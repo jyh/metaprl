@@ -208,7 +208,7 @@ interactive false_member {| intro_resource [] |} 'H :
 interactive false_type {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- "type"{."false"} }
 
-interactive false_elim {| elim_resource [ThinOption thinT]; squash_resource |} 'H 'J :
+interactive false_elim {| elim_resource []; squash_resource |} 'H 'J :
    sequent ['ext] { 'H; x: "false"; 'J['x] >- 'C['x] }
 
 (*!

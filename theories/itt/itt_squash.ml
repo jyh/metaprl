@@ -446,7 +446,7 @@ let extract_data (base1, base2, base3) =
          let tac = slookup tbl1 conc in
             (unsquashStableGoalT i thenLT [idT; tac (-1) thenT trivialT ]) p
       with Not_found ->
-         raise (RefineError ("squash", StringTermError ("squash tactic doesn't know about ", hyp)))
+         raise (RefineError ("squash", StringTermError ("squash tactic doesn't know about ", mk_xlist_term [hyp;<<slot[" |- "]>>;conc])))
       end end end end end
    in
       unsquash
@@ -466,6 +466,8 @@ let improve_resource (tbl1, tbl2, tbl3) = function
 
 let improve_arg tables name contexts vars args _ stmt tac =
    let assums, goal = unzip_mfunction stmt in
+   if is_squash_sequent goal then
+      raise (Invalid_argument "squash_stable resource annotation: conclusion sequent should not be squashed");
    let egoal = TermMan.explode_sequent goal in
    let concl = SeqGoal.get egoal.sequent_goals 0 in
    match contexts, vars, args, assums, (SeqHyp.to_list egoal.sequent_hyps) with
@@ -478,8 +480,6 @@ let improve_arg tables name contexts vars args _ stmt tac =
          SeqHyp.get eassum.sequent_hyps 0 = Context(h,[]) &&
          alpha_equal (SeqGoal.get eassum.sequent_goals 0) t
       ->
-         if is_squash_sequent goal then
-            raise (Invalid_argument "squash_stable resource annotation: conclusion sequent should not be squashed");
          if not (is_squash_sequent assum) then
             raise (Invalid_argument "squash_stable resource annotation: assumption sequent should be squashed");
          let t,a,_ = dest_equal concl in
@@ -493,8 +493,6 @@ let improve_arg tables name contexts vars args _ stmt tac =
          is_equal_term concl && h = h' &&
          (let t,a,b = dest_equal concl in (alpha_equal a b) )
       ->
-         if is_squash_sequent goal then
-            raise (Invalid_argument "squash_stable resource annotation: conclusion sequent should not be squashed");
          let t,a,_ = dest_equal concl in
          let tac p =
             let addr = Sequent.hyp_count_addr p in
@@ -510,13 +508,11 @@ let improve_arg tables name contexts vars args _ stmt tac =
           | _ -> false
          end
       ->
-         if is_squash_sequent goal then
-            raise (Invalid_argument "squash_stable resource annotation: conclusion sequent should not be squashed");
-         let tac i p =
-            let h, j = Sequent.hyp_indices p i in
+         let tac p =
+            let h, j = Sequent.hyp_indices p (-1) in
             Tactic_type.Tactic.tactic_of_rule tac ([| h; j|], [||]) [] p
          in
-            improve_resource tables (SqUnsquash(t, tac))
+            improve_resource tables (SqStable(t, it_term, (assertT t thenMT tac)))
     | _ ->
          raise (Invalid_argument "squash_stable resource annotation")
 

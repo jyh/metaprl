@@ -6,7 +6,7 @@ ROOT := ../..
 
 include $(ROOT)/mk/preface
 
-INCLUDE := -I . -I ../tactic
+INCLUDE := -I . -I ../tactic -I $(CAMLP4LIB)
 OCAMLDEPFLAGS := -prl
 PRLCFLAGS := -v
 

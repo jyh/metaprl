@@ -7,10 +7,10 @@ NSummary!location	location	location Summary
 P	p6	Number 1230
 P	p8	Number 1249
 O	o8	location p6 p8
-NSummary!parent2	parent2	parent2 Summary
-O	o10	parent2
+NSummary!parent	parent	parent Summary
+O	o10	parent
 P	p2	String Base_theory
-O	o12	parent2 p2
+O	o12	parent p2
 T	t93	o12
 B	b93	t93
 NPerv!nil	nil3	nil Perv
@@ -20,163 +20,163 @@ B	b4	t4
 T	t117	o b93 b4
 B	b117	t117
 P	p5	String Base_meta
-O	o120	parent2 p5
+O	o120	parent p5
 T	t138	o120
 B	b138	t138
 T	t139	o b138 b4
 B	b139	t139
 P	p7	String Base_cache
-O	o142	parent2 p7
+O	o142	parent p7
 T	t185	o142
 B	b185	t185
 T	t189	o b185 b4
 B	b189	t189
 P	p9	String Tactic_cache
-O	o189	parent2 p9
+O	o189	parent p9
 T	t190	o189
 B	b190	t190
 T	t345	o b190 b4
 B	b345	t345
 P	p11	String Typeinf
-O	o345	parent2 p11
+O	o345	parent p11
 T	t346	o345
 B	b346	t346
 T	t393	o b346 b4
 B	b393	t393
 P	p13	String Ocaml_df
-O	o398	parent2 p13
+O	o398	parent p13
 T	t413	o398
 B	b413	t413
 T	t446	o b413 b4
 B	b446	t446
 P	p15	String Ocaml_str_df
-O	o457	parent2 p15
+O	o457	parent p15
 T	t468	o457
 B	b468	t468
 T	t469	o b468 b4
 B	b469	t469
 P	p17	String Ocaml_sig_df
-O	o479	parent2 p17
+O	o479	parent p17
 T	t513	o479
 B	b513	t513
 T	t656	o b513 b4
 B	b656	t656
 P	p19	String Ocaml_me_df
-O	o656	parent2 p19
+O	o656	parent p19
 T	t657	o656
 B	b657	t657
 T	t658	o b657 b4
 B	b658	t658
 P	p21	String Ocaml_mt_df
-O	o658	parent2 p21
+O	o658	parent p21
 T	t659	o658
 B	b659	t659
 T	t660	o b659 b4
 B	b660	t660
 P	p23	String Ocaml_type_df
-O	o663	parent2 p23
+O	o663	parent p23
 T	t667	o663
 B	b667	t667
 T	t668	o b667 b4
 B	b668	t668
 P	p25	String Ocaml_patt_df
-O	o668	parent2 p25
+O	o668	parent p25
 T	t669	o668
 B	b669	t669
 T	t670	o b669 b4
 B	b670	t670
 P	p27	String Ocaml_expr_df
-O	o670	parent2 p27
+O	o670	parent p27
 T	t671	o670
 B	b671	t671
 T	t672	o b671 b4
 B	b672	t672
 P	p29	String Ocaml_base_df
-O	o672	parent2 p29
+O	o672	parent p29
 T	t673	o672
 B	b673	t673
 T	t674	o b673 b4
 B	b674	t674
 P	p31	String Ocaml
-O	o674	parent2 p31
+O	o674	parent p31
 T	t675	o674
 B	b675	t675
 T	t676	o b675 b4
 B	b676	t676
 P	p33	String Base_rewrite
-O	o676	parent2 p33
+O	o676	parent p33
 T	t677	o676
 B	b677	t677
 T	t678	o b677 b4
 B	b678	t678
 P	p35	String Base_dtactic
-O	o678	parent2 p35
+O	o678	parent p35
 T	t680	o678
 B	b680	t680
 T	t681	o b680 b4
 B	b681	t681
 P	p37	String Base_auto_tactic
-O	o681	parent2 p37
+O	o681	parent p37
 T	t682	o681
 B	b682	t682
 T	t683	o b682 b4
 B	b683	t683
 P	p39	String Base_trivial
-O	o683	parent2 p39
+O	o683	parent p39
 T	t684	o683
 B	b684	t684
 T	t685	o b684 b4
 B	b685	t685
 P	p41	String Top_conversionals
-O	o685	parent2 p41
+O	o685	parent p41
 T	t691	o685
 B	b691	t691
 T	t692	o b691 b4
 B	b692	t692
 P	p43	String Top_tacticals
-O	o693	parent2 p43
+O	o693	parent p43
 T	t694	o693
 B	b694	t694
 T	t695	o b694 b4
 B	b695	t695
 P	p45	String Var
-O	o695	parent2 p45
+O	o695	parent p45
 T	t696	o695
 B	b696	t696
 T	t697	o b696 b4
 B	b697	t697
 P	p47	String Mptop
-O	o697	parent2 p47
+O	o697	parent p47
 T	t698	o697
 B	b698	t698
 T	t699	o b698 b4
 B	b699	t699
 P	p49	String Summary
-O	o699	parent2 p49
+O	o699	parent p49
 T	t700	o699
 B	b700	t700
 T	t701	o b700 b4
 B	b701	t701
 P	p51	String Comment
-O	o701	parent2 p51
+O	o701	parent p51
 T	t702	o701
 B	b702	t702
 T	t703	o b702 b4
 B	b703	t703
 P	p53	String Base_dform
-O	o703	parent2 p53
+O	o703	parent p53
 T	t704	o703
 B	b704	t704
 T	t705	o b704 b4
 B	b705	t705
 P	p55	String Nuprl_font
-O	o705	parent2 p55
+O	o705	parent p55
 T	t706	o705
 B	b706	t706
 T	t707	o b706 b4
 B	b707	t707
 P	p57	String Perv
-O	o707	parent2 p57
+O	o707	parent p57
 T	t708	o707
 B	b708	t708
 T	t709	o b708 b4
@@ -237,9 +237,9 @@ T	t784	o b139 b783
 B	b784	t784
 T	t785	o b117 b784
 B	b785	t785
-NSummary!resource2	resource2	resource2 Summary
+NSummary!resource	resource	resource Summary
 P	p87	String auto
-O	o785	resource2 p87
+O	o785	resource p87
 NOcaml	Ocaml	Ocaml NIL
 NOcaml!type_lid	type_lid	type_lid Ocaml
 P	p88	Number 2332
@@ -283,7 +283,7 @@ B	b101	t101
 T	t786	o785 b91 b101
 B	b786	t786
 P	p102	String cache
-O	o786	resource2 p102
+O	o786	resource p102
 P	p103	Number 1424
 P	p104	Number 1434
 O	o104	type_lid p103 p104
@@ -304,7 +304,7 @@ B	b109	t109
 T	t787	o786 b106 b109
 B	b787	t787
 P	p110	String elim
-O	o787	resource2 p110
+O	o787	resource p110
 P	p111	Number 1761
 P	p112	Number 1783
 O	o112	type_prod p111 p112
@@ -356,7 +356,7 @@ B	b128	t128
 T	t788	o787 b124 b128
 B	b788	t788
 P	p129	String intro
-O	o788	resource2 p129
+O	o788	resource p129
 P	p130	Number 1815
 P	p131	Number 1852
 O	o131	type_prod p130 p131
@@ -419,7 +419,7 @@ B	b152	t152
 T	t789	o788 b151 b152
 B	b789	t789
 P	p153	String reduce
-O	o789	resource2 p153
+O	o789	resource p153
 P	p154	Number 2920
 P	p155	Number 2931
 O	o155	type_prod p154 p155
@@ -449,7 +449,7 @@ B	b163	t163
 T	t790	o789 b162 b163
 B	b790	t790
 P	p164	String toploop
-O	o793	resource2 p164
+O	o793	resource p164
 P	p165	Number 2445
 P	p166	Number 2467
 O	o166	type_prod p165 p166
@@ -490,7 +490,7 @@ B	b179	t179
 T	t818	o793 b176 b179
 B	b819	t818
 P	p180	String typeinf
-O	o819	resource2 p180
+O	o819	resource p180
 P	p181	Number 2151
 P	p182	Number 2172
 O	o182	type_lid p181 p182
@@ -512,7 +512,7 @@ B	b187	t187
 T	t819	o819 b184 b187
 B	b820	t819
 P	p188	String typeinf_subst
-O	o820	resource2 p188
+O	o820	resource p188
 P	p189	Number 1825
 P	p190	Number 1843
 O	o190	type_lid p189 p190
@@ -556,241 +556,241 @@ P	p849	Number 1250
 P	p850	Number 1268
 O	o850	location p849 p850
 P	p207	String Itt_theory
-O	o853	parent2 p207
+O	o853	parent p207
 T	t855	o853
 B	b855	t855
 T	t856	o b855 b4
 B	b856	t856
 P	p208	String Itt_fset
-O	o856	parent2 p208
+O	o856	parent p208
 T	t857	o856
 B	b857	t857
 T	t858	o b857 b4
 B	b858	t858
 P	p210	String Itt_prop_decide
-O	o858	parent2 p210
+O	o858	parent p210
 T	t859	o858
 B	b859	t859
 T	t860	o b859 b4
 B	b860	t860
 P	p212	String Itt_derive
-O	o860	parent2 p212
+O	o860	parent p212
 T	t861	o860
 B	b861	t861
 T	t862	o b861 b4
 B	b862	t862
 P	p214	String Itt_list2
-O	o862	parent2 p214
+O	o862	parent p214
 T	t863	o862
 B	b863	t863
 T	t864	o b863 b4
 B	b864	t864
 P	p216	String Itt_list
-O	o864	parent2 p216
+O	o864	parent p216
 T	t865	o864
 B	b865	t865
 T	t866	o b865 b4
 B	b866	t866
 P	p218	String Itt_quotient
-O	o866	parent2 p218
+O	o866	parent p218
 T	t867	o866
 B	b867	t867
 T	t868	o b867 b4
 B	b868	t868
 P	p220	String Itt_esquash
-O	o868	parent2 p220
+O	o868	parent p220
 T	t869	o868
 B	b869	t869
 T	t870	o b869 b4
 B	b870	t870
 P	p222	String Itt_srec
-O	o870	parent2 p222
+O	o870	parent p222
 T	t871	o870
 B	b871	t871
 T	t872	o b871 b4
 B	b872	t872
 P	p224	String Itt_prec
-O	o872	parent2 p224
+O	o872	parent p224
 T	t873	o872
 B	b873	t873
 T	t874	o b873 b4
 B	b874	t874
 P	p226	String Itt_w
-O	o874	parent2 p226
+O	o874	parent p226
 T	t875	o874
 B	b875	t875
 T	t876	o b875 b4
 B	b876	t876
 P	p228	String Itt_bunion
-O	o876	parent2 p228
+O	o876	parent p228
 T	t877	o876
 B	b877	t877
 T	t878	o b877 b4
 B	b878	t878
 P	p230	String Itt_bisect
-O	o878	parent2 p230
+O	o878	parent p230
 T	t879	o878
 B	b879	t879
 T	t880	o b879 b4
 B	b880	t880
 P	p232	String Itt_tunion
-O	o880	parent2 p232
+O	o880	parent p232
 T	t881	o880
 B	b881	t881
 T	t882	o b881 b4
 B	b882	t882
 P	p234	String Itt_isect
-O	o882	parent2 p234
+O	o882	parent p234
 T	t883	o882
 B	b883	t883
 T	t884	o b883 b4
 B	b884	t884
 P	p236	String Itt_struct2
-O	o884	parent2 p236
+O	o884	parent p236
 T	t885	o884
 B	b885	t885
 T	t886	o b885 b4
 B	b886	t886
 P	p238	String Itt_well_founded
-O	o886	parent2 p238
+O	o886	parent p238
 T	t887	o886
 B	b887	t887
 T	t888	o b887 b4
 B	b888	t888
 P	p240	String Itt_int_arith
-O	o888	parent2 p240
+O	o888	parent p240
 T	t889	o888
 B	b889	t889
 T	t890	o b889 b4
 B	b890	t890
 P	p242	String Itt_int_ext
-O	o890	parent2 p242
+O	o890	parent p242
 T	t891	o890
 B	b891	t891
 T	t892	o b891 b4
 B	b892	t892
 P	p244	String Itt_int_base
-O	o892	parent2 p244
+O	o892	parent p244
 T	t893	o892
 B	b893	t893
 T	t894	o b893 b4
 B	b894	t894
 P	p246	String Itt_atom_bool
-O	o894	parent2 p246
+O	o894	parent p246
 T	t895	o894
 B	b895	t895
 T	t896	o b895 b4
 B	b896	t896
 P	p248	String Itt_atom
-O	o896	parent2 p248
+O	o896	parent p248
 T	t897	o896
 B	b897	t897
 T	t898	o b897 b4
 B	b898	t898
 P	p250	String Itt_bool
-O	o898	parent2 p250
+O	o898	parent p250
 T	t899	o898
 B	b899	t899
 T	t900	o b899 b4
 B	b900	t900
 P	p252	String Itt_decidable
-O	o900	parent2 p252
+O	o900	parent p252
 T	t901	o900
 B	b901	t901
 T	t902	o b901 b4
 B	b902	t902
 P	p254	String Itt_logic
-O	o902	parent2 p254
+O	o902	parent p254
 T	t903	o902
 B	b903	t903
 T	t904	o b903 b4
 B	b904	t904
 P	p256	String Itt_prod
-O	o904	parent2 p256
+O	o904	parent p256
 T	t905	o904
 B	b905	t905
 T	t906	o b905 b4
 B	b906	t906
 P	p258	String Itt_dprod
-O	o906	parent2 p258
+O	o906	parent p258
 T	t907	o906
 B	b907	t907
 T	t908	o b907 b4
 B	b908	t908
 P	p260	String Itt_fun
-O	o908	parent2 p260
+O	o908	parent p260
 T	t909	o908
 B	b909	t909
 T	t910	o b909 b4
 B	b910	t910
 P	p262	String Itt_dfun
-O	o910	parent2 p262
+O	o910	parent p262
 T	t911	o910
 B	b911	t911
 T	t912	o b911 b4
 B	b912	t912
 P	p264	String Itt_rfun
-O	o912	parent2 p264
+O	o912	parent p264
 T	t913	o912
 B	b913	t913
 T	t914	o b913 b4
 B	b914	t914
 P	p266	String Itt_set
-O	o914	parent2 p266
+O	o914	parent p266
 T	t915	o914
 B	b915	t915
 T	t916	o b915 b4
 B	b916	t916
 P	p268	String Itt_unit
-O	o916	parent2 p268
+O	o916	parent p268
 T	t917	o916
 B	b917	t917
 T	t918	o b917 b4
 B	b918	t918
 P	p270	String Itt_squiggle
-O	o918	parent2 p270
+O	o918	parent p270
 T	t919	o918
 B	b919	t919
 T	t920	o b919 b4
 B	b920	t920
 P	p272	String Itt_squash
-O	o920	parent2 p272
+O	o920	parent p272
 T	t921	o920
 B	b921	t921
 T	t922	o b921 b4
 B	b922	t922
 P	p274	String Itt_union
-O	o922	parent2 p274
+O	o922	parent p274
 T	t923	o922
 B	b923	t923
 T	t924	o b923 b4
 B	b924	t924
 P	p276	String Itt_void
-O	o924	parent2 p276
+O	o924	parent p276
 T	t925	o924
 B	b925	t925
 T	t926	o b925 b4
 B	b926	t926
 P	p278	String Itt_subtype
-O	o926	parent2 p278
+O	o926	parent p278
 T	t927	o926
 B	b927	t927
 T	t928	o b927 b4
 B	b928	t928
 P	p280	String Itt_struct
-O	o928	parent2 p280
+O	o928	parent p280
 T	t929	o928
 B	b929	t929
 T	t930	o b929 b4
 B	b930	t930
 P	p282	String Itt_equal
-O	o930	parent2 p282
+O	o930	parent p282
 T	t931	o930
 B	b931	t931
 T	t932	o b931 b4
 B	b932	t932
 P	p284	String Itt_comment
-O	o932	parent2 p284
+O	o932	parent p284
 T	t933	o932
 B	b933	t933
 T	t934	o b933 b4
@@ -876,7 +876,7 @@ B	b973	t973
 T	t974	o b856 b973
 B	b974	t974
 P	p326	String eqcd
-O	o974	resource2 p326
+O	o974	resource p326
 P	p327	Number 6168
 P	p328	Number 6181
 O	o328	type_prod p327 p328
@@ -902,7 +902,7 @@ B	b334	t334
 T	t975	o974 b333 b334
 B	b975	t975
 P	p335	String squash
-O	o975	resource2 p335
+O	o975	resource p335
 P	p336	Number 4017
 P	p337	Number 4028
 O	o337	type_lid p336 p337
@@ -928,7 +928,7 @@ B	b343	t343
 T	t976	o975 b339 b343
 B	b976	t976
 P	p344	String sub
-O	o976	resource2 p344
+O	o976	resource p344
 P	p345	Number 4882
 P	p346	Number 4899
 O	o346	type_lid p345 p346
@@ -969,7 +969,7 @@ P	p987	Number 1269
 P	p988	Number 1288
 O	o988	location p987 p988
 P	p362	String Fir_int_set
-O	o989	parent2 p362
+O	o989	parent p362
 T	t989	o989
 B	b989	t989
 T	t990	o b989 b4
@@ -984,19 +984,19 @@ P	p993	Number 1289
 P	p994	Number 1304
 O	o994	location p993 p994
 P	p368	String Fir_exp
-O	o995	parent2 p368
+O	o995	parent p368
 T	t995	o995
 B	b995	t995
 T	t996	o b995 b4
 B	b996	t996
 P	p369	String Fir_ty
-O	o996	parent2 p369
+O	o996	parent p369
 T	t997	o996
 B	b997	t997
 T	t998	o b997 b4
 B	b998	t998
 P	p371	String Fir_state
-O	o998	parent2 p371
+O	o998	parent p371
 T	t999	o998
 B	b999	t999
 T	t1000	o b999 b4
@@ -1015,7 +1015,7 @@ P	p1005	Number 1305
 P	p1006	Number 1321
 O	o1006	location p1005 p1006
 P	p380	String Fir_type
-O	o1007	parent2 p380
+O	o1007	parent p380
 T	t1007	o1007
 B	b1007	t1007
 T	t1008	o b1007 b4
@@ -1030,7 +1030,7 @@ P	p1011	Number 1322
 P	p1012	Number 1344
 O	o1012	location p1011 p1012
 P	p386	String Fir_type_state
-O	o1013	parent2 p386
+O	o1013	parent p386
 T	t1013	o1013
 B	b1013	t1013
 T	t1014	o b1013 b4

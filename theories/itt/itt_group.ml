@@ -991,22 +991,22 @@ doc <:doc<
    @end[doc]
 >>
 define unfold_isInjective : isInjective{'f; 'A; 'B} <-->
-   all x: 'A^car. all y: 'A^car. ('f 'x = 'f 'y in 'B^car => 'x = 'y in 'A^car)
+   all x: 'A. all y: 'A. ('f 'x = 'f 'y in 'B => 'x = 'y in 'A)
 
 define unfold_isSurjective : isSurjective{'f; 'A; 'B} <-->
-   all z: 'B^car. exst u: 'A^car. ('z = 'f 'u in 'B^car)
+   all z: 'B. squash{exst u: 'A. ('z = 'f 'u in 'B)}
 
 define unfold_isBijective1 : isBijective{'f; 'A; 'B} <-->
    isInjective{'f; 'A; 'B} & isSurjective{'f; 'A; 'B}
 
 define unfold_groupMono : groupMono{'A; 'B} <-->
-   { f: groupHom{'A; 'B} | isInjective{'f; 'A; 'B} }
+   { f: groupHom{'A; 'B} | isInjective{'f; 'A^car; 'B^car} }
 
 define unfold_groupEpi : groupEpi{'A; 'B} <-->
-   { f: groupHom{'A; 'B} | isSurjective{'f; 'A; 'B} }
+   { f: groupHom{'A; 'B} | isSurjective{'f; 'A^car; 'B^car} }
 
 define unfold_groupIso : groupIso{'A; 'B} <-->
-   { f: groupHom{'A; 'B} | isBijective{'f; 'A; 'B} }
+   { f: groupHom{'A; 'B} | isBijective{'f; 'A^car; 'B^car} }
 doc docoff
 
 let unfold_isBijective = unfold_isBijective1 thenC addrC [0] unfold_isInjective thenC addrC [1] unfold_isSurjective
@@ -1026,20 +1026,20 @@ doc <:doc<
    @end[doc]
 >>
 interactive isInjective_wf {| intro [] |} :
-   sequent [squash] { <H> >- "type"{'A^car} } -->
-   sequent [squash] { <H> >- 'f in 'A^car -> 'B^car } -->
+   sequent [squash] { <H> >- "type"{'A} } -->
+   sequent [squash] { <H> >- 'f in 'A -> 'B } -->
    sequent ['ext] { <H> >- "type"{isInjective{'f; 'A; 'B}} }
 
 interactive isSurjective_wf {| intro [] |} :
-   sequent [squash] { <H> >- "type"{'A^car} } -->
-   sequent [squash] { <H> >- "type"{'B^car} } -->
-   sequent [squash] { <H> >- 'f in 'A^car -> 'B^car } -->
+   sequent [squash] { <H> >- "type"{'A} } -->
+   sequent [squash] { <H> >- "type"{'B} } -->
+   sequent [squash] { <H> >- 'f in 'A -> 'B } -->
    sequent ['ext] { <H> >- "type"{isSurjective{'f; 'A; 'B}} }
 
 interactive isBijective_wf {| intro [] |} :
-   sequent [squash] { <H> >- "type"{'A^car} } -->
-   sequent [squash] { <H> >- "type"{'B^car} } -->
-   sequent [squash] { <H> >- 'f in 'A^car -> 'B^car } -->
+   sequent [squash] { <H> >- "type"{'A} } -->
+   sequent [squash] { <H> >- "type"{'B} } -->
+   sequent [squash] { <H> >- 'f in 'A -> 'B } -->
    sequent ['ext] { <H> >- "type"{isBijective{'f; 'A; 'B}} }
 
 interactive groupMono_wf {| intro [] |} :
@@ -1070,75 +1070,72 @@ doc <:doc<
    @end[doc]
 >>
 interactive isInjective_intro {| intro [AutoMustComplete] |} :
-   [wf] sequent [squash] { <H> >- "type"{'A^car}} -->
-   [wf] sequent [squash] { <H> >- 'f in 'A^car -> 'B^car } -->
-   [main] sequent ['ext] { <H>; x: 'A^car; y: 'A^car; u: 'f 'x = 'f 'y in 'B^car >- 'x = 'y in 'A^car } -->
+   [wf] sequent [squash] { <H> >- "type"{'A}} -->
+   [wf] sequent [squash] { <H> >- 'f in 'A -> 'B } -->
+   [main] sequent ['ext] { <H>; x: 'A; y: 'A; u: 'f 'x = 'f 'y in 'B >- 'x = 'y in 'A } -->
    sequent ['ext] { <H> >- isInjective{'f; 'A; 'B} }
 
 interactive isInjective_elim {| elim [] |} 'H :
-   [main] sequent ['ext] { <H>; p: isInjective{'f; 'A; 'B}; v: all x: 'A^car. all y: 'A^car. ('f 'x = 'f 'y in 'B^car => 'x = 'y in 'A^car); <J['p]> >- 'C['p] } -->
+   [main] sequent ['ext] { <H>; p: isInjective{'f; 'A; 'B}; v: all x: 'A. all y: 'A. ('f 'x = 'f 'y in 'B => 'x = 'y in 'A); <J['p]> >- 'C['p] } -->
    sequent ['ext] { <H>; p: isInjective{'f; 'A; 'B}; <J['p]> >- 'C['p] }
 
 interactive isSurjective_intro {| intro [AutoMustComplete] |} :
-   [wf] sequent [squash] { <H> >- "type"{'A^car}} -->
-   [wf] sequent [squash] { <H> >- "type"{'B^car}} -->
-   [wf] sequent [squash] { <H> >- 'f in 'A^car -> 'B^car } -->
-   [main] sequent ['ext] { <H>; z: 'B^car >- exst u: 'A^car. 'z = 'f 'u in 'B^car } -->
+   [wf] sequent [squash] { <H> >- "type"{'A}} -->
+   [wf] sequent [squash] { <H> >- "type"{'B}} -->
+   [wf] sequent [squash] { <H> >- 'f in 'A -> 'B } -->
+   [main] sequent [squash] { <H>; z: 'B >- squash{exst u: 'A. 'z = 'f 'u in 'B} } -->
    sequent ['ext] { <H> >- isSurjective{'f; 'A; 'B} }
 
 interactive isSurjective_elim {| elim [] |} 'H :
-   [main] sequent ['ext] { <H>; p: isSurjective{'f; 'A; 'B}; w: all z: 'B^car. exst u: 'A^car. ('z = 'f 'u in 'B^car); <J['p]> >- 'C['p] } -->
+   [main] sequent ['ext] { <H>; p: isSurjective{'f; 'A; 'B}; w: all z: 'B. squash{exst u: 'A. ('z = 'f 'u in 'B)}; <J['p]> >- 'C['p] } -->
    sequent ['ext] { <H>; p: isSurjective{'f; 'A; 'B}; <J['p]> >- 'C['p] }
 
 interactive isBijective_intro {| intro [AutoMustComplete] |} :
-   [wf] sequent [squash] { <H> >- "type"{'A^car}} -->
-   [wf] sequent [squash] { <H> >- "type"{'B^car}} -->
-   [wf] sequent [squash] { <H> >- 'f in 'A^car -> 'B^car } -->
-   [main] sequent ['ext] { <H>; x: 'A^car; y: 'A^car; u: 'f 'x = 'f 'y in 'B^car >- 'x = 'y in 'A^car } -->
-   [main] sequent ['ext] { <H>; z: 'B^car >- exst u: 'A^car. 'z = 'f 'u in 'B^car } -->
+   sequent ['ext] { <H> >- isInjective{'f; 'A; 'B} } -->
+   sequent ['ext] { <H> >- isSurjective{'f; 'A; 'B} } -->
    sequent ['ext] { <H> >- isBijective{'f; 'A; 'B} }
 
 interactive isBijective_elim {| elim [] |} 'H :
-   [main] sequent ['ext] { <H>; p: isBijective{'f; 'A; 'B}; v: all x: 'A^car. all y: 'A^car. ('f 'x = 'f 'y in 'B^car => 'x = 'y in 'A^car); w: all z: 'B^car. exst u: 'A^car. ('z = 'f 'u in 'B^car); <J['p]> >- 'C['p] } -->
+   [main] sequent ['ext] { <H>; p: isBijective{'f; 'A; 'B}; v: all x: 'A. all y: 'A. ('f 'x = 'f 'y in 'B => 'x = 'y in 'A); w: all z: 'B. squash{exst u: 'A. ('z = 'f 'u in 'B)}; <J['p]> >- 'C['p] } -->
    sequent ['ext] { <H>; p: isBijective{'f; 'A; 'B}; <J['p]> >- 'C['p] }
 
 interactive groupMono_intro {| intro [intro_typeinf <<'A>>] |} group[i:l] :
    [wf] sequent [squash] { <H> >- 'A in group[i:l] } -->
    [wf] sequent [squash] { <H> >- 'B in group[i:l] } -->
    [wf] sequent [squash] { <H> >- 'f in groupHom{'A; 'B} } -->
-   [main] sequent ['ext] { <H> >- isInjective{'f; 'A; 'B} } -->
+   [main] sequent ['ext] { <H> >- isInjective{'f; 'A^car; 'B^car} } -->
    sequent ['ext] { <H> >- 'f in groupMono{'A; 'B} }
 
 interactive groupMono_elim {| elim [elim_typeinf <<'B>>] |} 'H group[i:l] :
    [wf] sequent [squash] { <H>; f: groupMono{'A; 'B}; <J['f]> >- 'A in group[i:l] } -->
    [wf] sequent [squash] { <H>; f: groupMono{'A; 'B}; <J['f]> >- 'B in group[i:l] } -->
-   [main] sequent ['ext] { <H>; f: groupHom{'A; 'B}; u: isInjective{'f; 'A; ' B}; <J['f]> >- 'C['f] } -->
+   [main] sequent ['ext] { <H>; f: groupHom{'A; 'B}; u: isInjective{'f; 'A^car; 'B^car}; <J['f]> >- 'C['f] } -->
    sequent ['ext] { <H>; f: groupMono{'A; 'B}; <J['f]> >- 'C['f] }
 
 interactive groupEpi_intro {| intro [intro_typeinf <<'A>>] |} group[i:l] :
    [wf] sequent [squash] { <H> >- 'A in group[i:l] } -->
    [wf] sequent [squash] { <H> >- 'B in group[i:l] } -->
    [wf] sequent [squash] { <H> >- 'f in groupHom{'A; 'B} } -->
-   [main] sequent ['ext] { <H> >- isSurjective{'f; 'A; 'B} } -->
+   [main] sequent ['ext] { <H> >- isSurjective{'f; 'A^car; 'B^car} } -->
    sequent ['ext] { <H> >- 'f in groupEpi{'A; 'B} }
 
 interactive groupEpi_elim {| elim [elim_typeinf <<'B>>] |} 'H group[i:l] :
    [wf] sequent [squash] { <H>; f: groupEpi{'A; 'B}; <J['f]> >- 'A in group[i:l] } -->
    [wf] sequent [squash] { <H>; f: groupEpi{'A; 'B}; <J['f]> >- 'B in group[i:l] } -->
-   [main] sequent ['ext] { <H>; f: groupHom{'A; 'B}; u: squash{isSurjective{'f; 'A; ' B}}; <J['f]> >- 'C['f] } -->
+   [main] sequent ['ext] { <H>; f: groupHom{'A; 'B}; u: squash{isSurjective{'f; 'A^car; ' B^car}}; <J['f]> >- 'C['f] } -->
    sequent ['ext] { <H>; f: groupEpi{'A; 'B}; <J['f]> >- 'C['f] }
 
 interactive groupIso_intro {| intro [intro_typeinf <<'A>>] |} group[i:l] :
    [wf] sequent [squash] { <H> >- 'A in group[i:l] } -->
    [wf] sequent [squash] { <H> >- 'B in group[i:l] } -->
    [wf] sequent [squash] { <H> >- 'f in groupHom{'A; 'B} } -->
-   [main] sequent ['ext] { <H> >- isBijective{'f; 'A; 'B} } -->
+   [main] sequent ['ext] { <H> >- isBijective{'f; 'A^car; 'B^car} } -->
    sequent ['ext] { <H> >- 'f in groupIso{'A; 'B} }
 
 interactive groupIso_elim {| elim [elim_typeinf <<'B>>] |} 'H group[i:l] :
    [wf] sequent [squash] { <H>; f: groupIso{'A; 'B}; <J['f]> >- 'A in group[i:l] } -->
    [wf] sequent [squash] { <H>; f: groupIso{'A; 'B}; <J['f]> >- 'B in group[i:l] } -->
-   [main] sequent ['ext] { <H>; f: groupHom{'A; 'B}; u: squash{isBijective{'f; 'A; ' B}}; <J['f]> >- 'C['f] } -->
+   [main] sequent ['ext] { <H>; f: groupHom{'A; 'B}; u: squash{isBijective{'f; 'A^car; ' B^car}}; <J['f]> >- 'C['f] } -->
    sequent ['ext] { <H>; f: groupIso{'A; 'B}; <J['f]> >- 'C['f] }
 
 doc <:doc< 

@@ -84,7 +84,8 @@ doc <:doc<
    @begin[doc]
    @modsection{Quotient Group}
    @modsubsection{Rewrites}
-  
+
+   The quotient group of $A$ in $B$, or the Factor Group of $B$ relative to $A$.
    @end[doc]
 >>
 define unfold_quotGroup : quotGroup{'A; 'B} <-->
@@ -97,6 +98,10 @@ let fold_quotGroup = makeFoldC << quotGroup{'A; 'B} >> unfold_quotGroup
 interactive quotG_equiv_type {| intro [intro_typeinf <<'B>>] |} group[i:l] :
    [wf] sequent [squash] { <H> >- subgroup[i:l]{'A; 'B} } -->
    sequent ['ext] { <H> >- "type"{quot x, y: 'B^car // ('x *['B] ('B^inv 'y) in 'A^car subset 'B^car)} }
+
+interactive quotG_equiv_type2 {| intro [intro_typeinf <<'B>>] |} group[i:l] :
+   [wf] sequent [squash] { <H> >- subgroup[i:l]{'A; 'B} } -->
+   sequent ['ext] { <H> >- "type"{(quotGroup{'A; 'B}^car)} }
 
 doc <:doc< 
    @begin[doc]
@@ -111,9 +116,32 @@ interactive quotGroup_intro {| intro [] |} :
 doc <:doc< 
    @begin[doc]
    @modsubsection{Rules}
-  
+
+   If <<normalSubg[i:l]{'A; 'B}>> and $B$ is abelian, then <<quotGroup{'A; 'B}>> is abelian.
    @end[doc]
 >>
+interactive quotGroup_abel {| intro [AutoMustComplete] |} :
+   sequent ['ext] { <H> >- normalSubg[i:l]{'A; 'B} } -->
+   sequent ['ext] { <H> >- isCommutative{'B} } -->
+   sequent ['ext] { <H> >- quotGroup{'A; 'B} in abelg[i:l] }
+
+doc <:doc< 
+   @begin[doc]
+
+   If <<normalSubg[i:l]{'A; 'B}>>, then $f: ('B -> <<quotGroup{'A; 'B}>>)$ defined by ??? is an epimorphism of $B$ to <<quotGroup{'A; 'B}>> with kernel $A$.
+   @end[doc]
+>>
+interactive quotGroup_hom {| intro [AutoMustComplete; intro_typeinf <<'B>>] |} group[i:l] :
+   sequent ['ext] { <H> >- normalSubg[i:l]{'A; 'B} } -->
+   sequent ['ext] { <H> >- lambda{a. 'a} in groupHom{'B; quotGroup{'A; 'B}} }
+
+interactive quotGroup_epi {| intro [AutoMustComplete; intro_typeinf <<'B>>] |} group[i:l] :
+   sequent ['ext] { <H> >- normalSubg[i:l]{'A; 'B} } -->
+   sequent ['ext] { <H> >- lambda{a. 'a} in groupEpi{'B; quotGroup{'A; 'B}} }
+
+interactive quotGroup_ker {| intro [AutoMustComplete; intro_typeinf <<'B>>] |} group[i:l] :
+   sequent ['ext] { <H> >- normalSubg[i:l]{'A; 'B} } -->
+   sequent ['ext] { <H> >- groupKer{lambda{a. 'a}; 'B; quotGroup{'A; 'B}} = 'A in group[i:l] }
 
 doc docoff
 
@@ -121,8 +149,8 @@ doc docoff
  * DISPLAY FORMS                                                        *
  ************************************************************************)
 
-dform quotGroup_df1 : except_mode[src] :: except_mode[prl] :: quotGroup{'A; 'B} =
-   slot{'A} `" // " slot{'B}
+dform quotGroup_df1 : except_mode[src] :: parens :: quotGroup{'A; 'B} =
+   slot{'B} `" // " slot{'A}
 
 (*
  * -*-

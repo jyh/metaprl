@@ -42,5 +42,7 @@ open Phobos_type
  * from Mp_mc_fir_phobos_exp).
  *)
 
+val applyIFormsAndBaseC : (mp_pre_term * mp_pre_term) list -> conv
 val applyIFormsC : (mp_pre_term * mp_pre_term) list -> conv
+
 val applyMetaBaseC : conv

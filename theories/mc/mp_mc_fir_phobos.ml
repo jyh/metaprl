@@ -52,11 +52,8 @@ open Mp_mc_base
  * This function takes a list of ((redex, _), (contractum, _)),
  * representing a list of iforms.  The conversional returned
  * applies all these rewrites until a fix point is reached.
- * It also reduces "Phobos variables" (i.e. variable[v:s]
- * from Mp_mc_fir_phobos_exp).
  *)
-
-let applyIFormsC iform_rewrites =
+let applyIFormsAndBaseC iform_rewrites =
    let patterns = List.map
       (fun ((redex, _), (contractum, _)) ->
 
@@ -77,6 +74,23 @@ let applyIFormsC iform_rewrites =
       Base_meta.reduce_meta_prod;
       Base_meta.reduce_meta_quot;
       Base_meta.reduce_meta_rem] @ patterns))))
+
+let applyIFormsC iform_rewrites =
+   let patterns = List.map
+      (fun ((redex, _), (contractum, _)) ->
+
+         (* Debugging output. *)
+         debug_string "##### creating iform:";
+         debug_term redex;
+         debug_string "<-->";
+         debug_term contractum;
+
+         (* Create the iform now. *)
+         create_iform "post_proc" false redex contractum
+
+      ) iform_rewrites
+   in
+      (repeatC (higherC (applyAllC (patterns))))
 
 let applyMetaBaseC =
    (repeatC (higherC (applyAllC [

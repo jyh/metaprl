@@ -245,7 +245,7 @@ let revHypC i = funC (fun p ->
 
 let assumC i = funC (fun p ->
    let trm = TermMan.nth_concl (Sequent.nth_assum (env_arg p) i) 1 in
-   rewriteC trm  thenTC nthHypT i)
+   rewriteC trm  thenTC nthAssumT i)
 
 let revAssumC i = funC (fun p ->
    let trm = TermMan.nth_concl (Sequent.nth_assum (env_arg p) i) 1 in

@@ -79,6 +79,7 @@ include Itt_equal
 include Itt_rfun
 include Itt_set
 include Itt_isect
+include Itt_tsquash
 include Itt_subtype
 (*! @docoff *)
 
@@ -267,11 +268,6 @@ prim dintersectionSubtype {| intro [] |} 'H 'a :
  * @end[doc]
  *)
 
-define unfoldSquashTop : squashTop{'A} <--> ({ x:top | 'A})
-
-(*! @docoff *)
-
-dform squashTop_df : squashTop{'A} = `"[" slot{'A} `"]"
 
 (*!
  * @begin[doc]
@@ -284,17 +280,17 @@ dform squashTop_df : squashTop{'A} = `"[" slot{'A} `"]"
 interactive setdisectSubtype {| intro [] |} 'H :
    [wf] sequent[squash] { 'H >- "type"{'A}} -->
    [wf] sequent[squash] { 'H; x:'A >- "type"{'P['x]}} -->
-   sequent ['ext] { 'H >- subtype{ {x: 'A | 'P['x]}; disect{'A;x.squashTop{'P['x]}}}}
+   sequent ['ext] { 'H >- subtype{ {x: 'A | 'P['x]}; disect{'A;x.tsquash{'P['x]}}}}
 
 interactive setDisect {| intro [] |} 'H :
    [wf] sequent[squash] { 'H >- "type"{'A}} -->
    [wf] sequent[squash] { 'H; x:'A >- "type"{'P['x]}} -->
-   sequent ['ext] { 'H; y: {x: 'A | 'P['x]} >- 'y IN  disect{'A;x.squashTop{'P['x]}}}
+   sequent ['ext] { 'H; y: {x: 'A | 'P['x]} >- 'y IN  disect{'A;x.tsquash{'P['x]}}}
 
 interactive disectSet {| intro [] |} 'H :
    [wf] sequent[squash] { 'H >- "type"{'A}} -->
    [wf] sequent[squash] { 'H; x:'A >- "type"{'P['x]}} -->
-   sequent ['ext] { 'H >- subtype{ disect{'A;x.squashTop{'P['x]}}; {x: 'A | 'P['x]} } }
+   sequent ['ext] { 'H >- subtype{ disect{'A;x.tsquash{'P['x]}}; {x: 'A | 'P['x]} } }
 
 (*! @docoff *)
 

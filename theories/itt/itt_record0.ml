@@ -1,4 +1,3 @@
-include Itt_theory
 include Itt_record_label0
 include Itt_struct3
 include Itt_inv_typing
@@ -136,55 +135,53 @@ interactive recordTypeElimination{| elim [ThinOption thinT]  |} 'H 'J 'v:
 interactive emptyRecordIntro {| intro[] |} 'H :
    sequent['ext]  {'H >-'r_1 = 'r_2 in record }
 
-interactive recordEqualS1  {| intro[SelectOption 1] |} 'H:
-   [equality] sequent[squash]{'H >- 'n1='m in label } -->
-   [equality] sequent[squash]{'H >- 'n2='m in label } -->
-   sequent[squash]{'H >- 'a1 ='a2 in 'A } -->
-   sequent['ext]  {'H >- rcrd{'n1;'a1;'r1}=rcrd{'n2;'a2;'r2} in record{'m;'A} }
-
-interactive recordIntroS1  {| intro[SelectOption 1] |} 'H:
-   [equality] sequent[squash]{'H >- 'n='m in label } -->
-   sequent[squash]{'H >- 'a IN 'A } -->
-   sequent['ext]  {'H >- rcrd{'n;'a;'r} IN record{'m;'A} }
-
-interactive recordIntroS2  {| intro[SelectOption 2] |} 'H:
-   [wf] sequent[squash]{'H >- 'n IN label } -->
+interactive recordEqualS5 'H:
    [wf] sequent[squash]{'H >- 'm IN label } -->
-   [equality] sequent[squash]{'H >- not{.'n ='m in label} } -->
-   sequent[squash]{'H >- 'r IN record{'m;'A} } -->
-   sequent['ext]  {'H >- rcrd{'n;'a;'r} IN record{'m;'A} }
+   sequent[squash]{'H >- 'a1 ='a2 in 'A } -->
+   sequent['ext]  {'H >- rcrd{'m;'a1;'r1}=rcrd{'m;'a2;'r2} in record{'m;'A} }
 
-interactive recordEqualS2  {| intro[SelectOption 2] |} 'H:
+interactive recordEqualS1 'H:
    [wf] sequent[squash]{'H >- 'n IN label } -->
    [wf] sequent[squash]{'H >- 'm IN label } -->
    [equality] sequent[squash]{'H >- not{.'n='m in label} } -->
    sequent[squash]{'H >- 'r1='r2 in record{'m;'A} } -->
    sequent['ext]  {'H >- rcrd{'n;'a;'r1}='r2 in record{'m;'A} }
 
-interactive recordEqualS3  {| intro[SelectOption 3] |} 'H:
+interactive recordEqualS4 'H:
+   [wf] sequent[squash]{'H >- 'n IN label } -->
+   [wf] sequent[squash]{'H >- 'm IN label } -->
+   [equality] sequent[squash]{'H >- not{.'n='m in label} } -->
+   sequent[squash]{'H >- 'r1=rcrd{'m;'a2;'r2} in record{'m;'A} } -->
+   sequent['ext]  {'H >- rcrd{'n;'a1;'r1}=rcrd{'m;'a2;'r2} in record{'m;'A} }
+
+interactive recordEqualS2 'H:
    [wf] sequent[squash]{'H >- 'n IN label } -->
    [wf] sequent[squash]{'H >- 'm IN label } -->
    [equality] sequent[squash]{'H >- not{.'n='m in label} } -->
    sequent[squash]{'H >- 'r1='r2 in record{'m;'A} } -->
    sequent['ext]  {'H >- 'r1=rcrd{'n;'a;'r2} in record{'m;'A} }
 
+let record_eqcdST p =
+   let n = Sequent.hyp_count_addr p in
+   firstT
+      [recordEqualS5 n;
+       recordEqualS4 n;
+       recordEqualS2 n;
+       recordEqualS1 n] p
+
+let resource intro += (<<'r1 = 'r2 in record{'m;'A} >>, wrap_intro record_eqcdST)
+
 (*** Reductions ***)
 
 interactive record_beta1 {| intro[] |} 'H:
-   [equality] sequent[squash]{'H >- 'n ='m in label } -->
-   sequent['ext]  {'H >- field{rcrd{'n; 'a; 'r};'m} ~ 'a }
+   [wf] sequent[squash]{'H >- 'n IN label } -->
+   sequent['ext]  {'H >- field{rcrd{'n; 'a; 'r};'n} ~ 'a }
 
 interactive record_beta2 {| intro[] |} 'H:
    [wf] sequent[squash]{'H >- 'n IN label } -->
    [wf] sequent[squash]{'H >- 'm IN label } -->
    [equality] sequent[squash]{'H >- not{.'n ='m in label} } -->
    sequent['ext]  {'H >- field{rcrd{'n; 'a; 'r};'m} ~ field{'r;'m} }
-
-interactive record_beta12  {| intro[] |} 'H:
-   [wf] sequent[squash]{'H >- 'n IN label } -->
-   [wf] sequent[squash]{'H >- 'm IN label } -->
-   sequent['ext]  {'H >- field{rcrd{'n; 'a; 'r};'m} ~ ifthenelse{eq_label{'n;'m};'a;field{'r;'m}} }
-
 
 interactive record_eta  {| intro[] |}'H 'A:
    [wf] sequent[squash]{'H >- 'n IN label } -->
@@ -198,8 +195,8 @@ interactive_rw record_eta_rw  :
 
 
 interactive record_cover  {| intro[] |} 'H:
-   [equality] sequent[squash]{'H >- 'n ='m in label } -->
-   sequent['ext]  {'H >- rcrd{'n; 'a; rcrd{'m; 'b; 'r}} ~  rcrd{'n; 'a; 'r} }
+   [wf] sequent[squash]{'H >- 'n IN label } -->
+   sequent['ext]  {'H >- rcrd{'n; 'a; rcrd{'n; 'b; 'r}} ~  rcrd{'n; 'a; 'r} }
 
 interactive record_exchange {| intro[] |} 'H:
    [wf] sequent[squash]{'H >- 'n IN label } -->
@@ -215,10 +212,6 @@ interactive field_member {| intro[] |} 'H:
    sequent[squash]{'H >- 'r IN record{'n;'A} } -->
    sequent['ext]  {'H >- field{'r;'n} IN 'A }
 
-interactive recordEliminationS {| elim[] |} 'H 'J 'x:
-   [wf] sequent[squash]{'H; r:record{'n;'A}; 'J['r] >- 'n IN label } -->
-   sequent['ext]  {'H; x:'A; r:record; 'J[rcrd{'n;'x;'r}] >- 'C[rcrd{'n;'x;'r}]} -->
-   sequent['ext]  {'H; r:record{'n;'A}; 'J['r] >- 'C['r]}
 
 
 
@@ -255,9 +248,6 @@ dform recordS_df : except_mode [src] :: record{'n;'A} = `"{" slot{'n} `":" slot{
 
 
 
-
-interactive test :
-   sequent['ext]  { >-  'C}
 
 (*
 let doubleInductionT =

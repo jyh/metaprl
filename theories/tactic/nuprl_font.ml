@@ -214,6 +214,7 @@ declare le
 declare ge
 declare equiv
 declare vee
+declare perp
 declare leftarrow
 declare middlearrow
 declare rightarrow
@@ -418,6 +419,18 @@ dform sup_df1 : internal :: sup[text:s] =
 
 dform sup_df2 : internal :: sup{'t} =
    sup_begin 't sup_end
+
+dform sub_begin_df : internal :: mode[prl] :: sub_begin =
+   `"_"
+
+dform sub_end_df : internal :: mode[prl] :: sub_end =
+   `""
+
+dform sup_begin_df : internal :: mode[prl] :: sup_begin =
+   `"^"
+
+dform sup_end_df : internal :: mode[prl] :: sup_end =
+   `""
 
 dform small_begin_df : internal :: mode[html] :: small_begin =
    izone `"<small>" ezone
@@ -744,6 +757,7 @@ dform le_df			: internal :: mode[prl] :: le                        = `"\218"
 dform ge_df			: internal :: mode[prl] :: ge                        = `"\219"
 dform equiv_df			: internal :: mode[prl] :: equiv                     = `"\226"
 dform vee_df			: internal :: mode[prl] :: vee                       = `"\208"
+dform perp_df			: internal :: mode[prl] :: perp                      = `"_|_"
 dform leftarrow_df		: internal :: mode[prl] :: leftarrow                 = `"\223\221"
 dform middlearrow_df		: internal :: mode[prl] :: middlearrow               = `"\221"
 dform rightarrow_df		: internal :: mode[prl] :: rightarrow                = `"\221\222"
@@ -793,6 +807,7 @@ dform le_df			: internal :: mode[html] :: le                        = sym["&#880
 dform ge_df			: internal :: mode[html] :: ge                        = sym["&#8805;"]
 dform equiv_df			: internal :: mode[html] :: equiv                     = sym["&#8801;"]
 dform vee_df			: internal :: mode[html] :: vee                       = sym["&#8744;"]
+dform perp_df			: internal :: mode[html] :: perp                      = keyword["&perp;"]
 dform leftarrow_df		: internal :: mode[html] :: leftarrow                 = sym["&#8592;"]
 dform middlearrow_df		: internal :: mode[html] :: middlearrow               = sym["&#8596;"]
 dform rightarrow_df		: internal :: mode[html] :: rightarrow                = sym["&#8594;"]
@@ -842,6 +857,7 @@ dform le_df			: internal :: mode[tex] :: le                        = mathmacro["
 dform ge_df			: internal :: mode[tex] :: ge                        = mathmacro["ge"]
 dform equiv_df			: internal :: mode[tex] :: equiv                     = mathmacro["equiv"]
 dform vee_df			: internal :: mode[tex] :: vee                       = mathmacro["vee"]
+dform perp_df			: internal :: mode[tex] :: perp                      = mathmacro["perp"]
 dform leftarrow_df		: internal :: mode[tex] :: leftarrow                 = mathmacro["leftarrow"]
 dform middlearrow_df		: internal :: mode[tex] :: middlearrow               = mathmacro["-"]
 dform rightarrow_df		: internal :: mode[tex] :: rightarrow                = mathmacro["rightarrow"]
@@ -879,6 +895,7 @@ dform longrightarrow_src_df : internal :: mode[src] :: longrightarrow = `"-->"
 dform times_df : internal :: mode[src] :: times = `"*"
 dform vee_df : internal :: mode[src] :: vee = `"or"
 dform wedge_df : internal :: mode[src] :: wedge = `"and"
+dform sim_df : internal :: mode[src] :: sim = `"~"
 
 (*
  * -*-

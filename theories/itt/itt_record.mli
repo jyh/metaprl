@@ -17,8 +17,11 @@ topval record_reduceT : tactic
 topval record_beta2 : conv
 topval record_beta2_rw : conv
 
+(*
 topval record_eqcd : tactic
 topval record_repeat_eqcd : tactic
+*)
+topval recordOrtT : tactic
 
 
 define unfoldRcrd : rcrd[t:t]{'a;'r} <--> rcrd{label[t:t];'a;'r}
@@ -35,3 +38,7 @@ define unfoldRecordR : record[n:t]{'A;a.'R['a]} <--> disect{record[n:t]{'A};r.'R
 
 define unfoldRecordI : record[n:t]{'A;'R} <--> record[n:t]{'A;a.'R}
 
+
+declare self{'self}
+
+declare self[n:t]{'x}

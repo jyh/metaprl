@@ -86,7 +86,7 @@ prim eq_atom_assert_intro {| intro [] |} 'H :
    sequent ['ext] { 'H >- "assert"{eq_atom{'x; 'y}} } =
    it
 
-prim eq_atom_assert_elim {| elim [ThinOption thinT] |} 'H 'J :
+prim eq_atom_assert_elim {| elim [] |} 'H 'J :
    [main] sequent ['ext] { 'H; x: 'a = 'b in atom; 'J[it] >- 'C[it] } -->
    sequent ['ext] { 'H; x: "assert"{eq_atom{'a; 'b}}; 'J['x] >- 'C['x] } =
    it

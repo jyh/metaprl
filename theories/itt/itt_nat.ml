@@ -75,8 +75,26 @@ open Base_auto_tactic
 
 define unfold_nat : nat <--> ({x:int | 'x>=0})
 
-dform nat_prl_df : except_mode [src] :: nat = mathbbN
-dform nat_src_df : mode[src] :: nat = `"nat"
+declare undefined{}
+
+define unfoldInd :   ind{'n; 'base; k,l. 'up['k;'l]} <-->
+                     ind{'n; i,j.undefined; 'base; k,l . 'up['k;'l]}
+
+
+interactive_rw reduce_ind_up :
+   ('x IN nat) -->
+   ind{.'x +@ 1; 'base; k,l. 'up['k;'l]} <-->
+   ('up['x +@ 1; ind{'x ; 'base; k,l. 'up['k;'l]}])
+
+interactive_rw reduce_ind_base :
+   (ind{0; 'base; k,l. 'up['k;'l]}) <-->
+   'base
+
+(*! @docoff *)
+let resource reduce +=
+   [<< ind{.'x +@ 1; 'base; k,l. 'up['k;'l]} >>, reduce_ind_up;
+    << ind{0; 'base; k,l. 'up['k;'l]} >>, reduce_ind_base]
+
 
 interactive natType {| intro [] |} 'H :
    sequent ['ext] { 'H >- "type"{nat} }
@@ -89,11 +107,11 @@ interactive natMemberEquality {| intro [] |} 'H :
 interactive natMemberZero {| intro [] |} 'H :
    sequent ['ext] { 'H >- 0 IN nat}
 
-interactive natElimination {| elim [] |} 'H 'J 'v :
+interactive natElimination  'H 'J 'v :
    sequent ['ext] { 'H; x: int; v:'x>=0; 'J['x] >- 'C['x]}  -->
    sequent ['ext] { 'H; x: nat; 'J['x] >- 'C['x]}
 
-interactive natInduction  'H 'J  :
+interactive natInduction {| elim [] |} 'H 'J  :
    sequent ['ext] { 'H; n: nat; 'J['n] >- 'C[0] }  -->
    sequent ['ext] { 'H; n: nat; 'J['n]; m: nat;  z: 'C['m] >- 'C['m +@ 1] }  -->
    sequent ['ext] { 'H; n: nat; 'J['n] >- 'C['n] }
@@ -121,4 +139,10 @@ let natBackInductionT n p =
       natBackInduction (Sequent.hyp_count_addr p) n bind p
 
 
+(******************)
+(*  Display Forms *)
+(******************)
+
+dform nat_prl_df : except_mode [src] :: nat = mathbbN
+dform nat_src_df : mode[src] :: nat = `"nat"
 

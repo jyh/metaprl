@@ -15,6 +15,6 @@ declare rcrd{'n;'a;'r}
 declare rcrd{}
 declare field{'r;'n}
 
-
+topval record_eqcdST : tactic
 
 

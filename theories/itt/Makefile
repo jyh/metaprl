@@ -44,6 +44,7 @@ MPFILES :=\
 	itt_arith\
 	itt_nat\
 	itt_isect\
+	itt_tsquash\
 	itt_disect\
 	itt_tunion\
 	itt_bisect\

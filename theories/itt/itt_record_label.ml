@@ -24,6 +24,7 @@ open Mp_resource
 open Tactic_type
 
 open Base_dtactic
+open Base_auto_tactic
 open Itt_equal
 
 
@@ -56,44 +57,67 @@ define unfold_eq_label : eq_label[x:t,y:t]{'A;'B} <-->  meta_eq{label[x:t]; labe
 (******************)
 
 
-
 prim reduce_eq_label_true {| intro [] |} 'H:
    sequent[squash] {'H >- label[x:t] = label[y:t]  in label} -->
    sequent['ext] {'H >- eq_label[x:t,y:t]{'A;'B} ~ 'A}
       = it
 
-interactive reduce_eq_label_false {| intro [] |} 'H:
+prim reduce_eq_label_false {| intro [] |} 'H:
    sequent[squash] {'H >- not{.label[x:t] = label[y:t]  in label}} -->
    sequent['ext] {'H >- eq_label[x:t,y:t]{'A;'B} ~ 'B}
+      = it
 
 
 interactive_rw reduce_eq_label_true_rw :
    (label[x:t] = label[y:t]  in label) -->
    eq_label[x:t,y:t]{'A;'B} <--> 'A
 
-interactive_rw reduce_eq_label_trivial_rw :
-      eq_label[x:t,x:t]{'A;'B} <--> 'A
-
 interactive_rw reduce_eq_label_false_rw :
    (not{.label[x:t] = label[y:t]  in label}) -->
    eq_label[x:t,y:t]{'A;'B} <--> 'B
+
+interactive_rw reduce_eq_label_trivial_rw :
+      eq_label[x:t,x:t]{'A;'B} <--> 'A
+
+let reduce_eq_label =  reduce_eq_label_trivial_rw orelseC
+                       (unfold_eq_label thenC reduce_meta_eq)
+
+let resource reduce += << eq_label[x:t,y:t]{'A;'B}  >>, reduce_eq_label
+
+
+interactive eq_label_false  'H:
+   sequent['ext] {'H >- not{.label[x:t] = label[y:t]  in label}} -->
+   sequent['ext] {'H >- 'B} -->
+   sequent['ext] {'H >- eq_label[x:t,y:t]{'A;'B}}
+
+interactive eq_label_true  'H:
+   sequent['ext] {'H >- 'A} -->
+   sequent['ext] {'H >- eq_label[x:t,x:t]{'A;'B}}
+
+let eq_labelIntroT p =
+   let tac =
+      rw reduce_eq_label 0 orelseT
+      eq_label_false (Sequent.hyp_count_addr p)
+   in tac p
+
+let resource intro += (<< eq_label[x:t,y:t]{'A;'B} >>, wrap_intro eq_labelIntroT )
+
+
 
 
 interactive not_eq_label  'H:
    sequent[squash] {'H >- eq_label[x:t,y:t]{."false";."true"} } -->
    sequent['ext] {'H >- not{.label[x:t] = label[y:t]  in label}}
 
-
-let reduce_eq_label =  reduce_eq_label_trivial_rw orelseC
-                       (unfold_eq_label thenC reduce_meta_eq)
-
 let not_eq_labelT p =
-      (not_eq_label (Sequent.hyp_count_addr p) thenT rw reduce_eq_label 0 thenT tryT (dT 0)) p
+   let n=Sequent.hyp_count_addr p in
+   let tac =
+      (not_eq_label n thenT rw reduce_eq_label 0 thenT tryT (dT 0))
+      orelseT trivialT
+   in tac p
 
 let resource intro +=
    (<< not{.label[x:t] = label[y:t]  in label}>>, wrap_intro not_eq_labelT )
-
-let resource reduce += << eq_label[x:t,y:t]{'A;'B}  >>, reduce_eq_label
 
 (******************)
 (*   Tactic       *)
@@ -105,16 +129,8 @@ let decideEqLabelT x y =
    in
       tac thenLT [tryT (dT 0);
                   tryT (dT 0);
-                  tryT (rwhAll (firstC
-                           [Itt_record_label0.reduce_eq_label_true_rw;
-                            reduce_eq_label_true_rw])
-                        thenAT nthHypT (-1)
-                        thenT rwhAll reduce_ifthenelse_true);
-                  tryT (rwhAll (firstC
-                           [Itt_record_label0.reduce_eq_label_false_rw;
-                            reduce_eq_label_false_rw])
-                        thenAT nthHypT (-1)
-                        thenT rwhAll reduce_ifthenelse_false)
+                  tryT (rwhAll reduce_eq_label_true_rw thenAT nthHypT (-1));
+                  tryT (rwhAll reduce_eq_label_false_rw thenAT nthHypT (-1));
                  ]
 
 
@@ -122,13 +138,12 @@ let decideEqLabelT x y =
 (*  Display Forms *)
 (******************)
 
-dform label_df : except_mode[src] :: except_mode[tex] :: label[t:t] =  slot[t:t]
+dform label_df_tex : except_mode[src] :: label[t:t] =  tt{ slot[t:t]}
 
-dform label_df_tex : mode[tex] :: label[t:t] =
-   izone `"\\mathtt{" ezone
-    slot[t:t]
-   izone "}" ezone
+declare eq_label[x:t,y:t]
+
+dform eq_label2_df : eq_label[x:t,y:t] =  label[x:t] space `"=" space  label[y:t]
 
 dform eq_label_df : except_mode[src] ::
-   eq_label[x:t,y:t]{'A;'B} = ifthenelse{eq_label{label[x:t];label[y:t]};'A;'B}
+   eq_label[x:t,y:t]{'A;'B} = ifthenelse{eq_label[x:t,y:t];'A;'B}
 

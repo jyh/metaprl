@@ -73,9 +73,11 @@ declare tt[name:s]
 declare tt{'t}
 declare tt_begin
 declare tt_end
+declare sub{'t}
 declare sub[name:s]
 declare sub_begin
 declare sub_end
+declare sup{'t}
 declare sup[name:s]
 declare sup_begin
 declare sup_end
@@ -184,6 +186,7 @@ declare le
 declare ge
 declare equiv
 declare vee
+declare perp
 declare leftarrow
 declare middlearrow
 declare rightarrow

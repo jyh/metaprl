@@ -12,7 +12,9 @@ include Itt_record
 
 include Itt_int_bool
 include Itt_atom
-
+include Itt_set
+include Itt_fun
+include Itt_tsquash
 
 open Printf
 open Mp_debug
@@ -33,6 +35,8 @@ open Tactic_type.Conversionals
 open Itt_int_bool
 open Itt_struct
 open Itt_record
+open Itt_fun
+open Itt_rfun
 
 (*!
  * @begin[doc]
@@ -261,12 +265,63 @@ interactive redAInCSpace {|intro[] |} 'H :
 (*! @docoff *)
 
 
-
-
-
 interactive cspaceElim {|elim[] |} 'H 'J:
    sequent['ext]{'H; a:int; b:int; c:int; color:atom; e:record; 'J[rcrd["color":t]{'color;point{'a;'b; 'c; 'e}}] >- 'C[rcrd["color":t]{'color;point{'a;'b; 'c; 'e}}] } -->
    sequent['ext]  {'H; p:cspace; 'J['p] >- 'C['p] }
+
+
+(*!
+ * Dependent Records
+ *)
+
+define unfold_semigroup1 : semigroup[G:t,mul:t,i:l] <-->
+   record[G:t]{univ[i:l];m.record[mul:t]{.'m -> 'm -> 'm;mul.
+   tsquash{.all x:'m.all y:'m.all z:'m. ('mul ('mul 'x 'y) 'z = 'mul 'x ('mul 'y 'z) in 'm)}}}
+
+define unfold_semigroup2 : semigroup[i:l] <--> semigroup["G":t,"*":t,i:l]
+
+let unfold_semigroup = (tryC unfold_semigroup2) thenC unfold_semigroup1
+
+let semigroupDT n = rw unfold_semigroup n thenT dT n
+
+let resource elim +=
+   [<<semigroup[i:l]>>,semigroupDT;
+    <<semigroup[G:t,mul:t,i:l]>>,semigroupDT
+   ]
+let resource intro +=
+   [<<semigroup[i:l]>>,wrap_intro (semigroupDT 0);
+    <<semigroup[G:t,mul:t,i:l]>>, wrap_intro (semigroupDT 0)
+   ]
+
+
+define integers : integers <-->
+   rcrd["Z":t]{int;
+   rcrd["+":t]{.lambda{x.lambda{y. 'x +@ 'y}};
+   rcrd["*":t]{.lambda{x.lambda{y. 'x *@ 'y}}
+              }}}
+
+interactive integers_add_semigroup 'H :
+   sequent['ext] {'H >- integers IN semigroup["Z":t,"+":t,0:l]}
+
+interactive integers_mul_semigroup 'H :
+   sequent['ext] {'H >- integers IN semigroup["Z":t,"*":t,0:l]}
+
+
+define morphisms : morphisms{'A}  <-->
+   rcrd["M":t]{.'A -> 'A;rcrd["*":t]{lambda{f.lambda{g. lambda{x. 'f ('g 'x)}}}}}
+
+interactive morphisms_semigroup 'H :
+   sequent[squash] {'H >- 'A IN univ[i:l]} -->
+   sequent['ext] {'H >- morphisms{'A} IN semigroup["M":t,"*":t,i:l]}
+
+interactive semigroupAssos4 'H semigroup[i:l] :
+   sequent[squash] {'H  >- 'g IN semigroup[i:l]} -->
+   sequent['ext] {'H  >-
+    all a:field["G":t]{'g}. all b:field["G":t]{'g}. all c:field["G":t]{'g}. all d:field["G":t]{'g}.
+      (field["*":t]{'g} (field["*":t]{'g} (field["*":t]{'g} 'a 'b) 'c) 'd =
+       field["*":t]{'g} 'a (field["*":t]{'g} 'b (field["*":t]{'g} 'c 'd)) in field["G":t]{'g}
+      )}
+
 
 
 
@@ -276,7 +331,6 @@ interactive cspaceElim {|elim[] |} 'H 'J:
 interactive tst 'H :
    sequent['ext]  { 'H >-  'C} -->
    sequent['ext]  { 'H >-  'C}
-
 
 
 dform plane:  plane = mathbbP `"lane"
@@ -294,6 +348,10 @@ dform point3: point{'a;'b;'c;'e} = `"point(" 'a `"," 'b `"," 'c ")"
 
 dform length: length{'p} = `"|" 'p `"|" subtwo
 
+
+dform self_mul_df  : except_mode [src] ::  (self["*":t]{'mul} 'x 'y) = `"(" 'x `"*" 'y `")"
+
+dform mul_df  : except_mode [src] ::  (field["*":t]{'r} 'x 'y) = `"(" 'x `" "  `"*" sub{'r} " " 'y `")"
 
 
 

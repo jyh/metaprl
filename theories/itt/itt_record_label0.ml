@@ -1,6 +1,7 @@
 (* labels as natural numberas *)
 
 include Itt_nat
+include Itt_struct2
 include Itt_struct3
 
 open Base_meta
@@ -13,7 +14,7 @@ open Var
 open Tactic_type
 open Tactic_type.Tacticals
 open Itt_bool
-
+open Itt_struct2
 
 (*
 let rwAll c = onAllMClausesT (rw c)
@@ -37,12 +38,25 @@ define unfold_zero : zero <--> 0
 define unfold_next : next{'x} <--> ('x +@ 1)
 
 
-declare undefined{}
 define unfoldInd :   ind_lab{'n; 'base; l. 'up['l]} <-->
-                     ind{'n; i,j.undefined; 'base; k,l . 'up['l]}
+                     ind{'n; 'base; k,l . 'up['l]}
 
 
-define unfold_eq_label : eq_label{'x;'y} <--> eq_int{'x;'y}
+
+interactive_rw reduce_ind_up :
+   ('x IN label) -->
+   ind_lab{next{'x}; 'base; l. 'up['l]} <-->
+   ('up[ind_lab{'x ; 'base; l. 'up['l]}])
+
+interactive_rw reduce_ind_base :
+   (ind_lab{zero; 'base; l. 'up['l]}) <-->
+   'base
+
+(*! @docoff *)
+let resource reduce +=
+   [<< ind_lab{next{'x}; 'base; l. 'up['l]} >>, reduce_ind_up;
+    << ind_lab{zero; 'base; l. 'up['l]} >>, reduce_ind_base]
+
 
 (******************)
 (*   Rules        *)
@@ -70,43 +84,12 @@ interactive labelBackInduction 'H 'n bind{x.'C['x]} 'm 'z :
    sequent ['ext] { 'H  >- 'C[zero] }
 
 
-(**** ind ****)
-
-interactive_rw reduce_ind_up :
-   ('x IN label) -->
-   ind_lab{next{'x}; 'base; l. 'up['l]} <-->
-   ('up[ind_lab{'x ; 'base; l. 'up['l]}])
-
-interactive_rw reduce_ind_base :
-   (ind_lab{zero; 'base; l. 'up['l]}) <-->
-   'base
-
-(*! @docoff *)
-let resource reduce +=
-   [<< ind_lab{next{'x}; 'base; l. 'up['l]} >>, reduce_ind_up;
-    << ind_lab{zero; 'base; l. 'up['l]} >>, reduce_ind_base]
 
 (**** equality ****)
 
 interactive label_sqequal 'H:
    sequent[squash] {'H >-'n = 'm  in label} -->
    sequent['ext] {'H >- 'n ~ 'm}
-
-interactive reduce_eq_label_true {| intro [] |} 'H:
-   sequent[squash] {'H >-'n = 'm  in label} -->
-   sequent['ext] {'H >- eq_label{'n;'m} ~ btrue}
-
-interactive reduce_eq_label_false {| intro [] |} 'H:
-   sequent[squash] {'H >- not{.'n = 'm  in label}} -->
-   sequent['ext] {'H >- eq_label{'n;'m} ~ bfalse}
-
-interactive_rw reduce_eq_label_true_rw :
-   ('n = 'm  in label) -->
-   eq_label{'n;'m} <--> btrue
-
-interactive_rw reduce_eq_label_false_rw :
-   (not{.'n = 'm  in label}) -->
-   eq_label{'n;'m} <--> bfalse
 
 interactive decide_eq_label 'H 'x 'y :
    [wf] sequent[squash] {'H >- 'x IN label} -->
@@ -120,22 +103,6 @@ interactive decide_eq_label 'H 'x 'y :
 (******************)
 
 
-let decideEqLabelT x y =
-   let tac p =
-      decide_eq_label (Sequent.hyp_count_addr p) x y p
-   in
-      tac thenLT [idT;
-                  idT;
-                  tryT (rwhAll reduce_eq_label_true_rw
-                        thenAT nthHypT (-1)
-                        thenT rwhAll reduce_ifthenelse_true);
-                  tryT (rwhAll reduce_eq_label_false_rw
-                        thenAT nthHypT (-1)
-                        thenT rwhAll reduce_ifthenelse_false)
-                 ]
-
-
-
 
 (******************)
 (*  Display Forms *)
@@ -147,4 +114,3 @@ dform zero_df : except_mode [src] :: zero = `"0"
 
 dform next_df : except_mode [src] :: next{'x} = slot{'x}  `"'"
 
-dform eq_label_df : except_mode[src] :: eq_label{'x;'y} =   slot{'x} space `"=" space slot{'y}

@@ -310,6 +310,8 @@ let revHypSubstT i j p =
       let h' = mk_equal_term t b a in
          (substT h' j thenET (equalSymT thenT nthHypT i)) p
 
+
+
 (* cutMem *)
 
 let letAtT i x_is_s_in_S p =

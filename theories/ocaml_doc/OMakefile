@@ -40,7 +40,7 @@ PRINT_THEORIES =\
     ocaml_doc_class1
 
 TheoryDocument(theory, $(PRINT_THEORIES))
-LaTeXDocumentInstall(tex, $(DOCDIR), book2, book2, theory-body)
+LaTeXDocumentInstall(tex doc, $(DOCDIR), ocaml-book, book2, theory-body)
 
 #
 # Clean up

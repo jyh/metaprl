@@ -541,7 +541,7 @@ dform status_partial_df : status_partial =
    keyword["#"]
 
 dform status_asserted_df : status_asserted =
-   keyword["!"]
+   keyword["?"]
 
 dform status_complete : status_complete =
    keyword["*"]

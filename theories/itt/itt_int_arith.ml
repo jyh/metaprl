@@ -556,7 +556,8 @@ let mul_normalizeC = (repeatC (higherC mul_Assoc2C)) thenC
 
 interactive_rw sum_same_products1_rw :
    ('a IN int) -->
-   ((number[i:n] *@ 'a) +@ (number[j:n] *@ 'a)) <--> ((number[i:n] +@ number[j:n]) *@ 'a)
+   ((number[i:n] *@ 'a) +@ (number[j:n] *@ 'a)) <--> ((number[i:n] +@
+ number[j:n]) *@ 'a)
 
 let sum_same_products1C = sum_same_products1_rw
 
@@ -710,6 +711,7 @@ let ge_addContractC = ge_addContract_rw
 let reduceContradRelT i p = (rw ((addrC [0] normalizeC) thenC
                                  (addrC [1] normalizeC) thenC
 		                 ge_addContractC thenC
+				 (unfold_ge thenC unfold_le thenC (addrC [0] unfold_le_bool)) thenC
 			         reduceC)
                                 i) p
 
@@ -880,5 +882,6 @@ sequent [squash] { 'H >- 'a IN int } -->
 sequent [squash] { 'H >- 'b IN int } -->
 sequent [squash] { 'H >- 'c IN int } -->
 sequent ['ext] { 'H; x: (('c *@ ('b +@ ('a *@ 'c)) +@ ('b *@ 'c)) >= 'b +@ 0);
-                     t: (((((('c *@ 'b) *@ 1) +@ (2 *@ ('a *@ ('c *@ 'c)))) +@ (('c *@ ((-1) *@ 'a)) *@ 'c)) +@ ('b *@ 'c)) < 'b)
+                     t: (((((('c *@ 'b) *@ 1) +@ (2 *@ ('a *@ ('c *@ 'c)))) +@
+ (('c *@ ((-1) *@ 'a)) *@ 'c)) +@ ('b *@ 'c)) < 'b)
                 >- "assert"{bfalse} }

@@ -209,7 +209,8 @@ type elim_option =
 let intro_compact entries =
    (* Collect all the entries with the same term value *)
    let rec separate t = function
-      { info_term = t' } as hd :: tl ->
+      hd :: tl ->
+         let t' = hd.info_term in
          let entries, tl = separate t tl in
             if alpha_equal t t' then
                hd :: entries, tl
@@ -300,8 +301,7 @@ let intro_compact entries =
            info_value = tac
          }
    in
-      List.map compile (divide entries)
-
+      if entries != [] then List.map compile (divide entries) else []
 
 (*
  * Extract a D tactic from the data.

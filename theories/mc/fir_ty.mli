@@ -1,7 +1,7 @@
 (*
  * Function Intermediate Representation formalized in MetaPRL.
  *
- * Defines the type system in the FIR.
+ * Defines the types in the FIR.
  *
  * ----------------------------------------------------------------
  *
@@ -39,7 +39,11 @@ open Tactic_type.Conversionals
  * Declarations.
  *************************************************************************)
 
-(* Integer and floating point precision. *)
+(*
+ * Integer and floating point precision.
+ * The floating point precision terms are here for completeness.
+ *    It'll be a while before we do any work with floating point numbers.
+ *)
 declare int8
 declare int16
 declare int32
@@ -54,7 +58,6 @@ declare tyInt
 (*
  * Enumeration type.
  * Represents a set of integers from 0 to ('num - 1).
- * 'num should be a number.
  *)
 declare tyEnum{ 'num }
 

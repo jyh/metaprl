@@ -1,0 +1,16 @@
+These are just some general notes about what's here.  Perhaps one day
+I'll actually turn this into a full fledged readme that's generally useful...
+
+fir_type* files are for typing rules/judgements.
+All the other files declare terms for FIR terms and rewrites
+to evaluate such terms.
+
+Note that some terms declared (and maybe entire files) may be
+there only for completeness or becuase I think I might need them later
+(or haven't bothered removing them yet).
+
+Subscripting is still a bit iffy at this point, especially given
+that there's a bazillino subscripting operators.  I'm pretty much
+ignoring them all at this point.
+
+The typing rules definitely also need a lot of work at this point.

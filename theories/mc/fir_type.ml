@@ -56,10 +56,6 @@ declare array{ 'A }
 
 (* Function type from 'A to 'B *)
 declare ty_fun{ 'A; 'B }
-(*
-declare apply
-declare lambda
-*)
 
 (* Universally quantified type. *)
 declare ty_all{ x. 'ty['x] }
@@ -203,6 +199,28 @@ interactive minus_int_tyInt_membership {| intro [] |} 'H :
    sequent ['ext] { 'H >- minus{'a} = minus{'b} in tyInt }
 
 (*
+ * Enumeration type.
+ *)
+
+prim tyEnum_equality {| intro [] |} 'H :
+   [wf] sequent ['ext] { 'H >- 'a = 'b in int } -->
+   sequent ['ext] { 'H >- tyEnum{'a} = tyEnum{'b} in fir_univ }
+   = it
+
+prim number_tyEnum_membership {| intro [] |} 'H :
+   [wf] sequent ['ext] { 'H >- 'a = 'b in int } -->
+   [main] sequent ['ext] { 'H >- "assert"{ lt_bool{'a; 'c} } } -->
+   [main] sequent ['ext] { 'H >- "assert"{ le_bool{0; 'a} } } -->
+   sequent ['ext]{ 'H >- 'a = 'b in tyEnum{'c} }
+   = it
+
+interactive atomEnum_tyEnum_membership {| intro [] |} 'H :
+   [wf] sequent ['ext] { 'H >- 'a = 'b in int } -->
+   [main] sequent ['ext] { 'H >- "assert"{ lt_bool{'a; 'c} } } -->
+   [main] sequent ['ext] { 'H >- "assert"{ le_bool{0; 'a} } } -->
+   sequent ['ext]{ 'H >- 'a = 'b in tyEnum{'c} }
+
+(*
  * Product type.
  * The ITT rules should be sufficient here. If needed,
  *    pair membership/equality may need to be defined here since that
@@ -292,6 +310,7 @@ prim lambda_member_equality {| intro [] |} 'H 'x :
       lambda{ x1. 'f1['x1] } = lambda{ x2. 'f2['x2] } in ty_fun{'A; 'B} }
    = it
 
+(* Is this completely correct? *)
 prim apply_equality {| intro [] |} 'H 'A :
    [wf] sequent ['ext] { 'H >- 'x1 = 'x2 in 'A } -->
    [wf] sequent ['ext] { 'H >- 'f1 = 'f2 in ty_fun{'A; 'B} } -->

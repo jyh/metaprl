@@ -2,6 +2,7 @@
  * Functional Intermediate Representation formalized in MetaPRL.
  *
  * Type judgements for FIR state operations.
+ * This file may be removed if it continues to serve little purpose.
  *
  * ----------------------------------------------------------------
  *

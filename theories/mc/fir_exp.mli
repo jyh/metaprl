@@ -52,7 +52,11 @@ declare idOp
 declare eqEqOp
 declare neqEqOp
 
-(* Subscript operators. *)
+(*
+ * Subscript operators.
+ * I have no clue how these are supposed to work/evaluate.
+ * Consequently, I just ignore them right now.
+ *)
 declare blockPolySub
 declare blockRawIntSub{ 'precision; 'sign }
 declare blockFloatSub{ 'precision }
@@ -61,7 +65,11 @@ declare rawFloatSub{ 'precision }
 declare rawDataSub
 declare rawFunctionSub
 
-(* Allocation operators. *)
+(*
+ * Allocation operators.
+ * I'm unsure about allocMalloc and allocUnion, so I haven't dealt
+ * with them yet.
+ *)
 declare allocTuple{ 'ty; 'atom_list }
 declare allocArray{ 'ty; 'atom_list }
 declare allocUnion{ 'ty; 'ty_var; 'num; 'atom_list }
@@ -95,6 +103,10 @@ declare letBinop{ 'op; 'ty; 'a1; 'a2; v. 'exp['v] }
 (*
  * Function application.
  * letExt is treated as a no-op; it evaluates to 'exp[it].
+ *    This is on the assumption that it has a side-effect that we dont'
+ *    need to worry about here.  If that's not true... uh-oh.
+ * tailCall's aren't emitted by the compiler. I declare the term
+ *    here for completeness.
  *)
 declare letExt{ 'ty; 'string; 'ty_of_str; 'atom_list; v. 'exp['v] }
 declare tailCall{ 'var; 'atom_list }
@@ -111,9 +123,13 @@ declare "match"{ 'key; 'cases }
 (* Allocation. *)
 declare letAlloc{ 'alloc_op; v. 'exp['v] }
 
-(* Subscripting. *)
-declare letSubscript{ 'subop; 'ty; 'ref; 'index; v. 'exp['v] }
-declare setSubscript{ 'subop; 'ty; 'ref; 'index; 'new_val; 'exp }
+(*
+ * Subscripting.
+ * In setSubscript, we bind the updated value to v in 'exp.
+ * For evaluation purposes, 'subop is completely ignored.
+ *)
+declare letSubscript{ 'subop; 'ty; 'var; 'index; v. 'exp['v] }
+declare setSubscript{ 'subop; 'ty; 'var; 'index; 'new_val; v. 'exp['v] }
 declare memcpy{ 'subop; 'var1; 'atom1; 'var2; 'atom2; 'len; 'exp }
 
 (*
@@ -147,3 +163,4 @@ topval reduce_match_block : conv
 topval reduce_allocTuple : conv
 topval reduce_allocArray : conv
 topval reduce_letSubscript : conv
+topval reduce_setSubscript : conv

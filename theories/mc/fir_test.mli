@@ -2,7 +2,9 @@
  * Functional Intermediate Representation formalized in MetaPRL.
  *
  * This is a dummy file to satisfy the Makefile dependencies.
- * See fir_test.ml for the actual test code.
+ * See fir_test.ml for the actual test code.  It may be either temporary
+ * code I was/am playing around with, or it could be output emitted by
+ * the mc compiler.
  *
  * ----------------------------------------------------------------
  *

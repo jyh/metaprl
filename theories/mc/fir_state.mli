@@ -6,6 +6,8 @@
  *    The 1st component is the length of the list, and also servers
  *    as the next reference id to allocate.  Reference id's start
  *    at zero and increase as you go toward the _beginning_ of the list.
+ * This file may be removed at a later date if its contents continue
+ *    to serve little purpose.
  *
  * ----------------------------------------------------------------
  *

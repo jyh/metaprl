@@ -86,34 +86,28 @@ let resource reduce += [
  *************************************************************************)
 
 (*
-
-(*
  * LetUnop/LetBinop equality. Note that 'T is the type 'e[v] and that
  *    the equality here is intensional.
  *)
 
 prim letUnop_equality {| intro [] |} 'H 's 'v :
-   [wf] sequent ['ext] { 'H >- 'state1 = 'state2 in ty_state } -->
    [wf] sequent ['ext] { 'H >- 'ty1 = 'ty2 in fir_univ } -->
    [wf] sequent ['ext]
       { 'H >- unop_exp{'op1; 'a} = unop_exp{'op2; 'b} in 'ty1 } -->
-   [wf] sequent ['ext] { 'H; s: ty_state; v: 'ty1 >-
-      'e1['s; 'v] = 'e2['s; 'v] in 'T } -->
+   [wf] sequent ['ext] { 'H; v: 'ty1 >- 'e1['v] = 'e2['v] in 'T } -->
    sequent ['ext] { 'H >-
-      letUnop{ 'state1; 'op1; 'ty1; 'a; s1, v1. 'e1['s1; 'v1] } =
-      letUnop{ 'state2; 'op2; 'ty2; 'b; s2, v2. 'e2['s2; 'v2] } in 'T }
+      letUnop{ 'op1; 'ty1; 'a;  v1. 'e1['v1] } =
+      letUnop{ 'op2; 'ty2; 'b;  v2. 'e2['v2] } in 'T }
    = it
 
 prim letBinop_equality {| intro [] |} 'H 's 'v :
-   [wf] sequent ['ext] { 'H >- 'state1 = 'state2 in ty_state } -->
    [wf] sequent ['ext] { 'H >- 'ty1 = 'ty2 in fir_univ } -->
    [wf] sequent ['ext] { 'H >-
       binop_exp{'op1; 'a1; 'a2} = binop_exp{'op2; 'b1; 'b2} in 'ty1 } -->
-   [wf] sequent ['ext] { 'H; s: ty_state; v: 'ty1 >-
-      'e1['s; 'v] = 'e2['s; 'v] in 'T } -->
+   [wf] sequent ['ext] { 'H; v: 'ty1 >- 'e1['v] = 'e2['v] in 'T } -->
    sequent ['ext] { 'H >-
-      letBinop{ 'state1; 'op1; 'ty1; 'a1; 'a2; s1, v1. 'e1['s1; 'v1] } =
-      letBinop{ 'state2; 'op2; 'ty2; 'b1; 'b2; s2, v2. 'e2['s2; 'v2] } in 'T }
+      letBinop{ 'op1; 'ty1; 'a1; 'a2; v1. 'e1['v1] } =
+      letBinop{ 'op2; 'ty2; 'b1; 'b2; v2. 'e2['v2] } in 'T }
    = it
 
 interactive idOp_equality {| intro [] |} 'H :
@@ -127,36 +121,32 @@ interactive idOp_equality {| intro [] |} 'H :
 
 prim matchCase_equality {| intro [] |} 'H :
    [wf] sequent ['ext] { 'H >- 'k1 = 'k2 in ty_int_set } -->
-   [wf] sequent ['ext] { 'H; s: ty_state >- 'e1['s] = 'e2['s] in 'T } -->
-   sequent ['ext] { 'H >-
-      matchCase{'k1; s1. 'e1['s1]} =
-      matchCase{'k2; s2. 'e2['s2]} in 'T }
+   [wf] sequent ['ext] { 'H >- 'e1 = 'e2 in 'T } -->
+   sequent ['ext] { 'H >- matchCase{'k1; 'e1} = matchCase{'k2; 'e2} in 'T }
    = it
 
 prim match_int_equality {| intro [] |} 'H :
-   [wf] sequent ['ext] { 'H >- 'state1 = 'state2 in ty_state } -->
-   [wf] sequent ['ext] { 'H >- 'i = 'j in int } -->
+   [wf] sequent ['ext] { 'H >- number[i:n] = number[j:n] in int } -->
    [wf] sequent ['ext] { 'H >- 'cases1 = 'cases2 in array{'T} } -->
 (*
    [main] sequent ['ext] { 'H >-
       "assert"{ produces_match{ number[i:n]; 'cases1 } } } -->
 *)
    sequent ['ext] { 'H >-
-      match_int{ 'state1; 'i; 'cases1 } =
-      match_int{ 'state2; 'j; 'cases2 } in 'T }
+      "match"{ number[i:n]; 'cases1 } =
+      "match"{ number[j:n]; 'cases2 } in 'T }
    = it
 
 prim match_block_equality {| intro [] |} 'H :
-   [wf] sequent ['ext] { 'H >- 'state1 = 'state2 in ty_state } -->
    [wf] sequent ['ext] { 'H >- 'cases1 = 'cases2 in array{'T} } -->
-   [wf] sequent ['ext] { 'H >- 'i = 'j in ty_block } -->
+   [wf] sequent ['ext] { 'H >- 'i = 'j in int } -->
 (*
    [main] sequent ['ext] { 'H >-
       "assert"{ produces_match{ 'i; 'cases1 } } } -->
 *)
    sequent ['ext] { 'H >-
-      match_block{ 'state1; 'i; 'cases1 } =
-      match_block{ 'state2; 'j; 'cases2 } in 'T }
+      "match"{ block{'i; 'args}; 'cases1 } =
+      "match"{ block{'j; 'args}; 'cases2 } in 'T }
    = it
 
 (*
@@ -167,6 +157,7 @@ prim ty_alloc_op_equality {| intro [] |} 'H :
    sequent ['ext] { 'H >- ty_alloc_op = ty_alloc_op in fir_univ }
    = it
 
+(* Incorrect I think. *)
 prim allocTuple_member_equality {| intro [] |} 'H :
    [wf] sequent ['ext] { 'H >- 'ty1 = 'ty2 in fir_univ } -->
    [wf] sequent ['ext] { 'H >- 'list1 = 'list2 in array{fir_value} } -->
@@ -175,6 +166,7 @@ prim allocTuple_member_equality {| intro [] |} 'H :
       allocTuple{'ty2; 'list2} in ty_alloc_op }
    = it
 
+(* Incorrect I think. *)
 prim allocArray_member_equality {| intro [] |} 'H :
    [wf] sequent ['ext] { 'H >- 'ty1 = 'ty2 in fir_univ } -->
    [wf] sequent ['ext] { 'H >- 'list1 = 'list2 in array{fir_value} } -->
@@ -183,6 +175,7 @@ prim allocArray_member_equality {| intro [] |} 'H :
       allocArray{'ty2; 'list2} in ty_alloc_op }
    = it
 
+(* Incorrect I think. *)
 prim allocUnion_member_equality {| intro [] |} 'H :
    [wf] sequent ['ext] { 'H >- 'ty1 = 'ty2 in fir_univ } -->
    (* ty_var things should go here... *)
@@ -193,8 +186,9 @@ prim allocUnion_member_equality {| intro [] |} 'H :
       allocUnion{'ty2; 'ty_var2; 'num2; 'list2 } in ty_alloc_op }
    = it
 
+(* Need to be corrected / updated. *)
+(*
 prim letAlloc_equality {| intro [] |} 'H 's 'v :
-   [wf] sequent ['ext] { 'H >- 'state1 = 'state2 in ty_state } -->
    [wf] sequent ['ext] { 'H >- 'alloc_op1 = 'alloc_op2 in ty_alloc_op } -->
    [main] sequent ['ext] { 'H; s: ty_state; v: ty_ref >-
       'e1['s; 'v] = 'e2['s; 'v] in 'T } -->
@@ -202,6 +196,7 @@ prim letAlloc_equality {| intro [] |} 'H 's 'v :
       letAlloc{ 'state1; 'alloc_op1; s1, v1. 'e1['s1; 'v1] } =
       letAlloc{ 'state2; 'alloc_op2; s2, v2. 'e2['s2; 'v2] } in 'T }
    = it
+*)
 
 (*
  * Subscripting operators and expressions.
@@ -209,8 +204,9 @@ prim letAlloc_equality {| intro [] |} 'H 's 'v :
  * We're also not requiring that references/indices be in bounds.
  *)
 
+(* Needs to be corrected / updated. *)
+(*
 prim letSubscript_equality {| intro [] |} 'H 's 'v :
-   [wf] sequent ['ext] { 'H >- 'st1 = 'st2 in ty_state } -->
    [wf] sequent ['ext] { 'H >- 'ty1 = 'ty2 in fir_univ } -->
    [wf] sequent ['ext] { 'H >- 'r1 = 'r2 in ty_ref } -->
    [wf] sequent ['ext] { 'H >- 'i1 = 'i2 in int } -->
@@ -221,6 +217,7 @@ prim letSubscript_equality {| intro [] |} 'H 's 'v :
       letSubscript{ 'st2; 'op2; 'ty2; 'r2; 'i2; s2, v2. 'e2['s2; 'v2] } in 'T }
    = it
 
+(* Needs to be corrected / updated. *)
 prim setSubscript_equality {| intro [] |} 'H 's :
    [wf] sequent ['ext] { 'H >- 'st1 = 'st2 in ty_state } -->
    [wf] sequent ['ext] { 'H >- 'ty1 = 'ty2 in fir_univ } -->
@@ -232,5 +229,4 @@ prim setSubscript_equality {| intro [] |} 'H 's :
       setSubscript{ 'st1; 'op1; 'ty1; 'r1; 'i1; 'n1; s1. 'e1['s1] } =
       setSubscript{ 'st2; 'op2; 'ty2; 'r2; 'i2; 'n2; s2. 'e2['s2] } in 'T }
    = it
-
 *)

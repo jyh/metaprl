@@ -91,8 +91,8 @@ declare "match"{ 'key; 'cases }
 declare letAlloc{ 'alloc_op; v. 'exp['v] }
 
 (* Subscripting. *)
-declare letSubscript{ 'subop; 'ty; 'ref; 'index; v. 'exp['v] }
-declare setSubscript{ 'subop; 'ty; 'ref; 'index; 'new_val; 'exp }
+declare letSubscript{ 'subop; 'ty; 'var; 'index; v. 'exp['v] }
+declare setSubscript{ 'subop; 'ty; 'var; 'index; 'new_val; v. 'exp['v] }
 declare memcpy{ 'subop; 'var1; 'atom1; 'var2; 'atom2; 'len; 'exp }
 
 (*
@@ -221,7 +221,7 @@ dform letSubscript_df : except_mode[src] ::
    szone slot{'exp} ezone popm
    ezone popm
 dform setSubscript_df : except_mode[src] ::
-   setSubscript{ 'subop; 'ty; 'ref; 'index; 'new_val; 'exp } =
+   setSubscript{ 'subop; 'ty; 'ref; 'index; 'new_val; v. 'exp } =
    szone slot{'ref} `"[" slot{'index} `"]" Nuprl_font!leftarrow
    slot{'new_val} hspace
    `"with subop " slot{'subop} hspace
@@ -252,7 +252,13 @@ prim_rw reduce_eqEqOp : binop_exp{ eqEqOp; 'a1; 'a2 } <-->
 prim_rw reduce_neqEqOp : binop_exp{ neqEqOp; 'a1; 'a2 } <-->
    ifthenelse{ beq_int{'a1; 'a2}; val_false; val_true }
 
-(* Normal values. *)
+(*
+ * Normal values.
+ * I could turn reduce_atomEnum into a conditional rewrite
+ *    to make sure that 0 <= 'num < 'bound,
+ *    but I don't see a compelling reason to do this as it
+ *    just complicates evaluation.
+ *)
 prim_rw reduce_atomInt : atomInt{ 'num } <--> 'num
 prim_rw reduce_atomEnum : atomEnum{ 'bound; 'num } <--> 'num
 prim_rw reduce_atomRawInt : atomRawInt{ 'num } <--> 'num
@@ -266,12 +272,20 @@ prim_rw reduce_letBinop :
    letBinop{ 'op; 'ty; 'a1; 'a2; v. 'exp['v] } <-->
    'exp[ binop_exp{ 'op; 'a1; 'a2 } ]
 
-(* Function application. *)
+(*
+ * Function application.
+ * letExt is treated as a no-op, on the assumption that it
+ * has a side-effect that we don't need to worry about here.
+ * If that's not true... uh-oh.
+ *)
 prim_rw reduce_letExt :
    letExt{ 'ty; 'string; 'ty_of_str; 'atom_list; v. 'exp['v] } <-->
    'exp[it]
 
-(* Control. *)
+(*
+ * Control.
+ * If the case list is nil, we can't evaluate the match expression.
+ *)
 prim_rw reduce_match_int :
    "match"{ number[i:n]; cons{ matchCase{'set; 'e }; 'el } } <-->
    ifthenelse{ member{ number[i:n]; 'set };
@@ -292,10 +306,16 @@ prim_rw reduce_allocArray :
    letAlloc{ allocArray{ 'ty; 'atom_list }; v. 'exp['v] } <-->
    'exp['atom_list]
 
-(* Subscripting. *)
+(*
+ * Subscripting.
+ * For evaluation purposes, 'subop is completely ignored.
+ *)
 prim_rw reduce_letSubscript :
-   letSubscript{ 'subop; 'ty; 'ref; 'index; v. 'exp['v] } <-->
-   'exp[ nth{'ref; 'index} ]
+   letSubscript{ 'subop; 'ty; 'var; 'index; v. 'exp['v] } <-->
+   'exp[ nth{ 'var; 'index } ]
+prim_rw reduce_setSubscript :
+   setSubscript{ 'subop; 'ty; 'var; 'index; 'new_val; v. 'exp['v] } <-->
+   'exp[ replace_nth{ 'var; 'index; 'new_val } ]
 
 (*************************************************************************
  * Automation.
@@ -325,5 +345,7 @@ let resource reduce += [
    << letAlloc{ allocArray{ 'ty; 'atom_list }; v. 'exp['v] } >>,
       reduce_allocArray;
    << letSubscript{ 'subop; 'ty; 'ref; 'index; v. 'exp['v] } >>,
-      reduce_letSubscript
+      reduce_letSubscript;
+   << setSubscript{ 'subop; 'ty; 'var; 'index; 'new_val; v. 'exp['v] } >>,
+      reduce_setSubscript
 ]

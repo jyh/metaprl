@@ -1,7 +1,7 @@
 (*
  * Functional Intermediate Representation formalized in MetaPRL.
  *
- * Define the type system in the FIR.
+ * Define the types in the FIR.
  *
  * ----------------------------------------------------------------
  *

@@ -66,10 +66,6 @@ declare array{ 'A }
  * FIR functions may not.
  *)
 declare ty_fun{ 'A; 'B }
-(*
-declare apply
-declare lambda
-*)
 
 (*
  * Universally quantified type.

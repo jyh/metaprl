@@ -15,6 +15,7 @@ open Refiner.Refiner
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
 open Refiner.Refiner.TermMan
+open Refiner.Refiner.TermSubst
 open Refiner.Refiner.RefineError
 open Resource
 
@@ -317,7 +318,7 @@ let d_resource = d_resource.resource_improve d_resource (quotient_equal_member_t
 let inf_quotient f decl t =
    let x, y, a, e = dest_quotient t in
    let decl', a' = f decl a in
-   let decl'', e' = f ((x, a)::(y, a)::decl') e in
+   let decl'', e' = f (add_unify_subst x a (add_unify_subst y a decl')) e in
    let le1, le2 = dest_univ a', dest_univ e' in
       decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2)
 

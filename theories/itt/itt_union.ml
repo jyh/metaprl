@@ -367,7 +367,7 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (union
 let inf_inl f decl t =
    let a = dest_inl t in
    let decl', a' = f decl a in
-      decl', mk_union_term a' (mk_var_term (maybe_new_var "T" (List.map fst decl')))
+      decl', mk_union_term a' (mk_var_term (new_unify_var decl' "T"))
 
 let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (inl_term, inf_inl)
 
@@ -377,19 +377,19 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (inl_t
 let inf_inr f decl t =
    let a = dest_inr t in
    let decl', a' = f decl a in
-      decl', mk_union_term (mk_var_term (maybe_new_var "T" (List.map fst decl'))) a'
+      decl', mk_union_term (mk_var_term (new_unify_var decl' "T")) a'
 
 let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (inr_term, inf_inr)
 
 (*
  * Type of decide.
  *)
-let inf_decide (inf : typeinf_func) (decl : term_subst) (t : term) =
+let inf_decide (inf : typeinf_func) (decl : unify_subst) (t : term) =
    let e, x, a, y, b = dest_decide t in
    let decl', e' = inf decl e in
    let l, r = dest_union e' in
-   let decl'', a' = inf ((x, l)::decl') a in
-   let decl''', b' = inf ((y, l)::decl'') b in
+   let decl'', a' = inf (add_unify_subst x l decl') a in
+   let decl''', b' = inf (add_unify_subst y l decl'') b in
       unify decl''' StringSet.empty a' b', a'
 
 let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (decide_term, inf_decide)

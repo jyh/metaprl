@@ -34,7 +34,7 @@ let _ =
 (*
  * This is the type of the inference algorithm.
  *)
-type typeinf_func = term_subst -> term -> term_subst * term
+type typeinf_func = unify_subst -> term -> unify_subst * term
 
 (*
  * Modular components also get a recursive instance of
@@ -68,7 +68,7 @@ let infer tbl =
    let rec aux decl t =
       if is_var_term t then
          let v = dest_var t in
-            try decl, List.assoc v decl with
+            try decl, List.assoc v (subst_of_unify_subst decl) with
                Not_found ->
                   raise (RefineError ("typeinf", StringTermError ("can't infer type for", t)))
       else
@@ -84,9 +84,9 @@ let infer tbl =
 (*
  * Keep a list of resources for lookup by the toploop.
  *)
-let resources = ref []
+let resources = ref ([] : (string * typeinf_resource) list)
 
-let save name rsrc =
+let save name (rsrc : typeinf_resource) =
    resources := (name, rsrc) :: !resources
 
 let get_resource name =
@@ -124,7 +124,7 @@ and improve_resource { resource_data = tbl } (t, inf) =
      resource_close = close_resource
    }
 
-and close_resource rsrc modname =
+and close_resource (rsrc : typeinf_resource) modname =
    save modname rsrc;
    rsrc
 
@@ -158,7 +158,7 @@ let infer_type p t =
    in
    let { sequent_hyps = hyps } = Sequent.explode_sequent p in
    let subst = filter hyps 0 (SeqHyp.length hyps) in
-      (get_typeinf_arg p "typeinf") subst t
+      (get_typeinf_arg p "typeinf") (unify_subst_of_subst subst) t
 
 (*
  * -*-

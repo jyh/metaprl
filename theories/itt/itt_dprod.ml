@@ -341,7 +341,7 @@ let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (spread_term, e
 let inf_dprod f decl t =
    let v, a, b = dest_dprod t in
    let decl', a' = f decl a in
-   let decl'', b' = f ((v, a)::decl') b in
+   let decl'', b' = f (add_unify_subst v a decl') b in
    let le1, le2 = dest_univ a', dest_univ b' in
       decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2)
 
@@ -366,10 +366,10 @@ let inf_spread inf decl t =
    let decl', a' = inf decl a in
       if is_prod_term a' then
          let l, r = dest_prod a' in
-            inf ((u, l)::(v, r)::decl') b
+            inf (add_unify_subst u l (add_unify_subst v r decl')) b
       else if is_dprod_term a' then
          let x, l, r = dest_dprod a' in
-            inf ((u, l)::(v, subst r [mk_var_term u] [x])::decl') b
+            inf (add_unify_subst u l (add_unify_subst v (subst r [mk_var_term u] [x]) decl')) b
       else
          raise (RefineError ("typeinf", StringTermError ("can't infer type for", t)))
 

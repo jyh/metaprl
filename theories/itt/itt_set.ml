@@ -15,6 +15,7 @@ open Refiner.Refiner
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
 open Refiner.Refiner.TermMan
+open Refiner.Refiner.TermSubst
 open Refiner.Refiner.RefineError
 open Resource
 
@@ -299,7 +300,7 @@ let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (set_term, eqcd
 let inf_set f decl t =
    let v, ty, prop = dest_set t in
    let decl', ty' = f decl ty in
-   let decl'', prop' = f ((v, ty)::decl') prop in
+   let decl'', prop' = f (add_unify_subst v ty decl') prop in
    let le1, le2 = dest_univ ty', dest_univ prop' in
       decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2)
 

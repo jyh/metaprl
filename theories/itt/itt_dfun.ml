@@ -13,6 +13,7 @@ open Nl_debug
 open Refiner.Refiner
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermMan
+open Refiner.Refiner.TermSubst
 open Refiner.Refiner.RefineError
 open Resource
 
@@ -325,7 +326,7 @@ let d_resource = d_resource.resource_improve d_resource (apply_equal_term, d_wra
 let inf_dfun f decl t =
    let v, a, b = dest_dfun t in
    let decl', a' = f decl a in
-   let decl'', b' = f ((v, a)::decl') b in
+   let decl'', b' = f (add_unify_subst v a decl') b in
    let le1, le2 = dest_univ a', dest_univ b' in
       decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2)
 

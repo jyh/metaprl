@@ -292,7 +292,7 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (list_
  * Type of nil.
  *)
 let inf_nil f decl t =
-   decl, mk_var_term (new_var "T" (List.map fst decl))
+   decl, mk_var_term (new_unify_var decl "T")
 
 let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (nil_term, inf_nil)
 
@@ -316,7 +316,12 @@ let inf_list_ind inf decl t =
       if is_list_term e' then
          let decl'', base' = inf decl' base in
          let a = dest_list e' in
-         let decl''', step' = inf ((hd, a)::(tl, e')::(f, base')::decl'') step in
+         let decl''', step' =
+            inf (add_unify_subst hd a (**)
+                    (add_unify_subst tl e' (**)
+                        (add_unify_subst f base' decl'')))
+            step
+         in
             unify decl''' StringSet.empty base' step', base'
       else
          raise (RefineError ("typeinf", StringTermError ("can't infer type for", t)))

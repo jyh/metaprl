@@ -90,7 +90,7 @@ type 'term attribute =
  | TacticArg of tactic
  | IntTacticArg of (int -> tactic)
  | ArgTacticArg of (tactic_arg -> tactic)  (* For tactics that precompile *)
- | TypeinfArg of ((string * 'term) list -> 'term -> (string * 'term) list * 'term)
+ | TypeinfArg of (unify_subst -> 'term -> unify_subst * 'term)
 
 and 'a attributes = (string * 'a attribute) list
 

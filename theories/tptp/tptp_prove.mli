@@ -9,7 +9,7 @@ open Tacticals
 
 topval resolveT : int -> tactic
 
-topval proveT : tactic
+topval proveT : int -> tactic
 topval testT : tactic
 
 (*

@@ -24,7 +24,7 @@ open Tacticals
 (*
  * This is the type of the inference algorithm.
  *)
-type typeinf_func = term_subst -> term -> term_subst * term
+type typeinf_func = unify_subst -> term -> unify_subst * term
 
 (*
  * Modular components also get a recursive instance of
@@ -56,7 +56,7 @@ val get_resource : string -> typeinf_resource
  * Utilities.
  *)
 val typeinf_of_proof : tactic_arg -> typeinf_func
-val infer_type : tactic_arg -> term -> term_subst * term
+val infer_type : tactic_arg -> term -> unify_subst * term
 
 (*
  * -*-

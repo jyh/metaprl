@@ -330,7 +330,7 @@ let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (rfun_term, eqc
 let inf_rfun inf decl t =
    let f, v, a, b = dest_rfun t in
    let decl', a' = inf decl a in
-   let decl'', b' = inf ((v, a)::(f, mk_fun_term a void_term)::decl') b in
+   let decl'', b' = inf (add_unify_subst v a (add_unify_subst f (mk_fun_term a void_term) decl')) b in
    let le1, le2 = dest_univ a', dest_univ b' in
       decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2)
 
@@ -339,13 +339,16 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (rfun_
 (*
  * Type of lambda.
  *)
-let inf_lambda (f : typeinf_func) (decl : term_subst) (t : term) =
+let inf_lambda (f : typeinf_func) (decl : unify_subst) (t : term) =
    let v, b = dest_lambda t in
-   let a = new_var v (List.map fst decl) in
-   let decl', b' = f ((v, mk_var_term a)::decl) b in
+   let a = new_unify_var decl v in
+   let decl', b' = f (add_unify_subst v (mk_var_term a) decl) b in
    let decl'', a' =
+(*
       try decl', List.assoc a decl' with
-         Not_found -> (a, void_term)::decl', void_term
+         Not_found ->
+*)
+            (add_unify_subst a void_term decl'), void_term
    in
       decl'', mk_dfun_term v a' b'
 

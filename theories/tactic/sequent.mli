@@ -76,7 +76,7 @@ val get_subst_arg      : tactic_arg -> term_subst
 val get_tactic_arg     : tactic_arg -> string -> Tactic_type.tactic
 val get_int_tactic_arg : tactic_arg -> string -> (int -> Tactic_type.tactic)
 val get_arg_tactic_arg : tactic_arg -> string -> tactic_arg -> Tactic_type.tactic
-val get_typeinf_arg    : tactic_arg -> string -> (term_subst -> term -> term_subst * term)
+val get_typeinf_arg    : tactic_arg -> string -> (unify_subst -> term -> unify_subst * term)
 
 (*
  * -*-

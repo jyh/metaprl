@@ -878,7 +878,7 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (false
 let inf_d dest f decl t =
    let v, a, b = dest t in
    let decl', a' = f decl a in
-   let decl'', b' = f ((v, a)::decl') b in
+   let decl'', b' = f (add_unify_subst v a decl') b in
    let le1, le2 = dest_univ a', dest_univ b' in
       decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2)
 

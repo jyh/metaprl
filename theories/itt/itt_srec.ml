@@ -12,6 +12,7 @@ open Printf
 open Nl_debug
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
+open Refiner.Refiner.TermSubst
 open Resource
 
 open Itt_void
@@ -172,7 +173,7 @@ let mk_srecind_term = mk_dep0_dep2_term srecind_opname
  *)
 let inf_srec f decl t =
    let a, body = dest_srec t in
-      f ((a, void_term)::decl) body
+      f (add_unify_subst a void_term decl) body
 
 let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (srec_term, inf_srec)
 
@@ -183,7 +184,7 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (srec_
 let inf_srecind f decl t =
    let p, h, a, g = dest_srecind t in
    let decl', a' = f decl a in
-      f ((p, a')::(h, a')::decl') g
+      f (add_unify_subst p a' (add_unify_subst h a' decl')) g
 
 let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (srecind_term, inf_srecind)
 

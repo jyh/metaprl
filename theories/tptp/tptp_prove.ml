@@ -78,7 +78,8 @@ type tptp_info =
    { tptp_first_hyp : int;
      tptp_constants : StringSet.t;
      tptp_hyps : tptp_clause_info array;
-     tptp_fail_cache : TptpCache.t ref
+     tptp_fail_cache : TptpCache.t ref;
+     tptp_bound : int
    }
 
 (*
@@ -118,6 +119,9 @@ let print_subst out subst =
       fprintf out " %s=%a" v print_term t
    in
       List.iter print subst
+
+let print_unify_subst out subst =
+   print_subst out (subst_of_unify_subst subst)
 
 (*
  * Build a set from a list.
@@ -203,7 +207,7 @@ let dest_hyp t =
         tptp_positive = positive
       }
 
-let dest_hyps hyps =
+let dest_hyps bound hyps =
    let j, constants = first_clause hyps in
    let len = SeqHyp.length hyps in
    let null_hyp =
@@ -227,7 +231,8 @@ let dest_hyps hyps =
       { tptp_first_hyp = j;
         tptp_constants = constants;
         tptp_hyps = hyps';
-        tptp_fail_cache = ref (TptpCache.create constants)
+        tptp_fail_cache = ref (TptpCache.create constants);
+        tptp_bound = bound
       }
 
 (*
@@ -242,7 +247,6 @@ let dest_goal t =
         tptp_positive = positive;
         tptp_negative = negative
       }
-
 
 (************************************************************************
  * UNIFICATION                                                          *
@@ -267,12 +271,12 @@ let rec unify_term_list foundp subst constants term1 = function
                   print_term term1
                   print_term term2
                   print_string_list (StringSet.elements constants)
-                  print_subst subst
+                  print_unify_subst subst
                   eflush;
             let subst = unify subst constants term1 term2 in
                if !debug_tptp then
                   eprintf "Unification:%a%t" (**)
-                     print_subst subst
+                     print_unify_subst subst
                      eflush;
                unify_term_list true subst constants term1 terms2
          with
@@ -301,7 +305,7 @@ let rec unify_term_lists constants terms1 terms2 =
       term1 :: terms1 ->
          begin
             try
-               let subst, terms2 = unify_term_list false [] constants term1 terms2 in
+               let subst, terms2 = unify_term_list false unify_empty constants term1 terms2 in
                   try
                      let subst, terms1 = unify_term_list true subst constants term1 terms1 in
                         subst, terms1, terms2
@@ -315,6 +319,10 @@ let rec unify_term_lists constants terms1 terms2 =
          end
     | [] ->
          raise unify_exn
+
+let unify_term_lists constants terms1 terms2 =
+   let subst, terms1, terms2 = unify_term_lists constants terms1 terms2 in
+      subst_of_unify_subst subst, terms1, terms2
 
 (*
  * Check that the goal and the hyp have some hope at unification.
@@ -359,6 +367,13 @@ let rec expand subst term =
       (v, t) :: substs ->
          expand substs (TermSubst.subst term [t] [v])
     | [] ->
+         term
+
+let expand_instance constants subst term =
+   let term = expand subst term in
+      if is_var_term term && not (StringSet.mem constants (dest_var term)) then
+         t_term
+      else
          term
 
 (*
@@ -408,15 +423,6 @@ let mk_goal { tptp_vars = vars; tptp_body = body } =
       true_term
    else
       mk_exists_term vars (mk_and_term body)
-
-(*
- * We draw in the default for vars that remain free.
- *)
-let add_defaults vars vars' subst =
-   let add_unit v =
-      (v, t_term)
-   in
-      subst @ (List.map add_unit vars) @ (List.map add_unit vars)
 
 (*
  * Prove well-formedness of a function.
@@ -518,16 +524,16 @@ let rec decompose_clause i p =
 (*
  * Instantiate the hyp with the substitution,
  *)
-let rec instantiate_hyp subst i p =
+let rec instantiate_hyp constants subst i p =
    if !debug_tptp then
       eprintf "Tptp_prove.instantiate_hyp%t" eflush;
    let _, hyp = Sequent.nth_hyp p i in
       if is_all_term hyp then
          let v = var_of_all hyp in
-         let t = expand subst (mk_var_term v) in
+         let t = expand_instance constants subst (mk_var_term v) in
             (withT t (dT i)
              thenLT [prove_wf;
-                     instantiate_hyp subst (Sequent.hyp_count p + 1)]) p
+                     instantiate_hyp constants subst (Sequent.hyp_count p + 1)]) p
       else
          decompose_clause i p
 
@@ -543,21 +549,21 @@ let rec trivial_goal i n p =
 (*
  * Decompose the goal.
  *)
-let rec instantiate_goal subst i n p =
+let rec instantiate_goal constants subst i n p =
    if !debug_tptp then
       eprintf "Tptp_prove.instantiate_goal:%a %t" print_subst subst eflush;
    let goal = Sequent.concl p in
       if is_exists_term goal then
          let v = var_of_exists goal in
-         let t = expand subst (mk_var_term v) in
+         let t = expand_instance constants subst (mk_var_term v) in
             (withT t (dT 0)
              thenLT [prove_wf;
-                     instantiate_goal subst i n;
+                     instantiate_goal constants subst i n;
                      prove_wf]) p
       else if is_and_term goal then
-         (dT 0 thenT instantiate_goal subst i n) p
+         (dT 0 thenT instantiate_goal constants subst i n) p
       else
-         (trivial_goal (Sequent.hyp_count p) n orelseT instantiate_hyp subst i) p
+         (trivial_goal (Sequent.hyp_count p) n orelseT instantiate_hyp constants subst i) p
 
 (*
  * Decompose the existential that has just been asserted.
@@ -573,18 +579,18 @@ let rec decompose_exists arg p =
       else if is_and_term hyp then
          (dT i thenT decompose_exists arg) p
       else
-         let subst, i, n = arg in
-            instantiate_goal subst i n p
+         let constants, subst, i, n = arg in
+            instantiate_goal constants subst i n p
 
 (*
  * Assert and decompose the new goal.
  *)
-let assert_new_goal level subst hyp_index goal tac p =
+let assert_new_goal level constants subst hyp_index goal tac p =
    if !debug_tptp_prove then
       eprintf "%aresolveT %d -> %a%t" tab level hyp_index debug_print goal eflush;
    (assertT goal
     thenLT [tac;
-            decompose_exists (subst, hyp_index, Sequent.hyp_count p)]) p
+            decompose_exists (constants, subst, hyp_index, Sequent.hyp_count p)]) p
 
 (*
  * Main tactic to unify on a hyp.
@@ -602,11 +608,10 @@ let resolveT i p =
    in
    let subst, terms1, terms2 = unify_term_lists constants goal_info.tptp_body hyp_info.tptp_body in
    let subst, new_info = new_goal constants subst terms1 terms2 in
-   let subst = add_defaults hyp_info.tptp_vars goal_info.tptp_vars subst in
    let goal = mk_goal new_info in
       if !debug_tptp then
          eprintf "New goal %a%t" print_term goal eflush;
-      assert_new_goal 0 subst i goal idT p
+      assert_new_goal 0 constants subst i goal idT p
 
 (************************************************************************
  * SEARCH                                                               *
@@ -626,13 +631,16 @@ let rec prove_auxT
          { tptp_constants = constants;
            tptp_first_hyp = first_hyp;
            tptp_hyps = hyps;
-           tptp_fail_cache = fail_cache
+           tptp_fail_cache = fail_cache;
+           tptp_bound = bound
          } as info
     } p =
    match goal_info.tptp_body with
       [] ->
          dT 0 p
     | body ->
+         if level > bound then
+            raise fail_exn;
          if TptpCache.subsumed !fail_cache body then
             raise fail_exn;
          if TptpCache.subsumed goal_cache body then
@@ -660,10 +668,9 @@ let rec prove_auxT
                   (* let _ = check_unify hyp_info goal_info in *)
                   let subst, terms1, terms2 = unify_term_lists constants body hyp_info.tptp_body in
                   let subst, goal_info' = new_goal constants subst terms1 terms2 in
-                  let subst = add_defaults hyp_info.tptp_vars goal_info.tptp_vars subst in
                   let goal = mk_goal goal_info' in
                      incr refine_count;
-                     assert_new_goal level subst i goal (nextT goal_info'), i + 1
+                     assert_new_goal level constants subst i goal (nextT goal_info'), i + 1
                with
                   RefineError _ ->
                      find_hyp (i + 1)
@@ -674,12 +681,12 @@ let rec prove_auxT
          in
             matchT first_hyp p
 
-let proveT p =
+let proveT bound p =
    let { sequent_goals = goals;
          sequent_hyps = hyps
        } = Sequent.explode_sequent p
    in
-   let info = dest_hyps hyps in
+   let info = dest_hyps bound hyps in
    let info =
       { tptp_goal_cache = TptpCache.create info.tptp_constants;
         tptp_goal = dest_goal (SeqGoal.get goals 0);
@@ -694,7 +701,7 @@ let proveT p =
  *)
 let loopTestT p =
    for i = 0 to 200 do
-      Tactic_type.refine proveT p
+      Tactic_type.refine (proveT 100) p
    done
 
 let testT p =

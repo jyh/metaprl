@@ -346,11 +346,6 @@ prim productElimination {| elim [ThinOption thinT] |} 'H :
    sequent { <H>; z: x:'A * 'B['x]; <J['z]> >- 'T['z] } =
    spread{'z; u, v. 't['z; 'u; 'v]}
 
-interactive productEqElimination {| elim [] |} 'H :
-   sequent { <H>; v: 'x_1 = 'x_2 in 'A; w: 'y_1= 'y_2 in 'B['x_1];  <J[it]> >- 'T[it] } -->
-   sequent { <H>; u: ('x_1,'y_1) = ('x_2,'y_2) in x:'A * 'B['x]; <J['u]> >- 'T['u] }
-
-
 doc <:doc<
    @begin[doc]
    @modsubsection{Combinator equality}
@@ -371,6 +366,10 @@ interactive spreadEquality_simple {| eqcd; intro [intro_typeinf <<'e1>>] |} (w:'
    [wf] sequent { <H>; u: 'A; v: 'B['u]; a: 'e1 = ('u, 'v) in w:'A * 'B['w] >-
              'b1['u; 'v] = 'b2['u; 'v] in 'T } -->
    sequent { <H> >- spread{'e1; u1, v1. 'b1['u1; 'v1]} = spread{'e2; u2, v2. 'b2['u2; 'v2]} in 'T }
+
+interactive productEqElimination {| elim [] |} 'H :
+   sequent { <H>; 'x1 = 'x2 in 'A; 'y1= 'y2 in 'B['x1];  <J[it]> >- 'T[it] } -->
+   sequent { <H>; u: ('x1,'y1) = ('x2,'y2) in x:'A * 'B['x]; <J['u]> >- 'T['u] }
 
 doc <:doc<
    @begin[doc]

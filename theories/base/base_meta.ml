@@ -59,6 +59,21 @@ declare meta_lt[a:s,b:s]{'tt; 'ff}
 declare meta_lt[a:t,b:t]{'tt; 'ff}
 declare meta_lt[a:l,b:l]{'tt; 'ff}
 
+declare meta_le[a:n,b:n]{'tt; 'ff}
+declare meta_le[a:s,b:s]{'tt; 'ff}
+declare meta_le[a:t,b:t]{'tt; 'ff}
+declare meta_le[a:l,b:l]{'tt; 'ff}
+
+declare meta_gt[a:n,b:n]{'tt; 'ff}
+declare meta_gt[a:s,b:s]{'tt; 'ff}
+declare meta_gt[a:t,b:t]{'tt; 'ff}
+declare meta_gt[a:l,b:l]{'tt; 'ff}
+
+declare meta_ge[a:n,b:n]{'tt; 'ff}
+declare meta_ge[a:s,b:s]{'tt; 'ff}
+declare meta_ge[a:t,b:t]{'tt; 'ff}
+declare meta_ge[a:l,b:l]{'tt; 'ff}
+
 let num_op = (dest_op (dest_term <<meta_num[0]>>).term_op).op_name
 
 (*
@@ -127,26 +142,49 @@ ml_rw reduce_meta_eq_var : ('goal : meta_eq[a:v,b:v]{'tt; 'ff}) = eq goal
 ml_rw reduce_meta_eq_tok : ('goal : meta_eq[a:t,b:t]{'tt; 'ff}) = eq goal
 ml_rw reduce_meta_eq_lev : ('goal : meta_eq[a:l,b:l]{'tt; 'ff}) = eq goal
 
-let lt goal =
+let rel (num_op, str_op, tok_op, lev_op) name goal =
    let true_term, false_term = two_subterms goal in
    let flag = match List.map dest_param (dest_op (dest_term goal).term_op).op_params with
       [ Number i1; Number i2 ] ->
-         Mp_num.lt_num i1 i2
+         num_op i1 i2
     | [ String s1; String s2 ] ->
-         s1 < s2
+         str_op s1 s2
     | [ Token t1; Token t2 ] ->
-         t1 < t2
+         tok_op t1 t2
     | [ MLevel l1; MLevel l2 ] ->
-         level_lt l1 l2
+         lev_op l1 l2
     | _ ->
-         raise (RefineError ("meta_lt", StringTermError ("ill-formed operation", goal)))
+         raise (RefineError (name, StringTermError ("ill-formed operation", goal)))
    in
       if flag then true_term else false_term
 
-ml_rw reduce_meta_lt_num : ('goal : meta_lt[a:n, b:n]{'tt; 'ff}) = lt goal
-ml_rw reduce_meta_lt_str : ('goal : meta_lt[a:s, b:s]{'tt; 'ff}) = lt goal
-ml_rw reduce_meta_lt_tok : ('goal : meta_lt[a:t, b:t]{'tt; 'ff}) = lt goal
-ml_rw reduce_meta_lt_lev : ('goal : meta_lt[a:l, b:l]{'tt; 'ff}) = lt goal
+ml_rw reduce_meta_lt_num : ('goal : meta_lt[a:n, b:n]{'tt; 'ff}) = rel (Mp_num.lt_num, (<), (<), level_lt) "meta_lt" goal
+ml_rw reduce_meta_lt_str : ('goal : meta_lt[a:s, b:s]{'tt; 'ff}) = rel (Mp_num.lt_num, (<), (<), level_lt) "meta_lt" goal
+ml_rw reduce_meta_lt_tok : ('goal : meta_lt[a:t, b:t]{'tt; 'ff}) = rel (Mp_num.lt_num, (<), (<), level_lt) "meta_lt" goal
+ml_rw reduce_meta_lt_lev : ('goal : meta_lt[a:l, b:l]{'tt; 'ff}) = rel (Mp_num.lt_num, (<), (<), level_lt) "meta_lt" goal
+
+ml_rw reduce_meta_le_num : ('goal : meta_le[a:n, b:n]{'tt; 'ff}) = rel (Mp_num.le_num, (<=), (<=), level_le) "meta_le" goal
+ml_rw reduce_meta_le_str : ('goal : meta_le[a:s, b:s]{'tt; 'ff}) = rel (Mp_num.le_num, (<=), (<=), level_le) "meta_le" goal
+ml_rw reduce_meta_le_tok : ('goal : meta_le[a:t, b:t]{'tt; 'ff}) = rel (Mp_num.le_num, (<=), (<=), level_le) "meta_le" goal
+ml_rw reduce_meta_le_lev : ('goal : meta_le[a:l, b:l]{'tt; 'ff}) = rel (Mp_num.le_num, (<=), (<=), level_le) "meta_le" goal
+
+ml_rw reduce_meta_gt_num : ('goal : meta_gt[a:n, b:n]{'tt; 'ff}) =
+   rel (Mp_num.gt_num, (>), (>), (fun l1 l2 -> level_lt l2 l1)) "meta_gt" goal
+ml_rw reduce_meta_gt_str : ('goal : meta_gt[a:s, b:s]{'tt; 'ff}) =
+   rel (Mp_num.gt_num, (>), (>), (fun l1 l2 -> level_lt l2 l1)) "meta_gt" goal
+ml_rw reduce_meta_gt_tok : ('goal : meta_gt[a:t, b:t]{'tt; 'ff}) =
+   rel (Mp_num.gt_num, (>), (>), (fun l1 l2 -> level_lt l2 l1)) "meta_gt" goal
+ml_rw reduce_meta_gt_lev : ('goal : meta_gt[a:l, b:l]{'tt; 'ff}) =
+   rel (Mp_num.gt_num, (>), (>), (fun l1 l2 -> level_lt l2 l1)) "meta_gt" goal
+
+ml_rw reduce_meta_ge_num : ('goal : meta_ge[a:n, b:n]{'tt; 'ff}) =
+   rel (Mp_num.ge_num, (>=), (>=), (fun l1 l2 -> level_le l2 l1)) "meta_ge" goal
+ml_rw reduce_meta_ge_str : ('goal : meta_ge[a:s, b:s]{'tt; 'ff}) =
+   rel (Mp_num.ge_num, (>=), (>=), (fun l1 l2 -> level_le l2 l1)) "meta_ge" goal
+ml_rw reduce_meta_ge_tok : ('goal : meta_ge[a:t, b:t]{'tt; 'ff}) =
+   rel (Mp_num.ge_num, (>=), (>=), (fun l1 l2 -> level_le l2 l1)) "meta_ge" goal
+ml_rw reduce_meta_ge_lev : ('goal : meta_ge[a:l, b:l]{'tt; 'ff}) =
+   rel (Mp_num.ge_num, (>=), (>=), (fun l1 l2 -> level_le l2 l1)) "meta_ge" goal
 
 (*
  * -*-

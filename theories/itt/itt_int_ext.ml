@@ -337,6 +337,11 @@ interactive bneq_int_wf {| intro [complete_unless_member]; eqcd |} :
    [wf] sequent { <H> >- 'b1='b2 in int } -->
    sequent { <H> >- bneq_int{'a1; 'b1}=bneq_int{'a2; 'b2} in bool }
 
+interactive neq_wf {| intro [] |} :
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   sequent { <H> >- "type"{'a <> 'b} }
+
 interactive gt_wf {| intro [] |} :
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->
@@ -628,15 +633,29 @@ interactive_rw rem_baseReduce_rw :
 
 let rem_baseReduceC = rem_baseReduce_rw
 
+prim rem_neg :
+   sequent { <H> >- 'b <> 0 } -->
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   sequent { <H> >- ('a %@ 'b) ~ ('a %@ (-'b)) } = it
+
+interactive_rw rem_neg_rw :
+   ('b <> 0) -->
+   ('a in int) -->
+   ('b in int) -->
+   ('a %@ 'b) <--> ('a %@ (-'b))
+
+let rem_negC = rem_neg_rw
+
 prim rem_indReduce :
-   sequent { <H> >- 0 < 'b } -->
+   sequent { <H> >- 'b <> 0 } -->
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->
    [wf] sequent { <H> >- 'c in int } -->
    sequent { <H> >- ((('a *@ 'b) +@ 'c) %@ 'b) ~ ('c %@ 'b) } = it
 
 interactive_rw rem_indReduce_rw :
-   (0 < 'b) -->
+   ('b <> 0) -->
    ('a in int) -->
    ('b in int) -->
    ('c in int) -->
@@ -645,7 +664,7 @@ interactive_rw rem_indReduce_rw :
 let rem_indReduceC = rem_indReduce_rw
 
 interactive rem_wf {| intro []; eqcd |} :
-   sequent { <H> >- "nequal"{'b ; 0} } -->
+   sequent { <H> >- 'b <> 0 } -->
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->
    sequent { <H> >- ('a %@ 'b) in int }
@@ -671,6 +690,20 @@ interactive_rw div_baseReduce_rw :
 
 let div_baseReduceC = div_baseReduce_rw
 
+prim div_neg :
+   sequent { <H> >- 'b <> 0 } -->
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   sequent { <H> >- ('a /@ 'b) ~ ((-'a) /@ (-'b)) } = it
+
+interactive_rw div_neg_rw :
+   ('b <> 0) -->
+   ('a in int) -->
+   ('b in int) -->
+   ('a /@ 'b) <--> ((-'a) /@ (-'b))
+
+let div_negC = div_neg_rw
+
 prim div_indReduce :
    sequent { <H> >- 'b <> 0 } -->
    [wf] sequent { <H> >- 'a in int } -->
@@ -688,10 +721,16 @@ interactive_rw div_indReduce_rw :
 let div_indReduceC = div_indReduce_rw
 
 interactive div_wf {| intro []; eqcd |} :
-   sequent { <H> >- "nequal"{'b ; 0} } -->
+   sequent { <H> >- 'b <> 0 } -->
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->
    sequent { <H> >- 'a /@ 'b in int }
+
+interactive div_remProperty :
+   sequent { <H> >- 'b <> 0 } -->
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+	sequent { <H> >- ('a %@ 'b) +@ ('a /@ 'b) *@ 'b = 'a in int }
 
 interactive lt_divMono 'b :
    sequent { <H> >- 0 < 'c } -->

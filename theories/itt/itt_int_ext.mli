@@ -273,15 +273,21 @@ rule rem_baseReduce :
    [wf] sequent { <H> >- 'b in int } -->
    sequent { <H> >- ('a %@ 'b) ~ 'a }
 
+rule rem_neg :
+   sequent { <H> >- 'b <> 0 } -->
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   sequent { <H> >- ('a %@ 'b) ~ ('a %@ (-'b)) }
+
 rule rem_indReduce :
-   sequent { <H> >- 0 < 'b } -->
+   sequent { <H> >- 'b <> 0 } -->
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->
    [wf] sequent { <H> >- 'c in int } -->
    sequent { <H> >- ((('a *@ 'b) +@ 'c) %@ 'b) ~ ('c %@ 'b) }
 
 rule rem_wf :
-   sequent { <H> >- "nequal"{'b ; 0} } -->
+   sequent { <H> >- 'b <> 0 } -->
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->
    sequent { <H> >- ('a %@ 'b) in int }
@@ -293,6 +299,12 @@ rule div_baseReduce :
    [wf] sequent { <H> >- 'b in int } -->
    sequent { <H> >- ('a /@ 'b) ~ 0 }
 
+rule div_neg :
+   sequent { <H> >- 'b <> 0 } -->
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   sequent { <H> >- ('a /@ 'b) ~ ((-'a) /@ (-'b)) }
+
 rule div_indReduce :
    sequent { <H> >- 'b <> 0 } -->
    [wf] sequent { <H> >- 'a in int } -->
@@ -301,10 +313,16 @@ rule div_indReduce :
    sequent { <H> >- ((('a *@ 'b) +@ 'c) /@ 'b) ~ ('a +@ ('c /@ 'b)) }
 
 rule div_wf :
-   sequent { <H> >- "nequal"{'b ; 0} } -->
+   sequent { <H> >- 'b <> 0 } -->
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->
    sequent { <H> >- 'a /@ 'b in int }
+
+rule div_remProperty :
+   sequent { <H> >- 'b <> 0 } -->
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+	sequent { <H> >- ('a %@ 'b) +@ ('a /@ 'b) *@ 'b = 'a in int }
 
 rule lt_divMono 'b :
    sequent { <H> >- 0 < 'c } -->

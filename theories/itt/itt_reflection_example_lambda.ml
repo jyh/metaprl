@@ -1,3 +1,5 @@
+(* This theory is a toy example of how we are going to define a language *)
+
 extends Itt_functions
 extends Itt_reflection_new
 extends Base_reflection
@@ -9,6 +11,11 @@ extends Itt_pairwise
 extends Itt_pairwise2
 
 open Basic_tactics
+
+
+
+
+
 
 define app_term : app_term <--> bterm{| >- apply[@]{term[@];term[@]} |}
 define lambda_term: lambda_term <-->  bterm{| >- lambda[@]{x.term[@]} |}
@@ -29,9 +36,9 @@ interactive_rw depth_of_app {| reduce |}: op_bdepth{app_term} <--> 0
 interactive_rw depth_of_lam {| reduce |}: op_bdepth{lambda_term} <--> 0
 
 
-define mk_app: mk_app <--> lambda {p. spread{'p; t1,t2. make_bterm{inject{app_term;bdepth{'t1}}; 't1::'t2::nil}}}
+define mk_app: mk_app <--> lambda {p. spread{'p; t1,t2. make_bterm{app_term;bdepth{'t1}; 't1::'t2::nil}}}
 
-interactive_rw mk_app2 {| reduce |}: mk_app ('f,'a) <-->  make_bterm{app_term; 'f::'a::nil}
+interactive_rw mk_app2 {| reduce |}: mk_app ('f,'a) <-->  make_bterm{app_term;bdepth{'f}; 'f::'a::nil}
 
 define dom_app: dom_app{'T;'S} <-->
    {p:(BTerm isect 'T)*(BTerm isect 'S) |
@@ -52,9 +59,9 @@ interactive dom_app_subtype  {| intro[] |}:
    sequent { <H> >- 'S_1 subtype 'S_2 } -->
    sequent { <H> >- dom_app{'T_1;'S_1} subtype dom_app{'T_2;'S_2} }
 
-define mk_lambda: mk_lambda <--> lambda {t. make_bterm{lambda_term; 't::nil}}
+define mk_lambda: mk_lambda <--> lambda {t. make_bterm{lambda_term;bdepth{'t}-@1; 't::nil}}
 
-interactive_rw mk_lambda2 {| reduce |}: mk_lambda 'f <-->  make_bterm{lambda_term; 'f::nil}
+interactive_rw mk_lambda2 {| reduce |}: mk_lambda 'f <-->  make_bterm{lambda_term;bdepth{'f}-@1; 'f::nil}
 
 define dom_lambda: dom_lambda{'T} <--> {t:BTerm isect 'T | bdepth{'t} >= 1}
 
@@ -135,15 +142,15 @@ define lambdaTerm: LambdaTerm <--> srec{X. Img{mk; dom{'X}; BTerm}}
 interactive lambda_term_induction  {| elim[] |} 'H:
    sequent { <H>; <J>; v:Var >- 'P[ 'v ] } -->
    sequent { <H>; <J>; t: LambdaTerm; s:LambdaTerm; bdepth{'t} = bdepth{'s} in nat;
-                            'P['t]; 'P['s]   >- 'P[ make_bterm{app_term; 't::'s::nil} ] } -->
+                            'P['t]; 'P['s]   >- 'P[ make_bterm{app_term;bdepth{'t}; 't::'s::nil} ] } -->
    sequent { <H>; <J>; t: LambdaTerm; bdepth{'t} >= 1;
-                            'P['t] >- 'P[ make_bterm{lambda_term; 't::nil} ] } -->
+                            'P['t] >- 'P[ make_bterm{lambda_term;bdepth{'t}-@1; 't::nil} ] } -->
    sequent { <H>; x: LambdaTerm; <J> >- 'P['x] }
 
 interactive lambda_intro  {| intro[] |} :
    sequent { <H> >- 't in LambdaTerm } -->
    sequent { <H> >- bdepth {'t} >= 1  } -->
-   sequent { <H> >- make_bterm{lambda_term; 't::nil} in LambdaTerm }
+   sequent { <H> >- make_bterm{lambda_term-@1; 't::nil} in LambdaTerm }
 
 interactive lambda_intro2  {| intro[] |} :
    sequent { <H> >- bterm{| <K>; x:term >- 't['x] |} in LambdaTerm } -->

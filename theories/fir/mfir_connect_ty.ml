@@ -334,7 +334,7 @@ let tydef_of_term t =
  * (see Mfir_record) and a ((var * ty * int) list) SymbolTable.t.
  *)
 
-(* Append a (var * ty * int) list to the given record. *)
+(* Append a (var * ty * int) list to the given record term. *)
 
 let rec term_of_frame_field rcrd f =
    match f with
@@ -349,7 +349,7 @@ let rec term_of_frame_field rcrd f =
          in
             term_of_frame_field new_rcrd t
 
-(* Turn a record into a (var * ty * int) list. *)
+(* Attach the given record term to the given (var * ty * int) list. *)
 
 let rec frame_field_of_term lst t =
    if is_recordEnd_term t then
@@ -370,7 +370,9 @@ let rec frame_field_of_term lst t =
 
 (*
  * The above functions make the actual frame conversion
- * rather straightforward.
+ * rather straightforward.  Note that the (var list) that
+ * represents a universal quantifier is translated to/from
+ * tyDefPoly.
  *)
 
 (* Go from a frame to a term. *)

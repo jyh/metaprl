@@ -6,6 +6,8 @@ Below, I have listed many bugs in the Mojave FIR theory that I am
 aware of.  They are listed in no particular order.  I have also listed,
 at the end, things that might be considered bugs, but really aren't.
 Other bugs can be found by searching the sources for the string ``BUG''.
+I make no guarentees that all BUGs are documented in this file, though
+I do claim that every bug or problem that I'm aware of is documented.
 
 
 -- Cannot give a type for functions of zero arguments (see Mfir_ty!tyFun).

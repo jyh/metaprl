@@ -108,10 +108,6 @@ val float_precision_of_num : Mp_num.num -> float_precision
 (*
  * Convert a list to a "term list", i.e. << cons{ ... } >>.
  * Lists are assumed to be nil-terminated.
- * For term_of_list:
- *    ('a -> term)   -- converts an item of type 'a to a corresponding term.
- * For list_of_term:
- *    (term -> 'a)   -- converts a term representing an 'a to an 'a.
  *)
 
 val term_of_list : ('a -> term) -> 'a list -> term

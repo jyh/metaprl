@@ -111,7 +111,7 @@ declare tyDefUnion{ 'cases }
 (*!
  * @begin[doc]
  *
- * ???
+ * (Documentation incomplete.)
  * @end[doc]
  *)
 
@@ -180,7 +180,7 @@ declare tyTuple[tc:s]{ 'ty_list }
 (*!
  * @begin[doc]
  *
- * ???
+ * (Documentation incomplete.)
  * @end[doc]
  *)
 

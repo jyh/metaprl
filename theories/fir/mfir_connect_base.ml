@@ -239,11 +239,12 @@ let rec list_of_term converter t =
 
 
 (**************************************************************************
- * Convert (raw) integer sets to terms.
+ * Convert (raw) integer sets to terms.  Integers and raw integers must
+ * be treated seperately in the functions below.
  **************************************************************************)
 
 (*
- * Convert bounds to number terms.
+ * Convert bounds to and from number terms.
  *)
 
 let term_of_int_bound b =
@@ -273,10 +274,11 @@ let rawint_bound_of_term precision sign t =
    else
       report_error "rawint_bound_of_term" t
 
+
 (*
  * The two functions below take a term and the bounds of an interval.
  * They create a new cons term with the interval as the head and the
- * term as the tail.
+ * given term as the tail.
  *)
 
 let fold_intset term left right =
@@ -291,10 +293,11 @@ let fold_rawintset term left right =
    let interval = mk_interval_term left' right' in
       mk_cons_term interval term
 
+
 (*
  * The two functions below are almost the inverses of the above
- * two folding functions.  They return sets given a term that represents
- * a list of intervals.
+ * two folding functions.  The take a list of intervals (as a term)
+ * and union them with the given (raw) integer set.
  *)
 
 let rec unfold_intset set intervals =
@@ -329,8 +332,11 @@ let rec unfold_rawintset precision sign set intervals =
    else
       report_error "unfold_rawintset" intervals
 
+
 (*
- * The main functions for converting between integer sets and terms.
+ * The main functions for converting between integer sets and terms
+ * use the folding and unfolding functions above to perform most of
+ * the work.
  *)
 
 let term_of_int_set set =
@@ -344,7 +350,7 @@ let int_set_of_term t =
          if 31 = (int_of_num precision) && (int_signed_of_string sign) then
             unfold_intset IntSet.empty intervals
          else
-            report_error "int_set_of_term (interval)" t
+            report_error "int_set_of_term (inner)" t
    else
       report_error "int_set_of_term" t
 
@@ -362,7 +368,7 @@ let rawint_set_of_term t =
             let sign' = int_signed_of_string sign in
                unfold_rawintset precision' sign' (RawIntSet.empty precision' sign') intervals
          with
-            _ -> report_error "rawint_set_of_term (interval)" t
+            _ -> report_error "rawint_set_of_term (inner)" t
    else
       report_error "rawint_set_of_term" t
 
@@ -373,8 +379,11 @@ let term_of_set s =
     | RawIntSet r -> term_of_rawint_set r
 
 let set_of_term t =
-   try IntSet (int_set_of_term t) with
-   _ ->
-      try RawIntSet (rawint_set_of_term t) with
-      _ ->
-         report_error "set_of_term" t
+   if is_intset_term t then
+      let precision, _, _ = dest_intset_term t in
+         if 31 = (int_of_num precision) then
+            IntSet (int_set_of_term t)
+         else
+            RawIntSet (rawint_set_of_term t)
+   else
+      report_error "set_of_term" t

@@ -19,4 +19,4 @@ OCamlLibrary $env 'base', (map "mfir_$_", @src), 'mfir_theory';
 #
 # Default target to build.
 #
-#Default( "base$env->{SUFLIB}" );
+Default( "base$env->{SUFLIB}" );

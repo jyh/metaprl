@@ -25,7 +25,7 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  * Author: Jason Hickey
- * @email{jyh@cs.caltech.edu} : Dform
+ * @email{jyh@cs.caltech.edu}
  * @end[doc]
  *)
 

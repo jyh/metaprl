@@ -43,6 +43,7 @@ extends Itt_theory
 extends Base_reflection
 extends Itt_nat
 extends Itt_synt_bterm
+extends Itt_synt_subst
 doc docoff
 
 
@@ -85,22 +86,6 @@ let rec reduce_rlist t =
 dform list_of_rlist_df : except_mode[src] :: list_of_rlist{'l} =
    `"list_of_rlist(" slot{'l} `")"
 
-(************************************************************************
- * Var                                                                  *
- ************************************************************************)
-
-prim_rw bterm_var_1 :
-  bterm{| x : term >- 'x |} <--> var{0;0}
-
-prim bterm_var_right :
-  sequent{ <H> >- bterm{| <K> >- 'x |} ~ var{'l;'r} } -->
-  sequent{ <H> >- bterm{| <K>; y:term >- 'x |} ~ var{'l;'r +@ 1} }
-  = it
-
-prim bterm_var_left :
-  sequent{ <H> >- bterm{| <K> >- 'x |} ~ var{'l;'r} } -->
-  sequent{ <H> >- bterm{| y:term; <K> >- 'x |} ~ var{'l +@ 1;'r} }
-  = it
 
 (************************************************************************
  * Operator                                                             *
@@ -128,12 +113,48 @@ prim_rw bterm_same_op:
 prim_rw bterm_inject: inject{bterm{| <K> >- 'op<||> |}; 'n} <--> ind{'n; bterm{| >- 'op<||> |}; k,l.bterm{x.'l}}
 
 (************************************************************************
+ * Var                                                                  *
+ ************************************************************************)
+
+prim_rw bterm_var_1 :
+  bterm{| x : term >- 'x |} <--> var{0;0}
+
+prim bterm_var_right :
+  sequent{ <H> >- bterm{| <K> >- 'x |} ~ var{'l;'r} } -->
+  sequent{ <H> >- bterm{| <K>; y:term >- 'x |} ~ var{'l;'r +@ 1} }
+  = it
+
+prim bterm_var_left :
+  sequent{ <H> >- bterm{| <K> >- 'x |} ~ var{'l;'r} } -->
+  sequent{ <H> >- bterm{| y:term; <K> >- 'x |} ~ var{'l +@ 1;'r} }
+  = it
+
+(************************************************************************
  * Make_bterm                                                           *
  ************************************************************************)
 
-prim_rw make_bterm_base :
- (if_quoted_op{'op;"true"} ) -->
- ('btl in list{BTerm} ) -->
- (compatible_shapes{'op;'btl}) -->
- make_bterm{'op;'btl} <--> Base_reflection!make_bterm{'op; rlist_of_list{'btl}}
+(*
+prim_rw make_bterm_eval :
+ (if_bterm{'bt;"true"} ) -->
+ (if_var_bterm{'bt;"false";"true"} ) -->
+ 'bt <--> make_bterm{'bt;list_of_rlist{Base_reflection!subterms{'bt}}}
+*)
+
+prim_rw make_bterm_eval :
+ (if_bterm{bterm{| <H> >- 't |};"true"} ) -->
+ (if_var_bterm{bterm{| <H> >- 't |};"false";"true"} ) -->
+ bterm{| <H> >- 't |} <--> make_bterm{bterm{| <H> >- 't |};list_of_rlist{Base_reflection!subterms{bterm{| <H> >- 't |}}}}
+
+
+(************************************************************************
+ * Reflection rule for substitution                                     *
+ ************************************************************************)
+
+prim_rw reflection_subst 'H :
+ (if_bterm{bterm{| <H>;x:term;<J> >- 't['x] |};"true"} ) -->
+ (if_bterm{bterm{| <H>;x:term;<J> >- 's['x] |};"true"} ) -->
+ subst{bterm{| <H>;x:term;<J> >- 't['x] |};
+       bterm{| <H>;x:term;<J> >- 'x |};
+       bterm{| <H>;x:term;<J> >- 's['x] |}} <-->
+ bterm{| <H>;x:term;<J> >- 't['s['x]] |}
 

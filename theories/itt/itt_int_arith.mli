@@ -52,6 +52,7 @@ topval arithT : tactic
 topval arithRelInConcl2HypT : tactic
 topval anyArithRel2geT : int -> tactic
 topval tryReduce_geT : int -> tactic
+topval sumListT : int list -> tactic
 topval findContradRelT : tactic
 topval reduceContradRelT : int -> tactic
 *)

@@ -247,7 +247,6 @@ let notle2geT t =
 *)
 
 let anyArithRel2geT = argfunT (fun i p ->
-(* We skip first item because it is a context *)
    let t=get_term i p in
    if is_le_term t then le2geT t
    else if is_lt_term t then lt2geT t
@@ -839,7 +838,7 @@ let sumListT = argfunT (fun l p ->
    let s = sumList l p in
    if !debug_int_arith then
    	eprintf "Contradictory term:%a%t" debug_print s eflush;
-   thenLocalAT (assertT s) 
+   thenLocalAT (assertT s)
    				(repeatT (ge_addMono thenT (tryT (onSomeHypT nthHypT)))))
 (* This looks like another working solution:   				
  *					(repeatT ((progressT (onSomeHypT nthHypT)) orelseT ge_addMono)))

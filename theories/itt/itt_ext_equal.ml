@@ -70,6 +70,22 @@ let resource intro +=
 
 let resource elim += (<<ext_equal{'A; 'B}>>, (fun n -> rw unfoldExtEqual n thenT dT n))
 
+interactive extEqualSymmetry :
+   sequent{ <H> >- ext_equal{'A;'B}} -->
+   sequent{ <H> >- ext_equal{'B;'A}}
+
+interactive extEqualSymmetry2 'H :
+   sequent{ <H>; w: ext_equal{'A;'B}; <J['w]>; ext_equal{'B;'A} >- 'C['w] } -->
+   sequent{ <H>; w: ext_equal{'A;'B}; <J['w]> >- 'C['w] }
+
+interactive extEqualEquality1 (*{| elim [] |}*) 'H :
+	sequent{ <H>; w: ext_equal{'T;'S}; <J['w]> >- 'x = 'y in 'S } -->
+	sequent{ <H>; w: ext_equal{'T;'S}; <J['w]> >- 'x = 'y in 'T }
+
+interactive extEqualEquality2 (*{| elim [] |}*) 'H :
+	sequent{ <H>; w: ext_equal{'T;'S}; <J['w]> >- 'x = 'y in 'T } -->
+	sequent{ <H>; w: ext_equal{'T;'S}; <J['w]> >- 'x = 'y in 'S }
+
 (*
  * -*-
  * Local Variables:

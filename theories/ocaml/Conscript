@@ -1,7 +1,7 @@
 Import qw( env );
 
 $env = $env->clone(
-	INCPATH	=> [@{$env->{INCPATH}}, "../tactic"]
+	INCPATH	=> [@{$env->{INCPATH}}, "../tactic", "/usr/lib/camlp4"]
 );
 
 OCamlSources $env

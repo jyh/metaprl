@@ -196,7 +196,7 @@ dform string_subscript_df2 : internal :: "string_subscript"[start:n, finish:n]{'
  * Sequencing.
  *)
 dform sequence_df1 : "sequence"{'e1} =
-   szone pushm[0] slot{list_expr; 'e1} popm ezone
+   szone pushm[0] list_expr{'e1} popm ezone
 
 dform sequence_df2 : internal :: "sequence"[start:n, finish:n]{'e1} =
    sequence{'e1}
@@ -206,19 +206,19 @@ dform sequence_df2 : internal :: "sequence"[start:n, finish:n]{'e1} =
  * This is a recursive display form.
  *)
 dform list_df1 : "list"{'e1} =
-   "[" pushm[0] slot{list_expr; 'e1} popm "]"
+   "[" pushm[0] list_expr{'e1} popm "]"
 
 dform array_df1 : "array"{'e1} =
-   "[|" pushm[0] slot{list_expr; 'e1} popm "|]"
+   "[|" pushm[0] list_expr{'e1} popm "|]"
 
 dform stream_df1 : "stream"{'e1} =
-   "[<" pushm[0] slot{se_list; 'e1} popm ">]"
+   "[<" pushm[0] se_list{'e1} popm ">]"
 
 dform record_df1 : "record"{'e1} =
-   "{" pushm[0] slot{ee_list; 'e1} popm "}"
+   "{" pushm[0] ee_list{'e1} popm "}"
 
 dform tuple_df1 : "tuple"{'e1} =
-   "(" pushm[0] slot{e_list; 'e1} popm ")"
+   "(" pushm[0] e_list{'e1} popm ")"
 
 dform list_df2 : internal :: "list"[start:n, finish:n]{'e1} =
    "list"{'e1}
@@ -238,75 +238,75 @@ dform tuple_df2 : internal :: "tuple"[start:n, finish:n]{'e1} =
 (*
  * Lists & arrays.
  *)
-dform list_expr_cons_df1 : internal :: slot{list_expr; cons{'e1; 'e2}} =
-   slot{list_expr; 'e1; 'e2}
+dform list_expr_cons_df1 : internal :: list_expr{cons{'e1; 'e2}} =
+   list_expr{'e1; 'e2}
 
-dform list_expr_cons_df2 : internal :: slot{list_expr; 'e1; cons{'e2; 'e3}} =
-   szone slot{'e1} ezone ";" hspace slot{list_expr; cons{'e2; 'e3}}
+dform list_expr_cons_df2 : internal :: list_expr{'e1; cons{'e2; 'e3}} =
+   szone slot{'e1} ezone ";" hspace list_expr{cons{'e2; 'e3}}
 
-dform nil_df : internal :: slot{list_expr; 'e1; nil} =
+dform nil_df : internal :: list_expr{'e1; nil} =
    szone slot{'e1} ezone
 
 (*
  * Module name.
  *)
-dform ident_expr_cons_df1 : internal :: slot{ident_expr; cons{'e1; 'e2}} =
-   slot{ident_expr; 'e1; 'e2}
+dform ident_expr_cons_df1 : internal :: ident_expr{cons{'e1; 'e2}} =
+   ident_expr{'e1; 'e2}
 
-dform ident_expr_cons_df2 : internal :: slot{ident_expr; .Ocaml!"string"[name:s]; cons{'e1; 'e2}} =
-   slot[name:s] `"." slot{ident_expr; 'e1; 'e2}
+dform ident_expr_cons_df2 : internal :: ident_expr{.Ocaml!"string"[name:s]; cons{'e1; 'e2}} =
+   slot[name:s] `"." ident_expr{'e1; 'e2}
 
-dform ident_expr_nil_df : internal :: slot{ident_expr; .Ocaml!"string"[name:s]; nil} =
+dform ident_expr_nil_df : internal :: ident_expr{.Ocaml!"string"[name:s]; nil} =
    slot[name:s]
 
 (*
  * Streams.
  *)
-dform se_list_nil_df : internal :: slot{se_list; nil} =
+dform se_list_nil_df : internal :: se_list{nil} =
    `""
 
-dform se_list_cons_df1 : internal :: slot{se_list; cons{'e1; 'e2}} =
-   slot{se_list; 'e1; 'e2}
+dform se_list_cons_df1 : internal :: se_list{cons{'e1; 'e2}} =
+   se_list{'e1; 'e2}
 
-dform se_list_cons_df2 : internal :: slot{se_list; cons{'s; 'e}; nil} =
+dform se_list_cons_df2 : internal :: se_list{cons{'s; 'e}; nil} =
    slot{'s} `"XXX" slot{'e}
 
-dform se_list_cons_df3 : internal :: slot{se_list; cons{'s; 'e}; cons{'e2; 'e3}} =
-   slot{'s} `"XXX" slot{'e} ";" hspace slot{se_list; 'e2; 'e3}
+dform se_list_cons_df3 : internal :: se_list{cons{'s; 'e}; cons{'e2; 'e3}} =
+   slot{'s} `"XXX" slot{'e} ";" hspace se_list{'e2; 'e3}
 
 (*
  * Tuples.
  *)
-dform e_list_nil_df1 : internal :: slot{e_list; nil} =
+dform e_list_nil_df1 : internal :: e_list{nil} =
    `""
 
-dform e_list_nil_df2 : internal :: slot{e_list; nil; e_list} =
+dform e_list_nil_df2 : internal :: e_list{nil; e_list} =
    `""
 
-dform e_list_cons_df1 : internal :: slot{e_list; cons{'e1; 'e2}} =
+dform e_list_cons_df1 : internal :: e_list{cons{'e1; 'e2}} =
    slot{'e1}
-   slot{e_list; 'e2; e_list}
+   e_list{'e2; e_list}
 
-dform e_list_cons_df2 : internal :: slot{e_list; cons{'e1; 'e2}; e_list} =
+dform e_list_cons_df2 : internal :: e_list{cons{'e1; 'e2}; e_list} =
    `"," hspace slot{'e1}
-   slot{e_list; 'e2; e_list}
+   e_list{'e2; e_list}
 
 (*
  * Records.
  *)
-dform ee_list_nil_df : internal :: slot{ee_list; nil} =
+dform ee_list_nil_df : internal :: ee_list{nil} =
    `""
 
-dform ee_list_nil_df : internal :: slot{ee_list; nil; ee_list} =
+dform ee_list_nil_df : internal :: ee_list{nil; ee_list} =
    `""
 
-dform ee_list_nil_df1 : internal :: slot{ee_list; cons{ee{'e1; 'e2}; 'e3}} =
+dform ee_list_nil_df1 : internal :: ee_list{cons{ee{'e1; 'e2}; 'e3}} =
    szone slot{'e1} hspace "=" hspace slot{'e2} ezone
-   slot{ee_list; 'e3; ee_list}
+   ee_list{'e3; ee_list}
 
-dform ee_list_nil_df2 : internal :: slot{ee_list; cons{ee{'e1; 'e2}; 'e3}; ee_list} =
+dform ee_list_nil_df2 : internal :: ee_list{cons{ee{'e1; 'e2}; 'e3}; ee_list} =
    ";" hspace szone slot{'e1} `" " "=" hspace slot{'e2} ezone
-   slot{ee_list; 'e3; ee_list}
+   ee_list{'e3; ee_list}
 
 (*
  * Assignment.
@@ -356,7 +356,7 @@ dform while_df1 : "while"{'e1; 'e2} =
    "_done" popm ezone
 
 dform while_df2 : internal :: "while"[start:n, finish:n]{'e1; 'e2} =
-   "_while"{'e1; 'e2}
+   "while"{'e1; 'e2}
 
 (*
  * Type casting.

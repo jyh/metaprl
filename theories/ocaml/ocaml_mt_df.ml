@@ -96,7 +96,7 @@ dform mt_uid_df3 : internal :: mt_uid[start:n, finish:n]{'v} =
  *)
 dform mt_sig_df1 : mt_sig{'sil} =
    szone "_sig" hspace
-   slot{list_expr; 'sil}
+   list_expr{'sil}
    hspace "_end" ezone
 
 dform mt_sig_df2 : internal :: mt_sig[start:n, finish:n]{'sil} =
@@ -106,15 +106,15 @@ dform mt_sig_df2 : internal :: mt_sig[start:n, finish:n]{'sil} =
  * Module type with clause.
  *)
 dform mt_with_df1 : mt_with{'mt; 'wcl} =
-   szone pushm[0] slot{'mt} slot{mt_with; 'wcl} popm ezone
+   szone pushm[0] slot{'mt} mt_with{'wcl} popm ezone
 
 dform mt_with_df2 : internal :: mt_with[start:n, finish:n]{'mt; 'wcl} =
    mt_with{'mt; 'wcl}
 
-dform mt_with_nil_df : internal :: slot{mt_with; nil} = `""
+dform mt_with_nil_df : internal :: mt_with{nil} = `""
 
-dform mt_with_cons_df : internal :: slot{mt_with; cons{'wc; 'wcl}} =
-   slot{'wc} slot{mt_with; 'wcl}
+dform mt_with_cons_df : internal :: mt_with{cons{'wc; 'wcl}} =
+   slot{'wc} mt_with{'wcl}
 
 (*
  * -*-

@@ -83,28 +83,28 @@ dform type_wildcard_df2 : internal :: type_wildcard[start:n, finish:n] =
 declare type_apply_list
 
 dform type_apply_df1 : parens :: "prec"[prec_apply] :: type_apply{'t1; 't2} =
-   slot{type_apply; 't1; cons{'t2; nil}}
+   type_apply{'t1; cons{'t2; nil}}
 
 dform type_apply_df2 : internal :: type_apply[start:n, finish:n]{'t1; 't2} =
    type_apply{'t1; 't2}
 
-dform type_apply_df3a : internal :: slot{type_apply; type_apply{'t1; 't2}; 't3} =
-   slot{type_apply; 't1; cons{'t2; 't3}}
+dform type_apply_df3a : internal :: type_apply{type_apply{'t1; 't2}; 't3} =
+   type_apply{'t1; cons{'t2; 't3}}
 
-dform type_apply_df3b : internal :: slot{type_apply; type_apply[start:n, finish:n]{'t1; 't2}; 't3} =
-   slot{type_apply; type_apply{'t1; 't2}; 't3}
+dform type_apply_df3b : internal :: type_apply{type_apply[start:n, finish:n]{'t1; 't2}; 't3} =
+   type_apply{type_apply{'t1; 't2}; 't3}
 
-dform type_apply_df4 : internal :: slot{type_apply; 't1; 't2} =
-   "(" slot{type_apply; 't2} ")" `" " slot{'t1}
+dform type_apply_df4 : internal :: type_apply{'t1; 't2} =
+   "(" type_apply{'t2} ")" `" " slot{'t1}
 
-dform type_apply_df5 : internal :: slot{type_apply; cons{'t1; 't2}} =
-   slot{'t1} slot{type_apply_list; 't2}
+dform type_apply_df5 : internal :: type_apply{cons{'t1; 't2}} =
+   slot{'t1} type_apply_list{'t2}
 
-dform type_apply_df6 : internal :: slot{type_apply_list; nil} =
+dform type_apply_df6 : internal :: type_apply_list{nil} =
    `""
 
-dform type_apply_df7 : internal :: slot{type_apply_list; cons{'t1; 't2}} =
-   `", " slot{'t1} slot{type_apply_list; 't2}
+dform type_apply_df7 : internal :: type_apply_list{cons{'t1; 't2}} =
+   `", " slot{'t1} type_apply_list{'t2}
 
 (*
  * Function type.
@@ -168,13 +168,13 @@ dform type_equal_df2 : internal :: internal :: type_equal[start:n, finish:n]{'t1
  * I'm not sure what the boolean is for.
  *)
 dform type_record_df1 : type_record{cons{'sbt; 'sbtl}} =
-   "{" `" " szone pushm[0] slot{'sbt} slot{type_record; 'sbtl} popm ezone `" " "}"
+   "{" `" " szone pushm[0] slot{'sbt} type_record{'sbtl} popm ezone `" " "}"
 
-dform type_record_cons_df1 : internal :: slot{type_record; cons{'sbt; 'sbtl}} =
+dform type_record_cons_df1 : internal :: type_record{cons{'sbt; 'sbtl}} =
    ";" hspace `" " slot{'sbt}
-   slot{type_record; 'sbtl}
+   type_record{'sbtl}
 
-dform type_record_nil_df1 : internal :: slot{type_record; nil} =
+dform type_record_nil_df1 : internal :: type_record{nil} =
    `""
 
 dform sbt_df1 : internal :: sbt{.Ocaml!"string"[name:s]; .Ocaml!"false"; 't} =
@@ -190,13 +190,13 @@ dform type_record_df2 : internal :: type_record[start:n, finish:n]{'t} =
  * Product types.
  *)
 dform type_prod_df1 : parens :: "prec"[prec_star] :: type_prod{cons{'t; 'tl}} =
-   szone pushm[0] slot{'t} slot{type_prod; 'tl} popm ezone
+   szone pushm[0] slot{'t} type_prod{'tl} popm ezone
 
-dform type_prod_nil_df1 : internal :: slot{type_prod; nil} =
+dform type_prod_nil_df1 : internal :: type_prod{nil} =
    `""
 
-dform type_prod_cons_df1 : internal :: slot{type_prod; cons{'t; 'tl}} =
-   `" " "*" `" " slot{'t} slot{type_prod; 'tl}
+dform type_prod_cons_df1 : internal :: type_prod{cons{'t; 'tl}} =
+   `" " "*" `" " slot{'t} type_prod{'tl}
 
 dform type_prod_df2 : internal :: type_prod[start:n, finish:n]{'tl} =
    type_prod{'tl}
@@ -206,29 +206,29 @@ dform type_prod_df2 : internal :: type_prod[start:n, finish:n]{'tl} =
  *)
 dform type_list_df1 : internal :: type_list{cons{'stl; 'stll}} =
    szone slot{'stl} ezone
-   slot{type_list; 'stll}
+   type_list{'stll}
 
 dform type_list_df2 : internal :: type_list[start:n, finish:n]{'stl} =
    type_list{'stl}
 
-dform type_list_nil_df1 : internal :: internal :: slot{type_list; nil} =
+dform type_list_nil_df1 : internal :: internal :: type_list{nil} =
    `""
 
-dform type_list_cons_df1 : internal :: slot{type_list; cons{'stl; 'stll}} =
+dform type_list_cons_df1 : internal :: type_list{cons{'stl; 'stll}} =
    hspace "|" `" " szone slot{'stl} ezone
-   slot{type_list; 'stll}
+   type_list{'stll}
 
 dform stl_df1 : internal :: stl{.Ocaml!"string"[name:s]; nil} =
    slot[name:s]
 
 dform stl_df2 : internal :: stl{.Ocaml!"string"[name:s]; cons{'t; 'tl}} =
-   slot[name:s] `" of " szone slot{'t} slot{stl; 'tl} ezone
+   slot[name:s] `" of " szone slot{'t} stl{'tl} ezone
 
-dform stl_df3 : internal :: slot{stl; nil} =
+dform stl_df3 : internal :: stl{nil} =
    `""
 
-dform stl_df4 : internal :: slot{stl; cons{'t; 'tl}} =
-   hspace "*" `" " slot{'t} slot{stl; 'tl}
+dform stl_df4 : internal :: stl{cons{'t; 'tl}} =
+   hspace "*" `" " slot{'t} stl{'tl}
 
 (*
  * -*-

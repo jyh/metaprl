@@ -42,9 +42,10 @@ MPFILES :=\
 	czf_itt_theory\
 	czf_itt_setdiff\
 	czf_itt_bool\
+	czf_itt_equiv\
 	czf_itt_group\
-	czf_itt_subgroup\
 	czf_itt_abel_group\
+	czf_itt_subgroup\
 	czf_itt_cyclic_subgroup\
 	czf_itt_cyclic_group
 

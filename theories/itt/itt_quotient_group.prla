@@ -14459,7 +14459,7 @@ T	t6335	o b6306 b6335
 B	b6336	t6335
 T	t6336	o1281 b6279 b6336
 B	b6337	t6336
-P	p6337	String "univTypeT << univ[i:l] >> thenT dT 8 thenMT dT 7 thenT autoT thenT dT 0"
+P	p6337	String "univTypeT << univ[i:l] >> thenT dT 8 thenMT dT 7 thenT esquashAutoT thenT dT 0 thenT dT 0"
 O	o6337	ext_rule p6337
 H	h6337	t6327
 T	t6337	o1219 b1293 b2179

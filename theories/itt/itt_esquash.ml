@@ -100,24 +100,13 @@ prim esquash_type {| intro [AutoMustComplete] |} :
 
 docoff
 
-let esquash_equal_exn =
-   RefineError("Esquash.esquash_equal*",StringError "not appropriate for membership goals, use esquash_univ instead")
-
-let equal_only_p require_complete p =
-   if is_member_term (Sequent.concl p) then
-      raise esquash_equal_exn;
-   require_complete
-
-let equal_only require_complete =
-   CondMustComplete (equal_only_p require_complete)
-
 doc <:doc< 
    @begin[doc]
    Two squashed propositions <<esquash{'A}>> and <<esquash{'B}>>
    are equal if both are types, and if each one implies another.
    @end[doc]
 >>
-prim esquash_equal {| intro [equal_only false]; eqcd |} :
+prim esquash_equal {| eqcd |} :
    [wf] sequent { <H> >- esquash{'P1} in univ[i:l] } -->
    [wf] sequent { <H> >- esquash{'P2} in univ[i:l] } -->
    sequent { <H>; esquash{'P1} >- esquash{'P2} } -->
@@ -125,7 +114,7 @@ prim esquash_equal {| intro [equal_only false]; eqcd |} :
    sequent { <H> >- esquash{'P1} = esquash{'P2} in univ[i:l] } =
    it
 
-prim esquash_univ {| intro [AutoMustComplete] |} :
+prim esquash_univ :
    [wf] sequent { <H> >- 'P in univ[i:l] } -->
    sequent { <H> >- esquash{'P} in univ[i:l] } =
    it
@@ -221,8 +210,22 @@ doc <:doc<
 let esquashT i =
    if i = 0 then esquash else unesquash i
 
+let esq_exn = RefineError("Itt_esquash.esquashEqualT", StringError "esquash_univ not appropriate for weakAutoT")
+
+let esquashEqualT = funT (fun p ->
+   let in_esquash =
+      try Sequent.get_bool_arg p "esquash"
+      with RefineError _ -> false
+   in
+   if is_member_term (Sequent.concl p) then 
+      if not in_esquash && in_auto p then raise esq_exn else esquash_univ
+   else if in_esquash then esquash_equal_intro else esquash_equal)
+
+let resource intro += 
+   (<<esquash{'P1} = esquash{'P2} in univ[i:l]>>, ("esquashEqualT", None, esquashEqualT))
+
 let esquashAutoT =
-   autoT thenT tryT (onSomeHypT esquashT orelseT esquash thenT autoT)
+   withBoolT "esquash" true (autoT thenT tryT (onSomeHypT esquashT orelseT esquash thenT autoT))
 
 (*
  * -*-

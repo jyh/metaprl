@@ -68,15 +68,15 @@ interactive false_univ {| intro [] |} :
 interactive true_univ {| intro [] |} :
    sequent { <H> >- "true" IN univ[1:l] }
 
-interactive type_univ :
-   [wf] sequent { <H> >- "type"{'A} } -->
+interactive type_univ {| intro [AutoMustComplete] |} :
+   [wf] sequent { <H> >- 'A Type } -->
    sequent { <H> >- 'A IN univ[1:l] }
 
 let typeT = type_univ
 
 (* Rules for false *)
 derived false_type {| intro [] |} :
-   sequent { <H> >- "type"{."false"} }
+   sequent { <H> >- "false" Type }
 
 derived false_elim {| elim [] |} 'H :
    sequent { <H>; x: "false"; <J['x]> >- 'C['x] }
@@ -93,7 +93,7 @@ interactive true_concl_elim :
    sequent { <H> >- 'P }
 
 interactive true_concl_intro :
-   [wf] sequent { <H> >- "type"{'P} } -->
+   [wf] sequent { <H> >- 'P Type } -->
    [main] sequent { <H> >- 'P } -->
    sequent { <H> >- 'P = "true" in univ[1:l] }
 

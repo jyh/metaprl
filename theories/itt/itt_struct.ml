@@ -265,8 +265,12 @@ doc <:doc<
    @docoff
    @end[doc]
 >>
-let nthHypT i =
-   hypothesis i orelseT hypothesisType i orelseT hypMem i
+let nthHypT = argfunT (fun i p ->
+   let concl = Sequent.concl p in
+   let hyp = Sequent.nth_hyp p i in
+      if alpha_equal hyp concl then hypothesis i
+      else if is_type_term concl then hypothesisType i
+      else hypMem i)
 
 doc <:doc< 
    @begin[doc]

@@ -259,6 +259,19 @@ declare subterms{'bt}
 prim_rw reduce_subterms1 'H :
    subterms{ bterm{| <H>; x: term; <J> >- 'x |} } <--> rnil
 
+doc <:doc<
+   @begin[doc]
+   @keyword[ml_rewrite] @rewrite_name[reduce_subterms2]
+      <<Perv!"rewrite"{
+           subterms{bterm{|<H> >-
+              <:doc<@underline{op}@{
+                 <<df_context{'J_1<|H|>}>>.<< 't_1<|H|> >>, @ldots,
+                 <<df_context{'J_n<|H|>}>>.<< 't_n<|H|> >>@}>>|}};
+           <:doc<[<<bterm{|<H>; <J_1> >- 't_1|}>>; @ldots; <<bterm{|<H>; <J_n> >- 't_n|}>> ] >>} >>
+   @end[doc]
+   @docoff
+>>
+
 ml_rw reduce_subterms2 {| reduce |} : ('goal :  subterms{ bterm{| <H> >- 't |} }) =
    let bt = one_subterm goal in
    let hyps, t = dest_bterm_sequent bt in
@@ -487,187 +500,26 @@ doc docoff
 dform term_df : except_mode[src] :: term =
    `"_"
 
-declare df_bconts{'conts : Dform} : Dform
+declare sequent[disply_bterm] { Term : Dform >- Dform } : Dform
+declare sequent[bterm_sep] { Term : Dform >- Dform } : Dform
 
-let rec fmt_term_lst format_term buf = function
-   [] ->
-      raise(Invalid_argument("fmt_term_lst"))
- | [t] ->
-      format_term buf NOParens t
- | t::tl ->
-      format_term buf NOParens t;
-      format_string buf "; ";
-      fmt_term_lst format_term buf tl
+dform bterm_df : parens :: bterm{| <H> >- 't |} =
+   slot{disply_bterm{| <H> >- 't |}}
 
-let format_term_list format_term buf = function
-   [] -> ()
- | ts ->
-      format_szone buf;
-      format_string buf "[";
-      format_pushm buf 0;
-      fmt_term_lst format_term buf ts;
-      format_popm buf;
-      format_string buf "]";
-      format_ezone buf
+dform bterm_cont_df : disply_bterm{| df_context{'c}; <H> >- 't |} =
+   df_context{'c} bterm_sep{| <H> >- 't |} disply_bterm{| <H> >- 't |}
 
-let make_cont v = <:con< df_context_var[$v$:v] >>
+dform bterm_var_df : disply_bterm{| v: term; <H> >- 't |} =
+   'v bterm_sep{| <H> >- 't |} disply_bterm{| <H> >- 't |}
 
-let format_bconts format_term buf v = function
-   [v'] when Lm_symbol.eq v v' -> ()
- | conts -> format_term buf NOParens <:con< df_bconts{$mk_rlist_term (List.map make_cont conts)$} >>
+dform bterm_unusual_df : disply_bterm{| v: 't1; <H> >- 't |} =
+   'v `":" slot{'t1} bterm_sep{| <H> >- 't |} disply_bterm{| <H> >- 't |}
 
-let format_context format_term buf v conts values =
-   format_term buf NOParens <:con< df_context_var[$v$:v] >>;
-   format_bconts format_term buf v conts;
-   format_term_list format_term buf values
+dform bterm_nil_df : disply_bterm{| >- 't |} =
+   `"." slot{'t}
 
-let format_bterm_prl format_term buf =
-   let rec format_hyp hyps i len =
-      if i <> len then
-         let _ =
-            format_szone buf;
-            format_pushm buf 0;
-            match SeqHyp.get hyps i with
-               Context (v, conts, values) ->
-                  (* This is a context hypothesis *)
-                  format_string buf "<"; (* note: U27E8 is much nicer, but not all fonts have it *)
-                  format_context format_term buf v conts values;
-                  format_string buf ">"; (* note: U27E9 is much nicer, but not all fonts have it *)
-                  format_string buf ".";
-                  format_space buf;
-             | Hypothesis (v, a) ->
-                  if Lm_symbol.to_string v <> "" then begin
-                     format_term buf NOParens (mk_var_term v);
-                     format_string buf ".";
-                     format_space buf;
-                  end;
-         in
-            format_popm buf;
-            format_ezone buf;
-            format_hyp hyps (succ i) len
-   in
-   let format term =
-      let { sequent_args = args;
-            sequent_hyps = hyps;
-            sequent_concl = concl
-          } = explode_sequent term
-      in
-         format_szone buf;
-         format_pushm buf 0;
-         let hlen = SeqHyp.length hyps in
-         if (hlen>0) then
-            format_hyp hyps 0 hlen;
-         format_pushm buf 0;
-         format_term buf NOParens concl;
-         format_popm buf;
-         format_popm buf;
-         format_ezone buf
-   in
-      format
-
-ml_dform bterm_prl_df : mode["prl"] :: sequent[bterm]{ <H> >- 'concl } format_term buf =
-   format_bterm_prl format_term buf
-
-ml_dform bterm_prl_df : mode["prl"] :: sequent[bterm]{ <H> >- } format_term buf =
-   format_bterm_prl format_term buf
-
-let mk_tslot t = <:con< slot{$t$} >>
-
-let format_bterm_html format_term buf =
-   let rec format_hyp hyps i len =
-      if i <> len then
-         let _ =
-            format_szone buf;
-            match SeqHyp.get hyps i with
-               Context (v, conts, values) ->
-                  (* This is a context hypothesis *)
-                  format_string buf "<";
-                  format_context format_term buf v conts values;
-                  format_string buf ">";
-                  format_string buf ".";
-                  format_space buf;
-              | Hypothesis (v, a) ->
-                  if Lm_symbol.to_string v <> "" then begin
-                     format_term buf NOParens (mk_var_term v);
-                     format_string buf ".";
-                     format_space buf;
-                  end;
-         in
-            format_ezone buf;
-            format_hyp hyps (succ i) len
-   in
-   let format term =
-      let { sequent_args = arg;
-            sequent_hyps = hyps;
-            sequent_concl = concl
-          } = explode_sequent term
-      in
-         format_szone buf;
-         format_pushm buf 0;
-         let hlen = SeqHyp.length hyps in
-         if (hlen>0) then
-            format_hyp hyps 0 hlen;
-         format_pushm buf 0;
-         format_term buf NOParens (mk_tslot concl);
-         format_popm buf;
-         format_popm buf;
-         format_ezone buf
-   in
-      format
-
-ml_dform bterm_html_df : mode["html"] :: sequent[bterm]{ <H> >- 'concl } format_term buf =
-   format_bterm_html format_term buf
-
-ml_dform bterm_html_df : mode["html"] :: sequent[bterm]{ <H> >- } format_term buf =
-   format_bterm_html format_term buf
-
-let format_bterm_tex format_term buf =
-   let rec format_hyp hyps i len =
-      if i <> len then
-         let _ =
-            format_szone buf;
-            match SeqHyp.get hyps i with
-               Context (v, conts, values) ->
-                  format_term buf NOParens <<mathmacro["left<"]>>;
-                  format_context format_term buf v conts values;
-                  format_term buf NOParens <<mathmacro["right>"]>>;
-                  format_string buf ".";
-                  format_space buf;
-             | Hypothesis (v, a) ->
-                  if Lm_symbol.to_string v <> "" then begin
-                     format_term buf NOParens (mk_var_term v);
-                     format_string buf ".";
-                     format_space buf;
-                  end;
-         in
-            format_ezone buf;
-            format_hyp hyps (succ i) len
-   in
-   let format term =
-      let { sequent_args = arg;
-            sequent_hyps = hyps;
-            sequent_concl = concl
-          } = explode_sequent term
-      in
-         format_szone buf;
-         format_pushm buf 0;
-         let hlen = SeqHyp.length hyps in
-         if (hlen>0) then
-            format_hyp hyps 0 hlen;
-         format_pushm buf 0;
-         format_term buf NOParens concl;
-         format_popm buf;
-         format_popm buf;
-         format_ezone buf
-   in
-      format
-
-ml_dform bterm_tex_df : mode["tex"] :: sequent[bterm]{ <H> >- 'concl } format_term buf =
-   format_bterm_tex format_term buf
-
-ml_dform bterm_tex_df : mode["tex"] :: sequent[bterm]{ <H> >- } format_term buf =
-   format_bterm_tex format_term buf
-
+dform bterm_sep_cons_df : bterm_sep{| 't1; <H> >- 't |} = `","
+dform bterm_sep_nil_df : bterm_sep{| >- 't |} = `""
 
 dform if_quoted_op_df : if_quoted_op{'bt; 'tt} =
    `"if_quoted_op(" slot{'bt} `"; " slot{'tt} `")"

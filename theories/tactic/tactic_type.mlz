@@ -1,0 +1,74 @@
+(*
+ * Define the common types.
+ *)
+
+open Term
+open Refine
+
+(*
+ * Many tactics wish to examine their argument, so
+ * the real type of tactic includes an argument.
+ *)
+type refine_attribute =
+   VarArgs of string list
+ | TermArgs of term list
+ | TypeArg of term 
+ | IntArgs of int list
+ | ThinArg of bool 
+ | SubstArg of (string * term) list
+
+(*
+ * Every goal has a label.
+ *)
+and tactic_argument =
+   { ref_label : string;
+     ref_args : refine_attribute list;
+     ref_fcache : cache;
+     ref_rsrc : tactic_resources
+   }
+
+and tactic_resources =
+   { ref_d : int -> tactic;
+     ref_eqcd : tactic;
+     ref_typeinf : term_subst -> term -> term_subst * term;
+     ref_squash : tactic;
+     ref_subtype : tactic
+   }
+
+(*
+ * A tactic takes these arguments.
+ *)
+and tactic = tactic_argument Refiner.tactic
+and safe_tactic = tactic_argument Refiner.safe_tactic
+
+and rw = tactic_argument Refiner.rw
+and cond_rewrite = tactic_argument Refiner.cond_rewrite
+
+and cache = tactic_argument Refiner.tactic Tactic_cache.extract
+
+(*
+ * A real arg also includes the goal.
+ *)
+type tactic_arg = term * tactic_argument
+
+(*
+ * $Log$
+ * Revision 1.1  1997/04/28 15:52:44  jyh
+ * This is the initial checkin of Nuprl-Light.
+ * I am porting the editor, so it is not included
+ * in this checkin.
+ *
+ * Directories:
+ *     refiner: logic engine
+ *     filter: front end to the Ocaml compiler
+ *     editor: Emacs proof editor
+ *     util: utilities
+ *     mk: Makefile templates
+ *
+ *
+ * -*-
+ * Local Variables:
+ * Caml-master: "refiner"
+ * End:
+ * -*-
+ *)

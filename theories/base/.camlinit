@@ -1,0 +1,2 @@
+directory . ../../refiner ../base ../../caml-light/cl/src/lib
+set arguments -I . baseDForm.prl

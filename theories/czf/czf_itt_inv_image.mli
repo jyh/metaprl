@@ -1,5 +1,5 @@
 include Czf_itt_set
-include Czf_itt_member
+include Czf_itt_set_bvd
 
 open Printf
 open Mp_debug
@@ -24,3 +24,8 @@ open Base_dtactic
 open Base_auto_tactic
 
 declare inv_image{'s; x. 'a['x]; 't}  (* { x in s | a(x) in t } *)
+
+rewrite unfold_inv_image: inv_image{'s; x. 'a['x]; 't} <-->
+   setbvd_prop{'s; x. mem{'a['x]; 't}}
+
+topval fold_inv_image : conv

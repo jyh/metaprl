@@ -1,5 +1,5 @@
 include Czf_itt_set
-include Czf_itt_member
+include Czf_itt_set_bvd
 
 open Printf
 open Mp_debug
@@ -23,10 +23,16 @@ open Var
 open Base_dtactic
 open Base_auto_tactic
 
-declare inv_image{'s; x. 'a['x]; 't}  (* { x in s | a(x) in t } *)
+(* The inverse image of t in s: { x in s | a(x) in t } *)
+declare inv_image{'s; x. 'a['x]; 't}
+
+prim_rw unfold_inv_image: inv_image{'s; x. 'a['x]; 't} <-->
+   setbvd_prop{'s; x. mem{'a['x]; 't}}
+
+let fold_inv_image = makeFoldC << inv_image{'s; x. 'a['x]; 't} >> unfold_inv_image
 
 dform inv_image_df : parens :: except_mode[src] :: inv_image{'s; x. 'a; 't} =
-   pushm[0] `"{" slot{'x} Nuprl_font!member `"s " slot{'s} `"| " slot{'a} " " Nuprl_font!member `"s " slot{'t} `"}" popm
+   pushm[0] `"{" slot{'x} " " Nuprl_font!member `"s " slot{'s} `" | " slot{'a} " " Nuprl_font!member `"s " slot{'t} `"}" popm
 
 (*
  * Axioms for inverse image.
@@ -53,6 +59,5 @@ interactive inv_image_member_elim {| elim [] |} 'H 'J :
    sequent [squash] { 'H; x: mem{'y; inv_image{'s; x. 'a['x]; 't}}; 'J['x] >- isset{'t} } -->
    sequent ['ext] { 'H; x: mem{'y; inv_image{'s; x. 'a['x]; 't}}; 'J['x]; z: set >- isset{'a['z]} } -->
    sequent ['ext] { 'H; x: mem{'y; inv_image{'s; x. 'a['x]; 't}}; 'J['x] >- fun_set{x. 'a['x]} } -->
-   sequent ['ext] { 'H; x: mem{'y; inv_image{'s; x. 'a['x]; 't}}; 'J['x] >- mem{'y; 's} } -->
-   sequent ['ext] { 'H; x: mem{'y; inv_image{'s; x. 'a['x]; 't}}; 'J['x]; w: mem{'a['y]; 't} >- 'C['x] } -->
+   sequent ['ext] { 'H; x: mem{'y; inv_image{'s; x. 'a['x]; 't}}; 'J['x]; v: mem{'y; 's}; w: mem{'a['y]; 't} >- 'C['x] } -->
    sequent ['ext] { 'H; x: mem{'y; inv_image{'s; x. 'a['x]; 't}}; 'J['x] >- 'C['x] }

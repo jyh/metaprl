@@ -5,6 +5,40 @@
 
 include Mc_theory
 
+interactive ce_test1 'H :
+   sequent ['ext] { 'H >-
+      letBinop{ plusIntOp; tyInt; 1; 2; v.
+      letBinop{ minusIntOp; tyInt; 'v; 3; w. 'w }}}
+
+interactive ce_test2 'H :
+   sequent ['ext] { 'H >-
+      letBinop{ plusIntOp; tyInt; 2; 'a; v. 'v }}
+
+interactive ce_test3 'H :
+   sequent ['ext] { 'H >-
+      letBinop{ plusIntOp; tyInt; 4; 6; a.
+      letBinop{ minusIntOp; tyInt; 4; 'a; b.
+      letBinop{ mulIntOp; tyInt; 'b; 'c; v. 'v }}}}
+
+interactive mod_test1 'H :
+   sequent ['ext] { 'H >-
+      letBinop{ plusIntOp; tyInt; 1000000000; 1000000000; v. 'v } }
+
+interactive mod_test2 'H :
+   sequent ['ext] { 'H >- pow{ 2; 4 } }
+
+interactive mod_test3 'H :
+   sequent ['ext] { 'H >- mod_arith_unsigned{ int8; 400 } }
+
+interactive mod_test4 'H :
+   sequent ['ext] { 'H >- mod_arith_signed{ int8; 127 } }
+
+interactive mod_test5 'H :
+   sequent ['ext] { 'H >- mod_arith_signed{ int8; 128 } }
+
+interactive mod_test6 'H :
+   sequent ['ext] { 'H >- mod_arith_signed{ int8; 129 } }
+
 interactive deadcode_test1 'H :
    sequent ['ext] { 'H >-
       letBinop{ plusIntOp; tyInt; 1; 2; v.

@@ -41,6 +41,24 @@ open Tactic_type.Conversionals
  *************************************************************************)
 
 (*
+ * Modular arithmetic for integers.
+ *)
+
+(* Precision of naml integers. *)
+declare naml_prec
+
+(* Computes base ^ exp where base and exp are integers, with exp non-neg. *)
+declare pow{ 'base; 'exp }
+
+(*
+ * Converts num to an appropriate value for an integer of precision bytes,
+ * signed or unsigned.
+ *)
+declare mod_arith{ 'precision; 'sign; 'num }
+declare mod_arith_signed{ 'precision; 'num }
+declare mod_arith_unsigned{ 'precision; 'num }
+
+(*
  * Boolean type.
  * true_set and false_set define true and false for use in matches.
  * val_true and val_false should be used for returning true and false
@@ -77,6 +95,18 @@ declare unknownFun
 (*************************************************************************
  * Rewrites.
  *************************************************************************)
+
+(* Modular arithmetic for integers. *)
+
+topval reduce_naml_prec : conv
+topval reduce_pow : conv
+topval reduce_int8 : conv
+topval reduce_int16 : conv
+topval reduce_int32 : conv
+topval reduce_int64 : conv
+topval reduce_mod_arith : conv
+topval reduce_mod_arith_signed : conv
+topval reduce_mod_arith_unsigned : conv
 
 (* Boolean type. *)
 

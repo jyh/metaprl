@@ -1,7 +1,7 @@
 (*
  * Functional Intermediate Representation formalized in MetaPRL.
  *
- * Collect all the modules that comprise the mc/fir theory.
+ * Fold constants together in FIR expressions.
  *
  * ----------------------------------------------------------------
  *
@@ -30,15 +30,29 @@
  * Email:  emre@its.caltech.edu
  *)
 
-(* for tokens *)
-include Itt_atom
-include Itt_atom_bool
-
-(* main modules *)
 include Fir_int_set
-include Fir_rawint_set
 include Fir_ty
 include Fir_exp
 include Fir_eval
-include Fir_deadcode
-include Fir_const_elim
+
+open Tactic_type.Conversionals
+
+(*************************************************************************
+ * Rewrites.
+ *************************************************************************)
+
+(*
+ * Naml integers.
+ *)
+
+topval const_elim_plusIntOp : conv
+topval const_elim_minusIntOp : conv
+topval const_elim_mulIntOp : conv
+topval const_elim_divIntOp : conv
+topval const_elim_remIntOp : conv
+
+(*************************************************************************
+ * Automation.
+ *************************************************************************)
+
+topval firConstElimT : int -> tactic

@@ -43,6 +43,16 @@ open Tactic_type.Conversionals
  *************************************************************************)
 
 (*
+ * Modular arithmetic for integers.
+ *)
+
+declare naml_prec
+declare pow{ 'base; 'exp }
+declare mod_arith{ 'precision; 'sign; 'num }
+declare mod_arith_signed{ 'precision; 'num }
+declare mod_arith_unsigned{ 'precision; 'num }
+
+(*
  * Boolean type.
  *)
 
@@ -77,6 +87,22 @@ declare unknownFun
  * Display forms.
  *************************************************************************)
 
+(* Modular arithmetic for integers. *)
+dform naml_prec_df : except_mode[src] :: naml_prec =
+   `"naml_prec"
+dform pow_df : except_mode[src] :: pow{ 'base; 'exp } =
+   slot{'base}  Nuprl_font!sup{'exp}
+dform mod_arith_df : except_mode[src] ::
+   mod_arith{ 'precision; 'sign; 'num } =
+   `"mod_arith(" slot{'precision} `", " slot{'sign}
+   `", " slot{'num} `")"
+dform mod_arith_signed_df : except_mode[src] ::
+   mod_arith_signed{ 'precision; 'num } =
+   `"mod_arith_signed(" slot{'precision} `", " slot{'num} `")"
+dform _mod_arith_unsigned_df : except_mode[src] ::
+   mod_arith_unsigned{ 'precision; 'num } =
+   `"mod_arith_unsigned(" slot{'precision} `", " slot{'num} `")"
+
 (* Boolean type *)
 dform true_set_df : except_mode[src] :: true_set = `"true_set"
 dform false_set_df : except_mode[src] :: false_set = `"false_set"
@@ -108,6 +134,35 @@ dform unknownFun_df : except_mode[src] :: unknownFun = `"UnknownFun"
  * Rewrites.
  * These are how we express FIR evaluation.
  *************************************************************************)
+
+(*
+ * Modular arithmetic for integers.
+ *)
+
+prim_rw reduce_naml_prec : naml_prec <--> 31
+prim_rw reduce_int8 : int8 <--> 8
+prim_rw reduce_int16 : int16 <--> 16
+prim_rw reduce_int32 : int32 <--> 32
+prim_rw reduce_int64 : int64 <--> 64
+prim_rw reduce_pow :
+   pow{ 'base; 'exp } <-->
+   ind{ 'exp; i, j. 1; 1; i, j. ('base *@ 'j) }
+prim_rw reduce_mod_arith :
+   mod_arith{ 'precision; 'sign; 'num } <-->
+   ifthenelse{ beq_int{'sign; val_true};
+      mod_arith_signed{ 'precision; 'num };
+      mod_arith_unsigned{ 'precision; 'num }}
+prim_rw reduce_mod_arith_signed :
+   mod_arith_signed{ 'precision; 'num } <-->
+   (lambda{ x.
+      ifthenelse{ ge_bool{'x; pow{2; ('precision -@ 1)}};
+         ('x -@ pow{2; 'precision});
+         'x
+      }
+    } ('num %@ pow{2; 'precision}) )
+prim_rw reduce_mod_arith_unsigned :
+   mod_arith_unsigned{ 'precision; 'num } <-->
+   ( 'num %@ pow{2; 'precision} )
 
 (*
  * Boolean type.
@@ -210,27 +265,27 @@ prim_rw reduce_uminusIntOp :
 (* Standard binary arithmetic operators. *)
 prim_rw reduce_plusIntOp :
    binop_exp{ plusIntOp; tyInt; 'a1; 'a2 } <-->
-   ('a1 +@ 'a2)
+   atomInt{ mod_arith{ naml_prec; val_true; ('a1 +@ 'a2) } }
 prim_rw reduce_minusIntOp :
    binop_exp{ minusIntOp; tyInt; 'a1; 'a2 } <-->
-   ('a1 -@ 'a2)
+   atomInt{ mod_arith{ naml_prec; val_true; ('a1 -@ 'a2) } }
 prim_rw reduce_mulIntOp :
    binop_exp{ mulIntOp; tyInt; 'a1; 'a2 } <-->
-   ('a1 *@ 'a2)
+   atomInt{ mod_arith{ naml_prec; val_true; ('a1 *@ 'a2) } }
 prim_rw reduce_divIntOp :
    binop_exp{ divIntOp; tyInt; 'a1; 'a2 } <-->
-   ('a1 /@ 'a2)
+   atomInt{ mod_arith{ naml_prec; val_true; ('a1 /@ 'a2) } }
 prim_rw reduce_remIntOp :
    binop_exp{ remIntOp; tyInt; 'a1; 'a2 } <-->
-   ('a1 %@ 'a2)
+   atomInt{ mod_arith{ naml_prec; val_true; ('a1 %@ 'a2) } }
 
 (* Max / min. *)
 prim_rw reduce_maxIntOp :
    binop_exp{ maxIntOp; tyInt; 'a1; 'a2 } <-->
-   ifthenelse{ lt_bool{'a1; 'a2}; 'a2; 'a1 }
+   atomInt{ ifthenelse{ lt_bool{'a1; 'a2}; 'a2; 'a1 } }
 prim_rw reduce_minIntOp :
    binop_exp{ minIntOp; tyInt; 'a1; 'a2 } <-->
-   ifthenelse{ lt_bool{'a1; 'a2}; 'a1; 'a2 }
+   atomInt{ ifthenelse{ lt_bool{'a1; 'a2}; 'a1; 'a2 } }
 
 (* Boolean comparisons. *)
 prim_rw reduce_eqIntOp :
@@ -267,6 +322,16 @@ prim_rw reduce_cmpIntOp :
 
 let firEvalT i =
    rwh (repeatC (applyAllC [
+      reduce_naml_prec;
+      reduce_int8;
+      reduce_int16;
+      reduce_int32;
+      reduce_int64;
+      reduce_pow;
+      reduce_mod_arith;
+      reduce_mod_arith_signed;
+      reduce_mod_arith_unsigned;
+
       reduce_true_set;
       reduce_false_set;
       reduce_val_true;

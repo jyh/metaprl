@@ -42,10 +42,10 @@ open Tactic_type.Conversionals
 
 (* Primitive operations. *)
 
-prim_rw reduce_letUnop_deadcode :
+interactive_rw reduce_letUnop_deadcode :
    letUnop{ 'op; 'ty; 'a1; v. 'exp } <-->
    'exp
-prim_rw reduce_letBinop_deadcode :
+interactive_rw reduce_letBinop_deadcode :
    letBinop{ 'op; 'ty; 'a1; 'a2; v. 'exp } <-->
    'exp
 

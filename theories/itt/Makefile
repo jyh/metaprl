@@ -94,7 +94,8 @@ MPFILES :=\
 	itt_field2\
 	itt_order\
 	itt_example\
-	itt_rat
+	itt_rat\
+	itt_supinf
 
 ifeq ($(TESTS_ENABLED),YES)
 	MPFILES:= $(MPFILES)\

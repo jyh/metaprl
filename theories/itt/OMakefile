@@ -87,6 +87,7 @@ MPFILES =\
    itt_field2\
    itt_order\
    itt_rat\
+   itt_supinf\
    itt_example
 
 TEST_FILES =\

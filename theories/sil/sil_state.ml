@@ -102,13 +102,13 @@ dform first_df : first =
 dform next_df : next{'l} =
    next_loop{nil; next{'l}}
 
-dform next_loop_df1 : internal :: next_loop{'index; first} =
+dform next_loop_df1 : next_loop{'index; first} =
    `"L" df_length{'index}
 
-dform next_loop_df2 : internal :: next_loop{'index; next{'l}} =
+dform next_loop_df2 : next_loop{'index; next{'l}} =
    next_loop{cons{nil; 'index}; 'l}
 
-dform next_loop_df3 : internal :: next_loop{'index; 'l} =
+dform next_loop_df3 : next_loop{'index; 'l} =
    `"L{" slot{'l} `"+" df_length{'index} `"}"
 
 dform ifthenelse_df : parens :: "prec"[prec_if_eq_label] :: if_eq_label{'e1; 'e2; 'e3; 'e4} =

@@ -293,13 +293,13 @@ declare display_ind{'x}
 declare display_ind_n
 declare display_ind_eq{'x;'y}
 
-dform display_ind_df1 : internal :: display_ind{'x} =
+dform display_ind_df1 : display_ind{'x} =
    math_it["Ind":s] `"(" 'x `")"
 
-dform display_ind_df2 : internal :: display_ind_n =
+dform display_ind_df2 : display_ind_n =
    display_ind{math_it["n":s]}
 
-dform ind_eq_df: internal :: except_mode[src] :: display_ind_eq{'x;'y} =
+dform ind_eq_df: except_mode[src] :: display_ind_eq{'x;'y} =
    szone 'x space `"=" space 'y ezone
 
 dform ind_df : parens :: "prec"[prec_bor] :: except_mode[src] ::

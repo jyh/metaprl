@@ -98,6 +98,12 @@ declare tyProject{ 'ty_var; 'num }
 declare tyDelayed
 
 (*
+ * Opaque type.
+ * Used for rollbacks.
+ *)
+declare tyPtrTable
+
+(*
  * Union tags.
  * normalUnion : all the fields are known and ordered.
  * exnUnion : not all the fields are known, nor are they ordered.

@@ -74,6 +74,9 @@ declare tyProject{ 'ty_var; 'num }
 (* Delayed type. *)
 declare tyDelayed
 
+(* Opaque type. *)
+declare tyPtrTable
+
 (* Union tags. *)
 declare normalUnion
 declare exnUnion
@@ -139,6 +142,9 @@ dform tyProject_df : except_mode[src] :: tyProject{ 'ty_var; 'num } =
 
 (* Delayed type. *)
 dform tyDelayed_df : except_mode[src] :: tyDelayed = `"TyDelayed"
+
+(* Opaque type. *)
+dform tyPtrTable_df : except_mode[src] :: tyPtrTable = `"TyPtrTable"
 
 (* Union tags. *)
 dform normalUnion_df : except_mode[src] :: normalUnion = `"NormalUnion"

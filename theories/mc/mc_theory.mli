@@ -36,6 +36,9 @@ include Itt_atom_bool
 
 (* main modules *)
 include Fir_int_set
+include Fir_rawint_set
 include Fir_ty
 include Fir_exp
 include Fir_eval
+include Fir_deadcode
+include Fir_marshal

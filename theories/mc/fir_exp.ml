@@ -36,37 +36,68 @@ include Base_theory
  * Declarations.
  *************************************************************************)
 
+(*
+ * Unary operations.
+ *)
+
 (* Identity (polymorphic). *)
 declare idOp
 
-(*
- * Naml integer operations.
- *)
-
-(* Unary and bitwise negation. *)
+(* Naml ints. *)
 declare uminusIntOp
 declare notIntOp
 
-(* Standard binary arithmetic operators. *)
+(* Bit fields. *)
+declare rawBitFieldOp{ 'precision; 'sign; 'num1; 'num2 }
+
+(* Native ints. *)
+declare uminusRawIntOp{ 'precision; 'sign }
+declare notRawIntOp{ 'precision; 'sign }
+
+(* Floats. *)
+declare uminusFloatOp{ 'precision }
+declare absFloatOp{ 'precision }
+
+(* Coerce to int. *)
+declare intOfFloatOp{ 'precision }
+
+(* Coerce to float. *)
+declare floatOfIntOp{ 'precision }
+declare floatOfFloatOp{ 'prec1; 'prec2 }
+declare floatOfRawIntOp{ 'float_prec; 'int_prec; 'int_sign }
+
+(* Coerce to rawint. *)
+declare rawIntOfEnumOp{ 'precision; 'sign; 'num }
+declare rawIntOfFloatOp{ 'int_prec; 'int_sign; 'float_prec }
+declare rawIntOfRawIntOp{ 'dest_prec; 'dest_sign; 'src_prec; 'src_sign }
+
+(* Integer/pointer coercions. *)
+declare rawIntOfPointerOp{ 'precision; 'sign }
+declare pointerOfRawIntOp{ 'precision; 'sign }
+
+(*
+ * Binary operations.
+ *)
+
+(* Enums. *)
+declare andEnumOp{ 'num }
+declare orEnumOp{ 'num }
+
+(* Naml ints. *)
 declare plusIntOp
 declare minusIntOp
 declare mulIntOp
 declare divIntOp
 declare remIntOp
-
-(* Binary bitwise operators. *)
 declare lslIntOp
 declare lsrIntOp
 declare asrIntOp
 declare andIntOp
 declare orIntOp
 declare xorIntOp
-
-(* Max / min. *)
 declare maxIntOp
 declare minIntOp
 
-(* Boolean comparisons. *)
 declare eqIntOp
 declare neqIntOp
 declare ltIntOp
@@ -75,15 +106,54 @@ declare gtIntOp
 declare geIntOp
 declare cmpIntOp
 
-(*
- * End Naml integer operations.
- *)
+(* Native ints. *)
+declare plusRawIntOp{ 'precision; 'sign }
+declare minusRawIntOp{ 'precision; 'sign }
+declare mulRawIntOp{ 'precision; 'sign }
+declare divRawIntOp{ 'precision; 'sign }
+declare remRawIntOp{ 'precision; 'sign }
+declare slRawIntOp{ 'precision; 'sign }
+declare srRawIntOp{ 'precision; 'sign }
+declare andRawIntOp{ 'precision; 'sign }
+declare orRawIntOp{ 'precision; 'sign }
+declare xorRawIntOp{ 'precision; 'sign }
+declare maxRawIntOp{ 'precision; 'sign }
+declare minRawIntOp{ 'precision; 'sign }
+
+declare rawSetBitFieldOp{ 'precision; 'sign; 'num1; 'num2 }
+
+declare eqRawIntOp{ 'precision; 'sign }
+declare neqRawIntOp{ 'precision; 'sign }
+declare ltRawIntOp{ 'precision; 'sign }
+declare leRawIntOp{ 'precision; 'sign }
+declare gtRawIntOp{ 'precision; 'sign }
+declare geRawIntOp{ 'precision; 'sign }
+declare cmpRawIntOp{ 'precision; 'sign }
+
+(* Floats. *)
+declare plusFloatOp{ 'precision }
+declare minusFloatOp{ 'precision }
+declare mulFloatOp{ 'precision }
+declare divFloatOp{ 'precision }
+declare remFloatOp{ 'precision }
+declare maxFloatOp{ 'precision }
+declare minFloatOp{ 'precision }
+
+declare eqFloatOp{ 'precision }
+declare neqFloatOp{ 'precision }
+declare ltFloatOp{ 'precision }
+declare leFloatOp{ 'precision }
+declare gtFloatOp{ 'precision }
+declare geFloatOp{ 'precision }
+declare cmpFloatOp{ 'precision }
 
 (* Pointer equality. *)
 declare eqEqOp
 declare neqEqOp
 
-(* Subscript operators. *)
+(*
+ * Subscript operators.
+ *)
 declare blockPolySub
 declare blockRawIntSub{ 'precision; 'sign }
 declare blockFloatSub{ 'precision }
@@ -92,13 +162,17 @@ declare rawFloatSub{ 'precision }
 declare rawDataSub
 declare rawFunctionSub
 
-(* Allocation operators. *)
+(*
+ * Allocation operators.
+ *)
 declare allocTuple{ 'ty; 'atom_list }
 declare allocArray{ 'ty; 'atom_list }
 declare allocUnion{ 'ty; 'ty_var; 'num; 'atom_list }
 declare allocMalloc{ 'atom }
 
-(* Normal values. *)
+(*
+ * Normal values.
+ *)
 declare atomInt{ 'int }
 declare atomEnum{ 'bound; 'num }
 declare atomRawInt{ 'num }
@@ -111,8 +185,6 @@ declare atomVar{ 'var }
  *)
 
 (* Primitive operations. *)
-declare unop_exp{ 'op; 'a1 }
-declare binop_exp{ 'op; 'a1; 'a2 }
 declare letUnop{ 'op; 'ty; 'a1; v. 'exp['v] }
 declare letBinop{ 'op; 'ty; 'a1; 'a2; v. 'exp['v] }
 
@@ -132,58 +204,216 @@ declare letSubscript{ 'subop; 'ty; 'var; 'index; v. 'exp['v] }
 declare setSubscript{ 'subop; 'ty; 'var; 'index; 'new_val; v. 'exp['v] }
 declare memcpy{ 'subop; 'var1; 'atom1; 'var2; 'atom2; 'len; 'exp }
 
+
 (*************************************************************************
  * Display forms.
  *************************************************************************)
 
+(*
+ * Unary operations.
+ *)
+
 (* Identity (polymorphic). *)
 dform idOp_df : except_mode[src] :: idOp = `"id"
 
-(*
- * Naml integer operations.
- *)
-
-(* Unary and bitwise negation. *)
+(* Naml ints. *)
 dform uminusIntOp_df : except_mode[src] :: uminusIntOp = `"-"
 dform notIntOp_df : except_mode[src] :: notIntOp = `"~"
 
-(* Standard binary arithmetic operators. *)
+(* Bit fields. *)
+dform rawBitFieldOp_df : except_mode[src] ::
+   rawBitFieldOp{ 'precision; 'sign; 'num1; 'num2 } =
+   `"RawBitFieldOp(" slot{'precision} `", " slot{'sign} `", "
+   slot{'num1} `", " slot{'num2} `")"
+
+(* Native ints. *)
+dform uminusRawIntOp_df : except_mode[src] ::
+   uminusRawIntOp{ 'precision; 'sign } =
+   `"UminusRawIntOp(" slot{'precision} `", " slot{'sign} `")"
+dform notRawIntOp_df : except_mode[src] ::
+   notRawIntOp{ 'precision; 'sign } =
+   `"NotRawIntOp(" slot{'precision} `", " slot{'sign} `")"
+
+(* Floats. *)
+dform uminusFloatOp_df : except_mode[src] :: uminusFloatOp{ 'precision } =
+   `"UminusFloatOp(" slot{'precision} `")"
+dform absFloatOp_df : except_mode[src] :: absFloatOp{ 'precision } =
+   `"AbsFloatOp(" slot{'precision} `")"
+
+(* Coerce to int. *)
+dform intOfFloatOp_df : except_mode[src] :: intOfFloatOp{ 'precision } =
+   `"IntOfFloatOp(" slot{'precision} `")"
+
+(* Coerce to float. *)
+dform floatOfIntOp_df : except_mode[src] ::
+   floatOfIntOp{ 'precision } =
+   `"FloatOfIntOp(" slot{'precision} `")"
+dform floatOfFLoatOp_df : except_mode[src] ::
+   floatOfFloatOp{ 'prec1; 'prec2 } =
+   `"FloatOfFloatOp(" slot{'prec1} `", " slot{'prec2} `")"
+dform floatOfRawIntOp_df : except_mode[src] ::
+   floatOfRawIntOp{ 'float_prec; 'int_prec; 'int_sign } =
+   `"FloatOfRawIntOp(" slot{'float_prec} `", " slot{'int_prec}
+   `", " slot{'int_sign} `")"
+
+(* Coerce to rawint. *)
+dform rawIntOfEnumOp_df : except_mode[src] ::
+   rawIntOfEnumOp{ 'precision; 'sign; 'num } =
+   `"RawIntOfEnumOp(" slot{'precision} `", " slot{'sign}
+   `", " slot{'num} `")"
+dform rawIntOfFloatOp_df : except_mode[src] ::
+   rawIntOfFloatOp{ 'int_prec; 'int_sign; 'float_prec } =
+   `"RawIntOfFloatOp(" slot{'int_prec} `", " slot{'int_sign}
+   `", " slot{'float_prec} `")"
+dform rawIntOfRawIntOp_df : except_mode[src] ::
+   rawIntOfRawIntOp{ 'dest_prec; 'dest_sign; 'src_prec; 'src_sign } =
+   `"RawIntOfRawIntOp(" slot{'dest_prec} `", " slot{'dest_sign}
+   `", " slot{'src_prec} `", " slot{'src_sign} `")"
+
+(* Integer/pointer coercions. *)
+dform rawIntOfPointerOp_df : except_mode[src] ::
+   rawIntOfPointerOp{ 'precision; 'sign } =
+   `"RawIntOfPointerOp(" slot{'precision} `", " slot{'sign} `")"
+dform pointerOfRawIntOp_df : except_mode[src] ::
+   pointerOfRawIntOp{ 'precision; 'sign } =
+   `"PointerOfRawIntOp(" slot{'precision} `", " slot{'sign} `")"
+
+(*
+ * Binary operations.
+ *)
+
+(* Enums. *)
+dform andEnumOp_df : except_mode[src] :: andEnumOp{ 'num } =
+   `"AndEnumOp(" slot{'num} `")"
+dform orEnumOp_df : except_mode[src] :: orEnumOp{ 'num } =
+   `"OrEnumOp(" slot{'num} `")"
+
+(* Naml ints. *)
 dform plusIntOp_df : except_mode[src] :: plusIntOp = `"+"
 dform minusIntOp_df : except_mode[src] :: minusIntOp = `"-"
 dform mulIntOp_df : except_mode[src] :: mulIntOp = `"*"
 dform divIntOp_df : except_mode[src] :: divIntOp = Nuprl_font!"div"
 dform remIntOp_df : except_mode[src] :: remIntOp = `"rem"
-
-(* Binary bitwise oerators. *)
 dform lslIntOp_df : except_mode[src] :: lslIntOp = `"<<"
 dform lsrIntOp_df : except_mode[src] :: lsrIntOp = `">>"
 dform asrIntOp_df : except_mode[src] :: asrIntOp = `">>"
 dform andIntOp_df : except_mode[src] :: andIntOp = `"&"
 dform orIntOp_df  : except_mode[src] :: orIntOp  = `"|"
 dform xorIntOp_df : except_mode[src] :: xorIntOp = `"^"
-
-(* Max / min. *)
 dform maxIntOp_df : except_mode[src] :: maxIntOp = `"max"
 dform minIntOp_df : except_mode[src] :: minIntOp = `"min"
 
-(* Comparison. *)
 dform eqIntOp_df : except_mode[src] :: eqIntOp = `"="
 dform neqIntOp_df : except_mode[src] :: neqIntOp = `"!="
 dform ltIntOp_df : except_mode[src] :: ltIntOp = `"<"
 dform leIntOp_df : except_mode[src] :: leIntOp = Nuprl_font!le
 dform gtIntOp_df : except_mode[src] :: gtIntOp = `">"
 dform geIntOp_df : except_mode[src] :: geIntOp = Nuprl_font!ge
-dform cmpIntOp_df : except_mode[src] :: cmpIntOp = `"compare"
+dform cmpIntOp_df : except_mode[src] :: cmpIntOp = `"cmp"
 
-(*
- * End Naml integer operations.
- *)
+(* Native ints. *)
+dform plusRawIntOp_df : except_mode[src] ::
+   plusRawIntOp{ 'precision; 'sign } =
+   `"PlusRawIntOp(" slot{'precision} `", " slot{'sign} `")"
+dform minusRawIntOp_df : except_mode[src] ::
+   minusRawIntOp{ 'precision; 'sign } =
+   `"MinusRawIntOp(" slot{'precision} `", " slot{'sign} `")"
+dform mulRawIntOp_df : except_mode[src] ::
+   mulRawIntOp{ 'precision; 'sign } =
+   `"MulRawIntOp(" slot{'precision} `", " slot{'sign} `")"
+dform divRawIntOp_df : except_mode[src] ::
+   divRawIntOp{ 'precision; 'sign } =
+   `"DivRawIntOp(" slot{'precision} `", " slot{'sign} `")"
+dform remRawIntOp_df : except_mode[src] ::
+   remRawIntOp{ 'precision; 'sign } =
+   `"RemRawIntOp(" slot{'precision} `", " slot{'sign} `")"
+dform slRawIntOp_df : except_mode[src] ::
+   slRawIntOp{ 'precision; 'sign } =
+   `"SlRawIntOp(" slot{'precision} `", " slot{'sign} `")"
+dform srRawIntOp_df : except_mode[src] ::
+   srRawIntOp{ 'precision; 'sign } =
+   `"SrRawIntOp(" slot{'precision} `", " slot{'sign} `")"
+dform andRawIntOp_df : except_mode[src] ::
+   andRawIntOp{ 'precision; 'sign } =
+   `"AndRawIntOp(" slot{'precision} `", " slot{'sign} `")"
+dform orRawIntOp_df : except_mode[src] ::
+   orRawIntOp{ 'precision; 'sign } =
+   `"OrRawIntOp(" slot{'precision} `", " slot{'sign} `")"
+dform xorRawIntOp_df : except_mode[src] ::
+   xorRawIntOp{ 'precision; 'sign } =
+   `"XorRawIntOp(" slot{'precision} `", " slot{'sign} `")"
+dform maxRawIntOp_df : except_mode[src] ::
+   maxRawIntOp{ 'precision; 'sign } =
+   `"MaxRawIntOp(" slot{'precision} `", " slot{'sign} `")"
+dform minRawIntOp_df : except_mode[src] ::
+   minRawIntOp{ 'precision; 'sign } =
+   `"MinRawIntOp(" slot{'precision} `", " slot{'sign} `")"
+
+dform rawSetBitFieldOp_df : except_mode[src] ::
+   rawSetBitFieldOp{ 'precision; 'sign; 'num1; 'num2 } =
+   `"RawSetBitFieldOp(" slot{'precision} `", " slot{'sign}
+   `", " slot{'num1} `", " slot{'num2} `")"
+
+dform eqRawIntOp_df : except_mode[src] ::
+   eqRawIntOp{ 'precision; 'sign } =
+   `"EqRawIntOp(" slot{'precision} `", " slot{'sign} `")"
+dform neqRawIntOp_df : except_mode[src] ::
+   neqRawIntOp{ 'precision; 'sign } =
+   `"NeqRawIntOp(" slot{'precision} `", " slot{'sign} `")"
+dform ltRawIntOp_df : except_mode[src] ::
+   ltRawIntOp{ 'precision; 'sign } =
+   `"LtRawIntOp(" slot{'precision} `", " slot{'sign} `")"
+dform leRawIntOp_df : except_mode[src] ::
+   leRawIntOp{ 'precision; 'sign } =
+   `"LeRawIntOp(" slot{'precision} `", " slot{'sign} `")"
+dform gtRawIntOp_df : except_mode[src] ::
+   gtRawIntOp{ 'precision; 'sign } =
+   `"GtRawIntOp(" slot{'precision} `", " slot{'sign} `")"
+dform geRawIntOp_df : except_mode[src] ::
+   geRawIntOp{ 'precision; 'sign } =
+   `"GeRawIntOp(" slot{'precision} `", " slot{'sign} `")"
+dform cmpRawIntOp_df : except_mode[src] ::
+   cmpRawIntOp{ 'precision; 'sign } =
+   `"CmpRawIntOp(" slot{'precision} `", " slot{'sign} `")"
+
+(* Floats. *)
+dform plusFloatOp_df : except_mode[src] :: plusFloatOp{ 'precision } =
+   `"PlusFloatOp(" slot{'precision} `")"
+dform minusFloatOp_df : except_mode[src] :: minusFloatOp{ 'precision } =
+   `"MinusFloatOp(" slot{'precision} `")"
+dform mulFloatOp_df : except_mode[src] :: mulFloatOp{ 'precision } =
+   `"MulFloatOp(" slot{'precision} `")"
+dform divFloatOp_df : except_mode[src] :: divFloatOp{ 'precision } =
+   `"DivFloatOp(" slot{'precision} `")"
+dform remFloatOp_df : except_mode[src] :: remFloatOp{ 'precision } =
+   `"RemFloatOp(" slot{'precision} `")"
+dform maxFloatOp_df : except_mode[src] :: maxFloatOp{ 'precision } =
+   `"MaxFloatOp(" slot{'precision} `")"
+dform minFloatOp_df : except_mode[src] :: minFloatOp{ 'precision } =
+   `"MinFloatOp(" slot{'precision} `")"
+
+dform eqFloatOp_df : except_mode[src] :: eqFloatOp{ 'precision } =
+   `"EqFloatOp(" slot{'precision} `")"
+dform neqFloatOp_df : except_mode[src] :: neqFloatOp{ 'precision } =
+   `"NeqFloatOp(" slot{'precision} `")"
+dform ltFloatOp_df : except_mode[src] :: ltFloatOp{ 'precision } =
+   `"LtFloatOp(" slot{'precision} `")"
+dform leFloatOp_df : except_mode[src] :: leFloatOp{ 'precision } =
+   `"LeFloatOp(" slot{'precision} `")"
+dform gtFloatOp_df : except_mode[src] :: gtFloatOp{ 'precision } =
+   `"GtFloatOp(" slot{'precision} `")"
+dform geFloatOp_df : except_mode[src] :: geFloatOp{ 'precision } =
+   `"GeFloatOp(" slot{'precision} `")"
+dform cmpFloatOp_df : except_mode[src] :: cmpFloatOp{ 'precision } =
+   `"CmpFloatOp(" slot{'precision} `")"
 
 (* Pointer equality. *)
 dform eqEqOp_df : except_mode[src] :: eqEqOp = `"EqEqOp"
 dform neqEqOp_df : except_mode[src] :: neqEqOp = `"NeqEqOp"
 
-(* Subscript operators. *)
+(*
+ * Subscript operators.
+ *)
 dform blockPolySub_df : except_mode[src] :: blockPolySub =
    `"BlockPolySub"
 dform blockRawIntSub_df : except_mode[src] :: blockRawIntSub{ 'p; 's } =
@@ -199,7 +429,9 @@ dform rawDataSub_df : except_mode[src] :: rawDataSub =
 dform rawFunctionSub : except_mode[src] :: rawFunctionSub =
    `"RawFunctionSub"
 
-(* Allocation operators. *)
+(*
+ * Allocation operators.
+ *)
 dform allocTuple_df : except_mode[src] :: allocTuple{ 'ty; 'atom_list } =
    szone `"AllocTuple(" slot{'ty} `", " slot{'atom_list} `")" ezone
 dform allocArray_df : except_mode[src] :: allocArray{ 'ty; 'atom_list } =
@@ -211,7 +443,9 @@ dform allocUnion_df : except_mode[src] ::
 dform allocMalloc_df : except_mode[src] :: allocMalloc{ 'atom } =
    `"AllocMalloc(" slot{'atom} `")"
 
-(* Normal values. *)
+(*
+ * Normal values.
+ *)
 dform atomInt_df : except_mode[src] :: atomInt{ 'int } =
    lzone `"AtomInt(" slot{'int} `")" ezone
 dform atomEnum_df : except_mode[src] :: atomEnum{ 'bound; 'num } =
@@ -231,10 +465,6 @@ dform atomVar_df : except_mode[src] :: atomVar{ 'var } =
  *)
 
 (* Primitive operations. *)
-dform unop_exp_df : except_mode[src] :: unop_exp{ 'op; 'a1 } =
-   slot{'op} `"(" slot{'a1} `")"
-dform binop_exp_df : except_mode[src] :: binop_exp{ 'op; 'a1; 'a2 } =
-   `"(" slot{'a1} `" " slot{'op} `" " slot{'a2} `")"
 dform letUnop_df : except_mode[src] ::
    letUnop{ 'op; 'ty; 'a1; v. 'exp } =
    pushm[0] szone push_indent `"let " slot{'v} `":" slot{'ty} `" =" hspace
@@ -272,7 +502,7 @@ dform match_df : except_mode[src] :: "match"{ 'key; 'cases } =
    szone slot{'cases} ezone popm
    ezone popm
 
-(* Allocation *)
+(* Allocation. *)
 dform letAlloc_df : except_mode[src] ::
    letAlloc{ 'alloc_op; v. 'exp } =
    pushm[0] szone push_indent `"let " slot{'v} `" =" hspace

@@ -61,6 +61,13 @@ declare apply{ 'f; 'x }
 declare fix{ f. 'b['f] }
 
 (*
+ * Expressions.
+*)
+
+declare unop_exp{ 'op; 'a1 }
+declare binop_exp{ 'op; 'a1; 'a2 }
+
+(*
  * Misc.
  * Not FIR terms, but used to make output from mc manageable.
  *)

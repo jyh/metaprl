@@ -36,40 +36,68 @@ include Base_theory
  * Declarations.
  *************************************************************************)
 
+(*
+ * Unary operations.
+ *)
+
 (* Identity (polymorphic). *)
 declare idOp
 
-(*
- * Naml integer operations.
- *)
-
-(* Unary and bitwise negation. *)
+(* Naml ints. *)
 declare uminusIntOp
 declare notIntOp
 
-(* Standard binary arithmetic operators. *)
+(* Bit fields. *)
+declare rawBitFieldOp{ 'precision; 'sign; 'num1; 'num2 }
+
+(* Native ints. *)
+declare uminusRawIntOp{ 'precision; 'sign }
+declare notRawIntOp{ 'precision; 'sign }
+
+(* Floats. *)
+declare uminusFloatOp{ 'precision }
+declare absFloatOp{ 'precision }
+
+(* Coerce to int. *)
+declare intOfFloatOp{ 'precision }
+
+(* Coerce to float. *)
+declare floatOfIntOp{ 'precision }
+declare floatOfFloatOp{ 'prec1; 'prec2 }
+declare floatOfRawIntOp{ 'float_prec; 'int_prec; 'int_sign }
+
+(* Coerce to rawint. *)
+declare rawIntOfEnumOp{ 'precision; 'sign; 'num }
+declare rawIntOfFloatOp{ 'int_prec; 'int_sign; 'float_prec }
+declare rawIntOfRawIntOp{ 'dest_prec; 'dest_sign; 'src_prec; 'src_sign }
+
+(* Integer/pointer coercions. *)
+declare rawIntOfPointerOp{ 'precision; 'sign }
+declare pointerOfRawIntOp{ 'precision; 'sign }
+
+(*
+ * Binary operations.
+ *)
+
+(* Enums. *)
+declare andEnumOp{ 'num }
+declare orEnumOp{ 'num }
+
+(* Naml ints. *)
 declare plusIntOp
 declare minusIntOp
 declare mulIntOp
 declare divIntOp
 declare remIntOp
-
-(*
- * Binary bitwise operators: and, or, xor, logical shifts left/right,
- *    arithmetic shift right.
- *)
 declare lslIntOp
 declare lsrIntOp
 declare asrIntOp
 declare andIntOp
 declare orIntOp
 declare xorIntOp
-
-(* Max / min. *)
 declare maxIntOp
 declare minIntOp
 
-(* Boolean comparisons. *)
 declare eqIntOp
 declare neqIntOp
 declare ltIntOp
@@ -78,16 +106,53 @@ declare gtIntOp
 declare geIntOp
 declare cmpIntOp
 
-(*
- * Pointer equality.
- *)
+(* Native ints. *)
+declare plusRawIntOp{ 'precision; 'sign }
+declare minusRawIntOp{ 'precision; 'sign }
+declare mulRawIntOp{ 'precision; 'sign }
+declare divRawIntOp{ 'precision; 'sign }
+declare remRawIntOp{ 'precision; 'sign }
+declare slRawIntOp{ 'precision; 'sign }
+declare srRawIntOp{ 'precision; 'sign }
+declare andRawIntOp{ 'precision; 'sign }
+declare orRawIntOp{ 'precision; 'sign }
+declare xorRawIntOp{ 'precision; 'sign }
+declare maxRawIntOp{ 'precision; 'sign }
+declare minRawIntOp{ 'precision; 'sign }
+
+declare rawSetBitFieldOp{ 'precision; 'sign; 'num1; 'num2 }
+
+declare eqRawIntOp{ 'precision; 'sign }
+declare neqRawIntOp{ 'precision; 'sign }
+declare ltRawIntOp{ 'precision; 'sign }
+declare leRawIntOp{ 'precision; 'sign }
+declare gtRawIntOp{ 'precision; 'sign }
+declare geRawIntOp{ 'precision; 'sign }
+declare cmpRawIntOp{ 'precision; 'sign }
+
+(* Floats. *)
+declare plusFloatOp{ 'precision }
+declare minusFloatOp{ 'precision }
+declare mulFloatOp{ 'precision }
+declare divFloatOp{ 'precision }
+declare remFloatOp{ 'precision }
+declare maxFloatOp{ 'precision }
+declare minFloatOp{ 'precision }
+
+declare eqFloatOp{ 'precision }
+declare neqFloatOp{ 'precision }
+declare ltFloatOp{ 'precision }
+declare leFloatOp{ 'precision }
+declare gtFloatOp{ 'precision }
+declare geFloatOp{ 'precision }
+declare cmpFloatOp{ 'precision }
+
+(* Pointer equality. *)
 declare eqEqOp
 declare neqEqOp
 
 (*
  * Subscript operators.
- * I have no clue how these are supposed to work/evaluate.
- * Consequently, I just ignore them right now.
  *)
 declare blockPolySub
 declare blockRawIntSub{ 'precision; 'sign }
@@ -99,8 +164,6 @@ declare rawFunctionSub
 
 (*
  * Allocation operators.
- * I'm unsure about allocMalloc and allocUnion, so I haven't dealt
- * with them yet.
  *)
 declare allocTuple{ 'ty; 'atom_list }
 declare allocArray{ 'ty; 'atom_list }
@@ -109,11 +172,6 @@ declare allocMalloc{ 'atom }
 
 (*
  * Normal values.
- * atomInt evaluates to 'int (a number).
- * atomEnum evalutes to 'num (a number).
- * atomVar evaluates to 'var (a free variable).
- * atomRawInt, atomConst, and atomFloat are declared for completeness.
- *    These haven't been dealt with as of yet.
  *)
 declare atomInt{ 'int }
 declare atomEnum{ 'bound; 'num }
@@ -126,29 +184,17 @@ declare atomVar{ 'var }
  * Expressions.
  *)
 
-(*
- * Primitive operations.
- * We bind 'v to the value of ('op args).
- *)
-declare unop_exp{ 'op; 'a1 }
-declare binop_exp{ 'op; 'a1; 'a2 }
+(* Primitive operations. *)
 declare letUnop{ 'op; 'ty; 'a1; v. 'exp['v] }
 declare letBinop{ 'op; 'ty; 'a1; 'a2; v. 'exp['v] }
 
-(*
- * Function application.
- * letExt is treated as a no-op; it evaluates to 'exp[it].
- *    This is on the assumption that it has a side-effect that we dont'
- *    need to worry about here.  If that's not true... uh-oh.
- * tailCall's aren't emitted by the compiler. I declare the term
- *    here for completeness.
- *)
+(* Function application. *)
 declare letExt{ 'ty; 'string; 'ty_of_str; 'atom_list; v. 'exp['v] }
 declare tailCall{ 'var; 'atom_list }
 
 (*
  * Control.
- * A matchCase consists of an int_set an expression.
+ * A matchCase consists of an int_set and an expression.
  * A match statement has a 'key (a number/int or block), and a list
  * of matchCases.
  *)
@@ -161,7 +207,6 @@ declare letAlloc{ 'alloc_op; v. 'exp['v] }
 (*
  * Subscripting.
  * In setSubscript, we bind the updated value to v in 'exp.
- * For evaluation purposes, 'subop is completely ignored.
  *)
 declare letSubscript{ 'subop; 'ty; 'var; 'index; v. 'exp['v] }
 declare setSubscript{ 'subop; 'ty; 'var; 'index; 'new_val; v. 'exp['v] }

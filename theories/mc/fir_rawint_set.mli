@@ -1,7 +1,7 @@
 (*
  * Functional Intermediate Representation formalized in MetaPRL.
  *
- * Collect all the modules that comprise the mc/fir theory.
+ * Define terms to represent Rawint sets.
  *
  * ----------------------------------------------------------------
  *
@@ -30,15 +30,22 @@
  * Email:  emre@its.caltech.edu
  *)
 
-(* for tokens *)
-include Itt_atom
-include Itt_atom_bool
+include Base_theory
 
-(* main modules *)
-include Fir_int_set
-include Fir_rawint_set
-include Fir_ty
-include Fir_exp
-include Fir_eval
-include Fir_deadcode
-include Fir_marshal
+(*************************************************************************
+ * Declarations.
+ *************************************************************************)
+
+(*
+ * Intervals.
+ * Represents a closed interval in the integers.
+ * 'left and 'right should be numbers with 'left <= 'right.
+ *)
+declare raw_interval{ 'left; 'right }
+
+(*
+ * The set.
+ * 'intervals should be a list of intervals, or nil in order to
+ *    represent the empty set.
+ *)
+declare rawint_set{ 'intervals }

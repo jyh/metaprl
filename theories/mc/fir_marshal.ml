@@ -1,7 +1,7 @@
 (*
  * Functional Intermediate Representation formalized in MetaPRL.
  *
- * Collect all the modules that comprise the mc/fir theory.
+ * Define and implement the connection to the Mojave compiler.
  *
  * ----------------------------------------------------------------
  *
@@ -29,16 +29,3 @@
  * Author: Brian Emre Aydemir
  * Email:  emre@its.caltech.edu
  *)
-
-(* for tokens *)
-include Itt_atom
-include Itt_atom_bool
-
-(* main modules *)
-include Fir_int_set
-include Fir_rawint_set
-include Fir_ty
-include Fir_exp
-include Fir_eval
-include Fir_deadcode
-include Fir_marshal

@@ -1,7 +1,7 @@
 (*
  * Functional Intermediate Representation formalized in MetaPRL.
  *
- * Collect all the modules that comprise the mc/fir theory.
+ * Implement deadcode elimination.
  *
  * ----------------------------------------------------------------
  *
@@ -30,15 +30,25 @@
  * Email:  emre@its.caltech.edu
  *)
 
-(* for tokens *)
-include Itt_atom
-include Itt_atom_bool
-
-(* main modules *)
-include Fir_int_set
-include Fir_rawint_set
-include Fir_ty
 include Fir_exp
 include Fir_eval
-include Fir_deadcode
-include Fir_marshal
+
+open Tactic_type.Conversionals
+
+(*************************************************************************
+ * Rewrites.
+ *************************************************************************)
+
+topval reduce_letUnop_deadcode : conv
+topval reduce_letBinop_deadcode : conv
+
+topval reduce_allocTuple_deadcode : conv
+topval reduce_allocArray_deadcode : conv
+
+topval reduce_letSubscript_deadcode : conv
+
+(*************************************************************************
+ * Automation.
+ *************************************************************************)
+
+topval firDeadcodeElimT : int -> tactic

@@ -1,7 +1,7 @@
 (*
  * Functional Intermediate Representation formalized in MetaPRL.
  *
- * Collect all the modules that comprise the mc/fir theory.
+ * Define terms to represent Rawint sets.
  *
  * ----------------------------------------------------------------
  *
@@ -30,15 +30,26 @@
  * Email:  emre@its.caltech.edu
  *)
 
-(* for tokens *)
-include Itt_atom
-include Itt_atom_bool
+include Base_theory
 
-(* main modules *)
-include Fir_int_set
-include Fir_rawint_set
-include Fir_ty
-include Fir_exp
-include Fir_eval
-include Fir_deadcode
-include Fir_marshal
+(*************************************************************************
+ * Declarations.
+ *************************************************************************)
+
+(* Intervals. *)
+declare raw_interval{ 'left; 'right }
+
+(* The set. *)
+declare rawint_set{ 'intervals }
+
+(*************************************************************************
+ * Display forms.
+ *************************************************************************)
+
+(* Intervals. *)
+dform raw_interval_df : except_mode[src] :: raw_interval{ 'l; 'r } =
+   lzone `"[" slot{'l} `", " slot{'r} `"]" ezone
+
+(* The set. *)
+dform rawint_set_df : except_mode[src] :: rawint_set{ 'intervals } =
+   pushm[0] szone `"rawint_set(" slot{'intervals} `")" ezone popm

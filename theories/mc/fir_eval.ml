@@ -55,10 +55,17 @@ declare val_false
  * Functions.
  *)
 
-declare lambda{ x. 'f['x] }   (* for functions with >= 1 arguments *)
-declare lambda{ 'f }          (* function with no arguments *)
+declare lambda{ x. 'f['x] }
+declare lambda{ 'f }
 declare apply{ 'f; 'x }
 declare fix{ f. 'b['f] }
+
+(*
+ * Expressions.
+ *)
+
+declare unop_exp{ 'op; 'a1 }
+declare binop_exp{ 'op; 'a1; 'a2 }
 
 (*
  * Misc.
@@ -87,6 +94,12 @@ dform fix_df : except_mode[src] :: fix{ f. 'b } =
    pushm[0] szone push_indent `"(fix " slot{'f} `"." hspace
    szone slot{'b} `")" ezone popm
    ezone popm
+
+(* Expressions. *)
+dform unop_exp_df : except_mode[src] :: unop_exp{ 'op; 'a1 } =
+   slot{'op} `"(" slot{'a1} `")"
+dform binop_exp_df : except_mode[src] :: binop_exp{ 'op; 'a1; 'a2 } =
+   `"(" slot{'a1} `" " slot{'op} `" " slot{'a2} `")"
 
 (* Misc. *)
 dform unknownFun_df : except_mode[src] :: unknownFun = `"UnknownFun"

@@ -43,7 +43,6 @@ open Tactic_type.Conversionals
 open Top_conversionals
 open Itt_int_ext
 
-(* topval thenIfLabelPredT : (string -> bool) -> tactic -> tactic -> tactic *)
 topval thenLocalMT : tactic -> tactic -> tactic
 topval thenLocalMElseT : tactic -> tactic -> tactic -> tactic
 topval thenLocalAT : tactic -> tactic -> tactic
@@ -72,6 +71,7 @@ topval mul_BubbleStepC : term -> conv
 topval mul_BubbleSortC : conv
 
 topval inject_coefC : term -> conv
+topval injectCoefC : conv
 topval mul_normalizeC : conv
 topval open_parenthesesC : conv
 topval sum_same_products1C : conv

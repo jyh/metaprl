@@ -76,6 +76,13 @@ open Itt_int_ext
 
 let _ = show_loading "Loading Itt_int_ext%t"
 
+let debug_int_arith =
+   create_debug (**)
+      { debug_name = "debug_int_arith";
+        debug_description = "Print out some debug info as tactics proceed";
+        debug_value = false
+      }
+
 (*******************************************************
  * ARITH
  *******************************************************)
@@ -87,8 +94,7 @@ let _ = show_loading "Loading Itt_int_ext%t"
 let debug_subgoals =
    create_debug (**)
       { debug_name = "subgoals";
-        debug_description = "Report subgoals observed with may be some
- additional info";
+        debug_description = "Report subgoals observed with may be some additional info";
         debug_value = false
       }
 
@@ -610,13 +616,13 @@ let mul_BubbleStepC tm =
                      idC
          else
             if (is_number_term a) & (is_number_term s) then
-	       reduceC
-	    else
-               if (compare_terms s a)=Less or
-                (is_number_term s) then
-	          mul_CommutC
-	       else
-	          idC
+	       		reduceC
+	    		else
+               if ((compare_terms s a)=Less & not (is_number_term a)) or
+                	(is_number_term s) then
+	          		mul_CommutC
+	       		else
+	          		idC
    else
       failC
 
@@ -626,17 +632,66 @@ let mul_BubbleStepC tm =
 let mul_BubbleSortC = repeatC (sweepDnC (termC mul_BubbleStepC))
 
 let inject_coefC t =
+	if not (is_add_term t) then
+   	mul_Id3C thenC
+      (repeatC (sweepDnC mul_uni_AssocC)) thenC
+      (addrC [0] reduceC)
+   else
+   	failC
+(*
    if is_mul_term t then
       mul_Id3C
    else
       failC
+*)
+
+let inject_coef2C t =
+	if is_add_term t then
+   	let (a,b)=dest_add t in
+      begin
+      	if !debug_int_arith then
+         	eprintf "\ninject_coefC: %a %a%t" print_term a print_term b eflush
+         else
+         	();
+      	let aC=if not (is_add_term a) then
+      				addrC [0] (mul_Id3C thenC
+      								(repeatC (sweepDnC mul_uni_AssocC)) thenC
+      								(addrC [0] reduceC))
+       			 else
+             		idC
+      	in
+      	let bC=if not (is_add_term b) then
+      				addrC [1] (mul_Id3C thenC
+      								(repeatC (sweepDnC mul_uni_AssocC)) thenC
+      								(addrC [0] reduceC))
+       			 else
+             		idC
+      	in
+      	aC thenC bC
+      end
+	else
+   	idC
+
+
+let checkArithTermC conv =
+	let auxC t = if (is_mul_term t) or
+   					 (is_add_term t) or
+                   (is_minus_term t) then
+                   conv
+         		 else
+                	 idC
+	in
+   termC auxC
+
+               (* (higherC (termC inject_coefC)) thenC *)
+let injectCoefC = checkArithTermC (higherC (termC inject_coefC))
+let injectCoef2C = sweepUpC (termC inject_coef2C)
 
 (* Before terms sorting we have to put parentheses in the rightmost-first
 manner
  *)
 let mul_normalizeC = (* (repeatC (higherC mul_Assoc2C)) thenC *)
-                     (higherC (termC inject_coefC)) thenC
-                     mul_BubbleSortC
+                     injectCoef2C thenC mul_BubbleSortC
 
 interactive_rw sum_same_products1_rw :
    ('a in int) -->
@@ -669,34 +724,12 @@ let same_product_aux a b =
    if (is_mul_term a) & (is_mul_term b) then
       let (a1,a2)=dest_mul a in
       let (b1,b2)=dest_mul b in
-(*
-      if is_number_term a1 then
-         if is_number_term b1 then
-*)
-            if (compare_terms a2 b2)=Equal then
-               (true, sum_same_products1C)
-            else
-               (false, idC)
-(*
-         else
-            if (compare_terms a1 b)=Equal then
-               (true, sum_same_products2C)
-            else
-               (false, idC)
+      if (compare_terms a2 b2)=Equal then
+         (true, sum_same_products1C)
       else
-         if is_number_term b1 then
-            if (compare_terms a b1)=Equal then
-               (true, sum_same_products3C)
-            else
-               (false, idC)
-         else
-            if (compare_terms a b)=Equal then
-               (true, sum_same_products4C)
-            else
-               (false, idC)
-*)
+         (false, idC)
    else
-      (false, idC)
+	  	(false, idC)
 
 let same_productC t =
    if (is_add_term t) then
@@ -739,29 +772,52 @@ let stripCoef t =
    contraction of sum of integers
  *)
 let add_BubbleStepC tm =
+  (if !debug_int_arith then
+		eprintf "\nadd_BubbleStepC: %a%t" print_term tm eflush
+   else
+      ();
    if is_add_term tm then
       let (a,s) = dest_add tm in
          if is_add_term s then
             let (b,c) = dest_add s in
-	       if (is_number_term a) & (is_number_term b) then
-	          (add_AssocC thenC (addrC [0] reduceC)) thenC add_Id2C
-	       else
+	       	if (is_number_term a) & (is_number_term b) then
+               begin
+               	if !debug_int_arith then
+							eprintf "add_BubbleStepC: adding numbers a b%t" eflush
+                  else
+                  	();
+	        			(add_AssocC thenC (addrC [0] reduceC)) thenC (tryC add_Id2C)
+               end
+	       	else
                   let a'=stripCoef a in
                   let b'=stripCoef b in
                   if (compare_terms b' a')=Less then
                      add_BubblePrimitiveC
                   else
-                     idC
+                     failC
          else
             if (is_number_term a) & (is_number_term s) then
-	       reduceC
-	    else
-               if (compare_terms s a)=Less then
-	          add_CommutC
-	       else
-	          idC
+               begin
+               	if !debug_int_arith then
+							eprintf "add_BubbleStepC: adding numbers a s%t" eflush
+                  else
+                  	();
+		       		reduceC
+               end
+	    		else
+     				if (compare_terms s a)=Less then
+	          		add_CommutC
+	       		else
+	          		failC
    else
-      failC
+      begin
+        	if !debug_int_arith then
+				eprintf "add_BubbleStepC: wrong term%t" eflush
+         else
+         	();
+	      failC
+      end
+  )
 
 (* here we apply add_BubbleStepC as many times as possible thus
    finally we have all sum subterms positioned in order
@@ -784,11 +840,12 @@ let add_normalizeC = (* (repeatC (higherC add_Assoc2C)) thenC *)
 
 let open_parenthesesC = repeatC (higherC mul_add_DistribC)
 
-let normalizeC = sub_elimC thenC
+let normalizeC = (repeatC (sweepDnC sub_elimC)) thenC
                  reduceC thenC
                  (* open_parenthesesC thenC *)
                  mul_normalizeC thenC
-                 add_normalizeC
+                 add_normalizeC thenC
+                 reduceC
 
 interactive_rw ge_addContract_rw :
    ( 'a in int ) -->
@@ -802,10 +859,8 @@ let ge_addContractC = ge_addContract_rw
  *)
 let reduceContradRelT i p = (rw ((addrC [0] normalizeC) thenC
                                  (addrC [1] normalizeC) thenC
-		                 ge_addContractC thenC
-(*				 (
-				 unfold_ge thenC unfold_le thenC (addrC [0] unfold_le_bool)) thenC*)
-			         reduceC)
+						               (tryC ge_addContractC) thenC
+					   			      reduceC)
                                 i) p
 
 let provideConstantC t =
@@ -850,15 +905,6 @@ let reduce_geCommonConstT i p =
    else
       idT p
 
-(*let tryReduce_geT i p =
-   let t=get_term i p in
-      if is_ge_term t then
-         (rw ((addrC [0] normalizeC) thenC
-             (addrC [1] (normalizeC thenC (termC provideConstantC))))
-             i) p
-      else
-         idT p*)
-
 let tryReduce_geT i p =
    let t=get_term i p in
       if is_ge_term t then
@@ -893,7 +939,10 @@ let proveSumT = ge_addMono
  *)
 let sumListT l p =
    let s = sumList l (Sequent.goal p) in
-   thenLocalAT (assertT s) (progressT proveSumT) p
+   (if !debug_int_arith then
+   	eprintf "Contradictory term:%a%t" print_term s eflush
+    else ();
+   thenLocalAT (assertT s) (tryT (progressT proveSumT)) p)
 
 (* Test if term has a form of a>=b+i where i is a number
  *)
@@ -919,53 +968,23 @@ let good_term t =
 (* Searches for contradiction among ge-relations
  *)
 let findContradRelT p =
-(*   let es = explode_sequent (Sequent.goal p) in
-   let {sequent_args = sa; sequent_hyps = sh; sequent_goals = sg} = es in
-   let aux h = match h with Hypothesis (s,t) -> t
-      | Context (s,l) -> (mk_simple_term xperv []) in
-   let shl = List.map aux (SeqHyp.to_list sh) in
-   let sgl = SeqGoal.to_list sg in
-   begin
-      print_term stdout sa;
-      print_term_list stdout shl;
-      print_term_list stdout sgl;
-      failT p
-   end
-*)
    let g=Sequent.goal p in
    let l = Arith.collect good_term g in
-(* begin
-           List.map (fun x->let t=(Refiner.Refiner.TermMan.nth_hyp g x)
-                     in print_term stdout t) l;
-*)
    let ar=Array.of_list l in
    match Arith.TG.solve (g,ar) with
       Arith.TG.Int (_,r),_ ->
-         (*
-           let aux i = eprintf "i=%u " i in
-           let aux2 i = eprintf "r=%u " ar.(i) in
-         *)
          let aux3 i al = (ar.(i))::al in
          let rl = List.fold_right aux3 r [] in
-         begin
-            (*
-              List.map aux l;
-              prerr_endline "";
-              List.map aux rl;
-              flush stderr;
-            *)
-            sumListT rl p
-         end
-      | Arith.TG.Disconnected,_ ->
-         begin
-(*            eprintf "No contradiction found";
-            prerr_endline "";
-            flush stderr;
-            failT p
-*)
-            raise (RefineError("arithT", StringError "Proof by contradiction -
- No contradiction found"))
-         end
+         (if !debug_int_arith then
+            let rec lprint ch ll =match ll with
+               h::t -> (fprintf ch "%u " h; lprint ch t)
+             | [] -> fprintf ch "."
+            in
+            eprintf "Hyps to sum:%a%t" lprint rl eflush
+          else ();
+         sumListT rl p)
+    | Arith.TG.Disconnected,_ ->
+         raise (RefineError("arithT", StringError "Proof by contradiction - No contradiction found"))
 
 (* Finds and proves contradiction among ge-relations
  *)

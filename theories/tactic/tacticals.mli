@@ -147,47 +147,6 @@ val get_sel_arg : tactic_arg -> int
 val get_thinning_arg : tactic_arg -> bool
 
 (*
- * $Log$
- * Revision 1.8  1998/07/02 22:25:37  jyh
- * Created term_copy module to copy and normalize terms.
- *
- * Revision 1.7  1998/06/22 19:46:48  jyh
- * Rewriting in contexts.  This required a change in addressing,
- * and the body of the context is the _last_ subterm, not the first.
- *
- * Revision 1.6  1998/06/15 22:33:50  jyh
- * Added CZF.
- *
- * Revision 1.5  1998/06/09 20:53:04  jyh
- * Propagated refinement changes.
- * New tacticals module.
- *
- * Revision 1.4  1998/06/03 22:20:05  jyh
- * Nonpolymorphic refiner.
- *
- * Revision 1.3  1998/05/28 13:48:42  jyh
- * Updated the editor to use new Refiner structure.
- * ITT needs dform names.
- *
- * Revision 1.2  1997/08/06 16:18:55  jyh
- * This is an ocaml version with subtyping, type inference,
- * d and eqcd tactics.  It is a basic system, but not debugged.
- *
- * Revision 1.1  1997/04/28 15:52:45  jyh
- * This is the initial checkin of Nuprl-Light.
- * I am porting the editor, so it is not included
- * in this checkin.
- *
- * Directories:
- *     refiner: logic engine
- *     filter: front end to the Ocaml compiler
- *     editor: Emacs proof editor
- *     util: utilities
- *     mk: Makefile templates
- *
- * Revision 1.1  1996/09/25 22:52:07  jyh
- * Initial "tactical" commit.
- *
  * -*-
  * Local Variables:
  * Caml-master: "editor.run"

@@ -152,13 +152,6 @@ val dest_tree_ind : term -> string * string * string * term * term
 val mk_tree_ind_term :  string -> string -> string -> term -> term -> term
 
 (*
- * $Log$
- * Revision 1.1  1998/07/02 18:38:08  jyh
- * Refiner modules now raise RefineError exceptions directly.
- * Modules in this revision have two versions: one that raises
- * verbose exceptions, and another that uses a generic exception.
- *
- *
  * -*-
  * Local Variables:
  * Caml-master: "refiner"

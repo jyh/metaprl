@@ -118,37 +118,6 @@ let get_opt_var_arg v p =
          maybe_new_var v (declared_vars p)
 
 (*
- * $Log$
- * Revision 1.6  1998/07/02 22:25:38  jyh
- * Created term_copy module to copy and normalize terms.
- *
- * Revision 1.5  1998/06/16 16:26:25  jyh
- * Added itt_test.
- *
- * Revision 1.4  1998/06/15 22:33:51  jyh
- * Added CZF.
- *
- * Revision 1.3  1998/06/03 22:20:06  jyh
- * Nonpolymorphic refiner.
- *
- * Revision 1.2  1998/04/24 02:44:07  jyh
- * Added more extensive debugging capabilities.
- *
- * Revision 1.1  1997/04/28 15:52:45  jyh
- * This is the initial checkin of Nuprl-Light.
- * I am porting the editor, so it is not included
- * in this checkin.
- *
- * Directories:
- *     refiner: logic engine
- *     filter: front end to the Ocaml compiler
- *     editor: Emacs proof editor
- *     util: utilities
- *     mk: Makefile templates
- *
- * Revision 1.1  1996/09/25 22:52:07  jyh
- * Initial "tactical" commit.
- *
  * -*-
  * Local Variables:
  * Caml-master: "editor.run"

@@ -388,29 +388,6 @@ dform patt_body_df3 : slot{patt_format; patt_body[@start:n, @finish:n]{'e}; 'pwe
    slot{patt_format; patt_body{'e}; 'pwel}
 
 (*
- * $Log$
- * Revision 1.7  1998/06/01 13:56:44  jyh
- * Proving twice one is two.
- *
- * Revision 1.6  1998/05/04 23:46:18  jyh
- * Most display forms now work.
- *
- * Revision 1.5  1998/05/04 13:01:35  jyh
- * Ocaml display without let rec.
- *
- * Revision 1.4  1998/04/29 20:54:08  jyh
- * Initial working display forms.
- *
- * Revision 1.3  1998/04/29 14:49:15  jyh
- * Added ocaml_sos.
- *
- * Revision 1.2  1998/02/18 18:47:36  jyh
- * Initial ocaml semantics.
- *
- * Revision 1.1  1998/02/13 16:02:19  jyh
- * Partially implemented semantics for caml.
- *
- *
  * -*-
  * Local Variables:
  * Caml-master: "refiner"

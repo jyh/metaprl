@@ -130,57 +130,6 @@ val dest_hide : term -> term
 val mk_hide_term : term -> term
 
 (*
- * $Log$
- * Revision 1.6  1998/07/02 18:37:50  jyh
- * Refiner modules now raise RefineError exceptions directly.
- * Modules in this revision have two versions: one that raises
- * verbose exceptions, and another that uses a generic exception.
- *
- * Revision 1.5  1998/05/28 13:48:02  jyh
- * Updated the editor to use new Refiner structure.
- * ITT needs dform names.
- *
- * Revision 1.4  1998/04/22 22:45:09  jyh
- * *** empty log message ***
- *
- * Revision 1.3  1998/04/09 18:26:09  jyh
- * Working compiler once again.
- *
- * Revision 1.2  1997/08/06 16:18:41  jyh
- * This is an ocaml version with subtyping, type inference,
- * d and eqcd tactics.  It is a basic system, but not debugged.
- *
- * Revision 1.1  1997/04/28 15:52:25  jyh
- * This is the initial checkin of Nuprl-Light.
- * I am porting the editor, so it is not included
- * in this checkin.
- *
- * Directories:
- *     refiner: logic engine
- *     filter: front end to the Ocaml compiler
- *     editor: Emacs proof editor
- *     util: utilities
- *     mk: Makefile templates
- *
- * Revision 1.4  1996/09/02 19:37:39  jyh
- * Semi working package management.
- * All _univ version removed.
- *
- * Revision 1.3  1996/05/21 02:17:10  jyh
- * This is a semi-working version before Wisconsin vacation.
- *
- * Revision 1.2  1996/04/11 13:34:14  jyh
- * This is the final version with the old syntax for terms.
- *
- * Revision 1.1  1996/03/30 01:37:18  jyh
- * Initial version of ITT.
- *
- * Revision 1.2  1996/03/28 02:51:28  jyh
- * This is an initial version of the type theory.
- *
- * Revision 1.1  1996/03/05 19:59:41  jyh
- * Version just before LogicalFramework.
- *
  * -*-
  * Local Variables:
  * Caml-master: "prlcomp.run"

@@ -155,29 +155,6 @@ val withTacticT : string -> tactic -> tactic -> tactic
 val timingT : tactic -> tactic
 
 (*
- * $Log$
- * Revision 1.7  1998/07/03 22:06:15  jyh
- * IO terms are now in term_std format.
- *
- * Revision 1.6  1998/07/02 22:25:35  jyh
- * Created term_copy module to copy and normalize terms.
- *
- * Revision 1.5  1998/06/16 16:26:24  jyh
- * Added itt_test.
- *
- * Revision 1.4  1998/06/15 22:33:48  jyh
- * Added CZF.
- *
- * Revision 1.3  1998/06/13 16:24:03  jyh
- * Adding timing tactical.
- *
- * Revision 1.2  1998/06/09 20:53:01  jyh
- * Propagated refinement changes.
- * New tacticals module.
- *
- * Revision 1.1  1998/06/03 22:20:02  jyh
- * Nonpolymorphic refiner.
- *
  * -*-
  * Local Variables:
  * Caml-master: "refiner"

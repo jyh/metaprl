@@ -344,13 +344,6 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (tree_
  *)
 
 (*
- * $Log$
- * Revision 1.1  1998/07/02 18:38:08  jyh
- * Refiner modules now raise RefineError exceptions directly.
- * Modules in this revision have two versions: one that raises
- * verbose exceptions, and another that uses a generic exception.
- *
- *
  * -*-
  * Local Variables:
  * Caml-master: "refiner"

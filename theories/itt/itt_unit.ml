@@ -159,37 +159,6 @@ let inf_it _ decl _ = decl, unit_term
 let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (it_term, inf_it)
 
 (*
- * $Log$
- * Revision 1.8  1998/07/02 18:38:03  jyh
- * Refiner modules now raise RefineError exceptions directly.
- * Modules in this revision have two versions: one that raises
- * verbose exceptions, and another that uses a generic exception.
- *
- * Revision 1.7  1998/06/09 20:52:49  jyh
- * Propagated refinement changes.
- * New tacticals module.
- *
- * Revision 1.6  1998/06/01 13:56:32  jyh
- * Proving twice one is two.
- *
- * Revision 1.5  1998/05/28 13:48:20  jyh
- * Updated the editor to use new Refiner structure.
- * ITT needs dform names.
- *
- * Revision 1.4  1998/04/24 02:43:55  jyh
- * Added more extensive debugging capabilities.
- *
- * Revision 1.3  1998/04/22 22:45:25  jyh
- * *** empty log message ***
- *
- * Revision 1.2  1998/04/09 18:26:11  jyh
- * Working compiler once again.
- *
- * Revision 1.1  1997/08/06 16:18:47  jyh
- * This is an ocaml version with subtyping, type inference,
- * d and eqcd tactics.  It is a basic system, but not debugged.
- *
- *
  * -*-
  * Local Variables:
  * Caml-master: "prlcomp.run"

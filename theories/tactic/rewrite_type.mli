@@ -118,24 +118,6 @@ val cutC : term -> conv
 val makeFoldC : term -> conv -> conv
 
 (*
- * $Log$
- * Revision 1.5  1998/07/02 22:25:29  jyh
- * Created term_copy module to copy and normalize terms.
- *
- * Revision 1.4  1998/06/23 22:12:42  jyh
- * Improved rewriter speed with conversion tree and flist.
- *
- * Revision 1.3  1998/06/22 20:01:44  jyh
- * Fixed syntax error in term_addr_gen.ml
- *
- * Revision 1.2  1998/06/22 19:46:44  jyh
- * Rewriting in contexts.  This required a change in addressing,
- * and the body of the context is the _last_ subterm, not the first.
- *
- * Revision 1.1  1998/06/03 22:19:56  jyh
- * Nonpolymorphic refiner.
- *
- *
  * -*-
  * Local Variables:
  * Caml-master: "refiner"

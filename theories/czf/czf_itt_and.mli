@@ -60,14 +60,3 @@ axiom and_res 'H :
    sequent ['ext] { 'H >- restricted{'B} } -->
    sequent ['ext] { 'H >- restricted{."and"{'A; 'B}} }
 
-(*
- * $Log$
- * Revision 1.2  1998/07/02 18:36:59  jyh
- * Refiner modules now raise RefineError exceptions directly.
- * Modules in this revision have two versions: one that raises
- * verbose exceptions, and another that uses a generic exception.
- *
- * Revision 1.1  1998/06/23 22:12:20  jyh
- * Improved rewriter speed with conversion tree and flist.
- *
- *)

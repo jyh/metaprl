@@ -204,26 +204,6 @@ dform stl_df4 : slot{stl; cons{'t; 'tl}} =
    hspace "*" `" " slot{'t} slot{stl; 'tl}
 
 (*
- * $Log$
- * Revision 1.6  1998/06/01 13:56:48  jyh
- * Proving twice one is two.
- *
- * Revision 1.5  1998/05/04 13:01:40  jyh
- * Ocaml display without let rec.
- *
- * Revision 1.4  1998/04/29 20:54:12  jyh
- * Initial working display forms.
- *
- * Revision 1.3  1998/04/29 14:49:31  jyh
- * Added ocaml_sos.
- *
- * Revision 1.2  1998/02/18 18:47:56  jyh
- * Initial ocaml semantics.
- *
- * Revision 1.1  1998/02/13 16:02:26  jyh
- * Partially implemented semantics for caml.
- *
- *
  * -*-
  * Local Variables:
  * Caml-master: "refiner"

@@ -148,14 +148,6 @@ declare class_val{'s; 'b1; 'b2; 'eo}
 declare class_vir{'s; 't}
 
 (*
- * $Log$
- * Revision 1.1  1998/01/27 23:04:32  jyh
- * Adding OCaml1.07 syntax.
- *
- * Revision 1.1  1998/01/03 23:20:25  jyh
- * Upgraded to OCaml 1.07, initial semantics of OCaml.
- *
- *
  * -*-
  * Local Variables:
  * Caml-master: "refiner"

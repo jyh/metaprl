@@ -93,50 +93,6 @@ val d_prodT : int -> tactic
 val eqcd_prodT : tactic
 
 (*
- * $Log$
- * Revision 1.5  1998/07/02 18:37:43  jyh
- * Refiner modules now raise RefineError exceptions directly.
- * Modules in this revision have two versions: one that raises
- * verbose exceptions, and another that uses a generic exception.
- *
- * Revision 1.4  1998/06/01 13:56:07  jyh
- * Proving twice one is two.
- *
- * Revision 1.3  1998/04/22 22:45:01  jyh
- * *** empty log message ***
- *
- * Revision 1.2  1997/08/06 16:18:37  jyh
- * This is an ocaml version with subtyping, type inference,
- * d and eqcd tactics.  It is a basic system, but not debugged.
- *
- * Revision 1.1  1997/04/28 15:52:21  jyh
- * This is the initial checkin of Nuprl-Light.
- * I am porting the editor, so it is not included
- * in this checkin.
- *
- * Directories:
- *     refiner: logic engine
- *     filter: front end to the Ocaml compiler
- *     editor: Emacs proof editor
- *     util: utilities
- *     mk: Makefile templates
- *
- * Revision 1.5  1996/10/23 15:18:10  jyh
- * First working version of dT tactic.
- *
- * Revision 1.4  1996/09/02 19:37:35  jyh
- * Semi working package management.
- * All _univ version removed.
- *
- * Revision 1.3  1996/05/21 02:17:01  jyh
- * This is a semi-working version before Wisconsin vacation.
- *
- * Revision 1.2  1996/04/11 13:34:08  jyh
- * This is the final version with the old syntax for terms.
- *
- * Revision 1.1  1996/03/28 02:51:33  jyh
- * This is an initial version of the type theory.
- *
  * -*-
  * Local Variables:
  * Caml-master: "prlcomp.run"

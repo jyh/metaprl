@@ -51,14 +51,3 @@ axiom dexists_wf 'H 'y :
    sequent ['ext] { 'H; y: 'T >- wf{'A['y]} } -->
    sequent ['ext] { 'H >- wf{."exists"{'T; x. 'A['x]} } }
 
-(*
- * $Log$
- * Revision 1.2  1998/07/02 18:37:04  jyh
- * Refiner modules now raise RefineError exceptions directly.
- * Modules in this revision have two versions: one that raises
- * verbose exceptions, and another that uses a generic exception.
- *
- * Revision 1.1  1998/06/23 22:12:21  jyh
- * Improved rewriter speed with conversion tree and flist.
- *
- *)

@@ -65,28 +65,6 @@ let test () =
 
 
 (*
- * $Log$
- * Revision 1.6  1998/07/04 22:34:08  nogin
- * Use fact(125)
- *
- * Revision 1.5  1998/07/02 18:38:00  jyh
- * Refiner modules now raise RefineError exceptions directly.
- * Modules in this revision have two versions: one that raises
- * verbose exceptions, and another that uses a generic exception.
- *
- * Revision 1.4  1998/07/01 18:10:10  nogin
- * Replaced 80 with 100
- *
- * Revision 1.3  1998/06/23 22:12:38  jyh
- * Improved rewriter speed with conversion tree and flist.
- *
- * Revision 1.2  1998/06/17 15:46:02  jyh
- * Optimizing compiler.
- *
- * Revision 1.1  1998/06/16 16:26:11  jyh
- * Added itt_test.
- *
- *
  * -*-
  * Local Variables:
  * Caml-master: "editor.top"

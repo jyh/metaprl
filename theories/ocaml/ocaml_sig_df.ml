@@ -115,23 +115,6 @@ dform sig_value_df2 : sig_value[@start:n, @finish:n, @name:s]{'t} =
    sig_value[@name:s]{'t}
 
 (*
- * $Log$
- * Revision 1.5  1998/05/04 13:01:37  jyh
- * Ocaml display without let rec.
- *
- * Revision 1.4  1998/04/29 20:54:09  jyh
- * Initial working display forms.
- *
- * Revision 1.3  1998/04/29 14:49:22  jyh
- * Added ocaml_sos.
- *
- * Revision 1.2  1998/02/18 18:47:42  jyh
- * Initial ocaml semantics.
- *
- * Revision 1.1  1998/02/13 16:02:23  jyh
- * Partially implemented semantics for caml.
- *
- *
  * -*-
  * Local Variables:
  * Caml-master: "refiner"

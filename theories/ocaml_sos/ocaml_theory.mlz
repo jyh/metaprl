@@ -22,11 +22,6 @@ include Ocaml_sig_sos
 include Ocaml_str_sos
 
 (*
- * $Log$
- * Revision 1.1  1998/04/29 14:50:18  jyh
- * Added ocaml_sos.
- *
- *
  * -*-
  * Local Variables:
  * Caml-master: "refiner"

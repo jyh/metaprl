@@ -113,20 +113,6 @@ axiom functional_apply_value 'H 't1 :
    sequent { 'H >- value_equiv{'S; apply{'f1; 'a1}; apply{'f2; 'a2}; 't2} }
 
 (*
- * $Log$
- * Revision 1.2  1998/06/01 13:56:52  jyh
- * Proving twice one is two.
- *
- * Revision 1.1  1998/04/29 14:49:43  jyh
- * Added ocaml_sos.
- *
- * Revision 1.1  1998/02/18 18:47:11  jyh
- * Initial ocaml semantics.
- *
- * Revision 1.1  1998/02/13 16:02:08  jyh
- * Partially implemented semantics for caml.
- *
- *
  * -*-
  * Local Variables:
  * Caml-master: "refiner"

@@ -17,11 +17,6 @@ axiom arith : arith_check{'t} --> 't
 
 
 (*
- * $Log$
- * Revision 1.1  1998/06/15 22:33:09  jyh
- * Added CZF.
- *
- *
  * -*-
  * Local Variables:
  * Caml-master: "refiner"

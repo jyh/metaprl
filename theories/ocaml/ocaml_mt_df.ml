@@ -90,23 +90,6 @@ dform mt_with_cons_df : slot{mt_with; cons{'wc; 'wcl}} =
    slot{'wc} slot{mt_with; 'wcl}
 
 (*
- * $Log$
- * Revision 1.5  1998/05/04 13:01:34  jyh
- * Ocaml display without let rec.
- *
- * Revision 1.4  1998/04/29 20:54:06  jyh
- * Initial working display forms.
- *
- * Revision 1.3  1998/04/29 14:49:10  jyh
- * Added ocaml_sos.
- *
- * Revision 1.2  1998/02/18 18:47:30  jyh
- * Initial ocaml semantics.
- *
- * Revision 1.1  1998/02/13 16:02:17  jyh
- * Partially implemented semantics for caml.
- *
- *
  * -*-
  * Local Variables:
  * Caml-master: "refiner"

@@ -416,30 +416,6 @@ let rw conv i p =
       apply i (make_address []) addr conv p
 
 (*
- * $Log$
- * Revision 1.7  1998/07/02 22:25:28  jyh
- * Created term_copy module to copy and normalize terms.
- *
- * Revision 1.6  1998/07/01 04:38:00  nogin
- * Moved Refiner exceptions into a separate module RefineErrors
- *
- * Revision 1.5  1998/06/27 05:29:50  nogin
- * Prevent some closure creations
- *
- * Revision 1.4  1998/06/23 22:12:41  jyh
- * Improved rewriter speed with conversion tree and flist.
- *
- * Revision 1.3  1998/06/22 20:01:43  jyh
- * Fixed syntax error in term_addr_gen.ml
- *
- * Revision 1.2  1998/06/22 19:46:43  jyh
- * Rewriting in contexts.  This required a change in addressing,
- * and the body of the context is the _last_ subterm, not the first.
- *
- * Revision 1.1  1998/06/03 22:19:55  jyh
- * Nonpolymorphic refiner.
- *
- *
  * -*-
  * Local Variables:
  * Caml-master: "refiner"

@@ -278,22 +278,6 @@ val eqMemberT : tactic
 val assumSetT : int -> tactic
 
 (*
- * $Log$
- * Revision 1.4  1998/07/02 18:37:15  jyh
- * Refiner modules now raise RefineError exceptions directly.
- * Modules in this revision have two versions: one that raises
- * verbose exceptions, and another that uses a generic exception.
- *
- * Revision 1.3  1998/06/23 22:12:25  jyh
- * Improved rewriter speed with conversion tree and flist.
- *
- * Revision 1.2  1998/06/16 16:26:05  jyh
- * Added itt_test.
- *
- * Revision 1.1  1998/06/15 22:32:50  jyh
- * Added CZF.
- *
- *
  * -*-
  * Local Variables:
  * Caml-master: "editor.run"

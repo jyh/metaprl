@@ -92,30 +92,6 @@ val repeatC : conv -> conv
 val repeatForC : int -> conv -> conv
 
 (*
- * $Log$
- * Revision 1.7  1998/07/02 22:25:25  jyh
- * Created term_copy module to copy and normalize terms.
- *
- * Revision 1.6  1998/07/01 04:37:59  nogin
- * Moved Refiner exceptions into a separate module RefineErrors
- *
- * Revision 1.5  1998/06/23 22:12:40  jyh
- * Improved rewriter speed with conversion tree and flist.
- *
- * Revision 1.4  1998/06/22 19:46:41  jyh
- * Rewriting in contexts.  This required a change in addressing,
- * and the body of the context is the _last_ subterm, not the first.
- *
- * Revision 1.3  1998/06/15 22:33:44  jyh
- * Added CZF.
- *
- * Revision 1.2  1998/06/12 18:36:49  jyh
- * Working factorial proof.
- *
- * Revision 1.1  1998/06/03 22:19:53  jyh
- * Nonpolymorphic refiner.
- *
- *
  * -*-
  * Local Variables:
  * Caml-master: "refiner"

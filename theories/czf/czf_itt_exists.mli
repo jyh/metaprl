@@ -57,14 +57,3 @@ axiom exists_res 'H 'y :
    sequent ['ext] { 'H; y: set >- restricted{'A['x]} } -->
    sequent ['ext] { 'H >- restricted{."exists"{x. 'A['x]}} }
 
-(*
- * $Log$
- * Revision 1.2  1998/07/02 18:37:06  jyh
- * Refiner modules now raise RefineError exceptions directly.
- * Modules in this revision have two versions: one that raises
- * verbose exceptions, and another that uses a generic exception.
- *
- * Revision 1.1  1998/06/23 22:12:22  jyh
- * Improved rewriter speed with conversion tree and flist.
- *
- *)

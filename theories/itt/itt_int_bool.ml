@@ -51,11 +51,6 @@ dform ge_int_df : mode[prl] :: parens :: "prec"[prec_implies] :: ge_int{'i; 'j} 
    slot{'i} " " Nuprl_font!ge " " slot{'j}
 
 (*
- * $Log$
- * Revision 1.1  1998/06/12 18:36:40  jyh
- * Working factorial proof.
- *
- *
  * -*-
  * Local Variables:
  * Caml-master: "refiner"

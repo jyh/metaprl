@@ -100,22 +100,6 @@ let d_res_falseT i p =
 let d_resource = d_resource.resource_improve d_resource (res_false_term, d_res_falseT)
 
 (*
- * $Log$
- * Revision 1.4  1998/07/02 18:37:07  jyh
- * Refiner modules now raise RefineError exceptions directly.
- * Modules in this revision have two versions: one that raises
- * verbose exceptions, and another that uses a generic exception.
- *
- * Revision 1.3  1998/07/01 04:37:24  nogin
- * Moved Refiner exceptions into a separate module RefineErrors
- *
- * Revision 1.2  1998/06/16 16:25:58  jyh
- * Added itt_test.
- *
- * Revision 1.1  1998/06/15 22:32:46  jyh
- * Added CZF.
- *
- *
  * -*-
  * Local Variables:
  * Caml-master: "editor.run"

@@ -30,11 +30,6 @@ rewrite reduceLEInt : le_int{'i; 'j} <--> bor{eq_int{'i; 'j}; lt_int{'i; 'j}}
 rewrite reduceGEInt : le_int{'i; 'j} <--> bor{eq_int{'i; 'j}; gt_int{'i; 'j}}
 
 (*
- * $Log$
- * Revision 1.1  1998/06/12 18:36:42  jyh
- * Working factorial proof.
- *
- *
  * -*-
  * Local Variables:
  * Caml-master: "refiner"

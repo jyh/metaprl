@@ -191,36 +191,6 @@ let rec repeatForC i conv =
       funC repeatForCE
 
 (*
- * $Log$
- * Revision 1.9  1998/07/02 22:25:24  jyh
- * Created term_copy module to copy and normalize terms.
- *
- * Revision 1.8  1998/07/01 04:37:57  nogin
- * Moved Refiner exceptions into a separate module RefineErrors
- *
- * Revision 1.7  1998/06/23 22:12:39  jyh
- * Improved rewriter speed with conversion tree and flist.
- *
- * Revision 1.6  1998/06/22 19:46:40  jyh
- * Rewriting in contexts.  This required a change in addressing,
- * and the body of the context is the _last_ subterm, not the first.
- *
- * Revision 1.5  1998/06/15 22:33:43  jyh
- * Added CZF.
- *
- * Revision 1.4  1998/06/12 20:46:09  jyh
- * Switched to term_ds.
- *
- * Revision 1.3  1998/06/12 18:36:47  jyh
- * Working factorial proof.
- *
- * Revision 1.2  1998/06/12 13:47:45  jyh
- * D tactic works, added itt_bool.
- *
- * Revision 1.1  1998/06/03 22:19:52  jyh
- * Nonpolymorphic refiner.
- *
- *
  * -*-
  * Local Variables:
  * Caml-master: "refiner"

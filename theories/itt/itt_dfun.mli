@@ -154,64 +154,6 @@ val d_dfunT : int -> tactic
 val eqcd_dfunT : tactic
 
 (*
- * $Log$
- * Revision 1.7  1998/07/02 18:37:26  jyh
- * Refiner modules now raise RefineError exceptions directly.
- * Modules in this revision have two versions: one that raises
- * verbose exceptions, and another that uses a generic exception.
- *
- * Revision 1.6  1998/06/23 22:12:29  jyh
- * Improved rewriter speed with conversion tree and flist.
- *
- * Revision 1.5  1998/05/28 13:47:26  jyh
- * Updated the editor to use new Refiner structure.
- * ITT needs dform names.
- *
- * Revision 1.4  1998/04/22 22:44:39  jyh
- * *** empty log message ***
- *
- * Revision 1.3  1997/08/07 19:43:51  jyh
- * Updated and added Lori's term modifications.
- * Need to update all pattern matchings.
- *
- * Revision 1.2  1997/08/06 16:18:25  jyh
- * This is an ocaml version with subtyping, type inference,
- * d and eqcd tactics.  It is a basic system, but not debugged.
- *
- * Revision 1.1  1997/04/28 15:52:08  jyh
- * This is the initial checkin of Nuprl-Light.
- * I am porting the editor, so it is not included
- * in this checkin.
- *
- * Directories:
- *     refiner: logic engine
- *     filter: front end to the Ocaml compiler
- *     editor: Emacs proof editor
- *     util: utilities
- *     mk: Makefile templates
- *
- * Revision 1.7  1996/10/23 15:18:05  jyh
- * First working version of dT tactic.
- *
- * Revision 1.6  1996/09/02 19:37:19  jyh
- * Semi working package management.
- * All _univ version removed.
- *
- * Revision 1.5  1996/05/21 02:16:38  jyh
- * This is a semi-working version before Wisconsin vacation.
- *
- * Revision 1.4  1996/04/11 13:33:52  jyh
- * This is the final version with the old syntax for terms.
- *
- * Revision 1.3  1996/03/30 01:37:13  jyh
- * Initial version of ITT.
- *
- * Revision 1.2  1996/03/28 02:51:28  jyh
- * This is an initial version of the type theory.
- *
- * Revision 1.1  1996/03/05 19:59:41  jyh
- * Version just before LogicalFramework.
- *
  * -*-
  * Local Variables:
  * Caml-master: "prlcomp.run"

@@ -75,22 +75,6 @@ let main () =
 let _ = Printexc.catch main ()
 
 (*
- * $Log$
- * Revision 1.4  1998/06/01 13:57:02  jyh
- * Proving twice one is two.
- *
- * Revision 1.3  1998/05/28 13:48:30  jyh
- * Updated the editor to use new Refiner structure.
- * ITT needs dform names.
- *
- * Revision 1.2  1997/09/08 15:02:40  jyh
- * This version compiles Ensemble.
- *
- * Revision 1.1  1997/08/06 16:18:53  jyh
- * This is an ocaml version with subtyping, type inference,
- * d and eqcd tactics.  It is a basic system, but not debugged.
- *
- *
  * -*-
  * Local Variables:
  * Caml-master: "rw.run"

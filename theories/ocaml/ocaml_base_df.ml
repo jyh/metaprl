@@ -180,27 +180,6 @@ dform end_df		: "_end"	= pushfont["bold"] `"end" popfont
 dform push_ident_df     : push_indent   = pushm[3]
 
 (*
- * $Log$
- * Revision 1.5  1998/05/28 13:48:27  jyh
- * Updated the editor to use new Refiner structure.
- * ITT needs dform names.
- *
- * Revision 1.4  1998/05/04 13:01:27  jyh
- * Ocaml display without let rec.
- *
- * Revision 1.3  1998/04/29 20:53:57  jyh
- * Initial working display forms.
- *
- * Revision 1.2  1998/04/29 14:48:45  jyh
- * Added ocaml_sos.
- *
- * Revision 1.1  1998/02/18 18:47:05  jyh
- * Initial ocaml semantics.
- *
- * Revision 1.1  1998/02/13 16:02:06  jyh
- * Partially implemented semantics for caml.
- *
- *
  * -*-
  * Local Variables:
  * Caml-master: "refiner"

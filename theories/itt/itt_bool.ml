@@ -182,17 +182,6 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (btrue
 let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (bfalse_term, inf_bfalse)
 
 (*
- * $Log$
- * Revision 1.3  1998/06/15 22:33:11  jyh
- * Added CZF.
- *
- * Revision 1.2  1998/06/12 18:36:35  jyh
- * Working factorial proof.
- *
- * Revision 1.1  1998/06/12 13:47:21  jyh
- * D tactic works, added itt_bool.
- *
- *
  * -*-
  * Local Variables:
  * Caml-master: "refiner"

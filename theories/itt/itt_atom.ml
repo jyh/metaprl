@@ -126,58 +126,6 @@ let inf_token _ decl _ = decl, atom_term
 let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (token_term, inf_token)
 
 (*
- * $Log$
- * Revision 1.7  1998/06/22 19:46:12  jyh
- * Rewriting in contexts.  This required a change in addressing,
- * and the body of the context is the _last_ subterm, not the first.
- *
- * Revision 1.6  1998/06/01 13:55:45  jyh
- * Proving twice one is two.
- *
- * Revision 1.5  1998/05/28 13:47:22  jyh
- * Updated the editor to use new Refiner structure.
- * ITT needs dform names.
- *
- * Revision 1.4  1998/04/24 02:43:21  jyh
- * Added more extensive debugging capabilities.
- *
- * Revision 1.3  1998/04/22 22:44:34  jyh
- * *** empty log message ***
- *
- * Revision 1.2  1997/08/06 16:18:23  jyh
- * This is an ocaml version with subtyping, type inference,
- * d and eqcd tactics.  It is a basic system, but not debugged.
- *
- * Revision 1.1  1997/04/28 15:52:07  jyh
- * This is the initial checkin of Nuprl-Light.
- * I am porting the editor, so it is not included
- * in this checkin.
- *
- * Directories:
- *     refiner: logic engine
- *     filter: front end to the Ocaml compiler
- *     editor: Emacs proof editor
- *     util: utilities
- *     mk: Makefile templates
- *
- * Revision 1.6  1996/09/25 22:52:10  jyh
- * Initial "tactical" commit.
- *
- * Revision 1.5  1996/05/21 02:16:33  jyh
- * This is a semi-working version before Wisconsin vacation.
- *
- * Revision 1.4  1996/04/11 13:33:49  jyh
- * This is the final version with the old syntax for terms.
- *
- * Revision 1.3  1996/03/28 02:51:26  jyh
- * This is an initial version of the type theory.
- *
- * Revision 1.2  1996/03/05 19:59:39  jyh
- * Version just before LogicalFramework.
- *
- * Revision 1.1  1996/02/13 21:35:53  jyh
- * Intermediate checkin while matching is bing added to the refiner.
- *
  * -*-
  * Local Variables:
  * Caml-master: "prlcomp.run"

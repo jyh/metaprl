@@ -967,49 +967,6 @@ let timingT tac arg =
    Utils.time_it tac arg
 
 (*
- * $Log$
- * Revision 1.13  1998/07/03 23:20:37  nogin
- * Do not be too verbose in case orelseT fails
- *
- * Revision 1.12  1998/07/03 22:06:14  jyh
- * IO terms are now in term_std format.
- *
- * Revision 1.11  1998/07/02 22:25:34  jyh
- * Created term_copy module to copy and normalize terms.
- *
- * Revision 1.10  1998/07/01 04:38:02  nogin
- * Moved Refiner exceptions into a separate module RefineErrors
- *
- * Revision 1.9  1998/06/23 22:12:44  jyh
- * Improved rewriter speed with conversion tree and flist.
- *
- * Revision 1.8  1998/06/22 19:46:45  jyh
- * Rewriting in contexts.  This required a change in addressing,
- * and the body of the context is the _last_ subterm, not the first.
- *
- * Revision 1.7  1998/06/16 16:26:23  jyh
- * Added itt_test.
- *
- * Revision 1.6  1998/06/15 22:33:47  jyh
- * Added CZF.
- *
- * Revision 1.5  1998/06/13 16:24:05  jyh
- * Adding timing tactical.
- *
- * Revision 1.4  1998/06/12 18:36:50  jyh
- * Working factorial proof.
- *
- * Revision 1.3  1998/06/12 13:47:48  jyh
- * D tactic works, added itt_bool.
- *
- * Revision 1.2  1998/06/09 20:53:00  jyh
- * Propagated refinement changes.
- * New tacticals module.
- *
- * Revision 1.1  1998/06/03 22:20:00  jyh
- * Nonpolymorphic refiner.
- *
- *
  * -*-
  * Local Variables:
  * Caml-master: "refiner"

@@ -142,17 +142,3 @@ let d_res_impliesT i p =
 
 let d_resource = d_resource.resource_improve d_resource (res_implies_term, d_res_impliesT)
 
-(*
- * $Log$
- * Revision 1.3  1998/07/02 18:37:09  jyh
- * Refiner modules now raise RefineError exceptions directly.
- * Modules in this revision have two versions: one that raises
- * verbose exceptions, and another that uses a generic exception.
- *
- * Revision 1.2  1998/07/01 04:37:25  nogin
- * Moved Refiner exceptions into a separate module RefineErrors
- *
- * Revision 1.1  1998/06/23 22:12:22  jyh
- * Improved rewriter speed with conversion tree and flist.
- *
- *)

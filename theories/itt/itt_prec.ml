@@ -208,48 +208,6 @@ let inf_precind f decl t =
 let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (precind_term, inf_precind)
 
 (*
- * $Log$
- * Revision 1.7  1998/06/15 22:33:28  jyh
- * Added CZF.
- *
- * Revision 1.6  1998/06/01 13:56:03  jyh
- * Proving twice one is two.
- *
- * Revision 1.5  1998/05/28 13:47:49  jyh
- * Updated the editor to use new Refiner structure.
- * ITT needs dform names.
- *
- * Revision 1.4  1998/04/24 02:43:37  jyh
- * Added more extensive debugging capabilities.
- *
- * Revision 1.3  1998/04/22 22:44:57  jyh
- * *** empty log message ***
- *
- * Revision 1.2  1997/08/06 16:18:35  jyh
- * This is an ocaml version with subtyping, type inference,
- * d and eqcd tactics.  It is a basic system, but not debugged.
- *
- * Revision 1.1  1997/04/28 15:52:19  jyh
- * This is the initial checkin of Nuprl-Light.
- * I am porting the editor, so it is not included
- * in this checkin.
- *
- * Directories:
- *     refiner: logic engine
- *     filter: front end to the Ocaml compiler
- *     editor: Emacs proof editor
- *     util: utilities
- *     mk: Makefile templates
- *
- * Revision 1.3  1996/05/21 02:16:57  jyh
- * This is a semi-working version before Wisconsin vacation.
- *
- * Revision 1.2  1996/04/11 13:34:06  jyh
- * This is the final version with the old syntax for terms.
- *
- * Revision 1.1  1996/03/30 01:37:15  jyh
- * Initial version of ITT.
- *
  * -*-
  * Local Variables:
  * Caml-master: "prlcomp.run"

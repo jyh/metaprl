@@ -58,11 +58,6 @@ prim subset_collection_left 'H :
    it
 
 (*
- * $Log$
- * Revision 1.1  1998/06/23 22:12:20  jyh
- * Improved rewriter speed with conversion tree and flist.
- *
- *
  * -*-
  * Local Variables:
  * Caml-master: "refiner"

@@ -90,17 +90,6 @@ declare push_indent
 declare patt_format
 
 (*
- * $Log$
- * Revision 1.2  1998/05/04 13:01:28  jyh
- * Ocaml display without let rec.
- *
- * Revision 1.1  1998/02/18 18:47:07  jyh
- * Initial ocaml semantics.
- *
- * Revision 1.1  1998/02/13 16:02:06  jyh
- * Partially implemented semantics for caml.
- *
- *
  * -*-
  * Local Variables:
  * Caml-master: "refiner"

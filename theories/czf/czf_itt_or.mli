@@ -65,21 +65,3 @@ axiom or_res 'H :
    sequent ['ext] { 'H >- restricted{'B} } -->
    sequent ['ext] { 'H >- restricted{."or"{'A; 'B}} }
 
-(*
- * $Log$
- * Revision 1.4  1998/07/02 18:37:13  jyh
- * Refiner modules now raise RefineError exceptions directly.
- * Modules in this revision have two versions: one that raises
- * verbose exceptions, and another that uses a generic exception.
- *
- * Revision 1.3  1998/06/23 22:12:23  jyh
- * Improved rewriter speed with conversion tree and flist.
- *
- * Revision 1.2  1998/06/22 19:46:07  jyh
- * Rewriting in contexts.  This required a change in addressing,
- * and the body of the context is the _last_ subterm, not the first.
- *
- * Revision 1.1  1998/06/16 16:26:03  jyh
- * Added itt_test.
- *
- *)

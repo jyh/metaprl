@@ -75,42 +75,6 @@ val get_int_tactic_arg : tactic_arg -> string -> (int -> Tactic_type.tactic)
 val get_typeinf_arg    : tactic_arg -> string -> (term_subst -> term -> term_subst * term)
 
 (*
- * $Log$
- * Revision 1.7  1998/07/03 22:06:13  jyh
- * IO terms are now in term_std format.
- *
- * Revision 1.6  1998/07/02 22:25:32  jyh
- * Created term_copy module to copy and normalize terms.
- *
- * Revision 1.5  1998/06/16 16:26:22  jyh
- * Added itt_test.
- *
- * Revision 1.4  1998/06/09 20:52:55  jyh
- * Propagated refinement changes.
- * New tacticals module.
- *
- * Revision 1.3  1998/06/03 22:19:59  jyh
- * Nonpolymorphic refiner.
- *
- * Revision 1.2  1998/05/28 13:48:35  jyh
- * Updated the editor to use new Refiner structure.
- * ITT needs dform names.
- *
- * Revision 1.1  1997/04/28 15:52:41  jyh
- * This is the initial checkin of Nuprl-Light.
- * I am porting the editor, so it is not included
- * in this checkin.
- *
- * Directories:
- *     refiner: logic engine
- *     filter: front end to the Ocaml compiler
- *     editor: Emacs proof editor
- *     util: utilities
- *     mk: Makefile templates
- *
- * Revision 1.1  1996/09/25 22:52:06  jyh
- * Initial "tactical" commit.
- *
  * -*-
  * Local Variables:
  * Caml-master: "prlcomp.run"

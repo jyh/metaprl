@@ -77,43 +77,6 @@ val dest_not : term -> term
 val mk_not_term : term -> term
 
 (*
- * $Log$
- * Revision 1.4  1998/06/15 22:33:27  jyh
- * Added CZF.
- *
- * Revision 1.3  1998/05/28 13:47:47  jyh
- * Updated the editor to use new Refiner structure.
- * ITT needs dform names.
- *
- * Revision 1.2  1997/08/06 16:18:35  jyh
- * This is an ocaml version with subtyping, type inference,
- * d and eqcd tactics.  It is a basic system, but not debugged.
- *
- * Revision 1.1  1997/04/28 15:52:18  jyh
- * This is the initial checkin of Nuprl-Light.
- * I am porting the editor, so it is not included
- * in this checkin.
- *
- * Directories:
- *     refiner: logic engine
- *     filter: front end to the Ocaml compiler
- *     editor: Emacs proof editor
- *     util: utilities
- *     mk: Makefile templates
- *
- * Revision 1.4  1996/10/23 15:18:09  jyh
- * First working version of dT tactic.
- *
- * Revision 1.3  1996/09/25 22:52:13  jyh
- * Initial "tactical" commit.
- *
- * Revision 1.2  1996/09/02 19:37:31  jyh
- * Semi working package management.
- * All _univ version removed.
- *
- * Revision 1.1  1996/06/11 18:38:40  jyh
- * Demo version 0.0
- *
  * -*-
  * Local Variables:
  * Caml-master: "prlcomp.run"

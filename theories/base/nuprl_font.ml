@@ -232,43 +232,6 @@ dform subq_df			: mode[prl] :: subq                      = `"XXX"
 dform subz_df			: mode[prl] :: subz                      = `"\235"
 
 (*
- * $Log$
- * Revision 1.7  1998/06/15 22:32:39  jyh
- * Added CZF.
- *
- * Revision 1.6  1998/05/07 16:03:02  jyh
- * Adding interactive proofs.
- *
- * Revision 1.5  1998/04/29 20:53:48  jyh
- * Initial working display forms.
- *
- * Revision 1.4  1998/04/24 19:39:09  jyh
- * Updated debugging.
- *
- * Revision 1.3  1998/04/24 02:43:15  jyh
- * Added more extensive debugging capabilities.
- *
- * Revision 1.2  1998/04/17 01:31:25  jyh
- * Editor is almost constructed.
- *
- * Revision 1.1  1997/04/28 15:51:56  jyh
- * This is the initial checkin of Nuprl-Light.
- * I am porting the editor, so it is not included
- * in this checkin.
- *
- * Directories:
- *     refiner: logic engine
- *     filter: front end to the Ocaml compiler
- *     editor: Emacs proof editor
- *     util: utilities
- *     mk: Makefile templates
- *
- * Revision 1.2  1996/05/21 02:16:16  jyh
- * This is a semi-working version before Wisconsin vacation.
- *
- * Revision 1.1  1996/04/11 13:33:29  jyh
- * This is the final version with the old syntax for terms.
- *
  * -*-
  * Local Variables:
  * Caml-master: "prlcomp.run"

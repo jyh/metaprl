@@ -121,35 +121,6 @@ dform str_fix_df2 : str_fix[@start:n, @finish:n]{'p} =
    str_fix{'p}
 
 (*
- * $Log$
- * Revision 1.9  1998/06/01 13:56:46  jyh
- * Proving twice one is two.
- *
- * Revision 1.8  1998/05/04 23:46:19  jyh
- * Most display forms now work.
- *
- * Revision 1.7  1998/05/04 13:01:38  jyh
- * Ocaml display without let rec.
- *
- * Revision 1.6  1998/05/01 14:59:53  jyh
- * Updating display forms.
- *
- * Revision 1.5  1998/04/30 14:20:34  jyh
- * Updating term_table.
- *
- * Revision 1.4  1998/04/29 20:54:11  jyh
- * Initial working display forms.
- *
- * Revision 1.3  1998/04/29 14:49:26  jyh
- * Added ocaml_sos.
- *
- * Revision 1.2  1998/02/18 18:47:49  jyh
- * Initial ocaml semantics.
- *
- * Revision 1.1  1998/02/13 16:02:24  jyh
- * Partially implemented semantics for caml.
- *
- *
  * -*-
  * Local Variables:
  * Caml-master: "refiner"

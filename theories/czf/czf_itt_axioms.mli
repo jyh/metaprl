@@ -53,11 +53,6 @@ axiom subset_collection_left 'H :
    sequent ['ext] { 'H >- "exists"{c. "all"{u. ("all"{'a1; x. "exists"{'a2; y. 'P['x; 'y; 'u]}}) => ("exists"{'c; b. "all"{'a1; x. "exists"{'b; y. 'P['x; 'y; 'u]}}})}} }
 
 (*
- * $Log$
- * Revision 1.1  1998/06/23 22:12:21  jyh
- * Improved rewriter speed with conversion tree and flist.
- *
- *
  * -*-
  * Local Variables:
  * Caml-master: "refiner"

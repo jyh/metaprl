@@ -281,46 +281,6 @@ dform parens_df : parens_df =
    `"parens"
 
 (*
- * $Log$
- * Revision 1.12  1998/07/02 18:36:52  jyh
- * Refiner modules now raise RefineError exceptions directly.
- * Modules in this revision have two versions: one that raises
- * verbose exceptions, and another that uses a generic exception.
- *
- * Revision 1.11  1998/06/15 22:32:40  jyh
- * Added CZF.
- *
- * Revision 1.10  1998/05/07 16:03:04  jyh
- * Adding interactive proofs.
- *
- * Revision 1.9  1998/05/04 13:01:23  jyh
- * Ocaml display without let rec.
- *
- * Revision 1.8  1998/05/01 18:43:38  jyh
- * Added raw display.
- *
- * Revision 1.7  1998/04/30 14:20:30  jyh
- * Updating term_table.
- *
- * Revision 1.6  1998/04/29 20:53:53  jyh
- * Initial working display forms.
- *
- * Revision 1.5  1998/04/29 14:48:38  jyh
- * Added ocaml_sos.
- *
- * Revision 1.4  1998/04/28 18:30:58  jyh
- * ls() works, adding display.
- *
- * Revision 1.3  1998/04/24 19:39:12  jyh
- * Updated debugging.
- *
- * Revision 1.2  1998/04/24 02:43:18  jyh
- * Added more extensive debugging capabilities.
- *
- * Revision 1.1  1998/04/17 01:31:31  jyh
- * Editor is almost constructed.
- *
- *
  * -*-
  * Local Variables:
  * Caml-master: "refiner"

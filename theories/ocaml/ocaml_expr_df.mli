@@ -28,14 +28,6 @@ prec prec_fun
 prec prec_let
 
 (*
- * $Log$
- * Revision 1.2  1998/05/04 13:01:31  jyh
- * Ocaml display without let rec.
- *
- * Revision 1.1  1998/02/18 18:47:15  jyh
- * Initial ocaml semantics.
- *
- *
  * -*-
  * Local Variables:
  * Caml-master: "refiner"

@@ -81,45 +81,6 @@ val synthesize : 'a extract -> 'a synthesis list -> 'a synthesis
 val used_hyps : 'a synthesis -> int list
 
 (*
- * $Log$
- * Revision 1.5  1998/06/09 20:52:59  jyh
- * Propagated refinement changes.
- * New tacticals module.
- *
- * Revision 1.4  1998/06/01 13:57:06  jyh
- * Proving twice one is two.
- *
- * Revision 1.3  1998/05/28 13:48:38  jyh
- * Updated the editor to use new Refiner structure.
- * ITT needs dform names.
- *
- * Revision 1.2  1998/05/07 16:03:11  jyh
- * Adding interactive proofs.
- *
- * Revision 1.1  1997/04/28 15:52:43  jyh
- * This is the initial checkin of Nuprl-Light.
- * I am porting the editor, so it is not included
- * in this checkin.
- *
- * Directories:
- *     refiner: logic engine
- *     filter: front end to the Ocaml compiler
- *     editor: Emacs proof editor
- *     util: utilities
- *     mk: Makefile templates
- *
- * Revision 1.4  1996/11/13 22:58:44  jyh
- * Initial version of forward/backward chaining cache.
- *
- * Revision 1.3  1996/11/05 02:42:41  jyh
- * This is a version of the FCache with complete forward chaining,
- * and multiple worlds.  Untested.
- *
- * Revision 1.2  1996/11/01 01:25:17  jyh
- * This is version of the cache for pur forward chaining.
- * Right now, I am thinking about extending the chainer with "worlds,"
- * which will be necessary to incorporate backward chaining.
- *
  * -*-
  * Local Variables:
  * Caml-master: "refiner"

@@ -112,32 +112,6 @@ declare subq
 declare subz
 
 (*
- *
- * $Log$
- * Revision 1.3  1998/05/07 16:03:03  jyh
- * Adding interactive proofs.
- *
- * Revision 1.2  1998/04/17 01:31:26  jyh
- * Editor is almost constructed.
- *
- * Revision 1.1  1997/04/28 15:51:57  jyh
- * This is the initial checkin of Nuprl-Light.
- * I am porting the editor, so it is not included
- * in this checkin.
- *
- * Directories:
- *     refiner: logic engine
- *     filter: front end to the Ocaml compiler
- *     editor: Emacs proof editor
- *     util: utilities
- *     mk: Makefile templates
- *
- * Revision 1.2  1996/05/21 02:16:17  jyh
- * This is a semi-working version before Wisconsin vacation.
- *
- * Revision 1.1  1996/04/11 13:33:30  jyh
- * This is the final version with the old syntax for terms.
- *
  * -*-
  * Local Variables:
  * Caml-master: "prlcomp.run"

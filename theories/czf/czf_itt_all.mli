@@ -53,14 +53,3 @@ axiom all_res 'H 'y :
 
 val d_allT : int -> tactic
 
-(*
- * $Log$
- * Revision 1.2  1998/07/02 18:36:57  jyh
- * Refiner modules now raise RefineError exceptions directly.
- * Modules in this revision have two versions: one that raises
- * verbose exceptions, and another that uses a generic exception.
- *
- * Revision 1.1  1998/06/23 22:12:20  jyh
- * Improved rewriter speed with conversion tree and flist.
- *
- *)

@@ -2205,69 +2205,6 @@ let used_hyps
    List.map (function inf -> hcount - (List_util.find_indexq inf hyps) - 1) used
 
 (*
- * $Log$
- * Revision 1.13  1998/07/02 22:25:33  jyh
- * Created term_copy module to copy and normalize terms.
- *
- * Revision 1.12  1998/07/01 04:38:01  nogin
- * Moved Refiner exceptions into a separate module RefineErrors
- *
- * Revision 1.11  1998/06/12 13:47:46  jyh
- * D tactic works, added itt_bool.
- *
- * Revision 1.10  1998/06/09 20:52:57  jyh
- * Propagated refinement changes.
- * New tacticals module.
- *
- * Revision 1.9  1998/06/01 13:57:04  jyh
- * Proving twice one is two.
- *
- * Revision 1.8  1998/05/28 13:48:36  jyh
- * Updated the editor to use new Refiner structure.
- * ITT needs dform names.
- *
- * Revision 1.7  1998/05/07 16:03:09  jyh
- * Adding interactive proofs.
- *
- * Revision 1.6  1998/04/29 14:50:25  jyh
- * Added ocaml_sos.
- *
- * Revision 1.5  1998/04/24 02:44:02  jyh
- * Added more extensive debugging capabilities.
- *
- * Revision 1.4  1998/04/21 20:58:10  jyh
- * Fixed typing problems introduced by refiner msequents.
- *
- * Revision 1.3  1998/04/08 15:08:37  jyh
- * Moved precedence to mllib.
- *
- * Revision 1.2  1998/04/08 14:57:37  jyh
- * ImpDag is in mllib.
- *
- * Revision 1.1  1997/04/28 15:52:42  jyh
- * This is the initial checkin of Nuprl-Light.
- * I am porting the editor, so it is not included
- * in this checkin.
- *
- * Directories:
- *     refiner: logic engine
- *     filter: front end to the Ocaml compiler
- *     editor: Emacs proof editor
- *     util: utilities
- *     mk: Makefile templates
- *
- * Revision 1.4  1996/11/13 22:58:43  jyh
- * Initial version of forward/backward chaining cache.
- *
- * Revision 1.3  1996/11/05 02:42:40  jyh
- * This is a version of the FCache with complete forward chaining,
- * and multiple worlds.  Untested.
- *
- * Revision 1.2  1996/11/01 01:25:16  jyh
- * This is version of the cache for pure forward chaining.
- * Right now, I am thinking about extending the chainer with "worlds,"
- * which will be necessary to incorporate backward chaining.
- *
  * -*-
  * Local Variables:
  * Caml-master: "refiner"

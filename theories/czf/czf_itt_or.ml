@@ -154,27 +154,3 @@ let d_res_orT i p =
 
 let d_resource = d_resource.resource_improve d_resource (res_or_term, d_res_orT)
 
-(*
- * $Log$
- * Revision 1.6  1998/07/02 18:37:12  jyh
- * Refiner modules now raise RefineError exceptions directly.
- * Modules in this revision have two versions: one that raises
- * verbose exceptions, and another that uses a generic exception.
- *
- * Revision 1.5  1998/07/01 04:37:27  nogin
- * Moved Refiner exceptions into a separate module RefineErrors
- *
- * Revision 1.4  1998/06/23 22:12:22  jyh
- * Improved rewriter speed with conversion tree and flist.
- *
- * Revision 1.3  1998/06/22 20:01:42  jyh
- * Fixed syntax error in term_addr_gen.ml
- *
- * Revision 1.2  1998/06/22 19:46:06  jyh
- * Rewriting in contexts.  This required a change in addressing,
- * and the body of the context is the _last_ subterm, not the first.
- *
- * Revision 1.1  1998/06/16 16:26:01  jyh
- * Added itt_test.
- *
- *)

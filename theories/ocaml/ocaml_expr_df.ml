@@ -405,38 +405,6 @@ mldform term_df : "apply"[@start1:n, @finish1:n]{
    format_term buf Dform.LEParens (Ml_term.term_of_string s)
 
 (*
- * $Log$
- * Revision 1.10  1998/07/02 22:25:21  jyh
- * Created term_copy module to copy and normalize terms.
- *
- * Revision 1.9  1998/06/01 13:56:42  jyh
- * Proving twice one is two.
- *
- * Revision 1.8  1998/05/04 23:46:16  jyh
- * Most display forms now work.
- *
- * Revision 1.7  1998/05/04 13:01:29  jyh
- * Ocaml display without let rec.
- *
- * Revision 1.6  1998/05/01 18:43:42  jyh
- * Added raw display.
- *
- * Revision 1.5  1998/05/01 14:59:51  jyh
- * Updating display forms.
- *
- * Revision 1.4  1998/04/29 20:54:03  jyh
- * Initial working display forms.
- *
- * Revision 1.3  1998/04/29 14:48:56  jyh
- * Added ocaml_sos.
- *
- * Revision 1.2  1998/02/18 18:47:13  jyh
- * Initial ocaml semantics.
- *
- * Revision 1.1  1998/02/13 16:02:11  jyh
- * Partially implemented semantics for caml.
- *
- *
  * -*-
  * Local Variables:
  * Caml-master: "refiner"

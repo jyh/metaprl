@@ -408,23 +408,6 @@ rewrite patt_body_reduce :
  *)
 
 (*
- * $Log$
- * Revision 1.2  1998/06/01 13:57:00  jyh
- * Proving twice one is two.
- *
- * Revision 1.1  1998/04/29 14:50:06  jyh
- * Added ocaml_sos.
- *
- * Revision 1.1  1998/02/18 18:47:40  jyh
- * Initial ocaml semantics.
- *
- * Revision 1.2  1998/02/13 22:10:26  jyh
- * Adding pattern semantics.
- *
- * Revision 1.1  1998/02/13 16:02:21  jyh
- * Partially implemented semantics for caml.
- *
- *
  * -*-
  * Local Variables:
  * Caml-master: "refiner"

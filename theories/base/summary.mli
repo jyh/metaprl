@@ -76,20 +76,6 @@ declare "proof_dont_thin"
 declare "proof_subst_arg"{'args}
 
 (*
- * $Log$
- * Revision 1.4  1998/06/15 22:32:41  jyh
- * Added CZF.
- *
- * Revision 1.3  1998/04/29 14:48:40  jyh
- * Added ocaml_sos.
- *
- * Revision 1.2  1998/04/28 18:31:00  jyh
- * ls() works, adding display.
- *
- * Revision 1.1  1998/04/17 01:31:33  jyh
- * Editor is almost constructed.
- *
- *
  * -*-
  * Local Variables:
  * Caml-master: "refiner"

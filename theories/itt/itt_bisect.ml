@@ -62,6 +62,8 @@ open Var
 open Tactic_type
 open Tactic_type.Tacticals
 
+open Base_dtactic
+
 open Itt_equal
 
 (************************************************************************
@@ -229,14 +231,15 @@ let intro_bisect_aboveT p =
 
 let bisect_above_term = << subtype{bisect{'A; 'B}; 'C} >>
 
-let resource intro += (bisect_above_term, intro_bisect_aboveT)
-
 let intro_bisect_belowT p =
    bisectSubtypeBelow (Sequent.hyp_count_addr p) p
 
 let bisect_below_term = << subtype{'C; bisect{'A; 'B}} >>
 
-let resource intro += (bisect_below_term, intro_bisect_belowT)
+let resource intro += [
+   bisect_above_term, wrap_intro intro_bisect_aboveT;
+   bisect_below_term, wrap_intro intro_bisect_belowT
+]
 
 (*
  * -*-

@@ -229,10 +229,10 @@ let record_repeat_eqcd =
    rwh unfoldRcrdS 0 thenT record_eqcd thenT untilFailT record_eqcd
 
 let resource intro += [
-   (<<'r='s in record[m:t]{'A}>>,record_repeat_eqcd);
-   (<<'r='s in record[m:t]{'A;'R}>>,record_repeat_eqcd);
-   (<<'r='s in record[m:t]{'A;a.'R['a]}>>,record_repeat_eqcd);
-   (<<'r='s in record[m:t]{self.'A['self];'R}>>,record_repeat_eqcd)
+   (<<'r='s in record[m:t]{'A}>>, wrap_intro record_repeat_eqcd);
+   (<<'r='s in record[m:t]{'A;'R}>>, wrap_intro record_repeat_eqcd);
+   (<<'r='s in record[m:t]{'A;a.'R['a]}>>, wrap_intro record_repeat_eqcd);
+   (<<'r='s in record[m:t]{self.'A['self];'R}>>, wrap_intro record_repeat_eqcd)
 ]
 
 
@@ -374,7 +374,7 @@ let recordOrtIntroST p =
         thenT tryT (completeT (dT 0))
       ) p
 
-let resource intro += (<<record_ort[n:t]{'a;record[m:t]{'A}}>>,recordOrtIntroST)
+let resource intro += (<<record_ort[n:t]{'a;record[m:t]{'A}}>>, wrap_intro recordOrtIntroST)
 
 let recordOrtIntroT p =
    let m, _ = Sequent.hyp_indices p (-1) in
@@ -385,7 +385,7 @@ let recordOrtIntroT p =
 
 let repeatRecordOrtIntroT = (untilFailT recordOrtIntroT) thenT tryT (recordOrtIntroST orelseT recordOrtIntro0T)
 
-let resource intro += (<<record_ort[n:t]{'a;record[m:t]{'A;'R}}>>,repeatRecordOrtIntroT)
+let resource intro += (<<record_ort[n:t]{'a;record[m:t]{'A;'R}}>>, wrap_intro repeatRecordOrtIntroT)
 
 *)
 (*** Elimination ***)

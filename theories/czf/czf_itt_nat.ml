@@ -76,6 +76,8 @@ open Tactic_type.Conversionals
 open Tactic_type.Sequent
 open Var
 
+open Base_dtactic
+
 open Itt_int
 open Itt_struct
 

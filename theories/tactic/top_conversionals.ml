@@ -94,6 +94,7 @@ open Simple_print
 open Term_match_table
 
 open Tactic_type.Conversionals
+open Tactic_type.Sequent
 
 (*
  * Debug statement.
@@ -400,12 +401,8 @@ let cutC = Tactic_type.Conversionals.cutC
  * @docoff
  * @end[doc]
  *)
-type reduce_data = (conv, conv) term_table
+type reduce_data = (term * conv) list
 
-(*
- * Extract a D tactic from the data.
- * The tactic checks for an optable.
- *)
 let identity x = x
 
 let extract_data tbl =
@@ -416,7 +413,7 @@ let extract_data tbl =
             (* Find and apply the right tactic *)
             if !debug_reduce then
                eprintf "Conversionals: lookup %a%t" debug_print t eflush;
-            snd (Term_match_table.lookup "Conversionals.extract_data" tbl identity t)
+            snd (Term_match_table.lookup tbl t)
          with
             Not_found ->
                raise (RefineError ("Conversionals.extract_data", StringTermError ("no reduction for", t)))
@@ -427,56 +424,21 @@ let extract_data tbl =
    in
       funC rw
 
-(*
- * Add a new tactic.
- *)
-let improve_data (t, conv) tbl =
-   Refine_exn.print Dform.null_base (insert tbl t) conv
-
-(*
- * Wrap up the joiner.
- *)
-let join_resource base1 base2 =
-   join_tables base1 base2
-
-let extract_resource = extract_data
-
-let improve_resource data x =
-   if !debug_reduce then
-      begin
-         let t, _ = x in
-         let opname = opname_of_term t in
-            eprintf "Conversionals.improve_resource: %a%t" debug_print t eflush
-      end;
-   improve_data x data
-
-let improve_resource_arg data name cvars vars args params mterm conv =
+let process_reduce_resource_annotation name cvars vars args params mterm conv =
    match mterm with
       MetaIff (MetaTheorem t, _) ->
-         improve_resource data (t, conv)
+         (t, conv)
     | _ ->
          raise (RefineError ("Conversionals.improve_resource_arg", StringError "not a simple rewrite"))
-
-let close_resource rsrc modname =
-   rsrc
 
 (*
  * Resource.
  *)
-let resource reduce = {
-   resource_empty = new_table ();
-   resource_join = join_resource;
-   resource_extract = extract_resource;
-   resource_improve = improve_resource;
-   resource_improve_arg = improve_resource_arg;
-   resource_close = close_resource
-}
-
-let get_resource modname =
-   Mp_resource.find reduce_resource modname
+let resource reduce =
+   table_resource_info identity extract_data
 
 let reduceTopC_env e =
-   get_conv (env_arg e) "reduce"
+   get_resource_arg (env_arg e) get_reduce_resource
 
 let reduceTopC = funC reduceTopC_env
 

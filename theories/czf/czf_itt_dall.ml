@@ -57,12 +57,13 @@ open Mp_debug
 open Printf
 
 open Refiner.Refiner.RefineError
-open Mp_resource
 
 open Tactic_type.Tacticals
 open Tactic_type.Conversionals
 open Tactic_type.Sequent
 open Var
+
+open Base_dtactic
 
 open Itt_logic
 open Itt_rfun

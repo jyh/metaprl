@@ -4,6 +4,7 @@
 include Fol_type
 
 open Tactic_type
+open Base_dtactic
 
 declare "false"
 

@@ -57,13 +57,14 @@ include Czf_itt_eq
 
 open Refiner.Refiner.Term
 open Refiner.Refiner.RefineError
-open Mp_resource
 
 open Tactic_type
 open Tactic_type.Tacticals
 open Tactic_type.Conversionals
 open Tactic_type.Sequent
 open Var
+
+open Base_dtactic
 
 open Itt_rfun
 open Itt_logic

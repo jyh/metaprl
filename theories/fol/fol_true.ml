@@ -4,6 +4,8 @@
 
 include Fol_type
 
+open Base_dtactic
+
 declare "true"
 declare "it"
 

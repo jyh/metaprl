@@ -78,14 +78,13 @@ type 'a auto_info =
 (*
  * The string is for debugging.
  *)
-resource (tactic auto_info, tactic, tactic auto_data, Tactic.pre_tactic * auto_prec) trivial
-resource (auto_tac auto_info, tactic, auto_tac auto_data, Tactic.pre_tactic * auto_prec) auto
+resource (tactic auto_info, tactic auto_data, tactic) trivial
+resource (auto_tac auto_info, auto_tac auto_data, tactic) auto
 
-(*
- * Get values for the toploop.
- *)
-val get_trivial_resource : string -> trivial_resource
-val get_auto_resource : string -> auto_resource
+val process_trivial_resource_annotation :
+   (Tactic.pre_tactic * auto_prec, tactic auto_info) annotation_processor
+val process_auto_resource_annotation :
+   (Tactic.pre_tactic * auto_prec, auto_tac auto_info) annotation_processor
 
 (*
  * Operations on precedences.
@@ -93,15 +92,6 @@ val get_auto_resource : string -> auto_resource
  * are smaller, and another list that are larger.
  *)
 val create_auto_prec : auto_prec list -> auto_prec list -> auto_prec
-
-(*
- * It is also possible to remove a class of operations
- * by given their precedence.
- *)
-val remove_auto_tactic :
-   auto_resource ->
-   auto_prec ->
-   auto_resource
 
 (*
  * Trivial is used by autoT.

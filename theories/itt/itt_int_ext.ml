@@ -72,7 +72,7 @@ open Base_auto_tactic
 
 open Itt_equal
 open Itt_struct
-
+open Itt_squash
 open Itt_int_base
 
 let _ = show_loading "Loading Itt_int_ext%t"

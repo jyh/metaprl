@@ -46,6 +46,7 @@ open Refiner.Refiner.Term
 open Tactic_type
 open Tactic_type.Sequent
 open Tactic_type.Tacticals
+open Mp_resource
 
 declare squash{'A}
 
@@ -122,12 +123,10 @@ type squash_data
 (*
  * The resource itself.
  *)
-resource (squash_info, int -> tactic, squash_data, Tactic.pre_tactic) squash
+resource (squash_info, squash_data, int -> tactic) squash
 
-(*
- * Access to resources from the toploop.
- *)
-val get_resource : string -> squash_resource
+val process_squash_resource_annotation :
+   (Tactic.pre_tactic, squash_info) annotation_processor
 
 (*
  * Utilities.

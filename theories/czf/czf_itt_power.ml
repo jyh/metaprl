@@ -51,6 +51,7 @@ include Czf_itt_rel
 open Refiner.Refiner.TermMan
 
 open Tactic_type
+open Base_dtactic
 
 open Itt_struct
 

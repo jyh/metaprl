@@ -246,8 +246,6 @@ let d_apply_equalT p =
 
 let apply_equal_term = << 'f1 'a1 = 'f2 'a2 in 'T >>
 
-let resource intro += (apply_equal_term, d_apply_equalT)
-
 (*
  * Typehood of application depends on the ability to infer a type.
  *)
@@ -275,7 +273,10 @@ let d_apply_typeT p =
 
 let apply_type_term = << "type"{. 'f 'a} >>
 
-let resource intro += (apply_type_term, d_apply_typeT)
+let resource intro += [
+   apply_equal_term, wrap_intro d_apply_equalT;
+   apply_type_term, wrap_intro d_apply_typeT
+]
 
 (*
  * D a hyp.

@@ -119,7 +119,7 @@ let dest_decidable_term term =
  * decide_resource                                                      *
  ************************************************************************)
 
-type decide_data = (tactic, tactic) term_table
+type decide_data = (term * tactic) list
 
 (*!
  * @begin[doc]
@@ -135,21 +135,16 @@ type decide_data = (tactic, tactic) term_table
 
 let identity x = x
 
-let extract_data =
-   let ref_exn = RefineError("Itt_decidable.extract_data", StringError "no applicable rule found") in
-   fun tbl p ->
-      let t = dest_decidable_term (Sequent.concl p) in
-      try
-         (snd (Term_match_table.lookup "Itt_decidable.extract_data" tbl identity t)) p
-      with Not_found -> raise ref_exn
+let ref_exn =
+   RefineError("Itt_decidable.extract_data", StringError "no applicable rule found")
 
-(*
- * Add a new tactic.
- *)
-let improve_resource tbl (t, tac) =
-    Refine_exn.print Dform.null_base (insert tbl (dest_decidable_term t)) tac
+let extract_data tbl p =
+   let t = dest_decidable_term (Sequent.concl p) in
+   try
+      (snd (Term_match_table.lookup tbl t)) p
+   with Not_found -> raise ref_exn
 
-let improve_arg data name context_args var_args term_args _ statement pre_tactic =
+let process_decide_resource_annotation name context_args var_args term_args _ statement pre_tactic =
    let _, goal = unzip_mfunction statement in
    let t =
       try TermMan.nth_concl goal 1 with
@@ -183,18 +178,12 @@ let improve_arg data name context_args var_args term_args _ statement pre_tactic
        | _ ->
             raise (Invalid_argument (sprintf "Itt_decidable.improve_arg: %s: not an introduction rule" name))
    in
-      improve_resource data (t,tac)
+      (t,tac)
 
-let resource decide = {
-   resource_empty = new_table ();
-   resource_join = join_tables;
-   resource_extract = extract_data;
-   resource_improve = improve_resource;
-   resource_improve_arg = improve_arg;
-   resource_close = fun rsrc modname -> rsrc
-}
+let resource decide =
+   table_resource_info identity extract_data
 
-let step_decidableT p = Sequent.get_tactic_arg p "decide" p
+let step_decidableT p = Sequent.get_resource_arg p get_decide_resource p
 
 let step_decidable_or_autoT p =
    let tac =

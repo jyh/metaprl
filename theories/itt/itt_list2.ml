@@ -62,6 +62,7 @@ open Tactic_type.Tacticals
 open Tactic_type.Conversionals
 open Var
 
+open Base_dtactic
 open Typeinf
 
 open Itt_equal

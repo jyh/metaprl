@@ -171,16 +171,8 @@ type sub_data
 (*
  * The resource itself.
  *)
-resource (sub_resource_info, tactic, sub_data, unit) sub
+resource (sub_resource_info, sub_data, tactic) sub
 
-(*
- * Access to resources from the toploop.
- *)
-val get_resource : string -> sub_resource
-
-(*
- * Utilities.
- *)
 topval subtypeT : tactic
 
 (************************************************************************

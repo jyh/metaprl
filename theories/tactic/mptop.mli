@@ -77,15 +77,12 @@ type expr =
 (*
  * The resource maps strings to values.
  *)
-type top_data
 type top_table
 
-resource (string * expr, top_table, top_data, unit) toploop
+(* Input: module name, local name, expr *)
+resource (string * string * expr, top_table, top_table) toploop
 
-(*
- * Fetch a resource by module name.
- *)
-val get_resource : string -> toploop_resource
+val add_commands : top_table -> (string * expr) list -> unit
 
 (*
  * A resource for compiling expressions from OCaml input.

@@ -35,6 +35,7 @@ include Refl_term
 include Refl_var_set
 
 open Tactic_type.Conversionals
+open Base_dtactic
 
 (************************************************************************
  * SYNTAX                                                               *

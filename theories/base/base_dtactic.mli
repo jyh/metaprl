@@ -38,6 +38,7 @@ open Refiner.Refiner.Refine
 open Tactic_type
 open Tactic_type.Tacticals
 
+open Mp_resource
 open Base_auto_tactic
 
 (*
@@ -61,8 +62,15 @@ type elim_option =
    ThinOption of (int -> tactic)  (* Thin the eliminated hyp, unless overridden *)
  | ElimArgsOption of (tactic_arg -> term -> term list) * term option
 
-resource (term * (int -> tactic), int -> tactic, elim_data, Tactic.pre_tactic * elim_option list) elim
-resource (term * tactic, tactic, intro_data, Tactic.pre_tactic * intro_option list) intro
+resource (term * (int -> tactic), elim_data, int -> tactic) elim
+resource (term * (string * int option * tactic), intro_data, tactic) intro
+
+val process_elim_resource_annotation :
+   (Tactic.pre_tactic * elim_option list, term * (int -> tactic)) annotation_processor
+val process_intro_resource_annotation :
+   (Tactic.pre_tactic * intro_option list, term * (string * int option * tactic)) annotation_processor
+
+val wrap_intro : tactic -> string * int option * tactic
 
 (*
  * The inherited d tactic.

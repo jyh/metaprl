@@ -337,10 +337,12 @@ let bool_sqequal_term2 = << 'e ~ bfalse >>
 let bool_sqequal_term3 = << btrue ~ 'e >>
 let bool_sqequal_term4 = << bfalse ~ 'e >>
 
-let resource intro += (bool_sqequal_term1, d_bool_sqequalT)
-let resource intro += (bool_sqequal_term2, d_bool_sqequalT)
-let resource intro += (bool_sqequal_term3, d_bool_sqequalT)
-let resource intro += (bool_sqequal_term4, d_bool_sqequalT)
+let resource intro += [
+   bool_sqequal_term1, wrap_intro d_bool_sqequalT;
+   bool_sqequal_term2, wrap_intro d_bool_sqequalT;
+   bool_sqequal_term3, wrap_intro d_bool_sqequalT;
+   bool_sqequal_term4, wrap_intro d_bool_sqequalT
+]
 
 (*
  * H >- Ui ext Unit

@@ -82,7 +82,7 @@ let _ =
  * assumptions.
  *)
 type typeinf_subst_info = term * typeinf_subst_fun
-type typeinf_subst_data = (typeinf_subst_fun, typeinf_subst_fun) term_table
+type typeinf_subst_data = typeinf_subst_info list
 
 (*
  * Modular components also get a recursive instance of
@@ -94,11 +94,7 @@ type typeinf_comp = typeinf_func -> typeinf_func
  * This is the resource addition.
  *)
 type typeinf_resource_info = term * typeinf_comp
-
-(*
- * Internal type.
- *)
-type typeinf_data = (typeinf_comp, typeinf_comp) term_table
+type typeinf_data = typeinf_resource_info list
 
 (************************************************************************
  * IMPLEMENTATION                                                       *
@@ -109,47 +105,22 @@ type typeinf_data = (typeinf_comp, typeinf_comp) term_table
  *)
 let identity x = x
 
-let collect (tbl : (typeinf_subst_fun, typeinf_subst_fun) term_table) subst (so, t) =
-   let inf =
-      try snd (lookup "Typeinf.collect" tbl identity t) with
-         Not_found ->
-            raise (RefineError ("Typeinf.collect", StringTermError ("can't collect type for", t)))
-   in
-      inf subst (so, t)
-
-(*
- * Wrap up the algorithm.
- *)
-let join_subst_resource = join_tables
-
-let extract_subst_resource = collect
-
-let improve_subst_resource tbl (t, inf) =
-   insert tbl t inf
-
-let close_subst_resource rsrc modname =
-   rsrc
+let collect tbl subst (so, t) =
+   try (snd (lookup tbl t)) subst (so, t) with
+      Not_found ->
+         raise (RefineError ("Typeinf.collect", StringTermError ("can't collect type for", t)))
 
 (*
  * Resource.
  *)
-let resource typeinf_subst = {
-   resource_empty = new_table ();
-   resource_join = join_subst_resource;
-   resource_extract = extract_subst_resource;
-   resource_improve = improve_subst_resource;
-   resource_improve_arg = Mp_resource.improve_arg_fail "typeinf_subst_resource";
-   resource_close = close_subst_resource
-}
-
-let get_typeinf_subst_resource modname =
-   Mp_resource.find typeinf_subst_resource modname
+let resource typeinf_subst =
+   table_resource_info identity collect
 
 (*
  * Projector.
  *)
 let collect_decls p =
-   let collect = get_tsubst_arg p "typeinf_subst" in
+   let collect = get_resource_arg p get_typeinf_subst_resource in
    let rec filter_hyps subst hyps i len =
       if i = len then
          subst
@@ -204,7 +175,7 @@ let infer tbl =
                raise (RefineError ("typeinf", StringStringError ("Undeclared variable", v)))
       else
          let inf =
-            try snd (lookup "Typeinf.infer" tbl identity t) with
+            try snd (lookup tbl t) with
                Not_found ->
                   raise (RefineError ("typeinf", StringTermError ("Don't know how to infer type for", t)))
          in
@@ -213,39 +184,14 @@ let infer tbl =
       aux
 
 (*
- * Wrap up the algorithm.
- *)
-let join_resource = join_tables
-
-let extract_resource = infer
-
-let improve_resource tbl (t, inf) =
-   insert tbl t inf
-
-let close_resource rsrc modname =
-   rsrc
-
-(*
  * The resource itself.
  *)
-let resource typeinf = {
-   resource_empty = new_table ();
-   resource_join = join_resource;
-   resource_extract = extract_resource;
-   resource_improve = improve_resource;
-   resource_improve_arg = Mp_resource.improve_arg_fail "typeinf_resource";
-   resource_close = close_resource
-}
-
-let get_typeinf_resource modname =
-   Mp_resource.find typeinf_resource modname
+let resource typeinf =
+   table_resource_info identity infer
 
 (*
  * Projector.
  *)
-let typeinf_of_proof p =
-   get_typeinf_arg p "typeinf"
-
 let rec collect_consts = function
    [] -> StringSet.empty
  | [v,t] -> StringSet.add v (free_vars_set t)
@@ -273,7 +219,7 @@ let typeinf_final consts eqs opt_eqs defs t =
 let infer_type p t =
    let decls = collect_decls p in
    let consts = StringSet.union (collect_consts decls) (free_vars_set t) in
-   let inf = get_typeinf_arg p "typeinf" in
+   let inf = get_resource_arg p get_typeinf_resource in
    try
       let eqs,opt_eqs,defs,t = inf consts decls eqnlist_empty [] [] t in
       let _,_,_,t = typeinf_final consts eqs opt_eqs defs t

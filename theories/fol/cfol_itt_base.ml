@@ -42,6 +42,8 @@ open Refiner.Refiner.TermSubst
 open Tactic_type
 open Tactic_type.Conversionals
 
+open Base_dtactic
+
 open Itt_struct
 open Itt_equal
 

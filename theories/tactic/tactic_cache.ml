@@ -148,7 +148,6 @@ type 'a cache =
    CacheNil
  | CacheForward of 'a fcache_info * 'a cache
  | CacheBackward of 'a bcache_info * 'a cache
- | CacheJoin of 'a cache * 'a cache
 
 (*
  * Inferences are used to list the results from forward chaining.
@@ -1595,11 +1594,8 @@ let chain extract =
 (*
  * Cache has empty lists.
  *)
-let new_cache () =
+let empty_cache =
    CacheNil
-
-let join_cache cache1 cache2 =
-   CacheJoin (cache1, cache2)
 
 (*
  * Forward chaining rule.
@@ -1756,9 +1752,6 @@ let extract_cache cache =
                   collect caches (info :: finfo) binfo cache
              | CacheBackward (info, cache) ->
                   collect caches finfo (info :: binfo) cache
-             | CacheJoin (cache1, cache2) ->
-                  let finfo, binfo, caches = collect caches finfo binfo cache1 in
-                     collect caches finfo binfo cache2
    in
    let finfo, binfo, _ = collect [] [] [] cache in
       finfo, binfo

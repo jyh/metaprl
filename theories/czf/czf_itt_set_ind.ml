@@ -39,11 +39,12 @@ open Refiner.Refiner.Term
 open Refiner.Refiner.TermSubst
 open Refiner.Refiner.TermMan
 open Refiner.Refiner.RefineError
-open Mp_resource
 
 open Tactic_type
 open Tactic_type.Sequent
 open Var
+
+open Base_dtactic
 
 open Itt_equal
 open Itt_struct
@@ -111,8 +112,6 @@ let d_set_ind_dfun_typeT p =
 
 let set_ind_dfun_type_term = << "type"{set_ind{'s; T, f, g. x: 'T -> 'B['f; 'x]}} >>
 
-let resource intro += (set_ind_dfun_type_term, d_set_ind_dfun_typeT)
-
 (*
  * Functionality.
  *)
@@ -127,8 +126,6 @@ let d_set_ind_dfun_funT p =
       set_ind_dfun_fun (hyp_count_addr p) goal' u v p
 
 let set_ind_dfun_fun_term = << fun_prop{z. set_ind{'A['z]; T, f, g. x: 'T -> 'B['z; 'T; 'f; 'g; 'x]}} >>
-
-let resource intro += (set_ind_dfun_fun_term, d_set_ind_dfun_funT)
 
 (*
  * Typehood.
@@ -145,8 +142,6 @@ let d_set_ind_dprod_typeT p =
 
 let set_ind_dprod_type_term = << "type"{set_ind{'s; T, f, g. x: 'T * 'B['f; 'x]}} >>
 
-let resource intro += (set_ind_dprod_type_term, d_set_ind_dprod_typeT)
-
 (*
  * Functionality.
  *)
@@ -162,7 +157,12 @@ let d_set_ind_dprod_funT p =
 
 let set_ind_dprod_fun_term = << fun_prop{z. set_ind{'A['z]; T, f, g. x: 'T * 'B['z; 'T; 'f; 'g; 'x]}} >>
 
-let resource intro += (set_ind_dprod_fun_term, d_set_ind_dprod_funT)
+let resource intro += [
+   set_ind_dfun_type_term, wrap_intro d_set_ind_dfun_typeT;
+   set_ind_dfun_fun_term, wrap_intro d_set_ind_dfun_funT;
+   set_ind_dprod_type_term, wrap_intro d_set_ind_dprod_typeT;
+   set_ind_dprod_fun_term, wrap_intro d_set_ind_dprod_funT
+]
 
 (*
  * -*-

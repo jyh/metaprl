@@ -49,8 +49,9 @@ open Mp_debug
 open Refiner.Refiner.RefineError
 
 open Tactic_type.Sequent
-open Mp_resource
 open Tactic_type.Tacticals
+
+open Base_dtactic
 
 let _ =
    show_loading "Loading Czf_itt_singleton%t"

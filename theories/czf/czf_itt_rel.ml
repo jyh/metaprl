@@ -55,10 +55,11 @@ include Czf_itt_dexists
 open Refiner.Refiner.TermType
 open Refiner.Refiner.Term
 open Refiner.Refiner.RefineError
-open Mp_resource
 
 open Tactic_type.Sequent
 open Var
+
+open Base_dtactic
 
 open Itt_logic
 

@@ -7256,7 +7256,7 @@ T	t4226	o2307 b4226
 B	b4227	t4226
 T	t4227	o2305 b4225 b4227
 B	b4228	t4227
-P	p4228	String "useWitnessT <<'t>> thenT unsquashT 2 thenT trivialT"
+P	p4228	String "useWitnessT <<'t>> thenT unsquashEqual 2 2 thenT autoT"
 O	o4228	ext_rule p4228
 T	t4228	o b4224 b19
 B	b4229	t4228

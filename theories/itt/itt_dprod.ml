@@ -406,7 +406,8 @@ prim spreadEquality {| eqcd |} 'H bind{z. 'T['z]} (w:'A * 'B['w]) 'u 'v 'a :
 (*! @docoff *)
 let spread_equal_term = << spread{'e1; u1, v1. 'b1['u1; 'v1]} = spread{'e2; u2, v2. 'b2['u2; 'v2]} in 'T >>
 
-let resource intro += (spread_equal_term, d_spread_equalT spreadEquality)
+let resource intro +=
+   (spread_equal_term, wrap_intro (d_spread_equalT spreadEquality))
 
 (*!
  * @begin[doc]

@@ -186,9 +186,9 @@ let debug_dtactic =
 (*
  * The d_tactic uses a term_table to match against terms.
  *)
-type elim_data = (int -> tactic, int -> tactic) term_table
+type elim_data = (term * (int -> tactic)) list
 
-type intro_data = (string * int option * tactic, tactic) term_table
+type intro_data = (term * (string * int option * tactic)) list
 
 type intro_option =
    SelectOption of int
@@ -309,15 +309,16 @@ let intro_compact entries =
  *)
 let identity x = x
 
-let extract_elim_data tbl = fun
-   i p ->
+let extract_elim_data data =
+   let tbl = create_table data identity in
+   fun i p ->
       let t = snd (Sequent.nth_hyp p i) in
       let tac =
          try
             (* Find and apply the right tactic *)
             if !debug_dtactic then
                eprintf "Base_dtactic: lookup %s%t" (SimplePrint.string_of_opname (opname_of_term t)) eflush;
-            snd (Term_match_table.lookup "Base_dtactic.extract_elim_data" tbl identity t)
+            snd (Term_match_table.lookup tbl t)
          with
             Not_found ->
                raise (RefineError ("extract_elim_data", StringTermError ("D tactic doesn't know about", t)))
@@ -327,15 +328,16 @@ let extract_elim_data tbl = fun
 
          tac i p
 
-let extract_intro_data tbl = fun
-   p ->
+let extract_intro_data data =
+   let tbl = create_table data intro_compact in
+   fun p ->
       let t = Sequent.concl p in
       let tac =
          try
             (* Find and apply the right tactic *)
             if !debug_dtactic then
                eprintf "Base_dtactic: lookup %s%t" (SimplePrint.string_of_opname (opname_of_term t)) eflush;
-            snd (Term_match_table.lookup "Base_dtactic.extract_intro_data" tbl intro_compact t)
+            snd (Term_match_table.lookup tbl t)
          with
             Not_found ->
                raise (RefineError ("extract_intro_data", StringTermError ("D tactic doesn't know about", t)))
@@ -348,8 +350,7 @@ let extract_intro_data tbl = fun
 (*
  * Add a new tactic.
  *)
-let improve_data (t, tac) tbl =
-   Refine_exn.print Dform.null_base (insert tbl t) tac
+let add_data datas data = data::datas
 
 (*
  * Options for intro rule.
@@ -396,7 +397,7 @@ let find_subterm t arg =
 (*
  * Improve the intro resource from a rule.
  *)
-let improve_intro_arg rsrc name context_args var_args term_args _ statement (pre_tactic, options) =
+let process_intro_resource_annotation name context_args var_args term_args _ statement (pre_tactic, options) =
    let _, goal = unzip_mfunction statement in
    let t =
       try TermMan.nth_concl goal 1 with
@@ -442,7 +443,7 @@ let improve_intro_arg rsrc name context_args var_args term_args _ statement (pre
        | _ ->
             raise (Invalid_argument (sprintf "Base_dtactic.intro: %s: not an introduction rule" name))
    in
-      improve_data (t, (name, get_sel_arg options, tac)) rsrc
+      t, (name, get_sel_arg options, tac)
 
 (*
  * Compile an elimination tactic.
@@ -465,7 +466,7 @@ let tryThinT thinT v i p =
    else
       idT p
 
-let improve_elim_arg rsrc name context_args var_args term_args _ statement (pre_tactic, options) =
+let process_elim_resource_annotation name context_args var_args term_args _ statement (pre_tactic, options) =
    let _, goal = unzip_mfunction statement in
    let { sequent_hyps = hyps } =
       try TermMan.explode_sequent goal with
@@ -555,58 +556,45 @@ let improve_elim_arg rsrc name context_args var_args term_args _ statement (pre_
        | _ ->
             raise (Invalid_argument (sprintf "Base_dtactic: %s: not an elimination rule" name))
    in
-      improve_data (t, tac) rsrc
+      t, tac
 
-(*
- * Wrap up the joiner.
- *)
-let join_resource = join_tables
+let add_intro_data datas ((t, _) as data) =
+   if !debug_dtactic then begin
+      let opname = opname_of_term t in
+         eprintf "Base_dtactic.improve_intro_resource: %s%t" (string_of_opname opname) eflush
+   end;
+   add_data datas data
 
-let improve_intro_resource data (t, tac) =
-   if !debug_dtactic then
-      begin
-         let opname = opname_of_term t in
-            eprintf "Base_dtactic.improve_intro_resource: %s%t" (string_of_opname opname) eflush
-      end;
-   improve_data (t, ("Base_dtactic.improve_intro_resource", None, tac)) data
+let wrap_intro tac =
+   ("wrap_intro", None, tac)
 
-let improve_elim_resource data t =
-   if !debug_dtactic then
-      begin
-         let opname = opname_of_term (fst t) in
-            eprintf "Base_dtactic.improve_elim_resource: %s%t" (string_of_opname opname) eflush
-      end;
-   improve_data t data
-
-let close_resource rsrc modname =
-   rsrc
+let add_elim_data datas ((t,_) as data) =
+   if !debug_dtactic then begin
+      let opname = opname_of_term t in
+         eprintf "Base_dtactic.improve_elim_resource: %s%t" (string_of_opname opname) eflush
+   end;
+   add_data datas data
 
 (*
  * Resource.
  *)
-let resource elim = {
-   resource_empty = new_table ();
-   resource_join = join_resource;
-   resource_extract = extract_elim_data;
-   resource_improve = improve_elim_resource;
-   resource_improve_arg = improve_elim_arg;
-   resource_close = close_resource
+let resource elim = Functional {
+   fp_empty = [];
+   fp_add = add_elim_data;
+   fp_retr = extract_elim_data;
 }
 
-let resource intro = {
-   resource_empty = new_table ();
-   resource_join = join_resource;
-   resource_extract = extract_intro_data;
-   resource_improve = improve_intro_resource;
-   resource_improve_arg = improve_intro_arg;
-   resource_close = close_resource
+let resource intro = Functional {
+   fp_empty = [];
+   fp_add = add_intro_data;
+   fp_retr = extract_intro_data;
 }
 
 let dT i p =
    if i = 0 then
-      Sequent.get_tactic_arg p "intro" p
+      Sequent.get_resource_arg p get_intro_resource p
    else
-      Sequent.get_int_tactic_arg p "elim" i p
+      Sequent.get_resource_arg p get_elim_resource i p
 
 let rec dForT i =
    if i <= 0 then

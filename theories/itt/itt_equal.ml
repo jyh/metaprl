@@ -71,6 +71,7 @@ open Tactic_type.Conversionals
 open Mptop
 
 open Base_meta
+open Base_dtactic
 open Base_auto_tactic
 
 (*
@@ -177,8 +178,7 @@ type eqcd_data = tactic term_stable
  * Extract an EQCD tactic from the data.
  * The tactic checks for an optable.
  *)
-let extract_data base =
-   let tbl = sextract base in
+let extract_data tbl =
    let eqcd p =
       let t = Sequent.concl p in
       let _, l, _ = dest_equal t in
@@ -199,7 +199,7 @@ let extract_data base =
 (*
  * Add info from a rule definition.
  *)
-let improve_intro_arg data name context_args var_args term_args _ statement pre_tactic =
+let process_eqcd_resource_annotation name context_args var_args term_args _ statement pre_tactic =
    let _, goal = unzip_mfunction statement in
    let t =
       try TermMan.nth_concl goal 1 with
@@ -238,41 +238,19 @@ let improve_intro_arg data name context_args var_args term_args _ statement pre_
        | _ ->
             raise (Invalid_argument (sprintf "Itt_equal.intro: %s: not an introduction rule" name))
    in
-      sinsert data t tac
-
-(*
- * Wrap up the joiner.
- *)
-let join_resource = join_stables
-
-let extract_resource = extract_data
-
-let improve_resource data (t, tac) =
-   sinsert data t tac
-
-let close_resource rsrc _ =
-   rsrc
+      (t, tac)
 
 (*
  * Resource.
  *)
-let resource eqcd = {
-   resource_empty = new_stable ();
-   resource_join = join_resource;
-   resource_extract = extract_resource;
-   resource_improve = improve_resource;
-   resource_improve_arg = improve_intro_arg;
-   resource_close = close_resource
-}
-
-let get_resource modname =
-   Mp_resource.find eqcd_resource modname
+let resource eqcd =
+   stable_resource_info extract_data
 
 (*
  * Resource argument.
  *)
 let eqcdT p =
-   Tactic_type.Sequent.get_tactic_arg p "eqcd" p
+   Sequent.get_resource_arg p get_eqcd_resource p
 
 (************************************************************************
  * DEFINITIONS                                                          *
@@ -329,7 +307,7 @@ dform it_df1 : it = cdot
  *)
 prim trueIntro {| intro [] |} 'H :
    sequent ['ext] { 'H >- "true" } =
-   it;;
+   it
 
 (*!************************************************************************
  * @begin[doc]
@@ -535,7 +513,7 @@ let eqcd_univT p =
        thenT tryT (rw reduce_cumulativity 0 thenT trueIntro i)) p
 
 let resource eqcd += (univ_term, eqcd_univT)
-let resource intro += (univ_member_term, eqcd_univT)
+let resource intro += (univ_member_term, wrap_intro eqcd_univT)
 
 (*!************************************************************************
  * @begin[doc]

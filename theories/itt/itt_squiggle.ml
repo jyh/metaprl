@@ -84,6 +84,7 @@ open Base_dtactic
 
 open Itt_equal
 open Itt_struct
+open Itt_squash
 
 (*
  * Show that the file is loading.

@@ -99,7 +99,6 @@ open Refiner.Refiner.TermOp
 open Refiner.Refiner.TermSubst
 open Refiner.Refiner.TermMan
 open Refiner.Refiner.RefineError
-open Mp_resource
 
 open Tactic_type
 open Tactic_type.Sequent
@@ -107,6 +106,7 @@ open Tactic_type.Tacticals
 open Var
 open Mptop
 
+open Base_dtactic
 open Base_auto_tactic
 
 open Itt_equal

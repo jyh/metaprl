@@ -37,6 +37,7 @@ include Itt_comment
 
 open Refiner.Refiner.TermType
 open Refiner.Refiner.Term
+open Mp_resource
 open Tactic_type
 open Tactic_type.Tacticals
 open Tactic_type.Conversionals
@@ -226,12 +227,10 @@ rule universeFormation 'H univ[j:l] :
 
 type eqcd_data
 
-resource (term * tactic, tactic, eqcd_data, Tactic.pre_tactic) eqcd
+resource (term * tactic, eqcd_data, tactic) eqcd
 
-(*
- * Access to resources from toploop.
- *)
-val get_resource : string -> eqcd_resource
+val process_eqcd_resource_annotation :
+   (Tactic.pre_tactic, term * tactic) annotation_processor
 
 topval eqcdT : tactic
 

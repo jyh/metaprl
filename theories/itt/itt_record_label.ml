@@ -24,6 +24,7 @@ open Mp_resource
 open Tactic_type
 
 open Base_dtactic
+open Itt_equal
 
 
 (******************)
@@ -89,7 +90,8 @@ let reduce_eq_label =  reduce_eq_label_trivial_rw orelseC
 let not_eq_labelT p =
       (not_eq_label (Sequent.hyp_count_addr p) thenT rw reduce_eq_label 0 thenT tryT (dT 0)) p
 
-let resource intro += (<< not{.label[x:t] = label[y:t]  in label}>>, not_eq_labelT )
+let resource intro +=
+   (<< not{.label[x:t] = label[y:t]  in label}>>, wrap_intro not_eq_labelT )
 
 let resource reduce += << eq_label[x:t,y:t]{'A;'B}  >>, reduce_eq_label
 

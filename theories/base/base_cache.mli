@@ -46,9 +46,7 @@ type cache = tactic Tactic_cache.cache
 
 type t
 
-resource (cache_rule, cache, t, unit) cache
-
-val get_resource : string -> cache_resource
+resource (cache_rule, t, cache) cache
 
 (*
  * -*-

@@ -164,12 +164,7 @@ type 'a auto_info =
      auto_tac : 'a
    }
 
-type 'a auto_data =
-   Empty
- | Tactic of 'a auto_info * 'a auto_data
- | Remove of auto_prec * 'a auto_data
- | Label of 'a auto_data
- | Join of 'a auto_data * 'a auto_data
+type 'a auto_data = 'a auto_info list
 
 (************************************************************************
  * IMPLEMENTATION                                                       *
@@ -285,28 +280,7 @@ let compileAutoT tacs p =
  * A list of tactics to try is constructed.
  * The earlier tactics should be tried first.
  *)
-let extract compile info =
-   let rec collect joins removes tactics item =
-      match item with
-         Empty ->
-            joins, removes, tactics
-       | Tactic (info, next) ->
-            if node_member info.auto_prec removes then
-               collect joins removes tactics next
-            else
-               collect joins removes (info :: tactics) next
-       | Remove (node, next) ->
-            collect joins (node :: removes) tactics next
-       | Label next ->
-            if List.memq item joins then
-               joins, removes, tactics
-            else
-               collect (item :: joins) removes tactics next
-       | Join (base1, base2) ->
-            let joins, removes, tactics = collect joins removes tactics base1 in
-               collect joins removes tactics base2
-   in
-   let _, _, tactics = collect [] [] [] info in
+let extract compile tactics =
    let tactics = sort_nodes tactics in
       if !debug_auto then
          begin
@@ -321,67 +295,41 @@ let extract compile info =
 let rec auto_wrap (tac : tactic) =
    AutoTac (fun p -> [tac, auto_wrap tac])
 
-(*
- * Wrap up the joiner.
- *)
-let join_resource data1 data2 =
-   Join (data1, data2)
-
-let improve_resource data info =
-   if !debug_auto then
-      eprintf "Base_auto_tactic.improve_resource: adding %s%t" info.auto_name eflush;
-   Tactic (info, data)
+let improve_resource data info = info::data
 
 let make_auto_tactic name context_args var_args term_args pre_tactic =
    match context_args, term_args with
       [| _ |], [] ->
          (fun p ->
                let vars = Var.maybe_new_vars_array p var_args in
-               let addr = Sequent.hyp_count_addr p in
+               let addr = hyp_count_addr p in
                   Tactic_type.Tactic.tactic_of_rule pre_tactic ([| addr |], vars) [] p)
     | _, [] ->
          raise (Invalid_argument (sprintf "Base_auto_tactic.improve: %s: only introduction rules are allowed" name))
     | _ ->
          raise (Invalid_argument (sprintf "Base_auto_tactic.improve: %s: term arguments are not allowed in auto tactics" name))
 
-let improve_triv_resource_arg data name context_args var_args term_args _ _ (pre_tactic, tprec) =
+let process_trivial_resource_annotation name context_args var_args term_args _ _ (pre_tactic, tprec) =
    let tac = make_auto_tactic name context_args var_args term_args pre_tactic in
-   let info = { auto_name = name; auto_prec = tprec; auto_tac = tac } in
-      Tactic (info, data)
+      { auto_name = name; auto_prec = tprec; auto_tac = tac }
 
-let improve_auto_resource_arg data name context_args var_args term_args _ _ (pre_tactic, tprec) =
+let process_auto_resource_annotation name context_args var_args term_args _ _ (pre_tactic, tprec) =
    let tac = make_auto_tactic name context_args var_args term_args pre_tactic in
-   let info = { auto_name = name; auto_prec = tprec; auto_tac = auto_wrap tac } in
-      Tactic (info, data)
-
-let close_resource data modname =
-   Label data
+      { auto_name = name; auto_prec = tprec; auto_tac = auto_wrap tac }
 
 (*
  * Resource.
  *)
-let extract_triv_resource data =
-   extract compileTrivialT data
-
-let resource trivial = {
-   resource_empty = Empty;
-   resource_join = join_resource;
-   resource_extract = extract_triv_resource;
-   resource_improve = improve_resource;
-   resource_improve_arg = improve_triv_resource_arg;
-   resource_close = close_resource
+let resource trivial = Functional {
+   fp_empty = [];
+   fp_add = improve_resource;
+   fp_retr = extract compileTrivialT
 }
 
-let extract_auto_resource data =
-   extract compileAutoT data
-
-let resource auto = {
-   resource_empty = Empty;
-   resource_join = join_resource;
-   resource_extract = extract_auto_resource;
-   resource_improve = improve_resource;
-   resource_improve_arg = improve_auto_resource_arg;
-   resource_close = close_resource
+let resource auto = Functional {
+   fp_empty = [];
+   fp_add = improve_resource;
+   fp_retr = extract compileAutoT
 }
 
 (*
@@ -392,15 +340,6 @@ let create_auto_prec before after =
       List.iter (fun p -> ImpDag.add_edge dag p node) before;
       List.iter (fun p -> ImpDag.add_edge dag node p) after;
       node
-
-(*
- * Remove all tactics with a given precedence.
- *)
-let remove_auto_tactic auto_rsrc node =
-   let wrap items =
-      Remove (node, items)
-   in
-      Mp_resource.wrap auto_rsrc wrap
 
 (*
  * Use the tactic as long as progress is being made.
@@ -482,7 +421,7 @@ let auto_assum_progress test (tac : int -> tactic) =
  * Trivial tactic.
  *)
 let trivialT p =
-   Sequent.get_tactic_arg p "trivial" p
+   get_resource_arg p get_trivial_resource p
 
 (*
  * Trivial is in auto tactic.
@@ -498,9 +437,6 @@ let resource trivial += {
    auto_tac = onSomeAssumT nthAssumT
 }
 
-let get_trivial_resource modname =
-   Mp_resource.find trivial_resource modname
-
 (*
  * Auto tactic includes trivialT.
  *)
@@ -510,14 +446,11 @@ let resource auto += {
    auto_tac = auto_wrap trivialT
 }
 
-let get_auto_resource modname =
-   Mp_resource.find auto_resource modname
-
 (*
  * The inherited auto tactic.
  *)
 let autoT p =
-   Sequent.get_tactic_arg p "auto" p
+   get_resource_arg p get_auto_resource p
 
 let tryAutoT tac =
    tac thenT tryT (completeT autoT)

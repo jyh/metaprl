@@ -443,7 +443,7 @@ let atomicT i p =
 let intro_atomicT p =
    onSomeHypT atomicT p
 
-let resource intro += (atomic_term, intro_atomicT)
+let resource intro += (atomic_term, wrap_intro intro_atomicT)
 
 let type_intro_rules =
    [|tptp2_type_intro0;

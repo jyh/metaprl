@@ -147,12 +147,6 @@ type expr =
 (*
  * The resource maps strings to values.
  *)
-type top_data =
-   Empty
- | Label of string * top_data
- | Expr of string * expr * top_data
- | Join of top_data * top_data
-
 type top_table =
    (string, string * expr) Hashtbl.t
 
@@ -160,46 +154,30 @@ type top_table =
  * IMPLEMENTATION                                                       *
  ************************************************************************)
 
-(*
- * Construct a hash table of all the values.
- * As in ML, the newer values override the previous.
+let create () =
+   Hashtbl.create 201
+
+let add tbl (module_name,name,expr) =
+   Hashtbl.add tbl name (module_name,expr)
+
+let add_commands tbl =
+   List.iter (fun (name, expr) -> Hashtbl.add tbl name ("",expr))
+
+let retr tbl = tbl
+
+(*!
+ * @begin[doc]
+ * Toplevel values are added to the @Comment!resource[toploop_resource] resource.
+ * The argument has type @code{string * expr}, which includes
+ * the string name of the value, and it's value.
+ * @docoff
+ * @end[doc]
  *)
-let collect_table data =
-   let hash = Hashtbl.create 201 in
-   let rec collect mod_name labels = function
-      Empty ->
-         labels
-    | (Label (mod_name, next)) as label ->
-         if List.memq label labels then
-            labels
-         else
-            collect mod_name (label :: labels) next
-    | Expr (name, expr, next) ->
-         let labels = collect mod_name labels next in
-            Hashtbl.add hash name (mod_name, expr);
-            labels
-
-    | Join (next1, next2) ->
-         let labels = collect mod_name labels next1 in
-            collect mod_name labels next2
-   in
-   let _ = collect "." [] data in
-      hash
-
-(*
- * Wrap up the joiner.
- *)
-let join_resource base1 base2 =
-   Join (base1, base2)
-
-let extract_resource data =
-   collect_table data
-
-let improve_resource data (name, expr) =
-   Expr (name, expr, data)
-
-let close_resource data mod_name =
-   Label (String.capitalize mod_name, data)
+let resource toploop = Imperative {
+   imp_create = create;
+   imp_add = add;
+   imp_retr = retr
+}
 
 (************************************************************************
  * COMPILING                                                            *
@@ -296,13 +274,7 @@ and mk_proj_expr base loc expr =
    let lookup names v =
       match names with
          [modname] ->
-            begin
-               try search modname v (Hashtbl.find_all base v) with
-                  Not_found ->
-                     Stdpp.raise_with_loc loc (**)
-                        (RefineError ("mk_proj_expr",
-                                      StringStringError ("undefined variable", modname ^ "." ^ v)))
-            end
+            search modname v (Hashtbl.find_all base v)
        | _ ->
             Stdpp.raise_with_loc loc (**)
                (RefineError ("mk_proj_expr", StringError "nested modules are not implemented"))
@@ -701,43 +673,16 @@ let cons_expr =
                 | _ ->
                      raise (RefineError ("cons_expr", StringError "type mismatch"))))
 
-let values =
-   ["+",                int_int_fun_int_expr ( + );
-    "-",                int_int_fun_int_expr ( - );
-    "*",                int_int_fun_int_expr ( * );
-    "/",                int_int_fun_int_expr ( / );
-    "::",               cons_expr;
-    "()",               UnitExpr ();
-    "[]",               ListExpr [];
-    "True",             BoolExpr true;
-    "False",            BoolExpr false]
-
-
-let rec add_resources base = function
-   (name, expr) :: tl ->
-      add_resources (Expr (name, expr, base)) tl
- | [] ->
-      base
-
-(*!
- * @begin[doc]
- * Toplevel values are added to the @Comment!resource[toploop_resource] resource.
- * The argument has type @code{string * expr}, which includes
- * the string name of the value, and it's value.
- * @docoff
- * @end[doc]
- *)
-let resource toploop = {
-   resource_empty = add_resources Empty values;
-   resource_join = join_resource;
-   resource_extract = extract_resource;
-   resource_improve = improve_resource;
-   resource_improve_arg = Mp_resource.improve_arg_fail "toploop_resource";
-   resource_close = close_resource
-}
-
-let get_resource modname =
-   Mp_resource.find toploop_resource modname
+let resource toploop +=
+   ["Pervasives", "+",     int_int_fun_int_expr ( + );
+    "Pervasives", "-",     int_int_fun_int_expr ( - );
+    "Pervasives", "*",     int_int_fun_int_expr ( * );
+    "Pervasives", "/",     int_int_fun_int_expr ( / );
+    "Pervasives", "::",    cons_expr;
+    "Pervasives", "()",    UnitExpr ();
+    "Pervasives", "[]",    ListExpr [];
+    "Pervasives", "True",  BoolExpr true;
+    "Pervasives", "False", BoolExpr false]
 
 let expr_of_ocaml_expr = mk_expr
 let expr_of_ocaml_str_item = mk_str_item

@@ -389,7 +389,7 @@ let d_isset_typeT p =
 
 let isset_type_term = << "type"{isset{'s1}} >>
 
-let resource intro += (isset_type_term, d_isset_typeT)
+let resource intro += (isset_type_term, wrap_intro d_isset_typeT)
 
 (*
  * Equal sets.

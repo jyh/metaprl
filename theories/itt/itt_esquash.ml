@@ -87,6 +87,8 @@ include Itt_logic
 open Tactic_type
 open Tactic_type.Conversionals
 
+open Base_dtactic
+
 open Itt_equal
 open Itt_void
 open Itt_unit

@@ -93,6 +93,8 @@ open Var
 open Tactic_type
 open Tactic_type.Tacticals
 
+open Base_dtactic
+
 open Itt_equal
 open Itt_subtype
 

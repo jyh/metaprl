@@ -34,6 +34,7 @@ include Mptop
 
 open Refiner.Refiner.Term
 open Refiner.Refiner.RefineError
+open Mp_resource
 
 open Tactic_type.Conversionals
 
@@ -90,7 +91,8 @@ topval repeatForC : int -> conv -> conv
 
 type reduce_data
 
-resource (term * conv, conv, reduce_data, conv) reduce
+resource (term * conv, reduce_data, conv) reduce
+val process_reduce_resource_annotation : (conv, term*conv) annotation_processor
 
 topval reduceTopC : conv
 topval reduceC : conv

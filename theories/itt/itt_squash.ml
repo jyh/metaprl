@@ -355,22 +355,22 @@ interactive squashFormation 'H :
  * to add support for other kinds of rules if necessary.
  * @end[doc]
  *)
-type squash_info =
-   SqUnsquash of term * (int -> tactic)
- | SqStable of term * term * tactic
- | SqUnsquashGoal of term * (int -> tactic)
+type squash_inf =
+   SqUnsquash of (int -> tactic)
+ | SqStable of term * tactic
+ | SqUnsquashGoal of (int -> tactic)
+
+
+type squash_info = term * squash_inf
 
 (*!
  * @begin[doc]
  *
- * The squash resource represents data using 3 tables for
- * each of the kinds of data.
+ * The squash resource represents data using a shape table.
  * @end[doc]
  *)
-type squash_data =
-   (int -> tactic) term_stable
- * (term * tactic) term_stable
- * (int -> tactic) term_stable
+type squash_data = squash_inf term_stable
+
 (*! @docoff *)
 
 (************************************************************************
@@ -409,59 +409,28 @@ let is_squash_goal p =
 (*
  * Extract an SQUASH tactic from the data.
  *)
-let extract_data (base1, base2, base3) =
-   let tbl1 = sextract base1 in
-   let tbl2 = sextract base2 in
-   let tbl3 = sextract base3 in
-   let unsquash i p =
-      let conc = concl p in
-      try (slookup tbl3 conc) i p
-      with Not_found -> begin
-      let hyp = dest_squash (snd (nth_hyp p i)) in
-      try (slookup tbl1 hyp) i p with Not_found -> begin
-      try
-         let t, tac = slookup tbl2 conc in
+let unsquash_tactic tbl i p =
+   let conc = concl p in
+   let hyp = dest_squash (snd (nth_hyp p i)) in
+   match slookup_all tbl conc, slookup_all tbl hyp with
+      (SqUnsquashGoal tac :: _), _ ->
+         tac i p
+    | _, (SqUnsquash tac :: _) ->
+         tac i p
+    | (SqStable (t,tac) :: _), _ ->
          let h, j = Sequent.hyp_indices p i in
             (unsquashWWitness h j t thenT tac) p
-      with Not_found -> begin
-      try
-         let t, tac = slookup tbl2 hyp in
-         (unsquashStableT i t thenLT [
-            idT;
-            tac thenT trivialT
-         ]) p
-      with Not_found -> begin
-      try
-         let tac = slookup tbl3 hyp in
+    | _, (SqStable (t,tac) :: _) ->
+         (unsquashStableT i t thenLT [ idT; tac thenT trivialT]) p
+    | _, (SqUnsquashGoal tac :: _) ->
          let h, j = Sequent.hyp_indices p i in
-         (unsquashHypGoalStable h j thenLT [
-            idT;
-            tac i thenT trivialT
-         ]) p
-      with Not_found -> begin
-      try
-         let tac = slookup tbl1 conc in
-            (unsquashStableGoalT i thenLT [idT; tac (-1) thenT trivialT ]) p
-      with Not_found ->
+            (unsquashHypGoalStable h j thenLT [idT; tac i thenT trivialT]) p
+    | (SqUnsquash tac :: _), _ ->
+         (unsquashStableGoalT i thenLT [idT; tac (-1) thenT trivialT ]) p
+    | [], [] ->
          raise (RefineError ("squash", StringTermError ("squash tactic doesn't know about ", mk_xlist_term [hyp;<<slot[" |- "]>>;conc])))
-      end end end end end
-   in
-      unsquash
 
-(*
- * Wrap up the joiner.
- *)
-let join_resource (tbl1, tbl2, tbl3) (tbl1', tbl2', tbl3') =
-   join_stables tbl1 tbl1',
-   join_stables tbl2 tbl2',
-   join_stables tbl3 tbl3'
-
-let improve_resource (tbl1, tbl2, tbl3) = function
-   SqUnsquash(t, tac) -> sinsert tbl1 t tac, tbl2, tbl3
- | SqStable(t, t', tac) -> tbl1, sinsert tbl2 t (t', tac), tbl3
- | SqUnsquashGoal(t, tac) -> tbl1, tbl2, sinsert tbl3 t tac
-
-let improve_arg tables name contexts vars args _ stmt tac =
+let process_squash_resource_annotation name contexts vars args _ stmt tac =
    let assums, goal = unzip_mfunction stmt in
    if is_squash_sequent goal then
       raise (Invalid_argument "squash_stable resource annotation: conclusion sequent should not be squashed");
@@ -484,7 +453,7 @@ let improve_arg tables name contexts vars args _ stmt tac =
             let addr = Sequent.hyp_count_addr p in
             Tactic_type.Tactic.tactic_of_rule tac ([|addr|], [||]) [] p
          in
-            improve_resource tables (SqStable(t, a, tac))
+            t, SqStable(a, tac)
       (* H |- a in T *)
     | [|h|], [||], [], [], [Context(h',[])] when
          is_equal_term concl && h = h' &&
@@ -495,7 +464,7 @@ let improve_arg tables name contexts vars args _ stmt tac =
             let addr = Sequent.hyp_count_addr p in
             Tactic_type.Tactic.tactic_of_rule tac ([|addr|], [||]) [] p
          in
-            improve_resource tables (SqStable(t, a, tac))
+            t, SqStable(a, tac)
       (* H; x:T; J[x] |- C[x] *)
     | [| h; j |], [||], [], [], [Context(h',[]); Hypothesis(v,t); Context(j', [v'])] when
          h = h' && j = j' && is_var_term v' && (dest_var v') = v &&
@@ -509,27 +478,15 @@ let improve_arg tables name contexts vars args _ stmt tac =
             let h, j = Sequent.hyp_indices p (-1) in
             Tactic_type.Tactic.tactic_of_rule tac ([| h; j|], [||]) [] p
          in
-            improve_resource tables (SqStable(t, it_term, (assertT t thenMT tac)))
+            t, SqStable(it_term, (assertT t thenMT tac))
     | _ ->
          raise (Invalid_argument "squash_stable resource annotation")
-
-let close_resource rsrc modname =
-   rsrc
 
 (*
  * Resource.
  *)
-let resource squash = {
-   resource_empty = new_stable (), new_stable (), new_stable ();
-   resource_join = join_resource;
-   resource_extract = extract_data;
-   resource_improve = improve_resource;
-   resource_improve_arg = improve_arg;
-   resource_close = close_resource
-}
-
-let get_resource modname =
-   Mp_resource.find squash_resource modname
+let resource squash =
+   stable_resource_info unsquash_tactic
 
 (********************************************************************
  * squash_resource info for base types                              *
@@ -541,25 +498,22 @@ let unsquashHypEqualT i p =
    let h, j = Sequent.hyp_indices p i in
    unsquashHypEqual h j p
 
-let resource squash += (SqUnsquash(equal_term, unsquashHypEqualT))
-
-let resource squash += (SqStable(equal_term, <<it>>, dT 0))
-
 let unsquashEqualT i p =
    let h, j = Sequent.hyp_indices p i in
    unsquashEqual h j p
-
-let resource squash += (SqUnsquashGoal(equal_term, unsquashEqualT))
 
 let unsquashSquashT i p =
    let h, j = Sequent.hyp_indices p i in
    unsquash h j p
 
-let resource squash += (SqStable(squash_term, <<it>>, dT 0))
-
-let resource squash += (SqUnsquashGoal(squash_term, unsquashSquashT))
-
-let resource squash += (SqStable(type_term, <<it>>, dT 0))
+let resource squash += [
+   equal_term, SqUnsquash unsquashHypEqualT;
+   equal_term, SqStable (<<it>>, dT 0);
+   equal_term, SqUnsquashGoal unsquashEqualT;
+   squash_term, SqStable (<<it>>, dT 0);
+   squash_term, SqUnsquashGoal(unsquashSquashT);
+   type_term, SqStable(<<it>>, dT 0)
+]
 
 (************************************************************************
  * TACTICS                                                              *
@@ -607,7 +561,7 @@ let resource squash += (SqStable(type_term, <<it>>, dT 0))
  * @end[doc]
  *)
 let unsquashT i p =
-   Sequent.get_int_tactic_arg p "squash" i p
+   Sequent.get_resource_arg p get_squash_resource i p
 
 let squashT p =
    (squashAssert (hyp_count_addr p) (concl p) thenLT

@@ -33,6 +33,8 @@
 include Itt_theory
 include Cfol_itt_base
 
+open Base_dtactic
+
 derive Fol_and
 
 (* Definitions *)

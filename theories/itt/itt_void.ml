@@ -57,10 +57,10 @@ open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
 open Refiner.Refiner.TermMan
 open Refiner.Refiner.RefineError
-open Mp_resource
 
 open Tactic_type.Tacticals
 
+open Base_dtactic
 open Base_auto_tactic
 
 open Itt_equal

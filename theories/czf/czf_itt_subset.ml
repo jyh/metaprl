@@ -37,6 +37,8 @@
 (*! @doc{@parents} *)
 include Czf_itt_dall
 
+open Base_dtactic
+
 (*! @doc{@terms} *)
 declare subset{'s1; 's2}
 

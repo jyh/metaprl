@@ -61,7 +61,7 @@ type t = cache
 (*
  * Add a rule.
  *)
-let improve_data info cache =
+let improve_data cache info =
    match info with
       Forward info ->
          add_frule cache info
@@ -69,32 +69,13 @@ let improve_data info cache =
          add_brule cache info
 
 (*
- * Wrap up the joiner.
- *)
-let join_resource = join_cache
-
-let extract_resource data = data
-
-let improve_resource data x =
-   improve_data x data
-
-let close_resource rsrc modname =
-   rsrc
-
-(*
  * Resource.
  *)
-let resource cache = {
-   resource_empty = new_cache ();
-   resource_join = join_resource;
-   resource_extract = extract_resource;
-   resource_improve = improve_resource;
-   resource_improve_arg = Mp_resource.improve_arg_fail "cache_resource";
-   resource_close = close_resource
+let resource cache = Functional {
+   fp_empty = empty_cache;
+   fp_add = improve_data;
+   fp_retr = (fun x -> x)
 }
-
-let get_resource modname =
-   Mp_resource.find cache_resource modname
 
 (*
  * -*-

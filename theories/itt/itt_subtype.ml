@@ -319,37 +319,19 @@ let extract_data base =
       subtyper
 
 (*
- * Wrap up the joiner.
- *)
-let join_resource = join_tables
-
-let extract_resource = extract_data
-
-let improve_resource = improve_data
-
-let close_resource rsrc modname =
-   rsrc
-
-(*
  * Resource.
  *)
-let resource sub = {
-   resource_empty = new_dtable ();
-   resource_join = join_resource;
-   resource_extract = extract_resource;
-   resource_improve = improve_resource;
-   resource_improve_arg = Mp_resource.improve_arg_fail "sub_resource";
-   resource_close = close_resource
+let resource sub = Functional {
+   fp_empty = empty_dtable;
+   fp_add = improve_data;
+   fp_retr = extract_data
 }
-
-let get_resource modname =
-   Mp_resource.find sub_resource modname
 
 (*
  * Resource argument.
  *)
 let subtypeT p =
-   Sequent.get_tactic_arg p "subtype" p
+   Sequent.get_resource_arg p get_sub_resource p
 
 (************************************************************************
  * TACTICS                                                              *

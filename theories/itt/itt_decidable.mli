@@ -35,12 +35,16 @@ include Itt_logic
 open Tactic_type
 open Tactic_type.Tacticals
 open Refiner.Refiner.TermType
+open Mp_resource
 
 define unfold_decidable : decidable{'p} <--> ('p or not {'p})
 
 type decide_data
 
-resource (term * tactic, tactic, decide_data, Tactic.pre_tactic ) decide
+resource (term * tactic, decide_data, tactic ) decide
+
+val process_decide_resource_annotation:
+   (Tactic.pre_tactic, term * tactic) annotation_processor
 
 (* Works only on sequents of form "H |- Decidable(P)", tries to prove
    that P is in fact decidable using rules added to decide_resource *)

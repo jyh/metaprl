@@ -54,9 +54,7 @@ open Tactic_type.Tacticals
 type typeinf_subst_info = term * typeinf_subst_fun
 type typeinf_subst_data
 
-resource (typeinf_subst_info, typeinf_subst_fun, typeinf_subst_data, unit) typeinf_subst
-
-val get_typeinf_subst_resource : string -> typeinf_subst_resource
+resource (typeinf_subst_info, typeinf_subst_data, typeinf_subst_fun) typeinf_subst
 
 (*
  * Modular components also get a recursive instance of
@@ -77,17 +75,11 @@ type typeinf_data
 (*
  * The resource itself.
  *)
-resource (typeinf_resource_info, typeinf_func, typeinf_data, unit) typeinf
-
-(*
- * Resources that have been created.
- *)
-val get_typeinf_resource : string -> typeinf_resource
+resource (typeinf_resource_info, typeinf_data, typeinf_func) typeinf
 
 (*
  * Utilities.
  *)
-val typeinf_of_proof : tactic_arg -> typeinf_func
 val infer_type : tactic_arg -> term -> term
 val infer_type_args : tactic_arg -> term -> term list
 

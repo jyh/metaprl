@@ -146,6 +146,7 @@ topval magicT : tactic
 topval splitBoolT : term -> int -> tactic
 topval splitITE : int -> tactic
 
+topval reduce_bnot_bnotC : conv
 topval eq_bfalse2assertT : tactic
 topval assert2eq_bfalseT : tactic
 

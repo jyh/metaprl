@@ -1,4 +1,4 @@
-doc <:doc< 
+doc <:doc<
    @spelling{bool ifthenelse splitBoolT splitITE}
   
    @begin[doc]
@@ -530,7 +530,7 @@ interactive assert_bimplies_elim {| elim [] |} 'H :
    [main] sequent ['ext] { 'H; 'J[it]; y: "assert"{'t2} >- 'C[it] } -->
    sequent ['ext] { 'H; x: "assert"{bimplies{'t1; 't2}}; 'J['x] >- 'C['x] }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    Finally, the following rules define
    introduction reasoning on the Boolean propositional
@@ -795,6 +795,16 @@ interactive assert2eq_bfalse :
    sequent ['ext] { 'H >- "assert"{bnot{'e1}} }
 
 let assert2eq_bfalseT = assert2eq_bfalse
+
+interactive not_assert_intro {| intro [] |} :
+   [wf] sequent ['ext] { 'H >- 'b in bool } -->
+   [main] sequent ['ext] { 'H >- "assert"{bnot{'b}} } -->
+   sequent ['ext] { 'H >- not{"assert"{'b}} }
+
+interactive not_assert_elim {| elim [] |} 'H :
+   [wf] sequent [squash] { 'H; 'J >- 'b in bool } -->
+   [main] sequent ['ext] { 'H; 'J >- y: "assert"{bnot{'b}} } -->
+   sequent ['ext] { 'H; x: not{"assert"{'b}}; 'J >- 'C }
 
 interactive_rw reduce_band_same :
    ( 'e in bool ) -->

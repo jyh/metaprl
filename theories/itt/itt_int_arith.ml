@@ -1,4 +1,4 @@
-doc <:doc< 
+doc <:doc<
    @spelling{arithT tactic implementation}
   
    @begin[doc]
@@ -69,6 +69,7 @@ open Top_conversionals
 
 open Itt_equal
 open Itt_struct
+open Itt_logic
 open Itt_bool
 
 open Itt_int_base
@@ -94,7 +95,8 @@ let debug_int_arith =
 let debug_subgoals =
    create_debug (**)
       { debug_name = "subgoals";
-        debug_description = "Report subgoals observed with may be some additional info";
+        debug_description = "Report subgoals observed with may be some
+ additional info";
         debug_value = false
       }
 
@@ -313,6 +315,7 @@ let arithRelInConcl2HypT p =
    else if is_le_term t then leInConcl2HypT p
    else if is_ge_term t then geInConcl2HypT p
    else if is_equal_term t then eqInConcl2HypT t p
+   else if is_not_term t then dT 0 p
    else idT p
 
 interactive ge_addMono :

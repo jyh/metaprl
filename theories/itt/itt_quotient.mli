@@ -164,11 +164,11 @@ rule quotient_memberEquality 'H :
    sequent ['ext] { 'H >- 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y] }
 
 (*
- * H, a: quot x, y: A // E, J[x] >- s[a] = t[a] in T[a]
+ * H, a: quot x, y: A // E, J[a] >- s[a] = t[a] in T[a]
  * by quotientElimination v w z
  *
- * H, a: quot x, y: A // E, J[x] >- T[a] = T[a] in Ui
- * H, a: quot x, y: A // E, J[x], v: A, w: A, z: E[v, w] >- s[v] = t[w] in T[v]
+ * H, a: quot x, y: A // E, J[a] >- T[a] = T[a] in Ui
+ * H, a: quot x, y: A // E, J[a], v: A, w: A, z: E[v, w] >- s[v] = t[w] in T[v]
  *)
 rule quotientElimination1 'H 'J 'v 'w 'z :
    sequent [squash] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a] >- "type"{'T['a]} } -->

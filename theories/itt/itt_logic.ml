@@ -1364,9 +1364,10 @@ let assum_test i p =
    let goal = TermMan.nth_concl goal 1 in
    let assum = List.nth assums (i - 1) in
    let goal' = TermMan.nth_concl assum 1 in
-      try match_terms [] goal' goal; true with
-         RefineError _ ->
-            false
+      try let _ = match_terms [] goal' goal in
+         true 
+      with RefineError _ ->
+         false
 
 let auto_resource =
    auto_resource.resource_improve auto_resource (**)

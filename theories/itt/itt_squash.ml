@@ -64,7 +64,7 @@ let is_squash_sequent goal =
    let args = args_of_sequent goal in
       match dest_xlist args with
          [flag] ->
-            opname_of_term flag == squash_opname
+            Opname.eq (opname_of_term flag) squash_opname
        | _ ->
             false
 

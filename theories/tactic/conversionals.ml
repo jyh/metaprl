@@ -75,7 +75,7 @@ let tryC rw =
  * subterm.
  *)
 let subterm_count t =
-   if opname_of_term t == context_opname then
+   if Opname.eq (opname_of_term t) context_opname then
       subterm_count t - 1
    else
       subterm_count t

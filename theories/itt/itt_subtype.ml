@@ -176,7 +176,7 @@ let subtype_f tac subgoals _ =
    let rec aux sg = function
       p::t ->
          let goal = concl p in
-            if opname_of_term goal == subtype_opname then
+            if Opname.eq (opname_of_term goal) subtype_opname then
                match sg with
                   (_, _, tac)::sg' -> (tac p)::(aux sg' t)
                 | [] -> raise (RefineError ("subtypeT", StringError "subtype mismatch"))

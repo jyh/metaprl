@@ -80,6 +80,10 @@ interactive extraction_test :
 interactive foo:
    sequent { <H> >- lambda{x.'x +@ 0} }
 
+prim bug175:
+   sequent { <H>; <J> >- 'A } -->
+   sequent { <H> >- sequent { <J> >- 'A }} = it
+
 (*
  * -*-
  * Local Variables:

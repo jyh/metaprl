@@ -263,7 +263,7 @@ $$
    @line{@Mov{v'; v}}
    @line{@CopyArgs{@it{args}; {(@Register{v} :: @it{vargs})}; v; e[v]}}
    @end[array]}}
-@line{@xrewrite[copy2]{@CopyArgs{(); @it{vargs}; v; e[v]}; e[@ReverseArgs{@it{vargs}}]}}
+@line{@xrewrite2[copy2]{@CopyArgs{(); @it{vargs}; v; e[v]}; e[@ReverseArgs{@it{vargs}}]}}
 @end[array]
 $$
 @caption{Auxiliary terms for x86 code generation}

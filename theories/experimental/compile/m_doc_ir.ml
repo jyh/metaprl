@@ -256,8 +256,8 @@ expressions are explicitly named.
 
 @begin[figure,ir]
 $$
-@begin[array,rcll]
-@line{@it{binop} {::=} {@AddOp @pipe @SubOp @pipe @MulOp @pipe @DivOp} @hbox{Binary arithmetic}}
+@begin[array,"r@{}c@{}ll"]
+@line{@it{binop} {@space ::= @space} {@AddOp @pipe @SubOp @pipe @MulOp @pipe @DivOp} @hbox{Binary arithmetic}}
 @line{@it{relop} {::=} {@EqOp @pipe @NeqOp @pipe @LeOp @pipe @LtOp @pipe @GeOp @pipe @GtOp} @hbox{Binary relations}}
 @line{{l}        {::=} {@it{string}} @hbox{Function label}}
 
@@ -325,7 +325,6 @@ which is substituted for $v$ in expression $e_2[v]$.  The translation
 problem is expressed through the following rule, which states that a
 program $e$ is compilable if the program can be translated to an atom,
 returning the value as the result of the program.
-
 $$
 @begin[array,c]
 @line{{@Gamma @vdash @compilable{@IR{e; v; @Return{v}}}}}
@@ -337,7 +336,6 @@ $$
 For many AST expressions, the translation to IR is straightforward.  The following rules give a few
 representative examples.  Note that the @tt[add] and @tt[set] rules perform substitution, which is
 specified implicitly using higher-order abstract syntax.
-
 $$
 @begin[array,l]
 @line{@xrewrite[int]{@IR{i; v; e[v]}; e[@AtomInt[i]]}}
@@ -358,7 +356,6 @@ $$
 For conditionals, code duplication is avoided by wrapping the code
 after the conditional in a function, and calling the function at the
 tail of each branch of the conditional.
-
 $$
 @xrewrite2[if]{@IR{@If{e_1; e_2; e_3}; v; e_4[v]};
     @begin[array,t,l]
@@ -376,7 +373,6 @@ outermost in a function definition.  The post-processing phase
 produces two kinds of $@lambda$-abstractions, the $@AtomParam{v;
 e[v]}$ is used to label function parameters in recursive definitions,
 and the $@AtomFun{v; e[v]}$ term is used for anonymous functions.
-
 $$
 @begin[array,l]
 @line{@xrewrite2[letrec]{@IR{@LetRec{R; d; e_1}; v; e_2[v]};

@@ -346,8 +346,8 @@ For example, the instruction $@Inst2Mem[ADD]{v_1; @MemReg{v_2}; e}$ performs the
 
 @begin[figure,isa]
 $$
-@begin[array,rcll]
-@line{l       {::=}   @it{string}                                                   @hbox{Function labels}}
+@begin[array,"r@{}c@{}ll"]
+@line{l       {@space::=@space}   @it{string}                                                   @hbox{Function labels}}
 @line{@it{r}  {::=}   {@it{eax} {@pipe} @it{ebx} {@pipe} @it{ecx} {@pipe} @it{edx}} @hbox{Registers}}
 @line{{}      {@pipe} {@it{esi} {@pipe} @it{edi} {@pipe} @it{esp} {@pipe} @it{ebp}} {}}
 @line{@it{v}  {::=}   {r {@pipe} v_1, v_2, @ldots}                                  @hbox{Variables}}
@@ -425,7 +425,6 @@ the form $@Inst3Reg[inst3]{o_1; v_2; v_3; v_4; v_5; e}$.  For example, the instr
 $@Inst3Reg[DIV]{@Register{r_1}; @Register{r_2}; @Register{r_3}; r_4; r_5; e}$ performs the following
 operation, where $(r_2, r_3)$ is the 64-bit value $r_2 * 2^32 + r_3$.  The Intel specification
 requires that $r_4$ be the register $@it{eax}$, and $r_5$ the register $@it{edx}$.
-
 $$
 @begin[array,l]
 @line{{@xlet r_4 = (r_2, r_3) / r_1 @xin}}

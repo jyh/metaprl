@@ -41,7 +41,6 @@ There are several simple optimizations that can be performed on the generated as
 dead-code elimination and reserve coalescing.  Dead-code elimination has a simple specification: any
 instruction that defines a new binding variable can be eliminated if the variable is never used.
 The following rewrites capture this property.
-
 $$
 @begin[array,l]
 @line{@xrewrite[dmov]{@Mov{o; v; e}; e}}
@@ -59,7 +58,6 @@ collector if $i$ bytes of storage are not available.  In the current version of 
 reservations specify a constant number of bytes of storage, and these reservations can be propagated
 up the expression tree and coalesced.  The first step is an upward propagation of the reserve
 statement.  The following rewrites illustrate the process.
-
 $$
 @begin[array,l]
 @line{@xrewrite2[rmov]{@Mov{o; v; @AsmReserve{i; e[v]}}; @AsmReserve{i; @Mov{o; v; e[v]}}}}
@@ -68,12 +66,10 @@ $$
 $$
 
 Adjacent reservations can also be coalesced.
-
-$$@xrewrite[rres]{@AsmReserve{i_1; @AsmReserve{i_2; e}}; @AsmReserve{i_1 + i_2; e}}$$
+$$@xrewrite2[rres]{@AsmReserve{i_1; @AsmReserve{i_2; e}}; @AsmReserve{i_1 + i_2; e}}$$
 
 Two reservations at a conditional boundary can also be coalesced.  To ensure that both branches have
 a reserve, it is always legal to introduce a reservation for $0$ bytes of storage.
-
 $$
 @begin[array,l]
 @line{@xrewrite2[rif]{@Jcc[J]{@it{cc}; @AsmReserve{i_1; e_1}; @AsmReserve{i_2; e_2}}; @AsmReserve{{@it{max}(i_1; i_2)}; @Jcc[J]{@it{cc}; e_1; e_2}}}}

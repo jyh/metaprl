@@ -43,6 +43,7 @@ declare math_CloseVar{'v; 'a}
 declare math_CloseRec{'R; 'frame; 'tuple}
 declare math_CloseRecDefs{'d}
 declare math_CloseRecBody{'e}
+declare math_CloseSubscript{'frame; 'index; 'v}
 
 dform math_CloseVar_df1 : mode[tex] :: math_CloseVar{'v; 'e; 'a} =
    math_CloseVar{'v; 'a} slot{'e}
@@ -66,8 +67,11 @@ dform math_CloseRecDefs_df : mode[tex] :: math_CloseRecDefs{'d} =
 dform math_CloseRecBody_df : mode[tex] :: math_CloseRecBody{'e} =
    math_xin slot{'e}
    
+dform math_CloseSubscript_df : mode[tex] :: math_CloseSubscript{'a1; 'a2; 'v} =
+    math_xlet slot{'v} `"= " slot{'a1} `".[" slot{'a2} `"]" math_xin
+
 dform math_CloseSubscript_df : mode[tex] :: math_CloseSubscript{'a1; 'a2; 'v; 'e} =
-    math_xlet slot{'v} `"= " slot{'a1} `".[" slot{'a2} `"]" math_xin slot{'e}
+    math_CloseSubscript{'a1; 'a2; 'v} slot{'e}
 
 dform math_CloseFrame_df : mode[tex] :: math_CloseFrame{'frame; 'e} =
    math_bf["frame"] `"(" slot{'frame} `"," slot{'e} `")"
@@ -98,7 +102,6 @@ where $@frame$ is an additional parameter, initialized to the empty tuple $()$, 
 function definition.  Simultaneously, we replace every occurrence of the record variable $R$ with
 $@CloseRecVar{R; @frame}$, which represents the partial application of the record $R$ to the tuple
 $@frame$.
-
 $$
 @xrewrite2[frame]{@LetRec{R; d[R]; e[R]};
    @CloseRec{R; @frame; ();
@@ -110,13 +113,11 @@ The second part of closure conversion does the closure operation using two opera
 suppose we have some expression $e$ with a free variable $v$.  We can abstract this variable using a
 call-by-name function application as the expression $@CloseVar{v; e; v}$, which reduces to $e$ by
 simple $@beta$-reduction.  
-
 $$@xrewrite[abs]{e[v]; @CloseVar{v; e[v]; v}}$$
 
 By selectively applying this rule, we can quantify variables that occur free in the
 function definitions $d$ in a term $@CloseRec{R; @frame; @it{tuple}; d; e}$.  The main closure
 operation is the addition of the abstracted variable to the frame, using the following rewrite.
-
 $$
 @xrewrite2[close]{@begin[array,t,l]
                         @line{@CloseVar{v; a}}
@@ -133,7 +134,6 @@ $$
 
 Once all free variables have been added to the frame, the $@CloseRec{R; @frame; @it{tuple}; d; e}$
 is rewritten to use explicit tuple allocation.
-
 $$
 @xrewrite2[alloc]{@begin[array,t,l]
 	          @line{@CloseRec{R; @frame; @it{tuple}}}
@@ -147,7 +147,6 @@ $$
 $$
 
 The final step of closure conversion is to propagate the subscript operations into the function bodies.
-
 $$
 @arraystretch{2}
 @begin[array,l]
@@ -155,7 +154,11 @@ $$
 @line{@xrewrite2[arg]{@CloseFrame{@frame; @FunDef{l; @AtomFun{v; {e[@frame; v]}}; {d[@frame]}}};
    @FunDef{l; @AtomFun{@frame; @AtomFun{v; {e[@frame; v]}}}; @CloseFrame{@frame; {d[@frame]}}}}}
 
-@line{@xrewrite2[sub]{@CloseSubscript{a_1; a_2; v_1; @FunDef{l; @AtomFun{v_2; {e[v_1; v_2]}}; {d[v_1]}}};
+@line{@xrewrite2[sub]{
+   @begin[array,t,l]
+   @line{@CloseSubscript{a_1; a_2; v_1}}
+   @line{@FunDef{l; @AtomFun{v_2; {e[v_1; v_2]}}; {d[v_1]}}}
+   @end[array];
    @begin[array,t,l]
    @line{@FunDef{l; @AtomFun{v_2; @LetSubscript{a_1; a_2; v_1; {e[v_1; v_2]}}}}}
    @line{@CloseSubscript{a_1; a_2; v_1; {d[v_1]}}}

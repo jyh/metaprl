@@ -173,7 +173,6 @@ a variable.  The following two rewrites are representative examples.  Note that 
 the variable $v$ are replaced with $@SpillRegister{v; s}$, potentially generating operands like
 $@MemRegOff{@SpillRegister{v; s}; i}$.  These kinds of operands are rewritten at the end of
 spill-code generation to their original form, e.g. $@MemRegOff{v; i}$.
-
 $$
 @begin[array,l]
 @line{@xrewrite2["smov"]{@Mov{o_r; v; e[v]};
@@ -196,12 +195,10 @@ any program that contains an occurrence of an operand $@SpillRegister{v_1; s}$, 
 a new program that fetches the spill into a new register $v_2$ and uses the new spill operand
 $@SpillRegister{v_2; s}$ in the remainder of the program.  This rewrite is selectively applied
 before any instruction that uses an operand $@SpillRegister{v_1; s}$.
-
 $$@xrewrite2[split]{e[@SpillRegister{v_1; s}]; @Spill[get]{@SpillRegister{v_1; s}; v_2; e[@SpillRegister{v_2; s}]}}$$
 
 In the third and final phase, when the register allocator determines that a variable should be
 spilled, the $@SpillRegister{v; s}$ operands are selectively eliminated with the following rewrite.
-
 $$@xrewrite[spill]{@SpillRegister{v; s}; @SpillMemory{s}}$$
 
 @docoff

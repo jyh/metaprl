@@ -47,7 +47,6 @@ example, an expression $e$ is dead if no program execution ever reaches expressi
 frequent approximation is based on scoping: a let-expression $@LetAtom{a; v; e}$ is dead if $v$ is
 not free in $e$.  This kind of dead-code elimination can be specified with the following
 set of rewrites.
-
 $$
 @begin[array,l]
 @line{@xrewrite[datom]{@LetAtom{a; v; e}; e}}
@@ -77,7 +76,6 @@ only constant values, the expression may be computed at compile time.  The follo
 captures the arithmetic part of this optimization, where $@semleft @it{op} @semright$ is the
 interpretation of the arithmetic operator in the meta-language.  Relations and conditionals can be
 folded in a similar fashion.
-
 $$
 @begin[array,l]
 @line{@xrewrite[binop]{@AtomBinop{@it{binop}; @AtomInt[i]; @AtomInt[j]}; {@semleft @it{op} @semright(i, j)}}}
@@ -92,7 +90,6 @@ set provided by the target architecture (our implementation, described in Sectio
 @refsection[m_doc_x86_codegen], uses 31-bit signed integers).
 
 For simple constants $a$, it is usually more efficient to inline the $@LetAtom{a; v; e[v]}$ expression as well.
-
 $$
 @begin[array,l]
 @line{@xrewrite[cint]{@LetAtom{@AtomInt[i]; v; e[v]}; e[@AtomInt[i]]}}

@@ -169,7 +169,6 @@ operator-name (like ``sum''), which is a unique name identifying the
 kind of term; 2) a list of parameters representing constant values; and
 3) a set of subterms with possible variable bindings.  We use the
 following syntax to describe terms:
-
 $$
 @underbrace{@it[opname]; @it{operator@space name}}
 @underbrace{{[p_1; @cdots; p_n]}; @it{parameters}}
@@ -202,7 +201,6 @@ which specifies the simultaneous, capture-avoiding substitution of
 terms $t_1, @ldots, t_n$ for $v_1, @ldots, v_n$ in the term matched by
 $v$.  For example, the rule for $@beta$-reduction is specified with
 the following rewrite.
-
 $$
    @xrewrite[beta]{{(@lambda x. v_1[x])@space v_2}; {v_1[v_2]}}
 $$
@@ -218,7 +216,6 @@ the redex can be replaced with the contractum, and vice-versa.
 Rewrites that are expressed with second-order notation are strictly
 more expressive than those that use the traditional substitution
 notation.  The following rewrite is valid in second-order notation.
-
 $$
    @xrewrite[const]{{(@lambda x. v[])@space 1}; {(@lambda x. v[])@space 2}}
 $$

@@ -65,7 +65,6 @@ tail-calls, and all occurrences of $@LetApply{a_1; a_2; v; e}$ and $@Return{a}$ 
 main objective in CPS conversion is to pass the result of the computation to a continuation
 function.  We state this formally as the following inference rule, which states that a program $e$
 is compilable if for all functions $@cont$, the program $@CPS{@cont; e}$ is compilable.
-
 $$
 @begin[array,c]
 @line{{@Gamma, @cont @colon @it{exp} @vdash @compilable{@CPS{@cont; e}}}}
@@ -96,7 +95,6 @@ e}}$ with the continuation-passing version $@LetRec{R; @FunDef{g; @AtomFun{v; @C
 
 For many expressions, CPS conversion is a straightforward mapping of the CPS translation, as shown
 by the following five rules.
-
 $$
 @arraystretch{2}
 @begin[array,l]
@@ -119,7 +117,6 @@ the term $@CPSFunVar{f}$, which represents the partial application of the functi
 This step is performed in two parts: first the @misspelled{@em{letrec}} rule replaces all
 occurrences of the record variable $R$ with the term $@CPSRecordVar{R}$, and then the
 @misspelled{@em{letfun}} rule replaces each function variable $f$ with the term $@CPSFunVar{f}$.
-
 $$
 @arraystretch{2}
 @begin[array,l]
@@ -136,7 +133,6 @@ $$
 Non-tail-call function applications must also be converted to continuation passing form, as shown in
 the @em{apply} rule, where the expression @em{after} the function call is wrapped in a continuation
 function and passed as a continuation argument.
-
 $$
 @begin[array,l]
 @line{@xrewrite2[apply]{@CPS{@cont; @LetApply{@CPSFunVar{v_1}; a; v_2; e[v_2]}};
@@ -150,7 +146,6 @@ $$
 In the final phase of CPS conversion, we can replace return statements with a call to the
 continuation.  For tail-calls, we replace the partial application of the function $@CPSFunVar{f}$
 with an application to the continuation.
-
 $$
 @begin[array,l]
 @line{@xrewrite[return]{@CPS{@cont; @Return{a}}; @TailCall{@cont; a}}}

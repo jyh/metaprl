@@ -313,6 +313,7 @@ topval equalTypeT : term -> term -> tactic
 
 topval univTypeT : term -> tactic
 topval univAssumT : int -> tactic
+topval cumulativityT : term -> tactic
 
 (*
  * -*-

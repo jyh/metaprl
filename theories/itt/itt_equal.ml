@@ -329,6 +329,19 @@ prim universeFormation 'H univ[j:l] :
    univ[j:l]
 
 (*
+ * H >- x = x in Ui
+ * by universeCumulativity
+ *
+ * H >- x = x in Uj
+ * H >- cumulativity(j, i)
+ *)
+prim universeCumulativity 'H univ[j:l] :
+   sequent ['ext] { 'H >- cumulativity[j:l, i:l] } -->
+   sequent ['ext] { 'H >- 'x = 'y in univ[j:l] } -->
+   sequent ['ext] { 'H >- 'x = 'y in univ[i:l] } =
+   it
+
+(*
  * Squash from any.
  *)
 prim squashFromAny 'H 'ext :
@@ -688,6 +701,14 @@ let univTypeT t p =
 let univAssumT i p =
    let j, k = hyp_indices p i in
       universeAssumType j k p
+
+(*
+ * Universe cumulativity.
+ *)
+let cumulativityT u p =
+   let i = hyp_count_addr p in
+      (universeCumulativity i u
+       thenLT [rw reduce_cumulativity 0 thenT trueIntro i; idT]) p
 
 (*
  * Typehood from truth.

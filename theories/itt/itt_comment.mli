@@ -230,8 +230,12 @@ declare math_group_power{'g; 'a; 'n}
 declare math_cycGroup{'g}
 declare math_cycSubg{'g; 'a}
 
+declare math_isInjective{'f; 'A; 'B}
+declare math_isSurjective{'f; 'A; 'B}
 declare math_isBijective{'f; 'A; 'B}
 declare math_groupHom{'A; 'B}
+declare math_groupMono{'A; 'B}
+declare math_groupEpi{'A; 'B}
 declare math_groupIso{'A; 'B}
 declare math_groupKer{'f; 'A; 'B}
 

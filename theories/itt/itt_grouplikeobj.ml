@@ -311,7 +311,7 @@ interactive monoid_is_semigrp :
 
 doc <:doc< 
    @begin[doc]
-   @modsection{Commutative operation}
+   @modsection{Commutative Operation}
    @modsubsection{Rewrites}
   
    @end[doc]

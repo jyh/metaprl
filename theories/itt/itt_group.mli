@@ -85,7 +85,11 @@ topval unfold_group : conv
 topval unfold_subgroup : conv
 topval unfold_isGroupHom : conv
 topval unfold_groupHom : conv
+topval unfold_isInjective : conv
+topval unfold_isSurjective : conv
 topval unfold_isBijective : conv
+topval unfold_groupMono : conv
+topval unfold_groupEpi : conv
 topval unfold_groupIso : conv
 topval unfold_groupKer : conv
 

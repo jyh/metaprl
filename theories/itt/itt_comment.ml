@@ -1252,8 +1252,12 @@ declare math_group_power{'g; 'a; 'n}
 declare math_cycGroup{'g}
 declare math_cycSubg{'g; 'a}
 
+declare math_isInjective{'f; 'A; 'B}
+declare math_isSurjective{'f; 'A; 'B}
 declare math_isBijective{'f; 'A; 'B}
 declare math_groupHom{'A; 'B}
+declare math_groupMono{'A; 'B}
+declare math_groupEpi{'A; 'B}
 declare math_groupIso{'A; 'B}
 declare math_groupKer{'f; 'A; 'B}
 
@@ -1403,6 +1407,22 @@ dform groupHom_df1 : mode[tex] :: math_groupHom{'A; 'B} =
    slot{'B}
    izone `")" ezone
 
+dform math_isInjective_df1 : mode[tex] :: math_isInjective{'f; 'A; 'B} =
+   'f
+   izone `"\\colon " ezone
+   'A
+   izone `"\\rightarrow " ezone
+   'B
+   izone `"{\\it \\ is \\  injective}" ezone
+
+dform math_isSurjective_df1 : mode[tex] :: math_isSurjective{'f; 'A; 'B} =
+   'f
+   izone `"\\colon " ezone
+   'A
+   izone `"\\rightarrow " ezone
+   'B
+   izone `"{\\it \\ is \\  surjective}" ezone
+
 dform math_isBijective_df1 : mode[tex] :: math_isBijective{'f; 'A; 'B} =
    'f
    izone `"\\colon " ezone
@@ -1410,6 +1430,20 @@ dform math_isBijective_df1 : mode[tex] :: math_isBijective{'f; 'A; 'B} =
    izone `"\\rightarrow " ezone
    'B
    izone `"{\\it \\ is \\  bijective}" ezone
+
+dform groupMono_df1 : mode[tex] :: math_groupMono{'A; 'B} =
+   izone `"{\\it Group\\_monomorphism}(" ezone
+   slot{'A}
+   izone `"," ezone
+   slot{'B}
+   izone `")" ezone
+
+dform groupEpi_df1 : mode[tex] :: math_groupEpi{'A; 'B} =
+   izone `"{\\it Group\\_epimorphism}(" ezone
+   slot{'A}
+   izone `"," ezone
+   slot{'B}
+   izone `")" ezone
 
 dform groupIso_df1 : mode[tex] :: math_groupIso{'A; 'B} =
    izone `"{\\it Group\\_isomorphism}(" ezone
@@ -1503,8 +1537,20 @@ dform cycSubg_df : except_mode[tex] :: math_cycSubg{'g; 'a} =
 dform groupHom_df : except_mode[tex] :: math_groupHom{'A; 'B} =
    `"Group_homomorphism(" slot{'A} `"; " slot{'B}  `")"
 
+dform isInjective_df : except_mode[tex] :: math_isInjective{'f; 'A; 'B} =
+   `"(" slot{'f} `":" slot{'A} " " rightarrow " " slot{'B}  `") is injective"
+
+dform isSurjective_df : except_mode[tex] :: math_isSurjective{'f; 'A; 'B} =
+   `"(" slot{'f} `":" slot{'A} " " rightarrow " " slot{'B}  `") is surjective"
+
 dform isBijective_df : except_mode[tex] :: math_isBijective{'f; 'A; 'B} =
    `"(" slot{'f} `":" slot{'A} " " rightarrow " " slot{'B}  `") is bijective"
+
+dform groupMono_df : except_mode[tex] :: math_groupMono{'A; 'B} =
+   `"Group_monomorphism(" slot{'A} `"; " slot{'B}  `")"
+
+dform groupEpi_df : except_mode[tex] :: math_groupEpi{'A; 'B} =
+   `"Group_epimorphism(" slot{'A} `"; " slot{'B}  `")"
 
 dform groupIso_df : except_mode[tex] :: math_groupIso{'A; 'B} =
    `"Group_isomorphism(" slot{'A} `"; " slot{'B}  `")"

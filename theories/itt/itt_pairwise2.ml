@@ -19,9 +19,6 @@ open Itt_struct
 open Itt_struct2
 (*! @docoff *)
 
-
-
-
 interactive supertype 'H 'B:  (* Can't prove it because of the BUG #3.14 *)
    sequent  { <H>; x:'A; <J['x]> >- 'A subtype 'B} -->
    sequent  { <H>; x:'B; <J['x]> >- 'T['x]} -->

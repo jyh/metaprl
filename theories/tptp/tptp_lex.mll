@@ -3,7 +3,7 @@
  *)
 {
 open Printf
-open Nl_debug
+open Mp_debug
 
 open Tptp_parse
 }

@@ -1,7 +1,13 @@
-(*
- * Collection.
+(*!
+ * @begin[doc]
+ * @theory[Itt_collection]
+ * The @tt{Itt_cillection} module formalized the type of indexed collections.
+ * See @cite[Nog02a] for more information.
+ * @end[doc] 
  *
  * ----------------------------------------------------------------
+ *
+ * @begin[license]
  *
  * This file is part of MetaPRL, a modular, higher order
  * logical framework that provides a logical programming
@@ -27,9 +33,16 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
- * Authors: Alexei Kopylov <kopylov@cs.cornell.edu>
- *          Aleksey Nogin <nogin@cs.cornell.edu>
+ * Authors: Alexei Kopylov @email{kopylov@cs.cornell.edu}
+ *          Aleksey Nogin @email{nogin@cs.cornell.edu}
  *
+ * @end[license]
+ *)
+
+(*!
+ * @begin[doc]
+ * @parents
+ * @end[doc]
  *)
 
 include Itt_bool
@@ -38,6 +51,8 @@ include Itt_fun
 include Itt_esquash
 include Itt_quotient
 include Itt_logic
+
+(*! @docoff *)
 
 open Itt_struct
 open Itt_squash
@@ -65,18 +80,12 @@ open Typeinf
 open Base_auto_tactic
 open Base_dtactic
 
-(*********************************************************)
-(*                                                       *)
-(*                      COLLECTIONS                      *)
-(*                                                       *)
-(*********************************************************)
-
-
-(********************** Definitions **********************)
-
-
-(***===--- Basic definitions  ---===***)
-
+(*!
+ * @begin[doc]
+ * @rules
+ * @thysubsection{Basic definitions}
+ * @end[doc]
+ *)
 
 (*--- col ---*)
 
@@ -212,7 +221,7 @@ interactive col_type_wf {| intro [intro_univ_arg] |} 'H univ[l:l] :
    sequent['ext]   {'H >- "type"{col_type{'C;'T}}}
 
 
-(***===--- basic operations ---===***)
+(*! @doc{@thysubsection{Basic operations}} *)
 
 (*--- singleton ---*)
 
@@ -262,7 +271,7 @@ interactive member_union_elim {| elim [ThinOption thinT] |} 'H 'J:
    sequent['ext] {'H; u:col_member{union{'X;x.'Y['x]};'y}; 'J >- squash{'Z} }
 
 
-(***===--- other operations ---===***)
+(*! @doc{@thysubsection{Other operations}} *)
 
 (*--- col_filter ---*)
 
@@ -468,6 +477,8 @@ interactive singleton_if  'H univ[l:l] :
                                        ifthenelse{'b; singleton{'x}; singleton{'y}} }}
 
 *)
+
+(*! @docoff *)
 
 (********************** Tactics *********************)
 

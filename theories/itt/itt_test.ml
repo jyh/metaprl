@@ -4,6 +4,9 @@
 
 include Itt_theory
 
+open Printf
+open Debug
+
 open Refiner.Refiner.Refine
 
 open Resource
@@ -45,7 +48,7 @@ let resources =
      ref_subtype = sub_resource.resource_extract sub_resource
    }
 
-let goal = { mseq_hyps = []; mseq_goal = << sequent { 'H >- fact{40} = 0 in int } >> }
+let goal = { mseq_hyps = []; mseq_goal = << sequent { 'H >- fact{60} = 0 in int } >> }
 
 let cache = Tactic_cache.extract (cache_resource.resource_extract cache_resource)
 
@@ -58,11 +61,22 @@ let arg =
       resources
 
 let test () =
-   let subgoals, ext = Tactic_type.refine (rw (repeatC (higherC redexC)) 0) arg in
-      ()
+   let subgoals, ext = Tactic_type.refine (timingT (rw (repeatC (higherC redexC)) 0)) arg in
+      match subgoals with
+         [subgoal] ->
+            Simple_print.print_simple_term (Sequent.goal subgoal);
+            eflush stdout
+       | [] ->
+            eprintf "No subgoals%t" eflush
+       | _ ->
+            eprintf "Too many subgoals%t" eflush
+		
 
 (*
  * $Log$
+ * Revision 1.2  1998/06/17 15:46:02  jyh
+ * Optimizing compiler.
+ *
  * Revision 1.1  1998/06/16 16:26:11  jyh
  * Added itt_test.
  *

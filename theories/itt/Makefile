@@ -46,14 +46,13 @@ PFILES := test
 CMXDEPS =\
 	$(CAMLLIB)/unix.cmxa\
         $(CAMLLIB)/nums.cmxa\
-	$(ROOT)/lib/clib.cmxa\
 	$(ROOT)/lib/util.cmxa\
 	$(ROOT)/lib/refiner.cmxa\
 	$(ROOT)/lib/library.cmxa\
 	$(ROOT)/theories/tactic/tactics.cmxa\
 	$(ROOT)/theories/ocaml/ocaml_df.cmxa\
 	$(ROOT)/theories/base/base.cmxa\
-	nl.cmxa
+	itt.cmxa
 
 CMXLIBS =\
 	$(CMXDEPS)
@@ -61,7 +60,6 @@ CMXLIBS =\
 CMADEPS =\
 	$(CAMLLIB)/unix.cma\
         $(CAMLLIB)/nums.cma\
-	$(ROOT)/lib/clib.cma\
 	$(ROOT)/lib/util.cma\
 	$(ROOT)/lib/refiner.cma\
 	$(ROOT)/lib/library.cma\
@@ -100,7 +98,7 @@ $(TEST).run: $(CMOBJS)
 
 $(TEST).opt: $(CMXOBJS)
 	rm -f $@
-	$(OCAMLOPT) -ccopt -p -o $@ -custom -linkall $(CMXOBJS) $(CCLIBS)
+	$(OCAMLOPT) -o $@ -linkall $(CMXOBJS) $(CCLIBS)
 
 clean::
 	del -f *.p4* *.pp*

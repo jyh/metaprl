@@ -11,6 +11,8 @@ OCAMLDEPFLAGS := -prl
 
 # Library files
 MPFILES := \
+   fir_ty \
+   fir_int_set \
    fir_exp \
    fir_int \
    fir_test

@@ -137,7 +137,7 @@ $(addsuffix .ml, $(BENCH_FILES)): $(GEN)
 $(addsuffix .mli, $(BENCH_FILES)):
    touch $(addsuffix .mli, $(BENCH_FILES))
 
-OCamlGeneratedFiles($(addsuffix .mli, $(BENCH_FILES)) $(addsuffix .ml, $(BENCH_FILES)))
+LocalOCamlGeneratedFiles($(addsuffix .mli, $(BENCH_FILES)) $(addsuffix .ml, $(BENCH_FILES)))
 
 clean:
     $(CLEAN) $(GEN) $(addsuffix .ml, $(BENCH_FILES)) $(addsuffix .mli, $(BENCH_FILES))

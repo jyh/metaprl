@@ -1,5 +1,8 @@
 include Czf_itt_group
 include Czf_itt_cyclic_subgroup
+include Czf_itt_subgroup
+include Czf_itt_subset
+include Itt_logic
 
 open Printf
 open Mp_debug
@@ -24,4 +27,9 @@ open Var
 open Base_dtactic
 open Base_auto_tactic
 
-declare cyclic_group{elem_in_G}
+declare cyclic_group{'a}
+
+rewrite  unfold_cyclic_group : cyclic_group{'a} <-->
+   cyclic_subgroup{'a}
+
+topval fold_cyclic_group : conv

@@ -17,6 +17,7 @@ declare Prop
 declare Set
 declare "type"[i:l]
 declare of_some_sort{'P}    (* 'P has some sort *)
+declare is_sort{'s}  (* 's is some sort*)
 declare prop_set{'s} (* type 's, is sort Prop or sort Set *)
 declare member{'t;'T} (* term 't has a type 'T*)
 (*
@@ -126,6 +127,9 @@ dform type_df : except_mode[src] :: "type"[i:l] = `"Type(" slot[i:l] `")"
 dform of_some_sort_df : except_mode[src] :: of_some_sort{'P} =
    slot{'P} space `"is of some sort"
 
+dform is_sort_df : except_mode[src] :: is_sort{'P} =
+   `"is_sort{" slot{'P} `"}"
+
 dform prop_set_df : except_mode[src] :: prop_set{'s} =
    slot{'s} space `"is" space slot{Set} space `"or" space slot{Prop}
 
@@ -178,17 +182,17 @@ prim ax_set {| intro [] |} :
 prim ax_type {| intro [] |} :
    sequent { <H> >- member{"type"[i:l];"type"[i':l]}  } = it
 
-(* Prop is a sort *)
+(* if P:Prop then P is of some sort *)
 prim prop_a_sort {| intro [] |} :
    sequent { <H> >- member{'P;Prop} } -->
    sequent { <H> >- of_some_sort{'P} } = it
 
-(* Set is a sort *)
+(* if P:Set then P is of some sort *)
 prim set_a_sort {| intro [] |} :
    sequent { <H> >- member{'P;Set} } -->
    sequent { <H> >- of_some_sort{'P} } = it
 
-(* Type[i] is a sort *)
+(* if P:Type(i) then P is of some sort *)
 prim type_a_sort {| intro [] |} "type"[i:l] :
    sequent { <H> >- member{'P;"type"[i:l]} } -->
    sequent { <H> >- of_some_sort{'P} } = it
@@ -201,6 +205,18 @@ interactive setHasSort {| intro [] |} :
 
 interactive typeHasSort {| intro [] |} :
    sequent { <H> >- of_some_sort{"type"[i:l]} }
+
+(* Set is a sort *)
+prim set_is_sort {| intro [] |} :
+	sequent { <H> >- is_sort{Set} } = it
+
+(* Prop is a sort *)
+prim prop_is_sort {| intro [] |} :
+	sequent { <H> >- is_sort{Prop} } = it
+
+(* Type[i] is a sort *)
+prim type_is_sort {| intro [] |} :
+	sequent { <H> >- is_sort{"type"[i:l]} } = it
 
 (****************************************************
 * Tentative axioms stating that type Prop (Set)
@@ -253,7 +269,7 @@ prim prod_types "type"[i:l] "type"[j:l] :
 
 prim lam {| intro [] |} 's :
    sequent { <H> >- member{ (x:'T -> 'U['x]); 's }  } -->
-   sequent { <H> >- of_some_sort{'s }  } -->
+   sequent { <H> >- is_sort{'s }  } -->
    sequent { <H>; x:'T >- member{ 't['x]; 'U['x] }  } -->
    sequent { <H> >- member{ lambda{'T;x.'t['x]}; (x:'T -> 'U['x]) } } = it
 

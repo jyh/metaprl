@@ -166,8 +166,6 @@ rule ind_ConstConstrs 'Hc :
  *  in the next part the conditions for the W-Ind rule and the W-Ind rule are implemented  *
  *******************************************************************************************)
 
-declare of_some_sort (* { <T> } *) (* any element of T is a type of some sort (Set, Prop or Type[i]) *)
-
 (* declaration of 'arity of sort' notion *)
 declare arity_of_some_sort_m (* (<Hi> >- <S>)*) (* Hi={I1:A1,...,Ik:Ak}, S={s1,...,sk},
                                             Aj is an arity of sort sj, j=1,...,k*)
@@ -320,7 +318,7 @@ rule of_some_sort_m_base :
    sequent { <H> >- sequent [of_some_sort_m] { >- of_some_sort_m } }
 
 rule of_some_sort_m_step :
-   sequent { <H> >- of_some_sort{'T2} } -->
+   sequent { <H> >- is_sort{'T2} } -->
 	sequent { <H> >- sequent [of_some_sort_m] { <T1> >- of_some_sort_m } } -->
 	sequent { <H> >- sequent [of_some_sort_m] { <T1>; t:'T2<|H|> >- of_some_sort_m } }
 

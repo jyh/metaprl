@@ -17,6 +17,7 @@ declare "type"[i:l]
 declare Prop
 declare Set
 declare of_some_sort{'P}    (* 'P has some sort *)
+declare is_sort{'s}
 declare prop_set{'s} (* type 's, is sort Prop or sort Set *)
 declare member{'t;'T} (* term 't has a type 'T*)
 (*
@@ -86,20 +87,33 @@ rule ax_set :
 rule ax_type :
    sequent { <H> >- member{"type"[i:l];"type"[i':l]}  }
 
-(* Prop is a sort *)
+(* if P:Prop then P is of some sort *)
 rule prop_a_sort:
    sequent { <H> >- member{'P;Prop} } -->
    sequent { <H> >- of_some_sort{'P} }
 
-(* Set is a sort *)
+(* if P:Set then P is of some sort *)
 rule set_a_sort:
    sequent { <H> >- member{'P;Set} } -->
    sequent { <H> >- of_some_sort{'P} }
 
-(* Type[i] is a sort *)
+(* if P:Type(i) then P is of some sort *)
 rule type_a_sort "type"[i:l]:
    sequent { <H> >- member{'P;"type"[i:l]} } -->
    sequent { <H> >- of_some_sort{'P} }
+
+(* Set is a sort *)
+rule set_is_sort :
+	sequent { <H> >- is_sort{Set} }
+
+(* Prop is a sort *)
+rule prop_is_sort :
+	sequent { <H> >- is_sort{Prop} }
+
+(* Type[i] is a sort *)
+rule type_is_sort :
+	sequent { <H> >- is_sort{"type"[i:l]} }
+
 
 (****************************************************
 * Tentative axioms stating that type Prop (Set)
@@ -152,7 +166,7 @@ rule prod_types "type"[i:l] "type"[j:l] :
 
 rule lam 's:
    sequent { <H> >- member{ (x:'T -> 'U['x]); 's }  } -->
-   sequent { <H> >- of_some_sort{'s }  } -->
+   sequent { <H> >- is_sort{'s }  } -->
    sequent { <H>; x:'T >- member{ 't['x]; 'U['x] }  } -->
    sequent { <H> >- member{ lambda{'T;x.'t['x]}; (x:'T -> 'U['x]) } }
 

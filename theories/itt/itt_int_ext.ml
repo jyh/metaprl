@@ -352,6 +352,8 @@ let resource reduce += [
    <<number[i:n] *@ number[j:n]>>, reduce_mul;
    <<number[i:n] /@ number[j:n]>>, reduce_div;
    <<"rem"{number[i:n]; number[j:n]}>>, reduce_rem;
+	<<max{number[i:n]; number[j:n]}>>, unfold_max;
+	<<min{number[i:n]; number[j:n]}>>, unfold_min;
 ]
 
 doc <:doc<

@@ -53,6 +53,8 @@ doc <:doc< @docoff >>
 open Tactic_type.Tacticals
 open Var
 
+open Refiner.Refiner.Term
+open Refiner.Refiner.TermOp
 open Auto_tactic
 open Dtactic
 open Top_conversionals
@@ -105,6 +107,19 @@ interactive_rw reduce_ind_up {| reduce |} :
 interactive_rw reduce_ind_base {| reduce |} :
    (ind{0; 'base; k,l. 'up['k;'l]}) <-->
    'base
+
+let reduce_ind_numberC =
+   unfoldInd
+
+let resource reduce += [
+   <<ind{number[n:n]; 'base; k, l. 'up['k; 'l]}>>, reduce_ind_numberC;
+]
+
+let ind_term = << ind{'x; 'base; k, l. 'up['k; 'l]} >>
+let ind_opname = opname_of_term ind_term
+let is_ind_term = is_dep0_dep0_dep2_term ind_opname
+let dest_ind = dest_dep0_dep0_dep2_term ind_opname
+let mk_ind_term = mk_dep0_dep0_dep2_term ind_opname
 
 doc <:doc< @doc{@rules} >>
 

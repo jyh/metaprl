@@ -838,6 +838,10 @@ interactive_rw add_Id2_rw {| reduce; arith_unfold |} :
 
 let add_Id2C = add_Id2_rw
 
+let resource reduce += [
+	<<'a -@ 0>>, (unfold_sub thenC (addrC [1] reduce_minus));
+]
+
 interactive_rw add_Id3_rw :
    ( 'a in int ) -->
    'a <--> (0 +@ 'a)

@@ -340,6 +340,18 @@ interactive unique_inv1 {| intro [] |} 'H :
    sequent ['ext] { 'H >- equiv{car{'g}; 'R; op{'g; 's2; 's}; id{'g}} } -->
    sequent ['ext] { 'H >- equiv{car{'g}; 'R; 's2; inv{'g; 's}} }
 
+interactive unique_inv_elim1 {| elim [] |} 'H 'J :
+   sequent [squash] { 'H; x: equiv{car{'g}; 'R; op{'g; 's2; 's}; id{'g}}; 'J['x] >- isset{'s} } -->
+   sequent [squash] { 'H; x: equiv{car{'g}; 'R; op{'g; 's2; 's}; id{'g}}; 'J['x] >- isset{'s2} } -->
+   sequent [squash] { 'H; x: equiv{car{'g}; 'R; op{'g; 's2; 's}; id{'g}}; 'J['x] >- isset{'R} } -->
+   sequent [squash] { 'H; x: equiv{car{'g}; 'R; op{'g; 's2; 's}; id{'g}}; 'J['x] >- 'g IN label } -->
+   sequent ['ext] { 'H; x: equiv{car{'g}; 'R; op{'g; 's2; 's}; id{'g}}; 'J['x] >- group{'g} } -->
+   sequent ['ext] { 'H; x: equiv{car{'g}; 'R; op{'g; 's2; 's}; id{'g}}; 'J['x] >- equiv{car{'g}; 'R} } -->
+   sequent ['ext] { 'H; x: equiv{car{'g}; 'R; op{'g; 's2; 's}; id{'g}}; 'J['x] >- mem{'s; car{'g}} } -->
+   sequent ['ext] { 'H; x: equiv{car{'g}; 'R; op{'g; 's2; 's}; id{'g}}; 'J['x] >- mem{'s2; car{'g}} } -->
+   sequent ['ext] { 'H; x: equiv{car{'g}; 'R; op{'g; 's2; 's}; id{'g}}; 'J['x]; y: equiv{car{'g}; 'R; 's2; inv{'g; 's}} >- 'C['x] } -->
+   sequent ['ext] { 'H; x: equiv{car{'g}; 'R; op{'g; 's2; 's}; id{'g}}; 'J['x] >- 'C['x] }
+
 interactive unique_inv2 {| intro [] |} 'H :
    sequent [squash] { 'H >- isset{'s} } -->
    sequent [squash] { 'H >- isset{'s2} } -->

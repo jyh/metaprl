@@ -59,6 +59,7 @@ MPFILES :=\
 	itt_prop_decide\
 	itt_fset\
 	itt_pointwise2\
+	itt_antiquotient\
 	itt_theory\
 	itt_collection\
 	ctt_markov\

@@ -360,7 +360,7 @@ let add_rat_Assoc2C = add_rat_Assoc2_rw
 doc <:doc<
    @begin[doc]
 
-   @rat{0; 1} is neutral element for @add_rat{Perv!nil;Perv!nil} in @rationals
+   <<rat{0; 1}>> is neutral element for <<add_rat{Perv!nil;Perv!nil}>> in <<rationals>>.
 
 	@end[doc]
 >>

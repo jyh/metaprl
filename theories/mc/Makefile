@@ -6,7 +6,7 @@ ROOT := ../..
 
 include $(ROOT)/mk/preface
 
-INCLUDE := -I . -I ../itt -I ../tactic -I ../base -I ../ocaml
+INCLUDE := -I . -I ../itt -I ../tactic -I ../base -I ../ocaml -I ../phobos
 OCAMLDEPFLAGS := -prl
 
 # Library files

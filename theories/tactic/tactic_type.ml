@@ -748,19 +748,16 @@ let make_subgoal
  * Construct polymorphic tactic.
  *)
 let tactic_of_rule rule (addrs, names) params arg =
-   let { ref_goal = goal; ref_sentinal = sentinal } = arg in
-   let _ =
-      if !debug_tactic then
-         eprintf "Collecting addresses%t" eflush
-   in
-   let rule = rule (addrs, names) params in
-   let _ =
-      if !debug_tactic then
-         eprintf "Starting refinement%t" eflush
-   in
-   let subgoals, ext = Refine.refine (get_sentinal sentinal) rule goal in
-      if !debug_tactic then
-         eprintf "tactic_of_rule done%t" eflush;
+   if !debug_tactic then begin
+      eprintf "Collecting addresses%t" eflush;
+      let rule = rule (addrs, names) params in
+      eprintf "Starting refinement%t" eflush;
+      let subgoals, ext = Refine.refine (get_sentinal arg.ref_sentinal) rule arg.ref_goal in
+      eprintf "tactic_of_rule done%t" eflush;
+      ThreadRefinerTacticals.create_value (List.map (make_subgoal arg) subgoals) (Extract (ext, List.length subgoals))
+   end else
+      let rule = rule (addrs, names) params in
+      let subgoals, ext = Refine.refine (get_sentinal arg.ref_sentinal) rule arg.ref_goal in
       ThreadRefinerTacticals.create_value (List.map (make_subgoal arg) subgoals) (Extract (ext, List.length subgoals))
 
 (*

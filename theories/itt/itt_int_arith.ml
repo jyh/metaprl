@@ -295,8 +295,15 @@ interactive eq2pair_of_ineq :
    [main] sequent ['ext] { 'H >- 'b >= 'a } -->
    sequent ['ext] { 'H >- 'a = 'b in int }
 
-let eqInConcl2HypT =
-	thenLocalMT eq2pair_of_ineq geInConcl2HypT
+let eqInConcl2HypT t =
+	let (t,a,b)=dest_equal t in
+   if alpha_equal t <<int>> then
+   	if alpha_equal a b then
+      	idT
+		else
+			thenLocalMT eq2pair_of_ineq geInConcl2HypT
+   else
+   	idT
 
 let arithRelInConcl2HypT p =
    let g=Sequent.goal p in
@@ -305,7 +312,7 @@ let arithRelInConcl2HypT p =
    else if is_gt_term t then gtInConcl2HypT p
    else if is_le_term t then leInConcl2HypT p
    else if is_ge_term t then geInConcl2HypT p
-   else if is_equal_term t then eqInConcl2HypT p
+   else if is_equal_term t then eqInConcl2HypT t p
    else idT p
 
 interactive ge_addMono :
@@ -623,7 +630,7 @@ let mul_BubbleStepC tm =
                    (is_number_term b) then
                      mul_BubblePrimitiveC
                   else
-                     idC
+                     failC
          else
             if (is_number_term a) & (is_number_term s) then
 	       		reduceC
@@ -632,19 +639,19 @@ let mul_BubbleStepC tm =
                 	(is_number_term s) then
 	          		mul_CommutC
 	       		else
-	          		idC
+	          		failC
    else
       failC
 
 (* here we apply mul_BubbleStepC as many times as possible thus
    finally we have all mul subterms positioned in order
  *)
-let mul_BubbleSortC = repeatC (sweepDnC (termC mul_BubbleStepC))
+let mul_BubbleSortC = repeatC (higherC (termC mul_BubbleStepC))
 
 let inject_coefC t =
 	if not (is_add_term t) then
    	mul_Id3C thenC
-      (repeatC (sweepDnC mul_uni_AssocC)) thenC
+      (repeatC (higherC mul_uni_AssocC)) thenC
       (addrC [0] reduceC)
    else
    	failC
@@ -665,14 +672,14 @@ let inject_coef2C t =
          	();
       	let aC=if not (is_add_term a) then
       				addrC [0] (mul_Id3C thenC
-      								(repeatC (sweepDnC mul_uni_AssocC)) thenC
+      								(repeatC (higherC mul_uni_AssocC)) thenC
       								(addrC [0] reduceC))
        			 else
              		idC
       	in
       	let bC=if not (is_add_term b) then
       				addrC [1] (mul_Id3C thenC
-      								(repeatC (sweepDnC mul_uni_AssocC)) thenC
+      								(repeatC (higherC mul_uni_AssocC)) thenC
       								(addrC [0] reduceC))
        			 else
              		idC
@@ -734,12 +741,12 @@ let same_product_aux a b =
    if (is_mul_term a) & (is_mul_term b) then
       let (a1,a2)=dest_mul a in
       let (b1,b2)=dest_mul b in
-      if (compare_terms a2 b2)=Equal then
+      if alpha_equal a2 b2 then
          (true, sum_same_products1C)
       else
-         (false, idC)
+         (false, failC)
    else
-	  	(false, idC)
+	  	(false, failC)
 
 let same_productC t =
    if (is_add_term t) then
@@ -750,15 +757,15 @@ let same_productC t =
          if same then
            (add_AssocC thenC (addrC [0] (conv thenC (addrC [0] reduceC))))
          else
-           idC
+           failC
       else
          let (same, conv)=same_product_aux a b in
          if same then
             conv thenC reduceC
          else
-            idC
+            failC
    else
-      idC
+      failC
 
 interactive_rw add_BubblePrimitive_rw :
    ( 'a in int ) -->
@@ -832,8 +839,8 @@ let add_BubbleStepC tm =
 (* here we apply add_BubbleStepC as many times as possible thus
    finally we have all sum subterms positioned in order
  *)
-let add_BubbleSortC = (repeatC (sweepDnC (termC add_BubbleStepC))) thenC
-                      (repeatC (sweepDnC (termC same_productC)))
+let add_BubbleSortC = (repeatC (higherC (termC add_BubbleStepC))) thenC
+                      (repeatC (higherC (termC same_productC)))
 
 interactive_rw sub_elim_rw :
    ( 'a in int ) -->
@@ -850,7 +857,7 @@ let add_normalizeC = (* (repeatC (higherC add_Assoc2C)) thenC *)
 
 let open_parenthesesC = repeatC (higherC mul_add_DistribC)
 
-let normalizeC = (repeatC (sweepDnC sub_elimC)) thenC
+let normalizeC = (repeatC (higherC sub_elimC)) thenC
                  reduceC thenC
                  (* open_parenthesesC thenC *)
                  mul_normalizeC thenC

@@ -60,13 +60,13 @@ doc <:doc<
    @begin[doc]
    @resources
 
-   @bf{The @Comment!resource[cps_resource]}
+   @bf{The @Comment!resource[cps] resource}
 
    The @tt[cps] resource provides a generic method for
    defining @emph{CPS transformation}.  The @conv[cpsC] conversion
    can be used to apply this evaluator.
 
-   The implementation of the @tt[cps_resource] and the @tt[cpsC]
+   The implementation of the @tt[cps] resource and the @tt[cpsC]
    conversion rely on tables to store the shape of redices, together with the
    conversions for the reduction.
 

@@ -249,7 +249,7 @@ interactive unitring_right_id {| intro [AutoMustComplete; intro_typeinf <<'R>>] 
 doc <:doc<
    @begin[doc]
    @modsection{Units}
-   An element << 'x >> of the unit ring << 'R >> is a @tt{unit} if there exists an element << 'a >> such that << 'a *['R] 'x = 'R^"1" in 'R^car >>. This element << 'a >> is uniquely determined by << 'x >> and is called the multiplicative inverse of << 'x >>.
+   An element << 'x >> of the unit ring << 'R >> is a @tt{unit} if there exists an element << 'a >> such that << 'a *['R] 'x = 'R^"1" in 'R^car >> and << 'x *['R] 'a = 'R^"1" in 'R^car >> . This element << 'a >> is uniquely determined by << 'x >> and is called the multiplicative inverse of << 'x >>.
 
    @end[doc]
 >>

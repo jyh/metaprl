@@ -92,6 +92,7 @@ MPFILES :=\
 	itt_ring2\
         itt_unitring\
 	itt_field2\
+	itt_poly\
 	itt_order\
 	itt_example\
 	itt_rat\

@@ -1102,14 +1102,14 @@ let rec get_bounds_aux v key constr (l,u,rest) =
 
 let get_bounds v constrs = C.fold (get_bounds_aux v) constrs ([],[],[])
 
-
-let print_constrs constrs =
-	C.iter (fun k (tree,f) -> eprintf "%a@." AF.print f) constrs
-
 (*
 let print_constrs constrs =
-	eprintf "%i constraints@." (C.length constrs)
+	C.iter (fun k (tree,f) -> eprintf "%a@." AF.print f) constrs
 *)
+
+let print_constrs constrs =
+	eprintf "%i constraints@." (C.length constrs)
+
 
 let var_bounds (old_upper, old_lower) f v =
 	let c = AF.coef f (succ v) in
@@ -1177,7 +1177,7 @@ let rec omega pool pool2 constrs =
 	let pairs = all_pairs l u in
 	if !debug_omega then
 		eprintf "generated %i pairs@." (List.length pairs);
-	let new_constrs = List.map (omega_aux v) pairs in
+	let new_constrs = List.rev_map (omega_aux v) pairs in
 	if !debug_omega then
 		eprintf "new constraints generated@.";
 	try

@@ -36,3 +36,7 @@ rule hypReplacementExt 'H 'B  :
 topval changeHypT : term -> int -> tactic
 
 topval replaceHypT : term -> int -> tactic
+
+topval replaceWithHypT : int -> int -> tactic
+
+topval replaceWithRevHypT : int -> int -> tactic

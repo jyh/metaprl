@@ -162,6 +162,12 @@ prim subtypeTypeLeft 'A :
    sequent { <H> >- "type"{'B} } =
    it
 
+interactive subtypeElimTypeRight 'H :
+	sequent { <H>; w: 'A subtype 'B; <J['w]> >- 'A Type }
+
+interactive subtypeElimTypeLeft 'H :
+	sequent { <H>; w: 'A subtype 'B; <J['w]> >- 'B Type }
+
 doc <:doc<
    @begin[doc]
    @modsubsection{Introduction}

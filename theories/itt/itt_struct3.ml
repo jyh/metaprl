@@ -7,9 +7,12 @@ extends Itt_pointwise
 open Lm_debug
 open Refiner.Refiner.RefineError
 
+open Tactic_type
 open Tactic_type.Tacticals
 
 open Itt_struct
+open Itt_ext_equal
+
 
 (*
  * Show that the file is loading.
@@ -55,3 +58,10 @@ let replaceHypT t i = funT (fun p ->
    with RefineError _ ->
         hypReplacementExt i t)
 
+let replaceWithHypT j i = funT (fun p ->
+   let s, t = dest_ext_equal (Sequent.nth_hyp p j) in
+	hypReplacementExt i t)
+
+let replaceWithRevHypT j i = funT (fun p ->
+   let s, t = dest_ext_equal (Sequent.nth_hyp p j) in
+	hypReplacementExt i s)

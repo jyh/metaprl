@@ -39,6 +39,9 @@ extends Itt_squash
 extends Itt_subtype
 extends Itt_logic
 
+open Refiner.Refiner.Term
+open Refiner.Refiner.TermOp
+
 open Itt_squash
 open Dtactic
 open Tactic_type.Tacticals
@@ -58,6 +61,12 @@ prim_rw type_def : "type"{'T} <--> ('T subtype 'T)
 define unfoldExtEqual : ext_equal{'A; 'B} <--> 'A subtype 'B & 'B subtype 'A
 
 dform extEqual_df : ext_equal{'A; 'B} =  'A `" =" sube `" " 'B
+
+let ext_equal_term = << ext_equal{'A; 'B} >>
+let ext_equal_opname = opname_of_term ext_equal_term
+let is_ext_equal_term = is_dep0_dep0_term ext_equal_opname
+let dest_ext_equal = dest_dep0_dep0_term ext_equal_opname
+let mk_ext_equal_term = mk_dep0_dep0_term ext_equal_opname
 
 interactive extEqualMember {|squash; intro[] |}:
    sequent{ <H> >- ext_equal{'A;'B}} -->

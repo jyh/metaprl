@@ -58,10 +58,7 @@ Terms -extend "M_ast" {
    declare SubscriptExpr{'e1; 'e2}
 
    // Assignment
-   declare AssignExpr{'e1; 'e2; 'e3}
-
-   // Sequencing
-//   declare SeqExpr{'e1; 'e2}
+   declare AssignExpr{'e1; 'e2; 'e3; 'e4}
 
    // Function arguments
    declare AstArgNil
@@ -157,7 +154,7 @@ Tokens -longest {
    PLUS = "+"                       {}
    RBRACK = "\\]"                   {}
    RPAREN = ")"                     {}
-//   SEMI = ";"                       {}
+   SEMI = ";"                       {}
    TIMES = "*"                      {}
 
    * COMMENT = "//[^\\n]*"          {}
@@ -171,7 +168,8 @@ Tokens -longest {
 // line have the same precendence.
 // This section is optional.
 
-%left prec_let
+%right prec_seq
+%right prec_let
 %left SEMI LET
 %left ID prec_atom
 %left ELSE
@@ -229,12 +227,8 @@ Grammar -start main {
                                     => SubscriptExpr{'e1; 'e2}
 
     // Assignments
-    | exp<'e1> LBRACK exp<'e2> RBRACK ASSIGN exp<'e3> %prec prec_let
-                                    => AssignExpr{'e1; 'e2; 'e3}
-
-    // Sequencing
-//    | exp<'e1> SEMI exp<'e2> %prec prec_let
-//                                    => SeqExpr{'e1; 'e2}
+    | exp<'e1> LBRACK exp<'e2> RBRACK ASSIGN exp<'e3> SEMI exp<'e4> %prec prec_let
+                                    => AssignExpr{'e1; 'e2; 'e3; 'e4}
 
     // Function application
     | exp<'f> LPAREN args<'args> RPAREN %prec prec_apply
@@ -250,7 +244,6 @@ Grammar -start main {
     // Non-recursive functions
     | LET fun<'fun> IN exp<'e2> %prec prec_let
                                     => NewFun{'fun; 'e2}
-
 
    tuple ::= exp<'e>                => AstAllocTupleCons{'e; AstAllocTupleNil{}}
     | exp<'e> COMMA tuple<'tuple>   => AstAllocTupleCons{'e; 'tuple}

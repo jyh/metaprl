@@ -302,6 +302,20 @@ prim_rw ir_subscript_expr {| ir |} :
 
 doc <:doc<
    @begin[doc]
+   Assignments.
+   They are *always* followed by an expression.
+   @end[doc]
+>>
+prim_rw ir_assign_expr {| ir |} :
+   IR{AssignExpr{'e1; 'e2; 'e3; 'e4}; v. 'e['v]}
+   <-->
+   IR{'e1; v1.
+   IR{'e2; v2.
+   IR{'e3; v3.
+   SetSubscript{'v1; 'v2; 'v3; IR{'e4; v. 'e['v]}}}}}
+
+doc <:doc<
+   @begin[doc]
    Some optimizations.
    @end[doc]
 >>

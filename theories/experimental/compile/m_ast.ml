@@ -89,7 +89,7 @@ declare FunLambdaExpr{v. 'e['v]}
 
 declare IfExpr{'e1; 'e2; 'e3}
 declare SubscriptExpr{'e1; 'e2}
-declare AssignExpr{'e1; 'e2; 'e3}
+declare AssignExpr{'e1; 'e2; 'e3; 'e4}
 declare ApplyExpr{'f; 'args}
 declare LetVarExpr{'e1; v. 'e2['v]}
 
@@ -135,16 +135,18 @@ declare AST{'e}
  *)
 
 (* Precedences *)
+prec prec_seq
+prec prec_comma
+prec prec_if
+prec prec_let
+prec prec_rel
 prec prec_add
 prec prec_mul
-prec prec_rel
-prec prec_let
 prec prec_fun
-prec prec_if
-prec prec_subscript
 prec prec_assign
-prec prec_comma
+prec prec_subscript
 
+prec prec_seq < prec_comma
 prec prec_comma < prec_if
 prec prec_if < prec_let
 prec prec_let < prec_rel
@@ -222,8 +224,8 @@ dform subscript_expr_df : parens :: "prec"[prec_subscript] :: SubscriptExpr{'e1;
    slot{'e1} `"[" slot{'e2} `"]"
 
 (* Assignments *)
-dform assign_expr_df : parens :: "prec"[prec_assign] :: AssignExpr{'e1; 'e2; 'e3} =
-   slot{'e1} `"[" slot{'e2} `"] <- " slot{'e3}
+dform assign_expr_df : parens :: "prec"[prec_assign] :: AssignExpr{'e1; 'e2; 'e3; 'e4} =
+   slot{'e1} `"[" slot{'e2} `"] <- " slot{'e3} `";" slot{'e4}
 
 (* Function application *)
 dform apply_expr_df : ApplyExpr{'e; 'args} =

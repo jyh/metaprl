@@ -153,6 +153,14 @@ interactive ext_test4 :
             t2
       >> } }
 
+interactive ext_test5 :
+   sequent { <H> >- compilable{.
+      <:ext<
+         let t = (1, 2, 3) in
+         t[1] <- t[2];
+         t
+      >> } }
+
 (*
  * -*-
  * Local Variables:

@@ -65,8 +65,7 @@ declare FunLambdaExpr{v. 'e['v]}
 
 declare IfExpr{'e1; 'e2; 'e3}
 declare SubscriptExpr{'e1; 'e2}
-declare AssignExpr{'e1; 'e2; 'e3}
-(*declare SeqExpr{'e1; 'e2}*)
+declare AssignExpr{'e1; 'e2; 'e3; 'e4}
 declare ApplyExpr{'f; 'args}
 declare LetVarExpr{'e1; v. 'e2['v]}
 

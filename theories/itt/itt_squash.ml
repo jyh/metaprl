@@ -1,6 +1,6 @@
 doc <:doc< 
    @begin[spelling]
-   squashT tac th unsquashed unsquash unsquashing unsquashT
+   squashT th unsquashed unsquash unsquashT
    @end[spelling]
   
    @begin[doc]
@@ -13,7 +13,7 @@ doc <:doc<
    That is <<squash{'A}>> means that $A$ is true, but we do not know its
    computational content.
    Consequentially,  the sequent
-   $$<<sequent{ <H>; x: 'A; <J> >- 'C}>>$$
+   $$<<sequent{ <H>; x: squash{'A}; <J> >- 'C}>>$$
    is true when $C$ is true (with the assumption that $A$ is true),
    but extract of $C$ does not depend on the witness of $A$.
    Note that $x$ in this sequent stands not for a witness for $A$,
@@ -24,29 +24,7 @@ doc <:doc<
    @emph{classical} reasoning under @tt[squash] without losing
    constructive content.
   
-   In addition to the @tt[squash] operator on types, the @MetaPRL includes
-   the meta-theory @tt[squash] operator that works on sequents.
-   Namely, sequents in the @MetaPRL implementation of the
-   @Nuprl type theory have two forms: one is the generic
-   form $<<sequent{ <H> >- 'T}>>$, where @i{ext} is a variable.  The variable
-   specifies that the subproof extract may be needed for the computational content
-   of the proof.
-  
-   The other form is $<<sequent{ <H> >- 'T}>>$, where @hrefterm[squash] is a
-   term defined in the @hrefmodule[Base_trivial]{} module.
-   The @tt[squash] term specifies that the extract of the proof of this
-   subgoal is @em{not} needed for the computational content of the whole proof.
-  
-   Typically, @tt[squash] sequents are used for well-formedness
-   goals (the computational content of well-formedness is never
-   used), but @tt[squash] sequents are also used in cases where
-   the computational content can be inferred.  Equality proofs
-   $a = b @in T$ are the canonical example: the computational content
-   of $a = b @in T$ is @emph{always} the term $@it$, and proofs
-   of equalities can always be squashed because the content can
-   be discovered later.
-  
-   The @tt{Itt_squash} module also defines a resource that can be used to
+   The @tt[Itt_squash] module also defines a resource that can be used to
    help prove ``squash'' stability---that is, to infer the proof
    of a proposition given an assumption that it is true.
   
@@ -311,11 +289,11 @@ doc <:doc<
    @resources
   
    The @Comment!resource[squash_resource] keeps 4 kind of tactics, as described by the
-   @tt[squash_info] type. The $@tt[SqUnsquash](T,@i[tac])$ is used when @i{tac i}
+   @tt[squash_info] type. The $@tt[SqUnsquash](T,@i[tac])$ is used when @i["tac i"]
    is capable turning @i{i}-th hypothesis from $@squash{T}$ into $T$.
    The $@tt[SqStable](T,t,@i[tac])$ variant is used when @i[tac] is capable
    of proving <<sequent{ <H> >- 't in 'T}>> from <<sequent{ <H> >- 'T}>>. Third,
-   the $@tt[SqUnsquashGoal](T,@i[tac])$ is used when @i{tac i} can unsquash
+   the $@tt[SqUnsquashGoal](T,@i[tac])$ is used when @i["tac i"] can unsquash
    @i{i}-th hypothesis provided the conclusion of the sequent is $T$. Finally, 
    $@tt[SqStableGoal](T,@i[tac])$ is used when @i[tac] can prover $T$ from
    $@squash{T}$.

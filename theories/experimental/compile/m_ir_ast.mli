@@ -24,6 +24,7 @@
  * @email{granicz@cs.caltech.edu}
  * @end[license]
  *)
+extends Base_theory
 extends M_ir
 
 open Refiner.Refiner.RefineError

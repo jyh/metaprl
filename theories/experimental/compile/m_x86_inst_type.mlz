@@ -25,8 +25,6 @@
  * @end[license]
  * @docoff
  *)
-extends M_x86_asm
-
 open Refiner.Refiner.TermType
 
 open Lm_symbol

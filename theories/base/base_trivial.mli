@@ -31,6 +31,8 @@
  * Author: Jason Hickey
  * jyh@cs.cornell.edu
  *)
+extends Summary
+extends Shell
 
 declare it
 declare trivial

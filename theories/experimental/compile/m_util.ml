@@ -25,14 +25,6 @@
  * @end[license]
  *)
 
-doc <:doc<
-   @begin[doc]
-   @parents
-   @end[doc]
->>
-extends Base_theory
-doc <:doc< @docoff >>
-
 open Lm_debug
 open Printf
 

@@ -25,8 +25,6 @@
  * @end[license]
  *)
 
-extends Base_theory
-
 open Term_match_table
 
 open Refiner.Refiner.TermType

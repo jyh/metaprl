@@ -24,6 +24,7 @@
  * @email{jyh@cs.caltech.edu}
  * @end[license]
  *)
+extends Base_theory
 extends M_ir
 
 open Tactic_type.Tacticals

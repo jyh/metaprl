@@ -50,7 +50,9 @@
  * @email{jyh@cs.caltech.edu}
  * @end[license]
  *)
-extends M_util
+extends Shell
+extends Top_tacticals
+extends Top_conversionals
 
 open Lm_symbol
 open Opname

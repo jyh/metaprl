@@ -42,7 +42,6 @@ doc <:doc<
    @parents
    @end[doc]
 >>
-extends M_util
 extends M_x86_backend
 doc <:doc< @docoff >>
 

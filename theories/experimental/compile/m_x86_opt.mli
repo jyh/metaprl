@@ -25,7 +25,6 @@
  * @end[license]
  *)
 extends M_x86_asm
-extends M_util
 
 open Refiner.Refiner.TermType
 

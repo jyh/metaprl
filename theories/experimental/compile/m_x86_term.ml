@@ -26,6 +26,7 @@
  * @docoff
  *)
 extends M_ir
+extends M_x86_asm
 extends M_x86_inst_type
 
 open Lm_symbol

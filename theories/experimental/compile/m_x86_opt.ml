@@ -32,7 +32,6 @@ doc <:doc<
 
 doc <:doc< @doc{@parents} >>
 extends M_x86_asm
-extends M_util
 doc docoff
 
 open M_util

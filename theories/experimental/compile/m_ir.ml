@@ -67,7 +67,9 @@ doc <:doc<
    @parents
    @end[doc]
 >>
-extends M_util
+extends Shell
+extends Top_tacticals
+extends Top_conversionals
 doc <:doc< @docoff >>
 
 open Refiner.Refiner.Term

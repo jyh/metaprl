@@ -24,7 +24,6 @@
  * @email{jyh@cs.caltech.edu}
  * @end[license]
  *)
-extends M_util
 extends M_x86_backend
 
 open Lm_symbol

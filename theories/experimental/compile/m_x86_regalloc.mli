@@ -24,12 +24,6 @@
  * @email{jyh@cs.caltech.edu}
  * @end[license]
  *)
-extends M_standardize
-extends M_x86_backend
-extends M_x86_spill
-extends M_x86_coalesce
-extends M_ra_main
-
 open Tactic_type.Tacticals
 
 (*

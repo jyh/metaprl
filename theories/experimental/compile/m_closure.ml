@@ -53,6 +53,7 @@ doc <:doc<
    @parents
    @end[doc]
 >>
+extends Base_meta
 extends M_ir
 doc <:doc< @docoff >>
 
@@ -230,7 +231,7 @@ doc <:doc<
    R, frame (length = i + 1)(v :: args) in
    ...
    @end[verbatim]
- 
+
    Variable closure is a beta-rewrite.
    @end[doc]
 >>

@@ -24,15 +24,15 @@
  * @end[license]
  *)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @parents
    @end[doc]
 >>
-extends M_util
+extends Summary
 doc <:doc< @docoff >>
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    Operators.
    @end[doc]
@@ -49,7 +49,7 @@ declare AstGtOp
 declare AstEqOp
 declare AstNeqOp
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    Expressions
    @end[doc]
@@ -69,7 +69,7 @@ declare AssignExpr{'e1; 'e2; 'e3; 'e4}
 declare ApplyExpr{'f; 'args}
 declare LetVarExpr{'e1; v. 'e2['v]}
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    Arguments.
    @end[doc]
@@ -77,7 +77,7 @@ doc <:doc<
 declare AstArgNil
 declare AstArgCons{'head; 'tail}
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    Mutually recursive functions.
    We need post-parsing rewrite rules (relaxed mode) to create these.
@@ -90,7 +90,7 @@ declare AstFunDef{'label; 'e; 'cont}
 declare AstEndDef
 declare AstLetFun{'R; 'label; f. 'cont['f]}
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    Tuples.
    @end[doc]
@@ -99,7 +99,7 @@ declare AstAllocTupleNil
 declare AstAllocTupleCons{'e; 'rest}
 declare TupleExpr{'tuple}
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    The parsed program is represented as an AST term.
    @end[doc]

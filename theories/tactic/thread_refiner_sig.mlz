@@ -3,36 +3,6 @@
  *)
 
 (*
- * The interface to Ensemble uses abstract
- * unique system-wide handles.  The interface
- * to Ensemble is through the server which is
- * created with a callback when notifications occur.
- *)
-module type RemoteSig =
-sig
-   type ('job, 'notify) server
-   type t
-
-   (*
-    * The server is passed a notifier.
-    *)
-   val create_server : ((t * 'notify) list -> unit) -> ('job, 'notify) server
-
-   (*
-    * Operations on handles.
-    *)
-   val create : ('job, 'notify) server -> t
-   val eq : t -> t -> bool
-
-   (*
-    * Issue a remote job.
-    * The function that is passed is a notifier.
-    *)
-   val submit : ('job, 'notify) server -> t -> 'job -> unit
-   val cancel : ('job, 'notify) server -> t -> unit
-end
-
-(*
  * This module is used to provide arguments to the thread module.
  *)
 module type ThreadRefinerArgSig =

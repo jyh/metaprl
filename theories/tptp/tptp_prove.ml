@@ -48,6 +48,18 @@ let debug_tptp_prove =
 let debug_subst = load_debug "subst"
 
 (************************************************************************
+ * RULES                                                                *
+ ************************************************************************)
+
+(*
+ * Just create a rule to duplicate the goal for testing.
+ *)
+interactive duplicate 'H :
+   sequent ['ext] { 'H >- 'T } -->
+   sequent ['ext] { 'H >- 'T } -->
+   sequent ['ext] { 'H >- 'T }
+
+(************************************************************************
  * TYPES                                                                *
  ************************************************************************)
 
@@ -371,7 +383,7 @@ let rec expand subst term =
 
 let expand_instance constants subst term =
    let term = expand subst term in
-      if is_var_term term && not (StringSet.mem constants (dest_var term)) then
+      if false && is_var_term term && not (StringSet.mem constants (dest_var term)) then
          t_term
       else
          term
@@ -384,39 +396,49 @@ let new_goal constants subst terms1 terms2 =
    let terms1 = List.map (expand subst) terms1 in
    let terms2 = List.map (fun t -> expand subst (negate_term t)) terms2 in
    let body = merge_term_lists terms1 terms2 in
-   let free_vars = StringSet.not_mem_filt constants (free_vars_terms body) in
-   let new_vars = new_vars 1 [] vars (List.length free_vars) in
-   let new_vars_terms = List.map mk_var_term new_vars in
-   let subst' = List.combine free_vars new_vars_terms in
-   let _ =
-      if !debug_tptp then
-         begin
-            eprintf "Standardizing:\n\tTerms: %a\n\tSubst: %a%t" (**)
-               print_term_list body
-               print_subst (List.combine free_vars new_vars_terms)
-               eflush;
-            debug_subst := true
-         end
-   in
-   let body = List.map (fun t -> TermSubst.subst t new_vars_terms free_vars) body in
-   let _ =
-      if !debug_tptp then
-         begin
-            debug_subst := false;
-            eprintf "Standardized:\n\tTerms: %a%t" (**)
-               print_term_list body
-               eflush
-         end
-   in
    let positive, negative = split_atoms body in
-   let info =
-      { tptp_vars = new_vars;
-        tptp_body = body;
-        tptp_positive = positive;
-        tptp_negative = negative
-      }
-   in
-      subst @ subst', info
+   let free_vars = StringSet.not_mem_filt constants (free_vars_terms body) in
+      if free_vars = [] then
+         let info =
+            { tptp_vars = [];
+              tptp_body = body;
+              tptp_positive = positive;
+              tptp_negative = negative
+            }
+         in
+            subst, info
+      else
+         let new_vars = new_vars 1 [] vars (List.length free_vars) in
+         let new_vars_terms = List.map mk_var_term new_vars in
+         let subst' = List.combine free_vars new_vars_terms in
+         let _ =
+            if !debug_tptp then
+               begin
+                  eprintf "Standardizing:\n\tTerms: %a\n\tSubst: %a%t" (**)
+                     print_term_list body
+                     print_subst (List.combine free_vars new_vars_terms)
+                     eflush;
+                  debug_subst := true
+               end
+         in
+         let body = List.map (fun t -> TermSubst.subst t new_vars_terms free_vars) body in
+         let _ =
+            if !debug_tptp then
+               begin
+                  debug_subst := false;
+                  eprintf "Standardized:\n\tTerms: %a%t" (**)
+                     print_term_list body
+                     eflush
+               end
+         in
+         let info =
+            { tptp_vars = new_vars;
+              tptp_body = body;
+              tptp_positive = positive;
+              tptp_negative = negative
+            }
+         in
+            subst @ subst', info
 
 let mk_goal { tptp_vars = vars; tptp_body = body } =
    if body = [] then
@@ -470,7 +492,7 @@ let rec neg_trivial i j p =
    if !debug_tptp then
       eprintf "Tptp_prove.neg_trivial: %d %d%t" i j eflush;
    if j < 0 then
-      idT p
+      raise (RefineError ("neg_trivial", StringError "match not found"))
    else if j = i then
       neg_trivial i (j - 1) p
    else if j > i then
@@ -485,7 +507,7 @@ let rec pos_trivial i j p =
    if !debug_tptp then
       eprintf "Tptp_prove.pos_trivial: %d %d%t" i j eflush;
    if j < 0 then
-      idT p
+      raise (RefineError ("pos_trivial", StringError "match not found"))
    else if j = i then
       pos_trivial i (j - 1) p
    else if j > i then
@@ -641,8 +663,12 @@ let rec prove_auxT
     | body ->
          if level > bound then
             raise fail_exn;
+(*
+ * Turn off fail-cache for more determinstic performance
+ * testing.  --jyh
          if TptpCache.subsumed !fail_cache body then
             raise fail_exn;
+ *)
          if TptpCache.subsumed goal_cache body then
             raise cycle_exn;
          let cache = TptpCache.insert goal_cache body in
@@ -699,17 +725,19 @@ let proveT bound p =
 (*
  * This tactic is just for performance testing.
  *)
-let loopTestT p =
-   for i = 0 to 200 do
-      Tactic_type.refine (proveT 100) p
-   done
+let dupT p =
+   duplicate (Sequent.hyp_count_addr p) p
+
+let rec loopTestT i p =
+   if i = 0 then
+      proveT 100 p
+   else
+      (dupT thenLT [loopTestT (pred i); proveT 100]) p
 
 let testT p =
    refine_count := 0;
    fail_count := 0;
-   Utils.time_it loopTestT p;
-   eprintf "Total refinements: %d\nFailed refinements: %d%t" !refine_count !fail_count eflush;
-   idT p
+   timingT (loopTestT 100) p
 
 (*
  * -*-

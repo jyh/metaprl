@@ -8,13 +8,17 @@ OCAMLDEPFLAGS := -prl_init
 
 # Library files
 MLZFILES :=\
+	remote_sig\
 	thread_refiner_sig
 
 NLFILES :=\
+	thread_util\
+	thread_event\
+	remote_sig\
+	remote_null\
 	thread_refiner_sig\
 	thread_refiner_null\
-	thread_refiner_tree\
-	remote_refiner\
+	thread_refiner\
 	perv\
 	tactic_cache\
 	tactic_type\

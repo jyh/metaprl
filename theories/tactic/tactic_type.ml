@@ -20,6 +20,8 @@
 
 open Nl_debug
 open Printf
+open Getrusage
+
 open Simple_print
 
 open Refiner.Refiner
@@ -75,6 +77,9 @@ struct
    let compose ext extl = Compose (ext, extl)
 end
 
+(*
+module ThreadRefiner = Thread_refiner.MakeThreadRefiner (ThreadRefinerArg) (Remote_null.Remote)
+*)
 module ThreadRefiner = Thread_refiner_null.MakeThreadRefiner (ThreadRefinerArg)
 
 (*
@@ -415,11 +420,36 @@ let tactic_arg_alpha_equal { ref_goal = goal1 } { ref_goal = goal2 } =
 (*
  * The refiner just applies the tactic to the arg.
  *)
+let show_times = ref false
+
 let refine tac arg =
-   let x = ThreadRefiner.eval remote_server (tac arg) in
+   let start = Unix.times () in
+   let start_time = Unix.gettimeofday () in
+   let x =
+      show_times := false;
+      ThreadRefiner.eval remote_server (tac arg)
+   in
+   let finish = Unix.times () in
+   let finish_time = Unix.gettimeofday () in
+      if !show_times then
+         eprintf "User time %f; System time %f; Real time %f%t" (**)
+            ((finish.Unix.tms_utime +. finish.Unix.tms_cutime)
+             -. (start.Unix.tms_utime +. start.Unix.tms_cstime))
+            ((finish.Unix.tms_stime +. finish.Unix.tms_cstime)
+             -. (start.Unix.tms_stime +. finish.Unix.tms_cstime))
+            (finish_time -. start_time)
+            eflush;
       if !debug_tactic then
          eprintf "Refinement done%t" eflush;
       x
+
+(*
+ * Time the tactic.
+ * This shows the time for the entire refinement.
+ *)
+let timingT tac arg =
+   show_times := true;
+   tac arg
 
 (*
  * Eventually, we may want to look at the rule and do something
@@ -765,16 +795,6 @@ let withSubstT subst tac arg =
    in
    let subgoals, ext = refine tac arg in
       ThreadRefiner.create_value (List.map make_subgoal subgoals) ext
-
-(*
- * Time the tactic.
- *)
-let timingT tac arg =
-   let tac arg =
-      let subgoals, ext = ThreadRefiner.eval remote_server (tac arg) in
-         ThreadRefiner.create_value subgoals ext
-   in
-      Utils.time_it tac arg
 
 (*
  * -*-

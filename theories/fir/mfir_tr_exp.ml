@@ -165,23 +165,34 @@ let resource auto += {
  * @begin[doc]
  * @modsubsection{Allocation}
  *
- * ...
+ * An offset atom should either be an integer or a raw integer.
+ * Note that offsets cannot be negative.
  * @end[doc]
  *)
 
-(* XXX alloc *)
-
 prim ty_offset_tyInt {| intro [] |} 'H :
+   sequent [mfir] { 'H >- int_le{ 0; 'i } } -->
    sequent [mfir] { 'H >- has_type["atom"]{ atomInt{'i}; tyInt } } -->
    sequent [mfir] { 'H >- has_type["offset"]{ atomInt{'i}; offset } }
    = it
 
 prim ty_offset_tyRawInt {| intro [] |} 'H :
+   sequent [mfir] { 'H >- int_le{ 0; 'i } } -->
    sequent [mfir] { 'H >- has_type["atom"]{ atomRawInt[32, "signed"]{'i};
                                             tyRawInt[32, "signed"] } } -->
    sequent [mfir] { 'H >- has_type["offset"]{ atomRawInt[32, "signed"]{'i};
                                               offset } }
    = it
+
+(*!
+ * @begin[doc]
+ *
+ * The rules for the expression $<< letAlloc{ 'op; v. 'exp['v] } >>$
+ * defer, when possible, to the rules for the well-formedness of
+ * the value allocated.  The result of the allocation is bound to $<< 'v >>$
+ * in $<< 'exp >>$.
+ * @end[doc]
+ *)
 
 prim ty_letAlloc_tuple {| intro [] |} 'H 'a :
    sequent [mfir] { 'H >- has_type["store"]{'atoms; tyTuple[tc:s]{'tyl}} } -->
@@ -193,7 +204,24 @@ prim ty_letAlloc_tuple {| intro [] |} 'H 'a :
          't } }
    = it
 
-(* XXX allocUnion *)
+prim ty_letAlloc_union {| intro [] |} 'H 'a :
+   sequent [mfir] { 'H >-
+      has_type["store"]{ union_val[i:n]{ 'tv; 'atoms }; 'ty } } -->
+   sequent [mfir] { 'H; a: var_def{ 'ty; no_def } >-
+      has_type["exp"]{ 'exp['a]; 't } } -->
+   sequent [mfir] { 'H >-
+      has_type["exp"]{
+         letAlloc{ allocUnion[i:n]{ 'ty; 'tv; 'atoms }; v. 'exp['v] };
+         't } }
+   = it
+
+(*!
+ * @begin[doc]
+ *
+ * For array and raw data allocation, we only validate the size
+ * of the area allocated, and in the case of arrays, the initializer value.
+ * @end[doc]
+ *)
 
 prim ty_letAlloc_varray {| intro [] |} 'H 'a :
    sequent [mfir] { 'H >- has_type["offset"]{ 'a1; offset } } -->

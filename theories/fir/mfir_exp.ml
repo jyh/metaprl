@@ -512,7 +512,7 @@ dform allocTuple_df : except_mode[src] ::
 
 dform allocUnion_df : except_mode[src] ::
    allocUnion[case:n]{ 'ty; 'ty_var; 'atom_list } =
-   bf["alloc union"] `"(" slot{'ty_var} slot{'atom_list} `", "
+   bf["alloc union"] `"(" slot{'ty_var} `"(" slot{'atom_list} `"),"
       slot[case:n] `"): " slot{'ty}
 
 dform allocVArray_df : except_mode[src] ::

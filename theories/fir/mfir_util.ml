@@ -62,8 +62,9 @@ open Mfir_int
  * @begin[doc]
  * @terms
  *
- * The term @tt[offset] is the type of ``offsets'' into data aggregates,
- * such as arrays.
+ * The term @tt[offset] is the type of offsets into data aggregates,
+ * such as arrays.  This includes the atoms used to specify the initial
+ * size of the data when it is allocated, as well as an index into the data.
  * @end[doc]
  *)
 

@@ -300,14 +300,11 @@ interactive member_col_filter_elim {| elim [elim_univ_typeinf <<'x>>] |} 'H univ
 define unfold_isect : "isect"{'S;s.'C['s]} <-->
    lambda{x.all s:'S. col_member{'C['s]; 'x}}
 
-(*
- * JYH: somehow, this proof has a free [l:l]
 interactive isect_wf {| intro [] |} :
    sequent[squash]{ <H> >- "type"{'T}} -->
    sequent[squash]{ <H> >- 'S in univ[l:l] } -->
    sequent[squash]{ <H>; s:'S >- 'C['s] in Col[l:l]{'T} } -->
    sequent['ext]  { <H> >- "isect"{'S;s.'C['s]} in Col[l:l]{'T} }
-*)
 
 interactive member_isect {| intro [intro_univ_arg] |} :
    [wf] sequent[squash]{ <H> >- "type"{'S} } -->

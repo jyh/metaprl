@@ -89,6 +89,7 @@ declare rev_assoc{'eq; 'x; 'l; y. 'b['y]; 'z}
  * List map function.
  *)
 declare map{'f; 'l}
+declare map{x.'f['x]; 'l}
 
 (*
  * Fold a function over a list.
@@ -99,6 +100,8 @@ declare fold_left{'f; 'v; 'l}
  * Length of the list.
  *)
 declare length{'l}
+
+declare Index{'l}
 
 (*
  * Get the nth element.

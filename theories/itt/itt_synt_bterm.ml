@@ -43,6 +43,7 @@ doc <:doc<
 >>
 extends Itt_theory
 extends Itt_nat
+extends Itt_list2
 extends Itt_synt_var
 extends Itt_synt_operator
 extends Itt_pairwise2
@@ -92,6 +93,15 @@ interactive_rw bterm_ind_var_reduce2 :
 
 define unfold_bdepth: bdepth{'bt} <--> bterm_ind{'bt; v. depth{'v}; op,btl,ind. op_bdepth{'op}}
 
+dform bdepth_df: bdepth{'bt} = `"bdepth(" slot{'bt} `")"
+
+interactive_rw bdepth_reduce1 {| reduce |} :  bdepth{make_bterm{'op;'btl}} <--> op_bdepth{'op}
+
+interactive_rw bdepth_reduce2 {| reduce |} :  bdepth{var{'l;'r}} <--> depth{var{'l;'r}}
+
+interactive_rw bdepth_var_reduce: ('v in Var) --> bdepth{'v} <--> depth{'v}
+
+(*
 define unfold_compatible_shapes: compatible_shapes{'op; 'btl} <-->
    squash{
    fix{ f. lambda{ diff. lambda{ arity. lambda{ btl.
@@ -100,6 +110,15 @@ define unfold_compatible_shapes: compatible_shapes{'op; 'btl} <-->
             (bdepth{'h2} -@ 'h1 = 'diff in int) and  ('f 'diff 't1 't2) } }
       } } } } op_bdepth{'op} arity{'op} 'btl
    }
+*)
+
+define unfold_compatible_shapes: compatible_shapes{'op; 'btl} <-->
+   squash{
+      length{arity{'op}} = length{'btl} in int &
+      all i:Index{'btl}. bdepth{nth{'btl;'i}} =  op_bdepth{'op} +@ nth{arity{'op};'i} in int
+   }
+
+dform compatible_shapes_df: compatible_shapes{'op;'btl} = `"compatible_shapes(" slot{'op} `";" slot{'btl} `")"
 
 prim btermUniv {| intro [] |} :
    sequent { <H> >- BTerm in univ[i:l] } =
@@ -147,6 +166,14 @@ interactive bterm_ind_wf {| intro [] |} bind{bt.'C['bt]}:
                                v.'var_case['v];
                                op,subterms,ind_hyp. 'op_case['op; 'subterms; 'ind_hyp] } in 'C['bt] }
 
+interactive bdepth_wf {| intro[] |} :
+   sequent { <H> >- 'bt in BTerm } -->
+   sequent { <H> >- bdepth{'bt} in nat }
+
+interactive bdepth_wf2 {| intro[] |} :
+   sequent { <H> >- 'bt in BTerm } -->
+   sequent { <H> >- bdepth{'bt} in int }
+
 define unfold_dest_bterm:
    dest_bterm{'bt; v.'var_case['v];
                    op,subterms. 'op_case['op; 'subterms] }
@@ -174,6 +201,13 @@ interactive_rw dest_bterm_var_reduce2 :
 
 interactive var_subtype {| intro [] |} :
    sequent { <H> >- Var subtype BTerm }
+
+interactive subterms_have_greater_bdepth {| intro [AutoMustComplete] |} :
+   sequent { <H> >- 'op in BOperator } -->
+   sequent { <H> >- 'btl in list{BTerm} } -->
+   sequent { <H> >- compatible_shapes{'op;'btl} } -->
+   sequent { <H> >- all_list{'btl; bt. bdepth{'bt} >= op_bdepth{'op}} }
+
 
 (************************************************************************
  * Var_bterm                                                            *

@@ -45,5 +45,18 @@ interactive id_wf  {| intro [] |} :
 
 define unfold_funexp :  fun_exp{'f;'n} <--> ind{'n;id; "_" ,F.compose{'F;'f}}
 
-define unfold_funexp2 :  fun_exp{x.'f['x];'n} <--> fun_exp{lambda{x.'f['x]};'n}
+dform funexp_df :  fun_exp{'f;'n} = slot{'f} sup{'n}
+
+interactive_rw funexp_reduce_base:
+   fun_exp{'f;0} <--> id
+
+interactive_rw funexp_reduce_step:
+   ('n in nat) -->
+   fun_exp{'f;'n+1} <--> compose{fun_exp{'f;'n};'f}
+
+interactive funexp_wf {| intro[] |}:
+   sequent{ <H> >- 'f in 'T -> 'T } -->
+   sequent{ <H> >- 'n in nat } -->
+   sequent{ <H> >- fun_exp{'f;'n} in 'T -> 'T }
+
 

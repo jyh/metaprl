@@ -200,6 +200,9 @@ doc <:doc<
 define unfold_map : map{'f; 'l} <-->
    list_ind{'l; nil; h, t, g. cons{'f 'h; 'g}}
 
+define unfold_map2 : map{x.'f['x]; 'l} <--> map{lambda{x.'f['x]};'l}
+
+
 doc <:doc<
    @begin[doc]
    @noindent
@@ -263,6 +266,8 @@ define unfold_mklist: mklist{'n;'f} <-->
    ind{'n; nil; x,l.('f ('n-@ 'x)) :: 'l}
 
 
+define unfold_list: list <--> list{top}
+
 doc <:doc< @docoff >>
 
 let length_term = << length{'l} >>
@@ -279,6 +284,8 @@ prec prec_append
 prec prec_ball
 prec prec_assoc
 
+dform list_df : list = `"List"
+
 dform all_df : except_mode[src] :: parens :: "prec"[prec_quant] :: "all_list"{'A; x. 'B} =
    szone pushm[3] Nuprl_font!forall slot{'x} Nuprl_font!member slot{'A} sbreak["",". "] slot{'B} popm ezone
 
@@ -290,6 +297,9 @@ dform is_nil_df : except_mode[src] :: parens :: "prec"[prec_equal] :: is_nil{'l}
 
 dform mem_df : except_mode[src] :: mem{'x; 'l; 'T} =
    `"(" slot{'x} " " Nuprl_font!member `" " slot{'l} `" in " slot{list{'T}} `")"
+
+dform index_df : except_mode[src] :: Index{'l} =
+   `"Index(" slot{'l} `")"
 
 dform subset_df : except_mode[src] :: \subset{'l1; 'l2; 'T} =
    `"(" slot{'l1} " " Nuprl_font!subseteq `"[" slot{'T} `"] " slot{'l2} `")"
@@ -330,14 +340,17 @@ dform rev_assoc_df : except_mode[src] :: parens :: "prec"[prec_assoc] :: rev_ass
 dform map_df : except_mode[src] :: parens :: "prec"[prec_apply] :: map{'f; 'l} =
    `"map" space slot{'f} space slot{'l}
 
+dform map_df : except_mode[src] :: parens :: "prec"[prec_apply] :: map{x.'f; 'l} =
+   `"map("slot{'x} `"." slot{'f} `";" slot{'l} `")"
+
 dform fold_left_df : except_mode[src] :: fold_left{'f; 'v; 'l} =
    `"fold_left(" slot{'f} `", " slot{'v} `", " slot{'l} `")"
 
 dform length_df : except_mode[src] :: length{'l} =
-   `"length(" slot{'l} `")"
+   `"|" slot{'l} `"|"
 
 dform nth_df : except_mode[src] :: nth{'l; 'i} =
-   `"nth(" slot{'l} `", " slot{'i} `")"
+    slot{'l} sub{'i}
 
 dform replace_nth_df : except_mode[src] :: replace_nth{'l; 'i; 'v} =
    szone `"replace_nth(" pushm[0] slot{'l} `"," hspace slot{'i} `"," hspace slot{'v} `")" popm ezone
@@ -506,6 +519,38 @@ interactive_rw reduce_map_nil {| reduce |} :
 interactive_rw reduce_map_cons {| reduce |} :
    map{'f; cons{'h; 't}} <--> cons{'f 'h; map{'f; 't}}
 
+interactive_rw reduce_map2_nil {| reduce |} :
+   map{x.'f['x]; nil} <--> nil
+
+interactive_rw reduce_map2_cons {| reduce |} :
+   map{x.'f['x]; cons{'h; 't}} <--> cons{'f['h]; map{x.'f['x]; 't}}
+
+interactive_rw length_map {| reduce |} :
+   ('l in list) -->
+   length{map{'f; 'l}} <--> length{'l}
+
+interactive_rw length_map2 {| reduce |} :
+   ('l in list) -->
+   length{map{x.'f['x]; 'l}} <--> length{'l}
+
+interactive_rw index_map {| reduce |} :
+   ('l in list) -->
+   Index{map{'f; 'l}} <--> Index{'l}
+
+interactive_rw index_map2 {| reduce |} :
+   ('l in list) -->
+   Index{map{x.'f['x]; 'l}} <--> Index{'l}
+
+interactive_rw nth_map {| reduce |} :
+   ('l in list) -->
+   ('i in Index{'l}) -->
+   nth{map{'f; 'l};'i} <--> 'f(nth{'l;'i})
+
+interactive_rw nth_map2 {| reduce |} :
+   ('l in list) -->
+   ('i in Index{'l}) -->
+   nth{map{x.'f['x]; 'l};'i} <--> 'f[nth{'l;'i}]
+
 doc docoff
 
 let fold_map = makeFoldC << map{'f; 'l} >> unfold_map
@@ -627,8 +672,7 @@ doc <:doc<
    @end[doc]
 >>
 
-interactive is_nil_wf {| intro [intro_typeinf <<'l>>] |} list{'T} :
-   [wf] sequent { <H> >- 'l in list{'T} } -->
+interactive is_nil_wf {| intro [] |} :
    sequent { <H> >- is_nil{'l} in bool }
 
 (*
@@ -708,6 +752,16 @@ interactive map_wf {| intro [intro_typeinf <<'l>>] |} list{'T1} :
    [wf] sequent { <H> >- 'l in list{'T1} } -->
    sequent { <H> >- map{'f; 'l} in list{'T2} }
 
+interactive map_wf2 {| intro [] |} :
+   [wf] sequent { <H> >- "type"{'T2} } -->
+   [wf] sequent { <H> >- 'l in list } -->
+   [wf] sequent { <H> >- all_list{'l;x.'f['x] in 'T2} } -->
+   sequent { <H> >- map{x.'f['x]; 'l} in list{'T2} }
+
+interactive map_wf3 {| intro [] |} :
+   [wf] sequent { <H> >- 'l in list } -->
+   sequent { <H> >- map{x.'f['x]; 'l} in list }
+
 (*
  * Fold_left.
  *)
@@ -722,29 +776,24 @@ interactive fold_left_wf {| intro [intro_typeinf <<'l>>] |} list{'T1} :
 (*
  * Length.
  *)
-interactive length_wf {| intro [intro_typeinf <<'l>>] |} list{'T1} :
-   [wf] sequent { <H> >- "type"{'T1} } -->
-   [wf] sequent { <H> >- 'l in list{'T1} } -->
+interactive length_wf {| intro [] |} :
+   [wf] sequent { <H> >- 'l in list } -->
    sequent { <H> >- length{'l} in int }
 
-interactive length_nonneg {| intro [intro_typeinf <<'l>>] |} list{'T1} :
-   [wf] sequent { <H> >- "type"{'T1} } -->
-   [wf] sequent { <H> >- 'l in list{'T1} } -->
+interactive length_nonneg {| intro [] |}  :
+   [wf] sequent { <H> >- 'l in list } -->
    sequent { <H> >- 0 <= length{'l} }
 
-interactive length_wf2 {| intro [intro_typeinf <<'h>>] |} 'T1 :
-   [wf] sequent { <H> >- 'h in 'T1 } -->
-   [wf] sequent { <H> >- 't in list{'T1} } -->
+interactive length_wf2 {| intro [] |} :
+   [wf] sequent { <H> >- 't in list } -->
    sequent { <H> >- length{cons{'h;'t}} in nat }
 
-interactive length_cons_pos {| intro [intro_typeinf <<'h>>] |} 'T1 :
-   [wf] sequent { <H> >- 'h in 'T1 } -->
-   [wf] sequent { <H> >- 't in list{'T1} } -->
+interactive length_cons_pos {| intro [] |} :
+   [wf] sequent { <H> >- 't in list } -->
    sequent { <H> >- 0 < length{cons{'h;'t}} }
 
-interactive length_wf1 {| intro [intro_typeinf <<'l>>] |} list{'T1} :
-   [wf] sequent { <H> >- "type"{'T1} } -->
-   [wf] sequent { <H> >- 'l in list{'T1} } -->
+interactive length_wf1 {| intro [] |} :
+   [wf] sequent { <H> >- 'l in list } -->
    sequent { <H> >- length{'l} in nat }
 
 interactive nth_wf {| intro [] |} :
@@ -766,9 +815,8 @@ interactive list_lengthzero {| elim [] |} 'H 'A :
    sequent { <H>; x: (length{'l} = 0 in int); <J[it]>; y: 'l = nil in list{'A} >- 'C[it] } -->
    sequent { <H>; x: (length{'l} = 0 in int); <J['x]> >- 'C['x] }
 
-interactive index_wf {| intro [intro_typeinf <<'l>>] |} list{'T1} :
-   [wf] sequent { <H> >- "type"{'T1} } -->
-   [wf] sequent { <H> >- 'l in list{'T1} } -->
+interactive index_wf {| intro [] |}  :
+   [wf] sequent { <H> >- 'l in list } -->
    sequent { <H> >- Index{'l} Type }
 
 interactive index_mem {| intro [AutoMustComplete] |} :
@@ -830,11 +878,11 @@ interactive restrict_list {| intro[] |} :
    sequent { <H> >- 'l in list{{x:'A | mem{'x;'l;'A}}} }
 
 interactive listTop {| nth_hyp |} 'H :
-   sequent { <H>; l : list{'A}; <J['l]> >- 'l in list{top} }
+   sequent { <H>; l : list{'A}; <J['l]> >- 'l in list }
 
 interactive listTop2 {| intro[AutoMustComplete; intro_typeinf <<'l>>] |} list{'A} :
    sequent { <H> >- 'l in list{'A} } -->
-   sequent { <H> >- 'l in list{top} }
+   sequent { <H> >- 'l in list }
 
 
 interactive list_induction2 :
@@ -851,7 +899,7 @@ define list_of_fun{k.'f[k];'n} <--> ind{'n; nil; k,l. 'f[0]:: list_of_fun{k.'f[k
 
 
 interactive list_elements_id {| intro [] |} :
-   [wf] sequent { <H> >- 'l in list{top} } -->
+   [wf] sequent { <H> >- 'l in list } -->
    sequent { <H> >- 'l ~ list_of_fun{k.nth{'l;'k}; length{l}} }
 
 h::t <-->
@@ -873,13 +921,13 @@ interactive_rw tail_reduce2 {| reduce |}: ('n in nat) -->
 
 
 interactive tail_does_not_depend_on_the_head {| intro[] |}:
-   sequent { <H> >-  'l in list{top} } -->
+   sequent { <H> >-  'l in list } -->
    sequent { <H> >-  'n in nat } -->
    sequent { <H> >- 'n <= length{'l} } -->
    sequent { <H> >- tail{'l;'n} ~ tail{cons{'h;'l};'n}  }
 
 interactive list_is_its_own_tail {| intro[] |}:
-   sequent { <H> >-  'l in list{top} } -->
+   sequent { <H> >-  'l in list } -->
    sequent { <H> >- 'l ~ tail{'l;length{'l}} }
 
 interactive tail_squiggle {| intro[] |}:
@@ -889,8 +937,8 @@ interactive tail_squiggle {| intro[] |}:
 
 
 interactive listSquiggle :
-   [wf] sequent { <H> >- 'l1 in list{top} } -->
-   [wf] sequent { <H> >- 'l2 in list{top} } -->
+   [wf] sequent { <H> >- 'l1 in list } -->
+   [wf] sequent { <H> >- 'l2 in list } -->
    [wf] sequent { <H> >- length{'l1} = length{'l2} in nat } -->
    sequent { <H>; i: Index{'l1} >- nth{'l1; 'i} ~ nth{'l2; 'i} } -->
    sequent { <H> >- 'l1 ~ 'l2 }
@@ -910,12 +958,12 @@ interactive all_list_intro_cons  {| intro[] |} :
    sequent { <H> >- all_list{cons{'a; 'l};  x. 'P['x]} }
 
 interactive all_list_map  {| intro[] |} :
-   [wf] sequent { <H> >- 'l in list{top}  } -->
+   [wf] sequent { <H> >- 'l in list  } -->
    sequent { <H> >-  all_list{'l; x. 'P['f('x)]} } -->
    sequent { <H> >- all_list{map{'f;'l};  y. 'P['y]} }
 
 interactive all_list_intro  {| intro[] |} :
-   sequent { <H> >- 'l in list{top}  } -->
+   sequent { <H> >- 'l in list  } -->
    sequent { <H>; i:Index{'l}  >- 'P[nth{'l;'i}]  } -->
    sequent { <H> >- all_list{'l;  x. 'P['x]} }
 
@@ -926,7 +974,7 @@ interactive all_list_intro1  {| intro[SelectOption 1;  intro_typeinf <<'l>>] |} 
    sequent { <H> >- all_list{'l;  x. 'P['x]} }
 
 interactive all_list_elim {| elim[] |} 'H  'i :
-   sequent { <H>; u: all_list{'l;  x. 'P['x]}; <J['u]> >- 'l in list{top}  } -->
+   sequent { <H>; u: all_list{'l;  x. 'P['x]}; <J['u]> >- 'l in list  } -->
    sequent { <H>; u: all_list{'l;  x. 'P['x]}; <J['u]> >- 'i in Index{'l}  } -->
    sequent { <H>; u: all_list{'l;  x. 'P['x]}; <J['u]>; 'P[nth{'l;'i}] >- 'C['u] } -->
    sequent { <H>; u: all_list{'l;  x. 'P['x]}; <J['u]> >- 'C['u] }
@@ -938,7 +986,7 @@ interactive all_list_witness_wf  {| intro[intro_typeinf <<'l>>] |} list{'A} :
    sequent { <H> >- all_list_witness{'l;  x. 'p['x]} in all_list{'l;  x. 'P['x]} }
 
 interactive all_list_witness_wf2  {| intro[] |} :
-   sequent { <H> >- 'l in list{top}  } -->
+   sequent { <H> >- 'l in list  } -->
    sequent { <H> >- all_list{'l;  x. 'p['x] in 'P['x]}  } -->
    sequent { <H> >- all_list_witness{'l;  x. 'p['x]} in all_list{'l;  x. 'P['x]} }
 

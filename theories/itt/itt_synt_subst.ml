@@ -40,6 +40,7 @@ doc <:doc< @doc{@parents} >>
 extends Itt_theory
 extends Itt_nat
 extends Itt_fun2
+extends Itt_nequal
 extends Itt_synt_var
 extends Itt_synt_operator
 extends Itt_synt_bterm
@@ -57,7 +58,7 @@ define unfold_add_var:
       fix{add.lambda{bt.
          dest_bterm{'bt;
                     u. if left{'v}<=@ left{'u} then var{left{'u}+@1;right{'u}} else var{left{'u};right{'u}+@1};
-                    op,subterms. make_bterm{'op;map{lambda{x.'add 'x}; 'subterms}} }
+                    op,subterms. make_bterm{'op;map{x.'add 'x; 'subterms}} }
          }} 'bt
 
 (*
@@ -70,7 +71,21 @@ define unfold_add_var1:
  *  add_vars_upto( <H>.s; <H>,<J>.t ) = <H>,<J>.s
  *)
 define unfold_add_vars_upto:
-   add_vars_upto{'s;'u} <--> fun_exp{s.add_var{'s}; bdepth{'u} -@ bdepth{'s}}
+   add_vars_upto{'s;'t} <--> ind{bdepth{'t} -@ bdepth{'s};'s; k,s.add_var{'s}}
+
+
+interactive_rw add_vars_upto_bdepth {| reduce |} :
+   ('t in BTerm)  -->
+   ('s in BTerm)  -->
+   (bdepth{'t} >= bdepth{'s})  -->
+   bdepth{add_vars_upto{'s;'t}} <--> bdepth{'t}
+
+interactive add_vars_upto_wf {| intro [] |} :
+   sequent { <H> >- 't in BTerm } -->
+   sequent { <H> >- 's in BTerm } -->
+   sequent { <H> >- bdepth{'t} >= bdepth{'s} } -->
+   sequent { <H> >- add_vars_upto{'s;'t} in BTerm }
+
 
 (*
  *  subst( <H>,x,<J_1>,<J_2>.t[x]; var(<H>,x,<J_3>.x); <H>,x,<J_1>.s[x] ) = <H>,x,<J_1>,<J_2>.t[s[x]]
@@ -80,22 +95,36 @@ define unfold_subst:
       fix{subst.lambda{t.
          dest_bterm{'t;
                     u. if is_eq{'v;'u} then add_vars_upto{'s;'u} else 'u;
-                    op,subterms. make_bterm{'op;map{lambda{x.'subst 'x}; 'subterms}} }
+                    op,subterms. make_bterm{'op;map{x.'subst 'x; 'subterms}} }
          }} 't
 
-interactive subst_wf {| intro [] |} :
-   sequent { <H> >- 't in BTerm } -->
-   sequent { <H> >- 'v in Var } -->
-   sequent { <H> >- bdepth{'t} >= depth{'v} } -->
-   sequent { <H> >- 's in BTerm } -->
-   sequent { <H> >- subst{'t;'v;'s} in BTerm }
+interactive_rw subst_reduce1 {| reduce |} :
+      subst{make_bterm{'op;'subterms}; 'v; 's} <--> make_bterm{'op; map{x.subst{'x;'v;'s}; 'subterms}}
+
+interactive_rw subst_var_reduce :
+      ('u in Var) -->
+      subst{'u; 'v; 's} <--> if is_eq{'v;'u} then add_vars_upto{'s;'u} else 'u
+
+interactive_rw subst_var_eq_reduce {| reduce |} :
+      ('v in Var) -->
+      subst{'v; 'v; 's} <-->  add_vars_upto{'s;'v}
+
+interactive_rw subst_reduce2 {| reduce |} :
+      subst{var{'l;'r}; 'v; 's} <-->  if is_eq{'v;var{'l;'r}} then add_vars_upto{'s;var{'l;'r}} else var{'l;'r}
 
 interactive_rw subst_bdepth {| reduce |} :
    ('t in BTerm)  -->
    ('v in Var)  -->
-   (bdepth{'t} >= depth{'v})  -->
    ('s in BTerm)  -->
-   bdepth{subst{'t;'v;'s}} <--> bdepth{'t} -@ 1
+   (bdepth{'t} >= bdepth{'s})  -->
+   bdepth{subst{'t;'v;'s}} <--> bdepth{'t}
+
+interactive subst_wf {| intro [] |} :
+   sequent { <H> >- 't in BTerm } -->
+   sequent { <H> >- 'v in Var } -->
+   sequent { <H> >- 's in BTerm } -->
+   sequent { <H> >- bdepth{'t} >= bdepth{'s} } -->
+   sequent { <H> >- subst{'t;'v;'s} in BTerm }
 
 (*
  * Iterated subst - the relative position of the two variables may matter

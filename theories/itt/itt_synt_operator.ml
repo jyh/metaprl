@@ -60,6 +60,10 @@ declare arity{'op}
 declare is_same_op{'op_1;'op_2} (* Do not consider  op_bdepth *)
 declare inject{'op; 'n} (* Op * Nat -> BOp *)
 
+dform boperator_df: BOperator = `"BOperator"
+dform op_bdepth_df: op_bdepth{'op} = `"bdepth" sub["o"] "(" slot{'op} ")"
+
+
 define unfold_unbind :
    unbind{'op} <--> inject{'op; op_bdepth{'op} -@ 1 }
 
@@ -68,6 +72,8 @@ define unfold_bind :
 
 define unfold_op :
    Operator <--> quot o1, o2 : BOperator // "assert"{is_same_op{'o1; 'o2}}
+
+dform operator_df: Operator = `"Operator"
 
 doc "doc"{rewrites}
 
@@ -126,6 +132,10 @@ prim op_bdepth_wf {| intro [] |} :
    sequent { <H> >- 'op in BOperator } -->
    sequent { <H> >- op_bdepth{'op} in nat }
    = it
+
+interactive op_bdepth_wf2 {| intro [] |} :
+   sequent { <H> >- 'op in BOperator } -->
+   sequent { <H> >- op_bdepth{'op} in int }
 
 prim arity_wf {| intro [] |} :
    sequent { <H> >- 'op in Operator } -->

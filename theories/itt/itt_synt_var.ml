@@ -103,6 +103,10 @@ interactive depth_wf {| intro [] |} :
    sequent { <H> >- 'v in Var } -->
    sequent { <H> >- depth{'v} in nat }
 
+interactive depth_wf2 {| intro [] |} :
+   sequent { <H> >- 'v in Var } -->
+   sequent { <H> >- depth{'v} in int }
+
 interactive eq_wf {| intro [] |} :
    sequent { <H> >- 'v1 in Var } -->
    sequent { <H> >- 'v2 in Var } -->

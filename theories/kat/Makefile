@@ -15,6 +15,7 @@ MPFILES :=\
 	base_select \
 	kat_terms \
 	kat_axioms \
+	kat_test \
 
 # Name of main libraris
 MAIN = theory

@@ -19,3 +19,5 @@ declare minus{'x}    (*   ~'x  *)
 declare star{'x}    (*   'x^*  *)
 
 declare bool
+
+declare kleene

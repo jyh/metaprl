@@ -1069,7 +1069,6 @@ let timingT tac p =
 (*
  * Try marshaling, used for making sure OCaml marshaler doesn't fold
  * too much into the function closures.
- *)
 let check_marshal name f =
    eprintf "+ Tactic_type: marshaling %s%t" name eflush;
    try
@@ -1142,6 +1141,10 @@ let test_marshal () =
    check_marshal "withTacticT" withTacticT;
    check_marshal "timingT" timingT;
    check_marshal "finalT" finalT
+ *)
+
+let test_marshal () =
+   eprintf "Marshaler not linked%t" eflush
 
 (*
  * -*-

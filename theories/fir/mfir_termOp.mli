@@ -242,6 +242,11 @@ val is_tyDefPoly_term : term -> bool
 val mk_tyDefPoly_term : string -> term -> term
 val dest_tyDefPoly_term : term -> string * term
 
+val frameSubField_term : term
+val is_frameSubField_term : term -> bool
+val mk_frameSubField_term : term -> term -> term -> term
+val dest_frameSubField_term : term -> term * term * term
+
 val unionCase_term : term
 val is_unionCase_term : term -> bool
 val mk_unionCase_term : term -> term
@@ -307,6 +312,11 @@ val dest_tyArray_term : term -> term
 
 val tyRawData_term : term
 val is_tyRawData_term : term -> bool
+
+val tyFrame_term : term
+val is_tyFrame_term : term -> bool
+val mk_tyFrame_term : term -> term -> term
+val dest_tyFrame_term : term -> term * term
 
 val tyVar_term : term
 val is_tyVar_term : term -> bool

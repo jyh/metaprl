@@ -12,9 +12,6 @@ at the end, things that might be considered bugs, but really aren't.
 -- No terms are declared for subops.  If I implement these,
    perhaps they should go in their own file, e.g. Mfir_subop.
 
--- No terms are declared for frames, including tyFrame and frame.
-   These should go in Mfir_ty.
-
 -- No terms are declared for the FIR object system, including tyCase,
    and tyObject.  These should go in Mfir_ty.
 

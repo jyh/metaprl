@@ -54,6 +54,7 @@ declare mutable_ty{ 'ty; 'flag }
  *)
 
 declare tyDefPoly{ t. 'ty['t] }
+declare frameSubField{ 'var; 'ty; 'num }
 declare unionCase{ 'elts }
 declare tyDefUnion{ 'cases }
 declare tyDefDTuple{ 'ty_var }
@@ -88,6 +89,7 @@ declare tyTag{ 'ty_var; 'mtyl }
 
 declare tyArray{ 'ty }
 declare tyRawData
+declare tyFrame{ 'ty_var; 'tyl }
 
 (*
  * Polymorphism.

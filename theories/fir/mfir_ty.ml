@@ -79,12 +79,23 @@ declare mutable_ty{ 'ty; 'flag }
  * @begin[doc]
  * @modsubsection{Type definitions}
  *
- * Type definitions define parameterized types and unions.  The term
- * @tt[tyDefPoly] abstracts a type @tt[ty] over a type @tt[t].
+ * Type definitions define parameterized type, unions, and frames.
+ * The term @tt[tyDefPoly] abstracts a type @tt[ty] over a type @tt[t].
  * @end[doc]
  *)
 
 declare tyDefPoly{ t. 'ty['t] }
+
+(*!
+ * @begin[doc]
+ *
+ * Frames are defined as records, where each field is a list of
+ * @tt[frameSubField] terms.  Each subfield has subterms for its
+ * name, type, and size
+ * @end[doc]
+ *)
+
+declare frameSubField{ 'var; 'ty; 'num }
 
 (*!
  * @begin[doc]
@@ -206,6 +217,18 @@ declare tyRawData
 
 (*!
  * @begin[doc]
+ *
+ * The type @tt[tyFrame] is the frame given by @tt[ty_var] instantiated
+ * at the types in the list @tt[tyl].  Frames are used for the frames
+ * generated during closure conversion, and they are not directly
+ * accessible to the programmer.
+ * @end[doc]
+ *)
+
+declare tyFrame{ 'ty_var; 'tyl }
+
+(*!
+ * @begin[doc]
  * @modsubsection{Polymorphism}
  *
  * The term @tt[tyVar] represents a type variable.
@@ -284,6 +307,10 @@ dform tyDefPoly_df : except_mode[src] :: except_mode[tex] ::
 dform tyDefPoly_df : mode[tex] ::
    tyDefPoly{ t. 'ty } =
    izone `"\\Lambda " ezone slot{'t} `". " slot{'ty}
+
+dform frameSubField_df : except_mode[src] ::
+   frameSubField{ 'var; 'ty; 'num } =
+   `"(" slot{'var} `"," slot{'ty} `"," slot{'num} `")"
 
 dform unionCase_df : except_mode[src] ::
    unionCase{ 'elts } =
@@ -376,6 +403,10 @@ dform tyArray_df : except_mode[src] ::
 dform tyRawData_df : except_mode[src] ::
    tyRawData =
    bf["data"]
+
+dform tyFrame_df : except_mode[src] ::
+   tyFrame{ 'ty_var; 'tyl } =
+   bf["frame"] `"(" slot{'ty_var} `"," slot{'tyl} `")"
 
 (*
  * Polymorphism.

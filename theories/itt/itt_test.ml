@@ -40,7 +40,7 @@ let redexC =
            reduceDiv;
            reduceFix]
 
-let goal = mk_msequent << sequent { 'H >- fact{100} = 0 in int } >> []
+let goal = mk_msequent << sequent { 'H >- fact{125} = 0 in int } >> []
 
 let cache = Tactic_cache.extract (cache_resource.resource_extract cache_resource)
 
@@ -66,6 +66,9 @@ let test () =
 
 (*
  * $Log$
+ * Revision 1.6  1998/07/04 22:34:08  nogin
+ * Use fact(125)
+ *
  * Revision 1.5  1998/07/02 18:38:00  jyh
  * Refiner modules now raise RefineError exceptions directly.
  * Modules in this revision have two versions: one that raises

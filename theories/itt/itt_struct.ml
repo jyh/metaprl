@@ -114,7 +114,7 @@ prim thin 'H :
 
 prim exchange 'H 'K 'L:
    ('t : sequent { <H>; <L>; <K>; <J> >- 'C }) -->
-   sequent { <H>; <K>; <L>; <J> >- 'C } =
+   sequent { <H>; <K>; < L<|H|> >; <J> >- 'C } =
    't
 
 doc <:doc< 
@@ -222,12 +222,12 @@ doc <:doc<
 >>
 prim hypReplacement 'H 'B univ[i:l] :
    [main] ('t['x] : sequent { <H>; x: 'B; <J['x]> >- 'T['x] }) -->
-   [equality] sequent { <H>; x: 'A; <J['x]> >- 'A = 'B in univ[i:l] } -->
+   [equality] sequent { <H>; x: 'A; <J['x]> >- 'A = 'B<|H|> in univ[i:l] } -->
    sequent { <H>; x: 'A; <J['x]> >- 'T['x] } =
    't['x]
 
 prim hypSubstitution 'H ('t1 = 't2 in 'T2) bind{y. 'A['y]} :
-   [equality] sequent { <H>; x: 'A['t1]; <J['x]> >- 't1 = 't2 in 'T2 } -->
+   [equality] sequent { <H>; x: 'A['t1]; <J['x]> >- 't1 = 't2<|H|> in 'T2 } -->
    [main] ('t['x] : sequent { <H>; x: 'A['t2]; <J['x]> >- 'T1['x] }) -->
    [wf] sequent { <H>; x: 'A['t1]; <J['x]>; z: 'T2 >- "type"{'A['z]} } -->
    sequent { <H>; x: 'A['t1]; <J['x]> >- 'T1['x] } =

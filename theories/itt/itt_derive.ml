@@ -45,6 +45,7 @@ open Mp_resource
 open Var
 open Mptop
 open Typeinf
+open Lm_symbol
 
 open Tactic_type
 open Tactic_type.Tacticals
@@ -141,7 +142,7 @@ let search_apply =
    let rec search apps vars goal =
       if is_apply_term goal then
          let f, a = dest_apply goal in
-            if is_var_term f & List.mem (dest_var f) vars then
+            if is_var_term f && SymbolSet.mem vars (dest_var f) then
                search_term (add_term goal apps) vars goal
             else
                search_term apps vars goal
@@ -181,11 +182,8 @@ let autoApplyT = argfunT (fun i p ->
       if is_type_term goal then
          raise (RefineError ("autoApplyT", StringError "don't apply to 'type' goals"))
       else
-         let vars = Sequent.declared_vars p in
-         let apps =
-            search_apply vars (**)
-               (if i = 0 then Sequent.concl p else Sequent.nth_hyp p i)
-         in
+         let t = if i = 0 then Sequent.concl p else Sequent.nth_hyp p i in
+         let apps = search_apply (free_vars_set t) t in
             anyApplyT apps i)
 
 (*

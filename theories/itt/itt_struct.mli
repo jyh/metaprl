@@ -96,7 +96,7 @@ rule substitution ('t1 = 't2 in 'T2) bind{x. 'T1['x]} :
  *)
 rule hypReplacement 'H 'B univ[i:l] :
    sequent { <H>; x: 'B; <J['x]> >- 'T['x] } -->
-   sequent { <H>; x: 'A; <J['x]> >- 'A = 'B in univ[i:l] } -->
+   sequent { <H>; x: 'A; <J['x]> >- 'A = 'B<|H|> in univ[i:l] } -->
    sequent { <H>; x: 'A; <J['x]> >- 'T['x] }
 
 (*
@@ -107,7 +107,7 @@ rule hypReplacement 'H 'B univ[i:l] :
  * H, x: A[t1]; J[x]; z: T2 >> A[z] in type
  *)
 rule hypSubstitution 'H ('t1 = 't2 in 'T2) bind{y. 'A['y]} :
-   sequent { <H>; x: 'A['t1]; <J['x]> >- 't1 = 't2 in 'T2 } -->
+   sequent { <H>; x: 'A['t1]; <J['x]> >- 't1 = 't2<|H|> in 'T2 } -->
    sequent { <H>; x: 'A['t2]; <J['x]> >- 'T1['x] } -->
    sequent { <H>; x: 'A['t1]; <J['x]>; z: 'T2 >- "type"{'A['z]} } -->
    sequent { <H>; x: 'A['t1]; <J['x]> >- 'T1['x] }

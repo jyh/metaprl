@@ -325,7 +325,7 @@ prim ty_matchExp_tyUnion_cases_ind 'H :
       has_type["union_cases"]{ matchExp{ atomVar{'v}; 'tail }; 't } } -->
    sequent { <H>; a: var_def{ 'v; tyUnion{ 'tv; 'tyl; 's }; 'd }; <J> >-
       has_type["union_cases"]{ matchExp{ atomVar{'v};
-                                         (matchCase{'set; 'exp} :: 'tail) };
+                                         (matchCase{'set<|H|>; 'exp} :: 'tail) };
                                't } }
    = it
 

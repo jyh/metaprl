@@ -117,9 +117,9 @@ interactive substitution2 ('t1 = 't2 in 'T) bind{x. 'C['x]} :
    sequent { <H> >- 'C['t1] }
 
 interactive hypSubstitution2 'H ('t1 = 't2 in 'T) bind{y. 'A['y]} :
-   [equality] sequent { <H>; x: 'A['t1]; <J['x]> >- 't1 = 't2 in 'T } -->
+   [equality] sequent { <H>; x: 'A['t1]; <J['x]> >- 't1 = 't2<|H|> in 'T } -->
    [main] sequent { <H>; x: 'A['t2]; <J['x]> >- 'C['x] } -->
-   [wf] sequent { <H>; x: 'A['t1]; <J['x]>; z: 'T; v: 't1='z in 'T; w: 't2='z in 'T
+   [wf] sequent { <H>; x: 'A['t1]; <J['x]>; z: 'T; v: 't1='z in 'T; w: 't2<|H|> = 'z in 'T
                            >- "type"{'A['z]} } -->
    sequent { <H>; x: 'A['t1]; <J['x]> >- 'C['x] }
 

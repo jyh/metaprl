@@ -550,13 +550,13 @@ prim universeFormation univ[j:l] :
 let infer_equal subst (so, t) =
    let t, x1, x2 = dest_equal t in
    let subst =
-      if is_var_term x1 then
-         (dest_var x1, t) :: subst
+      if is_fso_var_term x1 then
+         (dest_fso_var x1, t) :: subst
       else
          subst
    in
-      if is_var_term x2 then
-         (dest_var x2, t) :: subst
+      if is_fso_var_term x2 then
+         (dest_fso_var x2, t) :: subst
       else
          subst
 

@@ -353,37 +353,37 @@ let process_squash_resource_annotation name contexts args _ stmt tac =
    let concl = SeqGoal.get egoal.sequent_goals 0 in
    match contexts, args, assums, (SeqHyp.to_list egoal.sequent_hyps) with
       (* H |- [T] --> H |- T *)
-      [||], [], [_, _, assum], [Context(h,[])] when
+      [||], [], [_, _, assum], [Context(h,[],[])] when
          let eassum = TermMan.explode_sequent assum in
-         SeqHyp.get eassum.sequent_hyps 0 = Context(h,[]) &&
+         SeqHyp.get eassum.sequent_hyps 0 = Context(h,[],[]) &&
          let aconcl = SeqGoal.get eassum.sequent_goals 0 in
          is_squash_term aconcl &&
          alpha_equal (dest_squash aconcl) concl
       ->
          concl, SqStableGoal(Tactic_type.Tactic.tactic_of_rule tac [||] [])
       (* H |- T --> H |- a in T *)
-    | [||], [], [_, _, assum], [Context(h,[])] when
+    | [||], [], [_, _, assum], [Context(h,[],[])] when
          is_equal_term concl &&
          let t,a,b = dest_equal concl in
          alpha_equal a b &&
          let eassum = TermMan.explode_sequent assum in
-         SeqHyp.get eassum.sequent_hyps 0 = Context(h,[]) &&
+         SeqHyp.get eassum.sequent_hyps 0 = Context(h,[],[]) &&
          alpha_equal (SeqGoal.get eassum.sequent_goals 0) t
       ->
          let t,a,_ = dest_equal concl in
             t, SqStable(a, Tactic_type.Tactic.tactic_of_rule tac [||] [])
       (* H |- a in T *)
-    | [||], [], [], [Context(_,[])] when
+    | [||], [], [], [Context(_,[],[])] when
          (let t,a,b = dest_equal concl in (alpha_equal a b) )
       ->
          let t,a,_ = dest_equal concl in
             t, SqStable(a, Tactic_type.Tactic.tactic_of_rule tac [||] [])
       (* H; x:T; J[x] |- C[x] *)
-    | [| h |], [], [], [Context(h',[]); HypBinding(v,t); Context(_, [v'])] when
-         h = h' && is_var_term v' && (dest_var v') = v &&
+    | [| h |], [], [], [Context(h',[],[]); HypBinding(v,t); Context(_, [h''], [v'])] when
+         h = h' && h' = h'' && is_var_term v' && (dest_var v') = v &&
          is_so_var_term concl &&
          begin match dest_so_var concl with
-            _, [v''] -> alpha_equal v' v''
+            _, [_; _], [v''] -> alpha_equal v' v''
           | _ -> false
          end
       ->

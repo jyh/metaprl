@@ -39,6 +39,7 @@ doc <:doc<
 doc <:doc< @doc{@parents} >>
 extends Itt_theory
 extends Itt_nat
+extends Itt_fun2
 extends Itt_synt_var
 extends Itt_synt_operator
 extends Itt_synt_bterm
@@ -49,13 +50,36 @@ open Basic_tactics
 doc <:doc< @doc{@terms} >>
 
 (*
- *  subst( <H>,x,<J>.t[x]; var(<H>,x,<J2>.x); <H>,<J>.s ) = <H>,<J>.t[s]
+ *  add_var( <H>;<J>.s; <H>,x,<J'>.x ) = <H>,x,<J>.s
+ *)
+define unfold_add_var:
+   add_var{'bt;'v} <-->
+      fix{add.lambda{bt.
+         dest_bterm{'bt;
+                    u. if left{'v}<=@ left{'u} then var{left{'u}+@1;right{'u}} else var{left{'u};right{'u}+@1};
+                    op,subterms. make_bterm{'op;map{lambda{x.'add 'x}; 'subterms}} }
+         }} 'bt
+
+(*
+ *  add_var( <H>.s ) = <H>,x.s
+ *)
+define unfold_add_var1:
+   add_var{'bt} <--> add_var{'bt; var{bdepth{'bt};0}}
+
+(*
+ *  add_vars_upto( <H>.s; <H>,<J>.t ) = <H>,<J>.s
+ *)
+define unfold_add_vars_upto:
+   add_vars_upto{'s;'u} <--> fun_exp{s.add_var{'s}; bdepth{'u} -@ bdepth{'s}}
+
+(*
+ *  subst( <H>,x,<J_1>,<J_2>.t[x]; var(<H>,x,<J_3>.x); <H>,x,<J_1>.s[x] ) = <H>,x,<J_1>,<J_2>.t[s[x]]
  *)
 define unfold_subst:
    subst{'t;'v;'s} <-->
       fix{subst.lambda{t.
          dest_bterm{'t;
-                    u. subst_var{'u;'v;'s};
+                    u. if is_eq{'v;'u} then add_vars_upto{'s;'u} else 'u;
                     op,subterms. make_bterm{'op;map{lambda{x.'subst 'x}; 'subterms}} }
          }} 't
 

@@ -45,3 +45,5 @@ interactive id_wf  {| intro [] |} :
 
 define unfold_funexp :  fun_exp{'f;'n} <--> ind{'n;id; "_" ,F.compose{'F;'f}}
 
+define unfold_funexp2 :  fun_exp{x.'f['x];'n} <--> fun_exp{lambda{x.'f['x]};'n}
+

@@ -699,3 +699,61 @@ val atomVar_term : term
 val is_atomVar_term : term -> bool
 val mk_atomVar_term : term -> term
 val dest_atomVar_term : term -> term
+
+(**************
+ * Expressions.
+ **************)
+
+val letUnop_term : term
+val is_letUnop_term : term -> bool
+val mk_letUnop_term : term -> term -> term -> string -> term -> term
+val dest_letUnop_term : term -> term * term * term * string * term
+
+val letBinop_term : term
+val is_letBinop_term : term -> bool
+val mk_letBinop_term : term -> term -> term -> term -> string -> term -> term
+val dest_letBinop_term : term -> term * term * term * term * string * term
+
+val letExt_term : term
+val is_letExt_term : term -> bool
+val mk_letExt_term : term -> term -> term -> term -> string -> term -> term
+val dest_letExt_term : term -> term * term * term * term * string * term
+
+val tailCall_term : term
+val is_tailCall_term : term -> bool
+val mk_tailCall_term : term -> term -> term
+val dest_tailCall_term : term -> term * term
+
+val matchCase_term : term
+val is_matchCase_term : term -> bool
+val mk_matchCase_term : term -> term -> term
+val dest_matchCase_term : term -> term * term
+
+val match_term : term
+val is_match_term : term -> bool
+val mk_match_term : term -> term -> term
+val dest_match_term : term -> term * term
+
+val letAlloc_term : term
+val is_letAlloc_term : term -> bool
+val mk_letAlloc_term : string -> term -> term -> term
+val dest_letAlloc_term : term -> string * term * term
+
+val letSubscript_term : term
+val is_letSubscript_term : term -> bool
+val mk_letSubscript_term :
+   term -> term -> term -> term -> string -> term -> term
+val dest_letSubscript_term : term -> term * term * term * term * string * term
+
+val setSubscript_term : term
+val is_setSubscript_term : term -> bool
+val mk_setSubscript_term :
+   term -> term -> term -> term -> term -> string -> term -> term
+val dest_setSubscript_term :
+   term -> term * term * term * term * term * string * term
+
+val memcpy_term : term
+val is_memcpy_term : term -> bool
+val mk_memcpy_term :
+   term -> term -> term -> term -> term -> term -> term -> term
+val dest_memcpy_term : term -> term * term * term * term * term * term * term

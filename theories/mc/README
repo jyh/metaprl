@@ -1,105 +1,38 @@
-Note as of 19 November 2001:
+Maintainer of this theory: Brian Emre Aydemir (emre@its.caltech.edu)
+Last update to this file: 20 November 2001
 
-Clean up mc_term_op_ds!! (errors and all that...)
+Brief module descriptions:
+--------------------------------------------------------------------------
+mc_term_op_ds - Basic term operations beyond what's provided in
+   Refiner.Refiner.TermOp for working with terms in this theory.
+fir_int_set - Basic FIR integer set.
+fir_rawint_set - Basic FIR raw integer set.
+fir_ty - Terms and display forms for FIR types.
+fir_exp - Terms and display forms for FIR expressions.
+fir_eval - Defines how an FIR term-structure should evaluate.
+fir_deadcode - Deadcode elimination on an FIR term-structure.
+fir_const_elim - Constant elimination on an FIR term-structure.
+fir_marshal - Convertes between an Fir.prog and MetaPRL term-structure.
+mc_theory - Pulls together all of the above files for convinience.
+fir_test - Contains test sequents.  Not comprehensive or actively maintained.
+fir_type* - Not actively maintained.  I think these were supposed to have
+   rules that determined what constituted a well-typed expression.
 
+General overview:
 --------------------------------------------------------------------------
 
-Note as of 18 November 2001:
+The purpose of this theory is to provide a formal representation of the
+Mojave compiler's FIR.
 
-I need to redo this readme file
-
-I also need to get semantics on the FIR union and some expression crap!
-
+Todo list:
 --------------------------------------------------------------------------
+- Term construction / deconstruction operators for int_set and rawint_set.
+- Clean up mc_term_op_ds, esp. with regard to error handling and messages.
+- Get semantics for union / allocation / type-construction ops.
+- Make a comprehensive test file.
+- fir_deadcode - get dead parameter and function removal working.
+- fir_exp - Atomic, Debug, and Migrate term are missing.  I should
+   at least declare these or something.
 
-Note as of 17 November 2001:
-
-This file needs a complete rewrite.  I should also make this file
-much more informative.
-
-If you don't use term_ds, I'm unsure what'll happen with this code...
-
-I'm also highly confused as to what I need to do to get all the necessary
-term operations working as I'd like them too!
-
-I also need to do _a lot_ of rereading of code to eliminate typos since this
-code is otherwise a bit difficult to test.
-
+Notes to myself:
 --------------------------------------------------------------------------
-
-Note as of 7 November 2001:
-
-I have some sort of constant elimination things defined.
-At this point, I need to get marshalling working, which means
-getting the two build trees to compile together.  And I
-should probable have some good test cases or something.
-
---------------------------------------------------------------------------
-
-Note as of 21 October 2001:
-
-Fir_deadcode: need to get dead function paramter and dead function
-   removal working at some point.
-
---------------------------------------------------------------------------
-
-Notes as of 19 October 2001:
-
-Fir_exp: I don't have Atomic, Debug, or SysMigrate terms.
-
-Assumptions that I should have written down earlier:
-   for Fir_eval:
-      allocArray/allocTuple take the list to allocate as the result
-      let/set assume they get a list to index/replace into
-
---------------------------------------------------------------------------
-
-Notes as of 6 October 2001 (I hope...):
-
-(When I say FIR, I refer to the FIR in the mc compiler.)
-
-In general, the Fir_type* modules need testing and refinement
-at this point.  Emphasis on the testing.  I've just sort
-of guessed what typing judgements are useful/correct.  There's
-no actual guarentees that the type system defined through those files
-is consistent, logical, correct, etc.  There's no guarentee that they
-even make any sort of sense at this point.
-
-The general divisions for the Fir_type* files are as follows:
-Fir_type : basic types, e.g. Fir_ty
-Fir_type_exp : rules for Fir_exp stuff
-Fir_type_int : rules for Fir_int stuff (mostly a convinience for automation
-   last I checked)
-
-The rest of the files are intended to represent the following:
-Fir_int_set : A limited implementation of the int_set's in the FIR.
-   The set is essentially a list of closed intervals over the integers.
-   Unlike the FIR, I have no notiong of max / min sets, singleton sets,
-   and all those convinient operations/representations.  I have a list
-   of intervals, I can test for membership, and that's about it.
-   I don't even try enforcing that the intervals are in any sort of sane
-   order or that for a given interval [a,b], I don't enforce a<=b
-   (though membership testing should blow up badly if that's the case).
-Fir_ty : FIR types
-Fir_exp : FIR expressions
-Fir_eval : used to evaluate the FIR as output by mc with -print_metaprl.
-
-Oh yeah, naming scheme.  Essentially, anything that's supposed to represent
-something in the fir uses the exact same name, except the first
-character is lowercase, e.g. TyInt -> tyInt.
-
-With term names like these, the idea is that the mc compiler
-can easily spit things out with a minimum of mangling, leaving it
-to MetaPRL to provide the necessary rewrites to change the output
-or whatever into something it can deal with.
-
-This seems to work pretty well.
-
-The only oddity at this point is that tuples are being represented
-here (and emmited by the compiler) as lists it would seem.
-Really wacky if you ask me, but umm, well, this all has to do with...
-
-Subscripting.  Subscripting is fun.  Subscripting is interesting.  Yes.
-So are union related things. These are all "fun".  That means that
-I don't feel that I completely understand them yet, so their implementation
-and whatnot may be wacky.

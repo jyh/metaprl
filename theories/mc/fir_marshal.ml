@@ -40,21 +40,11 @@ open Fir_ty
 open Fir_exp
 
 (*************************************************************************
- * Convert between the marshalled version of the fir and Fir.prog.
- *************************************************************************)
-
-let marshalled_fir_to_prog data =
-   ()
-
-let marshall_prog dest prog =
-   ()
-
-(*************************************************************************
  * Convert between Fir.prog and MetaPRL terms.
  *************************************************************************)
 
-let prog_to_term fir_prog =
+let fir_prog_to_term fir_prog =
    ()
 
-let term_to_prog term_exp =
+let term_to_fir_prog term_exp =
    ()

@@ -42,3 +42,4 @@ include Fir_exp
 include Fir_eval
 include Fir_deadcode
 include Fir_const_elim
+include Fir_marshal

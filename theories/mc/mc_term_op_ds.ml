@@ -166,4 +166,30 @@ let dest_5_dep0_1_dep1_term opname t =
           | _ ->
                raise (SanityError "dest_5_dep0_1_dep1_term")
       else
-         raise (DestFailure("dest_5_dep0_1_dep1_term: ", t))
+         raise (DestFailure ("dest_5_dep0_1_dep1_term: ", t))
+
+(*************************************************************************
+ * 7 subterms.
+ *************************************************************************)
+
+let is_7_dep0_term opname t =
+   let (opname', arities, subterms) = pre_dest_term t in
+      opname_arity_check opname [0;0;0;0;0;0;0] opname' arities
+
+let mk_7_dep0_term opname t1 t2 t3 t4 t5 t6 t7 =
+   mk_term  (make_op { op_name = opname; op_params = [] })
+            [ mk_simple_bterm t1; mk_simple_bterm t2; mk_simple_bterm t3;
+              mk_simple_bterm t4; mk_simple_bterm t5; mk_simple_bterm t6;
+              mk_simple_bterm t7
+            ]
+
+let dest_7_dep0_term opname t =
+   let (opname', arities, subterms) = pre_dest_term t in
+      if opname_arity_check opname [0;0;0;0;0;0;0] opname' arities then
+         match subterms with
+            [t1; t2; t3; t4; t5; t6; t7] ->
+               t1, t2, t3, t4, t5, t6, t7
+          | _ ->
+               raise (SanityError "dest_7_dep0_term")
+      else
+         raise (DestFailure ("dest_7_dep0_term: ", t))

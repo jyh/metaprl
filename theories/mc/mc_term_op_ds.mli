@@ -75,3 +75,13 @@ val mk_5_dep0_1_dep1_term :
    opname -> term -> term -> term -> term -> term -> string -> term -> term
 val dest_5_dep0_1_dep1_term :
    opname -> term -> term * term * term * term * term * string * term
+
+(*************************************************************************
+ * 7 subterms
+ *************************************************************************)
+
+val is_7_dep0_term : opname -> term -> bool
+val mk_7_dep0_term :
+   opname -> term -> term -> term -> term -> term -> term -> term -> term
+val dest_7_dep0_term :
+   opname -> term -> term * term * term * term * term * term * term

@@ -1132,3 +1132,67 @@ let dest_atomVar_term = dest_dep0_term atomVar_opname
 (**************
  * Expressions.
  **************)
+
+let letUnop_term = << letUnop{ 'op; 'ty; 'a1; v. 'exp['v] } >>
+let letUnop_opname = opname_of_term letUnop_term
+let is_letUnop_term = is_3_dep0_1_dep1_term letUnop_opname
+let mk_letUnop_term = mk_3_dep0_1_dep1_term letUnop_opname
+let dest_letUnop_term = dest_3_dep0_1_dep1_term letUnop_opname
+
+let letBinop_term = << letBinop{ 'op; 'ty; 'a1; 'a2; v. 'exp['v] } >>
+let letBinop_opname = opname_of_term letBinop_term
+let is_letBinop_term = is_4_dep0_1_dep1_term letBinop_opname
+let mk_letBinop_term = mk_4_dep0_1_dep1_term letBinop_opname
+let dest_letBinop_term = dest_4_dep0_1_dep1_term letBinop_opname
+
+let letExt_term =
+   << letExt{ 'ty; 'string; 'ty_of_str; 'atom_list; v. 'exp['v] } >>
+let letExt_opname = opname_of_term letExt_term
+let is_letExt_term = is_4_dep0_1_dep1_term letExt_opname
+let mk_letExt_term = mk_4_dep0_1_dep1_term letExt_opname
+let dest_letExt_term = dest_4_dep0_1_dep1_term letExt_opname
+
+let tailCall_term = << tailCall{ 'var; 'atom_list } >>
+let tailCall_opname = opname_of_term tailCall_term
+let is_tailCall_term = is_dep0_dep0_term tailCall_opname
+let mk_tailCall_term = mk_dep0_dep0_term tailCall_opname
+let dest_tailCall_term = dest_dep0_dep0_term tailCall_opname
+
+let matchCase_term = << matchCase{ 'set; 'exp } >>
+let matchCase_opname = opname_of_term matchCase_term
+let is_matchCase_term = is_dep0_dep0_term matchCase_opname
+let mk_matchCase_term = mk_dep0_dep0_term matchCase_opname
+let dest_matchCase_term = dest_dep0_dep0_term matchCase_opname
+
+let match_term = << "match"{ 'key; 'cases } >>
+let match_opname = opname_of_term match_term
+let is_match_term = is_dep0_dep0_term match_opname
+let mk_match_term = mk_dep0_dep0_term match_opname
+let dest_match_term = dest_dep0_dep0_term match_opname
+
+let letAlloc_term = << letAlloc{ 'alloc_op; v. 'exp['v] } >>
+let letAlloc_opname = opname_of_term letAlloc_term
+let is_letAlloc_term = is_dep0_dep1_term letAlloc_opname
+let mk_letAlloc_term = mk_dep0_dep1_term letAlloc_opname
+let dest_letAlloc_term = dest_dep0_dep1_term letAlloc_opname
+
+let letSubscript_term =
+   << letSubscript{ 'subop; 'ty; 'var; 'index; v. 'exp['v] } >>
+let letSubscript_opname = opname_of_term letSubscript_term
+let is_letSubscript_term = is_4_dep0_1_dep1_term letSubscript_opname
+let mk_letSubscript_term = mk_4_dep0_1_dep1_term letSubscript_opname
+let dest_letSubscript_term = dest_4_dep0_1_dep1_term letSubscript_opname
+
+let setSubscript_term =
+   << setSubscript{ 'subop; 'ty; 'var; 'index; 'new_val; v. 'exp['v] } >>
+let setSubscript_opname = opname_of_term setSubscript_term
+let is_setSubscript_term = is_5_dep0_1_dep1_term setSubscript_opname
+let mk_setSubscript_term = mk_5_dep0_1_dep1_term setSubscript_opname
+let dest_setSubscript_term = dest_5_dep0_1_dep1_term setSubscript_opname
+
+let memcpy_term =
+   << memcpy{ 'subop; 'var1; 'atom1; 'var2; 'atom2; 'len; 'exp } >>
+let memcpy_opname = opname_of_term memcpy_term
+let is_memcpy_term = is_7_dep0_term memcpy_opname
+let mk_memcpy_term = mk_7_dep0_term memcpy_opname
+let dest_memcpy_term = dest_7_dep0_term memcpy_opname

@@ -29,3 +29,19 @@
  * Author: Brian Emre Aydemir
  * Email:  emre@its.caltech.edu
  *)
+
+(* Open MC ML namespaces. *)
+
+open Fir
+
+(* Open MetaPRL ML namespaces. *)
+
+open Refiner.Refiner.Term
+
+(*************************************************************************
+ * Convert between Fir.prog and MetaPRL terms.
+ *************************************************************************)
+
+val fir_prog_to_term : Fir.prog -> unit
+
+val term_to_fir_prog : term -> unit

@@ -9,7 +9,8 @@ extends Itt_pairwise2
 
 open Basic_tactics
 
-define unfold_dom: dom{'ops;'T} <--> Var + (exst i:Index{'ops} . { bts: list{BTerm isect 'T} | compatible_shapes{nth{'ops;'i};'bts} })
+
+define unfold_dom: dom{'ops;'T} <--> Var + (i:Index{'ops} * { bts: list{BTerm isect 'T} | compatible_shapes{nth{'ops;'i};'bts} })
 
 
 define unfold_mk: mk{'ops} <--> lambda{d. decide{'d; v. 'v; p.spread{'p; i,bts. make_bterm{nth{'ops;'i}; 'bts } }}}
@@ -31,4 +32,20 @@ interactive dom_monotone  {| intro[] |}:
    sequent { <H> >- 'ops in list{Operator} } -->
    sequent { <H> >- 'S subtype 'T } -->
    sequent { <H> >- dom{'ops;'S} subtype dom{'ops;'T} }
+
+define dest: dest{'ops} <-->
+   lambda{t.
+      dest_bterm{'t;
+        var. inl{'var};
+        op,subterms.
+           inr{(find{'ops; 'op; x,y.is_same_op{'x;'y}}
+               ,'subterms
+               )} }}
+
+
+interactive mk_reverse {| intro[] |} :
+   sequent { <H> >- 'ops in list{Operator} } -->
+   sequent { <H> >- 'T subtype BTerm } -->
+   sequent { <H> >- dest{'ops} in RReverse{mk{'ops}; dom{'ops;'T}; BTerm} }
+
 

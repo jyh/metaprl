@@ -127,7 +127,7 @@ and compare_bterm_lists constantp subst terms1 terms2 =
    match terms1, terms2 with
       term1 :: terms1, term2 :: terms2 ->
          begin
-            match compare_terms constantp subst (dest_bterm term1).bterm (dest_bterm term2).bterm with
+            match compare_terms constantp subst (dest_simple_bterm term1) (dest_simple_bterm term2) with
                Equal subst ->
                   compare_bterm_lists constantp subst terms1 terms2
              | ord ->

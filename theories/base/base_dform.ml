@@ -168,11 +168,11 @@ dform rewrite_df : mode["prl"] :: "rewrite"{'redex; 'contractum} =
  *    cflag is true if the last term was a conclusion
  *    t is the term to be printed.
  *)
-ml_dform sequent_src_df : "sequent"{'ext; 'seq} format_term buf =
+ml_dform sequent_src_df : mode["src"] :: "sequent"{'ext; 'seq} format_term buf =
    let rec format_goal goals i len =
       if i <> len then
          begin
-            format_string buf (if i = 0 then ">-" else ";");
+            format_string buf (if i = 0 then " >-" else ";");
             format_space buf;
             format_term buf NOParens (SeqGoal.get goals i);
             format_goal goals (i + 1) len
@@ -205,7 +205,9 @@ ml_dform sequent_src_df : "sequent"{'ext; 'seq} format_term buf =
       in
          format_szone buf;
          format_pushm buf 0;
-         format_string buf "sequent {";
+         format_string buf "sequent [";
+         format_term buf NOParens args;
+         format_string buf "] {";
          format_hyp hyps 0 (SeqHyp.length hyps);
          format_goal goals 0 (SeqGoal.length goals);
          format_string buf " }";

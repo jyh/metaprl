@@ -392,44 +392,19 @@ prec prec_or < prec_and
 prec prec_and < prec_not
 prec prec_quant < prec_iff
 
-dform true_df1 : mode[src] :: "true" = `"True"
-
-dform false_df1 : mode[src] :: "false" = `"False"
-
-dform not_df1 : mode[src] :: parens :: "prec"[prec_implies] :: "not"{'a} =
-   `"not " slot["le"]{'a}
-
-dform implies_df1 : mode[src] :: parens :: "prec"[prec_implies] :: implies{'a; 'b} =
-   slot["le"]{'a} `" => " slot["lt"]{'b}
-
-dform iff_df1 : mode[src] :: parens :: "prec"[prec_iff] :: iff{'a; 'b} =
-   slot["le"]{'a} `" <==> " slot["lt"]{'b}
-
-dform and_df1 : mode[src] :: parens :: "prec"[prec_and] :: "and"{'a; 'b} =
-   slot["le"]{'a} `" or " slot["lt"]{'b}
-
-dform or_df1 : mode[src] :: parens :: "prec"[prec_or] :: "or"{'a; 'b} =
-   slot["le"]{'a} `" and " slot["lt"]{'b}
-
-dform all_df1 : mode[src] :: parens :: "prec"[prec_quant] :: "all"{'A; x. 'B} =
-   `"all " slot{'x} `": " slot{'A}`"." slot{'B}
-
-dform exists_df1 : mode[src] :: parens :: "prec"[prec_quant] :: "exists"{'A; x. 'B} =
-  `"exists " slot{'x} `": " slot{'A} `"." slot{'B}
-
-dform true_df2 : "true" =
+dform true_df : "true" =
    `"True"
 
-dform false_df2 : "false" =
+dform false_df : "false" =
    `"False"
 
-dform not_df2 : parens :: "prec"[prec_not] :: "not"{'a} =
+dform not_df1 : parens :: "prec"[prec_not] :: "not"{'a} =
    Nuprl_font!tneg slot["le"]{'a}
 
-dform implies_df2 : parens :: "prec"[prec_implies] :: implies{'a; 'b} =
+dform implies_df1 : parens :: "prec"[prec_implies] :: implies{'a; 'b} =
    slot["le"]{'a} " " Nuprl_font!Rightarrow " " slot["lt"]{'b}
 
-dform iff_df2 : parens :: "prec"[prec_iff] :: iff{'a; 'b} =
+dform iff_df1 : parens :: "prec"[prec_iff] :: iff{'a; 'b} =
    slot["le"]{'a} " " Nuprl_font!Leftrightarrow " " slot["lt"]{'b}
 
 (*
@@ -437,37 +412,63 @@ dform iff_df2 : parens :: "prec"[prec_iff] :: iff{'a; 'b} =
  *)
 declare or_df{'a}
 
-dform or_df2 : parens :: "prec"[prec_or] :: "or"{'a; 'b} =
+dform or_df1 : parens :: "prec"[prec_or] :: "or"{'a; 'b} =
    szone pushm[0] slot["le"]{'a} or_df{'b} popm ezone
 
-dform or_df3 : or_df{."or"{'a; 'b}} =
-   hspace Nuprl_font!vee " " slot["le"]{'a} or_df{'b}
+dform or_df2 : or_df{."or"{'a; 'b}} =
+   or_df{'a} or_df{'b}
 
-dform or_df4 : or_df{'a} =
+dform or_df3 : or_df{'a} =
    hspace Nuprl_font!vee " " slot{'a}
+
+dform or_df4 : mode[src] :: parens :: "prec"[prec_or] :: "or"{'a; 'b} =
+   slot["le"]{'a} `" or " slot["lt"]{'b}
 
 (*
  * Disjunction.
  *)
 declare and_df{'a}
 
-dform and_df2 : parens :: "prec"[prec_and] :: "and"{'a; 'b} =
+dform and_df1 : parens :: "prec"[prec_and] :: "and"{'a; 'b} =
    szone pushm[0] slot["le"]{'a} and_df{'b} popm ezone
 
-dform and_df3 : and_df{."and"{'a; 'b}} =
-   hspace Nuprl_font!wedge " " slot["le"]{'a} and_df{'b}
+dform and_df2 : and_df{."and"{'a; 'b}} =
+   and_df{'a} and_df{'b}
 
-dform and_df4 : and_df{'a} =
+dform and_df3 : and_df{'a} =
    hspace Nuprl_font!wedge " " slot{'a}
+
+dform and_df4 : mode[src] :: parens :: "prec"[prec_and] :: "and"{'a; 'b} =
+   slot["le"]{'a} `" and " slot["lt"]{'b}
 
 (*
  * Quantifiers.
  *)
-dform all_df2 : parens :: "prec"[prec_quant] :: "all"{'A; x. 'B} =
+dform all_df1 : parens :: "prec"[prec_quant] :: "all"{'A; x. 'B} =
    pushm[3] Nuprl_font!forall slot{'x} `":" slot{'A} sbreak["",". "] slot{'B} popm
 
-dform exists_df2 : parens :: "prec"[prec_quant] :: "exists"{'A; x. 'B} =
+dform exists_df1 : parens :: "prec"[prec_quant] :: "exists"{'A; x. 'B} =
    pushm[3] Nuprl_font!"exists" slot{'x} `":" slot{'A} sbreak["",". "] slot{'B} popm
+
+(*
+ * Source mode
+ *)
+
+dform not_df2 : mode[src] :: parens :: "prec"[prec_implies] :: "not"{'a} =
+   `"not " slot["le"]{'a}
+
+dform implies_df2 : mode[src] :: parens :: "prec"[prec_implies] :: implies{'a; 'b} =
+   slot["le"]{'a} `" => " slot["lt"]{'b}
+
+dform iff_df2 : mode[src] :: parens :: "prec"[prec_iff] :: iff{'a; 'b} =
+   slot["le"]{'a} `" <==> " slot["lt"]{'b}
+
+dform all_df2 : mode[src] :: parens :: "prec"[prec_quant] :: "all"{'A; x. 'B} =
+   `"all " slot{'x} `": " slot{'A}`"." slot{'B}
+
+dform exists_df2 : mode[src] :: parens :: "prec"[prec_quant] :: "exists"{'A; x. 'B} =
+  `"exists " slot{'x} `": " slot{'A} `"." slot{'B}
+
 
 (************************************************************************
  * TACTICS                                                              *

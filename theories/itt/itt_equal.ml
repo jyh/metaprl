@@ -270,16 +270,16 @@ dform member_df : parens :: "prec"[prec_equal] :: ('x IN 'T) =
 
 dform it_df1 : it = cdot
 
-dform type_prl_df1 : parens :: "prec"[prec_type] :: "type"{'a} =
+dform type_df1 : parens :: "prec"[prec_type] :: "type"{'a} =
    slot{'a} " " `"Type"
+
+dform type_df2 : mode[src] :: "type"{'a} =
+   `"\"type\"{" slot{'a} `"}"
 
 dform univ_df1 : univ[i:l] =
    mathbbU `"[" slot[i:l] `"]"
 
-dform univ_df2 : mode[html] :: univ[i:l] =
-   mathbbU `"[" slot[i:l] `"]"
-
-dform squash_df : squash =
+dform squash_df : mode[prl] :: squash =
    cdot
 
 (************************************************************************

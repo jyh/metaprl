@@ -153,17 +153,17 @@ dform two_order_df : two_order{'a; 'b} =
 prec prec_prod
 prec prec_spread
 
-dform prod_src_df : parens :: "prec"[prec_prod] :: mode[src] :: prod{'A; 'B} =
-   slot{'A} `" * " slot{'B}
-
 dform prod_prl_df : parens :: "prec"[prec_prod] :: prod{'A; 'B} =
    pushm[0] slot{'A} " " times " " slot{'B} popm
 
-dform prod_src_df2 : parens :: "prec"[prec_prod] :: mode[src] :: prod{'A; x. 'B} =
-   slot{'x} `":" slot{'A} `" * " slot{'B}
+dform prod_src_df : parens :: "prec"[prec_prod] :: mode[src] :: prod{'A; 'B} =
+   slot{'A} `" * " slot{'B}
 
 dform prod_prl_df2 :  parens :: "prec"[prec_prod] :: prod{'A; x. 'B} =
    slot{'x} `":" slot{'A} " " times " " slot{'B}
+
+dform prod_src_df2 : parens :: "prec"[prec_prod] :: mode[src] :: prod{'A; x. 'B} =
+   slot{'x} `":" slot{'A} `" * " slot{'B}
 
 dform pair_prl_df1 : pair{'a; 'b} =
    pushm[0] `"<" slot{'a}`"," slot{'b} `">" popm

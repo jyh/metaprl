@@ -87,13 +87,13 @@ declare AtomBinop{'op; 'a1; 'a2}
  * Expressions.
  *)
 declare LetAtom{'a; v. 'e['v]}
-declare LetFun{v. 'e1['v]; f. 'e2['f]}
 declare TailCall{'f; 'a}
 declare If{'a; 'e1; 'e2}
 declare LetPair{'a1; 'a2; v. 'e['v]}
 declare LetSubscript{'a1; 'a2; v. 'e['v]}
 declare SetSubscript{'a1; 'a2; 'a3; 'e}
 
+declare LetFun{v. 'e1['v]; f. 'e2['f]}
 declare LetApply{'f; 'a; v. 'e['v]}
 declare Return{'a}
 

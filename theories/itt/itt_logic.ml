@@ -1221,7 +1221,7 @@ doc <:doc<
       @vdots@cr
       <<sequent{ <H>; math_ldots >- 'T_n}>>@cr
       @hline
-      <<sequent{ <H> >- all x:'T_i.'C}>>;
+      <<sequent{ <H>; x:'T_i >- 'C}>>;
   
       <<sequent{ <H>; math_ldots >- 'T_1}>>@cr
       @vdots@cr
@@ -1245,21 +1245,25 @@ let genAssumT = argfunT (fun indices p ->
    in
    let rec make_gen_term t = function
       [] ->
-         t
+         t, idT
     | i :: indices ->
-         let t = make_gen_term t indices in
+         let t, tac = make_gen_term t indices in
          let t' = TermMan.nth_concl (Sequent.nth_assum p i) 1 in
          if is_member_term t' then
             let t_type, t_var, _ = dest_equal t' in
-               if is_var_term t_var then
+               (if is_var_term t_var then
                   mk_all_term (dest_var t_var) t_type t
                else
                   let v = maybe_new_var_arg p "v" in
-                     mk_all_term v t_type (var_subst t t_var v)
-         else mk_implies_term t' t
+                     mk_all_term v t_type (var_subst t t_var v)),
+               (dT 0 thenLT [
+                  equalTypeT t_var t_var thenT nthAssumT i;
+                  idT])
+         else 
+            mk_implies_term t' t, (dT 0 thenLT [typeAssertT thenT nthAssumT i; tac])
    in
-   let t = make_gen_term (TermMan.nth_concl goal 1) indices in
-      assertT t thenMT (backThruHypT (-1) thenT autoT) )
+   let t, tac = make_gen_term (TermMan.nth_concl goal 1) indices in
+      (assertT t thenMT (backThruHypT (-1) thenT autoT)) thenT tac)
 
 (************ logic instance for j-prover in refiner/reflib/jall.ml  **********)
 

@@ -13119,7 +13119,7 @@ T	t5809	o1268 b5797 b5809
 B	b5810	t5809
 T	t5810	o1268 b5794 b5810
 B	b5811	t5810
-P	p5811	String "genAssumT [3] thenT dT 0 thenMT repeatForT 2 (dT 2) ttca"
+P	p5811	String "genAssumT [3] thenT repeatForT 2 (dT 2) ttca"
 O	o5811	ext_rule p5811
 T	t5811	o b5800 b14
 B	b5812	t5811

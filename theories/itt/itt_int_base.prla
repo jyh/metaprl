@@ -12006,7 +12006,7 @@ T	t5320	o5312 b5314 b5317 b5320
 B	b5321	t5320
 T	t5321	o5312 b5313 b1381 b5321
 B	b5322	t5321
-P	p5322	String "genAssumT [1] thenT dT 0 thenWT autoT"
+P	p5322	String "genAssumT [1]"
 O	o5322	ext_rule p5322
 T	t5322	o1656 b5312 b5322
 S	s5322	tbrarg h

@@ -1853,7 +1853,7 @@ T	t2837	o662 b3347 b2121
 B	b2837	t2837
 T	t2838	o662 b2997 b2837
 B	b2838	t2838
-P	p2838	String "genAssumT [2] thenT dT 0 thenWT autoT"
+P	p2838	String "genAssumT [2]"
 O	o2838	ext_rule p2838
 T	t2839	o1265 b2120 b3354
 B	b2839	t2839

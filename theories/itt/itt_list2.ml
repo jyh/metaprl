@@ -259,7 +259,7 @@ dform sameset_df : except_mode[src] :: sameset{'l1; 'l2; 'T} =
    (keyword["sameset"] 'l1 'l2 'T)
 
 dform append_df : except_mode[src] :: parens :: "prec"[prec_append] :: append{'l1; 'l2} =
-   slot{'l1} `" @" space slot{'l2}
+   slot["le"]{'l1} `" @" space slot{'l2}
 
 dform ball2_df : except_mode[src] :: parens :: "prec"[prec_ball] :: ball2{'l1; 'l2; x, y. 'b} =
    pushm[3] Nuprl_font!forall subb slot{'x} `", " slot{'y} space

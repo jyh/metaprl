@@ -7,6 +7,7 @@ declare sequent_arg{'T}
 declare le[i:l,j:l]  (* i is less or equal to j *)
 
 declare WF (* hypothesises are well-formed *)
+declare WF{'H}
 declare "type"[i:l]
 declare Prop
 declare Set
@@ -188,87 +189,83 @@ prim let_in 'T bind{x.'U['x]}:
 *                CONVERSION RULES               *
 *************************************************)
 
-declare red{'x;'t} (* term 'x reduces to term 't in the context H *)
+declare red {'x;'t} (* term 'x reduces to term 't in the context H *)
 
 
+(*
 prim beta :
-   sequent{ <H> >- red{ app{ lambda{'T; x.'t['x]}; 'u }; 't['u] } } = it
+   sequent { <H> >- red{ app{ lambda{'T; x.'t['x]}; 'u }; 't['u] } } = it
+*)
 
+prim_rw beta :
+   ( app{ lambda{'T; x.'t['x]}; 'u } ) <--> ( 't['u] )
+
+(*
 prim delta_let 'H:
-   sequent{ <H>; x:"let"{'t;'T} ; <J['x]> >- red{ 'x ; 't } } = it
+   sequent { <H>; x:"let"{'t;'T} ; <J['x]> >- red{ 'x ; 't } } = it
+*)
 
+prim delta_let_concl 'H bind{x.'C['x]} :
+   sequent { <H>; x:"let"{'t;'T} ; <J['x]> >- 'C['t] } -->
+	sequent { <H>; x:"let"{'t;'T} ; <J['x]> >- 'C['x] } = it
+
+prim delta_let_hyp 'H 'J bind{x.'C['x]} bind{x.'D['x]} :
+   sequent { <H>; x:"let"{'t;'T} ; <J['x]>; 'D['t]; <K['x]> >- 'C['x] } -->
+	sequent { <H>; x:"let"{'t;'T} ; <J['x]>; 'D['x]; <K['x]> >- 'C['x] } = it
+
+prim delta_let_all 'H bind{x.'C['x]} :
+   sequent { <H>; x:"let"{'t;'T} ; <J['t]> >- 'C['t] } -->
+	sequent { <H>; x:"let"{'t;'T} ; <J['x]> >- 'C['x] } = it
+
+(*
 prim zeta :
-   sequent{ <H> >- red{ let_in{ 'u; x.'t['x] }; 't['u] } } = it
+   sequent { <H> >- red{ let_in{ 'u; x.'t['x] }; 't['u] } } = it
+*)
 
-prim eta :
-   sequent{ <H> >- red{ lambda{ 'T; x.app{'t;'x}}; 't } } =it
-
+prim_rw zeta :
+   let_in{ 'u; x.'t['x] } <--> 't['u]
 
 (***************************************************
 *                 CONVERTIBILITY                   *
 ****************************************************)
 
-declare conv{'t1;'t2}  (* term 't1 reduces to term 't2 in the context H with
-                          many of the reductions *)
-declare equiv{'t1;'t2} (* two terms are convertible (or equivalent) *)
 declare conv_le{ 't; 'u } (* extending equivalence relation into an order
                              which will be inductively defined *)
-
-(* in the folowing two axioms the reduction of one term to another with
- * many of the reductions is defined *)
-prim red_conv :
-   sequent{ <H> >- red{'t;'u} } -->
-   sequent{ <H> >- conv{'t;'u} } = it
-
-prim reduces 't1:
-   sequent{ <H> >- conv{ 't; 't1 } } -->
-   sequent{ <H> >- conv{ 't1; 'u } } -->
-   sequent{ <H> >- conv{ 't; 'u} } = it
-
-(* definition of convertibility (equivalence) of two terms 't1 and 't2;
- *  two terms 't1 and 't2 are convertible (equivalent) in the environment E
- *  and context H iff the exist a term u such that E[H]|-'t1 > ... > u and
- * E[H]|-'t2 > ... > u *)
-prim equivalent 'u:
-   sequent{ <H> >- conv{ 't1; 'u } } -->
-   sequent{ <H> >- conv{ 't2; 'u } } -->
-   sequent{ <H> >- equiv{ 't1; 't2 } } = it
-
 
 (* inductive defenition of conv_le *)
 
 prim conv_le_1 :
-   sequent{ <H> >- equiv{ 't; 'u } } -->
-   sequent{ <H> >- conv_le{ 't; 'u } } = it
+   sequent { <H> >- conv_le{ 't; 't } } = it
 
 prim conv_le_2 :
-   sequent{ >- le[i:l,j:l] } -->
-   sequent{ <H> >- conv_le{ "type"[i:l]; "type"[j:l] } } = it
+   sequent { >- le[i:l,j:l] } -->
+   sequent { <H> >- conv_le{ "type"[i:l]; "type"[j:l] } } = it
 
 prim conv_le_3 :
-   sequent{ <H> >- conv_le{ Prop; "type"[i:l] } } = it
+   sequent { <H> >- conv_le{ Prop; "type"[i:l] } } = it
 
 prim conv_le_4 :
-   sequent{ <H> >- conv_le{ Set; "type"[i:l] } } = it
+   sequent { <H> >- conv_le{ Set; "type"[i:l] } } = it
 
 prim conv_le_5 :
-   sequent{ <H> >- equiv{ 'T; 'U } } -->
-   sequent{ <H>; x:decl{'T} >- conv_le{ 'T1['x]; 'U1['x] } } -->
-   sequent{ <H> >- conv_le{ product{ 'T; x.'T1['x]}; product{ 'U; x.'U1['x] }}} = it
+   sequent { <H>; x:decl{'T} >- conv_le{ 'T1['x]; 'U1['x] } } -->
+   sequent { <H> >- conv_le{ product{ 'T; x.'T1['x]}; product{ 'T; x.'U1['x] }}} = it
 
 prim conv_rule 's 'T:
-   sequent{ <H> >- has_type{ 'U; 's } } -->
-   sequent{ <H> >- has_type{ 'T; 't } } -->
-   sequent{ <H> >- conv_le{ 'T; 'U } } -->
-   sequent{ <H> >- has_type{ 't; 'U } } = it
+   sequent { <H> >- has_type{ 'U; 's } } -->
+   sequent { <H> >- has_type{ 't; 'T } } -->
+   sequent { <H> >- conv_le{ 'T; 'U } } -->
+   sequent { <H> >- has_type{ 't; 'U } } = it
 
 (*********************************************
  *         INDUCTIVE DEFINITIONS PART        *
 **********************************************)
 
 (* Coq's Ind(H)[Hp](Hi:=Hc) - inductive definition *)
-declare Ind       (*{ <H> >- ( <Hp> >- ( <Hi> >- (<Hc> >- 't))) }*)
-declare IndDef    (*{ <H> >- ( <Hp> >- ( <Hi> >- (<Hc> >- 't))) }*)
+declare Ind       (* *)
+declare IndDef    (* for ind.defenitions, Hi - new types, defenitions of new types *)
+declare IndParam (* for ind. defenirions, Hp - parameters of ind. defenition *)
+declare IndConstrs (* for ind. defenitions, Hc - constructors *)
 
 (* declaration of a multiple product, i.e. (p1:P1)(p2:P2)...(pr:Pr)T *)
 declare prodH     (*{ <H> >- 'T }*)
@@ -290,36 +287,61 @@ prim_rw test 'H :
 (* base axioms about Ind and IndDef *)
 (* for new types *)
 prim_rw indSubstDef 'Hi1 :
-   (sequent [Ind] { <H> >- (sequent { <Hp> >-
-	   (sequent { <Hi1>; x:'T; <Hi2['x]> >-
-		   (sequent { <Hc['x]> >- 't['x]})})}) }) <-->
-   (sequent [Ind] { <H> >- (sequent { <Hp> >-
-	   (sequent { <Hi1>; x1:'T; <Hi2['x1]> >-
-		   (sequent { <Hc['x1]> >- 't[(sequent [IndDef] { <H> >-
-		      (sequent { <Hp> >- (sequent { <Hi1>; x:'T; <Hi2['x]> >-
-				   sequent { <Hc['x]> >- 'x}})}) })] })})}) })
+   sequent [IndParam] { <Hp> >-
+	   (sequent [IndDef] { <Hi1>; x:'T; <Hi2['x]> >-
+		   (sequent [IndConstrs] { <Hc['x]> >- 't['x]})})} <-->
+   sequent [IndParam] { <Hp> >-
+	   (sequent [IndDef] { <Hi1>; x1:'T; <Hi2['x1]> >-
+		   (sequent [IndConstrs] { <Hc['x1]> >-
+			   't[sequent [IndParam] { <Hp> >-
+				   (sequent [IndDef] { <Hi1>; x:'T; <Hi2['x]> >-
+				      sequent [IndConstrs] { <Hc['x]> >- 'x}})}] })})}
 
 (* for constructors (names, types) *)
 prim_rw indSubstConstr 'Hc1 :
-   sequent [Ind] { <H> >- sequent { <Hp> >- sequent { <Hi> >-
-	sequent { <Hc1>; x:'T; <Hc2['x]> >- 't['x]}}} } <-->
-   sequent [Ind] { <H> >- sequent { <Hp> >- sequent { <Hi> >-
-		sequent { <Hc1>; x1:'T; <Hc2['x1]> >-
-         't[ sequent [IndDef] { <H> >- sequent { <Hp> >- sequent { <Hi> >-
-		      sequent { <Hc1>; x:'T; <Hc2['x]> >- 'x}}} } ]}}} }
+   sequent [IndParam] { <Hp> >-
+	   sequent [IndDef] { <Hi> >-
+		   sequent [IndConstrs] { <Hc1>; c:'C<|Hi;Hp|>; < Hc2<|Hi;Hp|> > >- 't['c]}}} <-->
+   sequent [IndParam] { <Hp> >-
+	   sequent [IndDef] { <Hi> >-
+		   sequent { <Hc1>; c1:'C<|Hi; Hp|>; < Hc2<|Hi; Hp|> > >-
+				't[ sequent [IndParam] { <Hp> >-
+				   sequent [IndDef] { <Hi> >-
+				      sequent [IndConstrs] { <Hc1>; c:'C<|Hi; Hp|>; < Hc2<|Hi; Hp|> > >- 'c}}}]}}}
 
 (* carry out ground terms from the Ind *)
 prim_rw indCarryOut :
-   sequent [Ind] { <H> >- sequent { <Hp> >- sequent { <Hi> >-
-	    sequent { <Hc> >- 't<||> } } }} <--> 't<||>
+   sequent { <H> >-
+	   sequent [IndParam] { <Hp> >-
+		   sequent [IndDef] { <Hi> >-
+	         sequent [IndConstrs] { <Hc> >- 't<||> } } }} <-->
+	't<||>
 
 
 (* implementation of the first part of the Coq's Ind-Const rule *)
-prim_rw ind_ConstDef 'Hi1 :
-   sequent [Ind] { <H> >- sequent { <Hp> >- sequent { <Hi1>; x:'T; <Hi2> >-
+(*prim_rw ind_ConstDef 'Hi1 :
+   sequent [Ind] { <H> >- sequent { <Hp> >- sequent { <Hi1>; I:'A; <Hi2> >-
 	   sequent { <Hc> >- WF }}} } <-->
-	sequent [Ind] { <H> >- sequent { <Hp> >- sequent { <Hi1>; x:'T; <Hi2> >-
-	   sequent { <Hc> >- has_type{sequent [prodH] { <Hp> >- 'T};'x} }}} }
+	sequent [Ind] { <H> >- sequent { <Hp> >- sequent { <Hi1>; I:'A; <Hi2> >-
+	   sequent { <Hc> >- has_type{'I;sequent [prodH] { <Hp> >- 'A}} }}} }
+*)
+prim ind_ConstDef 'Hi1 :
+   sequent { <H> >-
+	   WF{
+		   sequent [IndParam] { <Hp> >-
+		      sequent [IndDef] { <Hi1>; I:'A<|Hp;H|>; <Hi2> >-
+		         sequent [IndConstrs] { <Hc<|Hp;H;Hi1;Hi2|>['I]> >- it }}} } } -->
+	sequent { <H> >-
+		has_type {
+			sequent [IndParam] { <Hp> >-
+				sequent [IndDef] { <Hi1>; I:'A<|Hp;H|>; <Hi2> >-
+					sequent { <Hc<|Hp;H;Hi1;Hi2|>['I]> >- 'I} }};
+			sequent [prodH] { <Hp> >- 'A}} } } = it
+
+
+(*		 sequent [IndDef] { <Hi1>; I:'A<|Hp;H|>; <Hi2> >- sequent { <Hc<|Hp;H;Hi1;Hi2|>['I]> >-
+		    has_type{ 'I; sequent [prodH] { <Hp> >- 'A} } }}} } = it
+*)
 
 (* declaration of a multiple application, i.e. (...((Ip1)p2)p3...)pr *)
 declare applH (* { <H> >- 'T } *)
@@ -370,30 +392,39 @@ prim_rw substH_step :
 (* implementation of the second part of the Coq's Ind-Const rule *)
 (* old uncorrected
 prim ind_ConstConstr :
-   sequent {Ind{ <H> >- ( <Hp> >- ( <Hi> >- (<Hc1>; x:'T; <Hc2['x]> >-
-	   has_type{prodH{ <Hp> >- sequent [substH] {<Hp> ( <Hi> >- 'T)}};'x} ))) }}  = it
+   sequent {Ind{ <H> >- ( <Hp> >- ( <Hi> >- (<Hc1>; c:'C; <Hc2['x]> >-
+	   has_type{'c;prodH{ <Hp> >- sequent [substH] {<Hp> ( <Hi> >- 'C)}}} ))) }}  = it
 *)
-prim_rw ind_ConstConstr 'Hc1 :
+(*
+prim ind_ConstConstr 'Hc1 :
    sequent [Ind] { <H> >- sequent { <Hp> >- sequent { <Hi> >-
-	   sequent { <Hc1>; c:'C; <Hc2['c]> >- WF }}} }  <-->
+	   sequent { <Hc1>; c:'C; <Hc2['c]> >- WF }}} }  -->
 	sequent [Ind] { <H> >- sequent { <Hp> >- sequent { <Hi> >-
-	   sequent { <Hc1>; c:'C; <Hc2['c]> >- has_type{ sequent { <Hp> >-
-		sequent [substH] { <Hi> >- 'C}};'c} }}} }
-
-
-(* in the next part the conditions for the W-Ind rule and the W-Ind rule are implemented  *)
-
-declare of_some_sort (* { <T> } *) (* any element of T is a type of some sort (Set, Prop or Type[i]) *)
-
-declare has_type_m (* { <I> >- ( <T> >- has_type_m ) } *) (* multiple has_type, i.e. I={I1,...,Ik}, T={T1,...,Tk},
-                                         has_type{Ij;Tj}, j=1,..,k *)
-
+	   sequent { <Hc1>; c:'C; <Hc2['c]> >-
+		   has_type{'c;sequent { <Hp> >- sequent [substH] { <Hi> >- 'C}}} }}} } = it
+*)
+prim ind_ConstConstrs 'Hc1 :
+   sequent { <H> >-
+	   WF {
+		   sequent [IndParam] { <Hp> >-
+			   sequent [IndDef] { <Hi> >-
+	            sequent [IndConstrs] { <Hc1>; c:'C<|Hp;H;Hi|>; <Hc2['c]> >- it }}} }}  -->
+	sequent { <H> >-
+	   has_type {
+		   sequent [IndParam] { <Hp> >-
+			   sequent [IndDef] { <Hi> >-
+	            sequent [IndConstrs] { <Hc1>; c:'C<|Hp;H;Hi|>; <Hc2['c]> >- 'c }}};
+			sequent { <Hp> >- sequent [substH] { <Hi> >- 'C}}} } = it
 
 
 (*******************************************************************************************
  *  in the next part the conditions for the W-Ind rule and the W-Ind rule are implemented  *
  *******************************************************************************************)
 
+declare of_some_sort (* { <T> } *) (* any element of T is a type of some sort (Set, Prop or Type[i]) *)
+
+declare has_type_m (* { <I> >- ( <T> >- has_type_m ) } *) (* multiple has_type, i.e. I={I1,...,Ik}, T={T1,...,Tk},
+                                         has_type{Ij;Tj}, j=1,..,k *)
 (* declaration of 'arity of sort' notion *)
 declare arity_of_sort_m (* (<Hi> >- <S>)*) (* Hi={I1:A1,...,Ik:Ak}, S={s1,...,sk},
                                             Aj is an arity of sort sj, j=1,...,k*)
@@ -464,22 +495,25 @@ prim strictly_pos_1 'H :
    sequent { <H>; x:'T1; <J['x]>  >- strictly_pos{'x;'T} } = it
 
 prim strictly_pos_2 'H :
+	sequent { <H>; x:'T1; <J['x]> >- strictly_pos{'x;sequent [applH] { <T2> >- 'x}} } = it
+
+prim strictly_pos_3 'H 'U bind{x,y.'V['x;'y]} :
+   sequent { <H>; x:'T2; <J['x]>; x1:'U >- strictly_pos{'x;'V['x1;'x]} } -->
 	sequent { <H>; x:'T2; <J['x]> >-
-	   conv_le{ 'T['x]; sequent [applH]{ <T1> >- 'x} } } -->
-	sequent { <H>; x:'T2; <J['x]> >- strictly_pos{'x;'T['x]} } = it
+	   strictly_pos{'x ; product{ 'U;x1.'V['x1;'x]}} } = it
 
-prim strictly_pos_3 'U bind{x,y.'V['x,'y]}:
-   sequent { <H>; x:'T1; <J['x]> >- conv_le{ 'T; product{ 'U;x1.'V['x1,'x]}} } -->
-	sequent { <H>; x:'T2; <J['x]>; x1:'U >- strictly_pos{'x;'V['x1,'x]} } -->
-	sequent { <H>; x:'T2; <J['x]> >- strictly_pos{'x;'T['x]} } = it
-
-prim strictly_pos_4 :
-   sequent { <H1>; x:'T2; <J['x]> >- conv_le{'T['x]; sequent [applH] { <T1> >-
-	   sequent [applH] { <'A1['x]> >- 'I } } } } -->
-	sequent { <H1>; x:'T2; <J['x]> >- sequent [Ind] { <H> >- sequent { <Hp> >-
-	   sequent { 'I:'A >- sequent { <Hc> >- 'I } } } } } -->
-	sequent { <H1>; x:'T2; <J['x]> >- sequent [imbr_pos_cond_m] { <Hc> >- sequent { 'I >- 'x } } } -->
-	sequent { <H1>; x:'T2; <J['x]> >- strictly_pos{'x;'T} } = it
+prim strictly_pos_4 'H 'T1:
+   sequent { <H>; x:'T2; <J['x]>  >-
+		sequent [IndParam] { <Hp> >-
+	         sequent [IndDef] { I:'A<|Hp;H;J|>['x] >-
+			      sequent [IndConstrs] { <Hc<|Hp;H;J|>['I;'x]> >- it } } } } -->
+	sequent { <H>; x:'T2; <J['x]> >-
+	   sequent [imbr_pos_cond_m] { <Hc<|Hp;H;J|>['I;'x]> >-
+		   sequent { 'I >- 'x } } } -->
+	sequent { <H>; x:'T2; <J['x]> >-
+	   strictly_pos{
+		   'x;
+			sequent [applH] { <T1>; <A1['x]> >- 'I }} } = it
 
 
 

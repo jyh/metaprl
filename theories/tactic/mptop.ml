@@ -429,6 +429,8 @@ and mk_expr base expr =
             not_supported loc "ifthenelse"
        | (<:expr< $int:s$ >>) ->
             IntExpr (int_of_string s)
+       | (<:expr< lazy $_$ >>) ->
+            not_supported loc "lazy"
        | (<:expr< let $rec:b$ $list:pel$ in $e$ >>) ->
             not_supported loc "let"
        | (<:expr< $lid:s$ >>)
@@ -571,10 +573,8 @@ and mk_type base t =
             not_supported loc "type product"
        | (<:ctyp< $uid:s$ >>) ->
             not_supported loc "type constructor var"
-(* 3.02
-       | MLast.TyXnd (_, _, t) ->
-            mk_type base t
- *)
+       | MLast.TyPol (_, _, _) ->
+            not_supported loc "type constructor Pol"
        | MLast.TyVrn _ ->
             not_supported loc "type constructor Vrn"
        | MLast.TyOlb _ ->
@@ -652,8 +652,9 @@ and mk_module_type base mt =
             not_supported loc "module type application"
        | (<:module_type< functor ( $s$ : $mt1$ ) -> $mt2$ >>) ->
             not_supported loc "module type functor"
-       | (<:module_type< $lid:i$ >>)
-       | (<:module_type< $uid:i$ >>) ->
+       | (<:module_type< $lid:_$ >>)
+       | (<:module_type< ' $_$ >>)
+       | (<:module_type< $uid:_$ >>) ->
             not_supported loc "module type var"
        | (<:module_type< sig $list:sil$ end >>) ->
             not_supported loc "module type sig"

@@ -42,3 +42,27 @@ open Fir
 (* Open MetaPRL ML namespaces. *)
 
 open Refiner.Refiner.Term
+
+
+(*
+ * Convert to and from unop.
+ *)
+
+val term_of_unop : unop -> term
+val unop_of_term : term -> unop
+
+
+(*
+ * Convert to and from binop.
+ *)
+
+val term_of_binop : binop -> term
+val binop_of_term : term -> binop
+
+
+(*
+ * Convert to and from atom.
+ *)
+
+val term_of_atom : atom -> term
+val atom_of_term : term -> atom

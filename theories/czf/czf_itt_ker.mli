@@ -32,9 +32,7 @@
 
 extends Czf_itt_hom
 
-open Refiner.Refiner.RefineError
-
-open Tactic_type.Conversionals
+open Basic_tactics
 
 (************************************************************************
  * TERMS                                                                *

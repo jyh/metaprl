@@ -1,8 +1,7 @@
 extends Itt_equal
 extends Itt_struct
 
-open Refiner.Refiner.TermType
-open Tactic_type.Conversionals
+open Basic_tactics
 
 val is_squiggle_term : term -> bool
 val dest_squiggle : term -> term * term

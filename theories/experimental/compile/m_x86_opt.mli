@@ -26,9 +26,7 @@
  *)
 extends M_x86_asm
 
-open Refiner.Refiner.TermType
-
-open Tactic_type.Conversionals
+open Basic_tactics
 
 (*
  * Optimization resources

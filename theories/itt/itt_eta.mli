@@ -1,7 +1,6 @@
 extends Itt_dfun
 
-open Refiner.Refiner.TermType
-open Tactic_type.Conversionals
+open Basic_tactics
 
 rewrite reduceEta (x: 'A -> 'B['x]) : ('f in (x: 'A -> 'B['x])) -->
     lambda{x. 'f 'x} <--> 'f

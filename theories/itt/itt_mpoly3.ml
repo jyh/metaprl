@@ -5,21 +5,10 @@ extends Itt_ring_uce
 extends Itt_w
 
 open Lm_debug
-open Lm_symbol
 open Lm_printf
-open Refiner.Refiner
-open Refiner.Refiner.Term
-open Refiner.Refiner.TermSubst
-open Refiner.Refiner.TermMan
-open Refiner.Refiner.TermOp
 open Refiner.Refiner.RefineError
 open Simple_print
-open Tactic_type
-open Tactic_type.Conversionals
-open Tactic_type.Tacticals
-open Top_conversionals
-open Top_tacticals
-open Dtactic
+open Basic_tactics
 open Itt_equal
 open Itt_struct
 open Itt_rfun
@@ -57,7 +46,7 @@ let extract_data tbl =
       funC rw
 
 let process_mpoly_eval_resource_rw_annotation =
-   Rewrite.redex_and_conv_of_rw_annotation "mpoly_eval"
+   redex_and_conv_of_rw_annotation "mpoly_eval"
 
 (*
  * Resource.

@@ -32,7 +32,7 @@
 
 extends Itt_grouplikeobj
 
-open Tactic_type.Conversionals
+open Tactic_type.Tactic
 
 (************************************************************************
  * SYNTAX                                                               *

@@ -34,9 +34,7 @@ extends Czf_itt_group
 extends Czf_itt_subset
 extends Czf_itt_isect
 
-open Refiner.Refiner.RefineError
-
-open Tactic_type.Tacticals
+open Basic_tactics
 
 (************************************************************************
  * TERMS                                                                *

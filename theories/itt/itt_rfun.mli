@@ -35,11 +35,7 @@ extends Itt_equal
 extends Itt_set
 extends Itt_void
 
-open Lm_symbol
-
-open Refiner.Refiner.TermType
-
-open Tactic_type.Conversionals
+open Basic_tactics
 
 (************************************************************************
  * TERMS                                                                *

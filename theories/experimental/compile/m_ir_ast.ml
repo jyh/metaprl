@@ -37,13 +37,7 @@ extends M_ir
 
 doc <<docoff>>
 
-open Refiner.Refiner.TermType
-open Term_match_table
-
-open Tactic_type.Sequent
-open Tactic_type.Rewrite
-open Tactic_type.Tacticals
-open Tactic_type.Conversionals
+open Basic_tactics
 
 open Base_meta
 open M_util

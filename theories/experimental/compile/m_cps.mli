@@ -28,7 +28,7 @@ extends M_ir
 
 open Refiner.Refiner.RefineError
 
-open Tactic_type.Conversionals
+open Tactic_type.Tactic
 
 (*
  * CPS resource

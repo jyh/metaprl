@@ -33,7 +33,7 @@
 extends Czf_itt_dexists
 extends Czf_itt_subset
 
-open Tactic_type.Conversionals
+open Tactic_type.Tactic
 
 (************************************************************************
  * TERMS                                                                *

@@ -34,7 +34,7 @@ extends Itt_group
 extends Itt_int_base
 extends Itt_subset
 
-open Tactic_type.Conversionals
+open Tactic_type.Tactic
 
 (************************************************************************
  * TERMS                                                               *

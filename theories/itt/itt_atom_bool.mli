@@ -33,7 +33,7 @@
 extends Itt_atom
 extends Itt_bool
 
-open Tactic_type.Conversionals
+open Tactic_type.Tactic
 
 prec prec_eq_atom
 

@@ -27,7 +27,7 @@
 extends Base_theory
 extends M_ir
 
-open Tactic_type.Tacticals
+open Tactic_type.Tactic
 
 (*
  * Inlining.

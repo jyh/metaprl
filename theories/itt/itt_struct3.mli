@@ -4,9 +4,7 @@ extends Itt_struct2
 extends Itt_subtype
 extends Itt_pointwise
 
-open Refiner.Refiner.RefineError
-
-open Tactic_type.Tacticals
+open Basic_tactics
 
 (************************************************************************
  * RULES                                                                *

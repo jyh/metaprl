@@ -33,7 +33,7 @@
 extends Itt_ring2
 extends Itt_record_renaming
 
-open Tactic_type.Conversionals
+open Tactic_type.Tactic
 
 (************************************************************************
  * SYNTAX                                                               *

@@ -33,7 +33,7 @@
 extends Itt_field2
 extends Itt_intdomain_e
 
-open Tactic_type.Conversionals
+open Tactic_type.Tactic
 
 (************************************************************************
  * SYNTAX                                                               *

@@ -14,7 +14,7 @@ doc <:doc<
    @end[doc]
 >>
 
- prim_rw reduceEta (x: 'A -> 'B['x]) :
+prim_rw reduceEta (x: 'A -> 'B['x]) :
    ('f in (x: 'A -> 'B['x])) -->
     lambda{x. 'f 'x} <--> 'f
 

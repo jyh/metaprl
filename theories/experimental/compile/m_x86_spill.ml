@@ -45,22 +45,12 @@ doc <:doc<
 extends M_x86_backend
 doc <:doc< @docoff >>
 
-open Lm_symbol
-
-open Perv
+open Basic_tactics
+open Refiner.Refiner.RefineError
 
 open M_x86_inst_type
 open M_x86_term
 open M_util
-
-open Refiner.Refiner.TermSubst
-open Refiner.Refiner.RefineError
-
-open Term_match_table
-
-open Tactic_type.Tacticals
-open Tactic_type.Conversionals
-open Tactic_type.Sequent
 
 (************************************************************************
  * Reduction resource

@@ -35,23 +35,13 @@ extends Tptp_load
 
 open Lm_debug
 open Lm_printf
-open Lm_symbol
 open Lm_string_set
 
-open Term_sig
-open Refiner.Refiner
-open Refiner.Refiner.TermType
-open Refiner.Refiner.Term
-open Refiner.Refiner.TermSubst
 open Refiner.Refiner.RefineError
 
 open Unify_mm
 
-open Tactic_type
-open Tactic_type.Tacticals
-
-open Auto_tactic
-open Dtactic
+open Basic_tactics
 
 open Itt_equal
 open Itt_struct

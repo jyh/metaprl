@@ -41,19 +41,11 @@ extends Itt_quotient
 extends Itt_list
 extends Itt_list2
 
-open Refiner.Refiner.Term
-open Refiner.Refiner.TermOp
-open Refiner.Refiner.RefineError
-
 open Lm_debug
 open Lm_printf
 
-open Tactic_type
-open Tactic_type.Tacticals
-
-open Dtactic
-open Typeinf
-open Top_conversionals
+open Refiner.Refiner.RefineError
+open Basic_tactics
 
 open Itt_bool
 open Itt_rfun

@@ -32,7 +32,7 @@
 
 extends Czf_itt_sep
 
-open Tactic_type.Conversionals
+open Tactic_type.Tactic
 
 (************************************************************************
  * TERMS                                                                *

@@ -51,15 +51,8 @@ doc <:doc< @docoff >>
 
 open Lm_debug
 open Lm_printf
-open Refiner.Refiner
-open Refiner.Refiner.TermSubst
 
-open Tactic_type
-open Tactic_type.Sequent
-open Tactic_type.Tacticals
-open Var
-
-open Auto_tactic
+open Basic_tactics
 
 open Itt_equal
 

@@ -51,10 +51,7 @@
 extends Itt_theory
 extends Czf_itt_comment
 
-open Lm_symbol
-open Refiner.Refiner.TermType
-
-open Tactic_type.Conversionals
+open Basic_tactics
 
 (************************************************************************
  * TERMS                                                                *

@@ -36,11 +36,7 @@ extends Itt_set
 extends Itt_isect
 extends Itt_subtype
 
-open Lm_symbol
-
-open Refiner.Refiner.TermType
-
-open Tactic_type.Tacticals
+open Basic_tactics
 
 (************************************************************************
  * TERMS                                                                *

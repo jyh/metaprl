@@ -37,9 +37,7 @@ extends Sil_state
 extends Sil_programs
 extends Sil_sos
 
-open Refiner.Refiner.TermType
-
-open Tactic_type.Conversionals
+open Basic_tactics
 
 topval rwvalueT : term -> int -> tactic
 topval rwvalueRevT : term -> int -> tactic

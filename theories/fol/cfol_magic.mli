@@ -3,7 +3,7 @@
  *)
 extends Fol_not
 
-open Tactic_type.Tacticals
+open Tactic_type.Tactic
 
 declare magic{x. 't['x]}
 

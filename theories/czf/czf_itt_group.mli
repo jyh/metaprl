@@ -33,7 +33,7 @@
 extends Itt_record_label0
 extends Czf_itt_dall
 
-open Tactic_type.Conversionals
+open Tactic_type.Tactic
 
 (************************************************************************
  * TERMS                                                                *

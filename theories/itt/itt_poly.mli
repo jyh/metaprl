@@ -32,7 +32,7 @@
 
 extends Itt_cyclic_group
 
-open Tactic_type.Conversionals
+open Tactic_type.Tactic
 
 (************************************************************************
  * SYNTAX                                                               *

@@ -2,7 +2,7 @@ extends Itt_record
 extends Itt_fun
 extends Itt_int_base
 
-open Tactic_type.Conversionals
+open Tactic_type.Tactic
 
 topval fold_point : conv
 topval unfold_point : conv

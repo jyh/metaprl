@@ -2,7 +2,7 @@ extends Itt_record_label0
 extends Itt_struct3
 extends Itt_inv_typing
 
-open Tactic_type.Conversionals
+open Tactic_type.Tactic
 
 declare record{}
 declare recordTop{}

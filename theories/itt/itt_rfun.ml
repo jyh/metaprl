@@ -62,15 +62,10 @@ extends Itt_struct
 doc docoff
 
 open Lm_debug
-open Lm_symbol
 open Lm_printf
-open Refiner.Refiner.Term
-open Refiner.Refiner.TermOp
-open Refiner.Refiner.TermSubst
 open Unify_mm
 
-open Dtactic
-open Top_conversionals
+open Basic_tactics
 
 open Itt_equal
 open Itt_struct

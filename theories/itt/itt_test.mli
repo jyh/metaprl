@@ -30,7 +30,7 @@
  * jyh@cs.cornell.edu
  *)
 
-open Tactic_type.Conversionals
+open Tactic_type.Tactic
 
 extends Itt_theory
 

@@ -38,7 +38,7 @@ extends M_x86_coalesce
 extends M_x86_regalloc
 extends M_x86_opt
 
-open Tactic_type.Tacticals
+open Tactic_type.Tactic
 
 topval convertT : tactic
 topval codeT    : tactic

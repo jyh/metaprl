@@ -53,7 +53,7 @@ extends Itt_quotient
 extends Itt_int_arith*)
 doc <:doc< @docoff >>
 
-open Tactic_type.Sequent
+open Tactic_type.Tactic
 
 topval testT : tactic
 

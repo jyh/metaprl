@@ -41,11 +41,7 @@
 extends Itt_equal
 extends Itt_struct
 
-open Refiner.Refiner.TermType
-
-open Tactic_type
-open Tactic_type.Tacticals
-open Mp_resource
+open Basic_tactics
 
 declare squash{'A}
 
@@ -119,7 +115,7 @@ type squash_info
 resource (squash_info, int -> tactic) squash
 
 val process_squash_resource_annotation :
-   (Tactic.pre_tactic, squash_info) annotation_processor
+   (pre_tactic, squash_info) annotation_processor
 
 (* Squashing and unsquashing *)
 topval squashT : tactic

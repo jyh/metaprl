@@ -7,7 +7,7 @@ extends Czf_itt_setdiff
 extends Czf_itt_union
 extends Czf_itt_isect
 
-open Tactic_type.Conversionals
+open Tactic_type.Tactic
 
 declare boolset
 declare strue

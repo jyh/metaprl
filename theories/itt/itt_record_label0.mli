@@ -2,9 +2,8 @@
 
 extends Itt_nat
 extends Itt_nequal
-open Refiner.Refiner.TermType
-open Tactic_type.Conversionals
 
+open Basic_tactics
 
 define unfold_label : label <--> nat
 

@@ -113,17 +113,7 @@ extends Czf_itt_comment
 open Lm_debug
 open Lm_printf
 
-open Refiner.Refiner.Term
-open Refiner.Refiner.TermOp
-
-open Tactic_type
-open Tactic_type.Tacticals
-open Tactic_type.Sequent
-open Var
-
-open Dtactic
-open Auto_tactic
-open Top_conversionals
+open Basic_tactics
 
 open Itt_rfun
 open Itt_struct

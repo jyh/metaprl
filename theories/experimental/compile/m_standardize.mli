@@ -29,7 +29,7 @@ extends M_ir
 
 open Lm_symbol
 
-open Tactic_type.Tacticals
+open Tactic_type.Tactic
 
 topval standardizeT : tactic
 

@@ -135,16 +135,9 @@ doc <:doc< @docoff >>
 
 open Lm_debug
 open Lm_printf
-open Refiner.Refiner
-open Term
-open TermOp
-open TermSubst
-open RefineError
 
-open Tactic_type
-open Tactic_type.Tacticals
-
-open Dtactic
+open Refiner.Refiner.RefineError
+open Basic_tactics
 
 open Itt_equal
 open Itt_subtype

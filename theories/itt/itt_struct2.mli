@@ -33,9 +33,7 @@
 
 extends Itt_struct
 
-open Refiner.Refiner.TermType
-
-open Tactic_type.Sequent
+open Basic_tactics
 
 topval substConclT : term -> tactic
 topval substT : term -> int -> tactic

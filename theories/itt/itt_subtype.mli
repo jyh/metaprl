@@ -34,9 +34,7 @@
 extends Itt_equal
 extends Itt_struct
 
-open Refiner.Refiner.TermType
-
-open Tactic_type.Tacticals
+open Basic_tactics
 
 (************************************************************************
  * TERMS                                                                *

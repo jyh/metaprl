@@ -4,8 +4,7 @@ extends Itt_struct3
 extends Itt_logic
 extends Itt_disect
 
-open Refiner.Refiner.TermType
-open Tactic_type.Conversionals
+open Basic_tactics
 
 val dest_field : term -> term * string
 val mk_field_term : term -> string -> term

@@ -8,14 +8,10 @@ extends Itt_rat
 open Lm_debug
 open Lm_printf
 
-open Refiner.Refiner.Term
-open Refiner.Refiner.TermSubst
-open Refiner.Refiner.RefineError
-
 open Supinf
 
-open Tactic_type
-open Tactic_type.Tacticals
+open Refiner.Refiner.RefineError
+open Basic_tactics
 
 open Itt_equal
 open Itt_struct

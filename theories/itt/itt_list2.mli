@@ -34,9 +34,7 @@ extends Itt_list
 extends Itt_logic
 extends Itt_bool
 
-open Refiner.Refiner.TermType
-
-open Tactic_type.Conversionals
+open Basic_tactics
 
 (************************************************************************
  * SYNTAX                                                               *

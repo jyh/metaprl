@@ -38,7 +38,7 @@ extends Fol_or
 extends Fol_implies
 extends Fol_not
 
-open Tactic_type.Tacticals
+open Tactic_type.Tactic
 
 topval propDecideT : tactic
 topval proveTypeT : tactic

@@ -80,23 +80,10 @@ doc <:doc< @docoff >>
 
 open Lm_debug
 open Lm_printf
-open Term_sig
-open Refiner.Refiner
-open TermType
-open Term
-open TermOp
-open TermSubst
-open TermMan
-open TermMeta
-open RefineError
 open Term_stable
 
-open Tactic_type
-open Tactic_type.Tacticals
-open Tactic_type.Sequent
-
-open Dtactic
-open Auto_tactic
+open Basic_tactics
+open Refiner.Refiner.RefineError
 
 open Itt_struct
 open Itt_equal

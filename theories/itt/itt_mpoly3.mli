@@ -3,8 +3,7 @@ extends Itt_list2
 extends Itt_ring_uce
 
 open Refiner.Refiner.Refine
-open Mp_resource
-open Tactic_type.Conversionals
+open Basic_tactics
 
 type var_set
 

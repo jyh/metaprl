@@ -50,23 +50,10 @@ extends Itt_comment
 
 open Lm_debug
 open Lm_printf
-open Lm_symbol
-open Refiner.Refiner
-open Refiner.Refiner.Term
-open Refiner.Refiner.TermSubst
-open Refiner.Refiner.TermOp
-open Refiner.Refiner.TermMan
-open Refiner.Refiner.TermMeta
-open Refiner.Refiner.RefineError
 open Simple_print
 
-open Tactic_type
-open Tactic_type.Tacticals
-open Tactic_type.Conversionals
-
+open Basic_tactics
 open Base_meta
-open Dtactic
-open Auto_tactic
 
 (*
  * Show that the file is loading.
@@ -148,9 +135,9 @@ let dest_type_term = dest_dep0_term type_opname
 let univ_term = << univ[i:l] >>
 let univ1_term = << univ[1:l] >>
 let univ_opname = opname_of_term univ_term
-let is_univ_term = TermOp.is_univ_term univ_opname
-let dest_univ = TermOp.dest_univ_term univ_opname
-let mk_univ_term = TermOp.mk_univ_term univ_opname
+let is_univ_term = is_univ_term univ_opname
+let dest_univ = dest_univ_term univ_opname
+let mk_univ_term = mk_univ_term univ_opname
 
 let unknown_level = dest_univ << univ[unknown:l] >>
 

@@ -27,7 +27,7 @@
 extends M_ir
 extends M_arith
 
-open Tactic_type.Tacticals
+open Tactic_type.Tactic
 
 topval reserveT : tactic
 

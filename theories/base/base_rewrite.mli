@@ -34,8 +34,7 @@ extends Perv
 extends Auto_tactic
 
 open Refiner.Refiner.TermType
-
-open Tactic_type.Conversionals
+open Tactic_type.Tactic
 
 declare sequent_arg
 

@@ -5,7 +5,7 @@ extends Czf_itt_nat
 extends Czf_itt_sep
 extends Itt_bool
 
-open Tactic_type.Conversionals
+open Tactic_type.Tactic
 
 declare setdiff{'s1; 's2}
 

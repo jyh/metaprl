@@ -39,14 +39,9 @@ doc <:doc<
 extends M_ir
 doc <:doc< @docoff >>
 
+open Basic_tactics
+
 open M_util
-
-open Refiner.Refiner.RefineError
-
-open Term_match_table
-
-open Tactic_type.Conversionals
-open Tactic_type.Sequent
 
 (************************************************************************
  * Resource.

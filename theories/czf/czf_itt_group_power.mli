@@ -33,7 +33,7 @@
 extends Czf_itt_group
 extends Itt_int_base
 
-open Tactic_type.Conversionals
+open Tactic_type.Tactic
 
 (************************************************************************
  * TERMS                                                                *

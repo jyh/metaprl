@@ -1,21 +1,11 @@
 extends Nuprl_decidable__equality
 
-open Dtactic
-open Mp_resource
-open Top_conversionals
 open Itt_fun
-open Typeinf
 
 open Lm_printf
-open Refiner.Refiner
-open Refiner.Refiner.Term
-open Refiner.Refiner.TermOp
-open Refiner.Refiner.TermMan
-open Refiner.Refiner.TermSubst
 open Refiner.Refiner.RefineError
-open Mp_resource
 open Unify_mm
-
+open Basic_tactics
 
 interactive nuprl_eq_id_self  {| intro [] |} :
    [wf] sequent  { <Gamma> >- '"a" in "Id"[]{} }  -->

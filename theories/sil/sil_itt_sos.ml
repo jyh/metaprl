@@ -38,18 +38,8 @@ extends Sil_programs
 extends Sil_sos
 extends Sil_itt_state
 
-open Refiner.Refiner
-open Refiner.Refiner.Term
-open Refiner.Refiner.TermOp
-open Refiner.Refiner.TermMan
 open Refiner.Refiner.RefineError
-
-open Tactic_type
-open Tactic_type.Conversionals
-open Tactic_type.Tacticals
-
-open Dtactic
-open Auto_tactic
+open Basic_tactics
 open Base_rewrite
 
 open Sil_sos

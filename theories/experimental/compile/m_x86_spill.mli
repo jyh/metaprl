@@ -26,11 +26,7 @@
  *)
 extends M_x86_backend
 
-open Lm_symbol
-
-open Refiner.Refiner.TermType
-
-open Tactic_type.Conversionals
+open Basic_tactics
 
 (*
  * CPS resource

@@ -34,9 +34,7 @@
 extends Itt_equal
 extends Itt_dfun
 
-open Refiner.Refiner.TermType
-
-open Tactic_type.Conversionals
+open Basic_tactics
 
 val fun_term : term
 val dest_fun : term -> term * term

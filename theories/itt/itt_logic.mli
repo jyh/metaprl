@@ -42,13 +42,7 @@ extends Itt_void
 extends Itt_unit
 extends Itt_struct
 
-open Lm_symbol
-
-open Refiner.Refiner.TermType
-
-open Tactic_type.Conversionals
-
-open Auto_tactic
+open Basic_tactics
 
 (************************************************************************
  * TERMS                                                                *

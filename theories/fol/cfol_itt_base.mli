@@ -36,7 +36,7 @@ derive Fol_type
 derive Fol_false
 derive Fol_true
 
-open Tactic_type.Conversionals
+open Tactic_type.Tactic
 
 topval fold_false : conv
 topval fold_true : conv

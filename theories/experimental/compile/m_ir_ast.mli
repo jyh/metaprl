@@ -27,9 +27,7 @@
 extends Base_theory
 extends M_ir
 
-open Refiner.Refiner.RefineError
-
-open Tactic_type.Conversionals
+open Basic_tactics
 
 (*
  * IR resource

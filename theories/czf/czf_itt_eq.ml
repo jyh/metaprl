@@ -86,17 +86,7 @@ doc docoff
 
 open Itt_equal
 
-open Refiner.Refiner.Term
-open Refiner.Refiner.TermOp
-
-open Tactic_type
-open Tactic_type.Sequent
-open Tactic_type.Tacticals
-open Var
-
-open Dtactic
-open Auto_tactic
-open Top_conversionals
+open Basic_tactics
 
 open Itt_equal
 open Itt_rfun

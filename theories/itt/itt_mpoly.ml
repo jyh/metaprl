@@ -3,21 +3,8 @@ extends Itt_poly
 extends Itt_list2
 extends Itt_ring_uce
 
-open Lm_symbol
 open Lm_printf
-open Refiner.Refiner
-open Refiner.Refiner.Term
-open Refiner.Refiner.TermSubst
-open Refiner.Refiner.TermMan
-open Refiner.Refiner.TermOp
-open Refiner.Refiner.RefineError
-open Simple_print
-open Tactic_type
-open Tactic_type.Conversionals
-open Tactic_type.Tacticals
-open Top_conversionals
-open Top_tacticals
-open Dtactic
+open Base_tactics
 open Itt_equal
 open Itt_struct
 open Itt_rfun

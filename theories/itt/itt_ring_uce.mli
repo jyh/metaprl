@@ -33,7 +33,7 @@
 extends Itt_unitring
 extends Itt_ring_e
 
-open Tactic_type.Conversionals
+open Tactic_type.Tactic
 
 (************************************************************************
  * SYNTAX                                                               *

@@ -37,10 +37,7 @@
 
 extends Czf_itt_set
 
-open Lm_symbol
-open Refiner.Refiner.TermType
-
-open Tactic_type.Tacticals
+open Basic_tactics
 
 (************************************************************************
  * TERMS                                                                *

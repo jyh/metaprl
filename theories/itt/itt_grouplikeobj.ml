@@ -48,10 +48,7 @@ doc docoff
 open Lm_debug
 open Lm_printf
 
-open Tactic_type.Tacticals
-open Tactic_type.Conversionals
-
-open Dtactic
+open Basic_tactics
 
 open Itt_record
 open Itt_fun

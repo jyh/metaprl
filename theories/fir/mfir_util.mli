@@ -40,8 +40,7 @@ extends Mfir_ty
 extends Mfir_exp
 extends Mfir_sequent
 
-open Tactic_type.Conversionals
-
+open Tactic_type.Tactic
 
 (**************************************************************************
  * Declarations.

@@ -3,20 +3,7 @@ open Cic_lambda
 
 open Lm_printf
 
-open Refiner.Refiner.TermOp
-open Refiner.Refiner.TermMan
-open Refiner.Refiner.Term
-open Refiner.Refiner.TermType
-open Refiner.Refiner.TermAddr
-open Term_sig
-
-open Tactic_type.Conversionals
-open Top_conversionals
-open Top_tacticals
-open Var
-
-open Dtactic
-open Auto_tactic
+open Basic_tactic
 
 prim collapse_base {| intro [] |} :
 	sequent { <H> >- 'C } -->

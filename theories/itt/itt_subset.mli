@@ -42,9 +42,7 @@ extends Itt_bool
 extends Itt_int_base
 extends Itt_ext_equal
 
-open Refiner.Refiner.TermType
-
-open Tactic_type.Sequent
+open Basic_tactics
 
 (************************************************************************
  * TERMS                                                                *

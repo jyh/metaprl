@@ -36,9 +36,7 @@ extends Itt_logic
 extends Itt_bool
 extends Itt_int_ext
 
-open Tactic_type.Conversionals
-
-open Refiner.Refiner.Rewrite
+open Basic_tactics
 
 type ge_elim_type = int -> tactic_arg -> (term list * (int -> tactic))
 type ge_intro_type = tactic_arg -> (term list * tactic)

@@ -34,7 +34,7 @@
 extends Itt_equal
 extends Itt_squash
 
-open Tactic_type.Conversionals
+open Tactic_type.Tactic
 
 declare esquash{'P}
 

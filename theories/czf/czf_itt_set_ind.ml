@@ -35,14 +35,7 @@ extends Czf_itt_sep
 open Lm_debug
 open Lm_printf
 
-open Refiner.Refiner.Term
-open Refiner.Refiner.TermMan
-
-open Tactic_type
-open Tactic_type.Tacticals
-open Var
-
-open Dtactic
+open Basic_tactics
 
 open Itt_equal
 open Itt_rfun

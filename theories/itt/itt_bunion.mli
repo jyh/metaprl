@@ -33,7 +33,7 @@
 extends Itt_tunion
 extends Itt_bool
 
-open Tactic_type.Conversionals
+open Tactic_type.Tactic
 
 define unfold_bunion : "bunion"{'A; 'B} <-->
                           tunion{bool; x. ifthenelse{'x; 'A; 'B}}

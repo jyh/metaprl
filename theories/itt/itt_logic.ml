@@ -63,25 +63,12 @@ doc <:doc< @docoff >>
 
 open Lm_debug
 open Lm_printf
-open Lm_symbol
-open Term_sig
-open Refiner.Refiner
-open Refiner.Refiner.Term
-open Refiner.Refiner.TermType
-open Refiner.Refiner.TermOp
-open Refiner.Refiner.TermMan
-open Refiner.Refiner.TermSubst
-open Refiner.Refiner.RefineError
 open Simple_print
 
-open Tactic_type
-open Tactic_type.Tacticals
-open Tactic_type.Conversionals
-open Var
 open Browser_resource
 
-open Auto_tactic
-open Dtactic
+open Basic_tactics
+open Refiner.Refiner.RefineError
 
 open Itt_squash
 open Itt_equal
@@ -1273,7 +1260,7 @@ struct
     | _ :: assums -> find_in_assums term tac assums
 
    let find_hyp term assums tac = funT (fun p ->
-      let hyps = (explode_sequent (Sequent.goal p)).sequent_hyps in
+      let hyps = (explode_sequent p).sequent_hyps in
       let len = SeqHyp.length hyps in
       let rec aux i =
          if i = len then find_in_assums term tac assums
@@ -1374,7 +1361,7 @@ let base_jproverT def_mult = funT (fun p ->
        | Some _ as ml -> ml
    in
    let goal = Sequent.goal p in
-   let seq = explode_sequent goal in
+   let seq = TermMan.explode_sequent goal in
    let assums = make_j_assums p goal (Sequent.num_assums p) 1 in
    let hyps = (Sequent.all_hyps p) @ (List.map fst assums) in
    match

@@ -27,9 +27,7 @@
 extends M_standardize
 extends M_x86_backend
 
-open Lm_symbol
-
-open Tactic_type.Tacticals
+open Basic_tactics
 
 topval renameT : tactic
 val coalesceT : symbol SymbolTable.t -> tactic

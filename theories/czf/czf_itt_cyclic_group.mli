@@ -33,7 +33,7 @@
 extends Czf_itt_group
 extends Czf_itt_cyclic_subgroup
 
-open Tactic_type.Conversionals
+open Tactic_type.Tactic
 
 (************************************************************************
  * TERMS                                                                *

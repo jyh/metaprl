@@ -47,14 +47,7 @@ doc <:doc< @docoff >>
 
 open M_util
 
-open Refiner.Refiner.RefineError
-
-open Term_match_table
-
-open Tactic_type.Tacticals
-open Tactic_type.Conversionals
-open Tactic_type.Sequent
-open Tactic_type.Rewrite
+open Basic_tactics
 
 (************************************************************************
  * REDUCTION RESOURCE                                                   *

@@ -34,10 +34,7 @@ extends Czf_itt_set
 extends Czf_itt_member
 extends Czf_itt_pair
 
-open Lm_symbol
-open Refiner.Refiner.RefineError
-
-open Tactic_type.Conversionals
+open Basic_tactics
 
 (************************************************************************
  * TERMS                                                                *

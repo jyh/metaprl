@@ -33,9 +33,7 @@
 extends Czf_itt_group_power
 extends Czf_itt_subgroup
 
-open Refiner.Refiner.RefineError
-
-open Tactic_type.Conversionals
+open Basic_tactics
 
 (************************************************************************
  * TERMS                                                                *

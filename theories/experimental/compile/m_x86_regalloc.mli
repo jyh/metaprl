@@ -24,7 +24,7 @@
  * @email{jyh@cs.caltech.edu}
  * @end[license]
  *)
-open Tactic_type.Tacticals
+open Tactic_type.Tactic
 
 (*
  * One step for debugging.

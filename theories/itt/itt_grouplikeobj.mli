@@ -35,7 +35,7 @@ extends Itt_set
 extends Itt_fun
 extends Itt_disect
 
-open Tactic_type.Conversionals
+open Tactic_type.Tactic
 
 (************************************************************************
  * SYNTAX                                                               *

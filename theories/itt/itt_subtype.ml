@@ -63,17 +63,10 @@ doc <:doc< @docoff >>
 
 open Lm_debug
 open Lm_printf
-open Refiner.Refiner.Term
-open Refiner.Refiner.TermOp
+
+open Basic_tactics
 open Refiner.Refiner.RefineError
-open Mp_resource
 open Term_dtable
-
-open Tactic_type
-open Tactic_type.Tacticals
-open Tactic_type.Sequent
-
-open Dtactic
 
 open Itt_equal
 open Itt_struct

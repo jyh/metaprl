@@ -1,5 +1,4 @@
-open Refiner.Refiner.TermType
-open Tactic_type.Conversionals
+open Basic_tactics
 
 declare rename[a:t, b:t]{'r}
 declare rename_mul_add{'S}

@@ -35,7 +35,7 @@ extends Fol_itt_type
 
 derive Fol_implies
 
-open Tactic_type.Conversionals
+open Tactic_type.Tactic
 
 topval fold_implies : conv
 topval fold_lambda : conv

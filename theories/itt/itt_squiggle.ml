@@ -59,17 +59,9 @@ extends Itt_comment
 
 open Lm_debug
 open Lm_printf
-open Refiner.Refiner
-open Refiner.Refiner.Term
-open Refiner.Refiner.TermOp
 
-open Var
-open Tactic_type.Tacticals
-open Tactic_type
-open Tactic_type.Conversionals
 open Base_rewrite
-
-open Dtactic
+open Basic_tactics
 
 open Itt_equal
 open Itt_struct

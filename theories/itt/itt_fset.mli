@@ -37,9 +37,7 @@ extends Itt_quotient
 extends Itt_list
 extends Itt_list2
 
-open Refiner.Refiner.TermType
-
-open Tactic_type.Conversionals
+open Basic_tactics
 
 (************************************************************************
  * SYNTAX                                                               *

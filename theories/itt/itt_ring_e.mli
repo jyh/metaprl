@@ -32,7 +32,7 @@
 
 extends Itt_ring2
 
-open Tactic_type.Conversionals
+open Tactic_type.Tactic
 
 (************************************************************************
  * SYNTAX                                                               *

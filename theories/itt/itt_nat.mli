@@ -1,8 +1,6 @@
 extends Itt_int_ext
 
-open Lm_symbol
-open Refiner.Refiner.TermType
-open Tactic_type.Conversionals
+open Basic_tactics
 
 val ind_term : term
 val is_ind_term : term -> bool

@@ -5,7 +5,7 @@ extends Itt_srec
 extends Itt_bisect
 extends Itt_struct
 
-open Tactic_type.Conversionals
+open Tactic_type.Tactic
 
 declare Node{'T}
 

@@ -28,7 +28,7 @@
 extends M_ir
 extends M_x86_frame
 
-open Tactic_type.Conversionals
+open Tactic_type.Tactic
 
 (*
  * Dead-code elim.

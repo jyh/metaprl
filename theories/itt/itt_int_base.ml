@@ -69,18 +69,9 @@ doc <:doc< @docoff >>
 open Lm_debug
 open Lm_printf
 
-open Refiner.Refiner.Term
-open Refiner.Refiner.TermOp
 open Refiner.Refiner.RefineError
-
-open Tactic_type
-open Tactic_type.Tacticals
-open Top_conversionals
-open Conversionals
-
+open Basic_tactics
 open Base_meta
-open Auto_tactic
-open Dtactic
 
 open Itt_equal
 open Itt_struct
@@ -120,7 +111,7 @@ let extract_data tbl =
       funC rw
 
 let process_arith_unfold_resource_rw_annotation =
-   Rewrite.redex_and_conv_of_rw_annotation "arith_unfold"
+   redex_and_conv_of_rw_annotation "arith_unfold"
 
 (*
  * Resource.

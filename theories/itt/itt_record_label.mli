@@ -2,8 +2,7 @@
 
 extends Itt_record_label0
 
-open Refiner.Refiner.TermType
-open Tactic_type.Conversionals
+open Basic_tactics
 
 declare label[t:t]
 

@@ -1,12 +1,7 @@
 extends Itt_ring_uce
 extends Itt_mpoly2
 
-open Tactic_type
-open Tactic_type.Conversionals
-open Tactic_type.Tacticals
-open Top_conversionals
-open Top_tacticals
-open Auto_tactic
+open Basic_tactics
 
 open Itt_equal
 open Itt_struct

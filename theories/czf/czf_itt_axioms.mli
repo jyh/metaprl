@@ -30,7 +30,7 @@
  * jyh@cs.cornell.edu
  *)
 
-open Tactic_type.Tacticals
+open Tactic_type.Tactic
 
 extends Czf_itt_true
 extends Czf_itt_false

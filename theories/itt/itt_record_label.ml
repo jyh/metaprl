@@ -1,23 +1,12 @@
 extends Itt_record_label0
 extends Itt_nequal
 
-open Itt_squiggle
+open Basic_tactics
+open Refiner.Refiner.RefineError
 
 open Base_meta
+open Itt_squiggle
 open Itt_struct
-open Dtactic
-open Tactic_type.Conversionals
-open Tactic_type.Tacticals
-
-open Refiner.Refiner
-open Refiner.Refiner.Term
-open Refiner.Refiner.TermMan
-open Refiner.Refiner.RefineError
-open Tactic_type
-open Tactic_type.Tacticals
-
-open Dtactic
-open Auto_tactic
 open Itt_equal
 
 (******************)

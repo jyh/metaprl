@@ -4,8 +4,7 @@
 
 extends Base_theory
 
-open Refiner.Refiner.TermType
-open Tactic_type.Tacticals
+open Basic_tactics
 
 topval nthHypT : int -> tactic
 topval thinT : int -> tactic

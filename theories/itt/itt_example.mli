@@ -24,7 +24,7 @@
  * @email{jyh@cs.caltech.edu}
  * @end[license]
  *)
-open Tactic_type.Conversionals
+open Tactic_type.Tactic
 
 topval fold_on : conv
 topval fold_open : conv

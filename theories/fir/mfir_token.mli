@@ -34,8 +34,7 @@
 
 extends Mfir_bool
 
-open Tactic_type.Conversionals
-
+open Tactic_type.Tactic
 
 (**************************************************************************
  * Declarations.

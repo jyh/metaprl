@@ -31,8 +31,7 @@
 
 extends Itt_logic
 
-open Tactic_type.Tacticals
-open Refiner.Refiner.TermType
+open Basic_tactics
 
 define unfold_decidable : decidable{'p} <--> ('p or not {'p})
 

@@ -50,25 +50,11 @@ open Lm_debug
 open Lm_printf
 open Lm_num
 
-open Term_sig
-open Refiner.Refiner
-open Refiner.Refiner.Term
-open Refiner.Refiner.TermMan
-open Refiner.Refiner.TermSubst
-open Refiner.Refiner.TermType
-open Refiner.Refiner.TermMeta
-
 open Term_order
 open Simple_print
 open Term_match_table
 
-open Tactic_type
-open Tactic_type.Tacticals
-open Tactic_type.Conversionals
-
-open Dtactic
-
-open Top_conversionals
+open Basic_tactics
 
 open Itt_equal
 open Itt_struct
@@ -770,7 +756,7 @@ let term2term_number p t =
 	let es={sequent_args=t; sequent_hyps=(SeqHyp.of_list []); sequent_goals=(SeqGoal.of_list [t])} in
 	let s=mk_sequent_term es in
 	let s'=apply_rewrite p normalizeC s in
-	let t'=SeqGoal.get (explode_sequent s').sequent_goals 0 in
+	let t'=SeqGoal.get (TermMan.explode_sequent s').sequent_goals 0 in
 	begin
 		if !debug_int_arith then
 			eprintf "t2t_n: %a -> %a%t" print_term t print_term t' eflush;

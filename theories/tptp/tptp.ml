@@ -4,16 +4,8 @@
 
 extends Itt_theory
 
-open Refiner.Refiner.Term
-open Refiner.Refiner.TermOp
 open Refiner.Refiner.RefineError
-
-open Tactic_type
-open Tactic_type.Tacticals
-open Tactic_type.Conversionals
-
-open Auto_tactic
-open Dtactic
+open Basic_tactics
 
 open Itt_equal
 open Itt_rfun

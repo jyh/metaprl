@@ -4,9 +4,7 @@ extends Itt_esquash
 extends Itt_quotient
 extends Itt_logic
 
-open Refiner.Refiner.TermType
-
-open Tactic_type.Conversionals
+open Basic_tactics
 
 topval colEqSymT : tactic
 topval colEqTransT : term -> tactic

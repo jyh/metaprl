@@ -43,9 +43,8 @@ extends Itt_singleton
 
 open Lm_debug
 open Lm_printf
-open Tactic_type.Tacticals
-open Dtactic
-open Top_conversionals
+
+open Basic_tactics
 
 open Itt_struct
 open Itt_fun

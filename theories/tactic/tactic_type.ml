@@ -654,6 +654,9 @@ let tactic_of_refine_tactic rule arg =
 (*
  * Convert a rewrite into a tactic.
  *)
+let tactic_of_rewrite_exn1 = RefineError ("tactic_of_rewrite", StringError "rewrite did not produce a goal")
+let tactic_of_rewrite_exn2 = RefineError ("tactic_of_rewrite", StringError "rewrite produced too many goals")
+
 let tactic_of_rewrite rw arg =
    let rule = rwtactic rw in
    let { ref_goal = goal;
@@ -682,9 +685,9 @@ let tactic_of_rewrite rw arg =
             in
                [subgoal], Extract (ext, 1)
        | [], _ ->
-            raise (RefineError ("tactic_of_rewrite", StringError "rewrite did not produce a goal"))
+            raise tactic_of_rewrite_exn1
        | _ ->
-            raise (RefineError ("tactic_of_rewrite", StringError "rewrite produced too many goals"))
+            raise tactic_of_rewrite_exn2
 
 (*
  * Convert a conditional rewrite to a tactic.
@@ -729,6 +732,8 @@ let compose ext extl =
 (*
  * Flatten the extract tree to produce a normal form.
  *)
+let justify_exn = RefineError ("Tactic_type.justify", StringError "identity tactic failed")
+ 
 let rec justify extl = function
    Compose (ext, extl') ->
       let rec justify_list extl = function
@@ -752,7 +757,7 @@ let rec justify extl = function
          ext :: extl ->
             ext, extl
        | [] ->
-            raise (RefineError ("Tactic_type.justify", StringError "identity tactic failed"))
+            raise justify_exn
 
 (*
  * To produce a term from the extract, the proof must be complete.
@@ -805,6 +810,8 @@ let rec flatten_subgoals = function
 (*
  * Apply a tactic list to the goals.
  *)
+let apply_subgoals_exn = RefineError ("thenLT", StringError "length mismatch")
+
 let rec apply_subgoals = function
    (tac :: tacl), (subgoal :: subgoals) ->
       let subgoals', ext = refine tac subgoal in
@@ -813,7 +820,7 @@ let rec apply_subgoals = function
  | [], [] ->
       [], []
  | _ ->
-      raise (RefineError ("thenLT", StringError "length mismatch"))
+      raise apply_subgoals_exn
 
 (*
  * Sequencing tactics.
@@ -837,10 +844,8 @@ let prefix_thenFLT tac1 tac2 goal =
 
 let prefix_orelseT tac1 tac2 goal =
    try tac1 goal with
-      RefineError (name1, x) ->
-         try tac2 goal with
-            RefineError (name2, y) ->
-               raise (RefineError ("orelseT", PairError (name1, x, name2, y)))
+      RefineError _ ->
+         tac2 goal
 
 (*
  * Modify the label.
@@ -963,6 +968,9 @@ let timingT tac arg =
 
 (*
  * $Log$
+ * Revision 1.13  1998/07/03 23:20:37  nogin
+ * Do not be too verbose in case orelseT fails
+ *
  * Revision 1.12  1998/07/03 22:06:14  jyh
  * IO terms are now in term_std format.
  *

@@ -1,3 +1,4 @@
+include Itt_record_label0
 include Czf_itt_set
 include Czf_itt_member
 include Czf_itt_eq
@@ -26,10 +27,14 @@ open Var
 open Base_dtactic
 open Base_auto_tactic
 
-declare car   (* The "carrier" set for the group *)
-declare op{'s1; 's2}
-declare id
-declare inv{'s}
+declare group{'g}
+declare car{'g}   (* The "carrier" set for the group *)
+declare op{'g; 's1; 's2}
+declare id{'g}
+declare inv{'g; 's}
+declare eqElem{'g; 's1; 's2}
 
-topval groupCancelLeftT : term -> tactic
-topval groupCancelRightT : term -> tactic
+prec prec_op
+
+topval groupCancelLeftT : term -> term -> tactic
+topval groupCancelRightT : term -> term -> tactic

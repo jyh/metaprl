@@ -30,15 +30,15 @@ extends M_cps
  * Just for testing.
  *)
 interactive test_prog 'H :
-   sequent [m] { 'H; cont: exp >- compilable{CPS{'cont;
+   sequent [m] { 'H; cont: exp >- compilable{CPS{AtomVar{'cont};
                                   LetAtom{AtomInt[1:n]; v1.
-                                  LetAtom{'v1; v2.
+                                  LetAtom{AtomBinop{AddOp; AtomVar{'v1}; AtomInt[3]}; v2.
                                   FunDecl{f.
                                   FunDef{'f; AtomFun{v3.
-                                     LetPair{'v2; 'v3; v4.
-                                     LetSubscript{'v4; AtomInt[0:n]; v5.
-                                     Return{'v5}}}};
-                                  TailCall{'f; AtomInt[17:n]}}}}}}}
+                                     LetPair{AtomVar{'v2}; AtomVar{'v3}; v4.
+                                     LetSubscript{AtomVar{'v4}; AtomInt[0:n]; v5.
+                                     Return{AtomVar{'v5}}}}};
+                                  TailCall{AtomFunVar{'f}; AtomInt[17]}}}}}}}
                }
 
 (*

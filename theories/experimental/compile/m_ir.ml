@@ -91,14 +91,15 @@ declare ValPair{'v1; 'v2}
  * @modsubsection{Atoms}
  *
  * Atoms are values: integers, variables, binary operations
- * on atoms, and functions.  We use the built-in representation
- * of variables (for now).  In this phase, unnamed functions
+ * on atoms, and functions.  In this phase, unnamed functions
  * are also atoms.
  * @end[doc]
  *)
 declare AtomInt[i:n]
 declare AtomBinop{'op; 'a1; 'a2}
 declare AtomFun{x. 'e['x]}
+declare AtomVar{'v}
+declare AtomFunVar{'v}
 
 (*!
  * @begin[doc]
@@ -109,6 +110,7 @@ declare AtomFun{x. 'e['x]}
  *)
 declare LetAtom{'a; v. 'e['v]}
 declare TailCall{'f; 'a}
+declare TailCall{'f; 'a1; 'a2}
 declare If{'a; 'e1; 'e2}
 declare LetPair{'a1; 'a2; v. 'e['v]}
 declare LetSubscript{'a1; 'a2; v. 'e['v]}
@@ -117,9 +119,11 @@ declare SetSubscript{'a1; 'a2; 'a3; 'e}
 (*!
  * @begin[doc]
  * LetApply, Return are eliminated during CPS conversion.
+ * LetClosure is like LetApply, but it is a partial application.
  * @end[doc]
  *)
 declare LetApply{'f; 'a; v. 'e['v]}
+declare LetClosure{'a1; 'a2; f. 'e['f]}
 declare Return{'a}
 
 (*!
@@ -179,16 +183,20 @@ declare compilable{'e}
 (*
  * Precedences.
  *)
+prec prec_var
 prec prec_mul
 prec prec_add
 prec prec_if
 prec prec_fun
 prec prec_let
+prec prec_compilable
 
+prec prec_mul < prec_var
 prec prec_add < prec_mul
-prec prec_if < prec_add
+prec prec_let < prec_add
+prec prec_if < prec_let
 prec prec_fun < prec_if
-prec prec_let < prec_fun
+prec prec_compilable < prec_let
 
 (* Some convenient keywords *)
 declare xlet
@@ -208,7 +216,13 @@ dform val_pair_df : except_mode[src] :: ValPair{'a; 'b} =
 
 (* Atoms *)
 dform atom_int_df : AtomInt[i:n] =
-   slot[i:n]
+   `"#" slot[i:n]
+
+dform atom_var_df : parens :: "prec"[prec_var] :: AtomVar{'v} =
+   Nuprl_font!downarrow slot{'v}
+
+dform atom_fun_var_df : parens :: "prec"[prec_var] :: AtomFunVar{'v} =
+   Nuprl_font!uparrow slot{'v}
 
 dform atom_binop_add_df : parens :: "prec"[prec_add] :: AtomBinop{AddOp; 'e1; 'e2} =
    slot["lt"]{'e1} " " `"+ " slot["le"]{'e2}
@@ -236,8 +250,11 @@ dform fun_def_df : parens :: "prec"[prec_let] :: FunDef{'f; 'e1; 'e2} =
 dform exp_let_atom_df : parens :: "prec"[prec_let] :: LetAtom{'a; v. 'e} =
    xlet `" " slot{'v} `" = " slot{'a} `" " xin hspace slot["lt"]{'e}
 
-dform exp_tail_call_df : parens :: "prec"[prec_let] :: TailCall{'f; 'a} =
-   slot{'f} `"(" slot{'a} `")"
+dform exp_tailcall2_df : parens :: "prec"[prec_let] :: TailCall{'f; 'a} =
+   `"tailcall " slot{'f} `"(" slot{'a} `")"
+
+dform exp_tailcall3_df : parens :: "prec"[prec_let] :: TailCall{'f; 'a1; 'a2} =
+   `"tailcall " slot{'f} `"(" slot{'a1} `", " slot{'a2} `")"
 
 dform exp_if_df : parens :: "prec"[prec_if] :: except_mode[tex] :: If{'a; 'e1; 'e2} =
    szone pushm[0] pushm[3] `"if" `" " szone{'a} `" " `"then" hspace
@@ -254,7 +271,10 @@ dform exp_set_subscript_df : parens :: "prec"[prec_let] :: SetSubscript{'a1; 'a2
    slot{'a1} `"[" slot{'a2} `"] <- " slot{'a3} `";" hspace slot["lt"]{'e}
 
 dform exp_let_apply_df : parens :: "prec"[prec_let] :: LetApply{'f; 'a; v. 'e} =
-   xlet `" " slot{'v} `" = " slot{'f} `"(" slot{'a} `") " xin hspace slot["lt"]{'e}
+   xlet `" apply " slot{'v} `" = " slot{'f} `"(" slot{'a} `") " xin hspace slot["lt"]{'e}
+
+dform exp_let_closure_df : parens :: "prec"[prec_let] :: LetClosure{'f; 'a; v. 'e} =
+   xlet `" closure " slot{'v} `" = " slot{'f} `"(" slot{'a} `") " xin hspace slot["lt"]{'e}
 
 dform exp_return_df : Return{'a} =
    bf["return"] `"(" slot{'a} `")"
@@ -267,8 +287,8 @@ dform exp_df : exp = bf["exp"]
 dform def_df : def{'v; 'e} =
    slot{'v} `" = " slot{'e}
 
-dform compilable_df : compilable{'e} =
-   `"#" pushm[0] slot{'e} popm
+dform compilable_df : "prec"[prec_compilable] :: compilable{'e} =
+   szone Nuprl_font!longrightarrow pushm[0] slot{'e} popm ezone
 
 (*
  * Sequent tag for the M language.

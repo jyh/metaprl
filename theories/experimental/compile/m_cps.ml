@@ -42,29 +42,18 @@ open M_ir
 open Mp_debug
 open Printf
 
-open Refiner.Refiner
-open Refiner.Refiner.Term
 open Refiner.Refiner.TermType
-open Refiner.Refiner.TermOp
-open Refiner.Refiner.TermMan
-open Refiner.Refiner.TermAddr
+open Refiner.Refiner.Term
 open Refiner.Refiner.TermSubst
-open Refiner.Refiner.Refine
 open Refiner.Refiner.RefineError
 
 open Mp_resource
-open Var
-open Mptop
-
 open Simple_print
 open Term_match_table
 
-open Tactic_type
-open Tactic_type.Tacticals
 open Tactic_type.Conversionals
 open Tactic_type.Sequent
 
-(*
 (************************************************************************
  * REDUCTION RESOURCE                                                   *
  ************************************************************************)
@@ -137,7 +126,6 @@ let cpsTopC = funC cpsTopC_env
 
 let cpsC =
    repeatC (higherC cpsTopC)
-*)
 
 (************************************************************************
  * CPS transformation
@@ -145,74 +133,117 @@ let cpsC =
 
 (*!
  * @begin[doc]
- * @modsubsection{CPS Application}
+ * @modsubsection{Application}
  *
  * Add an application that we will map through the program.
  * This should be eliminated by the end of CPS conversion.
  * @end[doc]
  *)
-declare CPS{'e1; 'e2}
+declare CPS{'cont; 'a; v. 'e['v]}
+declare CPS{'cont; 'e}
 
-dform cps_df : CPS{'e1; 'e2} =
-   `"CPS[" pushm[0] slot{'e1} popm `";" " " pushm[0] slot{'e2} popm `"]"
+dform cps_atom_df : CPS{'cont; 'a; v. 'e} =
+   szone pushm[1] `"CPS[" 'cont `";" " " 'a `";" " " 'v `"." slot{'e} popm `"]" ezone
 
-(*!
- * @begin[doc]
- * @modsubsection{CPS conversion}
- *
- * CPS conversion is expressed using inference rules.
- * @end[doc]
- *)
-interactive cps_let_int 'H bind{x. 'A['x]} CPS{'cont; LetAtom{AtomInt[i:n]; v. 'e['v]}} :
-   sequent [m] { 'H >- 'A[LetAtom{AtomInt[i:n]; v. CPS{'cont; 'e['v]}}] } -->
-   sequent [m] { 'H >- 'A[CPS{'cont; LetAtom{AtomInt[i:n]; v. 'e['v]}}] }
-
-interactive cps_let_binop 'H bind{x. 'A['x]} CPS{'cont; LetAtom{AtomBinop{'op; 'a1; 'a2}; v. 'e['v]}} :
-   sequent [m] { 'H >- 'A[LetAtom{AtomBinop{'op; 'a1; 'a2}; v. CPS{'cont; 'e['v]}}] } -->
-   sequent [m] { 'H >- 'A[CPS{'cont; LetAtom{AtomBinop{'op; 'a1; 'a2}; v. 'e['v]}}] }
-
-interactive cps_let_fun 'H bind{x. 'A['x]} CPS{'cont; LetAtom{AtomFun{x. 'e1['x]}; f. 'e2['f]}} :
-   sequent [m] { 'H >- 'A[LetAtom{AtomFun{g. AtomFun{x. CPS{'g; 'e1['x]}}}; f. CPS{'cont; 'e2[CPS{'f; AtomFun{z. 'z}}]}}] } -->
-   sequent [m] { 'H >- 'A[CPS{'cont; LetAtom{AtomFun{x. 'e1['x]}; f. 'e2['f]}}] }
+dform cps_exp_df : CPS{'cont; 'e} =
+   szone pushm[1] `"CPS[" 'cont `";" " " 'e popm `"]" ezone
 
 (*!
  * @begin[doc]
- * @modsubsection{Apply the transformation}
+ * @modsubsection{Formalizing CPS conversion}
  *
- * We apply CPS transformation in two phases.
- * In the first phase, we transform the spine of the program.
+ * CPS conversion work by transformation of function application.
+ * Each rewrite in the transformation preserves the operational
+ * semantics of the program.
+ *
+ * For atoms, the transformation is a nop unless the atom is
+ * a function var.  If so, the function must be partially applied.
  * @end[doc]
  *)
-let cpsAddrT a p =
-   let a = make_address a in
-   let x = get_opt_var_arg "z" p in
-   let x_term = mk_var_term x in
-   let goal = Sequent.concl p in
-   let apply = term_subterm goal a in
-   let goal' = replace_subterm goal a x_term in
-   let bind = mk_xbind_term x goal' in
-   let addr = Sequent.hyp_count_addr p in
-   let fail p =
-      raise (RefineError ("M_cps.cpsAddrT", StringTermError ("no reduction for", apply)))
-   in
-      firstT [cps_let_int addr bind apply;
-              cps_let_binop addr bind apply;
-              cps_let_fun addr bind apply;
-              fail] p
+prim_rw cps_atom_int : CPS{'cont; AtomInt[i:n]; v. 'e['v]} <-->
+   'e[AtomInt[i:n]]
 
-let cpsTestT a p =
-   let a = make_address a in
-   let x = get_opt_var_arg "z" p in
-   let x_term = mk_var_term x in
-   let goal = Sequent.concl p in
-   let apply = term_subterm goal a in
-   let goal' = replace_subterm goal a x_term in
-   let bind = mk_xbind_term x goal' in
-   let addr = Sequent.hyp_count_addr p in
-   let fail p =
-      raise (RefineError ("M_cps.cpsAddrT", StringTermError ("no reduction for", apply)))
-   in
-      cps_let_binop addr bind apply p
+prim_rw cps_atom_var : CPS{'cont; AtomVar{'v1}; v2. 'e['v2]} <-->
+   'e['v1]
+
+prim_rw cps_atom_binop : CPS{'cont; AtomBinop{'op; 'a1; 'a2}; v. 'e['v]} <-->
+   CPS{'cont; 'a1; v1.
+   CPS{'cont; 'a2; v2.
+   LetAtom{AtomBinop{'op; 'v1; 'v2}; v. 'e['v]}}}
+
+prim_rw cps_atom_fun_var : CPS{'cont; AtomFunVar{'f}; g. 'e['g]} <-->
+   LetClosure{AtomFunVar{'f}; 'cont; g. 'e[AtomVar{'g}]}
+
+(*!
+ * @begin[doc]
+ * CPS transformation for expressions.
+ * @end[doc]
+ *)
+prim_rw cps_let_atom : CPS{'cont; LetAtom{'a; v. 'e['v]}} <-->
+   CPS{'cont; 'a; v. CPS{'cont; 'e['v]}}
+
+prim_rw cps_let_pair : CPS{'cont; LetPair{'a1; 'a2; v. 'e['v]}} <-->
+   CPS{'cont; 'a1; v1.
+   CPS{'cont; 'a2; v2.
+   LetPair{'v1; 'v2; v.
+   CPS{'cont; 'e['v]}}}}
+
+prim_rw cps_let_subscript : CPS{'cont; LetSubscript{'a1; 'a2; v. 'e['v]}} <-->
+   CPS{'cont; 'a1; v1.
+   CPS{'cont; 'a2; v2.
+   LetSubscript{'v1; 'v2;
+   v. CPS{'cont; 'e['v]}}}}
+
+prim_rw cps_return : CPS{'cont; Return{'a}} <-->
+   CPS{'cont; 'a; v.
+   TailCall{'cont; 'v}}
+
+prim_rw cps_tailcall : CPS{'cont; TailCall{'a1; 'a2}} <-->
+   CPS{'cont; 'a1; v1.
+   CPS{'cont; 'a2; v2.
+   TailCall{'v1; 'v2}}}
+
+(*!
+ * @begin[doc]
+ * @modsubsection{CPS optimizations}
+ *
+ * The tailcall transformation may create an unecessary closure.
+ * @end[doc]
+ *)
+prim_rw cps_opt_tailcall : LetClosure{'a1; 'a2; f. TailCall{AtomVar{'f}; 'a3}} <-->
+   TailCall{'a1; 'a2; 'a3}
+
+(*!
+ * @begin[doc]
+ * Functions get an extra argument.
+ * @end[doc]
+ *)
+prim_rw cps_declare : CPS{'cont; FunDecl{f. 'e['f]}} <-->
+   FunDecl{f. CPS{'cont; 'e['f]}}
+
+prim_rw cps_define : CPS{'cont; FunDef{'f; AtomFun{x. 'e1['x]}; 'e2}} <-->
+   FunDef{'f; AtomFun{cont. AtomFun{x. CPS{AtomVar{'cont}; 'e1['x]}}}; CPS{'cont; 'e2}}
+(*! docoff *)
+
+(*
+ * Add all these rules to the CPS resource.
+ *)
+let resource cps +=
+    [<< CPS{'cont; AtomInt[i:n]; v. 'e['v]} >>, cps_atom_int;
+     << CPS{'cont; AtomVar{'v1}; v2. 'e['v2]} >>, cps_atom_var;
+     << CPS{'cont; AtomBinop{'op; 'a1; 'a2}; v. 'e['v]} >>, cps_atom_binop;
+     << CPS{'cont; AtomFunVar{'f}; g. 'e['g]} >>, cps_atom_fun_var;
+
+     << CPS{'cont; LetAtom{'a; v. 'e['v]}} >>, cps_let_atom;
+     << CPS{'cont; LetPair{'a1; 'a2; v. 'e['v]}} >>, cps_let_pair;
+     << CPS{'cont; LetSubscript{'a1; 'a2; v. 'e['v]}} >>, cps_let_subscript;
+     << CPS{'cont; Return{'a}} >>, cps_return;
+     << CPS{'cont; TailCall{AtomFunVar{'f}; 'e}} >>, cps_tailcall;
+
+     << CPS{'cont; FunDecl{f. 'e['f]}} >>, cps_declare;
+     << CPS{'cont; FunDef{'f; AtomFun{x. 'e1['x]}; 'e2}} >>, cps_define;
+
+     << LetClosure{'a1; 'a2; f. TailCall{AtomVar{'f}; 'a3}} >>, cps_opt_tailcall]
 
 (*!
  * @docoff

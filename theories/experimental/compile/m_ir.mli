@@ -56,11 +56,13 @@ extends Base_theory
 (*
  * Display form precendences.
  *)
+prec prec_var
 prec prec_mul
 prec prec_add
 prec prec_if
 prec prec_fun
 prec prec_let
+prec prec_compilable
 
 (*
  * Binary operators.
@@ -84,17 +86,22 @@ declare ValPair{'v1; 'v2}
 declare AtomInt[i:n]
 declare AtomBinop{'op; 'a1; 'a2}
 declare AtomFun{x. 'e['x]}
+declare AtomVar{'v}
+declare AtomFunVar{'v}
 
 (*
  * Expressions.
  *)
 declare LetAtom{'a; v. 'e['v]}
 declare TailCall{'f; 'a}
+declare TailCall{'f; 'a1; 'a2}
 declare If{'a; 'e1; 'e2}
 declare LetPair{'a1; 'a2; v. 'e['v]}
 declare LetSubscript{'a1; 'a2; v. 'e['v]}
 declare SetSubscript{'a1; 'a2; 'a3; 'e}
+
 declare LetApply{'f; 'a; v. 'e['v]}
+declare LetClosure{'a1; 'a2; f. 'e['f]}
 declare Return{'a}
 
 (*

@@ -18,6 +18,7 @@ Todo list:
    the theories was used here as well.
 -  Deadcode elimination: Implement more forms of it. Prove the
    forms that aren't proven.
+-  Constant elimination: Same notes as for deadcode elim.
 -  Mp_mc_connect_base (special notes):
    .  Check float conversion code. Specifically, this code
       DOES NOT WORK.  I need a way of going from the 80 bit internal
@@ -30,6 +31,8 @@ Todo list:
    to be checked I think.
 -  fundef (Mp_mc_fir_exp) is a hack.  I need to come up with a term
    representation for entire programs that is "convinient".
+-  division: I'm not completely convinced I've expressed this in a
+   "safe and correct" manner.
 
 Notes to myself:
 --------------------------------------------------------------------------

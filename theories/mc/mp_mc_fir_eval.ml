@@ -196,7 +196,14 @@ prim_rw reduce_idOp :
 
 prim_rw reduce_uminusIntOp :
    unop_exp{ uminusIntOp; tyInt; 'atom1 } <-->
-   atomInt{ ."minus"{'atom1} }
+   atomInt{ mod_arith_signed{ naml_prec; ('atom1 *@ (-1)) } }
+
+(* Native ints. Arithmetic results are always atomRawInt's with
+ * the appropriate precision and signing (we get a value). *)
+
+prim_rw reduce_uminusRawIntOp :
+   unop_exp{ uminusRawIntOp{'p; 's}; tyRawInt{'p; 's}; 'atom1 } <-->
+   atomRawInt{ 'p; 's; mod_arith{ 'p; 's; ('atom1 *@ (-1)) } }
 
 (*
  * Binary operations.

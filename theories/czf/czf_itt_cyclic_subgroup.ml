@@ -28,16 +28,16 @@ open Base_auto_tactic
 
 declare elem_in_G
 declare power{'z; 'n}
-declare cyclic_subgroup{elem_in_G}
+declare cyclic_subgroup{'a}
 
 prim_rw unfold_power : power{'z; 'n} <-->
    ind{'n; i, j. op{inv{'z}; power{'z; ('n +@ 1)}}; id; k, l. op{'z; power{'z; ('n -@ 1)}}}
 
-prim_rw unfold_cyclic_subgroup : cyclic_subgroup{elem_in_G} <-->
-   collect{int; x. power{elem_in_G; 'x}}
+prim_rw unfold_cyclic_subgroup : cyclic_subgroup{'a} <-->
+   collect{int; x. power{'a; 'x}}
 
 let fold_power = makeFoldC << power{'z; 'n} >> unfold_power
-let fold_cyclic_subgroup = makeFoldC << cyclic_subgroup{elem_in_G} >> unfold_cyclic_subgroup
+let fold_cyclic_subgroup = makeFoldC << cyclic_subgroup{'a} >> unfold_cyclic_subgroup
 
 prec prec_power
 
@@ -47,8 +47,8 @@ dform elem_in_G_df : except_mode[src] :: elem_in_G =
 dform power_df : parens :: "prec"[prec_power] :: except_mode[src] :: power{'z; 'n} =
    slot["le"]{'z} `"^" slot{'n}
 
-dform cyclic_subgroup_df : except_mode[src] :: cyclic_subgroup{elem_in_G} =
-   `"<gen>"
+dform cyclic_subgroup_df : except_mode[src] :: cyclic_subgroup{'a} =
+   `"<" slot{'a} `">"
 
 (* axioms *)
 interactive elem_in_G_wf1 {| intro [] |} 'H :
@@ -119,3 +119,34 @@ interactive cyclic_subgroup_inv_wf {| intro[] |} 'H :
    sequent [squash] { 'H >- isset{'s} } -->
    sequent ['ext] { 'H >- mem{'s; cyclic_subgroup{elem_in_G}} } -->
    sequent ['ext] { 'H >- mem{inv{'s}; cyclic_subgroup{elem_in_G}} }
+
+interactive cyclic_subgroup_wf3 {| intro [] |} 'H :
+   sequent ['ext] { 'H >- isset{'a} } -->
+   sequent ['ext] { 'H >- mem{'a; car} } -->
+   sequent ['ext] { 'H >-  isset{cyclic_subgroup{'a}} }
+
+interactive cyclic_subgroup_wf4 {| intro[] |} 'H :
+   sequent ['ext] { 'H >- isset{'a} } -->
+   sequent ['ext] { 'H >- mem{'a; car} } -->
+   sequent ['ext] { 'H >- subset{cyclic_subgroup{'a}; car} }
+
+interactive cyclic_subgroup_op_wf1 {| intro[] |} 'H :
+   sequent ['ext] { 'H >- isset{'a} } -->
+   sequent ['ext] { 'H >- mem{'a; car} } -->
+   sequent [squash] { 'H >- isset{'s1} } -->
+   sequent [squash] { 'H >- isset{'s2} } -->
+   sequent ['ext] { 'H >- mem{'s1; cyclic_subgroup{'a}} } -->
+   sequent ['ext] { 'H >- mem{'s2; cyclic_subgroup{'a}} } -->
+   sequent ['ext] { 'H >- mem{op{'s1; 's2}; cyclic_subgroup{'a}} }
+
+interactive cyclic_subgroup_id_wf1 {| intro[] |} 'H :
+   sequent ['ext] { 'H >- isset{'a} } -->
+   sequent ['ext] { 'H >- mem{'a; car} } -->
+   sequent ['ext] { 'H >- mem{id; cyclic_subgroup{'a}} }
+
+interactive cyclic_subgroup_inv_wf1 {| intro[] |} 'H :
+   sequent ['ext] { 'H >- isset{'a} } -->
+   sequent ['ext] { 'H >- mem{'a; car} } -->
+   sequent [squash] { 'H >- isset{'s} } -->
+   sequent ['ext] { 'H >- mem{'s; cyclic_subgroup{'a}} } -->
+   sequent ['ext] { 'H >- mem{inv{'s}; cyclic_subgroup{'a}} }

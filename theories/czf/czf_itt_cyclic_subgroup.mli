@@ -27,13 +27,14 @@ open Base_auto_tactic
 
 declare elem_in_G
 declare power{'z; 'n}
-declare cyclic_subgroup{elem_in_G}
+declare cyclic_subgroup{'a}
+(* declare cyclic_subgroup{elem_in_G} *)
 
 rewrite unfold_power : power{'z; 'n} <-->
    ind{'n; i, j. op{inv{'z}; power{'z; ('n +@ 1)}}; id; k, l. op{'z; power{'z; ('n -@ 1)}}}
 
-rewrite unfold_cyclic_subgroup : cyclic_subgroup{elem_in_G} <-->
-   collect{int; x. power{elem_in_G; 'x}}
+rewrite unfold_cyclic_subgroup : cyclic_subgroup{'a} <-->
+   collect{int; x. power{'a; 'x}}
 
 topval fold_power : conv
 topval fold_cyclic_subgroup : conv

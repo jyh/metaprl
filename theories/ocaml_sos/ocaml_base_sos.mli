@@ -44,7 +44,7 @@ declare it
  * Term:
  * The address of a value.
  *)
-declare address[@name:s]
+declare address[name:s]
 
 (*
  * Type:

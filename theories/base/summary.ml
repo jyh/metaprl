@@ -87,8 +87,9 @@ declare "some"{'t}
 declare "meta_theory"{'A}
 declare "meta_theorem"{'A}
 declare "meta_implies"{'A; 'B}
-declare "meta_function"{'name; 'A; 'B}
+declare "meta_function"{'arg; 'A; 'B}
 declare "meta_iff"{'A; 'B}
+declare "meta_labeled"[label:s]{'meta}
 
 declare "context_param"[name:s]
 declare "var_param"[name:s]
@@ -316,8 +317,17 @@ dform meta_theorem_df : meta_theorem{'A} =
 dform meta_implies_df : meta_implies{'A; 'B} =
    slot{'A} " " longrightarrow hspace slot{'B}
 
-dform meta_function_df : meta_function{'name; 'A; 'B} =
-   szone pushm[0] `"(\"" slot{'name} `"\") " slot{'A} " " popm ezone longrightarrow hspace slot{'B}
+dform meta_function_df : meta_function{'arg; 'A; 'B} =
+   szone pushm[0] slot{'arg} `": " slot{'A} `" " popm ezone longrightarrow hspace slot{'B}
+
+dform meta_labeled_imp_df : meta_labeled[label]{meta_implies{'A; 'B}} =
+   szone pushm[0] `"[\"" slot[label] `"\"] " slot {'A} `" " popm ezone 
+   longrightarrow hspace slot{'B}
+
+dform meta_labeled_fun_df : meta_labeled[label]{meta_function{'arg; 'A; 'B}} =
+   szone pushm[0] `"[\"" slot[label] `"\"] "
+      szone pushm[0] slot{'arg} `": " slot{'A} `" " popm ezone 
+   popm ezone longrightarrow hspace slot{'B}
 
 dform mode_df : mode_df[s:s] =
    `"mode[" slot[s:s] `"]"

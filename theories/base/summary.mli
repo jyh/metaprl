@@ -73,8 +73,9 @@ declare "some"{'t}
 declare "meta_theory"{'A}
 declare "meta_theorem"{'A}
 declare "meta_implies"{'A; 'B}
-declare "meta_function"{'name; 'A; 'B}
+declare "meta_function"{'arg; 'A; 'B}
 declare "meta_iff"{'A; 'B}
+declare "meta_labeled"[label:s]{'meta}
 
 declare "context_param"[name:s]
 declare "var_param"[name:s]

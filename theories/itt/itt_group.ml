@@ -191,7 +191,7 @@ interactive id_in_car {| intro [AutoMustComplete; intro_typeinf <<'G>>] |} group
    [wf] sequent { <H> >- 'G in group[i:l] } -->
    sequent { <H> >- 'G^"1" in 'G^car }
 
-interactive inv_in_car {| intro [AutoMustComplete; intro_typeinf <<'G>>] |} group[i:l] :
+interactive inv_in_car {| intro [intro_typeinf <<'G>>] |} group[i:l] :
    [wf] sequent { <H> >- 'G in group[i:l] } -->
    [wf] sequent { <H> >- 'a in 'G^car } -->
    sequent { <H> >- 'G^inv 'a in 'G^car }
@@ -336,14 +336,14 @@ doc <:doc<
    Unique inverse (left and right).
    @end[doc]
 >>
-interactive unique_inv_left {| intro [intro_typeinf <<'G>>] |} group[i:l] :
+interactive unique_inv_left {| intro [AutoMustComplete; intro_typeinf <<'G>>] |} group[i:l] :
    [wf] sequent { <H> >- 'G in group[i:l] } -->
    [wf] sequent { <H> >- 'a in 'G^car } -->
    [wf] sequent { <H> >- 'a2 in 'G^car } -->
    [wf] sequent { <H> >- 'a2 *['G] 'a = 'G^"1" in 'G^car } -->
    sequent { <H> >- 'a2 = 'G^inv 'a in 'G^car }
 
-interactive unique_inv_right {| intro [intro_typeinf <<'G>>] |} group[i:l] :
+interactive unique_inv_right {| intro [AutoMustComplete; intro_typeinf <<'G>>] |} group[i:l] :
    [wf] sequent { <H> >- 'G in group[i:l] } -->
    [wf] sequent { <H> >- 'a in 'G^car } -->
    [wf] sequent { <H> >- 'a2 in 'G^car } -->

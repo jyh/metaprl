@@ -165,7 +165,7 @@ PRINT_THEORIES =\
     itt_intdomain\
     itt_field2\
     itt_poly\
-    itt_collectionOB\
+    itt_collection\
     itt_pointwise\
     itt_pointwise2
 

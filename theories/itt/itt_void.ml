@@ -92,6 +92,8 @@ let is_void_term = is_no_subterms_term void_opname
 
 dform void_df1 : except_mode[src] :: void = `"Void"
 
+dform top_df : except_mode[src] :: top = `"Top"
+
 (************************************************************************
  * RULES                                                                *
  ************************************************************************)

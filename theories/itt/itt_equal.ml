@@ -91,7 +91,7 @@ let debug_eqcd =
  * TERMS                                                                *
  ************************************************************************)
 
-doc <:doc< ************************************************************************
+doc <:doc<
    @begin[doc]
    @terms
   
@@ -99,9 +99,6 @@ doc <:doc< *********************************************************************
    universe judgments are listed in the modules for each of the types.
    Furthermore, there is no elimination rule, since each universe is just a set of
    points, with no order.
-  
-   The $@cumulativity{i; j}$ term is a primitive judgment that defines level
-   @emph{inclusion} (this is a builtin judgment in @MetaPRL).
   
    The $@type{t}$ term is used to define the @emph{type} judgment.  A term $T$ is a
    type if <<sequent{ <H> >- "type"{'T}}>>.
@@ -115,11 +112,9 @@ doc <:doc< *********************************************************************
    @end[doc]
 >>
 declare "type"{'a}
-declare univ[i:l]
 declare equal{'T; 'a; 'b}
-declare cumulativity[i:l, j:l]
-doc <:doc< @docoff >>
-
+declare univ[i:l]
+doc docoff
 (* 
  * XXX HACK:
  * Type theory should have its own sequent_arg, but instead it uses
@@ -130,6 +125,16 @@ declare sequent_arg
 
 declare "true"
 declare "false"
+
+doc <:doc<
+   @begin[doc]
+   The $@cumulativity{i; j}$ term is a primitive judgment that defines level
+   @emph{inclusion} (this is a builtin judgment in @MetaPRL).
+   @end[doc]
+>>
+define unfold_cumulativity :
+   cumulativity[i:l, j:l] <--> meta_lt[i:l, j:l]{."true"; ."false"}
+doc docoff
 
 let true_term = << "true" >>
 let true_opname = opname_of_term true_term
@@ -256,11 +261,8 @@ let eqcdT =
  * DEFINITIONS                                                          *
  ************************************************************************)
 
-prim_rw reduce_cumulativity' : cumulativity[i:l, j:l] <-->
-   meta_lt[i:l, j:l]{."true"; ."false"}
-
 let reduce_cumulativity =
-   reduce_cumulativity' thenC reduce_meta_lt_lev
+   unfold_cumulativity thenC reduce_meta_lt_lev
 
 (************************************************************************
  * DISPLAY FORMS                                                        *

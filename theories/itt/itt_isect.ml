@@ -134,9 +134,6 @@ dform isect_df1 : except_mode[src] :: (Isect x: 'A. 'B) =
 dform isect_df2 : mode[src] :: (Isect x: 'A. 'B) =
    `"isect " slot{'x} `":" slot{'A} `"." slot{'B}
 
-dform top_df : except_mode[src] :: top =
-   `"Top"
-
 (************************************************************************
  * RULES                                                                *
  ************************************************************************)

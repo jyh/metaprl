@@ -51,9 +51,13 @@ topval const_elim_uminusRawIntOp : conv
  * Binary operations.
  *)
 
+(* Naml ints. *)
+
 topval const_elim_plusIntOp : conv
 topval const_elim_minusIntOp : conv
 topval const_elim_mulIntOp : conv
+
+(* Native ints. *)
 
 topval const_elim_plusRawIntOp : conv
 topval const_elim_minusRawIntOp : conv

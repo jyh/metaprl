@@ -8,11 +8,11 @@ Import qw( env );
 # Clone the environment and modify as needed.
 #
 $env = $env->clone(
-   INCPATH  => [@{$env->{INCPATH}}, "#theories/mc"],
+   INCPATH  => [@{$env->{INCPATH}}, "$env->{MP}/theories/mc"],
       OCAMLLINK => "$env->{OCAMLLINK} -I /usr/lib/camlp4",
       OCAMLCFLAGS => "-thread",
       MLLIBS    => "unix.cmxa threads.cmxa odyl.cmxa camlp4.cmxa pa_o.cmx",
-      CCLIBS    => "-cclib clib/clib.a -cclib $env->{MC}/lib/cutil/libcutil.a"
+      CCLIBS    => "-cclib $env->{MP}/clib/clib.a -cclib $env->{MC}/lib/cutil/libcutil.a"
    );
 
 #

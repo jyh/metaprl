@@ -33,6 +33,8 @@ Todo list:
    representation for entire programs that is "convinient".
 -  division: I'm not completely convinced I've expressed this in a
    "safe and correct" manner.
+-  Modify conscripts to get MC and MetaPRL compiling together...
+-  Clean up all the MetaPRL conscripts...
 
 Notes to myself:
 --------------------------------------------------------------------------

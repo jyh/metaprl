@@ -8,10 +8,10 @@ Import qw( env );
 #
 $env = $env->clone(
    INCPATH  => [@{$env->{INCPATH}},
-                "#theories/tactic",
-                "#theories/ocaml",
-                "#theories/base",
-                "#theories/itt"]
+                "$env->{MP}/theories/tactic",
+                "$env->{MP}/theories/ocaml",
+                "$env->{MP}/theories/base",
+                "$env->{MP}/theories/itt"]
 );
 
 #

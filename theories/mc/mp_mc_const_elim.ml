@@ -58,6 +58,8 @@ interactive_rw const_elim_uminusRawIntOp :
  * Binary operations.
  *)
 
+(* Naml ints. *)
+
 interactive_rw const_elim_plusIntOp :
    letBinop{ tyInt; plusIntOp; atomInt{'i1}; atomInt{'i2}; v. 'exp['v] } <-->
    'exp[ binop_exp{ plusIntOp; tyInt; 'i1; 'i2 } ]
@@ -69,6 +71,8 @@ interactive_rw const_elim_minusIntOp :
 interactive_rw const_elim_mulIntOp :
    letBinop{ tyInt; mulIntOp; atomInt{'i1}; atomInt{'i2}; v. 'exp['v] } <-->
    'exp[ binop_exp{ mulIntOp; tyInt; 'i1; 'i2 } ]
+
+(* Native ints. *)
 
 interactive_rw const_elim_plusRawIntOp :
    letBinop{ tyRawInt{'p; 's}; plusRawIntOp{'p; 's};

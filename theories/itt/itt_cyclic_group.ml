@@ -42,6 +42,7 @@ extends Itt_int_base
 doc <:doc< @docoff >>
 extends Itt_int_ext
 extends Itt_int_arith
+extends Itt_subset
 
 open Printf
 open Mp_debug
@@ -99,7 +100,7 @@ prim_rw unfold_cycGroup : cycGroup{'g} <-->
    (exst a: 'g^car. all x: 'g^car. exst n: int. ('x = group_power{'g; 'a; 'n} in 'g^car))
 
 prim_rw unfold_cycSubg : cycSubg[i:l]{'s; 'g; 'a} <-->
-   ('s^car = {x: 'g^car| exst n: int. 'x = group_power{'g; 'a; 'n} in 'g^car} in univ[i:l] & 's^"*" = 'g^"*" in 's^car -> 's^car -> 's^car)
+   ('s^car = {x: 'g^car| exst n: int. 'x = group_power{'g; 'a; 'n} in 'g^car} in univ[i:l] & 'g^"*" = 's^"*" in 's^car -> 's^car -> 's^car)
 doc <:doc< @docoff >>
 
 let fold_group_power = makeFoldC << group_power{'g; 'a; 'n} >> unfold_group_power
@@ -219,7 +220,7 @@ interactive subgroup_power {| intro [AutoMustComplete; intro_typeinf <<'g>>] |} 
    [main] sequent ['ext] { 'H >- subStructure{'s; 'g} } -->
    [wf] sequent [squash] { 'H >- 'a in 's^car } -->
    [wf] sequent [squash] { 'H >- 'n in int } -->
-   sequent ['ext] { 'H >- group_power{'s; 'a; 'n} = group_power{'g; 'a; 'n} in 's^car }
+   sequent ['ext] { 'H >- group_power{'g; 'a; 'n} = group_power{'s; 'a; 'n} in 's^car }
 
 doc <:doc< 
    @begin[doc]
@@ -271,7 +272,7 @@ interactive subg_cycGroup group[i:l] 'g :
    [main] sequent ['ext] { 'H >- cycGroup{'g} } -->
    [main] sequent ['ext] { 'H >- subStructure{'s; 'g} } -->
    [main] sequent ['ext] { 'H >- exst x: 's^car. not {('x = 's^"1" in 's^car)} } -->
-   [decidable] sequent ['ext] { 'H; a: int; x: 'g^car >- decidable{(group_power{'g; 'x; 'a} in 's^car)} } -->
+   [decidable] sequent ['ext] { 'H; a: int; x: 'g^car >- decidable{(group_power{'g; 'x; 'a} in 's^car subset 'g^car)} } -->
    sequent ['ext] { 'H >- cycGroup{'s} }
 
 doc <:doc< 
@@ -285,14 +286,14 @@ interactive cycSubg_intro {| intro [] |} :
    [wf] sequent [squash] { 'H >- 'g in group[i:l] } -->
    [wf] sequent [squash] { 'H >- 'a in 'g^car } -->
    [main] sequent ['ext] { 'H >- 's^car = {x: 'g^car| exst n: int. 'x = group_power{'g; 'a; 'n} in 'g^car} in univ[i:l] } -->
-   [main] sequent ['ext] { 'H >- 's^"*" = 'g^"*" in 's^car -> 's^car -> 's^car } -->
+   [main] sequent ['ext] { 'H >- 'g^"*" = 's^"*" in 's^car -> 's^car -> 's^car } -->
    sequent ['ext] { 'H >- cycSubg[i:l]{'s; 'g; 'a} }
 
 interactive cycSubg_elim {| elim [] |} 'H :
    [wf] sequent [squash] { 'H; u: cycSubg[i:l]{'s; 'g; 'a}; 'J['u] >- 's in group[i:l] } -->
    [wf] sequent [squash] { 'H; u: cycSubg[i:l]{'s; 'g; 'a}; 'J['u] >- 'g in group[i:l] } -->
    [wf] sequent [squash] { 'H; u: cycSubg[i:l]{'s; 'g; 'a}; 'J['u] >- 'a in 'g^car } -->
-   [main] sequent ['ext] { 'H; u: cycSubg[i:l]{'s; 'g; 'a}; 'J['u]; v: 's^car = {x: 'g^car| exst n: int. 'x = group_power{'g; 'a; 'n} in 'g^car} in univ[i:l]; w: 's^"*" = 'g^"*" in 's^car -> 's^car -> 's^car >- 'C['u] } -->
+   [main] sequent ['ext] { 'H; u: cycSubg[i:l]{'s; 'g; 'a}; 'J['u]; v: 's^car = {x: 'g^car| exst n: int. 'x = group_power{'g; 'a; 'n} in 'g^car} in univ[i:l]; w: 'g^"*" = 's^"*" in 's^car -> 's^car -> 's^car >- 'C['u] } -->
    sequent ['ext] { 'H; u: cycSubg[i:l]{'s; 'g; 'a}; 'J['u] >- 'C['u] }
 
 doc <:doc< 

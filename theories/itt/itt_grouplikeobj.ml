@@ -410,7 +410,7 @@ doc <:doc<
    @end[doc]
 >>
 define unfold_subStructure : subStructure{'s; 'g} <-->
-   ('s^car subset 'g^car) & ('s^"*" = 'g^"*" in 's^car -> 's^car -> 's^car)
+   ('s^car subset 'g^car) & ('g^"*" = 's^"*" in 's^car -> 's^car -> 's^car)
 doc <:doc< @docoff >>
 
 let fold_subStructure = makeFoldC << subStructure{'s; 'g} >> unfold_subStructure
@@ -421,12 +421,12 @@ doc <:doc<
    @end[doc]
 >>
 interactive subStructure_intro {| intro [] |} :
-   [wf] sequent [squash] { 'H >- 's^"*" = 'g^"*" in 's^car -> 's^car -> 's^car } -->
+   [wf] sequent [squash] { 'H >- 'g^"*" = 's^"*" in 's^car -> 's^car -> 's^car } -->
    [main] sequent ['ext] { 'H >- 's^car subset 'g^car } -->
    sequent ['ext] { 'H >- subStructure{'s; 'g} }
 
 interactive subStructure_elim {| elim [] |} 'H :
-   sequent ['ext] { 'H; u: subStructure{'s; 'g}; x: 's^car subset 'g^car; v: 's^"*" = 'g^"*" in 's^car -> 's^car -> 's^car; 'J['u] >- 'C['u] } -->
+   sequent ['ext] { 'H; u: subStructure{'s; 'g}; x: 's^car subset 'g^car; v: 'g^"*" = 's^"*" in 's^car -> 's^car -> 's^car; 'J['u] >- 'C['u] } -->
    sequent ['ext] { 'H; u: subStructure{'s; 'g}; 'J['u] >- 'C['u] }
 
 doc <:doc< 

@@ -533,6 +533,14 @@ interactive subgroup_op {| intro [intro_typeinf <<'g>>] |} group[i:l] :
    [main] sequent ['ext] { 'H >- subStructure{'s; 'g} } -->
    [wf] sequent [squash] {'H >- 'a in 's^car } -->
    [wf] sequent [squash] {'H >- 'b in 's^car } -->
+   sequent ['ext] { 'H >- 'a *['g] 'b = 'a *['s] 'b in 's^car }
+
+interactive subgroup_op1 {| intro [intro_typeinf <<'g>>] |} group[i:l] :
+   [wf] sequent [squash] {'H >- 's in group[i:l] } -->
+   [wf] sequent [squash] {'H >- 'g in group[i:l] } -->
+   [main] sequent ['ext] { 'H >- subStructure{'s; 'g} } -->
+   [wf] sequent [squash] {'H >- 'a in 's^car } -->
+   [wf] sequent [squash] {'H >- 'b in 's^car } -->
    sequent ['ext] { 'H >- 'a *['g] 'b in 's^car }
 
 (* interactive subgroup_op1 {| intro [intro_typeinf <<'g>>] |} group[i:l] :
@@ -546,14 +554,14 @@ interactive subgroup_id {| intro [intro_typeinf <<'g>>] |} group[i:l] :
    [wf] sequent [squash] {'H >- 's in group[i:l] } -->
    [wf] sequent [squash] {'H >- 'g in group[i:l] } -->
    [main] sequent ['ext] { 'H >- subStructure{'s; 'g} } -->
-   sequent ['ext] {'H >- 's^"1" = 'g^"1" in 's^car }
+   sequent ['ext] {'H >- 'g^"1" = 's^"1" in 's^car }
 
 interactive subgroup_inv {| intro [intro_typeinf <<'g>>] |} group[i:l] :
    [wf] sequent [squash] {'H >- 's in group[i:l] } -->
    [wf] sequent [squash] {'H >- 'g in group[i:l] } -->
    [main] sequent ['ext] { 'H >- subStructure{'s; 'g} } -->
    [wf] sequent [squash] {'H >- 'a in 's^car } -->
-   sequent ['ext] {'H >- 's^inv 'a = 'g^inv 'a in 's^car }
+   sequent ['ext] {'H >- 'g^inv 'a = 's^inv 'a in 's^car }
 
 doc <:doc< 
    @begin[doc]

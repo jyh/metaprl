@@ -334,8 +334,8 @@ dform list_df1 : except_mode[src] :: parens :: "prec"[prec_list] :: list{'a} =
 dform list_ind_df1 : except_mode[src] :: parens :: "prec"[prec_list] :: list_ind{'e; 'base; h, t, f. 'step} =
    szone pushm[1] pushm[3]
    `"match " slot{'e} `" with" hspace
-   `"  [] ->" hspace slot{'base} popm hspace
-   `"| " pushm[0] slot{'h} `"::" slot{'t} `"." slot{'f} `" ->" hspace slot{'step} popm popm ezone
+   pushm[3] `"[] ->" hspace slot{'base} popm popm hspace
+   `"| " pushm[3] slot{'h} `"::" slot{'t} `"." slot{'f} `" ->" hspace slot{'step} popm popm ezone
 (************************************************************************
  * PRIMITIVES                                                           *
  ************************************************************************)

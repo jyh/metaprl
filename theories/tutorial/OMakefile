@@ -3,7 +3,7 @@ OCAMLINCLUDES +=\
 	-I ../base -I ../itt
 
 # Library files
-MPFILES =
+MPFILES = fol_false
 
 Theory($(MPFILES))
 

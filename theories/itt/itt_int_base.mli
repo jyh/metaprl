@@ -143,8 +143,10 @@ val mk_number_term : Mp_num.num -> term
 
 val ind_term : term
 val is_ind_term : term -> bool
-val dest_ind : term -> term * string * string * term * term * string * string * term
-val mk_ind_term : term -> string -> string -> term -> term -> string -> string -> term -> term
+val dest_ind : term -> term * string * string * term * term * string * string *
+ term
+val mk_ind_term : term -> string -> string -> term -> term -> string -> string
+ -> term -> term
 
 val reduce_numeral: conv
 
@@ -286,9 +288,11 @@ up[n, m, it, z])
  * H, n:Z, J[n], m:Z, v: 0 < m, z: C[m - 1] >- C[m] ext up[n, m, v, z]
  *)
 rule intElimination 'H :
-   sequent ['ext] { <H>; n: int; <J['n]>; m: int; v: 'm < 0; z: 'C['m +@ 1] >- 'C['m] } -->
+   sequent ['ext] { <H>; n: int; <J['n]>; m: int; v: 'm < 0; z: 'C['m +@ 1] >-
+ 'C['m] } -->
    sequent ['ext] { <H>; n: int; <J['n]> >- 'C[0] } -->
-   sequent ['ext] { <H>; n: int; <J['n]>; m: int; v: 0 < 'm; z: 'C['m -@ 1] >- 'C['m] } -->
+   sequent ['ext] { <H>; n: int; <J['n]>; m: int; v: 0 < 'm; z: 'C['m -@ 1] >-
+ 'C['m] } -->
    sequent ['ext] { <H>; n: int; <J['n]> >- 'C['n] }
 
 (*
@@ -306,11 +310,15 @@ rule intElimination 'H :
  *)
 rule indEquality lambda{z. 'T['z]} :
    sequent [squash] { <H> >- 'x1 = 'x2 in int } -->
-   sequent [squash] { <H>; x: int; w: 'x < 0; y: 'T['x +@ 1] >- 'down1['x; 'y] = 'down2['x; 'y] in 'T['x] } -->
+   sequent [squash] { <H>; x: int; w: 'x < 0; y: 'T['x +@ 1] >- 'down1['x; 'y] =
+ 'down2['x; 'y] in 'T['x] } -->
    sequent [squash] { <H> >- 'base1 = 'base2 in 'T[0] } -->
-   sequent [squash] { <H>; x: int; w: 0 < 'x; y: 'T['x -@ 1] >- 'up1['x; 'y] = 'up2['x; 'y] in 'T['x] } -->
-   sequent ['ext] { <H> >- ind{'x1; i1, j1. 'down1['i1; 'j1]; 'base1; k1, l1. 'up1['k1; 'l1]}
-                   = ind{'x2; i2, j2. 'down2['i2; 'j2]; 'base2; k2, l2. 'up2['k2; 'l2]}
+   sequent [squash] { <H>; x: int; w: 0 < 'x; y: 'T['x -@ 1] >- 'up1['x; 'y] =
+ 'up2['x; 'y] in 'T['x] } -->
+   sequent ['ext] { <H> >- ind{'x1; i1, j1. 'down1['i1; 'j1]; 'base1; k1, l1.
+ 'up1['k1; 'l1]}
+                   = ind{'x2; i2, j2. 'down2['i2; 'j2]; 'base2; k2, l2.
+ 'up2['k2; 'l2]}
                    in 'T['x1] }
 (*
  Definition of basic operations (and relations) on int
@@ -431,21 +439,9 @@ rule add_Id :
 
 topval add_IdC: conv
 
-rule add_Id2 :
-   [wf] sequent [squash] { <H> >- 'a in int } -->
-   sequent ['ext] { <H> >- (0 +@ 'a) ~ 'a }
-
 topval add_Id2C: conv
 
-rule add_Id3 :
-   [wf] sequent [squash] { <H> >- 'a in int } -->
-   sequent ['ext] { <H> >- 'a ~ (0 +@ 'a) }
-
 topval add_Id3C: conv
-
-rule add_Id4 :
-   [wf] sequent [squash] { <H> >- 'a in int } -->
-   sequent ['ext] { <H> >- 'a ~ ('a +@ 0) }
 
 topval add_Id4C: conv
 

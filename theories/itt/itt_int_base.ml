@@ -1,4 +1,4 @@
-doc <:doc< 
+doc <:doc<
    @spelling{int number ind add minus beq_int lt_bool}
   
    @begin[doc]
@@ -257,7 +257,8 @@ dform ind_df : parens :: "prec"[prec_bor] :: except_mode[src] ::
    ((display_var["n":v]{nil} < 0) => display_ind_eq{display_ind_n;
  'down[display_var["n":v]{nil}; display_ind{(display_var["n":v]{nil} +@ 1)}]})
  hspace
-   (display_ind_eq{display_var["n":v]{nil};0} => display_ind_eq{display_ind_n; 'base}) hspace
+   (display_ind_eq{display_var["n":v]{nil};0} => display_ind_eq{display_ind_n;
+ 'base}) hspace
    ((0 < display_var["n":v]{nil}) => display_ind_eq{display_ind_n;
  'up[display_var["n":v]{nil}; display_ind{(display_var["n":v]{nil} -@ 1)}]})
  popm ezone
@@ -531,7 +532,8 @@ doc <:doc<
 prim lt_Reflex :
    [wf] sequent [squash] { <H> >- 'a in int } -->
    [wf] sequent [squash] { <H> >- 'b in int } -->
-   sequent ['ext] { <H> >- band{lt_bool{'a; 'b}; lt_bool{'b; 'a}} ~ bfalse } = it
+   sequent ['ext] { <H> >- band{lt_bool{'a; 'b}; lt_bool{'b; 'a}} ~ bfalse } =
+ it
 
 interactive_rw lt_Reflex_rw :
    ( 'a in int ) -->
@@ -673,10 +675,12 @@ up[n, m, it, z])
  *)
 prim intElimination {| elim [ThinOption thinT] |} 'H :
    ( 'down['n; 'm; 'v; 'z] :
-      sequent ['ext] { <H>; n: int; <J['n]>; m: int; v: 'm < 0; z: 'C['m +@ 1] >- 'C['m] } ) -->
+      sequent ['ext] { <H>; n: int; <J['n]>; m: int; v: 'm < 0; z: 'C['m +@ 1]
+ >- 'C['m] } ) -->
    ( 'base['n] : sequent ['ext] { <H>; n: int; <J['n]> >- 'C[0] } ) -->
    ( 'up['n; 'm; 'v; 'z] : 
-      sequent ['ext] { <H>; n: int; <J['n]>; m: int; v: 0 < 'm; z: 'C['m -@ 1] >- 'C['m] } ) -->
+      sequent ['ext] { <H>; n: int; <J['n]>; m: int; v: 0 < 'm; z: 'C['m -@ 1]
+ >- 'C['m] } ) -->
    sequent ['ext] { <H>; n: int; <J['n]> >- 'C['n] } =
       ind{'n; m, z. 'down['n; 'm; it; 'z]; 'base['n]; m, z. 'up['n; 'm; it; 'z]}
 
@@ -842,19 +846,11 @@ interactive_rw add_Id_rw :
 
 let add_IdC = add_Id_rw
 
-interactive add_Id2 :
-   [wf] sequent [squash] { <H> >- 'a in int } -->
-   sequent ['ext] { <H> >- (0 +@ 'a) ~ 'a }
-
 interactive_rw add_Id2_rw :
    ( 'a in int ) -->
    (0 +@ 'a) <--> 'a
 
 let add_Id2C = add_Id2_rw
-
-interactive add_Id3 :
-   [wf] sequent [squash] { <H> >- 'a in int } -->
-   sequent ['ext] { <H> >- 'a ~ (0 +@ 'a) }
 
 interactive_rw add_Id3_rw :
    ( 'a in int ) -->
@@ -862,21 +858,17 @@ interactive_rw add_Id3_rw :
 
 let add_Id3C = add_Id3_rw
 
-interactive add_Id4 :
-   [wf] sequent [squash] { <H> >- 'a in int } -->
-   sequent ['ext] { <H> >- 'a ~ ('a +@ 0) }
-
 interactive_rw add_Id4_rw :
    ( 'a in int ) -->
    'a <--> ('a +@ 0)
 
 let add_Id4C = add_Id4_rw
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-  
+
    @tt{- 'a} is a inverse element for 'a in @tt{int}
-  
+
    @end[doc]
 >>
 prim minus_add_inverse :

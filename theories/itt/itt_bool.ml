@@ -433,7 +433,8 @@ interactive bool_subst_concl bind{x. 'C['x]} 'e :
 
 interactive bool_subst_hyp 'H bind{x. 'A['x]} 'e :
    [wf] sequent [squash] { <H>; x: 'A['e]; <J['x]> >- 'e in bool } -->
-   [main] sequent ['ext] { <H>; x: 'A[btrue]; <J['x]>; y: "assert"{'e} >- 'C['x] }
+   [main] sequent ['ext] { <H>; x: 'A[btrue]; <J['x]>; y: "assert"{'e} >- 'C['x]
+ }
  -->
    [main] sequent ['ext] { <H>; x: 'A[bfalse]; <J['x]>; y: "assert"{bnot{'e}} >-
  'C['x] } -->
@@ -512,7 +513,8 @@ doc <:doc<
    @end[doc]
 >>
 interactive assert_bor_elim {| elim [] |} 'H :
-   [wf] sequent [squash] { <H>; x: "assert"{bor{'t1; 't2}}; <J['x]> >- 't1 in bool
+   [wf] sequent [squash] { <H>; x: "assert"{bor{'t1; 't2}}; <J['x]> >- 't1 in
+ bool
  } -->
    [main] sequent ['ext] { <H>; x: "assert"{'t1}; <J[it]> >- 'C[it] } -->
    [main] sequent ['ext] { <H>; x: "assert"{'t2}; <J[it]> >- 'C[it] } -->
@@ -800,11 +802,6 @@ interactive not_assert_intro {| intro [] |} :
    [wf] sequent ['ext] { <H> >- 'b in bool } -->
    [main] sequent ['ext] { <H> >- "assert"{bnot{'b}} } -->
    sequent ['ext] { <H> >- not{"assert"{'b}} }
-
-interactive not_assert_elim {| elim [] |} 'H :
-   [wf] sequent [squash] { <H>; <J> >- 'b in bool } -->
-   [main] sequent ['ext] { <H>; <J> >- y: "assert"{bnot{'b}} } -->
-   sequent ['ext] { <H>; x: not{"assert"{'b}}; <J> >- 'C }
 
 interactive_rw reduce_band_same :
    ( 'e in bool ) -->

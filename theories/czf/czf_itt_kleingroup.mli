@@ -31,6 +31,8 @@
  *)
 
 include Czf_itt_group
+include Czf_itt_singleton
+include Czf_itt_union
 
 open Printf
 open Mp_debug
@@ -82,8 +84,6 @@ declare k3              (* Element of the group *)
  *)
 rewrite unfold_klein4_car : car{klein4} <-->
    union{sing{k0}; union{sing{k1}; union{sing{k2}; sing{k3}}}} 
-rewrite unfold_klein4_eqG : eqG{klein4} <-->
-   union{sing{pair{k0; k0}}; union{sing{pair{k1; k1}}; union{sing{pair{k2; k2}}; sing{pair{k3; k3}}}}} 
 rewrite unfold_klein4_op00 : op{klein4; k0; k0} <--> k0
 rewrite unfold_klein4_op01 : op{klein4; k0; k1} <--> k1
 rewrite unfold_klein4_op02 : op{klein4; k0; k2} <--> k2

@@ -39,10 +39,9 @@
  *    @space @space @space @space @space $c$ @space | $c$ $b$ $a$ $e$
 *)
  * The klein 4-group is assigned a label $@klein4$. Its carrier set,
- * equivalence relation, operation, identity, and inverse are all
- * rewritten in terms of its elements $@k0$, $@k1$, $@k2$, and $@k3$.
- * By showing all the axioms for groups are satisfied, we prove that
- * $@klein4$ is a group.
+ * operation, identity, and inverse are all rewritten in terms of
+ * its elements $@k0$, $@k1$, $@k2$, and $@k3$. By showing all the
+ * axioms for groups are satisfied, we prove that $@klein4$ is a group.
  * @end[doc]
  * ----------------------------------------------------------------
  *
@@ -77,6 +76,8 @@
 
 (*! @doc{@parents} *)
 include Czf_itt_group
+include Czf_itt_singleton
+include Czf_itt_union
 (*! @docoff *)
 
 open Printf
@@ -130,8 +131,6 @@ declare k3              (* Element of the group *)
  *)
 prim_rw unfold_klein4_car : car{klein4} <-->
    union{sing{k0}; union{sing{k1}; union{sing{k2}; sing{k3}}}} 
-prim_rw unfold_klein4_eqG : eqG{klein4} <-->
-   union{sing{pair{k0; k0}}; union{sing{pair{k1; k1}}; union{sing{pair{k2; k2}}; sing{pair{k3; k3}}}}} 
 prim_rw unfold_klein4_op00 : op{klein4; k0; k0} <--> k0
 prim_rw unfold_klein4_op01 : op{klein4; k0; k1} <--> k1
 prim_rw unfold_klein4_op02 : op{klein4; k0; k2} <--> k2
@@ -205,37 +204,32 @@ interactive k3_isset {| intro [] |} 'H :
 (*!
  * @begin[doc]
  *
- * The $@car{@klein4}$, $@eqG{@klein4}$, $@id{@klein4}$ are
- * well-formed; the $@op{@klein4; s_1; s_2}$ is well-formed
- * if its set arguments are both sets; the $@inv{@klein4; s}$
- * is well-formed if its set argument is a set.
+ * The $@car{@klein4}$, $@id{@klein4}$ are well-formed; the
+ * $@op{@klein4; s_1; s_2}$ is well-formed if its set
+ * arguments are both sets; the $@inv{@klein4; s}$ is 
+ *well-formed if its set argument is a set.
  * @end[doc]
  *)
-interactive klein4_car_wf {| intro[] |} 'H :
+interactive klein4_car_isset {| intro[] |} 'H :
    sequent ['ext] { 'H >- isset{car{klein4}} }
 
-interactive klein4_eqG_wf1 {| intro[] |} 'H :
-   sequent ['ext] { 'H >- isset{eqG{klein4}} }
-
-interactive klein4_op_wf {| intro[] |} 'H :
+interactive klein4_op_isset {| intro[] |} 'H :
    sequent [squash] { 'H >- isset{'s1} } -->
    sequent [squash] { 'H >- isset{'s2} } -->
    sequent ['ext] { 'H >- isset{op{klein4; 's1; 's2}} }
 
-interactive klein4_id_wf1 {| intro [] |} 'H :
+interactive klein4_id_isset {| intro [] |} 'H :
    sequent ['ext] { 'H >- isset{id{klein4}} }
 
-interactive klein4_inv_wf1 {| intro[] |} 'H :
+interactive klein4_inv_isset {| intro[] |} 'H :
    sequent [squash] { 'H >- isset{'s1} } -->
    sequent ['ext] { 'H >- isset{inv{klein4; 's1}} }
 
 (*!
  * @begin[doc]
- * @thysubsection{Introduction and elimination for the carrier set and the equivalence relation}
+ * @thysubsection{Introduction and elimination for the carrier set}
  *
- * The $@car{@klein4}$ contains $@k0$, $@k1$, $@k2$, $@k3$; $@eqG{@klein4}$
- * contains $@pair{@k0; @k0}$, $@pair{@k1; @k1}$, $@pair{@k2; @k2}$, and
- * $@pair{@k3; @k3}$.
+ * The $@car{@klein4}$ contains $@k0$, $@k1$, $@k2$, $@k3$.
  * @end[doc]
  *)
 interactive car_klein0 {| intro[] |} 'H :
@@ -250,18 +244,6 @@ interactive car_klein2 {| intro[] |} 'H :
 interactive car_klein3 {| intro[] |} 'H :
    sequent ['ext] { 'H >- mem{k3; car{klein4}} }
 
-interactive eqG_klein0 {| intro[] |} 'H :
-   sequent ['ext] { 'H >- mem{pair{k0; k0}; eqG{klein4}} }
-
-interactive eqG_klein1 {| intro[] |} 'H :
-   sequent ['ext] { 'H >- mem{pair{k1; k1}; eqG{klein4}} }
-
-interactive eqG_klein2 {| intro[] |} 'H :
-   sequent ['ext] { 'H >- mem{pair{k2; k2}; eqG{klein4}} }
-
-interactive eqG_klein3 {| intro[] |} 'H :
-   sequent ['ext] { 'H >- mem{pair{k3; k3}; eqG{klein4}} }
-
 interactive car_klein0_elim {| elim [] |} 'H 'J :
    sequent [squash] { 'H; x: mem{'y; car{klein4}}; 'J['x] >- isset{'y} } -->
    sequent ['ext] { 'H; x: mem{'y; car{klein4}}; 'J['x]; z: eq{'y; k0} >- 'T['x] } -->
@@ -270,14 +252,6 @@ interactive car_klein0_elim {| elim [] |} 'H 'J :
    sequent ['ext] { 'H; x: mem{'y; car{klein4}}; 'J['x]; z: eq{'y; k3} >- 'T['x] } -->
    sequent ['ext] { 'H; x: mem{'y; car{klein4}}; 'J['x] >- 'T['x] }
 
-interactive eqG_klein0_elim {| elim [] |} 'H 'J :
-   sequent [squash] { 'H; x: mem{'y; eqG{klein4}}; 'J['x] >- isset{'y} } -->
-   sequent ['ext] { 'H; x: mem{'y; eqG{klein4}}; 'J['x]; z: eq{'y; pair{k0; k0}} >- 'T['x] } -->
-   sequent ['ext] { 'H; x: mem{'y; eqG{klein4}}; 'J['x]; z: eq{'y; pair{k1; k1}} >- 'T['x] } -->
-   sequent ['ext] { 'H; x: mem{'y; eqG{klein4}}; 'J['x]; z: eq{'y; pair{k2; k2}} >- 'T['x] } -->
-   sequent ['ext] { 'H; x: mem{'y; eqG{klein4}}; 'J['x]; z: eq{'y; pair{k3; k3}} >- 'T['x] } -->
-   sequent ['ext] { 'H; x: mem{'y; eqG{klein4}}; 'J['x] >- 'T['x] }
-
 (*!
  * @begin[doc]
  * @thysubsection{Verificatioin of the group axioms}
@@ -285,41 +259,10 @@ interactive eqG_klein0_elim {| elim [] |} 'H 'J :
  * The @tt{op} for @tt{klein4} is functional and is a mapping.
  * @end[doc]
  *)
-interactive klein4_op_eq_fun1 {| intro[] |} 'H :
-   sequent [squash] { 'H >- isset{'s} } -->
-   sequent ['ext] { 'H >- fun_set{z. op{klein4; 'z; 's}} }
-
-interactive klein4_op_eq_fun2 {| intro[] |} 'H :
-   sequent [squash] { 'H >- isset{'s} } -->
-   sequent ['ext] { 'H >- fun_set{z. op{klein4; 's; 'z}} }
-
-interactive klein4_op_eqG_fun1 {| intro[] |} 'H :
-   sequent [squash] { 'H >- isset{'s} } -->
-   sequent ['ext] { 'H >- equiv_fun_set{car{klein4}; eqG{klein4}; z. op{klein4; 'z; 's}} }
-
-interactive klein4_op_equiv_fun2 {| intro[] |} 'H :
-   sequent [squash] { 'H >- isset{'s} } -->
-   sequent ['ext] { 'H >- equiv_fun_set{car{klein4}; eqG{klein4}; z. op{klein4; 's; 'z}} }
-
-interactive klein4_op_eqG1 {| intro[] |} 'H :
-   sequent [squash] { 'H >- isset{'s1} } -->
-   sequent [squash] { 'H >- isset{'s2} } -->
-   sequent [squash] { 'H >- isset{'s3} } -->
-   sequent ['ext] { 'H >- mem{'s1; car{klein4}} } -->
-   sequent ['ext] { 'H >- mem{'s2; car{klein4}} } -->
-   sequent ['ext] { 'H >- mem{'s3; car{klein4}} } -->
-   sequent ['ext] { 'H >- equiv{car{klein4}; eqG{klein4}; 's1; 's2} } -->
-   sequent ['ext] { 'H >- equiv{car{klein4}; eqG{klein4}; op{klein4; 's3; 's1}; op{klein4; 's3; 's2}} }
-
-interactive klein4_op_eqG2 {| intro[] |} 'H :
-   sequent [squash] { 'H >- isset{'s1} } -->
-   sequent [squash] { 'H >- isset{'s2} } -->
-   sequent [squash] { 'H >- isset{'s3} } -->
-   sequent ['ext] { 'H >- mem{'s1; car{klein4}} } -->
-   sequent ['ext] { 'H >- mem{'s2; car{klein4}} } -->
-   sequent ['ext] { 'H >- mem{'s3; car{klein4}} } -->
-   sequent ['ext] { 'H >- equiv{car{klein4}; eqG{klein4}; 's1; 's2} } -->
-   sequent ['ext] { 'H >- equiv{car{klein4}; eqG{klein4}; op{klein4; 's1; 's3}; op{klein4; 's2; 's3}} }
+interactive klein4_op_fun {| intro[] |} 'H :
+   sequent ['ext] { 'H >- fun_set{z. 's1['z]} } -->
+   sequent ['ext] { 'H >- fun_set{z. 's2['z]} } -->
+   sequent ['ext] { 'H >- fun_set{z. op{klein4; 's1['z]; 's2['z]}} }
 
 interactive klein4_op_closure {| intro[] |} 'H :
    sequent [squash] { 'H >- isset{'s1} } -->
@@ -327,6 +270,27 @@ interactive klein4_op_closure {| intro[] |} 'H :
    sequent ['ext] { 'H >- mem{'s1; car{klein4}} } -->
    sequent ['ext] { 'H >- mem{'s2; car{klein4}} } -->
    sequent ['ext] { 'H >- mem{op{klein4; 's1; 's2}; car{klein4}} }
+(*! @docoff *)
+
+interactive klein4_op_eq1 {| intro[] |} 'H :
+   sequent [squash] { 'H >- isset{'s1} } -->
+   sequent [squash] { 'H >- isset{'s2} } -->
+   sequent [squash] { 'H >- isset{'s3} } -->
+   sequent ['ext] { 'H >- mem{'s1; car{klein4}} } -->
+   sequent ['ext] { 'H >- mem{'s2; car{klein4}} } -->
+   sequent ['ext] { 'H >- mem{'s3; car{klein4}} } -->
+   sequent ['ext] { 'H >- eq{'s1; 's2} } -->
+   sequent ['ext] { 'H >- eq{op{klein4; 's3; 's1}; op{klein4; 's3; 's2}} }
+
+interactive klein4_op_eq2 {| intro[] |} 'H :
+   sequent [squash] { 'H >- isset{'s1} } -->
+   sequent [squash] { 'H >- isset{'s2} } -->
+   sequent [squash] { 'H >- isset{'s3} } -->
+   sequent ['ext] { 'H >- mem{'s1; car{klein4}} } -->
+   sequent ['ext] { 'H >- mem{'s2; car{klein4}} } -->
+   sequent ['ext] { 'H >- mem{'s3; car{klein4}} } -->
+   sequent ['ext] { 'H >- eq{'s1; 's2} } -->
+   sequent ['ext] { 'H >- eq{op{klein4; 's1; 's3}; op{klein4; 's2; 's3}} }
 
 (*!
  * @begin[doc]
@@ -341,7 +305,7 @@ interactive klein4_op_assoc1 {| intro[] |} 'H :
    sequent ['ext] { 'H >- mem{'s1; car{klein4}} } -->
    sequent ['ext] { 'H >- mem{'s2; car{klein4}} } -->
    sequent ['ext] { 'H >- mem{'s3; car{klein4}} } -->
-   sequent ['ext] { 'H >- equiv{car{klein4}; eqG{klein4}; op{klein4; op{klein4; 's1; 's2}; 's3}; op{klein4; 's1; op{klein4; 's2; 's3}}} }
+   sequent ['ext] { 'H >- eq{op{klein4; op{klein4; 's1; 's2}; 's3}; op{klein4; 's1; op{klein4; 's2; 's3}}} }
 
 interactive klein4_op_assoc2 {| intro[] |} 'H :
    sequent [squash] { 'H >- isset{'s1} } -->
@@ -350,7 +314,7 @@ interactive klein4_op_assoc2 {| intro[] |} 'H :
    sequent ['ext] { 'H >- mem{'s1; car{klein4}} } -->
    sequent ['ext] { 'H >- mem{'s2; car{klein4}} } -->
    sequent ['ext] { 'H >- mem{'s3; car{klein4}} } -->
-   sequent ['ext] { 'H >- equiv{car{klein4}; eqG{klein4}; op{klein4; 's1; op{klein4; 's2; 's3}}; op{klein4; op{klein4; 's1; 's2}; 's3}} }
+   sequent ['ext] { 'H >- eq{op{klein4; 's1; op{klein4; 's2; 's3}}; op{klein4; op{klein4; 's1; 's2}; 's3}} }
 
 (*!
  * @begin[doc]
@@ -358,13 +322,13 @@ interactive klein4_op_assoc2 {| intro[] |} 'H :
  * The axioms for the identity are satisfied.
  * @end[doc]
  *)
-interactive klein4_id_wf2 {| intro[] |} 'H :
+interactive klein4_id_mem {| intro[] |} 'H :
    sequent ['ext] { 'H >- mem{id{klein4}; car{klein4}} }
 
 interactive klein4_id_eq1 {| intro[] |} 'H :
    sequent [squash] { 'H >- isset{'s} } -->
    sequent ['ext] { 'H >- mem{'s; car{klein4}} } -->
-   sequent ['ext] { 'H >- equiv{car{klein4}; eqG{klein4}; op{klein4; id{klein4}; 's}; 's} }
+   sequent ['ext] { 'H >- eq{op{klein4; id{klein4}; 's}; 's} }
 
 (*!
  * @begin[doc]
@@ -372,13 +336,10 @@ interactive klein4_id_eq1 {| intro[] |} 'H :
  * The axioms for the inverse are satisfied.
  * @end[doc]
  *)
-interactive klein4_inv_equiv_fun1 {| intro[] |} 'H :
-   sequent ['ext] { 'H >- equiv_fun_set{car{klein4}; eqG{klein4}; z. inv{klein4; 'z}} }
-
-interactive klein4_inv_eq_fun1 {| intro[] |} 'H :
+interactive klein4_inv_fun {| intro[] |} 'H :
    sequent ['ext] { 'H >- fun_set{z. inv{klein4; 'z}} }
 
-interactive klein4_inv_wf2 {| intro[] |} 'H :
+interactive klein4_inv_mem {| intro[] |} 'H :
    sequent [squash] { 'H >- isset{'s1} } -->
    sequent ['ext] { 'H >- mem{'s1; car{klein4}} } -->
    sequent ['ext] { 'H >- mem{inv{klein4; 's1}; car{klein4}} }
@@ -386,7 +347,7 @@ interactive klein4_inv_wf2 {| intro[] |} 'H :
 interactive klein4_inv_id1 {| intro[] |} 'H :
    sequent [squash] { 'H >- isset{'s1} } -->
    sequent ['ext] { 'H >- mem{'s1; car{klein4}} } -->
-   sequent ['ext] { 'H >- equiv{car{klein4}; eqG{klein4}; op{klein4; inv{klein4; 's1}; 's1}; id{klein4}} }
+   sequent ['ext] { 'H >- eq{op{klein4; inv{klein4; 's1}; 's1}; id{klein4}} }
 
 (*! @docoff *)
 (*

@@ -30,8 +30,8 @@
  * Email : xiny@cs.caltech.edu
  *)
 
+include Czf_itt_group_power
 include Czf_itt_subgroup
-include Itt_int_base
 
 open Printf
 open Mp_debug
@@ -60,21 +60,15 @@ open Base_auto_tactic
  * TERMS                                                                *
  ************************************************************************)
 
-declare power{'g; 'z; 'n}
 declare cyc_subg{'s; 'g; 'a}
 
 (************************************************************************
  * DEFINITIONS                                                          *
  ************************************************************************)
 
-rewrite unfold_power : power{'g; 'z; 'n} <-->
-   ind{'n; i, j. op{'g; inv{'g; 'z}; power{'g; 'z; ('n +@ 1)}}; id{'g}; k, l. op{'g; 'z; power{'g; 'z; ('n -@ 1)}}}
-
 rewrite unfold_cyc_subg : cyc_subg{'s; 'g; 'a} <-->
-   (group{'s} & group{'g} & mem{'a; car{'g}} & group_bvd{'s; 'g; collect{int; x. power{'g; 'a; 'x}}})
-(*   (mem{'a; car{'g}} & group_bvd{'s; 'g; collect{int; x. power{'g; 'a; 'x}}}) *)
+   (group{'s} & group{'g} & mem{'a; car{'g}} & equal{car{'s}; collect{int; x. power{'g; 'a; 'x}}} & (all a: set. all b: set. (mem{'a; car{'s}} => mem{'b; car{'s}} => eq{op{'s; 'a; 'b}; op{'g; 'a; 'b}})))
 
-topval fold_power : conv
 topval fold_cyc_subg : conv
 
 (************************************************************************

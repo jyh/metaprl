@@ -7,21 +7,7 @@
  * The @tt{Czf_itt_subgroup} module defines subgroups.
  * A subgroup of a group $g$ is a group whose carrier
  * is a subset of $g$ and who shares the same binary
- * operation as $g$. Since the binary operation for a
- * group is related with the equivalence relation for
- * the group, the subgroup must have the same
- * equivalence relation as $g$. So @tt{subgroup} can
- * be defined by @tt{groupbvd} like
- *
- * $$
- * @begin[array, l]
- * @line{@item{@subgroup{s; g} @equiv}}
- * @line{@item{@space @space @space
- *   @groupbvd{s; g; @car{s}}}}
- * @line{@item{@space @space @space
- *   @wedge @subset{@car{s}; @car{g}}}}
- * @end[array]
- * $$
+ * operation as $g$.
  *
  * @end[doc]
  *
@@ -106,8 +92,7 @@ declare subgroup{'s; 'g}
  * @end[doc]
  *)
 prim_rw unfold_subgroup : subgroup{'s; 'g} <-->
-   (group{'s} & group{'g} & subset{car{'s}; car{'g}} & group_bvd{'s; 'g; car{'s}})
-(*   (group_bvd{'s; 'g; car{'s}} & subset{car{'s}; car{'g}})*)
+   (group{'s} & group{'g} & subset{car{'s}; car{'g}} & (all a: set. all b: set. (mem{'a; car{'s}} => mem{'b; car{'s}} => eq{op{'s; 'a; 'b}; op{'g; 'a; 'b}})))
 (*! @docoff *)
 
 (************************************************************************
@@ -139,10 +124,8 @@ interactive subgroup_wf {| intro [] |} 'H :
  * @thysubsection{Introduction}
  *
  * The proposition $@subgroup{s; g}$ is true if it is well-formed,
- * $s$ and $g$ are groups, $@car{s}$ is a subset of $@car{g}$,
- * $@op{s; a; b}$ is defined as $@op{g; a; b}$ for $a, b @in @car{s}$,
- * and any two elements of $h$ are equivalent if and only if they
- * are equivalent in $g$.
+ * $s$ and $g$ are groups, $@car{s}$ is a subset of $@car{g}$, and
+ * $@op{s; a; b}$ is defined as $@op{g; a; b}$ for $a, b @in @car{s}$.
  * @end[doc]
  *)
 interactive subgroup_intro {| intro [] |} 'H :
@@ -151,9 +134,7 @@ interactive subgroup_intro {| intro [] |} 'H :
    sequent ['ext] { 'H >- group{'s} } -->
    sequent ['ext] { 'H >- group{'g} } -->
    sequent ['ext] { 'H >- subset{car{'s}; car{'g}} } -->
-   sequent ['ext] { 'H; a: set; b: set; x: mem{'a; car{'s}}; y: mem{'b; car{'s}} >- equiv{car{'s}; eqG{'s}; op{'s; 'a; 'b}; op{'g; 'a; 'b}} } -->
-   sequent ['ext] { 'H; c: set; d: set; u: equiv{car{'s}; eqG{'s}; 'c; 'd} >- equiv{car{'g}; eqG{'g}; 'c; 'd} } -->
-   sequent ['ext] { 'H; p: set; q: set; x: mem{'p; car{'s}}; y: mem{'q; car{'s}}; v: equiv{car{'g}; eqG{'g}; 'p; 'q} >- equiv{car{'s}; eqG{'s}; 'p; 'q} } -->
+   sequent ['ext] { 'H; a: set; b: set; x: mem{'a; car{'s}}; y: mem{'b; car{'s}} >- eq{op{'s; 'a; 'b}; op{'g; 'a; 'b}} } -->
    sequent ['ext] { 'H >- subgroup{'s; 'g} }
 
 (*!
@@ -162,31 +143,49 @@ interactive subgroup_intro {| intro [] |} 'H :
  *
  * If $s$ is a subgroup of $g$, then
  * @begin[enumerate]
- * @item{the equivalence relation of $g$ is also an equivalence relation on $s$.}
+ * @item{$s$ is closed under the binary operation of $g$.}
  * @item{the identity of $s$ is also an identity of $g$.}
- * @item{the inverse of $a @in @car{s}$ is also an inverse of $a$ in $g$.}
+ * @item{the inverse of $a @in @car{s}$ is also the inverse of $a$ in $g$.}
  * @end[enumerate]
  * @end[doc]
  *)
-interactive subgroup_equiv {| intro [] |} 'H :
+interactive subgroup_op {| intro [] |} 'H :
+   sequent [squash] { 'H >- 's IN label } -->
+   sequent [squash] { 'H >- 'g IN label } -->
+   sequent [squash] { 'H >- isset{'a} } -->
+   sequent [squash] { 'H >- isset{'b} } -->
+   sequent ['ext] { 'H >- mem{'a; car{'s}} } -->
+   sequent ['ext] { 'H >- mem{'b; car{'s}} } -->
+   sequent ['ext] { 'H >- subgroup{'s; 'g} } -->
+   sequent ['ext] { 'H >- mem{op{'g; 'a; 'b}; car{'s}} }
+
+interactive subgroup_id1 {| intro [] |} 'H :
    sequent [squash] { 'H >- 's IN label } -->
    sequent [squash] { 'H >- 'g IN label } -->
    sequent ['ext] { 'H >- subgroup{'s; 'g} } -->
-   sequent ['ext] { 'H >- equiv{car{'s}; eqG{'g}} }
+   sequent ['ext] { 'H >- eq{id{'s}; id{'g}} }
 
-interactive subgroup_id {| intro [] |} 'H :
+interactive subgroup_id2 {| intro [] |} 'H :
    sequent [squash] { 'H >- 's IN label } -->
    sequent [squash] { 'H >- 'g IN label } -->
    sequent ['ext] { 'H >- subgroup{'s; 'g} } -->
-   sequent ['ext] { 'H >- equiv{car{'g}; eqG{'g}; id{'s}; id{'g}} }
+   sequent ['ext] { 'H >- mem{id{'g}; car{'s}} }
 
-interactive subgroup_inv {| intro [] |} 'H :
+interactive subgroup_inv1 {| intro [] |} 'H :
    sequent [squash] { 'H >- 's IN label } -->
    sequent [squash] { 'H >- 'g IN label } -->
    sequent [squash] { 'H >- isset{'a} } -->
    sequent ['ext] { 'H >- mem{'a; car{'s}} } -->
    sequent ['ext] { 'H >- subgroup{'s; 'g} } -->
-   sequent ['ext] { 'H >- equiv{car{'g}; eqG{'g}; inv{'s; 'a}; inv{'g; 'a}} }
+   sequent ['ext] { 'H >- eq{inv{'s; 'a}; inv{'g; 'a}} }
+
+interactive subgroup_inv2 {| intro [] |} 'H :
+   sequent [squash] { 'H >- 's IN label } -->
+   sequent [squash] { 'H >- 'g IN label } -->
+   sequent [squash] { 'H >- isset{'a} } -->
+   sequent ['ext] { 'H >- mem{'a; car{'s}} } -->
+   sequent ['ext] { 'H >- subgroup{'s; 'g} } -->
+   sequent ['ext] { 'H >- mem{inv{'g; 'a}; car{'s}} }
 
 (*!
  * @begin[doc]

@@ -4,31 +4,16 @@
  * @begin[doc]
  * @theory[Czf_itt_coset]
  *
- * The @tt{Czf_itt_coset} module defines the @emph{left coset} and
- * the @emph{right coset}. If $h$ is a subgroup of $g$ and
+ * The @tt{Czf_itt_coset} module defines the @emph{left coset}
+ * and the @emph{right coset}. If $h$ is a subgroup of $g$ and
  * $@mem{a; @car{g}}$, then the set of $a * h$ for which
- * $h @in @car{h}$ is the left coset of $h$ containing $a$, and the
- * set of $h * a$ for which $h @in @car{h}$ is the right coset of
- * $h$ containing $a$. The elements of the left coset are the
- * elements of $x @in @car{g}$ which is equivalent with $@op{g; a; y}$
- * for some $y @in @car{h}$. The elements of the right coset are the
- * elements of $x @in @car{g}$ which is equivalent with $@op{g; y; a}$
- * for some $y @in @car{h}$.
- *
- * The @tt{lcoset} and @tt{rcoset} are defined by @tt{sep} instead of
- * @tt{setbvd}. The @tt{setbvd} definition $@setbvd{x; @car{h}; @op{g; a; x}}$
- * for $@lcoset{h; g; a}$ looks correct at the first sight, but the
- * introduction and elimination rules for @tt{setbvd} all refers to
- * equality rather that equivalence, which is not suitable for groups.
- * The $@lcoset{h; g; a}$ and $@rcoset{h; g; a}$ are defined by
- * separation as
- * $$
- * @sep{x; @car{'g}; @dexists{y; car{'h}; @mem{@pair{'x; @op{'g; 'a; 'y}}; @eqG{'g}}}}
- * $$
- * and
- * $$
- * @sep{x; @car{'g}; @dexists{y; car{'h}; @mem{@pair{'x; @op{'g; 'y; 'a}}; @eqG{'g}}}}
- * $$
+ * $h @in @car{h}$ is the left coset of $h$ containing $a$, and
+ * the set of $h * a$ for which $h @in @car{h}$ is the right
+ * coset of $h$ containing $a$. The elements of the left coset
+ * are the elements of $x @in @car{g}$ which is equal to $@op{g; a; y}$
+ * for some $y @in @car{h}$. The elements of the right coset are
+ * the elements of $x @in @car{g}$ which is equal to $@op{g; y; a}$
+ * for some $y @in @car{h}$. The cosets are defined by separation.
  *
  * @end[doc]
  *
@@ -65,8 +50,8 @@
 
 (*! @doc{@parents} *)
 include Czf_itt_group
+include Czf_itt_dexists
 include Czf_itt_subgroup
-include Czf_itt_set_bvd
 (*! @docoff *)
 
 open Printf
@@ -112,10 +97,10 @@ declare rcoset{'h; 'g; 'a}
  * @end[doc]
  *)
 prim_rw unfold_lcoset : lcoset{'h; 'g; 'a} <-->
-   sep{car{'g}; x. "dexists"{car{'h}; y. mem{pair{'x; op{'g; 'a; 'y}}; eqG{'g}}}}
+   sep{car{'g}; x. "dexists"{car{'h}; y. eq{'x; op{'g; 'a; 'y}}}}
 
 prim_rw unfold_rcoset : rcoset{'h; 'g; 'a} <-->
-   sep{car{'g}; x. "dexists"{car{'h}; y. mem{pair{'x; op{'g; 'y; 'a}}; eqG{'g}}}}
+   sep{car{'g}; x. "dexists"{car{'h}; y. eq{'x; op{'g; 'y; 'a}}}}
 (*! @docoff *)
 
 (************************************************************************
@@ -145,14 +130,14 @@ interactive lcoset_isset {| intro [] |} 'H :
    sequent [squash] { 'H >- 'h IN label } -->
    sequent [squash] { 'H >- 'g IN label } -->
    sequent [squash] { 'H >- isset{'a} } -->
-   sequent ['ext] { 'H >- group{'g} } -->
+(*   sequent ['ext] { 'H >- group{'g} } -->*)
    sequent ['ext] { 'H >- isset{lcoset{'h; 'g; 'a}} }
 
 interactive rcoset_isset {| intro [] |} 'H :
    sequent [squash] { 'H >- 'h IN label } -->
    sequent [squash] { 'H >- 'g IN label } -->
    sequent [squash] { 'H >- isset{'a} } -->
-   sequent ['ext] { 'H >- group{'g} } -->
+(*   sequent ['ext] { 'H >- group{'g} } -->*)
    sequent ['ext] { 'H >- isset{rcoset{'h; 'g; 'a}} }
 
 (*!
@@ -163,30 +148,34 @@ interactive rcoset_isset {| intro [] |} 'H :
  * left coset is well-formed, $@mem{a; @car{g}}$,
  * $@mem{x; @car{g}}$, $@subgroup{h; g}$, and there
  * exists a set $y$ such that $y$ is a member of
- * $@car{h}$ and $x$ is equivalent to $@op{g; a; y}$
+ * $@car{h}$ and $x$ is equal to $@op{g; a; y}$
  * in $@car{g}$.
  * @end[doc]
  *)
-interactive lcoset_intro {| intro [] |} 'H :
+interactive lcoset_intro {| intro [] |} 'H 'z :
    sequent [squash] { 'H >- 'h IN label } -->
    sequent [squash] { 'H >- 'g IN label } -->
    sequent [squash] { 'H >- isset{'a} } -->
    sequent [squash] { 'H >- isset{'x} } -->
+   sequent [squash] { 'H >- isset{'z} } -->
    sequent ['ext] { 'H >- mem{'a; car{'g}} } -->
    sequent ['ext] { 'H >- mem{'x; car{'g}} } -->
    sequent ['ext] { 'H >- subgroup{'h; 'g} } -->
-   sequent ['ext] { 'H >- exst y: set. (mem{'y; car{'h}} & equiv{car{'g}; eqG{'g}; 'x; op{'g; 'a; 'y}}) } -->
+   sequent ['ext] { 'H >- mem{'z; car{'h}} } -->
+   sequent ['ext] { 'H >- eq{'x; op{'g; 'a; 'z}} } -->
    sequent ['ext] { 'H >- mem{'x; lcoset{'h; 'g; 'a}} }
 
-interactive rcoset_intro {| intro [] |} 'H :
+interactive rcoset_intro {| intro [] |} 'H 'z :
    sequent [squash] { 'H >- 'h IN label } -->
    sequent [squash] { 'H >- 'g IN label } -->
    sequent [squash] { 'H >- isset{'a} } -->
    sequent [squash] { 'H >- isset{'x} } -->
+   sequent [squash] { 'H >- isset{'z} } -->
    sequent ['ext] { 'H >- mem{'a; car{'g}} } -->
    sequent ['ext] { 'H >- mem{'x; car{'g}} } -->
    sequent ['ext] { 'H >- subgroup{'h; 'g} } -->
-   sequent ['ext] { 'H >- exst y: set. (mem{'y; car{'h}} & equiv{car{'g}; eqG{'g}; 'x; op{'g; 'y; 'a}}) } -->
+   sequent ['ext] { 'H >- mem{'z; car{'h}} } -->
+   sequent ['ext] { 'H >- eq{'x; op{'g; 'z; 'a}} } -->
    sequent ['ext] { 'H >- mem{'x; rcoset{'h; 'g; 'a}} }
 
 (*!
@@ -196,7 +185,7 @@ interactive rcoset_intro {| intro [] |} 'H :
  * The elimination form for the left coset
  * $@mem{y; @lcoset{h; g; a}}$ implies $@mem{y; @car{g}}$
  * and also produces a witness $@mem{z; @car{h}}$ for which
- * $@equiv{@car{g}; @eqG{g}; y; @op{g; a; z}}$.
+ * $@eq{y; @op{g; a; z}}$.
  * @end[doc]
  *)
 interactive lcoset_elim {| elim [] |} 'H 'J :
@@ -206,7 +195,7 @@ interactive lcoset_elim {| elim [] |} 'H 'J :
    sequent [squash] { 'H; x: mem{'y; lcoset{'h; 'g; 'a}}; 'J['x] >- isset{'y} } -->
    sequent ['ext] { 'H; x: mem{'y; lcoset{'h; 'g; 'a}}; 'J['x] >- mem{'a; car{'g}} } -->
    sequent ['ext] { 'H; x: mem{'y; lcoset{'h; 'g; 'a}}; 'J['x] >- subgroup{'h; 'g} } -->
-   sequent ['ext] { 'H; x: mem{'y; lcoset{'h; 'g; 'a}}; 'J['x]; u: mem{'y; car{'g}}; z: set; v: mem{'z; car{'h}}; w: equiv{car{'g}; eqG{'g}; 'y; op{'g; 'a; 'z}} >- 'C['x] } -->
+   sequent ['ext] { 'H; x: mem{'y; lcoset{'h; 'g; 'a}}; 'J['x]; u: mem{'y; car{'g}}; z: set; v: mem{'z; car{'h}}; w: eq{'y; op{'g; 'a; 'z}} >- 'C['x] } -->
    sequent ['ext] { 'H; x: mem{'y; lcoset{'h; 'g; 'a}}; 'J['x] >- 'C['x] }
 
 interactive rcoset_elim {| elim [] |} 'H 'J :
@@ -216,7 +205,7 @@ interactive rcoset_elim {| elim [] |} 'H 'J :
    sequent [squash] { 'H; x: mem{'y; rcoset{'h; 'g; 'a}}; 'J['x] >- isset{'y} } -->
    sequent ['ext] { 'H; x: mem{'y; rcoset{'h; 'g; 'a}}; 'J['x] >- mem{'a; car{'g}} } -->
    sequent ['ext] { 'H; x: mem{'y; rcoset{'h; 'g; 'a}}; 'J['x] >- subgroup{'h; 'g} } -->
-   sequent ['ext] { 'H; x: mem{'y; rcoset{'h; 'g; 'a}}; 'J['x]; u: mem{'y; car{'g}}; z: set; v: mem{'z; car{'h}}; w: equiv{car{'g}; eqG{'g}; 'y; op{'g; 'z; 'a}} >- 'C['x] } -->
+   sequent ['ext] { 'H; x: mem{'y; rcoset{'h; 'g; 'a}}; 'J['x]; u: mem{'y; car{'g}}; z: set; v: mem{'z; car{'h}}; w: eq{'y; op{'g; 'z; 'a}} >- 'C['x] } -->
    sequent ['ext] { 'H; x: mem{'y; rcoset{'h; 'g; 'a}}; 'J['x] >- 'C['x] }
 
 (*!

@@ -69,7 +69,7 @@ declare hom{'g1; 'g2; x. 'f['x]}
  * and for all a, b in g1, f(a * b) = f(a) * f(b).
  *)
 rewrite unfold_hom : hom{'g1; 'g2; x. 'f['x]} <-->
-   (group{'g1} & group{'g2} & (all a: set. (mem{'a; car{'g1}} => mem{'f['a]; car{'g2}})) & (all a: set. all b: set. (mem{'a; car{'g1}} => mem{'b; car{'g1}} => equiv{car{'g1}; eqG{'g1}; 'a; 'b} => equiv{car{'g2}; eqG{'g2}; 'f['a]; 'f['b]})) & (all a: set. all b: set. (mem{'a; car{'g1}} => mem{'b; car{'g1}} => equiv{car{'g2}; eqG{'g2}; 'f[op{'g1; 'a; 'b}]; op{'g2; 'f['a]; 'f['b]}})))
+   (group{'g1} & group{'g2} & (all a: set. (mem{'a; car{'g1}} => member{'f['a]; car{'g2}})) & (all a: set. all b: set. (mem{'a; car{'g1}} => mem{'b; car{'g1}} => eq{'a; 'b} => eq{'f['a]; 'f['b]})) & (all a: set. all b: set. (mem{'a; car{'g1}} => mem{'b; car{'g1}} => eq{'f[op{'g1; 'a; 'b}]; op{'g2; 'f['a]; 'f['b]}})))
 
 (************************************************************************
  * TACTICS                                                              *

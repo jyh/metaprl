@@ -30,7 +30,6 @@
  * Email : xiny@cs.caltech.edu
  *)
 
-include Czf_itt_group
 include Czf_itt_subgroup
 include Czf_itt_coset
 

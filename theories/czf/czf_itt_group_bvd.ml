@@ -6,13 +6,10 @@
  *
  * The @tt{Czf_itt_group_bvd} module defines the @emph{group builder}
  * which builds a new group $g_1$ from an existing group $g_2$ which
- * shares the same operation and equivalence relation, but has a
- * different carrier. The same operation requires that $a *_1 b$ has
- * equivalent value with $a *_2 b$ for any $a$ and $b$ in $g_1$. The
- * same equivalence relation requires any $a$ and $b$ in $g_1$ are 
- * equivalent in $g_1$ if and only if they are equivalent in $g_2$.
- * Examples of use of @tt{groupbvd} are subgroups, kernels, cyclic
- * subgroups, etc.
+ * shares the same operation, but has a different carrier. The same
+ * operation requires that $a *_1 b$ is equal to $a *_2 b$ for any
+ * $a$ and $b$ in $g_1$. Examples of use of @tt{groupbvd} are
+ * subgroups, kernels, cyclic subgroups, etc.
  * @end[doc]
  *
  * ----------------------------------------------------------------
@@ -48,7 +45,6 @@
 
 (*! @doc{@parents} *)
 include Czf_itt_group
-include Czf_itt_equiv
 (*! @docoff *)
 
 open Printf
@@ -94,12 +90,12 @@ declare group_bvd{'h; 'g; 's}
  * @rewrites
  *
  * The $@groupbvd{h; g; s}$ builds a group $h$ from group $g$ which
- * satisfies $@equal{@car{h}; s}$ and the operation and equivalence
- * relation of $h$ are the same as those of $g$.
+ * satisfies $@equal{@car{h}; s}$ and the operation of $h$ is the
+ * same as that of $g$.
  * @end[doc]
  *)
 prim_rw unfold_group_bvd : group_bvd{'h; 'g; 's} <-->
-   (group{'h} & group{'g} & isset{'s} & equal{car{'h}; 's} & (all a: set. all b: set. (mem{'a; car{'h}} => mem{'b; car{'h}} => equiv{car{'h}; eqG{'h}; op{'h; 'a; 'b}; op{'g; 'a; 'b}})) & (all a: set. all b: set. (equiv{car{'h}; eqG{'h}; 'a; 'b} => equiv{car{'g}; eqG{'g}; 'a; 'b})) & (all a: set. all b: set. (mem{'a; car{'h}} => mem{'b; car{'h}} => equiv{car{'g}; eqG{'g}; 'a; 'b} => equiv{car{'h}; eqG{'h}; 'a; 'b})))
+   (group{'h} & group{'g} & isset{'s} & equal{car{'h}; 's} & (all a: set. all b: set. (mem{'a; car{'h}} => mem{'b; car{'h}} => eq{op{'h; 'a; 'b}; op{'g; 'a; 'b}})))
 (*! @docoff *)
 
 (************************************************************************
@@ -134,10 +130,8 @@ interactive group_bvd_wf {| intro [] |} 'H :
  *
  * The proposition $@groupbvd{h; g; s}$ is true if it is
  * well-formed; if $h$ and $g$ are both groups; if
- * $@equal{@car{h}; s}$; if for any $a$ and $b$ $@in$
- * $@car{h}$, $@op{h; a; b}$ is equivalent to $@op{g; a; b}$;
- * and if any two elements in $@car{h}$ are equivalent in
- * $h$ if and only if they are equivalent in $g$.
+ * $@equal{@car{h}; s}$; and if for any $a$ and $b$ $@in$
+ * $@car{h}$, $@op{h; a; b}$ is equal to $@op{g; a; b}$.
  * @end[doc]
  *)
 interactive group_bvd_intro {| intro [] |} 'H :
@@ -147,9 +141,7 @@ interactive group_bvd_intro {| intro [] |} 'H :
    sequent ['ext] { 'H >- group{'h} } -->
    sequent ['ext] { 'H >- group{'g} } -->
    sequent ['ext] { 'H >- equal{car{'h}; 's} } -->
-   sequent ['ext] { 'H; a: set; b: set; x: mem{'a; car{'h}}; y: mem{'b; car{'h}} >- equiv{car{'h}; eqG{'h}; op{'h; 'a; 'b}; op{'g; 'a; 'b}} } -->
-   sequent ['ext] { 'H; c: set; d: set; u: equiv{car{'h}; eqG{'h}; 'c; 'd} >- equiv{car{'g}; eqG{'g}; 'c; 'd} } -->
-   sequent ['ext] { 'H; p: set; q: set; x: mem{'p; car{'h}}; y: mem{'q; car{'h}}; v: equiv{car{'g}; eqG{'g}; 'p; 'q} >- equiv{car{'h}; eqG{'h}; 'p; 'q} } -->
+   sequent ['ext] { 'H; a: set; b: set; x: mem{'a; car{'h}}; y: mem{'b; car{'h}} >- eq{op{'h; 'a; 'b}; op{'g; 'a; 'b}} } -->
    sequent ['ext] { 'H >- group_bvd{'h; 'g; 's} }
 (*! @docoff *)
 

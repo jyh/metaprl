@@ -98,7 +98,7 @@ declare ker{'h; 'g1; 'g2; x. 'f['x]}
  * @end[doc]
  *)
 prim_rw unfold_ker : ker{'h; 'g1; 'g2; x. 'f['x]} <-->
-   (hom{'g1; 'g2; x. 'f['x]} & group_bvd{'h; 'g1; sep{car{'g1}; x. mem{pair{'f['x]; id{'g2}}; eqG{'g2}}}})
+   (hom{'g1; 'g2; x. 'f['x]} & group_bvd{'h; 'g1; sep{car{'g1}; x. eq{'f['x]; id{'g2}}}})
 (*! @docoff *)
 
 (************************************************************************
@@ -144,22 +144,22 @@ interactive ker_intro {| intro [] |} 'H :
    sequent [squash] { 'H >- 'g2 IN label } -->
    sequent [squash] { 'H >- 'h IN label } -->
    sequent ['ext] { 'H >- hom{'g1; 'g2; x. 'f['x]} } -->
-   sequent ['ext] { 'H >- group_bvd{'h; 'g1; sep{car{'g1}; x. mem{pair{'f['x]; id{'g2}}; eqG{'g2}}}} } -->
+   sequent ['ext] { 'H >- group_bvd{'h; 'g1; sep{car{'g1}; x. eq{'f['x]; id{'g2}}}} } -->
    sequent ['ext] { 'H >- ker{'h; 'g1; 'g2; x. 'f['x]} }
 (*! @docoff *)
 
 (*
  * If f is a group homomorphism of G into G', then the mapping of any
- * element in the kernel of f is equivalent with the identity of G'.
+ * element in the kernel of f is equal to the identity of G'.
  *)
-interactive ker_mem_equiv {| elim [] |} 'H 'J 'y :
+interactive ker_mem_id {| elim [] |} 'H 'J 'y :
    sequent [squash] { 'H; u: ker{'h; 'g1; 'g2; x. 'f['x]}; 'J['u] >- isset{'y} } -->
    sequent [squash] { 'H; u: ker{'h; 'g1; 'g2; x. 'f['x]}; 'J['u] >- 'g1 IN label } -->
    sequent [squash] { 'H; u: ker{'h; 'g1; 'g2; x. 'f['x]}; 'J['u] >- 'g2 IN label } -->
    sequent [squash] { 'H; u: ker{'h; 'g1; 'g2; x. 'f['x]}; 'J['u] >- 'h IN label } -->
    sequent ['ext] { 'H; u: ker{'h; 'g1; 'g2; x. 'f['x]}; 'J['u] >- fun_set{x. 'f['x]} } -->
    sequent ['ext] { 'H; u: ker{'h; 'g1; 'g2; x. 'f['x]}; 'J['u] >- mem{'y; car{'h}} } -->
-   sequent ['ext] { 'H; u: ker{'h; 'g1; 'g2; x. 'f['x]}; 'J['u]; v: mem{'y; car{'g1}}; w: equiv{car{'g2}; eqG{'g2}; 'f['y]; id{'g2}} >- 'C['u] } -->
+   sequent ['ext] { 'H; u: ker{'h; 'g1; 'g2; x. 'f['x]}; 'J['u]; v: mem{'y; car{'g1}}; w: eq{'f['y]; id{'g2}} >- 'C['u] } -->
    sequent ['ext] { 'H; u: ker{'h; 'g1; 'g2; x. 'f['x]}; 'J['u] >- 'C['u] }
 
 (*!
@@ -189,11 +189,11 @@ interactive ker_subgroup_elim (*{| elim [] |}*) 'H 'J :
 (*!
  * @begin[doc]
  * If the kernel proposition $@ker{x; h; g1; g2; f[x]}$ is true, then
- * the set $@sep{x; @car{g1}; @mem{@pair{f[x]; f[a]}; @eqG{g2}}}$
+ * the set $@sep{x; @car{g1}; @eq{f[x]; f[a]}}$
  * is equal to $@lcoset{h; g1; a}$ and $@rcoset{h; g1; a}$.
  * @end[doc]
  *)
-interactive ker_lcoset1 {| intro [] |} 'H :
+interactive ker_lcoset_i {| intro [] |} 'H 'g2 :
    sequent [squash] { 'H >- 'g1 IN label } -->
    sequent [squash] { 'H >- 'g2 IN label } -->
    sequent [squash] { 'H >- 'h IN label } -->
@@ -201,19 +201,19 @@ interactive ker_lcoset1 {| intro [] |} 'H :
    sequent ['ext] { 'H >- mem{'a; car{'g1}} } -->
    sequent ['ext] { 'H >- fun_set{x. 'f['x]} } -->
    sequent ['ext] { 'H >- ker{'h; 'g1; 'g2; x. 'f['x]} } -->
-   sequent ['ext] { 'H >- equal{sep{car{'g1}; x. mem{pair{'f['x]; 'f['a]}; eqG{'g2}}}; lcoset{'h; 'g1; 'a}} }
+   sequent ['ext] { 'H >- equal{sep{car{'g1}; x. eq{'f['x]; 'f['a]}}; lcoset{'h; 'g1; 'a}} }
 
-interactive ker_lcoset2 (*{| elim [] |}*) 'H 'J 'a :
+interactive ker_lcoset_e (*{| elim [] |}*) 'H 'J 'g2 'a :
    sequent [squash] { 'H; u: ker{'h; 'g1; 'g2; x. 'f['x]}; 'J['u] >- 'g1 IN label } -->
    sequent [squash] { 'H; u: ker{'h; 'g1; 'g2; x. 'f['x]}; 'J['u] >- 'g2 IN label } -->
    sequent [squash] { 'H; u: ker{'h; 'g1; 'g2; x. 'f['x]}; 'J['u] >- 'h IN label } -->
    sequent [squash] { 'H; u: ker{'h; 'g1; 'g2; x. 'f['x]}; 'J['u] >- isset{'a} } -->
    sequent ['ext] { 'H; u: ker{'h; 'g1; 'g2; x. 'f['x]}; 'J['u] >- mem{'a; car{'g1}} } -->
    sequent ['ext] { 'H; u: ker{'h; 'g1; 'g2; x. 'f['x]}; 'J['u] >- fun_set{x. 'f['x]} } -->
-   sequent ['ext] { 'H; u: ker{'h; 'g1; 'g2; x. 'f['x]}; 'J['u]; v: equal{sep{car{'g1}; x. mem{pair{'f['x]; 'f['a]}; eqG{'g2}}}; lcoset{'h; 'g1; 'a}} >- 'C['u] } -->
+   sequent ['ext] { 'H; u: ker{'h; 'g1; 'g2; x. 'f['x]}; 'J['u]; v: equal{sep{car{'g1}; x. eq{'f['x]; 'f['a]}}; lcoset{'h; 'g1; 'a}} >- 'C['u] } -->
    sequent ['ext] { 'H; u: ker{'h; 'g1; 'g2; x. 'f['x]}; 'J['u] >- 'C['u] }
 
-interactive ker_rcoset1 {| intro [] |} 'H :
+interactive ker_rcoset_i {| intro [] |} 'H 'g2 :
    sequent [squash] { 'H >- 'g1 IN label } -->
    sequent [squash] { 'H >- 'g2 IN label } -->
    sequent [squash] { 'H >- 'h IN label } -->
@@ -221,16 +221,16 @@ interactive ker_rcoset1 {| intro [] |} 'H :
    sequent ['ext] { 'H >- mem{'a; car{'g1}} } -->
    sequent ['ext] { 'H >- fun_set{x. 'f['x]} } -->
    sequent ['ext] { 'H >- ker{'h; 'g1; 'g2; x. 'f['x]} } -->
-   sequent ['ext] { 'H >- equal{sep{car{'g1}; x. mem{pair{'f['x]; 'f['a]}; eqG{'g2}}}; rcoset{'h; 'g1; 'a}} }
+   sequent ['ext] { 'H >- equal{sep{car{'g1}; x. eq{'f['x]; 'f['a]}}; rcoset{'h; 'g1; 'a}} }
 
-interactive ker_rcoset2 (*{| elim [] |}*) 'H 'J 'a :
+interactive ker_rcoset_e (*{| elim [] |}*) 'H 'J 'g2 'a :
    sequent [squash] { 'H; u: ker{'h; 'g1; 'g2; x. 'f['x]}; 'J['u] >- 'g1 IN label } -->
    sequent [squash] { 'H; u: ker{'h; 'g1; 'g2; x. 'f['x]}; 'J['u] >- 'g2 IN label } -->
    sequent [squash] { 'H; u: ker{'h; 'g1; 'g2; x. 'f['x]}; 'J['u] >- 'h IN label } -->
    sequent [squash] { 'H; u: ker{'h; 'g1; 'g2; x. 'f['x]}; 'J['u] >- isset{'a} } -->
    sequent ['ext] { 'H; u: ker{'h; 'g1; 'g2; x. 'f['x]}; 'J['u] >- mem{'a; car{'g1}} } -->
    sequent ['ext] { 'H; u: ker{'h; 'g1; 'g2; x. 'f['x]}; 'J['u] >- fun_set{x. 'f['x]} } -->
-   sequent ['ext] { 'H; u: ker{'h; 'g1; 'g2; x. 'f['x]}; 'J['u]; v: equal{sep{car{'g1}; x. mem{pair{'f['x]; 'f['a]}; eqG{'g2}}}; rcoset{'h; 'g1; 'a}} >- 'C['u] } -->
+   sequent ['ext] { 'H; u: ker{'h; 'g1; 'g2; x. 'f['x]}; 'J['u]; v: equal{sep{car{'g1}; x. eq{'f['x]; 'f['a]}}; rcoset{'h; 'g1; 'a}} >- 'C['u] } -->
    sequent ['ext] { 'H; u: ker{'h; 'g1; 'g2; x. 'f['x]}; 'J['u] >- 'C['u] }
 
 (*!
@@ -245,16 +245,16 @@ interactive ker_mono1 (*{| elim [] |}*) 'H 'J :
    sequent [squash] { 'H; u: ker{'h; 'g1; 'g2; x. 'f['x]}; 'J['u] >- 'g2 IN label } -->
    sequent [squash] { 'H; u: ker{'h; 'g1; 'g2; x. 'f['x]}; 'J['u] >- 'h IN label } -->
    sequent ['ext] { 'H; u: ker{'h; 'g1; 'g2; x. 'f['x]}; 'J['u] >- fun_set{x. 'f['x]} } -->
-   sequent ['ext] { 'H; u: ker{'h; 'g1; 'g2; x. 'f['x]}; 'J['u] >- equal{car{'h}; sep{car{'g1}; x. mem{pair{'x; id{'g1}}; eqG{'g1}}}} } -->
-   sequent ['ext] { 'H; u: ker{'h; 'g1; 'g2; x. 'f['x]}; 'J['u] >- all c: set.all d: set. (mem{'c; car{'g1}} => mem{'d; car{'g1}} => equiv{car{'g2}; eqG{'g2}; 'f['c]; 'f['d]} => equiv{car{'g1}; eqG{'g1}; 'c; 'd}) }
+   sequent ['ext] { 'H; u: ker{'h; 'g1; 'g2; x. 'f['x]}; 'J['u] >- equal{car{'h}; sep{car{'g1}; x. eq{'x; id{'g1}}}} } -->
+   sequent ['ext] { 'H; u: ker{'h; 'g1; 'g2; x. 'f['x]}; 'J['u] >- all c: set.all d: set. (mem{'c; car{'g1}} => mem{'d; car{'g1}} => eq{'f['c]; 'f['d]} => eq{'c; 'd}) }
 
-interactive ker_monomorphism2 (*{| elim [] |}*) 'H 'J :
+interactive ker_mono2 (*{| elim [] |}*) 'H 'J :
    sequent [squash] { 'H; u: ker{'h; 'g1; 'g2; x. 'f['x]}; 'J['u] >- 'g1 IN label } -->
    sequent [squash] { 'H; u: ker{'h; 'g1; 'g2; x. 'f['x]}; 'J['u] >- 'g2 IN label } -->
    sequent [squash] { 'H; u: ker{'h; 'g1; 'g2; x. 'f['x]}; 'J['u] >- 'h IN label } -->
    sequent ['ext] { 'H; u: ker{'h; 'g1; 'g2; x. 'f['x]}; 'J['u] >- fun_set{x. 'f['x]} } -->
-   sequent ['ext] { 'H; u: ker{'h; 'g1; 'g2; x. 'f['x]}; 'J['u]; c: set; d: set; u: mem{'c; car{'g1}}; v: mem{'d; car{'g1}}; w: equiv{car{'g2}; eqG{'g2}; 'f['c]; 'f['d]} >- equiv{car{'g1}; eqG{'g1}; 'c; 'd} } -->
-   sequent ['ext] { 'H; u: ker{'h; 'g1; 'g2; x. 'f['x]}; 'J['u] >- equal{car{'h}; sep{car{'g1}; x. mem{pair{'x; id{'g1}}; eqG{'g1}}}} }
+   sequent ['ext] { 'H; u: ker{'h; 'g1; 'g2; x. 'f['x]}; 'J['u]; c: set; d: set; u: mem{'c; car{'g1}}; v: mem{'d; car{'g1}}; w: eq{'f['c]; 'f['d]} >- eq{'c; 'd} } -->
+   sequent ['ext] { 'H; u: ker{'h; 'g1; 'g2; x. 'f['x]}; 'J['u] >- equal{car{'h}; sep{car{'g1}; x. eq{'x; id{'g1}}}} }
 
 (*!
  * @begin[doc]
@@ -295,13 +295,13 @@ let kerSubgT i p =
    let j, k = Sequent.hyp_indices p i in
       ker_subgroup_elim j k p
 
-let kerLcosetT t i p =
+let kerLcosetT t1 t2 i p =
    let j, k = Sequent.hyp_indices p i in
-      ker_lcoset2 j k t p
+      ker_lcoset_e j k t1 t2 p
 
-let kerRcosetT t i p =
+let kerRcosetT t1 t2 i p =
    let j, k = Sequent.hyp_indices p i in
-      ker_rcoset2 j k t p
+      ker_rcoset_e j k t1 t2 p
 
 let kerNormalSubgT i p =
    let j, k = Sequent.hyp_indices p i in

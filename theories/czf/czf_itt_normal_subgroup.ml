@@ -43,7 +43,6 @@
  *)
 
 (*! @doc{@parents} *)
-include Czf_itt_group
 include Czf_itt_subgroup
 include Czf_itt_abel_group
 include Czf_itt_coset
@@ -143,7 +142,7 @@ interactive normalSubg_intro {| intro [] |} 'H :
  * All subgroups of abelian groups are normal.
  * @end[doc]
  *)
-interactive subg_abel_normal 'H 'J 's :
+interactive abel_subg_normal 'H 'J 's :
    sequent [squash] { 'H; x: abel{'g}; 'J['x] >- 's IN label } -->
    sequent [squash] { 'H; x: abel{'g}; 'J['x] >- 'g IN label } -->
    sequent ['ext] { 'H; x: abel{'g}; 'J['x] >- subgroup{'s; 'g} } -->
@@ -153,7 +152,7 @@ interactive subg_abel_normal 'H 'J 's :
 (*! @docoff *)
 let abelNormalSubgT t i p =
    let j, k = Sequent.hyp_indices p i in
-      subg_abel_normal j k t p
+      abel_subg_normal j k t p
 
 (*
  * -*-

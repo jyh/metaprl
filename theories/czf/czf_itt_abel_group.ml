@@ -90,7 +90,7 @@ declare abel{'g}
  * @end[doc]
  *)
 prim_rw unfold_abel: abel{'g} <-->
-   (group{'g} & (all a: set. all b: set. (mem{'a; car{'g}} => mem{'b; car{'g}} => equiv{car{'g}; eqG{'g}; op{'g; 'a; 'b}; op{'g; 'b; 'a}})))
+   (group{'g} & (all a: set. all b: set. (mem{'a; car{'g}} => mem{'b; car{'g}} => eq{op{'g; 'a; 'b}; op{'g; 'b; 'a}})))
 (*! @docoff *)
 
 (************************************************************************
@@ -128,7 +128,7 @@ interactive abel_type {| intro [] |} 'H :
 interactive abel_intro {| intro[] |} 'H :
    sequent [squash] { 'H >- 'g IN label } -->
    sequent ['ext] { 'H >- group{'g} } -->
-   sequent ['ext] { 'H; a: set; b: set; x: mem{'a; car{'g}}; y: mem{'b; car{'g}} >- equiv{car{'g}; eqG{'g}; op{'g; 'a; 'b}; op{'g; 'b; 'a}} } -->
+   sequent ['ext] { 'H; a: set; b: set; x: mem{'a; car{'g}}; y: mem{'b; car{'g}} >- eq{op{'g; 'a; 'b}; op{'g; 'b; 'a}} } -->
    sequent ['ext] { 'H >- abel{'g} }
 (*! @docoff *)
 

@@ -51,6 +51,7 @@ MPFILES :=\
 	czf_itt_subgroup\
 	czf_itt_coset\
 	czf_itt_normal_subgroup\
+	czf_itt_group_power\
 	czf_itt_cyclic_subgroup\
 	czf_itt_cyclic_group\
 	czf_itt_hom\

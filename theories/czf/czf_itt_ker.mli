@@ -73,7 +73,7 @@ declare ker{'h; 'g1; 'g2; x. 'f['x]}
  * h of g called the kernel of f.
  *)
 rewrite unfold_ker : ker{'h; 'g1; 'g2; x. 'f['x]} <-->
-   (hom{'g1; 'g2; x. 'f['x]} & group_bvd{'h; 'g1; sep{car{'g1}; x. mem{pair{'f['x]; id{'g2}}; eqG{'g2}}}})
+   (hom{'g1; 'g2; x. 'f['x]} & group_bvd{'h; 'g1; sep{car{'g1}; x. eq{'f['x]; id{'g2}}}})
 
 (************************************************************************
  * TACTICS                                                              *
@@ -91,8 +91,8 @@ topval kerSubgT : int -> tactic
  * { x in G1 | f(x) = f(a) } is the left coset aH of H,
  * and is also the right coset Ha of H.
  *)
-topval kerLcosetT : term -> int -> tactic
-topval kerRcosetT : term -> int -> tactic
+topval kerLcosetT : term -> term -> int -> tactic
+topval kerRcosetT : term -> term -> int -> tactic
 
 (*
  * The ker of a homomorphism f: G1 -> G2 is a normal subgroup of G1.

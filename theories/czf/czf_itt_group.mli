@@ -31,11 +31,7 @@
  *)
 
 include Itt_record_label0
-include Czf_itt_member
-include Czf_itt_eq
 include Czf_itt_dall
-include Czf_itt_and
-include Czf_itt_equiv
 
 open Mp_debug
 open Refiner.Refiner.TermType
@@ -65,7 +61,6 @@ open Base_auto_tactic
 
 declare group{'g}
 declare car{'g}         (* The "carrier" set for the group *)
-declare eqG{'g}         (* The equivalence relation for the group *)
 declare op{'g; 'a; 'b}
 declare id{'g}
 declare inv{'g; 'a}

@@ -40,7 +40,6 @@
 
 (*! @doc{@parents} *)
 include Czf_itt_group
-include Czf_itt_equiv
 include Czf_itt_hom
 (*! @docoff *)
 
@@ -89,7 +88,7 @@ declare iso{'g1; 'g2; x. 'f['x]}
  * @end[doc]
  *)
 prim_rw unfold_iso : iso{'g1; 'g2; x. 'f['x]} <-->
-   (hom{'g1; 'g2; x. 'f['x]} & (all c: set. all d: set. (mem{'c; car{'g1}} => mem{'d; car{'g1}} => equiv{car{'g2}; eqG{'g2}; 'f['c]; 'f['d]} => equiv{car{'g1}; eqG{'g1}; 'c; 'd})) & (all e: set. (mem{'e; car{'g2}} => (exst p: set. (mem{'p; car{'g1}} & equiv{car{'g2}; eqG{'g2}; 'e; 'f['p]})))))
+   (hom{'g1; 'g2; x. 'f['x]} & (all c: set. all d: set. (mem{'c; car{'g1}} => mem{'d; car{'g1}} => eq{'f['c]; 'f['d]} => eq{'c; 'd})) & (all e: set. (mem{'e; car{'g2}} => (exst p: set. (mem{'p; car{'g1}} & eq{'e; 'f['p]})))))
 (*! @docoff *)
 
 (************************************************************************
@@ -136,17 +135,7 @@ interactive iso_fun {| intro [] |} 'H :
    sequent ['ext] { 'H; z: set >- fun_set{x. 'f['x; 'z]} } -->
    sequent ['ext] { 'H >- fun_prop{z. iso{'g1; 'g2; y. 'f['z; 'y]}} }
 
-interactive iso_equiv_fun {| intro [] |} 'H :
-   sequent [squash] { 'H >- 'g1 IN label } -->
-   sequent [squash] { 'H >- 'g2 IN label } -->
-   sequent ['ext] { 'H >- group{'g1} } -->
-   sequent ['ext] { 'H >- group{'g2} } -->
-   sequent [squash] { 'H; z: set; x: set >- isset{'f['z; 'x]} } -->
-   sequent ['ext] { 'H; z1: set; x1: set; y1: mem{'x1; car{'g1}} >- mem{'f['z1; 'x1]; car{'g2}} } -->
-   sequent ['ext] { 'H; z3: set; c: set; d: set; x3: mem{'c; car{'g1}}; y3: mem{'d; car{'g1}}; v: equiv{car{'g1}; eqG{'g1}; 'c; 'd} >- equiv{car{'g2}; eqG{'g2}; 'f['c; 'z3]; 'f['d; 'z3]} } -->
-   sequent ['ext] { 'H >- equiv_fun_prop{car{'g1}; eqG{'g1}; z. iso{'g1; 'g2; y. 'f['z; 'y]}} }
 (*! @docoff *)
-
 (*
  * -*-
  * Local Variables:

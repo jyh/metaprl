@@ -1,5 +1,5 @@
 (*
- * Isomorphism.
+ * The power operation for groups.
  *
  * ----------------------------------------------------------------
  *
@@ -30,7 +30,8 @@
  * Email : xiny@cs.caltech.edu
  *)
 
-include Czf_itt_hom
+include Czf_itt_group
+include Itt_int_base
 
 open Printf
 open Mp_debug
@@ -59,14 +60,16 @@ open Base_auto_tactic
  * TERMS                                                                *
  ************************************************************************)
 
-declare iso{'g1; 'g2; x. 'f['x]}
+declare power{'g; 'z; 'n}
 
 (************************************************************************
  * DEFINITIONS                                                          *
  ************************************************************************)
 
-rewrite unfold_iso : iso{'g1; 'g2; x. 'f['x]} <-->
-   (hom{'g1; 'g2; x. 'f['x]} & (all c: set. all d: set. (mem{'c; car{'g1}} => mem{'d; car{'g1}} => eq{'f['c]; 'f['d]} => eq{'c; 'd})) & (all e: set. (mem{'e; car{'g2}} => (exst p: set. (mem{'p; car{'g1}} & eq{'e; 'f['p]})))))
+rewrite unfold_power : power{'g; 'z; 'n} <-->
+   ind{'n; i, j. op{'g; inv{'g; 'z}; power{'g; 'z; ('n +@ 1)}}; id{'g}; k, l. op{'g; 'z; power{'g; 'z; ('n -@ 1)}}}
+
+topval fold_power : conv
 
 (*
  * -*-

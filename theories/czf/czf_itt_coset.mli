@@ -31,7 +31,7 @@
  *)
 
 include Czf_itt_group
-include Czf_itt_set_bvd
+include Czf_itt_dexists
 
 open Printf
 open Mp_debug
@@ -69,10 +69,10 @@ declare rcoset{'h; 'g; 'a}
  ************************************************************************)
 
 rewrite unfold_lcoset : lcoset{'h; 'g; 'a} <-->
-   sep{car{'g}; x. "dexists"{car{'h}; y. mem{pair{'x; op{'g; 'a; 'y}}; eqG{'g}}}}
+   sep{car{'g}; x. "dexists"{car{'h}; y. eq{'x; op{'g; 'a; 'y}}}}
 
 rewrite unfold_rcoset : rcoset{'h; 'g; 'a} <-->
-   sep{car{'g}; x. "dexists"{car{'h}; y. mem{pair{'x; op{'g; 'y; 'a}}; eqG{'g}}}}
+   sep{car{'g}; x. "dexists"{car{'h}; y. eq{'x; op{'g; 'y; 'a}}}}
 
 (*
  * -*-

@@ -65,7 +65,7 @@ declare abel{'g}
  ************************************************************************)
 
 rewrite unfold_abel: abel{'g} <-->
-   (group{'g} & (all a: set. all b: set. (mem{'a; car{'g}} => mem{'b; car{'g}} => equiv{car{'g}; eqG{'g}; op{'g; 'a; 'b}; op{'g; 'b; 'a}})))
+   (group{'g} & (all a: set. all b: set. (mem{'a; car{'g}} => mem{'b; car{'g}} => eq{op{'g; 'a; 'b}; op{'g; 'b; 'a}})))
 
 (*
  * -*-

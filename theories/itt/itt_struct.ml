@@ -132,7 +132,7 @@ doc <:doc<
 >>
 prim cut 'H 'S :
    [assertion] ('a : sequent { <H>; <J> >- 'S }) -->
-   [main] ('f['x] : sequent { <H>; 'S; <J> >- 'T }) -->
+   [main] ('f['x] : sequent { <H>; x: 'S; <J> >- 'T }) -->
    sequent { <H>; <J> >- 'T } =
    'f['a]
 

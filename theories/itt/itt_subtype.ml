@@ -186,19 +186,6 @@ prim subtype_axiomFormation {| intro [] |} :
 
 doc <:doc< 
    @begin[doc]
-   @modsubsection{Member equality}
-   The subtype-type, if true, contains only the term $@it$.
-   For $@it$ to be in <<'A subtype 'B>>, the subtype judgment
-   must be true.
-   @end[doc]
->>
-prim subtype_axiomEquality {| intro []; eqcd; squash |} :
-   [main] sequent { <H> >- 'A subtype 'B } -->
-   sequent { <H> >- it in 'A subtype 'B } =
-   it
-
-doc <:doc< 
-   @begin[doc]
    @modsubsection{Elimination}
   
    Subtype elimination has two forms.  The standard @tt[subtypeElimination]
@@ -215,9 +202,21 @@ prim subtypeElimination {| elim [ThinOption thinT] |} 'H :
 
 prim subtypeElimination2 'H 'a 'b :
    [wf] sequent { <H>; x: 'A subtype 'B; <J['x]> >- 'a='b in 'A } -->
-   ('t['y] : sequent { <H>; x: 'A subtype 'B; <J['x]>; 'a='b in 'B >- 'C['x] }) -->
+   ('t['x] : sequent { <H>; x: 'A subtype 'B; <J['x]>; 'a='b in 'B >- 'C['x] }) -->
    sequent { <H>; x: 'A subtype 'B; <J['x]> >- 'C['x] } =
    't[it]
+
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Member equality}
+   The subtype-type, if true, contains only the term $@it$.
+   For $@it$ to be in <<'A subtype 'B>>, the subtype judgment
+   must be true.
+   @end[doc]
+>>
+interactive subtype_axiomEquality {| intro []; eqcd; squash |} :
+   [main] sequent { <H> >- 'A subtype 'B } -->
+   sequent { <H> >- it in 'A subtype 'B }
 
 doc docoff
 

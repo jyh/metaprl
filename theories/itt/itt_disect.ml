@@ -178,10 +178,10 @@ prim dintersectionType {| intro [] |} :
 
 prim dintersectionTypeElimination {| elim [ThinOption thinT] |} 'H 'a :
    [wf] sequent { <H>; u:"type"{.bisect{'A; x. 'B['x]}}; <J['u]>  >- 'a in 'A } -->
-   ('t['u,'v] :
+   ('t['u;'v] :
    sequent { <H>; u:"type"{.bisect{'A; x. 'B['x]}}; v:"type"{'B['a]}; <J['u]> >- 'C['u] }) -->
    sequent { <H>; u:"type"{.bisect{'A; x. 'B['x]}}; <J['u]> >- 'C['u] } =
-   't['u,it]
+   't['u;it]
 
 doc <:doc< 
    @begin[doc]

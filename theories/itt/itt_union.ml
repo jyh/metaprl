@@ -258,10 +258,10 @@ doc <:doc<
    @end[doc]
 >>
 prim unionElimination {| elim [ThinOption thinT] |} 'H :
-   [left] ('left['u] : sequent { <H>; 'A + 'B; u: 'A; <J[inl{'u}]> >- 'T[inl{'u}] }) -->
-   [right] ('right['u] : sequent { <H>; 'A + 'B; v: 'B; <J[inr{'v}]> >- 'T[inr{'v}] }) -->
+   [left] ('left['u;'p] : sequent { <H>; p: 'A + 'B; u: 'A; <J[inl{'u}]> >- 'T[inl{'u}] }) -->
+   [right] ('right['v;'p] : sequent { <H>; p: 'A + 'B; v: 'B; <J[inr{'v}]> >- 'T[inr{'v}] }) -->
    sequent { <H>; x: 'A + 'B; <J['x]> >- 'T['x] } =
-   decide{'x; u. 'left['u]; v. 'right['v]}
+   decide{'x; u. 'left['u;'x]; v. 'right['v;'x]}
 
 doc <:doc< 
    @begin[doc]

@@ -227,13 +227,13 @@ doc <:doc<
    @end[doc]
 >>
 prim precUnrollElimination {| elim [ThinOption thinT] |} 'H :
-   ('g['z; 'y; 'u] : sequent { <H>; r: "prec"{T, x. 'B['T; 'x]; 'a}; <J['r]>;
+   ('g['r; 'y; 'u] : sequent { <H>; r: "prec"{T, x. 'B['T; 'x]; 'a}; <J['r]>;
              y: 'B[lambda{z. "prec"{T, x. 'B['T; 'x]; 'z}}; 'a];
              u: 'r = 'y in 'B[lambda{z. "prec"{T, x. 'B['T; 'x]; 'z}}; 'a]
              >- 'G['y]
            }) -->
    sequent { <H>; r: "prec"{T, x. 'B['T; 'x]; 'a}; <J['r]> >- 'G['r] } =
-   'g['z; 'z; it]
+   'g['r; 'r; it]
 
 doc <:doc< 
    @begin[doc]

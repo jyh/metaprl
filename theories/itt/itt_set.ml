@@ -209,7 +209,7 @@ doc docoff
  *)
 prim setFormation 'A :
    [wf] sequent { <H> >- 'A = 'A in univ[i:l] } -->
-   ('B['a] : sequent { <H>; 'A >- univ[i:l] }) -->
+   ('B['a] : sequent { <H>; a: 'A >- univ[i:l] }) -->
    sequent { <H> >- univ[i:l] } =
    { a: 'A | 'B['a] }
 

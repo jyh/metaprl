@@ -1,6 +1,6 @@
 doc <:doc<
    @begin[doc]
-   @module[Itt_synt_bterm]
+   @module[Itt_synt_subst]
 
    @end[doc]
 

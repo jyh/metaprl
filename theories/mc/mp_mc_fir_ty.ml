@@ -51,21 +51,54 @@ open Refiner.Refiner.TermOp
  * Term declarations.
  *************************************************************************)
 
-(* Base types. *)
+(*!
+ * @begin[doc]
+ * @terms
+ *
+ * @tt{tyInt} and @tt{tyEnum} are basic integer types.  @tt{tyInt}
+ * is a 31-bit, signed integer type analogous to the @tt{int} type
+ * in a language such as @OCaml.  A value of type @tt{tyEnum@{n-1@}}
+ * can take on integral values from 0 to $n$.
+ * @end[doc]
+ *)
 
 declare tyInt
 declare tyEnum{ 'int }
 
-(* Native types. *)
+(*!
+ * @begin[doc]
+ *
+ * @tt{tyRawInt} and @tt{tyFloat} represent raw data types.  Their
+ * subterms specify the precision and signed nature of the type
+ * (see @hreftheory[Mp_mc_fir_base]).  These correspond to
+ * the integer and floating point types in a language such as C.
+ * @end[doc]
+ *)
 
 declare tyRawInt{ 'int_precision; 'int_signed }
 declare tyFloat{ 'float_precision }
 
-(* Functions. *)
+(*!
+ * @begin[doc]
+ *
+ * @tt{tyFun} is a function type.  The first subterm is a list
+ * (see @hreftheory[Itt_list]) of types indicating the types of
+ * the arguments to the function. The second subterm is the type
+ * of the return value of the function.  Note that FIR
+ * functions never actually return in the conventional sense
+ * of the word (see @hreftheory[Mp_mc_fir_exp] and @hrefterm[tailCall]
+ * for more on this).
+ * @end[doc]
+ *)
 
 declare tyFun{ 'ty_list; 'ty }
 
-(* Tuples. *)
+(*!
+ * @begin[doc]
+ *
+ * Tuples
+ * @end[doc]
+ *)
 
 declare tyUnion{ 'ty_var; 'ty_list; 'int_set }
 declare tyTuple{ 'tuple_class; 'ty_list }
@@ -74,7 +107,12 @@ declare tyRawData
 declare tyPointer{ 'sub_block }
 declare tyFrame{ 'label }
 
-(* Polymorphism. *)
+(*!
+ * @begin[doc]
+ *
+ * Polymorphism.
+ * @end[doc]
+ *)
 
 declare tyVar{ 'ty_var }
 declare tyApply{ 'ty_var; 'ty_list }
@@ -82,20 +120,38 @@ declare tyExists{ 'ty_var_list; 'ty }
 declare tyAll{ 'ty_var_list; 'ty }
 declare tyProject{ 'var; 'int }
 
-(* Object-oriented. *)
+(*!
+ * @begin[doc]
+ *
+ * Object-oriented.
+ * @end[doc]
+ *)
 
 declare tyCase{ 'ty }
 declare tyObject{ 'ty_var; 'ty }
 
-(* Delayed type. *)
+(*!
+ * @begin[doc]
+ *
+ * @tt{tyDelayed} represents a ``delayed'' type, in other words
+ * a type that has not yet been determined by type inference.
+ * @end[doc]
+ *)
 
 declare tyDelayed
 
-(* Defining types. *)
+(*!
+ * @begin[doc]
+ *
+ * Defining types.
+ * @end[doc]
+ *)
 
 declare unionElt{ 'ty; 'bool }
 declare tyDefUnion{ 'ty_var_list; 'union_type; 'elts }
 declare tyDefLambda{ 'ty_var_list; 'ty }
+
+(*! @docoff *)
 
 (*************************************************************************
  * Display forms.

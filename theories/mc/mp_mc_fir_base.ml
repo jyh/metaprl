@@ -3,7 +3,7 @@
  * @theory[Mp_mc_fir_base]
  *
  * The @tt{Mp_mc_fir_base} module defines terms to represent basic FIR
- * terms and supporting Ocaml values.
+ * terms and supporting @OCaml values.
  * @end[doc].
  *
  * ----------------------------------------------------------------
@@ -53,17 +53,42 @@ open Mp_mc_term_op
  * Term declarations.
  *************************************************************************)
 
-(* Options, i.e. None | Some of 'a. *)
+(*!
+ * @begin[doc]
+ * @terms
+ *
+ * @tt{noneOpt} and @tt{someOpt} represent @OCaml option
+ * values, in other words, values of the type @tt{'a option}.
+ * @tt{Some v} is represented as @tt{someOpt@{v@}}.
+ * @end[doc]
+ *)
 
 declare noneOpt
 declare someOpt{ 'a }
 
-(* Boolean constants. *)
-
+(*!
+ * @begin[doc]
+ *
+ * @tt{val_true} and @tt{val_false} represent the @OCaml
+ * boolean constants @tt{true} and @tt{false}.
+ * @end[doc]
+ *)
 declare val_true
 declare val_false
 
-(* Floating-point and integer precisions. *)
+(*!
+ * @begin[doc]
+ *
+ * The FIR has support for integer and floating point types of
+ * various precisions (see @hrefterm[tyRawInt] and @hrefterm[tyFloat]
+ * in @hreftheory[Mp_mc_fir_ty]).  The following seven terms specifiy
+ * 8-bit, 16-bit, 32-bit, and 64-bit integer precision as well as
+ * single precision (4 byte), double precision (8 byte), and
+ * long double (10 byte) precision floats.  By convention,
+ * subterms called @tt{int_precision} and @tt{float_precision}
+ * refer to one of these terms.
+ * @end[doc]
+ *)
 
 declare int8
 declare int16
@@ -73,29 +98,56 @@ declare floatSingle
 declare floatDouble
 declare floatLongDouble
 
-(* Signed / unsigned integer qualifiers. *)
+(*!
+ * @begin[doc]
+ *
+ * @hrefterm[tyRawInt] also requires information about whether
+ * the integer type is signed or unsigned, which is what the following
+ * two terms specify.  By convention, subterms called @tt{int_signed}
+ * refer to one of these terms.
+ * @end[doc]
+ *)
 
 declare signedInt
 declare unsignedInt
 
-(* int and rawint sets. *)
+(*!
+ * @begin[doc]
+ *
+ * Integer and raw-integer sets.
+ * @end[doc]
+ *)
 
 declare interval{ 'left; 'right } (* closed bounds, i.e. [left, right] *)
 declare int_set{ 'interval_list }
 declare rawint_set{ 'int_precision; 'int_signed; 'interval_list }
 
-(* Tuple classes. *)
+(*!
+ * @begin[doc]
+ *
+ * Tuple classes.
+ * @end[doc]
+ *)
 
 declare normalTuple
 declare rawTuple
 
-(* Union tags. *)
+
+(*!
+ * @begin[doc]
+ *
+ * Union types.
+ * @end[doc]
+ *)
 
 declare normalUnion
 declare exnUnion
 
-(*
+(*!
+ * @begin[doc]
+ *
  * Subscript operators.
+ * @end[doc]
  *)
 
 (* Kind of block. *)
@@ -127,6 +179,8 @@ declare rawIntIndex{ 'int_precision; 'int_signed }
 (* Subscripting op. *)
 
 declare subop{ 'sub_block; 'sub_value; 'sub_index; 'sub_script }
+
+(*! @docoff *)
 
 (*************************************************************************
  * Term declarations.

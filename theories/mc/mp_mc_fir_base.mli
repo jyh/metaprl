@@ -1,6 +1,6 @@
 (*
  * The Mp_mc_fir_base module defines terms to represent basic FIR
- * terms and supporting Ocaml values.
+ * terms and supporting OCaml values.
  *
  * ----------------------------------------------------------------
  *

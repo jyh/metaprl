@@ -53,24 +53,53 @@ open Refiner.Refiner.TermOp
  * Declarations.
  *************************************************************************)
 
-(*
- * Unary operations.
+(*!
+ * @begin[doc]
+ * @terms
+ * @thysubsection{Unary operations}
+ *
+ * These are the unary operations in the FIR.  They are used in
+ * @hrefterm[letUnop] as the @tt{unop} subterm.  Each of the operators
+ * here can only be applied to values of a given type.  In instances
+ * where the type has precision and / or signing subterms
+ * (such as @hrefterm[tyRawInt]), the qualifiers in the operator
+ * must also match those of the type in order for the @hrefterm[letUnop]
+ * term to be well-formed.
+ *
+ * @tt{idOp} is a polymorphic identity operator.
+ * @end[doc]
  *)
-
-(* Identity (polymorphic). *)
 
 declare idOp
 
-(* Naml ints. *)
+(*!
+ * @begin[doc]
+ *
+ * @tt{uminusIntOp} is unary arithmetic negation and @tt{notIntOp}
+ * is bitwise negation.  They operate of values of type @hrefterm[tyInt].
+ * @end[doc]
+ *)
 
 declare uminusIntOp
 declare notIntOp
 
-(* Bit fields. *)
+(*!
+ * @begin[doc]
+ *
+ * Bit fields.
+ * @end[doc]
+ *)
 
 declare rawBitFieldOp{ 'int_precision; 'int_signed; 'int1; 'int2 }
 
-(* Native ints. *)
+(*!
+ * @begin[doc]
+ *
+ * @tt{uminusRawIntOp} and @tt{notRawIntOp} are analogous to
+ * @hrefterm[uminusIntOp] and @hrefterm[notIntOp], except they
+ * operate on values of type @hrefterm[tyRawInt].
+ * @end[doc]
+ *)
 
 declare uminusRawIntOp{ 'int_precision; 'int_signed }
 declare notRawIntOp{ 'int_precision; 'int_signed }
@@ -110,8 +139,19 @@ declare pointerOfRawIntOp{ 'int_precision; 'int_signed }
 
 declare pointerOfBlockOp{ 'sub_block }
 
-(*
- * Binary operations.
+(*!
+ * @begin[doc]
+ * @thysubsection{Binary operations}
+ *
+ * These are the binary operations in the FIR.  They are used in
+ * @hrefterm[letBinop] as the @tt{binop} subterm.  Each of the operators
+ * here can only be applied to values of a given type.  In instances
+ * where the type has precision and / or signing subterms
+ * (such as @hrefterm[tyRawInt]), the qualifiers in the operator
+ * must also match those of the type in order for the @hrefterm[letBinop]
+ * term to be well-formed.
+ *
+ * @end[doc]
  *)
 
 (* Enums. *)
@@ -198,14 +238,20 @@ declare neqEqOp
 
 declare plusPointerOp{ 'sub_block; 'int_precision; 'int_signed }
 
-(*
- * Fields (frame labels).
+(*!
+ * @begin[doc]
+ * @thysubsection{Fields (frame labels)}
+ *
+ * @end[doc]
  *)
 
 declare frameLabel{ 'label1; 'label2; 'label3 }
 
-(*
- * Normal values.
+(*!
+ * @begin[doc]
+ * @thysubsection{Normal values}
+ *
+ * @end[doc]
  *)
 
 declare atomNil{ 'ty }
@@ -218,8 +264,11 @@ declare atomSizeof{ 'var_list; 'atom_rawint }
 declare atomConst{ 'ty; 'ty_var; 'int }
 declare atomVar{ 'var }
 
-(*
- * Allocation operators.
+(*!
+ * @begin[doc]
+ * @thysubsection{Allocation operators}
+ *
+ * @end[doc]
  *)
 
 declare allocTuple{ 'tuple_class; 'ty; 'atom_list }
@@ -229,8 +278,11 @@ declare allocVArray{ 'ty; 'sub_index; 'atom1; 'atom2 }
 declare allocMalloc{ 'ty; 'atom }
 declare allocFrame{ 'var }
 
-(*
- * Tail calls / operations.
+(*!
+ * @begin[doc]
+ * @thysubsection{Tail calls / operations}
+ *
+ * @end[doc]
  *)
 
 declare tailSysMigrate{ 'int; 'atom1; 'atom2; 'var; 'atom_list }
@@ -238,8 +290,13 @@ declare tailAtomic{ 'var; 'atom; 'atom_list }
 declare tailAtomicRollback{ 'atom }
 declare tailAtomicCommit{ 'var; 'atom_list }
 
-(*
- * Predicates and assertions.
+(*!
+ * @begin[doc]
+ * @thysubsection{Predicates and assertions}
+ *
+ * These terms encode the safety checks that an FIR program must
+ * perform in order to ensure that programs execute safely.
+ * @end[doc]
  *)
 
 declare isMutable{ 'var }
@@ -247,8 +304,12 @@ declare reserve{ 'atom1; 'atom2 }
 declare boundsCheck{ 'subop; 'var; 'atom1; 'atom2 }
 declare elementCheck{ 'ty; 'subop; 'var; 'atom }
 
-(*
- * Debugging info.
+(*!
+ * @begin[doc]
+ * @thysubsection{Debugging info}
+ *
+ * These terms are used to encode debugging information.
+ * @end[doc]
  *)
 
 declare debugLine{ 'string; 'int }
@@ -257,8 +318,11 @@ declare debugVars{ 'debugVarItem_list }
 declare debugString{ 'string }
 declare debugContext{ 'debug_line; 'debug_vars }
 
-(*
- * Expressions.
+(*!
+ * @begin[doc]
+ * @thysubsection{Expressions}
+ *
+ * @end[doc]
  *)
 
 (* Primitive operations. *)
@@ -298,11 +362,16 @@ declare assertExp{ 'label; 'pred; 'exp }
 
 declare debug{ 'debug_info; 'exp }
 
-(*
- * Function definition.
+(*!
+ * @begin[doc]
+ * @thysubsection{Function definition}
+ *
+ * @end[doc]
  *)
 
 declare fundef{ 'debug_line; 'ty; 'var_list; 'exp }
+
+(*! @docoff *)
 
 (*************************************************************************
  * Display forms.

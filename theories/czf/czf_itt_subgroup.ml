@@ -30,7 +30,7 @@ open Base_auto_tactic
 declare subgroup{'s; 'g}
 
 prim_rw unfold_subgroup : subgroup{'s; 'g} <-->
-   (group{'s} & group{'g} & subset{car{'s}; car{'g}} & (all a: set. all b: set. (mem{'a; car{'s}} => mem{'b; car{'s}} => equal{op{'s; 'a; 'b}; op{'g; 'a; 'b}})) & (all a: set. all b: set. (equiv{car{'s}; eqG{'s}; 'a; 'b} => equiv{car{'g}; eqG{'g}; 'a; 'b})))
+   (group{'s} & group{'g} & subset{car{'s}; car{'g}} & (all a: set. all b: set. (mem{'a; car{'s}} => mem{'b; car{'s}} => equiv{car{'s}; eqG{'s}; op{'s; 'a; 'b}; op{'g; 'a; 'b}})) & (all a: set. all b: set. (equiv{car{'s}; eqG{'s}; 'a; 'b} => equiv{car{'g}; eqG{'g}; 'a; 'b})) & (all a: set. all b: set. (mem{'a; car{'s}} => mem{'b; car{'s}} => equiv{car{'g}; eqG{'g}; 'a; 'b} => equiv{car{'s}; eqG{'s}; 'a; 'b})))
 
 dform subgroup_df : except_mode[src] :: subgroup{'s; 'g} =
    `"subgroup(" slot{'s} `"; " slot{'g} `")"
@@ -38,7 +38,7 @@ dform subgroup_df : except_mode[src] :: subgroup{'s; 'g} =
 (*
  * Axioms
  *)
-interactive subgroup_type {| intro [] |} 'H :
+interactive subgroup_wf {| intro [] |} 'H :
    sequent [squash] { 'H >- 's IN label } -->
    sequent [squash] { 'H >- 'g IN label } -->
    sequent ['ext] { 'H >- "type"{subgroup{'s; 'g}} }
@@ -49,8 +49,9 @@ interactive subgroup_intro {| intro [] |} 'H :
    sequent ['ext] { 'H >- group{'s} } -->
    sequent ['ext] { 'H >- group{'g} } -->
    sequent ['ext] { 'H >- subset{car{'s}; car{'g}} } -->
-   sequent ['ext] { 'H; a: set; b: set; x: mem{'a; car{'s}}; y: mem{'b; car{'s}} >- equal{op{'s; 'a; 'b}; op{'g; 'a; 'b}} } -->
-   sequent ['ext] { 'H; a: set; b: set; x: equiv{car{'s}; eqG{'s}; 'a; 'b} >- equiv{car{'g}; eqG{'g}; 'a; 'b} } -->
+   sequent ['ext] { 'H; a: set; b: set; x: mem{'a; car{'s}}; y: mem{'b; car{'s}} >- equiv{car{'s}; eqG{'s}; op{'s; 'a; 'b}; op{'g; 'a; 'b}} } -->
+   sequent ['ext] { 'H; c: set; d: set; u: equiv{car{'s}; eqG{'s}; 'c; 'd} >- equiv{car{'g}; eqG{'g}; 'c; 'd} } -->
+   sequent ['ext] { 'H; p: set; q: set; x: mem{'p; car{'s}}; y: mem{'q; car{'s}}; v: equiv{car{'g}; eqG{'g}; 'p; 'q} >- equiv{car{'s}; eqG{'s}; 'p; 'q} } -->
    sequent ['ext] { 'H >- subgroup{'s; 'g} }
 
 interactive subgroup_equiv {| intro [] |} 'H :
@@ -84,8 +85,9 @@ interactive subgroup_isect 'H 'h1 'h2 :
    sequent ['ext] { 'H >- subgroup{'h1; 'g} } -->
    sequent ['ext] { 'H >- subgroup{'h2; 'g} } -->
    sequent ['ext] { 'H >- equal{car{'h}; ."isect"{car{'h1}; car{'h2}}} } -->
-   sequent ['ext] { 'H; a: set; b: set; x: mem{'a; car{'h}}; x: mem{'b; car{'h}} >- equal{op{'h; 'a; 'b}; op{'h1; 'a; 'b}} } -->
-   sequent ['ext] { 'H; a: set; b: set; x: equiv{car{'h}; eqG{'h}; 'a; 'b} >- equiv{car{'h1}; eqG{'h1}; 'a; 'b} } -->
+   sequent ['ext] { 'H; a: set; b: set; x: mem{'a; car{'h}}; y: mem{'b; car{'h}} >- equiv{car{'h}; eqG{'h}; op{'h; 'a; 'b}; op{'h1; 'a; 'b}} } -->
+   sequent ['ext] { 'H; c: set; d: set; u: equiv{car{'h}; eqG{'h}; 'c; 'd} >- equiv{car{'h1}; eqG{'h1}; 'c; 'd} } -->
+   sequent ['ext] { 'H; e: set; f: set; x1: mem{'e; car{'h}}; y1: mem{'f; car{'h}}; v: equiv{car{'h1}; eqG{'h1}; 'e; 'f} >- equiv{car{'h}; eqG{'h}; 'e; 'f} } -->
    sequent ['ext] { 'H >- subgroup{'h; 'g} }
 
 let subgroupIsectT t1 t2 p =

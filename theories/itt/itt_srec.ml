@@ -267,7 +267,7 @@ let mk_srecind_term = mk_dep0_dep2_term srecind_opname
  *)
 let inf_srec inf consts decls eqs opt_eqs defs t =
    let a, body = dest_srec t in
-      inf (StringSet.add a consts) ((a,univ1_term)::decls) eqs opt_eqs defs body
+      inf (StringSet.add consts a) ((a,univ1_term)::decls) eqs opt_eqs defs body
 
 let resource typeinf += (srec_term, inf_srec)
 

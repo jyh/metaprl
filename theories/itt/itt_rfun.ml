@@ -476,7 +476,7 @@ let rfunction_extensionalityT t1 t2 p =
 let inf_rfun inf consts decls eqs opt_eqs defs t =
    let f, v, a, b = dest_rfun t in
    infer_univ_dep0_dep1
-      (fun _ -> v,a,b) inf (StringSet.add f consts) ((f,t)::decls) eqs opt_eqs defs t
+      (fun _ -> v,a,b) inf (StringSet.add consts f) ((f,t)::decls) eqs opt_eqs defs t
 
 let resource typeinf += (rfun_term, inf_rfun)
 
@@ -485,7 +485,7 @@ let resource typeinf += (rfun_term, inf_rfun)
  *)
 let inf_lambda inf consts decls eqs opt_eqs defs t =
    let v, b = dest_lambda t in
-   let consts = StringSet.add v consts in
+   let consts = StringSet.add consts v in
    let a = Typeinf.vnewname consts defs "T" in
    let a' = mk_var_term a in
    let eqs', opt_eqs', defs', b' =

@@ -450,7 +450,7 @@ let inf_spread inf consts decls eqs opt_eqs defs t =
    let eqs', opt_eqs', defs', a' = inf consts decls eqs opt_eqs defs a in
    let eqs'', opt_eqs'', _, a'' =
       Typeinf.typeinf_final consts eqs' opt_eqs' defs' a' in
-   let consts = StringSet.add u (StringSet.add v consts) in
+   let consts = StringSet.add (StringSet.add consts u) v in
    if is_dprod_term a'' then
       let x, l, r = dest_dprod a' in
          inf consts ((v,subst1 r x (mk_var_term u))::(u,l)::decls) eqs'' opt_eqs'' defs' b

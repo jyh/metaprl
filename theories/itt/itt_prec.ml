@@ -287,7 +287,7 @@ let mk_precind_term = mk_dep0_dep2_term precind_opname
  *)
 let inf_prec inf consts decls eqs opt_eqs defs t =
    let a, b, body, arg = dest_prec t in
-   let consts = StringSet.add a (StringSet.add b consts) in
+   let consts = StringSet.add (StringSet.add consts a) b in
    let eqs', opt_eqs', defs', arg' = inf consts decls eqs opt_eqs defs arg in
       inf consts ((b,arg')::(a,mk_fun_term arg' univ1_term)::decls)
           eqs' opt_eqs' defs' body

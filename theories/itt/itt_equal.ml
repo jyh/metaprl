@@ -598,7 +598,7 @@ let infer_univ_dep0_dep1 destruct inf consts decls eqs opt_eqs defs t =
    let v, a, b = destruct t in
    let eqs', opt_eqs', defs', a' = inf consts decls eqs opt_eqs defs a in
    let eqs'', opt_eqs'', defs'', b' =
-      inf (StringSet.add v consts) ((v,a)::decls) eqs' opt_eqs' defs' b in
+      inf (StringSet.add consts v) ((v,a)::decls) eqs' opt_eqs' defs' b in
    let eqs''', opt_eqs''', subst, a'' = Typeinf.typeinf_final consts eqs'' opt_eqs'' defs'' a' in
    let b'' = apply_subst (apply_subst b' subst) defs in
    let le1 = try_dest_univ a'' in

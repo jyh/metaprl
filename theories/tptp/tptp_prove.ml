@@ -205,7 +205,7 @@ let rec first_clause_aux i len constants hyps =
          Hypothesis (v, hyp) ->
             let opname = opname_of_term hyp in
                if List.exists (Opname.eq opname) decl_opnames then
-                  first_clause_aux (i + 1) len (StringSet.add v constants) hyps
+                  first_clause_aux (i + 1) len (StringSet.add constants v) hyps
                else
                   i, constants
        | Context _ ->
@@ -224,10 +224,10 @@ let split_atoms =
          if is_not_term term then
             let term = dest_not term in
             let v = dest_var (head_of_apply term) in
-               collect positive (StringSet.add v negative) terms
+               collect positive (StringSet.add negative v) terms
          else
             let v = dest_var (head_of_apply term) in
-               collect (StringSet.add v positive) negative terms
+               collect (StringSet.add positive v) negative terms
     | [] ->
          positive, negative
    in

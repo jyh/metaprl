@@ -192,9 +192,9 @@ let resource typeinf =
  *)
 let rec collect_consts = function
    [] -> StringSet.empty
- | [v,t] -> StringSet.add v (free_vars_set t)
+ | [v,t] -> StringSet.add (free_vars_set t) v
  | (v,t)::tl ->
-      StringSet.add v (StringSet.union (free_vars_set t) (collect_consts tl))
+      StringSet.add (StringSet.union (free_vars_set t) (collect_consts tl)) v
 
 let rec try_append_eqs eqs consts = function
    [] -> eqs, []

@@ -91,6 +91,8 @@ declare df_last{'l}
 declare df_concat{'sep;'l}
 declare df_rev_concat{'sep;'l}
 
+declare df_context_var[s:s]
+
 (* same as "szone 'e ezone" *)
 declare szone{'e}
 (* @docoff *)
@@ -118,9 +120,6 @@ dform var_prl_df : mode[prl] :: display_var[v:v]{nil} =
 dform var_src_df : mode[src] :: display_var[v:v]{nil} =
    `"'" slot[v:v]
 
-dform var_html_df : mode[html] :: display_var[v:v]{nil} =
-   izone `"<font color=\"#114466\"><b>" ezone slot[v:v] izone `"</b></font>" ezone
-
 dform so_var_df : display_var[v:v]{'t} =
    szone display_var[v:v]{nil} `"[" pushm[0] var_list{'t} popm `"]" ezone
 
@@ -142,56 +141,111 @@ let split_digits s =
       let i = aux len in
       String.sub s 0 i, String.sub s i (len-i)
 
-let dvar_opname = opname_of_term <<display_var[v:v]{nil}>>
+let really_dest_var term =
+   match (dest_op (dest_term term).term_op).op_params with
+      [p] ->
+         begin match dest_param p with
+            Var v -> v
+          | _ -> raise (Invalid_argument "var_*_df")
+         end
+    | _ ->
+      raise (Invalid_argument "var_*_df")
+
+let split_var v =
+   match String_util.split '_' v with
+      [] ->
+         raise (Invalid_argument "var_*_df: string has an empty name")
+    | h::tl ->
+         if List.for_all (String_util.for_all String_util.is_digit) tl then
+            let hn,hd = split_digits h in
+               if (hn <> "") && (hd <> "") then hn, hd::tl else h,tl
+         else
+               h,tl
+
+let print_html_var format_term buf header_fun v =
+   let h,tl = split_var v in
+      format_izone buf;
+      format_string buf "<font color=\"#114466\">";
+      format_ezone buf;
+      format_term buf NOParens (header_fun h);
+      format_izone buf;
+      if (tl<>[]) then begin
+         format_string buf "<sub>";
+         format_ezone buf;
+         format_string buf (String.concat "," tl);
+         format_izone buf;
+         format_string buf "</sub>";
+      end;
+      format_string buf "</font>";
+      format_ezone buf
+
+let print_tex_var format_term buf header_fun v =
+   let h,tl = split_var v in
+      format_izone buf;
+      format_string buf "\\ensuremath{";
+      format_ezone buf;
+      format_term buf NOParens (header_fun h);
+      format_izone buf;
+      if (tl<>[]) then begin
+         format_string buf "_{";
+         format_ezone buf;
+         format_string buf (String.concat "," tl);
+         format_izone buf;
+      format_string buf "}";
+      end;
+      format_string buf "}";
+      format_ezone buf
+         
+let mathit_op = opname_of_term <<math_it[v:s]>>
+let mk_mathit = mk_string_term mathit_op
+
+ml_dform var_html_df : mode[html] :: display_var[v:v]{nil} format_term buf = fun
+   term ->
+      print_html_var format_term buf mk_mathit (really_dest_var term)
 
 ml_dform var_tex_df : mode[tex] :: display_var[v:v]{nil} format_term buf = fun
    term ->
-      let v =
-         match (dest_op (dest_term term).term_op).op_params with
-            [p] ->
-               begin match dest_param p with
-                  Var v -> v
-                | _ -> raise (Invalid_argument "var_tex_df")
-               end
-          | _ ->
-            raise (Invalid_argument "var_tex_df")
-      in match String_util.split '_' v with
-         [] ->
-            raise (Invalid_argument "var_tex_df: string has an empty name")
-       | h::tl ->
-            let h,tl =
-               if List.for_all (String_util.for_all String_util.is_digit) tl then
-                  let hn,hd = split_digits h in
-                     if (hn <> "") && (hd <> "") then hn, hd::tl else h,tl
-               else
-                  h,tl
-            in
-               format_izone buf;
-               format_string buf "\\ensuremath{\\mathit{";
-               format_ezone buf;
-               format_string buf h;
-               format_izone buf;
-               format_string buf "}}";
-               format_ezone buf;
-               if (tl<>[]) then begin
-                  format_izone buf;
-                  format_string buf "_{";
-                  format_ezone buf;
-                  format_string buf (String.concat "," tl);
-                  format_izone buf;
-                  format_string buf "}";
-                  format_ezone buf
-               end
+      print_tex_var format_term buf mk_mathit (really_dest_var term)
+
+dform cvar_src_df : mode[src] :: df_context_var[s:s] = slot[s:s]
+
+ml_dform cvar_prl_df : mode[prl] :: df_context_var[s:s] format_term buf = fun
+   term ->
+      let v = dest_string_param term in
+      if v = "" then raise (Invalid_argument "var_prl_df");
+      begin match v.[0] with
+         'H' -> format_term buf NOParens <<Gamma>>
+       | 'J' -> format_term buf NOParens <<Delta>>
+       | 'K' -> format_term buf NOParens <<Sigma>>
+       |  c  -> format_char buf c
+      end;
+      format_string buf (String.sub v 1 (String.length v - 1))
+
+let context_term = function
+   "H" -> <<Gamma>>
+ | "J" -> <<Delta>>
+ | "K" -> <<Sigma>>
+ |  v  -> mk_string_term mathit_op v
+
+ml_dform cvar_html_df : mode[html] :: df_context_var[s:s] format_term buf = fun
+   term ->
+      print_html_var format_term buf context_term (dest_string_param term)
+
+ml_dform cvar_tex_df : mode[tex] :: df_context_var[s:s] format_term buf = fun
+   term ->
+      print_tex_var format_term buf context_term (dest_string_param term)
 
 let bvar_opname = opname_of_term <<bvar{'v}>>
 
-ml_dform bvar_df : bvar{'v} format_term buf = fun
+ml_dform bvar_df : mode[src] :: bvar{'v} format_term buf = fun
    term ->
       let t = dest_dep0_term bvar_opname term in
          if is_var_term t then
             format_string buf (dest_var t)
          else
             format_term buf LTParens t
+
+dform bvar_df : except_mode[src] :: bvar{'v} = 'v
 
 (*
  * Rewriting.
@@ -280,15 +334,11 @@ ml_dform sequent_src_df : mode["src"] :: "sequent"{'ext; 'seq} format_term buf =
    in
       format
 
+let context_op = opname_of_term <<df_context_var[s:s]>>
+
 let format_context format_term buf v values =
-   let v' = match v with
-      "H" -> <<Gamma>>
-    | "J" -> <<Delta>>
-    | "K" -> <<Sigma>>
-    | _   -> mk_var_term v
-   in
-      format_term buf NOParens v';
-      format_term_list format_term buf values
+   format_term buf NOParens (mk_string_term context_op v);
+   format_term_list format_term buf values
 
 (*
  * @begin[doc]
@@ -316,7 +366,7 @@ ml_dform sequent_prl_df : mode["prl"] :: "sequent"{'ext; 'seq} format_term buf =
              | HypBinding (v, a) ->
                   format_szone buf;
                   format_pushm buf 0;
-                  format_string buf v;
+                  format_term buf NOParens (mk_var_term v);
                   format_string buf ":";
                   format_space buf;
                   format_term buf NOParens a;
@@ -386,7 +436,7 @@ ml_dform sequent_html_df : mode["html"] :: "sequent"{'ext; 'seq} format_term buf
                   format_string buf ">"
              | HypBinding (v, a) ->
                   format_szone buf;
-                  format_string buf v;
+                  format_term buf NOParens (mk_var_term v);
                   format_string buf ":";
                   format_space buf;
                   format_term buf NOParens a;
@@ -442,7 +492,7 @@ ml_dform sequent_tex_df : mode["tex"] :: "sequent"{'ext; 'seq} format_term buf =
                   format_term buf NOParens <<mathmacro["right>"]>>
              | HypBinding (v, a) ->
                   format_szone buf;
-                  format_string buf v;
+                  format_term buf NOParens (mk_var_term v);
                   format_string buf ":";
                   format_space buf;
                   format_term buf NOParens a;

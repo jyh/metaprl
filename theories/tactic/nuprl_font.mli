@@ -55,6 +55,8 @@ declare i[name:s]
 declare i{'t}
 declare it[name:s]
 declare it{'t}
+declare math_it{'t}
+declare math_it[text:s]
 declare em[s:s]
 declare em{'s}
 declare emph{'t}

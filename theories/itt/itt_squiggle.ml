@@ -12,7 +12,7 @@ doc <:doc<
    $t$ can be reduced to $s$. We can expand this semantics for open terms
    in the given context the same way as for any other type.
    For example one can prove that
-   $$@sequent{ext; {H; x@colon @prod{A;B}}; x  ~  @pair{@fst{x};@snd{x}}}$$
+   $$<<sequent['ext]{ <H>; x: <:doc<@prod{A;B}>> >- 'x ~ (<:doc<@pair{@fst{x};@snd{x}}>>)}>>$$
    This is a conditional rewrite: it states that we can replace $x$ with
    $@pair{@fst{x};@snd{x}}$ only when we know that $x$ is from a product type.
    The rules @hrefrule[squiggleSubstitution] and @hrefrule[squiggleHypSubstitution]

@@ -253,7 +253,6 @@ declare "meta_labeled"[label:s]{'meta}
 doc <:doc< @docoff >>
 
 declare "context_param"[name:s]
-declare "var_param"[name:s]
 declare "term_param"{'t}
 
 (* Arguments *)
@@ -444,15 +443,9 @@ dform rewrite_df : "rewrite"[name:s]{'redex; 'contractum; 'v; 'res} =
  * A conditional rewrite requires special handling of the params.
  *)
 dform context_param_df : except_mode[src] :: "context_param"[name:s] =
-   ensuremath[name:s]
+   df_context_var[name:s]
 
 dform context_param_df2 : mode[src] :: "context_param"[name:s] =
-   `"'" slot[name:s]
-
-dform var_param_df : except_mode[src] :: "var_param"[name:s] =
-   ensuremath[name:s]
-
-dform var_param_df2 : mode[src] :: "var_param"[name:s] =
    `"'" slot[name:s]
 
 dform term_param_df : "term_param"{'t} =

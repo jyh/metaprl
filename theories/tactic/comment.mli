@@ -242,8 +242,6 @@ declare math_bf{'t}
 declare math_bf[text:s]
 declare math_i{'t}
 declare math_i[text:s]
-declare math_it{'t}
-declare math_it[text:s]
 declare math_emph{'t}
 declare math_mathop{'t}
 declare math_mathrel[text:s]
@@ -351,7 +349,6 @@ declare math_multicolumn[cols,align]{'t}
  *)
 declare math_defrule[name]{'args; 'hyps; 'goal}
 declare math_rulebox{'tac; 'args; 'hyps; 'goal}
-declare math_sequent{'ext; 'hyps; 'goal}
 
 (*
  * -*-

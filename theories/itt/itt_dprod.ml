@@ -15,8 +15,8 @@ doc <:doc<
   
    $$
    @defrule[productElimination]{i;
-      @sequent{ext; {H; a@colon A; b@colon B[a]; J[@pair{a; b}]}; C[@pair{a; b}]};
-      @sequent{ext; {H; x@colon @prod{y; A; B[u]}; J[x]}; C[x]}.}
+      <<sequent['ext]{ <H>; a: 'A; b: 'B['a]; <J[('a,'b)]> >- 'C[('a,'b)]}>>;
+      <<sequent['ext]{ <H>; x: (u:'A * 'B['u]); <J['x]> >- 'C['x]}>>.}
    $$
   
    Because of this intensional equality, the @tt{Itt_dprod} module is
@@ -70,10 +70,10 @@ doc <:doc<
   
    $$
    @defrule[weakProductElimination]{p;
-     @sequent{ext; {@ldots;
-                      a@colon A; b@colon B[a];
-                      w@colon @pair{a; b} = p @in @prod{x; A; B[x]}}; C[p]};
-     @sequent{ext; {H; p@colon @prod{x; A; B[x]}; J[p]}; C[p]}.}
+     <<sequent['ext]{ math_ldots;
+                      a: 'A; b: 'B['a];
+                      ('a,'b) = 'p in (x:'A * 'B['x]); <J['p]> >- 'C['p]}>>;
+     <<sequent['ext]{ <H>; p: (x:'A * 'B['x]); <J['p]> >- 'C['p]}>>.}
    $$
   
    This rule @emph{can} be derived from the very-dependent function

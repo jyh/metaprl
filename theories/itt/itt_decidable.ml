@@ -1,6 +1,4 @@
 doc <:doc< 
-   @spelling{decideT}
-  
    @begin[doc]
    @module[Itt_decidable]
   
@@ -117,11 +115,11 @@ doc <:doc<
    on a specific proposition $P$, then tries to eliminate the first subgoal.
   
    $$
-   @rulebox{decideT; P;
-     @sequent{squash; H; @decidable{P}}@cr
-       @sequent{ext; {H; x@colon P}; C}@cr
-       @sequent{ext; {H; x@colon @not{P}}; C};
-     @sequent{ext; H; C}}
+   @rulebox{@misspelled{decideT}; P;
+     <<sequent[squash]{ <H> >- decidable{'P}}>>@cr
+       <<sequent['ext]{ <H>; x: 'P >- 'C}>>@cr
+       <<sequent['ext]{ <H>; x: not{'P} >- 'C}>>;
+     <<sequent['ext]{ <H> >- 'C}>>}
    $$
   
    @docoff

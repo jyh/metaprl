@@ -69,8 +69,8 @@ doc <:doc< *********************************************************************
   
    $$
    @rulebox{idT; ;
-     @sequent{ext; H; T};
-     @sequent{ext; H; T}}
+     <<sequent{ <H> >- 'T}>>;
+     <<sequent{ <H> >- 'T}>>}
    $$}
    @end[description]
   
@@ -83,14 +83,10 @@ doc <:doc<
    @begin[doc]
    @begin[description]
    @item{@tactic[cutT];
-   The @tt[cutT] tactic implements primitive lemma-instantiation.
-  
-   $$
-   @rulebox{cutT; T_1;
-     @sequent{ext; H; T_1}@cr
-     @sequent{ext; {H; x@colon T_1}; T_2};
-     @sequent{ext; H; T_2}}
-   $$}
+   The @tt[cutT] tactic implements primitive lemma-instantiation on meta-level by
+   allowing one to cut in an assumption.
+   
+   }
    @end[description]
   
    @docoff
@@ -136,13 +132,13 @@ doc <:doc<
    $$
    @rulebox{nthAssumT; i;
     @cdot;
-    @sequent{ext; H_1; T_1} @i{(Assumption@space 1)}@cr
+    <<sequent{ <H_1> >- 'T_1}>> @i{(Assumption@space 1)}@cr
     @ldots@cr
-    @sequent{ext; H_i; T_i} @i{(Assumption@space @i{i})}@cr
+    <<sequent{ <H_i> >- 'T_i}>> @i{(Assumption@space @i{i})}@cr
     @ldots@cr
-    @sequent{ext; H_n; T_n} @i{(Assumption@space @i{n})}@cr
+    <<sequent{ <H_n> >- 'T_n}>> @i{(Assumption@space @i{n})}@cr
     @hline
-    @sequent{ext; H_i; T_i}}
+    <<sequent{ <H_i> >- 'T_i}>>}
    $$}
    @end[description]
   
@@ -226,8 +222,8 @@ doc <:doc<
   
    $$
    @rulebox{idT; ;
-     @sequent{ext; H; T};
-     @sequent{ext; H; T}}
+     <<sequent{ <H> >- 'T}>>;
+     <<sequent{ <H> >- 'T}>>}
    $$
   
    @code{User time 0.000000; System time 0.000000; Real time 0.001778}}
@@ -326,9 +322,9 @@ doc <:doc< *********************************************************************
   
    $$
    @rulebox{selT; 2@space (@tt[dT]@space 0);
-     @sequent{ext; {H; x@colon T_2; J}; T_1@space @i{Type}}@cr
-     @sequent{ext; {H; x@colon T_2; J}; T_2};
-     @sequent{ext; {H; x@colon T_2; J}; T_1 @vee T_2}}
+     <<sequent{ <H>; x: 'T_2; <J> >- <:doc<T_1@space @i{Type}>>}>> @cr
+     <<sequent{ <H>; x: 'T_2; <J> >- 'T_2}>>;
+     <<sequent{ <H>; x: 'T_2; <J> >- <:doc<T_1 @vee T_2>>}>>}
    $$}
    @end[description]
   
@@ -352,7 +348,7 @@ doc <:doc< *********************************************************************
    @modsection{Clause selection}
   
    The following tactics are intended for use in a single-conclusion sequent calculus.
-   A sequent $@sequent{ext; {x_1@colon T_1; @cdots; x_n@colon T_n}; C}$ has
+   A sequent <<sequent{x: 'T_1; math_cdots; x: 'T_n >- 'C}>> has
    $n + 1$ @emph{clauses}.  The hypotheses are clauses $1, @ldots, n$ and the conclusion
    is clause $0$.
   

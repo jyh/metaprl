@@ -104,7 +104,7 @@ doc <:doc< *********************************************************************
    @emph{inclusion} (this is a builtin judgment in @MetaPRL).
   
    The $@type{t}$ term is used to define the @emph{type} judgment.  A term $T$ is a
-   type if $@sequent{squash; H; @type{T}}$.
+   type if <<sequent[squash]{ <H> >- "type"{'T}}>>.
   
    The semantic meaning of an open equality is that:
    @begin[enumerate]
@@ -439,7 +439,7 @@ doc <:doc< *********************************************************************
    @begin[doc]
    @modsubsection{Truth implies typehood}
   
-   For any sequent judgment $@sequent{ext; H; T}$ the term $T$ must be a
+   For any sequent judgment <<sequent['ext]{ <H> >- 'T}>> the term $T$ must be a
    type.  The following rule allows us to infer well-formedness of a
    type from its provability.  Note that this rule is useless for types $T$
    that are not true.

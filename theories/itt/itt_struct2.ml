@@ -1,9 +1,6 @@
 doc <:doc< 
    @begin[spelling]
-   cutEq cutMem cutSquash
-   assertEqT assertSquashT
-   assertAtT assertSquashAtT assertT
-   hypSubstitution substT struct th
+   struct th
    @end[spelling]
   
    @begin[doc]
@@ -131,7 +128,7 @@ doc <:doc<
    @begin[doc]
   
    The @tt{Itt_struct2} module redefines tactic @hreftactic[substT].
-   From now @tt{substT} uses the above version of substitution
+   From now @tt[substT] uses the above version of substitution
    instead of original one.
   
    @end[doc]
@@ -200,8 +197,8 @@ interactive substitutionInType ('t_1 = 't_2 in 'T) bind{x. 'c_1='c_2 in 'C['x]} 
 doc <:doc< 
    @begin[doc]
   
-   The sequent $@sequent{ext; {H; x@colon S; J[x]}; t[x] @in T}$
-   actually means not only that $t[x] @in T$ for any $x @in S$, but also
+   The sequent <<sequent['ext]{ <H>; x: 'S; <J['x]> >- 't['x] in 'T}>>
+   actually means not only that <<'t['x] in 'T>> for any <<'x in 'S>>, but also
    it means @emph{functionality}, i.e. for any two equal elements $s_1$, $s_2$ of $S$
    $t[s_1]$ and $t[s_2]$ should be equal in $T$.
   
@@ -226,7 +223,7 @@ interactive setMemElim {| elim [] |} 'H :
 doc <:doc< 
    @begin[doc]
   
-   The @tt{assertEqT} tactic applies this rule.
+   The @tt[assertEqT] tactic applies this rule.
    This tactic takes a term $s1=s2 @in S$ as an argument
    and a term <<bind{x.'t['x]}>> as an optional with-argument.
    This tactic helps us to prove an equality from a membership.
@@ -238,7 +235,7 @@ doc <:doc<
 doc <:doc< 
    @begin[doc]
   
-   The @tt{cutSquash} rule is similar to the @hrefrule[cut] rule.
+   The @tt[cutSquash] rule is similar to the @hrefrule[cut] rule.
    If we prove $S$, but do not show the extract term, then we can assert
    $S$ as a @emph{squashed} hypothesis, that is we are not allow to use its extract
    (see @hrefmodule[Itt_squash]).
@@ -253,11 +250,11 @@ interactive cutSquash 'H 'S :
 
 doc <:doc< 
    @begin[doc]
-   There are two tactics that used this rule: @tt{assertSquashT} and
-   @tt{assertSquashAtT}.
+   There are two tactics that used this rule: @tt[assertSquashT] and
+   @tt[assertSquashAtT].
    They are similar to @hreftactic[assertT] and  @hreftactic[assertAtT].
-   The @tt{assertSquashAtT n S} introduces the lemma $S$ after $n$th hypothesis.
-   The @tt{assertSquashT S} introduces the lemma $S$ at the end
+   The @tt[assertSquashAtT] $n$ $S$ introduces the lemma $S$ after $n$th hypothesis.
+   The @tt[assertSquashT] $S$ introduces the lemma $S$ at the end
    of the hypothesis list.
   
    @docoff

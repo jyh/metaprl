@@ -30,7 +30,7 @@ open Itt_pointwise
  * Show that the file is loading.
  *)
 let _ =
-   show_loading "Loading Itt_struct%t"
+   show_loading "Loading Itt_struct3%t"
 
 (* debug_string DebugLoad "Loading itt_struct..." *)
 

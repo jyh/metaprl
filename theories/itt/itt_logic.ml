@@ -1,8 +1,7 @@
 doc <:doc<
    @begin[spelling]
-   bi SelectOption assumT backThruAssumT backThruHypT dT genAssumT
-   genUnivCDT instHypT moveToConclT
-   ponens selT univCDT
+   bi assumT ponens selT backThruHypT dT genAssumT instHypT
+   moveToConclT univCDT
    @end[spelling]
   
    @begin[doc]
@@ -293,7 +292,7 @@ doc <:doc<
    The disjunction << "or"{'A; 'B} >> is well-formed if both
    $A$ and $B$ are types.  The disjunction is true if it is
    a type and one of $A$ or $B$ is true.  The introduction
-   rules use the @tt{SelectOption} to allow application with
+   rules use the @tt[SelectOption] to allow application with
    the @hreftactic[selT] tactical.  The @tt{selT 1 (dT 0)} tactic applies
    the @hrefrule[or_intro_left] rule, and @tt{selT 2 (dT 0)} applies the
    @hrefrule[or_intro_right] rule.  The elimination rule performs
@@ -749,13 +748,13 @@ doc <:doc<
   
    @begin[description]
    @item{@tactic[moveToConclT];
-   {  The @tt{moveToConclT} tactic ``moves'' a hypothesis to the conclusion
+   {  The @tt[moveToConclT] tactic ``moves'' a hypothesis to the conclusion
       using the implication form.  The generic usage is as follows:
   
       $$
       @rulebox{moveToConclT; i;
-      @sequent{ext; {H; J}; @all{x; T_1; T_2}};
-      @sequent{ext; {H; i@colon x@colon T_1; J}; T_2}.}
+      <<sequent['ext]{ <H>; <J> >- all x:'T_1. 'T_2}>>;
+      <<sequent['ext]{ <H>; "i. x": 'T_1; <J> >- 'T_2}>>.}
       $$
   
       The argument $i$ is the index of the hypothesis.  In some
@@ -765,8 +764,8 @@ doc <:doc<
   
       $$
       @rulebox{moveToConclT; i;
-      @sequent{ext; {H; j@colon @int}; @all{i; @int; (i < j) @Rightarrow T_2[i]}};
-      @sequent{ext; {H; i@colon @int; j@colon @int; w@colon i < j}; T_2[i]}}
+      <<sequent['ext]{ <H>; j: <:doc<@int>> >- all i:(<:doc<@int>>).(<:doc< (i < j) @Rightarrow T_2[i]>>)}>>;
+      <<sequent['ext]{ <H>; i:<:doc<@int>>; j: <:doc<@int>>; <:doc<i < j>> >- 'T_2['i]}>>}
       $$
    }}
    @end[description]
@@ -828,19 +827,19 @@ doc <:doc<
    @begin[doc]
    @begin[description]
    @item{@tactic[univCDT], @tactic[genUnivCDT];
-    {   The @tt{univCDT} and @tt{genUnivCDT} tactics
-        apply introduction reasoning on the goal.  The @tt{univCDT}
+    {   The @tt[univCDT] and @tt[genUnivCDT] tactics
+        apply introduction reasoning on the goal.  The @tt[univCDT]
         tactic decomposes universal quantifications, implications,
-        and function spaces.  The @tt{genUnivCDT} tactic also
+        and function spaces.  The @tt[genUnivCDT] tactic also
         chains through conjunctions and bi-conditionals.
   
         $$
         @rulebox{univCDT; @space;
-         @sequent{ext; {H; x_1@colon T_1; @cdots; x_n@colon T_n}; T_{n + 1}}@cr
-         @sequent{squash; {H; x_1@colon T_1; @cdots; x_{n - 1}@colon T_{n - 1}}; @type{T_n}}@cr
+         <<sequent['ext]{ <H>; x_1: 'T_1; math_cdots; x_n: 'T_n >- <:doc<T_{n + 1}>>}>>@cr
+         <<sequent[squash]{ <H>; x_1: 'T_1; math_cdots; (<:doc<x_{n - 1}@colon T_{n - 1}>>) >- "type"{'T_n}}>>@cr
          @vdots@cr
-         @sequent{squash; H; @type{T_1}};
-         @sequent{ext; H; @all{x_1; T_1; @ldots @all{x_n; T_n; T_{n + 1}}}}}
+         <<sequent[squash]{ <H> >- "type"{'T_1}}>>;
+         <<sequent['ext]{ <H> >- all x_1:'T_1.(<:doc< @ldots @all{x_n; T_n; T_{n + 1}}>>)}>>}
         $$}}
    @end[description]
    @docoff
@@ -881,20 +880,20 @@ doc <:doc<
    @begin[doc]
    @begin[description]
    @item{@tactic[instHypT];
-    {   The @tt{instHypT} tactic performs instantiation
+    {   The @tt[instHypT] tactic performs instantiation
         of a hypothesis.  The hypothesis must be a universal quantification
         or an implication.
   
         $$
         @rulebox{instHypT; t_1@space @cdots  t_n;
-         @sequent{ext; {H; y@colon @all{x_1; T_1; @ldots T_{n + 1}[x_1, @ldots, x_n]}; J[y];
-                        z@colon T_{n + 1}[t_1, @ldots, t_n]}; C}@cr
-         @sequent{squash; {H; y@colon @all{x_1; T_1; @ldots T_{n + 1}[x_1, @ldots, x_n]}; J[y]};
-                          t_1 @in T_1}@cr
+         <<sequent['ext]{ <H>; y: all x_1: 'T_1.(<:doc< @ldots T_{n + 1}[x_1, @ldots, x_n]>>); <J['y]>;
+                        z: <:doc<T_{n + 1}[t_1, @ldots, t_n]>> >- 'C}>>@cr
+         <<sequent[squash]{ <H>; y: all x_1: 'T_1.(<:doc< @ldots T_{n + 1}[x_1, @ldots, x_n]>>); <J['y]> >-
+                          't_1 in 'T_1}>>@cr
          @vdots@cr
-         @sequent{squash; {H; y@colon @all{x_1; T_1; @ldots . T_{n + 1}[x_1, @ldots, x_n]}; J[y]};
-                          t_n @in T_n};
-         @sequent{ext; {H; y@colon @all{x_1; T_1; @ldots . T_{n + 1}[x_1, @ldots, x_n]}; J[y]}; C}}
+         <<sequent[squash]{ <H>; y: all x_1: 'T_1.(<:doc<@ldots . T_{n + 1}[x_1, @ldots, x_n]>>); <J['y]> >-
+                          't_n in 'T_n}>>;
+         <<sequent['ext]{ <H>; y : all x_1: 'T_1.(<:doc<@ldots . T_{n + 1}[x_1, @ldots, x_n]>>); <J['y]> >- 'C}>>}
         $$}}
    @end[description]
    @docoff
@@ -1041,23 +1040,23 @@ doc <:doc<
    @begin[doc]
    @begin[description]
    @item{@tactic[backThruHypT];
-    {   The @tt{backThruHypT} performs backward-chaining through a
+    {   The @tt[backThruHypT] performs backward-chaining through a
         hypothesis.  The conclusion must match a suffix of the hypothesis,
         which must be a sequence of universal quantifications or
         implications through that suffix.
   
         $$
         @rulebox{backThruHypT; i;
-         @sequent{squash; {H; y@colon @all{x_1; T_1; @ldots . T_{n + 1}[x_1, @ldots, x_n]}; J[y]};
-                           t_1 @in T_1}@cr
+         <<sequent[squash]{ <H>; y: all x_1:'T_1.(<:doc<@ldots . T_{n + 1}[x_1, @ldots, x_n]>>); <J['y]> >-
+                           't_1 in 'T_1}>>@cr
          @vdots@cr
-         @sequent{squash; {H; y@colon @all{x_1; T_1; @ldots . T_{n + 1}[x_1, @ldots, x_n]}; J[y]};
-                           t_n @in T_n};
-         @sequent{ext; {H; y@colon @all{x_1; T_1; @ldots . T_{n + 1}[x_1, @ldots, x_n]}; J[y]};
-                        T_{n + 1}[t_1, @ldots, t_n]}}
+         <<sequent[squash]{ <H>; y: all x_1:'T_1.(<:doc<@ldots . T_{n + 1}[x_1, @ldots, x_n]>>); <J['y]> >-
+                           't_n in 'T_n}>>;
+         <<sequent['ext]{ <H>; y: all x_1:'T_1.(<:doc<@ldots . T_{n + 1}[x_1, @ldots, x_n]>>); <J['y]> >-
+                        (<:doc<T_{n + 1}[t_1, @ldots, t_n]>>)}>>}
         $$
   
-        The @tt{backThruHypT} computes the argument terms $t_1, @ldots, t_n$ by matching
+        The @tt[backThruHypT] computes the argument terms $t_1, @ldots, t_n$ by matching
         the goal with the hypothesis.}}
    @end[description]
    @docoff
@@ -1102,29 +1101,29 @@ doc <:doc<
    @begin[description]
    @item{@tactic[assumT];
     {   @emph{Assumptions} correspond to the subgoals of the outermost
-        theorem statement.  The @tt{assumT} tactic instantiates an
+        theorem statement.  The @tt[assumT] tactic instantiates an
         assumption as a universally quantified hypothesis.
   
         $$
         @rulebox{assumT; i;
-         @sequent{'ext; {H; @ldots}; T_1}@cr
+         <<sequent['ext]{ <H>; math_ldots >- 'T_1}>>@cr
          @vdots@cr
-         @sequent{'ext; {H; x_1@colon A_1; @cdots; x_n@colon A_n}; T_i}@cr
+         <<sequent['ext]{ <H>; x_1: 'A_1; math_cdots; x_n: 'A_n >- 'T_i}>>@cr
          @vdots@cr
-         @sequent{'ext; {H; @ldots}; T_m}@cr
+         <<sequent['ext]{ <H>; math_ldots >- 'T_m}>>@cr
          @hline
-         @sequent{'ext; {H; J; w@colon @all{x_1; A_1; @ldots. @all{x_n; A_n; T_i}}}; C}@cr
-         @sequent{squash; {H; J}; @type{A_1}}@cr
+         <<sequent['ext]{ <H>; <J>; w: all x_1: 'A_1.(<:doc<@ldots. @all{x_n; A_n; T_i}>>) >- 'C}>>@cr
+         <<sequent[squash]{ <H>; <J> >- "type"{'A_1}}>>@cr
          @vdots@cr
-         @sequent{squash; {H; J}; @type{A_n}};
+         <<sequent[squash]{ <H>; <J> >- "type"{'A_n}}>>;
   
-         @sequent{'ext; {H; @ldots}; T_1}@cr
+         <<sequent['ext]{ <H>; math_ldots >- 'T_1}>>@cr
          @vdots@cr
-         @sequent{'ext; {H; x_1@colon A_1; @cdots; x_n@colon A_n}; T_i}@cr
+         <<sequent['ext]{ <H>; x_1: 'A_1; math_cdots; x_n: 'A_n >- 'T_i}>>@cr
          @vdots@cr
-         @sequent{'ext; {H; @ldots}; T_m}@cr
+         <<sequent['ext]{ <H>; math_ldots >- 'T_m}>>@cr
          @hline
-         @sequent{'ext; {H; J}; C}}
+         <<sequent['ext]{ <H>; <J> >- 'C}>>}
         $$}}
    @end[description]
    @docoff
@@ -1198,7 +1197,7 @@ doc <:doc<
    @begin[doc]
    @begin[description]
    @item{@tactic[backThruAssumT];
-    { The @tt{backThruAssumT} performs backward chaining similar
+    { The @tt[backThruAssumT] performs backward chaining similar
       to the @hreftactic[backThruHypT], but on an @emph{assumption}.}}
    @end[description]
    @docoff
@@ -1212,25 +1211,25 @@ doc <:doc<
    @begin[doc]
    @begin[description]
    @item{@tactic[genAssumT];
-    {The @tt{genAssumT} generalizes on an assumption.
+    {The @tt[genAssumT] generalizes on an assumption.
   
      $$
      @rulebox{genAssumT; i;
-      @sequent{ext; {H; @ldots}; T_1}@cr
+      <<sequent['ext]{ <H>; math_ldots >- 'T_1}>>@cr
       @vdots@cr
-      @sequent{ext; H; t @in T_i}@cr
+      <<sequent['ext]{ <H> >- 't in 'T_i}>>@cr
       @vdots@cr
-      @sequent{ext; {H; @ldots}; T_n}@cr
+      <<sequent['ext]{ <H>; math_ldots >- 'T_n}>>@cr
       @hline
-      @sequent{ext; H; @all{x; T_i; C}};
+      <<sequent['ext]{ <H> >- all x:'T_i.'C}>>;
   
-      @sequent{ext; {H; @ldots}; T_1}@cr
+      <<sequent['ext]{ <H>; math_ldots >- 'T_1}>>@cr
       @vdots@cr
-      @sequent{ext; H; t @in T_i}@cr
+      <<sequent['ext]{ <H> >- 't in 'T_i}>>@cr
       @vdots@cr
-      @sequent{ext; {H; @ldots}; T_n}@cr
+      <<sequent['ext]{ <H>; math_ldots >- 'T_n}>>@cr
       @hline
-      @sequent{ext; H; C}}
+      <<sequent['ext]{ <H> >- 'C}>>}
      $$}}
    @end[description]
    @docoff

@@ -682,7 +682,7 @@ dform math_df3 : except_mode[tex] :: math{'t} =
 dform centermath_df1 : centermath[s:s] = centermath{slot[s:s]}
 
 dform centermath_df2 : mode[tex] :: centermath{'t} =
-   izone `"$$" ezone slot{'t} izone `"$$" ezone
+   izone `"$$" ezone lzone slot{'t} ezone izone `"$$" ezone
 
 dform centermath_df3 : except_mode[tex] :: centermath{'t} =
    com_hbreak `"$$" it{'t} `"$$" com_hbreak
@@ -1002,8 +1002,6 @@ declare math_bf{'t}
 declare math_bf[text:s]
 declare math_i{'t}
 declare math_i[text:s]
-declare math_it{'t}
-declare math_it[text:s]
 declare math_emph{'t}
 doc <:doc< @docoff >>
 
@@ -1079,23 +1077,11 @@ dform math_bf_df2 : except_mode[tex] :: math_bf{'t} =
 dform math_bf_df2 : except_mode[tex] :: math_bf[text:s] =
    bf[text:s]
 
-dform math_i_df1 : mode[tex] :: math_i{'t} =
-   izone `"\\mathit{" ezone slot{'t} izone `"}" ezone
+dform math_i_df1 : math_i{'t} =
+   math_it{'t}
 
-dform math_i_df1 : mode[tex] :: math_i[text:s] =
-   izone `"\\mathit{" ezone slot[text:s] izone `"}" ezone
-
-dform math_i_df2 : except_mode[tex] :: math_i{'t} =
-   it{'t}
-
-dform math_i_df2 : except_mode[tex] :: math_i[text:s] =
-   it[text:s]
-
-dform math_it_df1 : math_it{'t} =
-   math_i{'t}
-
-dform math_it_df2 : math_it[text:s] =
-   math_i[text:s]
+dform math_i_df2 : math_i[text:s] =
+   math_it[text:s]
 
 dform math_emph_df1 : mode[tex] :: math_emph{'t} =
    izone `"\\mathit{" ezone slot{'t} izone `"}" ezone
@@ -1830,15 +1816,10 @@ doc <:doc<
    @rulebox{tac; args; hyps; goal}
    $$
    
-   The @tt[sequent] term displays a sequent definition.
-   $$
-   @sequent{ext; hyps; goal}
-   $$
    @end[doc]
 >>
 declare math_defrule[name]{'args; 'hyps; 'goal}
 declare math_rulebox{'tac; 'args; 'hyps; 'goal}
-declare math_sequent{'ext; 'hyps; 'goal}
 doc <:doc< @docoff >>
 
 (*
@@ -1866,15 +1847,6 @@ dform tex_math_rulebox_df1 : mode[tex] :: math_rulebox{'name; 'args; 'hyps; 'goa
    'goal
    izone `"}}" ezone
 
-dform tex_math_sequent_df1 : mode[tex] :: math_sequent{'ext; 'hyps; 'goal} =
-   izone `"{\\xsequent{" ezone
-   'ext
-   izone `"}{" ezone
-   'hyps
-   izone `"}{" ezone
-   'goal
-   izone `"}}" ezone
-
 dform normal_math_defrule_df1 : except_mode[tex] :: math_defrule[name:s]{'args; 'hyps; 'goal} =
    pushm[3] szone
    keyword["rule"] `" " slot[name:s] `" " slot{'args} `"=" hspace
@@ -1886,13 +1858,6 @@ dform normal_math_rulebox_df1 : except_mode[tex] :: math_rulebox{'name; 'args; '
    pushm[3] szone
    slot{'hyps} hspace
    keyword["BY"] `" " slot{'name} `" " slot{'args} hspace
-   slot{'goal}
-   ezone popm
-
-dform normal_math_sequent_df1 : except_mode[tex] :: math_sequent{'ext; 'hyps; 'goal} =
-   pushm[3] szone
-   keyword["sequent ["] slot{'ext} keyword["] "]
-   slot{'hyps} `" " Nuprl_font!vdash hspace
    slot{'goal}
    ezone popm
 

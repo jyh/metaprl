@@ -34,9 +34,9 @@ doc <:doc<
    $$
    @defrule[and_intro]{
        @{| @tt{intro@_resource} [ ] |@} H;
-       @sequent{ext; H; A}@cr
-          @sequent{ext; H; B};
-       @sequent{ext; H; A @wedge B}}
+       <<sequent{ <H> >- 'A }>>@cr
+          <<sequent{ <H> >- 'B }>>;
+       <<sequent{ <H> >- <:doc<A @wedge B>> }>>}
    $$
   
    Once this rule is defined, an application of the tactic (@hreftactic[dT] 0)
@@ -62,17 +62,17 @@ doc <:doc<
    $$
    @defrule[or_intro_left]{
       @{| @tt{intro@_resource} [SelectOption 1] |@} H;
-      @sequent{ext; H; B @Type}
-          @cr @sequent{ext; H; A};
-      @sequent{ext; H; A @wedge B}}
+      <<sequent{ <H> >- <:doc<B @Type>> }>>
+          @cr <<sequent{ <H> >- 'A }>>;
+      <<sequent{ <H> >- <:doc<A @wedge B>> }>>}
    $$
   
    $$
    @defrule[or_intro_right]{
      @{| @tt{intro@_resource} [SelectOption 2] |@} H;
-     @sequent{ext; H; A @Type}@cr
-        @sequent{ext; H; B};
-     @sequent{ext; H; A @wedge B}}
+     <<sequent{ <H> >- <:doc<A @Type>> }>>@cr
+        <<sequent{ <H> >- 'B }>>;
+     <<sequent{ <H> >- <:doc<A @wedge B>> }>>}
    $$
   
    These options require @hreftactic[selT] arguments: the left rule is applied with

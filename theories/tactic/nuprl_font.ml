@@ -96,6 +96,8 @@ declare it[name:s]
 declare it{'t}
 declare it_begin
 declare it_end
+declare math_it{'t}
+declare math_it[text:s]
 declare html_sym[name:s]
 declare html_uni[unicode:n]
 declare em[s:s]
@@ -379,6 +381,12 @@ dform i_df1 : internal :: i[text:s] =
 dform i_df2 : internal :: i{'t} =
    it{'t}
 
+dform math_it_df2 : internal :: except_mode[tex] :: math_it{'t} =
+   it{'t}
+
+dform math_it_df2 : internal :: except_mode[tex] :: math_it[text:s] =
+   it[text:s]
+
 dform html_sym_df : internal ::  mode[html] :: html_sym[text:s] =
    izone `"<b>&" ezone slot[text:s] izone `";</b>" ezone
 
@@ -553,6 +561,12 @@ dform it_begin_df : internal :: mode[tex] :: it_begin =
 
 dform it_end_df : internal :: mode[tex] :: it_end =
    ezone
+
+dform math_it_df1 : mode[tex] :: math_it{'t} =
+   izone `"\\mathit{" ezone slot{'t} izone `"}" ezone
+
+dform math_it_df1 : mode[tex] :: math_it[text:s] =
+   izone `"\\mathit{" ezone slot[text:s] izone `"}" ezone
 
 dform em_begin_df : internal :: mode[tex] :: em_begin =
    tzone["emph"]

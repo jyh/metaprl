@@ -13,7 +13,7 @@ doc <:doc<
    That is <<squash{'A}>> means that $A$ is true, but we do not know its
    computational content.
    Consequentially,  the sequent
-   $$@sequent{@it; {H; x@colon @squash{A}; J}; C}$$
+   $$<<sequent['ext]{ <H>; x: 'A; <J> >- 'C}>>$$
    is true when $C$ is true (with the assumption that $A$ is true),
    but extract of $C$ does not depend on the witness of $A$.
    Note that $x$ in this sequent stands not for a witness for $A$,
@@ -28,11 +28,11 @@ doc <:doc<
    the meta-theory @tt[squash] operator that works on sequents.
    Namely, sequents in the @MetaPRL implementation of the
    @Nuprl type theory have two forms: one is the generic
-   form $@sequent{ext; H; T}$, where @i{ext} is a variable.  The variable
+   form $<<sequent['ext]{ <H> >- 'T}>>$, where @i{ext} is a variable.  The variable
    specifies that the subproof extract may be needed for the computational content
    of the proof.
   
-   The other form is $@sequent{squash; H; T}$, where @hrefterm[squash] is a
+   The other form is $<<sequent[squash]{ <H> >- 'T}>>$, where @hrefterm[squash] is a
    term defined in the @hrefmodule[Base_trivial]{} module.
    The @tt[squash] term specifies that the extract of the proof of this
    subgoal is @em{not} needed for the computational content of the whole proof.
@@ -340,7 +340,7 @@ doc <:doc<
    @tt[squash_info] type. The $@tt[SqUnsquash](T,@i[tac])$ is used when @i{tac i}
    is capable turning @i{i}-th hypothesis from $@squash{T}$ into $T$.
    The $@tt[SqStable](T,t,@i[tac])$ variant is used when @i[tac] is capable
-   of proving $@sequent{;H;t @in T}$ from $@sequent{;H;T}$. Third,
+   of proving <<sequent{ <H> >- 't in 'T}>> from <<sequent{ <H> >- 'T}>>. Third,
    the $@tt[SqUnsquashGoal](T,@i[tac])$ is used when @i{tac i} can unsquash
    @i{i}-th hypothesis provided the conclusion of the sequent is $T$. Finally, 
    $@tt[SqStableGoal](T,@i[tac])$ is used when @i[tac] can prover $T$ from
@@ -349,9 +349,9 @@ doc <:doc<
    The only way to improve the @tt{squash_resource} outside of the
    @tt{Itt_squash} theory is to use @it{resource annotations}. Currently, the
    following kinds of rules are recognized by the @tt{squash_resource} annotations:
-   $@sequent{squash;H;@squash{A}}@space@leftrightarrow@space@sequent{ext;H;A}$,
-   $@sequent{squash;H;A}@space@leftrightarrow@space@sequent{ext;H;t @in A}$,
-   $@sequent{ext;H;t @in A}$ and $@sequent{ext;{H; x@colon A; J[x]};C[x]}$
+   $<<sequent[squash]{ <H> >- squash{'A}}>>@space<<longrightarrow>>@space<<sequent['ext]{ <H> >- 'A}>>$,
+   $<<sequent[squash]{ <H> >- 'A}>>@space<<longrightarrow>>@space<<sequent['ext]{ <H> >- 't in 'A}>>$,
+   <<sequent['ext]{ <H> >- 't in 'A}>> and <<sequent['ext]{ <H>; x: 'A; <J['x]> >- 'C['x]}>>
    (e.g $A$ is a falsity), although it is possible
    to add support for other kinds of rules if necessary.
   
@@ -510,8 +510,8 @@ doc <:doc<
    to perform the following inference:
    $$
    @rulebox{squashT; ;
-      @sequent{squash; H; @squash{T}};
-      @sequent{ext; H; T}}
+      <<sequent[squash]{ <H> >- squash{'T}}>>;
+      <<sequent['ext]{ <H> >- 'T}>>}
    $$
    Term $T$ must be @emph{squash-stable} and known to @hrefresource[squash_resource]
    in order for @tt[squashT] to work.
@@ -520,8 +520,8 @@ doc <:doc<
    to perform the following inference:
    $$
    @rulebox{unsquashT;i;
-      @sequent{squash; {H; x@colon A; J[@it]}; C[@it]};
-      @sequent{ext; {H; x@colon @squash{A}; J[x]}; C[x]}}
+      <<sequent[squash]{ <H>; x: 'A; <J[it]> >- 'C[it]}>>;
+      <<sequent['ext]{ <H>; x: squash{'A}; <J['x]> >- 'C['x]}>>}
    $$
    Either $A$ or $C[x]$ must be @emph{squash-stable} and known
    to @hrefresource[squash_resource] in order for @tt[unsquashT] to work.
@@ -530,8 +530,8 @@ doc <:doc<
    to perform the following inference:
    $$
    @rulebox{sqsquashT; ;
-      @sequent{squash; H; T};
-      @sequent{ext; H; T}}
+      <<sequent[squash]{ <H> >- 'T}>>;
+      <<sequent['ext]{ <H> >- 'T}>>}
    $$
    Term $T$ must be @emph{squash-stable} and known to @hrefresource[squash_resource]
    in order for @tt[sqsquashT] to work.

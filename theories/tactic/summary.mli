@@ -81,7 +81,6 @@ declare "meta_iff"{'A; 'B}
 declare "meta_labeled"[label:s]{'meta}
 
 declare "context_param"[name:s]
-declare "var_param"[name:s]
 declare "term_param"{'t}
 
 (* Arguments *)

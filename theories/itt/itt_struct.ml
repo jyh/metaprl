@@ -101,7 +101,7 @@ doc <:doc<
    Note that $x$ must be a variable that is not bound by any hypothesis
    in $H$.  The rule is even more stringent: $x$ may not occur free
    in $J$ or $C$ (note that the goal is @emph{not} phrased as
-   $@sequent{ext; {H; x@colon A; J[x]}; C}$).
+   <<sequent['ext]{ <H>; x: 'A; <J['x]> >- 'C}>>).
   
    The proof extract term $t$ is unchanged.
    @end[doc]
@@ -255,7 +255,7 @@ doc <:doc<
    $$
    @rulebox{nthHypT; i;
       @cdot;
-      @sequent{ext; {H; i@colon x@colon A; J}; A}}
+      <<sequent['ext]{ <H>; "i. x": 'A; <J> >- 'A}>>}
    $$
   
    @docoff
@@ -272,8 +272,8 @@ doc <:doc<
   
    $$
    @rulebox{thinT; i;
-     @sequent{ext; {H; J}; C};
-     @sequent{ext; {H; i@colon x@colon A; J}; C}}
+     <<sequent['ext]{ <H>; <J> >- 'C}>>;
+     <<sequent['ext]{ <H>; "i. x": 'A; <J> >- 'C}>>}
    $$
   
    @noindent
@@ -281,8 +281,8 @@ doc <:doc<
   
    $$
    @rulebox{thinAllT; i@ j;
-      @sequent{ext; {H; J}; C};
-      @sequent{ext; {H; i@colon x_i@colon A_i; @cdots; j@colon x_j@colon A_j; J}; C}}
+      <<sequent['ext]{ <H>; <J> >- 'C}>>;
+      <<sequent['ext]{ <H>; "i. x_i": 'A_i; math_cdots; "j. x_j": 'A_j; <J> >- 'C}>>}
    $$
   
    @docoff
@@ -313,9 +313,9 @@ doc <:doc<
   
    $$
    @rulebox{assertT; A;
-     @ldots @i{assertion} @ldots @sequent{ext; H; A}@cr
-       @sequent{ext; {H; x@colon A}; C};
-     @sequent{ext; H; C}}
+     @ldots @i{assertion} @ldots <<sequent['ext]{ <H> >- 'A}>>@cr
+       <<sequent['ext]{ <H>; x: 'A >- 'C}>>;
+     <<sequent['ext]{ <H> >- 'C}>>}
    $$
   
    @docoff
@@ -335,9 +335,9 @@ doc <:doc<
   
    $$
    @rulebox{assertAtT; i@space A;
-      @ldots  @i{assertion} @ldots @sequent{ext; {H; J}; A}@cr
-         @sequent{ext; {H; x@colon A; J}; C};
-      @sequent{ext; {H; (@i{location}@space i); J}; C}}
+      @ldots  @i{assertion} @ldots <<sequent['ext]{ <H>; <J> >- 'A}>>@cr
+         <<sequent['ext]{ <H>; x: 'A; <J> >- 'C}>>;
+      <<sequent['ext]{ <H>; (<:doc<(@i{location}@space i)>>) ; <J> >- 'C}>>}
    $$
   
    @docoff
@@ -361,8 +361,8 @@ doc <:doc<
   
    $$
    @rulebox{useWitnessT; t;
-     @sequent{squash; H; t @in T};
-     @sequent{ext; H; T}}
+     <<sequent[squash]{ <H> >- 't in 'T}>>;
+     <<sequent['ext]{ <H> >- 'T}>>}
    $$
   
    @docoff
@@ -382,10 +382,10 @@ doc <:doc<
   
    $$
    @rulebox{substT; 1 + 2 = 3 @in @int;
-      @ldots @i{equality} @ldots @sequent{squash; H; 1 + 2 = 3 @in @int}@cr
-      @ldots @i{main} @ldots @sequent{ext; H; 3 < 1 * 3}@cr
-      @ldots @i{wf} @ldots @sequent{squash; {H; i@colon @int}; @type{(x < 1 * x)}};
-      @sequent{ext; H; (1 + 2) < 1 * (1 + 2)}}
+      @ldots @i{equality} @ldots <<sequent[squash]{ <H> >- <:doc<1 + 2 = 3 @in @int>>}>>@cr
+      @ldots @i{main} @ldots <<sequent['ext]{ <H> >- <:doc<3 < 1 * 3>>}>>@cr
+      @ldots @i{wf} @ldots <<sequent[squash]{ <H>; i: (<:doc<@int>>) >- "type"{.<:doc<(x < 1 * x)>>}}>>;
+      <<sequent['ext]{ <H> >- <:doc< (1 + 2) < 1 * (1 + 2)>>}>>}
    $$
   
    @docoff

@@ -31,12 +31,13 @@
  * Email:  emre@its.caltech.edu
  *)
 
+include Itt_bool
+include Itt_int_base
+include Itt_int_ext
+include Itt_list
 include Mp_mc_fir_base
 include Mp_mc_fir_ty
 include Mp_mc_fir_exp
-include Itt_int_base
-include Itt_int_ext
-include Itt_rfun
 
 open Tactic_type.Conversionals
 
@@ -66,6 +67,19 @@ declare mod_arith_signed{ 'int_precision; 'num }
 declare mod_arith_unsigned{ 'int_precision; 'num }
 
 (*
+ * Booleans, as represented in the FIR.
+ *)
+
+declare fir_true
+declare fir_false
+
+(*
+ * Set (and interval) membership.
+ *)
+
+declare member{ 'value; 'set }
+
+(*
  * Expressions.
  *)
 
@@ -80,12 +94,6 @@ declare binop_exp{ 'op; 'ty; 'a1; 'a2 }
  * Modular arithmetic for integers.
  *)
 
-topval reduce_naml_prec : conv
-topval reduce_int8 : conv
-topval reduce_int16 : conv
-topval reduce_int32 : conv
-topval reduce_int64 : conv
-
 topval reduce_pow : conv
 topval reduce_pow_2_7 : conv
 topval reduce_pow_2_8 : conv
@@ -97,10 +105,78 @@ topval reduce_pow_2_32 : conv
 topval reduce_pow_2_63 : conv
 topval reduce_pow_2_64 : conv
 
-topval reduce_mod_arith1 : conv  (* signedInt   -> mod_arith_signed   *)
-topval reduce_mod_arith2 : conv  (* unsignedInt -> mod_arith_unsigned *)
+topval reduce_arith_signed_int8 : conv
+topval reduce_arith_signed_int16 : conv
+topval reduce_arith_signed_int32 : conv
+topval reduce_arith_signed_int64 : conv
+topval reduce_arith_signed_naml : conv
+topval reduce_arith_unsigned_int8 : conv
+topval reduce_arith_unsigned_int16 : conv
+topval reduce_arith_unsigned_int32 : conv
+topval reduce_arith_unsigned_int64 : conv
+
 topval reduce_mod_arith_signed : conv
 topval reduce_mod_arith_unsigned : conv
+
+(*
+ * Booleans, as represented in the FIR.
+ *)
+
+topval reduce_fir_true : conv
+topval reduce_fir_false : conv
+
+(*
+ * Set (and interval) membership.
+ *)
+
+topval reduce_member_interval : conv
+topval reduce_member_int_set : conv
+topval reduce_member_rawint_set : conv
+topval reduce_member_int_set_empty : conv
+topval reduce_member_rawint_set_empty : conv
+
+(*
+ * Normal values.
+ *)
+
+topval reduce_atomVar_atomNil : conv
+topval reduce_atomVar_atomInt : conv
+topval reduce_atomVar_atomEnum : conv
+topval reduce_atomVar_atomRawInt : conv
+topval reduce_atomVar_atomFloat : conv
+topval reduce_atomVar_atomLabel : conv
+topval reduce_atomVar_atomSizeof : conv
+topval reduce_atomVar_atomConst : conv
+
+(*
+ * Unary operations.
+ *)
+
+topval reduce_idOp_atomVar : conv
+topval reduce_idOp_general : conv
+
+(*
+ * Binary operations.
+ *)
+
+topval reduce_plusIntOp : conv
+topval reduce_minusIntOp : conv
+topval reduce_mulIntOp : conv
+topval reduce_eqIntOp : conv
+
+topval reduce_matchExp_atomEnum : conv
+topval reduce_matchExp_atomInt : conv
+topval reduce_matchExp_number : conv
+
+(*************************************************************************
+ * Automation.
+ *************************************************************************)
+
+topval firExpEvalC : conv
+
+(*
+ * "old" rewrites are being commented out
+ * for the time being.
 
 (*
  * Unary operations.
@@ -154,3 +230,6 @@ topval reduce_atomVar : conv
 
 topval reduce_letUnop : conv
 topval reduce_letBinop : conv
+
+ * end commenting out of "old rewrites"
+ *)

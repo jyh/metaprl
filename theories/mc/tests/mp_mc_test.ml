@@ -37,6 +37,7 @@ include Mp_mc_theory
 
 open Simple_print.SimplePrint
 open Top_conversionals
+open Mp_mc_fir_eval
 open Mp_mc_const_elim
 
 (*
@@ -50,25 +51,74 @@ let apply_rewrite = apply_rewrite (Mp_resource.theory_bookmark "Mp_mc_theory")
  *************************************************************************)
 
 let test1 () =
-   print_string "\n\nBeginning test 1...\n\n";
-   let t = << letBinop{ tyInt; plusIntOp; atomInt{1}; atomInt{2};
-              v. 'v } >> in
+   print_string "\n\n*** Beginning test 1...\n\n";
+   let t = <<
+      letUnop{ tyInt; idOp; atomInt{0}; y.
+      letBinop{ tyEnum{2}; eqIntOp; atomVar{'y}; atomInt{0}; flag.
+      Mp_mc_fir_exp!matchExp{ 'flag;
+         cons{ matchCase{ 'dummy_label;
+                          int_set{ cons{ interval{0; 0}; nil } };
+                          'failure };
+         cons{ matchCase{ 'dummy_label;
+                          int_set{ cons{ interval{1; 1}; nil } };
+                          'success };
+         nil }}}}} >> in
    print_simple_term t;
-   print_string "\nApplying firConstElimC...\n";
-   let t = apply_rewrite firConstElimC t in
+   print_string "\n\nApplying firExpEvalC...\n\n";
+   let t = apply_rewrite firExpEvalC t in
    print_simple_term t;
    print_string "\n"
 
 let test2 () =
-   print_string "\n\nBeginning test 2...\n\n";
-   let t = << letBinop{ tyInt; plusIntOp; atomInt{1}; atomInt{2};
-              v. 'v } >> in
+   print_string "\n\n*** Beginning test 2...\n\n";
+   let t = <<
+      letUnop{ tyInt; idOp; atomInt{0}; y.
+      letBinop{ tyEnum{2}; eqIntOp; atomVar{'y}; atomInt{2}; flag.
+      Mp_mc_fir_exp!matchExp{ 'flag;
+         cons{ matchCase{ 'dummy_label;
+                          int_set{ cons{ interval{0; 0}; nil } };
+                          'success };
+         cons{ matchCase{ 'dummy_label;
+                          int_set{ cons{ interval{1; 1}; nil } };
+                          'failure };
+         nil }}}}} >> in
    print_simple_term t;
-   print_string "\nApplying const_elim_plusIntOp...\n";
-   let t = apply_rewrite const_elim_plusIntOp t in
+   print_string "\n\nApplying firExpEvalC...\n\n";
+   let t = apply_rewrite firExpEvalC t in
    print_simple_term t;
    print_string "\n"
 
+let test3 () =
+   print_string "\n\n*** Beginning test 3...\n\n";
+   let t = << member{ 0; interval{0; 0} } >> in
+   print_simple_term t;
+   print_string "\n\nApplying firExpEvalC...\n\n";
+   let t = apply_rewrite firExpEvalC t in
+   print_simple_term t;
+   print_string "\n"
+
+let test4 () =
+   print_string "\n\n*** Beginning test 4...\n\n";
+   let t = << member{ 0; int_set{ cons{ interval{0; 0}; nil } } } >> in
+   print_simple_term t;
+   print_string "\n\nApplying firExpEvalC...\n\n";
+   let t = apply_rewrite firExpEvalC t in
+   print_simple_term t;
+   print_string "\n"
+
+let test5 () =
+   print_string "\n\n*** Beginning test 5...\n\n";
+      let t = <<
+      Mp_mc_fir_exp!matchExp{ 0;
+         cons{ matchCase{ 'dummy_label;
+                          int_set{ cons{ interval{0; 0}; nil } };
+                          'success};
+         nil }} >> in
+   print_simple_term t;
+   print_string "\n\nApplying firExpEvalC...\n\n";
+   let t = apply_rewrite firExpEvalC t in
+   print_simple_term t;
+   print_string "\n"
 
 (*************************************************************************
  * Run tests.
@@ -76,4 +126,7 @@ let test2 () =
 
 let _ =
    test1 ();
-   test2 ()
+   test2 ();
+   test3 ();
+   test4 ();
+   test5 ()

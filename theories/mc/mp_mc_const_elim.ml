@@ -119,16 +119,13 @@ interactive_rw const_elim_atomVar_atomRawInt :
  * Automation
  *************************************************************************)
 
+(* Currently broken - reduces all precisions, at the very least *)
 let firConstElimC =
    repeatC (higherC (applyAllC [
 
       (* Many other rewrites are needed to support this optimization. *)
 
-      reduce_naml_prec;
-      reduce_int8;
-      reduce_int16;
-      reduce_int32;
-      reduce_int64;
+(*
       reduce_pow_2_7;
       reduce_pow_2_8;
       reduce_pow_2_15;
@@ -139,8 +136,15 @@ let firConstElimC =
       reduce_pow_2_63;
       reduce_pow_2_64;
       reduce_pow;
-      reduce_mod_arith1;
-      reduce_mod_arith2;
+      reduce_arith_signed_int8;
+      reduce_arith_signed_int16;
+      reduce_arith_signed_int32;
+      reduce_arith_signed_int64;
+      reduce_arith_signed_naml;
+      reduce_arith_unsigned_int8;
+      reduce_arith_unsigned_int16;
+      reduce_arith_unsigned_int32;
+      reduce_arith_unsigned_int64;
       reduce_mod_arith_signed;
       reduce_mod_arith_unsigned;
 
@@ -159,6 +163,7 @@ let firConstElimC =
       reduce_remRawIntOp;
       reduce_maxRawIntOp;
       reduce_minRawIntOp;
+*)
 
       (* Now we include the rewrites we defined above. *)
 

@@ -88,6 +88,8 @@ let symbol_of_string str =
       Hashtbl.find table str
    with
       Not_found ->
+         print_string "\n\nAiee! Mp_mc_connect_base.symbol_of_string:\n";
+         print_string ("No idea what " ^ str ^ " is supposed to be.\n\n");
          raise (Invalid_argument
                ("symbol_of_string: string \"" ^ str ^ "\" not in table."))
 
@@ -95,11 +97,7 @@ let var_term_of_symbol s =
    mk_var_term (string_of_symbol s)
 
 let symbol_of_var_term v =
-   try
-      symbol_of_string (dest_var v)
-   with
-      Not_found ->
-         raise (Invalid_argument "can't create symbols out of thin air yet")
+   symbol_of_string (dest_var v)
 
 (* Alias the below functions to keep the interface as general as possible. *)
 

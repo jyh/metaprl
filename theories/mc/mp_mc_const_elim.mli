@@ -75,4 +75,5 @@ topval const_elim_atomVar_atomRawInt : conv
  * Automation.
  *************************************************************************)
 
+(* Currently broken - reduces all precisions, at the very least *)
 topval firConstElimC : conv

@@ -385,7 +385,7 @@ doc <:doc< *********************************************************************
 prim equalityEquality {| intro [] |} :
    [wf] sequent { <H> >- 'T1 = 'T2 in univ[i:l] } -->
    [wf] sequent { <H> >- 'a1 = 'a2 in 'T1 } -->
-   [wf] sequent { <H> >- 'b1 = 'b2 in 'T2 } -->
+   [wf] sequent { <H> >- 'b1 = 'b2 in 'T1 } -->
    sequent { <H> >- ('a1 = 'b1 in 'T1) = ('a2 = 'b2 in 'T2) in univ[i:l] } =
    it
 
@@ -650,8 +650,8 @@ let triv_equalT =
             if alpha_equal ga gb then
                if alpha_equal ha ga then equalRefT hb
                else if alpha_equal hb ga then equalRefT ha thenT equalSymT
-               else if alpha_equal ha gb && alpha_equal hb ga then equalSymT
                else raise generic_refiner_exn
+            else if alpha_equal ha gb && alpha_equal hb ga then equalSymT
             else raise generic_refiner_exn
          else raise generic_refiner_exn)
 

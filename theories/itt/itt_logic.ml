@@ -232,7 +232,8 @@ interactive not_intro {| intro [] |} :
 interactive not_elim {| elim [ThinOption thinT] |} 'H :
    [main] sequent { <H>; x: "not"{'t}; <J['x]> >- 't } -->
    sequent { <H>; x: "not"{'t}; <J['x]> >- 'C }
-(*
+
+(* BUG: Squash_resource shoud now that not{'t} (as well as neq is squash_stable
 interactive not_membership {| intro []; squash |} :
    [wf] sequent { <H> >- "type"{'t} } -->
    [main] sequent { <H> >- not{'t} } -->
@@ -1237,7 +1238,7 @@ let genAssumT = argfunT (fun indices p ->
                   all_elim (-1) t_var thenLT [t_tac; tac1]),
                (all_intro thenLT [equalTypeT t_var t_var' thenT nthAssumT i; idT])
          else
-            mk_implies_term t' t, 
+            mk_implies_term t' t,
             (implies_elim (-1) thenLT [nthAssumT i; tac1]),
             (implies_intro thenLT [typeAssertT thenT nthAssumT i; tac2])
    in

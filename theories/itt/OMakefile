@@ -64,6 +64,7 @@ MPFILES =\
    itt_record\
    itt_record_exm\
    itt_algebra_df\
+   itt_record_renaming\
    itt_relation_str\
    itt_set_str\
    itt_bintree\
@@ -110,6 +111,7 @@ PRINT_THEORIES =\
     itt_dprod\
     itt_prod\
     itt_logic\
+    itt_nequal\
     itt_decidable\
     itt_bool\
     itt_int_base\

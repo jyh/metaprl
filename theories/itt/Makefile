@@ -30,6 +30,7 @@ MPFILES :=\
 	itt_prod\
 	itt_esquash\
 	itt_logic\
+	itt_nequal\
 	itt_well_founded\
 	itt_decidable\
 	itt_bool\
@@ -68,9 +69,9 @@ MPFILES :=\
 	itt_record_label\
 	itt_record0\
 	itt_record\
-	itt_record_renaming\
 	itt_record_exm\
 	itt_algebra_df\
+	itt_record_renaming\
         itt_relation_str\
         itt_set_str\
         itt_bintree\

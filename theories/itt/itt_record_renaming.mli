@@ -10,3 +10,10 @@ topval unfoldAdditiveC : term -> conv
 topval unfoldAdditiveT : term -> tactic
 topval useAdditiveWithT : term -> tactic -> tactic
 topval useAdditiveWithAutoT : term -> tactic
+
+topval test : term -> term
+
+topval reverseOrderC : term -> conv
+topval reverseOrderT : term -> tactic
+
+

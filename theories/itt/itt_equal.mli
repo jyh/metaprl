@@ -120,7 +120,7 @@ rule equalityFormation 'T :
 rule equalityEquality :
    sequent { <H> >- 'T1 = 'T2 in univ[i:l] } -->
    sequent { <H> >- 'a1 = 'a2 in 'T1 } -->
-   sequent { <H> >- 'b1 = 'b2 in 'T2 } -->
+   sequent { <H> >- 'b1 = 'b2 in 'T1 } -->
    sequent { <H> >- ('a1 = 'b1 in 'T1) = ('a2 = 'b2 in 'T2) in univ[i:l] }
 
 (*

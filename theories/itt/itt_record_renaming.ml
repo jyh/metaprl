@@ -12,6 +12,9 @@ extends Itt_record
 
 doc <:doc< @docoff >>
 
+extends Itt_algebra_df
+
+open Refiner.Refiner.TermMan
 open Tactic_type.Tacticals
 open Dtactic
 open Auto_tactic
@@ -248,15 +251,19 @@ doc <:doc<
    @end[doc]
 >>
 
+let rename_mul_add_length = 4
+
 define unfold_rename_add_mul: rename_add_mul{'add} <-->
    rename["+":t,"*":t]{
+   rename["-":t,"/":t]{
    rename["0":t,"1":t]{
-   rename["neg":t,"inv":t]{ 'add }}}
+   rename["neg":t,"inv":t]{ 'add }}}}
 
 define unfold_rename_mul_add: rename_mul_add{'mul} <-->
    rename["inv":t,"neg":t]{
    rename["1":t,"0":t]{
-   rename["*":t,"+":t]{ 'mul }}}
+   rename["/":t,"-":t]{
+   rename["*":t,"+":t]{ 'mul }}}}
 
 dform rename_mul_add_df : except_mode[src] ::  rename_mul_add{'mul} = rename["<mul>":t, "<add>" :t]{'mul}
 dform rename_add_mul_df : except_mode[src] :: rename_add_mul{'add} = rename["<add>":t, "<mul>" :t]{'add}
@@ -307,8 +314,8 @@ doc <:doc<
 >>
 
 let resource reduce +=
-  [ << field[c:t]{rename_mul_add{'r}} >>, (addrC [0] unfold_rename_mul_add thenC repeatForC 3 rename_reduceC);
-    << field[c:t]{rename_add_mul{'r}} >>, (addrC [0] unfold_rename_add_mul thenC repeatForC 3 rename_reduceC);
+  [ << field[c:t]{rename_mul_add{'r}} >>, (addrC [0] unfold_rename_mul_add thenC repeatForC rename_mul_add_length rename_reduceC);
+    << field[c:t]{rename_add_mul{'r}} >>, (addrC [0] unfold_rename_add_mul thenC repeatForC rename_mul_add_length rename_reduceC);
     << rename_add_mul{rcrd[c:t]{'a;'r}} >>, unfold_rename_add_mul;
     << rename_mul_add{rcrd[c:t]{'a;'r}} >>, unfold_rename_mul_add
   ]
@@ -455,3 +462,206 @@ doc <:doc<
 >>
 
 
+
+let test t =
+   match explode_term t with  << lambda{v. 'e} >> -> (e) | _ -> (<<'x>>)
+
+(******************* order  **********************)
+
+doc <:doc<
+   @begin[doc]
+   @modsection{Inverse Order}
+   Let we have a data structure $(O,<,>)$ with some order.
+   Then we can reverse the order just by  renaming:
+   @end[doc]
+>>
+
+let reverse_order_length = 7
+
+define unfold_reverse_order: reverse_order{'ord} <-->
+   rename["<":t,">":t]{
+   rename["<=":t,">=":t]{
+   rename["min":t,"max":t]{
+   rename["inf":t,"sup":t]{
+   rename["bottom":t,"top":t]{
+   rename["up":t,"down":t]{
+   rename["0":t,"1":t]{
+      'ord }}}}}}}
+
+
+dform reverse_order_df: except_mode[src] ::parens :: reverse_order{'ord} = slot["le"]{'ord} sup["-1"]
+
+
+doc <:doc<
+   @begin[doc]
+   @modsubsection{Reductions}
+     The following reduction holds:
+   @end[doc]
+>>
+
+interactive_rw reverse_order_cancel {| reduce |}:  reverse_order{reverse_order{'ord}} <--> 'ord
+
+doc <:doc<
+   @begin[doc]
+     This reductions are added to the @hrefresource[reduce_resource] resource, as well as the reductions of the terms of the form
+    <<field[c:t]{reverse_order{'ord}}>>.
+   @end[doc]
+>>
+
+let resource reduce +=
+  [ << field[c:t]{reverse_order{'r}} >>, (addrC [0] unfold_reverse_order thenC repeatForC reverse_order_length rename_reduceC);
+    << reverse_order{rcrd[c:t]{'a;'r}} >>, unfold_reverse_order;
+  ]
+
+
+doc <:doc<
+   @begin[doc]
+   @modsubsection{Tactics}
+
+     To reverse order one can apply the conversion @conv[reverseOrderC] <<'ord>>.
+     For example, it replaces <<'ord^">">> by  <<'ord^"<">>.
+
+     The @tt[reduceC] conversion should undo this conversion.
+
+     The @tactic[reverseOrderT] $ord$ tactic apply the above conversions to all subterms of the goal sequent (using @hreftactic[rwhAll]).
+
+   @end[doc]
+   @docoff
+>>
+
+
+
+interactive_rw reverse_order_rw 'ord:  'ord <-->   reverse_order{reverse_order{'ord}}
+
+let reverseOrderC term = allSubThenC (reverse_order_rw term) (reduceTopC)
+
+let reverseOrderT term  = rwhAll (reverseOrderC term)
+
+
+
+doc <:doc<
+   @begin[doc]
+   @modsubsection{Examples}
+     Suppouse we have an operator <<max{'ord;'a;'b}>> that takes the maximum of $a$ and $b$ w.r.t. order $ord$.
+     Then we can define  <<min{'ord;'a;'b}>> as max w.r.t. reverse order:
+   @end[doc]
+>>
+
+declare max{'ord;'a;'b}
+
+define unfold_min:  min{'ord;'a;'b}  <--> max{reverse_order{'ord};'a;'b}
+
+dform max_df : max{'ord;'a;'b} = `"max(" 'ord `";" 'a `";" 'b `")"
+dform min_df : min{'ord;'a;'b} = `"min(" 'ord `";" 'a `";" 'b `")"
+
+doc <:doc<
+   @begin[doc]
+         Then add the following rewrites to the reduce resource:
+   @end[doc]
+>>
+
+interactive_rw max_rev_rw {| reduce |} :
+    max{reverse_order{'ord};'a;'b} <-->  min{'ord;'a;'b}
+
+interactive_rw min_rev_rw {| reduce |} :
+    min{reverse_order{'ord};'a;'b} <-->  max{'ord;'a;'b}
+
+
+doc <:doc<
+   @begin[doc]
+         Then we can use @hreftactic[reverseOrderT] tactic on the goal << min{'ord;'a;'b} <['ord] 'a>>:
+         $$
+            @rulebox{reverseOrderT <<'ord>>; ;
+               <<sequent{ <H> >-  min{'ord;'a;'b} <['ord] 'a } >>;
+               <<sequent{ <H> >-  max{reverse_order{'ord};'a;'b} >[reverse_order{'ord}] 'a }>>}
+         $$
+   @end[doc]
+>>
+
+interactive example :
+    sequent { <H> >- max{reverse_order{'ord};'a;'b} >[reverse_order{'ord}] 'a } -->
+    sequent { <H> >- min{'ord;'a;'b} <['ord] 'a }
+
+
+doc <:doc< @docoff >>
+
+(*
+
+(****** Cut here ***************)
+
+declare group[i:l]
+declare agroup[i:l]
+
+interactive additive_wf {| intro [] |} :
+   sequent { <H> >- 'G in agroup[i:l] } -->
+   sequent { <H> >- as_additive{'G} in group[i:l]  }
+
+
+let inf_add inf consts decls eqs opt_eqs defs t =
+      eqs, opt_eqs, defs, <<group[i:l]>>   (* HACK *)
+
+
+let resource typeinf += (<< as_additive{'G}>>, inf_add)
+
+
+(******************* examples **********************)
+
+
+interactive right_id {| intro [intro_typeinf <<'G>>] |} group[i:l] :
+   sequent { <H> >- 'G in group[i:l] } -->
+   sequent { <H> >- 'a in 'G^car } -->
+   sequent { <H> >- 'a *['G] 'G^"1" = 'a in 'G^car }
+
+interactive right_id_add {| intro [intro_typeinf <<'G>>] |} agroup[i:l] :
+   sequent { <H> >- 'G in agroup[i:l] } -->
+   sequent { <H> >- 'a in 'G^car } -->
+   sequent { <H> >- 'a +['G] 'G^"0" = 'a in 'G^car }
+
+
+ declare group_power{'g; 'a; 'n}
+
+ (* a ^ 0 = e *)
+interactive group_power_0 {| intro [intro_typeinf <<'g>>] |} group[i:l] :
+   sequent { <H> >- 'g in group[i:l] } -->
+   sequent { <H> >- 'a in 'g^car } -->
+   sequent { <H> >- group_power{'g; 'a; 0} = 'g^"1" in 'g^car }
+
+
+define group_mult: group_mult{'g; 'a; 'n} <--> group_power{as_additive{'g}; 'a; 'n}
+
+interactive_rw mult_is_power {| reduce |}:
+   group_mult{rename_mul_add{ 'g }; 'a; 'n} <-->   group_power{'g; 'a; 'n}
+
+interactive_rw power_is_mult {| reduce |}:
+   group_power{rename_add_mul{ 'g }; 'a; 'n} <-->   group_mult{'g; 'a; 'n}
+
+(* a * 0 = 0 *)
+interactive group_mult_0 {| intro [intro_typeinf <<'g>>] |} group[i:l] :
+   sequent { <H> >- 'g in agroup[i:l] } -->
+   sequent { <H> >- 'a in 'g^car } -->
+   sequent { <H> >- group_mult{'g; 'a; 0} = 'g^"0" in 'g^car }
+
+
+declare  groupHom{'A; 'B}
+
+interactive trivial_hom  {| intro[ intro_typeinf <<'A>>] |} group[i:l]:
+   [wf] sequent { <H> >- 'A in group[i:l] } -->
+   [wf] sequent { <H> >- 'B in group[i:l] } -->
+   sequent { <H> >- lambda{x. 'B^"1"} in groupHom{'A; 'B} }
+
+interactive trivial_hom2 group[i:l] :
+   [wf] sequent { <H> >- 'A in agroup[i:l] } -->
+   [wf] sequent { <H> >- 'B in group[i:l] } -->
+   sequent { <H> >- lambda{x. 'B^"1"} in groupHom{as_additive{'A}; 'B} }
+
+interactive trivial_hom3 group[i:l] :
+   [wf] sequent { <H> >- 'A in group[i:l] } -->
+   [wf] sequent { <H> >- 'B in agroup[i:l] } -->
+   sequent { <H> >- lambda{x. 'B^"0"} in groupHom{'A; as_additive{'B}} }
+
+interactive trivial_hom4 group[i:l] :
+   [wf] sequent { <H> >- 'A in agroup[i:l] } -->
+   [wf] sequent { <H> >- 'B in agroup[i:l] } -->
+   sequent { <H> >- lambda{x. 'B^"0"} in groupHom{as_additive{'A}; as_additive{'B}} }
+
+*)

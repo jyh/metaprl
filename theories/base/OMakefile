@@ -17,17 +17,16 @@ Theory($(MPFILES))
 # Documentation
 #
 PRINT_THEORIES =\
-    base_theory\
-    top_tacticals\
-    top_conversionals\
-    var\
-    auto_tactic\
-    dtactic\
+    $(SUPPORT)/tactics/top_tacticals\
+    $(SUPPORT)/tactics/top_conversionals\
+    $(SUPPORT)/tactics/var\
+    $(SUPPORT)/tactics/auto_tactic\
+    $(SUPPORT)/tactics/dtactic\
     base_trivial\
     base_rewrite\
-    summary\
-    comment\
-    mptop
+    $(SUPPORT)/display/summary\
+    $(SUPPORT)/display/comment\
+    $(SUPPORT)/shell/mptop
 
 TheoryDocument(base, $(PRINT_THEORIES))
 
@@ -35,6 +34,6 @@ TheoryDocument(base, $(PRINT_THEORIES))
 # Clean up
 #
 clean:
-    $(CLEAN)
+    $(CLEAN) base.tex base-body.tex
 
 all: theory$(LIB_SUFFIX)

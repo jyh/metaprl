@@ -34,9 +34,17 @@ MPFILES =\
 Theory($(MPFILES))
 
 #
+# Documentation
+#
+PRINT_THEORIES =\
+    fol_theory
+
+TheoryDocument(fol, $(PRINT_THEORIES))
+
+#
 # Clean up
 #
 clean:
-    $(CLEAN)
+    $(CLEAN) fol.tex fol-body.tex
 
 all: theory$(LIB_SUFFIX)

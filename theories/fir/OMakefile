@@ -5,6 +5,8 @@ OCAMLINCLUDES +=\
 	$(addprefix -I , $(SUPPORT_DIRS))\
 	-I ../base
 
+MLZFILES = mfir_theory
+
 # Library files
 MPFILES = \
    mfir_auto \
@@ -32,9 +34,35 @@ MPFILES = \
 
 Theory($(MPFILES))
 
-MLZFILES = mfir_theory
+#
+# Documentation
+#
+PRINT_THEORIES =\
+    mfir_theory\
+    mfir_option\
+    mfir_bool\
+    mfir_token\
+    mfir_record\
+    mfir_int\
+    mfir_list\
+    mfir_int_set\
+    mfir_ty\
+    mfir_exp\
+    mfir_sequent\
+    mfir_util\
+    mfir_tr_base\
+    mfir_tr_types\
+    mfir_tr_atom_base\
+    mfir_tr_atom\
+    mfir_tr_store\
+    mfir_tr_exp
 
+TheoryDocument(fir, $(PRINT_THEORIES))
+
+#
+# Generic commands
+#
 clean:
-    $(CLEAN)
+    $(CLEAN) fir.tex fir-body.tex
 
 all: theory$(LIB_SUFFIX)

@@ -642,7 +642,7 @@ interactive test13 :
 	sequent { <H> >- 'x in int } -->
 	sequent { <H> >- 'y in int } -->
 	sequent { <H> >-
-		'x +@ ('x *@ 'y) +@ 'y +@ 1 =
+		'x +@ (('x *@ 'y) +@ ('y +@ 1)) =
 		eval_mpolyTerm{
 			addTerm{
 				varTerm{0};

@@ -251,6 +251,7 @@ The format specification corresponds roughly to the C specification.
 Each format argument takes a width and length specifier that
 corresponds to the C specification.
 
+@begin[quote]
 @begin[description]
 @item{d or i; convert an integer argument to signed decimal}
 @item{u; convert an integer argument to unsigned decimal}
@@ -279,6 +280,7 @@ corresponds to the C specification.
      @code{out_channel}.}
 @item{%; takes no argument and output one @tt{%} character.}
 @end[description]
+@end[quote]
 
 The @tt{Printf} module also provides several additional functions for
 printing on the standard channels.  The @tt{printf} function prints in

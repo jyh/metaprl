@@ -50,6 +50,7 @@ The syntax of a simple top-level declaration is as follows.
 @tt{let @emph{name} = @emph{expr}}
 @end[center]
 
+@noindent
 For example, the following code defines two variables $x$ and $y$ and
 adds them together to get a value for $z$.
 
@@ -62,6 +63,7 @@ val y : int = 2
 val z : int = 3
 @end[iverbatim]
 
+@noindent
 Definitions using @tt{let} can also be nested using the
 @tt{in} form.
 
@@ -104,6 +106,7 @@ rest of the file.
 - : int = 6
 @end[iverbatim]
 
+@noindent
 What is the value of $z$ in the following definition?
 
 @begin[iverbatim]
@@ -128,10 +131,10 @@ other.  They may be constructed, passed as arguments, and applied to
 arguments.  Like any other value, they may be named by using
 a @tt{let}.
 
-@begin[verbatim]
+@begin[iverbatim]
 # let incr = fun i -> i + 1;;
 val incr : int -> int = <fun>
-@end[verbatim]
+@end[iverbatim]
 
 Note the type @code{int -> int} for the function.  The @code{->} is
 for a @emph{function type}.  The type before the arrow is the type of
@@ -180,6 +183,7 @@ definition.
 val sum : int -> int -> int = <fun>
 @end[iverbatim]
 
+@noindent
 The application of @tt{sum} to only one argument is called a ``partial
 application.''
 

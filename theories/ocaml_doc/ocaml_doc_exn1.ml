@@ -98,11 +98,11 @@ using the @tt{try} keyword.  The syntax is as follows:
 
 @begin[center]
 @begin[tabular, l]
-@line{{@tt{try}@space e@space @tt{with}}}
-@line{{@phantom{$@space$ |} p_1 @space @tt{->} @space e_1}}
-@line{{$@space$ | p_2 @space @tt{->} @space e_2}}
+@line{{@tt{try}$@space$ e$@space$ @tt{with}}}
+@line{{@phantom{$@space$ |} p_1 $@space$ @tt{->} $@space$ e_1}}
+@line{{$@space$ | p_2 $@space$ @tt{->} $@space$ e_2}}
 @line{{@phantom{$@space$ |} $@vdots$}}
-@line{{$@space$ | p_n @space @tt{->} @space e_n}}
+@line{{$@space$ | p_n $@space$ @tt{->} $@space$ e_n}}
 @end[tabular]
 @end[center]
 

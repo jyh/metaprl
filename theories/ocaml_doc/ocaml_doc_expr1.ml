@@ -37,13 +37,13 @@ doc <:doc<
 @begin[doc]
 
 Many functional programming implementations include a significant
-runtime that defines a standard library and a garbage collector.  They
-also often include a toploop that can be used to interact with the
-system.  OCaml provides a compiler, a runtime, and a toploop.  By
-default, the toploop is called @tt[ocaml].  The toploop prints a
-prompt (@code{#}), reads an input expression, evaluates it, and prints
-the result .  Expressions in the toploop are terminated by a
-double-semicolon @code{;;}.
+runtime environment that defines a standard library and a garbage
+collector.  They also often include a toploop evaluator that can be used to
+interact with the system.  OCaml provides a compiler, a runtime, and a
+toploop.  By default, the toploop is called @tt[ocaml].  The toploop
+prints a prompt (@code{#}), reads an input expression, evaluates it,
+and prints the result .  Expressions in the toploop are terminated by
+a double-semicolon `@code{;;}'.
 
 @begin[iverbatim]
 % ocaml
@@ -61,42 +61,63 @@ Microsoft Windows).
 
 @section["ocaml-doc-expr1"]{Basic expressions}
 
-OCaml is a @emph{strongly typed} language---every expression must have
+OCaml is a @emph{strongly typed} language.  In OCaml every valid expression must have
 a type, and expressions of one type may not be used as expressions in
 another type.  There are no implicit coercions.  Normally, you do not
-have to input the types of expressions.  @emph{Type inference}
-@cite[DM82] is used to figure out the types for you.
+have to specify the types of expressions.  OCaml uses @emph{type inference}
+@cite[DM82] to figure out the types for you.
 
-The basic types are @code{unit}, @code{int}, @code{char}, @code{float},
+The primitive types are @code{unit}, @code{int}, @code{char}, @code{float},
 @code{bool}, and @code{string}.
 
 @subsection["ocaml-doc-expr-unit"]{@tt{unit}: the singleton type}
 
 The simplest type in OCaml is the @tt{unit} type, which contains one
-element: @code{()}.  This seems to be a rather silly type.  However,
-in a functional language every function must return a value; unit is
+element: @code{()}.  This type seems to be a rather silly.  However,
+in a functional language every function must return a value; @tt{unit} is
 commonly used as the value of a procedure that computes by
 side-effect.  It corresponds to the @code{void} type in C.
 
 @subsection["ocaml-doc-expr-int"]{@tt{int}: the integers}
 
 The @code{int} type is the type of signed integers: $@ldots, -2, -1,
-0, 1, 2, @ldots$.  The precision is finite.  On a 32-bit machine
-architecture, the precision is 31 bits (one bit is reserved for use by
-the runtime), and on a 64-bit architecture, the precision is
-63 bits.
+0, 1, 2, @ldots$ The precision is finite.  Integer values are
+represented by a machine word, minus one bit that is reserved for use
+by the garbage collector, so on a 32-bit machine architecture, the
+precision is 31 bits (one bit is reserved for use by the runtime), and
+on a 64-bit architecture, the precision is 63 bits.
 
-There are the usual expressions on integers
-@target["ocaml-doc-expr-plus"]{+} (addition),
-@target["ocaml-doc-expr-minus"]{-} (subtraction),
-@target["ocaml-doc-expr-star"]{*} (multiplication),
-@target["ocaml-doc-expr-div"]{/} (division), and
-@target["ocaml-doc-expr-mod"]{@tt{mod}} (remainder).
-In addition there are the normal shifting and masking operators on the
-binary representations of the numbers.
+Integers are usually specified in decimal, but there are several
+alternate forms.  In the following table the symbol $d$ denotes a
+decimal digit (`@code{0}'..`@code{9}'); $o$ denotes an octal digit
+(`@code{0}'..`@code{7}'); $b$ denotes a binary digit (`@code{0}' or
+`@code{1}'); and $h$ denotes a hexadecimal digit
+(`@code{0}'..`@code{9}', or `@code{a}'..`@code{f}', or
+`@code{A}'..`@code{F}').
 
 @begin[quote]
 @begin[tabular,ll]
+@line{{$ddd@ldots$}{an @code{int} specified in decimal.}}
+@line{{@code{0o}$ooo@ldots$}{an @code{int} specified in octal.}}
+@line{{@code{0b}$bbb@ldots$}{an @code{int} specified in binary.}}
+@line{{@code{0x}$hhh@ldots$}{an @code{int} specified in hexadecimal.}}
+@end[tabular]
+@end[quote]
+
+@noindent
+There are the usual operations on @code{int}s, including arithmetic
+and bitwise operations.
+
+@begin[quote]
+@begin[tabular,ll]
+@line{{-$i$}{negation.}}
+@line{{$i$ @target["ocaml-doc-expr-add"]{@tt{+}} $j$}{addition.}}
+@line{{$i$ @target["ocaml-doc-expr-sub"]{@tt{-}} $j$}{subtraction.}}
+@line{{$i$ @target["ocaml-doc-expr-mul"]{@tt{*}} $j$}{multiplication.}}
+@line{{$i$ @target["ocaml-doc-expr-div"]{@tt{/}} $j$}{division.}}
+@line{{$i$ @target["ocaml-doc-expr-mod"]{@tt{mod}} $j$}{remainder.}}
+
+@line{{@target["ocaml-doc-expr-lnot"]{@tt{lnot}} $i$}{bitwise-inverse.}}
 @line{{$i$ @target["ocaml-doc-expr-lsl"]{@tt{lsl}} $j$}{logical shift left $i @cdot 2^{j}$.}}
 
 @line{{$i$ @target["ocaml-doc-expr-lsr"]{@tt{lsr}} $j$}{logical shift right $i @div
@@ -105,8 +126,8 @@ binary representations of the numbers.
 @line{{$i$ @target["ocaml-doc-expr-asr"]{@tt{asl}} $j$}{arithmetic shift
    left $i @cdot 2^{j}$.}}
 
-@line{{$i$ @target["ocaml-doc-expr-asr"]{@tt{asr}} $j$}{arithmetic shift right $i @div
-   2^{j}$ (the sign of $i$ is preserved).}}
+@line{{$i$ @target["ocaml-doc-expr-asr"]{@tt{asr}} $j$}{arithmetic shift right $@lfloor i @div
+   2^{j} @rfloor$ (the sign of $i$ is preserved).}}
 
 @line{{$i$ @target["ocaml-doc-expr-land"]{@tt{land}} $j$}{bitwise-and.}}
 
@@ -117,30 +138,42 @@ binary representations of the numbers.
 @end[tabular]
 @end[quote]
 
+@begin[iverbatim]
+# 0b1100;;
+- : int = 12
+# 3 + 4 * 5;;
+- : int = 23
+# 0x100 lsl (2 + 6);;
+- : int = 65536
+@end[verbatim]
+
 @subsection["ocaml-doc-expr-float"]{@tt{float}: the floating-point numbers}
 
-The floating-point numbers provide fractional numbers.  The syntax of
-a floating point includes either a decimal point, or an exponent (base
-10) denoted by an E.  A digit is required before the decimal point.
-Here are a few examples.
+The floating-point numbers provide dynamically scalled ``floating
+point'' numbers.  The syntax of a floating point includes either a
+decimal point, or an exponent (base 10) denoted by an `@code{E}' or
+`@code{e}'.  A digit is required before the decimal point.  Here are a
+few examples:
 
 @begin[center]
 0.2, 2e7, 3.1415926, 31.415926e-1
 @end[center]
 
-The integer arithmetic operators @emph{do not work} with floating
-point values.  The corresponding operators include a `.': addition is
-@target["ocaml-doc-expr-plusf"]{+.}, subtraction is
-@target["ocaml-doc-expr-minusf"]{-.}, multiplication is
-@target["ocaml-doc-expr-starf"]{*.}, and division is
-@target["ocaml-doc-expr-divf"]{/.}.  There are also coercion functions
-@target["int-of-float"]{@tt{int_of_float}} and
-@target["float-of-int"]{@tt{float_of_int}}.
+The integer arithmetic operators (@code{+}, @code{-}, @code{*}, @code{/}, $@ldots$) @emph{do not work} with floating
+point values.  The corresponding operators include a `.' as follows:
+
+@begin[quote]
+@begin[tabular,ll]
+@line{{$x$ @target["ocaml-doc-expr-plusf"]{@tt{+.}} $y$}{floating-point addition.}}
+@line{{$x$ @target["ocaml-doc-expr-minusf"]{@tt{-.}} $y$}{floating-point subtraction.}}
+@line{{$x$ @target["ocaml-doc-expr-starf"]{@tt{*.}} $y$}{float-point multiplication.}}
+@line{{$x$ @target["ocaml-doc-expr-divf"]{@tt{/.}} $y$}{floating-point division.}}
+@line{{@target["int-of-float"]{@tt{int_of_float}} $x$}{@code{float} to @code{int} conversion.}}
+@line{{@target["float-of-int"]{@tt{float_of_int}} $i$}{@code{int} to @code{float} conversion.}}
+@end[tabular]
+@end[quote]
 
 @begin[iverbatim]
-% ocaml
-        Objective Caml version 3.08.0
-
 # 31.415926e-1;;
 - : float = 3.1415926
 # float_of_int 1;;
@@ -149,20 +182,53 @@ point values.  The corresponding operators include a `.': addition is
 - : int = 1
 # 3.1415926 *. 17.2;;
 - : float = 54.03539272
+# 1 + 2.0;;
+Characters 4-7:
+  1 + 2.0;;
+      ^^^
+This expression has type float but is here used with type int
 @end[iverbatim]
+
+The final expression fails to typcheck because the @code{int} operator
+@code{+} is used with the floating-point value @code{2.0}.
 
 @subsection["ocaml-doc-expr-char"]{@tt{char}: the characters}
 
-The character type is implemented as characters from the ASCII
-character set.  The syntax for a character constant uses single
-quotes.
+The character type @code{char} specifies characters from the ASCII
+character set.  The syntax for a character constants uses the single
+quote symbol @code{'}$c$@code{'}.
 
 @begin[iverbatim]
-'a', 'Z', '\120', '\t', '\r', '\n'
+'a', 'Z', ' ', 'W'
 @end[iverbatim]
 
-The numerical specification is in decimal, so @code{'\120'} is the
-ASCII character @tt{'x'}, not @tt{'P'} as it would be in octal.
+@noindent
+In addition, there are several kinds of escape sequences with an alternate syntax.
+Each escape sequence begins with the backslash character `@code{\}'.
+
+@begin[quote]
+@begin[tabular,ll]
+@line{{@code{'\\'}}{The backslash character itself.}}
+@line{{@code{'\''}}{The single-quote character.}}
+@line{{@code{'\t'}}{The tab character.}}
+@line{{@code{'\r'}}{The carraige-return character.}}
+@line{{@code{'\n'}}{The newline character.}}
+@line{{@code{'\b'}}{The backspace character.}}
+@line{{@code{'\}$ddd$@code{'}}{A decimal escape sequence.}}
+@line{{@code{'\x}$hh$@code{'}}{A hexadecimal escape sequence.}}
+@end[tabular]
+@end[quote]
+
+@noindent
+
+A decimal escape sequence must have exactly three decimal characters
+$d$, and specifies the ASCII character with the specified decimal
+code.  A hexadecimal escape sequence must have exactly two hexadecimal
+characters $h$.
+
+@begin[iverbatim]
+'a', 'Z', '\120', '\t', '\n', '\x7e'
+@end[iverbatim]
 
 There are functions for converting between characters and integers.
 The function @target["char-code"]{@tt{Char.code}} returns the integer
@@ -172,71 +238,148 @@ the character with the given ASCII code.  The
 @target[uppercase]{@tt["Char.uppercase"]} functions give the equivalent
 lower- or upper-case characters.
 
+@begin[iverbatim]
+# '\120';;
+- : char = 'x'
+# Char.code 'x';;
+- : int = 120
+# '\x7e';;
+- : char = '~'
+# Char.uppercase 'z';;
+- : char = 'Z'
+# Char.uppercase '[';;
+- : char = '['
+# Char.chr 32;;
+- : char = ' '
+@end[verbatim]
+
 @subsection["ocaml-doc-expr-string"]{@tt{string}: character strings}
 
-Character strings are a built-in type.  Unlike strings in C, character
-strings are not arrays of characters, and they do not use
-@code{'\000'} as a termination character.  The
-@target[string_length]{@tt{String.length}} function computes the
-length of the string.  The syntax for strings uses double-quotes.
-Characters in the string may use the @code{\ddd} syntax.
+In OCaml, character strings belong to a primitive type @code{string}.
+Unlike strings in C, character strings are not arrays of characters,
+and they do not use the null-character @code{'\000'} for termination.
+
+The syntax for strings uses the double-quote symbol `@code{"}' as
+a delimiter.  Characters in the string may use the escape sequences
+defined for characters.
 
 @begin[center]
 @begin[iverbatim]
-"Hello", " world\000 is not a terminator\n", "\120yz"
+"Hello", "The character '\000' is not a terminator", "\072\105"
 @end[iverbatim]
 @end[center]
 
+@noindent
 The @code{^} operator performs string concatenation.
 
 @begin[iverbatim]
-# "Hello " ^ "world\000 is not a terminator\n";;
-- : string = "Hello world\000 is not a terminator\n"
-# Printf.printf "%s" ("Hello " ^ "world\000 is not a terminator\n");;
-Hello world is not a terminator
+# "Hello " ^ " world\n";;
+- : string = "Hello world\n"
+# "The character '\000' is not a terminator";;
+- : string = "The character '\000' is not a terminator"
+# "\072\105";;
+- : string = "Hi"
 @end[iverbatim]
 
-Strings also allow random access.  The @code{s.[i]} operation gets
-character $i$ from string $s$, and the operation @code{s.[i] <- c}
-replaces character $i$ in string $s$ by character $c$.
+Strings also allow random access.  The expression @code{s.[i]} returns
+the $i$'th from string $s$; and the expression @code{s.[i] <- c}
+replaces the $i$'th in string $s$ by character $c$, returing a
+@code{unit} value.  The @target[String]{@tt{String}} module (see
+Section @refsection["ocaml-doc-string"]) also defines many functions
+to manipulate strings, including the
+@target[string_length]{@tt{String.length}} function, which returns the
+length of a string; and the @target[string_sub]{@tt{String.sub}}
+function, which returns a substring.
+
+@begin[iverbatim]
+# "Hello".[1];;
+- : char = 'e'
+# "Hello".[0] <- 'h';;
+- : unit = ()
+# String.length "Abcd\000";;
+- : int = 5
+# String.sub "Ab\000cd" 1 3;;
+- : string = "b\000c"
+@end[verbatim]
 
 @subsection["ocaml-doc-expr-bool"]{@tt{bool}: the Boolean values}
 
-There are only two Boolean values: @tt{true} and @tt{false}.  Every
-relation returns a Boolean value.  Logical negation is
-performed by the @tt{not} function.  The standard binary relations
-take two values of equal types and compare them in the normal way.
+The @code{bool} type is used to represent the Boolean values @tt{true}
+and @tt{false}.  Logical negation of Boolean values is performed by
+the @tt{not} function.
+
+There are several relations that can be used to compare values,
+returning @code{true} if the comparison holds and @code{false}
+otherwise.
 
 @begin[quote]
 @begin[tabular,ll]
-@line{{$x$ @code{=}  $y$}{$x$ is equal to $y$}}
-@line{{$x$ @code{<>} $y$}{$x$ is not equal to $y$}}
-@line{{$x$ @code{<}  $y$}{$x$ is less than $y$}}
-@line{{$x$ @code{<=} $y$}{$x$ is no more than $y$}}
-@line{{$x$ @code{>=} $y$}{$x$ is no less than $y$}}
-@line{{$x$ @code{>}  $y$}{$x$ is greater than $y$}}
+@line{{$x$ @code{=}  $y$}{$x$ is equal to $y$.}}
+@line{{$x$ @code{==} $y$}{$x$ is ``identical'' to $y$.}}
+@line{{$x$ @code{<>} $y$}{$x$ is not equal to $y$.}}
+@line{{$x$ @code{<}  $y$}{$x$ is less than $y$.}}
+@line{{$x$ @code{<=} $y$}{$x$ is no more than $y$.}}
+@line{{$x$ @code{>=} $y$}{$x$ is no less than $y$.}}
+@line{{$x$ @code{>}  $y$}{$x$ is greater than $y$.}}
 @end[tabular]
 @end[quote]
 
-These relations operate on values of @emph{arbitrary} type.  For the
-base types in this chapter, the comparison is what you would expect.
-For values of other types, the value is implementation-dependent.
+These relations operate on two values $x$ and $y$ having equal but
+arbitrary type.  For the primitive types in this chapter, the
+comparison is what you would expect.  For values of other types, the
+value is implementation-dependent, and in some cases may raise a
+runtime error.  For example, functions (discussed in the next chapter)
+cannot be compared.
 
-The logical operators are also defined: @code{&&} is conjunction, and
-@code{||} is disjunction.  Both operators are the ``short-circuit''
-versions: the second clause is not evaluated if the result can be
-determined from the first clause.  For example, in the following
-expression, the clause $3 > 4$ is not evaluated (which makes no
-difference at this point, but will make a difference when we add
-side-effects).
+The @code{==} deserves special mention, since we use the word
+``identical'' in an informal sense.  The exact semantics is this: if
+the expression ``$x$ @code{==} $y$'' evaluates to @code{true}, then so
+does the expression ``$x$ @code{=} $y$''.  However it is still
+possible for ``$x$ @code{=} $y$'' to be @code{true} even if ``$x$
+@code{==} $y$'' is not.  In the OCaml implementation from INRIA, the
+expression ``$x$ @code{==} $y$'' returns @code{true} only if the two
+values $x$ and $y$ are exactly the same value.  The comparison
+@code{==} is a constant-time operation that runs in a bounded number
+of machine instructions; the comparison @code{=} is not.
 
 @begin[iverbatim]
-# 1 < 2 || 3 > 4;;
+# 2 < 4;;
 - : bool = true
+# "A good job" > "All the tea in China";;
+- : bool = false
+# 2 + 6 = 8;;
+- : bool = true
+# 1.0 = 1.0;;
+- : bool = true
+# 1.0 == 1.0;;
+- : bool = false
+# 2 == 1 + 1;;
+- : bool = true
+@end[verbatim]
+
+Strings are compared lexicographically (in alphabetical-order), so the
+second example is @code{false} because the character `@code{l}' is
+greater than the space-character `@code{ }' in the ASCII character
+set.  The comparison ``@code{1.0 == 1.0}'' in this case returns
+@code{false} (because the 2 floating-point numbers were typed
+separately), but it performs normal comparison on @code{int} values.
+
+There are two logical operators: @code{&&} is conjunction (and), and
+@code{||} is disjunction (or).  Both operators are the
+``short-circuit'' versions: the second clause is not evaluated if the
+result can be determined from the first clause.
+
+@begin[iverbatim]
+# 1 < 2 || (1 / 0) > 0;;
+- : bool = true
+# 1 < 2 && (1 / 0) > 0;;
+Exception: Division_by_zero.
+# 1 > 2 && (1 / 0) > 0;;
+- : bool = false
 @end[iverbatim]
 
-There is also a conditional operator @tt{if $b$ then $e_1$ else
-$e_2$}.
+@noindent Conditionals are expressed with the syntax @tt{if $b$ then
+$e_1$ else $e_2$}.
 
 @begin[iverbatim]
 # if 1 < 2 then
@@ -249,18 +392,20 @@ $e_2$}.
 @section["ocaml-compiling"]{Compiling your code}
 
 If you wish to compile your code, you should place it in a file with
-the @tt{.ml} suffix.  There are two compilers: @tt[ocamlc] compiles to
+the @tt{.ml} suffix.  In INRIA OCaml, there are two compilers: @tt[ocamlc] compiles to
 byte-code, and @tt[ocamlopt] compiles to native machine code.  The
 native code is several times faster, but compile time is
 longer.  The usage is similar to @tt{cc}.  The double-semicolon
-terminators are not necessary in the source files; you may omit them
+terminators are not necessary in @code{.ml} source files; you may omit them
 if the source text is unambiguous.
 
 @begin[itemize]
-@item{To compile a single file, use @tt{ocamlc -g -c @emph{file}.ml}.
-This will produce a file @tt{@emph{file}.cmo}.  The @tt[ocamlopt]
-programs produces a file @tt{@emph{file}.cmx}.  The @code{-g} option
-includes debugging information in the output file.}
+
+@item{{To compile a single file, use @tt{ocamlc -g -c
+@emph{file}.ml}.  This will produce a file @tt{@emph{file}.cmo}.  The
+@tt[ocamlopt] programs produces a file @tt{@emph{file}.cmx}.  The
+@tt{-g} option is valid only for @tt{ocamlc}; it causes debugging
+information to be included in the output file.}}
 
 @item{To link together several files into a single executable, use
 @tt[ocamlc] to link the @tt{.cmo} files.  Normally, you would also
@@ -268,13 +413,11 @@ specify the @tt{-o @emph{program_file}} option to specify the output
 file (the default is @tt{a.out}).  For example, if you have two program
 files @tt{x.cmo} and @tt{y.cmo}, the command would be:
 
-@begin[center]
 @begin[iverbatim]
 % ocamlc -g -o program x.cmo y.cmo
 % ./program
 ...
-@end[iverbatim]
-@end[center]}
+@end[iverbatim]}
 @end[itemize]
 
 There is also a debugger @tt[ocamldebug] that you can use to debug

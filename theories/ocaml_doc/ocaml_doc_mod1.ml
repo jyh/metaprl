@@ -653,6 +653,7 @@ There are several commands that can be used.  The basic commands are
 @code{run}, @code{step}, @code{next}, @code{break}, @code{list},
 @code{print}, and @code{goto}.
 
+@begin[quote]
 @begin[description]
 @item{run; Start or continue execution of the program.}
 @item{break @@ module linenum; Set a breakpoint on line @emph{linenum}
@@ -670,6 +671,7 @@ There are several commands that can be used.  The basic commands are
    evaluate the function, a return control to the debugger when the
    function completes.  Otherwise, step forward one time step.}
 @end[description]
+@end[quote]
 
 For debugging the @code{test} program, we need to know the line
 numbers.  Let's set a breakpoint in the @code{loop} function, which

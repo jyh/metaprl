@@ -44,9 +44,11 @@ open Top_conversionals
 open Itt_int_ext
 
 topval bnot_lt2geC : conv
-topval ltInConcl2HypT : term -> tactic
+topval ltInConcl2HypT : tactic
 
 topval anyArithRel2geT : int -> tactic
+
+topval arithRelInConcl2HypT : tactic
 
 topval add_BubblePrimitiveC : conv
 topval add_BubbleStepC : term -> conv

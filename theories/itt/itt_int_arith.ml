@@ -176,8 +176,36 @@ interactive_rw bnot_lt2ge_rw :
 
 let bnot_lt2geC = bnot_lt2ge_rw
 
-let ltInConcl2HypT t p =
-   (rwh unfold_lt 0 thenMT magicT thenLT [idT;rwh bnot_lt2geC (-1)]) p
+let lt2ConclT p = (magicT thenLT [idT; rwh bnot_lt2geC (-1)] ) p
+
+let ltInConcl2HypT =
+   (rwh unfold_lt 0) thenMT lt2ConclT
+
+let gtInConcl2HypT p =
+   (rwh unfold_gt 0 thenMT ltInConcl2HypT ) p
+
+interactive_rw bnot_le2gt_rw :
+   ('a IN int) -->
+   ('b IN int) -->
+   "assert"{bnot{le_bool{'a; 'b}}} <--> ('a > 'b)
+
+let bnot_le2gtC = bnot_le2gt_rw
+
+let leInConcl2HypT =
+   (rwh unfold_le 0 thenMT magicT thenLT [idT;rwh bnot_le2gtC (-1)])
+
+let geInConcl2HypT p =
+   (rwh unfold_ge 0 thenMT leInConcl2HypT) p
+
+let arithRelInConcl2HypT p =
+   let g=Sequent.goal p in
+   let t=Refiner.Refiner.TermMan.nth_concl g 1 in
+(*      print_term stdout t; *)
+   if is_lt_term t then ltInConcl2HypT p
+   else if is_gt_term t then gtInConcl2HypT p
+   else if is_le_term t then leInConcl2HypT p
+   else if is_ge_term t then geInConcl2HypT p
+   else idT p
 
 interactive ge_addMono 'H :
    sequent [squash] { 'H >- 'a IN int } -->
@@ -328,10 +356,10 @@ let findContradRelT p =
 *)
    let g=Sequent.goal p in
    let l = Arith.TermHyps.collect good_term g in
-(**) begin
+(* begin
            List.map (fun x->let (_,t)=(Refiner.Refiner.TermMan.nth_hyp g x)
                      in print_term stdout t) l;
-(**)
+*)
    let ar=Array.of_list l in
    match Arith.TG.solve (g,ar) with
       Arith.TG.Int (_,r),_ ->
@@ -356,13 +384,15 @@ let findContradRelT p =
             prerr_endline "";
             failT p
          end
-end
 
 (* Finds and proves contradiction among ge-relations
  *)
-let arithT = (onAllHypsT anyArithRel2geT)
-(*   thenMT (onAllHypsT tryReduce_geT)
+let arithT = arithRelInConcl2HypT thenMT
+   (onAllHypsT anyArithRel2geT)
+(*
+   thenMT (onAllHypsT tryReduce_geT)
 *)
+
    thenMT findContradRelT
    thenMT reduceContradRelT (-1)
 

@@ -542,13 +542,6 @@ interactive_rw ge_addContract_rw3 {| reduce |} :
    ( 'a in int ) -->
    ((number[i:n] +@ 'a) >= (number[j:n] +@ 'a)) <--> (number[i:n] >= number[j:n])
 
-(*
-   Reduce contradictory relation a>=a+b where b>0.
- *)
-let reduceContradRelT =
-   rw ((addrC [0] normalizeC) thenC (addrC [1] normalizeC) thenC
-		 reduceC)
-
 interactive ge_addMono2 'c :
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->
@@ -658,7 +651,7 @@ let good_term t =
 
 (*
  * Caching
- *)
+
 let main_label="main"
 
 module TermPos=
@@ -739,22 +732,23 @@ let cacheT info = argfunT ( fun tac p ->
 	let aux_list = List.filter (fun (g,l) -> l<>main_label) aux_list in
 	assertListT info aux_list thenMT (tac thenAT (tryInfoT info)) thenMT (print_statT info)
 )
+*)
 
-let findContradRelT info = funT ( fun p ->
+let findContradRelT = funT ( fun p ->
 	let hyps=all_hyps p in
 	let aux (i,t) = good_term t in
 	let l=List.filter aux hyps in
 	let l'=List.flatten (List.map (term2inequality p) l) in
 	let l''=Arith.find_contradiction l' in
-	cacheT info (sumListT l'')
+	sumListT l''
 )
 
-let reduceIneqT = argfunT ( fun i p ->
-	if good_term (Sequent.nth_hyp p i) then
-		rw (allSubC normalizeC) i
-	else
-		failT
-)
+(*
+   Reduce contradictory relation a>=a+b where b>0.
+ *)
+let reduceContradRelT =
+   rw ((addrC [0] normalizeC) thenC (addrC [1] normalizeC) thenC
+		 reduceC)
 
 doc <:doc<
 	@begin[doc]
@@ -820,24 +814,10 @@ doc <:doc<
 
 (* Finds and proves contradiction among ge-relations
  *)
-let arith1 = funT (fun p ->
-   arithRelInConcl2HypT thenMT
-   (tryOnAllMCumulativeHypsT negativeHyp2ConclT)
-)
-
-let arith2 info = funT (fun p ->
-	let i=Sequent.hyp_count p in
-	cacheT info (reduceContradRelT i)
-)
-
-let arith3 = funT (fun p ->
-	let info=empty () in
-	((findContradRelT info) thenMT
-	(arith2 info))
-)
-
 let arithT = funT (fun p ->
-	arith1 thenMT arith3
+   arithRelInConcl2HypT thenMT
+   ((tryOnAllMCumulativeHypsT negativeHyp2ConclT) thenMT
+	(findContradRelT thenMT reduceContradRelT (-1)))
 )
 
 interactive test 'a 'b 'c :

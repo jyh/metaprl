@@ -33,5 +33,9 @@
 include Base_theory
 
 let _ =
-   Mp_mc_test_connect_ty.run_tests ();
-   Mp_mc_test_connect_exp.run_tests ()
+   let base_count = Mp_mc_test_connect_base.run_tests () in
+   let ty_count = Mp_mc_test_connect_ty.run_tests () in
+   let exp_count = Mp_mc_test_connect_exp.run_tests () in
+      Printf.printf "Number of base cases failed: %d\n" base_count;
+      Printf.printf "Number of ty cases failed: %d\n" ty_count;
+      Printf.printf "Number of exp cases failed: %d\n" exp_count

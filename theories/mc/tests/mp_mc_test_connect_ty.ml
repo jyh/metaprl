@@ -56,7 +56,10 @@ let print_head name fir_obj =
 let print_pass () =
    printf "\nTest passes.\n\n"
 
+let fail_count = ref 0
+
 let print_fail () =
+   fail_count := !fail_count + 1;
    printf "\n===> TEST FAILS! <===\n\n"
 
 (*************************************************************************
@@ -86,5 +89,8 @@ let test_tyEnum () =
  *************************************************************************)
 
 let run_tests () =
+   fail_count := 0;
+   Printf.printf "\n\n==> Beginning ty tests <==\n\n";
    test_tyInt     ();
-   test_tyEnum    ()
+   test_tyEnum    ();
+   !fail_count

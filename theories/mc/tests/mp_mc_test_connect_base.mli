@@ -2,6 +2,7 @@
  * Functional Intermediate Representation formalized in MetaPRL.
  *
  * A test program to test MC <--> MetaPRL FIR translation code.
+ * This module tests "basic" items.
  *
  * ----------------------------------------------------------------
  *
@@ -31,3 +32,10 @@
  *)
 
 include Base_theory
+
+(*
+ * Run all the tests defined in this suite.
+ * Returns the number of test cases that failed.
+ *)
+
+val run_tests : unit -> int

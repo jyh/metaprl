@@ -35,6 +35,7 @@ include Base_theory
 
 (*
  * Run all the tests defined in this suite.
+ * Returns the number of cases that failed.
  *)
 
-val run_tests : unit -> unit
+val run_tests : unit -> int

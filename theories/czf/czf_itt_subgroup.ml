@@ -1,3 +1,5 @@
+include Czf_itt_equiv
+include Czf_itt_eq
 include Czf_itt_group
 include Czf_itt_subset
 include Czf_itt_isect
@@ -12,101 +14,85 @@ open Refiner.Refiner.TermSubst
 open Refiner.Refiner.RefineError
 open Mp_resource
 
-open Var
 open Tactic_type
+open Tactic_type.Sequent
 open Tactic_type.Tacticals
+open Var
+open Mptop
 
 open Base_dtactic
 open Base_auto_tactic
 
 (* subgroup{'g; 's} is a type representing the subgroup
- * of the group represented by 'g, where 's is the
- * carrier set for the specific subgroup.
+ * of the group represented by 'g, where 's is a label
+ * representing the subgroup which itself is also a group.
  *)
 declare subgroup{'g; 's}
+
+prim_rw unfold_subgroup : subgroup{'g; 's} <-->
+   (group{'g} & group{'s} & subset{car{'s}; car{'g}} & (all a: set. all b:set. (mem{'a; car{'s}} => mem{'b; car{'s}} => equal{op{'s; 'a; 'b}; op{'g; 'a; 'b}})))
 
 dform subgroup_df : except_mode[src] :: subgroup{'g; 's} =
    `"subgroup(" slot{'g} `"; " slot{'s} `")"
 
-(* Axioms *)
+(*
+ * Axioms
+ *)
 interactive subgroup_type {| intro [] |} 'H :
    sequent [squash] { 'H >- 'g IN label } -->
-   sequent [squash] { 'H >- isset{'s} } -->
+   sequent [squash] { 'H >- 's IN label } -->
+   sequent ['ext] { 'H >- group{'g} } -->
+   sequent ['ext] { 'H >- group{'s} } -->
    sequent ['ext] { 'H >- "type"{subgroup{'g; 's}} }
 
 interactive subgroup_intro {| intro [] |} 'H :
    sequent [squash] { 'H >- 'g IN label } -->
-   sequent [squash] { 'H >- isset{'s} } -->
+   sequent [squash] { 'H >- 's IN label } -->
    sequent ['ext] { 'H >- group{'g} } -->
-   sequent ['ext] { 'H >- subset{'s; car{'g}} } -->
-   sequent ['ext] { 'H; a: set; b: set; x: mem{'a; 's}; y: mem{'b; 's} >- mem{op{'g; 'a; 'b}; 's} } -->
-   sequent ['ext] { 'H >- mem{id{'g}; 's} } -->
-   sequent ['ext] { 'H; a: set; b: mem{'a; 's} >- mem{inv{'g; 'a}; 's} } -->
+   sequent ['ext] { 'H >- group{'s} } -->
+   sequent ['ext] { 'H >- subset{car{'s}; car{'g}} } -->
+   sequent ['ext] { 'H; a: set; b: set; x: mem{'a; car{'s}}; y: mem{'b; car{'s}} >- equal{op{'s; 'a; 'b}; op{'g; 'a; 'b}} } -->
    sequent ['ext] { 'H >- subgroup{'g; 's} }
 
-interactive subgroup_car_elim (*{| elim [SelectOption 1] |}*) 'H 'J :
-   sequent [squash] { 'H; x: subgroup{'g; 's}; 'J['x] >- 'g IN label } -->
-   sequent [squash] { 'H; x: subgroup{'g; 's}; 'J['x] >- isset{'s} } -->
-   sequent ['ext] { 'H; x: subgroup{'g; 's}; 'J['x] >- group{'g} } -->
-   sequent ['ext] { 'H; x: subgroup{'g; 's}; 'J['x]; y: subset{'s; car{'g}} >- 'C['x] } -->
-   sequent ['ext] { 'H; x: subgroup{'g; 's}; 'J['x] >- 'C['x] }
+interactive subgroup_equiv_elim {| elim [] |} 'H 'J 's :
+   sequent [squash] { 'H; x: equiv{car{'g}; 'R}; 'J['x] >- 'g IN label } -->
+   sequent [squash] { 'H; x: equiv{car{'g}; 'R}; 'J['x] >- 's IN label } -->
+   sequent [squash] { 'H; x: equiv{car{'g}; 'R}; 'J['x] >- isset{'R} } -->
+   sequent ['ext] { 'H; x: equiv{car{'g}; 'R}; 'J['x] >- subgroup{'g; 's} } -->
+   sequent ['ext] { 'H; x: equiv{car{'g}; 'R}; 'J['x]; y: equiv{car{'s}; 'R} >- 'C['x] } -->
+   sequent ['ext] { 'H; x: equiv{car{'g}; 'R}; 'J['x] >- 'C['x] }
 
-interactive subgroup_op_elim (*{| elim [SelectOption 2] |}*) 'H 'J 'a 'b :
-   sequent [squash] { 'H; x: subgroup{'g; 's}; 'J['x] >- 'g IN label } -->
-   sequent [squash] { 'H; x: subgroup{'g; 's}; 'J['x] >- isset{'s} } -->
-   sequent ['ext] { 'H; x: subgroup{'g; 's}; 'J['x] >- group{'g} } -->
-   sequent [squash] { 'H; x: subgroup{'g; 's}; 'J['x] >- isset{'a} } -->
-   sequent [squash] { 'H; x: subgroup{'g; 's}; 'J['x] >- isset{'b} } -->
-   sequent ['ext] { 'H; x: subgroup{'g; 's}; 'J['x] >- mem{'a; 's} } -->
-   sequent ['ext] { 'H; x: subgroup{'g; 's}; 'J['x] >- mem{'b; 's} } -->
-   sequent ['ext] { 'H; x: subgroup{'g; 's}; 'J['x]; y: mem{op{'g; 'a; 'b}; 's} >- 'C['x] } -->
-   sequent ['ext] { 'H; x: subgroup{'g; 's}; 'J['x] >- 'C['x] }
+interactive subgroup_id {| intro [] |} 'H :
+   sequent [squash] { 'H >- 'g IN label } -->
+   sequent [squash] { 'H >- 's IN label } -->
+   sequent [squash] { 'H >- isset{'R} } -->
+   sequent ['ext] { 'H >- subgroup{'g; 's} } -->
+   sequent ['ext] { 'H >- equiv{car{'g}; 'R} } -->
+   sequent ['ext] { 'H >- equiv{car{'g}; 'R; id{'s}; id{'g}} }
 
-interactive subgroup_id_elim (*{| elim [SelectOption 3] |}*) 'H 'J :
-   sequent [squash] { 'H; x: subgroup{'g; 's}; 'J['x] >- 'g IN label } -->
-   sequent [squash] { 'H; x: subgroup{'g; 's}; 'J['x] >- isset{'s} } -->
-   sequent ['ext] { 'H; x: subgroup{'g; 's}; 'J['x] >- group{'g} } -->
-   sequent ['ext] { 'H; x: subgroup{'g; 's}; 'J['x]; y: mem{id{'g}; 's} >- 'C['x] } -->
-   sequent ['ext] { 'H; x: subgroup{'g; 's}; 'J['x] >- 'C['x] }
-
-interactive subgroup_inv_elim (*{| elim [SelectOption 4] |}*) 'H 'J 'a :
-   sequent [squash] { 'H; x: subgroup{'g; 's}; 'J['x] >- 'g IN label } -->
-   sequent [squash] { 'H; x: subgroup{'g; 's}; 'J['x] >- isset{'s} } -->
-   sequent ['ext] { 'H; x: subgroup{'g; 's}; 'J['x] >- group{'g} } -->
-   sequent [squash] { 'H; x: subgroup{'g; 's}; 'J['x] >- isset{'a} } -->
-   sequent ['ext] { 'H; x: subgroup{'g; 's}; 'J['x] >- mem{'a; 's} } -->
-   sequent ['ext] { 'H; x: subgroup{'g; 's}; 'J['x]; y: mem{inv{'g; 'a}; 's}  >- 'C ['x] } -->
-   sequent ['ext] { 'H; x: subgroup{'g; 's}; 'J['x] >- 'C['x] }
-
-let subgroupEliminationT n p =
-   let n = if n<0 then (Sequent.hyp_count p) + n + 1 else n in
-   try
-      let sel = get_sel_arg p in
-      let l = Sequent.get_term_list_arg p "with" in
-      let i, j = Sequent.hyp_indices p n in
-      match sel, l with
-         1, [] ->
-            (subgroup_car_elim i j) p
-       | 2, [a; b] ->
-            (subgroup_op_elim i j a b) p
-       | 3, [] ->
-            (subgroup_id_elim i j) p
-       | 4, [a] ->
-            (subgroup_inv_elim i j a) p
-       | _ ->
-            raise (RefineError ("subgroupElimination", StringError ("select option is out of range ([1,2,3,4]) or wrong number of terms")))
-   with RefineError ("get_attribute",_) ->
-      raise (RefineError ("subgroupElimination", StringError ("need a select option and a term list")))
-
-let resource elim += (<<subgroup{'g; 's}>>,subgroupEliminationT)
+interactive subgroup_inv {| intro [] |} 'H :
+   sequent [squash] { 'H >- 'g IN label } -->
+   sequent [squash] { 'H >- 's IN label } -->
+   sequent [squash] { 'H >- isset{'R} } -->
+   sequent [squash] { 'H >- isset{'a} } -->
+   sequent ['ext] { 'H >- mem{'a; car{'s}} } -->
+   sequent ['ext] { 'H >- subgroup{'g; 's} } -->
+   sequent ['ext] { 'H >- equiv{car{'g}; 'R} } -->
+   sequent ['ext] { 'H >- equiv{car{'g}; 'R; inv{'s; 'a}; inv{'g; 'a}} }
 
 (* Properties *)
 (* The intersections of subgroups H1 and H2 of a group G is again a subgroup of G. *)
-interactive subgroup_isect {| intro [] |} 'H :
+interactive subgroup_isect 'H 'h1 'h2 :
    sequent [squash] { 'H >- 'g IN label } -->
-   sequent [squash] { 'H >- isset{'s1} } -->
-   sequent [squash] { 'H >- isset{'s2} } -->
-   sequent ['ext] { 'H >- group{'g} } -->
-   sequent ['ext] { 'H >- subgroup{'g; 's1} } -->
-   sequent ['ext] { 'H >- subgroup{'g; 's2} } -->
-   sequent ['ext] { 'H >- subgroup{'g; ."isect"{'s1; 's2}} }
+   sequent [squash] { 'H >- 'h1 IN label } -->
+   sequent [squash] { 'H >- 'h2 IN label } -->
+   sequent [squash] { 'H >- 'h IN label } -->
+   sequent ['ext] { 'H >- group{'h} } -->
+   sequent ['ext] { 'H >- subgroup{'g; 'h1} } -->
+   sequent ['ext] { 'H >- subgroup{'g; 'h2} } -->
+   sequent ['ext] { 'H >- equal{car{'h}; ."isect"{car{'h1}; car{'h2}}} } -->
+   sequent ['ext] { 'H; a: set; b: set; x: mem{'a; car{'h}}; x: mem{'b; car{'h}} >- equal{op{'h; 'a; 'b}; op{'g; 'a; 'b}} } -->
+   sequent ['ext] { 'H >- subgroup{'g; 'h} }
+
+let subgroupIsectT t1 t2 p =
+   subgroup_isect (hyp_count_addr p) t1 t2 p

@@ -220,13 +220,13 @@ let resource reduce +=
  * DISPLAY FORMS                                                        *
  ************************************************************************)
 
-dform set_df : set =
+dform set_df : except_mode[src] :: set =
    `"set"
 
-dform isset_df : parens :: "prec"[prec_apply] :: isset{'s} =
+dform isset_df : parens :: except_mode[src] :: "prec"[prec_apply] :: isset{'s} =
    slot{'s} `" set"
 
-dform collect_df : parens :: "prec"[prec_apply] :: collect{'T; x. 'a} =
+dform collect_df : parens :: except_mode[src] :: "prec"[prec_apply] :: collect{'T; x. 'a} =
    szone pushm[3] `"collect" " " slot{'x} `":" " " slot{'T} `"." hspace slot{'a} popm ezone
 
 dform set_ind_df : parens :: "prec"[prec_tree_ind] :: set_ind{'z; a, f, g. 'body} =

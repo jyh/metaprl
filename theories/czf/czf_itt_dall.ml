@@ -104,7 +104,7 @@ let resource reduce += << "dall"{collect{'T; x. 'f['x]}; y. 'A['y]} >>, reduce_d
  * DISPLAY FORMS                                                        *
  ************************************************************************)
 
-dform dall_df1 : parens :: "prec"[prec_lambda] :: "dall"{'s; x. 'A} =
+dform dall_df1 : parens :: except_mode[src] :: "prec"[prec_lambda] :: "dall"{'s; x. 'A} =
    pushm[0] forall slot{'x} " " Nuprl_font!member `"s " slot{'s} `"." slot{'A} popm
 
 (************************************************************************

@@ -163,11 +163,14 @@ declare wf_kind{ 'k }
  * @begin[doc]
  *
  * A proof of @tt[type_eq] says that two types (or type definitions)
- * @tt[ty1] and @tt[ty2] are equal in the kind @tt[k].
+ * @tt[ty1] and @tt[ty2] are equal in the kind @tt[k], and that @tt[k]
+ * is well-formed.  A proof of @tt[type_eq_list] says that two lists of types
+ * (or type definitions) are pointwise equal.
  * @end[doc]
  *)
 
 declare type_eq{ 'ty1; 'ty2; 'k }
+declare type_eq_list{ 'tyl1; 'tyl2; 'k }
 
 (*!
  * @begin[doc]
@@ -245,7 +248,7 @@ dform lambda_df : except_mode[src] ::
 
 dform union_val_df : except_mode[src] ::
    union_val[i:n]{ 'ty_var; 'atom_list } =
-   slot{'ty_var} `"[" slot[i:n] `"]" slot{'atom_list}
+   slot{'ty_var} `"[" slot[i:n] `"](" slot{'atom_list} `")"
 
 dform raw_data_df : except_mode[src] ::
    raw_data =
@@ -298,6 +301,10 @@ dform wf_kind_df : except_mode[src] ::
 dform type_eq_df : except_mode[src] ::
    type_eq{ 'ty1; 'ty2; 'k } =
    slot{'ty1} `"=" slot{'ty2} `":" slot{'k}
+
+dform type_eq_list_df : except_mode[src] ::
+   type_eq_list{ 'tyl1; 'tyl2; 'k } =
+   slot{'tyl1} `"=" slot{'tyl2} `":" slot{'k}
 
 dform has_type_df : except_mode[src] ::
    has_type[str:s]{ 't; 'ty } =

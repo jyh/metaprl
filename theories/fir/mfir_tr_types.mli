@@ -37,9 +37,3 @@ extends Mfir_basic
 extends Mfir_ty
 extends Mfir_exp
 extends Mfir_sequent
-
-(*
- * Equality of union case definitions.
- *)
-
-declare union_type_eq{ 'case1; 'case2 }

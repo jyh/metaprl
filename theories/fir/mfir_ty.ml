@@ -177,12 +177,23 @@ declare tyAll{ t. 'ty['t] }
  * @begin[doc]
  *
  * If @tt[var] is a ``packed'' existential value (see @hrefterm[atomTyPack]),
- * then the term @tt[tyProject] is the $i^{th}$ type in the packing, where
+ * then the term @tt[tyProject] is the $i$th type in the packing, where
  * indexing starts at zero.
  * @end[doc]
  *)
 
 declare tyProject[i:n]{ 'var }
+
+(*!
+ * @begin[doc]
+ *
+ * If @tt[poly_ty] is a parametrized type definition (see
+ * @hrefterm[tyDefPoly]), then @tt[do_tyApply] instantiates the type
+ * definition at the types in the list @tt[ty_list].
+ * @end[doc]
+ *)
+
+declare do_tyApply{ 'poly_ty; 'ty_list }
 
 (*!
  * @begin[doc]
@@ -213,8 +224,60 @@ declare unionCase{ 'elts }
 declare tyDefUnion[str:s]{ 'cases }
 
 (*!
+ * @begin[doc]
+ *
+ * The term @tt[nth_unionCase] returns the $n$th tuple space of a union
+ * definition.
+ * @end[doc]
+ *)
+
+declare nth_unionCase{ 'n; 'union_def }
+
+(**************************************************************************
+ * Rewrites.
+ **************************************************************************)
+
+(*!
+ * @begin[doc]
+ * @rewrites
+ *
+ * Instantiating a parameterized type at a given list of types is
+ * straightforward.
+ * @end[doc]
+ *)
+
+prim_rw reduce_do_tyApply_base :
+   do_tyApply{ 'poly_ty; nil } <-->
+   'poly_ty
+
+prim_rw reduce_do_tyApply_ind :
+   do_tyApply{ tyDefPoly{ t. 'ty['t] }; cons{ 'a; 'b } } <-->
+   do_tyApply{ 'ty['a]; 'b }
+
+(*!
  * @docoff
  *)
+
+(*!
+ * @begin[doc]
+ *
+ * Computing the $n$th tuple space of a union definition is straightforward,
+ * given that the cases are given as a list.
+ * @end[doc]
+ *)
+
+prim_rw reduce_nth_unionCase :
+   nth_unionCase{ number[n:n]; tyDefUnion[str:s]{ 'cases } } <-->
+   nth_elt{ number[n:n]; 'cases }
+
+(*!
+ * @docoff
+ *)
+
+let resource reduce += [
+   << nth_unionCase{ number[i:n]; tyDefUnion[str:s]{ 'cases } } >>,
+      reduce_nth_unionCase
+]
 
 (**************************************************************************
  * Display forms.
@@ -262,7 +325,7 @@ dform tyFun_df : except_mode[src] ::
 
 dform tyUnion_df : except_mode[src] ::
    tyUnion{ 'ty_var; 'ty_list; 'intset } =
-   bf["union"] `"(" slot{'ty_var} slot{'ty_list} `", " slot{'intset} `")"
+   bf["union"] `"(" slot{'ty_var} `"," slot{'ty_list} `"," slot{'intset} `")"
 
 dform tyTuple_df : except_mode[src] ::
    tyTuple[tc:s]{ 'ty_list } =
@@ -286,7 +349,7 @@ dform tyVar_df : except_mode[src] ::
 
 dform tyApply_df : except_mode[src] ::
    tyApply{ 'ty_var; 'ty_list } =
-   slot{'ty_var} slot{'ty_list}
+   slot{'ty_var} `"(" slot{'ty_list} `")"
 
 dform tyExists_df : except_mode[src] ::
    tyExists{ t. 'ty } =
@@ -299,6 +362,10 @@ dform tyAll_df : except_mode[src] ::
 dform tyProject_df : except_mode[src] ::
    tyProject[i:n]{ 'var } =
    slot{'var} `"." slot[i:n]
+
+dform do_tyApply_df : except_mode[src] ::
+   do_tyApply{ 'poly_ty; 'ty_list } =
+   `"((" slot{'poly_ty} `") " slot{'ty_list} `")"
 
 (*
  * Type definitions.
@@ -322,12 +389,16 @@ dform unionCase_df : except_mode[src] ::
 
 dform tyDefUnion_df1 : except_mode[src] ::
    tyDefUnion[str:s]{ 'cases } =
-   bf["union"] sub{it[str:s]} slot{'cases}
+   bf["union"] sub{it[str:s]} `"(" slot{'cases} `")"
 
 dform tyDefUnion_df2 : except_mode[src] ::
    tyDefUnion["normal"]{ 'cases } =
-   bf["union"] sub{bf["normal"]} slot{'cases}
+   bf["union"] sub{bf["normal"]} `"(" slot{'cases} `")"
 
 dform tyDefUnion_df3: except_mode[src] ::
    tyDefUnion["exn"]{ 'cases } =
-   bf["exn"] sub{bf["normal"]} slot{'cases}
+   bf["exn"] sub{bf["normal"]} `"(" slot{'cases} `")"
+
+dform nth_unionCase_df : except_mode[src] ::
+   nth_unionCase{ 'i; 'union } =
+   bf["nth"] `"(" slot{'i} `"," slot{'union} `")"

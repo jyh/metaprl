@@ -1,6 +1,5 @@
 (*
  * The Mfir_ty module declares terms to represent the FIR type system.
- * @end[doc]
  *
  * ------------------------------------------------------------------------
  *
@@ -34,6 +33,8 @@
 
 extends Base_theory
 extends Mfir_basic
+
+open Tactic_type.Conversionals
 
 (**************************************************************************
  * Declarations.
@@ -73,6 +74,8 @@ declare tyExists{ t. 'ty['t] }
 declare tyAll{ t. 'ty['t] }
 declare tyProject[i:n]{ 'var }
 
+declare do_tyApply{ 'poly_ty; 'ty_list }
+
 (*
  * Type definitions.
  *)
@@ -81,3 +84,14 @@ declare tyDefPoly{ t. 'ty['t] }
 declare unionCaseElt{ 'ty; 'boolean }
 declare unionCase{ 'elts }
 declare tyDefUnion[str:s]{ 'cases }
+
+declare nth_unionCase{ 'n; 'union_def }
+
+(**************************************************************************
+ * Rewrites.
+ **************************************************************************)
+
+topval reduce_do_tyApply_base : conv
+topval reduce_do_tyApply_ind : conv
+
+topval reduce_nth_unionCase : conv

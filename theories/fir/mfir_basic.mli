@@ -79,6 +79,7 @@ declare nil
 declare cons{ 'elt; 'tail }
 
 declare length{ 'l }
+declare nth_elt{ 'n; 'l }
 
 (*
  * Integer sets.
@@ -87,7 +88,10 @@ declare length{ 'l }
 declare interval{ 'left; 'right }
 declare intset{ 'interval_list }
 declare rawintset[precision:n, sign:s]{ 'interval_list }
+
 declare member{ 'num; 'set }
+declare subset{ 'smaller_set; 'larger_set }
+declare set_eq{ 'set1; 'set2 }
 
 declare singleton{ 'i }
 
@@ -134,6 +138,7 @@ topval reduce_int_ge : conv
 
 topval reduce_length_base : conv
 topval reduce_length_ind : conv
+topval reduce_nth_elt : conv
 
 (*
  * Integer sets.
@@ -145,7 +150,11 @@ topval reduce_member_intset_base : conv
 topval reduce_member_rawintset_ind : conv
 topval reduce_member_rawintset_base : conv
 
+topval reduce_subset_base : conv
+topval reduce_subset_ind : conv
+topval reduce_set_eq : conv
 topval reduce_singleton : conv
+
 topval reduce_intset_max : conv
 topval reduce_enum_max : conv
 topval reduce_rawintset_max_u8 : conv

@@ -150,11 +150,93 @@ prim wf_tyFun {| intro [] |} 'H :
 (*!
  * @begin[doc]
  *
- * ...
+ * Two union types are equal if they name the same union definition, select
+ * the same subset of cases, and instantiate the definition at the same types.
+ * The well-formedness of the sequent ensures that the definition is
+ * well-formed.  Note that we need two rules to distinguish between the
+ * cases in which $tv$ is a polymorphic union definition, and when it isn't.
  * @end[doc]
  *)
 
-(* XXX union equality *)
+(*
+ * Non-polymorphic case.
+ *)
+
+prim wf_tyUnion1 'H 'J :
+   (* Types the unions are instantiated at should be equal. *)
+   sequent [mfir] { 'H; tv: ty_def{ union_type[j:n]; 'def }; 'J['tv] >-
+      type_eq_list{ 'tyl1; 'tyl2; small_type } } -->
+
+   (* The subset of cases should actually be a subset. *)
+   sequent [mfir] { 'H; tv: ty_def{ union_type[j:n]; 'def }; 'J['tv] >-
+      subset{ 'intset1; intset{ interval{ 0; (number[j:n] -@ 1) } } } } -->
+
+   (* The subset of cases should be equal. *)
+   sequent [mfir] { 'H; tv: ty_def{ union_type[j:n]; 'def }; 'J['tv] >-
+      set_eq{ 'intset1; 'intset2 } } -->
+
+   (* Then the two tyUnion's are equal. *)
+   sequent [mfir] { 'H; tv: ty_def{ union_type[j:n]; 'def }; 'J['tv] >-
+      type_eq{ tyUnion{ 'tv; 'tyl1; 'intset1 };
+               tyUnion{ 'tv; 'tyl2; 'intset2 };
+               small_type } }
+   = it
+
+(*
+ * Polymorphic case.
+ *)
+
+prim wf_tyUnion2 'H 'J :
+   (* Types the unions are instantiated at should be equal. *)
+   sequent [mfir] { 'H;
+                    tv: ty_def{ polyKind[i:n]{ union_type[j:n] }; 'def };
+                    'J['tv] >-
+      type_eq_list{ 'tyl1; 'tyl2; small_type } } -->
+
+   (* The subset of cases should actually be a subset. *)
+   sequent [mfir] { 'H;
+                    tv: ty_def{ polyKind[i:n]{ union_type[j:n] }; 'def };
+                    'J['tv] >-
+      subset{ 'intset1; intset{ interval{ 0; (number[j:n] -@ 1) } } } } -->
+
+   (* The subset of cases should be equal. *)
+   sequent [mfir] { 'H;
+                    tv: ty_def{ polyKind[i:n]{ union_type[j:n] }; 'def };
+                    'J['tv] >-
+      set_eq{ 'intset1; 'intset2 } } -->
+
+   (* Then the two tyUnion's are equal. *)
+   sequent [mfir] { 'H;
+                    tv: ty_def{ polyKind[i:n]{ union_type[j:n] }; 'def };
+                    'J['tv] >-
+      type_eq{ tyUnion{ 'tv; 'tyl1; 'intset1 };
+               tyUnion{ 'tv; 'tyl2; 'intset2 };
+               small_type } }
+   = it
+
+(*!
+ * @docoff
+ *)
+
+let d_wf_tyUnion1 i p =
+   let j, k = Sequent.hyp_indices p i in
+      wf_tyUnion1 j k p
+
+let d_wf_tyUnion2 i p =
+   let j, k = Sequent.hyp_indices p i in
+      wf_tyUnion2 j k p
+
+let resource auto += [{
+   auto_name = "d_wf_tyUnion1";
+   auto_prec = fir_auto_prec;
+   auto_tac = onSomeHypT d_wf_tyUnion1;
+   auto_type = AutoNormal
+}; {
+   auto_name = "d_wf_tyUnion2";
+   auto_prec = fir_auto_prec;
+   auto_tac = onSomeHypT d_wf_tyUnion2;
+   auto_type = AutoNormal
+}]
 
 (*!
  * @begin[doc]
@@ -171,19 +253,10 @@ prim wf_tyTuple_box {| intro [] |} 'H :
                                    small_type } }
    = it
 
-prim wf_tyTuple_normal1 {| intro [] |} 'H :
-   sequent [mfir] { 'H >- type_eq{ 'h1; 'h2; large_type } } -->
-   sequent [mfir] { 'H >- type_eq{ tyTuple["normal"]{ 't1 };
-                                   tyTuple["normal"]{ 't2 };
-                                   small_type } } -->
-   sequent [mfir] { 'H >- type_eq{ tyTuple["normal"]{ cons{ 'h1; 't1 } };
-                                   tyTuple["normal"]{ cons{ 'h2; 't2 } };
-                                   small_type } }
-   = it
-
-prim wf_tyTuple_normal2 {| intro [] |} 'H :
-   sequent [mfir] { 'H >- type_eq{ tyTuple["normal"]{ nil };
-                                   tyTuple["normal"]{ nil };
+prim wf_tyTuple_normal {| intro [] |} 'H :
+   sequent [mfir] { 'H >- type_eq_list{ 'tyl1; 'tyl2; large_type } } -->
+   sequent [mfir] { 'H >- type_eq{ tyTuple["normal"]{ 'tyl1 };
+                                   tyTuple["normal"]{ 'tyl2 };
                                    small_type } }
    = it
 
@@ -220,12 +293,10 @@ prim wf_tyRawData {| intro [] |} 'H :
  * @end[doc]
  *)
 
-(*
- * BUG: Is exact equality really the way to go?
- *)
+(* BUG: Is exact equality really the way to go? *)
 
 prim wf_tyVar 'H 'J :
-   sequent [mfir] { 'H; tv: ty_def{ 'k; no_def}; 'J['tv] >-
+   sequent [mfir] { 'H; tv: ty_def{ 'k; 'def}; 'J['tv] >-
       type_eq{ tyVar{ 'tv }; tyVar{ 'tv }; 'k } }
    = it
 
@@ -247,26 +318,69 @@ let resource auto += {
 (*!
  * @begin[doc]
  *
- * ...
+ * Two type applications are equal if the name the same parametrized type,
+ * and instantiate that type at equal lists of types.
  * @end[doc]
  *)
 
-(*
- * BUG: If the context can have definitions, then there's
- * another rule for tyApply
+prim wf_tyApply1 'H 'J :
+   sequent [mfir] { 'H; tv: ty_def{ polyKind[i:n]{ 'k }; 'def }; 'J['tv] >-
+      int_eq{ number[i:n]; length{ 'tyl1 } } } -->
+   sequent [mfir] { 'H; tv: ty_def{ polyKind[i:n]{ 'k }; 'def }; 'J['tv] >-
+      type_eq_list{ 'tyl1; 'tyl2; small_type } } -->
+   sequent [mfir] { 'H; tv: ty_def{ polyKind[i:n]{ 'k }; 'def }; 'J['tv] >-
+      type_eq{ tyApply{ 'tv; 'tyl1 };
+               tyApply{ 'tv; 'tyl2 };
+               'k } }
+   = it
+
+(*!
+ * @begin[doc]
+ *
+ * If the context contains a definition, we can expand a type application.
+ * @end[doc]
  *)
 
-(*
-prim wf_tyApply 'H 'J :
-   PREMISES??
-   sequent [mfir] { 'H; tv: ty_def{ polyKind[i:n]{ 'k }; no_def }; 'J['tv] >-
-      type_eq{ tyApply{ 'tv; 'ty_list1 };
-               tyApply{ 'tv; 'ty_list2 };
-               small_type } }
+prim wf_tyApply2 'H 'J :
+   sequent [mfir] { 'H;
+                    tv: ty_def{ polyKind[i:n]{'k}; tyDefPoly{t. 'ty['t]} };
+                    'J['tv] >-
+      type_eq_list{ 'tyl1; 'tyl1; small_type } } -->
+   sequent [mfir] { 'H;
+                    tv: ty_def{ polyKind[i:n]{'k}; tyDefPoly{t. 'ty['t]} };
+                    'J['tv] >-
+      type_eq{ do_tyApply{ tyDefPoly{t. 'ty['t]}; 'tyl1 };
+               'ty2;
+               'k } } -->
+   sequent [mfir] { 'H;
+                    tv: ty_def{ polyKind[i:n]{'k}; tyDefPoly{t. 'ty['t]} };
+                    'J['tv] >-
+      type_eq{ tyApply{ 'tv; 'tyl1 }; 'ty2; 'k } }
    = it
-*)
 
-(* XXX tyApply *)
+(*!
+ * @docoff
+ *)
+
+let d_wf_tyApply1 i p =
+   let j, k = Sequent.hyp_indices p i in
+      wf_tyApply1 j k p
+
+let d_wf_tyApply2 i p =
+   let j, k = Sequent.hyp_indices p i in
+      wf_tyApply2 j k p
+
+let resource auto += [{
+   auto_name = "d_wf_tyApply1";
+   auto_prec = fir_auto_prec;
+   auto_tac = onSomeHypT d_wf_tyApply1;
+   auto_type = AutoNormal
+}; {
+   auto_name = "d_wf_tyApply2";
+   auto_prec = fir_auto_prec;
+   auto_tac = onSomeHypT d_wf_tyApply2;
+   auto_type = AutoNormal
+}]
 
 (*!
  * @begin[doc]
@@ -335,12 +449,9 @@ prim wf_tyDefPoly {| intro [] |} 'H 'a :
                                    small_type } }
    = it
 
-(*!
- * @begin[doc]
- *
- * The term @tt[union_type_eq] is used to test the equality of two union case
+(*
+ * The term union_type_eq is used to test the equality of two union case
  * definitions.  It is used in the equality judgments for union definitions.
- * @end[doc]
  *)
 
 declare union_type_eq{ 'case1; 'case2 }

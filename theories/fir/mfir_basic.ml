@@ -137,6 +137,16 @@ declare length{ 'l }
 
 (*!
  * @begin[doc]
+ *
+ * The term @tt[nth_elt] returns the $n$th element of a list @tt[l].
+ * Indexing starts at zero.
+ * @end[doc]
+ *)
+
+declare nth_elt{ 'n; 'l }
+
+(*!
+ * @begin[doc]
  * @modsubsection{Integer sets}
  *
  * The FIR uses integer sets in pattern matching expressions (see
@@ -161,12 +171,17 @@ declare rawintset[precision:n, sign:s]{ 'interval_list }
  * @begin[doc]
  *
  * The term @tt[member] is used to determine whether or not a number @tt[num]
- * is in a set or interval @tt[set].  The validity of the relation is
- * expressed using the representation of booleans above.
+ * is in a set or interval @tt[set].  The term @tt[subset] is used to
+ * determine whether or not @tt[smaller_set] is a subset @tt[larger_set].  The
+ * term @tt[set_eq] is used to test two sets for equality.  The validity of
+ * each of these relations is expressed using the representation of booleans
+ * above.
  * @end[doc]
  *)
 
 declare member{ 'num; 'set }
+declare subset{ 'smaller_set; 'larger_set }
+declare set_eq{ 'set1; 'set2 }
 
 (*!
  * @begin[doc]
@@ -378,6 +393,37 @@ let resource reduce += [
    << int_ge{ 'num1; 'num2 } >>, reduce_int_ge
 ]
 
+(*!
+ * @begin[doc]
+ * @modsubsection{List operations}
+ *
+ * Computing the length of a list and the $n$th element of a list
+ * is straightforward.
+ * @end[doc]
+ *)
+
+prim_rw reduce_length_base :
+   length{ nil } <-->
+   0
+
+prim_rw reduce_length_ind :
+   length{ cons{ 'h; 't } } <-->
+   ( 1 +@ length{ 't } )
+
+prim_rw reduce_nth_elt :
+   nth_elt{ 'n; cons{ 'h; 't } } <-->
+   ifthenelse{ int_eq{ 'n; 0 }; 'h; nth_elt{ ('n -@ 1); 't } }
+
+(*!
+ * @docoff
+ *)
+
+let resource reduce += [
+   << length{ nil } >>, reduce_length_base;
+   << length{ cons{ 'h; 't } } >>, reduce_length_ind;
+   << nth_elt{ 'n; cons{ 'h; 't } } >>, reduce_nth_elt
+]
+
 (*
  * The following five rewrites are documented below (sorta).
  *)
@@ -404,28 +450,48 @@ prim_rw reduce_member_rawintset_base :
 
 (*!
  * @begin[doc]
- * @modsubsection{List operations}
- *
- * Computing the length of a list is straightforward.
- * @end[doc]
- *)
-
-prim_rw reduce_length_base :
-   length{ nil } <-->
-   0
-
-prim_rw reduce_length_ind :
-   length{ cons{ 'h; 't } } <-->
-   ( 1 +@ length{ 't } )
-
-(*!
- * @begin[doc]
- * @modsubsection{Set membership}
+ * @modsubsection{Set operations}
  *
  * The set (interval) membership relation $<< member{ 'i; 'set } >>$
  * can be rewritten into a series of comparisons against the intervals
  * (endpoints) of $set$.  The rewrites are straightforward and we omit
  * an explicit listing of them.
+ *
+ * The set subset relation is limited to cases when the larger set is
+ * specified as exactly one interval, and when both sets are integer sets.
+ * @end[doc]
+ *)
+
+(* BUG: Really limitted form of the subset relation. *)
+
+prim_rw reduce_subset_base :
+   subset{ intset{ nil }; intset{ 'intervals } } <-->
+   "true"
+
+prim_rw reduce_subset_ind :
+   subset{ intset{ cons{ interval{'i; 'j}; 'tail } };
+           intset{ cons{ interval{'n; 'm}; nil } } } <-->
+   "and"{ int_le{ 'n; 'i };
+   "and"{ int_le{ 'j; 'm };
+          subset{ intset{ 'tail };
+                  intset{ cons{ interval{'n; 'm}; nil } } } } }
+
+(*!
+ * @begin[doc]
+ *
+ * Set equality is currently limited to testing whether or not two
+ * integer sets are specified in exactly the same way.
+ * @end[doc]
+ *)
+
+(* BUG: Really unintelligent form of equality being used here. *)
+
+prim_rw reduce_set_eq :
+   set_eq{ intset{ 'intervals }; intset{ 'intervals } } <-->
+   "true"
+
+(*!
+ * @begin[doc]
  *
  * Singleton sets can be rewritten into actual integer sets.
  * @end[doc]
@@ -486,7 +552,7 @@ prim_rw reduce_rawintset_max_u64 :
 
 prim_rw reduce_rawintset_max_s64 :
    rawintset_max[64, "signed"] <-->
-   intset{ cons{ interval{. -9223372036854775808; 9223372036854775807 }; nil } }
+   intset{cons{interval{. -9223372036854775808; 9223372036854775807}; nil}}
 
 (*!
  * @docoff
@@ -503,6 +569,17 @@ let resource reduce += [
       reduce_member_rawintset_ind;
    << member{ 'num; rawintset[p:n, s:s]{nil} } >>,
       reduce_member_rawintset_base;
+
+   << subset{ intset{ nil }; intset{ 'intervals } } >>,
+      reduce_subset_base;
+   << subset{ intset{ cons{ interval{'i; 'j}; 'tail } };
+              intset{ cons{ interval{'n; 'm}; nil } } } >>,
+      reduce_subset_ind;
+   << set_eq{ intset{ 'intervals }; intset{ 'intervals } } >>,
+      reduce_set_eq;
+   << singleton{ 'i } >>,
+      reduce_singleton;
+
    << intset_max >>,
       reduce_intset_max;
    << enum_max >>,
@@ -676,11 +753,15 @@ dform colons_df2 :
    mfir_list_colons{cons{'last_elt; 'first_elts}} =
    mfir_list_colons{'first_elts} `" :: " slot{'last_elt}
 
-(* List length operator. *)
+(* List operators. *)
 
 dform length_df : except_mode[src] ::
    length{ 'l } =
    bf["length"] `"(" slot{'l} `")"
+
+dform nth_elt_df : except_mode[src] ::
+   nth_elt{ 'n; 'l } =
+   bf["nth"] `"(" slot{'n} `"," slot{'l} `")"
 
 (*
  * Integer sets.
@@ -713,9 +794,17 @@ dform member_df : except_mode[src] ::
    member{ 'num; 'set } =
    slot{'num} member slot{'set}
 
+dform subset_df : except_mode[src] ::
+   subset{ 'smaller_set; 'larger_set } =
+   slot{'smaller_set} subseteq slot{'larger_set}
+
+dform set_eq : except_mode[src] ::
+   set_eq{ 'set1; 'set2 } =
+   slot{'set1} `"=" slot{'set2}
+
 dform singleton_df : except_mode[src] ::
    singleton{ 'i } =
-   bf["singleton"] `"[" slot{'i} `"]"
+   `"{" slot{'i} `"}"
 
 dform intset_max_df : except_mode[src] ::
    intset_max =

@@ -53,7 +53,11 @@ extends Mfir_tr_types
  * @docoff
  *)
 
+open Tactic_type
+open Tactic_type.Tacticals
+open Base_auto_tactic
 open Base_dtactic
+open Mfir_auto
 
 (**************************************************************************
  * Rules.
@@ -62,6 +66,7 @@ open Base_dtactic
 (*!
  * @begin[doc]
  * @rules
+ * @modsubsection{Tuple and array values}
  *
  * Store values of a tuple types are represented as lists of atoms.
  * @end[doc]
@@ -98,6 +103,7 @@ prim ty_store_array2 {| intro [] |} 'H :
 
 (*!
  * @begin[doc]
+ * @modsubsection{Functions}
  *
  * The typing rules for functions are straightforward.  Note that for
  * $<< polyFun{ x. 'f['x] } >>$ to be well-formed, $f$ must be a function.
@@ -132,26 +138,123 @@ prim ty_store_polyFun2 {| intro [] |} 'H 'a :
 
 (*!
  * @begin[doc]
+ * @modsubsection{Union values}
  *
- * ...
+ * A value $<< union_val[i:n]{ 'tv; 'atom_list } >>$ belongs to a union type
+ * $<< tyUnion{'tv; 'tyl; singleton{number[i:n]}} >>$ if the type is
+ * well-formed, and if the atoms belong to the tuple space given by the $i$
+ * case of $tv$.  We need two rules for union values in order to distinguish
+ * between the cases when $tv$ is a polymorphic union definition, and when it
+ * isn't.
  * @end[doc]
  *)
 
-(* XXX union store values should go here. *)
+(*
+ * Non-polymorphic case.
+ *)
 
-(* gagh the next rule requires a lot of work.
-prim ty_store_union {| intro [] |} 'H :
-   sequent [mfir] { 'H >-
-      type_eq{ tyUnion{'ty_var; 'ty_list; singleton{number[i:n]}};
-               large_type } } -->
-   sequent [mfir] { 'H >-
-      has_type["store"]{ union_val[i:n]{ 'ty_var; 'atom_list };
-                         tyUnion{'ty_var; 'ty_list; singleton{number[i:n]}} }}
+prim ty_store_union1 'H 'J :
+   (* well-formedness of the union type. *)
+   sequent [mfir] { 'H;
+                    tv: ty_def{ union_type[k:n]; tyDefUnion[str:s]{'cases} };
+                    'J['tv] >-
+      type_eq{ tyUnion{'tv; nil; singleton{number[i:n]}};
+               tyUnion{'tv; nil; singleton{number[i:n]}};
+               small_type } } -->
+
+   (* check that the atoms have the right types. *)
+   sequent [mfir] { 'H;
+                    tv: ty_def{ union_type[k:n]; tyDefUnion[str:s]{'cases} };
+                    'J['tv] >-
+      has_type["union_atoms"]{'atom_list;
+                              nth_unionCase{number[i:n];
+                                            tyDefUnion[str:s]{'cases}}}} -->
+
+   (* then the union value is well-typed. *)
+   sequent [mfir] { 'H;
+                    tv: ty_def{ union_type[k:n]; tyDefUnion[str:s]{'cases} };
+                    'J['tv] >-
+      has_type["store"]{ union_val[i:n]{ 'tv; 'atom_list };
+                         tyUnion{'tv; nil; singleton{number[i:n]}} }}
    = it
-*)
+
+(*
+ * Polymorphic case.
+ *)
+
+prim ty_store_union2 'H 'J :
+   (* well-formedness of the union type. *)
+   sequent [mfir] { 'H;
+                    tv: ty_def{ polyKind[j:n]{'k}; tyDefPoly{t. 'ty['t]} };
+                    'J['tv] >-
+      type_eq{ tyUnion{'tv; cons{'a; 'b}; singleton{number[i:n]}};
+               tyUnion{'tv; cons{'a; 'b}; singleton{number[i:n]}};
+               small_type } } -->
+
+   (* check that the atoms have the right types. *)
+   sequent [mfir] { 'H;
+                    tv: ty_def{ polyKind[j:n]{'k}; tyDefPoly{t. 'ty['t]} };
+                    'J['tv] >-
+      has_type["union_atoms"]{'atom_list;
+                              nth_unionCase{number[i:n];
+                                            do_tyApply{tyDefPoly{t. 'ty['t]};
+                                                       cons{'a; 'b}}}}} -->
+
+   (* then the union value is well-typed. *)
+   sequent [mfir] { 'H;
+                    tv: ty_def{ polyKind[j:n]{'k}; tyDefPoly{t. 'ty['t]} };
+                    'J['tv] >-
+      has_type["store"]{ union_val[i:n]{ 'tv; 'atom_list };
+                         tyUnion{'tv; cons{'a; 'b}; singleton{number[i:n]}} }}
+   = it
+
+(*!
+ * @docoff
+ *)
+
+let d_ty_store_union1 i p =
+   let j, k = Sequent.hyp_indices p i in
+      ty_store_union1 j k p
+
+let d_ty_store_union2 i p =
+   let j, k = Sequent.hyp_indices p i in
+      ty_store_union2 j k p
+
+let resource auto += [{
+   auto_name = "d_ty_store_union1";
+   auto_prec = fir_auto_prec;
+   auto_tac = onSomeHypT d_ty_store_union1;
+   auto_type = AutoNormal
+}; {
+   auto_name = "d_ty_store_union2";
+   auto_prec = fir_auto_prec;
+   auto_tac = onSomeHypT d_ty_store_union2;
+   auto_type = AutoNormal
+}]
 
 (*!
  * @begin[doc]
+ *
+ * The next two rules check that the atoms used to initialize a union value
+ * have the appropriate types.
+ * @end[doc]
+ *)
+
+prim ty_store_union_atoms1 {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'elt; 'ty } } -->
+   sequent [mfir] { 'H >- has_type["union_atoms"]{ 'tail; 'rest } } -->
+   sequent [mfir] { 'H >-
+      has_type["union_atoms"]{ cons{ 'elt; 'tail };
+                               cons{ unionCaseElt{'ty; 'boolean}; 'rest } } }
+   = it
+
+prim ty_store_union_atoms2 {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["union_atoms"]{ nil; nil } }
+   = it
+
+(*!
+ * @begin[doc]
+ * @modsubsection{Raw data values}
  *
  * Raw data is represented abstractly as the value $<< raw_data >>$.
  * @end[doc]

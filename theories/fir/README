@@ -16,6 +16,16 @@ serve as notes to himself.  They may not make sense to others.
       1) Build up a context that has all the declarations we'll need.
       2) Type check the context.
       3) Type check each definition given the context.
+   I have this sneaking suspicion that we're going to need type definitions
+   as well.  Without them, I don't see how we can type-check values of
+   a union type.
+
+-- polyKind: At some point, I should try to simplify it.  It seems to be
+   causing many rules to multiply into two cases when that does not
+   necessarily have to be the case I think.
+
+-- Documentation: I'll try to maintain it, but I will plan on doing a massive
+   clean-up at the end of summer (right before classes start).
 
 Notable differences from the actual Mojave FIR:
 

@@ -79,4 +79,5 @@ declare no_def
 
 declare wf_kind{ 'k }
 declare type_eq{ 'ty1; 'ty2; 'k }
+declare type_eq_list{ 'tyl1; 'tyl2; 'k }
 declare has_type[str:s]{ 't; 'ty }

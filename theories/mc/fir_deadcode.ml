@@ -31,7 +31,7 @@
  *)
 
 include Fir_exp
-include Fir_eval
+include Mp_mc_fir_eval
 
 open Top_conversionals
 open Tactic_type.Conversionals

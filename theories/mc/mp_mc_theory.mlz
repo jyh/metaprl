@@ -33,6 +33,6 @@
 include Mp_mc_set
 include Fir_ty
 include Fir_exp
-include Fir_eval
+include Mp_mc_fir_eval
 include Fir_deadcode
 include Fir_const_elim

@@ -44,6 +44,9 @@ Notes to myself (things to do, but only if I feel so inclined):
          mllib/bitset
 -  Get a better understanding of MC code.
    .  What the heck is geoff's home dir doing in lib/cutil/Conscript
+-  "open Bad_module" doesn't seme to be caught by prlc.
+-  ensemble/thread_refiner.mli or somethign... wants to be a .mlz
+-  is the naml front-end working?
 
 Scratch space (random thoughts to myself):
 --------------------------------------------------------------------------

@@ -163,25 +163,11 @@ declare wf_kind{ 'k }
  * @begin[doc]
  *
  * A proof of @tt[type_eq] says that two types (or type definitions)
- * @tt[ty1] and @tt[ty2] are equal in the kind @tt[k].  The two subterm
- * form of @tt[type_eq] is degenerate, and says that a type @tt[ty] is equal
- * to itself in the kind @tt[k].
+ * @tt[ty1] and @tt[ty2] are equal in the kind @tt[k].
  * @end[doc]
  *)
 
 declare type_eq{ 'ty1; 'ty2; 'k }
-
-define unfold_type_eq :
-   type_eq{ 'ty; 'k } <-->
-   type_eq{ 'ty; 'ty; 'k }
-
-(*!
- * @docoff
- *)
-
-let resource reduce += [
-   << type_eq{ 'ty; 'k } >>, unfold_type_eq
-]
 
 (*!
  * @begin[doc]
@@ -309,13 +295,9 @@ dform wf_kind_df : except_mode[src] ::
    wf_kind{ 'k } =
    bf["wf_kind"] `"(" slot{'k} `")"
 
-dform type_eq_df1 : except_mode[src] ::
+dform type_eq_df : except_mode[src] ::
    type_eq{ 'ty1; 'ty2; 'k } =
    slot{'ty1} `"=" slot{'ty2} `":" slot{'k}
-
-dform type_eq_df2 : except_mode[src] ::
-   type_eq{ 'ty; 'k } =
-   slot{'ty} `":" slot{'k}
 
 dform has_type_df : except_mode[src] ::
    has_type[str:s]{ 't; 'ty } =

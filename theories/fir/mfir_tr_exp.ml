@@ -93,13 +93,14 @@ prim ty_letAtom {| intro [] |} 'H 'a :
  * passing style.  A function call is well-formed if the variable
  * $<< atomVar{'v} >>$ is a function, and if the arguments have the
  * appropriate types.  Note that the type of $<< atomVar{'v} >>$ must be a
- * function type that ``returns'' a value of type $<< tyEnum[0] >>$.
+ * function type that ``returns'' a value of type $<< tyEnum[0] >>$. Also note
+ * that in the two auxilary rules below (@tt[ty_tailCall_args1] and
+ * @tt[ty_tailCall_args2]), the well-formedness of the types is ensured by the
+ * sequent used in the application of the @tt[ty_tailCall] rule.
  * @end[doc]
  *)
 
 prim ty_tailCall 'H 'J :
-   sequent [mfir] { 'H; v: var_def{ tyFun{'t1; 't2}; no_def }; 'J['v] >-
-      type_eq{ tyEnum[0]; large_type } } -->
    sequent [mfir] { 'H; v: var_def{ tyFun{'t1; 't2}; no_def }; 'J['v] >-
       has_type["tailCall"]{ 'atom_list; tyFun{ 't1; 't2 } } } -->
    sequent [mfir] { 'H; v: var_def{ tyFun{'t1; 't2}; no_def }; 'J['v] >-
@@ -107,7 +108,6 @@ prim ty_tailCall 'H 'J :
    = it
 
 prim ty_tailCall_args1 {| intro [] |} 'H :
-   sequent [mfir] { 'H >- type_eq{ tyFun{ 't1; 't2 }; large_type } } -->
    sequent [mfir] { 'H >- has_type["atom"]{ 'h; 't1 } } -->
    sequent [mfir] { 'H >- has_type["tailCall"]{ 't; 't2 } } -->
    sequent [mfir] { 'H >-
@@ -115,7 +115,6 @@ prim ty_tailCall_args1 {| intro [] |} 'H :
    = it
 
 prim ty_tailCall_args2 {| intro [] |} 'H :
-   sequent [mfir] { 'H >- type_eq{ tyEnum[0]; large_type } } -->
    sequent [mfir] { 'H >- has_type["tailCall"]{ nil; tyEnum[0] } }
    = it
 

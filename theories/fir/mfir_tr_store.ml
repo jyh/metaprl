@@ -107,9 +107,7 @@ prim ty_store_array2 {| intro [] |} 'H :
  *)
 
 prim ty_store_lambda {| intro [] |} 'H 'a :
-   sequent [mfir] { 'H >-
-      type_eq{ tyFun{ 'arg_type; 'res_type }; large_type } } -->
-   sequent [mfir] { 'H >- type_eq{ 'arg_type; large_type } } -->
+   sequent [mfir] { 'H >- type_eq{ 'arg_type; 'arg_type; large_type } } -->
    sequent [mfir] { 'H; a: var_def{ 'arg_type; no_def } >-
       has_type["exp"]{ 'f['a]; 'res_type } } -->
    sequent [mfir] { 'H >-
@@ -117,7 +115,6 @@ prim ty_store_lambda {| intro [] |} 'H 'a :
    = it
 
 prim ty_store_polyFun1 {| intro [] |} 'H 'a :
-   sequent [mfir] { 'H >- type_eq{ tyAll{ t. 'ty['t] }; large_type } } -->
    sequent [mfir] { 'H; a: ty_def{ small_type; no_def } >-
       has_type["exp"]{ polyFun{ y. 'f['a; 'y] }; 'ty['a] } } -->
    sequent [mfir] { 'H >-
@@ -126,7 +123,6 @@ prim ty_store_polyFun1 {| intro [] |} 'H 'a :
    = it
 
 prim ty_store_polyFun2 {| intro [] |} 'H 'a :
-   sequent [mfir] { 'H >- type_eq{ tyAll{ t. 'ty['t] }; large_type } } -->
    sequent [mfir] { 'H; a: ty_def{ small_type; no_def } >-
       has_type["exp"]{ lambda{ y. 'f['a; 'y] }; 'ty['a] } } -->
    sequent [mfir] { 'H >-

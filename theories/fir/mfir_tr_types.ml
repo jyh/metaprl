@@ -355,7 +355,6 @@ declare union_type_eq{ 'case1; 'case2 }
  *)
 
 prim wf_tyDefUnion {| intro [] |} 'H :
-   sequent [mfir] { 'H >- wf_kind{ union_type[i:n] } } -->
    sequent [mfir] { 'H >- int_eq{ length{ 'cases1 }; number[i:n] } } -->
    sequent [mfir] { 'H >- union_type_eq{ 'cases1; 'cases2 } } -->
    sequent [mfir] { 'H >- type_eq{ tyDefUnion[str:s]{ 'cases1 };

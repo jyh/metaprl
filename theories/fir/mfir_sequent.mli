@@ -79,11 +79,4 @@ declare no_def
 
 declare wf_kind{ 'k }
 declare type_eq{ 'ty1; 'ty2; 'k }
-declare type_eq{ 'ty; 'k }
 declare has_type[str:s]{ 't; 'ty }
-
-(**************************************************************************
- * Rewrites.
- **************************************************************************)
-
-topval unfold_type_eq : conv

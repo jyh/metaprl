@@ -74,7 +74,6 @@ open Mfir_auto
  *)
 
 prim ty_atomInt {| intro [] |} 'H :
-   sequent [mfir] { 'H >- type_eq{ tyInt; large_type } } -->
    sequent [mfir] { 'H >- member{ 'i; intset_max } } -->
    sequent [mfir] { 'H >- has_type["atom"]{ atomInt{'i}; tyInt } }
    = it
@@ -83,12 +82,13 @@ prim ty_atomInt {| intro [] |} 'H :
  * @begin[doc]
  *
  * An enumeration atom $<< atomEnum[i:n]{'n} >>$ has type $<< tyEnum[i:n] >>$
- * if $ 0 <<le>> n < i $, and if $<< tyEnum[i:n] >>$ is a well-formed type.
+ * if $ 0 <<le>> n < i $, and if $<< tyEnum[i:n] >>$ is a well-formed type
+ * (that is, if $<< member{ number[i:n]; enum_max } >>$).
  * @end[doc]
  *)
 
 prim ty_atomEnum {| intro [] |} 'H :
-   sequent [mfir] { 'H >- type_eq{ tyEnum[i:n]; large_type } } -->
+   sequent [mfir] { 'H >- member{ number[i:n]; enum_max } } -->
    sequent [mfir] { 'H >- "and"{int_le{0; 'n}; int_lt{'n; number[i:n]}} } -->
    sequent [mfir] { 'H >- has_type["atom"]{atomEnum[i:n]{'n}; tyEnum[i:n]} }
    = it
@@ -103,7 +103,9 @@ prim ty_atomEnum {| intro [] |} 'H :
  *)
 
 prim ty_atomRawInt 'H :
-   sequent [mfir] { 'H >- type_eq{ tyRawInt[p:n, sign:s]; large_type } } -->
+   sequent [mfir] { 'H >- type_eq{ tyRawInt[p:n, sign:s];
+                                   tyRawInt[p:n, sign:s];
+                                   large_type } } -->
    sequent [mfir] { 'H >- member{ 'i; rawintset_max[p:n, sign:s] } } -->
    sequent [mfir] { 'H >-
       has_type["atom"]{ atomRawInt[p:n, sign:s]{'i}; tyRawInt[p:n, sign:s] } }

@@ -118,16 +118,6 @@ interactive equiv_type {| intro [] |} 'H :
    sequent [squash] { 'H >- isset{'b} } -->
    sequent ['ext] { 'H >- "type"{equiv{'s; 'r; 'a; 'b}} }
 
-interactive equiv_intro {| intro [] |} 'H :
-   [wf] sequent [squash] { 'H >- isset{'s} } -->
-   [wf] sequent [squash] { 'H >- isset{'r} } -->
-   [wf] sequent [squash] { 'H >- isset{'a} } -->
-   [wf] sequent [squash] { 'H >- isset{'b} } -->
-   sequent ['ext] { 'H >- mem{'a; 's} } -->
-   sequent ['ext] { 'H >- mem{'b; 's} } -->
-   sequent ['ext] { 'H >- mem{pair{'a; 'b}; 'r} } -->
-   sequent ['ext] { 'H >- equiv{'s; 'r; 'a; 'b} }
-
 (*
  * An equivalence relation on a set S is a relation
  * on S satisfying reflexivity, symmetry, and transitivity.

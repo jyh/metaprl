@@ -39,6 +39,7 @@ declare xorIntOp
 
 (* Boolean comparisons. *)
 declare eqIntOp
+declare neqIntOp
 declare ltIntOp
 declare leIntOp
 declare gtIntOp
@@ -74,6 +75,7 @@ dform xorIntOp_df : except_mode[src] :: xorIntOp = `"^"
 
 (* Comparison. *)
 dform eqIntOp_df : except_mode[src] :: eqIntOp = `"="
+dform neqIntOp_df : except_mode[src] :: neqIntOp = `"!="
 dform ltIntOp_df : except_mode[src] :: ltIntOp = `"<"
 dform leIntOp_df : except_mode[src] :: leIntOp = Nuprl_font!le
 dform gtIntOp_df : except_mode[src] :: gtIntOp = `">"
@@ -118,6 +120,8 @@ prim_rw reduce_xorIntOp : binOp{ xorIntOp; 'a1; 'a2; v. 'exp['v] } <-->*)
 (* Comparison. *)
 prim_rw reduce_eqIntOp : binOp{ eqIntOp; 'a1; 'a2; v. 'exp['v] } <-->
    'exp[ ifthenelse{ beq_int{ 'a1; 'a2 }; ftrue; ffalse } ]
+prim_rw reduce_neqIntOp : binOp{ neqIntOp; 'a1; 'a2; v. 'exp['v] } <-->
+   'exp[ ifthenelse{ bneq_int{ 'a1; 'a2 }; ftrue; ffalse } ]
 prim_rw reduce_ltIntOp : binOp{ ltIntOp; 'a1; 'a2; v. 'exp['v] } <-->
    'exp[ ifthenelse{ lt_bool{ 'a1; 'a2 }; ftrue; ffalse } ]
 prim_rw reduce_leIntOp : binOp{ leIntOp; 'a1; 'a2; v. 'exp['v] } <-->
@@ -149,6 +153,7 @@ let resource reduce += [
    << binOp{ xorIntOp; 'a1; 'a2; v. 'exp['v] } >>, reduce_xorIntOp;*)
 
    << binOp{ eqIntOp; 'a1; 'a2; v. 'exp['v] } >>, reduce_eqIntOp;
+   << binOp{ neqIntOp; 'a1; 'a2; v. 'exp['v] } >>, reduce_neqIntOp;
    << binOp{ ltIntOp; 'a1; 'a2; v. 'exp['v] } >>, reduce_ltIntOp;
    << binOp{ leIntOp; 'a1; 'a2; v. 'exp['v] } >>, reduce_leIntOp;
    << binOp{ gtIntOp; 'a1; 'a2; v. 'exp['v] } >>, reduce_gtIntOp;

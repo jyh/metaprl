@@ -44,6 +44,7 @@ declare xorIntOp
 
 (* Boolean comparisons. *)
 declare eqIntOp
+declare neqIntOp
 declare ltIntOp
 declare leIntOp
 declare gtIntOp

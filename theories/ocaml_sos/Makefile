@@ -12,7 +12,7 @@ MLZFILES :=\
 	ocaml_theory
 
 # Library files
-NLFILES :=\
+MPFILES :=\
 	ocaml\
 	ocaml_base_df\
 	ocaml_expr_df\

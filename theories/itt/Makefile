@@ -7,7 +7,7 @@ INCLUDE := -I . -I ../tactic -I ../ocaml -I ../base -I $(ROOT)/lib
 OCAMLDEPFLAGS := -prl
 
 # Library files
-NLFILES :=\
+MPFILES :=\
 	itt_squash\
 	itt_equal\
 	itt_subtype\

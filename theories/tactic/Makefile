@@ -10,7 +10,7 @@ INCLUDE = -I . -I $(ROOT)/lib -I $(CAMLP4LIB)
 OCAMLDEPFLAGS := -prl_init
 
 # Library files
-NLFILES :=\
+MPFILES :=\
 	perv\
 	tactic_cache\
 	tactic_type\

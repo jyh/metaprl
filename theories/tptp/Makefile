@@ -12,7 +12,7 @@ LMFILES :=\
 	tptp_parse\
 	tptp_lex
 
-NLFILES :=\
+MPFILES :=\
 	tptp\
 	tptp_load\
 	tptp_cache\

@@ -10,7 +10,7 @@ OCAMLDEPFLAGS := -prl
 MLZFILES :=\
 	fol_theory
 
-NLFILES :=\
+MPFILES :=\
 	fol_type\
 	fol_false\
 	fol_true\

@@ -11,7 +11,7 @@ MLZFILES :=\
 	czf_theory
 
 # Library files
-NLFILES :=\
+MPFILES :=\
 	czf_itt_set\
 	czf_itt_eq\
 	czf_itt_member\

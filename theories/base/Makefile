@@ -11,7 +11,7 @@ MLZFILES :=\
 	base_theory
 
 # Library files
-NLFILES :=\
+MPFILES :=\
 	typeinf\
 	nuprl_font\
 	base_dform\

@@ -7,7 +7,7 @@ INCLUDE := -I . -I ../itt -I ../tactic -I ../ocaml -I ../base -I $(ROOT)/lib
 OCAMLDEPFLAGS := -prl
 
 # Library files
-NLFILES :=\
+MPFILES :=\
 	refl_term
 
 # Name of main libraris

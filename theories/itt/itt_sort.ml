@@ -236,7 +236,7 @@ interactive bounded_inclusion list{'A} 'u1 :
    [main] sequent ['ext] { <H> >- bounded{'u1; 'l; 'lt} } -->
    sequent ['ext] { <H> >- bounded{'u; 'l; 'lt} }
 
-let boundInclusionT t p =
+let boundInclusionT = argfunT (fun t p ->
    let goal = Sequent.concl p in
    let _, l, _ =
       try three_subterms goal with
@@ -251,7 +251,7 @@ let boundInclusionT t p =
                   raise (RefineError("boundInclusion", StringTermError("can not infer type",l)))
             end
    in
-      bounded_inclusion a_type t p
+      bounded_inclusion a_type t)
 
 interactive insert_inclusion 'A :
    [wf] sequent [squash] { <H> >- "type"{'A} } -->
@@ -264,7 +264,7 @@ interactive insert_inclusion 'A :
    [main] sequent ['ext] { <H> >- bounded{'u; 'l; 'lt} } -->
    sequent ['ext] { <H> >- bounded{'u; insert{'u1; 'l; 'lt}; 'lt} }
 
-let insertInclusionT p =
+let insertInclusionT = funT (fun p ->
    let goal = Sequent.concl p in
    let u, _, _ = three_subterms goal in
    let a_type =
@@ -272,7 +272,7 @@ let insertInclusionT p =
          RefineError _ ->
             infer_type p u
    in
-      insert_inclusion a_type p
+      insert_inclusion a_type)
 
 (*
  * Properties of insert

@@ -252,7 +252,7 @@ interactive independentFunctionFormation :
 (*
  * Application equality depends on our infering a type.
  *)
-let d_apply_equalT p =
+let d_apply_equalT = funT (fun p ->
    let _, app, app' = dest_equal (Sequent.concl p) in
    if
       (try Sequent.get_bool_arg p "d_auto" with RefineError _ -> false) &&
@@ -274,14 +274,14 @@ let d_apply_equalT p =
       else
          raise (RefineError ("d_apply_equalT", StringTermError ("inferred type is not a function type", f_type)))
    in
-      tac f_type p
+      tac f_type)
 
 let apply_equal_term = << 'f1 'a1 = 'f2 'a2 in 'T >>
 
 (*
  * Typehood of application depends on the ability to infer a type.
  *)
-let d_apply_typeT p =
+let d_apply_typeT = funT (fun p ->
    let app = dest_type_term (Sequent.concl p) in
    let f, _ = dest_apply app in
    let f_type =
@@ -299,9 +299,9 @@ let d_apply_typeT p =
          raise (RefineError ("d_apply_typeT", StringTermError ("inferred type is not a function type", f_type)))
    in
       if is_univ_term univ then
-         (univTypeT univ thenT withT f_type eqcdT) p
+         univTypeT univ thenT withT f_type eqcdT
       else
-         raise (RefineError ("d_apply_typeT", StringTermError ("inferred type is not a univ", univ)))
+         raise (RefineError ("d_apply_typeT", StringTermError ("inferred type is not a univ", univ))))
 
 let apply_type_term = << "type"{. 'f 'a} >>
 
@@ -314,14 +314,13 @@ let resource intro += [
  * D a hyp.
  * We take the argument.
  *)
-let d_hyp_fun i p =
-   let i = Sequent.get_pos_hyp_num p i in
-      try
-         let a = get_with_arg p in
-            independentFunctionElimination2 i a p
-      with
-         RefineError _ ->
-            independentFunctionElimination i p
+let d_hyp_fun = argfunT (fun i p ->
+   try
+      let a = get_with_arg p in
+         independentFunctionElimination2 i a
+   with
+      RefineError _ ->
+         independentFunctionElimination i)
 
 let resource elim += (fun_term, d_hyp_fun)
 
@@ -332,15 +331,15 @@ let resource elim += (fun_term, d_hyp_fun)
 (*
  * Takes two arguments.
  *)
-let fnExtensionalityT t1 t2 p =
+let fnExtensionalityT t1 t2 = funT (fun p ->
    if is_rfun_term t1 then
-      rfunction_extensionalityT t1 t2 p
+      rfunction_extensionalityT t1 t2
    else if is_dfun_term t1 then
-      dfun_extensionalityT t1 t2 p
+      dfun_extensionalityT t1 t2
    else if is_fun_term t1 then
       let t, _, _ = dest_equal (Sequent.concl p) in
-         independentFunctionExtensionality t1 t2 p
-   else raise (RefineError ("extensionalityT", StringTermError ("first arg is not a function type", t1)))
+         independentFunctionExtensionality t1 t2
+   else raise (RefineError ("extensionalityT", StringTermError ("first arg is not a function type", t1))))
 
 let fnExtenT t = fnExtensionalityT t t
 

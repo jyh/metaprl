@@ -226,7 +226,7 @@ doc <:doc< @docoff >>
 (* substitution *)
 
 
-let sqSubstConclT t p =
+let sqSubstConclT = argfunT (fun t p ->
    let a, _ = dest_squiggle t in
    let bind =
       try
@@ -240,12 +240,12 @@ let sqSubstConclT t p =
             let x = get_opt_var_arg "z" p in
                mk_xbind_term x (var_subst (Sequent.concl p) a x)
    in
-      squiggleSubstitution t bind p
+      squiggleSubstitution t bind)
 
 (*
  * Hyp substitution requires a replacement.
  *)
-let sqSubstHypT i t p =
+let sqSubstHypT i t = funT (fun p ->
    let a, _ = dest_squiggle t in
    let i = Sequent.get_pos_hyp_num p i in
    let bind =
@@ -260,7 +260,7 @@ let sqSubstHypT i t p =
             let z = get_opt_var_arg "z" p in
                mk_xbind_term z (var_subst (Sequent.nth_hyp p i) a z)
    in
-      squiggleHypSubstitution i t bind p
+      squiggleHypSubstitution i t bind)
 
 (*
  * General substition.

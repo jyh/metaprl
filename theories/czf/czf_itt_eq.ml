@@ -327,11 +327,11 @@ interactive eq_isset 'H fun_set{z. 'f['z]} :
    sequent ['ext] { <H>; z: set; <J['z]> >- isset{'f['z]} }
 
 doc <:doc< @docoff >>
-let funSetT i p =
+let funSetT = argfunT (fun i p ->
    let z = Sequent.nth_binding p i in
    let t = dest_isset (Sequent.concl p) in
    let t = mk_fun_set_term z t in
-      eq_isset (Sequent.get_pos_hyp_num p i) t p
+      eq_isset (Sequent.get_pos_hyp_num p i) t)
 
 doc <:doc< 
    @begin[doc]
@@ -423,23 +423,23 @@ doc <:doc<
    @docoff
    @end[doc]
 >>
-let setConclSubstT t p =
+let setConclSubstT = argfunT (fun t p ->
    let s1, s2 = dest_eq t in
    let goal = Sequent.concl p in
    let bind = var_subst_to_bind goal s1 in
-      (eq_concl_subst s1 s2 bind
-       thenLT [addHiddenLabelT "eq";
-               addHiddenLabelT "main";
-               addHiddenLabelT "wf"]) p
+      eq_concl_subst s1 s2 bind
+      thenLT [addHiddenLabelT "eq";
+              addHiddenLabelT "main";
+              addHiddenLabelT "wf"])
 
-let setHypSubstT t i p =
+let setHypSubstT t i = funT (fun p ->
    let s1, s2 = dest_eq t in
    let hyp = nth_hyp p i in
    let bind = var_subst_to_bind hyp s1 in
-      (eq_hyp_subst (get_pos_hyp_num p i) s1 s2 bind
-       thenLT [addHiddenLabelT "eq";
-               addHiddenLabelT "main";
-               addHiddenLabelT "wf"]) p
+      eq_hyp_subst (get_pos_hyp_num p i) s1 s2 bind
+      thenLT [addHiddenLabelT "eq";
+              addHiddenLabelT "main";
+              addHiddenLabelT "wf"])
 
 let setSubstT t i =
    if i = 0 then

@@ -379,8 +379,8 @@ let dest_set_ind = dest_dep0_dep3_term set_ind_opname
 (*
  * Typehood of isset{'s1}
  *)
-let d_isset_typeT p =
-   (rw (addrC [0] unfold_isset) 0 thenT dT 0) p
+let d_isset_typeT =
+   rw (addrC [0] unfold_isset) 0 thenT dT 0
 
 let isset_type_term = << "type"{isset{'s1}} >>
 
@@ -394,26 +394,25 @@ let eqSetT = equal_set
 (*
  * Assumption.
  *)
-let setAssumT i p =
-   isset_assum (get_pos_hyp_num p i) p
+let setAssumT = isset_assum
 
 (*
  * Split a set in a hyp or concl.
  *)
-let splitT t i p =
+let splitT t i = funT (fun p ->
    if i = 0 then
       let bind = var_subst_to_bind (Sequent.concl p) t in
-         (set_split_concl t bind
-          thenLT [addHiddenLabelT "wf";
-                  addHiddenLabelT "wf";
-                  addHiddenLabelT "main"]) p
+         set_split_concl t bind
+         thenLT [addHiddenLabelT "wf";
+                 addHiddenLabelT "wf";
+                 addHiddenLabelT "main"]
    else
       let hyp = nth_hyp p i in
       let bind = var_subst_to_bind hyp t in
-         (set_split_hyp (get_pos_hyp_num p i) t bind
-          thenLT [addHiddenLabelT "wf";
-                  addHiddenLabelT "wf";
-                  addHiddenLabelT "main"]) p
+         set_split_hyp (get_pos_hyp_num p i) t bind
+         thenLT [addHiddenLabelT "wf";
+                 addHiddenLabelT "wf";
+                 addHiddenLabelT "main"])
 
 (************************************************************************
  * AUTOMATION                                                           *

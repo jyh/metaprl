@@ -360,7 +360,7 @@ doc <:doc<
    @docoff
    The equality reasoning requires type inference.
 >>
-let d_spread_equalT tac p =
+let d_spread_equalT tac = funT (fun p ->
    let rt, spread, _ = dest_equal (Sequent.concl p) in
    let type_type = mk_xbind_term (maybe_new_var_arg p "v") rt in
    let _, _, pair, _ = dest_spread spread in
@@ -377,7 +377,7 @@ let d_spread_equalT tac p =
          RefineError _ ->
             type_type, infer_type p pair
    in
-      tac type_type pair_type p
+      tac type_type pair_type)
 
 doc <:doc< 
    @begin[doc]

@@ -115,6 +115,19 @@ let failWithT = Tacticals.failWithT
 doc <:doc< 
    @begin[doc]
    @begin[description]
+   @item{@tactic[funT]; When @i[tac] is a function from @tt[tactic_arg] to @tt[tactic]
+   (e.g. a function that takes a look at the current goal and choses the tactic to apply
+   based on what is being proven), then @tt[funT] @i[tac] would be the corresponding tactic.}
+   @end[description]
+  
+   @docoff
+   @end[doc]
+>>
+let funT = Tacticals.funT
+
+doc <:doc< 
+   @begin[doc]
+   @begin[description]
    @item{@tactic[nthAssumT];
    The @tt[nthAssumT] tactic proves a goal by @emph{assumption}.
    Technically, an assumption is a subgoal of the theorem being proved.
@@ -459,7 +472,8 @@ let seqOnMT = Tacticals.seqOnMT
 let completeMT = Tacticals.completeMT
 let labProgressT = Tacticals.labProgressT
 
-let thinMatchT thinT assum p =
+let thinMatchT thinT assum =
+   funT (fun p ->
    let goal = Sequent.goal p in
    let index = Match_seq.match_hyps
       (explode_sequent goal)
@@ -472,9 +486,10 @@ let thinMatchT thinT assum p =
           | None ->
                thinT j thenT tac (pred j)
    in
-      tac (Sequent.hyp_count p) p
+      tac (Sequent.hyp_count p))
 
-let nameHypT i v p =
+let nameHypT i v =
+   funT (fun p ->
    let v = Var.maybe_new_var_arg p v in
    let i = Sequent.get_pos_hyp_num p i - 1 in
    let goal = Sequent.goal p in
@@ -502,7 +517,7 @@ let nameHypT i v p =
    in
    let goal = mk_sequent_term eseq in
    let a = Sequent.num_assums p + 1 in
-      (cutT goal thenLT [removeHiddenLabelT; nthAssumT a]) p
+      cutT goal thenLT [removeHiddenLabelT; nthAssumT a])
 
 let rec nameHypsT is vs =
    match is, vs with

@@ -179,13 +179,12 @@ let sort_nodes = Sort.list compare
  * Debugging firstT.
  *)
 let debugT auto_tac =
-   let tac p =
-      eprintf "Auto: trying %s%t" auto_tac.auto_name eflush;
-      let res = (progressT auto_tac.auto_tac) p in
-         eprintf "\t success!%t" eflush;
-         res
-   in
-      { auto_tac with auto_tac = tac }
+   { auto_tac with 
+     auto_tac =
+      funT (fun _ ->
+         eprintf "Auto: trying %s%t" auto_tac.auto_name eflush;
+         progressT auto_tac.auto_tac)
+   }
 
 let map_progressT tac =
    { tac with auto_tac = progressT tac.auto_tac }
@@ -199,10 +198,11 @@ let completeP tac = (tac.auto_type == AutoComplete)
  * A list of tactics to try is constructed.
  * The earlier tactics should be tried first.
  *)
-let make_progressT goals tac p =
-   let goal = Sequent.goal p in
-   if List.exists (alpha_equal goal) goals then idT p
-   else tac (goal::goals) p
+let make_progressT goals tac =
+   funT (fun p ->
+      let goal = Sequent.goal p in
+      if List.exists (alpha_equal goal) goals then idT
+      else tac (goal::goals))
 
 let extract tactics =
    let tactics =
@@ -274,17 +274,14 @@ let rec check_progress goal = function
 (*
  * Actual tactics.
  *)
-let trivialT p =
-   let trivT, _, _ = get_resource_arg p get_auto_resource in
-      trivT p
+let trivialT =
+   funT (fun p -> let trivT, _, _ = get_resource_arg p get_auto_resource in trivT)
 
-let autoT p =
-   let _, autoT, _ = get_resource_arg p get_auto_resource in
-      autoT p
+let autoT =
+   funT (fun p -> let _, autoT, _ = get_resource_arg p get_auto_resource in autoT)
 
-let strongAutoT p =
-   let _, _, sAutoT = get_resource_arg p get_auto_resource in
-      sAutoT p
+let strongAutoT =
+   funT (fun p -> let _, _, sAutoT = get_resource_arg p get_auto_resource in sAutoT)
 
 let tcaT = tryT (completeT strongAutoT)
 

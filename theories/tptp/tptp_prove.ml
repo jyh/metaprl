@@ -489,7 +489,7 @@ let rec prove_wf p =
       if is_atomic_term goal then
          let t = dest_atomic goal in
             if is_t_term t then
-               t_atomic p
+               t_atomic
             else
                let v = get_apply_var t in
                let _ =
@@ -497,7 +497,7 @@ let rec prove_wf p =
                      eprintf "Tptp_prove.prove_wf: atomic %s%t" v eflush
                in
                let i = Sequent.get_decl_number p v in
-                  (atomicT i thenT prove_wf) p
+                  atomicT i thenT (funT prove_wf)
       else if is_type_term goal then
          let t = dest_type_term goal in
             if is_apply_term t then
@@ -507,145 +507,147 @@ let rec prove_wf p =
                      eprintf "Tptp_prove.prove_wf: type %s%t" v eflush
                in
                let i = Sequent.get_decl_number p v in
-                  (typeT i thenT prove_wf) p
+                  typeT i thenT (funT prove_wf)
             else
-               (dT 0 thenT prove_wf) p
+               dT 0 thenT (funT prove_wf)
       else
          raise (RefineError ("prove_wf", StringTermError ("goal not recognized", goal)))
+
+let prove_wf = funT prove_wf
 
 (*
  * Try the clause with the negation of the current clause.
  *)
-let rec neg_trivial i j p =
+let rec neg_trivial i j =
    if !debug_tptp then
       eprintf "Tptp_prove.neg_trivial: %d %d%t" i j eflush;
    if j < 0 then
       raise (RefineError ("neg_trivial", StringError "match not found"))
    else if j = i then
-      neg_trivial i (j - 1) p
+      neg_trivial i (j - 1)
    else if j > i then
-      ((dT i thenT nthHypT (j - 1)) orelseT neg_trivial i (j - 1)) p
+      (dT i thenT nthHypT (j - 1)) orelseT neg_trivial i (j - 1)
    else
-      ((dT i thenT nthHypT j) orelseT neg_trivial i (j - 1)) p
+      (dT i thenT nthHypT j) orelseT neg_trivial i (j - 1)
 
 (*
  * Try the negation of the clause with the current clause.
  *)
-let rec pos_trivial i j p =
+let rec pos_trivial i j =
    if !debug_tptp then
       eprintf "Tptp_prove.pos_trivial: %d %d%t" i j eflush;
    if j < 0 then
       raise (RefineError ("pos_trivial", StringError "match not found"))
    else if j = i then
-      pos_trivial i (j - 1) p
+      pos_trivial i (j - 1)
    else if j > i then
-      ((dT j thenT nthHypT i) orelseT pos_trivial i (j - 1)) p
+      (dT j thenT nthHypT i) orelseT pos_trivial i (j - 1)
    else
-      ((dT j thenT nthHypT (i - 1)) orelseT pos_trivial i (j - 1)) p
+      (dT j thenT nthHypT (i - 1)) orelseT pos_trivial i (j - 1)
 
 (*
  * The clause at hyp i either proves the goal, or
  * it negates an existing hyp.
  *)
-let goal_or_trivial i p =
+let goal_or_trivial = argfunT (fun i p ->
    let hyp = Sequent.nth_hyp p i in
    let j = Sequent.hyp_count p in
       if !debug_tptp then
          eprintf "Tptp_prove.goal_or_trivial: %a%t" debug_print hyp eflush;
       if is_not_term hyp then
-         (nthHypT i orelseT neg_trivial i j) p
+         nthHypT i orelseT neg_trivial i j
       else
-         (nthHypT i orelseT pos_trivial i j) p
+         nthHypT i orelseT pos_trivial i j)
 
 (*
  * Every disjunct in the clause either
  * proves the goal, or it negates an asserted hyp.
  *)
-let rec decompose_clause i p =
+let rec decompose_clause i = funT (fun p ->
    if !debug_tptp then
       eprintf "Tptp_prove.decompose_clause%t" eflush;
    let hyp = Sequent.nth_hyp p i in
       if is_or_term hyp then
-         (dT i thenLT [goal_or_trivial i;
-                       decompose_clause i]) p
+         dT i thenLT [goal_or_trivial i;
+                       decompose_clause i]
       else
-         goal_or_trivial i p
+         goal_or_trivial i)
 
 (*
  * Instantiate the hyp with the substitution,
  *)
-let rec instantiate_hyp constants subst i p =
+let rec instantiate_hyp constants subst = argfunT (fun i p ->
    if !debug_tptp then
       eprintf "Tptp_prove.instantiate_hyp%t" eflush;
    let hyp = Sequent.nth_hyp p i in
       if is_all_term hyp then
          let v = var_of_all hyp in
          let t = expand_instance constants subst (mk_var_term v) in
-            (withT t (dT i)
-             thenLT [prove_wf;
-                     instantiate_hyp constants subst (Sequent.hyp_count p + 1)]) p
+            withT t (dT i)
+            thenLT [prove_wf;
+                    instantiate_hyp constants subst (Sequent.hyp_count p + 1)]
       else
-         decompose_clause i p
+         decompose_clause i)
 
 (*
  * The goal may follow directly from the assumptions.
  *)
-let rec trivial_goal i n p =
+let rec trivial_goal i n =
    if i < n then
       raise (RefineError ("trivial_goal", StringError "no match"))
    else
-      (nthHypT i orelseT trivial_goal (i - 1) n) p
+      nthHypT i orelseT trivial_goal (i - 1) n
 
 (*
  * Decompose the goal.
  *)
-let rec instantiate_goal constants subst i n p =
+let rec instantiate_goal constants subst i n = funT (fun p ->
    if !debug_tptp then
       eprintf "Tptp_prove.instantiate_goal:%a %t" print_subst subst eflush;
    let goal = Sequent.concl p in
       if is_exists_term goal then
          let v = var_of_exists goal in
          let t = expand_instance constants subst (mk_var_term v) in
-            (withT t (dT 0)
-             thenLT [prove_wf;
-                     instantiate_goal constants subst i n;
-                     prove_wf]) p
+            withT t (dT 0)
+            thenLT [prove_wf;
+                    instantiate_goal constants subst i n;
+                    prove_wf]
       else if is_and_term goal then
-         (dT 0 thenT instantiate_goal constants subst i n) p
+         dT 0 thenT instantiate_goal constants subst i n
       else
-         (trivial_goal (Sequent.hyp_count p) n orelseT instantiate_hyp constants subst i) p
+         trivial_goal (Sequent.hyp_count p) n orelseT instantiate_hyp constants subst i)
 
 (*
  * Decompose the existential that has just been asserted.
  * Save the new vars that are created.
  *)
-let rec decompose_exists arg p =
+let rec decompose_exists arg = funT (fun p -> 
    if !debug_tptp then
       eprintf "Tptp_prove.decompose_exists%t" eflush;
    let i = Sequent.hyp_count p in
    let hyp = Sequent.nth_hyp p i in
       if is_exists_term hyp then
-         (dT i thenT decompose_exists arg) p
+         dT i thenT decompose_exists arg
       else if is_and_term hyp then
-         (dT i thenT decompose_exists arg) p
+         dT i thenT decompose_exists arg
       else
          let constants, subst, i, n = arg in
-            instantiate_goal constants subst i n p
+            instantiate_goal constants subst i n)
 
 (*
  * Assert and decompose the new goal.
  *)
-let assert_new_goal level constants subst hyp_index goal tac p =
+let assert_new_goal level constants subst hyp_index goal tac = funT (fun p ->
    if !debug_tptp_prove then
       eprintf "%aresolveT %d -> %a%t" tab level hyp_index debug_print goal eflush;
-   (assertT goal
+   assertT goal
     thenLT [tac;
-            decompose_exists (constants, subst, hyp_index, Sequent.hyp_count p)]) p
+            decompose_exists (constants, subst, hyp_index, Sequent.hyp_count p)])
 
 (*
  * Main tactic to unify on a hyp.
  *)
-let resolveT i p =
+let resolveT = argfunT (fun i p ->
    let hyp = Sequent.nth_hyp p i in
    let { sequent_hyps = hyps; sequent_goals = goals } = Sequent.explode_sequent p in
    let j, constants = first_clause hyps in
@@ -660,7 +662,7 @@ let resolveT i p =
    let goal = mk_goal new_info in
       if !debug_tptp then
          eprintf "New goal %a%t" print_term goal eflush;
-      assert_new_goal 0 constants subst i goal idT p
+      assert_new_goal 0 constants subst i goal idT)
 
 (************************************************************************
  * SEARCH                                                               *
@@ -683,10 +685,10 @@ let rec prove_auxT
            tptp_fail_cache = fail_cache;
            tptp_bound = bound
          } as info
-    } p =
+    } =
    match goal_info.tptp_body with
       [] ->
-         dT 0 p
+         dT 0
     | body ->
          if level > bound then
             raise (RefineError ("proveT", StringError "failed"));
@@ -706,7 +708,7 @@ let rec prove_auxT
                  tptp_level = level + 1;
                  tptp_info = info
                }
-         in
+         in funT (fun p ->
          let count = Sequent.hyp_count p in
          let rec find_hyp i =
             if i = count then
@@ -731,13 +733,13 @@ let rec prove_auxT
                      eprintf "Tptp_prove.exception: %s%t" (Printexc.to_string exn) eflush;
                      raise exn
          in
-         let rec matchT i p =
+         let rec matchT i =
             let tac, next = find_hyp i in
-               (tac orelseT matchT next) p
+               tac orelseT matchT next
          in
-            matchT first_hyp p
+            matchT first_hyp)
 
-let proveT bound p =
+let proveT = argfunT (fun bound p ->
    eprintf "Tptp_prove.proveT: %d%t" bound eflush;
    let { sequent_goals = goals;
          sequent_hyps = hyps
@@ -751,16 +753,16 @@ let proveT bound p =
         tptp_info = info
       }
    in
-      prove_auxT info p
+      prove_auxT info)
 
 (*
  * This tactic is just for performance testing.
  *)
 let dupT = duplicate
 
-let rec loopTestT i p =
+let rec loopTestT i =
    if i = 0 then
-      proveT 100 p
+      proveT 100
    else
       begin
 (*
@@ -768,16 +770,16 @@ let rec loopTestT i p =
          Marshal.to_string proveT [Marshal.Closures];
          eprintf "Marshaled%t" eflush;
  *)
-         (dupT thenLT [loopTestT (pred i); proveT 100]) p
+         dupT thenLT [loopTestT (pred i); proveT 100]
       end
 
-let testT p =
+let testT = funT (fun _ ->
    refine_count := 0;
    fail_count := 0;
    let finalize () =
       eprintf "Refine count: %d Fail count: %d%t" !refine_count !fail_count eflush
    in
-      (finalT finalize thenT timingT (loopTestT 200)) p
+      finalT finalize thenT timingT (loopTestT 200))
 
 (*
  * -*-

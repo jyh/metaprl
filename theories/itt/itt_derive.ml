@@ -91,7 +91,7 @@ interactive independentApplyIntro ('A -> 'B) (bind{y. 'C['y]}) 'f 'a :
 (*
  * Add them as resources.
  *)
-let applyT app i p =
+let applyT app = argfunT (fun i p ->
    if i = 0 then
       let f, a = dest_apply app in
       let goal_type =
@@ -114,9 +114,9 @@ let applyT app i p =
             raise (RefineError ("d_applyT", StringTermError ("not a function type", goal_type)))
       in
       let bind = var_subst_to_bind (Sequent.concl p) app in
-         tac goal_type bind f a p
+         tac goal_type bind f a
    else
-      raise (RefineError ("d_applyT", StringError "no elimination form"))
+      raise (RefineError ("d_applyT", StringError "no elimination form")))
 
 (*
  * Search for an application that we can reduce.
@@ -167,16 +167,16 @@ let search_apply =
  * This is quite heuristic.  We don't descend into
  * the types for equalities.
  *)
-let rec anyApplyT apps i p =
+let rec anyApplyT apps i =
    match apps with
       [app] ->
-         applyT app i p
+         applyT app i
     | app :: apps ->
-         (applyT app i orelseT anyApplyT apps i) p
+         (applyT app i orelseT anyApplyT apps i)
     | [] ->
          raise (RefineError ("anyApplyT", StringError "no applications found"))
 
-let autoApplyT i p =
+let autoApplyT = argfunT (fun i p ->
    let goal = Sequent.concl p in
       if is_type_term goal then
          raise (RefineError ("autoApplyT", StringError "don't apply to 'type' goals"))
@@ -186,7 +186,7 @@ let autoApplyT i p =
             search_apply vars (**)
                (if i = 0 then Sequent.concl p else Sequent.nth_hyp p i)
          in
-            anyApplyT apps i p
+            anyApplyT apps i)
 
 (*
  * -*-

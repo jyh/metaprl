@@ -312,10 +312,10 @@ let resource reduce += [
  * Useful tactic to prove _rw from ~-rules
  *)
 let sqFromRwT t =
-   (fun p -> sqSubstT (Sequent.concl p) 0 p)
-    thenMT
-        autoT
-    thenT t thenT trivialT
+   (funT (fun p -> sqSubstT (Sequent.concl p) 0))
+   thenMT
+      autoT
+   thenT t thenT trivialT
 
 doc <:doc<
    @begin[doc]

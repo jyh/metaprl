@@ -73,6 +73,7 @@ open Refiner.Refiner.TermMan
 
 open Tactic_type
 open Tactic_type.Conversionals
+open Tactic_type.Tacticals
 open Tactic_type.Sequent
 open Perv
 
@@ -274,10 +275,10 @@ doc <:doc<
    @docoff
    @end[doc]
 >>
-let natIndT t p =
+let natIndT = argfunT (fun t p ->
    let goal = Sequent.concl p in
    let bind = var_subst_to_bind goal t in
-      nat_elim bind t p
+      nat_elim bind t)
 
 (*
  * -*-

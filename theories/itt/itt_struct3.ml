@@ -42,7 +42,6 @@ let _ =
  * difirent for these functionalities
  *)
 
-
 interactive substUsingEpimorphism 'H 'B bind{y. 'f['y]} bind{x. 'g['x]}  : (* g does not depend on J *)
    [wf] sequent [squash] { <H>; x: 'A; <J['x]>; y: 'B >- 'f['y] in 'A } -->
    [wf] sequent [squash] { <H>; x: 'A; <J['x]> >-  'g['x] in 'B } -->
@@ -61,13 +60,13 @@ interactive hypReplacementExt 'H 'B  :
    [main]  sequent ['ext] { <H>; x: 'B; <J['x]> >- 'T['x] } -->
    sequent ['ext] { <H>; x: 'A; <J['x]> >- 'T['x] }
 
-let changeHypT t i p =
-   hypReplacementStrong i t p
+let changeHypT t i =
+   hypReplacementStrong i t
 
-let replaceHypT t i p =
+let replaceHypT t i = funT (fun p ->
    try
       let univ = get_univ_arg p in
-        hypReplacement i t univ p
+        hypReplacement i t univ
    with RefineError _ ->
-        hypReplacementExt i t p
+        hypReplacementExt i t)
 

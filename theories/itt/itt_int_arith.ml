@@ -102,26 +102,24 @@ let debug_subgoals =
 
    let emptyLabel=""
 
-   let thenIfLabelPredT pred tac1 tac2 tac3 p =
+   let ifLabelPredT pred tac1' tac2' = funT (fun p ->
+      if pred (Sequent.label p) then
+         tac1'
+      else
+         tac2')
+   
+   let thenIfLabelPredT pred tac1 tac2 tac3 = funT (fun p ->
       let prefer l1 l2 =
          if l2=emptyLabel then l1
          else l2 in
+      let restoreHiddenLabelT = argfunT (fun l p ->
+         addHiddenLabelT (prefer l (Sequent.label p)))
+      in
       let label = Sequent.label p in
-      let restoreHiddenLabelT l p' =
-         addHiddenLabelT (prefer l (Sequent.label p')) p'
-      in
-      let ifLabelPredT pred tac1' tac2' p' =
-         (let lab=Sequent.label p' in
-         if pred lab then
-            tac1'
-         else
-            tac2'
-         ) p'
-      in
-      (addHiddenLabelT emptyLabel thenT
+      addHiddenLabelT emptyLabel thenT
       tac1 thenT
       ifLabelPredT pred tac2 tac3 thenT
-      restoreHiddenLabelT label) p
+      restoreHiddenLabelT label)
 
 (*
    let ifMextendedT tac p =
@@ -141,26 +139,16 @@ let debug_subgoals =
    let isEmptyOrAuxLabel l =
       (l=emptyLabel) or not (List.mem l main_labels)
 
-   let thenLocalMT tac1 tac2 p =
-      thenIfLabelPredT isEmptyOrMainLabel tac1 tac2 idT p
+   let thenLocalMT tac1 tac2 =
+      thenIfLabelPredT isEmptyOrMainLabel tac1 tac2 idT
 
-   let thenLocalMElseT tac1 tac2 tac3 p =
-      let tac2' p'=
-            if !debug_subgoals then
-               eprintf "\nPositive:\n%a%t" print_term (Sequent.goal p') eflush;
-            tac2 p'
-      in
-      let tac3' p'=
-            if !debug_subgoals then
-               eprintf "\nNegative:\n%a%t" print_term (Sequent.goal p') eflush;
-            tac3 p'
-      in
-      thenIfLabelPredT isEmptyOrMainLabel tac1 tac2' tac3' p
+   let thenLocalMElseT tac1 tac2 tac3 =
+      thenIfLabelPredT isEmptyOrMainLabel tac1 tac2 tac3
 
-   let thenLocalAT tac1 tac2 p =
-      thenIfLabelPredT isEmptyOrAuxLabel tac1 tac2 idT p
+   let thenLocalAT tac1 tac2 =
+      thenIfLabelPredT isEmptyOrAuxLabel tac1 tac2 idT
 
-   let onAllLocalMHypsT tac p =
+   let onAllLocalMHypsT = argfunT (fun tac p ->
       let rec aux i =
          if i = 1 then
             tac i
@@ -169,16 +157,16 @@ let debug_subgoals =
          else
             idT
       in
-         aux (Sequent.hyp_count p) p
+         aux (Sequent.hyp_count p))
 
-   let onAllLocalMCumulativeHypsT tac p =
+   let onAllLocalMCumulativeHypsT tac =
       let rec aux i p =
          if i <= (Sequent.hyp_count p) then
-            (thenLocalMT (tac i) (aux (succ i))) p
+            thenLocalMT (tac i) (funT (aux (succ i)))
          else
-            idT p
+            idT
       in
-         aux 2 p
+         funT (aux 2)
 
 (*
  * end of thenMT_prefix part
@@ -189,11 +177,11 @@ let get_term i p =
 (* We skip first item because it is a context *)
    if i<>1 then Sequent.nth_hyp p i else mk_simple_term xperv []
 
-let le2geT t p =
+let le2geT = argfunT (fun t p ->
    let (left,right)=dest_le t in
    let newt=mk_ge_term right left in
    thenLocalAT (assertT newt) (thenLocalMT (rwh unfold_ge 0) (onSomeHypT
- nthHypT)) p
+ nthHypT)))
 
 interactive lt2ge :
    [wf] sequent [squash] { <H> >- 'a in int } -->
@@ -201,12 +189,12 @@ interactive lt2ge :
    sequent [squash] { <H> >- 'a < 'b } -->
    sequent ['ext] { <H> >- 'b >= ('a +@ 1) }
 
-let lt2geT t p =
+let lt2geT = argfunT (fun t p ->
    let (left,right)=dest_lt t in
    let newt=mk_ge_term right
                       (mk_add_term left
                                   (mk_number_term (Mp_num.num_of_int 1))) in
-      (thenLocalAT (assertT newt) lt2ge) p
+      thenLocalAT (assertT newt) lt2ge)
 
 interactive gt2ge :
    [wf] sequent [squash] { <H> >- 'a in int } -->
@@ -214,12 +202,12 @@ interactive gt2ge :
    sequent [squash] { <H> >- 'a > 'b } -->
    sequent ['ext] { <H> >- 'a >= ('b +@ 1) }
 
-let gt2geT t p =
+let gt2geT = argfunT (fun t p ->
    let (left,right)=dest_gt t in
    let newt=mk_ge_term left
                       (mk_add_term right
                                   (mk_number_term (Mp_num.num_of_int 1))) in
-      (thenLocalAT (assertT newt) gt2ge ) p
+      thenLocalAT (assertT newt) gt2ge)
 
 interactive eq2ge1 :
    sequent [squash] { <H> >- 'a = 'b in int } -->
@@ -255,19 +243,19 @@ let notle2geT t =
    let newt = mk_ge_term l (mk_add_term r (Mp_num.num_of_int 1)) in
 *)
 
-let anyArithRel2geT i p =
+let anyArithRel2geT = argfunT (fun i p ->
 (* We skip first item because it is a context *)
    let t=get_term i p in
-   if is_le_term t then le2geT t p
-   else if is_lt_term t then lt2geT t p
-   else if is_gt_term t then gt2geT t p
+   if is_le_term t then le2geT t
+   else if is_lt_term t then lt2geT t
+   else if is_gt_term t then gt2geT t
    else if is_equal_term t then
       let (tt,l,r)=dest_equal t in
          if (alpha_equal int_term tt) & not (alpha_equal l r) then
-            (eq2geT t p)
+            eq2geT t
          else
-            idT p
-   else idT p (*if is_not_term t then
+            idT
+   else idT) (*if is_not_term t then
       let t1=dest_not t in
          if is_ge_term t1 then notge2geT t1
          else if is_le_term t1 then notle2geT t1
@@ -281,14 +269,9 @@ interactive_rw bnot_lt2ge_rw :
 
 let bnot_lt2geC = bnot_lt2ge_rw
 
-let lt2ConclT p = (magicT thenLT [(addHiddenLabelT "wf"); rwh bnot_lt2geC (-1)]
- ) p
-
-let ltInConcl2HypT =
-   thenLocalMT (rwh unfold_lt 0) lt2ConclT
-
-let gtInConcl2HypT =
-   thenLocalMT (rwh unfold_gt 0) ltInConcl2HypT
+let lt2ConclT = magicT thenLT [(addHiddenLabelT "wf"); rwh bnot_lt2geC (-1)]
+let ltInConcl2HypT = thenLocalMT (rwh unfold_lt 0) lt2ConclT
+let gtInConcl2HypT = thenLocalMT (rwh unfold_gt 0) ltInConcl2HypT
 
 interactive_rw bnot_le2gt_rw :
    ('a in int) -->
@@ -324,17 +307,17 @@ let neqInConcl2HypT =
 	thenLocalMT (rw (unfold_neq_int thenC (addrC [0] unfold_bneq_int)) 0)
 	(thenLocalMT (dT 0) (dT (-1)))
 
-let arithRelInConcl2HypT p =
+let arithRelInConcl2HypT = funT (fun p ->
    let g=Sequent.goal p in
    let t=Refiner.Refiner.TermMan.nth_concl g 1 in
-   if is_lt_term t then ltInConcl2HypT p
-   else if is_gt_term t then gtInConcl2HypT p
-   else if is_le_term t then leInConcl2HypT p
-   else if is_ge_term t then geInConcl2HypT p
-   else if is_equal_term t then eqInConcl2HypT t p
-   else if is_neq_int_term t then neqInConcl2HypT p
-   else if is_not_term t then dT 0 p
-   else idT p
+   if is_lt_term t then ltInConcl2HypT
+   else if is_gt_term t then gtInConcl2HypT
+   else if is_le_term t then leInConcl2HypT
+   else if is_ge_term t then geInConcl2HypT
+   else if is_equal_term t then eqInConcl2HypT t
+   else if is_neq_int_term t then neqInConcl2HypT
+   else if is_not_term t then dT 0
+   else idT)
 
 let arith_rels=[
 	opname_of_term << 'x<'y >>;
@@ -356,20 +339,20 @@ let rec is_arith_rel t =
     else
     	false)
 
-let negativeHyp2ConclT i p =
+let negativeHyp2ConclT = argfunT (fun i p ->
    let t=Sequent.nth_hyp p i in
 	if is_not_term t then
    	let t'=dest_not t in
       if is_arith_rel t' then
-      	(thenLocalMT (dT i) arithRelInConcl2HypT) p
+      	thenLocalMT (dT i) arithRelInConcl2HypT
 		else
-      	idT p
+      	idT
 	else if is_neq_int_term t then
    	thenLocalMT (rw (unfold_neq_int thenC (addrC [0] unfold_bneq_int)) i)
       (thenLocalMT (dT i)
-      (thenLocalMT eq_2beq_int arithRelInConcl2HypT)) p
+      (thenLocalMT eq_2beq_int arithRelInConcl2HypT))
    else
-   	idT p
+   	idT)
 
 interactive ge_addMono :
    sequent [squash] { <H> >- 'a in int } -->
@@ -925,11 +908,9 @@ let ge_addContractC = ge_addContract_rw
 (*
    Reduce contradictory relation a>=a+b where b>0.
  *)
-let reduceContradRelT i p = (rw ((addrC [0] normalizeC) thenC
-                                 (addrC [1] normalizeC) thenC
-						               (tryC ge_addContractC) thenC
-					   			      reduceC)
-                                i) p
+let reduceContradRelT =
+   rw ((addrC [0] normalizeC) thenC (addrC [1] normalizeC) thenC
+       (tryC ge_addContractC) thenC reduceC)
 
 let provideConstantC t =
    if is_number_term t then
@@ -960,27 +941,27 @@ let ge_addMono2C = ge_addMono2_rw
 let reduce_geLeftC = (addrC [0] normalizeC)
 let reduce_geRightC = (addrC [1] (normalizeC thenC (termC provideConstantC)))
 
-let reduce_geCommonConstT i p =
+let reduce_geCommonConstT = argfunT (fun i p ->
    let t=get_term i p in
    let (left,right)=dest_ge t in
    if is_add_term left then
       let (a,b)=dest_add left in
       if is_number_term a then
          thenLocalMT (rw (ge_addMono2_rw (mk_minus_term a)) i)
-                     (rw reduce_geLeftC i) p
+                     (rw reduce_geLeftC i)
       else
-         idT p
+         idT
    else
-      idT p
+      idT)
 
-let tryReduce_geT i p =
+let tryReduce_geT = argfunT (fun i p ->
    let t=get_term i p in
       if is_ge_term t then
          thenLocalMT (rw reduce_geLeftC i)
          (thenLocalMT (reduce_geCommonConstT i)
-                     (rw reduce_geRightC i)) p
+                     (rw reduce_geRightC i))
       else
-         idT p
+         idT)
 
 (* Generate sum of ge-relations
  *)
@@ -1005,12 +986,11 @@ let proveSumT = ge_addMono
 
 (* Asserts sum of ge-relations and grounds it
  *)
-let sumListT l p =
+let sumListT = argfunT (fun l p ->
    let s = sumList l (Sequent.goal p) in
-   (if !debug_int_arith then
-   	eprintf "Contradictory term:%a%t" print_term s eflush
-    else ();
-   thenLocalAT (assertT s) (tryT (progressT proveSumT)) p)
+   if !debug_int_arith then
+   	eprintf "Contradictory term:%a%t" print_term s eflush;
+   thenLocalAT (assertT s) (tryT (progressT proveSumT)))
 
 (* Test if term has a form of a>=b+i where i is a number
  *)
@@ -1035,7 +1015,7 @@ let good_term t =
 
 (* Searches for contradiction among ge-relations
  *)
-let findContradRelT p =
+let findContradRelT = funT (fun p ->
    let g=Sequent.goal p in
    let l = Arith.collect good_term g in
    let ar=Array.of_list l in
@@ -1050,9 +1030,9 @@ let findContradRelT p =
             in
             eprintf "Hyps to sum:%a%t" lprint rl eflush
           else ();
-         sumListT rl p)
+         sumListT rl)
     | Arith.TG.Disconnected,_ ->
-         raise (RefineError("arithT", StringError "Proof by contradiction - No contradiction found"))
+         raise (RefineError("arithT", StringError "Proof by contradiction - No contradiction found")))
 
 (* Finds and proves contradiction among ge-relations
  *)

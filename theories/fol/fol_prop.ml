@@ -104,67 +104,65 @@ let is_imp_or_term term =
 let is_imp_imp_term term =
    is_implies_term term & is_implies_term (fst (two_subterms term))
 
-(* This tactic is convenient *)
-let ifNotWT tac p =
-   (if (Sequent.label p) = "wf" then
-       idT
-    else
-       tac) p
-
 (* Try to decompose a hypothesis *)
-let rec decompPropDecideHypT i p =
+let rec decompPropDecideHypT i = funT (fun p ->
    let i = Sequent.get_pos_hyp_num p i in
-   (let term = Sequent.nth_hyp p i in
+   let term = Sequent.nth_hyp p i in
        if is_false_term term then
           dT i
        else if is_and_term term or is_or_term term then
-          dT i thenT ifNotWT internalPropDecideT
+          dT i thenT funT internalPropDecideT
        else if is_imp_and_term term then
           (* {C & D => B} => {C => D => B} *)
-          d_and_impT i thenT ifNotWT internalPropDecideT
+          d_and_impT i thenT funT internalPropDecideT
        else if is_imp_or_term term then
           (* {C or D => B} => {(C => B) & (D => B)} *)
-          d_or_impT i thenT ifNotWT internalPropDecideT
+          d_or_impT i thenT funT internalPropDecideT
        else if is_imp_imp_term term then
           (* {(C => D) => B} => {D => B} *)
-          d_imp_impT i thenT ifNotWT internalPropDecideT
+          d_imp_impT i thenT funT internalPropDecideT
        else if is_implies_term term then
-          dT i thenT thinT i thenT ifNotWT internalPropDecideT
+          dT i thenT thinT i thenT funT internalPropDecideT
        else
           (* Nothing recognized, try to see if we're done. *)
-          nthHypT i) p
+          nthHypT i)
 
 (* Decompose the goal *)
 and decompPropDecideConclT p =
-   (let goal = Sequent.concl p in
+   let goal = Sequent.concl p in
        if is_or_term goal then
-          (selT 1 (dT 0) thenT ifNotWT internalPropDecideT)
-          orelseT (selT 2 (dT 0) thenT ifNotWT internalPropDecideT)
+          (selT 1 (dT 0) thenT funT internalPropDecideT)
+          orelseT (selT 2 (dT 0) thenT funT internalPropDecideT)
        else if is_and_term goal or is_implies_term goal then
-          dT 0 thenT ifNotWT internalPropDecideT
+          dT 0 thenT funT internalPropDecideT
        else
-          trivialT) p
+          trivialT
 
 (* Internal version that does not handle negation *)
 and internalPropDecideT p =
-   (onSomeHypT decompPropDecideHypT orelseT decompPropDecideConclT) p
+   if (Sequent.label p) = "wf" then
+      idT
+   else
+      onSomeHypT decompPropDecideHypT orelseT (funT decompPropDecideConclT)
+
+let internalPropDecideT = removeHiddenLabelT thenT funT internalPropDecideT
 
 let propDecideT =
    onAllClausesT (fun i -> tryT (rw (sweepUpC unfold_not) i))
    thenT internalPropDecideT
 
 (* Simple tactic for proving typehood *)
-let thinAllT i j p =
+let thinAllT i j =
    let rec tac j =
       if j < i then
          idT
       else
          thinT j thenT tac (pred j)
    in
-      tac j p
+      tac j
 
-let proveTypeT p =
-   (thinAllT 2 (Sequent.hyp_count p) thenT trivialT) p
+let proveTypeT = funT (fun p ->
+   thinAllT 2 (Sequent.hyp_count p) thenT trivialT)
 
 (* Try the example again *)
 interactive distrib_or2 :

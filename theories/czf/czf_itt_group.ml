@@ -346,11 +346,8 @@ interactive cancel2 (*{| elim [] |}*) 'H :
    sequent ['ext] { <H>; x: eq{op{'g; 's1; 's3}; op{'g; 's2; 's3}}; <J['x]> >- eq{'s1; 's2} }
 doc <:doc< @docoff >>
 
-let groupCancelLeftT i p =
-   cancel1 (Sequent.get_pos_hyp_num p i) p
-
-let groupCancelRightT i p =
-   cancel2 (Sequent.get_pos_hyp_num p i) p
+let groupCancelLeftT = cancel1
+let groupCancelRightT = cancel2
 
 doc <:doc< 
    @begin[doc]
@@ -421,11 +418,8 @@ interactive unique_inv_elim2 (*{| elim [] |}*) 'H :
    sequent ['ext] { <H>; x: eq{op{'g; 's; 's2}; id{'g}}; <J['x]>; y: eq{'s2; inv{'g; 's}} >- 'C['x] } -->
    sequent ['ext] { <H>; x: eq{op{'g; 's; 's2}; id{'g}}; <J['x]> >- 'C['x] }
 
-let uniqueInvLeftT i p =
-   unique_inv_elim1 (Sequent.get_pos_hyp_num p i) p
-
-let uniqueInvRightT i p =
-   unique_inv_elim2 (Sequent.get_pos_hyp_num p i) p
+let uniqueInvLeftT = unique_inv_elim1
+let uniqueInvRightT = unique_inv_elim2
 
 doc <:doc< 
    @begin[doc]

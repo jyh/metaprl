@@ -302,19 +302,17 @@ interactive recordEqualOrt2 :
    [ort] sequent[squash]{ <H>; r:'R >- record_ort[n:t]{'a;'R} } -->
    sequent['ext]  { <H> >- 'r1 = rcrd[n:t]{'a;'r2}  in 'R }
 
-let recordOrtT p =
+let recordOrtT = funT (fun p ->
    let rrule =
       try
          let sel= get_sel_arg p in
             if sel=1 then recordEqualOrt1 else  if sel=2 then recordEqualOrt2 else recordMemberOrt
       with RefineError _ -> recordMemberOrt
    in
-   let tac =
       rrule thenLT
          [idT;
           tryT (dT 0 thenWT tryT (typeAssertT thenT nthHypT (-2)));
-         ]
-   in tac p
+         ])
 
 
 (*
@@ -391,47 +389,35 @@ interactive recordEliminationI  'H :
 doc <:doc< @docoff >>
 
 
-let recordS_elim n p =
+let recordS_elim = argfunT (fun n p ->
  let n = Sequent.get_pos_hyp_num p n in
- let tac =
     (recordEliminationS n)
     thenT
-      (record_reduceT thenMT tryT (thinT (n+1)))
- in
-    tac p
+      (record_reduceT thenMT tryT (thinT (n+1))))
 
-let recordL_elim n p =
+let recordL_elim = argfunT (fun n p ->
  let n = Sequent.get_pos_hyp_num p n in
- let tac =
     (recordEliminationL1 n orelseT recordEliminationL n)
     thenT
        ifLabT "ort"
                 (tryT (dT 0 thenWT tryT (typeAssertT thenT nthHypT (-2))))
-       (*else*) (record_reduceT thenMT tryT (dT n))
- in
-    tac p
+       (*else*) (record_reduceT thenMT tryT (dT n)))
 
-let recordR_elim n p =
+let recordR_elim = argfunT (fun n p ->
  let n = Sequent.get_pos_hyp_num p n in
- let tac =
     (recordEliminationR1 n orelseT recordEliminationR n)
     thenT
        ifLabT "ort"
                 (tryT (dT 0 thenWT tryT (typeAssertT thenT nthHypT (-1))))
-       (*else*) (record_reduceT thenMT tryT (dT (n+1)))
- in
-    tac p
+       (*else*) (record_reduceT thenMT tryT (dT (n+1))))
 
-let recordI_elim n p =
+let recordI_elim = argfunT (fun n p ->
  let n = Sequent.get_pos_hyp_num p n in
- let tac =
     (recordEliminationI1 n orelseT recordEliminationI n)
     thenT
        ifLabT "ort"
                 (tryT (dT 0 thenWT tryT (typeAssertT thenT nthHypT (-1))))
-       (*else*) (record_reduceT thenMT tryT (dT (n+1)))
- in
-    tac p
+       (*else*) (record_reduceT thenMT tryT (dT (n+1))))
 
 let resource elim += [
    (<<record[m:t]{'A}>>,recordS_elim);
@@ -480,14 +466,12 @@ interactive recordOrtIntroL :
    [main] sequent[squash]  { <H>; r:'R; x:'A['r] >- record_ort[n:t]{'a;record[m:t]{'A['r]}}}  -->
    sequent['ext]  { <H> >- record_ort[n:t]{'a;record[m:t]{self.'A['self];'R}} }
 
-let recordOrtIntroLT p =
-   let tac =
-      recordOrtIntroL thenLT
-         [idT;
-          tryT (dT 0 thenWT tryT (typeAssertT thenT nthHypT (-2)));
-          rwh record_reduce 0 thenT tryT recordOrtIntroST thenWT tryT (dT 0 thenT typeAssertT thenT nthHypT (-1));
-         ]
-   in tac p
+let recordOrtIntroLT =
+   recordOrtIntroL thenLT
+      [idT;
+       tryT (dT 0 thenWT tryT (typeAssertT thenT nthHypT (-2)));
+       rwh record_reduce 0 thenT tryT recordOrtIntroST thenWT tryT (dT 0 thenT typeAssertT thenT nthHypT (-1));
+      ]
 
 let resource intro += (<<record_ort[n:t]{'a;record[m:t]{self.'A['self];'R}}>>,wrap_intro recordOrtIntroLT)
 
@@ -497,14 +481,12 @@ interactive recordOrtIntroR :
    [main] sequent[squash]  { <H>; x:'A; r:'R['x] >- record_ort[n:t]{'a;record[m:t]{'A}}}  -->
    sequent['ext]  { <H> >- record_ort[n:t]{'a;record[m:t]{'A;x.'R['x]}} }
 
-let recordOrtIntroRT p =
-   let tac =
-      recordOrtIntroR thenLT
-         [idT;
-          tryT (dT 0 thenWT tryT (typeAssertT thenT nthHypT (-1)));
-          tryT recordOrtIntroST thenWT tryT (dT 0 thenT typeAssertT thenT nthHypT (-2));
-         ]
-   in tac p
+let recordOrtIntroRT =
+   recordOrtIntroR thenLT
+      [idT;
+       tryT (dT 0 thenWT tryT (typeAssertT thenT nthHypT (-1)));
+       tryT recordOrtIntroST thenWT tryT (dT 0 thenT typeAssertT thenT nthHypT (-2));
+      ]
 
 let resource intro += (<<record_ort[n:t]{'a;record[m:t]{'A;x.'R['x]}}>>,wrap_intro recordOrtIntroRT)
 
@@ -514,14 +496,12 @@ interactive recordOrtIntroI :
    [main] sequent[squash]  { <H>; x:'A; r:'R >- record_ort[n:t]{'a;record[m:t]{'A}}} -->
    sequent['ext]  { <H> >- record_ort[n:t]{'a;record[m:t]{'A;'R}} }
 
-let recordOrtIntroIT p =
-   let tac =
-      recordOrtIntroI thenLT
-         [idT;
-          tryT (dT 0 thenWT tryT (typeAssertT thenT nthHypT (-1)));
-          tryT recordOrtIntroST thenWT tryT (dT 0 thenT typeAssertT thenT nthHypT (-2));
-         ]
-   in tac p
+let recordOrtIntroIT =
+   recordOrtIntroI thenLT
+      [idT;
+       tryT (dT 0 thenWT tryT (typeAssertT thenT nthHypT (-1)));
+       tryT recordOrtIntroST thenWT tryT (dT 0 thenT typeAssertT thenT nthHypT (-2));
+      ]
 
 let resource intro += (<<record_ort[n:t]{'a;record[m:t]{'A;'R}}>>,wrap_intro recordOrtIntroIT)
 
@@ -531,9 +511,6 @@ let resource intro += (<<record_ort[n:t]{'a;record[m:t]{'A;'R}}>>,wrap_intro rec
 (******************)
 
 doc <:doc< @docoff >>
-
-
-
 
 (*
 let elim0 rule p n =

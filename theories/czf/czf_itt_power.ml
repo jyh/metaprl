@@ -51,6 +51,7 @@ doc docoff
 open Refiner.Refiner.TermMan
 
 open Tactic_type
+open Tactic_type.Tacticals
 open Base_dtactic
 open Top_conversionals
 
@@ -145,11 +146,11 @@ doc <:doc<
    @docoff
    @end[doc]
 >>
-let powerT t p =
+let powerT = funT (fun p ->
    let x, y, prop, a, b = dest_rel (Sequent.concl p) in
    let prop = mk_xbind_term y prop in
    let prop = mk_xbind_term x prop in
-      power_thm prop a b p
+      power_thm prop a b)
 
 (*
  * -*-

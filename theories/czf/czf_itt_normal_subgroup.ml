@@ -149,8 +149,7 @@ interactive abel_subg_normal 'H 's :
    sequent ['ext] { <H>; x: abel{'g}; <J['x]> >- 'C['x] }
 
 doc <:doc< @docoff >>
-let abelNormalSubgT t i p =
-   abel_subg_normal (Sequent.get_pos_hyp_num p i) t p
+let abelNormalSubgT t i = abel_subg_normal i t
 
 (*
  * -*-

@@ -262,20 +262,20 @@ interactive disectElimination_eq {| elim [] |} 'H bind{x.bind{a,b.'C['x;'a;'b]}}
                            a: 'A; u: 'a = 'x in 'A; b: 'B['a]; v: 'b = 'x in 'B['a]  >- 'C['x;'a;'b] } -->
    sequent ['ext] { <H>; x: bisect{'A; y.'B['y]}; <J['x]> >- 'C['x;'x;'x] }
 
-let disectEliminationT n p =
+let disectEliminationT = argfunT (fun n p ->
    let x = Sequent.nth_binding p n in
    let x_var = mk_var_term x in
    let bind =  get_with_arg p in
       if is_bind2_term bind then
          let bind = mk_bind1_term x bind in
-            disectElimination_eq n bind p
+            disectElimination_eq n bind
       else
          raise (RefineError
-           ("disectElimination", StringTermError ("required the bind term:",<<bind{a,b.'C['a;'b]}>>)))
+           ("disectElimination", StringTermError ("required the bind term:",<<bind{a,b.'C['a;'b]}>>))))
 
-let disectEliminationT n p =
+let disectEliminationT = argfunT (fun n p ->
    let n = Sequent.get_pos_hyp_num p n in
-      (disectEliminationT n thenT thinIfThinningT [-3;-1;n]) p
+      disectEliminationT n thenT thinIfThinningT [-3;-1;n])
 
 let resource elim += (<<bisect{'A; x.'B['x]}>>,disectEliminationT)
 
@@ -288,7 +288,6 @@ doc <:doc<
    @end[doc]
 >>
 
-
 interactive disectEliminationLeft (*{| elim [SelectOption 1] |}*) 'H :
    sequent ['ext] { <H>; x: bisect{'A; y.'B['y]}; <J['x]>;
                     a: 'A; u: 'a = 'x in 'A;  b: 'B['a]; v: 'b = 'x in 'B['a] >- 'C['a] } -->
@@ -299,21 +298,17 @@ interactive disectEliminationRight (*{| elim [SelectOption 2] |}*) 'H :
                     a: 'A; u: 'a = 'x in 'A;  b: 'B['a]; v: 'b = 'x in 'B['a] >- 'C['b] } -->
    sequent ['ext] { <H>; x: bisect{'A; y.'B['y]}; <J['x]> >- 'C['x] }
 
-let disectEliminationT n p =
+let disectEliminationT = argfunT (fun n p ->
    let n = Sequent.get_pos_hyp_num p n in
    try
       let sel = get_sel_arg p in
-         if sel = 1 then (disectEliminationLeft n thenT thinIfThinningT [-3;-1;n]) p else
-         if sel = 2 then (disectEliminationRight n thenT thinIfThinningT [-3;-1;n]) p else
+         if sel = 1 then disectEliminationLeft n thenT thinIfThinningT [-3;-1;n] else
+         if sel = 2 then disectEliminationRight n thenT thinIfThinningT [-3;-1;n] else
             raise (RefineError ("disectElimination", StringError ("select option is out of range ([1,2])")))
-   with RefineError ("get_attribute",_) ->
-      try disectEliminationT n p
-      with RefineError ("get_attribute",_) ->
-         raise (RefineError
-            ("disectElimination", StringTermError ("need a select option or a bind term:",<<bind{a,b.'C['a;'b]}>>)))
+   with RefineError _ ->
+      disectEliminationT n)
 
 let resource elim += (<<bisect{'A; x.'B['x]}>>,disectEliminationT)
-
 
 doc <:doc< 
    @begin[doc]

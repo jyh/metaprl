@@ -271,10 +271,10 @@ let subtype_f tac subgoals _ =
          let goal = concl p in
             if Opname.eq (opname_of_term goal) subtype_opname then
                match sg with
-                  (_, _, tac)::sg' -> (tac p)::(aux sg' t)
+                  (_, _, tac)::sg' -> tac::(aux sg' t)
                 | [] -> raise (RefineError ("subtypeT", StringError "subtype mismatch"))
             else
-               (idT p)::(aux sg t)
+               idT::(aux sg t)
     | [] -> []
    in
       tac thenFLT aux subgoals
@@ -301,9 +301,9 @@ let extract_data base =
             Not_found ->
                raise (RefineError ("subtype", StringTermError ("can't infer subtype ", t)))
       in
-         tac p
+         tac
    in
-      subtyper
+      funT subtyper
 
 (*
  * Resource.
@@ -317,8 +317,8 @@ let resource sub = Functional {
 (*
  * Resource argument.
  *)
-let prove_subtypeT p =
-   Sequent.get_resource_arg p get_sub_resource p
+let prove_subtypeT = funT (fun p ->
+   Sequent.get_resource_arg p get_sub_resource)
 
 let resource intro +=
    subtype_term, ("prove_subtype",None,prove_subtypeT)
@@ -331,14 +331,14 @@ let resource intro +=
  * D a hyp.
  * We take the argument.
  *)
-let d_hyp_subtypeT i p =
+let d_hyp_subtypeT = argfunT (fun i p ->
    try
       let args = get_with_args p in
          match args with
-           [a] -> subtypeElimination2 i a a p |
-           [a;b] -> subtypeElimination2 i a b p |
+           [a] -> subtypeElimination2 i a a |
+           [a;b] -> subtypeElimination2 i a b |
            _ -> raise (RefineError ("subtypeElimination", StringError ("1 or 2 arguments required")))
-   with RefineError ("get_attribute",_) -> subtypeElimination i p
+   with RefineError ("get_attribute",_) -> subtypeElimination i)
 
 let resource elim += (subtype_term, d_hyp_subtypeT)
 
@@ -352,11 +352,11 @@ interactive use_subtype2 'A :
    [main] sequent ['ext] { <H> >- 'A } -->
    sequent ['ext] { <H> >- 'B }
 
-let subtypeT t p =
+let subtypeT = argfunT (fun t p ->
    if is_equal_term (Sequent.concl p) then
-      use_subtype1 t p
+      use_subtype1 t
    else
-      use_subtype2 t p
+      use_subtype2 t)
 
 interactive by_subtype1 'H: (* Add to auto??? then remove subtype_axiomFormation from auto *)
    sequent [squash] { <H>; 'A; <J> >- 'A subtype 'B } -->

@@ -291,17 +291,10 @@ doc <:doc<
    @docoff
    @end[doc]
 >>
-let kerSubgT i p =
-   ker_subgroup_elim (Sequent.get_pos_hyp_num p i) p
-
-let kerLcosetT t1 t2 i p =
-   ker_lcoset_e (Sequent.get_pos_hyp_num p i) t1 t2 p
-
-let kerRcosetT t1 t2 i p =
-   ker_rcoset_e (Sequent.get_pos_hyp_num p i) t1 t2 p
-
-let kerNormalSubgT i p =
-   ker_normalSubg (Sequent.get_pos_hyp_num p i) p
+let kerSubgT = ker_subgroup_elim
+let kerLcosetT t1 t2 i = ker_lcoset_e i t1 t2
+let kerRcosetT t1 t2 i = ker_rcoset_e i t1 t2
+let kerNormalSubgT = ker_normalSubg
 
 (*
  * -*-

@@ -41,6 +41,7 @@ open Refiner.Refiner.TermMan
 open Refiner.Refiner.RefineError
 
 open Tactic_type
+open Tactic_type.Tacticals
 open Tactic_type.Sequent
 open Perv
 
@@ -100,56 +101,56 @@ interactive set_ind_dprod_fun (bind{x. bind{y. 'B['x; 'y]}}) :
 (*
  * Typehood.
  *)
-let d_set_ind_dfun_typeT p =
+let d_set_ind_dfun_typeT = funT (fun p ->
    let goal = Sequent.concl p in
    let set_ind = dest_type_term goal in
    let _, f, _, _, b = dest_set_ind set_ind in
    let v, _, b = dest_dfun b in
    let apply = mk_apply_term (mk_var_term f) (mk_var_term v) in
    let goal' = var_subst_to_bind b apply in
-      set_ind_dfun_type goal' p
+      set_ind_dfun_type goal')
 
 let set_ind_dfun_type_term = << "type"{set_ind{'s; T, f, g. x: 'T -> 'B['f; 'x]}} >>
 
 (*
  * Functionality.
  *)
-let d_set_ind_dfun_funT p =
+let d_set_ind_dfun_funT = funT (fun p ->
    let goal = Sequent.concl p in
    let x, set_ind = dest_fun_prop goal in
    let _, f, _, _, b = dest_set_ind set_ind in
    let v, _, b = dest_dfun b in
    let apply = mk_apply_term (mk_var_term f) (mk_var_term v) in
    let goal' = mk_xbind_term x (var_subst_to_bind b apply) in
-      set_ind_dfun_fun goal' p
+      set_ind_dfun_fun goal')
 
 let set_ind_dfun_fun_term = << fun_prop{z. set_ind{'A['z]; T, f, g. x: 'T -> 'B['z; 'T; 'f; 'g; 'x]}} >>
 
 (*
  * Typehood.
  *)
-let d_set_ind_dprod_typeT p =
+let d_set_ind_dprod_typeT = funT (fun p ->
    let goal = Sequent.concl p in
    let set_ind = dest_type_term goal in
    let _, f, _, _, b = dest_set_ind set_ind in
    let v, _, b = dest_dprod b in
    let apply = mk_apply_term (mk_var_term f) (mk_var_term v) in
    let goal' = var_subst_to_bind b apply in
-      set_ind_dprod_type goal' p
+      set_ind_dprod_type goal')
 
 let set_ind_dprod_type_term = << "type"{set_ind{'s; T, f, g. x: 'T * 'B['f; 'x]}} >>
 
 (*
  * Functionality.
  *)
-let d_set_ind_dprod_funT p =
+let d_set_ind_dprod_funT = funT (fun p ->
    let goal = Sequent.concl p in
    let x, set_ind = dest_fun_prop goal in
    let _, f, _, _, b = dest_set_ind set_ind in
    let v, _, b = dest_dprod b in
    let apply = mk_apply_term (mk_var_term f) (mk_var_term v) in
    let goal' = mk_xbind_term x (var_subst_to_bind b apply) in
-      set_ind_dprod_fun goal' p
+      set_ind_dprod_fun goal')
 
 let set_ind_dprod_fun_term = << fun_prop{z. set_ind{'A['z]; T, f, g. x: 'T * 'B['z; 'T; 'f; 'g; 'x]}} >>
 

@@ -402,27 +402,27 @@ let is_squash_goal p =
 (*
  * Extract an SQUASH tactic from the data.
  *)
-let unsquash_tactic tbl i p =
+let unsquash_tactic tbl = argfunT (fun i p ->
    let conc = concl p in
    let hyp = dest_squash (nth_hyp p i) in
    match slookup_all tbl conc, slookup_all tbl hyp with
       ((SqUnsquashGoal tac :: _)|(_ :: SqUnsquashGoal tac :: _)|(_ :: _ :: SqUnsquashGoal tac :: _)), _
     | _, ((SqUnsquash tac :: _)|(_ :: SqUnsquash tac :: _)|(_ :: _ :: SqUnsquash tac :: _)) ->
-         tac i p
+         tac i
     | (SqStable (t,tac) :: _), _ ->
-         (unsquashWWitness i t thenT tac) p
+         unsquashWWitness i t thenT tac
     | (SqStableGoal tac :: _), _ ->
-         (tac thenT unsquash i thenT squashMemberFormation) p
+         tac thenT unsquash i thenT squashMemberFormation
     | _, (SqStable (t,tac) :: _) ->
-         (unsquashStable i t thenLT [ idT; tac thenT trivialT]) p
+         unsquashStable i t thenLT [ idT; tac thenT trivialT]
     | _, (SqUnsquashGoal tac :: _) ->
-          (unsquashHypGoalStable i thenLT [idT; tac i thenT trivialT]) p
+         unsquashHypGoalStable i thenLT [idT; tac i thenT trivialT]
     | (SqUnsquash tac :: _), _ ->
-         (unsquashStableGoal i thenLT [idT; tac (-1) thenT nthHypT (-1)]) p
+         unsquashStableGoal i thenLT [idT; tac (-1) thenT nthHypT (-1)]
     | _, (SqStableGoal tac :: _) ->
-         (unsquashStableGoal i thenLT [idT; tac thenT nthHypT (-1)]) p
+         unsquashStableGoal i thenLT [idT; tac thenT nthHypT (-1)]
     | [], [] ->
-         raise (RefineError ("squash", StringTermError ("squash tactic doesn't know about ", mk_xlist_term [hyp;<<slot[" |- "]>>;conc])))
+         raise (RefineError ("squash", StringTermError ("squash tactic doesn't know about ", mk_xlist_term [hyp;<<slot[" |- "]>>;conc]))))
 
 let process_squash_resource_annotation name contexts args _ stmt tac =
    let assums, goal = unzip_mfunction stmt in
@@ -441,10 +441,7 @@ let process_squash_resource_annotation name contexts args _ stmt tac =
       ->
          if not (is_squash_sequent assum) then
             raise (Invalid_argument "squash_stable resource annotation: assumption sequent should be squashed");
-         let tac p =
-            Tactic_type.Tactic.tactic_of_rule tac [||] [] p
-         in
-            concl, SqStableGoal(tac)
+         concl, SqStableGoal(Tactic_type.Tactic.tactic_of_rule tac [||] [])
       (* H |- T --> H |- a in T *)
     | [||], [], [_, _, assum], [Context(h,[])] when
          is_equal_term concl &&
@@ -457,19 +454,13 @@ let process_squash_resource_annotation name contexts args _ stmt tac =
          if not (is_squash_sequent assum) then
             raise (Invalid_argument "squash_stable resource annotation: assumption sequent should be squashed");
          let t,a,_ = dest_equal concl in
-         let tac p =
-            Tactic_type.Tactic.tactic_of_rule tac [||] [] p
-         in
-            t, SqStable(a, tac)
+            t, SqStable(a, Tactic_type.Tactic.tactic_of_rule tac [||] [])
       (* H |- a in T *)
     | [||], [], [], [Context(_,[])] when
          (let t,a,b = dest_equal concl in (alpha_equal a b) )
       ->
          let t,a,_ = dest_equal concl in
-         let tac p =
-            Tactic_type.Tactic.tactic_of_rule tac [||] [] p
-         in
-            t, SqStable(a, tac)
+            t, SqStable(a, Tactic_type.Tactic.tactic_of_rule tac [||] [])
       (* H; x:T; J[x] |- C[x] *)
     | [| h |], [], [], [Context(h',[]); HypBinding(v,t); Context(_, [v'])] when
          h = h' && is_var_term v' && (dest_var v') = v &&
@@ -479,8 +470,8 @@ let process_squash_resource_annotation name contexts args _ stmt tac =
           | _ -> false
          end
       ->
-         let tac p =
-            Tactic_type.Tactic.tactic_of_rule tac [| Sequent.hyp_count p |] [] p
+         let tac = funT (fun p ->
+            Tactic_type.Tactic.tactic_of_rule tac [| Sequent.hyp_count p |] [])
          in
             t, SqStable(it_term, (assertT t thenMT tac))
     | _ ->
@@ -552,13 +543,13 @@ doc <:doc<
    @comment{Squash a goal}
    @end[doc]
 >>
-let unsquashT i p =
-   Sequent.get_resource_arg p get_squash_resource (Sequent.get_pos_hyp_num p i) p
+let unsquashT = argfunT (fun i p ->
+   Sequent.get_resource_arg p get_squash_resource (Sequent.get_pos_hyp_num p i))
 
-let squashT p =
+let squashT = funT (fun p ->
    let ct = concl p in
       if is_squash_term ct then raise(RefineError("squashT",StringError("already squashed")))
-      else (squashAssert ct thenLT [ idT; unsquashT (-1) thenT trivialT ]) p
+      else squashAssert ct thenLT [ idT; unsquashT (-1) thenT trivialT ])
 
 (* We want to see unsquashT's error message when squashElim is useless *)
 let squash_elimT i =
@@ -566,25 +557,25 @@ let squash_elimT i =
 
 let resource elim += (squash_term, squash_elimT)
 
-let rec unsquashAllT_aux i seq hyps p =
-   if i > hyps then idT p else
+let rec unsquashAllT_aux i seq hyps =
+   if i > hyps then idT else
    match SeqHyp.get seq (pred i) with
       HypBinding (_, hyp) | Hypothesis hyp when is_squash_term hyp ->
-         (unsquashT i orthenT unsquashAllT_aux (succ i) seq hyps) p
+         unsquashT i orthenT unsquashAllT_aux (succ i) seq hyps
     | _ ->
-         unsquashAllT_aux (succ i) seq hyps p
+         unsquashAllT_aux (succ i) seq hyps
 
-let unsquashAllT p =
-   unsquashAllT_aux 1 (explode_sequent p).sequent_hyps (hyp_count p) p
+let unsquashAllT = funT (fun p ->
+   unsquashAllT_aux 1 (explode_sequent p).sequent_hyps (hyp_count p))
 
-let sqsquashT p =
+let sqsquashT = funT (fun p ->
    if is_squash_goal p then
       raise (RefineError("sqsquashT", StringError("goal sequent already squashed")))
    else
       if is_squash_term (concl p) then
-         sqsqSq p
+         sqsqSq
       else
-         (squashT thenT squashMemberFormation) p
+         squashT thenT squashMemberFormation)
 
 let unsqsquashT = squashFromAny
 
@@ -592,18 +583,18 @@ let unsqsquashT = squashFromAny
  * AUTO TACTIC                                                          *
  ************************************************************************)
 
-let nthAssumArg assum p =
+let nthAssumArg = argfunT (fun assum p ->
    match is_squash_goal p, is_squash_sequent assum with
       false, true ->
-         sqsquashT p
+         sqsquashT
     | true, false ->
-         unsqsquashT (get_squash_arg assum) p
+         unsqsquashT (get_squash_arg assum)
     | _ ->
-         idT p
+         idT)
 
-let nthAssumT i p =
+let nthAssumT = argfunT (fun i p ->
    let assum = Sequent.nth_assum p i in
-      (Top_tacticals.thinMatchT thinT assum thenT nthAssumArg assum thenT nthAssumT i) p
+      Top_tacticals.thinMatchT thinT assum thenT nthAssumArg assum thenT nthAssumT i)
 
 let allSquashT =
    unsquashAllT thenT tryT sqsquashT

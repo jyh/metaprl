@@ -155,7 +155,7 @@ interactive well_ordering_principle bind{i.'P['i]} 'i :
 
 doc <:doc< @docoff >>
 
-let natBackInductionT n p =
+let natBackInductionT = argfunT (fun n p ->
    let bind =
       try
          let b = get_with_arg p in
@@ -168,7 +168,7 @@ let natBackInductionT n p =
                let z = get_opt_var_arg "z" p in
                   mk_xbind_term z (var_subst  (Sequent.concl p) <<0>> z)
    in
-      natBackInduction n bind p
+      natBackInduction n bind)
 
 (*
  * Some applications

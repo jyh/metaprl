@@ -261,9 +261,8 @@ doc <:doc<
    @docoff
    @end[doc]
 >>
-let nthHypT i p =
-   let i = Sequent.get_pos_hyp_num p i in
-      (hypothesis i orelseT hypothesisType i) p
+let nthHypT i =
+   hypothesis i orelseT hypothesisType i
 
 doc <:doc< 
    @begin[doc]
@@ -291,19 +290,19 @@ doc <:doc<
 >>
 let thinT = thin
 
-let thinIfThinningT hyps p =
-    (if get_thinning_arg p then
+let thinIfThinningT = argfunT (fun hyps p ->
+    if get_thinning_arg p then
        tryOnHypsT hyps thinT
-    else idT) p
+    else idT)
 
-let thinAllT i j p =
+let thinAllT i j =
    let rec tac j =
       if j < i then
          idT
       else
          thinT j thenT tac (pred j)
    in
-      tac j p
+      tac j
 
 doc <:doc< 
    @begin[doc]
@@ -322,13 +321,11 @@ doc <:doc<
    @docoff
    @end[doc]
 >>
-let assertT s p =
-   cut (Sequent.hyp_count p + 1) s p
+let assertT = cut 0
 
-let tryAssertT s ta tm p =
-   let concl = Sequent.concl p in
-   if alpha_equal s concl then ta p else
-      (assertT s thenLT [ta;tm]) p
+let tryAssertT s ta tm = funT (fun p ->
+   if alpha_equal s (Sequent.concl p) then ta else
+      assertT s thenLT [ta;tm])
 
 doc <:doc< 
    @begin[doc]
@@ -346,13 +343,12 @@ doc <:doc<
    @docoff
    @end[doc]
 >>
-let assertAtT i s p =
-   let i = if i < 0 then Sequent.get_pos_hyp_num p i + 1 else i in
-      cut i s p
+let assertAtT i s =
+   let i = if i < 0 then i + 1 else i in
+      cut i s
 
-let copyHypT i j p =
-   let t = Sequent.nth_hyp p i in
-      (assertAtT j t thenLT [nthHypT i; idT]) p
+let copyHypT i j = funT (fun p ->
+   assertAtT j (Sequent.nth_hyp p i) thenLT [nthHypT i; idT])
 
 let dupT = dup
 
@@ -395,7 +391,7 @@ doc <:doc<
    @docoff
    @end[doc]
 >>
-let substConclT t p =
+let substConclT = argfunT (fun t p ->
    let _, a, _ = dest_equal t in
    let bind =
       try
@@ -408,12 +404,12 @@ let substConclT t p =
          RefineError _ ->
             var_subst_to_bind (Sequent.concl p) a
    in
-      substitution t bind p
+      substitution t bind)
 
 (*
  * Hyp substitution requires a replacement.
  *)
-let substHypT i t p =
+let substHypT i t = funT (fun p ->
    let i = Sequent.get_pos_hyp_num p i in
    let _, a, _ = dest_equal t in
    let bind =
@@ -427,7 +423,7 @@ let substHypT i t p =
          RefineError _ ->
             var_subst_to_bind (Sequent.nth_hyp p i) a
    in
-      hypSubstitution i t bind p
+      hypSubstitution i t bind)
 
 (*
  * General substition.
@@ -441,20 +437,19 @@ let substT t i =
 (*
  * Derived versions.
  *)
-let hypSubstT i j p =
-      (substT (Sequent.nth_hyp p i) j thenET nthHypT i) p
+let hypSubstT i j = funT (fun p ->
+   substT (Sequent.nth_hyp p i) j thenET nthHypT i)
 
-let revHypSubstT i j p =
+let revHypSubstT i j = funT (fun p ->
    let t, a, b = dest_equal (Sequent.nth_hyp p i) in
    let h' = mk_equal_term t b a in
-      (substT h' j thenET (equalSymT thenT nthHypT i)) p
+      substT h' j thenET (equalSymT thenT nthHypT i))
 
 (*
  * Replace the entire hypothesis.
  *)
-let replaceHypT t i p =
-   let univ = get_univ_arg p in
-      hypReplacement (Sequent.get_pos_hyp_num p i) t univ p
+let replaceHypT t i = funT (fun p ->
+   hypReplacement i t (get_univ_arg p))
 
 (*
  * Typehood from equality.
@@ -462,11 +457,11 @@ let replaceHypT t i p =
 let equalTypeT = equalityTypeIsType
 let memberTypeT a = equalTypeT a a ttca
 
-let equalityAssumT i p =
+let equalityAssumT = argfunT (fun i p ->
    let t' = dest_type_term (Sequent.concl p) in
    let t,a,b = dest_equal (TermMan.nth_concl (Sequent.nth_assum p i) 1) in
       if alpha_equal t t' then
-         equalTypeT a b p else failT p
+         equalTypeT a b else failT)
 
 doc <:doc< 
    @begin[doc]

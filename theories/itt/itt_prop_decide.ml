@@ -59,7 +59,7 @@ let debug_prop_decide =
      }
 
 (* Like onSomeHyp, but works backwards. *)
-let revOnSomeHypT tac p =
+let revOnSomeHypT = argfunT (fun tac p ->
    let rec aux i =
       if i = 1 then
          tac i
@@ -68,14 +68,14 @@ let revOnSomeHypT tac p =
       else
          idT
    in
-      aux (Sequent.hyp_count p) p
+      aux (Sequent.hyp_count p))
 
 (* Operate on all non-wf subgoals *)
-let ifNotWT tac p =
-   (if (Sequent.label p) = "wf" then
+let ifNotWT = argfunT (fun tac p ->
+   if (Sequent.label p) = "wf" then
        idT
     else
-       tac) p
+       tac)
 
 (* Term classes *)
 let is_imp_and_term term =
@@ -128,8 +128,8 @@ let d_imp_impT i =
               thinT i]
 
 (* Try to decompose a hypothesis *)
-let rec decompPropDecideHypT count i p =
-   (let term = Sequent.nth_hyp p i in
+let rec decompPropDecideHypT count i = funT (fun p ->
+   let term = Sequent.nth_hyp p i in
        if is_false_term term then
           dT i
        else if is_and_term term or is_or_term term then
@@ -147,29 +147,27 @@ let rec decompPropDecideHypT count i p =
           dT i thenT thinT i thenT ifNotWT (internalPropDecideT count)
        else
           (* Nothing recognized, try to see if we're done. *)
-          nthHypT i) p
+          nthHypT i)
 
 (* Decompose the goal *)
-and decompPropDecideConclT count p =
+and decompPropDecideConclT count = funT (fun p ->
    if !debug_prop_decide then
-      begin
-         eprintf "decompPropDecideConclT: %a%t" Refiner.Refiner.Term.debug_print (Sequent.concl p) eflush
-      end;
-   (let goal = Sequent.concl p in
+      eprintf "decompPropDecideConclT: %a%t" Refiner.Refiner.Term.debug_print (Sequent.concl p) eflush;
+   let goal = Sequent.concl p in
        if is_or_term goal then
           (selT 1 (dT 0) thenT ifNotWT (internalPropDecideT count))
           orelseT (selT 2 (dT 0) thenT ifNotWT (internalPropDecideT count))
        else if is_and_term goal or is_implies_term goal then
           dT 0 thenT ifNotWT (internalPropDecideT count)
        else
-          trivialT) p
+          trivialT)
 
 (* Prove the proposition - internal version that does not handle negation *)
-and internalPropDecideT count p =
+and internalPropDecideT count = funT (fun p ->
    if !debug_prop_decide then
       eprintf "propDecideT: %d: %a%t" count debug_print (Sequent.goal p) eflush;
    let count = succ count in
-      (revOnSomeHypT (decompPropDecideHypT count) orelseT decompPropDecideConclT count) p
+      revOnSomeHypT (decompPropDecideHypT count) orelseT decompPropDecideConclT count)
 
 (* Convert all "not X" terms to "X => False" *)
 let notToImpliesFalseC =

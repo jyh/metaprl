@@ -41,6 +41,7 @@ open Refiner.Refiner.TermSubst
 
 open Tactic_type
 open Tactic_type.Conversionals
+open Tactic_type.Tacticals
 
 open Base_dtactic
 
@@ -96,12 +97,12 @@ interactive true_concl_intro :
    [main] sequent ['ext] { <H> >- 'P } -->
    sequent ['ext] { <H> >- 'P = "true" in univ[1:l] }
 
-let trueT p =
+let trueT = funT (fun p ->
    let goal = Sequent.concl p in
       if is_equal_term goal then
-         true_concl_intro p
+         true_concl_intro
       else
-         true_concl_elim p
+         true_concl_elim)
 
 (* Rules for pred *)
 interactive pred_elim {| elim [] |} 'H :

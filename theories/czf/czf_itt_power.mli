@@ -39,7 +39,7 @@ rewrite unfold_scoll : power{'s1; 's2} <-->
 rewrite reduce_scoll : power{collect{'T1; x1. 'f1['x1]}; collect{'T2; x2. 'f2['x2]}} <-->
     collect{.'T1 -> 'T2; x. collect{'T1; y. 'f2['x 'y]}}
 
-topval powerT : term -> tactic
+topval powerT : tactic
 
 (*
  * -*-

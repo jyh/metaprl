@@ -407,16 +407,14 @@ let atomic_intro_rules =
      tptp2_atomic_intro5
    |]
 
-let atomicT i p =
+let atomicT = argfunT (fun i p ->
    let arity = arity_of_apply (dest_atomic (Sequent.concl p)) in
       if arity < Array.length atomic_intro_rules then
-         (atomic_intro_rules.(arity) i
-          thenT addHiddenLabelT "wf") p
+         atomic_intro_rules.(arity) i thenT addHiddenLabelT "wf"
       else
-         raise (RefineError ("atomicT", StringIntError ("no rule for arity", arity)))
+         raise (RefineError ("atomicT", StringIntError ("no rule for arity", arity))))
 
-let intro_atomicT p =
-   onSomeHypT atomicT p
+let intro_atomicT = onSomeHypT atomicT
 
 let resource intro += (atomic_term, wrap_intro intro_atomicT)
 
@@ -429,13 +427,12 @@ let type_intro_rules =
      tptp2_type_intro5
    |]
 
-let typeT i p =
+let typeT = argfunT (fun i p ->
    let arity = arity_of_apply (dest_type_term (Sequent.concl p)) in
       if arity < Array.length type_intro_rules then
-         (type_intro_rules.(arity) i
-          thenT addHiddenLabelT "wf") p
+         type_intro_rules.(arity) i thenT addHiddenLabelT "wf"
       else
-         raise (RefineError ("typeT", StringIntError ("no rule for arity", arity)))
+         raise (RefineError ("typeT", StringIntError ("no rule for arity", arity))))
 
 (*
  * Custom tactic for proving tptp2_*_intro goals.

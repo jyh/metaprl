@@ -183,12 +183,12 @@ let extract_data tbl =
             let tac = slookup tbl l in
                if !debug_eqcd then
                   eprintf "Itt_equal.eqcd: found a tactic for %s%t" (SimplePrint.string_of_opname (opname_of_term l)) eflush;
-               tac p
+               tac
          with
             Not_found ->
                raise (RefineError ("eqcd", StringTermError ("EQCD tactic doesn't know about ", l)))
    in
-      eqcd
+      funT eqcd
 
 (*
  * Add info from a rule definition.
@@ -225,8 +225,8 @@ let process_eqcd_resource_annotation name context_args term_args _ statement pre
    let tac =
       match context_args with
          [||] ->
-            (fun p ->
-                Tactic_type.Tactic.tactic_of_rule pre_tactic [| |] (term_args p) p)
+            funT (fun p ->
+                Tactic_type.Tactic.tactic_of_rule pre_tactic [| |] (term_args p))
        | _ ->
             raise (Invalid_argument (sprintf "Itt_equal.intro: %s: not an introduction rule" name))
    in
@@ -241,8 +241,8 @@ let resource eqcd =
 (*
  * Resource argument.
  *)
-let eqcdT p =
-   Sequent.get_resource_arg p get_eqcd_resource p
+let eqcdT =
+   funT (fun p -> Sequent.get_resource_arg p get_eqcd_resource)
 
 (************************************************************************
  * DEFINITIONS                                                          *
@@ -637,23 +637,24 @@ let typeAssertT = typeEquality
 (*
  * Automation.
  *)
-let triv_equalT i p =
+let triv_equalT =
+   argfunT (fun i p ->
    let concl = Sequent.concl p in
    let hyp = Sequent.nth_hyp p i in
       if is_type_term concl then
-         let _ = dest_univ hyp in univAssumT i p
+         let _ = dest_univ hyp in univAssumT i
       else
          let gt, ga, gb = dest_equal concl in
-         if alpha_equal gt hyp then equalAssumT i p else
+         if alpha_equal gt hyp then equalAssumT i else
          let ht, ha, hb = dest_equal hyp in
          if alpha_equal gt ht then
             if alpha_equal ga gb then
-               if alpha_equal ha ga then equalRefT hb p
-               else if alpha_equal hb ga then (equalRefT ha thenT equalSymT) p
-               else if alpha_equal ha gb && alpha_equal hb ga then equalSymT p
+               if alpha_equal ha ga then equalRefT hb
+               else if alpha_equal hb ga then equalRefT ha thenT equalSymT
+               else if alpha_equal ha gb && alpha_equal hb ga then equalSymT
                else raise generic_refiner_exn
             else raise generic_refiner_exn
-         else raise generic_refiner_exn
+         else raise generic_refiner_exn)
 
 let equality_prec = create_auto_prec [trivial_prec] []
 

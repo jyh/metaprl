@@ -257,14 +257,14 @@ let intro_compact entries =
    in
 
    (* Compile the select version of the tactic *)
-   let compile_select name entries = fun
-      p ->
+   let compile_select name entries = 
+      funT (fun p ->
          let sel =
             try get_sel_arg p with
                RefineError _ ->
                   raise (RefineError (name, StringError "selT argument required"))
          in
-            assoc name sel entries p
+            assoc name sel entries)
    in
 
    (* Compile the non-selected version of the tactic *)
@@ -273,14 +273,12 @@ let intro_compact entries =
    in
 
    (* Compile the most general form *)
-   let compile_general name normal select = fun
-      p ->
-         let tac =
-            try assoc name (get_sel_arg p) select with
-               RefineError _ ->
-                  firstT normal
-         in
-            tac p
+   let compile_general name normal select = 
+      funT (fun p ->
+         begin try assoc name (get_sel_arg p) select with
+            RefineError _ ->
+               firstT normal
+         end)
    in
 
    (* Merge the entries *)
@@ -314,7 +312,7 @@ let identity x = x
 
 let extract_elim_data data =
    let tbl = create_table data identity in
-   fun i p ->
+   argfunT (fun i p ->
       let t = Sequent.nth_hyp p i in
       let tac =
          try
@@ -328,12 +326,11 @@ let extract_elim_data data =
       in
          if !debug_dtactic then
             eprintf "Base_dtactic: applying elim %s%t" (SimplePrint.string_of_opname (opname_of_term t)) eflush;
-
-         tac i p
+         tac i)
 
 let extract_intro_data data =
    let tbl = create_table data intro_compact in
-   fun p ->
+   funT (fun p ->
       let t = Sequent.concl p in
          try
             (* Find and apply the right tactic *)
@@ -345,17 +342,17 @@ let extract_intro_data data =
                   let tac = snd (Term_match_table.lookup tbl t) in
                   debug_term_table:=sv_deb_table;
                   eprintf "Base_dtactic: intro: applying %s%t" (SimplePrint.short_string_of_term t) eflush;
-                  tac p
+                  tac
                with
                   Not_found ->
                      debug_term_table:=sv_deb_table;
                      eprintf "Base_dtactic: intro: not found%t" eflush;
                      raise Not_found
             end else
-               snd (Term_match_table.lookup tbl t) p
+               snd (Term_match_table.lookup tbl t)
          with
             Not_found ->
-               raise (RefineError ("extract_intro_data", StringTermError ("D tactic doesn't know about", t)))
+               raise (RefineError ("extract_intro_data", StringTermError ("D tactic doesn't know about", t))))
 
 
 (*
@@ -459,9 +456,9 @@ let process_intro_resource_annotation name context_args term_args _ statement (p
                else
                   (fun p -> ())
             in
-               (fun p ->
+               funT (fun p ->
                   check_auto p;
-                     Tactic_type.Tactic.tactic_of_rule pre_tactic [||] (term_args p) p)
+                     Tactic_type.Tactic.tactic_of_rule pre_tactic [||] (term_args p))
        | _ ->
             raise (Invalid_argument (sprintf "Base_dtactic.intro: %s: not an introduction rule" name))
    in
@@ -543,8 +540,8 @@ let process_elim_resource_annotation name context_args term_args _ statement (pr
    let tac =
       match context_args, thinT with
          [| _ |], None ->
-            (fun i p ->
-               Tactic_type.Tactic.tactic_of_rule pre_tactic [| i |] (term_args i p) p)
+            argfunT (fun i p ->
+               Tactic_type.Tactic.tactic_of_rule pre_tactic [| i |] (term_args i p))
 
        | [| _ |], Some thinT ->
             let rec find_thin_num_aux hyps len i =
@@ -571,13 +568,13 @@ let process_elim_resource_annotation name context_args term_args _ statement (pr
              | _ -> raise (Invalid_argument (sprintf "Base_dtactic.improve_elim: %s: ThinOption: different assumptions have the eliminated hypothesis in a different place" name))
             in
             let thin_incr = (check_thin_nums thin_nums) - hnum in
-            (fun i p ->
+            argfunT (fun i p ->
                let tac = Tactic_type.Tactic.tactic_of_rule pre_tactic [| i |] (term_args i p)
                in 
                   if get_thinning_arg p then
-                     (tac thenT tryT (thinT (i + thin_incr))) p
+                     tac thenT tryT (thinT (i + thin_incr))
                   else
-                     tac p)
+                     tac)
        | _ ->
             raise (Invalid_argument (sprintf "Base_dtactic: %s: not an elimination rule" name))
    in
@@ -615,11 +612,12 @@ let resource intro = Functional {
    fp_retr = extract_intro_data;
 }
 
-let dT i p =
+let dT =
+   argfunT (fun i p ->
    if i = 0 then
-      Sequent.get_resource_arg p get_intro_resource p
+      Sequent.get_resource_arg p get_intro_resource
    else
-      Sequent.get_resource_arg p get_elim_resource (Sequent.get_pos_hyp_num p i) p
+      Sequent.get_resource_arg p get_elim_resource (Sequent.get_pos_hyp_num p i))
 
 let rec dForT i =
    if i <= 0 then
@@ -635,11 +633,11 @@ let d_elim_prec = create_auto_prec [trivial_prec; d_prec] []
 
 let eq_exn = RefineError ("dT", StringError "elim rule not suitable for autoT")
 
-let not_equal t i p =
-   if alpha_equal t (Sequent.nth_hyp p i) then raise eq_exn else idT p
+let not_equal t i =
+   funT (fun p -> if alpha_equal t (Sequent.nth_hyp p i) then raise eq_exn else idT)
 
-let auto_dT i p =
-   (dT i thenT not_equal (Sequent.nth_hyp p i) i) p
+let auto_dT =
+   argfunT (fun i p -> (dT i thenT not_equal (Sequent.nth_hyp p i) i))
 
 let resource auto += [ {
    auto_name = "dT";

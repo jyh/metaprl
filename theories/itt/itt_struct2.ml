@@ -273,7 +273,7 @@ doc <:doc<
 
 (* substitution *)
 
-let substConclT t p =
+let substConclT = argfunT (fun t p ->
    let _, a, _ = dest_equal t in
    let bind =
       try
@@ -286,14 +286,12 @@ let substConclT t p =
          RefineError _ ->
             var_subst_to_bind (Sequent.concl p) a
    in
-   let tac =
-      (substitutionInType t bind orelseT substitution2 t bind) thenWT thinIfThinningT [-1;-1]
-   in tac p
+      (substitutionInType t bind orelseT substitution2 t bind) thenWT thinIfThinningT [-1;-1])
 
 (*
  * Hyp substitution requires a replacement.
  *)
-let substHypT i t p =
+let substHypT i t = funT (fun p ->
    let i = Sequent.get_pos_hyp_num p i in
    let _, a, _ = dest_equal t in
    let bind =
@@ -308,13 +306,12 @@ let substHypT i t p =
             var_subst_to_bind (Sequent.nth_hyp p i) a
    in
      if get_thinning_arg p
-       then hypSubstitution i t bind p
-       else hypSubstitution2 i t bind p
+       then hypSubstitution i t bind
+       else hypSubstitution2 i t bind)
 
 (*
  * General substition.
  *)
-
 
 let eqSubstT t i =
    if i = 0 then
@@ -328,28 +325,27 @@ let substT t =
    else
       eqSubstT t
 
-
 (*
  * Derived versions.
  *)
 
-let hypSubstT i j p =
-      (substT (Sequent.nth_hyp p i) j thenET nthHypT i) p
+let hypSubstT i j = funT (fun p ->
+   substT (Sequent.nth_hyp p i) j thenET nthHypT i)
 
-let revHypSubstT i j p =
+let revHypSubstT i j = funT (fun p ->
    let trm = Sequent.nth_hyp p i in
    if is_squiggle_term trm then
       let a, b = dest_squiggle trm in
       let h' = mk_squiggle_term  b a in
-         (substT h' j thenET (sqSymT thenT nthHypT i)) p
+         substT h' j thenET (sqSymT thenT nthHypT i)
    else
       let t, a, b = dest_equal trm in
       let h' = mk_equal_term t b a in
-         (substT h' j thenET (equalSymT thenT nthHypT i)) p
+         substT h' j thenET (equalSymT thenT nthHypT i))
 
 (* cutMem *)
 
-let letT x_is_s_in_S p =
+let letT x_is_s_in_S = funT (fun p ->
    let _S, x, s = dest_equal x_is_s_in_S in
    let xname = dest_var x in
    let bind =
@@ -360,14 +356,14 @@ let letT x_is_s_in_S p =
                var_subst_to_bind (Sequent.concl p) s
    in
       if is_xbind_term bind then
-           (cutMem s  _S bind thenMT nameHypT (-2) xname thenMT thinIfThinningT [-1]) p
+           cutMem s  _S bind thenMT nameHypT (-2) xname thenMT thinIfThinningT [-1]
       else
-           raise (RefineError ("letT", StringTermError ("need a \"bind\" term: ", bind)))
+           raise (RefineError ("letT", StringTermError ("need a \"bind\" term: ", bind))))
 
 
 (* cutEq *)
 
-let assertEqT eq p =
+let assertEqT = argfunT (fun eq p ->
    let _, s1, s2 = dest_equal eq in
    let bind =
       try
@@ -382,13 +378,9 @@ let assertEqT eq p =
                mk_xbind_term x (mk_equal_term t' t1' t2')
    in
       if is_xbind_term bind then
-         (try
-            (cutEq eq bind thenMT thinIfThinningT [-2;-1]) p
-          with
-                 RefineError _ ->
-                    raise (RefineError ("assertEqT", StringTermError (" \"bind\" term: ", bind))))
+         cutEq eq bind thenMT thinIfThinningT [-2;-1]
       else
-         raise (RefineError ("assertEqT", StringTermError ("need a \"bind\" term: ", bind)))
+         raise (RefineError ("assertEqT", StringTermError ("need a \"bind\" term: ", bind))))
 
 (* cutSquash *)
 

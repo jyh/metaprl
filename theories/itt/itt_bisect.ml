@@ -157,21 +157,21 @@ interactive bisectElimination_eq 'H bind{x.bind{a,b.'C['x;'a;'b]}} :
                                                    b: 'B; v: 'b = 'x in 'B >- 'C['x;'a;'b] } -->
    sequent ['ext] { <H>; x: 'A isect 'B; <J['x]> >- 'C['x;'x;'x] }
 
-let bisectEliminationT n p =
+let bisectEliminationT = argfunT (fun n p ->
    let n = Sequent.get_pos_hyp_num p n in
    let x = Sequent.nth_binding p n in
    let x_var = mk_var_term x in
    let bind =  get_with_arg p in
       if is_bind2_term bind then
          let bind = mk_bind1_term x bind in
-            bisectElimination_eq n bind p
+            bisectElimination_eq n bind
       else
          raise (RefineError
-           ("bisectElimination", StringTermError ("required the bind term:",<<bind{a,b.'C['a;'b]}>>)))
+           ("bisectElimination", StringTermError ("required the bind term:",<<bind{a,b.'C['a;'b]}>>))))
 
-let bisectEliminationT n p =
+let bisectEliminationT = argfunT (fun n p ->
    let n = Sequent.get_pos_hyp_num p n in
-    (bisectEliminationT n thenT thinIfThinningT [-3;-1;n]) p
+      bisectEliminationT n thenT thinIfThinningT [-3;-1;n])
 
 let resource elim += (<<'A isect 'B>>,bisectEliminationT)
 
@@ -199,7 +199,7 @@ interactive bisectEliminationRight (*{| elim [SelectOption 2] |}*) 'H :
    sequent ['ext] { <H>; x: 'A isect 'B; <J['x]>; a: 'A; u: 'a = 'x in 'A; b: 'B; v: 'b = 'x in 'B >- 'C['b] } -->
    sequent ['ext] { <H>; x: 'A isect 'B; <J['x]> >- 'C['x] }
 
-let bisectEliminationT n p =
+let bisectEliminationT = argfunT (fun n p ->
    let n = Sequent.get_pos_hyp_num p n in
    try
       let sel = get_sel_arg p in
@@ -207,12 +207,9 @@ let bisectEliminationT n p =
          if sel = 1 then bisectEliminationLeft else
          if sel = 2 then bisectEliminationRight else
             raise (RefineError ("bisectElimination", StringError ("select option is out of range ([1,2])")))
-      in (r n thenT thinIfThinningT [-3;-1;n]) p
-   with RefineError ("get_attribute",_) ->
-      try bisectEliminationT n p
-      with RefineError ("get_attribute",_) ->
-         raise (RefineError
-            ("bisectElimination", StringTermError ("need a select option or a bind term:",<<bind{a,b.'C['a;'b]}>>)))
+      in r n thenT thinIfThinningT [-3;-1;n]
+   with RefineError _ -> 
+      bisectEliminationT n)
 
 let resource elim += (<<'A isect 'B>>,bisectEliminationT)
 

@@ -773,7 +773,7 @@ doc <:doc<
    @docoff
    @end[doc]
 >>
-let moveToConclT i p =
+let moveToConclT = argfunT (fun i p ->
    let i = Sequent.get_pos_hyp_num p i in
    let hyps = (Sequent.explode_sequent p).sequent_hyps in
    let vars, indices =
@@ -822,7 +822,7 @@ let moveToConclT i p =
        | [] ->
             idT
    in
-      tac (collect (i+1) vars indices) (Sequent.concl p) p
+      tac (collect (i+1) vars indices) (Sequent.concl p))
 
 doc <:doc< 
    @begin[doc]
@@ -854,11 +854,11 @@ let univCDT =
             or is_implies_term concl
             or is_fun_term concl
          then
-            (dT 0 thenMT tac) p
+            dT 0 thenMT (funT tac)
          else
-            idT p
+            idT
    in
-      tac
+      funT tac
 
 let genUnivCDT =
    let rec tac p =
@@ -871,11 +871,11 @@ let genUnivCDT =
             or is_prod_term concl
             or is_iff_term concl
          then
-            (dT 0 thenMT tac) p
+            dT 0 thenMT (funT tac)
          else
-            idT p
+            idT
    in
-      tac
+      funT tac
 
 doc <:doc< 
    @begin[doc]
@@ -901,10 +901,10 @@ doc <:doc<
    @end[doc]
 >>
 let instHypT args i =
-   let rec inst i firstp args p =
+   let rec inst i firstp args = funT (fun p ->
       match args with
          [] ->
-            idT p
+            idT
        | arg :: args' ->
             let hyp = Sequent.nth_hyp p i in
             let tailT args =
@@ -914,13 +914,13 @@ let instHypT args i =
                   thinT i thenT inst i false args
             in
                if is_all_term hyp then
-                  (withT arg (dT i) thenMT tailT args') p
+                  withT arg (dT i) thenMT tailT args'
                else if is_dfun_term hyp then
-                  (withT arg (dT i) thenMT (thinT (-1) thenT tailT args')) p
+                  withT arg (dT i) thenMT (thinT (-1) thenT tailT args')
                else if is_implies_term hyp or is_fun_term hyp then
-                  (dT i thenMT tailT args) p
+                  dT i thenMT tailT args
                else
-                  raise (RefineError ("instHypT", StringTermError ("hyp is not quantified", hyp)))
+                  raise (RefineError ("instHypT", StringTermError ("hyp is not quantified", hyp))))
    in
       thinningT false (inst i true args)
 
@@ -1063,11 +1063,11 @@ doc <:doc<
    @docoff
    @end[doc]
 >>
-let backThruHypT i p =
+let backThruHypT = argfunT (fun i p ->
    if !debug_auto then
       eprintf "Starting backThruHyp %d%t" i eflush;
-   let rec tac info i firstp p =
-      (match info with
+   let rec tac info i firstp = funT (fun p ->
+      match info with
           [] ->
              nthHypT i
         | hd :: args ->
@@ -1087,7 +1087,7 @@ let backThruHypT i p =
                  | IffLeft ->
                       dT i thenT thinT i thenT dT i thenLT tailT
                  | AllTerm (v, t) ->
-                      withT t (dT i) thenLT tailT) p
+                      withT t (dT i) thenLT tailT)
    in
    let info = match_goal [] (Sequent.nth_hyp p i) (Sequent.concl p) in
       if !debug_auto then
@@ -1095,7 +1095,7 @@ let backThruHypT i p =
             eprintf "backThruHyp %d%t" i eflush;
             eprint_info info
          end;
-      thinningT false (tac info i true) p
+      thinningT false (tac info i true))
 
 doc <:doc< 
    @begin[doc]
@@ -1178,21 +1178,21 @@ let make_assumT i goal assum form index =
    let len = TermMan.num_hyps assum in
 
    (* Call intro form on each arg *)
-   let rec introT j p =
+   let rec introT j =
       if j > len then begin
-         Itt_squash.nthAssumT i p
+         Itt_squash.nthAssumT i
       end else
-         (dT 0 thenMT introT (succ j)) p
+         (dT 0 thenMT introT (succ j))
    in
       tryAssertT form
          (thinAllT index (TermMan.num_hyps goal) thenT introT index)
          (addHiddenLabelT "main")
 
-let assumT i p =
+let assumT = argfunT (fun i p ->
    let goal = Sequent.goal p in
    let assum = Sequent.nth_assum p i in
    let form, index = assum_term goal assum in
-      make_assumT i goal assum form index p
+      make_assumT i goal assum form index)
 
 doc <:doc< 
    @begin[doc]
@@ -1204,9 +1204,9 @@ doc <:doc<
    @docoff
    @end[doc]
 >>
-let backThruAssumT i p =
+let backThruAssumT = argfunT (fun i p ->
    let j = Sequent.hyp_count p + 1 in
-      (assumT i thenMT (backThruHypT j thenT thinT j)) p
+      assumT i thenMT (backThruHypT j thenT thinT j))
 
 doc <:doc< 
    @begin[doc]
@@ -1236,7 +1236,7 @@ doc <:doc<
    @docoff
    @end[doc]
 >>
-let genAssumT indices p =
+let genAssumT = argfunT (fun indices p ->
    let goal = Sequent.goal p in
    let len = Sequent.num_assums p in
    let _ =
@@ -1260,7 +1260,7 @@ let genAssumT indices p =
          else mk_implies_term t' t
    in
    let t = make_gen_term (TermMan.nth_concl goal 1) indices in
-      (assertT t thenMT (backThruHypT (-1) thenT autoT) ) p
+      assertT t thenMT (backThruHypT (-1) thenT autoT) )
 
 (************ logic instance for j-prover in refiner/reflib/jall.ml  **********)
 
@@ -1290,18 +1290,18 @@ struct
 
    let tryfind_hyp_exn = RefineError("find_hyp_exn", StringError "hypothesys not found")
 
-   let tryfind_hyp term tact i p =
-      if alpha_equal (Sequent.nth_hyp p i) term then tact i p
-      else raise tryfind_hyp_exn
+   let tryfind_hyp term tact i = funT (fun p ->
+      if alpha_equal (Sequent.nth_hyp p i) term then tact i
+      else raise tryfind_hyp_exn)
 
-   let find_hyp_fail _ =
-      raise (Invalid_argument "Itt_logic.Itt_JLogic.find_hyp failed")
+   let find_hyp_fail =
+      funT (fun _ -> raise (Invalid_argument "Itt_logic.Itt_JLogic.find_hyp failed"))
 
    let find_hyp term tact =
       onSomeHypT (tryfind_hyp term tact) orelseT find_hyp_fail
 
-   let tryappend_subst subst t tact i p =
-      tact (match_terms subst t (Sequent.nth_hyp p i)) p
+   let tryappend_subst subst t tact i = funT (fun p ->
+      tact (match_terms subst t (Sequent.nth_hyp p i)))
 
    let append_subst subst t v tact =
       match (dest_term t).term_terms with
@@ -1314,13 +1314,13 @@ struct
             end
        | _ -> raise (Invalid_argument "Itt_logic.append_subst")
 
-   let goal_append_subst subst t v tact p =
+   let goal_append_subst subst t v tact =
       match (dest_term t).term_terms with
          [_;bt] ->
             let bt = dest_bterm bt in
             begin match bt.bvars with
                [dv] ->
-                  tact (match_terms subst (subst1 bt.bterm dv v) (Sequent.concl p)) p
+                  funT (fun p -> tact (match_terms subst (subst1 bt.bterm dv v) (Sequent.concl p)))
              | _ -> raise (Invalid_argument "Itt_logic.append_subst")
             end
        | _ -> raise (Invalid_argument "Itt_logic.append_subst")
@@ -1375,7 +1375,7 @@ let rec filter_hyps = function
  | (HypBinding (_, h) | Hypothesis h) :: hs -> h :: filter_hyps hs
 
 (* input a list_term of hyps,concl *)
-let base_jproverT def_mult p =
+let base_jproverT def_mult = funT (fun p ->
    let mult_limit =
       try Some (Sequent.get_int_arg p "jprover")
       with RefineError _ -> def_mult
@@ -1386,8 +1386,8 @@ let base_jproverT def_mult p =
       ITT_JProver.prover mult_limit hyps (SeqGoal.get seq.sequent_goals 0)
    with
       [t] ->
-         t [] p
-    | _ -> raise (Invalid_argument "Problems decoding ITT_JProver.prover proof")
+         t []
+    | _ -> raise (Invalid_argument "Problems decoding ITT_JProver.prover proof"))
 
 let jproverT = base_jproverT (Some 100)
 
@@ -1398,17 +1398,17 @@ let jproverT = base_jproverT (Some 100)
 (*
  * In auto tactic, Ok to decompose product hyps.
  *)
-let logic_trivT i p =
+let logic_trivT = argfunT (fun i p ->
    let hyp = Sequent.nth_hyp p i in
       if is_void_term hyp or is_false_term hyp then
-         dT i p
+         dT i
       else
-         raise (RefineError ("logic_trivT", StringTermError ("nothing known about", hyp)))
+         raise (RefineError ("logic_trivT", StringTermError ("nothing known about", hyp))))
 
 (*
  * Backchaining in auto tactic.
  *)
-let logic_autoT i p =
+let logic_autoT = argfunT (fun i p ->
    let hyp = Sequent.nth_hyp p i in
       if is_and_term hyp
          or is_prod_term hyp
@@ -1416,12 +1416,12 @@ let logic_autoT i p =
          or is_exists_term hyp
          or is_and_term (dest_squash hyp)
       then
-         dT i p
+         dT i
       else
-         raise (RefineError ("logic_autoT", StringError "unknown formula"))
+         raise (RefineError ("logic_autoT", StringError "unknown formula")))
 
 let assum_exn = (RefineError ("auto_assumT", StringError "already there"))
-let auto_assumT i p =
+let auto_assumT = argfunT (fun i p ->
    if !debug_auto then
       eprintf "Trying auto_assumT %d%t" i eflush;
    let goal = Sequent.goal p in
@@ -1443,7 +1443,7 @@ let auto_assumT i p =
       check_hyps (SeqHyp.length hyps);
       if !debug_auto then
          eprintf "\tTrying assumT %d%t" i eflush;
-      make_assumT i goal assum gen_assum index p
+      make_assumT i goal assum gen_assum index)
 
 let auto_assumT i = tryT (auto_assumT i)
 
@@ -1477,14 +1477,14 @@ let autoBackT compare_aux get_aux tac_aux onsome auto_aux =
    let mem aux goal (aux', goal') =
       compare_aux aux aux' && alpha_equal goal goal'
    in
-   let backHyp tac history (i:int) p =
+   let backHyp tac history (i:int) = funT (fun p ->
       let goal = Sequent.goal p in
       let aux = get_aux p i in
       let tac' =
          if List.exists (mem aux goal) history then failT else
          tac_aux i thenT tac ((aux,goal)::history)
       in
-         tac' p
+         tac')
    in
    let rec auto_back history =
       auto_aux thenT tryT (onsome (backHyp auto_back history))

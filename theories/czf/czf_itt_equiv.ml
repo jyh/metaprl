@@ -343,7 +343,7 @@ interactive equiv_fun_mem 'H equiv_fun_set{'s; 'r; z. 'f['z]} :
    sequent ['ext] { <H>; z: set; <J['z]> >- mem{'f['z]; 's} }
 
 doc <:doc< @docoff >>
-let equivFunSetT i p =
+let equivFunSetT = argfunT (fun i p ->
    let z = Sequent.nth_binding p i in
    let t = dest_isset (Sequent.concl p) in
    let t =
@@ -355,9 +355,9 @@ let equivFunSetT i p =
       with RefineError ("get_attribute",_) ->
          raise (RefineError ("equivFunSetT", StringError ("need a term list")))
    in
-      equiv_fun_isset (get_pos_hyp_num p i) t p
+      equiv_fun_isset (get_pos_hyp_num p i) t)
 
-let equivFunMemT t i p =
+let equivFunMemT t i = funT (fun p ->
    let z = Sequent.nth_binding p i in
    let t =
       try
@@ -368,7 +368,7 @@ let equivFunMemT t i p =
       with RefineError ("get_attribute",_) ->
          raise (RefineError ("equivFunSetT", StringError ("need a term list")))
    in
-      equiv_fun_mem (get_pos_hyp_num p i) t p
+      equiv_fun_mem i t)
 
 doc <:doc< 
    @begin[doc]
@@ -640,7 +640,7 @@ doc <:doc<
    @docoff
    @end[doc]
 >>
-let equivConclSubstT t p =
+let equivConclSubstT = argfunT (fun t p ->
    let s, r, s1, s2 = dest_equiv t in
    let goal = Sequent.concl p in
    let bind =
@@ -654,9 +654,9 @@ let equivConclSubstT t p =
          RefineError _ ->
             var_subst_to_bind goal s1
    in
-      equiv_concl_subst s r s1 s2 bind p
+      equiv_concl_subst s r s1 s2 bind)
 
-let equivHypSubstT t i p =
+let equivHypSubstT t i = funT (fun p ->
    let s, r, s1, s2 = dest_equiv t in
    let hyp = nth_hyp p i in
    let bind =
@@ -670,7 +670,7 @@ let equivHypSubstT t i p =
          RefineError _ ->
             var_subst_to_bind hyp s1
    in
-      equiv_hyp_subst (get_pos_hyp_num p i) s r s1 s2 bind p
+      equiv_hyp_subst i s r s1 s2 bind)
 
 let equivSubstT t i =
    if i = 0 then

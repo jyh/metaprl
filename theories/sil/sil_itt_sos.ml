@@ -178,7 +178,7 @@ let resource reduce += [
 interactive evals_identity {| intro [] |} :
    sequent ['ext] { <H> >- evalsto{'t1; 't1} }
 
-let rwevalT i p =
+let rwevalT = argfunT (fun i p ->
    let mseq = Sequent.msequent p in
    let _, hyps = Refine.dest_msequent mseq in
    let len = List.length hyps in
@@ -190,8 +190,7 @@ let rwevalT i p =
    let goal = TermMan.nth_concl hyp 1 in
    let a, b = two_subterms goal in
    let t = mk_xrewrite_term a b in
-      (rewriteT t
-       thenAT (rw fold_evalsto 0 thenT autoT)) p
+      rewriteT t thenAT (rw fold_evalsto 0 thenT autoT))
 
 (*
  * Value.
@@ -200,7 +199,7 @@ interactive value_thm :
    [main] sequent [squash] { <H> >- "value"{'e1; 's} } -->
    sequent ['ext] { <H> >- Perv!"rewrite"{eval{'e1; 's}; ."val"{progof{eval{'e1; .Sil_itt_state!empty}}; 's}} }
 
-let rwvalueT s2 i p =
+let rwvalueT s2 i = funT (fun p ->
    let mseq = Sequent.msequent p in
    let _, hyps = Refine.dest_msequent mseq in
    let len = List.length hyps in
@@ -214,9 +213,9 @@ let rwvalueT s2 i p =
    let a = mk_eval_term e2 s2 in
    let b = mk_val_term (mk_progof_term (mk_eval_term e2 empty_term)) s2 in
    let t = mk_xrewrite_term a b in
-      (rewriteT t thenAT value_thm thenT autoT) p
+      rewriteT t thenAT value_thm thenT autoT)
 
-let rwvalueRevT s2 i p =
+let rwvalueRevT s2 i = funT (fun p ->
    let mseq = Sequent.msequent p in
    let _, hyps = Refine.dest_msequent mseq in
    let len = List.length hyps in
@@ -230,7 +229,7 @@ let rwvalueRevT s2 i p =
    let b = mk_eval_term e2 s2 in
    let a = mk_val_term (mk_progof_term (mk_eval_term e2 empty_term)) s2 in
    let t = mk_xrewrite_term a b in
-      (rewriteT t thenAT (rewriteSymT thenT value_thm thenT autoT)) p
+      rewriteT t thenAT (rewriteSymT thenT value_thm thenT autoT))
 
 (*
  * Need eta-contraction.

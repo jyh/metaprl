@@ -34,15 +34,12 @@ prim cut 'T :
 (*
  * Tactics.
  *)
-let nthHypT i p =
-   hypothesis (Sequent.get_pos_hyp_num p i) p
+let nthHypT = hypothesis
+let thinT = thin
 
-let thinT i p =
-   thin (Sequent.get_pos_hyp_num p i) p
-
-let nthAssumT i p =
+let nthAssumT = argfunT (fun i p ->
    let assum = Sequent.nth_assum p i in
-      Top_tacticals.thinMatchT thinT assum p
+      Top_tacticals.thinMatchT thinT assum)
 
 let assertT = cut
 

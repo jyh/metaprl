@@ -203,7 +203,7 @@ interactive three_cases  compare{'ord; 'x;'y; 'less_case; 'equal_case; 'greater_
 
 doc <:doc< @docoff >>
 
-let decideOrder3T compare_term order_term p =
+let decideOrder3T compare_term order_term = funT (fun p ->
    let z = get_opt_var_arg "z" p in
    let bind =
       try
@@ -216,7 +216,7 @@ let decideOrder3T compare_term order_term p =
          RefineError _ ->
             mk_xbind_term z (var_subst (Sequent.concl p) compare_term  z)
    in
-    three_cases compare_term order_term bind p
+    three_cases compare_term order_term bind)
 
 doc <:doc< @doc { } >>
 

@@ -279,7 +279,7 @@ interactive intersectionElimination_eq 'H 'a bind{x.bind{z.'T['x;'z]}}:
    sequent ['ext] { <H>; x: Isect y: 'A. 'B['y]; <J['x]> >- 'T['x;'x] }
 
 
-let intersectionEliminationT n p =
+let intersectionEliminationT = argfunT (fun n p ->
    let n = Sequent.get_pos_hyp_num p n in
    let x = Sequent.nth_binding p n in
    let x_var = mk_var_term x in
@@ -297,11 +297,11 @@ let intersectionEliminationT n p =
          _ -> raise (RefineError ("intersectionElimination", StringError ("too many arguments")))
    in
    let bind = mk_bind1_term x bind in
-      intersectionElimination_eq n a bind p
+      intersectionElimination_eq n a bind)
 
-let intersectionEliminationT n p =
+let intersectionEliminationT = argfunT (fun n p ->
    let n = Sequent.get_pos_hyp_num p n in
-     (intersectionEliminationT n thenT thinIfThinningT [-1;n]) p
+     intersectionEliminationT n thenT thinIfThinningT [-1;n])
 
 doc <:doc< 
    @begin[doc]
@@ -314,10 +314,10 @@ interactive intersectionElimination2 (*{| elim [] |}*) 'H :
    [main] sequent ['ext] { <H>; x: Isect y: 'A. 'B; <J['x]>; z: 'B; v: 'z = 'x in 'B >- 'T['z] } -->
    sequent ['ext] { <H>; x: Isect y: 'A. 'B; <J['x]> >- 'T['x] }
 
-let intersectionEliminationT n p =
+let intersectionEliminationT = argfunT (fun n p ->
    let n = Sequent.get_pos_hyp_num p n in
-     ((intersectionElimination2 n thenT thinIfThinningT [-1;n])
-       orelseT intersectionEliminationT n) p
+     (intersectionElimination2 n thenT thinIfThinningT [-1;n])
+       orelseT intersectionEliminationT n)
 
 let resource elim += (<<Isect y: 'A. 'B['y]>>, intersectionEliminationT)
 
@@ -428,12 +428,12 @@ let resource sub +=
                << 'B1['a1] >>, << 'B2['a1] >>],
               intersectionSubtype))
 
-let d_isect_subtypeT i p =
+let d_isect_subtypeT = argfunT (fun i p ->
    if i = 0 then
       let a = get_with_arg p in
-         intersectionSubtype2 a p
+         intersectionSubtype2 a
    else
-      raise (RefineError ("d_isect_subtypeT", StringError "no elimination form"))
+      raise (RefineError ("d_isect_subtypeT", StringError "no elimination form")))
 
 let isect_subtype_term = << \subtype{."isect"{'A; x. 'B['x]}; 'T} >>
 

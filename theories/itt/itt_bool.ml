@@ -601,7 +601,7 @@ doc <:doc<
 (*
  * Split a bool in the conclusion.
  *)
-let splitBoolCT a p =
+let splitBoolCT = argfunT (fun a p ->
    let bind =
       try
          let t1 = get_with_arg p in
@@ -614,12 +614,12 @@ let splitBoolCT a p =
          RefineError _ ->
             var_subst_to_bind (Sequent.concl p) a
    in
-      bool_subst_concl bind a p
+      bool_subst_concl bind a)
 
 (*
  * Split a bool in a hyp.
  *)
-let splitBoolHT i a p =
+let splitBoolHT i a = funT (fun p ->
    let bind =
       try
          let b = get_with_arg p in
@@ -632,7 +632,7 @@ let splitBoolHT i a p =
          RefineError _ ->
             var_subst_to_bind (Sequent.nth_hyp p i) a
    in
-      bool_subst_hyp (Sequent.get_pos_hyp_num p i) bind a p
+      bool_subst_hyp (Sequent.get_pos_hyp_num p i) bind a)
 
 let splitBoolT t i =
    if i = 0 then
@@ -714,7 +714,7 @@ doc <:doc<
    @docoff
    @end[doc]
 >>
-let splitITE i p =
+let splitITE = argfunT (fun i p ->
    let t =
       if i = 0 then
          Sequent.concl p
@@ -738,10 +738,10 @@ let splitITE i p =
          raise (RefineError ("splitITE", StringTermError ("no condition", t)))
    in
    let i'= if (i>=0) then i else pred i in
-      (splitBoolT t i
+      splitBoolT t i
        thenLT [idT;
                rw (reduce_ite_trueC addrs) i';
-               rw (reduce_ite_falseC addrs) i']) p
+               rw (reduce_ite_falseC addrs) i'])
 
 (************************************************************************
  * TYPE INFERENCE                                                       *

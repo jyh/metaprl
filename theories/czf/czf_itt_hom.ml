@@ -347,11 +347,8 @@ doc <:doc<
    @docoff
    @end[doc]
 >>
-let homIdT i p =
-   hom_id_elim (Sequent.get_pos_hyp_num p i) p
-
-let homInvT t i p =
-   hom_inv_elim (Sequent.get_pos_hyp_num p i) t p
+let homIdT = hom_id_elim
+let homInvT t i = hom_inv_elim i t
 
 doc <:doc< @docoff >>
 (*

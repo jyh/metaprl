@@ -1073,7 +1073,7 @@ interactive fall_elim 'H 'a 'w :
  * TACTICS                                                              *
  ************************************************************************)
 
-let fmember_subst_elementT x p =
+let fmember_subst_elementT = argfunT (fun x p ->
    let t =
       try get_univ_arg p with
          RefineError _ ->
@@ -1082,7 +1082,7 @@ let fmember_subst_elementT x p =
             let _, x, _ = dest_fmember t in
             infer_type p x
    in
-      fmember_fun t x p
+      fmember_fun t x)
 
 let assert_2of3_type p t =
    try get_with_arg p with
@@ -1094,17 +1094,17 @@ let assert_2of3_type p t =
                   infer_type p y
          end
 
-let fcompareSymT p =
-   fcompare_sym (assert_2of3_type p (Sequent.concl p)) p
+let fcompareSymT = funT (fun p ->
+   fcompare_sym (assert_2of3_type p (Sequent.concl p)))
 
-let fcompareTransT z p =
-   fcompare_trans (assert_2of3_type p (Sequent.concl p)) z p
+let fcompareTransT = argfunT (fun z p ->
+   fcompare_trans (assert_2of3_type p (Sequent.concl p)) z)
 
 let assert_2of3_fset_type p t =
    dest_fset_type (assert_2of3_type p t)
 
-let fsubseteqTransT t p =
-   fsubseteq_trans (assert_2of3_fset_type p (Sequent.concl p)) t p
+let fsubseteqTransT = argfunT (fun t p ->
+   fsubseteq_trans (assert_2of3_fset_type p (Sequent.concl p)) t)
 
 (*
  * -*-

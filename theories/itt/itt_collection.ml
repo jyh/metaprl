@@ -481,11 +481,11 @@ doc <:doc< @docoff >>
 
 (********************** Tactics *********************)
 
-let colEqSymT p =
-   col_equal_sym (get_univ_arg p) p
+let colEqSymT = funT (fun p ->
+   col_equal_sym (get_univ_arg p))
 
-let colEqTransT t p =
-   col_equal_trans (get_univ_arg p) t p
+let colEqTransT = argfunT (fun t p ->
+   col_equal_trans (get_univ_arg p) t)
 
 (********************** dforms **********************)
 

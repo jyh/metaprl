@@ -80,7 +80,7 @@ let extract_data base =
       let t = concl p in
          try (slookup tbl t) p with
             Not_found ->
-               raise (RefineError (StringTermError ("SQUASH tactic doesn't know about ", t)))
+               raise (RefineError ("squash", StringTermError ("SQUASH tactic doesn't know about ", t)))
    in
       squash
 
@@ -123,6 +123,9 @@ let squash_of_proof p =
 
 (*
  * $Log$
+ * Revision 1.9  1998/06/12 13:47:39  jyh
+ * D tactic works, added itt_bool.
+ *
  * Revision 1.8  1998/06/09 20:52:45  jyh
  * Propagated refinement changes.
  * New tacticals module.

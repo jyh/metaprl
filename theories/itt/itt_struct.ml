@@ -160,7 +160,7 @@ let thinT i p =
    let i, j = hyp_indices p i in
    let x, _ = nth_hyp p i in
       if is_free_seq_var (i + 1) x p then
-         raise (RefineError (StringStringError ("thinT: free variable: ", x)))
+         raise (RefineError ("thinT", StringStringError ("free variable: ", x)))
       else
          thin i j p
 
@@ -202,7 +202,7 @@ let swapEquandsT p =
 let substConclT t p =
    let _, a, _ =
       try dest_equal t with
-         Term.TermMatch _ -> raise (RefineError (StringTermError ("substT: arg should be an equality: ", t)))
+         Term.TermMatch _ -> raise (RefineError ("substT", StringTermError ("arg should be an equality: ", t)))
    in
    let bind =
       try
@@ -210,7 +210,7 @@ let substConclT t p =
             if is_bind_term t1 then
                t1
             else
-               raise (RefineError (StringTermError ("substT: need a \"bind\" term: ", t)))
+               raise (RefineError ("substT", StringTermError ("need a \"bind\" term: ", t)))
       with
          Not_found ->
             let x = get_opt_var_arg "z" p in
@@ -229,7 +229,7 @@ let substHypT i t p =
    let _, a, _ =
       try dest_equal t with
          Term.TermMatch _ ->
-            raise (RefineError (StringTermError ("substT: arg should be an equality: ", t)))
+            raise (RefineError ("substT", StringTermError ("arg should be an equality: ", t)))
    in
    let _, t1 = Sequent.nth_hyp p i in
    let z = get_opt_var_arg "z" p in
@@ -239,7 +239,7 @@ let substHypT i t p =
             if is_bind_term b then
                b
             else
-               raise (RefineError (StringTermError ("substT: need a \"bind\" term: ", b)))
+               raise (RefineError ("substT", StringTermError ("need a \"bind\" term: ", b)))
       with
          Not_found ->
             mk_bind_term z (var_subst t1 a z)
@@ -272,6 +272,9 @@ let revHypSubstT i p =
 
 (*
  * $Log$
+ * Revision 1.9  1998/06/12 13:47:40  jyh
+ * D tactic works, added itt_bool.
+ *
  * Revision 1.8  1998/06/09 20:52:46  jyh
  * Propagated refinement changes.
  * New tacticals module.

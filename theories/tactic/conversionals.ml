@@ -45,7 +45,7 @@ let someSubC conv env =
    let count = subterm_count t in
    let rec subC i =
       if i = count then
-         (fun p -> raise (RefineError (StringStringError ("subC", "all subterms failed"))))
+         (fun p -> raise (RefineError ("subC", StringError "all subterms failed")))
       else
          (addrC [i] conv) orelseC (subC (i + 1))
    in
@@ -88,6 +88,9 @@ let rec sweepDnC rw =
 
 (*
  * $Log$
+ * Revision 1.2  1998/06/12 13:47:45  jyh
+ * D tactic works, added itt_bool.
+ *
  * Revision 1.1  1998/06/03 22:19:52  jyh
  * Nonpolymorphic refiner.
  *

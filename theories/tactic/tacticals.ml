@@ -29,10 +29,10 @@ let idT =
    Tactic_type.idT
 
 let failT p =
-   raise (RefineError (StringError "Fail"))
+   raise (RefineError ("failT", StringError "Fail"))
 
 let failWithT s p =
-   raise (RefineError (StringError s))
+   raise (RefineError ("failWithT", StringError s))
 
 (************************************************************************
  * SEQUENCING                                                           *
@@ -354,14 +354,14 @@ let thenLLT pred tac1 tacs =
                tac::tactl ->
                   (tac p)::(aux tactl ps)
              | [] ->
-                  raise (RefineError (StringError "thenMLT: argument mismatch"))
+                  raise (RefineError ("thenMLT", StringError "argument mismatch"))
          else
             (idT p)::(aux ts ps)
     | [] ->
          match ts with
             [] -> []
           | _ ->
-               raise (RefineError (StringError "thenMLT: argument mismatch"))
+               raise (RefineError ("thenMLT", StringError "argument mismatch"))
    in
       tac1 thenFLT (aux tacs)
 
@@ -566,7 +566,7 @@ let onVarT v tac p =
    let i =
       try Sequent.get_decl_number p v with
          Not_found ->
-            raise (RefineError (StringStringError ("onVarT", v)))
+            raise (RefineError ("onVarT", StringStringError (v, "variable not found")))
    in
       tac i p
 
@@ -609,6 +609,9 @@ let get_thinning_arg arg =
 
 (*
  * $Log$
+ * Revision 1.13  1998/06/12 13:47:49  jyh
+ * D tactic works, added itt_bool.
+ *
  * Revision 1.12  1998/06/09 20:53:02  jyh
  * Propagated refinement changes.
  * New tacticals module.

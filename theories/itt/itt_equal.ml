@@ -153,7 +153,7 @@ mlterm cumulativity{univ[@j:l]; univ[@i:l]} =
       if level_cumulativity j i then
          []
       else
-         raise (RefineError (StringError "cumulativity"))
+         raise (RefineError ("cumulativity", StringError "failed"))
 
  | fun _ extracts ->
       << it >>, extracts
@@ -225,7 +225,7 @@ let extract_data base =
                tac p
          with
             Not_found ->
-               raise (RefineError (StringTermError ("EQCD tactic doesn't know about ", l)))
+               raise (RefineError ("eqcd", StringTermError ("EQCD tactic doesn't know about ", l)))
    in
       eqcd
 
@@ -335,6 +335,9 @@ let squash_resource = squash_resource.resource_improve squash_resource (equal_te
 
 (*
  * $Log$
+ * Revision 1.11  1998/06/12 13:47:26  jyh
+ * D tactic works, added itt_bool.
+ *
  * Revision 1.10  1998/06/09 20:52:33  jyh
  * Propagated refinement changes.
  * New tacticals module.

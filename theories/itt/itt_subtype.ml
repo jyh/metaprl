@@ -177,7 +177,7 @@ let subtype_f tac subgoals _ =
             if opname_of_term goal == subtype_opname then
                match sg with
                   (_, _, tac)::sg' -> (tac p)::(aux sg' t)
-                | [] -> raise (RefineError (StringError "subtypeT: subtype mismatch"))
+                | [] -> raise (RefineError ("subtypeT", StringError "subtype mismatch"))
             else
                (idT p)::(aux sg t)
     | [] -> []
@@ -203,12 +203,12 @@ let extract_data base =
       let t1, t2 =
          try dest_subtype t with
             Term.TermMatch _ ->
-               raise (RefineError (StringTermError ("subtype: should be subtype: ", t)))
+               raise (RefineError ("subtype", StringTermError ("should be subtype: ", t)))
       in
       let tac =
          try lookup tbl t1 t2 with
             Not_found ->
-               raise (RefineError (StringTermError ("Can't infer subtype ", t)))
+               raise (RefineError ("subtype", StringTermError ("can't infer subtype ", t)))
       in
          tac p
    in
@@ -307,7 +307,7 @@ let inf_subtype f decl t =
    let decl'', b' = f decl' b in
    let le1, le2 =
       try dest_univ a', dest_univ b' with
-         Term.TermMatch _ -> raise (RefineError (StringTermError ("typeinf: can't infer type for", t)))
+         Term.TermMatch _ -> raise (RefineError ("typeinf", StringTermError ("can't infer type for", t)))
    in
       decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2)
 
@@ -315,6 +315,9 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (subty
 
 (*
  * $Log$
+ * Revision 1.10  1998/06/12 13:47:41  jyh
+ * D tactic works, added itt_bool.
+ *
  * Revision 1.9  1998/06/09 20:52:47  jyh
  * Propagated refinement changes.
  * New tacticals module.

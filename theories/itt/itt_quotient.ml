@@ -270,7 +270,8 @@ let inf_quotient f decl t =
    let decl'', e' = f ((x, a)::(y, a)::decl') e in
    let le1, le2 =
       try dest_univ a', dest_univ e' with
-         Term.TermMatch _ -> raise (RefineError (StringTermError ("typeinf: can't infer type for", t)))
+         Term.TermMatch _ ->
+            raise (RefineError ("typeinf", StringTermError ("can't infer type for", t)))
    in
       decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2)
 
@@ -303,6 +304,9 @@ let sub_resource =
 
 (*
  * $Log$
+ * Revision 1.9  1998/06/12 13:47:35  jyh
+ * D tactic works, added itt_bool.
+ *
  * Revision 1.8  1998/06/09 20:52:41  jyh
  * Propagated refinement changes.
  * New tacticals module.

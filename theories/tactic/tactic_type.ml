@@ -581,9 +581,9 @@ let tactic_of_rewrite rw =
                in
                   [subgoal], Extract (ext, 1)
           | [], _ ->
-               raise (RefineError (StringStringError ("tactic_of_rewrite", "rewrite did not produce a goal")))
+               raise (RefineError ("tactic_of_rewrite", StringError "rewrite did not produce a goal"))
           | _ ->
-               raise (RefineError (StringStringError ("tactic_of_rewrite", "rewrite produced too many goals")))
+               raise (RefineError ("tactic_of_rewrite", StringError "rewrite produced too many goals"))
    in
       tac
 
@@ -656,7 +656,7 @@ let rec justify extl = function
          ext :: extl ->
             ext, extl
        | [] ->
-            raise (RefineError (StringStringError ("Tactic_type.justify", "identity tactic failed")))
+            raise (RefineError ("Tactic_type.justify", StringError "identity tactic failed"))
 
 (*
  * To produce a term from the extract, the proof must be complete.
@@ -696,7 +696,7 @@ let rec apply_subgoals = function
  | [], [] ->
       [], []
  | _ ->
-      raise (RefineError (StringStringError ("thenLT", "length mismatch")))
+      raise (RefineError ("thenLT", StringError "length mismatch"))
 
 (*
  * Sequencing tactics.
@@ -723,7 +723,7 @@ let prefix_orelseT tac1 tac2 goal =
       RefineError x ->
          try tac2 goal with
             RefineError y ->
-               raise (RefineError (PairError ("orelseT", x, y)))
+               raise (RefineError ("orelseT", PairError (x, y)))
 
 (*
  * Modify the label.
@@ -840,6 +840,9 @@ let withSubstT subst tac arg =
 
 (*
  * $Log$
+ * Revision 1.3  1998/06/12 13:47:48  jyh
+ * D tactic works, added itt_bool.
+ *
  * Revision 1.2  1998/06/09 20:53:00  jyh
  * Propagated refinement changes.
  * New tacticals module.

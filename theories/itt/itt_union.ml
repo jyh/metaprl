@@ -212,7 +212,7 @@ let d_concl_union p =
    let flag =
       try get_sel_arg p with
          Not_found ->
-            raise (RefineError (StringError "d_concl_union: requires a flag"))
+            raise (RefineError ("d_concl_union", StringError "requires a flag"))
    in
    let tac =
       match flag with
@@ -221,7 +221,7 @@ let d_concl_union p =
        | 2 ->
             inrFormation
        | _ ->
-            raise (RefineError (StringError "d_concl_union: select either 1 or 2"))
+            raise (RefineError ("d_concl_union", StringError "select either 1 or 2"))
    in
       (tac count thenLT [idT; addHiddenLabelT "wf"]) p
 
@@ -288,7 +288,7 @@ let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (inr_term, eqcd
  * EQCD decide.
  *)
 let eqcd_decideT p =
-   raise (RefineError (StringError "eqcd_decideT: not implemented"))
+   raise (RefineError ("eqcd_decideT", StringError "not implemented"))
 
 let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (decide_term, eqcd_decideT)
 
@@ -305,7 +305,7 @@ let inf_union f decl t =
    let decl'', b' = f decl' b in
    let le1, le2 =
       try dest_univ a', dest_univ b' with
-         Term.TermMatch _ -> raise (RefineError (StringTermError ("typeinf: can't infer type for", t)))
+         Term.TermMatch _ -> raise (RefineError ("typeinf", StringTermError ("can't infer type for", t)))
    in
       decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2)
 
@@ -339,12 +339,13 @@ let inf_decide (inf : typeinf_func) (decl : term_subst) (t : term) =
    let decl', e' = inf decl e in
    let l, r =
       try dest_union e' with
-         Term.TermMatch _ -> raise (RefineError (StringTermError ("typeinf: can't infer type for", t)))
+         Term.TermMatch _ -> raise (RefineError ("typeinf", StringTermError ("can't infer type for", t)))
    in
    let decl'', a' = inf ((x, l)::decl') a in
    let decl''', b' = inf ((y, l)::decl'') b in
       try unify decl''' a' b', a' with
-         BadMatch _ -> raise (RefineError (StringTermError ("typeinf: can't infer type for", t)))
+         BadMatch _ ->
+            raise (RefineError ("typeinf", StringTermError ("can't infer type for", t)))
 
 let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (decide_term, inf_decide)
 
@@ -369,6 +370,9 @@ let sub_resource =
 
 (*
  * $Log$
+ * Revision 1.9  1998/06/12 13:47:43  jyh
+ * D tactic works, added itt_bool.
+ *
  * Revision 1.8  1998/06/09 20:52:48  jyh
  * Propagated refinement changes.
  * New tacticals module.

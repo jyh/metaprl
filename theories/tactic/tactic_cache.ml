@@ -1945,7 +1945,7 @@ let set_msequent extract { mseq_goal = goal } =
          { sequent_hyps = hyps; sequent_goals = [goal] } ->
             set_goal (collect 0 (del_hyp extract 0) hyps) goal
        | _ ->
-            raise (RefineError (StringStringError ("Tactic_cache.set_msequent", "conclusion has more than one goal")))
+            raise (RefineError ("Tactic_cache.set_msequent", StringError "conclusion has more than one goal"))
 
 (************************************************************************
  * LOOKUP                                                               *
@@ -2204,6 +2204,9 @@ let used_hyps
 
 (*
  * $Log$
+ * Revision 1.11  1998/06/12 13:47:46  jyh
+ * D tactic works, added itt_bool.
+ *
  * Revision 1.10  1998/06/09 20:52:57  jyh
  * Propagated refinement changes.
  * New tacticals module.

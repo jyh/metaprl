@@ -11,9 +11,13 @@ include Nuprl_font
 include Typeinf
 include Base_dtactic
 include Base_cache
+include Base_rewrite
 
 (*
  * $Log$
+ * Revision 1.6  1998/06/12 13:47:17  jyh
+ * D tactic works, added itt_bool.
+ *
  * Revision 1.5  1998/05/07 16:03:00  jyh
  * Adding interactive proofs.
  *

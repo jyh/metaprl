@@ -193,7 +193,7 @@ let inf_d dest f decl t =
    let decl'', b' = f ((v, a)::decl') b in
    let le1, le2 =
       try dest_univ a', dest_univ b' with
-         Term.TermMatch _ -> raise (RefineError (StringTermError ("typeinf: can't infer type for", t)))
+         Term.TermMatch _ -> raise (RefineError ("typeinf", StringTermError ("can't infer type for", t)))
    in
       decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2)
 
@@ -209,7 +209,7 @@ let inf_nd dest f decl t =
    let decl'', b' = f decl' b in
    let le1, le2 =
       try dest_univ a', dest_univ b' with
-         Term.TermMatch _ -> raise (RefineError (StringTermError ("typeinf: can't infer type for", t)))
+         Term.TermMatch _ -> raise (RefineError ("typeinf", StringTermError ("can't infer type for", t)))
    in
       decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2)
 
@@ -228,6 +228,9 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (not_t
 
 (*
  * $Log$
+ * Revision 1.8  1998/06/12 13:47:33  jyh
+ * D tactic works, added itt_bool.
+ *
  * Revision 1.7  1998/06/01 13:56:01  jyh
  * Proving twice one is two.
  *

@@ -39,12 +39,11 @@ declare "\\"
 (*
  * Variables.
  *)
-mldform var_src_df : mode[src] :: var[@v:v] format_term buf =
-   format_string buf "'";
-   format_string buf v
+dform var_src_df : mode[src] :: var[@v:v] =
+   `"'" slot[@v:s]
 
-mldform var_prl_df : mode[prl] :: var[@v:v] format_term buf =
-   format_string buf v
+dform var_prl_df : mode[prl] :: var[@v:v] =
+   slot[@v:s]
 
 dform so_var1_df : var[@v:v]{'x1} = var[@v:v] "[" 'x1  "]"
 
@@ -225,6 +224,9 @@ dform newline_df : "\\" = \newline
 (*
  *
  * $Log$
+ * Revision 1.9  1998/06/12 13:47:12  jyh
+ * D tactic works, added itt_bool.
+ *
  * Revision 1.8  1998/06/01 13:55:35  jyh
  * Proving twice one is two.
  *

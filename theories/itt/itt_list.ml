@@ -270,7 +270,7 @@ let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (cons_term, eqc
  * EQCD listind.
  *)
 let eqcd_list_indT p =
-   raise (RefineError (StringError "eqcd_list_indT: not implemented"))
+   raise (RefineError ("eqcd_list_indT", StringError "not implemented"))
 
 let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (list_ind_term, eqcd_list_indT)
 
@@ -303,7 +303,7 @@ let inf_cons inf decl t =
    let decl', hd' = inf decl hd in
    let decl'', tl' = inf decl' tl in
       try unify decl'' (mk_list_term hd') tl', tl' with
-         BadMatch _ -> raise (RefineError (StringTermError ("typeinf: can't infer type for", t)))
+         BadMatch _ -> raise (RefineError ("typeinf", StringTermError ("can't infer type for", t)))
 
 let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (cons_term, inf_cons)
 
@@ -319,7 +319,7 @@ let inf_list_ind inf decl t =
          let decl''', step' = inf ((hd, a)::(tl, e')::(f, base')::decl'') step in
             unify decl''' base' step', base'
       else
-         raise (RefineError (StringTermError ("typeinf: can't infer type for", t)))
+         raise (RefineError ("typeinf", StringTermError ("can't infer type for", t)))
 
 let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (list_ind_term, inf_list_ind)
 
@@ -343,6 +343,9 @@ let sub_resource =
 
 (*
  * $Log$
+ * Revision 1.10  1998/06/12 13:47:31  jyh
+ * D tactic works, added itt_bool.
+ *
  * Revision 1.9  1998/06/09 20:52:38  jyh
  * Propagated refinement changes.
  * New tacticals module.

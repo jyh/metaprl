@@ -261,7 +261,7 @@ let mk_fun_term = mk_dep0_dep0_term fun_opname
 let d_concl_rfun p =
    let wf =
       try get_with_arg p with
-         Not_found -> raise (RefineError (StringError "d_concl_rfun: need a well-order term"))
+         Not_found -> raise (RefineError ("d_concl_rfun", StringError "need a well-order term"))
    in
    let t = goal p in
    let count = hyp_count p in
@@ -272,7 +272,7 @@ let d_concl_rfun p =
                      addHiddenLabelT "aux";
                      idT]
         | _ ->
-             raise (RefineError (StringError "d_concl_rfun: not function type"))) p
+             raise (RefineError ("d_concl_rfun", StringError "not function type"))) p
 
 (*
  * D a hyp.
@@ -312,7 +312,7 @@ let d_resource = d_resource.resource_improve d_resource (rfun_term, d_rfunT)
 let eqcd_rfunT p =
    let wf =
       try get_with_arg p with
-         Not_found -> raise (RefineError (StringError "eqcd_rfun: need a well-order term"))
+         Not_found -> raise (RefineError ("eqcd_rfun", StringError "need a well-order term"))
    in
    let t = goal p in
    let count = hyp_count p in
@@ -338,7 +338,7 @@ let inf_rfun inf decl t =
    let decl'', b' = inf ((v, a)::(f, mk_fun_term a void_term)::decl') b in
    let le1, le2 =
       try dest_univ a', dest_univ b' with
-         Term.TermMatch _ -> raise (RefineError (StringTermError ("typeinf: can't infer type for", t)))
+         Term.TermMatch _ -> raise (RefineError ("typeinf", StringTermError ("can't infer type for", t)))
    in
       decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2)
 
@@ -377,7 +377,7 @@ let inf_apply inf decl t =
          let f'', v, d, r = dest_rfun f' in
             subst r [f; a] [f''; v]
       else
-         raise  (RefineError (StringTermError ("typeinf: can't infer type for", t)))
+         raise  (RefineError ("typeinf", StringTermError ("can't infer type for", t)))
    in
       decl'', ty
 
@@ -385,6 +385,9 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (apply
 
 (*
  * $Log$
+ * Revision 1.9  1998/06/12 13:47:36  jyh
+ * D tactic works, added itt_bool.
+ *
  * Revision 1.8  1998/06/09 20:52:42  jyh
  * Propagated refinement changes.
  * New tacticals module.

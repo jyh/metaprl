@@ -158,7 +158,7 @@ let d_set i p =
       let t =
          try get_with_arg p with
             Not_found ->
-               raise (RefineError (StringError "d_set requires an argument"))
+               raise (RefineError ("d_set", StringError "requires an argument"))
       in
       let v = get_opt_var_arg "z" p in
          setMemberFormation (Sequent.hyp_count p) t v p
@@ -244,7 +244,7 @@ let d_set_concl p =
    let t =
       try get_with_arg p with
          Not_found ->
-            raise (RefineError (StringError "d_set requires an argument"))
+            raise (RefineError ("d_set", StringError "requires an argument"))
    in
    let v = get_opt_var_arg "z" p in
       setMemberFormation (Sequent.hyp_count p) t v p
@@ -306,7 +306,7 @@ let inf_set f decl t =
    let decl'', prop' = f ((v, ty)::decl') prop in
    let le1, le2 =
       try dest_univ ty', dest_univ prop' with
-         Term.TermMatch _ -> raise (RefineError (StringTermError ("typeinf: can't infer type for", t)))
+         Term.TermMatch _ -> raise (RefineError ("typeinf", StringTermError ("can't infer type for", t)))
    in
       decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2)
 
@@ -327,6 +327,9 @@ let sub_resource =
 
 (*
  * $Log$
+ * Revision 1.8  1998/06/12 13:47:37  jyh
+ * D tactic works, added itt_bool.
+ *
  * Revision 1.7  1998/06/09 20:52:43  jyh
  * Propagated refinement changes.
  * New tacticals module.

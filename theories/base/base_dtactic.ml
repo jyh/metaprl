@@ -22,6 +22,13 @@ let _ =
    if !debug_load then
       eprintf "Loading Base_dtactic%t" eflush
 
+let debug_dtactic =
+   create_debug (**)
+      { debug_name = "dtactic";
+        debug_description = "display dT tactic operations";
+        debug_value = false
+      }
+
 (************************************************************************
  * TYPES                                                                *
  ************************************************************************)
@@ -100,8 +107,10 @@ let join_data base1 base2 =
  * Compute the hashtable from the info.
  *)
 let compute_table info =
-   let tbl = Hashtbl.create (List.length info) in
+   let tbl = Hashtbl.create 17 in
    let aux (key, tac) =
+      if !debug_dtactic then
+         eprintf "Base_dtactic.compute_table: adding %s%t" (string_of_opname (fst key)) eflush;
       Hashtbl.add tbl key tac
    in
       List.iter aux info;
@@ -120,7 +129,8 @@ let extract_data base =
                let tbl = compute_table base.d_info in
                   base.d_table <- Some tbl;
                   tbl
-          | Some tbl -> tbl
+          | Some tbl ->
+               tbl
       in
       let t =
          (* Get the term described by the number *)
@@ -136,7 +146,7 @@ let extract_data base =
                tac i p
          with
             Not_found ->
-               raise (RefineError (StringError ("D tactic doesn't know about " ^ (string_of_opname (fst key)))))
+               raise (RefineError ("extract_data", StringTermError ("D tactic doesn't know about", t)))
    in
       d
 
@@ -163,6 +173,12 @@ and extract_resource { resource_data = data } =
    extract_data data
 
 and improve_resource { resource_data = data } x =
+   if !debug_dtactic then
+      begin
+         let t, _ = x in
+         let opname = opname_of_term t in
+            eprintf "Base_dtactic.improve_resource: %s%t" (string_of_opname opname) eflush
+      end;
    { resource_data = improve_data x data;
      resource_join = join_resource;
      resource_extract = extract_resource;
@@ -183,6 +199,9 @@ let dT = d_resource.resource_extract d_resource
 
 (*
  * $Log$
+ * Revision 1.7  1998/06/12 13:47:13  jyh
+ * D tactic works, added itt_bool.
+ *
  * Revision 1.6  1998/06/09 20:52:29  jyh
  * Propagated refinement changes.
  * New tacticals module.

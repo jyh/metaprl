@@ -208,7 +208,7 @@ let mk_spread_term = mk_dep0_dep2_term spread_opname
 let d_concl_dprod p =
    let t =
       try get_with_arg p with
-         Not_found -> raise (RefineError (StringError "d_concl_dprod: requires an argument"))
+         Not_found -> raise (RefineError ("d_concl_dprod", StringError "requires an argument"))
    in
    let count = hyp_count p in
    let y = get_opt_var_arg "y" p in
@@ -278,7 +278,7 @@ let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (pair_term, eqc
 let eqcd_spreadT p =
    let _, l, _ = dest_equal (concl p) in
    let u, v, _, _ = dest_spread l in
-      raise (RefineError (StringError "eqcd_spreadT: not implemented"))
+      raise (RefineError ("eqcd_spreadT", StringError "not implemented"))
 
 let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (spread_term, eqcd_spreadT)
 
@@ -295,7 +295,7 @@ let inf_dprod f decl t =
    let decl'', b' = f ((v, a)::decl') b in
    let le1, le2 =
       try dest_univ a', dest_univ b' with
-         Term.TermMatch _ -> raise (RefineError (StringTermError ("typeinf: can't infer type for", t)))
+         Term.TermMatch _ -> raise (RefineError ("typeinf", StringTermError ("can't infer type for", t)))
    in
       decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2)
 
@@ -325,7 +325,7 @@ let inf_spread inf decl t =
          let x, l, r = dest_dprod a' in
             inf ((u, l)::(v, subst r [mk_var_term u] [x])::decl') b
       else
-         raise (RefineError (StringTermError ("typeinf: can't infer type for", t)))
+         raise (RefineError ("typeinf", StringTermError ("can't infer type for", t)))
 
 let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (spread_term, inf_spread)
 
@@ -351,6 +351,9 @@ let sub_resource =
 
 (*
  * $Log$
+ * Revision 1.9  1998/06/12 13:47:25  jyh
+ * D tactic works, added itt_bool.
+ *
  * Revision 1.8  1998/06/09 20:52:32  jyh
  * Propagated refinement changes.
  * New tacticals module.

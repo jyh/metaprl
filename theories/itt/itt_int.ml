@@ -7,6 +7,7 @@ include Tactic_type
 
 include Itt_equal
 include Itt_rfun
+include Itt_bool
 include Itt_logic
 
 open Printf
@@ -122,6 +123,7 @@ primrw reduceSub : "sub"{natural_number[@i:n]; natural_number[@j:n]} <--> natura
 primrw reduceMul : "mul"{natural_number[@i:n]; natural_number[@j:n]} <--> natural_number[@i * @j]
 primrw reduceDiv : "div"{natural_number[@i:n]; natural_number[@j:n]} <--> natural_number[@i / @j]
 primrw reduceRem : "rem"{natural_number[@i:n]; natural_number[@j:n]} <--> natural_number[@i % @j]
+primrw reduceLT  : "lt"{natural_number[@i:n]; natural_number[@j:n]}  <--> bool_flag[@i < @j]
 
 (*
  * Reduction on induction combinator:
@@ -146,9 +148,9 @@ primrw indReduceBase :
    'base
 
 mlterm indReduce{ind{'x; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]}} =
-   raise (RefineError (StringError "indReduce: not implemented"))
+   raise (RefineError ("indReduce", StringError "not implemented"))
  | fun _ _ ->
-      raise (RefineError (StringError "indReduce: not implemented"))
+      raise (RefineError ("indReduce", StringError "not implemented"))
 
 primrw indReduce : ind{'x; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]} <-->
    indReduce{ind{'x; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]}}
@@ -298,9 +300,9 @@ prim less_thanElimination 'H 'J :
  * This is the large decision procedure.
  *)
 mlterm arith_check{'t} =
-   raise (RefineError (StringError "arith not implemented"))
+   raise (RefineError ("arith", StringError "not implemented"))
  | fun _ _ ->
-      raise (RefineError (StringError "arith not implemented"))
+      raise (RefineError ("arith", StringError "not implemented"))
 
 prim arith : arith_check{'t} --> 't = it
 
@@ -385,6 +387,9 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (ind_t
 
 (*
  * $Log$
+ * Revision 1.10  1998/06/12 13:47:28  jyh
+ * D tactic works, added itt_bool.
+ *
  * Revision 1.9  1998/06/09 20:52:36  jyh
  * Propagated refinement changes.
  * New tacticals module.

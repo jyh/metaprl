@@ -150,7 +150,7 @@ let mk_isect_term = mk_dep0_dep1_term isect_opname
  * D the conclusion.
  *)
 let d_concl_isect p =
-   raise (RefineError (StringError "d_concl_isect: no rule for intersectionFormation"))
+   raise (RefineError ("d_concl_isect", StringError "no rule for intersectionFormation"))
 
 (*
  * D a hyp.
@@ -201,7 +201,7 @@ let inf_isect f decl t =
    let decl'', b' = f ((v, a)::decl') b in
    let le1, le2 =
       try dest_univ a', dest_univ b' with
-         Term.TermMatch _ -> raise (RefineError (StringTermError ("typeinf: can't infer type for", t)))
+         Term.TermMatch _ -> raise (RefineError ("typeinf", StringTermError ("can't infer type for", t)))
    in
       decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2)
 
@@ -229,6 +229,9 @@ let sub_resource =
 
 (*
  * $Log$
+ * Revision 1.9  1998/06/12 13:47:30  jyh
+ * D tactic works, added itt_bool.
+ *
  * Revision 1.8  1998/06/09 20:52:37  jyh
  * Propagated refinement changes.
  * New tacticals module.

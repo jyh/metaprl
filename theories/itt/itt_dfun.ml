@@ -197,7 +197,7 @@ let d_hyp_dfun i p =
    let a =
       try get_with_arg p with
          Not_found ->
-            raise (RefineError (StringError "d_hyp_dfun: requires an argument"))
+            raise (RefineError ("d_hyp_dfun", StringError "requires an argument"))
    in
    let count = hyp_count p in
    let i, j = hyp_indices p i in
@@ -256,7 +256,7 @@ let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (lambda_term, e
 let eqcd_applyT p =
    let t =
       try get_with_arg p with
-         Not_found -> raise (RefineError (StringError "eqcd_applyT: need an argument"))
+         Not_found -> raise (RefineError ("eqcd_applyT", StringError "need an argument"))
    in
    let count = hyp_count p in
       (applyEquality count t
@@ -277,7 +277,8 @@ let inf_dfun f decl t =
    let decl'', b' = f ((v, a)::decl') b in
    let le1, le2 =
       try dest_univ a', dest_univ b' with
-         Term.TermMatch _ -> raise (RefineError (StringTermError ("typeinf: can't infer type for", t)))
+         Term.TermMatch _ ->
+            raise (RefineError ("typeinf", StringTermError ("can't infer type for", t)))
    in
       decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2)
 
@@ -305,6 +306,9 @@ let sub_resource =
 
 (*
  * $Log$
+ * Revision 1.9  1998/06/12 13:47:23  jyh
+ * D tactic works, added itt_bool.
+ *
  * Revision 1.8  1998/06/09 20:52:31  jyh
  * Propagated refinement changes.
  * New tacticals module.

@@ -66,7 +66,7 @@ let infer tbl =
       let _, _, inf =
          try lookup tbl t with
             Not_found ->
-               raise (RefineError (StringTermError ("typeinf: can't infer type for", t)))
+               raise (RefineError ("typeinf", StringTermError ("can't infer type for", t)))
       in
          inf aux decl t
    in
@@ -112,6 +112,9 @@ let typeinf_of_proof p =
 
 (*
  * $Log$
+ * Revision 1.12  1998/06/12 13:47:18  jyh
+ * D tactic works, added itt_bool.
+ *
  * Revision 1.11  1998/06/09 20:52:30  jyh
  * Propagated refinement changes.
  * New tacticals module.

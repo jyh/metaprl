@@ -89,12 +89,10 @@ rule type_a_sort "type"[i:l]:
 *****************************************************)
 
 rule prop_a_prop_set:
-   sequent { <H> >- member{'P;Prop} } -->
-   sequent { <H> >- prop_set{'P} }
+   sequent { <H> >- prop_set{Prop} }
 
 rule set_a_prop_set:
-   sequent { <H> >- member{'P;Set} } -->
-   sequent { <H> >- prop_set{'P} }
+   sequent { <H> >- prop_set{Set} }
 
 
 (************************************************

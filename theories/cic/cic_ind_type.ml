@@ -743,6 +743,7 @@ prim of_some_sort_m_step {| intro [] |} :
 
 (* description-defenition of the third condition in the declaration of w_Ind rule*)
 declare req3{'C}
+declare req3
 declare req3_m
 
 dform req3_df : req3{'C} = `"req3{" slot{'C} `"}"
@@ -751,19 +752,19 @@ dform req3_m_df : sequent [req3_m] { <Hi> >- sequent { <Hc<| |> > >- it } } =
 	`"req3_m{" display_hyps{ sequent [req3_m] { <Hi> >- it } } `"|"
 		display_hyps{ sequent [Aux] { <Hc> >- it } } `"}"
 
-prim req3_intro 'H 'Hi 's :
-   sequent { <H>; <Hi>; I:'A<|H|>; <Ji<|H|> > >- type_of_constructor{'C['I];'I} } -->
+prim req3_intro 'Hi 's :
+   sequent { <H> >- sequent { <Hi>; I:'A<|H|>; <Ji<|H|> > >- type_of_constructor{'C['I];'I} } } -->
    sequent { <H> >- sequent [positivity_cond_m] { <Hi>; I:'A<|H|>; <Ji<|H|> > >- 'I } } -->
 	sequent { <H> >- arity_of_sort{'A<|H|>;'s<||>} } -->
-	sequent { <H>; <Hi>; I:'A<|H|>; <Ji<|H|> > >- 'C['I] in 's<||> } -->
-   sequent { <H>; <Hi>; I:'A<|H|>; <Ji<|H|> > >- req3{'C['I]} } = it
+	sequent { <H> >- sequent { <Hi>; I:'A<|H|>; <Ji<|H|> > >- 'C['I] in 's<||> } } -->
+   sequent { <H> >- sequent [req3] { <Hi>; I:'A<|H|>; <Ji<|H|> > >- req3{'C['I]} } } = it
 
 prim req3_m_base {| intro [] |} :
 	sequent { <H> >- sequent [req3_m] { <Hi> >- sequent  { >- it } } } = it
 
 prim req3_m_step {| intro [] |} :
 	sequent { <H> >- sequent [req3_m] { <Hi> >- sequent { <Hc> >- it } } } -->
-	sequent { <H> >- sequent { <Hi> >- req3{'C<|Hi;H|>} } } -->
+	sequent { <H> >- sequent [req3] { <Hi> >- req3{'C<|Hi;H|>} } } -->
 	sequent { <H> >- sequent [req3_m] { <Hi> >- sequent { <Hc>; c:'C<|Hi;H|> >- it } } } = it
 
 

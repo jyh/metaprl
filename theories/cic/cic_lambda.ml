@@ -184,13 +184,11 @@ prim type_a_sort "type"[i:l] :
 * is sort Prop or sort Set
 *****************************************************)
 
-prim prop_a_prop_set:
-   sequent { <H> >- member{'P;Prop} } -->
-   sequent { <H> >- prop_set{'P} } = it
+prim prop_a_prop_set {| intro [] |} :
+   sequent { <H> >- prop_set{Prop} } = it
 
-prim set_a_prop_set:
-   sequent { <H> >- member{'P;Set} } -->
-   sequent { <H> >- prop_set{'P} } = it
+prim set_a_prop_set {| intro [] |} :
+   sequent { <H> >- prop_set{Set} } = it
 
 
 (************************************************

@@ -315,21 +315,22 @@ rule of_some_sort_m_step :
 
 (* description-defenition of the third condition in the declaration of w_Ind rule*)
 declare req3{'C}
+declare req3
 declare req3_m
 
-rule req3_intro 'H 'Hi 's :
-   sequent { <H>; <Hi>; I:'A<|H|>; <Ji<|H|> > >- type_of_constructor{'C['I];'I} } -->
+rule req3_intro 'Hi 's :
+   sequent { <H> >- sequent { <Hi>; I:'A<|H|>; <Ji<|H|> > >- type_of_constructor{'C['I];'I} } } -->
    sequent { <H> >- sequent [positivity_cond_m] { <Hi>; I:'A<|H|>; <Ji<|H|> > >- 'I } } -->
 	sequent { <H> >- arity_of_sort{'A<|H|>;'s<||>} } -->
-	sequent { <H>; <Hi>; I:'A<|H|>; <Ji<|H|> > >- 'C['I] in 's<||> } -->
-   sequent { <H>; <Hi>; I:'A<|H|>; <Ji<|H|> > >- req3{'C['I]} }
+	sequent { <H> >- sequent { <Hi>; I:'A<|H|>; <Ji<|H|> > >- 'C['I] in 's<||> } } -->
+   sequent { <H> >- sequent [req3] { <Hi>; I:'A<|H|>; <Ji<|H|> > >- req3{'C['I]} } }
 
 rule req3_m_base :
 	sequent { <H> >- sequent [req3_m] { <Hi> >- sequent  { >- it } } }
 
 rule req3_m_step :
 	sequent { <H> >- sequent [req3_m] { <Hi> >- sequent { <Hc> >- it } } } -->
-	sequent { <H> >- sequent { <Hi> >- req3{'C<|Hi;H|>} } } -->
+	sequent { <H> >- sequent [req3] { <Hi> >- req3{'C<|Hi;H|>} } } -->
 	sequent { <H> >- sequent [req3_m] { <Hi> >- sequent { <Hc>; c:'C<|Hi;H|> >- it } } }
 
 

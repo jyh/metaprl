@@ -193,7 +193,7 @@ let extract_data tbl =
 (*
  * Add info from a rule definition.
  *)
-let process_eqcd_resource_annotation name context_args var_args term_args _ statement pre_tactic =
+let process_eqcd_resource_annotation name context_args term_args _ statement pre_tactic =
    let _, goal = unzip_mfunction statement in
    let t =
       try TermMan.nth_concl goal 1 with
@@ -226,8 +226,7 @@ let process_eqcd_resource_annotation name context_args var_args term_args _ stat
       match context_args with
          [||] ->
             (fun p ->
-                  let vars = Var.maybe_new_vars_array p var_args in
-                     Tactic_type.Tactic.tactic_of_rule pre_tactic ([| |], vars) (term_args p) p)
+                Tactic_type.Tactic.tactic_of_rule pre_tactic [| |] (term_args p) p)
        | _ ->
             raise (Invalid_argument (sprintf "Itt_equal.intro: %s: not an introduction rule" name))
    in

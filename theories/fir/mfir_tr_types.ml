@@ -357,7 +357,7 @@ prim wf_tyApply1 'H :
  * @end[doc]
  *)
 
-prim wf_tyExists 'a 'tv :
+prim wf_tyExists :
    sequent [fir] { 'H; tv: "type"; a: ty_def{ 'tv; small_type; no_def } >-
       type_eq{ 't1['tv]; 't2['tv]; large_type } } -->
    sequent [fir] { 'H >-
@@ -373,7 +373,7 @@ prim wf_tyExists 'a 'tv :
  * @end[doc]
  *)
 
-prim wf_tyAll 'a 'tv :
+prim wf_tyAll :
    sequent [fir] { 'H; tv: "type"; a: ty_def{ 'tv; small_type; no_def } >-
       type_eq{ 't1['tv]; 't2['tv]; large_type } } -->
    sequent [fir] { 'H >-
@@ -421,7 +421,7 @@ prim wf_tyProject 'H :
  * @end[doc]
  *)
 
-prim wf_tyDefPoly 'a 'tv :
+prim wf_tyDefPoly :
    sequent [fir] { 'H; tv: "type"; a: ty_def{ 'tv; small_type; no_def } >-
       type_eq{ 'ty1['tv]; 'ty2['tv]; polyKind{ ('i -@ 1); 'k } } } -->
    sequent [fir] { 'H >- type_eq{ tyDefPoly{ x. 'ty1['x] };

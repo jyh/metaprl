@@ -194,7 +194,7 @@ prim subtypeTypeLeft 'A :
  * proof extract term is always the $@it$ term.
  * @end[doc]
  *)
-prim subtype_axiomFormation {| intro [] |} 'x :
+prim subtype_axiomFormation {| intro [] |} :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [main] sequent [squash] { 'H; x: 'A >- 'x in 'B } -->
    sequent ['ext] { 'H >- 'A subtype 'B } =
@@ -229,7 +229,7 @@ prim subtypeElimination {| elim [ThinOption thinT] |} 'H :
    sequent ['ext] { 'H; x: 'A subtype 'B; 'J['x] >- 'C['x] } =
    't
 
-prim subtypeElimination2 'H 'a 'b 'y :
+prim subtypeElimination2 'H 'a 'b :
    [wf] sequent [squash] { 'H; x: 'A subtype 'B; 'J['x] >- 'a='b in 'A } -->
    ('t['y] : sequent ['ext] { 'H; x: 'A subtype 'B; 'J['x]; y: 'a='b in 'B >- 'C['x] }) -->
    sequent ['ext] { 'H; x: 'A subtype 'B; 'J['x] >- 'C['x] } =
@@ -333,12 +333,11 @@ let resource intro +=
  *)
 let d_hyp_subtypeT i p =
    try
-      let v = maybe_new_vars1 p (Sequent.nth_binding p i) in
       let args = get_with_args p in
-            match args with
-              [a] -> subtypeElimination2 i a a v p |
-              [a;b] -> subtypeElimination2 i a b v p |
-              _ -> raise (RefineError ("subtypeElimination", StringError ("1 or 2 arguments required")))
+         match args with
+           [a] -> subtypeElimination2 i a a p |
+           [a;b] -> subtypeElimination2 i a b p |
+           _ -> raise (RefineError ("subtypeElimination", StringError ("1 or 2 arguments required")))
    with RefineError ("get_attribute",_) -> subtypeElimination i p
 
 let resource elim += (subtype_term, d_hyp_subtypeT)

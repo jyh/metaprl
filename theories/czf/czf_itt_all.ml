@@ -65,7 +65,7 @@ let _ =
 (*
  * Implication is restricted.
  *)
-interactive dfun_fun3 {| intro [] |} 'u 'v 'z :
+interactive dfun_fun3 {| intro [] |} :
    ["wf"]   sequent [squash] { 'H; u: set >- "type"{'A['u]} } -->
    ["wf"]   sequent [squash] { 'H; u: set; z: 'A['u] >- "type"{'B['u; 'z]} } -->
    sequent ['ext] { 'H >- fun_prop{z. 'A['z]} } -->
@@ -77,7 +77,7 @@ interactive dfun_res1 {| intro [] |} :
    sequent [squash] { 'H; u: 'A >- restricted{'B['u]} } -->
    sequent ['ext] { 'H >- restricted{."fun"{'A; w. 'B['w]}} }
 
-interactive all_fun {| intro [] |} 'u 'v 'z :
+interactive all_fun {| intro [] |} :
    ["wf"]   sequent [squash] { 'H; u: set >- "type"{'A['u]} } -->
    ["wf"]   sequent [squash] { 'H; u: set; z: 'A['u] >- "type"{'B['u; 'z]} } -->
    sequent ['ext] { 'H >- fun_prop{z. 'A['z]} } -->

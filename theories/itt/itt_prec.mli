@@ -62,14 +62,14 @@ rewrite reducePrecind : precind{'a; p, h. 'g['p; 'h]} <-->
 
 (*
  * H >- prec(A1, x1. B1[A1; x1]; a1) = prec(A2, x2. B2[A2; x2]; a2) in Ui
- * by precEquality A x y z T P1 P2
+ * by precEquality A
  *
  * H >- a1 = a2 in A
  * H; x: A; T: A -> Ui >- B1[T; x] = B2[T; x] in Ui
  * H; P1: A -> Ui; P2: A -> Ui; z: x:A -> y: P1 x -> (y in P2 x); x:A; y: B1[P1; x]
  *   >- y = y in B2[P2; x]
  *)
-rule precEquality 'A 'x 'y 'z 'T 'P1 'P2 :
+rule precEquality 'A :
    sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
    sequent [squash] { 'H; x: 'A; T: 'A -> univ[i:l] >- 'B1['T; 'x] = 'B2['T; 'x] in univ[i:l] } -->
    sequent [squash] { 'H;
@@ -104,7 +104,7 @@ rule precMemberFormation :
  * H >- prec(T, x. B[T; x]. a) = prec(T, x. B[T; x]. a) in type
  * H >- a1 = a2 in B[lambda(a. prec(T, x. B[T; x]); a); a]
  *)
-rule precMemberEquality 'z :
+rule precMemberEquality :
    sequent [squash] { 'H >- "type"{("prec"{T, x. 'B['T; 'x]; 'a})} } -->
    sequent [squash] { 'H >- 'a1 = 'a2 in 'B[lambda{z. "prec"{T, x. 'B['T; 'x]; 'z}}; 'a] } -->
    sequent ['ext] { 'H >- 'a1 = 'a2 in "prec"{T, x. 'B['T; 'x]; 'a} }
@@ -120,7 +120,7 @@ rule precMemberEquality 'z :
  *   p: a: A * B[Z, a]
  * >- T[p]
  *)
-rule precElimination 'H lambda{z. 'G['z]} 'a 'A 'Z 'r 'p 'u 'h univ[i:l] :
+rule precElimination 'H lambda{z. 'G['z]} 'A univ[i:l] :
    sequent [squash] { 'H; r: "prec"{T, x. 'B['T; 'x]; 'a}; 'J['r] >- 'a = 'a in 'A } -->
    sequent ['ext] { 'H; r: "prec"{T, x. 'B['T; 'x]; 'a}; 'J['r];
       Z: 'A -> univ[i:l] ;
@@ -140,7 +140,7 @@ rule precElimination 'H lambda{z. 'G['z]} 'a 'A 'Z 'r 'p 'u 'h univ[i:l] :
  *   u: r = y in B[lambda(a. prec(T, x. B[T; x]); a); a]
  *   >- T[y]
  *)
-rule precUnrollElimination 'H 'z 'y 'u :
+rule precUnrollElimination 'H :
    sequent ['ext] { 'H; r: "prec"{T, x. 'B['T; 'x]; 'a}; 'J['r];
              y: 'B[lambda{z. "prec"{T, x. 'B['T; 'x]; 'z}}; 'a];
              u: 'r = 'y in 'B[lambda{z. "prec"{T, x. 'B['T; 'x]; 'z}}; 'a]
@@ -150,7 +150,7 @@ rule precUnrollElimination 'H 'z 'y 'u :
 
 (*
  * H >- precind(r1; h1, z1. t1[r1, z1]) = precind(r2; h2, z2. t2[r2; z2]) in S[r1]
- * by precindEquality lambda(x. S[x]) (a:A * prec(T, y. B[T; y]; a)) Z u h z
+ * by precindEquality lambda(x. S[x]) (a:A * prec(T, y. B[T; y]; a))
  *
  * H >- r1 = r2 in a:A * prec(T, y. B[T, y]; a)
  * H; Z: A -> Ui;
@@ -159,7 +159,7 @@ rule precUnrollElimination 'H 'z 'y 'u :
  *   z: a: A * B[Z; a]
  *   >- t1[h; z] = t2[h; z] in S[z]
  *)
-rule precindEquality lambda{x. 'S['x]} (a:'A * "prec"{T, y. 'B['T; 'y]; 'a}) 'Z 'u 'h 'z univ[i:l] :
+rule precindEquality lambda{x. 'S['x]} (a:'A * "prec"{T, y. 'B['T; 'y]; 'a}) univ[i:l] :
    sequent [squash] { 'H >- 'r1 = 'r2 in a: 'A * "prec"{T, y. 'B['T; 'y]; 'a} } -->
    sequent [squash] { 'H; Z: 'A -> univ[i:l];
              u: \subtype{(a: 'A * 'Z 'a); (a: 'A * "prec"{T, x. 'B['T; 'x]; 'a})};

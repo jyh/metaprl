@@ -136,7 +136,7 @@ interactive nat_is_int {| intro[AutoMustComplete] |} :
    sequent [squash] { 'H >- 'a='b in nat} -->
    sequent [squash] { 'H >- 'a='b in int}
 
-interactive natElimination  'H 'v :
+interactive natElimination  'H :
    sequent ['ext] { 'H; x: int; v:'x>=0; 'J['x] >- 'C['x]}  -->
    sequent ['ext] { 'H; x: nat; 'J['x] >- 'C['x]}
 

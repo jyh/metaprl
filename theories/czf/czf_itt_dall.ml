@@ -121,7 +121,7 @@ dform dall_df1 : parens :: except_mode[src] :: "prec"[prec_lambda] :: "dall"{'s;
  * set $x$.
  * @end[doc]
  *)
-interactive dall_type {| intro [] |} 'y :
+interactive dall_type {| intro [] |} :
    ["wf"] sequent [squash] { 'H >- isset{'s} } -->
    ["wf"] sequent [squash] { 'H; y: set >- "type"{'A['y]} } -->
    sequent ['ext] { 'H >- "type"{."dall"{'s; x. 'A['x]}} }
@@ -134,7 +134,7 @@ interactive dall_type {| intro [] |} 'y :
  * well-formed, and $P[a]$ is true for any set $@mem{a; s}$.
  * @end[doc]
  *)
-interactive dall_intro {| intro [] |} 'a 'b :
+interactive dall_intro {| intro [] |} :
    ["wf"]   sequent [squash] { 'H >- isset{'s} } -->
    ["wf"]   sequent [squash] { 'H; a: set >- "type"{'A['a]} } -->
    ["main"] sequent ['ext] { 'H; a: set; b: mem{'a; 's} >- 'A['a] } -->
@@ -149,7 +149,7 @@ interactive dall_intro {| intro [] |} 'a 'b :
  * produces an additional assumption $A[z]$.
  * @end[doc]
  *)
-interactive dall_elim {| elim [] |} 'H 'z 'w :
+interactive dall_elim {| elim [] |} 'H 'z :
    ["wf"]   sequent [squash] { 'H; x: "dall"{'s; y. 'A['y]}; 'J['x]; w: set >- "type"{'A['w]} } -->
    ["wf"]   sequent ['ext] { 'H; x: "dall"{'s; y. 'A['y]}; 'J['x] >- fun_prop{w. 'A['w]} } -->
    ["antecedent"] sequent ['ext] { 'H; x: "dall"{'s; y. 'A['y]}; 'J['x] >- member{'z; 's} } -->

@@ -152,20 +152,19 @@ interactive bisectMemberEquality {| intro []; eqcd |} :
  *)
 (*!@docoff *)
 
-interactive bisectElimination_eq 'H 'u 'v bind{x.bind{a,b.'C['x;'a;'b]}} :
+interactive bisectElimination_eq 'H bind{x.bind{a,b.'C['x;'a;'b]}} :
    sequent ['ext] { 'H; x: 'A isect 'B; 'J['x]; a: 'A; u: 'a = 'x in 'A;
                                                    b: 'B; v: 'b = 'x in 'B >- 'C['x;'a;'b] } -->
    sequent ['ext] { 'H; x: 'A isect 'B; 'J['x] >- 'C['x;'x;'x] }
 
 let bisectEliminationT n p =
    let n = Sequent.get_pos_hyp_num p n in
-   let u,v = maybe_new_vars2 p "u" "v" in
    let x = Sequent.nth_binding p n in
    let x_var = mk_var_term x in
    let bind =  get_with_arg p in
       if is_bind2_term bind then
          let bind = mk_bind1_term x bind in
-            bisectElimination_eq n u v bind p
+            bisectElimination_eq n bind p
       else
          raise (RefineError
            ("bisectElimination", StringTermError ("required the bind term:",<<bind{a,b.'C['a;'b]}>>)))
@@ -192,11 +191,11 @@ interactive bisectElimination 'H bind{a,b.'C['a;'b]} :
  *)
 
 
-interactive bisectEliminationLeft (*{| elim [SelectOption 1] |}*) 'H 'a 'u 'b 'v:
+interactive bisectEliminationLeft (*{| elim [SelectOption 1] |}*) 'H :
    sequent ['ext] { 'H; x: 'A isect 'B; 'J['x]; a: 'A; u: 'a = 'x in 'A; b: 'B; v: 'b = 'x in 'B >- 'C['a] } -->
    sequent ['ext] { 'H; x: 'A isect 'B; 'J['x] >- 'C['x] }
 
-interactive bisectEliminationRight (*{| elim [SelectOption 2] |}*) 'H 'a 'u 'b 'v :
+interactive bisectEliminationRight (*{| elim [SelectOption 2] |}*) 'H :
    sequent ['ext] { 'H; x: 'A isect 'B; 'J['x]; a: 'A; u: 'a = 'x in 'A; b: 'B; v: 'b = 'x in 'B >- 'C['b] } -->
    sequent ['ext] { 'H; x: 'A isect 'B; 'J['x] >- 'C['x] }
 
@@ -204,12 +203,11 @@ let bisectEliminationT n p =
    let n = Sequent.get_pos_hyp_num p n in
    try
       let sel = get_sel_arg p in
-      let a,u,b,v = maybe_new_vars4 p "a" "u" "b" "v" in
       let r =
          if sel = 1 then bisectEliminationLeft else
          if sel = 2 then bisectEliminationRight else
             raise (RefineError ("bisectElimination", StringError ("select option is out of range ([1,2])")))
-      in (r n a u b v thenT thinIfThinningT [-3;-1;n]) p
+      in (r n thenT thinIfThinningT [-3;-1;n]) p
    with RefineError ("get_attribute",_) ->
       try bisectEliminationT n p
       with RefineError ("get_attribute",_) ->
@@ -220,7 +218,7 @@ let resource elim += (<<'A isect 'B>>,bisectEliminationT)
 
 (*! @doc{Equality elimination.} *)
 
-interactive bisectEqualityElim {| elim [ThinOption thinT] |} 'H 'u 'v:
+interactive bisectEqualityElim {| elim [ThinOption thinT] |} 'H :
    sequent['ext] { 'H; x: 't1 = 't2 in 'A isect 'B; u : 't1 = 't2 in 'A; v : 't1 = 't2 in 'B; 'J['x] >- 'C['x] } -->
    sequent['ext] { 'H; x: 't1 = 't2 in 'A isect 'B; 'J['x] >- 'C['x] }
 

@@ -160,14 +160,14 @@ interactive bunionMemberEqualityRight {| intro [SelectOption 2]; eqcd |} :
  * membership in $A$, and another for membership in $B$.
  * @end[doc]
  *)
-interactive bunionElimination {| elim [ThinOption thinT] |} 'H 'y :
+interactive bunionElimination {| elim [ThinOption thinT] |} 'H :
    [main] sequent [squash] { 'H; x: 'A bunion 'B; 'J['x]; y: 'A >- 't1['y] = 't2['y] in 'C['y] } -->
    [main] sequent [squash] { 'H; x: 'A bunion 'B; 'J['x]; y: 'B >- 't1['y] = 't2['y] in 'C['y] } -->
    sequent ['ext] { 'H; x: 'A bunion 'B; 'J['x] >- 't1['x] = 't2['x] in 'C['x] }
 
 let thinLastT n = thinT (-1) thenT tryT (thinT n)
 
-interactive bunionElimination_eq {| elim [ThinOption thinLastT] |} 'H 'y :
+interactive bunionElimination_eq {| elim [ThinOption thinLastT] |} 'H :
    [main] sequent [squash] { 'H; x: 'A bunion 'B; 'J['x]; y: 'A; u:'y='x in 'A bunion 'B >- squash{'C['y]} } -->
    [main] sequent [squash] { 'H; x: 'A bunion 'B; 'J['x]; y: 'B; u:'y='x in 'A bunion 'B >- squash{'C['y]} } -->
    sequent ['ext] { 'H; x: 'A bunion 'B; 'J['x] >- squash{'C['x]} }

@@ -259,16 +259,16 @@ let rec record_eqcdS addr  =
 
 *)
 
-interactive recordTypeEliminationS {| elim [ThinOption thinT] |} 'H 'v:
+interactive recordTypeEliminationS {| elim [ThinOption thinT] |} 'H :
    [main] sequent ['ext] { 'H; u:"type"{record[n:t]{'A}}; v:"type"{'A}; 'J['u] >- 'C['u] } -->
    sequent ['ext] { 'H; u:"type"{record[n:t]{'A}}; 'J['u] >- 'C['u] }
 
-interactive recordTypeEliminationL {| elim [ThinOption thinT] |} 'H 'r 'v:
+interactive recordTypeEliminationL {| elim [ThinOption thinT] |} 'H 'r :
    [main] sequent ['ext] { 'H; u:"type"{record[n:t]{self.'A['self];'R}}; 'J['u] >- 'r in 'R } -->
    [main] sequent ['ext] { 'H; u:"type"{record[n:t]{self.'A['self];'R}}; v:"type"{'A['r]}; 'J['u] >- 'C['u] } -->
    sequent ['ext] { 'H; u:"type"{record[n:t]{self.'A['self];'R}}; 'J['u] >- 'C['u] }
 
-interactive recordTypeEliminationR {| elim [ThinOption thinT] |} 'H 'a 'v:
+interactive recordTypeEliminationR {| elim [ThinOption thinT] |} 'H 'a :
    [main] sequent ['ext] { 'H; u:"type"{record[n:t]{'A;x.'R['x]}}; 'J['u] >- 'a in 'A } -->
    [main] sequent ['ext] { 'H; u:"type"{record[n:t]{'A;x.'R['x]}}; v:"type"{'R['a]}; 'J['u] >- 'C['u] } -->
    sequent ['ext] { 'H; u:"type"{record[n:t]{'A;x.'R['x]}}; 'J['u] >- 'C['u] }
@@ -290,23 +290,22 @@ interactive recordEqualI {| intro[] |} :
    [main] sequent[squash]{'H >- 'r = 's in 'R } -->
    sequent['ext]  {'H >- 'r = 's in record[n:t]{'A;'R} }
 
-interactive recordMemberOrt (* {| intro[AutoMustComplete] |} *) 'u:
+interactive recordMemberOrt (* {| intro[AutoMustComplete] |} *) :
    [main] sequent[squash]{'H >- 'r in 'R } -->
    [ort] sequent[squash]{'H; u:'R >- record_ort[n:t]{'a;'R} } -->
    sequent['ext]  {'H >- rcrd[n:t]{'a;'r} in 'R }
 
-interactive recordEqualOrt1 'u:
+interactive recordEqualOrt1 :
    [main] sequent[squash]{'H >- 'r1 = 'r2 in 'R } -->
-   [ort] sequent[squash]{'H; u:'R >- record_ort[n:t]{'a;'R} } -->
+   [ort] sequent[squash]{'H; r:'R >- record_ort[n:t]{'a;'R} } -->
    sequent['ext]  {'H >- rcrd[n:t]{'a;'r1} = 'r2 in 'R }
 
-interactive recordEqualOrt2 'u:
+interactive recordEqualOrt2 :
    [main] sequent[squash]{'H >- 'r1 = 'r2 in 'R } -->
-   [ort] sequent[squash]{'H; u:'R >- record_ort[n:t]{'a;'R} } -->
+   [ort] sequent[squash]{'H; r:'R >- record_ort[n:t]{'a;'R} } -->
    sequent['ext]  {'H >- 'r1 = rcrd[n:t]{'a;'r2}  in 'R }
 
 let recordOrtT p =
-   let r= maybe_new_vars1 p "r" in
    let rrule =
       try
          let sel= get_sel_arg p in
@@ -314,7 +313,7 @@ let recordOrtT p =
       with RefineError _ -> recordMemberOrt
    in
    let tac =
-      rrule r thenLT
+      rrule thenLT
          [idT;
           tryT (dT 0 thenWT tryT (typeAssertT thenT nthHypT (-2)));
          ]
@@ -341,7 +340,7 @@ let resource intro += [
 
 (* Single Records *)
 
-interactive recordEliminationS {| elim[] |} 'H 'x 'dum:
+interactive recordEliminationS {| elim[] |} 'H :
    [main] sequent['ext]  {'H; x:'A; dum:record; 'J[rcrd[n:t]{'x;'dum}] >- 'C[rcrd[n:t]{'x;'dum}]} -->
    sequent['ext]  {'H; r:record[n:t]{'A}; 'J['r] >- 'C['r]}
 
@@ -351,11 +350,11 @@ interactive recordEliminationL2 {| elim[] |} 'H bind{rr,x.'C['rr;'x]} :
    [main] sequent['ext]  {'H; r:record[n:t]{self.'A['self];'R}; 'J['r]; rr:'R; x:'A['rr] >- 'C['rr;'x]} -->
    sequent['ext]  {'H; r:record[n:t]{self.'A['self];'R}; 'J['r] >- 'C['r; field[n:t]{'r}]}
 
-interactive recordEliminationL1  'H 'x :
+interactive recordEliminationL1  'H :
    [main] sequent['ext]  {'H; r:'R; x:'A['r]; 'J  >- 'C[rcrd[n:t]{'x;'r}]} -->
    sequent['ext]  {'H; r:record[n:t]{self.'A['self];'R}; 'J >- 'C['r]}
 
-interactive recordEliminationL 'H 'x 'rr:
+interactive recordEliminationL 'H :
    [ort] sequent[squash]{'H; r:record[n:t]{self.'A['self];'R}; 'J['r]; rr:'R; x:'A['rr]
                                                                 >- record_ort[n:t]{'x;'R} } -->
    [main] sequent['ext]  {'H; r:'R; x:'A['r]; 'J[rcrd[n:t]{'x;'r}] >- 'C[rcrd[n:t]{'x;'r}]} -->
@@ -371,22 +370,22 @@ interactive recordEliminationR1 'H :
    [main] sequent['ext]  {'H; x:'A; r:'R['x]; 'J  >- 'C[rcrd[n:t]{'x;'r}]} -->
    sequent['ext]  {'H; r:record[n:t]{'A;x.'R['x]}; 'J >- 'C['r]}
 
-interactive recordEliminationR 'H 'rr:
+interactive recordEliminationR 'H :
    [ort] sequent[squash]{'H; r:record[n:t]{'A;x.'R['x]}; 'J['r]; x:'A; rr:'R['x] >- record_ort[n:t]{'x;'R['x]} } -->
    [main] sequent['ext]  {'H; x:'A; r:'R['x]; 'J[rcrd[n:t]{'x;'r}] >- 'C[rcrd[n:t]{'x;'r}]} -->
    sequent['ext]  {'H; r:record[n:t]{'A;x.'R['x]}; 'J['r] >- 'C['r]}
 
 (* Independent Records *)
 
-interactive recordEliminationI2  'H 'x 'rr :
+interactive recordEliminationI2  'H :
    [main] sequent['ext]  {'H; r:record[n:t]{'A;'R}; 'J['r]; x:'A; rr:'R >- 'C['rr]} -->
    sequent['ext]  {'H; r:record[n:t]{'A;'R}; 'J['r] >- 'C['r]}
 
-interactive recordEliminationI1  'H 'x :
+interactive recordEliminationI1  'H :
    [main] sequent['ext]  {'H; x:'A; r:'R; 'J  >- 'C[rcrd[n:t]{'x;'r}]} -->
    sequent['ext]  {'H; r:record[n:t]{'A;'R}; 'J >- 'C['r]}
 
-interactive recordEliminationI  'H 'x 'rr:
+interactive recordEliminationI  'H :
    [ort] sequent[squash]{'H; r:record[n:t]{'A;'R}; 'J['r]; x:'A; rr:'R >- record_ort[n:t]{'x;'R} } -->
    [main] sequent['ext]  {'H; x:'A; r:'R; 'J[rcrd[n:t]{'x;'r}] >- 'C[rcrd[n:t]{'x;'r}]} -->
    sequent['ext]  {'H; r:record[n:t]{'A;'R}; 'J['r] >- 'C['r]}
@@ -397,9 +396,8 @@ interactive recordEliminationI  'H 'x 'rr:
 
 let recordS_elim n p =
  let n = Sequent.get_pos_hyp_num p n in
- let x,r = maybe_new_vars2 p "x" "dum" in
  let tac =
-    (recordEliminationS n x r)
+    (recordEliminationS n)
     thenT
       (record_reduceT thenMT tryT (thinT (n+1)))
  in
@@ -407,9 +405,8 @@ let recordS_elim n p =
 
 let recordL_elim n p =
  let n = Sequent.get_pos_hyp_num p n in
- let x,r = maybe_new_vars2 p "x" "r" in
  let tac =
-    (recordEliminationL1 n x orelseT recordEliminationL n x r)
+    (recordEliminationL1 n orelseT recordEliminationL n)
     thenT
        ifLabT "ort"
                 (tryT (dT 0 thenWT tryT (typeAssertT thenT nthHypT (-2))))
@@ -419,9 +416,8 @@ let recordL_elim n p =
 
 let recordR_elim n p =
  let n = Sequent.get_pos_hyp_num p n in
- let r = maybe_new_vars1 p "r" in
  let tac =
-    (recordEliminationR1 n orelseT recordEliminationR n r)
+    (recordEliminationR1 n orelseT recordEliminationR n)
     thenT
        ifLabT "ort"
                 (tryT (dT 0 thenWT tryT (typeAssertT thenT nthHypT (-1))))
@@ -431,9 +427,8 @@ let recordR_elim n p =
 
 let recordI_elim n p =
  let n = Sequent.get_pos_hyp_num p n in
- let x,r = maybe_new_vars2 p "x" "r" in
  let tac =
-    (recordEliminationI1 n x orelseT recordEliminationI n x r)
+    (recordEliminationI1 n orelseT recordEliminationI n)
     thenT
        ifLabT "ort"
                 (tryT (dT 0 thenWT tryT (typeAssertT thenT nthHypT (-1))))
@@ -448,19 +443,14 @@ let resource elim += [
    (<<record[m:t]{self.'A['self];'R}>>,recordL_elim)
 ]
 
-
-
-
 (*** Orthogonality ***)
 (*! @doc{@modsubsection{Orthogonality}} *)
 
-interactive functionOrtDinter {| intro[] |} 'b :
+interactive functionOrtDinter {| intro[] |} :
    [wf] sequent[squash]{'H >- "type"{bisect{'A;a.'B['a]}} } -->
    [main] sequent[squash]{'H; a:'A; b:'B['a] >- function_ort{x.'f['x];'A} } -->
    [main] sequent[squash]{'H; a:'A; b:'B['a] >- function_ort{x.'f['x];'B['a]} } -->
    sequent['ext]  {'H >-  function_ort{x.'f['x]; bisect{'A;a.'B['a]}} }
-
-
 
 interactive recordOrtIntro0 {| intro[] |} :
    sequent['ext]  {'H  >- record_ort[n:t]{'a;record} }
@@ -477,29 +467,25 @@ interactive recordOrtIntroS1 :
    [main] sequent[squash]{'H >- not{. label[n:t]=label[m:t] in label} } -->
    sequent['ext]  {'H >- record_ort[n:t]{'a;record[m:t]{'A}} }
 
-interactive recordOrtIntroS2 'x  :
+interactive recordOrtIntroS2 :
    [wf] sequent[squash]{'H >- "type"{record[n:t]{'A}} } -->
    [main] sequent[squash]{'H; x:'A >- 'x='a in 'A } -->
    sequent['ext]  {'H >- record_ort[n:t]{'a;record[n:t]{'A}} }
 
-let recordOrtIntroST p =
-   let x= maybe_new_vars1 p "x" in
-   let tac =
-      recordOrtIntroS2 x orelseT recordOrtIntroS1
-   in tac p
+let recordOrtIntroST =
+   recordOrtIntroS2 orelseT recordOrtIntroS1
 
 let resource intro += (<<record_ort[n:t]{'a;record[m:t]{'A}}>>,wrap_intro recordOrtIntroST)
 
-interactive recordOrtIntroL  'x 'r:
+interactive recordOrtIntroL :
    [wf] sequent[squash]{'H >- "type"{record[m:t]{self.'A['self];'R}} } -->
    [main] sequent[squash]  {'H; r:'R; x:'A['r] >- record_ort[n:t]{'a;'R}}  -->
    [main] sequent[squash]  {'H; r:'R; x:'A['r] >- record_ort[n:t]{'a;record[m:t]{'A['r]}}}  -->
    sequent['ext]  {'H >- record_ort[n:t]{'a;record[m:t]{self.'A['self];'R}} }
 
 let recordOrtIntroLT p =
-   let x,r= maybe_new_vars2 p "x" "r" in
    let tac =
-      recordOrtIntroL x r thenLT
+      recordOrtIntroL thenLT
          [idT;
           tryT (dT 0 thenWT tryT (typeAssertT thenT nthHypT (-2)));
           rwh record_reduce 0 thenT tryT recordOrtIntroST thenWT tryT (dT 0 thenT typeAssertT thenT nthHypT (-1));
@@ -508,16 +494,15 @@ let recordOrtIntroLT p =
 
 let resource intro += (<<record_ort[n:t]{'a;record[m:t]{self.'A['self];'R}}>>,wrap_intro recordOrtIntroLT)
 
-interactive recordOrtIntroR  'r :
+interactive recordOrtIntroR :
    [wf] sequent[squash]{'H >- "type"{record[m:t]{'A;x.'R['x]}} } -->
    [main] sequent[squash]  {'H; x:'A; r:'R['x] >- record_ort[n:t]{'a;'R['x]} } -->
    [main] sequent[squash]  {'H; x:'A; r:'R['x] >- record_ort[n:t]{'a;record[m:t]{'A}}}  -->
    sequent['ext]  {'H >- record_ort[n:t]{'a;record[m:t]{'A;x.'R['x]}} }
 
 let recordOrtIntroRT p =
-   let r= maybe_new_vars1 p "r" in
    let tac =
-      recordOrtIntroR r thenLT
+      recordOrtIntroR thenLT
          [idT;
           tryT (dT 0 thenWT tryT (typeAssertT thenT nthHypT (-1)));
           tryT recordOrtIntroST thenWT tryT (dT 0 thenT typeAssertT thenT nthHypT (-2));
@@ -526,16 +511,15 @@ let recordOrtIntroRT p =
 
 let resource intro += (<<record_ort[n:t]{'a;record[m:t]{'A;x.'R['x]}}>>,wrap_intro recordOrtIntroRT)
 
-interactive recordOrtIntroI  'x 'r :
+interactive recordOrtIntroI :
    [wf] sequent[squash]{'H >- "type"{record[m:t]{'A;'R}} } -->
    [main] sequent[squash]  {'H; x:'A; r:'R >- record_ort[n:t]{'a;'R} } -->
    [main] sequent[squash]  {'H; x:'A; r:'R >- record_ort[n:t]{'a;record[m:t]{'A}}} -->
    sequent['ext]  {'H >- record_ort[n:t]{'a;record[m:t]{'A;'R}} }
 
 let recordOrtIntroIT p =
-   let x,r= maybe_new_vars2 p "x" "r" in
    let tac =
-      recordOrtIntroI x r thenLT
+      recordOrtIntroI thenLT
          [idT;
           tryT (dT 0 thenWT tryT (typeAssertT thenT nthHypT (-1)));
           tryT recordOrtIntroST thenWT tryT (dT 0 thenT typeAssertT thenT nthHypT (-2));
@@ -568,7 +552,6 @@ let elim0 rule p n =
          RefineError _ ->
             let r, record = Sequent.nth_hyp p n in
             let x = field_name record
-            let rr,xx = maybe_new_vars2 rr xx in
             let field = mk_rcrd_term x
             let concl = (Sequent.concl p) in
             let concl1 = var_subst concl r.x
@@ -602,15 +585,6 @@ let resource intro += (<<record_ort[n:t]{'a;record[m:t]{'A;'R}}>>, wrap_intro re
 *)
 (*** Elimination ***)
 (*
-let makeElimTac1 rule p  =
-   let x = maybe_new_vars2 p "x" "r" in
-      tac x p
-
-
-let makeElimTac2 rule p  =
-   let x,r = maybe_new_vars2 p "x" "r" in
-      tac x r p
-
 let repeatRecEl tac n p =
    dT n thenMT dT (n+1)
       tac n thenMT tryT (tac (n+1))
@@ -619,8 +593,7 @@ let repeatRecEl tac n p =
 (*
 let rec repeatRecordEliminationT n p =
    let n = Sequent.get_pos_hyp_num p n in
-   let x,r = maybe_new_vars2 p "x" "r" in
-      ((recordElimination j k x r
+      ((recordElimination j k
            thenMT tryT (repeatRecordEliminationT (n+1)))
           orelseT recordEliminationS n x) p
 
@@ -629,11 +602,10 @@ let recordDefEliminationT n = repeatRecordEliminationT n thenAT tryT repeatRecor
 
 let recordEliminationT n p =
    let n = Sequent.get_pos_hyp_num p n in
-   let x,r = maybe_new_vars2 p "x" "r" in
    try
       let sel = get_sel_arg p in
-         if sel = 0 then recordElimination2 n x r p else
-            (recordElimination1 n x r orelse recordElimination n x r) p
+         if sel = 0 then recordElimination2 n p else
+            (recordElimination1 n orelse recordElimination n) p
    with
          RefineError _ -> recordDefEliminationT n p
 

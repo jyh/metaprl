@@ -60,35 +60,27 @@ open Fol_not
 open Fol_struct
 
 (* Refinement of implication *)
-interactive imp_and_rule 'H 'u :
+interactive imp_and_rule 'H :
    [wf] sequent['ext] {'H; x: ('C & 'D) => 'B; 'J >- "type"{'C}} -->
    [wf] sequent['ext] {'H; x: ('C & 'D) => 'B; 'J >- "type"{'D}} -->
    [main] sequent['ext] {'H; 'J; u: 'C => 'D => 'B >- 'T} -->
    sequent['ext] {'H; x: ('C & 'D) => 'B; 'J >- 'T}
 
-interactive imp_or_rule 'H 'u 'v :
+interactive imp_or_rule 'H :
    [wf] sequent['ext] {'H; x: ('C or 'D) => 'B; 'J >- "type"{'C}} -->
    [wf] sequent['ext] {'H; x: ('C or 'D) => 'B; 'J >- "type"{'D}} -->
    [main] sequent['ext] {'H; 'J; u: 'C => 'B; v: 'D => 'B >- 'T} -->
    sequent['ext] {'H; x: ('C or 'D) => 'B; 'J >- 'T}
 
-interactive imp_imp_rule 'H 'u :
+interactive imp_imp_rule 'H :
    [wf] sequent['ext] {'H; x: ('C => 'D) => 'B; 'J >- "type"{'C}} -->
    [wf] sequent['ext] {'H; x: ('C => 'D) => 'B; 'J >- "type"{'D}} -->
    [main] sequent['ext] {'H; 'J; u: 'D => 'B >- 'T} -->
    sequent['ext] {'H; x: ('C => 'D) => 'B; 'J >- 'T}
 
-let d_and_impT i p =
-   let u = Var.maybe_new_vars1 p "u" in
-      imp_and_rule i u p
-
-let d_or_impT i p =
-   let u, v = Var.maybe_new_vars2 p "u" "v" in
-      imp_or_rule i u v p
-
-let d_imp_impT i p =
-   let u = Var.maybe_new_vars1 p "u" in
-      imp_and_rule i u p
+let d_and_impT = imp_and_rule
+let d_or_impT = imp_or_rule
+let d_imp_impT = imp_and_rule
 
 (* Term operations *)
 let false_opname = opname_of_term << "false" >>

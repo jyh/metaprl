@@ -58,7 +58,7 @@ derived and_intro :
    [main] sequent ['ext] { 'H >- 'B } -->
    sequent ['ext] { 'H >- 'A & 'B }
 
-derived and_elim 'H 'x 'y 'z :
+derived and_elim 'H :
    [wf] sequent ['ext] { 'H; x: 'A & 'B; 'J['x] >- "type"{'A} } -->
    [wf] sequent ['ext] { 'H; x: 'A & 'B; 'J['x] >- "type"{'B} } -->
    [main] sequent ['ext] { 'H; y: 'A; z: 'B; 'J['y, 'z] >- 'C['y, 'z] } -->

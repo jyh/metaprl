@@ -3897,7 +3897,7 @@ B	b1711	t1711
 P	p1711	Number 4243
 P	p1712	Number 4438
 O	o1712	location p1711 p1712
-P	p1713	String "markov4 \"x\" ttca"
+P	p1713	String "markov4 ttca"
 O	o1713	ext_rule p1713
 T	t1713	o657 b1508 b1155
 B	b1713	t1713

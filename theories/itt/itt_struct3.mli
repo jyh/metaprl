@@ -39,7 +39,7 @@ rule substUsingEpimorphism 'H 'B bind{y. 'f['y]} bind{x. 'g['x]}  : (* g does no
    [main] sequent ['ext] { 'H; y: 'B; 'J['f['y]] >- 'C['f['y]] } -->
    sequent ['ext] { 'H; x: 'A; 'J['x] >- 'C['x] }
 
-rule hypReplacementStrong 'H 'B 'y :
+rule hypReplacementStrong 'H 'B :
    [assertion] sequent [squash] { 'H; x: 'A; 'J['x]; y: 'B >- 'y in 'A } -->
    [assertion] sequent [squash] { 'H; x: 'A; 'J['x] >-  'x in 'B } -->
    [main] sequent ['ext] { 'H; x: 'B; 'J['x] >- 'C['x] } -->

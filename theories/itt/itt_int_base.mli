@@ -190,7 +190,7 @@ rule beq_int2prop :
    sequent ['ext] { 'H >- 'a = 'b in int }
 
 (* Derived from previous *)
-rule eq_int_assert_elim 'H 'y :
+rule eq_int_assert_elim 'H :
    [main]sequent['ext]{ 'H; x:"assert"{beq_int{'a;'b}}; 'J[it];
                             y: 'a = 'b in int >- 'C[it]} -->
    [wf]sequent['ext]{ 'H; x:"assert"{beq_int{'a;'b}}; 'J[it] >- 'a in int} -->
@@ -279,13 +279,13 @@ rule numberEquality :
  * Induction:
  * H, n:Z, J[n] >- C[n] ext ind(i; m, z. down[n, m, it, z]; base[n]; m, z.
 up[n, m, it, z])
- * by intElimination [m; v; z]
+ * by intElimination
  *
  * H, n:Z, J[n], m:Z, v: m < 0, z: C[m + 1] >- C[m] ext down[n, m, v, z]
  * H, n:Z, J[n] >- C[0] ext base[n]
  * H, n:Z, J[n], m:Z, v: 0 < m, z: C[m - 1] >- C[m] ext up[n, m, v, z]
  *)
-rule intElimination 'H 'm 'v 'z :
+rule intElimination 'H :
    sequent ['ext] { 'H; n: int; 'J['n]; m: int; v: 'm < 0; z: 'C['m +@ 1] >- 'C['m] } -->
    sequent ['ext] { 'H; n: int; 'J['n] >- 'C[0] } -->
    sequent ['ext] { 'H; n: int; 'J['n]; m: int; v: 0 < 'm; z: 'C['m -@ 1] >- 'C['m] } -->
@@ -297,14 +297,14 @@ rule intElimination 'H 'm 'v 'z :
  * let b = ind(x2; i2, j2. down2[i2, j2]; base2; k2, l2. up2[k2, l2])
  *
  * H >- a = b in T[x1]
- * by indEquality [z. T[z]; x; y; w]
+ * by indEquality \z. T[z]
  *
  * H >- x1 = y1 in Z
  * H, x: Z, w: x < 0, y: T[x + 1] >- down1[x, y] = down2[x, y] in T[x]
  * H >- base1 = base2 in T[0]
  * H, x: Z, w: 0 < x, y: T[x - 1] >- up1[x, y] = up2[x, y] in T[x]
  *)
-rule indEquality lambda{z. 'T['z]} 'x 'y 'w :
+rule indEquality lambda{z. 'T['z]} :
    sequent [squash] { 'H >- 'x1 = 'x2 in int } -->
    sequent [squash] { 'H; x: int; w: 'x < 0; y: 'T['x +@ 1] >- 'down1['x; 'y] = 'down2['x; 'y] in 'T['x] } -->
    sequent [squash] { 'H >- 'base1 = 'base2 in 'T[0] } -->
@@ -343,7 +343,7 @@ topval lt_TrichotC: conv
 
 topval splitIntC : term -> term -> conv
 
-rule splitInt 'a 'b 'w :
+rule splitInt 'a 'b :
    [wf] sequent [squash] { 'H >- 'a in int } -->
    [wf] sequent [squash] { 'H >- 'b in int } -->
    [main] sequent ['ext] { 'H; w: ('a < 'b) >- 'C } -->

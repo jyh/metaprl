@@ -207,7 +207,7 @@ dform quot_df2 : mode[src] :: parens :: "prec"[prec_quot] :: "quot"{'A; x, y. 'E
  * @end[itemize]
  * @end[doc]
  *)
-prim quotientType {| intro [] |} 'u 'v 'w 'x1 'x2 :
+prim quotientType {| intro [] |} :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H; u: 'A; v: 'A >- "type"{'E['u; 'v]} } -->
    [wf] sequent [squash] { 'H; u: 'A >- 'E['u; 'u] } -->
@@ -223,7 +223,7 @@ prim quotientType {| intro [] |} 'u 'v 'w 'x1 'x2 :
  * the equivalence relations $E_1$ and $E_2$ are equal.
  * @end[doc]
  *)
-prim quotientEquality {| intro []; eqcd |} 'x 'y :
+prim quotientEquality {| intro []; eqcd |} :
    [wf] sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
    [wf] sequent [squash] { 'H; x: 'A1; y: 'A1 >- 'E1['x; 'y] = 'E2['x; 'y] in univ[i:l] } -->
    [wf] sequent [squash] { 'H >- "type"{.quot x1, y1: 'A1 // 'E1['x1; 'y1]} } -->
@@ -297,7 +297,7 @@ let resource intro +=
  * the @tactic[quotientT] tactic.
  * @end[doc]
  *)
-prim quotientElimination1 {| elim [ThinOption thinT] |} 'H 'v 'w 'z :
+prim quotientElimination1 {| elim [ThinOption thinT] |} 'H :
    [wf] sequent [squash] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a] >- "type"{'T['a]} } -->
    [main] sequent [squash] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a];
              v: 'A; w: 'A; z: 'E['v; 'w] >- 's['v] = 't['w] in 'T['v]
@@ -305,7 +305,7 @@ prim quotientElimination1 {| elim [ThinOption thinT] |} 'H 'v 'w 'z :
    sequent ['ext] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a] >- 's['a] = 't['a] in 'T['a] } =
    it
 
-interactive quotientElimination1_eq 'H 'v 'w 'z 'e1 'e2:
+interactive quotientElimination1_eq 'H :
    [wf] sequent [squash] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a] >- "type"{'T['a]} } -->
    [main] sequent [squash] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a];
              v: 'A; w: 'A; z: 'E['v; 'w];
@@ -315,13 +315,7 @@ interactive quotientElimination1_eq 'H 'v 'w 'z 'e1 'e2:
    sequent ['ext] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a] >- 's['a] = 't['a] in 'T['a] }
 
 (*! @docoff *)
-let quotientT i p =
-   let i = Sequent.get_pos_hyp_num p i in
-   match Var.maybe_new_vars ["v"; "w"; "z"; "e1"; "e2"] (Sequent.declared_vars p) with
-      [v; w; z; e1; e2] ->
-         quotientElimination1_eq i v w z e1 e2 p
-    | _ ->
-         raise (Invalid_argument "Itt_quotient.quotientT")
+let quotientT = quotientElimination1_eq
 
 (*!
  * @begin[doc]
@@ -329,7 +323,7 @@ let quotientT i p =
  * that $E[a_1, a_2]$.
  * @end[doc]
  *)
-prim quotient_equalityElimination {| elim [ThinOption thinT] |} 'H 'v :
+prim quotient_equalityElimination {| elim [ThinOption thinT] |} 'H :
    [main] ('g['v] : sequent ['ext] { 'H; e: 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]; 'J['e]; v: esquash{'E['a1; 'a2]} >- 'T['e] }) -->
    sequent ['ext] { 'H; e: 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]; 'J['e] >- 'T['e] } =
    'g[it]
@@ -342,7 +336,7 @@ prim quotient_equalityElimination {| elim [ThinOption thinT] |} 'H 'v :
  * the equivalence relation $E$ (the relation must become coarser).
  * @end[doc]
  *)
-interactive quotientSubtype 'a1 'a2 :
+interactive quotientSubtype :
    ["subtype"] sequent [squash] { 'H >- \subtype{'A1; 'A2} } -->
    [aux] sequent [squash] { 'H; a1: 'A1; a2: 'A1 (* ; 'E1['a1; 'a2] *) >- 'E2['a1; 'a2] } -->
    [wf] sequent [squash] { 'H >- "type"{(quot x1, y1: 'A1 // 'E1['x1; 'y1])} } -->
@@ -380,14 +374,10 @@ let resource typeinf += (quotient_term, infer_univ_dep0_dep1 dest_quotient_inf)
 (*
  * Subtyping of two quotient types.
  *)
-let quotient_subtypeT p =
-   let x, y = maybe_new_vars2 p "x" "y" in
-      quotientSubtype x y p
-
 let resource sub +=
    (DSubtype ([<< quot x1, y1: 'A1 // 'E1['x1; 'y1] >>, << quot x2, y2: 'A2 // 'E2['x2; 'y2] >>;
                << 'A1 >>, << 'A2 >>],
-              quotient_subtypeT))
+              quotientSubtype))
 
 (*
  * -*-

@@ -36,7 +36,7 @@ interactive not_type {| intro [] |} :
    [wf] sequent ['ext] { 'H >- "type"{'A} } -->
    sequent ['ext] { 'H >- "type"{."not"{'A}} }
 
-interactive not_intro {| intro [] |} 'x :
+interactive not_intro {| intro [] |} :
    [wf] sequent ['ext] { 'H >- "type"{'A} } -->
    [main] sequent ['ext] { 'H; x: 'A >- "false" } -->
    sequent ['ext] { 'H >- "not"{'A} }

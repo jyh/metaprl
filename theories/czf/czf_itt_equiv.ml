@@ -99,7 +99,7 @@ open Tactic_type.Tacticals
 open Tactic_type.Sequent
 open Tactic_type.Conversionals
 open Mptop
-open Var
+open Perv
 
 open Base_dtactic
 open Base_auto_tactic
@@ -306,7 +306,7 @@ interactive equiv_trans 'b :
 (*
  * Symmetry in another form.
  *)
-interactive equiv_sym1 'H 'u :
+interactive equiv_sym1 'H :
    sequent [squash] { 'H; x: equiv{'s; 'r; 'a; 'b}; 'J['x] >- isset{'s} } -->
    sequent [squash] { 'H; x: equiv{'s; 'r; 'a; 'b}; 'J['x] >- isset{'r} } -->
 (* sequent [squash] { 'H; x: equiv{'s; 'r; 'a; 'b}; 'J['x] >- isset{'a} } -->
@@ -492,7 +492,7 @@ interactive equiv_elem_equiv_fun5 {| intro [] |} :
  * equivalence) on set arguments.
  * @end[doc]
  *)
-interactive equiv_hyp_subst 'H 's 'r 's1 's2 (bind{w. 'P['w]}) 'z :
+interactive equiv_hyp_subst 'H 's 'r 's1 's2 (bind{w. 'P['w]}) :
    sequent ['ext] { 'H; x: 'P['s1]; 'J['x] >- equiv{'s; 'r} } -->
    sequent ['ext] { 'H; x: 'P['s1]; 'J['x] >- equiv{'s; 'r; 's1; 's2} } -->
    sequent ['ext] { 'H; x: 'P['s1]; 'J['x]; z: 'P['s2] >- 'C['x] } -->
@@ -652,15 +652,13 @@ let equivConclSubstT t p =
                raise generic_refiner_exn (* will be immedeiatelly caugh *)
       with
          RefineError _ ->
-            let w = maybe_new_vars1 p "w" in
-                mk_xbind_term w (var_subst goal s1 w)
+            var_subst_to_bind goal s1
    in
       equiv_concl_subst s r s1 s2 bind p
 
 let equivHypSubstT t i p =
    let s, r, s1, s2 = dest_equiv t in
    let hyp = nth_hyp p i in
-   let z = maybe_new_vars1 p "z" in
    let bind =
       try
          let t1 = get_with_arg p in
@@ -670,10 +668,9 @@ let equivHypSubstT t i p =
                raise generic_refiner_exn (* will be immedeiatelly caugh *)
       with
          RefineError _ ->
-            let w = maybe_new_vars1 p "w" in
-                mk_xbind_term w (var_subst hyp s1 w)
+            var_subst_to_bind hyp s1
    in
-      equiv_hyp_subst (get_pos_hyp_num p i) s r s1 s2 bind z p
+      equiv_hyp_subst (get_pos_hyp_num p i) s r s1 s2 bind p
 
 let equivSubstT t i =
    if i = 0 then
@@ -696,10 +693,7 @@ let equivSubstT t i =
 let equivRefT = equiv_ref_intro
 let equivSymT = equiv_sym
 let equivTransT = equiv_trans
-
-let equivSym1T i p =
-   let u = maybe_new_vars1 p "u" in
-      equiv_sym1 (get_pos_hyp_num p i) u p
+let equivSym1T = equiv_sym1
 
 (*
  * Always reasonable to try reflexivity.

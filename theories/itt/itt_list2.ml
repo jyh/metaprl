@@ -620,7 +620,7 @@ interactive append_wf2 {| intro [] |} :
 (*
  * Ball2.
  *)
-interactive ball2_wf2 {| intro [] |} 'T1 'T2 'u 'v :
+interactive ball2_wf2 {| intro [] |} 'T1 'T2 :
    [wf] sequent [squash] { 'H >- "type"{'T1} } -->
    [wf] sequent [squash] { 'H >- "type"{'T2} } -->
    [wf] sequent [squash] { 'H >- 'l1 in list{'T1} } -->

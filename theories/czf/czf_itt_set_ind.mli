@@ -45,7 +45,7 @@ rule set_ind_dfun_type (bind{u. 'B['u]}) :
    sequent [squash] { 'H >- fun_prop{u. 'B['u]} } -->
    sequent ['ext] { 'H >- "type"{set_ind{'s; T, f, g. x: 'T -> 'B['f 'x]}} }
 
-rule set_ind_dfun_fun (bind{x. bind{y. 'B['x; 'y]}}) 'u 'v :
+rule set_ind_dfun_fun (bind{x. bind{y. 'B['x; 'y]}}) :
    sequent ['ext] { 'H >- fun_set{z. 'A['z]} } -->
    sequent [squash] { 'H; u: set; v: set >- "type"{'B['u; 'v]} } -->
    sequent ['ext] { 'H; u: set >- fun_prop{z. 'B['u; 'z]} } -->
@@ -61,7 +61,7 @@ rule set_ind_dprod_type (bind{u. 'B['u]}) :
    sequent [squash] { 'H >- fun_prop{u. 'B['u]} } -->
    sequent ['ext] { 'H >- "type"{set_ind{'s; T, f, g. x: 'T * 'B['f 'x]}} }
 
-rule set_ind_dprod_fun (bind{x. bind{y. 'B['x; 'y]}}) 'u 'v :
+rule set_ind_dprod_fun (bind{x. bind{y. 'B['x; 'y]}}) :
    sequent ['ext] { 'H >- fun_set{z. 'A['z]} } -->
    sequent [squash] { 'H; u: set; v: set >- "type"{'B['u; 'v]} } -->
    sequent ['ext] { 'H; u: set >- fun_prop{z. 'B['u; 'z]} } -->

@@ -4054,7 +4054,7 @@ O	o1520	ext_rule p1520
 S	s1562	t967 h h3990 h1645 h3663 h4148
 G	s1562	t4208
 B	b1563	s1562
-P	p1576	String "recordMemberOrt \"w\" thenT autoT"
+P	p1576	String "recordMemberOrt thenT autoT"
 O	o1576	ext_rule p1576
 T	t3958	o1664 b3992
 B	b3958	t3958
@@ -4292,7 +4292,7 @@ G	s3037	t1373
 B	b3038	s3037
 T	t3038	o980 b3038 b3883
 B	b3039	t3038
-P	p3044	String "recordEliminationL1 4 \"a\" thenT autoT"
+P	p3044	String "recordEliminationL1 4 thenT autoT"
 O	o3044	ext_rule p3044
 P	p3058	String "rw unfoldRecordR 2 thenT withT <<bind{r1,r2.'C['r2; field[n:t]{'r1}]}>> (dT 2)"
 O	o3058	ext_rule p3058
@@ -4327,7 +4327,7 @@ NSummary!ext_identity	ext_identity	ext_identity Summary
 O	o3153	ext_identity
 P	p2970	String "rwhAllAll unfoldRecordI"
 O	o2970	ext_rule p2970
-P	p3043	String "rwhAllAll unfoldRecordI thenT recordEliminationR 2 \"rr\" thenT autoT"
+P	p3043	String "rwhAllAll unfoldRecordI thenT recordEliminationR 2 thenT autoT"
 O	o3047	ext_rule p3043
 P	p5190	Number 13345
 P	p5386	Number -1
@@ -4560,7 +4560,7 @@ P	p6211	String recordOrtIntroRT
 O	o6211	lid p6211
 T	t6211	o6211
 B	b6211	t6211
-P	p6219	String "rwaAllAll [unfoldRecordI] thenT recordOrtIntroR \"r\" thenT autoT"
+P	p6219	String "rwaAllAll [unfoldRecordI] thenT recordOrtIntroR thenT autoT"
 O	o6219	ext_rule p6219
 P	p5123	Number 17245
 P	p5261	Number 17364
@@ -7922,7 +7922,7 @@ T	t6076	o b6074 b6076
 B	b6077	t6076
 T	t6077	o978 b6055 b6077
 B	b6078	t6077
-P	p6078	String "recordMemberOrt \"w\" ttca"
+P	p6078	String "recordMemberOrt ttca"
 O	o6078	ext_rule p6078
 T	t6078	o1085 b1214 b4 b6073
 B	b6079	t6078

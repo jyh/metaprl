@@ -227,7 +227,7 @@ interactive sort_wf {| intro [] |} :
 (*
  * Some useful ordering theorems.
  *)
-interactive symetric_elim {| elim [elim_typeinf << 'a >>] |} 'H 'A 'v :
+interactive symetric_elim {| elim [elim_typeinf << 'a >>] |} 'H 'A :
    [wf] sequent [squash] { 'H; w: compare_lt{'lt; 'a; 'b}; 'J['w] >- 'lt in 'A -> 'A -> bool } -->
    [wf] sequent [squash] { 'H; w: compare_lt{'lt; 'a; 'b}; 'J['w] >- 'a in 'A } -->
    [wf] sequent [squash] { 'H; w: compare_lt{'lt; 'a; 'b}; 'J['w] >- 'b in 'A } -->

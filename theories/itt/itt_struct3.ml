@@ -50,7 +50,7 @@ interactive substUsingEpimorphism 'H 'B bind{y. 'f['y]} bind{x. 'g['x]}  : (* g 
    [main] sequent ['ext] { 'H; y: 'B; 'J['f['y]] >- 'C['f['y]] } -->
    sequent ['ext] { 'H; x: 'A; 'J['x] >- 'C['x] }
 
-interactive hypReplacementStrong 'H 'B 'y:
+interactive hypReplacementStrong 'H 'B :
    [assertion] sequent [squash] { 'H; x: 'A; 'J['x]; y: 'B >- 'y in 'A } -->
    [assertion] sequent [squash] { 'H; x: 'A; 'J['x] >-  'x in 'B } -->
    [main] sequent ['ext] { 'H; x: 'B; 'J['x] >- 'C['x] } -->
@@ -62,8 +62,7 @@ interactive hypReplacementExt 'H 'B  :
    sequent ['ext] { 'H; x: 'A; 'J['x] >- 'T['x] }
 
 let changeHypT t i p =
-   let y = maybe_new_vars1 p "y" in
-      hypReplacementStrong i t y p
+   hypReplacementStrong i t p
 
 let replaceHypT t i p =
    try

@@ -6811,7 +6811,7 @@ T	t1003	o1282 b991 b1001
 B	b1003	t1003
 T	t1004	o1282 b985 b1003
 B	b1004	t1004
-P	p1004	String "cutEq0 <<'c_1='c_2 in 'C['t_2]>> <<bind{c.'c 'c}>> \"v\" \"u\" thenMT onHypsT[-1;-1] thinT thenAT autoT"
+P	p1004	String "cutEq0 <<'c_1='c_2 in 'C['t_2]>> <<bind{c.'c 'c}>> thenMT onHypsT[-1;-1] thinT thenAT autoT"
 O	o1004	ext_rule p1004
 T	t1005	o b992 b23
 B	b1005	t1005
@@ -6960,7 +6960,7 @@ T	t1221	o1282 b1199 b1221
 B	b1227	t1221
 T	t1227	o1282 b3219 b1227
 B	b1228	t1227
-P	p1228	String "cutEq0 <<'s_1='s_2 in 'S>> <<bind{x.'t_1['x] 't_2['x]}>> \"v\" \"u\"  thenAT autoT"
+P	p1228	String "cutEq0 <<'s_1='s_2 in 'S>> <<bind{x.'t_1['x] 't_2['x]}>> thenAT autoT"
 O	o1228	ext_rule p1228
 T	t1228	o b1197 b23
 B	b1232	t1228

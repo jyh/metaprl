@@ -57,7 +57,7 @@ let _ =
 (*
  * Implication is restricted.
  *)
-interactive prod_fun {| intro [] |} 'w :
+interactive prod_fun {| intro [] |} :
    ["wf"] sequent [squash] { 'H; w: set >- "type"{'A['w]} } -->
    ["wf"] sequent [squash] { 'H; w: set >- "type"{'B['w]} } -->
    sequent ['ext] { 'H >- fun_prop{x. 'A['x]} } -->
@@ -75,7 +75,7 @@ interactive prod_res1 {| intro [] |} :
 (*
  * Implication is restricted.
  *)
-interactive and_fun {| intro [] |} 'w :
+interactive and_fun {| intro [] |} :
    ["wf"] sequent [squash] { 'H; w: set >- "type"{'A['w]} } -->
    ["wf"] sequent [squash] { 'H; w: set >- "type"{'B['w]} } -->
    sequent ['ext] { 'H >- fun_prop{x. 'A['x]} } -->

@@ -275,7 +275,7 @@ interactive consFormation :
  * of type $T$ for any elements $u @in A$, $v @in @list{A}$, and $z @in T$.
  * @end[doc]
  *)
-prim list_indEquality {| intro []; eqcd |} lambda{l. 'T['l]} list{'A} 'u 'v 'w :
+prim list_indEquality {| intro []; eqcd |} lambda{l. 'T['l]} list{'A} :
    [wf] sequent [squash] { 'H >- 'e1 = 'e2 in list{'A} } -->
    [wf] sequent [squash] { 'H >- 'base1 = 'base2 in 'T[nil] } -->
    [wf] sequent [squash] { 'H; u: 'A; v: list{'A}; w: 'T['v] >-
@@ -299,7 +299,7 @@ prim list_indEquality {| intro []; eqcd |} lambda{l. 'T['l]} list{'A} 'u 'v 'w :
  * $C[t]$ holds on $t$.
  * @end[doc]
  *)
-prim listElimination {| elim [ThinOption thinT] |} 'H 'w 'u 'v :
+prim listElimination {| elim [ThinOption thinT] |} 'H :
    [main] ('base['l] : sequent ['ext] { 'H; l: list{'A}; 'J['l] >- 'C[nil] }) -->
    [main] ('step['l; 'u; 'v; 'w] : sequent ['ext] { 'H; l: list{'A}; 'J['l]; u: 'A; v: list{'A}; w: 'C['v] >- 'C['u::'v] }) -->
    sequent ['ext] { 'H; l: list{'A}; 'J['l] >- 'C['l] } =
@@ -324,7 +324,7 @@ interactive cons_neq_nil {| elim [] |} 'H :
  * @modsubsection{Equality elimination}
  * @end[doc]
  *)
-interactive consEqElimination {| elim [ThinOption thinT] |} 'H 'v 'w :
+interactive consEqElimination {| elim [ThinOption thinT] |} 'H :
    sequent ['ext] {'H; u: cons{'h1; 't1} = cons{'h2; 't2} in list{'A};
                        v: 'h1 = 'h2 in 'A; w: 't1 = 't2 in list{'A};   'J['u] >- 'C['u] } -->
    sequent ['ext] {'H; u: cons{'h1; 't1} = cons{'h2; 't2} in list{'A}; 'J['u] >- 'C['u] }

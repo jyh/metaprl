@@ -151,7 +151,7 @@ rule inrEquality :
  * by unionElimination x u v
  * H, x: A # B, u:A, v:B[u], J[u, v] >- T[u, v] ext t[u, v]
  *)
-rule unionElimination 'H 'x 'u 'v :
+rule unionElimination 'H :
    sequent ['ext] { 'H; x: 'A + 'B; u: 'A; 'J[inl{'u}] >- 'T[inl{'u}] } -->
    sequent ['ext] { 'H; x: 'A + 'B; v: 'B; 'J[inr{'v}] >- 'T[inr{'v}] } -->
    sequent ['ext] { 'H; x: 'A + 'B; 'J['x] >- 'T['x] }
@@ -163,7 +163,7 @@ rule unionElimination 'H 'x 'u 'v :
  * H, u:A, w: e1 = inl u in A + B >- l1[u] = l2[u] in T[inl u]
  * H, v:A, w: e1 = inr v in A + B >- r1[v] = r2[v] in T[inr v]
  *)
-rule decideEquality bind{z. 'T['z]} ('A + 'B) 'u 'v 'w :
+rule decideEquality bind{z. 'T['z]} ('A + 'B) :
    sequent [squash] { 'H >- 'e1 = 'e2 in 'A + 'B } -->
    sequent [squash] { 'H; u: 'A; w: 'e1 = inl{'u} in 'A + 'B >- 'l1['u] = 'l2['u] in 'T[inl{'u}] } -->
    sequent [squash] { 'H; v: 'B; w: 'e1 = inr{'v} in 'A + 'B >- 'r1['v] = 'r2['v] in 'T[inr{'v}] } -->

@@ -70,7 +70,7 @@ prim or_intro_right {| intro [SelectOption 2] |} :
    sequent ['ext] { 'H >- "or"{'A; 'B} } =
    inr{'b}
 
-prim or_elim {| elim [] |} 'H 'x :
+prim or_elim {| elim [] |} 'H :
    [wf] ('a['x] : sequent ['ext] { 'H; x: 'A; 'J[inl{'x}] >- 'C[inl{'x}] }) -->
    [wf] ('b['x] : sequent ['ext] { 'H; x: 'B; 'J[inr{'x}] >- 'C[inr{'x}] }) -->
    sequent ['ext] { 'H; x: 'A or 'B; 'J['x] >- 'C['x] } =

@@ -109,7 +109,7 @@ dform sexists_df : except_mode[src] :: parens :: "prec"[prec_lambda] :: "sexists
  * if $P[x]$ is a well-formed proposition for any set argument $x$.
  * @end[doc]
  *)
-interactive sexists_type {| intro [] |} 'y :
+interactive sexists_type {| intro [] |} :
    sequent [squash] { 'H; y: set >- "type"{'A['y]} } -->
    sequent ['ext] { 'H >- "type"{."sexists"{x. 'A['x]} } }
 
@@ -121,7 +121,7 @@ interactive sexists_type {| intro [] |} 'y :
  * is true for some set $a$.
  * @end[doc]
  *)
-interactive sexists_intro  {| intro [] |}'z 'w :
+interactive sexists_intro  {| intro [] |} 'z :
    ["wf"]   sequent ['ext] { 'H >- isset{'z} } -->
    ["main"] sequent ['ext] { 'H >- 'A['z] } -->
    ["wf"]   sequent ['ext] { 'H; w: set >- "type"{'A['w]} } -->
@@ -135,7 +135,7 @@ interactive sexists_intro  {| intro [] |}'z 'w :
  * set $a$ and a proof $P[a]$.
  * @end[doc]
  *)
-interactive sexists_elim {| elim [] |} 'H 'x 'z 'w :
+interactive sexists_elim {| elim [] |} 'H :
    sequent ['ext] { 'H;
                     z: set;
                     w: 'A['z];

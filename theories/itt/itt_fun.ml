@@ -130,7 +130,7 @@ interactive independentFunctionEquality {| intro []; eqcd |} :
 (*
  * Typehood.
  *)
-interactive independentFunctionType {| intro [] |} 'x :
+interactive independentFunctionType {| intro [] |} :
    [wf] sequent [squash] { 'H >- "type"{'A1} } -->
    [wf] sequent [squash] { 'H; x: 'A1 >- "type"{'B1} } -->
    sequent ['ext] { 'H >- "type"{. 'A1 -> 'B1 } }
@@ -145,7 +145,7 @@ interactive independentFunctionType {| intro [] |} 'x :
  * there is a proof of $B$.
  * @end[doc]
  *)
-interactive independentLambdaFormation {| intro [] |} 'z :
+interactive independentLambdaFormation {| intro [] |} :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [main] ('b['z] : sequent ['ext] { 'H; z: 'A >- 'B }) -->
    sequent ['ext] { 'H >- 'A -> 'B }
@@ -160,7 +160,7 @@ interactive independentLambdaFormation {| intro [] |} 'z :
  * in $A$.
  * @end[doc]
  *)
-interactive independentLambdaEquality {| intro []; eqcd |} 'x :
+interactive independentLambdaEquality {| intro []; eqcd |} :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H; x: 'A >- 'b1['x] = 'b2['x] in 'B } -->
    sequent ['ext] { 'H >- lambda{a1. 'b1['a1]} = lambda{a2. 'b2['a2]} in 'A -> 'B }
@@ -174,7 +174,7 @@ interactive independentLambdaEquality {| intro []; eqcd |} 'x :
  * derived from the @hrefrule[functionExtensionality] rule.
  * @end[doc]
  *)
-interactive independentFunctionExtensionality ('C -> 'D) ('E -> 'F) 'u :
+interactive independentFunctionExtensionality ('C -> 'D) ('E -> 'F) :
    [main] sequent [squash] { 'H; u: 'A >- ('f 'u) = ('g 'u) in 'B } -->
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H >- 'f in 'C -> 'D } -->
@@ -192,7 +192,7 @@ interactive independentFunctionExtensionality ('C -> 'D) ('E -> 'F) 'u :
  * more appropriate for the functional application to a specific argument $a @in A$.
  * @end[doc]
  *)
-interactive independentFunctionElimination 'H 'f 'y :
+interactive independentFunctionElimination 'H :
    [assertion] ('a : sequent ['ext] { 'H; f: 'A -> 'B; 'J['f] >- 'A }) -->
    [main] ('t['f; 'y] : sequent ['ext] { 'H; f: 'A -> 'B; 'J['f]; y: 'B >- 'T['f] }) -->
    sequent ['ext] { 'H; f: 'A -> 'B; 'J['f] >- 'T['f] }
@@ -200,7 +200,7 @@ interactive independentFunctionElimination 'H 'f 'y :
 (*
  * Explicit function elimination.
  *)
-interactive independentFunctionElimination2 'H 'f 'y 'z 'a :
+interactive independentFunctionElimination2 'H 'a :
    [wf] sequent [squash] { 'H; f: 'A -> 'B; 'J['f] >- 'a in 'A } -->
    [main] ('t['y; 'z] : sequent ['ext] { 'H; f: 'A -> 'B; 'J['f]; y: 'B; z: 'y = ('f 'a) in 'B >- 'T['f] }) -->
    sequent ['ext] { 'H; f: 'A -> 'B; 'J['f] >- 'T['f] }
@@ -316,14 +316,12 @@ let resource intro += [
  *)
 let d_hyp_fun i p =
    let i = Sequent.get_pos_hyp_num p i in
-   let f = Sequent.nth_binding p i in
-   let y, z = maybe_new_vars2 p "y" "z" in
       try
          let a = get_with_arg p in
-            independentFunctionElimination2 i f y z a p
+            independentFunctionElimination2 i a p
       with
          RefineError _ ->
-            independentFunctionElimination i f y p
+            independentFunctionElimination i p
 
 let resource elim += (fun_term, d_hyp_fun)
 
@@ -341,8 +339,7 @@ let fnExtensionalityT t1 t2 p =
       dfun_extensionalityT t1 t2 p
    else if is_fun_term t1 then
       let t, _, _ = dest_equal (Sequent.concl p) in
-      let o = maybe_new_vars1 p "o" in
-         independentFunctionExtensionality t1 t2 o p
+         independentFunctionExtensionality t1 t2 p
    else raise (RefineError ("extensionalityT", StringTermError ("first arg is not a function type", t1)))
 
 let fnExtenT t = fnExtensionalityT t t

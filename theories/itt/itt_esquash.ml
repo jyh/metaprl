@@ -185,7 +185,7 @@ interactive unesquash 'H :
 interactive esquash_void_elim {| elim [] |} 'H :
    sequent ['ext] { 'H; x: esquash{void}; 'J['x] >- 'C['x] }
 
-interactive esquash_equal_intro {| intro [] |} 'x :
+interactive esquash_equal_intro {| intro [] |} :
    [wf] sequent [squash] { 'H >- 'P1 in univ[i:l] } -->
    [wf] sequent [squash] { 'H >- 'P2 in univ[i:l] } -->
    [main] sequent [squash] { 'H; x: 'P1 >- 'P2 } -->

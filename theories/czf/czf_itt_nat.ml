@@ -74,7 +74,7 @@ open Refiner.Refiner.TermMan
 open Tactic_type
 open Tactic_type.Conversionals
 open Tactic_type.Sequent
-open Var
+open Perv
 
 open Base_dtactic
 
@@ -276,8 +276,7 @@ interactive succ_member_elim1 {| elim [] |} 'H :
  *)
 let natIndT t p =
    let goal = Sequent.concl p in
-   let z = maybe_new_vars1 p "v" in
-   let bind = mk_xbind_term z (var_subst goal t z) in
+   let bind = var_subst_to_bind goal t in
       nat_elim bind t p
 
 (*

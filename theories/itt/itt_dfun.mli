@@ -53,7 +53,7 @@ rewrite unfold_dfun : (x: 'A -> 'B['x]) <--> ({ f | x: 'A -> 'B['x] })
  * H >- A = A in Ui
  * H, a: A >- Ui ext B
  *)
-rule functionFormation 'a 'A :
+rule functionFormation 'A :
    sequent [squash] { 'H >- 'A in univ[i:l] } -->
    sequent ['ext] { 'H; a: 'A >- univ[i:l] } -->
    sequent ['ext] { 'H >- univ[i:l] }
@@ -65,7 +65,7 @@ rule functionFormation 'a 'A :
  * H >- A1 = A2 in Ui
  * H, x: A1 >- B1[x] = B2[x] in Ui
  *)
-rule functionEquality 'x :
+rule functionEquality :
    sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
    sequent [squash] { 'H; x: 'A1 >- 'B1['x] = 'B2['x] in univ[i:l] } -->
    sequent ['ext] { 'H >- (a1:'A1 -> 'B1['a1]) = (a2:'A2 -> 'B2['a2]) in univ[i:l] }
@@ -73,31 +73,31 @@ rule functionEquality 'x :
 (*
  * Typehood.
  *)
-rule functionType 'x :
+rule functionType :
    sequent [squash] { 'H >- "type"{'A1} } -->
    sequent [squash] { 'H; x: 'A1 >- "type"{'B1['x]} } -->
    sequent ['ext] { 'H >- "type"{. a1:'A1 -> 'B1['a1] } }
 
 (*
  * H >- a:A -> B[a] ext lambda(z. b[z])
- * by lambdaFormation Ui z
+ * by lambdaFormation Ui
  *
  * H >- A = A in Ui
  * H, z: A >- B[z] ext b[z]
  *)
-rule lambdaFormation 'z :
+rule lambdaFormation :
    sequent [squash] { 'H >- "type"{'A} } -->
    sequent ['ext] { 'H; z: 'A >- 'B['z] } -->
    sequent ['ext] { 'H >- a:'A -> 'B['a] }
 
 (*
  * H >- lambda(a1. b1[a1]) = lambda(a2. b2[a2]) in a:A -> B
- * by lambdaEquality Ui x
+ * by lambdaEquality Ui
  *
  * H >- A = A in Ui
  * H, x: A >- b1[x] = b2[x] in B[x]
  *)
-rule lambdaEquality 'x :
+rule lambdaEquality :
    sequent [squash] { 'H >- "type"{'A} } -->
    sequent [squash] { 'H; x: 'A >- 'b1['x] = 'b2['x] in 'B['x] } -->
    sequent ['ext] { 'H >- lambda{a1. 'b1['a1]} = lambda{a2. 'b2['a2]} in a:'A -> 'B['a] }
@@ -111,7 +111,7 @@ rule lambdaEquality 'x :
  * H >- f = f in y:C -> D
  * H >- g = g in z:E -> F
  *)
-rule functionExtensionality (y:'C -> 'D['y]) (z:'E -> 'F['z]) 'u :
+rule functionExtensionality (y:'C -> 'D['y]) (z:'E -> 'F['z]) :
    sequent [squash] { 'H; u: 'A >- ('f 'u) = ('g 'u) in 'B['u] } -->
    sequent [squash] { 'H >- "type"{'A} } -->
    sequent [squash] { 'H >- 'f in y:'C -> 'D['y] } -->
@@ -120,12 +120,12 @@ rule functionExtensionality (y:'C -> 'D['y]) (z:'E -> 'F['z]) 'u :
 
 (*
  * H, f: (x:A -> B), J[x] >- T[f] t[f, f a, it]
- * by functionElimination i a y v
+ * by functionElimination i a
  *
  * H, f: (x:A -> B), J[x] >- a = a in A
  * H, f: (x:A -> B), J[x], y: B[a], v: y = f(a) in B[a] >- T[f] ext t[f, y, v]
  *)
-rule functionElimination 'H 'f 'a 'y 'v :
+rule functionElimination 'H 'a :
    sequent [squash] { 'H; f: x:'A -> 'B['x]; 'J['f] >- 'a in 'A } -->
    sequent ['ext] { 'H; f: x:'A -> 'B['x]; 'J['f]; y: 'B['a]; v: 'y = ('f 'a) in 'B['a] >- 'T['f] } -->
    sequent ['ext] { 'H; f: x:'A -> 'B['x]; 'J['f] >- 'T['f] }
@@ -149,7 +149,7 @@ rule applyEquality (x:'A -> 'B['x]) :
  * H >- A2 <= A1
  * H, a: A1 >- B1[a] <= B2[a]
  *)
-rule functionSubtype 'a :
+rule functionSubtype :
    sequent [squash] { 'H >- \subtype{'A2; 'A1} } -->
    sequent [squash] { 'H; a: 'A1 >- \subtype{'B1['a]; 'B2['a]} } -->
    sequent ['prop] { 'H >- \subtype{ (a1:'A1 -> 'B1['a1]); (a2:'A2 -> 'B2['a2]) } }

@@ -65,18 +65,16 @@ interactive nextMember {| intro [] |} :
    sequent [squash] { 'H >- 'x='y in label} -->
    sequent ['ext] { 'H >- next{'x} = next{'y} in label}
 
-interactive labelInduction {| elim [ThinOption thinT] |} 'H 'm 'z :
+interactive labelInduction {| elim [ThinOption thinT] |} 'H :
    sequent ['ext] { 'H; n: label; 'J['n] >- 'C[zero] }  -->
    sequent ['ext] { 'H; n: label; 'J['n]; m: label;  z: 'C['m] >- 'C[next{'m}] }  -->
    sequent ['ext] { 'H; n: label; 'J['n] >- 'C['n] }
 
-interactive labelBackInduction 'n bind{x.'C['x]} 'm 'z :
+interactive labelBackInduction 'n bind{x.'C['x]} :
    sequent [squash]{'H >- 'n in label }  -->
    sequent ['ext] { 'H >- 'C['n] }  -->
    sequent ['ext] { 'H; m: label;  z: 'C[next{'m}] >- 'C['m] }  -->
    sequent ['ext] { 'H  >- 'C[zero] }
-
-
 
 (**** equality ****)
 

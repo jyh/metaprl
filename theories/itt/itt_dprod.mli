@@ -77,22 +77,22 @@ rewrite reduceSnd : snd{pair{'a; 'b}} <--> 'b
 
 (*
  * H >- Ui ext x:A # B
- * by productFormation A x
+ * by productFormation A
  * H >- A = A in Ui
  * H, x:A >- Ui ext B
  *)
-rule productFormation 'A 'x :
+rule productFormation 'A :
    sequent [squash] { 'H >- 'A in univ[i:l] } -->
    sequent ['ext] { 'H; x: 'A >- univ[i:l] } -->
    sequent ['ext] { 'H >- univ[i:l] }
 
 (*
  * H >- x1:A1 # B1 = x2:A2 # B2 in Ui
- * by productEquality y
+ * by productEquality
  * H >- A1 = A2 in Ui
  * H, y:A1 >- B1[y] = B2[y] in Ui
  *)
-rule productEquality 'y :
+rule productEquality :
    sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
    sequent [squash] { 'H; y: 'A1 >- 'B1['y] = 'B2['y] in univ[i:l] } -->
    sequent ['ext] { 'H >- x1:'A1 * 'B1['x1] = x2:'A2 * 'B2['x2] in univ[i:l] }
@@ -100,19 +100,19 @@ rule productEquality 'y :
 (*
  * Typehood.
  *)
-rule productType 'x :
+rule productType :
    sequent [squash] { 'H >- "type"{'A1} } -->
    sequent [squash] { 'H; x: 'A1 >- "type"{'A2['x]} } -->
    sequent ['ext] { 'H >- "type"{.y:'A1 * 'A2['y]} }
 
 (*
  * H >- x:A * B ext (a, b)
- * by pairFormation a y
+ * by pairFormation a
  * H >- a = a in A
  * H >- B[a] ext b
  * H, y:A >- B[y] = B[y] in Ui
  *)
-rule pairFormation 'a 'y :
+rule pairFormation 'a :
    sequent [squash] { 'H >- 'a in 'A } -->
    sequent ['ext] { 'H >- 'B['a] } -->
    sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
@@ -120,12 +120,12 @@ rule pairFormation 'a 'y :
 
 (*
  * H >- (a1, b1) = (a2, b2) in x:A * B
- * by pairEquality y
+ * by pairEquality
  * H >- a1 = a2 in A
  * H >- b1 = b2 in B[a1]
  * H, y:A >- B[y] = B[y] in Ui
  *)
-rule pairEquality 'y :
+rule pairEquality :
    sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
    sequent [squash] { 'H >- 'b1 = 'b2 in 'B['a1] } -->
    sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
@@ -133,10 +133,10 @@ rule pairEquality 'y :
 
 (*
  * H, x:A * B[x], J[x] >- T[x] ext spread(x; u, v. t[u, v])
- * by productElimination u v
+ * by productElimination
  * H, x:A * B, u:A, v:B[u], J[u, v] >- T[u, v] ext t[u, v]
  *)
-rule productElimination 'H 'u 'v :
+rule productElimination 'H :
    sequent ['ext] { 'H; z: x:'A * 'B['x]; u: 'A; v: 'B['u]; 'J['u, 'v] >- 'T['u, 'v] } -->
    sequent ['ext] { 'H; z: x:'A * 'B['x]; 'J['z] >- 'T['z] }
 
@@ -146,7 +146,7 @@ rule productElimination 'H 'u 'v :
  * H >- e1 = e2 in w:A * B
  * H, u:A, v: B[u], a: e1 = (u, v) in w:A * B >- b1[u; v] = b2[u; v] in T[u, v]
  *)
-rule spreadEquality bind{z. 'T['z]} (w:'A * 'B['w]) 'u 'v 'a :
+rule spreadEquality bind{z. 'T['z]} (w:'A * 'B['w]) :
    sequent [squash] { 'H >- 'e1 = 'e2 in w:'A * 'B['w] } -->
    sequent [squash] { 'H; u: 'A; v: 'B['u]; a: 'e1 = ('u, 'v) in w:'A * 'B['w] >-
              'b1['u; 'v] = 'b2['u; 'v] in 'T['u, 'v] } -->
@@ -159,7 +159,7 @@ rule spreadEquality bind{z. 'T['z]} (w:'A * 'B['w]) 'u 'v 'a :
  * H >- A1 <= A2
  * H, a: A1 >- B1[a] <= B2[a]
  *)
-rule productSubtype 'a :
+rule productSubtype :
    sequent [squash] { 'H >- \subtype{'A1; 'A2} } -->
    sequent [squash] { 'H; a: 'A1 >- \subtype{'B1['a]; 'B2['a]} } -->
    sequent ['ext] { 'H >- \subtype{ (a1:'A1 * 'B1['a1]); (a2:'A2 * 'B2['a2]) } }

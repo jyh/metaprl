@@ -49,37 +49,37 @@ declare set{'A; x. 'B['x]}
 
 (*
  * H >- Ui ext { a:A | B }
- * by setFormation a A
+ * by setFormation A
  *
  * H >- A = A in Ui
  * H, a: A >- Ui ext B
  *)
-rule setFormation 'a 'A :
+rule setFormation 'A :
    sequent [squash] { 'H >- 'A = 'A in univ[i:l] } -->
    sequent ['ext] { 'H; a: 'A >- univ[i:l] } -->
    sequent ['ext] { 'H >- univ[i:l] }
 
 (*
  * H >- { a1:A1 | B1[a1] } = { a2:A2 | B2[a2] } in Ui
- * by setEquality x
+ * by setEquality
  *
  * H >- A1 = A2 in Ui
  * H, x: A1 >- B1[x] = B2[x] in Ui
  *)
-rule setEquality 'x :
+rule setEquality :
    sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
    sequent [squash] { 'H; x: 'A1 >- 'B1['x] = 'B2['x] in univ[i:l] } -->
    sequent ['ext] { 'H >- { a1:'A1 | 'B1['a1] } = { a2:'A2 | 'B2['a2] } in univ[i:l] }
 
 (*
  * H >- { a:A | B[a] } ext a
- * by setMemberFormation Ui a z
+ * by setMemberFormation Ui a
  *
  * H >- a = a in A
  * H >- B[a]
  * H, z: A >- B[z] = B[z] in Ui
  *)
-rule setMemberFormation 'a 'z :
+rule setMemberFormation 'a :
    sequent [squash] { 'H >- 'a = 'a in 'A } -->
    sequent [squash]   { 'H >- squash{'B['a]} } -->
    sequent [squash] { 'H; z: 'A >- "type"{'B['z]} } -->
@@ -87,13 +87,13 @@ rule setMemberFormation 'a 'z :
 
 (*
  * H >- a1 = a2 in { a:A | B }
- * by setMemberEquality Ui x
+ * by setMemberEquality Ui
  *
  * H >- a1 = a2 in A
  * H >- B[a1]
  * H, x: A >- B[x] = B[x] in Ui
  *)
-rule setMemberEquality 'x :
+rule setMemberEquality :
    sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
    sequent [squash] { 'H >- squash{'B['a1]} } -->
    sequent [squash] { 'H; x: 'A >- "type"{'B['x]} } -->
@@ -101,11 +101,11 @@ rule setMemberEquality 'x :
 
 (*
  * H, u: { x:A | B }, J[u] >- T[u] ext t[y]
- * by setElimination y v
+ * by setElimination
  *
  * H, u: { x:A | B }, y: A; v: squash{B[y]}; J[y] >- T[y]
  *)
-rule setElimination 'H 'u 'v :
+rule setElimination 'H :
    sequent ['ext] { 'H; u: 'A; v: squash{'B['u]}; 'J['u] >- 'T['u] } -->
    sequent ['ext] { 'H; u: { x:'A | 'B['x] }; 'J['u] >- 'T['u] }
 

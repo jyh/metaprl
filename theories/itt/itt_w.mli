@@ -76,22 +76,22 @@ prec prec_tree_ind
 
 (*
  * H >- Ui ext W(x:A; B[x])
- * by wFormation A x
+ * by wFormation A
  * H >- A = A in Ui
  * H, x:A >- Ui ext B
  *)
-rule wFormation 'A 'x :
+rule wFormation 'A :
    sequent [squash] { 'H >- 'A = 'A in univ[i:l] } -->
    sequent ['ext] { 'H; x: 'A >- univ[i:l] } -->
    sequent ['ext] { 'H >- univ[i:l] }
 
 (*
  * H >- W(x1:A1; B1) = W(x2:A2; B2) in Ui
- * by wEquality y
+ * by wEquality
  * H >- A1 = A2 in Ui
  * H, y:A1 >- B1[y] = B2[y] in Ui
  *)
-rule wEquality 'y :
+rule wEquality :
    sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
    sequent [squash] { 'H; y: 'A1 >- 'B1['y] = 'B2['y] in univ[i:l] } -->
    sequent ['ext] { 'H >- w{'A1; x1. 'B1['x1]} = w{'A2; x2. 'B2['x2]} in univ[i:l] }
@@ -99,7 +99,7 @@ rule wEquality 'y :
 (*
  * Typehood.
  *)
-rule wType 'x :
+rule wType :
    sequent [squash] { 'H >- "type"{'A1} } -->
    sequent [squash] { 'H; x: 'A1 >- "type"{'A2['x]} } -->
    sequent ['ext] { 'H >- "type"{.w{'A1; y.'A2['y]}} }
@@ -111,7 +111,7 @@ rule wType 'x :
  * H >- B[a] -> W(x:A; B[x]) ext f
  * H, y:A >- B[y] = B[y] in Ui
  *)
-rule treeFormation 'a 'y :
+rule treeFormation 'a :
    sequent [squash] { 'H >- 'a = 'a in 'A } -->
    sequent ['ext] { 'H >- 'B['a] -> w{'A; x. 'B['x]} } -->
    sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
@@ -124,7 +124,7 @@ rule treeFormation 'a 'y :
  * H >- b1 = b2 in B[a1] -> W(x:A; B)
  * H, y:A >- B[y] = B[y] in Ui
  *)
-rule treeEquality 'y :
+rule treeEquality :
    sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
    sequent [squash] { 'H >- 'b1 = 'b2 in 'B['a1] -> w{'A; x. 'B['x]} } -->
    sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
@@ -133,7 +133,7 @@ rule treeEquality 'y :
 (*
  * Elimination
  *)
-rule wElimination 'H 'z 'a 'f 'g 'b :
+rule wElimination 'H :
    sequent ['ext] { 'H;
                     z: w{'A; x. 'B['x]};
                     'J['z];

@@ -750,7 +750,7 @@ interactive normalSubg_intro {| intro [] |} :
    [main] sequent ['ext] { 'H; x: 'g^car >- lcoset{'s; 'g; 'x} = rcoset{'s; 'g; 'x} in univ[i:l] } -->
    sequent ['ext] { 'H >- normalSubg[i:l]{'s; 'g} }
 
-interactive normalSubg_elim {| elim [] |} 'H 'y 'b :
+interactive normalSubg_elim {| elim [] |} 'H 'b :
    [wf] sequent [squash] {'H; x: normalSubg[i:l]{'s; 'g}; 'J['x] >- 's in group[i:l] } -->
    [wf] sequent [squash] {'H; x: normalSubg[i:l]{'s; 'g}; 'J['x] >- 'g in group[i:l] } -->
    [main] sequent ['ext] { 'H; x: normalSubg[i:l]{'s; 'g}; 'J['x] >- subStructure{'s; 'g} } -->

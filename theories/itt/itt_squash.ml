@@ -294,28 +294,24 @@ interactive unsquash 'H :
    sequent ['ext] { 'H; u: squash{'P}; 'J['u] >- squash{'T['u]} }
 
 (*! @docoff *)
-interactive unsquashStableGoal 'H 'x :
+interactive unsquashStableGoal 'H :
    sequent [squash] { 'H; u: 'A; 'J[it] >- 'C[it] } -->
    sequent ['ext] { 'H; u: squash{'A}; 'J['u]; x: squash{'C['u]} >- 'C['u] } -->
    sequent ['ext] { 'H; u: squash{'A}; 'J['u] >- 'C['u]}
 
-let unsquashStableGoalT i p =
-   let x = maybe_new_vars1 p "x" in
-   unsquashStableGoal i x p
+let unsquashStableGoalT = unsquashStableGoal
 
 interactive unsquashHypGoalStable 'H :
    sequent ['ext] { 'H; u: 'A; 'J[it] >- 'C[it] } -->
    sequent ['ext] { 'H; u: squash{'A}; 'J['u] >- 'A } -->
    sequent ['ext] { 'H; u: squash{'A}; 'J['u] >- 'C['u]}
 
-interactive unsquashStable 'H 't 'x :
+interactive unsquashStable 'H 't :
    sequent ['ext] { 'H; u: 'A; 'J[it] >- 'C[it] } -->
    sequent [squash] { 'H; u: squash{'A}; 'J['u]; x: 'A >- 't in 'A } -->
    sequent ['ext] { 'H; u: squash{'A}; 'J['u] >- 'C['u]}
 
-let unsquashStableT i t p =
-   let x = maybe_new_vars1 p "x"in
-   unsquashStable i t x p
+let unsquashStableT = unsquashStable
 
 interactive squashAssert 'A :
    sequent [squash] { 'H >- squash{'A} } -->
@@ -420,15 +416,15 @@ let unsquash_tactic tbl i p =
     | [], [] ->
          raise (RefineError ("squash", StringTermError ("squash tactic doesn't know about ", mk_xlist_term [hyp;<<slot[" |- "]>>;conc])))
 
-let process_squash_resource_annotation name contexts vars args _ stmt tac =
+let process_squash_resource_annotation name contexts args _ stmt tac =
    let assums, goal = unzip_mfunction stmt in
    if is_squash_sequent goal then
       raise (Invalid_argument "squash_stable resource annotation: conclusion sequent should not be squashed");
    let egoal = TermMan.explode_sequent goal in
    let concl = SeqGoal.get egoal.sequent_goals 0 in
-   match contexts, vars, args, assums, (SeqHyp.to_list egoal.sequent_hyps) with
+   match contexts, args, assums, (SeqHyp.to_list egoal.sequent_hyps) with
       (* H |- T --> H |- a in T *)
-      [||], [||], [], [_, _, assum], [Context(h,[])] when
+      [||], [], [_, _, assum], [Context(h,[])] when
          let t,a,b = dest_equal concl in
          alpha_equal a b &&
          let eassum = TermMan.explode_sequent assum in
@@ -439,20 +435,20 @@ let process_squash_resource_annotation name contexts vars args _ stmt tac =
             raise (Invalid_argument "squash_stable resource annotation: assumption sequent should be squashed");
          let t,a,_ = dest_equal concl in
          let tac p =
-            Tactic_type.Tactic.tactic_of_rule tac ([||], [||]) [] p
+            Tactic_type.Tactic.tactic_of_rule tac [||] [] p
          in
             t, SqStable(a, tac)
       (* H |- a in T *)
-    | [| |], [||], [], [], [Context(_,[])] when
+    | [||], [], [], [Context(_,[])] when
          (let t,a,b = dest_equal concl in (alpha_equal a b) )
       ->
          let t,a,_ = dest_equal concl in
          let tac p =
-            Tactic_type.Tactic.tactic_of_rule tac ([||], [||]) [] p
+            Tactic_type.Tactic.tactic_of_rule tac [||] [] p
          in
             t, SqStable(a, tac)
       (* H; x:T; J[x] |- C[x] *)
-    | [| h |], [||], [], [], [Context(h',[]); HypBinding(v,t); Context(_, [v'])] when
+    | [| h |], [], [], [Context(h',[]); HypBinding(v,t); Context(_, [v'])] when
          h = h' && is_var_term v' && (dest_var v') = v &&
          is_so_var_term concl &&
          begin match dest_so_var concl with
@@ -461,7 +457,7 @@ let process_squash_resource_annotation name contexts vars args _ stmt tac =
          end
       ->
          let tac p =
-            Tactic_type.Tactic.tactic_of_rule tac ([| Sequent.hyp_count p |], [||]) [] p
+            Tactic_type.Tactic.tactic_of_rule tac [| Sequent.hyp_count p |] [] p
          in
             t, SqStable(it_term, (assertT t thenMT tac))
     | _ ->

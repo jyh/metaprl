@@ -7090,7 +7090,7 @@ B	b2566	t2565
 P	p2566	Number 8055
 P	p2567	Number 8241
 O	o2567	location p2566 p2567
-P	p629	String "subtype_axiomFormation \"x\" thenT autoT"
+P	p629	String "subtype_axiomFormation thenT autoT"
 O	o629	ext_rule p629
 T	t2567	o572 b1307 b395 b1308
 B	b2567	t2567

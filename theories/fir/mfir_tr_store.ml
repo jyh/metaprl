@@ -108,7 +108,7 @@ prim ty_store_array2 :
  * @end[doc]
  *)
 
-prim ty_store_lambda 'a 'v :
+prim ty_store_lambda :
    sequent [fir] { 'H >- type_eq{ 'u; 'u; large_type } } -->
    sequent [fir] { 'H; v: variable; a: var_def{ 'v; 'u; no_def } >-
       has_type["exp"]{ 'f['v]; 't } } -->
@@ -116,7 +116,7 @@ prim ty_store_lambda 'a 'v :
       has_type["exp"]{ lambda{ x. 'f['x] }; tyFun{ 'u; 't } } }
    = it
 
-prim ty_store_polyFun 'a 'tv :
+prim ty_store_polyFun :
    sequent [fir] { 'H; tv: "type"; a: ty_def{ 'tv; small_type; no_def } >-
       has_type["exp"]{ 'f['tv]; 'ty['tv] } } -->
    sequent [fir] { 'H >-

@@ -42,7 +42,7 @@ open Refiner.Refiner.RefineError
 
 open Tactic_type
 open Tactic_type.Sequent
-open Var
+open Perv
 
 open Base_dtactic
 
@@ -70,7 +70,7 @@ interactive set_ind_dfun_type (bind{u. 'B['u]}) :
    sequent [squash] { 'H >- fun_prop{u. 'B['u]} } -->
    sequent ['ext] { 'H >- "type"{set_ind{'s; T, f, g. x: 'T -> 'B['f 'x]}} }
 
-interactive set_ind_dfun_fun (bind{x. bind{y. 'B['x; 'y]}}) 'u 'v :
+interactive set_ind_dfun_fun (bind{x. bind{y. 'B['x; 'y]}}) :
    sequent ['ext] { 'H >- fun_set{z. 'A['z]} } -->
    sequent [squash] { 'H; u: set; v: set >- "type"{'B['u; 'v]} } -->
    sequent ['ext] { 'H; u: set >- fun_prop{z. 'B['u; 'z]} } -->
@@ -86,7 +86,7 @@ interactive set_ind_dprod_type (bind{u. 'B['u]}) :
    sequent [squash] { 'H >- fun_prop{u. 'B['u]} } -->
    sequent ['ext] { 'H >- "type"{set_ind{'s; T, f, g. x: 'T * 'B['f 'x]}} }
 
-interactive set_ind_dprod_fun (bind{x. bind{y. 'B['x; 'y]}}) 'u 'v :
+interactive set_ind_dprod_fun (bind{x. bind{y. 'B['x; 'y]}}) :
    sequent ['ext] { 'H >- fun_set{z. 'A['z]} } -->
    sequent [squash] { 'H; u: set; v: set >- "type"{'B['u; 'v]} } -->
    sequent ['ext] { 'H; u: set >- fun_prop{z. 'B['u; 'z]} } -->
@@ -106,8 +106,7 @@ let d_set_ind_dfun_typeT p =
    let _, f, _, _, b = dest_set_ind set_ind in
    let v, _, b = dest_dfun b in
    let apply = mk_apply_term (mk_var_term f) (mk_var_term v) in
-   let z = maybe_new_var "z" (free_vars_list b @ declared_vars p) in
-   let goal' = mk_xbind_term z (var_subst b apply z) in
+   let goal' = var_subst_to_bind b apply in
       set_ind_dfun_type goal' p
 
 let set_ind_dfun_type_term = << "type"{set_ind{'s; T, f, g. x: 'T -> 'B['f; 'x]}} >>
@@ -121,9 +120,8 @@ let d_set_ind_dfun_funT p =
    let _, f, _, _, b = dest_set_ind set_ind in
    let v, _, b = dest_dfun b in
    let apply = mk_apply_term (mk_var_term f) (mk_var_term v) in
-   let y, u, v = maybe_new_vars3 p "y" "u" "v" in
-   let goal' = mk_xbind_term x (mk_xbind_term y (var_subst b apply y)) in
-      set_ind_dfun_fun goal' u v p
+   let goal' = mk_xbind_term x (var_subst_to_bind b apply) in
+      set_ind_dfun_fun goal' p
 
 let set_ind_dfun_fun_term = << fun_prop{z. set_ind{'A['z]; T, f, g. x: 'T -> 'B['z; 'T; 'f; 'g; 'x]}} >>
 
@@ -136,8 +134,7 @@ let d_set_ind_dprod_typeT p =
    let _, f, _, _, b = dest_set_ind set_ind in
    let v, _, b = dest_dprod b in
    let apply = mk_apply_term (mk_var_term f) (mk_var_term v) in
-   let z = maybe_new_vars1 p "z" in
-   let goal' = mk_xbind_term z (var_subst b apply z) in
+   let goal' = var_subst_to_bind b apply in
       set_ind_dprod_type goal' p
 
 let set_ind_dprod_type_term = << "type"{set_ind{'s; T, f, g. x: 'T * 'B['f; 'x]}} >>
@@ -151,9 +148,8 @@ let d_set_ind_dprod_funT p =
    let _, f, _, _, b = dest_set_ind set_ind in
    let v, _, b = dest_dprod b in
    let apply = mk_apply_term (mk_var_term f) (mk_var_term v) in
-   let y, u, v = maybe_new_vars3 p "y" "u" "v" in
-   let goal' = mk_xbind_term x (mk_xbind_term y (var_subst b apply y)) in
-      set_ind_dprod_fun goal' u v p
+   let goal' = mk_xbind_term x (var_subst_to_bind b apply) in
+      set_ind_dprod_fun goal' p
 
 let set_ind_dprod_fun_term = << fun_prop{z. set_ind{'A['z]; T, f, g. x: 'T * 'B['z; 'T; 'f; 'g; 'x]}} >>
 

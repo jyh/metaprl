@@ -161,30 +161,30 @@ interactive t_atomic {| intro [] |} :
 (*
  * Intro and elimination forms.
  *)
-interactive tptp2_all_type {| intro [] |} 'x :
+interactive tptp2_all_type {| intro [] |} :
    sequent [squash] { 'H; x: atom0 >- "type"{'b['x]} } -->
    sequent ['ext] { 'H >- "type"{."all"{v. 'b['v]}} }
 
-interactive tptp2_all_intro {| intro [] |} 'v :
+interactive tptp2_all_intro {| intro [] |} :
    sequent ['ext] { 'H; v: atom0 >- 'b['v] } -->
    sequent ['ext] { 'H >- "all"{x. 'b['x]} }
 
-interactive tptp2_all_elim {| elim [] |} 'H 'z 'y :
+interactive tptp2_all_elim {| elim [] |} 'H 'z :
    sequent [squash] { 'H; x: "all"{v. 'b['v]}; 'J['x] >- atomic{'z} } -->
    sequent ['ext] { 'H; x: "all"{v. 'b['v]}; 'J['x]; y: 'b['z] >- 'C['x] } -->
    sequent ['ext] { 'H; x: "all"{v. 'b['v]}; 'J['x] >- 'C['x] }
 
-interactive tptp2_exists_type {| intro [] |} 'x :
+interactive tptp2_exists_type {| intro [] |} :
    sequent [squash] { 'H; x: atom0 >- "type"{'b['x]} } -->
    sequent ['ext] { 'H >- "type"{."exists"{v. 'b['v]}} }
 
-interactive tptp2_exists_intro {| intro [] |} 'x 'z :
+interactive tptp2_exists_intro {| intro [] |} 'z :
    sequent [squash] { 'H >- atomic{'z} } -->
    sequent ['ext] { 'H >- 'b['z] } -->
    sequent [squash] { 'H; x: atom0 >- "type"{'b['x]} } -->
    sequent ['ext] { 'H >- "exists"{v. 'b['v]} }
 
-interactive tptp2_exists_elim {| elim [] |} 'H 'y 'z :
+interactive tptp2_exists_elim {| elim [] |} 'H :
    sequent ['ext] { 'H; y: atom0; z: 'b['y]; 'J['y, 'z] >- 'C['y, 'z] } -->
    sequent ['ext] { 'H; x: "exists"{v. 'b['v]}; 'J['x] >- 'C['x] }
 

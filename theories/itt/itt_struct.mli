@@ -47,7 +47,6 @@ rule hypothesis 'H :
    sequent ['ext] { 'H; x: 'A; 'J['x] >- 'A }
 
 (*
-(*
  * H, x: A, J >- A ext t
  * by thin
  * H, J >- A ext t
@@ -62,11 +61,10 @@ rule thin 'H :
  * H, J >- S ext s
  * H, x: S, J >- T ext t[x]
  *)
-rule cut 'H 'S 'x :
+rule cut 'H 'S :
    sequent ['ext] { 'H; 'J >- 'S } -->
    sequent ['ext] { 'H; x: 'S; 'J >- 'T } -->
    sequent ['ext] { 'H; 'J >- 'T }
-*)
 
 (*
  * H >- T
@@ -108,7 +106,7 @@ rule hypReplacement 'H 'B univ[i:l] :
  * H; x: A[t2]; J[x] >> T1[x]
  * H, x: A[t1]; J[x]; z: T2 >> A[z] in type
  *)
-rule hypSubstitution 'H ('t1 = 't2 in 'T2) bind{y. 'A['y]} 'z :
+rule hypSubstitution 'H ('t1 = 't2 in 'T2) bind{y. 'A['y]} :
    sequent [squash] { 'H; x: 'A['t1]; 'J['x] >- 't1 = 't2 in 'T2 } -->
    sequent ['ext]  { 'H; x: 'A['t2]; 'J['x] >- 'T1['x] } -->
    sequent [squash] { 'H; x: 'A['t1]; 'J['x]; z: 'T2 >- "type"{'A['z]} } -->

@@ -74,7 +74,7 @@ derived or_intro_right :
    [main] ('b : sequent ['ext] { 'H >- 'B } ) -->
    sequent ['ext] { 'H >- Fol_or!"or"{'A; 'B} }
 
-derived or_elim 'H 'x :
+derived or_elim 'H :
    [wf] ('a['x] : sequent ['ext] { 'H; x: 'A; 'J[Fol_or!inl{'x}] >- 'C[Fol_or!inl{'x}] }) -->
    [wf] ('b['x] : sequent ['ext] { 'H; x: 'B; 'J[Fol_or!inr{'x}] >- 'C[Fol_or!inr{'x}] }) -->
    sequent ['ext] { 'H; x: Fol_or!"or"{'A; 'B}; 'J['x] >- 'C['x] }

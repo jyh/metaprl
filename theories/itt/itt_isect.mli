@@ -59,7 +59,7 @@ rewrite unfold_top : top <--> "isect"{void; x. void}
  * H >- A = A in Ui
  * H, x: A >- Ui ext B[x]
  *)
-rule intersectionFormation 'x 'A :
+rule intersectionFormation 'A :
    sequent [squash] { 'H >- 'A = 'A in univ[i:l] } -->
    sequent ['ext] { 'H; x: 'A >- univ[i:l] } -->
    sequent ['ext] { 'H >- univ[i:l] }
@@ -70,12 +70,12 @@ rule intersectionFormation 'x 'A :
  * H >- A1 = A2 in Ui
  * H, y: A1 >- B1[y] = B2[y] in Ui
  *)
-rule intersectionEquality 'y :
+rule intersectionEquality :
    sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
    sequent [squash] { 'H; y: 'A1 >- 'B1['y] = 'B2['y] in univ[i:l] } -->
    sequent ['ext] { 'H >- Isect x1: 'A1. 'B1['x1] = Isect x2: 'A2. 'B2['x2] in univ[i:l] }
 
-rule intersectionType 'y :
+rule intersectionType :
    sequent [squash] { 'H >- "type"{'A} } -->
    sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
    sequent ['ext] { 'H >- "type"{."isect"{'A; x. 'B['x]}} }
@@ -88,11 +88,11 @@ rule topType :
 
 (*
  * H >- isect x: A. B ext b[it]
- * by intersectionMemberFormation z
+ * by intersectionMemberFormation
  * H >- A = A in type
  * H, z: squash(A) >- B ext b[z]
 
-rule intersectionMemberFormation 'z :
+rule intersectionMemberFormation :
     sequent [squash] { 'H >- "type"{'A} } -->
     sequent ['ext] { 'H; z: squash{'A} >- 'B } -->
     sequent ['ext] { 'H >- isect x: 'A. 'B }
@@ -101,11 +101,11 @@ rule intersectionMemberFormation 'z :
 
 (*
  * H >- b1 = b2 in isect x:A. B[x]
- * by intersectionMemberEquality z
+ * by intersectionMemberEqualit
  * H >- A = A in type
  * H, z: A >- b1 = b2 in B[z]
  *)
-rule intersectionMemberEquality 'z :
+rule intersectionMemberEquality :
    sequent [squash] { 'H >- "type"{'A} } -->
    sequent [squash] { 'H; z: 'A >- 'b1 = 'b2 in 'B['z] } -->
    sequent ['ext] { 'H >- 'b1 = 'b2 in Isect x: 'A. 'B['x] }
@@ -132,7 +132,7 @@ rule intersectionMemberCaseEquality (Isect x: 'A. 'B['x]) 'a :
  * H >- A2 <= A1
  * H, a: A2 >- B1[a] <= B2[a]
  *)
-rule intersectionSubtype 'a :
+rule intersectionSubtype :
    sequent [squash] { 'H >- \subtype{'A2; 'A1} } -->
    sequent [squash] { 'H; a: 'A2 >- \subtype{'B1['a]; 'B2['a]} } -->
    sequent ['ext] { 'H >- \subtype{ (Isect a1:'A1. 'B1['a1]); (Isect a2:'A2. 'B2['a2]) } }

@@ -122,7 +122,7 @@ dform dexists_df : parens :: "prec"[prec_lambda] :: "dexists"{'s; x. 'A} =
  * for @emph{any} set argument $x$.
  * @end[doc]
  *)
-interactive dexists_type {| intro [] |} 'y :
+interactive dexists_type {| intro [] |} :
    ["wf"] sequent [squash] { 'H >- isset{'s} } -->
    ["wf"] sequent [squash] { 'H; y: set >- "type"{'A['y]} } -->
    sequent ['ext] { 'H >- "type"{."dexists"{'s; x. 'A['x]}} }
@@ -136,7 +136,7 @@ interactive dexists_type {| intro [] |} 'y :
  * element $@mem{a; s}$.
  * @end[doc]
  *)
-interactive dexists_intro {| intro [] |} 'z 'w :
+interactive dexists_intro {| intro [] |} 'z :
    ["wf"] sequent [squash] { 'H; w: set >- "type"{'A['w]} } -->
    ["wf"] sequent ['ext] { 'H >- fun_prop{x. 'A['x]} } -->
    ["main"] sequent ['ext] { 'H >- member{'z; 's} } -->
@@ -152,7 +152,7 @@ interactive dexists_intro {| intro [] |} 'z 'w :
  * produces these parts.
  * @end[doc]
  *)
-interactive dexists_elim {| elim [] |} 'H 'x 'z 'v 'w :
+interactive dexists_elim {| elim [] |} 'H :
    ["wf"] sequent [squash] { 'H; x: "dexists"{'s; y. 'A['y]}; 'J['x] >- isset{'s} } -->
    ["wf"] sequent [squash] { 'H; x: "dexists"{'s; y. 'A['y]}; 'J['x]; z: set >- "type"{'A['z]} } -->
    ["wf"] sequent ['ext] { 'H; x: "dexists"{'s; y. 'A['y]}; 'J['x] >- fun_prop{z. 'A['z]} } -->

@@ -57,22 +57,22 @@ rewrite unfold_srecind : srecind{'a; p, h. 'g['p; 'h]} <-->
 
 (*
  * H >- Ui ext srec(T. B[T])
- * by srecFormation T
+ * by srecFormation
  *
  * H, T: Ui >- Ui ext B[T]
  *)
-rule srecFormation 'T :
+rule srecFormation :
    sequent ['ext] { 'H; T: univ[i:l] >- univ[i:l] } -->
    sequent ['ext] { 'H >- univ[i:l] }
 
 (*
  * H >- srec(T1. B1[T1]) = srec(T2. B2[T2]) in Ui
- * by srecEquality T S1 S2 z
+ * by srecEquality
  *
  * H; T: Ui >- B1[T] = B2[T] in Ui
  * H; S1: Ui; S2: Ui; z: subtype(S1; S2) >- subtype(B1[S1]; B1[S2])
  *)
-rule srecEquality 'T 'S1 'S2 'z :
+rule srecEquality :
    sequent [squash] { 'H; T: univ[i:l] >- 'B1['T] = 'B2['T] in univ[i:l] } -->
    sequent [squash] { 'H; S1: univ[i:l]; S2: univ[i:l]; z: \subtype{'S1; 'S2} >- \subtype{'B1['S1]; 'B1['S2]} } -->
    sequent ['ext] { 'H >- srec{T1. 'B1['T1]} = srec{T2. 'B2['T2]} in univ[i:l] }
@@ -113,7 +113,7 @@ rule srec_memberEquality :
  * >- C[z]
  *)
 
-rule srecElimination 'H 'T1 'u 'v 'w 'z univ[i:l] :
+rule srecElimination 'H univ[i:l] :
    sequent ['ext] { 'H; x: srec{T. 'B['T]}; 'J['x];
              T1: univ[i:l];
              u: \subtype{'T1; srec{T. 'B['T]}};
@@ -129,7 +129,7 @@ rule srecElimination 'H 'T1 'u 'v 'w 'z univ[i:l] :
  *
  * H, x: srec(T. B[T]); J[x]; y: B[srec(T. B[T])]; u: x = y in B[srec(T. B[T])] >- C[y]
  *)
-rule srecUnrollElimination 'H 'x 'y 'u :
+rule srecUnrollElimination 'H :
    sequent ['ext] { 'H; x: srec{T. 'B['T]}; 'J['x]; y: 'B[srec{T. 'B['T]}]; u: 'x = 'y in 'B[srec{T. 'B['T]}] >- 'C['y] } -->
    sequent ['ext] { 'H; x: srec{T. 'B['T]}; 'J['x] >- 'C['x] }
 
@@ -142,7 +142,7 @@ rule srecUnrollElimination 'H 'x 'y 'u :
  *    v: w: T1 -> S[w], w: T[T1]
  *    >- t1[v; w] = t2[v; w] in S[w]
  *)
-rule srecindEquality lambda{x. 'S['x]} srec{T. 'B['T]} 'T1 'u 'v 'w 'z univ[i:l] :
+rule srecindEquality lambda{x. 'S['x]} srec{T. 'B['T]} univ[i:l] :
    sequent [squash] { 'H >- 'r1 = 'r2 in srec{T. 'B['T]} } -->
    sequent [squash] { 'H; r: srec{T. 'B['T]} >- "type"{'S['r]} } -->
    sequent [squash] { 'H; T1: univ[i:l]; z: \subtype{'T1; srec{T. 'B['T]}};

@@ -153,7 +153,7 @@ rule consEquality :
  * H; l: list(A); J[l] >- C[nil]
  * H; l: list(A); J[l]; u: A; v: list(A); w: C[v] >- C[u::v]
  *)
-rule listElimination 'H 'w 'u 'v :
+rule listElimination 'H :
    sequent ['ext] { 'H; l: list{'A}; 'J['l] >- 'C[nil] } -->
    sequent ['ext] { 'H; l: list{'A}; 'J['l]; u: 'A; v: list{'A}; w: 'C['v] >- 'C['u::'v] } -->
    sequent ['ext] { 'H; l: list{'A}; 'J['l] >- 'C['l] }
@@ -163,13 +163,13 @@ rule listElimination 'H 'w 'u 'v :
  *      = rec_case(e2; base2; u2, v2, z2. step2[u2; v2]
  *      in T[e1]
  *
- * by list_indEquality lambda(r. T[r]) list(A) u v w
+ * by list_indEquality lambda(r. T[r]) list(A)
  *
  * H >- e1 = e2 in list(A)
  * H >- base1 = base2 in T[nil]
  * H, u: A; v: list(A); w: T[v] >- step1[u; v; w] = step2[u; v; w] in T[u::v]
  *)
-rule list_indEquality lambda{l. 'T['l]} list{'A} 'u 'v 'w :
+rule list_indEquality lambda{l. 'T['l]} list{'A} :
    sequent [squash] { 'H >- 'e1 = 'e2 in list{'A} } -->
    sequent [squash] { 'H >- 'base1 = 'base2 in 'T[nil] } -->
    sequent [squash] { 'H; u: 'A; v: list{'A}; w: 'T['v] >-

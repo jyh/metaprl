@@ -54,7 +54,7 @@ val mk_disect_term : string -> term -> term -> term
  * RULES                                                                *
  ************************************************************************)
 
-rule dintersectionTypeElimination 'H 'a 'v:
+rule dintersectionTypeElimination 'H 'a :
    [wf] sequent [squash] { 'H; u:"type"{.bisect{'A; x. 'B['x]}}; 'J['u]  >- 'a in 'A } -->
    sequent ['ext] { 'H; u:"type"{.bisect{'A; x. 'B['x]}}; v:"type"{'B['a]}; 'J['u] >- 'C['u] } -->
    sequent ['ext] { 'H; u:"type"{.bisect{'A; x. 'B['x]}}; 'J['u] >- 'C['u] }

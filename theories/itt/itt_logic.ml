@@ -234,7 +234,7 @@ interactive not_type {| intro [] |} :
    [wf] sequent [squash] { 'H >- "type"{'t} } -->
    sequent ['ext] { 'H >- "type"{."not"{'t}} }
 
-interactive not_intro {| intro [] |} 'x :
+interactive not_intro {| intro [] |} :
    [wf] sequent [squash] { 'H >- "type"{'t} } -->
    [main] sequent [squash] { 'H; x: 't >- "false" } -->
    sequent ['ext] { 'H >- "not"{'t} }
@@ -278,11 +278,11 @@ interactive and_squash_intro {| intro [] |} :
    [main] sequent [squash] { 'H >- squash{'a2} } -->
    sequent ['ext] { 'H >- squash{('a1 & 'a2)} }
 
-interactive and_elim {| elim [] |} 'H 'y 'z :
+interactive and_elim {| elim [] |} 'H :
    [main] sequent ['ext] { 'H; y: 'a1; z: 'a2; 'J['y, 'z] >- 'C['y, 'z] } -->
    sequent ['ext] { 'H; x: 'a1 & 'a2; 'J['x] >- 'C['x] }
 
-interactive and_squash_elim {| elim [] |} 'H 'y 'z :
+interactive and_squash_elim {| elim [] |} 'H :
    [main] sequent ['ext] { 'H; y: squash{'a1}; z: squash{'a2}; 'J[it] >- 'C[it] } -->
    sequent ['ext] { 'H; x: squash{('a1 & 'a2)}; 'J['x] >- 'C['x] }
 
@@ -322,7 +322,7 @@ interactive or_intro_right {| intro [SelectOption 2] |} :
    [main] sequent ['ext] { 'H >- 'a2 } -->
    sequent ['ext] { 'H >- "or"{'a1; 'a2} }
 
-interactive or_elim {| elim [] |} 'H 'y :
+interactive or_elim {| elim [] |} 'H :
    [main] sequent ['ext] { 'H; y: 'a1; 'J[inl{'y}] >- 'C[inl{'y}] } -->
    [main] sequent ['ext] { 'H; y: 'a2; 'J[inr{'y}] >- 'C[inr{'y}] } -->
    sequent ['ext] { 'H; x: "or"{'a1; 'a2}; 'J['x] >- 'C['x] }
@@ -349,12 +349,12 @@ interactive implies_type {| intro [] |} :
    [wf] sequent [squash] { 'H >- "type"{'a2} } -->
    sequent ['ext] { 'H >- "type"{."implies"{'a1; 'a2}} }
 
-interactive implies_intro {| intro [] |} 'x :
+interactive implies_intro {| intro [] |} :
    [wf] sequent [squash] { 'H >- "type"{'a1} } -->
    [main] sequent ['ext] { 'H; x: 'a1 >- 'a2 } -->
    sequent ['ext] { 'H >- "implies"{'a1; 'a2} }
 
-interactive implies_elim {| elim [ThinOption thinT] |} 'H 'y :
+interactive implies_elim {| elim [ThinOption thinT] |} 'H :
    [assertion] sequent ['ext] { 'H; x: "implies"{'a1; 'a2}; 'J['x] >- 'a1 } -->
    [main] sequent ['ext] { 'H; x: "implies"{'a1; 'a2}; 'J['x]; y: 'a2 >- 'C['x] } -->
    sequent ['ext] { 'H; x: "implies"{'a1; 'a2}; 'J['x] >- 'C['x] }
@@ -383,7 +383,7 @@ interactive iff_intro {| intro [] |} :
    [wf] sequent ['ext] { 'H >- 'a2 => 'a1 } -->
    sequent ['ext] { 'H >- "iff"{'a1; 'a2} }
 
-interactive iff_elim {| elim [] |} 'H 'y 'z :
+interactive iff_elim {| elim [] |} 'H :
    sequent ['ext] { 'H; y: "implies"{'a1; 'a2}; z: "implies"{'a2; 'a1}; 'J['y, 'z] >- 'C['y, 'z] } -->
    sequent ['ext] { 'H; x: "iff"{'a1; 'a2}; 'J['x] >- 'C['x] }
 
@@ -397,22 +397,22 @@ interactive iff_elim {| elim [] |} 'H 'y 'z :
  * a proof of $A$.
  * @end[doc]
  *)
-interactive cand_univ {| intro []; eqcd |} 'x :
+interactive cand_univ {| intro []; eqcd |} :
    [wf] sequent [squash] { 'H >- 'a1 = 'b1 in univ[i:l] } -->
    [wf] sequent [squash] { 'H; x: 'a1 >- 'a2 = 'b2 in univ[i:l] } -->
    sequent ['ext] { 'H >- "cand"{'a1; 'a2} = "cand"{'b1; 'b2} in univ[i:l] }
 
-interactive cand_type {| intro [] |} 'x :
+interactive cand_type {| intro [] |} :
    [wf] sequent [squash] { 'H >- "type"{'a1} } -->
    [wf] sequent [squash] { 'H; x: 'a1 >- "type"{'a2} } -->
    sequent ['ext] { 'H >- "type"{."cand"{'a1; 'a2}} }
 
-interactive cand_intro {| intro [] |} 'x :
+interactive cand_intro {| intro [] |} :
    [main] sequent ['ext] { 'H >- 'a1 } -->
    [main] sequent ['ext] { 'H; x: 'a1 >- 'a2 } -->
    sequent ['ext] { 'H >- "cand"{'a1; 'a2} }
 
-interactive cand_elim {| elim [] |} 'H 'y 'z :
+interactive cand_elim {| elim [] |} 'H :
    [main] sequent ['ext] { 'H; y: 'a1; z: 'a2; 'J['y, 'z] >- 'C['y, 'z] } -->
    sequent ['ext] { 'H; x: "cand"{'a1; 'a2}; 'J['x] >- 'C['x] }
 
@@ -429,28 +429,28 @@ interactive cand_elim {| elim [] |} 'H 'y 'z :
  * there is a proof of $B$ and a proof of falsehood for $A$.
  * @end[doc]
  *)
-interactive cor_univ {| intro []; eqcd |} 'x :
+interactive cor_univ {| intro []; eqcd |} :
    [wf] sequent [squash] { 'H >- 'a1 = 'b1 in univ[i:l] } -->
    [wf] sequent [squash] { 'H; x: "not"{'a1} >- 'a2 = 'b2 in univ[i:l] } -->
    sequent ['ext] { 'H >- "cor"{'a1; 'a2} = "cor"{'b1; 'b2} in univ[i:l] }
 
-interactive cor_type {| intro [] |} 'x :
+interactive cor_type {| intro [] |} :
    [wf] sequent [squash] { 'H >- "type"{'a1} } -->
    [wf] sequent [squash] { 'H; x: "not"{'a1} >- "type"{'a2} } -->
    sequent ['ext] { 'H >- "type"{."cor"{'a1; 'a2}} }
 
-interactive cor_intro_left {| intro [SelectOption 1] |} 'x :
-   [wf] sequent [squash] { 'H; x: "not"{'a1} >- "type"{.'a2} } -->
+interactive cor_intro_left {| intro [SelectOption 1] |} :
+   [wf] sequent [squash] { 'H; x: "not"{'a1} >- "type"{'a2} } -->
    [main] sequent ['ext] { 'H >- 'a1 } -->
    sequent ['ext] { 'H >- "cor"{'a1; 'a2} }
 
-interactive cor_intro_right {| intro [SelectOption 2] |} 'x :
+interactive cor_intro_right {| intro [SelectOption 2] |} :
    [wf] sequent [squash] { 'H >- "type"{.'a1} } -->
    [main] sequent ['ext] { 'H >- "not"{'a1} } -->
    [main] sequent ['ext] { 'H; x: "not"{'a1} >- 'a2 } -->
    sequent ['ext] { 'H >- "cor"{'a1; 'a2} }
 
-interactive cor_elim {| elim [] |} 'H 'u 'v :
+interactive cor_elim {| elim [] |} 'H :
    [main] sequent ['ext] { 'H; u: 'a1; 'J[inl{'u}] >- 'C[inl{'u}] } -->
    [main] sequent ['ext] { 'H; u: "not"{'a1}; v: 'a2; 'J[inr{'u, 'v}] >- 'C[inr{'u, 'v}] } -->
    sequent ['ext] { 'H; x: "cor"{'a1; 'a2}; 'J['x] >- 'C['x] }
@@ -468,7 +468,7 @@ interactive cor_elim {| elim [] |} 'H 'u 'v :
  * $B[a]$.
  * @end[doc]
  *)
-interactive all_univ {| intro []; eqcd |} 'x :
+interactive all_univ {| intro []; eqcd |} :
    [wf] sequent [squash] { 'H >- 't1 = 't2 in univ[i:l] } -->
    [wf] sequent [squash] { 'H; x : 't1 >- 'b1['x] = 'b2['x] in univ[i:l] } -->
    sequent ['ext] { 'H >- "all"{'t1; x1. 'b1['x1]} = "all"{'t2; x2. 'b2['x2]} in univ[i:l] }
@@ -483,7 +483,7 @@ interactive all_intro {| intro [] |} :
    [main] sequent ['ext] { 'H; v: 't >- 'b['v] } -->
    sequent ['ext] { 'H >- "all"{'t; v. 'b['v]} }
 
-interactive all_elim {| elim [ThinOption thinT] |} 'H 'w 'z :
+interactive all_elim {| elim [ThinOption thinT] |} 'H 'z :
    [wf] sequent [squash] { 'H; x: all a: 'A. 'B['a]; 'J['x] >- 'z in 'A } -->
    [main] sequent ['ext] { 'H; x: all a: 'A. 'B['a]; 'J['x]; w: 'B['z] >- 'C['x] } -->
    sequent ['ext] { 'H; x: all a: 'A. 'B['a]; 'J['x] >- 'C['x] }
@@ -499,7 +499,7 @@ interactive all_elim {| elim [ThinOption thinT] |} 'H 'w 'z :
  * into its parts.
  * @end[doc]
  *)
-interactive exists_univ {| intro []; eqcd |} 'x :
+interactive exists_univ {| intro []; eqcd |} :
    [wf] sequent [squash] { 'H >- 't1 = 't2 in univ[i:l] } -->
    [wf] sequent [squash] { 'H; x : 't1 >- 'b1['x] = 'b2['x] in univ[i:l] } -->
    sequent ['ext] { 'H >- "exists"{'t1; x1. 'b1['x1]} = "exists"{'t2; x2. 'b2['x2]} in univ[i:l] }
@@ -515,7 +515,7 @@ interactive exists_intro {| intro [] |} 'z :
    [wf] sequent [squash] { 'H; v: 't >- "type"{'b['v]} } -->
    sequent ['ext] { 'H >- "exists"{'t; v. 'b['v]} }
 
-interactive exists_elim {| elim [] |} 'H 'y 'z :
+interactive exists_elim {| elim [] |} 'H :
    [main] sequent ['ext] { 'H; y: 'a; z: 'b['y]; 'J['y, 'z] >- 'C['y, 'z] } -->
    sequent ['ext] { 'H; x: exst v: 'a. 'b['v]; 'J['x] >- 'C['x] }
 (*! @docoff *)
@@ -1255,7 +1255,7 @@ let genAssumT indices p =
                if is_var_term t_var then
                   mk_all_term (dest_var t_var) t_type t
                else
-                  let v = maybe_new_vars1 p "v" in
+                  let v = maybe_new_var_arg p "v" in
                      mk_all_term v t_type (var_subst t t_var v)
          else mk_implies_term t' t
    in

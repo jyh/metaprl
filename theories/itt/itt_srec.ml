@@ -136,7 +136,7 @@ prim_rw unfold_srecind : srecind{'a; p, h. 'g['p; 'h]} <-->
 (*!
  * @docoff
  *)
-prim srecFormation 'T :
+prim srecFormation :
    ('B['T] : sequent ['ext] { 'H; T: univ[i:l] >- univ[i:l] }) -->
    sequent ['ext] { 'H >- univ[i:l] } =
    srec{T. 'B['T]}
@@ -150,13 +150,13 @@ prim srecFormation 'T :
  * a monotone type over types type $T @in @univ{i}$.
  * @end[doc]
  *)
-prim srecEquality {| intro []; eqcd |} 'T 'S1 'S2 'z :
+prim srecEquality {| intro []; eqcd |} :
    [wf] sequent [squash] { 'H; T: univ[i:l] >- 'B1['T] = 'B2['T] in univ[i:l] } -->
    [wf] sequent [squash] { 'H; S1: univ[i:l]; S2: univ[i:l]; z: \subtype{'S1; 'S2} >- \subtype{'B1['S1]; 'B1['S2]} } -->
    sequent ['ext] { 'H >- srec{T1. 'B1['T1]} = srec{T2. 'B2['T2]} in univ[i:l] } =
    it
 
-prim srecType {| intro [] |} 'S1 'S2 'z univ[i:l] :
+prim srecType {| intro [] |} univ[i:l] :
    [wf] sequent [squash] { 'H; S1: univ[i:l]; S2: univ[i:l]; z: \subtype{'S1; 'S2} >- \subtype{'B['S1]; 'B['S2]} } -->
    sequent ['ext] { 'H >- "type"{srec{T. 'B['T]}} } =
    it
@@ -196,7 +196,7 @@ prim srec_memberEquality {| intro [] |} :
  * @end[doc]
  *)
 
-prim srecElimination {| elim [ThinOption thinT] |} 'H 'T1 'u 'v 'w 'z univ[i:l] :
+prim srecElimination {| elim [ThinOption thinT] |} 'H univ[i:l] :
    [main] ('g['x; 'T1; 'u; 'w; 'z] : sequent ['ext] {
              'H;
              x: srec{T. 'B['T]};
@@ -217,7 +217,7 @@ prim srecElimination {| elim [ThinOption thinT] |} 'H 'T1 'u 'v 'w 'z univ[i:l] 
  * @end[doc]
  *)
 
-prim srecUnrollElimination (* {| elim [ThinOption thinT] |} *) 'H 'x 'y 'u :
+prim srecUnrollElimination (* {| elim [ThinOption thinT] |} *) 'H :
    [main] ('g['x; 'y; 'u] : sequent ['ext] { 'H; x: srec{T. 'B['T]}; 'J['x]; y: 'B[srec{T. 'B['T]}]; u: 'x = 'y in 'B[srec{T. 'B['T]}] >- 'C['y] }) -->
    sequent ['ext] { 'H; x: srec{T. 'B['T]}; 'J['x] >- 'C['x] } =
    'g['x; 'x; it]
@@ -232,7 +232,7 @@ prim srecUnrollElimination (* {| elim [ThinOption thinT] |} *) 'H 'x 'y 'u :
  * $h$ to compute the values of the recursive calls.
  * @end[doc]
  *)
-prim srecindEquality {| intro []; eqcd |} lambda{x. 'S['x]} srec{T. 'B['T]} 'T1 'u 'v 'w 'z univ[i:l] :
+prim srecindEquality {| intro []; eqcd |} lambda{x. 'S['x]} srec{T. 'B['T]} univ[i:l] :
    [wf] sequent [squash] { 'H >- 'r1 = 'r2 in srec{T. 'B['T]} } -->
    [wf] sequent [squash] { 'H; r: srec{T. 'B['T]} >- "type"{'S['r]} } -->
    [wf] sequent [squash] { 'H; T1: univ[i:l]; z: \subtype{'T1; srec{T. 'B['T]}};

@@ -413,7 +413,7 @@ let extract_data tbl =
    in
       funC rw
 
-let process_reduce_resource_annotation name cvars vars args params mterm conv =
+let process_reduce_resource_annotation name cvars args params mterm conv =
    match mterm with
       MetaIff (MetaTheorem t, _) ->
          (t, conv)

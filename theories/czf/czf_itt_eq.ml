@@ -103,7 +103,7 @@ open Refiner.Refiner.RefineError
 open Tactic_type
 open Tactic_type.Sequent
 open Tactic_type.Tacticals
-open Var
+open Perv
 open Mptop
 
 open Base_dtactic
@@ -374,13 +374,13 @@ interactive equal_fun {| intro [] |} :
  * context $P[x]$ is @emph{functional} on set arguments.
  * @end[doc]
  *)
-interactive eq_hyp_subst 'H 's1 's2 (bind{v. 'P['v]}) 'z :
+interactive eq_hyp_subst 'H 's1 's2 (bind{v. 'P['v]}) :
    sequent ['ext] { 'H; x: 'P['s1]; 'J['x] >- equal{'s1; 's2} } -->
    sequent ['ext] { 'H; x: 'P['s1]; 'J['x]; z: 'P['s2] >- 'C['x] } -->
    sequent ['ext] { 'H; x: 'P['s1]; 'J['x] >- fun_prop{z. 'P['z]} } -->
    sequent ['ext] { 'H; x: 'P['s1]; 'J['x] >- 'C['x] }
 
-interactive eq_concl_subst 's1 's2 (bind{v. 'C['v]}) 'z :
+interactive eq_concl_subst 's1 's2 (bind{v. 'C['v]}) :
    sequent ['ext] { 'H >- equal{'s1; 's2} } -->
    sequent ['ext] { 'H >- 'C['s2] } -->
    sequent ['ext] { 'H >- fun_prop{z. 'C['z]} } -->
@@ -441,9 +441,8 @@ interactive fun_prop {| intro [] |} :
 let setConclSubstT t p =
    let s1, s2 = dest_eq t in
    let goal = Sequent.concl p in
-   let z = maybe_new_vars1 p "v" in
-   let bind = mk_xbind_term z (var_subst goal s1 z) in
-      (eq_concl_subst s1 s2 bind z
+   let bind = var_subst_to_bind goal s1 in
+      (eq_concl_subst s1 s2 bind
        thenLT [addHiddenLabelT "eq";
                addHiddenLabelT "main";
                addHiddenLabelT "wf"]) p
@@ -451,9 +450,8 @@ let setConclSubstT t p =
 let setHypSubstT t i p =
    let s1, s2 = dest_eq t in
    let hyp = nth_hyp p i in
-   let z = maybe_new_vars1 p "v" in
-   let bind = mk_xbind_term z (var_subst hyp s1 z) in
-      (eq_hyp_subst (get_pos_hyp_num p i) s1 s2 bind z
+   let bind = var_subst_to_bind hyp s1 in
+      (eq_hyp_subst (get_pos_hyp_num p i) s1 s2 bind
        thenLT [addHiddenLabelT "eq";
                addHiddenLabelT "main";
                addHiddenLabelT "wf"]) p

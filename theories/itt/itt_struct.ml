@@ -67,7 +67,7 @@ open Mp_resource
 
 open Tactic_type
 open Tactic_type.Tacticals
-open Var
+open Perv
 open Mptop
 
 open Base_auto_tactic
@@ -129,7 +129,7 @@ prim exchange 'H 'K 'L:
  * in the abstracted proof $f[x]$, to get a proof $f[a]$ of $T$.
  * @end[doc]
  *)
-prim cut 'H 'S 'x :
+prim cut 'H 'S :
    [assertion] ('a : sequent ['ext] { 'H; 'J >- 'S }) -->
    [main] ('f['x] : sequent ['ext] { 'H; x: 'S; 'J >- 'T }) -->
    sequent ['ext] { 'H; 'J >- 'T } =
@@ -222,7 +222,7 @@ prim hypReplacement 'H 'B univ[i:l] :
    sequent ['ext] { 'H; x: 'A; 'J['x] >- 'T['x] } =
    't
 
-prim hypSubstitution 'H ('t1 = 't2 in 'T2) bind{y. 'A['y]} 'z :
+prim hypSubstitution 'H ('t1 = 't2 in 'T2) bind{y. 'A['y]} :
    [equality] sequent [squash] { 'H; x: 'A['t1]; 'J['x] >- 't1 = 't2 in 'T2 } -->
    [main] ('t : sequent ['ext] { 'H; x: 'A['t2]; 'J['x] >- 'T1['x] }) -->
    [wf] sequent [squash] { 'H; x: 'A['t1]; 'J['x]; z: 'T2 >- "type"{'A['z]} } -->
@@ -323,8 +323,7 @@ let thinAllT i j p =
  * @end[doc]
  *)
 let assertT s p =
-   let v = maybe_new_vars1 p "v" in
-      cut (Sequent.hyp_count p + 1) s v p
+   cut (Sequent.hyp_count p + 1) s p
 
 let tryAssertT s ta tm p =
    let concl = Sequent.concl p in
@@ -348,9 +347,8 @@ let tryAssertT s ta tm p =
  * @end[doc]
  *)
 let assertAtT i s p =
-   let v = get_opt_var_arg "v" p in
    let i = if i < 0 then Sequent.get_pos_hyp_num p i + 1 else i in
-      cut i s v p
+      cut i s p
 
 let copyHypT i j p =
    let t = Sequent.nth_hyp p i in
@@ -408,8 +406,7 @@ let substConclT t p =
                raise generic_refiner_exn (* will be immedeiatelly caugh *)
       with
          RefineError _ ->
-            let x = get_opt_var_arg "z" p in
-               mk_xbind_term x (var_subst (Sequent.concl p) a x)
+            var_subst_to_bind (Sequent.concl p) a
    in
       substitution t bind p
 
@@ -419,7 +416,6 @@ let substConclT t p =
 let substHypT i t p =
    let i = Sequent.get_pos_hyp_num p i in
    let _, a, _ = dest_equal t in
-   let z = get_opt_var_arg "z" p in
    let bind =
       try
          let b = get_with_arg p in
@@ -429,9 +425,9 @@ let substHypT i t p =
                raise generic_refiner_exn (* will be immedeiatelly caugh *)
       with
          RefineError _ ->
-            mk_xbind_term z (var_subst (Sequent.nth_hyp p i) a z)
+            var_subst_to_bind (Sequent.nth_hyp p i) a
    in
-      hypSubstitution i t bind z p
+      hypSubstitution i t bind p
 
 (*
  * General substition.

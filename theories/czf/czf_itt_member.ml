@@ -223,7 +223,7 @@ interactive member_fun {| intro [] |} :
  * can be proved with the pair of both choice functions.
  * @end[doc]
  *)
-interactive set_ext 'x 'y :
+interactive set_ext :
    ["wf"] sequent ['ext] { 'H >- isset{'s1} } -->
    ["wf"] sequent ['ext] { 'H >- isset{'s2} } -->
    ["main"] sequent ['ext] { 'H; x: set; y: mem{'x; 's1} >- mem{'x; 's2} } -->
@@ -265,9 +265,7 @@ let setOfT = set_isset
  * @docoff
  * @end[doc]
  *)
-let setExtT p =
-   let u, v = maybe_new_vars2 p "u" "v" in
-      set_ext u v p
+let setExtT = set_ext
 
 (*
  * -*-

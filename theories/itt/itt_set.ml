@@ -119,12 +119,12 @@ dform set_df1 : {x:'A | 'B} = math_set {'x; 'A; 'B}
 
 (*
  * H >- Ui ext { a:A | B }
- * by setFormation a A
+ * by setFormation A
  *
  * H >- A = A in Ui
  * H, a: A >- Ui ext B
  *)
-prim setFormation 'a 'A :
+prim setFormation 'A :
    [wf] sequent [squash] { 'H >- 'A = 'A in univ[i:l] } -->
    ('B['a] : sequent ['ext] { 'H; a: 'A >- univ[i:l] }) -->
    sequent ['ext] { 'H >- univ[i:l] } =
@@ -143,13 +143,13 @@ prim setFormation 'a 'A :
  * by applying the @hrefterm[esquash] operator to the set predicate.
  * @end[doc]
  *)
-prim setEquality {| intro []; eqcd |} 'x :
+prim setEquality {| intro []; eqcd |} :
    [wf] sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
    [wf] sequent [squash] { 'H; x: 'A1 >- 'B1['x] = 'B2['x] in univ[i:l] } -->
    sequent ['ext] { 'H >- { a1:'A1 | 'B1['a1] } = { a2:'A2 | 'B2['a2] } in univ[i:l] } =
    it
 
-prim setType {| intro [] |} 'x :
+prim setType {| intro [] |} :
    [wf] sequent [squash] { 'H >- "type"{'A1} } -->
    [wf] sequent [squash] { 'H; x: 'A1 >- "type"{'B1['x]} } -->
    sequent ['ext] { 'H >- "type"{.{ a1:'A1 | 'B1['a1] }} } =
@@ -163,7 +163,7 @@ prim setType {| intro [] |} 'x :
  * if they are equal in $A$ and also $B[a_1]$ is true.
  * @end[doc]
  *)
-prim setMemberEquality {| intro []; eqcd |} 'x :
+prim setMemberEquality {| intro []; eqcd |} :
    [wf] sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
    [assertion] sequent [squash] { 'H >- squash{'B['a1]} } -->
    [wf] sequent [squash] { 'H; x: 'A >- "type"{'B['x]} } -->
@@ -178,7 +178,7 @@ prim setMemberEquality {| intro []; eqcd |} 'x :
  * where $B[a]$ is true.
  * @end[doc]
  *)
-interactive setMemberFormation {| intro [] |} 'a 'z :
+interactive setMemberFormation {| intro [] |} 'a :
    [wf] sequent [squash] { 'H >- 'a = 'a in 'A } -->
    [main] sequent [squash]   { 'H >- squash{'B['a]} } -->
    [wf] sequent [squash] { 'H; z: 'A >- "type"{'B['z]} } -->
@@ -194,7 +194,7 @@ interactive setMemberFormation {| intro [] |} 'a 'z :
  * omitted.
  * @end[doc]
  *)
-prim setElimination {| elim [] |} 'H 'u 'v :
+prim setElimination {| elim [] |} 'H :
    ('t : sequent ['ext] { 'H; u: 'A; v: squash{'B['u]}; 'J['u] >- 'T['u] }) -->
    sequent ['ext] { 'H; u: { x:'A | 'B['x] }; 'J['u] >- 'T['u] } =
    't

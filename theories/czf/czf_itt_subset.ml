@@ -80,7 +80,7 @@ interactive subset_type {| intro [] |} :
  * element $@mem{x; s_1}$ is also an element of $s_2$.
  * @end[doc]
  *)
-interactive subset_intro {| intro [] |} 'x :
+interactive subset_intro {| intro [] |} :
    ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
    ["wf"] sequent [squash] { 'H >- isset{'s2} } -->
    ["main"] sequent ['ext] { 'H; x: set; y: mem{'x; 's1} >- mem{'x; 's2} } -->
@@ -95,7 +95,7 @@ interactive subset_intro {| intro [] |} 'x :
  * $@mem{x; s_2}$.
  * @end[doc]
  *)
-interactive subset_elim {| elim [] |} 'H 's 'z :
+interactive subset_elim {| elim [] |} 'H 's :
    ["wf"] sequent [squash] { 'H; x: 's1 subset 's2; 'J['x] >- isset{'s} } -->
    ["wf"] sequent [squash] { 'H; x: 's1 subset 's2; 'J['x] >- isset{'s1} } -->
    ["wf"] sequent [squash] { 'H; x: 's1 subset 's2; 'J['x] >- isset{'s2} } -->

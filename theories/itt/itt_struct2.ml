@@ -72,7 +72,9 @@ open Mp_resource
 
 open Tactic_type
 open Tactic_type.Tacticals
+open Top_tacticals
 open Var
+open Perv
 open Mptop
 
 open Base_dtactic
@@ -109,14 +111,14 @@ let _ =
  * @end[doc]
  *)
 
-interactive substitution2 ('t1 = 't2 in 'T) bind{x. 'C['x]} 'v 'w:
+interactive substitution2 ('t1 = 't2 in 'T) bind{x. 'C['x]} :
    [equality] sequent [squash] { 'H >- 't1 = 't2 in 'T } -->
    [main]  sequent ['ext] { 'H >- 'C['t2] } -->
    [wf] sequent [squash] { 'H; x: 'T; v: 't1='x in 'T; w: 't2='x in 'T
                            >- "type"{'C['x]} } -->
    sequent ['ext] { 'H >- 'C['t1] }
 
-interactive hypSubstitution2 'H ('t1 = 't2 in 'T) bind{y. 'A['y]} 'z 'v 'w:
+interactive hypSubstitution2 'H ('t1 = 't2 in 'T) bind{y. 'A['y]} :
    [equality] sequent [squash] { 'H; x: 'A['t1]; 'J['x] >- 't1 = 't2 in 'T } -->
    [main] sequent ['ext] { 'H; x: 'A['t2]; 'J['x] >- 'C['x] } -->
    [wf] sequent [squash] { 'H; x: 'A['t1]; 'J['x]; z: 'T; v: 't1='z in 'T; w: 't2='z in 'T
@@ -149,14 +151,10 @@ interactive hypSubstitution2 'H ('t1 = 't2 in 'T) bind{y. 'A['y]} 'z 'v 'w:
  * @end[doc]
  *)
 
-
-interactive cutMem 'x 'v 's 'S bind{x.'T['x]} :
+interactive cutMem 's 'S bind{x.'T['x]} :
   [assertion] sequent[squash]{ 'H >- 's in 'S } -->
    [main]      sequent ['ext] { 'H; x: 'S; v: 'x='s in 'S >- 'T['x] } -->
    sequent ['ext] { 'H >- 'T['s]}
-
-
-
 
 (*!
  * @begin[doc]
@@ -179,7 +177,7 @@ interactive cutEqWeak ('s_1='s_2 in 'S) bind{x.'t['x]} 'v 'u :
    sequent ['ext] { 'H >- 't['s_1] = 't['s_2] in 'T}
 *)
 
-interactive cutEq0 ('s_1='s_2 in 'S) bind{x.'t_1['x]  't_2['x]} 'v 'u :
+interactive cutEq0 ('s_1='s_2 in 'S) bind{x.'t_1['x]  't_2['x]} :
    [assertion] sequent[squash]{ 'H >- 's_1='s_2 in 'S } -->
    [main]      sequent ['ext] { 'H; x: 'S; v: 's_1='x in 'S; u: 's_2='x in 'S >- 't_1['x] = 't_2['x] in 'T } -->
    sequent ['ext] { 'H >- 't_1['s_1] = 't_2['s_2] in 'T}
@@ -192,7 +190,7 @@ interactive cutEq0 ('s_1='s_2 in 'S) bind{x.'t_1['x]  't_2['x]} 'v 'u :
  * @end[doc]
  *)
 
-interactive substitutionInType ('t_1 = 't_2 in 'T) bind{x. 'c_1='c_2 in 'C['x]} 'v 'w:
+interactive substitutionInType ('t_1 = 't_2 in 'T) bind{x. 'c_1='c_2 in 'C['x]} :
    [equality] sequent [squash] { 'H >- 't_1 = 't_2 in 'T } -->
    [main]  sequent ['ext] { 'H >-  'c_1 = 'c_2 in 'C['t_2] } -->
    [wf] sequent [squash] { 'H; x: 'T; v: 't_1='x in 'T; w: 't_2='x in 'T
@@ -211,7 +209,7 @@ interactive substitutionInType ('t_1 = 't_2 in 'T) bind{x. 'c_1='c_2 in 'C['x]} 
  * @end[doc]
  *)
 
-interactive cutEq ('s_1='s_2 in 'S) bind{x.'t_1['x] = 't_2['x] in 'T['x] } 'v 'u :
+interactive cutEq ('s_1='s_2 in 'S) bind{x.'t_1['x] = 't_2['x] in 'T['x] } :
    [assertion] sequent[squash]{ 'H >- 's_1='s_2 in 'S } -->
    [main]      sequent ['ext] { 'H; x: 'S; v: 's_1='x in 'S; u: 's_2='x in 'S >- 't_1['x] = 't_2['x] in 'T['x] } -->
    sequent ['ext] { 'H >- 't_1['s_1] = 't_2['s_2] in 'T['s_1]}
@@ -248,7 +246,7 @@ interactive setMemElim {| elim [] |} 'H :
  *)
 
 
-interactive cutSquash 'H 'S 'x :
+interactive cutSquash 'H 'S :
    [assertion] sequent [squash] { 'H; 'J >- 'S } -->
    [main]      sequent ['ext] { 'H; x: squash{'S}; 'J >- 'T } -->
    sequent ['ext] { 'H; 'J >- 'T}
@@ -276,7 +274,6 @@ interactive cutSquash 'H 'S 'x :
 (* substitution *)
 
 let substConclT t p =
-   let v,w = maybe_new_vars2 p "v" "w" in
    let _, a, _ = dest_equal t in
    let bind =
       try
@@ -287,11 +284,10 @@ let substConclT t p =
                raise (RefineError ("substT", StringTermError ("need a \"bind\" term: ", t)))
       with
          RefineError _ ->
-            let x = get_opt_var_arg "z" p in
-               mk_xbind_term x (var_subst (Sequent.concl p) a x)
+            var_subst_to_bind (Sequent.concl p) a
    in
    let tac =
-      (substitutionInType t bind v w orelseT substitution2 t bind v w) thenWT thinIfThinningT [-1;-1]
+      (substitutionInType t bind orelseT substitution2 t bind) thenWT thinIfThinningT [-1;-1]
    in tac p
 
 (*
@@ -299,9 +295,7 @@ let substConclT t p =
  *)
 let substHypT i t p =
    let i = Sequent.get_pos_hyp_num p i in
-   let v,w = maybe_new_vars2 p "v" "w" in
    let _, a, _ = dest_equal t in
-   let z = get_opt_var_arg "z" p in
    let bind =
       try
          let b = get_with_arg p in
@@ -311,11 +305,11 @@ let substHypT i t p =
                raise (RefineError ("substT", StringTermError ("need a \"bind\" term: ", b)))
       with
          RefineError _ ->
-            mk_xbind_term z (var_subst (Sequent.nth_hyp p i) a z)
+            var_subst_to_bind (Sequent.nth_hyp p i) a
    in
      if get_thinning_arg p
-       then hypSubstitution i t bind z p
-       else hypSubstitution2 i t bind z v w p
+       then hypSubstitution i t bind p
+       else hypSubstitution2 i t bind p
 
 (*
  * General substition.
@@ -353,12 +347,9 @@ let revHypSubstT i j p =
       let h' = mk_equal_term t b a in
          (substT h' j thenET (equalSymT thenT nthHypT i)) p
 
-
-
 (* cutMem *)
 
 let letT x_is_s_in_S p =
-   let v = maybe_new_vars1 p "v"  in
    let _S, x, s = dest_equal x_is_s_in_S in
    let xname = dest_var x in
    let bind =
@@ -366,11 +357,10 @@ let letT x_is_s_in_S p =
          get_with_arg p
       with
          RefineError _ ->
-            let z = get_opt_var_arg xname p in
-               mk_xbind_term z (var_subst (Sequent.concl p) s z)
+               var_subst_to_bind (Sequent.concl p) s
    in
       if is_xbind_term bind then
-           (cutMem xname v s _S bind thenMT thinIfThinningT [-1]) p
+           (cutMem s  _S bind thenMT nameHypT (-2) xname thenMT thinIfThinningT [-1]) p
       else
            raise (RefineError ("letT", StringTermError ("need a \"bind\" term: ", bind)))
 
@@ -378,7 +368,6 @@ let letT x_is_s_in_S p =
 (* cutEq *)
 
 let assertEqT eq p =
-   let v,u = maybe_new_vars2 p "v" "u" in
    let _, s1, s2 = dest_equal eq in
    let bind =
       try
@@ -394,7 +383,7 @@ let assertEqT eq p =
    in
       if is_xbind_term bind then
          (try
-            (cutEq eq bind v u thenMT thinIfThinningT [-2;-1]) p
+            (cutEq eq bind thenMT thinIfThinningT [-2;-1]) p
           with
                  RefineError _ ->
                     raise (RefineError ("assertEqT", StringTermError (" \"bind\" term: ", bind))))
@@ -403,12 +392,5 @@ let assertEqT eq p =
 
 (* cutSquash *)
 
-let assertSquashT s p =
-   let v = maybe_new_vars1 p "v" in
-      cutSquash (Sequent.hyp_count p) s v p
-
-let assertSquashAtT i s p =
-   let v = get_opt_var_arg "v" p in
-      cutSquash (Sequent.get_pos_hyp_num p i) s v p
-
-
+let assertSquashT = cutSquash 0
+let assertSquashAtT = cutSquash

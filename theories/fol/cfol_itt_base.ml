@@ -104,7 +104,7 @@ let trueT p =
          true_concl_elim p
 
 (* Rules for pred *)
-interactive pred_elim {| elim [] |} 'H 'y :
+interactive pred_elim {| elim [] |} 'H :
    sequent ['ext] { 'H; x: univ[1:l]; y: "type"{'x}; 'J['x] >- 'C['x] } -->
    sequent ['ext] { 'H; x: pred; 'J['x] >- 'C['x] }
 

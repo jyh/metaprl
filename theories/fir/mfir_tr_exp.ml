@@ -66,7 +66,7 @@ extends Mfir_tr_store
  * @end[doc]
  *)
 
-prim ty_letAtom 'a 'b :
+prim ty_letAtom :
    sequent [fir] { 'H >- has_type["atom"]{ 'atom; 'ty1 } } -->
    sequent [fir] { 'H; b: variable; a: var_def{ 'b; 'ty1; no_def } >-
       has_type["exp"]{ 'exp['b]; 'ty2 } } -->
@@ -86,7 +86,7 @@ prim ty_letAtom 'a 'b :
  * @end[doc]
  *)
 
-prim ty_letExt 'a 'b :
+prim ty_letExt :
    sequent [fir] { 'H >- has_type["atom_list"]{ 'args; 'tyl } } -->
    sequent [fir] { 'H; b: variable; a: var_def{ 'b; 'u; no_def } >-
       has_type["exp"]{ 'exp['b]; 't } } -->
@@ -387,7 +387,7 @@ prim ty_offset_tyRawInt_var 'H :
 
 (* XXX: documentation needs to be completed. *)
 
-prim ty_letAlloc_array 'a 'b :
+prim ty_letAlloc_array :
    sequent [fir] { 'H >- has_type["store"]{ 'atoms; tyArray{'u} } } -->
    sequent [fir] { 'H; b: variable; a: var_def{ 'b; tyArray{'u}; no_def } >-
       has_type["exp"]{ 'exp['b]; 't } } -->
@@ -406,7 +406,7 @@ prim ty_letAlloc_array 'a 'b :
 
 (* XXX: documentation needs to be completed. *)
 
-prim ty_letAlloc_varray 'a 'b :
+prim ty_letAlloc_varray :
    sequent [fir] { 'H >- has_type["atom"]{ 'a1; tyRawInt[32, "signed"] } } -->
    sequent [fir] { 'H >- has_type["atom"]{ 'a2; 'u } } -->
    sequent [fir] { 'H; b: variable; a: var_def{ 'b; tyArray{'u}; no_def } >-
@@ -431,7 +431,7 @@ prim ty_letAlloc_varray 'a 'b :
  * NOTE: Going with the FIR type checker (version 1.56) for allocMalloc.
  *)
 
-prim ty_letAlloc_malloc 'a 'b :
+prim ty_letAlloc_malloc :
    sequent [fir] { 'H >-
       has_type["atom"]{ 'atom; tyRawInt[32, "signed"] } } -->
    sequent [fir] { 'H; b: variable; a: var_def{ 'b; tyRawData; no_def } >-
@@ -452,7 +452,7 @@ prim ty_letAlloc_malloc 'a 'b :
 
 (* XXX: documentation needs to be completed. *)
 
-prim ty_letAlloc_frame 'a 'b :
+prim ty_letAlloc_frame :
    sequent [fir] { 'H >-
       type_eq{ tyFrame{ 'tv; 'tyl }; tyFrame{ 'tv; 'tyl }; small_type } } -->
    sequent [fir] { 'H;
@@ -474,7 +474,7 @@ prim ty_letAlloc_frame 'a 'b :
 
 (* XXX: documentation needs to be completed. *)
 
-prim ty_letSubscript_tyTuple 'H 'p 'q :
+prim ty_letSubscript_tyTuple 'H :
    sequent [fir] { 'H; y: var_def{ 'x; tyTuple[s:s]{'mtyl}; 'd }; 'J >-
       type_eq{ 'u;
                ty_of_mutable_ty{ nth_elt{ index_of_subscript{'a2}; 'mtyl } };
@@ -512,7 +512,7 @@ prim ty_setSubscript_tyTuple 'H :
 
 (* XXX: documentation needs to be completed. *)
 
-prim ty_letSubsript_tyArray 'a 'b :
+prim ty_letSubsript_tyArray :
    sequent [fir] { 'H >- has_type["atom"]{ 'a1; tyArray{ 'u } } } -->
    sequent [fir] { 'H >- has_type["offset"]{ 'a2; offset } } -->
    sequent [fir] { 'H; b: variable; a: var_def{ 'b; 'u; no_def } >-
@@ -557,7 +557,7 @@ prim ty_letSubscript_tyUnion 'H :
 
 (* XXX: documentation needs to be completed. *)
 
-prim ty_letSubscript_rawData 'a 'b :
+prim ty_letSubscript_rawData :
    sequent [fir] { 'H >- has_type["atom"]{ 'a1; tyRawData } } -->
    sequent [fir] { 'H >- has_type["offset"]{ 'a2; offset } } -->
    sequent [fir] { 'H; b: variable; a: var_def{ 'b; 'u; no_def } >-
@@ -604,7 +604,7 @@ prim ty_label 'H :
       has_type["label"]{ 'l; 'ty } }
    = it
 
-prim ty_letGlobal 'a 'b :
+prim ty_letGlobal :
    sequent [fir] { 'H >- has_type["label"]{ 'label; 'ty1 } } -->
    sequent [fir] { 'H; b: global; a: var_def{ 'b; 'ty1; no_def } >-
       has_type["exp"]{ 'exp['b]; 'ty2 } } -->

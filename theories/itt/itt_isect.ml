@@ -143,11 +143,11 @@ dform top_df : except_mode[src] :: top =
 
 (*
  * H >- Ui ext Isect x: A. B[x]
- * by intersectionFormation x A
+ * by intersectionFormation A
  * H >- A = A in Ui
  * H, x: A >- Ui ext B[x]
  *)
-prim intersectionFormation 'x 'A :
+prim intersectionFormation 'A :
    [wf] sequent [squash] { 'H >- 'A = 'A in univ[i:l] } -->
    ('B['x] : sequent ['ext] { 'H; x: 'A >- univ[i:l] }) -->
    sequent ['ext] { 'H >- univ[i:l] } =
@@ -163,13 +163,13 @@ prim intersectionFormation 'x 'A :
  * $x @in A$.
  * @end[doc]
  *)
-prim intersectionEquality {| intro []; eqcd |} 'y :
+prim intersectionEquality {| intro []; eqcd |} :
    [wf] sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
    [wf] sequent [squash] { 'H; y: 'A1 >- 'B1['y] = 'B2['y] in univ[i:l] } -->
    sequent ['ext] { 'H >- Isect x1: 'A1. 'B1['x1] = Isect x2: 'A2. 'B2['x2] in univ[i:l] } =
    it
 
-prim intersectionType {| intro [] |} 'y :
+prim intersectionType {| intro [] |} :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
    sequent ['ext] { 'H >- "type"{."isect"{'A; x. 'B['x]}} } =
@@ -202,7 +202,7 @@ interactive topType {| intro [] |} :
  * is trivial; all terms are equal in $@top$.
  * @end[doc]
  *)
-prim intersectionMemberEquality {| intro []; eqcd |} 'z :
+prim intersectionMemberEquality {| intro []; eqcd |} :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H; z: 'A >- 'b1 = 'b2 in 'B['z] } -->
    sequent ['ext] { 'H >- 'b1 = 'b2 in Isect x: 'A. 'B['x] } =
@@ -223,7 +223,7 @@ interactive topMemberEquality {| intro []; eqcd |} :
  * @end[doc]
  *)
 
-interactive intersectionMemberFormation {| intro [] |} 'z 'b :
+interactive intersectionMemberFormation {| intro [] |} 'b :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H; z: 'A >- 'b in 'B['z] } -->
    sequent ['ext] { 'H >-  Isect x: 'A. 'B['x] }
@@ -237,7 +237,7 @@ interactive intersectionMemberFormation {| intro [] |} 'z 'b :
  * @end[doc]
  *)
 
-interactive intersectionMemberFormation2 {| intro [] |} 'z :
+interactive intersectionMemberFormation2 {| intro [] |} :
     [wf] sequent [squash] { 'H >- "type"{'A} } -->
     [main] sequent ['ext] { 'H; z: squash{'A} >- 'B } -->
     sequent ['ext] { 'H >- Isect x: 'A. 'B }
@@ -265,7 +265,7 @@ interactive topMemberFormation {| intro [] |} :
  * to get a proof that $x @in B[a]$.
  * @end[doc]
  *)
-prim intersectionElimination {| elim [] |} 'H 'a 'z :
+prim intersectionElimination {| elim [] |} 'H 'a :
    [wf] sequent [squash] { 'H; x: Isect y: 'A. 'B['y]; 'J['x] >- 'a in 'A } -->
    [main] ('t['x; 'z] : sequent ['ext] { 'H; x: Isect y: 'A. 'B['y]; 'J['x]; z: 'B['a] >- 'T['z] }) -->
    sequent ['ext] { 'H; x: Isect y: 'A. 'B['y]; 'J['x] >- 'T['x] } =
@@ -273,14 +273,13 @@ prim intersectionElimination {| elim [] |} 'H 'a 'z :
 
 (*! @docoff *)
 
-interactive intersectionElimination_eq 'H 'v 'a bind{x.bind{z.'T['x;'z]}}:
+interactive intersectionElimination_eq 'H 'a bind{x.bind{z.'T['x;'z]}}:
    [wf] sequent [squash] { 'H; x: Isect y: 'A. 'B['y]; 'J['x] >- 'a in 'A } -->
    [main] sequent ['ext] { 'H; x: Isect y: 'A. 'B['y]; 'J['x]; z: 'B['a]; v: 'z = 'x in 'B['a] >- 'T['x;'z] } -->
    sequent ['ext] { 'H; x: Isect y: 'A. 'B['y]; 'J['x] >- 'T['x;'x] }
 
 
 let intersectionEliminationT n p =
-   let z,v = maybe_new_vars2 p "z" "v" in
    let n = Sequent.get_pos_hyp_num p n in
    let x = Sequent.nth_binding p n in
    let x_var = mk_var_term x in
@@ -291,14 +290,14 @@ let intersectionEliminationT n p =
    let (a,bind) =
       match args with
          [] -> raise (RefineError ("intersectionElimination", StringError ("arguments required"))) |
-         [a] -> (a,mk_xbind_term z (var_subst (Sequent.concl p) x_var z)) |
+         [a] -> (a, var_subst_to_bind (Sequent.concl p) x_var) |
          [a1;a2] -> if is_xbind_term a1 then (a2,a1) else
                     if is_xbind_term a2 then (a1,a2) else
                        raise (RefineError ("intersectionElimination", StringError ("need a bind term"))) |
          _ -> raise (RefineError ("intersectionElimination", StringError ("too many arguments")))
    in
    let bind = mk_bind1_term x bind in
-      intersectionElimination_eq n v a bind p
+      intersectionElimination_eq n a bind p
 
 let intersectionEliminationT n p =
    let n = Sequent.get_pos_hyp_num p n in
@@ -310,15 +309,14 @@ let intersectionEliminationT n p =
  * @end[doc]
  *)
 
-interactive intersectionElimination2 (*{| elim [] |}*) 'H 'z 'v :
+interactive intersectionElimination2 (*{| elim [] |}*) 'H :
    [wf] sequent [squash] { 'H; x: Isect y: 'A. 'B; 'J['x] >- squash{'A} } -->
    [main] sequent ['ext] { 'H; x: Isect y: 'A. 'B; 'J['x]; z: 'B; v: 'z = 'x in 'B >- 'T['z] } -->
    sequent ['ext] { 'H; x: Isect y: 'A. 'B; 'J['x] >- 'T['x] }
 
 let intersectionEliminationT n p =
    let n = Sequent.get_pos_hyp_num p n in
-   let z,v = maybe_new_vars2 p "z" "v" in
-     ((intersectionElimination2 n z v  thenT thinIfThinningT [-1;n])
+     ((intersectionElimination2 n thenT thinIfThinningT [-1;n])
        orelseT intersectionEliminationT n) p
 
 let resource elim += (<<Isect y: 'A. 'B['y]>>, intersectionEliminationT)
@@ -339,7 +337,7 @@ interactive intersectionMemberCaseEquality (Isect x: 'A. 'B['x]) 'a :
 
 (*! @doc{The elimination form of @hrefrule[intersectionMemberCaseEquality].} *)
 
-interactive intersectionEqualityElim {| elim [] |} 'H 'a 'v :
+interactive intersectionEqualityElim {| elim [] |} 'H 'a :
    [wf] sequent[squash] { 'H; u: 'b1 = 'b2 in Isect x: 'A. 'B['x]; 'J['u] >- 'a in 'A } -->
    sequent ['ext] { 'H; u: 'b1 = 'b2 in Isect x: 'A. 'B['x]; v: 'b1 = 'b2 in 'B['a]; 'J['u] >- 'C['u] } -->
    sequent ['ext] { 'H; u: 'b1 = 'b2 in Isect x: 'A. 'B['x]; 'J['u] >- 'C['u] }
@@ -348,7 +346,7 @@ interactive intersectionEqualityElim {| elim [] |} 'H 'a 'v :
 
 (* We could declare intersectionMemberCaseEquality as primitive and derive intersectionElimination *)
 
-interactive intersectionEliminationFromCaseEquality 'H 'a 'z :
+interactive intersectionEliminationFromCaseEquality 'H 'a :
    [wf] sequent [squash] { 'H; x: Isect y: 'A. 'B['y]; 'J['x] >- 'a in 'A } -->
    [main] sequent ['ext] { 'H; x: Isect y: 'A. 'B['y]; 'J['x]; z: 'B['a] >- 'T['z] } -->
    sequent ['ext] { 'H; x: Isect y: 'A. 'B['y]; 'J['x] >- 'T['x] }
@@ -363,7 +361,7 @@ interactive intersectionEliminationFromCaseEquality 'H 'a 'z :
  * domain type $B[a]$ for each $a @in A$.
  * @end[doc]
  *)
-prim intersectionSubtype {| intro [] |} 'a :
+prim intersectionSubtype {| intro [] |} :
    ["subtype"] sequent [squash] { 'H >- \subtype{'A2; 'A1} } -->
    ["subtype"] sequent [squash] { 'H; a: 'A2 >- \subtype{'B1['a]; 'B2['a]} } -->
    sequent ['ext] { 'H >- \subtype{ (Isect a1:'A1. 'B1['a1]); (Isect a2:'A2. 'B2['a2]) } } =
@@ -378,13 +376,13 @@ prim intersectionSubtype {| intro [] |} 'a :
  * of @emph{every} case $B[a]$ for $a @in A$.
  * @end[doc]
  *)
-interactive intersectionSubtype2 'y 'a :
+interactive intersectionSubtype2 'a :
    [wf] sequent [squash] { 'H >- 'a = 'a in 'A } -->
    [wf] sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
    ["subtype"] sequent [squash] { 'H >- \subtype{'B['a]; 'T} } -->
    sequent ['ext] { 'H >- \subtype{."isect"{'A; x. 'B['x]}; 'T} }
 
-interactive intersectionSubtype3 'x :
+interactive intersectionSubtype3 :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H >- "type"{'C} } -->
    ["subtype"] sequent [squash] { 'H; x: 'A >- \subtype{'C; 'B['x]} } -->
@@ -424,23 +422,16 @@ let resource typeinf += (isect_term, infer_univ_dep0_dep1 dest_isect)
 (*
  * Subtyping of two intersection types.
  *)
-let isect_subtypeT p =
-   let a = get_opt_var_arg "x" p in
-      intersectionSubtype a p
-
 let resource sub +=
    (DSubtype ([<< Isect a1:'A1. 'B1['a1] >>, << Isect a2:'A2. 'B2['a2] >>;
                << 'A2 >>, << 'A1 >>;
                << 'B1['a1] >>, << 'B2['a1] >>],
-              isect_subtypeT))
+              intersectionSubtype))
 
 let d_isect_subtypeT i p =
    if i = 0 then
       let a = get_with_arg p in
-      let concl = Sequent.concl p in
-      let v, _, _ = dest_isect concl in
-      let v = maybe_new_vars1 p v in
-         intersectionSubtype2 v a p
+         intersectionSubtype2 a p
    else
       raise (RefineError ("d_isect_subtypeT", StringError "no elimination form"))
 

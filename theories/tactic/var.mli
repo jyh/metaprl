@@ -33,22 +33,11 @@
 open Tactic_type.Sequent
 
 (* Generate a new var different from any in the list *)
-val new_var         : string -> string list -> string
-val maybe_new_var   : string -> string list -> string
-val maybe_new_vars  : string list -> string list -> string list
-
-val maybe_new_vars_array : tactic_arg -> string array -> string array
-val maybe_new_vars1 : tactic_arg -> string -> string
-val maybe_new_vars2 : tactic_arg -> string -> string -> string * string
-val maybe_new_vars3 : tactic_arg -> string -> string -> string -> string * string * string
-val maybe_new_vars4 : tactic_arg -> string -> string -> string -> string -> string * string * string * string
-val maybe_new_vars5 : tactic_arg -> string -> string -> string -> string -> string -> string * string * string * string * string
-val maybe_new_vars6 : tactic_arg -> string -> string -> string -> string -> string -> string -> string * string * string * string * string * string
-val maybe_new_vars7 : tactic_arg -> string -> string -> string -> string -> string -> string -> string -> string * string * string * string * string * string * string
-val maybe_new_vars8 : tactic_arg -> string -> string -> string -> string -> string -> string -> string -> string -> string * string * string * string * string * string * string * string
-val maybe_new_vars9 : tactic_arg -> string -> string -> string -> string -> string -> string -> string -> string -> string -> string * string * string * string * string * string * string * string * string
-
-val get_opt_var_arg : string -> tactic_arg -> string
+val new_var           : string -> string list -> string
+val maybe_new_var     : string -> string list -> string
+val maybe_new_vars    : string list -> string list -> string list
+val maybe_new_var_arg : tactic_arg -> string -> string
+val get_opt_var_arg   : string -> tactic_arg -> string
 
 (*
  * -*-

@@ -269,7 +269,7 @@ prim inrEquality {| intro []; eqcd |} :
  * on element membership).
  * @end[doc]
  *)
-prim unionElimination {| elim [ThinOption thinT] |} 'H 'x 'u 'v :
+prim unionElimination {| elim [ThinOption thinT] |} 'H :
    [left] ('left['u] : sequent ['ext] { 'H; x: 'A + 'B; u: 'A; 'J[inl{'u}] >- 'T[inl{'u}] }) -->
    [right] ('right['u] : sequent ['ext] { 'H; x: 'A + 'B; v: 'B; 'J[inr{'v}] >- 'T[inr{'v}] }) -->
    sequent ['ext] { 'H; x: 'A + 'B; 'J['x] >- 'T['x] } =
@@ -283,7 +283,7 @@ prim unionElimination {| elim [ThinOption thinT] |} 'H 'x 'u 'v :
  * $A + B$ for which all the subterms are equal.
  * @end[doc]
  *)
-prim decideEquality {| intro []; eqcd |} bind{z. 'T['z]} ('A + 'B) 'u 'v 'w :
+prim decideEquality {| intro []; eqcd |} bind{z. 'T['z]} ('A + 'B) :
    [wf] sequent [squash] { 'H >- 'e1 = 'e2 in 'A + 'B } -->
    [wf] sequent [squash] { 'H; u: 'A; w: 'e1 = inl{'u} in 'A + 'B >- 'l1['u] = 'l2['u] in 'T[inl{'u}] } -->
    [wf] sequent [squash] { 'H; v: 'B; w: 'e1 = inr{'v} in 'A + 'B >- 'r1['v] = 'r2['v] in 'T[inr{'v}] } -->

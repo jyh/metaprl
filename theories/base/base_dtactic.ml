@@ -408,7 +408,7 @@ let find_subterm t arg =
 (*
  * Improve the intro resource from a rule.
  *)
-let process_intro_resource_annotation name context_args var_args term_args _ statement (pre_tactic, options) =
+let process_intro_resource_annotation name context_args term_args _ statement (pre_tactic, options) =
    let _, goal = unzip_mfunction statement in
    let t =
       try TermMan.nth_concl goal 1 with
@@ -461,8 +461,7 @@ let process_intro_resource_annotation name context_args var_args term_args _ sta
             in
                (fun p ->
                   check_auto p;
-                  let vars = Var.maybe_new_vars_array p var_args in
-                     Tactic_type.Tactic.tactic_of_rule pre_tactic ([||], vars) (term_args p) p)
+                     Tactic_type.Tactic.tactic_of_rule pre_tactic [||] (term_args p) p)
        | _ ->
             raise (Invalid_argument (sprintf "Base_dtactic.intro: %s: not an introduction rule" name))
    in
@@ -479,7 +478,7 @@ let rec get_elim_args_arg = function
  | [] ->
       None
 
-let process_elim_resource_annotation name context_args var_args term_args _ statement (pre_tactic, options) =
+let process_elim_resource_annotation name context_args term_args _ statement (pre_tactic, options) =
    let assums, goal = unzip_mfunction statement in
    let { sequent_hyps = hyps } =
       try TermMan.explode_sequent goal with
@@ -530,19 +529,6 @@ let process_elim_resource_annotation name context_args var_args term_args _ stat
                                  raise (RefineError (name, StringIntError ("wrong number of arguments", length')));
                               args)
    in
-   let new_vars =
-      match v with
-         Some v when Array_util.mem v var_args ->
-            let index = Array_util.index v var_args in
-               (fun i p ->
-                  let v = Sequent.nth_binding p i in
-                  let vars = Array.copy var_args in
-                  let vars = Var.maybe_new_vars_array p vars in
-                     vars.(index) <- v;
-                     vars)
-       | _ ->
-            (fun i p -> Var.maybe_new_vars_array p var_args)
-   in
    let thinT =
       let rec collect = function
          ThinOption thinT :: _ ->
@@ -558,7 +544,7 @@ let process_elim_resource_annotation name context_args var_args term_args _ stat
       match context_args, thinT with
          [| _ |], None ->
             (fun i p ->
-               Tactic_type.Tactic.tactic_of_rule pre_tactic ([| i |], new_vars i p) (term_args i p) p)
+               Tactic_type.Tactic.tactic_of_rule pre_tactic [| i |] (term_args i p) p)
 
        | [| _ |], Some thinT ->
             let rec find_thin_num_aux hyps len i =
@@ -586,7 +572,7 @@ let process_elim_resource_annotation name context_args var_args term_args _ stat
             in
             let thin_incr = (check_thin_nums thin_nums) - hnum in
             (fun i p ->
-               let tac = Tactic_type.Tactic.tactic_of_rule pre_tactic ([| i |], new_vars i p) (term_args i p)
+               let tac = Tactic_type.Tactic.tactic_of_rule pre_tactic [| i |] (term_args i p)
                in 
                   if get_thinning_arg p then
                      (tac thenT tryT (thinT (i + thin_incr))) p

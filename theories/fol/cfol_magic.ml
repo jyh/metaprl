@@ -9,14 +9,12 @@ declare magic{x. 't['x]}
 
 dform magic_df : magic {x. 't} = `"magic"
 
-prim magic 'x :
+prim magic :
    ('t['x] : sequent ['ext] { 'H; x: "not"{'T} >- "false" }) -->
    sequent ['ext] { 'H >- 'T } =
    magic{x. 't['x]}
 
-let magicT p =
-   let v = Var.maybe_new_vars1 p "v" in
-      magic v p
+let magicT = magic
 
 (*
  * -*-

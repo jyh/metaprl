@@ -57,7 +57,7 @@ let _ =
 (*
  * Implication is restricted.
  *)
-interactive fun_fun {| intro [] |} 'w :
+interactive fun_fun {| intro [] |} :
    ["wf"] sequent [squash] { 'H; w: set >- "type"{'A['w]} } -->
    ["wf"] sequent [squash] { 'H; w: set >- "type"{'B['w]} } -->
    sequent ['ext] { 'H >- fun_prop{x. 'A['x]} } -->
@@ -75,7 +75,7 @@ interactive fun_res1 {| intro [] |} :
 (*
  * Implication is restricted.
  *)
-interactive implies_fun {| intro [] |} 'w :
+interactive implies_fun {| intro [] |} :
    ["wf"] sequent [squash] { 'H; w: set >- "type"{'A['w]} } -->
    ["wf"] sequent [squash] { 'H; w: set >- "type"{'B['w]} } -->
    sequent ['ext] { 'H >- fun_prop{x. 'A['x]} } -->
@@ -93,7 +93,7 @@ interactive implies_res1 {| intro [] |} :
 (*
  * Implication is restricted.
  *)
-interactive iff_fun {| intro [] |} 'w :
+interactive iff_fun {| intro [] |} :
    ["wf"] sequent [squash] { 'H; w: set >- "type"{'A['w]} } -->
    ["wf"] sequent [squash] { 'H; w: set >- "type"{'B['w]} } -->
    sequent ['ext] { 'H >- fun_prop{x. 'A['x]} } -->

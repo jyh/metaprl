@@ -60,12 +60,12 @@ derived implies_type :
    [wf] sequent ['ext] { 'H >- "type"{'B} } -->
    sequent ['ext] { 'H >- "type"{.Fol_implies!implies{'A; 'B}} }
 
-derived implies_intro 'x :
+derived implies_intro :
    [wf] sequent ['ext] { 'H >- "type"{'A} } -->
    [main] ('b['x] : sequent ['ext] { 'H; x: 'A >- 'B }) -->
    sequent ['ext] { 'H >- Fol_implies!implies{'A; 'B} }
 
-derived implies_elim 'H 'f 'b :
+derived implies_elim 'H :
    [assertion] ('a : sequent ['ext] { 'H; f: Fol_implies!implies{'A; 'B}; 'J['f] >- 'A }) -->
    [main] ('t['f; 'b] : sequent ['ext] { 'H; f: Fol_implies!implies{'A; 'B}; 'J['f]; b: 'B >- 'C['f] }) -->
    sequent ['ext] { 'H; f: Fol_implies!implies{'A; 'B}; 'J['f] >- 'C['f] }

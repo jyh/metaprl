@@ -112,7 +112,7 @@ rule bfalse_member : sequent ['ext] { 'H >- bfalse in "bool" }
  * by boolElimination i
  * H; i:x:Unit; J[it / x] >- C[it / x]
  *)
-rule boolElimination2 'H 'x :
+rule boolElimination2 'H :
    sequent['ext] { 'H; 'J[btrue] >- 'C[btrue] } -->
    sequent['ext] { 'H; 'J[bfalse] >- 'C[bfalse] } -->
    sequent ['ext] { 'H; x: "bool"; 'J['x] >- 'C['x] }

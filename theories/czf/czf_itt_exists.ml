@@ -70,7 +70,7 @@ let _ =
 (*
  * Implication is restricted.
  *)
-interactive dprod_fun3 {| intro [] |} 'u 'v 'z :
+interactive dprod_fun3 {| intro [] |} :
    ["wf"]   sequent [squash] { 'H; u: set >- "type"{'A['u]} } -->
    ["wf"]   sequent [squash] { 'H; u: set; z: 'A['u] >- "type"{'B['u; 'z]} } -->
    sequent ['ext] { 'H >- fun_prop{z. 'A['z]} } -->
@@ -82,7 +82,7 @@ interactive dprod_res {| intro [] |} :
    sequent [squash] { 'H; u: 'A >- restricted{'B['u]} } -->
    sequent ['ext] { 'H >- restricted{."prod"{'A; u. 'B['u]}} }
 
-interactive exists_fun {| intro [] |} 'u 'v 'z :
+interactive exists_fun {| intro [] |} :
    ["wf"]   sequent [squash] { 'H; u: set >- "type"{'A['u]} } -->
    ["wf"]   sequent [squash] { 'H; u: set; z: 'A['u] >- "type"{'B['u; 'z]} } -->
    sequent ['ext] { 'H >- fun_prop{z. 'A['z]} } -->

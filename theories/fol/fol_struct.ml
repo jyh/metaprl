@@ -25,7 +25,7 @@ prim thin 'H :
 (*
  * Cut rule.
  *)
-prim cut 'T 'x :
+prim cut 'T :
    ('a : sequent ['ext] { 'H >- 'T }) -->
    ('b['x] : sequent ['ext] { 'H; x: 'T >- 'C }) -->
    sequent ['ext] { 'H >- 'C } =
@@ -44,9 +44,7 @@ let nthAssumT i p =
    let assum = Sequent.nth_assum p i in
       Top_tacticals.thinMatchT thinT assum p
 
-let assertT t p =
-   let v = Var.maybe_new_vars1 p "v" in
-      cut t v p
+let assertT = cut
 
 (*
  * Add to trivialT tactic.

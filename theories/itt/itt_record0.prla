@@ -2313,7 +2313,7 @@ T	t1077	o b1073 b1077
 B	b1078	t1077
 T	t1078	o706 b1069 b1078
 B	b1079	t1078
-P	p1079	String "labelBackInduction <<'n>> <<bind{x.record{'x;'A}}>> \"m\" \"z\" thenT autoT"
+P	p1079	String "labelBackInduction <<'n>> <<bind{x.record{'x;'A}}>> thenT autoT"
 O	o1079	ext_rule p1079
 H	h1079	m t726
 P	p1080	Var m
@@ -2488,7 +2488,7 @@ T	t1144	o b1140 b1144
 B	b1145	t1144
 T	t1145	o706 b1134 b1145
 B	b1146	t1145
-P	p1146	String "labelBackInduction <<'n>> <<bind{k.\"type\"{record{'k;'A}}}>> \"k\" \"z\""
+P	p1146	String "labelBackInduction <<'n>> <<bind{k.\"type\"{record{'k;'A}}}>>"
 O	o1146	ext_rule p1146
 T	t1146	o708 b1118 b1128
 B	b1147	t1146

@@ -37,8 +37,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
- * Author: Jason Hickey
- * @email{jyh@cs.caltech.edu}
+ * Author: Jason Hickey @email{jyh@cs.caltech.edu}
+ * Modified By: Aleksey Nogin @email{nogin@cs.caltech.edu}
  *
  * @end[license]
  *)
@@ -46,6 +46,7 @@
 open Refiner.Refiner
 open Refiner.Refiner.TermType
 open Refiner.Refiner.Term
+open Refiner.Refiner.TermSubst
 open Refiner.Refiner.TermMan
 open Refiner.Refiner.RefineError
 
@@ -474,17 +475,31 @@ let thinMatchT thinT assum p =
       tac (Sequent.hyp_count p) p
 
 let nameHypT i v p =
-   let v = Var.maybe_new_vars1 p v in
+   let v = Var.maybe_new_var_arg p v in
    let i = Sequent.get_pos_hyp_num p i - 1 in
    let goal = Sequent.goal p in
    let eseq = explode_sequent goal in
-   let map i' hyp =
-      if i = i' then match hyp with
-         Hypothesis hyp -> HypBinding (v,hyp)
-       | _ -> raise(RefineError("nameHypT",StringError "not a name-free hypothesis"))
-     else hyp
+   let eseq =
+      match SeqHyp.get eseq.sequent_hyps i with
+         Hypothesis hyp ->
+            let map i' hyp' = if i = i' then HypBinding (v, hyp) else hyp' in
+               { eseq with sequent_hyps = SeqHyp.mapi map eseq.sequent_hyps }
+       | HypBinding (v',hyp) ->
+            let vt = mk_var_term v in
+            let s1 t = subst1 t v' vt in
+            let map i' hyp' =
+               if i'<i then hyp'
+               else if i=i' then HypBinding(v,hyp)
+               else begin match hyp' with
+                  Hypothesis hyp' -> Hypothesis (subst1 hyp' v' vt)
+                | HypBinding (vv,hyp') -> HypBinding (vv, subst1 hyp' v' vt)
+                | Context (vv, ts) -> Context (vv, List.map s1 ts)
+               end
+            in
+               { eseq with sequent_hyps = SeqHyp.mapi map eseq.sequent_hyps; 
+                           sequent_goals = SeqGoal.lazy_apply s1 eseq.sequent_goals }
+       | _ -> raise(RefineError("nameHypT",StringError "is a context"))
    in
-   let eseq = {eseq with sequent_hyps = SeqHyp.mapi map eseq.sequent_hyps } in
    let goal = mk_sequent_term eseq in
    let a = Sequent.num_assums p + 1 in
       (cutT goal thenLT [removeHiddenLabelT; nthAssumT a]) p

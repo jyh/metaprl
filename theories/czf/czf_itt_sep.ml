@@ -176,7 +176,7 @@ interactive member_restricted {| intro [] |} :
  * on any set argument $x$.
  * @end[doc]
  *)
-interactive sep_isset {| intro [] |} 'z :
+interactive sep_isset {| intro [] |} :
    ["wf"] sequent [squash] { 'H >- isset{'s} } -->
    ["wf"] sequent ['ext] { 'H >- fun_prop{z. 'P['z]} } -->
    ["wf"] sequent [squash] { 'H; z: set >- restricted{'P['z]} } -->
@@ -208,7 +208,7 @@ interactive sep_intro2 {| intro [] |} :
  * constructor in the @Nuprl type theory module @hrefmodule[Itt_set]).
  * @end[doc]
  *)
-interactive sep_elim {| elim [] |} 'H 'u 'v 'z :
+interactive sep_elim {| elim [] |} 'H :
    ["wf"]   sequent [squash] { 'H; w: mem{'x; sep{'s; y. 'P['y]}}; 'J['w] >- isset{'x} } -->
    ["wf"]   sequent [squash] { 'H; w: mem{'x; sep{'s; y. 'P['y]}}; 'J['w] >- isset{'s} } -->
    ["wf"]   sequent [squash] { 'H; w: mem{'x; sep{'s; y. 'P['y]}}; 'J['w]; z: set >- restricted{'P['z]} } -->
@@ -224,7 +224,7 @@ interactive sep_elim {| elim [] |} 'H 'u 'v 'z :
  * set argument and the proposition.
  * @end[doc]
  *)
-interactive sep_fun {| intro [] |} 'u 'v :
+interactive sep_fun {| intro [] |} :
    sequent [squash] { 'H; u: set; v: set >- restricted{'P['u; 'v]} } -->
    sequent ['ext] { 'H; u: set >- fun_prop{z. 'P['z; 'u]} } -->
    sequent ['ext] { 'H; u: set >- fun_prop{z. 'P['u; 'z]} } -->

@@ -56,7 +56,7 @@ let _ =
  *)
 
 
-interactive quotientElimination2 {| elim [ThinOption thinT] |} 'H 'v 'w 'z :
+interactive quotientElimination2 {| elim [ThinOption thinT] |} 'H :
    [wf] sequent [squash] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a] >- "type"{'T['a]} } -->
    [main] sequent [squash] { 'H; a: quot x, y: 'A // 'E['x; 'y];
              v: 'A; w: 'A; z: 'E['v; 'w]; 'J['v] >- 's['v] = 't['w] in 'T['v]
@@ -64,7 +64,7 @@ interactive quotientElimination2 {| elim [ThinOption thinT] |} 'H 'v 'w 'z :
    sequent ['ext] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a] >- 's['a] = 't['a] in 'T['a] }
 
 
-interactive tunionElimination2 {| elim [ThinOption thinT] |} 'H 'w 'z :
+interactive tunionElimination2 {| elim [ThinOption thinT] |} 'H :
    sequent [squash] { 'H; z: tunion{'A; y. 'B['y]};  w: 'A; x: 'B['w]; 'J['x] >- squash{'C['x]}  } -->
    sequent ['ext] { 'H; x: tunion{'A; y. 'B['y]}; 'J['x] >- squash{'C['x]} }
 

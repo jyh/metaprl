@@ -48,7 +48,7 @@ prec prec_tunion
 (*
  * Proof of Ui
  *)
-rule tunionFormation 'x 'A :
+rule tunionFormation 'A :
    sequent [squash] { 'H >- 'A = 'A in univ[i:l] } -->
    sequent ['ext] { 'H; x: 'A >- univ[i:l] } -->
    sequent ['ext] { 'H >- univ[i:l] }
@@ -56,12 +56,12 @@ rule tunionFormation 'x 'A :
 (*
  * Typehood.
  *)
-rule tunionEquality 'x :
+rule tunionEquality :
    sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
    sequent [squash] { 'H; x: 'A1 >- 'B1['x] = 'B2['x] in univ[i:l] } -->
    sequent ['ext] { 'H >- tunion{'A1; x1. 'B1['x1]} = tunion{'A2; x2. 'B2['x2] } in univ[i:l] }
 
-rule tunionType 'y :
+rule tunionType :
    sequent [squash] { 'H >- "type"{'A} } -->
    sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
    sequent ['ext] { 'H >- "type"{tunion{'A; x. 'B['x]}} }
@@ -69,13 +69,13 @@ rule tunionType 'y :
 (*
  * Membership.
  *)
-rule tunionMemberEquality 'a 'y :
+rule tunionMemberEquality 'a :
    sequent [squash] { 'H >- 'a = 'a in 'A } -->
    sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
    sequent [squash] { 'H >- 'x1 = 'x2 in 'B['a] } -->
    sequent ['ext] { 'H >- 'x1 = 'x2 in Union x:'A. 'B['x]  }
 
-rule tunionMemberFormation 'y 'a :
+rule tunionMemberFormation 'a :
    sequent [squash] { 'H >- 'a = 'a in 'A } -->
    sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
    sequent ['ext] { 'H >- 'B['a] } -->
@@ -84,7 +84,7 @@ rule tunionMemberFormation 'y 'a :
 (*
  * Elimination.
  *)
-rule tunionElimination 'H 'x 'w 'z :
+rule tunionElimination 'H :
    sequent [squash] { 'H; x: tunion{'A; y. 'B['y]}; 'J['x]; w: 'A; z: 'B['w] >- 't1['z] = 't2['z] in 'C['z] } -->
    sequent ['ext] { 'H; x: tunion{'A; y. 'B['y]}; 'J['x] >- 't1['x] = 't2['x] in 'C['x] }
 

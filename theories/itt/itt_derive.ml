@@ -42,7 +42,7 @@ open Refiner.Refiner.TermMan
 open Refiner.Refiner.RefineError
 open Mp_resource
 
-open Var
+open Perv
 open Mptop
 open Typeinf
 
@@ -113,8 +113,7 @@ let applyT app i p =
          else
             raise (RefineError ("d_applyT", StringTermError ("not a function type", goal_type)))
       in
-      let v = maybe_new_vars1 p "v" in
-      let bind = mk_xbind_term v (var_subst (Sequent.concl p) app v) in
+      let bind = var_subst_to_bind (Sequent.concl p) app in
          tac goal_type bind f a p
    else
       raise (RefineError ("d_applyT", StringError "no elimination form"))

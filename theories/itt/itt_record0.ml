@@ -124,7 +124,7 @@ interactive record_elim1 'n :
    sequent['ext]{'H >- record{'n;'A} } -->
    sequent['ext]  {'H >- "type"{'A} }
 
-interactive recordTypeElimination{| elim [ThinOption thinT]  |} 'H 'v:
+interactive recordTypeElimination{| elim [ThinOption thinT]  |} 'H :
    sequent[squash]{'H; u:"type"{record{'n;'A}}; 'J['u] >- 'n in label} -->
    sequent['ext]  {'H; u:"type"{record{'n;'A}}; v:"type"{'A}; 'J['u] >- 'C['u] } -->
    sequent['ext]  {'H; u:"type"{record{'n;'A}}; 'J['u] >- 'C['u] }

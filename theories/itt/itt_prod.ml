@@ -129,7 +129,7 @@ interactive independentProductFormation :
  * its parts $u@colon A$ and $v@colon B$.
  * @end[doc]
  *)
-interactive independentProductElimination {| elim [ThinOption thinT] |} 'H 'u 'v :
+interactive independentProductElimination {| elim [ThinOption thinT] |} 'H :
    ('t['u; 'v] : sequent ['ext] { 'H; z: 'A * 'B; u: 'A; v: 'B; 'J['u, 'v] >- 'T['u, 'v] }) -->
    sequent ['ext] { 'H; z: 'A * 'B; 'J['z] >- 'T['z] }
 

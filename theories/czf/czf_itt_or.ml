@@ -57,7 +57,7 @@ let _ =
 (*
  * Implication is restricted.
  *)
-interactive union_fun {| intro [] |} 'w :
+interactive union_fun {| intro [] |} :
    ["wf"] sequent [squash] { 'H; w: set >- "type"{'A['w]} } -->
    ["wf"] sequent [squash] { 'H; w: set >- "type"{'B['w]} } -->
    sequent ['ext] { 'H >- fun_prop{x. 'A['x]} } -->
@@ -75,7 +75,7 @@ interactive union_res1 {| intro [] |} :
 (*
  * Implication is restricted.
  *)
-interactive or_fun {| intro [] |} 'w :
+interactive or_fun {| intro [] |} :
    ["wf"] sequent [squash] { 'H; w: set >- "type"{'A['w]} } -->
    ["wf"] sequent [squash] { 'H; w: set >- "type"{'B['w]} } -->
    sequent ['ext] { 'H >- fun_prop{x. 'A['x]} } -->
@@ -85,7 +85,7 @@ interactive or_fun {| intro [] |} 'w :
 (*
  * Implication is restricted.
  *)
-interactive or_res1 {| intro [] |} 'w :
+interactive or_res1 {| intro [] |} :
    sequent [squash] { 'H >- restricted{. 'A} } -->
    sequent [squash] { 'H >- restricted{. 'B} } -->
    sequent ['ext] { 'H >- restricted{. "or"{'A; 'B}} }

@@ -413,7 +413,7 @@ prim beq_int2prop :
    sequent ['ext] { 'H >- 'a = 'b in int } = it
 
 (* Derived from previous *)
-interactive eq_int_assert_elim {| elim [ThinOption thinT] |} 'H 'y:
+interactive eq_int_assert_elim {| elim [ThinOption thinT] |} 'H :
    [main]sequent['ext]{ 'H; x:"assert"{beq_int{'a;'b}}; 'J[it];
                             y: 'a = 'b in int >- 'C[it]} -->
    [wf]sequent['ext]{ 'H; x:"assert"{beq_int{'a;'b}}; 'J[it] >- 'a in int} -->
@@ -578,7 +578,7 @@ let splitIntC a b =
          (mk_beq_int_term a b))
       lt_TrichotC
 
-interactive splitInt 'a 'b 'w :
+interactive splitInt 'a 'b :
    [wf] sequent [squash] { 'H >- 'a in int } -->
    [wf] sequent [squash] { 'H >- 'b in int } -->
    [main] sequent ['ext] { 'H; w: ('a < 'b) >- 'C } -->
@@ -586,9 +586,7 @@ interactive splitInt 'a 'b 'w :
    [main] sequent ['ext] { 'H; w: ('b < 'a) >- 'C } -->
    sequent ['ext] { 'H >- 'C }
 
-let splitIntT t1 t2 p =
-   let w = maybe_new_vars1 p "w" in
-      splitInt t1 t2 w p
+let splitIntT = splitInt
 
 prim lt_Transit 'b :
    [main] sequent [squash]
@@ -673,7 +671,7 @@ up[n, m, it, z])
  * H, n:Z, J[n] >- C[0] ext base[n]
  * H, n:Z, J[n], m:Z, v: 0 < m, z: C[m - 1] >- C[m] ext up[n, m, v, z]
  *)
-prim intElimination {| elim [ThinOption thinT] |} 'H 'm 'v 'z :
+prim intElimination {| elim [ThinOption thinT] |} 'H :
    ( 'down['n; 'm; 'v; 'z] : sequent ['ext] { 'H; n: int; 'J['n]; m: int; v: 'm
  < 0; z: 'C['m +@ 1] >- 'C['m] } ) -->
    ( 'base['n] : sequent ['ext] { 'H; n: int; 'J['n] >- 'C[0] } ) -->
@@ -753,14 +751,14 @@ let reduce_ind_numberC =
  * let b = ind(x2; i2, j2. down2[i2, j2]; base2; k2, l2. up2[k2, l2])
  *
  * H >- a = b in T[x1]
- * by indEquality [z. T[z]; x; y; w]
+ * by indEquality \z. T[z]
  *
  * H >- x1 = y1 in Z
  * H, x: Z, w: x < 0, y: T[x + 1] >- down1[x, y] = down2[x, y] in T[x]
  * H >- base1 = base2 in T[0]
  * H, x: Z, w: 0 < x, y: T[x - 1] >- up1[x, y] = up2[x, y] in T[x]
  *)
-prim indEquality {| intro []; eqcd |} lambda{z. 'T['z]} 'x 'y 'w :
+prim indEquality {| intro []; eqcd |} lambda{z. 'T['z]} :
    sequent [squash] { 'H >- 'x1 = 'x2 in int } -->
    sequent [squash] { 'H; x: int; w: 'x < 0; y: 'T['x +@ 1] >- 'down1['x; 'y] =
  'down2['x; 'y] in 'T['x] } -->

@@ -132,7 +132,7 @@ open Tactic_type
 open Tactic_type.Tacticals
 open Tactic_type.Conversionals
 open Tactic_type.Sequent
-open Var
+open Perv
 open Mptop
 
 open Base_dtactic
@@ -274,12 +274,12 @@ interactive isset_assum 'H :
  * $a$ produces a set for any argument $x @in T$.
  * @end[doc]
  *)
-interactive isset_collect {| intro [] |} 'y :
+interactive isset_collect {| intro [] |} :
    sequent [squash] { 'H >- 'T = 'T in univ[1:l] } -->
    sequent [squash] { 'H; y: 'T >- isset{'a['y]} } -->
    sequent ['ext] { 'H >- isset{collect{'T; x. 'a['x]}} }
 
-interactive isset_collect2 {| intro [] |} 'y :
+interactive isset_collect2 {| intro [] |} :
    sequent [squash] { 'H >- 'T = 'T in univ[1:l] } -->
    sequent [squash] { 'H; y: 'T >- isset{'a['y]} } -->
    sequent ['ext] { 'H >- collect{'T; x. 'a['x]} IN set }
@@ -305,7 +305,7 @@ interactive isset_apply {| intro [] |} :
  * (which is true for all $W$-types).
  * @end[doc]
  *)
-interactive set_elim {| elim [ThinOption thinT] |} 'H 'a 'T 'f 'w 'z :
+interactive set_elim {| elim [ThinOption thinT] |} 'H :
    sequent ['ext] { 'H;
                     a: set;
                     'J['a];
@@ -322,7 +322,7 @@ interactive set_elim {| elim [ThinOption thinT] |} 'H 'a 'T 'f 'w 'z :
  * The next two rules allow any set argument to be replaced with
  * an @tt{collect} argument.  These rules are never used.
  *)
-interactive set_split_hyp 'H 's (bind{v. 'A['v]}) 'T 'f 'z :
+interactive set_split_hyp 'H 's (bind{v. 'A['v]}) :
    sequent [squash] { 'H; x: 'A['s]; 'J['x] >- isset{'s} } -->
    sequent [squash] { 'H; x: 'A['s]; 'J['x]; z: set >- "type"{'A['z]} } -->
    sequent ['ext] { 'H;
@@ -334,7 +334,7 @@ interactive set_split_hyp 'H 's (bind{v. 'A['v]}) 'T 'f 'z :
                     >- 'C['z] } -->
    sequent ['ext] { 'H; x: 'A['s]; 'J['x] >- 'C['x] }
 
-interactive set_split_concl 's (bind{v. 'C['v]}) 'T 'f 'z :
+interactive set_split_concl 's (bind{v. 'C['v]}) :
    sequent [squash] { 'H >- isset{'s} } -->
    sequent [squash] { 'H; z: set >- "type"{'C['z]} } -->
    sequent ['ext] { 'H; T: univ[1:l]; f: 'T -> set >- 'C[collect{'T; y. 'f 'y}] } -->
@@ -407,22 +407,19 @@ let setAssumT i p =
  * Split a set in a hyp or concl.
  *)
 let splitT t i p =
-   let v_T, v_f, v_z = maybe_new_vars3 p "T" "f" "z" in
-      if i = 0 then
-         let goal = var_subst (Sequent.concl p) t v_z in
-         let bind = mk_xbind_term v_z goal in
-            (set_split_concl t bind v_T v_f v_z
-             thenLT [addHiddenLabelT "wf";
-                     addHiddenLabelT "wf";
-                     addHiddenLabelT "main"]) p
-      else
-         let hyp = nth_hyp p i in
-         let hyp = var_subst hyp t v_z in
-         let bind = mk_xbind_term v_z hyp in
-            (set_split_hyp (get_pos_hyp_num p i) t bind v_T v_f v_z
-             thenLT [addHiddenLabelT "wf";
-                     addHiddenLabelT "wf";
-                     addHiddenLabelT "main"]) p
+   if i = 0 then
+      let bind = var_subst_to_bind (Sequent.concl p) t in
+         (set_split_concl t bind
+          thenLT [addHiddenLabelT "wf";
+                  addHiddenLabelT "wf";
+                  addHiddenLabelT "main"]) p
+   else
+      let hyp = nth_hyp p i in
+      let bind = var_subst_to_bind hyp t in
+         (set_split_hyp (get_pos_hyp_num p i) t bind
+          thenLT [addHiddenLabelT "wf";
+                  addHiddenLabelT "wf";
+                  addHiddenLabelT "main"]) p
 
 (************************************************************************
  * AUTOMATION                                                           *

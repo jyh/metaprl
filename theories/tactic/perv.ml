@@ -35,19 +35,22 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
- * Author: Jason Hickey
- * @email{jyh@cs.caltech.edu}
+ * Author: Jason Hickey @email{jyh@cs.caltech.edu}
+ * Modified By: Aleksey Nogin @email{nogin@cs.caltech.edu}
  *
  * @end[license]
  *)
 
 open Printf
 open Mp_debug
+open String_util
+open String_set
 
 open Refiner.Refiner
 
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
+open Refiner.Refiner.TermSubst
 
 
 (*
@@ -118,6 +121,15 @@ let is_bind5_term = is_dep5_term bind_opname
 let mk_bind5_term = mk_dep5_term bind_opname
 let dest_bind5 = dest_dep5_term bind_opname
 *)
+
+let bv = "bnd"
+
+let var_subst_to_bind t1 t2 =
+   let vs = free_vars_set t1 in
+   let v =
+      if StringSet.mem vs bv then vnewname bv (StringSet.mem vs) else bv
+   in
+      mk_bind1_term v (var_subst t1 t2 v)
 
 (*
  * @begin[doc]

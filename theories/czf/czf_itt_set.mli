@@ -124,7 +124,7 @@ rule isset_assum 'H :
 (*
  * This is how a set is constructed.
  *)
-rule isset_collect 'y :
+rule isset_collect :
    sequent [squash] { 'H >- 'T = 'T in univ[1:l] } -->
    sequent [squash] { 'H; y: 'T >- isset{'a['y]} } -->
    sequent ['ext] { 'H >- isset{collect{'T; x. 'a['x]}} }
@@ -132,7 +132,7 @@ rule isset_collect 'y :
 (*
  * Induction.
  *)
-rule set_elim 'H 'a 'T 'f 'w 'z :
+rule set_elim 'H :
    sequent ['ext] { 'H;
                     a: set;
                     'J['a];
@@ -148,7 +148,7 @@ rule set_elim 'H 'a 'T 'f 'w 'z :
  * These are related forms to expand a set into its
  * collect representation.
  *)
-rule set_split_hyp 'H 's (bind{v. 'A['v]}) 'T 'f 'z :
+rule set_split_hyp 'H 's (bind{v. 'A['v]}) :
    sequent [squash] { 'H; x: 'A['s]; 'J['x] >- isset{'s} } -->
    sequent [squash] { 'H; x: 'A['s]; 'J['x]; z: set >- "type"{'A['z]} } -->
    sequent ['ext] { 'H;
@@ -160,7 +160,7 @@ rule set_split_hyp 'H 's (bind{v. 'A['v]}) 'T 'f 'z :
                     >- 'C['z] } -->
    sequent ['ext] { 'H; x: 'A['s]; 'J['x] >- 'C['x] }
 
-rule set_split_concl 's (bind{v. 'C['v]}) 'T 'f 'z :
+rule set_split_concl 's (bind{v. 'C['v]}) :
    sequent [squash] { 'H >- isset{'s} } -->
    sequent [squash] { 'H; z: set >- "type"{'C['z]} } -->
    sequent ['ext] { 'H; T: univ[1:l]; f: 'T -> set >- 'C[collect{'T; y. 'f 'y}] } -->

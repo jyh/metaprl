@@ -38,7 +38,7 @@ interactive tsquashMemberFormation {| intro [] |} :
    sequent[squash] { 'H >- squash{'A}} -->
    sequent ['ext] { 'H >- tsquash{'A}}
 
-interactive tsquashElimination {| elim [ThinOption thinT] |} 'H 'x:
+interactive tsquashElimination {| elim [ThinOption thinT] |} 'H :
    sequent['ext] { 'H; u:top; x: squash{'A}; 'J['u] >- 'C['u]} -->
    sequent['ext] { 'H; u:tsquash{'A}; 'J['u] >- 'C['u]}
 

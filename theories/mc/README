@@ -11,16 +11,16 @@ Last update to this file: 24 April 2002
 
 Overview:
 --------------------------------------------------------------------------
-The Mojave Compiler (MC) is one component of the Caltech PRL group's mission to
-develop methods and tools for building safe and reliable distributed systems.
-At it's core, MC uses a typed, mostly functional intermediate representation
-(FIR).  Every source language compiled by MC is eventually transformed into the
-FIR language.  By combining MC with a theorem prover / logical programming
-environment, e.g. MetaPRL, it is believed that we will be able to reason about
-code and perform higher level optimizations and program transformations that
-typical compilers are unable to perform.  The goal of this theory is to
-formalize the FIR in order to perform these transformations and to reason about
-FIR programs.
+The Mojave Compiler (MC) is one component of the Caltech Mojave Research
+Group's mission to develop methods and tools for building safe and reliable
+distributed systems.  At it's core, MC uses a typed, mostly functional
+intermediate representation (FIR).  Every source language compiled by MC is
+eventually transformed into the FIR language.  By combining MC with a theorem
+prover / logical programming environment, e.g. MetaPRL, it is believed that we
+will be able to reason about code and perform higher level optimizations and
+program transformations that typical compilers are unable to perform.  The goal
+of this theory is to formalize the FIR in order to perform these
+transformations and to reason about FIR programs.
 
 Currently, there are terms for everything in the FIR, some minimal operational
 semantics, and partial implementations of some trivial optimizations.  The

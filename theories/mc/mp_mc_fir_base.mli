@@ -1,13 +1,8 @@
 (*
- * Functional Intermediate Representation formalized in MetaPRL.
- *
- * Define terms to represent FIR types and terms.
- * Specific FIR types represented here: int_set, rawint_set,
- * float_precision, int_precision, int_signed, tuple_class, union_type
+ * The Mp_mc_fir_base module defines terms to represent basic FIR
+ * terms and supporting Ocaml values.
  *
  * ----------------------------------------------------------------
- *
- * Copyright (C) 2002 Brian Emre Aydemir, Caltech
  *
  * This file is part of MetaPRL, a modular, higher order
  * logical framework that provides a logical programming
@@ -15,6 +10,8 @@
  *
  * See the file doc/index.html for information on Nuprl,
  * OCaml, and more information about this system.
+ *
+ * Copyright (C) 2002 Brian Emre Aydemir, Caltech
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

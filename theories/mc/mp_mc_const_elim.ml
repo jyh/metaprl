@@ -1,16 +1,22 @@
-(*
- * Functional Intermediate Representation formalized in MetaPRL.
+(*!
+ * @begin[doc]
+ * @theory[Mp_mc_const_elim]
  *
- * Fold constants together in FIR expressions.
+ * The @tt{Mp_mc_const_elim} module provides rewrites to perform
+ * constant elimination (folding) in FIR programs.
+ * @end[doc]
  *
  * ----------------------------------------------------------------
  *
+ * @begin[license]
  * This file is part of MetaPRL, a modular, higher order
  * logical framework that provides a logical programming
  * environment for OCaml and other languages.
  *
  * See the file doc/index.html for information on Nuprl,
  * OCaml, and more information about this system.
+ *
+ * Copyright (C) 2002 Brian Emre Aydemir, Caltech
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,12 +33,19 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  * Author: Brian Emre Aydemir
- * Email:  emre@its.caltech.edu
+ * @email{emre@its.caltech.edu}
+ * @end[license]
  *)
 
+(*!
+ * @begin[doc]
+ * @parents
+ * @end[doc]
+ *)
 include Mp_mc_fir_ty
 include Mp_mc_fir_exp
 include Mp_mc_fir_eval
+(*! @docoff *)
 
 open Mp_mc_fir_eval
 open Top_conversionals

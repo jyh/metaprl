@@ -1,12 +1,8 @@
 (*
- * Functional Intermediate Representation formalized in MetaPRL.
- *
- * Term construction / deconstruction convinience functions
- * for MC theory terms.
+ * The Mp_mc_term_op module provides term construction and
+ * deconstruction convinience functions for MC theory terms.
  *
  * ----------------------------------------------------------------
- *
- * Copyright (C) 2002 Brian Emre Aydemir, Caltech
  *
  * This file is part of MetaPRL, a modular, higher order
  * logical framework that provides a logical programming
@@ -14,6 +10,8 @@
  *
  * See the file doc/index.html for information on Nuprl,
  * OCaml, and more information about this system.
+ *
+ * Copyright (C) 2002 Brian Emre Aydemir, Caltech
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

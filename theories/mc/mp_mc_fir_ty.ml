@@ -1,19 +1,21 @@
-(*
- * Functional Intermediate Representation formalized in MetaPRL.
+(*!
+ * @begin[doc]
+ * @theory[Mp_mc_fir_ty]
  *
- * Define terms to represent FIR types and terms.
- * Specific FIR types represented here: ty, tydef.
+ * The @tt{Mp_mc_fir_ty} module defines terms to represent FIR types.
+ * @end[doc]
  *
  * ----------------------------------------------------------------
  *
- * Copyright (C) 2002 Brian Emre Aydemir, Caltech
- *
+ * @begin[license]
  * This file is part of MetaPRL, a modular, higher order
  * logical framework that provides a logical programming
  * environment for OCaml and other languages.
  *
  * See the file doc/index.html for information on Nuprl,
  * OCaml, and more information about this system.
+ *
+ * Copyright (C) 2002 Brian Emre Aydemir, Caltech
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,10 +32,17 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  * Author: Brian Emre Aydemir
- * Email:  emre@its.caltech.edu
+ * @email{emre@its.caltech.edu}
+ * @end[license]
  *)
 
+(*!
+ * @begin[doc]
+ * @parents
+ * @end[doc]
+ *)
 include Base_theory
+(*! @docoff *)
 
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp

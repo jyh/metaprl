@@ -1,14 +1,8 @@
 (*
- * Functional Intermediate Representation formalized in MetaPRL.
- *
- * Define terms to represent FIR types and terms.
- * Specific FIR types represented here: unop, binop, sub_block, sub_value,
- * sub_index, sub_script, atom, alloc_op, tailop, pred_nop, pred_unop,
- * pred_binop, pred, debug_line, debug_vars, debug_info, exp, fundef.
+ * The Mp_mc_fir_exp module defines terms to represent
+ * FIR expressions.
  *
  * ----------------------------------------------------------------
- *
- * Copyright (C) 2002 Brian Emre Aydemir, Caltech
  *
  * This file is part of MetaPRL, a modular, higher order
  * logical framework that provides a logical programming
@@ -16,6 +10,8 @@
  *
  * See the file doc/index.html for information on Nuprl,
  * OCaml, and more information about this system.
+ *
+ * Copyright (C) 2002 Brian Emre Aydemir, Caltech
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

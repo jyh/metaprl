@@ -1,11 +1,8 @@
 (*
- * Functional Intermediate Representation formalized in MetaPRL.
- *
- * Deadcode elimination.
+ * The Mp_mc_deadcode module defines rewrites for deadcode
+ * elimination of FIR programs.
  *
  * ----------------------------------------------------------------
- *
- * Copyright (C) 2002 Brian Emre Aydemir, Caltech
  *
  * This file is part of MetaPRL, a modular, higher order
  * logical framework that provides a logical programming
@@ -13,6 +10,8 @@
  *
  * See the file doc/index.html for information on Nuprl,
  * OCaml, and more information about this system.
+ *
+ * Copyright (C) 2002 Brian Emre Aydemir, Caltech
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

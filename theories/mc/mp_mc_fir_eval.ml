@@ -1,18 +1,22 @@
-(*
- * Functional Intermediate Representation formalized in MetaPRL.
+(*!
+ * @begin[doc]
+ * @theory[Mp_mc_fir_eval]
  *
- * Define how to evaluate the FIR.
+ * The @tt{Mp_mc_fir_eval} module defines the operational semantics
+ * of the FIR.
+ * @end[doc]
  *
  * ----------------------------------------------------------------
  *
- * Copyright (C) 2002 Brian Emre Aydemir, Caltech
- *
+ * @begin[license]
  * This file is part of MetaPRL, a modular, higher order
  * logical framework that provides a logical programming
  * environment for OCaml and other languages.
  *
  * See the file doc/index.html for information on Nuprl,
  * OCaml, and more information about this system.
+ *
+ * Copyright (C) 2002 Brian Emre Aydemir, Caltech
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,15 +33,22 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  * Author: Brian Emre Aydemir
- * Email:  emre@its.caltech.edu
+ * @email{emre@its.caltech.edu}
+ * @end[license]
  *)
 
+(*!
+ * @begin[doc]
+ * @parents
+ * @end[doc]
+ *)
 include Mp_mc_fir_base
 include Mp_mc_fir_ty
 include Mp_mc_fir_exp
 include Itt_int_base
 include Itt_int_ext
 include Itt_rfun
+(*! @docoff *)
 
 open Top_conversionals
 open Tactic_type.Conversionals

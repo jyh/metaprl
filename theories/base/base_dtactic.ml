@@ -86,7 +86,7 @@
  * The @tt[AutoMustComplete] option can be used to indicate that the
  * @hreftactic[autoT] tactic should not use this rule unless it is capable
  * of finishing the proof on its own. This option can be used to mark irreversible
- * rules that make take a provable goal and produce potentially unprovable
+ * rules that may take a provable goal and produce potentially unprovable
  * subgoals.
  *
  * The @hrefresource[elim_resource] options are defined with the following type:

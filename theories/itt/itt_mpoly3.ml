@@ -73,8 +73,8 @@ let mpoly_evalTopC = funC mpoly_evalTopC_env
 let mpoly_evalC = repeatC (higherC mpoly_evalTopC)
 (*let mpoly_evalC = repeatC (lowerC mpoly_evalTopC)*)
 (*slow:
-let mpoly_evalC = repeatC (lowerC reduceTopC)
-*)
+ *let mpoly_evalC = repeatC (lowerC reduceTopC)
+ *)
 (*let mpoly_evalC = reduceC*)
 (*******************************************************************)
 
@@ -287,7 +287,7 @@ interactive eval_standardizeElim 'H unitringCE[i:l] :
 		=eval_mpoly{mpoly_ofTerm{'pt; 'R}; 'vals; 'R} in 'R^car); <J> >- 'C } -->
 	sequent{ <H>; 't = eval_mpolyTerm{'pt; 'vals; 'R} in 'R^car; <J> >- 'C }
 
-let tailC = mpoly_evalC (*thenC reduceC*)
+let tailC = idC (*mpoly_evalC*) (*thenC reduceC*)
 
 let resource mpoly_eval (*reduce*) += [
 	<<mpoly{'R; number[i:n]}>>, (unfold_mpoly thenC (addrC [0] unfold_monom));

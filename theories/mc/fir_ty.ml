@@ -22,7 +22,7 @@ declare tyEnum{ 'num }
 declare tyFun{ 'ty_list; 'ty }
 
 (* Tuples. *)
-declare tyUnion{ 'union_ty; 'ty_list; 'int_opt }
+declare tyUnion{ 'ty_var; 'ty_list; 'int_set }
 declare tyTuple{ 'ty_list }
 declare tyArray{ 'ty }
 declare tyRawData
@@ -73,9 +73,9 @@ dform tyFun_df : except_mode[src] :: tyFun{ 'ty_list; 'ty } =
 
 (* Tuples. *)
 dform tyUnion_df : except_mode[src] ::
-   tyUnion{ 'union_ty; 'ty_list; 'int_opt } =
-   szone `"TyUnion(" slot{'union_ty} `", " slot{'ty_list}
-   `", " slot{'int_opt} `")" ezone
+   tyUnion{ 'ty_var; 'ty_list; 'int_set } =
+   szone `"TyUnion(" slot{'ty_var} `", " slot{'ty_list}
+   `", " slot{'int_set} `")" ezone
 dform tyTuple_df : except_mode[src] :: tyTuple{ 'ty_list } =
    lzone `"TyTuple(" slot{'ty_list} `")" ezone
 dform tyArray_df : except_mode[src] :: tyArray{ 'ty } =

@@ -36,7 +36,7 @@ declare tyFun{ 'ty_list; 'ty }
  * 'ty_list in tyTuple is a list of the types in the tuple.
  * 'ty in tyArray is the type of the elements in the array.
  *)
-declare tyUnion{ 'union_ty; 'ty_list; 'int_opt }
+declare tyUnion{ 'ty_var; 'ty_list; 'int_set }
 declare tyTuple{ 'ty_list }
 declare tyArray{ 'ty }
 declare tyRawData

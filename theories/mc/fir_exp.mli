@@ -57,7 +57,7 @@ declare letUnop{ 'state; 'op; 'ty; 'a1; s, v. 'exp['s; 'v] }
 declare letBinop{ 'state; 'op; 'ty; 'a1; 'a2; s, v. 'exp['s; 'v] }
 
 (* Function application. *)
-declare letExt{ 'var; 'ty; 'string; 'ty; 'atom_list; 'exp }
+declare letExt{ 'ty; 'string; 'ty_str; 'atom_list; v. 'exp['v] }
 declare tailCall{ 'var; 'atom_list }
 
 (* Control. *)
@@ -80,6 +80,9 @@ declare setSubscript{ 'state; 'subop; 'ty; 'ref; 'index;
 topval reduce_idOp : conv
 topval reduce_eqEqOp : conv
 topval reduce_neqEqOp : conv
+topval reduce_atomInt : conv
+topval reduce_atomEnum : conv
+topval reduce_atomVar : conv
 topval reduce_letUnop : conv
 topval reduce_letBinop : conv
 topval reduce_allocTuple : conv

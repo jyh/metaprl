@@ -110,7 +110,7 @@ doc <:doc< @doc{@rules} >>
 interactive natType {| intro [] |} :
    sequent { <H> >- "type"{nat} }
 
-interactive natMemberEquality {| intro [] |} :
+interactive natMemberEquality {| intro [AutoMustComplete] |} :
    sequent { <H> >- 'a='b in int} -->
    sequent { <H> >- 'a >= 0}  -->
    sequent { <H> >- 'a='b in nat}
@@ -203,3 +203,4 @@ let positiveRule2T = smallest_positive
    sequent { <H>; x: exst a: int. ('a > 0 & 'P['a]); <J['x]>; y: exst u: int. ('u > 0 & 'P['u] & all b: int. (('b > 0 & 'P['b]) => 'b < 'u)) >- 'C['x] } -->
    sequent { <H>; x: exst a: int. ('a > 0 & 'P['a]); <J['x]> >- 'C['x] }
 *)
+

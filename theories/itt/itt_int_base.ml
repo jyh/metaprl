@@ -374,6 +374,8 @@ interactive intFormation :
 prim numberFormation {| intro [] |} number[n:n] :
    sequent { <H> >- int } = number[n:n]
 
+let resource intro += (<<int>>, wrap_intro (numberFormation <<0>>))
+
 doc <:doc<
    @begin[doc]
    @modsubsection{Well-formedness of operations and relations}
@@ -731,7 +733,7 @@ prim indEquality {| intro [complete_unless_member]; eqcd |} lambda{z. 'T['z]} :
                    in 'T['x1] } =
   it
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Addition properties}
 

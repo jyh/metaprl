@@ -50,6 +50,7 @@ MPFILES =\
    itt_quotient\
    itt_list\
    itt_list2\
+   itt_fun2\
    itt_union2\
    itt_derive\
    itt_prop_decide\
@@ -130,6 +131,7 @@ PRINT_THEORIES =\
     itt_esquash\
     itt_quotient\
     itt_struct2\
+    itt_fun2\
     itt_well_founded\
     itt_singleton\
     itt_subset\

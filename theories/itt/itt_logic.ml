@@ -1275,9 +1275,9 @@ struct
             begin match bt.bvars with
                [dv] ->
                   onSomeHypT (tryappend_subst subst (subst1 bt.bterm dv v) assums tact)
-             | _ -> raise (Invalid_argument "Itt_logic.append_subst")
+             | _ -> raise (Invalid_argument "Itt_logic.append_subst: internal error")
             end
-       | _ -> raise (Invalid_argument "Itt_logic.append_subst")
+       | _ -> raise (Invalid_argument "Itt_logic.append_subst: internal error")
 
    let goal_append_subst subst t v assums tact =
       match (dest_term t).term_terms with
@@ -1286,9 +1286,9 @@ struct
             begin match bt.bvars with
                [dv] ->
                   funT (fun p -> tact (match_terms subst (subst1 bt.bterm dv v) (Sequent.concl p)) assums)
-             | _ -> raise (Invalid_argument "Itt_logic.goal_append_subst")
+             | _ -> raise (Invalid_argument "Itt_logic.goal_append_subst: internal error")
             end
-       | _ -> raise (Invalid_argument "Itt_logic.goal_append_subst")
+       | _ -> raise (Invalid_argument "Itt_logic.goal_append_subst: internal error")
 
    let thenTi tac1 tac2 i = tac1 i thenT tac2
    let thenLTi tac1 tacl i = tac1 i thenLT tacl

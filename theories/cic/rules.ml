@@ -13,7 +13,7 @@ declare Prop
 declare Set
 declare of_some_sort{'P}    (* 'P has some sort *)
 declare prop_set{'s} (* type 's, is sort Prop or sort Set *)
-declare has_type{'t;'T} (* term 't has a type 'T*)
+declare member{'t;'T} (* term 't has a type 'T*)
 declare decl{'T}        (* declaration of some variable having type 'T (as assumption) *)
 declare "let"{'t;'T}      (* declaration of some variable as definition (let it be 't:'T)*)
 declare product{'T;x.'U['x]} (* product ('x:'T)'U, x-variable, T,U-terms *)
@@ -28,6 +28,14 @@ declare subst{'u;'x;'t} (* declaration of substitution of a term 't to all
 declare bind{x.'T['x]}
 declare bind{x,y.'T['x;'y]}
 
+prim collapse_base :
+	sequent { <H> >- 'C } -->
+	sequent { <H> >- sequent { >- 'C } } = it
+
+prim collapse_step :
+	sequent { <H>; x:'T >- sequent { <J['x]> >- 'C['x] } } -->
+	sequent { <H> >- sequent { x: 'T; <J['x]> >- 'C['x] } } = it
+
 (*****************************************************
 *   The type of a type is always a constant of the
 *   language of CIC called a 'sort'.
@@ -36,17 +44,17 @@ declare bind{x,y.'T['x;'y]}
 
 (* Prop is a sort *)
 prim prop_a_sort:
-   sequent { <H> >- has_type{'P;Prop} } -->
+   sequent { <H> >- member{'P;Prop} } -->
    sequent { <H> >- of_some_sort{'P} } = it
 
 (* Set is a sort *)
 prim set_a_sort:
-   sequent { <H> >- has_type{'P;Set} } -->
+   sequent { <H> >- member{'P;Set} } -->
    sequent { <H> >- of_some_sort{'P} } = it
 
 (* Type[i] is a sort *)
 prim type_a_sort "type"[i:l]:
-   sequent { <H> >- has_type{'P;"type"[i:l]} } -->
+   sequent { <H> >- member{'P;"type"[i:l]} } -->
    sequent { <H> >- of_some_sort{'P} } = it
 
 
@@ -56,11 +64,11 @@ prim type_a_sort "type"[i:l]:
 *****************************************************)
 
 prim prop_a_prop_set:
-   sequent { <H> >- has_type{'P;Prop} } -->
+   sequent { <H> >- member{'P;Prop} } -->
    sequent { <H> >- prop_set{'P} } = it
 
 prim set_a_prop_set:
-   sequent { <H> >- has_type{'P;Set} } -->
+   sequent { <H> >- member{'P;Set} } -->
    sequent { <H> >- prop_set{'P} } = it
 
 
@@ -69,7 +77,7 @@ prim set_a_prop_set:
 *************************************************)
 
 prim w_e :
-   sequent { >- WF } = it
+   sequent { >- WF{it} } = it
 
 (************************************************
 *
@@ -85,7 +93,7 @@ prim w_s_decl :
 *************************************************)
 
 prim w_s_let :
-   sequent { <H> >-  has_type{'t;'T} } -->
+   sequent { <H> >-  member{'t;'T} } -->
    sequent { <H>; x: "let"{'t;'T} >- WF } = it
 
 
@@ -100,19 +108,19 @@ prim w_s_let :
 
 prim ax_prop :
    sequent { <H> >- WF } -->
-   sequent { <H> >- has_type{Prop;"type"[i:l]}  } = it
+   sequent { <H> >- member{Prop;"type"[i:l]}  } = it
 
 
 
 prim ax_set :
    sequent { <H> >- WF } -->
-   sequent { <H> >- has_type{Set;"type"[i:l]}  } = it
+   sequent { <H> >- member{Set;"type"[i:l]}  } = it
 
 
 
 prim ax_type :
    sequent { <H> >- WF } -->
-   sequent { <H> >- has_type{"type"[i:l];"type"[i':l]}  } = it
+   sequent { <H> >- member{"type"[i:l];"type"[i':l]}  } = it
 
 
 (************************************************
@@ -121,13 +129,13 @@ prim ax_type :
 
 prim var_decl 'H:
    sequent { <H>; x: decl{'T}; <J['x]> >- WF } -->
-   sequent { <H>; x: decl{'T}; <J['x]> >- has_type{'x;'T}  } = it
+   sequent { <H>; x: decl{'T}; <J['x]> >- member{'x;'T}  } = it
 
 
 
 prim var_let 'H:
    sequent { <H>; x: "let"{'t;'T}; <J['x]> >- WF } -->
-   sequent { <H>; x: "let"{'t;'T}; <J['x]> >- has_type{'x;'T}  } = it
+   sequent { <H>; x: "let"{'t;'T}; <J['x]> >- member{'x;'T}  } = it
 
 
 (************************************************
@@ -136,22 +144,22 @@ prim var_let 'H:
 
 prim prod_1 's1:
    sequent { <H> >- prop_set{'s1}  } -->
-   sequent { <H> >- has_type{ 'T; 's1 } } -->
-   sequent { <H>; x:decl{'T} >- has_type{ 'U['x]; 's2 } } -->
-   sequent { <H> >- has_type{ product{'T;x.'U['x]}; 's2  }  } = it
+   sequent { <H> >- member{ 'T; 's1 } } -->
+   sequent { <H>; x:decl{'T} >- member{ 'U['x]; 's2 } } -->
+   sequent { <H> >- member{ product{'T;x.'U['x]}; 's2  }  } = it
 
 prim prod_2 's1:
    sequent { <H>; x:decl{'T} >- prop_set{'s2}  } -->
-   sequent { <H>; x:decl{'T} >- has_type{ 'U['x]; 's2 } } -->
-   sequent { <H> >- has_type{ 'T; 's1 } } -->
-   sequent { <H> >- has_type{ product{'T;x.'U['x]}; 's2  }  } = it
+   sequent { <H>; x:decl{'T} >- member{ 'U['x]; 's2 } } -->
+   sequent { <H> >- member{ 'T; 's1 } } -->
+   sequent { <H> >- member{ product{'T;x.'U['x]}; 's2  }  } = it
 
 prim prod_types "type"[i:l] "type"[j:l] :
-   sequent { <H> >- has_type{'T;"type"[i:l]}  } -->
-   sequent { <H>; x:decl{'T} >- has_type{ 'U['x]; "type"[j:l] }  } -->
+   sequent { <H> >- member{'T;"type"[i:l]}  } -->
+   sequent { <H>; x:decl{'T} >- member{ 'U['x]; "type"[j:l] }  } -->
    sequent { >- le[i:l,k:l]  } -->
    sequent { >- le[j:l,k:l]  } -->
-   sequent { <H> >- has_type{ product{'T;x.'U['x]}; "type"[k:l] } } = it
+   sequent { <H> >- member{ product{'T;x.'U['x]}; "type"[k:l] } } = it
 
 
 (************************************************
@@ -159,10 +167,10 @@ prim prod_types "type"[i:l] "type"[j:l] :
  ************************************************)
 
 prim lam 's:
-   sequent { <H> >- has_type{ product{'T;x.'U['x]}; 's }  } -->
+   sequent { <H> >- member{ product{'T;x.'U['x]}; 's }  } -->
    sequent { <H> >- of_some_sort{'s }  } -->
-   sequent { <H>; x:decl{'T} >- has_type{ 't['x]; 'U['x] }  } -->
-   sequent { <H> >- has_type{ lambda{'T;x.'t['x]}; product{'T;x.'U['x]} } } = it
+   sequent { <H>; x:decl{'T} >- member{ 't['x]; 'U['x] }  } -->
+   sequent { <H> >- member{ lambda{'T;x.'t['x]}; product{'T;x.'U['x]} } } = it
 
 
 (************************************************
@@ -170,9 +178,9 @@ prim lam 's:
  ************************************************)
 
 prim app product{'U; x.'T['x]} :
-   sequent { <H> >- has_type{ 't; product{'U; x.'T['x]} }  } -->
-   sequent { <H> >- has_type{ 'u;'U }  } -->
-   sequent { <H> >- has_type{ app{'t;'u}; 'T['u]  } } = it
+   sequent { <H> >- member{ 't; product{'U; x.'T['x]} }  } -->
+   sequent { <H> >- member{ 'u;'U }  } -->
+   sequent { <H> >- member{ app{'t;'u}; 'T['u]  } } = it
 
 
 (************************************************
@@ -180,9 +188,9 @@ prim app product{'U; x.'T['x]} :
  ************************************************)
 
 prim let_in 'T bind{x.'U['x]}:
-   sequent { <H> >- has_type{'t;'T}  } -->
-   sequent { <H>; x:"let"{'t;'T} >- has_type{'u['x];'U['x]} } -->
-   sequent { <H> >- has_type{ let_in{'t;x.'u['x]}; 'U['t] }  } = it
+   sequent { <H> >- member{'t;'T}  } -->
+   sequent { <H>; x:"let"{'t;'T} >- member{'u['x];'U['x]} } -->
+   sequent { <H> >- member{ let_in{'t;x.'u['x]}; 'U['t] }  } = it
 
 
 (************************************************
@@ -252,10 +260,10 @@ prim conv_le_5 :
    sequent { <H> >- conv_le{ product{ 'T; x.'T1['x]}; product{ 'T; x.'U1['x] }}} = it
 
 prim conv_rule 's 'T:
-   sequent { <H> >- has_type{ 'U; 's } } -->
-   sequent { <H> >- has_type{ 't; 'T } } -->
+   sequent { <H> >- member{ 'U; 's } } -->
+   sequent { <H> >- member{ 't; 'T } } -->
    sequent { <H> >- conv_le{ 'T; 'U } } -->
-   sequent { <H> >- has_type{ 't; 'U } } = it
+   sequent { <H> >- member{ 't; 'U } } = it
 
 (*********************************************
  *         INDUCTIVE DEFINITIONS PART        *
@@ -263,8 +271,8 @@ prim conv_rule 's 'T:
 
 (* Coq's Ind(H)[Hp](Hi:=Hc) - inductive definition *)
 declare Ind       (* *)
-declare IndDef    (* for ind.defenitions, Hi - new types, defenitions of new types *)
-declare IndParam (* for ind. defenirions, Hp - parameters of ind. defenition *)
+declare IndTypes    (* for ind.defenitions, Hi - new types, defenitions of new types *)
+declare IndParams (* for ind. defenirions, Hp - parameters of ind. defenition *)
 declare IndConstrs (* for ind. defenitions, Hc - constructors *)
 
 (* declaration of a multiple product, i.e. (p1:P1)(p2:P2)...(pr:Pr)T *)
@@ -280,68 +288,51 @@ prim_rw prodH_step :
 	sequent [prodH] { <H> >- product{'T;x.'S['x]} }
 
 
-prim_rw test 'H :
-   (sequent [Ind] { <H>; x:'T; <J['x]> >- 't['x]}) <-->
-   (sequent [Ind] { <H>; x:'T; <J['x]> >- 't[IndDef] })
-
-(* base axioms about Ind and IndDef *)
+(* base axioms about Ind and IndTypes *)
 (* for new types *)
 prim_rw indSubstDef 'Hi1 :
-   sequent [IndParam] { <Hp> >-
-	   (sequent [IndDef] { <Hi1>; x:'T; <Hi2['x]> >-
+   sequent [IndParams] { <Hp> >-
+	   (sequent [IndTypes] { <Hi1>; x:'T<|Hp|>; <Hi2<|Hp|> > >-
 		   (sequent [IndConstrs] { <Hc['x]> >- 't['x]})})} <-->
-   sequent [IndParam] { <Hp> >-
-	   (sequent [IndDef] { <Hi1>; x1:'T; <Hi2['x1]> >-
+   sequent [IndParams] { <Hp> >-
+	   (sequent [IndTypes] { <Hi1>; x1:'T<|Hp|>; <Hi2<|Hp|> > >-
 		   (sequent [IndConstrs] { <Hc['x1]> >-
-			   't[sequent [IndParam] { <Hp> >-
-				   (sequent [IndDef] { <Hi1>; x:'T; <Hi2['x]> >-
+			   't[sequent [IndParams] { <Hp> >-
+				   (sequent [IndTypes] { <Hi1>; x:'T<|Hp|>; <Hi2<|Hp|> > >-
 				      sequent [IndConstrs] { <Hc['x]> >- 'x}})}] })})}
 
 (* for constructors (names, types) *)
 prim_rw indSubstConstr 'Hc1 :
-   sequent [IndParam] { <Hp> >-
-	   sequent [IndDef] { <Hi> >-
+   sequent [IndParams] { <Hp> >-
+	   sequent [IndTypes] { <Hi> >-
 		   sequent [IndConstrs] { <Hc1>; c:'C<|Hi;Hp|>; < Hc2<|Hi;Hp|> > >- 't['c]}}} <-->
-   sequent [IndParam] { <Hp> >-
-	   sequent [IndDef] { <Hi> >-
+   sequent [IndParams] { <Hp> >-
+	   sequent [IndTypes] { <Hi> >-
 		   sequent { <Hc1>; c1:'C<|Hi; Hp|>; < Hc2<|Hi; Hp|> > >-
-				't[ sequent [IndParam] { <Hp> >-
-				   sequent [IndDef] { <Hi> >-
+				't[ sequent [IndParams] { <Hp> >-
+				   sequent [IndTypes] { <Hi> >-
 				      sequent [IndConstrs] { <Hc1>; c:'C<|Hi; Hp|>; < Hc2<|Hi; Hp|> > >- 'c}}}]}}}
 
 (* carry out ground terms from the Ind *)
 prim_rw indCarryOut :
-   sequent { <H> >-
-	   sequent [IndParam] { <Hp> >-
-		   sequent [IndDef] { <Hi> >-
-	         sequent [IndConstrs] { <Hc> >- 't<||> } } }} <-->
+   sequent [IndParams] { <Hp> >-
+	   sequent [IndTypes] { <Hi> >-
+	      sequent [IndConstrs] { <Hc> >- 't<||> } } } <-->
 	't<||>
 
 
 (* implementation of the first part of the Coq's Ind-Const rule *)
-(*prim_rw ind_ConstDef 'Hi1 :
-   sequent [Ind] { <H> >- sequent { <Hp> >- sequent { <Hi1>; I:'A; <Hi2> >-
-	   sequent { <Hc> >- WF }}} } <-->
-	sequent [Ind] { <H> >- sequent { <Hp> >- sequent { <Hi1>; I:'A; <Hi2> >-
-	   sequent { <Hc> >- has_type{'I;sequent [prodH] { <Hp> >- 'A}} }}} }
-*)
 prim ind_ConstDef 'Hi1 :
    sequent { <H> >-
 	   WF{
-		   sequent [IndParam] { <Hp> >-
-		      sequent [IndDef] { <Hi1>; I:'A<|Hp;H|>; <Hi2> >-
-		         sequent [IndConstrs] { <Hc<|Hp;H;Hi1;Hi2|>['I]> >- it }}} } } -->
+		   sequent [IndParams] { <Hp> >-
+		      sequent [IndTypes] { <Hi1>; I:'A<|Hp;H|>; <Hi2<|Hp;H|> > >-
+		         sequent [IndConstrs] { <Hc['I]> >- it }}} } } -->
 	sequent { <H> >-
-		has_type {
-			sequent [IndParam] { <Hp> >-
-				sequent [IndDef] { <Hi1>; I:'A<|Hp;H|>; <Hi2> >-
-					sequent { <Hc<|Hp;H;Hi1;Hi2|>['I]> >- 'I} }};
-			sequent [prodH] { <Hp> >- 'A}} } } = it
-
-
-(*		 sequent [IndDef] { <Hi1>; I:'A<|Hp;H|>; <Hi2> >- sequent { <Hc<|Hp;H;Hi1;Hi2|>['I]> >-
-		    has_type{ 'I; sequent [prodH] { <Hp> >- 'A} } }}} } = it
-*)
+		sequent [IndParams] { <Hp> >-
+			sequent [IndTypes] { <Hi1>; I:'A<|Hp;H|>; <Hi2<|Hp;H|> > >-
+				sequent { <Hc['I]> >- 'I } } }
+		in	sequent [prodH] { <Hp> >- 'A} } = it
 
 (* declaration of a multiple application, i.e. (...((Ip1)p2)p3...)pr *)
 declare applH (* { <H> >- 'T } *)
@@ -390,31 +381,17 @@ prim_rw substH_step :
 	   sequent [prodapp] { <Hp> >- bind{i.'C['i]} } } }
 
 (* implementation of the second part of the Coq's Ind-Const rule *)
-(* old uncorrected
-prim ind_ConstConstr :
-   sequent {Ind{ <H> >- ( <Hp> >- ( <Hi> >- (<Hc1>; c:'C; <Hc2['x]> >-
-	   has_type{'c;prodH{ <Hp> >- sequent [substH] {<Hp> ( <Hi> >- 'C)}}} ))) }}  = it
-*)
-(*
-prim ind_ConstConstr 'Hc1 :
-   sequent [Ind] { <H> >- sequent { <Hp> >- sequent { <Hi> >-
-	   sequent { <Hc1>; c:'C; <Hc2['c]> >- WF }}} }  -->
-	sequent [Ind] { <H> >- sequent { <Hp> >- sequent { <Hi> >-
-	   sequent { <Hc1>; c:'C; <Hc2['c]> >-
-		   has_type{'c;sequent { <Hp> >- sequent [substH] { <Hi> >- 'C}}} }}} } = it
-*)
 prim ind_ConstConstrs 'Hc1 :
    sequent { <H> >-
 	   WF {
-		   sequent [IndParam] { <Hp> >-
-			   sequent [IndDef] { <Hi> >-
-	            sequent [IndConstrs] { <Hc1>; c:'C<|Hp;H;Hi|>; <Hc2['c]> >- it }}} }}  -->
+		   sequent [IndParams] { <Hp> >-
+			   sequent [IndTypes] { <Hi> >-
+	            sequent [IndConstrs] { <Hc1>; c:'C<|Hi;Hp;H|>; <Hc2<|Hi;Hp;H|>['c]> >- it }}} }}  -->
 	sequent { <H> >-
-	   has_type {
-		   sequent [IndParam] { <Hp> >-
-			   sequent [IndDef] { <Hi> >-
-	            sequent [IndConstrs] { <Hc1>; c:'C<|Hp;H;Hi|>; <Hc2['c]> >- 'c }}};
-			sequent { <Hp> >- sequent [substH] { <Hi> >- 'C}}} } = it
+	   sequent [IndParams] { <Hp> >-
+		   sequent [IndTypes] { <Hi> >-
+	         sequent [IndConstrs] { <Hc1>; c:'C<|Hi;Hp;H|>; <Hc2<|Hi;Hp;H|>['c]> >-
+				   'c in sequent [prodH] { <Hp> >- 'C } } } } } = it
 
 
 (*******************************************************************************************
@@ -424,37 +401,48 @@ prim ind_ConstConstrs 'Hc1 :
 declare of_some_sort (* { <T> } *) (* any element of T is a type of some sort (Set, Prop or Type[i]) *)
 
 declare has_type_m (* { <I> >- ( <T> >- has_type_m ) } *) (* multiple has_type, i.e. I={I1,...,Ik}, T={T1,...,Tk},
-                                         has_type{Ij;Tj}, j=1,..,k *)
+                                         member{Ij;Tj}, j=1,..,k *)
 (* declaration of 'arity of sort' notion *)
-declare arity_of_sort_m (* (<Hi> >- <S>)*) (* Hi={I1:A1,...,Ik:Ak}, S={s1,...,sk},
+declare arity_of_some_sort_m (* (<Hi> >- <S>)*) (* Hi={I1:A1,...,Ik:Ak}, S={s1,...,sk},
                                             Aj is an arity of sort sj, j=1,...,k*)
-declare arity_of_sort{'T} (* type T is an arity of some sort *)
+declare arity_of_some_sort{'T} (* type T is an arity of some sort *)
+
+prim arity_of_some_sort_Set :
+   sequent { <H> >- arity_of_some_sort{Set} } = it
+
+prim arity_of_some_sort_Prop :
+	sequent { <H> >- arity_of_some_sort{Prop} } = it
+
+prim arity_of_some_sort_Type :
+   sequent { <H> >- arity_of_some_sort{"type"[i:l]} } = it
+
+prim arity_of_some_sort_prod bind{x.'U['x]} :
+   sequent { <H>; x:'T1 >- arity_of_some_sort{'U['x]} } -->
+	sequent { <H> >- arity_of_some_sort{product{'T1;x.'U['x]}} } = it
+
+prim arity_of_some_sort_m_base :
+   sequent { <H> >- arity_of_some_sort{'T} } -->
+	sequent { <H> >- sequent [arity_of_some_sort_m] { t:'T >- arity_of_some_sort_m } } = it
+
+prim arity_of_some_sort_m_step :
+   sequent { <H> >- arity_of_some_sort{'T} } -->
+	sequent { <H> >- sequent [arity_of_some_sort_m] { <T1> >- arity_of_some_sort_m} } -->
+   sequent { <H> >- sequent [arity_of_some_sort_m] { <T1>; t:'T<||> >- arity_of_some_sort_m } } = it
+
+declare arity_of_sort{'T;'s} (* type T is an arity of sort 's *)
 
 prim arity_of_sort_Set :
-   sequent { <H> >- conv_le{'T;Set} } -->
-	sequent { <H> >- arity_of_sort{'T} } = it
+   sequent { <H> >- arity_of_sort{Set;Set} } = it
 
 prim arity_of_sort_Prop :
-   sequent { <H> >- conv_le{'T;Prop} } -->
-	sequent { <H> >- arity_of_sort{'T} } = it
+   sequent { <H> >- arity_of_sort{Prop;Prop} } = it
 
-prim arity_of_sort_Type "type"[i:l] :
-   sequent { <H> >- conv_le{'T;"type"[i:l]} } -->
-	sequent { <H> >- arity_of_sort{'T} } = it
+prim arity_of_sort_Type :
+   sequent { <H> >- arity_of_sort{"type"[i:l];"type"[i:l]} } = it
 
-prim arity_of_sort_prod 'T1 bind{x.'U['x]} :
-   sequent { <H> >- conv_le{'T; product{'T1;x.'U['x]}} } -->
-	sequent { <H>; x:'T1 >- arity_of_sort{'U['x]} } -->
-	sequent { <H> >- arity_of_sort{'T} } = it
-
-prim arity_of_sort_m_base :
-   sequent { <H> >- arity_of_sort{'T} } -->
-	sequent { <H> >- sequent [arity_of_sort_m] { t:'T >- arity_of_sort_m } } = it
-
-prim arity_of_sort_m_step :
-   sequent { <H> >- arity_of_sort{'T} } -->
-	sequent { <H> >- sequent [arity_of_sort_m] { <T1> >- arity_of_sort_m} } -->
-   sequent { <H> >- sequent [arity_of_sort_m] { <T1>; t:'T<||> >- arity_of_sort_m } } = it
+prim arity_of_sort_prod bind{x.'U['x]} :
+   sequent { <H>; x:'T1 >- arity_of_sort{'U['x]; 's} } -->
+	sequent { <H> >- arity_of_sort{product{'T1;x.'U['x]}; 's} } = it
 
 (* declaration of 'type of constructor' notion *)
 declare type_of_constructor{'T;'I} (* 'T is a type of constructor of 'I *)
@@ -480,8 +468,8 @@ declare positivity_cond{ 'T; 'x } (* the type of constructor 'T satisfies the po
 
 (* declaration of 'positivity condition' notion *)
 prim positivity_cond_1 'H :
-   sequent { <H>; x: 'T; <J['x]> >- sequent [applH] { <T1> >- 'x} } -->
-	sequent { <H>; x: 'T; <J['x]> >-
+   sequent { <H>; x:'T; <J['x]> >- sequent [applH] { <T1> >- 'x} } -->
+	sequent { <H>; x:'T; <J['x]> >-
 	   positivity_cond{ sequent [applH] { <T1> >- 'x} ;'x } } = it
 
 prim positivity_cond_2 'H bind{x.'T['x]} bind{y,x.'U['y;'x]}:
@@ -489,6 +477,17 @@ prim positivity_cond_2 'H bind{x.'T['x]} bind{y,x.'U['y;'x]}:
 	sequent { <H>; x:'S; <J['x]>; y:'T['x] >- positivity_cond{'U['y;'x];'x} } -->
 	sequent { <H>; x:'S; <J['x]> >- positivity_cond{product{'T['x];y.'U['y;'x]};'x} } = it
 
+(* declaration of multiple positivity condition *)
+declare positivity_cond_m
+
+prim positivity_cond_m_base :
+   sequent { <H>; I:'A >- positivity_cond{'C['I];'I} } -->
+	sequent { <H> >- sequent [positivity_cond_m] { I:'A >- 'C['I] } } = it
+
+prim positivity_cond_m_step :
+   sequent { <H>; I:'A >- sequent { <Hi> >- positivity_cond{'C['I];'I} } } -->
+	sequent { <H>; I:'A >- sequent [positivity_cond_m] { <Hi > >- 'C['I] } } -->
+	sequent { <H> >- sequent [positivity_cond_m] { <Hi>; I:'A<|H|> >- 'C['I] } } = it
 
 (* declaration of 'strictly positive' notion *)
 prim strictly_pos_1 'H :
@@ -502,42 +501,52 @@ prim strictly_pos_3 'H 'U bind{x,y.'V['x;'y]} :
 	sequent { <H>; x:'T2; <J['x]> >-
 	   strictly_pos{'x ; product{ 'U;x1.'V['x1;'x]}} } = it
 
-prim strictly_pos_4 'H 'T1:
-   sequent { <H>; x:'T2; <J['x]>  >-
-		sequent [IndParam] { <Hp> >-
-	         sequent [IndDef] { I:'A<|Hp;H;J|>['x] >-
-			      sequent [IndConstrs] { <Hc<|Hp;H;J|>['I;'x]> >- it } } } } -->
-	sequent { <H>; x:'T2; <J['x]> >-
-	   sequent [imbr_pos_cond_m] { <Hc<|Hp;H;J|>['I;'x]> >-
+(*
+prim strictly_pos_4 'H :
+   sequent { <H>; x:'T2; <J['x]>; <A1['x]> >-
+	   sequent [imbr_pos_cond_m] { <Hc<|A1;H;J|>['I;'x]> >-
 		   sequent { 'I >- 'x } } } -->
 	sequent { <H>; x:'T2; <J['x]> >-
 	   strictly_pos{
 		   'x;
-			sequent [applH] { <T1>; <A1['x]> >- 'I }} } = it
-
+			sequent [applH] { <T1>; <A1['x]> >-
+				sequent [IndParams] { <Hp> >-
+					sequent [IndTypes] { I:'A<|Hp;H;J|>['x] >-
+						sequent [IndConstrs] { <Hc<|Hp;H;J|>['I;'x]> >- 'I } } } }} } = it
+*)
 
 
 
 (* declaration of 'imbricated positivity condition' notion *)
 
-prim imbr_pos_cond_1 :
-   sequent { <H>; x:'T; <J['x]> >- imbr_pos_cond{sequent [applH] { <T1> >- 'I};'I;'x} = it
+prim imbr_pos_cond_1 'H :
+   sequent { <H>; x:'T; <J['x]> >-
+	   type_of_constructor{ sequent [applH] { <T1> >- 'I<|J;H|>['x]} ;'I<|J;H|>['x]} } -->
+	sequent { <H>; x:'T; <J['x]> >-
+	   imbr_pos_cond{ sequent [applH] { <T1> >- 'I<|J;H|>['x]};'I<|J;H|>['x];'x} } = it
 
-prim imbr_pos_cond_2 bind{x,y.'U['x,'y]} :
+prim imbr_pos_cond_2 'H bind{x,y.'U['x;'y]} :
+   sequent { <H>; x:'T2; <J['x]> >- type_of_constructor{ product{'T['x];x1.'U['x1;'x]} ;'I} } -->
    sequent { <H>; x:'T2; <J['x]> >- strictly_pos{'x;'T['x]} } -->
-	sequent { <H>; x:'T2; <J['x]> >- imbr_pos_cond{'U['x]; ;'x} } -->
-	sequent { <H>; x:'T2; <J['x]> >- imbr_pos_cond{product{'T['x];x1.'U['x1,'x]};'I;'x} } = it
+	sequent { <H>; x:'T2; <J['x]>; x1:'T['x] >- imbr_pos_cond{'U['x1;'x];'I;'x} } -->
+	sequent { <H>; x:'T2; <J['x]> >- imbr_pos_cond{product{'T['x];x1.'U['x1;'x]};'I;'x} } = it
 
 (* inductive definition of multiple imbricated positivity condition, i.e.
    of imbr_pos_cond_m *)
-prim imbr_pos_cond_m_base :
-   sequent { <H> >- imbr_pos_cond{'C;'I;'x} } -->
-	sequent { <H> >- sequent [imbr_pos_cond_m] { c:'C >- sequent { 'I >- 'x } } } = it
+declare imbr_params{'I;'x}
 
-prim imbr_pos_cond_m_step :
-   sequent { <H> >- imbr_pos_cond{'C;'I;'x} } -->
-	sequent { <H> >- sequent [imbr_pos_cond_m] { <Hc> >- ( 'I >- 'x ) } } -->
-	sequent { <H> >- sequent [imbr_pos_cond_m] { <Hc>; c:'C >- ( 'I >- 'x ) } } = it
+prim imbr_pos_cond_m_base 'H :
+   sequent { <H>; x:'T; <J['x]> >- imbr_pos_cond{'C['x];'I['x];'x} } -->
+	sequent { <H>; x:'T; <J['x]> >-
+		sequent [imbr_pos_cond_m] { c:'C['x] >- imbr_params{'I['x];'x} } } = it
+
+prim imbr_pos_cond_m_step 'H :
+   sequent { <H>; x:'T; <J['x]> >- imbr_pos_cond{'C['x];'I['x];'x} } -->
+	sequent { <H>; x:'T; <J['x]> >-
+		sequent [imbr_pos_cond_m] { <Hc['x]> >-
+			imbr_params{'I<|H;J|>['x];'x} } } -->
+	sequent { <H>; x:'T; <J['x]> >- sequent [imbr_pos_cond_m] { <Hc['x]>; c:'C<|H;J|>['x] >-
+	   imbr_params{'I<|H;J|>['x];'x} } } = it
 
 
 (* declaration of 'of some sort' notion *)
@@ -546,12 +555,12 @@ declare of_some_sort_m (* { <T> } *) (* any element of T is a type of some sort 
 (* inductive defenition of multiple of_come_sort_m *)
 prim of_some_sort_m_base :
    sequent { <H> >- of_some_sort{'T} } -->
-	sequent { <H> >- sequent [of_some_sort_m] { t:'T >- of_some_sort_m } }
+	sequent { <H> >- sequent [of_some_sort_m] { t:'T >- of_some_sort_m } } = it
 
 prim of_some_sort_m_step :
    sequent { <H> >- of_some_sort{'T2} } -->
 	sequent { <H> >- sequent [of_some_sort_m] { <T1> >- of_some_sort_m } } -->
-	sequent { <H> >- sequent [of_some_sort_m] { <T1>; t:'T2 >- of_some_sort_m } }
+	sequent { <H> >- sequent [of_some_sort_m] { <T1>; t:'T2<|H|> >- of_some_sort_m } } = it
 
 
 (* description-defenition of the third condition in the declaration of w_Ind rule*)
@@ -559,28 +568,34 @@ declare req3{'C}
 declare req3_m
 
 prim req3_intro 'Hi 's :
-   sequent { <H> >- sequent { <Hi>; I:'A; <Ji['I]> >- type_of_constructor{'C;'I} } } -->
-   sequent { <H> >- sequent [positivity_cond_m] { <Hi>; I:'A; <Ji['I]> >- 'I } } -->
-	sequent { <H> >- arity_of_sort{'A;'s} } -->
-	sequent { <H> >- sequent { <Hi>; I:'A; <Ji['I]> >- has_type{'C;'s} } } -->
-   sequent { <H> >- sequent { <Hi>; I:'A; <Ji['I]> >- req3{'C} } }
+   sequent { <H> >- sequent { <Hi>; I:'A<|H|>; <Ji<|H|> > >- type_of_constructor{'C['I];'I} } } -->
+   sequent { <H> >- sequent [positivity_cond_m] { <Hi>; I:'A<|H|>; <Ji<|H|> > >- 'I } } -->
+	sequent { <H> >- arity_of_sort{'A<|H|>;'s<||>} } -->
+	sequent { <H> >- sequent { <Hi>; I:'A<|H|>; <Ji<|H|> > >- 'C['I] in 's<||> } } -->
+   sequent { <H> >- sequent { <Hi>; I:'A<|H|>; <Ji<|H|> > >- req3{'C['I]} } } = it
 
 prim req3_m_base :
-   sequent { <Hi> >- req{'C} } -->
-	sequent { <Hi> >- sequent [req3_m] { c:'C >- req3 } }
+   sequent { <Hi> >- req3{'C} } -->
+	sequent { <Hi> >- sequent [req3_m] { c:'C >- it } } = it
 
 prim req3_m_step :
-	sequent { <Hi> >- sequent [req3_m] { <Hc> >- req3 } } -->
-	sequent { <Hi> >- req3{'C} } -->
-	sequent { <Hi> >- sequent [req3_m] { <Hc>; c:'C >- req3 } } = it
+	sequent { <H> >- sequent [req3_m] { <Hi> >- sequent { <Hc> >- it } } } -->
+	sequent { <H> >- sequent { <Hi> >- req3{'C<|Hi;H|>} } } -->
+	sequent { <H> >- sequent [req3_m] { <Hi> >- sequent { <Hc>; c:'C<|Hi;H|> >- it } } } = it
 
 
 (* implementation of the Coq's W-Ind rule *)
 prim w_Ind :
-   sequent { <H>; <Hp> >- sequent [of_some_sort_m] { <Hi> >- of_some_sort_m } } -->
-	sequent { <H>; <Hp> >- sequent [arity_of_sort_m] { <Hi> >- arity_of_sort_m } } -->
-	sequent { <H>; <Hp> >- sequent { <Hi> >- sequent [req3_m] { <Hc> >- req3 } } } -->
-	sequent [Ind] { <H> >- sequent { <Hp> >- sequent { <Hi> >- sequent { <Hc> >- WF } } } }
+   sequent { <H> >- sequent { <Hp> >-
+		sequent [of_some_sort_m] { <Hi> >- of_some_sort_m } } } -->
+	sequent { <H> >- sequent { <Hp> >-
+		sequent [arity_of_some_sort_m] { <Hi> >- arity_of_some_sort_m } } } -->
+	sequent { <H> >- sequent { <Hp> >- sequent [req3_m] { <Hi> >- sequent { <Hc> >- it } } } } -->
+	sequent { <H> >-
+	   WF{
+			sequent [IndParams] { <Hp> >-
+				sequent [IndTypes] { <Hi> >-
+					sequent [IndConstrs] { <Hc> >- it } } } } } = it
 
 
 (****************************************************************

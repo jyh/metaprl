@@ -162,7 +162,6 @@ interactive prering_wf {| intro [] |} :
    sequent { <H> >- prering[i:l] Type }
 
 interactive isRing_wf {| intro [] |} :
-   sequent { <H> >- 'R^car Type } -->
    sequent { <H>; x: 'R^car; y: 'R^car >- 'x *['R] 'y in 'R^car} -->
    sequent { <H>; x: 'R^car; y: 'R^car >- 'x +['R] 'y in 'R^car} -->
    sequent { <H> >- 'R^"0" in 'R^car} -->

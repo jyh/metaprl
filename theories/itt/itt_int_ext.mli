@@ -258,6 +258,8 @@ rule lt_mulPositMono 'c :
    [wf] sequent { <H> >- 'c in int } -->
    sequent { <H> >- lt_bool{'a; 'b} ~ lt_bool{('c *@ 'a); ('c *@ 'b) } }
 
+topval lt_mulPositMonoC : term -> conv
+
 rule mul_uni_Assoc :
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->
@@ -271,6 +273,8 @@ rule lt_mulNegMono 'c :
    [wf] sequent { <H> >- 'b in int } -->
    [wf] sequent { <H> >- 'c in int } -->
    sequent { <H> >- lt_bool{'a; 'b} ~ lt_bool{('c *@ 'b) ; ('c *@ 'a)} }
+
+topval lt_mulNegMonoC : term -> conv
 
 rule rem_baseReduce :
    sequent { <H> >- 0 <= 'a } -->

@@ -85,6 +85,7 @@ MPFILES =\
    itt_field\
    itt_ring2\
    itt_unitring\
+   itt_intdomain\
    itt_field2\
    itt_poly\
    itt_order\
@@ -161,9 +162,10 @@ PRINT_THEORIES =\
     itt_quotient_group\
     itt_ring2\
     itt_unitring\
+    itt_intdomain\
     itt_field2\
     itt_poly\
-    itt_collection\
+    itt_collectionOB\
     itt_pointwise\
     itt_pointwise2
 

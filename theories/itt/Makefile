@@ -91,7 +91,8 @@ MPFILES :=\
 	itt_ring\
 	itt_field\
 	itt_ring2\
-    itt_unitring\
+        itt_unitring\
+	itt_intdomain\
 	itt_field2\
 	itt_poly\
 	itt_order\

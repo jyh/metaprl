@@ -100,7 +100,6 @@ interactive preunitring_wf {| intro [] |} :
    sequent { <H> >- preunitring[i:l] Type }
 
 interactive isUnitRing_wf {| intro [] |} :
-   sequent { <H> >- 'R^car Type } -->
    sequent { <H>; x: 'R^car; y: 'R^car >- 'x *['R] 'y in 'R^car} -->
    sequent { <H>; x: 'R^car; y: 'R^car >- 'x +['R] 'y in 'R^car} -->
    sequent { <H> >- 'R^"0" in 'R^car} -->

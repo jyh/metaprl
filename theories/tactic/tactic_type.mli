@@ -155,7 +155,15 @@ val withSubstT : term_subst -> tactic -> tactic
 val withTacticT : string -> tactic -> tactic -> tactic
 
 (*
+ * Print timing information.
+ *)
+val timingT : tactic -> tactic
+
+(*
  * $Log$
+ * Revision 1.3  1998/06/13 16:24:03  jyh
+ * Adding timing tactical.
+ *
  * Revision 1.2  1998/06/09 20:53:01  jyh
  * Propagated refinement changes.
  * New tacticals module.

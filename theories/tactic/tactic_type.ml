@@ -845,7 +845,16 @@ let withSubstT subst tac arg =
       List.map make_subgoal subgoals, ext
 
 (*
+ * Time the tactic.
+ *)
+let timingT tac arg =
+   Utils.time_it tac arg
+
+(*
  * $Log$
+ * Revision 1.5  1998/06/13 16:24:05  jyh
+ * Adding timing tactical.
+ *
  * Revision 1.4  1998/06/12 18:36:50  jyh
  * Working factorial proof.
  *

@@ -143,13 +143,13 @@ let is_equiv_term = is_dep0_dep0_dep0_dep0_term equiv_opname
 let dest_equiv = dest_dep0_dep0_dep0_dep0_term equiv_opname
 let mk_equiv_term = mk_dep0_dep0_dep0_dep0_term equiv_opname
 
-let equiv_fun_set_term = << equiv_fun_set{'s; 'r; z. 's['z]} >>
+let equiv_fun_set_term = << equiv_fun_set{'s1; 'r; z. 's2['z]} >>
 let equiv_fun_set_opname = opname_of_term equiv_fun_set_term
 let is_equiv_fun_set_term = is_dep0_dep0_dep1_term equiv_fun_set_opname
 let dest_equiv_fun_set = dest_dep0_dep0_dep1_term equiv_fun_set_opname
 let mk_equiv_fun_set_term = mk_dep0_dep0_dep1_term equiv_fun_set_opname
 
-let equiv_fun_prop_term = << equiv_fun_prop{'s; 'r; z. 's['z]} >>
+let equiv_fun_prop_term = << equiv_fun_prop{'s1; 'r; z. 's2['z]} >>
 let equiv_fun_prop_opname = opname_of_term equiv_fun_prop_term
 let is_equiv_fun_prop_term = is_dep0_dep0_dep1_term equiv_fun_prop_opname
 let dest_equiv_fun_prop = dest_dep0_dep0_dep1_term equiv_fun_prop_opname

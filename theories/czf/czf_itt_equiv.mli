@@ -40,22 +40,15 @@ open Basic_tactics
  * TERMS                                                                *
  ************************************************************************)
 
-declare equiv{'s; 'r; 'a; 'b}
 declare equiv{'s; 'r}
-declare equiv_fun_set{'s; 'r; z. 'f['z]}
-declare equiv_fun_prop{'s; 'r; z. 'P['z]}
 
-(************************************************************************
- * DEFINITIONS                                                          *
- ************************************************************************)
-
-rewrite unfold_equiv : equiv{'s; 'r; 'a; 'b} <-->
+define unfold_equiv : equiv{'s; 'r; 'a; 'b} <-->
    (((isset{'s} & isset{'r} & isset{'a} & isset{'b}) & mem{'a; 's} & mem{'b; 's}) & mem{pair{'a; 'b}; 'r})
 
-rewrite unfold_equiv_fun_set : equiv_fun_set{'s; 'r; z. 'f['z]} <-->
+define unfold_equiv_fun_set : equiv_fun_set{'s; 'r; z. 'f['z]} <-->
    (all a: set. all b: set. (equiv{'s; 'r} => equiv{'s; 'r; 'a; 'b} => equiv{'s; 'r; 'f['a]; 'f['b]}))
 
-rewrite unfold_equiv_fun_prop : equiv_fun_prop{'s; 'r; z. 'P['z]} <-->
+define unfold_equiv_fun_prop : equiv_fun_prop{'s; 'r; z. 'P['z]} <-->
     (all a: set. all b: set. (equiv{'s; 'r} => equiv{'s; 'r; 'a; 'b} => 'P['a] => 'P['b]))
 
 topval fold_equiv : conv

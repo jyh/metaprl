@@ -38,13 +38,7 @@ open Tactic_type.Tactic
  * TERMS                                                                *
  ************************************************************************)
 
-declare "sexists"{x. 'A['x]}
-
-(************************************************************************
- * REWRITES                                                             *
- ************************************************************************)
-
-rewrite unfold_sexists : "sexists"{x. 'A['x]} <--> (exst x: set. 'A['x])
+define unfold_sexists : "sexists"{x. 'A['x]} <--> (exst x: set. 'A['x])
 
 topval fold_sexists : conv
 

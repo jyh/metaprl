@@ -65,19 +65,19 @@ let stripRatCoef t =
 
 let compare_terms a b =
 	if is_rat_number_term a then
-		if is_rat_number_term b then Equal
-		else Less
+		if is_rat_number_term b then 0
+		else -1
 	else
-		if is_rat_number_term b then Greater
+		if is_rat_number_term b then 1
 		else
 			if is_mul_rat_term a then
 				if is_mul_rat_term b then
 					compare_terms a b
 				else
-					Greater
+					1
 			else
 				if is_mul_rat_term b then
-					Less
+					-1
 				else
 					compare_terms a b
 
@@ -86,7 +86,7 @@ let add_rat_Swap1C t =
 		<<add_rat{'a; 'b}>> when
 			let a' = stripRatCoef a in
 			let b' = stripRatCoef b in
-			(compare_terms b' a')=Less -> add_rat_CommutC
+			(compare_terms b' a')<0 -> add_rat_CommutC
 	 | _ -> failC
 
 let add_rat_Swap2C t =
@@ -96,7 +96,7 @@ let add_rat_Swap2C t =
 				<<add_rat{'c; 'd}>> when
 					let a' = stripRatCoef a in
 					let c' = stripRatCoef c in
-					(compare_terms c' a')=Less -> add_rat_BubblePrimitiveC
+					(compare_terms c' a')<0 -> add_rat_BubblePrimitiveC
 			 | _ -> failC
 			)
 	 | _ -> failC
@@ -111,14 +111,14 @@ let mul_rat_BubblePrimitiveC = mul_rat_BubblePrimitive_rw
 
 let mul_rat_Swap1C t =
 	match explode_term t with
-		<<mul_rat{'a; 'b}>> when (compare_terms b a)=Less -> mul_rat_CommutC
+		<<mul_rat{'a; 'b}>> when (compare_terms b a)<0 -> mul_rat_CommutC
 	 | _ -> failC
 
 let mul_rat_Swap2C t =
 	match explode_term t with
 		<<mul_rat{'a; 'b}>> ->
 			(match explode_term b with
-				<<mul_rat{'c; 'd}>> when (compare_terms c a)=Less -> mul_rat_BubblePrimitiveC
+				<<mul_rat{'c; 'd}>> when (compare_terms c a)<0 -> mul_rat_BubblePrimitiveC
 			 | _ -> failC
 			)
 	 | _ -> failC

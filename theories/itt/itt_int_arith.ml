@@ -597,19 +597,19 @@ interactive_rw sub_elim_rw {| arith_unfold |} :
 
 let compare_terms a b =
 	if is_number_term a then
-		if is_number_term b then Equal
-		else Less
+		if is_number_term b then 0
+		else -1
 	else
-		if is_number_term b then Greater
+		if is_number_term b then 1
 		else
 			if is_mul_term a then
 				if is_mul_term b then
 					compare_terms a b
 				else
-					Greater
+					1
 			else
 				if is_mul_term b then
-					Less
+					-1
 				else
 					compare_terms a b
 
@@ -618,7 +618,7 @@ let addSwap1C t =
 		<<'a +@ 'b>> when
 			let a' = stripCoef a in
 			let b' = stripCoef b in
-			(compare_terms b' a')=Less -> add_CommutC
+			(compare_terms b' a')<0 -> add_CommutC
 	 | _ -> failC
 
 let addSwap2C t =
@@ -628,7 +628,7 @@ let addSwap2C t =
 				<<'c +@ 'd>> when
 					let a' = stripCoef a in
 					let c' = stripCoef c in
-					(compare_terms c' a')=Less -> add_BubblePrimitiveC
+					(compare_terms c' a')<0 -> add_BubblePrimitiveC
 			 | _ -> failC
 			)
 	 | _ -> failC
@@ -636,7 +636,7 @@ let addSwap2C t =
 let mulSwap1C t =
 	match explode_term t with
 		<<'a *@ 'b>> when
-			(compare_terms b a)=Less -> mul_CommutC
+			(compare_terms b a)<0 -> mul_CommutC
 	 | _ -> failC
 
 let mulSwap2C t =
@@ -644,7 +644,7 @@ let mulSwap2C t =
 		<<'a *@ 'b>> ->
 			(match explode_term b with
 				<<'c *@ 'd>> when
-					(compare_terms c a)=Less -> mul_BubblePrimitiveC
+					(compare_terms c a)<0 -> mul_BubblePrimitiveC
 			 | _ -> failC
 			)
 	 | _ -> failC

@@ -1,69 +1,71 @@
-doc <:doc< 
+doc <:doc<
    @begin[spelling]
    AtomFun AtomFunVar CPS EndDef FunDef LetApply LetClosure exp
    @end[spelling]
-  
+
    @begin[doc]
-   This file defines the intermediate language for
-   the @emph{M} language.
-  
-   Here is the abstract syntax:
-  
+   @module[M_ir]
+
+   This module defines the intermediate language for
+   the @emph{M} language. Here is the abstract syntax:
+
    @begin[verbatim]
      (* Values *)
      v ::= i            (integers)
+        |  b            (booleans)
         |  v            (variables)
         |  fun v -> e   (functions)
         |  (v1, v2)     (pairs)
-  
+
      (* Atoms (functional expressions) *)
      a ::= i            (integers)
+        |  b            (booleans)
         |  v            (variables)
         |  a1 op a2     (binary operation)
         |  fun x -> e   (unnamed functions)
-  
+
      (* Expressions *)
      e ::= let v = a in e               (LetAtom)
         |  f(a)                         (TailCall)
         |  if a then e1 else e2         (Conditional)
         |  let v = a1[a2] in e          (Subscripting)
         |  a1[a2] <- a3; e              (Assignment)
-  
+
            (* These are eliminated during CPS *)
         |  let v = f(a) in e            (Function application)
         |  return a
    @end[verbatim]
-  
+
    A program is a set of function definitions and an program
    expressed in a sequent.  Each function must be declared, and
    defined separately.
    @end[doc]
-  
+
    ----------------------------------------------------------------
-  
+
    @begin[license]
    Copyright (C) 2003 Jason Hickey, Caltech
-  
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
    as published by the Free Software Foundation; either version 2
    of the License, or (at your option) any later version.
-  
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-  
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-  
+
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
 >>
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @parents
    @end[doc]
@@ -74,7 +76,7 @@ doc <:doc< @docoff >>
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @terms
    Binary operators.
@@ -92,13 +94,13 @@ declare NeqOp
 declare GeOp
 declare GtOp
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Atoms}
-  
+
    Atoms are values: integers, variables, binary operations
    on atoms, and functions.
-  
+
    AtomFun is a lambda-abstraction, and AtomFunVar is the projection
    of a function from a recursive function definition (defined below).
    @end[doc]
@@ -112,10 +114,10 @@ declare AtomFun{x. 'e['x]}
 declare AtomVar{'v}
 declare AtomFunVar{'R; 'v}
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Expressions}
-  
+
    There are several simple kinds of expressions.
    @end[doc]
 >>
@@ -133,7 +135,7 @@ declare LetTuple{'length; 'tuple; v. 'e['v]}
 declare LetSubscript{'a1; 'a2; v. 'e['v]}
 declare SetSubscript{'a1; 'a2; 'a3; 'e}
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    Reserve statements are inserted later in each function header.
    @end[doc]
@@ -143,7 +145,7 @@ declare Reserve[words:n]{'args; 'e}
 declare ReserveCons{'a; 'rest}
 declare ReserveNil
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    LetApply, Return are eliminated during CPS conversion.
    LetClosure is like LetApply, but it is a partial application.
@@ -153,19 +155,19 @@ declare LetApply{'f; 'a; v. 'e['v]}
 declare LetClosure{'a1; 'a2; f. 'e['f]}
 declare Return{'a}
 
-doc <:doc< 
+doc <:doc<
    This is the most problematic part of the description so far.
    This documentation discusses two possible approaches.
-  
+
    @begin[doc]
    @modsubsection{Recursive values}
-  
+
    We need some way to represent mutually recursive functions.
    The normal way to do this is to define a single recursive function,
    and use a switch to split the different parts.  The method to do this
    would use a record.  For example, suppose we define two mutually
    recursive functions $f$ and $g$:
-  
+
    let r2 = fix{r1. record{
                      field["f"]{lambda{x. (r1.g)(x)}};
                      field["g"]{lambda{x. (r1.f)(x)}}}}
@@ -175,11 +177,11 @@ doc <:doc<
 >>
 declare LetRec{R1. 'e1['R1]; R2. 'e2['R2]}
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    Records have a set of tagged fields.
    We require that all the fields be functions.
-  
+
    The record construction is recursive.  The Label term is used for
    field tags; the FunDef defines a new field in the record; and the
    EndDef term terminates the record fields.
@@ -190,7 +192,7 @@ declare Label[tag:t]
 declare FunDef{'label; 'exp; 'rest}
 declare EndDef
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    To simplify the presentation, we usually project the record fields
    before each of the field branches so that we can treat functions
@@ -203,13 +205,13 @@ doc <:doc< @doc{Include a term representing initialization code.} >>
 
 declare Initialize{'e}
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Program sequent representation}
-  
+
    Programs are represented as sequents:
       declarations, definitions >- exp
-  
+
    For now the language is untyped, so each declaration
    has the form v:exp.  A definition is an equality judgment.
    @end[doc]
@@ -348,7 +350,7 @@ declare m
 
 dform m_df : m = bf["m"]
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Subscripting.}
    Tuples are listed in reverse order.

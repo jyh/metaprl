@@ -1,4 +1,4 @@
-doc <:doc< 
+doc <:doc<
    @spelling{gt_bool le_bool ge_bool gt le ge nequal}
   
    @begin[doc]
@@ -107,6 +107,12 @@ define unfold_ge_bool :
 
 define unfold_bneq_int :
    bneq_int{'a; 'b} <--> bnot{beq_int{'a; 'b}}
+
+let bneq_int_term = << bneq_int{'x; 'y} >>
+let bneq_int_opname = opname_of_term bneq_int_term
+let is_bneq_int_term = is_dep0_dep0_term bneq_int_opname
+let mk_bneq_int_term = mk_dep0_dep0_term bneq_int_opname
+let dest_bneq_int = dest_dep0_dep0_term bneq_int_opname
 
 doc <:doc< @docoff >>
 
@@ -241,11 +247,11 @@ let is_ge_term = is_dep0_dep0_term ge_opname
 let mk_ge_term = mk_dep0_dep0_term ge_opname
 let dest_ge = dest_dep0_dep0_term ge_opname
 
-let bneq_int_term = << bneq_int{'x; 'y} >>
-let bneq_int_opname = opname_of_term bneq_int_term
-let is_bneq_int_term = is_dep0_dep0_term bneq_int_opname
-let mk_bneq_int_term = mk_dep0_dep0_term bneq_int_opname
-let dest_bneq_int = dest_dep0_dep0_term bneq_int_opname
+let neq_int_term = << nequal{'x; 'y} >>
+let neq_int_opname = opname_of_term neq_int_term
+let is_neq_int_term = is_dep0_dep0_term neq_int_opname
+let mk_neq_int_term = mk_dep0_dep0_term neq_int_opname
+let dest_neq_int = dest_dep0_dep0_term neq_int_opname
 
 dform le_df1 : except_mode[src] :: parens :: "prec"[prec_compare] :: le{'a; 'b}
  =

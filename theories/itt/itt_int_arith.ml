@@ -23,7 +23,7 @@ doc <:doc<
    modify it under the terms of the GNU General Public License
    as published by the Free Software Foundation; either version 2
    of the License, or (at your option) any later version.
-  
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -32,7 +32,7 @@ doc <:doc<
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-  
+
    Author: Yegor Bryukhov
    @email{ynb@mail.ru}
    @end[license]
@@ -307,6 +307,10 @@ let eqInConcl2HypT t =
    else
    	idT
 
+let neqInConcl2HypT =
+	thenLocalMT (rw (unfold_neq_int thenC (addrC [0] unfold_bneq_int)) 0)
+	(thenLocalMT (dT 0) (dT (-1)))
+
 let arithRelInConcl2HypT p =
    let g=Sequent.goal p in
    let t=Refiner.Refiner.TermMan.nth_concl g 1 in
@@ -315,6 +319,7 @@ let arithRelInConcl2HypT p =
    else if is_le_term t then leInConcl2HypT p
    else if is_ge_term t then geInConcl2HypT p
    else if is_equal_term t then eqInConcl2HypT t p
+   else if is_neq_int_term t then neqInConcl2HypT p
    else if is_not_term t then dT 0 p
    else idT p
 

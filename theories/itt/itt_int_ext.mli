@@ -108,6 +108,11 @@ topval reduce_mul: conv
 topval reduce_div: conv
 topval reduce_rem: conv
 
+val bneq_int_term : term
+val is_bneq_int_term : term -> bool
+val mk_bneq_int_term : term -> term -> term
+val dest_bneq_int : term -> term * term
+
 val le_term : term
 val is_le_term : term -> bool
 val mk_le_term : term -> term -> term
@@ -138,10 +143,10 @@ val is_rem_term : term -> bool
 val mk_rem_term : term -> term -> term
 val dest_rem : term -> term * term
 
-val bneq_int_term : term
-val is_bneq_int_term : term -> bool
-val mk_bneq_int_term : term -> term -> term
-val dest_bneq_int : term -> term * term
+val neq_int_term : term
+val is_neq_int_term : term -> bool
+val mk_neq_int_term : term -> term -> term
+val dest_neq_int : term -> term * term
 
 rule mul_wf :
    [wf] sequent [squash] { 'H >- 'a = 'a1 in int } -->

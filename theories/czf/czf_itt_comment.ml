@@ -137,7 +137,7 @@ dform eq_inner_df : except_mode[tex] :: math_eq{'s1; 's2} =
 dform fun_set_df : except_mode[tex] :: parens :: "prec"[prec_apply] :: math_funset{'x; 'P} =
    Nuprl_font!forall slot{'x} `"." slot{'P} `" fun_set"
 
-dform fun_set_df : except_mode[tex] :: parens :: "prec"[prec_apply] :: math_funprop{'x; 'P} =
+dform fun_prop_df : except_mode[tex] :: parens :: "prec"[prec_apply] :: math_funprop{'x; 'P} =
    Nuprl_font!forall slot{'x} `"." slot{'P} `" fun_prop"
 
 (************************************************************************
@@ -517,6 +517,377 @@ dform power_df1 : mode[tex] :: math_power{'s1; 's2} =
 
 dform power_df3 : except_mode[tex] :: math_power{'s1; 's2} =
    mathbbP `"(" pushm[0] szone slot{'s1} `" ->" hspace  slot{'s2} `")" ezone popm
+
+(************************************************************************
+ * EQUIVALENCE RELATION
+ ************************************************************************)
+
+declare math_equiv{'s; 'r; 'a; 'b}
+declare math_equiv{'s; 'r}
+declare math_equivfunset{'s; 'r; 'z; 'f}
+declare math_equivfunprop{'s; 'r; 'z; 'P}
+
+dform equiv_df1 : mode[tex] :: math_equiv{'s; 'r; 'a; 'b} =
+   izone `"{{\\it equiv}(" ezone
+   slot{'s}
+   izone `"," ezone
+   slot{'r}
+   izone `"," ezone
+   slot{'a}
+   izone `"," ezone
+   slot{'b}
+   izone `")}" ezone
+
+dform equiv_df1 : mode[tex] :: math_equiv{'s1; 's2} =
+   izone `"{{\\it equiv}(" ezone
+   slot{'s1}
+   izone `"," ezone
+   slot{'s2}
+   izone `")}" ezone
+
+dform equivfunset_df1 : mode[tex] :: math_equivfunset{'s; 'r; 'z; 'f} =
+   izone `"{{\\it equiv\\_fun\\_set}(" ezone
+   slot{'s}
+   izone `"," ezone
+   slot{'r}
+   izone `"," ezone
+   slot{'z}
+   izone `"." ezone
+   slot{'f}
+   izone `")}" ezone
+
+dform equivfunprop_df1 : mode[tex] :: math_equivfunprop{'s; 'r; 'z; 'P} =
+   izone `"{{\\it equiv\\_fun\\_prop}(" ezone
+   slot{'s}
+   izone `"," ezone
+   slot{'r}
+   izone `"," ezone
+   slot{'z}
+   izone `"." ezone
+   slot{'P}
+   izone `")}" ezone
+
+dform equivrl_df : parens :: except_mode[tex] :: math_equiv{'s1; 's2} =
+   `"equiv(" slot{'s1} `"; " slot{'s2} `")"
+
+dform equiv__df : parens :: except_mode[tex] :: math_equiv{'s; 'r; 'a; 'b} =
+   `"equiv(" slot{'s} `"; " slot{'r} `"; " slot{'a} `"; " slot{'b} `")"
+
+dform equiv_fun_set_df : except_mode[tex] :: parens :: "prec"[prec_apply] :: math_equivfunset{'s; 'r; 'z; 'f} =
+   Nuprl_font!forall slot{'z} `"." slot{'f} `" equiv_fun_set"
+
+dform equiv_fun_prop_df : except_mode[tex] :: parens :: "prec"[prec_apply] :: math_equivfunprop{'s; 'r; 'z; 'P} =
+   Nuprl_font!forall slot{'z} `"." slot{'P} `" equiv_fun_prop"
+
+(************************************************************************
+ * GROUP
+ ************************************************************************)
+
+declare math_group{'g}
+declare math_car{'g}
+declare math_eqG{'g}
+declare math_op{'g; 'a; 'b}
+declare math_id{'g}
+declare math_inv{'g; 'a}
+
+dform group_df1 : mode[tex] :: math_group{'g} =
+   izone `"{{\\it group}(" ezone
+   slot{'g}
+   izone `")}" ezone
+
+dform car_df1 : mode[tex] :: math_car{'g} =
+   izone `"{{\\it car}(" ezone
+   slot{'g}
+   izone `")}" ezone
+
+dform eqG_df1 : mode[tex] :: math_eqG{'g} =
+   izone `"{{\\it eqG}(" ezone
+   slot{'g}
+   izone `")}" ezone
+
+dform id_df1 : mode[tex] :: math_id{'g} =
+   izone `"{{\\it id}(" ezone
+   slot{'g}
+   izone `")}" ezone
+
+dform op_df1 : mode[tex] :: math_op{'g; 'a; 'b} =
+   izone `"{{\\it op}(" ezone
+   slot{'g}
+   izone `"," ezone
+   slot{'a}
+   izone `"," ezone
+   slot{'b}
+   izone `")}" ezone
+
+dform inv_df1 : mode[tex] :: math_inv{'g; 'a} =
+   izone `"{{\\it inv}(" ezone
+   slot{'g}
+   izone `"," ezone
+   slot{'a}
+   izone `")}" ezone
+
+dform group_df : except_mode[tex] :: math_group{'g} =
+   slot{'g} `" group"
+
+dform car_df : except_mode[tex] :: math_car{'g} =
+   `"car(" slot{'g} `")"
+
+dform eqG_df1 : except_mode[tex] :: math_eqG{'g} =
+   `"eqG(" slot{'g} `")"
+
+dform id_df : except_mode[tex] :: math_id{'g} =
+   `"id(" slot{'g} `")"
+
+dform op_df : parens :: except_mode[tex] :: math_op{'g; 'a; 'b} =
+   `"op(" slot{'g} `"; " slot{'a}  `"; " slot{'b} `")"
+
+dform inv_df : parens :: except_mode[tex] :: math_inv{'g; 'a} =
+   `"inv(" slot{'g} `"; " slot{'a} `")"
+
+(************************************************************************
+ * GROUP BUILDER
+ ************************************************************************)
+
+declare math_groupbvd{'h; 'g; 's}
+
+dform group_bvd_df1 : mode[tex] :: math_groupbvd{'h; 'g; 's} =
+   izone `"{{\\it group\\_bvd}(" ezone
+   slot{'h}
+   izone `"," ezone
+   slot{'g}
+   izone `"," ezone
+   slot{'s}
+   izone `")}" ezone
+
+dform group_bvd_df : parens :: except_mode[tex] :: math_groupbvd{'h; 'g; 's} =
+   `"group_builder(" slot{'h} `"; " slot{'g} `"; " slot{'s} `")"
+
+(************************************************************************
+ * ABELIAN GROUP
+ ************************************************************************)
+
+declare math_abel{'g}
+
+dform abel_df1 : mode[tex] :: math_abel{'g} =
+   izone `"{{\\it abel}(" ezone
+   slot{'g}
+   izone `")}" ezone
+
+dform abel_df : except_mode[tex] :: math_abel{'g} =
+   `"abel(" slot{'g} `")"
+
+(************************************************************************
+ * SUBGROUP
+ ************************************************************************)
+
+declare math_subgroup{'s; 'g}
+
+dform subgroup_df1 : mode[tex] :: math_subgroup{'s; 'g} =
+   izone `"{{\\it subgroup}(" ezone
+   slot{'s}
+   izone `"," ezone
+   slot{'g}
+   izone `")}" ezone
+
+dform subgroup_df : except_mode[tex] :: math_subgroup{'s; 'g} =
+   `"subgroup(" slot{'s} `"; " slot{'g} `")"
+
+(************************************************************************
+ * CYCLIC SUBGROUP
+ ************************************************************************)
+
+declare math_power{'g; 'z; 'n}
+declare math_cycsubg{'s; 'g; 'a}
+
+dform power_df1 : mode[tex] :: math_power{'g; 'z; 'n} =
+   izone `"{{\\it power}(" ezone
+   slot{'g}
+   izone `"," ezone
+   slot{'z}
+   izone `"," ezone
+   slot{'n}
+   izone `")}" ezone
+
+dform cycsubg_df1 : mode[tex] :: math_cycsubg{'s; 'g; 'a} =
+   izone `"{{\\it cyclic\\_subgroup}(" ezone
+   slot{'s}
+   izone `"," ezone
+   slot{'g}
+   izone `"," ezone
+   slot{'a}
+   izone `")}" ezone
+
+dform power_df : parens :: except_mode[tex] :: math_power{'g; 'z; 'n} =
+   `"power(" slot{'g} `"; " slot{'z}  `"; " slot{'n} `")"
+
+dform cycsubg_df : except_mode[tex] :: math_cycsubg{'s; 'g; 'a} =
+   `"cyclic_subgroup(" slot{'s} `"; " slot{'g} `"; " slot{'a} `")"
+
+(************************************************************************
+ * CYCLIC GROUP
+ ************************************************************************)
+
+declare math_cycgroup{'g; 'a}
+
+dform cycgroup_df1 : mode[tex] :: math_cycgroup{'g; 'a} =
+   izone `"{{\\it cyclic\\_group}(" ezone
+   slot{'g}
+   izone `"," ezone
+   slot{'a}
+   izone `")}" ezone
+
+dform cycgroup_df : except_mode[tex] :: math_cycgroup{'g; 'a} =
+   `"cyclic_group(" slot{'g} `"; " slot{'a} `")"
+
+(************************************************************************
+ * COSET
+ ************************************************************************)
+
+declare math_lcoset{'h; 'g; 'a}
+declare math_rcoset{'h; 'g; 'a}
+
+dform lcoset_df1 : mode[tex] :: math_lcoset{'h; 'g; 'a} =
+   izone `"{{\\it left\\_coset}(" ezone
+   slot{'h}
+   izone `"," ezone
+   slot{'g}
+   izone `"," ezone
+   slot{'a}
+   izone `")}" ezone
+
+dform rcoset_df1 : mode[tex] :: math_rcoset{'h; 'g; 'a} =
+   izone `"{{\\it right\\_coset}(" ezone
+   slot{'h}
+   izone `"," ezone
+   slot{'g}
+   izone `"," ezone
+   slot{'a}
+   izone `")}" ezone
+
+dform lcoset_df : parens :: except_mode[tex] :: math_lcoset{'h; 'g; 'a} =
+   `"lcoset(" slot{'h} `"; " slot{'g} `"; " slot{'a} `")"
+
+dform rcoset_df : parens :: except_mode[tex] :: math_rcoset{'h; 'g; 'a} =
+   `"rcoset(" slot{'h} `"; " slot{'g} `"; " slot{'a} `")"
+
+(************************************************************************
+ * NORMAL SUBGROUP
+ ************************************************************************)
+
+declare math_normalsubg{'s; 'g}
+
+dform normalsubg_df1 : mode[tex] :: math_normalsubg{'s; 'g} =
+   izone `"{{\\it normal\\_subgroup}(" ezone
+   slot{'s}
+   izone `"," ezone
+   slot{'g}
+   izone `")}" ezone
+
+dform normalsubg_df : except_mode[tex] :: math_normalsubg{'s; 'g} =
+   `"normal_subgroup(" slot{'s} `"; " slot{'g} `")"
+
+(************************************************************************
+ * SET BUILDER
+ ************************************************************************)
+
+declare math_set_bvd{'x; 's; 'a}
+
+dform set_bvd_df1 : mode[tex] :: math_set_bvd{'x; 's; 'a} =
+   izone `"{\\left\\{" ezone
+   slot{'a} `"| " 
+   slot{'x}
+   izone `"\\in_s " ezone
+   slot{'s}
+   izone `"\\right\\}}" ezone
+
+dform set_bvd_df : parens :: except_mode[tex] :: math_set_bvd{'x; 's; 'a} =
+   pushm[0] `"{" slot{'a} mid slot{'x} " " Nuprl_font!member `"s " slot{'s} `"}" popm
+
+(************************************************************************
+ * INVERSE IMAGE
+ ************************************************************************)
+
+declare math_inv_image{'x; 's; 'a; 't}
+
+dform inv_image_df1 : mode[tex] :: math_inv_image{'x; 's; 'a; 't} =
+   izone `"{\\left\\{" ezone
+   slot{'x}
+   izone `"\\in_s " ezone
+   slot{'s} `"| " 
+   slot{'a}
+   izone `"\\in_s " ezone
+   slot{'t}
+   izone `"\\right\\}}" ezone
+
+dform inv_image_df : parens :: except_mode[tex] :: math_inv_image{'x; 's; 'a; 't} =
+   pushm[0] `"{" slot{'x} " " Nuprl_font!member `"s " slot{'s} mid slot{'a} " " Nuprl_font!member `"s " slot{'t} `"}" popm
+
+(************************************************************************
+ * HOMOMORPHISM
+ ************************************************************************)
+
+declare math_hom{'x; 'g1; 'g2; 'f}
+
+dform hom_df1 : mode[tex] :: math_hom{'x; 'g1; 'g2; 'f} =
+   izone `"{{\\it homomorphism}(" ezone
+   slot{'f}
+   izone `":" ezone
+   slot{'g1}
+   izone `"->" ezone
+   slot{'g2}
+   izone `")}" ezone
+
+dform hom_df : parens :: except_mode[tex] :: math_hom{'x; 'g1; 'g2; 'f} =
+   `"hom(" slot{'g1} `"; " slot{'g2} `"; " slot{'f} `")"
+
+(************************************************************************
+ * KERNEL
+ ************************************************************************)
+
+declare math_ker{'x; 'h; 'g1; 'g2; 'f}
+
+dform ker_df1 : mode[tex] :: math_ker{'x; 'h; 'g1; 'g2; 'f} =
+   izone `"{{\\it kernel}(" ezone
+   slot{'h}
+   izone `"," ezone
+   slot{'g1}
+   izone `"," ezone
+   slot{'g2}
+   izone `"," ezone
+   slot{'x}
+   izone `"." ezone
+   slot{'f}
+   izone `")}" ezone
+
+dform ker_df : parens :: except_mode[tex] :: math_ker{'x; 'h; 'g1; 'g2; 'f} =
+   `"ker(" slot{'h} `"; " slot{'g1} `"; " slot{'g2} `"; " slot{'f} `")"
+
+(************************************************************************
+ * ISOMORPHISM
+ ************************************************************************)
+
+declare math_iso{'x; 'g1; 'g2; 'f}
+
+dform iso_df1 : mode[tex] :: math_iso{'x; 'g1; 'g2; 'f} =
+   izone `"{{\\it isomorphism}(" ezone
+   slot{'f}
+   izone `":" ezone
+   slot{'g1}
+   izone `"->" ezone
+   slot{'g2}
+   izone `")}" ezone
+(*   izone `"{{\\it iso}(" ezone
+   slot{'g1}
+   izone `"," ezone
+   slot{'g2}
+   izone `"," ezone
+   slot{'x}
+   izone `"." ezone
+   slot{'f}
+   izone `")}" ezone
+*)
+dform iso_df : parens :: except_mode[tex] :: math_iso{'x; 'g1; 'g2; 'f} =
+   `"iso(" slot{'g1} `"; " slot{'g2} `"; " slot{'f} `")"
 
 (*
  * -*-

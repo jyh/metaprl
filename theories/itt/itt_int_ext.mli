@@ -216,7 +216,6 @@ rule mul_uni_Assoc :
 
 topval mul_uni_AssocC : conv
 
-(* BUG WEAK
 rule lt_mulNegMono 'c :
    sequent { <H> >- 'c < 0 } -->
    [wf] sequent { <H> >- 'a in int } -->
@@ -289,6 +288,5 @@ rule div_Assoc :
    [wf] sequent { <H> >- 'b in int } -->
    [wf] sequent { <H> >- 'c in int } -->
    sequent { <H> >- (('a /@ 'b) /@ 'c) ~ ('a /@ ('b *@ 'c)) }
-*)
 
 topval fold_int_seg : conv

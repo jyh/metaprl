@@ -246,6 +246,7 @@ val is_false_term : term -> bool
 val equal_term : term
 val is_equal_term : term -> bool
 val is_member_term : term -> bool
+val complete_unless_member : Dtactic.intro_option
 val dest_equal : term -> term * term * term
 val mk_equal_term : term -> term -> term -> term
 

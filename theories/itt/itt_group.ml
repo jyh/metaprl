@@ -146,7 +146,7 @@ interactive pregroup_intro {| intro [AutoMustComplete] |} :
    sequent { <H> >- 'G in {car: univ[i:l]; "*": ^car -> ^car -> ^car; "1": ^car; inv: ^car -> ^car} } -->
    sequent { <H> >- 'G in pregroup[i:l] }
 
-interactive pregroup_equality {| intro [AutoMustComplete] |} :
+interactive pregroup_equality {| intro [complete_unless_member] |} :
    sequent { <H> >- 'A = 'B in {car: univ[i:l]; "*": ^car -> ^car -> ^car; "1": ^car; inv: ^car -> ^car} } -->
    sequent { <H> >- 'A = 'B in pregroup[i:l] }
 

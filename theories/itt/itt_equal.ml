@@ -157,6 +157,9 @@ let is_member_term t =
    match dest_equal t with
       _, t1, t2 -> alpha_equal t1 t2
 
+let complete_unless_member =
+   CondMustComplete (fun p -> not (is_member_term (Sequent.concl p)))
+
 let type_term = << "type"{'t} >>
 let type_opname = opname_of_term type_term
 let is_type_term = is_dep0_term type_opname

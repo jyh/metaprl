@@ -205,7 +205,7 @@ doc <:doc<
    equal if their functions and arguments are equal.
    @end[doc]
 >>
-interactive applyEquality {| intro[AutoMustComplete]; eqcd |} (x:'A -> 'B['x]) :
+interactive applyEquality {| intro[complete_unless_member]; eqcd |} (x:'A -> 'B['x]) :
    sequent { <H> >- 'f1 = 'f2 in x:'A -> 'B['x] } -->
    sequent { <H> >- 'a1 = 'a2 in 'A } -->
    sequent { <H> >- ('f1 'a1) = ('f2 'a2) in 'B['a1] }

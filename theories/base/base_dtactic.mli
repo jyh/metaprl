@@ -3,7 +3,7 @@
  *)
 
 open Refiner.Refiner.Term
-open Refine
+open Refiner.Refiner.Refine
 open Tacticals
 
 (*
@@ -20,6 +20,10 @@ val dT : int -> tactic
 
 (*
  * $Log$
+ * Revision 1.5  1998/07/03 21:04:11  nogin
+ * Specified the full "path" to the Refine module:
+ * open Refiner.Refiner.Refine
+ *
  * Revision 1.4  1998/07/02 18:36:47  jyh
  * Refiner modules now raise RefineError exceptions directly.
  * Modules in this revision have two versions: one that raises

@@ -1,5 +1,7 @@
 extends Base_theory
 
+open Tactic_type.Conversionals
+
 (* MetaPRL doesn't allow to declare a variable twice  in one Context
 so in rules w-s, ... we skip such things as "x not in H" *)
 
@@ -23,6 +25,8 @@ declare "fun"{'A;'B}
 
 rewrite unfold_fun :
 	('A -> 'B) <--> (dfun{'A; x.'B})
+
+topval unfold_funC : conv
 
 declare lambda{'T;x.'t['x]}  (* the term ['x:'T]'t is a function which maps
                                    elements of 'T to 't - lambda_abstraction

@@ -1,5 +1,6 @@
 extends Cic_lambda
 open Top_conversionals
+open Cic_lambda
 
 open Refiner.Refiner.TermOp
 open Refiner.Refiner.TermMan
@@ -129,6 +130,11 @@ prim_rw prodH_step :
    sequent [prodH] { <H>; x:'T >- 'S['x] } <-->
 	sequent [prodH] { <H> >- dfun{'T;x.'S['x]} }
 
+let fold_prodH_base = makeFoldC <<sequent [prodH] { >- 'S }>> prodH_base
+let fold_prodH_step0 = makeFoldC <<sequent [prodH] { <H>; x:'T >- 'S['x] }>> prodH_step
+let fold_prodH_step = (higherC unfold_funC) thenC fold_prodH_step0
+
+let fold_prodH = fold_prodH_base thenC (repeatC fold_prodH_step)
 
 (* base axioms about Ind and IndTypes *)
 (* for new types *)
@@ -172,7 +178,7 @@ prim ind_ConstDef 'Hi :
 	sequent { <H> >-
 		sequent [IndParams] { <Hp> >-
 			sequent [IndTypes] { <Hi>; I:'A<|Hp;H|>; <Ji<|Hp;H|> > >-
-				sequent { <Hc['I]> >- 'I } } }
+				sequent [IndConstrs] { <Hc['I]> >- 'I } } }
 		in	sequent [prodH] { <Hp> >- 'A} } = it
 
 (* declaration of a multiple application, i.e. (...((Ip1)p2)p3...)pr *)

@@ -26,6 +26,8 @@ declare "fun"{'A;'B}
 prim_rw unfold_fun :
 	('A -> 'B) <--> (dfun{'A; x.'B})
 
+let unfold_funC = unfold_fun
+
 declare lambda{'T;x.'t['x]}  (* the term ['x:'T]'t is a function which maps
                                    elements of 'T to 't - lambda_abstraction
                                    from lambda-calculus *)

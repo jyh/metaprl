@@ -1,5 +1,7 @@
 extends Cic_lambda
 
+open Tactic_type.Conversionals
+
 rule collapse_base :
 	sequent { <H> >- 'C } -->
 	sequent { <H> >- sequent { >- 'C } }
@@ -39,6 +41,9 @@ rewrite prodH_step :
    sequent [prodH] { <H>; x:'T >- 'S['x] } <-->
 	sequent [prodH] { <H> >- dfun{'T;x.'S['x]} }
 
+topval fold_prodH_base : conv
+topval fold_prodH_step : conv
+topval fold_prodH : conv
 
 (* base axioms about Ind and IndTypes *)
 (* for new types *)
@@ -82,7 +87,7 @@ rule ind_ConstDef 'Hi :
 	sequent { <H> >-
 		sequent [IndParams] { <Hp> >-
 			sequent [IndTypes] { <Hi>; I:'A<|Hp;H|>; <Ji<|Hp;H|> > >-
-				sequent { <Hc['I]> >- 'I } } }
+				sequent [IndConstrs] { <Hc['I]> >- 'I } } }
 		in	sequent [prodH] { <Hp> >- 'A} }
 
 (* declaration of a multiple application, i.e. (...((Ip1)p2)p3...)pr *)

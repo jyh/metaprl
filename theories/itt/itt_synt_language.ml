@@ -80,7 +80,7 @@ interactive find_diff_ops {| intro[] |} :
    sequent { <H> >- 'ops in diff_list{Operator} } -->
    sequent { <H> >- 'i in Index{'ops} } -->
    sequent { <H> >- 'depth in nat } -->
-   sequent { <H> >- find{'ops; inject{nth{'ops; 'i}; 'depth}; x,y.is_same_op{'x;'y}} = 'i in Index{'ops} }
+   sequent { <H> >- find{'ops; inject{nth{'ops; 'i}; 'depth}; x,y.Itt_synt_operator!is_same_op{'x;'y}} = 'i in Index{'ops} }
 
 interactive mk_dest_inverse {| intro[] |} :
    sequent { <H> >- 'ops in diff_list{Operator} } -->

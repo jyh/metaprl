@@ -1,6 +1,8 @@
 extends Itt_nat
 extends Itt_list2
 
+open Tactic_type.Tactic
+
 declare BOperator
 declare Operator
 declare op_bdepth{'op}
@@ -13,3 +15,5 @@ declare bind{'op}
 declare bind{'op;'n}
 
 iform unfold_arity : arity{'op} <--> length{shape{'op}}
+
+topval fold_op : conv

@@ -96,6 +96,8 @@ define unfold_op :
    Operator <--> quot o1, o2 : BOperator // "assert"{is_same_op{'o1; 'o2}}
 doc docoff
 
+let fold_op = makeFoldC << Operator >> unfold_op
+
 dform boperator_df: BOperator = `"BOperator"
 dform op_bdepth_df: op_bdepth{'op} = `"bdepth" sub["o"] "(" slot{'op} ")"
 dform shape_df: shape{'op} = `"shape(" slot{'op} `")"
@@ -218,13 +220,31 @@ prim inject_id {| intro [] |} :
    = it
 
 prim inject_sameop {| intro [] |} :
-   [wf] sequent { <H> >- 'op in BOperator } -->
+   [wf] sequent { <H> >- 'op in Operator } -->
    [wf] sequent { <H> >- 'n in nat } -->
    sequent { <H> >- "assert"{is_same_op{inject{'op;'n}; 'op}} }
    = it
 
+interactive is_same_op_ref1 {| intro [] |} :
+   [wf] sequent { <H> >- 'op in Operator } -->
+   sequent { <H> >- "assert"{is_same_op{'op;'op}} }
+
+interactive is_same_op_sym1 :
+   [wf] sequent { <H> >- 'op1 in Operator } -->
+   [wf] sequent { <H> >- 'op2 in Operator } -->
+   sequent { <H> >- "assert"{is_same_op{'op1;'op2}} } -->
+   sequent { <H> >- "assert"{is_same_op{'op2;'op1}} }
+
+interactive is_same_op_trans1 'op2 :
+   [wf] sequent { <H> >- 'op1 in Operator } -->
+   [wf] sequent { <H> >- 'op2 in Operator } -->
+   [wf] sequent { <H> >- 'op3 in Operator } -->
+   sequent { <H> >- "assert"{is_same_op{'op1;'op2}} } -->
+   sequent { <H> >- "assert"{is_same_op{'op2;'op3}} } -->
+   sequent { <H> >- "assert"{is_same_op{'op1;'op3}} }
+
 interactive inject_equal {| intro [] |} :
-   [wf] sequent { <H> >- 'op in BOperator } -->
+   [wf] sequent { <H> >- 'op in Operator } -->
    [wf] sequent { <H> >- 'n in nat } -->
    sequent { <H> >- inject{'op;'n} = 'op in Operator }
 

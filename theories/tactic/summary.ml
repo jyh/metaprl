@@ -903,7 +903,7 @@ let dest_proof = four_subterms
 let int_arg_term = << "int_arg"[i:n] >>
 let int_arg_opname = opname_of_term int_arg_term
 let mk_int_arg_term i =
-   mk_number_term int_arg_opname (Mp_num.Int i)
+   mk_number_term int_arg_opname (Mp_num.num_of_int i)
 
 let term_arg_term = << "term_arg"{'t} >>
 let term_arg_opname = opname_of_term term_arg_term

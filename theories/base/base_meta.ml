@@ -26,8 +26,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
- * Author: Jason Hickey
- * jyh@cs.cornell.edu
+ * Author: Jason Hickey <jyh@cs.cornell.edu>
  *
  *)
 include Mptop
@@ -76,6 +75,11 @@ let arith op goal =
    in
       t
 
+let check_zero op =
+   fun a b ->
+      if Mp_num.is_zero b then raise (RefineError ("Base_meta.arith", StringError "division by zero"))
+      else op a b
+
 (*
  * sum{op1[@i1:n]; op2[@i2:n]} --> op1[@i1 + @i2]
  *)
@@ -89,10 +93,10 @@ ml_rw reduce_meta_prod : ('goal : meta_prod{'a; 'b}) =
    arith Mp_num.mult_num goal
 
 ml_rw reduce_meta_quot : ('goal : meta_quot{'a; 'b}) =
-   arith Mp_num.div_num goal
+   arith (check_zero Mp_num.div_num) goal
 
 ml_rw reduce_meta_rem  : ('goal : meta_rem{'a; 'b}) =
-   arith Mp_num.rem_num goal
+   arith (check_zero Mp_num.rem_num) goal
 
 (*
  * eq{op1[@t:t]; op2[p1]; op3[p2]} --> op1["true":t] if p1 = p2

@@ -395,7 +395,20 @@ dform fix_df2 : "fix"[@start:n, @finish:n]{'p} =
    "fix"{'p}
 
 (*
+ * Finally, a special form for terms.
+ *)
+mldform term_df : "apply"[@start1:n, @finish1:n]{
+                     ."proj"[@start2:n, @finish2:n]{
+                        ."uid"[@start3:n, @finish3:n]{."uid"["Ml_term":s]};
+                        ."lid"[@start4:n, @finish4:n]{."lid"["term_of_string":s]}};
+                     .Ocaml!"string"[@start5:n, @finish5:n, @s:s]} format_term buf =
+   format_term buf Dform.LEParens (Ml_term.term_of_string s)
+
+(*
  * $Log$
+ * Revision 1.10  1998/07/02 22:25:21  jyh
+ * Created term_copy module to copy and normalize terms.
+ *
  * Revision 1.9  1998/06/01 13:56:42  jyh
  * Proving twice one is two.
  *

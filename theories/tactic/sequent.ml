@@ -6,6 +6,7 @@ open Printf
 open Debug
 
 open Refiner.Refiner
+open Refiner.Refiner.Refine
 
 (*
  * Debug statement.
@@ -15,9 +16,25 @@ let _ =
       eprintf "Loading Sequent%t" eflush
 
 (*
+ * Types.
+ *)
+type extract = Tactic_type.extract
+type tactic_arg = Tactic_type.tactic_arg
+type tactic_value = Tactic_type.tactic_value
+type cache = Tactic_type.cache
+type attributes = Tactic_type.attributes
+
+(*
  * Construction.
  *)
 let create = Tactic_type.create
+
+(*
+ * Two tactic_arguments are equal when they have
+ * equal msequent parts.  Their labels, etc, are
+ * not compared.
+ *)
+let tactic_arg_alpha_equal = Tactic_type.tactic_arg_alpha_equal
 
 (*
  * Addressing.
@@ -34,8 +51,6 @@ let nth_hyp = Tactic_type.nth_hyp
 let cache = Tactic_type.cache
 
 let label = Tactic_type.label
-
-let resources = Tactic_type.resources
 
 let attributes = Tactic_type.attributes
 
@@ -59,7 +74,9 @@ let get_decl_number arg v =
    TermMan.get_decl_number (goal arg) v
 
 let declared_vars arg =
-   TermMan.declared_vars (goal arg)
+   let seq = msequent arg in
+   let vars, goal, _ = dest_msequent_vars seq in
+      vars @ (TermMan.declared_vars goal)
 
 let explode_sequent arg =
    TermMan.explode_sequent (goal arg)
@@ -68,7 +85,30 @@ let is_free_seq_var i v arg =
    TermMan.is_free_seq_var i v (goal arg)
 
 (*
+ * Modification of the argument.
+ * These are functional.
+ *)
+let set_goal  = Tactic_type.set_goal
+let set_concl = Tactic_type.set_concl
+let set_label = Tactic_type.set_label
+
+(*
+ * Argument functions.
+ *)
+let get_term_arg       = Tactic_type.get_term
+let get_type_arg       = Tactic_type.get_type
+let get_int_arg        = Tactic_type.get_int
+let get_bool_arg       = Tactic_type.get_bool
+let get_subst_arg      = Tactic_type.get_subst
+let get_tactic_arg     = Tactic_type.get_tactic
+let get_int_tactic_arg = Tactic_type.get_int_tactic
+let get_typeinf_arg    = Tactic_type.get_typeinf
+
+(*
  * $Log$
+ * Revision 1.9  1998/07/02 22:25:30  jyh
+ * Created term_copy module to copy and normalize terms.
+ *
  * Revision 1.8  1998/06/16 16:26:21  jyh
  * Added itt_test.
  *

@@ -9,9 +9,9 @@ open Refiner.Refiner
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermMan
 open Refiner.Refiner.TermSubst
-open Refiner.Refiner.RefineErrors
+open Refiner.Refiner.RefineError
 
-open Tactic_type
+open Sequent
 
 (*
  * Debug statement.
@@ -21,8 +21,20 @@ let _ =
       eprintf "Loading Tacticals%t" eflush
 
 (************************************************************************
+ * TYPES                                                                *
+ ************************************************************************)
+
+type tactic = Tactic_type.tactic
+type cache = Tactic_type.cache
+
+(************************************************************************
  * TRIVIAL TACTICS                                                      *
  ************************************************************************)
+
+(* Basic refinement *)
+let refine = Tactic_type.refine
+let compose = Tactic_type.compose
+let term_of_extract = Tactic_type.term_of_extract
 
 (* Trivial tactics *)
 let idT =
@@ -270,7 +282,7 @@ let predicate_labels =
 (*
  * Add a label attribute.
  *)
-let addHiddenLabelT = setLabelT
+let addHiddenLabelT = Tactic_type.setLabelT
 
 let removeHiddenLabelT =
    addHiddenLabelT "main"
@@ -588,13 +600,6 @@ let withIntT    = Tactic_type.withIntT
 let withSubstT  = Tactic_type.withSubstT
 let withTacticT = Tactic_type.withTacticT
 
-let get_term_arg   = Tactic_type.get_term
-let get_type_arg   = Tactic_type.get_type
-let get_int_arg    = Tactic_type.get_int
-let get_bool_arg   = Tactic_type.get_bool
-let get_subst_arg  = Tactic_type.get_subst
-let get_tactic_arg = Tactic_type.get_tactic
-
 let withT     = withTermT "with"
 let usingT    = withSubstT
 let atT       = withTypeT "univ"
@@ -611,10 +616,15 @@ let get_sel_arg arg =
    get_int_arg arg "sel"
 
 let get_thinning_arg arg =
-   get_bool_arg arg "thin"
+   try get_bool_arg arg "thin" with
+      RefineError _ ->
+         true
 
 (*
  * $Log$
+ * Revision 1.17  1998/07/02 22:25:36  jyh
+ * Created term_copy module to copy and normalize terms.
+ *
  * Revision 1.16  1998/07/01 04:38:04  nogin
  * Moved Refiner exceptions into a separate module RefineErrors
  *

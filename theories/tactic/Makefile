@@ -13,7 +13,6 @@ NLFILES :=\
 	sequent\
 	tacticals\
 	var\
-	options\
 	rewrite_type\
 	conversionals
 

@@ -9,11 +9,11 @@ open Refiner.Refiner
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermMan
 open Refiner.Refiner.TermAddr
-open Refiner.Refiner.RefineErrors
+open Refiner.Refiner.RefineError
 open Refiner.Refiner.Rewrite
 open Refiner.Refiner.Refine
 
-open Tactic_type
+open Sequent
 open Tacticals
 open Var
 
@@ -213,24 +213,21 @@ let foldC t conv =
 let makeFoldC contractum conv =
    let fold_aux = function
       Rewrite rw ->
-         let mseq = { mseq_hyps = []; mseq_goal = contractum } in
+         let mseq = mk_msequent contractum [] in
          let tac = rwtactic rw in
             begin
                (* Apply the unfold conversion *)
-               match Refine.refine tac mseq with
-                  [{ mseq_goal = redex }], _ ->
+               match Refine.refine any_sentinal tac mseq with
+                  [redex], _ ->
                      (* Unfolded it, so create a rewrite that reverses it *)
+                     let redex, _ = dest_msequent redex in
                      let rw' = term_rewrite ([||], [||]) [redex] [contractum] in
                      let doCE env =
-                        try
-                        match apply_rewrite rw' ([||], [||]) [env_term env] with
+                        match apply_rewrite rw' ([||], [||], []) [env_term env] with
                            [contractum], _ ->
                               Fold (contractum, conv)
                          | _ ->
                               raise (RefineError ("Rewrite_type.fold", StringTermError ("rewrite failed", redex)))
-                        with
-                           RewriteErr err ->
-                              raise (RefineError ("Rewrite_Type.fold", RewriteError err))
                      in
                         Fun doCE
                 | _ ->
@@ -309,9 +306,9 @@ let rwSeqAxiomT p =
 let rec apply i rel addr conv p =
    match conv with
       Rewrite rw ->
-         tactic_of_rewrite (rwaddr addr rw) p
+         Tactic_type.tactic_of_rewrite (rwaddr addr rw) p
     | CondRewrite crw ->
-         tactic_of_cond_rewrite (crwaddr addr crw) p
+         Tactic_type.tactic_of_cond_rewrite (crwaddr addr crw) p
     | Compose clist ->
          composeT i rel addr (Flist.tree_of_list clist) p
     | Choose clist ->
@@ -359,11 +356,70 @@ and solveCutT i rel conv p =
  * Apply the rewrite.
  *)
 let rw conv i p =
+(*
+   (*
+    * root: address of the clause
+    * rel: offset into the term
+    * addr: compose_addrress root rel
+    *)
+   let rec apply i rel addr conv p =
+      match conv with
+         Rewrite rw ->
+            Tactic_type.tactic_of_rewrite (rwaddr addr rw) p
+       | CondRewrite crw ->
+            Tactic_type.tactic_of_cond_rewrite (crwaddr addr crw) p
+       | Compose clist ->
+            composeT i rel addr (Flist.tree_of_list clist) p
+       | Choose clist ->
+            chooseT i rel addr (Flist.tree_of_list clist) p
+       | Address (addr', conv) ->
+            let rel = compose_address rel addr' in
+            let addr = compose_address addr addr' in
+               apply i rel addr conv p
+       | Identity ->
+            idT p
+       | Fun f ->
+            apply i rel addr (f (p, addr)) p
+       | Fold (t, conv) ->
+            (cutT i rel t thenLT [idT; solveCutT i rel conv]) p
+       | Cut t ->
+            cutT i rel t p
+
+   and composeT i rel addr tree p =
+      match tree with
+         Flist.Empty ->
+            idT p
+       | Flist.Leaf conv ->
+            apply i rel addr conv p
+       | Flist.Append (tree1, tree2) ->
+            (composeT i rel addr tree1
+             thenT composeT i rel addr tree2) p
+
+   and chooseT i rel addr tree p =
+      match tree with
+         Flist.Empty ->
+            idT p
+       | Flist.Leaf conv ->
+            apply i rel addr conv p
+       | Flist.Append (tree1, tree2) ->
+            (chooseT i rel addr tree1
+             orelseT chooseT i rel addr tree2) p
+
+   and solveCutT i rel conv p =
+      let rel = compose_address (make_address [0]) rel in
+      let root = Sequent.clause_addr p 0 in
+      let addr = compose_address root rel in
+         (apply i rel addr conv thenT rwSeqAxiomT) p
+   in
+*)
    let addr = Sequent.clause_addr p i in
       apply i (make_address []) addr conv p
 
 (*
  * $Log$
+ * Revision 1.7  1998/07/02 22:25:28  jyh
+ * Created term_copy module to copy and normalize terms.
+ *
  * Revision 1.6  1998/07/01 04:38:00  nogin
  * Moved Refiner exceptions into a separate module RefineErrors
  *

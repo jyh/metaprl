@@ -2,10 +2,20 @@
  * Some basic tacticals.
  *)
 
+open Refiner.Refiner
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermSubst
 open Refiner.Refiner.Refine
-open Tactic_type
+
+open Sequent
+
+(* Types *)
+type tactic = Tactic_type.tactic
+
+(* Basic refinement *)
+val refine : tactic -> tactic_arg -> tactic_arg list * extract
+val compose : extract -> extract list -> extract
+val term_of_extract : Refine.refiner -> extract -> term list -> term
 
 (* Trivial tactics *)
 val idT : tactic
@@ -122,13 +132,6 @@ val withIntT : string -> int -> tactic -> tactic
 val withSubstT : term_subst -> tactic -> tactic
 val withTacticT : string -> tactic -> tactic -> tactic
 
-val get_term_arg    : tactic_arg -> string -> term
-val get_type_arg    : tactic_arg -> string -> term
-val get_int_arg     : tactic_arg -> string -> int
-val get_bool_arg    : tactic_arg -> string -> bool
-val get_subst_arg   : tactic_arg -> term_subst
-val get_tactic_arg  : tactic_arg -> string -> tactic
-
 (*
  * Specific argument functions.
  *)
@@ -145,6 +148,9 @@ val get_thinning_arg : tactic_arg -> bool
 
 (*
  * $Log$
+ * Revision 1.8  1998/07/02 22:25:37  jyh
+ * Created term_copy module to copy and normalize terms.
+ *
  * Revision 1.7  1998/06/22 19:46:48  jyh
  * Rewriting in contexts.  This required a change in addressing,
  * and the body of the context is the _last_ subterm, not the first.

@@ -13,9 +13,9 @@ open Printf
 
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermSubst
-open Refiner.Refiner.RefineErrors
+open Refiner.Refiner.RefineError
 
-open Tactic_type
+open Tacticals
 
 open Tacticals
 
@@ -63,8 +63,8 @@ let funC = Rewrite_type.funC
 let failC err =
    funC (fun _ -> raise (RefineError ("failC", StringError err)))
 
-let failWithC err =
-   funC (fun _ -> raise (RefineError err))
+let failWithC (name, err) =
+   funC (fun _ -> raise (RefineError (name, err)))
 
 (*
  * Trial.
@@ -192,6 +192,9 @@ let rec repeatForC i conv =
 
 (*
  * $Log$
+ * Revision 1.9  1998/07/02 22:25:24  jyh
+ * Created term_copy module to copy and normalize terms.
+ *
  * Revision 1.8  1998/07/01 04:37:57  nogin
  * Moved Refiner exceptions into a separate module RefineErrors
  *

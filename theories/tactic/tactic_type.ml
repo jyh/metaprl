@@ -26,7 +26,7 @@ open Refiner.Refiner.Term
 open Refiner.Refiner.TermMan
 open Refiner.Refiner.TermAddr
 open Refiner.Refiner.TermSubst
-open Refiner.Refiner.RefineErrors
+open Refiner.Refiner.RefineError
 open Refiner.Refiner.Refine
 
 (*
@@ -56,6 +56,8 @@ type attribute =
  | BoolArg of bool
  | SubstArg of term
  | TacticArg of tactic
+ | IntTacticArg of (int -> tactic)
+ | TypeinfArg of (term_subst -> term -> term_subst * term)
 
 and attributes = (string * attribute) list
 
@@ -74,15 +76,7 @@ and tactic_arg =
      ref_label : string;
      ref_attributes : attributes;
      mutable ref_cache : cache_info;
-     ref_rsrc : tactic_resources
-   }
-
-and tactic_resources =
-   { ref_d : int -> tactic;
-     ref_eqcd : tactic;
-     ref_typeinf : term_subst -> term -> term_subst * term;
-     ref_squash : tactic;
-     ref_subtype : tactic
+     ref_sentinal : sentinal
    }
 
 (*
@@ -130,12 +124,12 @@ and cache        = tactic Tactic_cache.extract
  *)
 let null_attributes = []
 
-let create label goal cache attributes resources =
+let create sentinal label goal cache attributes =
    { ref_goal = goal;
      ref_label = label;
      ref_attributes = attributes;
      ref_cache = OutOfDate cache;
-     ref_rsrc = resources
+     ref_sentinal = sentinal
    }
 
 (*
@@ -144,14 +138,14 @@ let create label goal cache attributes resources =
 let msequent { ref_goal = seq } =
    seq
 
-let goal { ref_goal = { mseq_goal = goal } } =
-   goal
+let goal { ref_goal = goal } =
+   fst (dest_msequent goal)
 
-let nth_hyp { ref_goal = { mseq_goal = goal } } i =
-   TermMan.nth_hyp goal (i - 1)
+let nth_hyp { ref_goal = goal } i =
+   TermMan.nth_hyp (fst (dest_msequent goal)) (i - 1)
 
-let nth_concl { ref_goal = { mseq_goal = goal } } i =
-   TermMan.nth_concl goal i
+let nth_concl { ref_goal = goal } i =
+   TermMan.nth_concl (fst (dest_msequent goal)) i
 
 let cache arg =
    match arg.ref_cache with
@@ -165,12 +159,10 @@ let cache arg =
 let label { ref_label = label } =
    label
 
-let resources { ref_rsrc = resources } =
-   resources
-
 let attributes { ref_attributes = attributes } =
    attributes
 
+(*
 let normalize_attribute (_, arg) =
    match arg with
       TermArg t ->
@@ -181,52 +173,54 @@ let normalize_attribute (_, arg) =
          normalize_term t
     | _ ->
          ()
+*)
 
 (*
  * Modify the argument.
  *)
 let set_goal arg goal =
-   let { ref_goal = { mseq_hyps = hyps };
+   let { ref_goal = seq;
          ref_label = label;
          ref_attributes = attributes;
          ref_cache = cache;
-         ref_rsrc = resources
+         ref_sentinal = sentinal
        } = arg
    in
-      { ref_goal = { mseq_goal = goal; mseq_hyps = hyps };
+      { ref_goal = mk_msequent goal (snd (dest_msequent seq));
         ref_label = label;
         ref_attributes = attributes;
         ref_cache = cache;
-        ref_rsrc = resources
+        ref_sentinal = sentinal
       }
 
 let set_concl arg concl =
-   let { ref_goal = { mseq_goal = goal; mseq_hyps = hyps };
+   let { ref_goal = seq;
          ref_label = label;
          ref_attributes = attributes;
          ref_cache = cache;
-         ref_rsrc = resources
+         ref_sentinal = sentinal
        } = arg
    in
-      { ref_goal = { mseq_goal = replace_goal goal concl; mseq_hyps = hyps };
+   let goal, hyps = dest_msequent seq in
+      { ref_goal = mk_msequent (replace_goal goal concl) hyps;
         ref_label = label;
         ref_attributes = attributes;
         ref_cache = cache;
-        ref_rsrc = resources
+        ref_sentinal = sentinal
       }
 
 let set_label arg label =
    let { ref_goal = goal;
          ref_attributes = attributes;
          ref_cache = cache;
-         ref_rsrc = resources
+         ref_sentinal = sentinal
        } = arg
    in
       { ref_goal = goal;
         ref_label = label;
         ref_attributes = attributes;
         ref_cache = cache;
-        ref_rsrc = resources
+        ref_sentinal = sentinal
       }
 
 (*
@@ -242,7 +236,7 @@ let get_term { ref_attributes = attributes } name =
     | _ :: tl ->
          search tl
     | [] ->
-         raise Not_found
+         raise (RefineError ("get_term", StringStringError ("not found", name)))
    in
       search attributes
 
@@ -256,7 +250,7 @@ let get_type { ref_attributes = attributes } name =
     | _ :: tl ->
          search tl
     | [] ->
-         raise Not_found
+         raise (RefineError ("get_type", StringStringError ("not found", name)))
    in
       search attributes
 
@@ -270,7 +264,7 @@ let get_int { ref_attributes = attributes } name =
     | _ :: tl ->
          search tl
     | [] ->
-         raise Not_found
+         raise (RefineError ("get_int", StringStringError ("not found", name)))
    in
       search attributes
 
@@ -284,7 +278,7 @@ let get_bool { ref_attributes = attributes } name =
     | _ :: tl ->
          search tl
     | [] ->
-         raise Not_found
+         raise (RefineError ("get_bool", StringStringError ("not found", name)))
    in
       search attributes
 
@@ -298,7 +292,35 @@ let get_tactic { ref_attributes = attributes } name =
     | _ :: tl ->
          search tl
     | [] ->
-         raise Not_found
+         raise (RefineError ("get_tactic", StringStringError ("not found", name)))
+   in
+      search attributes
+
+let get_int_tactic { ref_attributes = attributes } name =
+   let rec search = function
+      (name', IntTacticArg t) :: tl ->
+         if name' = name then
+            t
+         else
+            search tl
+    | (name', _) :: tl ->
+         search tl
+    | [] ->
+         raise (RefineError ("get_int_tactic", StringStringError ("not found", name)))
+   in
+      search attributes
+
+let get_typeinf { ref_attributes = attributes } name =
+   let rec search = function
+      (name', TypeinfArg t) :: tl ->
+         if name' = name then
+            t
+         else
+            search tl
+    | _ :: tl ->
+         search tl
+    | [] ->
+         raise (RefineError ("get_typeinf", StringStringError ("not found", name)))
    in
       search attributes
 
@@ -559,7 +581,7 @@ let make_subgoal
     { ref_label = label;
       ref_attributes = attributes;
       ref_cache = cache;
-      ref_rsrc = resources
+      ref_sentinal = sentinal
     } goal =
    let cache =
       match cache with
@@ -572,28 +594,24 @@ let make_subgoal
         ref_label = label;
         ref_attributes = attributes;
         ref_cache = cache;
-        ref_rsrc = resources
+        ref_sentinal = sentinal
       }
 
 (*
  * Construct polymorphic tactic.
  *)
 let tactic_of_rule rule (addrs, names) params arg =
-   let goal = arg.ref_goal in
+   let { ref_goal = goal; ref_sentinal = sentinal } = arg in
    let _ =
       if !debug_tactic then
          eprintf "Collecting addresses%t" eflush
    in
-   let rule =
-      try rule (nth_clause_addrs goal.mseq_goal addrs, names) params with
-         IncorrectAddress (addr, t) ->
-            raise (RefineError ("tactic_of_rule", AddressError (addr, t)))
-   in
+   let rule = rule (nth_clause_addrs (fst (dest_msequent goal)) addrs, names) params in
    let _ =
       if !debug_tactic then
          eprintf "Starting refinement%t" eflush
    in
-   let subgoals, ext = Refine.refine rule goal in
+   let subgoals, ext = Refine.refine sentinal rule goal in
       if !debug_tactic then
          eprintf "tactic_of_rule done%t" eflush;
       List.map (make_subgoal arg) subgoals, Extract (ext, List.length subgoals)
@@ -606,7 +624,8 @@ let tactic_of_refine_tactic rule arg =
       if !debug_tactic then
          eprintf "Starting refinement%t" eflush
    in
-   let subgoals, ext = Refine.refine rule arg.ref_goal in
+   let { ref_goal = goal; ref_sentinal = sentinal } = arg in
+   let subgoals, ext = Refine.refine sentinal rule goal in
       if !debug_tactic then
          eprintf "tactic_of_rule done%t" eflush;
       List.map (make_subgoal arg) subgoals, Extract (ext, List.length subgoals)
@@ -620,10 +639,10 @@ let tactic_of_rewrite rw arg =
          ref_label = label;
          ref_attributes = attributes;
          ref_cache = cache;
-         ref_rsrc = resources
+         ref_sentinal = sentinal
        } = arg
    in
-      match Refine.refine rule goal with
+      match Refine.refine sentinal rule goal with
          [subgoal], ext ->
             let cache =
                match cache with
@@ -637,7 +656,7 @@ let tactic_of_rewrite rw arg =
                  ref_label = label;
                  ref_attributes = attributes;
                  ref_cache = cache;
-                 ref_rsrc = resources
+                 ref_sentinal = sentinal
                }
             in
                [subgoal], Extract (ext, 1)
@@ -655,10 +674,10 @@ let tactic_of_cond_rewrite crw arg =
          ref_label = label;
          ref_attributes = attributes;
          ref_cache = cache;
-         ref_rsrc = resources
+         ref_sentinal = sentinal
        } = arg
    in
-   let subgoals, ext = Refine.refine rule goal in
+   let subgoals, ext = Refine.refine sentinal rule goal in
    let cache =
       match cache with
          Current cache ->
@@ -671,7 +690,7 @@ let tactic_of_cond_rewrite crw arg =
         ref_label = label;
         ref_attributes = attributes;
         ref_cache = cache;
-        ref_rsrc = resources
+        ref_sentinal = sentinal
       }
    in
       List.map make_subgoal subgoals, Extract (ext, List.length subgoals)
@@ -734,7 +753,8 @@ let nthAssumT i p =
    let i = i - 1 in
       if !debug_refine then
          begin
-            let { ref_goal = { mseq_hyps = hyps; mseq_goal = goal } } = p in
+            let { ref_goal = seq } = p in
+            let goal, hyps = dest_msequent seq in
                eprintf "Tactic_type.nthAssumT:\nHyp: %d%t" i eflush;
                List.iter (fun hyp ->
                      Simple_print.prerr_simple_term hyp;
@@ -796,10 +816,10 @@ let prefix_thenFLT tac1 tac2 goal =
 
 let prefix_orelseT tac1 tac2 goal =
    try tac1 goal with
-      RefineError x ->
+      RefineError (name1, x) ->
          try tac2 goal with
-            RefineError y ->
-               raise (RefineError ("orelseT", PairError (x, y)))
+            RefineError (name2, y) ->
+               raise (RefineError ("orelseT", PairError (name1, x, name2, y)))
 
 (*
  * Modify the label.
@@ -808,7 +828,7 @@ let setLabelT name arg =
    let { ref_goal = goal;
          ref_attributes = attributes;
          ref_cache = cache;
-         ref_rsrc = resources
+         ref_sentinal = sentinal
        } = arg
    in
    let arg =
@@ -816,7 +836,7 @@ let setLabelT name arg =
         ref_label = name;
         ref_attributes = attributes;
         ref_cache = cache;
-        ref_rsrc = resources
+        ref_sentinal = sentinal
       }
    in
       [arg], Identity
@@ -829,7 +849,7 @@ let withT attribute tac arg =
          ref_label = name;
          ref_attributes = attributes;
          ref_cache = cache;
-         ref_rsrc = resources
+         ref_sentinal = sentinal
        } = arg
    in
    let arg =
@@ -837,21 +857,21 @@ let withT attribute tac arg =
         ref_label = name;
         ref_attributes = attribute :: attributes;
         ref_cache = cache;
-        ref_rsrc = resources
+        ref_sentinal = sentinal
       }
    in
    let make_subgoal arg =
       let { ref_goal = goal;
             ref_label = name;
             ref_cache = cache;
-            ref_rsrc = resources
+            ref_sentinal = sentinal
           } = arg
       in
          { ref_goal = goal;
            ref_label = name;
            ref_attributes = attributes;
            ref_cache = cache;
-           ref_rsrc = resources
+           ref_sentinal = sentinal
          }
    in
    let subgoals, ext = refine tac arg in
@@ -880,7 +900,7 @@ let withSubstT subst tac arg =
          ref_label = name;
          ref_attributes = attributes;
          ref_cache = cache;
-         ref_rsrc = resources
+         ref_sentinal = sentinal
        } = arg
    in
    let rec make_subst = function
@@ -894,21 +914,21 @@ let withSubstT subst tac arg =
         ref_label = name;
         ref_attributes = make_subst subst;
         ref_cache = cache;
-        ref_rsrc = resources
+        ref_sentinal = sentinal
       }
    in
    let make_subgoal arg =
       let { ref_goal = goal;
             ref_label = name;
             ref_cache = cache;
-            ref_rsrc = resources
+
           } = arg
       in
          { ref_goal = goal;
            ref_label = name;
            ref_attributes = attributes;
            ref_cache = cache;
-           ref_rsrc = resources
+           ref_sentinal = sentinal
          }
    in
    let subgoals, ext = refine tac arg in
@@ -922,6 +942,9 @@ let timingT tac arg =
 
 (*
  * $Log$
+ * Revision 1.11  1998/07/02 22:25:34  jyh
+ * Created term_copy module to copy and normalize terms.
+ *
  * Revision 1.10  1998/07/01 04:38:02  nogin
  * Moved Refiner exceptions into a separate module RefineErrors
  *

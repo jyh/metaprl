@@ -42,7 +42,7 @@ open Refiner.Refiner.Term
 open Refiner.Refiner.TermMan
 open Refiner.Refiner.TermShape
 open Refiner.Refiner.TermSubst
-open Refiner.Refiner.RefineErrors
+open Refiner.Refiner.RefineError
 open Refiner.Refiner.Rewrite
 open Refiner.Refiner.Refine
 
@@ -1441,7 +1441,7 @@ let instantiate f world insts =
 let try_arglist_normal ({ ext_base = base } as extract) rw just world args =
    let terms = List.map (function inf -> inf.inf_value) args in
       try
-         let values, _ = apply_rewrite rw ([||], [||]) terms in
+         let values, _ = apply_rewrite rw ([||], [||], []) terms in
          let root =
             Inference { inf_values = values;
                         inf_just = just;
@@ -1475,9 +1475,9 @@ let try_fchain_normal extract world { finfo_rw = rw; finfo_just = just } finst =
 let try_arglist_wild extract rw wrw nargs just world args =
    let terms = List.map (function inf -> inf.inf_value) args in
       try
-         let wilds, _ = apply_rewrite wrw ([||], [||]) terms in
+         let wilds, _ = apply_rewrite wrw ([||], [||], []) terms in
          let wargs = List.map (function t -> find_inf extract world t (shape_of_term t)) wilds in
-         let values, _ = apply_rewrite rw ([||], [||]) terms in
+         let values, _ = apply_rewrite rw ([||], [||], []) terms in
          let facts = mix_wild nargs args wargs in
          let root =
             Inference { inf_values = values;
@@ -1654,7 +1654,7 @@ let add_brule cache { bc_concl = concl; bc_ants = ants; bc_just = just } =
    let rw = term_rewrite ([||], [||]) [concl] flat_ants in
    let spread_ants = compute_spread_ants ants in
    let trw t =
-      let values, _ = apply_rewrite rw ([||], [||]) [t] in
+      let values, _ = apply_rewrite rw ([||], [||], []) [t] in
          spread_ants values
    in
    let info =
@@ -1928,7 +1928,7 @@ let set_goal extract t =
  *    2. add all the hyps using add_hyp
  *    3. set the goal using sewt_goal
  *)
-let set_msequent extract { mseq_goal = goal } =
+let set_msequent extract seq =
    let rec collect i extract = function
       hyp :: hyps ->
          let extract =
@@ -1942,6 +1942,7 @@ let set_msequent extract { mseq_goal = goal } =
     | [] ->
          extract
    in
+   let goal, _ = dest_msequent seq in
       match explode_sequent goal with
          { sequent_hyps = hyps; sequent_goals = [goal] } ->
             set_goal (collect 0 (del_hyp extract 0) hyps) goal
@@ -2205,6 +2206,9 @@ let used_hyps
 
 (*
  * $Log$
+ * Revision 1.13  1998/07/02 22:25:33  jyh
+ * Created term_copy module to copy and normalize terms.
+ *
  * Revision 1.12  1998/07/01 04:38:01  nogin
  * Moved Refiner exceptions into a separate module RefineErrors
  *

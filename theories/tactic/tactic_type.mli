@@ -25,22 +25,10 @@ type attribute =
  | BoolArg of bool
  | SubstArg of term
  | TacticArg of tactic
+ | IntTacticArg of (int -> tactic)
+ | TypeinfArg of (term_subst -> term -> term_subst * term)
 
 and attributes = (string * attribute) list
-
-(*
- * These are the resources we thread through
- * the refinements.  This is not really modular programming.
- * What we really want is to make this a class, so that
- * we can subclass it as more resources are added.
- *)
-and tactic_resources =
-   { ref_d : int -> tactic;
-     ref_eqcd : tactic;
-     ref_typeinf : term_subst -> term -> term_subst * term;
-     ref_squash : tactic;
-     ref_subtype : tactic
-   }
 
 (*
  * Here are all the different type of tactics.
@@ -71,7 +59,7 @@ and cache = tactic Tactic_cache.extract
 (*
  * Build an initial argument for a proof.
  *)
-val create : string -> msequent -> cache -> attributes -> tactic_resources -> tactic_arg
+val create : sentinal -> string -> msequent -> cache -> attributes -> tactic_arg
 
 (*
  * Access to the argument.
@@ -82,10 +70,7 @@ val nth_hyp     : tactic_arg -> int -> string * term
 val nth_concl   : tactic_arg -> int -> term
 val cache       : tactic_arg -> cache
 val label       : tactic_arg -> string
-val resources   : tactic_arg -> tactic_resources
 val attributes  : tactic_arg -> attributes
-
-val normalize_attribute : (string * attribute) -> unit
 
 (*
  * Modification of the argument.
@@ -98,12 +83,14 @@ val set_label   : tactic_arg -> string -> tactic_arg
 (*
  * Attributes.
  *)
-val get_term    : tactic_arg -> string -> term
-val get_type    : tactic_arg -> string -> term
-val get_int     : tactic_arg -> string -> int
-val get_bool    : tactic_arg -> string -> bool
-val get_subst   : tactic_arg -> term_subst
-val get_tactic  : tactic_arg -> string -> tactic
+val get_term       : tactic_arg -> string -> term
+val get_type       : tactic_arg -> string -> term
+val get_int        : tactic_arg -> string -> int
+val get_bool       : tactic_arg -> string -> bool
+val get_subst      : tactic_arg -> term_subst
+val get_tactic     : tactic_arg -> string -> tactic
+val get_int_tactic : tactic_arg -> string -> (int -> tactic)
+val get_typeinf    : tactic_arg -> string -> (term_subst -> term -> term_subst * term)
 
 (*
  * Two tactic_arguments are equal when they have
@@ -164,6 +151,9 @@ val timingT : tactic -> tactic
 
 (*
  * $Log$
+ * Revision 1.6  1998/07/02 22:25:35  jyh
+ * Created term_copy module to copy and normalize terms.
+ *
  * Revision 1.5  1998/06/16 16:26:24  jyh
  * Added itt_test.
  *

@@ -2,11 +2,15 @@
  * NEw variable generation.
  *)
 
+open Refiner.Refiner.Term
+open Refiner.Refiner.RefineError
+
 open Printf
 open Debug
 open Ctype
 
 open Sequent
+open Tacticals
 
 (*
  * Debug statement.
@@ -106,7 +110,18 @@ let maybe_new_vars5 p v1 v2 v3 v4 v5 =
       v1, v2, v3, v4, v5
 
 (*
+ * Optional vars.
+ *)
+let get_opt_var_arg v p =
+   try dest_var (get_term_arg p "var") with
+      RefineError _ ->
+         maybe_new_var v (declared_vars p)
+
+(*
  * $Log$
+ * Revision 1.6  1998/07/02 22:25:38  jyh
+ * Created term_copy module to copy and normalize terms.
+ *
  * Revision 1.5  1998/06/16 16:26:25  jyh
  * Added itt_test.
  *

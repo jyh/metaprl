@@ -5,9 +5,8 @@
 include Tacticals
 
 open Refiner.Refiner.Term
-open Refiner.Refiner.RefineErrors
+open Refiner.Refiner.RefineError
 
-open Tactic_type
 open Tacticals
 open Rewrite_type
 
@@ -48,7 +47,7 @@ val funC : (env -> conv) -> conv
  * Fail with a message.
  *)
 val failC : string -> conv
-val failWithC : refine_error -> conv
+val failWithC : (string * refine_error) -> conv
 
 (*
  * Try a conversion.
@@ -94,6 +93,9 @@ val repeatForC : int -> conv -> conv
 
 (*
  * $Log$
+ * Revision 1.7  1998/07/02 22:25:25  jyh
+ * Created term_copy module to copy and normalize terms.
+ *
  * Revision 1.6  1998/07/01 04:37:59  nogin
  * Moved Refiner exceptions into a separate module RefineErrors
  *

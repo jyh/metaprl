@@ -4,13 +4,29 @@
 
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermMan
+open Refiner.Refiner.TermSubst
 open Refiner.Refiner.Refine
-open Tactic_type
+
+(*
+ * Types.
+ *)
+type extract = Tactic_type.extract
+type tactic_arg = Tactic_type.tactic_arg
+type tactic_value = Tactic_type.tactic_value
+type cache = Tactic_type.cache
+type attributes = Tactic_type.attributes
 
 (*
  * Build an initial argument for a proof.
  *)
-val create : string -> msequent -> cache -> attributes -> tactic_resources -> tactic_arg
+val create : sentinal -> string -> msequent -> cache -> attributes -> tactic_arg
+
+(*
+ * Two tactic_arguments are equal when they have
+ * equal msequent parts.  Their labels, etc, are
+ * not compared.
+ *)
+val tactic_arg_alpha_equal : tactic_arg -> tactic_arg -> bool
 
 (*
  * Get the address of a part of the sequent.
@@ -29,7 +45,6 @@ val concl : tactic_arg -> term
 val nth_hyp : tactic_arg -> int -> string * term
 val cache : tactic_arg -> cache
 val label : tactic_arg -> string
-val resources : tactic_arg -> tactic_resources
 val attributes : tactic_arg -> attributes
 
 (*
@@ -40,7 +55,30 @@ val explode_sequent : tactic_arg -> esequent
 val is_free_seq_var : int -> string -> tactic_arg -> bool
 
 (*
+ * Modification of the argument.
+ * These are functional.
+ *)
+val set_goal    : tactic_arg -> term -> tactic_arg
+val set_concl   : tactic_arg -> term -> tactic_arg
+val set_label   : tactic_arg -> string -> tactic_arg
+
+(*
+ * Argument functions.
+ *)
+val get_term_arg       : tactic_arg -> string -> term
+val get_type_arg       : tactic_arg -> string -> term
+val get_int_arg        : tactic_arg -> string -> int
+val get_bool_arg       : tactic_arg -> string -> bool
+val get_subst_arg      : tactic_arg -> term_subst
+val get_tactic_arg     : tactic_arg -> string -> Tactic_type.tactic
+val get_int_tactic_arg : tactic_arg -> string -> (int -> Tactic_type.tactic)
+val get_typeinf_arg    : tactic_arg -> string -> (term_subst -> term -> term_subst * term)
+
+(*
  * $Log$
+ * Revision 1.6  1998/07/02 22:25:32  jyh
+ * Created term_copy module to copy and normalize terms.
+ *
  * Revision 1.5  1998/06/16 16:26:22  jyh
  * Added itt_test.
  *

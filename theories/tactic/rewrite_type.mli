@@ -7,7 +7,8 @@ include Perv
 
 open Refiner.Refiner.Refine
 
-open Tactic_type
+open Sequent
+open Tacticals
 
 (************************************************************************
  * TYPES                                                                *
@@ -118,6 +119,9 @@ val makeFoldC : term -> conv -> conv
 
 (*
  * $Log$
+ * Revision 1.5  1998/07/02 22:25:29  jyh
+ * Created term_copy module to copy and normalize terms.
+ *
  * Revision 1.4  1998/06/23 22:12:42  jyh
  * Improved rewriter speed with conversion tree and flist.
  *

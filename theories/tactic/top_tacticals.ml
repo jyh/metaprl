@@ -1,20 +1,12 @@
 (*!
  * @begin[spelling]
- * OnFirstT OnLastT OnSameConclT addHiddenLabelT cutT dT failT failWithT
- * firstT idT ifLabT keepingLabelT nthAssumT onAllClausesT onClauseT
- * onClausesT onConclT onHypT onHypsT onSomeHypT onVarT orelseT progressT
- * removeHiddenLabelT repeatForT repeatMT repeatT whileProgressT untilFailT
- * whileProgressMT untilFailMT selT onAllAssumT
- * seqOnSameConclT seqT tactical thenAT thenET thenMT thenT thenWT timingT
- * tryT withBoolT withIntT withT withTypeT
- *
- * tac wf
+ * cutT idT nthAssumT OnFirstT orelseT thenT tryT selT seqT whileProgressT
  * @end[spelling]
  *
  * @begin[doc]
  * @module[Top_tacticals]
  *
- * The @tt{Top_tacticals} module defines the primitive
+ * The @tt[Top_tacticals] module defines the primitive
  * tactics and tacticals provided by the @MetaPRL prover.
  * @end[doc]
  *
@@ -64,7 +56,7 @@ extends Mptop
  *
  * @begin[description]
  * @item{@tactic[idT];
- * The @tt{idT} tactic is the @emph{identity}.
+ * The @tt[idT] tactic is the @emph{identity}.
  *
  * $$
  * @rulebox{idT; ;
@@ -82,7 +74,7 @@ let idT = Tactic_type.Tacticals.idT
  * @begin[doc]
  * @begin[description]
  * @item{@tactic[cutT];
- * The @tt{cutT} tactic implements primitive lemma-instantiation.
+ * The @tt[cutT] tactic implements primitive lemma-instantiation.
  *
  * $$
  * @rulebox{cutT; T_1;
@@ -101,7 +93,7 @@ let cutT = Tactic_type.Tacticals.cutT
  * @begin[doc]
  * @begin[description]
  * @item{@tactic[failT], @tactic[failwithT];
- * The @tt{failT} tactic always fails, and the @tt{failWithT} fails
+ * The @tt[failT] tactic always fails, and the @tt[failWithT] fails
  * with a specific message.}
  * @end[description]
  *
@@ -115,7 +107,7 @@ let failWithT = Tactic_type.Tacticals.failWithT
  * @begin[doc]
  * @begin[description]
  * @item{@tactic[nthAssumT];
- * The @tt{nthAssumT} tactic proves a goal by @emph{assumption}.
+ * The @tt[nthAssumT] tactic proves a goal by @emph{assumption}.
  * Technically, an assumption is a subgoal of the theorem being proved.
  * The assumption must be syntactically identical to the goal.
  *
@@ -144,26 +136,26 @@ let nthAssumT = Tactic_type.Tacticals.nthAssumT
  * @begin[description]
  * @item{@tactic[thenT], @tactic[orelseT];
  * There are several tacticals to manage proof search.  The basic
- * tacticals are @tt{thenT} and @tt{orelseT}, both @emph{infix}
- * tacticals.  The tactic @tt{$@i{tac}_1$ thenT $@i{tac}_2$}
- * first applies $@i{tac}_1$ to the goal, and then applies $@i{tac}_2$
+ * tacticals are @tt[thenT] and @tt[orelseT], both @emph{infix}
+ * tacticals.  The tactic @tt{$@i[tac]_1$ thenT $@i[tac]_2$}
+ * first applies $@i[tac]_1$ to the goal, and then applies $@i[tac]_2$
  * to @emph{all} of the subgoals.  It fails if either tactic fails
- * on any of the subgoals.  The tactic @tt{$@i{tac}_1$ orelseT $@i{tac}_2$}
- * first applies $@i{tac}_1$.  If it succeeds, $@i{tac}_2$ is ignored.
- * Otherwise, $@i{tac}_2$ is applied to the original goal.}
+ * on any of the subgoals.  The tactic @tt{$@i[tac]_1$ orelseT $@i[tac]_2$}
+ * first applies $@i[tac]_1$.  If it succeeds, $@i[tac]_2$ is ignored.
+ * Otherwise, $@i[tac]_2$ is applied to the original goal.}
  *
  * @item{@tactic[firstT];
- * The @tt{firstT} tactical is a variant of @tt{orelseT}.  It takes
- * a list of tactics @tt{$[@i{tac}_1; @ldots; @i{tac}_n]$} to be applied
+ * The @tt[firstT] tactical is a variant of @tt[orelseT].  It takes
+ * a list of tactics @tt{$[@i[tac]_1; @ldots; @i[tac]_n]$} to be applied
  * in order until the first one succeeds.  It fails if all of the argument
- * tactics fail.  It is equivalent to (@tt{$@i{tac_1}$ orelseT $@cdots$
- * orelseT $@i{tac}_n$}).}
+ * tactics fail.  It is equivalent to (@tt{$@i[tac]_1$ orelseT $@cdots$
+ * orelseT $@i[tac]_n$}).}
  *
  * @item{@tactic[seqT], @tactic[seqOnSameConclT];
- * The @tt{seqT} is the universal form of the @tt{firstT} tactical.
- * The (@tt{seqT $[@i{tac}_1; @ldots; @i{tac}_n]$}) tactic is equivalent to
- * (@tt{$@i{tac}_1$ thenT $@cdots$ thenT $@i{tac}_n$}).  The @tt{seqOnSameConclT}
- * tactic is the same as @tt{seqT} except that it selects only those subgoals
+ * The @tt[seqT] is the universal form of the @tt[firstT] tactical.
+ * The (@tt{seqT $[@i[tac]_1; @ldots; @i[tac]_n]$}) tactic is equivalent to
+ * (@tt{$@i[tac]_1$ thenT $@cdots$ thenT $@i[tac]_n$}).  The @tt[seqOnSameConclT]
+ * tactic is the same as @tt[seqT] except that it selects only those subgoals
  * that have the same conclusion as the current goal.}
  * @end[description]
  *
@@ -189,10 +181,10 @@ let seqOnSameConclT = Tactic_type.Tacticals.seqOnSameConclT
  * The use of these tactics is discouraged in favor of selecting tactics
  * by label (discussed below).
  *
- * The @tt{$@i{tac}_1$ then_OnFirstT $@i{tac}_2$} applies $@i{tac}_1$
- * to the goal, and then applies $@i{tac}_2$ to the @emph{first} subgoal
- * that is generated.  The @tt{then_OnLastT} selects the last subgoal,
- * and the @tt{then_OnSameConclT} tactic chooses the subgoal with the
+ * The @tt{$@i[tac]_1$ then_OnFirstT $@i[tac]_2$} applies $@i[tac]_1$
+ * to the goal, and then applies $@i[tac]_2$ to the @emph{first} subgoal
+ * that is generated.  The @tt[then_OnLastT] selects the last subgoal,
+ * and the @tt[then_OnSameConclT] tactic chooses the subgoal with the
  * same conclusion as the current goal.}
  * @end[description]
  *
@@ -207,7 +199,7 @@ let prefix_then_OnSameConclT = Tactic_type.Tacticals.prefix_then_OnSameConclT
  * @begin[doc]
  * @begin[description]
  * @item{@tactic[timingT];
- * The @tt{timingT} tactical applies its argument,
+ * The @tt[timingT] tactical applies its argument,
  * and prints timing information useful for tactic profiling.
  *
  * $$
@@ -228,9 +220,9 @@ let timingT = Tactic_type.Tacticals.timingT
  * @begin[doc]
  * @begin[description]
  * @item{@tactic[tryT], @tactic[completeT];
- * The @tt{tryT} tactical applies its argument, and performs
- * the identity if the tactic fails.  The tactic (@tt{tryT} @i{tac})
- * is equivalent to (@i{tac} @tt{orelseT idT}).}
+ * The @tt[tryT] tactical applies its argument, and performs
+ * the identity if the tactic fails.  The tactic (@tt[tryT] @i[tac])
+ * is equivalent to (@i[tac] @tt{orelseT idT}).}
  * @end[description]
  *
  * @docoff
@@ -243,8 +235,8 @@ let completeT = Tactic_type.Tacticals.completeT
  * @begin[doc]
  * @begin[description]
  * @item{@tactic[progressT];
- * The (@tt{progressT} $@i{tac}$) tactic applies its argument and fails
- * if either 1) $@i{tac}$ fails, or $@i{tac}$ failed to make ``progress''
+ * The (@tt[progressT] $@i[tac]$) tactic applies its argument and fails
+ * if either $@i[tac]$ fails, or $@i[tac]$ failed to make ``progress''
  * by generating subgoals that differ from the current goal.}
  * @end[description]
  *
@@ -257,21 +249,21 @@ let progressT = Tactic_type.Tacticals.progressT
  * @begin[doc]
  * @begin[description]
  * @item{@tactic[whileProgressT], @tactic[untilFailT], @tactic[repeatT], @tactic[repeatForT];
- * The (@tt{untilFailT} $@i{tac}$) tactic applies the argument $@i{tac}$
+ * The (@tt[untilFailT] $@i[tac]$) tactic applies the argument $@i[tac]$
  * repeatedly to the current goal and all of the generated subgoals until
- * an application of $@i{tac}$ fails. This is the same as @tt{REPEAT} tactical in Nuprl.
- * Note that the (@tt{untilFailT} $@i{tac}$) tactic
- * collects all exceptions generated by $@i{tac}$ and it never fails itself.
+ * an application of $@i[tac]$ fails. This is the same as @tt[REPEAT] tactical in Nuprl.
+ * Note that the (@tt[untilFailT] $@i[tac]$) tactic
+ * collects all exceptions generated by $@i[tac]$ and it never fails itself.
  *
- * The (@tt{whileProgressT} $@i{tac}$) tactic repeatedly executes the given tactic on all subgoals
- * while there is a progress. If $@i{tac}$ fails, then @tt{whileProgressT} also fails.
+ * The (@tt[whileProgressT] $@i[tac]$) tactic repeatedly executes the given tactic on all subgoals
+ * while there is a progress. If $@i[tac]$ fails, then @tt[whileProgressT] also fails.
  *
  *
- * The (@tt{repeatT} $@i{tac}$) tactic is equal to  (@tt{whileProgressT tryT} $@i{tac}$).
+ * The (@tt[repeatT] $@i[tac]$) tactic is equal to  (@tt{whileProgressT tryT} $@i[tac]$).
  * It repeats the application of its argument until it fails or no more progress is made.
  *
- * The (@tt{repeatForT} $i$ $@i{tac}$) repeatedly execute the given tactic  $@i{tac}$ on all subgoals
- * until the depth $i$ is reached. If $@i{tac}$ fails, then @tt{repeatForT} also fails.
+ * The (@tt[repeatForT] $i$ $@i[tac]$) repeatedly execute the given tactic  $@i[tac]$ on all subgoals
+ * until the depth $i$ is reached. If $@i[tac]$ fails, then @tt[repeatForT] also fails.
  * }
  * @end[description]
  *
@@ -297,21 +289,21 @@ let repeatForT = Tactic_type.Tacticals.repeatForT
  *
  * @begin[description]
  * @item{@tactic[withT], @tactic[withTypeT], @tactic[withBoolT], @tactic[withIntT];
- * {The (@tt{withT} @i{term tac}) tactic adds a term annotation to the
- * tree@; applies @i{tac}@; and then removes the term annotation from all of
- * the subgoals.  The @tt{withTypeT} adds a ``type'' annotation (the type is
- * expressed as a term).  The @tt{withBoolT} and @tt{withIntT} add Boolean and
+ * {The (@tt[withT] @i{term} @i[tac]) tactic adds a term annotation to the
+ * tree@; applies @i[tac]@; and then removes the term annotation from all of
+ * the subgoals.  The @tt[withTypeT] adds a ``type'' annotation (the type is
+ * expressed as a term).  The @tt[withBoolT] and @tt[withIntT] add Boolean and
  * integer annotations.}}
  *
  * @item{@tactic[selT];
  * There is one more tactical that is frequently
- * used in the @MetaPRL logics: by convention the @tt{selT} tactical is used to
+ * used in the @MetaPRL logics: by convention the @tt[selT] tactical is used to
  * ``select'' among several alternate methods of proof.  For example, in proving
  * a disjunction (Section @refmodule[Itt_logic]) it is necessary to select the
  * branch of the disjunct.
  *
  * $$
- * @rulebox{selT; 2@space (@tt{dT}@space 0);
+ * @rulebox{selT; 2@space (@tt[dT]@space 0);
  *   @sequent{ext; {H; x@colon T_2; J}; T_1@space @i{Type}}@cr
  *   @sequent{ext; {H; x@colon T_2; J}; T_2};
  *   @sequent{ext; {H; x@colon T_2; J}; T_1 @vee T_2}}
@@ -344,36 +336,36 @@ let doNotThinT = thinningT false
  *
  * @begin[description]
  * @item{@tactic[onClauseT], @tactic[onHypT], @tactic[onConclT];
- * The (@tt{onClauseT} $i$ @i{tac}) tactic applies the argument tactic with
- * integer argument $i$ (it is equivalent to @i{tac} $i$).  The @tt{onHypT}
+ * The (@tt[onClauseT] $i$ @i[tac]) tactic applies the argument tactic with
+ * integer argument $i$ (it is equivalent to @i[tac] $i$).  The @tt[onHypT]
  * restricts the integer argument to be a valid hypothesis number, and the
- * (@tt{onConclT} @i{tac}) tactical applies its argument tactic with
+ * (@tt[onConclT] @i[tac]) tactical applies its argument tactic with
  * argument $0$.}
  *
  * @item{@tactic[onVarT];
- * The (@tt{onVarT} @i{tac}) applies its argument with the number
+ * The (@tt[onVarT] @i[tac]) applies its argument with the number
  * of the hypothesis labeled with variable $v$.}
  *
  * @item{@tactic[onClausesT], @tactic[onHypsT];
- * The @tt{onClausesT} and @tt{onHypsT} take a list of clause numbers.
- * The (@tt{onClausesT} $[i_1; @cdots; i_n]$ @i{tac}) is equivalent to
- * (@tt{@i{tac} $i_1$ thenT $@cdots$ thenT @i{tac} $i_n$ thenT @i{tac} $0$}).  The
- * @tt{onHypsT} does the same, but it requires that the indices correspond
+ * The @tt[onClausesT] and @tt[onHypsT] take a list of clause numbers.
+ * The (@tt[onClausesT] $[i_1; @cdots; i_n]$ @i[tac]) is equivalent to
+ * (@tt{@i[tac] $i_1$ thenT $@cdots$ thenT @i[tac] $i_n$ thenT @i[tac] $0$}).  The
+ * @tt[onHypsT] does the same, but it requires that the indices correspond
  * to valid hypothesis numbers.}
  *
  * @item{@tactic[onAllClausesT], @tactic[onAllHypsT];
- * The (@tt{onAllClausesT} @i{tac}) applies the argument tactic to all the clauses,
- * including all the hypothesis and the conclusion.  The @tt{onAllHypsT} applies the
+ * The (@tt[onAllClausesT] @i[tac]) applies the argument tactic to all the clauses,
+ * including all the hypothesis and the conclusion.  The @tt[onAllHypsT] applies the
  * argument only to the hypotheses.}
  *
  * @item{@tactic[onAllAssumT];
- * The (@tt{onAllAssumT} @i{tac}) applies the argument tactic to all the assumptions.}
+ * The (@tt[onAllAssumT] @i[tac]) applies the argument tactic to all the assumptions.}
  *
  * @item{@tactic[onSomeHypT];
- * The (@tt{onSomeHypT} @i{tac}) applies the argument tactic to the
+ * The (@tt[onSomeHypT] @i[tac]) applies the argument tactic to the
  * hypotheses from the last to the first, returning once an application
- * succeeds.  The (@tt{onSomeHypT} @i{tac}) is equivalent to
- * (@tt{@i{tac} $n$ orelseT $@cdots$ orelseT @i{tac} $1$}).}
+ * succeeds.  The (@tt[onSomeHypT] @i[tac]) is equivalent to
+ * (@tt{@i[tac] $n$ orelseT $@cdots$ orelseT @i[tac] $1$}).}
  * @end[description]
  *
  * @docoff
@@ -409,17 +401,17 @@ let onVarT = Tactic_type.Tacticals.onVarT
  * Each node in a proof tree has a @emph{label}.  The labels have no logical
  * meaning, but they are frequently used to provide an informal description
  * of the kind of subgoal.  A label can be any string, but there are three
- * commonly used labels: ``main'' identifies the main steps of a proof,
- * ``antecedent'' identifies nodes that are assumptions that have to be
- * proved, and ``wf'' identifies nodes that require well-formedness reasoning.
+ * commonly used labels: ``@tt[main]'' identifies the main steps of a proof,
+ * ``@tt[antecedent]'' identifies nodes that are assumptions that have to be
+ * proved, and ``@tt[wf]'' identifies nodes that require well-formedness reasoning.
  *
  * @begin[description]
  * @item{@tactic[addHiddenLabelT], @tactic[removeHiddenLabelT], @tactic[keepingLabelT];
  * There are three tacticals that directly manipulate the label.
- * The (@tt{addHiddenLabelT} ``label'') tactic assigns the label to
- * the current goal, the @tt{removeHiddenLabelT} tactic assigns
- * the label ``main'', and the (@tt{keepingLabelT} $@i{tac}$) applies
- * the tactic $@i{tac}$ and assigns the label of the current goal
+ * The (@tt[addHiddenLabelT] ``label'') tactic assigns the label to
+ * the current goal, the @tt[removeHiddenLabelT] tactic assigns
+ * the label ``main'', and the (@tt[keepingLabelT] $@i[tac]$) applies
+ * the tactic $@i[tac]$ and assigns the label of the current goal
  * to all of the remaining subgoals.  The ``@tt{Hidden}'' is of historical
  * significance only@; the labels are hidden only in the sense that they
  * have no logical significance.}
@@ -427,19 +419,19 @@ let onVarT = Tactic_type.Tacticals.onVarT
  * @item{@tactic[ifLabT];
  * In addition to manipulating the labels, there are several tacticals
  * that take advantage of the label to apply tactics selectively.  The
- * (@tt{ifLabT} $l$ $@i{tac1}$ $@i{tac2}$) applies the tactic $@i{tac1}$ if
- * the current goal has label $l$, otherwise it applies the  tactic $@i{tac2}$.}
+ * (@tt[ifLabT] $l$ $@i[tac1]$ $@i[tac2]$) applies the tactic $@i[tac1]$ if
+ * the current goal has label $l$, otherwise it applies the  tactic $@i[tac2]$.}
  *
  * @item{@tactic[thenMT], @tactic[thenET], @tactic[thenWT], @tactic[thenAT];
- * The (infix) @tt{thenMT}, @tt{thenET}, and @tt{thenWT} are like the
- * @tt{thenT} tactical, except that they apply their second argument
- * only to the goals labeled ``main'', ``equality'', or ``wf'' respectively.
- * @tt{thenAT} applies its second argument only to the goal @emph{not}
- * labeled ``main''.}
+ * The (infix) @tt[thenMT], @tt[thenET], and @tt[thenWT] are like the
+ * @tt[thenT] tactical, except that they apply their second argument
+ * only to the goals labeled ``@tt[main]'', ``@tt[equality]'', or ``@tt[wf]'' respectively.
+ * @tt[thenAT] applies its second argument only to the goal @emph{not}
+ * labeled ``@tt[main]''.}
  *
  * @item{@tactic[whileProgressMT], @tactic[untilFailMT], @tactic[repeatMT], @tactic[repeatMForT];
  * These tactics repeat the argument tactic  only
- * on the subgoals labeled ``main''.}
+ * on the subgoals labeled ``@tt[main]''.}
  * @end[description]
  *
  * @docoff

@@ -1,7 +1,7 @@
 (*!
  * @begin[spelling]
- * args bf centermath defrule emph hyps mathop
- * opname mathrel rulebox tac verbatim tt
+ * args centermath defrule hyps mathop
+ * rulebox tac verbatim typeset
  * @end[spelling]
  *
  * @begin[doc]
@@ -21,7 +21,7 @@
  * @opname[s1, ..., sm]{t1; ...; tn},
  * @end[verbatim]
  *
- * The @tt{opname} is an operator name.  The usual quantification can be
+ * The @tt[opname] is an operator name.  The usual quantification can be
  * used; the term @code{@Itt_dprod!prod} refers to the @hrefterm[prod] term
  * defined in the @hrefmodule[Itt_dprod] module.  The strings $s_1, @ldots, s_m$
  * are the @emph{parameters} of the term, and the $t_1; @cdots; t_n$ expressions
@@ -29,7 +29,7 @@
  * double-quotes.  The subterms are normal comment text.
  *
  * Terms can also be constructed using a @tt{begin/end} construction.  For example,
- * the @tt{doc} term encloses a comment that uses a @LaTeX formatting-style.
+ * the @tt[doc] term encloses a comment that uses a @LaTeX formatting-style.
  *
  * @begin[verbatim]
  * @doc{Hello world}
@@ -89,10 +89,10 @@ extends Base_dform
  * @begin[doc]
  * @terms
  *
- * The @tt{comment_white} term represents white space.
- * The @tt{comment_string} term is a literal string.
- * The @tt{comment_block} term encloses a nested comment
- * block.  The @tt{comment_term} term contains an arbitrary term.
+ * The @tt[comment_white] term represents white space.
+ * The @tt[comment_string] term is a literal string.
+ * The @tt[comment_block] term encloses a nested comment
+ * block.  The @tt[comment_term] term contains an arbitrary term.
  * @end[doc]
  *)
 declare comment_white
@@ -102,7 +102,7 @@ declare comment_term{'t}
 
 (*!
  * @begin[doc]
- * The @tt{doc} term is used to enclose documentation blocks,
+ * The @tt[doc] term is used to enclose documentation blocks,
  * usually with the following type of definition.
  *
  * @begin[verbatim]
@@ -111,10 +111,10 @@ declare comment_term{'t}
  * @end[doc]
  * @end[verbatim]
  *
- * The @tt{license} term is used to enclose the license agreement
+ * The @tt[license] term is used to enclose the license agreement
  * text for a module.
  *
- * All the words in the @tt{spelling} term are added to the
+ * All the words in the @tt[spelling] term are added to the
  * spelling dictionary as correctly-spelled words.
  * @end[doc]
  *)
@@ -269,7 +269,7 @@ dform module_df2 : except_mode[tex] :: "module"[name:s] =
 
 (*!
  * @begin[doc]
- * Bookmaking commands.
+ * Bookmarking commands.
  * @end[doc]
  *)
 declare chapter[name:s]{'t}
@@ -729,7 +729,7 @@ dform code_df2 : except_mode[tex] :: code[s:s] =
 
 (*!
  * @begin[doc]
- * The @tt{verbatim} term encloses a block of verbatim text.
+ * The @tt[verbatim] term encloses a block of verbatim text.
  * @end[doc]
  *)
 declare verbatim[text:s]
@@ -939,20 +939,20 @@ dform math_slot_df1 : math_slot[tag:s]{'t} =
  * placed between matching @tt["$"] symbols (for inline
  * math expressions), or matching @tt["$$"] symbols (for
  * centered math expressions).  All terms in math mode
- * have an @tt{opname} that begins with the prefix @tt{math_}.
+ * have an @tt[opname] that begins with the prefix @tt{math_}.
  *
  * The following terms define standard forms in math mode.
  *
- * The @tt{math_mathop} and @tt{math_mathrel} terms give their
+ * The @tt{math_mathop} and @tt[math_mathrel] terms give their
  * contents the status of an ``operator'' or a ``relation.''  The
  * significance has to do with spacing in math mode.  An operator is
  * always followed by extra white space, and a relation is surrounded
  * by extra white space.
  *
- * The @tt{tt} term displays its contents in a @tt{fixed-width} font;
- * the @tt{bf} term displays the contents in a @bf{bold font}; the
- * @tt{i} and @tt{it} terms display their contents in an
- * @i{italic} font; and the @tt{emph} term @emph{emphasizes} it's
+ * The @tt[tt] term displays its contents in a @tt{fixed-width} font;
+ * the @tt[bf] term displays the contents in a @bf{bold font}; the
+ * @tt[i] and @tt[it] terms display their contents in an
+ * @i[italic] font; and the @tt[emph] term @emph{emphasizes} it's
  * contents.
  * @end[doc]
  *)
@@ -1587,7 +1587,7 @@ dform normal_math_hline_df1 : except_mode[tex] :: hline =
  * @rulebox{tac; args; hyps; goal}
  * $$
  *
- * The @tt{sequent} term displays a sequent definition.
+ * The @tt[sequent] term displays a sequent definition.
  * $$
  * @sequent{ext; hyps; goal}
  * $$

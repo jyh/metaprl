@@ -1,15 +1,12 @@
 (*!
  * @begin[spelling]
- * squashT unsquashed unsquashEqual unsquashGoalEqual SelectOption
- * autoT squashElim squashFormation squashFromAny squashStable unsquashEqualWeak
- * SqStable SqUnsquash SqUnsquashGoal tac AutoMustComplete sqsquashT unsquashT
- * unsquash unsquashing
+ * squashT sqsquashT tac th unsquashed unsquash unsquashing unsquashT
  * @end[spelling]
  *
  * @begin[doc]
  * @module[Itt_squash]
  *
- * The @tt{Itt_squash} module defines a @emph{squash} type.
+ * The @tt{Itt_squash} module defines a @i[squash] type.
  * $<<squash{'A}>>$ hides computational content of $A$.
  * $<<squash{'A}>>$ is inhabited @emph{iff} $A$ is inhabited.
  * When inhabited, $<<squash{'A}>>$ contains only one element $@it$.
@@ -24,11 +21,11 @@
  *
  * Squash types are needed to define set in @hrefmodule[Itt_set]. Also,
  * it can be argued (see @cite[KN01]) that it is consistent to use
- * @emph{classical} reasoning under @tt{squash} without losing
+ * @emph{classical} reasoning under @tt[squash] without losing
  * constructive content.
  *
- * In addition to the @tt{squash} operator on types, the @MetaPRL includes
- * the meta-theory @tt{squash} operator that works on sequents.
+ * In addition to the @tt[squash] operator on types, the @MetaPRL includes
+ * the meta-theory @tt[squash] operator that works on sequents.
  * Namely, sequents in the @MetaPRL implementation of the
  * @Nuprl type theory have two forms: one is the generic
  * form $@sequent{ext; H; T}$, where @i{ext} is a variable.  The variable
@@ -37,12 +34,12 @@
  *
  * The other form is $@sequent{squash; H; T}$, where @hrefterm[squash] is a
  * term defined in the @hrefmodule[Base_trivial]{} module.
- * The @tt{squash} term specifies that the extract of the proof of this
+ * The @tt[squash] term specifies that the extract of the proof of this
  * subgoal is @em{not} needed for the computational content of the whole proof.
  *
- * Typically, @tt{squash} sequents are used for well-formedness
+ * Typically, @tt[squash] sequents are used for well-formedness
  * goals (the computational content of well-formedness is never
- * used), but @tt{squash} sequents are also used in cases where
+ * used), but @tt[squash] sequents are also used in cases where
  * the computational content can be inferred.  Equality proofs
  * $a = b @in T$ are the canonical example: the computational content
  * of $a = b @in T$ is @emph{always} the term $@it$, and proofs
@@ -54,7 +51,7 @@
  * of a proposition given an assumption that it is true.
  *
  * This module defines a generic resource @hrefresource[squash_resource] that
- * can be used to recover computational content from a @tt{squash} proof.
+ * can be used to recover computational content from a @tt[squash] proof.
  * Additions to the resource are done through resource annotations, see the
  * @hrefresource[squash_resource] section for more information. Tactics
  * @hreftactic[squashT], @hreftactic[unsquashT] and @hreftactic[sqsquashT]
@@ -148,7 +145,7 @@ let _ =
  * @begin[doc]
  * @terms
  *
- * The @tt{squash} term defines the @tt{squash} type.
+ * The @tt[squash] term defines the @tt[squash] type.
  * @end[doc]
  *)
 declare squash{'A}
@@ -192,8 +189,8 @@ prim squashType {| intro [] |} 'H :
  * @modsubsection{Introduction}
  *
  * A squashed type $<<squash{'A}>>$ is true if $A$ is true.
- * This rule is irreversible, so we use @tt{AutoMustComplete} to prevent @tt{autoT}
- * from using it.
+ * This rule is irreversible, so we use @tt[AutoMustComplete] to prevent
+ * @hreftactic[autoT] from using it.
  * @end[doc]
  *)
 prim squashMemberFormation {| intro [AutoMustComplete] |} 'H :
@@ -205,11 +202,11 @@ prim squashMemberFormation {| intro [AutoMustComplete] |} 'H :
  * @begin[doc]
  * @modsubsection{Elimination}
  *
- * The first rule, @tt{unsquashEqual}, allows equalities to
+ * The first rule, @tt[unsquashEqual], allows equalities to
  * be unsquashed (because the proof can always be inferred).
- * The second rule, @tt{squashElim} shows that $@it$ is the only element
+ * The second rule, @tt[squashElim] shows that $@it$ is the only element
  * of a non-empty squashed type.
- * The third rule, @tt{squashFromAny} allowed to infer a squashed
+ * The third rule, @tt[squashFromAny] allowed to infer a squashed
  * sequent form from any sequent form, effectively allowing us to
  * "forget" a meta-witness (extract) if we do not need it.
  * @end[doc]
@@ -245,8 +242,8 @@ let resource typeinf += (squash_term,  Typeinf.infer_map dest_squash)
  * @begin[doc]
  * @modsection{Derived Rules}
  *
- * First, we can prove a stronger version of @tt{unsquashEqualWeak} by
- * combining it with @tt{squashElim}.
+ * First, we can prove a stronger version of @tt[unsquashEqualWeak] by
+ * combining it with @tt[squashElim].
  * @end[doc]
  *)
 interactive unsquashEqual 'H 'J :
@@ -278,7 +275,7 @@ interactive squashMemberEquality {| intro []; eqcd |} 'H :
 
 (*!
  * @begin[doc]
- * The @tt{squashStable} rule establishes that we can unsquash a proposition
+ * The @tt[squashStable] rule establishes that we can unsquash a proposition
  * when it is possible to recover it's witness from simply knowing the proposition
  * to be true.
  * @end[doc]
@@ -345,11 +342,11 @@ interactive squashFormation 'H :
  * @resources
  *
  * The @Comment!resource[squash_resource] keeps 3 kind of tactics, as described by the
- * @tt{squash_info} type. The $@tt{SqUnsquash}(T,@i{tac})$ is used when @i{tac i}
+ * @tt[squash_info] type. The $@tt[SqUnsquash](T,@i[tac])$ is used when @i{tac i}
  * is capable turning @i{i}-th hypothesis from $@squash{T}$ into $T$.
- * The $@tt{SqStable}(T,t,@i{tac})$ variant is used when @i{tac} is capable
+ * The $@tt[SqStable](T,t,@i[tac])$ variant is used when @i[tac] is capable
  * of proving $@sequent{;H;t @in T}$ from $@sequent{;H;T}$. Finally,
- * the $@tt{SqUnsquashGoal}(T,@i{tac})$ is used when @i{tac i} can unsquash
+ * the $@tt[SqUnsquashGoal](T,@i[tac])$ is used when @i{tac i} can unsquash
  * @i{i}-th hypothesis provided the conclusion of the sequent is $T$.
  *
  * The only way to improve the @tt{squash_resource} outside of the

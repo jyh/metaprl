@@ -7,7 +7,7 @@
  * @begin[doc]
  * @module[Itt_squiggle]
  *
- * The @tt{Itt_squiggle} module defines the squiggle equality.
+ * The @tt[Itt_squiggle] module defines the squiggle equality.
  * The squiggle equality $<<'t ~ 's>>$ holds for closed terms $t$ and $s$ iff
  * $t$ can be reduced to $s$. We can expand this semantics for open terms
  * in the given context the same way as for any other type.

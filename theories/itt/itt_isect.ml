@@ -339,7 +339,7 @@ interactive intersectionMemberCaseEquality 'H (isect x: 'A. 'B['x]) 'a :
    sequent ['ext] { 'H >- 'b1 = 'b2 in 'B['a] }
 
 
-(*! @doc{The elimination form of hrefrule[intersectionMemberCaseEquality].} *)
+(*! @doc{The elimination form of @hrefrule[intersectionMemberCaseEquality].} *)
 
 interactive intersectionEqualityElim {| elim [] |} 'H 'J 'a 'v :
    [wf] sequent[squash] { 'H; u: 'b1 = 'b2 in isect x: 'A. 'B['x]; 'J['u] >- 'a in 'A } -->

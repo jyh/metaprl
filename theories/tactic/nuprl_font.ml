@@ -901,7 +901,7 @@ dform sim_df : internal :: mode[src] :: sim = `"~"
 
 (*
  * -*-
- * Local Variables: internal ::
+ * Local Variables:
  * Caml-master: "htmlcomp.run"
  * End:
  * -*-

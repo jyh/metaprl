@@ -14,10 +14,10 @@
  *   a ::= i            (integers)
  *      |  v            (variables)
  *      |  a1 op a2     (binary operation)
+ *      |  fun x -> e   (unnamed functions)
  *
  *   (* Expressions *)
  *   e ::= let v = a in e               (LetAtom)
- *      |  let f(v) = e1 in e2          (LetFun)
  *      |  f(a)                         (TailCall)
  *      |  if a then e1 else e2         (Conditional)
  *      |  let v = a1[a2] in e          (Subscripting)
@@ -26,6 +26,10 @@
  *         (* These are eliminated during CPS *)
  *      |  let v = f(a) in e            (Function application)
  *      |  return a
+ *
+ * A program is a set of function definitions and an program
+ * expressed in a sequent.  Each function must be declared, and
+ * defined separately.
  *
  * ----------------------------------------------------------------
  *
@@ -71,9 +75,11 @@ declare ValPair{'v1; 'v2}
 (*
  * Atoms.
  * We use the built-in representation of variables (for now).
+ * In this phase, unnamed functions are also atoms.
  *)
 declare AtomInt[i:n]
 declare AtomBinop{'op; 'a1; 'a2}
+declare AtomFun{x. 'e['x]}
 
 (*
  * Expressions.
@@ -87,9 +93,7 @@ declare SetSubscript{'a1; 'a2; 'a3; 'e}
 
 (*
  * LetApply, Return are eliminated during CPS conversion.
- * LetFun is eliminated during closure conversion.
  *)
-declare LetFun{v. 'e1['v]; f. 'e2['f]}
 declare LetApply{'f; 'a; v. 'e['v]}
 declare Return{'a}
 
@@ -102,6 +106,7 @@ declare Return{'a}
  *)
 declare exp
 declare def{'v; 'e}
+declare compilable{'e}
 
 (************************************************************************
  * Display forms
@@ -151,13 +156,12 @@ dform atom_binop_mul_df : parens :: "prec"[prec_mul] :: AtomBinop{MulOp; 'e1; 'e
 dform atom_binop_div_df : parens :: "prec"[prec_mul] :: AtomBinop{DivOp; 'e1; 'e2} =
    slot["lt"]{'e1} " " `"/ " slot["le"]{'e2}
 
+dform atom_fun_df : parens :: "prec"[prec_fun] :: AtomFun{x. 'b} =
+   Nuprl_font!lambda slot{'x} `"." slot{'b}
+
 (* Expressions *)
 dform exp_let_atom_df : LetAtom{'a; v. 'e} =
    xlet `" " slot{'v} `" = " slot{'a} `" " xin hspace 'e
-
-dform exp_let_fun_df : LetFun{v. 'e1; f. 'e2} =
-   szone pushm[0] pushm[3] xlet `" " slot{'f} `"(" slot{'v} `") =" hspace slot{'e1} popm hspace xin popm ezone
-   hspace 'e2
 
 dform exp_tail_call_df : TailCall{'f; 'a} =
    slot{'f} `"(" slot{'a} `")"
@@ -190,6 +194,9 @@ dform exp_df : exp = bf["exp"]
 dform def_df : def{'v; 'e} =
    slot{'v} `" = " slot{'e}
 
+dform compilable_df : compilable{'e} =
+   `"#" pushm[0] slot{'e} popm
+
 (*
  * Sequent tag for the M language.
  *)
@@ -197,24 +204,18 @@ declare m
 
 dform m_df : m = bf["m"]
 
-(*
- * Just for testing the ext: quotation.
- *)
-let tprog = <:ext<let t = 1 in t+1>>
-
 (************************************************************************
  * Just for testing.
  *)
 interactive test_prog 'H :
-   sequent [m] { 'H >- <:ext<
-                        let v1 = 1 in
-                        let v2 = 2+v1 in
-                        let f (v3) =
-                           let v4 = (v2, v3) in
-                           let v5 = v4[0] in
-                              v5
-                        in
-                           f(17)>>}
+   sequent [m] { 'H >- compilable{LetAtom{AtomInt[1:n]; v1.
+                                  LetAtom{AtomBinop{AddOp; AtomInt[1:n]; 'v1}; v2.
+                                  LetAtom{AtomFun{v3.
+                                     LetPair{'v2; 'v3; v4.
+                                     LetSubscript{'v4; AtomInt[0:n]; v5.
+                                     Return{'v5}}}}; f.
+                                  TailCall{'f; AtomInt[17:n]}}}}}
+               }
 
 (*!
  * @docoff

@@ -161,8 +161,24 @@ let get_term i p =
    let hyps = (explode_sequent goal).sequent_hyps in
    let h=List.nth (SeqHyp.to_list hyps) (i-1) in
    match h with 
-   	HypBinding (_,t) | Hypothesis t -> t
-    | Context (_,_,_) -> xnil_term
+   	HypBinding (_,t) | Hypothesis t -> 
+		   if !debug_int_arith then
+   			eprintf "get_term %i=%a%t" i debug_print t eflush;
+	   	t
+    | Context (_,_,_) ->
+		   if !debug_int_arith then
+   			eprintf "get_term %i detected a context%t" i eflush;
+	   	xnil_term
+
+let reportT = funT (fun p ->
+	if !debug_int_arith then
+		let g=Sequent.goal p in
+		let c=nth_concl g 1 in
+		eprintf "Conclusion is:%a%t" debug_print c eflush
+	else
+		();
+	idT
+	)
 
 let le2geT = argfunT (fun t p ->
    let (left,right)=dest_le t in
@@ -508,7 +524,7 @@ let inject_coefC t =
    	let (a,b)=dest_add t in
       begin
       	if !debug_int_arith then
-         	eprintf "\ninject_coefC: %a %a%t" print_term a print_term b eflush;
+         	eprintf "\ninject_coefC: %a %a%t" debug_print a debug_print b eflush;
       	let aC=addrC [0] (mul_Id3C thenC
       							(repeatC (higherC mul_uni_AssocC)) thenC
       							(addrC [0] reduceC)
@@ -533,7 +549,7 @@ let rec inject_coefC t =
    	let (a,b)=dest_add t in
       begin
       	if !debug_int_arith then
-         	eprintf "\ninject_coefC: %a %a%t" print_term a print_term b eflush;
+         	eprintf "\ninject_coefC: %a %a%t" debug_print a debug_print b eflush;
       	let aC=addrC [0] (mul_Id3C thenC
       							(repeatC (higherC mul_uni_AssocC)) thenC
       							(addrC [0] reduceC)
@@ -634,7 +650,7 @@ let stripCoef t =
  *)
 let add_BubbleStepC tm =
   (if !debug_int_arith then
-		eprintf "\nadd_BubbleStepC: %a%t" print_term tm eflush;
+		eprintf "\nadd_BubbleStepC: %a%t" debug_print tm eflush;
    if is_add_term tm then
       let (a,s) = dest_add tm in
          if is_add_term s then
@@ -822,14 +838,14 @@ let sumList tl p =
 let sumListT = argfunT (fun l p ->
    let s = sumList l p in
    if !debug_int_arith then
-   	eprintf "Contradictory term:%a%t" print_term s eflush;
-   thenLocalAT (assertT s) (tryT (progressT ge_addMono)))
+   	eprintf "Contradictory term:%a%t" debug_print s eflush;
+   thenLocalAT (assertT s) (tryT (repeatT ge_addMono)))
 
 (* Test if term has a form of a>=b+i where i is a number
  *)
 let good_term t =
 (*
-   print_term stdout t;
+   debug_print stdout t;
    eprintf "\n %s \n" (Opname.string_of_opname (opname_of_term t));
 *)
    if is_ge_term t then
@@ -840,7 +856,7 @@ let good_term t =
         else
            false
    else
-     ((*print_term stdout t;
+     ((*debug_print stdout t;
       eprintf "%s %s\n" (Opname.string_of_opname (opname_of_term t))
                         (Opname.string_of_opname (opname_of_term ge_term));*)
       false

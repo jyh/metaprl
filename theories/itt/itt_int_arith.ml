@@ -203,7 +203,7 @@ let eqInConcl2HypT t =
 let neqInConcl2HypT =
 	(rw (unfold_neq_int thenC (addrC [0] unfold_bneq_int)) 0)
 	thenMT
-	((dT 0) thenMT (dT (-1)))
+	(assert_bnot_intro thenMT (eq_int_assert_elim (-1)))
 
 let arithRelInConcl2HypT = funT (fun p ->
    let g=Sequent.goal p in
@@ -214,7 +214,7 @@ let arithRelInConcl2HypT = funT (fun p ->
    else if is_ge_term t then geInConcl2HypT
    else if is_equal_term t then eqInConcl2HypT t
    else if is_neq_int_term t then neqInConcl2HypT
-   else if is_not_term t then dT 0
+   else if is_not_term t then not_intro
    else idT)
 
 let arith_rels=[
@@ -233,13 +233,13 @@ let negativeHyp2ConclT = argfunT (fun i p ->
    let t = Sequent.nth_hyp p i in
 	if is_not_term t then
       if is_arith_rel (dest_not t) then
-      	(dT i) thenMT arithRelInConcl2HypT
+      	(not_elim i) thenMT arithRelInConcl2HypT
 		else
       	idT
 	else if is_neq_int_term t then
    	(rw (unfold_neq_int thenC (addrC [0] unfold_bneq_int)) i)
    	thenMT
-      ((dT i) thenMT
+      ((assert_bnot_elim i) thenMT
       (eq_2beq_int thenMT arithRelInConcl2HypT))
    else
    	idT)
@@ -916,6 +916,26 @@ sequent { <H>; x: (('c *@ ('b +@ ('a *@ 'c)) +@ ('b *@ 'c)) >= 'b +@ 0);
                      t: (((((('c *@ 'b) *@ 1) +@ (2 *@ ('a *@ ('c *@ 'c)))) +@
  (('c *@ ((-1) *@ 'a)) *@ 'c)) +@ ('b *@ 'c)) < 'b)
                 >- "assert"{bfalse} }
+
+interactive test7 :
+sequent { <H> >- 'a in int } -->
+sequent { <H> >- 'b in int } -->
+sequent { <H>; 'a < 'b >- 'a <> 'b }
+
+interactive test8 :
+sequent { <H> >- 'a in int } -->
+sequent { <H> >- 'b in int } -->
+sequent { <H>; 'a < 'b >- not{'a = 'b in int} }
+
+interactive test9 :
+sequent { <H> >- 'a in int } -->
+sequent { <H> >- 'b in int } -->
+sequent { <H>; not{'a < 'b} >- 'a >= 'b }
+
+interactive test10 :
+sequent { <H> >- 'a in int } -->
+sequent { <H> >- 'b in int } -->
+sequent { <H>; 'a <> 'b >- 'a <> 'b }
 
 interactive eq2ineq :
 	[wf] sequent { <H> >- 'a in int } -->

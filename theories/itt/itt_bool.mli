@@ -122,6 +122,15 @@ rule assertSquashElim :
    sequent { <H> >- "assert"{'t} } -->
    sequent { <H> >- it in "assert"{'t} }
 
+rule assert_bnot_intro :
+   [wf] sequent { <H> >- 't1 in bool } -->
+   [main] sequent { <H>; x: "assert"{'t1} >- "false" } -->
+   sequent { <H> >- "assert"{bnot{'t1}} }
+
+rule assert_bnot_elim 'H :
+   [main] sequent { <H>; <J[it]> >- "assert"{'t} } -->
+   sequent { <H>; x: "assert"{bnot{'t}}; <J['x]> >- 'C['x] }
+
 (************************************************************************
  * TACTICS                                                              *
  ************************************************************************)

@@ -25,6 +25,7 @@
  * @email{granicz@cs.caltech.edu}
  * @end[license]
  *)
+extends Base_meta
 extends M_util
 extends M_ast
 extends M_ir
@@ -38,11 +39,13 @@ open Tactic_type.Rewrite
 open Tactic_type.Tacticals
 open Tactic_type.Conversionals
 
+open Base_meta
 open M_util
 
 declare IR{'e}
 declare IR{'e1; v. 'e2['v]}
 declare IR{'args; 'f; v. 'e['v]}
+declare IR_size{'tuple; 'init}
 
 dform ir_df1 : IR{'e} =
    keyword["IR["] slot{'e} `"]"
@@ -52,6 +55,9 @@ dform ir_df2 : IR{'e1; v. 'e2} =
 
 dform ir_df3 : IR{'args; 'f; v. 'e2} =
    keyword["IR "] slot{'v} `" = " slot{'f} `"(" slot{'args} `")" keyword[" in"] hspace slot{'e2}
+
+dform ir_df4 : IR_size{'tuple; 'init} =
+   keyword["SIZE_OF["] slot{'tuple} `", " slot{'init} `"]"
 
 (************************************************************************
  * REDUCTION RESOURCE                                                   *
@@ -237,6 +243,63 @@ prim_rw ir_arg_nil {| ir |} :
    IR{AstArgNil; 'f; v. 'e['v]}
    <-->
    'e['f]
+
+doc <:doc<
+   @begin[doc]
+   Tuples.
+   We use Base_meta arithmetic to figure out the size of a tuple.
+   @end[doc]
+>>
+declare succ{'e}
+
+prim_rw ir_alloc_tuple_cons {| ir |} :
+   IR{AstAllocTupleCons{'e; 'rest}; v. 'e2['v]}
+   <-->
+   IR{'e; v1.
+   IR{'rest; v2.
+   'e2[AllocTupleCons{'v1; 'v2}]}}
+
+prim_rw ir_alloc_tuple_nil {| ir |} :
+   IR{AstAllocTupleNil; v. 'e['v]}
+   <-->
+   'e[AllocTupleNil]
+
+prim_rw ir_tuple {| ir |} :
+   IR{TupleExpr{'tuple}; v. 'e['v]}
+   <-->
+   IR{'tuple; v.
+   LetTuple{IR_size{'tuple; meta_num[0:n]}; 'v; v2. 'e[AtomVar{'v2}]}}
+
+(* Tuple size computations *)
+prim_rw ir_size1 {| ir |} :
+   IR_size{AstAllocTupleCons{'e; 'rest}; 'count}
+   <-->
+   IR_size{'rest; succ{'count}}
+
+prim_rw ir_size2 {| ir |} :
+   IR_size{'AstAllotTupleNil; meta_num[n:n]}
+   <-->
+   Length[n:n]
+
+prim_rw reduce_succ {| ir |} :
+   succ{meta_num[n:n]}
+   <-->
+   meta_sum[n:n, 1:n]
+
+let resource ir +=
+   [ <<meta_sum[i1:n, i2:n]>>, reduce_meta_sum]
+
+doc <:doc<
+   @begin[doc]
+   Subscripting.
+   @end[doc]
+>>
+prim_rw ir_subscript_expr {| ir |} :
+   IR{SubscriptExpr{'e1; 'e2}; v. 'e['v]}
+   <-->
+   IR{'e1; v1.
+   IR{'e2; v2.
+   LetSubscript{'v1; 'v2; v. 'e[AtomVar{'v}]}}}
 
 doc <:doc<
    @begin[doc]

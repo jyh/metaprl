@@ -96,9 +96,12 @@ declare AstLetFun{'R; 'label; f. 'cont['f]}
 
 doc <:doc< 
    @begin[doc]
-   Missing: Tuples.
+   Tuples.
    @end[doc]
 >>
+declare AstAllocTupleNil
+declare AstAllocTupleCons{'e; 'rest}
+declare TupleExpr{'tuple}
 
 doc <:doc< 
    @begin[doc]

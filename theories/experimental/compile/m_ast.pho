@@ -74,11 +74,9 @@ Terms -extend "M_ast" {
    declare LetVarExpr{'e1 ;'e2}
 
    // Tuples
-   // TEMP: this are not used yet.
-   declare Length[n]
-   declare AllocTupleNil
-   declare AllocTupleCons{'a; 'rest}
-   declare LetTuple{'length; 'tuple; 'e}
+   declare AstAllocTupleNil
+   declare AstAllocTupleCons{'a; 'rest}
+   declare TupleExpr{'tuple}
 
    // Mutually recursive functions
    declare AstLetRec{'e1; 'e2}
@@ -205,8 +203,8 @@ Grammar -start main {
     // Anonymous functions
     | FUN ID<var_term[v:s]> ARROW exp<'e> %prec prec_let
                                     => LambdaExpr{v. 'e}
-    // Pairs
-    // TEMP: Missing
+    // Tuples
+    | LPAREN tuple<'tuple> RPAREN   => TupleExpr{'tuple}
 
     // Binary operations
     | exp<'e1> PLUS exp<'e2>        => BinopExpr{AstAddOp{}; 'e1; 'e2}
@@ -253,6 +251,9 @@ Grammar -start main {
     | LET fun<'fun> IN exp<'e2> %prec prec_let
                                     => NewFun{'fun; 'e2}
 
+
+   tuple ::= exp<'e>                => AstAllocTupleCons{'e; AstAllocTupleNil{}}
+    | exp<'e> COMMA tuple<'tuple>   => AstAllocTupleCons{'e; 'tuple}
 
    funs ::= fun<SimpleFun{var_term[f:s]; 'params; 'body}>
                                     => Functions{mcons{var_term[f:s]; mnil{}}; mcons{'params; mnil{}}; mcons{'body; mnil{}}}

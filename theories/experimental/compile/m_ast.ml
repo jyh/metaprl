@@ -119,9 +119,12 @@ declare AstLetFun{'R; 'label; f. 'cont['f]}
 
 doc <:doc< 
    @begin[doc]
-   Missing: Tuples.
+   Tuples.
    @end[doc]
 >>
+declare AstAllocTupleNil
+declare AstAllocTupleCons{'e; 'rest}
+declare TupleExpr{'tuple}
 
 doc <:doc< 
    @begin[doc]
@@ -266,6 +269,19 @@ dform ast_arg_cons_df2 : parens :: "prec"[prec_comma] :: AstArgCons{'a; 'b} =
 
 dform ast_arg_nil_df : parens :: "prec"[prec_comma] :: AstArgNil =
    `""
+
+(* Tuples *)
+dform ast_alloc_tuple_nil_df : parens :: "prec"[prec_comma] :: AstAllocTupleNil =
+   `""
+
+dform ast_alloc_tuple_cons_df1 : parens :: "prec"[prec_comma] :: AstAllocTupleCons{'e; 'rest} =
+   slot{'e} `", " slot["lt"]{'rest}
+
+dform ast_alloc_tuple_cons_df2 : parens :: "prec"[prec_comma] :: AstAllocTupleCons{'e; AstAllocTupleNil} =
+   slot{'e}
+
+dform tuple_expr_df : parens :: "prec"[prec_comma] :: TupleExpr{'tuple} =
+   `"(" slot{'tuple} `")"
 
 (* AST term *)
 dform ast_df : AST{'e} =

@@ -138,6 +138,22 @@ interactive ext_test2 :
             add3 (f (x), g (x), h (x))
       >> } }
 
+
+interactive ext_test3 :
+   sequent { <H> >- compilable{.
+      <:ext<
+         let t = (1, 2, 3) in t[0]
+      >> } }
+
+interactive ext_test4 :
+   sequent { <H> >- compilable{.
+      <:ext<
+         let f (x) = x * x in
+         let t1 = (1, 2 + 2, 3 + f (3)) in
+         let t2 = (1, 2 + if true then 1 else 0, 3) in
+            t2
+      >> } }
+
 (*
  * -*-
  * Local Variables:

@@ -1,34 +1,34 @@
 doc <:doc< -*- Mode: text -*-
-  
+
    @begin[spelling]
    Coercions Subclassing Superclassing
-   instanceof int fields pos subclassing
-   superclass superclasses typecase val
+   fields subclassing
+   superclass superclasses typecase
    @end[spelling]
-  
+
    @begin[doc]
    @chapter[classes]{The OCaml Object System}
    @end[doc]
-  
+
    ----------------------------------------------------------------
-  
+
    @begin[license]
    Copyright (C) 2000 Jason Hickey, Caltech
-  
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
    as published by the Free Software Foundation; either version 2
    of the License, or (at your option) any later version.
-  
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-  
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-  
+
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
@@ -37,7 +37,7 @@ doc <:doc< -*- Mode: text -*-
 doc <:doc< @docoff >>
 extends Base_theory
 
-doc <:doc< 
+doc <:doc<
 @begin[doc]
 
 OCaml includes a unique object system with classes, parameterized
@@ -57,7 +57,7 @@ separate, just as module signatures are separate from module
 structures.  There are three construct in the OCaml object system:
 class type are signatures for classes, classes are initial
 specifications for objects, and objects are instances of classes
-created with the @tt{new} keyword.
+created with the @tt[new] keyword.
 
 @subsection[class_types]{Class types}
 
@@ -65,17 +65,17 @@ A class type is defined using a @tt{class type} definition.  The syntax of
 a class type declaration is as follows.
 
 @begin[center]
-@tt{class type} @emph{name} @tt{= object} @emph{declarations} @tt{end}
+@tt{class type} @emph{name} @tt{= object} @emph{declarations} @tt[end]
 @end[center]
 
 The @emph{name} of the class type should begin with a lowercase letter
 or an underscore.  The declarations can include any of the following.
 
 @begin[itemize]
-@item{Inheritance directives with the @tt{inherit} keyword.}
-@item{Values, declared with the @tt{val} keyword.}
-@item{Methods, declared with the @tt{method} keyword.}
-@item{Type constraints, declared with the @tt{constraint} keyword.}
+@item{Inheritance directives with the @tt[inherit] keyword.}
+@item{Values, declared with the @tt[val] keyword.}
+@item{Methods, declared with the @tt[method] keyword.}
+@item{Type constraints, declared with the @tt[constraint] keyword.}
 @end[itemize]
 
 To illustrate the object system, let's use the canonical object
@@ -584,7 +584,7 @@ It has no method set
 @subsection[superclassing]{Superclassing, or @tt{typecase}}
 
 In OCaml, there is no operator to coerce an object to a superclass
-(there is no ``typecase'' operator, or @tt{instanceof} predicate like
+(there is no ``typecase'' operator, or @tt[instanceof] predicate like
 in Java).  So for instance, once we coerce a @code{colored_point} to a
 @code{point}, there is no corresponding operator for recovering the
 @code{colored_point}.

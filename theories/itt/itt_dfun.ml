@@ -1,10 +1,8 @@
 doc <:doc<
-   @spelling{dfun}
-
    @begin[doc]
    @module[Itt_dfun]
 
-   The @tt{Itt_dfun} module is @emph{derived} from the
+   The @tt[Itt_dfun] module is @emph{derived} from the
    @hrefmodule[Itt_rfun] module.  The type $@fun{x; A; B[x]}$ is
    equivalent to the type $@rfun{f; x; A; B[x]}$, where $f$ is
    not bound in $B[x]$.  The @emph{well-founded} restriction
@@ -80,8 +78,7 @@ doc <:doc<
    @begin[doc]
    @rewrites
 
-   The @tt{unfold_dfun} gives the definition of the
-   dependent-function space.
+   The @tt[unfold_dfun] gives the definition of the dependent-function space.
    @end[doc]
 >>
 prim_rw unfold_dfun : (x: 'A -> 'B['x]) <--> ({ f | x: 'A -> 'B['x] })

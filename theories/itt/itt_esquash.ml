@@ -1,6 +1,5 @@
 doc <:doc<
-   @spelling{bool esquashT unhidden squashes}
-
+   @spelling{squashes}
    @begin[doc]
    @module[Itt_esquash]
 

@@ -1,5 +1,5 @@
 doc <:doc<
-   @spelling{bi ponens}
+   @spelling{bi}
    @begin[doc]
    @module[Itt_logic]
 

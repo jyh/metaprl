@@ -1,6 +1,4 @@
 doc <:doc<
-   @spelling{Bickford}
-
    @begin[doc]
    @module[Itt_subset]
 

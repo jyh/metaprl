@@ -1,10 +1,8 @@
 doc <:doc<
-   @spelling{sexists}
-
    @begin[doc]
    @module[Czf_itt_sexists]
 
-   The @tt{Czf_itt_sexists} module defines the @emph{unrestricted}
+   The @tt[Czf_itt_sexists] module defines the @emph{unrestricted}
    existential quantification $@sexists{x; P[x]}$.  The proposition
    $P[x]$ must be well-formed for any set argument.  The existential
    is true, if $P[a]$ is true for some set $a$.

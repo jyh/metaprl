@@ -1,6 +1,4 @@
 doc <:doc<
-   @spelling{dprod}
-
    @begin[doc]
    @module[Itt_prod]
 

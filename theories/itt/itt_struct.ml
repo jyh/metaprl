@@ -1,14 +1,9 @@
 doc <:doc<
-   @begin[spelling]
-   assertT hypReplacement hypSubstitution onSomeHypT
-   ponens substT substition thinAllT thinT thinned
-   thinning thins useWitnessT wf struct assertAtT
-   @end[spelling]
-
+   @spelling{thinned thins}
    @begin[doc]
    @module[Itt_struct]
 
-   The @tt{Itt_struct} module defines @emph{structural} rules.
+   The @tt[Itt_struct] module defines @emph{structural} rules.
    Structural rules are logical operations like thinning and substitution
    that are not associated with a particular type.
    @end[doc]
@@ -217,7 +212,7 @@ prim substitution ('t1 = 't2 in 'T2) bind{x. 'T1['x]} :
 
 doc <:doc<
    @begin[doc]
-   Hypothesis substition is defined with two rules.  The @tt{hypReplacement}
+   Hypothesis substitution is defined with two rules.  The @tt{hypReplacement}
    performs entire replacement of a hypothesis $A$ with another $B$.  The
    two types must be equal (in some universe).  The proof extract is
    unchanged.

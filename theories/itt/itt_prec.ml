@@ -1,10 +1,9 @@
 doc <:doc<
-   @spelling{cons prec precind unrollings}
-
+   @spelling{unrollings}
    @begin[doc]
    @module[Itt_prec]
 
-   The @tt{Itt_prec} module define the @emph{parameterized}
+   The @tt[Itt_prec] module define the @emph{parameterized}
    recursive type.  The parameter allows values to be passed
    as the recursive type is unrolled.  The syntax of the type is
    $@prec{T; x; B[T, x]; a}$, there $T$ is the type that is
@@ -17,7 +16,7 @@ doc <:doc<
 
    $$@prec{T; i; @unit + @prod{k; @set{j; @int; j > i}; T(k)}; 0}.$$
 
-   The @i{nil} element is $@inl{@it}$, and the @i{cons}
+   The @i{nil} element is $@inl{@it}$, and the @tt[cons]
    operation is the right injection contains a pair of an integer $k$ that
    is larger than the parameter and a list increasing integers
    larger than $k$.

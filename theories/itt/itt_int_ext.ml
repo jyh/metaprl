@@ -1,6 +1,4 @@
 doc <:doc<
-   @spelling{gt_bool le_bool ge_bool gt le ge nequal}
-
    @begin[doc]
    @module[Itt_int_ext]
 

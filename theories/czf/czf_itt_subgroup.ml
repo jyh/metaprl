@@ -1,10 +1,8 @@
 doc <:doc<
-   @spelling{subgroup}
-
    @begin[doc]
    @module[Czf_itt_subgroup]
 
-   The @tt{Czf_itt_subgroup} module defines subgroups.
+   The @tt[Czf_itt_subgroup] module defines subgroups.
    A subgroup of a group $g$ is a group whose carrier
    is a subset of $g$ and who shares the same binary
    operation as $g$.

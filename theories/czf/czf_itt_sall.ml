@@ -1,10 +1,8 @@
 doc <:doc<
-   @spelling{sall}
-
    @begin[doc]
    @module[Czf_itt_sall]
 
-   The @tt{Czf_itt_sall} module defines the @emph{unrestricted} universal
+   The @tt[Czf_itt_sall] module defines the @emph{unrestricted} universal
    quantification $@sall{x; P[x]}$ over all sets $x$.  The proposition
    $P[x]$ must be well-formed for all sets $x$.
    @end[doc]

@@ -1,43 +1,43 @@
-doc <:doc< 
-   @spelling{rawdata th tyEnum}
-  
+doc <:doc<
+   @spelling{th}
+
    @begin[doc]
    @module[Mfir_ty]
-  
+
    The @tt[Mfir_ty] module declares terms to represent the FIR type system.
    @end[doc]
-  
+
    ------------------------------------------------------------------------
-  
+
    @begin[license]
    This file is part of MetaPRL, a modular, higher order
    logical framework that provides a logical programming
    environment for OCaml and other languages.  Additional
    information about the system is available at
    http://www.metaprl.org/
-  
+
    Copyright (C) 2002 Brian Emre Aydemir, Caltech
-  
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
    as published by the Free Software Foundation; either version 2
    of the License, or (at your option) any later version.
-  
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-  
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-  
+
    Author: Brian Emre Aydemir
    @email{emre@cs.caltech.edu}
    @end[license]
 >>
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @parents
    @end[doc]
@@ -46,7 +46,7 @@ doc <:doc<
 extends Mfir_int
 extends Mfir_list
 
-doc <:doc< 
+doc <:doc<
    @docoff
 >>
 
@@ -54,11 +54,11 @@ doc <:doc<
  * Declarations.
  **************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @terms
    @modsubsection{Mutable types}
-  
+
    The fields in tuples, unions, and dependent tuples are allowed to be
    mutable.  (The fields in an array are always mutable.)  The flags
    @tt[mutable] and @tt[immutable] declare a field to be mutable and
@@ -75,7 +75,7 @@ declare mutable_ty{ 'ty; 'flag }
 doc <:doc< ************************************
    @begin[doc]
    @modsubsection{Type definitions}
-  
+
    Type definitions define parameterized types, unions, frames, and dependent
    tuples.  The term @tt[tyDefPoly] abstracts a type @tt[ty] over @tt[t].
    @end[doc]
@@ -83,9 +83,9 @@ doc <:doc< ************************************
 
 declare tyDefPoly{ t. 'ty['t] }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-  
+
    Frames are defined as records, where each field is a record whose data
    consists of @tt[frameSubField] terms.
    @end[doc]
@@ -93,9 +93,9 @@ doc <:doc<
 
 declare frameSubField{ 'ty; 'num }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-  
+
    The term @tt[tyDefUnion] is used to define a disjoint union.  The subterm
    @tt[cases] is the list of cases in the union, and it should be a list of
    lists of @tt[mutable_ty] terms.  A union case can be viewed as a tuple
@@ -105,9 +105,9 @@ doc <:doc<
 
 declare tyDefUnion{ 'cases }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-  
+
    (Documentation incomplete.)
    @end[doc]
 >>
@@ -119,7 +119,7 @@ declare tyDefDTuple{ 'ty_var }
 doc <:doc< ************************************
    @begin[doc]
    @modsubsection{Numbers}
-  
+
    The type @tt[tyInt] includes all signed, 31-bit integers.  The type
    @tt{tyEnum[i:n]} includes the integers $@{0,@ldots,i-1@}$.  The
    type @tt[tyRawInt] includes integers of varying bit precisions (8, 16, 32,
@@ -137,7 +137,7 @@ declare tyFloat[precision:n]
 doc <:doc< ************************************
    @begin[doc]
    @modsubsection{Functions}
-  
+
    The type @tt[tyFun] represents functions that take an argument of
    type @tt[arg_type], and return a result of type @tt[res_type].
    @end[doc]
@@ -148,7 +148,7 @@ declare tyFun{ 'arg_type; 'res_type }
 doc <:doc< ************************************
    @begin[doc]
    @modsubsection{Tuples}
-  
+
    The type @tt[tyUnion] represents values in a polymorphic union type.  The
    integer set @tt[intset] selects a subset of the cases of a polymorphic
    union definition given by @tt[ty_var].  Indexing of union cases starts
@@ -159,13 +159,13 @@ doc <:doc< ************************************
 
 declare tyUnion{ 'ty_var; 'ty_list; 'intset }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-  
+
    The type @tt[tyTuple] represents tuples with arity $n$ if @tt[ty_list] is a
    list of $n$ types. The parameter @tt[tc] is a tuple class, which can either
    be ``normal'', ``raw'', or ``box''.  Raw tuples can contain pointers and
-   other rawdata.  They require a slightly different runtime representation,
+   other raw data.  They require a slightly different runtime representation,
    where the first field contains runtime type information.  Box tuples must
    always have arity one, and are used pass arbitrary values (such as
    floating-point values or raw integers) as polymorphic values.
@@ -174,9 +174,9 @@ doc <:doc<
 
 declare tyTuple[tc:s]{ 'mtyl }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-  
+
    (Documentation incomplete.)
    @end[doc]
 >>
@@ -189,7 +189,7 @@ declare tyTag{ 'ty_var; 'mtyl }
 doc <:doc< ************************************
    @begin[doc]
    @modsubsection{Other aggregates}
-  
+
    Arrays are similar to tuples, except all the elements of an array have the
    same type, and arrays may have arbitrary, non-negative dimension.
    @end[doc]
@@ -197,9 +197,9 @@ doc <:doc< ************************************
 
 declare tyArray{ 'ty }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-  
+
    The type @tt[tyRawData] represents arbitrary data.  It is commonly
    used to represent data in imperative programming languages, such
    as C, where the types of the elements within are not known.  Runtime
@@ -209,9 +209,9 @@ doc <:doc<
 
 declare tyRawData
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-  
+
    The type @tt[tyFrame] is the frame given by @tt[ty_var] instantiated
    at the types in the list @tt[tyl].  Frames are not directly accessible
    to the programmer.
@@ -223,16 +223,16 @@ declare tyFrame{ 'ty_var; 'tyl }
 doc <:doc< ************************************
    @begin[doc]
    @modsubsection{Polymorphism}
-  
+
    The term @tt[tyVar] represents a type variable.
    @end[doc]
 >>
 
 declare tyVar{ 'ty_var }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-  
+
    The type @tt[tyApply] applies the types in the list @tt[ty_list] to a
    parametrized type given by @tt[ty_var].  The application must be
    complete; the resulting type cannot be a parametrized type.
@@ -241,9 +241,9 @@ doc <:doc<
 
 declare tyApply{ 'ty_var; 'ty_list }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-  
+
    The existential type @tt[tyExists] defines a type @tt[ty] abstracted over a
    type variable @tt[t].  Similarly, the term @tt[tyAll] defines a universally
    quantified type.
@@ -253,9 +253,9 @@ doc <:doc<
 declare tyExists{ t. 'ty['t] }
 declare tyAll{ t. 'ty['t] }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-  
+
    If @tt[var] is a ``packed'' existential value (see @hrefterm[atomTyPack]),
    then the term @tt[tyProject] is the $i$th type in the packing, where
    indexing starts at zero.
@@ -264,7 +264,7 @@ doc <:doc<
 
 declare tyProject[i:n]{ 'var }
 
-doc <:doc< 
+doc <:doc<
    @docoff
 >>
 

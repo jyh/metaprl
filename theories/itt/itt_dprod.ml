@@ -1,6 +1,4 @@
 doc <:doc<
-   @spelling{dprod fst snd productElimination weakProductElimination}
-
    @begin[doc]
    @module[Itt_dprod]
 

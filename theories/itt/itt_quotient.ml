@@ -1,10 +1,8 @@
 doc <:doc<
-   @spelling{quot}
-
    @begin[doc]
    @module[Itt_quotient]
 
-   The @tt{Itt_quotient} module defines the @emph{quotient}
+   The @tt[Itt_quotient] module defines the @emph{quotient}
    type $@quot{T; x; y; E[x, y]}$, which imposes a @emph{new}
    equality $E$ on the type $T$.  The relation $E$ must be
    an equivalence relation on $T$; and to be well-formed the

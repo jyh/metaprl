@@ -1,10 +1,8 @@
 doc <:doc<
-   @spelling{rfun rfunctionFormation}
-
    @begin[doc]
    @module[Itt_rfun]
 
-   The @tt{Itt_rfun} module defines the @emph{very-dependent function
+   The @tt[Itt_rfun] module defines the @emph{very-dependent function
    type}.  This is the root type for the function types
    for the dependent-function @hrefmodule[Itt_dfun] and
    the nondependent-function @hrefmodule[Itt_fun].

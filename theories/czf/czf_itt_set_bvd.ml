@@ -1,10 +1,8 @@
 doc <:doc<
-   @spelling{set_bvd Xin}
-
    @begin[doc]
    @module[Czf_itt_set_bvd]
 
-   The @tt{Czf_itt_set_bvd} module defines the @emph{image} of a set
+   The @tt[Czf_itt_set_bvd] module defines the @emph{image} of a set
    under some mapping. Image is defined as a set constructor
    $@setbvd{x; s; a[x]}$, which builds a new set from an existing
    set $s$ via some mapping $a[x]$. A set $x$ is a member of
@@ -134,7 +132,7 @@ doc <:doc<
    @begin[doc]
    @modsubsection{Elimination}
 
-   The elimination form for the set builder $@mem{y; @set_bvd{x; s; a[x]}}$
+   The elimination form for the set builder $@mem{y; @setbvd{x; s; a[x]}}$
    produces a witness $@mem{z; s}$ for which $@eq{y; a[z]}$.
    @end[doc]
 >>

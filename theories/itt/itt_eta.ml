@@ -1,6 +1,4 @@
-doc <:doc< 
-   @spelling{reduceEta}
-  
+doc <:doc<
    @begin[doc]
    @module[Itt_eta]
    @parents
@@ -8,10 +6,10 @@ doc <:doc<
 >>
 extends Itt_dfun
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-  
-   The @tt{reduceEta} rewrite defines eta-reduction.
+
+   The @tt[reduceEta] rewrite defines eta-reduction.
    This is conditional reduction: one can apply it only for functions.
    @end[doc]
 >>

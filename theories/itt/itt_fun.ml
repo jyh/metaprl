@@ -1,10 +1,8 @@
 doc <:doc<
-   @spelling{independentFunctionElimination}
-
    @begin[doc]
    @module[Itt_fun]
 
-   The @tt{Itt_fun} module defines the non-dependent function type.
+   The @tt[Itt_fun] module defines the non-dependent function type.
    The function type is @emph{derived} from the dependent-function
    type @hrefmodule[Itt_dfun], which is in turn derived from the
    very-dependent function @hrefmodule[Itt_rfun].

@@ -1,12 +1,10 @@
 doc <:doc<
-   @begin[spelling]
-   struct th
-   @end[spelling]
+   @spelling{th}
 
    @begin[doc]
    @module[Itt_struct2]
 
-   The @tt{Itt_struct2} module contains some @emph{derived} rules similar
+   The @tt[Itt_struct2] module contains some @emph{derived} rules similar
    to @hrefrule[cut] and @hrefrule[substitution] in the @hrefmodule[Itt_struct] theory.
    @end[doc]
 

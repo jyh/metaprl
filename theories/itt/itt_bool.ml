@@ -1,10 +1,8 @@
 doc <:doc<
-   @spelling{bool ifthenelse splitBoolT splitITE}
-
    @begin[doc]
    @module[Itt_bool]
 
-   The @tt{Itt_bool} module defines a type of (decidable)
+   The @tt[Itt_bool] module defines a type of (decidable)
    Booleans.  The definition of the Boolean values is
    based on the @hrefterm[unit] type in the @hrefmodule[Itt_unit] module
    and the @hrefterm[union] type in the @hrefmodule[Itt_union]

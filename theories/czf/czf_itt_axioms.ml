@@ -1,6 +1,4 @@
 doc <:doc<
-   @spelling{rel}
-
    @begin[doc]
    @module[Czf_itt_axioms]
 

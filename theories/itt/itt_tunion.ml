@@ -1,10 +1,8 @@
 doc <:doc<
-   @spelling{tunion}
-
    @begin[doc]
    @module[Itt_tunion]
 
-   The @tt{Itt_tunion} module defines a (joint) union type
+   The @tt[Itt_tunion] module defines a (joint) union type
    $@tunion{x; A; B[x]}$.  The elements of the union are the
    elements of any of the types $B[x]$ for any $x @in A$.
 

@@ -1,6 +1,4 @@
 doc <:doc<
-   @spelling{conversional Mojave}
-
    @begin[doc]
    @module[Mfir_sequent]
 

@@ -1,10 +1,9 @@
 doc <:doc<
-   @spelling{memberFormation srec srecind unrollings}
-
+   @spelling{unrollings}
    @begin[doc]
    @module[Itt_srec]
 
-   The @tt{Itt_srec} module defines a ``simple'' recursive type,
+   The @tt[Itt_srec] module defines a ``simple'' recursive type,
    without parameters that are passed along the unrollings of the
    type, as it is in the parameterized recursive type in @hrefmodule[Itt_prec].
 

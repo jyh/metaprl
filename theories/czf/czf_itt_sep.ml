@@ -1,6 +1,4 @@
 doc <:doc<
-   @spelling{sep}
-
    @begin[doc]
    @module[Czf_itt_sep]
 

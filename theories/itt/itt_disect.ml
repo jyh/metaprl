@@ -1,11 +1,8 @@
 doc <:doc<
-   @begin[spelling]
-   disect
-   @end[spelling]
    @begin[doc]
    @module[Itt_disect]
 
-   The @tt{Itt_disect} module defines the @emph{dependent intersection}
+   The @tt[Itt_disect] module defines the @emph{dependent intersection}
    type $@bisect{x@colon A; B[x]}$.
    This type contains all elements $a$ from $A$ such that $a$ is also
    in $B[a]$.

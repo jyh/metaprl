@@ -1,9 +1,5 @@
 doc <:doc<
-   @begin[spelling]
-   dT handedness inl inlFormation inr inrFormation reduceDecideInl
-   reduceDecideInr selT
-   @end[spelling]
-
+   @spelling{handedness}
    @begin[doc]
    @module[Itt_union]
 

@@ -1,9 +1,6 @@
 doc <:doc< -*- Mode: text -*-
 
-   @begin[spelling]
-   asl asr bool cc chr cmo cmx coercions gdb int lor lsl lsr ml
-   doesn ll untyped mod ocamlc
-   @end[spelling]
+   @spelling{coercions doesn ll}
 
    @begin[doc]
    @chapter[ocaml_doc_expr1]{Simple Expressions}

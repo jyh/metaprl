@@ -1,12 +1,9 @@
 doc <:doc<
-   @begin[spelling]
-   squashT th unsquashed unsquash unsquashT
-   @end[spelling]
-
+   @spelling{th unsquash unsquashed}
    @begin[doc]
    @module[Itt_squash]
 
-   The @tt{Itt_squash} module defines a @i[squash] type.
+   The @tt[Itt_squash] module defines a @i[squash] type.
    <<squash{'A}>> hides computational content of $A$.
    <<squash{'A}>> is inhabited @emph{iff} $A$ is inhabited.
    When inhabited, <<squash{'A}>> contains only one element $@it$.

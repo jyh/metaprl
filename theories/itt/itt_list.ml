@@ -4,7 +4,7 @@ doc <:doc<
    @begin[doc]
    @module[Itt_list]
 
-   The @tt{Itt_list} module defines the type of finite
+   The @tt[Itt_list] module defines the type of finite
    lists of elements.  The lists can be defined using the
    simple recursive type in module @hrefmodule[Itt_srec].
    However, the lists have a simpler semantics, and they are defined

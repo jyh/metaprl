@@ -85,8 +85,8 @@ dform prod_prl_df2 :  parens :: "prec"[prec_prod] :: mode[prl] :: prod{'A; x. 'B
 dform pair_prl_df1 : mode[prl] :: pair{'a; 'b} =
    pushm[0] `"<" slot{'a}`"," slot{'b} `">" popm
 
-dform spread_prl_df1 : parens :: "prec"[prec_spread] :: mode[prl] :: spread{'e; u, v. 'b['u; 'v]} =
-   `"let " pair{'u; 'v} `" = " slot{'e} `" in " slot{'b['u; 'v]}
+dform spread_prl_df1 : parens :: "prec"[prec_spread] :: mode[prl] :: spread{'e; u, v. 'b} =
+   `"let " pair{'u; 'v} `" = " slot{'e} `" in " slot{'b}
 
 dform fst_df1 : mode[prl] :: fst{'e} =
    slot{'e} `".1"
@@ -156,7 +156,7 @@ prim pairEquality 'H 'y :
    sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
    sequent [squash] { 'H >- 'b1 = 'b2 in 'B['a1] } -->
    sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
-   sequent ['ext] { 'H >- ('a1, 'b1) = ('a2, 'b2) in x:'A * 'B } =
+   sequent ['ext] { 'H >- ('a1, 'b1) = ('a2, 'b2) in x:'A * 'B['x] } =
    it
 
 (*

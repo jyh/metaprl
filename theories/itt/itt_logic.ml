@@ -180,7 +180,7 @@ let is_iff_term = is_dep0_dep0_term iff_opname
 let dest_iff = dest_dep0_dep0_term iff_opname
 let mk_iff_term = mk_dep0_dep0_term iff_opname
 
-let not_term = << 'A => 'B >>
+let not_term = << "not"{'a} >>
 let not_opname = opname_of_term not_term
 let is_not_term = is_dep0_term not_opname
 let dest_not = dest_dep0_term not_opname

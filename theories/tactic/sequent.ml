@@ -67,6 +67,12 @@ let hyp_indices arg i =
       else
          i - 1, count - i
 
+let get_pos_hyp_num arg i =
+   if i < 0 then
+      (hyp_count arg) + i
+   else
+      i
+
 let clause_addr arg i =
    TermMan.nth_clause_addr (goal arg) i
 

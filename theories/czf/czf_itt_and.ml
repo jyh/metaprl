@@ -4,6 +4,9 @@
 
 include Czf_itt_set
 
+open Printf
+open Debug
+
 open Refiner.Refiner.RefineError
 open Resource
 
@@ -13,6 +16,11 @@ open Sequent
 
 open Itt_logic
 open Itt_rfun
+open Itt_dprod
+
+let _ =
+   if !debug_load then
+      eprintf "Loading Czf_itt_and%t" eflush
 
 (************************************************************************
  * TERMS                                                                *
@@ -20,16 +28,20 @@ open Itt_rfun
 
 declare "and"{'A; 'B}
 declare pair{'a; 'b}
+declare spread{'z; x, y. 'b['x; 'y]}
 
 (************************************************************************
  * REWRITES                                                             *
  ************************************************************************)
 
-primrw unfold_and : "and"{'A; 'B} <--> prod{'A; 'B}
+primrw unfold_and : "and"{'A; 'B} <--> 'A * 'B
 primrw unfold_pair : pair{'a; 'b} <--> Itt_dprod!pair{'a; 'b}
+primrw unfold_spread : spread{'z; x, y. 'b['x; 'y]} <-->
+   Itt_dprod!spread{'z; x, y. 'b['x; 'y]}
 
 let fold_and = makeFoldC << "and"{'A; 'B} >> unfold_and
 let fold_pair = makeFoldC << "pair"{'a; 'b} >> unfold_pair
+let fold_spread = makeFoldC << spread{'z; x, y. 'b['x; 'y]} >> unfold_spread
 
 (************************************************************************
  * DISPLAY FORMS                                                        *
@@ -41,9 +53,30 @@ dform and_df : mode[prl] :: parens :: "prec"[prec_and] :: "and"{'A; 'B} =
 dform pair_df : pair{'a; 'b} =
    `"<" pushm[0] slot{'a} `";" " " slot{'b} popm `">'"
 
+(*
+dform spread_df : parens :: "prec"[prec_spread] :: mode[prl] :: spread{'e; u, v. 'b} =
+   `"let " pair{'u; 'v} `" = " slot{'e} `" in " slot{'b}
+*)
+
 (************************************************************************
  * RULES                                                                *
  ************************************************************************)
+
+(*
+ * Typehood.
+ *)
+interactive and_type 'H :
+   sequent ['ext] { 'H >- "type"{'A} } -->
+   sequent ['ext] { 'H >- "type"{'B} } -->
+   sequent ['ext] { 'H >- "type"{."and"{'A; 'B}} }
+
+(*
+ * Well formedness.
+ *)
+interactive and_wf 'H :
+   sequent ['ext] { 'H >- wf{'A} } -->
+   sequent ['ext] { 'H >- wf{'B} } -->
+   sequent ['ext] { 'H >- wf{."and"{'A; 'B}} }
 
 (*
  * Intro.
@@ -53,11 +86,10 @@ dform pair_df : pair{'a; 'b} =
  * H >- A
  * H >- B
  *)
-prim and_intro 'H :
-   ('a : sequent ['ext] { 'H >- 'A }) -->
-   ('b : sequent ['ext] { 'H >- 'B }) -->
-   sequent ['ext] { 'H >- "and"{'A; 'B} } =
-   pair{'a; 'b}
+interactive and_intro 'H :
+   sequent ['ext] { 'H >- 'A } -->
+   sequent ['ext] { 'H >- 'B } -->
+   sequent ['ext] { 'H >- "and"{'A; 'B} }
 
 (*
  * Elimination.
@@ -66,35 +98,22 @@ prim and_intro 'H :
  * by and_elim i
  * H, x: A /\ B, y: A; z:B; J[<y, z>] >- T[<y, z>]
  *)
-prim and_elim 'H 'J 'x 'y 'z :
-   ('t['x; 'y; 'z] :
-    sequent ['ext] { 'H;
-                     x: "and"{'A; 'B};
+interactive and_elim 'H 'J 'x 'y 'z :
+   sequent ['ext] { 'H;
                      y: 'A;
                      z: 'B;
                      'J[pair{'y; 'z}]
                     >- 'T[pair{'y; 'z}]
-   }) -->
-   sequent ['ext] { 'H; x: "and"{'A; 'B}; 'J['x] >- 'T['x] } =
-   't[pair{'y; 'z}; 'y; 'z]
-
-(*
- * Well formedness.
- *)
-prim and_wf 'H :
-   sequent ['ext] { 'H >- wf{'A} } -->
-   sequent ['ext] { 'H >- wf{'B} } -->
-   sequent ['ext] { 'H >- wf{."and"{'A; 'B}} } =
-   it
+   } -->
+   sequent ['ext] { 'H; x: "and"{'A; 'B}; 'J['x] >- 'T['x] }
 
 (*
  * Implication is restricted.
  *)
-prim and_res 'H :
-   sequent ['ext] { 'H >- restricted{'A} } -->
-   sequent ['ext] { 'H >- restricted{'B} } -->
-   sequent ['ext] { 'H >- restricted{."and"{'A; 'B}} } =
-   it
+interactive and_res 'H :
+   sequent ['ext] { 'H >- restricted{x. 'A['x]} } -->
+   sequent ['ext] { 'H >- restricted{x. 'B['x]} } -->
+   sequent ['ext] { 'H >- restricted{x. "and"{'A['x]; 'B['x]}} }
 
 (************************************************************************
  * TACTICS                                                              *
@@ -102,7 +121,7 @@ prim and_res 'H :
 
 let and_term = << "and"{'A; 'B} >>
 let wf_and_term = << wf{. "and"{'A; 'B}} >>
-let res_and_term = << restricted{. "and"{'A; 'B}} >>
+let res_and_term = << restricted{x. "and"{'A['x]; 'B['x]}} >>
 
 (*
  * Propositional reasoning.
@@ -121,15 +140,27 @@ let d_resource = d_resource.resource_improve d_resource (and_term, d_andT)
 (*
  * Well-formedness.
  *)
-external id : 'a * 'b -> 'a * 'b = "%identity"
-
 let d_wf_andT i p =
    if i = 0 then
       and_wf (hyp_count p) p
    else
-      raise (RefineError (id ("d_wf_andT", (StringTermError ("no elim form", wf_and_term)))))
+      raise (RefineError ("d_wf_andT", (StringTermError ("no elim form", wf_and_term))))
 
 let d_resource = d_resource.resource_improve d_resource (wf_and_term, d_wf_andT)
+
+(*
+ * Typehood.
+ *)
+let d_type_andT i p =
+   if i = 0 then
+      and_type (hyp_count p) p
+   else
+      raise (RefineError ("d_type_andT", StringError "no elim form"))
+
+let type_and_term = << "type"{."and"{'A; 'B}} >>
+
+let d_resource = d_resource.resource_improve d_resource (type_and_term, d_type_andT)
+
 
 (*
  * Restricted.
@@ -138,7 +169,14 @@ let d_res_andT i p =
    if i = 0 then
       and_res (hyp_count p) p
    else
-      raise (RefineError (id ("d_res_andT", (StringTermError ("no elim form", res_and_term)))))
+      raise (RefineError ("d_res_andT", (StringTermError ("no elim form", res_and_term))))
 
 let d_resource = d_resource.resource_improve d_resource (res_and_term, d_res_andT)
 
+(*
+ * -*-
+ * Local Variables:
+ * Caml-master: "prlcomp.run"
+ * End:
+ * -*-
+ *)

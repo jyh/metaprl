@@ -3,6 +3,7 @@
  *)
 
 include Czf_itt_set
+include Czf_itt_union
 
 open Conversionals
 
@@ -19,7 +20,7 @@ declare decide{'x; y. 'a['y]; z. 'b['z]}
  * REWRITES                                                             *
  ************************************************************************)
 
-rewrite unfold_or : "or"{'A; 'B} <--> union{'A; 'B}
+rewrite unfold_or : "or"{'A; 'B} <--> Itt_union!union{'A; 'B}
 rewrite unfold_inl : inl{'x} <--> Itt_union!inl{'x}
 rewrite unfold_inr : inr{'x} <--> Itt_union!inr{'x}
 rewrite unfold_decide : decide{'x; y. 'a['y]; z. 'b['z]} <--> Itt_union!decide{'x; y. 'a['y]; z. 'b['z]}

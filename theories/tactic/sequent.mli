@@ -35,6 +35,7 @@ val clause_addr : tactic_arg -> int -> address
 val get_decl_number : tactic_arg -> string -> int
 val hyp_count : tactic_arg -> int
 val hyp_indices : tactic_arg -> int -> int * int
+val get_pos_hyp_num : tactic_arg -> int -> int
 
 (*
  * Get the parts of the argument.

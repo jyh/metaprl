@@ -11,6 +11,10 @@ include Czf_itt_exists
 include Czf_itt_dall
 include Czf_itt_dexists
 
+let _ =
+   if !debug_load then
+      eprintf "Loading CZF_itt_axioms%t" eflush
+
 (*
  * Make forula concise.
  *)

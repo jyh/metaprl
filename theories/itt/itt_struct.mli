@@ -104,6 +104,8 @@ val substT : term -> int -> tactic
 val hypSubstT : int -> int -> tactic
 val revHypSubstT : int -> int -> tactic
 
+val replaceHypT : term -> int -> tactic
+
 (*
  * -*-
  * Local Variables:

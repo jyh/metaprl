@@ -42,12 +42,9 @@ open Itt_dprod
 open Itt_union
 open Itt_w
 
-(*
- * Show that the file is loading.
- *)
 let _ =
    if !debug_load then
-      eprintf "Loading Itt_equal%t" eflush
+      eprintf "Loading Czf_itt_set%t" eflush
 
 let debug_czf_set =
    create_debug (**)
@@ -99,7 +96,7 @@ declare set_ind{'s; x, f, g. 'b['x; 'f; 'g]}
  *)
 primrw unfold_wf : wf{'p} <--> "type"{'p}
 primrw unfold_restricted : restricted{x. 'P['x]} <-->
-   ((all x: small. small_type{'P['x]})
+   ((all x: set. small_type{'P['x]})
     & (all a: set. exst b: set. all z: set. "iff"{member{'z; 'b}; .member{'z; 'a} & 'P['z]}))
 
 primrw unfold_set : set <--> w{small; x. 'x}
@@ -107,7 +104,7 @@ primrw unfold_isset : isset{'s} <--> ('s = 's in set)
 primrw unfold_member : member{'x; 'y} <-->
   (('x = 'x in set)
    & ('y = 'y in set)
-   & tree_ind{'y; t, f, g. "exists"{'t; a. 'f 'a = 'x in set}})
+   & set_ind{'y; t, f, g. "exists"{'t; a. 'f 'a = 'x in set}})
 primrw unfold_collect : collect{'T; x. 'a['x]} <--> tree{'T; lambda{x. 'a['x]}}
 primrw unfold_set_ind : set_ind{'s; x, f, g. 'b['x; 'f; 'g]} <-->
    tree_ind{'s; x, f, g. 'b['x; 'f; 'g]}
@@ -153,7 +150,7 @@ dform collect_df : mode[prl] :: parens :: "prec"[prec_apply] :: collect{'T; x. '
 
 dform set_ind_df : mode[prl] :: parens :: "prec"[prec_tree_ind] :: set_ind{'z; a, f, g. 'body} =
    szone pushm[3] `"set_ind(" slot{'g} `"." " "
-   pushm[3] `"let tree(" slot{'a} `", " slot{'f} `") =" space slot{'z} space `"in" popm space
+   pushm[3] `"let tree(" slot{'a} `", " slot{'f} `") =" hspace slot{'z} hspace `"in" popm hspace
    slot{'body} popm ezone
 
 (************************************************************************
@@ -232,6 +229,18 @@ interactive set_elim 'H 'J 'a 'T 'f 'w :
                     T: small;
                     f: 'T -> set;
                     w: (all x : 'T. 'C['f 'x])
+                  >- 'C[collect{'T; x. 'f 'x}]
+                  } -->
+   sequent ['ext] { 'H; a: set; 'J['a] >- 'C['a] }
+
+interactive set_elim2 'H 'J 'a 'T 'f 'w 'z :
+   sequent ['ext] { 'H;
+                    a: set;
+                    'J['a];
+                    T: small;
+                    f: 'T -> set;
+                    w: (all x : 'T. 'C['f 'x]);
+                    z: isset{collect{'T; x. 'f 'x}}
                   >- 'C[collect{'T; x. 'f 'x}]
                   } -->
    sequent ['ext] { 'H; a: set; 'J['a] >- 'C['a] }
@@ -337,12 +346,12 @@ let d_isset_genT tac i p =
       let i = hyp_count p in
          try
             let arg = get_with_arg p in
-            let i =
+            let sel =
                try get_sel_arg p with
                   RefineError _ ->
                      1
             in
-               if i > 1 then
+               if sel > 1 then
                   isset_member i arg p
                else
                   isset_contains i arg p
@@ -410,10 +419,10 @@ let d_setT i p =
    if i = 0 then
       raise (RefineError ("d_setT", StringTermError ("no formation rule", set_term)))
    else
-      let v_a, _ = nth_hyp p i in
-      let i, j = hyp_indices p i in
-      let v_T, v_f, v_b = maybe_new_vars3 p "T" "f" "b" in
-         set_elim i j v_a v_T v_f v_b p
+      let v_a, h_a = nth_hyp p i in
+      let j, k = hyp_indices p i in
+      let v_T, v_f, v_b, v_z = maybe_new_vars4 p "T" "f" "b" "z" in
+         set_elim2 j k v_a v_T v_f v_b v_z p
 
 let d_resource = d_resource.resource_improve d_resource (set_term, d_setT)
 

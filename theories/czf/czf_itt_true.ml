@@ -4,11 +4,18 @@
 
 include Czf_itt_set
 
+open Printf
+open Debug
+
 open Refiner.Refiner.RefineError
 
 open Sequent
 open Resource
 open Tacticals
+
+let _ =
+   if !debug_load then
+      eprintf "Loading Czf_itt_true%t" eflush
 
 declare "true"
 

@@ -106,7 +106,7 @@ axiom pairEquality 'H 'y :
    sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
    sequent [squash] { 'H >- 'b1 = 'b2 in 'B['a1] } -->
    sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
-   sequent ['ext] { 'H >- ('a1, 'b1) = ('a2, 'b2) in x:'A * 'B }
+   sequent ['ext] { 'H >- ('a1, 'b1) = ('a2, 'b2) in x:'A * 'B['x] }
 
 (*
  * H, x:A * B[x], J[x] >- T[x] ext spread(x; u, v. t[u, v])

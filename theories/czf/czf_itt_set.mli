@@ -92,7 +92,7 @@ declare set_ind{'s; x, f, g. 'b['x; 'f; 'g]}
  *)
 rewrite unfold_wf : wf{'p} <--> "type"{'p}
 rewrite unfold_restricted : restricted{x. 'P['x]} <-->
-   ((all x: small. small_type{'P['x]})
+   ((all x: set. small_type{'P['x]})
     & (all a: set. exst b: set. all z: set. "iff"{member{'z; 'b}; .member{'z; 'a} & 'P['z]}))
 
 rewrite unfold_set : set <--> w{small; x. 'x}
@@ -100,7 +100,7 @@ rewrite unfold_isset : isset{'s} <--> ('s = 's in set)
 rewrite unfold_member : member{'x; 'y} <-->
   (('x = 'x in set)
    & ('y = 'y in set)
-   & tree_ind{'y; t, f, g. "exists"{'t; a. 'f 'a = 'x in set}})
+   & set_ind{'y; t, f, g. "exists"{'t; a. 'f 'a = 'x in set}})
 rewrite unfold_collect : collect{'T; x. 'a['x]} <--> tree{'T; lambda{x. 'a['x]}}
 rewrite unfold_set_ind : set_ind{'s; x, f, g. 'b['x; 'f; 'g]} <-->
    tree_ind{'s; x, f, g. 'b['x; 'f; 'g]}
@@ -198,6 +198,18 @@ axiom set_elim 'H 'J 'a 'T 'f 'w :
                     T: small;
                     f: 'T -> set;
                     w: (all x : 'T. 'C['f 'x])
+                  >- 'C[collect{'T; x. 'f 'x}]
+                  } -->
+   sequent ['ext] { 'H; a: set; 'J['a] >- 'C['a] }
+
+axiom set_elim2 'H 'J 'a 'T 'f 'w 'z :
+   sequent ['ext] { 'H;
+                    a: set;
+                    'J['a];
+                    T: small;
+                    f: 'T -> set;
+                    w: (all x : 'T. 'C['f 'x]);
+                    z: isset{collect{'T; x. 'f 'x}}
                   >- 'C[collect{'T; x. 'f 'x}]
                   } -->
    sequent ['ext] { 'H; a: set; 'J['a] >- 'C['a] }

@@ -1,8 +1,11 @@
 (*
- * Primitiva axiomatization of implication.
+ * Primitiva interactiveatization of implication.
  *)
 
-include Czf_itt_all
+include Czf_itt_set
+
+open Debug
+open Printf
 
 open Refiner.Refiner.RefineError
 open Resource
@@ -15,61 +18,77 @@ open Var
 open Itt_logic
 open Itt_rfun
 
+let _ =
+   if !debug_load then
+      eprintf "Loading Czf_itt_dall%t" eflush
+
+(************************************************************************
+ * TERMS                                                                *
+ ************************************************************************)
+
+declare "all"{'T; x. 'A['x]}
+
 (************************************************************************
  * REWRITES                                                             *
  ************************************************************************)
 
-primrw unfold_dall : "all"{'T; x. 'A['x]} <--> (x: set -> member{'x; 'T} -> 'A['x])
+primrw unfold_dall : "all"{'s; x. 'A['x]} <-->
+   set_ind{'s; a, f, g. "fun"{'a; x. 'A['f 'x]}}
 
-let fold_dall = makeFoldC << "all"{'T; x. 'A['x]} >> unfold_dall
+interactive_rw reduce_dall : "all"{collect{'T; x. 'f['x]}; y. 'A['y]} <-->
+   (t: 'T -> 'A['f['t]])
 
 (************************************************************************
  * DISPLAY FORMS                                                        *
  ************************************************************************)
 
-dform dall_df : mode[prl] :: parens :: "prec"[prec_lambda] :: "all"{'T; x. 'A} =
-   pushm[0] forall `"'" slot{'x} `":" slot{'T} `"." slot{'A} popm
+dform dall_df : mode[prl] :: parens :: "prec"[prec_lambda] :: "all"{'s; x. 'A} =
+   pushm[0] forall `"'" slot{'x} " " Nuprl_font!member " " slot{'s} `"." slot{'A} popm
 
 (************************************************************************
  * RULES                                                                *
  ************************************************************************)
 
 (*
- * Intro.
- *
- * H >- all x: T. A
- * by dall_intro
- * H >- member{T; set}
- * H, x: T >- A
+ * Typehood.
  *)
-prim dall_intro 'H 'a 'b :
-   sequent ['ext] { 'H >- isset{'T} } -->
-   sequent ['ext] { 'H; a: set; b: member{'a; 'T} >- 'A['a] } -->
-   sequent ['ext] { 'H >- "all"{'T; x. 'A['x]} } =
-   it
-
-(*
- * Elimination.
- *
- * H, x: all y:T. A[y]}, J[x] >- T[x]
- * by dall_elim z
- * H, x: all y:T. A[y], J[x] >- member{z; T}
- * H, x: all y:T. A[y], J[x], z: A[z] >- T[x]
- *)
-prim dall_elim 'H 'J 'x 'z 'w :
-   sequent ['ext] { 'H; x: "all"{'T; y. 'A['y]}; 'J['x] >- member{'z; 'T} } -->
-   sequent ['ext] { 'H; x: "all"{'T; y. 'A['y]}; 'J['x]; w: 'A['z] >- 'C['x] } -->
-   sequent ['ext] { 'H; x: "all"{'T; y. 'A['y]}; 'J['x] >- 'C['x] } =
-   it
+interactive dall_type 'H 'y :
+   sequent ['ext] { 'H >- isset{'s} } -->
+   sequent ['ext] { 'H; y: set >- "type"{'A['y]} } -->
+   sequent ['ext] { 'H >- "type"{."all"{'s; x. 'A['x]}} }
 
 (*
  * Well formedness.
  *)
-prim dall_wf 'H 'y :
+interactive dall_wf 'H 'y :
    sequent ['ext] { 'H >- isset{'T} } -->
-   sequent ['ext] { 'H; y: 'T >- wf{'A['y]} } -->
-   sequent ['ext] { 'H >- wf{."all"{'T; x. 'A['x]} } } =
-   it
+   sequent ['ext] { 'H; y: set >- wf{'A['y]} } -->
+   sequent ['ext] { 'H >- wf{."all"{'T; x. 'A['x]} } }
+
+(*
+ * Intro.
+ *)
+interactive dall_intro 'H 'a 'b :
+   sequent ['ext] { 'H >- isset{'T} } -->
+   sequent ['ext] { 'H; a: set >- wf{'A['a]} } -->
+   sequent ['ext] { 'H; a: set; b: member{'a; 'T} >- 'A['a] } -->
+   sequent ['ext] { 'H >- "all"{'T; x. 'A['x]} }
+
+(*
+ * Elimination.
+ *)
+interactive dall_elim 'H 'J 'x 'z 'w :
+   sequent ['ext] { 'H; x: "all"{'T; y. 'A['y]}; 'J['x] >- member{'z; 'T} } -->
+   sequent ['ext] { 'H; x: "all"{'T; y. 'A['y]}; 'J['x]; w: 'A['z] >- 'C['x] } -->
+   sequent ['ext] { 'H; x: "all"{'T; y. 'A['y]}; 'J['x] >- 'C['x] }
+
+(*
+ * This is a restricted formula.
+ *)
+interactive dall_res 'H :
+   sequent ['ext] { 'H >- isset{'s} } -->
+   sequent ['ext] { 'H >- restricted{y. 'A['y]} } -->
+   sequent ['ext] { 'H >- restricted{z. "all"{'s; y. 'A['y]}} }
 
 (************************************************************************
  * TACTICS                                                              *
@@ -97,14 +116,33 @@ let d_resource = d_resource.resource_improve d_resource (dall_term, d_dallT)
 (*
  * Well-formedness.
  *)
-external id : 'a * 'b -> 'a * 'b = "%identity"
-
 let d_wf_dallT i p =
    if i = 0 then
       let v = maybe_new_vars1 p "v" in
          dall_wf (hyp_count p) v p
    else
-      raise (RefineError (id ("d_wf_dallT", (StringTermError ("no elim form", wf_dall_term)))))
+      raise (RefineError ("d_wf_dallT", (StringTermError ("no elim form", wf_dall_term))))
 
 let d_resource = d_resource.resource_improve d_resource (wf_dall_term, d_wf_dallT)
 
+(*
+ * Typehood.
+ *)
+let d_dall_typeT i p =
+   if i = 0 then
+      let v = maybe_new_vars1 p "v" in
+         dall_type (hyp_count p) v p
+   else
+      raise (RefineError ("d_dall_typeT", StringError "no elimination form"))
+
+let dall_type_term = << "type"{."all"{'s; x. 'A['x]}} >>
+
+let d_resource = d_resource.resource_improve d_resource (dall_type_term, d_dall_typeT)
+
+(*
+ * -*-
+ * Local Variables:
+ * Caml-master: "refiner"
+ * End:
+ * -*-
+ *)

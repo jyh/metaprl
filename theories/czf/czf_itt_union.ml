@@ -4,13 +4,22 @@
 
 include Czf_itt_set
 
+open Printf
+open Debug
+
 open Refiner.Refiner.RefineError
 open Resource
 
 open Sequent
 open Tacticals
+open Conversionals
+open Var
 
 open Itt_logic
+
+let _ =
+   if !debug_load then
+      eprintf "Loading Czf_itt_union%t" eflush
 
 (************************************************************************
  * TERMS                                                                *
@@ -26,6 +35,12 @@ primrw unfold_union : union{'s1; 's2} <-->
    set_ind{'s1; a1, f1, g1.
       set_ind{'s2; a2, f2, g2.
          collect{.Itt_union!union{'a1; 'a2}; x. decide{'x; z. 'f1 'z; z. 'f2 'z}}}}
+
+interactive_rw reduce_union : union{collect{'t1; x1. 'f1['x1]};
+                                    collect{'t2; x2. 'f2['x2]}} <-->
+   collect{.Itt_union!union{'t1; 't2}; x. decide{'x; z. 'f1['z]; z. 'f2['z]}}
+
+let fold_union = makeFoldC << union{'s1; 's2} >> unfold_union
 
 (************************************************************************
  * DISPLAY                                                              *
@@ -60,11 +75,21 @@ interactive union_member_intro_right 'H :
    sequent ['ext] { 'H >- member{'x; union{'s1; 's2}} }
 
 (*
- * Nothing is in the empty set.
- *)
+ * Desired elimination form.
 interactive union_member_elim 'H 'J :
    sequent ['ext] { 'H; x: member{'y; 's1}; 'J['x] >- 'T['x] } -->
    sequent ['ext] { 'H; x: member{'y; 's2}; 'J['x] >- 'T['x] } -->
+   sequent ['ext] { 'H; x: member{'y; union{'s1; 's2}}; 'J['x] >- 'T['x] }
+ *)
+
+(*
+ * We get a slightly less powerful elim form.
+ *)
+interactive union_member_elim3 'H 'J 'z :
+   sequent ['ext] { 'H; x: member{'y; union{'s1; 's2}}; 'J['x] >- isset{'s1} } -->
+   sequent ['ext] { 'H; x: member{'y; union{'s1; 's2}}; 'J['x] >- isset{'s2} } -->
+   sequent ['ext] { 'H; x: member{'y; union{'s1; 's2}}; 'J['x]; z: member{'y; 's1} >- 'T['x] } -->
+   sequent ['ext] { 'H; x: member{'y; union{'s1; 's2}}; 'J['x]; z: member{'y; 's2} >- 'T['x] } -->
    sequent ['ext] { 'H; x: member{'y; union{'s1; 's2}}; 'J['x] >- 'T['x] }
 
 (************************************************************************
@@ -92,7 +117,7 @@ let d_unionT i p =
       try
          let j = get_sel_arg p in
          let rule =
-            if j = 0 then
+            if j = 1 then
                union_member_intro_left
             else
                union_member_intro_right
@@ -103,7 +128,8 @@ let d_unionT i p =
             raise (RefineError ("d_unionT", StringError "d_unionT requires a selT argument"))
    else
       let i, j = hyp_indices p i in
-         union_member_elim i j p
+      let z = maybe_new_vars1 p "z" in
+         union_member_elim3 i j z p
 
 let union_member_term = << member{'x; union{'s1; 's2}} >>
 

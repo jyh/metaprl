@@ -5,6 +5,9 @@
 
 include Itt_theory
 
+open Printf
+open Debug
+
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
 open Refiner.Refiner.RefineError
@@ -16,6 +19,10 @@ open Sequent
 open Var
 
 open Itt_equal
+
+let _ =
+   if !debug_load then
+      eprintf "Loading Czf_itt_small%t" eflush
 
 (************************************************************************
  * TERMS                                                                *
@@ -72,15 +79,25 @@ interactive unit_small 'H : :
 interactive int_small 'H : :
    sequent ['ext] { 'H >- small_type{int} }
 
-interactive fun_small 'H 'z :
+interactive dfun_small 'H 'z :
    sequent ['ext] { 'H >- small_type{'A} } -->
    sequent ['ext] { 'H; z: 'A >- small_type{'B['z]} } -->
    sequent ['ext] { 'H >- small_type{. a: 'A -> 'B['a]} }
 
-interactive prod_small 'H 'z :
+interactive fun_small 'H :
+   sequent ['ext] { 'H >- small_type{'A} } -->
+   sequent ['ext] { 'H >- small_type{'B} } -->
+   sequent ['ext] { 'H >- small_type{. 'A -> 'B} }
+
+interactive dprod_small 'H 'z :
    sequent ['ext] { 'H >- small_type{'A} } -->
    sequent ['ext] { 'H; z: 'A >- small_type{'B['z]} } -->
    sequent ['ext] { 'H >- small_type{. a: 'A * 'B['a]} }
+
+interactive prod_small 'H :
+   sequent ['ext] { 'H >- small_type{'A} } -->
+   sequent ['ext] { 'H >- small_type{'B} } -->
+   sequent ['ext] { 'H >- small_type{. 'A * 'B} }
 
 interactive union_small 'H :
    sequent ['ext] { 'H >- small_type{'A} } -->
@@ -166,25 +183,45 @@ let int_small_type_term = << small_type{int} >>
 
 let d_resource = d_resource.resource_improve d_resource (int_small_type_term, d_int_small_typeT)
 
-let d_fun_small_typeT i p =
+let d_dfun_small_typeT i p =
    if i = 0 then
       let v = maybe_new_vars1 p "v" in
-         fun_small (hyp_count p) v p
+         dfun_small (hyp_count p) v p
+   else
+      raise (RefineError ("d_dfun_small_typeT", StringError "no elimination form"))
+
+let dfun_small_type_term = << small_type{. a: 'A -> 'B['a] } >>
+
+let d_resource = d_resource.resource_improve d_resource (dfun_small_type_term, d_dfun_small_typeT)
+
+let d_fun_small_typeT i p =
+   if i = 0 then
+      fun_small (hyp_count p) p
    else
       raise (RefineError ("d_fun_small_typeT", StringError "no elimination form"))
 
-let fun_small_type_term = << small_type{. a: 'A -> 'B['a] } >>
+let fun_small_type_term = << small_type{. 'A -> 'B } >>
 
 let d_resource = d_resource.resource_improve d_resource (fun_small_type_term, d_fun_small_typeT)
 
-let d_prod_small_typeT i p =
+let d_dprod_small_typeT i p =
    if i = 0 then
       let v = maybe_new_vars1 p "v" in
-         prod_small (hyp_count p) v p
+         dprod_small (hyp_count p) v p
+   else
+      raise (RefineError ("d_dprod_small_typeT", StringError "no elimination form"))
+
+let dprod_small_type_term = << small_type{. a: 'A * 'B['a] } >>
+
+let d_resource = d_resource.resource_improve d_resource (dprod_small_type_term, d_dprod_small_typeT)
+
+let d_prod_small_typeT i p =
+   if i = 0 then
+      prod_small (hyp_count p) p
    else
       raise (RefineError ("d_prod_small_typeT", StringError "no elimination form"))
 
-let prod_small_type_term = << small_type{. a: 'A * 'B['a] } >>
+let prod_small_type_term = << small_type{. 'A * 'B } >>
 
 let d_resource = d_resource.resource_improve d_resource (prod_small_type_term, d_prod_small_typeT)
 
@@ -212,14 +249,6 @@ let smallAssumT i p =
    (tryT (rwh unfold_small_type 0) thenT equalAssumT i) p
 
 (*
- * $Log$
- * Revision 1.2  1998/07/08 15:41:52  jyh
- * Pushed higherC into the refiner for efficiency.
- *
- * Revision 1.1  1998/07/06 21:39:26  jyh
- * Working czf_itt_set.
- *
- *
  * -*-
  * Local Variables:
  * Caml-master: "refiner"

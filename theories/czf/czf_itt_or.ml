@@ -3,6 +3,10 @@
  *)
 
 include Czf_itt_set
+include Czf_itt_union
+
+open Printf
+open Debug
 
 open Refiner.Refiner.RefineError
 open Resource
@@ -13,6 +17,10 @@ open Sequent
 
 open Itt_logic
 open Itt_rfun
+
+let _ =
+   if !debug_load then
+      eprintf "Loading Czf_itt_or%t" eflush
 
 (************************************************************************
  * TERMS                                                                *
@@ -27,7 +35,7 @@ declare decide{'x; y. 'a['y]; z. 'b['z]}
  * REWRITES                                                             *
  ************************************************************************)
 
-primrw unfold_or : "or"{'A; 'B} <--> union{'A; 'B}
+primrw unfold_or : "or"{'A; 'B} <--> Itt_union!union{'A; 'B}
 primrw unfold_inl : inl{'x} <--> Itt_union!inl{'x}
 primrw unfold_inr : inr{'x} <--> Itt_union!inr{'x}
 primrw unfold_decide : decide{'x; y. 'a['y]; z. 'b['z]} <--> Itt_union!decide{'x; y. 'a['y]; z. 'b['z]}

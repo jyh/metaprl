@@ -53,15 +53,25 @@ axiom unit_small 'H :
 axiom int_small 'H :
    sequent ['ext] { 'H >- small_type{int} }
 
-axiom fun_small 'H 'z :
+axiom dfun_small 'H 'z :
    sequent ['ext] { 'H >- small_type{'A} } -->
    sequent ['ext] { 'H; z: 'A >- small_type{'B['z]} } -->
    sequent ['ext] { 'H >- small_type{. a: 'A -> 'B['a]} }
 
-axiom prod_small 'H 'z :
+axiom fun_small 'H :
+   sequent ['ext] { 'H >- small_type{'A} } -->
+   sequent ['ext] { 'H >- small_type{'B} } -->
+   sequent ['ext] { 'H >- small_type{. 'A -> 'B} }
+
+axiom dprod_small 'H 'z :
    sequent ['ext] { 'H >- small_type{'A} } -->
    sequent ['ext] { 'H; z: 'A >- small_type{'B['z]} } -->
    sequent ['ext] { 'H >- small_type{. a: 'A * 'B['a]} }
+
+axiom prod_small 'H :
+   sequent ['ext] { 'H >- small_type{'A} } -->
+   sequent ['ext] { 'H >- small_type{'B} } -->
+   sequent ['ext] { 'H >- small_type{. 'A * 'B} }
 
 axiom union_small 'H :
    sequent ['ext] { 'H >- small_type{'A} } -->
@@ -87,6 +97,9 @@ val smallAssumT : int -> tactic
 
 (*
  * $Log$
+ * Revision 1.3  1998/07/09 21:08:43  jyh
+ * Upgraded czf.
+ *
  * Revision 1.2  1998/07/08 15:41:53  jyh
  * Pushed higherC into the refiner for efficiency.
  *

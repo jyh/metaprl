@@ -6,14 +6,46 @@ include Czf_itt_set
 
 open Conversionals
 
+(************************************************************************
+ * TERMS                                                                *
+ ************************************************************************)
+
 declare "and"{'A; 'B}
 declare pair{'a; 'b}
+declare spread{'z; x, y. 'b['x; 'y]}
 
-rewrite unfold_and : "and"{'A; 'B} <--> 'A * (unit * 'B)
-rewrite unfold_pair : pair{'a; 'b} <--> Itt_dprod!pair{'a; Itt_dprod!pair{it; 'b}}
+(************************************************************************
+ * REWRITES                                                             *
+ ************************************************************************)
+
+rewrite unfold_and : "and"{'A; 'B} <--> 'A * 'B
+rewrite unfold_pair : pair{'a; 'b} <--> Itt_dprod!pair{'a; 'b}
+rewrite unfold_spread : spread{'z; x, y. 'b['x; 'y]} <-->
+   Itt_dprod!spread{'z; x, y. 'b['x; 'y]}
 
 val fold_and : conv
 val fold_pair : conv
+val fold_spread : conv
+
+(************************************************************************
+ * RULES                                                                *
+ ************************************************************************)
+
+(*
+ * Typehood.
+ *)
+axiom and_type 'H :
+   sequent ['ext] { 'H >- "type"{'A} } -->
+   sequent ['ext] { 'H >- "type"{'B} } -->
+   sequent ['ext] { 'H >- "type"{."and"{'A; 'B}} }
+
+(*
+ * Well formedness.
+ *)
+axiom and_wf 'H :
+   sequent ['ext] { 'H >- wf{'A} } -->
+   sequent ['ext] { 'H >- wf{'B} } -->
+   sequent ['ext] { 'H >- wf{."and"{'A; 'B}} }
 
 (*
  * Intro.
@@ -37,34 +69,25 @@ axiom and_intro 'H :
  *)
 axiom and_elim 'H 'J 'x 'y 'z :
    sequent ['ext] { 'H;
-                    x: "and"{'A; 'B};
-                    y: 'A; z: 'B;
+                    y: 'A;
+                    z: 'B;
                     'J[pair{'y; 'z}]
                     >- 'T[pair{'y; 'z}]
    } -->
    sequent ['ext] { 'H; x: "and"{'A; 'B}; 'J['x] >- 'T['x] }
 
 (*
- * Well formedness.
- *)
-axiom and_wf 'H :
-   sequent ['ext] { 'H >- wf{'A} } -->
-   sequent ['ext] { 'H >- wf{'B} } -->
-   sequent ['ext] { 'H >- wf{."and"{'A; 'B}} }
-
-(*
- * Typehood.
- *)
-axiom and_type 'H :
-   sequent ['ext] { 'H >- "type"{'A} } -->
-   sequent ['ext] { 'H >- "type"{'B} } -->
-   sequent ['ext] { 'H >- "type"{."and"{'A; 'B}}
-
-(*
  * Implication is restricted.
  *)
 axiom and_res 'H :
-   sequent ['ext] { 'H >- restricted{'A} } -->
-   sequent ['ext] { 'H >- restricted{'B} } -->
-   sequent ['ext] { 'H >- restricted{."and"{'A; 'B}} }
+   sequent ['ext] { 'H >- restricted{x. 'A['x]} } -->
+   sequent ['ext] { 'H >- restricted{x. 'B['x]} } -->
+   sequent ['ext] { 'H >- restricted{x. "and"{'A['x]; 'B['x]}} }
 
+(*
+ * -*-
+ * Local Variables:
+ * Caml-master: "prlcomp.run"
+ * End:
+ * -*-
+ *)

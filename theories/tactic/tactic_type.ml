@@ -371,7 +371,10 @@ let tactic_arg_alpha_equal { ref_goal = goal1 } { ref_goal = goal2 } =
  * The refiner just applies the tactic to the arg.
  *)
 let refine tac arg =
-   tac arg
+   let x = tac arg in
+      if !debug_tactic then
+         eprintf "Refinement done%t" eflush;
+      x
 
 (*
  * NOTE:
@@ -733,7 +736,7 @@ let compose ext extl =
  * Flatten the extract tree to produce a normal form.
  *)
 let justify_exn = RefineError ("Tactic_type.justify", StringError "identity tactic failed")
- 
+
 let rec justify extl = function
    Compose (ext, extl') ->
       let rec justify_list extl = function

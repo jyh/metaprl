@@ -255,6 +255,14 @@ let revHypSubstT i j p =
       (substT h' j thenET (equalSymT thenT nthHypT i)) p
 
 (*
+ * Replace the entire hypothesis.
+ *)
+let replaceHypT t i p =
+   let j, k = hyp_indices p i in
+   let univ = get_univ_arg p in
+      hypReplacement j k t univ p
+
+(*
  * -*-
  * Local Variables:
  * Caml-master: "prlcomp.run"

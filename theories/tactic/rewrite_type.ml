@@ -5,6 +5,9 @@
 
 include Perv
 
+open Printf
+open Debug
+
 open Refiner.Refiner
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermMan
@@ -16,6 +19,8 @@ open Refiner.Refiner.Refine
 open Sequent
 open Tacticals
 open Var
+
+let debug_rewrite = load_debug "rewrite"
 
 (************************************************************************
  * TYPES                                                                *
@@ -391,7 +396,10 @@ and solveCutT i rel conv p =
  *)
 let rw conv i p =
    let addr = Sequent.clause_addr p i in
-      apply i (make_address []) addr conv p
+   let x = apply i (make_address []) addr conv p in
+      if !debug_rewrite then
+         eprintf "Rewrite done%t" eflush;
+      x
 
 (*
  * -*-

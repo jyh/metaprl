@@ -71,7 +71,7 @@ dform inr_df : mode[prl] :: parens :: "prec"[prec_inl] :: inr{'a} =
    `"inr" " " slot{'a}
 
 dform decide_df : mode[prl] :: decide{'x; y. 'a; z. 'b} =
-   szone pushm[0] pushm[3] `"match" " " slot{'a} " " `"with" hspace
+   szone pushm[0] pushm[3] `"match" " " slot{'x} " " `"with" hspace
    `"inl " slot{'y} `" -> " slot{'a} popm hspace
    pushm[3] `" | inr " slot{'z} `" -> " slot{'b} popm popm ezone
 

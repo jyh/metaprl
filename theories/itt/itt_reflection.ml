@@ -206,7 +206,8 @@ dform sameop_df : except_mode[src] :: same_op{'b1; 'b2} =
    `"same_op(" slot{'b1} `"; " slot{'b2} `")"
 
 let resource reduce +=
-   (<< same_op{ bterm{| <H1> >- 't1 |}; bterm{| <H2> >- 't2 |} } >>, (unfold_same_op thenC Base_reflection.reduce_if_same_op))
+   (<< same_op{ bterm{| <H1> >- 't1 |}; bterm{| <H2> >- 't2 |} } >>,
+   (unfold_same_op thenC Base_reflection.reduce_if_same_op))
 
 prim same_op_wf {| intro [] |} :
    sequent { <H> >- 'b1 in BTerm } -->
@@ -540,7 +541,8 @@ interactive bterm_elim1 {| elim [ThinOption thinT] |} 'H bind{x.'f['x]} :
 
 interactive bterm_elim2 {| elim [] |} 'H :
    sequent { <H>; b: BTerm; <J['b]>; a: BTerm >- 'C['a] Type} -->
-   sequent { <H>; b: BTerm; <J['b]>; c: BTerm; bl: list{BTerm}; all a: BTerm. (mem{'a; 'bl; BTerm} => 'C['a] & (depth 'a) < (depth 'c)) >- 'C[make_bterm{'c; 'bl}] } -->
+   sequent { <H>; b: BTerm; <J['b]>; c: BTerm; bl: list{BTerm};
+      all a: BTerm. (mem{'a; 'bl; BTerm} => 'C['a] & (depth 'a) < (depth 'c)) >- 'C[make_bterm{'c; 'bl}] } -->
    sequent { <H>; b: BTerm; <J['b]> >- 'C['b] }
 
 

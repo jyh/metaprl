@@ -50,7 +50,7 @@ open Mp_mc_connect_prog
 
 let debug = ref false
 
-(* Simple function for debug printing of strings and terms. *)
+(* Simple functions for debug printing of strings and terms. *)
 
 let debug_string str =
    if !debug then print_string ("\n" ^ str ^ "\n")

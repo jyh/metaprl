@@ -38,6 +38,7 @@ include Mp_mc_theory
 open Simple_print.SimplePrint
 open Top_conversionals
 open Mp_mc_fir_eval
+open Mp_mc_deadcode
 open Mp_mc_const_elim
 
 (*
@@ -131,6 +132,30 @@ let test6 () =
    print_simple_term t;
    print_string "\n"
 
+let test7 () =
+   print_string "\n\n*** Beginning test 7...\n\n";
+   let t = <<
+      letBinop{ tyInt; plusIntOp; atomInt{0}; atomInt{1}; y.
+      'y }
+   >> in
+   print_simple_term t;
+   print_string "\n\nApplying firDeadcodeC...\n\n";
+   let t = apply_rewrite firDeadcodeC t in
+   print_simple_term t;
+   print_string "\nNothing should have changed...\n"
+
+let test8 () =
+   print_string "\n\n*** Beginning test 8...\n\n";
+   let t = <<
+      letBinop{ tyInt; plusIntOp; atomInt{0}; atomInt{1}; y.
+      'nothing }
+   >> in
+   print_simple_term t;
+   print_string "\n\nApplying firDeadcodeC...\n\n";
+   let t = apply_rewrite firDeadcodeC t in
+   print_simple_term t;
+   print_string "\nWe should be down to 'nothing...\n"
+
 (*************************************************************************
  * Run tests.
  *************************************************************************)
@@ -141,4 +166,6 @@ let _ =
    test3 ();
    test4 ();
    test5 ();
-   test6 ()
+   test6 ();
+   test7 ();
+   test8 ()

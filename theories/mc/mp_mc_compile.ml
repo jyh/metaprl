@@ -75,17 +75,15 @@ let apply_rw_top =
  *)
 
 let compile_phobos_fir program post_rewrites inline_targets =
-
    (* Print out initial input. *)
-   debug_string "\n\nInitial program / Before PhoFIR -> FIR:\n\n";
-   debug_string "\n\nProgram:\n\n";
+   debug_string "Initial program / Before PhoFIR -> FIR:";
    debug_term program;
 
    (* General reductions and simplifications. *)
    let program = apply_rw_top reduceC program in
    let program = apply_rw_top applyMetaBaseC program in
    let program = apply_rw_top reduceC program in
-   debug_string "\n\nAfter general reductions:\n\n";
+   debug_string "\nAfter general reductions:";
    debug_term program;
 
    (* We apply each set of post-parsing rewrites one after another. *)
@@ -95,7 +93,7 @@ let compile_phobos_fir program post_rewrites inline_targets =
       program
       post_rewrites
    in
-   debug_string "\n\nAfter PhoFIR -> FIR\n\n";
+   debug_string "\nAfter PhoFIR -> FIR";
    debug_term program;
 
    (* Inlining. *)
@@ -105,16 +103,15 @@ let compile_phobos_fir program post_rewrites inline_targets =
       else
          program
    in
-   debug_string "\n\nAfter inlining\n\n";
+   debug_string "\nAfter inlining";
    debug_term program;
 
    (* Apply optimizations. *)
    let program = apply_rw_top firDeadcodeC program in
    let program = apply_rw_top firExpEvalC program in
    let program = apply_rw_top firConstElimC program in
-   debug_string "\n\nFinal term (i.e. after remaining optimizations) =\n\n";
-   debug_term program;
-   debug_string "\n\nfirProg -> Fir.prog not implemented yet\n"
+   print_string "\nFinal term =";
+   print_term program
 
 
 (*************************************************************************

@@ -51,6 +51,7 @@ val debug : bool ref
 
 val debug_string : string -> unit
 val debug_term : term -> unit
+val print_term : term -> unit
 
 (*************************************************************************
  * Term operations.

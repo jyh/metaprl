@@ -60,6 +60,11 @@ let debug_term term =
       print_string "\n"
    end
 
+let print_term term =
+      print_string "\n";
+      print_simple_term term;
+      print_string "\n"
+
 (*************************************************************************
  * Term operations.
  *************************************************************************)

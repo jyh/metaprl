@@ -61,9 +61,9 @@ let applyIFormsC iform_rewrites =
       (fun ((redex, _), (contractum, _)) ->
 
          (* Debugging output. *)
-         debug_string "\n\ncreating the following iform\n\n";
+         debug_string "##### creating iform:";
          debug_term redex;
-         debug_string "\n\n<-->\n\n";
+         debug_string "<-->";
          debug_term contractum;
 
          (* Create the iform now. *)

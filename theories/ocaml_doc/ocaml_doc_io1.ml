@@ -72,7 +72,7 @@ exactly as written.  These functions raise the @code{Sys_error}
 exception if the file can't be opened; otherwise they return an
 @code{out_channel}.
 
-A file can be opened with the functions @code{open_in}
+A file can be opened for reading with the functions @code{open_in}
 and @code{open_in_bin}.
 
 @begin[verbatim]
@@ -108,10 +108,11 @@ These opening modes have the following interpretation.
 @item{Open_nonblock; open in non-blocking mode}
 @end[description]
 
-The @tt{open_@{in,out@}_gen} functions have
-type
+The @tt{open_in_gen} and @tt{open_out_gen} functions have
+types
 @begin[verbatim]
-open_flag list -> int -> string -> {in,out}_channel.
+val open_in_gen : open_flag list -> int -> string -> in_channel.
+val open_out_gen : open_flag list -> int -> string -> out_channel.
 @end[verbatim]
 The @code{open_flag list} describe how to open the file, the @tt{int}
 argument describes the Unix mode to apply to the file if the file is

@@ -46,15 +46,14 @@ keyword.  There are three key parts in the module system:
 @emph{signatures}, @emph{structures}, and @emph{functors}.
 
 Module signatures correspond to the signatures defined in a
-@code{.mli} file, and module @emph{structures} correspond to the
-implementations defined in a @code{.ml} file.  There are several
-differences however.  One obvious difference is that a compilation
-unit can contain multiple structures and signatures.  Another, perhaps
-more important difference, is that a single signature can be used to
-specify multiple structures; and a structure can have multiple
-@emph{signatures}.
+@code{.mli} file, and module structures correspond to the
+implementations defined in a @code{.ml} file.  There is one major
+difference.  Each compilation unit has at most one signature, defined
+by the @code{.mli} file.  The module system is more general: a single
+signature can be used to specify multiple structures; and a structure
+can have multiple signatures.
 
-This ability to @emph{share} signatures and structures can have
+This ability to share signatures and structures can have
 important effects on code re-use.  For example, in Chapter
 @refchapter[unions], we introduced three implementations of finite
 sets (using unbalanced, ordered, and balanced binary trees).  All
@@ -65,13 +64,13 @@ used in a context that requires an implementation of finite sets.
 The ability to assign multiple signatures to a structure becomes
 useful in larger programs composed of multiple components each spread
 over multiple files.  The structures within a program component may
-make their implementations visible to one another (like a ``friends''
+make their implementations visible to one another (like a ``friend''
 declaration in a C++ class, or a @tt{protected} declaration for a Java
 method).  Outside the program component, a new signature may be
-assigned to hide the implementation details (making them ``private'').
+assigned to hide the implementation details (making them private).
 
-The OCaml module system also includes @emph{functors}, or
-@emph{parameterized} structures.  A functor is a @emph{function} that
+The OCaml module system also includes functors, or
+@emph{parameterized structures}.  A functor is a function that
 computes a structure given a structure argument.  Functors provide a
 simple way to generalize the implementation of a structure.
 
@@ -87,8 +86,8 @@ A module signature is declared with a @code{module type} declaration.
 @tt{module type} @emph{Name} @tt{= sig} @emph{signature} @tt{end}
 @end[center]
 
-The @emph{name} of the signature must begin with an uppercase letter.
-The @emph{signature} can contain any of the items that can occur in an
+The name of the signature must begin with an uppercase letter.
+The signature can contain any of the items that can occur in an
 interface @code{.mli} file, including any of the following.
 
 @begin[itemize]
@@ -106,8 +105,8 @@ OCaml toploop.  A signature is like a type declaration---if a
 @code{.mli} file defines a signature, the @emph{same} signature
 must also be defined in the @code{.ml} file.
 
-For the finite sets example, the signature should include a type
-declaration for the sets, and method declarations for the @tt{empty},
+For the finite set example, the signature should include a type
+declaration for the set type, and method declarations for the @tt{empty},
 @tt{mem}, and @tt{insert} methods.  For this example, we'll return to
 the OCaml toploop, which will display the types of the modules we define.
 
@@ -117,18 +116,18 @@ the OCaml toploop, which will display the types of the modules we define.
      type 'a t
      val empty : 'a t
      val mem : 'a -> 'a t -> bool
-     val insert : 'a -> 'a t -> bool
+     val insert : 'a -> 'a t -> 'a t
   end;;
 module type FsetSig =
   sig
     type 'a t
     val empty : 'a t
     val mem : 'a -> 'a t -> bool
-    val insert : 'a -> 'a t -> bool
+    val insert : 'a -> 'a t -> 'a t
   end
 @end[verbatim]
 
-The @tt{include} statements can be used to create a new signature that
+The @tt{include} statement can be used to create a new signature that
 @emph{extends} an existing signature.  For example, suppose we would
 like to define a signature for finite sets that includes a @tt{delete}
 function to remove an element of a set.  One way to be to re-type the
@@ -147,7 +146,7 @@ module type FsetDSig =
     type 'a t
     val empty : 'a t
     val mem : 'a -> 'a t -> bool
-    val insert : 'a -> 'a t -> bool
+    val insert : 'a -> 'a t -> 'a t
     val delete : 'a -> 'a t -> 'a t
   end
 @end[verbatim]
@@ -177,7 +176,7 @@ of a @code{.ml} file.  It can include any of the following.
 
 Let's try this with the balanced binary tree example (the complete
 definitions for the @tt{balance} and @tt{insert} functions are given
-in Section @refsubsection[method_definitions].
+in Section @refsubsection[method_definitions]).
 
 @begin[verbatim]
 # module Fset =
@@ -223,9 +222,9 @@ module Fset :
 Note that the default signature assigned to the structure exposes
 @emph{all} of the types and functions in the structure, including the
 type definitions for the @tt{color} and @code{'a t} types, as well as
-the @tt{balance} function.  To assign a signature to a structure, we
-include a type constraint using a @code{:} modifier of the following
-form.
+the @tt{balance} function, which would normally be hidden.  To assign
+a signature to a structure, we include a type constraint using a
+@code{:} modifier of the following form.
 
 @begin[center]
 @tt{module} @emph{Name} @tt{:} @emph{SigName} @tt{= struct} @emph{implementation} @tt{end}
@@ -235,7 +234,7 @@ In the finite set example, we want to assign the @code{FsetSig}
 signature to the module.
 
 @begin[verbatim]
-# module Fset =
+# module Fset : FsetSig =
   struct
      type color =
         Red
@@ -272,32 +271,32 @@ we want.
 
 To fix this problem, we can define our own comparison function, but we
 will need to define a separate finite set implementation for each
-different element type.  for this purpose, we can use
+different element type.  For this purpose, we can use
 @emph{functors}.  A functor is a @emph{function} on modules; the
 function requires a module argument, and it produces a module.
 Functors can be defined with the @tt{functor} keyword, or with a more
 common alternate syntax.
 
-@begin[center]
+@begin[quote]
 @tt{module} @emph{Name} @tt{= functor} @emph{(ArgName} @tt{:}
 @emph{ArgSig)} @tt{->}@cr
 @tt{struct} @emph{implementation} @tt{end}
 
 @tt{module} @emph{Name (Arg @tt{:} ArgSig)} @tt{=}@cr
 @tt{struct} @emph{implementation} @tt{end}
-@end[center]
+@end[quote]
 
 For the finite set example, we'll need to define an argument structure
 that includes a type @tt{elt} of elements, and a comparison function @tt{compare}.
-We'll have the @tt{compare} function return one of three cases:
+We'll have the @tt{compare} function return one of three kinds of values:
 
-@begin[enumerate]
+@begin[itemize]
 @item{a @emph{negative} number if the first argument is smaller than
    the second,}
 @item{@emph{zero} if the two arguments are equal,}
 @item{a @emph{positive} number if the first argument is larger than
    the second.}
-@end[enumerate]
+@end[itemize]
 
 @begin[verbatim]
 module type EltSig =
@@ -326,7 +325,7 @@ end
 Next, we redefine the set implementation as a functor.  The
 implementation must be modified to include a type definition for the
 @tt{elt} type, and the @tt{mem} and @tt{insert} functions must be
-modified to make use of the comparison function.
+modified to make use of the comparison function from @code{Elt}.
 
 @begin[verbatim]
 # module MakeFset (Elt : EltSig) =
@@ -377,7 +376,7 @@ module MakeFset :
 
 Note the return type.  The argument type is right: the functor takes
 an argument module @tt{Elt} with signature @tt{EltSig}.  But the
-returned module make the implementation fully visible.  To fix this
+returned module makes the implementation fully visible.  To fix this
 problem, we need to add a type constraint using the @code{:} modifier.
 
 @begin[verbatim]
@@ -397,26 +396,32 @@ module MakeFset : functor(Elt : EltSig) -> FsetSig
 @subsection[using_functor]{Using a functor}
 
 To @emph{use} the module produced by the functor, we need to
-@emph{apply} it to a specific module implementation of the
+@emph{apply} it to a specific module implementating the
 @tt{EltSig} signature.  Let's define a comparison function for a
-finite set of integers.  The comparison function is simple---we can
-just subtract the two arguments.
+finite set of integers.  The comparison function is straightforward.
 
 @begin[verbatim]
 # module Int =
   struct
      type elt = int
-     let compare = (-)
+     let compare i j =
+        if i < j then
+           -1
+        else if i > j then
+           1
+        else (* i = j *)
+           0
   end;;
 module Int : sig type elt = int val compare : int -> int -> int end
 # Int.compare 3 5;;
-- : int = -2
+- : int = -1
 @end[verbatim]
 
-Note that a type constraint would not be appropriate here.  In the
-@tt{EltSig} signature, the @tt{elt} type is @emph{abstract}.  The
-@tt{Int} module @emph{satisfies} the @tt{EltSig} signature, but we
-want to keep the @tt{elt} definition visible.
+We @emph{must not} give the @tt{Int} module the signature @tt{EltSig}.
+In the @tt{EltSig} signature, the @tt{elt} type is @emph{abstract}.
+Since there is no way to create a value of the abstract type @tt{elt},
+it would become impossible to use the @tt{compare} function, and the
+module would become useless.
 
 @begin[verbatim]
 # module Int' = (Int : EltSig);;
@@ -427,7 +432,7 @@ This expression has type int but is here used with type Int'.elt
 @end[verbatim]
 
 A functor is applied to an argument with the syntax
-@tt{@emph{functor_name} (@emph{arg_name})}.  To build a finite set of
+@tt{@emph{Functor_name} (@emph{Arg_name})}.  To build a finite set of
 integers, we apply the @tt{MakeFset} functor to the @tt{Int} module.
 
 @begin[verbatim]
@@ -444,9 +449,7 @@ module IntSet :
 - : IntSet.t = <abstr>
 @end[verbatim]
 
-Note the type definitions for @tt{elt} and @tt{t}: the OCaml compiler
-notes that the two types are computed from an application of the
-@tt{MakeFset} functor.
+Note the type definitions for @tt{elt} and @tt{t}: both types are abstract.
 
 @subsection[sharing_constraints]{Sharing constraints}
 
@@ -470,6 +473,8 @@ with multiple different element types.  The only way to fix this
 problem is to add a constraint on the functor type that specifies that
 the @tt{elt} type produced by the functor is the @emph{same} as the
 @tt{elt} type in the argument.
+
+@subsection[proper_definition]{An implementation that works}
 
 These kind of type constraints are called @emph{sharing constraints}.
 The argument and value of the @tt{MakeFset} functor ``share'' the same

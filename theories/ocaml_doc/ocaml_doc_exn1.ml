@@ -41,8 +41,9 @@ extends Base_theory
 Exceptions are used in OCaml as a control mechanism, either to signal
 errors, or to control the flow of execution.  When an exception is
 raised, the current execution is aborted, and control is thrown to the
-innermost exception handler, which may choose to handle the exception,
-or pass it through to the next exception handler.
+most recently entered active exception handler, which may choose to
+handle the exception, or pass it through to the next exception
+handler.
 
 Exceptions were designed as a more elegant alternative to explicit
 error handling in more traditional languages.  In Unix/C, for example,
@@ -83,7 +84,7 @@ In the first case, @code{assoc 2 l}, the key is found in the list and
 its value is returned.  In the second case, @code{assoc 3 l}, the key
 @code{3} does not exist in the list, and the exception
 @code{Not_found} is raised.  There is no explicit exception handler,
-and the top loop default handler is invoked.
+and the toploop default handler is invoked.
 
 Exceptions are declared with the @code{exception} keyword, and their
 syntax has the same form as a constructor declaration in a union type.
@@ -99,21 +100,21 @@ Uncaught exception: Abort(1, "GNU is not Unix")
 Exception handlers have the same form as a @tt{match} pattern match,
 using the @tt{try} keyword.  The syntax is as follows:
 
-$$
-@begin[array, l]
+@begin[center]
+@begin[tabular, l]
 @line{{@tt{try}@space e@space @tt{with}}}
-@line{{@space p_1 @space @tt{->} @space e_1}}
-@line{{@tt{|} p_2 @space @tt{->} @space e_2}}
-@line{{@vdots}}
-@line{{@tt{|} p_n @space @tt{->} @space e_n}}<
-@end[array]
-$$
+@line{{@phantom{$@space$ |} p_1 @space @tt{->} @space e_1}}
+@line{{$@space$ | p_2 @space @tt{->} @space e_2}}
+@line{{@phantom{$@space$ |} $@vdots$}}
+@line{{$@space$ | p_n @space @tt{->} @space e_n}}
+@end[tabular]
+@end[center]
 
-First, $e$ is evaluated.  If it does not raise an exception, the value
+First, $e$ is evaluated.  If it does not raise an exception, its value
 is returned as the result of the @tt{try} statement.  Otherwise, if
 an exception is raised during evaluation of $e$, the exception is
-matched against the patterns $p_1, @ldots, p_n$.  If the exception
-matches pattern $p_i$, the expression $e_i$ is evaluated and returned
+matched against the patterns $p_1, @ldots, p_n$.  If the first pattern
+the exception matches is $p_i$, the expression $e_i$ is evaluated and returned
 as the result.  Otherwise, if no pattern matches, the exception is
 propagated to the next exception handler.
 

@@ -45,7 +45,9 @@ represents a set of @emph{cases} of a particular type.  For example,
 we may say that a binary tree contains nodes that are either
 @emph{interior} nodes or @emph{leaves}.  Suppose that the interior
 nodes have a label of type @code{'a}.  In OCaml, this would be
-expressed with the following type definition.
+expressed as a type definition using the @tt{type} keyword.  The type
+is recursively defined, and it contains a type parameter @code{'a} for
+the type of elements.
 
 @begin[verbatim]
 # type 'a btree =
@@ -54,20 +56,22 @@ expressed with the following type definition.
 type 'a btree = | Node of 'a * 'a btree * 'a btree | Leaf
 @end[verbatim]
 
-The cases are separated by a vertical dash (the @code{|} char).  Each
-has a name and an optional set of values.  The name must begin with an
-uppercase letter.  In this case, the type of the definition is
-@code{'a btree}, and the interior node @code{Node} has three values: a
-label of type @code{'a}, a left child of type @code{'a btree}, and a
-right child of type @code{'a btree}.  The type @code{btree} is
-parameterized by the type argument @code{'a}.
+The name of the type is @tt{btree}, and the type parameterization uses
+prefix notation @code{'a btree}.  The cases are separated by a
+vertical dash (the @code{|} character).  Each case has a name and an
+optional set of values.  The name must begin with an uppercase letter.
+In this case, the type of the definition is @code{'a btree}, and the
+interior node @code{Node} has three values: a label of type @code{'a},
+a left child of type @code{'a btree}, and a right child of type
+@code{'a btree}.
 
-The tags (like @code{Node} and @code{Leaf}), are called
+The names (like @code{Node} and @code{Leaf}) are called
 @emph{constructors}.  Constructors can be viewed as functions that
 @emph{inject} values into the disjoint union.  Thus, the @code{Node}
-constructor would be a function of type @code{('a * 'a btree * 'a
-btree) -> 'a btree}.  For technical reasons, OCaml does not allow
-non-trivial constructors to be used as values.
+constructor would be a function of type
+@code{('a * 'a btree * 'a btree) -> 'a btree}.
+For technical reasons, OCaml does not allow
+constructors with arguments to be used as values.
 
 @begin[verbatim]
 # Leaf;;
@@ -87,7 +91,8 @@ function that counts the number of interior nodes in a value of type
 @begin[verbatim]
 # let rec cardinality = function
      Leaf -> 0
-   | Node (_, left, right) -> cardinality left + cardinality right + 1;;
+   | Node (_, left, right) ->
+        cardinality left + cardinality right + 1;;
 val cardinality : 'a btree -> int = <fun>
 # cardinality (Node (1, Node (2, Leaf, Leaf), Leaf));;
 - : int = 2
@@ -168,7 +173,7 @@ val s : int btree =
     Node (11, Node (9, Node (5, Leaf, Node (7, Leaf, Leaf)), Leaf), Leaf))
 @end[verbatim]
 
-Note that this insertion function does build balanced trees.  If
+Note that this insertion function does not build balanced trees.  If
 elements are inserted in order, the tree will be maximally unbalanced,
 with all the elements inserted along the right branch.
 
@@ -200,17 +205,20 @@ guarantee balancing, the complexity is still $O(n)$, worst case.
 
 @section[balanced_red_black_trees]{Balanced red-black trees}
 
-To correct the problem with linear complexity, we can use
-@emph{balanced} trees.  One common data structure is red-black trees,
-which add a label, either @code{Red} or @code{Black} to each of the
-interior nodes.  Several new invariants are maintained:
+For a more advanced example of pattern matching on unions, consider
+the implementation of balanced trees as red-black trees.  This section
+may be skipped by the reader who is already familiar with advanced
+pattern matching.
+
+Red-black trees add a label, either @code{Red} or @code{Black} to each
+of the interior nodes.  Several new invariants are maintained.
 
 @begin[enumerate]
-@item{every leaf is colored black}
-@item{all children of every red node are black}
-@item{every path from the root to a leaf has the same number of black
-nodes as every other path}
-@item{the root is always black}
+@item{Every leaf is colored black.}
+@item{All children of every red node are black.}
+@item{Every path from the root to a leaf has the same number of black
+nodes as every other path.}
+@item{The root is always black.}
 @end[enumerate]
 
 These invariants guarantee the balancing.  Since all the children of a
@@ -242,14 +250,13 @@ let rec mem x = function
       else true
 @end[verbatim]
 
-The @tt{insert} function is made a little more difficult because the
-invariants have to be maintained during the insertion.  We can do this
-in two parts: first find the location where the node is to be
-inserted.  If possible, add the new node with a @code{Red} label
-because this would preserve invariant 3.  This may, however, violate
-invariant 2 because the new @tt{Red} node may have a @tt{Red} parent.
-If this happens, the @tt{balance} function migrates the @tt{Red} label
-upward in the tree.
+The @tt{insert} function must maintain the invariants during
+insertion.  This can be done in two parts.  First find the location where
+the node is to be inserted.  If possible, add the new node with a
+@code{Red} label because this would preserve invariant 3.  This may,
+however, violate invariant 2 because the new @tt{Red} node may have a
+@tt{Red} parent.  If this happens, the @tt{balance} function migrates
+the @tt{Red} label upward in the tree.
 
 @begin[verbatim]
 # let balance = function
@@ -313,7 +320,7 @@ val s : int btree =
 
 A few of the types we have already seen are defined as unions.  The
 built-in Boolean type is defined as a union (the @tt{true} and
-@tt{false} keywords are treated a capitalized identifiers).
+@tt{false} keywords are treated as capitalized identifiers).
 
 @begin[verbatim]
 # type bool =

@@ -118,7 +118,7 @@ language easier to understand and explain.}}
 
 @section[ocaml_doc_intro_functional]{Functional and imperative languages}
 
-The ML languages are ``semi-functional,'' which means that the normal
+The ML languages are @emph{semi-functional}, which means that the normal
 programming style is functional, but the language includes assignment and
 side-effects.
 
@@ -149,8 +149,8 @@ invariant for the loop, and show that the state makes progress on each
 step toward the goal.
 
 In OCaml, Euclid's algorithm is normally implemented using recursion.
-The steps are the same, but there are no side-effects.  The @bf{let}
-keyword specifies a definition, the @bf{rec} keyword specifies that
+The steps are the same, but there are no side-effects.  The @tt{let}
+keyword specifies a definition, the @tt{rec} keyword specifies that
 the definition is recursive, and the @tt{gcd a b} defines a function
 with two arguments $a$ and $b$.
 
@@ -171,11 +171,10 @@ data structure is ever destroyed.
 There are problems with taking too strong a stance in favor of
 functional programming.  One is that every updatable data structure
 has to be passed as an argument to every function that uses it (this
-is called ``threading'' the state).  This can make the code obscure if
-there are too many of these data structures.  We take a moderate
-approach.  Imperative code may be used where it is natural, but the
-use of imperative code is discouraged if there is a more elegant
-functional version.
+is called @emph{threading} the state).  This can make the code obscure
+if there are too many of these data structures.  We take a moderate
+approach.  We use imperative code when necessary, but its use is
+discouraged.
 
 @section[ocaml_doc_intro_organization]{Organization}
 

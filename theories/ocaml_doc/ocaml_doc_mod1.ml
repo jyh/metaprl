@@ -43,19 +43,19 @@ One of the principles of modern programming is @emph{data hiding}
 using @emph{encapsulation}.  An @emph{abstract data type} (ADT) is a
 program unit that defines a data type and functions (also called
 @emph{methods}) that operate on that data type.  An ADT has two parts:
-a @emph{signature} that declares the accessible data structures and
-methods, and an @emph{implementation} that defines concrete
-implementations of the objects declared in the signature.  The
-@emph{implementation} is hidden: all access to the ADT must be through
-the methods defined in the signature.
+a @emph{signature} (or @emph{interface}) that declares the accessible
+data structures and methods, and an @emph{implementation} that defines
+concrete implementations of the objects declared in the signature.
+The implementation is hidden: all access to the ADT must be
+through the methods defined in the signature.
 
 There are several ideas behind data hiding using ADTs.
 First, by separating a program into distinct program units (called
 @emph{modules}), the program may be easier to understand.  Ideally,
-each module encapsulates a single @emph{concept} needed to address the
+each module encapsulates a single concept needed to address the
 problem at hand.
 
-Second, by hiding the @emph{implementation} of a program module,
+Second, by hiding the implementation of a program module,
 dependencies between program modules become tightly controlled.  Since
 all interactions must be through a module's methods, the
 implementation of the module can be changed without affecting the
@@ -64,8 +64,8 @@ preserved).
 
 OCaml provides a @emph{module system} that makes it easy to use the
 concepts of encapsulation and data hiding.  In fact, in OCaml every
-program file acts as a abstract module, called a @emph{compilation
-unit} in the OCaml terminology.  A @emph{signature} for the file can
+program file acts as an abstract module, called a @emph{compilation
+unit} in the OCaml terminology.  A signature for the file can
 be defined in a @code{.mli} file with the same name.  If there is no
 @code{.mli} file, the default signature includes all type and
 functions defined in the @code{.ml} file.
@@ -78,7 +78,7 @@ functions defined in the @code{.ml} file.
 
 @section[signatures]{Signatures}
 
-In OCaml, a @emph{signature} contains type definitions and function
+In OCaml, a signature contains type definitions and function
 declarations for the visible types and methods in the module.  To see
 how this works, let's revisit the binary trees we defined in Chapter
 @refchapter[unions].  A binary tree defines a simple, distinct
@@ -93,16 +93,16 @@ A module signature usually contains three parts:
    defined by the module.}
 @end[enumerate]
 
-For the binary tree, the signature will need to include a @emph{type}
-of binary trees, and type declarations for the methods for operating
+For the binary tree, the signature will need to include a type
+for binary trees, and type declarations for the methods for operating
 on the tree.  First, we need to choose a filename for the compilation
 unit.  The filename should reflect the @emph{function} of the data
 structure defined by the module.  For our purposes, the binary tree is
-a data structure used for defining a finite @emph{set} of values, and
-the appropriate filename for the signature would be @code{fset.mli}.
+a data structure used for defining a finite set of values, and
+an appropriate filename for the signature would be @code{fset.mli}.
 
-The set data structure defines a type of sets, and three methods: an
-@tt{empty} set, a @tt{mem} membership function, and a @tt{insert}
+The data structure defines a type for sets, and three methods: an
+@tt{empty} set, a @tt{mem} membership function, and an @tt{insert}
 insertion function.  The complete signature is defined below; we'll
 discuss each of the parts in the following sections.
 
@@ -127,13 +127,12 @@ Type declarations in a signature can be either @emph{transparent} or
 giving the type definition; a transparent type declaration includes
 the type definition.
 
-For the binary tree, the declaration @code{type 'a t} defines an
-@emph{abstract} type @code{'a t} of sets because the type definition
-is left unspecified.  In this case, the type definition won't be
-visible to other program units; they will be forced to use the methods
-if they want to operate on the data type.  Note that the abstract type
-definition is polymorphic: it is parameterized by the type variable
-@code{'a}.
+For the binary tree, the declaration @code{type 'a t} is abstract
+because the type definition is left unspecified.  In this case, the
+type definition won't be visible to other program units; they will be
+forced to use the methods if they want to operate on the data type.
+Note that the abstract type definition is polymorphic: it is
+parameterized by the type variable @code{'a}.
 
 Alternatively, we could have chosen a transparent definition that
 would make the type visible to other program modules.  For example, if
@@ -146,7 +145,7 @@ type 'a t =
  | Leaf
 @end[verbatim]
 
-By doing this, we would make the binary tree structure @emph{visible}
+By doing this, we would make the binary tree structure visible
 to other program components; they can now use the type definition to
 access the binary tree directly.  This would be
 undesirable for several reasons.  First, we may want to change the
@@ -162,14 +161,14 @@ the invariant, leading to errors that may be difficult to find.
 @subsection[method_declarations]{Method declarations}
 
 The method declarations include all the functions and values that are
-@emph{visible} to other program modules.  For the @tt{fset} module, the
+visible to other program modules.  For the @tt{Fset} module, the
 visible methods are the @tt{empty}, @tt{mem}, and @tt{insert}
 methods.  The signature gives only the type declarations for these
 methods.
 
 It should be noted that @emph{only} these methods will be visible to
 other program modules.  If we define helper functions in the
-implementation, these functions will be @emph{private} to the
+implementation, these functions will be private to the
 implementation and inaccessible to other program modules.
 
 @end[doc]
@@ -181,7 +180,7 @@ implementation and inaccessible to other program modules.
 @section[implementations]{Implementations}
 
 The module implementation is defined in a @code{.ml} file with the
-same name as the signature file.  The implementation contains parts
+same base name as the signature file.  The implementation contains parts
 that correspond to each of the parts in the signature.
 
 @begin[enumerate]
@@ -190,7 +189,7 @@ that correspond to each of the parts in the signature.
 @item{Method definitions.}
 @end[enumerate]
 
-The definitions do not have to occur in the same order as this in the
+The definitions do not have to occur in the same order as declarations in the
 signature, but there must be a definition for every item in the
 signature.
 
@@ -198,10 +197,10 @@ signature.
 
 In the implementation, definitions must be given for each of the types
 in the signature.  The implementation may also include other types.
-These types will be @emph{private} to the implementation; they will
+These types will be private to the implementation; they will
 not be visible outside the implementation.
 
-For the @tt{fset} module, let's use the red-black implementation of
+For the @tt{Fset} module, let's use the red-black implementation of
 balanced binary trees.  We need two type definitions: the definition
 of the @tt{Red} and @tt{Black} labels, and the tree definition itself.
 
@@ -241,11 +240,11 @@ let rec mem x = function
       else true
 @end[verbatim]
 
-The @tt{insert} method we needed two methods: one is the actual
-@tt{insert} function, and another is the helper function @tt{balance}
-that keeps the tree balanced.  We can include both functions in the
-implementation.  The @tt{balance} function will be private, since it
-is not declared in the signature.
+The implement the @tt{insert} method we need two methods: one is the
+actual @tt{insert} function, and another is the helper function
+@tt{balance} that keeps the tree balanced.  We can include both
+functions in the implementation.  The @tt{balance} function will be
+private, since it is not declared in the signature.
 
 @begin[verbatim]
 let balance = function
@@ -284,18 +283,18 @@ let insert x s =
 Once a compilation unit is defined, the types and methods can be used
 in other files by prefixing the names of the methods with the
 @emph{capitalized} file name.  For example, the @tt{empty} set can be
-used in another file with the name @code{Set.empty}.
+used in another file with the name @code{Fset.empty}.
 
-Let's define another module to test the @code{fset} implementation.
+Let's define another module to test the @code{Fset} implementation.
 This will be a simple program with an input loop where we can type in
 a string.  If the string is not in the set, it is added;
-otherwise, the loop should print out a message that the string is
+otherwise, the loop will print out a message that the string is
 already added.  To implement this program, we need to add another
-file; we'll call it @tt{test}.
+file; we'll call it @tt{test.ml}.
 
-The @tt{test} compilation unit has no externally visible types or
+The @tt{Test} compilation unit has no externally visible types or
 methods.  By default, the @code{test.mli} file should be empty.  The
-@tt{test} implementation should contains a function that recursively:
+@tt{Test} implementation should contain a function that recursively:
 
 @begin[enumerate]
 @item{prints a prompt}
@@ -331,8 +330,8 @@ let _ = loop ()
 There are a few things to note.  First, we need to catch the
 @code{End_of_file} exception that is raised when the end of the input
 file is reached.  In this case, we exit without comment.  To run the
-loop, we include the line @code{let _ = loop ()}.  The @code{let _ =
-...} may seem strange: it tells the OCaml parser that this is a new
+loop, we include the line @code{let _ = loop ()}.  The
+@code{let _ = ...} may seem strange: it tells the OCaml parser that this is a new
 top level expression.  Another way to accomplish this is by adding the
 @code{;;} terminator after the last @code{()} expression in the
 @code{loop} function.
@@ -528,7 +527,7 @@ It takes a little work to detect the cause of the error.  The compiler
 says that the files make inconsistent assumptions for interface
 @code{Fset}.  The interface is defined in the file @code{fset.cmi},
 and so this error message states that at least one of @code{fset.ml}
-or @code{test.cmo} need to be recompiled.  In general, we don't know
+or @code{test.cmo} needs to be recompiled.  In general, we don't know
 which file is out of date, and the best solution is to recompile them
 all.
 
@@ -540,12 +539,13 @@ all.
 
 @section[open]{Using @tt{open} to expose a namespace}
 
-The @tt{@emph{module_name}.@emph{method_name}} to refer to the methods
-in a module can get tedious.  The @tt{open @emph{module_name}} can be
-used to ``open'' a module interface, which will allow the use of
-unqualified names for types, exceptions, and methods.  For example,
-the @code{test.ml} module can be somewhat simplified by using the
-@code{open} statements for the @code{Printf} and @code{Fset} modules.
+Using the full name @tt{@emph{Module_name}.@emph{method_name}} to
+refer to the methods in a module can get tedious.  The
+@tt{open @emph{Module_name}} statement can be used to ``open'' a module
+interface, which will allow the use of unqualified names for types,
+exceptions, and methods.  For example, the @code{test.ml} module can
+be somewhat simplified by using the @code{open} statements for the
+@code{Printf} and @code{Fset} modules.
 
 @begin[verbatim]
 open Printf
@@ -574,7 +574,7 @@ let _ = loop ()
 Sometimes multiple @tt{open}ed modules will define the same name.  In
 this case, the @emph{last} module with an @tt{open} statement will
 determine the value of that symbol.  Fully qualified names (of the
-form @tt{@emph{module_name}.@emph{name}}) may still be used even if
+form @tt{@emph{Module_name}.@emph{name}}) may still be used even if
 the module has been opened.  Fully qualified names can be used to
 access values that may have been hidden by an @tt{open} statement.
 
@@ -600,12 +600,11 @@ the Unix @tt{grep} command can be used to find all the places where
 @code{Unix} functions are used).
 
 The behavior of the @tt{open} statement is not like an @code{#include}
-statement in C.  An implementation file @code{mod.ml} does not include
-an @code{open Mod} statement; this is done automatically by the
-compiler.  One common source of errors is defining a type in a
+statement in C.  An implementation file @code{mod.ml} should not include
+an @code{open Mod} statement.  One common source of errors is defining a type in a
 @code{.mli} interface, then attempting to use @code{open} to
 ``include'' the definition in the @code{.ml} implementation.  This
-won't work--the implementation must include an identical type
+won't work---the implementation must include an identical type
 definition.  True, this is an annoying feature of OCaml.  But it
 preserves a simple semantics: the implementation must provide a
 definition for each declaration in the signature.

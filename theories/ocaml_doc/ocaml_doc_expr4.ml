@@ -6,7 +6,7 @@
  * @end[spelling]
  *
  * @begin[doc]
- * @chapter[records]{Records, Arrays, Exceptions, and Side-Effects}
+ * @chapter[records]{Records, Arrays, and Side-Effects}
  * @end[doc]
  *
  * ----------------------------------------------------------------
@@ -40,20 +40,19 @@ extends Base_theory
 @begin[doc]
 
 In this chapter we discuss the remaining data types, all of which
-allow side-effects.  The record type can be viewed as the type of
-tuples where the components are labeled.  An array is a fixed-size
-vector of items with constant time access to each element.  There are
-operations to modify some of the fields in a record, and any of the
-fields in an array.
+allow side-effects.  A record can be viewed as a tuple with labeled
+fields.  An array is a fixed-size vector of items with constant
+time access to each element.  There are operations to modify some of
+the fields in a record, and any of the elements in an array.
 
 @section[sect_records]{Records}
 
 A record is a labeled collection of values of arbitrary types.  The
 syntax for a record type is a set of field type definitions surrounded
-by braces, and separated by semicolons.  Field types are declared as
+by braces, and separated by semicolons.  Fields are declared as
 @code{label : type}, where the label is an identifier that must begin
 with a lowercase letter or an underscore.  For example, the following
-record is redefines the database entry from Chapter
+record redefines the database entry from Chapter
 @refchapter[tuples].
 
 @begin[verbatim]
@@ -81,7 +80,7 @@ val jason : db_entry =
   {name="Jason"; height=6.25; phone="626-395-6568"; salary=50}
 @end[verbatim]
 
-There are two ways to get access to the fields in a record.  The
+There are two ways to access the fields in a record.  The
 projection operation @code{r.l} returns the field labeled @tt{l} in
 record @tt{r}.
 
@@ -94,8 +93,10 @@ record @tt{r}.
 
 Pattern matching can also be used to access the fields of a record.
 The syntax for a pattern is like a record value, but the fields
-contain a label and a pattern @code{label = patt}, and not all of the
-fields have to be included.
+contain a label and a pattern @code{label = patt}.  Not all of the
+fields have to be included.  Note that the binding occurrences of the
+variables @tt{n} and @tt{h} occur to the @emph{right} of the equality symbol
+in their fields.
 
 @begin[verbatim]
 # let { name = n; height = h } = jason;;
@@ -103,9 +104,8 @@ val n : string = "Jason"
 val h : float = 6.25
 @end[verbatim]
 
-There are two update operations: a functional version, and an
-imperative version.  The functional version produces a copy of a
-record with new values for the specified fields.  The syntax for a
+There is a functional update operation that produces a copy of a
+record with new values for the specified fields.  The syntax for
 functional update uses the @tt{with} keyword in a record definition.
 
 @begin[verbatim]
@@ -117,10 +117,10 @@ val dave : db_entry =
                 phone="626-395-6568"; salary=50}
 @end[verbatim]
 
-@subsection[record_update]{Record updates}
+@subsection[record_update]{Imperative record updates}
 
 Record fields can also be modified by assignment, but @emph{only if
-the record field is declared as @bf{mutable}}.  The syntax for a
+the record field is declared as mutable}.  The syntax for a
 mutable field uses the @tt{mutable} keyword before the field label.
 For example, if we wanted to allow salaries to be modified, we would
 re-declare the record entry as follows.
@@ -158,29 +158,28 @@ if we want to give @tt{jason} a raise, we would use the following statement.
 @end[verbatim]
 
 Note that the assignment statement itself returns the canonical unit
-value @code{()}.  That is, it doesn't really return a value, unlike
+value @code{()}.  That is, it doesn't return a useful value, unlike
 the functional update.  A functional update creates a completely new
 copy of a record; assignments to the copies will be independent.
 
 @begin[verbatim]
 # let dave = { jason with name = "Dave" };;
 val dave : db_entry =
-  {name="Dave"; height=6.25; phone="626=395-6568"; salary=150}
+  {name="Dave"; height=6.25; phone="626-395-6568"; salary=150}
 # dave.salary <- 180.0;;
 - : unit = ()
 # dave;;
-- : db_entry = {name="Dave"; height=6.25; phone="626=395-6568"; salary=180}
+- : db_entry = {name="Dave"; height=6.25; phone="626-395-6568"; salary=180}
 # jason;;
-- : db_entry = {name="Jason"; height=6.25; phone="626=395-6568"; salary=150}
+- : db_entry = {name="Jason"; height=6.25; phone="626-395-6568"; salary=150}
 @end[verbatim]
 
 @subsection[record_labels]{Field label namespace}
 
-One important point: the namespace for record field labels is flat.
-That is, all labels are defined at the toplevel in the same
-namespace.  This is important if you intend to declare records with
-the same field names.  If you do, the original labels will be lost!
-For example, consider the following sequence.
+One important point: the namespace for toplevel record field labels is
+flat.  This is important if you intend to declare records with the
+same field names.  If you do, the original labels will be lost!  For
+example, consider the following sequence.
 
 @begin[verbatim]
 # type rec1 = { name : string; height : float };;
@@ -211,15 +210,15 @@ but is here mixed with labels of type rec2
 In this case, the @tt{name} field was redefined.  At this point, the
 original @code{rec1.name} label is lost, making it impossible to
 access the name field in a value of type @tt{rec1}, and impossible to
-construct new values of type @tt{rec1}.  It is, however, permissable
+construct new values of type @tt{rec1}.  It is, however, permissible
 to use the same label names in separate files, as we will see in
 Chapter @refchapter[modules].
 
 @section[references]{References}
 
-Variables are @emph{never} mutable.  However, mutable values are
+Variables are @emph{never} mutable.  However, reference cells are
 common enough in OCaml programs that a special form is defined just
-for this case.  Mutable values use the @tt{ref} function.
+for this case.  Reference cells are created with the @tt{ref} function.
 
 @begin[verbatim]
 # let i = ref 1;;
@@ -245,7 +244,7 @@ Dereferencing uses the @code{!} operator, and assignment uses the
 - : int = 17
 @end[verbatim]
 
-Don't get confused with the @code{!} operator in C here.  the
+Don't get confused with the @code{!} operator in C here.  The
 following code can be confusing.
 
 @begin[verbatim]
@@ -265,7 +264,7 @@ As we mentioned in Section @refsection[value_restriction], mutability
 and side-effects interact with type inference.  For example, consider
 a ``one-shot'' function that saves a value on its first call, and
 returns that value on all future calls.  This function is not properly
-polymorphic.  We can illustrate this using a single variable.
+polymorphic because it contains a mutable field.  We can illustrate this using a single variable.
 
 @begin[verbatim]
 # let x = ref None;;
@@ -280,6 +279,8 @@ val x : '_a option ref = {contents=None}
 val one_shot : '_a -> '_a = <fun>
 # one_shot 1;;
 - : int = 1
+# one_shot;;
+val one_shot : int -> int = <fun>
 # one_shot 2;;
 - : int = 1
 # one_shot "Hello";;
@@ -288,12 +289,12 @@ This expression has type string but is here used with type int
 @end[verbatim]
 
 The value restriction requires that polymorphism be restricted to
-values.  Values include constants, and constructors with fields that
-are values, and non-mutable records with fields that are values.
-An application is @emph{not} a value, and a record with mutable fields
-is not a value.  By this definition, the @tt{x} and @tt{one_shot}
-variables cannot be polymorphic, as the type constants @code{'_a}
-indicate.
+values.  Values include functions, constants, constructors with fields
+that are values, and immutable records with fields that are values.  A
+function application is @emph{not} a value, and a record with mutable
+fields is not a value.  By this definition, the @tt{x} and
+@tt{one_shot} variables cannot be polymorphic, as the type constants
+@code{'_a} indicate.
 
 @section[arrays]{Arrays and strings}
 
@@ -308,8 +309,8 @@ the values computed from the expressions $e_1, @ldots, e_n$.
 val a : int array = [|1; 3; 5; 7|]
 @end[verbatim]
 
-Fields can be accessed with the $a@tt{.(}i@tt{)}$ construction.  Array
-indices start from 0; array bounds are checked.
+Fields can be accessed with the @code{a.(i)} construction.  Array
+indices start from 0.  Arrays are bounds-checked.
 
 @begin[verbatim]
 # a.(0);;
@@ -320,7 +321,7 @@ indices start from 0; array bounds are checked.
 Uncaught exception: Invalid_argument("Array.get")
 @end[verbatim]
 
-Fields are updated with the $a@tt{.(}i@tt{) <-} e$ assignment
+Fields are updated with the @code{a.(i) <- e} assignment
 statement.
 
 @begin[verbatim]
@@ -343,11 +344,11 @@ val a : int array = [|1; 1; 1; 1; 1; 1; 1; 1; 1; 1|]
 - : int = 10
 @end[verbatim]
 
-The @code{Array.blit} function can be used to copy elements from one
-array to another.  The @tt{blit} function requires five arguments: the
-source array, a starting offset into the array, the destination array, a
-starting offset into the destination array, and the number of elements
-to copy.
+The @code{Array.blit} function can be used to copy elements
+destructively from one array to another.  The @tt{blit} function
+requires five arguments: the source array, a starting offset into the
+array, the destination array, a starting offset into the destination
+array, and the number of elements to copy.
 
 @begin[verbatim]
 # Array.blit [| 3; 4; 5; 6 |] 1 a 3 2;;
@@ -357,8 +358,8 @@ to copy.
 @end[verbatim]
 
 In OCaml, strings are a lot like packed arrays of characters.  The
-access and update operations use the syntax $s@tt{.[}i@tt{]}$ and
-$s@tt{.[}i@tt{] <-} c$.
+access and update operations use the syntax @code{s.[i]} and
+@code{s.[i] <- c}.
 
 @begin[verbatim]
 # let s = "Jason";;
@@ -386,9 +387,9 @@ arbitrary contents.
 
 @section[looping]{Sequential execution and looping}
 
-Sequential execution is not useful in a functional language--why
+Sequential execution is not useful in a functional language---why
 compute a value and discard it?  In an imperative language, including
-a ``semi-imperative'' language like OCaml, sequential execution is
+a language like OCaml, sequential execution is
 used to compute by side-effect.
 
 Sequential execution is defined using the semicolon operator.  The

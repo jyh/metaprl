@@ -319,12 +319,10 @@ appropriate.  Records are defined in Chapter @refchapter[records].
 
 @begin[verbatim]
 # (* Name, Height, Phone, Salary *)
-  type db_entry = string * float * string * float;;
-type db_entry = string * float * string * float
+  let jason = ("Jason", 6.25, "626-395-6568", 50.0);;
+val jason : string * float * string * float =
 # let name_of_entry (name, _, _, _) = name;;
 val name_of_entry : 'a * 'b * 'c * 'd -> 'a = <fun>
-# let jason = ("Jason", 6.25, "626-395-6568", 50.0);;
-val jason : string * float * string * float =
   "Jason", 6.25, "626-395-6568", 50
 # name_of_entry jason;;
 - : string = "Jason"

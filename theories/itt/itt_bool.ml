@@ -679,7 +679,7 @@ let search_ifthenelse goal =
                i :: t ->
                   succ i :: t
              | [] ->
-                  raise (Failure "search_ifthenelse: empty address")
+                  raise (Invalid_argument "search_ifthenelse: empty address")
          in
             search_bterms addrs vars addr bterms
     | [] ->
@@ -751,10 +751,11 @@ let splitITE i p =
       if addrs = [] then
          raise (RefineError ("splitITE", StringTermError ("no condition", t)))
    in
+   let i'= if (i>=0) then i else pred i in
       (splitBoolT t i
-       thenLT [addHiddenLabelT "wf";
-               rw (reduce_ite_trueC addrs) i;
-               rw (reduce_ite_falseC addrs) i]) p
+       thenLT [idT;
+               rw (reduce_ite_trueC addrs) i';
+               rw (reduce_ite_falseC addrs) i']) p
 
 (************************************************************************
  * TYPE INFERENCE                                                       *

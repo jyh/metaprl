@@ -223,9 +223,7 @@ prim quotientType {| intro [] |} 'H 'u 'v 'w 'x1 'x2 :
 prim quotientEquality {| intro []; eqcd |} 'H 'x 'y 'z 'u 'v :
    [wf] sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
    [wf] sequent [squash] { 'H; x: 'A1; y: 'A1 >- 'E1['x; 'y] = 'E2['x; 'y] in univ[i:l] } -->
-   [wf] sequent [squash] { 'H; x: 'A1 >- 'E1['x; 'x] } -->
-   [wf] sequent [squash] { 'H; x: 'A1; y: 'A1; u: 'E1['x; 'y] >- 'E1['y; 'x] } -->
-   [wf] sequent [squash] { 'H; x: 'A1; y: 'A1; z: 'A1; u: 'E1['x; 'y]; v: 'E1['y; 'z] >- 'E1['x; 'z] } -->
+   [wf] sequent [squash] { 'H >- "type"{.quot x1, y1: 'A1 // 'E1['x1; 'y1]} } -->
    sequent ['ext] { 'H >- quot x1, y1: 'A1 // 'E1['x1; 'y1]
                    = quot x2, y2: 'A2 // 'E2['x2; 'y2]
                    in univ[i:l]
@@ -265,7 +263,7 @@ interactive quotient_memberFormation {| intro [] |} 'H :
 prim quotient_memberEquality 'H :
    [wf] sequent [squash] { 'H >- 'a1 IN quot x, y: 'A // 'E['x; 'y] } -->
    [wf] sequent [squash] { 'H >- 'a2 IN quot x, y: 'A // 'E['x; 'y] } -->
-   [wf] sequent [squash] { 'H >- esquash{'E['a1; 'a2]} } -->
+   sequent [squash] { 'H >- esquash{'E['a1; 'a2]} } -->
    sequent ['ext] { 'H >- 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y] } =
    it
 

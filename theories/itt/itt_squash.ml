@@ -196,7 +196,7 @@ prim squashType {| intro [] |} 'H :
  * @end[doc]
  *)
 prim squashMemberFormation {| intro [AutoMustComplete] |} 'H :
-   [wf] sequent [squash] { 'H >- 'A } -->
+   sequent [squash] { 'H >- 'A } -->
    sequent ['ext]   { 'H >- squash{'A} } =
    it
 

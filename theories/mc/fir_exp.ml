@@ -93,6 +93,7 @@ declare letAlloc{ 'alloc_op; v. 'exp['v] }
 (* Subscripting. *)
 declare letSubscript{ 'subop; 'ty; 'ref; 'index; v. 'exp['v] }
 declare setSubscript{ 'subop; 'ty; 'ref; 'index; 'new_val; 'exp }
+declare memcpy{ 'subop; 'var1; 'atom1; 'var2; 'atom2; 'len; 'exp }
 
 (*
  * Misc.
@@ -223,6 +224,12 @@ dform setSubscript_df : except_mode[src] ::
    setSubscript{ 'subop; 'ty; 'ref; 'index; 'new_val; 'exp } =
    szone slot{'ref} `"[" slot{'index} `"]" Nuprl_font!leftarrow
    slot{'new_val} hspace
+   `"with subop " slot{'subop} hspace
+   slot{'exp} ezone
+dform memcpy_df : except_mode[src] ::
+   memcpy{ 'subop; 'var1; 'atom1; 'var2; 'atom2; 'len; 'exp } =
+   szone `"memcpy(" slot{'var1} `"[" slot{'atom1} `"], "
+   slot{'var2} `"[" slot{'atom2} `"], " slot{'len} `")" hspace
    `"with subop " slot{'subop} hspace
    slot{'exp} ezone
 

@@ -114,6 +114,7 @@ declare letAlloc{ 'alloc_op; v. 'exp['v] }
 (* Subscripting. *)
 declare letSubscript{ 'subop; 'ty; 'ref; 'index; v. 'exp['v] }
 declare setSubscript{ 'subop; 'ty; 'ref; 'index; 'new_val; 'exp }
+declare memcpy{ 'subop; 'var1; 'atom1; 'var2; 'atom2; 'len; 'exp }
 
 (*
  * Misc.

@@ -183,17 +183,15 @@ interactive functionElimination {| elim_resource [] |} 'H 'J 'f 'a 'y 'v :
  * H >- f1 = f2 in x:A -> B[x]
  * H >- a1 = a2 in A
  *)
-interactive applyEquality {| intro_resource [] |} 'H (x:'A -> 'B['x]) :
+interactive applyEquality {| eqcd_resource |} 'H (x:'A -> 'B['x]) :
    sequent [squash] { 'H >- 'f1 = 'f2 in x:'A -> 'B['x] } -->
    sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
    sequent ['ext] { 'H >- ('f1 'a1) = ('f2 'a2) in 'B['a1] }
 
-interactive applyMember {| intro_resource [] |} 'H (x:'A -> 'B['x]) :
+interactive applyMember 'H (x:'A -> 'B['x]) :
    sequent [squash] { 'H >- member{. x:'A -> 'B['x]; 'f1} } -->
    sequent [squash] { 'H >- member{'A; 'a1} } -->
    sequent ['ext] { 'H >- member{'B['a1]; .'f1 'a1} }
-
-
 
 (*
  * H >- a1:A1 -> B1 <= a2:A2 -> B2

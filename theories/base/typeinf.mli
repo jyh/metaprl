@@ -97,6 +97,7 @@ val get_typeinf_resource : string -> typeinf_resource
  *)
 val typeinf_of_proof : tactic_arg -> typeinf_func
 val infer_type : tactic_arg -> term -> unify_subst * term
+val infer_type_args : tactic_arg -> term -> term list
 
 (*
  * -*-

@@ -144,6 +144,11 @@ rule applyEquality 'H (x:'A -> 'B['x]) :
    sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
    sequent ['ext] { 'H >- ('f1 'a1) = ('f2 'a2) in 'B['a1] }
 
+rule applyMember 'H (x:'A -> 'B['x]) :
+   sequent [squash] { 'H >- member{. x:'A -> 'B['x]; 'f1} } -->
+   sequent [squash] { 'H >- member{'A; 'a1} } -->
+   sequent ['ext] { 'H >- member{'B['a1]; .'f1 'a1} }
+
 (*
  * H >- a1:A1 -> B1 <= a2:A2 -> B2
  * by functionSubtype

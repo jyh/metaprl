@@ -40,6 +40,7 @@ open Refiner.Refiner.TermType
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermMan
 open Refiner.Refiner.TermSubst
+open Refiner.Refiner.TermAddr
 open Refiner.Refiner.Refine
 open Refiner.Refiner.RefineError
 open Term_match_table
@@ -248,6 +249,14 @@ let typeinf_of_proof p =
 let infer_type p t =
    let subst = collect_subst p in
       (get_typeinf_arg p "typeinf") (unify_subst_of_subst subst) t
+
+let infer_type_args p t =
+   let t =
+      try get_with_arg p with
+         RefineError _ ->
+            snd (infer_type p t)
+   in
+      [t]
 
 (*
  * -*-

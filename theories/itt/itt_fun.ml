@@ -158,12 +158,12 @@ interactive independentFunctionElimination2 'H 'J 'f 'y 'z 'a :
  * H >- f1 = f2 in x:A -> B[x]
  * H >- a1 = a2 in A
  *)
-interactive independentApplyEquality {| intro_resource [] |} 'H ('A -> 'B) :
+interactive independentApplyEquality {| eqcd_resource |} 'H ('A -> 'B) :
    [wf] sequent [squash] { 'H >- 'f1 = 'f2 in 'A -> 'B } -->
    [wf] sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
    sequent ['ext] { 'H >- ('f1 'a1) = ('f2 'a2) in 'B }
 
-interactive independentApplyMember {| intro_resource [] |} 'H ('A -> 'B) :
+interactive independentApplyMember 'H ('A -> 'B) :
    [wf] sequent [squash] { 'H >- member{.'A -> 'B; 'f1} } -->
    [wf] sequent [squash] { 'H >- member{'A; 'a1} } -->
    sequent ['ext] { 'H >- member{'B; .'f1 'a1} }
@@ -207,7 +207,17 @@ let d_apply_equalT p =
          RefineError _ ->
             snd (infer_type p f)
    in
-      (withT f_type (dT 0)) p
+   let tac =
+      if is_rfun_term f_type then
+         rfunction_applyEquality
+      else if is_dfun_term f_type then
+         applyEquality
+      else if is_fun_term f_type then
+         independentApplyEquality
+      else
+         raise (RefineError ("d_apply_equalT", StringTermError ("inferred type is not a function type", f_type)))
+   in
+      tac (Sequent.hyp_count_addr p) f_type p
 
 let apply_equal_term = << 'f1 'a1 = 'f2 'a2 in 'T >>
 
@@ -221,7 +231,17 @@ let d_apply_memberT p =
          RefineError _ ->
             snd (infer_type p f)
    in
-      (withT f_type (dT 0)) p
+   let tac =
+      if is_rfun_term f_type then
+         rfunction_applyMember
+      else if is_dfun_term f_type then
+         applyMember
+      else if is_fun_term f_type then
+         independentApplyMember
+      else
+         raise (RefineError ("d_apply_memberT", StringTermError ("inferred type is not a function type", f_type)))
+   in
+      tac (Sequent.hyp_count_addr p) f_type p
 
 let apply_member_term = << member{'T; .'f1 'a1} >>
 

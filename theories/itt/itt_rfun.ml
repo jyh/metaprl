@@ -360,13 +360,13 @@ prim rfunctionElimination {| elim_resource [] |} 'H 'J 'f 'a 'y 'v :
  * H >- f1 = f2 in { f | x:A -> B[f, x] }
  * H >- a1 = a2 in A
  *)
-prim rfunction_applyEquality {| intro_resource []; eqcd_resource |} 'H ({ f | x:'A -> 'B['f; 'x] }) :
+prim rfunction_applyEquality {| eqcd_resource |} 'H ({ f | x:'A -> 'B['f; 'x] }) :
    [wf] sequent [squash] { 'H >- 'f1 = 'f2 in { f | x:'A -> 'B['f; 'x] } } -->
    [wf] sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
    sequent ['ext] { 'H >- 'f1 'a1 = 'f2 'a2 in 'B['f1; 'a1] } =
    it
 
-interactive rfunction_applyMember {| intro_resource [] |} 'H ({ f | x:'A -> 'B['f; 'x] }) :
+interactive rfunction_applyMember 'H ({ f | x:'A -> 'B['f; 'x] }) :
    [wf] sequent [squash] { 'H >- member{.{ f | x:'A -> 'B['f; 'x] }; 'f1} } -->
    [wf] sequent [squash] { 'H >- member{'A; 'a1} } -->
    sequent ['ext] { 'H >- member{.'B['f1; 'a1]; .'f1 'a1} }

@@ -47,10 +47,19 @@ type elim_data
 type intro_data
 
 type intro_option =
-   SelectOption of int            (* Select among multiple introduction rules *)
+   (* Select among multiple introduction rules *)
+   SelectOption of int
+
+   (*
+    * Function to supply the term arguments of the rule.
+    * If the second argument is Some t, then the subterm described by t
+    * is passed as the argument to the argument producer.
+    *)
+ | IntroArgsOption of (tactic_arg -> term -> term list) * term option
 
 type elim_option =
    ThinOption of (int -> tactic)  (* Thin the eliminated hyp, unless overridden *)
+ | ElimArgsOption of (tactic_arg -> term -> term list) * term option
 
 resource (term * (int -> tactic), int -> tactic, elim_data, Tactic.pre_tactic * elim_option list) elim_resource
 resource (term * tactic, tactic, intro_data, Tactic.pre_tactic * intro_option list) intro_resource

@@ -75,13 +75,16 @@ let debug_dtactic =
  * The d_tactic uses a term_table to match against terms.
  *)
 type elim_data = (int -> tactic, int -> tactic) term_table
+
 type intro_data = (string * int option * tactic, tactic) term_table
 
 type intro_option =
-   SelectOption of int        (* Select among multiple introduction rules *)
+   SelectOption of int
+ | IntroArgsOption of (tactic_arg -> term -> term list) * term option
 
 type elim_option =
    ThinOption of (int -> tactic)
+ | ElimArgsOption of (tactic_arg -> term -> term list) * term option
 
 resource (term * (int -> tactic), int -> tactic, elim_data, Tactic.pre_tactic * elim_option list) elim_resource
 resource (term * tactic, tactic, intro_data, Tactic.pre_tactic * intro_option list) intro_resource
@@ -242,7 +245,49 @@ let improve_data (t, tac) tbl =
    Refine_exn.print Dform.null_base (insert tbl t) tac
 
 (*
- * Improve the introduction resource from the rule argument.
+ * Options for intro rule.
+ *)
+let rec get_args_arg = function
+   IntroArgsOption (f, arg) :: t ->
+      Some (f, arg)
+ | _ :: t ->
+      get_args_arg t
+ | [] ->
+      None
+
+let rec get_sel_arg = function
+   SelectOption sel :: t ->
+      Some sel
+ | _ :: t ->
+      get_sel_arg t
+ | [] ->
+      None
+
+(*
+ * This function needs to be moved into the term module.
+ *)
+let find_subterm t arg =
+   let rec search addr t =
+      if alpha_equal t arg then
+         addr
+      else
+         let { term_terms = bterms } = dest_term t in
+            search_bterms addr 0 bterms
+   and search_bterms addr index = function
+      [] ->
+         raise Not_found
+    | bterm :: bterms ->
+         let { bterm = t } = dest_bterm bterm in
+            try search (index :: addr) t with
+               Not_found ->
+                  search_bterms addr (succ index) bterms
+   in
+      try make_address (List.rev (search [] t)) with
+         Not_found ->
+            raise (RefineError ("Base_dtactic.improve_intro.find_subterm", StringTermError ("subterm can't be found", arg)))
+
+(*
+ * Improve the intro resource from a rule.
  *)
 let improve_intro_arg rsrc name context_args var_args term_args _ statement (pre_tactic, options) =
    let _, goal = unzip_mfunction statement in
@@ -256,39 +301,53 @@ let improve_intro_arg rsrc name context_args var_args term_args _ statement (pre
          [] ->
             (fun _ -> [])
        | _ ->
-            let length = List.length term_args in
-               (fun p ->
-                     let args =
-                        try get_with_args p with
-                           RefineError _ ->
-                              raise (RefineError (name, StringIntError ("arguments required", length)))
-                     in
-                     let length' = List.length args in
-                        if length' != length then
-                           raise (RefineError (name, StringIntError ("wrong number of arguments", length')));
-                        args)
+            match get_args_arg options with
+               Some (f, arg) ->
+                  let get_arg =
+                     match arg with
+                        None ->
+                           Sequent.concl
+                      | Some arg ->
+                           let addr = find_subterm t arg in
+                              (fun p -> term_subterm (Sequent.concl p) addr)
+                  in
+                     (fun p -> f p (get_arg p))
+             | None ->
+                  let length = List.length term_args in
+                     (fun p ->
+                           let args =
+                              try get_with_args p with
+                                 RefineError _ ->
+                                    raise (RefineError (name, StringIntError ("arguments required", length)))
+                           in
+                           let length' = List.length args in
+                              if length' != length then
+                                 raise (RefineError (name, StringIntError ("wrong number of arguments", length')));
+                              args)
    in
    let tac =
       match context_args with
          [|_|] ->
             (fun p ->
-               let vars = Var.maybe_new_vars_array p var_args in
-               let addr = Sequent.hyp_count_addr p in
-                  Tactic_type.Tactic.tactic_of_rule pre_tactic ([| addr |], vars) (term_args p) p)
+                  let vars = Var.maybe_new_vars_array p var_args in
+                  let addr = Sequent.hyp_count_addr p in
+                     Tactic_type.Tactic.tactic_of_rule pre_tactic ([| addr |], vars) (term_args p) p)
        | _ ->
             raise (Invalid_argument (sprintf "Base_dtactic.intro: %s: not an introduction rule" name))
-   in
-   let rec get_sel_arg = function
-      SelectOption i :: _ ->
-         Some i
-    | [] ->
-         None
    in
       improve_data (t, (name, get_sel_arg options, tac)) rsrc
 
 (*
  * Compile an elimination tactic.
  *)
+let rec get_elim_args_arg = function
+   ElimArgsOption (f, arg) :: t ->
+      Some (f, arg)
+ | _ :: t ->
+      get_elim_args_arg t
+ | [] ->
+      None
+
 let tryThinT thinT i p =
    if get_thinning_arg p then
       tryT (thinT i) p
@@ -318,19 +377,31 @@ let improve_elim_arg rsrc name context_args var_args term_args _ statement (pre_
    let term_args =
       match term_args with
          [] ->
-            (fun _ -> [])
+            (fun _ _ -> [])
        | _ ->
-            let length = List.length term_args in
-               (fun p ->
-                     let args =
-                        try get_with_args p with
-                           RefineError _ ->
-                              raise (RefineError (name, StringIntError ("arguments required", length)))
-                     in
-                     let length' = List.length args in
-                        if length' != length then
-                           raise (RefineError (name, StringIntError ("wrong number of arguments", length')));
-                        args)
+            match get_elim_args_arg options with
+               Some (f, arg) ->
+                  let get_arg =
+                     match arg with
+                        None ->
+                           (fun p i -> snd (Sequent.nth_hyp p i))
+                      | Some arg ->
+                           let addr = find_subterm t arg in
+                              (fun p i -> term_subterm (snd (Sequent.nth_hyp p i)) addr)
+                  in
+                     (fun i p -> f p (get_arg p i))
+             | None ->
+                  let length = List.length term_args in
+                     (fun _ p ->
+                           let args =
+                              try get_with_args p with
+                                 RefineError _ ->
+                                    raise (RefineError (name, StringIntError ("arguments required", length)))
+                           in
+                           let length' = List.length args in
+                              if length' != length then
+                                 raise (RefineError (name, StringIntError ("wrong number of arguments", length')));
+                              args)
    in
    let new_vars =
       if Array_util.mem v var_args then
@@ -348,6 +419,8 @@ let improve_elim_arg rsrc name context_args var_args term_args _ statement (pre_
       let rec collect = function
          ThinOption thinT :: _ ->
             Some thinT
+       | _ :: t ->
+            collect t
        | [] ->
             None
       in
@@ -359,13 +432,13 @@ let improve_elim_arg rsrc name context_args var_args term_args _ statement (pre_
             (fun i p ->
                   let vars = new_vars i p in
                   let j, k = Sequent.hyp_indices p i in
-                     Tactic_type.Tactic.tactic_of_rule pre_tactic ([| j; k |], new_vars i p) (term_args p) p)
+                     Tactic_type.Tactic.tactic_of_rule pre_tactic ([| j; k |], new_vars i p) (term_args i p) p)
 
        | [| _; _ |], Some thinT ->
             (fun i p ->
                   let vars = new_vars i p in
                   let j, k = Sequent.hyp_indices p i in
-                     (Tactic_type.Tactic.tactic_of_rule pre_tactic ([| j; k |], new_vars i p) (term_args p)
+                     (Tactic_type.Tactic.tactic_of_rule pre_tactic ([| j; k |], new_vars i p) (term_args i p)
                       thenT tryThinT thinT i) p)
        | _ ->
             raise (Invalid_argument (sprintf "Base_dtactic: %s: not an elimination rule" name))

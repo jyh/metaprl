@@ -1394,13 +1394,6 @@ let jproverT = base_jproverT (Some 100)
  * AUTO TACTIC                                                          *
  ************************************************************************)
 
-(* Trivial falsities *)
-let logic_trivT = argfunT (fun i p ->
-   let hyp = Sequent.nth_hyp p i in
-   match explode_term hyp with
-      <<void>> | <<"false">> -> dT i
-    | _ -> raise (RefineError ("logic_trivT", StringTermError ("nothing known about", hyp))))
-
 (*
  * In auto tactic, it's Ok to decompose product hyps.
  *)
@@ -1420,11 +1413,6 @@ let logic_prec = create_auto_prec [trivial_prec] [d_prec]
 let jprover_prec = create_auto_prec [trivial_prec;logic_prec] [d_prec]
 
 let resource auto += [{
-   auto_name = "logic_trivT";
-   auto_prec = trivial_prec;
-   auto_tac = onSomeHypT logic_trivT;
-   auto_type = AutoTrivial;
-}; {
    auto_name = "logic_autoT";
    auto_prec = logic_prec;
    auto_tac = onSomeHypT logic_autoT;

@@ -48,6 +48,7 @@
  * @parents
  * @end[doc]
  *)
+include Itt_atom
 include Itt_int_base
 include Itt_int_ext
 include Itt_list

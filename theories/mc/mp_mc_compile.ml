@@ -88,7 +88,7 @@ let compile_phobos_fir program post_rewrites inline_targets =
    (* We apply each set of post-parsing rewrites one after another. *)
    let program = List.fold_left
       (fun term post_rewrites ->
-         apply_rw_post (applyIFormsC post_rewrites) program)
+         apply_rw_post (applyIFormsC post_rewrites) term)
       program
       post_rewrites
    in

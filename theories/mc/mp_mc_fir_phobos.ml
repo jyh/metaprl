@@ -42,12 +42,10 @@
  * @end[doc]
  *)
 include Mp_mc_theory
-include Mp_mc_fir_phobos_exp
 (*! @docoff *)
 
 open Top_conversionals
 open Mp_mc_base
-open Mp_mc_fir_phobos_exp
 
 (*
  * This function takes a list of ((redex, _), (contractum, _)),
@@ -72,5 +70,4 @@ let applyIFormsC iform_rewrites =
 
       ) iform_rewrites
    in
-      (repeatC (higherC (applyAllC patterns))) thenC
-      (repeatC (higherC reduce_phobos_variable))
+      (repeatC (higherC (applyAllC patterns)))

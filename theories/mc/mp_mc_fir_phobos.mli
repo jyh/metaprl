@@ -30,7 +30,6 @@
  * Email:  granicz@cs.caltech.edu
  *)
 include Mp_mc_theory
-include Mp_mc_fir_phobos_exp
 
 open Tactic_type.Conversionals
 open Phobos_type

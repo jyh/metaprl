@@ -470,11 +470,6 @@ interactive subgroup_thm1 'H group[i:l] :
    sequent ['ext] { 'H >- subStructure{'s; 'g} } -->
    sequent ['ext] { 'H >- all a: 's^car. all b: 's^car. ('a *['g] ('g^inv 'b) in 's^car) }
 
-(*
-(* ???Since "isect" is not the set-theoretic intersection, the rule
- * below is not true. Might come back to this after implementing
- * set intersection.
- *)
 (*!
  * @begin[doc]
  *
@@ -492,7 +487,6 @@ interactive subgroup_isect 'H 's1 's2 group[i:l] :
    sequent ['ext] { 'H >- 's^car = "isect"{.'s1^car; x. 's2^car} in univ[i:l] } -->
    sequent ['ext] { 'H >- 's^"*" = 's1^"*" in 's^car -> 's^car -> 's^car } -->
    sequent ['ext] { 'H >- subStructure{'s; 'g} }
-*)
 
 (*!
  * @begin[doc]

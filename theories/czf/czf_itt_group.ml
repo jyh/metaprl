@@ -60,6 +60,8 @@ interactive op_wf2 {| intro[] |} 'H :
    sequent ['ext] { 'H >- mem{'s2; car} } -->
    sequent ['ext] { 'H >- mem{op{'s1; 's2}; car} }
 
+(* The following two rules are almost the same as the next two, but are necessary. *)
+
 interactive op_eq1 {| intro[] |} 'H :
    sequent [squash] { 'H >- isset{'s1} } -->
    sequent [squash] { 'H >- isset{'s2} } -->
@@ -82,11 +84,6 @@ interactive op_fun2 {| intro[] |} 'H :
    sequent [squash] { 'H >- isset{'s} } -->
    sequent ['ext] { 'H >- fun_set{z. op{'s; 'z}} }
 
-(* interactive op_fun3 {| intro[] |} 'H :
-   sequent [squash] { 'H >- isset{'s1} } -->
-   sequent [squash] { 'H >- isset{'s2} } -->
-   sequent ['ext] { 'H >- fun_set{z. op{'s1; 's2}} }
-*)
 interactive op_assoc1 {| intro[] |} 'H :
    sequent [squash] { 'H >- isset{'s1} } -->
    sequent [squash] { 'H >- isset{'s2} } -->
@@ -158,16 +155,8 @@ interactive inv_id2 {| intro[] |} 'H :
    sequent ['ext] { 'H >- equal{op{'s1; inv{'s1}}; id} }
 
 (* theorems *)
+
 (* Cancellation: a * b = a * c => b = c *)
-(* interactive cancel1 {| intro [] |} 'H :
-   sequent [squash] { 'H >- isset{'s1} } -->
-   sequent [squash] { 'H >- isset{'s2} } -->
-   sequent [squash] { 'H >- isset{'s3} } -->
-   sequent ['ext] { 'H >- mem{'s1; car} } -->
-   sequent ['ext] { 'H >- mem{'s2; car} } -->
-   sequent ['ext] { 'H >- mem{'s3; car} } -->
-   sequent ['ext] { 'H; x: equal{op{'s1; 's2}; op{'s1; 's3}} >- equal{'s2; 's3} }
-*)
 interactive cancel1 {| intro [] |} 'H 's1 :
    sequent [squash] { 'H >- isset{'s1} } -->
    sequent [squash] { 'H >- isset{'s2} } -->
@@ -208,12 +197,31 @@ interactive unique_id1 {| intro [] |} 'H :
    sequent ['ext] { 'H >- mem{'e2; car} } -->
    sequent ['ext] { 'H; x: eq{op{'e2; 's}; 's}; y: eq{op{'s; 'e2}; 's} >- eq{'e2; id} }
 *)
-interactive unique_inv {| intro [] |} 'H :
+(* interactive unique_inv {| intro [] |} 'H :
    sequent [squash] { 'H >- isset{'s} } -->
    sequent [squash] { 'H >- isset{'s2} } -->
    sequent ['ext] { 'H >- mem{'s; car} } -->
    sequent ['ext] { 'H >- mem{'s2; car} } -->
    sequent ['ext] { 'H; x: equal{op{'s2; 's}; id}; y: equal{op{'s; 's2}; id} >- equal{'s2; inv{'s}} }
+*)
+
+interactive unique_inv1 {| intro [] |} 'H :
+   sequent [squash] { 'H >- isset{'s} } -->
+   sequent [squash] { 'H >- isset{'s2} } -->
+   sequent ['ext] { 'H >- mem{'s; car} } -->
+   sequent ['ext] { 'H >- mem{'s2; car} } -->
+   sequent ['ext] { 'H >- equal{op{'s2; 's}; id} } -->
+   sequent ['ext] { 'H >- equal{op{'s; 's2}; id} } -->
+   sequent ['ext] { 'H >- equal{'s2; inv{'s}} }
+
+interactive unique_inv2 {| intro [] |} 'H :
+   sequent [squash] { 'H >- isset{'s} } -->
+   sequent [squash] { 'H >- isset{'s2} } -->
+   sequent ['ext] { 'H >- mem{'s; car} } -->
+   sequent ['ext] { 'H >- mem{'s2; car} } -->
+   sequent ['ext] { 'H >- equal{op{'s2; 's}; id} } -->
+   sequent ['ext] { 'H >- equal{op{'s; 's2}; id} } -->
+   sequent ['ext] { 'H >- equal{inv{'s}; 's2} }
 
 (* Unique solution for a * x = b : x = a' * b *)
 interactive unique_sol1 {| intro [] |} 'H :
@@ -246,5 +254,5 @@ interactive inv_simplify {| intro [] |} 'H :
    sequent ['ext] { 'H >- equal{inv{op{'a; 'b}}; op{inv{'b}; inv{'a}}} }
 
 (* Inverse of id *)
-(* interactive inv_of_id {| intro [] |} 'H :
-   sequent ['ext] { 'H >- eq{inv{id}; id} } *)
+interactive inv_of_id {| intro [] |} 'H :
+   sequent ['ext] { 'H >- eq{inv{id}; id} }

@@ -42,13 +42,13 @@ let fold_cyclic_subgroup = makeFoldC << cyclic_subgroup{elem_in_G} >> unfold_cyc
 prec prec_power
 
 dform elem_in_G_df : except_mode[src] :: elem_in_G =
-   `"a"
+   `"gen"
 
 dform power_df : parens :: "prec"[prec_power] :: except_mode[src] :: power{'z; 'n} =
    slot["le"]{'z} `"^" slot{'n}
 
 dform cyclic_subgroup_df : except_mode[src] :: cyclic_subgroup{elem_in_G} =
-   `"<a>"
+   `"<gen>"
 
 (* axioms *)
 interactive elem_in_G_wf1 {| intro [] |} 'H :
@@ -58,27 +58,44 @@ interactive elem_in_G_wf2 {| intro [] |} 'H :
    sequent ['ext] { 'H >- mem{elem_in_G; car} }
 
 (* power is a set *)
-interactive power_wf {| intro [] |} 'H :
-   sequent ['ext] { 'H; n: int >- isset{power{'z; 'n}} }
-
 interactive power_wf1 {| intro [] |} 'H :
    sequent ['ext] { 'H >- 'n IN int } -->
+   sequent ['ext] { 'H >- isset{'z} } -->
+   sequent ['ext] { 'H >- mem{'z; car} } -->
    sequent ['ext] { 'H >- isset{power{'z; 'n}} }
 
-(* power{elem_in_G; 'n} is in G *)
-interactive power_elem_in_G_wf {| intro [] |} 'H :
-   sequent ['ext] { 'H; n: int >- mem{power{elem_in_G; 'n}; car} }
+(* the power of an element in G is also in G *)
+interactive power_wf2 {| intro [] |} 'H :
+   sequent ['ext] { 'H >- 'n IN int } -->
+   sequent ['ext] { 'H >- isset{'z} } -->
+   sequent ['ext] { 'H >- mem{'z; car} } -->
+   sequent ['ext] { 'H >- mem{power{'z; 'n}; car} }
 
+(* power{elem_in_G; 'n} is in G *)
 interactive power_elem_in_G_wf1 {| intro [] |} 'H :
    sequent ['ext] { 'H >- 'n IN int } -->
    sequent ['ext] { 'H >- mem{power{elem_in_G; 'n}; car} }
 
+(* power property 1 *)
+interactive power_property1 {| intro [] |} 'H :
+   sequent ['ext] { 'H >- 'n IN int } -->
+   sequent ['ext] { 'H >- isset{'x} } -->
+   sequent ['ext] { 'H >- mem{'x; car} } -->
+   sequent ['ext] { 'H >- equal{op{power{'x; ('n +@ 1)}; inv{'x}}; power{'x; 'n}} }
+
+(* power property 2 *)
+interactive power_property2 {| intro [] |} 'H :
+   sequent ['ext] { 'H >- 'n IN int } -->
+   sequent ['ext] { 'H >- isset{'x} } -->
+   sequent ['ext] { 'H >- mem{'x; car} } -->
+   sequent ['ext] { 'H >- equal{op{power{'x; 'n}; 'x}; power{'x; ('n +@ 1)}} }
+
 (* power simplify *)
 interactive power_simplify {| intro [] |} 'H :
-   sequent [squash] { 'H >- isset{'x} } -->
-(*   sequent ['ext] { 'H >- mem{'x; car} } --> *)
    sequent ['ext] { 'H >- 'm IN int } -->
    sequent ['ext] { 'H >- 'n IN int } -->
+   sequent ['ext] { 'H >- isset{'x} } -->
+   sequent ['ext] { 'H >- mem{'x; car} } -->
    sequent ['ext] { 'H >- equal{op{power{'x; 'm}; power{'x; 'n}}; power{'x; ('m +@ 'n)}} }
 
 (* Cyclic_subgroup is a subgroup of G *)

@@ -387,6 +387,10 @@ dform alloc_tuple_shift_df : alloc_tuple{'l; AllocTupleCons{'a; 'rest}} =
 dform alloc_tuple_start_df : alloc_tuple{'l; AllocTupleNil} =
    szone pushm[1] bf["("] alloc_tuple{'l} bf[")"] popm ezone
 
+(* General alloc_tuple *)
+dform alloc_tuple_start_df : alloc_tuple{'l; 'tl} =
+   slot{'l} `" :: " slot{'tl}
+
 dform alloc_tuple_nil_df : alloc_tuple{nil} =
    `""
 

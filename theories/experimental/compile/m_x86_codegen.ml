@@ -91,10 +91,10 @@ dform asm_df2 : ASM{'a; v. 'e} =
    bf["let "] slot{'v} bf[" = assemble("] slot{'a} bf[") in"] hspace slot{'e}
 
 dform asm_df3 : ASM{'args1; 'args2; v. 'e} =
-   szone pushm[0] pushm[3] bf["assemble args"]
+   szone pushm[0] pushm[3] bf["assemble args["]
    hspace bf["src = "] slot{'args1}
    hspace bf["dst = "] slot{'args2}
-   hspace bf["as "] slot{'v}
+   hspace bf["as "] slot{'v} bf[" ]"]
    popm hspace bf["in"]
    popm ezone hspace slot{'e}
 
@@ -115,10 +115,10 @@ declare store_tuple{'v; 'tuple; 'rest}
 declare store_tuple{'v; 'off; 'tuple; 'rest}
 
 dform store_tuple_df1 : store_tuple{'v; 'tuple; 'rest} =
-   bf["store_tuple["] slot{'v} `", " slot{'tuple} hspace slot{'rest}
+   bf["store_tuple[ "] slot{'v} `", " slot{'tuple} bf[" ]"] hspace slot{'rest}
 
 dform store_tuple_df2 : store_tuple{'v; 'off; 'tuple; 'rest} =
-    bf["store_tuple["] slot{'v} `", " slot{'off} `", " slot{'tuple} hspace slot{'rest}
+    bf["store_tuple[ "] slot{'v} `", " slot{'off} `", " slot{'tuple} bf[" ]"] hspace slot{'rest}
 
 prim_rw unfold_store_tuple :
    store_tuple{'v; 'tuple; 'rest}
@@ -149,10 +149,10 @@ declare reverse_tuple{'tuple}
 declare reverse_tuple{'dst; 'src}
 
 dform reverse_tuple_df1 : reverse_tuple{'tuple} =
-   bf["reverse_tuple["] slot{'tuple} bf["]"]
+   bf["reverse_tuple[ "] slot{'tuple} bf[" ]"]
 
 dform reverse_tuple_df2 : reverse_tuple{'dst; 'src} =
-   bf["reverse_tuple["] slot{'dst} bf[" <- "] slot{'src} bf["]"]
+   bf["reverse_tuple[ src = "] slot{'src} bf[" dest = "] slot{'dst} bf[" ]"]
 
 prim_rw unfold_reverse_tuple :
    reverse_tuple{'tuple}
@@ -182,10 +182,10 @@ declare reverse_args{'args}
 declare reverse_args{'args1; 'args2}
 
 dform reverse_args_df1 : reverse_args{'args} =
-   bf["reverse_args["] slot{'args} bf["]"]
+   bf["reverse_args[ "] slot{'args} bf[" ]"]
 
 dform reverse_args_df2 : reverse_args{'dst; 'src} =
-   bf["reverse_args["] slot{'dst} bf[" <- "] slot{'src} bf["]"]
+   bf["reverse_args[ src = "] slot{'src} bf[" dst = "] slot{'dst} bf[" ]"]
 
 prim_rw unfold_reverse_args :
    reverse_args{'args}
@@ -211,10 +211,10 @@ declare copy_args{'args; v. 'e['v]}
 declare copy_args{'args1; 'args2; v. 'e['v]}
 
 dform copy_args_df1 : copy_args{'args; v. 'e} =
-   bf["let "] slot{'v} bf[" = copy_args["] slot{'args} bf["] in"] hspace slot{'e}
+   bf["let "] slot{'v} bf[" = copy_args[ "] slot{'args} bf[" ] in"] hspace slot{'e}
 
 dform copy_args_df2 : copy_args{'dst; 'src; v. 'e} =
-   bf["let "] slot{'v} bf[" = copy_args("] slot{'dst} bf["<-"] slot{'src} bf[") in"] hspace slot{'e}
+   bf["let "] slot{'v} bf[" = copy_args[ src = "] slot{'src} bf[" dest = "] slot{'dst} bf[" ] in"] hspace slot{'e}
 
 prim_rw unfold_copy_args :
    copy_args{'args; v. 'e['v]}
@@ -657,7 +657,7 @@ prim_rw mem_reg_off_cleanup_1 :
  *)
 declare invert_cc{'cc}
 
-dform df_invert_cc : invert_cc{'cc} =
+dform invert_cc_df : invert_cc{'cc} =
    bf["invert "] slot{'cc}
 
 prim_rw invert_cc_z :

@@ -284,11 +284,11 @@ ml_rw reduce_ind : ('goal : ind{number[x:n]; i, j. 'down['i; 'j]; 'base; k, l. '
       if code < 0 then
          let x'' = mk_number_term (Mp_num.succ_num x') in
          let goal = mk_ind_term x'' i j down base k l up in
-            subst down [x; goal] [k; l]
+            subst down [k; l] [x; goal]
       else if code > 0 then
          let x'' = mk_number_term (Mp_num.pred_num x') in
          let goal = mk_ind_term x'' i j down base k l up in
-            subst up [x; goal] [k; l]
+            subst up [k; l] [x; goal]
       else
          base
 

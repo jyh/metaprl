@@ -59,7 +59,7 @@ open Refiner.Refiner.RefineError
 open Mp_resource
 open Term_stable
 
-open Tactic_type.Tacticals
+open Tactic_type
 open Tactic_type.Tacticals
 open Tactic_type.Conversionals
 open Tactic_type.Sequent
@@ -157,7 +157,7 @@ dform set_ind_df : mode[prl] :: parens :: "prec"[prec_tree_ind] :: set_ind{'z; a
 (*
  * A set is a type in ITT.
  *)
-interactive set_type 'H :
+interactive set_type {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- "type"{set} }
 
 (*
@@ -176,7 +176,7 @@ interactive isset_assum 'H 'J :
 (*
  * This is how a set is constructed.
  *)
-interactive isset_collect 'H 'y :
+interactive isset_collect {| intro_resource [] |} 'H 'y :
    sequent [squash] { 'H >- 'T = 'T in univ[1:l] } -->
    sequent [squash] { 'H; y: 'T >- isset{'a['y]} } -->
    sequent ['ext] { 'H >- isset{collect{'T; x. 'a['x]}} }
@@ -192,7 +192,7 @@ interactive isset_apply 'H 'J :
 (*
  * Induction.
  *)
-interactive set_elim 'H 'J 'a 'T 'f 'w 'z :
+interactive set_elim {| elim_resource [ThinOption thinT] |} 'H 'J 'a 'T 'f 'w 'z :
    sequent ['ext] { 'H;
                     a: set;
                     'J['a];
@@ -229,9 +229,9 @@ interactive set_split_concl 'H 's (bind{v. 'C['v]}) 'T 'f 'z :
 (*
  * Equality on tree induction forms.
  *)
-interactive set_ind_equality 'H 'a 'f 'g 'x :
-   sequent [squash] { 'H >- 'z1 = 'z2 in set } -->
-   sequent [squash] { 'H; a: univ[1:l]; f: 'a -> set; g: x: univ[1:l] -> 'x -> 'T >-
+interactive set_ind_equality {| intro_resource [] |} 'H 'a 'f 'g 'x :
+   ["wf"]   sequent [squash] { 'H >- 'z1 = 'z2 in set } -->
+   ["main"] sequent [squash] { 'H; a: univ[1:l]; f: 'a -> set; g: x: univ[1:l] -> 'x -> 'T >-
       'body1['a; 'f; 'g] = 'body2['a; 'f; 'g] in 'T } -->
    sequent ['ext] { 'H >- set_ind{'z1; a1, f1, g1. 'body1['a1; 'f1; 'g1]}
                           = set_ind{'z2; a2, f2, g2. 'body2['a2; 'f2; 'g2]}
@@ -257,107 +257,30 @@ let mk_set_ind_term = mk_dep0_dep3_term set_ind_opname
 let dest_set_ind = dest_dep0_dep3_term set_ind_opname
 
 (************************************************************************
- * TACTICS                                                              *
- ************************************************************************)
-
-let d_collect_issetT i p =
-   if i = 0 then
-      let s = maybe_new_vars1 p "s" in
-         isset_collect (hyp_count_addr p) s p
-   else
-      raise (RefineError ("d_collect_issetT", StringError "no elimination form"))
-
-(*
- * Special case for collection.
- *)
-let isset_collect_term = << isset{collect{'T; x. 'a['x]}} >>
-
-let d_resource = Mp_resource.improve d_resource (isset_collect_term, d_collect_issetT)
-
-(************************************************************************
  * OTHER TACTICS                                                        *
  ************************************************************************)
 
 (*
- * H >- set type
- *)
-let d_set_typeT i p =
-   if i = 0 then
-      set_type (Sequent.hyp_count_addr p) p
-   else
-      raise (RefineError ("d_set_typeT", StringError "no elimination rule"))
-
-let set_type_term = << "type"{set} >>
-
-let d_resource = Mp_resource.improve d_resource (set_type_term, d_set_typeT)
-
-(*
- * Set elimination.
- *)
-let d_setT i p =
-   if i = 0 then
-      raise (RefineError ("d_setT", StringError "no introduction rule"))
-   else
-      let thin =
-         if i = hyp_count p then
-            thinT i
-         else
-            idT
-      in
-      let v_a, h_a = nth_hyp p i in
-      let j, k = hyp_indices p i in
-      let v_T, v_f, v_b, v_z = maybe_new_vars4 p "T" "f" "b" "z" in
-         (set_elim j k v_a v_T v_f v_b v_z thenT thin) p
-
-let set_term = << set >>
-
-let d_resource = Mp_resource.improve d_resource (set_term, d_setT)
-
-(*
  * Application rule.
  *)
-let d_apply_issetT i p =
-   if i = 0 then
-      let j = get_sel_arg p in
-      let k, l = hyp_indices p j in
-         isset_apply k l p
-   else
-      raise (RefineError ("d_apply_isset", StringError "no elimination form"))
+let d_apply_issetT p =
+   let j = get_sel_arg p in
+   let k, l = hyp_indices p j in
+      isset_apply k l p
 
 let apply_isset_term = << isset{.'f 'x} >>
 
-let d_resource = Mp_resource.improve d_resource (apply_isset_term, d_apply_issetT)
+let intro_resource = Mp_resource.improve intro_resource (apply_isset_term, d_apply_issetT)
 
 (*
  * Typehood of isset{'s1}
  *)
-let d_isset_typeT i p =
-   if i = 0 then
-      (rw (addrC [0] unfold_isset) 0 thenT dT 0) p
-   else
-      raise (RefineError ("d_isset_typeT", StringError "no elimination form"))
+let d_isset_typeT p =
+   (rw (addrC [0] unfold_isset) 0 thenT dT 0) p
 
 let isset_type_term = << "type"{isset{'s1}} >>
 
-let d_resource = Mp_resource.improve d_resource (isset_type_term, d_isset_typeT)
-
-(*
- * Equality of set_ind.
- *)
-let d_set_ind_equalT i p =
-   if i = 0 then
-   let t, f, g, t2 = maybe_new_vars4 p "T" "f" "g" "T2" in
-      (set_ind_equality (hyp_count_addr p) t f g t2
-       thenLT [addHiddenLabelT "wf";
-               addHiddenLabelT "main"]) p
-   else
-      raise (RefineError ("d_set_indT", StringError "no elimination form"))
-
-let set_ind_equal_term = << set_ind{'s1; a1, f1, g1. 'b1['a1; 'f1; 'g1]}
-                            = set_ind{'s2; a2, f2, g2. 'B2['a2; 'f2; 'g2]}
-                            in 'T >>
-
-let d_resource = Mp_resource.improve d_resource (set_ind_equal_term, d_set_ind_equalT)
+let intro_resource = Mp_resource.improve intro_resource (isset_type_term, d_isset_typeT)
 
 (*
  * Equal sets.

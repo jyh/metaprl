@@ -45,6 +45,7 @@ open Refiner.Refiner.TermSubst
 open Refiner.Refiner.RefineError
 open Mp_resource
 
+open Tactic_type
 open Tactic_type.Sequent
 open Tactic_type.Tacticals
 open Var
@@ -121,7 +122,7 @@ dform fun_set_df : mode[prl] :: parens :: "prec"[prec_apply] :: fun_prop{x. 'P} 
 (*
  * Membership in a universe.
  *)
-interactive eq_inner_equality1 'H :
+interactive eq_inner_equality1 {| intro_resource []; eqcd_resource |} 'H :
    sequent [squash] { 'H >- isset{'s1} } -->
    sequent [squash] { 'H >- isset{'s2} } -->
    sequent ['ext] { 'H >- eq_inner{'s1; 's2} = eq_inner{'s1; 's2} in univ[1:l] }
@@ -129,7 +130,7 @@ interactive eq_inner_equality1 'H :
 (*
  * Membership in a universe.
  *)
-interactive eq_inner_type 'H :
+interactive eq_inner_type {| intro_resource [] |} 'H :
    sequent [squash] { 'H >- isset{'s1} } -->
    sequent [squash] { 'H >- isset{'s2} } -->
    sequent ['ext] { 'H >- "type"{eq_inner{'s1; 's2}} }
@@ -137,7 +138,7 @@ interactive eq_inner_type 'H :
 (*
  * More general equality in a universe.
  *)
-interactive eq_inner_equality2 'H :
+interactive eq_inner_equality2 {| intro_resource []; eqcd_resource |} 'H :
    sequent [squash] { 'H >- 's1 = 's3 in set } -->
    sequent [squash] { 'H >- 's2 = 's4 in set } -->
    sequent ['ext] { 'H >- eq_inner{'s1; 's2} = eq_inner{'s3; 's4} in univ[1:l] }
@@ -145,7 +146,7 @@ interactive eq_inner_equality2 'H :
 (*
  * Equality typehood.
  *)
-interactive eq_type 'H :
+interactive eq_type {| intro_resource [] |} 'H :
    sequent [squash] { 'H >- isset{'s1} } -->
    sequent [squash] { 'H >- isset{'s2} } -->
    sequent [squash] { 'H >- "type"{eq{'s1; 's2}} }
@@ -186,12 +187,12 @@ interactive eq_trans 'H 's2 :
 (*
  * Finally, functionality puts them all together.
  *)
-interactive eq_fun 'H :
+interactive eq_fun {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- fun_set{z. 'f1['z]} } -->
    sequent ['ext] { 'H >- fun_set{z. 'f2['z]} } -->
    sequent ['ext] { 'H >- fun_prop{z. eq{'f1['z]; 'f2['z]}} }
 
-interactive eq_inner_fun 'H :
+interactive eq_inner_fun {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- fun_set{z. 'f1['z]} } -->
    sequent ['ext] { 'H >- fun_set{z. 'f2['z]} } -->
    sequent ['ext] { 'H >- fun_prop{z. eq_inner{'f1['z]; 'f2['z]}} }
@@ -214,25 +215,25 @@ interactive eq_concl_subst 'H 's1 's2 (bind{v. 'C['v]}) 'z :
 (*
  * Typehood of functionality.
  *)
-interactive fun_set_type 'H :
+interactive fun_set_type {| intro_resource [] |} 'H :
    sequent ['ext] { 'H; z: set >- isset{'f['z]} } -->
    sequent ['ext] { 'H >- "type"{fun_set{z. 'f['z]}} }
 
-interactive fun_prop_type 'H :
+interactive fun_prop_type {| intro_resource [] |} 'H :
    sequent [squash] { 'H; z: set >- "type"{'f['z]} } -->
    sequent ['ext] { 'H >- "type"{fun_prop{z. 'f['z]}} }
 
 (*
  * Unquantified sets are functional.
  *)
-interactive fun_set 'H :
+interactive fun_set {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- isset{'u} } -->
    sequent ['ext] { 'H >- fun_set{z. 'u} }
 
-interactive fun_ref 'H : :
+interactive fun_ref {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- fun_set{z. 'z} }
 
-interactive fun_prop 'H :
+interactive fun_prop {| intro_resource [] |} 'H :
    sequent [squash] { 'H >- "type"{'P} } -->
    sequent ['ext] { 'H >- fun_prop{z. 'P} }
 
@@ -270,145 +271,6 @@ let mk_fun_prop_term = mk_dep1_term fun_prop_opname
 (************************************************************************
  * TACTICS                                                              *
  ************************************************************************)
-
-(*
- * Functionality.
- *)
-let d_fun_set_typeT i p =
-   if i = 0 then
-      fun_set_type (hyp_count_addr p) p
-   else
-      raise (RefineError ("d_fun_set_typeT", StringError "no elimination form"))
-
-let fun_set_type_term = << "type"{fun_set{z. 'f['z]}} >>
-
-let d_resource = Mp_resource.improve d_resource (fun_set_type_term, d_fun_set_typeT)
-
-let d_fun_prop_typeT i p =
-   if i = 0 then
-      fun_prop_type (hyp_count_addr p) p
-   else
-      raise (RefineError ("d_fun_prop_typeT", StringError "no elimination form"))
-
-let fun_prop_type_term = << "type"{fun_prop{z. 'f['z]}} >>
-
-let d_resource = Mp_resource.improve d_resource (fun_prop_type_term, d_fun_prop_typeT)
-
-(*
- * Equality of inner equality.
- *)
-let eqcd_eq_innerT p =
-   let goal = Sequent.concl p in
-   let _, eq1, eq2 = dest_equal goal in
-   let j = hyp_count_addr p in
-      if alpha_equal eq1 eq2 then
-         eq_inner_equality1 j p
-      else
-         eq_inner_equality2 j p
-
-let eq_inner_term = << eq_inner{'s1; 's2} >>
-
-let eq_inner_equal_term = << eq_inner{'s1; 's2} = eq_inner{'s3; 's4} in univ[1:l] >>
-
-let eqcd_resource = Mp_resource.improve eqcd_resource (eq_inner_term, eqcd_eq_innerT)
-
-let d_resource = Mp_resource.improve d_resource (eq_inner_equal_term, d_wrap_eqcd eqcd_eq_innerT)
-
-(*
- * Typehood.
- *)
-let d_eq_inner_typeT i p =
-   if i = 0 then
-      eq_inner_type (hyp_count_addr p) p
-   else
-      raise (RefineError ("d_eq_inner_typeT", StringError "no elimination form"))
-
-let eq_inner_type_term = << "type"{eq_inner{'s1; 's2}} >>
-
-let d_resource = Mp_resource.improve d_resource (eq_inner_type_term, d_eq_inner_typeT)
-
-(*
- * Functionality.
- *)
-let d_eq_inner_funT i p =
-   if i = 0 then
-      eq_inner_fun (hyp_count_addr p) p
-   else
-      raise (RefineError ("d_eq_inner_funT", StringError "no elimination form"))
-
-let eq_inner_fun_term = << fun_prop{z. eq_inner{'s1['z]; 's2['z]}} >>
-
-let d_resource = Mp_resource.improve d_resource (eq_inner_fun_term, d_eq_inner_funT)
-
-(*
- * Equality typehood.
- *)
-let d_eq_typeT i p =
-   if i = 0 then
-      eq_type (hyp_count_addr p) p
-   else
-      raise (RefineError ("d_eq_typeT", StringError "no elimination form"))
-
-let eq_type_term = << "type"{eq{'s1; 's2}} >>
-
-let d_resource = Mp_resource.improve d_resource (eq_type_term, d_eq_typeT)
-
-(*
- * Functionality.
- *)
-let d_eq_funT i p =
-   if i = 0 then
-      eq_fun (hyp_count_addr p) p
-   else
-      raise (RefineError ("d_eq_funT", StringError "no elimination form"))
-
-let eq_fun_term = << fun_prop{z. eq{'s1['z]; 's2['z]}} >>
-
-let d_resource = Mp_resource.improve d_resource (eq_fun_term, d_eq_funT)
-
-(*
- * Unquantified sets.
- * This tactic only works on the forms:
- *    fun_set{z. v}
- *)
-let d_fun_setT i p =
-   if i = 0 then
-      let concl = Sequent.concl p in
-      let v, t = dest_fun_set concl in
-      let tac =
-         if is_var_term t then
-            let v' = dest_var t in
-               if v' = v then
-                  fun_ref
-               else
-                  fun_set
-         else if is_free_var v t then
-            raise (RefineError ("d_fun_setT", StringStringError ("variable is free", v)))
-         else
-            fun_set
-      in
-         tac (hyp_count_addr p) p
-   else
-      raise (RefineError ("d_fun_setT", StringError "no elimination form"))
-
-let fun_set_term = << fun_set{z. 'u} >>
-
-let d_resource = Mp_resource.improve d_resource (fun_set_term, d_fun_setT)
-
-let d_fun_propT i p =
-   if i = 0 then
-      let concl = Sequent.concl p in
-      let v, t = dest_fun_prop concl in
-         if is_free_var v t then
-            raise (RefineError ("d_fun_propT", StringStringError ("variable is free", v)))
-         else
-            fun_prop (hyp_count_addr p) p
-   else
-      raise (RefineError ("d_fun_propT", StringError "no elimination form"))
-
-let fun_prop_term = << fun_prop{z. 'P} >>
-
-let d_resource = Mp_resource.improve d_resource (fun_prop_term, d_fun_propT)
 
 (*
  * Substitution.

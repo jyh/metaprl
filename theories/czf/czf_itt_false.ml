@@ -51,82 +51,26 @@ let _ =
 (*
  * False is a restricted formula.
  *)
-interactive void_fun 'H : :
+interactive void_fun {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- fun_prop{x ."void"} }
 
 (*
  * False is a restricted formula.
  *)
-interactive void_res 'H : :
+interactive void_res {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- restricted{x ."void"} }
 
 (*
  * False is a restricted formula.
  *)
-interactive false_fun 'H : :
+interactive false_fun {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- fun_prop{x ."false"} }
 
 (*
  * False is a restricted formula.
  *)
-interactive false_res 'H : :
+interactive false_res {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- restricted{x ."false"} }
-
-(************************************************************************
- * TACTICS                                                              *
- ************************************************************************)
-
-(*
- * Functional.
- *)
-let d_void_funT i p =
-   if i = 0 then
-      void_fun (hyp_count_addr p) p
-   else
-      raise (RefineError ("d_void_funT", StringError "no elimination form"))
-
-let void_fun_term = << fun_prop{z. "void"} >>
-
-let d_resource = Mp_resource.improve d_resource (void_fun_term, d_void_funT)
-
-(*
- * Restricted.
- *)
-let d_void_resT i p =
-   if i = 0 then
-      void_res (hyp_count_addr p) p
-   else
-      raise (RefineError ("d_void_resT", StringError "no elimination form"))
-
-let void_res_term = << restricted{z. "void"} >>
-
-let d_resource = Mp_resource.improve d_resource (void_res_term, d_void_resT)
-
-(*
- * Functional.
- *)
-let d_false_funT i p =
-   if i = 0 then
-      false_fun (hyp_count_addr p) p
-   else
-      raise (RefineError ("d_false_funT", StringError "no elimination form"))
-
-let false_fun_term = << fun_prop{z. "false"} >>
-
-let d_resource = Mp_resource.improve d_resource (false_fun_term, d_false_funT)
-
-(*
- * Restricted.
- *)
-let d_false_resT i p =
-   if i = 0 then
-      false_res (hyp_count_addr p) p
-   else
-      raise (RefineError ("d_false_resT", StringError "no elimination form"))
-
-let false_res_term = << restricted{z. "false"} >>
-
-let d_resource = Mp_resource.improve d_resource (false_res_term, d_false_resT)
 
 (*
  * -*-

@@ -1820,7 +1820,7 @@ let add_hyp extract i gname t =
          ext_base = base
        } = extract
    in
-   let t = subst t (List.map mk_var_term names) gnames in
+   let t = subst t gnames (List.map mk_var_term names) in
    let hash = shape_of_term t in
    let world = build_world_with_hyp extract world t hash in
    let name = name_of_world world in
@@ -1928,7 +1928,7 @@ let set_goal extract t =
          ext_base = base
        } = extract
    in
-   let t = subst t (List.map mk_var_term names) gnames in
+   let t = subst t gnames (List.map mk_var_term names) in
    let hash = shape_of_term t in
    let goal =
       let goal =

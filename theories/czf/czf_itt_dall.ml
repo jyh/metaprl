@@ -80,98 +80,38 @@ dform dall_df : mode[prl] :: parens :: "prec"[prec_lambda] :: "dall"{'s; x. 'A} 
 (*
  * Typehood.
  *)
-interactive dall_type 'H 'y :
-   sequent [squash] { 'H >- isset{'s} } -->
-   sequent [squash] { 'H; y: set >- "type"{'A['y]} } -->
+interactive dall_type {| intro_resource [] |} 'H 'y :
+   ["wf"] sequent [squash] { 'H >- isset{'s} } -->
+   ["wf"] sequent [squash] { 'H; y: set >- "type"{'A['y]} } -->
    sequent ['ext] { 'H >- "type"{."dall"{'s; x. 'A['x]}} }
 
 (*
  * Intro.
  *)
-interactive dall_intro 'H 'a 'b :
-   sequent [squash] { 'H >- isset{'s} } -->
-   sequent [squash] { 'H; a: set >- "type"{'A['a]} } -->
-   sequent ['ext] { 'H; a: set; b: member{'a; 's} >- 'A['a] } -->
+interactive dall_intro {| intro_resource [] |} 'H 'a 'b :
+   ["wf"]   sequent [squash] { 'H >- isset{'s} } -->
+   ["wf"]   sequent [squash] { 'H; a: set >- "type"{'A['a]} } -->
+   ["main"] sequent ['ext] { 'H; a: set; b: member{'a; 's} >- 'A['a] } -->
    sequent ['ext] { 'H >- "dall"{'s; x. 'A['x]} }
 
 (*
  * Elimination.
  *)
-interactive dall_elim 'H 'J 'z 'w :
-   sequent [squash] { 'H; x: "dall"{'s; y. 'A['y]}; 'J['x]; w: set >- "type"{'A['w]} } -->
-   sequent ['ext] { 'H; x: "dall"{'s; y. 'A['y]}; 'J['x] >- fun_prop{w. 'A['w]} } -->
-   sequent ['ext] { 'H; x: "dall"{'s; y. 'A['y]}; 'J['x] >- member{'z; 's} } -->
-   sequent ['ext] { 'H; x: "dall"{'s; y. 'A['y]}; 'J['x]; w: 'A['z] >- 'C['x] } -->
+interactive dall_elim {| elim_resource [] |} 'H 'J 'z 'w :
+   ["wf"]   sequent [squash] { 'H; x: "dall"{'s; y. 'A['y]}; 'J['x]; w: set >- "type"{'A['w]} } -->
+   ["wf"]   sequent ['ext] { 'H; x: "dall"{'s; y. 'A['y]}; 'J['x] >- fun_prop{w. 'A['w]} } -->
+   ["antecedent"] sequent ['ext] { 'H; x: "dall"{'s; y. 'A['y]}; 'J['x] >- member{'z; 's} } -->
+   ["main"] sequent ['ext] { 'H; x: "dall"{'s; y. 'A['y]}; 'J['x]; w: 'A['z] >- 'C['x] } -->
    sequent ['ext] { 'H; x: "dall"{'s; y. 'A['y]}; 'J['x] >- 'C['x] }
 
 (*
  * This is a restricted formula.
  *)
-interactive dall_res2 'H 'w 'x :
-   sequent ['ext] { 'H; w: set; x: set >- "type"{'B['w; 'x]} } -->
-   sequent ['ext] { 'H >- fun_set{w. 'A['w]} } -->
-   sequent ['ext] { 'H >- restricted{z, y. 'B['z; 'y]} } -->
+interactive dall_res2 {| intro_resource [] |} 'H 'w 'x :
+   ["wf"]   sequent ['ext] { 'H; w: set; x: set >- "type"{'B['w; 'x]} } -->
+   ["wf"]   sequent ['ext] { 'H >- fun_set{w. 'A['w]} } -->
+   ["main"] sequent ['ext] { 'H >- restricted{z, y. 'B['z; 'y]} } -->
    sequent ['ext] { 'H >- restricted{z. "dall"{'A['z]; y. 'B['z; 'y]}} }
-
-(************************************************************************
- * TACTICS                                                              *
- ************************************************************************)
-
-(*
- * Propositional reasoning.
- *)
-let d_dallT i p =
-   if i = 0 then
-      let v, w = maybe_new_vars2 p "v" "w" in
-         (dall_intro (hyp_count_addr p) v w
-          thenLT [addHiddenLabelT "wf";
-                  addHiddenLabelT "wf";
-                  addHiddenLabelT "main"]) p
-   else
-      let x, _ = nth_hyp p i in
-      let u = Var.maybe_new_vars1 p "u" in
-      let z = get_with_arg p in
-      let i, j = hyp_indices p i in
-         (dall_elim i j z u
-          thenLT [addHiddenLabelT "wf";
-                  addHiddenLabelT "wf";
-                  addHiddenLabelT "antecedent";
-                  addHiddenLabelT "main"]) p
-
-let dall_term = << "dall"{'s; x. 'A['x]} >>
-
-let d_resource = Mp_resource.improve d_resource (dall_term, d_dallT)
-
-(*
- * Typehood.
- *)
-let d_dall_typeT i p =
-   if i = 0 then
-      let v = maybe_new_vars1 p "v" in
-         (dall_type (hyp_count_addr p) v thenT addHiddenLabelT "wf") p
-   else
-      raise (RefineError ("d_dall_typeT", StringError "no elimination form"))
-
-let dall_type_term = << "type"{."dall"{'s; x. 'A['x]}} >>
-
-let d_resource = Mp_resource.improve d_resource (dall_type_term, d_dall_typeT)
-
-(*
- * Restricted.
- *)
-let d_dall_resT i p =
-   if i = 0 then
-      let w, v = maybe_new_vars2 p "u" "v" in
-         (dall_res2 (hyp_count_addr p) w v
-          thenLT [addHiddenLabelT "wf";
-                  addHiddenLabelT "wf";
-                  addHiddenLabelT "main"]) p
-   else
-      raise (RefineError ("d_dall_resT", StringError "no elimination form"))
-
-let dall_res_term = << restricted{dall{'s; x. 'A['x]}} >>
-
-let d_resource = Mp_resource.improve d_resource (dall_res_term, d_dall_resT)
 
 (*
  * -*-

@@ -36,6 +36,7 @@ open Refiner.Refiner.Term
 open Refiner.Refiner.RefineError
 open Mp_resource
 
+open Tactic_type
 open Tactic_type.Tacticals
 open Tactic_type.Conversionals
 open Tactic_type.Sequent
@@ -74,7 +75,7 @@ dform member_df : mode[prl] :: parens :: "prec"[prec_apply] :: member{'x; 't} =
 (*
  * Membership judgment is also a type.
  *)
-interactive member_type 'H :
+interactive member_type {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- isset{'s1} } -->
    sequent ['ext] { 'H >- isset{'s2} } -->
    sequent ['ext] { 'H >- "type"{member{'s1; 's2}} }
@@ -106,7 +107,7 @@ interactive member_fun_right 'H 's1 :
    sequent ['ext] { 'H >- member{'s3; 's1} } -->
    sequent ['ext] { 'H >- member{'s3; 's2} }
 
-interactive member_fun 'H :
+interactive member_fun {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- fun_set{z. 'f1['z]} } -->
    sequent ['ext] { 'H >- fun_set{z. 'f2['z]} } -->
    sequent ['ext] { 'H >- fun_prop{z. member{'f1['z]; 'f2['z]}} }
@@ -124,32 +125,6 @@ interactive set_ext 'H 'x 'y :
 (************************************************************************
  * TACTICS                                                              *
  ************************************************************************)
-
-(*
- * H >- member{a; t} type
- *)
-let d_member_typeT i p =
-   if i = 0 then
-      member_type (Sequent.hyp_count_addr p) p
-   else
-      raise (RefineError ("d_member_typeT", StringError "no elimination rule"))
-
-let member_type_term = << "type"{member{'a; 't}} >>
-
-let d_resource = Mp_resource.improve d_resource (member_type_term, d_member_typeT)
-
-(*
- * Functionality.
- *)
-let d_member_funT i p =
-   if i = 0 then
-      member_fun (hyp_count_addr p) p
-   else
-      raise (RefineError ("d_member_funT", StringError "no elimination form"))
-
-let member_fun_term = << "fun_prop"{z. member{'s1['z]; 's2['z]}} >>
-
-let d_resource = Mp_resource.improve d_resource (member_fun_term, d_member_funT)
 
 (*
  * Membership.

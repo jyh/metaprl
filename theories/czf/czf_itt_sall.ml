@@ -77,62 +77,24 @@ dform sall_df : mode[prl] :: parens :: "prec"[prec_lambda] :: "sall"{x. 'A} =
 (*
  * Typehood.
  *)
-interactive sall_type 'H 'y :
+interactive sall_type {| intro_resource [] |} 'H 'y :
    sequent ['ext] { 'H; y: set >- "type"{'A['y]} } -->
    sequent ['ext] { 'H >- "type"{."sall"{x. 'A['x]} } }
 
 (*
  * Intro.
  *)
-interactive sall_intro 'H 'a :
+interactive sall_intro {| intro_resource [] |} 'H 'a :
    sequent ['ext] { 'H; a: set >- 'A['a] } -->
    sequent ['ext] { 'H >- "sall"{x. 'A['x]} }
 
 (*
  * Elimination.
  *)
-interactive sall_elim 'H 'J 'x 'z 'w :
-   sequent [squash] { 'H; x: "sall"{y. 'A['y]}; 'J['x] >- isset{'z} } -->
-   sequent ['ext] { 'H; x: "sall"{y. 'A['y]}; 'J['x]; w: 'A['z] >- 'T['x] } -->
+interactive sall_elim {| elim_resource [] |} 'H 'J 'x 'z 'w :
+   ["wf"]   sequent [squash] { 'H; x: "sall"{y. 'A['y]}; 'J['x] >- isset{'z} } -->
+   ["main"] sequent ['ext] { 'H; x: "sall"{y. 'A['y]}; 'J['x]; w: 'A['z] >- 'T['x] } -->
    sequent ['ext] { 'H; x: "sall"{y. 'A['y]}; 'J['x] >- 'T['x] }
-
-(************************************************************************
- * TACTICS                                                              *
- ************************************************************************)
-
-(*
- * Propositional reasoning.
- *)
-let d_sallT i p =
-   if i = 0 then
-      let v = maybe_new_vars1 p "v" in
-         sall_intro (hyp_count_addr p) v p
-   else
-      let x, _ = nth_hyp p i in
-      let w = Var.maybe_new_vars1 p "u" in
-      let z = get_with_arg p in
-      let i, j = hyp_indices p i in
-         (sall_elim i j x z w
-          thenLT [addHiddenLabelT "wf";
-                  addHiddenLabelT "main"]) p
-
-let sall_term = << "sall"{x. 'A['x]} >>
-
-let d_resource = Mp_resource.improve d_resource (sall_term, d_sallT)
-
-(*
- * Well-formedness.
- *)
-let d_sall_typeT i p =
-   if i = 0 then
-      let v = maybe_new_vars1 p "v" in
-         sall_type (hyp_count_addr p) v p
-   else
-      raise (RefineError ("d_sall_typeT", StringError "no elim form"))
-
-let sall_type_term = << "type"{."sall"{x. 'A['x]}} >>
-
-let d_resource = Mp_resource.improve d_resource (sall_type_term, d_sall_typeT)
 
 (*
  * -*-

@@ -352,7 +352,7 @@ let inf_spread inf decl t =
             inf (eqnlist_append_var_eqn u l (eqnlist_append_var_eqn v r decl')) b
       else if is_dprod_term a' then
          let x, l, r = dest_dprod a' in
-            inf (eqnlist_append_var_eqn u l (eqnlist_append_var_eqn v (subst r [mk_var_term u] [x]) decl')) b
+            inf (eqnlist_append_var_eqn u l (eqnlist_append_var_eqn v (subst1 r x (mk_var_term u)) decl')) b
       else
          raise (RefineError ("typeinf", StringTermError ("can't infer type for", t)))
 

@@ -101,7 +101,7 @@ dform restricted_df : mode[prl] :: parens :: "prec"[prec_quant] :: restricted{z.
 (*
  * Validity of separation.
  *)
-interactive sep_isset 'H 'z :
+interactive sep_isset {| intro_resource [] |} 'H 'z :
    sequent ['ext] { 'H >- isset{'s} } -->
    sequent [squash] { 'H; z: set >- 'P['z] = 'P['z] in univ[1:l] } -->
    sequent ['ext] { 'H >- isset{.sep{'s; x. 'P['x]}} }
@@ -109,21 +109,21 @@ interactive sep_isset 'H 'z :
 (*
  * Intro form.
  *)
-interactive sep_intro2 'H :
-   sequent [squash] { 'H; w: set >- 'P['w] = 'P['w] in univ[1:l] } -->
-   sequent ['ext] { 'H >- fun_prop{z. 'P['z]} } -->
-   sequent ['ext] { 'H >- member{'x; 's} } -->
-   sequent ['ext] { 'H >- 'P['x] } -->
+interactive sep_intro2 {| intro_resource [] |} 'H :
+   ["wf"]   sequent [squash] { 'H; w: set >- 'P['w] = 'P['w] in univ[1:l] } -->
+   ["wf"]   sequent ['ext] { 'H >- fun_prop{z. 'P['z]} } -->
+   ["main"] sequent ['ext] { 'H >- member{'x; 's} } -->
+   ["main"] sequent ['ext] { 'H >- 'P['x] } -->
    sequent ['ext] { 'H >- member{'x; sep{'s; z. 'P['z]}} }
 
 (*
  * Elim exposes the computational content.
  *)
-interactive sep_elim 'H 'J 'u 'v 'z :
-   sequent ['ext] { 'H; w: member{'x; sep{'s; y. 'P['y]}}; 'J['w] >- isset{'s} } -->
-   sequent [squash] { 'H; w: member{'x; sep{'s; y. 'P['y]}}; 'J['w]; z: set >- 'P['z] = 'P['z] in univ[1:l] } -->
-   sequent ['ext] { 'H; w: member{'x; sep{'s; y. 'P['y]}}; 'J['w] >- fun_prop{z. 'P['z]} } -->
-   sequent ['ext] { 'H; w: member{'x; sep{'s; y. 'P['y]}}; 'J['w]; u: member{'x; 's}; v: 'P['x] >- 'T['w] } -->
+interactive sep_elim {| elim_resource [] |} 'H 'J 'u 'v 'z :
+   ["wf"]   sequent ['ext] { 'H; w: member{'x; sep{'s; y. 'P['y]}}; 'J['w] >- isset{'s} } -->
+   ["wf"]   sequent [squash] { 'H; w: member{'x; sep{'s; y. 'P['y]}}; 'J['w]; z: set >- 'P['z] = 'P['z] in univ[1:l] } -->
+   ["wf"]   sequent ['ext] { 'H; w: member{'x; sep{'s; y. 'P['y]}}; 'J['w] >- fun_prop{z. 'P['z]} } -->
+   ["main"] sequent ['ext] { 'H; w: member{'x; sep{'s; y. 'P['y]}}; 'J['w]; u: member{'x; 's}; v: 'P['x] >- 'T['w] } -->
    sequent ['ext] { 'H; w: member{'x; sep{'s; y. 'P['y]}}; 'J['w] >- 'T['w] }
 
 (*
@@ -141,47 +141,6 @@ interactive sep_fun 'H 'u 'v :
    sequent ['ext] { 'H; u: set >- fun_prop{z. 'P['u; 'z]} } -->
    sequent ['ext] { 'H >- fun_set{z. 's['z]} } -->
    sequent ['ext] { 'H >- fun_set{z. sep{'s['z]; x. 'P['x; 'z]}} }
-
-(************************************************************************
- * TACTICS                                                              *
- ************************************************************************)
-
-(*
- * Typehood.
- *)
-let d_sep_setT i p =
-   if i = 0 then
-      let z = maybe_new_vars1 p "z" in
-         sep_isset (hyp_count_addr p) z p
-   else
-      raise (RefineError ("d_sep_isset", StringError "no elimination form"))
-
-let sep_isset_term = << isset{sep{'s; x. 'P['x]}} >>
-
-let d_resource = Mp_resource.improve d_resource (sep_isset_term, d_sep_setT)
-
-(*
- * Membership.
- *)
-let d_sep_memberT i p =
-   if i = 0 then
-      (sep_intro2 (hyp_count_addr p)
-       thenLT [addHiddenLabelT "wf";
-               addHiddenLabelT "wf";
-               addHiddenLabelT "main";
-               addHiddenLabelT "main"]) p
-   else
-      let u, v, z = maybe_new_vars3 p "u" "v" "z" in
-      let j, k = hyp_indices p i in
-         (sep_elim j k u v z
-          thenLT [addHiddenLabelT "wf";
-                  addHiddenLabelT "wf";
-                  addHiddenLabelT "wf";
-                  addHiddenLabelT "main"]) p
-
-let sep_member_term = << member{'x; sep{'s; y. 'P['y]}} >>
-
-let d_resource = Mp_resource.improve d_resource (sep_member_term, d_sep_memberT)
 
 (*
  * -*-

@@ -398,7 +398,7 @@ let rec new_vars varcount l vars i =
 let rec expand subst term =
    match subst with
       (v, t) :: substs ->
-         expand substs (TermSubst.subst term [t] [v])
+         expand substs (subst1 term v t)
     | [] ->
          term
 
@@ -442,7 +442,7 @@ let new_goal constants subst terms1 terms2 =
                   debug_subst := true
                end
          in
-         let body = List.map (fun t -> TermSubst.subst t new_vars_terms free_vars) body in
+         let body = List.map (fun t -> TermSubst.subst t free_vars new_vars_terms) body in
          let _ =
             if !debug_tptp then
                begin

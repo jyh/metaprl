@@ -51,82 +51,26 @@ let _ =
 (*
  * True is functional.
  *)
-interactive unit_fun 'H : :
+interactive unit_fun {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- fun_prop{z. "unit"} }
 
 (*
  * True is a restricted formula.
  *)
-interactive unit_res 'H : :
+interactive unit_res {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- restricted{z. "unit"} }
 
 (*
  * True is a restricted formula.
  *)
-interactive true_fun 'H : :
+interactive true_fun {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- fun_prop{x. "true"} }
 
 (*
  * True is a restricted formula.
  *)
-interactive true_res 'H : :
+interactive true_res {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- restricted{x. "true"} }
-
-(************************************************************************
- * TACTICS                                                              *
- ************************************************************************)
-
-(*
- * Restricted.
- *)
-let d_true_funT i p =
-   if i = 0 then
-      true_fun (hyp_count_addr p) p
-   else
-      raise (RefineError ("d_true_funT", StringError "no elimination form"))
-
-let true_fun_term = << fun_prop{x. "true"} >>
-
-let d_resource = Mp_resource.improve d_resource (true_fun_term, d_true_funT)
-
-(*
- * Restricted.
- *)
-let d_true_resT i p =
-   if i = 0 then
-      true_res (hyp_count_addr p) p
-   else
-      raise (RefineError ("d_true_resT", StringError "no elimination form"))
-
-let true_res_term = << restricted{x. "true"} >>
-
-let d_resource = Mp_resource.improve d_resource (true_res_term, d_true_resT)
-
-(*
- * Restricted.
- *)
-let d_unit_funT i p =
-   if i = 0 then
-      unit_fun (hyp_count_addr p) p
-   else
-      raise (RefineError ("d_unit_funT", StringError "no elimination form"))
-
-let unit_fun_term = << fun_prop{x. "unit"} >>
-
-let d_resource = Mp_resource.improve d_resource (unit_fun_term, d_unit_funT)
-
-(*
- * Restricted.
- *)
-let d_unit_resT i p =
-   if i = 0 then
-      unit_res (hyp_count_addr p) p
-   else
-      raise (RefineError ("d_unit_resT", StringError "no elimination form"))
-
-let unit_res_term = << restricted{x. "unit"} >>
-
-let d_resource = Mp_resource.improve d_resource (unit_res_term, d_unit_resT)
 
 (*
  * -*-

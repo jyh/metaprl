@@ -447,13 +447,13 @@ let inf_apply inf decl t =
    let ty =
       if is_dfun_term f' then
          let v, d, r = dest_dfun f' in
-            subst r [a] [v]
+            subst1 r v a
       else if is_fun_term f' then
          let _, r = dest_fun f' in
             r
       else if is_rfun_term f' then
          let f'', v, d, r = dest_rfun f' in
-            subst r [f; a] [f''; v]
+            subst r [f''; v] [f; a]
       else
          raise  (RefineError ("typeinf", StringTermError ("can't infer type for", t)))
    in

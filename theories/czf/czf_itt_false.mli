@@ -32,8 +32,6 @@
 
 include Czf_itt_sep
 
-open Tactic_type.Tacticals
-
 (*
  * False is a restricted formula.
  *)

@@ -77,23 +77,23 @@ dform sexists_df : mode[prl] :: parens :: "prec"[prec_lambda] :: "sexists"{x. 'A
 (*
  * Typing.
  *)
-interactive sexists_type 'H 'y :
+interactive sexists_type {| intro_resource [] |} 'H 'y :
    sequent [squash] { 'H; y: set >- "type"{'A['y]} } -->
    sequent ['ext] { 'H >- "type"{."sexists"{x. 'A['x]} } }
 
 (*
  * Intro.
  *)
-interactive sexists_intro 'H 'z 'w :
-   sequent ['ext] { 'H >- isset{'z} } -->
-   sequent ['ext] { 'H >- 'A['z] } -->
-   sequent ['ext] { 'H; w: set >- "type"{'A['w]} } -->
+interactive sexists_intro  {| intro_resource [] |}'H 'z 'w :
+   ["wf"]   sequent ['ext] { 'H >- isset{'z} } -->
+   ["main"] sequent ['ext] { 'H >- 'A['z] } -->
+   ["wf"]   sequent ['ext] { 'H; w: set >- "type"{'A['w]} } -->
    sequent ['ext] { 'H >- "sexists"{x. 'A['x]} }
 
 (*
  * Elimination.
  *)
-interactive sexists_elim 'H 'J 'x 'z 'w :
+interactive sexists_elim {| elim_resource [] |} 'H 'J 'x 'z 'w :
    sequent ['ext] { 'H;
                     z: set;
                     w: 'A['z];
@@ -101,45 +101,6 @@ interactive sexists_elim 'H 'J 'x 'z 'w :
                     >- 'T[pair{'z; 'w}]
                   } -->
    sequent ['ext] { 'H; x: "sexists"{y. 'A['y]}; 'J['x] >- 'T['x] }
-
-(************************************************************************
- * TACTICS                                                              *
- ************************************************************************)
-
-(*
- * Propositional reasoning.
- *)
-let d_sexistsT i p =
-   if i = 0 then
-      let z = get_with_arg p in
-      let w = maybe_new_vars1 p "v" in
-         (sexists_intro (hyp_count_addr p) z w
-          thenLT [addHiddenLabelT "wf";
-                  addHiddenLabelT "main";
-                  addHiddenLabelT "wf"]) p
-   else
-      let x, _ = nth_hyp p i in
-      let z, w = Var.maybe_new_vars2 p "u" "v" in
-      let i, j = hyp_indices p i in
-          sexists_elim i j x z w p
-
-let sexists_term = << "sexists"{x. 'B['x]} >>
-
-let d_resource = Mp_resource.improve d_resource (sexists_term, d_sexistsT)
-
-(*
- * Well-formedness.
- *)
-let d_exists_typeT i p =
-   if i = 0 then
-      let v = maybe_new_vars1 p "v" in
-         sexists_type (hyp_count_addr p) v p
-   else
-      raise (RefineError ("d_exists_typeT", StringError "no elim form"))
-
-let sexists_type_term = << "type"{sexists{x. 'B['x]}} >>
-
-let d_resource = Mp_resource.improve d_resource (sexists_type_term, d_exists_typeT)
 
 (*
  * -*-

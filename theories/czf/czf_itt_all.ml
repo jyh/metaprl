@@ -40,6 +40,7 @@ open Refiner.Refiner.TermMan
 open Refiner.Refiner.RefineError
 open Mp_resource
 
+open Tactic_type
 open Tactic_type.Tacticals
 open Tactic_type.Conversionals
 open Tactic_type.Sequent
@@ -64,32 +65,32 @@ let _ =
 (*
  * Implication is restricted.
  *)
-interactive dfun_fun3 'H 'u 'v 'z :
-   sequent ['ext] { 'H; u: set >- "type"{'A['u]} } -->
-   sequent ['ext] { 'H; u: set; z: 'A['u] >- "type"{'B['u; 'z]} } -->
-   sequent ['ext] { 'H >- fun_prop{z. 'A['z]} } -->
-   sequent ['ext] { 'H >- dfun_prop{z. 'A['z]; u, v. 'B['u; 'v]} } -->
+interactive dfun_fun3 {| intro_resource [] |} 'H 'u 'v 'z :
+   ["wf"]   sequent ['ext] { 'H; u: set >- "type"{'A['u]} } -->
+   ["wf"]   sequent ['ext] { 'H; u: set; z: 'A['u] >- "type"{'B['u; 'z]} } -->
+   ["main"] sequent ['ext] { 'H >- fun_prop{z. 'A['z]} } -->
+   ["main"] sequent ['ext] { 'H >- dfun_prop{z. 'A['z]; u, v. 'B['u; 'v]} } -->
    sequent ['ext] { 'H >- fun_prop{z. "fun"{'A['z]; w. 'B['z; 'w]}} }
 
-interactive dfun_res3 'H 'u 'v 'z :
-   sequent ['ext] { 'H; u: set >- "type"{'A['u]} } -->
-   sequent ['ext] { 'H; u: set; z: 'A['u] >- "type"{'B['u; 'z]} } -->
-   sequent ['ext] { 'H >- restricted{z. 'A['z]} } -->
-   sequent ['ext] { 'H >- restricted{z. 'A['z]; u, v. 'B['u; 'v]} } -->
+interactive dfun_res3 {| intro_resource [] |} 'H 'u 'v 'z :
+   ["wf"]   sequent ['ext] { 'H; u: set >- "type"{'A['u]} } -->
+   ["wf"]   sequent ['ext] { 'H; u: set; z: 'A['u] >- "type"{'B['u; 'z]} } -->
+   ["main"] sequent ['ext] { 'H >- restricted{z. 'A['z]} } -->
+   ["main"] sequent ['ext] { 'H >- restricted{z. 'A['z]; u, v. 'B['u; 'v]} } -->
    sequent ['ext] { 'H >- restricted{z. "fun"{'A['z]; w. 'B['z; 'w]}} }
 
-interactive all_fun 'H 'u 'v 'z :
-   sequent ['ext] { 'H; u: set >- "type"{'A['u]} } -->
-   sequent ['ext] { 'H; u: set; z: 'A['u] >- "type"{'B['u; 'z]} } -->
-   sequent ['ext] { 'H >- fun_prop{z. 'A['z]} } -->
-   sequent ['ext] { 'H >- dfun_prop{z. 'A['z]; u, v. 'B['u; 'v]} } -->
+interactive all_fun {| intro_resource [] |} 'H 'u 'v 'z :
+   ["wf"]   sequent ['ext] { 'H; u: set >- "type"{'A['u]} } -->
+   ["wf"]   sequent ['ext] { 'H; u: set; z: 'A['u] >- "type"{'B['u; 'z]} } -->
+   ["main"] sequent ['ext] { 'H >- fun_prop{z. 'A['z]} } -->
+   ["main"] sequent ['ext] { 'H >- dfun_prop{z. 'A['z]; u, v. 'B['u; 'v]} } -->
    sequent ['ext] { 'H >- fun_prop{z. "all"{'A['z]; w. 'B['z; 'w]}} }
 
-interactive all_res 'H 'u 'v 'z :
-   sequent ['ext] { 'H; u: set >- "type"{'A['u]} } -->
-   sequent ['ext] { 'H; u: set; z: 'A['u] >- "type"{'B['u; 'z]} } -->
-   sequent ['ext] { 'H >- restricted{z. 'A['z]} } -->
-   sequent ['ext] { 'H >- restricted{z. 'A['z]; u, v. 'B['u; 'v]} } -->
+interactive all_res {| intro_resource [] |} 'H 'u 'v 'z :
+   ["wf"]   sequent ['ext] { 'H; u: set >- "type"{'A['u]} } -->
+   ["wf"]   sequent ['ext] { 'H; u: set; z: 'A['u] >- "type"{'B['u; 'z]} } -->
+   ["main"] sequent ['ext] { 'H >- restricted{z. 'A['z]} } -->
+   ["main"] sequent ['ext] { 'H >- restricted{z. 'A['z]; u, v. 'B['u; 'v]} } -->
    sequent ['ext] { 'H >- restricted{z. "all"{'A['z]; w. 'B['z; 'w]}} }
 
 (************************************************************************
@@ -115,71 +116,6 @@ let allAutoT =
                     progressT (rwh (reduceFst orelseC reduceSnd) 0);
                     onSomeHypT d_iffT;
                     idT])
-
-(*
- * All rules have the same kind of hyps.
- *)
-let labels =
-   [addHiddenLabelT "wf";
-    addHiddenLabelT "wf";
-    addHiddenLabelT "main";
-    addHiddenLabelT "main"]
-
-(*
- * Functionality.
- *)
-let d_dfun_funT i p =
-   if i = 0 then
-      let u, v, z = maybe_new_vars3 p "u" "v" "z" in
-         (dfun_fun3 (hyp_count_addr p) u v z thenLT labels) p
-   else
-      raise (RefineError ("d_dfun_funT", StringError "no elimination fandm"))
-
-let dfun_fun_term = << fun_prop{z. "fun"{'P1['z]; w. 'P2['z; 'w]}} >>
-
-let d_resource = Mp_resource.improve d_resource (dfun_fun_term, d_dfun_funT)
-
-(*
- * Restricted.
- *)
-let d_dfun_resT i p =
-   if i = 0 then
-      let u, v, z = maybe_new_vars3 p "u" "v" "z" in
-         (dfun_res3 (hyp_count_addr p) u v z thenLT labels) p
-   else
-      raise (RefineError ("d_dfun_resT", StringError "no elimination fandm"))
-
-let dfun_res_term = << restricted{z. "fun"{'P1['z]; w. 'P2['z; 'w]}} >>
-
-let d_resource = Mp_resource.improve d_resource (dfun_res_term, d_dfun_resT)
-
-(*
- * Functionality.
- *)
-let d_all_funT i p =
-   if i = 0 then
-      let u, v, z = maybe_new_vars3 p "u" "v" "z" in
-         (all_fun (hyp_count_addr p) u v z thenLT labels) p
-   else
-      raise (RefineError ("d_all_funT", StringError "no elimination fandm"))
-
-let all_fun_term = << fun_prop{z. "all"{'P1['z]; w. 'P2['z; 'w]}} >>
-
-let d_resource = Mp_resource.improve d_resource (all_fun_term, d_all_funT)
-
-(*
- * Restricted.
- *)
-let d_all_resT i p =
-   if i = 0 then
-      let u, v, z = maybe_new_vars3 p "u" "v" "z" in
-         (all_res (hyp_count_addr p) u v z thenLT labels) p
-   else
-      raise (RefineError ("d_all_resT", StringError "no elimination fandm"))
-
-let all_res_term = << restricted{z. "all"{'P1['z]; w. 'P2['z; 'w]}} >>
-
-let d_resource = Mp_resource.improve d_resource (all_res_term, d_all_resT)
 
 (*
  * -*-

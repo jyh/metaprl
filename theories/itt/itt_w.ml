@@ -255,7 +255,7 @@ let inf_tree_ind inf decl t =
    let decl', a' = inf decl a in
       if is_w_term a' then
          let x, l, r = dest_w a' in
-            inf ((a, l)::(f, subst r [mk_var_term u] [x])::decl') b
+            inf ((a, l)::(f, subst1 r x (mk_var_term u))::decl') b
       else
          raise (RefineError ("typeinf", StringTermError ("can't infer type for", t)))
 

@@ -43,6 +43,8 @@ open Tactic_type.Tacticals
 open Tactic_type.Conversionals
 open Var
 
+open Base_dtactic
+
 open Itt_logic
 
 let _ =
@@ -83,7 +85,7 @@ dform union_df : mode[prl] :: parens :: "prec"[prec_or] :: union{'s1; 's2} =
 (*
  * Union is a set.
  *)
-interactive union_isset 'H :
+interactive union_isset {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- isset{'s1} } -->
    sequent ['ext] { 'H >- isset{'s2} } -->
    sequent ['ext] { 'H >- isset{union{'s1; 's2}} }
@@ -91,12 +93,12 @@ interactive union_isset 'H :
 (*
  * Membership in a union.
  *)
-interactive union_member_intro_left 'H :
+interactive union_member_intro_left {| intro_resource [SelectOption 1] |} 'H :
    sequent ['ext] { 'H >- member{'x; 's1} } -->
    sequent ['ext] { 'H >- isset{'s2} } -->
    sequent ['ext] { 'H >- member{'x; union{'s1; 's2}} }
 
-interactive union_member_intro_right 'H :
+interactive union_member_intro_right {| intro_resource [SelectOption 2] |} 'H :
    sequent ['ext] { 'H >- member{'x; 's2} } -->
    sequent ['ext] { 'H >- isset{'s1} } -->
    sequent ['ext] { 'H >- member{'x; union{'s1; 's2}} }
@@ -110,49 +112,6 @@ interactive union_member_elim3 'H 'J 'z :
    sequent ['ext] { 'H; x: member{'y; union{'s1; 's2}}; 'J['x]; z: member{'y; 's1} >- 'T['x] } -->
    sequent ['ext] { 'H; x: member{'y; union{'s1; 's2}}; 'J['x]; z: member{'y; 's2} >- 'T['x] } -->
    sequent ['ext] { 'H; x: member{'y; union{'s1; 's2}}; 'J['x] >- 'T['x] }
-
-(************************************************************************
- * TACTICS                                                              *
- ************************************************************************)
-
-(*
- * Sethood.
- *)
-let d_union_setT i p =
-   if i = 0 then
-      union_isset (hyp_count_addr p) p
-   else
-      raise (RefineError ("d_union_issetT", StringError "no elimination form"))
-
-let union_isset_term = << isset{union{'s1; 's2}} >>
-
-let d_resource = Mp_resource.improve d_resource (union_isset_term, d_union_setT)
-
-(*
- * Membership.
- *)
-let d_unionT i p =
-   if i = 0 then
-      try
-         let j = get_sel_arg p in
-         let ruleT =
-            if j = 1 then
-               union_member_intro_left
-            else
-               union_member_intro_right
-         in
-            ruleT (hyp_count_addr p) p
-      with
-         RefineError _ ->
-            raise (RefineError ("d_unionT", StringError "d_unionT requires a selT argument"))
-   else
-      let i, j = hyp_indices p i in
-      let z = maybe_new_vars1 p "z" in
-         union_member_elim3 i j z p
-
-let union_member_term = << member{'x; union{'s1; 's2}} >>
-
-let d_resource = Mp_resource.improve d_resource (union_member_term, d_unionT)
 
 (*
  * -*-

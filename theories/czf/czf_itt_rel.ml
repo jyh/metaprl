@@ -62,29 +62,11 @@ prim_rw unfold_rel : rel{a, b. 'P['a; 'b]; 's1; 's2} <-->
 (*
  * Typehood.
  *)
-interactive rel_type 'H 'u 'v :
+interactive rel_type {| intro_resource [] |} 'H 'u 'v :
    sequent [squash] { 'H; u: set; v: set >- "type"{'P['u; 'v]} } -->
    sequent [squash] { 'H >- isset{'s1} } -->
    sequent [squash] { 'H >- isset{'s2} } -->
    sequent ['ext] { 'H >- "type"{rel{x, y. 'P['x; 'y]; 's1; 's2}} }
-
-(************************************************************************
- * TACTICS                                                              *
- ************************************************************************)
-
-(*
- * Typehood.
- *)
-let d_rel_typeT i p =
-   if i = 0 then
-      let u, v = maybe_new_vars2 p "u" "v" in
-         rel_type (hyp_count_addr p) u v p
-   else
-      raise (RefineError ("d_rel_typeT", StringError "no elimination form"))
-
-let rel_type_term = << "type"{rel{a, b. 'P['a; 'b]; 's1; 's2}} >>
-
-let d_resource = Mp_resource.improve d_resource (rel_type_term, d_rel_typeT)
 
 (*
  * -*-

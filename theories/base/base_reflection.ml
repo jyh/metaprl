@@ -101,9 +101,9 @@ let dest_bterm_sequent_and_rename term vars =
  *    if_bterm{bterm{<H> >- _op_{<J1>.t1, ..., <Jn>.tn}}; 'tt}
  *       <-->
  *    if_bterm{bterm{<H>; <J1> >- 't1};
- *       if_bterm{<H>; <J2> >- 't2};
+ *       if_bterm{bterm{<H>; <J2> >- 't2};
  *          ...
- *            if_bterm{<H>; <Jn> >- 'tn}; 'tt}...}}
+ *            if_bterm{bterm{<H>; <Jn> >- 'tn}; 'tt}...}}
  *)
 
 declare if_bterm{'bt; 'tt}
@@ -141,22 +141,22 @@ let resource reduce +=
    (<< if_bterm{ bterm{| <H> >- 't |}; 'tt } >>, reduce_ifbterm)
 
 (***************************************************************************
- * dest_bterm{'bt} returns a list of sub-bterms of 'bt, undefined if 'bt
+ * subterms{'bt} returns a list of sub-bterms of 'bt, undefined if 'bt
  * is not a well-formed bterm
  *
- * rewrite axiom: dest_bterm{bterm{<H>; x:_; <J> >- x}} <--> []
+ * rewrite axiom: subterms{bterm{<H>; x:_; <J> >- x}} <--> []
  * ML rewrite_axiom:
- *    dest_bterm{bterm{<H> >- _op_{<J1>.t1, ..., <Jn>.tn}}}
+ *    subterms{bterm{<H> >- _op_{<J1>.t1, ..., <Jn>.tn}}}
  *       <-->
  *    [ bterm{<H>; <J1> >- t1}; ...; bterm{<H>; <Jn> >- tn} ]
  *)
 
-declare dest_bterm{'bt}
+declare subterms{'bt}
 
-prim_rw reduce_dest_bterm1 'H :
-   dest_bterm{ bterm{| <H>; x: term; <J> >- 'x |} } <--> Perv!nil
+prim_rw reduce_subterms1 'H :
+   subterms{ bterm{| <H>; x: term; <J> >- 'x |} } <--> Perv!nil
 
-ml_rw reduce_dest_bterm2 {| reduce |} : ('goal :  dest_bterm{ bterm{| <H> >- 't |} }) =
+ml_rw reduce_subterms2 {| reduce |} : ('goal :  subterms{ bterm{| <H> >- 't |} }) =
    let bt = one_subterm goal in
    let hyps, t = dest_bterm_sequent bt in
    let t' = dest_term (unquote_term t) in
@@ -165,17 +165,17 @@ ml_rw reduce_dest_bterm2 {| reduce |} : ('goal :  dest_bterm{ bterm{| <H> >- 't 
       	make_bterm_sequent (hyps @ (List.map hyp_of_var bt.bvars)) bt.bterm
    in mk_xlist_term (List.map wrap t'.term_terms)
 
-let reduce_dest_bterm =
+let reduce_subterms =
    termC (fun goal ->
       let bt =  one_subterm goal in
       let seq = TermMan.explode_sequent bt in
       let goal = SeqGoal.get seq.sequent_goals 0 in
-         if is_quoted_term goal then reduce_dest_bterm2
-         else if is_var_term goal then onSomeHypC reduce_dest_bterm1 (SeqHyp.length seq.sequent_hyps)
+         if is_quoted_term goal then reduce_subterms2
+         else if is_var_term goal then onSomeHypC reduce_subterms1 (SeqHyp.length seq.sequent_hyps)
          else failC)
 
 let resource reduce +=
-   (<< dest_bterm{ bterm{| <H> >- 't |} } >>, reduce_dest_bterm)
+   (<< subterms{ bterm{| <H> >- 't |} } >>, reduce_subterms)
 
 (************************************************************************
  * make_bterm{'bt; 'btl} takes the top-level operator of 'bt and

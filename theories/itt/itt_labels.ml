@@ -25,8 +25,6 @@
  *)
 extends Base_theory
 
-declare typeclass RecordLabel -> Token
-
 (*
  * XXX: HACK: these display forms are a work-around. A proper way would be to use
  * an opname shortener in the slot[t:t] display form in the Dform module.

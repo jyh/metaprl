@@ -53,10 +53,13 @@ interactive mult4 :
 (* Refers to the propositional structure of the example in the papers [1] and [2],*)
 (* as documented in the file refiner/reflib/jall.mli *)
 
-
 interactive jens_prop :
+   sequent { >- "type"{'S} } -->
+   sequent { >- "type"{'T} } -->
+   sequent { >- "type"{'R} } -->
+   sequent { >- "type"{'P} } -->
+   sequent { >- "type"{'Q} } -->
    sequent { >- ('S & ("not"{('T => 'R)} => 'P)) => (("not"{(('P => 'Q) & ('T => 'R))}) => (("not"{("not"{'P})}) & 'S & 'S)) }
-
 
 
 (* Prop. counter examples from FI99 paper: *)
@@ -107,7 +110,6 @@ interactive prop_n4 :
    sequent { >- 'A4 & (('B2 => (('B3 or 'A3) or 'B3)) & ('B1 => (('B2 or 'A2) or 'B2)) & ('B => (('B1 or 'A1) or 'B1)) & (('B or 'A) or 'B)) => 'A or ('B & 'A1) or ('B1 & 'A2) or ('B2 & 'A3) or ('B3 & 'A4) }
 
 
-
 (* First-order logic: classically AND intuitionistically      *)
 (* ========================================================== *)
 
@@ -115,6 +117,8 @@ interactive prop_n4 :
 (* simple formula, just getting started *)
 
 interactive ax_all :
+   sequent { >- "type"{'T} } -->
+   sequent { x: 'T >- "type"{'A['x]} } -->
    sequent { >- ((all x:'T. 'A['x]) => (all x:'T. 'A['x])) }
 
 
@@ -136,8 +140,13 @@ interactive all_exst 'v0_jprover :
 
 
 interactive jens_fo :
+   sequent { >- "type"{'O} } -->
+   sequent { a: 'O >- "type"{'P['a]} } -->
+   sequent { a: 'O >- "type"{'Q['a]} } -->
+   sequent { a: 'O >- "type"{'R['a]} } -->
+   sequent { a: 'O >- "type"{'S['a]} } -->
+   sequent { a: 'O >- "type"{'T['a]} } -->
    sequent { >- (all a:'O. all b:'O. ((all x:'O. 'S['x]) & (all y:'O. ("not"{('T['y] => 'R['y])} => 'P['y])) => "not"{(exst z:'O. (('P['z] => 'Q['z]) & ('T['z] => 'R['z])))} => "not"{("not"{('P['a])})} & 'S['a] & 'S['b])) }
-
 
 
 (* Spitting substitutions: *)
@@ -147,9 +156,11 @@ interactive jens_fo :
 (* Making branches independent from eigenvariables introduced in other branches *)
 (* Involves the vo_jprover parameter with the cut rule *)
 
-interactive subst :
+interactive subst 'v0_jprover :
+   sequent { >- 'v0_jprover in 'T } -->
+   sequent { x: 'T >- "type"{'A['x]} } -->
+   sequent { x: 'T >- "type"{'B['x]} } -->
    sequent { >- (all x:'T. ('A['x] or 'B['x])) & ((exst y:'T. 'A['y]) => (exst z:'T. ("not"{'A['z]}))) & (all x:'T. "not"{'B['x]}) =>  'Dummy }
-
 
 (* barber *)
 
@@ -191,6 +202,13 @@ interactive fv3 bind{x.'A['x]} 'a 'b 'f :
 
 
 interactive jens_fo_fv 'a 'b :
+   sequent { >- 'a in 'O } -->
+   sequent { >- 'b in 'O } -->
+   sequent { x:'O >- "type"{'P['x]} } -->
+   sequent { x:'O >- "type"{'Q['x]} } -->
+   sequent { x:'O >- "type"{'R['x]} } -->
+   sequent { x:'O >- "type"{'S['x]} } -->
+   sequent { x:'O >- "type"{'T['x]} } -->
    sequent { >- (all x:'O. 'S['x]) & (all y:'O. ("not"{('T['y] => 'R['y])} => 'P['y])) => "not"{(exst z:'O. (('P['z] => 'Q['z]) & ('T['z] => 'R['z])))} => "not"{("not"{('P['a])})} & 'S['a] & 'S['b] }
 
 
@@ -229,12 +247,30 @@ interactive fun2 bind{x.'A['x]} 'a bind{x.'f['x]} bind{x.'g['x]} :
 (* The examples can easily be extended to n > 4 *)
 
 interactive fo_n1 :
+   sequent { >- "type"{'T} } -->
+   sequent { >- "type"{'B} } -->
+   sequent { x: 'T >- "type"{'A['x]} } -->
+   sequent { x: 'T >- "type"{'A1['x]} } -->
    sequent { >- (all w:'T. 'A1['w]) & (all x:'T. (('B0 or 'A0['x]) or 'B0)) & "not"{('B0 & (all y:'T. 'A1['y]))} => all z:'T. 'A0['z] }
 
 interactive fo_n2 :
+   sequent { >- "type"{'T} } -->
+   sequent { >- "type"{'B} } -->
+   sequent { >- "type"{'B1} } -->
+   sequent { x: 'T >- "type"{'A['x]} } -->
+   sequent { x: 'T >- "type"{'A1['x]} } -->
+   sequent { x: 'T >- "type"{'A2['x]} } -->
    sequent { >- (all w:'T. 'A2['w]) & (all x:'T. (('B0 or 'A0['x]) or 'B0)) & "not"{('B0 & (all y:'T. 'A1['y]))} & "not"{('B1 & (all y:'T. 'A2['y]))} & (all x:'T. (('B1 or 'A1['x]) or 'B1)) => all z:'T. 'A0['z] }
 
 interactive fo_n3 :
+   sequent { >- "type"{'T} } -->
+   sequent { >- "type"{'B} } -->
+   sequent { >- "type"{'B1} } -->
+   sequent { >- "type"{'B2} } -->
+   sequent { x: 'T >- "type"{'A['x]} } -->
+   sequent { x: 'T >- "type"{'A1['x]} } -->
+   sequent { x: 'T >- "type"{'A2['x]} } -->
+   sequent { x: 'T >- "type"{'A3['x]} } -->
    sequent { >- (all w:'T. 'A3['w]) & (all x:'T. (('B0 or 'A0['x]) or 'B0)) & "not"{('B0 & (all y:'T. 'A1['y]))} &  "not"{('B1 & (all y:'T. 'A2['y]))} & (all x:'T. (('B1 or 'A1['x]) or 'B1)) &  "not"{('B2 & (all y:'T. 'A3['y]))} & (all x:'T. (('B2 or 'A2['x]) or 'B2)) => all z:'T. 'A0['z] }
 
 
@@ -256,7 +292,10 @@ interactive fo_n4 : (* takes really long *)
 
 (* deadlock1 is the example presented in the papers [9,10] *)
 
-interactive deadlock1 :
+interactive deadlock1 'v0_jprover :
+   sequent { >- 'v0_jprover in 'T } -->
+   sequent { x: 'T >- "type"{'A['x]} } -->
+   sequent { x: 'T >- "type"{'B['x]} } -->
    sequent { >- (all x:'T. ('A['x] or 'B['x])) & ((exst y:'T. 'A['y]) => (exst z:'T. ("not"{'A['z]}))) => (exst x:'T. 'B['x]) }
 
 
@@ -273,32 +312,42 @@ interactive deadlock2 bind{x,y.'A['x;'y]} 'c :
 (* embedding LJ deadlocks into bigger non-deadlock proofs *)
 
 
-interactive deadlock3 :
+interactive deadlock3 'v0_jprover :
+   sequent { >- 'v0_jprover in 'T } -->
+   sequent { >- "type"{'P} } -->
+   sequent { x: 'T >- "type"{'A['x]} } -->
+   sequent { x: 'T >- "type"{'B['x]} } -->
    sequent { >- 'P & (all x:'T. ('A['x] or 'B['x])) & ((exst y:'T. 'A['y]) => (exst z:'T. ("not"{'A['z]}))) => (exst x:'T. 'B['x]) & 'P }
 
-
-interactive deadlock4 :
+interactive deadlock4 'v0_jprover :
+   sequent { >- 'v0_jprover in 'T } -->
+   sequent { >- "type"{'P} } -->
+   sequent { x: 'T >- "type"{'A['x]} } -->
+   sequent { x: 'T >- "type"{'B['x]} } -->
    sequent { >- (all x:'T. (('A['x] or 'B['x]) & 'P)) & ((exst y:'T. 'A['y]) => (exst z:'T. ("not"{'A['z]}))) => (exst x:'T. 'B['x]) & 'P }
 
-
-
 (* ebedding multiple use of eigenvariable formula WITHOUT eigenvariable renaming *)
-
 
 interactive mult_no_rename :
    sequent { >- (all x:'T. ('A['x] or (exst a:'T. 'B['x;'a]))) & ((exst y:'T. 'A['y]) => (exst z:'T. ("not"{'A['z]}))) => (exst x:'T. exst y:'T. 'B['x;'y]) }
 
-interactive mult_no_rename2 :
+interactive mult_no_rename2 'v0_jprover :
+   sequent { >- 'v0_jprover in 'T } -->
+   sequent { x: 'T >- "type"{'A['x]} } -->
+   sequent { x: 'T >- "type"{'B['x]} } -->
+   sequent { x: 'T >- "type"{'C['x]} } -->
    sequent { >- (all x:'T. ('A['x] or ('B['x] & (exst a:'T. 'C['a])))) & ((exst y:'T. 'A['y]) => (exst z:'T. ("not"{'A['z]}))) => (exst x:'T. ('B['x] & (exst z:'T. 'C['z]))) }
-
 
 
 (* ebedding multiple use of eigenvariable formula WITH eigenvariable rule deletion, *)
 (* i.e. the identical eigenvarieble rule occurs on the same branch *)
 
-interactive mult_eigen_del :
+interactive mult_eigen_del 'v0_jprover :
+   sequent { >- 'v0_jprover in 'T } -->
+   sequent { x: 'T >- "type"{'A['x]} } -->
+   sequent { x: 'T >- "type"{'B['x]} } -->
+   sequent { x: 'T >- "type"{'C['x]} } -->
    sequent { >- (all x:'T. (('A['x] or 'B['x]) & (exst a:'T. 'C['a]))) & ((exst y:'T. 'A['y]) => (exst z:'T. ("not"{'A['z]}))) => (exst x:'T. ('B['x] & (exst z:'T. 'C['z]))) }
-
 
 
 (* ebedding multiple use of eigenvariable formula WITH eigenvariable renaming *)

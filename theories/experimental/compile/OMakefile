@@ -13,6 +13,7 @@ MLZFILES =\
 MPFILES =\
         m_doc_comment\
         m_doc_intro\
+	m_doc_intro_fdl\
         m_doc_ir\
         m_doc_parsing\
         m_doc_cps\
@@ -56,11 +57,23 @@ MPFILES =\
 Theory($(MPFILES))
 
 #
-# Generate the document
+# Generate the documents
 #
-
 PRINT_THEORIES =\
     m_doc_intro\
+    m_doc_parsing\
+    m_doc_ir\
+    m_doc_cps\
+    m_doc_closure\
+    m_doc_opt\
+    m_doc_x86_asm\
+    m_doc_x86_codegen\
+    m_doc_x86_regalloc\
+    m_doc_x86_opt\
+    m_doc_summary
+
+FDL_THEORIES =\
+    m_doc_intro_fdl\
     m_doc_parsing\
     m_doc_ir\
     m_doc_cps\
@@ -88,6 +101,7 @@ APPENDIX_THEORIES =\
 #
 # Generate the local files
 #
+TheoryDocument(fdl, $(FDL_THEORIES))
 TheoryDocument(theory, $(PRINT_THEORIES))
 TheoryDocument(appendix, $(APPENDIX_THEORIES))
 
@@ -96,6 +110,7 @@ TheoryDocument(appendix, $(APPENDIX_THEORIES))
 #
 LaTeXDocumentInstall(tex, $(DOCDIR), m-paper, m-paper, theory-body)
 LaTeXDocumentInstall(tex, $(DOCDIR), m-paper-tr, m-paper-tr, theory-body appendix-body)
+LaTeXDocumentInstall(tex, $(DOCDIR), m-paper-fdl, m-paper-fdl, fdl-body)
 
 #
 # Clean up

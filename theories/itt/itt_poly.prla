@@ -15313,7 +15313,7 @@ T	t7509	o1008 b7500 b7509
 B	b7510	t7509
 T	t7510	o6220 b7504
 B	b7511	t7510
-P	p7511	String "genAssumT [2] thenT dT (-1) thenT rwh unfold_sum2 0 thenT rwh unfold_sum1 0 thenT withT << lambda{z. 'F^car} >> eqcdT thenT byDefT reduceC"
+P	p7511	String "genAssumT [2] thenT dT (-1) thenT rwh unfold_sum2 0 thenT rwh unfold_sum1 0 thenT withT << bind{z. 'F^car} >> eqcdT thenT byDefT reduceC"
 O	o7511	ext_rule p7511
 T	t7511	o3417 b4786 b5042 b6075 b4403
 B	b7512	t7511

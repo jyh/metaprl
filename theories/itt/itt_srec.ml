@@ -224,7 +224,7 @@ doc <:doc<
    $h$ to compute the values of the recursive calls.
    @end[doc]
 >>
-prim srecindEquality {| intro []; eqcd |} lambda{x. 'S['x]} srec{T. 'B['T]} univ[i:l] :
+prim srecindEquality {| intro []; eqcd |} bind{x. 'S['x]} srec{T. 'B['T]} univ[i:l] :
    [wf] sequent { <H> >- 'r1 = 'r2 in srec{T. 'B['T]} } -->
    [wf] sequent { <H>; r: srec{T. 'B['T]} >- "type"{'S['r]} } -->
    [wf] sequent { <H>; T1: univ[i:l]; z: \subtype{'T1; srec{T. 'B['T]}};

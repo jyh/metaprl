@@ -730,7 +730,7 @@ let reduce_ind_numberC =
  * H >- base1 = base2 in T[0]
  * H, x: Z, w: 0 < x, y: T[x - 1] >- up1[x, y] = up2[x, y] in T[x]
  *)
-prim indEquality {| intro [complete_unless_member]; eqcd |} lambda{z. 'T['z]} :
+prim indEquality {| intro [complete_unless_member]; eqcd |} bind{z. 'T['z]} :
    sequent { <H> >- 'x1 = 'x2 in int } -->
    sequent { <H>; x: int; w: 'x < 0; y: 'T['x +@ 1] >- 'down1['x; 'y] =
  'down2['x; 'y] in 'T['x] } -->

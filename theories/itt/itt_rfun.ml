@@ -317,7 +317,7 @@ doc <:doc<
    a type for any restricted function $@rfun{f; y; @set{z; A; R[z, y]}; B[f, y]}$.
    @end[doc]
 >>
-prim rfunctionEquality  {| intro []; eqcd |} lambda{a. lambda{b. 'R['a; 'b]}} :
+prim rfunctionEquality  {| intro []; eqcd |} bind{a,b. 'R['a; 'b]} :
    [wf] sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
    [wf] sequent { <H> >- well_founded{'A1; a, b. 'R['a; 'b]} } -->
    [wf] sequent { <H>;
@@ -331,7 +331,7 @@ prim rfunctionEquality  {| intro []; eqcd |} lambda{a. lambda{b. 'R['a; 'b]}} :
            } =
    it
 
-prim rfunctionType  {| intro [] |} lambda{a. lambda{b. 'R['a; 'b]}} :
+prim rfunctionType  {| intro [] |} bind{a,b. 'R['a; 'b]} :
    [wf] sequent { <H> >- "type"{'A} } -->
    [wf] sequent { <H> >- well_founded{'A; a, b. 'R['a; 'b]} } -->
    [wf] sequent { <H>;
@@ -357,7 +357,7 @@ doc <:doc<
    because the domain is well-founded.
    @end[doc]
 >>
-prim rfunction_lambdaFormation {| intro [] |} lambda{a. lambda{b. 'R['a; 'b]}} :
+prim rfunction_lambdaFormation {| intro [] |} bind{a,b. 'R['a; 'b]} :
    [wf] sequent { <H> >- "type"{'A} } -->
    [wf] sequent { <H> >- well_founded{'A; a, b. 'R['a; 'b]} } -->
    ('b['g; 'y] : sequent { <H>; y: 'A; g: { f | x: { z: 'A | 'R['z; 'y] } -> 'B['f; 'x] } >- 'B['g; 'y] }) -->

@@ -1,10 +1,10 @@
 (*
- * The general theory for the M language.
+ * Intermediate code transformation.
  *
  * ----------------------------------------------------------------
  *
  * @begin[license]
- * Copyright (C) 2003 Jason Hickey, Caltech
+ * Copyright (C) 2003 Adam Granicz, Caltech
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,29 +20,31 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
- * Author: Jason Hickey
- * @email{jyh@cs.caltech.edu}
+ * Author: Adam Granicz
+ * @email{granicz@cs.caltech.edu}
  * @end[license]
  *)
-extends M_ast
 extends M_ir
-extends M_ir_ast
-extends M_cps
-extends M_closure
-extends M_prog
-extends M_dead
-extends M_inline
-extends M_reserve
-extends M_x86_codegen
-extends M_x86_coalesce
-extends M_x86_regalloc
-extends M_x86_opt
+
+open Refiner.Refiner.Term
+open Refiner.Refiner.RefineError
+open Mp_resource
 
 open Tactic_type.Tacticals
+open Tactic_type.Conversionals
 
-topval convertT : tactic
-topval codeT    : tactic
-topval compileT : tactic
+(*
+ * IR resource
+ *)
+resource (term * conv, conv) ir
+
+(*
+ * For debugging.
+ *)
+topval irTopC : conv
+topval irC : conv
+
+topval irT : tactic
 
 (*
  * -*-

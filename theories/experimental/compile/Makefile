@@ -31,7 +31,9 @@ MPFILES :=\
 	m_doc_proposal\
 	m_util\
 	m_arith\
+	m_ast\
 	m_ir\
+	m_ir_ast\
 	m_cps\
 	m_closure\
 	m_prog\

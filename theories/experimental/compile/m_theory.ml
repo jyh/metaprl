@@ -24,7 +24,9 @@
  * @email{jyh@cs.caltech.edu}
  * @end[license]
  *)
+extends M_ast
 extends M_ir
+extends M_ir_ast
 extends M_cps
 extends M_closure
 extends M_prog
@@ -36,6 +38,7 @@ extends M_x86_coalesce
 extends M_x86_regalloc
 extends M_x86_opt
 
+open M_ir_ast
 open M_cps
 open M_closure
 open M_prog
@@ -52,8 +55,11 @@ open Tactic_type.Tacticals
 open Tactic_type.Conversionals
 
 let convertT =
+   (* IR conversion *)
+   irT
+
    (* CPS conversion *)
-   cpsT
+   thenT cpsT
 
    (* Closure conversion *)
    thenT closeT

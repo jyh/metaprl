@@ -28,18 +28,18 @@ Module M_ast
 
 Terms -extend "M_ast" {
    // Arithmetic operators
-   declare AddOp
-   declare SubOp
-   declare MulOp
-   declare DivOp
+   declare AstAddOp
+   declare AstSubOp
+   declare AstMulOp
+   declare AstDivOp
 
    // Relational operators
-   declare LeOp
-   declare LtOp
-   declare GeOp
-   declare GtOp
-   declare EqOp
-   declare NeqOp
+   declare AstLeOp
+   declare AstLtOp
+   declare AstGeOp
+   declare AstGtOp
+   declare AstEqOp
+   declare AstNeqOp
 
    // Simple expressions.
    declare TrueExpr
@@ -49,6 +49,7 @@ Terms -extend "M_ast" {
    declare RelopExpr{'op; 'e1; 'e2}
    declare VarExpr{'v}
    declare LambdaExpr{'e}
+   declare FunLambdaExpr{'e}
 
    // If
    declare IfExpr{'e1; 'e2; 'e3}
@@ -60,11 +61,11 @@ Terms -extend "M_ast" {
    declare AssignExpr{'e1; 'e2; 'e3}
 
    // Sequencing
-   declare SeqExpr{'e1; 'e2}
+//   declare SeqExpr{'e1; 'e2}
 
    // Function arguments
-   declare ArgNil
-   declare ArgCons{'a; 'rest}
+   declare AstArgNil
+   declare AstArgCons{'a; 'rest}
 
    // Function calls and return
    declare ApplyExpr{'f; 'args}
@@ -80,20 +81,21 @@ Terms -extend "M_ast" {
    declare LetTuple{'length; 'tuple; 'e}
 
    // Mutually recursive functions
-   declare LetRec{'e1; 'e2}
-   declare Fields{'fields}
-   declare Label[t]
-   declare FunDef{'label; 'exp; 'rest}
-   declare EndDef
+   declare AstLetRec{'e1; 'e2}
+   declare AstFields{'fields}
+   declare AstLabel[t]
+   declare AstFunDef{'label; 'exp; 'rest}
+   declare AstEndDef
 
    // Function projection
-   declare LetFun{'R; 'label; 'rest}
+   declare AstLetFun{'R; 'label; 'rest}
 }
 
 // These terms must be eliminated by the end of the
 // informal post-parsing rewrites.
 
 Terms -extend "$" {
+   declare var_term[s]
    declare number[n]
    declare SimpleFun{'f; 'params; 'body}
    declare Functions{'fvars; 'pbunch; 'fbodies}
@@ -101,7 +103,8 @@ Terms -extend "$" {
    declare MutFuns{'fvars; 'pbunch; 'fbodies; 'cont}
    declare process_functions{'fvars; 'pbunch; 'fbodies}
    declare project_functions{'R; 'fvars; 'rest}
-   declare bind_vars{'vars; 'e}
+   declare first_bind_vars{'R; 'fvars; 'vars; 'e}
+   declare bind_vars{'R; 'fvars; 'vars; 'e}
    declare norec_bind_vars{'vars; 'e}
 
    // Define our own list terms
@@ -118,17 +121,20 @@ Terms -extend "$" {
 //          -first   : match first substring that matches.
 
 Tokens -longest {
-   ID = "[_a-zA-Z][_a-zA-Z0-9]*"    { __token__[p:s]{'pos} -> 'p }
+   ID = "[_a-zA-Z][_a-zA-Z0-9]*"    { __token__[p:s]{'pos} -> var_term[p:s] }
    NUM = "[0-9]+"                   { __token__[p:s]{'pos} -> number[p:n] }
+   ID2 = "&&"                       { __token__[p:s]{'pos} -> 'p }
 
    AND = "and"                      {}
    ELSE = "else"                    {}
    END = "end"                      {}
+   FALSE = "false"                  {}
    FUN = "fun"                      {}
    IF = "if"                        {}
    IN = "in"                        {}
    LET = "let"                      {}
    THEN = "then"                    {}
+   TRUE = "true"                    {}
    REC = "rec"                      {}
 
    ARROW = "->"                     {}
@@ -149,7 +155,7 @@ Tokens -longest {
    PLUS = "+"                       {}
    RBRACK = "\\]"                   {}
    RPAREN = ")"                     {}
-   SEMI = ";"                       {}
+//   SEMI = ";"                       {}
    TIMES = "*"                      {}
 
    * COMMENT = "//[^\\n]*"          {}
@@ -182,24 +188,32 @@ Grammar -start exp {
     // Numbers
       NUM<number[i:n]>              => IntExpr[i:n]
 
+    // Booleans
+    | TRUE                          => TrueExpr{}
+    | FALSE                         => FalseExpr{}
+
     // Variables
-    | ID<var[v:v]>                  => VarExpr{'v}
+    | ID<var_term[v:s]>             => VarExpr{'v}
 
     // Anonymous functions
-    | FUN ID<var[v:v]> ARROW exp<'e> %prec prec_let
+    | FUN ID<var_term[v:s]> ARROW exp<'e> %prec prec_let
                                     => LambdaExpr{v. 'e}
-    // Binary operations
-    | exp<'e1> PLUS exp<'e2>        => BinopExpr{AddOp{}; 'e1; 'e2}
-    | exp<'e1> MINUS exp<'e2>       => BinopExpr{SubOp{}; 'e1; 'e2}
-    | exp<'e1> TIMES exp<'e2>       => BinopExpr{MulOp{}; 'e1; 'e2}
-    | exp<'e1> DIV exp<'e2>         => BinopExpr{DivOp{}; 'e1; 'e2}
+    // Pairs
+    // TEMP: Missing
 
-    | exp<'e1> LE exp<'e2>          => RelopExpr{LeOp{}; 'e1; 'e2}
-    | exp<'e1> LT exp<'e2>          => RelopExpr{LtOp{}; 'e1; 'e2}
-    | exp<'e1> GE exp<'e2>          => RelopExpr{GeOp{}; 'e1; 'e2}
-    | exp<'e1> GT exp<'e2>          => RelopExpr{GtOp{}; 'e1; 'e2}
-    | exp<'e1> EQ exp<'e2>          => RelopExpr{EqOp{}; 'e1; 'e2}
-    | exp<'e1> NEQ exp<'e2>         => RelopExpr{NeqOp{}; 'e1; 'e2}
+    // Binary operations
+    | exp<'e1> PLUS exp<'e2>        => BinopExpr{AstAddOp{}; 'e1; 'e2}
+    | exp<'e1> MINUS exp<'e2>       => BinopExpr{AstSubOp{}; 'e1; 'e2}
+    | exp<'e1> TIMES exp<'e2>       => BinopExpr{AstMulOp{}; 'e1; 'e2}
+    | exp<'e1> DIV exp<'e2>         => BinopExpr{AstDivOp{}; 'e1; 'e2}
+
+    // Relational operations
+    | exp<'e1> LE exp<'e2>          => RelopExpr{AstLeOp{}; 'e1; 'e2}
+    | exp<'e1> LT exp<'e2>          => RelopExpr{AstLtOp{}; 'e1; 'e2}
+    | exp<'e1> GE exp<'e2>          => RelopExpr{AstGeOp{}; 'e1; 'e2}
+    | exp<'e1> GT exp<'e2>          => RelopExpr{AstGtOp{}; 'e1; 'e2}
+    | exp<'e1> EQ exp<'e2>          => RelopExpr{AstEqOp{}; 'e1; 'e2}
+    | exp<'e1> NEQ exp<'e2>         => RelopExpr{AstNeqOp{}; 'e1; 'e2}
 
     // Conditionals
     | IF exp<'e1> THEN exp<'e2> ELSE exp<'e3>
@@ -214,15 +228,15 @@ Grammar -start exp {
                                     => AssignExpr{'e1; 'e2; 'e3}
 
     // Sequencing
-    | exp<'e1> SEMI exp<'e2> %prec prec_let
-                                    => SeqExpr{'e1; 'e2}
+//    | exp<'e1> SEMI exp<'e2> %prec prec_let
+//                                    => SeqExpr{'e1; 'e2}
 
     // Function application
     | exp<'f> LPAREN args<'args> RPAREN %prec prec_apply
                                     => ApplyExpr{'f; 'args}
 
     // Let-definitions
-    | LET ID<var[v:v]> EQ exp<'e1> IN exp<'e2> %prec prec_let
+    | LET ID<var_term[v:s] /*var[v:v]*/> EQ exp<'e1> IN exp<'e2> %prec prec_let
                                     => LetVarExpr{'e1; v. 'e2}
 
     // Recursive functions
@@ -233,76 +247,85 @@ Grammar -start exp {
                                     => NewFun{'fun; 'e2}
 
 
-   funs ::= fun<SimpleFun{var[f:v]; 'params; 'body}>
-                                    => Functions{mcons{'f; mnil{}}; mcons{'params; mnil{}}; mcons{'body; mnil{}}}
-    | fun<SimpleFun{var[f:v]; 'params; 'body}> AND funs<Functions{'fvars; 'pbunch; 'fbodies}>
-                                    => Functions{mcons{'f; 'fvars}; mcons{'params; 'pbunch}; mcons{'body; 'fbodies}}
+   funs ::= fun<SimpleFun{var_term[f:s]; 'params; 'body}>
+                                    => Functions{mcons{var_term[f:s]; mnil{}}; mcons{'params; mnil{}}; mcons{'body; mnil{}}}
+    | fun<SimpleFun{var_term[f:s]; 'params; 'body}> AND funs<Functions{'fvars; 'pbunch; 'fbodies}>
+                                    => Functions{mcons{var_term[f:s]; 'fvars}; mcons{'params; 'pbunch}; mcons{'body; 'fbodies}}
 
-   fun ::= ID<var[f:v]> LPAREN params<'params> RPAREN EQ exp<'e>
-                                    => SimpleFun{'f; 'params; 'e}
+   fun ::= ID<var_term[f:s]> LPAREN params<'params> RPAREN EQ exp<'e>
+                                    => SimpleFun{var_term[f:s]; 'params; 'e}
 
-   args ::= exp<'e>                 => ArgCons{'e; ArgNil{}}
-    | exp<'e> COMMA args<'args>     => ArgCons{'e; 'args}
+   args ::= exp<'e>                 => AstArgCons{'e; AstArgNil{}}
+    | exp<'e> COMMA args<'args>     => AstArgCons{'e; 'args}
 
-   params ::= ID<var[v:v]>          => mcons{'v; mnil{}}
-    | ID<var[v:v]> COMMA params<'ids>
-                                    => mcons{'v; 'ids}
+   params ::= ID<var_term[v:s]>     => mcons{var_term[v:s]; mnil{}}
+    | ID<var_term[v:s]> COMMA params<'ids>
+                                    => mcons{var_term[v:s]; 'ids}
 }
 
 // We want:
 //
-// LetRec{R. Fields{
-//                FunDef{Label["fib":t]; LambdaExpr{i.
-//                      LetFun{'R; Label["fib":t]; fib.
+// AstLetRec{R. AstFields{
+//                AstFunDef{AstLabel["fib":t]; LambdaExpr{i.
+//                      AstLetFun{'R; AstLabel["fib":t]; fib.
 //                            ...}};
-//                      FunDef{...;
-//                            EndDef}}};
-//          R. LetFun{'R; Label["fib":t]; fib.
+//                      AstFunDef{...;
+//                            AstEndDef}}};
+//          R. AstLetFun{'R; AstLabel["fib":t]; fib.
 //                ...}}
 
 Rewrites {
 
    // Put all mutually recursive functions into a record.
    MutFuns{'fvars; 'pbunch; 'fbodies; 'rest} ->
-      LetRec{R. Fields{process_functions{'R; 'fvars; 'fvars; 'pbunch; 'fbodies}};
+      AstLetRec{R. AstFields{process_functions{'R; 'fvars; 'fvars; 'pbunch; 'fbodies}};
          R. project_functions{'R; 'fvars; 'rest}}
 
    // process_functions{...} creates the fields of the record.
-   process_functions{var[R:v]; 'funs; mcons{var[f:v]; 'fvars}; mcons{'params; 'pbunch}; mcons{'body; 'fbodies}} ->
-      FunDef{Label[f:t];
-         bind_vars{'R; 'funs; 'params; 'body};
+   process_functions{'R; 'funs; mcons{var_term[f:s]; 'fvars}; mcons{'params; 'pbunch}; mcons{'body; 'fbodies}} ->
+      AstFunDef{AstLabel[f:t];
+         first_bind_vars{'R; 'funs; 'params; 'body};
          process_functions{'R; 'funs; 'fvars; 'pbunch; 'fbodies}}
 
    process_functions{?; ?; mnil{}; mnil{}; mnil{}} ->
-      EndDef{}
+      AstEndDef{}
 
    // Perform binding of function parameters (currying).
    // We project functions into variables in the innermost lambda.
-   bind_vars{var[R:v]; 'fvars; mnil{}; 'body} ->
+   // Note: we use FunLambdaExpr for the outermost lambda, and
+   //       LambdaExpr for the others.
+
+   first_bind_vars{'R; 'fvars; mnil{}; 'body} ->
       project_functions{'R; 'fvars; 'body}
 
-   bind_vars{var[R:v]; 'fvars; mcons{var[v:v]; 'vars}; 'body} ->
+   first_bind_vars{'R; 'fvars; mcons{var_term[v:s]; 'vars}; 'body} ->
+      FunLambdaExpr{v. bind_vars{'R; 'fvars; 'vars; 'body}}
+
+   bind_vars{'R; 'fvars; mnil{}; 'body} ->
+      project_functions{'R; 'fvars; 'body}
+
+   bind_vars{'R; 'fvars; mcons{var_term[v:s]; 'vars}; 'body} ->
       LambdaExpr{v. bind_vars{'R; 'fvars; 'vars; 'body}}
 
    // Perform binding of function parameters (currying).
    // No function projection.
-   norec_bind_vars{var[R:v]; 'fvars; mnil{}; 'body} ->
+   norec_bind_vars{'R; 'fvars; mnil{}; 'body} ->
       'body
 
-   norec_bind_vars{var[R:v]; 'fvars; mcons{var[v:v]; 'vars}; 'body} ->
+   norec_bind_vars{'R; 'fvars; mcons{var_term[v:s]; 'vars}; 'body} ->
       LambdaExpr{v. norec_bind_vars{'R; 'fvars; 'vars; 'body}}
 
    // project_functions{...} projects a list of functions into variables.
-   project_functions{var[R:v]; mcons{var[f:v]; 'fvars}; 'rest} ->
-      LetFun{'R; Label[f:t]; f. project_functions{'R; 'fvars; 'rest}}
+   project_functions{'R; mcons{var_term[f:s]; 'fvars}; 'rest} ->
+      AstLetFun{'R; AstLabel[f:t]; f. project_functions{'R; 'fvars; 'rest}}
 
    project_functions{?; mnil{}; 'rest} ->
       'rest
 
    // Process non-recursive functions.
-   NewFun{SimpleFun{var[f:v]; 'params; 'body}; 'rest} ->
-      LetRec{R. Fields{
-         FunDef{Label[f:t]; norec_bind_vars{'R; mcons{var[f:v]; mnil{}}; 'params; 'body}; EndDef{}}};
-         R. project_functions{'R; mcons{var[f:v]; mnil{}}; 'rest}}
+   NewFun{SimpleFun{var_term[f:s]; 'params; 'body}; 'rest} ->
+      AstLetRec{R. AstFields{
+         AstFunDef{AstLabel[f:t]; norec_bind_vars{'R; mcons{var_term[f:s]; mnil{}}; 'params; 'body}; AstEndDef{}}};
+         R. project_functions{'R; mcons{var_term[f:s]; mnil{}}; 'rest}}
 }
 

@@ -86,7 +86,6 @@ interactive spill_prog :
          TailCall{AtomVar{'spill}; ArgCons{AtomInt[25:n]; ArgNil}}}}} }
 
 
-(*
 interactive ext_fib_prog2 :
    sequent { <H> >- compilable{.
       <:ext<
@@ -99,7 +98,7 @@ interactive ext_fib_prog2 :
                   v1 + v2
          in
             fib (25) >>} }
-*)
+
 
 (*
  * -*-

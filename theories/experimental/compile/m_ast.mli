@@ -1,8 +1,5 @@
 (*
  * This file defines the terms needed to represent the M AST.
- * The language is a superset of the M IR. So far, the only
- * extension is tuples, which are used to encode function
- * arguments.
  *
  * ----------------------------------------------------------------
  *
@@ -27,9 +24,86 @@
  * @end[license]
  *)
 
+doc <:doc< 
+   @begin[doc]
+   @parents
+   @end[doc]
+>>
 extends M_util
-extends M_ir
+doc <:doc< @docoff >>
 
+open Refiner.Refiner.Term
+open Refiner.Refiner.TermOp
+
+doc <:doc< 
+   @begin[doc]
+   We define our own tuple terms.
+   @end[doc]
+>>
 declare mnil
 declare mcons{'e; 'list}
 
+doc <:doc< 
+   @begin[doc]
+   Operators.
+   @end[doc]
+>>
+declare AstAddOp
+declare AstSubOp
+declare AstMulOp
+declare AstDivOp
+
+declare AstLeOp
+declare AstLtOp
+declare AstGeOp
+declare AstGtOp
+declare AstEqOp
+declare AstNeqOp
+
+doc <:doc< 
+   @begin[doc]
+   Expressions
+   @end[doc]
+>>
+declare TrueExpr
+declare FalseExpr
+declare IntExpr[i:n]
+declare BinopExpr{'op; 'e1; 'e2}
+declare RelopExpr{'op; 'e1; 'e2}
+declare VarExpr{'v}
+declare LambdaExpr{v. 'e['v]}
+declare FunLambdaExpr{v. 'e['v]}
+
+declare IfExpr{'e1; 'e2; 'e3}
+declare SubscriptExpr{'e1; 'e2}
+declare AssignExpr{'e1; 'e2; 'e3}
+(*declare SeqExpr{'e1; 'e2}*)
+declare ApplyExpr{'f; 'args}
+declare LetVarExpr{'e1; v. 'e2['v]}
+
+doc <:doc< 
+   @begin[doc]
+   Arguments.
+   @end[doc]
+>>
+declare AstArgNil
+declare AstArgCons{'head; 'tail}
+
+doc <:doc< 
+   @begin[doc]
+   Mutually recursive functions.
+   We need post-parsing rewrite rules (relaxed mode) to create these.
+   @end[doc]
+>>
+declare AstLetRec{R1. 'e1['R1]; R2. 'e2['R2]}
+declare AstFields{'fields}
+declare AstLabel[label:t]
+declare AstFunDef{'label; 'e; 'cont}
+declare AstEndDef
+declare AstLetFun{'R; 'label; f. 'cont['f]}
+
+doc <:doc< 
+   @begin[doc]
+   Missing: Tuples.
+   @end[doc]
+>>

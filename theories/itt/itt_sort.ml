@@ -135,7 +135,7 @@ dform sorted_df : sorted{'l; 'lt} =
    `"Sorted[" slot{'lt} `"](" slot{'l} `")"
 
 dform bounded_df : bounded{'u; 'l; 'lt} =
-   `"Bounded[" slot{'lt} `"](" slot{'u} " " Nuprl_font!le " " slot{'l} `")"
+   `"(" slot{'u} " " Nuprl_font!le `"[" slot{'lt} `"] " slot{'l} `")"
 
 (*
  * Sorting algorithm.
@@ -147,10 +147,11 @@ dform sort_df : sort{'l; 'lt} =
    (keyword["sort"] 'l 'lt)
 
 dform list_ind_df : list_ind{'l; 'base; u, v, g. 'step} =
-   szone pushm[0] pushm[3] `"let rec " slot{'g} " " `" = function" hspace
-   pushm[3] cons{'u; 'v} `" ->" hspace slot{'step} popm hspace
-   pushm[3] `"[] ->" hspace slot{'base} popm popm hspace
-   pushm[3] `"in" hspace slot{'g} " " slot{'l} popm popm ezone
+   szone pushm[0] pushm[1] `"let rec " slot{'g} `"_fun = function" break["",""]
+   pushm[5] `"  " cons{'u; 'v} `" ->" hspace
+      szone `"let " slot{'g} `" = " slot{'g} `"_fun " slot{'v} `" in" hspace slot{'step} ezone popm hspace
+   pushm[5] `"| [] ->" hspace slot{'base} popm popm hspace
+   pushm[3] `"in" hspace slot{'g} `"_fun " slot{'l} popm popm ezone
 
 (************************************************************************
  * REWRITE LEMMAS                                                       *

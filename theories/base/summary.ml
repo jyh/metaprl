@@ -208,7 +208,7 @@ dform location_df : "location"[start:n, finish:n]{'body} =
  *)
 dform rewrite_df : "rewrite"[name:s]{'redex; 'contractum; 'proof; 'res} =
    szone pushm[4]
-   slot{'proof} info[" rewrite"] " " slot[name:s] " " slot{'res} slot{'redex} " " longleftrightarrow hspace slot{'contractum}
+   slot{'proof} info[" rewrite"] " " slot[name:s] `" :" hspace slot{'res} slot{'redex} " " longleftrightarrow hspace slot{'contractum}
    popm ezone
 
 (*

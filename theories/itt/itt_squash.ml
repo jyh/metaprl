@@ -83,7 +83,6 @@ open Lm_printf
 open Term_stable
 
 open Basic_tactics
-open Refiner.Refiner.RefineError
 
 open Itt_struct
 open Itt_equal

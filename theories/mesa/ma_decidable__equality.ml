@@ -3,7 +3,6 @@ extends Nuprl_decidable__equality
 open Itt_fun
 
 open Lm_printf
-open Refiner.Refiner.RefineError
 open Unify_mm
 open Basic_tactics
 

@@ -37,8 +37,6 @@ open Lm_debug
 open Lm_printf
 open Lm_string_set
 
-open Refiner.Refiner.RefineError
-
 open Unify_mm
 
 open Basic_tactics

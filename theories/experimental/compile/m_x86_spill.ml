@@ -46,7 +46,6 @@ extends M_x86_backend
 doc <:doc< @docoff >>
 
 open Basic_tactics
-open Refiner.Refiner.RefineError
 
 open M_x86_inst_type
 open M_x86_term

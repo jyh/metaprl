@@ -4,7 +4,6 @@
 
 extends Itt_theory
 
-open Refiner.Refiner.RefineError
 open Basic_tactics
 
 open Itt_equal

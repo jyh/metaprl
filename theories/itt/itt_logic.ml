@@ -68,7 +68,6 @@ open Simple_print
 open Browser_resource
 
 open Basic_tactics
-open Refiner.Refiner.RefineError
 
 open Itt_squash
 open Itt_equal

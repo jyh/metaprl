@@ -6,7 +6,6 @@ extends Itt_w
 
 open Lm_debug
 open Lm_printf
-open Refiner.Refiner.RefineError
 open Simple_print
 open Basic_tactics
 open Itt_equal

@@ -58,7 +58,6 @@ open Lm_debug
 open Lm_printf
 
 open Basic_tactics
-open Refiner.Refiner.RefineError
 
 open Itt_equal
 open Itt_struct

@@ -65,7 +65,6 @@ open Lm_debug
 open Lm_printf
 
 open Basic_tactics
-open Refiner.Refiner.RefineError
 open Term_dtable
 
 open Itt_equal

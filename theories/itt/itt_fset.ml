@@ -44,7 +44,6 @@ extends Itt_list2
 open Lm_debug
 open Lm_printf
 
-open Refiner.Refiner.RefineError
 open Basic_tactics
 
 open Itt_bool

@@ -26,7 +26,7 @@
  *)
 extends M_ir
 
-open Refiner.Refiner.RefineError
+open Refiner.Refiner.TermType
 
 open Tactic_type.Tactic
 

@@ -69,7 +69,6 @@ doc <:doc< @docoff >>
 open Lm_debug
 open Lm_printf
 
-open Refiner.Refiner.RefineError
 open Basic_tactics
 open Base_meta
 

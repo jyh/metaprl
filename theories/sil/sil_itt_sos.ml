@@ -38,7 +38,6 @@ extends Sil_programs
 extends Sil_sos
 extends Sil_itt_state
 
-open Refiner.Refiner.RefineError
 open Basic_tactics
 open Base_rewrite
 

@@ -2,7 +2,6 @@ extends Itt_record_label0
 extends Itt_nequal
 
 open Basic_tactics
-open Refiner.Refiner.RefineError
 
 open Base_meta
 open Itt_squiggle

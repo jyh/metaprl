@@ -25,11 +25,12 @@ NLFILES :=\
 	itt_dprod\
 	itt_prod\
 	itt_union\
-	itt_bool\
 	itt_soft\
 	itt_logic\
+	itt_bool\
 	itt_ext_equal\
 	itt_int\
+	itt_int_bool\
 	itt_isect\
 	itt_prec\
 	itt_srec\

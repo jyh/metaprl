@@ -5,6 +5,7 @@
 include Tacticals
 
 open Refiner.Refiner.Term
+open Refiner.Refiner.Refine
 
 open Tactic_type
 open Tacticals
@@ -13,6 +14,9 @@ open Rewrite_type
 (************************************************************************
  * INHERITANCE                                                          *
  ************************************************************************)
+
+type env = Rewrite_type.env
+type conv = Rewrite_type.conv
 
 (*
  * Environment.
@@ -34,6 +38,12 @@ val idC : conv
 (************************************************************************
  * SEARCH                                                               *
  ************************************************************************)
+
+(*
+ * Fail with a message.
+ *)
+val failC : string -> conv
+val failWithC : refine_error -> conv
 
 (*
  * Try a conversion.
@@ -67,7 +77,21 @@ val sweepUpC : conv -> conv
 val sweepDnC : conv -> conv
 
 (*
+ * Use the first conversion that works.
+ *)
+val firstC : conv list -> conv
+
+(*
+ * Repeat the conversion until nothing more happens.
+ *)
+val repeatC : conv -> conv
+val repeatForC : int -> conv -> conv
+
+(*
  * $Log$
+ * Revision 1.2  1998/06/12 18:36:49  jyh
+ * Working factorial proof.
+ *
  * Revision 1.1  1998/06/03 22:19:53  jyh
  * Nonpolymorphic refiner.
  *

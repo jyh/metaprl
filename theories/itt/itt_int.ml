@@ -66,8 +66,8 @@ prec prec_compare < prec_add
 
 dform int_prl_df1 : mode[prl] :: int = mathbbZ
 
-mldform natural_number_df : natural_number[@n:n] print_term buf =
-   format_int buf n
+dform natural_number_df : natural_number[@n:n] =
+   slot[@n:s]
 
 dform add_df1 :  mode[prl] :: parens :: "prec"[prec_add] :: "add"{'a; 'b} =
    slot[le]{'a} `" + " slot[lt]{'b}
@@ -123,7 +123,6 @@ primrw reduceSub : "sub"{natural_number[@i:n]; natural_number[@j:n]} <--> natura
 primrw reduceMul : "mul"{natural_number[@i:n]; natural_number[@j:n]} <--> natural_number[@i * @j]
 primrw reduceDiv : "div"{natural_number[@i:n]; natural_number[@j:n]} <--> natural_number[@i / @j]
 primrw reduceRem : "rem"{natural_number[@i:n]; natural_number[@j:n]} <--> natural_number[@i % @j]
-primrw reduceLT  : "lt"{natural_number[@i:n]; natural_number[@j:n]}  <--> bool_flag[@i < @j]
 
 (*
  * Reduction on induction combinator:
@@ -387,6 +386,9 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (ind_t
 
 (*
  * $Log$
+ * Revision 1.11  1998/06/12 18:36:38  jyh
+ * Working factorial proof.
+ *
  * Revision 1.10  1998/06/12 13:47:28  jyh
  * D tactic works, added itt_bool.
  *

@@ -12,8 +12,12 @@ open Tactic_type
  ************************************************************************)
 
 declare "bool"
+
 declare "btrue"
 declare "bfalse"
+declare bor{'a; 'b}
+declare band{'a; 'b}
+declare bnot{'a; 'b}
 
 declare ifthenelse{'e1; 'e2; 'e3}
 
@@ -26,10 +30,13 @@ rewrite boolTrue : "bool_flag"["true":t] <--> "btrue"
 rewrite boolFalse : "bool_flag"["false":t] <--> "bfalse"
 
 (*
- * Ifthenelse rewrites.
+ * Reduction.
  *)
 rewrite ifthenelseTrue : ifthenelse{btrue; 'e1; 'e2} <--> 'e1
 rewrite ifthenelseFalse : ifthenelse{bfalse; 'e1; 'e2} <--> 'e2
+rewrite reduceBor : bor{'a; 'b} <--> ifthenelse{'a; btrue; 'b}
+rewrite reduceBand : band{'a; 'b} <--> ifthenelse{'a; 'b; bfalse}
+rewrite reduceBnot : bnot{'a} <--> ifthenelse{'a; bfalse; btrue}
 
 (************************************************************************
  * RULES                                                                *
@@ -66,7 +73,7 @@ axiom bool_falseEquality 'H : sequent ['ext] { 'H >- bfalse = bfalse in "bool" }
  * by boolElimination i
  * H; i:x:Unit; J[it / x] >- C[it / x]
  *)
-axiom boolElimination 'H 'J :
+axiom boolElimination 'H 'J 'x :
    sequent['ext] { 'H; x: "bool"; 'J[btrue] >- 'C[btrue] } -->
    sequent['ext] { 'H; x: "bool"; 'J[bfalse] >- 'C[bfalse] } -->
    sequent ['ext] { 'H; x: "bool"; 'J['x] >- 'C['x] }
@@ -85,6 +92,9 @@ val bfalse_term : term
 
 (*
  * $Log$
+ * Revision 1.2  1998/06/12 18:36:36  jyh
+ * Working factorial proof.
+ *
  * Revision 1.1  1998/06/12 13:47:22  jyh
  * D tactic works, added itt_bool.
  *

@@ -3,10 +3,12 @@
  *)
 
 include Itt_equal
+include Itt_logic
 
 open Resource
 
 open Itt_equal
+open Itt_logic
 
 (************************************************************************
  * TERMS                                                                *
@@ -15,6 +17,9 @@ open Itt_equal
 declare "bool"
 declare "btrue"
 declare "bfalse"
+declare bor{'a; 'b}
+declare band{'a; 'b}
+declare bnot{'a; 'b}
 
 declare ifthenelse{'e1; 'e2; 'e3}
 
@@ -31,6 +36,37 @@ primrw boolFalse : "bool_flag"["false":t] <--> "bfalse"
  *)
 primrw ifthenelseTrue : ifthenelse{btrue; 'e1; 'e2} <--> 'e1
 primrw ifthenelseFalse : ifthenelse{bfalse; 'e1; 'e2} <--> 'e2
+primrw reduceBor : bor{'a; 'b} <--> ifthenelse{'a; btrue; 'b}
+primrw reduceBand : band{'a; 'b} <--> ifthenelse{'a; 'b; bfalse}
+primrw reduceBnot : bnot{'a} <--> ifthenelse{'a; bfalse; btrue}
+
+(************************************************************************
+ * DISPLAY FORMS                                                        *
+ ************************************************************************)
+
+dform bool_df : mode[prl] :: bool =
+   `"Bool"
+
+dform btrue_df : mode[prl] :: btrue =
+   `"true"
+
+dform bfalse_df : mode[prl] :: bfalse =
+   `"false"
+
+dform bor_df : mode[prl] :: parens :: "prec"[prec_or] :: bor{'a; 'b} =
+   slot{'a} " " vee subb " " slot{'b}
+
+dform band_df : mode[prl] :: parens :: "prec"[prec_and] :: band{'a; 'b} =
+   slot{'a} " " wedge subb " " slot{'b}
+
+dform bnot_df : mode[prl] :: parens :: "prec"[prec_implies] :: bnot{'a} =
+   tneg subb slot{'a}
+
+dform ifthenelse_df : mode[prl] :: parens :: "prec"[prec_or] :: ifthenelse{'e1; 'e2; 'e3} =
+   pushm[0] szone push_indent `"if" `" " slot{'e1} `" " `"then" hspace
+   szone slot{'e2} ezone popm hspace
+   push_indent `"else" hspace
+   szone slot{'e3} ezone popm popm
 
 (************************************************************************
  * RULES                                                                *
@@ -75,7 +111,7 @@ prim bool_falseEquality 'H : : sequent ['ext] { 'H >- bfalse = bfalse in "bool" 
  * by boolElimination i
  * H; i:x:Unit; J[it / x] >- C[it / x]
  *)
-prim boolElimination 'H 'J :
+prim boolElimination 'H 'J 'x :
    ('btrue : sequent['ext] { 'H; x: "bool"; 'J[btrue] >- 'C[btrue] }) -->
    ('bfalse : sequent['ext] { 'H; x: "bool"; 'J[bfalse] >- 'C[bfalse] }) -->
    sequent ['ext] { 'H; x: "bool"; 'J['x] >- 'C['x] } =
@@ -101,7 +137,8 @@ let d_boolT i p =
           bool_trueFormation count
        else
           let i, j = Sequent.hyp_indices p i in
-             boolElimination i j) p
+          let v, _ = Sequent.nth_hyp p i in
+             boolElimination i j v) p
 
 let d_resource = d_resource.resource_improve d_resource (bool_term, d_boolT)
 
@@ -146,6 +183,9 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (bfals
 
 (*
  * $Log$
+ * Revision 1.2  1998/06/12 18:36:35  jyh
+ * Working factorial proof.
+ *
  * Revision 1.1  1998/06/12 13:47:21  jyh
  * D tactic works, added itt_bool.
  *

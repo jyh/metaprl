@@ -22,6 +22,7 @@ open Debug
 open Refiner.Refiner
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermMan
+open Refiner.Refiner.TermAddr
 open Refiner.Refiner.TermSubst
 open Refiner.Refiner.Refine
 
@@ -531,7 +532,12 @@ let tactic_of_rule rule (addrs, names) params arg =
          ref_rsrc = resources
        } = arg
    in
-   let subgoals, ext = Refine.refine (rule (nth_clause_addrs goal.mseq_goal addrs, names) params) goal in
+   let rule =
+      try rule (nth_clause_addrs goal.mseq_goal addrs, names) params with
+         IncorrectAddress (addr, t) ->
+            raise (RefineError ("tactic_of_rule", AddressError (addr, t)))
+   in
+   let subgoals, ext = Refine.refine rule goal in
    let cache =
       match cache with
          Current cache ->
@@ -840,6 +846,9 @@ let withSubstT subst tac arg =
 
 (*
  * $Log$
+ * Revision 1.4  1998/06/12 18:36:50  jyh
+ * Working factorial proof.
+ *
  * Revision 1.3  1998/06/12 13:47:48  jyh
  * D tactic works, added itt_bool.
  *

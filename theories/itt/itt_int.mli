@@ -7,7 +7,6 @@ include Tactic_type
 
 include Itt_equal
 include Itt_rfun
-include Itt_bool
 include Itt_logic
 
 open Refiner.Refiner.Term
@@ -30,6 +29,10 @@ declare "sub"{'a; 'b}
 declare "mul"{'a; 'b}
 declare "div"{'a; 'b}
 declare "rem"{'a; 'b}
+
+(*
+ * Propositions.
+ *)
 declare lt{'a; 'b}
 declare le{'a; 'b}
 declare ge{'a; 'b}
@@ -56,7 +59,6 @@ rewrite reduceSub : "sub"{natural_number[@i:n]; natural_number[@j:n]} <--> natur
 rewrite reduceMul : "mul"{natural_number[@i:n]; natural_number[@j:n]} <--> natural_number[@i * @j]
 rewrite reduceDiv : "div"{natural_number[@i:n]; natural_number[@j:n]} <--> natural_number[@i / @j]
 rewrite reduceRem : "rem"{natural_number[@i:n]; natural_number[@j:n]} <--> natural_number[@i % @j]
-rewrite reduceLT  : "lt"{natural_number[@i:n]; natural_number[@j:n]}  <--> bool_flag[@i < @j]
 
 (************************************************************************
  * RULES                                                                *
@@ -226,6 +228,9 @@ val mk_ind_term : term -> string -> string -> term -> term -> string -> string -
 
 (*
  * $Log$
+ * Revision 1.7  1998/06/12 18:36:39  jyh
+ * Working factorial proof.
+ *
  * Revision 1.6  1998/06/12 13:47:29  jyh
  * D tactic works, added itt_bool.
  *

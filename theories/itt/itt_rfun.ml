@@ -75,6 +75,9 @@ dform apply_df1 : parens :: "prec"[prec_apply] :: apply{'f; 'a} =
 dform lambda_df1 : mode[prl] :: parens :: "prec"[prec_lambda] :: lambda{x. 'b} =
    Nuprl_font!lambda slot{'x} `"." slot{'b}
 
+dform fix_df1 : mode[prl] :: fix{f. 'b} =
+   `"fix" "(" slot{'f} `"." slot{'b} ")"
+
 (************************************************************************
  * REWRITES                                                             *
  ************************************************************************)
@@ -385,6 +388,9 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (apply
 
 (*
  * $Log$
+ * Revision 1.10  1998/06/12 18:36:44  jyh
+ * Working factorial proof.
+ *
  * Revision 1.9  1998/06/12 13:47:36  jyh
  * D tactic works, added itt_bool.
  *

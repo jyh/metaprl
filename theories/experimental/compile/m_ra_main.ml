@@ -246,8 +246,7 @@ struct
          if i = Frame.reg_class_count then
             regs
          else
-            let regs = List.fold_left SymbolSet.add regs Frame.registers.(i) in
-               collect regs (succ i)
+            collect (SymbolSet.add_list regs Frame.registers.(i)) (succ i)
       in
       let precolored = collect SymbolSet.empty 0 in
          SymbolSet.mem precolored

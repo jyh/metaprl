@@ -899,7 +899,7 @@ let get_operands_mov inst rest src dst =
  * Branches.
  *)
 let get_operands_jmp inst src args =
-   let srcs = List.fold_left SymbolSet.add SymbolSet.empty args in
+   let srcs = SymbolSet.add_list SymbolSet.empty args in
       match src with
          ImmediateLabel (l, _) ->
             { code_dst   = SymbolSet.empty;
@@ -926,7 +926,7 @@ let get_operands_jcc inst rest1 rest2 =
 
 let get_operands_reserve inst args =
       { code_dst = SymbolSet.empty;
-        code_src = List.fold_left SymbolSet.add SymbolSet.empty args;
+        code_src = SymbolSet.of_list args;
         code_class = CodeNormal;
         code_inst = inst;
         code_rest = []

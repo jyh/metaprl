@@ -318,23 +318,30 @@ let rec unify_term_list foundp eqnl constants term1 = function
    term2 :: terms2 ->
       begin
          try
+(*
             if !debug_tptp then
-               eprintf "Unifying terms:\n\tTerm1: %a\n\tTerm2: %a\n\tConstants: %a\n\tSubst: %a%t" (**)
+               eprintf "Unifying terms:\n\tTerm1: %a\n\tTerm2: %a\n\tConstants: %a\n\tSubst: %a%t" 
                   print_term term1
                   print_term term2
                   print_string_list (constants)
                   print_unify_eqnlist eqnl
                   eflush;
+*)
             let eqnl = unify_mm_eqnl_eqnl  (eqnlist_append_eqns eqnl [(term1,term2)] ) constants in
+(*
                if !debug_tptp then
                   eprintf "Unification:%a%t" (**)
                      print_unify_eqnlist eqnl
                      eflush;
+*)
                unify_term_list true eqnl constants term1 terms2
          with
-            RefineError _ ->
+           _ ->
+
+(*
                if !debug_tptp then
                   eprintf "Unification failed%t" eflush;
+*)
                let eqnl, terms2 = unify_term_list foundp eqnl constants term1 terms2 in
                   eqnl, term2 :: terms2
       end
@@ -375,7 +382,10 @@ let rec unify_term_lists constants terms1 terms2 =
 let unify_term_lists constants terms1 terms2 =
    let constants=(StringSet.elements constants) in
    let eqnl, terms1, terms2 = unify_term_lists constants terms1 terms2 in
+      try
       (unify_mm_eqnl eqnl constants), terms1, terms2
+      with
+        _ ->  raise (RefineError ("unify", StringError "terms do not unify"))
 
 (*
  * Check that the goal and the hyp have some hope at unification.

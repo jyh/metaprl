@@ -648,21 +648,8 @@ let mul_BubbleStepC tm =
  *)
 let mul_BubbleSortC = repeatC (higherC (termC mul_BubbleStepC))
 
-let inject_coefC t =
-	if not (is_add_term t) then
-   	mul_Id3C thenC
-      (repeatC (higherC mul_uni_AssocC)) thenC
-      (addrC [0] reduceC)
-   else
-   	failC
 (*
-   if is_mul_term t then
-      mul_Id3C
-   else
-      failC
-*)
-
-let inject_coef2C t =
+let inject_coefC t =
 	if is_add_term t then
    	let (a,b)=dest_add t in
       begin
@@ -670,50 +657,58 @@ let inject_coef2C t =
          	eprintf "\ninject_coefC: %a %a%t" print_term a print_term b eflush
          else
          	();
-      	let aC=if not (is_add_term a) then
-      				addrC [0] (mul_Id3C thenC
-      								(repeatC (higherC mul_uni_AssocC)) thenC
-      								(addrC [0] reduceC))
-       			 else
-             		idC
-      	in
-      	let bC=if not (is_add_term b) then
-      				addrC [1] (mul_Id3C thenC
-      								(repeatC (higherC mul_uni_AssocC)) thenC
-      								(addrC [0] reduceC))
-       			 else
-             		idC
-      	in
-      	aC thenC bC
+      	let aC=addrC [0] (mul_Id3C thenC
+      							(repeatC (higherC mul_uni_AssocC)) thenC
+      							(addrC [0] reduceC)
+             				  )
+			in
+      	if not (is_add_term b) then
+      		aC thenC (addrC [1] (mul_Id3C thenC
+      									(repeatC (higherC mul_uni_AssocC)) thenC
+      									(addrC [0] reduceC)
+              					 	  ))
+       	else
+         	aC
       end
 	else
-   	idC
+   	failC
 
 
-let checkArithTermC conv =
-	let auxC t = if (is_mul_term t) or
-   					 (is_add_term t) or
-                   (is_minus_term t) then
-                   conv
-         		 else
-                	 idC
-	in
-   termC auxC
+let injectCoefC = sweepUpC (termC inject_coefC)
+*)
 
-               (* (higherC (termC inject_coefC)) thenC *)
-let injectCoefC = checkArithTermC (higherC (termC inject_coefC))
-let injectCoef2C = sweepUpC (termC inject_coef2C)
+let rec inject_coefC t =
+	if is_add_term t then
+   	let (a,b)=dest_add t in
+      begin
+      	if !debug_int_arith then
+         	eprintf "\ninject_coefC: %a %a%t" print_term a print_term b eflush
+         else
+         	();
+      	let aC=addrC [0] (mul_Id3C thenC
+      							(repeatC (higherC mul_uni_AssocC)) thenC
+      							(addrC [0] reduceC)
+             				  )
+			in
+      	if not (is_add_term b) then
+      		aC thenC (addrC [1] (mul_Id3C thenC
+      									(repeatC (higherC mul_uni_AssocC)) thenC
+      									(addrC [0] reduceC)
+              					 	  ))
+       	else
+         	aC thenC (addrC [1] (termC inject_coefC))
+      end
+   else
+   	failC
 
-(* Before terms sorting we have to put parentheses in the rightmost-first
-manner
- *)
-let mul_normalizeC = (* (repeatC (higherC mul_Assoc2C)) thenC *)
-                     injectCoef2C thenC mul_BubbleSortC
+let injectCoefC = higherC (termC inject_coefC)
+
+let mul_normalizeC = injectCoefC thenC mul_BubbleSortC
 
 interactive_rw sum_same_products1_rw :
    ('a in int) -->
-   ((number[i:n] *@ 'a) +@ (number[j:n] *@ 'a)) <--> ((number[i:n] +@
- number[j:n]) *@ 'a)
+   ((number[i:n] *@ 'a) +@ (number[j:n] *@ 'a)) <-->
+   ((number[i:n] +@ number[j:n]) *@ 'a)
 
 let sum_same_products1C = sum_same_products1_rw
 

@@ -263,11 +263,6 @@ let intro_resource = Mp_resource.improve intro_resource (bool_sqequal_term2, d_b
 let intro_resource = Mp_resource.improve intro_resource (bool_sqequal_term3, d_bool_sqequalT)
 let intro_resource = Mp_resource.improve intro_resource (bool_sqequal_term4, d_bool_sqequalT)
 
-interactive boolElimination3 {| elim_resource [] |} 'H 'J 'x :
-   sequent['ext] { 'H; 'J[btrue] >- 'C[btrue] } -->
-   sequent['ext] { 'H; 'J[bfalse] >- 'C[bfalse] } -->
-   sequent ['ext] { 'H; x: hide{."bool"}; 'J['x] >- 'C['x] }
-
 (*
  * H >- Ui ext Unit
  * by boolFormation

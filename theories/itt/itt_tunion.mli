@@ -84,9 +84,9 @@ rule tunionMemberFormation 'H 'y 'a :
 (*
  * Elimination.
  *)
-rule tunionElimination 'H 'J 'x 'w 'z 'w2 :
-   sequent ['ext] { 'H; x: tunion{'A; y. 'B['y]}; 'J['x]; w: hide{'A}; z: 'B['w]; w2: 'z = 'x in tunion{'A; y. 'B['y]} >- 'C['x] } -->
-   sequent ['ext] { 'H; x: tunion{'A; y. 'B['y]}; 'J['x] >- 'C['x] }
+rule tunionElimination 'H 'J 'x 'w 'z :
+   sequent [squash] { 'H; x: tunion{'A; y. 'B['y]}; 'J['x]; w: 'A; z: 'B['w] >- 't1['z] = 't2['z] in 'C['z] } -->
+   sequent ['ext] { 'H; x: tunion{'A; y. 'B['y]}; 'J['x] >- 't1['x] = 't2['x] in 'C['x] }
 
 (*
  * -*-

@@ -30,6 +30,7 @@
  * jyh@cs.cornell.edu
  *)
 
+include Itt_struct
 include Itt_equal
 include Itt_set
 
@@ -39,9 +40,11 @@ open Refiner.Refiner.TermOp
 open Refiner.Refiner.RefineError
 open Mp_resource
 
+open Base_dtactic
 open Tactic_type.Tacticals
 open Var
 
+open Itt_struct
 open Itt_equal
 
 (************************************************************************
@@ -107,10 +110,10 @@ prim tunionMemberFormation {| intro_resource [] |} 'H 'y 'a :
 (*
  * Elimination.
  *)
-prim tunionElimination {| elim_resource [] |} 'H 'J 'x 'w 'z 'w2 :
-   ('t['z; 'w2] : sequent ['ext] { 'H; x: tunion{'A; y. 'B['y]}; 'J['x]; w: hide{'A}; z: 'B['w]; w2: 'z = 'x in tunion{'A; y. 'B['y]} >- 'C['x] }) -->
-   sequent ['ext] { 'H; x: tunion{'A; y. 'B['y]}; 'J['x] >- 'C['x] } =
-   't['x; it]
+prim tunionElimination {| elim_resource [ThinOption thinT] |} 'H 'J 'x 'w 'z :
+   sequent [squash] { 'H; x: tunion{'A; y. 'B['y]}; 'J['x]; w: 'A; z: 'B['w] >- 't1['z] = 't2['z] in 'C['z] } -->
+   sequent ['ext] { 'H; x: tunion{'A; y. 'B['y]}; 'J['x] >- 't1['x] = 't2['x] in 'C['x] } =
+   it
 
 (************************************************************************
  * TACTICS                                                              *

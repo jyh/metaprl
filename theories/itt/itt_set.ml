@@ -176,15 +176,16 @@ prim set_subtype {| intro_resource [] |} 'H :
    it
 
 (*
- * Equalities can be unhidden.
+ * Equalities can be unhidden. See itt_equash if you are wondering
+ * why we are replacing hidden variables with "it".
  *)
 prim unhideEqual 'H 'J 'u :
-   ('t['u] : sequent ['ext] { 'H; u: 'x = 'y in 'A; 'J['u] >- 'C['u] }) -->
+   ('t['u] : sequent ['ext] { 'H; u: 'x = 'y in 'A; 'J[it] >- 'C[it] }) -->
    sequent ['ext] { 'H; u: hide{('x = 'y in 'A)}; 'J['u] >- 'C['u] } =
    't[it]
 
 prim unhideGoalEqual 'H 'J 'u :
-   sequent [squash] { 'H; u: 'P; 'J['u] >- 'x['u] = 'y['u] in 'T['u] } -->
+   sequent [squash] { 'H; u: 'P; 'J[it] >- 'x[it] = 'y[it] in 'T[it] } -->
    sequent ['ext] { 'H; u: hide{'P}; 'J['u] >- 'x['u] = 'y['u] in 'T['u] } =
    it
 

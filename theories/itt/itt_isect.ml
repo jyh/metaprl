@@ -120,16 +120,19 @@ interactive topType {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- "type"{top} }
 
 (*
+ * With the current semantics of hide{A} (see esquash), this rule is invalid
+ *
  * H >- isect x: A. B[x] ext b[it]
  * by intersectionMemberFormation z
  * H >- A = A in type
  * H, z: hide(A) >- B[z] ext b[z]
+ *
+ * prim intersectionMemberFormation {| intro_resource [] |} 'H 'z :
+ *   [wf] sequent [squash] { 'H >- "type"{'A} } -->
+ *   [main] ('b['z] : sequent ['ext] { 'H; z: hide{'A} >- 'B['z] }) -->
+ *   sequent ['ext] { 'H >- isect x: 'A. 'B['x] } =
+ *   'b[it]
  *)
-prim intersectionMemberFormation {| intro_resource [] |} 'H 'z :
-   [wf] sequent [squash] { 'H >- "type"{'A} } -->
-   [main] ('b['z] : sequent ['ext] { 'H; z: hide{'A} >- 'B['z] }) -->
-   sequent ['ext] { 'H >- isect x: 'A. 'B['x] } =
-   'b[it]
 
 (*
  * H >- b1 = b2 in isect x:A. B[x]

@@ -118,10 +118,10 @@ interactive bunionMemberEqualityRight {| intro_resource [SelectOption 2]; eqcd_r
 (*
  * Elimination.
  *)
-interactive bunionElimination {| elim_resource [ThinOption thinT] |} 'H 'J 'y 'z :
-   [main] sequent ['ext] { 'H; x: bunion{'A; 'B}; 'J['x]; y: 'A; z: 'y = 'x in bunion{'A; 'B} >- 'C['x] } -->
-   [main] sequent ['ext] { 'H; x: bunion{'A; 'B}; 'J['x]; y: 'B; z: 'y = 'x in bunion{'A; 'B} >- 'C['x] } -->
-   sequent ['ext] { 'H; x: bunion{'A; 'B}; 'J['x] >- 'C['x] }
+interactive bunionElimination {| elim_resource [ThinOption thinT] |} 'H 'J 'y :
+   [main] sequent [squash] { 'H; x: bunion{'A; 'B}; 'J['x]; y: 'A >- 't1['y] = 't2['y] in 'C['y] } -->
+   [main] sequent [squash] { 'H; x: bunion{'A; 'B}; 'J['x]; y: 'B >- 't1['y] = 't2['y] in 'C['y] } -->
+   sequent ['ext] { 'H; x: bunion{'A; 'B}; 'J['x] >- 't1['x] = 't2['x] in 'C['x] }
 
 (*
  * -*-

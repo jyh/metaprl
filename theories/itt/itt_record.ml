@@ -80,7 +80,7 @@ define unfoldRecordS : record[t:t]{'A} <--> record{label[t:t];'A}
 
 (*!
  * @begin[doc]
- * Records are defined as intersections. Dependent records are defined are defined as dependent intersectons:
+ * Records are defined as intersections. Dependent records are defined as dependent intersectons:
  * @end[doc]
  *)
 

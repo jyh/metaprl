@@ -527,8 +527,8 @@ prim type_squashElimination 'H :
    it
 
 prim rewrite_squashElimination 'H :
-   sequent [squash] { 'H >- Perv!"rewrite"{'a; 'b} } -->
-   sequent ['ext] { 'H >- Perv!"rewrite"{'a; 'b} } =
+   sequent [squash] { 'H >- 'a ~ 'b } -->
+   sequent ['ext] { 'H >- 'a ~ 'b } =
    it
 
 (*

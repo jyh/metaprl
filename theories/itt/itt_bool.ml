@@ -328,16 +328,16 @@ interactive ifthenelse_equality {| intro_resource []; eqcd_resource |} 'H 'w :
  *)
 interactive boolSqequal 'H :
    sequent [squash] { 'H >- 'x = 'y in bool } -->
-   sequent ['ext] { 'H >- Perv!"rewrite"{'x; 'y} }
+   sequent ['ext] { 'H >- 'x ~ 'y }
 (*! @docoff *)
 
 let d_bool_sqequalT p =
    boolSqequal (Sequent.hyp_count_addr p) p
 
-let bool_sqequal_term1 = << Perv!"rewrite"{'e; btrue} >>
-let bool_sqequal_term2 = << Perv!"rewrite"{'e; bfalse} >>
-let bool_sqequal_term3 = << Perv!"rewrite"{btrue; 'e} >>
-let bool_sqequal_term4 = << Perv!"rewrite"{bfalse; 'e} >>
+let bool_sqequal_term1 = << 'e ~ btrue >>
+let bool_sqequal_term2 = << 'e ~ bfalse >>
+let bool_sqequal_term3 = << btrue ~ 'e >>
+let bool_sqequal_term4 = << bfalse ~ 'e >>
 
 let intro_resource = Mp_resource.improve intro_resource (bool_sqequal_term1, d_bool_sqequalT)
 let intro_resource = Mp_resource.improve intro_resource (bool_sqequal_term2, d_bool_sqequalT)

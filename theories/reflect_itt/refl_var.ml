@@ -224,7 +224,7 @@ interactive eq_var_wf {| intro_resource [] |} 'H :
  *)
 interactive var_sqequal {| intro_resource [] |} 'H :
    [wf] sequent [squash] { 'H >- 'x = 'y in var_type } -->
-   sequent ['ext] { 'H >- Perv!"rewrite"{'x; 'y} }
+   sequent ['ext] { 'H >- 'x ~ 'y }
 
 (*
  * Translate to equality.

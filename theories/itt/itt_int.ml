@@ -500,7 +500,7 @@ prim less_thanElimination {| elim_resource [ThinOption thinT] |} 'H 'J :
  *)
 prim int_sqequal 'H :
    sequent [squash] { 'H >- 'i = 'j in int } -->
-   sequent ['ext] { 'H >- Perv!"rewrite"{'i; 'j} } =
+   sequent ['ext] { 'H >- 'i ~ 'j } =
    it
 
 (*!

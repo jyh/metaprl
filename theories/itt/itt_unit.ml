@@ -186,7 +186,7 @@ prim unit_squashElimination 'H :
  *)
 interactive unitSqequal 'H :
    sequent [squash] { 'H >- 'x = 'y in unit } -->
-   sequent ['ext] { 'H >- Perv!"rewrite"{'x; 'y} }
+   sequent ['ext] { 'H >- 'x ~ 'y }
 (*! @docoff *)
 
 (************************************************************************
@@ -199,7 +199,7 @@ interactive unitSqequal 'H :
 let intro_unit_sqequalT p =
    unitSqequal (Sequent.hyp_count_addr p) p
 
-let unit_rewrite_term = << "rewrite"{'e1; it} >>
+let unit_rewrite_term = << 'e1 ~ it >>
 
 let intro_resource = Mp_resource.improve intro_resource (unit_rewrite_term, intro_unit_sqequalT)
 

@@ -320,7 +320,7 @@ prim list_indEquality {| intro_resource []; eqcd_resource |} 'H lambda{l. 'T['l]
  *)
 prim nilSqequal 'H 'T :
    sequent [squash] { 'H >- 'u = nil in list{'T} } -->
-   sequent ['ext] { 'H >- Perv!"rewrite"{'u; nil} } =
+   sequent ['ext] { 'H >- 'u ~ nil } =
    it
 
 (*!

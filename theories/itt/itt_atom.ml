@@ -176,7 +176,7 @@ prim tokenEquality {| intro_resource []; eqcd_resource |} 'H :
  *)
 prim atomSqequal 'H :
    sequent [squash] { 'H >- 'x = 'y in atom } -->
-   sequent ['ext] { 'H >- Perv!"rewrite"{'x; 'y} } =
+   sequent ['ext] { 'H >- 'x ~ 'y } =
    it
 (*! @docoff *)
 

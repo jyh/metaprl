@@ -85,7 +85,7 @@ doc <:doc<
 >>
 
 
-define rbtree: RBTree{'A} <--> fix {rbtree. lambda {n. lambda {parent_color.
+define rbtree: RBTreeOf{'A} <--> fix {rbtree. lambda {n. lambda {parent_color.
                        if beq_int{'n;.  -1}
                          then void
                          else
@@ -94,9 +94,9 @@ define rbtree: RBTree{'A} <--> fix {rbtree. lambda {n. lambda {parent_color.
                          }}}
 
 
-define btree1: BTree{'A;'n} <--> RBTree{'A} 'n red           (* Red-black tree with a black root *)
+define btree1: BTree{'A;'n} <--> RBTreeOf{'A} 'n red           (* Red-black tree with a black root *)
 
-define rbtree1: RBTree{'A;'n} <--> RBTree{'A} 'n black        (* Red-black tree with an arbitary root *)
+define rbtree1: RBTree{'A;'n} <--> RBTreeOf{'A} 'n black        (* Red-black tree with an arbitary root *)
 
 define btree2: BTree{'A} <--> tunion{ nat; n.BTree{'A;'n} }
 
@@ -236,7 +236,7 @@ interactive rbtree_wf {| intro[] |} :
    sequent{ <H> >- "type"{'A} } -->
    sequent{ <H> >- 'color in Color } -->
    sequent{ <H> >- 'n in nat } -->
-   sequent{ <H> >- "type"{RBTree{'A} 'n 'color} }
+   sequent{ <H> >- "type"{RBTreeOf{'A} 'n 'color} }
 
 interactive btree1_wf {| intro[] |} :
    sequent{ <H> >- "type"{'A} } -->

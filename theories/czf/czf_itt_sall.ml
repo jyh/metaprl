@@ -105,7 +105,7 @@ dform sall_df : except_mode[src] :: parens :: "prec"[prec_lambda] :: "sall"{x. '
  * $A[x]$ is a proposition for any set $x$.
  * @end[doc]
  *)
-interactive sall_type {| intro_resource [] |} 'H 'y :
+interactive sall_type {| intro [] |} 'H 'y :
    sequent ['ext] { 'H; y: set >- "type"{'A['y]} } -->
    sequent ['ext] { 'H >- "type"{."sall"{x. 'A['x]} } }
 
@@ -117,7 +117,7 @@ interactive sall_type {| intro_resource [] |} 'H 'y :
  * and if $A[x]$ is true for every set $x$.
  * @end[doc]
  *)
-interactive sall_intro {| intro_resource [] |} 'H 'a :
+interactive sall_intro {| intro [] |} 'H 'a :
    sequent ['ext] { 'H; a: set >- 'A['a] } -->
    sequent ['ext] { 'H >- "sall"{x. 'A['x]} }
 
@@ -129,7 +129,7 @@ interactive sall_intro {| intro_resource [] |} 'H 'a :
  * on a particular set argument $z$.
  * @end[doc]
  *)
-interactive sall_elim {| elim_resource [] |} 'H 'J 'x 'z 'w :
+interactive sall_elim {| elim [] |} 'H 'J 'x 'z 'w :
    ["wf"]   sequent [squash] { 'H; x: "sall"{y. 'A['y]}; 'J['x] >- isset{'z} } -->
    ["main"] sequent ['ext] { 'H; x: "sall"{y. 'A['y]}; 'J['x]; w: 'A['z] >- 'T['x] } -->
    sequent ['ext] { 'H; x: "sall"{y. 'A['y]}; 'J['x] >- 'T['x] }

@@ -97,7 +97,7 @@ prim_rw unfold_prod : ('A * 'B) <--> (x: 'A * 'B)
  * both $A$ and $B$ are types.
  * @end[doc]
  *)
-interactive independentProductEquality {| intro_resource []; eqcd_resource |} 'H :
+interactive independentProductEquality {| intro []; eqcd |} 'H :
    [wf] sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
    [wf] sequent [squash] { 'H >- 'B1 = 'B2 in univ[i:l] } -->
    sequent ['ext] { 'H >- 'A1 * 'B1 = 'A2 * 'B2 in univ[i:l] }
@@ -105,7 +105,7 @@ interactive independentProductEquality {| intro_resource []; eqcd_resource |} 'H
 (*
  * Typehood.
  *)
-interactive independentProductType {| intro_resource [] |} 'H :
+interactive independentProductType {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- "type"{'A1} } -->
    [wf] sequent [squash] { 'H >- "type"{'A2} } -->
    sequent ['ext] { 'H >- "type"{.'A1 * 'A2} }
@@ -129,7 +129,7 @@ interactive independentProductFormation 'H :
  * its parts $u@colon A$ and $v@colon B$.
  * @end[doc]
  *)
-interactive independentProductElimination {| elim_resource [ThinOption thinT] |} 'H 'J 'z 'u 'v :
+interactive independentProductElimination {| elim [ThinOption thinT] |} 'H 'J 'z 'u 'v :
    ('t['u; 'v] : sequent ['ext] { 'H; z: 'A * 'B; u: 'A; v: 'B; 'J['u, 'v] >- 'T['u, 'v] }) -->
    sequent ['ext] { 'H; z: 'A * 'B; 'J['z] >- 'T['z] }
 
@@ -141,7 +141,7 @@ interactive independentProductElimination {| elim_resource [ThinOption thinT] |}
  * are the pairs $@pair{a; b}$, where $a @in A$ and $b @in B$.
  * @end[doc]
  *)
-interactive independentPairEquality {| intro_resource []; eqcd_resource |} 'H :
+interactive independentPairEquality {| intro []; eqcd |} 'H :
    [wf] sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
    [wf] sequent [squash] { 'H >- 'b1 = 'b2 in 'B } -->
    sequent ['ext] { 'H >- ('a1, 'b1) = ('a2, 'b2) in 'A * 'B }
@@ -156,7 +156,7 @@ interactive independentPairEquality {| intro_resource []; eqcd_resource |} 'H :
  * true if both $A$ and $B$ are true.
  * @end[doc]
  *)
-interactive independentPairFormation {| intro_resource [] |} 'H :
+interactive independentPairFormation {| intro [] |} 'H :
    [wf] ('a : sequent ['ext] { 'H >- 'A }) -->
    [wf] ('b : sequent ['ext] { 'H >- 'B }) -->
    sequent ['ext] { 'H >- 'A * 'B }
@@ -168,7 +168,7 @@ interactive independentPairFormation {| intro_resource [] |} 'H :
  * The product space is covariant in both parts.
  * @end[doc]
  *)
-interactive independentProductSubtype {| intro_resource [] |} 'H :
+interactive independentProductSubtype {| intro [] |} 'H :
    sequent [squash] { 'H >- subtype{'A1; 'A2} } -->
    sequent [squash] { 'H >- subtype{'B1; 'B2} } -->
    sequent ['ext] { 'H >- subtype{ ('A1 * 'B1); ('A2 * 'B2) } }

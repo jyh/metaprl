@@ -75,18 +75,18 @@ let reduce_eq_atom =
  * RULES                                                                *
  ************************************************************************)
 
-prim eq_atom_wf {| intro_resource [] |} 'H :
+prim eq_atom_wf {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- 'x IN atom } -->
    [wf] sequent [squash] { 'H >- 'y IN atom } -->
    sequent ['ext] { 'H >- eq_atom{'x; 'y} IN bool } =
    it
 
-prim eq_atom_assert_intro {| intro_resource [] |} 'H :
+prim eq_atom_assert_intro {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- 'x = 'y in atom } -->
    sequent ['ext] { 'H >- "assert"{eq_atom{'x; 'y}} } =
    it
 
-prim eq_atom_assert_elim {| elim_resource [ThinOption thinT] |} 'H 'J :
+prim eq_atom_assert_elim {| elim [ThinOption thinT] |} 'H 'J :
    [main] sequent ['ext] { 'H; x: 'a = 'b in atom; 'J[it] >- 'C[it] } -->
    sequent ['ext] { 'H; x: "assert"{eq_atom{'a; 'b}}; 'J['x] >- 'C['x] } =
    it

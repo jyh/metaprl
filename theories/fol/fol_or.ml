@@ -52,25 +52,25 @@ prim_rw reduce_decide_inr : decide{inr{'x}; y. 'body1['y]; z. 'body2['z]} <--> '
  * RULES                                                                *
  ************************************************************************)
 
-prim or_type {| intro_resource [] |} 'H :
+prim or_type {| intro [] |} 'H :
    [wf] sequent ['ext] { 'H >- "type"{'A} } -->
    [wf] sequent ['ext] { 'H >- "type"{'B} } -->
    sequent ['ext] { 'H >- "type"{."or"{'A; 'B}} } =
    trivial
 
-prim or_intro_left {| intro_resource [SelectOption 1] |} 'H :
+prim or_intro_left {| intro [SelectOption 1] |} 'H :
    [wf] sequent ['ext] { 'H >- "type"{'B} } -->
    [main] ('a : sequent ['ext] { 'H >- 'A }) -->
    sequent ['ext] { 'H >- "or"{'A; 'B} } =
    inl{'a}
 
-prim or_intro_right {| intro_resource [SelectOption 2] |} 'H :
+prim or_intro_right {| intro [SelectOption 2] |} 'H :
    [wf] sequent ['ext] { 'H >- "type"{'A} } -->
    [main] ('b : sequent ['ext] { 'H >- 'B } ) -->
    sequent ['ext] { 'H >- "or"{'A; 'B} } =
    inr{'b}
 
-prim or_elim {| elim_resource [] |} 'H 'J 'x :
+prim or_elim {| elim [] |} 'H 'J 'x :
    [wf] ('a['x] : sequent ['ext] { 'H; x: 'A; 'J[inl{'x}] >- 'C[inl{'x}] }) -->
    [wf] ('b['x] : sequent ['ext] { 'H; x: 'B; 'J[inr{'x}] >- 'C[inr{'x}] }) -->
    sequent ['ext] { 'H; x: 'A or 'B; 'J['x] >- 'C['x] } =

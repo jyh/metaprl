@@ -34,7 +34,7 @@ open Base_dtactic
 
 declare label[t:t]
 
-prim labelMember {| intro_resource []; eqcd_resource |} 'H :
+prim labelMember {| intro []; eqcd |} 'H :
    sequent ['ext] { 'H >- label[t:t] IN label } =
    it
 
@@ -56,12 +56,12 @@ define unfold_eq_label : eq_label[x:t,y:t]{'A;'B} <-->  meta_eq{label[x:t]; labe
 
 
 
-prim reduce_eq_label_true {| intro_resource [] |} 'H:
+prim reduce_eq_label_true {| intro [] |} 'H:
    sequent[squash] {'H >- label[x:t] = label[y:t]  in label} -->
    sequent['ext] {'H >- eq_label[x:t,y:t]{'A;'B} ~ 'A}
       = it
 
-interactive reduce_eq_label_false {| intro_resource [] |} 'H:
+interactive reduce_eq_label_false {| intro [] |} 'H:
    sequent[squash] {'H >- not{.label[x:t] = label[y:t]  in label}} -->
    sequent['ext] {'H >- eq_label[x:t,y:t]{'A;'B} ~ 'B}
 

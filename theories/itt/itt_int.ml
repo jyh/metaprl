@@ -373,7 +373,7 @@ prim intFormation 'H :
  * is a type.
  * @end[doc]
  *)
-prim intType {| intro_resource [] |} 'H :
+prim intType {| intro [] |} 'H :
    sequent ['ext] { 'H >- "type"{int} } =
    it
 
@@ -381,7 +381,7 @@ prim intType {| intro_resource [] |} 'H :
  * H >- Z = Z in Ui ext Ax
  * by intEquality
  *)
-prim intEquality {| intro_resource []; eqcd_resource |} 'H :
+prim intEquality {| intro []; eqcd |} 'H :
    sequent ['ext] { 'H >- int IN univ[i:l] } =
    it
 (*! @docoff *)
@@ -401,7 +401,7 @@ prim numberFormation 'H number[n:n] :
  * The $@int$ type contains the @hrefterm[number] terms.
  * @end[doc]
  *)
-prim numberEquality {| intro_resource []; eqcd_resource |} 'H :
+prim numberEquality {| intro []; eqcd |} 'H :
    sequent ['ext] { 'H >- number[n:n] IN int } =
    it
 
@@ -415,7 +415,7 @@ prim numberEquality {| intro_resource []; eqcd_resource |} 'H :
  * uses the @tt{ind} term, which performs a case analysis on its argument.
  * @end[doc]
  *)
-prim intElimination {| elim_resource [ThinOption thinT] |} 'H 'J 'n 'm 'v 'z :
+prim intElimination {| elim [ThinOption thinT] |} 'H 'J 'n 'm 'v 'z :
    [main] ('down['n; 'm; 'v; 'z] : sequent ['ext] { 'H; n: int; 'J['n]; m: int; v: 'm < 0; z: 'C['m +@ 1] >- 'C['m] }) -->
    [main] ('base['n] : sequent ['ext] { 'H; n: int; 'J['n] >- 'C[0] }) -->
    [main] ('up['n; 'm; 'v; 'z] : sequent ['ext] { 'H; n: int; 'J['n]; m: int; v: 0 < 'm; z: 'C['m -@ 1] >- 'C['m] }) -->
@@ -430,7 +430,7 @@ prim intElimination {| elim_resource [ThinOption thinT] |} 'H 'J 'n 'm 'v 'z :
  * cases (zero, positive, and negative) produce values of type $T$.
  * @end[doc]
  *)
-prim indEquality {| intro_resource []; eqcd_resource |} 'H lambda{z. 'T['z]} 'x 'y 'w :
+prim indEquality {| intro []; eqcd |} 'H lambda{z. 'T['z]} 'x 'y 'w :
    [wf] sequent [squash] { 'H >- 'x1 = 'x2 in int } -->
    [wf] sequent [squash] { 'H; x: int; w: 'x < 0; y: 'T['x +@ 1] >- 'down1['x; 'y] = 'down2['x; 'y] in 'T['x] } -->
    [wf] sequent [squash] { 'H >- 'base1 = 'base2 in 'T[0] } -->
@@ -464,7 +464,7 @@ prim less_thanFormation 'H :
  * if it is true.
  * @end[doc]
  *)
-prim less_thanEquality {| intro_resource []; eqcd_resource |} 'H :
+prim less_thanEquality {| intro []; eqcd |} 'H :
    [wf] sequent [squash] { 'H >- 'i1 = 'j1 in int } -->
    [wf] sequent [squash] { 'H >- 'i2 = 'j2 in int } -->
    sequent ['ext] { 'H >- 'i1 < 'j1 = 'i2 < 'j2 in univ[i:l] } =
@@ -476,7 +476,7 @@ prim less_thanEquality {| intro_resource []; eqcd_resource |} 'H :
  *
  * H >- a < b
  *)
-prim less_than_memberEquality {| intro_resource []; eqcd_resource |} 'H :
+prim less_than_memberEquality {| intro []; eqcd |} 'H :
    [wf] sequent [squash] { 'H >- 'a < 'b } -->
    sequent ['ext] { 'H >- it IN ('a < 'b) } =
    it
@@ -488,7 +488,7 @@ prim less_than_memberEquality {| intro_resource []; eqcd_resource |} 'H :
  *
  * H, x: a < b; J[it] >- C[it]
  *)
-prim less_thanElimination {| elim_resource [ThinOption thinT] |} 'H 'J :
+prim less_thanElimination {| elim [ThinOption thinT] |} 'H 'J :
    ('t : sequent ['ext] { 'H; x: 'a < 'b; 'J[it] >- 'C[it] }) -->
    sequent ['ext] { 'H; x: 'a < 'b; 'J['x] >- 'C['x] } =
    't
@@ -508,77 +508,77 @@ prim int_sqequal 'H :
  * @docoff
  * @end[doc]
  *)
-interactive add_wf {| intro_resource [] |} 'H :
+interactive add_wf {| intro [] |} 'H :
    sequent [squash] { 'H >- 'i IN int } -->
    sequent [squash] { 'H >- 'j IN int } -->
    sequent ['ext] { 'H >- add{'i; 'j} IN int }
 
-interactive sub_wf {| intro_resource [] |} 'H :
+interactive sub_wf {| intro [] |} 'H :
    sequent [squash] { 'H >- 'i IN int } -->
    sequent [squash] { 'H >- 'j IN int } -->
    sequent ['ext] { 'H >- sub{'i; 'j} IN int }
 
-interactive mul_wf {| intro_resource [] |} 'H :
+interactive mul_wf {| intro [] |} 'H :
    sequent [squash] { 'H >- 'i IN int } -->
    sequent [squash] { 'H >- 'j IN int } -->
    sequent ['ext] { 'H >- mul{'i; 'j} IN int }
 
-interactive div_wf {| intro_resource [] |} 'H :
+interactive div_wf {| intro [] |} 'H :
    sequent [squash] { 'H >- 'i IN int } -->
    sequent [squash] { 'H >- 'j IN int } -->
    sequent [squash] { 'H >- not{.'j = 0 in int} } -->
    sequent ['ext] { 'H >- "div"{'i; 'j} IN int }
 
-interactive rem_wf {| intro_resource [] |} 'H :
+interactive rem_wf {| intro [] |} 'H :
    sequent [squash] { 'H >- 'i IN int } -->
    sequent [squash] { 'H >- 'j IN int } -->
    sequent [squash] { 'H >- not{.'j = 0 in int} } -->
    sequent ['ext] { 'H >- "rem"{'i; 'j} IN int }
 
-interactive lt_type {| intro_resource [] |} 'H :
+interactive lt_type {| intro [] |} 'H :
    sequent [squash] { 'H >- 'i IN int } -->
    sequent [squash] { 'H >- 'j IN int } -->
    sequent ['ext] { 'H >- "type"{lt{'i; 'j}} }
 
-interactive gt_type {| intro_resource [] |} 'H :
+interactive gt_type {| intro [] |} 'H :
    sequent [squash] { 'H >- 'i IN int } -->
    sequent [squash] { 'H >- 'j IN int } -->
    sequent ['ext] { 'H >- "type"{gt{'i; 'j}} }
 
-interactive le_type {| intro_resource [] |} 'H :
+interactive le_type {| intro [] |} 'H :
    sequent [squash] { 'H >- 'i IN int } -->
    sequent [squash] { 'H >- 'j IN int } -->
    sequent ['ext] { 'H >- "type"{le{'i; 'j}} }
 
-interactive ge_type {| intro_resource [] |} 'H :
+interactive ge_type {| intro [] |} 'H :
    sequent [squash] { 'H >- 'i IN int } -->
    sequent [squash] { 'H >- 'j IN int } -->
    sequent ['ext] { 'H >- "type"{ge{'i; 'j}} }
 
-interactive gt_member {| intro_resource [] |} 'H :
+interactive gt_member {| intro [] |} 'H :
    sequent [squash] { 'H >- 'i IN int } -->
    sequent [squash] { 'H >- 'j IN int } -->
    sequent ['ext] { 'H >- gt{'i; 'j} IN univ[i:l] }
 
-interactive le_member {| intro_resource [] |} 'H :
+interactive le_member {| intro [] |} 'H :
    sequent [squash] { 'H >- 'i IN int } -->
    sequent [squash] { 'H >- 'j IN int } -->
    sequent ['ext] { 'H >- le{'i; 'j} IN univ[i:l] }
 
-interactive ge_member {| intro_resource [] |} 'H :
+interactive ge_member {| intro [] |} 'H :
    sequent [squash] { 'H >- 'i IN int } -->
    sequent [squash] { 'H >- 'j IN int } -->
    sequent ['ext] { 'H >- ge{'i; 'j} IN univ[i:l] }
 
-interactive lt_reverse {| elim_resource [] |} 'H 'J 'y :
+interactive lt_reverse {| elim [] |} 'H 'J 'y :
    sequent ['ext] { 'H; x: ('i < 'j); 'J['x]; y: "not"{.'j < 'i} >- 'C['x] } -->
    sequent ['ext] { 'H; x: ('i < 'j); 'J['x] >- 'C['x] }
 
-interactive lt_add {| intro_resource [] |} 'H :
+interactive lt_add {| intro [] |} 'H :
    sequent [squash] { 'H >- 'i < 'j } -->
    sequent ['ext] { 'H >- ('i +@ 'k) < ('j +@ 'k) }
 
-interactive lt_sub {| intro_resource [] |} 'H :
+interactive lt_sub {| intro [] |} 'H :
    sequent [squash] { 'H >- 'i < 'j } -->
    sequent ['ext] { 'H >- ('i -@ 'k) < ('j -@ 'k) }
 

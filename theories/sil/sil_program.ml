@@ -39,7 +39,7 @@ declare sil_program{'e1; 's1}
 (*
  * Is a number a sil_program?
  *)
-prim number_program {| intro_resource [] |} 'H :
+prim number_program {| intro [] |} 'H :
    sequent ['ext] { 'H >- sil_program{number[i:n]; 's1} } =
    it
 

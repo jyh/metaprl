@@ -28,17 +28,17 @@ dform all_df : parens :: "prec"["prec_all"] :: "all"{x. 'B} =
  * RULES                                                                *
  ************************************************************************)
 
-prim all_type {| intro_resource [] |} 'H 'x :
+prim all_type {| intro [] |} 'H 'x :
    [wf] sequent ['ext] { 'H; x: pred >- "type"{'B['x]} } -->
    sequent ['ext] { 'H >- "type"{."all"{y. 'B['y]}} } = trivial
 
-prim all_intro {| intro_resource [] |} 'H 'x :
+prim all_intro {| intro [] |} 'H 'x :
    [main] ('b['x] : sequent ['ext] { 'H; x: pred >- 'B['x] }) -->
    [wf] sequent ['ext] { 'H; x: pred >- "type"{'B['x]} } -->
    sequent ['ext] { 'H >- "all"{y. 'B['y]} } =
    lambda{y. 'b['y]}
 
-prim all_elim {| elim_resource [ThinOption thinT] |} 'H 'J 'x 'z 'a :
+prim all_elim {| elim [ThinOption thinT] |} 'H 'J 'x 'z 'a :
    [wf] sequent ['ext] { 'H; x: "all"{y. 'B['y]}; 'J['x] >- "type"{'a} } -->
    [wf] sequent ['ext] { 'H; x: "all"{y. 'B['y]}; 'J['x]; z: pred >- "type"{'B['z]} } -->
    [main] ('b['x; 'z] : sequent ['ext] { 'H; x: "all"{y. 'B['y]}; 'J['x]; z: 'B['a] >- 'C['x] }) -->

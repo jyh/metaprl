@@ -455,59 +455,59 @@ let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_i
 (*
  * Variable maps.
  *)
-interactive vmap_type_type2 {| intro_resource [] |} 'H :
+interactive vmap_type_type2 {| intro [] |} 'H :
    sequent ['ext] { 'H >- "type"{vmap_type} }
 
-interactive vmap_elim {| elim_resource [ThinOption thinT] |} 'H 'J 'v1 'v2 'g 'w :
+interactive vmap_elim {| elim [ThinOption thinT] |} 'H 'J 'v1 'v2 'g 'w :
    [main] sequent ['ext] { 'H; f: vmap_type; 'J['f] >- 'C[vmap_nil] } -->
    [main] sequent ['ext] { 'H; f: vmap_type; 'J['f]; v1: var_type; v2: var_type; g: vmap_type; w: 'C['g] >- 'C[vmap_cons{'v1; 'v2; 'g}] } -->
    sequent ['ext] { 'H; f: vmap_type; 'J['f] >- 'C['f] }
 
-interactive vmap_compare_wf {| intro_resource [] |} 'H :
+interactive vmap_compare_wf {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- member{vmap_type; 'vm} } -->
    [wf] sequent [squash] { 'H >- member{var_type; 'v1} } -->
    [wf] sequent [squash] { 'H >- member{var_type; 'v2} } -->
    sequent ['ext] { 'H >- member{bool; vmap_compare{'v1; 'v2; 'vm}} }
 
-interactive vmap_nil_wf2 {| intro_resource [] |} 'H :
+interactive vmap_nil_wf2 {| intro [] |} 'H :
    sequent ['ext] { 'H >- member{.vmap_type; vmap_nil} }
 
-interactive vmap_cons_wf2 {| intro_resource [] |} 'H :
+interactive vmap_cons_wf2 {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- member{var_type; 'v1} } -->
    [wf] sequent [squash] { 'H >- member{var_type; 'v2} } -->
    [wf] sequent [squash] { 'H >- member{.vmap_type; 'vm} } -->
    sequent ['ext] { 'H >- member{.vmap_type; vmap_cons{'v1; 'v2; 'vm}} }
 
-interactive vmap_compose_wf2 {| intro_resource [] |} 'H 'f :
+interactive vmap_compose_wf2 {| intro [] |} 'H 'f :
    [wf] sequent [squash] { 'H >- member{list{var_type}; 'vl1} } -->
    [wf] sequent [squash] { 'H >- member{list{var_type}; 'vl2} } -->
    [wf] sequent [squash] { 'H >- member{.vmap_type; 'vm} } -->
    [wf] sequent [squash] { 'H; f: vmap_type >- member{bool; 'b['f]} } -->
    sequent ['ext] { 'H >- member{bool; vmap_compose{'vl1; 'vl2; 'vm; g. 'b['g]}} }
 
-interactive vmap_invert_wf2 {| intro_resource [] |} 'H :
+interactive vmap_invert_wf2 {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- member{vmap_type; 'f} } -->
    sequent ['ext] { 'H >- member{vmap_type; vmap_invert{'f}} }
 
-interactive vmap_id_wf {| intro_resource [] |} 'H :
+interactive vmap_id_wf {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- member{vmap_type; 'f} } -->
    sequent ['ext] { 'H >- member{bool; vmap_id{'f}} }
 
-interactive vmap_length_wf {| intro_resource [] |} 'H :
+interactive vmap_length_wf {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- member{vmap_type; 'f} } -->
    [wf] sequent [squash] { 'H >- member{vmap_type; 'g} } -->
    sequent ['ext] { 'H >- member{bool; vmap_length{'f; 'g}} }
 
-interactive vmap_join_wf {| intro_resource [] |} 'H :
+interactive vmap_join_wf {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- member{vmap_type; 'f} } -->
    [wf] sequent [squash] { 'H >- member{vmap_type; 'g} } -->
    sequent ['ext] { 'H >- member{vmap_type; vmap_join{'f; 'g}} }
 
-interactive vmap_fst_wf {| intro_resource [] |} 'H :
+interactive vmap_fst_wf {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- member{vmap_type; 'f} } -->
    sequent ['ext] { 'H >- member{list{var_type}; vmap_fst{'f}} }
 
-interactive vmap_snd_wf {| intro_resource [] |} 'H :
+interactive vmap_snd_wf {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- member{vmap_type; 'f} } -->
    sequent ['ext] { 'H >- member{list{var_type}; vmap_snd{'f}} }
 
@@ -536,13 +536,13 @@ interactive vmap_compare_trans 'H 'g 'v2 :
 (*
  * Alpha equality on terms.
  *)
-interactive eq_alpha_term_wf {| intro_resource [SelectOption 1] |} 'H :
+interactive eq_alpha_term_wf {| intro [SelectOption 1] |} 'H :
    [wf] sequent [squash] { 'H >- member{.vmap_type; 'f} } -->
    [wf] sequent [squash] { 'H >- member{.raw_term_type; 't1} } -->
    [wf] sequent [squash] { 'H >- member{.raw_term_type; 't2} } -->
    sequent ['ext] { 'H >- member{bool; eq_alpha_term{'f; 't1; 't2}} }
 
-interactive eq_alpha_bterm_wf2 {| intro_resource [SelectOption 2] |} 'H 'T1 'T2 :
+interactive eq_alpha_bterm_wf2 {| intro [SelectOption 2] |} 'H 'T1 'T2 :
    [wf] sequent [squash] { 'H >- subtype{'T1; raw_term_type} } -->
    [wf] sequent [squash] { 'H >- subtype{'T2; raw_term_type} } -->
    [wf] sequent [squash] { 'H >- member{vmap_type; 'f} } -->
@@ -578,7 +578,7 @@ interactive eq_alpha_term_trans 'H 'g 't2 :
 (*
  * Unconditional alpha-equality.
  *)
-interactive eq_alpha_wf {| intro_resource [] |} 'H :
+interactive eq_alpha_wf {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- member{.raw_term_type; 't1} } -->
    [wf] sequent [squash] { 'H >- member{.raw_term_type; 't2} } -->
    sequent ['ext] { 'H >- member{bool; eq_alpha{'t1; 't2}} }
@@ -604,7 +604,7 @@ interactive eq_alpha_trans 'H 't2 :
 (*
  * Term type.
  *)
-interactive term_type_type {| intro_resource [] |} 'H :
+interactive term_type_type {| intro [] |} 'H :
    sequent ['ext] { 'H >- "type"{term_type} }
 
 (*

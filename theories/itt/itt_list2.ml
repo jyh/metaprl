@@ -500,14 +500,14 @@ interactive_rw rev2 :
  * well-formedness of each of the constructions.
  * @end[doc]
  *)
-interactive is_nil_wf {| intro_resource [] |} 'H 'T :
+interactive is_nil_wf {| intro [] |} 'H 'T :
    [wf] sequent [squash] { 'H >- 'l IN list{'T} } -->
    sequent ['ext] { 'H >- is_nil{'l} IN bool }
 
 (*
  * Append.
  *)
-interactive append_wf2 {| intro_resource [] |} 'H :
+interactive append_wf2 {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- 'l1 IN list{'T} } -->
    [wf] sequent [squash] { 'H >- 'l2 IN list{'T} } -->
    sequent ['ext] { 'H >- append{'l1; 'l2} IN list{'T} }
@@ -515,7 +515,7 @@ interactive append_wf2 {| intro_resource [] |} 'H :
 (*
  * Ball2.
  *)
-interactive ball2_wf2 {| intro_resource [] |} 'H 'T1 'T2 'u 'v :
+interactive ball2_wf2 {| intro [] |} 'H 'T1 'T2 'u 'v :
    [wf] sequent [squash] { 'H >- "type"{'T1} } -->
    [wf] sequent [squash] { 'H >- "type"{'T2} } -->
    [wf] sequent [squash] { 'H >- 'l1 IN list{'T1} } -->
@@ -526,7 +526,7 @@ interactive ball2_wf2 {| intro_resource [] |} 'H 'T1 'T2 'u 'v :
 (*
  * assoc2.
  *)
-interactive assoc_wf {| intro_resource [] |} 'H 'z 'T1 'T2 :
+interactive assoc_wf {| intro [] |} 'H 'z 'T1 'T2 :
    [wf] sequent [squash] { 'H >- "type"{'T2} } -->
    [wf] sequent [squash] { 'H >- 'eq IN 'T1 -> 'T1 -> bool } -->
    [wf] sequent [squash] { 'H >- 'x IN 'T1 } -->
@@ -535,7 +535,7 @@ interactive assoc_wf {| intro_resource [] |} 'H 'z 'T1 'T2 :
    [wf] sequent [squash] { 'H >- 'z IN 'T } -->
    sequent ['ext] { 'H >- assoc{'eq; 'x; 'l; v. 'b['v]; 'z} IN 'T }
 
-interactive rev_assoc_wf {| intro_resource [] |} 'H 'z 'T1 'T2 :
+interactive rev_assoc_wf {| intro [] |} 'H 'z 'T1 'T2 :
    [wf] sequent [squash] { 'H >- "type"{'T1} } -->
    [wf] sequent [squash] { 'H >- 'eq IN 'T2 -> 'T2 -> bool } -->
    [wf] sequent [squash] { 'H >- 'x IN 'T2 } -->
@@ -547,7 +547,7 @@ interactive rev_assoc_wf {| intro_resource [] |} 'H 'z 'T1 'T2 :
 (*
  * map.
  *)
-interactive map_wf {| intro_resource [] |} 'H 'T1 :
+interactive map_wf {| intro [] |} 'H 'T1 :
    [wf] sequent [squash] { 'H >- "type"{'T1} } -->
    [wf] sequent [squash] { 'H >- "type"{'T2} } -->
    [wf] sequent [squash] { 'H >- 'f IN 'T1 -> 'T2 } -->
@@ -557,7 +557,7 @@ interactive map_wf {| intro_resource [] |} 'H 'T1 :
 (*
  * Fold_left.
  *)
-interactive fold_left_wf {| intro_resource [] |} 'H 'T1 'T2 :
+interactive fold_left_wf {| intro [] |} 'H 'T1 'T2 :
    [wf] sequent [squash] { 'H >- "type"{'T1} } -->
    [wf] sequent [squash] { 'H >- "type"{'T2} } -->
    [wf] sequent [squash] { 'H >- 'f IN 'T1 -> 'T2 -> 'T2 } -->
@@ -568,19 +568,19 @@ interactive fold_left_wf {| intro_resource [] |} 'H 'T1 'T2 :
 (*
  * Length.
  *)
-interactive length_wf {| intro_resource [] |} 'H 'T1 :
+interactive length_wf {| intro [] |} 'H 'T1 :
    [wf] sequent [squash] { 'H >- "type"{'T1} } -->
    [wf] sequent [squash] { 'H >- 'l IN list{'T1} } -->
    sequent ['ext] { 'H >- length{'l} IN int }
 
-interactive nth_wf {| intro_resource [] |} 'H :
+interactive nth_wf {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- "type"{'T} } -->
    [wf] sequent [squash] { 'H >- 'l IN list{'T} } -->
    [wf] sequent [squash] { 'H >- ge{'i; 0} } -->
    [wf] sequent [squash] { 'H >- lt{'i; length{'l}} } -->
    sequent ['ext] { 'H >- nth{'l; 'i} IN 'T }
 
-interactive replace_nth_wf {| intro_resource [] |} 'H :
+interactive replace_nth_wf {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- "type"{'T} } -->
    [wf] sequent [squash] { 'H >- 'l IN list{'T} } -->
    [wf] sequent [squash] { 'H >- ge{'i; 0} } -->
@@ -591,7 +591,7 @@ interactive replace_nth_wf {| intro_resource [] |} 'H :
 (*
  * Reverse.
  *)
-interactive rev_wf {| intro_resource [] |} 'H :
+interactive rev_wf {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H >- 'l IN list{'A} } -->
    sequent ['ext] { 'H >- rev{'l} IN list{'A} }

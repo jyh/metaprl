@@ -91,14 +91,14 @@ let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_i
 (*
  * Well-formedness.
  *)
-interactive free_vars_wf1 {| intro_resource [] |} 'H :
+interactive free_vars_wf1 {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- member{raw_term_type; 't} } -->
    sequent ['ext] { 'H >- member{var_set; free_vars{'t}} }
 
 (*
  * Functionality.
  *)
-interactive free_vars_fun1 {| intro_resource [] |} 'H 't1 'f 'v1 :
+interactive free_vars_fun1 {| intro [] |} 'H 't1 'f 'v1 :
    [wf] sequent [squash] { 'H >- member{raw_term_type; 't1} } -->
    [wf] sequent [squash] { 'H >- member{raw_term_type; 't2} } -->
    [wf] sequent [squash] { 'H >- member{vmap_type; 'f} } -->
@@ -109,7 +109,7 @@ interactive free_vars_fun1 {| intro_resource [] |} 'H 't1 'f 'v1 :
    [main] sequent [squash] { 'H >- "assert"{vmap_compare{'v1; 'v2; 'f}} } -->
    sequent ['ext] { 'H >- "assert"{vmember{'v2; free_vars{'t2}}} }
 
-interactive free_vars_wf2 {| intro_resource [] |} 'H :
+interactive free_vars_wf2 {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- member{term_type; 't} } -->
    sequent ['ext] { 'H >- member{var_set; free_vars{'t}} }
 

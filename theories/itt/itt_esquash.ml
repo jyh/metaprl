@@ -125,19 +125,19 @@ let fold_esquash = makeFoldC << esquash{'P} >> unfold_esquash
  * $P$ is a type; it contains the terms $@btrue$ and $@bfalse$.
  * @end[doc]
  *)
-interactive esquash_bool_type {| intro_resource [] |} 'H :
+interactive esquash_bool_type {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- "type"{'P} } -->
    sequent ['ext] { 'H >- "type"{esquash_bool{'P}} }
 
-interactive esquash_bool_univ {| intro_resource [] |} 'H :
+interactive esquash_bool_univ {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- 'P IN univ[i:l] } -->
    sequent ['ext] { 'H >- esquash_bool{'P} IN univ[i:l] }
 
-interactive esquash_bool_true {| intro_resource [] |} 'H :
+interactive esquash_bool_true {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- "type"{'P} } -->
    sequent ['ext] { 'H >- btrue IN esquash_bool{'P} }
 
-interactive esquash_bool_false {| intro_resource [] |} 'H :
+interactive esquash_bool_false {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- "type"{'P} } -->
    sequent ['ext] { 'H >- bfalse IN esquash_bool{'P} }
 
@@ -147,11 +147,11 @@ interactive esquash_bool_false {| intro_resource [] |} 'H :
  * if the proposition $P$ is also in $@univ{i}$.
  * @end[doc]
  *)
-interactive esquash_type {| intro_resource [] |} 'H :
+interactive esquash_type {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- "type"{'P} } -->
    sequent ['ext] { 'H >- "type"{esquash{'P}} }
 
-interactive esquash_univ {| intro_resource [] |} 'H :
+interactive esquash_univ {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- 'P IN univ[i:l] } -->
    sequent ['ext] { 'H >- esquash{'P} IN univ[i:l] }
 
@@ -213,18 +213,18 @@ let resource elim += (<< esquash{'P} >>, d_esquash_elim)
  * can be recovered).
  * @end[doc]
  *)
-interactive esquash_equal_elim2 {| elim_resource [] |} 'H 'J :
+interactive esquash_equal_elim2 {| elim [] |} 'H 'J :
    sequent ['ext] { 'H; x: ('t1 = 't2 in 'T3); 'J[it] >- 'C[it] } -->
    sequent ['ext] { 'H; x: esquash{.'t1 = 't2 in 'T3}; 'J['x] >- 'C['x] }
 
-interactive esquash_void_elim2 {| elim_resource [] |} 'H 'J :
+interactive esquash_void_elim2 {| elim [] |} 'H 'J :
    sequent ['ext] { 'H; x: esquash{void}; 'J['x] >- 'C['x] }
 
-interactive esquash_unit_elim2 {| elim_resource [] |} 'H 'J :
+interactive esquash_unit_elim2 {| elim [] |} 'H 'J :
    sequent ['ext] { 'H; 'J[it] >- 'C[it] } -->
    sequent ['ext] { 'H; x: esquash{unit}; 'J['x] >- 'C['x] }
 
-interactive esquash_esquash_elim2 {| elim_resource [] |} 'H 'J :
+interactive esquash_esquash_elim2 {| elim [] |} 'H 'J :
    sequent ['ext] { 'H; x: esquash{'P}; 'J[it] >- 'C[it] } -->
    sequent ['ext] { 'H; x: esquash{esquash{'P}}; 'J['x] >- 'C['x] }
 
@@ -236,7 +236,7 @@ interactive esquash_esquash_elim2 {| elim_resource [] |} 'H 'J :
  * are equal if both $P_1$ and $P_2$ are types, and $P_1 @Leftrightarrow P_2$.
  * @end[doc]
  *)
-interactive esquash_equal_intro {| intro_resource [] |} 'H 'x :
+interactive esquash_equal_intro {| intro [] |} 'H 'x :
    [wf] sequent [squash] { 'H >- 'P1 IN univ[i:l] } -->
    [wf] sequent [squash] { 'H >- 'P2 IN univ[i:l] } -->
    [main] sequent [squash] { 'H; x: 'P1 >- 'P2 } -->
@@ -251,7 +251,7 @@ interactive esquash_equal_intro {| intro_resource [] |} 'H 'x :
  * can be overridden with the following more useful rule.
  * @end[doc]
  *)
-interactive set_elim {| elim_resource [] |} 'H 'J :
+interactive set_elim {| elim [] |} 'H 'J :
    [main] sequent ['ext] { 'H; x: 'T; z: esquash{'P['x]}; 'J['x] >- 'C['x] } -->
    sequent ['ext] { 'H; x: { y: 'T | 'P['y] }; 'J['x] >- 'C['x] }
 

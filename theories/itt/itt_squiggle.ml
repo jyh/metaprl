@@ -129,7 +129,7 @@ let mk_squiggle_term = mk_dep0_dep0_term squiggle_opname
    are equal as types whenever they are correct types.
  * @end[doc]
 *)
-prim squiggleEquality {| intro_resource []; eqcd_resource |} 'H :
+prim squiggleEquality {| intro []; eqcd |} 'H :
   [wf] sequent[squash] { 'H >- 't1 ~ 's1 } -->
   [wf] sequent[squash] { 'H >- 't2 ~ 's2 } -->
   sequent['ext] { 'H >- ('t1 ~ 's1) = ('t2 ~ 's2) in univ[i:l]} =
@@ -140,7 +140,7 @@ interactive squiggleFormation 'H ('t ~ 's) :
   sequent['ext] { 'H >- univ[i:l]}
      (* = 't ~ 's *)
 
-interactive squiggleType {| intro_resource [] |} 'H :
+interactive squiggleType {| intro [] |} 'H :
   [wf] sequent[squash] { 'H >- 't ~ 's } -->
   sequent['ext] { 'H >- "type"{.'t ~ 's}}
 
@@ -152,12 +152,12 @@ interactive squiggleType {| intro_resource [] |} 'H :
  * @end[doc]
  *)
 
-prim squiggle_memberEquality {| intro_resource []; eqcd_resource; squash_resource |} 'H :
+prim squiggle_memberEquality {| intro []; eqcd; squash |} 'H :
   [wf] sequent[squash] { 'H >- 't ~ 's } -->
   sequent['ext] { 'H >- it IN ('t ~ 's)} =
   it
 
-prim squiggleElimination {|  elim_resource [ThinOption thinT] |} 'H 'J :
+prim squiggleElimination {|  elim [ThinOption thinT] |} 'H 'J :
    ('t : sequent['ext] { 'H; x: ('t ~ 's); 'J[it] >- 'C[it] }) -->
    sequent ['ext] { 'H; x: ('t ~ 's); 'J['x] >- 'C['x] } =
    't
@@ -201,7 +201,7 @@ prim squiggleHypSubstitution 'H 'J ('t ~ 's) bind{x. 'A['x]}:
  *)
 
 
-prim squiggleRef {|  intro_resource [] |} 'H :
+prim squiggleRef {|  intro [] |} 'H :
    sequent ['ext] { 'H >- 't ~ 't } =
    it
 

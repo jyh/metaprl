@@ -183,13 +183,13 @@ let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_i
 (*
  * Var is a type.
  *)
-interactive var_type_type {| intro_resource [] |} 'H :
+interactive var_type_type {| intro [] |} 'H :
    sequent ['ext] { 'H >- "type"{var_type} }
 
 (*
  * Induction.
  *)
-interactive var_type_elim {| elim_resource [ThinOption thinT] |} 'H 'J 'i 't 'v 'w :
+interactive var_type_elim {| elim [ThinOption thinT] |} 'H 'J 'i 't 'v 'w :
    [main] sequent ['ext] { 'H; x: var_type; 'J['x] >- 'C[vnil] } -->
    [main] sequent ['ext] { 'H; x: var_type; 'J['x]; i: int; v: var_type; w: 'C['v] >- 'C[ivar{'i; 'v}] } -->
    [main] sequent ['ext] { 'H; x: var_type; 'J['x]; t: atom; v: var_type; w: 'C['v] >- 'C[tvar{'t; 'v}] } -->
@@ -198,23 +198,23 @@ interactive var_type_elim {| elim_resource [ThinOption thinT] |} 'H 'J 'i 't 'v 
 (*
  * Typehood.
  *)
-interactive vnil_wf {| intro_resource [] |}  'H :
+interactive vnil_wf {| intro [] |}  'H :
    sequent ['ext] { 'H >- member{var_type; vnil} }
 
-interactive var_wf {| intro_resource [] |} 'H :
+interactive var_wf {| intro [] |} 'H :
    sequent ['ext] { 'H >- member{var_type; var[t:t]} }
 
-interactive ivar_wf {| intro_resource [] |} 'H :
+interactive ivar_wf {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- member{var_type; 'v} } -->
    [wf] sequent [squash] { 'H >- member{int; 'i} } -->
    sequent ['ext] { 'H >- member{var_type; ivar{'i; 'v}} }
 
-interactive tvar_wf {| intro_resource [] |} 'H :
+interactive tvar_wf {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- member{var_type; 'v} } -->
    [wf] sequent [squash] { 'H >- member{atom; 't} } -->
    sequent ['ext] { 'H >- member{var_type; tvar{'t; 'v}} }
 
-interactive eq_var_wf {| intro_resource [] |} 'H :
+interactive eq_var_wf {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- member{var_type; 'x} } -->
    [wf] sequent [squash] { 'H >- member{var_type; 'y} } -->
    sequent ['ext] { 'H >- member{bool; eq_var{'x; 'y}} }
@@ -222,18 +222,18 @@ interactive eq_var_wf {| intro_resource [] |} 'H :
 (*
  * Sqiggle equality.
  *)
-interactive var_sqequal {| intro_resource [] |} 'H :
+interactive var_sqequal {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- 'x = 'y in var_type } -->
    sequent ['ext] { 'H >- 'x ~ 'y }
 
 (*
  * Translate to equality.
  *)
-interactive eq_var_assert_intro {| intro_resource [] |} 'H :
+interactive eq_var_assert_intro {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- 'v1 = 'v2 in var_type } -->
    sequent ['ext] { 'H >- "assert"{eq_var{'v1; 'v2}} }
 
-interactive eq_var_assert_elim2 {| elim_resource [] |} 'H 'J :
+interactive eq_var_assert_elim2 {| elim [] |} 'H 'J :
    [wf] sequent [squash] { 'H; x: "assert"{eq_var{'v1; 'v2}}; 'J['x] >- member{var_type; 'v1} } -->
    [wf] sequent [squash] { 'H; x: "assert"{eq_var{'v1; 'v2}}; 'J['x] >- member{var_type; 'v2} } -->
    [main] sequent ['ext] { 'H; x: 'v1 = 'v2 in var_type; 'J[it] >- 'C[it] } -->

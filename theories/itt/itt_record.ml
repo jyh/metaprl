@@ -81,25 +81,25 @@ define unfoldRecordOrt : record_ort[t:t]{'a;'R} <-->  function_ort{r.rcrd[t:t]{'
 
 (*** Typing ***)
 
-interactive recordTypeS {| intro_resource [] |} 'H :
+interactive recordTypeS {| intro [] |} 'H :
    sequent[squash]{'H >- "type"{'A} } -->
    sequent['ext]  {'H >- "type"{record[n:t]{'A}} }
 
-interactive field_member {| intro_resource[] |} 'H:
+interactive field_member {| intro[] |} 'H:
    sequent[squash]{'H >- 'r IN record[n:t]{'A} } -->
    sequent['ext]  {'H >- field[n:t]{'r} IN 'A }
 
-interactive recordTypeL {| intro_resource [] |} 'H :
+interactive recordTypeL {| intro [] |} 'H :
    sequent[squash]{'H >- "type"{'R} } -->
    sequent[squash]{'H; self:'R >- "type"{'A['self]} } -->
    sequent['ext]  {'H >- "type"{record[n:t]{self.'A['self];'R}} }
 
-interactive recordTypeR {| intro_resource [] |} 'H :
+interactive recordTypeR {| intro [] |} 'H :
    sequent[squash]{'H >- "type"{'A} } -->
    sequent[squash]{'H; x:'A >- "type"{'R['x]} } -->
    sequent['ext]  {'H >- "type"{record[n:t]{'A;x.'R['x]}} }
 
-interactive recordTypeI {| intro_resource [] |} 'H :
+interactive recordTypeI {| intro [] |} 'H :
    sequent[squash]{'H >- "type"{'A} } -->
    sequent[squash]{'H >- "type"{'R} } -->
    sequent['ext]  {'H >- "type"{record[n:t]{'A;'R}} }
@@ -117,7 +117,7 @@ interactive_rw record_beta:
    field[n:t]{rcrd[m:t]{'a; 'r}} <--> eq_label[n:t,m:t]{'a;
                                                         field[n:t]{'r}}
 
-interactive record_eta {| intro_resource [] |} 'H 'A:
+interactive record_eta {| intro [] |} 'H 'A:
    sequent[squash]{'H >- 'r IN record[n:t]{'A} } -->
    sequent['ext]  {'H >- rcrd[n:t]{field[n:t]{'r}; 'r} ~ 'r }
 
@@ -167,16 +167,16 @@ interactive recordMemberS  'H:
    sequent[squash]{'H >- eq_label[n:t,m:t]{('a IN 'A); ('r IN record[m:t]{'A})} } -->
    sequent['ext]  {'H >- rcrd[n:t]{'a;'r} IN record[m:t]{'A} }
 
-interactive recordTypeEliminationS {| elim_resource [ThinOption thinT] |} 'H 'J 'v:
+interactive recordTypeEliminationS {| elim [ThinOption thinT] |} 'H 'J 'v:
    sequent ['ext] { 'H; u:"type"{record[n:t]{'A}}; v:"type"{'A}; 'J['u] >- 'C['u] } -->
    sequent ['ext] { 'H; u:"type"{record[n:t]{'A}}; 'J['u] >- 'C['u] }
 
-interactive recordTypeEliminationL {| elim_resource [ThinOption thinT] |} 'H 'J 'r 'v:
+interactive recordTypeEliminationL {| elim [ThinOption thinT] |} 'H 'J 'r 'v:
    sequent ['ext] { 'H; u:"type"{record[n:t]{self.'A['self];'R}}; 'J['u] >- 'r IN 'R } -->
    sequent ['ext] { 'H; u:"type"{record[n:t]{self.'A['self];'R}}; v:"type"{'A['r]}; 'J['u] >- 'C['u] } -->
    sequent ['ext] { 'H; u:"type"{record[n:t]{self.'A['self];'R}}; 'J['u] >- 'C['u] }
 
-interactive recordTypeEliminationR {| elim_resource [ThinOption thinT] |} 'H 'J 'a 'v:
+interactive recordTypeEliminationR {| elim [ThinOption thinT] |} 'H 'J 'a 'v:
    sequent ['ext] { 'H; u:"type"{record[n:t]{'A;x.'R['x]}}; 'J['u] >- 'a IN 'A } -->
    sequent ['ext] { 'H; u:"type"{record[n:t]{'A;x.'R['x]}}; v:"type"{'R['a]}; 'J['u] >- 'C['u] } -->
    sequent ['ext] { 'H; u:"type"{record[n:t]{'A;x.'R['x]}}; 'J['u] >- 'C['u] }
@@ -198,7 +198,7 @@ interactive recordEqualI   'H:
    sequent[squash]{'H >- 'r = 's in 'R } -->
    sequent['ext]  {'H >- 'r = 's in record[n:t]{'A;'R} }
 
-interactive recordMemberOrt (* {| intro_resource[SelectOption 0] |} *) 'H 'u:
+interactive recordMemberOrt (* {| intro[SelectOption 0] |} *) 'H 'u:
    sequent[squash]{'H >- 'r IN 'R } -->
    [ort] sequent[squash]{'H; u:'R >- record_ort[n:t]{'a;'R} } -->
    sequent['ext]  {'H >- rcrd[n:t]{'a;'r} IN 'R }
@@ -240,13 +240,13 @@ let resource intro += [
 
 (* Single Records *)
 
-interactive recordEliminationS {| elim_resource[] |} 'H 'J 'x:
+interactive recordEliminationS {| elim[] |} 'H 'J 'x:
    sequent['ext]  {'H; x:'A; r:record; 'J[rcrd[n:t]{'x;'r}] >- 'C[rcrd[n:t]{'x;'r}]} -->
    sequent['ext]  {'H; r:record[n:t]{'A}; 'J['r] >- 'C['r]}
 
 (* Left-associated Records *)
 
-interactive recordEliminationL2 {| elim_resource[] |} 'H 'J   bind{rr,x.'C['rr;'x]} :
+interactive recordEliminationL2 {| elim[] |} 'H 'J   bind{rr,x.'C['rr;'x]} :
    sequent['ext]  {'H; r:record[n:t]{self.'A['self];'R}; 'J['r]; rr:'R; x:'A['rr] >- 'C['rr;'x]} -->
    sequent['ext]  {'H; r:record[n:t]{self.'A['self];'R}; 'J['r] >- 'C['r; field[n:t]{'r}]}
 
@@ -262,7 +262,7 @@ interactive recordEliminationL 'H 'J 'x 'rr:
 
 (* Right-assotiated Records *)
 
-interactive recordEliminationR2 {| elim_resource[] |} 'H 'J    bind{rr,z.'C['rr;'z]}:
+interactive recordEliminationR2 {| elim[] |} 'H 'J    bind{rr,z.'C['rr;'z]}:
    sequent['ext]  {'H; r:record[n:t]{'A;x.'R['x]}; 'J['r]; x:'A; rr:'R['x] >- 'C['rr;'x]} -->
    sequent['ext]  {'H; r:record[n:t]{'A;x.'R['x]}; 'J['r] >- 'C['r; field[n:t]{'r}]}
 
@@ -293,7 +293,7 @@ interactive recordEliminationI2  'H 'J  'x 'rr :
 
 (*** Orthogonality ***)
 
-interactive functionOrtDinter {| intro_resource[] |} 'H 'b :
+interactive functionOrtDinter {| intro[] |} 'H 'b :
    [wf] sequent[squash]{'H >- "type"{disect{'A;a.'B['a]}} } -->
    [main] sequent[squash]{'H; a:'A; b:'B['a] >- function_ort{x.'f['x];'A} } -->
    [main] sequent[squash]{'H; a:'A; b:'B['a] >- function_ort{x.'f['x];'B['a]} } -->
@@ -301,27 +301,27 @@ interactive functionOrtDinter {| intro_resource[] |} 'H 'b :
 
 
 
-interactive recordOrtIntro0 {| intro_resource[] |} 'H  :
+interactive recordOrtIntro0 {| intro[] |} 'H  :
    sequent['ext]  {'H  >- record_ort[n:t]{'a;record} }
 
-interactive recordOrtIntroS {| intro_resource[] |} 'H  'x  :
+interactive recordOrtIntroS {| intro[] |} 'H  'x  :
    [wf] sequent[squash]{'H >- "type"{record[m:t]{'A}} } -->
    [main] sequent[squash]{'H; x:'A >- eq_label[n:t,m:t]{.'a IN 'A;."true"} } -->
    sequent['ext]  {'H >- record_ort[n:t]{'a;record[m:t]{'A}} }
 
-interactive recordOrtIntroR {| intro_resource[] |} 'H  'x  :
+interactive recordOrtIntroR {| intro[] |} 'H  'x  :
    [wf] sequent[squash]{'H >- "type"{record[m:t]{self.'A['self];'R}} } -->
    [main] sequent[squash]  {'H; r:'R; x:'A['r] >- record_ort[n:t]{'a;'R}}  -->
    [main] sequent[squash]  {'H; r:'R; x:'A['r] >- record_ort[n:t]{'a;record[m:t]{'A['r]}}}  -->
    sequent['ext]  {'H >- record_ort[n:t]{'a;record[m:t]{self.'A['self];'R}} }
 
-interactive recordOrtIntroL {| intro_resource[] |} 'H  'r :
+interactive recordOrtIntroL {| intro[] |} 'H  'r :
    [wf] sequent[squash]{'H >- "type"{record[m:t]{'A;x.'R['x]}} } -->
    [main] sequent[squash]  {'H; x:'A; r:'R['x] >- record_ort[n:t]{'a;'R['x]} } -->
    [main] sequent[squash]  {'H; x:'A; r:'R['x] >- record_ort[n:t]{'a;record[m:t]{'A}}}  -->
    sequent['ext]  {'H >- record_ort[n:t]{'a;record[m:t]{'A;x.'R['x]}} }
 
-interactive recordOrtIntroI {| intro_resource[] |} 'H  'x  :
+interactive recordOrtIntroI {| intro[] |} 'H  'x  :
    [wf] sequent[squash]{'H >- "type"{record[m:t]{'A;'R}} } -->
    [main] sequent[squash]  {'H; x:'A; r:'R >- record_ort[n:t]{'a;'R} } -->
    [main] sequent[squash]  {'H; x:'A; r:'R >- record_ort[n:t]{'a;record[m:t]{'A}}} -->

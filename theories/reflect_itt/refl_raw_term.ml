@@ -179,11 +179,11 @@ let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_i
 (*
  * Operators.
  *)
-prim operator_type {| intro_resource [] |} 'H :
+prim operator_type {| intro [] |} 'H :
    sequent ['ext] { 'H >- "type"{operator_type} } =
    it
 
-prim eq_op_wf {| intro_resource [] |} 'H :
+prim eq_op_wf {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- member{operator_type; 'op1} } -->
    [wf] sequent [squash] { 'H >- member{operator_type; 'op2} } -->
    sequent ['ext] { 'H >- member{bool; eq_op{'op1; 'op2}} } =
@@ -213,39 +213,39 @@ prim eq_op_trans 'H 'op2 :
 (*
  * Bterms.
  *)
-interactive raw_bterm_type {| intro_resource [] |} 'H :
+interactive raw_bterm_type {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- "type"{'T} } -->
    sequent ['ext] { 'H >- "type"{raw_bterm_type{'T}} }
 
 (*
  * Bvars.
  *)
-interactive bvar_type {| intro_resource [] |} 'H :
+interactive bvar_type {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- "type"{'T} } -->
    sequent ['ext] { 'H >- "type"{bvar_type{'T}} }
 
 (*
  * Terms.
  *)
-interactive raw_term_type2 {| intro_resource [] |} 'H :
+interactive raw_term_type2 {| intro [] |} 'H :
    sequent ['ext] { 'H >- "type"{raw_term_type} }
 
-interactive bvar_wf {| intro_resource [] |} 'H :
+interactive bvar_wf {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- member{var_type; 'v} } -->
    [wf] sequent [squash] { 'H >- member{list{raw_term_type}; 'tl} } -->
    sequent ['ext] { 'H >- member{raw_term_type; bvar{'v; 'tl}} }
 
-interactive bterm_wf {| intro_resource [] |} 'H :
+interactive bterm_wf {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- member{list{var_type}; 'vl} } -->
    [wf] sequent [squash] { 'H >- member{'T; 't} } -->
    sequent ['ext] { 'H >- member{raw_bterm_type{'T}; bterm{'vl; 't}} }
 
-interactive term_wf {| intro_resource [] |} 'H :
+interactive term_wf {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- member{operator_type; 'op} } -->
    [wf] sequent [squash] { 'H >- member{list{raw_bterm_type{raw_term_type}}; 'bterms} } -->
    sequent ['ext] { 'H >- member{raw_term_type; term{'op; 'bterms}} }
 
-interactive term_elim1 {| elim_resource [ThinOption thinT] |} 'H 'J 'T 'y 'z 'w 'v 'op 'bterms 'terms :
+interactive term_elim1 {| elim [ThinOption thinT] |} 'H 'J 'T 'y 'z 'w 'v 'op 'bterms 'terms :
    [main] sequent ['ext] { 'H; x: raw_term_type; 'J['x];
       T: univ[1:l];
       y: subtype{'T; raw_term_type};
@@ -262,7 +262,7 @@ interactive term_elim1 {| elim_resource [ThinOption thinT] |} 'H 'J 'T 'y 'z 'w 
       >- 'C[bvar{'v; 'terms}] } -->
    sequent ['ext] { 'H; x: raw_term_type; 'J['x] >- 'C['x] }
 
-interactive bterm_term_wf {| intro_resource [] |} 'H :
+interactive bterm_term_wf {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- "type"{'T} } -->
    [wf] sequent [squash] { 'H >- member{raw_bterm_type{'T}; 't} } -->
    sequent ['ext] { 'H >- member{'T; bterm_term{'t}} }

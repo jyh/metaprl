@@ -107,7 +107,7 @@ dform power_df3 : power{'s1; 's2} =
  * are sets.
  * @end[doc]
  *)
-interactive power_isset1 {| intro_resource [] |} 'H :
+interactive power_isset1 {| intro [] |} 'H :
    ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
    ["wf"] sequent [squash] { 'H >- isset{'s2} } -->
    sequent ['ext] { 'H >- isset{power{'s1; 's2}} }

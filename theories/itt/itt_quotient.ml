@@ -215,7 +215,7 @@ prim quotientFormation 'H (quot x, y: 'A // 'E['x; 'y]) 'z 'u 'v :
  * @end[itemize]
  * @end[doc]
  *)
-prim quotientType {| intro_resource [] |} 'H 'u 'v 'w 'x1 'x2 :
+prim quotientType {| intro [] |} 'H 'u 'v 'w 'x1 'x2 :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H; u: 'A; v: 'A >- "type"{'E['u; 'v]} } -->
    [wf] sequent [squash] { 'H; u: 'A >- 'E['u; 'u] } -->
@@ -231,7 +231,7 @@ prim quotientType {| intro_resource [] |} 'H 'u 'v 'w 'x1 'x2 :
  * the equivalence relations $E_1$ and $E_2$ are equal.
  * @end[doc]
  *)
-prim quotientWeakEquality {| intro_resource []; eqcd_resource |} 'H 'x 'y 'z 'u 'v :
+prim quotientWeakEquality {| intro []; eqcd |} 'H 'x 'y 'z 'u 'v :
    [wf] sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
    [wf] sequent [squash] { 'H; x: 'A1; y: 'A1 >- 'E1['x; 'y] = 'E2['x; 'y] in univ[i:l] } -->
    [wf] sequent [squash] { 'H; x: 'A1 >- 'E1['x; 'x] } -->
@@ -251,7 +251,7 @@ prim quotientWeakEquality {| intro_resource []; eqcd_resource |} 'H 'x 'y 'z 'u 
  * $E_1[x, y] @Leftrightarrow E_2[x, y]$.
  * @end[doc]
  *)
-prim quotientEquality {| intro_resource [SelectOption 1] |} 'H 'r 's 'v :
+prim quotientEquality {| intro [SelectOption 1] |} 'H 'r 's 'v :
    [wf] sequent [squash] { 'H >- quot x1, y1: 'A1 // 'E1['x1; 'y1] = quot x1, y1: 'A1 // 'E1['x1; 'y1] in univ[i:l] } -->
    [wf] sequent [squash] { 'H >- quot x2, y2: 'A2 // 'E2['x2; 'y2] = quot x2, y2: 'A2 // 'E2['x2; 'y2] in univ[i:l] } -->
    [wf] sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
@@ -263,7 +263,7 @@ prim quotientEquality {| intro_resource [SelectOption 1] |} 'H 'r 's 'v :
 (*!
  * @docoff
  *)
-prim quotient_memberFormation {| intro_resource [] |} 'H :
+prim quotient_memberFormation {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- "type"{(quot x, y: 'A // 'E['x; 'y])} } -->
    [main] ('a : sequent ['ext] { 'H >- 'A }) -->
    sequent ['ext] { 'H >- quot x, y: 'A // 'E['x; 'y] } =
@@ -278,13 +278,13 @@ prim quotient_memberFormation {| intro_resource [] |} 'H :
  * equivalence relation $E$.
  * @end[doc]
  *)
-prim quotient_memberWeakEquality {| intro_resource [] |} 'H :
+prim quotient_memberWeakEquality {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- "type"{(quot x, y: 'A // 'E['x; 'y])} } -->
    [wf] sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
    sequent ['ext] { 'H >- 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y] } =
    it
 
-prim quotientMember {| intro_resource [] |}  'H :
+prim quotientMember {| intro [] |}  'H :
    [wf] sequent [squash] { 'H >- "type"{(quot x, y: 'A // 'E['x; 'y])} } -->
    [wf] sequent [squash] { 'H >- 'l IN 'A } -->
    sequent ['ext] { 'H >- 'l IN (quot x, y: 'A // 'E['x; 'y]) } =
@@ -297,7 +297,7 @@ prim quotientMember {| intro_resource [] |}  'H :
  * in $A$, and they are related with the equivalence relation $E[a_1, a_2]$.
  * @end[doc]
  *)
-prim quotient_memberEquality {| intro_resource []; eqcd_resource |} 'H :
+prim quotient_memberEquality {| intro []; eqcd |} 'H :
    [wf] sequent [squash] { 'H >- "type"{(quot x, y: 'A // 'E['x; 'y])} } -->
    [wf] sequent [squash] { 'H >- 'a1 IN 'A } -->
    [wf] sequent [squash] { 'H >- 'a2 IN 'A } -->
@@ -323,7 +323,7 @@ prim quotientElimination1 'H 'J 'v 'w 'z :
    sequent ['ext] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a] >- 's['a] = 't['a] in 'T['a] } =
    it
 
-prim quotientElimination2 {| elim_resource [ThinOption thinT] |} 'H 'J 'v 'w 'z :
+prim quotientElimination2 {| elim [ThinOption thinT] |} 'H 'J 'v 'w 'z :
    [wf] sequent [squash] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a] >- "type"{'T['a]} } -->
    [main] sequent [squash] { 'H; a: quot x, y: 'A // 'E['x; 'y];
              v: 'A; w: 'A; z: 'E['v; 'w]; 'J['v] >- 's['v] = 't['w] in 'T['v]
@@ -337,7 +337,7 @@ prim quotientElimination2 {| elim_resource [ThinOption thinT] |} 'H 'J 'v 'w 'z 
  * that $E[a_1, a_2]$.
  * @end[doc]
  *)
-prim quotient_equalityElimination {| elim_resource [] |} 'H 'J 'v :
+prim quotient_equalityElimination {| elim [] |} 'H 'J 'v :
    [main] ('g['v] : sequent ['ext] { 'H; x: 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]; 'J['x]; v: squash{'E['a1; 'a2]} >- 'T['x] }) -->
    sequent ['ext] { 'H; x: 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]; 'J['x] >- 'T['x] } =
    'g[it]

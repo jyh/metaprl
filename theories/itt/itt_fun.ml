@@ -110,7 +110,7 @@ prim_rw unfold_fun : ('A -> 'B) <--> (x: 'A -> 'B)
  * The non-dependent function has an intensional type equality.
  * @end[doc]
  *)
-interactive independentFunctionEquality {| intro_resource []; eqcd_resource |} 'H :
+interactive independentFunctionEquality {| intro []; eqcd |} 'H :
    [wf] sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
    [wf] sequent [squash] { 'H >- 'B1 = 'B2 in univ[i:l] } -->
    sequent ['ext] { 'H >- ('A1 -> 'B1) = ('A2 -> 'B2) in univ[i:l] }
@@ -118,7 +118,7 @@ interactive independentFunctionEquality {| intro_resource []; eqcd_resource |} '
 (*
  * Typehood.
  *)
-interactive independentFunctionType {| intro_resource [] |} 'H 'x :
+interactive independentFunctionType {| intro [] |} 'H 'x :
    [wf] sequent [squash] { 'H >- "type"{'A1} } -->
    [wf] sequent [squash] { 'H; x: 'A1 >- "type"{'B1} } -->
    sequent ['ext] { 'H >- "type"{. 'A1 -> 'B1 } }
@@ -133,7 +133,7 @@ interactive independentFunctionType {| intro_resource [] |} 'H 'x :
  * there is a proof of $B$.
  * @end[doc]
  *)
-interactive independentLambdaFormation {| intro_resource [] |} 'H 'z :
+interactive independentLambdaFormation {| intro [] |} 'H 'z :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [main] ('b['z] : sequent ['ext] { 'H; z: 'A >- 'B }) -->
    sequent ['ext] { 'H >- 'A -> 'B }
@@ -148,7 +148,7 @@ interactive independentLambdaFormation {| intro_resource [] |} 'H 'z :
  * in $A$.
  * @end[doc]
  *)
-interactive independentLambdaEquality {| intro_resource []; eqcd_resource |} 'H 'x :
+interactive independentLambdaEquality {| intro []; eqcd |} 'H 'x :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H; x: 'A >- 'b1['x] = 'b2['x] in 'B } -->
    sequent ['ext] { 'H >- lambda{a1. 'b1['a1]} = lambda{a2. 'b2['a2]} in 'A -> 'B }
@@ -185,7 +185,7 @@ interactive independentFunctionElimination2 'H 'J 'f 'y 'z 'a :
  * functions and arguments are equal.
  * @end[doc]
  *)
-interactive independentApplyEquality {| eqcd_resource |} 'H ('A -> 'B) :
+interactive independentApplyEquality {| eqcd |} 'H ('A -> 'B) :
    [wf] sequent [squash] { 'H >- 'f1 = 'f2 in 'A -> 'B } -->
    [wf] sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
    sequent ['ext] { 'H >- ('f1 'a1) = ('f2 'a2) in 'B }

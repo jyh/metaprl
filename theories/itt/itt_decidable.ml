@@ -239,9 +239,9 @@ let decideT t p =
  * The propositions $@true$ and $@false$ are always decidable.
  * @end[doc]
  *)
-interactive dec_false {| decide_resource |} 'H :
+interactive dec_false {| decide |} 'H :
    sequent ['ext] { 'H >- decidable{."false"} }
 
-interactive dec_true {| decide_resource |} 'H :
+interactive dec_true {| decide |} 'H :
    sequent ['ext] { 'H >- decidable{."true"} }
 (*! @docoff *)

@@ -169,12 +169,12 @@ dform union_df2 : parens :: "prec"[prec_or] :: union{'s} =
  * are sets.
  * @end[doc]
  *)
-interactive bunion_isset {| intro_resource [] |} 'H :
+interactive bunion_isset {| intro [] |} 'H :
    ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
    ["wf"] sequent [squash] { 'H >- isset{'s2} } -->
    sequent ['ext] { 'H >- isset{union{'s1; 's2}} }
 
-interactive union_isset {| intro_resource [] |} 'H :
+interactive union_isset {| intro [] |} 'H :
    ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
    sequent ['ext] { 'H >- isset{union{'s1}} }
 
@@ -187,14 +187,14 @@ interactive union_isset {| intro_resource [] |} 'H :
  * be a member of $s_2$.
  * @end[doc]
  *)
-interactive bunion_member_intro_left {| intro_resource [SelectOption 1] |} 'H :
+interactive bunion_member_intro_left {| intro [SelectOption 1] |} 'H :
    ["wf"] sequent [squash] { 'H >- isset{'x} } -->
    ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
    ["wf"] sequent [squash] { 'H >- isset{'s2} } -->
    sequent ['ext] { 'H >- mem{'x; 's1} } -->
    sequent ['ext] { 'H >- mem{'x; union{'s1; 's2}} }
 
-interactive bunion_member_intro_right {| intro_resource [SelectOption 2] |} 'H :
+interactive bunion_member_intro_right {| intro [SelectOption 2] |} 'H :
    ["wf"] sequent [squash] { 'H >- isset{'x} } -->
    ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
    ["wf"] sequent [squash] { 'H >- isset{'s2} } -->
@@ -208,7 +208,7 @@ interactive bunion_member_intro_right {| intro_resource [SelectOption 2] |} 'H :
  * element $@mem{y; s}$ for which $@mem{x; y}$.
  * @end[doc]
  *)
-interactive union_member_intro {| intro_resource [] |} 'H :
+interactive union_member_intro {| intro [] |} 'H :
    ["wf"] sequent [squash] { 'H >- isset{'x} } -->
    ["wf"] sequent [squash] { 'H >- isset{'s} } -->
    sequent ['ext] { 'H >- dexists{'s; y. mem{'x; 'y}} } -->
@@ -224,7 +224,7 @@ interactive union_member_intro {| intro_resource [] |} 'H :
  * the binary union.
  * @end[doc]
  *)
-interactive bunion_member_elim {| elim_resource [] |} 'H 'J :
+interactive bunion_member_elim {| elim [] |} 'H 'J :
    ["wf"] sequent [squash] { 'H; x: mem{'y; union{'s1; 's2}}; 'J['x] >- isset{'y} } -->
    ["wf"] sequent [squash] { 'H; x: mem{'y; union{'s1; 's2}}; 'J['x] >- isset{'s1} } -->
    ["wf"] sequent [squash] { 'H; x: mem{'y; union{'s1; 's2}}; 'J['x] >- isset{'s2} } -->
@@ -239,7 +239,7 @@ interactive bunion_member_elim {| elim_resource [] |} 'H 'J :
  * a witness $@mem{z; y}$ for which $@mem{x; z}$.
  * @end[doc]
  *)
-interactive union_member_elim {| elim_resource [] |} 'H 'J :
+interactive union_member_elim {| elim [] |} 'H 'J :
    ["wf"] sequent [squash] { 'H; x: mem{'y; union{'s}}; 'J['x] >- isset{'y} } -->
    ["wf"] sequent [squash] { 'H; x: mem{'y; union{'s}}; 'J['x] >- isset{'s} } -->
    sequent ['ext] { 'H; x: mem{'y; union{'s}}; 'J['x]; z: set; u: mem{'z; 's}; v: mem{'y; 'z} >- 'T['x] } -->
@@ -250,12 +250,12 @@ interactive union_member_elim {| elim_resource [] |} 'H 'J :
  * The union types are both functional in their arguments.
  * @end[doc]
  *)
-interactive bunion_fun {| intro_resource [] |} 'H :
+interactive bunion_fun {| intro [] |} 'H :
    sequent ['ext] { 'H >- fun_set{z. 's1['z]} } -->
    sequent ['ext] { 'H >- fun_set{z. 's2['z]} } -->
    sequent ['ext] { 'H >- fun_set{z. union{'s1['z]; 's2['z]}} }
 
-interactive union_fun {| intro_resource [] |} 'H :
+interactive union_fun {| intro [] |} 'H :
    sequent ['ext] { 'H >- fun_set{z. 's['z]} } -->
    sequent ['ext] { 'H >- fun_set{z. union{'s['z]}} }
 (*! @docoff *)

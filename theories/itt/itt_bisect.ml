@@ -102,12 +102,12 @@ dform bisect_df : except_mode[src] :: parens :: "prec"[prec_bisect] :: bisect{'A
  * and $B$ are types.
  * @end[doc]
  *)
-interactive bisectEquality {| intro_resource []; eqcd_resource |} 'H :
+interactive bisectEquality {| intro []; eqcd |} 'H :
    [wf] sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
    [wf] sequent [squash] { 'H >- 'B1 = 'B2 in univ[i:l] } -->
    sequent ['ext] { 'H >- bisect{'A1; 'B1} = bisect{'A2; 'B2} in univ[i:l] }
 
-interactive bisectType {| intro_resource [] |} 'H :
+interactive bisectType {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H >- "type"{'B} } -->
    sequent ['ext] { 'H >- "type"{bisect{'A; 'B}} }
@@ -131,7 +131,7 @@ interactive bisectFormation 'H :
  * are members of both $A$ and $B$.
  * @end[doc]
  *)
-interactive bisectMemberEquality {| intro_resource []; eqcd_resource |} 'H :
+interactive bisectMemberEquality {| intro []; eqcd |} 'H :
    [wf] sequent [squash] { 'H >- 'x = 'y in 'A } -->
    [wf] sequent [squash] { 'H >- 'x = 'y in 'B } -->
    sequent ['ext] { 'H >- 'x = 'y in bisect{'A; 'B} }

@@ -183,7 +183,7 @@ let reduce_info =
 
 let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
 
-interactive evals_identity {| intro_resource [] |} 'H :
+interactive evals_identity {| intro [] |} 'H :
    sequent ['ext] { 'H >- evalsto{'t1; 't1} }
 
 let rwevalT i p =
@@ -378,10 +378,10 @@ prim_rw unfold_apply : Sil_programs!apply{'e1; 'e2} <-->
  * NATURAL SEMANTICS                                                    *
  ************************************************************************)
 
-interactive exprof_value {| intro_resource [] |} 'H :
+interactive exprof_value {| intro [] |} 'H :
    sequent ['ext] { 'H >- "value"{exprof{'e}} }
 
-interactive exprof_eval {| intro_resource [] |} 'H :
+interactive exprof_eval {| intro [] |} 'H :
    sequent ['ext] { 'H >- evalsto{eval{exprof{'e}; 's}; eval{exprof{'e}; 's}} }
 
 (*

@@ -150,13 +150,13 @@ prim subtypeFormation 'H :
  * two subtype-types are equal if their subterms are equal.
  * @end[doc]
  *)
-prim subtypeEquality {| intro_resource []; eqcd_resource |} 'H :
+prim subtypeEquality {| intro []; eqcd |} 'H :
    [wf] sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
    [wf] sequent [squash] { 'H >- 'B1 = 'B2 in univ[i:l] } -->
    sequent ['ext] { 'H >- subtype{'A1; 'B1} = subtype{'A2; 'B2} in univ[i:l] } =
    it
 
-prim subtypeType {| intro_resource [] |} 'H :
+prim subtypeType {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H >- "type"{'B} } -->
    sequent ['ext] { 'H >- "type"{subtype{'A; 'B}} } =
@@ -189,7 +189,7 @@ prim subtypeTypeRight 'H 'B :
  * proof extract term is always the $@it$ term.
  * @end[doc]
  *)
-prim subtype_axiomFormation {| intro_resource [] |} 'H 'x :
+prim subtype_axiomFormation {| intro [] |} 'H 'x :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [main] sequent [squash] { 'H; x: 'A >- 'x IN 'B } -->
    sequent ['ext] { 'H >- subtype{'A; 'B} } =
@@ -203,7 +203,7 @@ prim subtype_axiomFormation {| intro_resource [] |} 'H 'x :
  * must be true.
  * @end[doc]
  *)
-prim subtype_axiomEquality {| intro_resource []; eqcd_resource |} 'H :
+prim subtype_axiomEquality {| intro []; eqcd |} 'H :
    [main] sequent [squash] { 'H >- subtype{'A; 'B} } -->
    sequent ['ext] { 'H >- it IN subtype{'A; 'B} } =
    it
@@ -219,7 +219,7 @@ prim subtype_axiomEquality {| intro_resource []; eqcd_resource |} 'H :
  * additional assumption $a @in B$.
  * @end[doc]
  *)
-prim subtypeElimination {| elim_resource [ThinOption thinT] |} 'H 'J :
+prim subtypeElimination {| elim [ThinOption thinT] |} 'H 'J :
    ('t : sequent ['ext] { 'H; x: subtype{'A; 'B}; 'J[it] >- 'C[it] }) -->
    sequent ['ext] { 'H; x: subtype{'A; 'B}; 'J['x] >- 'C['x] } =
    't

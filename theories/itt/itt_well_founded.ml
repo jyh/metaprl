@@ -106,12 +106,12 @@ dform well_founded_df : except_mode[src] :: well_founded[i:l]{'A; x, y. 'R} =
  * relation $R$ is a binary relation.
  * @end[doc]
  *)
-interactive partial_order_type {| intro_resource [] |} 'H 'a 'b :
+interactive partial_order_type {| intro [] |} 'H 'a 'b :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H; a: 'A; b: 'A >- "type"{'R['a; 'b]} } -->
    sequent ['ext] { 'H >- "type"{partial_order{'A; x, y. 'R['x; 'y]}} }
 
-interactive well_founded_type {| intro_resource [] |} 'H 'a 'b :
+interactive well_founded_type {| intro [] |} 'H 'a 'b :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H; a: 'A; b: 'A >- "type"{'R['a; 'b]} } -->
    sequent ['ext] { 'H >- "type"{well_founded[i:l]{'A; x, y. 'R['x; 'y]}} }

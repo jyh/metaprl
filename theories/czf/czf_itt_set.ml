@@ -250,7 +250,7 @@ dform set_ind_df : parens :: "prec"[prec_tree_ind] :: set_ind{'z; a, f, g. 'body
  * default reasoning.
  * @end[doc]
  *)
-interactive set_type {| intro_resource [] |} 'H :
+interactive set_type {| intro [] |} 'H :
    sequent ['ext] { 'H >- "type"{set} }
 
 (*
@@ -273,12 +273,12 @@ interactive isset_assum 'H 'J :
  * $a$ produces a set for any argument $x @in T$.
  * @end[doc]
  *)
-interactive isset_collect {| intro_resource [] |} 'H 'y :
+interactive isset_collect {| intro [] |} 'H 'y :
    sequent [squash] { 'H >- 'T = 'T in univ[1:l] } -->
    sequent [squash] { 'H; y: 'T >- isset{'a['y]} } -->
    sequent ['ext] { 'H >- isset{collect{'T; x. 'a['x]}} }
 
-interactive isset_collect2 {| intro_resource [] |} 'H 'y :
+interactive isset_collect2 {| intro [] |} 'H 'y :
    sequent [squash] { 'H >- 'T = 'T in univ[1:l] } -->
    sequent [squash] { 'H; y: 'T >- isset{'a['y]} } -->
    sequent ['ext] { 'H >- collect{'T; x. 'a['x]} IN set }
@@ -287,7 +287,7 @@ interactive isset_collect2 {| intro_resource [] |} 'H 'y :
  * @docoff
  * This is how a set is constructed.
  *)
-interactive isset_apply {| intro_resource [] |} 'H :
+interactive isset_apply {| intro [] |} 'H :
    sequent [squash] { 'H >- ('f 'a) IN set } -->
    sequent ['ext] { 'H >- isset{.'f 'a} }
 
@@ -304,7 +304,7 @@ interactive isset_apply {| intro_resource [] |} 'H :
  * (which is true for all $W$-types).
  * @end[doc]
  *)
-interactive set_elim {| elim_resource [ThinOption thinT] |} 'H 'J 'a 'T 'f 'w 'z :
+interactive set_elim {| elim [ThinOption thinT] |} 'H 'J 'a 'T 'f 'w 'z :
    sequent ['ext] { 'H;
                     a: set;
                     'J['a];
@@ -349,7 +349,7 @@ interactive set_split_concl 'H 's (bind{v. 'C['v]}) 'T 'f 'z :
  * $g @in x@colon @univ{1} @rightarrow x @rightarrow T$.
  * @end[doc]
  *)
-interactive set_ind_equality2 {| intro_resource [] |} 'H :
+interactive set_ind_equality2 {| intro [] |} 'H :
    ["wf"]   sequent [squash] { 'H >- 'z1 = 'z2 in set } -->
    ["main"] sequent [squash] { 'H; a1: univ[1:l]; f1: 'a1 -> set; g1: x: univ[1:l] -> 'x -> 'T >-
       'body1['a1; 'f1; 'g1] = 'body2['a1; 'f1; 'g1] in 'T } -->

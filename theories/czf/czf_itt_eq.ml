@@ -249,7 +249,7 @@ dform dfun_prop_df : except_mode[src] :: parens :: "prec"[prec_apply] :: dfun_pr
  * the set arguments to be equal (in the native @hrefterm[set] type).
  * @end[doc]
  *)
-interactive eq_equality1 {| intro_resource [] |} 'H :
+interactive eq_equality1 {| intro [] |} 'H :
    sequent [squash] { 'H >- isset{'s1} } -->
    sequent [squash] { 'H >- isset{'s2} } -->
    sequent ['ext] { 'H >- Itt_equal!equal{univ[1:l]; eq{'s1; 's2}; eq{'s1; 's2}} }
@@ -257,7 +257,7 @@ interactive eq_equality1 {| intro_resource [] |} 'H :
 (*
  * Membership in a universe.
  *)
-interactive eq_type {| intro_resource [] |} 'H :
+interactive eq_type {| intro [] |} 'H :
    sequent [squash] { 'H >- isset{'s1} } -->
    sequent [squash] { 'H >- isset{'s2} } -->
    sequent ['ext] { 'H >- "type"{eq{'s1; 's2}} }
@@ -265,7 +265,7 @@ interactive eq_type {| intro_resource [] |} 'H :
 (*
  * More general equality in a universe.
  *)
-interactive eq_equality2 {| intro_resource [] |} 'H :
+interactive eq_equality2 {| intro [] |} 'H :
    sequent [squash] { 'H >- Itt_equal!equal{set; 's1; 's3} } -->
    sequent [squash] { 'H >- Itt_equal!equal{set; 's2; 's4} } -->
    sequent ['ext] { 'H >- Itt_equal!equal{univ[1:l]; eq{'s1; 's2}; eq{'s3; 's4}} }
@@ -277,12 +277,12 @@ interactive eq_equality2 {| intro_resource [] |} 'H :
  * that both $s_1$ and $s_2$ are types.
  * @end[doc]
  *)
-interactive equal_type {| intro_resource [] |} 'H :
+interactive equal_type {| intro [] |} 'H :
    sequent [squash] { 'H >- isset{'s1} } -->
    sequent [squash] { 'H >- isset{'s2} } -->
    sequent ['ext] { 'H >- "type"{equal{'s1; 's2}} }
 
-interactive equal_intro {| intro_resource [] |} 'H :
+interactive equal_intro {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- isset{'s1} } -->
    [wf] sequent [squash] { 'H >- isset{'s2} } -->
    sequent ['ext] { 'H >- eq{'s1; 's2} } -->
@@ -306,7 +306,7 @@ interactive equal_isset_right 'H 's1 :
  * transitive.
  * @end[doc]
  *)
-interactive eq_ref {| intro_resource [] |} 'H :
+interactive eq_ref {| intro [] |} 'H :
    sequent [squash] { 'H >- isset{'s1} } -->
    sequent ['ext] { 'H >- eq{'s1; 's1} }
 
@@ -355,12 +355,12 @@ let funSetT i p =
  * @emph{functional} with respect to their set arguments.
  * @end[doc]
  *)
-interactive eq_fun {| intro_resource [] |} 'H :
+interactive eq_fun {| intro [] |} 'H :
    sequent ['ext] { 'H >- fun_set{z. 'f1['z]} } -->
    sequent ['ext] { 'H >- fun_set{z. 'f2['z]} } -->
    sequent ['ext] { 'H >- fun_prop{z. eq{'f1['z]; 'f2['z]}} }
 
-interactive equal_fun {| intro_resource [] |} 'H :
+interactive equal_fun {| intro [] |} 'H :
    sequent ['ext] { 'H >- fun_set{z. 'f1['z]} } -->
    sequent ['ext] { 'H >- fun_set{z. 'f2['z]} } -->
    sequent ['ext] { 'H >- fun_prop{z. equal{'f1['z]; 'f2['z]}} }
@@ -395,11 +395,11 @@ interactive eq_concl_subst 'H 's1 's2 (bind{v. 'C['v]}) 'z :
  * it's argument be a family of propositions.
  * @end[doc]
  *)
-interactive fun_set_type {| intro_resource [] |} 'H :
+interactive fun_set_type {| intro [] |} 'H :
    sequent [squash] { 'H; z: set >- isset{'f['z]} } -->
    sequent ['ext] { 'H >- "type"{fun_set{z. 'f['z]}} }
 
-interactive fun_prop_type {| intro_resource [] |} 'H :
+interactive fun_prop_type {| intro [] |} 'H :
    sequent [squash] { 'H; z: set >- "type"{'f['z]} } -->
    sequent ['ext] { 'H >- "type"{fun_prop{z. 'f['z]}} }
 
@@ -410,14 +410,14 @@ interactive fun_prop_type {| intro_resource [] |} 'H :
  * The identity function is also functional.
  * @end[doc]
  *)
-interactive fun_set {| intro_resource [] |} 'H :
+interactive fun_set {| intro [] |} 'H :
    sequent [squash] { 'H >- isset{'u} } -->
    sequent ['ext] { 'H >- fun_set{z. 'u} }
 
-interactive fun_ref {| intro_resource [] |} 'H :
+interactive fun_ref {| intro [] |} 'H :
    sequent ['ext] { 'H >- fun_set{z. 'z} }
 
-interactive fun_prop {| intro_resource [] |} 'H :
+interactive fun_prop {| intro [] |} 'H :
    sequent [squash] { 'H >- "type"{'P} } -->
    sequent ['ext] { 'H >- fun_prop{z. 'P} }
 

@@ -48,17 +48,17 @@ define unfold_eq_label : eq_label{'x;'y} <--> eq_int{'x;'y}
 (*   Rules        *)
 (******************)
 
-interactive labelType {| intro_resource [] |} 'H :
+interactive labelType {| intro [] |} 'H :
    sequent ['ext] { 'H >- "type"{label} }
 
-interactive zeroMember {| intro_resource [] |} 'H :
+interactive zeroMember {| intro [] |} 'H :
    sequent ['ext] { 'H >- zero IN label}
 
-interactive nextMember {| intro_resource [] |} 'H :
+interactive nextMember {| intro [] |} 'H :
    sequent [squash] { 'H >- 'x='y in label} -->
    sequent ['ext] { 'H >- next{'x} = next{'y} in label}
 
-interactive labelInduction {| elim_resource [ThinOption thinT] |} 'H 'J 'n 'm 'z :
+interactive labelInduction {| elim [ThinOption thinT] |} 'H 'J 'n 'm 'z :
    sequent ['ext] { 'H; n: label; 'J['n] >- 'C[zero] }  -->
    sequent ['ext] { 'H; n: label; 'J['n]; m: label;  z: 'C['m] >- 'C[next{'m}] }  -->
    sequent ['ext] { 'H; n: label; 'J['n] >- 'C['n] }
@@ -92,11 +92,11 @@ interactive label_sqequal 'H:
    sequent[squash] {'H >-'n = 'm  in label} -->
    sequent['ext] {'H >- 'n ~ 'm}
 
-interactive reduce_eq_label_true {| intro_resource [] |} 'H:
+interactive reduce_eq_label_true {| intro [] |} 'H:
    sequent[squash] {'H >-'n = 'm  in label} -->
    sequent['ext] {'H >- eq_label{'n;'m} ~ btrue}
 
-interactive reduce_eq_label_false {| intro_resource [] |} 'H:
+interactive reduce_eq_label_false {| intro [] |} 'H:
    sequent[squash] {'H >- not{.'n = 'm  in label}} -->
    sequent['ext] {'H >- eq_label{'n;'m} ~ bfalse}
 

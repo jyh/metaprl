@@ -112,12 +112,12 @@ let fold_bunion = makeFoldC << bunion{'A; 'B} >> unfold_bunion
  * both $A$ and $B$ are types.
  * @end[doc]
  *)
-interactive bunionEquality {| intro_resource []; eqcd_resource |} 'H :
+interactive bunionEquality {| intro []; eqcd |} 'H :
    [wf] sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
    [wf] sequent [squash] { 'H >- 'B1 = 'B2 in univ[i:l] } -->
    sequent ['ext] { 'H >- bunion{'A1; 'B1} = bunion{'A2; 'B2} in univ[i:l] }
 
-interactive bunionType {| intro_resource [] |} 'H :
+interactive bunionType {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H >- "type"{'B} } -->
    sequent ['ext] { 'H >- "type"{bunion{'A; 'B}} }
@@ -139,12 +139,12 @@ interactive bunionFormation 'H :
  * in either type.
  * @end[doc]
  *)
-interactive bunionMemberEqualityLeft {| intro_resource [SelectOption 1]; eqcd_resource |} 'H :
+interactive bunionMemberEqualityLeft {| intro [SelectOption 1]; eqcd |} 'H :
    [wf] sequent [squash] { 'H >- 'x = 'y in 'A } -->
    [wf] sequent [squash] { 'H >- "type"{'B} } -->
    sequent ['ext] { 'H >- 'x = 'y in bunion{'A; 'B} }
 
-interactive bunionMemberEqualityRight {| intro_resource [SelectOption 2]; eqcd_resource |} 'H :
+interactive bunionMemberEqualityRight {| intro [SelectOption 2]; eqcd |} 'H :
    [wf] sequent [squash] { 'H >- 'x = 'y in 'B } -->
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    sequent ['ext] { 'H >- 'x = 'y in bunion{'A; 'B} }
@@ -160,7 +160,7 @@ interactive bunionMemberEqualityRight {| intro_resource [SelectOption 2]; eqcd_r
  * membership in $A$, and another for membership in $B$.
  * @end[doc]
  *)
-interactive bunionElimination {| elim_resource [ThinOption thinT] |} 'H 'J 'y :
+interactive bunionElimination {| elim [ThinOption thinT] |} 'H 'J 'y :
    [main] sequent [squash] { 'H; x: bunion{'A; 'B}; 'J['x]; y: 'A >- 't1['y] = 't2['y] in 'C['y] } -->
    [main] sequent [squash] { 'H; x: bunion{'A; 'B}; 'J['x]; y: 'B >- 't1['y] = 't2['y] in 'C['y] } -->
    sequent ['ext] { 'H; x: bunion{'A; 'B}; 'J['x] >- 't1['x] = 't2['x] in 'C['x] }

@@ -172,11 +172,11 @@ dform squash_df : except_mode[src] :: squash{'A} = math_squash{'A}
  * $<<squash{'A}>>$ is a type if $A$ is a type.
  * @end[doc]
  *)
-prim squashEquality {| intro_resource []; eqcd_resource |} 'H  :
+prim squashEquality {| intro []; eqcd |} 'H  :
    [wf] sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
    sequent ['ext] { 'H >- squash{'A1} = squash{'A2} in univ[i:l] } = it
 
-prim squashType {| intro_resource [] |} 'H :
+prim squashType {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    sequent ['ext] { 'H >- "type"{.squash{'A}} } =
    it
@@ -190,7 +190,7 @@ prim squashType {| intro_resource [] |} 'H :
  * from using it.
  * @end[doc]
  *)
-prim squashMemberFormation {| intro_resource [SelectOption 0] |} 'H :
+prim squashMemberFormation {| intro [SelectOption 0] |} 'H :
    [wf] sequent [squash] { 'H >- 'A } -->
    sequent ['ext]   { 'H >- squash{'A} } =
    it
@@ -266,7 +266,7 @@ interactive sqsqEqual 'H :
  * Next, we show that a witness of a provable hidden type is $@it$.
  * @end[doc]
  *)
-interactive squashMemberEquality {| intro_resource []; eqcd_resource |} 'H :
+interactive squashMemberEquality {| intro []; eqcd |} 'H :
    [wf] sequent [squash] { 'H >- squash{'A} } -->
    sequent ['ext] { 'H >- it IN squash{'A} }
 

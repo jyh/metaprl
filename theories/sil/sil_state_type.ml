@@ -105,55 +105,55 @@ prim_rw unfold_state_type : state_type{'decl} <-->
 (*
  * Need this unhiding.
  *)
-interactive unhide_in_domain {| elim_resource [] |} 'H 'J :
+interactive unhide_in_domain {| elim [] |} 'H 'J :
    sequent ['ext] { 'H; u: in_domain{'decl; 'l}; 'J['u] >- 'C['u] } -->
    sequent ['ext] { 'H; u: hide{in_domain{'decl; 'l}}; 'J['u] >- 'C['u] }
 
 (*
  * Typing rules.
  *)
-interactive label_type_member {| intro_resource [] |} 'H :
+interactive label_type_member {| intro [] |} 'H :
    sequent ['ext] { 'H >- member{univ[i:l]; label_type} }
 
-interactive label_type_type {| intro_resource [] |} 'H :
+interactive label_type_type {| intro [] |} 'H :
    sequent ['ext] { 'H >- "type"{label_type} }
 
-interactive in_domain_member {| intro_resource [] |} 'H :
+interactive in_domain_member {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- member{decl_type[i:l]; 'r} } -->
    [wf] sequent [squash] { 'H >- member{label_type; 'l} } -->
    sequent ['ext] { 'H >- member{univ[i:l]; in_domain{'r; 'l}} }
 
-interactive in_domain_type {| intro_resource [] |} 'H decl_type[i:l] :
+interactive in_domain_type {| intro [] |} 'H decl_type[i:l] :
    [wf] sequent [squash] { 'H >- member{decl_type[i:l]; 'r} } -->
    [wf] sequent [squash] { 'H >- member{label_type; 'l} } -->
    sequent ['ext] { 'H >- "type"{in_domain{'r; 'l}} }
 
-interactive empty_member {| intro_resource [] |} 'H :
+interactive empty_member {| intro [] |} 'H :
    sequent ['ext] { 'H >- member{decl_type[i:l]; state_empty_decl} }
 
-interactive alloc_member {| intro_resource [] |} 'H :
+interactive alloc_member {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- member{decl_type[i:l]; 'r} } -->
    [wf] sequent [squash] { 'H >- member{univ[i:l]; 't} } -->
    sequent ['ext] { 'H >- member{decl_type[i:l]; state_alloc_decl{'r; 't}} }
 
-interactive store_member {| intro_resource [] |} 'H :
+interactive store_member {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- member{decl_type[i:l]; 'r} } -->
    [wf] sequent [squash] { 'H >- in_domain{'r; 'l} } -->
    [wf] sequent [squash] { 'H >- member{univ[i:l]; 't} } -->
    sequent [squash] { 'H >- member{decl_type[i:l]; state_store_decl{'r; 'l; 't}} }
 
-interactive state_type_member {| intro_resource [] |} 'H :
+interactive state_type_member {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- member{decl_type[i:l]; 'decl} } -->
    sequent ['ext] { 'H >- member{univ[i:l]; state_type{'decl}} }
 
-interactive state_type_type {| intro_resource [] |} 'H decl_type[i:l] :
+interactive state_type_type {| intro [] |} 'H decl_type[i:l] :
    [wf] sequent [squash] { 'H >- member{decl_type[i:l]; 'decl} } -->
    sequent ['ext] { 'H >- "type"{state_type{'decl}} }
 
 (*
  * Membership of state operations.
  *)
-interactive empty_member2 {| intro_resource [] |} 'H :
+interactive empty_member2 {| intro [] |} 'H :
    sequent ['ext] { 'H >- member{state_type{state_empty_decl}; empty} }
 
 (*

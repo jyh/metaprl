@@ -159,13 +159,13 @@ prim intersectionFormation 'H 'x 'A :
  * $x @in A$.
  * @end[doc]
  *)
-prim intersectionEquality {| intro_resource []; eqcd_resource |} 'H 'y :
+prim intersectionEquality {| intro []; eqcd |} 'H 'y :
    [wf] sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
    [wf] sequent [squash] { 'H; y: 'A1 >- 'B1['y] = 'B2['y] in univ[i:l] } -->
    sequent ['ext] { 'H >- isect x1: 'A1. 'B1['x1] = isect x2: 'A2. 'B2['x2] in univ[i:l] } =
    it
 
-prim intersectionType {| intro_resource [] |} 'H 'y :
+prim intersectionType {| intro [] |} 'H 'y :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
    sequent ['ext] { 'H >- "type"{."isect"{'A; x. 'B['x]}} } =
@@ -177,10 +177,10 @@ prim intersectionType {| intro_resource [] |} 'H 'y :
  * The $@top$ type is a member of every type universe.
  * @end[doc]
  *)
-interactive topUniv {| intro_resource [] |} 'H :
+interactive topUniv {| intro [] |} 'H :
    sequent ['ext] { 'H >- top IN univ[i:l] }
 
-interactive topType {| intro_resource [] |} 'H :
+interactive topType {| intro [] |} 'H :
    sequent ['ext] { 'H >- "type"{top} }
 
 
@@ -198,13 +198,13 @@ interactive topType {| intro_resource [] |} 'H :
  * is trivial; all terms are equal in $@top$.
  * @end[doc]
  *)
-prim intersectionMemberEquality {| intro_resource []; eqcd_resource |} 'H 'z :
+prim intersectionMemberEquality {| intro []; eqcd |} 'H 'z :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H; z: 'A >- 'b1 = 'b2 in 'B['z] } -->
    sequent ['ext] { 'H >- 'b1 = 'b2 in isect x: 'A. 'B['x] } =
    it
 
-interactive topMemberEquality {| intro_resource []; eqcd_resource |} 'H :
+interactive topMemberEquality {| intro []; eqcd |} 'H :
    sequent ['ext] { 'H >- 'b1 = 'b2 in top }
 
 
@@ -219,7 +219,7 @@ interactive topMemberEquality {| intro_resource []; eqcd_resource |} 'H :
  * @end[doc]
  *)
 
-interactive intersectionMemberFormation {| intro_resource [] |} 'H 'z 'b :
+interactive intersectionMemberFormation {| intro [] |} 'H 'z 'b :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H; z: 'A >- 'b IN 'B['z] } -->
    sequent ['ext] { 'H >-  isect x: 'A. 'B['x] }
@@ -233,7 +233,7 @@ interactive intersectionMemberFormation {| intro_resource [] |} 'H 'z 'b :
  * @end[doc]
  *)
 
-interactive intersectionMemberFormation2 {| intro_resource [] |} 'H 'z :
+interactive intersectionMemberFormation2 {| intro [] |} 'H 'z :
     [wf] sequent [squash] { 'H >- "type"{'A} } -->
     [main] sequent ['ext] { 'H; z: squash{'A} >- 'B } -->
     sequent ['ext] { 'H >- isect x: 'A. 'B }
@@ -246,7 +246,7 @@ interactive intersectionMemberFormation2 {| intro_resource [] |} 'H 'z :
  * @end[doc]
  *)
 
-interactive topMemberFormation {| intro_resource [] |} 'H:
+interactive topMemberFormation {| intro [] |} 'H:
    sequent ['ext] { 'H >-  top }
 
 
@@ -261,7 +261,7 @@ interactive topMemberFormation {| intro_resource [] |} 'H:
  * to get a proof that $x @in B[a]$.
  * @end[doc]
  *)
-prim intersectionElimination {| elim_resource [] |} 'H 'J 'a 'x 'z 'v :
+prim intersectionElimination {| elim [] |} 'H 'J 'a 'x 'z 'v :
    [wf] sequent [squash] { 'H; x: isect y: 'A. 'B['y]; 'J['x] >- 'a IN 'A } -->
    [main] ('t['x; 'z; 'v] : sequent ['ext] { 'H; x: isect y: 'A. 'B['y]; 'J['x]; z: 'B['a]; v: 'z = 'x in 'B['a] >- 'T['x] }) -->
    sequent ['ext] { 'H; x: isect y: 'A. 'B['y]; 'J['x] >- 'T['x] } =
@@ -273,7 +273,7 @@ prim intersectionElimination {| elim_resource [] |} 'H 'J 'a 'x 'z 'v :
  * @end[doc]
  *)
 
-interactive intersectionElimination2 (*{| elim_resource [] |}*) 'H 'J 'x 'z 'v :
+interactive intersectionElimination2 (*{| elim [] |}*) 'H 'J 'x 'z 'v :
    [wf] sequent [squash] { 'H; x: isect y: 'A. 'B; 'J['x] >- 'A } -->
    [main] sequent ['ext] { 'H; x: isect y: 'A. 'B; 'J['x]; z: 'B; v: 'z = 'x in 'B >- 'T['x] } -->
    sequent ['ext] { 'H; x: isect y: 'A. 'B; 'J['x] >- 'T['x] }
@@ -305,7 +305,7 @@ interactive intersectionMemberCaseEquality 'H (isect x: 'A. 'B['x]) 'a :
  * domain type $B[a]$ for each $a @in A$.
  * @end[doc]
  *)
-prim intersectionSubtype {| intro_resource [] |} 'H 'a :
+prim intersectionSubtype {| intro [] |} 'H 'a :
    sequent [squash] { 'H >- subtype{'A2; 'A1} } -->
    sequent [squash] { 'H; a: 'A2 >- subtype{'B1['a]; 'B2['a]} } -->
    sequent ['ext] { 'H >- subtype{ (isect a1:'A1. 'B1['a1]); (isect a2:'A2. 'B2['a2]) } } =
@@ -338,7 +338,7 @@ interactive intersectionSubtype3 'H 'x :
  * @emph{Every} type is a subtype of $@top$.
  * @end[doc]
  *)
-interactive topSubtype {| intro_resource [] |} 'H :
+interactive topSubtype {| intro [] |} 'H :
    sequent [squash] { 'H >- "type"{'T} } -->
    sequent ['ext] { 'H >- subtype{'T; top} }
 (*! @docoff *)

@@ -327,7 +327,7 @@ dform it_df1 : it = cdot
 (*
  * True always holds.
  *)
-prim trueIntro {| intro_resource [] |} 'H :
+prim trueIntro {| intro [] |} 'H :
    sequent ['ext] { 'H >- "true" } =
    it;;
 
@@ -412,7 +412,7 @@ prim equalityFormation 'H 'T :
  * H >- a1 = a2 in T1
  * H >- b1 = b2 in T1
  *)
-prim equalityEquality {| intro_resource [] |} 'H :
+prim equalityEquality {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- 'T1 = 'T2 in univ[i:l] } -->
    [wf] sequent [squash] { 'H >- 'a1 = 'a2 in 'T1 } -->
    [wf] sequent [squash] { 'H >- 'b1 = 'b2 in 'T2 } -->
@@ -422,14 +422,14 @@ prim equalityEquality {| intro_resource [] |} 'H :
 (*
  * Typehood.
  *)
-prim equalityType {| intro_resource [] |} 'H :
+prim equalityType {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- 'a IN 'T } -->
    [wf] sequent [squash] { 'H >- 'b IN 'T } -->
    sequent ['ext] { 'H >- "type"{. 'a = 'b in 'T } } =
    it
 
 (*! @docoff *)
-interactive equalityType2 {| intro_resource [] |} 'H :
+interactive equalityType2 {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- 'a IN 'T } -->
    sequent ['ext] { 'H >- "type"{. 'a IN 'T } }
 
@@ -448,7 +448,7 @@ interactive equalityType2 {| intro_resource [] |} 'H :
  *
  * H >- a = b in T
  *)
-prim axiomMember {| intro_resource []; eqcd_resource |} 'H :
+prim axiomMember {| intro []; eqcd |} 'H :
    [wf] sequent [squash] { 'H >- 'a = 'b in 'T } -->
    sequent ['ext] { 'H >- it IN ('a = 'b in 'T) } =
    it
@@ -459,12 +459,12 @@ prim axiomMember {| intro_resource []; eqcd_resource |} 'H :
  *
  * H, x: a = b in T; J[it] >- C[it]
  *)
-prim equalityElimination {| elim_resource [] |} 'H 'J :
+prim equalityElimination {| elim [] |} 'H 'J :
    ('t : sequent ['ext] { 'H; x: 'a = 'b in 'T; 'J[it] >- 'C[it] }) -->
    sequent ['ext] { 'H; x: 'a = 'b in 'T; 'J['x] >- 'C['x] } =
    't
 
-prim type_axiomMember {| intro_resource []; eqcd_resource |} 'H :
+prim type_axiomMember {| intro []; eqcd |} 'H :
    sequent [squash] { 'H >- "type"{'T} } -->
    sequent ['ext] { 'H >- it IN "type"{'T} } =
    it
@@ -545,7 +545,7 @@ let resource intro += (univ_member_term, eqcd_univT)
  * every inhabitant $x @in @univ{l}$ is also a type.
  * @end[doc]
  *)
-prim universeType {| intro_resource [] |} 'H :
+prim universeType {| intro [] |} 'H :
    sequent ['ext] { 'H >- "type"{univ[l:l]} } =
    it
 

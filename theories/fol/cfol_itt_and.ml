@@ -40,7 +40,7 @@ prim_rw unfold_and : "and"{'A; 'B} <--> esquash{prod{'A; 'B}}
 prim_rw unfold_pair : "pair"{'a; 'b} <--> Base_trivial!it
 
 (* Lemmas *)
-interactive and_univ {| intro_resource [] |} 'H :
+interactive and_univ {| intro [] |} 'H :
    [wf] sequent ['ext] { 'H >- "type"{'A} } -->
    [wf] sequent ['ext] { 'H >- "type"{'B} } -->
    sequent ['ext] { 'H >- "and"{'A; 'B} IN univ[1:l] }

@@ -9,10 +9,10 @@ declare "false"
 
 dform false_df : "false" = `"False"
 
-prim false_type {| intro_resource [] |} 'H :
+prim false_type {| intro [] |} 'H :
    sequent ['ext] { 'H >- "type"{."false"} } = trivial
 
-prim false_elim {| elim_resource [] |} 'H 'J :
+prim false_elim {| elim [] |} 'H 'J :
    sequent ['ext] { 'H; x: "false"; 'J['x] >- 'C['x] } = trivial
 
 (*

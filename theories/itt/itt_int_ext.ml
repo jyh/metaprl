@@ -263,7 +263,7 @@ let reduce_div =
  * @thysection{Well-formedness and algebraic properties of @tt[mul]}
  * @end[doc]
  *)
-prim mul_wf {| intro_resource []; eqcd_resource |} 'H :
+prim mul_wf {| intro []; eqcd |} 'H :
    [wf] sequent [squash] { 'H >- 'a = 'a1 in int } -->
    [wf] sequent [squash] { 'H >- 'b = 'b1 in int } -->
    sequent ['ext] { 'H >- 'a *@ 'b = 'a1 *@ 'b1 in int } = it
@@ -436,7 +436,7 @@ interactive_rw rem_indReduce_rw :
 
 let rem_indReduceC = rem_indReduce_rw
 
-interactive rem_wf {| intro_resource []; eqcd_resource |} 'H :
+interactive rem_wf {| intro []; eqcd |} 'H :
    sequent [squash] { 'H >- "nequal"{'b ; 0} } -->
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    [wf] sequent [squash] { 'H >- 'b IN int } -->
@@ -479,7 +479,7 @@ interactive_rw div_indReduce_rw :
 
 let div_indReduceC = div_indReduce_rw
 
-interactive div_wf {| intro_resource []; eqcd_resource |} 'H :
+interactive div_wf {| intro []; eqcd |} 'H :
    sequent [squash] { 'H >- "nequal"{'b ; 0} } -->
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    [wf] sequent [squash] { 'H >- 'b IN int } -->
@@ -522,22 +522,22 @@ interactive_rw div_Assoc_rw :
 
 let div_AssocC = div_Assoc_rw
 
-interactive gt_wf {| intro_resource [] |} 'H :
+interactive gt_wf {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    [wf] sequent [squash] { 'H >- 'b IN int } -->
    sequent ['ext] { 'H >- "type"{gt{'a; 'b}} }
 
-interactive le_wf {| intro_resource [] |} 'H :
+interactive le_wf {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    [wf] sequent [squash] { 'H >- 'b IN int } -->
    sequent ['ext] { 'H >- "type"{le{'a; 'b}} }
 
-interactive ge_wf {| intro_resource [] |} 'H :
+interactive ge_wf {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    [wf] sequent [squash] { 'H >- 'b IN int } -->
    sequent ['ext] { 'H >- "type"{ge{'a; 'b}} }
 
-interactive ge_sqstable {| squash_resource; intro_resource [] |} 'H :
+interactive ge_sqstable {| squash; intro [] |} 'H :
    sequent [squash] { 'H >- 'a >= 'b } -->
    sequent ['ext] { 'H >- it IN ('a >= 'b) }
 

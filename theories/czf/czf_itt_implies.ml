@@ -56,7 +56,7 @@ let _ =
 (*
  * Implication is restricted.
  *)
-interactive fun_fun {| intro_resource [] |} 'H 'w :
+interactive fun_fun {| intro [] |} 'H 'w :
    ["wf"] sequent [squash] { 'H; w: set >- "type"{'A['w]} } -->
    ["wf"] sequent [squash] { 'H; w: set >- "type"{'B['w]} } -->
    sequent ['ext] { 'H >- fun_prop{x. 'A['x]} } -->
@@ -66,7 +66,7 @@ interactive fun_fun {| intro_resource [] |} 'H 'w :
 (*
  * Implication is restricted.
  *)
-interactive fun_res1 {| intro_resource [] |} 'H :
+interactive fun_res1 {| intro [] |} 'H :
    sequent ['ext] { 'H >- restricted{. 'A} } -->
    sequent ['ext] { 'H >- restricted{. 'B} } -->
    sequent ['ext] { 'H >- restricted{. "fun"{'A; 'B}} }
@@ -74,7 +74,7 @@ interactive fun_res1 {| intro_resource [] |} 'H :
 (*
  * Implication is restricted.
  *)
-interactive implies_fun {| intro_resource [] |} 'H 'w :
+interactive implies_fun {| intro [] |} 'H 'w :
    ["wf"] sequent [squash] { 'H; w: set >- "type"{'A['w]} } -->
    ["wf"] sequent [squash] { 'H; w: set >- "type"{'B['w]} } -->
    sequent ['ext] { 'H >- fun_prop{x. 'A['x]} } -->
@@ -84,7 +84,7 @@ interactive implies_fun {| intro_resource [] |} 'H 'w :
 (*
  * Implication is restricted.
  *)
-interactive implies_res1 {| intro_resource [] |} 'H :
+interactive implies_res1 {| intro [] |} 'H :
    sequent ['ext] { 'H >- restricted{. 'A} } -->
    sequent ['ext] { 'H >- restricted{. 'B} } -->
    sequent ['ext] { 'H >- restricted{. "implies"{'A; 'B}} }
@@ -92,7 +92,7 @@ interactive implies_res1 {| intro_resource [] |} 'H :
 (*
  * Implication is restricted.
  *)
-interactive iff_fun {| intro_resource [] |} 'H 'w :
+interactive iff_fun {| intro [] |} 'H 'w :
    ["wf"] sequent [squash] { 'H; w: set >- "type"{'A['w]} } -->
    ["wf"] sequent [squash] { 'H; w: set >- "type"{'B['w]} } -->
    sequent ['ext] { 'H >- fun_prop{x. 'A['x]} } -->
@@ -102,7 +102,7 @@ interactive iff_fun {| intro_resource [] |} 'H 'w :
 (*
  * Implication is restricted.
  *)
-interactive iff_res1 {| intro_resource [] |} 'H :
+interactive iff_res1 {| intro [] |} 'H :
    sequent ['ext] { 'H >- restricted{. 'A} } -->
    sequent ['ext] { 'H >- restricted{. 'B} } -->
    sequent ['ext] { 'H >- restricted{. "iff"{'A; 'B}} }

@@ -145,17 +145,17 @@ dform lt_df : parens :: "prec"[prec_compare] :: lt{'i; 'j} =
  * is a set.  Infinity is also a set.
  * @end[doc]
  *)
-interactive zero_isset {| intro_resource [] |} 'H :
+interactive zero_isset {| intro [] |} 'H :
    sequent ['ext] { 'H >- isset{zero} }
 
-interactive succ_isset {| intro_resource [] |} 'H :
+interactive succ_isset {| intro [] |} 'H :
    sequent [squash] { 'H >- isset{'i} } -->
    sequent ['ext] { 'H >- isset{succ{'i}} }
 
-interactive inf_isset {| intro_resource [] |} 'H :
+interactive inf_isset {| intro [] |} 'H :
    sequent ['ext] { 'H >- isset{inf} }
 
-interactive succ_fun {| intro_resource [] |} 'H :
+interactive succ_fun {| intro [] |} 'H :
    sequent ['ext] { 'H >- fun_set{z. 's['z]} } -->
    sequent ['ext] { 'H >- fun_set{z. succ{'s['z]}} }
 
@@ -166,10 +166,10 @@ interactive succ_fun {| intro_resource [] |} 'H :
  * if it's argument is a number.
  * @end[doc]
  *)
-interactive zero_isnat {| intro_resource [] |} 'H :
+interactive zero_isnat {| intro [] |} 'H :
    sequent ['ext] { 'H >- mem{zero; inf} }
 
-interactive succ_isnat {| intro_resource [] |} 'H :
+interactive succ_isnat {| intro [] |} 'H :
    ["wf"] sequent ['ext] { 'H >- isset{'i} } -->
    sequent ['ext] { 'H >- mem{'i; inf} } -->
    sequent ['ext] { 'H >- mem{succ{'i}; inf} }
@@ -202,12 +202,12 @@ interactive nat_elim 'H bind{z. 'C['z]} 'i :
  * and it is also a restricted proposition.
  * @end[doc]
  *)
-interactive lt_fun {| intro_resource [] |} 'H :
+interactive lt_fun {| intro [] |} 'H :
    sequent ['ext] { 'H >- fun_set{z. 's1['z]} } -->
    sequent ['ext] { 'H >- fun_set{z. 's2['z]} } -->
    sequent ['ext] { 'H >- fun_prop{z. lt{'s1['z]; 's2['z]}} }
 
-interactive lt_restricted {| intro_resource [] |} 'H :
+interactive lt_restricted {| intro [] |} 'H :
    ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
    ["wf"] sequent [squash] { 'H >- isset{'s2} } -->
    sequent ['ext] { 'H >- restricted{lt{'s1; 's2}} }
@@ -226,12 +226,12 @@ interactive lt_restricted {| intro_resource [] |} 'H :
  * from any successor.
  * @end[doc]
  *)
-interactive zero_member_intro {| intro_resource [] |} 'H :
+interactive zero_member_intro {| intro [] |} 'H :
    ["wf"] sequent ['ext] { 'H >- isset{'i} } -->
    ["wf"] sequent ['ext] { 'H >- mem{'i; inf} } -->
    sequent ['ext] { 'H >- lt{zero; succ{'i}} }
 
-interactive zero_member_elim {| elim_resource [] |} 'H 'J :
+interactive zero_member_elim {| elim [] |} 'H 'J :
    ["wf"] sequent [squash] { 'H; x: lt{'i; zero}; 'J['x] >- mem{'i; inf} } -->
    sequent ['ext] { 'H; x: lt{'i; zero}; 'J['x] >- 'T['x] }
 
@@ -245,7 +245,7 @@ interactive zero_member_elim {| elim_resource [] |} 'H 'J :
  * $i @neq @succ{i}$, so the set $@inf$ is actually infinite.
  * @end[doc]
  *)
-interactive succ_member_intro1 {| intro_resource [] |} 'H :
+interactive succ_member_intro1 {| intro [] |} 'H :
    ["wf"] sequent [squash] { 'H >- isset{'i} } -->
    ["wf"] sequent [squash] { 'H >- isset{'j} } -->
    ["wf"] sequent ['ext] { 'H >- mem{'i; inf} } -->
@@ -253,7 +253,7 @@ interactive succ_member_intro1 {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- lt{'i; 'j} } -->
    sequent ['ext] { 'H >- lt{succ{'i}; succ{'j}} }
 
-interactive succ_member_elim1 {| elim_resource [] |} 'H 'J :
+interactive succ_member_elim1 {| elim [] |} 'H 'J :
    ["wf"] sequent [squash] { 'H; x: lt{succ{'i}; succ{'j}}; 'J['x] >- isset{'i} } -->
    ["wf"] sequent [squash] { 'H; x: lt{succ{'i}; succ{'j}}; 'J['x] >- isset{'j} } -->
    ["wf"] sequent ['ext] { 'H; x: lt{succ{'i}; succ{'j}}; 'J['x] >- mem{'j; inf} } -->

@@ -176,43 +176,43 @@ dform apply5_df : mode[prl] :: parens :: "prec"[prec_apply] :: apply{'f; 'x1; 'x
 (*
  * t is an atom.
  *)
-interactive t_atomic {| intro_resource [] |} 'H :
+interactive t_atomic {| intro [] |} 'H :
    sequent ['ext] { 'H >- atomic{t} }
 
 (*
  * Intro and elimination forms.
  *)
-interactive tptp2_all_type {| intro_resource [] |} 'H 'x :
+interactive tptp2_all_type {| intro [] |} 'H 'x :
    sequent [squash] { 'H; x: atom0 >- "type"{'b['x]} } -->
    sequent ['ext] { 'H >- "type"{."all"{v. 'b['v]}} }
 
-interactive tptp2_all_intro {| intro_resource [] |} 'H 'v :
+interactive tptp2_all_intro {| intro [] |} 'H 'v :
    sequent ['ext] { 'H; v: atom0 >- 'b['v] } -->
    sequent ['ext] { 'H >- "all"{x. 'b['x]} }
 
-interactive tptp2_all_elim {| elim_resource [] |} 'H 'J 'z 'y :
+interactive tptp2_all_elim {| elim [] |} 'H 'J 'z 'y :
    sequent [squash] { 'H; x: "all"{v. 'b['v]}; 'J['x] >- atomic{'z} } -->
    sequent ['ext] { 'H; x: "all"{v. 'b['v]}; 'J['x]; y: 'b['z] >- 'C['x] } -->
    sequent ['ext] { 'H; x: "all"{v. 'b['v]}; 'J['x] >- 'C['x] }
 
-interactive tptp2_exists_type {| intro_resource [] |} 'H 'x :
+interactive tptp2_exists_type {| intro [] |} 'H 'x :
    sequent [squash] { 'H; x: atom0 >- "type"{'b['x]} } -->
    sequent ['ext] { 'H >- "type"{."exists"{v. 'b['v]}} }
 
-interactive tptp2_exists_intro {| intro_resource [] |} 'H 'x 'z :
+interactive tptp2_exists_intro {| intro [] |} 'H 'x 'z :
    sequent [squash] { 'H >- atomic{'z} } -->
    sequent ['ext] { 'H >- 'b['z] } -->
    sequent [squash] { 'H; x: atom0 >- "type"{'b['x]} } -->
    sequent ['ext] { 'H >- "exists"{v. 'b['v]} }
 
-interactive tptp2_exists_elim {| elim_resource [] |} 'H 'J 'y 'z :
+interactive tptp2_exists_elim {| elim [] |} 'H 'J 'y 'z :
    sequent ['ext] { 'H; y: atom0; z: 'b['y]; 'J['y, 'z] >- 'C['y, 'z] } -->
    sequent ['ext] { 'H; x: "exists"{v. 'b['v]}; 'J['x] >- 'C['x] }
 
 (*
  * Simplified rule for atomicity.
  *)
-interactive tptp_atomic_type {| intro_resource [] |} 'H :
+interactive tptp_atomic_type {| intro [] |} 'H :
    sequent [squash] { 'H >- atomic{'x} } -->
    sequent ['ext] { 'H >- "type"{atomic{'x}} }
 

@@ -186,7 +186,7 @@ prim unionFormation 'H :
  * union $A + B$ is a type if both $A$ and $B$ are types.
  * @end[doc]
  *)
-prim unionEquality {| intro_resource []; eqcd_resource |} 'H :
+prim unionEquality {| intro []; eqcd |} 'H :
    [wf] sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
    [wf] sequent [squash] { 'H >- 'B1 = 'B2 in univ[i:l] } -->
    sequent ['ext] { 'H >- 'A1 + 'B1 = 'A2 + 'B2 in univ[i:l] } =
@@ -195,7 +195,7 @@ prim unionEquality {| intro_resource []; eqcd_resource |} 'H :
 (*
  * Typehood.
  *)
-prim unionType {| intro_resource [] |} 'H :
+prim unionType {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H >- "type"{'B} } -->
    sequent ['ext] { 'H >- "type"{. 'A + 'B } } =
@@ -213,7 +213,7 @@ prim unionType {| intro_resource [] |} 'H :
  * and the @tt{inrFormation} is applied with @tt{selT 2 (dT 0)}.
  * @end[doc]
  *)
-prim inlFormation {| intro_resource [SelectOption 1] |} 'H :
+prim inlFormation {| intro [SelectOption 1] |} 'H :
    [main] ('a : sequent ['ext] { 'H >- 'A }) -->
    [wf] sequent [squash] { 'H >- "type"{'B} } -->
    sequent ['ext] { 'H >- 'A + 'B } =
@@ -225,7 +225,7 @@ prim inlFormation {| intro_resource [SelectOption 1] |} 'H :
  * H >- B
  * H >- A = A in Ui
  *)
-prim inrFormation {| intro_resource [SelectOption 2] |} 'H :
+prim inrFormation {| intro [SelectOption 2] |} 'H :
    [main] ('b : sequent ['ext] { 'H >- 'B }) -->
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    sequent ['ext] { 'H >- 'A + 'B } =
@@ -240,7 +240,7 @@ prim inrFormation {| intro_resource [SelectOption 2] |} 'H :
  * $A$ and $B$ must be types.
  * @end[doc]
  *)
-prim inlEquality {| intro_resource []; eqcd_resource |} 'H :
+prim inlEquality {| intro []; eqcd |} 'H :
    [wf] sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
    [wf] sequent [squash] { 'H >- "type"{'B} } -->
    sequent ['ext] { 'H >- inl{'a1} = inl{'a2} in 'A + 'B } =
@@ -252,7 +252,7 @@ prim inlEquality {| intro_resource []; eqcd_resource |} 'H :
  * H >- b1 = b2 in B
  * H >- A = A in Ui
  *)
-prim inrEquality {| intro_resource []; eqcd_resource |} 'H :
+prim inrEquality {| intro []; eqcd |} 'H :
    [wf] sequent [squash] { 'H >- 'b1 = 'b2 in 'B } -->
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    sequent ['ext] { 'H >- inr{'b1} = inr{'b2} in 'A + 'B } =
@@ -269,7 +269,7 @@ prim inrEquality {| intro_resource []; eqcd_resource |} 'H :
  * on element membership).
  * @end[doc]
  *)
-prim unionElimination {| elim_resource [ThinOption thinT] |} 'H 'J 'x 'u 'v :
+prim unionElimination {| elim [ThinOption thinT] |} 'H 'J 'x 'u 'v :
    [left] ('left['u] : sequent ['ext] { 'H; x: 'A + 'B; u: 'A; 'J[inl{'u}] >- 'T[inl{'u}] }) -->
    [right] ('right['u] : sequent ['ext] { 'H; x: 'A + 'B; v: 'B; 'J[inr{'v}] >- 'T[inr{'v}] }) -->
    sequent ['ext] { 'H; x: 'A + 'B; 'J['x] >- 'T['x] } =
@@ -283,7 +283,7 @@ prim unionElimination {| elim_resource [ThinOption thinT] |} 'H 'J 'x 'u 'v :
  * $A + B$ for which all the subterms are equal.
  * @end[doc]
  *)
-prim decideEquality {| intro_resource []; eqcd_resource |} 'H bind{z. 'T['z]} ('A + 'B) 'u 'v 'w :
+prim decideEquality {| intro []; eqcd |} 'H bind{z. 'T['z]} ('A + 'B) 'u 'v 'w :
    [wf] sequent [squash] { 'H >- 'e1 = 'e2 in 'A + 'B } -->
    [wf] sequent [squash] { 'H; u: 'A; w: 'e1 = inl{'u} in 'A + 'B >- 'l1['u] = 'l2['u] in 'T[inl{'u}] } -->
    [wf] sequent [squash] { 'H; v: 'B; w: 'e1 = inr{'v} in 'A + 'B >- 'r1['v] = 'r2['v] in 'T[inr{'v}] } -->
@@ -300,7 +300,7 @@ prim decideEquality {| intro_resource []; eqcd_resource |} 'H bind{z. 'T['z]} ('
  * $A_1 @subseteq A_2$ and $B_1 @subseteq B_2$.
  * @end[doc]
  *)
-prim unionSubtype {| intro_resource [] |} 'H :
+prim unionSubtype {| intro [] |} 'H :
    sequent [squash] { 'H >- subtype{'A1; 'A2} } -->
    sequent [squash] { 'H >- subtype{'B1; 'B2} } -->
    sequent ['ext] { 'H >- subtype{ ('A1 + 'B1); ('A2 + 'B2) } } =
@@ -310,10 +310,10 @@ prim unionSubtype {| intro_resource [] |} 'H :
 (*
  * Interactive.
  *)
-interactive union_contradiction1 {| elim_resource [] |} 'H 'J :
+interactive union_contradiction1 {| elim [] |} 'H 'J :
    sequent ['ext] { 'H; x: inl{'y} = inr{'z} in 'T; 'J['x] >- 'C['x] }
 
-interactive union_contradiction2 {| elim_resource [] |} 'H 'J :
+interactive union_contradiction2 {| elim [] |} 'H 'J :
    sequent ['ext] { 'H; x: inr{'y} = inl{'z} in 'T; 'J['x] >- 'C['x] }
 
 (************************************************************************

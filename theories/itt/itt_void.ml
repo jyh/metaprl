@@ -108,7 +108,7 @@ dform void_df1 : except_mode[src] :: void = `"Void"
  * @end[doc]
  *
  *)
-prim voidEquality {| intro_resource []; eqcd_resource |} 'H :
+prim voidEquality {| intro []; eqcd |} 'H :
    sequent ['ext] { 'H >- void IN univ[i:l] } =
    it
 
@@ -122,7 +122,7 @@ interactive voidFormation 'H :
 (*
  * Typehood.
  *)
-prim voidType {| intro_resource [] |} 'H :
+prim voidType {| intro [] |} 'H :
    sequent ['ext] { 'H >- "type"{void} } =
    it
 
@@ -134,7 +134,7 @@ prim voidType {| intro_resource [] |} 'H :
  * $@void$ type produces no cases.
  * @end[doc]
  *)
-prim voidElimination {| elim_resource []; squash_resource |} 'H 'J :
+prim voidElimination {| elim []; squash |} 'H 'J :
    sequent ['ext] { 'H; x: void; 'J['x] >- 'C['x] } =
    it
 

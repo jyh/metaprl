@@ -115,18 +115,18 @@ let resource reduce +=
  * RULES                                                                *
  ************************************************************************)
 
-prim eq_int_wf {| intro_resource [] |} 'H :
+prim eq_int_wf {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- 'i IN int } -->
    [wf] sequent [squash] { 'H >- 'j IN int } -->
    sequent ['ext] { 'H >- eq_int{'i; 'j} IN bool } =
    it
 
-prim eq_int_assert_intro {| intro_resource [] |} 'H :
+prim eq_int_assert_intro {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- 'x = 'y in int } -->
    sequent ['ext] { 'H >- "assert"{eq_int{'x; 'y}} } =
    it
 
-prim eq_int_assert_elim {| elim_resource [] |} 'H 'J :
+prim eq_int_assert_elim {| elim [] |} 'H 'J :
    sequent ['ext] { 'H; x: 'a = 'b in int; 'J[it] >- 'C[it] } -->
    sequent ['ext] { 'H; x: "assert"{eq_int{'a; 'b}}; 'J['x] >- 'C['x] } =
    it

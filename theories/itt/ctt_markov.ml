@@ -133,7 +133,7 @@ interactive markov2 'H : (*  = Markov, proved from MarkovN *)
    sequent [squash] {'H >- not{not{'A}} } -->
    sequent ['ext]   {'H >- squash{'A} }
 
-interactive markov4 {| intro_resource [SelectOption 1] |} 'H 'x : (*  = proved from Markov *)
+interactive markov4 {| intro [SelectOption 1] |} 'H 'x : (*  = proved from Markov *)
    [wf] sequent [squash] {'H >- "type"{'A} } -->
    sequent [squash] {'H; x:not{'A} >- "false" } -->
    sequent ['ext]   {'H >- squash{'A} }

@@ -94,13 +94,13 @@ dform empty_df : empty =
  * a well-formed set, and it has no elements.
  * @end[doc]
  *)
-interactive empty_isset {| intro_resource [] |} 'H :
+interactive empty_isset {| intro [] |} 'H :
    sequent ['ext] { 'H >- isset{empty} }
 
 (*
  * Nothing is in the empty set.
  *)
-interactive empty_member_elim {| elim_resource [] |} 'H 'J :
+interactive empty_member_elim {| elim [] |} 'H 'J :
    sequent ['ext] { 'H; x: mem{'y; empty}; 'J['x] >- 'T['x] }
 (*! @docoff *)
 

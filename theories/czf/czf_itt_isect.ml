@@ -119,12 +119,12 @@ dform isect_df2 : parens :: "prec"[prec_and] :: "isect"{'s} =
  * Both forms of intersection are well-formed if their arguments are sets.
  * @end[doc]
  *)
-interactive bisect_isset {| intro_resource [] |} 'H :
+interactive bisect_isset {| intro [] |} 'H :
    ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
    ["wf"] sequent [squash] { 'H >- isset{'s2} } -->
    sequent ['ext] { 'H >- isset{."isect"{'s1; 's2}} }
 
-interactive isect_isset {| intro_resource [] |} 'H :
+interactive isect_isset {| intro [] |} 'H :
    ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
    sequent ['ext] { 'H >- isset{."isect"{'s1}} }
 
@@ -136,7 +136,7 @@ interactive isect_isset {| intro_resource [] |} 'H :
  * in both sets $s_1$ and $s_2$.
  * @end[doc]
  *)
-interactive bisect_member_intro {| intro_resource [] |} 'H :
+interactive bisect_member_intro {| intro [] |} 'H :
    ["wf"] sequent [squash] { 'H >- isset{'x} } -->
    ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
    ["wf"] sequent [squash] { 'H >- isset{'s2} } -->
@@ -150,7 +150,7 @@ interactive bisect_member_intro {| intro_resource [] |} 'H :
  * $@mem{x; y}$ for all $@mem{y; s}$.
  * @end[doc]
  *)
-interactive isect_member_intro {| intro_resource [] |} 'H :
+interactive isect_member_intro {| intro [] |} 'H :
    ["wf"] sequent [squash] { 'H >- isset{'x} } -->
    ["wf"] sequent [squash] { 'H >- isset{'s} } -->
    sequent ['ext] { 'H >- mem{'x; union{'s}} } -->
@@ -165,7 +165,7 @@ interactive isect_member_intro {| intro_resource [] |} 'H :
  * produces the proofs for membership in both types.
  * @end[doc]
  *)
-interactive bisect_member_elim {| elim_resource [] |} 'H 'J :
+interactive bisect_member_elim {| elim [] |} 'H 'J :
    ["wf"] sequent [squash] { 'H; x: mem{'y; ."isect"{'s1; 's2}}; 'J['x] >- isset{'y} } -->
    ["wf"] sequent [squash] { 'H; x: mem{'y; ."isect"{'s1; 's2}}; 'J['x] >- isset{'s1} } -->
    ["wf"] sequent [squash] { 'H; x: mem{'y; ."isect"{'s1; 's2}}; 'J['x] >- isset{'s2} } -->
@@ -179,7 +179,7 @@ interactive bisect_member_elim {| elim_resource [] |} 'H 'J :
  * instantiation of of the assumption on a particular set $@mem{z; 's}$.
  * @end[doc]
  *)
-interactive isect_member_elim {| elim_resource [] |} 'H 'J 'z :
+interactive isect_member_elim {| elim [] |} 'H 'J 'z :
    ["wf"] sequent [squash] { 'H; x: mem{'y; ."isect"{'s}}; 'J['x] >- isset{'z} } -->
    ["wf"] sequent [squash] { 'H; x: mem{'y; ."isect"{'s}}; 'J['x] >- isset{'y} } -->
    ["wf"] sequent [squash] { 'H; x: mem{'y; ."isect"{'s}}; 'J['x] >- isset{'s} } -->
@@ -192,12 +192,12 @@ interactive isect_member_elim {| elim_resource [] |} 'H 'J 'z :
  * The intersection types are both functional in their arguments.
  * @end[doc]
  *)
-interactive bisect_fun {| intro_resource [] |} 'H :
+interactive bisect_fun {| intro [] |} 'H :
    sequent ['ext] { 'H >- fun_set{z. 's1['z]} } -->
    sequent ['ext] { 'H >- fun_set{z. 's2['z]} } -->
    sequent ['ext] { 'H >- fun_set{z. "isect"{'s1['z]; 's2['z]}} }
 
-interactive isect_fun {| intro_resource [] |} 'H :
+interactive isect_fun {| intro [] |} 'H :
    sequent ['ext] { 'H >- fun_set{z. 's['z]} } -->
    sequent ['ext] { 'H >- fun_set{z. "isect"{'s['z]}} }
 (*! @docoff *)

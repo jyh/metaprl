@@ -44,10 +44,10 @@ define unfold_plane:  plane <--> record["x":t]{int;record["y":t]{int}}
 
 define unfold_space:  space <--> record["x":t]{int;record["y":t]{int;record["z":t]{int}}}
 
-interactive planeType {|intro_resource[] |} 'H :
+interactive planeType {|intro[] |} 'H :
    sequent['ext] {'H >- "type"{plane} }
 
-interactive spaceType {|intro_resource[] |} 'H :
+interactive spaceType {|intro[] |} 'H :
    sequent['ext] {'H >- "type"{space} }
 
 
@@ -59,7 +59,7 @@ interactive spaceType {|intro_resource[] |} 'H :
 
 define unfold_O: O <--> rcrd["x":t]{0; rcrd["y":t]{0; rcrd["z":t]{0}}}
 
-interactive oInSpace {|intro_resource[] |} 'H :
+interactive oInSpace {|intro[] |} 'H :
    sequent['ext] {'H >- O IN space }
 
 (*!
@@ -68,7 +68,7 @@ interactive oInSpace {|intro_resource[] |} 'H :
  * @end[doc]
  *)
 
-interactive oInPlane {|intro_resource[] |} 'H :
+interactive oInPlane {|intro[] |} 'H :
    sequent['ext] {'H >- O IN plane }
 
 (*!
@@ -77,7 +77,7 @@ interactive oInPlane {|intro_resource[] |} 'H :
  * @end[doc]
  *)
 
-interactive spacePlane {|intro_resource[] |} 'H :
+interactive spacePlane {|intro[] |} 'H :
    sequent['ext] {'H >- subtype{space;plane} }
 
 (*!
@@ -92,10 +92,10 @@ define unfold_B: B <--> rcrd["z":t]{0; rcrd["y":t]{2; rcrd["x":t]{1}}}
 
 (*! @docoff *)
 
-interactive aInSpace {|intro_resource[] |} 'H :
+interactive aInSpace {|intro[] |} 'H :
    sequent['ext] {'H >- A IN space }
 
-interactive bInSpace {|intro_resource[] |} 'H :
+interactive bInSpace {|intro[] |} 'H :
    sequent['ext] {'H >- B IN space }
 
 
@@ -107,10 +107,10 @@ interactive bInSpace {|intro_resource[] |} 'H :
  * @end[doc]
  *)
 
-interactive abInPlane {|intro_resource[] |} 'H :
+interactive abInPlane {|intro[] |} 'H :
    sequent['ext] {'H >- A = B in plane }
 
-interactive abInSpace {|intro_resource[] |} 'H :
+interactive abInSpace {|intro[] |} 'H :
    sequent['ext] {'H >- not{.A = B in space} }
 
 (*!
@@ -156,12 +156,12 @@ let fold_point =
    makeFoldC <<point{'a;'b;'c;'e}>> space_point orelseC
    makeFoldC <<point{'a;'b;'e}>> plane_point
 
-interactive planeIntro {|intro_resource[] |} 'H :
+interactive planeIntro {|intro[] |} 'H :
    sequent[squash] {'H >- 'a IN int} -->
    sequent[squash] {'H >- 'b IN int} -->
    sequent['ext] {'H >- point{'a;'b;rcrd} IN plane}
 
-interactive spaceIntro {|intro_resource[] |} 'H :
+interactive spaceIntro {|intro[] |} 'H :
    sequent[squash] {'H >- 'a IN int} -->
    sequent[squash] {'H >- 'b IN int} -->
    sequent[squash] {'H >- 'c IN int} -->
@@ -194,14 +194,14 @@ interactive point_eta 'H :
  * @end[doc]
  *)
 
-interactive planeElim {|elim_resource[] |} 'H 'J:
+interactive planeElim {|elim[] |} 'H 'J:
    sequent['ext]{'H; a:int; b:int; e:record; 'J[point{'a;'b;'e}] >- 'C[point{'a;'b;'e}] } -->
    sequent['ext]  {'H; p:plane; 'J['p] >- 'C['p] }
 
 
 (*! @docoff *)
 
-interactive spaceElim {|elim_resource[] |} 'H 'J:
+interactive spaceElim {|elim[] |} 'H 'J:
    sequent['ext]{'H; a:int; b:int; c:int; e:record; 'J[point{'a;'b;'c;'e}] >- 'C[point{'a;'b;'c;'e}] } -->
    sequent['ext]  {'H; p:space; 'J['p] >- 'C['p] }
 
@@ -231,7 +231,7 @@ let resource reduce += << length{point{'a;'b;'e}}  >>, reduce_length
  * @end[doc]
  *)
 
-interactive length_A {|intro_resource[] |} 'H :
+interactive length_A {|intro[] |} 'H :
    sequent['ext]  {'H >- length{point{3;4;'e}} = 25 in int }
 
 (*!
@@ -240,7 +240,7 @@ interactive length_A {|intro_resource[] |} 'H :
  * @end[doc]
  *)
 
-interactive length_wf {|intro_resource[] |} 'H :
+interactive length_wf {|intro[] |} 'H :
    sequent[squash]{'H >- 'p IN plane } -->
    sequent['ext]  {'H >- length{'p} IN int }
 
@@ -255,7 +255,7 @@ define unfold_colored_space:  cspace <--> record["color":t]{atom;space}
 
 define unfold_redA: redA <--> rcrd["color":t]{token["red":t]; A}
 
-interactive redAInCSpace {|intro_resource[] |} 'H :
+interactive redAInCSpace {|intro[] |} 'H :
    sequent['ext] {'H >- redA IN cspace }
 
 (*! @docoff *)
@@ -264,7 +264,7 @@ interactive redAInCSpace {|intro_resource[] |} 'H :
 
 
 
-interactive cspaceElim {|elim_resource[] |} 'H 'J:
+interactive cspaceElim {|elim[] |} 'H 'J:
    sequent['ext]{'H; a:int; b:int; c:int; color:atom; e:record; 'J[rcrd["color":t]{'color;point{'a;'b; 'c; 'e}}] >- 'C[rcrd["color":t]{'color;point{'a;'b; 'c; 'e}}] } -->
    sequent['ext]  {'H; p:cspace; 'J['p] >- 'C['p] }
 

@@ -120,7 +120,7 @@ dform dall_df1 : parens :: "prec"[prec_lambda] :: "dall"{'s; x. 'A} =
  * set $x$.
  * @end[doc]
  *)
-interactive dall_type {| intro_resource [] |} 'H 'y :
+interactive dall_type {| intro [] |} 'H 'y :
    ["wf"] sequent [squash] { 'H >- isset{'s} } -->
    ["wf"] sequent [squash] { 'H; y: set >- "type"{'A['y]} } -->
    sequent ['ext] { 'H >- "type"{."dall"{'s; x. 'A['x]}} }
@@ -133,7 +133,7 @@ interactive dall_type {| intro_resource [] |} 'H 'y :
  * well-formed, and $P[a]$ is true for any set $@mem{a; s}$.
  * @end[doc]
  *)
-interactive dall_intro {| intro_resource [] |} 'H 'a 'b :
+interactive dall_intro {| intro [] |} 'H 'a 'b :
    ["wf"]   sequent [squash] { 'H >- isset{'s} } -->
    ["wf"]   sequent [squash] { 'H; a: set >- "type"{'A['a]} } -->
    ["main"] sequent ['ext] { 'H; a: set; b: mem{'a; 's} >- 'A['a] } -->
@@ -148,7 +148,7 @@ interactive dall_intro {| intro_resource [] |} 'H 'a 'b :
  * produces an additional assumption $A[z]$.
  * @end[doc]
  *)
-interactive dall_elim {| elim_resource [] |} 'H 'J 'z 'w :
+interactive dall_elim {| elim [] |} 'H 'J 'z 'w :
    ["wf"]   sequent [squash] { 'H; x: "dall"{'s; y. 'A['y]}; 'J['x]; w: set >- "type"{'A['w]} } -->
    ["wf"]   sequent ['ext] { 'H; x: "dall"{'s; y. 'A['y]}; 'J['x] >- fun_prop{w. 'A['w]} } -->
    ["antecedent"] sequent ['ext] { 'H; x: "dall"{'s; y. 'A['y]}; 'J['x] >- member{'z; 's} } -->
@@ -163,7 +163,7 @@ interactive dall_elim {| elim_resource [] |} 'H 'J 'z 'w :
  * and proposition arguments.
  * @end[doc]
  *)
-interactive dall_fun {| intro_resource [] |} 'H :
+interactive dall_fun {| intro [] |} 'H :
    sequent ['ext] { 'H >- fun_set{z. 'A['z]} } -->
    sequent ['ext] { 'H; z: set >- fun_prop{x. 'B['z; 'x]} } -->
    sequent ['ext] { 'H; z: set >- fun_prop{x. 'B['x; 'z]} } -->
@@ -180,7 +180,7 @@ interactive dall_fun {| intro_resource [] |} 'H :
  * itself).
  * @end[doc]
  *)
-interactive dall_res {| intro_resource [] |} 'H :
+interactive dall_res {| intro [] |} 'H :
    ["wf"]   sequent [squash] { 'H >- isset{'A} } -->
    sequent [squash] { 'H; x: set >- restricted{'B['x]} } -->
    sequent ['ext] { 'H >- restricted{. "dall"{'A; y. 'B['y]}} }

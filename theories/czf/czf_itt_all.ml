@@ -65,26 +65,26 @@ let _ =
 (*
  * Implication is restricted.
  *)
-interactive dfun_fun3 {| intro_resource [] |} 'H 'u 'v 'z :
+interactive dfun_fun3 {| intro [] |} 'H 'u 'v 'z :
    ["wf"]   sequent [squash] { 'H; u: set >- "type"{'A['u]} } -->
    ["wf"]   sequent [squash] { 'H; u: set; z: 'A['u] >- "type"{'B['u; 'z]} } -->
    sequent ['ext] { 'H >- fun_prop{z. 'A['z]} } -->
    sequent ['ext] { 'H >- dfun_prop{z. 'A['z]; u, v. 'B['u; 'v]} } -->
    sequent ['ext] { 'H >- fun_prop{z. "fun"{'A['z]; w. 'B['z; 'w]}} }
 
-interactive dfun_res1 {| intro_resource [] |} 'H :
+interactive dfun_res1 {| intro [] |} 'H :
    sequent [squash] { 'H >- restricted{'A} } -->
    sequent [squash] { 'H; u: 'A >- restricted{'B['u]} } -->
    sequent ['ext] { 'H >- restricted{."fun"{'A; w. 'B['w]}} }
 
-interactive all_fun {| intro_resource [] |} 'H 'u 'v 'z :
+interactive all_fun {| intro [] |} 'H 'u 'v 'z :
    ["wf"]   sequent [squash] { 'H; u: set >- "type"{'A['u]} } -->
    ["wf"]   sequent [squash] { 'H; u: set; z: 'A['u] >- "type"{'B['u; 'z]} } -->
    sequent ['ext] { 'H >- fun_prop{z. 'A['z]} } -->
    sequent ['ext] { 'H >- dfun_prop{z. 'A['z]; u, v. 'B['u; 'v]} } -->
    sequent ['ext] { 'H >- fun_prop{z. "all"{'A['z]; w. 'B['z; 'w]}} }
 
-interactive all_res {| intro_resource [] |} 'H :
+interactive all_res {| intro [] |} 'H :
    sequent [squash] { 'H >- restricted{'A} } -->
    sequent [squash] { 'H; u: 'A >- restricted{'B['u]} } -->
    sequent ['ext] { 'H >- restricted{."all"{'A; w. 'B['w]}} }

@@ -127,7 +127,7 @@ prim_rw unfold_dfun : (x: 'A -> 'B['x]) <--> ({ f | x: 'A -> 'B['x] })
  * type is trivially well-founded, since it has no elements.
  * @end[doc]
  *)
-interactive void_well_founded {| intro_resource [] |} 'H :
+interactive void_well_founded {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    sequent ['ext] { 'H >- well_founded{'A; a1, a2. void} }
 
@@ -139,7 +139,7 @@ interactive void_well_founded {| intro_resource [] |} 'H :
  * equality of the very-dependent type.
  * @end[doc]
  *)
-interactive functionEquality {| intro_resource []; eqcd_resource |} 'H 'x :
+interactive functionEquality {| intro []; eqcd |} 'H 'x :
    [wf] sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
    [wf] sequent [squash] { 'H; x: 'A1 >- 'B1['x] = 'B2['x] in univ[i:l] } -->
    sequent ['ext] { 'H >- (a1:'A1 -> 'B1['a1]) = (a2:'A2 -> 'B2['a2]) in univ[i:l] }
@@ -147,7 +147,7 @@ interactive functionEquality {| intro_resource []; eqcd_resource |} 'H 'x :
 (*
  * Typehood.
  *)
-interactive functionType {| intro_resource [] |} 'H 'x :
+interactive functionType {| intro [] |} 'H 'x :
    [wf] sequent [squash] { 'H >- "type"{'A1} } -->
    [wf] sequent [squash] { 'H; x: 'A1 >- "type"{'B1['x]} } -->
    sequent ['ext] { 'H >- "type"{. a1:'A1 -> 'B1['a1] } }
@@ -162,7 +162,7 @@ interactive functionType {| intro_resource [] |} 'H 'x :
  * and $B[a]$ is true for any $a @in A$.
  * @end[doc]
  *)
-interactive lambdaFormation {| intro_resource [] |} 'H 'z :
+interactive lambdaFormation {| intro [] |} 'H 'z :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [main] ('b['z] : sequent ['ext] { 'H; z: 'A >- 'B['z] }) -->
    sequent ['ext] { 'H >- a:'A -> 'B['a] }
@@ -174,7 +174,7 @@ interactive lambdaFormation {| intro_resource [] |} 'H 'z :
  * The dependent function space contains the @hrefterm[lambda] functions.
  * @end[doc]
  *)
-interactive lambdaEquality {| intro_resource [] |} 'H 'x :
+interactive lambdaEquality {| intro [] |} 'H 'x :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H; x: 'A >- 'b1['x] = 'b2['x] in 'B['x] } -->
    sequent ['ext] { 'H >- lambda{a1. 'b1['a1]} = lambda{a2. 'b2['a2]} in a:'A -> 'B['a] }
@@ -204,7 +204,7 @@ interactive functionExtensionality 'H (y:'C -> 'D['y]) (z:'E -> 'F['z]) 'u :
  * obtain a proof of $B[a]$.
  * @end[doc]
  *)
-interactive functionElimination {| elim_resource [] |} 'H 'J 'f 'a 'y 'v :
+interactive functionElimination {| elim [] |} 'H 'J 'f 'a 'y 'v :
    [wf] sequent [squash] { 'H; f: x:'A -> 'B['x]; 'J['f] >- 'a IN 'A } -->
    ('t['f; 'y; 'v] : sequent ['ext] { 'H; f: x:'A -> 'B['x]; 'J['f]; y: 'B['a]; v: 'y = ('f 'a) in 'B['a] >- 'T['f] }) -->
    sequent ['ext] { 'H; f: x:'A -> 'B['x]; 'J['f] >- 'T['f] }
@@ -217,7 +217,7 @@ interactive functionElimination {| elim_resource [] |} 'H 'J 'f 'a 'y 'v :
  * equal if their functions and arguments are equal.
  * @end[doc]
  *)
-interactive applyEquality {| eqcd_resource |} 'H (x:'A -> 'B['x]) :
+interactive applyEquality {| eqcd |} 'H (x:'A -> 'B['x]) :
    sequent [squash] { 'H >- 'f1 = 'f2 in x:'A -> 'B['x] } -->
    sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
    sequent ['ext] { 'H >- ('f1 'a1) = ('f2 'a2) in 'B['a1] }
@@ -235,7 +235,7 @@ let applyEquality' t p =
  *
  * @end[doc]
  *)
-interactive functionSubtype {| intro_resource [] |} 'H 'a :
+interactive functionSubtype {| intro [] |} 'H 'a :
    sequent [squash] { 'H >- subtype{'A2; 'A1} } -->
    sequent [squash] { 'H; a: 'A1 >- subtype{'B1['a]; 'B2['a]} } -->
    sequent ['prop] { 'H >- subtype{ (a1:'A1 -> 'B1['a1]); (a2:'A2 -> 'B2['a2]) } }
@@ -248,7 +248,7 @@ interactive functionSubtype {| intro_resource [] |} 'H 'a :
  *
  * H; x: a1:A1 -> B1 <= a2:A2 -> B2; y: A2 <= A1; z: a:A2 -> B2[a] <= B1[a]; J[x] >- T[x]
  *)
-interactive function_subtypeElimination {| elim_resource [] |} 'H 'J 'x 'y 'z 'a :
+interactive function_subtypeElimination {| elim [] |} 'H 'J 'x 'y 'z 'a :
    ('t['x; 'y; 'z] : sequent ['ext] { 'H;
              x: subtype{(a1:'A1 -> 'B1['a1]); (a2:'A2 -> 'B2['a2])};
              'J['x];
@@ -264,7 +264,7 @@ interactive function_subtypeElimination {| elim_resource [] |} 'H 'J 'x 'y 'z 'a
  * by function_equalityElimination
  *
  * H; x: a1:A1 -> B1 = a2:A2 -> B2 in Ui; y: A1 = A2 in Ui; z: a:A1 -> B1[a] = B2[a] in Ui; J[x] >- T[x]
-interactive function_equalityElimination {| elim_resource [ThinOption thinT] |} 'H 'J 'x 'y 'z 'a :
+interactive function_equalityElimination {| elim [ThinOption thinT] |} 'H 'J 'x 'y 'z 'a :
    ('t['x; 'y; 'z] : sequent { 'H;
              x: (a1:'A1 -> 'B1['a1]) = (a2:'A2 -> 'B2['a2]) in univ[i:l];
              'J['x];

@@ -38,17 +38,17 @@ prim_rw reduce_spread : spread{pair{'x; 'y}; a, b. 'body['a; 'b]} <--> 'body['x;
  * RULES                                                                *
  ************************************************************************)
 
-prim and_type {| intro_resource [] |} 'H :
+prim and_type {| intro [] |} 'H :
    [wf] sequent ['ext] { 'H >- "type"{'A} } -->
    [wf] sequent ['ext] { 'H >- "type"{'B} } -->
    sequent ['ext] { 'H >- "type"{.'A & 'B} } = trivial
 
-prim and_intro {| intro_resource [] |} 'H :
+prim and_intro {| intro [] |} 'H :
    [main] ('a : sequent ['ext] { 'H >- 'A }) -->
    [main] ('b : sequent ['ext] { 'H >- 'B }) -->
    sequent ['ext] { 'H >- 'A & 'B } = pair{'a; 'b}
 
-prim and_elim {| elim_resource [] |} 'H 'J 'x 'y 'z :
+prim and_elim {| elim [] |} 'H 'J 'x 'y 'z :
    [wf] sequent ['ext] { 'H; x: 'A & 'B; 'J['x] >- "type"{'A} } -->
    [wf] sequent ['ext] { 'H; x: 'A & 'B; 'J['x] >- "type"{'B} } -->
    [main] ('body['y; 'z] : sequent ['ext] { 'H; y: 'A; z: 'B; 'J['y, 'z] >- 'C['y, 'z] }) -->

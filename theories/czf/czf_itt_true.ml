@@ -51,25 +51,25 @@ let _ =
 (*
  * True is functional.
  *)
-interactive unit_fun {| intro_resource [] |} 'H :
+interactive unit_fun {| intro [] |} 'H :
    sequent ['ext] { 'H >- fun_prop{z. "unit"} }
 
 (*
  * True is a restricted formula.
  *)
-interactive unit_res {| intro_resource [] |} 'H :
+interactive unit_res {| intro [] |} 'H :
    sequent ['ext] { 'H >- restricted{."unit"} }
 
 (*
  * True is a restricted formula.
  *)
-interactive true_fun {| intro_resource [] |} 'H :
+interactive true_fun {| intro [] |} 'H :
    sequent ['ext] { 'H >- fun_prop{x. "true"} }
 
 (*
  * True is a restricted formula.
  *)
-interactive true_res {| intro_resource [] |} 'H :
+interactive true_res {| intro [] |} 'H :
    sequent ['ext] { 'H >- restricted{. "true"} }
 
 (*

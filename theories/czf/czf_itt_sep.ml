@@ -157,12 +157,12 @@ let squash_restrictedT p =
  * are restricted for any @hrefterm[set] arguments.
  * @end[doc]
  *)
-interactive eq_restricted {| intro_resource [] |} 'H :
+interactive eq_restricted {| intro [] |} 'H :
    ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
    ["wf"] sequent [squash] { 'H >- isset{'s2} } -->
    sequent ['ext] { 'H >- restricted{eq{'s1; 's2}} }
 
-interactive member_restricted {| intro_resource [] |} 'H :
+interactive member_restricted {| intro [] |} 'H :
    ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
    ["wf"] sequent [squash] { 'H >- isset{'s2} } -->
    sequent ['ext] { 'H >- restricted{mem{'s1; 's2}} }
@@ -176,7 +176,7 @@ interactive member_restricted {| intro_resource [] |} 'H :
  * on any set argument $x$.
  * @end[doc]
  *)
-interactive sep_isset {| intro_resource [] |} 'H 'z :
+interactive sep_isset {| intro [] |} 'H 'z :
    ["wf"] sequent [squash] { 'H >- isset{'s} } -->
    ["wf"] sequent ['ext] { 'H >- fun_prop{z. 'P['z]} } -->
    ["wf"] sequent [squash] { 'H; z: set >- restricted{'P['z]} } -->
@@ -191,7 +191,7 @@ interactive sep_isset {| intro_resource [] |} 'H 'z :
  * and $P[x]$.
  * @end[doc]
  *)
-interactive sep_intro2 {| intro_resource [] |} 'H :
+interactive sep_intro2 {| intro [] |} 'H :
    ["wf"]   sequent [squash] { 'H; w: set >- restricted{'P['w]} } -->
    ["wf"]   sequent ['ext] { 'H >- fun_prop{z. 'P['z]} } -->
    ["main"] sequent ['ext] { 'H >- member{'x; 's} } -->
@@ -208,7 +208,7 @@ interactive sep_intro2 {| intro_resource [] |} 'H :
  * constructor in the @Nuprl type theory module @hreftheory[Itt_set]).
  * @end[doc]
  *)
-interactive sep_elim {| elim_resource [] |} 'H 'J 'u 'v 'z :
+interactive sep_elim {| elim [] |} 'H 'J 'u 'v 'z :
    ["wf"]   sequent [squash] { 'H; w: mem{'x; sep{'s; y. 'P['y]}}; 'J['w] >- isset{'x} } -->
    ["wf"]   sequent [squash] { 'H; w: mem{'x; sep{'s; y. 'P['y]}}; 'J['w] >- isset{'s} } -->
    ["wf"]   sequent [squash] { 'H; w: mem{'x; sep{'s; y. 'P['y]}}; 'J['w]; z: set >- restricted{'P['z]} } -->
@@ -224,7 +224,7 @@ interactive sep_elim {| elim_resource [] |} 'H 'J 'u 'v 'z :
  * set argument and the proposition.
  * @end[doc]
  *)
-interactive sep_fun {| intro_resource [] |} 'H 'u 'v :
+interactive sep_fun {| intro [] |} 'H 'u 'v :
    sequent [squash] { 'H; u: set; v: set >- restricted{'P['u; 'v]} } -->
    sequent ['ext] { 'H; u: set >- fun_prop{z. 'P['z; 'u]} } -->
    sequent ['ext] { 'H; u: set >- fun_prop{z. 'P['u; 'z]} } -->

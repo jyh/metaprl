@@ -113,7 +113,7 @@ dform unit_df1 : except_mode[src] :: unit = `"Unit"
  * is also a type.
  * @end[doc]
  *)
-prim unitEquality {| intro_resource []; eqcd_resource |} 'H :
+prim unitEquality {| intro []; eqcd |} 'H :
    sequent ['ext] { 'H >- unit IN univ[i:l] } =
    it
 
@@ -127,7 +127,7 @@ interactive unitFormation 'H :
 (*
  * Is a type.
  *)
-prim unitType {| intro_resource [] |} 'H :
+prim unitType {| intro [] |} 'H :
    sequent ['ext] { 'H >- "type"{unit} } =
    it
 
@@ -137,7 +137,7 @@ prim unitType {| intro_resource [] |} 'H :
  * The unique inhabitant of the $@unit$ type is the term $@it$.
  * @end[doc]
  *)
-prim unit_memberEquality {| intro_resource []; eqcd_resource; squash_resource |} 'H :
+prim unit_memberEquality {| intro []; eqcd; squash |} 'H :
    sequent ['ext] { 'H >- it IN unit } =
    it
 
@@ -149,7 +149,7 @@ prim unit_memberEquality {| intro_resource []; eqcd_resource; squash_resource |}
  * $@it$.
  * @end[doc]
  *)
-interactive unit_memberFormation {| intro_resource [] |} 'H :
+interactive unit_memberFormation {| intro [] |} 'H :
    sequent ['ext] { 'H >- unit }
 
 (*!
@@ -159,7 +159,7 @@ interactive unit_memberFormation {| intro_resource [] |} 'H :
  * on $x@colon @unit$.  The witness is replaced with the term $@it$.
  * @end[doc]
  *)
-prim unitElimination {| elim_resource [ThinOption thinT] |} 'H 'J :
+prim unitElimination {| elim [ThinOption thinT] |} 'H 'J :
    ('t : sequent['ext] { 'H; x: unit; 'J[it] >- 'C[it] }) -->
    sequent ['ext] { 'H; x: unit; 'J['x] >- 'C['x] } =
    't

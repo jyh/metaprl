@@ -134,14 +134,14 @@ prim atomFormation 'H :
  * The $@atom$ term is a member of every universe, and it is a type.
  * @end[doc]
  *)
-prim atomEquality {| intro_resource []; eqcd_resource |} 'H :
+prim atomEquality {| intro []; eqcd |} 'H :
    sequent ['ext] { 'H >- atom = atom in univ[i:l] } =
    it
 
 (*
  * Typehood.
  *)
-prim atomType {| intro_resource [] |} 'H :
+prim atomType {| intro [] |} 'H :
    sequent ['ext] { 'H >- "type"{atom} } =
    it
 
@@ -165,7 +165,7 @@ prim tokenFormation 'H token[t:t] :
  * same token.
  * @end[doc]
  *)
-prim tokenEquality {| intro_resource []; eqcd_resource |} 'H :
+prim tokenEquality {| intro []; eqcd |} 'H :
    sequent ['ext] { 'H >- token[t:t] = token[t:t] in atom } =
    it
 

@@ -136,12 +136,12 @@ dform member_df : except_mode[src] :: parens :: "prec"[prec_apply] :: member{'x;
  * sets.
  * @end[doc]
  *)
-interactive mem_type {| intro_resource [] |} 'H :
+interactive mem_type {| intro [] |} 'H :
    ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
    ["wf"] sequent [squash] { 'H >- isset{'s2} } -->
    sequent ['ext] { 'H >- "type"{mem{'s1; 's2}} }
 
-interactive mem_equal {| intro_resource [] |} 'H :
+interactive mem_equal {| intro [] |} 'H :
    ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
    ["wf"] sequent [squash] { 'H >- isset{'s2} } -->
    sequent ['ext] { 'H >- Itt_equal!equal{univ[1:l]; mem{'s1; 's2}; mem{'s1; 's2}} }
@@ -149,7 +149,7 @@ interactive mem_equal {| intro_resource [] |} 'H :
 (*
  * Introduction.
  *)
-interactive member_intro {| intro_resource [] |} 'H :
+interactive member_intro {| intro [] |} 'H :
    ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
    ["wf"] sequent [squash] { 'H >- isset{'s2} } -->
    sequent ['ext] { 'H >- mem{'s1; 's2} } -->
@@ -208,7 +208,7 @@ let memSubstRightT t p =
  * judgment.
  * @end[doc]
  *)
-interactive member_fun {| intro_resource [] |} 'H :
+interactive member_fun {| intro [] |} 'H :
    sequent ['ext] { 'H >- fun_set{z. 'f1['z]} } -->
    sequent ['ext] { 'H >- fun_set{z. 'f2['z]} } -->
    sequent ['ext] { 'H >- fun_prop{z. mem{'f1['z]; 'f2['z]}} }

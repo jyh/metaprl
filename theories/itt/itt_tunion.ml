@@ -121,13 +121,13 @@ prim tunionFormation 'H 'x 'A :
  * a type, and $B[a]$ is a type for any $a @in A$.
  * @end[doc]
  *)
-prim tunionEquality {| intro_resource []; eqcd_resource |} 'H 'x :
+prim tunionEquality {| intro []; eqcd |} 'H 'x :
    [wf] sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
    [wf] sequent [squash] { 'H; x: 'A1 >- 'B1['x] = 'B2['x] in univ[i:l] } -->
    sequent ['ext] { 'H >- tunion{'A1; x1. 'B1['x1]} = tunion{'A2; x2. 'B2['x2] } in univ[i:l] } =
    it
 
-prim tunionType {| intro_resource [] |} 'H 'y :
+prim tunionType {| intro [] |} 'H 'y :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
    sequent ['ext] { 'H >- "type"{tunion{'A; x. 'B['x]}} } =
@@ -143,7 +143,7 @@ prim tunionType {| intro_resource [] |} 'H 'y :
  * of the branches $B[a]$.
  * @end[doc]
  *)
-prim tunionMemberEquality {| intro_resource []; eqcd_resource |} 'H 'a 'y :
+prim tunionMemberEquality {| intro []; eqcd |} 'H 'a 'y :
    [wf] sequent [squash] { 'H >- 'a = 'a in 'A } -->
    [wf] sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
    [wf] sequent [squash] { 'H >- 'x1 = 'x2 in 'B['a] } -->
@@ -160,7 +160,7 @@ prim tunionMemberEquality {| intro_resource []; eqcd_resource |} 'H 'a 'y :
  * is also inhabited.
  * @end[doc]
  *)
-prim tunionMemberFormation {| intro_resource [] |} 'H 'y 'a :
+prim tunionMemberFormation {| intro [] |} 'H 'y 'a :
    [wf] sequent [squash] { 'H >- 'a = 'a in 'A } -->
    [wf] sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
    [main] ('t : sequent ['ext] { 'H >- 'B['a] }) -->
@@ -177,7 +177,7 @@ prim tunionMemberFormation {| intro_resource [] |} 'H 'y 'a :
  * where the computational content of the proof can be omitted.
  * @end[doc]
  *)
-prim tunionElimination {| elim_resource [ThinOption thinT] |} 'H 'J 'x 'w 'z :
+prim tunionElimination {| elim [ThinOption thinT] |} 'H 'J 'x 'w 'z :
    sequent [squash] { 'H; x: tunion{'A; y. 'B['y]}; 'J['x]; w: 'A; z: 'B['w] >- 't1['z] = 't2['z] in 'C['z] } -->
    sequent ['ext] { 'H; x: tunion{'A; y. 'B['y]}; 'J['x] >- 't1['x] = 't2['x] in 'C['x] } =
    it

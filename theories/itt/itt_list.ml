@@ -206,12 +206,12 @@ dform list_ind_df1 : except_mode[src] :: parens :: "prec"[prec_list] :: list_ind
  * $T$ is a type.
  * @end[doc]
  *)
-prim listType {| intro_resource [] |} 'H :
+prim listType {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    sequent ['ext] { 'H >- "type"{list{'A}} } =
    it
 
-prim listEquality {| intro_resource [] |} 'H :
+prim listEquality {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- 'A = 'B in univ[i:l] } -->
    sequent ['ext] { 'H >- list{'A} = list{'B} in univ[i:l] } =
    it
@@ -230,12 +230,12 @@ interactive listFormation 'H :
  * The @hrefterm[nil] term is a member of every list type $@list{A}$.
  * @end[doc]
  *)
-prim nilEquality {| intro_resource [] |} 'H :
+prim nilEquality {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    sequent ['ext] { 'H >- nil IN list{'A} } =
    it
 
-interactive nilFormation {| intro_resource [] |} 'H :
+interactive nilFormation {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    sequent ['ext] { 'H >- list{'A} }
 
@@ -246,7 +246,7 @@ interactive nilFormation {| intro_resource [] |} 'H :
  * of $@list{A}$.
  * @end[doc]
  *)
-prim consEquality {| intro_resource []; eqcd_resource |} 'H :
+prim consEquality {| intro []; eqcd |} 'H :
    [wf] sequent [squash] { 'H >- 'u1 = 'u2 in 'A } -->
    [wf] sequent [squash] { 'H >- 'v1 = 'v2 in list{'A} } -->
    sequent ['ext] { 'H >- cons{'u1; 'v1} = cons{'u2; 'v2} in list{'A} } =
@@ -277,7 +277,7 @@ interactive consFormation 'H :
  * $C[t]$ holds on $t$.
  * @end[doc]
  *)
-prim listElimination {| elim_resource [ThinOption thinT] |} 'H 'J 'l 'w 'u 'v :
+prim listElimination {| elim [ThinOption thinT] |} 'H 'J 'l 'w 'u 'v :
    [main] ('base['l] : sequent ['ext] { 'H; l: list{'A}; 'J['l] >- 'C[nil] }) -->
    [main] ('step['l; 'u; 'v; 'w] : sequent ['ext] { 'H; l: list{'A}; 'J['l]; u: 'A; v: list{'A}; w: 'C['v] >- 'C['u::'v] }) -->
    sequent ['ext] { 'H; l: list{'A}; 'J['l] >- 'C['l] } =
@@ -293,7 +293,7 @@ prim listElimination {| elim_resource [ThinOption thinT] |} 'H 'J 'l 'w 'u 'v :
  * of type $T$ for any elements $u @in A$, $v @in @list{A}$, and $z @in T$.
  * @end[doc]
  *)
-prim list_indEquality {| intro_resource []; eqcd_resource |} 'H lambda{l. 'T['l]} list{'A} 'u 'v 'w :
+prim list_indEquality {| intro []; eqcd |} 'H lambda{l. 'T['l]} list{'A} 'u 'v 'w :
    [wf] sequent [squash] { 'H >- 'e1 = 'e2 in list{'A} } -->
    [wf] sequent [squash] { 'H >- 'base1 = 'base2 in 'T[nil] } -->
    [wf] sequent [squash] { 'H; u: 'A; v: list{'A}; w: 'T['v] >-
@@ -337,10 +337,10 @@ interactive listSubtype 'H :
  * every list type.
  * @end[doc]
  *)
-interactive nil_neq_cons {| elim_resource [] |} 'H 'J :
+interactive nil_neq_cons {| elim [] |} 'H 'J :
    sequent ['ext] { 'H; x: nil = cons{'h; 't} in list{'T}; 'J['x] >- 'C['x] }
 
-interactive cons_neq_nil {| elim_resource [] |} 'H 'J :
+interactive cons_neq_nil {| elim [] |} 'H 'J :
    sequent ['ext] { 'H; x: cons{'h; 't} = nil in list{'T}; 'J['x] >- 'C['x] }
 (*! @docoff *)
 

@@ -324,42 +324,42 @@ let reduce_eq =
    reduce_eq thenC reduce_meta_eq
 *)
 
-prim add_wf {| intro_resource []; eqcd_resource |} 'H :
+prim add_wf {| intro []; eqcd |} 'H :
    [wf] sequent [squash] { 'H >- 'a = 'a1 in int } -->
    [wf] sequent [squash] { 'H >- 'b = 'b1 in int } -->
    sequent ['ext] { 'H >- 'a +@ 'b = 'a1 +@ 'b1 in int } = it
 
-prim minus_wf {| intro_resource []; eqcd_resource |} 'H :
+prim minus_wf {| intro []; eqcd |} 'H :
    [wf] sequent [squash] { 'H >- 'a = 'a1 in int } -->
    sequent ['ext] { 'H >- (-'a) = (-'a1) in int } = it
 
-interactive sub_wf {| intro_resource []; eqcd_resource |} 'H :
+interactive sub_wf {| intro []; eqcd |} 'H :
    [wf] sequent [squash] { 'H >- 'a = 'a1 in int } -->
    [wf] sequent [squash] { 'H >- 'b = 'b1 in int } -->
    sequent ['ext] { 'H >- 'a -@ 'b = 'a1 -@ 'b1 in int }
 
-prim lt_bool_wf {| intro_resource []; eqcd_resource |} 'H :
+prim lt_bool_wf {| intro []; eqcd |} 'H :
    sequent [squash] { 'H >- 'a='a1 in int } -->
    sequent [squash] { 'H >- 'b='b1 in int } -->
    sequent ['ext] { 'H >- lt_bool{'a; 'b} = lt_bool{'a1; 'b1} in bool } = it
 
 (* Derived from previous *)
-interactive lt_bool_wf2 {| intro_resource []; eqcd_resource |} 'H :
+interactive lt_bool_wf2 {| intro []; eqcd |} 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    [wf] sequent [squash] { 'H >- 'b IN int } -->
    sequent ['ext] { 'H >- lt_bool{'a; 'b} IN bool }
 
-prim beq_wf {| intro_resource []; eqcd_resource |} 'H :
+prim beq_wf {| intro []; eqcd |} 'H :
    [wf] sequent [squash] { 'H >- 'a = 'a1 in int } -->
    [wf] sequent [squash] { 'H >- 'b = 'b1 in int } -->
    sequent ['ext] { 'H >- beq_int{'a; 'b} = beq_int{'a1; 'b1} in bool } = it
 (*! @docoff *)
 
-interactive lt_squashStable {| squash_resource |} 'H :
+interactive lt_squashStable {| squash |} 'H :
    sequent [squash] { 'H >- 'a < 'b } -->
    sequent ['ext] { 'H >- it IN ('a < 'b) }
 
-interactive lt_wf {| intro_resource [] |} 'H :
+interactive lt_wf {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    [wf] sequent [squash] { 'H >- 'b IN int } -->
    sequent ['ext] { 'H >- "type"{lt{'a; 'b}} }
@@ -377,7 +377,7 @@ prim beq_int2prop 'H :
    sequent ['ext] { 'H >- 'a = 'b in int } = it
 
 (* Derived from previous *)
-interactive eq_int_assert_elim {| elim_resource [ThinOption thinT] |} 'H 'J 'y:
+interactive eq_int_assert_elim {| elim [ThinOption thinT] |} 'H 'J 'y:
    [main]sequent['ext]{ 'H; x:"assert"{beq_int{'a;'b}}; 'J[it];
                             y: 'a = 'b in int >- 'C[it]} -->
    [wf]sequent['ext]{ 'H; x:"assert"{beq_int{'a;'b}}; 'J[it] >- 'a IN int} -->
@@ -397,11 +397,11 @@ let beq_int_is_trueC = beq_int_is_true_rw
 (*
  Derived from previous rewrite
  *)
-interactive eq_2beq_int {| intro_resource [] |} 'H :
+interactive eq_2beq_int {| intro [] |} 'H :
    sequent [squash] { 'H >- 'a = 'b in int } -->
    sequent ['ext] { 'H >- "assert"{beq_int{'a; 'b}} }
 
-interactive lt_bool_member {| intro_resource [] |} 'H :
+interactive lt_bool_member {| intro [] |} 'H :
   [main]  sequent [squash] { 'H >- 'a < 'b } -->
 (*  [wf] sequent [squash] { 'H >- 'a IN int } -->
   [wf] sequent [squash] { 'H >- 'b IN int } --> *)
@@ -467,14 +467,14 @@ prim intFormation 'H :
 (*
  * H >- int Type
  *)
-prim intType {| intro_resource [] |} 'H :
+prim intType {| intro [] |} 'H :
    sequent ['ext] { 'H >- "type"{int} } = it
 
 (*
  * H >- Z = Z in Ui ext Ax
  * by intEquality
  *)
-prim intEquality {| intro_resource []; eqcd_resource |} 'H :
+prim intEquality {| intro []; eqcd |} 'H :
    sequent ['ext] { 'H >- int = int in univ[i:l] } = it
 
 (*
@@ -496,7 +496,7 @@ prim numberFormation 'H number[n:n] :
  * H >- i = i in int
  * by numberEquality
  *)
-prim numberEquality {| intro_resource []; eqcd_resource |} 'H :
+prim numberEquality {| intro []; eqcd |} 'H :
    sequent ['ext] { 'H >- number[n:n] = number[n:n] in int } = it
 
 (*!
@@ -519,7 +519,7 @@ up[n, m, it, z])
  * H, n:Z, J[n] >- C[0] ext base[n]
  * H, n:Z, J[n], m:Z, v: 0 < m, z: C[m - 1] >- C[m] ext up[n, m, v, z]
  *)
-prim intElimination {| elim_resource [ThinOption thinT] |} 'H 'J 'n 'm 'v 'z :
+prim intElimination {| elim [ThinOption thinT] |} 'H 'J 'n 'm 'v 'z :
    ( 'down['n; 'm; 'v; 'z] : sequent ['ext] { 'H; n: int; 'J['n]; m: int; v: 'm < 0; z: 'C['m +@ 1] >- 'C['m] } ) -->
    ( 'base['n] : sequent ['ext] { 'H; n: int; 'J['n] >- 'C[0] } ) -->
    ( 'up['n; 'm; 'v; 'z] : sequent ['ext] { 'H; n: int; 'J['n]; m: int; v: 0 < 'm; z: 'C['m -@ 1] >- 'C['m] } ) -->
@@ -547,7 +547,7 @@ prim intElimination {| elim_resource [ThinOption thinT] |} 'H 'J 'n 'm 'v 'z :
  * H >- base1 = base2 in T[0]
  * H, x: Z, w: 0 < x, y: T[x - 1] >- up1[x, y] = up2[x, y] in T[x]
  *)
-prim indEquality {| intro_resource []; eqcd_resource |} 'H lambda{z. 'T['z]} 'x 'y 'w :
+prim indEquality {| intro []; eqcd |} 'H lambda{z. 'T['z]} 'x 'y 'w :
    sequent [squash] { 'H >- 'x1 = 'x2 in int } -->
    sequent [squash] { 'H; x: int; w: 'x < 0; y: 'T['x +@ 1] >- 'down1['x; 'y] = 'down2['x; 'y] in 'T['x] } -->
    sequent [squash] { 'H >- 'base1 = 'base2 in 'T[0] } -->

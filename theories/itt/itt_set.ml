@@ -145,13 +145,13 @@ prim setFormation 'H 'a 'A :
  * any $x @in A_2$.
  * @end[doc]
  *)
-prim setEquality {| intro_resource []; eqcd_resource |} 'H 'x :
+prim setEquality {| intro []; eqcd |} 'H 'x :
    [wf] sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
    [wf] sequent [squash] { 'H; x: 'A1 >- 'B1['x] = 'B2['x] in univ[i:l] } -->
    sequent ['ext] { 'H >- { a1:'A1 | 'B1['a1] } = { a2:'A2 | 'B2['a2] } in univ[i:l] } =
    it
 
-prim setType {| intro_resource [] |} 'H 'x :
+prim setType {| intro [] |} 'H 'x :
    [wf] sequent [squash] { 'H >- "type"{'A1} } -->
    [wf] sequent [squash] { 'H; x: 'A1 >- "type"{'B1['x]} } -->
    sequent ['ext] { 'H >- "type"{.{ a1:'A1 | 'B1['a1] }} } =
@@ -165,7 +165,7 @@ prim setType {| intro_resource [] |} 'H 'x :
  * where $B[x]$ is true.
  * @end[doc]
  *)
-prim setMemberFormation {| intro_resource [] |} 'H 'a 'z :
+prim setMemberFormation {| intro [] |} 'H 'a 'z :
    [wf] sequent [squash] { 'H >- 'a = 'a in 'A } -->
    [main] sequent [squash]   { 'H >- 'B['a] } -->
    [wf] sequent [squash] { 'H; z: 'A >- "type"{'B['z]} } -->
@@ -180,7 +180,7 @@ prim setMemberFormation {| intro_resource [] |} 'H 'a 'z :
  * if they are equal in $A$ and also $B[a_1]$ is true.
  * @end[doc]
  *)
-prim setMemberEquality {| intro_resource []; eqcd_resource |} 'H 'x :
+prim setMemberEquality {| intro []; eqcd |} 'H 'x :
    [wf] sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
    [assertion] sequent [squash] { 'H >- 'B['a1] } -->
    [wf] sequent [squash] { 'H; x: 'A >- "type"{'B['x]} } -->
@@ -197,7 +197,7 @@ prim setMemberEquality {| intro_resource []; eqcd_resource |} 'H 'x :
  * omitted.
  * @end[doc]
  *)
-prim setElimination {| elim_resource [] |} 'H 'J 'u 'v :
+prim setElimination {| elim [] |} 'H 'J 'u 'v :
    ('t : sequent ['ext] { 'H; u: 'A; v: squash{'B['u]}; 'J['u] >- 'T['u] }) -->
    sequent ['ext] { 'H; u: { x:'A | 'B['x] }; 'J['u] >- 'T['u] } =
    't
@@ -211,7 +211,7 @@ prim setElimination {| elim_resource [] |} 'H 'J 'u 'v :
  * @hrefresource[subtype_resource].
  * @end[doc]
  *)
-prim set_subtype {| intro_resource [] |} 'H :
+prim set_subtype {| intro [] |} 'H :
    sequent [squash] { 'H >- "type"{ { a: 'A | 'B['a] } } } -->
    sequent ['ext] { 'H >- subtype{ { a: 'A | 'B['a] }; 'A } } =
    it

@@ -243,16 +243,16 @@ dform assert_df : parens :: "prec"[prec_assert] :: except_mode[src] :: "assert"{
  * contains the terms $@true$ and $@false$.
  * @end[doc]
  *)
-interactive boolEquality {| intro_resource []; eqcd_resource |} 'H :
+interactive boolEquality {| intro []; eqcd |} 'H :
    sequent ['ext] { 'H >- "bool" IN univ[i:l] }
 
-interactive boolType {| intro_resource [] |} 'H :
+interactive boolType {| intro [] |} 'H :
    sequent ['ext] { 'H >- "type"{bool} }
 
-interactive btrue_member {| intro_resource []; eqcd_resource |} 'H :
+interactive btrue_member {| intro []; eqcd |} 'H :
   sequent ['ext] { 'H >- btrue IN "bool" }
 
-interactive bfalse_member {| intro_resource []; eqcd_resource |} 'H :
+interactive bfalse_member {| intro []; eqcd |} 'H :
    sequent ['ext] { 'H >- bfalse IN "bool" }
 
 (*!
@@ -264,7 +264,7 @@ interactive bfalse_member {| intro_resource []; eqcd_resource |} 'H :
  * true, and the another where it is false.
  * @end[doc]
  *)
-interactive boolElimination2 {| elim_resource [] |} 'H 'J 'x :
+interactive boolElimination2 {| elim [] |} 'H 'J 'x :
    [main] sequent['ext] { 'H; 'J[btrue] >- 'C[btrue] } -->
    [main] sequent['ext] { 'H; 'J[bfalse] >- 'C[bfalse] } -->
    sequent ['ext] { 'H; x: "bool"; 'J['x] >- 'C['x] }
@@ -278,7 +278,7 @@ interactive boolElimination2 {| elim_resource [] |} 'H 'J 'x :
  * a case analysis on the condition.
  * @end[doc]
  *)
-interactive ifthenelse_type2 {| intro_resource [] |} 'H 'x :
+interactive ifthenelse_type2 {| intro [] |} 'H 'x :
    [wf] sequent [squash] { 'H >- 'e IN bool } -->
    [wf] sequent [squash] { 'H; x: 'e = btrue in bool >- "type"{'A} } -->
    [wf] sequent [squash] { 'H; x: 'e = bfalse in bool >- "type"{'B} } -->
@@ -292,10 +292,10 @@ interactive ifthenelse_type2 {| intro_resource [] |} 'H 'x :
  * $@true$ and $@false$ are provably distinct.
  * @end[doc]
  *)
-interactive boolContradiction1 {| elim_resource [ThinOption thinT] |} 'H 'J :
+interactive boolContradiction1 {| elim [ThinOption thinT] |} 'H 'J :
    sequent ['ext] { 'H; x: btrue = bfalse in bool; 'J['x] >- 'C['x] }
 
-interactive boolContradiction2 {| elim_resource [ThinOption thinT] |} 'H 'J :
+interactive boolContradiction2 {| elim [ThinOption thinT] |} 'H 'J :
    sequent ['ext] { 'H; x: bfalse = btrue in bool; 'J['x] >- 'C['x] }
 
 (*!
@@ -308,7 +308,7 @@ interactive boolContradiction2 {| elim_resource [ThinOption thinT] |} 'H 'J :
  * condition.
  * @end[doc]
  *)
-interactive ifthenelse_equality {| intro_resource []; eqcd_resource |} 'H 'w :
+interactive ifthenelse_equality {| intro []; eqcd |} 'H 'w :
    [wf] sequent [squash] { 'H >- 'e1 = 'e2 in bool } -->
    [wf] sequent [squash] { 'H; w: 'e1 = btrue in bool >- 'x1 = 'x2 in 'T } -->
    [wf] sequent [squash] { 'H; w: 'e1 = bfalse in bool >- 'y1 = 'y2 in 'T } -->
@@ -367,22 +367,22 @@ interactive bool_falseFormation 'H :
  * immediate subterms are also Boolean values.
  * @end[doc]
  *)
-interactive bor_member {| intro_resource [] |} 'H :
+interactive bor_member {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- 't1 IN bool } -->
    [wf] sequent [squash] { 'H >- 't2 IN bool } -->
    sequent ['ext] { 'H >- bor{'t1; 't2} IN bool }
 
-interactive band_member {| intro_resource [] |} 'H :
+interactive band_member {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- 't1 IN bool } -->
    [wf] sequent [squash] { 'H >- 't2 IN bool } -->
    sequent ['ext] { 'H >- band{'t1; 't2} IN bool }
 
-interactive bimplies_member {| intro_resource [] |} 'H :
+interactive bimplies_member {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- 't1 IN bool } -->
    [wf] sequent [squash] { 'H >- 't2 IN bool } -->
    sequent ['ext] { 'H >- bimplies{'t1; 't2} IN bool }
 
-interactive bnot_member {| intro_resource [] |} 'H :
+interactive bnot_member {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- 'a IN bool } -->
    sequent ['ext] { 'H >- bnot{'a} IN bool }
 
@@ -400,14 +400,14 @@ interactive bnot_member {| intro_resource [] |} 'H :
  * the $@assert{@false}$ assumption is contradictory.
  * @end[doc]
  *)
-interactive assert_type {| intro_resource [] |} 'H :
+interactive assert_type {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- 't IN bool } -->
    sequent ['ext] { 'H >- "type"{."assert"{'t}} }
 
-interactive assert_true {| intro_resource [] |} 'H :
+interactive assert_true {| intro [] |} 'H :
    sequent ['ext] { 'H >- "assert"{btrue} }
 
-interactive assert_false {| elim_resource [ThinOption thinT] |} 'H 'J :
+interactive assert_false {| elim [ThinOption thinT] |} 'H 'J :
    sequent ['ext] { 'H; x: "assert"{bfalse}; 'J['x] >- 'C['x] }
 
 (*!
@@ -455,7 +455,7 @@ interactive bool_ext_equality 'H 'u :
  * term $@it$ term; the proof itself can be omitted.
  * @end[doc]
  *)
-interactive assertSquashElim {| squash_resource |} 'H :
+interactive assertSquashElim {| squash |} 'H :
    sequent [squash] { 'H >- "assert"{'t} } -->
    sequent ['ext] { 'H >- it IN "assert"{'t} }
 
@@ -467,12 +467,12 @@ interactive assertSquashElim {| squash_resource |} 'H :
  * elimination reasoning on the Boolean negation.
  * @end[doc]
  *)
-interactive assert_bnot_intro {| intro_resource [] |} 'H 'x :
+interactive assert_bnot_intro {| intro [] |} 'H 'x :
    [wf] sequent [squash] { 'H >- 't1 IN bool } -->
    [main] sequent [squash] { 'H; x: "assert"{'t1} >- "false" } -->
    sequent ['ext] { 'H >- "assert"{bnot{'t1}} }
 
-interactive assert_bnot_elim {| elim_resource [] |} 'H 'J :
+interactive assert_bnot_elim {| elim [] |} 'H 'J :
    [wf] sequent [squash] { 'H; 'J[it] >- "assert"{'t} } -->
    sequent ['ext] { 'H; x: "assert"{bnot{'t}}; 'J['x] >- 'C['x] }
 
@@ -495,18 +495,18 @@ interactive assert_magic 'H 'x :
  * on the Boolean binary connectives.
  * @end[doc]
  *)
-interactive assert_bor_elim {| elim_resource [] |} 'H 'J :
+interactive assert_bor_elim {| elim [] |} 'H 'J :
    [wf] sequent [squash] { 'H; x: "assert"{bor{'t1; 't2}}; 'J['x] >- 't1 IN bool } -->
    [main] sequent ['ext] { 'H; x: "assert"{'t1}; 'J[it] >- 'C[it] } -->
    [main] sequent ['ext] { 'H; x: "assert"{'t2}; 'J[it] >- 'C[it] } -->
    sequent ['ext] { 'H; x: "assert"{bor{'t1; 't2}}; 'J['x] >- 'C['x] }
 
-interactive assert_band_elim {| elim_resource [] |} 'H 'J 'y 'z :
+interactive assert_band_elim {| elim [] |} 'H 'J 'y 'z :
    [wf] sequent [squash] { 'H; x: "assert"{band{'t1; 't2}}; 'J['x] >- 't1 IN bool } -->
    [main] sequent ['ext] { 'H; y: "assert"{'t1}; z: "assert"{'t2}; 'J[it] >- 'C[it] } -->
    sequent ['ext] { 'H; x: "assert"{band{'t1; 't2}}; 'J['x] >- 'C['x] }
 
-interactive assert_bimplies_elim {| elim_resource [] |} 'H 'J :
+interactive assert_bimplies_elim {| elim [] |} 'H 'J :
    [assertion] sequent [squash] { 'H; 'J[it] >- "assert"{'t1} } -->
    [main] sequent ['ext] { 'H; 'J[it]; y: "assert"{'t2} >- 'C[it] } -->
    sequent ['ext] { 'H; x: "assert"{bimplies{'t1; 't2}}; 'J['x] >- 'C['x] }
@@ -518,22 +518,22 @@ interactive assert_bimplies_elim {| elim_resource [] |} 'H 'J :
  * connectives.
  * @end[doc]
  *)
-interactive assert_bor_intro_left {| intro_resource [SelectOption 1] |} 'H :
+interactive assert_bor_intro_left {| intro [SelectOption 1] |} 'H :
    [wf] sequent [squash] { 'H >- 't2 IN bool } -->
    [main] sequent [squash] { 'H >- "assert"{'t1} } -->
    sequent ['ext] { 'H >- "assert"{bor{'t1; 't2}} }
 
-interactive assert_bor_intro_right {| intro_resource [SelectOption 2] |} 'H :
+interactive assert_bor_intro_right {| intro [SelectOption 2] |} 'H :
    [wf] sequent [squash] { 'H >- 't1 IN bool } -->
    [main] sequent [squash] { 'H >- "assert"{'t2} } -->
    sequent ['ext] { 'H >- "assert"{bor{'t1; 't2}} }
 
-interactive assert_band_intro {| intro_resource [] |} 'H :
+interactive assert_band_intro {| intro [] |} 'H :
    [main] sequent [squash] { 'H >- "assert"{'t1} } -->
    [main] sequent [squash] { 'H >- "assert"{'t2} } -->
    sequent ['ext] { 'H >- "assert"{band{'t1; 't2}} }
 
-interactive assert_bimplies_intro {| intro_resource [] |} 'H 'x :
+interactive assert_bimplies_intro {| intro [] |} 'H 'x :
    [wf] sequent [squash] { 'H >- 't1 IN bool } -->
    [main] sequent [squash] { 'H; x: "assert"{'t1} >- "assert"{'t2} } -->
    sequent ['ext] { 'H >- "assert"{bimplies{'t1; 't2}} }

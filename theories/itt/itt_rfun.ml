@@ -265,14 +265,14 @@ let resource reduce +=
  * of well-foundness.
  * @end[doc]
  *)
-prim well_founded_assum_elim {| elim_resource [ThinOption thinT] |} 'H 'J 'a 'a3 'u :
+prim well_founded_assum_elim {| elim [ThinOption thinT] |} 'H 'J 'a 'a3 'u :
    [main] sequent [squash] { 'H; p: well_founded_assum{'A; a1, a2. 'R['a1; 'a2]; 'P}; 'J['p] >- 'a IN 'A } -->
    [main] sequent [squash] { 'H; p: well_founded_assum{'A; a1, a2. 'R['a1; 'a2]; 'P}; 'J['p]; a3: 'A; u: 'R['a3; 'a] >- well_founded_apply{'P; 'a3} } -->
    [main] ('t['u] : sequent [squash] { 'H; p: well_founded_assum{'A; a1, a2. 'R['a1; 'a2]; 'P}; 'J['p]; u: well_founded_apply{'P; 'a} >- 'C['p] }) -->
    sequent ['ext] { 'H; p: well_founded_assum{'A; a1, a2. 'R['a1; 'a2]; 'P}; 'J['p] >- 'C['p] } =
    't[it]
 
-prim well_founded {| intro_resource [] |} 'H 'a1 'a2 'a3 'u 'v 'p 'P :
+prim well_founded {| intro [] |} 'H 'a1 'a2 'a3 'u 'v 'p 'P :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H; a1: 'A; a2: 'A >- "type"{'R['a1; 'a2]} } -->
    [main] sequent [squash] { 'H; a1: 'A; u: 'R['a1; 'a1] >- void } -->
@@ -282,7 +282,7 @@ prim well_founded {| intro_resource [] |} 'H 'a1 'a2 'a3 'u 'v 'p 'P :
    sequent ['ext] { 'H >- well_founded{'A; a, b. 'R['a; 'b]} } =
    it
 
-prim well_founded_apply_type {| intro_resource [] |} 'H 'A :
+prim well_founded_apply_type {| intro [] |} 'H 'A :
    [wf] sequent [squash] { 'H >- 'P IN well_founded_prop{'A} } -->
    [wf] sequent [squash] { 'H >- 'A IN univ[i:l] } -->
    [wf] sequent [squash] { 'H >- 'a IN 'A } -->
@@ -307,7 +307,7 @@ prim rfunctionFormation 'H { f | a: 'A -> 'B['f; 'a] } :
  * a type for any restricted function $@rfun{f; y; @set{A; x; R[z, y]}; B[f, y]}$.
  * @end[doc]
  *)
-prim rfunctionEquality  {| intro_resource []; eqcd_resource |} 'H lambda{a. lambda{b. 'R['a; 'b]}} 'g 'y 'z :
+prim rfunctionEquality  {| intro []; eqcd |} 'H lambda{a. lambda{b. 'R['a; 'b]}} 'g 'y 'z :
    [wf] sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
    [wf] sequent [squash] { 'H >- well_founded{'A1; a, b. 'R['a; 'b]} } -->
    [wf] sequent [squash] { 'H;
@@ -321,7 +321,7 @@ prim rfunctionEquality  {| intro_resource []; eqcd_resource |} 'H lambda{a. lamb
            } =
    it
 
-prim rfunctionType  {| intro_resource [] |} 'H lambda{a. lambda{b. 'R['a; 'b]}} 'g 'y 'z :
+prim rfunctionType  {| intro [] |} 'H lambda{a. lambda{b. 'R['a; 'b]}} 'g 'y 'z :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H >- well_founded{'A; a, b. 'R['a; 'b]} } -->
    [wf] sequent [squash] { 'H;
@@ -347,7 +347,7 @@ prim rfunctionType  {| intro_resource [] |} 'H lambda{a. lambda{b. 'R['a; 'b]}} 
  * because the domain is well-founded.
  * @end[doc]
  *)
-prim rfunction_lambdaFormation {| intro_resource [] |} 'H lambda{a. lambda{b. 'R['a; 'b]}} 'g 'y 'z :
+prim rfunction_lambdaFormation {| intro [] |} 'H lambda{a. lambda{b. 'R['a; 'b]}} 'g 'y 'z :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H >- well_founded{'A; a, b. 'R['a; 'b]} } -->
    ('b['g; 'y] : sequent ['ext] { 'H; y: 'A; g: { f | x: { z: 'A | 'R['z; 'y] } -> 'B['f; 'x] } >- 'B['g; 'y] }) -->
@@ -364,7 +364,7 @@ prim rfunction_lambdaFormation {| intro_resource [] |} 'H lambda{a. lambda{b. 'R
  * substituted for the function argument.
  * @end[doc]
  *)
-prim rfunction_lambdaEquality {| intro_resource []; eqcd_resource |} 'H 'y :
+prim rfunction_lambdaEquality {| intro []; eqcd |} 'H 'y :
    [wf] sequent [squash] { 'H >- "type"{{ f | x: 'A -> 'B['f; 'x] }} } -->
    [wf] sequent [squash] { 'H; y: 'A >- 'b1['y] = 'b2['y] in 'B[lambda{x1. 'b1['x1]}; 'y] } -->
    sequent ['ext] { 'H >- lambda{x1. 'b1['x1]} = lambda{x2. 'b2['x2]} in { f | x: 'A -> 'B['f; 'x] } } =
@@ -404,7 +404,7 @@ prim rfunctionExtensionality 'H
  * get a proof $B[f, a]$.
  * @end[doc]
  *)
-prim rfunctionElimination {| elim_resource [] |} 'H 'J 'f 'a 'y 'v :
+prim rfunctionElimination {| elim [] |} 'H 'J 'f 'a 'y 'v :
    [wf] sequent [squash] { 'H; f: { g | x:'A -> 'B['g; 'x] }; 'J['f] >- 'a IN 'A } -->
    ('t['f; 'y; 'v] : sequent ['ext] { 'H;
                                f: { g | x:'A -> 'B['g; 'x] };
@@ -423,7 +423,7 @@ prim rfunctionElimination {| elim_resource [] |} 'H 'J 'f 'a 'y 'v :
  * and their arguments are equal.
  * @end[doc]
  *)
-prim rfunction_applyEquality {| eqcd_resource |} 'H ({ f | x:'A -> 'B['f; 'x] }) :
+prim rfunction_applyEquality {| eqcd |} 'H ({ f | x:'A -> 'B['f; 'x] }) :
    [wf] sequent [squash] { 'H >- 'f1 = 'f2 in { f | x:'A -> 'B['f; 'x] } } -->
    [wf] sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
    sequent ['ext] { 'H >- 'f1 'a1 = 'f2 'a2 in 'B['f1; 'a1] } =
@@ -442,7 +442,7 @@ let rfunction_applyEquality' t p =
  * an arbitrary instance $f$ in the function space.
  * @end[doc]
  *)
-interactive rfunction_rfunction_subtype {| intro_resource [] |} 'H 'a 'f lambda{a. lambda{b. 'R['a; 'b]}} :
+interactive rfunction_rfunction_subtype {| intro [] |} 'H 'a 'f lambda{a. lambda{b. 'R['a; 'b]}} :
    [main] sequent [squash] { 'H >- subtype{'A2; 'A1} } -->
    [wf] sequent [squash] { 'H >- "type"{.{f1 | x1: 'A1 -> 'B1['f1; 'x1] }} } -->
    [wf] sequent [squash] { 'H >- "type"{.{f2 | x2: 'A2 -> 'B2['f2; 'x2] }} } -->

@@ -99,34 +99,34 @@ prim_rw unfold_state : state{'D} <-->
 (*
  * Well-formedness of label type.
  *)
-interactive label_wf {| intro_resource [] |} 'H :
+interactive label_wf {| intro [] |} 'H :
    sequent ['ext] { 'H >- member{univ[i:l]; label_type} }
 
-interactive label_type {| intro_resource [] |} 'H :
+interactive label_type {| intro [] |} 'H :
    sequent ['ext] { 'H >- "type"{label_type} }
 
 (*
  * Well-formedness of eqlabel_fun
  *)
-interactive eq_label_fun_wf {| intro_resource [] |} 'H :
+interactive eq_label_fun_wf {| intro [] |} 'H :
    sequent ['ext] { 'H >- member{.label_type -> label_type -> bool; eq_label_fun} }
 
 (*
  * Type of declaration lists.
  *)
-interactive decl_type_wf {| intro_resource [] |} 'H :
+interactive decl_type_wf {| intro [] |} 'H :
    sequent ['ext] { 'H >- member{univ[i ':l]; decl_type[i:l]} }
 
-interactive empty_decl_wf {| intro_resource [] |} 'H :
+interactive empty_decl_wf {| intro [] |} 'H :
    sequent ['ext] { 'H >- member{decl_type[i:l]; empty_decl} }
 
-interactive store_decl_wf {| intro_resource [] |} 'H :
+interactive store_decl_wf {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- member{decl_type[i:l]; 'D} } -->
    [wf] sequent [squash] { 'H >- member{label_type; 'l} } -->
    [wf] sequent [squash] { 'H >- member{univ[i:l]; 'T} } -->
    sequent ['ext] { 'H >- member{decl_type[i:l]; store_decl{'D; 'l; 'T}} }
 
-interactive alloc_decl_wf {| intro_resource [] |} 'H :
+interactive alloc_decl_wf {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- member{decl_type[i:l]; 'D} } -->
    [wf] sequent [squash] { 'H >- member{univ[i:l]; 'T} } -->
    sequent ['ext] { 'H >- member{decl_type[i:l]; alloc_decl{'D; 'T}} }
@@ -134,7 +134,7 @@ interactive alloc_decl_wf {| intro_resource [] |} 'H :
 (*
  * Well-formedness of next_label.
  *)
-interactive next_label_wf {| intro_resource [] |} 'H (univ[i:l]) :
+interactive next_label_wf {| intro [] |} 'H (univ[i:l]) :
    [wf] sequent [squash] { 'H >- member{decl_type[i:l]; 'D} } -->
    [wf] sequent [squash] { 'H >- member{label_type; 'l} } -->
    sequent ['ext] { 'H >- member{label_type; next_label{'D; 'l}} }
@@ -142,23 +142,23 @@ interactive next_label_wf {| intro_resource [] |} 'H (univ[i:l]) :
 (*
  * Well-formedness of state.
  *)
-interactive state_wf {| intro_resource [] |} 'H :
+interactive state_wf {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- member{decl_type[i:l]; 'D} } -->
    sequent ['ext] { 'H >- member{univ[i:l]; state{'D}} }
 
 (*
  * Well-formedness of states.
  *)
-interactive empty_wf {| intro_resource [] |} 'H :
+interactive empty_wf {| intro [] |} 'H :
    sequent ['ext] { 'H >- member{state{empty_decl}; empty} }
 
-interactive store_wf1 {| intro_resource [] |} 'H (univ[i:l]) :
+interactive store_wf1 {| intro [] |} 'H (univ[i:l]) :
    [wf] sequent [squash] { 'H >- member{decl_type[i:l]; 'D} } -->
    [wf] sequent [squash] { 'H >- 'l1 = 'l2 in label_type } -->
    [wf] sequent [squash] { 'H >- member{'T; 'v} } -->
    sequent ['ext] { 'H >- member{state{store_decl{'D; 'l1; 'T}}; store{'s; 'l2; 'v}} }
 
-interactive store_wf2 {| intro_resource [] |} 'H :
+interactive store_wf2 {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- "type"{'T} } -->
    [wf] sequent [squash] { 'H >- member{label_type; 'l1} } -->
    [wf] sequent [squash] { 'H >- member{label_type; 'l2} } -->

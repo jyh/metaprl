@@ -162,19 +162,19 @@ prim dintersectionFormation 'H 'x 'A :
  * @end[doc]
  *)
 
-prim dintersectionEquality {| intro_resource []; eqcd_resource |} 'H 'y :
+prim dintersectionEquality {| intro []; eqcd |} 'H 'y :
    [wf] sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
    [wf] sequent [squash] { 'H; y: 'A1 >- 'B1['y] = 'B2['y] in univ[i:l] } -->
    sequent ['ext] { 'H >- disect{'A1; x1.'B1['x1]} = disect{'A2; x2.'B2['x2]} in univ[i:l] } =
    it
 
-prim dintersectionType {| intro_resource [] |} 'H 'y :
+prim dintersectionType {| intro [] |} 'H 'y :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
    sequent ['ext] { 'H >- "type"{.disect{'A; x. 'B['x]}} } =
    it
 
-prim dintersectionTypeElimination {| elim_resource [ThinOption thinT] |} 'H 'J 'a 'v:
+prim dintersectionTypeElimination {| elim [ThinOption thinT] |} 'H 'J 'a 'v:
    [wf] sequent [squash] { 'H; u:"type"{.disect{'A; x. 'B['x]}}; 'J['u]  >- 'a IN 'A } -->
    ('t['u,'v] :
    sequent ['ext] { 'H; u:"type"{.disect{'A; x. 'B['x]}}; v:"type"{'B['a]}; 'J['u] >- 'C['u] }) -->
@@ -191,7 +191,7 @@ prim dintersectionTypeElimination {| elim_resource [ThinOption thinT] |} 'H 'J '
  *)
 
 
-prim dintersectionMemberEquality {| intro_resource []; eqcd_resource |} 'H :
+prim dintersectionMemberEquality {| intro []; eqcd |} 'H :
    [wf] sequent [squash] { 'H; x:'A >- "type"{'B['x]} } -->
    sequent [squash] { 'H >- 't1 = 't2 in 'A } -->
    sequent [squash] { 'H >- 't1 = 't2 in 'B['t1] } -->
@@ -207,7 +207,7 @@ prim dintersectionMemberEquality {| intro_resource []; eqcd_resource |} 'H :
  * @end[doc]
  *)
 
-interactive dintersectionMemberFormation {| intro_resource [] |} 'H 't:
+interactive dintersectionMemberFormation {| intro [] |} 'H 't:
    [wf] sequent [squash] { 'H; x:'A >- "type"{'B['x]} } -->
    sequent [squash] { 'H >- 't IN 'A } -->
    sequent [squash] { 'H >- 't IN 'B['t] } -->
@@ -221,13 +221,13 @@ interactive dintersectionMemberFormation {| intro_resource [] |} 'H 't:
  * @end[doc]
  *)
 
-prim dintersectionElimination {| elim_resource [] |} 'H 'J  bind{a,b,dumb.'T['a;'b;'dumb]}:
+prim dintersectionElimination {| elim [] |} 'H 'J  bind{a,b,dumb.'T['a;'b;'dumb]}:
    [main] ('t['a; 'b] :
    sequent ['ext] { 'H; x: disect{'A; y.'B['y]}; 'J['x];  a:'A; b: 'B['a]  >- 'T['a;'b; it] }) -->
    sequent ['ext] { 'H; x: disect{'A; y.'B['y]}; 'J['x] >- 'T['x;'x; it] } =
    't['x; 'x]
 (*
-prim dintersectionElimination {| elim_resource [] |} 'H 'J  bind{a,b.'T['a;'b]}:
+prim dintersectionElimination {| elim [] |} 'H 'J  bind{a,b.'T['a;'b]}:
    [main] ('t['a; 'b] :
    sequent ['ext] { 'H; x: disect{'A; y.'B['y]}; 'J['x];  a:'A; b: 'B['a]  >- 'T['a;'b] }) -->
    sequent ['ext] { 'H; x: disect{'A; y.'B['y]}; 'J['x] >- 'T['x;'x] } =
@@ -247,7 +247,7 @@ interactive dintersectionElimination2 'H 'J 'x 'a 'b 'v 'w:
  * @end[doc]
  *)
 
-prim dintersectionSubtype {| intro_resource [] |} 'H 'a :
+prim dintersectionSubtype {| intro [] |} 'H 'a :
    sequent [squash] { 'H >- subtype{'A1; 'A2} } -->
    sequent [squash] { 'H; a: 'A1 >- subtype{'B1['a]; 'B2['a]} } -->
    sequent ['ext] { 'H >- subtype{ disect{'A1; a1.'B1['a1]}; disect{'A2; a2.'B2['a2]} } } =
@@ -281,17 +281,17 @@ dform squashTop_df : squashTop{'A} = `"[" slot{'A} `"]"
  *)
 
 
-interactive setdisectSubtype {| intro_resource [] |} 'H :
+interactive setdisectSubtype {| intro [] |} 'H :
    [wf] sequent[squash] { 'H >- "type"{'A}} -->
    [wf] sequent[squash] { 'H; x:'A >- "type"{'P['x]}} -->
    sequent ['ext] { 'H >- subtype{ {x: 'A | 'P['x]}; disect{'A;x.squashTop{'P['x]}}}}
 
-interactive setDisect {| intro_resource [] |} 'H :
+interactive setDisect {| intro [] |} 'H :
    [wf] sequent[squash] { 'H >- "type"{'A}} -->
    [wf] sequent[squash] { 'H; x:'A >- "type"{'P['x]}} -->
    sequent ['ext] { 'H; y: {x: 'A | 'P['x]} >- 'y IN  disect{'A;x.squashTop{'P['x]}}}
 
-interactive disectSet {| intro_resource [] |} 'H :
+interactive disectSet {| intro [] |} 'H :
    [wf] sequent[squash] { 'H >- "type"{'A}} -->
    [wf] sequent[squash] { 'H; x:'A >- "type"{'P['x]}} -->
    sequent ['ext] { 'H >- subtype{ disect{'A;x.squashTop{'P['x]}}; {x: 'A | 'P['x]} } }

@@ -24,4 +24,5 @@ Build qw(
         itt/Conscript
         mc/Conscript
         phobos/Conscript
+        fir/Conscript
 );

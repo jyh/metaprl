@@ -1,5 +1,7 @@
 (*
- * Basic properties of integers
+ *
+ * The integers are formalized as a @emph{ruleitive}
+ * type in the @Nuprl type theory.
  *
  * ----------------------------------------------------------------
  *
@@ -27,14 +29,13 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  * Author: Yegor Bryukhov
- * ynb@mail.ru
- *
+ * @email{ynb@mail.ru}
  *)
 
 include Itt_equal
 include Itt_rfun
-include Itt_logic
 include Itt_bool
+include Itt_logic
 
 open Refiner.Refiner.Term
 
@@ -60,7 +61,6 @@ define unfold_sub :
 (*
  Prop-int-lt definition
  *)
-
 define unfold_lt :
    lt{'a; 'b} <--> "assert"{lt_bool{'a; 'b}}
 
@@ -91,10 +91,6 @@ rule lt_bool_wf2 'H :
    [wf] sequent [squash] { 'H >- 'b IN int } -->
    sequent ['ext] { 'H >- lt_bool{'a; 'b} IN bool }
 
-(*
- = in int VS beq_int
- *)
-
 rule beq_wf 'H :
    [wf] sequent [squash] { 'H >- 'a = 'a1 in int } -->
    [wf] sequent [squash] { 'H >- 'b = 'b1 in int } -->
@@ -111,14 +107,9 @@ rule eq_int_assert_elim 'H 'J :
    [main] sequent ['ext] { 'H; x: 'a = 'b in int; 'J[it] >- 'C[it] } -->
    sequent ['ext] { 'H; x: "assert"{beq_int{'a; 'b}}; 'J['x] >- 'C['x] }
 
-(*
-rewrite beq_int_is_true :
+rule beq_int_is_true 'H :
    sequent [squash] { 'H >- 'a = 'b in int } -->
-   sequent ['ext] { 'H >- beq_int{'a; 'b} <--> "btrue" }
-*)
-rewrite beq_int_is_true :
-   ('a = 'b in int) -->
-   beq_int{'a; 'b} <--> btrue
+   sequent ['ext] { 'H >- beq_int{'a; 'b} ~ btrue }
 
 (*
  Derived from previous rewrite
@@ -126,10 +117,6 @@ rewrite beq_int_is_true :
 rule eq_2beq_int 'H :
    sequent [squash] { 'H >- 'a = 'b in int } -->
    sequent ['ext] { 'H >- "assert"{beq_int{'a; 'b}} }
-
-(************************************************************************
- * RULES                                                                *
- ************************************************************************)
 
 (*
  * Reduction on induction combinator:
@@ -183,7 +170,6 @@ rule intEquality 'H :
  *)
 rule numberFormation 'H number[n:n] :
    sequent ['ext] { 'H >- int }
-
 (*
  * H >- i = i in int
  * by numberEquality
@@ -228,98 +214,79 @@ rule indEquality 'H lambda{z. 'T['z]} 'x 'y 'w :
    sequent ['ext] { 'H >- ind{'x1; i1, j1. 'down1['i1; 'j1]; 'base1; k1, l1. 'up1['k1; 'l1]}
                    = ind{'x2; i2, j2. 'down2['i2; 'j2]; 'base2; k2, l2. 'up2['k2; 'l2]}
                    in 'T['x1] }
-
-
 (*
  Definition of basic operations (and relations) on int
  *)
 
-rewrite lt_Reflex :
-   ('a IN int) -->
-   ('b IN int) -->
-   band{lt_bool{'a; 'b}; lt_bool{'b; 'a}} <--> bfalse
+rule lt_Reflex 'H :
+   [wf] sequent [squash] { 'H >- 'a IN int } -->
+   [wf] sequent [squash] { 'H >- 'b IN int } -->
+   sequent ['ext] { 'H >- band{lt_bool{'a; 'b}; lt_bool{'b; 'a}} ~ bfalse }
 
-rewrite lt_Trichot :
-   ('a IN int ) -->
-   ('b IN int ) -->
-   bor{bor{lt_bool{'a; 'b};lt_bool{'b; 'a}}; beq_int{'a; 'b}} <--> btrue
+rule lt_Trichot 'H :
+   [wf] sequent [squash] { 'H >- 'a IN int } -->
+   [wf] sequent [squash] { 'H >- 'b IN int } -->
+   sequent ['ext]
+     { 'H >- bor{bor{lt_bool{'a; 'b};lt_bool{'b; 'a}}; beq_int{'a; 'b}} ~ btrue }
 
 (*
 Switching to rewrite to provide the uniform of int-properties
 
-rule lt_Transit 'H 'b:
+rule lt_Transit 'H 'b :
    sequent [squash] { 'H >- 'a < 'b } -->
    sequent [squash] { 'H >- 'b < 'c } -->
    sequent ['ext] { 'H >- 'a < 'c }
 *)
 
-rewrite lt_Transit 'b :
-   ('a IN int ) -->
-   ('b IN int ) -->
-   ('c IN int ) -->
-   (band{lt_bool{'a; 'b};lt_bool{'b; 'c}} = btrue in bool) -->
-   lt_bool{'a; 'c} <--> btrue
-
-rewrite lt_Discret :
-   ('a IN int ) -->
-   ('b IN int ) -->
-   lt_bool{'a; 'b} <--> bor{beq_int{('a +@ 1); 'b}; lt_bool{('a +@ 1); 'b}}
-
-rewrite lt_addMono 'c:
-   ('a IN int ) -->
-   ('b IN int ) -->
-   ('c IN int ) -->
-   lt_bool{'a; 'b} <--> lt_bool{('a +@ 'c); ('b +@ 'c)}
-
-rewrite add_Commut :
-   ('a IN int ) -->
-   ('b IN int ) -->
-   ('a +@ 'b) <--> ('b +@ 'a)
-
-rewrite add_Assoc :
-   ('a IN int ) -->
-   ('b IN int ) -->
-   ('c IN int ) -->
-   ('a +@ ('b +@ 'c)) <--> (('a +@ 'b) +@ 'c)
-
-rewrite add_Id :
-   ('a IN int ) -->
-   ('a +@ 0) <--> 'a
-
-rewrite add_Id2 :
-   ('a IN int ) -->
-   (0 +@ 'a) <--> 'a
-
-rewrite uni_add_inverse :
-   ('a IN int ) -->
-   ( 'a +@ uni_minus{ 'a } ) <--> 0 
-
-(*
-rewrite sub_reduce :
+rule lt_Transit 'H 'b :
+   [main] sequent [squash] 
+   	{ 'H >- band{lt_bool{'a; 'b};lt_bool{'b; 'c}} = btrue in bool } -->
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    [wf] sequent [squash] { 'H >- 'b IN int } -->
-   sequent ['ext] { 'H >- 'a -@ 'b <--> 'a +@ uni_minus{'b}
-*)
+   [wf] sequent [squash] { 'H >- 'c IN int } -->
+   sequent ['ext] { 'H >- lt_bool{'a; 'c} ~ btrue }
 
-rewrite uni_add_Distrib :
-   ('a IN int ) -->
-   ('b IN int ) -->
-   uni_minus{ ('a +@ 'b) } <--> ( uni_minus{ 'b } +@ uni_minus{ 'b } ) 
+rule lt_Discret 'H :
+   [wf] sequent [squash] { 'H >- 'a IN int } -->
+   [wf] sequent [squash] { 'H >- 'b IN int } -->
+   sequent ['ext] { 'H >- lt_bool{'a; 'b} ~
+                          bor{beq_int{('a +@ 1); 'b}; lt_bool{('a +@ 1); 'b}} }
 
-rewrite uni_uni_reduce :
-   ('a IN int ) -->
-   uni_minus{ uni_minus{ 'a } } <--> 'a
+rule lt_addMono 'H 'c:
+   [wf] sequent [squash] { 'H >- 'a IN int } -->
+   [wf] sequent [squash] { 'H >- 'b IN int } -->
+   [wf] sequent [squash] { 'H >- 'c IN int } -->
+   sequent ['ext] { 'H >- lt_bool{'a; 'b} ~ lt_bool{('a +@ 'c); ('b +@ 'c)} }
 
+rule add_Commut 'H :
+   [wf] sequent [squash] { 'H >- 'a IN int } -->
+   [wf] sequent [squash] { 'H >- 'b IN int } -->
+   sequent ['ext] { 'H >- ('a +@ 'b) ~ ('b +@ 'a) }
 
+rule add_Assoc 'H :
+   [wf] sequent [squash] { 'H >- 'a IN int } -->
+   [wf] sequent [squash] { 'H >- 'b IN int } -->
+   [wf] sequent [squash] { 'H >- 'c IN int } -->
+   sequent ['ext] { 'H >- ('a +@ ('b +@ 'c)) ~ (('a +@ 'b) +@ 'c) }
 
+rule add_Id 'H :
+   [wf] sequent [squash] { 'H >- 'a IN int } -->
+   sequent ['ext] { 'H >- ('a +@ 0) ~ 'a }
 
+rule add_Id2 'H :
+   [wf] sequent [squash] { 'H >- 'a IN int } -->
+   sequent ['ext] { 'H >- (0 +@ 'a) ~ 'a }
 
+rule uni_add_inverse 'H :
+   [wf] sequent [squash] { 'H >- 'a IN int } -->
+   sequent ['ext] { 'H >- ( 'a +@ uni_minus{ 'a } ) ~ 0 }
 
+rule uni_add_Distrib 'H :
+   [wf] sequent [squash] { 'H >- 'a IN int } -->
+   [wf] sequent [squash] { 'H >- 'b IN int } -->
+   sequent { 'H >- uni_minus{ ('a +@ 'b) } ~
+                   ( uni_minus{ 'b } +@ uni_minus{ 'b } ) }
 
-
-
-
-
-
-
-
+rule uni_uni_reduce 'H :
+   [wf] sequent [squash] { 'H >- 'a IN int } -->
+   sequent ['ext] { 'H >- uni_minus{ uni_minus{ 'a } } ~ 'a }

@@ -70,6 +70,8 @@ open Base_dtactic
 open Itt_equal
 open Itt_struct
 
+open Itt_int_base
+
 let _ = show_loading "Loading Itt_int_ext%t"
 (************************************************************************
  * TERMS                                                                *
@@ -116,12 +118,12 @@ define unfold_gt :
 Switching to define-version to provide the same behaviour as bool-relations,
 i.d. rewritability of <= in the same extent as of <
 
-prim_rw unfold_le :
+prim_rw unfold_le 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    [wf] sequent [squash] { 'H >- 'b IN int } -->
    sequent ['ext] { 'H >- 'a <= 'b <--> ('a < 'b) \/ ('a = 'b in int) }
 
-prim_rw unfold_ge :
+prim_rw unfold_ge 'H :
    [wf] sequent [squash] { 'H >- a IN int } -->
    [wf] sequent [squash] { 'H >- b IN int } -->
    sequent ['ext] { 'H >- 'a >= 'b <--> ('a < 'b) \/ ('a = 'b in int) }
@@ -148,76 +150,76 @@ prim mul_wf {| intro_resource []; eqcd_resource |} 'H :
    [wf] sequent [squash] { 'H >- 'b = 'b1 in int } -->
    sequent ['ext] { 'H >- 'a *@ 'b = 'a1 *@ 'b1 in int } = it
 
-interactive_rw lt_mulPositMono 'c:
-   (0 < 'c ) -->
-   ('a IN int ) -->
-   ('b IN int ) -->
-   ('c IN int ) -->
-   lt_bool{'a; 'b} <--> lt_bool{('c *@ 'a); ('c *@ 'b) }
+interactive lt_mulPositMono 'H 'c :
+   sequent [squash] { 'H >- 0 < 'c } -->
+   [wf] sequent [squash] { 'H >- 'a IN int } -->
+   [wf] sequent [squash] { 'H >- 'b IN int } -->
+   [wf] sequent [squash] { 'H >- 'c IN int } -->
+   sequent ['ext] { 'H >- lt_bool{'a; 'b} ~ lt_bool{('c *@ 'a); ('c *@ 'b) } }
 
-prim_rw mul_Commut :
-   ('a IN int ) -->
-   ('b IN int ) -->
-   ('a *@ 'b) <--> ('b *@ 'a)
+prim mul_Commut 'H :
+   [wf] sequent [squash] { 'H >- 'a IN int } -->
+   [wf] sequent [squash] { 'H >- 'b IN int } -->
+   sequent ['ext] { 'H >- ('a *@ 'b) ~ ('b *@ 'a) } = it
 
-prim_rw mul_Assoc :
-   ('a IN int ) -->
-   ('b IN int ) -->
-   ('c IN int ) -->
-   ('a *@ ('b *@ 'c)) <--> (('a *@ 'b) *@ 'c) 
+prim mul_Assoc 'H :
+   [wf] sequent [squash] { 'H >- 'a IN int } -->
+   [wf] sequent [squash] { 'H >- 'b IN int } -->
+   [wf] sequent [squash] { 'H >- 'c IN int } -->
+   sequent ['ext] { 'H >- ('a *@ ('b *@ 'c)) ~ (('a *@ 'b) *@ 'c) } = it
 
-prim_rw mul_add_Distrib :
-   ('a IN int ) -->
-   ('b IN int ) -->
-   ('c IN int ) -->
-   ('a *@ ('b +@ 'c)) <--> (('a *@ 'b) +@ ('a *@ 'c)) 
+prim mul_add_Distrib 'H :
+   [wf] sequent [squash] { 'H >- 'a IN int } -->
+   [wf] sequent [squash] { 'H >- 'b IN int } -->
+   [wf] sequent [squash] { 'H >- 'c IN int } -->
+   sequent ['ext] { 'H >- ('a *@ ('b +@ 'c)) ~ (('a *@ 'b) +@ ('a *@ 'c)) } = it
 
-prim_rw mul_Id :
-   ('a IN int ) -->
-   (1 *@ 'a) <--> 'a
+prim mul_Id 'H :
+   [wf] sequent [squash] { 'H >- 'a IN int } -->
+   sequent ['ext] { 'H >- (1 *@ 'a) ~ 'a } = it
 
-interactive_rw mul_Id2 :
-   ('a IN int ) -->
-   ('a *@ 1) <--> 'a
+interactive mul_Id2 'H :
+   [wf] sequent [squash] { 'H >- 'a IN int } -->
+   sequent ['ext] { 'H >- ('a *@ 1) ~ 'a }
 
-prim_rw mul_Zero :
-   ('a IN int ) -->
-   (0 *@ 'a) <--> 0
+prim mul_Zero 'H :
+   [wf] sequent [squash] { 'H >- 'a IN int } -->
+   sequent ['ext] { 'H >- (0 *@ 'a) ~ 0 } = it
  
-interactive_rw mul_Zero2 :
-   ('a IN int ) -->
-   ('a *@ 0) <--> 0
+interactive mul_Zero2 'H :
+   [wf] sequent [squash] { 'H >- 'a IN int } -->
+   sequent ['ext] { 'H >- ('a *@ 0) ~ 0 }
 
-interactive_rw mul_uni_Assoc :
-   ('a IN int ) -->
-   ('b IN int ) -->
-   ('a *@ uni_minus{ 'b }) <--> (uni_minus{ 'a } *@ 'b)
+interactive mul_uni_Assoc 'H :
+   [wf] sequent [squash] { 'H >- 'a IN int } -->
+   [wf] sequent [squash] { 'H >- 'b IN int } -->
+   sequent ['ext] { 'H >- ('a *@ uni_minus{ 'b }) ~ (uni_minus{ 'a } *@ 'b) }
 
-interactive_rw lt_mulNegMono 'c:
-   ('c < 0 ) -->
-   ('a IN int ) -->
-   ('b IN int ) -->
-   ('c IN int ) -->
-   lt_bool{'a; 'b} <--> lt_bool{('c *@ 'b) ; ('c *@ 'a)} 
+interactive lt_mulNegMono 'H 'c :
+   sequent [squash] { 'H >- 'c < 0 } -->
+   [wf] sequent [squash] { 'H >- 'a IN int } -->
+   [wf] sequent [squash] { 'H >- 'b IN int } -->
+   [wf] sequent [squash] { 'H >- 'c IN int } -->
+   sequent ['ext] { 'H >- lt_bool{'a; 'b} ~ lt_bool{('c *@ 'b) ; ('c *@ 'a)} }
 
 (*!
  * @begin[doc]
  * @thysection{@tt[rem] definition and well-formedness}
  * @end[doc]
  *)
-prim_rw rem_baseReduce :
-   (0 <= 'a ) -->
-   ('a < 'b ) -->
-   ('a IN int ) -->
-   ('b IN int ) -->
-   ('a rem 'b) <--> 'a 
+prim rem_baseReduce 'H :
+   sequent [squash] { 'H >- 0 <= 'a } -->
+   sequent [squash] { 'H >- 'a < 'b } -->
+   [wf] sequent [squash] { 'H >- 'a IN int } -->
+   [wf] sequent [squash] { 'H >- 'b IN int } -->
+   sequent ['ext] { 'H >- ('a rem 'b) ~ 'a } = it
 
-prim_rw rem_indReduce :
-   (0 < 'b ) -->
-   ('a IN int ) -->
-   ('b IN int ) -->
-   ('c IN int ) -->
-   ((('a *@ 'b) +@ 'c) rem 'b) <--> ('c rem 'b) 
+prim rem_indReduce 'H :
+   sequent [squash] { 'H >- 0 < 'b } -->
+   [wf] sequent [squash] { 'H >- 'a IN int } -->
+   [wf] sequent [squash] { 'H >- 'b IN int } -->
+   [wf] sequent [squash] { 'H >- 'c IN int } -->
+   sequent ['ext] { 'H >- ((('a *@ 'b) +@ 'c) rem 'b) ~ ('c rem 'b) } = it
 
 interactive rem_wf {| intro_resource []; eqcd_resource |} 'H :
    sequent [squash] { 'H >- "nequal"{'b ; 0} } -->
@@ -230,19 +232,19 @@ interactive rem_wf {| intro_resource []; eqcd_resource |} 'H :
  * @thysection{@tt[div] definition and properties}
  * @end[doc]
  *)
-prim_rw div_baseReduce :
-   (0 <= 'a ) -->
-   ('a < 'b ) -->
-   ('a IN int ) -->
-   ('b IN int ) -->
-   ('a /@ 'b) <--> 0
+prim div_baseReduce 'H :
+   sequent [squash] { 'H >- 0 <= 'a } -->
+   sequent [squash] { 'H >- 'a < 'b } -->
+   [wf] sequent [squash] { 'H >- 'a IN int } -->
+   [wf] sequent [squash] { 'H >- 'b IN int } -->
+   sequent ['ext] { 'H >- ('a /@ 'b) ~ 0 } = it
 
-prim_rw div_indReduce :
-   (0 < 'b ) -->
-   ('a IN int ) -->
-   ('b IN int ) -->
-   ('c IN int ) -->
-   ((('a *@ 'b) +@ 'c) /@ 'b) <--> ('a +@ ('c /@ 'b)) 
+prim div_indReduce 'H :
+   sequent [squash] { 'H >- 0 < 'b } -->
+   [wf] sequent [squash] { 'H >- 'a IN int } -->
+   [wf] sequent [squash] { 'H >- 'b IN int } -->
+   [wf] sequent [squash] { 'H >- 'c IN int } -->
+   sequent ['ext] { 'H >- ((('a *@ 'b) +@ 'c) /@ 'b) ~ ('a +@ ('c /@ 'b)) } = it
 
 interactive div_wf {| intro_resource []; eqcd_resource |} 'H :
    sequent [squash] { 'H >- "nequal"{'b ; 0} } -->
@@ -258,7 +260,7 @@ interactive lt_divMono 'H 'b :
    [wf] sequent [squash] { 'H >- 'c IN int } -->
    sequent ['ext] { 'H >- 'a /@ 'c <= 'b /@ 'c }
 
-interactive add_divReduce 'H:
+interactive add_divReduce 'H :
    sequent [squash] {'H >- 0 < 'a } -->
    sequent [squash] {'H >- 0 < 'b } -->
    sequent [squash] {'H >- 0 < 'c } -->
@@ -267,19 +269,19 @@ interactive add_divReduce 'H:
    [wf] sequent [squash] {'H >- 'c IN int } -->
    sequent ['ext] {'H >- ('a /@ 'c) +@ ('b /@ 'c) <= ('a +@ 'b) /@ 'c }
 
-interactive_rw div_Assoc :
-   (0 <= 'a ) -->
-   (0 < 'b ) -->
-   (0 < 'c ) -->
-   ('a IN int ) -->
-   ('b IN int ) -->
-   ('c IN int ) -->
-   (('a /@ 'b) /@ 'c) <--> ('a /@ ('b *@ 'c))
+interactive div_Assoc 'H :
+   sequent [squash] { 'H >- 0 <= 'a } -->
+   sequent [squash] { 'H >- 0 < 'b } -->
+   sequent [squash] { 'H >- 0 < 'c } -->
+   [wf] sequent [squash] { 'H >- 'a IN int } -->
+   [wf] sequent [squash] { 'H >- 'b IN int } -->
+   [wf] sequent [squash] { 'H >- 'c IN int } -->
+   sequent ['ext] { 'H >- (('a /@ 'b) /@ 'c) ~ ('a /@ ('b *@ 'c)) }
 
 (*
 Incorrect but there has to be some assoc/commut/composition property
 
-rewrite rem_Assoc 'H:
+rewrite rem_Assoc 'H :
    sequent [squash] { 'H >- 0 <= 'a } -->
    sequent [squash] { 'H >- 0 < 'b } -->
    sequent [squash] { 'H >- 0 < 'c } -->
@@ -290,7 +292,7 @@ rewrite rem_Assoc 'H:
 
 *)
 
-
+(*
 let reduce_info =
    [<< ('a *@ ('b *@ 'c)) >>, mul_Assoc;
     << ('a *@ ('b +@ 'c)) >>, mul_add_Distrib;
@@ -301,3 +303,4 @@ let reduce_info =
     << ('a *@ uni_minus{ 'b }) >>, mul_uni_Assoc]
 
 let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
+*)

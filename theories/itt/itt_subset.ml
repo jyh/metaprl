@@ -173,6 +173,11 @@ doc <:doc<
    @end[doc] 
 >>
 
+interactive mem_univ {| intro []; eqcd |}  :
+   sequent [squash] { <H> >- singleton{'a1; 'B1} = singleton{'a2; 'B2} in univ[i:l] } -->
+   sequent [squash] { <H> >- 'A1 = 'A2 in univ[i:l] } -->
+   sequent ['ext] { <H> >- mem{'a1;'A1;'B1} = mem{'a2; 'A2; 'B2} in univ[i:l]}
+
 interactive mem_wf {| intro [] |}  :
    sequent [squash] { <H> >- 'a in 'B } -->
    sequent [squash] { <H> >- "type"{'A} } -->
@@ -186,10 +191,19 @@ interactive mem_intro {| intro [] |}  :
 doc <:doc< 
    @begin[doc]
    @modsubsection{Subset}
-   @modsubsection{Well-formedness}
+   @modsubsection{Typehood and equality}
    Type <<'A subset 'B>> is well-formed whenever $A$ and $B$ are types.
+   Two subset-types are equal if their subterms are equal and any element
+   in one of the first subterm is also in the other.
    @end[doc]
 >>
+
+interactive subset_univ {| intro []; eqcd |} :
+   sequent [squash] { <H> >- 'A1 = 'A2 in univ[i:l] } -->
+   sequent [squash] { <H> >- 'B1 = 'B2 in univ[i:l] } -->
+   sequent [squash] { <H>; x: 'A1 >- 'x in 'B1 } -->
+   sequent [squash] { <H>; x: 'B1 >- 'x in 'B2 } -->
+   sequent ['ext] { <H> >- ('A1 subset 'B1) = ('A2 subset 'B2) in univ[i:l] }
 
 interactive subset_wf {| intro [] |} :
    sequent [squash] { <H> >- "type"{'A} } -->
@@ -303,6 +317,15 @@ doc <:doc<
 
 (* Note that we don't need this membership if we add a rule: A subset B --> x in B --> x in A Type  *)
       
+interactive member_univ {| intro []; eqcd |} :
+   sequent [squash] { <H> >- 'A1 = 'A2 in univ[i:l] } -->
+   sequent [squash] { <H> >- 'B1 = 'B2 in univ[i:l] } -->
+   sequent [squash] { <H> >- 'a1 = 'a2 in 'B1 } -->
+   sequent [squash] { <H> >- 'a1 = 'a2 in 'B2 } -->
+   sequent [squash] { <H>; x: 'A1 >- 'x in 'B1 } -->
+   sequent [squash] { <H>; x: 'B1 >- 'x in 'B2 } -->
+   sequent ['ext] { <H> >- ('a1 in 'A1 subset 'B1) = ('a2 in 'A2 subset 'B2) in univ[i:l] }
+
 interactive member_wf {| intro [] |}  :
    sequent [squash] { <H> >- 'a in 'B } -->
    sequent [squash] { <H> >- "type"{'A} } -->

@@ -517,19 +517,19 @@ doc <:doc<
      @end[enumerate]
    @end[doc]
 >>
-interactive subgroup_op {| intro [intro_typeinf <<'G>>] |} group[i:l] :
+interactive subgroup_op {| intro [AutoMustComplete; intro_typeinf <<'G>>] |} group[i:l] :
    [main] sequent [squash] { <H> >- subgroup[i:l]{'S; 'G} } -->
    [wf] sequent [squash] { <H> >- 'a in 'S^car } -->
    [wf] sequent [squash] { <H> >- 'b in 'S^car } -->
    sequent ['ext] { <H> >- 'a *['G] 'b = 'a *['S] 'b in 'S^car }
 
-interactive subgroup_op1 {| intro [intro_typeinf <<'G>>] |} group[i:l] :
+interactive subgroup_op1 {| intro [AutoMustComplete; intro_typeinf <<'G>>] |} group[i:l] :
    [main] sequent [squash] { <H> >- subgroup[i:l]{'S; 'G} } -->
    [wf] sequent [squash] { <H> >- 'a in 'S^car } -->
    [wf] sequent [squash] { <H> >- 'b in 'S^car } -->
    sequent ['ext] { <H> >- 'a *['G] 'b in 'S^car }
 
-interactive subgroup_id {| intro [intro_typeinf <<'G>>] |} group[i:l] :
+interactive subgroup_id {| intro [AutoMustComplete; intro_typeinf <<'G>>] |} group[i:l] :
    [main] sequent [squash] { <H> >- subgroup[i:l]{'S; 'G} } -->
    sequent ['ext] { <H> >- 'G^"1" = 'S^"1" in 'S^car }
 
@@ -537,7 +537,7 @@ interactive subgroup_id1 {| intro [AutoMustComplete; intro_typeinf <<'G>>] |} gr
    [main] sequent [squash] { <H> >- subgroup[i:l]{'S; 'G} } -->
    sequent ['ext] { <H> >- 'G^"1" in 'S^car }
 
-interactive subgroup_inv {| intro [intro_typeinf <<'G>>] |} group[i:l] :
+interactive subgroup_inv {| intro [AutoMustComplete; intro_typeinf <<'G>>] |} group[i:l] :
    [main] sequent [squash] { <H> >- subgroup[i:l]{'S; 'G} } -->
    [wf] sequent [squash] { <H> >- 'a in 'S^car } -->
    sequent ['ext] { <H> >- 'G^inv 'a = 'S^inv 'a in 'S^car }

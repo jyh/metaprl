@@ -124,7 +124,7 @@ rule member_wf :
    sequent [squash] { <H> >- "type"{'A} } -->
    sequent ['ext] { <H> >- "type"{'a in 'A subset 'B} }
 
-rule member_intro   :
+rule member_intro :
    sequent [squash] { <H> >- 'a in 'A } -->
    sequent [squash] { <H> >- 'A subset 'B } -->
    sequent ['ext] { <H> >- 'a in 'A subset 'B }

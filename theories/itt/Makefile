@@ -83,6 +83,7 @@ MPFILES :=\
 	itt_grouplikeobj\
 	itt_group\
         itt_cyclic_group\
+	itt_quotient_group\
         itt_example
 
 ifeq ($(TESTS),YES)

@@ -49,6 +49,7 @@ extends Itt_subtype
 extends Itt_struct
 extends Itt_set
 extends Itt_logic
+extends Itt_equal
 
 doc <:doc< @docoff >>
 
@@ -78,6 +79,7 @@ open Auto_tactic
 open Itt_struct
 open Itt_logic
 open Itt_subtype
+open Itt_equal
 
 (*
  * Show that the file is loading.
@@ -106,6 +108,11 @@ doc <:doc<
    @end[doc]
 >>
 
+interactive singletonEquality {| intro []; eqcd |} :
+   [wf] sequent [squash] { <H> >- 'A1 = 'A2 in univ[i:l] } -->
+   [wf] sequent [squash] { <H> >- 'a1 = 'a2 in 'A1 } -->
+   [wf] sequent [squash] { <H>; x: 'A1 >- 'x in 'A2 } -->
+   sequent ['ext] { <H> >- singleton{'a1; 'A1} = singleton{ 'a2; 'A2 } in univ[i:l] }
 
 interactive singleton_wf {| intro[] |}:
    sequent[squash]  { <H> >- 'a in 'A} -->

@@ -49,13 +49,6 @@ let debug_supinf_steps =
         debug_value = false
       }
 
-let debug_supinf_memory =
-   create_debug (**)
-      { debug_name = "debug_supinf_memory";
-        debug_description = "Do not re-assert terms that are already in hypotheses";
-        debug_value = false
-      }
-
 module type BoundFieldSig =
 sig
 	type bfield
@@ -1023,13 +1016,10 @@ end
 module TTable=Term_eq_table.MakeTermTable(TermPos)
 
 let mem h t = TTable.mem !h t
-let add h t d =
-	if !debug_supinf_memory then
-		h:=(TTable.add !h t d)
-	else
-		()
+let add h t d = h:=(TTable.add !h t d)
 let empty _ = ref (TTable.empty)
 
+(*
 let assert_geT info history f1 f2 = funT (fun p ->
 	let t=(mk_ge_rat_term (SAF.term_of info f1) (SAF.term_of info f2)) in
 	if mem history t then
@@ -1040,12 +1030,29 @@ let assert_geT info history f1 f2 = funT (fun p ->
 			assertT t
 		end
 )
-
-let runAssertT info h label f1 f2 tac =
+*)
+let runAssertT info history label f1 f2 tac = funT (fun p ->
 	if tac==idT then
-		assert_geT info h f1 f2 thenAT (addHiddenLabelT label)
+		let t=(mk_ge_rat_term (SAF.term_of info f1) (SAF.term_of info f2)) in
+		if mem history t then
+			idT
+		else
+			begin
+				add history t ((Sequent.hyp_count p)+1);
+				assertT t thenAT (addHiddenLabelT label)
+			end
+(*		assert_geT info history f1 f2 thenAT (addHiddenLabelT label)*)
 	else
-		assert_geT info h f1 f2 thenAT (addHiddenLabelT label thenT tac)
+		let t=(mk_ge_rat_term (SAF.term_of info f1) (SAF.term_of info f2)) in
+		if mem history t then
+			idT
+		else
+			begin
+				add history t ((Sequent.hyp_count p)+1);
+				assertT t thenAT (addHiddenLabelT label thenT tac)
+			end
+(*		assert_geT info history f1 f2 thenAT (addHiddenLabelT label thenT tac)*)
+)
 
 let rec runAssertStepT info h label tac f1 f2 =
 	match f1,f2 with
@@ -1065,7 +1072,13 @@ and runAssertStepListT info h label tac = function
  | [] -> raise (Invalid_argument "runAssertStepListT applied to an empty list")
 
 let runTransitiveT info h label f1 f2 f3 =
-	runAssertT info h label f1 f3 (geTransitive (SAF.term_of info f2))
+	try
+		runAssertT info h label f1 f3 (geTransitive (SAF.term_of info f2))
+	with RefineError(a,b) ->
+		begin
+			printf"RefineError caught in runTransitiveT";
+			raise (RefineError(a,b))
+		end
 
 let rec runTransitiveStepT info h label f1 f2 f3 =
 	match f1,f2,f3 with
@@ -1157,7 +1170,13 @@ let testT = funT (fun p ->
 					printf"inf=";SAF.print inf'; eflush stdout;
 					SAF.print inf'; printf "<="; SAF.print saf'; printf "<="; SAF.print sup'; eflush stdout;
 				end;
-			runListT info (empty ()) actions
+			try
+				runListT info (empty ()) actions
+			with generic_refiner_exn ->
+				begin
+					printf"RefineError caught in testT%t" eflush;
+					raise generic_refiner_exn
+				end
 		end
 	end
 )

@@ -195,11 +195,6 @@ val is_union_term : term -> bool
 val mk_union_term : term -> term -> term
 val dest_union_term : term -> term * term
 
-val singleton_term : term
-val is_singleton_term : term -> bool
-val mk_singleton_term : Mp_num.num -> string -> term -> term
-val dest_singleton_term : term -> Mp_num.num * string * term
-
 val intset_max_term : term
 val is_intset_max_term : term -> bool
 val mk_intset_max_term : Mp_num.num -> string -> term

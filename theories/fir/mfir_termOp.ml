@@ -228,12 +228,6 @@ let is_union_term = is_2_dep0_term union_opname
 let mk_union_term = mk_2_dep0_term union_opname
 let dest_union_term = dest_2_dep0_term union_opname
 
-let singleton_term = << singleton[precision:n, sign:s]{ 'i } >>
-let singleton_opname = opname_of_term singleton_term
-let is_singleton_term = is_num_str_1_dep0_term singleton_opname
-let mk_singleton_term = mk_num_str_1_dep0_term singleton_opname
-let dest_singleton_term = dest_num_str_1_dep0_term singleton_opname
-
 let intset_max_term = << intset_max[precision:n, sign:s] >>
 let intset_max_opname = opname_of_term intset_max_term
 let is_intset_max_term = is_num_str_0_dep0_term intset_max_opname

@@ -58,7 +58,6 @@ declare normalize{ 'set }
 declare subset{ 'set1; 'set2 }
 declare set_eq{ 'set1; 'set2 }
 declare union{ 'set1; 'set2 }
-declare singleton[precision:n, sign:s]{ 'i }
 
 (*
  * Constants.
@@ -81,7 +80,6 @@ topval reduce_normalize : conv
 topval reduce_subset : conv
 topval reduce_set_eq : conv
 topval reduce_union : conv
-topval reduce_singleton : conv
 
 (*
  * Constants.

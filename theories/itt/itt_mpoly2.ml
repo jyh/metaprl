@@ -17,8 +17,8 @@ open Itt_ring2
 
 let debug_mpoly_eval =
    create_debug (**)
-      { debug_name = "debug_mpoly_eval";
-        debug_description = "display mpoly_eval steps";
+      { debug_name = "mpoly_eval";
+        debug_description = "display mpoly_eval steps (evaluting multi-variable polynomials in ITT)";
         debug_value = false
       }
 

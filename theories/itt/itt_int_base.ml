@@ -82,8 +82,8 @@ let _ = show_loading "Loading Itt_int_base%t"
 
 let debug_arith_unfold =
    create_debug (**)
-      { debug_name = "debug_arith_unfold";
-        debug_description = "display arith_unfold steps";
+      { debug_name = "arith_unfold";
+        debug_description = "display Itt_int_base.arith_unfold steps";
         debug_value = false
       }
 

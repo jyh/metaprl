@@ -26,15 +26,15 @@ let _ = show_loading "Loading Itt_supinf%t"
 
 let debug_supinf_trace =
    create_debug (**)
-      { debug_name = "debug_supinf_trace";
+      { debug_name = "supinf_trace";
         debug_description = "Print out (low-level) trace of supinf execution";
         debug_value = false
       }
 
 let debug_supinf_steps =
    create_debug (**)
-      { debug_name = "debug_supinf_steps";
-        debug_description = "Print out (high-level) steps to be proved";
+      { debug_name = "supinf_steps";
+        debug_description = "Itt_supinf.supinfT: print out (high-level) steps to be proved";
         debug_value = false
       }
 

@@ -72,15 +72,15 @@ let _ = show_loading "Loading Itt_int_ext%t"
 
 let debug_int_arith =
    create_debug (**)
-      { debug_name = "debug_int_arith";
-        debug_description = "Print out some debug info as tactics proceed";
+      { debug_name = "int_arith";
+        debug_description = "Print out some debug info as Itt_int_arith.arithT tactics proceed";
         debug_value = false
       }
 
 let debug_arith_dtactic =
    create_debug (**)
-      { debug_name = "debug_arith_dtactic";
-        debug_description = "display operations of conversion to >=";
+      { debug_name = "arith_dtactic";
+        debug_description = "Itt_int_arith.arithT: display operations of conversion to >=";
         debug_value = false
       }
 

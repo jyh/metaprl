@@ -34,7 +34,9 @@
 
 extends Mfir_int
 extends Mfir_list
+extends Mfir_int_set
 extends Mfir_ty
+extends Mfir_exp
 
 open Tactic_type.Conversionals
 
@@ -49,6 +51,7 @@ declare do_tyApply{ 'poly_ty; 'ty_list }
 declare instantiate_tyExists{ 'ty; 'var; 'num }
 declare num_params{ 'ty }
 declare nth_unionCase{ 'n; 'union_def }
+declare union_cases{ 'set; 'cases }
 
 
 (**************************************************************************
@@ -59,3 +62,4 @@ topval reduce_do_tyApply : conv
 topval reduce_instantiate_tyExists : conv
 topval reduce_num_params : conv
 topval reduce_nth_unionCase : conv
+topval reduce_union_cases : conv

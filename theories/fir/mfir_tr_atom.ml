@@ -280,8 +280,6 @@ prim ty_plusIntOp {| intro [] |} 'H :
  * @docoff
  *)
 
-(* XXX: write up the remaining unop/binop rules. *)
-
 (*
  * Unary operators.
  *)

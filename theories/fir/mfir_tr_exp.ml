@@ -151,6 +151,12 @@ let resource auto += {
    auto_type = AutoNormal
 }
 
+(*
+ * The term check_cases is used to check the cases of a match expression.
+ *)
+
+declare check_cases{ 'ty; 'cases }
+
 (*!
  * @begin[doc]
  * @modsubsection{Pattern matching}
@@ -160,6 +166,54 @@ let resource auto += {
  *)
 
 (* XXX matching *)
+
+prim ty_check_cases_base {| intro [] |} 'H :
+   sequent [mfir] { 'H >- check_cases{ 'ty; nil } }
+   = it
+
+prim ty_check_cases_ind {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["exp"]{ 'exp; 'ty } } -->
+   sequent [mfir] { 'H >- check_cases{ 'ty; 'tail } } -->
+   sequent [mfir] { 'H >- check_cases{ 'ty; cons{ matchCase{ 'set; 'exp };
+                                                  'tail } } }
+   = it
+
+prim ty_matchExp_tyInt {| intro [] |} 'H :
+   (* The  atom being matched should be well-formed. *)
+   sequent [mfir] { 'H >- has_type["atom"]{ atomInt{'i}; tyInt } } -->
+
+   (* The cases should cover all of tyInt. *)
+   sequent [mfir] { 'H >- set_eq{ intset_max[31, "signed"];
+                                  union_cases{ intset[31, "signed"]{ nil };
+                                               'cases } } } -->
+
+   (* The cases should have the right type. *)
+   sequent [mfir] { 'H >- check_cases{ 't; 'cases } } -->
+
+   (* Then the matchExp is well-typed. *)
+   sequent [mfir] { 'H >- has_type["exp"]{ matchExp{ atomInt{'i}; 'cases };
+                                           't } }
+   = it
+
+prim ty_matchExp_tyRawInt {| intro [] |} 'H :
+   (* The  atom being matched should be well-formed. *)
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomRawInt[p:n, s:s]{'i}; tyRawInt[p:n, s:s] } } -->
+
+   (* The cases should cover all of tyRawInt. *)
+   sequent [mfir] { 'H >- set_eq{ intset_max[p:n, s:s];
+                                  union_cases{ intset[p:n, s:s]{ nil };
+                                               'cases } } } -->
+
+   (* The cases should have the right type. *)
+   sequent [mfir] { 'H >- check_cases{ 't; 'cases } } -->
+
+   (* Then the matchExp is well-typed. *)
+   sequent [mfir] { 'H >-
+      has_type["exp"]{ matchExp{ atomRawInt[p:n, s:s]{'i}; 'cases };
+                       't } }
+   = it
+
 
 (*!
  * @begin[doc]
@@ -301,3 +355,12 @@ let resource auto += {
    auto_tac = onSomeHypT d_ty_label;
    auto_type = AutoNormal
 }
+
+
+(**************************************************************************
+ * Display forms.
+ **************************************************************************)
+
+dform check_cases_df : except_mode[src] ::
+   check_cases{ 'ty; 'cases } =
+   bf["check_cases"] `"(" slot{'ty} `"," slot{'cases} `")"

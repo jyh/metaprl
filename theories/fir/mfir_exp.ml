@@ -546,7 +546,7 @@ dform tailCall_df : except_mode[src] ::
 
 dform matchCase_df : except_mode[src] ::
    matchCase{ 'set; 'exp } =
-   pushm[0] szone push_indent slot{'set} `"->" hspace
+   pushm[0] szone push_indent slot{'set} rightarrow hspace
    szone slot{'exp} ezone popm
    ezone popm
 

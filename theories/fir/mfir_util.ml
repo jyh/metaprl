@@ -44,7 +44,9 @@
 
 extends Mfir_int
 extends Mfir_list
+extends Mfir_int_set
 extends Mfir_ty
+extends Mfir_exp
 
 (*!
  * @docoff
@@ -52,6 +54,7 @@ extends Mfir_ty
 
 open Top_conversionals
 open Mfir_int
+open Mfir_int_set
 
 
 (**************************************************************************
@@ -110,6 +113,16 @@ declare num_params{ 'ty }
  *)
 
 declare nth_unionCase{ 'n; 'union_def }
+
+(*!
+ * @begin[doc]
+ *
+ * The term @tt[union_cases] takes the union of the sets in
+ * a list of match cases, and then unions that with @tt[set].
+ * @end[doc]
+ *)
+
+declare union_cases{ 'set; 'cases }
 
 
 (**************************************************************************
@@ -245,6 +258,35 @@ let resource reduce += [
       reduce_nth_unionCase
 ]
 
+(*!
+ * @begin[doc]
+ *
+ * Taking the union of the sets in a list of match cases is straightforward.
+ * @end[doc]
+ *)
+
+prim_rw reduce_union_cases_base :
+   union_cases{ 'set; nil } <-->
+   'set
+
+prim_rw reduce_union_cases_ind :
+   union_cases{ 'set; cons{ matchCase{ 'case; 'exp }; 'tail } } <-->
+   union_cases{ union{ 'set; 'case }; 'tail }
+
+(*!
+ * @docoff
+ *)
+
+let reduce_union_cases =
+   reduce_union_cases_base orelseC
+   (  reduce_union_cases_ind thenC
+      (addrC [0] (repeatC reduce_union))
+   )
+
+let resource reduce += [
+   << union_cases{ 'set; 'cases } >>, reduce_union_cases
+]
+
 
 (**************************************************************************
  * Display forms.
@@ -270,3 +312,6 @@ dform nth_unionCase_df : except_mode[src] ::
    nth_unionCase{ 'i; 'union } =
    bf["nth_case"] `"(" slot{'i} `"," slot{'union} `")"
 
+dform union_cases_df : except_mode[src] ::
+   union_cases{ 'set; 'cases } =
+   bf["union_cases"] `"(" slot{'set} `"," slot{'cases} `")"

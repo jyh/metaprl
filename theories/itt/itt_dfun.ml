@@ -179,8 +179,8 @@ interactive lambdaEquality {| intro [] |} 'H 'x :
 interactive functionExtensionality 'H (y:'C -> 'D['y]) (z:'E -> 'F['z]) 'u :
    [main] sequent [squash] { 'H; u: 'A >- ('f 'u) = ('g 'u) in 'B['u] } -->
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
-   [wf] sequent [squash] { 'H >- 'f = 'f in y:'C -> 'D['y] } -->
-   [wf] sequent [squash] { 'H >- 'g = 'g in z:'E -> 'F['z] } -->
+   [wf] sequent [squash] { 'H >- 'f IN y:'C -> 'D['y] } -->
+   [wf] sequent [squash] { 'H >- 'g IN z:'E -> 'F['z] } -->
    sequent ['ext] { 'H >- 'f = 'g in x:'A -> 'B['x] }
 
 (*!

@@ -161,7 +161,7 @@ type sub_resource_info =
  *)
 resource (sub_resource_info, tactic) sub
 
-topval subtypeT : tactic
+topval subtypeT : term -> tactic
 
 (************************************************************************
  * TACTICS                                                              *

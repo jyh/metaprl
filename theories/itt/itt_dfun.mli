@@ -114,8 +114,8 @@ rule lambdaEquality 'H 'x :
 rule functionExtensionality 'H (y:'C -> 'D['y]) (z:'E -> 'F['z]) 'u :
    sequent [squash] { 'H; u: 'A >- ('f 'u) = ('g 'u) in 'B['u] } -->
    sequent [squash] { 'H >- "type"{'A} } -->
-   sequent [squash] { 'H >- 'f = 'f in y:'C -> 'D['y] } -->
-   sequent [squash] { 'H >- 'g = 'g in z:'E -> 'F['z] } -->
+   sequent [squash] { 'H >- 'f IN y:'C -> 'D['y] } -->
+   sequent [squash] { 'H >- 'g IN z:'E -> 'F['z] } -->
    sequent ['ext] { 'H >- 'f = 'g in x:'A -> 'B['x] }
 
 (*

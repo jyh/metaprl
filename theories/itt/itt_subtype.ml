@@ -314,8 +314,11 @@ let resource sub = Functional {
 (*
  * Resource argument.
  *)
-let subtypeT p =
+let prove_subtypeT p =
    Sequent.get_resource_arg p get_sub_resource p
+
+let resource intro +=
+   subtype_term, ("prove_subtype",None,prove_subtypeT)
 
 (************************************************************************
  * TACTICS                                                              *
@@ -337,6 +340,24 @@ let d_hyp_subtypeT i p =
             subtypeElimination j k p
 
 let resource elim += (subtype_term, d_hyp_subtypeT)
+
+prim use_subtype1 'H 'A :
+   [aux] sequent [squash] { 'H >- subtype{'A; 'B} } -->
+   [main] sequent [squash] { 'H >- 't1 = 't2 in 'A } -->
+   sequent ['ext] { 'H >- 't1 = 't2 in 'B } =
+      it
+
+interactive use_subtype2 'H 'A :
+   [aux] sequent [squash] { 'H >- subtype{'A; 'B} } -->
+   [main] sequent ['ext] { 'H >- 'A } -->
+   sequent ['ext] { 'H >- 'B }
+
+let subtypeT t p =
+   let h = Sequent.hyp_count_addr p in
+      if is_equal_term (Sequent.concl p) then
+         use_subtype1 h t p
+      else
+         use_subtype2 h t p
 
 (************************************************************************
  * TYPE INFERENCE                                                       *

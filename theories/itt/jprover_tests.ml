@@ -123,7 +123,7 @@ interactive subst :
 
 (* barber *)
 
-interactive barber 'barber :
+interactive barber 'barber 'H 'barber bind{x,y.'shaves['x;'y]} :
    sequent [squash] { 'H >- "type"{'People} } -->
    sequent [squash] { 'H >- 'barber in 'People } -->
    sequent [squash] { 'H; p1: 'People; p2: 'People >- "type"{'shaves['p1;'p2]} } -->

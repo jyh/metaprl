@@ -70,16 +70,16 @@ let redex2C =
 
 let redexC = (repeatC (higherC redex1C) thenC (higherC redex2C))
 
-interactive fact100 'H :
+interactive fact100 :
    sequent ['ext] { 'H >- fact{100} }
 
-interactive fact250 'H :
+interactive fact250 :
    sequent ['ext] { 'H >- fact{250} }
 
-interactive fact400 'H :
+interactive fact400 :
    sequent ['ext] { 'H >- fact{400} }
 
-interactive fact650 'H :
+interactive fact650 :
    sequent ['ext] { 'H >- fact{650} }
 
 let factT = rw (repeatC redexC) 0

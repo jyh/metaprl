@@ -69,6 +69,8 @@ MPFILES :=\
 	itt_record\
 	itt_record_exm\
 	itt_sort\
+	itt_grouplikeobj\
+	itt_group\
 	itt_example
 
 ifeq ($(TESTS),YES)

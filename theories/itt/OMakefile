@@ -117,6 +117,7 @@ MPFILES =\
    itt_closure\
    itt_synt_language\
    itt_reflection_example_lambda\
+   itt_reflection_lambda_reduction\
    itt_example
 
 OCamlProgram(gen_int_bench, gen_int_bench)

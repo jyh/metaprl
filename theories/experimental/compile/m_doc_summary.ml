@@ -1,6 +1,7 @@
 doc <:doc< -*- mode: text; -*-
    @begin[spelling]
-   CPS grunge Liang Morrisett Necula untrusted Hannan LF Pfenning Pnueli Resler Singerman
+   CPS grunge Liang Morrisett Necula untrusted Hannan LF Pfenning Pnueli Resler Singerman Danvy
+   Fellinski HOAS compilable
    @end[spelling]
 
    @begin[doc]
@@ -93,23 +94,24 @@ the definition of mutually recursive functions.
 
 In the compiler presented in this paper we took a very conservative approach to making sure the
 the rule rewrite transformations do not affect the program semantics. A very good example of this is
-the CPS transformation (Section @refsection[m_doc_cps]). Here we have defined the semantics of the
+the CPS transformation (Section @refsection[m_doc_cps]). There we have defined the semantics of the
 $@CPS{c;e}$ to just be the function $c$ applied to expression $e$. Under this semantics, the rule
 @tt[cps_prog] (that states that a program is compilable if the result of its CPS transformation is
-compilable) is obviously valid (for example, if we take $c$ to be an identity function, then the
-rule is pretty much a ``no-op''). This semantics also provides us with sufficient information to be
-able to separately validate each individual CPS-related program transformation.
+compilable) is obviously valid --- if we take $c$ to be an identity function, then under this
+semantics the rule simply does not change the program. This semantics also provides us with
+sufficient information to be able to separately validate each individual CPS-related program
+transformation.
 
-A downside of such a conservative approach is that it becomes very hard to write transformation in
+A downside of such a conservative approach is that it becomes very hard to write transformations in
 an optimal way. In particular, the CPS rewrites presented is this paper introduce a large number of
-``administrative'' beta-redexes that would need to be eliminated in subsequent optimization stages.
+``administrative'' beta-redices that would need to be eliminated in subsequent optimization stages.
 In the work-in-progress compiler for the typed language, we chose an alternative approach. There, in
 the CPS term is defined as performing a syntactical transformation of a program. In this approach,
 all the rewrites for the CPS term become simply parts of the @emph{definition} of the CPS
 transformation. All the work required to prove that the transformation does not change the meaning
-of the program goes into establishing that the correspoding @tt[cps_prog] rule is valid. This
+of the program goes into establishing that the corresponding @tt[cps_prog] rule is valid. This
 approach makes it much easier to specify the CPS transformation in an optimal way, following the
-approahc of Danvy and Fellinski @cite[DF92]. In fact, in the work-in-progress compiler, the
+approach of Danvy and Fellinski @cite[DF92]. In fact, in the work-in-progress compiler, the
 specification of the CPS transformation ends up being even simpler than Danvy and Fellinski's one
 because of the efficiency of the HOAS language that we use.
 

@@ -6,12 +6,9 @@ doc <:doc<
    @begin[doc]
    @module[M_cps]
 
-     CPS conversion uses a method similar to that presented in Danvy and Fellinski @cite[DF92].
-     However, there are two significant differences.  First, instead of using normal and administrative
-     redices, we use second-order notation for the administrative redices (in other words, the administrative
-     redices are coded in the meta-language).  Second, we define the transformations in CPS so that
-     preservation of program semantics is easy to verify.  This represents only a small change to the
-     transformation.
+     Here we define the CPS transformation in a way that aims at making the preservation of program
+     semantics easy to verify (see Section @refsection[m_doc_summary] for a discussion of advantages
+     and disadvantages of this approach).
    @end[doc]
 
    ----------------------------------------------------------------

@@ -1,9 +1,9 @@
 #
 # Include support
 #
-OCAMLINCLUDES +=\
-	$(addprefix -I , $(SUPPORT_DIRS))\
-	-I ../base
+OCAMLINCLUDES[] +=
+	$(SUPPORT_DIRS)
+	../base
 
 MLZFILES = mfir_theory
 

@@ -1,6 +1,6 @@
-OCAMLINCLUDES +=\
-	$(addprefix -I , $(SUPPORT_DIRS))\
-	-I ../base
+OCAMLINCLUDES[] +=
+	$(SUPPORT_DIRS)
+	../base
 
 # Common files
 MLZFILES =

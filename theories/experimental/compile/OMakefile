@@ -1,9 +1,8 @@
-OCAMLINCLUDES +=\
-        -I .\
-        -I ../../base\
-        -I $(ROOT)/libmojave/stdlib\
-        -I $(ROOT)/libmojave/util\
-        $(SUPPORT_INCLUDE)
+OCAMLINCLUDES[] +=
+        ../../base
+        $(ROOT)/libmojave/stdlib
+        $(ROOT)/libmojave/util
+        $(SUPPORT_DIRS)
 
 MLZFILES =\
         m_ra_type\

@@ -1,7 +1,7 @@
-OCAMLINCLUDES +=\
-	$(addprefix -I , $(SUPPORT_DIRS))\
-	-I ../itt\
-	-I ../base
+OCAMLINCLUDES[] +=
+	$(SUPPORT_DIRS)
+	../itt
+	../base
 
 .INCLUDE: Files
 

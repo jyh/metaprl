@@ -1,7 +1,7 @@
-OCAMLINCLUDES +=\
-	$(addprefix -I , $(SUPPORT_DIRS))\
-	-I ../base\
-	-I ../itt
+OCAMLINCLUDES[] +=
+	$(SUPPORT_DIRS)
+	../base
+	../itt
 
 # Library files
 MPFILES =\

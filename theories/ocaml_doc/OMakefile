@@ -1,9 +1,9 @@
 THEORYNAME = ocaml_doc
 THEORYDESCR = "Introduction to OCaml" Book
 
-OCAMLINCLUDES +=\
-	$(addprefix -I , $(SUPPORT_DIRS))\
-	-I ../base
+OCAMLINCLUDES[] +=
+	$(SUPPORT_DIRS)
+	../base
 
 # Common files
 MLZFILES =

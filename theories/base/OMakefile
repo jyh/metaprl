@@ -1,4 +1,4 @@
-OCAMLINCLUDES += $(addprefix -I , $(SUPPORT_DIRS))
+OCAMLINCLUDES += $(SUPPORT_DIRS)
 THEORYNAME = base
 THEORYDESCR = Basic Meta-Theory
 

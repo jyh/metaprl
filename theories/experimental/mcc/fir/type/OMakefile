@@ -1,16 +1,15 @@
 #
 # Include directories
 #
-OCAMLINCLUDES =\
-	-I .\
-	-I $(MCC)/fir/type\
-	-I $(ROOT)/support/display\
-	-I $(ROOT)/support/shell\
-	-I $(ROOT)/support/tactics\
-	-I $(ROOT)/theories/ocaml\
-	-I $(ROOT)/theories/base\
-	-I $(ROOT)/libmojave/stdlib\
-	-I $(ROOT)/libmojave/util
+OCAMLINCLUDES[] +=
+	$(MCC)/fir/type
+	$(ROOT)/support/display
+	$(ROOT)/support/shell
+	$(ROOT)/support/tactics
+	$(ROOT)/theories/ocaml
+	$(ROOT)/theories/base
+	$(ROOT)/libmojave/stdlib
+	$(ROOT)/libmojave/util
 
 #
 # Library files

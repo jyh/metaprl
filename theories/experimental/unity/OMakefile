@@ -1,9 +1,8 @@
-OCAMLINCLUDES =\
-	-I .\
-	-I $(ROOT)/support/display\
-	$(SUPPORT_INCLUDE)\
-	-I ../../base\
-	-I ../compile
+OCAMLINCLUDES[] +=
+	$(ROOT)/support/display
+	$(SUPPORT_INCLUDE)
+	../../base
+	../compile
 
 include Files
 

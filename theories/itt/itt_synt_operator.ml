@@ -283,6 +283,10 @@ interactive shape_int_list {| intro [] |} :
    sequent { <H> >- 'op in Operator } -->
    sequent { <H> >- shape{'op} in list{int} }
 
+interactive shape_list {| intro [] |} :
+   sequent { <H> >- 'op in Operator } -->
+   sequent { <H> >- shape{'op} in list }
+
 interactive shape_nat_list {| intro [] |} :
    sequent { <H> >- 'op1 = 'op2 in Operator } -->
    sequent { <H> >- shape{'op1} = shape{'op2} in list{nat} }

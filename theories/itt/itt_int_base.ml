@@ -333,7 +333,7 @@ prim int_sqequal :
    sequent { <H> >- 'a = 'b in int } -->
    sequent { <H> >- 'a ~ 'b } = it
 
-interactive_rw int_sqequal_rw 'b :
+interactive_rw int_sqequal_rw ('a ~ 'b) :
    ('a = 'b in int) -->
    'a <--> 'b
 

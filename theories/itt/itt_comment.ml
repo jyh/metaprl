@@ -1337,13 +1337,13 @@ dform subStructure_df1 : mode[tex] :: math_subStructure{'s; 'g} =
    izone `"}" ezone
 
 dform subgroup_df1 : mode[tex] :: math_subgroup{'i; 's; 'g} =
-   izone `"{{\\it Subgroup}_{" ezone
+   izone `"{\\it Subgroup}_{" ezone
    slot{'i}
    izone `"}(" ezone
    slot{'s}
    izone `"," ezone
    slot{'g}
-   izone `")}" ezone
+   izone `")" ezone
 
 dform lcoset_df1 : mode[tex] :: math_lcoset{'h; 'g; 'a} =
    izone `"{{\\it Left\\_coset}(" ezone

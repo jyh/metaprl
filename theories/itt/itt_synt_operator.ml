@@ -45,6 +45,13 @@ extends Itt_nat
 
 open Basic_tactics
 
+
+interactive nat_add :
+   sequent { <H> >- 'm in nat } -->
+   sequent { <H> >- 'n in nat } -->
+   sequent { <H> >- 'm +@ 'n in nat }
+
+
 doc "doc"{terms}
 
 declare BOperator
@@ -143,7 +150,7 @@ interactive bind_wf {| intro [] |} :
 
 interactive_rw bind_red {| reduce |} :
    'op in BOperator -->
-   'n in nat ->
+   'n in nat -->
    op_bdepth{bind{'op; 'n}} <--> op_bdepth{'op} +@ 'n
 
 interactive unbind_wf {| intro [] |} :
@@ -155,7 +162,5 @@ interactive_rw unbind_red {| reduce |} :
    'op in BOperator -->
    op_bdepth{'op} > 0 -->
    op_bdepth{unbind{'op}} <--> op_bdepth{'op} -@ 1
-
-
 
 doc <:doc< @docoff >>

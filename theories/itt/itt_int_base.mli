@@ -331,6 +331,17 @@ rule lt_Reflex :
 topval lt_ReflexC: conv
 topval lt_IrreflexC: conv
 
+rule irrefl_Elimination 'H 'J :
+	[wf] sequent { <H> >- 'a in int } -->
+	[wf] sequent { <H> >- 'b in int } -->
+	sequent { <H>; x: 'a < 'b; <J['x]>; y: 'b < 'a; <K['x;'y]> >- 'C['x;'y] }
+
+topval irrefl_EliminationT : int -> int -> tactic
+
+rule irreflElim 'H :
+	[wf] sequent { <H> >- 'a in int } -->
+	sequent { <H>; x: 'a < 'a; <J['x]> >- 'C['x] }
+
 rule lt_Asym 'a 'b :
    [main] sequent { <H> >- 'a < 'b } -->
    [main] sequent { <H> >- 'b < 'a } -->
@@ -395,6 +406,8 @@ rule lt_addMono 'c:
    sequent { <H> >- lt_bool{'a; 'b} ~ lt_bool{('a +@ 'c); ('b +@ 'c)} }
 
 topval lt_addMonoC: term -> conv
+
+topval lt_addAddC : term -> conv
 
 rule add_Commut :
    [wf] sequent { <H> >- 'a in int } -->

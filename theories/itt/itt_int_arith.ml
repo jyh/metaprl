@@ -165,6 +165,8 @@ interactive notle2ge :
    sequent { <H> >- 'a >= ('b +@ 1) }
 
 interactive nequal_elim {| elim [] |} 'H :
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
    [main] sequent { <H>; <J[it]>; y: (('a >= 'b +@ 1) or ('b >= 'a +@ 1)) >- 'C[it] } -->
    sequent { <H>; x: nequal{'a;'b}; <J['x]> >- 'C['x] }
 
@@ -273,15 +275,6 @@ let negativeHyp2ConclT = argfunT (fun i p ->
       (eq_2beq_int thenMT arithRelInConcl2HypT))
    else
    	idT)
-
-interactive ge_addMono :
-   sequent { <H> >- 'a in int } -->
-   sequent { <H> >- 'b in int } -->
-   sequent { <H> >- 'c in int } -->
-   sequent { <H> >- 'd in int } -->
-   sequent { <H> >- 'a >= 'b } -->
-   sequent { <H> >- 'c >= 'd } -->
-   sequent { <H> >- ('a +@ 'c) >= ('b +@ 'd) }
 
 type comparison = Less | Equal | Greater
 

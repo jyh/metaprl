@@ -356,6 +356,30 @@ interactive ge_sqstable {| squash; intro [] |} :
    sequent { <H> >- 'a >= 'b } -->
    sequent { <H> >- it in ('a >= 'b) }
 
+interactive ge_addWeakMono {| intro [] |} :
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   [wf] sequent { <H> >- 'c in int } -->
+   sequent { <H> >- 'a >= 'b } -->
+   sequent { <H> >- ('a +@ 'c) >= ('b +@ 'c) }
+
+interactive ge_Transit 'b :
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   [wf] sequent { <H> >- 'c in int } -->
+   sequent { <H> >- 'a >= 'b } -->
+   sequent { <H> >- 'b >= 'c } -->
+   sequent { <H> >- 'a >= 'c }
+
+interactive ge_addMono :
+   sequent { <H> >- 'a in int } -->
+   sequent { <H> >- 'b in int } -->
+   sequent { <H> >- 'c in int } -->
+   sequent { <H> >- 'd in int } -->
+   sequent { <H> >- 'a >= 'b } -->
+   sequent { <H> >- 'c >= 'd } -->
+   sequent { <H> >- ('a +@ 'c) >= ('b +@ 'd) }
+
 doc <:doc<
    @begin[doc]
    @modsection{Well-formedness and algebraic properties of <<(Perv!nil) *@ (Perv!nil)>>}

@@ -518,6 +518,17 @@ interactive_rw lt_irreflex_rw {| reduce |} :
 
 let lt_IrreflexC = lt_irreflex_rw
 
+interactive irrefl_Elimination 'H 'J :
+	[wf] sequent { <H> >- 'a in int } -->
+	[wf] sequent { <H> >- 'b in int } -->
+	sequent { <H>; x: 'a < 'b; <J['x]>; y: 'b < 'a; <K['x;'y]> >- 'C['x;'y] }
+
+let irrefl_EliminationT i j = irrefl_Elimination i (j-i)
+
+interactive irreflElim {| elim [] |} 'H :
+	[wf] sequent { <H> >- 'a in int } -->
+	sequent { <H>; x: 'a < 'a; <J['x]> >- 'C['x] }
+
 interactive lt_Asym 'a 'b :
    [main] sequent { <H> >- 'a < 'b } -->
    [main] sequent { <H> >- 'b < 'a } -->
@@ -831,6 +842,8 @@ interactive_rw lt_addMono_rw 'c :
    lt_bool{'a; 'b} <--> lt_bool{('a +@ 'c); ('b +@ 'c)}
 
 let lt_addMonoC = lt_addMono_rw
+
+let lt_addAddC t = foldC <<lt_bool{'a; 'b}>> (lt_addMonoC t)
 
 interactive lt_add_lt :
    [main] sequent { <H> >- 'a < 'b} -->

@@ -450,7 +450,7 @@ doc <:doc<
    @begin[doc]
    @resources
 
-   The (@tt{onSomeAssumT equalityAssumT}) tactic is added to the @hreftactic[trivialT]
+   The (@tt["onSomeAssumT equalityAssumT"]) tactic is added to the @hreftactic[trivialT]
    resource.
 
    @docoff

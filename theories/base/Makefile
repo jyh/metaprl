@@ -17,6 +17,7 @@ NLFILES :=\
 	summary\
 	base_dtactic\
 	base_cache\
+	base_rewrite\
 	base_theory\
 	evaluator
 

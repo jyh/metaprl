@@ -52,9 +52,13 @@ and cache = tactic Tactic_cache.extract
  * A real arg also includes the goal.
  *)
 type tactic_arg = tactic_argument Refine.tactic_arg
+type rewrite_arg = tactic_argument Refine.rewrite_arg
 
 (*
  * $Log$
+ * Revision 1.9  1998/06/01 19:54:01  jyh
+ * Working addition proof.  Removing polymorphism from refiner(?)
+ *
  * Revision 1.8  1998/06/01 13:57:08  jyh
  * Proving twice one is two.
  *

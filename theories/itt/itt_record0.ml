@@ -116,7 +116,7 @@ interactive record_beta1 {| intro[] |} :
 interactive record_beta2 {| intro[] |} :
    [wf] sequent{ <H> >- 'n in label } -->
    [wf] sequent{ <H> >- 'm in label } -->
-   [equality] sequent{ <H> >- not{.'n ='m in label} } -->
+   [equality] sequent{ <H> >- 'n <>'m in label } -->
    sequent{ <H> >- field{rcrd{'n; 'a; 'r};'m} ~ field{'r;'m} }
 
 interactive record_eta  {| intro[] |} 'A:
@@ -136,7 +136,7 @@ interactive record_cover  {| intro[] |} :
 interactive record_exchange {| intro[] |} :
    [wf] sequent{ <H> >- 'n in label } -->
    [wf] sequent{ <H> >- 'm in label } -->
-   [equality] sequent{ <H> >- not{.'n='m in label} } -->
+   [equality] sequent{ <H> >- 'n <> 'm in label } -->
    sequent{ <H> >- rcrd{'n; 'a; rcrd{'m; 'b; 'r}} ~  rcrd{'m; 'b; rcrd{'n; 'a; 'r}} }
 
 (*** Introductions ***)
@@ -149,21 +149,21 @@ interactive recordEqualS5 :
 interactive recordEqualS1 :
    [wf] sequent{ <H> >- 'n in label } -->
    [wf] sequent{ <H> >- 'm in label } -->
-   [equality] sequent{ <H> >- not{.'n='m in label} } -->
+   [equality] sequent{ <H> >- 'n <> 'm in label } -->
    sequent{ <H> >- 'r1='r2 in record{'m;'A} } -->
    sequent{ <H> >- rcrd{'n;'a;'r1}='r2 in record{'m;'A} }
 
 interactive recordEqualS4 :
    [wf] sequent{ <H> >- 'n in label } -->
    [wf] sequent{ <H> >- 'm in label } -->
-   [equality] sequent{ <H> >- not{.'n='m in label} } -->
+   [equality] sequent{ <H> >- 'n<>'m in label } -->
    sequent{ <H> >- 'r1=rcrd{'m;'a2;'r2} in record{'m;'A} } -->
    sequent{ <H> >- rcrd{'n;'a1;'r1}=rcrd{'m;'a2;'r2} in record{'m;'A} }
 
 interactive recordEqualS2 :
    [wf] sequent{ <H> >- 'n in label } -->
    [wf] sequent{ <H> >- 'm in label } -->
-   [equality] sequent{ <H> >- not{.'n='m in label} } -->
+   [equality] sequent{ <H> >- 'n<>'m in label } -->
    sequent{ <H> >- 'r1='r2 in record{'m;'A} } -->
    sequent{ <H> >- 'r1=rcrd{'n;'a;'r2} in record{'m;'A} }
 

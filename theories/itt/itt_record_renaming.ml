@@ -44,34 +44,6 @@ dform over_df2 : mode[tex] :: over{'a;'b} =
 
 dform rename_df : except_mode[src] ::  rename[a:t, b:t]{'r} = slot{'r} `"[" over{label[a:t]; label[b:t]} `"]"
 
-doc <:doc<
-   @begin[doc]
-     For example, <<rename[ "x":t, "y":t]{.{x=1;y=2;z=3}} ~ {y=1;x=2;z=3}>>.
-     In general the following reduction rules describe how renaming works on records.
-   @end[doc]
->>
-
-interactive_rw rename_rcrd_reduce1 :
-   rename[a:t, b:t]{rcrd[a:t]{'x;'r}} <--> rcrd[b:t]{'x;rename[a:t, b:t]{'r}}
-
-interactive_rw rename_rcrd_reduce2 :
-   rename[a:t, b:t]{rcrd[b:t]{'x;'r}} <--> rcrd[a:t]{'x;rename[a:t, b:t]{'r}}
-
-interactive_rw rename_rcrd_reduce3 :
-   (not{.label[a:t] = label[c:t] in label}) -->
-   (not{.label[b:t] = label[c:t] in label}) -->
-   rename[a:t, b:t]{rcrd[c:t]{'x;'r}} <--> rcrd[c:t]{'x;rename[a:t, b:t]{'r}}
-
-interactive_rw rename_empty_rcrd {| reduce |}:
-   rename[a:t, b:t]{ rcrd } <--> rcrd
-
-doc <:doc<
-   @begin[doc]
-     These reductions with constant labels are in the @hrefresource[reduce_resource] resource.
-     Thus, the @hrefconv[reduceC] does such reduction whenever <<label[a:t]>>,  <<label[b:t]>>, and  <<label[c:t]>> are concrete labels.
-   @end[doc]
-   @docoff
->>
 
 interactive_rw rename_rcrd_reduce :
    rename[a:t, b:t]{rcrd[c:t]{'x;'r}} <-->
@@ -88,31 +60,41 @@ let resource reduce +=
    << rename[a:t, b:t]{rcrd[c:t]{'x;'r}} >>, rename_rcrd_reduceC
 
 
+doc <:doc<
+   @begin[doc]
+     For example, <<rename[ "x":t, "y":t]{.{x=1;y=2;z=3}} ~ {y=1;x=2;z=3}>>.
+     In general the following reduction rules describe how renaming works on records.
+   @end[doc]
+>>
+
+interactive_rw rename_rcrd_reduce1 :
+   rename[a:t, b:t]{rcrd[a:t]{'x;'r}} <--> rcrd[b:t]{'x;rename[a:t, b:t]{'r}}
+
+interactive_rw rename_rcrd_reduce2 :
+   rename[a:t, b:t]{rcrd[b:t]{'x;'r}} <--> rcrd[a:t]{'x;rename[a:t, b:t]{'r}}
+
+interactive_rw rename_rcrd_reduce3 :
+   (label[a:t] <> label[c:t] in label) -->
+   (label[b:t] <> label[c:t] in label) -->
+   rename[a:t, b:t]{rcrd[c:t]{'x;'r}} <--> rcrd[c:t]{'x;rename[a:t, b:t]{'r}}
+
+interactive_rw rename_empty_rcrd {| reduce |}:
+   rename[a:t, b:t]{ rcrd } <--> rcrd
+
+doc <:doc<
+   @begin[doc]
+     These reductions with constant labels are in the @hrefresource[reduce_resource] resource.
+     Thus, the @hrefconv[reduceC] does such reduction whenever <<label[a:t]>>,  <<label[b:t]>>, and  <<label[c:t]>> are concrete labels.
+   @end[doc]
+>>
+
 
 doc <:doc<
    @begin[doc]
      @modsection{Properies}
      The main properties of the renaming are the following reductions:
    @end[doc]
->>
-
-
-interactive_rw rename_rw1 :
-   field[a:t]{rename[a:t, b:t]{'r}} <--> field[b:t]{'r}
-
-interactive_rw rename_rw2 :
-   field[b:t]{rename[a:t, b:t]{'r}} <--> field[a:t]{'r}
-
-interactive_rw rename_rw3:
-   (not{.label[a:t] = label[c:t] in label}) -->
-   (not{.label[b:t] = label[c:t] in label}) -->
-   field[c:t]{rename[a:t, b:t]{'r}} <--> field[c:t]{'r}
-
-doc <:doc<
-   @begin[doc]
-     These reductions with constant labels are also added to the @hrefresource[reduce_resource] resource.
-   @end[doc]
-   @docoff
+@docoff
 >>
 
 interactive_rw rename_rw:
@@ -127,6 +109,26 @@ let rename_reduceC = rename_rw thenC reduce_eq_label thenC tryC reduce_eq_label
 
 let resource reduce +=
    << field[c:t]{rename[a:t, b:t]{'r}} >>, rename_reduceC
+
+doc <:doc< doc>>
+
+
+interactive_rw rename_rw1 :
+   field[a:t]{rename[a:t, b:t]{'r}} <--> field[b:t]{'r}
+
+interactive_rw rename_rw2 :
+   field[b:t]{rename[a:t, b:t]{'r}} <--> field[a:t]{'r}
+
+interactive_rw rename_rw3:
+   (label[a:t] <> label[c:t] in label) -->
+   (label[b:t] <> label[c:t] in label) -->
+   field[c:t]{rename[a:t, b:t]{'r}} <--> field[c:t]{'r}
+
+doc <:doc<
+   @begin[doc]
+     These reductions with constant labels are also added to the @hrefresource[reduce_resource] resource.
+   @end[doc]
+>>
 
 doc <:doc<
    @begin[doc]
@@ -183,10 +185,10 @@ doc <:doc<
 >>
 
 interactive_rw rename_exchange :
-   (not{.label[a:t] = label[c:t] in label}) -->
-   (not{.label[b:t] = label[c:t] in label}) -->
-   (not{.label[a:t] = label[d:t] in label}) -->
-   (not{.label[b:t] = label[d:t] in label}) -->
+   (label[a:t] <> label[c:t] in label) -->
+   (label[b:t] <> label[c:t] in label) -->
+   (label[a:t] <> label[d:t] in label) -->
+   (label[b:t] <> label[d:t] in label) -->
    rename[a:t, b:t]{rename[c:t, d:t]{'r}} <-->
    rename[c:t, d:t]{rename[a:t, b:t]{'r}}
 
@@ -225,7 +227,8 @@ doc <:doc<
 >>
 
 
-interactive_rw rename_fields rename[a:t,b:t]{'r}:  'r <-->  rename[b:t,a:t]{ rename[a:t,b:t]{'r} }
+interactive_rw rename_fields rename[a:t,b:t]{'r}:
+   'r <-->  rename[b:t,a:t]{ rename[a:t,b:t]{'r} }
 
 
 let renameFieldC term = allSubThenC (rename_fields term) (reduceTopC)

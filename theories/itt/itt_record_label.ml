@@ -1,4 +1,7 @@
 extends Itt_record_label0
+extends Itt_nequal
+
+open Itt_squiggle
 
 open Base_meta
 open Itt_struct
@@ -8,6 +11,16 @@ open Tactic_type.Tacticals
 
 open Refiner.Refiner
 open Refiner.Refiner.Term
+open Refiner.Refiner.TermMan
+open Refiner.Refiner.TermSubst
+open Refiner.Refiner.TermType
+open Refiner.Refiner.RefineError
+open Tactic_type
+open Tactic_type.Sequent
+open Tactic_type.Tacticals
+open Var
+
+open Auto_tactic
 
 open Dtactic
 open Auto_tactic
@@ -45,17 +58,38 @@ prim reduce_eq_label_true {| intro [] |} :
       = it
 
 prim reduce_eq_label_false {| intro [] |} :
-   sequent{ <H> >- not{.label[x:t] = label[y:t]  in label}} -->
+   sequent{ <H> >- label[x:t] <> label[y:t]  in label} -->
    sequent{ <H> >- eq_label[x:t,y:t]{'A;'B} ~ 'B}
       = it
 
-interactive_rw reduce_eq_label_true_rw :
+interactive_rw reduce_eq_label_true_rw label[x:t] label[y:t] :
    (label[x:t] = label[y:t]  in label) -->
    eq_label[x:t,y:t]{'A;'B} <--> 'A
 
-interactive_rw reduce_eq_label_false_rw :
-   (not{.label[x:t] = label[y:t]  in label}) -->
+interactive_rw reduce_eq_label_false_rw label[x:t]  label[y:t] :
+   (label[x:t] <> label[y:t]  in label) -->
    eq_label[x:t,y:t]{'A;'B} <--> 'B
+
+let eq_label_elimT = argfunT (fun n p ->
+   let t = Sequent.nth_hyp p n in
+   match explode_term t with
+         <<'x='y in 'label>> ->   tryT (progressT (rwAll (sweepDnC (reduce_eq_label_true_rw x y orelseC reduce_eq_label_true_rw y x))) thenAT autoT)
+                                  thenT sqSubstT <:con<"rewrite"{$x$ ; $y$}>> 0 thenAT  (Itt_record_label0.label_sqequal thenT nthHypT n) |
+          _ -> failT
+)
+
+let neq_label_elimT = argfunT (fun n p ->
+   let t = Sequent.nth_hyp p n in
+   match explode_term t with
+         <<'x<>'y in 'label>> ->  progressT (rwAll  (sweepDnC (reduce_eq_label_false_rw x y orelseC reduce_eq_label_false_rw y x))) thenAT autoT |
+          _ ->  (raise (RefineError ("neqelimT", StringTermError (" a term: ", t))))
+)
+
+
+let resource elim +=
+  [ << label[x:t] = label[y:t] in label >>, eq_label_elimT;
+    << label[x:t] <> label[y:t] in label >>, neq_label_elimT ]
+
 
 interactive_rw reduce_eq_label_trivial_rw :
       eq_label[x:t,x:t]{'A;'B} <--> 'A
@@ -65,8 +99,10 @@ let reduce_eq_label =  reduce_eq_label_trivial_rw orelseC
 
 let resource reduce += << eq_label[x:t,y:t]{'A;'B}  >>, reduce_eq_label
 
+
+
 interactive eq_label_false :
-   sequent{ <H> >- not{.label[x:t] = label[y:t]  in label}} -->
+   sequent{ <H> >- label[x:t] <> label[y:t]  in label} -->
    sequent{ <H> >- 'B} -->
    sequent{ <H> >- eq_label[x:t,y:t]{'A;'B}}
 
@@ -81,13 +117,13 @@ let resource intro += (<< eq_label[x:t,y:t]{'A;'B} >>, wrap_intro eq_labelIntroT
 
 interactive not_eq_label :
    sequent{ <H> >- eq_label[x:t,y:t]{."false";."true"} } -->
-   sequent{ <H> >- not{.label[x:t] = label[y:t]  in label}}
+   sequent{ <H> >- label[x:t] <> label[y:t]  in label}
 
 let not_eq_labelT =
-   (not_eq_label thenT rw reduce_eq_label 0 thenT tryT (dT 0)) orelseT trivialT
+   (not_eq_label thenT rw reduce_eq_label 0 thenT tryT (dT 0))  orelseT  Itt_nequal.triv_nequalT orelseT trivialT
 
 let resource intro +=
-   (<< not{.label[x:t] = label[y:t]  in label}>>, wrap_intro not_eq_labelT )
+   (<< label[x:t] <> label[y:t]  in label>>, wrap_intro not_eq_labelT )
 
 (******************)
 (*   Tactic       *)
@@ -97,8 +133,8 @@ let decideEqLabelT x y =
    Itt_record_label0.decide_eq_label x y
       thenLT [tryT (dT 0);
               tryT (dT 0);
-              tryT (rwhAll reduce_eq_label_true_rw thenAT nthHypT (-1));
-              tryT (rwhAll reduce_eq_label_false_rw thenAT nthHypT (-1));
+              tryT (dT (-1));
+              tryT (dT (-1));
              ]
 
 (******************)

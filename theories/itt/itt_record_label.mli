@@ -16,3 +16,5 @@ topval decideEqLabelT : term -> term -> tactic
 topval not_eq_labelT : tactic
 
 topval eq_labelIntroT : tactic
+
+topval neq_label_elimT : int -> tactic

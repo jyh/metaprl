@@ -3,6 +3,7 @@
 extends Itt_nat
 extends Itt_struct2
 extends Itt_struct3
+extends Itt_nequal
 
 open Itt_struct
 open Dtactic
@@ -65,15 +66,15 @@ interactive label_sqequal :
 interactive decide_eq_label 'x 'y :
    [wf] sequent{ <H> >- 'x in label} -->
    [wf] sequent{ <H> >- 'y in label} -->
-   [main] sequent{ <H>; u:'x='y in label >- 'C} -->
-   [main] sequent{ <H>; u:not{.'x='y in label} >- 'C} -->
+   [main] sequent{ <H>; u: 'x='y in label >- 'C} -->
+   [main] sequent{ <H>; u: 'x<>'y in label >- 'C} -->
    sequent{ <H> >- 'C}
 
 interactive decide_eq_label2 'x 'y :
    [wf] sequent{ <H> >- 'x in label} -->
    [wf] sequent{ <H> >- 'y in label} -->
    [main] sequent{ <H>; u:'x~'y >- 'C} -->
-   [main] sequent{ <H>; u:not{.'x='y in label} >- 'C} -->
+   [main] sequent{ <H>; u: 'x<>'y in label >- 'C} -->
    sequent{ <H> >- 'C}
 
 let decideEqLabel0T x y = decide_eq_label2 x y thenLT [idT;idT; hypSubstT (-1) 0; idT]

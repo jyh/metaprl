@@ -1,6 +1,7 @@
 (* Labels as natural numberas *)
 
 extends Itt_nat
+extends Itt_nequal
 open Refiner.Refiner.Term
 open Tactic_type.Conversionals
 
@@ -18,7 +19,9 @@ rule decide_eq_label 'x 'y :
    [wf] sequent{ <H> >- 'x in label} -->
    [wf] sequent{ <H> >- 'y in label} -->
    sequent{ <H>; u:'x='y in label >- 'C} -->
-   sequent{ <H>; u:not{.'x='y in label} >- 'C} -->
+   sequent{ <H>; u: 'x <> 'y in label >- 'C} -->
    sequent{ <H> >- 'C}
 
 topval decideEqLabel0T : term -> term -> tactic
+
+val  label_sqequal : tactic

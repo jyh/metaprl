@@ -146,7 +146,7 @@ interactive_rw record_beta1 {| reduce |} :
    field[n:t]{rcrd[n:t]{'a; 'r}} <--> 'a
 
 interactive_rw record_beta2:
-   (not{.label[m:t] = label[n:t] in label}) -->
+   (label[m:t] <> label[n:t] in label) -->
    field[n:t]{rcrd[m:t]{'a; 'r}} <--> field[n:t]{'r}
 
 interactive_rw record_beta:
@@ -176,6 +176,10 @@ interactive_rw record_exchange :
    rcrd[n:t]{'a; rcrd[m:t]{'b; 'r}} <--> eq_label[n:t,m:t]{rcrd[n:t]{'a;'r};
                                                            rcrd[m:t]{'b; rcrd[n:t]{'a; 'r}}}
 
+interactive_rw record_same_reduce {| reduce |}:  (* This should not be in eval, but in autoC *)
+   rcrd[n:t]{'a; rcrd[n:t]{'b; 'r}} <--> rcrd[n:t]{'a;'r}
+
+
 (*** Introductions ***)
 doc <:doc< @doc{@modsubsection{Introduction}} >>
 
@@ -187,22 +191,22 @@ interactive recordIntroE2 {| intro[] |} :
    sequent{ <H> >- rcrd[n:t]{'a} in recordTop }
 
 interactive recordEqualS1 :
-   [equality] sequent{ <H> >- not{.label[n:t]=label[m:t] in label} } -->
+   [equality] sequent{ <H> >- label[n:t]<>label[m:t] in label } -->
    [main] sequent{ <H> >- 'r1='r2 in record[m:t]{'A} } -->
    sequent{ <H> >- rcrd[n:t]{'a;'r1}='r2 in record[m:t]{'A} }
 
 interactive recordEqualS2 :
-   [equality] sequent{ <H> >- not{.label[n:t]=label[m:t] in label} } -->
+   [equality] sequent{ <H> >- label[n:t]<>label[m:t] in label } -->
    [main] sequent{ <H> >- 'r1='r2 in record[m:t]{'A} } -->
    sequent{ <H> >- 'r1=rcrd[n:t]{'a;'r2} in record[m:t]{'A} }
 
 interactive recordEqualS3 :
-   [equality] sequent{ <H> >- not{.label[n:t]=label[m:t] in label} } -->
+   [equality] sequent{ <H> >- label[n:t]<>label[m:t] in label } -->
    [main] sequent{ <H> >- 'r1='r2 in record[m:t]{'A} } -->
    sequent{ <H> >- rcrd[n:t]{'a1;'r1}=rcrd[n:t]{'a2;'r2} in record[m:t]{'A} }
 
 interactive recordEqualS4 :
-   [equality] sequent{ <H> >- not{.label[n:t]=label[m:t] in label} } -->
+   [equality] sequent{ <H> >- label[n:t]<>label[m:t] in label } -->
    [main] sequent{ <H> >- 'r1=rcrd[m:t]{'a2;'r2} in record[m:t]{'A} } -->
    sequent{ <H> >- rcrd[n:t]{'a1;'r1}=rcrd[m:t]{'a2;'r2} in record[m:t]{'A} }
 
@@ -433,7 +437,7 @@ interactive recordOrtIntroTop {| intro[] |} :
 
 interactive recordOrtIntroS1 :
    [wf] sequent{ <H> >- "type"{record[m:t]{'A}} } -->
-   [main] sequent{ <H> >- not{. label[n:t]=label[m:t] in label} } -->
+   [main] sequent{ <H> >-  label[n:t]<>label[m:t] in label } -->
    sequent{ <H> >- record_ort[n:t]{'a;record[m:t]{'A}} }
 
 interactive recordOrtIntroS2 :

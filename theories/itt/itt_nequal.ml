@@ -99,7 +99,7 @@ dform nequal_df2 : mode[src] :: parens :: "prec"[prec_equal] :: nequal{'T; 'a; '
  * RULES                                                                *
  ************************************************************************)
 
-interactive neq_type :
+interactive neq_type {| intro[] |}:
    [wf] sequent { <H> >- 'x in 'T } -->
    [wf] sequent { <H> >- 'y in 'T } -->
    sequent { <H> >- "type"{'x <> 'y in 'T} }
@@ -134,7 +134,7 @@ interactive neq_elim {| elim [ThinOption thinT] |} 'H :
 (*
  * Automation.
  *)
-let triv_nequalT = neq_sym thenLT [idT;idT; trivialT]
+let triv_nequalT = neq_sym thenLT [idT;idT; completeT trivialT]
 
 let resource intro += <<'x <>'y in 'T>> , wrap_intro (triv_nequalT orelseT neq_intro)
 

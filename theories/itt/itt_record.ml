@@ -703,6 +703,9 @@ dform subrecordS_df : except_mode [src] :: subrecord{record[n:t]{'a}}
 dform subrcrd_df : except_mode [src] :: subrecord{rcrd[n:t]{'a;'r}}
    =  subrecord{'r} ";" subrecord{rcrd[n:t]{'a}}
 
+dform subrcrdS2_df : except_mode [src] :: subrecord{rcrd[n:t]{'a;rcrd}}
+   =  subrecord{rcrd[n:t]{'a}}
+
 dform subrecordI_df : except_mode [src] :: subrecord{record[n:t]{'a;'r}}
    = subrecord{record[n:t]{'a}} ";" subrecord{'r}
 
@@ -729,7 +732,6 @@ dform rcrdS_df : except_mode [src] :: rcrd[n:t]{'a}
 
 dform rcrd_df : except_mode [src] :: rcrd[n:t]{'a;'r}
    =  "{" subrecord{rcrd[n:t]{'a;'r}} "}"
-
 
 dform recordS_df : except_mode [src] :: record[n:t]{'a}
    =  "{" subrecord{record[n:t]{'a}} "}"

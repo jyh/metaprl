@@ -43,13 +43,14 @@ open Itt_list
 
 (*!
  * @begin[doc]
+ * @modsection{Simple Records}
  * First, let us define two record types: $<<plane>>$ and $<<space>>$.
  * @end[doc]
  *)
 
-define unfold_plane:  plane <--> record["x":t]{int;record["y":t]{int}}
+define unfold_plane:  plane <--> {x:int; y:int}
 
-define unfold_space:  space <--> record["x":t]{int;record["y":t]{int;record["z":t]{int}}}
+define unfold_space:  space <--> {x:int; y:int; z:int}
 
 interactive planeType {|intro[] |} :
    sequent['ext] {'H >- "type"{plane} }
@@ -64,7 +65,7 @@ interactive spaceType {|intro[] |} :
  * @end[doc]
  *)
 
-define unfold_O: O <--> rcrd["x":t]{0; rcrd["y":t]{0; rcrd["z":t]{0}}}
+define unfold_O: O <-->  {x=0; y=0; z=0}
 
 interactive oInSpace {|intro[] |} :
    sequent['ext] {'H >- O in space }
@@ -85,7 +86,7 @@ interactive oInPlane {|intro[] |} :
  *)
 
 interactive spacePlane {|intro[] |} :
-   sequent['ext] {'H >- \subtype{space;plane} }
+   sequent['ext] {'H >- space  subtype plane }
 
 (*!
  * @begin[doc]
@@ -93,9 +94,8 @@ interactive spacePlane {|intro[] |} :
  * @end[doc]
  *)
 
-
-define unfold_A: A <--> rcrd["x":t]{1; rcrd["y":t]{2; rcrd["z":t]{3;rcrd}}}
-define unfold_B: B <--> rcrd["z":t]{0; rcrd["y":t]{2; rcrd["x":t]{1}}}
+define unfold_A: A <--> {x=1; y=2; z=3}
+define unfold_B: B <--> {z=0; y=2; x=1}
 
 (*! @docoff *)
 
@@ -127,16 +127,16 @@ interactive abInSpace {|intro[] |} :
  *)
 
 interactive_rw a_rw  :
-   A <--> rcrd["y":t]{2; rcrd["z":t]{3; rcrd["x":t]{1}}}
+   A <--> {y=2; z=3; x=1}
 
 (*!
  * @begin[doc]
- * However if two fields have the same label, then the leftmost field covers others. E.g.,
+ * However if two fields have the same label, then the rightmost field covers others. E.g.,
  * @end[doc]
  *)
 
 interactive_rw cover_rw  :
-   rcrd["x":t]{2; rcrd["x":t]{3}} <-->    rcrd["x":t]{2}
+   {x=3; x=2} <-->    {x=2}
 
 
 (*!
@@ -146,7 +146,7 @@ interactive_rw cover_rw  :
  *)
 
 interactive_rw a_z_rw  :
-   field["z":t]{A} <--> 3
+   (A^y) <--> 2
 
 (*!
  * @begin[doc]
@@ -181,17 +181,19 @@ interactive spaceIntro {|intro[] |} :
  *)
 
 
-interactive_rw point_beta1_rw : field["x":t]{point{'a;'b;'e}} <--> 'a
 
-interactive_rw point_beta2_rw : field["y":t]{point{'a;'b;'e}} <--> 'b
+interactive_rw point_beta1_rw : (point{'a;'b;'e}^x) <--> 'a
+
+interactive_rw point_beta2_rw : (point{'a;'b;'e}^y) <--> 'b
 
 let resource reduce +=
-   [<< field["x":t]{point{'a;'b;'e}}  >>, point_beta1_rw;
-    << field["y":t]{point{'a;'b;'e}}  >>, point_beta2_rw]
+   [<< point{'a;'b;'e}^x  >>, point_beta1_rw;
+    << point{'a;'b;'e}^y  >>, point_beta2_rw]
+
 
 interactive point_eta :
    sequent[squash]{'H >- 'p in plane } -->
-   sequent['ext]{'H >-   point{field["x":t]{'p};field["y":t]{'p};'p} ~ 'p }
+   sequent['ext]{'H >-   point{.'p^x;.'p^y;'p} ~ 'p }
 
 
 (*!
@@ -219,8 +221,7 @@ interactive spaceElim {|elim[] |} 'H :
  * @end[doc]
  *)
 
-
-define unfold_length: length{'p} <--> (field["x":t]{'p}*@field["x":t]{'p} +@ field["y":t]{'p}*@field["y":t]{'p})
+define unfold_length: length{'p} <--> ('p^x *@ 'p^x  +@  'p^y *@  'p^y)
 
 (*!
  * @begin[doc]
@@ -243,7 +244,7 @@ interactive length_A {|intro[] |} :
 
 (*!
  * @begin[doc]
- * Now, using the @tt{reduce_length} and @hrefrule[planeElim] rule, we can prove that
+ * Now, using the @tt[reduce_length] and @hrefrule[planeElim] rule, we can prove that
  * @end[doc]
  *)
 
@@ -271,23 +272,43 @@ interactive cspaceElim {|elim[] |} 'H :
    sequent['ext]  {'H; p:cspace; 'J['p] >- 'C['p] }
 
 
+
+
+
 (*!
- * Dependent Records
+ * @begin[doc]
+ * @modsection{Dependent Records}
+ * @modsubsection{Algebraic structures}
+ *
+ * @end[doc]
  *)
+
 
 define unfold_semigroup1 : semigroup[G:t,mul:t,i:l] <-->
    record[G:t]{univ[i:l];m.record[mul:t]{.'m -> 'm -> 'm;mul.
    tsquash{.all x:'m.all y:'m.all z:'m. ('mul ('mul 'x 'y) 'z = 'mul 'x ('mul 'y 'z) in 'm)}}}
 
+(*
 define unfold_semigroup2 : semigroup[i:l] <--> semigroup["G":t,"*":t,i:l]
+*)
 
-let unfold_semigroup = (tryC unfold_semigroup2) thenC unfold_semigroup1
+define  unfold_mul_semigroup : semigroup[i:l] <-->
+   {car : univ[i:l];
+    "*" : ^car -> ^car -> ^car;
+    all x: ^car. all y:^car .all z:^car. ('x ^* 'y) ^* 'z =  'x ^* ('y ^* 'z) in ^car
+   }
+
+
+(* let unfold_semigroup = (tryC unfold_semigroup2) thenC unfold_semigroup1 *)
+
+let unfold_semigroup = unfold_mul_semigroup orelseC unfold_semigroup1
+
 
 let semigroupDT n = rw unfold_semigroup n thenT dT n
 
 let resource elim +=
-   [<<semigroup[i:l]>>,semigroupDT;
-    <<semigroup[G:t,mul:t,i:l]>>,semigroupDT
+   [ <<semigroup[i:l]>>,semigroupDT;
+     <<semigroup[G:t,mul:t,i:l]>>,semigroupDT
    ]
 let resource intro +=
    [<<semigroup[i:l]>>,wrap_intro (semigroupDT 0);
@@ -296,10 +317,10 @@ let resource intro +=
 
 
 define integers : integers <-->
-   rcrd["Z":t]{int;
-   rcrd["+":t]{.lambda{x.lambda{y. 'x +@ 'y}};
-   rcrd["*":t]{.lambda{x.lambda{y. 'x *@ 'y}}
-              }}}
+   {car = int;
+    "+" = lambda{x.lambda{y. 'x +@ 'y}};
+    "*" = lambda{x.lambda{y. 'x *@ 'y}}
+   }
 
 interactive integers_add_semigroup :
    sequent['ext] {'H >- integers in semigroup["Z":t,"+":t,0:l]}
@@ -309,46 +330,47 @@ interactive integers_mul_semigroup :
 
 
 define morphisms : morphisms{'A}  <-->
-   rcrd["M":t]{.'A -> 'A;rcrd["*":t]{lambda{f.lambda{g. lambda{x. 'f ('g 'x)}}}}}
+   {car = 'A -> 'A;
+    "*" = lambda{f.lambda{g. lambda{x. 'f ('g 'x)}}}
+   }
 
 interactive morphisms_semigroup :
    sequent[squash] {'H >- 'A in univ[i:l]} -->
    sequent['ext] {'H >- morphisms{'A} in semigroup["M":t,"*":t,i:l]}
 
 interactive semigroupAssos4 semigroup[i:l] :
-   sequent[squash] {'H  >- 'g in semigroup[i:l]} -->
    sequent['ext] {'H  >-
-    all a:field["G":t]{'g}. all b:field["G":t]{'g}. all c:field["G":t]{'g}. all d:field["G":t]{'g}.
-      (field["*":t]{'g} (field["*":t]{'g} (field["*":t]{'g} 'a 'b) 'c) 'd =
-       field["*":t]{'g} 'a (field["*":t]{'g} 'b (field["*":t]{'g} 'c 'd)) in field["G":t]{'g}
-      )}
-
-
+    forany semigroup[i:l].
+     all a:^car. all b:^car. all c:^car. all d:^car.
+      (('a ^* 'b) ^* 'c) ^* 'd = 'a ^* ('b ^* ('c ^* 'd)) in ^car
+      }
 
 (*!
- * Data structures
+ * @begin[doc]
+ * @modsubsection{Data structures}
+ * @end[doc]
  *)
 
 
 define unfold_stack :
       Stack[i:l]{'A} <-->                     (* The stack of elements of A *)
-         record["car":t]{univ[i:l]; car.
-         record["empty":t]{'car;  empty.
-         record["push":t]{.'car->'A->'car; push.
-         record["pop":t]{.'car->('car * 'A + unit); pop.
-         tsquash{.
-            (all s: 'car. all a:'A. ('pop('push 's 'a) = inl{('s,'a)} in ('car * 'A + unit)))
-            & ('pop('empty) = inr{it} in ('car * 'A + unit))
-         }}}}}
+        {car : univ[i:l];
+         empty : ^car;
+         push :  ^car -> 'A -> ^car;
+         pop:  ^car-> ^car * 'A + unit;
+         all s: ^car. all a:'A. (^pop(^push 's 'a) = inl{('s,'a)} in (^car * 'A + unit));
+         ^pop(^empty) = inr{it} in (^car * 'A + unit)
+        }
+
 
 
 define stack_as_list :
          list_stack{'A} <-->
-            rcrd["car":t]{list{'A};
-            rcrd["empty":t]{nil;
-            rcrd["push":t]{lambda{s.lambda{a.cons{'a;'s}}};
-            rcrd["pop":t]{lambda{s.list_ind{'s; inr{it}; a,s,f.inl{('s,'a)}}}
-         }}}}
+          { car = list{'A};
+            empty = nil;
+            push = lambda{s.lambda{a.cons{'a;'s}}};
+            pop = lambda{s.list_ind{'s; inr{it}; a,s,f.inl{('s,'a)}}}
+         }
 
 
 
@@ -359,6 +381,7 @@ interactive stack_as_list_wf {| intro [] |}:
 
 (*
  * @begin[doc]
+ * @modsection{Mutually recursive functions}
  * Using records, one can define a module with mutually recursive functions.
  * E.g. let us define the module with two functions:
  *   foo x = if x>0 then fee (x-1) else 0
@@ -369,8 +392,9 @@ interactive stack_as_list_wf {| intro [] |}:
 
 define unfold_a_module : a_module <-->
    fix{self.
-          rcrd["foo":t]{lambda{x.ifthenelse{gt_bool{'x;0};.field["fee":t]{'self} ('x -@ 1);0}};
-          rcrd["fee":t]{lambda{x.ifthenelse{gt_bool{'x;0};.field["foo":t]{'self} ('x -@ 1);1}}}}}
+          {foo = lambda{x.ifthenelse{gt_bool{'x;0};. ^fee ('x -@ 1);0}};
+           fee = lambda{x.ifthenelse{gt_bool{'x;0};. ^foo ('x -@ 1);1}}
+          }}
 
 let fold_a_module =
    makeFoldC <<a_module>> unfold_a_module;;
@@ -379,18 +403,18 @@ let eval_a_module =
    unfold_a_module thenC reduceTopC thenC higherC fold_a_module;;
 
 interactive_rw foo_eval :
-   (field["foo":t]{a_module} 'x) <--> ifthenelse{gt_bool{'x;0};.field["fee":t]{a_module} ('x -@ 1);0}
+   (a_module^foo 'x) <--> ifthenelse{gt_bool{'x;0};.a_module^fee ('x -@ 1);0}
 
 interactive_rw fee_eval :
-   (field["fee":t]{a_module} 'x) <--> ifthenelse{gt_bool{'x;0};.field["foo":t]{a_module} ('x -@ 1);1}
+   (a_module^fee 'x) <--> ifthenelse{gt_bool{'x;0};.a_module^foo ('x -@ 1);1}
 
 let resource reduce +=
-   [<< field["foo":t]{a_module} 'x  >>, foo_eval;
-    << field["fee":t]{a_module} 'x  >>, fee_eval]
+   [<< a_module^foo 'x  >>, foo_eval;
+    << a_module^fee 'x  >>, fee_eval]
 
 
 interactive_rw example_of_evaluation :
-  (field["foo":t]{a_module} 5) <--> 1
+  (a_module^foo 5) <--> 1
 
 (*! @docoff *)
 

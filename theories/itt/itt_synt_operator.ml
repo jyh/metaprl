@@ -42,6 +42,7 @@ doc "doc"{parents}
 extends Itt_quotient
 extends Itt_int_base
 extends Itt_nat
+extends Itt_list
 
 open Basic_tactics
 

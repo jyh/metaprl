@@ -156,8 +156,8 @@ README.uue: README.doc
 	uuencode README.doc < README.doc > README.uue
 
 clean:
-	del -f *.cm[aiox] *.z* *~ *.ml *.ml[ily]
-	del -f $(NAME) *.*run
+	$(RM) *.cm[aiox] *.z* *~ *.ml *.ml[ily]
+	$(RM) -f $(NAME) *.*run
 
 depend: $(PRLFILES) $(PRLIFILES) $(MLFILES) $(MLIFILES)
 	$(CAMLDEP) $(INCLUDE) $(PRLIFILES) $(PRLFILES) $(MLFILES) $(MLIFILES) > Makefile.dep

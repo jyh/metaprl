@@ -32,7 +32,7 @@ opt: $(MAIN).opt
 install:: all
 
 clean::
-	del -f *.p4* *.pp*
+	$(RM) *.p4* *.pp*
 
 # Add dependency for parser
 $(addsuffix .cmiz, $(MFILES)) $(addsuffix .cmoz, $(MFILES)): $(REF_ROOT)/filter/prlcomp.cma

@@ -39,7 +39,7 @@ all: $(MAIN).cma
 opt: $(MAIN).cmxa
 
 clean::
-	del -f *.p4* *.pp*
+	$(RM) *.p4* *.pp*
 
 # Real makefile
 include $(ROOT)/mk/config

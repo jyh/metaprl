@@ -58,30 +58,41 @@ declare MemRegRegOffMul[off:n, mul:n]{'r1; 'r2}
  * @modsubsection{Condition codes}
  * @end[doc]
  *)
-declare LT
-declare LE
-declare EQ
-declare NEQ
-declare GT
-declare GE
-declare ULT
-declare ULE
-declare UGT
-declare UGE
+declare CC["lt"]
+declare CC["le"]
+declare CC["z"]
+declare CC["nz"]
+declare CC["gt"]
+declare CC["ge"]
+declare CC["b"]
+declare CC["be"]
+declare CC["a"]
+declare CC["ae"]
 
 (*!
  * @begin[doc]
  * @modsubsection{Instructions}
+ *
+ * There are several classes of instructions.
+ *
+ * let defines a new registers
+ * Inst2[opname]: this is a normal two-operand instruction
+ * Inst1[opname]: a normal one-operand instruction
+ * Instm[opname]: a MUL/DIV instruction
+ * Shift[opname]: a shift instruction; if the second operand is
+ *   not a constant, it must be register %cl
+ * Cmp[opname]: a comparison; both operands are sources
+ * Set[opname]: the set/cc instruction
  * @end[doc]
  *)
-declare MOV{'src; dst. 'rest['dst]}
-declare MOV{'dst; 'src; 'rest}
-declare NEG{'dst; 'rest}
-declare NOT{'dst; 'rest}
-declare ADD{'dst; 'src; 'rest}
-declare LEA{'dst; 'src; 'rest}
-declare SUB{'dst; 'src; 'rest}
-declare IMUL{'dst; 'src; 'rest}
+declare Let{'src; dst. 'rest['dst]}
+declare Inst1["neg"]{'dst; 'rest}
+declare Inst1["not"]{'dst; 'rest}
+declare Inst2["mov"]{'dst; 'src; 'rest}
+declare Inst2["add"]{'dst; 'src; 'rest}
+declare Inst2["lea"]{'dst; 'src; 'rest}
+declare Inst2["sub"]{'dst; 'src; 'rest}
+declare Inst2["imul"]{'dst; 'src; 'rest}
 
 (*!
  * @begin[doc]
@@ -90,35 +101,32 @@ declare IMUL{'dst; 'src; 'rest}
  * repectively.
  * @end[doc]
  *)
-declare MUL{'dst1; 'dst2; 'src; 'rest}
-declare DIV{'dst1; 'dst2; 'src; 'rest}
+declare Instm["mul"]{'dst1; 'dst2; 'src; 'rest}
+declare Instm["div"]{'dst1; 'dst2; 'src; 'rest}
 
-declare AND{'dst; 'src; 'rest}
-declare OR{'dst; 'src; 'rest}
-declare XOR{'dst; 'src; 'rest}
-declare SAR{'dst; 'src; 'rest}
-declare SHL{'dst; 'src; 'rest}
-declare SHR{'dst; 'src; 'rest}
+declare Inst2["and"]{'dst; 'src; 'rest}
+declare Inst2["or"]{'dst; 'src; 'rest}
+declare Inst2["xor"]{'dst; 'src; 'rest}
+declare Shift["sar"]{'dst; 'src; 'rest}
+declare Shift["shl"]{'dst; 'src; 'rest}
+declare Shift["shr"]{'dst; 'src; 'rest}
 
-declare TEST{'src1; 'src2; 'rest}
-declare CMP{'src1; 'src2; 'rest}
-declare SET{'cc; 'dst; 'rest}
+declare Cmp["test"]{'src1; 'src2; 'rest}
+declare Cmp["cmp"]{'src1; 'src2; 'rest}
+declare Set["set"]{'cc; 'dst; 'rest}
 
 (*
  * Various forms of tailcalls.
  *)
-declare JMP{'label; 'arg1}
-declare JMP{'label; 'arg1; 'arg2}
-declare JMP{'label; 'arg1; 'arg2; 'arg3}
-declare JCC{'cc; 'label; 'arg1; 'rest}
-declare JCC{'cc; 'label; 'arg1; 'arg2; 'rest}
-declare JCC{'cc; 'label; 'arg1; 'arg2; 'arg3; 'rest}
-declare IJMP{'src; 'arg1}
-declare IJMP{'src; 'arg1; 'arg2}
-declare IJMP{'src; 'arg1; 'arg2; 'arg3}
+declare Jmp["jmp"]{'label; 'arg1}
+declare Jmp["jmp"]{'label; 'arg1; 'arg2}
+declare Jmp["jmp"]{'label; 'arg1; 'arg2; 'arg3}
+declare Jcc["jcc"]{'cc; 'label; 'arg1; 'rest}
+declare Jcc["jcc"]{'cc; 'label; 'arg1; 'arg2; 'rest}
+declare Jcc["jcc"]{'cc; 'label; 'arg1; 'arg2; 'arg3; 'rest}
 
 (*
- * Comment for debugging.
+ * Also add a comment instruction.
  *)
 declare Comment[comment:s]{'rest}
 

@@ -1,5 +1,5 @@
 (*
- * Basic architecture parameters.
+ * Utilities for x86 instructions.
  *
  * ----------------------------------------------------------------
  *
@@ -24,48 +24,13 @@
  * @email{jyh@cs.caltech.edu}
  * @end[license]
  *)
-extends M_ir
-extends M_arith
-extends M_x86_util
+extends X86_asm
 
 (*
- * We need more general operands during code construction.
+ * Map over all operands in the program.
  *)
-declare ImmediateNumber{'i}
-declare MemRegOff{'r; 'off}
-declare MemRegRegOffMul{'r1; 'r2; 'off; 'mul}
-
-(*
- * Size of a word on this platform, in bytes.
- *)
-declare word_size
-
-(*
- * This is the format of the header word of a given size.
- *)
-declare header[i:n]
-declare header{'i}
-
-(*
- * Registers.
- *)
-declare eax
-declare ebx
-declare ecx
-declare edx
-declare esi
-declare edi
-declare esp
-declare ebp
-
-declare next
-
-(*
- * Name resolution.
- *)
-declare AssignRegisters{'registers}
-declare RegisterCons[label:t]{'reg; 'rest}
-declare RegisterNil
+declare MapOperands{'arg; 'code}
+declare MapOperand{'arg; 'operand}
 
 (*!
  * @docoff

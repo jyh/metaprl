@@ -31,23 +31,13 @@
  * @end[doc]
  *)
 extends M_ir
-extends X86_asm
+extends M_x86_frame
 (*! @docoff *)
 
 open Refiner.Refiner.Term
 
 open Tactic_type.Tacticals
 open Tactic_type.Conversionals
-
-(*
- * Dead resource
- *)
-resource (term * conv, conv) codegen
-
-(*
- * Debug functions.
- *)
-topval codegenC : conv
 
 (*
  * Dead-code elim.

@@ -20,6 +20,7 @@ MPFILES :=\
 	m_dead\
 	m_inline\
 	x86_asm\
+	m_x86_util\
 	m_x86_frame\
 	m_x86_codegen\
 	m_theory\

@@ -86,8 +86,13 @@ open Mp_resource
 open Simple_print
 open Term_match_table
 
+open Tactic_type.Tacticals
 open Tactic_type.Conversionals
 open Tactic_type.Sequent
+
+(************************************************************************
+ * Phase 1.
+ *)
 
 (*!
  * @begin[doc]
@@ -131,6 +136,9 @@ let mk_apply_term = mk_dep0_dep0_term apply_opname
 
 (*
  * Now, a conversional to apply the inverse-beta reduction.
+ * The "vars" parameter is the set of function variables.
+ * Function variables are not treated as free; we don't
+ * need closure conversion for them.
  *)
 let abstractTopC vars =
    let convC e =
@@ -170,6 +178,40 @@ let abstractT p =
    in
    let vars = collect StringSet.empty (concl p) in
       rwh (abstractTopC vars) 0 p
+
+(************************************************************************
+ * Phase 2.
+ *)
+
+(*!
+ * @begin[doc]
+ * @modsubsection{Closure conversion, phase 2}
+ *
+ * In the second phase of closure conversion, we perform the
+ * actual closure reduction.
+ * @end[doc]
+ *)
+prim_rw close_exp :
+   FunDecl{f. FunDef{'f; CloseApply{CloseLambda{y. 'e1['f; 'y]}; 'v}; 'e2['f]}}
+   <-->
+   FunDecl{f.
+   FunDef{'f; AtomFun{y.
+              LetClosure{AtomFunVar{'f}; AtomVar{'y}; g.
+              'e1['g; 'y]}};
+   LetClosure{AtomFunVar{'f}; 'v; g.
+   'e2['g]}}}
+
+let closeC =
+   repeatC (higherC close_exp)
+
+(************************************************************************
+ * Closure conversion tactic.
+ *)
+let closeOnceT =
+   abstractT thenT rw closeC 0
+
+let closeT =
+   repeatT closeOnceT
 
 (*!
  * @docoff

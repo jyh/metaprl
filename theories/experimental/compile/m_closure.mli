@@ -31,8 +31,19 @@
 extends M_ir
 
 open Tactic_type.Tacticals
+open Tactic_type.Conversionals
 
+(*
+ * The first three are for debugging.
+ *)
 topval abstractT : tactic
+topval closeC : conv
+topval closeOnceT : tactic
+
+(*
+ * This is the actual closure conversion.
+ *)
+topval closeT : tactic
 
 (*!
  * @docoff

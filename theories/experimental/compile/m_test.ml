@@ -36,8 +36,9 @@ interactive test_prog 'H :
                                   FunDecl{f.
                                   FunDef{'f; AtomFun{v3.
                                      LetPair{AtomVar{'v2}; AtomVar{'v3}; v4.
-                                     LetSubscript{AtomVar{'v4}; AtomInt[0:n]; v5.
-                                     Return{AtomVar{'v5}}}}};
+                                     LetPair{AtomVar{'v1}; AtomVar{'v4}; v5.
+                                     LetSubscript{AtomVar{'v5}; AtomInt[0:n]; v6.
+                                     Return{AtomVar{'v6}}}}}};
                                   TailCall{AtomFunVar{'f}; AtomInt[17]}}}}}}}
                }
 

@@ -602,6 +602,30 @@ let record_exchangeC n =
 
 let t = <<'alpha>>
 
+(*************
+ * Subtyping
+ *************)
+
+interactive recordLSubtype {| intro [] |} :
+	[wf] sequent { <H> >- 'S Type } -->
+	[wf] sequent { <H>; x: 'S >- 'A['x] Type } -->
+	sequent { <H> >- record[n:t]{r.'A['r];'S} subtype 'S }
+
+interactive recordRSubtype {| intro [] |} :
+	[wf] sequent { <H> >- 'S Type } -->
+	[wf] sequent { <H>; x: 'S >- 'A['x] Type } -->
+	sequent { <H> >- record[n:t]{'S; r.'A['r]} subtype record[n:t]{'S} }
+
+interactive recordSubtype1 {| intro [] |} :
+	[wf] sequent { <H> >- 'R Type } -->
+	[wf] sequent { <H> >- 'S Type } -->
+	sequent { <H> >- record[n:t]{'R;'S} subtype record[n:t]{'R} }
+
+interactive recordSubtype2 {| intro [] |} :
+	[wf] sequent { <H> >- 'R Type } -->
+	[wf] sequent { <H> >- 'S Type } -->
+	sequent { <H> >- record[n:t]{'R;'S} subtype 'S }
+
 (******************)
 (*  Display Forms *)
 (******************)

@@ -526,7 +526,7 @@ let mul_BubbleStepC tm =
                      idC
          else
             if (is_number_term a) & (is_number_term s) then
-	       reduce_mul
+	       reduceC
 	    else
                if (compare_terms s a)=Less or
                 (is_number_term s) then
@@ -539,7 +539,7 @@ let mul_BubbleStepC tm =
 (* here we apply mul_BubbleStepC as many times as possible thus
    finally we have all mul subterms positioned in order
  *)
-let mul_BubbleSortC = sweepDnC (termC mul_BubbleStepC)
+let mul_BubbleSortC = repeatC (sweepDnC (termC mul_BubbleStepC))
 
 let inject_coefC t =
    if is_mul_term t then
@@ -550,9 +550,9 @@ let inject_coefC t =
 (* Before terms sorting we have to put parentheses in the rightmost-first
 manner
  *)
-let mul_normalizeC = (sweepDnC mul_Assoc2C) thenC
+let mul_normalizeC = (repeatC (higherC mul_Assoc2C)) thenC
                      (higherC (termC inject_coefC)) thenC
-                     (repeatC mul_BubbleSortC)
+                     mul_BubbleSortC
 
 interactive_rw sum_same_products1_rw :
    ('a IN int) -->
@@ -560,34 +560,39 @@ interactive_rw sum_same_products1_rw :
 
 let sum_same_products1C = sum_same_products1_rw
 
+(*
 interactive_rw sum_same_products2_rw :
-   ('a = 'b in int) -->
-   ((number[i:n] *@ 'a) +@ 'b) <--> ((number[i:n] +@ 1) *@ 'a)
+   ('a IN int) -->
+   ((number[i:n] *@ 'a) +@ 'a) <--> ((number[i:n] +@ 1) *@ 'a)
 
 let sum_same_products2C = sum_same_products2_rw
 
 interactive_rw sum_same_products3_rw :
-   ('a = 'b in int) -->
-   ('a +@ (number[j:n] *@ 'b)) <--> ((number[j:n] +@ 1) *@ 'a)
+   ('a IN int) -->
+   ('a +@ (number[j:n] *@ 'a)) <--> ((number[j:n] +@ 1) *@ 'a)
 
 let sum_same_products3C = sum_same_products3_rw
 
 interactive_rw sum_same_products4_rw :
-   ('a = 'b in int) -->
-   ('a +@ 'b) <--> (2 *@ 'a)
+   ('a IN int) -->
+   ('a +@ 'a) <--> (2 *@ 'a)
 
 let sum_same_products4C = sum_same_products4_rw
+*)
 
 let same_product_aux a b =
    if (is_mul_term a) & (is_mul_term b) then
       let (a1,a2)=dest_mul a in
       let (b1,b2)=dest_mul b in
+(*
       if is_number_term a1 then
          if is_number_term b1 then
+*)
             if (compare_terms a2 b2)=Equal then
                (true, sum_same_products1C)
             else
                (false, idC)
+(*
          else
             if (compare_terms a1 b)=Equal then
                (true, sum_same_products2C)
@@ -604,6 +609,7 @@ let same_product_aux a b =
                (true, sum_same_products4C)
             else
                (false, idC)
+*)
    else
       (false, idC)
 
@@ -675,18 +681,18 @@ let add_BubbleStepC tm =
 (* here we apply add_BubbleStepC as many times as possible thus
    finally we have all sum subterms positioned in order
  *)
-let add_BubbleSortC = (sweepDnC (termC same_productC)) thenC
-                      (sweepDnC (termC add_BubbleStepC))
+let add_BubbleSortC = (repeatC (sweepDnC (termC add_BubbleStepC))) thenC
+                      (repeatC (sweepDnC (termC same_productC)))
 
 (* Before terms sorting we have to put parentheses in the rightmost-first
 manner
  *)
 let add_normalizeC = (repeatC (higherC add_Assoc2C)) thenC
-                     (repeatC add_BubbleSortC)
+                     add_BubbleSortC
 
-let open_parenthesesC = repeatC (sweepDnC mul_add_DistribC)
+let open_parenthesesC = repeatC (higherC mul_add_DistribC)
 
-let normalizeC = (sweepDnC reduceC) thenC
+let normalizeC = reduceC thenC
                  open_parenthesesC thenC
                  mul_normalizeC thenC
                  add_normalizeC

@@ -66,9 +66,11 @@ topval inject_coefC : term -> conv
 topval mul_normalizeC : conv
 topval open_parenthesesC : conv
 topval sum_same_products1C : conv
+(*
 topval sum_same_products2C : conv
 topval sum_same_products3C : conv
 topval sum_same_products4C : conv
+*)
 topval same_productC : term -> conv
 topval normalizeC : conv
 

@@ -82,7 +82,7 @@ declare fcompare{'eq; 'x1; 'x2}
 declare fsquash{'eq; 's}
 
 declare fball{'s; x. 'b['x]}
-declare fbexists{'s; v. 'b['x]}
+declare fbexists{'s; x. 'b['x]}
 declare fall{'eq; 'T; 's; x. 'b['x]}
 declare fexists{'eq; 'T; 's; x. 'b['x]}
 declare foflist{'l}

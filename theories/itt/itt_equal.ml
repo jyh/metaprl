@@ -336,8 +336,8 @@ prim universeFormation 'H univ[j:l] :
  * H >- cumulativity(j, i)
  *)
 prim universeCumulativity 'H univ[j:l] :
-   sequent ['ext] { 'H >- cumulativity[j:l, i:l] } -->
-   sequent ['ext] { 'H >- 'x = 'y in univ[j:l] } -->
+   sequent [squash] { 'H >- cumulativity[j:l, i:l] } -->
+   sequent [squash] { 'H >- 'x = 'y in univ[j:l] } -->
    sequent ['ext] { 'H >- 'x = 'y in univ[i:l] } =
    it
 

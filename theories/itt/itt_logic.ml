@@ -991,6 +991,48 @@ let backThruAssumT i p =
    let j = Sequent.hyp_count p + 1 in
       (assumT i thenMT (backThruHypT j thenT thinT j)) p
 
+(*
+ * Generalize on a membership assumption:
+ *         i. sequent [...] { ... >- member{T; t} } -->
+ *         ...
+ *         sequent [...] { ... >- 'T2 }
+ *         BY genAssumT [i; and any others you want to include...]
+ *
+ *         sequent [...] { ... >- all x: T. ...others... => T2 }
+ *)
+let genAssumT indices p =
+   let goal, assums = dest_msequent (Sequent.msequent p) in
+   let len = List.length assums in
+   let _ =
+      List.iter (fun i ->
+            if i <= 0 || i > len then
+               raise (RefineError ("genAssumT", StringIntError ("assum index is out of range", i)))) indices
+   in
+   let rec make_assum_implies_term indices t =
+      match indices with
+         [] ->
+            t
+       | i :: indices ->
+            let t' = TermMan.nth_concl (List.nth assums (pred i)) 1 in
+               make_assum_implies_term indices (mk_implies_term t' t)
+   in
+   let t =
+      match indices with
+         i :: indices ->
+            let goal = make_assum_implies_term indices (TermMan.nth_concl goal 1) in
+            let t = TermMan.nth_concl (List.nth assums (pred i)) 1 in
+            let t_type, t_var = dest_member t in
+               if is_var_term t_var then
+                  mk_all_term (dest_var t_var) t_type goal
+               else
+                  let v = maybe_new_vars1 p "v" in
+                     mk_all_term v t_type (var_subst goal t_var v)
+       | [] ->
+            raise (RefineError ("genAssumT", StringError "requires an assumption to generalize"))
+
+   in
+      assertT t p
+
 (************************************************************************
  * AUTO TACTIC                                                          *
  ************************************************************************)

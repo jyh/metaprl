@@ -160,6 +160,8 @@ topval moveToConclVarsT : string list -> tactic
 
 topval squash_falseT : tactic
 
+topval genAssumT : int list -> tactic
+
 (*
  * -*-
  * Local Variables:

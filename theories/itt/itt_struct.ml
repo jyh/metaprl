@@ -180,6 +180,9 @@ interactive hypothesis 'H :
 interactive hypothesisType 'H :
    sequent { <H>; x: 'A; <J['x]> >- "type"{'A} }
 
+interactive hypMem 'H :
+   sequent { <H>; x: 't1 = 't2 in 'A; <J['x]> >- 'A }
+
 doc <:doc< 
    @begin[doc]
    @modsubsection{Substitution}
@@ -263,7 +266,7 @@ doc <:doc<
    @end[doc]
 >>
 let nthHypT i =
-   hypothesis i orelseT hypothesisType i
+   hypothesis i orelseT hypothesisType i orelseT hypMem i
 
 doc <:doc< 
    @begin[doc]

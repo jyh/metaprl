@@ -24,11 +24,11 @@ declare prodH     (*{ <H> >- 'T }*)
 
 (* inductive definition of multiple product *)
 rewrite prodH_base :
-   sequent [prodH] { x:'T >- 'S['x] } <--> product{'T; x.'S['x]}
+   sequent [prodH] { >- 'S } <--> 'S
 
 rewrite prodH_step :
    sequent [prodH] { <H>; x:'T >- 'S['x] } <-->
-	sequent [prodH] { <H> >- product{'T;x.'S['x]} }
+	sequent [prodH] { <H> >- dfun{'T;x.'S['x]} }
 
 
 (* base axioms about Ind and IndTypes *)
@@ -82,12 +82,12 @@ declare applH (* { <H> >- 'T } *)
 
 (*inductive definition of multiple application *)
 rewrite applH_base :
-   sequent [applH] { x:'T >- sequent { <H> >- 'S} } <-->
-	sequent { <H>; x:'T >- app{'S;'x} }
+   sequent [applH] { >- sequent { <H> >- 'S} } <-->
+	sequent { <H> >- 'S }
 
 rewrite applH_step :
    sequent [applH] { x:'T; <H> >- sequent { <J> >- 'S} } <-->
-	sequent [applH] { <H> >- sequent { <J>; x:'T >- app{'S;'x} } }
+	sequent [applH] { <H> >- sequent { <J>; x:'T >- apply{'S;'x} } }
 
 (* Product + Application + Substitution (p1:P1)...(pn:Pn)C{I/Ip1...pn} *)
 declare prodapp
@@ -98,7 +98,7 @@ rewrite prodapp_base :
 
 rewrite prodapp_step :
    sequent [prodapp] { <Hp>; p:'P >- bind{i.'C['i]} } <-->
-	sequent [prodapp] { <Hp> >- bind{ i.product{ 'P; p.'C[app{'i;'p}] } } }
+	sequent [prodapp] { <Hp> >- bind{ i.dfun{ 'P; p.'C[apply{'i;'p}] } } }
 
 
 (* declaration of multiple substitution *)
@@ -161,7 +161,7 @@ rule arity_of_some_sort_Type :
 
 rule arity_of_some_sort_prod bind{x.'U['x]} :
    sequent { <H>; x:'T1 >- arity_of_some_sort{'U['x]} } -->
-	sequent { <H> >- arity_of_some_sort{product{'T1;x.'U['x]}} }
+	sequent { <H> >- arity_of_some_sort{dfun{'T1;x.'U['x]}} }
 
 rule arity_of_some_sort_m_base :
    sequent { <H> >- arity_of_some_sort{'T} } -->
@@ -185,7 +185,7 @@ rule arity_of_sort_Type :
 
 rule arity_of_sort_prod bind{x.'U['x]} :
    sequent { <H>; x:'T1 >- arity_of_sort{'U['x]; 's} } -->
-	sequent { <H> >- arity_of_sort{product{'T1;x.'U['x]}; 's} }
+	sequent { <H> >- arity_of_sort{dfun{'T1;x.'U['x]}; 's} }
 
 (* declaration of 'type of constructor' notion *)
 declare type_of_constructor{'T;'I} (* 'T is a type of constructor of 'I *)
@@ -195,7 +195,7 @@ rule type_of_constructor_app :
 
 rule type_of_constructor_prod 'T1 bind{x.'C['x]} :
    sequent { <H>; x:'T1 >- type_of_constructor{'C['x];'I} } -->
-	sequent { <H> >- type_of_constructor{ product{'T1;x.'C['x]}; 'I } }
+	sequent { <H> >- type_of_constructor{ dfun{'T1;x.'C['x]}; 'I } }
 
 declare imbr_pos_cond_m (* { <Hc> >-( 'I >- 'x ) } *)
 (* Hc={c1:C1,...,cn:Cn}, the types constructor Ci (each of them) of 'I
@@ -218,7 +218,7 @@ rule positivity_cond_1 'H :
 rule positivity_cond_2 'H bind{x.'T['x]} bind{y,x.'U['y;'x]}:
    sequent { <H>; x:'S; <J['x]> >- strictly_pos{'x;'T['x]}} -->
 	sequent { <H>; x:'S; <J['x]>; y:'T['x] >- positivity_cond{'U['y;'x];'x} } -->
-	sequent { <H>; x:'S; <J['x]> >- positivity_cond{product{'T['x];y.'U['y;'x]};'x} }
+	sequent { <H>; x:'S; <J['x]> >- positivity_cond{dfun{'T['x];y.'U['y;'x]};'x} }
 
 (* declaration of multiple positivity condition *)
 declare positivity_cond_m
@@ -242,7 +242,7 @@ rule strictly_pos_2 'H :
 rule strictly_pos_3 'H 'U bind{x,y.'V['x;'y]} :
    sequent { <H>; x:'T2; <J['x]>; x1:'U >- strictly_pos{'x;'V['x1;'x]} } -->
 	sequent { <H>; x:'T2; <J['x]> >-
-	   strictly_pos{'x ; product{ 'U;x1.'V['x1;'x]}} }
+	   strictly_pos{'x ; dfun{ 'U;x1.'V['x1;'x]}} }
 
 (*
 rule strictly_pos_4 'H :
@@ -269,10 +269,10 @@ rule imbr_pos_cond_1 'H :
 	   imbr_pos_cond{ sequent [applH] { <T1> >- 'I<|J;H|>['x]};'I<|J;H|>['x];'x} }
 
 rule imbr_pos_cond_2 'H bind{x,y.'U['x;'y]} :
-   sequent { <H>; x:'T2; <J['x]> >- type_of_constructor{ product{'T['x];x1.'U['x1;'x]} ;'I} } -->
+   sequent { <H>; x:'T2; <J['x]> >- type_of_constructor{ dfun{'T['x];x1.'U['x1;'x]} ;'I} } -->
    sequent { <H>; x:'T2; <J['x]> >- strictly_pos{'x;'T['x]} } -->
 	sequent { <H>; x:'T2; <J['x]>; x1:'T['x] >- imbr_pos_cond{'U['x1;'x];'I;'x} } -->
-	sequent { <H>; x:'T2; <J['x]> >- imbr_pos_cond{product{'T['x];x1.'U['x1;'x]};'I;'x} }
+	sequent { <H>; x:'T2; <J['x]> >- imbr_pos_cond{dfun{'T['x];x1.'U['x1;'x]};'I;'x} }
 
 (* inductive definition of multiple imbricated positivity condition, i.e.
    of imbr_pos_cond_m *)

@@ -1,4 +1,5 @@
 extends Base_theory
+
 (* MetaPRL doesn't allow to declare a variable twice  in one Context
 so in rules w-s, ... we skip such things as "x not in H" *)
 
@@ -16,17 +17,28 @@ declare prop_set{'s} (* type 's, is sort Prop or sort Set *)
 declare member{'t;'T} (* term 't has a type 'T*)
 declare decl{'T}        (* declaration of some variable having type 'T (as assumption) *)
 declare "let"{'t;'T}      (* declaration of some variable as definition (let it be 't:'T)*)
-declare product{'T;x.'U['x]} (* product ('x:'T)'U, x-variable, T,U-terms *)
+declare dfun{'T;x.'U['x]} (* product ('x:'T)'U, x-variable, T,U-terms *)
+
+declare "fun"{'A;'B}
+
+rewrite unfold_fun :
+	('A -> 'B) <--> (dfun{'A; x.'B})
+
 declare lambda{'T;x.'t['x]}  (* the term ['x:'T]'t is a function which maps
                                    elements of 'T to 't - lambda_abstraction
                                    from lambda-calculus *)
 declare let_in{'t;x.'u['x]} (* declaration of the let-in expressions -
                             in term 'u the var 'x is locally bound to term 't *)
-declare app{'t;'u} (* declaration of "term 't applied to term 'u" *)
+declare apply{'t;'u} (* declaration of "term 't applied to term 'u" *)
 declare subst{'u;'x;'t} (* declaration of substitution of a term 't to all
                             free occurrences of a variable 'x in a term 'u *)
 declare bind{x.'T['x]}
 declare bind{x,y.'T['x;'y]}
+
+
+declare math_fun{'x; 'A; 'B}
+declare math_fun{'A; 'B}
+
 
 (*****************************************************
 *   The type of a type is always a constant of the
@@ -138,20 +150,20 @@ rule prod_1 's1:
    sequent { <H> >- prop_set{'s1}  } -->
    sequent { <H> >- member{ 'T; 's1 } } -->
    sequent { <H>; x:decl{'T} >- member{ 'U['x]; 's2 } } -->
-   sequent { <H> >- member{ product{'T;x.'U['x]}; 's2  }  }
+   sequent { <H> >- member{ dfun{'T;x.'U['x]}; 's2  }  }
 
 rule prod_2 's1:
    sequent { <H>; x:decl{'T} >- prop_set{'s2}  } -->
    sequent { <H>; x:decl{'T} >- member{ 'U['x]; 's2 } } -->
    sequent { <H> >- member{ 'T; 's1 } } -->
-   sequent { <H> >- member{ product{'T;x.'U['x]}; 's2  }  }
+   sequent { <H> >- member{ dfun{'T;x.'U['x]}; 's2  }  }
 
 rule prod_types "type"[i:l] "type"[j:l] :
    sequent { <H> >- member{'T;"type"[i:l]}  } -->
    sequent { <H>; x:decl{'T} >- member{ 'U['x]; "type"[j:l] }  } -->
    sequent { >- le[i:l,k:l]  } -->
    sequent { >- le[j:l,k:l]  } -->
-   sequent { <H> >- member{ product{'T;x.'U['x]}; "type"[k:l] } }
+   sequent { <H> >- member{ dfun{'T;x.'U['x]}; "type"[k:l] } }
 
 
 (************************************************
@@ -159,20 +171,20 @@ rule prod_types "type"[i:l] "type"[j:l] :
  ************************************************)
 
 rule lam 's:
-   sequent { <H> >- member{ product{'T;x.'U['x]}; 's }  } -->
+   sequent { <H> >- member{ dfun{'T;x.'U['x]}; 's }  } -->
    sequent { <H> >- of_some_sort{'s }  } -->
    sequent { <H>; x:decl{'T} >- member{ 't['x]; 'U['x] }  } -->
-   sequent { <H> >- member{ lambda{'T;x.'t['x]}; product{'T;x.'U['x]} } }
+   sequent { <H> >- member{ lambda{'T;x.'t['x]}; dfun{'T;x.'U['x]} } }
 
 
 (************************************************
  *                                              *
  ************************************************)
 
-rule app product{'U; x.'T['x]} :
-   sequent { <H> >- member{ 't; product{'U; x.'T['x]} }  } -->
+rule app dfun{'U; x.'T['x]} :
+   sequent { <H> >- member{ 't; dfun{'U; x.'T['x]} }  } -->
    sequent { <H> >- member{ 'u;'U }  } -->
-   sequent { <H> >- member{ app{'t;'u}; 'T['u]  } }
+   sequent { <H> >- member{ apply{'t;'u}; 'T['u]  } }
 
 
 (************************************************
@@ -194,11 +206,11 @@ declare red {'x;'t} (* term 'x reduces to term 't in the context H *)
 
 (*
 rule beta :
-   sequent { <H> >- red{ app{ lambda{'T; x.'t['x]}; 'u }; 't['u] } }
+   sequent { <H> >- red{ apply{ lambda{'T; x.'t['x]}; 'u }; 't['u] } }
 *)
 
 rewrite beta :
-   ( app{ lambda{'T; x.'t['x]}; 'u } ) <--> ( 't['u] )
+   ( apply{ lambda{'T; x.'t['x]}; 'u } ) <--> ( 't['u] )
 
 (*
 rule delta_let 'H:
@@ -249,7 +261,7 @@ rule conv_le_4 :
 
 rule conv_le_5 :
    sequent { <H>; x:decl{'T} >- conv_le{ 'T1['x]; 'U1['x] } } -->
-   sequent { <H> >- conv_le{ product{ 'T; x.'T1['x]}; product{ 'T; x.'U1['x] }}}
+   sequent { <H> >- conv_le{ dfun{ 'T; x.'T1['x]}; dfun{ 'T; x.'U1['x] }}}
 
 rule conv_rule 's 'T:
    sequent { <H> >- member{ 'U; 's } } -->

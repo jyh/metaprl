@@ -1,12 +1,12 @@
 OCAMLINCLUDES +=\
    $(addprefix -I , $(SUPPORT_DIRS))\
-	-I ../itt\
    -I ../base
 
 # Library files
 MPFILES =\
    cic_lambda\
-   cic_ind_type
+   cic_ind_type\
+   cic_list
 
 #TEST_FILES =
 #   itt_bugs\

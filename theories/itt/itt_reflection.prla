@@ -5824,7 +5824,7 @@ P	p2589	Number 14472
 O	o2589	location p2588 p2589
 P	p2590	String unfold_max_list
 O	o2590	definition p2590
-NItt_reflection!max_list	max_list	max_list Itt_reflection
+NItt_reflection!max_list	max_list	list_max Itt_nat
 O	o2591	max_list
 T	t2591	o2591 b1063
 B	b2591	t2591

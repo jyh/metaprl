@@ -30,6 +30,7 @@ MPFILES =\
    itt_well_founded\
    itt_decidable\
    itt_bool\
+   itt_list\
    itt_ext_equal\
    itt_pointwise\
    itt_struct2\
@@ -50,7 +51,6 @@ MPFILES =\
    itt_prec\
    itt_srec\
    itt_quotient\
-   itt_list\
    itt_list2\
    itt_fun2\
    itt_union2\

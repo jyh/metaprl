@@ -7,16 +7,16 @@ declare BTerm
 declare Var
 declare subterms{'t}
 declare make_bterm{'bt; 'btl}
+declare is_same_op{'b1; 'b2}
 declare same_op{'b1; 'b2}
 declare simple_bterm{'bt}
 declare var_bterm{'bt}
 declare is_var_bterm{'bt}
 declare subst{'bt; 't}
-declare dest_op{'op;'bt; subterms.'match_case['subterms]; 'orelse}
 
-declare var_arity
+declare var_arity{'t}
 declare subterms_arity{'bt}
-declare depth
+declare depth{'t}
 
 topval unfold_is_bterm : conv
 topval unfold_subterms : conv

@@ -328,7 +328,7 @@ dform parent_df : "parent"{'path; 'opens; 'resources} =
  *)
 dform module_df : "module"[name:s]{'info} =
    szone pushm[4]
-   info["module"] " " slot[name:s] `" = " break slot{'info}
+   info["module"] " " slot[name:s] `" = " hbreak slot{'info}
    ezone popm
 
 dform dform_df : "dform"[name:s]{'modes; 'redex; 'def} =

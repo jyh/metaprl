@@ -331,8 +331,8 @@ dform ifthenelse_df2 : internal :: ifthenelse[start:n, finish:n]{'e1; 'e2; 'e3} 
  *)
 dform for_upto_df1 : for_upto{'e1; 'e2; x. 'e3} =
    pushm[0] push_indent
-   "_for" hspace slot{'x} hspace assign slot{'e2} hspace "_to" slot{'e3} hspace "_do" break
-      slot{'e3} popm break
+   "_for" hspace slot{'x} hspace assign slot{'e2} hspace "_to" slot{'e3} hspace "_do" hbreak
+      slot{'e3} popm hbreak
       "_done" popm
 
 dform for_upto_df2 : internal :: for_upto[start:n, finish:n]{'e1; 'e2; x. 'e3} =
@@ -340,8 +340,8 @@ dform for_upto_df2 : internal :: for_upto[start:n, finish:n]{'e1; 'e2; x. 'e3} =
 
 dform for_downto_df1 : for_downto{'e1; 'e2; x. 'e3} =
    pushm[0] push_indent
-   "_for" hspace slot{'x} hspace assign slot{'e2} hspace "_downto" slot{'e3} hspace "_do" break
-      slot{'e3} popm break
+   "_for" hspace slot{'x} hspace assign slot{'e2} hspace "_downto" slot{'e3} hspace "_do" hbreak
+      slot{'e3} popm hbreak
       "_done" popm
 
 dform for_downto_df2 : internal :: for_downto[start:n, finish:n]{'e1; 'e2; x. 'e3} =

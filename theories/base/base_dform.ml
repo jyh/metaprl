@@ -238,9 +238,9 @@ ml_dform sequent_prl_df : mode["prl"] :: "sequent"{'ext; 'seq} format_term buf =
          let lead = (string_of_int (i + 1)) ^ ". " in
          let _ =
             if i = 0 then
-               format_break buf lead ""
+               format_hbreak buf lead ""
             else
-               format_break buf lead "; ";
+               format_hbreak buf lead "; ";
             match SeqHyp.get hyps i with
                Context (v, values) ->
                   (* This is a context hypothesis *)
@@ -259,9 +259,9 @@ ml_dform sequent_prl_df : mode["prl"] :: "sequent"{'ext; 'seq} format_term buf =
       if i <> len then
          let a = SeqGoal.get goals i in
             if i = 0 then
-               format_break buf "\159 " " \159 "
+               format_hbreak buf "\159 " " \159 "
             else
-               format_break buf "; " "\159 ";
+               format_hbreak buf "; " "\159 ";
             format_term buf NOParens a;
             format_goal goals (i + 1) len
    in
@@ -305,9 +305,9 @@ ml_dform sequent_html_df : mode["html"] :: "sequent"{'ext; 'seq} format_term buf
          let lead = (string_of_int (i + 1)) ^ ". " in
          let _ =
             if i = 0 then
-               format_break buf lead ""
+               format_hbreak buf lead ""
             else
-               format_break buf lead "; ";
+               format_hbreak buf lead "; ";
             match SeqHyp.get hyps i with
                Context (v, values) ->
                   (* This is a context hypothesis *)
@@ -326,9 +326,9 @@ ml_dform sequent_html_df : mode["html"] :: "sequent"{'ext; 'seq} format_term buf
       if i <> len then
          let a = SeqGoal.get goals i in
             if i = 0 then
-               format_break buf "<i>&#8866;</i> " " <i>&#8866;</i> "
+               format_hbreak buf "<i>&#8866;</i> " " <i>&#8866;</i> "
             else
-               format_break buf "; " "<i>&#8866;</i> ";
+               format_hbreak buf "; " "<i>&#8866;</i> ";
             format_term buf NOParens a;
             format_goal goals (i + 1) len
    in
@@ -372,9 +372,9 @@ ml_dform sequent_prl_df : mode["tex"] :: "sequent"{'ext; 'seq} format_term buf =
          let lead = (string_of_int (i + 1)) ^ ". " in
          let _ =
             if i = 0 then
-               format_break buf lead ""
+               format_hbreak buf lead ""
             else
-               format_break buf lead "; ";
+               format_hbreak buf lead "; ";
             match SeqHyp.get hyps i with
                Context (v, values) ->
                   (* This is a context hypothesis *)
@@ -400,7 +400,7 @@ ml_dform sequent_prl_df : mode["tex"] :: "sequent"{'ext; 'seq} format_term buf =
                   format_space buf
                end
             else
-               format_break buf "; " "$\\vdash$ ";
+               format_hbreak buf "; " "$\\vdash$ ";
             format_term buf NOParens a;
             format_goal goals (i + 1) len
    in

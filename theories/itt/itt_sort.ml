@@ -148,7 +148,7 @@ dform sort_df : sort{'l; 'lt} =
    (keyword["sort"] 'l 'lt)
 
 dform list_ind_df : list_ind{'l; 'base; u, v, g. 'step['g]} =
-   szone pushm[0] pushm[1] `"let rec " slot{'g} `" = function" break["",""]
+   szone pushm[0] pushm[1] `"let rec " slot{'g} `" = function" hbreak["",""]
    pushm[5] `"  " cons{'u; 'v} `" ->" hspace slot{'step[('g 'v)]} popm hspace
    pushm[5] `"| [] ->" hspace slot{'base} popm popm hspace
    pushm[3] `"in" hspace slot{'g} `" " slot{'l} popm popm ezone

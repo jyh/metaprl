@@ -43,7 +43,6 @@ declare "location"[start:n, finish:n]{'body}
 
 declare "rewrite"[name:s]{'redex; 'contractum; 'proof; 'res}
 declare "cond_rewrite"[name:s]{'params; 'args; 'redex; 'contractum; 'proof; 'res}
-declare "axiom"[name:s]{'stmt; 'proof; 'res}
 declare "rule"[name:s]{'params; 'stmt; 'proof; 'res}
 declare "opname"[name:s]{'term}
 declare "mlterm"{'term; 'cons; 'oexpr}

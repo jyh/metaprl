@@ -154,14 +154,12 @@ declare "cond_rewrite"[name:s]{'params; 'args; 'redex; 'contractum; 'proof; 'res
 
 (*!
  * @begin[doc]
- * Rules are defined using the @tt[axiom] and
- * @tt[rule] terms.  An axiom is a
- * simple rule with no assumptions; @it{@misspelled{stmt}} is the statement of the axiom, and @it{proof}
+ * Rules are defined using the @tt[rule] term.
+ * The @it{@misspelled{stmt}} is the statement of the rule, and @it{proof}
  * is it's proof.  The rule also includes a @it{param} list that defines the subgoals
- * of the rule.
+ * of the rule and the @it{res} list of resource annotations.
  * @end[doc]
  *)
-declare "axiom"[name:s]{'stmt; 'proof; 'res}
 declare "rule"[name:s]{'params; 'stmt; 'proof; 'res}
 
 (*!
@@ -461,11 +459,6 @@ dform cond_rewrite_df : "cond_rewrite"[name:s]{'params; 'args; 'redex; 'contract
    szone pushm[4]
    ensuremath{'redex} " " ensuremath{longleftrightarrow} hspace ensuremath{'contractum}
    popm ezone
-   popm ezone
-
-dform axiom_df : "axiom"[name:s]{'stmt; 'proof; 'res} =
-   szone pushm[4]
-   ensuremath{'proof} info[" rule"] " " rule_name[name:s] resources{'res} keyword[":"] hspace ensuremath{'stmt}
    popm ezone
 
 dform rule_df : "rule"[name:s]{'params; 'stmt; 'proof; 'res} =

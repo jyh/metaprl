@@ -6,7 +6,7 @@ extends Fol_type
 
 declare "false"
 
-axiom false_type 'H :
+rule false_type 'H :
    sequent ['ext] { 'H >- "type"{."false"} }
 
 (*

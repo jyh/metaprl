@@ -677,7 +677,6 @@ let next_inst inst =
     | LabelRec (_, t, _, _)
     | LabelDef (_, t, _) ->
          1, t
-    | SetMem (_, _, _, t)
     | Inst1Reg (_, _, _, t)
     | Inst2Mem (_, _, _, t)
     | ShiftMem (_, _, _, t)

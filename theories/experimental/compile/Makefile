@@ -51,11 +51,13 @@ MPFILES :=\
 # Register allocation uses lm_libmojave
 #
 ifneq ($(LIBMOJAVE),undefined)
-INCLUDE := $(INCLUDE)\
+INCLUDE := \
+	$(INCLUDE)\
 	-I $(LIBMOJAVE)/naml/stdlib\
-	-I $(LIBMOJAVE)/lm_libmojave/util
+	-I $(LIBMOJAVE)/util
 
 MPFILES :=\
+	$(MPFILES)\
 	m_standardize\
 	m_x86_inst_type\
 	m_x86_term\

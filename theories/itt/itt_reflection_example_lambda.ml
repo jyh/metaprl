@@ -20,6 +20,11 @@ open Basic_tactics
 define app_term : app_term <--> bterm{| >- apply[@]{term[@];term[@]} |}
 define lambda_term: lambda_term <-->  bterm{| >- lambda[@]{x.term[@]} |}
 
+dform app_df: app_term = `"\"apply\""
+dform lsmbda_df: lambda_term = `"\"" lambda "\""
+
+
+
 
 interactive app_wf {| intro[] |}:
    sequent{ <H> >-  app_term in BOperator }
@@ -37,6 +42,9 @@ interactive_rw depth_of_lam {| reduce |}: op_bdepth{lambda_term} <--> 0
 
 
 define mk_app: mk_app <--> lambda {p. spread{'p; t1,t2. make_bterm{app_term;bdepth{'t1}; 't1::'t2::nil}}}
+
+dform mk_app_df: mk_app = `"mk_app"
+
 
 interactive_rw mk_app2 {| reduce |}: mk_app ('f,'a) <-->  make_bterm{app_term;bdepth{'f}; 'f::'a::nil}
 
@@ -61,6 +69,9 @@ interactive dom_app_subtype  {| intro[] |}:
 
 define mk_lambda: mk_lambda <--> lambda {t. make_bterm{lambda_term;bdepth{'t}-@1; 't::nil}}
 
+dform mk_lambda_df: mk_lambda = `"mk_lambda"
+
+
 interactive_rw mk_lambda2 {| reduce |}: mk_lambda 'f <-->  make_bterm{lambda_term;bdepth{'f}-@1; 'f::nil}
 
 define dom_lambda: dom_lambda{'T} <--> {t:BTerm isect 'T | bdepth{'t} >= 1}
@@ -80,6 +91,9 @@ define mk: mk <-->
       orelse.decide{'orelse;
       (* app a *) a.mk_app 'a;
       (* lam l *) l.mk_lambda 'l}}}
+
+dform mk_df: mk = `"mk"
+
 
 interactive dom_wf  {| intro[] |}:
    sequent { <H> >- "type"{'T} } -->
@@ -132,12 +146,18 @@ define dest: dest <-->
             dest_app {'t; a,b. inr{('a,'b)};
             it }}}}
 
+dform dest_df: dest = `"dest"
+
+
 interactive mk_reverse {| intro[] |} :
    sequent { <H> >- 'T subtype BTerm } -->
    sequent { <H> >- dest in RReverse{mk; dom{'T}; BTerm} }
 
 
 define lambdaTerm: LambdaTerm <--> srec{X. Img{mk; dom{'X}; BTerm}}
+
+dform mk_lambda_df: LambdaTerm = `"Term" sub{lambda}
+
 
 interactive lambda_term_induction  {| elim[] |} 'H:
    sequent { <H>; <J>; v:Var >- 'P[ 'v ] } -->

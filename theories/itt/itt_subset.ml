@@ -80,7 +80,7 @@ extends Itt_bool
 extends Itt_int_base
 extends Itt_ext_equal
 
-doc <:doc< @docoff >>
+doc docoff
 
 open Printf
 open Mp_debug
@@ -135,7 +135,7 @@ define unfold_subset : "subset"{'A; 'B} <-->
 
 define member : member{'a; 'A; 'B} <--> mem{'a; 'A; 'B} & 'A subset 'B & 'a in 'B
 
-doc <:doc< @docoff >>
+doc docoff
 
 let fold_subset = makeFoldC << 'A subset 'B >> unfold_subset
 
@@ -207,7 +207,7 @@ interactive subset_intro {| intro [] |}  :
    [main] sequent [squash] { <H>; a: 'A; b: 'B; u: 'a = 'b in 'B >- 'b in 'A } -->
    sequent ['ext] { <H> >- 'A subset 'B }
 
-doc <:doc< @docoff >>
+doc docoff
 
 (* mem, member and subset are squash stable: *)      
       
@@ -328,8 +328,8 @@ doc <:doc<
    @begin[doc]
    Note that the truth of predicate $<<'a in 'A subset 'B>>$ does not depend on $B$ whenever
    $<<'A subtype 'B>>$ and this predicate is well-formed.
+   This fact establishes a validity of introducing a binary membership $<<'a in 'A>>$ with the liberal well-formedness rule.
    @end[doc]
-   This fact establishes a validity of introducing a binary membership <<'a in 'A>> with the liberal well-formedness rule.
 >>
 
 interactive member_doesnot_depend_on_B  'H:
@@ -337,7 +337,7 @@ interactive member_doesnot_depend_on_B  'H:
    sequent [squash] { <H> >- 'A subtype '"B'" } -->
    sequent ['ext] { <H>; u: 'a in 'A subset 'B >- 'a in 'A subset '"B'" }
 
-doc <:doc< @docoff >>
+doc docoff
       
 (*
  * -*-

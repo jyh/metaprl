@@ -48,22 +48,43 @@ open Simple_print.SimplePrint
 
 open Printf
 
+(* General functions. *)
+
+let print_head name fir_obj =
+   printf "test_%s:\n%s\n" name fir_obj
+
+let print_pass () =
+   printf "\nTest passes.\n\n"
+
+let print_fail () =
+   printf "\n===> TEST FAILS! <===\n\n"
+
 (*************************************************************************
  * Define test functions.
  *************************************************************************)
 
+let test_tyInt () =
+   print_head "tyInt" "TyInt";
+   let t = term_of_ty TyInt in
+   let t' = ty_of_term t in
+      print_simple_term t;
+      match t' with
+         TyInt -> print_pass ()
+       | _     -> print_fail ()
+
 let test_tyEnum () =
-   printf "test_tyEnum: (TyEnum 12)\n";
+   print_head "tyEnum" "TyEnum 12";
    let t = term_of_ty (TyEnum 12) in
    let t' = ty_of_term t in
       print_simple_term t;
       match t' with
-         TyEnum 12 -> printf "\nTest passes.\n\n"
-       | _ -> printf "\nTest FAILS.\n\n"
+         TyEnum 12   -> print_pass ()
+       | _           -> print_fail ()
 
 (*************************************************************************
  * Define a function to run all the above tests.
  *************************************************************************)
 
 let run_tests () =
-   test_tyEnum ()
+   test_tyInt     ();
+   test_tyEnum    ()

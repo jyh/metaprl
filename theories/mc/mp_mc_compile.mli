@@ -1,8 +1,7 @@
 (*
  * Functional Intermediate Representation formalized in MetaPRL.
  *
- * A test program to test MC <--> MetaPRL FIR translation code.
- * This module tests FIR expressions.
+ * Provides the primary interface to the MC compiler.
  *
  * ----------------------------------------------------------------
  *
@@ -34,7 +33,7 @@
 include Base_theory
 
 (*
- * Run all the tests defined in this suite.
+ * This is an identity operation for an FIR program.
  *)
 
-val run_tests : unit -> unit
+val compile : Fir.prog -> Fir.prog

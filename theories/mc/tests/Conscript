@@ -22,7 +22,7 @@ $env = $env->clone(
                "$env->{MC}/fir/util",
                "$env->{MC}/fir/opt"],
       OCAMLLINK => "$env->{OCAMLLINK} -I /usr/lib/camlp4",
-      OCAMLCFLAGS => "-thread -linkall",
+      OCAMLCFLAGS => "-thread",
       MLLIBS    => "unix.cmxa threads.cmxa odyl.cmxa camlp4.cmxa pa_o.cmx",
       CCLIBS    => "-cclib clib/clib.a -cclib $env->{MC}/lib/cutil/libcutil.a"
    );

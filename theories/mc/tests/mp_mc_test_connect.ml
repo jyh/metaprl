@@ -33,4 +33,5 @@
 include Base_theory
 
 let _ =
-   Mp_mc_test_connect_ty.run_tests ()
+   Mp_mc_test_connect_ty.run_tests ();
+   Mp_mc_test_connect_exp.run_tests ()

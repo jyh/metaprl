@@ -35,6 +35,7 @@ if(defined($ENV{'MC_ROOT'})) {
       'mp_mc_connect_ty.ml',
       'mp_mc_connect_exp.ml',
       'mp_mc_connect.ml',
+      'mp_mc_compile.ml',
       'mp_mc_theory.ml',
       'fir_test.ml';
    OCamlLibrary $env 'base',
@@ -49,6 +50,7 @@ if(defined($ENV{'MC_ROOT'})) {
       'mp_mc_connect_ty',
       'mp_mc_connect_exp',
       'mp_mc_connect',
+      'mp_mc_compile',
       'mp_mc_theory',
       'fir_test';
    Default qw( base.cmxa );

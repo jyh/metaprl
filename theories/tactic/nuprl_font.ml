@@ -242,7 +242,6 @@ dform cd_end_df2 : internal :: mode[html] :: cd_end =
  * DISPLAY FORMS                                                        *
  ************************************************************************)
 
-(*
 dform info_begin_df : internal :: info_begin =
    izone `"<font color=\"#115599\"><b>" ezone
 
@@ -260,127 +259,6 @@ dform keyword_begin_df : internal :: keyword_begin =
 
 dform keyword_end_df : internal :: keyword_end =
    izone `"</b></font>" ezone
-
-dform keyword_df1 : internal :: keyword[text:s] =
-   keyword_begin slot[text:s] keyword_end
-
-dform keyword_df2 : internal :: keyword{'t} =
-   keyword_begin 't keyword_end
-
-dform bf_begin_df : internal :: bf_begin =
-   izone `"<b>" ezone
-
-dform bf_end_df : internal :: bf_end =
-   izone `"</b>" ezone
-
-dform bf_df1 : internal :: bf[text:s] =
-   bf_begin slot[text:s] bf_end
-
-dform bf_df2 : internal :: bf{'t} =
-   bf_begin 't bf_end
-
-dform it_begin_df : internal :: it_begin =
-   izone `"<b>" ezone
-
-dform it_end_df : internal :: it_end =
-   izone `"</b>" ezone
-
-dform it_df1 : internal :: it[text:s] =
-   it_begin slot[text:s] it_end
-
-dform it_df2 : internal :: it{'t} =
-   it_begin 't it_end
-
-dform sym_begin_df : internal :: sym_begin =
-   izone `"<b>" ezone
-
-dform sym_end_df : internal :: sym_end =
-   izone `"</b>" ezone
-
-dform sym_df1 : internal :: sym[text:s] =
-   sym_begin slot[text:s] sym_end
-
-dform sym_df2 : internal :: sym{'t} =
-   sym_begin 't sym_end
-
-dform em_begin_df : internal :: em_begin =
-   izone `"<em>" ezone
-
-dform em_end_df : internal :: em_end =
-   izone `"</em>" ezone
-
-dform em_df1 : internal :: em[text:s] =
-   em_begin slot[text:s] em_end
-
-dform em_df2 : internal :: em{'t} =
-   em_begin 't em_end
-
-dform tt_begin_df : internal :: tt_begin =
-   izone `"<tt>" ezone
-
-dform tt_end_df : internal :: tt_end =
-   izone `"</tt>" ezone
-
-dform tt_df1 : internal :: tt[text:s] =
-   tt_begin slot[text:s] tt_end
-
-dform tt_df2 : internal :: tt{'t} =
-   tt_begin 't tt_end
-
-dform sub_begin_df : internal :: sub_begin =
-   izone `"<sub>" ezone
-
-dform sub_end_df : internal :: sub_end =
-   izone `"</sub>" ezone
-
-dform sub_df1 : internal :: sub[text:s] =
-   sub_begin slot[text:s] sub_end
-
-dform sub_df2 : internal :: sub{'t} =
-   sub_begin 't sub_end
-
-dform sup_begin_df : internal :: sup_begin =
-   izone `"<sup>" ezone
-
-dform sup_end_df : internal :: sup_end =
-   izone `"</sup>" ezone
-
-dform sup_df1 : internal :: sup[text:s] =
-   sup_begin slot[text:s] sup_end
-
-dform sup_df2 : internal :: sup{'t} =
-   sup_begin 't sup_end
-
-dform small_begin_df : internal :: small_begin =
-   izone `"<small>" ezone
-
-dform small_end_df : internal :: small_end =
-   izone `"</small>" ezone
-
-dform small_df1 : internal :: small[text:s] =
-   small_begin slot[text:s] small_end
-
-dform small_df2 : internal :: small{'t} =
-   small_begin 't small_end
-*)
-
-dform info_begin_df : internal :: info_begin =
-   izone `"<b>" ezone
-
-dform info_end_df : internal :: info_end =
-   izone `"</b>" ezone
-
-dform info_df1 : internal :: info[text:s] =
-   info_begin slot[text:s] info_end
-
-dform info_df2 : internal :: info{'t} =
-   info_begin 't info_end
-
-dform keyword_begin_df : internal :: keyword_begin =
-   izone `"<b>" ezone
-
-dform keyword_end_df : internal :: keyword_end =
-   izone `"</b>" ezone
 
 dform keyword_df1 : internal :: keyword[text:s] =
    keyword_begin slot[text:s] keyword_end

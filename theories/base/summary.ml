@@ -300,7 +300,7 @@ dform begin_cd_tex_df : internal :: begin_cd{'path} =
 dform end_cd_tex_df : internal :: end_cd =
    `""
 
-dform begin_cd_df1 : internal :: mode[html] :: begin_cd{'path} =
+dform begin_cd_df1 : internal :: mode[htmltmlx] :: begin_cd{'path} =
    izone `"<a href=\"http://cd.metaprl.local//" cdinternal{'path}
 
 dform cd_internal_df1 : internal :: mode[html] :: cdinternal{cons{."parent"[name:s]; cons{'n2; 'n3}}} =
@@ -456,6 +456,9 @@ dform proof_df : internal :: proof{'main; goal_list{'goal}; 'text; 'subgoals} =
 
 dform goals_df : internal :: goals_df{goal{'status; 'label; 'assums; 'goal}; 'cache} =
    'status `"[" goal_list_status{'cache} `"]" newline 'label msequent{'assums; 'goal}
+
+dform goal_df : internal :: goal{'status; 'label; 'assums; 'goal} =
+   'status `"[]" newline 'label msequent{'assums; 'goal}
 
 dform goal_list_status_df1 : internal :: goal_list_status{cons{goal{goal_status{'status}; 'label; 'assums; 'goal}; cons{'hd; 'tl}}} =
    df_last{'status} `" " goal_list_status{cons{'hd; 'tl}}

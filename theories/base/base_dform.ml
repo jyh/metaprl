@@ -85,12 +85,8 @@ dform var_prl_df : mode[prl] :: var[v:v] =
 dform var_tex_df : mode[tex] :: var[v:v] =
    izone `"{\\it " ezone slot[v:s] izone `"\\/}" ezone
 
-(*
 dform var_html_df : mode[html] :: var[v:v] =
    izone `"<font color=\"#114466\"><b>" ezone slot[v:s] izone `"</b></font>" ezone
-*)
-dform var_html_df : mode[html] :: var[v:v] =
-   izone `"<b>" ezone slot[v:s] izone `"</b>" ezone
 
 dform so_var1_df : var[v:v]{'x1} = var[v:v] "[" 'x1  "]"
 

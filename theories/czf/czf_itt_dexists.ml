@@ -1,6 +1,4 @@
 doc <:doc<
-   @spelling{dexists}
-
    @begin[doc]
    @module[Czf_itt_dexists]
 

@@ -1,10 +1,8 @@
 doc <:doc<
-   @spelling{abelNormalSubgT}
-
    @begin[doc]
    @module[Czf_itt_normal_subgroup]
 
-   The @tt{Czf_itt_normal_subgroup} module defines normal subgroups.
+   The @tt[Czf_itt_normal_subgroup] module defines normal subgroups.
    A subgroup $h$ of a group $g$ is @emph{normal} if its left and
    right cosets coincide, that is, if
    $$@forall a @in @car{g}. @equal{@lcoset{h; g; a}; @rcoset{h; g; a}}$$

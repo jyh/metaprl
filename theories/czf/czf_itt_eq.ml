@@ -1,17 +1,13 @@
-doc <:doc< 
-   @begin[spelling]
-   Ref Sym Trans eq dfun eqSet setSubstT
-   @end[spelling]
-  
+doc <:doc<
    @begin[doc]
    @module[Czf_itt_eq]
-  
-   The @tt{Czf_itt_eq} module defines @emph{extensional} equality
+
+   The @tt[Czf_itt_eq] module defines @emph{extensional} equality
    of sets.  Sets are equal if they have the same members, and in addition
    the equality must be @emph{computable}.  The basic definition of
    equality is given with the @tt{eq} term, which is defined
    as follows.
-  
+
    $$
    @begin[array, l]
    @line{@item{@eq{@collect{x_1; T_1; f_1[x_1]}; @collect{x_2; T_2; f_2[x_2]}} @equiv}}
@@ -21,18 +17,18 @@ doc <:doc<
      @wedge @forall x_2@colon T_2. @exists x_1@colon T_2. @eq{f_{1}[x_1]; f_{2}[x_2]}}}
    @end[array]
    $$
-  
+
    This recursive definition requires that for each element of one set,
    there must be an equal element in the other set.  The proof of an
    equality is a pair of functions that, given an element of one set,
    produce the equal element in the other set.  Note that there is
    significant computational content in this judgment.
-  
+
    The @tt{eq} judgment is a predicate in $@univ{1}$ for any two
    sets.  The $@equal{s_1; s_2}$ judgment adds the additional requirement
    $@isset{s_1} @wedge @isset{s_2}$ (which raises it to a predicate
    in $@univ{2}$).
-  
+
    In addition to the equality judgments, the @tt{Czf_itt_eq} module
    also defines @emph{functionality} judgments.  The $@funset{s; f[s]}$
    requires that the function $f$ compute equal set values for equal
@@ -43,42 +39,42 @@ doc <:doc<
    a type for any $x @in A$.  The judgment requires that a proof
    $B[u_2]$ be computable from @emph{any} two proofs $u_1@colon A$
    and $u_2@colon A$ and a proof $B[u_1]$:
-  
+
    $$
    @dfunprop{x; A; B[x]} @equiv u_1@colon A @rightarrow
         B[u_1] @rightarrow u_2@colon A @rightarrow B[u_2].
    $$
-  
+
    The @tt{dfun_prop} term is used for functionality judgments
    on dependent types.
    @end[doc]
-  
+
    ----------------------------------------------------------------
-  
+
    @begin[license]
    This file is part of MetaPRL, a modular, higher order
    logical framework that provides a logical programming
    environment for OCaml and other languages.
-  
+
    See the file doc/index.html for information on Nuprl,
    OCaml, and more information about this system.
-  
+
    Copyright (C) 1998 Jason Hickey, Cornell University
-  
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
    as published by the Free Software Foundation; either version 2
    of the License, or (at your option) any later version.
-  
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-  
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-  
+
    Author: Jason Hickey
    @email{jyh@cs.cornell.edu}
    @end[license]
@@ -145,10 +141,10 @@ let mk_fun_prop_term = mk_dep1_term fun_prop_opname
  * REWRITES                                                             *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @rewrites
-  
+
    The @tt{eq} judgment requires that the two sets
    have the same elements.
    @end[doc]
@@ -163,7 +159,7 @@ interactive_rw reduce_eq {| reduce |} : eq{collect{'T1; x1. 'f1['x1]}; collect{'
    ((all y1 : 'T1. exst y2: 'T2. eq{.'f1['y1]; .'f2['y2]})
     & (all y2 : 'T2. exst y1: 'T1. eq{.'f1['y1]; .'f2['y2]}))
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    The @tt{unfold_equal} term requires that, in addition, the two arguments
    must be sets.
@@ -177,7 +173,7 @@ interactive_rw reduce_equal {| reduce |} : (collect{'T1; x1. 'f1['x1]} = collect
    & ((all y1 : 'T1. exst y2: 'T2. eq{.'f1['y1]; .'f2['y2]})
      & (all y2 : 'T2. exst y1: 'T1. eq{.'f1['y1]; .'f2['y2]})))
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    The following four rewrites define the functionality judgments.
    @end[doc]
@@ -220,7 +216,7 @@ dform dfun_prop_df : except_mode[src] :: parens :: "prec"[prec_apply] :: dfun_pr
  * RULES                                                                *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @rules
    @modsubsection{Typehood and equality}
@@ -250,7 +246,7 @@ interactive eq_equality2 {| intro [] |} :
    sequent { <H> >- 's2 = 's4 in set } -->
    sequent { <H> >-  eq{'s1; 's2}=  eq{'s3; 's4} in univ[1:l]  }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    The @tt{eq} judgment also requires the arguments to be sets,
    but in addition, and equality judgment $@equal{s_1; s_2}$ @emph{implies}
@@ -279,7 +275,7 @@ interactive equal_isset_right 's1 :
    sequent { <H> >- equal{'s1; 's2} } -->
    sequent { <H> >- isset{'s2} }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Equality is an equivalence relation}
    The @tt{eq} judgment is reflexive, symmetric, and
@@ -310,7 +306,7 @@ interactive eq_trans 's2 :
    sequent { <H> >- eq{'s2; 's3} } -->
    sequent { <H> >- eq{'s1; 's3} }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Functionality}
    The $@funset{z; f[z]}$ judgment implies that $f[z]$ is a
@@ -328,7 +324,7 @@ let funSetT = argfunT (fun i p ->
    let t = mk_fun_set_term z t in
       eq_isset (Sequent.get_pos_hyp_num p i) t)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    The @tt{eq} and @tt{equal} judgments are
    @emph{functional} with respect to their set arguments.
@@ -344,10 +340,10 @@ interactive equal_fun {| intro [] |} :
    sequent { <H> >- fun_set{z. 'f2['z]} } -->
    sequent { <H> >- fun_prop{z. 'f1['z] = 'f2['z]} }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Substitution}
-  
+
    The following two rules define substitution.
    Set $s_1$ can be replaced by set $s_2$ in a context
    $P[s_1]$ if $s_1$ an $s_2$ are equal, and the
@@ -366,7 +362,7 @@ interactive eq_concl_subst 's1 's2 (bind{v. 'C['v]}) :
    sequent { <H> >- fun_prop{z. 'C['z]} } -->
    sequent { <H> >- 'C['s1] }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Typehood of the functionality judgments}
    The @tt{fun_set} judgment requires that it's argument
@@ -382,7 +378,7 @@ interactive fun_prop_type {| intro [] |} :
    sequent { <H>; z: set >- "type"{'f['z]} } -->
    sequent { <H> >- "type"{fun_prop{z. 'f['z]}} }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    The trivial cases, where the functionality argument
    does not depend on the set argument, are functional.
@@ -404,10 +400,10 @@ interactive fun_prop {| intro [] |} :
  * TACTICS                                                              *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Substitution}
-  
+
    @begin[description]
    @item{@tactic[setSubstT];
      The @tt{setSubstT} tactic @emph{substitutes} one set for
@@ -442,10 +438,10 @@ let setSubstT t i =
    else
       setHypSubstT t i
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @tactics
-  
+
    @begin[description]
    @item{@tactic[eqSetRefT], @tactic[eqSetSymT], @tactic[eqSetTransT];
       The three @tt{eqSet} tactics apply equivalence

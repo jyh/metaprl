@@ -1,10 +1,8 @@
 doc <:doc<
-   @spelling{power}
-
    @begin[doc]
    @module[Czf_itt_group_power]
 
-   The @tt{Czf_itt_group_power} module defines the power operation
+   The @tt[Czf_itt_group_power] module defines the power operation
    in a group, i.e., it describes $x^n = x * x * ... * x$.
 
    $x^n$ is defined by induction on $n$ as

@@ -1,6 +1,4 @@
 doc <:doc<
-   @spelling{abel}
-
    @begin[doc]
    @module[Czf_itt_abel_group]
 

@@ -1,10 +1,8 @@
 doc <:doc<
-   @spelling{groupCancelLeftT groupCancelRightT uniqueInvLeftT uniqueInvRightT}
-
    @begin[doc]
    @module[Czf_itt_group]
 
-   The @tt{Czf_itt_group} module defines groups. Each group
+   The @tt[Czf_itt_group] module defines groups. Each group
    is assigned a label, such as $g$. The predicate $@group{g}$
    is used to represent "$g$ is a group". The carrier set,
    operation, identity, and inverse of the group are defined

@@ -1,10 +1,8 @@
 doc <:doc<
-   @spelling{inv_image}
-
    @begin[doc]
    @module[Czf_itt_inv_image]
 
-   The @tt{Czf_itt_inv_image} module defines the @emph{inverse image}
+   The @tt[Czf_itt_inv_image] module defines the @emph{inverse image}
    of a set under some mapping. The inverse image is defined as a set
    constructor $@invimage{x; s; t; a[x]}$. The term $s$ and $t$ must
    be sets, and $a[x]$ must be functional. The elements of the inverse

@@ -1,6 +1,4 @@
 doc <:doc<
-   @spelling{dall}
-
    @begin[doc]
    @module[Czf_itt_dall]
 

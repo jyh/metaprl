@@ -1,50 +1,46 @@
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @module[Czf_itt_member]
-  
-   The @tt{Czf_itt_member} module defines membership in a set.
+
+   The @tt[Czf_itt_member] module defines membership in a set.
    The basic definition is an existential judgment: a set $s$
    is an element of a set $@collect{x; T; f[x]}$ if there is
    some element $a@colon T$ and $@eq{s; f[a]}$.
-  
+
    Note that equality has to be defined @emph{before} membership.
    We also prove the @emph{extensionality} judgment here; two sets
    are equal if they have the same members.
    @end[doc]
-  
+
    ----------------------------------------------------------------
-  
+
    @begin[license]
    This file is part of MetaPRL, a modular, higher order
    logical framework that provides a logical programming
    environment for OCaml and other languages.
-  
+
    See the file doc/index.html for information on Nuprl,
    OCaml, and more information about this system.
-  
+
    Copyright (C) 1998 Jason Hickey, Cornell University
-  
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
    as published by the Free Software Foundation; either version 2
    of the License, or (at your option) any later version.
-  
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-  
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-  
+
    Author: Jason Hickey
    @email{jyh@cs.cornell.edu}
    @end[license]
-  
-   @begin[spelling]
-   memberOfT setExtT setOfT
-   @end[spelling]
 >>
 
 doc <:doc< @doc{@parents} >>
@@ -60,10 +56,10 @@ open Itt_rfun
  * TERMS                                                                *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @terms
-  
+
    The @tt{member} term defines the membership judgment.
    @end[doc]
 >>
@@ -74,10 +70,10 @@ declare member{'x; 'y}
  * DEFINITIONS                                                          *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @rewrites
-  
+
    The @tt{member} judgment is defined using the @hrefterm[set_ind]
    induction combinator.
    @end[doc]
@@ -110,11 +106,11 @@ dform member_df : except_mode[src] :: parens :: "prec"[prec_apply] :: member{'x;
  * RULES                                                                *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @rules
    @modsubsection{Well-formedness}
-  
+
    The @tt{member} judgment is well-formed if-and-only-if its arguments are
    sets.
    @end[doc]
@@ -152,7 +148,7 @@ interactive set_isset 'x :
    sequent { <H> >- member{'x; 'y} } -->
    sequent { <H> >- isset{'y} }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Functionality}
    The @tt{member} judgment is functional in both its arguments.
@@ -183,7 +179,7 @@ doc <:doc< @docoff >>
 
 let memSubstRightT = mem_fun_right
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    The @tt{member_fun} rule proves the general functionality
    judgment.
@@ -194,10 +190,10 @@ interactive member_fun {| intro [] |} :
    sequent { <H> >- fun_set{z. 'f2['z]} } -->
    sequent { <H> >- fun_prop{z. mem{'f1['z]; 'f2['z]}} }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Set extensionality}
-  
+
    Two sets are equal if-and-only-if they have the same elements.
    The proof of this theorem is straightforward.  The two membership
    goals are the functions that ``choose,'' for any element of
@@ -217,10 +213,10 @@ doc <:doc< @docoff >>
  * TACTICS                                                              *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @tactics
-  
+
    @begin[description]
    @item{@tactic[memberOfT], @tactic[setOfT];
      The @tt{memberOfT} applies the @hrefrule[elem_isset] rule, and
@@ -234,7 +230,7 @@ doc <:doc<
 let memberOfT = elem_isset
 let setOfT = set_isset
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @begin[description]
    @item{@tactic[setExtT];

@@ -108,7 +108,7 @@ doc <:doc<
    on a specific proposition $P$, then tries to eliminate the first subgoal.
 
    $$
-   @rulebox{@misspelled{decideT}; P;
+   @rulebox{decideT; P;
      <<sequent{ <H> >- decidable{'P}}>>@cr
        <<sequent{ <H>; x: 'P >- 'C}>>@cr
        <<sequent{ <H>; x: not{'P} >- 'C}>>;

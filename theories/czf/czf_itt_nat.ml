@@ -1,15 +1,13 @@
-doc <:doc< 
-   @spelling{nat natIndT succ}
-  
+doc <:doc<
    @begin[doc]
    @module[Czf_itt_nat]
-  
-   The @tt{Czf_itt_nat} module defines the infinite set $@inf$.
+
+   The @tt[Czf_itt_nat] module defines the infinite set $@inf$.
    We use the definition of $@inf$ as the definition of the
    natural numbers.  The @tt{zero} term represents the zero,
    and the @tt{succ} term $@succ{i}$ represents $i + 1$.
    The construction is the usual ordinal construction.
-  
+
    $$
    @begin[array, lcl]
    @line{@zero @equiv @empty}
@@ -18,43 +16,43 @@ doc <:doc<
    @line{@succ{i} @equiv @union{i; @sing{i}}}
    @end[array]
    $$
-  
+
    The definition of the $@inf$ set uses the @hrefterm[list]
    type as an index type, and it codes the elements using
    the list induction combinator.
-  
+
    $$@inf @equiv @collect{l; @list{@unit}; @listind{l; @zero; h; t; g; @succ{g}}}$$
-  
+
    We also define the usual ordering $@lt{i; j}$ on numbers (this
    is just a membership judgment).
    @end[doc]
-  
+
    ----------------------------------------------------------------
-  
+
    @begin[license]
    This file is part of MetaPRL, a modular, higher order
    logical framework that provides a logical programming
    environment for OCaml and other languages.
-  
+
    See the file doc/index.html for information on Nuprl,
    OCaml, and more information about this system.
-  
+
    Copyright (C) 1998 Jason Hickey, Cornell University
-  
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
    as published by the Free Software Foundation; either version 2
    of the License, or (at your option) any later version.
-  
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-  
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-  
+
    Author: Jason Hickey
    @email{jyh@cs.cornell.edu}
    @end[license]
@@ -92,10 +90,10 @@ doc <:doc< @docoff >>
  * REWRITES                                                             *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @rewrites
-  
+
    The following four rewrites give the definition
    of the natural numbers.  The $@inf$ set itself is an
    ordinal construction.
@@ -134,11 +132,11 @@ dform lt_df : parens :: "prec"[prec_compare] :: lt{'i; 'j} =
  * RULES                                                                *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @rules
    @modsubsection{Well-formedness}
-  
+
    Zero is a set, and the successor of @emph{any} set
    is a set.  Infinity is also a set.
    @end[doc]
@@ -157,7 +155,7 @@ interactive succ_fun {| intro [] |} :
    sequent { <H> >- fun_set{z. 's['z]} } -->
    sequent { <H> >- fun_set{z. succ{'s['z]}} }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @noindent
    The zero is also a number, and the successor is a number
@@ -172,10 +170,10 @@ interactive succ_isnat {| intro [] |} :
    sequent { <H> >- mem{'i; inf} } -->
    sequent { <H> >- mem{succ{'i}; inf} }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Induction}
-  
+
    The induction rule performs induction on an
    arbitrary number expression in the goal.  The goal
    must be functional over @emph{all} sets.  The induction
@@ -192,10 +190,10 @@ interactive nat_elim bind{z. 'C['z]} 'i :
    ["step"] sequent { <H>; j: set; u: mem{'j; inf}; v: 'C['j] >- 'C[succ{'j}] } -->
    sequent { <H> >- 'C['i] }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Functionality}
-  
+
    The $@lt{i; j}$ relation is functional on its arguments,
    and it is also a restricted proposition.
    @end[doc]
@@ -210,13 +208,13 @@ interactive lt_restricted {| intro [] |} :
    ["wf"] sequent { <H> >- isset{'s2} } -->
    sequent { <H> >- restricted{lt{'s1; 's2}} }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Zero}
-  
+
    The following three rules characterize the @tt{zero}
    set.  Zero is a number that is smaller than every successor.
-  
+
    The rules play a crucial rule in forcing the $@inf$ set to be
    infinite.  Induction by itself is not sufficient, because the
    induction rule is valid if all the numbers are equal.  The
@@ -233,10 +231,10 @@ interactive zero_member_elim {| elim [] |} 'H :
    ["wf"] sequent { <H>; x: lt{'i; zero}; <J['x]> >- mem{'i; inf} } -->
    sequent { <H>; x: lt{'i; zero}; <J['x]> >- 'T['x] }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Successor}
-  
+
    The following two rules characterize the successor.
    The relation $@lt{@succ{i}; @succ{j}}$ is true if-and-only-if
    $@lt{i; j}$.  With these final rules, we can show that
@@ -258,10 +256,10 @@ interactive succ_member_elim1 {| elim [] |} 'H :
    sequent { <H>; x: lt{succ{'i}; succ{'j}}; <J['x]>; w: lt{'i; 'j} >- 'T['x] } -->
    sequent { <H>; x: lt{succ{'i}; succ{'j}}; <J['x]> >- 'T['x] }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @tactics
-  
+
    @begin[description]
    @item{@tactic[natIndT];
       The (@tt{natIndT} @i{t}) tactic performs induction on

@@ -1,10 +1,8 @@
 doc <:doc<
-   @spelling{group_bvd}
-
    @begin[doc]
    @module[Czf_itt_group_bvd]
 
-   The @tt{Czf_itt_group_bvd} module defines the @emph{group builder}
+   The @tt[Czf_itt_group_bvd] module defines the @emph{group builder}
    which builds a new group $g_1$ from an existing group $g_2$ which
    shares the same operation, but has a different carrier which must
    be a subset of the underlying set of $g_2$. The same operation

@@ -390,7 +390,7 @@ doc <:doc<
 
 
    $$
-   @rulebox{@tt[foldAdditiveT] <<'F>>; ;
+   @rulebox{foldAdditiveT; <<'F>>;
      <<sequent(nil){ <H> >- 'a +['F] 'F^"0" = 'a in 'F^car }>>;
      <<sequent(nil){ <H> >- 'a *[as_additive{'F}] as_additive{'F}^"1" = 'a in as_additive{'F}^car }>>}
    $$
@@ -401,7 +401,7 @@ doc <:doc<
 
       Then
    $$
-   @rulebox{@tt[unfoldAdditiveT] <<'F>>; ;
+   @rulebox{unfoldAdditiveT; <<'F>>;
      <<sequent(nil){ <H> >- 'a in as_additive{'F}^car }>>;
      <<sequent(nil){ <H> >- 'a in 'F^car }>>}
    $$
@@ -453,13 +453,13 @@ doc <:doc<
          <<group_mult{'R;'a;'n}>> by <<group_power{as_additive{'R}; 'a; 'n}>>
         and visa versa:
    $$
-   @rulebox{@tt[foldAdditiveT] <<'R>>; ;
+   @rulebox{foldAdditiveT; <<'R>>;
      <<sequent(nil){ <H> >- group_mult{'R; 'a; 0} = 'R^"0" in 'R^car}>>;
      <<sequent(nil){ <H> >- group_power{as_additive{'R}; 'a; 0} = as_additive{'R}^"1" in as_additive{'R}^car}>>}
    $$
 
    $$
-   @rulebox{@tt[unfoldAdditiveT] <<'R>>; ;
+   @rulebox{unfoldAdditiveT; <<'R>>;
      <<sequent(nil){ <H> >- group_power{as_additive{'R}; 'a; 0} = as_additive{'R}^"1" in as_additive{'R}^car}>>;
      <<sequent(nil){ <H> >- group_mult{'R; 'a; 0} = 'R^"0" in 'R^car}>>}
    $$
@@ -577,7 +577,7 @@ doc <:doc<
    @begin[doc]
          Then we can use @hreftactic[reverseOrderT] tactic on the goal << min{'ord;'a;'b} <['ord] 'a>>:
          $$
-            @rulebox{@tt[reverseOrderT] <<'ord>>; ;
+            @rulebox{reverseOrderT; <<'ord>>;
                <<sequent{ <H> >-  min{'ord;'a;'b} <['ord] 'a } >>;
                <<sequent{ <H> >-  max{reverse_order{'ord};'a;'b} >[reverse_order{'ord}] 'a }>>}
          $$

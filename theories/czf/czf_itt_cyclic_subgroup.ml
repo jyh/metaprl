@@ -1,6 +1,4 @@
 doc <:doc<
-   @spelling{cycgroup}
-
    @begin[doc]
    @module[Czf_itt_cyclic_subgroup]
 

@@ -1,10 +1,8 @@
 doc <:doc<
-   @spelling{iso}
-
    @begin[doc]
    @module[Czf_itt_iso]
 
-   The @tt{Czf_itt_iso} module defines the isomorphism.
+   The @tt[Czf_itt_iso] module defines the isomorphism.
    @end[doc]
 
    ----------------------------------------------------------------

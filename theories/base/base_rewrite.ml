@@ -1,14 +1,14 @@
 doc <:doc<
-   @spelling{rewriter rw}
+   @spelling{rewriter}
 
    @begin[doc]
    @module[Base_rewrite]
 
    The rewrite judgment $t_1 @longleftrightarrow t_2$ is used in rewrite
-   derivations.  Derived rewrites are declared with the @bf{interactive_rw}
+   derivations.  Derived rewrites are declared with the @tt[interactive_rw]
    form, as follows:
 
-   @bf{interactive_rw} @it{name} : $t_1 @longleftrightarrow t_2$
+   @tt[interactive_rw] @it{name} : $t_1 @longleftrightarrow t_2$
 
    When a rewrite is declared, the @MetaPRL refiner
    requires a proof of the judgment $t_1 @longleftrightarrow t_2$.

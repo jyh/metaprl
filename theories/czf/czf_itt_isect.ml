@@ -1,11 +1,8 @@
 doc <:doc<
-   @begin[spelling]
-   isect
-   @end[spelling]
    @begin[doc]
    @module[Czf_itt_isect]
 
-   The @tt{Czf_itt_isect} module gives defines a binary
+   The @tt[Czf_itt_isect] module gives defines a binary
    and general intersection.  The intersection is a @emph{derived} form,
    the binary intersection is defined with separation:
 
@@ -167,7 +164,7 @@ interactive bisect_member_elim {| elim [] |} 'H :
 
 doc <:doc<
    @begin[doc]
-   The elimination form for the general isect $@mem{x; @isect{s}}$ performs
+   The elimination form for the general intersection $@mem{x; @isect{s}}$ performs
    instantiation of the assumption on a particular set $@mem{z; 's}$.
    @end[doc]
 >>

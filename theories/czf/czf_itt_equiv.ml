@@ -1,10 +1,8 @@
 doc <:doc<
-   @spelling{equiv equivSubstT}
-
    @begin[doc]
    @module[Czf_itt_equiv]
 
-   The @tt{Czf_itt_equiv} module defines equivalence relations on sets.
+   The @tt[Czf_itt_equiv] module defines equivalence relations on sets.
    An equivalence relation is a binary relation that is reflexive,
    symmetric, and transitive.
 

@@ -1,13 +1,9 @@
 doc <:doc<
-   @begin[spelling]
-   bi assumT ponens selT backThruHypT dT genAssumT instHypT
-   moveToConclT univCDT
-   @end[spelling]
-
+   @spelling{bi ponens}
    @begin[doc]
    @module[Itt_logic]
 
-   The @tt{Itt_logic} module defines the propositional
+   The @tt[Itt_logic] module defines the propositional
    interpretations of the basic types.  This is a @emph{derived}
    module.  All the propositional connectives are coded in
    terms of the existing types.

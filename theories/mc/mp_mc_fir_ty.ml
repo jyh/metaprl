@@ -96,7 +96,7 @@ declare tyFun{ 'ty_list; 'ty }
 (*!
  * @begin[doc]
  *
- * Tuples
+ * Tuples. (Documentation incomplete.)
  * @end[doc]
  *)
 
@@ -110,7 +110,7 @@ declare tyFrame{ 'label }
 (*!
  * @begin[doc]
  *
- * Polymorphism.
+ * Polymorphism. (Documentation incomplete.)
  * @end[doc]
  *)
 
@@ -123,7 +123,7 @@ declare tyProject{ 'var; 'int }
 (*!
  * @begin[doc]
  *
- * Object-oriented.
+ * Object-oriented. (Documentation incomplete.)
  * @end[doc]
  *)
 
@@ -143,7 +143,10 @@ declare tyDelayed
 (*!
  * @begin[doc]
  *
- * Defining types.
+ * The FIR also has support for defining new types.  The remaining
+ * terms of this module represent the toplevel constructions for
+ * defining new types.
+ * (Documentation incomplete.)
  * @end[doc]
  *)
 

@@ -2,7 +2,13 @@
  * @begin[doc]
  * @theory[Mp_mc_theory]
  *
- * The @tt{Mp_mc_theory} module is provided as a convinience.
+ * The MC theory (all it's modules have the ``Mp_mc_'' prefix) attempts
+ * to formalize the Mojave Compiler's (MC) functional intermediate
+ * representation (FIR).
+ *
+ * (Documentation incomplete.  I should put the theory overview here.)
+ *
+ * The @tt{Mp_mc_theory} module itself is provided as a convinience.
  * It simply includes all the modules that make up the MC theory.
  * @end[doc]
  *

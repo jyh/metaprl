@@ -76,7 +76,7 @@ declare intOfFloatOp{ 'float_precision }
 (* Coerce to float. *)
 
 declare floatOfIntOp{ 'float_precision }
-declare floatOfFloatOp{ 'float_precision1; 'float_precision2 }
+declare floatOfFloatOp{ 'float_precision_dest; 'float_precision_src }
 declare floatOfRawIntOp{ 'float_precision; 'int_precision; 'int_signed }
 
 (* Coerce to rawint. *)

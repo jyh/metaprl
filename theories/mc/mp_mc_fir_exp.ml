@@ -59,14 +59,16 @@ open Refiner.Refiner.TermOp
  * @thysubsection{Unary operations}
  *
  * These are the unary operations in the FIR.  They are used in
- * @hrefterm[letUnop] as the @tt{unop} subterm.  Each of the operators
- * here can only be applied to values of a given type.  In instances
- * where the type has precision and / or signing subterms
- * (such as @hrefterm[tyRawInt]), the qualifiers in the operator
- * must also match those of the type in order for the @hrefterm[letUnop]
- * term to be well-formed.
+ * @hrefterm[letUnop] as the @tt{unop} subterm.  Each of these
+ * operators encodes enough information about the type
+ * of its operand, and in some case, the type of the resulting value.
+ * (For some operators, this type information is implicit and does not
+ * require any subterms.)  In most cases, the type of an operator's
+ * operand is the same as the type of its resulting value.
+ * The notable exceptions are the conversion operators.
  *
- * @tt{idOp} is a polymorphic identity operator.
+ * @tt{idOp} is a polymorphic identity operator.  It leaves
+ * its operand unchanged.
  * @end[doc]
  *)
 
@@ -86,7 +88,7 @@ declare notIntOp
 (*!
  * @begin[doc]
  *
- * Bit fields.
+ * Bit fields. (Documentation incomplete.)
  * @end[doc]
  *)
 
@@ -104,7 +106,14 @@ declare rawBitFieldOp{ 'int_precision; 'int_signed; 'int1; 'int2 }
 declare uminusRawIntOp{ 'int_precision; 'int_signed }
 declare notRawIntOp{ 'int_precision; 'int_signed }
 
-(* Floats. *)
+(*!
+ * @begin[doc]
+ *
+ * The next five terms are basic unary operations on values of type
+ * @hrefterm[tyFloat].  They represent unary negation, absolute value,
+ * sine, cosine, and square root.
+ * @end[doc]
+ *)
 
 declare uminusFloatOp{ 'float_precision }
 declare absFloatOp{ 'float_precision }
@@ -112,17 +121,43 @@ declare sinOp{ 'float_precision }
 declare cosOp{ 'float_precision }
 declare sqrtOp{ 'float_precision }
 
-(* Coerce to int. *)
+(*!
+ * @begin[doc]
+ *
+ * @tt{intOfFloatOp} specifies the conversion of a value of type
+ * @hrefterm[tyFloat] to a value of type @hrefterm[tyInt]. Note
+ * that the precision of the resulting float value needs to be specified.
+ * @end[doc]
+ *)
 
 declare intOfFloatOp{ 'float_precision }
 
-(* Coerce to float. *)
+(*!
+ * @begin[doc]
+ *
+ * The next three terms convert values of type
+ * @hrefterm[tyInt], @hrefterm[tyFloat], and @hrefterm[tyRawInt], respectively,
+ * to values of type @hrefterm[tyFloat].  The precision of the resulting
+ * float value is the first subterm.  Additional subterms, when present,
+ * specify information about the source type.
+ * @end[doc]
+ *)
 
 declare floatOfIntOp{ 'float_precision }
-declare floatOfFloatOp{ 'float_precision1; 'float_precision2 }
+declare floatOfFloatOp{ 'float_precision_dest; 'float_precision_src }
 declare floatOfRawIntOp{ 'float_precision; 'int_precision; 'int_signed }
 
-(* Coerce to rawint. *)
+(*!
+ * @begin[doc]
+ *
+ * The next four terms convert values of type @hrefterm[tyInt],
+ * @hrefterm[tyEnum], @hrefterm[tyFloat], and @hrefterm[tyRawInt],
+ * respectively, to values of type @hrefterm[tyRawInt].  The precision
+ * and signing of the resulting integer value is encoded in the first
+ * two subterms. Additional subterms, when present, specify information
+ * about the source type.
+ * @end[doc]
+ *)
 
 declare rawIntOfIntOp{ 'int_precision; 'int_signed }
 declare rawIntOfEnumOp{ 'int_precision; 'int_signed; 'int }
@@ -130,6 +165,12 @@ declare rawIntOfFloatOp{ 'int_precision; 'int_signed; 'float_precision }
 declare rawIntOfRawIntOp{ 'dest_int_precision; 'dest_int_signed;
                           'src_int_precision;  'src_int_signed }
 
+(*!
+ * @begin[doc]
+ *
+ * (Documentation incomplete.)
+ * @end[doc]
+ *)
 (* Integer/pointer coercions. *)
 
 declare rawIntOfPointerOp{ 'int_precision; 'int_signed }
@@ -144,23 +185,34 @@ declare pointerOfBlockOp{ 'sub_block }
  * @thysubsection{Binary operations}
  *
  * These are the binary operations in the FIR.  They are used in
- * @hrefterm[letBinop] as the @tt{binop} subterm.  Each of the operators
- * here can only be applied to values of a given type.  In instances
- * where the type has precision and / or signing subterms
- * (such as @hrefterm[tyRawInt]), the qualifiers in the operator
- * must also match those of the type in order for the @hrefterm[letBinop]
- * term to be well-formed.
+ * @hrefterm[letBinop] as the @tt{binop} subterm.  Each of these
+ * operators encodes enough information about the type
+ * of its operands, and in some case, the type of the resulting value.
+ * (For some operators, this type information is implicit and does not
+ * require any subterms.)  In most cases, the type of an operator's
+ * operands is the same as the type of its resulting value.
  *
+ * (Documentation incomplete.)
  * @end[doc]
  *)
-
-(* Enums. *)
 
 declare andEnumOp{ 'int }
 declare orEnumOp{ 'int }
 declare xorEnumOp{ 'int }
 
-(* Naml ints. *)
+(*!
+ * @begin[doc]
+ *
+ * The following set of @tt{IntOp}s operate on values of type
+ * @hrefterm[tyInt].  They encode basic arithmetic and boolean
+ * comparison operations.  In order, the arithmetic operations are:
+ * addition, subtraction, multiplication, division, remainder (mod),
+ * logical shift left, logical shift right, arithmetic shift right,
+ * bitwise and, bitwise or, bitwise xor, max (returns the greater
+ * of its operands), min (returns the lesser of its operands).
+ * (Documentation incomplete.)
+ * @end[doc]
+ *)
 
 declare plusIntOp
 declare minusIntOp
@@ -184,8 +236,15 @@ declare gtIntOp
 declare geIntOp
 declare cmpIntOp
 
-(* Native ints. *)
-
+(*!
+ * @begin[doc]
+ *
+ * The following set of @tt{RawIntOp}s operate on values of type
+ * @hrefterm[tyRawInt]. They encode basic arithmetic and boolean
+ * comparison operations.
+ * (Documentation incomplete.)
+ * @end[doc]
+ *)
 declare plusRawIntOp{ 'int_precision; 'int_signed }
 declare minusRawIntOp{ 'int_precision; 'int_signed }
 declare mulRawIntOp{ 'int_precision; 'int_signed }
@@ -209,7 +268,15 @@ declare gtRawIntOp{ 'int_precision; 'int_signed }
 declare geRawIntOp{ 'int_precision; 'int_signed }
 declare cmpRawIntOp{ 'int_precision; 'int_signed }
 
-(* Floats. *)
+(*!
+ * @begin[doc]
+ *
+ * The following set of @tt{FloatOp}s operate on values of type
+ * @hrefterm[tyFloat]. They encode basic arithmetic and boolean
+ * comparison operations.
+ * (Documentation incomplete.)
+ * @end[doc]
+ *)
 
 declare plusFloatOp{ 'float_precision }
 declare minusFloatOp{ 'float_precision }
@@ -242,6 +309,7 @@ declare plusPointerOp{ 'sub_block; 'int_precision; 'int_signed }
  * @begin[doc]
  * @thysubsection{Fields (frame labels)}
  *
+ * (Documentation incomplete.)
  * @end[doc]
  *)
 
@@ -251,6 +319,7 @@ declare frameLabel{ 'label1; 'label2; 'label3 }
  * @begin[doc]
  * @thysubsection{Normal values}
  *
+ * Atoms represent values in the FIR. (Documentation incomplete.)
  * @end[doc]
  *)
 
@@ -268,6 +337,7 @@ declare atomVar{ 'var }
  * @begin[doc]
  * @thysubsection{Allocation operators}
  *
+ * (Documentation incomplete.)
  * @end[doc]
  *)
 
@@ -282,6 +352,10 @@ declare allocFrame{ 'var }
  * @begin[doc]
  * @thysubsection{Tail calls / operations}
  *
+ * These operators are used in the @hrefterm[specialCall] expression.
+ * They specify the actions that need to occur before control
+ * is passed to another local function.
+ * (Documentation incomplete.)
  * @end[doc]
  *)
 
@@ -296,6 +370,7 @@ declare tailAtomicCommit{ 'var; 'atom_list }
  *
  * These terms encode the safety checks that an FIR program must
  * perform in order to ensure that programs execute safely.
+ * (Documentation incomplete.)
  * @end[doc]
  *)
 
@@ -309,6 +384,7 @@ declare elementCheck{ 'ty; 'subop; 'var; 'atom }
  * @thysubsection{Debugging info}
  *
  * These terms are used to encode debugging information.
+ * (Documentation incomplete.)
  * @end[doc]
  *)
 
@@ -322,6 +398,7 @@ declare debugContext{ 'debug_line; 'debug_vars }
  * @begin[doc]
  * @thysubsection{Expressions}
  *
+ * (Documentation incomplete.)
  * @end[doc]
  *)
 
@@ -366,6 +443,7 @@ declare debug{ 'debug_info; 'exp }
  * @begin[doc]
  * @thysubsection{Function definition}
  *
+ * (Documentation incomplete.)
  * @end[doc]
  *)
 
@@ -442,8 +520,9 @@ dform floatOfIntOp_df : except_mode[src] ::
    floatOfIntOp{ 'float_precision } =
    `"FloatOfIntOp(" slot{'float_precision} `")"
 dform floatOfFLoatOp_df : except_mode[src] ::
-   floatOfFloatOp{ 'float_precision1; 'float_precision2 } =
-   `"FloatOfFloatOp(" slot{'float_precision1} `"," slot{'float_precision2} `")"
+   floatOfFloatOp{ 'float_precision_dest; 'float_precision_src } =
+   `"FloatOfFloatOp(" slot{'float_precision_dest} `","
+   slot{'float_precision_src} `")"
 dform floatOfRawIntOp_df : except_mode[src] ::
    floatOfRawIntOp{ 'float_precision; 'int_precision; 'int_signed } =
    `"FloatOfRawIntOp(" slot{'float_precision} `"," slot{'int_precision}
@@ -999,20 +1078,21 @@ let dest_intOfFloatOp_term = dest_dep0_term intOfFloatOp_opname
 
 (* Coerce to float. *)
 
-let floatOfIntOp_term = << floatOfIntOp{ 'precision } >>
+let floatOfIntOp_term = << floatOfIntOp{ 'float_precision } >>
 let floatOfIntOp_opname = opname_of_term floatOfIntOp_term
 let is_floatOfIntOp_term = is_dep0_term floatOfIntOp_opname
 let mk_floatOfIntOp_term = mk_dep0_term floatOfIntOp_opname
 let dest_floatOfIntOp_term = dest_dep0_term floatOfIntOp_opname
 
-let floatOfFloatOp_term = << floatOfFloatOp{ 'prec1; 'prec2 } >>
+let floatOfFloatOp_term =
+   << floatOfFloatOp{ 'float_precision_dest; 'float_precision_src} >>
 let floatOfFloatOp_opname = opname_of_term floatOfFloatOp_term
 let is_floatOfFloatOp_term = is_dep0_dep0_term floatOfFloatOp_opname
 let mk_floatOfFloatOp_term = mk_dep0_dep0_term floatOfFloatOp_opname
 let dest_floatOfFloatOp_term = dest_dep0_dep0_term floatOfFloatOp_opname
 
 let floatOfRawIntOp_term =
-   << floatOfRawIntOp{ 'float_prec; 'int_prec; 'int_sign } >>
+   << floatOfRawIntOp{ 'float_precision; 'int_precision; 'int_signed } >>
 let floatOfRawIntOp_opname = opname_of_term floatOfRawIntOp_term
 let is_floatOfRawIntOp_term = is_dep0_dep0_dep0_term floatOfRawIntOp_opname
 let mk_floatOfRawIntOp_term = mk_dep0_dep0_dep0_term floatOfRawIntOp_opname

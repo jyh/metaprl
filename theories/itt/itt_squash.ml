@@ -10,8 +10,8 @@
  *
  * The @tt{Itt_squash} module defines a @emph{squash} type.
  * $<<squash{'A}>>$ hides computational content of $A$.
- * $<<squash{'A}>>$ is inhabited iff and only if $A$ is inhabited.
- * In this case $<<squash{'A}>>$ contains only one element $@it$.
+ * $<<squash{'A}>>$ is inhabited @emph{iff} $A$ is inhabited.
+ * When inhabited, $<<squash{'A}>>$ contains only one element $@it$.
  * That is $<<squash{'A}>>$ means that $A$ is true, but we do not know its
  * computational content.
  * Consequentially,  the sequent
@@ -25,25 +25,6 @@
  * it can be argued (see @cite[KN01]) that it is consistent to use
  * @emph{classical} reasoning under @tt{squash} without losing
  * constructive content.
- *
- * The @tt{Itt_squash} module also defines a resource that can be used to
- * help prove ``squash'' stability---that is, to infer the proof
- * of a proposition given an assumption that it is true.
- *
- * This module defines a generic resource @hrefresource[squash_resource] that
- * can be used to recover computational content from a @tt{squash} proof.
- * The resource defines a tactic @hreftactic[squashT] that performs the
- * following inference:
- *
- * $$
- * @rulebox{squashT; ;
- *    @sequent{squash; H; @squash{T}};
- *    @sequent{ext; H; T}}
- * $$
- *
- * Additions to the resource require two arguments: a @emph{term} that
- * matches the conclusion of the goal, and a tactic that performs
- * squash reduction on goals of that form.
  *
  * In addition to the @tt{squash} operator on types, the @MetaPRL includes
  * the meta-theory @tt{squash} operator that works on sequents.
@@ -65,6 +46,17 @@
  * of $a = b @in T$ is @emph{always} the term $@it$, and proofs
  * of equalities can always be squashed because the content can
  * be discovered later.
+ *
+ * The @tt{Itt_squash} module also defines a resource that can be used to
+ * help prove ``squash'' stability---that is, to infer the proof
+ * of a proposition given an assumption that it is true.
+ *
+ * This module defines a generic resource @hrefresource[squash_resource] that
+ * can be used to recover computational content from a @tt{squash} proof.
+ * Additions to the resource are done through resource annotations, see the
+ * @hrefresource[squash_resource] section for more information. Tactics
+ * @hreftactic[squashT], @hreftactic[unsquashT] and @hreftactic[sqsquashT]
+ * make use of the @hrefresource[squash_resource].
  *
  * @end[doc]
  *
@@ -570,7 +562,7 @@ let unsquashEqualT i p =
 let squash_resource =
    Mp_resource.improve squash_resource (SqUnsquashGoal(equal_term, unsquashEqualT))
 
-let unsquashT i p =
+let unsquashSquashT i p =
    let h, j = Sequent.hyp_indices p i in
    unsquash h j p
 
@@ -578,7 +570,7 @@ let squash_resource =
    Mp_resource.improve squash_resource (SqStable(squash_term, <<it>>, dT 0))
 
 let squash_resource =
-    Mp_resource.improve squash_resource (SqUnsquashGoal(squash_term, unsquashEqualT))
+    Mp_resource.improve squash_resource (SqUnsquashGoal(squash_term, unsquashSquashT))
 
 let squash_resource =
    Mp_resource.improve squash_resource (SqStable(type_term, <<it>>, dT 0))
@@ -591,10 +583,39 @@ let squash_resource =
  * @begin[doc]
  * @tactics
  *
- * The @tactic[squashT]{} tactic is defined as a proof annotation
- * that is passed down the proof.  The tactic retrieves the
- * annotation and applies it to the current goal.
+ * The @tactic[squashT] tactic uses @hrefresource[squash_resource]
+ * to perform the following inference:
+ * $$
+ * @rulebox{squashT; ;
+ *    @sequent{squash; H; @squash{T}};
+ *    @sequent{ext; H; T}}
+ * $$
+ * Term $T$ must be @emph{squash-stable} and known to @hrefresource[squash_resource]
+ * in order for @tt[squashT] to work.
  *
+ * The @tactic[unsquashT]{} tactic uses @hrefresource[squash_resource]
+ * to perform the following inference:
+ * $$
+ * @rulebox{unsquashT;i;
+ *    @sequent{squash; {H; x@colon A; J[@it]}; C[@it]};
+ *    @sequent{ext; {H; x@colon @squash{A}; J[x]}; C[x]}}
+ * $$
+ * Either $A$ or $C[x]$ must be @emph{squash-stable} and known
+ * to @hrefresource[squash_resource] in order for @tt[unsquashT] to work.
+ *
+ * The @tactic[sqsquashT] tactic uses @hrefresource[squash_resource]
+ * to perform the following inference:
+ * $$
+ * @rulebox{sqsquashT; ;
+ *    @sequent{squash; H; T};
+ *    @sequent{ext; H; T}}
+ * $$
+ * Term $T$ must be @emph{squash-stable} and known to @hrefresource[squash_resource]
+ * in order for @tt[sqsquashT] to work.
+ *
+ * Both @tt[unsquashT] and @tt[sqsquashT] are added to @hrefresource[auto_resouce],
+ * so all necessary squashing-unsquashing will be performed by @hreftactic[autoT]
+ * whenever possible.
  * @docoff
  * @comment{Squash a goal}
  * @end[doc]

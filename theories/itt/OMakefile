@@ -115,8 +115,8 @@ MPFILES =\
    itt_sqsimple\
    itt_functions\
    itt_closure\
-   itt_reflection_example_lambda\
    itt_synt_language\
+   itt_reflection_example_lambda\
    itt_example
 
 OCamlProgram(gen_int_bench, gen_int_bench)

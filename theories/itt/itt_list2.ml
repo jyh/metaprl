@@ -45,6 +45,7 @@ extends Itt_bool
 extends Itt_nat
 extends Itt_isect
 extends Itt_struct2
+extends Itt_nequal
 extends Itt_int_base
 extends Itt_int_ext
 extends Itt_int_arith
@@ -1133,7 +1134,7 @@ interactive sameset_trans 'l2 :
 
 
 doc <:doc<
-y   @begin[doc]
+   @begin[doc]
     The <<find{'l; 'a; x,y.'eq['x;'y]}>> returns an index of an element in the list $l$ equal to the element $a$ according to equality $eq$.
     It returns the length of the list otherwise.
    @end[doc]
@@ -1168,6 +1169,14 @@ interactive find_when_not_found_wf  {| intro [intro_typeinf <<'l>>] |}  list{'T}
    sequent  { <H>; x:'T; y:'T >- 'eq['x;'y] in bool } -->
    sequent  { <H> >- all_list{'l; x.not{"assert"{'eq['x;'a]}}} } -->
    sequent  { <H> >- find{'l; 'a; x,y.'eq['x;'y]} = length{'l} in int }
+
+doc <:doc<
+   @begin[doc]
+    The <<diff_list{'T}>> defines a type of lists with @emph{different} elements.
+   @end[doc]
+>>
+
+define unfold_diff_list: diff_list{'T} <--> {l:list{'T} | all i:Index{'l}. all j:Index{'l}. ('i < 'j => nth{'l;'i} <> nth{'l;'j} in 'T)}
 
 
 doc <:doc< @docoff >>

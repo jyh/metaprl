@@ -38,10 +38,3 @@ rewrite unfold_cyclic_subgroup : cyclic_subgroup{'a} <-->
 
 topval fold_power : conv
 topval fold_cyclic_subgroup : conv
-
-rule lt_Id 'H 'a :
-   [main] sequent ['ext] { 'H >- 'a < 'a } -->
-   [wf] sequent ['ext] { 'H >- 'a IN int } -->
-   sequent ['ext] { 'H >- 'C }
-
-topval lt_IdT : term -> tactic

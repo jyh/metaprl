@@ -32,7 +32,7 @@ extends M_cps
 interactive test_prog 'H :
    sequent [m] { 'H; cont: exp >- compilable{CPS{'cont;
                                   LetAtom{AtomInt[1:n]; v1.
-                                  LetAtom{AtomBinop{AddOp; AtomInt[1:n]; 'v1}; v2.
+                                  LetAtom{'v1; v2.
                                   FunDecl{f.
                                   FunDef{'f; AtomFun{v3.
                                      LetPair{'v2; 'v3; v4.

@@ -175,8 +175,13 @@ interactive cps_let_fun 'H bind{x. 'A['x]} CPS{'cont; LetAtom{AtomFun{x. 'e1['x]
    sequent [m] { 'H >- 'A[LetAtom{AtomFun{g. AtomFun{x. CPS{'g; 'e1['x]}}}; f. CPS{'cont; 'e2[CPS{'f; AtomFun{z. 'z}}]}}] } -->
    sequent [m] { 'H >- 'A[CPS{'cont; LetAtom{AtomFun{x. 'e1['x]}; f. 'e2['f]}}] }
 
-(*
- * Tactic to apply transformation.
+(*!
+ * @begin[doc]
+ * @modsubsection{Apply the transformation}
+ *
+ * We apply CPS transformation in two phases.
+ * In the first phase, we transform the spine of the program.
+ * @end[doc]
  *)
 let cpsAddrT a p =
    let a = make_address a in
@@ -186,7 +191,28 @@ let cpsAddrT a p =
    let apply = term_subterm goal a in
    let goal' = replace_subterm goal a x_term in
    let bind = mk_xbind_term x goal' in
-      cps_let_int (Sequent.hyp_count_addr p) bind apply p
+   let addr = Sequent.hyp_count_addr p in
+   let fail p =
+      raise (RefineError ("M_cps.cpsAddrT", StringTermError ("no reduction for", apply)))
+   in
+      firstT [cps_let_int addr bind apply;
+              cps_let_binop addr bind apply;
+              cps_let_fun addr bind apply;
+              fail] p
+
+let cpsTestT a p =
+   let a = make_address a in
+   let x = get_opt_var_arg "z" p in
+   let x_term = mk_var_term x in
+   let goal = Sequent.concl p in
+   let apply = term_subterm goal a in
+   let goal' = replace_subterm goal a x_term in
+   let bind = mk_xbind_term x goal' in
+   let addr = Sequent.hyp_count_addr p in
+   let fail p =
+      raise (RefineError ("M_cps.cpsAddrT", StringTermError ("no reduction for", apply)))
+   in
+      cps_let_binop addr bind apply p
 
 (*!
  * @docoff

@@ -37,6 +37,7 @@ declare CPS{'e1; 'e2}
  * Testing.
  *)
 topval cpsAddrT : int list -> tactic
+topval cpsTestT : int list -> tactic
 
 (*!
  * @docoff

@@ -217,6 +217,17 @@ interactive test_prog 'H :
                                   TailCall{'f; AtomInt[17:n]}}}}}
                }
 
+interactive ext_test_prog 'H :
+   sequent [m] { 'H >- compilable{.<:ext<
+                        let v1 = 1 in
+                        let v2 = 2+v1 in
+                        let f (v3) =
+                           let v4 = (v2, v3) in
+                           let v5 = v4[0] in
+                              v5
+                        in
+                           f(17)>>} }
+
 (*!
  * @docoff
  *

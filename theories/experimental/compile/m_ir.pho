@@ -126,9 +126,9 @@ Grammar -start exp {
    exp ::= LET ID<var[v:v]> EQ a<'a> IN exp<'e>
                                     => LetAtom{'a; v. 'e}
     | LET ID<var[f:v]> LPAREN ID<var[v:v]> RPAREN EQ exp<'e1> IN exp<'e2>
-                                    => LetFun{v. 'e1; f. 'e2}
+                                    => LetAtom{AtomFun{v. 'e1}; f. 'e2}
     | LET REC ID<var[f:v]> LPAREN ID<var[v:v]> RPAREN EQ exp<'e1> IN exp<'e2>
-                                    => LetRecFun{f, v. 'e1; f. 'e2}
+                                    => LetAtom{f. AtomFun{v. 'e1}; f. 'e2}
     | LET ID<var[v:v]> EQ a<'a1> LBRACK a<'a2> RBRACK IN exp<'e>
                                     => LetSubscript{'a1; 'a2; v. 'e}
     | LET ID<var[v:v]> EQ ID<var[f:v]> LPAREN a<'a> RPAREN IN exp<'e>
@@ -144,7 +144,7 @@ Grammar -start exp {
     | a<'a> %prec prec_atom         => Return{'a}
 
 
-   a ::= NUM<'i>                    => AtomInt{'i}
+   a ::= NUM<'i>                    => 'i
       | ID                          {}
       | FUN ID<var[v:v]> ARROW exp<'e>
                                     => AtomFun{v. 'e}

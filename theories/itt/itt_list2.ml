@@ -48,6 +48,7 @@ extends Itt_struct2
 extends Itt_int_base
 extends Itt_int_ext
 extends Itt_int_arith
+extends Itt_pairwise
 doc <:doc< @docoff >>
 
 open Basic_tactics
@@ -835,9 +836,57 @@ interactive listTop2 {| intro[AutoMustComplete; intro_typeinf <<'l>>] |} list{'A
    sequent { <H> >- 'l in list{'A} } -->
    sequent { <H> >- 'l in list{top} }
 
+
+interactive list_induction2 :
+   sequent { <H> >- 'P[nil; nil] } -->
+   sequent { <H>; h2:'B; t2:list{'B} >- 'P[nil; 'h2::'t2] } -->
+   sequent { <H>; h1:'A; t1:list{'A} >- 'P['h1::'t1; nil] } -->
+   sequent { <H>; h1:'A; t1:list{'A}; h2:'B; t2:list{'B};  'P['t1;'t2] >- 'P['h1::'t1;'h2::'t2] } -->
+   sequent { <H>; l1:list{'A}; l2:list{'B} >- 'P['l1; 'l2] }
+
+(*
+
+l
+define list_of_fun{k.'f[k];'n} <--> ind{'n; nil; k,l. 'f[0]:: list_of_fun{k.'f[k+1]} }
+
+
 interactive list_elements_id {| intro [] |} :
    [wf] sequent { <H> >- 'l in list{top} } -->
-   sequent { <H> >- 'l ~ list_ind{'l; nil; h,t,r. cons{nth{'l; length{'l} -@ length{'t} -@ 1}; 'r}}}
+   sequent { <H> >- 'l ~ list_of_fun{k.nth{'l;'k}; length{l}} }
+
+h::t <-->
+t ~ lof {k.t@k}
+h::t
+   l@0 :: lof{k. h::t @ k+1}
+   append{l_o_f [nth[h::t;k]
+   if k = 0 then
+
+*)
+
+
+define unfold_tail: tail{'l;'n} <--> ind{'n; nil;   k,r. cons{nth{'l;length{'l} -@ 'k}; 'r} }
+
+interactive_rw tail_reduce1 {| reduce |}:
+   tail{'l;0} <--> nil
+interactive_rw tail_reduce2 {| reduce |}: ('n in nat) -->
+   tail{'l;'n+@1} <-->  cons{nth{'l;length{'l} -@ ('n +@ 1)};  tail{'l;'n} }
+
+
+interactive tail_does_not_depend_on_the_head {| intro[] |}:
+   sequent { <H> >-  'l in list{top} } -->
+   sequent { <H> >-  'n in nat } -->
+   sequent { <H> >- 'n <= length{'l} } -->
+   sequent { <H> >- tail{'l;'n} ~ tail{cons{'h;'l};'n}  }
+
+interactive list_is_its_own_tail {| intro[] |}:
+   sequent { <H> >-  'l in list{top} } -->
+   sequent { <H> >- 'l ~ tail{'l;length{'l}} }
+
+interactive tail_squiggle {| intro[] |}:
+   sequent { <H> >-  'n in nat } -->
+   sequent { <H>; i:nat; 'i<'n >-  nth{'l_1;length{'l_1}-@('i+@1)} ~ nth{'l_2;length{'l_2}-@('i+@1)} } -->
+   sequent { <H> >-  tail{'l_1;'n} ~ tail{'l_2;'n} }
+
 
 interactive listSquiggle :
    [wf] sequent { <H> >- 'l1 in list{top} } -->

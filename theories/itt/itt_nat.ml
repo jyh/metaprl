@@ -179,6 +179,13 @@ interactive natInduction {| elim [ThinOption thinT] |} 'H  :
    sequent { <H>; n: nat; <J['n]>; m: nat;  'C['m] >- 'C['m +@ 1] }  -->
    sequent { <H>; n: nat; <J['n]> >- 'C['n] }
 
+let thinNextLastT n = (thinT (-2) thenT thinT n)
+
+interactive natInduction2 {| elim [ThinOption thinNextLastT] |} 'H  :
+   sequent { <H>; n: nat; <J['n]> >- 'C[0] }  -->
+   sequent { <H>; n: nat; <J['n]>; m: nat; 'm<'n; 'C['m] >- 'C['m +@ 1] }  -->
+   sequent { <H>; n: nat; <J['n]> >- 'C['n] }
+
 interactive natFullInduction (* {| elim [SelectOption 1; ThinOption thinT] |} *) 'H  :
    sequent { <H>; n: nat; <J['n]>; m: nat; all k: nat. (('k < 'm) => 'C['k]) >- 'C['m] }  -->
    sequent { <H>; n: nat; <J['n]> >- 'C['n] }

@@ -38,6 +38,8 @@ MPFILES =\
    itt_pointwise\
    itt_struct2\
    itt_struct3\
+   itt_pairwise\
+   itt_pairwise2\
    itt_int_base\
    itt_int_ext\
    itt_int_arith\
@@ -102,8 +104,6 @@ MPFILES =\
    itt_rat\
    itt_rat2\
    itt_supinf\
-   itt_pairwise\
-   itt_pairwise2\
    itt_synt_var\
    itt_synt_operator\
    itt_synt_bterm\

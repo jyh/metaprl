@@ -17,9 +17,6 @@ include Itt_equal
 declare atom
 declare token[@t:t]
 
-val atom_term : term
-val bogus_token : term
-
 (************************************************************************
  * RULES                                                                *
  ************************************************************************)
@@ -48,8 +45,28 @@ axiom tokenFormation 'H token[@t:t] : sequent ['ext] { 'H >- atom }
  *)
 axiom tokenEquality 'H : sequent ['ext] { 'H >- token[@t:t] = token[@t:t] in atom }
 
+(************************************************************************
+ * TACTICS                                                              *
+ ************************************************************************)
+
+val d_atomT : int -> tactic
+val eqcd_atomT : tactic
+val eqcd_tokenT : tactic
+
+val atom_term : term
+
+val token_term : term
+val bogus_token : term
+val is_token_term : term -> bool
+val dest_token : term -> string
+val mk_token_term : string -> term
+
 (*
  * $Log$
+ * Revision 1.2  1997/08/06 16:18:23  jyh
+ * This is an ocaml version with subtyping, type inference,
+ * d and eqcd tactics.  It is a basic system, but not debugged.
+ *
  * Revision 1.1  1997/04/28 15:52:07  jyh
  * This is the initial checkin of Nuprl-Light.
  * I am porting the editor, so it is not included

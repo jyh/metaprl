@@ -3,6 +3,10 @@
  *
  *)
 
+open Term
+
+include Tactic_type
+
 include Itt_equal
 include Itt_set
 include Itt_rfun
@@ -143,7 +147,38 @@ axiom quotient_equalityElimination 'H 'J 'v :
    sequent ['ext] { 'H; x: 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]; 'J['x] >- 'T['x] }
 
 (*
+ * H >- quot x1, y1: A1 // E1[x1; y1] <= quot x2, y2: A2 // E2[x2; y2]
+ * by quotientSubtype
+ *
+ * H >- A1 <= A2
+ * H, x1: A1, y1: A1 >- E1[x1; y1] => E2[x2; y2]
+ * H >- quot x1, y1: A1 // E1[x1; y1] in type
+ * H >- quot x2, y2: A2 // E2[x2; y2] in type
+ *)
+axiom quotientSubtype 'H 'a1 'a2 :
+   sequent [squash] { 'H >- subtype{'A1; 'A2} } -->
+   sequent [squash] { 'H; a1: 'A1; a2: 'A1 (* ; 'E1['a1; 'a2] *) >- 'E2['a1; 'a2] } -->
+   sequent [squash] { 'H >- "type"{(quot x1, y1: 'A1 // 'E1['x1; 'y1])} } -->
+   sequent [squash] { 'H >- "type"{(quot x2, y2: 'A2 // 'E2['x2; 'y2])} } -->
+   sequent ['ext] { 'H >- subtype{ (quot x1, y1: 'A1 // 'E1['x1; 'y1]); (quot x2, y2: 'A2 // 'E2['x2; 'y2]) } };;
+
+(************************************************************************
+ * TACTICS                                                              *
+ ************************************************************************)
+
+val d_quotientT : int -> tactic
+val eqcd_quotientT : tactic
+
+val is_quotient_term : term -> bool
+val dest_quotient : term -> string * string * term * term
+val mk_quotient_term : string -> string -> term -> term -> term
+
+(*
  * $Log$
+ * Revision 1.2  1997/08/06 16:18:38  jyh
+ * This is an ocaml version with subtyping, type inference,
+ * d and eqcd tactics.  It is a basic system, but not debugged.
+ *
  * Revision 1.1  1997/04/28 15:52:23  jyh
  * This is the initial checkin of Nuprl-Light.
  * I am porting the editor, so it is not included

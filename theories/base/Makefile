@@ -1,6 +1,6 @@
 # Libraries
 REF_ROOT := ../..
-INCLUDE := -I . -I $(REF_ROOT)/refiner -I ../tactic
+INCLUDE := -I . -I $(REF_ROOT)/mllib -I $(REF_ROOT)/refiner -I ../tactic
 OCAMLFLAGS := -g -root $(REF_ROOT)
 OCAMLC := $(REF_ROOT)/filter/prlcomp.run
 CAMLP4 := $(REF_ROOT)/filter/prlcomp.run -E -root $(REF_ROOT)
@@ -11,13 +11,14 @@ MLZFILES :=\
 
 # Library files
 LMFILES :=\
+	typeinf\
 	nuprl_font\
 	base_dform\
 	base_dtactic\
 	base_theory
 
 # Name of main libraris
-MAIN = tactics
+MAIN = base
 
 all: $(MAIN).cma
 opt: $(MAIN).cmxa

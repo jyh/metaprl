@@ -11,6 +11,7 @@ open Term
 open Resource
 
 include Itt_equal
+include Itt_subtype
 
 (*
  * incr_debug_level DebugMessage
@@ -51,6 +52,19 @@ prim voidEquality 'H : : sequent ['ext] { 'H >- void = void in univ[@i:l] } = it
  *)
 prim voidElimination 'H 'J : : sequent ['ext] { 'H; x: void; 'J['x] >- 'C['x] } = it
 
+(*
+ * Squash stability.
+ *)
+prim void_squashElimination 'H : sequent [squash] { 'H >- void } :
+   sequent ['ext] { 'H >- void } = it
+
+(*
+ * Subtyping.
+ *)
+prim void_subtype 'H : :
+   sequent ['ext] { 'H >- subtype{void; 'T} } =
+   it
+
 (************************************************************************
  * TACTICS                                                              *
  ************************************************************************)
@@ -63,7 +77,7 @@ let void_term = << void >>
 (*
  * D
  *)
-let d_void i p =
+let d_voidT i p =
    if i = 0 then
       failwith "can't prove void"
    else
@@ -72,21 +86,60 @@ let d_void i p =
       let i = get_pos_hyp_index i count in
          voidElimination (i - 1) (count - i - 1) p
 
-let d_resource = d_resource.resource_improve d_resource (void_term, d_void)
+let d_resource = d_resource.resource_improve d_resource (void_term, d_voidT)
 let dT = d_resource.resource_extract d_resource
 
 (*
  * EqCD.
  *)
-let eqcd_void p =
+let eqcd_voidT p =
    let count = num_hyps (goal p) in
       voidEquality count p
 
-let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (void_term, eqcd_void)
+let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (void_term, eqcd_voidT)
 let eqcdT = eqcd_resource.resource_extract eqcd_resource
+
+(************************************************************************
+ * SQUASH STABILITY                                                     *
+ ************************************************************************)
+
+(*
+ * Void is squash stable.
+ *)
+let squash_void p =
+   void_squashElimination (hyp_count p) p
+
+let squash_resource = squash_resource.resource_improve squash_resource (void_term, squash_void)
+
+(************************************************************************
+ * SUBTYPING                                                            *
+ ************************************************************************)
+
+let void_sub p =
+   void_subtype (hyp_count p) p
+
+let sub_resource =
+   sub_resource.resource_improve
+   sub_resource
+   (RLSubtype ([void_term, << 'a >>], void_sub))
+
+(************************************************************************
+ * TYPE INFERENCE                                                       *
+ ************************************************************************)
+
+(*
+ * Type of void.
+ *)
+let inf_void _ decl _ = decl, univ1_term
+
+let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (void_term, inf_void)
 
 (*
  * $Log$
+ * Revision 1.2  1997/08/06 16:18:48  jyh
+ * This is an ocaml version with subtyping, type inference,
+ * d and eqcd tactics.  It is a basic system, but not debugged.
+ *
  * Revision 1.1  1997/04/28 15:52:31  jyh
  * This is the initial checkin of Nuprl-Light.
  * I am porting the editor, so it is not included

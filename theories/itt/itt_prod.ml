@@ -4,8 +4,10 @@
  *)
 
 open Debug
+open Term
 open Options
 open Resource
+open Refine_sig
 
 include Var
 
@@ -73,6 +75,19 @@ prim independentPairEquality 'H :
    sequent ['ext] { 'H >- ('a1, 'b1) = ('a2, 'b2) in 'A * 'B } =
    it
 
+(*
+ * H >- A1 -> B1 <= A2 -> B2
+ * by functionSubtype
+ *
+ * H >- A2 <= A1
+ * H >- B1 <= B2
+ *)
+prim independentProductSubtype 'H :
+   sequent [squash] { 'H >- subtype{'A1; 'A2} } -->
+   sequent [squash] { 'H >- subtype{'B1; 'B2} } -->
+   sequent ['ext] { 'H >- subtype{ ('A1 * 'B1); ('A2 * 'B2) } } =
+   it
+
 (************************************************************************
  * TACTICS                                                              *
  ************************************************************************)
@@ -101,30 +116,68 @@ let d_hyp_prod i p =
 (*
  * Join them.
  *)
-let d_prod i =
+let d_prodT i =
    if i = 0 then
       d_concl_prod
    else
       d_hyp_prod i
 
-let prod_term = << 'A * 'B >>
-
-let d_resource = d_resource.resource_improve d_resource (prod_term, d_prod)
-let d = d_resource.resource_extract d_resource
+let d_resource = d_resource.resource_improve d_resource (prod_term, d_prodT)
 
 (*
  * EQCD.
  *)
-let eqcd_prod p =
+let eqcd_prodT p =
    let count = hyp_count p in
       (independentProductEquality count
        thenT addHiddenLabelT "wf") p
 
-let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (prod_term, eqcd_prod)
-let eqcd = eqcd_resource.resource_extract eqcd_resource
+let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (prod_term, eqcd_prodT)
+
+(************************************************************************
+ * TYPE INFERENCE                                                       *
+ ************************************************************************)
+
+(*
+ * Type of rfun.
+ *)
+let inf_prod f decl t =
+   let a, b = dest_prod t in
+   let decl', a' = f decl a in
+   let decl'', b' = f decl' b in
+   let le1, le2 =
+      try dest_univ a', dest_univ b' with
+         Term.TermMatch _ -> raise (RefineError (StringTermError ("typeinf: can't infer type for", t)))
+   in
+      decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2)
+
+let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (prod_term, inf_prod)
+
+(************************************************************************
+ * SUBTYPING                                                            *
+ ************************************************************************)
+
+(*
+ * Subtyping of two product types.
+ *)
+let prod_subtypeT p =
+   (independentProductSubtype (hyp_count p)
+    thenT addHiddenLabelT "subtype") p
+
+let sub_resource =
+   sub_resource.resource_improve
+   sub_resource
+   (DSubtype ([<< 'A1 * 'B1 >>, << 'A2 * 'B2 >>;
+               << 'A1 >>, << 'A2 >>;
+               << 'B1 >>, << 'B2 >>],
+              prod_subtypeT))
 
 (*
  * $Log$
+ * Revision 1.2  1997/08/06 16:18:36  jyh
+ * This is an ocaml version with subtyping, type inference,
+ * d and eqcd tactics.  It is a basic system, but not debugged.
+ *
  * Revision 1.1  1997/04/28 15:52:20  jyh
  * This is the initial checkin of Nuprl-Light.
  * I am porting the editor, so it is not included

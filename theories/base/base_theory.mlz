@@ -1,5 +1,5 @@
 (*
- * The base theory doesn't have anything right now.
+ * The base theory collects everything.
  *
  *)
 
@@ -7,10 +7,15 @@ include Sequent
 include Tacticals
 include Base_dform
 include Nuprl_font
+include Typeinf
 include Base_dtactic
 
 (*
  * $Log$
+ * Revision 1.2  1997/08/06 16:18:18  jyh
+ * This is an ocaml version with subtyping, type inference,
+ * d and eqcd tactics.  It is a basic system, but not debugged.
+ *
  * Revision 1.1  1997/04/28 15:51:56  jyh
  * This is the initial checkin of Nuprl-Light.
  * I am porting the editor, so it is not included

@@ -3,6 +3,10 @@
  *
  *)
 
+open Term
+
+include Tactic_type
+
 include Itt_equal
 include Itt_set
 include Itt_rfun
@@ -84,7 +88,34 @@ axiom intersectionElimination 'H 'J 'a 'x 'y 'v :
    sequent ['ext] { 'H; x: isect y: 'A. 'B['y]; 'J['x] >- 'T['x] }
 
 (*
+ * H >- isect a1:A1. B1 <= isect a2:A2. B2
+ * by intersectionSubtype
+ *
+ * H >- A2 <= A1
+ * H, a: A1 >- B1[a] <= B2[a]
+ *)
+axiom intersectionSubtype 'H 'a :
+   sequent [squash] { 'H >- subtype{'A2; 'A1} } -->
+   sequent [squash] { 'H; a: 'A1 >- subtype{'B1['a]; 'B2['a]} } -->
+   sequent ['ext] { 'H >- subtype{ (isect a1:'A1. 'B1['a1]); (isect a2:'A2. 'B2['a2]) } }
+
+(************************************************************************
+ * TACTICS                                                              *
+ ************************************************************************)
+
+val d_isectT : int -> tactic
+val eqcd_isectT : tactic
+
+val is_isect_term : term -> bool
+val dest_isect : term -> string * term * term
+val mk_isect_term : string -> term -> term -> term
+
+(*
  * $Log$
+ * Revision 1.2  1997/08/06 16:18:33  jyh
+ * This is an ocaml version with subtyping, type inference,
+ * d and eqcd tactics.  It is a basic system, but not debugged.
+ *
  * Revision 1.1  1997/04/28 15:52:15  jyh
  * This is the initial checkin of Nuprl-Light.
  * I am porting the editor, so it is not included

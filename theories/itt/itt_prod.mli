@@ -3,6 +3,8 @@
  *
  *)
 
+include Tactic_type
+
 include Itt_equal
 include Itt_dprod
 
@@ -61,7 +63,30 @@ axiom independentPairEquality 'H :
    sequent ['ext] { 'H >- ('a1, 'b1) = ('a2, 'b2) in 'A * 'B }
 
 (*
+ * H >- A1 -> B1 <= A2 -> B2
+ * by functionSubtype
+ *
+ * H >- A2 <= A1
+ * H >- B1 <= B2
+ *)
+axiom independentProductSubtype 'H :
+   sequent [squash] { 'H >- subtype{'A1; 'A2} } -->
+   sequent [squash] { 'H >- subtype{'B1; 'B2} } -->
+   sequent ['ext] { 'H >- subtype{ ('A1 * 'B1); ('A2 * 'B2) } }
+
+(************************************************************************
+ * TACTICS                                                              *
+ ************************************************************************)
+
+val d_prodT : int -> tactic
+val eqcd_prodT : tactic
+
+(*
  * $Log$
+ * Revision 1.2  1997/08/06 16:18:37  jyh
+ * This is an ocaml version with subtyping, type inference,
+ * d and eqcd tactics.  It is a basic system, but not debugged.
+ *
  * Revision 1.1  1997/04/28 15:52:21  jyh
  * This is the initial checkin of Nuprl-Light.
  * I am porting the editor, so it is not included

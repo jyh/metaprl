@@ -3,6 +3,10 @@
  *
  *)
 
+open Term
+
+include Tactic_type
+
 include Itt_equal
 include Itt_rfun
 
@@ -106,7 +110,52 @@ axiom spreadEquality 'H lambda{z. 'T['z]} (w:'A * 'B['w]) 'u 'v 'a :
    sequent ['ext] { 'H >- spread{'e1; u1, v1. 'b1['u1; 'v1]} = spread{'e2; u2, v2. 'b2['u2; 'v2]} in 'T['e1] }
 
 (*
+ * H >- a1:A1 * B1 <= a2:A2 * B2
+ * by functionSubtype
+ *
+ * H >- A1 <= A2
+ * H, a: A1 >- B1[a] <= B2[a]
+ *)
+axiom productSubtype 'H 'a :
+   sequent [squash] { 'H >- subtype{'A1; 'A2} } -->
+   sequent [squash] { 'H; a: 'A1 >- subtype{'B1['a]; 'B2['a]} } -->
+   sequent ['ext] { 'H >- subtype{ (a1:'A1 * 'B1['a1]); (a2:'A2 * 'B2['a2]) } }
+
+(************************************************************************
+ * TACTICS                                                              *
+ ************************************************************************)
+
+val d_dprodT : int -> tactic
+val eqcd_dprodT : tactic
+val eqcd_pairT : tactic
+val eqcd_spreadT : tactic
+
+val dprod_term : term
+val is_dprod_term : term -> bool
+val dest_dprod : term -> string * term * term
+val mk_dprod_term : string -> term -> term -> term
+
+val prod_term : term
+val is_prod_term : term -> bool
+val dest_prod : term -> term * term
+val mk_prod_term : term -> term -> term
+
+val pair_term : term
+val is_pair_term : term -> bool
+val dest_pair : term -> term * term
+val mk_pair_term : term -> term -> term
+
+val spread_term : term
+val is_spread_term : term -> bool
+val dest_spread : term -> string * string * term * term
+val mk_spread_term : string -> string -> term -> term -> term
+
+(*
  * $Log$
+ * Revision 1.2  1997/08/06 16:18:26  jyh
+ * This is an ocaml version with subtyping, type inference,
+ * d and eqcd tactics.  It is a basic system, but not debugged.
+ *
  * Revision 1.1  1997/04/28 15:52:09  jyh
  * This is the initial checkin of Nuprl-Light.
  * I am porting the editor, so it is not included

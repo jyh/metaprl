@@ -4,10 +4,13 @@
  *)
 
 open Debug
+open Term
+open Resource
 
 include Itt_equal
 include Itt_prec
 include Itt_subtype
+include Itt_void
 
 (* debug_string DebugLoad "Loading itt_srec..." *)
 
@@ -133,8 +136,52 @@ prim srecindEquality 'H lambda{x. 'S['x]} srec{T. 'B['T]} 'T1 'u 'v 'w 'z univ[@
            } =
    it
 
+(************************************************************************
+ * TACTICS                                                              *
+ ************************************************************************)
+
+let srec_term = << srec{T. 'B['T]} >>
+let srec_opname = opname_of_term srec_term
+let is_srec_term = is_dep1_term srec_opname
+let dest_srec = dest_dep1_term srec_opname
+let mk_srec_term = mk_dep1_term srec_opname
+
+let srecind_term = << srecind{'a; p, h. 'g['p; 'h]} >>
+let srecind_opname = opname_of_term srecind_term
+let is_srecind_term = is_dep0_dep2_term srecind_opname
+let dest_srecind = dest_dep0_dep2_term srecind_opname
+let mk_srecind_term = mk_dep0_dep2_term srecind_opname
+
+(************************************************************************
+ * TYPE INFERENCE                                                       *
+ ************************************************************************)
+
+(*
+ * Type of srec.
+ *)
+let inf_srec f decl t =
+   let a, body = dest_srec t in
+      f ((a, void_term)::decl) body
+
+let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (srec_term, inf_srec)
+
+(*
+ * Type of srecind.
+ * WRONG!
+ *)
+let inf_srecind f decl t =
+   let p, h, a, g = dest_srecind t in
+   let decl', a' = f decl a in
+      f ((p, a')::(h, a')::decl') g
+
+let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (srecind_term, inf_srecind)
+
 (*
  * $Log$
+ * Revision 1.2  1997/08/06 16:18:43  jyh
+ * This is an ocaml version with subtyping, type inference,
+ * d and eqcd tactics.  It is a basic system, but not debugged.
+ *
  * Revision 1.1  1997/04/28 15:52:26  jyh
  * This is the initial checkin of Nuprl-Light.
  * I am porting the editor, so it is not included

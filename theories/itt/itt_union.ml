@@ -4,6 +4,7 @@
  *)
 
 open Debug
+open Term
 open Options
 open Refine_sig
 open Resource
@@ -139,8 +140,49 @@ prim decideEquality 'H lambda{z. 'T['z]} ('A + 'B) 'u 'v 'w :
                    'T['e1] } =
    it
 
+(*
+ * H >- A1 + B1 <= A2 + B2
+ * by unionSubtype
+ *
+ * H >- A1 <= A2
+ * H >- B1 <= B2
+ *)
+prim unionSubtype 'H :
+   sequent [squash] { 'H >- subtype{'A1; 'A2} } -->
+   sequent [squash] { 'H >- subtype{'B1; 'B2} } -->
+   sequent ['ext] { 'H >- subtype{ ('A1 + 'B1); ('A2 + 'B2) } } =
+   it
+
 (************************************************************************
- * TACTICS                                                              *
+ * PRIMITIVES                                                           *
+ ************************************************************************)
+
+let union_term = << 'A + 'B >>
+let union_opname = opname_of_term union_term
+let is_union_term = is_dep0_dep0_term union_opname
+let dest_union = dest_dep0_dep0_term union_opname
+let mk_union_term = mk_dep0_dep0_term union_opname
+
+let inl_term = << inl{'x} >>
+let inl_opname = opname_of_term inl_term
+let is_inl_term = is_dep0_term inl_opname
+let dest_inl = dest_dep0_term inl_opname
+let mk_inl_term = mk_dep0_term inl_opname
+
+let inr_term = << inr{'x} >>
+let inr_opname = opname_of_term inr_term
+let is_inr_term = is_dep0_term inr_opname
+let dest_inr = dest_dep0_term inr_opname
+let mk_inr_term = mk_dep0_term inr_opname
+
+let decide_term = << decide{'x; y. 'a['y]; z. 'b['z]} >>
+let decide_opname = opname_of_term decide_term
+let is_decide_term = is_dep0_dep1_dep1_term decide_opname
+let dest_decide = dest_dep0_dep1_dep1_term decide_opname
+let mk_decide_term = mk_dep0_dep1_dep1_term decide_opname
+
+(************************************************************************
+ * D TACTIC                                                             *
  ************************************************************************)
 
 (*
@@ -177,30 +219,137 @@ let d_hyp_union i p =
 (*
  * Join them.
  *)
-let d_union i =
+let d_unionT i =
    if i = 0 then
       d_concl_union
    else
       d_hyp_union i
 
-let union_term = << 'A + 'B >>
+let d_resource = d_resource.resource_improve d_resource (union_term, d_unionT)
 
-let d_resource = d_resource.resource_improve d_resource (union_term, d_union)
-let d = d_resource.resource_extract d_resource
+(************************************************************************
+ * EQCD TACTIC                                                          *
+ ************************************************************************)
 
 (*
- * EQCD.
+ * EQCD union.
  *)
-let eqcd_union p =
+let eqcd_unionT p =
    let count = hyp_count p in
       (unionEquality count
        thenT addHiddenLabelT "wf") p
 
-let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (union_term, eqcd_union)
-let eqcd = eqcd_resource.resource_extract eqcd_resource
+let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (union_term, eqcd_unionT)
+
+(*
+ * EQCD inl.
+ *)
+let eqcd_inlT p =
+   let count = hyp_count p in
+      (inlEquality count
+       thenT addHiddenLabelT "wf") p
+
+let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (inl_term, eqcd_inlT)
+
+(*
+ * EQCD inr.
+ *)
+let eqcd_inrT p =
+   let count = hyp_count p in
+      (inrEquality count
+       thenT addHiddenLabelT "wf") p
+
+let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (inr_term, eqcd_inrT)
+
+(*
+ * EQCD decide.
+ *)
+let eqcd_decideT p =
+   raise (RefineError (StringError "eqcd_decideT: not implemented"))
+
+let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (decide_term, eqcd_decideT)
+
+(************************************************************************
+ * TYPE INFERENCE                                                       *
+ ************************************************************************)
+
+(*
+ * Type of disjoint union.
+ *)
+let inf_union f decl t =
+   let a, b = dest_union t in
+   let decl', a' = f decl a in
+   let decl'', b' = f decl' b in
+   let le1, le2 =
+      try dest_univ a', dest_univ b' with
+         Term.TermMatch _ -> raise (RefineError (StringTermError ("typeinf: can't infer type for", t)))
+   in
+      decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2)
+
+let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (union_term, inf_union)
+
+(*
+ * Type of inl.
+ *)
+let inf_inl f decl t =
+   let a = dest_inl t in
+   let decl', a' = f decl a in
+      decl', mk_union_term a' (mk_var_term (maybe_new_var "T" (List.map fst decl')))
+
+let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (inl_term, inf_inl)
+
+(*
+ * Type of inr.
+ *)
+let inf_inr f decl t =
+   let a = dest_inr t in
+   let decl', a' = f decl a in
+      decl', mk_union_term (mk_var_term (maybe_new_var "T" (List.map fst decl'))) a'
+
+let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (inr_term, inf_inr)
+
+(*
+ * Type of decide.
+ *)
+let inf_decide (inf : typeinf_func) (decl : term_subst) (t : term) =
+   let e, x, a, y, b = dest_decide t in
+   let decl', e' = inf decl e in
+   let l, r =
+      try dest_union e' with
+         Term.TermMatch _ -> raise (RefineError (StringTermError ("typeinf: can't infer type for", t)))
+   in
+   let decl'', a' = inf ((x, l)::decl') a in
+   let decl''', b' = inf ((y, l)::decl'') b in
+      try unify decl''' a' b', a' with
+         BadMatch _ -> raise (RefineError (StringTermError ("typeinf: can't infer type for", t)))
+
+let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (decide_term, inf_decide)
+
+(************************************************************************
+ * SUBTYPING                                                            *
+ ************************************************************************)
+
+(*
+ * Subtyping of two union types.
+ *)
+let union_subtypeT p =
+   (unionSubtype (hyp_count p)
+    thenT addHiddenLabelT "subtype") p
+
+let sub_resource =
+   sub_resource.resource_improve
+   sub_resource
+   (DSubtype ([<< 'A1 + 'B1 >>, << 'A2 + 'B2 >>;
+               << 'A1 >>, << 'A2 >>;
+               << 'B1 >>, << 'B2 >>],
+              union_subtypeT))
 
 (*
  * $Log$
+ * Revision 1.2  1997/08/06 16:18:46  jyh
+ * This is an ocaml version with subtyping, type inference,
+ * d and eqcd tactics.  It is a basic system, but not debugged.
+ *
  * Revision 1.1  1997/04/28 15:52:30  jyh
  * This is the initial checkin of Nuprl-Light.
  * I am porting the editor, so it is not included

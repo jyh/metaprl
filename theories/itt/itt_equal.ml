@@ -8,12 +8,15 @@ open Opname
 open Term
 open Rformat
 open Simple_print
+open Term_stable
 open Refine_sig
 open Resource
 
 open Tactic_type
 
 include Base_theory
+
+include Itt_squash
 
 (* debug_string DebugLoad "Loading itt_equal..." *)
 
@@ -109,6 +112,14 @@ prim typeEquality 'H :
    it
 
 (*
+ * Squash elim.
+ *)
+prim equality_squashElimination 'H :
+   sequent [squash] { 'H >- 'a = 'b in 'T } :
+   sequent ['ext] { 'H >- 'a = 'b in 'T } =
+   it
+
+(*
  * There should be only one param, of String type.
  * Get it. 
  *)
@@ -154,147 +165,73 @@ prim universeFormation 'H univ[@j:l] :
    univ[@j:l]
 
 (************************************************************************
- * EQCD TACTIC                                                          *
+ * PRIMITIVES                                                           *
  ************************************************************************)
 
 (*
  * Primitives.
  *)
-let equal_opname =
-   let t = << 'a = 'b in 'c >> in
-      opname_of_term t
-
+let equal_term = << 'a = 'b in 'c >>
+let equal_opname = opname_of_term equal_term
 let is_equal_term = is_dep0_dep0_dep0_term equal_opname
 let dest_equal = dest_dep0_dep0_dep0_term equal_opname
 let mk_equal_term = mk_dep0_dep0_dep0_term equal_opname
 
+let univ_term = << univ[@i:l] >>
+let univ1_term = << univ[1:l] >>
+let univ_opname = opname_of_term univ_term
+let is_univ_term = Term.is_univ_term univ_opname
+let dest_univ = Term.dest_univ_term univ_opname
+let mk_univ_term = Term.mk_univ_term univ_opname
+
+let it_term = << it >>
+
+(************************************************************************
+ * EQCD TACTIC                                                          *
+ ************************************************************************)
+
 (*
  * EQCD resource.
- * The key is the opname plus the arity of the subterms.
+ * Use simple table.
  *)
-type eqcd_key = opname * int list
-
-type eqcd_data =
-   { eqcd_info : (eqcd_key * tactic) list;
-     mutable eqcd_table : (eqcd_key, tactic) Hashtbl.t option
-   }
+type eqcd_data = tactic term_stable
 
 resource (term * tactic, tactic, eqcd_data) eqcd_resource
 
 (*
- * Check if the first list is a suffix of the other.
- *)
-let check_suffix list1 =
-   let rec aux l =
-      if list1 == l then
-         true
-      else
-         match l with
-            _::t ->
-               aux t
-          | [] ->
-               false
-   in
-      aux
-
-(*
- * Insert the first list into the second.
- *)
-let rec insert_data data1 = function
-   h::t ->
-      begin
-         match h with
-            name, tac ->
-               begin
-                  try 
-                     List.assq name data1;
-                     insert_data data1 t
-                  with
-                     Not_found ->
-                        insert_data (h::data1) t
-               end
-      end
-      
- | [] -> data1
-            
-(*
- * Join the data from two bases.
- * First check if one is a suffix of the other.
- * This will commonly be the case, and so we optimize it.
- *)
-let join_data base1 base2 =
-   let data1 = base1.eqcd_info in
-   let data2 = base2.eqcd_info in
-      if check_suffix data1 data2 then
-         base2
-      else if check_suffix data2 data1 then
-         base1
-      else
-         { eqcd_info = insert_data data2 data1; eqcd_table = None }
-
-(*
- * Compute the hashtable from the info.
- *)
-let compute_table info =
-   let tbl = Hashtbl.create (List.length info) in
-   let aux (key, tac) =
-      Hashtbl.add tbl key tac
-   in
-      List.iter aux info;
-      tbl
-
-(*
- * Extract a D tactic from the data.
+ * Extract an EQCD tactic from the data.
  * The tactic checks for an optable.
  *)
 let extract_data base =
+   let tbl = sextract base in
    let eqcd p =
-      let tbl =
-         (* Compute the hashtbl if necessary *)
-         match base.eqcd_table with
-            None ->
-               let tbl = compute_table base.eqcd_info in
-                  base.eqcd_table <- Some tbl;
-                  tbl
-          | Some tbl -> tbl
-      in
       let t = concl p in
       let _, l, _ = dest_equal t in
-      let key = opname_of_term l, subterm_arities l in
          try
             (* Find and apply the right tactic *)
-            let tac = Hashtbl.find tbl key in
+            let tac = slookup tbl l in
                tac p
          with
             Not_found ->
-               raise (RefineError (StringError ("EQCD tactic doesn't know about " ^ (string_of_opname (fst key)))))
+               raise (RefineError (StringTermError ("EQCD tactic doesn't know about ", l)))
    in
       eqcd
 
 (*
- * Add a new tactic.
- *)
-let improve_data (t, tac) data =
-   { eqcd_info = ((opname_of_term t, subterm_arities t), tac)::(data.eqcd_info);
-     eqcd_table = None
-   }
-
-(*
  * Wrap up the joiner.
  *)
-let rec join_resource base1 base2 =
-   let data = join_data base1.resource_data base2.resource_data in
-      { resource_data = data;
-        resource_join = join_resource;
-        resource_extract = extract_resource;
-        resource_improve = improve_resource
-      }
+let rec join_resource { resource_data = data1 } { resource_data = data2 } =
+   { resource_data = join_stables data1 data2;
+     resource_join = join_resource;
+     resource_extract = extract_resource;
+     resource_improve = improve_resource
+   }
       
 and extract_resource { resource_data = data } =
    extract_data data
    
-and improve_resource { resource_data = data } x =
-   { resource_data = improve_data x data;
+and improve_resource { resource_data = data } (t, tac) =
+   { resource_data = sinsert data t tac;
      resource_join = join_resource;
      resource_extract = extract_resource;
      resource_improve = improve_resource
@@ -304,13 +241,16 @@ and improve_resource { resource_data = data } x =
  * Resource.
  *)
 let eqcd_resource =
-   { resource_data = { eqcd_info = []; eqcd_table = None };
+   { resource_data = new_stable ();
      resource_join = join_resource;
      resource_extract = extract_resource;
      resource_improve = improve_resource
    }
 
-let eqcd = eqcd_resource.resource_extract eqcd_resource
+(*
+ * Resource argument.
+ *)
+let eqcd_of_proof (_, { ref_rsrc = { ref_eqcd = eqcd } }) = eqcd
 
 (************************************************************************
  * D TACTIC                                                             *
@@ -319,16 +259,72 @@ let eqcd = eqcd_resource.resource_extract eqcd_resource
 (*
  * D tactic.
  *)
-let d_equal i p =
+let d_equalT i p =
    if i = 0 then
-      failwith "Use EqCD on conclusion"
+      (eqcd_of_proof p) p
    else
       let t = goal p in
       let count = num_hyps t in
          equalityElimination (i - 1) (count - i - 1) p
 
+let d_resource = d_resource.resource_improve d_resource (equal_term, d_equalT)
+
+(************************************************************************
+ * EQCD                                                                 *
+ ************************************************************************)
+
+(*
+ * EQCD tactic.
+ *)
+let eqcd_univT p =
+   universeEquality (hyp_count p) p
+
+let eqcd_itT p =
+   axiomEquality (hyp_count p) p
+
+let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (univ_term, eqcd_univT)
+let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (it_term, eqcd_itT)
+
+(************************************************************************
+ * TYPE INFERENCE                                                       *
+ ************************************************************************)
+
+(*
+ * Type of a universe is incremented by one.
+ *)
+let inf_univ _ decl t =
+   let le = dest_univ t in
+      decl, mk_univ_term (incr_level_exp le)
+
+let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (univ_term, inf_univ)
+
+(*
+ * Type of an equality is the type of the equality type.
+ *)
+let inf_equal inf decl t =
+   let ty, _, _ = dest_equal t in
+      inf decl ty
+
+let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (equal_term, inf_equal)
+
+(************************************************************************
+ * SQUASH STABILITY                                                     *
+ ************************************************************************)
+
+(*
+ * Equality is squash stable.
+ *)
+let squash_equalT p =
+   equality_squashElimination (hyp_count p) p
+
+let squash_resource = squash_resource.resource_improve squash_resource (equal_term, squash_equalT)
+
 (*
  * $Log$
+ * Revision 1.2  1997/08/06 16:18:26  jyh
+ * This is an ocaml version with subtyping, type inference,
+ * d and eqcd tactics.  It is a basic system, but not debugged.
+ *
  * Revision 1.1  1997/04/28 15:52:10  jyh
  * This is the initial checkin of Nuprl-Light.
  * I am porting the editor, so it is not included

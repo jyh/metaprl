@@ -3,8 +3,16 @@
  *
  *)
 
+open Term
+
 include Itt_equal
 include Itt_rfun
+
+(*
+ * This is just syntax for a binding term.
+ * It has no semantic meaning in the type theory.
+ *)
+declare bind{x. 'T['x]}
 
 (*
  * H; x: A; J >- A ext x
@@ -67,7 +75,51 @@ axiom hypReplacement 'H 'J 'B univ[@i:l] :
    sequent ['ext] { 'H; x: 'A; 'J['x] >- 'T['x] }
 
 (*
+ * H; x: A[t1]; J[x] >> T1[x] ext t
+ * by hypSubstitution (t1 = t2 in T2) bind(x. A[x])
+ * H; x: A[t1]; J[x] >> t1 = t2 in T2
+ * H; x: A[t2]; J[x] >> T1[x]
+ * H, x: A[t1]; J[x]; z: T2 >> A[z] in type
+ *)
+axiom hypSubstitution 'H 'J ('t1 = 't2 in 'T2) bind{y. 'A['y]} 'z :
+   sequent [squash] { 'H; x: 'A['t1]; 'J['x] >- 't1 = 't2 in 'T2 } -->
+   sequent ['prop] { 'H; x: 'A['t2]; 'J['x] >- 'T1['x] } -->
+   sequent [squash] { 'H; x: 'A['t1]; 'J['x]; z: 'T2 >- 'A['z] } -->
+   sequent ['prop] { 'H; x: 'A['t1]; 'J['x] >- 'T1['x] }
+
+(*
+ * We don't really need this a s a rule, but it
+ * is used often.
+ *
+ * H >> a = b in T
+ * by swapEquands
+ * H >> b = a in T
+ *)
+axiom swapEquands 'H :
+   sequent [squash] { 'H >- 'b = 'a in 'T } -->
+   sequent ['ext] { 'H >- 'a = 'b in 'T }
+
+(************************************************************************
+ * TACTICS                                                              *
+ ************************************************************************)
+
+val nthHypT : int -> tactic
+val thinT : int -> tactic
+val assertT : term -> tactic
+val assertAtT : int -> term -> tactic
+val useWitnessT : term -> tactic
+
+val swapEquandsT : tactic
+val substT : int -> term -> tactic
+val hypSubstT : int -> tactic
+val revHypSubstT : int -> tactic
+
+(*
  * $Log$
+ * Revision 1.2  1997/08/06 16:18:44  jyh
+ * This is an ocaml version with subtyping, type inference,
+ * d and eqcd tactics.  It is a basic system, but not debugged.
+ *
  * Revision 1.1  1997/04/28 15:52:28  jyh
  * This is the initial checkin of Nuprl-Light.
  * I am porting the editor, so it is not included

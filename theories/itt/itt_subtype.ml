@@ -5,12 +5,14 @@
 
 open Debug
 open Options
+open Term
 open Resource
+open Term_dtable
+open Refine_sig
 
 open Var
      
 include Itt_equal
-include Itt_logic
 
 (* debug_string DebugLoad "Loading itt_subtype..." *)
 
@@ -19,13 +21,6 @@ include Itt_logic
  ************************************************************************)
 
 declare subtype{'A; 'B}
-
-(************************************************************************
- * REWRITES                                                             *
- ************************************************************************)
-
-declare ext_equal{'A; 'B}
-primrw ext_equal : ext_equal{'A; 'B} <--> subtype{'A; 'B} & subtype{'B; 'A}
 
 (************************************************************************
  * DISPLAY FORMS                                                        *
@@ -69,9 +64,9 @@ prim subtypeEquality 'H :
  * H >- A = A in Ui
  * H; x: A; y: A; x = y in A >- x = y in B
  *)
-prim subtype_axiomFormation 'H 'x 'y 'z :
+prim subtype_axiomFormation 'H 'x :
    sequent [squash] { 'H >- "type"{'A} } -->
-   sequent [squash] { 'H; x: 'A; y: 'A; z: 'x = 'y in 'A >- 'x = 'y in 'B } -->
+   sequent [squash] { 'H; x: 'A >- 'x = 'x in 'B } -->
    sequent ['ext] { 'H >- subtype{'A; 'B} } =
    it
 
@@ -110,6 +105,134 @@ prim subtypeElimination2 'H 'A :
    sequent ['ext] { 'H >- 'x = 'y in 'B } =
    it
 
+(*
+ * Squash elimination.
+ *)
+prim subtype_squashElimination 'H :
+   sequent [squash] { 'H >- subtype{'A; 'B} } -->
+   sequent ['ext] { 'H >- subtype{'A; 'B} } =
+   it
+
+(************************************************************************
+ * PRIMITIVES                                                           *
+ ************************************************************************)
+
+let subtype_term = << subtype{'A; 'B} >>
+let subtype_opname = opname_of_term subtype_term
+let is_subtype_term = is_dep0_dep0_term subtype_opname
+let dest_subtype = dest_dep0_dep0_term subtype_opname
+let mk_subtype_term = mk_dep0_dep0_term subtype_opname
+
+(************************************************************************
+ * SUBTYPE RESOURCE                                                     *
+ ************************************************************************)
+
+(*
+ * This is what is supplied to the resource.
+ *)
+type sub_info_type = (term * term) list * tactic
+
+type sub_resource_info =
+   LRSubtype of sub_info_type
+ | RLSubtype of sub_info_type
+ | DSubtype of sub_info_type
+
+(*
+ * Subtype resource is a DAG.
+ *)
+type sub_data = tactic term_dtable
+     
+(*
+ * The resource itself.
+ *)
+resource (sub_resource_info, tactic, sub_data) sub_resource
+
+(*
+ * Improve the subtyping information.
+ * We are provided with a (term * term) list
+ * and a tactic, where the first term pair is the goal, the rest are
+ * subgoals, and the supplied tactic should generate the subgoals
+ * in order.
+ *)
+let subtype_f tac subgoals _ =
+   let rec aux sg = function
+      p::t ->
+         let goal = concl p in
+            if opname_of_term goal == subtype_opname then
+               match sg with
+                  (_, _, tac)::sg' -> (tac p)::(aux sg' t)
+                | [] -> raise (RefineError (StringError "subtypeT: subtype mismatch"))
+            else
+               (idT p)::(aux sg t)
+    | [] -> []
+   in
+      tac thenFLT aux subgoals
+
+let improve_data base = function
+   LRSubtype (goal, tac) ->
+      insert_left base goal (subtype_f tac)
+ | RLSubtype (goal, tac) ->
+      insert_right base goal (subtype_f tac)
+ | DSubtype (goal, tac) ->
+      insert base goal (subtype_f tac)
+
+(*
+ * Extract a subtype tactic from the data.
+ * Chain the tactics together.
+ *)
+let extract_data base =
+   let tbl = extract base in
+   let subtyper p =
+      let t = concl p in
+      let t1, t2 =
+         try dest_subtype t with
+            Term.TermMatch _ ->
+               raise (RefineError (StringTermError ("subtype: should be subtype: ", t)))
+      in
+      let tac =
+         try lookup tbl t1 t2 with
+            Not_found ->
+               raise (RefineError (StringTermError ("Can't infer subtype ", t)))
+      in
+         tac p
+   in
+      subtyper
+
+(*
+ * Wrap up the joiner.
+ *)
+let rec join_resource { resource_data = data1 } { resource_data = data2 } =
+   { resource_data = join_tables data1 data2;
+     resource_join = join_resource;
+     resource_extract = extract_resource;
+     resource_improve = improve_resource
+   }
+      
+and extract_resource { resource_data = data } =
+   extract_data data
+   
+and improve_resource { resource_data = data } arg =
+   { resource_data = improve_data data arg;
+     resource_join = join_resource;
+     resource_extract = extract_resource;
+     resource_improve = improve_resource
+   }
+
+(*
+ * Resource.
+ *)
+let sub_resource =
+   { resource_data = new_dtable ();
+     resource_join = join_resource;
+     resource_extract = extract_resource;
+     resource_improve = improve_resource
+   }
+
+(*
+ * Resource argument.
+ *)
+let subtyper_of_proof (_, { ref_rsrc = { ref_subtype = f } }) = f
+
 (************************************************************************
  * TACTICS                                                              *
  ************************************************************************)
@@ -119,12 +242,10 @@ prim subtypeElimination2 'H 'A :
  *)
 let d_concl_subtype p =
    let count = hyp_count p in
-      (match maybe_new_vars ["x"; "y"; "%z"] (declared_vars p) with
-          [x; y; z] ->
-             subtype_axiomFormation count x y z
-             thenLT [addHiddenLabelT "wf";
-                     addHiddenLabelT "aux"]
-        | _ -> failT) p
+   let x = maybe_new_var "x" (declared_vars p) in
+      (subtype_axiomFormation count x
+       thenLT [addHiddenLabelT "wf";
+               addHiddenLabelT "aux"]) p
 
 (*
  * D a hyp.
@@ -144,10 +265,7 @@ let d_subtype i =
    else
       d_hyp_subtype i
 
-let subtype_term = << subtype{'A; 'B} >>
-
 let d_resource = d_resource.resource_improve d_resource (subtype_term, d_subtype)
-let d = d_resource.resource_extract d_resource
 
 (*
  * EQCD.
@@ -158,10 +276,32 @@ let eqcd_subtype p =
        thenT addHiddenLabelT "wf") p
 
 let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (subtype_term, eqcd_subtype)
-let eqcd = eqcd_resource.resource_extract eqcd_resource
+
+(************************************************************************
+ * TYPE INFERENCE                                                       *
+ ************************************************************************)
+
+(*
+ * Type of subtype.
+ *)
+let inf_subtype f decl t =
+   let a, b = dest_subtype t in
+   let decl', a' = f decl a in
+   let decl'', b' = f decl' b in
+   let le1, le2 =
+      try dest_univ a', dest_univ b' with
+         Term.TermMatch _ -> raise (RefineError (StringTermError ("typeinf: can't infer type for", t)))
+   in
+      decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2)
+
+let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (subtype_term, inf_subtype)
 
 (*
  * $Log$
+ * Revision 1.2  1997/08/06 16:18:45  jyh
+ * This is an ocaml version with subtyping, type inference,
+ * d and eqcd tactics.  It is a basic system, but not debugged.
+ *
  * Revision 1.1  1997/04/28 15:52:29  jyh
  * This is the initial checkin of Nuprl-Light.
  * I am porting the editor, so it is not included

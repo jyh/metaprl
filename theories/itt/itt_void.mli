@@ -5,7 +5,12 @@
  *
  *)
 
+open Term
+
+include Tactic_type
+
 include Itt_equal
+include Itt_subtype
 
 (************************************************************************
  * TERMS                                                                *
@@ -36,7 +41,33 @@ axiom voidEquality 'H : sequent ['ext] { 'H >- void = void in univ[@i:l] }
 axiom voidElimination 'H 'J : sequent ['ext] { 'H; x: void; 'J['x] >- 'C['x] }
 
 (*
+ * Squash elimination.
+ *)
+axiom void_squashElimination 'H :
+   sequent [squash] { 'H >- void } -->
+   sequent ['ext] { 'H >- void }
+
+(*
+ * Subtyping.
+ *)
+axiom void_subtype 'H :
+   sequent ['ext] { 'H >- subtype{void; 'T} }
+
+(************************************************************************
+ * TACTICS                                                              *
+ ************************************************************************)
+
+val d_voidT : int -> tactic
+val eqcd_voidT : tactic
+
+val void_term : term
+
+(*
  * $Log$
+ * Revision 1.2  1997/08/06 16:18:50  jyh
+ * This is an ocaml version with subtyping, type inference,
+ * d and eqcd tactics.  It is a basic system, but not debugged.
+ *
  * Revision 1.1  1997/04/28 15:52:32  jyh
  * This is the initial checkin of Nuprl-Light.
  * I am porting the editor, so it is not included

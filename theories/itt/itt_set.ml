@@ -10,8 +10,12 @@ open Refine_sig
 open Resource
 
 include Var
+include Tacticals
 
 include Itt_equal
+include Itt_unit
+include Itt_subtype
+include Itt_struct
 
 (* debug_string DebugLoad "Loading itt_set..." *)
 
@@ -94,9 +98,35 @@ prim setMemberEquality 'H 'x :
  * H, u: { x:A | B }, y: A; v: hide(B[y]); J[y] >- T[y]
  *)
 prim setElimination 'H 'J 'u 'y 'v :
-   ('t['u; 'y; 'v] : sequent ['ext] { 'H; u: { x:'A | 'B['x] }; y: 'A; v: hide{'B['y]}; 'J['y] >- 'T['y] }) :
-   sequent ['ext] { 'H; u: { x:'A | 'B['x] }; 'J['u] >- 'T['u] } =
+   sequent [squash] { 'H; u: { x:'A | 'B['x] }; y: 'A; v: 'B['y]; 'J['y] >- 'T['y] } :
+   sequent [squash] { 'H; u: { x:'A | 'B['x] }; 'J['u] >- 'T['u] } =
+   it
+
+(*
+ * H, u: { x:A | B }, J[u] >> T[u] ext t[y]
+ * by setElimination2 y v z
+ * H, u: { x:A | B }, y: A; v: hide(B[y]); J[y] >> T[y]
+ *)
+prim setElimination2 'H 'J 'u 'y 'v :
+   ('t['u; 'y; 'v] : sequent [it; 'prop] { 'H; u: { x:'A | 'B['x] }; y: 'A; v: hide{'B['y]}; 'J['y] >- 'T['y] }) -->
+   sequent [it; 'prop] { 'H; u: { x:'A | 'B['x] }; 'J['u] >- 'T['u] } =
    't['u; 'u; it]
+
+(*
+ * Unhiding.
+ *)
+prim hideElimination 'H 'J :
+   sequent [squash] { 'H; u: 'P; 'J[it] >- 'T[it] } -->
+   sequent [squash] { 'H; u: hide{'P}; 'J['u] >- 'T['u] } =
+   it
+
+(*
+ * Subtyping.
+ *)
+prim set_subtype 'H :
+   sequent [squash] { 'H >- "type"{ { a: 'A | 'B['a] } } } -->
+   sequent ['ext] { 'H >- subtype{ { a: 'A | 'B['a] }; 'A } } =
+   it
 
 (************************************************************************
  * TACTICS                                                              *
@@ -140,8 +170,152 @@ let eqcd_set p =
 let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (set_term, eqcd_set)
 let eqcd = eqcd_resource.resource_extract eqcd_resource
 
+(************************************************************************
+ * TACTICS                                                              *
+ ************************************************************************)
+
+let set_term = << { a: 'A | 'B['a] } >>
+let set_opname = opname_of_term set_term
+let is_set_term = is_dep0_dep1_term set_opname
+let dest_set = dest_dep0_dep1_term set_opname
+let mk_set_term = mk_dep0_dep1_term set_opname
+
+let hide_term = << hide{'a} >>
+let hide_opname = opname_of_term hide_term
+let is_hide_term = is_dep0_term hide_opname
+let dest_hide = dest_dep0_term hide_opname
+let mk_hide_term = mk_dep0_term hide_opname
+
+(*
+ * Squash a goal.
+ *)
+let squashT p =
+   (if is_squash_goal p then
+       idT
+    else
+       squash_of_proof p) p
+
+(*
+ * Unhide a hidden hypothesis.
+ *)
+let unhideT i p =
+   let count = hyp_count p in
+   let i' = get_pos_hyp_index i count in
+   let s = dest_hide (nth_hyp i' p) in
+      (assertAtT (i' + 1) s
+       thenLT [squashT thenMT nthHypT i';
+               thinT i']) p
+
+(*
+ * Unhide all hidden hyps.
+ *)
+let unhideAllT p =
+   let count = hyp_count p in
+   let rec aux i p =
+      (if i < count then
+          let h = nth_hyp i p in
+             if is_hide_term h then
+                unhideT i thenMT aux (i + 1)
+             else
+                aux (i + 1)
+       else
+          idT) p
+   in
+      aux 0 p
+
+(*
+ * D
+ *)
+let d_set_concl p =
+   let t =
+      try get_term_arg 1 p with
+         Not_found ->
+            raise (RefineError (StringError "d_set requires an argument"))
+   in
+   let v = get_opt_var_arg "z" p in
+      setMemberFormation (hyp_count p) t v p
+
+let d_set_hyp i p =
+   let count = hyp_count p in
+   let i' = get_pos_hyp_index i count in
+   let n = var_of_hyp i' p in
+   let d_squashed p =
+      (match maybe_new_vars ["y"; "v"] (Sequent.declared_vars p) with
+          [y; v] ->
+             setElimination i' (count - i' - 1) n y v
+        | _ -> failT) p
+   in
+   let d_hidden p =
+      (match maybe_new_vars ["y"; "v"] (Sequent.declared_vars p) with
+          [y; v] ->
+             setElimination2 i' (count - i' - 1) n y v
+        | _ -> failT) p
+   in
+      (if is_squash_goal p then
+          d_squashed
+       else
+          let squash = squash_of_proof p in
+          let tac =
+             d_hidden thenT tryT (unhideT (i' + 2))
+          in
+             (squash thenMT d_squashed) orelseT tac) p
+
+let d_setT i =
+   if i = 0 then
+      d_set_concl
+   else
+      d_set_hyp i
+         
+let d_resource = d_resource.resource_improve d_resource (set_term, d_setT)
+
+(*
+ * EqCD.
+ *)
+let eqcd_setT p =
+   let count = hyp_count p in
+   let v = get_opt_var_arg "x" p in
+      setEquality count v p
+
+let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (set_term, eqcd_setT)
+
+(************************************************************************
+ * TYPE INFERENCE                                                       *
+ ************************************************************************)
+
+(*
+ * Type of atom.
+ *)
+let inf_set f decl t =
+   let v, ty, prop = dest_set t in
+   let decl', ty' = f decl ty in
+   let decl'', prop' = f ((v, ty)::decl') prop in
+   let le1, le2 =
+      try dest_univ ty', dest_univ prop' with
+         Term.TermMatch _ -> raise (RefineError (StringTermError ("typeinf: can't infer type for", t)))
+   in
+      decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2)
+
+let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (set_term, inf_set)
+
+(************************************************************************
+ * SUBTYPING                                                            *
+ ************************************************************************)
+
+let set_subtypeT p =
+   (set_subtype (hyp_count p)
+    thenT addHiddenLabelT "wf") p
+
+let sub_resource =
+   sub_resource.resource_improve
+   sub_resource
+   (LRSubtype ([<< { a: 'A | 'B['a] } >>, << 'A >>], set_subtypeT))
+
 (*
  * $Log$
+ * Revision 1.2  1997/08/06 16:18:41  jyh
+ * This is an ocaml version with subtyping, type inference,
+ * d and eqcd tactics.  It is a basic system, but not debugged.
+ *
  * Revision 1.1  1997/04/28 15:52:25  jyh
  * This is the initial checkin of Nuprl-Light.
  * I am porting the editor, so it is not included

@@ -4,12 +4,14 @@
  *)
 
 open Debug
+open Term
 open Refine_sig
 open Resource
 
 include Var
 
 include Itt_equal
+include Itt_void
 include Itt_set
 
 (* debug_string DebugLoad "Loading itt_rfun..." *)
@@ -76,7 +78,7 @@ primrw fix : fix{f. 'b['f]} <--> 'b[fix{f. 'b['f]}]
 prim rfunctionFormation 'H { f | a: 'A -> 'B['f; 'a] } :
    sequent [squash] { 'H >- { f | a: 'A -> 'B['f; 'a] } = { f | a: 'A -> 'B['f; 'a] } in univ[@i:l] } :
    sequent ['ext] { 'H >- univ[@i:l] } =
-   't
+   { f | a: 'A -> 'B['f; 'a] }
 
 (*
  * H >- { f1 | a1:A1 -> B1[f1, a1] } = { f2 | a2:A2 -> B2[f2, a2] } in Ui
@@ -180,7 +182,56 @@ prim rfunction_applyEquality 'H ({ f | x:'A -> 'B['f; 'x] }) :
    it
 
 (************************************************************************
- * TACTICS                                                              *
+ * PRIMITIVES                                                           *
+ ************************************************************************)
+
+(*
+ * Primitives.
+ *)
+let rfun_term = << { f | x: 'A -> 'B['f; 'x] } >>
+let rfun_opname = opname_of_term rfun_term
+let is_rfun_term = is_dep0_dep2_term rfun_opname
+let dest_rfun = dest_dep0_dep2_term rfun_opname
+let mk_rfun_term = mk_dep0_dep2_term rfun_opname
+
+let well_founded_term = << well_founded{'A; x, y. 'R['x; 'y]} >>
+let well_founded_opname = opname_of_term well_founded_term
+let is_well_founded_term = is_dep0_dep2_term well_founded_opname
+let dest_well_founded = dest_dep0_dep2_term well_founded_opname
+let mk_well_founded_term = mk_dep0_dep2_term well_founded_opname
+
+let lambda_term = << lambda{x. 'b['x]} >>
+let lambda_opname = opname_of_term lambda_term
+let is_lambda_term = is_dep1_term lambda_opname
+let dest_lambda = dest_dep1_term lambda_opname
+let mk_lambda_term = mk_dep1_term lambda_opname
+
+let fix_term = << fix{x. 'b['x]} >>
+let fix_opname = opname_of_term fix_term
+let is_fix_term = is_dep1_term fix_opname
+let dest_fix = dest_dep1_term fix_opname
+let mk_fix_term = mk_dep1_term fix_opname
+
+let apply_term = << apply{'f; 'a} >>
+let apply_opname = opname_of_term apply_term
+let is_apply_term = is_dep0_dep0_term apply_opname
+let dest_apply = dest_dep0_dep0_term apply_opname
+let mk_apply_term = mk_dep0_dep0_term apply_opname
+
+let dfun_term = << x: 'A -> 'B['x] >>
+let dfun_opname = opname_of_term dfun_term
+let is_dfun_term = is_dep0_dep1_term dfun_opname
+let dest_dfun = dest_dep0_dep1_term dfun_opname
+let mk_dfun_term = mk_dep0_dep1_term dfun_opname
+
+let fun_term = << 'A -> 'B >>
+let fun_opname = opname_of_term fun_term
+let is_fun_term = is_dep0_dep0_term fun_opname
+let dest_fun = dest_dep0_dep0_term fun_opname
+let mk_fun_term = mk_dep0_dep0_term fun_opname
+
+(************************************************************************
+ * D TACTICS                                                            *
  ************************************************************************)
 
 (*
@@ -222,23 +273,24 @@ let d_hyp_rfun i p =
 (*
  * Join them.
  *)
-let d_rfun i =
+let d_rfunT i =
    if i = 0 then
       d_concl_rfun
    else
       d_hyp_rfun i
 
-let rfun_term = << { f | x: 'A -> 'B['f; 'x] } >>
-
-let d_resource = d_resource.resource_improve d_resource (rfun_term, d_rfun)
-let d = d_resource.resource_extract d_resource
+let d_resource = d_resource.resource_improve d_resource (rfun_term, d_rfunT)
+ 
+(************************************************************************
+ * EQCD TACTICS                                                         *
+ ************************************************************************)
 
 (*
- * EQCD.
+ * RFUN
  *
  * Need a term for the well-order.
  *)
-let eqcd_rfun p =
+let eqcd_rfunT p =
    let wf =
       try get_term_arg 0 p with
          Not_found -> raise (RefineError (StringError "eqcd_rfun: need a well-order term"))
@@ -252,11 +304,72 @@ let eqcd_rfun p =
         | _ ->
              failT) p
 
-let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (rfun_term, eqcd_rfun)
-let eqcd = eqcd_resource.resource_extract eqcd_resource
+let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (rfun_term, eqcd_rfunT)
+
+(************************************************************************
+ * TYPE INFERENCE                                                       *
+ ************************************************************************)
+
+(*
+ * Type of rfun.
+ *)
+let inf_rfun inf decl t =
+   let f, v, a, b = dest_rfun t in
+   let decl', a' = inf decl a in
+   let decl'', b' = inf ((v, a)::(f, mk_fun_term a void_term)::decl') b in
+   let le1, le2 =
+      try dest_univ a', dest_univ b' with
+         Term.TermMatch _ -> raise (RefineError (StringTermError ("typeinf: can't infer type for", t)))
+   in
+      decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2)
+
+let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (rfun_term, inf_rfun)
+
+(*
+ * Type of lambda.
+ *)
+let inf_lambda (f : typeinf_func) (decl : term_subst) (t : term) =
+   let v, b = dest_lambda t in
+   let a = new_var v (List.map fst decl) in
+   let decl', b' = f ((v, mk_var_term a)::decl) b in
+   let decl'', a' = 
+      try decl', List.assoc a decl' with
+         Not_found -> (a, void_term)::decl', void_term
+   in
+      decl'', mk_dfun_term v a' b'
+
+let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (lambda_term, inf_lambda)
+
+(*
+ * Type of apply.
+ *)
+let inf_apply inf decl t =
+   let f, a = dest_apply t in
+   let decl', f' = inf decl f in
+   let decl'', a' = inf decl' a in
+   let ty =
+      if is_dfun_term f' then
+         let v, d, r = dest_dfun f' in
+            subst r [a] [v]
+      else if is_fun_term f' then
+         let _, r = dest_fun f' in
+            r
+      else if is_rfun_term f' then
+         let f'', v, d, r = dest_rfun f' in
+            subst r [f; a] [f''; v]
+      else
+         raise  (RefineError (StringTermError ("typeinf: can't infer type for", t)))
+   in
+      decl'', ty
+
+let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (apply_term, inf_apply)
 
 (*
  * $Log$
+ * Revision 1.2  1997/08/06 16:18:38  jyh
+ * This is an ocaml version with subtyping, type inference,
+ * d and eqcd tactics.  It is a basic system, but not debugged.
+ *
  * Revision 1.1  1997/04/28 15:52:23  jyh
  * This is the initial checkin of Nuprl-Light.
  * I am porting the editor, so it is not included

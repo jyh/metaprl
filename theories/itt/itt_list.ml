@@ -4,8 +4,10 @@
  *)
 
 open Debug
+open Term
 open Options
 open Resource
+open Refine_sig
 
 include Var
 
@@ -115,6 +117,19 @@ prim consFormation 'H :
    'h :: 't
 
 (*
+ * H >- u1::v1 = u2::v2 in list(A)
+ * consEquality
+ *
+ * H >- u1 = u2 in A
+ * H >- v1 = v2 in list(A)
+ *)
+prim consEquality 'H :
+   sequent [squash] { 'H >- 'u1 = 'u2 in 'A } -->
+   sequent [squash] { 'H >- 'v1 = 'v2 in list{'A} } -->
+   sequent ['ext] { 'H >- cons{'u1; 'v1} = cons{'u2; 'v2} in list{'A} } =
+   it
+
+(*
  * H; l: list(A); J[l] >- C[l]
  * by listElimination w u v
  *
@@ -150,16 +165,44 @@ prim list_indEquality 'H lambda{l. 'T['l]} list{'A} 'u 'v 'w :
            } =
    it
    
+(*
+ * H >- list(A1) <= list(A2)
+ * by listSubtype
+ *
+ * H >- A1 <= A2
+ *)
+prim listSubtype 'H :
+   sequent [squash] { 'H >- subtype{'A1; 'A2} } -->
+   sequent ['ext] { 'H >- subtype{list{'A1}; list{'A2}}} =
+   it
+
 (************************************************************************
- * TACTICS                                                              *
+ * PRIMITIVES                                                           *
  ************************************************************************)
      
-(*
- * D
- *)
 let list_term = << list{'A} >>
+let list_opname = opname_of_term list_term
+let is_list_term = is_dep0_term list_opname
+let dest_list = dest_dep0_term list_opname
+let mk_list_term = mk_dep0_term list_opname
+
 let nil_term = << nil >>
+
 let cons_term = << cons{'a; 'b} >>
+let cons_opname = opname_of_term cons_term
+let is_cons_term = is_dep0_dep0_term cons_opname
+let dest_cons = dest_dep0_dep0_term cons_opname
+let mk_cons_term = mk_dep0_dep0_term cons_opname
+
+let list_ind_term = << list_ind{'e; 'base; h, t, f. 'step['h; 't; 'f]} >>
+let list_ind_opname = opname_of_term list_ind_term
+let is_list_ind_term = is_dep0_dep0_dep3_term list_ind_opname
+let dest_list_ind = dest_dep0_dep0_dep3_term list_ind_opname
+let mk_list_ind_term = mk_dep0_dep0_dep3_term list_ind_opname
+
+(************************************************************************
+ * D TACTIC                                                             *
+ ************************************************************************)
 
 let d_concl_list p =
    nilFormation (hyp_count p) p
@@ -176,25 +219,121 @@ let d_hyp_list i p =
         | _ ->
              failT) p
 
-let d_list i =
+let d_listT i =
    if i = 0 then
       d_concl_list
    else
       d_hyp_list i
 
-let d_resource = d_resource.resource_improve d_resource (list_term, d_list)
-let d = d_resource.resource_extract d_resource
+let d_resource = d_resource.resource_improve d_resource (list_term, d_listT)
+
+(************************************************************************
+ * EQCD TACTICS                                                         *
+ ************************************************************************)
 
 (*
- * EqCD.
+ * EqCD list.
  *)
-let eqcd_list p = listEquality (hyp_count p) p
+let eqcd_listT p = listEquality (hyp_count p) p
 
-let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (list_term, eqcd_list)
-let eqcd = eqcd_resource.resource_extract eqcd_resource
+let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (list_term, eqcd_listT)
+
+(*
+ * EqCD nil.
+ *)
+let eqcd_nilT p = nilEquality (hyp_count p) p
+
+let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (nil_term, eqcd_nilT)
+
+(*
+ * EqCD nil.
+ *)
+let eqcd_consT p = consEquality (hyp_count p) p
+
+let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (cons_term, eqcd_consT)
+
+(*
+ * EQCD listind.
+ *)
+let eqcd_list_indT p =
+   raise (RefineError (StringError "eqcd_list_indT: not implemented"))
+
+let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (list_ind_term, eqcd_list_indT)
+
+(************************************************************************
+ * TYPE INFERENCE                                                       *
+ ************************************************************************)
+
+(*
+ * Type of list.
+ *)
+let inf_list f decl t =
+   let a = dest_list t in
+      f decl a
+
+let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (list_term, inf_list)
+
+(*
+ * Type of nil.
+ *)
+let inf_nil f decl t =
+   decl, mk_var_term (new_var "T" (List.map fst decl))
+
+let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (nil_term, inf_nil)
+
+(*
+ * Type of cons.
+ *)
+let inf_cons inf decl t =
+   let hd, tl = dest_cons t in
+   let decl', hd' = inf decl hd in
+   let decl'', tl' = inf decl' tl in
+      try unify decl'' (mk_list_term hd') tl', tl' with
+         BadMatch _ -> raise (RefineError (StringTermError ("typeinf: can't infer type for", t)))
+
+let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (cons_term, inf_cons)
+
+(*
+ * Type of list_ind.
+ *)
+let inf_list_ind inf decl t =
+   let e, base, hd, tl, f, step = dest_list_ind t in
+   let decl', e' = inf decl e in
+      if is_list_term e' then
+         let decl'', base' = inf decl' base in
+         let a = dest_list e' in
+         let decl''', step' = inf ((hd, a)::(tl, e')::(f, base')::decl'') step in
+            unify decl''' base' step', base'
+      else
+         raise (RefineError (StringTermError ("typeinf: can't infer type for", t)))
+
+let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (list_ind_term, inf_list_ind)
+
+(************************************************************************
+ * SUBTYPING                                                            *
+ ************************************************************************)
+
+(*
+ * Subtyping of two list types.
+ *)
+let list_subtypeT p =
+   (listSubtype (hyp_count p)
+    thenT addHiddenLabelT "subtype") p
+
+let sub_resource =
+   sub_resource.resource_improve
+   sub_resource
+   (DSubtype ([<< list{'A1} >>, << list{'A2} >>;
+               << 'A2 >>, << 'A1 >>;
+               << 'B1 >>, << 'B2 >>],
+              list_subtypeT))
 
 (*
  * $Log$
+ * Revision 1.2  1997/08/06 16:18:33  jyh
+ * This is an ocaml version with subtyping, type inference,
+ * d and eqcd tactics.  It is a basic system, but not debugged.
+ *
  * Revision 1.1  1997/04/28 15:52:16  jyh
  * This is the initial checkin of Nuprl-Light.
  * I am porting the editor, so it is not included

@@ -1,6 +1,6 @@
 # Libraries
 REF_ROOT := ../..
-INCLUDE := -I . -I $(REF_ROOT)/refiner
+INCLUDE := -I . -I $(REF_ROOT)/mllib -I $(REF_ROOT)/refiner
 OCAMLFLAGS := -g -root $(REF_ROOT)
 OCAMLC := $(REF_ROOT)/filter/prlcomp.run
 CAMLP4 := $(REF_ROOT)/filter/prlcomp.run -E

@@ -4,9 +4,11 @@
  *)
 
 open Debug
+open Term
 open Options
 open Refine_sig
 open Resource
+open Refine_sig
 
 include Var
 
@@ -138,8 +140,49 @@ prim spreadEquality 'H lambda{z. 'T['z]} (w:'A * 'B['w]) 'u 'v 'a :
    sequent ['ext] { 'H >- spread{'e1; u1, v1. 'b1['u1; 'v1]} = spread{'e2; u2, v2. 'b2['u2; 'v2]} in 'T['e1] } =
    it
 
+(*
+ * H >- a1:A1 * B1 <= a2:A2 * B2
+ * by functionSubtype
+ *
+ * H >- A1 <= A2
+ * H, a: A1 >- B1[a] <= B2[a]
+ *)
+prim productSubtype 'H 'a :
+   sequent [squash] { 'H >- subtype{'A1; 'A2} } -->
+   sequent [squash] { 'H; a: 'A1 >- subtype{'B1['a]; 'B2['a]} } -->
+   sequent ['ext] { 'H >- subtype{ (a1:'A1 * 'B1['a1]); (a2:'A2 * 'B2['a2]) } } =
+   it
+
 (************************************************************************
- * TACTICS                                                              *
+ * PRIMITIVES                                                           *
+ ************************************************************************)
+
+let dprod_term = << x: 'A * 'B['x] >>
+let dprod_opname = opname_of_term dprod_term
+let is_dprod_term = is_dep0_dep1_term dprod_opname
+let dest_dprod = dest_dep0_dep1_term dprod_opname
+let mk_dprod_term = mk_dep0_dep1_term dprod_opname
+
+let prod_term = << 'A * 'B >>
+let prod_opname = opname_of_term prod_term
+let is_prod_term = is_dep0_dep0_term prod_opname
+let dest_prod = dest_dep0_dep0_term prod_opname
+let mk_prod_term = mk_dep0_dep0_term prod_opname
+
+let pair_term = << pair{'a; 'b} >>
+let pair_opname = opname_of_term pair_term
+let is_pair_term = is_dep0_dep0_term pair_opname
+let dest_pair = dest_dep0_dep0_term pair_opname
+let mk_pair_term = mk_dep0_dep0_term pair_opname
+
+let spread_term = << spread{'e; u, v. 'b['u; 'v]} >>
+let spread_opname = opname_of_term spread_term
+let is_spread_term = is_dep0_dep2_term spread_opname
+let dest_spread = dest_dep0_dep2_term spread_opname
+let mk_spread_term = mk_dep0_dep2_term spread_opname
+
+(************************************************************************
+ * D TACTIC                                                             *
  ************************************************************************)
 
 (*
@@ -175,31 +218,127 @@ let d_hyp_dprod i p =
 (*
  * Join them.
  *)
-let d_dprod i =
+let d_dprodT i =
    if i = 0 then
       d_concl_dprod
    else
       d_hyp_dprod i
 
-let dprod_term = << x: 'A * 'B['x] >>
+let d_resource = d_resource.resource_improve d_resource (dprod_term, d_dprodT)
 
-let d_resource = d_resource.resource_improve d_resource (dprod_term, d_dprod)
-let d = d_resource.resource_extract d_resource
+(************************************************************************
+ * EQCD TACTIC                                                          *
+ ************************************************************************)
 
 (*
- * EQCD.
+ * EQCD dprod.
  *)
-let eqcd_dprod p =
+let eqcd_dprodT p =
+   let _, l, _ = dest_equal (concl p) in
+   let v, _, _ = dest_dprod l in
+   let x = get_opt_var_arg v p in
    let count = hyp_count p in
-   let v = get_opt_var_arg "y" p in
-      (productEquality count v
+      (productEquality count x
        thenT addHiddenLabelT "wf") p
 
-let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (dprod_term, eqcd_dprod)
-let eqcd = eqcd_resource.resource_extract eqcd_resource
+let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (dprod_term, eqcd_dprodT)
+
+(*
+ * EQCD pair.
+ *)
+let eqcd_pairT p =
+   let l, _, _ = dest_equal (concl p) in
+   let v, _, _ = dest_dprod l in
+   let x = get_opt_var_arg v p in
+   let count = hyp_count p in
+      (pairEquality count x
+       thenT addHiddenLabelT "wf") p
+
+let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (pair_term, eqcd_pairT)
+
+(*
+ * EQCD spread.
+ *)
+let eqcd_spreadT p =
+   let _, l, _ = dest_equal (concl p) in
+   let u, v, _, _ = dest_spread l in
+      raise (RefineError (StringError "eqcd_spreadT: not implemented"))
+
+let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (spread_term, eqcd_spreadT)
+
+(************************************************************************
+ * TYPE INFERENCE                                                       *
+ ************************************************************************)
+
+(*
+ * Type of rfun.
+ *)
+let inf_dprod f decl t =
+   let v, a, b = dest_dprod t in
+   let decl', a' = f decl a in
+   let decl'', b' = f ((v, a)::decl') b in
+   let le1, le2 =
+      try dest_univ a', dest_univ b' with
+         Term.TermMatch _ -> raise (RefineError (StringTermError ("typeinf: can't infer type for", t)))
+   in
+      decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2)
+
+let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (dprod_term, inf_dprod)
+
+(*
+ * Type of pair.
+ *)
+let inf_pair f decl t =
+   let a, b = dest_pair t in
+   let decl', a' = f decl a in
+   let decl'', b' = f decl' b in
+      decl'', mk_prod_term a' b'
+
+let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (pair_term, inf_pair)
+
+(*
+ * Type of spread.
+ *)
+let inf_spread inf decl t =
+   let u, v, a, b = dest_spread t in
+   let decl', a' = inf decl a in
+      if is_prod_term a' then
+         let l, r = dest_prod a' in
+            inf ((u, l)::(v, r)::decl') b
+      else if is_dprod_term a' then
+         let x, l, r = dest_dprod a' in
+            inf ((u, l)::(v, subst r [mk_var_term u] [x])::decl') b
+      else
+         raise (RefineError (StringTermError ("typeinf: can't infer type for", t)))
+
+let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (spread_term, inf_spread)
+
+(************************************************************************
+ * SUBTYPING                                                            *
+ ************************************************************************)
+
+(*
+ * Subtyping of two function types.
+ *)
+let dprod_subtypeT p =
+   let a = get_opt_var_arg "x" p in
+      (productSubtype (hyp_count p) a
+       thenT addHiddenLabelT "subtype") p
+
+let sub_resource =
+   sub_resource.resource_improve
+   sub_resource
+   (DSubtype ([<< a1:'A1 * 'B1['a1] >>, << a2:'A2 * 'B2['a2] >>;
+               << 'A2 >>, << 'A1 >>;
+               << 'B1['a1] >>, << 'B2['a1] >>],
+              dprod_subtypeT))
 
 (*
  * $Log$
+ * Revision 1.2  1997/08/06 16:18:25  jyh
+ * This is an ocaml version with subtyping, type inference,
+ * d and eqcd tactics.  It is a basic system, but not debugged.
+ *
  * Revision 1.1  1997/04/28 15:52:09  jyh
  * This is the initial checkin of Nuprl-Light.
  * I am porting the editor, so it is not included

@@ -3,20 +3,15 @@
  *
  *)
 
+open Term
+
 include Itt_equal
-include Itt_logic
 
 (************************************************************************
  * TERMS                                                                *
  ************************************************************************)
 
 declare subtype{'A; 'B}
-
-(************************************************************************
- * REWRITES                                                             *
- ************************************************************************)
-
-define ext_equal : ext_equal{'A; 'B} <--> subtype{'A; 'B} & subtype{'B; 'A}
 
 (************************************************************************
  * RULES                                                                *
@@ -52,9 +47,9 @@ axiom subtypeEquality 'H :
  * H >- A = A in Ui
  * H; x: A; y: A; x = y in A >- x = y in B
  *)
-axiom subtype_axiomFormation 'H 'x 'y 'z :
+axiom subtype_axiomFormation 'H 'x :
    sequent [squash] { 'H >- "type"{'A} } -->
-   sequent [squash] { 'H; x: 'A; y: 'A; z: 'x = 'y in 'A >- 'x = 'y in 'B } -->
+   sequent [squash] { 'H; x: 'A >- 'x = 'x in 'B } -->
    sequent ['ext] { 'H >- subtype{'A; 'B} }
 
 (*
@@ -90,7 +85,65 @@ axiom subtypeElimination2 'H 'A :
    sequent ['ext] { 'H >- 'x = 'y in 'B }
 
 (*
+ * Squash elimination.
+ *)
+axiom subtype_squashElimination 'H :
+   sequent [squash] { 'H >- subtype{'A; 'B} } -->
+   sequent ['ext] { 'H >- subtype{'A; 'B} }
+
+(************************************************************************
+ * RESOURCE                                                             *
+ ************************************************************************)
+
+(*
+ * Define a resource to keep track of proofs of subtyping.
+ * This resource provides tactics to prove subtyping goals.
+ * These tactics take transitivity into account, and try
+ * to construct an optimal subtype chain.
+ *)
+
+(*
+ * This is what is supplied to the resource.
+ *)
+type sub_info_type = (term * term) list * tactic
+
+type sub_resource_info =
+   LRSubtype of sub_info_type
+ | RLSubtype of sub_info_type
+ | DSubtype of sub_info_type
+
+(*
+ * Internal type.
+ *)
+type sub_data
+     
+(*
+ * The resource itself.
+ *)
+resource (sub_resource_info, tactic, sub_data) sub_resource
+
+(*
+ * Utilities.
+ *)
+val subtyper_of_proof : tactic_arg -> tactic
+
+(************************************************************************
+ * TACTICS                                                              *
+ ************************************************************************)
+
+val d_subtype : int -> tactic
+val eqcd_subtype : tactic
+
+val is_subtype_term : term -> bool
+val dest_subtype : term -> term * term
+val mk_subtype_term : term -> term -> term
+
+(*
  * $Log$
+ * Revision 1.2  1997/08/06 16:18:46  jyh
+ * This is an ocaml version with subtyping, type inference,
+ * d and eqcd tactics.  It is a basic system, but not debugged.
+ *
  * Revision 1.1  1997/04/28 15:52:29  jyh
  * This is the initial checkin of Nuprl-Light.
  * I am porting the editor, so it is not included

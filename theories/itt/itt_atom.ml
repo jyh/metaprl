@@ -61,34 +61,64 @@ prim tokenEquality 'H : : sequent ['ext] { 'H >- token[@t:t] = token[@t:t] in at
  * TACTICS                                                              *
  ************************************************************************)
      
+let atom_term = << atom >>
+let token_term = << token[@x:t] >>
+let token_opname = opname_of_term token_term
+let is_token_term = Term.is_token_term token_opname
+let dest_token = Term.dest_token_term token_opname
+let mk_token_term = Term.mk_token_term token_opname
+
 (*
  * D
  *)
-let atom_term = << atom >>
+let bogus_token = << token["token":t] >>
 
-let bogus_token = << token["hello world":t] >>
-
-let d_atom i p =
+let d_atomT i p =
    if i = 0 then
       tokenFormation (num_hyps (goal p)) bogus_token p
    else
       failwith "Can't eliminate Atom"
 
-let d_resource = d_resource.resource_improve d_resource (atom_term, d_atom)
-let dT = d_resource.resource_extract d_resource
+let d_resource = d_resource.resource_improve d_resource (atom_term, d_atomT)
 
 (*
  * EqCD.
  *)
-let eqcd_atom p =
+let eqcd_atomT p =
    let count = num_hyps (goal p) in
       atomEquality count p
 
-let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (atom_term, eqcd_atom)
-let eqcd = eqcd_resource.resource_extract eqcd_resource
+let eqcd_tokenT p =
+   let count = hyp_count p in
+      tokenEquality count p
+
+let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (atom_term, eqcd_atomT)
+let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (token_term, eqcd_tokenT)
+
+(************************************************************************
+ * TYPE INFERENCE                                                       *
+ ************************************************************************)
+
+(*
+ * Type of atom.
+ *)
+let inf_atom _ decl _ = decl, univ1_term
+
+let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (atom_term, inf_atom)
+
+(*
+ * Type of an equality is the type of the equality type.
+ *)
+let inf_token _ decl _ = decl, atom_term
+
+let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (token_term, inf_token)
 
 (*
  * $Log$
+ * Revision 1.2  1997/08/06 16:18:23  jyh
+ * This is an ocaml version with subtyping, type inference,
+ * d and eqcd tactics.  It is a basic system, but not debugged.
+ *
  * Revision 1.1  1997/04/28 15:52:07  jyh
  * This is the initial checkin of Nuprl-Light.
  * I am porting the editor, so it is not included

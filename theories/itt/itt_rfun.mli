@@ -3,6 +3,10 @@
  *
  *)
 
+open Term
+
+include Tactic_type
+
 include Itt_equal
 include Itt_set
 
@@ -144,8 +148,54 @@ axiom rfunction_applyEquality 'H ({ f | x:'A -> 'B['f; 'x] }) :
    sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
    sequent ['ext] { 'H >- 'f1 'a1 = 'f2 'a2 in 'B['f1; 'a1] }
 
+(************************************************************************
+ * TACTICS                                                              *
+ ************************************************************************)
+
+val d_rfunT : int -> tactic
+val eqcd_rfunT : tactic
+
+val rfun_term : term
+val is_rfun_term : term -> bool
+val dest_rfun : term -> string * string * term * term
+val mk_rfun_term : string -> string -> term -> term -> term
+
+val dfun_term : term
+val is_dfun_term : term -> bool
+val dest_dfun : term -> string * term * term
+val mk_dfun_term : string -> term -> term -> term
+
+val fun_term : term
+val is_fun_term : term -> bool
+val dest_fun : term -> term * term
+val mk_fun_term : term -> term -> term
+
+val well_founded_term : term
+val is_well_founded_term : term -> bool
+val dest_well_founded : term -> string * string * term * term
+val mk_well_founded_term : string -> string -> term -> term -> term
+
+val lambda_term : term
+val is_lambda_term : term -> bool
+val dest_lambda : term -> string * term
+val mk_lambda_term : string -> term -> term
+
+val fix_term : term
+val is_fix_term : term -> bool
+val dest_fix : term -> string * term
+val mk_fix_term : string -> term -> term
+
+val apply_term : term
+val is_apply_term : term -> bool
+val dest_apply : term -> term * term
+val mk_apply_term : term -> term -> term
+
 (*
  * $Log$
+ * Revision 1.2  1997/08/06 16:18:40  jyh
+ * This is an ocaml version with subtyping, type inference,
+ * d and eqcd tactics.  It is a basic system, but not debugged.
+ *
  * Revision 1.1  1997/04/28 15:52:24  jyh
  * This is the initial checkin of Nuprl-Light.
  * I am porting the editor, so it is not included

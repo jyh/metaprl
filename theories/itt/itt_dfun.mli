@@ -100,16 +100,63 @@ axiom applyEquality 'H (x:'A -> 'B['x]) :
    sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
    sequent ['ext] { 'H >- ('f1 'a1) = ('f2 'a2) in 'B['a1] }
 
+(*
+ * H >- a1:A1 -> B1 <= a2:A2 -> B2
+ * by functionSubtype
+ *
+ * H >- A2 <= A1
+ * H, a: A1 >- B1[a] <= B2[a]
+ *)
+axiom functionSubtype 'H 'a :
+   sequent [squash] { 'H >- subtype{'A2; 'A1} } -->
+   sequent [squash] { 'H; a: 'A1 >- subtype{'B1['a]; 'B2['a]} } -->
+   sequent ['prop] { 'H >- subtype{ (a1:'A1 -> 'B1['a1]); (a2:'A2 -> 'B2['a2]) } }
+
+(*
+ * H; x: a1:A1 -> B1 <= a2:A2 -> B2; J[x] >- T[x]
+ * by function_subtypeElimination i
+ *
+ * H; x: a1:A1 -> B1 <= a2:A2 -> B2; y: A2 <= A1; z: a:A2 -> B2[a] <= B1[a]; J[x] >- T[x]
+ *)
+axiom function_subtypeElimination 'H 'J 'y 'z 'a :
+   sequent { 'H;
+             x: subtype{(a1:'A1 -> 'B1['a1]); (a2:'A2 -> 'B2['a2])};
+             'J['x];
+             y: subtype{'A2; 'A1};
+             z: a:'A2 -> subtype{'B1['a]; 'B2['a]}
+             >- 'T['x]
+           } -->
+   sequent { 'H; x: subtype{(a1:'A1 -> 'B1['a1]); (a2:'A2 -> 'B2['a2])}; 'J['x] >- 'T['x] }
+
+(*
+ * H; x: a1:A1 -> B1 = a2:A2 -> B2 in Ui; J[x] >- T[x]
+ * by function_equalityElimination
+ *
+ * H; x: a1:A1 -> B1 = a2:A2 -> B2 in Ui; y: A1 = A2 in Ui; z: a:A1 -> B1[a] = B2[a] in Ui; J[x] >- T[x]
+ *)
+axiom function_equalityElimination 'H 'J 'y 'z 'a :
+   sequent { 'H;
+             x: (a1:'A1 -> 'B1['a1]) = (a2:'A2 -> 'B2['a2]) in univ[@i:l];
+             'J['x];
+             y: 'A1 = 'A2 in univ[@i:l];
+             z: a:'A1 -> ('B1['a] = 'B2['a] in univ[@i:l])
+             >- 'T['x]
+           } -->
+   sequent { 'H; x: (a1:'A1 -> 'B1['a1]) = (a2:'A2 -> 'B2['a2]) in univ[@i:l]; 'J['x] >- 'T['x] }
+
 (************************************************************************
- * PRIMITIVES                                                           *
+ * TACTICS                                                              *
  ************************************************************************)
 
-val is_dfun_term : term -> bool
-val dest_dfun : term -> string * term * term
-val mk_dfun_term : string -> term -> term -> term
+val d_dfunT : int -> tactic
+val eqcd_dfunT : tactic
 
 (*
  * $Log$
+ * Revision 1.2  1997/08/06 16:18:25  jyh
+ * This is an ocaml version with subtyping, type inference,
+ * d and eqcd tactics.  It is a basic system, but not debugged.
+ *
  * Revision 1.1  1997/04/28 15:52:08  jyh
  * This is the initial checkin of Nuprl-Light.
  * I am porting the editor, so it is not included

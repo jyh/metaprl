@@ -3,8 +3,12 @@
  *
  *)
 
+open Term
+
 include Itt_equal
 include Itt_subtype
+include Itt_fun
+include Itt_prod
 
 (************************************************************************
  * TERMS                                                                *
@@ -140,8 +144,24 @@ axiom precindEquality 'H lambda{x. 'S['x]} (a:'A * "prec"{T, y. 'B['T; 'y]; 'a})
                    in 'S['r1]
            }
 
+(************************************************************************
+ * TACTICS                                                              *        
+ ************************************************************************)
+
+val is_prec_term : term -> bool
+val dest_prec : term -> string * string * term * term
+val mk_prec_term : string -> string -> term -> term -> term
+
+val is_precind_term : term -> bool
+val dest_precind : term -> string * string * term * term
+val mk_precind_term : string -> string -> term -> term -> term
+
 (*
  * $Log$
+ * Revision 1.2  1997/08/06 16:18:36  jyh
+ * This is an ocaml version with subtyping, type inference,
+ * d and eqcd tactics.  It is a basic system, but not debugged.
+ *
  * Revision 1.1  1997/04/28 15:52:20  jyh
  * This is the initial checkin of Nuprl-Light.
  * I am porting the editor, so it is not included

@@ -2,6 +2,10 @@
  * Some basic tacticals.
  *
  * $Log$
+ * Revision 1.2  1997/08/06 16:18:55  jyh
+ * This is an ocaml version with subtyping, type inference,
+ * d and eqcd tactics.  It is a basic system, but not debugged.
+ *
  * Revision 1.1  1997/04/28 15:52:44  jyh
  * This is the initial checkin of Nuprl-Light.
  * I am porting the editor, so it is not included
@@ -316,6 +320,12 @@ let ifWT tac p =
     else
        idT) p
 
+let ifET tac p =
+   (if proof_label p = "equality" then
+       tac
+    else
+       idT) p
+   
 let ifAT tac p =
    (if List.mem (proof_label p) main_labels then
        idT
@@ -342,6 +352,9 @@ let prefix_thenAT tac1 tac2 =
 
 let prefix_thenWT tac1 tac2 =
    tac1 thenT ifWT tac2
+
+let prefix_thenET tac1 tac2 =
+   tac1 thenT ifET tac2
 
 let prefix_thenPT tac1 tac2 =
    tac1 thenT ifPT tac2

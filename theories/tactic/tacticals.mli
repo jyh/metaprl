@@ -2,6 +2,10 @@
  * Some basic tacticals.
  *
  * $Log$
+ * Revision 1.2  1997/08/06 16:18:55  jyh
+ * This is an ocaml version with subtyping, type inference,
+ * d and eqcd tactics.  It is a basic system, but not debugged.
+ *
  * Revision 1.1  1997/04/28 15:52:45  jyh
  * This is the initial checkin of Nuprl-Light.
  * I am porting the editor, so it is not included
@@ -46,6 +50,7 @@ val prefix_orelseT : tactic -> tactic -> tactic
 val prefix_andalsoT : tactic -> tactic -> tactic
 val prefix_orthenT : tactic -> tactic -> tactic
 val firstT : tactic list -> tactic
+val tryT : tactic -> tactic
 
 val prefix_thenT : tactic -> tactic -> tactic
 val prefix_thenLT : tactic -> tactic list -> tactic
@@ -90,6 +95,7 @@ val prefix_thenMLT : tactic -> tactic list -> tactic
 val prefix_thenAT : tactic -> tactic -> tactic
 val prefix_thenALT : tactic -> tactic list -> tactic
 val prefix_thenWT : tactic -> tactic -> tactic
+val prefix_thenET : tactic -> tactic -> tactic
 val prefix_thenPT : tactic -> tactic -> tactic
 
 val repeatMT : tactic -> tactic

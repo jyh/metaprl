@@ -4,6 +4,7 @@
  *)
 
 open Debug
+open Term
 open Rformat
 open Refine_sig
 open Resource
@@ -42,9 +43,11 @@ prec prec_compare
 prec prec_add
 prec prec_mul
 
+(*
 prec prec_mul < prec_apply
 prec prec_add < prec_mul
 prec prec_compare < prec_add
+*)
 
 dform mode[prl] :: int = mathbbZ
 
@@ -150,11 +153,11 @@ primrw indReduce : ind{'x; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]} <-->
 rwthm indReduce ind('x; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]) =
    let n = dest_natural_number x in
       if n > 0 then
-         (| 'down['x; 'redex] >>
+         << 'down['x; 'redex] >>
       else if n < 0 then
-         (| 'up['x; 'redex] >>
+         << 'up['x; 'redex] >>
       else
-         (| 'base >>
+         << 'base >>
    mlend
 *)
 
@@ -287,14 +290,30 @@ prim arith : arith_check{'t} --> 't = it
  * TACTICS                                                              *
  ************************************************************************)
      
+let int_term = << int >>
+
+let natural_number_term = << natural_number[@n:n] >>
+let natural_number_opname = opname_of_term natural_number_term
+let is_natural_number_term = is_number_term natural_number_opname
+let dest_natural_number = dest_number_term natural_number_opname
+let mk_natural_number_term = mk_number_term natural_number_opname
+
+let ind_term = << ind{'i; m, z. 'down; 'base; m, z. 'up} >>
+let ind_opname = opname_of_term ind_term
+let is_ind_term = is_dep0_dep2_dep0_dep2_term ind_opname
+let dest_ind = dest_dep0_dep2_dep0_dep2_term ind_opname
+let mk_ind_term = mk_dep0_dep2_dep0_dep2_term ind_opname
+
+(************************************************************************
+ * D TACTIC                                                             *
+ ************************************************************************)
+
 (*
  * D
  *)
-let int_term = << int >>
-
 let zero = << 0 >>
 
-let d_int i p =
+let d_intT i p =
    if i = 0 then
       numberFormation (hyp_count p) zero p
    else
@@ -307,20 +326,52 @@ let d_int i p =
           | _ ->
                failwith "d_int: match"
          
-let d_resource = d_resource.resource_improve d_resource (int_term, d_int)
-let d = d_resource.resource_extract d_resource
-let x = d_resource
+let d_resource = d_resource.resource_improve d_resource (int_term, d_intT)
+
+(************************************************************************
+ * EQCD TACTIC                                                          *
+ ************************************************************************)
 
 (*
- * EqCD.
+ * EqCD int.
  *)
-let eqcd_int p = intEquality (hyp_count p) p
+let eqcd_intT p = intEquality (hyp_count p) p
 
-let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (int_term, eqcd_int)
-let eqcd = eqcd_resource.resource_extract eqcd_resource
+let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (int_term, eqcd_intT)
+
+(************************************************************************
+ * TYPE INFERENCE                                                       *
+ ************************************************************************)
+
+(*
+ * Type of int.
+ *)
+let inf_int _ decl _ = decl, univ1_term
+
+let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (int_term, inf_int)
+
+(*
+ * Type of natural_number.
+ *)
+let inf_natural_number _ decl _ = decl, int_term
+
+let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (natural_number_term, inf_natural_number)
+
+(*
+ * Type of ind.
+ *)
+let inf_ind inf decl t =
+   let i, a, b, down, base, c, d, up = dest_ind t in
+      inf decl base
+
+let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (ind_term, inf_ind)
 
 (*
  * $Log$
+ * Revision 1.2  1997/08/06 16:18:31  jyh
+ * This is an ocaml version with subtyping, type inference,
+ * d and eqcd tactics.  It is a basic system, but not debugged.
+ *
  * Revision 1.1  1997/04/28 15:52:13  jyh
  * This is the initial checkin of Nuprl-Light.
  * I am porting the editor, so it is not included

@@ -3,6 +3,10 @@
  *
  *)
 
+open Term
+
+include Tactic_type
+
 include Itt_equal
 include Itt_rfun
 
@@ -87,6 +91,18 @@ axiom consFormation 'H :
    sequent ['ext] { 'H >- list{'A} }
 
 (*
+ * H >- u1::v1 = u2::v2 in list(A)
+ * consEquality
+ *
+ * H >- u1 = u2 in A
+ * H >- v1 = v2 in list(A)
+ *)
+axiom consEquality 'H :
+   sequent [squash] { 'H >- 'u1 = 'u2 in 'A } -->
+   sequent [squash] { 'H >- 'v1 = 'v2 in list{'A} } -->
+   sequent ['ext] { 'H >- cons{'u1; 'v1} = cons{'u2; 'v2} in list{'A} };;
+
+(*
  * H; l: list(A); J[l] >- C[l]
  * by listElimination w u v
  *
@@ -121,7 +137,43 @@ axiom list_indEquality 'H lambda{l. 'T['l]} list{'A} 'u 'v 'w :
            }
    
 (*
+ * H >- list(A1) <= list(A2)
+ * by listSubtype
+ *
+ * H >- A1 <= A2
+ *)
+axiom listSubtype 'H :
+   sequent [squash] { 'H >- subtype{'A1; 'A2} } -->
+   sequent ['ext] { 'H >- subtype{list{'A1}; list{'A2}}}
+
+(************************************************************************
+ * TACTICS                                                              *
+ ************************************************************************)
+
+val d_listT : int -> tactic
+val eqcd_listT : tactic
+
+val list_term : term
+val is_list_term : term -> bool
+val dest_list : term -> term
+val mk_list_term : term -> term
+
+val nil_term : term
+
+val is_cons_term : term -> bool
+val dest_cons : term -> term * term
+val mk_cons_term : term -> term -> term
+
+val is_list_ind_term : term -> bool
+val dest_list_ind : term -> term * term * string * string * string * term
+val mk_list_ind_term : term -> term -> string -> string -> string -> term -> term
+
+(*
  * $Log$
+ * Revision 1.2  1997/08/06 16:18:34  jyh
+ * This is an ocaml version with subtyping, type inference,
+ * d and eqcd tactics.  It is a basic system, but not debugged.
+ *
  * Revision 1.1  1997/04/28 15:52:17  jyh
  * This is the initial checkin of Nuprl-Light.
  * I am porting the editor, so it is not included

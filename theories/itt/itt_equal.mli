@@ -6,16 +6,15 @@
 
 open Term
 
-open Tactic_type
+include Tactic_type
 
 include Base_theory
+
+include Itt_squash
 
 (************************************************************************
  * TERMS                                                                *
  ************************************************************************)
-
-declare ext
-declare squash
 
 declare "type"{'a}
 declare univ[@i:l]
@@ -83,6 +82,13 @@ axiom typeEquality 'H :
    sequent ['ext] { 'H >- "type"{'T} }
 
 (*
+ * Squash elim.
+ *)
+axiom equality_squashElimination 'H :
+   sequent [squash] { 'H >- 'a = 'b in 'T } -->
+   sequent ['ext] { 'H >- 'a = 'b in 'T }
+
+(*
  * H >- Uj = Uj in Ui
  * by universeEquality (side (j < i))
  *)
@@ -108,6 +114,8 @@ type eqcd_data
      
 resource (term * tactic, tactic, eqcd_data) eqcd_resource
 
+val eqcd_of_proof : tactic_arg -> tactic
+
 (************************************************************************
  * PRIMITIVES                                                           *
  ************************************************************************)
@@ -116,8 +124,34 @@ val is_equal_term : term -> bool
 val dest_equal : term -> term * term * term
 val mk_equal_term : term -> term -> term -> term
 
+(************************************************************************
+ * PRIMITIVES AND TACTICS                                               *
+ ************************************************************************)
+
+val equal_term : term
+val is_equal_term : term -> bool
+val dest_equal : term -> term * term * term
+val mk_equal_term : term -> term -> term -> term
+
+val univ_term : term
+val univ1_term : term
+val is_univ_term : term -> bool
+val dest_univ : term -> level_exp
+val mk_univ_term : level_exp -> term
+
+val it_term : term
+      
+val d_equalT : int -> tactic
+val eqcd_univT : tactic
+val eqcd_itT : tactic
+val squash_equalT : tactic
+
 (*
  * $Log$
+ * Revision 1.2  1997/08/06 16:18:27  jyh
+ * This is an ocaml version with subtyping, type inference,
+ * d and eqcd tactics.  It is a basic system, but not debugged.
+ *
  * Revision 1.1  1997/04/28 15:52:10  jyh
  * This is the initial checkin of Nuprl-Light.
  * I am porting the editor, so it is not included

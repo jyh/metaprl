@@ -3,7 +3,12 @@
  *
  *)
 
+open Term
+
 include Itt_equal
+include Itt_subtype
+include Itt_unit
+include Itt_struct
 
 (************************************************************************
  * TERMS                                                                *
@@ -75,11 +80,59 @@ axiom setMemberEquality 'H 'x :
  * H, u: { x:A | B }, y: A; v: hide{B[y]}; J[y] >- T[y]
  *)
 axiom setElimination 'H 'J 'u 'y 'v :
-   sequent ['ext] { 'H; u: { x:'A | 'B['x] }; y: 'A; v: hide{'B['y]}; 'J['y] >- 'T['y] } -->
+   sequent ['ext] { 'H; u: { x:'A | 'B['x] }; y: 'A; v: 'B['y]; 'J['y] >- 'T['y] } -->
    sequent ['ext] { 'H; u: { x:'A | 'B['x] }; 'J['u] >- 'T['u] }
 
 (*
+ * H, u: { x:A | B }, J[u] >> T[u] ext t[y]
+ * by setElimination2 y v z
+ * H, u: { x:A | B }, y: A; v: hide(B[y]); J[y] >> T[y]
+ *)
+axiom setElimination2 'H 'J 'u 'y 'v :
+   sequent [it; 'prop] { 'H; u: { x:'A | 'B['x] }; y: 'A; v: hide{'B['y]}; 'J['y] >- 'T['y] } -->
+   sequent [it; 'prop] { 'H; u: { x:'A | 'B['x] }; 'J['u] >- 'T['u] }
+
+(*
+ * Unhiding.
+ *)
+axiom hideElimination 'H 'J :
+   sequent [squash] { 'H; u: 'P; 'J[it] >- 'T[it] } -->
+   sequent [squash] { 'H; u: hide{'P}; 'J['u] >- 'T['u] }
+
+(*
+ * Subtyping.
+ *)
+axiom set_subtype 'H :
+   sequent [squash] { 'H >- "type"{ { a: 'A | 'B['a] } } } -->
+   sequent ['ext] { 'H >- subtype{ { a: 'A | 'B['a] }; 'A } }
+
+(************************************************************************
+ * TACTICS                                                              *
+ ************************************************************************)
+
+val d_setT : int -> tactic
+val eqcd_setT : tactic
+
+(* Hiding and unhiding *)
+val squashT : tactic
+val unhideT : int -> tactic
+val unhideAllT : tactic
+
+(* Primitives *)
+val is_set_term : term -> bool
+val dest_set : term -> string * term * term
+val mk_set_term : string -> term -> term -> term
+
+val is_hide_term : term -> bool
+val dest_hide : term -> term
+val mk_hide_term : term -> term
+
+(*
  * $Log$
+ * Revision 1.2  1997/08/06 16:18:41  jyh
+ * This is an ocaml version with subtyping, type inference,
+ * d and eqcd tactics.  It is a basic system, but not debugged.
+ *
  * Revision 1.1  1997/04/28 15:52:25  jyh
  * This is the initial checkin of Nuprl-Light.
  * I am porting the editor, so it is not included

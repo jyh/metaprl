@@ -111,22 +111,57 @@ prim applyEquality 'H (x:'A -> 'B['x]) :
    sequent ['ext] { 'H >- ('f1 'a1) = ('f2 'a2) in 'B['a1] } =
    it
 
+(*
+ * H >- a1:A1 -> B1 <= a2:A2 -> B2
+ * by functionSubtype
+ *
+ * H >- A2 <= A1
+ * H, a: A1 >- B1[a] <= B2[a]
+ *)
+prim functionSubtype 'H 'a :
+   sequent [squash] { 'H >- subtype{'A2; 'A1} } -->
+   sequent [squash] { 'H; a: 'A1 >- subtype{'B1['a]; 'B2['a]} } -->
+   sequent ['prop] { 'H >- subtype{ (a1:'A1 -> 'B1['a1]); (a2:'A2 -> 'B2['a2]) } } =
+   it
+
+(*
+ * H; x: a1:A1 -> B1 <= a2:A2 -> B2; J[x] >- T[x]
+ * by function_subtypeElimination i
+ *
+ * H; x: a1:A1 -> B1 <= a2:A2 -> B2; y: A2 <= A1; z: a:A2 -> B2[a] <= B1[a]; J[x] >- T[x]
+ *)
+prim function_subtypeElimination 'H 'J 'y 'z 'a :
+   ('t['x; 'y; 'z] : sequent { 'H;
+             x: subtype{(a1:'A1 -> 'B1['a1]); (a2:'A2 -> 'B2['a2])};
+             'J['x];
+             y: subtype{'A2; 'A1};
+             z: a:'A2 -> subtype{'B1['a]; 'B2['a]}
+             >- 'T['x]
+           }) -->
+   sequent { 'H; x: subtype{(a1:'A1 -> 'B1['a1]); (a2:'A2 -> 'B2['a2])}; 'J['x] >- 'T['x] } =
+   't['x; it; lambda{x. it}]
+
+(*
+ * H; x: a1:A1 -> B1 = a2:A2 -> B2 in Ui; J[x] >- T[x]
+ * by function_equalityElimination
+ *
+ * H; x: a1:A1 -> B1 = a2:A2 -> B2 in Ui; y: A1 = A2 in Ui; z: a:A1 -> B1[a] = B2[a] in Ui; J[x] >- T[x]
+ *)
+prim function_equalityElimination 'H 'J 'y 'z 'a :
+   ('t['x; 'y; 'z] : sequent { 'H;
+             x: (a1:'A1 -> 'B1['a1]) = (a2:'A2 -> 'B2['a2]) in univ[@i:l];
+             'J['x];
+             y: 'A1 = 'A2 in univ[@i:l];
+             z: a:'A1 -> ('B1['a] = 'B2['a] in univ[@i:l])
+             >- 'T['x]
+           }) -->
+sequent { 'H; x: (a1:'A1 -> 'B1['a1]) = (a2:'A2 -> 'B2['a2]) in univ[@i:l]; 'J['x] >- 'T['x] } =
+
+   't['x; it; lambda{x. it}]
+
 (************************************************************************
- * TACTICS                                                              *
+ * D TACTIC                                                             *
  ************************************************************************)
-
-(*
- * Template.
- *)
-let dfun_term = << x: 'A -> 'B['x] >>
-
-(*
- * Primitives.
- *)
-let dfun_opname = opname_of_term dfun_term
-let is_dfun_term = is_dep0_dep1_term dfun_opname
-let dest_dfun = dest_dep0_dep1_term dfun_opname
-let mk_dfun_term = mk_dep0_dep1_term dfun_opname
 
 (*
  * D the conclusion.
@@ -136,17 +171,16 @@ let d_concl_dfun p =
    let t = concl p in
    let z, _, _ = dest_dfun t in
    let z' = get_opt_var_arg z p in
-      lambdaFormation count z' p
+      lambdaFormation count z' p;;
 
 (*
  * D a hyp.
  * We take the argument.
  *)
 let d_hyp_dfun i p =
-   let a =
-      try get_term_arg 0 p with
-         Not_found ->
-            raise (RefineError (StringError "d_hyp_dfun: requires an argument"))
+   let a = try get_term_arg 0 p with
+              Not_found ->
+                 raise (RefineError (StringError "d_hyp_dfun: requires an argument"))
    in
    let count = hyp_count p in
    let i' = get_pos_hyp_index i count in
@@ -156,36 +190,108 @@ let d_hyp_dfun i p =
              functionElimination i' (count - i' - 1) f a y v
              thenLT [addHiddenLabelT "wf"; idT]
         | _ ->
-             failT) p
+             failT) p;;
 
 (*
  * Join them.
  *)
-let d_dfun i =
+let d_dfunT i =
    if i = 0 then
       d_concl_dfun
    else
-      d_hyp_dfun i
+      d_hyp_dfun i;;
 
-let d_resource = d_resource.resource_improve d_resource (dfun_term, d_dfun)
-let d = d_resource.resource_extract d_resource
+let d_resource = d_resource.resource_improve d_resource (dfun_term, d_dfunT);;
+
+(************************************************************************
+ * EQCD TACTICS                                                         *
+ ************************************************************************)
 
 (*
- * EQCD.
- *
- * Need a term for the well-order.
+ * EQCD dfun.
  *)
-let eqcd_dfun p =
-   let x = get_opt_var_arg "x" p in
+let eqcd_dfunT p =
+   let _, x, _ = dest_equal (concl p) in
+   let v, _, _ = dest_dfun x in
+   let x = get_opt_var_arg v p in
    let count = hyp_count p in
       (functionEquality count x
-       thenT addHiddenLabelT "wf") p
+       thenT addHiddenLabelT "wf") p;;
 
-let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (dfun_term, eqcd_dfun)
-let eqcd = eqcd_resource.resource_extract eqcd_resource
+let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (dfun_term, eqcd_dfunT);;
+
+(*
+ * EQCD lambda.
+ *)
+let eqcd_lambdaT p =
+   let _, l, _ = dest_equal (concl p) in
+   let v, _ = dest_lambda l in
+   let x = get_opt_var_arg v p in
+   let count = hyp_count p in
+      (lambdaEquality count x
+       thenT addHiddenLabelT "wf") p;;
+
+let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (lambda_term, eqcd_lambdaT);;
+
+(*
+ * EQCD apply.
+ *)
+let eqcd_applyT p =
+   let t =
+      try get_term_arg 0 p with
+         Not_found -> raise (RefineError (StringError "eqcd_applyT: need an argument"))
+   in
+   let count = hyp_count p in
+      (applyEquality count t
+       thenT addHiddenLabelT "wf") p;;
+
+let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (apply_term, eqcd_applyT);;
+
+(************************************************************************
+ * TYPE INFERENCE                                                       *
+ ************************************************************************)
+
+(*
+ * Type of rfun.
+ *)
+let inf_dfun f decl t =
+   let v, a, b = dest_dfun t in
+   let decl', a' = f decl a in
+   let decl'', b' = f ((v, a)::decl') b in
+   let le1, le2 =
+      try dest_univ a', dest_univ b' with
+         Term.TermMatch _ -> raise (RefineError (StringTermError ("typeinf: can't infer type for", t)))
+   in
+      decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2);;
+
+let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (dfun_term, inf_dfun);;
+
+(************************************************************************
+ * SUBTYPING                                                            *
+ ************************************************************************)
+
+(*
+ * Subtyping of two function types.
+ *)
+let dfun_subtypeT p =
+   let a = get_opt_var_arg "x" p in
+      (functionSubtype (hyp_count p) a
+       thenT addHiddenLabelT "subtype") p;;
+
+let sub_resource =
+   sub_resource.resource_improve
+   sub_resource
+   (DSubtype ([<< a1:'A1 -> 'B1['a1] >>, << a2:'A2 -> 'B2['a2] >>;
+               << 'A2 >>, << 'A1 >>;
+               << 'B1['a1] >>, << 'B2['a1] >>],
+              dfun_subtypeT));;
 
 (*
  * $Log$
+ * Revision 1.2  1997/08/06 16:18:24  jyh
+ * This is an ocaml version with subtyping, type inference,
+ * d and eqcd tactics.  It is a basic system, but not debugged.
+ *
  * Revision 1.1  1997/04/28 15:52:08  jyh
  * This is the initial checkin of Nuprl-Light.
  * I am porting the editor, so it is not included

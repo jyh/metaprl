@@ -4,8 +4,10 @@
  *)
 
 open Debug
+open Term
 open Options
 open Resource
+open Refine_sig
 
 include Itt_equal
 include Itt_rfun
@@ -64,8 +66,21 @@ prim independentFunctionElimination 'H 'J 'f 'y :
    sequent ['ext] { 'H; f: 'A -> 'B; 'J['f] >- 'T['f] } =
    't['f; 'f 'a]
 
+(*
+ * H >- A1 -> B1 <= A2 -> B2
+ * by functionSubtype
+ *
+ * H >- A2 <= A1
+ * H >- B1 <= B2
+ *)
+prim independentFunctionSubtype 'H :
+   sequent [squash] { 'H >- subtype{'A2; 'A1} } -->
+   sequent [squash] { 'H >- subtype{'B1; 'B2} } -->
+   sequent ['ext] { 'H >- subtype{ ('A1 -> 'B1); ('A2 -> 'B2) } } =
+   it
+
 (************************************************************************
- * TACTICS                                                              *
+ * D TACTIC                                                             *
  ************************************************************************)
 
 (*
@@ -91,32 +106,74 @@ let d_hyp_fun i p =
 (*
  * Join them.
  *)
-let d_fun i =
+let d_funT i =
    if i = 0 then
       d_concl_fun
    else
       d_hyp_fun i
 
-let fun_term = << 'A -> 'B >>
+let d_resource = d_resource.resource_improve d_resource (fun_term, d_funT)
 
-let d_resource = d_resource.resource_improve d_resource (fun_term, d_fun)
-let d = d_resource.resource_extract d_resource
+(************************************************************************
+ * EQCD TACTIC                                                          *
+ ************************************************************************)
 
 (*
  * EQCD.
  *
  * Need a term for the well-order.
  *)
-let eqcd_fun p =
+let eqcd_funT p =
    let count = hyp_count p in
       (independentFunctionEquality count
        thenT addHiddenLabelT "wf") p
 
-let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (fun_term, eqcd_fun)
-let eqcd = eqcd_resource.resource_extract eqcd_resource
+let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (fun_term, eqcd_funT)
+
+(************************************************************************
+ * TYPE INFERENCE                                                       *
+ ************************************************************************)
+
+(*
+ * Type of rfun.
+ *)
+let inf_fun f decl t =
+   let a, b = dest_fun t in
+   let decl', a' = f decl a in
+   let decl'', b' = f decl' b in
+   let le1, le2 =
+      try dest_univ a', dest_univ b' with
+         Term.TermMatch _ -> raise (RefineError (StringTermError ("typeinf: can't infer type for", t)))
+   in
+      decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2)
+
+let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (fun_term, inf_fun)
+
+(************************************************************************
+ * SUBTYPING                                                            *
+ ************************************************************************)
+
+(*
+ * Subtyping of two function types.
+ *)
+let fun_subtypeT p =
+   (independentFunctionSubtype (hyp_count p)
+    thenT addHiddenLabelT "subtype") p
+
+let sub_resource =
+   sub_resource.resource_improve
+   sub_resource
+   (DSubtype ([<< 'A1 -> 'B1 >>, << 'A2 -> 'B2 >>;
+               << 'A2 >>, << 'A1 >>;
+               << 'B1 >>, << 'B2 >>],
+              fun_subtypeT))
 
 (*
  * $Log$
+ * Revision 1.2  1997/08/06 16:18:30  jyh
+ * This is an ocaml version with subtyping, type inference,
+ * d and eqcd tactics.  It is a basic system, but not debugged.
+ *
  * Revision 1.1  1997/04/28 15:52:11  jyh
  * This is the initial checkin of Nuprl-Light.
  * I am porting the editor, so it is not included

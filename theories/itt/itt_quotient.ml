@@ -4,8 +4,10 @@
  *)
 
 open Debug
+open Term
 open Options
 open Resource
+open Refine_sig
 
 include Var
 
@@ -168,9 +170,32 @@ prim quotient_equalityElimination 'H 'J 'v :
    sequent ['ext] { 'H; x: 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]; 'J['x] >- 'T['x] } =
    'g[it]
 
+(*
+ * H >- quot x1, y1: A1 // E1[x1; y1] <= quot x2, y2: A2 // E2[x2; y2]
+ * by quotientSubtype
+ *
+ * H >- A1 <= A2
+ * H, x1: A1, y1: A1 >- E1[x1; y1] => E2[x2; y2]
+ * H >- quot x1, y1: A1 // E1[x1; y1] in type
+ * H >- quot x2, y2: A2 // E2[x2; y2] in type
+ *)
+prim quotientSubtype 'H 'a1 'a2 :
+   sequent [squash] { 'H >- subtype{'A1; 'A2} } -->
+   sequent [squash] { 'H; a1: 'A1; a2: 'A1 (* ; 'E1['a1; 'a2] *) >- 'E2['a1; 'a2] } -->
+   sequent [squash] { 'H >- "type"{(quot x1, y1: 'A1 // 'E1['x1; 'y1])} } -->
+   sequent [squash] { 'H >- "type"{(quot x2, y2: 'A2 // 'E2['x2; 'y2])} } -->
+   sequent ['ext] { 'H >- subtype{ (quot x1, y1: 'A1 // 'E1['x1; 'y1]); (quot x2, y2: 'A2 // 'E2['x2; 'y2]) } } =
+   it
+
 (************************************************************************
  * TACTICS                                                              *
  ************************************************************************)
+
+let quotient_term = << "quot"{'A; x, y. 'E['x; 'y]} >>
+let quotient_opname = opname_of_term quotient_term
+let is_quotient_term = is_dep0_dep2_term quotient_opname
+let dest_quotient = dest_dep0_dep2_term quotient_opname
+let mk_quotient_term = mk_dep0_dep2_term quotient_opname
 
 (*
  * D the conclusion.
@@ -194,21 +219,18 @@ let d_hyp_quotient i p =
 (*
  * Join them.
  *)
-let d_quotient i =
+let d_quotientT i =
    if i = 0 then
       d_concl_quotient
    else
       d_hyp_quotient i
 
-let quotient_term = << "quot"{'A; 'B} >>
-
-let d_resource = d_resource.resource_improve d_resource (quotient_term, d_quotient)
-let d = d_resource.resource_extract d_resource
+let d_resource = d_resource.resource_improve d_resource (quotient_term, d_quotientT)
 
 (*
  * EQCD.
  *)
-let eqcd_quotient p =
+let eqcd_quotientT p =
    let count = hyp_count p in
       (match maybe_new_vars ["r"; "s"; "t"] (declared_vars p) with
           [r; s; t] ->
@@ -216,11 +238,58 @@ let eqcd_quotient p =
              thenT addHiddenLabelT "wf"
         | _ -> failT) p
 
-let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (quotient_term, eqcd_quotient)
-let eqcd = eqcd_resource.resource_extract eqcd_resource
+let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (quotient_term, eqcd_quotientT)
+
+(************************************************************************
+ * TYPE INFERENCE                                                       *
+ ************************************************************************)
+
+(*
+ * Type of quotient.
+ *)
+let inf_quotient f decl t =
+   let x, y, a, e = dest_quotient t in
+   let decl', a' = f decl a in
+   let decl'', e' = f ((x, a)::(y, a)::decl') e in
+   let le1, le2 =
+      try dest_univ a', dest_univ e' with
+         Term.TermMatch _ -> raise (RefineError (StringTermError ("typeinf: can't infer type for", t)))
+   in
+      decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2)
+
+let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (quotient_term, inf_quotient)
+
+(************************************************************************
+ * SUBTYPING                                                            *
+ ************************************************************************)
+
+(*
+ * Subtyping of two quotient types.
+ *)
+let quotient_subtypeT p =
+   (match maybe_new_vars ["x"; "y"] (declared_vars p) with
+       [x; y] ->
+          (quotientSubtype (hyp_count p) x y
+           thenLT [addHiddenLabelT "subtype";
+                   addHiddenLabelT "aux";
+                   addHiddenLabelT "wf";
+                   addHiddenLabelT "wf"])
+         
+     | _ -> failT) p
+
+let sub_resource =
+   sub_resource.resource_improve
+   sub_resource
+   (DSubtype ([<< quot x1, y1: 'A1 // 'E1['x1; 'y1] >>, << quot x2, y2: 'A2 // 'E2['x2; 'y2] >>;
+               << 'A1 >>, << 'A2 >>],
+              quotient_subtypeT))
 
 (*
  * $Log$
+ * Revision 1.2  1997/08/06 16:18:37  jyh
+ * This is an ocaml version with subtyping, type inference,
+ * d and eqcd tactics.  It is a basic system, but not debugged.
+ *
  * Revision 1.1  1997/04/28 15:52:22  jyh
  * This is the initial checkin of Nuprl-Light.
  * I am porting the editor, so it is not included

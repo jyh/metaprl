@@ -4,9 +4,15 @@
  *)
 
 open Debug
+open Term
+open Resource
+open Refine_sig
 
 include Itt_equal
 include Itt_subtype
+include Itt_void
+include Itt_fun
+include Itt_prod
 
 (* debug_string DebugLoad "Loading itt_prec..." *)
 
@@ -150,8 +156,53 @@ prim precindEquality 'H lambda{x. 'S['x]} (a:'A * "prec"{T, y. 'B['T; 'y]; 'a}) 
            } =
    it
 
+(************************************************************************
+ * TACTICS                                                              *
+ ************************************************************************)
+
+let prec_term = << "prec"{T, x. 'B['T; 'x]; 'a} >>
+let prec_opname = opname_of_term prec_term
+let is_prec_term = is_dep2_dep0_term prec_opname
+let dest_prec = dest_dep2_dep0_term prec_opname
+let mk_prec_term = mk_dep2_dep0_term prec_opname
+
+let precind_term = << precind{'a; p, h. 'g['p; 'h]} >>
+let precind_opname = opname_of_term precind_term
+let is_precind_term = is_dep0_dep2_term precind_opname
+let dest_precind = dest_dep0_dep2_term precind_opname
+let mk_precind_term = mk_dep0_dep2_term precind_opname
+
+(************************************************************************
+ * TYPE INFERENCE                                                       *
+ ************************************************************************)
+
+(*
+ * Type of prec.
+ *)
+let inf_prec f decl t =
+   let a, b, body, arg = dest_prec t in
+   let decl', arg' = f decl arg in
+      f ((a, void_term)::(b, arg')::decl') body
+
+let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (prec_term, inf_prec)
+
+(*
+ * Type of precind.
+ * WRONG!
+ *)
+let inf_precind f decl t =
+   let p, h, a, g = dest_precind t in
+   let decl', a' = f decl a in
+      f ((p, a')::(h, a')::decl') g
+
+let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (precind_term, inf_precind)
+
 (*
  * $Log$
+ * Revision 1.2  1997/08/06 16:18:35  jyh
+ * This is an ocaml version with subtyping, type inference,
+ * d and eqcd tactics.  It is a basic system, but not debugged.
+ *
  * Revision 1.1  1997/04/28 15:52:19  jyh
  * This is the initial checkin of Nuprl-Light.
  * I am porting the editor, so it is not included

@@ -4,11 +4,21 @@
  *)
 
 open Debug
+open Term
+open Refine_sig
+
+include Options
 
 include Itt_equal
 include Itt_rfun
 
 (* debug_string DebugLoad "Loading itt_struct..." *)
+
+(*
+ * This is just syntax for a binding term.
+ * It has no semantic meaning in the type theory.
+ *)
+declare bind{x. 'T['x]}
 
 (*
  * H; x: A; J >- A ext x
@@ -76,7 +86,182 @@ prim hypReplacement 'H 'J 'B univ[@i:l] :
    't
 
 (*
+ * H; x: A[t1]; J[x] >> T1[x] ext t
+ * by hypSubstitution (t1 = t2 in T2) bind(x. A[x])
+ * H; x: A[t1]; J[x] >> t1 = t2 in T2
+ * H; x: A[t2]; J[x] >> T1[x]
+ * H, x: A[t1]; J[x]; z: T2 >> A[z] in type
+ *)
+prim hypSubstitution 'H 'J ('t1 = 't2 in 'T2) bind{y. 'A['y]} 'z :
+   sequent [squash] { 'H; x: 'A['t1]; 'J['x] >- 't1 = 't2 in 'T2 } -->
+   sequent ['prop] { 'H; x: 'A['t2]; 'J['x] >- 'T1['x] } -->
+   sequent [squash] { 'H; x: 'A['t1]; 'J['x]; z: 'T2 >- 'A['z] } -->
+   sequent ['prop] { 'H; x: 'A['t1]; 'J['x] >- 'T1['x] } =
+   it
+
+(*
+ * We don't really need this a s a rule, but it
+ * is used often.
+ *
+ * H >> a = b in T
+ * by swapEquands
+ * H >> b = a in T
+ *)
+prim swapEquands 'H :
+   sequent [squash] { 'H >- 'b = 'a in 'T } -->
+   sequent ['ext] { 'H >- 'a = 'b in 'T } =
+   it
+
+(************************************************************************
+ * PRIMITIVES                                                           *
+ ************************************************************************)
+
+let bind_term = << bind{x. 'T['x]} >>
+let bind_opname = opname_of_term bind_term
+let is_bind_term = is_dep1_term bind_opname
+let dest_bind = dest_dep1_term bind_opname
+let mk_bind_term = mk_dep1_term bind_opname
+
+(************************************************************************
+ * TACTICS                                                              *
+ ************************************************************************)
+
+(*
+ * Prove by hypothesis.
+ *)
+let nthHypT i p =
+   let count = hyp_count p in
+   let i' = get_pos_hyp_index i count in
+   let x = var_of_hyp i' p in
+      hypothesis i' (count - i' - 1) x p
+
+(*
+ * Thin a hyp.
+ * Check that this doesn't introduce a free variable
+ * (although the rule is still valid otherwise).
+ *)
+let thinT i p =
+   let count = hyp_count p in
+   let i' = get_pos_hyp_index i count in
+   let x = var_of_hyp i' p in
+      if is_free_seq_var (i' + 1) x (goal p) then
+         raise (RefineError (StringStringError ("thinT: free variable: ", x)))
+      else
+         thin i' (count - i' - 1) p
+
+(*
+ * Cut rule.
+ *)
+let assertT s p =
+   let count = hyp_count p in
+   let v = get_opt_var_arg "%x" p in
+      (cut (count - 1) 0 s v
+       thenLT [addHiddenLabelT "assertion"; idT]) p
+
+(*
+ * Cut in at a certain point.
+ *)
+let assertAtT i s p =
+   let count = hyp_count p in
+   let i' = get_pos_hyp_index i count in
+   let v = get_opt_var_arg "%x" p in
+      (cut i' (count - i' - 1) s v
+       thenLT [addHiddenLabelT "assertion"; idT]) p
+
+(*
+ * Explicit extract.
+ *)
+let useWitnessT t p =
+   let count = hyp_count p in
+      introduction count t p
+
+(*
+ * Swap the equands.
+ *)
+let swapEquandsT p =
+   swapEquands (hyp_count p) p
+
+(*
+ * Substitution.
+ * The binding term may be optionally supplied.
+ *)
+let substConclT t p =
+   let _, a, _ =
+      try dest_equal t with
+         Term.TermMatch _ -> raise (RefineError (StringTermError ("substT: arg should be an equality: ", t)))
+   in
+   let bind = 
+      try
+         let t1 = get_term_arg 0 p in
+            if is_bind_term t1 then
+               t1
+            else
+               raise (RefineError (StringTermError ("substT: need a \"bind\" term: ", t)))
+      with
+         Not_found ->
+            let x = get_opt_var_arg "z" p in
+               mk_bind_term x (var_subst (concl p) a x)
+   in
+      (substitution (hyp_count p) t bind
+       thenLT [addHiddenLabelT "equality";
+               addHiddenLabelT "main";
+               addHiddenLabelT "aux"]) p
+
+(*
+ * Hyp substitution requires a replacement.
+ *)
+let substHypT i t p =
+   let count = hyp_count p in
+   let i' = get_pos_hyp_index i count in
+   let _, a, _ =
+      try dest_equal t with
+         Term.TermMatch _ -> raise (RefineError (StringTermError ("substT: arg should be an equality: ", t)))
+   in
+   let t1 = Sequent.nth_hyp i' p in
+   let z = get_opt_var_arg "z" p in
+   let bind =
+      try
+         let b = get_term_arg 0 p in
+            if is_bind_term b then
+               b
+            else
+               raise (RefineError (StringTermError ("substT: need a \"bind\" term: ", b)))
+      with
+         Not_found ->
+            mk_bind_term z (var_subst t1 a z)
+   in
+      (hypSubstitution i' (count - i' - 1) t bind z
+       thenLT [addHiddenLabelT "equality";
+               addHiddenLabelT "main";
+               addHiddenLabelT "aux"]) p
+
+(*
+ * General substition.
+ *)
+let substT i =
+   if i = 0 then
+      substConclT
+   else
+      substHypT i
+
+(*
+ * Derived versions.
+ *)
+let hypSubstT i p =
+   let h = Sequent.nth_hyp i p in
+      (substT i h thenET nthHypT i) p
+
+let revHypSubstT i p =
+   let t, a, b = dest_equal (Sequent.nth_hyp i p) in
+   let h' = mk_equal_term t b a in
+      (substT i h' thenET (swapEquandsT thenT nthHypT i)) p
+
+(*
  * $Log$
+ * Revision 1.2  1997/08/06 16:18:44  jyh
+ * This is an ocaml version with subtyping, type inference,
+ * d and eqcd tactics.  It is a basic system, but not debugged.
+ *
  * Revision 1.1  1997/04/28 15:52:28  jyh
  * This is the initial checkin of Nuprl-Light.
  * I am porting the editor, so it is not included

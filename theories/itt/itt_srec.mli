@@ -3,6 +3,8 @@
  *
  *)
 
+open Term
+
 include Itt_equal
 include Itt_prec
 include Itt_subtype
@@ -122,8 +124,24 @@ axiom srecindEquality 'H lambda{x. 'S['x]} srec{T. 'B['T]} 'T1 'u 'v 'w 'z univ[
                    in 'S['r1]
            }
 
+(************************************************************************
+ * TACTICS                                                              *        
+ ************************************************************************)
+
+val is_srec_term : term -> bool
+val dest_srec : term -> string * term
+val mk_srec_term : string -> term -> term
+
+val is_srecind_term : term -> bool
+val dest_srecind : term -> string * string * term * term
+val mk_srecind_term : string -> string -> term -> term -> term
+
 (*
  * $Log$
+ * Revision 1.2  1997/08/06 16:18:43  jyh
+ * This is an ocaml version with subtyping, type inference,
+ * d and eqcd tactics.  It is a basic system, but not debugged.
+ *
  * Revision 1.1  1997/04/28 15:52:27  jyh
  * This is the initial checkin of Nuprl-Light.
  * I am porting the editor, so it is not included

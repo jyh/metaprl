@@ -5,6 +5,8 @@
 
 open Term
 
+include Tactic_type
+
 include Itt_equal
 include Itt_rfun
 include Itt_logic
@@ -201,8 +203,31 @@ axiom arith : arith_check{'t} --> 't
 val x : (d_resource_info, d_tactic, d_data) Resource.rsrc
 *)
 
+(************************************************************************
+ * TACTICS                                                              *
+ ************************************************************************)
+
+val d_intT : int -> tactic
+val eqcd_intT : tactic
+
+val int_term : term
+
+val natural_number_term : term
+val is_natural_number_term : term -> bool
+val dest_natural_number : term -> int
+val mk_natural_number_term : int -> term
+
+val ind_term : term
+val is_ind_term : term -> bool
+val dest_ind : term -> term * string * string * term * term * string * string * term
+val mk_ind_term : term -> string -> string -> term -> term -> string -> string -> term -> term
+
 (*
  * $Log$
+ * Revision 1.2  1997/08/06 16:18:32  jyh
+ * This is an ocaml version with subtyping, type inference,
+ * d and eqcd tactics.  It is a basic system, but not debugged.
+ *
  * Revision 1.1  1997/04/28 15:52:13  jyh
  * This is the initial checkin of Nuprl-Light.
  * I am porting the editor, so it is not included

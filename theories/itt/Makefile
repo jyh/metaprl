@@ -1,6 +1,6 @@
 # Libraries
 REF_ROOT := ../..
-INCLUDE := -I . -I $(REF_ROOT)/refiner -I ../tactic -I ../base
+INCLUDE := -I . -I $(REF_ROOT)/mllib -I $(REF_ROOT)/refiner -I ../tactic -I ../base
 OCAMLFLAGS := -g -root $(REF_ROOT)
 OCAMLC := $(REF_ROOT)/filter/prlcomp.run
 CAMLP4 := $(REF_ROOT)/filter/prlcomp.run -E -root $(REF_ROOT)
@@ -11,8 +11,12 @@ MLZFILES :=\
 
 # Library files
 LMFILES :=\
+	itt_squash\
 	itt_equal\
+	itt_subtype\
+	itt_struct\
 	itt_void\
+	itt_unit\
 	itt_atom\
 	itt_set\
 	itt_rfun\
@@ -23,10 +27,9 @@ LMFILES :=\
 	itt_union\
 	itt_soft\
 	itt_logic\
-	itt_struct\
+	itt_ext_equal\
 	itt_int\
 	itt_isect\
-	itt_subtype\
 	itt_prec\
 	itt_srec\
 	itt_quotient\
@@ -34,7 +37,7 @@ LMFILES :=\
 	itt_theory
 
 # Name of main libraris
-MAIN = tactics
+MAIN = itt
 
 all: $(MAIN).cma
 opt: $(MAIN).cmxa

@@ -4,8 +4,10 @@
  *)
 
 open Debug
+open Term
 open Options
 open Resource
+open Refine_sig
 
 include Var
 
@@ -104,19 +106,34 @@ prim intersectionElimination 'H 'J 'a 'x 'y 'v :
    sequent ['ext] { 'H; x: isect y: 'A. 'B['y]; 'J['x] >- 'T['x] } =
    't['x; 'x; it]
 
+(*
+ * H >- isect a1:A1. B1 <= isect a2:A2. B2
+ * by intersectionSubtype
+ *
+ * H >- A2 <= A1
+ * H, a: A1 >- B1[a] <= B2[a]
+ *)
+prim intersectionSubtype 'H 'a :
+   sequent [squash] { 'H >- subtype{'A2; 'A1} } -->
+   sequent [squash] { 'H; a: 'A1 >- subtype{'B1['a]; 'B2['a]} } -->
+   sequent ['ext] { 'H >- subtype{ (isect a1:'A1. 'B1['a1]); (isect a2:'A2. 'B2['a2]) } } =
+   it
+
 (************************************************************************
  * TACTICS                                                              *
  ************************************************************************)
+
+let isect_term = << isect x: 'A. 'B['x] >>
+let isect_opname = opname_of_term isect_term
+let is_isect_term = is_dep0_dep1_term isect_opname
+let dest_isect = dest_dep0_dep1_term isect_opname
+let mk_isect_term = mk_dep0_dep1_term isect_opname
 
 (*
  * D the conclusion.
  *)
 let d_concl_isect p =
-   let count = hyp_count p in
-   let y = get_opt_var_arg "y" p in
-      (intersectionMemberFormation count y
-       thenLT [addHiddenLabelT "wf";
-               idT]) p
+   raise (RefineError (StringError "d_concl_isect: no rule for intersectionFormation"))
 
 (*
  * D a hyp.
@@ -136,31 +153,70 @@ let d_hyp_isect i p =
 (*
  * Join them.
  *)
-let d_isect i =
+let d_isectT i =
    if i = 0 then
       d_concl_isect
    else
       d_hyp_isect i
 
-let isect_term = << isect x: 'A. 'B['x] >>
-
-let d_resource = d_resource.resource_improve d_resource (isect_term, d_isect)
-let d = d_resource.resource_extract d_resource
+let d_resource = d_resource.resource_improve d_resource (isect_term, d_isectT)
 
 (*
  * EQCD.
  *)
-let eqcd_isect p =
+let eqcd_isectT p =
    let count = hyp_count p in
    let v = get_opt_var_arg "y" p in
       (intersectionEquality count v
        thenT addHiddenLabelT "wf") p
 
-let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (isect_term, eqcd_isect)
-let eqcd = eqcd_resource.resource_extract eqcd_resource
+let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (isect_term, eqcd_isectT)
+
+(************************************************************************
+ * TYPE INFERENCE                                                       *
+ ************************************************************************)
+
+(*
+ * Type of isect.
+ *)
+let inf_isect f decl t =
+   let v, a, b = dest_isect t in
+   let decl', a' = f decl a in
+   let decl'', b' = f ((v, a)::decl') b in
+   let le1, le2 =
+      try dest_univ a', dest_univ b' with
+         Term.TermMatch _ -> raise (RefineError (StringTermError ("typeinf: can't infer type for", t)))
+   in
+      decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2)
+
+let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (isect_term, inf_isect)
+
+(************************************************************************
+ * SUBTYPING                                                            *
+ ************************************************************************)
+
+(*
+ * Subtyping of two intersection types.
+ *)
+let isect_subtypeT p =
+   let a = get_opt_var_arg "x" p in
+      (intersectionSubtype (hyp_count p) a
+       thenT addHiddenLabelT "subtype") p
+
+let sub_resource =
+   sub_resource.resource_improve
+   sub_resource
+   (DSubtype ([<< isect a1:'A1. 'B1['a1] >>, << isect a2:'A2. 'B2['a2] >>;
+               << 'A2 >>, << 'A1 >>;
+               << 'B1['a1] >>, << 'B2['a1] >>],
+              isect_subtypeT))
 
 (*
  * $Log$
+ * Revision 1.2  1997/08/06 16:18:32  jyh
+ * This is an ocaml version with subtyping, type inference,
+ * d and eqcd tactics.  It is a basic system, but not debugged.
+ *
  * Revision 1.1  1997/04/28 15:52:14  jyh
  * This is the initial checkin of Nuprl-Light.
  * I am porting the editor, so it is not included

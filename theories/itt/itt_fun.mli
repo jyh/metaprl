@@ -3,6 +3,8 @@
  *
  *)
 
+include Tactic_type
+
 include Itt_equal
 include Itt_rfun
 
@@ -59,7 +61,30 @@ axiom independentFunctionElimination 'H 'J 'f 'y :
    sequent ['ext] { 'H; f: 'A -> 'B; 'J['f] >- 'T['f] }
 
 (*
+ * H >- A1 -> B1 <= A2 -> B2
+ * by functionSubtype
+ *
+ * H >- A2 <= A1
+ * H >- B1 <= B2
+ *)
+axiom independentFunctionSubtype 'H :
+   sequent [squash] { 'H >- subtype{'A2; 'A1} } -->
+   sequent [squash] { 'H >- subtype{'B1; 'B2} } -->
+   sequent ['ext] { 'H >- subtype{ ('A1 -> 'B1); ('A2 -> 'B2) } }
+
+(************************************************************************
+ * TACTICS                                                              *
+ ************************************************************************)
+
+val d_funT : int -> tactic
+val eqcd_funT : tactic
+
+(*
  * $Log$
+ * Revision 1.2  1997/08/06 16:18:31  jyh
+ * This is an ocaml version with subtyping, type inference,
+ * d and eqcd tactics.  It is a basic system, but not debugged.
+ *
  * Revision 1.1  1997/04/28 15:52:12  jyh
  * This is the initial checkin of Nuprl-Light.
  * I am porting the editor, so it is not included

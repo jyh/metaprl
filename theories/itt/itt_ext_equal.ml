@@ -60,7 +60,7 @@ prim_rw type_def : "type"{'T} <--> ('T subtype 'T)
 
 define unfoldExtEqual : ext_equal{'A; 'B} <--> 'A subtype 'B & 'B subtype 'A
 
-dform extEqual_df : ext_equal{'A; 'B} =  'A `"=" sube 'B 
+dform extEqual_df : ext_equal{'A; 'B} =  'A `" =" sube `" " 'B 
 
    
 interactive extEqualMember {|squash; intro[] |}: 

@@ -175,15 +175,4 @@ interactive insert_wf {| intro[] |}  univ[i:l]:
    sequent[squash] { <H> >- 't in SortedTree{'O; d.'A['d]} } -->
    sequent['ext]   { <H> >- insert{'nd;'t;'O} in SortedTree{'O; d.'A['d]}  }
 
-
-
 doc <:doc< @docoff >>
-
-
-
-
-
-
-
-
-

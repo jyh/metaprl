@@ -147,4 +147,4 @@ interactive example_wf2 {| intro[] |} :
 interactive example_19 {| intro[] |} :
  sequent['ext]  { <H> >- in_tree{19; simpletree; int} }
 
-
+doc <:doc< @docoff >>

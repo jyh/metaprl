@@ -197,46 +197,6 @@ declare math_quot{'T; 'x; 'y; 'E}
 
 declare math_subset{'t1; 't2}
 
-(************************************************************************
- * GROUP THEORY
- ************************************************************************)
-
-declare math_groupoid{'i}
-declare math_semigroup{'i}
-declare math_monoid{'i}
-declare math_group{'i}
-declare math_premonoid{'i}
-declare math_pregroup{'i}
-
-declare math_car{'g}
-declare math_mul{'g; 'a; 'b}
-declare math_id{'g}
-declare math_inv{'g; 'a}
-
-declare math_csemigroup{'i}
-declare math_cmonoid{'i}
-declare math_abelg{'i}
-
-declare math_subStructure{'s; 'g}
-declare math_subgroup{'i; 's; 'g}
-
-declare math_lcoset{'h; 'g; 'a}
-declare math_rcoset{'h; 'g; 'a}
-declare math_normalSubg{'i; 's; 'g}
-
-declare math_group_power{'g; 'a; 'n}
-declare math_cycGroup{'g}
-declare math_cycSubg{'g; 'a}
-
-declare math_isInjective{'f; 'A; 'B}
-declare math_isSurjective{'f; 'A; 'B}
-declare math_isBijective{'f; 'A; 'B}
-declare math_groupHom{'A; 'B}
-declare math_groupMono{'A; 'B}
-declare math_groupEpi{'A; 'B}
-declare math_groupIso{'A; 'B}
-declare math_groupKer{'f; 'A; 'B}
-
 (* OTHER *)
 
 declare colons{'a}

@@ -1,6 +1,4 @@
 doc <:doc< 
-   @spelling{group}
-  
    @begin[doc]
    @module[Itt_group]
   
@@ -33,18 +31,17 @@ doc <:doc<
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
   
-   Author: Xin Yu
-   @email{xiny@cs.caltech.edu}
+   Author: Xin Yu @email{xiny@cs.caltech.edu}
    @end[license]
 >>
 
 doc <:doc< @doc{@parents} >>
 extends Itt_grouplikeobj
-doc <:doc< @docoff >>
 extends Itt_subset
 extends Itt_subset2
 extends Itt_bisect
 extends Itt_ext_equal
+doc docoff
 
 open Printf
 open Mp_debug
@@ -77,6 +74,7 @@ open Itt_fun
 open Itt_int_ext
 open Itt_bisect
 open Itt_equal
+open Itt_subtype
 
 let _ =
    show_loading "Loading Itt_group%t"
@@ -100,7 +98,7 @@ define unfold_isGroup1 : isGroup{'G} <-->
 
 define unfold_group1 : group[i:l] <-->
    {G: pregroup[i:l] | isGroup{'G}}
-doc <:doc< @docoff >>
+doc docoff
 
 let unfold_pregroup = unfold_pregroup1 thenC addrC [1] unfold_premonoid
 let unfold_isGroup = unfold_isGroup1 thenC addrC [0] unfold_isSemigroup
@@ -365,7 +363,7 @@ interactive inv_simplify {| intro [intro_typeinf <<'G>>] |} group[i:l] :
    sequent [squash] { <H> >- 'a in 'G^car } -->
    sequent [squash] { <H> >- 'b in 'G^car } -->
    sequent ['ext] { <H> >- 'G^inv ('a *['G] 'b)  = ('G^inv 'b) *['G] ('G^inv 'a) in 'G^car }
-doc <:doc< @docoff >>
+doc docoff
 
 (* Inverse of id *)
 interactive inv_of_id {| intro [intro_typeinf <<'G>>] |} group[i:l] :
@@ -397,7 +395,7 @@ doc <:doc<
 >>
 define unfold_abelg : abelg[i:l] <-->
    {G: group[i:l] | isCommutative{'G}}
-doc <:doc< @docoff >>
+doc docoff
 
 let fold_abelg = makeFoldC << abelg[i:l] >> unfold_abelg
 
@@ -453,7 +451,7 @@ doc <:doc<
 >>
 define unfold_subgroup : subgroup[i:l]{'S; 'G} <-->
    ((('S in group[i:l]) & ('G in group[i:l])) & subStructure{'S; 'G})
-doc <:doc< @docoff >>
+doc docoff
 
 let fold_subgroup = makeFoldC << subgroup[i:l]{'S; 'G} >> unfold_subgroup
 
@@ -502,7 +500,7 @@ doc <:doc<
 interactive subgroup_sqStable {| squash |} :
    [wf] sequent [squash] { <H> >- squash{subgroup[i:l]{'S; 'G}} } -->
    sequent ['ext] { <H> >- subgroup[i:l]{'S; 'G} }
-doc <:doc< @docoff >>
+doc docoff
 
 interactive subgroup_ref {| intro [] |} :
    sequent [squash] { <H> >- 'G in group[i:l] } -->
@@ -515,7 +513,7 @@ doc <:doc<
      @begin[enumerate]
      @item{$s$ is closed under the binary operation of $g$.}
      @item{the identity of $s$ is the identity of $g$.}
-     @item{the inverse of $a @in @car{s}$ is also the inverse of $a$ in $g$.}
+     @item{the inverse of <<'a in 's^car>> is also the inverse of $a$ in $g$.}
      @end[enumerate]
    @end[doc]
 >>
@@ -553,7 +551,7 @@ doc <:doc<
    @begin[doc]
   
      A non-empty subset $S$ is a subgroup of $G$ only if
-     for all $a, b @in S$, $@mul{G; a; @inv{G; b}} @in @car{S}$
+     for all $a, b @in S$, <<'a *['G] ('G^inv 'b) in 'S^car>>
    @end[doc]
 >>
 interactive subgroup_thm1 group[i:l] :
@@ -588,7 +586,7 @@ define unfold_lcoset : lcoset{'S; 'G; 'b} <-->
 
 define unfold_rcoset : rcoset{'S; 'G; 'b} <-->
    {x: 'G^car | exst a: 'S^car. 'x = 'a *['G] 'b in 'G^car}
-doc <:doc< @docoff >>
+doc docoff
 
 let fold_lcoset = makeFoldC << lcoset{'S; 'G; 'b} >> unfold_lcoset
 let fold_rcoset = makeFoldC << rcoset{'S; 'G; 'b} >> unfold_rcoset
@@ -703,7 +701,7 @@ doc <:doc<
 >>
 define unfold_normalSubg : normalSubg[i:l]{'S; 'G} <-->
    subgroup[i:l]{'S; 'G} & all x: 'G^car. ext_equal{lcoset{'S; 'G; 'x}; rcoset{'S; 'G; 'x}}
-doc <:doc< @docoff >>
+doc docoff
 
 let fold_normalSubg = makeFoldC << normalSubg[i:l]{'S; 'G} >> unfold_normalSubg
 
@@ -764,7 +762,7 @@ define unfold_isGroupHom : isGroupHom{'f; 'A; 'B} <-->
 
 define unfold_groupHom1 : groupHom{'A; 'B} <-->
    { f: 'A^car -> 'B^car | isGroupHom{'f; 'A; 'B} }
-doc <:doc< @docoff >>
+doc docoff
 
 let unfold_groupHom = unfold_groupHom1 thenC addrC [1] unfold_isGroupHom
 
@@ -827,7 +825,7 @@ doc <:doc<
   
      For any groups $G_1$ and $G_2$, there is always at least
      one homomorphism $f@colon G_1 @rightarrow G_2$ which
-     maps all elements of $@car{G_1}$ into $@id{G_2}$. This
+     maps all elements of <<'G_1^car>> into <<'G_2^"1">>. This
      is called the Trivial Homomorphism.
    @end[doc]
 >>
@@ -857,8 +855,8 @@ interactive groupHom_id {| intro [AutoMustComplete; intro_typeinf <<'A>>] |} gro
 doc <:doc< 
    @begin[doc]
   
-     $f$ maps the inverse of an element $a$ in $@car{A}$ into
-     the inverse of $f[a]$ in $@car{B}$.
+     $f$ maps the inverse of an element $a$ in <<'A^car>> into
+     the inverse of $f[a]$ in <<'B^car>>.
    @end[doc]
 >>
 interactive groupHom_inv {| intro [AutoMustComplete; intro_typeinf <<'A>>] |} group[i:l] :
@@ -909,7 +907,7 @@ interactive groupHom_subg2 'f 'B 'T :
    [wf] sequent [squash] { <H>; x: 'A^car >- "type"{'f 'x in 'T^car} } -->
    sequent ['ext] { <H> >- subgroup[i:l]{{car={x: 'A^car | 'f 'x in 'T^car subset 'B^car}; "*"='A^"*"; "1"='A^"1"; inv='A^inv}; 'A} }
 
-doc <:doc< @docoff >>
+doc docoff
 
 (************************************************************************
  * GROUP KERNEL                                                         *
@@ -925,7 +923,7 @@ doc <:doc<
 define unfold_groupKer : groupKer{'f; 'A; 'B} <-->
    {car={ x: 'A^car | 'f 'x = 'B^"1" in 'B^car }; "*"='A^"*"; "1"='A^"1"; inv='A^inv}
 
-doc <:doc< @docoff >>
+doc docoff
 
 let fold_groupKer = makeFoldC << groupKer{'f; 'A; 'B}  >> unfold_groupKer
 
@@ -990,7 +988,7 @@ interactive groupKer_normalSubg {| intro [] |} :
    [wf] sequent [squash] { <H> >- 'f in groupHom{'A; 'B} } -->
    sequent ['ext] { <H> >- normalSubg[i:l]{groupKer{'f; 'A; 'B}; 'A} }
 
-doc <:doc< @docoff >>
+doc docoff
 
 (************************************************************************
  * GROUP EPIMORPHISM, Group MONOMORPHISM, and Group ISOMORPHISM         *
@@ -1021,7 +1019,7 @@ define unfold_groupEpi : groupEpi{'A; 'B} <-->
 
 define unfold_groupIso : groupIso{'A; 'B} <-->
    { f: groupHom{'A; 'B} | isBijective{'f; 'A; 'B} }
-doc <:doc< @docoff >>
+doc docoff
 
 let unfold_isBijective = unfold_isBijective1 thenC addrC [0] unfold_isInjective thenC addrC [1] unfold_isSurjective
 
@@ -1159,8 +1157,8 @@ doc <:doc<
    @begin[doc]
    @modsubsection{Rules}
   
-   $f: A -> B$ is a group monomorphism iff the kernel of $f$ contains
-   $@id{'A}$ alone.
+   $f: (<<'A -> 'B>>)$ is a group monomorphism iff the kernel of $f$ contains
+   <<'A^"1">> alone.
    @end[doc]
 >>
 interactive groupMono_ker1 group[i:l] :
@@ -1178,8 +1176,8 @@ interactive groupMono_ker2 group[i:l] :
 
 doc <:doc< 
    @begin[doc]
-   If $f: A -> B$ is an isomorphism, then its inverse mapping is
-   also an isomorphism.
+   If $f: (<<'A -> 'B>>)$ is an isomorphism, then its inverse mapping is
+   also an isomorphism. <<groupIso{'A; 'B}>>
    @end[doc]
 >>
 interactive groupIso_iso group[i:l] 'f :
@@ -1190,7 +1188,7 @@ interactive groupIso_iso group[i:l] 'f :
    [wf] sequent [squash] { <H>; x: 'A^car >- 'g ('f 'x) = 'x in 'A^car } -->
    sequent ['ext] { <H> >- 'g in groupIso{'B; 'A} }
 
-doc <:doc< @docoff >>
+doc docoff
 
 (************************************************************************
  * GROUP EXAMPLES                                                       *
@@ -1205,6 +1203,8 @@ doc <:doc<
 interactive integer_add_group :
    sequent ['ext] { <H> >- {car=int; "*"=lambda{x. lambda{y. 'x +@ 'y}}; "1"=0; inv=lambda{x. (-'x)}} in group[i:l] }
 
+doc docoff
+
 (************************************************************************
  * DISPLAY FORMS                                                        *
  ************************************************************************)
@@ -1212,59 +1212,77 @@ interactive integer_add_group :
 prec prec_inv
 prec prec_mul < prec_inv
 
-dform group_df : except_mode[src] :: group[i:l] =
-   math_group{slot[i:l]}
+dform group_df1 : except_mode[src] :: except_mode[prl] :: group[i:l] =
+   mathbbG `"roup" sub{slot[i:l]}
 
-dform pregroup_df : except_mode[src] :: pregroup[i:l] =
-   math_pregroup{slot[i:l]}
+dform group_df2 : mode[prl] :: group[i:l] =
+   `"Group[" slot[i:l] `"]"
+
+dform pregroup_df1 : except_mode[src] :: except_mode[prl] :: pregroup[i:l] =
+   `"pregroup" sub{slot[i:l]}
+
+dform pregroup_df2 : mode[prl] :: pregroup[i:l] =
+   `"pregroup[" slot[i:l] `"]"
 
 dform isGroup_df : except_mode[src] :: isGroup{'G} =
    `"isGroup(" slot{'G} `")"
 
-dform inv_df1 : except_mode[src] :: parens :: "prec"[prec_inv] :: ('G^inv 'a) =
-   math_inv{'G; 'a}
+dform inv_df1 : except_mode[src] :: except_mode[prl] :: parens :: "prec"[prec_inv] :: ('G^inv 'a) =
+   slot{'a} izone `"^{-1}" ezone sub{'G}
 
-dform abelg_df : except_mode[src] :: abelg[i:l] =
-   math_abelg{slot[i:l]}
+dform inv_df2 : mode[prl] :: parens :: "prec"[prec_inv] :: ('G^inv 'a) =
+   slot{'G} `".inv " slot{'a}
 
-dform subgroup_df : except_mode[src] :: subgroup[i:l]{'S; 'G} =
-   math_subgroup{slot[i:l]; 'S; 'G}
+dform abelg_df1 : except_mode[src] :: except_mode[prl] :: abelg[i:l] =
+   `"Abelian_group" sub{slot[i:l]}
+
+dform abelg_df2 : mode[prl] :: abelg[i:l] =
+   `"Abelian_group[" slot[i:l] `"]"
+
+dform subgroup_df1 : except_mode[src] :: except_mode[prl] :: parens :: "prec"[prec_subtype] :: subgroup[i:l]{'S; 'G} =
+   slot{'S} `" " subseteq izone `"_{" ezone `"group" izone `"_{" ezone slot[i:l] izone `"}}" ezone `" " slot{'G}
+
+dform subgroup_df2 : mode[prl] :: parens :: "prec"[prec_subtype] :: subgroup[i:l]{'S; 'G} =
+   slot{'S} `" " subseteq `"(Group[" slot[i:l] `"]) " slot{'G}
 
 dform lcoset_df : except_mode[src] :: lcoset{'H; 'G; 'a} =
-   math_lcoset{'H; 'G; 'a}
+   `"Left_coset(" slot{'H} `"; " slot{'G} `"; " slot{'a} `")"
 
 dform rcoset_df : except_mode[src] :: rcoset{'H; 'G; 'a} =
-   math_rcoset{'H; 'G; 'a}
+   `"Right_coset(" slot{'H} `"; " slot{'G} `"; " slot{'a} `")"
 
-dform normalSubg_df : except_mode[src] :: normalSubg[i:l]{'S; 'G} =
-   math_normalSubg{slot[i:l]; 'S; 'G}
+dform normalSubg_df1 : except_mode[src] :: except_mode[prl] :: normalSubg[i:l]{'S; 'G} =
+   `"Normal_subgroup" sub{slot[i:l]} `"(" slot{'S} `", " slot{'G} `")"
+
+dform normalSubg_df2 : mode[prl] :: normalSubg[i:l]{'S; 'G} =
+   `"Normal_subgroup[" slot[i:l] `"](" slot{'S} `", " slot{'G} `")"
 
 dform isGroupHom_df : except_mode[src] :: isGroupHom{'f; 'A; 'B} =
-   `"isGroupHom(" slot{'f} `"; " slot{'A} `"; " slot{'B}  `")"
+   `"isGroupHom(" slot{'f} `"; " slot{'A} `"; " slot{'B} `")"
 
 dform groupHom_df : except_mode[src] :: groupHom{'A; 'B} =
-   math_groupHom{'A; 'B}
-
-dform groupKer_df : except_mode[src] :: groupKer{'f; 'A; 'B} =
-   math_groupKer{'f; 'A; 'B}
+   `"Group_homomorphism(" slot{'A} `"; " slot{'B} `")"
 
 dform isInjective_df : except_mode[src] :: isInjective{'f; 'A; 'B} =
-   math_isInjective{'f; 'A; 'B}
+   `"(" slot{'f} `": " slot{'A} " " rightarrow " " slot{'B}  `") is injective"
 
 dform isSurjective_df : except_mode[src] :: isSurjective{'f; 'A; 'B} =
-   math_isSurjective{'f; 'A; 'B}
+   `"(" slot{'f} `": " slot{'A} " " rightarrow " " slot{'B}  `") is surjective"
 
 dform isBijective_df : except_mode[src] :: isBijective{'f; 'A; 'B} =
-   math_isBijective{'f; 'A; 'B}
+   `"(" slot{'f} `": " slot{'A} " " rightarrow " " slot{'B}  `") is bijective"
 
 dform groupMono_df : except_mode[src] :: groupMono{'A; 'B} =
-   math_groupMono{'A; 'B}
+   `"Group_monomorphism(" slot{'A} `"; " slot{'B} `")"
 
 dform groupEpi_df : except_mode[src] :: groupEpi{'A; 'B} =
-   math_groupEpi{'A; 'B}
+   `"Group_epimorphism(" slot{'A} `"; " slot{'B} `")"
 
 dform groupIso_df : except_mode[src] :: groupIso{'A; 'B} =
-   math_groupIso{'A; 'B}
+   slot{'A} `" " Nuprl_font!cong `" " slot{'B}
+
+dform groupKer_df : except_mode[src] :: groupKer{'f; 'A; 'B} =
+   `"Group_kernel_of(" slot{'f} `": " slot{'A} " " rightarrow " " slot{'B} `")"
 
 (*
  * -*-

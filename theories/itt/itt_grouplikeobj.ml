@@ -34,18 +34,17 @@ doc <:doc<
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
   
-   Author: Xin Yu
-   @email{xiny@cs.caltech.edu}
+   Author: Xin Yu @email{xiny@cs.caltech.edu}
    @end[license]
 >>
 
 doc <:doc< @doc{@parents} >>
 extends Itt_record
-doc <:doc< @docoff >>
 extends Itt_set
 extends Itt_subset
 extends Itt_fun
 extends Itt_disect
+doc docoff
 
 open Printf
 open Mp_debug
@@ -95,7 +94,7 @@ doc <:doc<
 >>
 define unfold_groupoid : groupoid[i:l] <-->
    {car: univ[i:l]; "*": ^car -> ^car -> ^car}
-doc <:doc< @docoff >>
+doc docoff
 
 let fold_groupoid = makeFoldC << groupoid[i:l] >> unfold_groupoid
 
@@ -144,7 +143,7 @@ define unfold_isSemigroup : isSemigroup{'g} <-->
 
 define unfold_semigroup1 : semigroup[i:l] <-->
    {g: groupoid[i:l] | isSemigroup{'g}}
-doc <:doc< @docoff >>
+doc docoff
 
 let unfold_semigroup = unfold_semigroup1 thenC addrC [0] unfold_groupoid thenC addrC [1] unfold_isSemigroup
 
@@ -225,7 +224,7 @@ define unfold_isMonoid1 : isMonoid{'g} <-->
 
 define unfold_monoid1 : monoid[i:l] <-->
    {g: premonoid[i:l] | isMonoid{'g}}
-doc <:doc< @docoff >>
+doc docoff
 
 let unfold_premonoid = unfold_premonoid1 thenC addrC [1] unfold_groupoid
 let unfold_isMonoid = unfold_isMonoid1 thenC addrC [0] unfold_isSemigroup
@@ -324,7 +323,7 @@ define unfold_csemigroup : csemigroup[i:l] <-->
 
 define unfold_cmonoid : cmonoid[i:l] <-->
    {g: monoid[i:l] | isCommutative{'g}}
-doc <:doc< @docoff >>
+doc docoff
 
 let fold_isCommutative = makeFoldC << isCommutative{'g} >> unfold_isCommutative
 let fold_csemigroup = makeFoldC << csemigroup[i:l] >> unfold_csemigroup
@@ -415,7 +414,7 @@ doc <:doc<
 >>
 define unfold_subStructure : subStructure{'s; 'g} <-->
    ('s^car subset 'g^car) & ('g^"*" = 's^"*" in 's^car -> 's^car -> 's^car)
-doc <:doc< @docoff >>
+doc docoff
 
 let fold_subStructure = makeFoldC << subStructure{'s; 'g} >> unfold_subStructure
 
@@ -456,7 +455,7 @@ doc <:doc<
 interactive subStructure_sqStable {| squash |} :
    [wf] sequent [squash] { <H> >- squash{subStructure{'s; 'g}} } -->
    sequent ['ext] { <H> >- subStructure{'s; 'g} }
-doc <:doc< @docoff >>
+doc docoff
 
 interactive subStructure_type_right 'B :
    sequent [squash] { <H> >- subStructure{'A; 'B} } -->
@@ -470,17 +469,31 @@ interactive subStructure_type_left 'A :
  * DISPLAY FORMS                                                        *
  ************************************************************************)
 
-dform groupoid_df1 : except_mode[src] :: groupoid[i:l] =
-   math_groupoid{slot[i:l]}
+prec prec_mul
 
-dform semigroup_df1 : except_mode[src] :: semigroup[i:l] =
-   math_semigroup{slot[i:l]}
+dform groupoid_df1 : except_mode[src] :: except_mode[prl] :: groupoid[i:l] =
+   mathbbG `"roupoid" sub{slot[i:l]}
 
-dform monoid_df1 : except_mode[src] :: monoid[i:l] =
-   math_monoid{slot[i:l]}
+dform groupoid_df2 : mode[prl] :: groupoid[i:l] =
+   `"Groupoid[" slot[i:l] `"]"
 
-dform premonoid_df1 : except_mode[src] :: premonoid[i:l] =
-   math_premonoid{slot[i:l]}
+dform semigroup_df1 : except_mode[src] :: except_mode[prl] :: semigroup[i:l] =
+   mathbbS `"emigroup" sub{slot[i:l]}
+
+dform semigroup_df2 : mode[prl] :: semigroup[i:l] =
+   `"Semigroup[" slot[i:l] `"]"
+
+dform monoid_df1 : except_mode[src] :: except_mode[prl] :: monoid[i:l] =
+   mathbbM `"onoid" sub{slot[i:l]}
+
+dform monoid_df2 : mode[prl] :: monoid[i:l] =
+   `"Monoid[" slot[i:l] `"]"
+
+dform premonoid_df1 : except_mode[src] :: except_mode[prl] :: premonoid[i:l] =
+   `"premonoid" sub{slot[i:l]}
+
+dform premonoid_df2 : mode[prl] :: premonoid[i:l] =
+   `"premonoid[" slot[i:l] `"]"
 
 dform isSemigroup_df : except_mode[src] :: isSemigroup{'g} =
    `"isSemigroup(" slot{'g} `")"
@@ -488,26 +501,44 @@ dform isSemigroup_df : except_mode[src] :: isSemigroup{'g} =
 dform isMonoid_df : except_mode[src] :: isMonoid{'g} =
    `"isMonoid(" slot{'g} `")"
 
-dform car_df1 : except_mode[src] :: ('g^car) =
-   math_car{'g}
+dform car_df1 : except_mode[src] :: except_mode[prl] :: ('g^car) =
+   `"car" sub{'g}
 
-dform mul_df2 : except_mode[src] :: parens :: "prec"[prec_mul] :: ('g^"*" 'a 'b) =
-   math_mul{'g; 'a; 'b}
+dform car_df2 : mode[prl] :: ('g^car) =
+   slot{'g} `".car"
 
-dform id_df1 : except_mode[src] :: ('g^"1") =
-   math_id{'g}
+dform mul_df1 : except_mode[src] :: except_mode[prl] :: parens :: "prec"[prec_mul] :: ('g^"*" 'a 'b) =
+   slot{'a} `"*" sub{'g} slot{'b}
+
+dform mul_df2 : mode[prl] :: parens :: "prec"[prec_mul] :: ('g^"*" 'a 'b) =
+   slot["lt"]{'a} `" " slot{'g} `".* " slot["le"]{'b}
+
+dform id_df1 : except_mode[src] :: except_mode[prl] :: ('g^"1") =
+   1 sub{'g}
+
+dform id_df2 : mode[prl] :: ('g^"1") =
+   slot{'g} `".1"
 
 dform isCommutative_df : except_mode[src] :: isCommutative{'g} =
    `"isCommutative(" slot{'g} `")"
 
-dform csemigroup_df1 : except_mode[src] :: csemigroup[i:l] =
-   math_csemigroup{slot[i:l]}
+dform csemigroup_df1 : except_mode[src] :: except_mode[prl] :: csemigroup[i:l] =
+   `"Commutative_semigroup" sub{slot[i:l]}
 
-dform cmonoid_df1 : except_mode[src] :: cmonoid[i:l] =
-   math_cmonoid{slot[i:l]}
+dform csemigroup_df2 : mode[prl] :: csemigroup[i:l] =
+   `"Commutative_semigroup[" slot[i:l] `"]"
 
-dform subStructure_df1 : except_mode[src] :: parens :: "prec"[prec_subtype] :: subStructure{'s; 'g} =
-   math_subStructure{'s; 'g}
+dform cmonoid_df1 : except_mode[src] :: except_mode[prl] :: cmonoid[i:l] =
+   `"Commutative_monoid" sub{slot[i:l]}
+
+dform monoid_df2 : mode[prl] :: cmonoid[i:l] =
+   `"Commutative_monoid[" slot[i:l] `"]"
+
+dform subStructure_df1 : except_mode[src] :: except_mode[prl] :: parens :: "prec"[prec_subtype] :: subStructure{'s; 'g} =
+   slot{'s} `" " subseteq sub["str":s] `" " slot{'g}
+
+dform subStructure_df2 : mode[prl] :: parens :: "prec"[prec_subtype] :: subStructure{'s; 'g} =
+   slot{'s} `" " subseteq `"(str) " slot{'g}
 
 (************************************************************************
  * TYPE INFERENCE                                                       *

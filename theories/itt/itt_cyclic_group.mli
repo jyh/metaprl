@@ -62,7 +62,7 @@ open Itt_fun
  ************************************************************************)
 
 declare group_power{'g; 'a; 'n}
-declare cycGroup{'g}
+declare isCyclic{'g}
 declare cycSubg{'g; 'a}
 
 (************************************************************************
@@ -70,7 +70,7 @@ declare cycSubg{'g; 'a}
  ************************************************************************)
 
 topval fold_group_power : conv
-topval fold_cycGroup : conv
+topval fold_isCyclic : conv
 topval fold_cycSubg : conv
 
 (*

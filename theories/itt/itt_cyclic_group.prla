@@ -2565,10 +2565,10 @@ T	t1149	o1145 b1146 b1147 b1148
 B	b1149	t1149
 T	t1150	o1144 b1149
 B	b1150	t1150
-P	p1153	String cycGroup
+P	p1153	String isCyclic
 O	o1153	opname p1153
-NItt_cyclic_group!cycGroup	cycGroup	cycGroup Itt_cyclic_group
-O	o1154	cycGroup
+NItt_cyclic_group!isCyclic	isCyclic	isCyclic Itt_cyclic_group
+O	o1154	isCyclic
 T	t1154	o1154 b1146
 B	b1154	t1154
 T	t1155	o1153 b1154
@@ -2658,7 +2658,7 @@ T	t1198	o1197 b15
 B	b1198	t1198
 T	t1199	o1181 b1149 b1197 b1198 b15
 B	b1199	t1199
-P	p1202	String unfold_cycGroup
+P	p1202	String unfold_isCyclic
 O	o1202	rewrite p1202
 NItt_logic	Itt_logic	Itt_logic NIL
 NItt_logic!exists	exists	exists Itt_logic
@@ -3205,12 +3205,12 @@ P	p1054	Number 3230
 O	o1055	patt_var p1053 p1054
 O	o1057	patt_done p1049 p1052
 T	t1061	o1057
-B	b1061	t1061 fold_cycGroup
+B	b1061	t1061 fold_isCyclic
 T	t1063	o1055 b1061
 B	b1063	t1063
 P	p1063	Number 3233
 O	o1063	apply p1063 p1052
-P	p1269	String "MP-Caml3.02 term:\\132\\149\\166\\190\\000\\000\\000;\\000\\000\\000\\018\\000\\000\\0007\\000\\000\\0003\\160\\160\\160$\\000\\000\\000\\000\\160(cycGroup\\1600Itt_cyclic_group@@\\160\\160@\\160\\160\\160\\004\\n\\160#var@\\160\\147!g@@@"
+P	p1269	String "MP-Caml3.02 term:\\132\\149\\166\\190\\000\\000\\000;\\000\\000\\000\\018\\000\\000\\0007\\000\\000\\0003\\160\\160\\160$\\000\\000\\000\\000\\160(isCyclic\\1600Itt_cyclic_group@@\\160\\160@\\160\\160\\160\\004\\n\\160#var@\\160\\147!g@@@"
 P	p3152	Number 3242
 P	p1433	Number 3261
 O	o1064	apply p1063 p1433
@@ -3356,12 +3356,12 @@ B	b1876	t1864
 P	p1884	Number 3702
 P	p1885	Number 3777
 O	o1885	location p1884 p1885
-P	p1318	String cycGroup_df
+P	p1318	String isCyclic_df
 O	o1318	dform p1318
 T	t1318	o b1306 b15
 B	b1318	t1318
-NItt_comment!math_cycGroup	math_cycGroup	math_cycGroup Itt_comment
-O	o1319	math_cycGroup
+NItt_comment!math_isCyclic	math_isCyclic	math_isCyclic Itt_comment
+O	o1319	math_isCyclic
 T	t1319	o1319 b1146
 B	b1319	t1319
 T	t1320	o b1319 b15
@@ -4532,7 +4532,7 @@ T	t3089	o b3088 b16
 B	b3089	t3089
 T	t3090	o b5 b3089
 B	b3090	t3090
-P	p3096	String cycGroup_type
+P	p3096	String isCyclic_type
 O	o3096	rule p3096
 NItt_equal!type	type	type Itt_equal
 O	o3097	type
@@ -4544,7 +4544,7 @@ T	t3098	o1370 b3097
 B	b3098	t3098
 T	t3099	o1369 b1374 b3098
 B	b3099	t3099
-P	p3099	String "byDefT unfold_cycGroup"
+P	p3099	String "byDefT unfold_isCyclic"
 O	o3099	ext_rule p3099
 T	t3100	o b1373 b15
 B	b3100	t3100
@@ -4558,7 +4558,7 @@ T	t3104	o3099 b1387 b3103 b15 b15
 B	b3104	t3104
 T	t3105	o1385 b3104
 B	b3105	t3105
-P	p3128	String cycGroup_intro
+P	p3128	String isCyclic_intro
 O	o3128	rule p3128
 T	t3128	o1365 b1147
 B	b3128	t3128
@@ -4583,7 +4583,7 @@ T	t3136	o1369 b1376 b3136
 B	b3137	t3136
 T	t3137	o1369 b1374 b3137
 B	b3138	t3137
-P	p3138	String "assumT 3 thenT genAssumT [2] thenT byDefT unfold_cycGroup thenT withT << 'a >> (dT 0) thenT autoT"
+P	p3138	String "assumT 3 thenT genAssumT [2] thenT byDefT unfold_isCyclic thenT withT << 'a >> (dT 0) thenT autoT"
 O	o3138	ext_rule p3138
 T	t3138	o b3132 b15
 B	b3139	t3138
@@ -4601,7 +4601,7 @@ T	t3144	o3138 b1387 b3144 b15 b15
 B	b3145	t3144
 T	t3145	o1385 b3145
 B	b3146	t3145
-P	p3169	String cycGroup_elim
+P	p3169	String isCyclic_elim
 O	o3169	rule p3169
 NSummary!meta_labeled	meta_labeled	meta_labeled Summary
 P	p3172	String wf
@@ -4625,7 +4625,7 @@ G	s3178	t3176
 B	b3179	s3178
 T	t3179	o1370 b3179
 B	b3180	t3179
-P	p3182	String "assumT 2 thenT copyHypT 2 (-1) thenT rwh unfold_cycGroup (-1) thenT autoT"
+P	p3182	String "assumT 2 thenT copyHypT 2 (-1) thenT rwh unfold_isCyclic (-1) thenT autoT"
 O	o3182	ext_rule p3182
 P	p3195	String elim_typeinf
 O	o3195	lid p3195
@@ -4669,7 +4669,7 @@ T	t3228	o b3227 b16
 B	b3228	t3228
 T	t3229	o b5 b3228
 B	b3229	t3229
-P	p3235	String cycGroup_commutative
+P	p3235	String isCyclic_commutative
 O	o3235	rule p3235
 T	t3235	o3172 b1374
 B	b3235	t3235
@@ -8493,7 +8493,7 @@ B	b2421	t2419
 P	p2421	Number 7096
 P	p2422	Number 7483
 O	o2422	location p2421 p2422
-P	p811	String cycGroup_abelian
+P	p811	String isCyclic_abelian
 O	o812	rule p811
 NItt_group!abelg	abelg	abelg Itt_group
 O	o814	abelg p1159
@@ -9981,7 +9981,7 @@ T	t4568	o b3411 b4567
 B	b4568	t4568
 T	t4569	o b5 b4568
 B	b4569	t4569
-P	p4582	String subg_cycGroup
+P	p4582	String subg_isCyclic
 O	o4582	rule p4582
 T	t4582	o1365 b1146
 B	b4582	t4582
@@ -10641,7 +10641,7 @@ T	t2607	o1369 b1227 b2118
 B	b2607	t2607
 T	t2609	o1369 b3236 b2607
 B	b2609	t2609
-P	p2609	String "assumT 1 thenT assumT 2 thenT dT (-1) thenT dT (-1) thenT byDefT unfold_cycGroup"
+P	p2609	String "assumT 1 thenT assumT 2 thenT dT (-1) thenT dT (-1) thenT byDefT unfold_isCyclic"
 O	o2609	ext_rule p2609
 T	t2122	o b2112 b15
 B	b2123	t2122

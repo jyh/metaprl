@@ -329,9 +329,6 @@ interactive treeInduction1 {| elim [ThinOption thinT] |} 'H :
                        >-  'C[tree{{left = 'l; right = 'r }}] } -->
     sequent['ext]  { <H>; t: BinTree;  <J['t]> >-  'C['t]}
 
+doc <:doc< @docoff >>
 
 (* ==================== *)
-
-
-
-

@@ -31,18 +31,17 @@ doc <:doc<
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
   
-   Author: Xin Yu
-   @email{xiny@cs.caltech.edu}
+   Author: Xin Yu @email{xiny@cs.caltech.edu}
    @end[license]
 >>
 
 doc <:doc< @doc{@parents} >>
 extends Itt_group
 extends Itt_int_base
-doc <:doc< @docoff >>
 extends Itt_int_ext
 extends Itt_int_arith
 extends Itt_subset
+doc docoff
 
 open Printf
 open Mp_debug
@@ -79,9 +78,9 @@ let _ =
 
 doc <:doc< @doc{@terms} >>
 declare group_power{'g; 'a; 'n}
-declare cycGroup{'g}
+declare isCyclic{'g}
 declare cycSubg{'g; 'a}
-doc <:doc< @docoff >>
+doc docoff
 
 (************************************************************************
  * REWRITES                                                             *
@@ -96,29 +95,33 @@ doc <:doc<
 prim_rw unfold_group_power : group_power{'g; 'a; 'n} <-->
    ind{'n; i, j. ('g^inv 'a) *['g] group_power{'g; 'a; ('n +@ 1)}; .'g^"1"; k, l. 'a *['g] group_power{'g; 'a; ('n -@ 1)}}
 
-prim_rw unfold_cycGroup : cycGroup{'g} <-->
+prim_rw unfold_isCyclic : isCyclic{'g} <-->
    (exst a: 'g^car. all x: 'g^car. exst n: int. ('x = group_power{'g; 'a; 'n} in 'g^car))
 
 prim_rw unfold_cycSubg : cycSubg{'g; 'a} <-->
    {car={x: 'g^car| exst n: int. 'x = group_power{'g; 'a; 'n} in 'g^car}; "*"='g^"*"; "1"='g^"1"; inv='g^inv}
-doc <:doc< @docoff >>
+doc docoff
 
 let fold_group_power = makeFoldC << group_power{'g; 'a; 'n} >> unfold_group_power
-let fold_cycGroup = makeFoldC << cycGroup{'g} >> unfold_cycGroup
+let fold_isCyclic = makeFoldC << isCyclic{'g} >> unfold_isCyclic
 let fold_cycSubg = makeFoldC << cycSubg{'g; 'a} >> unfold_cycSubg
 
 (************************************************************************
  * DISPLAY FORMS                                                        *
  ************************************************************************)
 
-dform group_power_df1 : except_mode[src] :: parens :: "prec"[prec_inv] :: group_power{'g; 'a; 'n} =
-   math_group_power{'g; 'a; 'n}
+dform group_power_df1 : except_mode[src] :: except_mode[prl] :: parens :: "prec"[prec_inv] :: group_power{'G; 'a; 'n} =
+   slot["le"]{'a} sup{'n} sub{'G}
 
-dform cycGroup_df : except_mode[src] :: cycGroup{'g} =
-   math_cycGroup{'g}
+dform group_power_df2 : mode[prl] :: parens :: "prec"[prec_inv] :: group_power{'G; 'a; 'n} =
+(*   `"(" slot{'a} `"^" slot{'n} `")" sub{'G}*)
+   slot["le"]{'a} sup{'n} sub{'G}
 
-dform cycSubg_df : except_mode[src] :: cycSubg{'g; 'a} =
-   math_cycSubg{'g; 'a}
+dform isCyclic_df : except_mode[src] :: isCyclic{'G} =
+   `"isCyclic(" slot{'G} `")"
+
+dform cycSubg_df : except_mode[src] :: cycSubg{'G; 'a} =
+   `"Cyclic_subgroup(" slot{'G} `"; " slot{'a} `")"
 
 (************************************************************************
  * REDUCTIONS                                                           *
@@ -136,6 +139,7 @@ let resource reduce +=
 
 doc <:doc< 
    @begin[doc]
+   @modsection{Rules}
    @modsubsection{Group power operation}
   
    Well-formedness.
@@ -146,7 +150,7 @@ interactive group_power_wf {| intro [intro_typeinf <<'g>>] |} group[i:l] :
    sequent [squash] { <H> >- 'a in 'g^car } -->
    sequent [squash] { <H> >- 'n in int } -->
    sequent ['ext] { <H> >- group_power{'g; 'a; 'n} in 'g^car }
-doc <:doc< @docoff >>
+doc docoff
 
 (* a ^ 0 = e *)
 interactive group_power_0 {| intro [intro_typeinf <<'g>>] |} group[i:l] :
@@ -186,7 +190,7 @@ interactive group_power_reduce {| intro [intro_typeinf <<'g>>] |} group[i:l] :
    sequent [squash] { <H> >- 'm in int } -->
    sequent [squash] { <H> >- 'n in int } -->
    sequent ['ext] { <H> >- group_power{'g; 'a; 'm} *['g] group_power{'g; 'a; 'n} = group_power{'g; 'a; ('m +@ 'n)} in 'g^car }
-doc <:doc< @docoff >>
+doc docoff
 
 interactive group_power_inv_reduce {| intro [intro_typeinf <<'g>>] |} group[i:l] :
    sequent [squash] { <H> >- 'g in group[i:l] } -->
@@ -226,20 +230,20 @@ doc <:doc<
   
    @end[doc]
 >>
-interactive cycGroup_type {| intro [intro_typeinf <<'g>>] |} group[i:l] :
+interactive isCyclic_type {| intro [intro_typeinf <<'g>>] |} group[i:l] :
    sequent [squash] { <H> >- 'g in group[i:l] } -->
-   sequent ['ext] { <H> >- "type"{cycGroup{'g}} }
+   sequent ['ext] { <H> >- "type"{isCyclic{'g}} }
 
-interactive cycGroup_intro {| intro [intro_typeinf <<'g>>] |} group[i:l] 'a :
+interactive isCyclic_intro {| intro [intro_typeinf <<'g>>] |} group[i:l] 'a :
    sequent [squash] { <H> >- 'g in group[i:l] } -->
    sequent [squash] { <H> >- 'a in 'g^car } -->
    sequent ['ext] { <H>; x: 'g^car >- exst n: int. 'x = group_power{'g; 'a; 'n} in 'g^car } -->
-   sequent ['ext] { <H> >- cycGroup{'g} }
+   sequent ['ext] { <H> >- isCyclic{'g} }
 
-interactive cycGroup_elim {| elim [elim_typeinf <<'g>>] |} 'H group[i:l] :
-   [wf] sequent [squash] { <H>; x: cycGroup{'g}; <J['x]> >- 'g in group[i:l] } -->
-   [main] sequent ['ext] { <H>; x: cycGroup{'g}; <J['x]>; a: 'g^car; b: all x: 'g^car. exst n: int. ('x = group_power{'g; 'a; 'n} in 'g^car) >- 'C['x] } -->
-   sequent ['ext] { <H>; x: cycGroup{'g}; <J['x]> >- 'C['x] }
+interactive isCyclic_elim {| elim [elim_typeinf <<'g>>] |} 'H group[i:l] :
+   [wf] sequent [squash] { <H>; x: isCyclic{'g}; <J['x]> >- 'g in group[i:l] } -->
+   [main] sequent ['ext] { <H>; x: isCyclic{'g}; <J['x]>; a: 'g^car; b: all x: 'g^car. exst n: int. ('x = group_power{'g; 'a; 'n} in 'g^car) >- 'C['x] } -->
+   sequent ['ext] { <H>; x: isCyclic{'g}; <J['x]> >- 'C['x] }
 
 doc <:doc< 
    @begin[doc]
@@ -247,16 +251,16 @@ doc <:doc<
    Every cyclic group is abelian.
    @end[doc]
 >>
-interactive cycGroup_commutative {| intro [AutoMustComplete; intro_typeinf <<'g>>] |} group[i:l] :
+interactive isCyclic_commutative group[i:l] :
    [wf] sequent [squash] { <H> >- 'g in group[i:l] } -->
-   [main] sequent ['ext] { <H> >- cycGroup{'g} } -->
+   [main] sequent ['ext] { <H> >- isCyclic{'g} } -->
    sequent ['ext] { <H> >- isCommutative{'g} }
 
-interactive cycGroup_abelian {| intro [AutoMustComplete] |} :
+interactive isCyclic_abelian :
    [wf] sequent [squash] { <H> >- 'g in group[i:l] } -->
-   [main] sequent ['ext] { <H> >- cycGroup{'g} } -->
+   [main] sequent ['ext] { <H> >- isCyclic{'g} } -->
    sequent ['ext] { <H> >- 'g in abelg[i:l] }
-doc <:doc< @docoff >>
+doc docoff
 
 doc <:doc< 
    @begin[doc]
@@ -264,12 +268,12 @@ doc <:doc<
    Every non-trivial subgroup of a cyclic group is cyclic.
    @end[doc]
 >>
-interactive subg_cycGroup group[i:l] 'g :
-   [main] sequent ['ext] { <H> >- cycGroup{'g} } -->
+interactive subg_isCyclic group[i:l] 'g :
+   [main] sequent ['ext] { <H> >- isCyclic{'g} } -->
    [main] sequent [squash] { <H> >- subgroup[i:l]{'s; 'g} } -->
    [main] sequent ['ext] { <H> >- exst x: 's^car. not {('x = 's^"1" in 's^car)} } -->
    [decidable] sequent ['ext] { <H>; a: int; x: 'g^car >- decidable{(group_power{'g; 'x; 'a} in 's^car subset 'g^car)} } -->
-   sequent ['ext] { <H> >- cycGroup{'s} }
+   sequent ['ext] { <H> >- isCyclic{'s} }
 
 doc <:doc< 
    @begin[doc]
@@ -312,7 +316,7 @@ interactive cycsubg_subgroup {| intro [AutoMustComplete] |} :
    [wf] sequent [squash] { <H> >- 'g in group[i:l] } -->
    [wf] sequent [squash] { <H> >- 'a in 'g^car } -->
    sequent ['ext] { <H> >- subgroup[i:l]{cycSubg{'g; 'a}; 'g} }
-doc <:doc< @docoff >>
+doc docoff
 
 (*
  * -*-

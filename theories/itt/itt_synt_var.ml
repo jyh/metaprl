@@ -69,10 +69,6 @@ prim_rw right_id {| reduce |} :
 interactive_rw eq_equal {| reduce |} :
    is_eq{var{'left_1; 'right_1};var{'left_2; 'right_2}} <--> ('left_1 =@ 'left_2)
 
-interactive_rw eq_same {| reduce |} :
-   ('v in Var) -->
-   is_eq{'v;'v} <--> btrue
-
 
 doc "doc"{rules}
 
@@ -109,6 +105,10 @@ interactive eq_wf {| intro [] |} :
    sequent { <H> >- 'v2 in Var } -->
    sequent { <H> >- is_eq{'v1; 'v2} in bool }
 
+interactive_rw eq_same {| reduce |} :
+   ('v in Var) -->
+   is_eq{'v;'v} <--> btrue
+
 (* XXX: TODO: arith tactics need to know abot the next 3 rules *)
 
 interactive depth_pos {| intro [] |} :
@@ -123,6 +123,14 @@ interactive right_bound {| intro [] |} :
    sequent { <H> >- 'v in Var } -->
    sequent { <H> >- right{'v} < depth{'v} }
 
+
+interactive leftSquiddle {| intro [] |} :
+   sequent { <H> >- 'v1 = 'v2 in Var } -->
+   sequent { <H> >- left{'v1} ~ left{'v2} }
+
+interactive rightSquiddle {| intro [] |} :
+   sequent { <H> >- 'v1 = 'v2 in Var } -->
+   sequent { <H> >- right{'v1} ~ right{'v2} }
 
 interactive varSquiddle {| nth_hyp |} :
    sequent { <H> >- 'b1 = 'b2 in Var } -->

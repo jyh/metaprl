@@ -52,6 +52,8 @@ declare it
 
 declare small_type
 declare large_type
+declare union_type[i:n]
+declare polyKind[i:n]{ 'k }
 
 (*
  * Store values.
@@ -77,7 +79,7 @@ declare no_def
 
 declare type_eq{ 'ty1; 'ty2; 'k }
 declare type_eq{ 'ty; 'k }
-declare has_type{ 't; 'ty }
+declare has_type[str:s]{ 't; 'ty }
 
 (**************************************************************************
  * Rewrites.

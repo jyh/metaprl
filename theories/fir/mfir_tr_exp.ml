@@ -55,7 +55,11 @@ extends Mfir_tr_store
  * @docoff
  *)
 
+open Tactic_type
+open Tactic_type.Tacticals
+open Base_auto_tactic
 open Base_dtactic
+open Mfir_auto
 
 (**************************************************************************
  * Rules.
@@ -65,22 +69,120 @@ open Base_dtactic
  * @begin[doc]
  * @rules
  *
- * Operationally, the term @tt[letAtom] binds @tt[atom] to @tt[v] in @tt[exp].
- * The expression has type @tt[ty2] if @tt[atom] has type @tt[ty1], and the
- * expression @tt[exp] has type @tt[ty2] under the assumption that @tt[v] has
- * type @tt[ty1]. The assumptions ensure that @tt[ty1] and @tt[ty2] are
- * well-formed types.
+ * Operationally, the $<< letAtom{ 'ty1; 'atom; v. 'exp['v] } >>$ expression
+ * binds $<< 'atom >>$ to $<< 'v >>$ in $<< 'exp >>$.  The expression has type
+ * $<< 'ty2 >>$ if $<< 'atom >>$ has type $<< 'ty1 >>$, and $<< 'exp['v] >>$
+ * has type $<< 'ty2 >>$ assuming that $<< 'v >>$ has type $<< 'ty1 >>$.
  * @end[doc]
  *)
 
 prim ty_letAtom {| intro [] |} 'H 'a :
-   sequent [mfir] { 'H >- has_type{ 'atom; 'ty1 } } -->
+   sequent [mfir] { 'H >- has_type["atom"]{ 'atom; 'ty1 } } -->
    sequent [mfir] { 'H; a: var_def{ 'ty1; no_def } >-
-      has_type{ 'exp['a]; 'ty2 } } -->
+      has_type["exp"]{ 'exp['a]; 'ty2 } } -->
    sequent [mfir] { 'H >-
-      has_type{ letAtom{ 'ty1; 'atom; v. 'exp['v] }; 'ty2 } }
+      has_type["exp"]{ letAtom{ 'ty1; 'atom; v. 'exp['v] }; 'ty2 } }
+   = it
+
+(* XXX letExt *)
+
+(*!
+ * @begin[doc]
+ *
+ * The next three rules assume that FIR programs are written in continuation
+ * passing style.  A function call is well-formed if the variable
+ * $<< atomVar{'v} >>$ is a function, and if the arguments have the
+ * appropriate types.  Note that the type of $<< atomVar{'v} >>$ must be a
+ * function type that ``returns'' a value of type $<< tyEnum[0] >>$.
+ * @end[doc]
+ *)
+
+prim ty_tailCall 'H 'J :
+   sequent [mfir] { 'H; v: var_def{ tyFun{'t1; 't2}; no_def }; 'J['v] >-
+      type_eq{ tyEnum[0]; large_type } } -->
+   sequent [mfir] { 'H; v: var_def{ tyFun{'t1; 't2}; no_def }; 'J['v] >-
+      has_type["tailCall"]{ 'atom_list; tyFun{ 't1; 't2 } } } -->
+   sequent [mfir] { 'H; v: var_def{ tyFun{'t1; 't2}; no_def }; 'J['v] >-
+      has_type["exp"]{ tailCall{ atomVar{'v}; 'atom_list }; tyEnum[0] } }
+   = it
+
+prim ty_tailCall_args1 {| intro [] |} 'H :
+   sequent [mfir] { 'H >- type_eq{ tyFun{ 't1; 't2 }; large_type } } -->
+   sequent [mfir] { 'H >- has_type["atom"]{ 'h; 't1 } } -->
+   sequent [mfir] { 'H >- has_type["tailCall"]{ 't; 't2 } } -->
+   sequent [mfir] { 'H >-
+      has_type["tailCall"]{ cons{ 'h; 't }; tyFun{ 't1; 't2 } } }
+   = it
+
+prim ty_tailCall_args2 {| intro [] |} 'H :
+   sequent [mfir] { 'H >- type_eq{ tyEnum[0]; large_type } } -->
+   sequent [mfir] { 'H >- has_type["tailCall"]{ nil; tyEnum[0] } }
    = it
 
 (*!
  * @docoff
  *)
+
+let d_ty_tailCall i p =
+   let j, k = Sequent.hyp_indices p i in
+      ty_tailCall j k p
+
+let resource auto += {
+   auto_name = "d_ty_tailCall";
+   auto_prec = fir_auto_prec;
+   auto_tac = onSomeHypT d_ty_tailCall;
+   auto_type = AutoNormal
+}
+
+(* XXX matchExp *)
+
+(* XXX letAlloc *)
+
+(* XXX Subscript *)
+
+(*!
+ * @begin[doc]
+ *
+ * The expression $<< letGlobal{ 'ty1; 'label; v. 'exp['v] } >>$ is used to
+ * read a global value, and the expression
+ * $<< setGlobal{ 'label; 'ty1; 'atom; 'exp } >>$ is used to set a global
+ * value.  There is no way to use global values directly.  The typing rules
+ * for these expressions are straightforward.
+ * @end[doc]
+ *)
+
+prim ty_label 'H 'J :
+   sequent [mfir] { 'H; l: global_def{ 'ty; no_def }; 'J['l] >-
+      has_type["label"]{ 'l; 'ty } }
+   = it
+
+prim ty_letGlobal {| intro [] |} 'H 'a :
+   sequent [mfir] { 'H >- has_type["label"]{ 'label; 'ty1 } } -->
+   sequent [mfir] { 'H; a: var_def{ 'ty1; no_def } >-
+      has_type["exp"]{ 'exp['a]; 'ty2 } } -->
+   sequent [mfir] { 'H >-
+      has_type["exp"]{ letGlobal{ 'ty1; 'label; v. 'exp['v] }; 'ty2 } }
+   = it
+
+prim ty_setGlobal {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["label"]{ 'label; 'ty1 } } -->
+   sequent [mfir] { 'H >- has_type["atom"]{ 'atom; 'ty1 } } -->
+   sequent [mfir] { 'H >- has_type["exp"]{ 'exp; 'ty2 } } -->
+   sequent [mfir] { 'H >-
+      has_type["exp"]{ setGlobal{ 'label; 'ty1; 'atom; 'exp }; 'ty2 } }
+   = it
+
+(*!
+ * @docoff
+ *)
+
+let d_ty_label i p =
+   let j, k = Sequent.hyp_indices p i in
+      ty_label j k p
+
+let resource auto += {
+   auto_name = "d_ty_label";
+   auto_prec = fir_auto_prec;
+   auto_tac = onSomeHypT d_ty_label;
+   auto_type = AutoNormal
+}

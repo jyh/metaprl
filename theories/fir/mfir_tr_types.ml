@@ -3,7 +3,7 @@
  * @module[Mfir_tr_types]
  *
  * The @tt[Mfir_tr_types] module defines type equality judgments, which are
- * used to define type well-formedness.
+ * used to determine the well-formedness of FIR types.
  * @end[doc]
  *
  * ------------------------------------------------------------------------
@@ -52,7 +52,11 @@ extends Mfir_sequent
  * @docoff
  *)
 
+open Tactic_type
+open Tactic_type.Tacticals
+open Base_auto_tactic
 open Base_dtactic
+open Mfir_auto
 
 (**************************************************************************
  * Rules.
@@ -62,21 +66,21 @@ open Base_dtactic
  * @begin[doc]
  * @rules
  *
- * Two type variables are equal if they name the same variable, and the
- * variable is declared in the context with the specified kind.
+ * The equality judgment for $<< tyInt >>$ is straightforward.
  * @end[doc]
  *)
 
-prim wf_tyVar {| elim [] |} 'H 'J :
-   sequent [mfir] { 'H; tv: ty_def{ 'k; no_def}; 'J['tv] >-
-      type_eq{ tyVar{ 'tv }; tyVar{ 'tv }; 'k } }
+prim wf_tyInt {| intro [] |} 'H :
+   sequent [mfir] { 'H >- type_eq{ tyInt; tyInt; small_type } }
    = it
 
 (*!
  * @begin[doc]
  *
- * An enumeration type is well-formed if the parameter is within the allowed
- * range of values.
+ * Two enumeration types are equal if they have the same parameter $i$, and if
+ * $i$ is within the allowed range of values.  This latter restriction assists
+ * the Mojave compiler's garbage collector in differentiating between
+ * enumeration constants and pointers.
  * @end[doc]
  *)
 
@@ -88,55 +92,74 @@ prim wf_tyEnum {| intro [] |} 'H :
 (*!
  * @begin[doc]
  *
- * The equality judgments for numeric data types are straightforward. Note
- * that $<< tyRawInt[precision:n, "signed"] >>$,
- * $<< tyRawInt[precision:n, "unsigned"] >>$,
- * and $<< tyFloat[precision:n] >>$
- * cannot be used as $<< small_type >>$ types.
+ * The equality judgments for the types of raw integers and floating point
+ * values are straightforward. Note that $<< tyRawInt[p:n, sign:s] >>$ and
+ * $<< tyFloat[p:n] >>$ cannot be used as $<< small_type >>$ types.
  * @end[doc]
  *)
 
-prim wf_tyInt {| intro [] |} 'H :
-   sequent [mfir] { 'H >- type_eq{ tyInt; tyInt; small_type } }
-   = it
-
 prim wf_tyRawInt_signed {| intro [] |} 'H :
    sequent [mfir] { 'H >-
-      "or"{ int_eq{ number[precision:n]; 8 };
-      "or"{ int_eq{ number[precision:n]; 16 };
-      "or"{ int_eq{ number[precision:n]; 32 };
-            int_eq{ number[precision:n]; 64 } } } } } -->
-   sequent [mfir] { 'H >- type_eq{ tyRawInt[precision:n, "signed"];
-                                   tyRawInt[precision:n, "signed"];
+      "or"{ int_eq{ number[p:n]; 8 };
+      "or"{ int_eq{ number[p:n]; 16 };
+      "or"{ int_eq{ number[p:n]; 32 };
+            int_eq{ number[p:n]; 64 } } } } } -->
+   sequent [mfir] { 'H >- type_eq{ tyRawInt[p:n, "signed"];
+                                   tyRawInt[p:n, "signed"];
                                    large_type } }
    = it
 
 prim wf_tyRawInt_unsigned {| intro [] |} 'H :
    sequent [mfir] { 'H >-
-      "or"{ int_eq{ number[precision:n]; 8 };
-      "or"{ int_eq{ number[precision:n]; 16 };
-      "or"{ int_eq{ number[precision:n]; 32 };
-            int_eq{ number[precision:n]; 64 } } } } } -->
-   sequent [mfir] { 'H >- type_eq{ tyRawInt[precision:n, "unsigned"];
-                                   tyRawInt[precision:n, "unsigned"];
+      "or"{ int_eq{ number[p:n]; 8 };
+      "or"{ int_eq{ number[p:n]; 16 };
+      "or"{ int_eq{ number[p:n]; 32 };
+            int_eq{ number[p:n]; 64 } } } } } -->
+   sequent [mfir] { 'H >- type_eq{ tyRawInt[p:n, "unsigned"];
+                                   tyRawInt[p:n, "unsigned"];
                                    large_type } }
    = it
 
 prim wf_tyFloat {| intro [] |} 'H :
    sequent [mfir] { 'H >-
-      "or"{ int_eq{ number[precision:n]; 32 };
-      "or"{ int_eq{ number[precision:n]; 64 };
-            int_eq{ number[precision:n]; 80 } } } } -->
-   sequent [mfir] { 'H >- type_eq{ tyFloat[precision:n];
-                                   tyFloat[precision:n];
+      "or"{ int_eq{ number[p:n]; 32 };
+      "or"{ int_eq{ number[p:n]; 64 };
+            int_eq{ number[p:n]; 80 } } } } -->
+   sequent [mfir] { 'H >- type_eq{ tyFloat[p:n];
+                                   tyFloat[p:n];
                                    large_type } }
    = it
 
 (*!
  * @begin[doc]
  *
- * Two tuple types are equal if they have the same ``class'', and they are
- * pointwise equal.  Note that ``box'' tuples must have arity one.
+ * Two function types are equal if their arguments types are equal, and if
+ * the types of their return values are equal.
+ * @end[doc]
+ *)
+
+prim wf_tyFun {| intro [] |} 'H :
+   sequent [mfir] { 'H >- type_eq{ 'a1; 'a2; large_type } } -->
+   sequent [mfir] { 'H >- type_eq{ 'r1; 'r2; large_type } } -->
+   sequent [mfir] { 'H >- type_eq{ tyFun{ 'a1; 'r1 };
+                                   tyFun{ 'a2; 'r2 };
+                                   small_type } }
+   = it
+
+(*!
+ * @begin[doc]
+ *
+ * ...
+ * @end[doc]
+ *)
+
+(* XXX union equality *)
+
+(*!
+ * @begin[doc]
+ *
+ * Two tuple types are equal if they are the same kind of tuple, and their
+ * projections are pointwise equal.  Note that box tuples must have arity one.
  * @end[doc]
  *)
 
@@ -178,8 +201,8 @@ prim wf_tyArray {| intro [] |} 'H :
 (*!
  * @begin[doc]
  *
- * Rawdata is an opaque data space used to represent data without strict
- * typing rules, such as heap data in C.
+ * The rawdata type $<< tyRawData >>$ is used to represent data without
+ * strict typing rules.
  * @end[doc]
  *)
 
@@ -190,18 +213,108 @@ prim wf_tyRawData {| intro [] |} 'H :
 (*!
  * @begin[doc]
  *
- * Two function types are equal if their arguments types are equal, and if
- * the types of their return values are equal.
+ * Two type variables are equal if they name the same variable, and the
+ * variable is declared in the context with the specified kind.
  * @end[doc]
  *)
 
-prim wf_tyFun {| intro [] |} 'H :
-   sequent [mfir] { 'H >- type_eq{ 'a1; 'a2; large_type } } -->
-   sequent [mfir] { 'H >- type_eq{ 'r1; 'r2; large_type } } -->
-   sequent [mfir] { 'H >- type_eq{ tyFun{ 'a1; 'r1 };
-                                   tyFun{ 'a2; 'r2 };
+(*
+ * BUG: Is exact equality really the way to go?
+ *)
+
+prim wf_tyVar 'H 'J :
+   sequent [mfir] { 'H; tv: ty_def{ 'k; no_def}; 'J['tv] >-
+      type_eq{ tyVar{ 'tv }; tyVar{ 'tv }; 'k } }
+   = it
+
+(*!
+ * @docoff
+ *)
+
+let d_wf_tyVar i p =
+   let j, k = Sequent.hyp_indices p i in
+      wf_tyVar j k p
+
+let resource auto += {
+   auto_name = "d_wf_tyVar";
+   auto_prec = fir_auto_prec;
+   auto_tac = onSomeHypT d_wf_tyVar;
+   auto_type = AutoNormal
+}
+
+(*!
+ * @begin[doc]
+ *
+ * ...
+ * @end[doc]
+ *)
+
+(*
+ * BUG: If the context can have definitions, then there's
+ * another rule for tyApply
+ *)
+
+(*
+prim wf_tyApply 'H 'J :
+   PREMISES??
+   sequent [mfir] { 'H; tv: ty_def{ polyKind[i:n]{ 'k }; no_def }; 'J['tv] >-
+      type_eq{ tyApply{ 'tv; 'ty_list1 };
+               tyApply{ 'tv; 'ty_list2 };
+               small_type } }
+   = it
+*)
+
+(* XXX tyApply *)
+
+(*!
+ * @begin[doc]
+ *
+ * Two existential types are equal if when instantiated at the same
+ * $<< small_type >>$ type, the resulting types are equal.
+ * @end[doc]
+ *)
+
+prim wf_tyExists {| intro [] |} 'H 'a :
+   sequent [mfir] { 'H; a: ty_def{ small_type; no_def } >-
+      type_eq{ 't1['a]; 't2['a]; large_type } } -->
+   sequent [mfir] { 'H >- type_eq{ tyExists{ x. 't1['x] };
+                                   tyExists{ y. 't2['y] };
                                    small_type } }
    = it
+
+(*!
+ * @begin[doc]
+ *
+ * Two universal types are equal if when instantiated at the same
+ * $<< small_type >>$ type, the resulting types are equal.
+ * @end[doc]
+ *)
+
+prim wf_tyAll {| intro [] |} 'H 'a :
+   sequent [mfir] { 'H; a: ty_def{ small_type; no_def } >-
+      type_eq{ 't1['a]; 't2['a]; large_type } } -->
+   sequent [mfir] { 'H >- type_eq{ tyAll{ x. 't1['x] };
+                                   tyAll{ y. 't2['y] };
+                                   small_type } }
+   = it
+
+(*!
+ * @begin[doc]
+ *
+ * ...
+ * @end[doc]
+ *)
+
+(* GAGH variable equality??
+prim wf_tyProject {| intro [] |} 'H :
+   sequent [mfir] { 'H; v: var_def{ tyExists{ t. 'ty['t] } }; 'J['v] >-
+      type_eq{ tyProject[i:n]{ atomVar{'v} };
+               tyProject[i:n]{ atomVar{'v} };
+               small_type } }
+   = it
+*)
+
+(* XXX tyProject (multiple versions?), type definitions. *)
 
 (*!
  * @docoff

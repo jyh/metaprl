@@ -1,21 +1,9 @@
 (*!
- * @spelling{Mojave}
- *
  * @begin[doc]
- * @theory{Mojave FIR Theory}
+ * @module[Mfir_auto]
  *
- * The Mojave FIR Theory (hereafter the FIR theory) seeks to formalize
- * the ``Function Intermediate Representation'' (FIR) of the Mojave
- * compiler. The FIR is a typed, semi-functional language that supports
- * polymorphism, process migration, and transactions
- * @cite["fir:tech-report1"].
- *
- * The FIR theory is currently under active development.  It originally
- * started as the Mojave Compiler Theory.  Following the insights gained in
- * writing @cite["fir:tech-report1"], we decided to redevelop the theory in
- * its entirety. As a first step, we plan on formalizing the FIR type system,
- * and then using the formalization to type-check programs from the
- * Mojave compiler.
+ * The @tt[Mfir_auto] module defines the basic constructs to automate the
+ * FIR theory.
  * @end[doc]
  *
  * ------------------------------------------------------------------------
@@ -49,26 +37,12 @@
  *)
 
 (*!
- * @begin[doc]
- * @module[Mfir_theory]
- *
- * The @tt[Mfir_theory] module does not introduce any logical content
- * to the FIR theory.  It is a convenience for including the FIR
- * theory elsewhere.
- * @end[doc]
+ * @docoff
  *)
 
 extends Base_theory
-extends Mfir_basic
-extends Mfir_ty
-extends Mfir_exp
-extends Mfir_sequent
-extends Mfir_tr_base
-extends Mfir_tr_types
-extends Mfir_tr_atom
-extends Mfir_tr_store
-extends Mfir_tr_exp
 
-(*!
- * @docoff
- *)
+open Base_auto_tactic
+open Base_dtactic
+
+let fir_auto_prec = create_auto_prec [trivial_prec; d_prec] []

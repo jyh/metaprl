@@ -2,7 +2,7 @@
  * @begin[doc]
  * @module[Mfir_basic]
  *
- * The @tt[Mfir_basic] module declares basic terms needed to
+ * The @tt[Mfir_basic] module declares basic terms and rewrites needed to
  * support the @MetaPRL representation of the FIR.
  * @end[doc]
  *
@@ -57,7 +57,7 @@ open Top_conversionals
  * @modsubsection{Booleans}
  *
  * The FIR theory uses meta-booleans to express simple judgments and
- * conditionals.  The logical operators here are classical, not constructive.
+ * conditionals.  The logical operators here are interpreted classically.
  * @end[doc]
  *)
 
@@ -84,8 +84,9 @@ declare numeral{ 'num }
 (*!
  * @begin[doc]
  *
- * Basic arithmetic operations can be applied to integers, along with unary
- * negation (@tt[minus]).
+ * Basic arithmetic operations can be applied to integers.  These include
+ * addition, subtraction, multiplication, division, remainder, and unary
+ * negation.
  * @end[doc]
  *)
 
@@ -99,9 +100,9 @@ declare minus{ 'num }
 (*!
  * @begin[doc]
  *
- * Basic binary comparison operators can also be applied to integers.  The
- * rewrites below can rewrite the comparisons to either @tt["\"true\""] or
- * @tt["\"false\""].
+ * Integers can be compared using the following six binary operators. They
+ * use the representation of booleans above to express the validity of a
+ * comparison.
  * @end[doc]
  *)
 
@@ -138,8 +139,8 @@ declare cons{ 'elt; 'tail }
  * consists of a list of intervals.  In this case, the end points of each
  * interval are interpreted as signed, 31-bit integers.  The term
  * @tt[rawintset] is similar, except the end points of each interval are
- * interpreted as integers with the specified precision and signedness (see
- * @hrefterm[tyRawInt]).
+ * interpreted as raw integers with the specified precision and signedness
+ * (see @hrefterm[tyRawInt] for a description of raw integers).
  * @end[doc]
  *)
 
@@ -151,8 +152,8 @@ declare rawintset[precision:n, sign:s]{ 'interval_list }
  * @begin[doc]
  *
  * The term @tt[member] is used to determine whether or not a number @tt[num]
- * is in a set or interval @tt[set].  The rewrites below will reduce a
- * @tt[member] term to either @tt["\"true\""] or @tt["\"false\""].
+ * is in a set or interval @tt[set].  The validity of the relation is
+ * expressed using the representation of booleans above.
  * @end[doc]
  *)
 
@@ -177,6 +178,16 @@ declare intset_max
 
 declare enum_max
 
+(*!
+ * @begin[doc]
+ *
+ * The term @tt[rawintset_max] is the set of allowed values for raw integers
+ * with the specified precision and signedness.
+ * @end[doc]
+ *)
+
+declare rawintset_max[precision:n, sign:s]
+
 (**************************************************************************
  * Rewrites.
  **************************************************************************)
@@ -186,9 +197,7 @@ declare enum_max
  * @rewrites
  * @modsubsection{Conditionals}
  *
- * The logical connectives are treated in a classical fashion. Rewriting of
- * ``if-then-else'' expressions is a straightforward case analysis on the
- * test.  All of these rewrites are added to the @tt[reduce] resource.
+ * The logical operators declared above are treated classically.
  * @end[doc]
  *)
 
@@ -230,11 +239,9 @@ let resource reduce += [
  * @begin[doc]
  * @modsubsection{Arithmetic}
  *
- * Integer arithmetic and comparison is rewritten using meta operations from
- * the @tt[Base_meta] module.  The rewrites are added to the @tt[reduce]
- * resource.  They are straightforward, and we omit an explicit listing of
- * them.
- * @end[doc]
+ * The integer arithmetic and comparison operators above are rewritten using
+ * meta operations from the @tt[Base_meta] module.  They are straightforward,
+ * and we omit an explicit listing of them.  @end[doc]
  *)
 
 (*!
@@ -352,14 +359,8 @@ let resource reduce += [
    << int_ge{ 'num1; 'num2 } >>, reduce_int_ge
 ]
 
-(*!
- * @begin[doc]
- * @modsubsection{Set membership}
- *
- * Set and interval membership is a straightforward comparison against
- * each of the intervals in a set and the endpoints of an interval.
- * Recall that intervals are closed.
- * @end[doc]
+(*
+ * The following five rewrites are documented below (sorta).
  *)
 
 prim_rw reduce_member_interval :
@@ -384,6 +385,12 @@ prim_rw reduce_member_rawintset_base :
 
 (*!
  * @begin[doc]
+ * @modsubsection{Set membership}
+ *
+ * The set (interval) membership relation $<< member{ 'i; 'set } >>$
+ * can be rewritten into a series of comparisons against the intervals
+ * (endpoints) of $set$.  The rewrites are straightforward and we omit
+ * an explicit listing of them.
  *
  * Set constants can be rewritten into their actual values.
  * @end[doc]
@@ -396,6 +403,38 @@ prim_rw reduce_intset_max :
 prim_rw reduce_enum_max :
    enum_max <-->
    intset{ cons{ interval{ 0; 2048 }; nil } }
+
+prim_rw reduce_rawintset_max_u8 :
+   rawintset_max[8, "unsigned"] <-->
+   intset{ cons{ interval{ 0; 255 }; nil } }
+
+prim_rw reduce_rawintset_max_s8 :
+   rawintset_max[8, "signed"] <-->
+   intset{ cons{ interval{. -128; 127 }; nil } }
+
+prim_rw reduce_rawintset_max_u16 :
+   rawintset_max[16, "unsigned"] <-->
+   intset{ cons{ interval{ 0; 65536 }; nil } }
+
+prim_rw reduce_rawintset_max_s16 :
+   rawintset_max[16, "signed"] <-->
+   intset{ cons{ interval{. -32768; 32767 }; nil } }
+
+prim_rw reduce_rawintset_max_u32 :
+   rawintset_max[32, "unsigned"] <-->
+   intset{ cons{ interval{ 0; 4294967296}; nil } }
+
+prim_rw reduce_rawintset_max_s32 :
+   rawintset_max[32, "signed"] <-->
+   intset{ cons{ interval{. -2147483648; 2147483647 }; nil } }
+
+prim_rw reduce_rawintset_max_u64 :
+   rawintset_max[64, "unsigned"] <-->
+   intset{ cons{ interval{ 0; 18446744073709551616 }; nil } }
+
+prim_rw reduce_rawintset_max_s64 :
+   rawintset_max[64, "signed"] <-->
+   intset{ cons{ interval{. -9223372036854775808; 9223372036854775807 }; nil } }
 
 (*!
  * @docoff
@@ -415,7 +454,23 @@ let resource reduce += [
    << intset_max >>,
       reduce_intset_max;
    << enum_max >>,
-      reduce_enum_max
+      reduce_enum_max;
+   << rawintset_max[8, "unsigned"] >>,
+      reduce_rawintset_max_u8;
+   << rawintset_max[8, "signed"] >>,
+      reduce_rawintset_max_s8;
+   << rawintset_max[16, "unsigned"] >>,
+      reduce_rawintset_max_u16;
+   << rawintset_max[16, "signed"] >>,
+      reduce_rawintset_max_s16;
+   << rawintset_max[32, "unsigned"] >>,
+      reduce_rawintset_max_u32;
+   << rawintset_max[32, "signed"] >>,
+      reduce_rawintset_max_s32;
+   << rawintset_max[64, "unsigned"] >>,
+      reduce_rawintset_max_u64;
+   << rawintset_max[64, "signed"] >>,
+      reduce_rawintset_max_s64
 ]
 
 (**************************************************************************
@@ -581,9 +636,19 @@ dform intset_df : except_mode[src] ::
    intset{ 'interval_list } =
    bf["intset"] `" " slot{'interval_list}
 
-dform rawintset_df : except_mode[src] ::
+dform rawintset_df1 : except_mode[src] ::
    rawintset[precision:n, sign:s]{ 'interval_list } =
-   bf["rawintset"] sub{slot[precision:n]} sup{slot[sign:s]} `" "
+   bf["rawintset"] sub{slot[precision:n]} sup{it[sign:s]} `" "
+      slot{'interval_list}
+
+dform rawintset_df2 : except_mode[src] ::
+   rawintset[precision:n, "signed"]{ 'interval_list } =
+   bf["rawintset"] sub{slot[precision:n]} sup{bf["signed"]} `" "
+      slot{'interval_list}
+
+dform rawintset_df3 : except_mode[src] ::
+   rawintset[precision:n, "unsigned"]{ 'interval_list } =
+   bf["rawintset"] sub{slot[precision:n]} sup{bf["unsigned"]} `" "
       slot{'interval_list}
 
 dform member_df : except_mode[src] ::
@@ -597,3 +662,15 @@ dform intset_max_df : except_mode[src] ::
 dform enum_max_df : except_mode[src] ::
    enum_max =
    bf["enum_max"]
+
+dform rawintset_max_df1 : except_mode[src] ::
+   rawintset_max[precision:n, sign:s] =
+   bf["rawintset_max"] sub{slot[precision:n]} sup{it[sign:s]}
+
+dform rawintset_max_df2 : except_mode[src] ::
+   rawintset_max[precision:n, "signed"] =
+   bf["rawintset_max"] sub{slot[precision:n]} sup{bf["signed"]}
+
+dform rawintset_max_df3 : except_mode[src] ::
+   rawintset_max[precision:n, "unsigned"] =
+   bf["rawintset_max"] sub{slot[precision:n]} sup{bf["unsigned"]}

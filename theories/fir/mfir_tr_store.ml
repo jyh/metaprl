@@ -65,23 +65,37 @@ open Base_dtactic
  *
  * The typing rules for functions are straightforward.  The body of the
  * function must be typed as the result type of the function, assuming that
- * its binding variable has the appropriate type (or kind).
+ * its binding variable has the appropriate type (or kind). Note that
+ * for $<< polyFun{ x. 'f['x] } >>$ to be well-formed, $f$ must be a function.
  * @end[doc]
  *)
 
 prim ty_store_lambda {| intro [] |} 'H 'a :
+   sequent [mfir] { 'H >-
+      type_eq{ tyFun{ 'arg_type; 'res_type }; large_type } } -->
    sequent [mfir] { 'H >- type_eq{ 'arg_type; large_type } } -->
    sequent [mfir] { 'H; a: var_def{ 'arg_type; no_def } >-
-      has_type{ 'f['a]; 'res_type } } -->
+      has_type["exp"]{ 'f['a]; 'res_type } } -->
    sequent [mfir] { 'H >-
-      has_type{ lambda{ v. 'f['v] }; tyFun{ 'arg_type; 'res_type } } }
+      has_type["exp"]{ lambda{ v. 'f['v] }; tyFun{ 'arg_type; 'res_type } } }
    = it
 
-prim ty_store_polyFun {| intro [] |} 'H 'a :
+prim ty_store_polyFun1 {| intro [] |} 'H 'a :
+   sequent [mfir] { 'H >- type_eq{ tyAll{ t. 'ty['t] }; large_type } } -->
    sequent [mfir] { 'H; a: ty_def{ small_type; no_def } >-
-      has_type{ 'f['a]; 'ty['a] } } -->
+      has_type["exp"]{ polyFun{ y. 'f['a; 'y] }; 'ty['a] } } -->
    sequent [mfir] { 'H >-
-      has_type{ polyFun{ t. 'f['t] }; tyAll{ t. 'ty['t] } } }
+      has_type["exp"]{ polyFun{ x. polyFun{ y. 'f['x; 'y] } };
+                       tyAll{ t. 'ty['t] } } }
+   = it
+
+prim ty_store_polyFun2 {| intro [] |} 'H 'a :
+   sequent [mfir] { 'H >- type_eq{ tyAll{ t. 'ty['t] }; large_type } } -->
+   sequent [mfir] { 'H; a: ty_def{ small_type; no_def } >-
+      has_type["exp"]{ lambda{ y. 'f['a; 'y] }; 'ty['a] } } -->
+   sequent [mfir] { 'H >-
+      has_type["exp"]{ polyFun{ x. lambda{ y. 'f['x; 'y] } };
+                       tyAll{ t. 'ty['t] } } }
    = it
 
 (*!

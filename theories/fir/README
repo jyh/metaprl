@@ -19,6 +19,25 @@ serve as notes to himself.  They may not make sense to others.
       2) Type check the context.
       3) Type check each definition given the context.
 
+-- I want to say that has_type[str]{'t; 'ty} also includes a well-formedness
+   proof of 'ty.  Of course, I have no way of forcing that to be true in
+   MetaPRL.  Does this mean I should go ahead and use ``informal'' reasoning
+   elsewhere to simplify rules?  If I had induction over rules, this
+   wouldn't be a problem.  *shrug*  I guess I'll explicity do the wf check
+   for now, and come back later to see if I can simplify things.
+
+-- The above remark should apply equally well to checking kinds when
+   introducing new kind definitions.  Though, I've already gone the lazy
+   route with this one...
+
+-- For things like set membership: rewrites or rules? which is faster?
+
+Notable differences from the actual Mojave FIR:
+
+-- The following have been ``curried'' (since: lists are somewhat annoying
+   to deal with in MetaPRL, can get better binding variables, ...):
+      TyFun
+
 Comments that will be around a while:
 
 -- Must _not_ include anything from ITT.  Otherwise, we get

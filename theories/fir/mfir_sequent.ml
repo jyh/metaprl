@@ -7,12 +7,12 @@
  * The @tt[Mfir_sequent] module declares terms used in FIR theory sequents.
  * We take the following interpretation of sequents in the FIR theory.  If a
  * sequent is not well-formed, then it holds trivially.  In order for a
- * sequent to be well-formed, the list of hypotheses, also called a
+ * sequent to be well-formed, the list of hypotheses, also called the
  * @em{context}, must be well-formed.
  *
  * Contexts may contain declarations and definitions for variables, type
  * variables, and global labels (global values in FIR programs).  A variable
- * must be declared before it is defined, since variable may be defined in a
+ * must be declared before it is defined, since variables may be defined in a
  * mutually recursive fashion.  No variable may be declared or defined more
  * than once.  Similar requirements hold for type variables and global labels.
  * @end[doc]
@@ -90,11 +90,37 @@ declare large_type
 
 (*!
  * @begin[doc]
+ *
+ * Union definitions (see @hrefterm[tyDefUnion]) belong to the @tt[union_type]
+ * kind, where the parameter $i$ indiciates the number of cases in the union.
+ * @end[doc]
+ *)
+
+declare union_type[i:n]
+
+(*!
+ * @begin[doc]
+ *
+ * Parametrized types (see @hrefterm[tyDefPoly]) belong to the @tt[polyKind]
+ * kind.  The parameter $i$ is the number of parameters in the definition, and
+ * the subterm @tt[k] is the kind of the type once all the parameters are
+ * instantiated.
+ * @end[doc]
+ *)
+
+declare polyKind[i:n]{ 'k }
+
+(*!
+ * @begin[doc]
  * @modsubsection{Contexts}
  *
- * The terms @tt[ty_def], @tt[var_def], and @tt[global_def] are used
- * for definitions in the context.  If the subterm @tt[def] is @tt[no_def],
- * then the definition is considered to actually be a declaration only.
+ * The terms @tt[ty_def], @tt[var_def], and @tt[global_def] are used for
+ * definitions in the context.  If the subterm @tt[def] is @tt[no_def], then
+ * the definition is considered to be a declaration only.  A declaration is
+ * well-formed if the first subterm is a well-formed kind/type, and the second
+ * subterm is @tt[no_def].  A definition is well-formed if the corresponding
+ * declaration is well-formed, and if the value/type in the definition has the
+ * specified kind or type.
  * @end[doc]
  *)
 
@@ -112,8 +138,8 @@ declare no_def
  * argument.  The term @tt[lambda] is a non-polymorphic function of one
  * argument.  (Note that functions of multiple arguments are represented in
  * curried form.) The term @tt[union_val] is a value of case $i$ of some union
- * type @tt[ty_var], initialized with the atoms @tt[atom_list].  The term
- * @tt[raw_data] is an opaque representation of raw data (see
+ * type @tt[ty_var], initialized with the atoms in the list @tt[atom_list].
+ * The term @tt[raw_data] is an opaque representation of raw data (see
  * @hrefterm[tyRawData]).
  * @end[doc]
  *)
@@ -130,8 +156,7 @@ declare raw_data
  * A proof of @tt[type_eq] says that two types (or type definitions)
  * @tt[ty1] and @tt[ty2] are equal in the kind @tt[k].  The two subterm
  * form of @tt[type_eq] is degenerate, and says that a type @tt[ty] is equal
- * to itself in the kind @tt[k]. The conversional @tt[unfold_type_eq] is added
- * to the @tt[reduce] resource.
+ * to itself in the kind @tt[k].
  * @end[doc]
  *)
 
@@ -157,7 +182,7 @@ let resource reduce += [
  * @end[doc]
  *)
 
-declare has_type{ 't; 'ty }
+declare has_type[str:s]{ 't; 'ty }
 
 (*!
  * @docoff
@@ -187,17 +212,25 @@ dform it_df2 : mode[tex] ::
  * Kinds.
  *)
 
-dform smallType_df : except_mode[src] ::
+dform small_type_df : except_mode[src] ::
    small_type =
    omega
 
-dform largeType_df : except_mode[src] :: except_mode[tex] ::
+dform large_type_df : except_mode[src] :: except_mode[tex] ::
    large_type  =
    `"(big " omega `")"
 
 dform largeType_df : mode[tex] ::
    large_type  =
    izone `"\\Omega" ezone
+
+dform union_type_df : except_mode[src] ::
+   union_type[i:n] =
+   bf["union"] `"[" slot[i:n] `"]"
+
+dform polyKind_df : except_mode[src] ::
+   polyKind[i:n]{ 'k } =
+   small_type sup{slot[i:n]} rightarrow slot{'k}
 
 (*
  * Store values.
@@ -272,5 +305,5 @@ dform type_eq_df2 : except_mode[src] ::
    slot{'ty} `":" slot{'k}
 
 dform has_type_df : except_mode[src] ::
-   has_type{ 't; 'ty } =
-   slot{'t} `":" slot{'ty}
+   has_type[str:s]{ 't; 'ty } =
+   slot{'t} `":" slot{'ty} `" [" it[str:s] `"]"

@@ -168,6 +168,11 @@ val is_intset_max_term : term -> bool
 val enum_max_term : term
 val is_enum_max_term : term -> bool
 
+val rawintset_max_term : term
+val is_rawintset_max_term : term -> bool
+val mk_rawintset_max_term : Mp_num.num -> string -> term
+val dest_rawintset_max_term : term -> Mp_num.num * string
+
 val tyInt_term : term
 val is_tyInt_term : term -> bool
 

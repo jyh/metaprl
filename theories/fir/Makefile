@@ -11,6 +11,7 @@ OCAMLDEPFLAGS := -prl
 
 # Library files
 MPFILES := \
+   mfir_auto \
    mfir_basic \
    mfir_ty \
    mfir_exp \

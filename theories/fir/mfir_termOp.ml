@@ -197,6 +197,12 @@ let enum_max_term = << enum_max >>
 let enum_max_opname = opname_of_term enum_max_term
 let is_enum_max_term = is_0_dep0_term enum_max_opname
 
+let rawintset_max_term = << rawintset_max[precision:n, sign:s] >>
+let rawintset_max_opname = opname_of_term rawintset_max_term
+let is_rawintset_max_term = is_num_str_0_dep0_term rawintset_max_opname
+let mk_rawintset_max_term = mk_num_str_0_dep0_term rawintset_max_opname
+let dest_rawintset_max_term = dest_num_str_0_dep0_term rawintset_max_opname
+
 let tyInt_term = << tyInt >>
 let tyInt_opname = opname_of_term tyInt_term
 let is_tyInt_term = is_0_dep0_term tyInt_opname

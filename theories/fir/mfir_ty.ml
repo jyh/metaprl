@@ -1,6 +1,4 @@
 (*!
- * @spelling{exn tailcalls th ty tyRawInt tyFloat tyApply tyEnum var}
- *
  * @begin[doc]
  * @module[Mfir_ty]
  *
@@ -57,6 +55,7 @@ extends Mfir_basic
  * DROPPED: TyObject.         Part of the (unsound) FIR object system.
  * DROPPED: TyDelayed.        Not doing type inference.
  * TODO:    frame.            I'm confused.
+ * TODO:    TyFun*            Need a type for functions of zero arguments.
  *)
 
 (*!
@@ -64,12 +63,12 @@ extends Mfir_basic
  * @terms
  * @modsubsection{Numbers}
  *
- * The type @tt[tyInt] refers to signed, 31-bit, ML-style integers.  The type
- * @tt{tyEnum[i:n]} includes the integers $@{0,@ldots,i-1@}$.  The native
- * integer type @tt{tyRawInt[precision:n, sign:s]} includes integers of
- * varying bit precisions (8, 16, 32, and 64) and signedness (``signed'' or
- * ``unsigned'').  The type @tt{tyFloat[precision:n]} includes floating-point
- * values of a specified bit-precision (32, 64, or 80).
+ * The type @tt[tyInt] refers to signed, 31-bit integers.  The type
+ * @tt{tyEnum[i:n]} includes the integers $@{0,@ldots,i-1@}$.  The raw integer
+ * type @tt[tyRawInt] includes integers of varying bit precisions (8, 16, 32,
+ * and 64) and signedness (``signed'' or ``unsigned'').  The type @tt[tyFloat]
+ * includes floating-point values of a specified bit-precision (32, 64, or
+ * 80).
  * @end[doc]
  *)
 
@@ -112,7 +111,7 @@ declare tyUnion{ 'ty_var; 'ty_list; 'intset }
  *
  * The type @tt[tyTuple] represents tuples with arity $n$ if @tt[ty_list]
  * is a list of $n$ types. The parameter @tt[tc] is a tuple class, which
- * can either be ``normal'' or ``box''.  ``box'' tuples must always have
+ * can either be ``normal'' or ``box''.  Box tuples must always have
  * arity one, and are used pass arbitrary values (such as floating-point
  * values or raw integers) as polymorphic values.
  * @end[doc]
@@ -153,8 +152,9 @@ declare tyVar{ 'ty_var }
 (*!
  * @begin[doc]
  *
- * The term @tt{tyApply@{'ty_var@; 'ty_list@}} applies the types @tt[ty_list]
- * to a type function given by @tt[ty_var].
+ * The term @tt[tyApply] applies the types in the list @tt[ty_list] to a
+ * parametrized type given by @tt[ty_var].  The application should be
+ * complete; that is, the resulting type should not be a parametrized type.
  * @end[doc]
  *)
 
@@ -200,7 +200,7 @@ declare tyDefPoly{ t. 'ty['t] }
  *
  * The term @tt[tyDefUnion] is used to define a disjoint union.  The parameter
  * @tt[str] should either be ``normal'' or ``exn''.  Unions are tagged with
- * ``exn'' when they have more than 100 cases.  The subterms @tt[cases] should
+ * ``exn'' when they have more than 100 cases.  The subterm @tt[cases] should
  * be a list of @tt[unionCase] terms, and each @tt[unionCase] term should have
  * a list of @tt[unionCaseElt] terms.  A union case can be viewed as a tuple
  * space in which each field is tagged with a boolean indicating whether or
@@ -232,9 +232,17 @@ dform tyEnum_df : except_mode[src] ::
    tyEnum[i:n] =
    bf["enum"] sub{slot[i:n]}
 
-dform tyRawInt_df : except_mode[src] ::
+dform tyRawInt_df1 : except_mode[src] ::
    tyRawInt[precision:n, sign:s] =
-   mathbbZ sub{slot[precision:n]} sup{bf{slot[sign:s]}}
+   mathbbZ sub{slot[precision:n]} sup{it[sign:s]}
+
+dform tyRawInt_df2 : except_mode[src] ::
+   tyRawInt[precision:n, "signed"] =
+   mathbbZ sub{slot[precision:n]} sup{bf["signed"]}
+
+dform tyRawInt_df3 : except_mode[src] ::
+   tyRawInt[precision:n, "unsigned"] =
+   mathbbZ sub{slot[precision:n]} sup{bf["unsigned"]}
 
 dform tyFloat_df : except_mode[src] ::
    tyFloat[precision:n] =

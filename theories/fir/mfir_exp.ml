@@ -59,7 +59,7 @@ extends Mfir_ty
  * TODO:    AtomLabel.           I'm lazy.
  * TODO:    AtomSizeof.          I'm lazy.
  * TODO:    AtomConst.           I'm lazy.
- * DROPPED: AtomFun.             Not sure if this is really needed.
+ * DROPPED: AtomFun.             Not sure if this is really needed. (BUG?)
  * DROPPED: AtomRawDataOfFrame.  No idea what this is for.
  * DROPPED: debugging.           Contains no useful (formal) content.
  * DROPPED: AllocArray.          No idea how this works.
@@ -75,8 +75,7 @@ extends Mfir_ty
  *)
 
 (*
- * BUG: AtomVar vs. AtomFun.  Something feels wrong here...
- * I've dropped AtomFun in the meantime.
+ * BUG: I don't think I need AtomFun.  So it's been dropped for now.
  *)
 
 (*!
@@ -211,8 +210,8 @@ declare neqEqOp
  * The term @tt[atomInt] corresponds to integers of type @hrefterm[tyInt]. The
  * term @tt[atomEnum] corresponds to constants of type @hrefterm[tyEnum].  The
  * term @tt[atomRawInt] is an integer of type @hrefterm[tyRawInt]. The
- * parameters of these terms specify their value, and the relevant parameters
- * of their respective types.
+ * parameters of these terms specify the relevant parameters of their
+ * respective types, and their subterms specify their values.
  * @end[doc]
  *)
 
@@ -223,7 +222,7 @@ declare atomRawInt[precision:n, sign:s]{ 'num }
 (*!
  * @begin[doc]
  *
- * The term @tt[atomVar] corresponds to variables in the FIR.
+ * The term @tt[atomVar] is used to represent variables in the FIR.
  * @end[doc]
  *)
 
@@ -277,9 +276,9 @@ declare atomBinop{ 'binop; 'atom1; 'atom2 }
  * @begin[doc]
  * @modsubsection{Allocation operators}
  *
- * Allocation operators are used the @hrefterm[letAlloc] expression below to
- * allocate data aggregates.  The term @tt[allocTuple] is used to allocate a
- * tuple value with type @tt[ty], tuple class @tt[tc], and elements
+ * Allocation operators are used in the @hrefterm[letAlloc] expression below
+ * to allocate data aggregates.  The term @tt[allocTuple] is used to allocate
+ * a tuple value with type @tt[ty], tuple class @tt[tc], and elements
  * @tt[atom_list].
  * @end[doc]
  *)
@@ -289,9 +288,10 @@ declare allocTuple[tc:s]{ 'ty; 'atom_list }
 (*!
  * @begin[doc]
  *
- * The term @tt[allocUnion] is used to allocate a union value.  The union type
- * is given by @tt[ty_var], and the case allocated is given by @tt[case].  The
- * values used to initialize the case are given by @tt[atom_list].
+ * The term @tt[allocUnion] is used to allocate a union value of type @tt[ty].
+ * The union type is given by @tt[ty_var], and the case allocated is given by
+ * @tt[case].  The values used to initialize the case are given by
+ * @tt[atom_list].
  * @end[doc]
  *)
 
@@ -323,11 +323,11 @@ declare allocMalloc{ 'ty; 'atom }
  *
  * Expressions combine the atoms and operators above to define FIR
  * programs. They include forms for binding values to variables,
- * calling functions, matching a value against a pattern,
- * subscripting aggregate data.
+ * calling functions, matching a value against a pattern, allocating data,
+ * and subscripting aggregate data.
  *
- * The term @tt[letAtom] forms a new scope, where @tt[atom]
- * is bound to @tt[v] in @tt[exp].
+ * The term @tt[letAtom] forms a new scope, where an atom @tt[atom] of
+ * type @tt[ty] is bound to @tt[v] in @tt[exp].
  * @end[doc]
  *)
 
@@ -352,7 +352,7 @@ declare letExt[str:s]{ 'fun_res_type; 'fun_arg_types; 'fun_args; v. 'exp['v] }
  * The term @tt[tailCall] is a function call to the function given by
  * @tt[atom].  The arguments to the function are given by @tt[atom_list].
  * There is no way to bind the value returned by the function.  In practice,
- * functions have a return type of @tt{tyEnum[0:n]}, a void type.
+ * functions have a return type of @tt{tyEnum[0]}, a void type.
  * @end[doc]
  *)
 
@@ -377,8 +377,7 @@ declare matchExp{ 'atom; 'matchCase_list }
  * @begin[doc]
  *
  * The @tt[letAlloc] term is used to allocate a data aggregate using
- * @tt[alloc_op].  A reference to the data allocated is bound to @tt[v] in
- * @tt[exp].
+ * @tt[alloc_op].
  * @end[doc]
  *)
 
@@ -583,5 +582,4 @@ dform letGlobal_df : except_mode[src] ::
 
 dform setGlobal_df : except_mode[src] ::
    setGlobal{ 'label; 'ty; 'atom; 'exp } =
-   slot{'label} `":" slot{'ty} leftarrow slot{'atom} `";" hspace
-   slot{'exp}
+   slot{'label} `":" slot{'ty} leftarrow slot{'atom} `";" slot{'exp}

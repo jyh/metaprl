@@ -74,13 +74,15 @@ prim truth_intro {| intro [] |} 'H :
  *
  * Type well-formedness judgments are expressed as a set of type
  * equality judgments.  The @tt[wf_small_type] rule allows any
- * $<< small_type >>$ type to be used as a $<< large_type >>$.
+ * $<< small_type >>$ type to be used as a $<< large_type >>$ type.
+ * Type equality judgments are given for the $<< small_type >>$ kind
+ * whenever possible.
  * @end[doc]
  *)
 
 prim wf_small_type {| intro [] |} 'H :
-   sequent [mfir] { 'H >- type_eq{ 'ty1; 'ty2; small_type } } -->
-   sequent [mfir] { 'H >- type_eq{ 'ty1; 'ty2; large_type } }
+   sequent [mfir] { 'H >- type_eq{ 't1; 't2; small_type } } -->
+   sequent [mfir] { 'H >- type_eq{ 't1; 't2; large_type } }
    = it
 
 (*!

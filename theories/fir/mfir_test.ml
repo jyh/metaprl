@@ -48,10 +48,6 @@ interactive arith1 :
    sequent [mfir] { >- 42 } -->
    sequent [mfir] { >-  (-(6 /@ -3) +@ 5) *@ (10 -@ 4) }
 
-interactive simple1 :
-   sequent [mfir] { >-
-      has_type{ letAtom{ tyInt; atomInt{2}; v. atomVar{'v} }; tyInt } }
-
 (*!
  * @docoff
  *)

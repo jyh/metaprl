@@ -89,6 +89,7 @@ declare member{ 'num; 'set }
 
 declare intset_max
 declare enum_max
+declare rawintset_max[precision:n, sign:s]
 
 (**************************************************************************
  * Rewrites.
@@ -139,3 +140,11 @@ topval reduce_member_rawintset_base : conv
 
 topval reduce_intset_max : conv
 topval reduce_enum_max : conv
+topval reduce_rawintset_max_u8 : conv
+topval reduce_rawintset_max_s8 : conv
+topval reduce_rawintset_max_u16 : conv
+topval reduce_rawintset_max_s16 : conv
+topval reduce_rawintset_max_u32 : conv
+topval reduce_rawintset_max_s32 : conv
+topval reduce_rawintset_max_u64 : conv
+topval reduce_rawintset_max_s64 : conv

@@ -148,9 +148,10 @@ The high-level outline of the paper is as follows.
 
 @begin[center]
 @begin[tabular,lll]
-@line{$@bullet$ {Section  @refsection[m_doc_parsing]} {parsing}}
-@line{$@bullet$ {Section  @refsection[m_doc_ir]}      {intermediate representation (IR)}}
-@line{$@bullet$ {Section  @refsection[m_doc_x86_asm]} {Intel x86 assembly code generation}}
+@line{$@bullet$ {Section  @refsection[m_doc_parsing]}  {Parsing}}
+@line{$@bullet$ {Section  @refsection[m_doc_ir]}       {Intermediate representation (IR)}}
+@line{$@bullet$ {Section  @refsection[m_doc_x86_asm]}  {Intel x86 assembly code generation}}
+@line{$@bullet$ {Section  @refsection[m_doc_summary]}  {Summary and future work}}
 @line{$@bullet$ {Section  @refsection["related-work"]} {Related work}}
 @end[tabular]
 @end[center]
@@ -201,7 +202,9 @@ terms $t_1, @ldots, t_n$ for $v_1, @ldots, v_n$ in the term matched by
 $v$.  For example, the rule for $@beta$-reduction is specified with
 the following rewrite.
 
-$$@xrewrite[beta]{{(@lambda x. v_1[x])@space v_2}; {v_1[v_2]}}$$
+$$
+   @xrewrite[beta]{{(@lambda x. v_1[x])@space v_2}; {v_1[v_2]}}
+$$
 
 The left-hand-side of the rewrite is a pattern called
 the @emph{redex}.  The $v_1[x]$ stands for an arbitrary term with free
@@ -215,7 +218,9 @@ Rewrites that are expressed with second-order notation are strictly
 more expressive than those that use the traditional substitution
 notation.  The following rewrite is valid in second-order notation.
 
-$$@xrewrite[const]{{(@lambda x. v[])@space 1}; {(@lambda x. v[])@space 2}}$$
+$$
+   @xrewrite[const]{{(@lambda x. v[])@space 1}; {(@lambda x. v[])@space 2}}
+$$
 
 In the context $@lambda x$, the second-order variable $v[]$ matches
 only those terms that do not have $x$ as a free variable.  No

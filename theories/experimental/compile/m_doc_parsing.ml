@@ -53,39 +53,6 @@ instance, we can use actual program notation (instead of the uniform
 term syntax) to express program transformations in rewrite rules and
 we can specify test programs in source notation.
 
-@begin[figure,syntax]
-$
-@begin[array,rclcl]
-@line{@it{op} {::=}   {+ @pipe - @pipe * @pipe / @pipe = @pipe <> @pipe < @pipe @le @pipe > @pipe
-@ge }
-{@space} @hbox{Binary operators}}
-@line{{}{}{}{}{}}
-@end[array]
-$
-
-$
-@begin[array,rcll]
-@line{@it{e} {::=} {@AtomTrue @pipe @AtomFalse} @hbox{@it{Booleans}}}
-@line{{} {@pipe} @AtomInt[i] @hbox{@it{Integers}}}
-@line{{} {@pipe} v @hbox{@it{Variables}}}
-@line{{} {@pipe} {e @space @it{op} @space e @space} @hbox{@it{Binary expressions}}}
-@line{{} {@pipe} @AtomFun{v; e} @hbox{@it{Anonymous functions @space}}}
-@line{{} {@pipe} {e; e} @hbox{@it{Sequencing}}}
-@line{{} {@pipe} {e.[e]} @hbox{@it{Subscripting}}}
-@end[array]
-@begin[array,rll]
-@line{{@pipe} {e.[e] @leftarrow e} @hbox{@it{Assignment}}}
-@line{{@pipe} @If{e; e; e} @hbox{@it{Conditionals}}}
-@line{{@pipe} {e(e_1, @ldots, e_n)} @hbox{@it{Application}}}
-@line{{@pipe} @LetAtom{e; v; e} @hbox{@it{Let definitions}}}
-@line{{@pipe} {@xlet @xrec f_1 (v_1, @ldots, v_n) = e} {}}
-@line{{} @vdots @hbox{@it{Recursive functions}}}
-@line{{} {@xand f_n (v_1, @ldots, v_n) = e}}
-@end[array]
-$
-@caption{Program syntax}
-@end[figure]
-
 A Phobos language specification resembles a typical parser definition
 in YACC @cite[Joh75], except that semantic actions for productions use
 term rewriting.  Phobos employs @emph{informal} rewriting, which means
@@ -101,10 +68,42 @@ to produce more informative messages if an error is detected.  The
 following example demonstrates a single lexer clause, that translates
 a nonnegative decimal number to a term with operator name @tt{number} and a
 single integer parameter.
-
 $$
 @tt["NUM = \"[0-9]+\""] @space @lbrace @bf[token][i] @lbrace pos @rbrace @longleftrightarrow number[i] @rbrace
 $$
+
+@begin[figure,syntax]
+$
+@begin[array,rclcl]
+@line{@it{op} {::=}   {+ @pipe - @pipe * @pipe / @pipe = @pipe <> @pipe < @pipe @le @pipe > @pipe
+@ge }
+{@space} @hbox{Binary operators}}
+@line{{}{}{}{}{}}
+@end[array]
+$
+
+$
+@begin[array,rcll]
+@line{@it{e} {::=} {@AtomTrue @pipe @AtomFalse} @hbox{Booleans}}
+@line{{} {@pipe} @AtomInt[i] @hbox{Integers}}
+@line{{} {@pipe} v @hbox{Variables}}
+@line{{} {@pipe} {e @space @it{op} @space e @space} @hbox{Binary expressions}}
+@line{{} {@pipe} @AtomFun{v; e} @hbox{Anonymous functions @space}}
+@line{{} {@pipe} {e; e} @hbox{Sequencing}}
+@line{{} {@pipe} {e.[e]} @hbox{Subscripting}}
+@end[array]
+@begin[array,rll]
+@line{{@pipe} {e.[e] @leftarrow e} @hbox{Assignment}}
+@line{{@pipe} @If{e; e; e} @hbox{Conditionals}}
+@line{{@pipe} {e(e_1, @ldots, e_n)} @hbox{Application}}
+@line{{@pipe} @LetAtom{e; v; e} @hbox{Let definitions}}
+@line{{@pipe} {@xlet @xrec f_1 (v_1, @ldots, v_n) = e} {}}
+@line{{} @vdots @hbox{Recursive functions}}
+@line{{} {@xand f_n (v_1, @ldots, v_n) = e}}
+@end[array]
+$
+@caption{Program syntax}
+@end[figure]
 
 The parser is defined as a set of grammar productions. For each
 grammar production in the program syntax shown in Figure
@@ -115,7 +114,6 @@ $$
 where the symbols $S_i$ may be annotated with a term pattern. For
 instance, the production for the let-expression is defined with the
 following production and semantic action.
-
 $$
    @tt{exp ::= LET @space ID@left["<"] v @right[">"] @space EQ @space exp@left["<"] e
    @right[">"] @space IN @space exp@left["<"] rest @right[">"]} @longleftrightarrow @LetAtom{e; v; rest}

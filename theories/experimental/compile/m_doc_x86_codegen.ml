@@ -89,6 +89,15 @@ $a$ and substitutes it for the variable $v$ in assembly expression $e[v]$.
 
 @subsubsection["asmatoms"]{Atom translation}
 
+The translation of atoms is primarily a translation of the IR names for values and the assembly
+names for operands.  A representative set of atom translations is shown in Figure
+@reffigure[asmatomtrans].  Since the language is untyped, we use a 31-bit representation of
+integers, where the least-significant-bit is always set to 1.  Since pointers are always
+word-aligned, this allows the garbage collector to differentiate between integers and pointers.  The
+division operation is the most complicated translation: first the operands $a_1$ and $a_2$ are
+shifted to obtain the standard integer representation, the division operation is performed, and the
+result is converted to a 31-bit representation.
+
 @begin[figure,asmatomtrans]
 $$
 @begin[array,l]
@@ -125,16 +134,13 @@ $$
 @caption{Translation of atoms to x86 assembly}
 @end[figure]
 
-The translation of atoms is primarily a translation of the IR names for values and the assembly
-names for operands.  A representative set of atom translations is shown in Figure
-@reffigure[asmatomtrans].  Since the language is untyped, we use a 31-bit representation of
-integers, where the least-significant-bit is always set to 1.  Since pointers are always
-word-aligned, this allows the garbage collector to differentiate between integers and pointers.  The
-division operation is the most complicated translation: first the operands $a_1$ and $a_2$ are
-shifted to obtain the standard integer representation, the division operation is performed, and the
-result is converted to a 31-bit representation.
-
 @subsubsection["asmexps"]{Expression translation}
+
+Expressions translate to sequences of assembly instructions.  A representative set of translations
+in shown in Figure @reffigure[asmexptrans].  The translation of $@LetAtom{a; v; e[v]}$ is the
+simplest case, the atom $a$ is translated into an operand $v'$, which is copied to a variable $v$
+(since the expression $e[v]$ assumes $v$ is a variable), and the rest of the code $e[v]$ is
+translated.  Conditionals translate into comparisons followed by a conditional branch.
 
 @begin[figure,asmexptrans]
 $$
@@ -180,6 +186,16 @@ $$
 @caption{Translation of expressions to x86 assembly}
 @end[figure]
 
+The memory operations shown in Figure @reffigure[asmmemtrans] are among the most complicated
+translations.  For the runtime, we use a contiguous heap and a copying garbage collector.
+The representation of all memory blocks in the heap includes a header word containing the number of
+bytes in the block (the number of bytes is always a multiple of the word size), following by one
+word for each field.  A pointer to a block points to the first field of the block (the word after
+the header word).  The heap area itself is contiguous, delimited by $@it{base}$ and $@it{limit}$
+pointers; the next allocation point is in the $@it{next}$ pointer.  These pointers are accessed
+through the $@ContextRegister[name]$ pseudo-operand, which is later translated to an absolute memory
+address.
+
 @begin[figure,asmmemtrans]
 $$
 @begin[array,l]
@@ -221,6 +237,18 @@ $$
 @caption{Translation of memory operations to x86 assembly}
 @end[figure]
 
+During a subscript operation, shown in the @tt{sub} translation, the index is compared against the
+number of words in the block as indicated in the header word, and a bounds-check exception is raised
+if the index is out-of-bounds (denoted with the instruction $@Jcc[J]{@it{AE}; @it{bounds.error}}$).
+When a block of memory is allocated in the @misspelled{@tt{alloc}} and @misspelled{@tt{closure}}
+rules, the first step reserves storage with the $@Reserve{i}$ term, and then the data is allocated
+and initialized.  Figure @reffigure[asmhelp] shows the implementation of some of the helper terms:
+the $@Reserve{i}$ expression determines whether sufficient storage is present for an allocation of
+$i$ bytes, and calls the garbage collector otherwise; the $@StoreTuple{p; i; @it{args}; e}$ term
+generates the code to initialize the fields of a tuple from a set of arguments; and the
+$@CopyArgs{@it{args}; @it{vargs}; v; e}$ term copies the argument list in $@it{@misspelled{args}}$
+into registers.
+
 @begin[figure,asmhelp]
 $$
 @begin[array,l]
@@ -252,34 +280,6 @@ $$
 $$
 @caption{Auxiliary terms for x86 code generation}
 @end[figure]
-
-Expressions translate to sequences of assembly instructions.  A representative set of translations
-in shown in Figure @reffigure[asmexptrans].  The translation of $@LetAtom{a; v; e[v]}$ is the
-simplest case, the atom $a$ is translated into an operand $v'$, which is copied to a variable $v$
-(since the expression $e[v]$ assumes $v$ is a variable), and the rest of the code $e[v]$ is
-translated.  Conditionals translate into comparisons followed by a conditional branch.
-
-The memory operations shown in Figure @reffigure[asmmemtrans] are among the most complicated
-translations.  For the runtime, we use a contiguous heap and a copying garbage collector.
-The representation of all memory blocks in the heap includes a header word containing the number of
-bytes in the block (the number of bytes is always a multiple of the word size), following by one
-word for each field.  A pointer to a block points to the first field of the block (the word after
-the header word).  The heap area itself is contiguous, delimited by $@it{base}$ and $@it{limit}$
-pointers; the next allocation point is in the $@it{next}$ pointer.  These pointers are accessed
-through the $@ContextRegister[name]$ pseudo-operand, which is later translated to an absolute memory
-address.
-
-During a subscript operation, shown in the @tt{sub} translation, the index is compared against the
-number of words in the block as indicated in the header word, and a bounds-check exception is raised
-if the index is out-of-bounds (denoted with the instruction $@Jcc[J]{@it{AE}; @it{bounds.error}}$).
-When a block of memory is allocated in the @misspelled{@tt{alloc}} and @misspelled{@tt{closure}}
-rules, the first step reserves storage with the $@Reserve{i}$ term, and then the data is allocated
-and initialized.  Figure @reffigure[asmhelp] shows the implementation of some of the helper terms:
-the $@Reserve{i}$ expression determines whether sufficient storage is present for an allocation of
-$i$ bytes, and calls the garbage collector otherwise; the $@StoreTuple{p; i; @it{args}; e}$ term
-generates the code to initialize the fields of a tuple from a set of arguments; and the
-$@CopyArgs{@it{args}; @it{vargs}; v; e}$ term copies the argument list in $@it{@misspelled{args}}$
-into registers.
 
 @docoff
 @end[doc]

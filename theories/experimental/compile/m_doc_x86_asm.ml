@@ -361,8 +361,8 @@ $$
 @line{{}      {@pipe} @ImmediateNumber{i}                                           @hbox{Constant number}}
 @line{{}      {@pipe} @ImmediateCLabel{v; l}                                        @hbox{Label}}
 @line{{} {} {} {}}
-@line{p       {@pipe} {@LabelRec{R; d; p} {@pipe} e}                                @hbox{Programs}}
-@line{d       {@pipe} {@LabelDef{l; e_@lambda; d} {@pipe} @LabelEnd}                @hbox{Function definition}}
+@line{p       {::=} {@LabelRec{R; d; p} {@pipe} e}                                @hbox{Programs}}
+@line{d       {::=} {@LabelDef{l; e_@lambda; d} {@pipe} @LabelEnd}                @hbox{Function definition}}
 @line{{e_@lambda} {::=} {@LabelFun{v; e_@lambda} @pipe e}                           @hbox{Functions}}
 @end[array]
 @begin[array,rcll]
@@ -370,9 +370,9 @@ $$
 @line{@it{inst1} {::=}   {@it{INC} @pipe @it{DEC} @pipe @cdots}                     @hbox{1-operand opcodes}}
 @line{@it{inst2} {::=}   {@it{ADD} @pipe @it{SUB} @pipe @it{AND} @pipe @cdots}      @hbox{2-operand opcodes}}
 @line{@it{inst3} {::=}   {@it{MUL} @pipe @it{DIV}}                                  @hbox{3-operand opcodes}}
-@line{@it{cmp}   {::=}   {@it{CMP} @pipe @it{TEST}}                                 @hbox{comparisons}}
-@line{@it{jmp}   {::=}   {@it{JMP}}                                                 @hbox{unconditional branch}}
-@line{@it{jcc}   {::=}   {@it{JEQ} @pipe @it{JLT} @pipe @it{JGT} @pipe @cdots}      @hbox{conditional branch}}
+@line{@it{cmp}   {::=}   {@it{CMP} @pipe @it{TEST}}                                 @hbox{Comparisons}}
+@line{@it{jmp}   {::=}   {@it{JMP}}                                                 @hbox{Unconditional branch}}
+@line{@it{jcc}   {::=}   {@it{JEQ} @pipe @it{JLT} @pipe @it{JGT} @pipe @cdots}      @hbox{Conditional branches}}
 @line{@it{e}  {::=}   @Mov{o; v; e}                                                 @hbox{Copy}}
 @line{{}      {@pipe} @Inst1Mem[inst1]{o_m; e}                                      @hbox{1-operand mem inst}}
 @line{{}      {@pipe} @Inst1Reg[inst1]{o_r; v; e}                                   @hbox{1-operand reg inst}}

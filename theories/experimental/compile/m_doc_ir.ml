@@ -258,33 +258,33 @@ expressions are explicitly named.
 @small{
 $$
 @begin[array,rcll]
-@line{@it{bop} {::=} {@AddOp @pipe @SubOp @pipe @MulOp @pipe @DivOp} @hbox{@it{Binary arithmetic}}}
-@line{@it{rop} {::=} {@LeOp @pipe @LtOp @pipe @GeOp} @hbox{@it{Binary relations}}}
-@line{{}         {@pipe} {@GtOp @pipe @EqOp @pipe @NeqOp} {}}
-@line{{l}        {::=} {@it{string}} @hbox{@it{Function label}}}
+@line{@it{bop} {::=} {@AddOp @pipe @SubOp @pipe @MulOp @pipe @DivOp} @hbox{Binary arithmetic}}
+@line{@it{rop} {::=} {@LeOp @pipe @LtOp @pipe @GtOp} @hbox{Binary relations}}
+@line{{}         {@pipe} {@GeOp @pipe @EqOp @pipe @NeqOp} {}}
+@line{{l}        {::=} {@it{string}} @hbox{Function label}}
 
 @line{{}{}{}{}}
-@line{{a} {::=}     {@AtomTrue @pipe @AtomFalse}          @hbox{@it{Boolean values}}}
-@line{{}  {@pipe}   @AtomInt[i]                           @hbox{@it{Integers}}}
-@line{{}  {@pipe}   @AtomVar{v}                           @hbox{@it{Variables}}}
-@line{{}  {@pipe}   @AtomBinop{@it{bop}; a_1; a_2}        @hbox{@it{Binary arithmetic}}}
-@line{{}  {@pipe}   @AtomRelop{@it{rop}; a_1; a_2}        @hbox{@it{Binary relations}}}
-@line{{}  {@pipe}   @AtomFunVar{R; l}                     @hbox{@it{Function labels}}}
+@line{{a} {::=}     {@AtomTrue @pipe @AtomFalse}          @hbox{Boolean values}}
+@line{{}  {@pipe}   @AtomInt[i]                           @hbox{Integers}}
+@line{{}  {@pipe}   @AtomVar{v}                           @hbox{Variables}}
+@line{{}  {@pipe}   @AtomBinop{@it{bop}; a_1; a_2}        @hbox{Binary arithmetic}}
+@line{{}  {@pipe}   @AtomRelop{@it{rop}; a_1; a_2}        @hbox{Binary relations}}
+@line{{}  {@pipe}   @AtomFunVar{R; l}                     @hbox{Function labels}}
 @end[array]
 @begin[array,rcll]
-@line{{e} {::=}   @LetAtom{a; v; e}                        @hbox{@it{Variable definition}}}
-@line{{}  {@pipe} @If{a; e_1; e_2}                         @hbox{@it{Conditional}}}
-@line{{}  {@pipe} @LetTuple{i; {a_1, @ldots, a_n}; v; e}   @hbox{@it{Tuple allocation}}}
-@line{{}  {@pipe} @LetSubscript{a_1; a_2; v; e}            @hbox{@it{Subscripting}}}
-@line{{}  {@pipe} @SetSubscript{a_1; a_2; a_3; e}          @hbox{@it{Assignment}}}
-@line{{}  {@pipe} @LetApply{a; {a_1, @ldots, a_n}; v; e}   @hbox{@it{Function application}}}
-@line{{}  {@pipe} @LetClosure{a_1; a_2; v; e}              @hbox{@it{Closure creation}}}
-@line{{}  {@pipe} @Return{a}                               @hbox{@it{Return a value}}}
-@line{{}  {@pipe} @TailCall{a; {a_1, @ldots, a_n}}         @hbox{@it{Tail-call}}}
-@line{{}  {@pipe} @LetRec{R; d; e}                         @hbox{@it{Recursive functions}}}
+@line{{e} {::=}   @LetAtom{a; v; e}                        @hbox{Variable definition}}
+@line{{}  {@pipe} @If{a; e_1; e_2}                         @hbox{Conditional}}
+@line{{}  {@pipe} @LetTuple{i; {a_1, @ldots, a_n}; v; e}   @hbox{Tuple allocation}}
+@line{{}  {@pipe} @LetSubscript{a_1; a_2; v; e}            @hbox{Subscripting}}
+@line{{}  {@pipe} @SetSubscript{a_1; a_2; a_3; e}          @hbox{Assignment}}
+@line{{}  {@pipe} @LetApply{a; {a_1, @ldots, a_n}; v; e}   @hbox{Function application}}
+@line{{}  {@pipe} @LetClosure{a_1; a_2; v; e}              @hbox{Closure creation}}
+@line{{}  {@pipe} @Return{a}                               @hbox{Return a value}}
+@line{{}  {@pipe} @TailCall{a; {a_1, @ldots, a_n}}         @hbox{Tail-call}}
+@line{{}  {@pipe} @LetRec{R; d; e}                         @hbox{Recursive functions}}
 @line{{}{}{}{}}
-@line{{e_@lambda} {::=} {@AtomFun{v; e_@lambda} @pipe @AtomFun{v; e}} @hbox{@it{Functions}}}
-@line{{d} {::=}   @FunDef{l; e_@lambda; d}                 @hbox{@it{Function definitions}}}
+@line{{e_@lambda} {::=} {@AtomFun{v; e_@lambda} @pipe @AtomFun{v; e}} @hbox{Functions}}
+@line{{d} {::=}   @FunDef{l; e_@lambda; d}                 @hbox{Function definitions}}
 @line{{}  {@pipe} @EndDef                                  {}}
 @end[array]
 $$}

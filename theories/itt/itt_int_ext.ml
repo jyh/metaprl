@@ -110,6 +110,13 @@ define unfold_ge_bool :
 define unfold_bneq_int :
    bneq_int{'a; 'b} <--> bnot{beq_int{'a; 'b}}
 
+let resource reduce += [
+   << gt_bool{'a; 'b} >>, unfold_gt_bool;
+   << le_bool{'a; 'b} >>, unfold_le_bool;
+   << ge_bool{'a; 'b} >>, unfold_ge_bool;
+   << bneq_int{'a; 'b} >>, unfold_bneq_int;
+]
+
 (*
  Prop-int-relations definitions
  *)

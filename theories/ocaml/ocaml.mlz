@@ -1,0 +1,460 @@
+(*
+ * This file contains the primitive syntax and display
+ * for ocaml terms.
+ *)
+
+(************************************************************************
+ * EXPRESSIONS                                                          *
+ ************************************************************************)
+
+(*
+ * Constants.
+ *)
+declare "char"[$c:s]
+declare "int"[$i:s]
+declare "string"[$s:s]
+declare "float"[$s:s]
+
+(*
+ * Projection.
+ *)
+declare "proj"{'e1; 'e2}
+
+(*
+ * Application.
+ *)
+declare "apply"{'e1; 'e2}
+
+(*
+ * Subscripting.
+ *)
+declare string_subscript{'e1; 'e2}
+declare "array_subscript"{'e1; 'e2}
+
+(*
+ * Lists, arrays, streams, records.
+ * This is a recursive display form.
+ *)
+declare "list"{'e1}
+declare "array"{'e1}
+declare "stream"{'e1}
+declare "record"{'e1}
+declare "cons"{'e1; 'e2}
+declare "nil"
+
+(*
+ * Assignment.
+ *)
+declare assign{'e1; 'e2}
+
+(*
+ * Conditional.
+ *)
+declare "ifthenelse"{'e1; 'e2; 'e3}
+
+(*
+ * Loops.
+ *)
+declare for_upto{'e1; 'e2; x. 'e3}
+declare for_downto{'e1; 'e2; x. 'e3}
+declare "while"{'e1; 'e2}
+
+(*
+ * Type casting.
+ *)
+declare cast{'e; 't}
+
+(*
+ * Class coercion.
+ *)
+declare class_coerce{'e1; 'e2}
+
+(*
+ * New object.
+ *)
+declare "new"{'e1}
+
+(*
+ * "Match" forms.
+ *)
+declare "fun"{'pwel}
+declare "match"{'e; 'pwel}
+declare "try"{'e; 'pwel}
+
+(*
+ * "Let" forms.  The real work is performed in the patterns.
+ *)
+declare "let"{'p; 'e}
+declare "fix"{x. 'pel}
+
+(************************************************************************
+ * PATTERNS                                                             *
+ ************************************************************************)
+
+(*
+ * Display forms for patterns are a problem, because the innermost term is the
+ * term to be evaluated under all the pattern bindings.
+ * We contruct the pattern term and extract the inner expression.
+ * Patterns are collected on a stack.
+ *
+ * Here is how a "let" expression looks:
+ *    1. let : (p1, e1), ..., (pn, en), e
+ *       let{pl; el}, where
+ *       pl = patt_arg{...; patt_end{... patt_in{e}}}
+ *       el = cons{e1; cons{e2; ... nil}}
+ *
+ * Here is how a "match" expression looks:
+ *    2. match e, (p1, w1, e1), ..., (pn, wn, en)
+ *       match{patt_ifelse{pwe1; patt_ifelse{pwe2; ... patt_if{pwen}}}}
+ *       where
+ *          pwe = patt_* ... {we}
+ *          we  = patt_with{w; e} | patt_body{e}
+ *
+ * Here is how a "let rec" expression looks:
+ * The arguments are _inside_ the pattern.
+ *    3. letrec (p1, e1), ..., (pn, en), e
+ *       fix{x. let{pl; x}}, where
+ *       pl = patt_arg{...; patt_end{... patt_match{e1; ... patt_in{e}}}}
+ *
+ * These three forms are different, but we can combine their
+ * display forms somewhat.
+ *
+ * Display forms have three arguments.
+ *    1. key: (patt_format usually)
+ *    2. current pattern
+ *    3. stack of terms representing the pattern being constructed
+ *
+ * For the "let" form, we initialize the stack with the list "el".
+ *)
+
+(*
+ * Constant.
+ *)
+declare patt_char[$c:s]
+declare patt_int[$i:n]
+declare patt_string[$s:s]
+declare patt_float[$f:s]
+        
+(*
+ * Binding.
+ *)
+declare patt_var{x. 'p}
+
+(*
+ * Projection.
+ *)
+declare patt_proj{'p}
+declare patt_proj_arg{'p}
+declare patt_proj_end{'p}
+
+(*
+ * Simultaneous match.
+ *)
+declare patt_as{'p}
+declare patt_as_arg{'p}
+declare patt_as_end{'p}
+
+(*
+ * Wildcard.
+ *)
+declare patt_wildcard{'p}
+
+(*
+ * Application.
+ *)
+declare patt_apply{'p}
+declare patt_apply_arg{'p}
+declare patt_apply_end{'p}
+
+(*
+ * Alternates.
+ *)
+declare patt_choice{'p}
+declare patt_choice_arg{'p}
+declare patt_choice_end{'p}
+
+(*
+ * Range of choices.
+ *)
+declare patt_range{'p}
+declare patt_range_arg{'p}
+declare patt_range_end{'p}
+
+(*
+ * List pattern.
+ *)
+declare patt_list{'p}
+declare patt_list_arg{'p}
+declare patt_list_end{'p}
+
+(*
+ * Tuple pattern.
+ *)
+declare patt_tuple{'p}
+declare patt_tuple_arg{'p}
+declare patt_tuple_end{'p}
+
+(*
+ * "Let" forms.
+ * Clauses are delimited by patt_and.
+ * The stack contains one of the following:
+ *    patt_let: this is the first clause of a let
+ *    patt_and: this is the second or greater clause of a let
+ *    patt_fix: this is a clause of a fix
+ *)
+declare patt_and{'p}
+declare patt_in{'e}
+declare patt_match{'e1; 'e2}
+
+(*
+ * "Match" forms.
+ *)
+declare patt_ifelse{'pwe; 'pwel}
+declare patt_if{'pwe}
+declare patt_with{'e1; 'e2}
+declare patt_body{'e1}
+
+(************************************************************************
+ * TYPES                                                                *
+ ************************************************************************)
+
+(*
+ * Projection.
+ *)
+declare type_proj{'t1; 't2}
+
+(*
+ * "As" type.
+ *)
+declare type_as{'t1; 't2}
+           
+(*
+ * Wildcard type.
+ *)
+declare type_wildcard
+
+(*
+ * Application.
+ *)
+declare type_apply{'t1; 't2}
+           
+(*
+ * Function type.
+ *)
+declare type_fun{'t1; 't2}
+
+(*
+ * Class identifier.
+ *)
+declare type_class_id{'t1}
+
+(*
+ * Identifiers.
+ *)
+declare type_lid[$v:v]
+declare type_uid[$v:v]
+
+(*
+ * Type parameter.
+ *)
+declare type_param[$s:s]
+
+(*
+ * Type equivalence.
+ *)
+declare type_equal{'t1; 't2}
+
+(*
+ * Record type.
+ * I'm not sure what the boolean is for.
+ *)
+declare type_record{'sbtl}
+declare type_record_elem[$s:s; $b:s]{'t}
+
+(*
+ * Product types.
+ *)
+declare type_prod{'tl}
+
+(************************************************************************
+ * SIGNATURE ITEMS                                                      *
+ ************************************************************************)
+
+(*
+ * Signatures and structures are treated as records.
+ * Their names are strings, not variables, and they do not
+ * alpha-vary.  We could have external and internal names
+ * like Harper's translucent sums, but we would diverge
+ * from the ocaml type theory.
+ *)
+
+(*
+ * Exception declarations name type constructors.
+ *)
+declare sig_exception[$name:s]{'tl}
+
+(*
+ * External function declaration.
+ *)
+declare sig_external[$name:s]{'t; 'sl}
+
+(*
+ * Module declaration.
+ *)
+declare sig_module[$name:s]{'mt}
+           
+(*
+ * Module type declaration.
+ *)
+declare sig_module_type[$name:s]{'mt}
+
+(*
+ * Open a module in scope.
+ *)
+declare sig_open{'sl}
+
+(*
+ * Type definition.
+ *)
+declare sig_type{'ssltl}
+
+(*
+ * Value declaration.
+ *)
+declare sig_value[$name:s]{'t}
+
+(************************************************************************
+ * STRUCTURE ITEMS                                                      *
+ ************************************************************************)
+
+(*
+ * Exception declarations name type constructors.
+ *)
+declare str_exception[$name:s]{'tl}
+
+(*
+ * External function declaration.
+ *)
+declare str_external[$name:s]{'t; 'sl}
+
+(*
+ * Unnamed value.
+ *)
+declare str_expr{'e}
+
+(*
+ * Module definition.
+ *)
+declare str_module[$name:s]{'me}
+
+(*
+ * Module type definition.
+ *)
+declare str_module_type[$name:s]{'mt}
+
+(*
+ * Open a module in scope.
+ *)
+declare str_open{'sl}
+
+(*
+ * Type definition.
+ *)
+declare str_type{'ssltl} =
+   sig_type{'ssltl}
+
+(*
+ * Value definition.
+ *)
+declare str_let{'p; 'e}
+declare str_fix{'p}
+
+(************************************************************************
+ * MODULE TYPE                                                          *
+ ************************************************************************)
+                          
+(*
+ * Projection.
+ *)
+declare mt_proj{'mt1; 'mt2}
+
+(*
+ * Application.
+ *)
+declare mt_apply{'mt1; 'mt2}
+
+(*
+ * Functor.
+ *)
+declare mt_functor[$name:s]{'mt1; 'mt2}
+           
+(*
+ * Id.
+ *)
+declare mt_lid[$name:s]
+declare mt_uid[$name:s]
+
+(*
+ * Signature.
+ *)
+declare mt_sig{'sil}
+
+(*
+ * Module type with clause.
+ *)
+declare mt_with{'mt; 'wcl}
+           
+(*
+ * With clauses.
+ * I'm not sure what these mean.
+ *)
+declare wc_type{'sl1; 'sl2; 't}
+declare wc_module{'sl1; 'mt}
+
+(************************************************************************
+ * MODULE EXPRESSION                                                    *
+ ************************************************************************)
+ 
+(*
+ * Projection.
+ *)
+declare me_proj{'me1; 'me2}
+
+(*
+ * Application.
+ *)
+declare me_apply{'me1; 'me2}
+
+(*
+ * Functor.
+ *)
+declare me_functor[$name:s]{'mt; 'me}
+
+(*
+ * Structure.
+ *)
+declare me_struct{'sil}
+
+(*
+ * Type cast.
+ *)
+declare me_cast{'me; 'mt}
+
+(*
+ * Variables.
+ *)
+declare me_lid[$name:s]
+declare me_uid[$name:s]
+
+(*
+ * $Log$
+ * Revision 1.1  1998/02/13 16:02:04  jyh
+ * Partially implemented semantics for caml.
+ *
+ *
+ * -*-
+ * Local Variables:
+ * Caml-master: "refiner"
+ * End:
+ * -*-
+ *)

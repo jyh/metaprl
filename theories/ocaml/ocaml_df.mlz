@@ -1,0 +1,24 @@
+(*
+ * Include all the display forms.
+ *)
+
+include Ocaml_expr_df
+include Ocaml_patt_df
+include Ocaml_type_df
+include Ocaml_sig_df
+include Ocaml_str_df
+include Ocaml_mt_df
+include Ocaml_me_df
+
+(*
+ * $Log$
+ * Revision 1.1  1998/02/13 16:02:09  jyh
+ * Partially implemented semantics for caml.
+ *
+ *
+ * -*-
+ * Local Variables:
+ * Caml-master: "refiner"
+ * End:
+ * -*-
+ *)

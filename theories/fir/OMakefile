@@ -24,3 +24,12 @@ MPFILES = \
    mfir_test
 
 Theory($(MPFILES))
+
+#
+# Clean up
+#
+clean:
+    $(CLEAN)
+
+realclean:
+    $(REALCLEAN)

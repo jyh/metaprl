@@ -88,3 +88,12 @@ TEST_FILES =\
 MPFILES = $(if $(equal $(TESTS), yes), $(MPFILES) $(TEST_FILES), $(MPFILES))
 
 Theory($(MPFILES))
+
+#
+# Clean up
+#
+clean:
+    $(CLEAN)
+
+realclean:
+    $(REALCLEAN)

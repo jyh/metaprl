@@ -22,3 +22,12 @@ X =\
 	ocaml_theory
 
 Theory($(MPFILES))
+
+#
+# Clean up
+#
+clean:
+    $(CLEAN)
+
+realclean:
+    $(REALCLEAN)

@@ -12,3 +12,12 @@ MPFILES =\
 	sil_itt_state_types
 
 Theory($(MPFILES))
+
+#
+# Clean up
+#
+clean:
+    $(CLEAN)
+
+realclean:
+    $(REALCLEAN)

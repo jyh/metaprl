@@ -23,3 +23,12 @@ MPFILES = \
 #   mp_mc_theory
 
 Theory($(MPFILES))
+
+#
+# Clean up
+#
+clean:
+    $(CLEAN)
+
+realclean:
+    $(REALCLEAN)

@@ -19,3 +19,12 @@ MPFILES =\
 	ocaml_df
 
 Theory($(MPFILES))
+
+#
+# Clean up
+#
+clean:
+    $(CLEAN)
+
+realclean:
+    $(REALCLEAN)

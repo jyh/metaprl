@@ -14,3 +14,12 @@ MPFILES =\
 	top_conversionals
 
 Theory($(MPFILES))
+
+#
+# Clean up
+#
+clean:
+    $(CLEAN)
+
+realclean:
+    $(REALCLEAN)

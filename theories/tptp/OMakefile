@@ -19,3 +19,12 @@ MPFILES =\
 	tptp_prove
 
 Theory($(MPFILES))
+
+#
+# Clean up
+#
+clean:
+    $(CLEAN)
+
+realclean:
+    $(REALCLEAN)

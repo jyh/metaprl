@@ -23,3 +23,12 @@ MPFILES =\
 	ocaml_doc_class1
 
 Theory($(MPFILES))
+
+#
+# Clean up
+#
+clean:
+    $(CLEAN)
+
+realclean:
+    $(REALCLEAN)

@@ -29,3 +29,12 @@ MPFILES =\
 	cfol_itt_all
 
 Theory($(MPFILES))
+
+#
+# Clean up
+#
+clean:
+    $(CLEAN)
+
+realclean:
+    $(REALCLEAN)

@@ -52,24 +52,24 @@ prim bracketsProp {| intro [] |} :
 
 prim emptyDefSimple :
 	sequent { <H> >-
-	   sequent [|IndParamsWF|] { <Hp> >-
-		   sequent [|IndTypesWF|] { I: 'A >-
-	         sequent [|IndConstrsWF|] { >- it } }}}   -->
+	   sequent [IndParamsWF] { <Hp> >-
+		   sequent [IndTypesWF] { I: 'A >-
+	         sequent [IndConstrsWF] { >- it } }}}   -->
 	sequent { <H> >-
-	   sequent [|IndParamsSubst|] { <Hp> >-
-		   sequent [|IndTypesSubst|] { I: 'A >-
-	         sequent [|IndConstrsSubst|] { >- emptyDef{'I} } } } } = it
+	   sequent [IndParamsSubst] { <Hp> >-
+		   sequent [IndTypesSubst] { I: 'A >-
+	         sequent [IndConstrsSubst] { >- emptyDef{'I} } } } } = it
 
 (*
 prim emptyDefMutual :
 	sequent { <H> >-
-	   sequent [|IndParamsWF|] { <Hp> >-
-		   sequent [|IndTypesWF|] { <Hi>; I: 'A; <Ji> >-
-	         sequent [|IndConstrsWF|] { <Hc['I]> >- it } }}}   -->
+	   sequent [IndParamsWF] { <Hp> >-
+		   sequent [IndTypesWF] { <Hi>; I: 'A; <Ji> >-
+	         sequent [IndConstrsWF] { <Hc['I]> >- it } }}}   -->
 	sequent { <H> >-
-	   sequent [|IndParamsSubst|] { <Hp> >-
-		   sequent [|IndTypesSubst|] { <Hi>; I: 'A; <Ji> >-
-	         sequent [|IndConstrsSubst|] { <Hc['I]> >- emptyDef{'I} } } } } = it
+	   sequent [IndParamsSubst] { <Hp> >-
+		   sequent [IndTypesSubst] { <Hi>; I: 'A; <Ji> >-
+	         sequent [IndConstrsSubst] { <Hc['I]> >- emptyDef{'I} } } } } = it
 *)
 
 
@@ -77,14 +77,14 @@ declare branchType
 declare branchType{'P;'c;'C}
 
 prim_rw branchTypeApp {| reduce |} :
-	sequent [|branchType|] { <Hp> >-
-		branchType{ 'P<||>; 'c<||>; sequent [|applH|] { <Hp>;<T<| |> > >- 'I} } } <-->
-	sequent [|applH|] { <T>; 'c >- 'P }
+	sequent [branchType] { <Hp> >-
+		branchType{ 'P<||>; 'c<||>; sequent [applH] { <Hp>;<T<| |> > >- 'I} } } <-->
+	sequent [applH] { <T>; 'c >- 'P }
 
 prim_rw branchTypeFun {| reduce |} :
-	sequent [|branchType|] { <Hp> >-
+	sequent [branchType] { <Hp> >-
 		branchType{ 'P<||>; 'c<||>; (x:'T<||> -> 'C['x]) } } <-->
-	(x: 'T -> sequent [|branchType|] { <Hp> >- branchType{'P; 'c 'x; 'C['x]}} )
+	(x: 'T -> sequent [branchType] { <Hp> >- branchType{'P; 'c 'x; 'C['x]}} )
 
 let branchType_term = << branchType{'P; 'c; 'C} >>
 let branchType_opname = opname_of_term branchType_term
@@ -99,14 +99,14 @@ let mk_branchType_sequent args p c c_type =
 
 (*
 prim branchTypes :
-	f in  sequent [|branchType|] { <Hp> >-
+	f in  sequent [branchType] { <Hp> >-
 		branchType{'P; sequent[applH]{ <Hp> >- 'c}; sequent[applH]{ <Hp> >- 'C} } } -->
 	sequent { <H> >-
-		sequent [|IndParams|] { <Hp> >-
-			sequent [|IndTypes|] { <Hi>; I: 'A<|H|>; <Ji<|H|> > >-
-				sequent [|IndConstrs|] { <Hc['I]>; c: 'C['I]; <Jc['I]> >-
-					sequent [|branchConstrs|] { <HcI>; 'C['I] >-
-						sequent [|branchCases|] { <F>; 'f >- 'P} } } } } }
+		sequent [IndParams] { <Hp> >-
+			sequent [IndTypes] { <Hi>; I: 'A<|H|>; <Ji<|H|> > >-
+				sequent [IndConstrs] { <Hc['I]>; c: 'C['I]; <Jc['I]> >-
+					sequent [branchConstrs] { <HcI>; 'C['I] >-
+						sequent [branchCases] { <F>; 'f >- 'P} } } } } }
 *)
 
 
@@ -114,38 +114,38 @@ prim branchTypes :
  *    typing rules for case-analysis                                  *
  **********************************************************************)
 
-prim indCases 'Hi 'B sequent [|branchConstrs|] { <HcI> >- it } :
+prim indCases 'Hi 'B sequent [branchConstrs] { <HcI> >- it } :
 	sequent { <H> >-
-	   sequent [|IndParamsWF|] { <Hp> >-
-			sequent [|IndTypesWF|] { <Hi>; I: 'A<|H|>; <Ji<|H|> > >-
-				sequent [|IndConstrsWF|] { <Hc['I]> >- it } } } } -->
+	   sequent [IndParamsWF] { <Hp> >-
+			sequent [IndTypesWF] { <Hi>; I: 'A<|H|>; <Ji<|H|> > >-
+				sequent [IndConstrsWF] { <Hc['I]> >- it } } } } -->
 	sequent { <H> >-
-		sequent [|IndParams|] { <Hp> >-
-			sequent [|IndTypes|] { <Hi>; I: 'A<|H|>; <Ji<|H|> > >-
-				sequent [|IndConstrs|] { <Hc['I]> >-
-					'c in sequent [|applH|] { <Hp>; <T> >- 'I } } } } } -->
+		sequent [IndParams] { <Hp> >-
+			sequent [IndTypes] { <Hi>; I: 'A<|H|>; <Ji<|H|> > >-
+				sequent [IndConstrs] { <Hc['I]> >-
+					'c in sequent [applH] { <Hp>; <T> >- 'I } } } } } -->
 	sequent { <H> >-
-		sequent [|IndParams|] { <Hp> >-
-			sequent [|IndTypes|] { <Hi>; I: 'A<|H|>; <Ji<|H|> > >-
-				sequent [|IndConstrs|] { <Hc['I]> >-
+		sequent [IndParams] { <Hp> >-
+			sequent [IndTypes] { <Hi>; I: 'A<|H|>; <Ji<|H|> > >-
+				sequent [IndConstrs] { <Hc['I]> >-
 					'P in 'B } } } } -->
 	sequent { <H> >-
-		sequent [|IndParams|] { <Hp> >-
-			sequent [|IndTypes|] { <Hi>; I: 'A<|H|>; <Ji<|H|> > >-
-				sequent [|IndConstrs|] { <Hc['I]> >-
-					brackets{sequent [|applH|] { <Hp> >- 'I }; 'B} } } } } -->
+		sequent [IndParams] { <Hp> >-
+			sequent [IndTypes] { <Hi>; I: 'A<|H|>; <Ji<|H|> > >-
+				sequent [IndConstrs] { <Hc['I]> >-
+					brackets{sequent [applH] { <Hp> >- 'I }; 'B} } } } } -->
 	sequent { <H> >-
-		sequent [|IndParams|] { <Hp> >-
-			sequent [|IndTypes|] { <Hi>; I: 'A<|H|>; <Ji<|H|> > >-
-				sequent [|IndConstrs|] { <Hc['I]> >-
-					sequent [|branchConstrs|] { <HcI> >-
-						sequent [|branchCases|] { <F> >- 'P} } } } } } -->
+		sequent [IndParams] { <Hp> >-
+			sequent [IndTypes] { <Hi>; I: 'A<|H|>; <Ji<|H|> > >-
+				sequent [IndConstrs] { <Hc['I]> >-
+					sequent [branchConstrs] { <HcI> >-
+						sequent [branchCases] { <F> >- 'P} } } } } } -->
 	sequent { <H> >-
-		sequent [|IndParams|] { <Hp> >-
-			sequent [|IndTypes|] { <Hi>; I: 'A<|H|>; <Ji<|H|> > >-
-				sequent [|IndConstrs|] { <Hc['I]> >-
-					case{'c;'P; sequent [|cases|] { <F> >- it} }
-					in (sequent [|applH|] { <T>; 'c >- 'P }) } } } } = it
+		sequent [IndParams] { <Hp> >-
+			sequent [IndTypes] { <Hi>; I: 'A<|H|>; <Ji<|H|> > >-
+				sequent [IndConstrs] { <Hc['I]> >-
+					case{'c;'P; sequent [cases] { <F> >- it} }
+					in (sequent [applH] { <T>; 'c >- 'P }) } } } } = it
 
 open Lm_printf
 open Simple_print
@@ -276,8 +276,8 @@ let get_c_in_C' def c_type c =
 declare AppMember
 
 prim_rw app_member_rw :
-  sequent [|AppMember|] { 'q; <Hp> >- 'c in (p:'P -> 'C['p]) } <-->
-  sequent [|AppMember|] { <Hp> >- ('c 'q) in 'C['q] }
+  sequent [AppMember] { 'q; <Hp> >- 'c in (p:'P -> 'C['p]) } <-->
+  sequent [AppMember] { <Hp> >- ('c 'q) in 'C['q] }
 
 let apply_context t params =
    let app_seq = TermMan.mk_sequent_term
@@ -349,43 +349,147 @@ declare IndParamsIota
 
 
 prim_rw iotaStart 'Hc :
-	case{ sequent [|IndParams|] { <Hp> >-
-				sequent [|IndTypes|] { <Hi> >-
-					sequent [|IndConstrs|] { <Hc>; c: 'C; <Jc> >-
-						sequent [|applH|] { <Q> >- 'c} } } };
-			'P; sequent [|cases|] { <F> >- it} } <-->
+	case{ sequent [IndParams] { <Hp> >-
+				sequent [IndTypes] { <Hi> >-
+					sequent [IndConstrs] { <Hc>; c: 'C; <Jc> >-
+						sequent [applH] { <Q> >- 'c} } } };
+			'P; sequent [cases] { <F> >- it} } <-->
 	caseAux{
-		sequent [|IndParams|] { <Hp> >-
-			sequent [|IndParamsIota|] { >-
-				sequent [|IndTypes|] { <Hi> >-
-					sequent [|IndConstrs|] { <Hc>; c: 'C; <Jc> >-
-						sequent [|applH|] { <Q> >- 'c} } } } };
-			'P; sequent [|cases|] { <F> >- it} }
+		sequent [IndParams] { <Hp> >-
+			sequent [IndParamsIota] { >-
+				sequent [IndTypes] { <Hi> >-
+					sequent [IndConstrs] { <Hc>; c: 'C; <Jc> >-
+						sequent [applH] { <Q> >- 'c} } } } };
+			'P; sequent [cases] { <F> >- it} }
 
 (*
 prim_rw iotaStep 'Hc :
 	caseAux{
-		sequent [|IndParams|] { <Hp>; p:'P >-
-			sequent [|IndParamsIota|] { <Jp['p]> >-
-				sequent [|IndTypes|] { <Hi['p]> >-
-					sequent [|IndConstrs|] { <Hc['p]>; c: 'C['p]; <Jc['p]> >-
-						sequent [|applH|] { 'q; <Q> >- 'c} } } } };
-			'P; sequent [|cases|] { <F> >- it} } <-->
+		sequent [IndParams] { <Hp>; p:'P >-
+			sequent [IndParamsIota] { <Jp['p]> >-
+				sequent [IndTypes] { <Hi['p]> >-
+					sequent [IndConstrs] { <Hc['p]>; c: 'C['p]; <Jc['p]> >-
+						sequent [applH] { 'q; <Q> >- 'c} } } } };
+			'P; sequent [cases] { <F> >- it} } <-->
 	caseAux{
-		sequent [|IndParams|] { <Hp> >-
-			sequent [|IndParamsIota|] { p:'P; <Jp['p]> >-
-				sequent [|IndTypes|] { <Hi['p]> >-
-					sequent [|IndConstrs|] { <Hc['p]>; c: 'C['p]; <Jc['p]> >-
-						sequent [|applH|] { <Q> >- 'c} } } } };
-			'P; sequent [|cases|] { <F> >- it} }
+		sequent [IndParams] { <Hp> >-
+			sequent [IndParamsIota] { p:'P; <Jp['p]> >-
+				sequent [IndTypes] { <Hi['p]> >-
+					sequent [IndConstrs] { <Hc['p]>; c: 'C['p]; <Jc['p]> >-
+						sequent [applH] { <Q> >- 'c} } } } };
+			'P; sequent [cases] { <F> >- it} }
 
 prim_rw iotaFinal 'Hc :
 	caseAux{
-		sequent [|IndParams|] { >-
-			sequent [|IndParamsIota|] { <Jp> >-
-				sequent [|IndTypes|] { <Hi> >-
-					sequent [|IndConstrs|] { <Hc>; c: 'C; <Jc> >-
-						sequent [|applH|] { <Q> >- 'c} } } } };
-			'P; sequent [|cases|] { <F> >- it} } <-->
-	sequent [|applH|] { <Q> >- 'f }
+		sequent [IndParams] { >-
+			sequent [IndParamsIota] { <Jp> >-
+				sequent [IndTypes] { <Hi> >-
+					sequent [IndConstrs] { <Hc>; c: 'C; <Jc> >-
+						sequent [applH] { <Q> >- 'c} } } } };
+			'P; sequent [cases] { <F> >- it} } <-->
+	sequent [applH] { <Q> >- 'f }
+*)
+(*
+declare struct_smaller{'T; y.'t['y]}
+
+prim struct_smaller_const {| intro [] }| :
+	sequent { <H> >- struct_smaller{'T; y.'t} }
+
+prim struct_smaller_app {| intro [] }| :
+	sequent { <H> >- struct_smaller{'T; y.'t['y]} } -->
+	sequent { <H> >- struct_smaller{'T; y.('t['y] 'u['y])} }
+
+(* may be 'T has to depend on 'y then we probably need struct_smaller{'y; 't} *)
+prim struct_smaller_lambda {| intro [] }| :
+	sequent { <H>; x: 'S >- struct_smaller{'T; y.'t['x;'y]} } -->
+	sequent { <H> >- struct_smaller{'T; y.lambda{'S; x.'t['x;'y]}} }
+
+prim struct_smaller_cases_base {| intro [] }| :
+	sequent { <H> >- struct_smaller{'T; y.(sequent [cases] { >- it})} } -->
+
+prim struct_smaller_cases_step {| intro [] }| :
+	sequent { <H> >- struct_smaller{'T; y.'f['y]} } -->
+	sequent { <H> >- struct_smaller{'T; y.(sequent [cases] { <F['y]> >- it})} } -->
+	sequent { <H> >- struct_smaller{'T; y.(sequent [cases] { 'f['y]; <F['y]> >- it})} } -->
+
+prim struct_smaller_case {| intro [] }| :
+	sequent { <H> >- struct_smaller{'T; y.'c['y]} } -->
+	sequent { <H> >- struct_smaller{'T; y.(sequent [cases] { <F['y]> >- it}} } -->
+	sequent { <H> >- struct_smaller{'T; y.case{'S;'c['y];'P; sequent [cases] { <F['y]> >- it} }} }
+
+declare D{<V>; f,x.M['f;'x]}
+declare DummyType
+
+prim
+	D{<V>; f,x.M['x]}
+
+prim
+	D{<V>; f,x.'P['f;'x]} -->
+	z: DummyType >- D{<V>; f,x.'Q['f;'x;'z]} -->
+	D{<V>; f,x.lambda{'P['f;'x]; z.Q['f;'x;'z]}
+
+prim
+	ForEach{sequent{<F1>; g: A['f;'x] := N['f;'x;'g]; <F2> >- it}; D{<V>; f,x.'N['f;'x;'g]} } -->
+	ForEach{sequent{<F1>; g: A['f;'x] := N['f;'x;'g]; <F2> >- it}; D{<V>; f,x.'A['f;'x]} } -->
+	D{<V>; f,x.(sequent [fixpoint] {<F['f;'x]> >- 'g['f;'x]})}
+
+declare D_ForAll
+
+prim D_sequent_base :
+	D{<V>; f,x.'C['f;'x]} -->
+	D{<V>; f,x.(sequent [D_ForAll] { >- 'C['f;'x]})}
+
+prim D_sequent_step :
+	D{<V>; f,x.'T['f;'x]} -->
+	v: DummyType >- D{<V>; f,x.(sequent [D_ForAll] {<H['f;'x;'v]> >- 'C['f;'x]})} -->
+	D{<V>; f,x.(sequent [D_ForAll] {v: 'T['f;'x]; <H['f;'x;'v]> >- 'C['f;'x]})}
+
+prim
+	D{<V>; f,x.(sequent[D_ForAll]{ <Hp['f;'x]>; <Hi['f;'x]> <Hc['f;'x]> >- it}) } -->
+	D{<V>; f,x.
+		sequent [IndParams] { <Hp['f;'x]> >-
+			sequent [IndTypes] { <Hi['f;'x]> >-
+				sequent [IndConstrs] { <Hc['f;'x]> >- it } } }
+
+prim DD_base :
+	DD{<V>; <Hp>; <Hi>; <Hc>; <>; f,x.<>}
+
+prim DD_step :
+	D{(<V>; RP{<Hp>; (<Hi>; I: 'A; <Ji>); (<Hc>; c: prodH{<T> >- applH{<Hargs> >- 'I} } ; <Jc>);<T>}; f,x.'E['f;'x]} -->
+	DD{<V>; <Hp>; (<Hi>; I: 'A; <Ji>); <Hc>; (c: prodH{<T> >- applH{<Hargs> >- 'I} } ; <Jc>); f,x.(prodH{<T['I <- Ind()]> >- 'E['f;'x]}; <F['f;'x]>)}
+
+prim D_case_rec_position :
+	D{(<V1>; z: 'T; <V2>); f,x.'Pred['f;'x]} -->
+	D{(<V1>; z: 'T; <V2>); f,x.applH{Ind{...}; <R>}} -->
+	D{(<V1>; z: 'T; <V2>); f,x.<P['f;'x]>} -->
+	DD{(<V1>; z: 'T; <V2>); <Hp>; <Hi>; <>; <Hc>; f,x.<F['f;'x]>} -->
+	D{(<V1>; z: 'T; <V2>); f,x.case{applH{Ind{...}; <R>}; applH{'z; <P['f;'x]>};'Pred['f;'x]; sequent [cases] { <F['f;'x]> >- it} }}
+
+prim D_case_rec_on :
+	D{<V>; f,x.'Pred['f;'x]} -->
+	D{<V>; f,x.applH{Ind{...}; <R>}} -->
+	D{<V>; f,x.<P['f;'x]>} -->
+	DD{<V>; <Hp>; <Hi>; <>; <Hc>; f,x.<F['f;'x]>} -->
+	D{<V>; f,x.case{applH{Ind{...}; <R>}; applH{'x; <P>};'Pred['f;'x]; sequent [cases] { <F['f;'x]> >- it} }}
+
+prim D_case_general :
+	D{<V>; f,x.'Pred['f;'x]} -->
+	D{<V>; f,x.'T['f;'x]} -->
+	D{<V>; f,x.'c['f;'x]} -->
+	D{<V>; f,x.(sequent [D_ForAll] { <F['f;'x]> >- it}) } -->
+	D{<V>; f,x.case{'T['f;'x];'c['f;'x];'Pred['f;'x]; sequent [cases] { <F['f;'x]> >- it} }}
+
+prim D_applH_on_fixpoint :
+	D{(<V1>; z: 'T; <V2>); f,x.sequent [D_ForAll] { <Hp['f;'x]>; applH{'z; <Q>} >- it} } -->
+	D{(<V1>; z: 'T; <V2>); f,x.applH{'f; (<Hp['f;'x]>; (applH{'z; <Q>}))} }
+
+prim D_applH :
+	D{<V>; f,x.'t['f;'x] } -->
+	D{<V>; f,x.sequent [D_ForAll] { <Hp['f;'x]> >- it} } -->
+	D{<V>; f,x.applH{'t['f;'x]; <Hp['f;'x]>} }
+
+prim D_app :
+	D{<V>; f,x.'t['f;'x] } -->
+	D{<V>; f,x.'s['f;'x] } -->
+	D{<V>; f,x.('t['f;'x] 's['f;'x]) }
 *)

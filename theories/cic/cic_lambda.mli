@@ -5,12 +5,6 @@ open Basic_tactics
 (* MetaPRL doesn't allow to declare a variable twice  in one Context
 so in rules w-s, ... we skip such things as "x not in H" *)
 
-(* Sequent judgments *)
-declare sequent [cic] { Term : Term >- Term } : Term
-
-(* Terms *)
-declare sequent [sequent_arg{'a}] { Term : Term >- Term } : Term
-
 declare le[i:l,j:l]  (* i is less or equal to j *)
 
 (*
@@ -50,8 +44,6 @@ declare subst{'u;'x;'t} (* declaration of substitution of a term 't to all
 
 declare math_fun{'x; 'A; 'B}
 declare math_fun{'A; 'B}
-
-val mk_sequent_arg_term : term -> term
 
 val member_term : term
 val is_member_term : term -> bool
@@ -133,8 +125,9 @@ rule set_a_prop_set:
 *************************************************)
 
 rule var 'H :
-   sequent { <H>; <J> >- of_some_sort{'T} } -->
-   sequent { <H>; x: 'T; <J> >- 'x in 'T }
+   (*sequent { <H>; <J> >- of_some_sort{'T} } -->*)
+   sequent { <H> >- of_some_sort{'T} } -->
+   sequent { <H>; x: 'T; <J['x]> >- 'x in 'T }
 
 rule weak 'H :
 	sequent { <H>; <J> >- 'A in 'B } -->

@@ -3,7 +3,9 @@ extends Base_theory
 open Basic_tactics
 
 (* MetaPRL doesn't allow to declare a variable twice  in one Context
-so in rules w-s, ... we skip such things as "x not in H" *)
+so in rules w-s, ... we skip such things as "x not in H"
+!!!!!!!! no, it's not enforced by MetaPRL :( !!!!!!!!!!!!!!!
+*)
 
 declare le[i:l,j:l]  (* i is less or equal to j *)
 
@@ -41,15 +43,6 @@ declare let_in{'t;x.'u['x]} (* declaration of the let-in expressions -
 declare apply{'t;'u} (* declaration of "term 't applied to term 'u" *)
 declare subst{'u;'x;'t} (* declaration of substitution of a term 't to all
                          free occurrences of a variable 'x in a term 'u *)
-
-(* Sequent judgments *)
-declare sequent [cic] { Term : Term >- Term } : Term
-
-(* Terms *)
-declare sequent [sequent_arg{'a}] { Term : Term >- Term } : Term
-
-let sequent_arg_opname = opname_of_term << sequent_arg{'a} >>
-let mk_sequent_arg_term = mk_dep0_term sequent_arg_opname
 
 let member_term = << 'a in 'c >>
 let member_opname = opname_of_term member_term
@@ -236,8 +229,12 @@ prim set_a_prop_set {| intro [] |} :
 *************************************************)
 
 prim var 'H :
-   sequent { <H>; <J> >- of_some_sort{'T} } -->
-   sequent { <H>; x: 'T; <J> >- 'x in 'T } = it
+   sequent { <H> >- of_some_sort{'T} } -->
+   sequent { <H>; x: 'T; <J['x]> >- 'x in 'T } = it
+
+let resource nth_hyp += [
+	(<<'T>>, <<'x in 'T>>, (fun i -> var i ttca))
+]
 
 prim weak 'H :
 	sequent { <H>; <J> >- 'A in 'B } -->

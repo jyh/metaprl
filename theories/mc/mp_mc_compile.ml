@@ -73,6 +73,7 @@ let apply_conversion iformsC term =
  * Apply a list of iforms to a term until fix-point is reached.
  *)
 let fix_point_iforms_and_base iforms term =
+   Printf.eprintf "fix_p... with %i forms\n%t" (List.length iforms) flush;
    apply_rw_top (applyIFormsAndBaseC iforms) term
 
 (*

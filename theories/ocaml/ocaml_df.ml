@@ -15,7 +15,10 @@ include Ocaml_str_df
 
 (*
  * $Log$
- * Revision 1.2  1998/04/29 20:53:59  jyh
+ * Revision 1.3  1998/04/30 14:20:32  jyh
+ * Updating term_table.
+ *
+ * Revision 1.3  1998/04/29 20:54:02  jyh
  * Initial working display forms.
  *
  * Revision 1.2  1998/04/29 14:48:55  jyh

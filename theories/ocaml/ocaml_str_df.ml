@@ -46,7 +46,10 @@ dform str_module_type_df : str_module_type[@name:s]{'mt} =
 (*
  * Open a module in scope.
  *)
-dform str_open_df : str_open{'sl} = 
+dform str_open_df1 : str_open{'sl} = 
+   sig_open{'sl}
+
+dform str_open_df2 : str_open[@start:n, @finish:n]{'sl} =
    str_open{'sl}
 
 (*
@@ -62,6 +65,9 @@ dform str_let_df : str_let{'p; 'e} = "let"{'p; 'e}
                           
 (*
  * $Log$
+ * Revision 1.5  1998/04/30 14:20:34  jyh
+ * Updating term_table.
+ *
  * Revision 1.4  1998/04/29 20:54:11  jyh
  * Initial working display forms.
  *

@@ -100,7 +100,7 @@ declare lines{'e}
 dform lines_nil_df : lines{nil} = `""
 
 dform lines_cons_df : lines{cons{'e1; 'e2}} =
-   slot{'e1} newline slot{'e2}
+   slot{'e1} newline lines{'e2}
 
 dform interface_df : "interface"{'body} =
    szone pushm[0] pushm[4]
@@ -233,6 +233,9 @@ dform summary_item_df : "summary_item"{'term} =
 
 (*
  * $Log$
+ * Revision 1.7  1998/04/30 14:20:30  jyh
+ * Updating term_table.
+ *
  * Revision 1.6  1998/04/29 20:53:53  jyh
  * Initial working display forms.
  *

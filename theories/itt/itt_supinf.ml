@@ -887,27 +887,6 @@ and inf info (c:SACS.sacs) (s:SAF.saf) (h:CS.t) =
 		end;
 	(result,actions)
 
-let collect gl =
-   let hyps = (explode_sequent gl).sequent_hyps in
-   let rec aux l i =
-      if i < 0 then
-         l
-      else
-         let l =
-            match SeqHyp.get hyps i with
-               Hypothesis t
-             | HypBinding (_, t) ->
-                  if is_ge_rat_term t then
-                     t :: l
-                  else
-                     l
-             | Context _ ->
-                  l
-         in
-            aux l (pred i)
-   in
-      aux [] (pred (SeqHyp.length hyps))
-
 let monom2af var2index t =
 	if is_mul_rat_term t then
 		let t1,t2=dest_mul_rat t in
@@ -944,8 +923,7 @@ let ge2af var2index t =
 	AF.add f1 neg_f2
 
 let make_sacs var2index p =
-   let g = Sequent.goal p in
-   let l = collect g in
+   let l = List.filter is_ge_rat_term (Sequent.all_hyps p) in
 	let afs=List.map (ge2af var2index) l in
 	List.fold_left SACS.addConstr SACS.empty afs
 

@@ -1371,11 +1371,6 @@ end
 
 module ITT_JProver = Jall.JProver(Itt_JLogic)
 
-let rec filter_hyps hyps = function
-   [] -> hyps
- | Context _ :: hs -> filter_hyps hyps hs
- | (HypBinding (_, h) | Hypothesis h) :: hs -> filter_hyps (h::hyps) hs
-
 let rec make_j_assums p goal len i =
    if i>len then [] else
    let assum = Sequent.nth_assum p i in
@@ -1394,7 +1389,7 @@ let base_jproverT def_mult = funT (fun p ->
    let goal = Sequent.goal p in
    let seq = explode_sequent goal in
    let assums = make_j_assums p goal (Sequent.num_assums p) 1 in
-   let hyps = filter_hyps (List.map fst assums) (SeqHyp.to_list seq.sequent_hyps) in
+   let hyps = (Sequent.all_hyps p) @ (List.map fst assums) in
    match
       ITT_JProver.prover mult_limit hyps (SeqGoal.get seq.sequent_goals 0)
    with

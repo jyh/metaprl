@@ -345,6 +345,26 @@ interactive ge_addMono :
 
 type comparison = Less | Equal | Greater
 
+let simple_compare x y =
+   match compare x y with
+      0 -> Equal
+    | i when i > 0 -> Greater
+    | _ -> Less
+
+let rec compare_lists compare l1 l2 =
+   if l1==l2 then
+      Equal
+   else
+      match l1, l2 with
+         [], [] -> Equal
+       | [], _  -> Less
+       | _ , []  -> Greater
+       | hd1::tail1, hd2::tail2 ->
+            begin match compare hd1 hd2 with
+               Equal -> compare_lists compare tail1 tail2
+             | cmp -> cmp
+            end
+
 let rec compare_terms t1 t2 =
    if t1==t2 then
       Equal
@@ -371,190 +391,50 @@ and compare_ops op1 op2 =
         else
           compare_plists par1 par2
 
-and compare_btlists subt1 subt2 =
-   if subt1==subt2 then
-      Equal
-   else
-      match subt1 with
-        [] ->
-          (
-          match subt2 with
-            [] -> Equal
-          | hd2::tail2 -> Less
-          )
-      | hd1::tail1 ->
-          (
-          match subt2 with
-            [] -> Greater
-          | hd2::tail2 ->
-            match compare_bterms hd1 hd2 with
-              Less -> Less
-          | Greater -> Greater
-          | Equal -> compare_btlists tail1 tail2
-          )
+and compare_btlists btl1 btl2 = compare_lists compare_bterms btl1 btl2
 
+(* XXX BUG? Nogin: Is it OK to ignore bvars here? *)
 and compare_bterms b1 b2 =
    if b1==b2 then
       Equal
    else
-      let {bvars = bv1; bterm = t1} = dest_bterm b1 in
-      let {bvars = bv2; bterm = t2} = dest_bterm b2 in
-      compare_terms t1 t2
+      compare_terms (dest_bterm b1).bterm (dest_bterm b2).bterm
 
-and compare_plists p1 p2 =
-   if p1==p2 then
-      Equal
-   else
-      match p1 with
-        [] ->
-          (
-          match p2 with
-            [] -> Equal
-          | hd2::tail2 -> Less
-          )
-      | hd1::tail1 ->
-          (
-          match p2 with
-            [] -> Greater
-          | hd2::tail2 ->
-            match compare_params hd1 hd2 with
-              Less -> Less
-            | Greater -> Greater
-            | Equal -> compare_plists tail1 tail2
-          )
+and compare_plists pl1 pl2 = compare_lists compare_params pl1 pl2
 
 and compare_params par1 par2 =
    if par1==par2 then
       Equal
    else
-      let p1 = dest_param par1 in
-      let p2 = dest_param par2 in
-      match p1 with
-        Number(n1) ->
-         (
-          match p2 with
-            Number(n2) ->
-              if n1<n2 then Less
-              else if n1>n2 then Greater
-              else Equal
-          | _ -> Less
-         )
-      | String(s1) ->
-         (
-          match p2 with
-            Number(_) -> Greater
-          | String(s2) ->
-             if s1<s2 then Less
-             else if s1>s2 then Greater
-             else Equal
-          | _ -> Less
-         )
-      | Token(s1) ->
-         (
-          match p2 with
-            Number(_) -> Greater
-          | String(_) -> Greater
-          | Token(s2) ->
-             if s1<s2 then Less
-             else if s1>s2 then Greater
-             else Equal
-          | _ -> Less
-         )
-      | Var(s1) ->
-         (
-          match p2 with
-            Number(_) -> Greater
-          | String(_) -> Greater
-          | Token(_) -> Greater
-          | Var(s2) ->
-             if s1<s2 then Less
-             else if s1>s2 then Greater
-             else Equal
-          | _ -> Less
-         )
-      | MNumber(s1) ->
-         (
-          match p2 with
-            Number(_) -> Greater
-          | String(_) -> Greater
-          | Token(_) -> Greater
-          | Var(_) -> Greater
-          | MNumber(s2) ->
-             if s1<s2 then Less
-             else if s1>s2 then Greater
-             else Equal
-          | _ -> Less
-         )
-      | MString(s1) ->
-         (
-          match p2 with
-            Number(_) -> Greater
-          | String(_) -> Greater
-          | Token(_) -> Greater
-          | Var(_) -> Greater
-          | MNumber(_) -> Greater
-          | MString(s2) ->
-             if s1<s2 then Less
-             else if s1>s2 then Greater
-             else Equal
-          | _ -> Less
-         )
-      | MToken(s1) ->
-         (
-          match p2 with
-            Number(_) -> Greater
-          | String(_) -> Greater
-          | Token(_) -> Greater
-          | Var(_) -> Greater
-          | MNumber(_) -> Greater
-          | MString(_) -> Greater
-          | MToken(s2) ->
-             if s1<s2 then Less
-             else if s1>s2 then Greater
-             else Equal
-          | _ -> Less
-         )
-      | MLevel(l1) ->
-         (
-          match p2 with
-            Number(_) -> Greater
-          | String(_) -> Greater
-          | Token(_) -> Greater
-          | Var(_) -> Greater
-          | MNumber(_) -> Greater
-          | MString(_) -> Greater
-          | MToken(_) -> Greater
-          | MLevel(l2) -> compare_levels l1 l2
-          | _ -> Less
-         )
-      | ObId(id1) ->
-         (
-          match p2 with
-            Number(_) -> Greater
-          | String(_) -> Greater
-          | Token(_) -> Greater
-          | Var(_) -> Greater
-          | MNumber(_) -> Greater
-          | MString(_) -> Greater
-          | MToken(_) -> Greater
-          | MLevel(_) -> Greater
-          | ObId(id2) -> compare_plists id1 id2
-          | _ -> Less
-        )
-      | ParamList(pl1) ->
-         (
-          match p2 with
-            Number(_) -> Greater
-          | String(_) -> Greater
-          | Token(_) -> Greater
-          | Var(_) -> Greater
-          | MNumber(_) -> Greater
-          | MString(_) -> Greater
-          | MToken(_) -> Greater
-          | MLevel(_) -> Greater
-          | ObId(_) -> Greater
-          | ParamList(pl2) -> compare_plists pl1 pl2
-         )
+      match dest_param par1, dest_param par2 with
+         Number n1    , Number n2     -> simple_compare n1 n2
+       | Number _     , _             -> Less
+       | _            , Number _      -> Greater
+       | String s1    , String s2     -> simple_compare s1 s2
+       | String _     , _             -> Less
+       | _            , String _      -> Greater 
+       | Token t1     , Token t2      -> simple_compare t1 t2 
+       | Token _      , _             -> Less
+       | _            , Token _       -> Greater
+       | Var v1       , Var v2        -> simple_compare v1 v2
+       | Var _        , _             -> Less
+       | _            , Var _         -> Greater
+       | MNumber s1   , MNumber s2    -> simple_compare s1 s2
+       | MNumber _    , _             -> Less
+       | _            , MNumber _     -> Greater
+       | MString s1   , MString s2    -> simple_compare s1 s2
+       | MString _    , _             -> Less
+       | _            , MString _     -> Greater
+       | MToken s1    , MToken s2     -> simple_compare s1 s2
+       | MToken _     , _             -> Less
+       | _            , MToken _      -> Greater
+       | MLevel l1    , MLevel l2     -> compare_levels l1 l2
+       | MLevel _     , _             -> Less
+       | _            , MLevel _      -> Greater
+       | ObId id1     , ObId id2      -> compare_plists id1 id2
+       | ObId _       , _             -> Less
+       | _            , ObId _        -> Greater
+       | ParamList pl1, ParamList pl2 -> compare_plists pl1 pl2
 
 and compare_levels l1 l2 =
    if l1==l2 then
@@ -566,27 +446,7 @@ and compare_levels l1 l2 =
         else if c1>c2 then Greater
         else compare_lvlists v1 v2
 
-and compare_lvlists lv1 lv2 =
-   if lv1==lv2 then
-      Equal
-   else
-      match lv1 with
-        [] ->
-          (
-          match lv2 with
-            [] -> Equal
-          | hd2::tail2 -> Less
-          )
-      | hd1::tail1 ->
-          (
-          match lv2 with
-            [] -> Greater
-          | hd2::tail2 ->
-            match compare_lvars hd1 hd2 with
-              Less -> Less
-            | Greater -> Greater
-            | Equal -> compare_lvlists tail1 tail2
-          )
+and compare_lvlists lvl1 lvl2 = compare_lists compare_lvars lvl1 lvl2
 
 and compare_lvars v1 v2 =
    if v1==v2 then
@@ -596,10 +456,7 @@ and compare_lvars v1 v2 =
       let {le_var=s2; le_offset=o2}=dest_level_var v2 in
         if s1<s2 then Less
         else if s1>s2 then Greater
-        else
-          if o1<o2 then Less
-          else if o1>o2 then Greater
-          else Equal
+        else simple_compare o1 o2
 
 (*
 let ct a b =

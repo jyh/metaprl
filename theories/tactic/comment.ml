@@ -519,73 +519,73 @@ declare reffigure[name:s]
 doc <:doc< @docoff >>
 
 dform refchapter_df1 : mode[tex] :: refchapter[name:s] =
-   izone `"\\reflabelchapter{" slot[name:s] `"}{" ezone slot[name:s] izone `"}" ezone
+   izone `"\\reflabelchapter{" slot[name:s] `"}" ezone
 
 dform refchapter_df2 : except_mode[tex] :: refchapter[name:s] =
    bf[name:s]
 
 dform refsection_df1 : mode[tex] :: refsection[name:s] =
-   izone `"\\reflabelsection{" slot[name:s] `"}{" ezone slot[name:s] izone `"}" ezone
+   izone `"\\reflabelsection{" slot[name:s] `"}" ezone
 
 dform refsection_df2 : except_mode[tex] :: refsection[name:s] =
    bf[name:s]
 
 dform refsubsection_df1 : mode[tex] :: refsubsection[name:s] =
-   izone `"\\reflabelsubsection{" slot[name:s] `"}{" ezone slot[name:s] izone `"}" ezone
+   izone `"\\reflabelsubsection{" slot[name:s] `"}" ezone
 
 dform refsubsection_df2 : except_mode[tex] :: refsubsection[name:s] =
    bf[name:s]
 
 dform refsubsubsection_df1 : mode[tex] :: refsubsubsection[name:s] =
-   izone `"\\reflabelsubsubsection{" slot[name:s] `"}{" ezone slot[name:s] izone `"}" ezone
+   izone `"\\reflabelsubsubsection{" slot[name:s] `"}" ezone
 
 dform refsubsubsection_df2 : except_mode[tex] :: refsubsubsection[name:s] =
    bf[name:s]
 
 dform refmodule_df1 : mode[tex] :: refmodule[name:s] =
-   izone `"\\reflabelmodule{" slot[name:s] `"}{" ezone slot[name:s] izone `"}" ezone
+   izone `"\\reflabelmodule{" slot[name:s] `"}" ezone
 
 dform refmodule_df2 : except_mode[tex] :: refmodule[name:s] =
    bf[name:s]
 
 dform refterm_df1 : mode[tex] :: refterm[name:s] =
-   izone `"\\reflabelterm{" slot[name:s] `"}{" ezone slot[name:s] izone `"}" ezone
+   izone `"\\refterm{" slot[name:s] `"}" ezone
 
 dform refterm_df2 : except_mode[tex] :: refterm[name:s] =
    bf[name:s]
 
 dform refresource_df1 : mode[tex] :: refresource[name:s] =
-   izone `"\\reflabelresource{" slot[name:s] `"}{" ezone slot[name:s] izone `"}" ezone
+   izone `"\\refresource{" slot[name:s] `"}" ezone
 
 dform refresource_df2 : except_mode[tex] :: refresource[name:s] =
    bf[name:s]
 
 dform refrewrite_df1 : mode[tex] :: refrewrite[name:s] =
-   izone `"\\reflabelrewrite{" slot[name:s] `"}{" ezone slot[name:s] izone `"}" ezone
+   izone `"\\refrewrite{" slot[name:s] `"}" ezone
 
 dform refrewrite_df2 : except_mode[tex] :: refrewrite[name:s] =
    bf[name:s]
 
 dform reftactic_df1 : mode[tex] :: reftactic[name:s] =
-   izone `"\\reflabeltactic{" slot[name:s] `"}{" ezone slot[name:s] izone `"}" ezone
+   izone `"\\reftactic{" slot[name:s] `"}" ezone
 
 dform reftactic_df2 : except_mode[tex] :: reftactic[name:s] =
    bf[name:s]
 
 dform refconv_df1 : mode[tex] :: refconv[name:s] =
-   izone `"\\reflabelconv{" slot[name:s] `"}{" ezone slot[name:s] izone `"}" ezone
+   izone `"\\refconv{" slot[name:s] `"}" ezone
 
 dform refconv_df2 : except_mode[tex] :: refconv[name:s] =
    bf[name:s]
 
 dform refrule_df1 : mode[tex] :: refrule[name:s] =
-   izone `"\\reflabelrule{" slot[name:s] `"}{" ezone slot[name:s] izone `"}" ezone
+   izone `"\\refrule{" slot[name:s] `"}" ezone
 
 dform refrule_df2 : except_mode[tex] :: refrule[name:s] =
    bf[name:s]
 
 dform reffigure_df1 : mode[tex] :: reffigure[name:s] =
-   izone `"\\reffigure{" slot[name:s] `"}{" ezone slot[name:s] izone `"}" ezone
+   izone `"\\reffigure{" slot[name:s] `"}" ezone
 
 dform reffigure_df2 : except_mode[tex] :: reffigure[name:s] =
    bf[name:s]
@@ -640,50 +640,6 @@ dform cite_df2 : except_mode[tex] :: cite[text:s] =
 
 doc <:doc< 
    @begin[doc]
-   The following terms display standard representations
-   of the usual names.  @code{@MetaPRL} displays as @MetaPRL;
-   @code{@Nuprl} displays as @Nuprl; @code{@NuPRL} displays as @NuPRL;
-   @code{@OCaml} displays as @OCaml; and @code{@LaTeX} displays as
-   @LaTeX.
-   @end[doc]
->>
-declare "MetaPRL"
-declare "Nuprl"
-declare "NuPRL"
-declare "OCaml"
-declare "LaTeX"
-declare "MartinLof"
-doc <:doc< @docoff >>
-
-dform metaprl_df1 : mode[tex] :: "MetaPRL" =
-   izone `"\\MetaPRL{}" ezone
-
-dform metaprl_df2 : except_mode[tex] :: "MetaPRL" =
-   it["MetaPRL":s]
-
-dform metaprl_df1 : mode[tex] :: "MartinLof" =
-   izone `"\\MartinLof{}" ezone
-
-dform metaprl_df2 : except_mode[tex] :: "MartinLof" =
-   it["Martin-Lof":s]
-
-dform nuprl_df1 : mode[tex] :: "Nuprl" =
-   izone `"\\Nuprl{}" ezone
-
-dform nuprl_df2 : except_mode[tex] :: "Nuprl" =
-   it["Nuprl":s]
-
-dform ocaml_df1 : "OCaml" =
-   `"OCaml"
-
-dform latex_df1 : mode[tex] :: "LaTeX" =
-   izone `"\\LaTeX{}" ezone
-
-dform latex_df2 : except_mode[tex] :: "LaTeX" =
-   `"LaTeX"
-
-doc <:doc< 
-   @begin[doc]
    The @code{phantom} term produces white space, equivalent in width
    to the term being typeset.
    @end[doc]
@@ -713,7 +669,7 @@ doc <:doc< @docoff >>
 dform math_df1 : math[s:s] = math{slot[s:s]}
 
 dform math_df2 : mode[tex] :: math{'t} =
-   lzone izone `"$" ezone slot{'t} izone `"$" ezone ezone
+   lzone ensuremath{'t} ezone
 
 dform math_df3 : except_mode[tex] :: math{'t} =
    `"$" it{'t} `"$"
@@ -1934,6 +1890,112 @@ dform normal_math_sequent_df1 : except_mode[tex] :: math_sequent{'ext; 'hyps; 'g
    slot{'hyps} `" " Nuprl_font!vdash hspace
    slot{'goal}
    ezone popm
+
+doc <:doc< 
+   @begin[doc]
+   The following terms display standard representations
+   of the usual names.  @code{@MetaPRL} displays as @MetaPRL;
+   @code{@Nuprl} displays as @Nuprl; @code{@NuPRL} displays as @NuPRL;
+   @code{@OCaml} displays as @OCaml; and @code{@LaTeX} displays as
+   @LaTeX.
+   @end[doc]
+>>
+declare "MetaPRL"
+declare "Nuprl"
+declare "NuPRL"
+declare "OCaml"
+declare "LaTeX"
+declare "MartinLof"
+doc docoff
+
+dform metaprl_df1 : mode[tex] :: "MetaPRL" =
+   izone `"\\MetaPRL{}" ezone
+
+dform metaprl_df2 : except_mode[tex] :: "MetaPRL" =
+   it["MetaPRL":s]
+
+dform metaprl_df1 : mode[tex] :: "MartinLof" =
+   izone `"\\mbox{\\MartinLof{}}" ezone
+
+dform metaprl_df2 : except_mode[tex] :: "MartinLof" =
+   it["Martin-Lof":s]
+
+dform nuprl_df1 : mode[tex] :: "Nuprl" =
+   izone `"\\Nuprl{}" ezone
+
+dform nuprl_df2 : except_mode[tex] :: "Nuprl" =
+   it["Nuprl":s]
+
+dform ocaml_df1 : "OCaml" =
+   math_mbox{slot["OCaml"]}
+
+dform latex_df1 : mode[tex] :: "LaTeX" =
+   izone `"\mbox{\\LaTeX{}}" ezone
+
+dform latex_df2 : except_mode[tex] :: "LaTeX" =
+   `"LaTeX"
+
+(*
+ * Some terms would not display "inline" (as the display form for "declare"
+ * would try to display them)
+ *)
+
+declare special
+
+dform special_df : special =
+   math_it{slot["special display"]}
+
+dform theory_sp : slot["decl"]{"theory"{'t}} = special
+dform mod_sp    : slot["decl"]{"module"[name:s]} = special
+dform mod_sp    : slot["decl"]{"module"{'name}} = special
+dform chap_sp   : slot["decl"]{chapter[name:s]{'t}} = special
+dform sec_sp    : slot["decl"]{section[name:s]{'t}} = special
+dform subsec_sp : slot["decl"]{subsection[name:s]{'t}} = special
+dform sbssec_sp : slot["decl"]{subsubsection[name:s]{'t}} = special
+dform modsec_sp : slot["decl"]{modsection{'t}} = special
+dform msbsec_sp : slot["decl"]{modsubsection{'t}} = special
+dform parent_sp : slot["decl"]{parents} = special
+dform terms_sp  : slot["decl"]{terms} = special
+dform rewrite_sp: slot["decl"]{rewrites} = special
+dform rules_sp  : slot["decl"]{rules} = special
+dform convs_sp  : slot["decl"]{convs} = special
+dform tacts_sp  : slot["decl"]{tactics} = special
+dform rsrss_sp  : slot["decl"]{resources} = special
+dform refcha_sp : slot["decl"]{refchapter[name:s]} = special
+dform refsec_sp : slot["decl"]{refsection[name:s]} = special
+dform refsbs_sp : slot["decl"]{refsubsection[name:s]} = special
+dform refsss_sp : slot["decl"]{refsubsubsection[name:s]} = special
+dform reffig_sp : slot["decl"]{reffigure[name:s]} = special
+dform refmod_sp : slot["decl"]{refmodule[name:s]} = special
+dform code_sp   : slot["decl"]{code[name:s]} = special
+dform verb_sp   : slot["decl"]{verbatim[name:s]} = special
+dform email_sp  : slot["decl"]{email[name:s]} = special
+dform center_sp : slot["decl"]{center{'t}} = special
+dform fig_sp    : slot["decl"]{figure[name]{'t}} = special
+dform capt_sp   : slot["decl"]{caption{'t}} = special
+dform qout_sp   : slot["decl"]{quote{'t}} = special
+dform quot_sp   : slot["decl"]{quotation{'t}} = special
+dform item_sp   : slot["decl"]{item{'t}} = special
+dform item_sp   : slot["decl"]{item{'t1;'t2}} = special
+dform cite_sp   : slot["decl"]{cite[s]} = special
+dform enum_sp   : slot["decl"]{enumerate{'t}} = special
+dform items_sp  : slot["decl"]{itemize{'t}} = special
+dform descr_sp  : slot["decl"]{description{'t}} = special
+dform comm_sp   : slot["decl"]{comment[s]{'t}} = special
+dform left_sp   : slot["decl"]{math_left[s]} = special
+dform right_sp  : slot["decl"]{math_right[s]} = special
+dform tabular_sp: slot["decl"]{math_tabular[s1,s2]{'t}} = special
+dform tabular_sp: slot["decl"]{math_tabular[s]{'t}} = special
+dform tabular_sp: slot["decl"]{tabular[s1,s2]{'t}} = special
+dform tabular_sp: slot["decl"]{tabular[s]{'t}} = special
+dform cr_sp     : slot["decl"]{cr} = special
+dform cr_sp     : slot["decl"]{math_cr} = special
+dform hline_sp  : slot["decl"]{hline} = special
+dform hline_sp  : slot["decl"]{math_hline} = special
+dform multi_sp  : slot["decl"]{multicolumn[s1,s2]{'t}} = special
+dform multi_sp  : slot["decl"]{math_multicolumn[s1,s2]{'t}} = special
+dform array_sp  : slot["decl"]{math_array[s]{'t}} = special
+dform array_sp  : slot["decl"]{math_array[s1,s2]{'t}} = special
 
 (*
  * -*-

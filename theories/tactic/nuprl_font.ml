@@ -499,7 +499,7 @@ dform ensuremath_df1 : internal :: ensuremath[text:s] =
    ensuremath{slot[text:s]}
 
 dform ensuremath_df2 : internal :: mode[tex] :: ensuremath{'t} =
-   izone `"$" ezone slot{'t} izone `"$" ezone
+   tzone["ensuremath"] slot{'t} ezone
 
 dform ensuremath_cons_df : internal :: mode[tex] :: cons{ensuremath{'t1}; ensuremath{'t2}} =
    ensuremath{cons{'t1;'t2}}
@@ -511,7 +511,7 @@ dform mathmacro_df : internal :: mode[tex] :: mathmacro[text:s] =
    izone `"\\" slot[text:s] `" " ezone
 
 dform info_begin_df : internal :: mode[tex] :: info_begin =
-   izone `"\\mbox{\\bf " ezone
+   izone `"\\textbf{" ezone
 
 dform info_end_df : internal :: mode[tex] :: info_end =
    izone `"}" ezone
@@ -536,7 +536,7 @@ ml_dform keyword_tex_df : internal :: mode[tex] :: keyword[text:s] format_term b
      format_ezone buf
 
 dform keyword_begin_df : internal :: mode[tex] :: keyword_begin =
-   izone `"\\mbox{\\bf " ezone
+   izone `"\\textbf{" ezone
 
 dform keyword_end_df : internal :: mode[tex] :: keyword_end =
    izone `"}" ezone

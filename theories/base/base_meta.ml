@@ -27,11 +27,12 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  * Author: Jason Hickey <jyh@cs.cornell.edu>
- *
+ * Modified By: Aleksey Nogin <nogin@cs.cornell.edu>
  *)
 
 extends Shell
 extends Summary
+extends Ocaml_df
 
 open Refiner.Refiner.TermType
 open Refiner.Refiner.Term
@@ -60,7 +61,7 @@ declare meta_lt[a:s,b:s]{'tt; 'ff}
 declare meta_lt[a:t,b:t]{'tt; 'ff}
 declare meta_lt[a:l,b:l]{'tt; 'ff}
 
-let num_op = (dest_op (dest_term <<meta_num[0]>>).term_op).op_name
+let num_op = opname_of_term <<meta_num[0]>>
 
 (*
  * Arithmetic operations.

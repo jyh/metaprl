@@ -1166,17 +1166,9 @@ let assumT i p =
    (* Call intro form on each arg *)
    let rec introT j p =
       if j > len then
-         let goal = Sequent.goal p in
-         let assum = Sequent.nth_assum p i in
-            if is_squash_sequent goal then
-               if is_squash_sequent assum then
-                  nthAssumT i p
-               else
-                  (unsqsquashT (get_squash_arg assum) thenT nthAssumT i) p
-            else
-               nthAssumT i p
+         Itt_squash.nthAssumT i p
       else
-         (dT 0 thenMT introT (j + 1)) p
+         (dT 0 thenMT introT (succ j)) p
    in
       (tryAssertT form
          (thinAllT index (TermMan.num_hyps goal) thenT introT index)

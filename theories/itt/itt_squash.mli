@@ -143,6 +143,9 @@ topval unsquashAllT : tactic
 topval sqsquashT : tactic
 topval unsqsquashT : term -> tactic
 
+(* Do thinning and squashing to matche agains assumption *)
+topval nthAssumT : int -> tactic
+
 (*
  * -*-
  * Local Variables:

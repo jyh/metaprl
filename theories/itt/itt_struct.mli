@@ -128,7 +128,7 @@ rule equalityTypeIsType 'H 'a 'b :
 topval nthHypT : int -> tactic
 topval thinT : int -> tactic
 topval thinAllT : int -> int -> tactic
-topval nthAssumT : int -> tactic
+topval thinMatchT : term -> tactic
 topval assertT : term -> tactic
 (* do not assert if already have the right conclusion *)
 topval tryAssertT : term -> tactic -> tactic -> tactic

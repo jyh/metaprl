@@ -57,6 +57,9 @@ declare notRawIntOp{ 'precision; 'sign }
 (* Floats. *)
 declare uminusFloatOp{ 'precision }
 declare absFloatOp{ 'precision }
+declare sinOp{ 'precision }
+declare cosOp{ 'precision }
+declare sqrtOp{ 'precision }
 
 (* Coerce to int. *)
 declare intOfFloatOp{ 'precision }
@@ -146,6 +149,8 @@ declare leFloatOp{ 'precision }
 declare gtFloatOp{ 'precision }
 declare geFloatOp{ 'precision }
 declare cmpFloatOp{ 'precision }
+
+declare atan2Op{ 'precision }
 
 (* Pointer equality. *)
 declare eqEqOp
@@ -239,6 +244,12 @@ dform uminusFloatOp_df : except_mode[src] :: uminusFloatOp{ 'precision } =
    `"UminusFloatOp(" slot{'precision} `")"
 dform absFloatOp_df : except_mode[src] :: absFloatOp{ 'precision } =
    `"AbsFloatOp(" slot{'precision} `")"
+dform sinOp_df : except_mode[src] :: sinOp{ 'precision } =
+   `"sinOp(" slot{'precision} `")"
+dform cosOp_df : except_mode[src] :: cosOp{ 'precision } =
+   `"cosOp(" slot{'precision} `")"
+dform sqrtOp_df : except_mode[src] :: sqrtOp{ 'precision } =
+   `"sqrtOp(" slot{'precision} `")"
 
 (* Coerce to int. *)
 dform intOfFloatOp_df : except_mode[src] :: intOfFloatOp{ 'precision } =
@@ -406,6 +417,9 @@ dform geFloatOp_df : except_mode[src] :: geFloatOp{ 'precision } =
    `"GeFloatOp(" slot{'precision} `")"
 dform cmpFloatOp_df : except_mode[src] :: cmpFloatOp{ 'precision } =
    `"CmpFloatOp(" slot{'precision} `")"
+
+dform atan2Op_df : except_mode[src] :: atan2Op{ 'precision } =
+   `"atan2Op(" slot{'precision} `")"
 
 (* Pointer equality. *)
 dform eqEqOp_df : except_mode[src] :: eqEqOp = `"EqEqOp"

@@ -1,3 +1,21 @@
+Note as of 21 October 2001:
+
+Fir_deadcode: need to get dead function paramter and dead function
+   removal working at some point.
+
+--------------------------------------------------------------------------
+
+Notes as of 19 October 2001:
+
+Fir_exp: I don't have Atomic, Debug, or SysMigrate terms.
+
+Assumptions that I should have written down earlier:
+   for Fir_eval:
+      allocArray/allocTuple take the list to allocate as the result
+      let/set assume they get a list to index/replace into
+
+--------------------------------------------------------------------------
+
 Notes as of 6 October 2001 (I hope...):
 
 (When I say FIR, I refer to the FIR in the mc compiler.)

@@ -64,8 +64,8 @@ declare fix{ f. 'b['f] }
  * Expressions.
  *)
 
-declare unop_exp{ 'op; 'a1 }
-declare binop_exp{ 'op; 'a1; 'a2 }
+declare unop_exp{ 'op; 'ty; 'a1 }
+declare binop_exp{ 'op; 'ty; 'a1; 'a2 }
 
 (*
  * Misc.
@@ -96,10 +96,10 @@ dform fix_df : except_mode[src] :: fix{ f. 'b } =
    ezone popm
 
 (* Expressions. *)
-dform unop_exp_df : except_mode[src] :: unop_exp{ 'op; 'a1 } =
-   slot{'op} `"(" slot{'a1} `")"
-dform binop_exp_df : except_mode[src] :: binop_exp{ 'op; 'a1; 'a2 } =
-   `"(" slot{'a1} `" " slot{'op} `" " slot{'a2} `")"
+dform unop_exp_df : except_mode[src] :: unop_exp{ 'op; 'ty; 'a1 } =
+   slot{'op} `"(" slot{'a1} `"):" slot{'ty}
+dform binop_exp_df : except_mode[src] :: binop_exp{ 'op; 'ty; 'a1; 'a2 } =
+   `"(" slot{'a1} `" " slot{'op} `" " slot{'a2} `"):" slot{'ty}
 
 (* Misc. *)
 dform unknownFun_df : except_mode[src] :: unknownFun = `"UnknownFun"
@@ -137,13 +137,7 @@ prim_rw reduce_tyVar : tyVar{ 'ty_var } <--> 'ty_var
  **************)
 
 (* Identity (polymorphic). *)
-prim_rw reduce_idOp : unop_exp{ idOp; 'a1 } <--> 'a1
-
-(* Pointer equality. *)
-prim_rw reduce_eqEqOp : binop_exp{ eqEqOp; 'a1; 'a2 } <-->
-   ifthenelse{ beq_int{'a1; 'a2}; val_true; val_false }
-prim_rw reduce_neqEqOp : binop_exp{ neqEqOp; 'a1; 'a2 } <-->
-   ifthenelse{ beq_int{'a1; 'a2}; val_false; val_true }
+prim_rw reduce_idOp : unop_exp{ idOp; 'ty; 'a1 } <--> 'a1
 
 (*
  * Normal values.
@@ -160,10 +154,10 @@ prim_rw reduce_atomVar : atomVar{ 'var } <--> 'var
 (* Primitive operations. *)
 prim_rw reduce_letUnop :
    letUnop{ 'op; 'ty; 'a1; v. 'exp['v] } <-->
-   'exp[ unop_exp{ 'op; 'a1 } ]
+   'exp[ unop_exp{ 'op; 'ty; 'a1 } ]
 prim_rw reduce_letBinop :
    letBinop{ 'op; 'ty; 'a1; 'a2; v. 'exp['v] } <-->
-   'exp[ binop_exp{ 'op; 'a1; 'a2 } ]
+   'exp[ binop_exp{ 'op; 'ty; 'a1; 'a2 } ]
 
 (*
  * Function application.
@@ -210,55 +204,55 @@ prim_rw reduce_setSubscript :
 
 (* Unary and bitwise negation. *)
 prim_rw reduce_uminusIntOp :
-   unop_exp{ uminusIntOp; 'a1 } <-->
+   unop_exp{ uminusIntOp; tyInt; 'a1 } <-->
    "minus"{'a1}
 
 (* Standard binary arithmetic operators. *)
 prim_rw reduce_plusIntOp :
-   binop_exp{ plusIntOp; 'a1; 'a2 } <-->
+   binop_exp{ plusIntOp; tyInt; 'a1; 'a2 } <-->
    ('a1 +@ 'a2)
 prim_rw reduce_minusIntOp :
-   binop_exp{ minusIntOp; 'a1; 'a2 } <-->
+   binop_exp{ minusIntOp; tyInt; 'a1; 'a2 } <-->
    ('a1 -@ 'a2)
 prim_rw reduce_mulIntOp :
-   binop_exp{ mulIntOp; 'a1; 'a2 } <-->
+   binop_exp{ mulIntOp; tyInt; 'a1; 'a2 } <-->
    ('a1 *@ 'a2)
 prim_rw reduce_divIntOp :
-   binop_exp{ divIntOp; 'a1; 'a2 } <-->
+   binop_exp{ divIntOp; tyInt; 'a1; 'a2 } <-->
    ('a1 /@ 'a2)
 prim_rw reduce_remIntOp :
-   binop_exp{ remIntOp; 'a1; 'a2 } <-->
+   binop_exp{ remIntOp; tyInt; 'a1; 'a2 } <-->
    ('a1 %@ 'a2)
 
 (* Max / min. *)
 prim_rw reduce_maxIntOp :
-   binop_exp{ maxIntOp; 'a1; 'a2 } <-->
+   binop_exp{ maxIntOp; tyInt; 'a1; 'a2 } <-->
    ifthenelse{ lt_bool{'a1; 'a2}; 'a2; 'a1 }
 prim_rw reduce_minIntOp :
-   binop_exp{ minIntOp; 'a1; 'a2 } <-->
+   binop_exp{ minIntOp; tyInt; 'a1; 'a2 } <-->
    ifthenelse{ lt_bool{'a1; 'a2}; 'a1; 'a2 }
 
 (* Boolean comparisons. *)
 prim_rw reduce_eqIntOp :
-   binop_exp{ eqIntOp; 'a1; 'a2 } <-->
+   binop_exp{ eqIntOp; tyInt; 'a1; 'a2 } <-->
    ifthenelse{ beq_int{ 'a1; 'a2 }; val_true; val_false }
 prim_rw reduce_neqIntOp :
-   binop_exp{ neqIntOp; 'a1; 'a2 } <-->
+   binop_exp{ neqIntOp; tyInt; 'a1; 'a2 } <-->
    ifthenelse{ bneq_int{ 'a1; 'a2 }; val_true; val_false }
 prim_rw reduce_ltIntOp :
-   binop_exp{ ltIntOp; 'a1; 'a2 } <-->
+   binop_exp{ ltIntOp; tyInt; 'a1; 'a2 } <-->
    ifthenelse{ lt_bool{ 'a1; 'a2 }; val_true; val_false }
 prim_rw reduce_leIntOp :
-   binop_exp{ leIntOp; 'a1; 'a2 } <-->
+   binop_exp{ leIntOp; tyInt; 'a1; 'a2 } <-->
    ifthenelse{ le_bool{ 'a1; 'a2 }; val_true; val_false }
 prim_rw reduce_gtIntOp :
-   binop_exp{ gtIntOp; 'a1; 'a2 } <-->
+   binop_exp{ gtIntOp; tyInt; 'a1; 'a2 } <-->
    ifthenelse{ gt_bool{ 'a1; 'a2 }; val_true; val_false }
 prim_rw reduce_geIntOp :
-   binop_exp{ geIntOp; 'a1; 'a2 } <-->
+   binop_exp{ geIntOp; tyInt; 'a1; 'a2 } <-->
    ifthenelse{ ge_bool{ 'a1; 'a2 }; val_true; val_false }
 prim_rw reduce_cmpIntOp :
-   binop_exp{ cmpIntOp; 'a1; 'a2 } <-->
+   binop_exp{ cmpIntOp; tyInt; 'a1; 'a2 } <-->
    ifthenelse{ beq_int{'a1; 'a2};
       0;
       ifthenelse{ lt_bool{'a1; 'a2};
@@ -285,8 +279,6 @@ let firEvalT i =
       reduce_tyVar;
 
       reduce_idOp;
-      reduce_eqEqOp;
-      reduce_neqEqOp;
       reduce_atomInt;
       reduce_atomEnum;
       reduce_atomRawInt;

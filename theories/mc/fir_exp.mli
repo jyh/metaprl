@@ -57,6 +57,9 @@ declare notRawIntOp{ 'precision; 'sign }
 (* Floats. *)
 declare uminusFloatOp{ 'precision }
 declare absFloatOp{ 'precision }
+declare sinOp{ 'precision }
+declare cosOp{ 'precision }
+declare sqrtOp{ 'precision }
 
 (* Coerce to int. *)
 declare intOfFloatOp{ 'precision }
@@ -146,6 +149,8 @@ declare leFloatOp{ 'precision }
 declare gtFloatOp{ 'precision }
 declare geFloatOp{ 'precision }
 declare cmpFloatOp{ 'precision }
+
+declare atan2Op{ 'precision }
 
 (* Pointer equality. *)
 declare eqEqOp

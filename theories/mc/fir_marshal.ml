@@ -1,7 +1,7 @@
 (*
  * Functional Intermediate Representation formalized in MetaPRL.
  *
- * Define and implement the connection to the Mojave compiler.
+ * Define and implement the connection to the Mojave compiler FIR.
  *
  * ----------------------------------------------------------------
  *
@@ -29,3 +29,28 @@
  * Author: Brian Emre Aydemir
  * Email:  emre@its.caltech.edu
  *)
+
+(* Open MC ML namespaces. *)
+
+open Fir
+
+(* Open MetaPRL ML namespaces. *)
+
+open Fir_ty
+open Fir_exp
+
+(*************************************************************************
+ * Convert between the marshalled version of the fir and Fir.prog.
+ *************************************************************************)
+
+let marshalled_fir_to_prog data =
+
+let marshall_prog dest prog =
+
+(*************************************************************************
+ * Convert between Fir.prog and MetaPRL terms.
+ *************************************************************************)
+
+let prog_to_term fir_prog =
+
+let term_to_prog term_exp =

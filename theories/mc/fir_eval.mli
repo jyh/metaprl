@@ -64,8 +64,8 @@ declare fix{ f. 'b['f] }
  * Expressions.
 *)
 
-declare unop_exp{ 'op; 'a1 }
-declare binop_exp{ 'op; 'a1; 'a2 }
+declare unop_exp{ 'op; 'ty; 'a1 }
+declare binop_exp{ 'op; 'ty; 'a1; 'a2 }
 
 (*
  * Misc.
@@ -98,8 +98,6 @@ topval reduce_tyVar : conv
 (* Expressions. *)
 
 topval reduce_idOp : conv
-topval reduce_eqEqOp : conv
-topval reduce_neqEqOp : conv
 topval reduce_atomInt : conv
 topval reduce_atomEnum : conv
 topval reduce_atomRawInt : conv

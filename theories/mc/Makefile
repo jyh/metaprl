@@ -17,7 +17,6 @@ MPFILES := \
    fir_exp \
    fir_eval \
    fir_deadcode \
-   fir_marshal \
    mc_theory \
    fir_test
 

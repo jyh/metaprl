@@ -1,7 +1,7 @@
 (*
  * Functional Intermediate Representation formalized in MetaPRL.
  *
- * Define and implement the connection to the Mojave compiler.
+ * Define and implement the connection to the Mojave compiler FIR.
  *
  * ----------------------------------------------------------------
  *

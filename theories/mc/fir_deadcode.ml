@@ -42,20 +42,17 @@ open Tactic_type.Conversionals
 
 (* Primitive operations. *)
 
-interactive_rw reduce_letUnop_deadcode :
+prim_rw reduce_letUnop_deadcode :
    letUnop{ 'op; 'ty; 'a1; v. 'exp } <-->
    'exp
-interactive_rw reduce_letBinop_deadcode :
+prim_rw reduce_letBinop_deadcode :
    letBinop{ 'op; 'ty; 'a1; 'a2; v. 'exp } <-->
    'exp
 
 (* Allocation. *)
 
-interactive_rw reduce_allocTuple_deadcode :
-   letAlloc{ allocTuple{ 'ty; 'atom_list }; v. 'exp } <-->
-   'exp
-interactive_rw reduce_allocArray_deadcode :
-   letAlloc{ allocArray{ 'ty; 'atom_list }; v. 'exp } <-->
+prim_rw reduce_letAlloc_deadcode :
+   letAlloc{ 'alloc_op; v. 'exp } <-->
    'exp
 
 (* Subscripting. *)
@@ -73,8 +70,7 @@ let firDeadcodeElimT i =
       reduce_letUnop_deadcode;
       reduce_letBinop_deadcode;
 
-      reduce_allocTuple_deadcode;
-      reduce_allocArray_deadcode;
+      reduce_letAlloc_deadcode;
 
       reduce_letSubscript_deadcode
    ] )) i

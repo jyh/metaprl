@@ -111,11 +111,11 @@ interactive add_var_wf {| intro [] |} :
 define unfold_add_new_var:
    add_var{'bt} <--> add_var{'bt; new_var{'bt}}
 
-interactive_rw add_var1_bdepth {| reduce |} :
+interactive_rw add_new_var_bdepth {| reduce |} :
    ('bt in BTerm)  -->
    bdepth{add_var{'bt}} <--> bdepth{'bt} +@ 1
 
-interactive add_var1_wf {| intro [] |} :
+interactive add_new_var_wf {| intro [] |} :
    sequent { <H> >- 'bt in BTerm } -->
    sequent { <H> >- add_var{'bt} in BTerm }
 
@@ -205,17 +205,15 @@ interactive subst_commutes {| intro |}
 
 
 (*
- *  bind(x. bterm{<H>.b[x]} ) = bterm{<H>,x.b[x]}
+ *  bind(x. bterm{<H>.b[x]} ) = bterm{x,<H>.b[x]}
  *)
 define unfold_bind:
    bind{x.'bt['x]} <-->
       fix{bind.lambda{bt.
          dest_bterm{'bt;
-                    u. if depth{'u} <=@ bdepth{'bt}
-                        then var{left{'u};right{'u}+@1}
-                        else 'u;
+                    u. var{left{'u}+@1;right{'u}};
                     op,subterms. make_bterm{bind{'op}; map{x.'bind 'x; 'subterms}} }
-         }} 'bt[new_var{'bt[it]}]
+         }} 'bt[var{-1;0}]
 
 
 doc docoff

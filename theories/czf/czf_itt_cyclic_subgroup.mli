@@ -31,10 +31,7 @@ declare cyclic_subgroup{elem_in_G}
 
 rewrite unfold_power : power{'z; 'n} <-->
    ind{'n; i, j. op{inv{'z}; power{'z; ('n +@ 1)}}; id; k, l. op{'z; power{'z; ('n -@ 1)}}}
-(*
-rewrite unfold_power : power{'z; 'n} <-->
-   ind{'n; i, j. op{inv{'z}; power{'z; ."add"{'n; number[1:n]}}}; id; k, l. op{'z; power{'z; ."sub"{'n; number[1:n]}}}}
-*)
+
 rewrite unfold_cyclic_subgroup : cyclic_subgroup{elem_in_G} <-->
    collect{int; x. power{elem_in_G; 'x}}
 

@@ -224,6 +224,7 @@ PRINT_THEORIES =\
     itt_synt_operator\
     itt_synt_bterm\
     itt_synt_subst\
+    itt_reflection_new\
     itt_collection\
     itt_pointwise\
     itt_pointwise2

@@ -1111,3 +1111,25 @@ and exp_of_term t =
    else
       raise (RefineError ("exp_of_term", StringTermError
             ("not an exp",  t)))
+
+(*
+ * Convert to and from fundef.
+ *)
+
+let term_of_fundef (line, ty, vars, exp) =
+   mk_fundef_term    (term_of_debug_line line)
+                     (term_of_ty ty)
+                     (term_of_list term_of_var vars)
+                     (term_of_exp exp)
+
+let fundef_of_term t =
+   if is_fundef_term t then
+      let line, ty, vars, exp = dest_fundef_term t in
+         (debug_line_of_term line),
+         (ty_of_term ty),
+         (list_of_term var_of_term vars),
+         (exp_of_term exp)
+
+   else
+      raise (RefineError ("fundef_of_term", StringTermError
+            ("not a fundef", t)))

@@ -32,10 +32,9 @@
  * Email:  emre@its.caltech.edu
  *)
 
-include Base_theory
-
 (*
- * This is an identity operation for an FIR program.
+ * This is an identity operation for an FIR program. Later, we'd
+ * like to do optimizations and proofs.
  *)
 
 val compile : Fir.prog -> Fir.prog

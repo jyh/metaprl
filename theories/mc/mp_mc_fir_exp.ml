@@ -4,7 +4,7 @@
  * Define terms to represent FIR types and terms.
  * Specific FIR types represented here: unop, binop, sub_block, sub_value,
  * sub_index, sub_script, atom, alloc_op, tailop, pred_nop, pred_unop,
- * pred_binop, pred, debug_line, debug_vars, debug_info, exp.
+ * pred_binop, pred, debug_line, debug_vars, debug_info, exp, fundef.
  *
  * ----------------------------------------------------------------
  *
@@ -327,6 +327,12 @@ declare assertExp{ 'label; 'pred; 'exp }
 (* Debugging. *)
 
 declare debug{ 'debug_info; 'exp }
+
+(*
+ * Function definition.
+ *)
+
+declare fundef{ 'debug_line; 'ty; 'var_list; 'exp }
 
 (*************************************************************************
  * Display forms.
@@ -925,6 +931,15 @@ dform assertExp_df : except_mode[src] ::
 dform debug_df : except_mode[src] ::
    debug{ 'debug_info; 'exp } =
    `"Debug(" slot{'debug_info} `"," slot{'exp} `")"
+
+(*
+ * Function definition.
+ *)
+
+dform fundef_df : except_mode[src] ::
+   fundef{ 'debug_line; 'ty; 'var_list; 'exp } =
+   `"Fundef(" slot{'debug_line} `"," slot{'ty} `","
+   slot{'var_list} `"," slot{'exp} `")"
 
 (*************************************************************************
  * Term operations.
@@ -1821,3 +1836,13 @@ let debug_opname = opname_of_term debug_term
 let is_debug_term = is_dep0_dep0_term debug_opname
 let mk_debug_term = mk_dep0_dep0_term debug_opname
 let dest_debug_term = dest_dep0_dep0_term debug_opname
+
+(*
+ * Function definition.
+ *)
+
+let fundef_term = << fundef{ 'debug_line; 'ty; 'var_list; 'exp } >>
+let fundef_opname = opname_of_term fundef_term
+let is_fundef_term = is_4_dep0_term fundef_opname
+let mk_fundef_term = mk_4_dep0_term fundef_opname
+let dest_fundef_term = dest_4_dep0_term fundef_opname

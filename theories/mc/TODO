@@ -19,7 +19,15 @@ Todo list:
 -  Deadcode elimination: Implement more forms of it. Prove the
    forms that aren't proven.
 -  Mp_mc_connect_base (special notes):
-   .  Check float conversion code.
+   .  Check float conversion code. Specifically, this code
+      DOES NOT WORK.  I need a way of going from the 80 bit internal
+      representation of rawfloat's to some integral or string representation
+      w/o loss of information.
+-  Verify that Mp_mc_fir_eval actually is general enough now to prove
+   other things... . (It just occurred to me that I don't think I can
+   prove deadcode.)
+-  fundef (Mp_mc_fir_exp) is a hack.  I need to come up with a term
+   representation for entire programs that is "convinient".
 
 Notes to myself:
 --------------------------------------------------------------------------

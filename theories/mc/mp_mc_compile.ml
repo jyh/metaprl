@@ -34,11 +34,20 @@
 
 include Base_theory
 
+open Symbol
 open Fir
 
+open Mp_mc_connect_exp
+
 (*
- * This is an identity operation for an FIR program.
+ * Despite the apparently complexity, this is an identity operation for
+ * an Fir.prog. We convert the function definitions (fundef SymbolTable.t)
+ * to terms (term SymbolTable.t), and then back again.  Later, we'd
+ * like to do optimizations and proofs after we converted to terms.
  *)
 
-let compile fir_prog =
-   fir_prog
+let compile prog =
+   let term_table = SymbolTable.map term_of_fundef prog.prog_funs in
+   (* Here, we'd do something like optimize or generate a proof. *)
+   let new_prog_funs = SymbolTable.map fundef_of_term term_table in
+      { prog with prog_funs = new_prog_funs }

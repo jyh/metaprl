@@ -129,3 +129,10 @@ val debug_info_of_term : term -> debug_info
 
 val term_of_exp : exp -> term
 val exp_of_term : term -> exp
+
+(*
+ * Convert to and from fundef.
+ *)
+
+val term_of_fundef : fundef -> term
+val fundef_of_term : term -> fundef

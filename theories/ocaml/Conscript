@@ -1,9 +1,5 @@
 Import qw( env );
 
-$env = $env->clone(
-	INCPATH	=> [@{$env->{INCPATH}}, "../tactic", $env->{CAMLP4STDLIB}]
-);
-
 OCamlSources $env
 	'ocaml.mlz',
 	'ocaml_base_df.ml',

@@ -1,9 +1,5 @@
 Import qw( env );
 
-$env = $env->clone(
-	INCPATH	=> [@{$env->{INCPATH}}, "../tactic", "../ocaml", "../base"]
-);
-
 OCamlSources $env
 	'itt_comment.ml',
 	'itt_equal.ml',

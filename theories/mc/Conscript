@@ -4,21 +4,6 @@
 Import qw( env );
 
 #
-# Set up basic include paths.
-#
-$env = $env->clone(
-   INCPATH  => [@{$env->{INCPATH}},
-                "$env->{MP_HASH}/theories/tactic",
-                "$env->{MP_HASH}/theories/ocaml",
-                "$env->{MP_HASH}/theories/base",
-                "$env->{MP_HASH}/theories/itt",
-                "$env->{MC}/front/generic",
-                "$env->{MC}/lib/util",
-                "$env->{MC}/fir/type",
-                "$env->{MC}/fir/util"]
-);
-
-#
 # Set up file lists.
 #
 my @src =

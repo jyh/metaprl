@@ -1,20 +1,6 @@
 Import qw( env );
 
 $env = $env->clone(
-    INCPATH => [@{$env->{INCPATH}},
-                "$env->{MP_HASH}/mllib",
-                "$env->{MP_HASH}/lib",
-                "$env->{MP_HASH}/refiner/refbase",
-                "$env->{MP_HASH}/refiner/refsig",
-                "$env->{MP_HASH}/refiner/term_gen",
-                "$env->{MP_HASH}/refiner/term_ds",
-                "$env->{MP_HASH}/refiner/term_std",
-                "$env->{MP_HASH}/refiner/rewrite",
-                "$env->{MP_HASH}/refiner/refiner",
-                "$env->{MP_HASH}/refiner/reflib",
-                "$env->{MP_HASH}/library",
-                "$env->{MP_HASH}/ensemble",
-                "$env->{MP_HASH}/filter/boot"],
     ENV => {
             PATH => "$ENV{'PATH'}:$env->{MP}/filter/filter",
             MPLIB => "$env->{MP}/lib",

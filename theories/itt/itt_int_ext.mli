@@ -152,13 +152,6 @@ rule mul_wf 'H :
    [wf] sequent [squash] { 'H >- 'b = 'b1 in int } -->
    sequent ['ext] { 'H >- 'a *@ 'b = 'a1 *@ 'b1 in int }
 
-rule lt_mulPositMono 'H 'c :
-   sequent [squash] { 'H >- 0 < 'c } -->
-   [wf] sequent [squash] { 'H >- 'a IN int } -->
-   [wf] sequent [squash] { 'H >- 'b IN int } -->
-   [wf] sequent [squash] { 'H >- 'c IN int } -->
-   sequent ['ext] { 'H >- lt_bool{'a; 'b} ~ lt_bool{('c *@ 'a); ('c *@ 'b) } }
-
 rule mul_Commut 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    [wf] sequent [squash] { 'H >- 'b IN int } -->
@@ -191,6 +184,20 @@ rule mul_Zero 'H :
 rule mul_Zero2 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    sequent ['ext] { 'H >- ('a *@ 0) ~ 0 }
+
+rule lt_mulPositMonoEq 'H 'c :
+   sequent [squash] { 'H >- 0 < 'c } -->
+   [wf] sequent [squash] { 'H >- 'a IN int } -->
+   [wf] sequent [squash] { 'H >- 'b IN int } -->
+   [wf] sequent [squash] { 'H >- 'c IN int } -->
+   sequent ['ext] { 'H >- lt_bool{'a; 'b} = lt_bool{('c *@ 'a); ('c *@ 'b) } in bool }
+
+rule lt_mulPositMono 'H 'c :
+   sequent [squash] { 'H >- 0 < 'c } -->
+   [wf] sequent [squash] { 'H >- 'a IN int } -->
+   [wf] sequent [squash] { 'H >- 'b IN int } -->
+   [wf] sequent [squash] { 'H >- 'c IN int } -->
+   sequent ['ext] { 'H >- lt_bool{'a; 'b} ~ lt_bool{('c *@ 'a); ('c *@ 'b) } }
 
 rule mul_uni_Assoc 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->

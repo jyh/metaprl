@@ -64,13 +64,16 @@ open Var
 open Tactic_type
 open Tactic_type.Tacticals
 open Tactic_type.Conversionals
+open Tactic_type.Sequent
 
 open Base_meta
+open Base_auto_tactic
 open Base_dtactic
 
 open Itt_equal
 open Itt_struct
 open Itt_bool
+open Itt_squiggle
 
 let _ = show_loading "Loading Itt_int_base%t"
 (************************************************************************
@@ -232,6 +235,29 @@ let finishSq2ExT i =
 
 let sqeq2rwT t =
    t thenT onSomeAssumT finishSq2ExT
+
+let sqFromRwT t =
+   (fun p -> sqSubstT (Sequent.concl p) 0 p) 
+    thenMT 
+        autoT
+    thenT 
+        (sqeq2rwT t)
+
+let testT p = 
+   let g =Sequent.goal p in
+(*  let (g,_):(term * term list)=Refiner.Refiner.Refine.dest_msequent mseq in
+   let es : Refiner.Refiner.TermMan.Term.esequent=Refiner.Refiner.TermMan.explode_sequent g in
+   let (args,hyps,goals)=es in
+   let gl = SEQ_SET.to_list goals in*)
+   let (s2,h2)=Refiner.Refiner.TermMan.nth_hyp g 2 in
+   begin
+      print_term stdout g;
+      printf "\nHL%sHL\n" s2;
+      print_term stdout h2;
+      print_term stdout (Refiner.Refiner.TermMan.nth_concl g 1);
+(*      print_term_list stdout gl;*)
+      failT p
+   end
  
 (*!
  * @begin[doc]
@@ -312,6 +338,11 @@ prim add_wf {| intro_resource []; eqcd_resource |} 'H :
 prim minus_wf {| intro_resource []; eqcd_resource |} 'H :
    [wf] sequent [squash] { 'H >- 'a = 'a1 in int } -->
    sequent ['ext] { 'H >- (-'a) = (-'a1) in int } = it
+
+interactive sub_wf {| intro_resource []; eqcd_resource |} 'H :
+   [wf] sequent [squash] { 'H >- 'a = 'a1 in int } -->
+   [wf] sequent [squash] { 'H >- 'b = 'b1 in int } -->
+   sequent ['ext] { 'H >- 'a -@ 'b = 'a1 -@ 'b1 in int }
 
 prim lt_bool_wf {| intro_resource []; eqcd_resource |} 'H :
    sequent [squash] { 'H >- 'a='a1 in int } -->
@@ -570,6 +601,16 @@ interactive_rw lt_Reflex_rw :
 
 let lt_ReflexC = lt_Reflex_rw
 
+interactive lt_Asym 'H 'a 'b :
+   [main] sequent [squash] { 'H >- 'a < 'b } -->
+   [main] sequent [squash] { 'H >- 'b < 'a } -->
+   [wf] sequent [squash] { 'H >- 'a IN int } -->
+   [wf] sequent [squash] { 'H >- 'b IN int } -->
+   sequent ['ext] { 'H >- 'C }
+
+let lt_AsymT t1 t2 p =
+      lt_Asym (Sequent.hyp_count_addr p) t1 t2 p
+
 prim lt_Trichot 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    [wf] sequent [squash] { 'H >- 'b IN int } -->
@@ -583,7 +624,7 @@ interactive_rw lt_Trichot_rw :
 
 let lt_TrichotC = lt_Trichot_rw
 
-let decideC a b = 
+let splitIntC a b = 
    foldC 
       (mk_bor_term 
          (mk_bor_term 
@@ -592,7 +633,7 @@ let decideC a b =
          (mk_beq_int_term a b))  
       lt_TrichotC
 
-interactive decide 'H 'a 'b 'w :
+interactive splitInt 'H 'a 'b 'w :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    [wf] sequent [squash] { 'H >- 'b IN int } -->
    [main] sequent ['ext] { 'H; w: ('a < 'b) >- 'C } -->
@@ -600,18 +641,9 @@ interactive decide 'H 'a 'b 'w :
    [main] sequent ['ext] { 'H; w: ('b < 'a) >- 'C } -->
    sequent ['ext] { 'H >- 'C }
 
-let decideT t1 t2 p =
+let splitIntT t1 t2 p =
    let w = maybe_new_vars1 p "w" in
-      decide (Sequent.hyp_count_addr p) t1 t2 w p
-
-(*
-Switching to rewrite to provide the uniform of int-properties
-
-rule lt_Transit 'H 'b:
-   sequent [squash] { 'H >- 'a < 'b } -->
-   sequent [squash] { 'H >- 'b < 'c } -->
-   sequent ['ext] { 'H >- 'a < 'c }
-*)
+      splitInt (Sequent.hyp_count_addr p) t1 t2 w p
 
 prim lt_Transit 'H 'b :
    [main] sequent [squash]
@@ -629,6 +661,17 @@ interactive_rw lt_Transit_rw 'b :
    lt_bool{'a; 'c} <--> btrue
 
 let lt_TransitC = lt_Transit_rw
+
+interactive ltDissect 'H 'b:
+   [main] sequent [squash] { 'H >- 'a < 'b } -->
+   [main] sequent [squash] { 'H >- 'b < 'c } -->
+   [wf] sequent [squash] { 'H >- 'a IN int } -->
+   [wf] sequent [squash] { 'H >- 'b IN int } -->
+   [wf] sequent [squash] { 'H >- 'c IN int } -->
+   sequent ['ext] { 'H >- 'a < 'c }
+
+let ltDissectT t1 p =
+      ltDissect (Sequent.hyp_count_addr p) t1 p
 
 prim lt_Discret 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
@@ -685,6 +728,18 @@ interactive_rw add_Commut_rw :
    ('a +@ 'b) <--> ('b +@ 'a)
 
 let add_CommutC = add_Commut_rw
+
+interactive lt_add_lt 'H :
+   [main] sequent [squash] { 'H >- 'a < 'b} -->
+   [main] sequent [squash] { 'H >- 'c < 'd} -->
+   [wf] sequent [squash] { 'H >- 'a IN int } -->
+   [wf] sequent [squash] { 'H >- 'b IN int } -->
+   [wf] sequent [squash] { 'H >- 'c IN int } -->
+   [wf] sequent [squash] { 'H >- 'd IN int } -->
+   sequent ['ext] { 'H >- ('a +@ 'c) < ('b +@ 'd) }
+
+let lt_add_ltT p =
+      lt_add_lt (Sequent.hyp_count_addr p) p
 
 prim add_Assoc 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
@@ -810,12 +865,12 @@ let typeinf_resource =
 
 (*
 let reduce_info =
-   [<< band{lt_bool{'a; 'b}; lt_bool{'b; 'a}} >>, lt_Reflex;
-    << ('a +@ 0) >>, add_Id;
-    << (0 +@ 'a) >>, add_Id2;
-    << ( 'a +@ (- 'a)) >>, minus_add_inverse;
-    << (-(-'a)) >>, minus_minus_reduce;
-    << ('a +@ ('b +@ 'c)) >>, add_Assoc]
+   [<< band{lt_bool{'a; 'b}; lt_bool{'b; 'a}} >>, lt_ReflexC;
+    << ('a +@ 0) >>, add_IdC;
+    << (0 +@ 'a) >>, add_Id2C;
+    << ( 'a +@ (- 'a)) >>, minus_add_inverseC;
+    << (-(-'a)) >>, minus_minus_reduceC;
+    << ('a +@ ('b +@ 'c)) >>, add_AssocC]
 
 
 let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info

@@ -54,7 +54,9 @@ open Printf
 open Mp_debug
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
+open Refiner.Refiner.TermMan
 open Refiner.Refiner.TermSubst
+open Refiner.Refiner.TermType
 open Refiner.Refiner.RefineError
 open Rformat
 open Mp_resource
@@ -66,6 +68,7 @@ open Tactic_type.Conversionals
 
 open Base_meta
 open Base_dtactic
+open Base_auto_tactic
 
 open Itt_equal
 open Itt_struct
@@ -132,29 +135,11 @@ let is_rem_term = is_dep0_dep0_term rem_opname
 let mk_rem_term = mk_dep0_dep0_term rem_opname
 let dest_rem = dest_dep0_dep0_term rem_opname
 
-let le_term = << 'x <= 'y >>
-let le_opname = opname_of_term le_term
-let is_le_term = is_dep0_dep0_term le_opname
-let mk_le_term = mk_dep0_dep0_term le_opname
-let dest_le = dest_dep0_dep0_term le_opname
-
-let ge_term = << 'x >= 'y >>
-let ge_opname = opname_of_term ge_term
-let is_ge_term = is_dep0_dep0_term ge_opname
-let mk_ge_term = mk_dep0_dep0_term ge_opname
-let dest_ge = dest_dep0_dep0_term ge_opname
-
 let gt_term = << 'x > 'y >>
 let gt_opname = opname_of_term gt_term
 let is_gt_term = is_dep0_dep0_term gt_opname
 let mk_gt_term = mk_dep0_dep0_term gt_opname
 let dest_gt = dest_dep0_dep0_term gt_opname
-
-let bneq_int_term = << bneq_int{'x; 'y} >>
-let bneq_int_opname = opname_of_term bneq_int_term
-let is_bneq_int_term = is_dep0_dep0_term bneq_int_opname
-let mk_bneq_int_term = mk_dep0_dep0_term bneq_int_opname
-let dest_bneq_int = dest_dep0_dep0_term bneq_int_opname
 
 (************************************************************************
  * DISPLAY FORMS                                                        *
@@ -177,21 +162,8 @@ dform rem_df1 : except_mode[src] :: parens :: "prec"[prec_mul] :: "rem"{'a; 'b} 
 dform rem_df2 : mode[src] :: parens :: "prec"[prec_mul] :: "rem"{'a; 'b} =
    slot["lt"]{'a} `" %@ " slot["le"]{'b}
 
-dform le_df1 : except_mode[src] :: parens :: "prec"[prec_compare] :: le{'a; 'b} =
-   slot["lt"]{'a} Nuprl_font!le slot["le"]{'b}
-dform le_df2 : mode[src] :: parens :: "prec"[prec_compare] :: le{'a; 'b} =
-   slot["lt"]{'a} `" <= " slot["le"]{'b}
-
-dform ge_df1 : except_mode[src] :: parens :: "prec"[prec_compare] :: ge{'a; 'b} =
-   slot["lt"]{'a} Nuprl_font!ge slot["le"]{'b}
-dform ge_df2 : mode[src] :: parens :: "prec"[prec_compare] :: ge{'a; 'b} =
-   slot["lt"]{'a} `" >= " slot["le"]{'b}
-
 dform gt_df1 : parens :: "prec"[prec_compare] :: gt{'a; 'b} =
    slot["lt"]{'a} `" > " slot["le"]{'b}
-
-dform bneq_int_df1 : parens :: "prec"[prec_compare] :: bneq_int{'a; 'b} =
-   slot["lt"]{'a} `" " Nuprl_font!neq Nuprl_font!subb `" " slot["le"]{'b}
 
 (*
 Switching to define-version to provide the same behaviour as bool-relations,
@@ -216,6 +188,37 @@ define unfold_ge :
 
 define unfold_neq_int :
    nequal{'a; 'b} <--> "assert"{bneq_int{'a; 'b}}
+
+let le_term = << 'x <= 'y >>
+let le_opname = opname_of_term le_term
+let is_le_term = is_dep0_dep0_term le_opname
+let mk_le_term = mk_dep0_dep0_term le_opname
+let dest_le = dest_dep0_dep0_term le_opname
+
+let ge_term = << 'x >= 'y >>
+let ge_opname = opname_of_term ge_term
+let is_ge_term = is_dep0_dep0_term ge_opname
+let mk_ge_term = mk_dep0_dep0_term ge_opname
+let dest_ge = dest_dep0_dep0_term ge_opname
+
+let bneq_int_term = << bneq_int{'x; 'y} >>
+let bneq_int_opname = opname_of_term bneq_int_term
+let is_bneq_int_term = is_dep0_dep0_term bneq_int_opname
+let mk_bneq_int_term = mk_dep0_dep0_term bneq_int_opname
+let dest_bneq_int = dest_dep0_dep0_term bneq_int_opname
+
+dform le_df1 : except_mode[src] :: parens :: "prec"[prec_compare] :: le{'a; 'b} =
+   slot["lt"]{'a} Nuprl_font!le slot["le"]{'b}
+dform le_df2 : mode[src] :: parens :: "prec"[prec_compare] :: le{'a; 'b} =
+   slot["lt"]{'a} `" <= " slot["le"]{'b}
+
+dform ge_df1 : except_mode[src] :: parens :: "prec"[prec_compare] :: ge{'a; 'b} =
+   slot["lt"]{'a} Nuprl_font!ge slot["le"]{'b}
+dform ge_df2 : mode[src] :: parens :: "prec"[prec_compare] :: ge{'a; 'b} =
+   slot["lt"]{'a} `" >= " slot["le"]{'b}
+
+dform bneq_int_df1 : parens :: "prec"[prec_compare] :: bneq_int{'a; 'b} =
+   slot["lt"]{'a} `" " Nuprl_font!neq Nuprl_font!subb `" " slot["le"]{'b}
 
 (*! @docoff *)
 
@@ -262,22 +265,6 @@ prim mul_wf {| intro_resource []; eqcd_resource |} 'H :
    [wf] sequent [squash] { 'H >- 'a = 'a1 in int } -->
    [wf] sequent [squash] { 'H >- 'b = 'b1 in int } -->
    sequent ['ext] { 'H >- 'a *@ 'b = 'a1 *@ 'b1 in int } = it
-
-interactive lt_mulPositMono 'H 'c :
-   sequent [squash] { 'H >- 0 < 'c } -->
-   [wf] sequent [squash] { 'H >- 'a IN int } -->
-   [wf] sequent [squash] { 'H >- 'b IN int } -->
-   [wf] sequent [squash] { 'H >- 'c IN int } -->
-   sequent ['ext] { 'H >- lt_bool{'a; 'b} ~ lt_bool{('c *@ 'a); ('c *@ 'b) } }
-
-interactive_rw lt_mulPositMono_rw 'c :
-   (0 < 'c) -->
-   ('a IN int) -->
-   ('b IN int) -->
-   ('c IN int) -->
-   lt_bool{'a; 'b} <--> lt_bool{('c *@ 'a); ('c *@ 'b) }
-
-let lt_mulPositMonoC = lt_mulPositMono_rw
 
 prim mul_Commut 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
@@ -358,6 +345,29 @@ interactive_rw mul_Zero2_rw :
    ('a *@ 0) <--> 0
 
 let mul_Zero2C = mul_Zero2_rw
+
+interactive lt_mulPositMonoEq 'H 'c :
+   sequent [squash] { 'H >- 0 < 'c } -->
+   [wf] sequent [squash] { 'H >- 'a IN int } -->
+   [wf] sequent [squash] { 'H >- 'b IN int } -->
+   [wf] sequent [squash] { 'H >- 'c IN int } -->
+   sequent ['ext] { 'H >- lt_bool{'a; 'b} = lt_bool{('c *@ 'a); ('c *@ 'b) } in bool }
+
+interactive lt_mulPositMono 'H 'c :
+   sequent [squash] { 'H >- 0 < 'c } -->
+   [wf] sequent [squash] { 'H >- 'a IN int } -->
+   [wf] sequent [squash] { 'H >- 'b IN int } -->
+   [wf] sequent [squash] { 'H >- 'c IN int } -->
+   sequent ['ext] { 'H >- lt_bool{'a; 'b} ~ lt_bool{('c *@ 'a); ('c *@ 'b) } }
+
+interactive_rw lt_mulPositMono_rw 'c :
+   (0 < 'c) -->
+   ('a IN int) -->
+   ('b IN int) -->
+   ('c IN int) -->
+   lt_bool{'a; 'b} <--> lt_bool{('c *@ 'a); ('c *@ 'b) }
+
+let lt_mulPositMonoC = lt_mulPositMono_rw
 
 interactive mul_uni_Assoc 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
@@ -536,3 +546,4 @@ let reduce_info =
 
 let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
 *)
+

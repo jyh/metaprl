@@ -39,8 +39,11 @@ include Itt_logic
 
 open Refiner.Refiner.Term
 
+(*
 open Tactic_type.Tacticals
 open Tactic_type.Conversionals
+*)
+open Tactic_type.Sequent
 
 (************************************************************************
  * TERMS                                                                *
@@ -79,6 +82,10 @@ prec prec_add
 topval finishSq2ExT : int -> tactic
 
 topval sqeq2rwT : tactic -> tactic
+
+topval sqFromRwT : tactic -> tactic
+
+topval testT : tactic
 
 (*
  * Integers are canonical.
@@ -170,6 +177,11 @@ rule add_wf 'H :
 rule minus_wf 'H :
    [wf] sequent [squash] { 'H >- 'a = 'a1 in int } -->
    sequent ['ext] { 'H >- (- 'a) = (- 'a1) in int }
+
+rule sub_wf 'H :
+   [wf] sequent [squash] { 'H >- 'a = 'a1 in int } -->
+   [wf] sequent [squash] { 'H >- 'b = 'b1 in int } -->
+   sequent ['ext] { 'H >- 'a -@ 'b = 'a1 -@ 'b1 in int }
 
 rule lt_bool_wf 'H :
    sequent [squash] { 'H >- 'a='a1 in int } -->
@@ -336,6 +348,15 @@ rule lt_Reflex 'H :
 
 topval lt_ReflexC: conv
 
+rule lt_Asym 'H 'a 'b :
+   [main] sequent [squash] { 'H >- 'a < 'b } -->
+   [main] sequent [squash] { 'H >- 'b < 'a } -->
+   [wf] sequent [squash] { 'H >- 'a IN int } -->
+   [wf] sequent [squash] { 'H >- 'b IN int } -->
+   sequent ['ext] { 'H >- 'C }
+
+topval lt_AsymT : term -> term -> tactic
+
 rule lt_Trichot 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    [wf] sequent [squash] { 'H >- 'b IN int } -->
@@ -344,9 +365,9 @@ rule lt_Trichot 'H :
 
 topval lt_TrichotC: conv
 
-topval decideC : term -> term -> conv 
+topval splitIntC : term -> term -> conv 
 
-rule decide 'H 'a 'b 'w :
+rule splitInt 'H 'a 'b 'w :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    [wf] sequent [squash] { 'H >- 'b IN int } -->
    [main] sequent ['ext] { 'H; w: ('a < 'b) >- 'C } -->
@@ -354,7 +375,7 @@ rule decide 'H 'a 'b 'w :
    [main] sequent ['ext] { 'H; w: ('b < 'a) >- 'C } -->
    sequent ['ext] { 'H >- 'C }
 
-topval decideT : term -> term -> tactic
+topval splitIntT : term -> term -> tactic
 
 (*
 Switching to rewrite to provide the uniform of int-properties
@@ -374,6 +395,16 @@ rule lt_Transit 'H 'b :
    sequent ['ext] { 'H >- lt_bool{'a; 'c} ~ btrue }
 
 topval lt_TransitC: term -> conv
+
+rule ltDissect 'H 'b:
+   [main] sequent [squash] { 'H >- 'a < 'b } -->
+   [main] sequent [squash] { 'H >- 'b < 'c } -->
+   [wf] sequent [squash] { 'H >- 'a IN int } -->
+   [wf] sequent [squash] { 'H >- 'b IN int } -->
+   [wf] sequent [squash] { 'H >- 'c IN int } -->
+   sequent ['ext] { 'H >- 'a < 'c }
+
+topval ltDissectT : term -> tactic
 
 rule lt_Discret 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
@@ -397,6 +428,17 @@ rule add_Commut 'H :
    sequent ['ext] { 'H >- ('a +@ 'b) ~ ('b +@ 'a) }
 
 topval add_CommutC: conv
+
+rule lt_add_lt 'H :
+   [main] sequent [squash] { 'H >- 'a < 'b} -->
+   [main] sequent [squash] { 'H >- 'c < 'd} -->
+   [wf] sequent [squash] { 'H >- 'a IN int } -->
+   [wf] sequent [squash] { 'H >- 'b IN int } -->
+   [wf] sequent [squash] { 'H >- 'c IN int } -->
+   [wf] sequent [squash] { 'H >- 'd IN int } -->
+   sequent ['ext] { 'H >- ('a +@ 'c) < ('b +@ 'd) }
+
+topval lt_add_ltT : tactic
 
 rule add_Assoc 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->

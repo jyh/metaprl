@@ -33,13 +33,16 @@
 
 include Itt_rfun
 include Itt_dfun
+include Itt_fun
 include Itt_unit
 include Itt_union
 
 open Mp_debug
 open Printf
 
+open Tactic_type
 open Tactic_type.Conversionals
+open Var
 
 open Base_dtactic
 
@@ -85,6 +88,7 @@ prim_rw unfold_snd : snd{'e} <--> spread{'e; u, v. 'v}
 interactive_rw reduce_choose_left : choose{left; 'a; 'b} <--> 'a
 interactive_rw reduce_choose_right : choose{right; 'a; 'b} <--> 'b
 
+let fold_two = makeFoldC << two >> unfold_two
 let fold_left = makeFoldC << left >> unfold_left
 let fold_right = makeFoldC << right >> unfold_right
 
@@ -198,17 +202,6 @@ interactive two_well_founded {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- well_founded{two; a, b. two_order{'a; 'b}} }
 
 (*
- * H >- Ui ext x:A * B
- * by productFormation A x
- * H >- A = A in Ui
- * H, x:A >- Ui ext B
- *)
-interactive productFormation 'H 'A 'x :
-   [wf] sequent [squash] { 'H >- 'A = 'A in univ[i:l] } -->
-   [main] ('B['x] : sequent ['ext] { 'H; x: 'A >- univ[i:l] }) -->
-   sequent ['ext] { 'H >- univ[i:l] }
-
-(*
  * H >- x1:A1 * B1 = x2:A2 * B2 in Ui
  * by productEquality y
  * H >- A1 = A2 in Ui
@@ -218,6 +211,22 @@ interactive productEquality {| intro_resource []; eqcd_resource |} 'H 'y :
    [wf] sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
    [wf] sequent [squash] { 'H; y: 'A1 >- 'B1['y] = 'B2['y] in univ[i:l] } -->
    sequent ['ext] { 'H >- x1:'A1 * 'B1['x1] = x2:'A2 * 'B2['x2] in univ[i:l] }
+
+interactive productMember {| intro_resource [] |} 'H 'y :
+   [wf] sequent [squash] { 'H >- member{univ[i:l]; 'A} } -->
+   [wf] sequent [squash] { 'H; y: 'A >- member{univ[i:l]; 'B['y]} } -->
+   sequent ['ext] { 'H >- member{univ[i:l]; .x:'A * 'B['x]} }
+
+(*
+ * H >- Ui ext x:A * B
+ * by productFormation A x
+ * H >- A = A in Ui
+ * H, x:A >- Ui ext B
+ *)
+interactive productFormation 'H 'A 'x :
+   [wf] sequent [squash] { 'H >- member{univ[i:l]; 'A} } -->
+   [main] ('B['x] : sequent ['ext] { 'H; x: 'A >- univ[i:l] }) -->
+   sequent ['ext] { 'H >- univ[i:l] }
 
 (*
  * Typehood.
@@ -234,8 +243,18 @@ interactive productType {| intro_resource [] |} 'H 'x :
  * H >- B[a] ext b
  * H, y:A >- B[y] = B[y] in Ui
  *)
-interactive pairFormation {| intro_resource [] |} 'H 'a 'y :
+interactive pairFormation 'H 'a 'y :
    [wf] sequent [squash] { 'H >- 'a = 'a in 'A } -->
+   [main] ('b : sequent ['ext] { 'H >- 'B['a] }) -->
+   [wf] sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
+   sequent ['ext] { 'H >- x:'A * 'B['x] }
+
+let pairFormation' t p =
+   let y = maybe_new_vars1 p "y" in
+      pairFormation (Sequent.hyp_count_addr p) t y p
+
+interactive pairFormation2 {| intro_resource [] |} 'H 'a 'y :
+   [wf] sequent [squash] { 'H >- member{'A; 'a} } -->
    [main] ('b : sequent ['ext] { 'H >- 'B['a] }) -->
    [wf] sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
    sequent ['ext] { 'H >- x:'A * 'B['x] }

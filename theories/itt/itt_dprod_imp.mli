@@ -34,8 +34,13 @@ include Itt_rfun
 include Itt_unit
 include Itt_union
 
+open Refiner.Refiner.TermType
 open Tactic_type.Conversionals
+open Tactic_type.Tacticals
 
+topval pairFormation' : term -> tactic
+
+topval fold_two : conv
 topval fold_left : conv
 topval fold_right : conv
 

@@ -34,6 +34,7 @@
 include Itt_equal
 include Itt_rfun
 include Itt_struct
+include Itt_logic
 
 open Printf
 open Mp_debug
@@ -89,6 +90,16 @@ prim_rw reduce_listindNil :
 prim_rw reduce_listindCons :
    list_ind{('u :: 'v); 'base; h, t, f. 'step['h; 't; 'f]} <-->
       'step['u; 'v; list_ind{'v; 'base; h, t, f. 'step['h; 't; 'f]}]
+
+(************************************************************************
+ * REDUCTIONS                                                           *
+ ************************************************************************)
+
+let reduce_info =
+   [<< list_ind{nil; 'e1; h, t, g. 'e2['h; 't; 'g]} >>, reduce_listindNil;
+    << list_ind{cons{'h1; 't1}; 'e1; h2, t2, g2. 'e2['h2; 't2; 'g2]} >>, reduce_listindCons]
+
+let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
 
 (************************************************************************
  * DISPLAY FORMS                                                        *
@@ -334,16 +345,6 @@ let list_ind_opname = opname_of_term list_ind_term
 let is_list_ind_term = is_dep0_dep0_dep3_term list_ind_opname
 let dest_list_ind = dest_dep0_dep0_dep3_term list_ind_opname
 let mk_list_ind_term = mk_dep0_dep0_dep3_term list_ind_opname
-
-(************************************************************************
- * REDUCTIONS                                                           *
- ************************************************************************)
-
-let reduce_info =
-   [<< list_ind{nil; 'e1; h, t, g. 'e2['h; 't; 'g]} >>, reduce_listindNil;
-    << list_ind{cons{'h1; 't1}; 'e1; h2, t2, g2. 'e2['h2; 't2; 'g2]} >>, reduce_listindCons]
-
-let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
 
 (************************************************************************
  * TYPE INFERENCE                                                       *

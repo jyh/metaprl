@@ -236,6 +236,10 @@ interactive notle2ge :
    [aux] sequent [squash] { 'H >- "not"{('a <= 'b)} } -->
    sequent ['ext] { 'H >- 'a >= ('b +@ 1) }
 
+interactive nequal_elim {| elim [] |} 'H :
+   [main] sequent [squash] { 'H; 'J[it]; y: (('a >= 'b +@ 1) or ('b >= 'a +@ 1)) >- 'C[it] } -->
+   sequent ['ext] { 'H; x: nequal{'a;'b}; 'J['x] >- 'C['x] }
+
 (*
 let notle2geT t =
    let (l,r)=dest_le t in
@@ -1062,3 +1066,14 @@ sequent ['ext] { 'H; x: (('c *@ ('b +@ ('a *@ 'c)) +@ ('b *@ 'c)) >= 'b +@ 0);
                      t: (((((('c *@ 'b) *@ 1) +@ (2 *@ ('a *@ ('c *@ 'c)))) +@
  (('c *@ ((-1) *@ 'a)) *@ 'c)) +@ ('b *@ 'c)) < 'b)
                 >- "assert"{bfalse} }
+
+interactive eq2ineq :
+	[wf] sequent ['ext] { 'H >- 'a in int } -->
+	[wf] sequent ['ext] { 'H >- 'b in int } -->
+   [main] sequent ['ext] { 'H >- 'a = 'b in int } -->
+	sequent ['ext] { 'H >- 'a <= 'b }
+
+interactive_rw beq2ineq_rw :
+	('a in int) -->
+   ('b in int) -->
+   beq_int{'a;'b} <--> band{le_bool{'a;'b}; le_bool{'b;'a}}

@@ -480,10 +480,10 @@ interactive assert_bnot_intro {| intro [] |} :
    sequent ['ext] { 'H >- "assert"{bnot{'t1}} }
 
 interactive assert_bnot_elim {| elim [] |} 'H :
-   [wf] sequent [squash] { 'H; 'J[it] >- "assert"{'t} } -->
+   [main] sequent [squash] { 'H; 'J[it] >- "assert"{'t} } -->
    sequent ['ext] { 'H; x: "assert"{bnot{'t}}; 'J['x] >- 'C['x] }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    The @tt{magic} rule defines classical reasoning about
    Boolean values.  The rule can be used to prove $@neg@neg A @Rightarrow_b A$,

@@ -515,7 +515,7 @@ interactive assert_bor_intro_right {| intro [SelectOption 2] |} :
 
 interactive assert_band_intro {| intro [] |} :
    [main] sequent { <H> >- "assert"{'t1} } -->
-   [main] sequent { <H> >- "assert"{'t2} } -->
+   [main] sequent { <H>; x: "assert"{'t1} >- "assert"{'t2} } -->
    sequent { <H> >- "assert"{band{'t1; 't2}} }
 
 interactive assert_bimplies_intro {| intro [] |} :

@@ -172,10 +172,15 @@ doc docoff
 (************************************************************************
  * Polynomials                                                          *
  ************************************************************************)
+doc <:doc<
+   @begin[doc]
+   @modsection{Polynomial ring}
+
+   @end[doc]
+>>
 interactive poly_field {| intro [] |} :
    [wf] sequent { <H> >- 'F in fieldE[i:l] } -->
-   sequent { <H> >- poly{'F} in intDomainE[i:l] }
-
+   sequent { <H> >- poly_ring{'F} in intDomainE[i:l] }
 
 
 (************************************************************************

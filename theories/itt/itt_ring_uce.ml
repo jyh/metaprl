@@ -187,15 +187,455 @@ interactive unitringCE_elim {| elim [] |} 'H :
       u8: all x: 'f^car. all y: 'f^car. "iff"{'x = 'y in 'f^car; "assert"{'f^eq 'x 'y}};
       <J['f]> >- 'C['f] } -->
    sequent { <H>; f: unitringCE[i:l]; <J['f]> >- 'C['f] }
+
+doc <:doc<
+   @begin[doc]
+   @modsubsection{Properties}
+
+   @end[doc]
+>>
+interactive car_wf {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} unitringCE[i:l] :
+   [wf] sequent { <H> >- 'R in unitringCE[i:l] } -->
+   sequent { <H> >- 'R^car Type }
+
+interactive car_wf2 {| intro [AutoMustComplete] |} :
+   [wf] sequent { <H> >- 'R in unitringCE[i:l] } -->
+   sequent { <H> >- 'R^car in univ[i:l] }
+
+interactive add_wf {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} unitringCE[i:l] :
+   [wf] sequent { <H> >- 'R in unitringCE[i:l] } -->
+   sequent { <H> >- 'R^"+" in 'R^car -> 'R^car -> 'R^car }
+
+interactive neg_wf {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} unitringCE[i:l] :
+   [wf] sequent { <H> >- 'R in unitringCE[i:l] } -->
+   sequent { <H> >- 'R^neg in 'R^car -> 'R^car }
+
+interactive mul_wf {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} unitringCE[i:l] :
+   [wf] sequent { <H> >- 'R in unitringCE[i:l] } -->
+   sequent { <H> >- 'R^"*" in 'R^car -> 'R^car -> 'R^car }
+
+interactive eq_wf {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} unitringCE[i:l] :
+   [wf] sequent { <H> >- 'R in unitringCE[i:l] } -->
+   sequent { <H> >- 'R^"eq" in 'R^car -> 'R^car -> bool }
+
+interactive add_in_car {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} unitringCE[i:l] :
+   [wf] sequent { <H> >- 'R in unitringCE[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'R^car } -->
+   [wf] sequent { <H> >- 'b in 'R^car } -->
+   sequent { <H> >- 'a +['R] 'b in 'R^car }
+
+interactive mul_in_car {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} unitringCE[i:l] :
+   [wf] sequent { <H> >- 'R in unitringCE[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'R^car } -->
+   [wf] sequent { <H> >- 'b in 'R^car } -->
+   sequent { <H> >- 'a *['R] 'b in 'R^car }
+
+interactive eq_in_bool {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} unitringCE[i:l] :
+   [wf] sequent { <H> >- 'R in unitringCE[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'R^car } -->
+   [wf] sequent { <H> >- 'b in 'R^car } -->
+   sequent { <H> >- 'R^eq 'a 'b in bool }
+
+interactive addid_in_car {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} unitringCE[i:l] :
+   [wf] sequent { <H> >- 'R in unitringCE[i:l] } -->
+   sequent { <H> >- 'R^"0" in 'R^car }
+
+interactive id_in_car {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} unitringCE[i:l] :
+   [wf] sequent { <H> >- 'R in unitringCE[i:l] } -->
+   sequent { <H> >- 'R^"1" in 'R^car }
+
+interactive neg_in_car {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} unitringCE[i:l] :
+   [wf] sequent { <H> >- 'R in unitringCE[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'R^car } -->
+   sequent { <H> >- 'R^neg 'a in 'R^car }
+
+interactive ringuce_add_assoc {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} unitringCE[i:l] :
+   [wf] sequent { <H> >- 'R in unitringCE[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'R^car } -->
+   [wf] sequent { <H> >- 'b in 'R^car } -->
+   [wf] sequent { <H> >- 'c in 'R^car } -->
+   sequent { <H> >- ('a +['R] 'b) +['R] 'c = 'a +['R] ('b +['R] 'c) in 'R^car }
+
+interactive ringuce_add_assoc2 {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} unitringCE[i:l] :
+   [wf] sequent { <H> >- 'R in unitringCE[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'R^car } -->
+   [wf] sequent { <H> >- 'b in 'R^car } -->
+   [wf] sequent { <H> >- 'c in 'R^car } -->
+   sequent { <H> >- 'a +['R] ('b +['R] 'c) = ('a +['R] 'b) +['R] 'c in 'R^car }
+
+interactive ringuce_mul_assoc {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} unitringCE[i:l] :
+   [wf] sequent { <H> >- 'R in unitringCE[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'R^car } -->
+   [wf] sequent { <H> >- 'b in 'R^car } -->
+   [wf] sequent { <H> >- 'c in 'R^car } -->
+   sequent { <H> >- ('a *['R] 'b) *['R] 'c = 'a *['R] ('b *['R] 'c) in 'R^car }
+
+interactive ringuce_mul_assoc2 {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} unitringCE[i:l] :
+   [wf] sequent { <H> >- 'R in unitringCE[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'R^car } -->
+   [wf] sequent { <H> >- 'b in 'R^car } -->
+   [wf] sequent { <H> >- 'c in 'R^car } -->
+   sequent { <H> >- 'a *['R] ('b *['R] 'c) = ('a *['R] 'b) *['R] 'c in 'R^car }
+
+interactive ringuce_add_commut {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} unitringCE[i:l] :
+   [wf] sequent { <H> >- 'R in unitringCE[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'R^car } -->
+   [wf] sequent { <H> >- 'b in 'R^car } -->
+   sequent { <H> >- 'a +['R] 'b = 'b +['R] 'a in 'R^car }
+
+interactive ringuce_mul_commut {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} unitringCE[i:l] :
+   [wf] sequent { <H> >- 'R in unitringCE[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'R^car } -->
+   [wf] sequent { <H> >- 'b in 'R^car } -->
+   sequent { <H> >- 'a *['R] 'b = 'b *['R] 'a in 'R^car }
+
+interactive ringuce_left_addid {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} unitringCE[i:l] :
+   [wf] sequent { <H> >- 'R in unitringCE[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'R^car } -->
+   sequent { <H> >- 'R^"0" +['R] 'a = 'a in 'R^car }
+
+interactive ringuce_left_addid2 {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} unitringCE[i:l] :
+   [wf] sequent { <H> >- 'R in unitringCE[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'R^car } -->
+   sequent { <H> >- 'a = 'R^"0" +['R] 'a in 'R^car }
+
+interactive ringuce_right_addid {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} unitringCE[i:l] :
+   [wf] sequent { <H> >- 'R in unitringCE[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'R^car } -->
+   sequent { <H> >- 'a +['R] 'R^"0" = 'a in 'R^car }
+
+interactive ringuce_right_addid2 {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} unitringCE[i:l] :
+   [wf] sequent { <H> >- 'R in unitringCE[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'R^car } -->
+   sequent { <H> >- 'a = 'a +['R] 'R^"0" in 'R^car }
+
+interactive ringuce_left_id {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} unitringCE[i:l] :
+   [wf] sequent { <H> >- 'R in unitringCE[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'R^car } -->
+   sequent { <H> >- 'R^"1" *['R] 'a = 'a in 'R^car }
+
+interactive ringuce_left_id2 {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} unitringCE[i:l] :
+   [wf] sequent { <H> >- 'R in unitringCE[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'R^car } -->
+   sequent { <H> >- 'a = 'R^"1" *['R] 'a in 'R^car }
+
+interactive ringuce_right_id {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} unitringCE[i:l] :
+   [wf] sequent { <H> >- 'R in unitringCE[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'R^car } -->
+   sequent { <H> >- 'a *['R] 'R^"1" = 'a in 'R^car }
+
+interactive ringuce_right_id2 {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} unitringCE[i:l] :
+   [wf] sequent { <H> >- 'R in unitringCE[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'R^car } -->
+   sequent { <H> >- 'a = 'a *['R] 'R^"1" in 'R^car }
+
+interactive ringuce_left_neg {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} unitringCE[i:l] :
+   [wf] sequent { <H> >- 'R in unitringCE[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'R^car } -->
+   sequent { <H> >- ('R^neg 'a) +['R] 'a = 'R^"0" in 'R^car }
+
+interactive ringuce_left_neg2 {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} unitringCE[i:l] :
+   [wf] sequent { <H> >- 'R in unitringCE[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'R^car } -->
+   sequent { <H> >- 'R^"0" = ('R^neg 'a) +['R] 'a in 'R^car }
+
+interactive ringuce_right_neg {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} unitringCE[i:l] :
+   [wf] sequent { <H> >- 'R in unitringCE[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'R^car } -->
+   sequent { <H> >- 'a +['R] ('R^neg 'a) = 'R^"0" in 'R^car }
+
+interactive ringuce_right_neg2 {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} unitringCE[i:l] :
+   [wf] sequent { <H> >- 'R in unitringCE[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'R^car } -->
+   sequent { <H> >- 'R^"0" = 'a +['R] ('R^neg 'a) in 'R^car }
+
+interactive ringuce_right_distib {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} unitringCE[i:l] :
+   [wf] sequent { <H> >- 'R in unitringCE[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'R^car } -->
+   [wf] sequent { <H> >- 'b in 'R^car } -->
+   [wf] sequent { <H> >- 'c in 'R^car } -->
+   sequent { <H> >- ('a +['R] 'b) *['R] 'c = ('a *['R] 'c) +['R] ('b *['R] 'c) in 'R^car }
+
+interactive ringuce_right_distib1 {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} unitringCE[i:l] :
+   [wf] sequent { <H> >- 'R in unitringCE[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'R^car } -->
+   [wf] sequent { <H> >- 'b in 'R^car } -->
+   [wf] sequent { <H> >- 'c in 'R^car } -->
+   sequent { <H> >- ('a *['R] 'c) +['R] ('b *['R] 'c) = ('a +['R] 'b) *['R] 'c in 'R^car }
+
+interactive ringuce_left_distib {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} unitringCE[i:l] :
+   [wf] sequent { <H> >- 'R in unitringCE[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'R^car } -->
+   [wf] sequent { <H> >- 'b in 'R^car } -->
+   [wf] sequent { <H> >- 'c in 'R^car } -->
+   sequent { <H> >- 'a *['R] ('b +['R] 'c) = ('a *['R] 'b) +['R] ('a *['R] 'c) in 'R^car }
+
+interactive ringuce_eqDecidable {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} unitringCE[i:l] :
+   [wf] sequent { <H> >- 'R in unitringCE[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'R^car } -->
+   [wf] sequent { <H> >- 'b in 'R^car } -->
+   [wf] sequent { <H> >- 'a = 'b in 'R^car } -->
+   sequent { <H> >- "assert"{'R^eq 'a 'b} }
+
+interactive ringuce_eqDecidable1 unitringCE[i:l] :
+   [wf] sequent { <H> >- 'R in unitringCE[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'R^car } -->
+   [wf] sequent { <H> >- 'b in 'R^car } -->
+   [wf] sequent { <H> >- "assert"{'R^eq 'a 'b} } -->
+   sequent { <H> >- 'a = 'b in 'R^car }
+
+interactive ringuce_isZero {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} unitringCE[i:l] :
+   [wf] sequent { <H> >- 'R in unitringCE[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'R^car } -->
+   [wf] sequent { <H> >- 'a = 'R^"0" in 'R^car } -->
+   sequent { <H> >- "assert"{isZero{'a; 'R}} }
+
+interactive ringuce_isZero2 unitringCE[i:l] :
+   [wf] sequent { <H> >- 'R in unitringCE[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'R^car } -->
+   [wf] sequent { <H> >- "assert"{isZero{'a; 'R}} } -->
+   sequent { <H> >- 'a = 'R^"0" in 'R^car }
+
+interactive ringuce_left_distib1 {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} unitringCE[i:l] :
+   [wf] sequent { <H> >- 'R in unitringCE[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'R^car } -->
+   [wf] sequent { <H> >- 'b in 'R^car } -->
+   [wf] sequent { <H> >- 'c in 'R^car } -->
+   sequent { <H> >- ('a *['R] 'b) +['R] ('a *['R] 'c) = 'a *['R] ('b +['R] 'c) in 'R^car }
+
+interactive add_eq1 {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} unitringCE[i:l] :
+   [wf] sequent { <H> >- 'R in unitringCE[i:l] } -->
+   [wf] sequent { <H> >- 'a = 'b in 'R^car } -->
+   [wf] sequent { <H> >- 'c in 'R^car } -->
+   sequent { <H> >- 'a +['R] 'c = 'b +['R] 'c in 'R^car }
+
+interactive add_eq2 {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} unitringCE[i:l] :
+   [wf] sequent { <H> >- 'R in unitringCE[i:l] } -->
+   [wf] sequent { <H> >- 'a = 'b in 'R^car } -->
+   [wf] sequent { <H> >- 'c in 'R^car } -->
+   sequent { <H> >- 'c +['R] 'a = 'c +['R] 'b in 'R^car }
+
+interactive mul_eq1 {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} unitringCE[i:l] :
+   [wf] sequent { <H> >- 'R in unitringCE[i:l] } -->
+   [wf] sequent { <H> >- 'a = 'b in 'R^car } -->
+   [wf] sequent { <H> >- 'c in 'R^car } -->
+   sequent { <H> >- 'a *['R] 'c = 'b *['R] 'c in 'R^car }
+
+interactive mul_eq2 {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} unitringCE[i:l] :
+   [wf] sequent { <H> >- 'R in unitringCE[i:l] } -->
+   [wf] sequent { <H> >- 'a = 'b in 'R^car } -->
+   [wf] sequent { <H> >- 'c in 'R^car } -->
+   sequent { <H> >- 'c *['R] 'a = 'c *['R] 'b in 'R^car }
+
+doc <:doc<
+   @begin[doc]
+   @modsection{Hierarchy}
+
+   @end[doc]
+>>
+interactive unitringCE_subtype_unitring {| intro [] |} :
+   sequent { <H> >- unitringCE[i:l] subtype unitring[i:l] }
+
+interactive unitringCE_subtype_ring {| intro [] |} :
+   sequent { <H> >- unitringCE[i:l] subtype ring[i:l] }
 doc docoff
 
 (************************************************************************
  * Polynomials                                                          *
  ************************************************************************)
-interactive poly_ring {| intro [] |} :
-   [wf] sequent { <H> >- 'F in unitringCE[i:l] } -->
-   sequent { <H> >- poly{'F} in unitringCE[i:l] }
+doc <:doc<
+   @begin[doc]
+   @modsection{Polynomial ring}
+   @modsubsection{Rewrites}
 
+   @end[doc]
+>>
+define unfold_poly_ring : poly_ring{'F} <-->
+   { car = poly{'F};
+     "*" = lambda{p. lambda{q. mul_poly{'p; 'q; 'F}}};
+     "+" = lambda{p. lambda{q. add_poly{'p; 'q; 'F}}};
+     "0" = zero_poly{'F};
+     neg = lambda{p. neg_poly{'p; 'F}};
+     "1" = unit_poly{'F};
+     "eq" = lambda{p. lambda{q. eq_poly{'p; 'q; 'F}}}
+   }
+doc docoff
+
+let fold_poly_ring = makeFoldC << poly_ring{'F} >> unfold_poly_ring
+
+interactive neg_neg1 {| intro [intro_typeinf <<'R>>] |} unitringCE[i:l] :
+   [wf] sequent { <H> >- 'R in unitringCE[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'R^car } -->
+   sequent { <H> >- 'a = 'R^neg ('R^neg 'a) in 'R^car }
+
+interactive neg_neg2 {| intro [intro_typeinf <<'R>>] |} unitringCE[i:l] :
+   [wf] sequent { <H> >- 'R in unitringCE[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'R^car } -->
+   sequent { <H> >- 'R^neg ('R^neg 'a) = 'a in 'R^car }
+
+interactive neg_of_addid {| intro [intro_typeinf <<'R>>] |} unitringCE[i:l] :
+   [wf] sequent { <H> >- 'R in unitringCE[i:l] } -->
+   sequent { <H> >- 'R^neg 'R^"0" = 'R^"0" in 'R^car }
+
+interactive neg_of_addid2 {| intro [intro_typeinf <<'R>>] |} unitringCE[i:l] :
+   [wf] sequent { <H> >- 'R in unitringCE[i:l] } -->
+   sequent { <H> >- 'R^"0" = 'R^neg 'R^"0" in 'R^car }
+
+
+interactive ringpoly_coeff_addpoly {| intro [AutoMustComplete; intro_typeinf <<'F>>] |} unitringCE[i:l] :
+   [wf] sequent { <H> >- 'F in unitringCE[i:l] } -->
+   [wf] sequent { <H> >- 'p in poly{'F} } -->
+   [wf] sequent { <H> >- 'q in poly{'F} } -->
+   [wf] sequent { <H> >- 'n in nat } -->
+   sequent { <H> >- coeff{add_poly{'p; 'q; 'F}; 'n; 'F} = coeff{'p; 'n; 'F} +@ coeff{'q; 'n; 'F} in 'F^car }
+
+
+interactive ringpoly_add_assoc {| intro [AutoMustComplete; intro_typeinf <<'F>>] |} unitringCE[i:l] :
+   [wf] sequent { <H> >- 'F in unitringCE[i:l] } -->
+   [wf] sequent { <H> >- 'p in poly{'F} } -->
+   [wf] sequent { <H> >- 'q in poly{'F} } -->
+   [wf] sequent { <H> >- 't in poly{'F} } -->
+   sequent { <H> >- add_poly{add_poly{'p; 'q; 'F}; 't; 'F} = add_poly{'p; add_poly{'q; 't; 'F}; 'F} in poly{'F} }
+
+interactive ringpoly_add_assoc2 {| intro [AutoMustComplete; intro_typeinf <<'F>>] |} unitringCE[i:l] :
+   [wf] sequent { <H> >- 'F in unitringCE[i:l] } -->
+   [wf] sequent { <H> >- 'p in poly{'F} } -->
+   [wf] sequent { <H> >- 'q in poly{'F} } -->
+   [wf] sequent { <H> >- 't in poly{'F} } -->
+   sequent { <H> >- add_poly{'p; add_poly{'q; 't; 'F}; 'F} = add_poly{add_poly{'p; 'q; 'F}; 't; 'F} in poly{'F} }
+
+interactive ringpoly_mul_assoc {| intro [AutoMustComplete; intro_typeinf <<'F>>] |} unitringCE[i:l] :
+   [wf] sequent { <H> >- 'F in unitringCE[i:l] } -->
+   [wf] sequent { <H> >- 'p in poly{'F} } -->
+   [wf] sequent { <H> >- 'q in poly{'F} } -->
+   [wf] sequent { <H> >- 't in poly{'F} } -->
+   sequent { <H> >- mul_poly{mul_poly{'p; 'q; 'F}; 't; 'F} = mul_poly{'p; mul_poly{'q; 't; 'F}; 'F} in poly{'F} }
+
+interactive ringpoly_mul_assoc2 {| intro [AutoMustComplete; intro_typeinf <<'F>>] |} unitringCE[i:l] :
+   [wf] sequent { <H> >- 'F in unitringCE[i:l] } -->
+   [wf] sequent { <H> >- 'p in poly{'F} } -->
+   [wf] sequent { <H> >- 'q in poly{'F} } -->
+   [wf] sequent { <H> >- 't in poly{'F} } -->
+   sequent { <H> >- mul_poly{'p; mul_poly{'q; 't; 'F}; 'F} = mul_poly{mul_poly{'p; 'q; 'F}; 't; 'F} in poly{'F} }
+
+interactive ringpoly_addid {| intro [intro_typeinf <<'F>>] |} unitringCE[i:l] :
+   [wf] sequent { <H> >- 'F in unitringCE[i:l] } -->
+   [wf] sequent { <H> >- 'p in poly{'F} } -->
+   sequent { <H> >- add_poly{zero_poly{'F}; 'p; 'F} = 'p in poly{'F} }
+
+interactive ringpoly_addid2 {| intro [intro_typeinf <<'F>>] |} unitringCE[i:l] :
+   [wf] sequent { <H> >- 'F in unitringCE[i:l] } -->
+   [wf] sequent { <H> >- 'p in poly{'F} } -->
+   sequent { <H> >- 'p = add_poly{zero_poly{'F}; 'p; 'F} in poly{'F} }
+
+interactive ringpoly_left_neg {| intro [AutoMustComplete; intro_typeinf <<'F>>] |} unitringCE[i:l] :
+   [wf] sequent { <H> >- 'F in unitringCE[i:l] } -->
+   [wf] sequent { <H> >- 'p in poly{'F} } -->
+   sequent { <H> >- add_poly{neg_poly{'p; 'F}; 'p; 'F} = zero_poly{'F} in poly{'F} }
+
+interactive ringpoly_left_neg2 {| intro [AutoMustComplete; intro_typeinf <<'F>>] |} unitringCE[i:l] :
+   [wf] sequent { <H> >- 'F in unitringCE[i:l] } -->
+   [wf] sequent { <H> >- 'p in poly{'F} } -->
+   sequent { <H> >- zero_poly{'F} = add_poly{neg_poly{'p; 'F}; 'p; 'F} in poly{'F} }
+
+interactive ringpoly_left_id {| intro [intro_typeinf <<'F>>] |} unitringCE[i:l] :
+   [wf] sequent { <H> >- 'F in unitringCE[i:l] } -->
+   [wf] sequent { <H> >- 'p in poly{'F} } -->
+   sequent { <H> >- mul_poly{unit_poly{'F}; 'p; 'F} = 'p in poly{'F} }
+
+interactive ringpoly_left_id2 {| intro [intro_typeinf <<'F>>] |} unitringCE[i:l] :
+   [wf] sequent { <H> >- 'F in unitringCE[i:l] } -->
+   [wf] sequent { <H> >- 'p in poly{'F} } -->
+   sequent { <H> >- 'p = mul_poly{unit_poly{'F}; 'p; 'F} in poly{'F} }
+
+interactive ringpoly_add_commut {| intro [intro_typeinf <<'F>>] |} unitringCE[i:l] :
+   [wf] sequent { <H> >- 'F in unitringCE[i:l] } -->
+   [wf] sequent { <H> >- 'p in poly{'F} } -->
+   [wf] sequent { <H> >- 'q in poly{'F} } -->
+   sequent { <H> >- add_poly{'p; 'q; 'F} = add_poly{'q; 'p; 'F} in poly{'F} }
+
+interactive ringpoly_mul_commut {| intro [intro_typeinf <<'F>>] |} unitringCE[i:l] :
+   [wf] sequent { <H> >- 'F in unitringCE[i:l] } -->
+   [wf] sequent { <H> >- 'p in poly{'F} } -->
+   [wf] sequent { <H> >- 'q in poly{'F} } -->
+   sequent { <H> >- mul_poly{'p; 'q; 'F} = mul_poly{'q; 'p; 'F} in poly{'F} }
+
+interactive ringpoly_right_id {| intro [intro_typeinf <<'F>>] |} unitringCE[i:l] :
+   [wf] sequent { <H> >- 'F in unitringCE[i:l] } -->
+   [wf] sequent { <H> >- 'p in poly{'F} } -->
+   sequent { <H> >- mul_poly{'p; unit_poly{'F}; 'F} = 'p in poly{'F} }
+
+interactive ringpoly_right_id2 {| intro [intro_typeinf <<'F>>] |} unitringCE[i:l] :
+   [wf] sequent { <H> >- 'F in unitringCE[i:l] } -->
+   [wf] sequent { <H> >- 'p in poly{'F} } -->
+   sequent { <H> >- 'p = mul_poly{'p; unit_poly{'F}; 'F} in poly{'F} }
+
+interactive ringpoly_right_distrib {| intro [intro_typeinf <<'F>>] |} unitringCE[i:l] :
+   [wf] sequent { <H> >- 'F in unitringCE[i:l] } -->
+   [wf] sequent { <H> >- 'p in poly{'F} } -->
+   [wf] sequent { <H> >- 'q in poly{'F} } -->
+   [wf] sequent { <H> >- 't in poly{'F} } -->
+   sequent { <H> >- mul_poly{add_poly{'p; 'q; 'F}; 't; 'F} = add_poly{mul_poly{'p; 't; 'F}; mul_poly{'q; 't; 'F}; 'F} in poly{'F} }
+
+interactive ringpoly_right_distrib1 {| intro [intro_typeinf <<'F>>] |} unitringCE[i:l] :
+   [wf] sequent { <H> >- 'F in unitringCE[i:l] } -->
+   [wf] sequent { <H> >- 'p in poly{'F} } -->
+   [wf] sequent { <H> >- 'q in poly{'F} } -->
+   [wf] sequent { <H> >- 't in poly{'F} } -->
+   sequent { <H> >- add_poly{mul_poly{'p; 't; 'F}; mul_poly{'q; 't; 'F}; 'F} = mul_poly{add_poly{'p; 'q; 'F}; 't; 'F} in poly{'F} }
+
+interactive ringpoly_left_distrib {| intro [intro_typeinf <<'F>>] |} unitringCE[i:l] :
+   [wf] sequent { <H> >- 'F in unitringCE[i:l] } -->
+   [wf] sequent { <H> >- 'p in poly{'F} } -->
+   [wf] sequent { <H> >- 'q in poly{'F} } -->
+   [wf] sequent { <H> >- 't in poly{'F} } -->
+   sequent { <H> >- mul_poly{'p; add_poly{'q; 't; 'F}; 'F} = add_poly{mul_poly{'p; 'q; 'F}; mul_poly{'p; 't; 'F}; 'F} in poly{'F} }
+
+interactive ringpoly_left_distrib1 {| intro [intro_typeinf <<'F>>] |} unitringCE[i:l] :
+   [wf] sequent { <H> >- 'F in unitringCE[i:l] } -->
+   [wf] sequent { <H> >- 'p in poly{'F} } -->
+   [wf] sequent { <H> >- 'q in poly{'F} } -->
+   [wf] sequent { <H> >- 't in poly{'F} } -->
+   sequent { <H> >- add_poly{mul_poly{'p; 'q; 'F}; mul_poly{'p; 't; 'F}; 'F} = mul_poly{'p; add_poly{'q; 't; 'F}; 'F} in poly{'F} }
+
+(*interactive eval_add_distrib {| intro [intro_typeinf <<'F>>] |} fieldE[i:l] :
+   [wf] sequent { <H> >- 'p in poly{'F} } -->
+   [wf] sequent { <H> >- 'q in poly{'F} } -->
+   [wf] sequent { <H> >- 'a in 'F^car } -->
+   [wf] sequent { <H> >- 'F in fieldE[i:l] } -->
+   sequent { <H> >- eval_poly{'p; 'a; 'F} +['F] eval_poly{'q; 'a; 'F} = eval_poly{add_poly{'p; 'q; 'F}; 'a; 'F} in 'F^car }
+
+interactive eval_mul_distrib {| intro [intro_typeinf <<'F>>] |} fieldE[i:l] :
+   [wf] sequent { <H> >- 'p in poly{'F} } -->
+   [wf] sequent { <H> >- 'q in poly{'F} } -->
+   [wf] sequent { <H> >- 'a in 'F^car } -->
+   [wf] sequent { <H> >- 'F in fieldE[i:l] } -->
+   sequent { <H> >- eval_poly{'p; 'a; 'F} *['F] eval_poly{'q; 'a; 'F} = eval_poly{mul_poly{'p; 'q; 'F}; 'a; 'F} in 'F^car }
+*)
+interactive ringpoly_eqdec {| intro [intro_typeinf <<'F>>] |} unitringCE[i:l] :
+   [wf] sequent { <H> >- 'F in unitringCE[i:l] } -->
+   [wf] sequent { <H> >- 'p in poly{'F} } -->
+   [wf] sequent { <H> >- 'q in poly{'F} } -->
+   [wf] sequent { <H> >- 'p = 'q in poly{'F} } -->
+   sequent { <H> >- "assert"{eq_poly{'p; 'q; 'F}} }
+
+interactive ringpoly_eqdec2 unitringCE[i:l] :
+   [wf] sequent { <H> >- 'F in unitringCE[i:l] } -->
+   [wf] sequent { <H> >- 'p in poly{'F} } -->
+   [wf] sequent { <H> >- 'q in poly{'F} } -->
+   [wf] sequent { <H> >- "assert"{eq_poly{'p; 'q; 'F}} } -->
+   sequent { <H> >- 'p = 'q in poly{'F} }
+
+doc <:doc<
+   @begin[doc]
+   @modsubsection{Properties}
+
+   @end[doc]
+>>
+interactive poly_ring_uce {| intro [] |} :
+   [wf] sequent { <H> >- 'F in unitringCE[i:l] } -->
+   sequent { <H> >- poly_ring{'F} in unitringCE[i:l] }
+doc docoff
 
 (************************************************************************
  * DISPLAY FOfMS                                                        *

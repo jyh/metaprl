@@ -419,6 +419,11 @@ interactive lt_wf {| intro [] |} :
    [wf] sequent { <H> >- 'b in int } -->
    sequent { <H> >- "type"{lt{'a; 'b}} }
 
+interactive lt_univ {| intro [] |} :
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   sequent { <H> >- lt{'a; 'b} in univ[i:l] }
+
 doc <:doc<
    @begin[doc]
    @modsubsection{Correspondence between <<beq_int{'a;'b}>> and <<'a='b in int>> }

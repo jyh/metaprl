@@ -112,6 +112,9 @@ doc <:doc< @doc{@rules} >>
 interactive natType {| intro [] |} :
    sequent { <H> >- "type"{nat} }
 
+interactive natUniv {| intro [] |} :
+   sequent { <H> >- nat in univ[i:l] }
+
 interactive natMemberEquality {| intro [AutoMustComplete] |} :
    sequent { <H> >- 'a='b in int} -->
    sequent { <H> >- 'a >= 0}  -->
@@ -165,6 +168,10 @@ interactive indEquality {| intro [complete_unless_member]; eqcd |} bind{z. 'T['z
 interactive finiteNatType {| intro [] |} :
    sequent { <H> >- 'k in int} -->
    sequent { <H> >- "type"{nat{'k}} }
+
+interactive finiteNatUniv {| intro [] |} :
+   sequent { <H> >- 'k in int} -->
+   sequent { <H> >- nat{'k} in univ[i:l] }
 
 interactive finiteNatMemberEquality {| intro [] |} :
    sequent { <H> >- 'a = 'b in int_seg{0; 'k} } -->

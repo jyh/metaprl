@@ -168,10 +168,16 @@ doc docoff
 (************************************************************************
  * Polynomials                                                          *
  ************************************************************************)
+doc <:doc<
+   @begin[doc]
+   @modsection{Polynomial ring}
+
+   @end[doc]
+>>
 interactive poly_intdomain {| intro [] |} :
    [wf] sequent { <H> >- 'F in intDomainE[i:l] } -->
-   sequent { <H> >- poly{'F} in intDomainE[i:l] }
-
+   sequent { <H> >- poly_ring{'F} in intDomainE[i:l] }
+doc docoff
 
 (************************************************************************
  * DISPLAY FOfMS                                                        *

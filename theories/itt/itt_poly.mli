@@ -40,6 +40,7 @@ open Tactic_type.Conversionals
 
 declare poly{'f}
 declare zero_poly{'f}
+declare unit_poly{'f}
 declare isZero{'a; 'f}
 declare isZeroPoly{'p; 'f}
 declare deg{'p}
@@ -48,9 +49,11 @@ declare normalize{'p; 'f}
 declare add_const{'p; 'a; 'f}
 declare mul_const{'p; 'a; 'f}
 declare add_poly{'p; 'q; 'f}
+declare neg_poly{'p; 'f}
 declare sum{'i; 'j; x.'P['x]; 'f}
 declare mul_poly{'p; 'q; 'f}
 declare eval_poly{'p; 'a; 'f}
+declare eq_poly{'p; 'q; 'f}
 
 (************************************************************************
  * TACTICS                                                              *
@@ -58,6 +61,7 @@ declare eval_poly{'p; 'a; 'f}
 
 topval unfold_poly : conv
 topval unfold_zero_poly : conv
+topval unfold_unit_poly : conv
 topval unfold_isZero : conv
 topval unfold_isZeroPoly : conv
 topval unfold_deg : conv
@@ -67,13 +71,16 @@ topval unfold_normalize1 : conv
 topval unfold_add_const : conv
 topval unfold_mul_const : conv
 topval unfold_add_poly : conv
+topval unfold_neg_poly : conv
 topval unfold_sum: conv
 topval unfold_mul_poly : conv
 topval unfold_eval_poly : conv
 topval unfold_eval_poly1 : conv
+topval unfold_eq_poly : conv
 
 topval fold_poly : conv
 topval fold_zero_poly : conv
+topval fold_unit_poly : conv
 topval fold_isZero : conv
 topval fold_isZeroPoly : conv
 topval fold_deg : conv
@@ -83,9 +90,15 @@ topval fold_normalize1 : conv
 topval fold_add_const : conv
 topval fold_mul_const : conv
 topval fold_add_poly : conv
+topval fold_neg_poly : conv
+(*topval fold_sum: conv*)
 topval fold_mul_poly : conv
 topval fold_eval_poly : conv
 topval fold_eval_poly1 : conv
+topval fold_eq_poly : conv
+
+topval coeffZeropolyC : conv
+topval coeffZeropoly1C : conv
 
 (*
  * -*-

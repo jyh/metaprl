@@ -45,6 +45,7 @@ open Dtactic
 open Top_conversionals
 
 open Itt_grouplikeobj
+open Itt_group
 open Itt_equal
 
 let _ =
@@ -69,6 +70,9 @@ define unfold_poly : poly{'F} <-->
 
 define unfold_zero_poly : zero_poly{'F} <-->
    (0, lambda{x. 'F^"0"})
+
+define unfold_unit_poly : unit_poly{'F} <-->
+   (0, lambda{x. 'F^"1"})
 
 define unfold_isZeroPoly : isZeroPoly{'p; 'F} <-->
    band{ (fst{'p} =@ 0); isZero{(snd{'p} 0); 'F} }
@@ -101,6 +105,9 @@ define unfold_mul_const : mul_const{'p; 'a; 'F} <-->
 define unfold_add_poly : add_poly{'p; 'q; 'F} <-->
    normalize{(max{fst{'p}; fst{'q}}, lambda{x. coeff{'p;'x;'F} +['F] coeff{'q;'x;'F}}); 'F}
 
+define unfold_neg_poly : neg_poly{'p; 'F} <-->
+   (fst{'p}, lambda{x. ('F^neg (snd{'p} 'x))})
+
 define unfold_sum : sum{'i; 'j; x.'P['x]; 'F} <-->
    ind{('j -@ 'i); k,down. 'down +['F] 'P['i +@ 'k]; 'P['i]; k,up. 'up +['F] 'P['i +@ 'k] }
 
@@ -123,10 +130,15 @@ define unfold_eval_poly : eval_poly{'p; 'a; 'F} <-->
 interactive_rw unfold_eval_poly1 : eval_poly{('u, 'v); 'a; 'F} <-->
    ind{ 'u; ('v 0); k,up.
         ('up +['F] (natpower{'F; 'a; 'k} *['F] ('v 'k))) }
+
+define unfold_eq_poly : eq_poly{'p; 'q; 'F} <-->
+   band{ (fst{'p} =@ fst{'q});
+         ind{fst{'p}; 'F^eq (snd{'p} 0) (snd{'q} 0); k, up. band{'up; 'F^eq (snd{'p} 'k) (snd{'q} 'k)}}}
 doc docoff
 
 let fold_poly = makeFoldC << poly{'F} >> unfold_poly
 let fold_zero_poly = makeFoldC << zero_poly{'F} >> unfold_zero_poly
+let fold_unit_poly = makeFoldC << unit_poly{'F} >> unfold_unit_poly
 let fold_isZero = makeFoldC << isZero{'a; 'F} >> unfold_isZero
 let fold_isZeroPoly = makeFoldC << isZeroPoly{'p; 'F} >> unfold_isZeroPoly
 let fold_deg = makeFoldC << deg{'p} >> unfold_deg
@@ -136,9 +148,12 @@ let fold_normalize1 = makeFoldC << normalize{('u, 'v); 'F} >> unfold_normalize1
 let fold_add_const = makeFoldC << add_const{'p; 'a; 'F} >> unfold_add_const
 let fold_mul_const = makeFoldC << mul_const{'p; 'a; 'F} >> unfold_mul_const
 let fold_add_poly = makeFoldC << add_poly{'p; 'q; 'F} >> unfold_add_poly
+let fold_neg_poly = makeFoldC << neg_poly{'p; 'F} >> unfold_neg_poly
+(*let fold_sum = makeFoldC << sum{'i; 'j; x.'P['x]; 'F} >> unfold_sum*)
 let fold_mul_poly = makeFoldC << mul_poly{'p; 'q; 'F} >> unfold_mul_poly
 let fold_eval_poly = makeFoldC << eval_poly{'p; 'a; 'F} >> unfold_eval_poly
 let fold_eval_poly1 = makeFoldC << eval_poly{('u, 'v); 'a; 'F} >> unfold_eval_poly1
+let fold_eq_poly = makeFoldC << eq_poly{'p; 'q; 'F} >> unfold_eq_poly
 
 interactive nat_is_int {| intro[AutoMustComplete] |} :
    [wf] sequent { <H> >- 'a='b in nat} -->
@@ -174,12 +189,27 @@ interactive sub_ge_zero {| intro [] |} :
  ************************************************************************)
 
 interactive_rw reduce_coeff_degree1 {| reduce |} :
-   (fst{'p} in int) -->
+   (fst{'p} in nat) -->
    coeff{'p; fst{'p}; 'F} <--> (snd{'p} fst{'p})
 
+interactive_rw reduce_coeff_0 {| reduce |} :
+   coeff{'p; 0; 'F} <--> (snd{'p} 0)
+
 interactive_rw reduce_coeff_degree2 {| reduce |} :
-   ('u in int) -->
+   ('u in nat) -->
    coeff{('u, 'v); 'u; 'F} <--> ('v 'u)
+
+interactive_rw reduce_coeff_zeropoly1 :
+   ('n in nat) -->
+   coeff{(0, lambda{x. 'F^"0"}); 'n; 'F} <--> ('F^"0")
+
+let coeffZeropolyC = reduce_coeff_zeropoly1
+
+interactive_rw reduce_coeff_zeropoly2 :
+   ('n in nat) -->
+   coeff{zero_poly{'F}; 'n; 'F} <--> ('F^"0")
+
+let coeffZeropoly1C = reduce_coeff_zeropoly2
 
 interactive_rw reduce_eval_0 {| reduce |} :
    eval_poly{(0, 'v); 'a; 'F} <--> ('v 0)
@@ -200,6 +230,12 @@ interactive poly_wf {| intro [] |} :
    [wf] sequent { <H> >- 'F^"0" in 'F^car } -->
    [wf] sequent { <H>; x: 'F^car >- 'F^eq 'x 'F^"0" in bool } -->
    sequent { <H> >- poly{'F} Type }
+
+interactive poly_univ {| intro [] |} :
+   [wf] sequent { <H> >- 'F^car in univ[i:l] } -->
+   [wf] sequent { <H> >- 'F^"0" in 'F^car } -->
+   [wf] sequent { <H>; x: 'F^car >- 'F^eq 'x 'F^"0" in bool } -->
+   sequent { <H> >- poly{'F} in univ[i:l] }
 
 interactive poly_intro {| intro [AutoMustComplete] |} :
    [wf] sequent { <H> >- 'p in n: nat * (nat{'n +@ 1} -> 'F^car) } -->
@@ -225,6 +261,12 @@ interactive zero_poly_wf {| intro [] |} :
    [wf] sequent { <H> >- 'F^"0" in 'F^car } -->
    [wf] sequent { <H>; x: 'F^car >- 'F^eq 'x 'F^"0" in bool } -->
    sequent { <H> >- zero_poly{'F} in poly{'F} }
+
+interactive unit_poly_wf {| intro [] |} :
+   [wf] sequent { <H> >- 'F^"1" in 'F^car } -->
+   [wf] sequent { <H> >- 'F^"0" in 'F^car } -->
+   [wf] sequent { <H>; x: 'F^car >- 'F^eq 'x 'F^"0" in bool } -->
+   sequent { <H> >- unit_poly{'F} in poly{'F} }
 
 interactive isZeroPoly_wf {| intro [] |} :
    [wf] sequent { <H> >- fst{'p} in int } -->
@@ -268,6 +310,14 @@ interactive add_poly_wf {| intro [] |} :
    [wf] sequent { <H> >- 'q in poly{'F} } -->
    sequent { <H> >- add_poly{'p; 'q; 'F} in poly{'F} }
 
+interactive neg_poly_wf {| intro [] |} :
+   [wf] sequent { <H> >- 'p in poly{'F} } -->
+   [wf] sequent { <H> >- 'F^"0" in 'F^car } -->
+   [wf] sequent { <H>; x: 'F^car; y: 'F^car >- 'F^eq 'x 'y in bool } -->
+   [wf] sequent { <H>; x: 'F^car >- 'F^neg 'x in 'F^car } -->
+   sequent { <H>; x: 'F^car; "not"{"assert"{isZero{'x; 'F}}}; "assert"{isZero{'F^neg 'x; 'F}} >- "false" } -->
+   sequent { <H> >- neg_poly{'p; 'F} in poly{'F} }
+
 interactive sum_wf {| intro [] |} :
    [wf] sequent { <H> >- 'i in int } -->
    [wf] sequent { <H> >- 'j in int } -->
@@ -282,7 +332,6 @@ interactive mul_poly_wf {| intro [] |} :
    [wf] sequent { <H>; x: 'F^car >- 'F^eq 'x 'F^"0" in bool } -->
    [wf] sequent { <H>; x: 'F^car; y: 'F^car >- 'x +['F] 'y in 'F^car } -->
    [wf] sequent { <H>; x: 'F^car; y: 'F^car >- 'x *['F] 'y in 'F^car } -->
-   [wf] sequent { <H>; x1: 'F^car; y1: 'F^car; x2: 'F^car; y2: 'F^car; 'x1 = 'x2 in 'F^car; 'y1 = 'y2 in 'F^car >- 'x1 +['F] 'y1 = 'x2 +['F] 'y2 in 'F^car } -->
    sequent { <H> >- mul_poly{'p; 'q; 'F} in poly{'F} }
 
 interactive eval_poly_wf {| intro [] |} :
@@ -295,6 +344,25 @@ interactive eval_poly_wf {| intro [] |} :
    [wf] sequent { <H>; x: 'F^car; y: 'F^car >- 'x *['F] 'y in 'F^car } -->
    sequent { <H> >- eval_poly{'p; 'a; 'F} in 'F^car }
 
+interactive eq_poly_wf {| intro [] |} :
+   [wf] sequent { <H> >- 'p in poly{'F} } -->
+   [wf] sequent { <H> >- 'q in poly{'F} } -->
+   [wf] sequent { <H> >- 'F^"0" in 'F^car } -->
+   [wf] sequent { <H>; x: 'F^car; y: 'F^car >- 'F^eq 'x 'y in bool } -->
+   sequent { <H> >- eq_poly{'p; 'q; 'F} in bool }
+
+doc <:doc<
+   @begin[doc]
+   @modsubsection{Properties}
+
+   @end[doc]
+>>
+interactive poly_normalize {| intro [] |} :
+   [wf] sequent { <H> >- 'p in poly{'F} } -->
+   [wf] sequent { <H> >- 'F^"0" in 'F^car } -->
+   [wf] sequent { <H>; x: 'F^car >- 'F^eq 'x 'F^"0" in bool } -->
+   sequent { <H> >- normalize{'p; 'F} = 'p in poly{'F} }
+
 interactive eval_leadingcoeff_isZero {| intro [] |} :
    [wf] sequent { <H> >- 'p in n: nat * (nat{'n +@ 1} -> 'F^car) } -->
    [wf] sequent { <H> >- 'a in 'F^car } -->
@@ -303,6 +371,8 @@ interactive eval_leadingcoeff_isZero {| intro [] |} :
    [wf] sequent { <H>; x: 'F^car >- 'F^eq 'x 'F^"0" in bool } -->
    [wf] sequent { <H>; x: 'F^car; y: 'F^car >- 'x +['F] 'y in 'F^car } -->
    [wf] sequent { <H>; x: 'F^car; y: 'F^car >- 'x *['F] 'y in 'F^car } -->
+   [wf] sequent { <H>; x: 'F^car; y: 'F^car; "assert"{isZero{'y; 'F}} >- "assert"{isZero{'x *['F] 'y; 'F}} } -->
+   [wf] sequent { <H>; x: 'F^car; y: 'F^car; "assert"{isZero{'y; 'F}} >- 'x +['F] 'y = 'x in 'F^car } -->
    [wf] sequent { <H> >- fst{'p} > 0 } -->
    sequent { <H> >- "assert"{isZero{(snd{'p} fst{'p}); 'F}} } -->
    sequent { <H> >- eval_poly{'p; 'a; 'F} = eval_poly{((fst{'p} -@ 1), snd{'p}); 'a; 'F} in 'F^car }
@@ -316,6 +386,8 @@ interactive eval_leadingcoeff_isZero1 {| intro [] |} :
    [wf] sequent { <H>; x: 'F^car >- 'F^eq 'x 'F^"0" in bool } -->
    [wf] sequent { <H>; x: 'F^car; y: 'F^car >- 'x +['F] 'y in 'F^car } -->
    [wf] sequent { <H>; x: 'F^car; y: 'F^car >- 'x *['F] 'y in 'F^car } -->
+   [wf] sequent { <H>; x: 'F^car; y: 'F^car; "assert"{isZero{'y; 'F}} >- "assert"{isZero{'x *['F] 'y; 'F}} } -->
+   [wf] sequent { <H>; x: 'F^car; y: 'F^car; "assert"{isZero{'y; 'F}} >- 'x +['F] 'y = 'x in 'F^car } -->
    sequent { <H> >- "assert"{isZero{('v ('u +@ 1)); 'F}} } -->
    sequent { <H> >- eval_poly{('u +@ 1, 'v); 'a; 'F} = eval_poly{('u, 'v); 'a; 'F} in 'F^car }
 
@@ -327,8 +399,17 @@ interactive eval_normalize {| intro [] |} :
    [wf] sequent { <H>; x: 'F^car >- 'F^eq 'x 'F^"0" in bool } -->
    [wf] sequent { <H>; x: 'F^car; y: 'F^car >- 'x +['F] 'y in 'F^car } -->
    [wf] sequent { <H>; x: 'F^car; y: 'F^car >- 'x *['F] 'y in 'F^car } -->
+   [wf] sequent { <H>; x: 'F^car; y: 'F^car; "assert"{isZero{'y; 'F}} >- "assert"{isZero{'x *['F] 'y; 'F}} } -->
+   [wf] sequent { <H>; x: 'F^car; y: 'F^car; "assert"{isZero{'y; 'F}} >- 'x +['F] 'y = 'x in 'F^car } -->
    sequent { <H> >- eval_poly{normalize{'p; 'F}; 'a; 'F} = eval_poly{'p; 'a; 'F} in 'F^car }
 
+(*interactive coeff_normalize {| intro [] |} :
+   [wf] sequent { <H> >- 'p in n: nat * (nat{'n +@ 1} -> 'F^car) } -->
+   [wf] sequent { <H> >- 'i in nat } -->
+   [wf] sequent { <H> >- 'F^"0" in 'F^car } -->
+   [wf] sequent { <H>; x: 'F^car >- 'F^eq 'x 'F^"0" in bool } -->
+   sequent { <H> >- coeff{normalize{'p; 'F}; 'i; 'F} = coeff{'p; 'i; 'F} in 'F^car }
+*)
 (*interactive eval_add_distrib {| intro [intro_typeinf <<'F>>] |} fieldE[i:l] :
    [wf] sequent { <H> >- 'p in poly{'F} } -->
    [wf] sequent { <H> >- 'q in poly{'F} } -->
@@ -347,14 +428,22 @@ interactive eval_mul_distrib {| intro [intro_typeinf <<'F>>] |} fieldE[i:l] :
  * DISPLAY FOfMS                                                        *
  ************************************************************************)
 
+prec prec_neg
 prec prec_add
+
+prec prec_add < prec_neg
 prec prec_add < prec_mul
+prec prec_neg < prec_mul
+prec prec_neg < prec_inv
 
 dform poly_df : except_mode[src] :: poly{'F} =
    slot{'F} `"[x]"
 
 dform zero_poly_df : except_mode[src] :: zero_poly{'F} =
    `"zero_poly(" slot{'F} `")"
+
+dform unit_poly_df : except_mode[src] :: unit_poly{'F} =
+   `"unit_poly(" slot{'F} `")"
 
 dform isZero_df : except_mode[src] :: isZero{'a; 'F} =
    `"isZero(" slot{'a} `"; " slot{'F} `")"
@@ -380,6 +469,9 @@ dform mul_poly_const_df : except_mode[src] :: parens :: "prec"[prec_mul] :: mul_
 dform add_poly_df : except_mode[src] :: parens :: "prec"[prec_add] :: add_poly{'p; 'q; 'F} =
    slot{'p} sub{'F} `" + " slot{'q} sub{'F}
 
+dform neg_poly_df : except_mode[src] :: parens :: "prec"[prec_neg] :: neg_poly{'p; 'F} =
+   `"-" slot{'p} sub{'F}
+
 dform mul_poly_df : except_mode[src] :: parens :: "prec"[prec_mul] :: mul_poly{'p; 'q; 'F} =
    slot{'p} sub{'F} `" * " slot{'q} sub{'F}
 
@@ -391,6 +483,9 @@ dform sum_df2 : mode[prl] :: sum{'i; 'j; x.'P; 'F} =
 
 dform eval_poly_df : except_mode[src] :: eval_poly{'p; 'a; 'F} =
    slot{'p} sub{'F} `"(" slot{'a} `")"
+
+dform eq_poly_df : except_mode[src] :: parens :: eq_poly{'p; 'q; 'F} =
+   slot{'p} sub{'F} `" eq " slot{'q} sub{'F}
 
 (*
  * -*-

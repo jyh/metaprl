@@ -422,7 +422,6 @@ interactive ring_additive_group {| intro [AutoMustComplete] |} :
 interactive ring_additive_abelgroup {| intro [AutoMustComplete] |} :
    [wf] sequent { <H> >- 'R in ring[i:l] } -->
    sequent { <H> >- as_additive{'R} in abelg[i:l] }
-
 doc docoff
 
 (************************************************************************
@@ -454,6 +453,31 @@ let inf_add_group _ _ _ eqs opt_eqs defs t =
       eqs, opt_eqs, defs, <<group[i:l]>>   (* hack *)
 
 let resource typeinf += (<< as_additive{'R}>>, inf_add_group)
+
+doc <:doc<
+   @begin[doc]
+   @modsection{Properties}
+
+   @end[doc]
+>>
+interactive neg_neg1 {| intro [intro_typeinf <<'R>>] |} ring[i:l] :
+   [wf] sequent { <H> >- 'R in ring[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'R^car } -->
+   sequent { <H> >- 'a = 'R^neg ('R^neg 'a) in 'R^car }
+
+interactive neg_neg2 {| intro [intro_typeinf <<'R>>] |} ring[i:l] :
+   [wf] sequent { <H> >- 'R in ring[i:l] } -->
+   [wf] sequent { <H> >- 'a in 'R^car } -->
+   sequent { <H> >- 'R^neg ('R^neg 'a) = 'a in 'R^car }
+
+interactive neg_of_addid {| intro [intro_typeinf <<'R>>] |} ring[i:l] :
+   [wf] sequent { <H> >- 'R in ring[i:l] } -->
+   sequent { <H> >- 'R^neg 'R^"0" = 'R^"0" in 'R^car }
+
+interactive neg_of_addid2 {| intro [intro_typeinf <<'R>>] |} ring[i:l] :
+   [wf] sequent { <H> >- 'R in ring[i:l] } -->
+   sequent { <H> >- 'R^"0" = 'R^neg 'R^"0" in 'R^car }
+doc docoff
 
 (************************************************************************
  * RING EXAMPLES                                                        *

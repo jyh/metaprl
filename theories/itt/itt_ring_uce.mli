@@ -43,6 +43,8 @@ declare preunitringE[i:l]
 declare isUnitRingCE{'f}
 declare unitringCE[i:l]
 
+declare poly_ring{'F}
+
 (************************************************************************
  * TACTICS                                                              *
  ************************************************************************)
@@ -57,6 +59,9 @@ topval fold_isUnitRingCE1 : conv
 topval fold_isUnitRingCE : conv
 topval fold_unitringCE1 : conv
 topval fold_unitringCE : conv
+
+topval unfold_poly_ring : conv
+topval fold_poly_ring : conv
 
 (*
  * -*-

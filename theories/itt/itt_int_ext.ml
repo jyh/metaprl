@@ -440,6 +440,16 @@ interactive ge_addMono :
    sequent { <H> >- 'c >= 'd } -->
    sequent { <H> >- ('a +@ 'c) >= ('b +@ 'd) }
 
+interactive min_wf {| intro [] |} :
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   sequent { <H> >- min{'a; 'b} in int }
+
+interactive max_wf {| intro [] |} :
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   sequent { <H> >- max{'a; 'b} in int }
+
 interactive max_self1 {| intro [] |} :
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->
@@ -899,6 +909,11 @@ doc <:doc<
    @modsection{Integer segmentation properties}
    @end[doc]
 >>
+interactive intSegUniv {| intro [] |} :
+   sequent { <H> >- 'a in int} -->
+   sequent { <H> >- 'b in int} -->
+   sequent { <H> >- int_seg{'a; 'b} in univ[i:l] }
+
 interactive intSegType {| intro [] |} :
    sequent { <H> >- 'i in int} -->
    sequent { <H> >- 'j in int} -->

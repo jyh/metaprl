@@ -528,10 +528,10 @@ let normalizeC = sub_elimC thenC
 
 doc <:doc< @docoff >>
 
-(*interactive_rw ge_addContract_rw :
+interactive_rw ge_addContract_rw :
    ( 'a in int ) -->
    ( 'b in int ) -->
-   ('a >= ('b +@ 'a)) <--> (0 >= 'b)*)
+   ('a >= ('b +@ 'a)) <--> (0 >= 'b)
 
 interactive_rw ge_addContract_rw1 {| reduce |} :
    ( 'a in int ) -->

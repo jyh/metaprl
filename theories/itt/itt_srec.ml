@@ -178,8 +178,9 @@ prim srec_memberFormation {| intro [] |} :
  * elements of $B[@srec{T; B[T]}]$.
  * @end[doc]
  *)
+
 prim srec_memberEquality {| intro [] |} :
-   [wf] sequent [squash] { 'H >- 'x1 = 'x2 in 'B[srec{T. 'B['T]}] } -->
+   sequent [squash] { 'H >- 'x1 = 'x2 in 'B[srec{T. 'B['T]}] } -->
    [wf] sequent [squash] { 'H >- "type"{(srec{T. 'B['T]})} } -->
    sequent ['ext] { 'H >- 'x1 = 'x2 in srec{T. 'B['T]} } =
    it
@@ -194,7 +195,8 @@ prim srec_memberEquality {| intro [] |} :
  * the unrollings, it also holds on $x$.
  * @end[doc]
  *)
-prim srecElimination {| elim [ThinOption thinT] |} 'H 'x srec{T. 'B['T]} 'T1 'u 'v 'w 'z univ[i:l] :
+
+prim srecElimination {| elim [ThinOption thinT] |} 'H 'T1 'u 'v 'w 'z univ[i:l] :
    [main] ('g['x; 'T1; 'u; 'w; 'z] : sequent ['ext] {
              'H;
              x: srec{T. 'B['T]};
@@ -214,6 +216,7 @@ prim srecElimination {| elim [ThinOption thinT] |} 'H 'x srec{T. 'B['T]} 'T1 'u 
  * type definition.
  * @end[doc]
  *)
+
 prim srecUnrollElimination {| elim [ThinOption thinT] |} 'H 'x 'y 'u :
    [main] ('g['x; 'y; 'u] : sequent ['ext] { 'H; x: srec{T. 'B['T]}; 'J['x]; y: 'B[srec{T. 'B['T]}]; u: 'x = 'y in 'B[srec{T. 'B['T]}] >- 'C['y] }) -->
    sequent ['ext] { 'H; x: srec{T. 'B['T]}; 'J['x] >- 'C['x] } =
@@ -290,3 +293,27 @@ let resource typeinf += (srecind_term, inf_srecind)
  * End:
  * -*-
  *)
+
+
+
+(* There are some questions about srec. This theory is subject to be changed.
+   1. Is the rule srecType valid?
+
+     Suppose we have B: U_n -> U_{n+1}, but not in U_n->U_n.
+     Or we have B:U_2->U_2, s.t. B is monotone on U_1, but not on U_2.
+     The rule allow us to form  srec{T. B[T]}, but I don't see semantics for this type.
+
+     I think this rule should have additiona assumption: B: U_i -> U_i.
+
+   2. Even if we add this assumption. Would the rule srecElimination be valid?
+
+     Suppose  we have  B: U_2 -> U_2, s.t. B is monotone on U_2, but B is not in U_1 -> U_1.
+     Then would an apllication of rule srecElimination <<univ[1:l]>> be valid?
+     I don't think so.
+     It means that we have to define srec[i:l]{T.B[T]}
+
+
+   3. Om the other hand I want to ba able to constract rec{T.B(T)} even if B is monotone  U_i[A] -> U_i[A]
+   (where U_i[A] = {X:U_i|X < A}), but not nessecry from Ui->Ui. Semanticly it makes sence, but current rules do not allow that.
+
+*)

@@ -1,3 +1,8 @@
+(*!
+ @begin[doc]
+ @module[Itt_pointwise2]
+ @end[doc]
+ *)
 
 extends Itt_equal
 extends Itt_quotient
@@ -35,7 +40,7 @@ open Itt_quotient
  * Show that the file is loading.
  *)
 let _ =
-   show_loading "Loading Itt_pointwise%t"
+   show_loading "Loading Itt_pointwise2%t"
 
 (* debug_string DebugLoad "Loading itt_struct..." *)
 
@@ -43,9 +48,13 @@ let _ =
  * RULES                                                                *
  ************************************************************************)
 
-(* The following rules are valid only for pointwise functionality.
+(*!
+ @begin[doc]
+  The following rules are derived only in pointwise functionality.
  * They both contradict to Let rule.
+ @end[doc]
  *)
+
 
 interactive quotientElimination2 {| elim [ThinOption thinT] |} 'H 'v 'w 'z :
    [wf] sequent [squash] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a] >- "type"{'T['a]} } -->
@@ -65,4 +74,4 @@ interactive bunionElimination2 {| elim [ThinOption thinT] |} 'H :
    sequent ['ext] { 'H; x: 'A bunion 'B; 'J['x] >- squash{'C['x]} }
 
 
-
+(*! @docoff *)

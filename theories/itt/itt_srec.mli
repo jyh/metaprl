@@ -112,7 +112,8 @@ rule srec_memberEquality :
  *   z: T[T1]
  * >- C[z]
  *)
-rule srecElimination 'H 'x srec{T. 'B['T]} 'T1 'u 'v 'w 'z univ[i:l] :
+
+rule srecElimination 'H 'T1 'u 'v 'w 'z univ[i:l] :
    sequent ['ext] { 'H; x: srec{T. 'B['T]}; 'J['x];
              T1: univ[i:l];
              u: \subtype{'T1; srec{T. 'B['T]}};

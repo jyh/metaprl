@@ -80,7 +80,7 @@ define unfoldRecordS : record[t:t]{'A} <--> record{label[t:t];'A}
 
 (*!
  * @begin[doc]
- * Records are defined as intersections. Dependent records are defined as dependent intersectons:
+ * Records are defined as intersections. Dependent records are defined as dependent intersections:
  * @end[doc]
  *)
 
@@ -341,8 +341,8 @@ let resource intro += [
 
 (* Single Records *)
 
-interactive recordEliminationS {| elim[] |} 'H 'x:
-   [main] sequent['ext]  {'H; x:'A; r:record; 'J[rcrd[n:t]{'x;'r}] >- 'C[rcrd[n:t]{'x;'r}]} -->
+interactive recordEliminationS {| elim[] |} 'H 'x 'dum:
+   [main] sequent['ext]  {'H; x:'A; dum:record; 'J[rcrd[n:t]{'x;'dum}] >- 'C[rcrd[n:t]{'x;'dum}]} -->
    sequent['ext]  {'H; r:record[n:t]{'A}; 'J['r] >- 'C['r]}
 
 (* Left-associated Records *)
@@ -395,6 +395,16 @@ interactive recordEliminationI  'H 'x 'rr:
 (*! @docoff *)
 
 
+let recordS_elim n p =
+ let n = Sequent.get_pos_hyp_num p n in
+ let x,r = maybe_new_vars2 p "x" "dum" in
+ let tac =
+    (recordEliminationS n x r)
+    thenT
+      (record_reduceT thenMT tryT (thinT (n+1)))
+ in
+    tac p
+
 let recordL_elim n p =
  let n = Sequent.get_pos_hyp_num p n in
  let x,r = maybe_new_vars2 p "x" "r" in
@@ -432,6 +442,7 @@ let recordI_elim n p =
     tac p
 
 let resource elim += [
+   (<<record[m:t]{'A}>>,recordS_elim);
    (<<record[m:t]{'A;'R}>>,recordI_elim);
    (<<record[m:t]{'A;a.'R['a]}>>,recordR_elim);
    (<<record[m:t]{self.'A['self];'R}>>,recordL_elim)
@@ -453,6 +464,9 @@ interactive functionOrtDinter {| intro[] |} 'b :
 
 interactive recordOrtIntro0 {| intro[] |} :
    sequent['ext]  {'H  >- record_ort[n:t]{'a;record} }
+
+interactive recordOrtIntroT {| intro[] |} :
+   sequent['ext]  {'H  >- record_ort[n:t]{'a;top} }
 
 interactive recordOrtIntroTop {| intro[] |} :
    [wf] sequent[squash]  {'H  >- "type"{tsquash{'A}} } -->
@@ -641,71 +655,98 @@ let record_exchangeC n =
 
 
 
-
+let t = <<'alpha>>
 (******************)
 (*  Display Forms *)
 (******************)
 
-(*! @docoff *)
+
 
 declare subrecord{'A}
 declare self{'self}
 
 declare self[n:t]{'x}
 
-dform self_df : except_mode [src] ::  self{'self} = `""
-
 (*
-dform field_self  : except_mode [src] ::  field[t:t]{self{'self}} = label[t:t]
+dform self_df : except_mode [src] ::  self{'self} = `""
 *)
 
+dform self_df : except_mode [src] ::  self{'self} = 'self
+
 dform field_df : except_mode [src] :: field[t:t]{'r} = field{'r;label[t:t]}
+
+dform field_self  : except_mode [src] ::  field[t:t]{self{'self}} = label[t:t]
 
 dform self_lab_df : except_mode [src] ::  self[n:t]{'x} = field[n:t]{self{'x}}
 
 
 
+
+declare "{"
+declare "}"
+declare ";"
+declare "|"
+
+dform open_record_df : "{" = szone pushm  `"{" pushm
+dform close_record_df : "}" = popm `"}" popm ezone
+dform separator_record_df : ";" = `";" hspace
+dform separator_record_df : "|" = `" |" hspace
+
 dform subrecord_df : except_mode [src] :: subrecord{'r} = 'r
 
 dform subrcrdS_df : except_mode [src] :: subrecord{rcrd[n:t]{'a}}
-   = label[n:t] `"=" slot{'a}
+   = declaration{label[n:t];'a}
 
 dform subrecordS_df : except_mode [src] :: subrecord{record[n:t]{'a}}
    = label[n:t] `":" slot{'a}
 
 dform subrcrd_df : except_mode [src] :: subrecord{rcrd[n:t]{'a;'r}}
-   =  subrecord{'r} `";" \space subrecord{rcrd[n:t]{'a}}
+   =  subrecord{'r} ";" subrecord{rcrd[n:t]{'a}}
 
 dform subrecordI_df : except_mode [src] :: subrecord{record[n:t]{'a;'r}}
-   = subrecord{record[n:t]{'a}} `";" \space subrecord{'r}
+   = subrecord{record[n:t]{'a}} ";" subrecord{'r}
 
 dform subrecordL_df : except_mode [src] :: subrecord{record[n:t]{self.'a['self];'r}}
-   = subrecord{'r} `";" \space subrecord{record[n:t]{'a[self{'self}]}}
+   = subrecord{'r} ";" subrecord{record[n:t]{'a[self{'self}]}}
 
 dform subrecordR_df : except_mode [src] :: subrecord{record[n:t]{'a;x.'r['x]}}
-   = subrecord{record[n:t]{'a}} `";" \space subrecord{'r[self[n:t]{'x}]}
+   = subrecord{record[n:t]{'a}} ";" subrecord{'r[self[n:t]{'x}]}
 
+dform set_record_df : except_mode [src] :: subrecord{{self: 'A | 'P['self]}}
+   =  'self `":" slot{'A} "|" 'P[self{'self}]
+
+dform set_record_df : except_mode [src] :: subrecord{{self:{self2:'a | 'P2['self2]} | 'P['self]}}
+   =  subrecord{{self:'a | 'P2['self]}} "|" 'P[self{'self}]
+
+dform set_record_df : except_mode [src] :: subrecord{{self: record[n:t]{self2.'a['self2];'r} | 'P['self]}}
+   =  subrecord{record[n:t]{self2.'a['self2];'r}} "|" 'P[self{'self2}]
 
 
 
 
 dform rcrdS_df : except_mode [src] :: rcrd[n:t]{'a}
-   = `"{" subrecord{rcrd[n:t]{'a}} `"}"
+   = "{" subrecord{rcrd[n:t]{'a}} "}"
 
 dform rcrd_df : except_mode [src] :: rcrd[n:t]{'a;'r}
-   = `"{" subrecord{rcrd[n:t]{'a;'r}} `"}"
+   =  "{" subrecord{rcrd[n:t]{'a;'r}} "}"
+
 
 dform recordS_df : except_mode [src] :: record[n:t]{'a}
-   = `"{" subrecord{record[n:t]{'a}} `"}"
+   =  "{" subrecord{record[n:t]{'a}} "}"
 
 dform recordI_df : except_mode [src] :: record[n:t]{'a;'r}
-   = `"{" subrecord{record[n:t]{'a;'r}} `"}"
+   =  "{" subrecord{record[n:t]{'a;'r}} "}"
 
 dform recordR_df : except_mode [src] :: record[n:t]{self.'a['self];'r}
-   = `"{" subrecord{record[n:t]{self.'a['self];'r}} `"}"
+   =  "{" subrecord{record[n:t]{self.'a['self];'r}} "}"
 
 dform recordL_df : except_mode [src] :: record[n:t]{'a;x.'r['x]}
-   = `"{" subrecord{record[n:t]{'a;x.'r['x]}} `"}"
+   =  "{" subrecord{record[n:t]{'a;x.'r['x]}} "}"
+
+dform set_record_df : except_mode [src] ::  ({self:'a | 'P['self]})
+   =  "{" subrecord{{self:'a | 'P['self]}} "}"
+
+
 
 
 
@@ -716,3 +757,31 @@ dform functionOrt_df : except_mode [src] :: function_ort{x.'f['x];'R}
 dform recordOrt_df : except_mode [src] :: record_ort[n:t]{'a;'R}
      =   rcrd[n:t]{'a} perp 'R
 
+
+
+
+(* TODO List:
+ *  - I want to eliminate types like {x:A; R_1} isect R_2.
+      One way is to write an elimination rule for any such type. But there are too many of them! (4 records*2 intersections * 2 orders = 16 types!)
+      There are should be an easier way!
+ *  - After that associative rule should be proved very easy.
+    - Sets and records.
+    - Elimination (and into) tactics:
+        : there should be an easy way to make only one elimination (intro)
+        : dT (-n) does not work ( next(-n) = -n , and next(-n) = -(n+1) )
+    - Renaming labels
+   - intro should give only one wf-subgoal. E.g. {x=a;y=b;z=c} in {x:A;y:B[x]; z:C[x,y]} sould produce only wf subgal: {x:A;y:B[x]; z:C[x,y]} Type
+     (not that x:A |- {y:B[x]; z:C[x,y]} Type ). The same is for sets.
+     There should be a general approach to deal with it.
+   - make grammar understand {x:A;y:B;}
+   - update record_exm
+
+ BUGS :
+   - currently display forms for self implementes in hacker way.
+   Also dforms for sets: {x:A | B[x]} x is treated as self sometimes works strange,
+   e.g. <<{y:{x:{aaa:'r; bbb:'r['self]} | 'B['x]} | 'C['y]}>> is displayed as {aaa:r; bbb:r[self] | B[self] | C[y]}
+   Not all cases of sets and records are implemented. Intersection and records?
+#
+
+
+*)

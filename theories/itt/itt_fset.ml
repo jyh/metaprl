@@ -217,16 +217,16 @@ dform fequalp_df : except_mode[src] :: fequalp{'eq; 'T} =
    `"fequalp(" slot{'eq} `"; " slot{'T} `")"
 
 dform fcompare_df : parens :: "prec"[prec_fsubseteq] :: except_mode[src] :: fcompare{'eq; 'x1; 'x2} =
-   slot{'x1} `" =" slot{'eq} space slot{'x2}
+   slot{'x1} `" =" sub{slot{'eq}} space slot{'x2}
 
 dform fsubseteq_df1 : parens :: "prec"[prec_fsubseteq] :: except_mode[src] :: fsubseteq{'eq; 'A; 'B} =
-   slot{'A} `" " subseteq slot{'eq} space slot{'B}
+   slot{'A} `" " subseteq sub{slot{'eq}} space slot{'B}
 
 dform fequal_df1 : parens :: "prec"[prec_fsubseteq] :: except_mode[src] :: fequal{'eq; 'A; 'B} =
-   slot{'A} `" =" slot{'eq} space slot{'B}
+   slot{'A} `" =" sub{slot{'eq}} space slot{'B}
 
 dform fmember_df : parens :: "prec"[prec_fmember] :: except_mode[src] :: fmember{'eq; 'x; 's} =
-   slot{'x} space Nuprl_font!member slot{'eq} space slot{'s}
+   slot{'x} space Nuprl_font!member sub{slot{'eq}} space slot{'s}
 
 dform fset_df : except_mode[src] :: fset{'eq; 'T} =
    `"FSet(" slot{'eq} `"; " slot{'T} `")"
@@ -238,16 +238,16 @@ dform fsingleton_df : except_mode[src] :: fsingleton{'x} =
    `"{" slot{'x} `"}"
 
 dform funion_df : parens :: "prec"[prec_funion] :: except_mode[src] :: funion{'eq; 's1; 's2} =
-   slot{'s1} space cup slot{'eq} space slot{'s2}
+   slot{'s1} space `"+" sub{slot{'eq}} space slot{'s2}
 
 dform fisect_df : parens :: "prec"[prec_fisect] :: except_mode[src] :: fisect{'eq; 's1; 's2} =
    slot["le"]{'s1} space cap slot{'eq} space slot{'s2}
 
 dform fsub_df : parens :: "prec"[prec_fisect] :: except_mode[src] :: fsub{'eq; 's1; 's2} =
-   slot["le"]{'s1} space `"-" slot{'eq} space slot{'s2}
+   slot["le"]{'s1} space `"-" sub{slot{'eq}} space slot{'s2}
 
 dform fsquash_df : fsquash{'eq; 's1} =
-   `"|" slot{'s1} `"|" slot{'eq}
+   `"|" slot{'s1} `"|" sub{slot{'eq}}
 
 dform fball_df : parens :: "prec"[prec_fall] :: except_mode[src] :: fball{'s; x. 'b} =
    pushm[3] Nuprl_font!"forall" subb slot{'x} space Nuprl_font!member space slot{'s} sbreak["",". "]
@@ -258,12 +258,12 @@ dform fbexists_df : parens :: "prec"[prec_fexists] :: except_mode[src] :: fbexis
       slot{'b} popm
 
 dform fall_df : parens :: "prec"[prec_fall] :: except_mode[src] :: fall{'eq; 'T; 's; x. 'b} =
-   pushm[3] Nuprl_font!"forall" slot{'x} space Nuprl_font!member slot{'eq} space slot{'s}
+   pushm[3] Nuprl_font!"forall" slot{'x} space Nuprl_font!member sub{slot{'eq}} space slot{'s}
    Nuprl_font!member space slot{'T} sbreak["",". "]
       slot{'b} popm
 
 dform fexists_df : parens :: "prec"[prec_fexists] :: except_mode[src] :: fexists{'eq; 'T; 's; x. 'b} =
-   pushm[3] Nuprl_font!"exists" slot{'x} space Nuprl_font!member slot{'eq} space slot{'s}
+   pushm[3] Nuprl_font!"exists" slot{'x} space Nuprl_font!member sub{slot{'eq}} space slot{'s}
    Nuprl_font!member space slot{'T} sbreak["",". "]
       slot{'b} popm
 

@@ -194,6 +194,17 @@ prec prec_lambda < prec_apply
 prec prec_fun < prec_apply
 prec prec_fun < prec_lambda
 
+declare declaration{'decl;'term} (* Used only for display forms, such as let and records *)
+
+dform decl_df : declaration{'decl;'a}
+   = 'decl `" = " slot{'a}
+
+dform decl_df : except_mode [src] :: declaration{'decl;lambda{x.'a}}
+   = declaration{'decl 'x;'a}
+
+dform decl_df : except_mode [src] :: declaration{'decl;fix{f.'a['f]}}
+   = declaration{'decl; 'a['decl]}
+
 dform fun_df1 : "fun"{'A; 'B} = math_fun{'A; 'B}
 dform fun_df2 : "fun"{'A; x. 'B} = math_fun{'x; 'A; 'B}
 
@@ -208,6 +219,10 @@ dform lambda_df : parens :: except_mode [src] :: "prec"[prec_lambda] :: lambda{x
 
 dform fix_df : except_mode[src] :: fix{f. 'b} =
    `"fix" `"(" slot{'f} `"." slot{'b} `")"
+
+dform let_df : "let"{'a;x.'b} =
+     szone pushm[3]  `"let " szone{declaration{'x;'a}} `" in" hspace
+     szone{'b} popm ezone
 
 dform well_founded_prop_df : except_mode[src] :: well_founded_prop{'A} =
    `"WellFounded " slot{'A} " " rightarrow `" Prop"

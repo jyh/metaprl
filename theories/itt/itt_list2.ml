@@ -114,7 +114,7 @@ define unfold_subset :
  * @begin[doc]
  * @terms
  *
- * The @tt{sameset} term determines whether the two lists contain the same
+ * The @tt[sameset] term determines whether the two lists contain the same
  * set of elements.
  * @end[doc]
  *)
@@ -708,7 +708,7 @@ interactive rev_wf {| intro [] |} :
  * @begin[doc]
  * @rules
  *
- * A list $v$ is a subset of the list $cons{'u; 'v}$.
+ * A list $v$ is a subset of the list $<<cons{'u; 'v}>>$.
  * @end[doc]
  *)
 interactive subset_cons {| intro [AutoMustComplete] |} :

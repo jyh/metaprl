@@ -202,7 +202,10 @@ prec prec_bor < prec_band
 prec prec_band < prec_bnot
 prec prec_bnot < prec_assert
 
-dform bool_df : except_mode[src] :: bool =
+dform bool_df : except_mode[src]  :: except_mode[prl] :: bool =
+   mathbbB
+
+dform bool_df : mode[prl] :: bool =
    `"Bool"
 
 dform btrue_df : except_mode[src] :: btrue =

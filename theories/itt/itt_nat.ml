@@ -4,7 +4,7 @@
  * @begin[doc]
  * @module[Itt_nat]
  *
- * Natural numbers
+ * Theory of natural numbers.
  * @end[doc]
  *
  * ----------------------------------------------------------------

@@ -55,6 +55,7 @@ MPFILES :=\
 	itt_quotient\
 	itt_list\
 	itt_list2\
+	itt_union2\
 	itt_derive\
 	itt_prop_decide\
 	itt_fset\
@@ -68,6 +69,13 @@ MPFILES :=\
 	itt_record0\
 	itt_record\
 	itt_record_exm\
+	itt_algebra_df\
+        itt_relation_str\
+        itt_set_str\
+        itt_bintree\
+        itt_datatree\
+        itt_sortedtree\
+        itt_rbtree\
 	itt_sort\
         itt_singleton\
 	itt_subset\

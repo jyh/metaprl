@@ -230,7 +230,7 @@ define nodetype2: Node{'T;l,r.'R['l;'r]} <--> record["left":t]{'T; l.record["rig
 
 dform node_df : except_mode[src] :: Node{'T;l,r.'R} = `"Node(" 'T `"; " 'l `"," 'r `"." 'R ")"
 
-define nodetype2: Node{'T;'A} <--> Node{'T; l,r.'A}
+define nodetype3: Node{'T;'A} <--> Node{'T; l,r.'A}
 
 dform node_df : except_mode[src] :: Node{'T;'A} = `"Node(" 'T `"; " 'A ")"
 

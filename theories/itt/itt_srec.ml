@@ -217,7 +217,7 @@ prim srecElimination {| elim [ThinOption thinT] |} 'H 'T1 'u 'v 'w 'z univ[i:l] 
  * @end[doc]
  *)
 
-prim srecUnrollElimination {| elim [ThinOption thinT] |} 'H 'x 'y 'u :
+prim srecUnrollElimination (* {| elim [ThinOption thinT] |} *) 'H 'x 'y 'u :
    [main] ('g['x; 'y; 'u] : sequent ['ext] { 'H; x: srec{T. 'B['T]}; 'J['x]; y: 'B[srec{T. 'B['T]}]; u: 'x = 'y in 'B[srec{T. 'B['T]}] >- 'C['y] }) -->
    sequent ['ext] { 'H; x: srec{T. 'B['T]}; 'J['x] >- 'C['x] } =
    'g['x; 'x; it]

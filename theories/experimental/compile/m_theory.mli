@@ -24,6 +24,9 @@
  * @email{jyh@cs.caltech.edu}
  * @end[license]
  *)
+extends M_ir
+
+(*
 extends M_ast
 extends M_post_parsing
 extends M_cps
@@ -36,7 +39,8 @@ extends M_x86
 
 open Tactic_type.Tacticals
 
-topval compileT : tactic
+     topval compileT : tactic
+*)
 
 (*!
  * @docoff

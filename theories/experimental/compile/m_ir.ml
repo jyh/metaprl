@@ -90,22 +90,14 @@ declare GtOp
 
 (*!
  * @begin[doc]
- * Values are numbers, functions, and pairs.
- * @end[doc]
- *)
-declare ValFalse
-declare ValTrue
-declare ValInt[i:n]
-declare ValFun{v. 'e['v]}
-declare ValPair{'v1; 'v2}
-
-(*!
- * @begin[doc]
  * @modsubsection{Atoms}
  *
  * Atoms are values: integers, variables, binary operations
- * on atoms, and functions.  In this phase, unnamed functions
- * are also atoms.
+ * on atoms, and functions.  For now, variable are represented
+ * as variables; we don't need separate atoms.
+ *
+ * AtomFun is a lambda-abstraction, and AtomFunVar is the projection
+ * of a function from a recursive function definition (defined below).
  * @end[doc]
  *)
 declare AtomFalse
@@ -113,8 +105,7 @@ declare AtomTrue
 declare AtomInt[i:n]
 declare AtomBinop{'op; 'a1; 'a2}
 declare AtomFun{x. 'e['x]}
-declare AtomVar{'v}
-declare AtomFunVar{'v}
+declare AtomFunVar{'R; 'v}
 
 (*!
  * @begin[doc]
@@ -154,27 +145,37 @@ declare Return{'a}
  * would use a record.  For example, suppose we define two mutually
  * recursive functions $f$ and $g$:
  *
- * let r = fix{r. record{
- *                   field["f"]{lambda{x. (r.g)(x)}};
- *                   field["g"]{lambda{x. (r.f)(x)}}}}
+ * let r2 = fix{r1. record{
+ *                   field["f"]{lambda{x. (r1.g)(x)}};
+ *                   field["g"]{lambda{x. (r1.f)(x)}}}}
  * in
- *    r.f(1)
- *
- * An alternate representation is to use side-effects.  We have to deal with
- * state anyway, and this scheme seems to be a little simpler.  The idea is
- * to separate function declarations from definitions.  A declaration
- * FunDecl{f; ...} adds a default value for $f$ to the program state.
- * A definition FunDef{f; e; ...} assigns the new value $e$ for $f$.
- *
- * The semantics is like this:
- *    FunDecl{f. e}       ==    let f = ref None in e
- *    FunDef{f; e1; e2}   ==    f := Some e1; e2
- *
- * However, this approach seems easier, so we'll pursue it for now.
+ *    r2.f(1)
  * @end[doc]
  *)
-declare FunDecl{f. 'e['f]}
-declare FunDef{'f; 'e1; 'e2}
+declare LetRec{R1. 'e1['R1]; R2. 'e2['R2]}
+
+(*!
+ * @begin[doc]
+ * Records have a set of tagged fields.
+ * We require that allthe fields be functions.
+ *
+ * The record construction is recursive.  The Label term is used for
+ * field tags; the FunDef defines a new field in the record; and the
+ * EndDef term terminates the record fields.
+ * @end[doc]
+ *)
+declare Label[tag:t]
+declare FunDef{'label; 'exp; 'rest}
+declare EndDef
+
+(*!
+ * @begin[doc]
+ * To simplify the presentation, we usually project the record fields
+ * before each of the field branches so that we can treat functions
+ * as if they were variables.
+ * @end[doc]
+ *)
+declare LetFun{'R; 'label; f. 'e['f]}
 
 (*!
  * @begin[doc]
@@ -190,21 +191,6 @@ declare FunDef{'f; 'e1; 'e2}
 declare exp
 declare def{'v; 'e}
 declare compilable{'e}
-
-(************************************************************************
- * Destructors.
- *)
-let fundecl_term = << FunDecl{f. 'e['f]} >>
-let fundecl_opname = opname_of_term fundecl_term
-let is_fundecl_term = is_dep1_term fundecl_opname
-let dest_fundecl_term = dest_dep1_term fundecl_opname
-let mk_fundecl_term = mk_dep1_term fundecl_opname
-
-let fundef_term = << FunDef{'f; 'e1; 'e2} >>
-let fundef_opname = opname_of_term fundef_term
-let is_fundef_term = is_dep0_dep0_dep0_term fundef_opname
-let dest_fundef_term = dest_dep0_dep0_dep0_term fundef_opname
-let mk_fundef_term = mk_dep0_dep0_dep0_term fundef_opname
 
 (************************************************************************
  * Display forms
@@ -236,22 +222,6 @@ declare xin
 dform xlet_df : xlet = bf["let"]
 dform xin_df : xin = bf["in"]
 
-(* Values *)
-dform val_false_df : ValFalse =
-   `"<false>"
-
-dform val_true_df : ValTrue =
-   `"<true>"
-
-dform val_int_df : ValInt[i:n] =
-   `"<" slot[i:n] `">"
-
-dform val_fun_df : parens :: except_mode [src] :: "prec"[prec_fun] :: ValFun{v. 'b} =
-   `"<" Nuprl_font!lambda slot{'v} `"." slot{'b} `">"
-
-dform val_pair_df : except_mode[src] :: ValPair{'a; 'b} =
-   pushm[0] `"<" slot{'a}`"," slot{'b} `">" popm
-
 (* Atoms *)
 dform atom_false_df : AtomFalse =
    `"false"
@@ -262,11 +232,8 @@ dform atom_false_df : AtomTrue =
 dform atom_int_df : AtomInt[i:n] =
    `"#" slot[i:n]
 
-dform atom_var_df : parens :: "prec"[prec_var] :: AtomVar{'v} =
-   Nuprl_font!downarrow slot{'v}
-
-dform atom_fun_var_df : parens :: "prec"[prec_var] :: AtomFunVar{'v} =
-   Nuprl_font!uparrow slot{'v}
+dform atom_fun_var_df : parens :: "prec"[prec_var] :: AtomFunVar{'R; 'v} =
+   slot{'R} `"." slot{'v}
 
 dform atom_binop_add_df : parens :: "prec"[prec_add] :: AtomBinop{AddOp; 'e1; 'e2} =
    slot["lt"]{'e1} " " `"+ " slot["le"]{'e2}
@@ -301,13 +268,6 @@ dform atom_binop_neq_df : parens :: "prec"[prec_rel] :: AtomBinop{NeqOp; 'e1; 'e
 dform atom_fun_df : parens :: "prec"[prec_fun] :: AtomFun{x. 'e} =
    szone pushm[3] Nuprl_font!lambda Nuprl_font!suba slot{'x} `"." hspace slot{'e} popm ezone
 
-(* Recursive functions *)
-dform fun_decl_df : parens :: "prec"[prec_let] :: FunDecl{f. 'e} =
-   bf["declare "] slot{'f} `" " xin hspace slot["lt"]{'e}
-
-dform fun_def_df : parens :: "prec"[prec_let] :: FunDef{'f; 'e1; 'e2} =
-   pushm[3] bf["define "] slot{'f} bf[" = "] hspace slot{'e1} `" " xin popm hspace slot["lt"]{'e2}
-
 (* Expressions *)
 dform exp_let_atom_df : parens :: "prec"[prec_let] :: LetAtom{'a; v. 'e} =
    xlet `" " slot{'v} bf[" = "] slot{'a} `" " xin hspace slot["lt"]{'e}
@@ -324,7 +284,7 @@ dform exp_if_df : parens :: "prec"[prec_if] :: except_mode[tex] :: If{'a; 'e1; '
    pushm[3] bf["else"] hspace slot{'e2} popm popm ezone
 
 dform exp_let_pair_df : parens :: "prec"[prec_let] :: LetPair{'a1; 'a2; v. 'e} =
-   xlet `" " slot{'v} bf[" = "] ValPair{'a1; 'a2} `" " xin hspace slot["lt"]{'e}
+   xlet `" " slot{'v} bf[" = "] `"(" 'a1 `"," 'a2 `") " xin hspace slot["lt"]{'e}
 
 dform exp_subscript_df : parens :: "prec"[prec_let] :: LetSubscript{'a1; 'a2; v. 'e} =
    xlet `" " slot{'v} bf[" = "] slot{'a1} `"[" slot{'a2} `"] " xin hspace slot["lt"]{'e}
@@ -340,6 +300,24 @@ dform exp_let_closure_df : parens :: "prec"[prec_let] :: LetClosure{'f; 'a; v. '
 
 dform exp_return_df : Return{'a} =
    bf["return"] `"(" slot{'a} `")"
+
+(*
+ * Recursive functions.
+ *)
+dform let_rec_df : parens :: "prec"[prec_let] :: LetRec{R1. 'e1; R2. 'e2} =
+   szone pushm[3] xlet bf[" rec "] slot{'R1} `"." 'e1 popm ezone hspace slot{'R2} `"." xin hspace slot["lt"]{'e2}
+
+dform fun_def_df : parens :: "prec"[prec_let] :: FunDef{'label; 'e; 'rest} =
+   hspace szone pushm[3] bf["fun "] slot{'label} `" =" hspace slot{'e} popm ezone 'rest
+
+dform end_def_df : EndDef =
+   `""
+
+dform label_df : Label[s:t] =
+   slot[s:t]
+
+dform let_fun_def : parens :: "prec"[prec_let] :: LetFun{'R; 'label; f. 'e} =
+   xlet bf[" fun "] slot{'f} `" = " slot{'R} `"." slot{'label} `" " xin hspace slot["lt"]{'e}
 
 (*
  * Declarations and definitions.

@@ -82,15 +82,6 @@ declare GeOp
 declare GtOp
 
 (*
- * Values are numbers, functions, and pairs.
- *)
-declare ValFalse
-declare ValTrue
-declare ValInt[i:n]
-declare ValFun{v. 'e['v]}
-declare ValPair{'v1; 'v2}
-
-(*
  * Atoms.
  * We use the built-in representation of variables (for now).
  *)
@@ -99,8 +90,7 @@ declare AtomTrue
 declare AtomInt[i:n]
 declare AtomBinop{'op; 'a1; 'a2}
 declare AtomFun{x. 'e['x]}
-declare AtomVar{'v}
-declare AtomFunVar{'v}
+declare AtomFunVar{'R; 'v}
 
 (*
  * Expressions.
@@ -120,8 +110,11 @@ declare Return{'a}
 (*
  * Recursive functions.
  *)
-declare FunDecl{f. 'e['f]}
-declare FunDef{'f; 'e1; 'e2}
+declare LetRec{R1. 'e1['R1]; R2. 'e2['R2]}
+declare Label[tag:t]
+declare FunDef{'label; 'exp; 'rest}
+declare EndDef
+declare LetFun{'R; 'label; f. 'e['f]}
 
 (*
  * Programs are represented as sequents:
@@ -138,19 +131,6 @@ declare compilable{'e}
  * Sequent tag for m programs.
  *)
 declare m
-
-(*
- * Destructors.
- *)
-val fundecl_term : term
-val is_fundecl_term : term -> bool
-val dest_fundecl_term : term -> string * term
-val mk_fundecl_term : string -> term ->  term
-
-val fundef_term : term
-val is_fundef_term : term -> bool
-val dest_fundef_term : term -> term * term * term
-val mk_fundef_term : term -> term -> term ->  term
 
 (*!
  * @docoff

@@ -29,48 +29,20 @@ extends M_theory
 (************************************************************************
  * Just for testing.
  *)
-interactive test_prog :
-   sequent [m] { 'H >-
-      compilable{
-         LetAtom{AtomInt[1:n]; v1.
-         LetAtom{AtomBinop{AddOp; AtomVar{'v1}; AtomInt[3]}; v2.
-         FunDecl{f.
-         FunDef{'f; AtomFun{v3.
-            LetPair{AtomVar{'v2}; AtomVar{'v3}; v4.
-            LetPair{AtomVar{'v1}; AtomVar{'v4}; v5.
-            LetSubscript{AtomVar{'v5}; AtomInt[0:n]; v6.
-            Return{AtomVar{'v6}}}}}};
-         TailCall{AtomFunVar{'f}; AtomInt[17]}}}}}} }
-
 interactive fib_prog 'H :
-   sequent [m] { 'H; cont: exp >- compilable{CPS{AtomVar{'cont};
-      FunDecl{fib.
-      FunDef{'fib; AtomFun{i.
-         If{AtomBinop{LeOp; AtomVar{'i}; AtomInt[1:n]};
-            Return{AtomVar{'i}};
-            LetApply{AtomFunVar{'fib}; AtomBinop{SubOp; AtomVar{'i}; AtomInt[1:n]}; v1.
-               LetApply{AtomFunVar{'fib}; AtomBinop{SubOp; AtomVar{'i}; AtomInt[2:n]}; v2.
-               Return{AtomBinop{AddOp; AtomVar{'v1}; AtomVar{'v2}}}}}}};
-      TailCall{AtomFunVar{'fib}; AtomInt[35:n]}}}}} }
+   sequent [m] { 'H; cont: exp >- compilable{
+      LetRec{R.
+         FunDef{Label["fib":t]; AtomFun{i.
+            LetFun{'R; Label["fib":t]; fib.
+            If{AtomBinop{LeOp; 'i; AtomInt[1:n]};
+               Return{'i};
 
-
-interactive ext_test_prog :
-   sequent [m] { 'H >- compilable{.<:ext<
-                          let v1 = 1 in
-                          let v2 = 2+v1 in
-                          let f (v3) =
-                             let v4 = (v2, v3) in
-                             let v5 = v4[0] in
-                                v5
-                          in
-                             f(17)>>} }
-
-interactive ext_test_prog2 :
-   sequent [m] { 'H >- compilable{PP{.<:ext<
-                           let f (x, y) = g(y, x)
-                           and g (x, y) = x-y
-                           in
-                              f(1, 2)>>}} }
+               LetApply{'fib; AtomBinop{SubOp; 'i; AtomInt[1:n]}; v1.
+               LetApply{'fib; AtomBinop{SubOp; 'i; AtomInt[2:n]}; v2.
+               Return{AtomBinop{AddOp; 'v1; 'v2}}}}}}};
+         EndDef};
+      R. LetFun{'R; Label["fib":t]; fib.
+         TailCall{'fib; AtomInt[35:n]}}}} }
 
 (*!
  * @docoff

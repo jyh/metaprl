@@ -1191,6 +1191,23 @@ doc <:doc<
 
 define unfold_diff_list: diff_list{'T} <--> {l:list{'T} | all i:Index{'l}. all j:Index{'l}. ('i < 'j => nth{'l;'i} <> nth{'l;'j} in 'T)}
 
+interactive diff_list_wf  {| intro[] |} :
+   sequent  { <H> >- 'T Type } -->
+   sequent  { <H> >- diff_list{'T} Type }
+
+interactive diff_list_mem  {| intro[] |} :
+   sequent  { <H> >- 'T Type } -->
+   sequent  { <H> >- 'l in list{'T} } -->
+   sequent { <H>; i: Index{'l}; j: Index{'l}; 'i < 'j >- nth{'l;'i} <> nth{'l;'j} in 'T } -->
+   sequent  { <H> >- 'l in diff_list{'T} }
+
+interactive diff_list_elim {| elim [] |} 'H :
+   sequent { <H>; l: diff_list{'T}; <J['l]> >- 'T Type } -->
+   sequent { <H>; l: list{'T}; all i:Index{'l}. all j:Index{'l}. ('i < 'j => nth{'l;'i} <> nth{'l;'j} in 'T); <J['l]> >- 'C['l] } -->
+   sequent { <H>; l: diff_list{'T}; <J['l]> >- 'C['l] }
+
+interactive difflist {| nth_hyp |} 'H :
+   sequent { <H>; l : diff_list{'A}; <J['l]> >- 'l in list{'A} }
 
 doc <:doc< @docoff >>
 

@@ -99,6 +99,19 @@ let _ =
  *)
 prim_rw unfold_dfun : (x: 'A -> 'B['x]) <--> ({ f | x: 'A -> 'B['x] })
 
+(*!
+ * @begin[doc]
+ *
+ * The @tt{reduceEta} rewrite defines eta-reduction.
+ * This is conditional reduction: one can apply it only for functions.
+ * @end[doc]
+ *)
+
+ prim_rw reduceEta (x: 'A -> 'B['x]) :
+   ('f IN (x: 'A -> 'B['x])) -->
+    lambda{x. 'f 'x} <--> 'f
+
+
 (************************************************************************
  * RULES                                                                *
  ************************************************************************)

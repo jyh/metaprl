@@ -1,6 +1,6 @@
 include Itt_equal
 include Itt_record
-include Itt_arith
+include Itt_int_bool
 include Itt_atom
 
 
@@ -20,7 +20,9 @@ open Tactic_type.Tacticals
 open Base_dtactic
 open Tactic_type.Conversionals
 
+open Itt_int_bool
 open Itt_struct
+open Itt_record
 
 
 define unfold_plane:  plane <--> record["x"]{int;record["y"]{int}}
@@ -30,7 +32,7 @@ define unfold_colored_space:  cspace <--> record["color"]{atom;space}
 
 define unfold_0: O <--> rcrd["x"]{0; rcrd["y"]{0; rcrd["z"]{0}}}
 define unfold_A: A <--> rcrd["x"]{1; rcrd["y"]{2; rcrd["z"]{3;rcrd}}}
-define unfold_B: B <--> rcrd["z"]{3; rcrd["y"]{2; rcrd["x"]{0}}}
+define unfold_B: B <--> rcrd["z"]{0; rcrd["y"]{2; rcrd["x"]{1}}}
 define unfold_redA: redA <--> rcrd["color"]{token["red":t]; A}
 
 
@@ -66,19 +68,26 @@ interactive abInPlane {|intro_resource[] |} 'H :
 interactive abInSpace {|intro_resource[] |} 'H :
    sequent['ext] {'H >- not{.A = B in space} }
 
-interactive planeSpace {|intro_resource[] |} 'H :
-   sequent['ext] {'H >- subtype{plane;space} }
+interactive spacePlane {|intro_resource[] |} 'H :
+   sequent['ext] {'H >- subtype{space;plane} }
 
 
 define plane_point: point{'a;'b;'e} <--> rcrd["x"]{'a; rcrd["y"]{'b;'e }}
 define space_point: point{'a;'b; 'c;'e} <--> rcrd["x"]{'a; rcrd["y"]{'b; rcrd["z"]{'c;'e}}}
 
 let unfold_point = plane_point orelseC space_point
-let fold_point = makeFoldC <<point{'a;'b;'e}>> plane_point orelseC makeFoldC <<point{'a;'b;'c;'e}>> space_point
+
+let fold_point =
+   makeFoldC <<point{'a;'b;'c;'e}>> space_point orelseC
+   makeFoldC <<point{'a;'b;'e}>> plane_point
 
 interactive planeElim {|elim_resource[] |} 'H 'J:
    sequent['ext]{'H; a:int; b:int; e:record; 'J[point{'a;'b;'e}] >- 'C[point{'a;'b;'e}] } -->
    sequent['ext]  {'H; p:plane; 'J['p] >- 'C['p] }
+
+interactive spaceElim {|elim_resource[] |} 'H 'J:
+   sequent['ext]{'H; a:int; b:int; c:int; e:record; 'J[point{'a;'b;'c;'e}] >- 'C[point{'a;'b;'c;'e}] } -->
+   sequent['ext]  {'H; p:space; 'J['p] >- 'C['p] }
 
 interactive cspaceElim {|elim_resource[] |} 'H 'J:
    sequent['ext]{'H; a:int; b:int; c:int; color:atom; e:record; 'J[rcrd["color"]{'color;point{'a;'b; 'c; 'e}}] >- 'C[rcrd["color"]{'color;point{'a;'b; 'c; 'e}}] } -->
@@ -88,13 +97,26 @@ interactive_rw point_beta1_rw : field["x"]{point{'a;'b;'e}} <--> 'a
 
 interactive_rw point_beta2_rw : field["y"]{point{'a;'b;'e}} <--> 'b
 
+
+let reduce_info =
+   [<< field["x"]{point{'a;'b;'e}}  >>, point_beta1_rw;
+    << field["y"]{point{'a;'b;'e}}  >>, point_beta2_rw]
+
+let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
+
 interactive point_eta 'H :
    sequent[squash]{'H >- 'p IN plane } -->
-   sequent['ext]{'H >-  'p ~ point{field["x"]{'p};field["x"]{'p};'p} }
+   sequent['ext]{'H >-   point{field["x"]{'p};field["y"]{'p};'p} ~ 'p }
 
 define unfold_length: length{'p} <--> (field["x"]{'p}*@field["x"]{'p} +@ field["y"]{'p}*@field["y"]{'p})
 
 interactive_rw reduce_length: length{point{'a;'b;'e}} <--> ('a *@ 'a +@ 'b *@ 'b)
+
+let reduce_info =
+   [<< length{point{'a;'b;'e}}  >>, reduce_length]
+
+let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
+
 
 interactive length_wf {|intro_resource[] |} 'H :
    sequent[squash]{'H >- 'p IN plane } -->

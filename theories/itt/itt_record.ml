@@ -150,8 +150,11 @@ let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_i
 
 interactive record_eta {| intro_resource [] |} 'H 'A:
    sequent[squash]{'H >- 'r IN record[n:s]{'A} } -->
-   sequent['ext]  {'H >- 'r ~ rcrd[n:s]{field[n:s]{'r}; 'r} }
+   sequent['ext]  {'H >- rcrd[n:s]{field[n:s]{'r}; 'r} ~ 'r }
 
+interactive_rw record_eta_rw  :
+   ('r IN record[n:s]{top} ) -->
+   rcrd[n:s]{field[n:s]{'r}; 'r} <--> 'r
 
 interactive_rw record_exchange :
    rcrd[n:s]{'a; rcrd[m:s]{'b; 'r}} <--> eq_label[n:s,m:s]{rcrd[n:s]{'a;'r};
@@ -188,22 +191,22 @@ interactive recordElimination2  'H 'J  'x 'rr :
 interactive recordOrtIntro0 {| intro_resource[] |} 'H  :
    sequent['ext]  {'H  >- record_ort[n:s]{'a;record} }
 
-interactive recordOrtIntroS1 {| intro_resource[] |} 'H  'x  :
+interactive recordOrtIntroS 'H  'x  :
    [wf] sequent[squash]{'H >- "type"{record[m:s]{'A}} } -->
    [main] sequent[squash]{'H; x:'A >- eq_label[n:s,m:s]{.'a IN 'A;."true"} } -->
    sequent['ext]  {'H >- record_ort[n:s]{'a;record[m:s]{'A}} }
 
-interactive recordOrtIntroS2 {| intro_resource[] |} 'H  'x  :
+interactive recordOrtIntroSM 'H  'x  :
    [main] sequent[squash]  {'H; x:'A >- eq_label[n:s,m:s]{.'a IN 'A;."true"} } -->
    sequent['ext]  {'H; r:record[m:s]{'A}  >- record_ort[n:s]{'a;record[m:s]{'A}} }
 
 
-interactive recordOrtIntro1 {| intro_resource[] |} 'H  'x  :
+interactive recordOrtIntro  'H  'x  :
    [wf] sequent[squash]{'H >- "type"{record[m:s]{'A;'R}} } -->
    [main] sequent[squash]  {'H; x:'A; r:'R >-  eq_label[n:s,m:s]{.'a IN 'A; record_ort[n:s]{'a;'R}} } -->
    sequent['ext]  {'H >- record_ort[n:s]{'a;record[m:s]{'A;'R}} }
 
-interactive recordOrtIntro2 'H  'x  :
+interactive recordOrtIntroM 'H  'x  :
    [main] sequent[squash]  {'H; x:'A; r:'R >-  eq_label[n:s,m:s]{.'a IN 'A; record_ort[n:s]{'a;'R}} } -->
    sequent['ext]  {'H; r:record[m:s]{'A;'R}  >- record_ort[n:s]{'a;record[m:s]{'A;'R}} }
 
@@ -220,7 +223,7 @@ let recordOrtIntroST p =
    let m, _ = Sequent.hyp_indices p (-1) in
    let n= Sequent.hyp_count_addr p in
    let x= maybe_new_vars1 p "x" in
-      ( (recordOrtIntroS2 m x orelseT recordOrtIntroS1 n x)
+      ( (recordOrtIntroSM m x orelseT recordOrtIntroS n x)
         thenMT  rw reduce_eq_label 0
         thenT tryT (completeT (dT 0))
       ) p
@@ -232,7 +235,7 @@ let recordOrtIntroT p =
    let m, _ = Sequent.hyp_indices p (-1) in
    let n= Sequent.hyp_count_addr p in
    let x= maybe_new_vars1 p "x" in
-      ((recordOrtIntro2 m x orelseT recordOrtIntro1 n x) thenMT  rw reduce_eq_label 0) p
+      ((recordOrtIntroM m x orelseT recordOrtIntro n x) thenMT  rw reduce_eq_label 0) p
 
 
 let repeatRecordOrtIntroT = (untilFailT recordOrtIntroT) thenT tryT (recordOrtIntroST orelseT recordOrtIntro0T)

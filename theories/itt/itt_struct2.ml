@@ -148,7 +148,7 @@ interactive hypSubstitution2 'H 'J ('t1 = 't2 in 'T) bind{y. 'A['y]} 'z :
  *)
 
 
-interactive cutMem 'H 'J 'x 's 'S bind{y.'T['y]} :
+interactive cutMem 'H 'J 'x 'v 's 'S bind{x.'T['x]} :
   [assertion] sequent[squash]{ 'H; 'J >- 's IN 'S } -->
    [main]      sequent ['ext] { 'H; x: 'S; v: 'x='s in 'S; 'J >- 'T['x] } -->
    sequent ['ext] { 'H; 'J >- 'T['s]}
@@ -181,9 +181,9 @@ interactive cutMem 'H 'J 'x 's 'S bind{y.'T['y]} :
 
 
 
-interactive cutEq 'H ('s_1='s_2 in 'S) bind{x.'t['x]} 'x:
+interactive cutEq 'H ('s_1='s_2 in 'S) bind{x.'t['x]} 'v 'u :
    [assertion] sequent[squash]{ 'H >- 's_1='s_2 in 'S } -->
-   [main]      sequent ['ext] { 'H; x: 'S; v: 's_1='x in 'S; v: 's_2='x in 'S >- 't['x] IN 'T } -->
+   [main]      sequent ['ext] { 'H; x: 'S; v: 's_1='x in 'S; u: 's_2='x in 'S >- 't['x] IN 'T } -->
    sequent ['ext] { 'H >- 't['s_1] = 't['s_2] in 'T}
 
 (*!
@@ -313,6 +313,7 @@ let revHypSubstT i j p =
 (* cutMem *)
 
 let letAtT i x_is_s_in_S p =
+   let v = maybe_new_vars1 p "v"  in
    let i, j = Sequent.hyp_split_addr p i in
    let _S, x, s = dest_equal x_is_s_in_S in
    let xname = dest_var x in
@@ -321,11 +322,11 @@ let letAtT i x_is_s_in_S p =
          get_with_arg p
       with
          RefineError _ ->
-            let z = get_opt_var_arg "z" p in
+            let z = get_opt_var_arg xname p in
                mk_xbind_term z (var_subst (Sequent.concl p) s z)
    in
       if is_xbind_term bind then
-           cutMem i j xname s _S bind p
+           cutMem i j xname v s _S bind p
       else
            raise (RefineError ("letT", StringTermError ("need a \"bind\" term: ", bind)))
 
@@ -334,7 +335,7 @@ let letT  = letAtT (-1)
 (* cutEq *)
 
 let assertEqT eq p =
-   let v = maybe_new_vars1 p "v" in
+   let v,u = maybe_new_vars2 p "v" "u" in
    let _, s1, _ = dest_equal eq in
    let bind =
       try
@@ -347,7 +348,7 @@ let assertEqT eq p =
    in
       if is_xbind_term bind then
          (try
-            cutEq  (Sequent.hyp_count_addr p) eq bind v p
+            cutEq  (Sequent.hyp_count_addr p) eq bind v u p
           with
                  RefineError _ ->
                     raise (RefineError ("assertEqT", StringTermError (" \"bind\" term: ", bind))))

@@ -226,7 +226,13 @@ interactive record_beta12  {| intro_resource[] |} 'H:
 interactive record_eta  {| intro_resource[] |}'H 'A:
    [wf] sequent[squash]{'H >- 'n IN label } -->
    [wf] sequent[squash]{'H >- 'r IN record{'n;'A} } -->
-   sequent['ext]  {'H >- 'r ~ rcrd{'n; field{'r;'n}; 'r} }
+   sequent['ext]  {'H >- rcrd{'n; field{'r;'n}; 'r} ~ 'r }
+
+
+interactive_rw record_eta_rw  :
+   ('n IN label ) -->
+   ('r IN record{'n;top} ) -->
+   rcrd{'n; field{'r;'n}; 'r} <--> 'r
 
 
 interactive record_cover  {| intro_resource[] |} 'H:
@@ -292,26 +298,56 @@ let elim_resource = Mp_resource.improve elim_resource (<<record{'n;'A;'R}>>, rec
 interactive recordOrtIntro0 {| intro_resource[] |} 'H  :
    sequent['ext]  {'H  >- record_ort{'n;'a;record} }
 
-interactive recordOrtIntroS1 {| intro_resource[SelectOption 1] |} 'H  'x  :
+interactive recordOrtIntroS1  'H  'x  :
+   [wf] sequent[squash]{'H >- 'n IN label } -->
+   [wf] sequent[squash]{'H >- 'm IN label } -->
+   [wf] sequent[squash]{'H >- "type"{record{'m;'A}} } -->
+   sequent[squash]  {'H; x:'A >- 'a IN 'A } -->
+   sequent['ext]  {'H   >- record_ort{'n;'a;record{'m;'A}} }
+
+interactive recordOrtIntroSM1  'H  'x  :
    [wf] sequent[squash]{'H >- 'n IN label } -->
    [wf] sequent[squash]{'H >- 'm IN label } -->
    sequent[squash]  {'H; x:'A >- 'a IN 'A } -->
    sequent['ext]  {'H; r:record{'m;'A}  >- record_ort{'n;'a;record{'m;'A}} }
 
-interactive recordOrtIntroS2 {| intro_resource[SelectOption 2] |} 'H  'x  :
+interactive recordOrtIntroS2 'H  'x  :
+   [wf] sequent[squash]{'H >- 'n IN label } -->
+   [wf] sequent[squash]{'H >- 'm IN label } -->
+   [wf] sequent[squash]{'H >- "type"{record{'m;'A}} } -->
+   [equality] sequent[squash]{'H; r:record{'m;'A} >- not{.'n = 'm in label} } -->
+   sequent['ext]  {'H  >- record_ort{'n;'a;record{'m;'A}} }
+
+interactive recordOrtIntroSM2 'H  'x  :
    [wf] sequent[squash]{'H >- 'n IN label } -->
    [wf] sequent[squash]{'H >- 'm IN label } -->
    [equality] sequent[squash]{'H; r:record{'m;'A} >- not{.'n = 'm in label} } -->
    sequent['ext]  {'H; r:record{'m;'A}  >- record_ort{'n;'a;record{'m;'A}} }
 
-interactive recordOrtIntro1 {| intro_resource[SelectOption 1] |} 'H  'x  :
+interactive recordOrtIntro1  'H  'x  :
+   [wf] sequent[squash]{'H >- 'n IN label } -->
+   [wf] sequent[squash]{'H >- 'm IN label } -->
+   [wf] sequent[squash]{'H >- "type"{record{'m;'A; 'R}} } -->
+   sequent[squash]  {'H; x:'A; r:'R >- 'a IN 'A } -->
+   [ort] sequent[squash]  {'H; x:'A; r:'R >- record_ort{'n;'a;'R} } -->
+   sequent['ext]  {'H >- record_ort{'n;'a;record{'m;'A;'R}} }
+
+interactive recordOrtIntroM1 'H  'x  :
    [wf] sequent[squash]{'H >- 'n IN label } -->
    [wf] sequent[squash]{'H >- 'm IN label } -->
    sequent[squash]  {'H; x:'A; r:'R >- 'a IN 'A } -->
    [ort] sequent[squash]  {'H; x:'A; r:'R >- record_ort{'n;'a;'R} } -->
    sequent['ext]  {'H; r:record{'m;'A;'R}  >- record_ort{'n;'a;record{'m;'A;'R}} }
 
-interactive recordOrtIntro2 {| intro_resource[SelectOption 2] |} 'H  'x  :
+interactive recordOrtIntro2  'H  'x  :
+   [wf] sequent[squash]{'H >- 'n IN label } -->
+   [wf] sequent[squash]{'H >- 'm IN label } -->
+   [wf] sequent[squash]{'H >- "type"{record{'m;'A; 'R}} } -->
+   [equality] sequent[squash]{'H; r:record{'m;'A;'R} >- not{.'n = 'm in label} } -->
+   [ort] sequent[squash]  {'H; x:'A; r:'R >- record_ort{'n;'a;'R} } -->
+   sequent['ext]  {'H >- record_ort{'n;'a;record{'m;'A;'R}} }
+
+interactive recordOrtIntroM2  'H  'x  :
    [wf] sequent[squash]{'H >- 'n IN label } -->
    [wf] sequent[squash]{'H >- 'm IN label } -->
    [equality] sequent[squash]{'H; r:record{'m;'A;'R} >- not{.'n = 'm in label} } -->

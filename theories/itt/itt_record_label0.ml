@@ -112,8 +112,8 @@ interactive_rw reduce_eq_label_false_rw :
 interactive decide_eq_label 'H 'x 'y :
    [wf] sequent[squash] {'H >- 'x IN label} -->
    [wf] sequent[squash] {'H >- 'y IN label} -->
-   sequent['ext] {'H; u:'x='y in label >- 'C} -->
-   sequent['ext] {'H; u:not{.'x='y in label} >- 'C} -->
+   [main] sequent['ext] {'H; u:'x='y in label >- 'C} -->
+   [main] sequent['ext] {'H; u:not{.'x='y in label} >- 'C} -->
    sequent['ext] {'H >- 'C}
 
 (******************)
@@ -127,14 +127,12 @@ let decideEqLabelT x y =
    in
       tac thenLT [idT;
                   idT;
-                  tryT (rwhAll (firstC
-                           [reduce_eq_label_true_rw;
-                            reduce_ifthenelse_true])
-                        thenAT nthHypT (-1));
-                  tryT (rwhAll (firstC
-                           [reduce_eq_label_false_rw;
-                            reduce_ifthenelse_false])
-                        thenAT nthHypT (-1));
+                  tryT (rwhAll reduce_eq_label_true_rw
+                        thenAT nthHypT (-1)
+                        thenT rwhAll reduce_ifthenelse_true);
+                  tryT (rwhAll reduce_eq_label_false_rw
+                        thenAT nthHypT (-1)
+                        thenT rwhAll reduce_ifthenelse_false)
                  ]
 
 

@@ -98,7 +98,6 @@ let into_resource =
 (*   Tactic       *)
 (******************)
 
-
 let decideEqLabelT x y =
    let tac p =
       Itt_record_label0.decide_eq_label (Sequent.hyp_count_addr p) x y p
@@ -107,14 +106,14 @@ let decideEqLabelT x y =
                   tryT (dT 0);
                   tryT (rwhAll (firstC
                            [Itt_record_label0.reduce_eq_label_true_rw;
-                            reduce_eq_label_true_rw;
-                            reduce_ifthenelse_true])
-                        thenAT nthHypT (-1));
+                            reduce_eq_label_true_rw])
+                        thenAT nthHypT (-1)
+                        thenT rwhAll reduce_ifthenelse_true);
                   tryT (rwhAll (firstC
                            [Itt_record_label0.reduce_eq_label_false_rw;
-                            reduce_eq_label_false_rw;
-                            reduce_ifthenelse_false])
-                        thenAT nthHypT (-1));
+                            reduce_eq_label_false_rw])
+                        thenAT nthHypT (-1)
+                        thenT rwhAll reduce_ifthenelse_false)
                  ]
 
 

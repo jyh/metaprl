@@ -39,6 +39,10 @@ open Refiner.Refiner.TermType
 open Tactic_type.Tacticals
 open Tactic_type.Conversionals
 
+val fun_term : term
+val dest_fun : term -> term * term
+val mk_fun_term : term -> term -> term
+
 (************************************************************************
  * REWRITES                                                             *
  ************************************************************************)

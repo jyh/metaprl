@@ -99,6 +99,19 @@ define unfoldFunctionOrt : function_ort{x.'f['x];'R} <--> (all x:'R. ('x = 'f['x
 
 define unfoldRecordOrt : record_ort[t:t]{'a;'R} <-->  function_ort{r.rcrd[t:t]{'a;'r};'R}
 
+(****************************)
+(* Constructors/destructors *)
+(****************************)
+
+let field_term = <<'a^fld>>
+let field_opname = opname_of_term field_term
+let dest_field t =
+   match dest_token_simple_term field_opname t with
+      f, [t] ->
+         t, f
+    | _ -> raise(RefineError("dest_field", StringError "not a field term"))
+let mk_field_term t f =
+   mk_token_simple_term field_opname f [t]
 
 (******************)
 (*   Rules        *)

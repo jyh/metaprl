@@ -42,6 +42,7 @@
 extends Itt_grouplikeobj
 (*! @docoff *)
 extends Itt_subset
+extends Itt_bisect
 
 open Printf
 open Mp_debug
@@ -70,7 +71,7 @@ open Itt_struct
 open Itt_record
 open Itt_fun
 open Itt_int_ext
-open Itt_isect
+open Itt_bisect
 
 let _ =
    show_loading "Loading Itt_group%t"
@@ -492,12 +493,10 @@ interactive subgroup_isect 'H 's1 's2 group[i:l] :
    sequent [squash] {'H >- 's1 in group[i:l] } -->
    sequent [squash] {'H >- 's2 in group[i:l] } -->
    sequent [squash] {'H >- 'g in group[i:l] } -->
-   sequent [squash] {'H >- 's in group[i:l] } -->
    sequent ['ext] { 'H >- subStructure{'s1; 'g} } -->
    sequent ['ext] { 'H >- subStructure{'s2; 'g} } -->
-   sequent ['ext] { 'H >- 's^car = "isect"{.'s1^car; x. 's2^car} in univ[i:l] } -->
-   sequent ['ext] { 'H >- 's^"*" = 's1^"*" in 's^car -> 's^car -> 's^car } -->
-   sequent ['ext] { 'H >- subStructure{'s; 'g} }
+   sequent ['ext] { 'H >- (            {car=bisect{.'s1^car;.'s2^car}; "*"='g^"*"; "1"='g^"1"; inv='g^inv} in group[i:l]) &
+                          subStructure{{car=bisect{.'s1^car;.'s2^car}; "*"='g^"*"; "1"='g^"1"; inv='g^inv}; 'g} }
 
 (*!
  * @begin[doc]

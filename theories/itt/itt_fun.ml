@@ -59,6 +59,7 @@ open Printf
 open Mp_debug
 open Refiner.Refiner
 open Refiner.Refiner.Term
+open Refiner.Refiner.TermOp
 open Refiner.Refiner.TermMan
 open Refiner.Refiner.TermSubst
 open Refiner.Refiner.RefineError
@@ -97,6 +98,17 @@ let _ =
  * @end[doc]
  *)
 prim_rw unfold_fun : ('A -> 'B) <--> (x: 'A -> 'B)
+
+(*! @docoff *)
+
+(************************************************************************
+ * Constructors/Destructors                                             *
+ ************************************************************************)
+
+let fun_term = <<'A -> 'B>>
+let fun_opname = opname_of_term fun_term
+let dest_fun = dest_dep0_dep0_term fun_opname
+let mk_fun_term = mk_dep0_dep0_term fun_opname
 
 (************************************************************************
  * RULES                                                                *
@@ -242,21 +254,15 @@ interactive independentFunctionFormation 'H :
  *)
 let d_apply_equalT p =
    let _, app, app' = dest_equal (Sequent.concl p) in
+   if
+      (try Sequent.get_bool_arg p "d_auto" with RefineError _ -> false) &&
+      (not (alpha_equal app app'))
+   then raise generic_refiner_exn;
    let f, _ = dest_apply app in
    let f_type =
       try get_with_arg p with
          RefineError _ ->
-            let t = infer_type p f in
-            if begin
-               try Sequent.get_bool_arg p "d_auto"
-               with RefineError _ -> false
-            end then
-               let f', _ = dest_apply app' in
-               let t' = infer_type p f' in
-               if alpha_equal t t' then
-                  t
-               else raise (RefineError ("d_apply_equalT", StringError ("inferred types do not much while inside non-complete autoT")))
-           else t
+            infer_type p f
    in
    let tac =
       if is_rfun_term f_type then

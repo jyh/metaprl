@@ -203,6 +203,31 @@ dform subStructure_df1 : except_mode[src] :: parens :: "prec"[prec_subtype] :: s
    math_subStructure{'s; 'g}
 
 (************************************************************************
+ * TYPE INFERENCE                                                       *
+ ************************************************************************)
+
+let inf_id _ _ _ eqs opt_eqs defs t =
+   let t, _ = dest_field t in
+   let car = mk_field_term t "car" in
+      eqs, opt_eqs, defs, car
+
+let inf_inv _ _ _ eqs opt_eqs defs t =
+   let t, _ = dest_field t in
+   let car = mk_field_term t "car" in
+      eqs, opt_eqs, defs, mk_fun_term car car
+
+let inf_mul _ _ _ eqs opt_eqs defs t =
+   let t, _ = dest_field t in
+   let car = mk_field_term t "car" in
+      eqs, opt_eqs, defs, mk_fun_term car (mk_fun_term car car)
+
+let resource typeinf += [
+   <<'g^"1">>, inf_id;
+   <<'g^"inv">>, inf_inv;
+   <<'g^"*">>, inf_mul
+]
+
+(************************************************************************
  * RULES                                                                *
  ************************************************************************)
 

@@ -9,6 +9,8 @@ open Tactic_type.Tacticals
 open Tactic_type.Sequent
 open Tactic_type.Conversionals
 
+val dest_field : term -> term * string
+val mk_field_term : term -> string -> term
 
 topval record_exchangeC : int -> conv
 

@@ -20,7 +20,6 @@ MPFILES := \
    fir_eval \
    fir_deadcode \
    fir_const_elim \
-   fir_marshal \
    mc_theory \
    fir_test
 

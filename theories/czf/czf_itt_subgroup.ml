@@ -4,7 +4,6 @@ include Czf_itt_isect
 
 open Printf
 open Mp_debug
-open Mp_ctype
 open Refiner.Refiner
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp

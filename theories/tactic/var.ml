@@ -72,7 +72,7 @@ open Refiner.Refiner.RefineError
 
 open Printf
 open Mp_debug
-open Mp_ctype
+open String_util
 
 open Tactic_type
 

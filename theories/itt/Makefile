@@ -34,7 +34,8 @@ LMFILES :=\
 	itt_srec\
 	itt_quotient\
 	itt_list\
-	itt_theory
+	itt_theory\
+   itt_redrules
 
 # Name of main libraris
 MAIN = itt

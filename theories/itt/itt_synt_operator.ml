@@ -1,7 +1,8 @@
 doc <:doc<
    @begin[doc]
    @module[Itt_synt_operator]
-
+   The @tt[Itt_synt_operator] module defines a type of operators << BOperator >>
+   for our simple theory of syntax.
    @end[doc]
 
    ----------------------------------------------------------------
@@ -43,37 +44,70 @@ extends Itt_quotient
 extends Itt_int_base
 extends Itt_nat
 extends Itt_list2
+doc docoff
 
 open Basic_tactics
 
-doc "doc"{terms}
+(************************************************************************
+ * TERMS                                                                *
+ ************************************************************************)
+
+doc <:doc<
+   @begin[doc]
+   @terms
+
+   The @tt{BOperator} type is an abstract type with a decidable equality.
+   We only require that an operator have a fixed binding depth (a number)
+   and a shape.
+
+   As in the case of concrete quoted operators, the shape of
+   an abstract operator is a list of numbers, each stating the number of
+   bindings the operator adds to the corresponding subterm; the length of
+   this list is the arity of an operator.
+
+   The @tt{Operator} type imposes a @emph{new} equality
+   << is_same_op{'op1; 'op2} >> on type <<BOperator>>, in which two
+   operators are considered equal iff they are of the same shape (which
+   means their binding depths can be different.)
+
+   The << inject{'op;'n} >> operator gives the operator << 'op >> a ``new''
+   binding depth << 'n >>.
+
+   @end[doc]
+>>
 
 declare BOperator
 declare op_bdepth{'op}
 declare shape{'op}
-declare is_same_op{'op_1;'op_2} (* Do not consider  op_bdepth *)
+declare is_same_op{'op_1;'op_2} (* Do not consider op_bdepth *)
 declare inject{'op; 'n} (* Op * Nat -> BOp *)
-
-dform boperator_df: BOperator = `"BOperator"
-dform op_bdepth_df: op_bdepth{'op} = `"bdepth" sub["o"] "(" slot{'op} ")"
-
 
 define unfold_unbind :
    unbind{'op} <--> inject{'op; op_bdepth{'op} -@ 1 }
-
 define unfold_bind :
    bind{'op; 'n} <--> inject{'op; op_bdepth{'op} +@ 'n }
-
 define unfold_bind1 :
    bind{'op} <--> inject{'op; op_bdepth{'op} +@ 1 }
 
 declare arity{'op}
 iform unfold_arity : arity{'op} <--> length{shape{'op}}
-dform arity_df: arity{'op} = `"arity(" slot{'op} `")"
 
 define unfold_op :
    Operator <--> quot o1, o2 : BOperator // "assert"{is_same_op{'o1; 'o2}}
+doc docoff
 
+dform boperator_df: BOperator = `"BOperator"
+dform op_bdepth_df: op_bdepth{'op} = `"bdepth" sub["o"] "(" slot{'op} ")"
+dform shape_df: shape{'op} = `"shape(" slot{'op} `")"
+dform issameop_df : is_same_op{'op1;'op2} =
+   `"is_same_op(" slot{'op1} `"; " slot{'op2} `")"
+dform inject_df : inject{'op;'n} =
+   `"inject(" slot{'op} `"; " slot{'n} `")"
+dform unbind_df: unbind{'op} = `"unbind(" slot{'op} `")"
+dform bind_df : bind{'op;'n} =
+   `"bind(" slot{'op} `"; " slot{'n} `")"
+dform bind_df1: bind{'op} = `"bind(" slot{'op} `")"
+dform arity_df: arity{'op} = `"arity(" slot{'op} `")"
 dform operator_df: Operator = `"Operator"
 
 doc "doc"{rewrites}
@@ -91,6 +125,7 @@ prim bop_univ {| intro [] |}:
 interactive bop_type {| intro [] |}:
    sequent { <H> >- BOperator Type }
 
+(* is_same_op is an equivalence relation on BOperator. *)
 prim is_same_op_wf {| intro [] |} :
    sequent { <H> >- 'op_1 in BOperator } -->
    sequent { <H> >- 'op_2 in BOperator } -->
@@ -222,5 +257,4 @@ interactive_rw shape_bind {| reduce |} :
 interactive_rw shape_bind1 {| reduce |} :
    'op in BOperator -->
    shape{bind{'op}} <--> shape{'op}
-
-doc <:doc< @docoff >>
+doc docoff

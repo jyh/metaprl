@@ -57,7 +57,6 @@ doc <:doc< @begin[doc]
    $bterm(<<Gamma>>; x; <<Delta>>. x)$ where $|<<Gamma>>|=i$ and $|<<Delta>>|=j$.
 @end[doc] >>
 
-
 declare Var
 dform vars_df : Var = `"Var"
 
@@ -82,7 +81,6 @@ prim_rw right_id {| reduce |} :
 
 doc <:doc< @begin[doc]
  @modsection{Definitions}
-
  @modsubsection{Depth}
  The depth of a variable <<var{'i;'j}>> is <<'i+@'j+@1>>.
 @end[doc] >>
@@ -117,8 +115,7 @@ define unfold_is_eq:
 dform is_eq_df : is_eq{'v;'u} =  slot{'v} space cong sub{bool} space slot{'u}
 
 declare eq{'v;'u}
-iform unfold_eq:
-   eq{'v;'u} <--> "assert"{is_eq{'v;'u}}
+iform unfold_eq: eq{'v;'u} <--> "assert"{is_eq{'v;'u}}
 dform eq_df : eq{'v;'u} =  slot{'v} space cong sub{Var} space slot{'u}
 
 interactive_rw eq_equal {| reduce |} :
@@ -197,20 +194,6 @@ interactive eq_trans 'v2 :
    sequent { <H> >- "assert"{is_eq{'v1; 'v2}} } -->
    sequent { <H> >- "assert"{is_eq{'v2; 'v3}} } -->
    sequent { <H> >- "assert"{is_eq{'v1; 'v3}} }
-
-interactive eq_sym1 :
-   sequent { <H> >- 'v1 in Var } -->
-   sequent { <H> >- 'v2 in Var } -->
-   sequent { <H> >- eq{'v1; 'v2} } -->
-   sequent { <H> >- eq{'v2; 'v1} }
-
-interactive eq_trans1 'v2 :
-   sequent { <H> >- 'v1 in Var } -->
-   sequent { <H> >- 'v2 in Var } -->
-   sequent { <H> >- 'v3 in Var } -->
-   sequent { <H> >- eq{'v1; 'v2} } -->
-   sequent { <H> >- eq{'v2; 'v3} } -->
-   sequent { <H> >- eq{'v1; 'v3} }
 
 (* XXX: TODO: arith tactics need to know abot the next 3 rules *)
 

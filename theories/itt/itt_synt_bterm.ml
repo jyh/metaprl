@@ -1,6 +1,8 @@
 doc <:doc<
    @begin[doc]
    @module[Itt_synt_bterm]
+   The @tt[Itt_synt_bterm] module defines a type of bterms << BTerm >>
+   for our simple theory of syntax.
 
    @end[doc]
 
@@ -59,16 +61,24 @@ open Itt_squash
  * The BTerm type                                                       *
  ************************************************************************)
 
+doc <:doc< @begin[doc]
+   @modsection{BTerm}
+
+   The << BTerm >> type is defined recursively. A syntactic term is either
+   a variable of type << Var >> or a composed term of the form
+   << make_bterm{'op; 'mbtl} >>, where << 'op >> is an operator of type
+   << BOperator >>, << 'mbtl >> is a list of syntactic terms, and << 'mbtl >>
+   must be compatible with the shape and the binding depth of << 'op >>.
+
+   The @tt[bterm_ind] defines the induction combinator for the << BTerm >> type.
+
+@end[doc] >>
+
+
 declare BTerm
 declare make_bterm{'op; 'subterms}
 declare bterm_ind{'bt; v.'var_case['v];
                        op,subterms,ind. 'op_case['op; 'subterms; 'ind] }
-
-dform bterm_df : except_mode[src] :: BTerm =
-   `"BTerm"
-
-dform make_bterm_df : except_mode[src] :: make_bterm{'bt; 'btl} =
-   `"make_bterm(" slot{'bt} `"; " slot{'btl} `")"
 
 prim_rw bterm_ind_op_reduce {| reduce |}:
       bterm_ind{make_bterm{'op; 'subterms};
@@ -90,47 +100,63 @@ interactive_rw bterm_ind_var_reduce2 :
                 v.'var_case['v];
                 op,subterms,ind. 'op_case['op; 'subterms; 'ind] } <-->
          'var_case['v]
+doc docoff
+
+dform bterm_df : BTerm = `"BTerm"
+dform make_bterm_df : make_bterm{'bt; 'btl} =
+   `"make_bterm(" slot{'bt} `"; " slot{'btl} `")"
+dform bterm_ind_df : bterm_ind{'bt; v.'var_case; op,subterms,ind. 'op_case } =
+   szone pushm[1] pushm[3]
+   `"match " slot{'bt} `" with" hspace
+   pushm[3] slot{'v} `" ->" hspace slot{'var_case} popm popm hspace
+   `"| " pushm[3] `"make_bterm(" slot{'op} `";" slot{'subterms} `")." slot{'ind} `" ->" hspace slot{'op_case} popm popm ezone
+
+doc <:doc<
+   @begin[doc]
+   @modsubsection{Depth}
+   When a bterm << 'bt >> is a variable, its binding depth << bdepth{'bt} >>
+   is defined as the depth of << 'bt >> as defined in @hrefmodule[Itt_synt_var].
+   When << 'bt >> is a composed term of the form << make_bterm{'op; 'mbtl} >>,
+   its binding depth is defined as the binding depth of the operator << 'op >>.
+   @end[doc]
+>>
 
 define unfold_bdepth: bdepth{'bt} <--> bterm_ind{'bt; v. depth{'v}; op,btl,ind. op_bdepth{'op}}
-
-dform bdepth_df: bdepth{'bt} = `"bdepth(" slot{'bt} `")"
 
 interactive_rw bdepth_reduce1 {| reduce |} :  bdepth{make_bterm{'op;'btl}} <--> op_bdepth{'op}
 
 interactive_rw bdepth_reduce2 {| reduce |} :  bdepth{var{'l;'r}} <--> depth{var{'l;'r}}
 
 interactive_rw bdepth_var_reduce: ('v in Var) --> bdepth{'v} <--> depth{'v}
+doc docoff
+dform bdepth_df: bdepth{'bt} = `"bdepth(" slot{'bt} `")"
 
-(*
-define unfold_compatible_shapes: compatible_shapes{'op; 'btl} <-->
-   squash{
-   fix{ f. lambda{ diff. lambda{ shape. lambda{ btl.
-      list_ind{ 'shape; is_nil{'btl}; h1,t1,g.
-         list_ind{ 'btl; bfalse; h2,t2,g.
-            (bdepth{'h2} -@ 'h1 = 'diff in int) and  ('f 'diff 't1 't2) } }
-      } } } } op_bdepth{'op} shape{'op} 'btl
-   }
-*)
+doc <:doc< @begin[doc]
+   @modsubsection{Compatible shapes}
 
+   Suppose the shape of an operator << 'op >> is $[b_1;@ldots;b_n]$ ($n @ge 0$)
+   and the binding depth is << 'd >>. We say << 'mbtl >> and << 'op >> have
+   compatible shapes if << 'mbtl >> is a list of length << 'n >> where the
+   binding depth of the $i$-th element is $b_i+d$ (for each $i @in 1..n$).
+   @end[doc]
+>>
 define unfold_compatible_shapes: compatible_shapes{'op; 'btl} <-->
-   squash{
       length{shape{'op}} = length{'btl} in int &
       all i:Index{'btl}. bdepth{nth{'btl;'i}} =  op_bdepth{'op} +@ nth{shape{'op};'i} in int
-   }
-
-dform compatible_shapes_df: compatible_shapes{'op;'btl} = `"compatible_shapes(" slot{'op} `";" slot{'btl} `")"
 
 interactive compatible_shapes_wf {| intro [] |} :
    sequent { <H> >- length{shape{'op}} = length{'btl} in int } -->
    sequent { <H> >- all i:Index{'btl}. bdepth{nth{'btl;'i}} =  op_bdepth{'op} +@ nth{shape{'op};'i} in int } -->
    sequent { <H> >- compatible_shapes{'op; 'btl} }
+doc docoff
+
+dform compatible_shapes_df: compatible_shapes{'op;'btl} = `"compatible_shapes(" slot{'op} `";" slot{'btl} `")"
+
+doc "doc"{rules}
 
 prim btermUniv {| intro [] |} :
    sequent { <H> >- BTerm in univ[i:l] } =
    it
-
-interactive btermType {| intro [] |} :
-   sequent { <H> >- BTerm Type }
 
 prim btermVar {| intro [AutoMustComplete] |} :
    sequent { <H> >- 'v in Var } -->
@@ -162,6 +188,8 @@ prim bterm_elim {| elim [] |} 'H :
 
 (* Derivable rules *)
 
+interactive btermType {| intro [] |} :
+   sequent { <H> >- BTerm Type }
 
 interactive bterm_ind_wf {| intro [] |} bind{bt.'C['bt]}:
    sequent { <H> >- 'bt in BTerm } -->
@@ -180,38 +208,6 @@ interactive bdepth_wf2 {| intro[] |} :
    sequent { <H> >- 'bt in BTerm } -->
    sequent { <H> >- bdepth{'bt} in int }
 
-
-(* A version of a bterm that takes depth as an argument *)
-declare make_bterm{'op;'bdepth;'subterms}
-iform make_bterm: make_bterm{'op;'bdepth;'subterms} <--> make_bterm{inject{'op;'bdepth};'subterms}
-dform make_bterm_df: make_bterm{'op;'bdepth;'subterms} =   `"make_bterm" sub{'bdepth}`"(" slot{'op} `"; " slot{'subterms} `")"
-
-
-define unfold_dest_bterm:
-   dest_bterm{'bt; v.'var_case['v];
-                   op,subterms. 'op_case['op; 'subterms] }
- <--> bterm_ind{'bt; v.'var_case['v];
-                     op,subterms,ind. 'op_case['op; 'subterms] }
-
-interactive_rw dest_bterm_op_reduce {| reduce |}:
-   dest_bterm{make_bterm{'op; 'subterms};
-             v.'var_case['v];
-             op,subterms. 'op_case['op; 'subterms] } <-->
-      'op_case['op; 'subterms]
-
-interactive_rw dest_bterm_var_reduce {| reduce |}:
-   dest_bterm{var{'l;'r};
-             v.'var_case['v];
-             op,subterms. 'op_case['op; 'subterms] } <-->
-      'var_case[var{'l;'r}]
-
-interactive_rw dest_bterm_var_reduce2 :
-   ('v in Var) -->
-   dest_bterm{'v;
-             v.'var_case['v];
-             op,subterms. 'op_case['op; 'subterms] } <-->
-      'var_case['v]
-
 interactive var_subtype {| intro [] |} :
    sequent { <H> >- Var subtype BTerm }
 
@@ -221,10 +217,44 @@ interactive subterms_have_greater_bdepth {| intro [AutoMustComplete] |} :
    sequent { <H> >- compatible_shapes{'op;'btl} } -->
    sequent { <H> >- all_list{'btl; bt. bdepth{'bt} >= op_bdepth{'op}} }
 
-(************************************************************************
- * Vars_of{bt} are defined the set of vars whose depth is less than     *
- * or equal to the depth of bt                                          *
- ************************************************************************)
+doc <:doc< @begin[doc]
+
+   << make_bterm{'op;'bdepth;'subterms} >> is a version of a bterm that
+   takes the depth as an argument.
+
+   @tt[dest_bterm] is a special case of @tt[bterm_ind] where <<'ind>> is
+   omitted. It is simpler than @tt[bterm_ind], but is as powerful since
+   @tt[bterm_ind] can also be defined using @tt[dest_bterm] and the
+   @tt[fix] operator.
+
+@end[doc] >>
+
+declare make_bterm{'op;'bdepth;'subterms}
+iform make_bterm: make_bterm{'op;'bdepth;'subterms} <--> make_bterm{inject{'op;'bdepth};'subterms}
+
+declare dest_bterm{'bt; v.'var_case['v];
+                        op,subterms. 'op_case['op; 'subterms] }
+iform dest_bterm:
+   dest_bterm{'bt; v.'var_case['v];
+                   op,subterms. 'op_case['op; 'subterms] }
+   <--> bterm_ind{'bt; v.'var_case['v];
+                       op,subterms,ind. 'op_case['op; 'subterms] }
+doc docoff
+
+dform make_bterm_df: make_bterm{'op;'bdepth;'subterms} =
+   `"make_bterm" sub{'bdepth} `"(" slot{'op} `"; " slot{'subterms} `")"
+
+dform dest_bterm_df : dest_bterm{'bt; v.'var_case; op,subterms. 'op_case } =
+   szone pushm[1] pushm[3]
+   `"match " slot{'bt} `" with" hspace
+   pushm[3] slot{'v} `" ->" hspace slot{'var_case} popm popm hspace
+   `"| " pushm[3] `"make_bterm(" slot{'op} `";" slot{'subterms} `") ->" hspace slot{'op_case} popm popm ezone
+
+doc <:doc< @begin[doc]
+   << Vars_of{'bt} >> defines the set of vars whose depth is less than or
+   equal to the depth of << 'bt >>.
+@end[doc] >>
+
 define unfold_vars_of: Vars_of{'bt} <--> { v: Var | bdepth{'v} <= bdepth{'bt} }
 
 interactive vars_of_wf {| intro [] |} :
@@ -243,13 +273,20 @@ interactive vars_of_elim {| elim [] |} 'H :
 
 interactive vars_of_member {| nth_hyp |} 'H :
    sequent { <H>; u: Vars_of{'bt}; <J['u]> >- 'u in Var }
+doc docoff
+dform vars_of_df: Vars_of{'bt} = `"Vars_of(" slot{'bt} `")"
 
 (************************************************************************
  * Var_bterm                                                            *
  ************************************************************************)
+doc <:doc< @begin[doc]
+   << var_bterm{'bt} >> returns <<"true">> if << 'bt >> is in << Var >>,
+   <<"false">> otherwise.
+@end[doc] >>
 
 define unfold_is_var_bterm: is_var_bterm{'bt} <--> dest_bterm{'bt; v.btrue; op,btl. bfalse}
 define unfold_var_bterm: var_bterm{'bt} <--> "assert"{is_var_bterm{'bt}}
+doc docoff
 
 dform is_var_bterm_df : except_mode[src] :: is_var_bterm{'bt} =
    `"is_var_bterm(" slot{'bt} `")"
@@ -258,6 +295,7 @@ dform var_bterm_df : except_mode[src] :: var_bterm{'bt} =
 
 let fold_var_bterm = makeFoldC << var_bterm{'bt} >> unfold_var_bterm
 
+doc <:doc< >>
 interactive_rw is_var_reduce1 {| reduce |}: is_var_bterm{var{'l;'r}} <--> btrue
 interactive_rw is_var_reduce2 {| reduce |}: is_var_bterm{make_bterm{'op;'btl}} <--> bfalse
 interactive_rw var_reduce1 {| reduce |}: var_bterm{var{'l;'r}} <--> "assert"{btrue}
@@ -315,12 +353,18 @@ interactive var_bterm {| intro [] |} :
  * OpBTerm                                                              *
  ************************************************************************)
 
+doc <:doc< @begin[doc]
+   << OpBTerm >> is the set of non-variable bterms. So, a bterm is either in
+   << Var >> or in << OpBTerm >>, but not in both.
+@end[doc] >>
 define unfold_opbterm:
    OpBTerm <--> { bt: BTerm |  not{ var_bterm{'bt} } }
+doc docoff
 
 dform opbterm_df : except_mode[src] :: OpBTerm =
    `"OpBTerm"
 
+doc <:doc< >>
 interactive opbterm_univ {| intro [] |} :
    sequent { <H> >- OpBTerm in univ[i:l] }
 
@@ -359,9 +403,16 @@ interactive var_or_opbterm_hyp 'H bind{x. 'A['x]} 'b :
  * Op_of                                                                *
  ************************************************************************)
 
+doc <:doc< @begin[doc]
+   << op_of{'t} >> returns the operator of a bterm << 't >>.
+@end[doc] >>
 define unfold_op_of:
    op_of{'t} <--> dest_bterm{'t; v.'v; op,subterms.'op}
+doc docoff
 
+dform op_of_df: op_of{'bt} = `"op_of(" slot{'bt} `")"
+
+doc <:doc< >>
 interactive_rw op_of_reduce {| reduce |}: op_of{make_bterm{'op;'btl}} <--> 'op
 
 interactive op_of_wf {| intro [] |} :
@@ -386,12 +437,17 @@ interactive op_of_eq 'bl1 'bl2 :
  * Subterms                                                             *
  ************************************************************************)
 
+doc <:doc< @begin[doc]
+   << subterms{'t} >> returns the subterms of a bterm << 't >>.
+@end[doc] >>
 define unfold_subterms:
    subterms{'t} <--> dest_bterm{'t; v.nil; op,subterms.'subterms}
+doc docoff
 
 dform subterms_df : except_mode[src] :: subterms{'bt} =
    `"subterms(" slot{'bt} `")"
 
+doc <:doc< >>
 interactive_rw subterms_reduce1 {| reduce |}:  subterms{var{'l;'r}} <--> nil
 interactive_rw subterms_reduce2 {| reduce |}:  subterms{make_bterm{'op;'btl}} <--> 'btl
 
@@ -400,9 +456,12 @@ interactive subterms_wf {| intro [] |} :
    sequent { <H> >- subterms{'bt} in list{BTerm} }
 
 interactive_rw subterms_var :
-      ('bt in Var) -->
-      subterms{'bt} <--> nil
+   ('bt in Var) -->
+   subterms{'bt} <--> nil
 
+doc <:doc< @begin[doc]
+   We can prove if two bterms are equal, then they are squiggle equal.
+@end[doc] >>
 interactive btermSquiggle {| nth_hyp |} :
    sequent { <H> >- 'b1 = 'b2 in BTerm } -->
    sequent { <H> >- 'b1 ~ 'b2 }
@@ -410,7 +469,7 @@ interactive btermSquiggle {| nth_hyp |} :
 interactive btermlistSquiggle {| nth_hyp |} :
    sequent { <H> >- 'b1 = 'b2 in list{BTerm} } -->
    sequent { <H> >- 'b1 ~ 'b2 }
-
+doc docoff
 
 (************************************************************************
  * TYPE INFERENCE                                                       *
@@ -422,24 +481,31 @@ interactive btermlistSquiggle {| nth_hyp |} :
 let resource typeinf += (<< BTerm >>, infer_univ1)
 let resource typeinf += (<< subterms{'bt} >>, infer_const << list{BTerm} >>)
 
-
 (************************************************************************
  * Same_op                                                              *
  ************************************************************************)
 
+doc <:doc< @begin[doc]
+   << same_op{'b1; 'b2} >> decides whether two bterms have the same operator.
+   If both are variables, it returns << "true" >>; if both are composed bterms,
+   its result depends on whether their operators are the same; otherwise, it
+   returns << "false">>.
+@end[doc] >>
 define unfold_is_same_op: is_same_op{'b1; 'b2} <-->
    dest_bterm{'b1;
                v1. dest_bterm{'b2; v2. is_eq{'v1;'v2}; op2,btl2.bfalse};
-               op1,btl1. dest_bterm{'b2; v2. bfalse; op2,btl2. Itt_synt_operator!is_same_op{'op1;'op2}} }
+               op1,btl1. dest_bterm{'b2; v2. bfalse;
+                                    op2,btl2. Itt_synt_operator!is_same_op{'op1;'op2}} }
 
 define unfold_same_op: same_op{'b1; 'b2} <--> "assert"{is_same_op{'b1; 'b2}}
+doc docoff
 
 dform is_sameop_df : except_mode[src] :: is_same_op{'b1; 'b2} =
    `"is_same_op(" slot{'b1} `"; " slot{'b2} `")"
 dform sameop_df : except_mode[src] :: same_op{'b1; 'b2} =
    `"same_op(" slot{'b1} `"; " slot{'b2} `")"
 
-
+doc <:doc< >>
 interactive is_same_op_wf {| intro [] |} :
    sequent { <H> >- 'b1 in BTerm } -->
    sequent { <H> >- 'b2 in BTerm } -->
@@ -465,7 +531,6 @@ interactive same_op_decidable {| intro [] |} :
    [wf] sequent { <H> >- 'b2 in BTerm } -->
    sequent { <H> >- decidable{same_op{'b1; 'b2}} }
 
-
 interactive same_op_id {| intro [] |} :
    sequent { <H> >- 'b in BTerm } -->
    sequent { <H> >- same_op{'b; 'b} }
@@ -487,7 +552,6 @@ interactive same_op_trans 'b2:
    sequent { <H> >- same_op{'b1; 'b2} } -->
    sequent { <H> >- same_op{'b2; 'b3} } -->
    sequent { <H> >- same_op{'b1; 'b3} }
-
 doc docoff
 
 let sameOpSymT = same_op_sym

@@ -4556,7 +4556,7 @@ B	b1556	t1555
 P	p1556	Number 5893
 P	p1557	Number 6027
 O	o1557	location p1556 p1557
-P	p1830	String "byDefT unfold_subst thenT byDefsT [reduce_fix; reduceC; dest_bterm_var_reduce2]"
+P	p1830	String "byDefT unfold_subst thenT byDefsT [reduce_fix; reduceC; bterm_ind_var_reduce2]"
 O	o1830	ext_rule p1830
 T	t1830	o1116 b1073 b10
 B	b1830	t1830

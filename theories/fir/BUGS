@@ -2,14 +2,15 @@ Mojave FIR Theory
 BUGS
 by Brian Emre Aydemir (emre@cs.caltech.edu)
 
-Below, I have listed every bug in the Mojave FIR theory that I am
+Below, I have listed many bugs in the Mojave FIR theory that I am
 aware of.  They are listed in no particular order.  I have also listed,
 at the end, things that might be considered bugs, but really aren't.
+Other bugs can be found by searching the sources for the string ``BUG''.
 
 
 -- Cannot give a type for functions of zero arguments (see Mfir_ty!tyFun).
-   In particular, Mfir_connect_ty will convert TyFun ([], t) to [[t]]
-   instead of a tyFun term.
+   In particular, Mfir_connect_ty will convert TyFun ([], t) to some
+   term representing t instead of a tyFun term.
 
 -- No terms are declared for subops.  If I implement these,
    perhaps they should go in their own file, e.g. Mfir_subop.

@@ -341,12 +341,11 @@ let rec term_of_frame_field rcrd f =
       [] ->
          rcrd
     | (v, ty, i) :: t ->
-         let subfield_term = mk_frameSubField_term (term_of_ty ty)
-                                                   (number_term_of_int i)
+         let subfield_term =
+            mk_frameSubField_term (term_of_ty ty) (number_term_of_int i)
          in
-         let new_rcrd = mk_record_term (string_of_symbol v)
-                                       subfield_term
-                                       rcrd
+         let new_rcrd =
+            mk_record_term (string_of_symbol v) subfield_term rcrd
          in
             term_of_frame_field new_rcrd t
 
@@ -379,9 +378,8 @@ let rec frame_field_of_term lst t =
 let term_of_core_frame f =
    let fold_func rcrd key value =
       let frame_field = term_of_frame_field recordEnd_term value in
-      let new_record = mk_record_term (string_of_symbol key)
-                                      frame_field
-                                      rcrd
+      let new_record =
+         mk_record_term (string_of_symbol key) frame_field rcrd
       in
          new_record
    in

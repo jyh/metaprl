@@ -172,13 +172,14 @@ let num_of_int_precision p =
     | Int64 -> (num_of_int 64)
 
 let int_precision_of_num n =
-   match int_of_num n with
-      8 ->  Int8
-    | 16 -> Int16
-    | 32 -> Int32
-    | 64 -> Int64
-    | _ ->
-         raise (Invalid_argument "int_precision_of_num: not a rawint precision")
+   let i = int_of_num n in
+      match int_of_num n with
+         8 ->  Int8
+       | 16 -> Int16
+       | 32 -> Int32
+       | 64 -> Int64
+       | _ ->
+            raise (Invalid_argument ("int_precision_of_num: not a rawint precision --- " ^ (string_of_int i)))
 
 
 let string_of_int_signed s =
@@ -193,7 +194,7 @@ let int_signed_of_string s =
    else if s = "unsigned" then
       false
    else
-      raise (Invalid_argument "int_signed_of_string: not a int_signed")
+      raise (Invalid_argument ("int_signed_of_string: not a int_signed --- " ^ s))
 
 
 let num_of_float_precision p =
@@ -203,12 +204,13 @@ let num_of_float_precision p =
     | LongDouble ->  (num_of_int 80)
 
 let float_precision_of_num n =
-   match int_of_num n with
-      32 -> Single
-    | 64 -> Double
-    | 80 -> Double
-    | _ ->
-         raise (Invalid_argument "float_precision_of_num: not a float_precision")
+   let i = int_of_num n in
+      match int_of_num n with
+         32 -> Single
+       | 64 -> Double
+       | 80 -> Double
+       | _ ->
+            raise (Invalid_argument ("float_precision_of_num: not a float_precision --- " ^ (string_of_int i)))
 
 
 (**************************************************************************
@@ -233,8 +235,7 @@ let rec list_of_term converter t =
    else if t = nil_term then
       []
    else
-      raise (RefineError ("list_of_term", StringTermError
-            ("not a list term", t)))
+      report_error "list_of_term" t
 
 
 (**************************************************************************
@@ -306,7 +307,7 @@ let rec unfold_intset set intervals =
             let newset = IntSet.of_interval (Closed left') (Closed right') in
                unfold_intset (IntSet.union newset set) tail
          else
-            report_error "unfold_intset" head
+            report_error "unfold_intset (head)" intervals
    else if is_nil_term intervals then
       set
    else
@@ -322,7 +323,7 @@ let rec unfold_rawintset precision sign set intervals =
             let newset = RawIntSet.of_interval precision sign (Closed left') (Closed right') in
                unfold_rawintset precision sign (RawIntSet.union newset set) tail
          else
-            report_error "unfold_rawintset" head
+            report_error "unfold_rawintset (head)" intervals
    else if is_nil_term intervals then
       set
    else
@@ -343,7 +344,7 @@ let int_set_of_term t =
          if 31 = (int_of_num precision) && (int_signed_of_string sign) then
             unfold_intset IntSet.empty intervals
          else
-            report_error "int_set_of_term" t
+            report_error "int_set_of_term (interval)" t
    else
       report_error "int_set_of_term" t
 
@@ -356,9 +357,12 @@ let term_of_rawint_set set =
 let rawint_set_of_term t =
    if is_intset_term t then
       let precision, sign, intervals = dest_intset_term t in
-      let precision' = int_precision_of_num precision in
-      let sign' = int_signed_of_string sign in
-         unfold_rawintset precision' sign' (RawIntSet.empty precision' sign') intervals
+         try
+            let precision' = int_precision_of_num precision in
+            let sign' = int_signed_of_string sign in
+               unfold_rawintset precision' sign' (RawIntSet.empty precision' sign') intervals
+         with
+            _ -> report_error "rawint_set_of_term (interval)" t
    else
       report_error "rawint_set_of_term" t
 

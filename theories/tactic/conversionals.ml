@@ -69,18 +69,6 @@ let tryC rw =
    rw orelseC idC
 
 (*
- * BUG:
- * We override subterm_count for the next functions
- * because we don't want to go into special context
- * subterm.
- *)
-let subterm_count t =
-   if Opname.eq (opname_of_term t) context_opname then
-      subterm_count t - 1
-   else
-      subterm_count t
-
-(*
  * First subterm that works.
  *)
 let someSubC conv =

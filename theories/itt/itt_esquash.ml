@@ -148,7 +148,7 @@ prim esquash_elim {| elim [] |} 'H 'J :
  * It can also be formulated as an introduction rule.
  * @end[doc]
  *)
-interactive esquash_mem {| intro [] |} 'H :
+interactive esquash_mem {| intro []; squash |} 'H :
    sequent [squash] { 'H >- esquash{'A} } -->
    sequent ['ext] { 'H >- it IN esquash{'A} }
 

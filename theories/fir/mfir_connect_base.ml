@@ -34,8 +34,11 @@
 
 (* Open MCC ML namespaces. *)
 
+open Interval_set
 open Rawint
+open Rawfloat
 open Symbol
+open Fir_set
 open Fir
 
 (* Open MetaPRL ML namespaces. *)
@@ -140,14 +143,72 @@ let bool_of_term t =
 let number_term_of_int i =
    mk_number_term (num_of_int i)
 
-let int_of_number_term n =
-   int_of_num (dest_number_term n)
+let int_of_number_term t =
+   if is_number_term t then
+      int_of_num (dest_number_term t)
+   else
+      report_error "int_of_number_term" t
+
 
 let number_term_of_rawint r =
    mk_number_term (num_of_string (Rawint.to_string r))
 
 let rawint_of_number_term precision sign t =
-   Rawint.of_string precision sign (string_of_num (dest_number_term t))
+   if is_number_term t then
+      Rawint.of_string precision sign (string_of_num (dest_number_term t))
+   else
+      report_error "rawint_of_number_term" t
+
+
+(**************************************************************************
+ * Convert int_precision, int_signed, and float_precision.
+ **************************************************************************)
+
+let num_of_int_precision p =
+   match p with
+      Int8 ->  (num_of_int 8)
+    | Int16 -> (num_of_int 16)
+    | Int32 -> (num_of_int 32)
+    | Int64 -> (num_of_int 64)
+
+let int_precision_of_num n =
+   match int_of_num n with
+      8 ->  Int8
+    | 16 -> Int16
+    | 32 -> Int32
+    | 64 -> Int64
+    | _ ->
+         raise (Invalid_argument "int_precision_of_num: not a rawint precision")
+
+
+let string_of_int_signed s =
+   if s then
+      "signed"
+   else
+      "unsigned"
+
+let int_signed_of_string s =
+   if s = "signed" then
+      true
+   else if s = "unsigned" then
+      false
+   else
+      raise (Invalid_argument "int_signed_of_string: not a int_signed")
+
+
+let num_of_float_precision p =
+   match p with
+      Single ->      (num_of_int 32)
+    | Double ->      (num_of_int 64)
+    | LongDouble ->  (num_of_int 80)
+
+let float_precision_of_num n =
+   match int_of_num n with
+      32 -> Single
+    | 64 -> Double
+    | 80 -> Double
+    | _ ->
+         raise (Invalid_argument "float_precision_of_num: not a float_precision")
 
 
 (**************************************************************************
@@ -174,3 +235,142 @@ let rec list_of_term converter t =
    else
       raise (RefineError ("list_of_term", StringTermError
             ("not a list term", t)))
+
+
+(**************************************************************************
+ * Convert (raw) integer sets to terms.
+ **************************************************************************)
+
+(*
+ * Convert bounds to number terms.
+ *)
+
+let term_of_int_bound b =
+   match b with
+      Closed i ->
+         number_term_of_int i
+    | _ ->
+         raise (Invalid_argument "term_of_int_bound: not a Closed bound")
+
+let int_bound_of_term t =
+   if is_number_term t then
+      Closed (int_of_number_term t)
+   else
+      report_error "int_bound_of_term" t
+
+
+let term_of_rawint_bound b =
+   match b with
+      Closed r ->
+         number_term_of_rawint r
+    | _ ->
+         raise (Invalid_argument "term_of_rawint_bound: not a Closed bound")
+
+let rawint_bound_of_term precision sign t =
+   if is_number_term t then
+      Closed (rawint_of_number_term precision sign t)
+   else
+      report_error "rawint_bound_of_term" t
+
+(*
+ * The two functions below take a term and the bounds of an interval.
+ * They create a new cons term with the interval as the head and the
+ * term as the tail.
+ *)
+
+let fold_intset term left right =
+   let left' = term_of_int_bound left in
+   let right' = term_of_int_bound right in
+   let interval = mk_interval_term left' right' in
+      mk_cons_term interval term
+
+let fold_rawintset term left right =
+   let left' = term_of_rawint_bound left in
+   let right' = term_of_rawint_bound right in
+   let interval = mk_interval_term left' right' in
+      mk_cons_term interval term
+
+(*
+ * The two functions below are almost the inverses of the above
+ * two folding functions.  They return sets given a term that represents
+ * a list of intervals.
+ *)
+
+let rec unfold_intset set intervals =
+   if is_cons_term intervals then
+      let head, tail = dest_cons_term intervals in
+         if is_interval_term head then
+            let left, right = dest_interval_term head in
+            let left' = int_of_number_term left in
+            let right' = int_of_number_term right in
+            let newset = IntSet.of_interval (Closed left') (Closed right') in
+               unfold_intset (IntSet.union newset set) tail
+         else
+            report_error "unfold_intset" head
+   else if is_nil_term intervals then
+      set
+   else
+      report_error "unfold_intset" intervals
+
+let rec unfold_rawintset precision sign set intervals =
+   if is_cons_term intervals then
+      let head, tail = dest_cons_term intervals in
+         if is_interval_term head then
+            let left, right = dest_interval_term head in
+            let left' = rawint_of_number_term precision sign left in
+            let right' = rawint_of_number_term precision sign right in
+            let newset = RawIntSet.of_interval precision sign (Closed left') (Closed right') in
+               unfold_rawintset precision sign (RawIntSet.union newset set) tail
+         else
+            report_error "unfold_rawintset" head
+   else if is_nil_term intervals then
+      set
+   else
+      report_error "unfold_rawintset" intervals
+
+(*
+ * The main functions for converting between integer sets and terms.
+ *)
+
+let term_of_int_set set =
+   mk_intset_term (num_of_int 31)
+                  "signed"
+                  (IntSet.fold fold_intset nil_term set)
+
+let int_set_of_term t =
+   if is_intset_term t then
+      let precision, sign, intervals = dest_intset_term t in
+         if 31 = (int_of_num precision) && (int_signed_of_string sign) then
+            unfold_intset IntSet.empty intervals
+         else
+            report_error "int_set_of_term" t
+   else
+      report_error "int_set_of_term" t
+
+
+let term_of_rawint_set set =
+   mk_intset_term (num_of_int_precision (RawIntSet.precision set))
+                  (string_of_int_signed (RawIntSet.signed set))
+                  (RawIntSet.fold fold_rawintset nil_term set)
+
+let rawint_set_of_term t =
+   if is_intset_term t then
+      let precision, sign, intervals = dest_intset_term t in
+      let precision' = int_precision_of_num precision in
+      let sign' = int_signed_of_string sign in
+         unfold_rawintset precision' sign' (RawIntSet.empty precision' sign') intervals
+   else
+      report_error "rawint_set_of_term" t
+
+
+let term_of_set s =
+   match s with
+      IntSet i ->    term_of_int_set i
+    | RawIntSet r -> term_of_rawint_set r
+
+let set_of_term t =
+   try IntSet (int_set_of_term t) with
+   _ ->
+      try RawIntSet (rawint_set_of_term t) with
+      _ ->
+         report_error "set_of_term" t

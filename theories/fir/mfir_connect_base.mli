@@ -35,6 +35,7 @@
 (* Open MCC ML namespaces. *)
 
 open Rawint
+open Rawfloat
 open Symbol
 open Fir
 
@@ -88,6 +89,20 @@ val rawint_of_number_term : int_precision -> int_signed -> term -> rawint
 
 
 (*
+ * Convert int_precision, int_signed, and float_precision.
+ *)
+
+val num_of_int_precision : int_precision -> Mp_num.num
+val int_precision_of_num : Mp_num.num -> int_precision
+
+val string_of_int_signed : int_signed -> string
+val int_signed_of_string : string -> int_signed
+
+val num_of_float_precision : float_precision -> Mp_num.num
+val float_precision_of_num : Mp_num.num -> float_precision
+
+
+(*
  * Convert a list to a "term list", i.e. << cons{ ... } >>.
  * Lists are assumed to be nil-terminated.
  * For term_of_list:
@@ -98,3 +113,17 @@ val rawint_of_number_term : int_precision -> int_signed -> term -> rawint
 
 val term_of_list : ('a -> term) -> 'a list -> term
 val list_of_term : (term -> 'a) -> term -> 'a list
+
+
+(*
+ * Convert (raw) integer sets to terms.
+ *)
+
+val term_of_int_set : int_set -> term
+val int_set_of_term : term -> int_set
+
+val term_of_rawint_set : rawint_set -> term
+val rawint_set_of_term : term -> rawint_set
+
+val term_of_set : set -> term
+val set_of_term : term -> set

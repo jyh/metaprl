@@ -59,6 +59,7 @@ open Base_dtactic
 (*!
  * @begin[doc]
  * @rules
+ * @modsubsection{Basic axioms}
  *
  * Proofs of side-conditions require a proof of $<< "true" >>$, which we
  * take to be an axiom.
@@ -80,7 +81,7 @@ prim truth_intro {| intro [] |} 'H :
  * @end[doc]
  *)
 
-prim wf_small_type {| intro [] |} 'H :
+prim ty_small_as_large {| intro [] |} 'H :
    sequent [mfir] { 'H >- type_eq{ 't1; 't2; small_type } } -->
    sequent [mfir] { 'H >- type_eq{ 't1; 't2; large_type } }
    = it
@@ -102,6 +103,28 @@ prim ty_atom_list1 {| intro [] |} 'H :
 
 prim ty_atom_list2 {| intro [] |} 'H :
    sequent [mfir] { 'H >- has_type["atom_list"]{ nil; nil } }
+   = it
+
+(*!
+ * @begin[doc]
+ * @modsubsection{Kind well-formedness}
+ *
+ * The well-formedness judgments for kinds are straightforward.  Note that
+ * union definitions cannot define a negative number of cases.
+ * @end[doc]
+ *)
+
+prim wf_small_type {| intro [] |} 'H :
+   sequent [mfir] { 'H >- wf_kind{ small_type } }
+   = it
+
+prim wf_large_type {| intro [] |} 'H :
+   sequent [mfir] { 'H >- wf_kind{ large_type } }
+   = it
+
+prim wf_union_type {| intro [] |} 'H :
+   sequent [mfir] { 'H >- int_le{ 0; number[i:n] } } -->
+   sequent [mfir] { 'H >- wf_kind{ union_type[i:n] } }
    = it
 
 (*!

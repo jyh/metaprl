@@ -153,6 +153,15 @@ declare raw_data
  * @begin[doc]
  * @modsubsection{Judgments}
  *
+ * The judgment @tt[wf_kind] says that kind @tt[k] is well-formed.
+ * @end[doc]
+ *)
+
+declare wf_kind{ 'k }
+
+(*!
+ * @begin[doc]
+ *
  * A proof of @tt[type_eq] says that two types (or type definitions)
  * @tt[ty1] and @tt[ty2] are equal in the kind @tt[k].  The two subterm
  * form of @tt[type_eq] is degenerate, and says that a type @tt[ty] is equal
@@ -295,6 +304,10 @@ dform no_def_df2 : mode[tex] ::
 (*
  * Judgments.
  *)
+
+dform wf_kind_df : except_mode[src] ::
+   wf_kind{ 'k } =
+   bf["wf_kind"] `"(" slot{'k} `")"
 
 dform type_eq_df1 : except_mode[src] ::
    type_eq{ 'ty1; 'ty2; 'k } =

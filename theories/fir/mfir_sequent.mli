@@ -77,6 +77,7 @@ declare no_def
  * Judgments.
  *)
 
+declare wf_kind{ 'k }
 declare type_eq{ 'ty1; 'ty2; 'k }
 declare type_eq{ 'ty; 'k }
 declare has_type[str:s]{ 't; 'ty }

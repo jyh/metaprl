@@ -251,7 +251,7 @@ interactive fo_n1 :
    sequent { >- "type"{'B} } -->
    sequent { x: 'T >- "type"{'A['x]} } -->
    sequent { x: 'T >- "type"{'A1['x]} } -->
-   sequent { >- (all w:'T. 'A1['w]) & (all x:'T. (('B0 or 'A0['x]) or 'B0)) & "not"{('B0 & (all y:'T. 'A1['y]))} => all z:'T. 'A0['z] }
+   sequent { >- (all w:'T. 'A1['w]) & (all x:'T. (('B or 'A['x]) or 'B)) & "not"{('B & (all y:'T. 'A1['y]))} => all z:'T. 'A['z] }
 
 interactive fo_n2 :
    sequent { >- "type"{'T} } -->
@@ -260,7 +260,7 @@ interactive fo_n2 :
    sequent { x: 'T >- "type"{'A['x]} } -->
    sequent { x: 'T >- "type"{'A1['x]} } -->
    sequent { x: 'T >- "type"{'A2['x]} } -->
-   sequent { >- (all w:'T. 'A2['w]) & (all x:'T. (('B0 or 'A0['x]) or 'B0)) & "not"{('B0 & (all y:'T. 'A1['y]))} & "not"{('B1 & (all y:'T. 'A2['y]))} & (all x:'T. (('B1 or 'A1['x]) or 'B1)) => all z:'T. 'A0['z] }
+   sequent { >- (all w:'T. 'A2['w]) & (all x:'T. (('B or 'A['x]) or 'B)) & "not"{('B & (all y:'T. 'A1['y]))} & "not"{('B1 & (all y:'T. 'A2['y]))} & (all x:'T. (('B1 or 'A1['x]) or 'B1)) => all z:'T. 'A['z] }
 
 interactive fo_n3 :
    sequent { >- "type"{'T} } -->
@@ -271,11 +271,11 @@ interactive fo_n3 :
    sequent { x: 'T >- "type"{'A1['x]} } -->
    sequent { x: 'T >- "type"{'A2['x]} } -->
    sequent { x: 'T >- "type"{'A3['x]} } -->
-   sequent { >- (all w:'T. 'A3['w]) & (all x:'T. (('B0 or 'A0['x]) or 'B0)) & "not"{('B0 & (all y:'T. 'A1['y]))} &  "not"{('B1 & (all y:'T. 'A2['y]))} & (all x:'T. (('B1 or 'A1['x]) or 'B1)) &  "not"{('B2 & (all y:'T. 'A3['y]))} & (all x:'T. (('B2 or 'A2['x]) or 'B2)) => all z:'T. 'A0['z] }
+   sequent { >- (all w:'T. 'A3['w]) & (all x:'T. (('B or 'A['x]) or 'B)) & "not"{('B & (all y:'T. 'A1['y]))} &  "not"{('B1 & (all y:'T. 'A2['y]))} & (all x:'T. (('B1 or 'A1['x]) or 'B1)) &  "not"{('B2 & (all y:'T. 'A3['y]))} & (all x:'T. (('B2 or 'A2['x]) or 'B2)) => all z:'T. 'A['z] }
 
 
 interactive fo_n4 : (* takes really long *)
-   sequent { >- (all w:'T. 'A4['w]) & (all x:'T. (('B0 or 'A0['x]) or 'B0)) & "not"{('B0 & (all y:'T. 'A1['y]))} & (all x:'T. (('B1 or 'A1['x]) or 'B1)) & "not"{('B1 & (all y:'T. 'A2['y]))} & (all x:'T. (('B2 or 'A2['x]) or 'B2)) & "not"{('B2 & (all y:'T. 'A3['y]))} & (all x:'T. (('B3 or 'A3['x]) or 'B3)) & "not"{('B3 & (all y:'T. 'A4['y]))} => all z:'T. 'A0['z] }
+   sequent { >- (all w:'T. 'A4['w]) & (all x:'T. (('B or 'A['x]) or 'B)) & "not"{('B & (all y:'T. 'A1['y]))} & (all x:'T. (('B1 or 'A1['x]) or 'B1)) & "not"{('B1 & (all y:'T. 'A2['y]))} & (all x:'T. (('B2 or 'A2['x]) or 'B2)) & "not"{('B2 & (all y:'T. 'A3['y]))} & (all x:'T. (('B3 or 'A3['x]) or 'B3)) & "not"{('B3 & (all y:'T. 'A4['y]))} => all z:'T. 'A['z] }
 
 
 

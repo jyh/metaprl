@@ -36,6 +36,8 @@ extends Itt_set
 extends Itt_rfun
 extends Itt_esquash
 
+open Lm_symbol
+
 open Refiner.Refiner.Term
 
 open Tactic_type.Tacticals
@@ -176,8 +178,8 @@ rule quotientSubtype :
  ************************************************************************)
 
 val is_quotient_term : term -> bool
-val dest_quotient : term -> string * string * term * term
-val mk_quotient_term : string -> string -> term -> term -> term
+val dest_quotient : term -> var * var * term * term
+val mk_quotient_term : var -> var -> term -> term -> term
 
 topval quotientT : int -> tactic
 

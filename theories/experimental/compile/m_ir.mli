@@ -52,6 +52,7 @@
  *)
 extends M_util
 
+open Lm_symbol
 open Opname
 open Refiner.Refiner.Term
 
@@ -165,8 +166,8 @@ val mk_fundef_term : term -> term -> term -> term
 val letrec_term : term
 val letrec_opname : opname
 val is_letrec_term : term -> bool
-val dest_letrec_term : term -> string * term * string * term
-val mk_letrec_term : string -> term -> string -> term -> term
+val dest_letrec_term : term -> var * term * var * term
+val mk_letrec_term : var -> term -> var -> term -> term
 
 (*
  * -*-

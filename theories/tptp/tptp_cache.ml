@@ -32,8 +32,9 @@
  *)
 
 open Printf
-open Mp_debug
-open String_set
+open Lm_debug
+open Lm_symbol
+open Lm_string_set
 open Set_sig
 
 open Refiner.Refiner.TermType
@@ -46,6 +47,13 @@ let debug_cache =
         debug_description = "Show TPTP cache operations";
         debug_value = false
       }
+
+(************************************************************************
+ * COMPATIBILITY
+ ************************************************************************)
+
+let dest_var t =
+   string_of_symbol (dest_var t)
 
 (************************************************************************
  * TYPES                                                                *
@@ -113,7 +121,7 @@ let rec compare_terms constantp subst term1 term2 =
    else
       let trm1 = dest_term term1 in
       let trm2 = dest_term term2 in
-         match compare trm1.term_op trm2.term_op with
+         match Pervasives.compare trm1.term_op trm2.term_op with
             0 ->
                compare_bterm_lists constantp subst trm1.term_terms trm2.term_terms
           | ord ->
@@ -159,7 +167,7 @@ and compare_term_lists constantp subst terms1 terms2 =
 and compare_vars subst v1 v2 =
    try
       let v2' = List.assoc v1 subst in
-      let ord = compare v2 v2' in
+      let ord = Pervasives.compare v2 v2' in
          if ord = 0 then
             Equal subst
          else if ord < 0 then

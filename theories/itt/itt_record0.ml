@@ -3,7 +3,7 @@ extends Itt_struct3
 extends Itt_inv_typing
 
 open Printf
-open Mp_debug
+open Lm_debug
 open Refiner.Refiner
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp

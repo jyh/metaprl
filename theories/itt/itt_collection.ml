@@ -59,7 +59,7 @@ open Itt_squash
 open Itt_tunion
 open Itt_int_base
 
-open Mp_debug
+open Lm_debug
 open Refiner.Refiner
 open Refiner.Refiner.TermType
 open Refiner.Refiner.Term

@@ -12,21 +12,21 @@
  * OCaml, and more information about this system.
  *
  * Copyright (C) 1998 Jason Hickey, Cornell University
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- * 
+ *
  * Author: Jason Hickey
  * jyh@cs.cornell.edu
  *)
@@ -34,8 +34,8 @@
 extends Tptp
 
 open Printf
-open Mp_debug
-open Mp_pervasives
+open Lm_debug
+open Lm_pervasives
 
 open Refiner.Refiner.TermType
 open Refiner.Refiner.Term
@@ -48,10 +48,22 @@ open Tptp_type
 open Tptp
 
 (*
+ * Compatibility.
+ *)
+let mk_var_term v =
+   mk_var_term (Lm_symbol.add v)
+
+let mk_all_term bvars t =
+   mk_all_term (List.map Lm_symbol.add bvars) t
+
+let mk_exists_term bvars t =
+   mk_exists_term (List.map Lm_symbol.add bvars) t
+
+(*
  * string -> path commands
  *)
 let set_path _ var path =
-   let path' = String_util.split ':' path in
+   let path' = Lm_string_util.split ":" path in
       var := path'
 
 let set_path_arg d var =
@@ -214,7 +226,7 @@ let mk_fun_decl (v, arity) =
    if arity > Array.length atoms then
       raise (Failure (sprintf "mk_fun_decl: arity is out of range: %d" arity))
    else
-      HypBinding (v, atoms.(arity))
+      HypBinding (Lm_symbol.add v, atoms.(arity))
 
 (*
  * Predicates are over atoms.
@@ -232,13 +244,13 @@ let mk_pred_decl (v, arity) =
    if arity > Array.length props then
       raise (Failure (sprintf "mk_pred_decl: arity is out of range: %d" arity))
    else
-      HypBinding (v, props.(arity))
+      HypBinding (Lm_symbol.add v, props.(arity))
 
 (*
  * Axiom declaration wrap a Hypothesis.
  *)
 let mk_axiom_decl (v, ax) =
-   HypBinding (v, ax)
+   HypBinding (Lm_symbol.add v, ax)
 
 (*
  * Collect the sequent.

@@ -46,7 +46,6 @@ declare meta_rem[a:n, b:n]
 
 declare meta_eq[a:n,b:n]{'tt; 'ff}
 declare meta_eq[a:s,b:s]{'tt; 'ff}
-declare meta_eq[a:v,b:v]{'tt; 'ff}
 declare meta_eq[a:t,b:t]{'tt; 'ff}
 declare meta_eq[a:l,b:l]{'tt; 'ff}
 
@@ -66,7 +65,6 @@ ml_rw reduce_meta_rem  : meta_rem[a:n, b:n]
 
 ml_rw reduce_meta_eq_num : meta_eq[a:n,b:n]{'tt; 'ff}
 ml_rw reduce_meta_eq_str : meta_eq[a:s,b:s]{'tt; 'ff}
-ml_rw reduce_meta_eq_var : meta_eq[a:v,b:v]{'tt; 'ff}
 ml_rw reduce_meta_eq_tok : meta_eq[a:t,b:t]{'tt; 'ff}
 ml_rw reduce_meta_eq_lev : meta_eq[a:l,b:l]{'tt; 'ff}
 

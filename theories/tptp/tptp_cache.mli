@@ -31,7 +31,7 @@
  * jyh@cs.cornell.edu
  *)
 
-open String_set
+open Lm_string_set
 
 open Refiner.Refiner.TermType
 

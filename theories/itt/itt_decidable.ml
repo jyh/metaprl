@@ -51,7 +51,7 @@ extends Itt_logic
 doc <:doc< @docoff >>
 
 open Printf
-open Mp_debug
+open Lm_debug
 open Term_match_table
 open Tactic_type
 open Tactic_type.Tacticals

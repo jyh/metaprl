@@ -47,7 +47,6 @@ declare "false"
 
 declare eq[a:n, b:n]{'t; 'f}
 declare eq[a:s, b:s]{'t; 'f}
-declare eq[a:v, b:v]{'t; 'f}
 declare eq[a:t, b:t]{'t; 'f}
 declare eq[a:l, b:l]{'t; 'f}
 
@@ -150,7 +149,6 @@ ml_rw reduce_error0 : ('goal: error[msg:s]) =
 
 prim_rw reduce_eq_num : eq[a:n, b:n]{'t; 'f} <--> meta_eq[a:n, b:n]{'t; 'f}
 prim_rw reduce_eq_str : eq[a:s, b:s]{'t; 'f} <--> meta_eq[a:s, b:s]{'t; 'f}
-prim_rw reduce_eq_var : eq[a:v, b:v]{'t; 'f} <--> meta_eq[a:v, b:v]{'t; 'f}
 prim_rw reduce_eq_tok : eq[a:t, b:t]{'t; 'f} <--> meta_eq[a:t, b:t]{'t; 'f}
 prim_rw reduce_eq_lev : eq[a:l, b:l]{'t; 'f} <--> meta_eq[a:l, b:l]{'t; 'f}
 

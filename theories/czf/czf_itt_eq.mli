@@ -37,6 +37,7 @@
 
 extends Czf_itt_set
 
+open Lm_symbol
 open Refiner.Refiner.TermType
 
 open Tactic_type.Tacticals
@@ -95,12 +96,12 @@ val mk_eq_term : term -> term -> term
 val dest_eq : term -> term * term
 
 val is_fun_set_term : term -> bool
-val mk_fun_set_term : string -> term -> term
-val dest_fun_set : term -> string * term
+val mk_fun_set_term : var -> term -> term
+val dest_fun_set : term -> var * term
 
 val is_fun_prop_term : term -> bool
-val mk_fun_prop_term : string -> term -> term
-val dest_fun_prop : term -> string * term
+val mk_fun_prop_term : var -> term -> term
+val dest_fun_prop : term -> var * term
 
 (*
  * Functionality.

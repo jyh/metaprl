@@ -37,7 +37,7 @@ extends Itt_fun
 extends Itt_unit
 extends Itt_union
 
-open Mp_debug
+open Lm_debug
 open Printf
 
 open Tactic_type

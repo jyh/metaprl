@@ -62,7 +62,7 @@ extends Itt_squash
 doc <:doc< @docoff >>
 
 open Printf
-open Mp_debug
+open Lm_debug
 open Refiner.Refiner
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermSubst

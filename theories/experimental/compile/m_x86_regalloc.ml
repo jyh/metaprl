@@ -31,7 +31,7 @@ extends M_x86_coalesce
 extends M_ra_main
 
 open Printf
-open Mp_debug
+open Lm_debug
 
 open Lm_symbol
 open Lm_string_util

@@ -35,9 +35,10 @@
 extends Tptp_load
 
 open Printf
-open Mp_debug
-open String_set
-open Thread_util
+open Lm_debug
+open Lm_symbol
+open Lm_string_set
+open Lm_thread_util
 
 open Refiner.Refiner
 open Refiner.Refiner.TermType
@@ -78,6 +79,24 @@ let debug_tptp_prove =
       }
 
 let debug_subst = load_debug "subst"
+
+(************************************************************************
+ * COMPATIBILTY
+ ************************************************************************)
+
+let dest_var t =
+   string_of_symbol (dest_var t)
+
+let dest_all t =
+   let bvars, t = dest_all t in
+      List.map string_of_symbol bvars, t
+
+let dest_exists t =
+   let bvars, t = dest_exists t in
+      List.map string_of_symbol bvars, t
+
+let symbol_set_of_string_set s =
+   SymbolSet.of_list (List.map Lm_symbol.add (StringSet.elements s))
 
 (************************************************************************
  * RULES                                                                *
@@ -164,6 +183,12 @@ let print_subst out =
    in
       List.iter print
 
+let print_var_subst out =
+   let print (v, t) =
+      fprintf out " %a=%a" print_symbol v print_term t
+   in
+      List.iter print
+
 (*
  *   Print equnlist
  *)
@@ -208,10 +233,10 @@ let rec first_clause_aux i len constants hyps =
             let opname = opname_of_term hyp in
                if List.exists (Opname.eq opname) decl_opnames then
                   let constants =
-                     match h with 
-                        HypBinding(v, _) -> StringSet.add constants v
+                     match h with
+                        HypBinding(v, _) -> StringSet.add constants (string_of_symbol v)
                       | _ -> constants
-                  in 
+                  in
                      first_clause_aux (i + 1) len constants hyps
                else
                   i, constants
@@ -313,7 +338,7 @@ let rec unify_term_list foundp eqnl constants term1 = function
                   print_string_list (StringSet.elements constants)
                   print_unify_eqnlist eqnl
                   eflush;
-            let eqnl = unify_eqnl_eqnl (eqnlist_append_eqn eqnl term1 term2) constants in
+            let eqnl = unify_eqnl_eqnl (eqnlist_append_eqn eqnl term1 term2) (symbol_set_of_string_set constants) in
                if !debug_tptp then
                   eprintf "Unification:%a%t" (**)
                      print_unify_eqnlist eqnl
@@ -362,7 +387,7 @@ let rec unify_term_lists constants terms1 terms2 =
 
 let unify_term_lists constants terms1 terms2 =
    let eqnl, terms1, terms2 = unify_term_lists constants terms1 terms2 in
-      (unify_eqnl eqnl constants), terms1, terms2
+      (unify_eqnl eqnl (symbol_set_of_string_set constants)), terms1, terms2
 
 (*
  * Check that the goal and the hyp have some hope at unification.
@@ -421,11 +446,13 @@ let expand_instance constants subst term =
  *)
 let new_goal constants subst terms1 terms2 =
    let vars, terms = List.split subst in
-   let terms1 = List.map (expand subst) terms1 in
-   let terms2 = List.map (fun t -> expand subst (negate_term t)) terms2 in
+   let subst' = List.map (fun (v, t) -> Lm_symbol.add v, t) subst in
+   let terms1 = List.map (expand subst') terms1 in
+   let terms2 = List.map (fun t -> expand subst' (negate_term t)) terms2 in
    let body = merge_term_lists terms1 terms2 in
    let positive, negative = split_atoms body in
-   let free_vars = StringSet.not_mem_filt constants (StringSet.elements (free_vars_terms body)) in
+   let free_vars' = SymbolSet.not_mem_filt constants (SymbolSet.elements (free_vars_terms body)) in
+   let free_vars = List.map string_of_symbol free_vars' in
       if free_vars = [] then
          let info =
             { tptp_vars = [];
@@ -437,7 +464,7 @@ let new_goal constants subst terms1 terms2 =
             subst, info
       else
          let new_vars = new_vars 1 [] vars (List.length free_vars) in
-         let new_vars_terms = List.map mk_var_term new_vars in
+         let new_vars_terms = List.map (fun v -> mk_var_term (Lm_symbol.add v)) new_vars in
          let subst' = List.combine free_vars new_vars_terms in
          let _ =
             if !debug_tptp then
@@ -449,7 +476,7 @@ let new_goal constants subst terms1 terms2 =
                   debug_subst := true
                end
          in
-         let body = List.map (fun t -> TermSubst.subst t free_vars new_vars_terms) body in
+         let body = List.map (fun t -> TermSubst.subst t free_vars' new_vars_terms) body in
          let _ =
             if !debug_tptp then
                begin
@@ -472,7 +499,7 @@ let mk_goal { tptp_vars = vars; tptp_body = body } =
    if body = [] then
       << "true" >>
    else
-      mk_exists_term vars (mk_and_term body)
+      mk_exists_term (List.map Lm_symbol.add vars) (mk_and_term body)
 
 (*
  * Prove well-formedness of a function.
@@ -496,7 +523,7 @@ let rec prove_wf p =
                   if !debug_tptp then
                      eprintf "Tptp_prove.prove_wf: atomic %s%t" v eflush
                in
-               let i = Sequent.get_decl_number p v in
+               let i = Sequent.get_decl_number p (Lm_symbol.add v) in
                   atomicT i thenT (funT prove_wf)
       else if is_type_term goal then
          let t = dest_type_term goal in
@@ -506,7 +533,7 @@ let rec prove_wf p =
                   if !debug_tptp then
                      eprintf "Tptp_prove.prove_wf: type %s%t" v eflush
                in
-               let i = Sequent.get_decl_number p v in
+               let i = Sequent.get_decl_number p (Lm_symbol.add v) in
                   typeT i thenT (funT prove_wf)
             else
                dT 0 thenT (funT prove_wf)
@@ -603,7 +630,7 @@ let rec trivial_goal i n =
  *)
 let rec instantiate_goal constants subst i n = funT (fun p ->
    if !debug_tptp then
-      eprintf "Tptp_prove.instantiate_goal:%a %t" print_subst subst eflush;
+      eprintf "Tptp_prove.instantiate_goal:%a %t" print_var_subst subst eflush;
    let goal = Sequent.concl p in
       if is_exists_term goal then
          let v = var_of_exists goal in
@@ -621,7 +648,7 @@ let rec instantiate_goal constants subst i n = funT (fun p ->
  * Decompose the existential that has just been asserted.
  * Save the new vars that are created.
  *)
-let rec decompose_exists arg = funT (fun p -> 
+let rec decompose_exists arg = funT (fun p ->
    if !debug_tptp then
       eprintf "Tptp_prove.decompose_exists%t" eflush;
    let i = Sequent.hyp_count p in
@@ -658,7 +685,9 @@ let resolveT = argfunT (fun i p ->
          eprintf "Starting unification: constants %a%t" print_string_list (StringSet.elements constants) eflush
    in
    let subst, terms1, terms2 = unify_term_lists constants goal_info.tptp_body hyp_info.tptp_body in
-   let subst, new_info = new_goal constants subst terms1 terms2 in
+   let subst = List.map (fun (v, t) -> string_of_symbol v, t) subst in
+   let subst, new_info = new_goal (symbol_set_of_string_set constants) subst terms1 terms2 in
+   let subst = List.map (fun (v, t) -> Lm_symbol.add v, t) subst in
    let goal = mk_goal new_info in
       if !debug_tptp then
          eprintf "New goal %a%t" print_term goal eflush;
@@ -722,7 +751,9 @@ let rec prove_auxT
                   let hyp_info = hyps.(i - 1) in
                   (* let _ = check_unify hyp_info goal_info in *)
                   let subst, terms1, terms2 = unify_term_lists constants body hyp_info.tptp_body in
-                  let subst, goal_info' = new_goal constants subst terms1 terms2 in
+                  let subst = List.map (fun (v, t) -> string_of_symbol v, t) subst in
+                  let subst, goal_info' = new_goal (symbol_set_of_string_set constants) subst terms1 terms2 in
+                  let subst = List.map (fun (v, t) -> Lm_symbol.add v, t) subst in
                   let goal = mk_goal goal_info' in
                      incr refine_count;
                      assert_new_goal level constants subst i goal (nextT goal_info'), i + 1

@@ -35,6 +35,8 @@ extends Itt_equal
 extends Itt_set
 extends Itt_void
 
+open Lm_symbol
+
 open Refiner.Refiner.Term
 
 open Tactic_type.Tacticals
@@ -189,13 +191,13 @@ rule rfunction_applyEquality ({ f | x:'A -> 'B['f; 'x] }) :
 
 val rfun_term : term
 val is_rfun_term : term -> bool
-val dest_rfun : term -> string * string * term * term
-val mk_rfun_term : string -> string -> term -> term -> term
+val dest_rfun : term -> var * var * term * term
+val mk_rfun_term : var -> var -> term -> term -> term
 
 val dfun_term : term
 val is_dfun_term : term -> bool
-val dest_dfun : term -> string * term * term
-val mk_dfun_term : string -> term -> term -> term
+val dest_dfun : term -> var * term * term
+val mk_dfun_term : var -> term -> term -> term
 
 val fun_term : term
 val is_fun_term : term -> bool
@@ -204,18 +206,18 @@ val mk_fun_term : term -> term -> term
 
 val well_founded_term : term
 val is_well_founded_term : term -> bool
-val dest_well_founded : term -> string * string * term * term
-val mk_well_founded_term : string -> string -> term -> term -> term
+val dest_well_founded : term -> var * var * term * term
+val mk_well_founded_term : var -> var -> term -> term -> term
 
 val lambda_term : term
 val is_lambda_term : term -> bool
-val dest_lambda : term -> string * term
-val mk_lambda_term : string -> term -> term
+val dest_lambda : term -> var * term
+val mk_lambda_term : var -> term -> term
 
 val fix_term : term
 val is_fix_term : term -> bool
-val dest_fix : term -> string * term
-val mk_fix_term : string -> term -> term
+val dest_fix : term -> var * term
+val mk_fix_term : var -> term -> term
 
 val apply_term : term
 val is_apply_term : term -> bool

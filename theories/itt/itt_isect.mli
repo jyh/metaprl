@@ -37,6 +37,8 @@ extends Itt_rfun
 extends Itt_logic
 extends Itt_struct2
 
+open Lm_symbol
+
 open Refiner.Refiner.Term
 
 open Tactic_type.Tacticals
@@ -118,6 +120,7 @@ rule topMemberEquality :
  * H >- b1 = b2 in Isect x:A. B[x]
  * H >- a = a in A
  *)
+(* WEAK BUG
 rule intersectionMemberCaseEquality (Isect x: 'A. 'B['x]) 'a :
    sequent { <H> >- 'b1 = 'b2 in Isect x: 'A. 'B['x] } -->
    sequent { <H> >- 'a = 'a in 'A } -->
@@ -132,14 +135,15 @@ rule intersectionSubtype :
 rule topSubtype :
    sequent { <H> >- "type"{'T} } -->
    sequent { <H> >- \subtype{'T; top} }
+*)
 
 (************************************************************************
  * TACTICS                                                              *
  ************************************************************************)
 
 val is_isect_term : term -> bool
-val dest_isect : term -> string * term * term
-val mk_isect_term : string -> term -> term -> term
+val dest_isect : term -> var * term * term
+val mk_isect_term : var -> term -> term -> term
 
 (*
  * -*-

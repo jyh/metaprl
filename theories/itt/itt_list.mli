@@ -34,6 +34,8 @@
 extends Itt_equal
 extends Itt_rfun
 
+open Lm_symbol
+
 open Refiner.Refiner.Term
 
 open Tactic_type.Tacticals
@@ -213,8 +215,8 @@ val dest_cons : term -> term * term
 val mk_cons_term : term -> term -> term
 
 val is_list_ind_term : term -> bool
-val dest_list_ind : term -> term * term * string * string * string * term
-val mk_list_ind_term : term -> term -> string -> string -> string -> term -> term
+val dest_list_ind : term -> term * term * var * var * var * term
+val mk_list_ind_term : term -> term -> var -> var -> var -> term -> term
 
 (*
  * -*-

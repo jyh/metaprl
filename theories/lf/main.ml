@@ -30,7 +30,7 @@
  * jyh@cs.cornell.edu
  *)
 
-open Mp_debug;;
+open Lm_debug;;
 open Util;;
 
 debug_string DebugLoad "Loading LF main...";;

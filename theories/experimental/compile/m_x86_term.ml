@@ -29,7 +29,7 @@ extends M_ir
 extends M_x86_inst_type
 
 open Printf
-open Mp_debug
+open Lm_debug
 
 open Lm_symbol
 
@@ -293,7 +293,7 @@ let dest_symbol v =
    Symbol.add (dest_var v)
 
 let int32_of_num i =
-   Int32.of_string (Mp_num.string_of_num i)
+   Int32.of_string (Lm_num.string_of_num i)
 
 let dest_spill_reg t =
    if is_var_term t then
@@ -710,7 +710,7 @@ let mk_symbol_term v =
  * Make a number.
  *)
 let num_of_int32 i =
-   Mp_num.num_of_string (Int32.to_string i)
+   Lm_num.num_of_string (Int32.to_string i)
 
 (*
  * A generic term constructor.

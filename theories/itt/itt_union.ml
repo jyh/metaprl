@@ -1,57 +1,57 @@
-doc <:doc< 
+doc <:doc<
    @begin[spelling]
    dT handedness inl inlFormation inr inrFormation reduceDecideInl
    reduceDecideInr selT
    @end[spelling]
-  
+
    @begin[doc]
    @module[Itt_union]
-  
+
    The union type $T_1 + T_2$ defines a union space containing the
    elements of both $T_1$ and $T_2$.  The union is @emph{disjoint}: the
    elements are @emph{tagged} with the @hrefterm[inl] and @hrefterm[inr]
    tags as belonging to the ``left'' type $T_1$ or the ``right'' type
    $T_2$.
-  
+
    The union type is the first primitive type that can have more than one
    element.  The tag makes the handedness of membership decidable, and
    the union type $@unit + @unit$ contains two elements: <<inl{it}>> and
    <<inr{it}>>.  The @hrefmodule[Itt_bool] module uses this definition to
    define the Boolean values, where @emph{false} is <<inl{it}>> and
    @emph{true} is <<inr{it}>>.
-  
+
    @end[doc]
-  
+
    ----------------------------------------------------------------
-  
+
    @begin[license]
-  
+
    This file is part of MetaPRL, a modular, higher order
    logical framework that provides a logical programming
    environment for OCaml and other languages.
-  
+
    See the file doc/index.html for information on Nuprl,
    OCaml, and more information about this system.
-  
+
    Copyright (C) 1998 Jason Hickey, Cornell University
-  
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
    as published by the Free Software Foundation; either version 2
    of the License, or (at your option) any later version.
-  
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-  
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-  
+
    Author: Jason Hickey
    @email{jyh@cs.cornell.edu}
-  
+
    @end[license]
 >>
 
@@ -63,8 +63,9 @@ extends Itt_subtype
 doc docoff
 
 open Printf
-open Mp_debug
-open String_set
+open Lm_symbol
+open Lm_debug
+open Lm_string_set
 open Refiner.Refiner
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
@@ -94,10 +95,10 @@ let _ =
  * TERMS                                                                *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @terms
-  
+
    The @tt{union} type is the binary union of two types $A$ and $B$.
    The elements are @inl{'a} for $a @in A$ and @inr{b} for $b @in B$.
    The @tt{decide} term @emph{decides} the handedness of the term $x @in A + B$.
@@ -112,16 +113,16 @@ declare decide{'x; y. 'a['y]; z. 'b['z]}
  * REWRITES                                                             *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @rewrites
-  
+
    The following two rules define the computational behavior of the
    @hrefterm[decide] term.  There are two reductions, the @tt{reduceDecideInl}
    rewrite describes reduction of @tt{decide} on the @hrefterm[inl] term,
    and @tt{reduceDecideInr} describes reduction on the @hrefterm[inr] term.
    The rewrites are added to the @hrefconv[reduceC] resource.
-  
+
    @end[doc]
 >>
 prim_rw reduceDecideInl {| reduce |} : decide{inl{'x}; u. 'l['u]; v. 'r['v]} <--> 'l['x]
@@ -165,11 +166,11 @@ prim unionFormation :
    sequent { <H> >- univ[i:l] } =
    'A + 'B
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @rules
    @modsubsection{Typehood and equality}
-  
+
    The equality of the @hrefterm[union] type is intensional; the
    union $A + B$ is a type if both $A$ and $B$ are types.
    @end[doc]
@@ -189,10 +190,10 @@ prim unionType {| intro [] |} :
    sequent { <H> >- "type"{. 'A + 'B } } =
    it
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Introduction}
-  
+
    The union type $A + B$ is true if both $A$ and $B$ are types,
    and either 1) $A$ is provable, or 2) $B$ is provable.  The following
    two rules are added to the @hreftactic[dT] tactic.  The application
@@ -219,10 +220,10 @@ prim inrFormation {| intro [SelectOption 2] |} :
    sequent { <H> >- 'A + 'B } =
    inr{'b}
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Membership}
-  
+
    The following two rules define membership, $@inl{a} @in A + B$
    if $a @in A$ and $@inr{b} @in A + B$ if $b @in B$.  Both
    $A$ and $B$ must be types.
@@ -246,10 +247,10 @@ prim inrEquality {| intro []; eqcd |} :
    sequent { <H> >- inr{'b1} = inr{'b2} in 'A + 'B } =
    it
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Elimination}
-  
+
    The handedness of the union membership is @emph{decidable}.  The
    elimination rule performs a case analysis in the assumption $x@colon A + B$;
    the first for the @tt{inl} case, and the second for the @tt{inr}.  The proof
@@ -263,10 +264,10 @@ prim unionElimination {| elim [ThinOption thinT] |} 'H :
    sequent { <H>; x: 'A + 'B; <J['x]> >- 'T['x] } =
    decide{'x; u. 'left['u;'x]; v. 'right['v;'x]}
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Combinator equality}
-  
+
    The @tt{decide} term equality is true if there is @emph{some} type
    $A + B$ for which all the subterms are equal.
    @end[doc]
@@ -280,10 +281,10 @@ prim decideEquality {| intro []; eqcd |} bind{z. 'T['z]} ('A + 'B) :
                    'T['e1] } =
    it
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Subtyping}
-  
+
    The union type $A_1 + A_2$ is a subtype of type $A_2 + B_2$ if
    $A_1 @subseteq A_2$ and $B_1 @subseteq B_2$.
    @end[doc]
@@ -338,13 +339,16 @@ let mk_decide_term = mk_dep0_dep1_dep1_term decide_opname
 
 let resource typeinf += (union_term, infer_univ_dep0_dep0 dest_union)
 
+let tr_var = Lm_symbol.add "T-r"
+let tl_var = Lm_symbol.add "T-l"
+
 (*
  * Type of inl.
  *)
 let inf_inl inf consts decls eqs opt_eqs defs t =
    let a = dest_inl t in
    let eqs', opt_eqs', defs', a' = inf consts decls eqs opt_eqs defs a in
-   let b = Typeinf.vnewname consts defs' "T-r" in
+   let b = Typeinf.vnewname consts defs' tr_var in
        eqs', opt_eqs', ((b,<<void>>)::defs') , mk_union_term a' (mk_var_term b)
 
 let resource typeinf += (inl_term, inf_inl)
@@ -355,7 +359,7 @@ let resource typeinf += (inl_term, inf_inl)
 let inf_inr inf consts decls eqs opt_eqs defs t =
    let a = dest_inl t in
    let eqs', opt_eqs', defs', a' = inf consts decls eqs opt_eqs defs a in
-   let b = Typeinf.vnewname consts defs' "T-l" in
+   let b = Typeinf.vnewname consts defs' tl_var in
        eqs', opt_eqs', ((b,<<void>>)::defs') , mk_union_term (mk_var_term b) a'
 
 let resource typeinf += (inr_term, inf_inr)
@@ -366,10 +370,10 @@ let resource typeinf += (inr_term, inf_inr)
 let inf_decide inf consts decls eqs opt_eqs defs t =
    let e, x, a, y, b = dest_decide t in
    let eqs', opt_eqs', defs', e' = inf consts decls eqs opt_eqs defs e in
-   let consts = StringSet.add (StringSet.add consts x) y in
-   let l = Typeinf.vnewname consts defs' "T-l" in
+   let consts = SymbolSet.add (SymbolSet.add consts x) y in
+   let l = Typeinf.vnewname consts defs' tl_var in
    let l' = mk_var_term l in
-   let r = Typeinf.vnewname consts defs' "T-r" in
+   let r = Typeinf.vnewname consts defs' tr_var in
    let r' = mk_var_term r in
    let eqs'', opt_eqs'', defs'', a' =
       inf consts ((x, l')::decls)

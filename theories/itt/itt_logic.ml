@@ -3,51 +3,51 @@ doc <:doc<
    bi assumT ponens selT backThruHypT dT genAssumT instHypT
    moveToConclT univCDT
    @end[spelling]
-  
+
    @begin[doc]
    @module[Itt_logic]
-  
+
    The @tt{Itt_logic} module defines the propositional
    interpretations of the basic types.  This is a @emph{derived}
    module.  All the propositional connectives are coded in
    terms of the existing types.
-  
+
    This module also defines several tactics.
    @end[doc]
-  
+
    ----------------------------------------------------------------
-  
+
    @begin[license]
    This file is part of MetaPRL, a modular, higher order
    logical framework that provides a logical programming
    environment for OCaml and other languages.
-  
+
    See the file doc/index.html for information on Nuprl,
    OCaml, and more information about this system.
-  
+
    Copyright (C) 1998 Jason Hickey, Cornell University
-  
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
    as published by the Free Software Foundation; either version 2
    of the License, or (at your option) any later version.
-  
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-  
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-  
+
    Author: Jason Hickey @email{jyh@cs.cornell.edu}
    Modified by: Aleksey Nogin @email{nogin@cs.cornell.edu}
-  
+
    @end[license]
 >>
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @parents
    @end[doc]
@@ -66,7 +66,8 @@ extends Itt_struct
 doc <:doc< @docoff >>
 
 open Printf
-open Mp_debug
+open Lm_debug
+open Lm_symbol
 open Refiner.Refiner
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermType
@@ -111,17 +112,17 @@ let debug_auto =
  * REWRITES								*
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @terms
-  
+
    The following terms define the propositional connectives.
    The @tt{prop} term defines the space of @emph{propositions}
    (the same as the type universes).
-  
+
    The propositional interpretations have the following
    definitions:
-  
+
    $$
    @begin[array, rcl]
    @line{@true  @equiv  @unit}
@@ -135,7 +136,7 @@ doc <:doc<
    @line{@exists{x; A; B[x]}  @equiv  @prod{x; A; B[x]}}
    @end[array]
    $$
-  
+
    The @emph{conditional} forms $@cand{A; B}$ and
    $@cor{A; B}$ encode the propositional truth
    from left-to-right.
@@ -170,15 +171,15 @@ let fold_exists  = makeFoldC << exst x: 'A. 'B['x] >> unfold_exists
  * RULES                                                                *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @rules
-  
+
    The rules are divided into groups for each of the
    propositional connectives.  Each of the connectives
    has a well-formedness rule, and introduction and elimination
    forms (where possible).
-  
+
    @modsubsection{True and False}
    The @hrefterm[true] and @hrefterm[false] terms are
    both types.  The @tt{true} term is always true; there is
@@ -207,10 +208,10 @@ interactive false_elim {| elim []; squash |} 'H :
 interactive false_esquash_elim {| elim [] |} 'H :
    sequent { <H>; x: esquash{."false"}; <J['x]> >- 'C['x] }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Negation}
-  
+
    The negation << "not"{'A} >> is well-formed if
    $A$ is a type.  The negation states that the type $A$
    is not inhabited: any proof of $A$ is also a proof of
@@ -241,10 +242,10 @@ interactive not_membership {| intro []; squash |} :
    [main] sequent { <H> >- not{'t} } -->
    sequent { <H> >- lambda{x.'f['x]} in not{'t} }
 *)
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Conjunction}
-  
+
    The conjunction << "and"{'A; 'B} >> is well-formed if
    both $A$ and $B$ are types.  It is true if both $A$ and
    $B$ are true.  The elimination form splits the assumption
@@ -279,10 +280,10 @@ interactive and_squash_elim {| elim [] |} 'H :
    [main] sequent { <H>; y: squash{'a1}; z: squash{'a2}; <J[it]> >- 'C[it] } -->
    sequent { <H>; x: squash{('a1 & 'a2)}; <J['x]> >- 'C['x] }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Disjunction}
-  
+
    The disjunction << "or"{'A; 'B} >> is well-formed if both
    $A$ and $B$ are types.  The disjunction is true if it is
    a type and one of $A$ or $B$ is true.  The introduction
@@ -320,10 +321,10 @@ interactive or_elim {| elim [] |} 'H :
    [main] sequent { <H>; y: 'a2; <J[inr{'y}]> >- 'C[inr{'y}] } -->
    sequent { <H>; x: "or"{'a1; 'a2}; <J['x]> >- 'C['x] }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Implication}
-  
+
    The implication << implies{'A; 'B} >> is well-formed if both
    $A$ and $B$ are types.  The implication is true if it is a
    type, and a proof of $B$ can be produced from a proof of
@@ -352,10 +353,10 @@ interactive implies_elim {| elim [ThinOption thinT] |} 'H :
    [main] sequent { <H>; x: "implies"{'a1; 'a2}; <J['x]>; y: 'a2 >- 'C['x] } -->
    sequent { <H>; x: "implies"{'a1; 'a2}; <J['x]> >- 'C['x] }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Bi-implication}
-  
+
    The bi-implication << "iff"{'A; 'B} >> is well-formed if
    both $A$ and $B$ are types.  The introduction and elimination rules
    perform the top-level conjunctive reasoning.
@@ -380,10 +381,10 @@ interactive iff_elim {| elim [] |} 'H :
    sequent { <H>; y: "implies"{'a1; 'a2}; z: "implies"{'a2; 'a1}; <J['y, 'z]> >- 'C['y, 'z] } -->
    sequent { <H>; x: "iff"{'a1; 'a2}; <J['x]> >- 'C['x] }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Conditional conjunction}
-  
+
    The conditional conjunction << "cand"{'A; 'B} >> differs from
    the conjunction only in the introduction rule.  The conjunction
    is true if $A$ is true, and a proof of $B$ can be produced from
@@ -409,10 +410,10 @@ interactive cand_elim {| elim [] |} 'H :
    [main] sequent { <H>; y: 'a1; z: 'a2; <J['y, 'z]> >- 'C['y, 'z] } -->
    sequent { <H>; x: "cand"{'a1; 'a2}; <J['x]> >- 'C['x] }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Conditional disjunction}
-  
+
    The conditional disjunction << "cor"{'A; 'B} >> differs from
    the disjunction in that a proof of $B$ is needed only if
    a proof of $A$ can't be found.  The conditional disjunction
@@ -448,10 +449,10 @@ interactive cor_elim {| elim [] |} 'H :
    [main] sequent { <H>; u: "not"{'a1}; v: 'a2; <J[inr{'u, 'v}]> >- 'C[inr{'u, 'v}] } -->
    sequent { <H>; x: "cor"{'a1; 'a2}; <J['x]> >- 'C['x] }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Universal quantification}
-  
+
    The universal quantification << all x: 'A. 'B['x] >> is well-formed
    if $A$ is a type, and $B[x]$ is a type for any $x @in A$.
    The quantification is true if it is well-formed and
@@ -481,10 +482,10 @@ interactive all_elim {| elim [ThinOption thinT] |} 'H 'z :
    [main] sequent { <H>; x: all a: 'A. 'B['a]; <J['x]>; w: 'B['z] >- 'C['x] } -->
    sequent { <H>; x: all a: 'A. 'B['a]; <J['x]> >- 'C['x] }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Existential quantification}
-  
+
    The existential quantification << exst x: 'A. 'B['x] >> is well-formed
    if $A$ is a type, and $B[x]$ is a type for any $x @in A$.  The quantification
    is true if it is well-formed and there is a proof $a @in A$ where $B[a]$
@@ -726,30 +727,30 @@ let rec intersects vars fv =
          else
             intersects tl fv
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @tactics
-  
+
    The @hrefmodule[Itt_logic] module defines several tactics for
    reasoning in the @Nuprl type theory.  The tactics perform
    @emph{generic} reasoning of @Nuprl sequents.
-  
+
    @begin[description]
    @item{@tactic[moveToConclT];
    {  The @tt[moveToConclT] tactic ``moves'' a hypothesis to the conclusion
       using the implication form.  The generic usage is as follows:
-  
+
       $$
       @rulebox{moveToConclT; i;
       <<sequent{ <H>; <J> >- all x:'T_1. 'T_2}>>;
       <<sequent{ <H>; "i. x": 'T_1; <J> >- 'T_2}>>.}
       $$
-  
+
       The argument $i$ is the index of the hypothesis.  In some
       cases, there may be additional hypotheses following
       $x@colon T_1$ that @emph{depend} on the hypothesis $x$.
       These hypotheses are also moved to the conclusion.
-  
+
       $$
       @rulebox{moveToConclT; i;
       <<sequent{ <H>; j: <:doc<@int>> >- all i:(<:doc<@int>>).(<:doc< (i < j) @Rightarrow T_2[i]>>)}>>;
@@ -760,6 +761,9 @@ doc <:doc<
    @docoff
    @end[doc]
 >>
+
+let none_var = Lm_symbol.add "none"
+
 let moveToConclT = argfunT (fun i p ->
    let i = Sequent.get_pos_hyp_num p i in
    let hyps = (Sequent.explode_sequent p).sequent_hyps in
@@ -768,7 +772,7 @@ let moveToConclT = argfunT (fun i p ->
          HypBinding (v, hyp) ->
             [v], [i, v, hyp]
        | Hypothesis hyp ->
-            [], [i, "none", hyp]
+            [], [i, none_var, hyp]
        | Context _ ->
             raise(RefineError("moveToConclT",StringError "is a context"))
    in
@@ -785,7 +789,7 @@ let moveToConclT = argfunT (fun i p ->
                   collect (i + 1) vars indices
           | Hypothesis hyp ->
                if is_some_var_free vars hyp then
-                  collect (i + 1) vars ((i, "none", hyp) :: indices)
+                  collect (i + 1) vars ((i, none_var, hyp) :: indices)
                else
                   collect (i + 1) vars indices
           | _ ->
@@ -811,7 +815,7 @@ let moveToConclT = argfunT (fun i p ->
    in
       tac (collect (i+1) vars indices) (Sequent.concl p))
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @begin[description]
    @item{@tactic[univCDT], @tactic[genUnivCDT];
@@ -820,7 +824,7 @@ doc <:doc<
         tactic decomposes universal quantifications, implications,
         and function spaces.  The @tt[genUnivCDT] tactic also
         chains through conjunctions and bi-conditionals.
-  
+
         $$
         @rulebox{univCDT; @space;
          <<sequent{ <H>; x_1: 'T_1; math_cdots; x_n: 'T_n >- <:doc<T_{n + 1}>>}>>@cr
@@ -864,14 +868,14 @@ let genUnivCDT =
    in
       funT tac
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @begin[description]
    @item{@tactic[instHypT];
     {   The @tt[instHypT] tactic performs instantiation
         of a hypothesis.  The hypothesis must be a universal quantification
         or an implication.
-  
+
         $$
         @rulebox{instHypT; t_1@space @cdots  t_n;
          <<sequent{ <H>; y: all x_1: 'T_1.(<:doc< @ldots T_{n + 1}[x_1, @ldots, x_n]>>); <J['y]>;
@@ -915,7 +919,7 @@ let instHypT args i =
  * This type is used to collect the arguments to instantiate.
  *)
 type formula_args =
-   AllTerm of string * term
+   AllTerm of var * term
  | ImpliesTerm
  | IffLeft
  | IffRight
@@ -926,7 +930,7 @@ type formula_args =
 let eprint_info info =
    let print_item = function
       AllTerm (v, t) ->
-         eprintf "\tAllTerm %s: %a\n" v SimplePrint.print_simple_term_fp t
+         eprintf "\tAllTerm %a: %a\n" print_symbol v SimplePrint.print_simple_term_fp t
     | ImpliesTerm ->
          eprintf "\tImpliesTerm\n"
     | IffLeft ->
@@ -956,7 +960,7 @@ let rec assoc v = function
 let check_subst subst =
    let check (v, t) =
       if !debug_auto then
-         eprintf "check_subst: checking %s/%a%t" v SimplePrint.print_simple_term_fp t eflush;
+         eprintf "check_subst: checking %a/%a%t" print_symbol v SimplePrint.print_simple_term_fp t eflush;
       if not (is_var_term t & dest_var t = v) then
          raise (RefineError ("check_subst", StringError "bad match"))
    in
@@ -971,7 +975,7 @@ let instantiate_vars args subst =
    if !debug_auto then
       begin
             eprintf "instantiate_vars: got subst\n";
-            List.iter (fun (v,t) -> eprintf "\t%s: %a%t" v SimplePrint.print_simple_term_fp t eflush) subst
+            List.iter (fun (v,t) -> eprintf "\t%a: %a%t" print_symbol v SimplePrint.print_simple_term_fp t eflush) subst
       end;
    let rec collect result args subst =
       match args with
@@ -1024,7 +1028,7 @@ let rec match_goal args form goal =
          else
             raise (RefineError ("match_goal", StringError "no match"))
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @begin[description]
    @item{@tactic[backThruHypT];
@@ -1032,7 +1036,7 @@ doc <:doc<
         hypothesis.  The conclusion must match a suffix of the hypothesis,
         which must be a sequence of universal quantifications or
         implications through that suffix.
-  
+
         $$
         @rulebox{backThruHypT; i;
          <<sequent{ <H>; y: all x_1:'T_1.(<:doc<@ldots . T_{n + 1}[x_1, @ldots, x_n]>>); <J['y]> >-
@@ -1043,7 +1047,7 @@ doc <:doc<
          <<sequent{ <H>; y: all x_1:'T_1.(<:doc<@ldots . T_{n + 1}[x_1, @ldots, x_n]>>); <J['y]> >-
                         (<:doc<T_{n + 1}[t_1, @ldots, t_n]>>)}>>}
         $$
-  
+
         The @tt[backThruHypT] computes the argument terms $t_1, @ldots, t_n$ by matching
         the goal with the hypothesis.}}
    @end[description]
@@ -1084,14 +1088,14 @@ let backThruHypT = argfunT (fun i p ->
          end;
       thinningT false (tac info i true))
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @begin[description]
    @item{@tactic[assumT];
     {   @emph{Assumptions} correspond to the subgoals of the outermost
         theorem statement.  The @tt[assumT] tactic instantiates an
         assumption as a universally quantified hypothesis.
-  
+
         $$
         @rulebox{assumT; i;
          <<sequent{ <H>; math_ldots >- 'T_1}>>@cr
@@ -1104,7 +1108,7 @@ doc <:doc<
          <<sequent{ <H>; <J> >- "type"{'A_1}}>>@cr
          @vdots@cr
          <<sequent{ <H>; <J> >- "type"{'A_n}}>>;
-  
+
          <<sequent{ <H>; math_ldots >- 'T_1}>>@cr
          @vdots@cr
          <<sequent{ <H>; x_1: 'A_1; math_cdots; x_n: 'A_n >- 'T_i}>>@cr
@@ -1181,7 +1185,7 @@ let assumT = argfunT (fun i p ->
    let form, index = assum_term goal assum in
       make_assumT i goal assum form index)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @begin[description]
    @item{@tactic[backThruAssumT];
@@ -1195,12 +1199,12 @@ let backThruAssumT = argfunT (fun i p ->
    let j = Sequent.hyp_count p + 1 in
       assumT i thenMT (backThruHypT j thenT thinT j))
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @begin[description]
    @item{@tactic[genAssumT];
     {The @tt[genAssumT] generalizes on an assumption.
-  
+
      $$
      @rulebox{genAssumT; i;
       <<sequent{ <H>; math_ldots >- 'T_1}>>@cr
@@ -1210,7 +1214,7 @@ doc <:doc<
       <<sequent{ <H>; math_ldots >- 'T_n}>>@cr
       @hline
       <<sequent{ <H>; x:'T_i >- 'C}>>;
-  
+
       <<sequent{ <H>; math_ldots >- 'T_1}>>@cr
       @vdots@cr
       <<sequent{ <H> >- 't in 'T_i}>>@cr
@@ -1242,12 +1246,12 @@ let genAssumT = argfunT (fun indices p ->
                (if is_var_term t_var then
                   mk_all_term (dest_var t_var) t_type t
                else
-                  let v = maybe_new_var_arg p "v" in
+                  let v = maybe_new_var_arg p (Lm_symbol.add "v") in
                      mk_all_term v t_type (var_subst t t_var v)),
                (dT 0 thenLT [
                   equalTypeT t_var t_var thenT nthAssumT i;
                   idT])
-         else 
+         else
             mk_implies_term t' t, (dT 0 thenLT [typeAssertT thenT nthAssumT i; tac])
    in
    let t, tac = make_gen_term (TermMan.nth_concl goal 1) indices in
@@ -1260,9 +1264,13 @@ struct
    open Jlogic_sig
 
    let is_all_term = is_all_term
-   let dest_all = dest_all
+   let dest_all t =
+      let v, t1, t2 = dest_all t in
+         string_of_symbol v, t1, t2
    let is_exists_term = is_exists_term
-   let dest_exists = dest_exists
+   let dest_exists t =
+      let v, t1, t2 = dest_exists t in
+         string_of_symbol v, t1, t2
    let is_and_term t = is_and_term t || is_iff_term t
    let dest_and t =
       if is_iff_term t then let a, b = dest_iff t in

@@ -59,7 +59,7 @@ open Refiner.Refiner.RefineError
 open Mp_resource
 open Simple_print
 open Printf
-open Mp_debug
+open Lm_debug
 
 open Tactic_type
 open Tactic_type.Tacticals

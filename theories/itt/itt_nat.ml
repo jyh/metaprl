@@ -53,7 +53,7 @@ extends Itt_int_arith
 doc <:doc< @docoff >>
 
 open Printf
-open Mp_debug
+open Lm_debug
 open Refiner.Refiner.TermType
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
@@ -102,10 +102,9 @@ dform ind_df : parens :: "prec"[prec_bor] :: except_mode[src] ::
    ind{'x; 'base; k, l. 'up['k; 'l]} =
    szone pushm[3] szone display_ind{'x} space `"where" space display_ind_n space
    `"=" ezone hspace
-   ((display_ind_eq{display_var["n":v]{nil};0}) =>
-   (display_ind_eq{display_ind_n;'base})) hspace
-   ((display_var["n":v]{nil} > 0) => (display_ind_eq{display_ind_n;
-   'up[display_var["n":v]{nil}; display_ind{(display_var["n":v]{nil} -@ 1)}]}))
+   ((display_ind_eq{math_it["n":s];0}) => (display_ind_eq{display_ind_n;'base})) hspace
+   ((math_it["n":s] > 0) => (display_ind_eq{display_ind_n;
+   'up[math_it["n":s]; display_ind{(math_it["n":s] -@ 1)}]}))
    popm ezone
 
 doc <:doc< @doc{@rewrites} >>

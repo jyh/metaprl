@@ -35,6 +35,8 @@ extends Itt_equal
 extends Itt_struct
 extends Itt_subtype
 
+open Lm_symbol
+
 open Refiner.Refiner.Term
 
 open Tactic_type.Tacticals
@@ -170,8 +172,8 @@ rule productSubtype :
 
 val dprod_term : term
 val is_dprod_term : term -> bool
-val dest_dprod : term -> string * term * term
-val mk_dprod_term : string -> term -> term -> term
+val dest_dprod : term -> var * term * term
+val mk_dprod_term : var -> term -> term -> term
 
 val prod_term : term
 val is_prod_term : term -> bool
@@ -185,8 +187,8 @@ val mk_pair_term : term -> term -> term
 
 val spread_term : term
 val is_spread_term : term -> bool
-val dest_spread : term -> string * string * term * term
-val mk_spread_term : string -> string -> term -> term -> term
+val dest_spread : term -> var * var * term * term
+val mk_spread_term : var -> var -> term -> term -> term
 
 (*
  * -*-

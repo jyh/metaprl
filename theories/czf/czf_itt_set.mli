@@ -51,6 +51,7 @@
 extends Itt_theory
 extends Czf_itt_comment
 
+open Lm_symbol
 open Refiner.Refiner.Term
 
 open Tactic_type.Tacticals
@@ -188,8 +189,8 @@ val dest_isset : term -> term
 
 val set_ind_term : term
 val is_set_ind_term : term -> bool
-val mk_set_ind_term : string -> string -> string -> term -> term -> term
-val dest_set_ind : term -> string * string * string * term * term
+val mk_set_ind_term : var -> var -> var -> term -> term -> term
+val dest_set_ind : term -> var * var * var * term * term
 
 (*
  * isset{'s} => 's = 's in set

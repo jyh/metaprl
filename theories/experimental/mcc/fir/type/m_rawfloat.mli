@@ -62,10 +62,10 @@ declare rawfloat_if_lt{'i1; 'i2; 'e1; 'e2}
 (*
  * Term conversions.
  *)
-val rawfloat_precision_of_num : Mp_num.num -> float_precision
+val rawfloat_precision_of_num : Lm_num.num -> float_precision
 val dest_rawfloat : term -> rawfloat
 
-val num_of_rawfloat_precision : float_precision -> Mp_num.num
+val num_of_rawfloat_precision : float_precision -> Lm_num.num
 val make_rawfloat : rawfloat -> term
 
 (*!

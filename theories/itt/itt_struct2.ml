@@ -1,49 +1,49 @@
-doc <:doc< 
+doc <:doc<
    @begin[spelling]
    struct th
    @end[spelling]
-  
+
    @begin[doc]
    @module[Itt_struct2]
-  
+
    The @tt{Itt_struct2} module contains some @emph{derived} rules similar
    to @hrefrule[cut] and @hrefrule[substitution] in the @hrefmodule[Itt_struct] theory.
    @end[doc]
-  
+
    ----------------------------------------------------------------
-  
+
    @begin[license]
-  
+
    This file is part of MetaPRL, a modular, higher order
    logical framework that provides a logical programming
    environment for OCaml and other languages.
-  
+
    See the file doc/index.html for information on Nuprl,
    OCaml, and more information about this system.
-  
+
    Copyright (C) 1998 Jason Hickey, Cornell University
-  
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
    as published by the Free Software Foundation; either version 2
    of the License, or (at your option) any later version.
-  
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-  
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-  
+
    Author: Alexei Kopylov
    @email{kopylov@cs.caltech.edu}
-  
+
    @end[license]
 >>
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @parents
    @end[doc]
@@ -57,7 +57,8 @@ extends Itt_logic
 doc <:doc< @docoff >>
 
 open Printf
-open Mp_debug
+open Lm_debug
+open Lm_symbol
 open Refiner.Refiner
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
@@ -93,11 +94,11 @@ let _ =
  * RULES                                                                *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @rules
    @modsubsection{Substitution}
-  
+
    Using @hrefterm[set] type we can derive more stronger version of the @hrefrule[substitution]
    and @hrefrule[hypSubstitution] rules.
    Suppose we have that $t_1=t_2 @in T$.
@@ -124,27 +125,27 @@ interactive hypSubstitution2 'H ('t1 = 't2 in 'T) bind{y. 'A['y]} :
 
 
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-  
+
    The @tt{Itt_struct2} module redefines tactic @hreftactic[substT].
    From now @tt[substT] uses the above version of substitution
    instead of original one.
-  
+
    @end[doc]
 >>
 
 
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Cut rules}
-  
+
    There are three advanced versions of the @hrefrule[cut] rule.
    The @tt[cutMem] states that if $s @in S$,
    and $T[x]$ is true for any $x$ from $S$ such that $x=s @in S$,
    then $T[s]$ is certainly true.
-  
+
    @end[doc]
 >>
 
@@ -153,17 +154,17 @@ interactive cutMem 's 'S bind{x.'T['x]} :
    [main]      sequent { <H>; x: 'S; v: 'x='s in 'S >- 'T['x] } -->
    sequent { <H> >- 'T['s]}
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    The corresponding tactic is the @tt[letT] tactic.
    This tactic takes a term $x=s @in S$ as an argument
    and a term <<bind{x.'T['x]}>> as an optional with-argument.
    If this argument is omitted then the tactic finds all occurrences of $s$
    in the conclusion and replace them with $x$.
-  
+
    This tactic is usually used when we have an assumption $s @in S$,
    and want to use the elimination rule corresponding to $S$.
-  
+
    @end[doc]
 >>
 
@@ -180,10 +181,10 @@ interactive cutEq0 ('s_1='s_2 in 'S) bind{x.'t_1['x]  't_2['x]} :
    sequent { <H> >- 't_1['s_1] = 't_2['s_2] in 'T}
 
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Substitution in a type}
-  
+
    @end[doc]
 >>
 
@@ -194,14 +195,14 @@ interactive substitutionInType ('t_1 = 't_2 in 'T) bind{x. 'c_1='c_2 in 'C['x]} 
                            >- "type"{'C['x]} } -->
    sequent { <H> >- 'c_1 = 'c_2 in 'C['t_1] }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-  
+
    The sequent <<sequent{ <H>; x: 'S; <J['x]> >- 't['x] in 'T}>>
    actually means not only that <<'t['x] in 'T>> for any <<'x in 'S>>, but also
    it means @emph{functionality}, i.e. for any two equal elements $s_1$, $s_2$ of $S$
    $t[s_1]$ and $t[s_2]$ should be equal in $T$.
-  
+
    The following rule states this explicitly.
    @end[doc]
 >>
@@ -211,7 +212,7 @@ interactive cutEq ('s_1='s_2 in 'S) bind{x.'t_1['x] = 't_2['x] in 'T['x] } :
    [main]      sequent { <H>; x: 'S; v: 's_1='x in 'S; u: 's_2='x in 'S >- 't_1['x] = 't_2['x] in 'T['x] } -->
    sequent { <H> >- 't_1['s_1] = 't_2['s_2] in 'T['s_1]}
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    Elimination rule for set membership
    @end[doc]
@@ -220,21 +221,21 @@ interactive setMemElim {| elim [] |} 'H :
    sequent { <H>; v: 't in 'A; u: squash{'B['t]}; <J[it]> >- 'C[it] } -->
    sequent { <H>; v: 't in {x: 'A | 'B['x]}; <J['v]> >- 'C['v] }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-  
+
    The @tt[assertEqT] tactic applies this rule.
    This tactic takes a term $s1=s2 @in S$ as an argument
    and a term <<bind{x.'t['x]}>> as an optional with-argument.
    This tactic helps us to prove an equality from a membership.
-  
+
    @end[doc]
 >>
 
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-  
+
    The @tt[cutSquash] rule is similar to the @hrefrule[cut] rule.
    If we prove $S$, but do not show the extract term, then we can assert
    $S$ as a @emph{squashed} hypothesis, that is we are not allow to use its extract
@@ -248,7 +249,7 @@ interactive cutSquash 'H 'S :
    [main]      sequent { <H>; x: squash{'S}; <J> >- 'T } -->
    sequent { <H>; <J> >- 'T}
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    There are two tactics that used this rule: @tt[assertSquashT] and
    @tt[assertSquashAtT].
@@ -256,7 +257,7 @@ doc <:doc<
    The @tt[assertSquashAtT] $n$ $S$ introduces the lemma $S$ after $n$th hypothesis.
    The @tt[assertSquashT] $S$ introduces the lemma $S$ at the end
    of the hypothesis list.
-  
+
    @docoff
    @end[doc]
 >>
@@ -326,7 +327,7 @@ let letT x_is_s_in_S = funT (fun p ->
    let _S, x, s = dest_equal x_is_s_in_S in
    let xname = dest_var x in
    let bind = get_bind_from_arg_or_concl_subst p s in
-      cutMem s  _S bind thenMT nameHypT (-2) xname thenMT thinIfThinningT [-1])
+      cutMem s  _S bind thenMT nameHypT (-2) (string_of_symbol xname) thenMT thinIfThinningT [-1])
 
 (* cutEq *)
 
@@ -337,7 +338,7 @@ let assertEqT = argfunT (fun eq p ->
          get_with_arg p
       with
          RefineError _ ->
-            let x = maybe_new_var_arg p "z" in
+            let x = maybe_new_var_arg p (Lm_symbol.add "z") in
             let t, t1,  t2 = dest_equal (Sequent.concl p) in
             let t' = var_subst t s1 x in
             let t1' = var_subst t1 s1 x in

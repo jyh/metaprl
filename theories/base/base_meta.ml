@@ -52,7 +52,6 @@ declare meta_rem[a:n, b:n]
 
 declare meta_eq[a:n,b:n]{'tt; 'ff}
 declare meta_eq[a:s,b:s]{'tt; 'ff}
-declare meta_eq[a:v,b:v]{'tt; 'ff}
 declare meta_eq[a:t,b:t]{'tt; 'ff}
 declare meta_eq[a:l,b:l]{'tt; 'ff}
 
@@ -73,26 +72,26 @@ let arith op goal =
 
 let check_zero op =
    fun a b ->
-      if Mp_num.is_zero b then raise (RefineError ("Base_meta.arith", StringError "division by zero"))
+      if Lm_num.is_zero b then raise (RefineError ("Base_meta.arith", StringError "division by zero"))
       else op a b
 
 (*
  * sum{op1[@i1:n]; op2[@i2:n]} --> op1[@i1 + @i2]
  *)
 ml_rw reduce_meta_sum : ('goal : meta_sum[a:n, b:n]) =
-   arith Mp_num.add_num goal
+   arith Lm_num.add_num goal
 
 ml_rw reduce_meta_diff : ('goal : meta_diff[a:n, b:n]) =
-   arith Mp_num.sub_num goal
+   arith Lm_num.sub_num goal
 
 ml_rw reduce_meta_prod : ('goal : meta_prod[a:n, b:n]) =
-   arith Mp_num.mult_num goal
+   arith Lm_num.mult_num goal
 
 ml_rw reduce_meta_quot : ('goal : meta_quot[a:n, b:n]) =
-   arith (check_zero Mp_num.div_num) goal
+   arith (check_zero Lm_num.div_num) goal
 
 ml_rw reduce_meta_rem  : ('goal : meta_rem[a:n, b:n]) =
-   arith (check_zero Mp_num.rem_num) goal
+   arith (check_zero Lm_num.rem_num) goal
 
 (*
  * eq[p1,p2]{t1,t2} --> t1 if p1 = p2
@@ -102,10 +101,9 @@ let eq goal =
    let true_term, false_term = two_subterms goal in
    let flag = match dest_params (dest_op (dest_term goal).term_op).op_params with
       [ Number i1; Number i2 ] ->
-         Mp_num.eq_num i1 i2
-    | [ String s1; String s2 ]
-    | [ Var s1; Var s2 ] ->
-         s1 = s2
+         Lm_num.eq_num i1 i2
+    | [ String s1; String s2 ] ->
+         s1 = s1
     | [ Token t1; Token t2 ] ->
          t1 = t2
     | [ MLevel l1; MLevel l2 ] ->
@@ -117,7 +115,6 @@ let eq goal =
 
 ml_rw reduce_meta_eq_num : ('goal : meta_eq[a:n,b:n]{'tt; 'ff}) = eq goal
 ml_rw reduce_meta_eq_str : ('goal : meta_eq[a:s,b:s]{'tt; 'ff}) = eq goal
-ml_rw reduce_meta_eq_var : ('goal : meta_eq[a:v,b:v]{'tt; 'ff}) = eq goal
 ml_rw reduce_meta_eq_tok : ('goal : meta_eq[a:t,b:t]{'tt; 'ff}) = eq goal
 ml_rw reduce_meta_eq_lev : ('goal : meta_eq[a:l,b:l]{'tt; 'ff}) = eq goal
 
@@ -125,7 +122,7 @@ let lt goal =
    let true_term, false_term = two_subterms goal in
    let flag = match dest_params (dest_op (dest_term goal).term_op).op_params with
       [ Number i1; Number i2 ] ->
-         Mp_num.lt_num i1 i2
+         Lm_num.lt_num i1 i2
     | [ String s1; String s2 ] ->
          s1 < s2
     | [ Token t1; Token t2 ] ->

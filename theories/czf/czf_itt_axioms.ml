@@ -65,7 +65,7 @@ extends Czf_itt_rel
 doc <:doc< @docoff >>
 
 open Printf
-open Mp_debug
+open Lm_debug
 
 open Tactic_type
 open Var

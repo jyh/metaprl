@@ -39,7 +39,7 @@ extends Ocaml
 extends Ocaml_base_sos
 extends Ocaml_expr_sos
 
-open Mp_debug
+open Lm_debug
 open Printf
 
 let _ =

@@ -36,6 +36,8 @@ extends Itt_set
 extends Itt_isect
 extends Itt_subtype
 
+open Lm_symbol
+
 open Refiner.Refiner.Term
 
 open Tactic_type.Tacticals
@@ -47,8 +49,8 @@ open Tactic_type.Tacticals
 declare bisect{'A; x. 'B['x]}
 
 val is_disect_term : term -> bool
-val dest_disect : term -> string * term * term
-val mk_disect_term : string -> term -> term -> term
+val dest_disect : term -> var * term * term
+val mk_disect_term : var -> term -> term -> term
 
 (************************************************************************
  * RULES                                                                *

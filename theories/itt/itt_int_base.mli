@@ -38,6 +38,8 @@ extends Itt_bool
 extends Itt_logic
 extends Itt_decidable
 
+open Lm_symbol
+
 open Refiner.Refiner.Term
 
 (*
@@ -136,14 +138,14 @@ val dest_sub : term -> term * term
 
 val number_term : term
 val is_number_term : term -> bool
-val dest_number : term -> Mp_num.num
-val mk_number_term : Mp_num.num -> term
+val dest_number : term -> Lm_num.num
+val mk_number_term : Lm_num.num -> term
 
 val ind_term : term
 val is_ind_term : term -> bool
-val dest_ind : term -> term * string * string * term * term * string * string *
+val dest_ind : term -> term * var * var * term * term * var * var *
  term
-val mk_ind_term : term -> string -> string -> term -> term -> string -> string
+val mk_ind_term : term -> var -> var -> term -> term -> var -> var
  -> term -> term
 
 val reduce_numeral: conv
@@ -243,6 +245,9 @@ rewrite reduce_ind_base :
  ************************************************************************)
 
 (*
+ * BUG WEAK
+
+(*
  * H >- Ui ext Z
  * by intFormation
  *)
@@ -268,6 +273,7 @@ rule intEquality :
  *)
 rule numberFormation number[n:n] :
    sequent { <H> >- int }
+
 (*
  * H >- i = i in int
  * by numberEquality
@@ -286,11 +292,9 @@ up[n, m, it, z])
  * H, n:Z, J[n], m:Z, v: 0 < m, z: C[m - 1] >- C[m] ext up[n, m, v, z]
  *)
 rule intElimination 'H :
-   sequent { <H>; n: int; <J['n]>; m: int; v: 'm < 0; z: 'C['m +@ 1] >-
- 'C['m] } -->
+   sequent { <H>; n: int; <J['n]>; m: int; v: 'm < 0; z: 'C['m +@ 1] >- 'C['m] } -->
    sequent { <H>; n: int; <J['n]> >- 'C[0] } -->
-   sequent { <H>; n: int; <J['n]>; m: int; v: 0 < 'm; z: 'C['m -@ 1] >-
- 'C['m] } -->
+   sequent { <H>; n: int; <J['n]>; m: int; v: 0 < 'm; z: 'C['m -@ 1] >- 'C['m] } -->
    sequent { <H>; n: int; <J['n]> >- 'C['n] }
 
 (*
@@ -318,6 +322,8 @@ rule indEquality lambda{z. 'T['z]} :
                    = ind{'x2; i2, j2. 'down2['i2; 'j2]; 'base2; k2, l2.
  'up2['k2; 'l2]}
                    in 'T['x1] }
+*)
+
 (*
  Definition of basic operations (and relations) on int
  *)

@@ -48,7 +48,7 @@ extends Czf_itt_sep
 doc <:doc< @docoff >>
 
 open Printf
-open Mp_debug
+open Lm_debug
 open Refiner.Refiner.TermType
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp

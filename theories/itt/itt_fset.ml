@@ -47,7 +47,7 @@ open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
 open Refiner.Refiner.RefineError
 open Mp_resource
-open Mp_debug
+open Lm_debug
 open Printf
 
 open Tactic_type

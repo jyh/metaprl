@@ -66,7 +66,7 @@ extends Itt_decidable
 doc <:doc< @docoff >>
 
 open Printf
-open Mp_debug
+open Lm_debug
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
 open Refiner.Refiner.TermSubst
@@ -246,10 +246,10 @@ declare display_ind_n
 declare display_ind_eq{'x;'y}
 
 dform display_ind_df1 : internal :: display_ind{'x} =
-   display_var["Ind":v]{nil} `"(" 'x `")"
+   math_it["Ind":s] `"(" 'x `")"
 
 dform display_ind_df2 : internal :: display_ind_n =
-   display_ind{display_var["n":v]{nil}}
+   display_ind{math_it["n":s]}
 
 dform ind_eq_df: internal :: except_mode[src] :: display_ind_eq{'x;'y} =
    szone 'x space `"=" space 'y ezone
@@ -258,13 +258,12 @@ dform ind_df : parens :: "prec"[prec_bor] :: except_mode[src] ::
    ind{'x; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]} =
    szone pushm[3] szone display_ind{'x} space `"where" space display_ind_n space
  `"=" ezone hspace
-   ((display_var["n":v]{nil} < 0) => display_ind_eq{display_ind_n;
- 'down[display_var["n":v]{nil}; display_ind{(display_var["n":v]{nil} +@ 1)}]})
+   ((math_it["n":s] < 0) => display_ind_eq{display_ind_n;
+ 'down[math_it["n":s]; display_ind{(math_it["n":s] +@ 1)}]})
  hspace
-   (display_ind_eq{display_var["n":v]{nil};0} => display_ind_eq{display_ind_n;
- 'base}) hspace
-   ((0 < display_var["n":v]{nil}) => display_ind_eq{display_ind_n;
- 'up[display_var["n":v]{nil}; display_ind{(display_var["n":v]{nil} -@ 1)}]})
+   (display_ind_eq{math_it["n":s];0} => display_ind_eq{display_ind_n; 'base}) hspace
+   ((0 < math_it["n":s]) => display_ind_eq{display_ind_n;
+ 'up[math_it["n":s]; display_ind{(math_it["n":s] -@ 1)}]})
  popm ezone
 
 doc <:doc<

@@ -43,7 +43,7 @@ open Fir
 
 (* Open MetaPRL ML namespaces. *)
 
-open Mp_num
+open Lm_num
 open Refiner.Refiner.Term
 open Refiner.Refiner.RefineError
 open Mfir_termOp

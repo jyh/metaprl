@@ -28,7 +28,7 @@
 extends M_ir
 
 open Printf
-open Mp_debug
+open Lm_debug
 
 open Lm_string_util
 

@@ -51,7 +51,7 @@ extends Itt_subtype
 doc <:doc< @docoff >>
 
 open Printf
-open Mp_debug
+open Lm_debug
 open Tactic_type.Sequent
 open Opname
 open Refiner.Refiner.Term

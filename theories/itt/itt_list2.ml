@@ -1,38 +1,38 @@
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @module[Itt_list2]
-  
+
    The @tt{Itt_list2} module defines a ``library'' of
    additional operations on the lists defined in
    the @hrefmodule[Itt_list] module.
    @end[doc]
-  
+
    ----------------------------------------------------------------
-  
+
    @begin[license]
    This file is part of MetaPRL, a modular, higher order
    logical framework that provides a logical programming
    environment for OCaml and other languages.
-  
+
    See the file doc/index.html for information on Nuprl,
    OCaml, and more information about this system.
-  
+
    Copyright (C) 1998 Jason Hickey, Cornell University
-  
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
    as published by the Free Software Foundation; either version 2
    of the License, or (at your option) any later version.
-  
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-  
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-  
+
    Author: Jason Hickey @email{jyh@cs.cornell.edu}
    Modified By: Aleksey Nogin @email{nogin@cs.cornell.edu}
    @end[license]
@@ -71,10 +71,10 @@ open Itt_dprod
  * SYNTAX                                                               *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @terms
-  
+
    The @tt{is_nil} term defines a Boolean value that is true
    @emph{iff} the argument list $l$ is empty.
    @end[doc]
@@ -82,10 +82,10 @@ doc <:doc<
 define unfold_is_nil :
    is_nil{'l} <--> list_ind{'l; btrue; h, t, g. bfalse}
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @terms
-  
+
    The @tt[mem] term defines list membership.
    @end[doc]
 >>
@@ -93,10 +93,10 @@ define unfold_mem :
    mem{'x; 'l; 'T} <-->
       list_ind{'l; "false"; h, t, g. "or"{('x = 'h in 'T); 'g}}
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @terms
-  
+
    The @tt{subset} term determines whether the elements in $l_1$ are also
    in $l_2$.
    @end[doc]
@@ -105,10 +105,10 @@ define unfold_subset :
    \subset{'l1; 'l2; 'T} <-->
       list_ind{'l1; "true"; h, t, g. "and"{mem{'h; 'l2; 'T}; 'g}}
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @terms
-  
+
    The @tt[sameset] term determines whether the two lists contain the same
    set of elements.
    @end[doc]
@@ -117,7 +117,7 @@ define unfold_sameset :
    sameset{'l1; 'l2; 'T} <-->
       "and"{\subset{'l1; 'l2; 'T}; \subset{'l2; 'l1; 'T}}
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @noindent
    The @tt{append} term takes two lists and concatenates them.
@@ -127,7 +127,7 @@ define unfold_append :
    append{'l1; 'l2} <-->
       list_ind{'l1; 'l2; h, t, g. 'h :: 'g}
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @noindent
    The @tt{ball2} term defines a Boolean universal quantification
@@ -142,7 +142,7 @@ define unfold_ball2 :
                      h1, t1, g1. lambda{z. list_ind{'z; bfalse;
                      h2, t2, g2. band{'b['h1; 'h2]; .'g1 't2}}}} 'l2)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @noindent
    The @tt[assoc] term defines an associative lookup on
@@ -159,7 +159,7 @@ define unfold_assoc :
          spread{'h; u, v.
             ifthenelse{.'eq 'u 'x; 'b['v]; 'g}}}
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @noindent
    The @tt[rev_assoc] term also performs an associative search,
@@ -172,7 +172,7 @@ define unfold_rev_assoc :
          spread{'h; u, v.
             ifthenelse{.'eq 'v 'x; 'b['u]; 'g}}}
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @noindent
    The @tt{map} term applies the function $f$ to each element
@@ -183,7 +183,7 @@ doc <:doc<
 define unfold_map : map{'f; 'l} <-->
    list_ind{'l; nil; h, t, g. cons{.'f 'h; 'g}}
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @noindent
    The @tt{fold_left} term applies the function $f$ to each element
@@ -194,9 +194,9 @@ doc <:doc<
 >>
 define unfold_fold_left :
    fold_left{'f; 'v; 'l} <-->
-      (list_ind{'l; lambda{v. 'v}; h, t, g. lambda{v. 'g ('f 'h 'v)}} 'v)
+      (list_ind{'l; lambda{x. 'x}; h, t, g. lambda{x. 'g ('f 'h 'x)}} 'v)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @noindent
    The @tt[nth] term returns element $i$ of list $l$.
@@ -207,7 +207,7 @@ define unfold_nth :
    nth{'l; 'i} <-->
       (list_ind{'l; it; u, v, g. lambda{j. ifthenelse{beq_int{'j; 0}; 'u; .'g ('j -@ 1)}}} 'i)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @noindent
    The @tt[replace_nth] term replace element $i$ of list $l$
@@ -218,7 +218,7 @@ define unfold_replace_nth :
    replace_nth{'l; 'i; 't} <-->
       (list_ind{'l; nil; u, v, g. lambda{j. ifthenelse{beq_int{'j; 0}; cons{'t; 'v}; cons{'u; .'g ('j -@ 1)}}}} 'i)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @noindent
    The @tt{length} term returns the total number of elements in
@@ -228,7 +228,7 @@ doc <:doc<
 define unfold_length :
    length{'l} <--> list_ind{'l; 0; u, v, g. 'g +@ 1}
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @noindent
    The @tt[rev] function returns a list with the same elements as
@@ -309,10 +309,10 @@ dform rev_df : except_mode[src] :: rev{'l} =
  * REWRITES                                                             *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @rewrites
-  
+
    The @hrefterm[is_nil] term is defined with the
    @hrefterm[list_ind] term, with a base case $@btrue$,
    and step case $@bfalse$.
@@ -325,7 +325,7 @@ doc docoff
 
 let fold_is_nil = makeFoldC << is_nil{'l} >> unfold_is_nil
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    The @hrefterm[mem] term performs induction over the list.
    @end[doc]
@@ -338,14 +338,14 @@ doc docoff
 
 let fold_mem = makeFoldC << mem{'x; 'l; 'T} >> unfold_mem
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    The @hrefterm[subset] term performs induction over the first list.
    @end[doc]
 >>
 interactive_rw reduce_subset_nil {| reduce |} : \subset{nil; 'l; 'T} <--> "true"
 
-interactive_rw reduce_subset_cons {| reduce |} : 
+interactive_rw reduce_subset_cons {| reduce |} :
    \subset{cons{'u; 'v}; 'l; 'T} <--> "and"{mem{'u; 'l; 'T}; \subset{'v; 'l; 'T}}
 
 doc docoff
@@ -354,7 +354,7 @@ let fold_subset = makeFoldC << \subset{'l1; 'l2; 'T} >> unfold_subset
 
 let fold_sameset = makeFoldC << sameset{'l1; 'l2; 'T} >> unfold_sameset
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    The @hrefterm[append] term performs induction over the
    first list.
@@ -378,7 +378,7 @@ doc docoff
 
 let fold_append = makeFoldC << append{'l1; 'l2} >> unfold_append
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    The @hrefterm[ball2] term performs simultaneous induction
    over both lists, comparing the elements of the lists with
@@ -397,12 +397,12 @@ interactive_rw reduce_ball2_cons_nil {| reduce |} :
 interactive_rw reduce_ball2_cons_cons {| reduce |} :
    ball2{cons{'h1; 't1}; cons{'h2; 't2}; x, y. 'b['x; 'y]} <-->
       band{'b['h1; 'h2]; ball2{'t1; 't2; x, y. 'b['x; 'y]}}
-      
+
 doc docoff
 
 let fold_ball2 = makeFoldC << ball2{'l1; 'l2; x, y. 'b['x; 'y]} >> unfold_ball2
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    The @hrefterm[assoc] term performs induction over the list,
    splitting each pair and comparing it with the key.
@@ -419,7 +419,7 @@ doc docoff
 
 let fold_assoc = makeFoldC << assoc{'eq; 'x; 'l; v. 'b['v]; 'z} >> unfold_assoc
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    The @hrefterm[rev_assoc] term also performs induction over the list,
    but it keys on the second element of each pair.
@@ -436,7 +436,7 @@ doc docoff
 
 let fold_rev_assoc = makeFoldC << rev_assoc{'eq; 'x; 'l; v. 'b['v]; 'z} >> unfold_rev_assoc
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    The @hrefterm[map] term performs induction over the list $l$,
    applying the function to each element, and collecting the results.
@@ -452,7 +452,7 @@ doc docoff
 
 let fold_map = makeFoldC << map{'f; 'l} >> unfold_map
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    The @hrefterm[fold_left] term performs induction over the
    list argument, applying the function to the head element
@@ -470,7 +470,7 @@ doc docoff
 
 let fold_fold_left = makeFoldC << fold_left{'f; 'v; 'l} >> unfold_fold_left
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    The @hrefterm[length] function counts the total number of elements in the
    list.
@@ -484,7 +484,7 @@ doc docoff
 
 let fold_length = makeFoldC << length{'l} >> unfold_length
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    The @hrefterm[nth] term performs induction over the
    list, comparing the index to 0 at each step and returning the head element
@@ -498,7 +498,7 @@ doc docoff
 
 let fold_nth = makeFoldC << nth{'l; 'i} >> unfold_nth
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    The @hrefterm[replace_nth] term is similar to the @hrefterm[nth]
    term, but it collects the list, and replaces the head element
@@ -513,7 +513,7 @@ doc docoff
 
 let fold_replace_nth = makeFoldC << replace_nth{'l; 'i; 't} >> unfold_replace_nth
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    The @hrefterm[rev] term reverses the list.
    This particular computation is rather inefficient;
@@ -532,10 +532,10 @@ let fold_rev = makeFoldC << rev{'l} >> unfold_rev
  * RULES                                                                *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @rules
-  
+
    The rules in the @hrefmodule[Itt_list2] are limited to
    well-formedness of each of the constructions.
    @end[doc]
@@ -675,10 +675,10 @@ interactive_rw rev2 'A :
    ('l in list{'A}) -->
    rev{rev{'l}} <--> 'l
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @rules
-  
+
    A list $v$ is a subset of the list <<cons{'u; 'v}>>.
    @end[doc]
 >>
@@ -690,10 +690,10 @@ interactive subset_cons {| intro [AutoMustComplete] |} :
    sequent { <H> >- \subset{'v; 'l; 'A} } -->
    sequent { <H> >- \subset{'v; cons{'u; 'l}; 'A} }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @rules
-  
+
    @tt[subset] is reflexive and transitive.
    @end[doc]
 >>
@@ -711,10 +711,10 @@ interactive subset_trans 'l2 :
    sequent { <H> >- \subset{'l2; 'l3; 'A} } -->
    sequent { <H> >- \subset{'l1; 'l3; 'A} }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @rules
-  
+
    @tt[sameset] is reflexive, symmetric, and transitive.
    @end[doc]
 >>

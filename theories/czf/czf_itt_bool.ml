@@ -10,7 +10,7 @@ extends Itt_logic
 extends Itt_theory
 
 open Printf
-open Mp_debug
+open Lm_debug
 open Refiner.Refiner.TermType
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp

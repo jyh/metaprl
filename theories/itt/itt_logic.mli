@@ -42,6 +42,8 @@ extends Itt_void
 extends Itt_unit
 extends Itt_struct
 
+open Lm_symbol
+
 open Refiner.Refiner.TermType
 
 open Tactic_type.Tacticals
@@ -98,12 +100,12 @@ prec prec_quant
 val is_false_term : term -> bool
 
 val is_all_term : term -> bool
-val dest_all : term -> string * term * term
-val mk_all_term : string -> term -> term -> term
+val dest_all : term -> var * term * term
+val mk_all_term : var -> term -> term -> term
 
 val is_exists_term : term -> bool
-val dest_exists : term -> string * term * term
-val mk_exists_term : string -> term -> term -> term
+val dest_exists : term -> var * term * term
+val mk_exists_term : var -> term -> term -> term
 
 val is_or_term : term -> bool
 val dest_or : term -> term * term

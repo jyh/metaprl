@@ -38,7 +38,7 @@ open Fir
 
 (* Open MetaPRL ML namespaces. *)
 
-open Mp_num
+open Lm_num
 open Mfir_termOp
 open Mfir_connect_base
 

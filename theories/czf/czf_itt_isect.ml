@@ -55,7 +55,7 @@ extends Czf_itt_union
 doc <:doc< @docoff >>
 
 open Printf
-open Mp_debug
+open Lm_debug
 
 open Refiner.Refiner.RefineError
 open Mp_resource

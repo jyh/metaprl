@@ -120,7 +120,7 @@ dform rawfloat_if_lt_df : parens :: "prec"[prec_if] :: rawfloat_if_lt{'i1; 'i2; 
  * Precisions.
  *)
 let rawfloat_precision_of_num p =
-   match Mp_num.int_of_num p with
+   match Lm_num.int_of_num p with
       32 -> Lm_rawfloat.Single
     | 64 -> Lm_rawfloat.Double
     | 80 -> Lm_rawfloat.LongDouble
@@ -136,7 +136,7 @@ let num_of_rawfloat_precision p =
        | Lm_rawfloat.Double -> 64
        | Lm_rawfloat.LongDouble -> 80
    in
-      Mp_num.num_of_int i
+      Lm_num.num_of_int i
 
 (*
  * Conversion to terms.

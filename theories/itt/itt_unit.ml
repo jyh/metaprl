@@ -53,7 +53,7 @@ extends Itt_squiggle
 doc <:doc< @docoff >>
 
 open Printf
-open Mp_debug
+open Lm_debug
 open Tactic_type.Sequent
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp

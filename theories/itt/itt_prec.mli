@@ -11,21 +11,21 @@
  * OCaml, and more information about this system.
  *
  * Copyright (C) 1998 Jason Hickey, Cornell University
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- * 
+ *
  * Author: Jason Hickey
  * jyh@cs.cornell.edu
  *
@@ -35,6 +35,8 @@ extends Itt_equal
 extends Itt_subtype
 extends Itt_fun
 extends Itt_prod
+
+open Lm_symbol
 
 open Refiner.Refiner.Term
 
@@ -177,12 +179,12 @@ rule precindEquality lambda{x. 'S['x]} (a:'A * "prec"{T, y. 'B['T; 'y]; 'a}) uni
  ************************************************************************)
 
 val is_prec_term : term -> bool
-val dest_prec : term -> string * string * term * term
-val mk_prec_term : string -> string -> term -> term -> term
+val dest_prec : term -> var * var * term * term
+val mk_prec_term : var -> var -> term -> term -> term
 
 val is_precind_term : term -> bool
-val dest_precind : term -> string * string * term * term
-val mk_precind_term : string -> string -> term -> term -> term
+val dest_precind : term -> var * var * term * term
+val mk_precind_term : var -> var -> term -> term -> term
 
 (*
  * -*-

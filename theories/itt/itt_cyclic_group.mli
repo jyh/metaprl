@@ -34,7 +34,7 @@ extends Itt_group
 extends Itt_int_base
 extends Itt_subset
 
-open Mp_debug
+open Lm_debug
 open Refiner.Refiner.TermType
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp

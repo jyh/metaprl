@@ -47,7 +47,7 @@ extends M_x86_backend
 doc <:doc< @docoff >>
 
 open Printf
-open Mp_debug
+open Lm_debug
 
 open Lm_symbol
 

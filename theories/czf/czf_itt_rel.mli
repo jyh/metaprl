@@ -33,6 +33,7 @@
 extends Czf_itt_dall
 extends Czf_itt_dexists
 
+open Lm_symbol
 open Refiner.Refiner.TermType
 
 (************************************************************************
@@ -51,7 +52,7 @@ declare rel{a, b. 'P['a; 'b]; 's1; 's2}
 rewrite unfold_rel : rel{a, b. 'P['a; 'b]; 's1; 's2} <-->
    (dall{'s1; x. dexists{'s2; y. 'P['x; 'y]}} & dall{'s2; y. dexists{'s1; x. 'P['x; 'y]}})
 
-val dest_rel : term -> string * string * term * term * term
+val dest_rel : term -> var * var * term * term * term
 
 (*
  * -*-

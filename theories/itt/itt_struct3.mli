@@ -5,7 +5,7 @@ extends Itt_subtype
 extends Itt_pointwise
 
 open Printf
-open Mp_debug
+open Lm_debug
 open Refiner.Refiner
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
@@ -32,6 +32,8 @@ open Itt_pointwise
 (* This rule is valid both in pointwise and pairwise functionality, but the proof of this rule is
  * difirent for these functionalities
  *)
+(*
+ * WEAK BUG
 rule substUsingEpimorphism 'H 'B bind{y. 'f['y]} bind{x. 'g['x]}  : (* g does not depend on J *)
    [wf] sequent { <H>; x: 'A; <J['x]>; y: 'B >- 'f['y] in 'A } -->
    [wf] sequent { <H>; x: 'A; <J['x]> >-  'g['x] in 'B } -->
@@ -49,6 +51,7 @@ rule hypReplacementExt 'H 'B  :
    [equality] sequent { <H>; x: 'A; <J['x]> >- ext_equal{'A;'B} } -->
    [main]  sequent { <H>; x: 'B; <J['x]> >- 'T['x] } -->
    sequent { <H>; x: 'A; <J['x]> >- 'T['x] }
+*)
 
 topval changeHypT : term -> int -> tactic
 

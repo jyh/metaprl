@@ -37,7 +37,8 @@ extends Czf_itt_pair
 open Itt_equal
 
 open Printf
-open Mp_debug
+open Lm_debug
+open Lm_symbol
 open Refiner.Refiner.TermType
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
@@ -98,12 +99,12 @@ val mk_equiv_term : term -> term -> term -> term -> term
 val dest_equiv : term -> term * term * term * term
 
 val is_equiv_fun_set_term : term -> bool
-val mk_equiv_fun_set_term : term -> term -> string -> term -> term
-val dest_equiv_fun_set : term -> term * term * string * term
+val mk_equiv_fun_set_term : term -> term -> var -> term -> term
+val dest_equiv_fun_set : term -> term * term * var * term
 
 val is_equiv_fun_prop_term : term -> bool
-val mk_equiv_fun_prop_term : term -> term -> string -> term -> term
-val dest_equiv_fun_prop : term -> term * term * string * term
+val mk_equiv_fun_prop_term : term -> term -> var -> term -> term
+val dest_equiv_fun_prop : term -> term * term * var * term
 
 (*
  * Functionality.

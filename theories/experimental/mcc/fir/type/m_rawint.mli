@@ -38,11 +38,11 @@ declare rawint[precision:n, signed:t, value:s]
 (*
  * Term conversions.
  *)
-val rawint_precision_of_num : Mp_num.num -> int_precision
+val rawint_precision_of_num : Lm_num.num -> int_precision
 val boolean_of_string : string -> bool
 val dest_rawint : term -> rawint
 
-val num_of_rawint_precision : int_precision -> Mp_num.num
+val num_of_rawint_precision : int_precision -> Lm_num.num
 val string_of_boolean : bool -> string
 val make_rawint : rawint -> term
 

@@ -152,7 +152,7 @@ dform rawint_if_lt_df : parens :: "prec"[prec_if] :: rawint_if_lt{'i1; 'i2; 'e1;
  * Precisions.
  *)
 let rawint_precision_of_num p =
-   match Mp_num.int_of_num p with
+   match Lm_num.int_of_num p with
       8  -> Lm_rawint.Int8
     | 16 -> Lm_rawint.Int16
     | 32 -> Lm_rawint.Int32
@@ -176,7 +176,7 @@ let num_of_rawint_precision p =
        | Lm_rawint.Int32 -> 32
        | Lm_rawint.Int64 -> 64
    in
-      Mp_num.num_of_int i
+      Lm_num.num_of_int i
 
 let string_of_boolean b =
    if b then
@@ -257,8 +257,8 @@ ml_rw reduce_rawint_bitfield : ('goal : rawint_bitfield[off:n, len:n]{'i}) =
       match params, bterms with
          [Number off; Number len], [{ bvars = []; bterm = t }] ->
             let i = dest_rawint t in
-            let off = Mp_num.int_of_num off in
-            let len = Mp_num.int_of_num len in
+            let off = Lm_num.int_of_num off in
+            let len = Lm_num.int_of_num len in
                make_rawint (Lm_rawint.field i off len)
        | _ ->
             raise (RefineError ("reduce_rawint_bitfield", StringTermError ("illegal operation", goal)))

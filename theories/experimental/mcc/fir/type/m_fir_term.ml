@@ -413,7 +413,7 @@ let dest_poly_sub_value dest_ty t =
          (* EnumSub *)
        | [Number i], []
          when Opname.eq op opname_EnumSub ->
-            EnumSub (Mp_num.int_of_num i)
+            EnumSub (Lm_num.int_of_num i)
 
          (* TagSub *)
        | [], [{ bvars = []; bterm = ty_var };
@@ -443,7 +443,7 @@ let dest_poly_sub_value dest_ty t =
 let make_poly_sub_value make_ty v =
    match v with
       EnumSub i ->
-         let params = [make_param (Number (Mp_num.num_of_int i))] in
+         let params = [make_param (Number (Lm_num.num_of_int i))] in
          let op = mk_op opname_EnumSub params in
             mk_term op []
     | IntSub ->
@@ -692,7 +692,7 @@ let dest_poly_type (dest_ty : term -> 'ty) (t : term) : 'ty poly_ty =
          (* TyEnum *)
        | [Number i], []
          when Opname.eq op opname_TyEnum ->
-            TyEnum (Mp_num.int_of_num i)
+            TyEnum (Lm_num.int_of_num i)
 
          (* TyRawInt *)
        | [Number p; Token s], []
@@ -798,7 +798,7 @@ let dest_poly_type (dest_ty : term -> 'ty) (t : term) : 'ty poly_ty =
          (* TyProject *)
        | [Number i], [{ bvars = []; bterm = ty_var }]
          when Opname.eq op opname_TyProject ->
-            let i = Mp_num.int_of_num i in
+            let i = Lm_num.int_of_num i in
             let ty_var = dest_symbol ty_var in
                TyProject (ty_var, i)
 
@@ -810,7 +810,7 @@ let make_poly_type make_ty ty =
       TyInt ->
          term_TyInt
     | TyEnum i ->
-         let params = [make_param (Number (Mp_num.num_of_int i))] in
+         let params = [make_param (Number (Lm_num.num_of_int i))] in
          let op = mk_op opname_TyEnum params in
             mk_term op []
     | TyRawInt (p, s) ->
@@ -875,7 +875,7 @@ let make_poly_type make_ty ty =
             List.fold_right (fun v ty ->
                   mk_term op [mk_bterm [Symbol.to_string v] ty]) vars ty
     | TyProject (v, i) ->
-         let params = [make_param (Number (Mp_num.num_of_int i))] in
+         let params = [make_param (Number (Lm_num.num_of_int i))] in
          let op = mk_op opname_TyProject params in
          let v = mk_bterm [] (make_symbol v) in
             mk_term op [v]
@@ -947,7 +947,7 @@ let dest_poly_frame dest_ty t =
                                     [Number size], [{ bvars = []; bterm = v };
                                                     { bvars = []; bterm = ty }]
                                     when Opname.eq op opname_FrameSubfield ->
-                                       let size = Mp_num.int_of_num size in
+                                       let size = Lm_num.int_of_num size in
                                        let v = dest_symbol v in
                                        let ty = dest_ty ty in
                                           size, v, ty
@@ -973,7 +973,7 @@ let make_poly_frame make_ty vars table =
                List.map (fun (v, ty, i) ->
                      let v = make_symbol v in
                      let ty = make_ty ty in
-                     let params = [make_param (Number (Mp_num.num_of_int i))] in
+                     let params = [make_param (Number (Lm_num.num_of_int i))] in
                      let op = mk_op opname_FrameSubfield params in
                         mk_term op [mk_bterm [] v; mk_bterm [] ty]) subfields
             in
@@ -1148,7 +1148,7 @@ let dest_unop dest_ty t =
 
        | [Number i], [] ->
             if Opname.eq op opname_NotEnumOp then
-               NotEnumOp (Mp_num.int_of_num i)
+               NotEnumOp (Lm_num.int_of_num i)
             else if Opname.eq op opname_UMinusFloatOp then
                UMinusFloatOp (rawfloat_precision_of_num i)
             else if Opname.eq op opname_AbsFloatOp then
@@ -1212,8 +1212,8 @@ let dest_unop dest_ty t =
          when Opname.eq op opname_RawBitFieldOp ->
             let p = rawint_precision_of_num p in
             let s = boolean_of_string s in
-            let off = Mp_num.int_of_num off in
-            let len = Mp_num.int_of_num len in
+            let off = Lm_num.int_of_num off in
+            let len = Lm_num.int_of_num len in
                RawBitFieldOp (p, s, off, len)
 
        | [Number p1; Number p2], []
@@ -1238,7 +1238,7 @@ let dest_unop dest_ty t =
             else if Opname.eq op opname_RawIntOfEnumOp then
                let p = rawint_precision_of_num p in
                let s = boolean_of_string s in
-               let i = Mp_num.int_of_num i in
+               let i = Lm_num.int_of_num i in
                   RawIntOfEnumOp (p, s, i)
             else
                raise (RefineError ("dest_unop", StringTermError ("not a unop", t)))
@@ -1294,7 +1294,7 @@ let dest_unop dest_ty t =
 let make_unop make_ty op =
    match op with
       NotEnumOp i ->
-         let params = [make_param (Number (Mp_num.num_of_int i))] in
+         let params = [make_param (Number (Lm_num.num_of_int i))] in
          let op = mk_op opname_NotEnumOp params in
             mk_term op []
     | UMinusIntOp ->
@@ -1311,8 +1311,8 @@ let make_unop make_ty op =
          let params =
             [make_param (Number (num_of_rawint_precision p));
              make_param (Token (string_of_boolean s));
-             make_param (Number (Mp_num.num_of_int off));
-             make_param (Number (Mp_num.num_of_int len))]
+             make_param (Number (Lm_num.num_of_int off));
+             make_param (Number (Lm_num.num_of_int len))]
          in
          let op = mk_op opname_RawBitFieldOp params in
             mk_term op []
@@ -1377,7 +1377,7 @@ let make_unop make_ty op =
          let params =
             [make_param (Number (num_of_rawint_precision p));
              make_param (Token (string_of_boolean s));
-             make_param (Number (Mp_num.num_of_int n))]
+             make_param (Number (Lm_num.num_of_int n))]
          in
          let op = mk_op opname_RawIntOfEnumOp params in
             mk_term op []
@@ -1656,11 +1656,11 @@ let dest_binop dest_ty t =
 
        | [Number n], [] ->
             if Opname.eq op opname_AndEnumOp then
-               AndEnumOp (Mp_num.int_of_num n)
+               AndEnumOp (Lm_num.int_of_num n)
             else if Opname.eq op opname_OrEnumOp then
-               OrEnumOp (Mp_num.int_of_num n)
+               OrEnumOp (Lm_num.int_of_num n)
             else if Opname.eq op opname_XorEnumOp then
-               XorEnumOp (Mp_num.int_of_num n)
+               XorEnumOp (Lm_num.int_of_num n)
             else if Opname.eq op opname_PlusFloatOp then
                PlusFloatOp (rawfloat_precision_of_num n)
             else if Opname.eq op opname_MinusFloatOp then
@@ -1744,8 +1744,8 @@ let dest_binop dest_ty t =
          when Opname.eq op opname_RawSetBitFieldOp ->
             let p = rawint_precision_of_num p in
             let s = boolean_of_string s in
-            let off = Mp_num.int_of_num off in
-            let len = Mp_num.int_of_num len in
+            let off = Lm_num.int_of_num off in
+            let len = Lm_num.int_of_num len in
                RawSetBitFieldOp (p, s, off, len)
 
        | [], [{ bvars = []; bterm = ty }] ->
@@ -1769,15 +1769,15 @@ let dest_binop dest_ty t =
 let make_binop make_ty op =
    match op with
       AndEnumOp i ->
-         let params = [make_param (Number (Mp_num.num_of_int i))] in
+         let params = [make_param (Number (Lm_num.num_of_int i))] in
          let op = mk_op opname_AndEnumOp params in
             mk_term op []
     | OrEnumOp i ->
-         let params = [make_param (Number (Mp_num.num_of_int i))] in
+         let params = [make_param (Number (Lm_num.num_of_int i))] in
          let op = mk_op opname_OrEnumOp params in
             mk_term op []
     | XorEnumOp i ->
-         let params = [make_param (Number (Mp_num.num_of_int i))] in
+         let params = [make_param (Number (Lm_num.num_of_int i))] in
          let op = mk_op opname_XorEnumOp params in
             mk_term op []
     | PlusIntOp ->
@@ -1848,8 +1848,8 @@ let make_binop make_ty op =
          let params =
             [make_param (Number (num_of_rawint_precision p));
              make_param (Token (string_of_boolean s));
-             make_param (Number (Mp_num.num_of_int off));
-             make_param (Number (Mp_num.num_of_int len))]
+             make_param (Number (Lm_num.num_of_int off));
+             make_param (Number (Lm_num.num_of_int len))]
          in
          let op = mk_op opname_RawSetBitFieldOp params in
             mk_term op []
@@ -2061,7 +2061,7 @@ let dest_poly_atom (dest_ty : term -> 'ty) (dest_atom : term -> 'atom) (t : term
          (* AtomEnum *)
        | [Number n; Number i], []
          when Opname.eq op opname_AtomEnum ->
-            AtomEnum (Mp_num.int_of_num n, Mp_num.int_of_num i)
+            AtomEnum (Lm_num.int_of_num n, Lm_num.int_of_num i)
 
          (* AtomRawInt *)
        | [], [{ bvars = []; bterm = i }]
@@ -2153,8 +2153,8 @@ let make_poly_atom make_ty make_atom a =
          mk_simple_term opname_AtomInt [make_int i]
     | AtomEnum (n, i) ->
          let params =
-            [make_param (Number (Mp_num.num_of_int n));
-             make_param (Number (Mp_num.num_of_int i))]
+            [make_param (Number (Lm_num.num_of_int n));
+             make_param (Number (Lm_num.num_of_int i))]
          in
          let op = mk_op opname_AtomEnum params in
             mk_term op []
@@ -2171,7 +2171,7 @@ let make_poly_atom make_ty make_atom a =
          let i = make_rawint i in
             mk_simple_term opname_AtomSizeof [ty_vars; i]
     | AtomConst (ty, ty_var, i) ->
-         let params = [make_param (Number (Mp_num.num_of_int i))] in
+         let params = [make_param (Number (Lm_num.num_of_int i))] in
          let op = mk_op opname_AtomConst params in
          let ty = mk_bterm [] (make_ty ty) in
          let ty_var = mk_bterm [] (make_symbol ty_var) in
@@ -2275,7 +2275,7 @@ let dest_poly_alloc_op dest_ty dest_atom t =
                       { bvars = []; bterm = ty_var };
                       { bvars = []; bterm = atom_list }]
          when Opname.eq op opname_AllocUnion ->
-            let i = Mp_num.int_of_num i in
+            let i = Lm_num.int_of_num i in
             let ty = dest_ty ty in
             let ty_var = dest_symbol ty_var in
             let atom_list = List.map dest_atom (dest_xlist atom_list) in
@@ -2340,7 +2340,7 @@ let make_poly_alloc_op make_ty make_atom op =
          let ty = mk_bterm [] (make_ty ty) in
          let ty_var = mk_bterm [] (make_symbol ty_var) in
          let atom_list = mk_bterm [] (mk_xlist_term (List.map make_atom atom_list)) in
-         let params = [make_param (Number (Mp_num.num_of_int i))] in
+         let params = [make_param (Number (Lm_num.num_of_int i))] in
          let op = mk_op opname_AllocUnion params in
          let t = mk_term op [ty; ty_var; atom_list] in
             make_ty_lambda ty_vars t
@@ -2448,7 +2448,7 @@ let dest_poly_tailop dest_atom t =
             let a2 = dest_atom a2 in
             let a3 = dest_atom a3 in
             let atom_list = List.map dest_atom (dest_xlist atom_list) in
-            let i = Mp_num.int_of_num i in
+            let i = Lm_num.int_of_num i in
                TailSysMigrate (i, a1, a2, a3, atom_list)
 
        | [], [{ bvars = []; bterm = a1 };
@@ -2486,7 +2486,7 @@ let make_poly_tailop make_atom op =
          let a2 = mk_bterm [] (make_atom a2) in
          let a3 = mk_bterm [] (make_atom a3) in
          let atom_list = mk_bterm [] (mk_xlist_term (List.map make_atom atom_list)) in
-         let params = [make_param (Number (Mp_num.num_of_int i))] in
+         let params = [make_param (Number (Lm_num.num_of_int i))] in
          let op = mk_op opname_TailSpeculate params in
             mk_term op [a1; a2; a3; atom_list]
 

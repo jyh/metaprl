@@ -64,7 +64,7 @@ doc docoff
 extends Perv
 extends Ocaml_df
 
-open Mp_debug
+open Lm_debug
 open Printf
 
 open Refiner.Refiner.Term
@@ -93,7 +93,7 @@ doc <:doc<
    
    This theory uses its own semantics of sequents: a @tt[Base_rewrite] sequent
    of a form <<sequent { <H> >- Perv!"rewrite"{'a; 'b} }>> means that <<'a>> and <<'b>>
-   are interchangeble in context <<df_context_var["H"]>>.
+   are interchangeble in context <<df_context_var[H:v]>>.
    @end[doc]
 >>
 declare sequent_arg

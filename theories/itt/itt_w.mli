@@ -34,6 +34,7 @@ extends Itt_equal
 extends Itt_rfun
 
 open Opname
+open Lm_symbol
 open Refiner.Refiner.Term
 
 (************************************************************************
@@ -162,8 +163,8 @@ rule tree_indEquality (w{'A; x. 'B['x]}) 'a 'f 'g :
 val w_term : term
 val w_opname :opname
 val is_w_term : term -> bool
-val dest_w : term -> string * term * term
-val mk_w_term : string -> term -> term -> term
+val dest_w : term -> var * term * term
+val mk_w_term : var -> term -> term -> term
 
 val tree_term : term
 val tree_opname : opname
@@ -174,8 +175,8 @@ val mk_tree_term : term -> term -> term
 val tree_ind_term : term
 val tree_ind_opname : opname
 val is_tree_ind_term : term -> bool
-val dest_tree_ind : term -> string * string * string * term * term
-val mk_tree_ind_term :  string -> string -> string -> term -> term -> term
+val dest_tree_ind : term -> var * var * var * term * term
+val mk_tree_ind_term :  var -> var -> var -> term -> term -> term
 
 (*
  * -*-

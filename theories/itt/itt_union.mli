@@ -35,6 +35,8 @@ extends Itt_equal
 extends Itt_struct
 extends Itt_subtype
 
+open Lm_symbol
+
 open Refiner.Refiner.Term
 
 open Tactic_type.Tacticals
@@ -204,8 +206,8 @@ val mk_inr_term : term -> term
 
 val decide_term : term
 val is_decide_term : term -> bool
-val dest_decide : term -> term * string * term * string * term
-val mk_decide_term : term -> string -> term -> string -> term -> term
+val dest_decide : term -> term * var * term * var * term
+val mk_decide_term : term -> var -> term -> var -> term -> term
 
 (*
  * -*-

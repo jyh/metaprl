@@ -139,13 +139,13 @@ let dest_int t =
       match params, bterms with
          [Number i], []
          when Opname.eq op opname_int ->
-            Mp_num.int_of_num i
+            Lm_num.int_of_num i
 
        | _ ->
             raise (RefineError ("dest_int", StringTermError ("not an int", t)))
 
 let make_int i =
-   let params = [make_param (Number (Mp_num.num_of_int i))] in
+   let params = [make_param (Number (Lm_num.num_of_int i))] in
    let op = mk_op opname_int params in
       mk_term op []
 

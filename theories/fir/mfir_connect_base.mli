@@ -95,14 +95,14 @@ val rawint_of_number_term : int_precision -> int_signed -> term -> rawint
  * Convert int_precision, int_signed, and float_precision.
  *)
 
-val num_of_int_precision : int_precision -> Mp_num.num
-val int_precision_of_num : Mp_num.num -> int_precision
+val num_of_int_precision : int_precision -> Lm_num.num
+val int_precision_of_num : Lm_num.num -> int_precision
 
 val string_of_int_signed : int_signed -> string
 val int_signed_of_string : string -> int_signed
 
-val num_of_float_precision : float_precision -> Mp_num.num
-val float_precision_of_num : Mp_num.num -> float_precision
+val num_of_float_precision : float_precision -> Lm_num.num
+val float_precision_of_num : Lm_num.num -> float_precision
 
 
 (*

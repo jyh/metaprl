@@ -75,7 +75,6 @@ let resource reduce +=
 
     <<meta_eq[a:n,b:n]{'tt; 'ff}>>, Base_meta.reduce_meta_eq_num;
     <<meta_eq[a:s,b:s]{'tt; 'ff}>>, Base_meta.reduce_meta_eq_str;
-    <<meta_eq[a:v,b:v]{'tt; 'ff}>>, Base_meta.reduce_meta_eq_var;
     <<meta_eq[a:t,b:t]{'tt; 'ff}>>, Base_meta.reduce_meta_eq_tok;
     <<meta_eq[a:l,b:l]{'tt; 'ff}>>, Base_meta.reduce_meta_eq_lev;
     <<meta_lt[a:n,b:n]{'tt; 'ff}>>, Base_meta.reduce_meta_lt_num;
@@ -85,7 +84,6 @@ let resource reduce +=
 
     <<eq[a:n,b:n]{'tt; 'ff}>>, Phobos_base.reduce_eq_num;
     <<eq[a:s,b:s]{'tt; 'ff}>>, Phobos_base.reduce_eq_str;
-    <<eq[a:v,b:v]{'tt; 'ff}>>, Phobos_base.reduce_eq_var;
     <<eq[a:t,b:t]{'tt; 'ff}>>, Phobos_base.reduce_eq_tok;
     <<eq[a:l,b:l]{'tt; 'ff}>>, Phobos_base.reduce_eq_lev;
 

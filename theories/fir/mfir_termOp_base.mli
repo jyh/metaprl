@@ -34,7 +34,7 @@
 
 open Opname
 open Refiner.Refiner.Term
-
+open Lm_symbol
 
 (*
  * No parameters, no subterms.
@@ -52,8 +52,8 @@ val mk_1_dep0_term : opname -> term -> term
 val dest_1_dep0_term : opname -> term -> term
 
 val is_0_dep0_1_dep1_term : opname -> term -> bool
-val mk_0_dep0_1_dep1_term : opname -> string -> term -> term
-val dest_0_dep0_1_dep1_term : opname -> term -> string * term
+val mk_0_dep0_1_dep1_term : opname -> var -> term -> term
+val dest_0_dep0_1_dep1_term : opname -> term -> var * term
 
 
 (*
@@ -65,8 +65,8 @@ val mk_2_dep0_term : opname -> term -> term -> term
 val dest_2_dep0_term : opname -> term -> term * term
 
 val is_1_dep0_1_dep1_term : opname -> term -> bool
-val mk_1_dep0_1_dep1_term : opname -> term -> string -> term -> term
-val dest_1_dep0_1_dep1_term : opname -> term -> term * string * term
+val mk_1_dep0_1_dep1_term : opname -> term -> var -> term -> term
+val dest_1_dep0_1_dep1_term : opname -> term -> term * var * term
 
 
 (*
@@ -78,8 +78,8 @@ val mk_3_dep0_term : opname -> term -> term -> term -> term
 val dest_3_dep0_term : opname -> term -> term * term * term
 
 val is_2_dep0_1_dep1_term : opname -> term -> bool
-val mk_2_dep0_1_dep1_term : opname -> term -> term -> string -> term -> term
-val dest_2_dep0_1_dep1_term : opname -> term -> term * term * string * term
+val mk_2_dep0_1_dep1_term : opname -> term -> term -> var -> term -> term
+val dest_2_dep0_1_dep1_term : opname -> term -> term * term * var * term
 
 
 (*
@@ -91,8 +91,8 @@ val mk_4_dep0_term : opname -> term -> term -> term -> term -> term
 val dest_4_dep0_term : opname -> term -> term * term * term * term
 
 val is_3_dep0_1_dep1_term : opname -> term -> bool
-val mk_3_dep0_1_dep1_term : opname -> term -> term -> term -> string -> term -> term
-val dest_3_dep0_1_dep1_term : opname -> term -> term * term * term * string * term
+val mk_3_dep0_1_dep1_term : opname -> term -> term -> term -> var -> term -> term
+val dest_3_dep0_1_dep1_term : opname -> term -> term * term * term * var * term
 
 
 (*
@@ -109,21 +109,20 @@ val dest_5_dep0_term : opname -> term -> term * term * term * term * term
  *)
 
 val is_num_0_dep0_term : opname -> term -> bool
-val mk_num_0_dep0_term : opname -> Mp_num.num -> term
-val dest_num_0_dep0_term : opname -> term -> Mp_num.num
+val mk_num_0_dep0_term : opname -> Lm_num.num -> term
+val dest_num_0_dep0_term : opname -> term -> Lm_num.num
 
 val is_str_0_dep0_term : opname -> term -> bool
 val mk_str_0_dep0_term : opname -> string -> term
 val dest_str_0_dep0_term : opname -> term -> string
-
 
 (*
  * 1 parameter, 1 subterms.
  *)
 
 val is_num_1_dep0_term : opname -> term -> bool
-val mk_num_1_dep0_term : opname -> Mp_num.num-> term -> term
-val dest_num_1_dep0_term : opname -> term -> Mp_num.num * term
+val mk_num_1_dep0_term : opname -> Lm_num.num-> term -> term
+val dest_num_1_dep0_term : opname -> term -> Lm_num.num * term
 
 val is_str_1_dep0_term : opname -> term -> bool
 val mk_str_1_dep0_term : opname -> string -> term -> term
@@ -144,8 +143,8 @@ val dest_str_2_dep0_term : opname -> term -> string * term * term
  *)
 
 val is_num_3_dep0_term : opname -> term -> bool
-val mk_num_3_dep0_term : opname -> Mp_num.num -> term -> term -> term -> term
-val dest_num_3_dep0_term : opname -> term -> Mp_num.num * term * term * term
+val mk_num_3_dep0_term : opname -> Lm_num.num -> term -> term -> term -> term
+val dest_num_3_dep0_term : opname -> term -> Lm_num.num * term * term * term
 
 
 (*
@@ -153,8 +152,8 @@ val dest_num_3_dep0_term : opname -> term -> Mp_num.num * term * term * term
  *)
 
 val is_str_3_dep0_1_dep1_term : opname -> term -> bool
-val mk_str_3_dep0_1_dep1_term : opname -> string -> term -> term -> term -> string -> term -> term
-val dest_str_3_dep0_1_dep1_term : opname -> term -> string * term * term * term * string * term
+val mk_str_3_dep0_1_dep1_term : opname -> string -> term -> term -> term -> var -> term -> term
+val dest_str_3_dep0_1_dep1_term : opname -> term -> string * term * term * term * var * term
 
 
 (*
@@ -162,16 +161,16 @@ val dest_str_3_dep0_1_dep1_term : opname -> term -> string * term * term * term 
  *)
 
 val is_num_num_0_dep0_term : opname -> term -> bool
-val mk_num_num_0_dep0_term : opname -> Mp_num.num -> Mp_num.num -> term
-val dest_num_num_0_dep0_term : opname -> term -> Mp_num.num * Mp_num.num
+val mk_num_num_0_dep0_term : opname -> Lm_num.num -> Lm_num.num -> term
+val dest_num_num_0_dep0_term : opname -> term -> Lm_num.num * Lm_num.num
 
 val is_num_str_0_dep0_term : opname -> term -> bool
-val mk_num_str_0_dep0_term : opname -> Mp_num.num -> string -> term
-val dest_num_str_0_dep0_term : opname -> term -> Mp_num.num * string
+val mk_num_str_0_dep0_term : opname -> Lm_num.num -> string -> term
+val dest_num_str_0_dep0_term : opname -> term -> Lm_num.num * string
 
 val is_str_num_0_dep0_term : opname -> term -> bool
-val mk_str_num_0_dep0_term : opname -> string -> Mp_num.num -> term
-val dest_str_num_0_dep0_term : opname -> term -> string * Mp_num.num
+val mk_str_num_0_dep0_term : opname -> string -> Lm_num.num -> term
+val dest_str_num_0_dep0_term : opname -> term -> string * Lm_num.num
 
 
 (*
@@ -179,8 +178,8 @@ val dest_str_num_0_dep0_term : opname -> term -> string * Mp_num.num
  *)
 
 val is_num_str_1_dep0_term : opname -> term -> bool
-val mk_num_str_1_dep0_term : opname -> Mp_num.num -> string -> term -> term
-val dest_num_str_1_dep0_term : opname -> term -> Mp_num.num * string * term
+val mk_num_str_1_dep0_term : opname -> Lm_num.num -> string -> term -> term
+val dest_num_str_1_dep0_term : opname -> term -> Lm_num.num * string * term
 
 
 (*
@@ -188,8 +187,8 @@ val dest_num_str_1_dep0_term : opname -> term -> Mp_num.num * string * term
  *)
 
 val is_num_str_2_dep0_term : opname -> term -> bool
-val mk_num_str_2_dep0_term : opname -> Mp_num.num -> string -> term -> term -> term
-val dest_num_str_2_dep0_term : opname -> term -> Mp_num.num * string * term * term
+val mk_num_str_2_dep0_term : opname -> Lm_num.num -> string -> term -> term -> term
+val dest_num_str_2_dep0_term : opname -> term -> Lm_num.num * string * term * term
 
 val is_str_str_2_dep0_term : opname -> term -> bool
 val mk_str_str_2_dep0_term : opname -> string -> string -> term -> term -> term
@@ -201,12 +200,12 @@ val dest_str_str_2_dep0_term : opname -> term -> string * string * term * term
  *)
 
 val is_num_num_str_0_dep0_term : opname -> term -> bool
-val mk_num_num_str_0_dep0_term : opname -> Mp_num.num -> Mp_num.num -> string -> term
-val dest_num_num_str_0_dep0_term : opname -> term -> Mp_num.num * Mp_num.num * string
+val mk_num_num_str_0_dep0_term : opname -> Lm_num.num -> Lm_num.num -> string -> term
+val dest_num_num_str_0_dep0_term : opname -> term -> Lm_num.num * Lm_num.num * string
 
 val is_num_str_num_0_dep0_term : opname -> term -> bool
-val mk_num_str_num_0_dep0_term : opname -> Mp_num.num -> string -> Mp_num.num -> term
-val dest_num_str_num_0_dep0_term : opname -> term -> Mp_num.num * string * Mp_num.num
+val mk_num_str_num_0_dep0_term : opname -> Lm_num.num -> string -> Lm_num.num -> term
+val dest_num_str_num_0_dep0_term : opname -> term -> Lm_num.num * string * Lm_num.num
 
 
 (*
@@ -214,9 +213,9 @@ val dest_num_str_num_0_dep0_term : opname -> term -> Mp_num.num * string * Mp_nu
  *)
 
 val is_num_str_num_num_0_dep0_term : opname -> term -> bool
-val mk_num_str_num_num_0_dep0_term : opname -> Mp_num.num -> string -> Mp_num.num -> Mp_num.num -> term
-val dest_num_str_num_num_0_dep0_term : opname -> term -> Mp_num.num * string * Mp_num.num * Mp_num.num
+val mk_num_str_num_num_0_dep0_term : opname -> Lm_num.num -> string -> Lm_num.num -> Lm_num.num -> term
+val dest_num_str_num_num_0_dep0_term : opname -> term -> Lm_num.num * string * Lm_num.num * Lm_num.num
 
 val is_num_str_num_str_0_dep0_term : opname -> term -> bool
-val mk_num_str_num_str_0_dep0_term : opname -> Mp_num.num -> string -> Mp_num.num -> string -> term
-val dest_num_str_num_str_0_dep0_term : opname -> term -> Mp_num.num * string * Mp_num.num * string
+val mk_num_str_num_str_0_dep0_term : opname -> Lm_num.num -> string -> Lm_num.num -> string -> term
+val dest_num_str_num_str_0_dep0_term : opname -> term -> Lm_num.num * string * Lm_num.num * string

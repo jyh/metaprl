@@ -33,7 +33,7 @@
 extends Itt_group
 extends Itt_quotient
 
-open Mp_debug
+open Lm_debug
 open Refiner.Refiner.TermType
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp

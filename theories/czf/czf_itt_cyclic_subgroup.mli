@@ -34,7 +34,7 @@ extends Czf_itt_group_power
 extends Czf_itt_subgroup
 
 open Printf
-open Mp_debug
+open Lm_debug
 open Refiner.Refiner.TermType
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp

@@ -31,6 +31,8 @@
  *
  *)
 
+open Lm_symbol
+
 open Refiner.Refiner.Term
 
 extends Itt_equal
@@ -159,12 +161,12 @@ rule srecindEquality lambda{x. 'S['x]} srec{T. 'B['T]} univ[i:l] :
  ************************************************************************)
 
 val is_srec_term : term -> bool
-val dest_srec : term -> string * term
-val mk_srec_term : string -> term -> term
+val dest_srec : term -> var * term
+val mk_srec_term : var -> term -> term
 
 val is_srecind_term : term -> bool
-val dest_srecind : term -> string * string * term * term
-val mk_srecind_term : string -> string -> term -> term -> term
+val dest_srecind : term -> var * var * term * term
+val mk_srecind_term : var -> var -> term -> term -> term
 
 (*
  * -*-

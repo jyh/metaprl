@@ -33,7 +33,7 @@
 extends Itt_record_label0
 extends Czf_itt_dall
 
-open Mp_debug
+open Lm_debug
 open Refiner.Refiner.TermType
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp

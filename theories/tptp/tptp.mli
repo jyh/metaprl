@@ -32,6 +32,8 @@
 
 extends Itt_theory
 
+open Lm_symbol
+
 open Refiner.Refiner.TermType
 
 open Tactic_type.Conversionals
@@ -133,14 +135,14 @@ val mk_and_term : term list -> term
 val dest_and : term -> term list
 
 val is_all_term : term -> bool
-val mk_all_term : string list -> term -> term
-val dest_all : term -> string list * term
-val var_of_all : term -> string
+val mk_all_term : var list -> term -> term
+val dest_all : term -> var list * term
+val var_of_all : term -> var
 
 val is_exists_term : term -> bool
-val mk_exists_term : string list -> term -> term
-val dest_exists : term -> string list * term
-val var_of_exists : term -> string
+val mk_exists_term : var list -> term -> term
+val dest_exists : term -> var list * term
+val var_of_exists : term -> var
 
 (************************************************************************
  * TACTICS                                                              *

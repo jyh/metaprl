@@ -46,7 +46,7 @@ open M_ir
 open M_ast
 open M_util
 
-open Mp_debug
+open Lm_debug
 open Printf
 
 open Refiner.Refiner.TermType

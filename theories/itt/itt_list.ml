@@ -1,9 +1,9 @@
-doc <:doc< 
+doc <:doc<
    @spelling{cons}
-  
+
    @begin[doc]
    @module[Itt_list]
-  
+
    The @tt{Itt_list} module defines the type of finite
    lists of elements.  The lists can be defined using the
    simple recursive type in module @hrefmodule[Itt_srec].
@@ -11,33 +11,33 @@ doc <:doc<
    as primitive, so that lists can be used without including
    the recursive type.
    @end[doc]
-  
+
    ----------------------------------------------------------------
-  
+
    @begin[license]
    This file is part of MetaPRL, a modular, higher order
    logical framework that provides a logical programming
    environment for OCaml and other languages.
-  
+
    See the file doc/index.html for information on Nuprl,
    OCaml, and more information about this system.
-  
+
    Copyright (C) 1998 Jason Hickey, Cornell University
-  
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
    as published by the Free Software Foundation; either version 2
    of the License, or (at your option) any later version.
-  
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-  
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-  
+
    Author: Jason Hickey
    @email{jyh@cs.cornell.edu}
    @end[license]
@@ -51,8 +51,9 @@ extends Itt_logic
 doc docoff
 
 open Printf
-open Mp_debug
-open String_set
+open Lm_symbol
+open Lm_debug
+open Lm_string_set
 open Refiner.Refiner
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
@@ -83,10 +84,10 @@ let _ =
  * TERMS                                                                *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @terms
-  
+
    The @tt[nil] term is the empty list, the @tt[cons] term
    adds an element $a$ to list $b$.
    @end[doc]
@@ -94,7 +95,7 @@ doc <:doc<
 declare nil
 declare cons{'a; 'b}
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    The @tt[list] term defines the list type.  The @tt[list_ind]
    term defines the induction combinator.
@@ -107,10 +108,10 @@ declare list_ind{'e; 'base; h, t, f. 'step['h; 't; 'f]}
  * REWRITES                                                             *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @rewrites
-  
+
    The @hrefterm[list_ind] term computes values on lists.
    The combinator has two bodies; the @i{base} term
    defines the value on empty lists, and the $@i{step}[h, t, f]$
@@ -129,11 +130,11 @@ prim_rw reduce_listindCons {| reduce |} :
  * RULES                                                                *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @rules
    @modsubsection{Typehood and equality}
-  
+
    The $@list{T}$ term is a well-formed type if
    $T$ is a type.
    @end[doc]
@@ -148,10 +149,10 @@ prim listEquality {| intro [] |} :
    sequent { <H> >- list{'A} = list{'B} in univ[i:l] } =
    it
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Membership}
-  
+
    The @hrefterm[nil] term is a member of every list type $@list{A}$.
    @end[doc]
 >>
@@ -164,7 +165,7 @@ interactive nilFormation {| intro [] |} :
    [wf] sequent { <H> >- "type"{'A} } -->
    sequent { <H> >- list{'A} }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    The @hrefterm[cons] term $@cons{h; t}$ is a member of the list
    type $@list{A}$ if $h$ is an element of $A$, and $t$ is an element
@@ -177,10 +178,10 @@ prim consEquality {| intro []; eqcd |} :
    sequent { <H> >- cons{'u1; 'v1} = cons{'u2; 'v2} in list{'A} } =
    it
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Combinator equality}
-  
+
    The @hrefterm[list_ind] term $@listind{l; u; v; z; @i{base}; @i{step}[u, v, z]}$
    computes a value of type $T$ if 1) the argument $l$ is a list of type $@list{A}$,
    2) the @i{base} term has type $T$, and 3) the @i{step} term computes a value
@@ -199,10 +200,10 @@ prim list_indEquality {| intro []; eqcd |} lambda{l. 'T['l]} list{'A} :
            } =
    it
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Elimination}
-  
+
    The elimination for performs induction over the assumption
    $l@colon @list{A}$.  The rule produces two cases for a conclusion
    $C[l]$.  In the base case, $C$ must hold on the empty list, and
@@ -217,10 +218,10 @@ prim listElimination {| elim [ThinOption thinT] |} 'H :
    sequent { <H>; l: list{'A}; <J['l]> >- 'C['l] } =
    list_ind{'l; 'base['l]; u, v, w. 'step['l; 'u; 'v; 'w]}
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Contradiction}
-  
+
    The terms @hrefterm[nil] and @hrefterm[cons] are distinct in
    every list type.
    @end[doc]
@@ -241,10 +242,10 @@ interactive consEqElimination {| elim [ThinOption thinT] |} 'H :
                        v: 'h1 = 'h2 in 'A; w: 't1 = 't2 in list{'A};   <J['u]> >- 'C['u] } -->
    sequent { <H>; u: cons{'h1; 't1} = cons{'h2; 't2} in list{'A}; <J['u]> >- 'C['u] }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Computation}
-  
+
    The @emph{only} representative on the empty list is the
    @hrefterm[nil] term.
    @end[doc]
@@ -254,10 +255,10 @@ prim nilSqequal 'T :
    sequent { <H> >- 'u ~ nil } =
    it
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Subtyping}
-  
+
    The list type $@list{A}$ is covariant in the type argument $A$.
    @end[doc]
 >>
@@ -275,7 +276,7 @@ interactive listFormation :
 (*
    H >- list(A) ext cons(h; t)
    by consFormation
-  
+
    H >- A ext h
    H >- list(A) ext t
 *)
@@ -369,11 +370,13 @@ let mk_list_ind_term = mk_dep0_dep0_dep3_term list_ind_opname
  *)
 let resource typeinf += (list_term, Typeinf.infer_map dest_list)
 
+let t_var = Lm_symbol.add "T"
+
 (*
  * Type of nil.
  *)
 let inf_nil _ consts _ eqs opt_eqs defs _ =
-   let t = Typeinf.vnewname consts defs "T" in
+   let t = Typeinf.vnewname consts defs t_var in
    eqs, opt_eqs, ((t, <<void>>)::defs), mk_list_term (mk_var_term t)
 
 let resource typeinf += (nil_term, inf_nil)
@@ -385,7 +388,7 @@ let inf_cons inf consts decls eqs opt_eqs defs t =
    let hd, tl = dest_cons t in
    let eqs', opt_eqs', defs', hd' = inf consts decls eqs opt_eqs defs hd in
    let eqs'', opt_eqs'', defs'', tl' = inf consts decls eqs' opt_eqs' defs' tl in
-   let t = Typeinf.vnewname consts defs'' "T" in
+   let t = Typeinf.vnewname consts defs'' t_var in
    let tt = mk_var_term t in
       eqs'', ((mk_list_term tt,tl')::(tt,hd')::opt_eqs''), ((t,<<void>>)::defs''), mk_list_term hd'
 
@@ -397,7 +400,7 @@ let resource typeinf += (cons_term, inf_cons)
 let inf_list_ind inf consts decls eqs opt_eqs defs t =
    let e, base, hd, tl, f, step = dest_list_ind t in
    let eqs', opt_eqs', defs', e' = inf consts decls eqs opt_eqs defs e in
-   let t = Typeinf.vnewname consts defs' "T" in
+   let t = Typeinf.vnewname consts defs' t_var in
       inf consts decls eqs'
           ((mk_list_term (mk_var_term t),e)::opt_eqs') ((t,<<void>>)::defs') base
 

@@ -37,6 +37,8 @@ extends Itt_subtype
 extends Itt_unit
 extends Itt_struct
 
+open Lm_symbol
+
 open Refiner.Refiner.Term
 
 open Tactic_type.Tacticals
@@ -123,8 +125,8 @@ rule set_subtype :
 
 (* Primitives *)
 val is_set_term : term -> bool
-val dest_set : term -> string * term * term
-val mk_set_term : string -> term -> term -> term
+val dest_set : term -> var * term * term
+val mk_set_term : var -> term -> term -> term
 
 
 (*

@@ -35,7 +35,7 @@ extends Itt_set
 extends Itt_fun
 extends Itt_disect
 
-open Mp_debug
+open Lm_debug
 open Refiner.Refiner.TermType
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp

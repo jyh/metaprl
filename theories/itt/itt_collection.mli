@@ -5,7 +5,7 @@ extends Itt_quotient
 extends Itt_logic
 
 open Printf
-open Mp_debug
+open Lm_debug
 open Refiner.Refiner
 open Refiner.Refiner.Term
 open Mp_resource

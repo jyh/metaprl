@@ -48,7 +48,7 @@ extends Itt_int_ext
 doc docoff
 
 open Printf
-open Mp_debug
+open Lm_debug
 open Opname
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
@@ -182,7 +182,7 @@ let lt2geT = argfunT (fun t p ->
    let (left,right)=dest_lt t in
    let newt=mk_ge_term right
                       (mk_add_term left
-                                  (mk_number_term (Mp_num.num_of_int 1))) in
+                                  (mk_number_term (Lm_num.num_of_int 1))) in
       thenLocalAT (assertT newt) lt2ge)
 
 interactive gt2ge :
@@ -195,7 +195,7 @@ let gt2geT = argfunT (fun t p ->
    let (left,right)=dest_gt t in
    let newt=mk_ge_term left
                       (mk_add_term right
-                                  (mk_number_term (Mp_num.num_of_int 1))) in
+                                  (mk_number_term (Lm_num.num_of_int 1))) in
       thenLocalAT (assertT newt) gt2ge)
 
 interactive eq2ge1 :
@@ -229,7 +229,7 @@ interactive nequal_elim {| elim [] |} 'H :
 (*
 let notle2geT t =
    let (l,r)=dest_le t in
-   let newt = mk_ge_term l (mk_add_term r (Mp_num.num_of_int 1)) in
+   let newt = mk_ge_term l (mk_add_term r (Lm_num.num_of_int 1)) in
 *)
 
 let anyArithRel2geT = argfunT (fun i p ->
@@ -533,23 +533,6 @@ and compare_params par1 par2 =
           | MLevel(l2) -> compare_levels l1 l2
           | _ -> Less
          )
-      | MVar(s1) ->
-         (
-          match p2 with
-            Number(_) -> Greater
-          | String(_) -> Greater
-          | Token(_) -> Greater
-          | Var(_) -> Greater
-          | MNumber(_) -> Greater
-          | MString(_) -> Greater
-          | MToken(_) -> Greater
-          | MLevel(_) -> Greater
-          | MVar(s2) ->
-             if s1<s2 then Less
-             else if s1>s2 then Greater
-             else Equal
-          | _ -> Less
-         )
       | ObId(id1) ->
          (
           match p2 with
@@ -561,7 +544,6 @@ and compare_params par1 par2 =
           | MString(_) -> Greater
           | MToken(_) -> Greater
           | MLevel(_) -> Greater
-          | MVar(_) -> Greater
           | ObId(id2) -> compare_plists id1 id2
           | _ -> Less
         )
@@ -576,7 +558,6 @@ and compare_params par1 par2 =
           | MString(_) -> Greater
           | MToken(_) -> Greater
           | MLevel(_) -> Greater
-          | MVar(_) -> Greater
           | ObId(_) -> Greater
           | ParamList(pl2) -> compare_plists pl1 pl2
          )

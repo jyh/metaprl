@@ -33,7 +33,7 @@ doc <:doc<
 extends Base_theory
 doc <:doc< @docoff >>
 
-open Mp_debug
+open Lm_debug
 open Printf
 
 open Refiner.Refiner.Term

@@ -35,6 +35,7 @@
 extends Base_theory
 extends Itt_comment
 
+open Lm_symbol
 open Refiner.Refiner.TermType
 open Refiner.Refiner.Term
 open Mp_resource
@@ -251,7 +252,7 @@ val it_term : term
 
 (* Universe inference functions *)
 val infer_univ_dep0_dep0 : (term -> term * term) -> typeinf_comp
-val infer_univ_dep0_dep1 : (term -> string * term * term) -> typeinf_comp
+val infer_univ_dep0_dep1 : (term -> var * term * term) -> typeinf_comp
 val infer_univ1 : typeinf_comp
 
 val equality_prec : auto_prec

@@ -1,14 +1,14 @@
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @module[Itt_isect]
-  
+
    The @tt[Itt_isect] module defines the @emph{intersection}
    type <<Isect x:'A.'B['x]>>.  The elements of the intersection
    are the terms that inhabit $B[x]$ for @emph{every} $x @in A$.
    The intersection is similar to the function space $@fun{x; A; B[x]}$;
    the intersection is inhabited if-and-only-if there is a constant
    function in the dependent-function space.
-  
+
    The intersection does not have a conventional
    set-theoretic interpretation.  One example is the
    type $@top @equiv <<Isect x:void.void>>$.  If the set theoretic
@@ -16,12 +16,12 @@ doc <:doc<
    would probably be empty.  However, in the type theory,
    the intersection contains @emph{every} term $t$ because the
    quantification is empty.
-  
+
    Another example is the type $@isect{T; @univ{i}; T @rightarrow T}$,
    which contains all the identity functions.  The set-theoretic
    interpretation of functions as sets of ordered pairs would again
    be empty.
-  
+
    The intersection is commonly used to express polymorphism of
    function spaces, and it is also used as an operator for
    record type concatenation.  If records are expressed as
@@ -32,39 +32,39 @@ doc <:doc<
    @bigcap @record{l_2@colon T_2}$ is isomorphic to the
    record space $@record{{l_1@colon T_1; l_2@colon T_2}}$.
    @end[doc]
-  
+
    ----------------------------------------------------------------
-  
+
    @begin[license]
    This file is part of MetaPRL, a modular, higher order
    logical framework that provides a logical programming
    environment for OCaml and other languages.
-  
+
    See the file doc/index.html for information on Nuprl,
    OCaml, and more information about this system.
-  
+
    Copyright (C) 1998 Jason Hickey, Cornell University
-  
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
    as published by the Free Software Foundation; either version 2
    of the License, or (at your option) any later version.
-  
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-  
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-  
+
    Author: Jason Hickey
    @email{jyh@cs.cornell.edu}
    @end[license]
 >>
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @parents
    @end[doc]
@@ -77,7 +77,7 @@ extends Itt_struct2
 doc <:doc< @docoff >>
 
 open Printf
-open Mp_debug
+open Lm_debug
 open Refiner.Refiner
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
@@ -107,10 +107,10 @@ let _ =
  * TERMS                                                                *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @terms
-  
+
    The @tt[isect] term denotes the intersection type.
    The @tt[top] type defines the type of all terms
    <<Isect x:void.void>>.
@@ -149,11 +149,11 @@ prim intersectionFormation 'A :
    sequent { <H> >- univ[i:l] } =
    Isect x: 'A. 'B['x]
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @rules
    @modsubsection{Typehood and equality}
-  
+
    The intersection $@isect{x; A; B[x]}$ is well-formed if
    $A$ is a type, and $B[x]$ is a family of types indexed by
    $x @in A$.
@@ -171,7 +171,7 @@ prim intersectionType {| intro [] |} :
    sequent { <H> >- "type"{."isect"{'A; x. 'B['x]}} } =
    it
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    The well-formedness of the $@top$ type is derived.
    The $@top$ type is a member of every type universe.
@@ -184,7 +184,7 @@ interactive topType {| intro [] |} :
    sequent { <H> >- "type"{top} }
 
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Membership}
    The elements in the intersection $@isect{x; A; B[x]}$ are the
@@ -193,7 +193,7 @@ doc <:doc<
    of the equalities on each type $B[z]$.  That is, for two elements
    of the intersection to be equal, they must be equal in
    @emph{every} type $B[z]$.
-  
+
    The @hrefterm[top] type contains every program.  The equality here
    is trivial; all terms are equal in $@top$.
    @end[doc]
@@ -208,10 +208,10 @@ interactive topMemberEquality {| intro []; eqcd |} :
    sequent { <H> >- 'b1 = 'b2 in top }
 
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Introduction}
-  
+
    In general the only one way to introduce intersection is
    to show @emph{explicitly} its witness.
    The following introduction rule is @emph{derived} from the
@@ -224,7 +224,7 @@ interactive intersectionMemberFormation {| intro [] |} 'b :
    [wf] sequent { <H>; z: 'A >- 'b in 'B['z] } -->
    sequent { <H> >-  Isect x: 'A. 'B['x] }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    In one special case when $B$ does not depend on $x$  we can derive
    simpler rule:
@@ -239,9 +239,9 @@ interactive intersectionMemberFormation2 {| intro [] |} :
     sequent { <H> >- Isect x: 'A. 'B }
 
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-  
+
    Of course $@top$ is inhabited.
    @end[doc]
 >>
@@ -251,10 +251,10 @@ interactive topMemberFormation {| intro [] |} :
 
 
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Elimination}
-  
+
    The elimination form performs instantiation of the
    intersection space.  If $a @in A$, the elimination form
    instantiates the intersection assumption $x@colon @isect{y; A; B[y]}$
@@ -299,7 +299,7 @@ let intersectionEliminationT = argfunT (fun n p ->
    let n = Sequent.get_pos_hyp_num p n in
      intersectionEliminationT n thenT thinIfThinningT [-1;n])
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    We can derive a simpler elimination rule for the case when $B$ does not contain $x$.
    @end[doc]
@@ -317,7 +317,7 @@ let intersectionEliminationT = argfunT (fun n p ->
 
 let resource elim += (<<Isect y: 'A. 'B['y]>>, intersectionEliminationT)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    As a corollary of elimination rule we have that if
    two terms are equal in the intersection, they are also
@@ -347,10 +347,10 @@ interactive intersectionEliminationFromCaseEquality 'H 'a :
    [main] sequent { <H>; x: Isect y: 'A. 'B['y]; <J['x]>; z: 'B['a] >- 'T['z] } -->
    sequent { <H>; x: Isect y: 'A. 'B['y]; <J['x]> >- 'T['x] }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Subtyping}
-  
+
    The intersection type conforms to the subtyping properties
    of the dependent-function space.  The type is @emph{contravariant}
    in the quantified type $A$, and pointwise-covariant in the
@@ -363,7 +363,7 @@ interactive intersectionSubtype {| intro [] |} :
    [wf] sequent { <H> >- (Isect a1:'A1. 'B1['a1]) Type } -->
    sequent { <H> >- \subtype{ (Isect a1:'A1. 'B1['a1]); (Isect a2:'A2. 'B2['a2]) } }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    The alternate subtyping rules are for cases where one of
    the types is not an intersection.  The intersection is a subtype
@@ -384,7 +384,7 @@ interactive intersectionSubtype3 :
    ["subtype"] sequent { <H>; x: 'A >- \subtype{'C; 'B['x]} } -->
    sequent { <H> >- \subtype{'C; ."isect"{'A; x. 'B['x]}} }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @noindent
    @emph{Every} type is a subtype of $@top$.

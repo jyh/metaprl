@@ -1,14 +1,14 @@
-doc <:doc< 
+doc <:doc<
    @spelling{rfun rfunctionFormation}
-  
+
    @begin[doc]
    @module[Itt_rfun]
-  
+
    The @tt{Itt_rfun} module defines the @emph{very-dependent function
    type}.  This is the root type for the function types
    for the dependent-function @hrefmodule[Itt_dfun] and
    the nondependent-function @hrefmodule[Itt_fun].
-  
+
    A complete description of the semantics of the type is given
    in @cite[Hic96a].  The type can be described
    informally as follows.
@@ -24,33 +24,33 @@ doc <:doc<
    must be well-formed if $f$ is restricted to arguments smaller
    than $x$.
    @end[doc]
-  
+
    ----------------------------------------------------------------
-  
+
    @begin[license]
    This file is part of MetaPRL, a modular, higher order
    logical framework that provides a logical programming
    environment for OCaml and other languages.
-  
+
    See the file doc/index.html for information on Nuprl,
    OCaml, and more information about this system.
-  
+
    Copyright (C) 1998 Jason Hickey, Cornell University
-  
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
    as published by the Free Software Foundation; either version 2
    of the License, or (at your option) any later version.
-  
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-  
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-  
+
    Author: Jason Hickey
    @email{jyh@cs.cornell.edu}
    @end[license]
@@ -64,8 +64,9 @@ extends Itt_struct
 doc docoff
 
 open Printf
-open Mp_debug
-open String_set
+open Lm_symbol
+open Lm_debug
+open Lm_string_set
 open Refiner.Refiner
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
@@ -99,18 +100,18 @@ let _ =
  * TERMS                                                                *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @terms
-  
+
    The @tt{rfun} type defines the very-dependent function $@rfun{f; x; A; B}$;
    the @tt{fun} type is used to define dependent functions $@fun{x; A; B[x]}$ and
    nondependent functions $@fun{A; B}$.
-  
+
    The elements of the function types are
    the functions <<lambda{x.'b['x]}>>, and the induction combinator is the
    application $@apply{f; a}$.  The @tt{fix} term defines a @emph{fixpoint}.
-  
+
    The @tt{well_founded} terms are used to define the well-founded order
    on the domain; the definition is given with the well-founded rules below.
    @end[doc]
@@ -238,10 +239,10 @@ dform well_founded_df : except_mode[src] :: well_founded{'A; a, b. 'R} =
  * REWRITES                                                             *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @rewrites
-  
+
    The @tt{reduce_beta} rewrite defines normal beta-reduction.
    The @tt{reduce_fix} rewrite defines reduction on the fixpoint
    combinator.  The @tt{reduce_fix} rewrite can be derived by defining
@@ -257,17 +258,17 @@ doc docoff
  * RULES                                                                *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Well-foundness}
-  
+
    The following three rules are used to define a well-founded order.
    The term @hrefterm[well_founded_prop] $@"well_founded_prop"{A}$ represents an arbitrary
    proposition (predicate) on $A$; the @hrefterm[well_founded_apply] $@"well_founded_apply"{P; a}$
    represents the application of the proposition $P$ to $a$.  The @hrefterm[well_founded_assum]
    term $@"well_founded_assum"{A; a_1; a_2; R[a_1, a_2]; P}$ asserts that predicate $P$ holds on
    all elements of $a$ by induction on the relation $R[a_1, a_2]$.
-  
+
    The reason this definition is so convoluted is that the definition of
    well-foundness must be given @emph{before} defining functions and application.
    The @hrefmodule[Itt_well_founded] module provides simplified definitions
@@ -298,7 +299,7 @@ prim well_founded_apply_type {| intro [] |} 'A :
    sequent { <H> >- well_founded_apply{'P; 'a} in univ[i:l] } =
    it
 
-doc <:doc< 
+doc <:doc<
    @docoff
 >>
 prim rfunctionFormation { f | a: 'A -> 'B['f; 'a] } :
@@ -306,10 +307,10 @@ prim rfunctionFormation { f | a: 'A -> 'B['f; 'a] } :
    sequent { <H> >- univ[i:l] } =
    { f | a: 'A -> 'B['f; 'a] }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Typehood and equality}
-  
+
    The well-formedness of the very-dependent function
    requires that the domain type $A$ be a type, that the domain
    be well-founded with some relation $R$, and that $B[f, x]$ be
@@ -341,10 +342,10 @@ prim rfunctionType  {| intro [] |} lambda{a. lambda{b. 'R['a; 'b]}} :
    sequent { <H> >- "type"{. { f | a:'A -> 'B['f; 'a] } } } =
    it
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Introduction}
-  
+
    Viewed as a proposition, the very-dependent function type
    represents a @emph{recursive} proposition.  The function type
    $@rfun{f; x; A; B[f, x]}$ must be well-formed with well-founded
@@ -363,10 +364,10 @@ prim rfunction_lambdaFormation {| intro [] |} lambda{a. lambda{b. 'R['a; 'b]}} :
    sequent { <H> >- { f | x:'A -> 'B['f; 'x] } } =
    lambda{y. fix{g. 'b['g; 'y]}}
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Membership}
-  
+
    The members of the function space are the @hrefterm[lambda] terms.
    The function space must be well-formed, and the body of the function
    must inhabit the range type $B$ where the @tt{lambda} function is
@@ -379,10 +380,10 @@ prim rfunction_lambdaEquality {| intro []; eqcd |} :
    sequent { <H> >- lambda{x1. 'b1['x1]} = lambda{x2. 'b2['x2]} in { f | x: 'A -> 'B['f; 'x] } } =
    it
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Extensional equality}
-  
+
    The function space is one of the few types in the @Nuprl type
    theory with an @emph{extensional} equality.  Normally, equality is
    intensional --- it depends on the syntactic structure of the
@@ -403,10 +404,10 @@ prim rfunctionExtensionality
    sequent { <H> >- 'f1 = 'f2 in { g | x:'A -> 'B['g; 'x] } } =
    it
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Elimination}
-  
+
    The elimination form for a function type $f@colon @rfun{g; x; A; B[g, x]}$
    allows @emph{instantiation} of the function on an argument $a$, to
    get a proof $B[f, a]$.
@@ -423,10 +424,10 @@ prim rfunctionElimination {| elim [] |} 'H 'a :
    sequent { <H>; f: { g | x:'A -> 'B['g; 'x] }; <J['f]> >- 'T['f] } =
    't['f; 'f 'a; it]
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Combinator equality}
-  
+
    Two @emph{applications} are equal if their functions are equal,
    and their arguments are equal.
    @end[doc]
@@ -438,10 +439,10 @@ prim rfunction_applyEquality {| intro[]; eqcd |} ({ f | x:'A -> 'B['f; 'x] }) :
    it
 doc <:doc< @docoff >>
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Subtyping}
-  
+
    Function subtyping is @emph{contravariant} in the domain and
    @emph{covariant} in the range.  The range subtyping is given using
    an arbitrary instance $f$ in the function space.
@@ -477,7 +478,7 @@ let rfunction_extensionalityT = rfunctionExtensionality
 let inf_rfun inf consts decls eqs opt_eqs defs t =
    let f, v, a, b = dest_rfun t in
    infer_univ_dep0_dep1
-      (fun _ -> v,a,b) inf (StringSet.add consts f) ((f,t)::decls) eqs opt_eqs defs t
+      (fun _ -> v,a,b) inf (SymbolSet.add consts f) ((f,t)::decls) eqs opt_eqs defs t
 
 let resource typeinf += (rfun_term, inf_rfun)
 
@@ -486,8 +487,8 @@ let resource typeinf += (rfun_term, inf_rfun)
  *)
 let inf_lambda inf consts decls eqs opt_eqs defs t =
    let v, b = dest_lambda t in
-   let consts = StringSet.add consts v in
-   let a = Typeinf.vnewname consts defs "T" in
+   let consts = SymbolSet.add consts v in
+   let a = Typeinf.vnewname consts defs (Lm_symbol.add "T") in
    let a' = mk_var_term a in
    let eqs', opt_eqs', defs', b' =
       inf consts ((v, a')::decls) eqs opt_eqs ((a,Itt_void.top_term)::defs) b
@@ -512,8 +513,8 @@ let inf_apply inf consts decls eqs opt_eqs defs t =
       let f''', v, d, r = dest_rfun f'' in
          eqs''', opt_eqs''', defs'', subst r [f'''; v] [f; a]
    else
-      let av = Typeinf.vnewname consts defs'' "A" in
-      let bv = Typeinf.vnewname consts defs'' "B" in
+      let av = Typeinf.vnewname consts defs'' (Lm_symbol.add "A") in
+      let bv = Typeinf.vnewname consts defs'' (Lm_symbol.add "B") in
       let at = mk_var_term av in
       let bt = mk_var_term bv in
          (eqnlist_append_eqn eqs'' f' (mk_fun_term at bt)),((a',at)::opt_eqs'''),

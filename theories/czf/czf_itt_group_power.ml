@@ -1,12 +1,12 @@
-doc <:doc< 
+doc <:doc<
    @spelling{power}
-  
+
    @begin[doc]
    @module[Czf_itt_group_power]
-  
+
    The @tt{Czf_itt_group_power} module defines the power operation
    in a group, i.e., it describes $x^n = x * x * ... * x$.
-  
+
    $x^n$ is defined by induction on $n$ as
    $$
    @begin[array, l]
@@ -16,33 +16,33 @@ doc <:doc<
    @end[array]
    $$
    @end[doc]
-  
+
    ----------------------------------------------------------------
-  
+
    @begin[license]
    This file is part of MetaPRL, a modular, higher order
    logical framework that provides a logical programming
    environment for OCaml and other languages.
-  
+
    See the file doc/index.html for information on Nuprl,
    OCaml, and more information about this system.
-  
+
    Copyright (C) 2002 Xin Yu, Caltech
-  
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
    as published by the Free Software Foundation; either version 2
    of the License, or (at your option) any later version.
-  
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-  
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-  
+
    Author: Xin Yu
    @email{xiny@cs.caltech.edu}
    @end[license]
@@ -54,6 +54,7 @@ extends Itt_int_base
 doc <:doc< @docoff >>
 
 open Lm_debug
+open Lm_printf
 
 open Tactic_type.Conversionals
 
@@ -74,10 +75,10 @@ doc <:doc< @docoff >>
  * REWRITES                                                             *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @rewrites
-  
+
    The @tt{power} is defined by induction.
    @end[doc]
 >>
@@ -98,11 +99,11 @@ dform power_df : parens :: except_mode[src] :: power{'g; 'z; 'n} =
  * RULES                                                                *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @rules
    @modsubsection{Well-formedness}
-  
+
    The $@power{g; z; n}$ is well-formed if $g$ is a label,
    $z$ is a set, and $n$ is an integer in ITT.
    @end[doc]
@@ -113,10 +114,10 @@ interactive power_wf {| intro [] |} :
    sequent { <H> >- 'n IN int } -->
    sequent { <H> >- isset{power{'g; 'z; 'n}} }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Membership}
-  
+
    If $z$ is a member of $@car{g}$, then $@power{g; z; n}$
    is also in $@car{g}$ for any integer $n$.
    @end[doc]
@@ -129,10 +130,10 @@ interactive power_mem {| intro [] |} :
    sequent { <H> >- mem{'z; car{'g}} } -->
    sequent { <H> >- mem{power{'g; 'z; 'n}; car{'g}} }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Functionality}
-  
+
    The @tt{power} is functional in its set argument.
    @end[doc]
 >>
@@ -163,10 +164,10 @@ interactive power_more {| intro [] |} :
    sequent { <H> >- mem{'x; car{'g}} } -->
    sequent { <H> >- eq{op{'g; power{'g; 'x; 'n}; 'x}; power{'g; 'x; ('n +@ 1)}} }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Power reduction}
-  
+
    $x^m * x^n = x^{m + n}$
    @end[doc]
 >>

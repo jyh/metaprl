@@ -111,6 +111,7 @@ doc docoff
 extends Czf_itt_comment
 
 open Lm_debug
+open Lm_printf
 
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp

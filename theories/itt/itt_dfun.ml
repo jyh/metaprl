@@ -58,6 +58,7 @@ extends Itt_unit
 doc <:doc< @docoff >>
 
 open Lm_debug
+open Lm_printf
 
 open Dtactic
 

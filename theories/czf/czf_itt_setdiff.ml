@@ -1,4 +1,4 @@
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @module[Czf_itt_setdiff]
    @parents
@@ -14,6 +14,7 @@ extends Itt_bool
 doc <:doc< @docoff >>
 
 open Lm_debug
+open Lm_printf
 
 open Tactic_type.Conversionals
 
@@ -25,10 +26,10 @@ let _ =
 doc <:doc< @doc{@terms} >>
 declare setdiff{'s1; 's2}
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @rewrites
-  
+
    @tt[setdiff] is defined using restricted separation.
    @end[doc]
 >>
@@ -45,11 +46,11 @@ prec prec_setdiff
 dform setdiff_df : except_mode[src] :: parens :: "prec"[prec_setdiff] :: setdiff{'s1; 's2} =
    slot{'s1} `" - " slot{'s2}
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @rules
    @modsubsection{Well-formedness}
-  
+
    A @tt[setdiff] is well-formed if its arguments are both sets.
    @end[doc]
 >>
@@ -58,10 +59,10 @@ interactive setdiff_isset {| intro [] |} :
    ["wf"] sequent { <H> >- isset{'s2} } -->
    sequent { <H> >- isset{setdiff{'s1; 's2}} }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Introduction}
-  
+
    A set $x$ is in the difference set @setdiff{s1; s2} if $x$ is a
    member of $s_1$ and $x$ is not a member of $s_2$.
    @end[doc]
@@ -74,10 +75,10 @@ interactive setdiff_intro {| intro [] |} 'x :
    sequent { <H> >- "implies"{mem{'x; 's2}; ."false"} } -->
    sequent { <H> >- mem{'x; setdiff{'s1; 's2}} }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Elimination}
-  
+
    The elimination form of @setdiff{s_1; s_2} produces a proof that
    $@mem{x; s_2}$ is wrong for which $@mem{x; s_1}$.
    @end[doc]
@@ -89,10 +90,10 @@ interactive setdiff_elim {| elim [] |} 'H :
    sequent { <H>; x: mem{'y; setdiff{'s1; 's2}}; <J['x]>; u: mem{'y; 's1}; v: "implies"{mem{'y; 's2}; ."false"} >- 'T['x] } -->
    sequent { <H>; x: mem{'y; setdiff{'s1; 's2}}; <J['x]> >- 'T['x] }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Functionality}
-  
+
    A @tt[setdiff] type is functional in both set arguments.
    @end[doc]
 >>

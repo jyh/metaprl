@@ -54,6 +54,7 @@ extends Itt_squiggle
 doc <:doc< @docoff >>
 
 open Lm_debug
+open Lm_printf
 open Refiner.Refiner
 open Refiner.Refiner.Term
 

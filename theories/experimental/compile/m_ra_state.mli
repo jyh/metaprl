@@ -1,5 +1,5 @@
 (*
- * Lm_debug variables.
+ * Lm_printf variables.
  *
  * ----------------------------------------------------------------
  *
@@ -32,7 +32,7 @@ extends Base_theory
 val debug_live : bool ref
 
 (*
- * Lm_debug the register allocator.
+ * Lm_printf the register allocator.
  *)
 val debug_regalloc : int ref
 

@@ -48,8 +48,8 @@ extends Base_theory
 doc <:doc< @docoff >>
 extends Itt_comment
 
-open Printf
 open Lm_debug
+open Lm_printf
 open Lm_symbol
 open Refiner.Refiner
 open Refiner.Refiner.Term

@@ -1,4 +1,4 @@
-doc <:doc< 
+doc <:doc<
  @begin[doc]
  @module[Itt_pointwise2]
  @end[doc]
@@ -13,6 +13,7 @@ extends Itt_pointwise
 doc <:doc< @docoff >>
 
 open Lm_debug
+open Lm_printf
 
 open Dtactic
 
@@ -30,7 +31,7 @@ let _ =
  * RULES                                                                *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
  @begin[doc]
   The following rules are derived only in pointwise functionality.
    They both contradict to Let rule.

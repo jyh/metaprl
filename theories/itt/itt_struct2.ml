@@ -57,6 +57,7 @@ extends Itt_logic
 doc <:doc< @docoff >>
 
 open Lm_debug
+open Lm_printf
 open Lm_symbol
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermMan

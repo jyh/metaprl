@@ -26,7 +26,7 @@
  *)
 
 open Lm_debug
-open Printf
+open Lm_printf
 
 open Term_sig
 open Refiner.Refiner.Term

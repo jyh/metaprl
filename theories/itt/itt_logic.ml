@@ -65,8 +65,8 @@ extends Itt_unit
 extends Itt_struct
 doc <:doc< @docoff >>
 
-open Printf
 open Lm_debug
+open Lm_printf
 open Lm_symbol
 open Term_sig
 open Refiner.Refiner

@@ -42,6 +42,7 @@ doc docoff
 extends Itt_poly
 
 open Lm_debug
+open Lm_printf
 open Tactic_type.Tacticals
 open Dtactic
 open Top_conversionals

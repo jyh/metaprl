@@ -1,7 +1,7 @@
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @module[Itt_datatree]
-  
+
    This is a theory of binary trees with data.
    @end[doc]
 >>
@@ -13,6 +13,7 @@ extends Itt_logic
 doc <:doc< @docoff >>
 
 open Lm_debug
+open Lm_printf
 
 open Dtactic
 open Top_conversionals
@@ -23,7 +24,7 @@ open Top_conversionals
 let _ =
    show_loading "Loading Itt_datatree%t"
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsection{Definition}
    @end[doc]
@@ -43,7 +44,7 @@ interactive datatree_subtype {| intro[] |} :
  sequent{ <H> >-"subtype"{ DataTree{'A};BinTree}}
 
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsection{Set of elements}
     A data tree is defined as set of elements.
@@ -77,7 +78,7 @@ interactive in_tree_univ {| intro[] |} :
  sequent{ <H> >- in_tree{'a;'t; 'A} in univ[i:l] }
 
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    Now we can define set of elements of the tree:
    @end[doc]
@@ -109,7 +110,7 @@ interactive set_from_tree_subtype {| intro[] |} :
 (* ==================== *)
 
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsection{Examples}
    @end[doc]

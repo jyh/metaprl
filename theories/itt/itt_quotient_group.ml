@@ -43,6 +43,7 @@ extends Itt_subset2
 doc docoff
 
 open Lm_debug
+open Lm_printf
 open Refiner.Refiner.TermOp
 
 open Dtactic

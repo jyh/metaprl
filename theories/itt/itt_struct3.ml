@@ -5,6 +5,7 @@ extends Itt_subtype
 extends Itt_pointwise
 
 open Lm_debug
+open Lm_printf
 open Refiner.Refiner.RefineError
 
 open Tactic_type

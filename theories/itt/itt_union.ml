@@ -62,8 +62,9 @@ extends Itt_struct
 extends Itt_subtype
 doc docoff
 
-open Lm_symbol
 open Lm_debug
+open Lm_symbol
+open Lm_printf
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
 open Unify_mm

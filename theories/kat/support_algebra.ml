@@ -1,7 +1,6 @@
 extends Base_theory
 
-open Lm_debug
-open Printf
+open Lm_printf
 
 open Tactic_type
 open Top_conversionals

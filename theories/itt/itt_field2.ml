@@ -43,6 +43,7 @@ extends Itt_unitring
 extends Itt_intdomain
 
 open Lm_debug
+open Lm_printf
 open Tactic_type.Tacticals
 open Dtactic
 open Top_conversionals

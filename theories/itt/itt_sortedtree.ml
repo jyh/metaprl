@@ -1,7 +1,7 @@
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @module[Itt_sortedtree]
-  
+
    This is a theory of sorted binary trees.
    @end[doc]
 >>
@@ -15,6 +15,7 @@ extends Itt_logic
 doc <:doc< @docoff >>
 
 open Lm_debug
+open Lm_printf
 
 open Tactic_type.Tacticals
 open Dtactic
@@ -40,7 +41,7 @@ let softrec_reduce term unfold  = term, (reduceByRecDefC term unfold)
 let _ =
    show_loading "Loading Itt_binatatree%t"
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @terms
    @end[doc]

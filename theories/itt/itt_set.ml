@@ -60,6 +60,7 @@ extends Itt_struct
 doc <:doc< @docoff >>
 
 open Lm_debug
+open Lm_printf
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
 

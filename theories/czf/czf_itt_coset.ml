@@ -1,7 +1,7 @@
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @module[Czf_itt_coset]
-  
+
    The @tt[Czf_itt_coset] module defines the @emph{left coset}
    and the @emph{right coset}. If $h$ is a subgroup of $g$ and
    $@mem{a; @car{g}}$, then the left coset containing $a$ is
@@ -11,35 +11,35 @@ doc <:doc<
    some $y @in @car{h}$. The elements of the right coset are
    those in $@car{g}$ which are equal to $@op{g; y; a}$ for some
    $y @in @car{h}$. The cosets are defined by separation.
-  
+
    @end[doc]
-  
+
    ----------------------------------------------------------------
-  
+
    @begin[license]
    This file is part of MetaPRL, a modular, higher order
    logical framework that provides a logical programming
    environment for OCaml and other languages.
-  
+
    See the file doc/index.html for information on Nuprl,
    OCaml, and more information about this system.
-  
+
    Copyright (C) 2002 Xin Yu, Caltech
-  
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
    as published by the Free Software Foundation; either version 2
    of the License, or (at your option) any later version.
-  
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-  
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-  
+
    Author: Xin Yu
    @email{xiny@cs.caltech.edu}
    @end[license]
@@ -52,6 +52,7 @@ extends Czf_itt_subgroup
 doc <:doc< @docoff >>
 
 open Lm_debug
+open Lm_printf
 
 open Dtactic
 
@@ -71,10 +72,10 @@ doc <:doc< @docoff >>
  * REWRITES                                                             *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @rewrites
-  
+
    The @hrefterm[lcoset] and @hrefterm[rcoset] terms are defined by separation.
    @end[doc]
 >>
@@ -99,11 +100,11 @@ dform rcoset_df : parens :: except_mode[src] :: rcoset{'h; 'g; 'a} =
  * RULES                                                                *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @rules
    @modsubsection{Well-formedness}
-  
+
    The $@lcoset{h; g; a}$ and $@rcoset{h; g; a}$ are well-formed
    if $h$ and $g$ are labels, and $a$ is a set.
    @end[doc]
@@ -122,10 +123,10 @@ interactive rcoset_isset {| intro [] |} :
 (*   sequent { <H> >- group{'g} } -->*)
    sequent { <H> >- isset{rcoset{'h; 'g; 'a}} }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Introduction}
-  
+
    A set $x$ is a member of $@lcoset{h; g; a}$ if the
    left coset is well-formed, $@mem{a; @car{g}}$,
    $@mem{x; @car{g}}$, $@subgroup{h; g}$, and there
@@ -160,10 +161,10 @@ interactive rcoset_intro {| intro [] |} 'z :
    sequent { <H> >- eq{'x; op{'g; 'z; 'a}} } -->
    sequent { <H> >- mem{'x; rcoset{'h; 'g; 'a}} }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Elimination}
-  
+
    The elimination form for the left coset
    $@mem{y; @lcoset{h; g; a}}$ implies $@mem{y; @car{g}}$ and
    also produces a witness $@mem{z; @car{h}}$ for which
@@ -190,10 +191,10 @@ interactive rcoset_elim {| elim [] |} 'H :
    sequent { <H>; x: mem{'y; rcoset{'h; 'g; 'a}}; <J['x]>; u: mem{'y; car{'g}}; z: set; v: mem{'z; car{'h}}; w: eq{'y; op{'g; 'z; 'a}} >- 'C['x] } -->
    sequent { <H>; x: mem{'y; rcoset{'h; 'g; 'a}}; <J['x]> >- 'C['x] }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Theorems}
-  
+
    If $h$ is a subgroup of group $g$, both the left and right
    cosets of $h$ containing $a$ are subsets of the carrier of
    $g$.

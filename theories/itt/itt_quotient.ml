@@ -136,6 +136,7 @@ extends Itt_esquash
 doc <:doc< @docoff >>
 
 open Lm_debug
+open Lm_printf
 open Refiner.Refiner
 open Term
 open TermOp

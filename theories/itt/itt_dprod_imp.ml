@@ -38,7 +38,7 @@ extends Itt_unit
 extends Itt_union
 
 open Lm_debug
-open Printf
+open Lm_printf
 
 open Tactic_type
 open Var

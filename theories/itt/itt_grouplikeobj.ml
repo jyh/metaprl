@@ -46,6 +46,7 @@ extends Itt_disect
 doc docoff
 
 open Lm_debug
+open Lm_printf
 
 open Tactic_type.Tacticals
 open Tactic_type.Conversionals

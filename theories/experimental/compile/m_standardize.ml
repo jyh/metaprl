@@ -28,8 +28,7 @@
 extends Shell
 extends M_ir
 
-open Printf
-open Lm_debug
+open Lm_printf
 
 open Lm_symbol
 

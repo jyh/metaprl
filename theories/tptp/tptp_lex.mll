@@ -2,14 +2,15 @@
  * Lexer for TPTP files.
  *)
 {
-open Printf
+open Lm_pervasives
+open Lm_printf
 open Lm_debug
 
 open Tptp_parse
 }
 
 rule main = parse
-    [' ' '\010' '\013' '\009' '\012'] + 
+    [' ' '\010' '\013' '\009' '\012'] +
     { main lexbuf }
   | ['A'-'Z' '\192'-'\214' '\216'-'\222' ]
     (['A'-'Z' 'a'-'z' '_' '\192'-'\214' '\216'-'\246' '\248'-'\255'
@@ -24,13 +25,13 @@ rule main = parse
          | "input_clause" -> Input_clause
          | name -> Lid name
       }
-  | '(' 
+  | '('
     { LeftParen }
-  | ')' 
+  | ')'
     { RightParen }
-  | '[' 
+  | '['
     { LeftBrack }
-  | ']' 
+  | ']'
     { RightBrack }
   | '\''  [^ '\''] * '\''
     { let s = Lexing.lexeme lexbuf in
@@ -38,19 +39,19 @@ rule main = parse
 	   String.blit s 1 s' 0 (String.length s');
 	   String s'
     }
-  | "--" 
+  | "--"
     { Negative }
-  | "++" 
+  | "++"
     { Positive }
-  | ',' 
+  | ','
     { Comma }
-  | '.' 
+  | '.'
     { Dot }
   | '%' [^'\n'] *
     { main lexbuf }
   | eof
       { Eof }
-  | _ 
+  | _
       { eprintf "Undefined token '%s'%t" (Lexing.lexeme lexbuf) eflush;
 	main lexbuf
       }

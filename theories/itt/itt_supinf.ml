@@ -5,8 +5,10 @@ extends Itt_bool
 extends Itt_int_ext
 extends Itt_rat
 
-open Printf
 open Lm_debug
+open Lm_printf
+open Lm_pervasives
+
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermSubst
 open Refiner.Refiner.RefineError

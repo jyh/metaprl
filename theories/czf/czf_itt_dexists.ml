@@ -1,48 +1,48 @@
-doc <:doc< 
+doc <:doc<
    @spelling{dexists}
-  
+
    @begin[doc]
    @module[Czf_itt_dexists]
-  
+
    The @tt{Czf_itt_dexists} theory defines @emph{restricted}
    existential quantification.  The syntax of the operator
    is $@dexists{x; s; P[x]}$, where $s$ is a set, and $P[x]$
    is a functional proposition for any set argument $x$.
    The proposition is true if $P[a]$ is true for @emph{some} element
    $@mem{a; s}$.
-  
+
    The restricted universal quantification is coded as
    an implication on the elements of $s$.
-  
+
    $$@dexists{x; @collect{y; T; f[y]}; P[x]} @equiv @prod{x; T; P[x]}$$
    @end[doc]
-  
+
    ----------------------------------------------------------------
-  
+
    @begin[license]
    This file is part of MetaPRL, a modular, higher order
    logical framework that provides a logical programming
    environment for OCaml and other languages.
-  
+
    See the file doc/index.html for information on Nuprl,
    OCaml, and more information about this system.
-  
+
    Copyright (C) 1998 Jason Hickey, Cornell University
-  
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
    as published by the Free Software Foundation; either version 2
    of the License, or (at your option) any later version.
-  
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-  
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-  
+
    Author: Jason Hickey
    @email{jyh@cs.cornell.edu}
    @end[license]
@@ -54,6 +54,7 @@ extends Czf_itt_set_ind
 doc docoff
 
 open Lm_debug
+open Lm_printf
 
 open Dtactic
 open Top_conversionals
@@ -75,10 +76,10 @@ doc <:doc< @docoff >>
  * REWRITES                                                             *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @rewrites
-  
+
    The existential is defined by set induction on the set
    argument as a dependent product type.
    @end[doc]
@@ -101,11 +102,11 @@ dform dexists_df : parens :: "prec"[prec_lambda] :: "dexists"{'s; x. 'A} =
  * RULES                                                                *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @rules
    @modsubsection{Well-formedness}
-  
+
    The proposition $@dexists{x; s; P[x]}$ is well-formed
    if $s$ is a set, and $P[x]$ is a well-formed proposition
    for @emph{any} set argument $x$.
@@ -116,10 +117,10 @@ interactive dexists_type {| intro [] |} :
    ["wf"] sequent { <H>; y: set >- "type"{'A['y]} } -->
    sequent { <H> >- "type"{."dexists"{'s; x. 'A['x]}} }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Introduction}
-  
+
    The existential $@dexists{x; s; P[x]}$ is true if
    it is well-formed and if $P[a]$ is true for some
    element $@mem{a; s}$.
@@ -132,10 +133,10 @@ interactive dexists_intro {| intro [] |} 'z :
    ["antecedent"] sequent { <H> >- 'A['z] } -->
    sequent { <H> >- "dexists"{'s; x. 'A['x]} }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Elimination}
-  
+
    The proof of the existential $@dexists{x; s; P[x]}$ has two parts:
    an element $@mem{a; s}$, and a proof $P[a]$.  The elimination form
    produces these parts.
@@ -155,10 +156,10 @@ interactive dexists_elim {| elim [] |} 'H :
                   } -->
    sequent { <H>; x: "dexists"{'s; y. 'A['y]}; <J['x]> >- 'C['x] }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Functionality}
-  
+
    The existential is functional in both its set and proposition
    arguments.
    @end[doc]
@@ -170,10 +171,10 @@ interactive dexists_fun {| intro [] |} :
    ["wf"] sequent { <H>; z: set; x: set >- "type"{'B['z; 'x]} } -->
    sequent { <H> >- fun_prop{z. "dexists"{'A['z]; y. 'B['z; 'y]}} }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Restriction}
-  
+
    The existential is a restricted formula because it is
    a quantification over the @emph{index} type of the set
    argument.

@@ -6,7 +6,7 @@ open Top_conversionals
 open Itt_fun
 open Typeinf
 
-open Printf
+open Lm_printf
 open Refiner.Refiner
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp

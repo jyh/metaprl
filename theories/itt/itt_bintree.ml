@@ -1,7 +1,7 @@
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @module[Itt_bintree]
-  
+
    This is a theory of binary trees.
    @end[doc]
 >>
@@ -15,6 +15,7 @@ extends Itt_struct
 doc <:doc< @docoff >>
 
 open Lm_debug
+open Lm_printf
 
 open Tactic_type.Tacticals
 open Dtactic
@@ -28,7 +29,7 @@ open Itt_struct
 let _ =
    show_loading "Loading Itt_bintree%t"
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsection{Simple Trees}
    @modsection{Basic Definitions}
@@ -56,10 +57,10 @@ define indtree: tree_ind{'tree; 'empty; L,R,node. 'f['L;'R;'node]} <-->
            }
 
 
-interactive_rw reduce_indtree_empty {| reduce |} : 
+interactive_rw reduce_indtree_empty {| reduce |} :
    tree_ind{emptytree; 'empty_case; L,R,node. 'f['L;'R;'node]} <--> 'empty_case
 
-interactive_rw reduce_indtree_node {| reduce |} : 
+interactive_rw reduce_indtree_node {| reduce |} :
    tree_ind{tree{'node}; 'empty_case; L,R,node. 'f['L;'R;'node]} <-->
    'f[ tree_ind{('node^left); 'empty_case; L,R,node. 'f['L;'R;'node]};
        tree_ind{('node^right); 'empty_case; L,R,node. 'f['L;'R;'node]};
@@ -81,7 +82,7 @@ dform indtree_df : except_mode[src] :: tree_ind{'tree; 'empty; L,R,node. 'f} =
    emptytree `" -> " slot{'empty} popm hspace
    pushm[3] `" | " 'L `"." 'R `"." tree{'node} `" -> " slot{'f} popm popm ezone
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Basic Rules}
    @end[doc]
@@ -100,7 +101,7 @@ interactive bintree_wf {| intro[] |} :
  sequent{ <H> >-"type"{ BinTree}}
 
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Functions on trees}
    @end[doc]
@@ -160,7 +161,7 @@ interactive height_weight  {| intro[] |} : (* make two theorems *)
 
 (* ==================== *)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Example}
    @end[doc]
@@ -183,7 +184,7 @@ interactive example_wf  {| intro[] |} :
 
 
 (* ==================== *)
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsection{Parametrized trees}
    @modsubsection{Definitions}
@@ -222,7 +223,7 @@ let resource intro +=
 let resource elim +=
    << Node{'T;l,r.'R['l;'r]} >>, (fun n -> rw nodetype2 n thenT dT n)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Rules}
    @end[doc]
@@ -272,7 +273,7 @@ interactive node_wf2  {| intro[] |} :
  sequent{ <H> >- 'nd in 'R['l;'r] }  -->
  sequent{ <H> >-node{'l;'r;'nd} in Node{'T;ll,rr.'R['ll;'rr]} }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    Induction rule
    @end[doc]

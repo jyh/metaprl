@@ -56,6 +56,7 @@ extends Itt_dfun
 doc <:doc< @docoff >>
 
 open Lm_debug
+open Lm_printf
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
 open Refiner.Refiner.TermSubst

@@ -1,33 +1,33 @@
 doc <:doc< -*- Mode: text -*-
-  
+
    @begin[spelling]
    ADT ADTs Fset acts expr fset goto grep linenum ll
    mem namespace stdin timestep cc ed
    @end[spelling]
-  
+
    @begin[doc]
    @chapter[files]{Files, Compilation Units, and Programs}
    @end[doc]
-  
+
    ----------------------------------------------------------------
-  
+
    @begin[license]
    Copyright (C) 2000 Jason Hickey, Caltech
-  
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
    as published by the Free Software Foundation; either version 2
    of the License, or (at your option) any later version.
-  
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-  
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-  
+
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
@@ -36,7 +36,7 @@ doc <:doc< -*- Mode: text -*-
 doc <:doc< @docoff >>
 extends Base_theory
 
-doc <:doc< 
+doc <:doc<
 @begin[doc]
 
 One of the principles of modern programming is @emph{data hiding}
@@ -73,7 +73,7 @@ functions defined in the @code[".ml"] file.
 @end[doc]
 >>
 
-doc <:doc< 
+doc <:doc<
 @begin[doc]
 
 @section[signatures]{Signatures}
@@ -174,7 +174,7 @@ implementation and inaccessible to other program modules.
 @end[doc]
 >>
 
-doc <:doc< 
+doc <:doc<
 @begin[doc]
 
 @section[implementations]{Implementations}
@@ -275,7 +275,7 @@ let insert x s =
 @end[doc]
 >>
 
-doc <:doc< 
+doc <:doc<
 @begin[doc]
 
 @section[using_comp_unit]{Building a program}
@@ -315,9 +315,9 @@ let loop () =
             flush stdout;
             let line = input_line stdin in
                if Fset.mem line !set then
-                  Printf.printf "%s is already in the set\n" line
+                  Lm_printf.printf "%s is already in the set\n" line
                else
-                  Printf.printf "%s added to the set\n" line;
+                  Lm_printf.printf "%s added to the set\n" line;
                set := Fset.insert line !set
          done
       with
@@ -339,7 +339,7 @@ top level expression.  Another way to accomplish this is by adding the
 @end[doc]
 >>
 
-doc <:doc< 
+doc <:doc<
 @begin[doc]
 
 @section[compiling]{Compiling the program}
@@ -535,7 +535,7 @@ all.
 @end[doc]
 >>
 
-doc <:doc< 
+doc <:doc<
 @begin[doc]
 
 @section[open]{Using @tt{open} to expose a namespace}
@@ -546,7 +546,7 @@ refer to the methods in a module can get tedious.  The
 interface, which will allow the use of unqualified names for types,
 exceptions, and methods.  For example, the @code{test.ml} module can
 be somewhat simplified by using the @code{open} statements for the
-@code{Printf} and @code{Fset} modules.
+@code{Lm_printf} and @code{Fset} modules.
 
 @begin[verbatim]
 
@@ -611,7 +611,7 @@ definition for each declaration in the signature.
 @end[doc]
 >>
 
-doc <:doc< 
+doc <:doc<
 @begin[doc]
 
 @section[debugging]{Debugging a program}
@@ -704,9 +704,9 @@ continue execution to that point.
 32             flush stdout;
 33             let line = input_line stdin in
 34                if Fset.mem line !set then
-35                   Printf.printf "%s is already in the set\n" line
+35                   Lm_printf.printf "%s is already in the set\n" line
 36                else
-37                   Printf.printf "%s added to the set\n" line;
+37                   Lm_printf.printf "%s added to the set\n" line;
 38                set := Fset.insert line !set
 39          done
 (ocd) break @ 34
@@ -730,10 +730,10 @@ Time : 24 - pc : 24628 - module Test
 34                if Fset.mem line !set<|a|> then
 (ocd) n
 Time : 25 - pc : 24672 - module Test
-37                   <|b|>Printf.printf "%s added to the set\n" line;
+37                   <|b|>Lm_printf.printf "%s added to the set\n" line;
 (ocd) n
 Time : 135 - pc : 24700 - module Test
-37                   Printf.printf "%s added to the set\n" line<|a|>;
+37                   Lm_printf.printf "%s added to the set\n" line<|a|>;
 (ocd) n
 Time : 141 - pc : 24728 - module Test
 38                set := Fset.insert line !set<|a|>

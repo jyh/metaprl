@@ -67,6 +67,7 @@ extends Itt_decidable
 doc <:doc< @docoff >>
 
 open Lm_debug
+open Lm_printf
 
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
@@ -106,14 +107,14 @@ let extract_data tbl =
          try
             (* Find and apply the right tactic *)
             if !debug_arith_unfold then
-               Printf.eprintf "Conversionals: lookup %a%t" debug_print t eflush;
+               Lm_printf.eprintf "Conversionals: lookup %a%t" debug_print t eflush;
             Term_match_table.lookup tbl Term_match_table.select_all t
          with
             Not_found ->
                raise (RefineError ("Conversionals.extract_data", StringTermError ("no reduction for", t)))
       in
          if !debug_arith_unfold then
-            Printf.eprintf "Conversionals: applying %a%t" debug_print t eflush;
+            Lm_printf.eprintf "Conversionals: applying %a%t" debug_print t eflush;
          conv
    in
       funC rw

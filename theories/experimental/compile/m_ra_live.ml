@@ -26,12 +26,12 @@
 extends M_ra_type
 extends M_ra_state
 
-open Format
-
+open Lm_format
 open Lm_debug
 open Lm_trace
 open Lm_symbol
 open Lm_symbol_matrix
+open Lm_pervasives
 
 open M_ra_type
 open M_ra_state
@@ -441,7 +441,7 @@ struct
       let _ =
          if rc1 <> rc2 then
             raise (Invalid_argument (**)
-                      (Printf.sprintf "graph_add_move: cenv for def, use disagree: def %s = %d, use %s = %d" (**)
+                      (Lm_printf.sprintf "graph_add_move: cenv for def, use disagree: def %s = %d, use %s = %d" (**)
                           (string_of_symbol def) rc1 (string_of_symbol use) rc2))
       in
          (* Add interference edges *)

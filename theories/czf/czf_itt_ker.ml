@@ -1,40 +1,40 @@
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @module[Czf_itt_ker]
-  
+
    The @tt[Czf_itt_ker] module defines the kernel proposition
    $@ker{x; h; g1; g2; f[x]}$, in which $f$ is a homomorphism of
    $g1$ into $g2$, i.e., $@hom{x; g1; g2; f}$, and $h$ is a
    group formed by the elements of $g1$ that are mapped into
    the identity of $g2$.
    @end[doc]
-  
+
    ----------------------------------------------------------------
-  
+
    @begin[license]
    This file is part of MetaPRL, a modular, higher order
    logical framework that provides a logical programming
    environment for OCaml and other languages.
-  
+
    See the file doc/index.html for information on Nuprl,
    OCaml, and more information about this system.
-  
+
    Copyright (C) 2002 Xin Yu, Caltech
-  
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
    as published by the Free Software Foundation; either version 2
    of the License, or (at your option) any later version.
-  
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-  
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-  
+
    Author: Xin Yu
    @email{xiny@cs.caltech.edu}
    @end[license]
@@ -47,6 +47,7 @@ extends Czf_itt_normal_subgroup
 doc <:doc< @docoff >>
 
 open Lm_debug
+open Lm_printf
 
 open Dtactic
 
@@ -65,7 +66,7 @@ doc <:doc< @docoff >>
  * REWRITES                                                             *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @rewrites
    The @tt[ker] judgment requires that $@hom{x; g1; g2; f[x]}$
@@ -89,11 +90,11 @@ dform ker_df : parens :: except_mode[src] :: ker{'h; 'g1; 'g2; x. 'f} =
  * RULES                                                                *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @rules
    @modsubsection{Well-formedness}
-  
+
    The kernel proposition $@ker{x; h; g1; g2; f[x]}$ is well-formed if
    $g1$, $g2$, and $h$ are labels, and $f[x]$ is functional in any
    set argument $x$.
@@ -106,10 +107,10 @@ interactive ker_type {| intro [] |} :
    sequent { <H> >- fun_set{x. 'f['x]} } -->
    sequent { <H> >- "type"{ker{'h; 'g1; 'g2; x. 'f['x]}} }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Introduction}
-  
+
    The proposition $@ker{x; h; g1; g2; f[x]}$ is true if
    $@hom{x; g1; g2; f}$ is true and $h$ is a group formed
    by the elements of group $g1$ that are mapped into $@id{g2}$.
@@ -149,10 +150,10 @@ interactive ker_subgroup hom{'g1; 'g2; x. 'f['x]} 'h :
    sequent { <H> >- fun_set{x. 'f['x]} } -->
    sequent { <H> >- subgroup{'h; 'g1} }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Theorems}
-  
+
    The kernel of a group homomorphism from $g1$ into $g2$ is a subgroup
    of $g1$.
    @end[doc]
@@ -186,7 +187,7 @@ interactive ker_rcoset_i {| intro [] |} 'g2 :
    sequent { <H> >- ker{'h; 'g1; 'g2; x. 'f['x]} } -->
    sequent { <H> >- equal{sep{car{'g1}; x. eq{'f['x]; 'f['a]}}; rcoset{'h; 'g1; 'a}} }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    If the proposition $@ker{x; h; g1; g2; f[x]}$ is true, then
    the set $@sep{x; @car{g1}; @eq{f[x]; f[a]}}$
@@ -213,7 +214,7 @@ interactive ker_rcoset_e (*{| elim [] |}*) 'H 'g2 'a :
    sequent { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]>; v: equal{sep{car{'g1}; x. eq{'f['x]; 'f['a]}}; rcoset{'h; 'g1; 'a}} >- 'C['u] } -->
    sequent { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- 'C['u] }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    A group homomorphism $f$ from $g1$ into $g2$ is called a
    @emph{monomorphism} if it is @emph{one to one}; this is the
@@ -236,7 +237,7 @@ interactive ker_mono2 (*{| elim [] |}*) 'H :
    sequent { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]>; c: set; d: set; v: mem{'c; car{'g1}}; w: mem{'d; car{'g1}}; z: eq{'f['c]; 'f['d]} >- eq{'c; 'd} } -->
    sequent { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- equal{car{'h}; sep{car{'g1}; x. eq{'x; id{'g1}}}} }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    The kernel of a group homomorphism $f$ from $g1$ into $g2$ is
    a normal subgroup of $g1$.
@@ -255,10 +256,10 @@ doc <:doc< @docoff >>
  * TACTICS                                                              *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @tactics
-  
+
    @begin[description]
    @item{@tactic[kerSubgT], @tactic[kerLcosetT], @tactic[kerRcosetT], @tactic[kerNormalSubgT];
       The four @tt[ker] tactics apply the theorems for the

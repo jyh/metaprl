@@ -26,8 +26,7 @@
  *)
 extends Top_tacticals
 
-open Printf
-open Lm_debug
+open Lm_printf
 
 open Lm_symbol
 
@@ -95,7 +94,7 @@ let allocT =
  *)
 let printT_aux filename p =
    let out = open_out filename in
-   let buf = Format.formatter_of_out_channel out in
+   let buf = Lm_format.formatter_of_out_channel out in
       pp_print_prog buf (concl p);
       close_out out;
       idT

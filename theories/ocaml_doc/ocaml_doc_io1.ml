@@ -1,33 +1,33 @@
 doc <:doc< -*- Mode: text -*-
-  
+
    @begin[spelling]
    bprintf dd ddd dddd deallocates eprintf excl fprintf gen int ll nonblock
    printf rdonly sprintf stderr stdout trunc wronly creat
    @end[spelling]
-  
+
    @begin[doc]
    @chapter[io]{Input and Output}
    @end[doc]
-  
+
    ----------------------------------------------------------------
-  
+
    @begin[license]
    Copyright (C) 2000 Jason Hickey, Caltech
-  
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
    as published by the Free Software Foundation; either version 2
    of the License, or (at your option) any later version.
-  
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-  
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-  
+
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
@@ -36,7 +36,7 @@ doc <:doc< -*- Mode: text -*-
 doc <:doc< @docoff >>
 extends Base_theory
 
-doc <:doc< 
+doc <:doc<
 @begin[doc]
 
 The I/O library in OCaml is fairly expressive, including a @tt{Unix}
@@ -216,12 +216,12 @@ force the writing on the buffer, use the @code{flush} function.
 val flush : out_channel -> unit
 @end[verbatim]
 
-@section[printf]{Printf}
+@section[printf]{Lm_printf}
 
 The regular functions for I/O can be somewhat awkward.  OCaml also
 implements a @tt{printf} function similar to the @tt{printf} in
 Unix/C.  These functions are defined in the library module
-@code{Printf}.  The general form is given by @code{fprintf}.
+@code{Lm_printf}.  The general form is given by @code{fprintf}.
 
 @begin[verbatim]
 val fprintf: out_channel -> ('a, out_channel, unit) format -> 'a
@@ -280,7 +280,7 @@ corresponds to the C specification.
 @item{%; takes no argument and output one @tt{%} character.}
 @end[description]
 
-The @tt{Printf} module also provides several additional functions for
+The @tt{Lm_printf} module also provides several additional functions for
 printing on the standard channels.  The @tt{printf} function prints in
 the channel @tt{stdout}, and @tt{eprintf} prints on @tt{stderr}.
 
@@ -349,7 +349,7 @@ the buffer to an @code{out_channel}.
 val output_buffer : out_channel -> t -> unit
 @end[verbatim]
 
-The @tt{Printf} module also provides formatted output to a string
+The @tt{Lm_printf} module also provides formatted output to a string
 buffer.  The @tt{bprintf} function takes a @tt{printf}-style format
 string, and formats output to a buffer.
 

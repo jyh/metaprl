@@ -27,11 +27,10 @@
  *)
 extends M_ra_live
 
-open Format
-
 open Lm_flags
 open Lm_symbol
 open Lm_symbol_matrix
+open Lm_format
 
 open M_ra_type
 open M_ra_live
@@ -417,7 +416,7 @@ struct
                            node2 :: nodes
                   in
                      if not (SymSymbolMatrix.query ra.ra_edges name1 name2) then
-                        raise (Invalid_argument (Printf.sprintf
+                        raise (Invalid_argument (Lm_printf.sprintf
                            "%s[%s]: %s: illegal neighbor: %s" (**)
                            pos (string_of_node_class node1.node_class) s1 (string_of_symbol name2)));
                      nodes) [] node1.node_neighbors
@@ -431,7 +430,7 @@ struct
             if node1.node_class = NodeSpillWL then
                begin
                   if len1 < max_colors then
-                     raise (Invalid_argument (Printf.sprintf
+                     raise (Invalid_argument (Lm_printf.sprintf
                         "%s[%s]: class is wrong: %s: degree = %d" (**)
                         pos (string_of_node_class node1.node_class) s1 len1))
                end;
@@ -443,7 +442,7 @@ struct
                begin
                   let moveb = node_is_move_related node1 in
                      if len1 >= max_colors || not moveb then
-                        raise (Invalid_argument (Printf.sprintf
+                        raise (Invalid_argument (Lm_printf.sprintf
                            "%s[%s]: class is wrong: %s: degree = %d, move_related = %b" (**)
                            pos (string_of_node_class node1.node_class) s1 len1 moveb))
                end;
@@ -455,7 +454,7 @@ struct
                begin
                   let moveb = node_is_move_related node1 in
                      if len1 >= max_colors || moveb then
-                        raise (Invalid_argument (Printf.sprintf
+                        raise (Invalid_argument (Lm_printf.sprintf
                            "%s[%s]: class is wrong: %s: degree = %d, move_related = %b" (**)
                            pos (string_of_node_class node1.node_class) s1 len1 moveb))
                end;
@@ -521,7 +520,7 @@ struct
                          | _ ->
                               count) 0 neighbors
                in
-                  raise (Invalid_argument (Printf.sprintf
+                  raise (Invalid_argument (Lm_printf.sprintf
                      "%s[%s]: degree is wrong: %s: degree = %d, neighbors = %d, precolored = %d, freeze = %d, spillwl = %d, colored = %d, coalesced = %d, simp = %d, stack = %d" (**)
                      pos (string_of_node_class node1.node_class) s1 len1 len2 len_precolored len_freeze len_spill len_colored len_coalesced len_simp len_stack))
 
@@ -798,11 +797,11 @@ struct
             move_depth = depth
           } = move
       in
-         Format.printf "@[<hv 3>Move:@ dst = %a" pp_print_symbol dst.node_name;
-         Format.printf "; expanded = %a" pp_print_symbol (node_alias dst).node_name;
-         Format.printf ";@ src = %a" pp_print_symbol src.node_name;
-         Format.printf "; expanded = %a" pp_print_symbol (node_alias src).node_name;
-         Format.printf "@]"
+         Lm_format.printf "@[<hv 3>Move:@ dst = %a" pp_print_symbol dst.node_name;
+         Lm_format.printf "; expanded = %a" pp_print_symbol (node_alias dst).node_name;
+         Lm_format.printf ";@ src = %a" pp_print_symbol src.node_name;
+         Lm_format.printf "; expanded = %a" pp_print_symbol (node_alias src).node_name;
+         Lm_format.printf "@]"
 
    (************************************************************************
     * SPILL COST

@@ -48,6 +48,7 @@ extends Itt_equal
 extends Itt_logic
 
 open Lm_debug
+open Lm_printf
 
 open Tactic_type.Tacticals
 

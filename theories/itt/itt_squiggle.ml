@@ -58,6 +58,7 @@ doc <:doc< @docoff >>
 extends Itt_comment
 
 open Lm_debug
+open Lm_printf
 open Refiner.Refiner
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp

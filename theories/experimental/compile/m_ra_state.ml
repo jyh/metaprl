@@ -1,5 +1,5 @@
 (*
- * Lm_debug variables.
+ * Lm_printf variables.
  *
  * ----------------------------------------------------------------
  *
@@ -33,7 +33,7 @@ extends Base_theory
 let debug_live = ref false
 
 (*
- * Lm_debug the register allocator.
+ * Lm_printf the register allocator.
  *)
 let debug_regalloc = ref 0
 

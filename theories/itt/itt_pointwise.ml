@@ -9,6 +9,7 @@ extends Itt_equal
 doc <:doc< @docoff >>
 
 open Lm_debug
+open Lm_printf
 
 (*
  * Show that the file is loading.

@@ -40,6 +40,7 @@ extends Itt_cyclic_group
 doc docoff
 
 open Lm_debug
+open Lm_printf
 open Dtactic
 open Top_conversionals
 

@@ -33,8 +33,7 @@
 
 extends Tptp
 
-open Printf
-open Lm_debug
+open Lm_printf
 
 open Term_sig
 open Refiner.Refiner.TermType

@@ -44,6 +44,7 @@ extends Itt_ext_equal
 doc docoff
 
 open Lm_debug
+open Lm_printf
 open Refiner.Refiner.TermOp
 
 open Tactic_type.Tacticals

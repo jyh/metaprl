@@ -1,46 +1,46 @@
-doc <:doc< 
+doc <:doc<
    @spelling{set_bvd Xin}
-  
+
    @begin[doc]
    @module[Czf_itt_set_bvd]
-  
+
    The @tt{Czf_itt_set_bvd} module defines the @emph{image} of a set
    under some mapping. Image is defined as a set constructor
    $@setbvd{x; s; a[x]}$, which builds a new set from an existing
    set $s$ via some mapping $a[x]$. A set $x$ is a member of
    $@setbvd{x; s; a[x]}$ if there exists a set $y @in s$ such
    that $@eq{x; a[y]}$ is true.
-  
+
    The image constructor $@setbvd{z; @collect{x; T; f[x]}; a[z]}$
    is defined as the set $@collect{y; T; a[f(y)]}$.
    @end[doc]
-  
+
    ----------------------------------------------------------------
-  
+
    @begin[license]
    This file is part of MetaPRL, a modular, higher order
    logical framework that provides a logical programming
    environment for OCaml and other languages.
-  
+
    See the file doc/index.html for information on Nuprl,
    OCaml, and more information about this system.
-  
+
    Copyright (C) 2002 Xin Yu, Caltech
-  
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
    as published by the Free Software Foundation; either version 2
    of the License, or (at your option) any later version.
-  
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-  
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-  
+
    Author: Xin Yu
    @email{xiny@cs.caltech.edu}
    @end[license]
@@ -52,6 +52,7 @@ extends Czf_itt_dexists
 doc docoff
 
 open Lm_debug
+open Lm_printf
 
 open Dtactic
 open Top_conversionals
@@ -71,10 +72,10 @@ doc <:doc< @docoff >>
  * REWRITES                                                             *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @rewrites
-  
+
    The @tt{set_bvd} term is defined by set induction.
    @end[doc]
 >>
@@ -97,11 +98,11 @@ dform set_bvd_df : parens :: except_mode[src] :: set_bvd{'s; x. 'a} =
  * RULES                                                                *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @rules
    @modsubsection{Well-formedness}
-  
+
    The set builder $@setbvd{x; s; a[x]}$ is well-formed
    if $s$ is a set, and $a[x]$ is a family of sets.
    @end[doc]
@@ -111,10 +112,10 @@ interactive set_bvd_isset {| intro [] |} :
    sequent { <H>; x: set >- isset{'a['x]} } -->
    sequent { <H> >- isset{set_bvd{'s; x. 'a['x]}} }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Introduction}
-  
+
    A set $y$ is a member of $@setbvd{x; s; a[x]}$
    if the set builder is well-formed; if $a[x]$ is
    functional on any set argument $x$; and if
@@ -129,10 +130,10 @@ interactive set_bvd_member_intro {| intro [] |} :
    sequent { <H> >- dexists{'s; z. eq{'y; 'a['z]}} } -->
    sequent { <H> >- mem{'y; set_bvd{'s; x. 'a['x]}} }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Elimination}
-  
+
    The elimination form for the set builder $@mem{y; @set_bvd{x; s; a[x]}}$
    produces a witness $@mem{z; s}$ for which $@eq{y; a[z]}$.
    @end[doc]
@@ -145,10 +146,10 @@ interactive set_bvd_member_elim {| elim [] |} 'H :
    sequent { <H>; x: mem{'y; set_bvd{'s; x. 'a['x]}}; <J['x]>; z: set; u: mem{'z; 's}; v: eq{'y; 'a['z]} >- 'T['x] } -->
    sequent { <H>; x: mem{'y; set_bvd{'s; x. 'a['x]}}; <J['x]> >- 'T['x] }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Functionality}
-  
+
    The image constructor is functional in both the set
    argument and the mapping.
    @end[doc]

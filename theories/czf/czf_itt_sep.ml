@@ -1,15 +1,15 @@
-doc <:doc< 
+doc <:doc<
    @spelling{sep}
-  
+
    @begin[doc]
    @module[Czf_itt_sep]
-  
+
    The @tt[Czf_itt_sep] module defines @emph{restricted separation}.
    Separation is defined as a set constructor $@sep{x; s; P[x]}$.
    The term $s$ must be a set, and $P[x]$ must be a functional,
    restricted proposition.  The elements of the separation are the
    elements of $x @in s$ for which $P[x]$ is true.
-  
+
    The separation constructor is a set if $s$ is a set, and
    if $P[x]$ is @emph{restricted}.  Our formalization of
    restriction differs slightly from Aczel's account, although
@@ -18,38 +18,38 @@ doc <:doc<
    quantifiers $@forall s@ldots$ and $@exists s@ldots$.  In
    our construction, a predicate $P$ is restricted if it
    is a well-formed proposition in $@univ{1}$.
-  
+
    The separation constructor $@sep{z; @collect{x; T; f[x]}; P[z]}$
    is defined with the product type as the set
    $@collect{z; (@prod{x; A; P[x]}); f(@fst{z})}$.
    @end[doc]
-  
+
    ----------------------------------------------------------------
-  
+
    @begin[license]
    This file is part of MetaPRL, a modular, higher order
    logical framework that provides a logical programming
    environment for OCaml and other languages.
-  
+
    See the file doc/index.html for information on Nuprl,
    OCaml, and more information about this system.
-  
+
    Copyright (C) 1998 Jason Hickey, Cornell University
-  
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
    as published by the Free Software Foundation; either version 2
    of the License, or (at your option) any later version.
-  
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-  
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-  
+
    Author: Jason Hickey
    @email{jyh@cs.cornell.edu}
    @end[license]
@@ -60,6 +60,7 @@ extends Czf_itt_member
 doc docoff
 
 open Lm_debug
+open Lm_printf
 
 open Dtactic
 open Top_conversionals
@@ -81,10 +82,10 @@ declare restricted{'P}
  * REWRITES                                                             *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @rewrites
-  
+
    The @tt{sep} term is defined by set induction.
    @end[doc]
 >>
@@ -95,7 +96,7 @@ prim_rw unfold_sep : sep{'s; x. 'P['x]} <-->
 interactive_rw reduce_sep {| reduce |} : sep{collect{'T; x. 'f['x]}; z. 'P['z]} <-->
    collect{. "prod"{'T; t. 'P['f['t]]}; w. 'f[fst{'w}]}
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    The $@restricted{P}$ predicate means that the proposition is
    well-formed in $@univ{1}$.
@@ -131,10 +132,10 @@ interactive squash_restricted :
 
 let squash_restrictedT = squash_restricted
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Equality and membership are restricted judgments}
-  
+
    The next two rules show that equality and membership
    are restricted for any @hrefterm[set] arguments.
    @end[doc]
@@ -149,10 +150,10 @@ interactive member_restricted {| intro [] |} :
    ["wf"] sequent { <H> >- isset{'s2} } -->
    sequent { <H> >- restricted{mem{'s1; 's2}} }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Well-formedness}
-  
+
    The separation $@sep{x; s; P[x]}$ is well-formed
    if $s$ is a set, and $P[x]$ is restricted and functional
    on any set argument $x$.
@@ -164,10 +165,10 @@ interactive sep_isset {| intro [] |} :
    ["wf"] sequent { <H>; z: set >- restricted{'P['z]} } -->
    sequent { <H> >- isset{.sep{'s; x. 'P['x]}} }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Introduction}
-  
+
    A set $x$ is a member of $@sep{z; s; P[z]}$ if
    the separation is well-formed; if $@member{x; s}$;
    and $P[x]$.
@@ -180,10 +181,10 @@ interactive sep_intro2 {| intro [] |} :
    ["main"] sequent { <H> >- 'P['x] } -->
    sequent { <H> >- mem{'x; sep{'s; z. 'P['z]}} }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Elimination}
-  
+
    An assumption $@mem{x; @sep{y; s; P[y]}}$ implies two facts:
    $@mem{x; s}$ and $P[x]$.  The computational content of the
    predicate $P[x]$ is visible (unlike the separation ``set''
@@ -198,10 +199,10 @@ interactive sep_elim {| elim [] |} 'H :
    ["main"] sequent { <H>; w: mem{'x; sep{'s; y. 'P['y]}}; <J['w]>; u: mem{'x; 's}; v: 'P['x] >- 'T['w] } -->
    sequent { <H>; w: mem{'x; sep{'s; y. 'P['y]}}; <J['w]> >- 'T['w] }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Functionality}
-  
+
    The separation constructor is functional in both the
    set argument and the proposition.
    @end[doc]

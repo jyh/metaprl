@@ -39,7 +39,6 @@ doc <:doc<
    @email{ynb@mail.ru}
    @end[license]
 >>
-
 extends Itt_equal
 extends Itt_rfun
 extends Itt_logic
@@ -47,9 +46,11 @@ extends Itt_bool
 extends Itt_int_ext
 doc docoff
 
-open Printf
 open Lm_debug
+open Lm_pervasives
+open Lm_printf
 open Lm_num
+
 open Term_sig
 open Refiner.Refiner
 open Refiner.Refiner.Term
@@ -57,6 +58,7 @@ open Refiner.Refiner.TermMan
 open Refiner.Refiner.TermSubst
 open Refiner.Refiner.TermType
 open Refiner.Refiner.TermMeta
+
 open Term_order
 open Simple_print
 open Term_match_table
@@ -77,7 +79,7 @@ open Itt_bool
 open Itt_int_base
 open Itt_int_ext
 
-module TO=TermOrder(Refiner.Refiner)
+module TO = TermOrder (Refiner.Refiner)
 open TO
 
 let _ = show_loading "Loading Itt_int_ext%t"

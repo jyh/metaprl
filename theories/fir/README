@@ -12,14 +12,10 @@ is likely to be in the form of comments in .ml files.
 The following remarks by Brian Emre Aydemir (emre) are intended to
 serve as notes to himself.  They may not make sense to others.
 
--- Mfir_exp display forms may be a bit wacky since I haven't tested them.
-
 -- Possible method for type checking FIR programs:
       1) Build up a context that has all the declarations we'll need.
       2) Type check the context.
       3) Type check each definition given the context.
-
--- For things like set membership: rewrites or rules? which is faster?
 
 Notable differences from the actual Mojave FIR:
 
@@ -28,6 +24,9 @@ Notable differences from the actual Mojave FIR:
       TyFun
 
 Comments that will be around a while:
+
+-- Display forms will be implmented with the philosophy, ``if it works for
+   me, it must be good enough''.
 
 -- Must _not_ include anything from ITT.  Otherwise, we get
    a soup of logical inconsistencies/differences.

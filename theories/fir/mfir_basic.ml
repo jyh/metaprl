@@ -438,17 +438,23 @@ prim_rw reduce_singleton :
 (*!
  * @begin[doc]
  *
- * Set constants can be rewritten into their actual values.
+ * Set constants can be rewritten into their actual values.  We omit all of
+ * these cases since they are straightforward, except for the one for the
+ * allowed range of enumeration values.
  * @end[doc]
+ *)
+
+prim_rw reduce_enum_max :
+   enum_max <-->
+   intset{ cons{ interval{ 0; 2048 }; nil } }
+
+(*!
+ * @docoff
  *)
 
 prim_rw reduce_intset_max :
    intset_max <-->
    intset{ cons{ interval{. -1073741824; 1073741823}; nil } }
-
-prim_rw reduce_enum_max :
-   enum_max <-->
-   intset{ cons{ interval{ 0; 2048 }; nil } }
 
 prim_rw reduce_rawintset_max_u8 :
    rawintset_max[8, "unsigned"] <-->

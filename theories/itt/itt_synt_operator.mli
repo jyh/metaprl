@@ -2,6 +2,7 @@ extends Itt_nat
 extends Itt_list2
 
 declare BOperator
+declare Operator
 declare op_bdepth{'op}
 declare shape{'op}
 declare arity{'op}

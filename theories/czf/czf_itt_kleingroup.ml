@@ -1,12 +1,12 @@
-doc <:doc< 
+doc <:doc<
    @spelling{klein}
-  
+
    @begin[doc]
    @module[Czf_itt_kleingroup]
-  
+
    The @tt[Czf_itt_kleingroup] module defines the klein 4-group, which
    contains 4 elements $e$, $a$, $b$, $c$, and whose group table is:
-  
+
    $$
       @space @space @space @space | @space e @space a @space b @space c
    $$
@@ -25,17 +25,17 @@ doc <:doc<
    $$
       @space @space c @space | @space c @space b @space a @space e
    $$
-  
+
 (*    @space @space @space @space @space @space @space   | $e$ $a$ $b$ $c$
-  
+
       @space @space @space @space----|-----------------
-  
+
       @space @space @space @space @space $e$ @space | $e$ $a$ $b$ $c$
-  
+
       @space @space @space @space @space $a$ @space | $a$ $e$ $c$ $b$
-  
+
       @space @space @space @space @space $b$ @space | $b$ $c$ $e$ $a$
-  
+
       @space @space @space @space @space $c$ @space | $c$ $b$ $a$ $e$
 *)
    The klein 4-group is assigned a label $@klein4$. Its carrier set,
@@ -44,31 +44,31 @@ doc <:doc<
    axioms for groups are satisfied, we prove that $@klein4$ is a group.
    @end[doc]
    ----------------------------------------------------------------
-  
+
    @begin[license]
    This file is part of MetaPRL, a modular, higher order
    logical framework that provides a logical programming
    environment for OCaml and other languages.
-  
+
    See the file doc/index.html for information on Nuprl,
    OCaml, and more information about this system.
-  
+
    Copyright (C) 2002 Xin Yu, Caltech
-  
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
    as published by the Free Software Foundation; either version 2
    of the License, or (at your option) any later version.
-  
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-  
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-  
+
    Author: Xin Yu @email{xiny@cs.caltech.edu}
    @end[license]
 >>
@@ -102,15 +102,15 @@ doc <:doc< @docoff >>
  * REWRITES                                                             *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @rewrites
-  
+
    The definition of the klein 4-group.
    @end[doc]
 >>
 prim_rw unfold_klein4_car : car{klein4} <-->
-   union{sing{k0}; union{sing{k1}; union{sing{k2}; sing{k3}}}} 
+   union{sing{k0}; union{sing{k1}; union{sing{k2}; sing{k3}}}}
 prim_rw unfold_klein4_op00 : op{klein4; k0; k0} <--> k0
 prim_rw unfold_klein4_op01 : op{klein4; k0; k1} <--> k1
 prim_rw unfold_klein4_op02 : op{klein4; k0; k2} <--> k2
@@ -157,36 +157,36 @@ dform k3_df : except_mode[src] :: k3 =
  * RULES                                                                *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @rules
    @modsubsection{Well-formedness}
-  
+
    The @tt[klein4] is a label and @tt[k0], @tt[k1], @tt[k2], @tt[k3]
    are all sets. These are axioms.
    @end[doc]
 >>
-interactive klein4_label {| intro [] |} :
+prim klein4_label {| intro [] |} :
    sequent { <H> >- klein4 IN label }
 
-interactive k0_isset {| intro [] |} :
+prim k0_isset {| intro [] |} :
    sequent { <H> >- isset{k0} }
 
-interactive k1_isset {| intro [] |} :
+prim k1_isset {| intro [] |} :
    sequent { <H> >- isset{k1} }
 
-interactive k2_isset {| intro [] |} :
+prim k2_isset {| intro [] |} :
    sequent { <H> >- isset{k2} }
 
-interactive k3_isset {| intro [] |} :
+prim k3_isset {| intro [] |} :
    sequent { <H> >- isset{k3} }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-  
+
    The $@car{@klein4}$, $@id{@klein4}$ are well-formed; the
    $@op{@klein4; s_1; s_2}$ is well-formed if its set
-   arguments are both sets; the $@inv{@klein4; s}$ is 
+   arguments are both sets; the $@inv{@klein4; s}$ is
   well-formed if its set argument is a set.
    @end[doc]
 >>
@@ -205,10 +205,10 @@ interactive klein4_inv_isset {| intro[] |} :
    sequent { <H> >- isset{'s1} } -->
    sequent { <H> >- isset{inv{klein4; 's1}} }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Introduction and elimination for the carrier set}
-  
+
    The $@car{@klein4}$ contains $@k0$, $@k1$, $@k2$, $@k3$ only.
    @end[doc]
 >>
@@ -232,10 +232,10 @@ interactive car_klein0_elim {| elim [] |} 'H :
    sequent { <H>; x: mem{'y; car{klein4}}; <J['x]>; z: eq{'y; k3} >- 'T['x] } -->
    sequent { <H>; x: mem{'y; car{klein4}}; <J['x]> >- 'T['x] }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Verification of the group axioms}
-  
+
    The @tt[op] for @tt[klein4] is functional and is a mapping.
    @end[doc]
 >>
@@ -272,9 +272,9 @@ interactive klein4_op_eq2 {| intro[] |} :
    sequent { <H> >- eq{'s1; 's2} } -->
    sequent { <H> >- eq{op{klein4; 's1; 's3}; op{klein4; 's2; 's3}} }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-  
+
    The @tt[op] for @tt[klein4] is associative.
    @end[doc]
 >>
@@ -297,9 +297,9 @@ interactive klein4_op_assoc2 {| intro[] |} :
    sequent { <H> >- mem{'s3; car{klein4}} } -->
    sequent { <H> >- eq{op{klein4; 's1; op{klein4; 's2; 's3}}; op{klein4; op{klein4; 's1; 's2}; 's3}} }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-  
+
    The axioms for the identity are satisfied.
    @end[doc]
 >>
@@ -311,9 +311,9 @@ interactive klein4_id_eq1 {| intro[] |} :
    sequent { <H> >- mem{'s; car{klein4}} } -->
    sequent { <H> >- eq{op{klein4; id{klein4}; 's}; 's} }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-  
+
    The axioms for the inverse are satisfied.
    @end[doc]
 >>

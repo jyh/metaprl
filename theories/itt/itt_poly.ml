@@ -106,7 +106,7 @@ define unfold_sum : sum{'i; 'j; x.'P['x]; 'F} <-->
 
 define unfold_mul_poly : mul_poly{'p; 'q; 'F} <-->
    if bor{isZeroPoly{'p;'F}; isZeroPoly{'q;'F}} then zero_poly{'F}
-   else (fst{'p} +@ fst{'q}, lambda{x. sum{0; 'x; y. (coeff{'p;'y;'F} *['F] coeff{'q;('x-@'y);'F}); 'F}})
+   else normalize{(fst{'p} +@ fst{'q}, lambda{x. sum{0; 'x; y. (coeff{'p;'y;'F} *['F] coeff{'q;('x-@'y);'F}); 'F}}); 'F}
 
 (*define unfold_eval_poly : eval_poly{'p; 'a; 'F} <-->
    ind{ fst{'p}; (snd{'p} fst{'p}); i,up.
@@ -275,17 +275,6 @@ interactive sum_wf {| intro [] |} :
    [wf] sequent { <H>; x: 'F^car; y: 'F^car >- 'x +['F] 'y in 'F^car } -->
    sequent { <H> >- sum{'i; 'j; x.'P['x]; 'F} in 'F^car }
 
-interactive mulpoly_leading_coeff {| intro [] |} :
-   [wf] sequent { <H> >- 'p in poly{'F} } -->
-   [wf] sequent { <H> >- 'q in poly{'F} } -->
-   [wf] sequent { <H> >- 'F^"0" in 'F^car } -->
-   [wf] sequent { <H>; x: 'F^car >- 'F^eq 'x 'F^"0" in bool } -->
-   [wf] sequent { <H>; x: 'F^car; y: 'F^car >- 'x +['F] 'y in 'F^car } -->
-   [wf] sequent { <H>; x: 'F^car; y: 'F^car >- 'x *['F] 'y in 'F^car } -->
-   [wf] sequent { <H>; x1: 'F^car; y1: 'F^car; x2: 'F^car; y2: 'F^car; 'x1 = 'x2 in 'F^car; 'y1 = 'y2 in 'F^car >- 'x1 +['F] 'y1 = 'x2 +['F] 'y2 in 'F^car } -->
-   [wf] sequent { <H>; x: 'F^car; y: 'F^car; "not"{"assert"{isZero{'x; 'F}}}; "not"{"assert"{isZero{'y; 'F}}} >- "not"{"assert"{isZero{'x *['F] 'y; 'F}}} } -->
-   sequent { <H> >- sum{0; (fst{'p} +@ fst{'q}); y. (coeff{'p; 'y; 'F} *['F] coeff{'q; ((fst{'p} +@ fst{'q}) -@ 'y); 'F}); 'F} = coeff{'p; fst{'p}; 'F} *['F] coeff{'q; fst{'q}; 'F} in 'F^car }
-
 interactive mul_poly_wf {| intro [] |} :
    [wf] sequent { <H> >- 'p in poly{'F} } -->
    [wf] sequent { <H> >- 'q in poly{'F} } -->
@@ -294,13 +283,13 @@ interactive mul_poly_wf {| intro [] |} :
    [wf] sequent { <H>; x: 'F^car; y: 'F^car >- 'x +['F] 'y in 'F^car } -->
    [wf] sequent { <H>; x: 'F^car; y: 'F^car >- 'x *['F] 'y in 'F^car } -->
    [wf] sequent { <H>; x1: 'F^car; y1: 'F^car; x2: 'F^car; y2: 'F^car; 'x1 = 'x2 in 'F^car; 'y1 = 'y2 in 'F^car >- 'x1 +['F] 'y1 = 'x2 +['F] 'y2 in 'F^car } -->
-   [wf] sequent { <H>; x: 'F^car; y: 'F^car; "not"{"assert"{isZero{'x; 'F}}}; "not"{"assert"{isZero{'y; 'F}}} >- "not"{"assert"{isZero{'x *['F] 'y; 'F}}} } -->
    sequent { <H> >- mul_poly{'p; 'q; 'F} in poly{'F} }
 
 interactive eval_poly_wf {| intro [] |} :
    [wf] sequent { <H> >- 'p in n: nat * (nat{'n +@ 1} -> 'F^car) } -->
    [wf] sequent { <H> >- 'a in 'F^car } -->
    [wf] sequent { <H> >- 'F^"0" in 'F^car } -->
+   [wf] sequent { <H> >- 'F^"1" in 'F^car } -->
    [wf] sequent { <H>; x: 'F^car >- 'F^eq 'x 'F^"0" in bool } -->
    [wf] sequent { <H>; x: 'F^car; y: 'F^car >- 'x +['F] 'y in 'F^car } -->
    [wf] sequent { <H>; x: 'F^car; y: 'F^car >- 'x *['F] 'y in 'F^car } -->
@@ -310,6 +299,7 @@ interactive eval_leadingcoeff_isZero {| intro [] |} :
    [wf] sequent { <H> >- 'p in n: nat * (nat{'n +@ 1} -> 'F^car) } -->
    [wf] sequent { <H> >- 'a in 'F^car } -->
    [wf] sequent { <H> >- 'F^"0" in 'F^car } -->
+   [wf] sequent { <H> >- 'F^"1" in 'F^car } -->
    [wf] sequent { <H>; x: 'F^car >- 'F^eq 'x 'F^"0" in bool } -->
    [wf] sequent { <H>; x: 'F^car; y: 'F^car >- 'x +['F] 'y in 'F^car } -->
    [wf] sequent { <H>; x: 'F^car; y: 'F^car >- 'x *['F] 'y in 'F^car } -->
@@ -322,10 +312,10 @@ interactive eval_leadingcoeff_isZero1 {| intro [] |} :
    [wf] sequent { <H> >- 'v in (nat{'u +@ 2} -> 'F^car) } -->
    [wf] sequent { <H> >- 'a in 'F^car } -->
    [wf] sequent { <H> >- 'F^"0" in 'F^car } -->
+   [wf] sequent { <H> >- 'F^"1" in 'F^car } -->
    [wf] sequent { <H>; x: 'F^car >- 'F^eq 'x 'F^"0" in bool } -->
    [wf] sequent { <H>; x: 'F^car; y: 'F^car >- 'x +['F] 'y in 'F^car } -->
    [wf] sequent { <H>; x: 'F^car; y: 'F^car >- 'x *['F] 'y in 'F^car } -->
-   [wf] sequent { <H> >- 'u > 0 } -->
    sequent { <H> >- "assert"{isZero{('v ('u +@ 1)); 'F}} } -->
    sequent { <H> >- eval_poly{('u +@ 1, 'v); 'a; 'F} = eval_poly{('u, 'v); 'a; 'F} in 'F^car }
 
@@ -333,6 +323,7 @@ interactive eval_normalize {| intro [] |} :
    [wf] sequent { <H> >- 'p in n: nat * (nat{'n +@ 1} -> 'F^car) } -->
    [wf] sequent { <H> >- 'a in 'F^car } -->
    [wf] sequent { <H> >- 'F^"0" in 'F^car } -->
+   [wf] sequent { <H> >- 'F^"1" in 'F^car } -->
    [wf] sequent { <H>; x: 'F^car >- 'F^eq 'x 'F^"0" in bool } -->
    [wf] sequent { <H>; x: 'F^car; y: 'F^car >- 'x +['F] 'y in 'F^car } -->
    [wf] sequent { <H>; x: 'F^car; y: 'F^car >- 'x *['F] 'y in 'F^car } -->

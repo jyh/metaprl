@@ -255,9 +255,10 @@ ML-like language where all intermediate values apart from arithmetic
 expressions are explicitly named.
 
 @begin[figure,ir]
-@small{
-$$
-@begin[array,rcll]
+@begin[small]
+$
+@begin[array,cc]
+@line{{@begin[array,t,rcll]
 @line{@it{bop} {::=} {@AddOp @pipe @SubOp @pipe @MulOp @pipe @DivOp} @hbox{Binary arithmetic}}
 @line{@it{rop} {::=} {@LeOp @pipe @LtOp @pipe @GtOp} @hbox{Binary relations}}
 @line{{}         {@pipe} {@GeOp @pipe @EqOp @pipe @NeqOp} {}}
@@ -270,8 +271,8 @@ $$
 @line{{}  {@pipe}   @AtomBinop{@it{bop}; a_1; a_2}        @hbox{Binary arithmetic}}
 @line{{}  {@pipe}   @AtomRelop{@it{rop}; a_1; a_2}        @hbox{Binary relations}}
 @line{{}  {@pipe}   @AtomFunVar{R; l}                     @hbox{Function labels}}
-@end[array]
-@begin[array,rcll]
+@end[array]}
+{@begin[array,t,rcll]
 @line{{e} {::=}   @LetAtom{a; v; e}                        @hbox{Variable definition}}
 @line{{}  {@pipe} @If{a; e_1; e_2}                         @hbox{Conditional}}
 @line{{}  {@pipe} @LetTuple{i; {a_1, @ldots, a_n}; v; e}   @hbox{Tuple allocation}}
@@ -286,8 +287,10 @@ $$
 @line{{e_@lambda} {::=} {@AtomFun{v; e_@lambda} @pipe @AtomFun{v; e}} @hbox{Functions}}
 @line{{d} {::=}   @FunDef{l; e_@lambda; d}                 @hbox{Function definitions}}
 @line{{}  {@pipe} @EndDef                                  {}}
+@end[array]}}
 @end[array]
-$$}
+$
+@end[small]
 @caption{Intermediate Representation}
 @end[figure]
 

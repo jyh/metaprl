@@ -28,6 +28,7 @@ MPFILES :=\
 	m_doc_x86_regalloc\
 	m_doc_x86_opt\
 	m_doc_summary\
+	m_doc_proposal\
 	m_util\
 	m_arith\
 	m_ir\

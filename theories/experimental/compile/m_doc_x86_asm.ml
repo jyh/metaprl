@@ -345,9 +345,10 @@ For example, the instruction $@Inst2Mem[ADD]{v_1; @MemReg{v_2}; e}$ performs the
 @leftarrow @MemReg{v_2} + v_1$, where $@MemReg{v_2}$ means the value in memory at location $v_2$.
 
 @begin[figure,isa]
-@small{
-$$
-@begin[array,rcll]
+@begin[small]
+$
+@begin[array,cc]
+@line{{@begin[array,rcll]
 @line{l       {::=}   @it{string}                                                   @hbox{Function labels}}
 @line{@it{r}  {::=}   {@it{eax} {@pipe} @it{ebx} {@pipe} @it{ecx} {@pipe} @it{edx}} @hbox{Registers}}
 @line{{}      {@pipe} {@it{esi} {@pipe} @it{edi} {@pipe} @it{esp} {@pipe} @it{ebp}} {}}
@@ -364,8 +365,8 @@ $$
 @line{p       {::=} {@LabelRec{R; d; p} {@pipe} e}                                @hbox{Programs}}
 @line{d       {::=} {@LabelDef{l; e_@lambda; d} {@pipe} @LabelEnd}                @hbox{Function definition}}
 @line{{e_@lambda} {::=} {@LabelFun{v; e_@lambda} @pipe e}                           @hbox{Functions}}
-@end[array]
-@begin[array,rcll]
+@end[array]}
+{@begin[array,rcll]
 @line{@it{cc} {::=}   {= {@pipe} <> {@pipe} < {@pipe} > {@pipe} {@le} {@pipe} @ge}  @hbox{Condition codes}}
 @line{@it{inst1} {::=}   {@it{INC} @pipe @it{DEC} @pipe @cdots}                     @hbox{1-operand opcodes}}
 @line{@it{inst2} {::=}   {@it{ADD} @pipe @it{SUB} @pipe @it{AND} @pipe @cdots}      @hbox{2-operand opcodes}}
@@ -382,8 +383,10 @@ $$
 @line{{}      {@pipe} @Cmp[cmp]{o_1; o_2}                                           @hbox{Comparison}}
 @line{{}      {@pipe} @Jmp[jmp]{o; {o_r; @ldots; o_r}}                              @hbox{Unconditional branch}}
 @line{{}      {@pipe} @Jcc[j]{@it{cc}; e_1; e_2}                                    @hbox{Conditional branch}}
+@end[array]}}
 @end[array]
-$$}
+$
+@end[small]
 @caption{Scoped Intel x86 instruction set}
 @end[figure]
 

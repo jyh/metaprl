@@ -176,6 +176,7 @@ $$
 $$
 
 @begin[center]
+@begin[small]
 @begin[tabular,"|c|l|"]
 @hline
 @line{{Displayed form} {Term}}
@@ -186,6 +187,7 @@ $$
 @line{{$x + y$} @tt{{sum[]@lbrace x; y @rbrace}}}
 @hline
 @end[tabular]
+@end[small]
 @end[center]
 
 A few examples are shown in the table.  Numbers have an integer

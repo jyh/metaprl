@@ -42,6 +42,8 @@ declare math_xrewrite2[label:s]{'e1; 'e2}
 declare math_semleft
 declare math_semright
 declare math_compilable{'e}
+declare small{'e}
+declare math_small{'e}
 
 (*
  * -*-

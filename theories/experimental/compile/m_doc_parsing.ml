@@ -74,16 +74,15 @@ $$
 
 @begin[figure,syntax]
 $
-@begin[array,rclcl]
+@begin[small]
+@begin[array,cc]
+@line{@multicolumn[2,l]{@begin[array,rclcl]
 @line{@it{op} {::=}   {+ @pipe - @pipe * @pipe / @pipe = @pipe <> @pipe < @pipe @le @pipe > @pipe
 @ge }
 {@space} @hbox{Binary operators}}
 @line{{}{}{}{}{}}
-@end[array]
-$
-
-$
-@begin[array,rcll]
+@end[array]}}
+@line{{@begin[array,rcll]
 @line{@it{e} {::=} {@AtomTrue @pipe @AtomFalse} @hbox{Booleans}}
 @line{{} {@pipe} @AtomInt[i] @hbox{Integers}}
 @line{{} {@pipe} v @hbox{Variables}}
@@ -91,8 +90,8 @@ $
 @line{{} {@pipe} @AtomFun{v; e} @hbox{Anonymous functions @space}}
 @line{{} {@pipe} {e; e} @hbox{Sequencing}}
 @line{{} {@pipe} {e.[e]} @hbox{Subscripting}}
-@end[array]
-@begin[array,rll]
+@end[array]}
+{@begin[array,rll]
 @line{{@pipe} {e.[e] @leftarrow e} @hbox{Assignment}}
 @line{{@pipe} @If{e; e; e} @hbox{Conditionals}}
 @line{{@pipe} {e(e_1, @ldots, e_n)} @hbox{Application}}
@@ -100,7 +99,9 @@ $
 @line{{@pipe} {@xlet @xrec f_1 (v_1, @ldots, v_n) = e} {}}
 @line{{} @vdots @hbox{Recursive functions}}
 @line{{} {@xand f_n (v_1, @ldots, v_n) = e}}
+@end[array]}}
 @end[array]
+@end[small]
 $
 @caption{Program syntax}
 @end[figure]

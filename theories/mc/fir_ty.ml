@@ -6,7 +6,6 @@
  *)
 
 include Base_theory
-include Itt_theory
 include Fir_int_set
 
 (*************************************************************************
@@ -34,9 +33,6 @@ declare tyExists{ 'ty_var_list; 'ty }
 declare tyAll{ 'ty_var_list; 'ty }
 declare tyProject{ 'ty_var; 'num }
 
-(* Subscripting. *)
-declare tySubscript{ 'ty1; 'ty2 }
-
 (* Delayed type. *)
 declare tyDelayed
 
@@ -55,14 +51,6 @@ define unfold_false_set : false_set <--> int_set{ 0; 0 }
 define unfold_val_true : val_true <--> 1
 define unfold_val_false : val_false <--> 0
 
-define unfold_tyBool : tyBool <-->
-   tyUnion{ normalUnion; cons{ nil; cons{ nil; nil } }; int_set{ nil } }
-define unfold_tyBool2 : tyBool2 <--> tyEnum{ 2 }
-define unfold_tyTrue : tyTrue <-->
-   tyUnion{ normalUnion; cons{ nil; cons{ nil; nil } }; true_set }
-define unfold_tyFalse : tyFalse <-->
-   tyUnion{ normalUnion; cons{ nil; cons{ nil; nil } }; false_set }
-
 (*************************************************************************
  * Display forms.
  *************************************************************************)
@@ -76,7 +64,7 @@ dform tyEnum_df : except_mode[src] :: tyEnum{ 'num } =
 
 (* Function type. *)
 dform tyFun_df : except_mode[src] :: tyFun{ 'ty_list; 'ty } =
-   szone `"TyFun" slot{'ty_list} `"->" slot{'ty} ezone
+   szone `"TyFun" `"(" slot{'ty_list} `") -> " slot{'ty} ezone
 
 (* Tuples. *)
 dform tyUnion_df : except_mode[src] ::
@@ -84,13 +72,9 @@ dform tyUnion_df : except_mode[src] ::
    szone `"TyUnion(" slot{'union_ty} `", " slot{'ty_list}
    `", " slot{'int_opt} `")" ezone
 dform tyTuple_df : except_mode[src] :: tyTuple{ 'ty_list } =
-   lzone `"TyTuple" slot{'ty_list} ezone
+   lzone `"TyTuple(" slot{'ty_list} `")" ezone
 dform tyArray_df : except_mode[src] :: tyArray{ 'ty } =
    lzone `"TyArray(" slot{'ty} `")" ezone
-
-(* Subscripting. *)
-dform tySubscript_df : except_mode[src] :: tySubscript{ 'ty1; 'ty2 } =
-   lzone `"TySubscript(" slot{'ty1} `", " slot{'ty2} `")" ezone
 
 (* Delayed type. *)
 dform tyDelayed_df : except_mode[src] :: tyDelayed = `"TyDelayed"
@@ -115,11 +99,6 @@ dform false_set_df : except_mode[src] :: false_set = `"false_set"
 dform val_true_df : except_mode[src] :: val_true = `"val_true"
 dform val_false_df : except_mode[src] :: val_false = `"val_false"
 
-dform tyBool_df : except_mode[src] :: tyBool = `"TyBool(Union)"
-dform tyBool2_df : except_mode[src] :: tyBool2 = `"TyBool(Enum)"
-dform tyTrue_df : except_mode[src] :: tyTrue = `"TyTrue"
-dform tyFalse_df : except_mode[src] :: tyFalse = `"TyFalse"
-
 (*************************************************************************
  * Automation.
  *************************************************************************)
@@ -129,8 +108,4 @@ let resource reduce += [
    << false_set >>, unfold_false_set;
    << val_true >>, unfold_val_true;
    << val_false >>, unfold_val_false;
-   << tyBool >>, unfold_tyBool;
-   << tyBool2 >>, unfold_tyBool2;
-   << tyTrue >>, unfold_tyTrue;
-   << tyFalse >>, unfold_tyFalse;
 ]

@@ -24,15 +24,6 @@ declare value{ 'v }
 (* Identity (polymorphic). *)
 declare idOp
 
-(* Subscripts. *)
-declare plusSubIntOp
-declare minusSubIntOp
-declare minusSubSubOp
-declare composeSubOp
-
-(* Pointer equality. *)
-declare eqEqOp
-
 (* Allocation operators. *)
 declare allocTuple{ 'ty; 'atom_list }
 declare allocArray{ 'ty; 'atom_list }
@@ -44,14 +35,8 @@ define unfold_copy : copy{ 'len; 'init } <-->
  * Normal values.
  *)
 
-(* Subscript atoms. *)
-declare atomSubType{ 'ty }
-declare atomSubIndex{ 'sub; 'int }
-declare atomSubOffset{ 'sub; 'int }
-declare atomSubscript{ 'sub }
-
 (* Subscript ops. *)
-declare aggrSubscript
+declare rawSubscript
 declare intSubscript
 
 (* Normal atoms. *)
@@ -64,9 +49,13 @@ declare atomVar{ 'var }
  * Expressions.
  *)
 
+(* Primitive operations. *)
+declare unop_exp{ 'op; 'a1 }
+declare binop_exp{ 'op; 'a1; 'a2 }
+declare letUnop{ 'op; 'ty; 'a1; v. 'exp['v] }
+declare letBinop{ 'op; 'ty; 'a1; 'a2; v. 'exp['v] }
+
 (* Function application. *)
-declare unOp{ 'op; 'a1; v. 'exp['v] }
-declare binOp{ 'op; 'a1; 'a2; v. 'exp['v] }
 declare tailCall{ 'var; 'atom_list }
 
 (* Control. *)
@@ -95,15 +84,6 @@ dform value_df : except_mode[src] :: value{ 'v } =
 (* Identity (polymorphic). *)
 dform idOp_df : except_mode[src] :: idOp = `"id"
 
-(* Subscripts. *)
-dform plusSubIntOp_df : except_mode[src] :: plusSubIntOp = `"PlusSubIntOp"
-dform minusSubIntOp_df : except_mode[src] :: minusSubIntOp = `"MinusSubIntOp"
-dform minusSubSubOp_df : except_mode[src] :: minusSubSubOp = `"MinusSubSubOp"
-dform composeSubOp_df : except_mode[src] :: composeSubOp = `"ComposeSubOp"
-
-(* Pointer equality. *)
-dform eqEqOp_df : except_mode[src] :: eqEqOp = `"EqEqOp"
-
 (* Allocation operators. *)
 dform allocTuple_df : except_mode[src] :: allocTuple{ 'ty; 'atom_list } =
    szone `"AllocTuple(" slot{'ty} `", " slot{'atom_list} `")" ezone
@@ -120,18 +100,8 @@ dform copy_df : except_mode[src] :: copy{ 'len; 'init} =
  * Normal values.
  *)
 
-(* Subscript atoms. *)
-dform atomSubType_df : except_mode[src] :: atomSubType{ 'ty } =
-   lzone `"AtomSubType(" slot{'ty} `")" ezone
-dform atomSubIndex_df : except_mode[src] :: atomSubIndex{ 'sub; 'int } =
-   lzone `"AtomSubIndex(" slot{'sub} `", " slot{'int} `")" ezone
-dform atomSubOffset_df : except_mode[src] :: atomSubOffset{ 'sub; 'int } =
-   lzone `"AtomSubOffset(" slot{'sub} `", " slot{ 'int } `")" ezone
-dform atomSubscript_df : except_mode[src] :: atomSubscript{ 'sub } =
-   lzone `"AtomSubscript(" slot{'sub} `")" ezone
-
 (* Subscript ops. *)
-dform aggrSubscript_df : except_mode[src] :: aggrSubscript = `"AggrSubscript"
+dform rawSubscript_df : except_mode[src] :: rawSubscript = `"RawSubscript"
 dform intSubscript_df : except_mode[src] :: intSubscript = `"IntSubscript"
 
 (* Normal atoms. *)
@@ -149,19 +119,27 @@ dform atomVar_df : except_mode[src] :: atomVar{ 'var } =
  * Expressions.
  *)
 
-(* Function application. *)
-dform unOp_df : except_mode[src] :: unOp{ 'op; 'a1; v. 'exp } =
-   pushm[0] szone push_indent `"let " slot{'v} `" =" hspace
+(* Primitive operations. *)
+dform unop_exp_df : except_mode[src] :: unop_exp{ 'op; 'a1 } =
+   slot{'op} `"(" slot{'a1} `")"
+dform binop_exp_df : except_mode[src] :: binop_exp{ 'op; 'a1; 'a2 } =
+   `"(" slot{'a1} `" " slot{'op} `" " slot{'a2} `")"
+dform letUnop_df : except_mode[src] ::
+   letUnop{ 'op; 'ty; 'a1; v. 'exp } =
+   pushm[0] szone push_indent `"let " slot{'v} `":" slot{'ty} `" =" hspace
    lzone slot{'op} `"(" slot{'a1} `")" ezone popm hspace
    push_indent `"in" hspace
    szone slot{'exp} ezone popm
    ezone popm
-dform binOp_df : except_mode[src] :: binOp{ 'op; 'a1; 'a2; v. 'exp } =
-   pushm[0] szone push_indent `"let " slot{'v} `" =" hspace
+dform letBinop_df : except_mode[src] ::
+   letBinop{ 'op; 'ty; 'a1; 'a2; v. 'exp } =
+   pushm[0] szone push_indent `"let " slot{'v} `":" slot{'ty} `" =" hspace
    lzone `"(" slot{'a1} `" " slot{'op} `" " slot{'a2} `")" ezone popm hspace
    push_indent `"in" hspace
    szone slot{'exp} ezone popm
    ezone popm
+
+(* Function application. *)
 dform tailCall_df : except_mode[src] :: tailCall{ 'var; 'atom_list } =
    szone `"TailCall(" slot{'var} `", " slot{'atom_list} `")" ezone
 
@@ -206,7 +184,7 @@ dform setSubscript_df : except_mode[src] ::
 prim_rw reduce_value : prog{ 's; value{ 'v } } <--> 'v
 
 (* Identity (polymorphic). *)
-prim_rw reduce_idOp : unOp{ idOp; 'a1; v. 'exp['v] } <--> 'exp['a1]
+prim_rw reduce_idOp : unop_exp{ idOp; 'a1 } <--> 'a1
 
 (* Integer atom. *)
 prim_rw reduce_atomInt : atomInt{ 'num } <--> 'num
@@ -214,14 +192,22 @@ prim_rw reduce_atomInt : atomInt{ 'num } <--> 'num
 (* Enumeration atom. *)
 prim_rw reduce_atomEnum : atomEnum{ 'bound; 'num } <--> 'num
 
+(* Primitive operations. *)
+prim_rw reduce_letUnop :
+   letUnop{ 'op; 'ty; 'a1; v. 'exp['v] } <-->
+   'exp[ unop_exp{ 'op; 'a1 } ]
+prim_rw reduce_letBinop :
+   letBinop{ 'op; 'ty; 'a1; 'a2; v. 'exp['v] } <-->
+   'exp[ binop_exp{ 'op; 'a1; 'a2 } ]
+
 (* Allocation. *)
 prim_rw reduce_allocTuple :
    prog{ 'state; letAlloc{ allocTuple{ 'ty; 'atom_list }; v. 'exp['v] } } <-->
-   "match"{ alloc{ 'state; 0; 'atom_list }; s2, v2.
+   smatch{ alloc{ 'state; 0; 'atom_list }; s2, v2.
       prog{ 's2; 'exp['v2] } }
 prim_rw reduce_allocArray :
    prog{ 'state; letAlloc{ allocArray{ 'ty; 'atom_list }; v. 'exp['v] } } <-->
-   "match"{ alloc{ 'state; 0; 'atom_list }; s2, v2.
+   smatch{ alloc{ 'state; 0; 'atom_list }; s2, v2.
       prog{ 's2; 'exp['v2] } }
 
 (* Control *)
@@ -235,11 +221,11 @@ prim_rw reduce_match_block :
 (* Subscripting. *)
 prim_rw reduce_letSubscript :
    prog{ 'state; letSubscript{ 'ref; 'index; v. 'exp['v] } } <-->
-   "match"{ fetch{ 'state; 'ref; 'index }; s2, v2.
+   smatch{ fetch{ 'state; 'ref; 'index }; s2, v2.
       prog{ 's2; 'exp['v2] } }
 prim_rw reduce_setSubscript :
    prog{ 'state; setSubscript{ 'ref; 'index; 'new_val; 'exp } } <-->
-   "match"{ store{ 'state; 'ref; 'index; 'new_val }; s2, v2.
+   smatch{ store{ 'state; 'ref; 'index; 'new_val }; s2, v2.
       prog{ 's2; 'exp } }
 
 (*************************************************************************
@@ -248,20 +234,18 @@ prim_rw reduce_setSubscript :
 
 let resource reduce += [
    <<  prog{ 's; value{ 'v } } >>, reduce_value;
-
-   << unOp{ idOp; 'a1; v. 'exp['v] } >>, reduce_idOp;
-
+   << unop_exp{ idOp; 'a1 } >>, reduce_idOp;
+   << letUnop{ 'op; 'ty; 'a1; v. 'exp['v] } >>, reduce_letUnop;
+   << letBinop{ 'op; 'ty; 'a1; 'a2; v. 'exp['v] } >>, reduce_letBinop;
    << prog{'state; letAlloc{ allocTuple{ 'ty; 'atom_list }; v. 'exp['v] }} >>,
       reduce_allocTuple;
    << prog{'state; letAlloc{ allocArray{ 'ty; 'atom_list }; v. 'exp['v] }} >>,
       reduce_allocArray;
    << copy{ 'len; 'init } >>, unfold_copy;
-
    << "match"{ number[i:n]; cons{matchCase{'set; 'exp}; 'el} } >>,
       reduce_match_num;
    << "match"{ block{ 'i; 'args }; cons{matchCase{'set; 'exp}; 'el} } >>,
       reduce_match_block;
-
    << prog{ 'state; letSubscript{ 'ref; 'index; v. 'exp['v] } } >>,
       reduce_letSubscript;
    << prog{ 'state; setSubscript{ 'ref; 'index; 'new_val; 'exp } } >>,

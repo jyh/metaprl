@@ -80,4 +80,4 @@ declare fetch{ 'state; 'ref; 'index }
  * Binds the triple (x,y,z) returned by alloc, store, and fetch
  *    to a <- pair(x,y) and b <- z.
  *)
-declare "match"{ 'i; a, b. 'exp['a; 'b] }
+declare smatch{ 'i; a, b. 'exp['a; 'b] }

@@ -86,80 +86,62 @@ dform pow_df : except_mode[src] :: pow{ 'base; 'exp } =
  *************************************************************************)
 
 (* Unary and bitwise negation. *)
-prim_rw reduce_uminusIntOp : unOp{ uminusIntOp; 'a1; v. 'exp['v] } <-->
-   'exp[ "minus"{'a1} ]
-(* prim_rw reduce_notIntOp : unOp{ notIntOp; 'a1; v. 'exp['v] } <--> *)
+prim_rw reduce_uminusIntOp :
+   unop_exp{ uminusIntOp; 'a1 } <-->
+   "minus"{'a1}
 
 (* Standard binary arithmetic operators. *)
-prim_rw reduce_plusIntOp : binOp{ plusIntOp; 'a1; 'a2; v. 'exp['v] } <-->
-   'exp[ ('a1 +@ 'a2) ]
-prim_rw reduce_minusIntOp : binOp{ minusIntOp; 'a1; 'a2; v. 'exp['v] } <-->
-   'exp[ ('a1 -@ 'a2) ]
-prim_rw reduce_mulIntOp : binOp{ mulIntOp; 'a1; 'a2; v. 'exp['v] } <-->
-   'exp[ ('a1 *@ 'a2) ]
-prim_rw reduce_divIntOp : binOp{ divIntOp; 'a1; 'a2; v. 'exp['v] } <-->
-   'exp[ ('a1 /@ 'a2) ]
-prim_rw reduce_remIntOp : binOp{ remIntOp; 'a1; 'a2; v. 'exp['v] } <-->
-   'exp[ ('a1 %@ 'a2) ]
+prim_rw reduce_plusIntOp :
+   binop_exp{ plusIntOp; 'a1; 'a2 } <-->
+   ('a1 +@ 'a2)
+prim_rw reduce_minusIntOp :
+   binop_exp{ minusIntOp; 'a1; 'a2 } <-->
+   ('a1 -@ 'a2)
+prim_rw reduce_mulIntOp :
+   binop_exp{ mulIntOp; 'a1; 'a2 } <-->
+   ('a1 *@ 'a2)
+prim_rw reduce_divIntOp :
+   binop_exp{ divIntOp; 'a1; 'a2 } <-->
+   ('a1 /@ 'a2)
+prim_rw reduce_remIntOp :
+   binop_exp{ remIntOp; 'a1; 'a2 } <-->
+   ('a1 %@ 'a2)
 
-(* Binary bitwise operators. *)
-prim_rw reduce_lslIntOp : binOp{ lslIntOp; 'a1; 'a2; v. 'exp['v] } <-->
-   'exp[ ( 'a1 *@ pow{2; 'a2} ) ]
-prim_rw reduce_lsrIntOp : binOp{ lsrIntOp; 'a1; 'a2; v. 'exp['v] } <-->
-   'exp[ ( 'a1 /@ pow{2; 'a2} ) ]
-prim_rw reduce_asrIntOp : binOp{ asrIntOp; 'a1; 'a2; v. 'exp['v] } <-->
-   'exp[ ( 'a1 /@ pow{2; 'a2} ) ]
-(*prim_rw reduce_andIntOp : binOp{ andIntOp; 'a1; 'a2; v. 'exp['v] } <-->
-prim_rw reduce_orIntOp : binOp{ orIntOp; 'a1; 'a2; v. 'exp['v] } <-->
-prim_rw reduce_xorIntOp : binOp{ xorIntOp; 'a1; 'a2; v. 'exp['v] } <-->*)
-
-(* Comparison. *)
-prim_rw reduce_eqIntOp : binOp{ eqIntOp; 'a1; 'a2; v. 'exp['v] } <-->
-   'exp[ ifthenelse{ beq_int{ 'a1; 'a2 }; val_true; val_false } ]
-   (*'exp[ beq_int{ 'a1; 'a2 } ]*)
-prim_rw reduce_neqIntOp : binOp{ neqIntOp; 'a1; 'a2; v. 'exp['v] } <-->
-   'exp[ ifthenelse{ bneq_int{ 'a1; 'a2 }; val_true; val_false } ]
-   (*'exp[ bneq_int{ 'a1; 'a2 } ]*)
-prim_rw reduce_ltIntOp : binOp{ ltIntOp; 'a1; 'a2; v. 'exp['v] } <-->
-   'exp[ ifthenelse{ lt_bool{ 'a1; 'a2 }; val_true; val_false }  ]
-   (*'exp[ lt_bool{ 'a1; 'a2 } ]*)
-prim_rw reduce_leIntOp : binOp{ leIntOp; 'a1; 'a2; v. 'exp['v] } <-->
-   'exp[ ifthenelse{ le_bool{ 'a1; 'a2 }; val_true; val_false } ]
-   (*'exp[ le_bool{ 'a1; 'a2 } ]*)
-prim_rw reduce_gtIntOp : binOp{ gtIntOp; 'a1; 'a2; v. 'exp['v] } <-->
-   'exp[ ifthenelse{ gt_bool{ 'a1; 'a2 }; val_true; val_false } ]
-   (*'exp[ gt_bool{ 'a1; 'a2 } ]*)
-prim_rw reduce_geIntOp : binOp{ geIntOp; 'a1; 'a2; v. 'exp['v] } <-->
-   'exp[ ifthenelse{ ge_bool{ 'a1; 'a2 }; val_true; val_false } ]
-   (*'exp[ ge_bool{ 'a1; 'a2 } ]*)
+(* Boolean comparisons. *)
+prim_rw reduce_eqIntOp :
+   binop_exp{ eqIntOp; 'a1; 'a2 } <-->
+   ifthenelse{ beq_int{ 'a1; 'a2 }; val_true; val_false }
+prim_rw reduce_neqIntOp :
+   binop_exp{ neqIntOp; 'a1; 'a2 } <-->
+   ifthenelse{ bneq_int{ 'a1; 'a2 }; val_true; val_false }
+prim_rw reduce_ltIntOp :
+   binop_exp{ ltIntOp; 'a1; 'a2 } <-->
+   ifthenelse{ lt_bool{ 'a1; 'a2 }; val_true; val_false }
+prim_rw reduce_leIntOp :
+   binop_exp{ leIntOp; 'a1; 'a2 } <-->
+   ifthenelse{ le_bool{ 'a1; 'a2 }; val_true; val_false }
+prim_rw reduce_gtIntOp :
+   binop_exp{ gtIntOp; 'a1; 'a2 } <-->
+   ifthenelse{ gt_bool{ 'a1; 'a2 }; val_true; val_false }
+prim_rw reduce_geIntOp :
+   binop_exp{ geIntOp; 'a1; 'a2 } <-->
+   ifthenelse{ ge_bool{ 'a1; 'a2 }; val_true; val_false }
 
 (*************************************************************************
  * Automation.
  *************************************************************************)
 
 let resource reduce += [
-   << unOp{ uminusIntOp; 'a1; v. 'exp['v] } >>, reduce_uminusIntOp;
-   (*<< unOpr{ notIntOp; 'a1; v. 'exp['v] } >>, reduce_notIntOp;*)
-
-   << binOp{ plusIntOp; 'a1; 'a2; v. 'exp['v] } >>,  reduce_plusIntOp;
-   << binOp{ minusIntOp; 'a1; 'a2; v. 'exp['v] } >>, reduce_minusIntOp;
-   << binOp{ mulIntOp; 'a1; 'a2; v. 'exp['v] } >>,   reduce_mulIntOp;
-   << binOp{ divIntOp; 'a1; 'a2; v. 'exp['v] } >>,   reduce_divIntOp;
-   << binOp{ remIntOp; 'a1; 'a2; v. 'exp['v] } >>,   reduce_remIntOp;
-
-   << binOp{ lslIntOp; 'a1; 'a2; v. 'exp['v] } >>, reduce_lslIntOp;
-   << binOp{ lsrIntOp; 'a1; 'a2; v. 'exp['v] } >>, reduce_lsrIntOp;
-   << binOp{ asrIntOp; 'a1; 'a2; v. 'exp['v] } >>, reduce_asrIntOp;
-   (*<< binOp{ andIntOp; 'a1; 'a2; v. 'exp['v] } >>, reduce_andIntOp;
-   << binOp{ orIntOp; 'a1; 'a2; v. 'exp['v] } >>,  reduce_orIntOp;
-   << binOp{ xorIntOp; 'a1; 'a2; v. 'exp['v] } >>, reduce_xorIntOp;*)
-
-   << binOp{ eqIntOp; 'a1; 'a2; v. 'exp['v] } >>, reduce_eqIntOp;
-   << binOp{ neqIntOp; 'a1; 'a2; v. 'exp['v] } >>, reduce_neqIntOp;
-   << binOp{ ltIntOp; 'a1; 'a2; v. 'exp['v] } >>, reduce_ltIntOp;
-   << binOp{ leIntOp; 'a1; 'a2; v. 'exp['v] } >>, reduce_leIntOp;
-   << binOp{ gtIntOp; 'a1; 'a2; v. 'exp['v] } >>, reduce_gtIntOp;
-   << binOp{ geIntOp; 'a1; 'a2; v. 'exp['v] } >>, reduce_geIntOp;
-
-   << pow{ 'base; 'exp } >>, unfold_pow
+   << unop_exp{ uminusIntOp; 'a1 } >>, reduce_uminusIntOp;
+   << binop_exp{ plusIntOp; 'a1; 'a2 } >>, reduce_plusIntOp;
+   << binop_exp{ minusIntOp; 'a1; 'a2 } >>, reduce_minusIntOp;
+   << binop_exp{ mulIntOp; 'a1; 'a2 } >>, reduce_mulIntOp;
+   << binop_exp{ divIntOp; 'a1; 'a2 } >>, reduce_divIntOp;
+   << binop_exp{ remIntOp; 'a1; 'a2 } >>, reduce_remIntOp;
+   << binop_exp{ eqIntOp; 'a1; 'a2 } >>, reduce_eqIntOp;
+   << binop_exp{ neqIntOp; 'a1; 'a2 } >>, reduce_neqIntOp;
+   << binop_exp{ ltIntOp; 'a1; 'a2 } >>, reduce_ltIntOp;
+   << binop_exp{ leIntOp; 'a1; 'a2 } >>, reduce_leIntOp;
+   << binop_exp{ gtIntOp; 'a1; 'a2 } >>, reduce_gtIntOp;
+   << binop_exp{ geIntOp; 'a1; 'a2 } >>, reduce_geIntOp
 ]

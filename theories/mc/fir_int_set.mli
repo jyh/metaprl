@@ -39,7 +39,9 @@ declare int_set{ 'a; 'b }
  *    bfalse otherwise.
  * member reduces to btrue if 'num is in 'int_set and bfalse otherwise.
  *    'num is in 'int_set if it's in any one of the intervals of the set.
+ * not_in_interval and not_member are the negations of the above.
  *)
-define unfold_in_interval : in_interval{ 'num; interval{'l; 'r} } <-->
+define unfold_in_interval :
+   in_interval{ 'num; interval{'l; 'r} } <-->
    band{ le_bool{'l; 'num}; le_bool{'num; 'r} }
 declare member{ 'num; 'int_set }

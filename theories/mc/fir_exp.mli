@@ -32,15 +32,6 @@ declare value{ 'v }
 (* Identity (polymorphic). *)
 declare idOp
 
-(* Subscripts. *)
-declare plusSubIntOp
-declare minusSubIntOp
-declare minusSubSubOp
-declare composeSubOp
-
-(* Pointer equality. *)
-declare eqEqOp
-
 (*
  * Allocation operators.
  * copy makes a list with 'len copies of 'init.
@@ -56,14 +47,8 @@ define unfold_copy : copy{ 'len; 'init } <-->
  * Normal values.
  *)
 
-(* Subscript atoms. *)
-declare atomSubType{ 'ty }
-declare atomSubIndex{ 'sub; 'int }
-declare atomSubOffset{ 'sub; 'int }
-declare atomSubscript{ 'sub }
-
 (* Subscript ops. *)
-declare aggrSubscript
+declare rawSubscript
 declare intSubscript
 
 (*
@@ -81,9 +66,13 @@ declare atomVar{ 'var }
  * Expressions.
  *)
 
+(* Primitive operations. *)
+declare unop_exp{ 'op; 'a1 }
+declare binop_exp{ 'op; 'a1; 'a2 }
+declare letUnop{ 'op; 'ty; 'a1; v. 'exp['v] }
+declare letBinop{ 'op; 'ty; 'a1; 'a2; v. 'exp['v] }
+
 (* Function application. *)
-declare unOp{ 'op; 'a1; v. 'exp['v] }
-declare binOp{ 'op; 'a1; 'a2; v. 'exp['v] }
 declare tailCall{ 'var; 'atom_list }
 
 (* Control. *)

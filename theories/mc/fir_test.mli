@@ -13,3 +13,5 @@ include Fir_int_set
 include Fir_ty
 include Fir_exp
 include Fir_int
+include Fir_type
+include Fir_type_exp

@@ -44,7 +44,7 @@ declare store{ 'state; 'ref; 'index; 'item }
 declare fetch{ 'state; 'ref; 'index }
 
 (* Match / spread. *)
-declare "match"{ 'i; a, b. 'exp['a; 'b] }
+declare smatch{ 'i; a, b. 'exp['a; 'b] }
 
 (*************************************************************************
  * Display forms.
@@ -90,7 +90,7 @@ dform fetch_df : except_mode[src] :: fetch{ 'state; 'ref; 'index} =
    `"fetch(" slot{'state} `", " slot{'ref} `"[" slot{'index} `"])"
 
 (* Match / spread. *)
-dform match_df : except_mode[src] :: "match"{'x; a, b. 'body} =
+dform smatch_df : except_mode[src] :: smatch{'x; a, b. 'body} =
    szone pushm[0] push_indent `"let <" slot{'a} `"," slot{'b} `"> =" hspace
    szone slot{'x} ezone popm hspace
    push_indent `"in" hspace
@@ -151,8 +151,8 @@ prim_rw reduce_fetch :
       'index } }
 
 (* Match / spread. *)
-prim_rw reduce_match :
-   "match"{ triple{ 'x; 'y; 'z }; a, b. 'exp[ 'a; 'b ] } <-->
+prim_rw reduce_smatch :
+   smatch{ triple{ 'x; 'y; 'z }; a, b. 'exp[ 'a; 'b ] } <-->
    'exp[ pair{ 'x; 'y }; 'z ]
 
 (*************************************************************************
@@ -167,5 +167,5 @@ let resource reduce += [
    << alloc{ 'state; 'tag; 'item_list } >>, reduce_alloc;
    << store{ 'state; 'ref; 'index; 'item_list } >>, reduce_store;
    << fetch{ 'state; 'ref; 'index } >>, reduce_fetch;
-   << "match"{ 'i; a, b. 'exp['a; 'b] } >>, reduce_match
+   << smatch{ 'i; a, b. 'exp['a; 'b] } >>, reduce_smatch
 ]

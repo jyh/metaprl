@@ -6,7 +6,6 @@
  *)
 
 include Base_theory
-include Itt_theory
 include Fir_int_set
 
 (*************************************************************************
@@ -46,9 +45,6 @@ declare tyExists{ 'ty_var_list; 'ty }
 declare tyAll{ 'ty_var_list; 'ty }
 declare tyProject{ 'ty_var; 'num }
 
-(* Subscripting. *)
-declare tySubscript{ 'ty1; 'ty2 }
-
 (*
  * Delayed type.
  * Type should be inferred later.
@@ -76,11 +72,3 @@ define unfold_true_set : true_set <--> int_set{ 1; 1 }
 define unfold_false_set : false_set <--> int_set{ 0; 0 }
 define unfold_val_true : val_true <--> 1
 define unfold_val_false : val_false <--> 0
-
-define unfold_tyBool : tyBool <-->
-   tyUnion{ normalUnion; cons{ nil; cons{ nil; nil } }; int_set{ nil } }
-define unfold_tyBool2 : tyBool2 <--> tyEnum{ 2 }
-define unfold_tyTrue : tyTrue <-->
-   tyUnion{ normalUnion; cons{ nil; cons{ nil; nil } }; true_set }
-define unfold_tyFalse : tyFalse <-->
-   tyUnion{ normalUnion; cons{ nil; cons{ nil; nil } }; false_set }

@@ -16,6 +16,9 @@ MPFILES := \
    fir_ty \
    fir_exp \
    fir_int \
+   fir_type \
+   fir_type_state \
+   fir_type_exp \
    fir_test\
 
 # Name of main libraries

@@ -7,6 +7,9 @@
  *     sequent [it; it] { H >> T }
  *
  * $Log$
+ * Revision 1.2  1998/04/21 19:54:56  jyh
+ * Upgraded refiner for program extraction.
+ *
  * Revision 1.1  1997/08/06 16:18:42  jyh
  * This is an ocaml version with subtyping, type inference,
  * d and eqcd tactics.  It is a basic system, but not debugged.
@@ -52,11 +55,12 @@ let squash_opname = opname_of_term squash_term
 (*
  * Is a goal squashed?
  *)
-let is_squash_goal (s, _) =
+let is_squash_goal { tac_goal = s } =
    match dest_sequent s with
       [_; _; flag] ->
          opname_of_term flag == squash_opname
-    | _ -> false
+    | _ ->
+         false
 
 (************************************************************************
  * IMPLEMENTATION                                                       *
@@ -109,7 +113,7 @@ let squash_resource =
 (*
  * Resource argument.
  *)
-let squash_of_proof (_, { ref_rsrc = { ref_squash = squash } }) = squash
+let squash_of_proof { tac_arg = { ref_rsrc = { ref_squash = squash } } } = squash
 
 (*
  * -*-

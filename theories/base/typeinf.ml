@@ -4,6 +4,9 @@
  * it is used to perform basic inference.
  *
  * $Log$
+ * Revision 1.2  1998/04/21 19:54:42  jyh
+ * Upgraded refiner for program extraction.
+ *
  * Revision 1.1  1997/08/06 16:18:18  jyh
  * This is an ocaml version with subtyping, type inference,
  * d and eqcd tactics.  It is a basic system, but not debugged.
@@ -99,7 +102,7 @@ let typeinf_resource =
 (*
  * Projector.
  *)
-let typeinf_of_proof (_, { ref_rsrc = { ref_typeinf = inf } }) = inf
+let typeinf_of_proof { tac_arg = { ref_rsrc = { ref_typeinf = inf } } } = inf
 
 (*
  * -*-

@@ -231,7 +231,7 @@ let sub_resource =
 (*
  * Resource argument.
  *)
-let subtyper_of_proof (_, { ref_rsrc = { ref_subtype = f } }) = f
+let subtyper_of_proof { tac_arg = { ref_rsrc = { ref_subtype = f } } } = f
 
 (************************************************************************
  * TACTICS                                                              *
@@ -298,6 +298,9 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (subty
 
 (*
  * $Log$
+ * Revision 1.3  1998/04/21 19:55:07  jyh
+ * Upgraded refiner for program extraction.
+ *
  * Revision 1.2  1997/08/06 16:18:45  jyh
  * This is an ocaml version with subtyping, type inference,
  * d and eqcd tactics.  It is a basic system, but not debugged.

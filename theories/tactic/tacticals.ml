@@ -1,38 +1,6 @@
 (*
  * Some basic tacticals.
  *
- * $Log$
- * Revision 1.6  1998/04/17 01:31:36  jyh
- * Editor is almost constructed.
- *
- * Revision 1.5  1998/04/13 21:11:18  jyh
- * Added interactive proofs to filter.
- *
- * Revision 1.4  1998/04/09 18:26:13  jyh
- * Working compiler once again.
- *
- * Revision 1.3  1998/02/18 18:48:05  jyh
- * Initial ocaml semantics.
- *
- * Revision 1.2  1997/08/06 16:18:55  jyh
- * This is an ocaml version with subtyping, type inference,
- * d and eqcd tactics.  It is a basic system, but not debugged.
- *
- * Revision 1.1  1997/04/28 15:52:44  jyh
- * This is the initial checkin of Nuprl-Light.
- * I am porting the editor, so it is not included
- * in this checkin.
- *
- * Directories:
- *     refiner: logic engine
- *     filter: front end to the Ocaml compiler
- *     editor: Emacs proof editor
- *     util: utilities
- *     mk: Makefile templates
- *
- * Revision 1.1  1996/09/25 22:52:07  jyh
- * Initial "tactical" commit.
- *
  *)
 
 open Term
@@ -115,9 +83,9 @@ let prefix_then_OnLastT tac1 tac2 =
 
 let prefix_then_OnSameConclT tac1 tac2 =
    let first p =
-      let t = nth_concl (fst p) 0 in
+      let t = nth_concl p.tac_goal 0 in
       let second p =
-         let t' = nth_concl (fst p) 0 in
+         let t' = nth_concl p.tac_goal 0 in
             (if alpha_equal t t' then
                 tac2
              else
@@ -141,11 +109,11 @@ let completeT tac =
  *)
 let progressT tac =
    let aux p =
-      let t = fst p in
+      let t = p.tac_goal in
       let aux' p' =
          match p' with
-            [(t', _) as p''] ->
-               [(if t' = t' then
+            [p''] ->
+               [(if alpha_equal p''.tac_goal t then
                     idT
                  else
                     failWithT "progressT") p'']
@@ -162,14 +130,14 @@ let progressT tac =
  *)
 let repeatT tac =
    let rec aux t p =
-      let t' = fst p in
+      let t' = p.tac_goal in
          (if alpha_equal t t' then
              idT
           else
              tac thenT (aux t')) p
    in
    let start p =
-      let t = fst p in
+      let t = p.tac_goal in
          (tac thenT (aux t)) p
    in
       start
@@ -206,12 +174,12 @@ let seqOnSameConclT = function
  | tacs ->
       let start p =
          (* Save the first conclusion *)
-         let t = nth_concl (fst p) 0 in
+         let t = nth_concl p.tac_goal 0 in
          let rec aux tacs p =
             (* Recurse through the tactics *)
             (match tacs with
                 tac::tactl ->
-                   let t' = nth_concl (fst p) 0 in
+                   let t' = nth_concl p.tac_goal 0 in
                       if alpha_equal t t' then
                          tac thenT (aux tactl)
                       else
@@ -236,7 +204,7 @@ let ifT pred tac1 tac2 p =
        tac2) p
 
 let ifOnConclT pred =
-   ifT (function p -> pred (nth_concl (fst p) 0))
+   ifT (function p -> pred (nth_concl p.tac_goal 0))
 
 let ifOnHypT pred tac1 tac2 i p =
    (if pred (nth_hyp i p) then
@@ -245,7 +213,7 @@ let ifOnHypT pred tac1 tac2 i p =
        tac2) i p
 
 let ifThenT pred tac1 =
-   ifT (function (t, _) -> pred t) tac1 idT
+   ifT (function { tac_goal = t } -> pred t) tac1 idT
 
 let ifThenOnConclT pred tac =
    let failT = failWithT "ifThenOnConclT" in
@@ -289,13 +257,21 @@ let predicate_labels =
 (*
  * Get the label from a proof.
  *)
-let proof_label (_, { ref_label = label }) = label
+let proof_label { tac_arg = { ref_label = label } } =
+   label
 
 (*
  * Add a label attribute.
  *)
-let addHiddenLabelT s (t, { ref_args = args; ref_fcache = fcache; ref_rsrc = rsrc }) =
-   idT (t, { ref_label = s; ref_args = args; ref_fcache = fcache; ref_rsrc = rsrc })
+let addHiddenLabelT s
+    { tac_goal = t;
+      tac_hyps = hyps;
+      tac_arg = { ref_args = args; ref_fcache = fcache; ref_rsrc = rsrc }
+    } =
+   idT { tac_goal = t;
+         tac_hyps = hyps;
+         tac_arg = { ref_label = s; ref_args = args; ref_fcache = fcache; ref_rsrc = rsrc }
+   }
 
 let removeHiddenLabelT =
    addHiddenLabelT "main"
@@ -411,14 +387,14 @@ let prefix_thenALT =
  *)
 let repeatMT tac =
    let rec aux t p =
-      let t' = fst p in
+      let t' = p.tac_goal in
          (if alpha_equal t t' then
              idT
           else
              tac thenMT (aux t')) p
    in
    let start p =
-      let t = fst p in
+      let t = p.tac_goal in
          (tac thenMT (aux t)) p
    in
       start
@@ -457,12 +433,12 @@ let completeMT tac =
  *)
 let labProgressT tac =
    let aux p =
-      let t = fst p in
+      let t = p.tac_goal in
       let lab = proof_label p in
       let aux' p' =
          match p' with
             [p''] ->
-               let t' = fst p'' in
+               let t' = p''.tac_goal in
                let lab' = proof_label p'' in
                   [(if alpha_equal t t' & lab = lab' then
                        idT
@@ -483,7 +459,7 @@ let labProgressT tac =
  * Renumbering.
  *)
 let onClauseT i tac p =
-   tac (get_pos_hyp_num i p) p
+   (tac (get_pos_hyp_num i p) p : safe_tactic)
 
 let onHypT = onClauseT
 
@@ -498,7 +474,8 @@ let onClausesT clauses tac =
          onClauseT i tac
     | i::t ->
          onClauseT i tac thenT aux t
-    | [] -> idT
+    | [] ->
+         idT
    in
       aux clauses
 
@@ -601,38 +578,64 @@ let onVarT v tac p =
 (*
  * Push args.
  *)
-let withArgListT args tac (goal, { ref_label = label;
-                                   ref_args = args';
-                                   ref_fcache = fcache;
-                                   ref_rsrc = rsrc
-                           }) =
-   let restoreArgListT (goal', { ref_label = label'; ref_fcache = fcache; ref_rsrc = rsrc }) =
-      idT (goal', { ref_label = label'; ref_args = args'; ref_fcache = fcache; ref_rsrc = rsrc })
+let withArgListT args tac
+    { tac_goal = goal;
+      tac_hyps = hyps;
+      tac_arg = { ref_label = label;
+                  ref_args = args';
+                  ref_fcache = fcache;
+                  ref_rsrc = rsrc
+                }
+    } =
+   let restoreArgListT { tac_goal = goal';
+                         tac_hyps = hyps';
+                         tac_arg = { ref_label = label'; ref_fcache = fcache; ref_rsrc = rsrc }
+       } =
+      idT { tac_goal = goal';
+            tac_hyps = hyps';
+            tac_arg = { ref_label = label'; ref_args = args'; ref_fcache = fcache; ref_rsrc = rsrc }
+      }
    in
-      (tac thenT restoreArgListT) (goal, { ref_label = label;
-                                           ref_args = args @ args';
-                                           ref_fcache = fcache;
-                                           ref_rsrc = rsrc
-                                   })
+      (tac thenT restoreArgListT) { tac_goal = goal;
+                                    tac_hyps = hyps;
+                                    tac_arg = { ref_label = label;
+                                                ref_args = args @ args';
+                                                ref_fcache = fcache;
+                                                ref_rsrc = rsrc
+                                              }
+      }
 
-let withArgT arg tac (goal, { ref_label = label;
-                              ref_args = args';
-                              ref_fcache = fcache;
-                              ref_rsrc = rsrc
-                      }) =
-   let restoreArgListT (goal', { ref_label = label'; ref_fcache = fcache; ref_rsrc = rsrc }) =
-      idT (goal', { ref_label = label'; ref_args = args'; ref_fcache = fcache; ref_rsrc = rsrc })
+let withArgT arg tac
+    { tac_goal = goal;
+      tac_hyps = hyps;
+      tac_arg = { ref_label = label;
+                  ref_args = args';
+                  ref_fcache = fcache;
+                  ref_rsrc = rsrc
+                }
+    } =
+   let restoreArgListT { tac_goal = goal';
+                         tac_hyps = hyps';
+                         tac_arg = { ref_label = label'; ref_fcache = fcache; ref_rsrc = rsrc } 
+       } =
+      idT { tac_goal = goal';
+            tac_hyps = hyps';
+            tac_arg = { ref_label = label'; ref_args = args'; ref_fcache = fcache; ref_rsrc = rsrc }
+      }
    in
-      (tac thenT restoreArgListT) (goal, { ref_label = label;
-                                           ref_args = arg::args';
-                                           ref_fcache = fcache;
-                                           ref_rsrc = rsrc
-                                   })
+      (tac thenT restoreArgListT) { tac_goal = goal;
+                                    tac_hyps = hyps;
+                                    tac_arg = { ref_label = label;
+                                                ref_args = arg::args';
+                                                ref_fcache = fcache;
+                                                ref_rsrc = rsrc
+                                              }
+      }
 
 (*
  * Get an arg, given a test.
  *)
-let get_arg test (_, { ref_args = args }) =
+let get_arg test { tac_arg = { ref_args = args } } =
    let rec aux = function
       h::t ->
          begin
@@ -640,7 +643,8 @@ let get_arg test (_, { ref_args = args }) =
                Some x -> x
              | None -> aux t
          end
-    | [] -> raise Not_found
+    | [] ->
+         raise Not_found
    in
       aux args
 
@@ -745,6 +749,41 @@ let get_thinning_arg =
       get_arg test
 
 (*
+ * $Log$
+ * Revision 1.7  1998/04/21 19:55:23  jyh
+ * Upgraded refiner for program extraction.
+ *
+ * Revision 1.6  1998/04/17 01:31:36  jyh
+ * Editor is almost constructed.
+ *
+ * Revision 1.5  1998/04/13 21:11:18  jyh
+ * Added interactive proofs to filter.
+ *
+ * Revision 1.4  1998/04/09 18:26:13  jyh
+ * Working compiler once again.
+ *
+ * Revision 1.3  1998/02/18 18:48:05  jyh
+ * Initial ocaml semantics.
+ *
+ * Revision 1.2  1997/08/06 16:18:55  jyh
+ * This is an ocaml version with subtyping, type inference,
+ * d and eqcd tactics.  It is a basic system, but not debugged.
+ *
+ * Revision 1.1  1997/04/28 15:52:44  jyh
+ * This is the initial checkin of Nuprl-Light.
+ * I am porting the editor, so it is not included
+ * in this checkin.
+ *
+ * Directories:
+ *     refiner: logic engine
+ *     filter: front end to the Ocaml compiler
+ *     editor: Emacs proof editor
+ *     util: utilities
+ *     mk: Makefile templates
+ *
+ * Revision 1.1  1996/09/25 22:52:07  jyh
+ * Initial "tactical" commit.
+ *
  * -*-
  * Local Variables:
  * Caml-master: "/usr/local/lib/nuprl-light/camlp4o.run"

@@ -143,6 +143,9 @@ mlterm cumulativity{univ[@j:l]; univ[@i:l]} =
       else
          raise (RefineError (StringError "cumulativity"))
 
+ | fun _ extracts ->
+      << it >>, extracts
+
 (*
  * H >- Uj = Uj in Ui
  * by universeEquality (side (j < i))
@@ -247,7 +250,7 @@ let eqcd_resource =
 (*
  * Resource argument.
  *)
-let eqcd_of_proof (_, { ref_rsrc = { ref_eqcd = eqcd } }) = eqcd
+let eqcd_of_proof { tac_arg = { ref_rsrc = { ref_eqcd = eqcd } } } = eqcd
 
 (************************************************************************
  * D TACTIC                                                             *
@@ -318,6 +321,9 @@ let squash_resource = squash_resource.resource_improve squash_resource (equal_te
 
 (*
  * $Log$
+ * Revision 1.4  1998/04/21 19:54:47  jyh
+ * Upgraded refiner for program extraction.
+ *
  * Revision 1.3  1998/04/09 18:26:03  jyh
  * Working compiler once again.
  *

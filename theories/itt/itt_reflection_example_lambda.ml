@@ -71,3 +71,14 @@ interactive mk_apply_wf  {| intro[] |} :
    sequent { <H> >- mk_apply{'t;'s} in LambdaTerm }
 
 
+define unfold_dest_lambda_term: dest_lambda_term{'t; v.'var_case['v]; f.'lambda_case['f]; a,b.'apply_case['a;'b]} <-->
+   dest_bterm{'t;
+              v. 'var_case['v];
+              op,subterms.
+                 if Itt_synt_operator!is_same_op{lambda_term;'op}
+                  then 'lambda_case[nth{'subterms;0}]
+                  else 'apply_case[nth{'subterms;0};nth{'subterms;1}]
+             }
+
+
+

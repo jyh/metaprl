@@ -43,24 +43,28 @@ open Mp_resource
 open Refiner.Refiner.Term
 open Refiner.Refiner.Rewrite
 open Dtactic
+open Term_match_table
 
-(*
-type ge_elim_data_type = int -> tactic_arg -> term
+type ge_elim_type = int -> tactic_arg -> (term list * (int -> tactic))
+type ge_intro_type = tactic_arg -> (term list * tactic)
 
-val extract_ge_elim_data_data : (term * (term list -> ge_elim_data_type)) list -> ge_elim_data_type
-val extract_ge_elim_data_data : (term * (rewrite_rule -> ge_elim_data_type)) list -> ge_elim_data_type
+(*val extract_ge_elim_data : (int -> tactic) term_map_table -> int -> tactic_arg -> ((term list) * (int -> tactic))*)
+
+resource (term * (term list) * (int -> tactic), ge_elim_type) ge_elim
+resource (term * (term list) * tactic, ge_intro_type) ge_intro
+
+(*val process_ge_elim_resource_annotation :
+   (Tactic.pre_tactic, term * (term list) * (int -> tactic)) annotation_processor
 *)
+(*
+val all2ge : tactic_arg -> (term list list * tactic) list
 
-(*resource (term * (int -> tactic), (int -> tactic)) ge_elim*)
-(*resource (term * (term list -> ge_elim_data_type), ge_elim_data_type) ge_elim_data*)
-(*resource (term * (rewrite_rule -> ge_elim_data_type), ge_elim_data_type) ge_elim_data*)
-(*resource (term * (string * int option * tactic), tactic) ge_intro*)
+val prefix : 'a -> ('a list list) -> ('a list list)
+val product : ('a list list) -> ('a list list) -> ('a list list)
+val list_product : ('a list list list) -> ('a list list)
 
-(*val process_ge_elim_data_resource_annotation :
-   (Tactic.pre_tactic * elim_option list, term * (term list -> ge_elim_data_type)) annotation_processor
-val process_ge_elim_data_resource_annotation :
-   (Tactic.pre_tactic * elim_option list, term * (rewrite_rule -> ge_elim_data_type)) annotation_processor*)
-
+val all2ge_flat : tactic_arg -> term list * tactic
+*)
 (* Parts of normalizeC, use for debugging
 topval sub_elimC : conv
 topval mul_normalizeC : conv
@@ -68,11 +72,12 @@ topval add_normalizeC : conv
 topval injectCoefC : conv
 topval mul_BubbleSortC : conv
 topval mul_BubbleStep2C : conv
-*)
+
 topval sum_same_products1C : conv
 topval sum_same_products2C : conv
 topval sum_same_products3C : conv
 topval sum_same_products4C : conv
+*)
 topval normalizeC : conv
 
 topval arithT : tactic
@@ -83,16 +88,15 @@ topval arithT : tactic
 topval genT : term list -> int -> int -> int -> int -> int -> tactic
 
 (* sometimes these parts of arithT are useful to figure out why arithT does not work
+*)
 topval neqInConcl2HypT : tactic
 topval arithRelInConcl2HypT : tactic
 topval negativeHyp2ConclT : int -> tactic
-topval reduceIneqT : int -> tactic
 topval findContradRelT : tactic
 topval reduceContradRelT : int -> tactic
-*)
-(*topval conv2geT : int -> tactic*)
-(*topval testT : int -> tactic*)
-(*topval all2geT : tactic*)
-
-(*topval tT : tactic
+(**)
+(*
+topval testT : int -> tactic
+topval conv2geT : int -> tactic
+topval all2geT : tactic
 *)

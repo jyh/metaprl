@@ -26,7 +26,7 @@ Module M_ast
 
 // Define the term-set to be used.
 
-Terms -extend "M_ast" {
+Terms -extend "M_ir" {
    // Define our own list terms
    declare mcons{'el; 'list}
    declare mnil
@@ -48,6 +48,7 @@ Terms -extend "M_ast" {
    declare AtomInt[n]
    declare AtomFun{'e}
    declare AtomBinop{'op; 'a1; 'a2}
+   declare AtomVar{'v}
 
    // Expressions
    declare LetAtom{'a; 'e}
@@ -56,8 +57,8 @@ Terms -extend "M_ast" {
    declare LetPair{'a1; 'a2; 'e}
    declare LetSubscript{'a1; 'a2; 'e}
    declare SetSubscript{'a1; 'a2; 'a3; 'e}
-   declare LetFun{'e1; 'e2}
-   declare LetRecFun{'e1; 'e2}
+   declare FunDecl{'e}
+   declare FunDef{'f; 'e1}
    declare LetApply{'f; 'a; 'e}
    declare Return{'a}
 
@@ -134,27 +135,26 @@ Tokens -longest {
 Grammar -start exp {
    exp ::= LET ID<var[v:v]> EQ a<'a> IN exp<'e>
                                     => LetAtom{'a; v. 'e}
-    | LET ID<var[f:v]> LPAREN id_list<'params> RPAREN EQ exp<'e1> IN exp<'e2>
-                                    => LetAtom{AtomFun{bind_vars{'params; 'e1}}; f.'e2}
-    | LET REC ID<var[f:v]> LPAREN id_list<'params> RPAREN EQ exp<'e1> IN exp<'e2>
-                                    => LetAtom{f. AtomFun{bind_vars{'params; 'e1}}; f. 'e2}
+    | LET ID<var[f:v]> LPAREN ID<var[v:v]> RPAREN EQ exp<'e1> IN exp<'e2>
+                                    => FunDecl{f. FunDef{'f; AtomFun{v. 'e1}; 'e2}}
+    | LET REC ID<var[f:v]> LPAREN ID<var[v:v]> RPAREN EQ exp<'e1> IN exp<'e2>
+                                    => FunDecl{f. FunDef{'f; AtomFun{v. 'e1}; 'e2}}
     | LET ID<var[v:v]> EQ a<'a1> LBRACK a<'a2> RBRACK IN exp<'e>
                                     => LetSubscript{'a1; 'a2; v. 'e}
-    | LET ID<var[v:v]> EQ ID<var[f:v]> LPAREN a_list<'args> RPAREN IN exp<'e>
-                                    => LetApply{'f; 'args; v. 'e}
+    | LET ID<var[v:v]> EQ a<'f> LPAREN a<'a> RPAREN IN exp<'e>
+                                    => LetApply{'f; 'a; v. 'e}
     | LET ID<var[v:v]> EQ LPAREN a<'a1> COMMA a<'a2> RPAREN IN exp<'e>
                                     => LetPair{'a1; 'a2; v. 'e}
-    | ID<var[f:v]> LPAREN a_list<'args> RPAREN %prec prec_apply
-                                    => TailCall{'f; 'args}
+    | ID<var[f:v]> LPAREN a<'a> RPAREN %prec prec_apply
+                                    => TailCall{AtomVar{'f}; 'a}
     | IF a<'a> THEN exp<'e1> ELSE exp<'e2>
                                     => If{'a; 'e1; 'e2}
     | a<'a1> LBRACK a<'a2> RBRACK ASSIGN a<'a3> SEMI exp<'e>
                                     => SetSubscript{'a1; 'a2; 'a3; 'e}
     | a<'a> %prec prec_atom         => Return{'a}
 
-
    a ::= NUM<'i>                    => 'i
-      | ID                          {}
+      | ID<var[v:v]>                => AtomVar{'v}
       | FUN ID<var[v:v]> ARROW exp<'e>
                                     => AtomFun{v. 'e}
       | a<'a1> PLUS a<'a2>          => AtomBinop{AddOp{}; 'a1; 'a2}
@@ -169,15 +169,9 @@ Grammar -start exp {
       | a<'a1> EQ a<'a2>            => AtomBinop{EqOp{}; 'a1; 'a2}
       | a<'a1> NEQ a<'a2>           => AtomBinop{NeqOp{}; 'a1; 'a2}
 
-   // Not the most efficient way to parse lists...
-   a_list ::= a<'a>                 => mcons{'a; mnil{}}
-      | a<'a> COMMA a_list<'list>   => mcons{'a; 'list}
-
-   id_list ::= ID<var[v:v]>         => mcons{'v; mnil{}}
-      | ID<var[v:v]> COMMA id_list<'list>
-                                    => mcons{'v; 'list}
 }
 
 // Perform binding.
 Rewrites {
 }
+

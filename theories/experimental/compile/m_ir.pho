@@ -1,5 +1,5 @@
 (*
- * The M IR.
+ * The M IR description language.
  *
  * ----------------------------------------------------------------
  * Copyright (C) 2003 Adam Granicz, Caltech
@@ -43,6 +43,8 @@ Terms -extend "M_ir" {
    declare AtomInt[n]
    declare AtomFun{'e}
    declare AtomBinop{'op; 'a1; 'a2}
+   declare AtomVar{'v}
+   declare AtomFunVar{'v}
 
    declare LetAtom{'a; 'e}
    declare TailCall{'f; 'a}
@@ -51,10 +53,14 @@ Terms -extend "M_ir" {
    declare LetSubscript{'a1; 'a2; 'e}
    declare SetSubscript{'a1; 'a2; 'a3; 'e}
 
-   declare LetFun{'e1; 'e2}
-   declare LetRecFun{'e1; 'e2}
+   declare FunDef{'e}
+   declare FunDecl{'e}
    declare LetApply{'f; 'a; 'e}
    declare Return{'a}
+
+   declare LetClosure{'f; 'v; 'e}
+   declare CloseLambda{'e}
+   declare CloseApply{'a; 'e}
 }
 
 // Place global code here.
@@ -69,21 +75,25 @@ Tokens -longest {
    ID = "[_a-zA-Z][_a-zA-Z0-9]*"    { __token__[p:s]{'pos} -> 'p }
    NUM = "[0-9]+"                   { __token__[p:s]{'pos} -> AtomInt[p:n] }
 
+   CLAMBDA = "clambda"              {}
+   CLOSURE = "closure"              {}
+   DECL = "declare"                 {}
+   DEFINE = "define"                {}
    ELSE = "else"                    {}
-   END = "end"                      {}
-   FUN = "fun"                      {}
    IF = "if"                        {}
    IN = "in"                        {}
+   LAMBDA = "lambda"                {}
    LET = "let"                      {}
-   REC = "rec"                      {}
    THEN = "then"                    {}
 
    ARROW = "->"                     {}
    ASSIGN = "<-"                    {}
+   CAPPLY = "?"                     {}
    COMMA = ","                      {}
    DIV = "/"                        {}
    DOT = "\\."                      {}
    EQ = "="                         {}
+   FUNVAR = "\\^"                   {}
    GE = ">="                        {}
    GT = ">"                         {}
    LBRACK = "\\["                   {}
@@ -98,6 +108,7 @@ Tokens -longest {
    RPAREN = ")"                     {}
    SEMI = ";"                       {}
    TIMES = "*"                      {}
+   VAR = "@"                        {}
 
    * COMMENT = "//[^\\n]*"          {}
    * EOL = "\\n"                    {}
@@ -114,9 +125,9 @@ Tokens -longest {
 %left ELSE
 %left LT LE GT GE EQ NEQ
 %left PLUS MINUS
-%left TIMES DIV REM
+%left TIMES DIV REM CAPPLY
 %left LBRACK
-%right prec_apply
+%right LPAREN prec_apply
 
 // Specify grammar.
 // Must supply a start symbol.
@@ -125,29 +136,37 @@ Grammar -start exp {
 
    exp ::= LET ID<var[v:v]> EQ a<'a> IN exp<'e>
                                     => LetAtom{'a; v. 'e}
-    | LET ID<var[f:v]> LPAREN ID<var[v:v]> RPAREN EQ exp<'e1> IN exp<'e2>
-                                    => LetAtom{AtomFun{v. 'e1}; f. 'e2}
-    | LET REC ID<var[f:v]> LPAREN ID<var[v:v]> RPAREN EQ exp<'e1> IN exp<'e2>
-                                    => LetAtom{f. AtomFun{v. 'e1}; f. 'e2}
+    | DECL ID<var[f:v]> IN exp<'e>  => FunDecl{f. 'e}
+    | DEFINE ID<var[f:v]> EQ a<'a> IN exp<'e>
+                                    => FunDef{'f; 'a; 'e}
+    | LET CLOSURE ID<var[f:v]> EQ a<'a1> LPAREN a<'a2> RPAREN IN exp<'e>
+                                    => LetClosure{'a1; 'a2; f. 'e}
     | LET ID<var[v:v]> EQ a<'a1> LBRACK a<'a2> RBRACK IN exp<'e>
-                                    => LetSubscript{'a1; 'a2; v. 'e}
-    | LET ID<var[v:v]> EQ ID<var[f:v]> LPAREN a<'a> RPAREN IN exp<'e>
+                                    => LetSubscript{'a1; 'a2; v. 'e} 
+    | LET ID<var[v:v]> EQ a<'f> LPAREN a<'a> RPAREN IN exp<'e>
                                     => LetApply{'f; 'a; v. 'e}
     | LET ID<var[v:v]> EQ LPAREN a<'a1> COMMA a<'a2> RPAREN IN exp<'e>
                                     => LetPair{'a1; 'a2; v. 'e}
-    | ID<var[f:v]> LPAREN a<'a> RPAREN %prec prec_apply
+    | a<'f> LPAREN a<'a> RPAREN %prec prec_apply
                                     => TailCall{'f; 'a}
     | IF a<'a> THEN exp<'e1> ELSE exp<'e2>
                                     => If{'a; 'e1; 'e2}
     | a<'a1> LBRACK a<'a2> RBRACK ASSIGN a<'a3> SEMI exp<'e>
                                     => SetSubscript{'a1; 'a2; 'a3; 'e}
-    | a<'a> %prec prec_atom         => Return{'a}
+    | a<'a> %prec prec_atom         => 'a
 
 
    a ::= NUM<'i>                    => 'i
-      | ID                          {}
-      | FUN ID<var[v:v]> ARROW exp<'e>
+      | ID<var[v:v]> %prec prec_atom
+                                    => 'v
+      | VAR ID<var[v:v]>            => AtomVar{'v}
+      | FUNVAR ID<var[v:v]>         => AtomFunVar{'v}
+      | LAMBDA ID<var[v:v]> ARROW exp<'e>
                                     => AtomFun{v. 'e}
+      | CLAMBDA ID<var[v:v]> ARROW exp<'e>
+                                    => CloseLambda{v. 'e}
+      | a<'a1> CAPPLY a<'a2>        => CloseApply{'a1; 'a2}
+
       | a<'a1> PLUS a<'a2>          => AtomBinop{AddOp{}; 'a1; 'a2}
       | a<'a1> MINUS a<'a2>         => AtomBinop{SubOp{}; 'a1; 'a2}
       | a<'a1> TIMES a<'a2>         => AtomBinop{MulOp{}; 'a1; 'a2}
@@ -160,4 +179,16 @@ Grammar -start exp {
       | a<'a1> EQ a<'a2>            => AtomBinop{EqOp{}; 'a1; 'a2}
       | a<'a1> NEQ a<'a2>           => AtomBinop{NeqOp{}; 'a1; 'a2}
 
+      // Second-order variables.
+      // We simply spell out the common cases and fail on the rest.
+      | ID<var[v:v]> LBRACK ID<var[v1:v]> RBRACK
+                                    => var[v:v]{'v1}
+      | ID<var[v:v]> LBRACK ID<var[v1:v]> SEMI ID<var[v2:v]> RBRACK
+                                    => var[v:v]{'v1; 'v2}
+      | ID<var[v:v]> LBRACK ID<var[v1:v]> SEMI ID<var[v2:v]> SEMI ID<var[v3:v]> RBRACK
+                                    => var[v:v]{'v1; 'v2; 'v3}
+      | LPAREN a<'a> RPAREN         => 'a
+}
+
+Rewrites {
 }

@@ -201,6 +201,21 @@ prim_rw close_exp :
    LetClosure{AtomFunVar{'f}; 'v; g.
    'e2['g]}}}
 
+prim_rw ext_close_exp :
+   <:desc<
+      declare f in
+      define f = (clambda y -> e1[f; y]) ? v in
+         e2[f]>>
+   <-->
+   <:desc<
+      declare f in
+      define f = (lambda y ->
+         let closure g = ^f(@y) in
+            e1[g; y])
+      in
+      let closure g = ^f(v) in
+         e2[g]>>
+
 let closeC =
    repeatC (higherC close_exp)
 

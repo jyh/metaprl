@@ -356,6 +356,10 @@ prim typeEquality :
    sequent { <H> >- 'T Type } =
    it
 
+interactive type_type {| intro[] |} :
+   [main] sequent { <H> >- 'T Type } -->
+   sequent { <H> >- ('T Type) Type }
+
 doc <:doc< ************************************************************************
    @begin[doc]
    @modsubsection{Universe cumulativity}

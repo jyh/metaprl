@@ -181,6 +181,8 @@ val is_quotient_term : term -> bool
 val dest_quotient : term -> string * string * term * term
 val mk_quotient_term : string -> string -> term -> term -> term
 
+topval quotientT : int -> tactic
+
 (*
  * -*-
  * Local Variables:

@@ -291,7 +291,9 @@ let resource intro +=
  * The first two elimination forms are valid only if the goal
  * is an equality judgment.  For both cases, the judgment is true
  * if it is true for any two elements that are equal in the quotient type.
- * The difference is the ordering of the hypotheses in the subgoal.
+ *
+ * The @hreftactic[dT] tactic would use the first rule; for the second one use
+ * the @tactic[quotientT] tactic.
  * @end[doc]
  *)
 prim quotientElimination1 {| elim [ThinOption thinT] |} 'H 'J 'v 'w 'z :
@@ -302,7 +304,7 @@ prim quotientElimination1 {| elim [ThinOption thinT] |} 'H 'J 'v 'w 'z :
    sequent ['ext] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a] >- 's['a] = 't['a] in 'T['a] } =
    it
 
-interactive quotientElimination1_eq {| elim [ThinOption thinT] |} 'H 'J 'v 'w 'z 'e1 'e2:
+interactive quotientElimination1_eq 'H 'J 'v 'w 'z 'e1 'e2:
    [wf] sequent [squash] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a] >- "type"{'T['a]} } -->
    [main] sequent [squash] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a];
              v: 'A; w: 'A; z: 'E['v; 'w];
@@ -311,15 +313,24 @@ interactive quotientElimination1_eq {| elim [ThinOption thinT] |} 'H 'J 'v 'w 'z
            } -->
    sequent ['ext] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a] >- 's['a] = 't['a] in 'T['a] }
 
+(*! @docoff *)
+let quotientT i p =
+   let i,j = Sequent.hyp_indices p i in
+   match Var.maybe_new_vars ["v"; "w"; "z"; "e1"; "e2"] (Sequent.declared_vars p) with
+      [v; w; z; e1; e2] ->
+         quotientElimination1_eq i j v w z e1 e2 p
+    | _ ->
+         raise (Invalid_argument "Itt_quotient.quotientT")
+
 (*!
  * @begin[doc]
  * An equality assumption $a_1 = a_2 @in @quot{A; x; y; E[x, y]}$ implies
  * that $E[a_1, a_2]$.
  * @end[doc]
  *)
-prim quotient_equalityElimination {| elim [] |} 'H 'J 'v :
-   [main] ('g['v] : sequent ['ext] { 'H; x: 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]; 'J['x]; v: esquash{'E['a1; 'a2]} >- 'T['x] }) -->
-   sequent ['ext] { 'H; x: 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]; 'J['x] >- 'T['x] } =
+prim quotient_equalityElimination {| elim [ThinOption thinT] |} 'H 'J 'v :
+   [main] ('g['v] : sequent ['ext] { 'H; e: 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]; 'J['e]; v: esquash{'E['a1; 'a2]} >- 'T['e] }) -->
+   sequent ['ext] { 'H; e: 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]; 'J['e] >- 'T['e] } =
    'g[it]
 
 (*!
@@ -369,10 +380,8 @@ let resource typeinf += (quotient_term, infer_univ_dep0_dep1 dest_quotient_inf)
  * Subtyping of two quotient types.
  *)
 let quotient_subtypeT p =
-   (match Var.maybe_new_vars ["x"; "y"] (Sequent.declared_vars p) with
-       [x; y] ->
-          quotientSubtype (Sequent.hyp_count_addr p) x y
-     | _ -> failT) p
+   let x, y = maybe_new_vars2 p "x" "y" in
+      quotientSubtype (Sequent.hyp_count_addr p) x y p
 
 let resource sub +=
    (DSubtype ([<< quot x1, y1: 'A1 // 'E1['x1; 'y1] >>, << quot x2, y2: 'A2 // 'E2['x2; 'y2] >>;

@@ -1368,7 +1368,7 @@ B	b524	t524
 NSummary!interactive	interactive	interactive Summary
 O	o524	interactive
 NSummary!ext_rule	ext_rule	ext_rule Summary
-P	p3	String "doNotThinT (dT 2) thenT autoT"
+P	p3	String "quotientT 2 thenT autoT"
 O	o6	ext_rule p3
 NSummary!status_incomplete	status_incomplete	status_incomplete Summary
 O	o526	status_incomplete

@@ -9115,13 +9115,13 @@ T	t5191	o b5187 b5191
 B	b5192	t5191
 T	t5192	o3476 b5169 b5192
 B	b5193	t5192
-P	p5193	String "dT 0 thenT withT <<'v_1>> (dT 3) thenT autoT"
+P	p5193	String "dT 0 thenT withT <<'v_1>> (dT 2) thenT autoT"
 O	o5193	ext_rule p5193
 T	t5193	o3476 b5187 b10
 B	b5194	t5193
 T	t5194	o5193 b3475 b5194 b10 b10
 B	b5195	t5194
-P	p5195	String "dT 0 thenT withT <<'w>> (dT 3) thenT autoT"
+P	p5195	String "dT 0 thenT withT <<'w>> (dT 2) thenT autoT"
 O	o5195	ext_rule p5195
 T	t5195	o3476 b5190 b10
 B	b5196	t5195

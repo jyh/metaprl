@@ -52,7 +52,7 @@ declare address[name:s]
  * belongs to fun{'t1; 't2} and for any argument in 't1,
  * the application of the function does not modify the state.
  *)
-declare functional{'t1 : Ocaml; 't2 : Ocaml} : Ocaml
+declare functional{'t1 : OCaml; 't2 : OCaml} : OCaml
 
 (*
  * Judgment:
@@ -62,30 +62,30 @@ declare functional{'t1 : Ocaml; 't2 : Ocaml} : Ocaml
  *    e1, e2: the expressions being compared
  *    t: the type of the comparison
  *)
-declare equiv{'S; 'e1 : Ocaml; 'e2 : Ocaml; 't : Ocaml}
+declare equiv{'S; 'e1 : OCaml; 'e2 : OCaml; 't : OCaml}
 define member_unfold :
-   member{'S; 'e : Ocaml; 't : Ocaml} <--> equiv{'S; 'e; 'e; 't}
+   member{'S; 'e : OCaml; 't : OCaml} <--> equiv{'S; 'e; 'e; 't}
 
 (*
  * Judgment:
  * Two expressions are functionally equivalent if they are equivalent
  * and they are both values.
  *)
-declare value_equiv{'S; 'e1 : Ocaml; 'e2 : Ocaml; 't : Ocaml}
+declare value_equiv{'S; 'e1 : OCaml; 'e2 : OCaml; 't : OCaml}
 define value_member_unfold :
-   value_member{'S; 'e : Ocaml; 't : Ocaml} <--> value_equiv{'S; 'e; 'e; 't}
+   value_member{'S; 'e : OCaml; 't : OCaml} <--> value_equiv{'S; 'e; 'e; 't}
 
 (*
  * Judgment:
  * Untyped value judgment.
  *)
-declare is_value{'S; 'e : Ocaml}
+declare is_value{'S; 'e : OCaml}
 
 (*
  * Judgment:
  * t is a valid type.
  *)
-declare is_type{'t : Ocaml}
+declare is_type{'t : OCaml}
 
 (*
  * Equivalence of names.
@@ -100,17 +100,17 @@ declare name_equiv{'S; 'n1; 'n2}
  * expr: projects the program component
  * :expr_value: projects the program if it is a value
  *)
-declare process{'S; 'e : Ocaml}
-declare "value"{'S; 'e : Ocaml}
+declare process{'S; 'e : OCaml}
+declare "value"{'S; 'e : OCaml}
 declare spread{'process; e, S. 'body['e; 'S]}
 declare spread_value{'process; v, S. 'body['v; 'S]}
-declare expr_value{'S; 'e : Ocaml}
+declare expr_value{'S; 'e : OCaml}
 
 define state_unfold :
-   state{'S; 'e : Ocaml} <--> spread{process{'S; 'e}; v, S2. 'S2}
+   state{'S; 'e : OCaml} <--> spread{process{'S; 'e}; v, S2. 'S2}
 
 define expr_unfold :
-   expr{'S; 'e : Ocaml} <--> spread{process{'S; 'e}; v, S2. 'v}
+   expr{'S; 'e : OCaml} <--> spread{process{'S; 'e}; v, S2. 'v}
 
 (*
  * Operations on states.
@@ -137,7 +137,7 @@ prim value_equiv_is_equiv :
 (*
  * A functional function application to a value is a value.
  *)
-prim functional_apply_value ('t1 :> Ocaml) :
+prim functional_apply_value ('t1 :> OCaml) :
    sequent { <H> >- value_equiv{'S; 'a1; 'a2; 't2} } -->
    sequent { <H> >- value_equiv{'S; 'f1; 'f2; functional{'t1; 't2}} } -->
    sequent { <H> >- value_equiv{'S; apply{'f1; 'a1}; apply{'f2; 'a2}; 't2} } =

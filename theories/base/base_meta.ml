@@ -35,6 +35,7 @@ extends Summary
 extends Ocaml_df
 
 open Term_sig
+open Refiner.Refiner
 open Refiner.Refiner.TermType
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermMan
@@ -57,6 +58,7 @@ declare meta_eq[a:n,b:n]{'tt : 'a; 'ff : 'a} : 'a
 declare meta_eq[a:s,b:s]{'tt : 'a; 'ff : 'a} : 'a
 declare meta_eq[a:t,b:t]{'tt : 'a; 'ff : 'a} : 'a
 declare meta_eq[a:l,b:l]{'tt : 'a; 'ff : 'a} : 'a
+declare meta_eq[a:sh,b:sh]{'tt : 'a; 'ff : 'a} : 'a
 
 declare meta_lt[a:n,b:n]{'tt : 'a; 'ff : 'a} : 'a
 declare meta_lt[a:s,b:s]{'tt : 'a; 'ff : 'a} : 'a
@@ -111,6 +113,8 @@ let eq goal =
          Opname.eq t1 t2
     | [ MLevel l1; MLevel l2 ] ->
          l1 == l2
+    | [ Shape sh1; Shape sh2 ] ->
+         TermShape.eq sh1 sh2
     | _ ->
          raise (RefineError ("meta_eq", StringTermError ("ill-formed operation", goal)))
    in
@@ -123,6 +127,7 @@ ml_rw reduce_meta_eq_num : ('goal : meta_eq[a:n, b:n]{'tt; 'ff}) = eq goal
 ml_rw reduce_meta_eq_str : ('goal : meta_eq[a:s, b:s]{'tt; 'ff}) = eq goal
 ml_rw reduce_meta_eq_tok : ('goal : meta_eq[a:t, b:t]{'tt; 'ff}) = eq goal
 ml_rw reduce_meta_eq_lev : ('goal : meta_eq[a:l, b:l]{'tt; 'ff}) = eq goal
+ml_rw reduce_meta_eq_shp : ('goal : meta_eq[a:sh, b:sh]{'tt; 'ff}) = eq goal
 
 let lt goal =
    let true_term, false_term = two_subterms goal in

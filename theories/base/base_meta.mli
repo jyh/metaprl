@@ -50,6 +50,7 @@ declare meta_eq[a:n, b:n]{'tt : 'a; 'ff : 'a} : 'a
 declare meta_eq[a:s, b:s]{'tt : 'a; 'ff : 'a} : 'a
 declare meta_eq[a:t, b:t]{'tt : 'a; 'ff : 'a} : 'a
 declare meta_eq[a:l, b:l]{'tt : 'a; 'ff : 'a} : 'a
+declare meta_eq[a:sh,b:sh]{'tt : 'a; 'ff : 'a} : 'a
 
 declare meta_lt[a:n, b:n]{'tt : 'a; 'ff : 'a} : 'a
 declare meta_lt[a:s, b:s]{'tt : 'a; 'ff : 'a} : 'a

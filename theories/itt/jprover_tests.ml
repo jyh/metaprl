@@ -78,7 +78,13 @@ interactive jen2 :
 interactive subst :
    sequent ['ext] { >- (all x:'T. ('A['x] or 'B['x])) & ((exst y:'T. 'A['y]) => (exst z:'T. ("not"{'A['z]}))) & (all x:'T. "not"{'B['x]}) =>  'Dummy }
 
+(* barber *)
 
+interactive barber 'H 'barber :
+   sequent [squash] { 'H >- "type"{'People} } -->
+   sequent [squash] { 'H >- member{'People; 'barber} } -->
+   sequent [squash] { 'H; p1: 'People; p2: 'People >- "type"{'shaves['p1;'p2]} } -->
+   sequent ['ext] { 'H; x: all person:'People. "iff"{'shaves['barber;'person];."not"{'shaves['person;'person]}} >- "false" }
 
 (* Eliminating given free variables: *)
 (* --------------------------------- *)

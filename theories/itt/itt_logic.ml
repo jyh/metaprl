@@ -1089,8 +1089,12 @@ struct
    let dest_all = dest_all
    let is_exists_term = is_exists_term
    let dest_exists = dest_exists
-   let is_and_term = is_and_term
-   let dest_and = dest_and
+   let is_and_term t = is_and_term t || is_iff_term t
+   let dest_and t =
+      if is_iff_term t then let a, b = dest_iff t in
+         (mk_implies_term a b, mk_implies_term b a)
+      else
+         dest_and t
    let is_or_term = is_or_term
    let dest_or = dest_or
    let is_implies_term = is_implies_term

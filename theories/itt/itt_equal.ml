@@ -163,10 +163,6 @@ let try_dest_univ t =
 
 let it_term = << it >>
 
-let squash_term = << squash >>
-let squash_opname = opname_of_term squash_term
-let is_squash_term = is_no_subterms_term squash_opname
-
 (************************************************************************
  * EQCD RESOURCE                                                        *
  ************************************************************************)

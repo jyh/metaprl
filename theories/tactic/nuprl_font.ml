@@ -436,7 +436,10 @@ declare ensuremath{'t}
 declare mathBB[name:s]
 declare mathmacro[name:s]
 
-dform ensuremath_df1 : internal :: mode[tex] :: ensuremath[text:s] =
+dform ensuremath_df0 : internal :: except_mode[tex] :: ensuremath{'t} =
+   't
+
+dform ensuremath_df1 : internal :: ensuremath[text:s] =
    ensuremath{slot[text:s]}
 
 dform ensuremath_df2 : internal :: mode[tex] :: ensuremath{'t} =

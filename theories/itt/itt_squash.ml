@@ -1,6 +1,7 @@
 (*!
  * @begin[spelling]
- * squashT unhiding unsquashed unsquashEqual unsquashGoalEqual
+ * squashT unhiding unsquashed unsquashEqual unsquashGoalEqual SelectOption
+ * autoT squashElim squashFormation squashFromAny squashStable unsquashEqualWeak
  * @end[spelling]
  *
  * @begin[doc]
@@ -167,16 +168,6 @@ dform squash_df : except_mode[src] :: squash{'A} = math_squash{'A}
  * RULES                                                                *
  ************************************************************************)
 
-(*
- * H >- Ui ext squash(A)
- * by setFormation a A
- * H >- Ui ext A
- *)
-prim squashFormation 'H 'A :
-   ('A : sequent ['ext] { 'H >- univ[i:l] }) -->
-   sequent ['ext] { 'H >- univ[i:l] } =
-   squash{'A}
-
 (*!
  * @begin[doc]
  * @rules
@@ -187,7 +178,7 @@ prim squashFormation 'H 'A :
  *)
 prim squashEquality {| intro_resource []; eqcd_resource |} 'H  :
    [wf] sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
-   sequent ['ext] { 'H >- squash{'A2} = squash{'A1} in univ[i:l] } = it
+   sequent ['ext] { 'H >- squash{'A1} = squash{'A2} in univ[i:l] } = it
 
 prim squashType {| intro_resource [] |} 'H :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
@@ -199,51 +190,44 @@ prim squashType {| intro_resource [] |} 'H :
  * @thysubsection{Introduction}
  *
  * A squashed type $<<squash{'A}>>$ is true if $A$ is true.
+ * This rule is irreversible, so we use @tt{SelectOption 0} to prevent @tt{autoT}
+ * from using it.
  * @end[doc]
  *)
-prim squashMemberFormation {| intro_resource [] |} 'H :
+prim squashMemberFormation {| intro_resource [SelectOption 0] |} 'H :
    [wf] sequent [squash] { 'H >- 'A } -->
    sequent ['ext]   { 'H >- squash{'A} } =
    it
 
 (*!
  * @begin[doc]
- * @thysubsection{Membership}
+ * @thysubsection{Elimination}
  *
- * The first rule states that witness of a provable squash type is $@it$ and
- * the second rule states the same on meta-level about sequents.
+ * The first rule, @tt{unsquashEqual}, allows equalities to
+ * be unsquashed (because the proof can always be inferred).
+ * The second rule, @tt{squashElim} show that $@it$ is the only element
+ * of a non-empty squashed type.
+ * The third rule, @tt{squashFromAny} allowed to infer a squashed
+ * sequent form from any sequent form, effectively allowing us to
+ * "forget" a meta-witness (extract) if we do not need it.
  * @end[doc]
  *)
-prim squashMemberEquality {| intro_resource []; eqcd_resource |} 'H :
-   [wf] sequent [squash] { 'H >- 'A } -->
-   sequent ['ext] { 'H >- it IN squash{'A} } =
+prim unsquashEqualWeak 'H 'J :
+   sequent [squash] { 'H; u: 'P; 'J >- 'x = 'y in 'A } -->
+   sequent ['ext] { 'H; u: squash{'P}; 'J >- 'x = 'y in 'A } =
    it
+
+prim squashElim 'H 'J :
+   ('t : sequent ['ext] { 'H; u: squash{'P}; 'J[it] >- 'C[it] }) -->
+   sequent ['ext] { 'H; u: squash{'P}; 'J['u] >- 'C['u] } =
+   't
 
 prim squashFromAny 'H 'ext :
    sequent ['ext] { 'H >- 'T } -->
    sequent [squash] { 'H >- 'T } =
    it
 
-(*!
- * @begin[doc]
- * @thysubsection{Elimination}
- *
- * The next two rules allow special cases for squashed hypotheses to be
- * unsquashed.  The first rule, @tt{unsquashEqual}, allows equalities to
- * be unsquashed (because the proof can always be inferred), and the
- * @tt{unsquashGoalEqual} rule allows hypotheses to be unsquashed if
- * an equality is being proved (for the same reason).
- * @end[doc]
- *)
-prim unsquashEqual 'H 'J 'u :
-   ('t['u] : sequent ['ext] { 'H; u: 'x = 'y in 'A; 'J[it] >- 'C[it] }) -->
-   sequent ['ext] { 'H; u: squash{('x = 'y in 'A)}; 'J['u] >- 'C['u] } =
-   't[it]
-
-prim unsquashGoalEqual 'H 'J 'u :
-   sequent [squash] { 'H; u: 'P; 'J[it] >- 'x[it] = 'y[it] in 'T[it] } -->
-   sequent ['ext] { 'H; u: squash{'P}; 'J['u] >- 'x['u] = 'y['u] in 'T['u] } =
-   it
+(*! @docoff *)
 
 (************************************************************************
  * TYPE INFERENCE                                                       *
@@ -251,6 +235,72 @@ prim unsquashGoalEqual 'H 'J 'u :
 
 let typeinf_resource =
    Mp_resource.improve typeinf_resource (squash_term,  Typeinf.infer_map dest_squash)
+
+(************************************************************************
+ * THEOREMS                                                             *
+ ************************************************************************)
+
+(*!
+ * @begin[doc]
+ * @thysection{Derived Rules}
+ *
+ * First, we can prove a stronger version of @tt{unsquashEqualWeak} by
+ * combining it with @tt{squashElim}.
+ * @end[doc]
+ *)
+interactive unsquashEqual 'H 'J :
+   sequent [squash] { 'H; u: 'P; 'J[it] >- 'x[it] = 'y[it] in 'A[it] } -->
+   sequent ['ext] { 'H; u: squash{'P}; 'J['u] >- 'x['u] = 'y['u] in 'A['u] }
+
+(*!
+ * @begin[doc]
+ * Next, we prove that equality witness can always be recovered on meta-level.
+ * @end[doc]
+ *)
+interactive sqsqEqual 'H :
+   sequent [squash] { 'H >- 't IN 'A} -->
+   sequent ['ext] { 'H >- 't IN 'A}
+
+(*!
+ * @begin[doc]
+ * Next, we show that a witness of a provable hidden type is $@it$.
+ * @end[doc]
+ *)
+interactive squashMemberEquality {| intro_resource []; eqcd_resource |} 'H :
+   [wf] sequent [squash] { 'H >- squash{'A} } -->
+   sequent ['ext] { 'H >- it IN squash{'A} }
+
+(*!
+ * @begin[doc]
+ * The @tt{squashStable} rule establishes that we can unsquash a proposition
+ * when it is possible to recover it's witness from simply knowing the proposition
+ * to be true.
+ * @end[doc]
+ *)
+
+interactive squashStable 'H 'J 't :
+   [main] sequent [squash] { 'H >- squash{'A} } -->
+   [wf] sequent [squash] { 'H; x: 'A >- 't IN 'A } -->
+   sequent ['ext] { 'H >- 'A}
+
+interactive unsquashHypEqual 'H 'J :
+   sequent ['ext] { 'H; u: 'x = 'y in 'A; 'J[it] >- 'C[it] } -->
+   sequent ['ext] { 'H; u: squash{('x = 'y in 'A)}; 'J['u] >- 'C['u] }
+
+interactive unsquash 'H 'J :
+   sequent [squash] { 'H; u: 'P; 'J[it] >- squash{'T[it]} } -->
+   sequent ['ext] { 'H; u: squash{'P}; 'J['u] >- squash{'T['u]} }
+
+(*!
+ * @docoff
+ *
+ * H >- Ui ext squash(A)
+ * by squashFormation
+ * H >- Ui ext A
+ *)
+interactive squashFormation 'H :
+   sequent ['ext] { 'H >- univ[i:l] } -->
+   sequent ['ext] { 'H >- univ[i:l] }
 
 (************************************************************************
  * TYPES                                                                *
@@ -273,35 +323,6 @@ type squash_data = tactic term_stable
  *)
 resource (term * tactic, tactic, squash_data, unit) squash_resource
 (*! @docoff *)
-
-(************************************************************************
- * PRIMITIVES                                                           *
- ************************************************************************)
-
-let sqsquash_term = << squash >>
-let sqsquash_opname = opname_of_term squash_term
-
-(*
- * Is a goal squashed?
- *)
-let is_squash_sequent goal =
-   let args = args_of_sequent goal in
-      match dest_xlist args with
-         [flag] ->
-            Opname.eq (opname_of_term flag) sqsquash_opname
-       | _ ->
-            false
-
-let get_squash_arg goal =
-   let args = args_of_sequent goal in
-      match dest_xlist args with
-         [flag] ->
-            flag
-       | _ ->
-            raise (RefineError ("get_squash_arg", StringError "no argument"))
-
-let is_squash_goal p =
-   is_squash_sequent (goal p)
 
 (************************************************************************
  * IMPLEMENTATION                                                       *
@@ -351,6 +372,35 @@ let get_resource modname =
    Mp_resource.find squash_resource modname
 
 (************************************************************************
+ * PRIMITIVES                                                           *
+ ************************************************************************)
+
+let sqsquash_term = << squash >>
+let sqsquash_opname = opname_of_term squash_term
+
+(*
+ * Is a goal squashed?
+ *)
+let is_squash_sequent goal =
+   let args = args_of_sequent goal in
+      match dest_xlist args with
+         [flag] ->
+            Opname.eq (opname_of_term flag) sqsquash_opname
+       | _ ->
+            false
+
+let get_squash_arg goal =
+   let args = args_of_sequent goal in
+      match dest_xlist args with
+         [flag] ->
+            flag
+       | _ ->
+            raise (RefineError ("get_squash_arg", StringError "no argument"))
+
+let is_squash_goal p =
+   is_squash_sequent (goal p)
+
+(************************************************************************
  * TACTICS                                                              *
  ************************************************************************)
 
@@ -370,13 +420,17 @@ let squashT p =
    Sequent.get_tactic_arg p "squash" p
 
 let unsquashT i p =
-   let u, t = Sequent.nth_hyp p i in
-   let t = dest_squash t in
+   let t = Sequent.concl p in
    let j, k = Sequent.hyp_indices p i in
       if is_equal_term t then
-         unsquashEqual j k u p
-      else (* if is_equal_term (Sequent.concl p) then *)
-         unsquashGoalEqual j k u p
+         unsquashEqual j k p
+      else if is_squash_term t then
+         unsquash j k p
+      else (* if is_equal_term (dest_squash (fst (Sequent.nth_hyp p i)) then *)
+         unsquashHypEqual j k p
+
+let elim_resource =
+   Mp_resource.improve elim_resource (squash_term, unsquashT)
 
 let sqsquashT =
    squashT thenT dT 0

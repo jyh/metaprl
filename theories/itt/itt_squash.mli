@@ -53,18 +53,9 @@ declare squash{'A}
  ************************************************************************)
 
 
-(*
- * H >- Ui ext squash(A)
- * by setFormation a A
- * H >- Ui ext A
- *)
-rule squashFormation 'H 'A :
-   sequent ['ext] { 'H >- univ[i:l] } -->
-   sequent ['ext] { 'H >- univ[i:l] }
-
 rule squashEquality 'H  :
    sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
-   sequent ['ext] { 'H >- squash{'A2} = squash{'A1} in univ[i:l] }
+   sequent ['ext] { 'H >- squash{'A1} = squash{'A2} in univ[i:l] }
 
 rule squashType 'H :
    sequent [squash] { 'H >- "type"{'A} } -->
@@ -74,21 +65,43 @@ rule squashMemberFormation 'H :
    sequent [squash] { 'H >- 'A } -->
    sequent ['ext]   { 'H >- squash{'A} }
 
-rule squashMemberEquality 'H :
-   sequent [squash] { 'H >- 'A } -->
-   sequent ['ext] { 'H >- it IN squash{'A} }
+rule squashElim 'H 'J :
+   sequent ['ext] { 'H; u: squash{'P}; 'J[it] >- 'C[it] } -->
+   sequent ['ext] { 'H; u: squash{'P}; 'J['u] >- 'C['u] }
+
+rule unsquashEqual 'H 'J :
+   sequent [squash] { 'H; u: 'P; 'J[it] >- 'x[it] = 'y[it] in 'A[it] } -->
+   sequent ['ext] { 'H; u: squash{'P}; 'J['u] >- 'x['u] = 'y['u] in 'A['u] }
 
 rule squashFromAny 'H 'ext :
    sequent ['ext] { 'H >- 'T } -->
    sequent [squash] { 'H >- 'T }
 
-rule unsquashEqual 'H 'J 'u :
+rule squashMemberEquality 'H :
+   [wf] sequent [squash] { 'H >- squash{'A} } -->
+   sequent ['ext] { 'H >- it IN squash{'A} }
+
+rule squashStable 'H 'J 't :
+   [main] sequent [squash] { 'H >- squash{'A} } -->
+   [wf] sequent [squash] { 'H; x: 'A >- 't IN 'A } -->
+   sequent ['ext] { 'H >- 'A}
+
+rule unsquashHypEqual 'H 'J :
    sequent ['ext] { 'H; u: 'x = 'y in 'A; 'J[it] >- 'C[it] } -->
    sequent ['ext] { 'H; u: squash{('x = 'y in 'A)}; 'J['u] >- 'C['u] }
 
-rule unsquashGoalEqual 'H 'J 'u :
-   sequent [squash] { 'H; u: 'P; 'J[it] >- 'x[it] = 'y[it] in 'T[it] } -->
-   sequent ['ext] { 'H; u: squash{'P}; 'J['u] >- 'x['u] = 'y['u] in 'T['u] }
+rule unsquash 'H 'J :
+   sequent [squash] { 'H; u: 'P; 'J[it] >- squash{'T[it]} } -->
+   sequent ['ext] { 'H; u: squash{'P}; 'J['u] >- squash{'T['u]} }
+
+(*
+ * H >- Ui ext squash(A)
+ * by squashFormation
+ * H >- Ui ext A
+ *)
+rule squashFormation 'H :
+   sequent ['ext] { 'H >- univ[i:l] } -->
+   sequent ['ext] { 'H >- univ[i:l] }
 
 (************************************************************************
  * TACTICS                                                              *

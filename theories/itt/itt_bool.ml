@@ -72,8 +72,9 @@ open Base_dtactic
 open Base_auto_tactic
 
 open Itt_equal
-open Itt_logic
 open Itt_struct
+open Itt_squash
+open Itt_logic
 
 (************************************************************************
  * TERMS                                                                *

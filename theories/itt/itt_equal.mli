@@ -273,9 +273,6 @@ val is_univ_term : term -> bool
 val dest_univ : term -> level_exp
 val mk_univ_term : level_exp -> term
 
-val squash_term : term
-val is_squash_term : term -> bool
-
 val it_term : term
 
 (* Universe inference functions *)

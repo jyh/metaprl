@@ -1,6 +1,5 @@
 (*
- * The M Abstract Syntax.
- * Binding structure is imposed during parsing.
+ * The M IR.
  *
  * ----------------------------------------------------------------
  * Copyright (C) 2003 Adam Granicz, Caltech

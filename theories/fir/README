@@ -27,6 +27,9 @@ serve as notes to himself.  They may not make sense to others.
 -- Documentation: I'll try to maintain it, but I will plan on doing a massive
    clean-up at the end of summer (right before classes start).
 
+-- I should make sure automation, especially those rules added ``by hand'',
+   is actually being done ``intelligently''.
+
 Notable differences from the actual Mojave FIR:
 
 -- The following have been ``curried'' (since: lists are somewhat annoying

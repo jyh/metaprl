@@ -44,6 +44,8 @@
 extends Base_theory
 extends Mfir_basic
 
+open Top_conversionals
+
 (**************************************************************************
  * Declarations.
  **************************************************************************)
@@ -197,6 +199,16 @@ declare do_tyApply{ 'poly_ty; 'ty_list }
 
 (*!
  * @begin[doc]
+ *
+ * The term @tt[num_params] counts the number of parameters in an
+ * existential or universal type @tt[ty].
+ * @end[doc]
+ *)
+
+declare num_params{ 'ty }
+
+(*!
+ * @begin[doc]
  * @modsubsection{Type definitions}
  *
  * Type definitions defined parameterized types and unions.  The term
@@ -257,6 +269,46 @@ prim_rw reduce_do_tyApply_ind :
 (*!
  * @docoff
  *)
+
+let resource reduce += [
+   << do_tyApply{ 'poly_ty; nil } >>,
+      reduce_do_tyApply_base;
+   << do_tyApply{ tyDefPoly{ t. 'ty['t] }; cons{ 'a; 'b } } >>,
+      reduce_do_tyApply_ind
+]
+
+(*!
+ * @begin[doc]
+ *
+ * Counting the number of parameters in a type $<< tyExists{t. 'ty['t]} >>$
+ * or $<< tyAll{ t. 'ty['t]} >>$ is also straightforward. Note the
+ * bogus instantiation at $<< tyInt >>$ to address the problem of
+ * free variables.
+ * @end[doc]
+ *)
+
+prim_rw reduce_num_params_exists :
+   num_params{ tyExists{ t. 'ty['t] } } <-->
+   (1 +@ num_params{ 'ty[tyInt] })
+
+prim_rw reduce_num_params_all :
+   num_params{ tyAll{ t. 'ty['t] } } <-->
+   (1 +@ num_params{ 'ty[tyInt] })
+
+prim_rw reduce_num_params_any :
+   num_params{ 'ty } <-->
+   0
+
+(*!
+ * @docoff
+ *)
+
+let resource reduce += [
+   << num_params{ 'ty } >>,
+      (reduce_num_params_exists orelseC
+       reduce_num_params_all orelseC
+       reduce_num_params_any)
+]
 
 (*!
  * @begin[doc]
@@ -366,6 +418,10 @@ dform tyProject_df : except_mode[src] ::
 dform do_tyApply_df : except_mode[src] ::
    do_tyApply{ 'poly_ty; 'ty_list } =
    `"((" slot{'poly_ty} `") " slot{'ty_list} `")"
+
+dform num_params_df : except_mode[src] ::
+   num_params{ 'ty } =
+   bf["num_params"] `"(" slot{'ty} `")"
 
 (*
  * Type definitions.

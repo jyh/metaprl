@@ -417,20 +417,44 @@ prim wf_tyAll {| intro [] |} 'H 'a :
 (*!
  * @begin[doc]
  *
- * ...
+ * Type projections are well-formed if $i$ is in bounds.
  * @end[doc]
  *)
 
-(* XXX tyProject (multiple versions?) *)
+(*
+ * BUG: We might need another rule for tyProject since we can use
+ * a definition from the context to test $v.i = u$.  Or we might
+ * have variable aliasing $v1 = v2 = ...$.
+ *)
 
-(* GAGH variable equality??
-prim wf_tyProject {| intro [] |} 'H :
-   sequent [mfir] { 'H; v: var_def{ tyExists{ t. 'ty['t] } }; 'J['v] >-
+prim wf_tyProject 'H 'J :
+   sequent [mfir] { 'H;
+                    v: var_def{ polyKind[i:n]{'k}; tyExists{t. 'ty['t]} };
+                    'J['v] >-
+      "and"{ int_le{ 0; number[i:n] };
+             int_lt{ number[i:n]; num_params{tyExists{t. 'ty['t]}} } } } -->
+   sequent [mfir] { 'H;
+                    v: var_def{polyKind[i:n]{'k}; tyExists{t. 'ty['t]} };
+                    'J['v] >-
       type_eq{ tyProject[i:n]{ atomVar{'v} };
                tyProject[i:n]{ atomVar{'v} };
                small_type } }
    = it
-*)
+
+(*!
+ * @docoff
+ *)
+
+let d_wf_tyProject i p =
+   let j, k = Sequent.hyp_indices p i in
+      wf_tyProject j k p
+
+let resource auto += {
+   auto_name = "d_wf_tyProject";
+   auto_prec = fir_auto_prec;
+   auto_tac = onSomeHypT d_wf_tyProject;
+   auto_type = AutoNormal
+}
 
 (*!
  * @begin[doc]

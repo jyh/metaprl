@@ -75,6 +75,7 @@ declare tyAll{ t. 'ty['t] }
 declare tyProject[i:n]{ 'var }
 
 declare do_tyApply{ 'poly_ty; 'ty_list }
+declare num_params{ 'ty }
 
 (*
  * Type definitions.
@@ -93,5 +94,9 @@ declare nth_unionCase{ 'n; 'union_def }
 
 topval reduce_do_tyApply_base : conv
 topval reduce_do_tyApply_ind : conv
+
+topval reduce_num_params_exists : conv
+topval reduce_num_params_all : conv
+topval reduce_num_params_any : conv
 
 topval reduce_nth_unionCase : conv

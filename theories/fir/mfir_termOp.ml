@@ -319,6 +319,12 @@ let is_do_tyApply_term = is_2_dep0_term do_tyApply_opname
 let mk_do_tyApply_term = mk_2_dep0_term do_tyApply_opname
 let dest_do_tyApply_term = dest_2_dep0_term do_tyApply_opname
 
+let num_params_term = << num_params{ 'ty } >>
+let num_params_opname = opname_of_term num_params_term
+let is_num_params_term = is_1_dep0_term num_params_opname
+let mk_num_params_term = mk_1_dep0_term num_params_opname
+let dest_num_params_term = dest_1_dep0_term num_params_opname
+
 let tyDefPoly_term = << tyDefPoly{ t. 'ty['t] } >>
 let tyDefPoly_opname = opname_of_term tyDefPoly_term
 let is_tyDefPoly_term = is_0_dep0_1_dep1_term tyDefPoly_opname

@@ -269,6 +269,11 @@ val is_do_tyApply_term : term -> bool
 val mk_do_tyApply_term : term -> term -> term
 val dest_do_tyApply_term : term -> term * term
 
+val num_params_term : term
+val is_num_params_term : term -> bool
+val mk_num_params_term : term -> term
+val dest_num_params_term : term -> term
+
 val tyDefPoly_term : term
 val is_tyDefPoly_term : term -> bool
 val mk_tyDefPoly_term : string -> term -> term

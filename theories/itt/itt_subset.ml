@@ -211,7 +211,7 @@ doc <:doc< @docoff >>
 
 (* mem, member and subset are squash stable: *)      
       
-interactive subset_sqstable (* {| squash |} *) :
+interactive subset_sqstable {| squash |} :
    sequent [squash] { 'H >- squash{'A subset 'B} } -->
    sequent ['ext] { 'H >- 'A subset 'B }
 

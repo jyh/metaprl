@@ -71,6 +71,7 @@ open Base_auto_tactic
 open Itt_struct
 open Itt_record
 open Itt_grouplikeobj
+open Itt_squash
 open Itt_fun
 open Itt_int_ext
 open Itt_bisect
@@ -506,8 +507,7 @@ doc <:doc<
    Subgroup is squash-stable.
    @end[doc]
 >>
-interactive subgroup_squashStable :
-(*   [wf] sequent [squash] { 'H >- "type"{.'s^car} } -->*)
+interactive subgroup_squashStable {| squash |} :
    [wf] sequent [squash] { 'H >- squash{subgroup[i:l]{'S; 'G}} } -->
    sequent ['ext] { 'H >- subgroup[i:l]{'S; 'G} }
 doc <:doc< @docoff >>

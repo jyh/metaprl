@@ -273,6 +273,11 @@ interactive squashMemberEquality {| intro []; eqcd |} :
    [wf] sequent [squash] { 'H >- squash{'A} } -->
    sequent ['ext] { 'H >- it in squash{'A} }
 
+doc <:doc<@docoff>>
+interactive sqsqSq :
+   sequent [squash] { 'H >- squash{'A}} -->
+   sequent ['ext] { 'H >- squash{'A}}
+
 doc <:doc< 
    @begin[doc]
    The @tt[squashStable] rule establishes that we can unsquash a proposition
@@ -299,8 +304,6 @@ interactive unsquashStableGoal 'H :
    sequent ['ext] { 'H; u: squash{'A}; 'J['u]; x: squash{'C['u]} >- 'C['u] } -->
    sequent ['ext] { 'H; u: squash{'A}; 'J['u] >- 'C['u]}
 
-let unsquashStableGoalT = unsquashStableGoal
-
 interactive unsquashHypGoalStable 'H :
    sequent ['ext] { 'H; u: 'A; 'J[it] >- 'C[it] } -->
    sequent ['ext] { 'H; u: squash{'A}; 'J['u] >- 'A } -->
@@ -310,8 +313,6 @@ interactive unsquashStable 'H 't :
    sequent ['ext] { 'H; u: 'A; 'J[it] >- 'C[it] } -->
    sequent [squash] { 'H; u: squash{'A}; 'J['u]; x: 'A >- 't in 'A } -->
    sequent ['ext] { 'H; u: squash{'A}; 'J['u] >- 'C['u]}
-
-let unsquashStableT = unsquashStable
 
 interactive squashAssert 'A :
    sequent [squash] { 'H >- squash{'A} } -->
@@ -335,17 +336,20 @@ doc <:doc<
    @begin[doc]
    @resources
   
-   The @Comment!resource[squash_resource] keeps 3 kind of tactics, as described by the
+   The @Comment!resource[squash_resource] keeps 4 kind of tactics, as described by the
    @tt[squash_info] type. The $@tt[SqUnsquash](T,@i[tac])$ is used when @i{tac i}
    is capable turning @i{i}-th hypothesis from $@squash{T}$ into $T$.
    The $@tt[SqStable](T,t,@i[tac])$ variant is used when @i[tac] is capable
-   of proving $@sequent{;H;t @in T}$ from $@sequent{;H;T}$. Finally,
+   of proving $@sequent{;H;t @in T}$ from $@sequent{;H;T}$. Third,
    the $@tt[SqUnsquashGoal](T,@i[tac])$ is used when @i{tac i} can unsquash
-   @i{i}-th hypothesis provided the conclusion of the sequent is $T$.
+   @i{i}-th hypothesis provided the conclusion of the sequent is $T$. Finally, 
+   $@tt[SqStableGoal](T,@i[tac])$ is used when @i[tac] can prover $T$ from
+   $@squash{T}$.
   
    The only way to improve the @tt{squash_resource} outside of the
    @tt{Itt_squash} theory is to use @it{resource annotations}. Currently, the
    following kinds of rules are recognized by the @tt{squash_resource} annotations:
+   $@sequent{squash;H;@squash{A}}@space@leftrightarrow@space@sequent{ext;H;A}$,
    $@sequent{squash;H;A}@space@leftrightarrow@space@sequent{ext;H;t @in A}$,
    $@sequent{ext;H;t @in A}$ and $@sequent{ext;{H; x@colon A; J[x]};C[x]}$
    (e.g $A$ is a falsity), although it is possible
@@ -358,7 +362,7 @@ type squash_inf =
    SqUnsquash of (int -> tactic)
  | SqStable of term * tactic
  | SqUnsquashGoal of (int -> tactic)
-
+ | SqStableGoal of tactic
 
 type squash_info = term * squash_inf
 
@@ -407,12 +411,16 @@ let unsquash_tactic tbl i p =
          tac i p
     | (SqStable (t,tac) :: _), _ ->
          (unsquashWWitness i t thenT tac) p
+    | (SqStableGoal tac :: _), _ ->
+         (tac thenT unsquash i thenT squashMemberFormation) p
     | _, (SqStable (t,tac) :: _) ->
-         (unsquashStableT i t thenLT [ idT; tac thenT trivialT]) p
+         (unsquashStable i t thenLT [ idT; tac thenT trivialT]) p
     | _, (SqUnsquashGoal tac :: _) ->
           (unsquashHypGoalStable i thenLT [idT; tac i thenT trivialT]) p
     | (SqUnsquash tac :: _), _ ->
-         (unsquashStableGoalT i thenLT [idT; tac (-1) thenT trivialT ]) p
+         (unsquashStableGoal i thenLT [idT; tac (-1) thenT nthHypT (-1)]) p
+    | _, (SqStableGoal tac :: _) ->
+         (unsquashStableGoal i thenLT [idT; tac thenT nthHypT (-1)]) p
     | [], [] ->
          raise (RefineError ("squash", StringTermError ("squash tactic doesn't know about ", mk_xlist_term [hyp;<<slot[" |- "]>>;conc])))
 
@@ -423,8 +431,23 @@ let process_squash_resource_annotation name contexts args _ stmt tac =
    let egoal = TermMan.explode_sequent goal in
    let concl = SeqGoal.get egoal.sequent_goals 0 in
    match contexts, args, assums, (SeqHyp.to_list egoal.sequent_hyps) with
-      (* H |- T --> H |- a in T *)
+      (* H |- [T] --> H |- T *)
       [||], [], [_, _, assum], [Context(h,[])] when
+         let eassum = TermMan.explode_sequent assum in
+         SeqHyp.get eassum.sequent_hyps 0 = Context(h,[]) &&
+         let aconcl = SeqGoal.get eassum.sequent_goals 0 in
+         is_squash_term aconcl &&
+         alpha_equal (dest_squash aconcl) concl
+      ->
+         if not (is_squash_sequent assum) then
+            raise (Invalid_argument "squash_stable resource annotation: assumption sequent should be squashed");
+         let tac p =
+            Tactic_type.Tactic.tactic_of_rule tac [||] [] p
+         in
+            concl, SqStableGoal(tac)
+      (* H |- T --> H |- a in T *)
+    | [||], [], [_, _, assum], [Context(h,[])] when
+         is_equal_term concl &&
          let t,a,b = dest_equal concl in
          alpha_equal a b &&
          let eassum = TermMan.explode_sequent assum in
@@ -533,8 +556,9 @@ let unsquashT i p =
    Sequent.get_resource_arg p get_squash_resource (Sequent.get_pos_hyp_num p i) p
 
 let squashT p =
-   (squashAssert (concl p) thenLT
-      [ idT; unsquashT (-1) thenT trivialT ]) p
+   let ct = concl p in
+      if is_squash_term ct then raise(RefineError("squashT",StringError("already squashed")))
+      else (squashAssert ct thenLT [ idT; unsquashT (-1) thenT trivialT ]) p
 
 (* We want to see unsquashT's error message when squashElim is useless *)
 let squash_elimT i =
@@ -557,7 +581,10 @@ let sqsquashT p =
    if is_squash_goal p then
       raise (RefineError("sqsquashT", StringError("goal sequent already squashed")))
    else
-      (squashT thenT squashMemberFormation) p
+      if is_squash_term (concl p) then
+         sqsqSq p
+      else
+         (squashT thenT squashMemberFormation) p
 
 let unsqsquashT = squashFromAny
 

@@ -1,37 +1,5 @@
 (*
  * characters in the Nuprl font.
- *
- * $Log$
- * Revision 1.5  1998/04/29 20:53:48  jyh
- * Initial working display forms.
- *
- * Revision 1.4  1998/04/24 19:39:09  jyh
- * Updated debugging.
- *
- * Revision 1.3  1998/04/24 02:43:15  jyh
- * Added more extensive debugging capabilities.
- *
- * Revision 1.2  1998/04/17 01:31:25  jyh
- * Editor is almost constructed.
- *
- * Revision 1.1  1997/04/28 15:51:56  jyh
- * This is the initial checkin of Nuprl-Light.
- * I am porting the editor, so it is not included
- * in this checkin.
- *
- * Directories:
- *     refiner: logic engine
- *     filter: front end to the Ocaml compiler
- *     editor: Emacs proof editor
- *     util: utilities
- *     mk: Makefile templates
- *
- * Revision 1.2  1996/05/21 02:16:16  jyh
- * This is a semi-working version before Wisconsin vacation.
- *
- * Revision 1.1  1996/04/11 13:33:29  jyh
- * This is the final version with the old syntax for terms.
- *
  *)
 
 open Printf
@@ -45,14 +13,33 @@ let _ =
       eprintf "Loading Nuprl_font%t" eflush
 
 (* Displays *)
-declare mathbbP
-declare mathbbR
-declare mathbbN
-declare mathbbC
-declare mathbbQ
-declare mathbbZ
-declare mathbbU
+declare mathbbA
 declare mathbbB
+declare mathbbC
+declare mathbbD
+declare mathbbE
+declare mathbbF
+declare mathbbG
+declare mathbbH
+declare mathbbI
+declare mathbbJ
+declare mathbbK
+declare mathbbL
+declare mathbbM
+declare mathbbN
+declare mathbbO
+declare mathbbP
+declare mathbbQ
+declare mathbbR
+declare mathbbS
+declare mathbbT
+declare mathbbU
+declare mathbbV
+declare mathbbW
+declare mathbbX
+declare mathbbY
+declare mathbbZ
+
 declare shortLeftarrow
 declare Leftarrow
 declare Middlearrow
@@ -72,6 +59,20 @@ declare lambda
 declare gamma
 declare delta
 declare rho
+declare sigma
+declare epsilon
+declare eta
+declare theta
+declare iota
+declare kappa
+declare mu
+declare nu
+declare omicron
+declare tau
+declare phi
+declare xi
+declare omega
+
 declare wedge
 declare tneg
 declare member
@@ -122,83 +123,150 @@ declare subq
 declare subz
 
 (* Displays *)
-dform mathbbP_df		: mode[prl] :: mathbbP                   = `"\128"
-dform mathbbR_df		: mode[prl] :: mathbbR                   = `"\129"
-dform mathbbN_df		: mode[prl] :: mathbbN                   = `"\130"
+dform mathbbA_df		: mode[prl] :: mathbbA                   = `"\129"
+dform mathbbB_df		: mode[prl] :: mathbbB                   = `"\130"
 dform mathbbC_df		: mode[prl] :: mathbbC                   = `"\131"
-dform mathbbQ_df		: mode[prl] :: mathbbQ                   = `"\132"
-dform mathbbZ_df		: mode[prl] :: mathbbZ                   = `"\133"
-dform mathbbU_df		: mode[prl] :: mathbbU                   = `"\134"
-dform mathbbB_df		: mode[prl] :: mathbbB                   = `"\192"
-dform shortLeftarrow_df		: mode[prl] :: shortLeftarrow            = `"\135"
-dform leftarrow_df		: mode[prl] :: Leftarrow                 = `"\135\136"
-dform middlearrow_df		: mode[prl] :: Middlearrow               = `"\136"
-dform shortRightarrow_df	: mode[prl] :: shortRightarrow           = `"\137"
-dform rightarrow_df		: mode[prl] :: Rightarrow                = `"\136\137"
-dform ulcorner_df		: mode[prl] :: ulcorner                  = `"\138"
-dform urcorner_df		: mode[prl] :: urcorner                  = `"\139"
-dform vdash_df                  : mode[prl] :: vdash                     = `"\140"
-dform integral_df		: mode[prl] :: integral                  = `"\141"
-dform cdot_df                   : mode[prl] :: cdot                      = `"\142"
-dform downarrow_df		: mode[prl] :: downarrow                 = `"\143"
-dform uparrow_df		: mode[prl] :: uparrow                   = `"\162"
-dform alpha_df                  : mode[prl] :: alpha                     = `"\144"
-dform beta_df			: mode[prl] :: beta                      = `"\145"
-dform pi_df			: mode[prl] :: pi                        = `"\146"
-dform lambda_df			: mode[prl] :: lambda                    = `"\150"
-dform gamma_df			: mode[prl] :: gamma                     = `"\151"
-dform delta_df			: mode[prl] :: delta                     = `"\152"
-dform rho_df			: mode[prl] :: rho                       = `"\193"
-dform wedge_df			: mode[prl] :: wedge                     = `"\146"
-dform tneg_df			: mode[prl] :: tneg                      = `"\147"
-dform member_df			: mode[prl] :: member                    = `"\148"
-dform plusminus_df		: mode[prl] :: plusminus                 = `"\154"
-dform oplus_df			: mode[prl] :: oplus                     = `"\155"
-dform infty_df			: mode[prl] :: infty                     = `"\156"
-dform partial_df		: mode[prl] :: partial                   = `"\157"
-dform subset_df			: mode[prl] :: subset                    = `"\158"
-dform supset_df			: mode[prl] :: supset                    = `"\159"
-dform cap_df			: mode[prl] :: cap                       = `"\160"
-dform cup_df			: mode[prl] :: cup                       = `"\161"
-dform forall_df			: mode[prl] :: forall                    = `"\162"
-dform _df			: mode[prl] :: "exists"                  = `"\163"
-dform oinfty_df			: mode[prl] :: oinfty                    = `"\164"
+dform mathbbD_df		: mode[prl] :: mathbbD                   = `"\132"
+dform mathbbE_df		: mode[prl] :: mathbbE                   = `"\133"
+dform mathbbF_df		: mode[prl] :: mathbbF                   = `"\134"
+dform mathbbG_df		: mode[prl] :: mathbbG                   = `"\135"
+dform mathbbH_df		: mode[prl] :: mathbbH                   = `"\136"
+dform mathbbI_df		: mode[prl] :: mathbbI                   = `"\137"
+dform mathbbJ_df		: mode[prl] :: mathbbJ                   = `"\138"
+dform mathbbK_df		: mode[prl] :: mathbbK                   = `"\139"
+dform mathbbL_df		: mode[prl] :: mathbbL                   = `"\140"
+dform mathbbM_df		: mode[prl] :: mathbbM                   = `"\141"
+dform mathbbN_df		: mode[prl] :: mathbbN                   = `"\142"
+dform mathbbO_df		: mode[prl] :: mathbbO                   = `"\143"
+dform mathbbP_df		: mode[prl] :: mathbbP                   = `"\144"
+dform mathbbQ_df		: mode[prl] :: mathbbQ                   = `"\145"
+dform mathbbR_df		: mode[prl] :: mathbbR                   = `"\146"
+dform mathbbS_df		: mode[prl] :: mathbbS                   = `"\147"
+dform mathbbT_df		: mode[prl] :: mathbbT                   = `"\148"
+dform mathbbU_df		: mode[prl] :: mathbbU                   = `"\149"
+dform mathbbV_df		: mode[prl] :: mathbbV                   = `"\150"
+dform mathbbW_df		: mode[prl] :: mathbbW                   = `"\151"
+dform mathbbX_df		: mode[prl] :: mathbbX                   = `"\152"
+dform mathbbY_df		: mode[prl] :: mathbbY                   = `"\153"
+dform mathbbZ_df		: mode[prl] :: mathbbZ                   = `"\154"
+
+dform shortLeftarrow_df		: mode[prl] :: shortLeftarrow            = `"\1565"
+dform leftarrow_df		: mode[prl] :: Leftarrow                 = `"\220\221"
+dform middlearrow_df		: mode[prl] :: Middlearrow               = `"\221"
+dform shortRightarrow_df	: mode[prl] :: shortRightarrow           = `"\158"
+dform rightarrow_df		: mode[prl] :: Rightarrow                = `"\221\222"
+dform ulcorner_df		: mode[prl] :: ulcorner                  = `"\154"
+dform urcorner_df		: mode[prl] :: urcorner                  = `"\155"
+dform vdash_df                  : mode[prl] :: vdash                     = `"\159"
+dform integral_df		: mode[prl] :: integral                  = `"\160"
+dform cdot_df                   : mode[prl] :: cdot                      = `"\204"
+dform downarrow_df		: mode[prl] :: downarrow                 = `"\205"
+dform uparrow_df		: mode[prl] :: uparrow                   = `"\206"
+dform alpha_df                  : mode[prl] :: alpha                     = `"\161"
+dform beta_df			: mode[prl] :: beta                      = `"\162"
+dform pi_df			: mode[prl] :: pi                        = `"\176"
+dform lambda_df			: mode[prl] :: lambda                    = `"\171"
+dform gamma_df			: mode[prl] :: gamma                     = `"\163"
+dform delta_df			: mode[prl] :: delta                     = `"\164"
+dform rho_df			: mode[prl] :: rho                       = `"\177"
+dform sigma_df			: mode[prl] :: sigma                     = `"\178"
+dform epsilon_df		: mode[prl] :: epsilon                   = `"\165"
+dform eta_df			: mode[prl] :: eta                       = `"\167"
+dform theta_df			: mode[prl] :: theta                     = `"\168"
+dform iota_df			: mode[prl] :: iota                      = `"\169"
+dform kappa_df			: mode[prl] :: kappa                     = `"\170"
+dform mu_df			: mode[prl] :: mu                        = `"\172"
+dform nu_df			: mode[prl] :: nu                        = `"\173"
+dform omicron_df		: mode[prl] :: omicron                   = `"\175"
+dform tau_df			: mode[prl] :: tau                       = `"\179"
+dform phi_df			: mode[prl] :: phi                       = `"\181"
+dform xi_df			: mode[prl] :: xi                        = `"\182"
+dform omega_df			: mode[prl] :: omega                     = `"\184"
+
+dform wedge_df			: mode[prl] :: wedge                     = `"\207"
+dform tneg_df			: mode[prl] :: tneg                      = `"\191"
+dform member_df			: mode[prl] :: member                    = `"\209"
+dform plusminus_df		: mode[prl] :: plusminus                 = `"\210"
+dform oplus_df			: mode[prl] :: oplus                     = `"XXX"
+dform infty_df			: mode[prl] :: infty                     = `"XXX"
+dform partial_df		: mode[prl] :: partial                   = `"\211"
+dform subset_df			: mode[prl] :: subset                    = `"\212"
+dform supset_df			: mode[prl] :: supset                    = `"\213"
+dform cap_df			: mode[prl] :: cap                       = `"\214"
+dform cup_df			: mode[prl] :: cup                       = `"\215"
+dform forall_df			: mode[prl] :: forall                    = `"\216"
+dform exists_df			: mode[prl] :: "exists"                  = `"\217"
+dform oinfty_df			: mode[prl] :: oinfty                    = `"XXX"
 dform shortleftrightarrow_df	: mode[prl] :: shortleftrightarrow       = `"\165"
-dform shortleftarrow_df		: mode[prl] :: shortleftarrow            = `"\166"
-dform shortrightarrow_df	: mode[prl] :: shortrightarrow           = `"\167"
-dform longleftrightarrow_df	: mode[prl] :: longleftrightarrow        = `"\135\136\136\137"
-dform longleftarrow_df		: mode[prl] :: longleftarrow             = `"\135\136\136"
-dform longrightarrow_df		: mode[prl] :: longrightarrow            = `"\136\136\137"
-dform neq_df			: mode[prl] :: neq                       = `"\168"
-dform sim_df			: mode[prl] :: sim                       = `"\169"
-dform le_df			: mode[prl] :: le                        = `"\170"
-dform ge_df			: mode[prl] :: ge                        = `"\171"
-dform equiv_df			: mode[prl] :: equiv                     = `"\172"
-dform vee_df			: mode[prl] :: vee                       = `"\173"
-dform leftarrow_df		: mode[prl] :: leftarrow                 = `"\174\175"
-dform middlearrow_df		: mode[prl] :: middlearrow               = `"\175"
-dform rightarrow_df		: mode[prl] :: rightarrow                = `"\175\176"
-dform sigma_df			: mode[prl] :: Sigma                     = `"\177"
-dform delta_df			: mode[prl] :: Delta                     = `"\178"
-dform pi_df			: mode[prl] :: Pi                        = `"\179"
-dform times_df			: mode[prl] :: times                     = `"\180"
-dform div_df            	: mode[prl] :: "div"                     = `"\181"
-dform supplus_df		: mode[prl] :: supplus                   = `"\182"
-dform supminus_df		: mode[prl] :: supminus                  = `"\183"
-dform supcirc_df		: mode[prl] :: supcirc                   = `"\184"
-dform subseteq_df		: mode[prl] :: subseteq                  = `"\185"
-dform supseteq_df		: mode[prl] :: supseteq                  = `"\186"
-dform subzero_df		: mode[prl] :: subzero                   = `"\187"
-dform subone_df			: mode[prl] :: subone                    = `"\188"
-dform subtwo_df			: mode[prl] :: subtwo                    = `"\189"
-dform subthree_df		: mode[prl] :: subthree                  = `"\190"
-dform suba_df			: mode[prl] :: suba                      = `"\194"
-dform subb_df			: mode[prl] :: subb                      = `"\196"
-dform subc_df			: mode[prl] :: subc                      = `"\198"
-dform subq_df			: mode[prl] :: subq                      = `"\195"
-dform subz_df			: mode[prl] :: subz                      = `"\197"
+dform shortleftarrow_df		: mode[prl] :: shortleftarrow            = `"\220"
+dform shortrightarrow_df	: mode[prl] :: shortrightarrow           = `"\222"
+dform longleftrightarrow_df	: mode[prl] :: longleftrightarrow        = `"\223\221\221\222"
+dform longleftarrow_df		: mode[prl] :: longleftarrow             = `"\220\221\221"
+dform longrightarrow_df		: mode[prl] :: longrightarrow            = `"\221\221\222"
+dform neq_df			: mode[prl] :: neq                       = `"225"
+dform sim_df			: mode[prl] :: sim                       = `"XXX"
+dform le_df			: mode[prl] :: le                        = `"\218"
+dform ge_df			: mode[prl] :: ge                        = `"\219"
+dform equiv_df			: mode[prl] :: equiv                     = `"\226"
+dform vee_df			: mode[prl] :: vee                       = `"\208"
+dform leftarrow_df		: mode[prl] :: leftarrow                 = `"\223\221"
+dform middlearrow_df		: mode[prl] :: middlearrow               = `"\221"
+dform rightarrow_df		: mode[prl] :: rightarrow                = `"\221\222"
+dform sigma_df			: mode[prl] :: Sigma                     = `"\199"
+dform delta_df			: mode[prl] :: Delta                     = `"\194"
+dform pi_df			: mode[prl] :: Pi                        = `"\198"
+dform times_df			: mode[prl] :: times                     = `"\227"
+dform div_df            	: mode[prl] :: "div"                     = `"\228"
+dform supplus_df		: mode[prl] :: supplus                   = `"\229"
+dform supminus_df		: mode[prl] :: supminus                  = `"\230"
+dform supcirc_df		: mode[prl] :: supcirc                   = `"\231"
+dform subseteq_df		: mode[prl] :: subseteq                  = `"\232"
+dform supseteq_df		: mode[prl] :: supseteq                  = `"\233"
+dform subzero_df		: mode[prl] :: subzero                   = `"\240"
+dform subone_df			: mode[prl] :: subone                    = `"\241"
+dform subtwo_df			: mode[prl] :: subtwo                    = `"\242"
+dform subthree_df		: mode[prl] :: subthree                  = `"\244"
+dform suba_df			: mode[prl] :: suba                      = `"\237"
+dform subb_df			: mode[prl] :: subb                      = `"\236"
+dform subc_df			: mode[prl] :: subc                      = `"\238"
+dform subq_df			: mode[prl] :: subq                      = `"XXX"
+dform subz_df			: mode[prl] :: subz                      = `"\235"
 
 (*
+ * $Log$
+ * Revision 1.6  1998/05/07 16:03:02  jyh
+ * Adding interactive proofs.
+ *
+ * Revision 1.5  1998/04/29 20:53:48  jyh
+ * Initial working display forms.
+ *
+ * Revision 1.4  1998/04/24 19:39:09  jyh
+ * Updated debugging.
+ *
+ * Revision 1.3  1998/04/24 02:43:15  jyh
+ * Added more extensive debugging capabilities.
+ *
+ * Revision 1.2  1998/04/17 01:31:25  jyh
+ * Editor is almost constructed.
+ *
+ * Revision 1.1  1997/04/28 15:51:56  jyh
+ * This is the initial checkin of Nuprl-Light.
+ * I am porting the editor, so it is not included
+ * in this checkin.
+ *
+ * Directories:
+ *     refiner: logic engine
+ *     filter: front end to the Ocaml compiler
+ *     editor: Emacs proof editor
+ *     util: utilities
+ *     mk: Makefile templates
+ *
+ * Revision 1.2  1996/05/21 02:16:16  jyh
+ * This is a semi-working version before Wisconsin vacation.
+ *
+ * Revision 1.1  1996/04/11 13:33:29  jyh
+ * This is the final version with the old syntax for terms.
+ *
  * -*-
  * Local Variables:
  * Caml-master: "prlcomp.run"

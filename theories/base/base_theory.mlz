@@ -10,9 +10,13 @@ include Base_dform
 include Nuprl_font
 include Typeinf
 include Base_dtactic
+include Base_cache
 
 (*
  * $Log$
+ * Revision 1.5  1998/05/07 16:03:00  jyh
+ * Adding interactive proofs.
+ *
  * Revision 1.4  1998/04/29 20:53:46  jyh
  * Initial working display forms.
  *

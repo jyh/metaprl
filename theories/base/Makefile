@@ -15,6 +15,7 @@ NLFILES :=\
 	base_dform\
 	summary\
 	base_dtactic\
+	base_cache\
 	base_theory\
 	evaluator
 

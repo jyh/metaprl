@@ -154,9 +154,10 @@ type 'a bcacheInfo =
  * The cache is a list of these entries.
  *)
 type 'a cache =
-   { cache_finfo : 'a fcacheInfo list;
-     cache_binfo : 'a bcacheInfo list
-   }
+   CacheNil
+ | CacheForward of 'a fcacheInfo * 'a cache
+ | CacheBackward of 'a bcacheInfo * 'a cache
+ | CacheJoin of 'a cache * 'a cache
 
 (*
  * An inference is a fact, either because it is a
@@ -1404,7 +1405,10 @@ let chain extract =
  * Cache has empty lists.
  *)
 let new_cache () =
-    { cache_finfo = []; cache_binfo = [] }
+   CacheNil
+
+let join_cache cache1 cache2 =
+   CacheJoin (cache1, cache2)
 
 (************************************************************************
  * EXTRACT CONSTRUCTION                                                 *
@@ -1434,8 +1438,7 @@ let compute_wild t =
    in
       terms', wilds'
       
-let add_frule { cache_finfo = finfo; cache_binfo = binfo }
-    { fc_ants = ants; fc_concl = concl; fc_just = just } =
+let add_frule cache { fc_ants = ants; fc_concl = concl; fc_just = just } =
    let args, wild = compute_wild ants in
    let info =
       { finfo_plates = List.map Term_template.of_term args;
@@ -1444,7 +1447,7 @@ let add_frule { cache_finfo = finfo; cache_binfo = binfo }
         finfo_just = just
       }
    in
-      { cache_finfo = info::finfo; cache_binfo = binfo }
+      CacheForward (info, cache)
 
 (*
  * Flatten the antecedents for rewriting.
@@ -1492,8 +1495,7 @@ let compute_spread_ants ants =
 (*
  * Add a rule for backward chaining.
  *)
-let add_brule  { cache_finfo = finfo; cache_binfo = binfo }
-    { bc_concl = concl; bc_ants = ants; bc_just = just } =
+let add_brule cache { bc_concl = concl; bc_ants = ants; bc_just = just } =
    (* Flatten the antecedents *)
    let flat_ants = flatten_ants ants in
    let rw = term_rewrite ([||], [||]) [concl] flat_ants in
@@ -1508,7 +1510,7 @@ let add_brule  { cache_finfo = finfo; cache_binfo = binfo }
         binfo_just = just
       }
    in
-      { cache_finfo = finfo; cache_binfo = info::binfo }
+      CacheBackward (info, cache)
 
 (*
  * Build the forward chaining hash table.
@@ -1545,9 +1547,34 @@ let make_rules info =
       tbl
 
 (*
+ * Collect all the forward and backward rules form the cache tree.
+ * We keep a record of all the caches seen so we can remove duplicates.
+ *)
+let extract_cache cache =
+   let rec collect caches finfo binfo cache =
+      if List.memq cache caches then
+         finfo, binfo, caches
+      else
+         let caches = cache :: caches in
+            match cache with
+               CacheNil ->
+                  finfo, binfo, caches
+             | CacheForward (info, cache) ->
+                  collect caches (info :: finfo) binfo cache
+             | CacheBackward (info, cache) ->
+                  collect caches finfo (info :: binfo) cache
+             | CacheJoin (cache1, cache2) ->
+                  let finfo, binfo, caches = collect caches finfo binfo cache1 in
+                     collect caches finfo binfo cache2
+   in
+   let finfo, binfo, _ = collect [] [] [] cache in
+      finfo, binfo
+ 
+(*
  * Construct the extract.
  *)
-let extract { cache_finfo = finfo; cache_binfo = binfo } =
+let extract cache =
+   let finfo, binfo = extract_cache cache in
    let node, goals, bchain = new_goals Empty None in
       {  (* Hyps *)
          ext_used = [];
@@ -2028,6 +2055,9 @@ let used_hyps
    
 (*
  * $Log$
+ * Revision 1.7  1998/05/07 16:03:09  jyh
+ * Adding interactive proofs.
+ *
  * Revision 1.6  1998/04/29 14:50:25  jyh
  * Added ocaml_sos.
  *

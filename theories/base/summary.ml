@@ -124,7 +124,7 @@ dform location_df : "location"[@start:n, @finish:n]{'body} =
  *)
 dform rewrite_df : "rewrite"[@name:s]{'redex; 'contractum; 'proof} =
    szone pushm[4]
-   `"rewrite" " " slot[@name:s] " " slot{'redex} longleftrightarrow slot{'contractum}
+   `"rewrite" " " slot[@name:s] " " slot{'redex} " " longleftrightarrow hspace slot{'contractum}
    popm ezone
 
 (*
@@ -238,6 +238,9 @@ dform df_term_df : df_term{'t} =
 
 (*
  * $Log$
+ * Revision 1.10  1998/05/07 16:03:04  jyh
+ * Adding interactive proofs.
+ *
  * Revision 1.9  1998/05/04 13:01:23  jyh
  * Ocaml display without let rec.
  *

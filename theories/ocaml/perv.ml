@@ -37,8 +37,14 @@ dform perv_nil_df : "nil" = `""
 dform perv_cons_df : "cons"{'car; 'cdr} =
    slot{'car} slot{'cdr}
 
+dform perv_string_df : "string"[@s:s] =
+   `"\"" slot[@s:s] `"\""
+
 (*
  * $Log$
+ * Revision 1.2  1998/05/07 16:03:07  jyh
+ * Adding interactive proofs.
+ *
  * Revision 1.1  1998/04/29 20:54:14  jyh
  * Initial working display forms.
  *

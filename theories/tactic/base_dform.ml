@@ -194,6 +194,26 @@ ml_dform bvar_df : bvar{'v} format_term buf = fun
 dform rewrite_df2 : "rewrite"{'redex; 'contractum} =
    szone pushm[3] slot{'redex} " " longleftrightarrow " " slot{'contractum} popm ezone
 
+let rec fmt_term_lst format_term buf = function
+   [] -> raise(Invalid_argument("fmt_term_lst"))
+ | [t] ->
+      format_term buf NOParens t
+ | t::tl ->
+      format_term buf NOParens t;
+      format_string buf "; ";
+      fmt_term_lst format_term buf tl
+
+let format_term_list format_term buf = function
+   [] -> ()
+ | ts ->
+      format_szone buf;
+      format_string buf "[";
+      format_pushm buf 0;
+      fmt_term_lst format_term buf ts;
+      format_popm buf;
+      format_string buf "]";
+      format_ezone buf
+
 (*
  * For sequents.
  * In the "format" function,
@@ -226,11 +246,12 @@ ml_dform sequent_src_df : mode["src"] :: "sequent"{'ext; 'seq} format_term buf =
                   format_term buf NOParens a
              | Hypothesis a ->
                   format_space buf;
-                  format_string buf "_: ";
                   format_term buf NOParens a
              | Context (v, values) ->
                   format_space buf;
-                  format_term buf NOParens (mk_so_var_term v values)
+                  format_string buf ("<" ^ v);
+                  format_term_list format_term buf values;
+                  format_string buf ">"
          in
             format_hyp hyps (succ i) len
    in
@@ -260,35 +281,22 @@ ml_dform sequent_src_df : mode["src"] :: "sequent"{'ext; 'seq} format_term buf =
  * @end[doc]
  *)
 ml_dform sequent_prl_df : mode["prl"] :: "sequent"{'ext; 'seq} format_term buf =
-   let format_arg = function
-      [] ->
-         ()
-    | args ->
-         format_string buf "[";
-         let rec format = function
-            arg::t ->
-               format_term buf NOParens arg;
-               if t <> [] then
-                  format_string buf "; ";
-               format t
-          | [] ->
-               ()
-         in
-            format args;
-            format_string buf "]";
-   in
    let rec format_hyp hyps i len =
       if i <> len then
          let lead = (string_of_int (succ i)) ^ ". " in
          let _ =
+            format_term buf NOParens <<pushfont["bf"]>>;
             if i = 0 then
                format_hbreak buf lead " "
             else
                format_hbreak buf lead "; ";
+            format_term buf NOParens <<popfont>>;
             match SeqHyp.get hyps i with
                Context (v, values) ->
                   (* This is a context hypothesis *)
-                  format_term buf NOParens (mk_so_var_term v values)
+                  format_string buf "<";
+                  format_term buf NOParens (mk_so_var_term v values);
+                  format_string buf ">";
              | HypBinding (v, a) ->
                   format_szone buf;
                   format_pushm buf 0;
@@ -301,8 +309,6 @@ ml_dform sequent_prl_df : mode["prl"] :: "sequent"{'ext; 'seq} format_term buf =
              | Hypothesis a ->
                   format_szone buf;
                   format_pushm buf 0;
-                  format_string buf "_:";
-                  format_space buf;
                   format_term buf NOParens a;
                   format_popm buf;
                   format_ezone buf
@@ -316,7 +322,9 @@ ml_dform sequent_prl_df : mode["prl"] :: "sequent"{'ext; 'seq} format_term buf =
                begin
                   format_hbreak buf "" " ";
                   format_pushm buf 2;
+                  format_term buf NOParens <<pushfont["bf"]>>;
                   format_term buf NOParens <<Nuprl_font!vdash>>;
+                  format_term buf NOParens <<popfont>>;
                   format_string buf " ";
                end
             else
@@ -336,7 +344,7 @@ ml_dform sequent_prl_df : mode["prl"] :: "sequent"{'ext; 'seq} format_term buf =
       in
          format_szone buf;
          format_pushm buf 0;
-         format_arg (dest_xlist args);
+         format_term_list format_term buf (dest_xlist args);
          let hlen = SeqHyp.length hyps in
          if (hlen>0) then format_hyp hyps 0 hlen;
          format_goal goals 0 (SeqGoal.length goals);
@@ -346,23 +354,6 @@ ml_dform sequent_prl_df : mode["prl"] :: "sequent"{'ext; 'seq} format_term buf =
       format
 
 ml_dform sequent_html_df : mode["html"] :: "sequent"{'ext; 'seq} format_term buf =
-   let format_arg = function
-      [] ->
-         ()
-    | args ->
-         format_string buf "[";
-         let rec format = function
-            arg::t ->
-               format_term buf NOParens arg;
-               if t <> [] then
-                  format_string buf "; ";
-               format t
-          | [] ->
-               ()
-         in
-            format args;
-            format_string buf "]";
-   in
    let rec format_hyp hyps i len =
       if i <> len then
          let lead = (string_of_int (succ i)) ^ ". " in
@@ -374,7 +365,9 @@ ml_dform sequent_html_df : mode["html"] :: "sequent"{'ext; 'seq} format_term buf
             match SeqHyp.get hyps i with
                Context (v, values) ->
                   (* This is a context hypothesis *)
-                  format_term buf NOParens (mk_so_var_term v values)
+                  format_string buf "<";
+                  format_term buf NOParens (mk_so_var_term v values);
+                  format_string buf ">"
              | HypBinding (v, a) ->
                   format_szone buf;
                   format_string buf v;
@@ -384,8 +377,6 @@ ml_dform sequent_html_df : mode["html"] :: "sequent"{'ext; 'seq} format_term buf
                   format_ezone buf
              | Hypothesis a ->
                   format_szone buf;
-                  format_string buf "_:";
-                  format_space buf;
                   format_term buf NOParens a;
                   format_ezone buf
          in
@@ -410,7 +401,7 @@ ml_dform sequent_html_df : mode["html"] :: "sequent"{'ext; 'seq} format_term buf
       in
          format_szone buf;
          format_pushm buf 0;
-         format_arg (dest_xlist args);
+         format_term_list format_term buf (dest_xlist args);
          let hlen = SeqHyp.length hyps in
          if (hlen>0) then format_hyp hyps 0 hlen;
          format_goal goals 0 (SeqGoal.length goals);
@@ -420,23 +411,6 @@ ml_dform sequent_html_df : mode["html"] :: "sequent"{'ext; 'seq} format_term buf
       format
 
 ml_dform sequent_tex_df : mode["tex"] :: "sequent"{'ext; 'seq} format_term buf =
-   let format_arg = function
-      [] ->
-         ()
-    | args ->
-         format_string buf "[";
-         let rec format = function
-            arg::t ->
-               format_term buf NOParens arg;
-               if t <> [] then
-                  format_string buf "; ";
-               format t
-          | [] ->
-               ()
-         in
-            format args;
-            format_string buf "]";
-   in
    let rec format_hyp hyps i len =
       if i <> len then
          let lead = (string_of_int (succ i)) ^ ". " in
@@ -447,8 +421,9 @@ ml_dform sequent_tex_df : mode["tex"] :: "sequent"{'ext; 'seq} format_term buf =
                format_hbreak buf lead "; ";
             match SeqHyp.get hyps i with
                Context (v, values) ->
-                  (* This is a context hypothesis *)
-                  format_term buf NOParens (mk_so_var_term v values)
+                  format_term buf NOParens <<mathmacro["left<"]>>;
+                  format_term buf NOParens (mk_so_var_term v values);
+                  format_term buf NOParens <<mathmacro["right>"]>>
              | HypBinding (v, a) ->
                   format_szone buf;
                   format_string buf v;
@@ -458,8 +433,6 @@ ml_dform sequent_tex_df : mode["tex"] :: "sequent"{'ext; 'seq} format_term buf =
                   format_ezone buf
              | Hypothesis a ->
                   format_szone buf;
-                  format_string buf "_:";
-                  format_space buf;
                   format_term buf NOParens a;
                   format_ezone buf
          in
@@ -481,7 +454,7 @@ ml_dform sequent_tex_df : mode["tex"] :: "sequent"{'ext; 'seq} format_term buf =
       in
          format_szone buf;
          format_pushm buf 0;
-         format_arg (dest_xlist args);
+         format_term_list format_term buf (dest_xlist args);
          let hlen = SeqHyp.length hyps in
          if (hlen>0) then format_hyp hyps 0 hlen;
          format_hspace buf;

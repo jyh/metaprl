@@ -299,8 +299,8 @@ dform keyword_begin_df : internal :: mode[html] :: keyword_begin =
 dform keyword_end_df : internal :: mode[html] :: keyword_end =
    izone `"</b></font>" ezone
 
-dform info_begin_df_all : internal :: except_mode[html] :: except_mode [tex] :: info_begin = `""
-dform info_end_df_all : internal :: except_mode[html] :: except_mode [tex] :: info_end = `""
+dform info_begin_df_all : internal :: mode [src] :: info_begin = `""
+dform info_end_df_all : internal :: mode[src] :: info_end = `""
 
 dform keyword_begin_df_all : internal :: except_mode[html] :: except_mode[tex] :: keyword_begin = `""
 dform keyword_end_df_all : internal :: except_mode[html] :: except_mode[tex] :: keyword_end = `""
@@ -487,6 +487,12 @@ dform info_begin_df : internal :: mode[tex] :: info_begin =
 
 dform info_end_df : internal :: mode[tex] :: info_end =
    izone `"}" ezone
+
+dform info_begin_df : internal :: mode[prl] :: info_begin =
+   pushfont["bf"]
+
+dform info_end_df : internal :: mode[prl] :: info_end =
+   popfont
 
 let not_alnum c = not (is_alnum c)
 ml_dform keyword_tex_df : internal :: mode[tex] :: keyword[text:s] format_term buf =

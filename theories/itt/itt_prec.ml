@@ -1,71 +1,71 @@
-(*!
- * @spelling{cons prec precind unrollings}
- *
- * @begin[doc]
- * @module[Itt_prec]
- *
- * The @tt{Itt_prec} module define the @emph{parameterized}
- * recursive type.  The parameter allows values to be passed
- * as the recursive type is unrolled.  The syntax of the type is
- * $@prec{T; x; B[T, x]; a}$, there $T$ is the type that is
- * being defined, $x$ represents the parameter, with initial
- * value $a$, and $B[T, x]$ is the definition of the type.
- * The body $B[T, x]$ must be monotone in the type argument $T$.
- *
- * The following type definition defines the
- * list of strictly increasing positive integers.
- *
- * $$@prec{T; i; @unit + @prod{k; @set{j; @int; j > i}; T(k)}; 0}.$$
- *
- * The @i{nil} element is $@inl{@it}$, and the @i{cons}
- * operation is the right injection contains a pair of an integer $k$ that
- * is larger than the parameter and a list increasing integers
- * larger than $k$.
- * @end[doc]
- *
- * ----------------------------------------------------------------
- *
- * @begin[license]
- * This file is part of MetaPRL, a modular, higher order
- * logical framework that provides a logical programming
- * environment for OCaml and other languages.
- *
- * See the file doc/index.html for information on Nuprl,
- * OCaml, and more information about this system.
- *
- * Copyright (C) 1998 Jason Hickey, Cornell University
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- *
- * Author: Jason Hickey
- * @email{jyh@cs.cornell.edu}
- * @end[license]
- *)
+doc <:doc< 
+   @spelling{cons prec precind unrollings}
+  
+   @begin[doc]
+   @module[Itt_prec]
+  
+   The @tt{Itt_prec} module define the @emph{parameterized}
+   recursive type.  The parameter allows values to be passed
+   as the recursive type is unrolled.  The syntax of the type is
+   $@prec{T; x; B[T, x]; a}$, there $T$ is the type that is
+   being defined, $x$ represents the parameter, with initial
+   value $a$, and $B[T, x]$ is the definition of the type.
+   The body $B[T, x]$ must be monotone in the type argument $T$.
+  
+   The following type definition defines the
+   list of strictly increasing positive integers.
+  
+   $$@prec{T; i; @unit + @prod{k; @set{j; @int; j > i}; T(k)}; 0}.$$
+  
+   The @i{nil} element is $@inl{@it}$, and the @i{cons}
+   operation is the right injection contains a pair of an integer $k$ that
+   is larger than the parameter and a list increasing integers
+   larger than $k$.
+   @end[doc]
+  
+   ----------------------------------------------------------------
+  
+   @begin[license]
+   This file is part of MetaPRL, a modular, higher order
+   logical framework that provides a logical programming
+   environment for OCaml and other languages.
+  
+   See the file doc/index.html for information on Nuprl,
+   OCaml, and more information about this system.
+  
+   Copyright (C) 1998 Jason Hickey, Cornell University
+  
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public License
+   as published by the Free Software Foundation; either version 2
+   of the License, or (at your option) any later version.
+  
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+  
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  
+   Author: Jason Hickey
+   @email{jyh@cs.cornell.edu}
+   @end[license]
+>>
 
-(*!
- * @begin[doc]
- * @parents
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @parents
+   @end[doc]
+>>
 extends Itt_equal
 extends Itt_subtype
 extends Itt_void
 extends Itt_fun
 extends Itt_prod
 extends Itt_struct
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 open Printf
 open Mp_debug
@@ -94,15 +94,15 @@ let _ =
  * TERMS                                                                *
  ************************************************************************)
 
-(*!
- * @begin[doc]
- * @terms
- *
- * The @tt{prec} term defines the parameterized recursive type.
- * The @tt{precind} term is the induction combinator, for computation
- * over the elements in the recursive type.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @terms
+  
+   The @tt{prec} term defines the parameterized recursive type.
+   The @tt{precind} term is the induction combinator, for computation
+   over the elements in the recursive type.
+   @end[doc]
+>>
 declare "prec"{T, x. 'B['T; 'x]; 'a}
 declare precind{'a; p, h. 'g['p; 'h]}
 
@@ -110,21 +110,21 @@ declare precind{'a; p, h. 'g['p; 'h]}
  * REWRITES                                                             *
  ************************************************************************)
 
-(*!
- * @begin[doc]
- * @rewrites
- *
- * The @tt{precind} term takes two arguments.  The argument $a$
- * is the term over which the computation is being performed, and
- * the $g[p, h]$ term defines the body of the computation.  The
- * first parameter in the body, $p$, represents the result of
- * the recursive computation, and the second parameter $h$
- * represents the argument $a$ itself.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @rewrites
+  
+   The @tt{precind} term takes two arguments.  The argument $a$
+   is the term over which the computation is being performed, and
+   the $g[p, h]$ term defines the body of the computation.  The
+   first parameter in the body, $p$, represents the result of
+   the recursive computation, and the second parameter $h$
+   represents the argument $a$ itself.
+   @end[doc]
+>>
 prim_rw reducePrecind : precind{'a; p, h. 'g['p; 'h]} <-->
    'g[lambda{a. precind{'a; p, h. 'g['p; 'h]}}; 'a]
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 (************************************************************************
  * DISPLAY                                                              *
@@ -144,19 +144,19 @@ dform precind_df : except_mode[src] :: precind{'a; p, h. 'g} =
  * RULES                                                                *
  ************************************************************************)
 
-(*!
- * @begin[doc]
- * @rules
- * @modsubsection{Equality}
- *
- * The @tt{prec} type $@prec{T; x; B[T, x]; a}$ is well-formed if: 1) there
- * is a type of parameters $A$; 2) the initial parameter $a$ has type $A$;
- * and 3) the body $B[T, x]$ is well-formed for any argument $x @in A$ and
- * @emph{any} type $T @in @univ{i}$.  In addition, $B[T, x]$ must be
- * @emph{monotone} in the type argument $T$.  If $T_1 @subseteq T_2$, then
- * $B[T_1, x] @subseteq B[T_2, x]$.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @rules
+   @modsubsection{Equality}
+  
+   The @tt{prec} type $@prec{T; x; B[T, x]; a}$ is well-formed if: 1) there
+   is a type of parameters $A$; 2) the initial parameter $a$ has type $A$;
+   and 3) the body $B[T, x]$ is well-formed for any argument $x @in A$ and
+   @emph{any} type $T @in @univ{i}$.  In addition, $B[T, x]$ must be
+   @emph{monotone} in the type argument $T$.  If $T_1 @subseteq T_2$, then
+   $B[T_1, x] @subseteq B[T_2, x]$.
+   @end[doc]
+>>
 prim precEquality {| intro []; eqcd |} 'A :
    [wf] sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
    [wf] sequent [squash] { 'H; x: 'A; T: 'A -> univ[i:l] >- 'B1['T; 'x] = 'B2['T; 'x] in univ[i:l] } -->
@@ -174,40 +174,40 @@ prim precEquality {| intro []; eqcd |} 'A :
            } =
    it
 
-(*!
- * @docoff
- *)
+doc <:doc< 
+   @docoff
+>>
 prim precMemberFormation {| intro [] |} :
    [main] ('t : sequent ['ext] { 'H >- 'B[lambda{z. "prec"{T, x. 'B['T; 'x]; 'z}}; 'a] }) -->
    [wf] sequent [squash] { 'H >- "type"{("prec"{T, x. 'B['T; 'x]; 'a})} } -->
    sequent ['ext] { 'H >- "prec"{T, x. 'B['T; 'x]; 'a} } =
    't
 
-(*!
- * @begin[doc]
- * @modsubsection{Membership}
- *
- * The elements of the parameterized recursive type $@prec{T; x; B[T, x]; a}$ are the
- * elements in the body $B[@lambda{a'; @prec{T; x; B[T, x]; a'}}, a]$, where the
- * definition of the type has been unrolled.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Membership}
+  
+   The elements of the parameterized recursive type $@prec{T; x; B[T, x]; a}$ are the
+   elements in the body $B[@lambda{a'; @prec{T; x; B[T, x]; a'}}, a]$, where the
+   definition of the type has been unrolled.
+   @end[doc]
+>>
 prim precMemberEquality {| intro []; eqcd |} :
    [wf] sequent [squash] { 'H >- "type"{("prec"{T, x. 'B['T; 'x]; 'a})} } -->
    [wf] sequent [squash] { 'H >- 'a1 = 'a2 in 'B[lambda{z. "prec"{T, x. 'B['T; 'x]; 'z}}; 'a] } -->
    sequent ['ext] { 'H >- 'a1 = 'a2 in "prec"{T, x. 'B['T; 'x]; 'a} } =
    it
 
-(*!
- * @begin[doc]
- * @modsubsection{Elimination}
- *
- * The elimination form performs induction on the recursive type
- * definition.  The conclusion $G[p]$ holds on any element $p$ of the
- * recursive type $@prec{T; x; B[T, x]; a}$ if, given that it holds
- * on all the unrollings of $p$, it also holds on $p$.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Elimination}
+  
+   The elimination form performs induction on the recursive type
+   definition.  The conclusion $G[p]$ holds on any element $p$ of the
+   recursive type $@prec{T; x; B[T, x]; a}$ if, given that it holds
+   on all the unrollings of $p$, it also holds on $p$.
+   @end[doc]
+>>
 prim precElimination {| elim [ThinOption thinT] |} 'H lambda{z. 'G['z]} 'A univ[i:l] :
    [wf] sequent [squash] { 'H; r: "prec"{T, x. 'B['T; 'x]; 'a}; 'J['r] >- 'a = 'a in 'A } -->
    [main] ('g['r; 'u; 'p; 'h] : sequent ['ext] { 'H; r: "prec"{T, x. 'B['T; 'x]; 'a}; 'J['r];
@@ -220,12 +220,12 @@ prim precElimination {| elim [ThinOption thinT] |} 'H lambda{z. 'G['z]} 'A univ[
    sequent ['ext] { 'H; r: "prec"{T, x. 'B['T; 'x]; 'a}; 'J['r] >- 'G['a] } =
    precind{'a; p, h. 'g['r; lambda{x. it}; 'p; 'h]}
 
-(*!
- * @begin[doc]
- * The second form of elimination performs an unrolling of the
- * type definition of the parameterized recursive type.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   The second form of elimination performs an unrolling of the
+   type definition of the parameterized recursive type.
+   @end[doc]
+>>
 prim precUnrollElimination {| elim [ThinOption thinT] |} 'H :
    ('g['z; 'y; 'u] : sequent ['ext] { 'H; r: "prec"{T, x. 'B['T; 'x]; 'a}; 'J['r];
              y: 'B[lambda{z. "prec"{T, x. 'B['T; 'x]; 'z}}; 'a];
@@ -235,18 +235,18 @@ prim precUnrollElimination {| elim [ThinOption thinT] |} 'H :
    sequent ['ext] { 'H; r: "prec"{T, x. 'B['T; 'x]; 'a}; 'J['r] >- 'G['r] } =
    'g['z; 'z; it]
 
-(*!
- * @begin[doc]
- * @modsubsection{Combinator equality}
- *
- * The @hrefterm[precind] term $@precind{r; h; z; t[h, z]}$ produces
- * values of type $S$ if the argument $r$ is the pair of a parameter $a$
- * and a term in some parameterized recursive type $@prec{T; y; B[T, y]; a}$,
- * and the body $t[h, z]$ produces values of type $S$ given the
- * argument $r$, and a function $h$ that computes the result on the
- * unrollings.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Combinator equality}
+  
+   The @hrefterm[precind] term $@precind{r; h; z; t[h, z]}$ produces
+   values of type $S$ if the argument $r$ is the pair of a parameter $a$
+   and a term in some parameterized recursive type $@prec{T; y; B[T, y]; a}$,
+   and the body $t[h, z]$ produces values of type $S$ given the
+   argument $r$, and a function $h$ that computes the result on the
+   unrollings.
+   @end[doc]
+>>
 prim precindEquality {| intro []; eqcd |} lambda{x. 'S['x]} (a:'A * "prec"{T, y. 'B['T; 'y]; 'a}) univ[i:l] :
    [wf] sequent [squash] { 'H >- 'r1 = 'r2 in a: 'A * "prec"{T, y. 'B['T; 'y]; 'a} } -->
    [wf] sequent [squash] { 'H; Z: 'A -> univ[i:l];
@@ -260,7 +260,7 @@ prim precindEquality {| intro []; eqcd |} lambda{x. 'S['x]} (a:'A * "prec"{T, y.
                    in 'S['r1]
            } =
    it
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 (************************************************************************
  * TACTICS                                                              *

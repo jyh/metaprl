@@ -1,16 +1,16 @@
-(*!
- * @begin[doc]
- * @module[Itt_datatree]
- *
- * This is a theory of binary trees with data.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @module[Itt_datatree]
+  
+   This is a theory of binary trees with data.
+   @end[doc]
+>>
 
 extends Itt_bintree
 extends Itt_record
 extends Itt_logic
 
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 open Printf
 open Mp_debug
@@ -43,11 +43,11 @@ let _ =
 
 
 
-(*!
- * @begin[doc]
- * @modsection{Definition}
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsection{Definition}
+   @end[doc]
+>>
 
 define bindatatree : DataTree{'A} <--> BinTree{{"data":'A}}
 
@@ -63,14 +63,14 @@ interactive datatree_subtype {| intro[] |} :
  sequent['ext]  {'H >-"subtype"{ DataTree{'A};BinTree}}
 
 
-(*!
- * @begin[doc]
- * @modsection{Set of elements}
+doc <:doc< 
+   @begin[doc]
+   @modsection{Set of elements}
     A data tree is defined as set of elements.
 
   First let us define whether an element is in a tree:
- * @end[doc]
- *)
+   @end[doc]
+>>
 
 
 define in_tree: in_tree{'a;'t; 'A} <--> tree_ind{ 't;  ."false"; L,R,self. 'L or 'R or 'a = ^data in 'A}
@@ -101,11 +101,11 @@ interactive in_tree_univ {| intro[] |} :
  sequent['ext]  {'H >- in_tree{'a;'t; 'A} in univ[i:l] }
 
 
-(*!
- * @begin[doc]
+doc <:doc< 
+   @begin[doc]
    Now we can define set of elements of the tree:
- * @end[doc]
- *)
+   @end[doc]
+>>
 
 
 
@@ -133,11 +133,11 @@ interactive set_from_tree_subtype {| intro[] |} :
 (* ==================== *)
 
 
-(*!
- * @begin[doc]
- * @modsection{Examples}
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsection{Examples}
+   @end[doc]
+>>
 
 
 interactive example_wf2 {| intro[] |} :

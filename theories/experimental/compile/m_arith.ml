@@ -46,7 +46,7 @@ prim_rw reduce_div : div{number[i1:n]; number[i2:n]} <--> number{meta_quot[i1:n,
 prim_rw reduce_max : max{number[i1:n]; number[i2:n]} <--> meta_lt[i1:n, i2:n]{number[i2:n]; number[i1:n]}
 prim_rw reduce_number : number{meta_num[i:n]} <--> number[i:n]
 
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 let resource reduce +=
     [<< add{number[i1:n]; number[i2:n]} >>, (reduce_add thenC addrC[0] reduce_meta_sum  thenC reduce_number);

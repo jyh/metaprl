@@ -79,7 +79,7 @@ dform header_df2 : header{'i} =
 prim_rw unfold_header : header[i:n] <--> ImmediateNumber{mul{number[i:n]; word_size}}
 prim_rw fold_header : header{number[i:n]} <--> header[i:n]
 
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 (*
  * Add common reductions to reduce resource.

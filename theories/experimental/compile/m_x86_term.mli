@@ -80,9 +80,7 @@ val operands_of_inst : (reg, 'a) poly_inst -> operand list
  *)
 val next_inst : term_inst -> int * term
 
-(*!
- * @docoff
- *
+(*
  * -*-
  * Local Variables:
  * Caml-master: "compile"

@@ -135,7 +135,7 @@ prim_rw reserve_let_closure :
  *)
 declare r
 
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 let resource reduce +=
    [<< ReserveParams{'params; AtomFun{v. 'e['v]}} >>, add_reserve_param;

@@ -1,51 +1,51 @@
-(*!
- * @begin[doc]
- * @module[Itt_equal]
- *
- * The @tt{Itt_equal} module defines type @emph{universes},
- * @emph{cumulativity} of type universes, and equality.
- * @end[doc]
- *
- * ----------------------------------------------------------------
- *
- * @begin[license]
- *
- * This file is part of MetaPRL, a modular, higher order
- * logical framework that provides a logical programming
- * environment for OCaml and other languages.
- *
- * See the file doc/index.html for information on Nuprl,
- * OCaml, and more information about this system.
- *
- * Copyright (C) 1998 Jason Hickey, Cornell University
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- *
- * Author: Jason Hickey
- * @email{jyh@cs.caltech.edu}
- *
- * @end[license]
- *)
+doc <:doc< 
+   @begin[doc]
+   @module[Itt_equal]
+  
+   The @tt{Itt_equal} module defines type @emph{universes},
+   @emph{cumulativity} of type universes, and equality.
+   @end[doc]
+  
+   ----------------------------------------------------------------
+  
+   @begin[license]
+  
+   This file is part of MetaPRL, a modular, higher order
+   logical framework that provides a logical programming
+   environment for OCaml and other languages.
+  
+   See the file doc/index.html for information on Nuprl,
+   OCaml, and more information about this system.
+  
+   Copyright (C) 1998 Jason Hickey, Cornell University
+  
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public License
+   as published by the Free Software Foundation; either version 2
+   of the License, or (at your option) any later version.
+  
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+  
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  
+   Author: Jason Hickey
+   @email{jyh@cs.caltech.edu}
+  
+   @end[license]
+>>
 
-(*!************************************************************************
- * @begin[doc]
- * @parents
- * @end[doc]
- *)
+doc <:doc< ************************************************************************
+   @begin[doc]
+   @parents
+   @end[doc]
+>>
 extends Base_theory
-(*! @docoff *)
+doc <:doc< @docoff >>
 extends Itt_comment
 
 open Printf
@@ -91,34 +91,34 @@ let debug_eqcd =
  * TERMS                                                                *
  ************************************************************************)
 
-(*!************************************************************************
- * @begin[doc]
- * @terms
- *
- * The universe type $@univ{i}$ is a @emph{type of types}.  The individual type
- * universe judgments are listed in the modules for each of the types.
- * Furthermore, there is no elimination rule, since each universe is just a set of
- * points, with no order.
- *
- * The $@cumulativity{i; j}$ term is a primitive judgment that defines level
- * @emph{inclusion} (this is a builtin judgment in @MetaPRL).
- *
- * The $@type{t}$ term is used to define the @emph{type} judgment.  A term $T$ is a
- * type if $@sequent{squash; H; @type{T}}$.
- *
- * The semantic meaning of an open equality is that:
- * @begin[enumerate]
- * @item{$T$ is a type,}
- * @item{$t_1$ and $t_2$ are well-formed elements of type $T$.}
- * @item{and $t_1$ and $t_2$ are equal using the equality of type $T$.}
- * @end[enumerate]
- * @end[doc]
- *)
+doc <:doc< ************************************************************************
+   @begin[doc]
+   @terms
+  
+   The universe type $@univ{i}$ is a @emph{type of types}.  The individual type
+   universe judgments are listed in the modules for each of the types.
+   Furthermore, there is no elimination rule, since each universe is just a set of
+   points, with no order.
+  
+   The $@cumulativity{i; j}$ term is a primitive judgment that defines level
+   @emph{inclusion} (this is a builtin judgment in @MetaPRL).
+  
+   The $@type{t}$ term is used to define the @emph{type} judgment.  A term $T$ is a
+   type if $@sequent{squash; H; @type{T}}$.
+  
+   The semantic meaning of an open equality is that:
+   @begin[enumerate]
+   @item{$T$ is a type,}
+   @item{$t_1$ and $t_2$ are well-formed elements of type $T$.}
+   @item{and $t_1$ and $t_2$ are equal using the equality of type $T$.}
+   @end[enumerate]
+   @end[doc]
+>>
 declare "type"{'a}
 declare univ[i:l]
 declare equal{'T; 'a; 'b}
 declare cumulativity[i:l, j:l]
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 declare "true"
 declare "false"
@@ -302,30 +302,30 @@ prim trueIntro {| intro [] |} :
    sequent ['ext] { 'H >- "true" } =
    it
 
-(*!************************************************************************
- * @begin[doc]
- * @rules
- *
- * @modsubsection{Equality axiom}
- *
- * The @emph{axiom} rule declares that if a program $x$ has type
- * $T$ by assumption, then $T$ is a type, and $x$ is a member of $T$.
- * @end[doc]
- *)
+doc <:doc< ************************************************************************
+   @begin[doc]
+   @rules
+  
+   @modsubsection{Equality axiom}
+  
+   The @emph{axiom} rule declares that if a program $x$ has type
+   $T$ by assumption, then $T$ is a type, and $x$ is a member of $T$.
+   @end[doc]
+>>
 prim equalityAxiom 'H :
    sequent ['ext] { 'H; x: 'T; 'J['x] >- 'x in 'T } =
    it
 
-(*!************************************************************************
- * @begin[doc]
- * @modsubsection{Equality is an equivalence relation}
- *
- * The next three rules specify that equality is an equivalence relation.
- * The @emph{reflexivity} rule differs from the standard definition:
- * a program $x$ has type $T$ if it is equal to any other
- * element of $T$.
- * @end[doc]
- *)
+doc <:doc< ************************************************************************
+   @begin[doc]
+   @modsubsection{Equality is an equivalence relation}
+  
+   The next three rules specify that equality is an equivalence relation.
+   The @emph{reflexivity} rule differs from the standard definition:
+   a program $x$ has type $T$ if it is equal to any other
+   element of $T$.
+   @end[doc]
+>>
 
 (*
  * Reflexivity.
@@ -365,15 +365,15 @@ prim equalityFormation 'T :
    sequent ['ext] { 'H >- univ[i:l] } =
    'a = 'b in 'T
 
-(*!************************************************************************
- * @begin[doc]
- * @modsubsection{Well-formedness of equality}
- *
- * The next two rules describe well-formedness of the equality judgment.
- * Equality is @emph{intensional}: two equalities are equal if all of their
- * parts are equal.
- * @end[doc]
- *)
+doc <:doc< ************************************************************************
+   @begin[doc]
+   @modsubsection{Well-formedness of equality}
+  
+   The next two rules describe well-formedness of the equality judgment.
+   Equality is @emph{intensional}: two equalities are equal if all of their
+   parts are equal.
+   @end[doc]
+>>
 
 (*
  * H >- (a1 = b1 in T1) = (a2 = b2 in T2)
@@ -399,14 +399,14 @@ prim equalityType {| intro [] |} :
    sequent ['ext] { 'H >- "type"{. 'a = 'b in 'T } } =
    it
 
-(*!************************************************************************
- * @begin[doc]
- * @modsubsection{Inhabitants of the equality types}
- *
- * The two following rules state that $@it$ is the one-and-only element
- * in a provable equality or a provable @tt{Type} type.
- * @end[doc]
- *)
+doc <:doc< ************************************************************************
+   @begin[doc]
+   @modsubsection{Inhabitants of the equality types}
+  
+   The two following rules state that $@it$ is the one-and-only element
+   in a provable equality or a provable @tt{Type} type.
+   @end[doc]
+>>
 
 (*
  * H >- it in (a = b in T)
@@ -435,16 +435,16 @@ prim type_axiomMember {| intro []; eqcd |} :
    sequent ['ext] { 'H >- it in "type"{'T} } =
    it
 
-(*!************************************************************************
- * @begin[doc]
- * @modsubsection{Truth implies typehood}
- *
- * For any sequent judgment $@sequent{ext; H; T}$ the term $T$ must be a
- * type.  The following rule allows us to infer well-formedness of a
- * type from its provability.  Note that this rule is useless for types $T$
- * that are not true.
- * @end[doc]
- *)
+doc <:doc< ************************************************************************
+   @begin[doc]
+   @modsubsection{Truth implies typehood}
+  
+   For any sequent judgment $@sequent{ext; H; T}$ the term $T$ must be a
+   type.  The following rule allows us to infer well-formedness of a
+   type from its provability.  Note that this rule is useless for types $T$
+   that are not true.
+   @end[doc]
+>>
 
 (*
  * H >- T = T in type
@@ -457,15 +457,15 @@ prim typeEquality :
    sequent ['ext] { 'H >- "type"{'T} } =
    it
 
-(*!************************************************************************
- * @begin[doc]
- * @modsubsection{Universe cumulativity}
- *
- * The following two rules describe universe @emph{cumulativity}.
- * The $@cumulativity{i:l; j:l}$ term is a built-in judgment
- * describing level inclusion.
- * @end[doc]
- *)
+doc <:doc< ************************************************************************
+   @begin[doc]
+   @modsubsection{Universe cumulativity}
+  
+   The following two rules describe universe @emph{cumulativity}.
+   The $@cumulativity{i:l; j:l}$ term is a built-in judgment
+   describing level inclusion.
+   @end[doc]
+>>
 
 (*
  * H >- Uj in Ui
@@ -492,7 +492,7 @@ prim universeCumulativity univ[j:l] :
    sequent ['ext] { 'H >- 'x = 'y in univ[i:l] } =
    it
 
-(*! @docoff *)
+doc <:doc< @docoff >>
 let univ_member_term = << univ[i:l] in univ[j:l] >>
 
 let eqcd_univT =
@@ -501,14 +501,14 @@ let eqcd_univT =
 let resource eqcd += (univ_term, eqcd_univT)
 let resource intro += (univ_member_term, wrap_intro eqcd_univT)
 
-(*!************************************************************************
- * @begin[doc]
- * @modsubsection{The type universe is a type}
- *
- * The next three rules state that every universe $@univ{l}$ is a type, and
- * every inhabitant $x @in @univ{l}$ is also a type.
- * @end[doc]
- *)
+doc <:doc< ************************************************************************
+   @begin[doc]
+   @modsubsection{The type universe is a type}
+  
+   The next three rules state that every universe $@univ{l}$ is a type, and
+   every inhabitant $x @in @univ{l}$ is also a type.
+   @end[doc]
+>>
 prim universeMemberType univ[i:l] :
    [wf] sequent [squash] { 'H >- 'x in univ[i:l] } -->
    sequent ['ext] { 'H >- "type"{'x} } =
@@ -524,7 +524,7 @@ interactive universeAssumType 'H :
 interactive universeType {| intro [] |} :
    sequent ['ext] { 'H >- "type"{univ[l:l]} }
 
-(*! @docoff *)
+doc <:doc< @docoff >>
 let univTypeT = universeMemberType
 
 (*

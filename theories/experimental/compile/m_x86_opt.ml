@@ -1,33 +1,33 @@
-(*!
- * @begin[spelling]
- * CPS ra
- * @end[spelling]
- *
- * Some easy assembly optimizations.
- *
- * ----------------------------------------------------------------
- *
- * @begin[license]
- * Copyright (C) 2003 Jason Hickey, Caltech
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- *
- * Author: Jason Hickey
- * @email{jyh@cs.caltech.edu}
- * @end[license]
- *)
+doc <:doc< 
+   @begin[spelling]
+   CPS ra
+   @end[spelling]
+  
+   Some easy assembly optimizations.
+  
+   ----------------------------------------------------------------
+  
+   @begin[license]
+   Copyright (C) 2003 Jason Hickey, Caltech
+  
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public License
+   as published by the Free Software Foundation; either version 2
+   of the License, or (at your option) any later version.
+  
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+  
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  
+   Author: Jason Hickey
+   @email{jyh@cs.caltech.edu}
+   @end[license]
+>>
 extends M_x86_asm
 extends M_util
 
@@ -47,23 +47,23 @@ open Top_conversionals
  * REDUCTION RESOURCES                                                   *
  ************************************************************************)
 
-(*!
- * @begin[doc]
- * @resources
- *
- * @bf{The @Comment!resource[before_ra_resource]}
- *
- * The @tt{before_ra} resource provides a generic method for
- * defining @emph{CPS transformation}.  The @conv[before_raC] conversion
- * can be used to apply this evaluator.
- *
- * The implementation of the @tt{before_ra_resource} and the @tt[before_raC]
- * conversion rely on tables to store the shape of redices, together with the
- * conversions for the reduction.
- *
- * @docoff
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @resources
+  
+   @bf{The @Comment!resource[before_ra_resource]}
+  
+   The @tt{before_ra} resource provides a generic method for
+   defining @emph{CPS transformation}.  The @conv[before_raC] conversion
+   can be used to apply this evaluator.
+  
+   The implementation of the @tt{before_ra_resource} and the @tt[before_raC]
+   conversion rely on tables to store the shape of redices, together with the
+   conversions for the reduction.
+  
+   @docoff
+   @end[doc]
+>>
 let resource before_ra =
    table_resource_info identity extract_data
 
@@ -137,7 +137,7 @@ prim_rw delete_null_reserve :
    <-->
    'rest
 
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 (************************************************************************
  * Resources.

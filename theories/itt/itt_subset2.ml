@@ -1,47 +1,47 @@
-(*!
- * @begin[doc]
- * @module[Itt_subset2]
- *
- * In this theory we prove some facts about subset relation defines in Section @refmodule[Itt_subset]. 
- * @end[doc]
- *
- * ----------------------------------------------------------------
- *
- * @begin[license]
- *
- * This file is part of MetaPRL, a modular, higher order
- * logical framework that provides a logical programming
- * environment for OCaml and other languages.
- *
- * See the file doc/index.html for information on Nuprl,
- * OCaml, and more information about this system.
- *
- * Copyright (C) 1998 Jason Hickey, Cornell University
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- *
- * Author:  Alexei Kopylov @email{kopylov@cs.cornell.edu}
- *
- * @end[license]
- *)
+doc <:doc< 
+   @begin[doc]
+   @module[Itt_subset2]
+  
+   In this theory we prove some facts about subset relation defines in Section @refmodule[Itt_subset]. 
+   @end[doc]
+  
+   ----------------------------------------------------------------
+  
+   @begin[license]
+  
+   This file is part of MetaPRL, a modular, higher order
+   logical framework that provides a logical programming
+   environment for OCaml and other languages.
+  
+   See the file doc/index.html for information on Nuprl,
+   OCaml, and more information about this system.
+  
+   Copyright (C) 1998 Jason Hickey, Cornell University
+  
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public License
+   as published by the Free Software Foundation; either version 2
+   of the License, or (at your option) any later version.
+  
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+  
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  
+   Author:  Alexei Kopylov @email{kopylov@cs.cornell.edu}
+  
+   @end[license]
+>>
 
-(*!
- * @begin[doc]
- * @parents
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @parents
+   @end[doc]
+>>
 extends Itt_subset
 extends Itt_set
 extends Itt_isect
@@ -50,7 +50,7 @@ extends Itt_bisect
 extends Itt_bunion
 extends Itt_ext_equal
 
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 open Printf
 open Mp_debug
@@ -90,14 +90,14 @@ let _ =
 
 
 
-(*!
+doc <:doc< 
  @begin[doc]
- * @modsection{Sets}
+   @modsection{Sets}
   The subset relation corresponds to set type (Section @refmodule[Itt_set]) in the following way:
   $<<'A subset 'B>>$ if and only if there is a proposition $P: <<'B -> univ[i:l]>>$, such that
   $<<ext_equal{'A; {x:'B | 'P['x]}}>>$.
  @end[doc]
-  *)
+>>
 
 
 interactive set_subset {| intro [] |}  :
@@ -115,7 +115,7 @@ interactive subset_iff  :
    sequent ['ext] {'H >- iff{'A subset 'B; exst P:'B -> univ[i:l]. ext_equal{{x:'B| 'P 'x}; 'A}} }
 
 
-(*!
+doc <:doc< 
  @begin[doc]
  @modsection{Lattice}
   Subsets of a given type forms a lattice with respect to $<<space subset space>>$ relation and intersection and union operations.
@@ -123,7 +123,7 @@ interactive subset_iff  :
   @modsubsection{Order}
   Subset relation forms a partial order on types.
  @end[doc]
-  *)
+>>
 
 
 
@@ -145,15 +145,15 @@ interactive subset_exact:
 
 
 
-(*!
- * @begin[doc]
- * @modsubsection{Union and Intersection}
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Union and Intersection}
    Although intersection and union on types do not behave as set-theoretic union and intersection,
    they works exactly as set-theoretic union and intersection on @em{subsets} of a given type.
 
    Intersection of @emph{non-empty} family of subsets of a given type is subset of this type.
- * @end[doc]
- *)
+   @end[doc]
+>>
 
 interactive subset_isect {| intro[AutoMustComplete] |}:
    sequent [squash] { 'H >-'I } -->
@@ -165,21 +165,21 @@ interactive subset_bisect {| intro[AutoMustComplete] |}:
    sequent [squash] { 'H >-'B subset 'T} -->
    sequent ['ext] { 'H >- 'A isect 'B subset 'T }
 
-(*!
- * @begin[doc]
+doc <:doc< 
+   @begin[doc]
    Note that if only one of types is subset of $T$ then it does not mean that their intersection is subset of $T$.
- * @end[doc]
- *)
+   @end[doc]
+>>
 
 interactive counterexample2 :
    sequent ['ext] { 'H >- not{(bool isect top subset top)} }
 
-(*!
- * @begin[doc]
+doc <:doc< 
+   @begin[doc]
 
    Union of a family of subsets of a given type is subset of this type.
- * @end[doc]
- *)
+   @end[doc]
+>>
       
 interactive subset_union {| intro[] |}:
    sequent [squash] { 'H >-"type"{'I} } -->
@@ -192,12 +192,12 @@ interactive subset_bunion {| intro[] |}:
    sequent ['ext] { 'H >- 'A bunion 'B subset 'T }
 
 
-(*!
- * @begin[doc]
- * @modsection{Monotonicity}
+doc <:doc< 
+   @begin[doc]
+   @modsection{Monotonicity}
     Most of the type constructors are monotone with respect to $<<space subset space>>$.
- * @end[doc]
- *)
+   @end[doc]
+>>
 
 interactive prod_subset {| intro [] |} :
    sequent [squash] { 'H >- 'A subset '"A'" } -->
@@ -209,7 +209,7 @@ interactive union_subset {| intro [] |} :
    sequent [squash] { 'H >- 'B subset '"B'" } -->
    sequent ['ext] { 'H >- 'A + 'B subset '"A'" + '"B'" } 
 
-(*! @docoff *)
+doc <:doc< @docoff >>
 
       
 (*

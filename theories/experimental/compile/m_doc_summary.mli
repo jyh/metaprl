@@ -26,9 +26,7 @@
  *)
 extends M_doc_comment
 
-(*!
- * @docoff
- *
+(*
  * -*-
  * Local Variables:
  * Caml-master: "compile"

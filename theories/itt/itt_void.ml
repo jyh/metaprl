@@ -1,54 +1,54 @@
-(*!
- * @begin[doc]
- * @module[Itt_void]
- *
- * The @tt{Itt_void} module defines the @emph{empty} type.
- * The $@void$ type is a subtype of every other type (since
- * it has no elements).
- * @end[doc]
- *
- * ----------------------------------------------------------------
- *
- * @begin[license]
- *
- * This file is part of MetaPRL, a modular, higher order
- * logical framework that provides a logical programming
- * environment for OCaml and other languages.
- *
- * See the file doc/index.html for information on Nuprl,
- * OCaml, and more information about this system.
- *
- * Copyright (C) 1998 Jason Hickey, Cornell University
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- *
- * Author: Jason Hickey
- * @email{jyh@cs.caltech.edu}
- *
- * @end[license]
- *)
+doc <:doc< 
+   @begin[doc]
+   @module[Itt_void]
+  
+   The @tt{Itt_void} module defines the @emph{empty} type.
+   The $@void$ type is a subtype of every other type (since
+   it has no elements).
+   @end[doc]
+  
+   ----------------------------------------------------------------
+  
+   @begin[license]
+  
+   This file is part of MetaPRL, a modular, higher order
+   logical framework that provides a logical programming
+   environment for OCaml and other languages.
+  
+   See the file doc/index.html for information on Nuprl,
+   OCaml, and more information about this system.
+  
+   Copyright (C) 1998 Jason Hickey, Cornell University
+  
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public License
+   as published by the Free Software Foundation; either version 2
+   of the License, or (at your option) any later version.
+  
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+  
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  
+   Author: Jason Hickey
+   @email{jyh@cs.caltech.edu}
+  
+   @end[license]
+>>
 
-(*!
- * @begin[doc]
- * @parents
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @parents
+   @end[doc]
+>>
 extends Itt_equal
 extends Itt_squash
 extends Itt_subtype
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 open Printf
 open Mp_debug
@@ -77,10 +77,10 @@ let _ =
  * TERMS                                                                *
  ************************************************************************)
 
-(*! @doc{@terms} *)
+doc <:doc< @doc{@terms} >>
 declare void
 declare top (* we declare it here because we need it for type inference *)
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 let void_term = << void >>
 let void_opname = opname_of_term void_term
@@ -96,17 +96,17 @@ dform void_df1 : except_mode[src] :: void = `"Void"
  * RULES                                                                *
  ************************************************************************)
 
-(*!
- * @begin[doc]
- * @rules
- *
- * @modsubsection{Equality and typehood}
- *
- * The $@void$ type is a member of every universe, and it
- * is a type.
- * @end[doc]
- *
- *)
+doc <:doc< 
+   @begin[doc]
+   @rules
+  
+   @modsubsection{Equality and typehood}
+  
+   The $@void$ type is a member of every universe, and it
+   is a type.
+   @end[doc]
+  
+>>
 prim voidEquality {| intro []; eqcd |} :
    sequent ['ext] { 'H >- void in univ[i:l] } =
    it
@@ -125,30 +125,30 @@ prim voidType {| intro [] |} :
    sequent ['ext] { 'H >- "type"{void} } =
    it
 
-(*!
- * @begin[doc]
- * @modsubsection{Elimination}
- *
- * Since the $@void$ type is empty, induction over the
- * $@void$ type produces no cases.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Elimination}
+  
+   Since the $@void$ type is empty, induction over the
+   $@void$ type produces no cases.
+   @end[doc]
+>>
 prim voidElimination {| elim []; squash |} 'H :
    sequent ['ext] { 'H; x: void; 'J['x] >- 'C['x] } =
    it
 
-(*!
- * @begin[doc]
- * @modsubsection{Subtyping}
- *
- * The $@void$ type is a subtype of every other type.
- * This rule is derived from the definition of subtyping, and the
- * @hrefrule[voidElimination] rule.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Subtyping}
+  
+   The $@void$ type is a subtype of every other type.
+   This rule is derived from the definition of subtyping, and the
+   @hrefrule[voidElimination] rule.
+   @end[doc]
+>>
 interactive void_subtype {| intro[] |} :
    sequent ['ext] { 'H >- \subtype{void; 'T} }
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 (************************************************************************
  * SUBTYPING                                                            *

@@ -34,9 +34,7 @@ declare mul{'i1; 'i2}
 declare div{'i1; 'i2}
 declare max{'i1; 'i2}
 
-(*!
- * @docoff
- *
+(*
  * -*-
  * Local Variables:
  * Caml-master: "compile"

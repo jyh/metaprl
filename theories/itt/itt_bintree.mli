@@ -5,8 +5,6 @@ extends Itt_srec
 extends Itt_bisect
 extends Itt_struct
 
-(*! @docoff *)
-
 open Printf
 open Mp_debug
 open Refiner.Refiner
@@ -32,13 +30,9 @@ open Itt_srec
 open Itt_union
 open Itt_struct
 
-
-
 declare Node{'T}
 
-
 declare BinTree
-
 
 declare emptytree
 
@@ -62,10 +56,3 @@ declare simpletree
 val match_tree : conv
 val leftSubtree : conv
 val rightSubtree : conv
-
-
-
-
-
-
-

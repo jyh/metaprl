@@ -1,69 +1,69 @@
-(*!
- * @begin[spelling]
- * axiomFormation squashElimination
- * subtypeElimination info
- * @end[spelling]
- *
- * @begin[doc]
- * @module[Itt_subtype]
- *
- * The @tt[Itt_subtype] module provides the definition of
- * @emph{subtyping}.  Informally a type $T_1$ is a subtype of
- * a type $T_2$, $T_1 @subseteq T_2$, if any two equal elements of $T_1$ are also
- * equal in $T_2$.  This is slightly different from the set-theoretic
- * definition.  In set theory, the quotiented set $@int_2$ contains
- * two equivalence classes; one is the set of even numbers and the other
- * is the set of odd numbers.  In the @Nuprl{} type theory, the two types
- * have the same elements, but all even numbers are equal in $@int_2$ (and
- * all the odd numbers are also equal).  It follows that $@int @subseteq @int_2$.
- *
- * The subtype-type has trivial computational content, like equality.
- * The subtype contains only the $@it$ term if it is true; it is
- * empty otherwise.
- * @end[doc]
- *
- * ----------------------------------------------------------------
- *
- * @begin[license]
- *
- * This file is part of MetaPRL, a modular, higher order
- * logical framework that provides a logical programming
- * environment for OCaml and other languages.
- *
- * See the file doc/index.html for information on Nuprl,
- * OCaml, and more information about this system.
- *
- * Copyright (C) 1998 Jason Hickey, Cornell University
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- *
- * Author: Jason Hickey
- * @email{jyh@cs.caltech.edu}
- *
- * @end[license]
- *)
+doc <:doc< 
+   @begin[spelling]
+   axiomFormation squashElimination
+   subtypeElimination info
+   @end[spelling]
+  
+   @begin[doc]
+   @module[Itt_subtype]
+  
+   The @tt[Itt_subtype] module provides the definition of
+   @emph{subtyping}.  Informally a type $T_1$ is a subtype of
+   a type $T_2$, $T_1 @subseteq T_2$, if any two equal elements of $T_1$ are also
+   equal in $T_2$.  This is slightly different from the set-theoretic
+   definition.  In set theory, the quotiented set $@int_2$ contains
+   two equivalence classes; one is the set of even numbers and the other
+   is the set of odd numbers.  In the @Nuprl{} type theory, the two types
+   have the same elements, but all even numbers are equal in $@int_2$ (and
+   all the odd numbers are also equal).  It follows that $@int @subseteq @int_2$.
+  
+   The subtype-type has trivial computational content, like equality.
+   The subtype contains only the $@it$ term if it is true; it is
+   empty otherwise.
+   @end[doc]
+  
+   ----------------------------------------------------------------
+  
+   @begin[license]
+  
+   This file is part of MetaPRL, a modular, higher order
+   logical framework that provides a logical programming
+   environment for OCaml and other languages.
+  
+   See the file doc/index.html for information on Nuprl,
+   OCaml, and more information about this system.
+  
+   Copyright (C) 1998 Jason Hickey, Cornell University
+  
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public License
+   as published by the Free Software Foundation; either version 2
+   of the License, or (at your option) any later version.
+  
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+  
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  
+   Author: Jason Hickey
+   @email{jyh@cs.caltech.edu}
+  
+   @end[license]
+>>
 
-(*!
- * @begin[doc]
- * @parents
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @parents
+   @end[doc]
+>>
 extends Itt_equal
 extends Itt_struct
 extends Itt_squash
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 open Printf
 open Mp_debug
@@ -100,15 +100,15 @@ let _ =
  * TERMS                                                                *
  ************************************************************************)
 
-(*!
- * @begin[doc]
- * @terms
- *
- * The @tt{subtype} term is a binary relation.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @terms
+  
+   The @tt{subtype} term is a binary relation.
+   @end[doc]
+>>
 declare \subtype{'A; 'B}
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 let subtype_term = << 'A subtype 'B >>
 let subtype_opname = opname_of_term subtype_term
@@ -144,17 +144,17 @@ prim subtypeFormation :
    sequent ['ext] { 'H >- univ[i:l] } =
    \subtype{'A; 'B}
 
-(*!
- * @begin[doc]
- * @rules
- *
- * @modsubsection{Typehood and equality}
- *
- * The $<< \subtype{'A; 'B} >>$ term is a type if both
- * $A$ and $B$ are types.  The equality is @emph{intensional}:
- * two subtype-types are equal if their subterms are equal.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @rules
+  
+   @modsubsection{Typehood and equality}
+  
+   The $<< \subtype{'A; 'B} >>$ term is a type if both
+   $A$ and $B$ are types.  The equality is @emph{intensional}:
+   two subtype-types are equal if their subterms are equal.
+   @end[doc]
+>>
 prim subtypeEquality {| intro []; eqcd |} :
    [wf] sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
    [wf] sequent [squash] { 'H >- 'B1 = 'B2 in univ[i:l] } -->
@@ -167,13 +167,13 @@ prim subtypeType {| intro [] |} :
    sequent ['ext] { 'H >- "type"{.'A subtype 'B} } =
    it
 
-(*!
- * @begin[doc]
- * The intensional interpretation of typehood also means that if
- * the subtype judgment $A @subseteq B$ is true, then both $A$
- * and $B$ are types.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   The intensional interpretation of typehood also means that if
+   the subtype judgment $A @subseteq B$ is true, then both $A$
+   and $B$ are types.
+   @end[doc]
+>>
 prim subtypeTypeRight 'B :
    [main] sequent [squash] { 'H >- 'A subtype 'B } -->
    sequent ['ext] { 'H >- "type"{'A} } =
@@ -184,46 +184,46 @@ prim subtypeTypeLeft 'A :
    sequent ['ext] { 'H >- "type"{'B} } =
    it
 
-(*!
- * @begin[doc]
- * @modsubsection{Introduction}
- *
- * The @tt{subtype_axiomFormation} rule gives the introduction form
- * for the subtype judgment.  A type $A @subseteq B$ is true if $A$
- * and $B$ are types, and any term $t @in A$ is also in $B$.  The
- * proof extract term is always the $@it$ term.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Introduction}
+  
+   The @tt{subtype_axiomFormation} rule gives the introduction form
+   for the subtype judgment.  A type $A @subseteq B$ is true if $A$
+   and $B$ are types, and any term $t @in A$ is also in $B$.  The
+   proof extract term is always the $@it$ term.
+   @end[doc]
+>>
 prim subtype_axiomFormation {| intro [] |} :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [main] sequent [squash] { 'H; x: 'A >- 'x in 'B } -->
    sequent ['ext] { 'H >- 'A subtype 'B } =
    it
 
-(*!
- * @begin[doc]
- * @modsubsection{Member equality}
- * The subtype-type, if true, contains only the term $@it$.
- * For $@it$ to be in $A @subseteq B$, the subtype judgment
- * must be true.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Member equality}
+   The subtype-type, if true, contains only the term $@it$.
+   For $@it$ to be in $A @subseteq B$, the subtype judgment
+   must be true.
+   @end[doc]
+>>
 prim subtype_axiomEquality {| intro []; eqcd; squash |} :
    [main] sequent [squash] { 'H >- 'A subtype 'B } -->
    sequent ['ext] { 'H >- it in 'A subtype 'B } =
    it
 
-(*!
- * @begin[doc]
- * @modsubsection{Elimination}
- *
- * Subtype elimination has two forms.  The standard @tt{subtypeElimination}
- * form corresponds to induction: the witness $x@colon A @subseteq B$ is
- * replaced with the unique proof term $@it$.  The second rule
- * @tt{subtypeElimination2} takes a witness $a @in A$ and adds the
- * additional assumption $a @in B$.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Elimination}
+  
+   Subtype elimination has two forms.  The standard @tt{subtypeElimination}
+   form corresponds to induction: the witness $x@colon A @subseteq B$ is
+   replaced with the unique proof term $@it$.  The second rule
+   @tt{subtypeElimination2} takes a witness $a @in A$ and adds the
+   additional assumption $a @in B$.
+   @end[doc]
+>>
 prim subtypeElimination {| elim [ThinOption thinT] |} 'H :
    ('t : sequent ['ext] { 'H; x: 'A subtype 'B; 'J[it] >- 'C[it] }) -->
    sequent ['ext] { 'H; x: 'A subtype 'B; 'J['x] >- 'C['x] } =
@@ -246,17 +246,17 @@ type sub_resource_info =
  | RLSubtype of sub_info_type
  | DSubtype of sub_info_type
 
-(*!
- * @begin[doc]
- * @resources
- *
- * The @tt{Itt_subtype} module defines the @resource[subtype_resource], which is
- * used to prove subtyping judgments.  The @tt{sub_resource_info} argument
- * requires two terms $t_1 @subseteq t_2$ that match the goal term, and
- * a tactic that can be used to refine goals of that form.
- * @end[doc]
- *)
-(*! @docoff *)
+doc <:doc< 
+   @begin[doc]
+   @resources
+  
+   The @tt{Itt_subtype} module defines the @resource[subtype_resource], which is
+   used to prove subtyping judgments.  The @tt{sub_resource_info} argument
+   requires two terms $t_1 @subseteq t_2$ that match the goal term, and
+   a tactic that can be used to refine goals of that form.
+   @end[doc]
+>>
+doc <:doc< @docoff >>
 
 (*
  * Improve the subtyping information.

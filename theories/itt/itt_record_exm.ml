@@ -1,14 +1,14 @@
-(*!
- * @begin[doc]
- * @module[Itt_record_exm]
- *
- * This theory contains some examples of how to use records.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @module[Itt_record_exm]
+  
+   This theory contains some examples of how to use records.
+   @end[doc]
+>>
 
 extends Itt_record
 
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 extends Itt_int_base
 extends Itt_int_ext
@@ -41,12 +41,12 @@ open Itt_fun
 open Itt_rfun
 open Itt_list
 
-(*!
- * @begin[doc]
- * @modsection{Simple Records}
- * First, let us define two record types: $<<plane>>$ and $<<space>>$.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsection{Simple Records}
+   First, let us define two record types: $<<plane>>$ and $<<space>>$.
+   @end[doc]
+>>
 
 define unfold_plane:  plane <--> {x:int; y:int}
 
@@ -59,45 +59,45 @@ interactive spaceType {|intro[] |} :
    sequent['ext] {'H >- "type"{space} }
 
 
-(*!
- * @begin[doc]
- * The elements of these types are records. E.g., the point $<<O>>$ is an element of the type $<<space>>$:
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   The elements of these types are records. E.g., the point $<<O>>$ is an element of the type $<<space>>$:
+   @end[doc]
+>>
 
 define unfold_O: O <-->  {x=0; y=0; z=0}
 
 interactive oInSpace {|intro[] |} :
    sequent['ext] {'H >- O in space }
 
-(*!
- * @begin[doc]
- * $<<O>>$ also can be considered as an element of the type $<<plane>>$:
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   $<<O>>$ also can be considered as an element of the type $<<plane>>$:
+   @end[doc]
+>>
 
 interactive oInPlane {|intro[] |} :
    sequent['ext] {'H >- O in plane }
 
-(*!
- * @begin[doc]
- * In general $<<space>>$ is a subtype of $<<plane>>$.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   In general $<<space>>$ is a subtype of $<<plane>>$.
+   @end[doc]
+>>
 
 interactive spacePlane {|intro[] |} :
    sequent['ext] {'H >- space  subtype plane }
 
-(*!
- * @begin[doc]
- * Let us consider two points $<<A>>$ and $<<B>>$:
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   Let us consider two points $<<A>>$ and $<<B>>$:
+   @end[doc]
+>>
 
 define unfold_A: A <--> {x=1; y=2; z=3}
 define unfold_B: B <--> {z=0; y=2; x=1}
 
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 interactive aInSpace {|intro[] |} :
    sequent['ext] {'H >- A in space }
@@ -106,13 +106,13 @@ interactive bInSpace {|intro[] |} :
    sequent['ext] {'H >- B in space }
 
 
-(*!
- * @begin[doc]
- * These points are equal in $<<plane>>$, since they have
- * the same $<<label["x":t]>>$ and $<<label["y":t]>>$ coordinates,
- * But they are not equal in $<<space>>$, since they differ in $<<label["z":t]>>$ coordinate.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   These points are equal in $<<plane>>$, since they have
+   the same $<<label["x":t]>>$ and $<<label["y":t]>>$ coordinates,
+   But they are not equal in $<<space>>$, since they differ in $<<label["z":t]>>$ coordinate.
+   @end[doc]
+>>
 
 interactive abInPlane {|intro[] |} :
    sequent['ext] {'H >- A = B in plane }
@@ -120,39 +120,39 @@ interactive abInPlane {|intro[] |} :
 interactive abInSpace {|intro[] |} :
    sequent['ext] {'H >- not{.A = B in space} }
 
-(*!
- * @begin[doc]
- * We can change the order of fields with different labels. E.g.,
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   We can change the order of fields with different labels. E.g.,
+   @end[doc]
+>>
 
 interactive_rw a_rw  :
    A <--> {y=2; z=3; x=1}
 
-(*!
- * @begin[doc]
- * However if two fields have the same label, then the rightmost field covers others. E.g.,
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   However if two fields have the same label, then the rightmost field covers others. E.g.,
+   @end[doc]
+>>
 
 interactive_rw cover_rw  :
    {x=3; x=2} <-->    {x=2}
 
 
-(*!
- * @begin[doc]
- * The field operator $<<field[x:t]{'r}>>$ gets the field $<<label[x:t]>>$ of the record $<<'r>>$. E.g.,
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   The field operator $<<field[x:t]{'r}>>$ gets the field $<<label[x:t]>>$ of the record $<<'r>>$. E.g.,
+   @end[doc]
+>>
 
 interactive_rw a_z_rw  :
    (A^y) <--> 2
 
-(*!
- * @begin[doc]
- * Let us define
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   Let us define
+   @end[doc]
+>>
 
 define plane_point: point{'a;'b;'e} <--> rcrd["x":t]{'a; rcrd["y":t]{'b;'e }}
 define space_point: point{'a;'b; 'c;'e} <--> rcrd["x":t]{'a; rcrd["y":t]{'b; rcrd["z":t]{'c;'e}}}
@@ -174,11 +174,11 @@ interactive spaceIntro {|intro[] |} :
    sequent[squash] {'H >- 'c in int} -->
    sequent['ext] {'H >- point{'a;'b;'c;rcrd} in space}
 
-(*!
- * @begin[doc]
- * Then we have the following reductions:
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   Then we have the following reductions:
+   @end[doc]
+>>
 
 
 
@@ -196,67 +196,67 @@ interactive point_eta :
    sequent['ext]{'H >-   point{.'p^x;.'p^y;'p} ~ 'p }
 
 
-(*!
- * @begin[doc]
- * The last reduction says that any element of $<<plane>>$ is a point of the form $<<point{'a;'b;rcrd}>>$.
- * Therefore we have the following elimination rule:
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   The last reduction says that any element of $<<plane>>$ is a point of the form $<<point{'a;'b;rcrd}>>$.
+   Therefore we have the following elimination rule:
+   @end[doc]
+>>
 
 interactive planeElim {|elim[] |} 'H :
    sequent['ext]{'H; a:int; b:int; e:record; 'J[point{'a;'b;'e}] >- 'C[point{'a;'b;'e}] } -->
    sequent['ext]  {'H; p:plane; 'J['p] >- 'C['p] }
 
 
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 interactive spaceElim {|elim[] |} 'H :
    sequent['ext]{'H; a:int; b:int; c:int; e:record; 'J[point{'a;'b;'c;'e}] >- 'C[point{'a;'b;'c;'e}] } -->
    sequent['ext]  {'H; p:space; 'J['p] >- 'C['p] }
 
 
-(*!
- * @begin[doc]
- * Now we can define length of a point:
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   Now we can define length of a point:
+   @end[doc]
+>>
 
 define unfold_length: length{'p} <--> ('p^x *@ 'p^x  +@  'p^y *@  'p^y)
 
-(*!
- * @begin[doc]
- * That is,
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   That is,
+   @end[doc]
+>>
 
 interactive_rw reduce_length: length{point{'a;'b;'e}} <--> ('a *@ 'a +@ 'b *@ 'b)
 
 let resource reduce += << length{point{'a;'b;'e}}  >>, reduce_length
 
-(*!
- * @begin[doc]
- * For example,
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   For example,
+   @end[doc]
+>>
 
 interactive length_A {|intro[] |} :
    sequent['ext]  {'H >- length{point{3;4;'e}} = 25 in int }
 
-(*!
- * @begin[doc]
- * Now, using the @tt[reduce_length] and @hrefrule[planeElim] rule, we can prove that
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   Now, using the @tt[reduce_length] and @hrefrule[planeElim] rule, we can prove that
+   @end[doc]
+>>
 
 interactive length_wf {|intro[] |} :
    sequent[squash]{'H >- 'p in plane } -->
    sequent['ext]  {'H >- length{'p} in int }
 
-(*!
- * @begin[doc]
- * Record can be extended. For example we can define $<<cplane>>$ and $<<cspace>>$ types.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   Record can be extended. For example we can define $<<cplane>>$ and $<<cspace>>$ types.
+   @end[doc]
+>>
 
 define unfold_colored_plane:  cplane <--> record["color":t]{atom;plane}
 define unfold_colored_space:  cspace <--> record["color":t]{atom;space}
@@ -275,13 +275,13 @@ interactive cspaceElim {|elim[] |} 'H :
 
 
 
-(*!
- * @begin[doc]
- * @modsection{Dependent Records}
- * @modsubsection{Algebraic structures}
- *
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsection{Dependent Records}
+   @modsubsection{Algebraic structures}
+  
+   @end[doc]
+>>
 
 
 define unfold_semigroup1 : semigroup[G:t,mul:t,i:l] <-->
@@ -345,11 +345,11 @@ interactive semigroupAssos4 semigroup[i:l] :
       (('a ^* 'b) ^* 'c) ^* 'd = 'a ^* ('b ^* ('c ^* 'd)) in ^car
       }
 
-(*!
- * @begin[doc]
- * @modsubsection{Data structures}
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Data structures}
+   @end[doc]
+>>
 
 
 define unfold_stack :
@@ -416,7 +416,7 @@ let resource reduce +=
 interactive_rw example_of_evaluation :
   (a_module^foo 5) <--> 1
 
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 interactive tst :
    sequent['ext]  { 'H >-  'C} -->

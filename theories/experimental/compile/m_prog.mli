@@ -42,9 +42,7 @@ topval progTopC : conv
 topval progC : conv
 topval progT : tactic
 
-(*!
- * @docoff
- *
+(*
  * -*-
  * Local Variables:
  * Caml-master: "compile"

@@ -74,9 +74,7 @@ declare math_FunDef{'label; 'exp}
 declare math_EndDef
 declare math_LetFun{'R; 'label; 'f; 'e}
 
-(*!
- * @docoff
- *
+(*
  * -*-
  * Local Variables:
  * Caml-master: "compile"

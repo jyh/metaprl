@@ -168,9 +168,7 @@ val is_letrec_term : term -> bool
 val dest_letrec_term : term -> string * term * string * term
 val mk_letrec_term : string -> term -> string -> term -> term
 
-(*!
- * @docoff
- *
+(*
  * -*-
  * Local Variables:
  * Caml-master: "compile"

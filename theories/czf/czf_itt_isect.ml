@@ -1,58 +1,58 @@
-(*!
- * @begin[spelling]
- * isect
- * @end[spelling]
- * @begin[doc]
- * @module[Czf_itt_isect]
- *
- * The @tt{Czf_itt_isect} module gives defines a binary
- * and general intersection.  The intersection is a @emph{derived} form,
- * the binary intersection is defined with separation:
- *
- * $$@isect{s_1; s_2} @equiv @sep{x; s_1; @mem{x; s_2}}.$$
- *
- * The general intersection is defined over the union type.
- * The elements in the intersection $@isect{s}$ are the elements
- * of the union $@union{s}$ that are also members of all
- * the elements of $s$.
- *
- * $$@isect{s} @equiv @sep{x; @union{s}; @dall{y; s; @mem{x; y}}}$$
- * @end[doc]
- *
- * ----------------------------------------------------------------
- *
- * @begin[license]
- * This file is part of MetaPRL, a modular, higher order
- * logical framework that provides a logical programming
- * environment for OCaml and other languages.
- *
- * See the file doc/index.html for information on Nuprl,
- * OCaml, and more information about this system.
- *
- * Copyright (C) 1998 Jason Hickey, Cornell University
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- *
- * Author: Jason Hickey
- * @email{jyh@cs.cornell.edu}
- * @end[license]
- *)
+doc <:doc< 
+   @begin[spelling]
+   isect
+   @end[spelling]
+   @begin[doc]
+   @module[Czf_itt_isect]
+  
+   The @tt{Czf_itt_isect} module gives defines a binary
+   and general intersection.  The intersection is a @emph{derived} form,
+   the binary intersection is defined with separation:
+  
+   $$@isect{s_1; s_2} @equiv @sep{x; s_1; @mem{x; s_2}}.$$
+  
+   The general intersection is defined over the union type.
+   The elements in the intersection $@isect{s}$ are the elements
+   of the union $@union{s}$ that are also members of all
+   the elements of $s$.
+  
+   $$@isect{s} @equiv @sep{x; @union{s}; @dall{y; s; @mem{x; y}}}$$
+   @end[doc]
+  
+   ----------------------------------------------------------------
+  
+   @begin[license]
+   This file is part of MetaPRL, a modular, higher order
+   logical framework that provides a logical programming
+   environment for OCaml and other languages.
+  
+   See the file doc/index.html for information on Nuprl,
+   OCaml, and more information about this system.
+  
+   Copyright (C) 1998 Jason Hickey, Cornell University
+  
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public License
+   as published by the Free Software Foundation; either version 2
+   of the License, or (at your option) any later version.
+  
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+  
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  
+   Author: Jason Hickey
+   @email{jyh@cs.cornell.edu}
+   @end[license]
+>>
 
-(*! @doc{@parents} *)
+doc <:doc< @doc{@parents} >>
 extends Czf_itt_union
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 open Printf
 open Mp_debug
@@ -76,7 +76,7 @@ let _ =
  * TERMS                                                                *
  ************************************************************************)
 
-(*! @doc{@terms} *)
+doc <:doc< @doc{@terms} >>
 declare "isect"{'s1; 's2}
 declare "isect"{'s1}
 
@@ -84,18 +84,18 @@ declare "isect"{'s1}
  * REWRITES                                                             *
  ************************************************************************)
 
-(*!
- * @begin[doc]
- * @rewrites
- *
- * The intersections are derived from the separation
- * set constructor in the @hrefmodule[Czf_itt_sep] module,
- * and the union in the @hrefmodule[Czf_itt_union] module.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @rewrites
+  
+   The intersections are derived from the separation
+   set constructor in the @hrefmodule[Czf_itt_sep] module,
+   and the union in the @hrefmodule[Czf_itt_union] module.
+   @end[doc]
+>>
 prim_rw unfold_bisect : "isect"{'s1; 's2} <--> sep{'s1; x. mem{'x; 's2}}
 prim_rw unfold_isect : "isect"{'s} <--> sep{union{'s}; x. dall{'s; y. mem{'x; 'y}}}
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 (************************************************************************
  * DISPLAY                                                              *
@@ -111,14 +111,14 @@ dform isect_df2 : parens :: "prec"[prec_and] :: "isect"{'s} =
  * RULES                                                                *
  ************************************************************************)
 
-(*!
- * @begin[doc]
- * @rules
- * @modsubsection{Well-formedness}
- *
- * Both forms of intersection are well-formed if their arguments are sets.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @rules
+   @modsubsection{Well-formedness}
+  
+   Both forms of intersection are well-formed if their arguments are sets.
+   @end[doc]
+>>
 interactive bisect_isset {| intro [] |} :
    ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
    ["wf"] sequent [squash] { 'H >- isset{'s2} } -->
@@ -128,14 +128,14 @@ interactive isect_isset {| intro [] |} :
    ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
    sequent ['ext] { 'H >- isset{."isect"{'s1}} }
 
-(*!
- * @begin[doc]
- * @modsubsection{Introduction}
- *
- * The binary intersection $@isect{s_1; s_2}$ requires membership
- * in both sets $s_1$ and $s_2$.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Introduction}
+  
+   The binary intersection $@isect{s_1; s_2}$ requires membership
+   in both sets $s_1$ and $s_2$.
+   @end[doc]
+>>
 interactive bisect_member_intro {| intro [] |} :
    ["wf"] sequent [squash] { 'H >- isset{'x} } -->
    ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
@@ -144,12 +144,12 @@ interactive bisect_member_intro {| intro [] |} :
    sequent ['ext] { 'H >- mem{'x; 's2} } -->
    sequent ['ext] { 'H >- mem{'x; ."isect"{'s1; 's2}} }
 
-(*!
- * @begin[doc]
- * A set $x$ is in the general intersection $@isect{s}$ if
- * $@mem{x; y}$ for all $@mem{y; s}$.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   A set $x$ is in the general intersection $@isect{s}$ if
+   $@mem{x; y}$ for all $@mem{y; s}$.
+   @end[doc]
+>>
 interactive isect_member_intro {| intro [] |} :
    ["wf"] sequent [squash] { 'H >- isset{'x} } -->
    ["wf"] sequent [squash] { 'H >- isset{'s} } -->
@@ -157,14 +157,14 @@ interactive isect_member_intro {| intro [] |} :
    sequent ['ext] { 'H; y: set; w: mem{'y; 's} >- mem{'x; 'y} } -->
    sequent ['ext] { 'H >- mem{'x; ."isect"{'s}} }
 
-(*!
- * @begin[doc]
- * @modsubsection{Elimination}
- *
- * The elimination form for membership in the binary intersection
- * produces the proofs for membership in both types.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Elimination}
+  
+   The elimination form for membership in the binary intersection
+   produces the proofs for membership in both types.
+   @end[doc]
+>>
 interactive bisect_member_elim {| elim [] |} 'H :
    ["wf"] sequent [squash] { 'H; x: mem{'y; ."isect"{'s1; 's2}}; 'J['x] >- isset{'y} } -->
    ["wf"] sequent [squash] { 'H; x: mem{'y; ."isect"{'s1; 's2}}; 'J['x] >- isset{'s1} } -->
@@ -173,12 +173,12 @@ interactive bisect_member_elim {| elim [] |} 'H :
    sequent ['ext] { 'H; x: mem{'y; ."isect"{'s1; 's2}}; 'J['x]; z: mem{'y; 's2} >- 'T['x] } -->
    sequent ['ext] { 'H; x: mem{'y; ."isect"{'s1; 's2}}; 'J['x] >- 'T['x] }
 
-(*!
- * @begin[doc]
- * The elimination form for the general isect $@mem{x; @isect{s}}$ performs
- * instantiation of the assumption on a particular set $@mem{z; 's}$.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   The elimination form for the general isect $@mem{x; @isect{s}}$ performs
+   instantiation of the assumption on a particular set $@mem{z; 's}$.
+   @end[doc]
+>>
 interactive isect_member_elim {| elim [] |} 'H 'z :
    ["wf"] sequent [squash] { 'H; x: mem{'y; ."isect"{'s}}; 'J['x] >- isset{'z} } -->
    ["wf"] sequent [squash] { 'H; x: mem{'y; ."isect"{'s}}; 'J['x] >- isset{'y} } -->
@@ -187,11 +187,11 @@ interactive isect_member_elim {| elim [] |} 'H 'z :
    sequent ['ext] { 'H; x: mem{'y; ."isect"{'s}}; 'J['x]; w: mem{'y; 'z} >- 'T['x] } -->
    sequent ['ext] { 'H; x: mem{'y; ."isect"{'s}}; 'J['x] >- 'T['x] }
 
-(*!
- * @begin[doc]
- * The intersection types are both functional in their arguments.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   The intersection types are both functional in their arguments.
+   @end[doc]
+>>
 interactive bisect_fun {| intro [] |} :
    sequent ['ext] { 'H >- fun_set{z. 's1['z]} } -->
    sequent ['ext] { 'H >- fun_set{z. 's2['z]} } -->
@@ -200,7 +200,7 @@ interactive bisect_fun {| intro [] |} :
 interactive isect_fun {| intro [] |} :
    sequent ['ext] { 'H >- fun_set{z. 's['z]} } -->
    sequent ['ext] { 'H >- fun_set{z. "isect"{'s['z]}} }
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 (*
  * -*-

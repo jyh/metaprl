@@ -250,9 +250,7 @@ sig
    val compile : block trace -> spset
 end
 
-(*!
- * @docoff
- *
+(*
  * -*-
  * Local Variables:
  * Caml-master: "compile"

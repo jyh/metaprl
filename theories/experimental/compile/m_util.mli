@@ -25,13 +25,7 @@
  * @end[license]
  *)
 
-(*!
- * @begin[doc]
- * @parents
- * @end[doc]
- *)
 extends Base_theory
-(*! @docoff *)
 
 open Term_match_table
 
@@ -46,9 +40,7 @@ val identity : 'a -> 'a
 val extract_data : conv term_table -> conv
 val process_resource_annotation : 'a -> 'b -> 'c -> 'd -> 'e -> meta_term -> 'f -> term * 'f
 
-(*!
- * @docoff
- *
+(*
  * -*-
  * Local Variables:
  * Caml-master: "compile"

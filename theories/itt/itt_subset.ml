@@ -1,74 +1,74 @@
-(*!
- * @spelling{Bickford}
- * 
- * @begin[doc]
- * @module[Itt_subset]
- *
- * The @tt[Itt_subset] module provides the set-theoretic definition of
- * @emph{subset}. A type $A$ is a subset of a type $B$,
- * $@subset{A; B}$, if $A$ is a subtype of $B$ and if any one of two equal
- * elements in $B$ is in $A$ then another element is also in $A$
- * (that is, two equal elements in $B$ are either both in $A$ or both not in $A$).
- * As a corollary we have that $A$ and $B$ have the same equality on the
- * elements of $A$. That is, for any two elements of $A$ if they are equal in $B$,
- * then they are also equal in $A$ (see rule @hrefrule[use_superset1]).
+doc <:doc< 
+   @spelling{Bickford}
+   
+   @begin[doc]
+   @module[Itt_subset]
+  
+   The @tt[Itt_subset] module provides the set-theoretic definition of
+   @emph{subset}. A type $A$ is a subset of a type $B$,
+   $@subset{A; B}$, if $A$ is a subtype of $B$ and if any one of two equal
+   elements in $B$ is in $A$ then another element is also in $A$
+   (that is, two equal elements in $B$ are either both in $A$ or both not in $A$).
+   As a corollary we have that $A$ and $B$ have the same equality on the
+   elements of $A$. That is, for any two elements of $A$ if they are equal in $B$,
+   then they are also equal in $A$ (see rule @hrefrule[use_superset1]).
 
- * Not every subtype is subset. For example, $<<int  subtype (int subtwo)>>$
- * but not $<<int subset (int subtwo)>>$. See also @hrefrule[counterexample1].
- *
- * The main property of $<<'A subset 'B>>$ is that the membership in $A$ could
- * be defined for all elements in $B$.
- *
- * The subset relation corresponds to set type (Section @refmodule[Itt_set]) in the following way:
- * $<<'A subset 'B>>$ if and only if there is a proposition $P: <<'B -> univ[i:l]>>$, such that
- * $<<ext_equal{'A; {x:'B | 'P['x]}}>>$ (see @hrefrule[subset_iff]).
- *
- * Type-theoretic intersection and union (Sections @refmodule[Itt_isect] and @refmodule[Itt_tunion])
+   Not every subtype is subset. For example, $<<int  subtype (int subtwo)>>$
+   but not $<<int subset (int subtwo)>>$. See also @hrefrule[counterexample1].
+  
+   The main property of $<<'A subset 'B>>$ is that the membership in $A$ could
+   be defined for all elements in $B$.
+  
+   The subset relation corresponds to set type (Section @refmodule[Itt_set]) in the following way:
+   $<<'A subset 'B>>$ if and only if there is a proposition $P: <<'B -> univ[i:l]>>$, such that
+   $<<ext_equal{'A; {x:'B | 'P['x]}}>>$ (see @hrefrule[subset_iff]).
+  
+   Type-theoretic intersection and union (Sections @refmodule[Itt_isect] and @refmodule[Itt_tunion])
    behaves on subsets of a given type  like usual intersection and union.
 
- * @end[doc]
- *
- * ----------------------------------------------------------------
- *
- * @begin[license]
- *
- * This file is part of MetaPRL, a modular, higher order
- * logical framework that provides a logical programming
- * environment for OCaml and other languages.
- *
- * See the file doc/index.html for information on Nuprl,
- * OCaml, and more information about this system.
- *
- * Copyright (C) 1998 Jason Hickey, Cornell University
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- *
- * Authors:
- *  Jason Hickey @email{jyh@cs.caltech.edu}
- *  Xin Yu @email{xiny@cs.caltech.edu},
- *  Alexei Kopylov @email{kopylov@cs.cornell.edu}
- *  An equivalent definition of "strong subtype" was in Mark Bickford's Logic of Events. 
- *
- * @end[license]
- *)
+   @end[doc]
+  
+   ----------------------------------------------------------------
+  
+   @begin[license]
+  
+   This file is part of MetaPRL, a modular, higher order
+   logical framework that provides a logical programming
+   environment for OCaml and other languages.
+  
+   See the file doc/index.html for information on Nuprl,
+   OCaml, and more information about this system.
+  
+   Copyright (C) 1998 Jason Hickey, Cornell University
+  
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public License
+   as published by the Free Software Foundation; either version 2
+   of the License, or (at your option) any later version.
+  
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+  
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  
+   Authors:
+    Jason Hickey @email{jyh@cs.caltech.edu}
+    Xin Yu @email{xiny@cs.caltech.edu},
+    Alexei Kopylov @email{kopylov@cs.cornell.edu}
+    An equivalent definition of "strong subtype" was in Mark Bickford's Logic of Events. 
+  
+   @end[license]
+>>
 
-(*!
- * @begin[doc]
- * @parents
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @parents
+   @end[doc]
+>>
 extends Itt_equal
 extends Itt_subtype
 extends Itt_struct
@@ -80,7 +80,7 @@ extends Itt_bool
 extends Itt_int_base
 extends Itt_ext_equal
 
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 open Printf
 open Mp_debug
@@ -121,12 +121,12 @@ let _ =
  * TERMS                                                                *
  ************************************************************************)
 
-(*!
- * @begin[doc]
- * @modsection{Definitions}
- *
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsection{Definitions}
+  
+   @end[doc]
+>>
 
 define mem : mem{'a; 'A; 'B} <--> (singleton{'a;'B} subtype 'A)
 
@@ -135,7 +135,7 @@ define unfold_subset : "subset"{'A; 'B} <-->
 
 define member : member{'a; 'A; 'B} <--> mem{'a; 'A; 'B} & 'A subset 'B & 'a in 'B
 
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 let fold_subset = makeFoldC << 'A subset 'B >> unfold_subset
 
@@ -167,11 +167,11 @@ dform subset_df1 : mode[src] :: parens :: "prec"[prec_subtype] :: ('A subset 'B)
 (************************************************************************
  * RULES                                                                *
  ************************************************************************)
-(*!
- * @begin[doc]
- * @modsection{Basic Rules}
- * @end[doc] 
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsection{Basic Rules}
+   @end[doc] 
+>>
 
 interactive mem_wf {| intro [] |}  :
    sequent [squash] { 'H >- 'a in 'B } -->
@@ -183,31 +183,31 @@ interactive mem_intro {| intro [] |}  :
    sequent [squash] { 'H; b:'B; u: 'a='b in 'B >- 'b in 'A} -->
    sequent ['ext] { 'H >- mem{'a;'A;'B} }
 
-(*!
- * @begin[doc]
- * @modsubsection{Subset}
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Subset}
    @modsubsection{Well-formedness}
    Type $<<'A subset 'B>>$ is well-formed whenever $A$ and $B$ are types.
- * @end[doc]
- *)
+   @end[doc]
+>>
 
 interactive subset_wf {| intro [] |} :
    sequent [squash] { 'H >- "type"{'A} } -->
    sequent [squash] { 'H >- "type"{'B} } -->
    sequent ['ext] { 'H >- "type"{.'A subset 'B} }
 
-(*!
- * @begin[doc]
+doc <:doc< 
+   @begin[doc]
    @modsubsection{Introduction Rule}
- * @end[doc]
- *)
+   @end[doc]
+>>
       
 interactive subset_intro {| intro [] |}  :
    [wf] sequent [squash] { 'H >- 'A subtype 'B } -->
    [main] sequent [squash] {'H; a: 'A; b: 'B; u: 'a = 'b in 'B >- 'b in 'A } -->
    sequent ['ext] { 'H >- 'A subset 'B }
 
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 (* mem, member and subset are squash stable: *)      
       
@@ -215,34 +215,34 @@ interactive subset_sqstable (* {| squash |} *) :
    sequent [squash] { 'H >- squash{'A subset 'B} } -->
    sequent ['ext] { 'H >- 'A subset 'B }
 
-(*!
- * @begin[doc]
- * @modsubsection{Elimination Rules}
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Elimination Rules}
 
    By definition if $<<'A subset 'B>>$ then  $<<'A subtype 'B>>$. (The opposite is not true --- see @hrefrule[counterexample1] below).
- * @end[doc]
-*)
+   @end[doc]
+>>
 
 interactive subset_is_subtype  :
    [assertion] sequent [squash] { 'H >- 'A subset 'B } -->
    sequent ['ext] { 'H >- 'A subtype 'B }
 
-(*!
- * @begin[doc]
+doc <:doc< 
+   @begin[doc]
    As a corollary we have that if two element are equal in a subset then they are equal in a superset.
- * @end[doc]
-*)
+   @end[doc]
+>>
 
 interactive use_subset  'A :
    [assertion] sequent [squash] { 'H >- 'A subset 'B } -->
    sequent [squash] { 'H >- 'x = 'y in 'A } -->
    sequent ['ext] { 'H >- 'x = 'y in 'B }
 
-(*!
- * @begin[doc]
+doc <:doc< 
+   @begin[doc]
    If two elements are equal in a type $B$ then they are equal in a subtype $A$ of $B$, if at least one of them is in $A$.
- * @end[doc]
-*)
+   @end[doc]
+>>
 
 interactive use_superset1  'B :
    [assertion] sequent [squash] { 'H >- 'A subset 'B } -->
@@ -256,32 +256,32 @@ interactive use_superset2  'B :
    sequent [squash] { 'H >- 'x = 'y in 'B } -->
    sequent ['ext] { 'H >- 'x = 'y in 'A }
 
-(*!
- * @begin[doc]
+doc <:doc< 
+   @begin[doc]
     As a corollary we have that if two element are equal in $B$ then if one of them is in $A$ then another one is also in $A$.
- * @end[doc]
- *)
+   @end[doc]
+>>
 interactive use_superset 'B 'y:
    [assertion] sequent [squash] { 'H >- 'A subset 'B } -->
    sequent [squash] { 'H >- 'y in 'A } -->
    sequent [squash] { 'H >- 'x = 'y in 'B } -->
    sequent ['ext] { 'H >- 'x  in 'A }
 
-(*!
- * @begin[doc]
+doc <:doc< 
+   @begin[doc]
    Note that the rule @hrefrule[subset_is_subtype] is not reversible: $<<'A subtype 'B>>$ does not imply $<<'A subset 'B>>$.
    For example, any type is subtype of $<<top>>$, but not every type is @emph{subset} of $<<top>>$.
- * @end[doc]
- *)
+   @end[doc]
+>>
 
 interactive counterexample1 :
    sequent ['ext] { 'H >- not{(bool subset top)} }
 
-(*!
- * @begin[doc]
- * If $<<'A subset 'B>>$ is true, then both $A$ and $B$ are types.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   If $<<'A subset 'B>>$ is true, then both $A$ and $B$ are types.
+   @end[doc]
+>>
 (* Note than if would have reverse functionality we could say that if A subset B Type then both A and B are types *)
       
 interactive subsetTypeRight  'B :
@@ -292,14 +292,14 @@ interactive subsetTypeLeft  'A :
    [main] sequent [squash] { 'H >- 'A subset 'B }  -->
    sequent ['ext] { 'H >- "type"{'B} }
 
-(*!
- * @begin[doc]
- * @modsubsection{Membership}
- * Proposition $<<'a in 'A subset 'B>>$ is almost equal to conjunction of
- * $<<'a in 'A>>$ and $<<'A subset 'B>>$, but its well-formedness is more liberal.
- * Indeed, $<<'a in 'A subset 'B>>$ is well-formed whenever $<<'a in 'B>>$ and $A$ and $B$ are types.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Membership}
+   Proposition $<<'a in 'A subset 'B>>$ is almost equal to conjunction of
+   $<<'a in 'A>>$ and $<<'A subset 'B>>$, but its well-formedness is more liberal.
+   Indeed, $<<'a in 'A subset 'B>>$ is well-formed whenever $<<'a in 'B>>$ and $A$ and $B$ are types.
+   @end[doc]
+>>
 
 (* Note that we don't need this membership if we add a rule: A subset B --> x in B --> x in A Type  *)
       
@@ -308,12 +308,12 @@ interactive member_wf {| intro [] |}  :
    sequent [squash] { 'H >- "type"{'A} } -->
    sequent ['ext] { 'H >- "type"{'a in 'A subset 'B} }
 
-(*!
- * @begin[doc]
- * Introduction and elimination rules reflect the fact that $<<'a in 'A subset 'B>>$
- * if and only if $<<'a in 'A>>$ and $<<'A subset 'B>>$.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   Introduction and elimination rules reflect the fact that $<<'a in 'A subset 'B>>$
+   if and only if $<<'a in 'A>>$ and $<<'A subset 'B>>$.
+   @end[doc]
+>>
       
 interactive member_intro {| intro [] |}  :
    sequent [squash] { 'H >- 'a in 'A } -->
@@ -324,20 +324,20 @@ interactive member_elim {| elim [] |} 'H :
    sequent ['ext] { 'H; u: 'a in 'A; v: 'A subset 'B; 'J >- 'C } --> 
    sequent ['ext] { 'H; u: 'a in 'A subset 'B; 'J >- 'C  }
 
-(*!
- * @begin[doc]
- * Note that the truth of predicate $<<'a in 'A subset 'B>>$ does not depend on $B$ whenever
- * $<<'A subtype 'B>>$ and this predicate is well-formed.
- * @end[doc]
- * This fact establishes a validity of introducing a binary membership <<'a in 'A>> with the liberal well-formedness rule.
- *)
+doc <:doc< 
+   @begin[doc]
+   Note that the truth of predicate $<<'a in 'A subset 'B>>$ does not depend on $B$ whenever
+   $<<'A subtype 'B>>$ and this predicate is well-formed.
+   @end[doc]
+   This fact establishes a validity of introducing a binary membership <<'a in 'A>> with the liberal well-formedness rule.
+>>
 
 interactive member_doesnot_depend_on_B  'H:
    sequent [squash] { 'H >- 'A subtype 'B } -->
    sequent [squash] { 'H >- 'A subtype '"B'" } -->
    sequent ['ext] { 'H; u: 'a in 'A subset 'B >- 'a in 'A subset '"B'" }
 
-(*! @docoff *)
+doc <:doc< @docoff >>
       
 (*
  * -*-

@@ -126,9 +126,7 @@ declare math_SetMem[opcode:s]{'cc; 'dst}
 declare math_SetReg[opcode:s]{'cc; 'src; 'dst}
 declare math_Jcc[opcode:s]{'cc; 'e}
 
-(*!
- * @docoff
- *
+(*
  * -*-
  * Local Variables:
  * Caml-master: "compile"

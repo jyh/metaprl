@@ -46,9 +46,7 @@ declare word_size
 declare header[i:n]
 declare header{'i}
 
-(*!
- * @docoff
- *
+(*
  * -*-
  * Local Variables:
  * Caml-master: "compile"

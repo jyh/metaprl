@@ -1,65 +1,65 @@
-(*!
- * @begin[spelling]
- * sqSubstT sqeq
- * @end[spelling]
+doc <:doc< 
+   @begin[spelling]
+   sqSubstT sqeq
+   @end[spelling]
 
 
- * @begin[doc]
- * @module[Itt_squiggle]
- *
- * The @tt[Itt_squiggle] module defines the squiggle equality.
- * The squiggle equality $<<'t ~ 's>>$ holds for closed terms $t$ and $s$ iff
- * $t$ can be reduced to $s$. We can expand this semantics for open terms
- * in the given context the same way as for any other type.
- * For example one can prove that
- * $$@sequent{ext; {H; x@colon @prod{A;B}}; x  ~  @pair{@fst{x};@snd{x}}}$$
- * This is a conditional rewrite: it states that we can replace $x$ with
- * $@pair{@fst{x};@snd{x}}$ only when we know that $x$ is from a product type.
- * The rules @hrefrule[squiggleSubstitution] and @hrefrule[squiggleHypSubstitution]
- * define when such substitution would be valid.
- * @end[doc]
- *
- * ----------------------------------------------------------------
- *
- * @begin[license]
- *
- * This file is part of MetaPRL, a modular, higher order
- * logical framework that provides a logical programming
- * environment for OCaml and other languages.
- *
- * See the file doc/index.html for information on Nuprl,
- * OCaml, and more information about this system.
- *
- * Copyright (C) 1998 Jason Hickey, Cornell University
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- *
- * @end[license]
- *)
+   @begin[doc]
+   @module[Itt_squiggle]
+  
+   The @tt[Itt_squiggle] module defines the squiggle equality.
+   The squiggle equality $<<'t ~ 's>>$ holds for closed terms $t$ and $s$ iff
+   $t$ can be reduced to $s$. We can expand this semantics for open terms
+   in the given context the same way as for any other type.
+   For example one can prove that
+   $$@sequent{ext; {H; x@colon @prod{A;B}}; x  ~  @pair{@fst{x};@snd{x}}}$$
+   This is a conditional rewrite: it states that we can replace $x$ with
+   $@pair{@fst{x};@snd{x}}$ only when we know that $x$ is from a product type.
+   The rules @hrefrule[squiggleSubstitution] and @hrefrule[squiggleHypSubstitution]
+   define when such substitution would be valid.
+   @end[doc]
+  
+   ----------------------------------------------------------------
+  
+   @begin[license]
+  
+   This file is part of MetaPRL, a modular, higher order
+   logical framework that provides a logical programming
+   environment for OCaml and other languages.
+  
+   See the file doc/index.html for information on Nuprl,
+   OCaml, and more information about this system.
+  
+   Copyright (C) 1998 Jason Hickey, Cornell University
+  
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public License
+   as published by the Free Software Foundation; either version 2
+   of the License, or (at your option) any later version.
+  
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+  
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  
+   @end[license]
+>>
 
-(*!************************************************************************
- * @begin[doc]
- * @parents
- * @end[doc]
- *)
+doc <:doc< ************************************************************************
+   @begin[doc]
+   @parents
+   @end[doc]
+>>
 
 extends Itt_equal
 extends Itt_struct
 extends Itt_squash
 
-(*! @docoff *)
+doc <:doc< @docoff >>
 extends Itt_comment
 
 open Printf
@@ -108,7 +108,7 @@ let _ =
 declare "sqeq"{'t;'s}
 *)
 
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 dform sqeq_df : ('a ~ 'b) = szone slot{'a} `" " sim hspace slot{'b} ezone
 
@@ -121,15 +121,15 @@ let mk_squiggle_term = mk_dep0_dep0_term squiggle_opname
 
 
 
-(*!
- * @begin[doc]
+doc <:doc< 
+   @begin[doc]
    @rewrites
- * @modsubsection{Typehood and equality}
+   @modsubsection{Typehood and equality}
    The squiggle relation $<<'t ~ 's>>$ is a type if and only if
    it holds.  Two squiggle relation $<<'t_1 ~ 's_1>>$ and $<<'t_2 ~ 's_2>>$
    are equal as types whenever they are correct types.
- * @end[doc]
-*)
+   @end[doc]
+>>
 prim squiggleEquality {| intro []; eqcd |} :
   [wf] sequent[squash] { 'H >- 't1 ~ 's1 } -->
   [wf] sequent[squash] { 'H >- 't2 ~ 's2 } -->
@@ -145,13 +145,13 @@ interactive squiggleType {| intro [] |} :
   [wf] sequent[squash] { 'H >- 't ~ 's } -->
   sequent['ext] { 'H >- "type"{.'t ~ 's}}
 
-(*!
- * @begin[doc]
- * @modsubsection{Membership}
- * The $@it$ term is the one-and-only element
- * in a provable squiggle equality type.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Membership}
+   The $@it$ term is the one-and-only element
+   in a provable squiggle equality type.
+   @end[doc]
+>>
 
 prim squiggle_memberEquality {| intro []; eqcd; squash |} :
   [wf] sequent[squash] { 'H >- 't ~ 's } -->
@@ -163,13 +163,13 @@ prim squiggleElimination {|  elim [ThinOption thinT] |} 'H :
    sequent ['ext] { 'H; x: ('t ~ 's); 'J['x] >- 'C['x] } =
    't
 
-(*!
- * @begin[doc]
- * @modsubsection{Substitution}
- * If we can prove that $<<'t ~ 's>>$, then we can substitute $s$ for $t$
- * in any place without generating any well-formedness subgoals.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Substitution}
+   If we can prove that $<<'t ~ 's>>$, then we can substitute $s$ for $t$
+   in any place without generating any well-formedness subgoals.
+   @end[doc]
+>>
 
 prim squiggleSubstitution ('t ~ 's) bind{x. 'A['x]} :
   [equality] sequent[squash] { 'H >- 't ~ 's } -->
@@ -183,23 +183,23 @@ prim squiggleHypSubstitution 'H ('t ~ 's) bind{x. 'A['x]}:
    sequent ['ext] { 'H; x: 'A['t]; 'J['x] >- 'C['x] } =
    't
 
-(*!
- * @begin[doc]
- * The  @tt{sqSubstT} tactic takes a clause number $i$, and
- * a term $<<'t ~ 's>>$ and applies one of two above rules.
- * This tactic substitutes the term $s$ for
- * @emph{all} occurrences of the term $t$ in the clause.
- * One can give a term  $<< bind{x. 'A['x]} >>$ as an optional with-argument
- * to specify exact location of the subterm to be replaced.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   The  @tt{sqSubstT} tactic takes a clause number $i$, and
+   a term $<<'t ~ 's>>$ and applies one of two above rules.
+   This tactic substitutes the term $s$ for
+   @emph{all} occurrences of the term $t$ in the clause.
+   One can give a term  $<< bind{x. 'A['x]} >>$ as an optional with-argument
+   to specify exact location of the subterm to be replaced.
+   @end[doc]
+>>
 
-(*!
- * @begin[doc]
- * @modsubsection{Squiggle equality is an equivalence relation}
- * Squiggle equality is reflexive, symmetric and transitive.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Squiggle equality is an equivalence relation}
+   Squiggle equality is reflexive, symmetric and transitive.
+   @end[doc]
+>>
 
 
 prim squiggleRef {|  intro [] |} :
@@ -215,7 +215,7 @@ interactive squiggleTrans 'r :
    sequent [squash] { 'H >- 'r ~ 's } -->
    sequent ['ext] { 'H >- 't ~ 's }
 
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 
 

@@ -1,13 +1,13 @@
-(*!
- * @begin[doc]
- * @module[Itt_record]
- *
- * This is a theory of record type.
- * Record type is defined as dependent intersection.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @module[Itt_record]
+  
+   This is a theory of record type.
+   Record type is defined as dependent intersection.
+   @end[doc]
+>>
 
-(*! @doc{@parents} *)
+doc <:doc< @doc{@parents} >>
 
 extends Itt_record_label
 extends Itt_record0
@@ -16,7 +16,7 @@ extends Itt_disect
 extends Itt_logic
 extends Itt_tsquash
 
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 open Printf
 open Mp_debug
@@ -51,7 +51,7 @@ let _ =
    show_loading "Loading Itt_record%t"
 
 
-(*! *)
+doc <:doc< >>
 
 
 
@@ -65,9 +65,9 @@ let _ =
 (*  Definitions   *)
 (******************)
 
-(*! @doc{@terms} *)
+doc <:doc< @doc{@terms} >>
 
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 
 define unfoldRcrd : rcrd[t:t]{'a;'r} <--> rcrd{label[t:t];'a;'r}
@@ -78,11 +78,11 @@ define unfoldField : field[t:t]{'r} <--> field{'r;label[t:t]}
 
 define unfoldRecordS : record[t:t]{'A} <--> record{label[t:t];'A}
 
-(*!
- * @begin[doc]
- * Records are defined as intersections. Dependent records are defined as dependent intersections:
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   Records are defined as intersections. Dependent records are defined as dependent intersections:
+   @end[doc]
+>>
 
 define unfoldRecordL : record[n:t]{self.'A['self];'R} <--> self: 'R  isect  record[n:t]{'A['self]}
 
@@ -92,7 +92,7 @@ define unfoldRecordI : record[n:t]{'A;'R} <--> record[n:t]{'A;x.'R}
 
 (* let foldRecordI = makeFoldC  <<record{'n;'A;'R}>> unfoldRecordI *)
 
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 
 define unfoldFunctionOrt : function_ort{x.'f['x];'R} <--> (all x:'R. ('x = 'f['x] in 'R))
@@ -117,18 +117,18 @@ let mk_field_term t f =
 (*   Rules        *)
 (******************)
 
-(*!
- * @begin[doc]
- * @rules
- * @modsubsection{Typehood and equality}
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @rules
+   @modsubsection{Typehood and equality}
+   @end[doc]
+>>
 
-(*!
- * @begin[doc]
- * The following rule are derivable using the above definitions.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   The following rule are derivable using the above definitions.
+   @end[doc]
+>>
 
 
 (*** Typing ***)
@@ -158,7 +158,7 @@ interactive recordTypeI {| intro [] |} :
 
 (*** Reductions ***)
 
-(*! @doc{@modsubsection{Reductions}} *)
+doc <:doc< @doc{@modsubsection{Reductions}} >>
 
 interactive_rw record_beta1:
    field[n:t]{rcrd[n:t]{'a; 'r}} <--> 'a
@@ -198,7 +198,7 @@ interactive_rw record_exchange :
                                                            rcrd[m:t]{'b; rcrd[n:t]{'a; 'r}}}
 
 (*** Introductions ***)
-(*! @doc{@modsubsection{Introduction}} *)
+doc <:doc< @doc{@modsubsection{Introduction}} >>
 
 interactive recordEqualS1 :
    [equality] sequent[squash]{'H >- not{.label[n:t]=label[m:t] in label} } -->
@@ -336,7 +336,7 @@ let resource intro += [
 *)
 
 (*** Eliminations ***)
-(*! @doc{@modsubsection{Elimination}} *)
+doc <:doc< @doc{@modsubsection{Elimination}} >>
 
 (* Single Records *)
 
@@ -391,7 +391,7 @@ interactive recordEliminationI  'H :
    sequent['ext]  {'H; r:record[n:t]{'A;'R}; 'J['r] >- 'C['r]}
 
 
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 
 let recordS_elim n p =
@@ -444,7 +444,7 @@ let resource elim += [
 ]
 
 (*** Orthogonality ***)
-(*! @doc{@modsubsection{Orthogonality}} *)
+doc <:doc< @doc{@modsubsection{Orthogonality}} >>
 
 interactive functionOrtDinter {| intro[] |} :
    [wf] sequent[squash]{'H >- "type"{bisect{'A;a.'B['a]}} } -->
@@ -533,7 +533,7 @@ let resource intro += (<<record_ort[n:t]{'a;record[m:t]{'A;'R}}>>,wrap_intro rec
 (*  Tactics       *)
 (******************)
 
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 
 

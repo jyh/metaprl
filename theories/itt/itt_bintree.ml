@@ -1,10 +1,10 @@
-(*!
- * @begin[doc]
- * @module[Itt_bintree]
- *
- * This is a theory of binary trees.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @module[Itt_bintree]
+  
+   This is a theory of binary trees.
+   @end[doc]
+>>
 
 extends Itt_record
 extends Itt_algebra_df
@@ -12,7 +12,7 @@ extends Itt_srec
 extends Itt_bisect
 extends Itt_struct
 
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 open Printf
 open Mp_debug
@@ -47,12 +47,12 @@ let _ =
 
 
 
-(*!
- * @begin[doc]
- * @modsection{Simple Trees}
- * @modsection{Basic Definitions}
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsection{Simple Trees}
+   @modsection{Basic Definitions}
+   @end[doc]
+>>
 
 
 define nodetype: Node{'T} <--> {left:'T; right:'T}
@@ -86,7 +86,7 @@ interactive_rw reduce_indtree_node : tree_ind{tree{'node}; 'empty_case; L,R,node
      ]
 
 
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 dform nodetype_df : except_mode[src] :: Node{'T} = `"Node(" 'T ")"
 
@@ -108,11 +108,11 @@ let resource reduce +=
    ]
 
 
-(*!
- * @begin[doc]
- * @modsubsection{Basic Rules}
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Basic Rules}
+   @end[doc]
+>>
 
 
 interactive node_wf {| intro[] |}:
@@ -127,11 +127,11 @@ interactive bintree_wf {| intro[] |} :
  sequent['ext]  {'H >-"type"{ BinTree}}
 
 
-(*!
- * @begin[doc]
- * @modsubsection{Functions on trees}
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Functions on trees}
+   @end[doc]
+>>
 
 
 define match_tree: match_tree{'t; 'empty_case; self.'nonempty_case['self]} <--> tree_ind{'t; 'empty_case; L,R,self.'nonempty_case['self]}
@@ -187,11 +187,11 @@ interactive height_weight  {| intro[] |} : (* make two theorems *)
 
 (* ==================== *)
 
-(*!
- * @begin[doc]
- * @modsubsection{Example}
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Example}
+   @end[doc]
+>>
 
 (*     17     *)
 (*      \     *)
@@ -210,12 +210,12 @@ interactive example_wf  {| intro[] |} :
 
 
 (* ==================== *)
-(*!
- * @begin[doc]
- * @modsection{Parametrized trees}
- * @modsubsection{Definitions}
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsection{Parametrized trees}
+   @modsubsection{Definitions}
+   @end[doc]
+>>
 
 define node: node{'l;'r;'nd} <--> ( ('nd^left:='l)^right:='r )
 
@@ -251,11 +251,11 @@ let resource intro +=
 let resource elim +=
    << Node{'T;l,r.'R['l;'r]} >>, (fun n -> rw nodetype2 n thenT dT n)
 
-(*!
- * @begin[doc]
- * @modsubsection{Rules}
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Rules}
+   @end[doc]
+>>
 
 
 interactive tree_monotone2 {| intro[] |} :
@@ -302,11 +302,11 @@ interactive node_wf2  {| intro[] |} :
  sequent[squash]{'H >- 'nd in 'R['l;'r] }  -->
  sequent['ext]  {'H >-node{'l;'r;'nd} in Node{'T;l,r.'R['l;'r]} }
 
-(*!
- * @begin[doc]
- * Induction rule
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   Induction rule
+   @end[doc]
+>>
 
 interactive treeInduction {| elim [ThinOption thinT] |} 'H :
     sequent['ext]  {'H; t: BinTree{l,r.'R['l;'r]};  'J['t] >-  'C[emptytree]} -->

@@ -1,52 +1,52 @@
-(*!
- * @spelling{subgroup}
- *
- * @begin[doc]
- * @module[Czf_itt_subgroup]
- *
- * The @tt{Czf_itt_subgroup} module defines subgroups.
- * A subgroup of a group $g$ is a group whose carrier
- * is a subset of $g$ and who shares the same binary
- * operation as $g$.
- *
- * @end[doc]
- *
- * ----------------------------------------------------------------
- *
- * @begin[license]
- * This file is part of MetaPRL, a modular, higher order
- * logical framework that provides a logical programming
- * environment for OCaml and other languages.
- *
- * See the file doc/index.html for information on Nuprl,
- * OCaml, and more information about this system.
- *
- * Copyright (C) 2002 Xin Yu, Caltech
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- *
- * Author: Xin Yu
- * @email{xiny@cs.caltech.edu}
- * @end[license]
- *)
+doc <:doc< 
+   @spelling{subgroup}
+  
+   @begin[doc]
+   @module[Czf_itt_subgroup]
+  
+   The @tt{Czf_itt_subgroup} module defines subgroups.
+   A subgroup of a group $g$ is a group whose carrier
+   is a subset of $g$ and who shares the same binary
+   operation as $g$.
+  
+   @end[doc]
+  
+   ----------------------------------------------------------------
+  
+   @begin[license]
+   This file is part of MetaPRL, a modular, higher order
+   logical framework that provides a logical programming
+   environment for OCaml and other languages.
+  
+   See the file doc/index.html for information on Nuprl,
+   OCaml, and more information about this system.
+  
+   Copyright (C) 2002 Xin Yu, Caltech
+  
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public License
+   as published by the Free Software Foundation; either version 2
+   of the License, or (at your option) any later version.
+  
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+  
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  
+   Author: Xin Yu
+   @email{xiny@cs.caltech.edu}
+   @end[license]
+>>
 
-(*! @doc{@parents} *)
+doc <:doc< @doc{@parents} >>
 extends Czf_itt_group
 extends Czf_itt_subset
 extends Czf_itt_isect
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 open Printf
 open Mp_debug
@@ -74,26 +74,26 @@ let _ =
  * TERMS                                                                *
  ************************************************************************)
 
-(*! @doc{@terms} *)
+doc <:doc< @doc{@terms} >>
 declare subgroup{'s; 'g}
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 (************************************************************************
  * REWRITES                                                             *
  ************************************************************************)
 
-(*!
- * @begin[doc]
- * @rewrites
- *
- * A group $s$ is a subgroup of group $g$ if the carrier of $s$
- * is a subset of that of $g$ and the operation of $s$ is the same
- * as that of $g$.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @rewrites
+  
+   A group $s$ is a subgroup of group $g$ if the carrier of $s$
+   is a subset of that of $g$ and the operation of $s$ is the same
+   as that of $g$.
+   @end[doc]
+>>
 prim_rw unfold_subgroup : subgroup{'s; 'g} <-->
    (group{'s} & group{'g} & \subset{car{'s}; car{'g}} & (all a: set. all b: set. (mem{'a; car{'s}} => mem{'b; car{'s}} => eq{op{'s; 'a; 'b}; op{'g; 'a; 'b}})))
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 (************************************************************************
  * DISPLAY FORMS                                                        *
@@ -106,28 +106,28 @@ dform subgroup_df : except_mode[src] :: subgroup{'s; 'g} =
  * RULES                                                                *
  ************************************************************************)
 
-(*!
- * @begin[doc]
- * @rules
- * @modsubsection{Typehood}
- *
- * The $@subgroup{s; g}$ is well-formed if its arguments are labels.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @rules
+   @modsubsection{Typehood}
+  
+   The $@subgroup{s; g}$ is well-formed if its arguments are labels.
+   @end[doc]
+>>
 interactive subgroup_wf {| intro [] |} :
    sequent [squash] { 'H >- 's IN label } -->
    sequent [squash] { 'H >- 'g IN label } -->
    sequent ['ext] { 'H >- "type"{subgroup{'s; 'g}} }
 
-(*!
- * @begin[doc]
- * @modsubsection{Introduction}
- *
- * The proposition $@subgroup{s; g}$ is true if it is well-formed,
- * $s$ and $g$ are groups, $@car{s}$ is a subset of $@car{g}$, and
- * $@op{s; a; b}$ is defined as $@op{g; a; b}$ for $a, b @in @car{s}$.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Introduction}
+  
+   The proposition $@subgroup{s; g}$ is true if it is well-formed,
+   $s$ and $g$ are groups, $@car{s}$ is a subset of $@car{g}$, and
+   $@op{s; a; b}$ is defined as $@op{g; a; b}$ for $a, b @in @car{s}$.
+   @end[doc]
+>>
 interactive subgroup_intro {| intro [] |} :
    sequent [squash] { 'H >- 's IN label } -->
    sequent [squash] { 'H >- 'g IN label } -->
@@ -137,18 +137,18 @@ interactive subgroup_intro {| intro [] |} :
    sequent ['ext] { 'H; a: set; b: set; x: mem{'a; car{'s}}; y: mem{'b; car{'s}} >- eq{op{'s; 'a; 'b}; op{'g; 'a; 'b}} } -->
    sequent ['ext] { 'H >- subgroup{'s; 'g} }
 
-(*!
- * @begin[doc]
- * @modsubsection{Properties}
- *
- * If $s$ is a subgroup of $g$, then
- * @begin[enumerate]
- * @item{$s$ is closed under the binary operation of $g$.}
- * @item{the identity of $s$ is the identity of $g$.}
- * @item{the inverse of $a @in @car{s}$ is also the inverse of $a$ in $g$.}
- * @end[enumerate]
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Properties}
+  
+   If $s$ is a subgroup of $g$, then
+   @begin[enumerate]
+   @item{$s$ is closed under the binary operation of $g$.}
+   @item{the identity of $s$ is the identity of $g$.}
+   @item{the inverse of $a @in @car{s}$ is also the inverse of $a$ in $g$.}
+   @end[enumerate]
+   @end[doc]
+>>
 interactive subgroup_op {| intro [] |} :
    sequent [squash] { 'H >- 's IN label } -->
    sequent [squash] { 'H >- 'g IN label } -->
@@ -187,14 +187,14 @@ interactive subgroup_inv2 {| intro [] |} :
    sequent ['ext] { 'H >- subgroup{'s; 'g} } -->
    sequent ['ext] { 'H >- mem{inv{'g; 'a}; car{'s}} }
 
-(*!
- * @begin[doc]
- * @modsubsection{Theorems}
- *
- * The intersection group of subgroups $h_1$ and $h_2$ of
- * a group $g$ is again a subgroup of $g$.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Theorems}
+  
+   The intersection group of subgroups $h_1$ and $h_2$ of
+   a group $g$ is again a subgroup of $g$.
+   @end[doc]
+>>
 interactive subgroup_isect 'h1 'h2 :
    sequent [squash] { 'H >- 'g IN label } -->
    sequent [squash] { 'H >- 'h1 IN label } -->
@@ -207,24 +207,24 @@ interactive subgroup_isect 'h1 'h2 :
    sequent ['ext] { 'H; a: set; b: set; x: mem{'a; car{'h}}; y: mem{'b; car{'h}} >- eq{op{'h; 'a; 'b}; op{'h1; 'a; 'b}} } -->
    sequent ['ext] { 'H >- subgroup{'h; 'g} }
 
-(*! @docoff *)
+doc <:doc< @docoff >>
 (************************************************************************
  * TACTICS                                                              *
  ************************************************************************)
 
-(*!
- * @begin[doc]
- * @tactics
- *
- * @begin[description]
- * @item{@tactic[subgroupIsectT];
- *    The tactic applies the @hrefrule[subgroup_isect] rule
- *    and proves group $h$ is a subgroup of $g$ if it is the
- *    intersection of two subgroups of $g$.}
- * @end[description]
- * @docoff
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @tactics
+  
+   @begin[description]
+   @item{@tactic[subgroupIsectT];
+      The tactic applies the @hrefrule[subgroup_isect] rule
+      and proves group $h$ is a subgroup of $g$ if it is the
+      intersection of two subgroups of $g$.}
+   @end[description]
+   @docoff
+   @end[doc]
+>>
 let subgroupIsectT = subgroup_isect
 
 (*

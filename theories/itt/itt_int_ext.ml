@@ -1,54 +1,54 @@
-(*!
- * @spelling{gt_bool le_bool ge_bool gt le ge nequal}
- *
- * @begin[doc]
- * @module[Itt_int_ext]
- *
- * Some more about integers
- * @end[doc]
- *
- * ----------------------------------------------------------------
- *
- * @begin[license]
- * This file is part of MetaPRL, a modular, higher order
- * logical framework that provides a logical programming
- * environment for OCaml and other languages.
- *
- * See the file doc/index.html for information on Nuprl,
- * OCaml, and more information about this system.
- *
- * Copyright (C) 1998 Jason Hickey, Cornell University
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- *
- * Author: Yegor Bryukhov
- * @email{ynb@mail.ru}
- * @end[license]
- *)
+doc <:doc< 
+   @spelling{gt_bool le_bool ge_bool gt le ge nequal}
+  
+   @begin[doc]
+   @module[Itt_int_ext]
+  
+   Some more about integers
+   @end[doc]
+  
+   ----------------------------------------------------------------
+  
+   @begin[license]
+   This file is part of MetaPRL, a modular, higher order
+   logical framework that provides a logical programming
+   environment for OCaml and other languages.
+  
+   See the file doc/index.html for information on Nuprl,
+   OCaml, and more information about this system.
+  
+   Copyright (C) 1998 Jason Hickey, Cornell University
+  
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public License
+   as published by the Free Software Foundation; either version 2
+   of the License, or (at your option) any later version.
+  
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+  
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  
+   Author: Yegor Bryukhov
+   @email{ynb@mail.ru}
+   @end[license]
+>>
 
-(*!
- * @begin[doc]
- * @parents
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @parents
+   @end[doc]
+>>
 extends Itt_equal
 extends Itt_rfun
 extends Itt_logic
 extends Itt_bool
 extends Itt_int_base
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 open Printf
 open Mp_debug
@@ -80,12 +80,12 @@ let _ = show_loading "Loading Itt_int_ext%t"
 (************************************************************************
  * TERMS                                                                *
  ************************************************************************)
-(*!
- * @begin[doc]
- * @terms
- * Multiplicative operations on $@int$
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @terms
+   Multiplicative operations on $@int$
+   @end[doc]
+>>
 declare "mul"{'a; 'b}
 declare "div"{'a; 'b}
 declare "rem"{'a; 'b}
@@ -94,7 +94,7 @@ declare "rem"{'a; 'b}
  Definitions of >b <=b >=b
  *)
 
-(*! @doc{More order relation operations} *)
+doc <:doc< @doc{More order relation operations} >>
 
 define unfold_gt_bool :
    gt_bool{'a; 'b} <--> lt_bool{'b; 'a}
@@ -108,7 +108,7 @@ define unfold_ge_bool :
 define unfold_bneq_int :
    bneq_int{'a; 'b} <--> bnot{beq_int{'a; 'b}}
 
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 let resource reduce += [
    << gt_bool{'a; 'b} >>, unfold_gt_bool;
@@ -200,7 +200,7 @@ dform rem_df2 : mode[src] :: parens :: "prec"[prec_mul] :: "rem"{'a; 'b} =
 dform gt_df1 : parens :: "prec"[prec_compare] :: gt{'a; 'b} =
    slot["lt"]{'a} `" > " slot["le"]{'b}
 
-(*! @doc{More order relation propositions} *)
+doc <:doc< @doc{More order relation propositions} >>
 
 define unfold_le :
    le{'a; 'b} <--> "assert"{le_bool{'a; 'b}}
@@ -211,7 +211,7 @@ define unfold_ge :
 define unfold_neq_int :
    nequal{'a; 'b} <--> "assert"{bneq_int{'a; 'b}}
 
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 let resource reduce += [
    << gt{'a; 'b} >>, unfold_gt;
@@ -275,15 +275,15 @@ dform ge_bool_df1 : parens :: "prec"[prec_compare] :: ge_bool{'a; 'b} =
  * REWRITES                                                             *
  ************************************************************************)
 
-(*!
- * @begin[doc]
- * @rewrites
- *
- * The binary arithmetic operators are defined using the
- * @emph{meta} arithmetic operators that are @MetaPRL
- * builtin operations.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @rewrites
+  
+   The binary arithmetic operators are defined using the
+   @emph{meta} arithmetic operators that are @MetaPRL
+   builtin operations.
+   @end[doc]
+>>
 
 prim_rw reduce_mul_meta : (number[i:n] *@ number[j:n]) <-->
    number{meta_prod[i:n, j:n]}
@@ -292,7 +292,7 @@ prim_rw reduce_div_meta : (number[i:n] /@ number[j:n]) <-->
 prim_rw reduce_rem_meta : "rem"{number[i:n]; number[j:n]} <-->
    number{meta_rem[i:n, j:n]}
 
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 let reduce_mul =
    reduce_mul_meta thenC (addrC [0] reduce_meta_prod) thenC reduce_numeral
@@ -309,11 +309,11 @@ let resource reduce += [
    <<"rem"{number[i:n]; number[j:n]}>>, reduce_rem;
 ]
 
-(*!
- * @begin[doc]
- * @modsection{Well-formedness and algebraic properties of @tt[mul]}
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsection{Well-formedness and algebraic properties of @tt[mul]}
+   @end[doc]
+>>
 prim mul_wf {| intro []; eqcd |} :
    [wf] sequent [squash] { 'H >- 'a = 'a1 in int } -->
    [wf] sequent [squash] { 'H >- 'b = 'b1 in int } -->
@@ -469,11 +469,11 @@ interactive_rw lt_mulNegMono_rw 'c :
 
 let lt_mulNegMonoC = lt_mulNegMono_rw
 
-(*!
- * @begin[doc]
- * @modsection{@tt[rem] definition and well-formedness}
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsection{@tt[rem] definition and well-formedness}
+   @end[doc]
+>>
 prim rem_baseReduce :
    sequent [squash] { 'H >- 0 <= 'a } -->
    sequent [squash] { 'H >- 'a < 'b } -->
@@ -512,11 +512,11 @@ interactive rem_wf {| intro []; eqcd |} :
    [wf] sequent [squash] { 'H >- 'b in int } -->
    sequent ['ext] { 'H >- ('a %@ 'b) in int }
 
-(*!
- * @begin[doc]
- * @modsection{@tt[div] definition and properties}
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsection{@tt[div] definition and properties}
+   @end[doc]
+>>
 prim div_baseReduce :
    sequent [squash] { 'H >- 0 <= 'a } -->
    sequent [squash] { 'H >- 'a < 'b } -->

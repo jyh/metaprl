@@ -1,48 +1,48 @@
-(*!
- * @begin[doc]
- * @module[Mp_mc_fir_ty]
- *
- * The @tt[Mp_mc_fir_ty] module defines terms to represent FIR types.
- * @end[doc]
- *
- * ----------------------------------------------------------------
- *
- * @begin[license]
- * This file is part of MetaPRL, a modular, higher order
- * logical framework that provides a logical programming
- * environment for OCaml and other languages.
- *
- * See the file doc/index.html for information on Nuprl,
- * OCaml, and more information about this system.
- *
- * Copyright (C) 2002 Brian Emre Aydemir, Caltech
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- *
- * Author: Brian Emre Aydemir
- * @email{emre@its.caltech.edu}
- * @end[license]
- *)
+doc <:doc< 
+   @begin[doc]
+   @module[Mp_mc_fir_ty]
+  
+   The @tt[Mp_mc_fir_ty] module defines terms to represent FIR types.
+   @end[doc]
+  
+   ----------------------------------------------------------------
+  
+   @begin[license]
+   This file is part of MetaPRL, a modular, higher order
+   logical framework that provides a logical programming
+   environment for OCaml and other languages.
+  
+   See the file doc/index.html for information on Nuprl,
+   OCaml, and more information about this system.
+  
+   Copyright (C) 2002 Brian Emre Aydemir, Caltech
+  
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public License
+   as published by the Free Software Foundation; either version 2
+   of the License, or (at your option) any later version.
+  
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+  
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  
+   Author: Brian Emre Aydemir
+   @email{emre@its.caltech.edu}
+   @end[license]
+>>
 
-(*!
- * @begin[doc]
- * @parents
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @parents
+   @end[doc]
+>>
 extends Base_theory
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
@@ -51,54 +51,54 @@ open Refiner.Refiner.TermOp
  * Term declarations.
  *************************************************************************)
 
-(*!
- * @begin[doc]
- * @terms
- *
- * @tt[tyInt] and @tt[tyEnum] are basic integer types.  @tt[tyInt]
- * is a 31-bit, signed integer type analogous to the @tt[int] type
- * in a language such as @OCaml.  A value of type @misspelled{@tt{tyEnum@{n-1@}}}
- * can take on integral values from 0 to $n$.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @terms
+  
+   @tt[tyInt] and @tt[tyEnum] are basic integer types.  @tt[tyInt]
+   is a 31-bit, signed integer type analogous to the @tt[int] type
+   in a language such as @OCaml.  A value of type @misspelled{@tt{tyEnum@{n-1@}}}
+   can take on integral values from 0 to $n$.
+   @end[doc]
+>>
 
 declare tyInt
 declare tyEnum{ 'int }
 
-(*!
- * @begin[doc]
- *
- * @tt[tyRawInt] and @tt[tyFloat] represent raw data types.  Their
- * subterms specify the precision and signed nature of the type
- * (see @hrefmodule[Mp_mc_fir_base]).  These correspond to
- * the integer and floating point types in a language such as C.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   @tt[tyRawInt] and @tt[tyFloat] represent raw data types.  Their
+   subterms specify the precision and signed nature of the type
+   (see @hrefmodule[Mp_mc_fir_base]).  These correspond to
+   the integer and floating point types in a language such as C.
+   @end[doc]
+>>
 
 declare tyRawInt{ 'int_precision; 'int_signed }
 declare tyFloat{ 'float_precision }
 
-(*!
- * @begin[doc]
- *
- * @tt[tyFun] is a function type.  The first subterm is a list
- * (see @hrefmodule[Itt_list]) of types indicating the types of
- * the arguments to the function. The second subterm is the type
- * of the return value of the function.  Note that FIR
- * functions never actually return in the conventional sense
- * of the word (see @hrefmodule[Mp_mc_fir_exp] and @hrefterm[tailCall]
- * for more on this).
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   @tt[tyFun] is a function type.  The first subterm is a list
+   (see @hrefmodule[Itt_list]) of types indicating the types of
+   the arguments to the function. The second subterm is the type
+   of the return value of the function.  Note that FIR
+   functions never actually return in the conventional sense
+   of the word (see @hrefmodule[Mp_mc_fir_exp] and @hrefterm[tailCall]
+   for more on this).
+   @end[doc]
+>>
 
 declare tyFun{ 'ty_list; 'ty }
 
-(*!
- * @begin[doc]
- *
- * Tuples. (Documentation incomplete.)
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   Tuples. (Documentation incomplete.)
+   @end[doc]
+>>
 
 declare tyUnion{ 'ty_var; 'ty_list; 'int_set }
 declare tyTuple{ 'tuple_class; 'ty_list }
@@ -107,12 +107,12 @@ declare tyRawData
 declare tyPointer{ 'sub_block }
 declare tyFrame{ 'label }
 
-(*!
- * @begin[doc]
- *
- * Polymorphism. (Documentation incomplete.)
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   Polymorphism. (Documentation incomplete.)
+   @end[doc]
+>>
 
 declare tyVar{ 'ty_var }
 declare tyApply{ 'ty_var; 'ty_list }
@@ -120,41 +120,41 @@ declare tyExists{ 'ty_var_list; 'ty }
 declare tyAll{ 'ty_var_list; 'ty }
 declare tyProject{ 'var; 'int }
 
-(*!
- * @begin[doc]
- *
- * Object-oriented. (Documentation incomplete.)
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   Object-oriented. (Documentation incomplete.)
+   @end[doc]
+>>
 
 declare tyCase{ 'ty }
 declare tyObject{ 'ty_var; 'ty }
 
-(*!
- * @begin[doc]
- *
- * @tt[tyDelayed] represents a ``delayed'' type, in other words
- * a type that has not yet been determined by type inference.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   @tt[tyDelayed] represents a ``delayed'' type, in other words
+   a type that has not yet been determined by type inference.
+   @end[doc]
+>>
 
 declare tyDelayed
 
-(*!
- * @begin[doc]
- *
- * The FIR also has support for defining new types.  The remaining
- * terms of this module represent the top-level constructions for
- * defining new types.
- * (Documentation incomplete.)
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   The FIR also has support for defining new types.  The remaining
+   terms of this module represent the top-level constructions for
+   defining new types.
+   (Documentation incomplete.)
+   @end[doc]
+>>
 
 declare unionElt{ 'ty; 'bool }
 declare tyDefUnion{ 'ty_var_list; 'union_type; 'elts }
 declare tyDefLambda{ 'ty_var_list; 'ty }
 
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 (*************************************************************************
  * Display forms.

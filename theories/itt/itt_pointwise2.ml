@@ -1,8 +1,8 @@
-(*!
+doc <:doc< 
  @begin[doc]
  @module[Itt_pointwise2]
  @end[doc]
- *)
+>>
 
 extends Itt_equal
 extends Itt_quotient
@@ -10,7 +10,7 @@ extends Itt_struct
 extends Itt_tunion
 extends Itt_bunion
 extends Itt_pointwise
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 open Printf
 open Mp_debug
@@ -48,12 +48,12 @@ let _ =
  * RULES                                                                *
  ************************************************************************)
 
-(*!
+doc <:doc< 
  @begin[doc]
   The following rules are derived only in pointwise functionality.
- * They both contradict to Let rule.
+   They both contradict to Let rule.
  @end[doc]
- *)
+>>
 
 
 interactive quotientElimination2 {| elim [ThinOption thinT] |} 'H :
@@ -74,4 +74,4 @@ interactive bunionElimination2 {| elim [ThinOption thinT] |} 'H :
    sequent ['ext] { 'H; x: 'A bunion 'B; 'J['x] >- squash{'C['x]} }
 
 
-(*! @docoff *)
+doc <:doc< @docoff >>

@@ -1,13 +1,8 @@
-(*!
- * @begin[doc]
- * @module[Mfir_tr_atom]
- *
- * The @tt[Mfir_tr_atom] module defines the typing rules for FIR atoms.
- * @end[doc]
+(*
+ * The Mfir_tr_atom module defines the typing rules for FIR atoms.
  *
  * ------------------------------------------------------------------------
  *
- * @begin[license]
  * This file is part of MetaPRL, a modular, higher order
  * logical framework that provides a logical programming
  * environment for OCaml and other languages.  Additional
@@ -30,9 +25,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
- * Author: Brian Emre Aydemir
- * @email{emre@cs.caltech.edu}
- * @end[license]
+ * Author: Brian Emre Aydemir <emre@cs.caltech.edu>
  *)
 
 extends Mfir_list

@@ -1,58 +1,58 @@
-(*!
- * @spelling{cons consFormation nilFormation}
- *
- * @begin[doc]
- * @module[Itt_list]
- *
- * The @tt{Itt_list} module defines the type of finite
- * lists of elements.  The lists can be defined using the
- * simple recursive type in module @hrefmodule[Itt_srec].
- * However, the lists have a simpler semantics, and they are defined
- * as primitive, so that lists can be used without including
- * the recursive type.
- * @end[doc]
- *
- * ----------------------------------------------------------------
- *
- * @begin[license]
- * This file is part of MetaPRL, a modular, higher order
- * logical framework that provides a logical programming
- * environment for OCaml and other languages.
- *
- * See the file doc/index.html for information on Nuprl,
- * OCaml, and more information about this system.
- *
- * Copyright (C) 1998 Jason Hickey, Cornell University
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- *
- * Author: Jason Hickey
- * @email{jyh@cs.cornell.edu}
- * @end[license]
- *)
+doc <:doc< 
+   @spelling{cons consFormation nilFormation}
+  
+   @begin[doc]
+   @module[Itt_list]
+  
+   The @tt{Itt_list} module defines the type of finite
+   lists of elements.  The lists can be defined using the
+   simple recursive type in module @hrefmodule[Itt_srec].
+   However, the lists have a simpler semantics, and they are defined
+   as primitive, so that lists can be used without including
+   the recursive type.
+   @end[doc]
+  
+   ----------------------------------------------------------------
+  
+   @begin[license]
+   This file is part of MetaPRL, a modular, higher order
+   logical framework that provides a logical programming
+   environment for OCaml and other languages.
+  
+   See the file doc/index.html for information on Nuprl,
+   OCaml, and more information about this system.
+  
+   Copyright (C) 1998 Jason Hickey, Cornell University
+  
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public License
+   as published by the Free Software Foundation; either version 2
+   of the License, or (at your option) any later version.
+  
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+  
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  
+   Author: Jason Hickey
+   @email{jyh@cs.cornell.edu}
+   @end[license]
+>>
 
-(*!
- * @begin[doc]
- * @parents
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @parents
+   @end[doc]
+>>
 extends Itt_equal
 extends Itt_rfun
 extends Itt_struct
 extends Itt_logic
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 open Printf
 open Mp_debug
@@ -89,23 +89,23 @@ let _ =
  * TERMS                                                                *
  ************************************************************************)
 
-(*!
- * @begin[doc]
- * @terms
- *
- * The @tt[nil] term is the empty list, the @tt[cons] term
- * adds an element $a$ to list $b$.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @terms
+  
+   The @tt[nil] term is the empty list, the @tt[cons] term
+   adds an element $a$ to list $b$.
+   @end[doc]
+>>
 declare nil
 declare cons{'a; 'b}
 
-(*!
- * @begin[doc]
- * The @tt[list] term defines the list type.  The @tt[list_ind]
- * term defines the induction combinator.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   The @tt[list] term defines the list type.  The @tt[list_ind]
+   term defines the induction combinator.
+   @end[doc]
+>>
 declare list{'a}
 declare list_ind{'e; 'base; h, t, f. 'step['h; 't; 'f]}
 
@@ -113,24 +113,24 @@ declare list_ind{'e; 'base; h, t, f. 'step['h; 't; 'f]}
  * REWRITES                                                             *
  ************************************************************************)
 
-(*!
- * @begin[doc]
- * @rewrites
- *
- * The @hrefterm[list_ind] term computes values on lists.
- * The combinator has two bodies; the @i{base} term
- * defines the value on empty lists, and the $@i{step}[h, t, f]$
- * term defines values on $@cons{h; t}$, where $f$ represents
- * the value computed on the tail $t$ of the list.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @rewrites
+  
+   The @hrefterm[list_ind] term computes values on lists.
+   The combinator has two bodies; the @i{base} term
+   defines the value on empty lists, and the $@i{step}[h, t, f]$
+   term defines values on $@cons{h; t}$, where $f$ represents
+   the value computed on the tail $t$ of the list.
+   @end[doc]
+>>
 prim_rw reduce_listindNil :
    list_ind{nil; 'base; h, t, f. 'step['h; 't; 'f]} <--> 'base
 
 prim_rw reduce_listindCons :
    list_ind{('u :: 'v); 'base; h, t, f. 'step['h; 't; 'f]} <-->
       'step['u; 'v; list_ind{'v; 'base; h, t, f. 'step['h; 't; 'f]}]
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 (************************************************************************
  * REDUCTIONS                                                           *
@@ -197,15 +197,15 @@ dform list_ind_df1 : except_mode[src] :: parens :: "prec"[prec_list] :: list_ind
  * RULES                                                                *
  ************************************************************************)
 
-(*!
- * @begin[doc]
- * @rules
- * @modsubsection{Typehood and equality}
- *
- * The $@list{T}$ term is a well-formed type if
- * $T$ is a type.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @rules
+   @modsubsection{Typehood and equality}
+  
+   The $@list{T}$ term is a well-formed type if
+   $T$ is a type.
+   @end[doc]
+>>
 prim listType {| intro [] |} :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    sequent ['ext] { 'H >- "type"{list{'A}} } =
@@ -223,13 +223,13 @@ interactive listFormation :
    sequent ['ext] { 'H >- univ[i:l] } -->
    sequent ['ext] { 'H >- univ[i:l] }
 
-(*!
- * @begin[doc]
- * @modsubsection{Membership}
- *
- * The @hrefterm[nil] term is a member of every list type $@list{A}$.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Membership}
+  
+   The @hrefterm[nil] term is a member of every list type $@list{A}$.
+   @end[doc]
+>>
 prim nilEquality {| intro [] |} :
    [wf] sequent [squash] { 'H >- "type"{list{'A}} } -->
    sequent ['ext] { 'H >- nil in list{'A} } =
@@ -239,42 +239,42 @@ interactive nilFormation {| intro [] |} :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    sequent ['ext] { 'H >- list{'A} }
 
-(*!
- * @begin[doc]
- * The @hrefterm[cons] term $@cons{h; t}$ is a member of the list
- * type $@list{A}$ if $h$ is an element of $A$, and $t$ is an element
- * of $@list{A}$.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   The @hrefterm[cons] term $@cons{h; t}$ is a member of the list
+   type $@list{A}$ if $h$ is an element of $A$, and $t$ is an element
+   of $@list{A}$.
+   @end[doc]
+>>
 prim consEquality {| intro []; eqcd |} :
    [wf] sequent [squash] { 'H >- 'u1 = 'u2 in 'A } -->
    [wf] sequent [squash] { 'H >- 'v1 = 'v2 in list{'A} } -->
    sequent ['ext] { 'H >- cons{'u1; 'v1} = cons{'u2; 'v2} in list{'A} } =
    it
 
-(*!
- * @docoff
- * H >- list(A) ext cons(h; t)
- * by consFormation
- *
- * H >- A ext h
- * H >- list(A) ext t
- *)
+doc <:doc< 
+   @docoff
+   H >- list(A) ext cons(h; t)
+   by consFormation
+  
+   H >- A ext h
+   H >- list(A) ext t
+>>
 interactive consFormation :
    sequent ['ext] { 'H >- 'A } -->
    sequent ['ext] { 'H >- list{'A} } -->
    sequent ['ext] { 'H >- list{'A} }
 
-(*!
- * @begin[doc]
- * @modsubsection{Combinator equality}
- *
- * The @hrefterm[list_ind] term $@listind{l; u; v; z; @i{base}; @i{step}[u, v, z]}$
- * computes a value of type $T$ if 1) the argument $l$ is a list of type $@list{A}$,
- * 2) the @i{base} term has type $T$, and 3) the @i{step} term computes a value
- * of type $T$ for any elements $u @in A$, $v @in @list{A}$, and $z @in T$.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Combinator equality}
+  
+   The @hrefterm[list_ind] term $@listind{l; u; v; z; @i{base}; @i{step}[u, v, z]}$
+   computes a value of type $T$ if 1) the argument $l$ is a list of type $@list{A}$,
+   2) the @i{base} term has type $T$, and 3) the @i{step} term computes a value
+   of type $T$ for any elements $u @in A$, $v @in @list{A}$, and $z @in T$.
+   @end[doc]
+>>
 prim list_indEquality {| intro []; eqcd |} lambda{l. 'T['l]} list{'A} :
    [wf] sequent [squash] { 'H >- 'e1 = 'e2 in list{'A} } -->
    [wf] sequent [squash] { 'H >- 'base1 = 'base2 in 'T[nil] } -->
@@ -287,32 +287,32 @@ prim list_indEquality {| intro []; eqcd |} lambda{l. 'T['l]} list{'A} :
            } =
    it
 
-(*!
- * @begin[doc]
- * @modsubsection{Elimination}
- *
- * The elimination for performs induction over the assumption
- * $l@colon @list{A}$.  The rule produces two cases for a conclusion
- * $C[l]$.  In the base case, $C$ must hold on the empty list, and
- * in the induction step, $C[@cons{h; t}]$ must hold for any elements
- * $h @in A$ and $t @in @list{A}$, where the induction hypothesis
- * $C[t]$ holds on $t$.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Elimination}
+  
+   The elimination for performs induction over the assumption
+   $l@colon @list{A}$.  The rule produces two cases for a conclusion
+   $C[l]$.  In the base case, $C$ must hold on the empty list, and
+   in the induction step, $C[@cons{h; t}]$ must hold for any elements
+   $h @in A$ and $t @in @list{A}$, where the induction hypothesis
+   $C[t]$ holds on $t$.
+   @end[doc]
+>>
 prim listElimination {| elim [ThinOption thinT] |} 'H :
    [main] ('base['l] : sequent ['ext] { 'H; l: list{'A}; 'J['l] >- 'C[nil] }) -->
    [main] ('step['l; 'u; 'v; 'w] : sequent ['ext] { 'H; l: list{'A}; 'J['l]; u: 'A; v: list{'A}; w: 'C['v] >- 'C['u::'v] }) -->
    sequent ['ext] { 'H; l: list{'A}; 'J['l] >- 'C['l] } =
    list_ind{'l; 'base['l]; u, v, w. 'step['l; 'u; 'v; 'w]}
 
-(*!
- * @begin[doc]
- * @modsubsection{Contradiction}
- *
- * The terms @hrefterm[nil] and @hrefterm[cons] are distinct in
- * every list type.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Contradiction}
+  
+   The terms @hrefterm[nil] and @hrefterm[cons] are distinct in
+   every list type.
+   @end[doc]
+>>
 interactive nil_neq_cons {| elim [] |} 'H :
    sequent ['ext] { 'H; x: nil = cons{'h; 't} in list{'T}; 'J['x] >- 'C['x] }
 
@@ -329,30 +329,30 @@ interactive consEqElimination {| elim [ThinOption thinT] |} 'H :
                        v: 'h1 = 'h2 in 'A; w: 't1 = 't2 in list{'A};   'J['u] >- 'C['u] } -->
    sequent ['ext] {'H; u: cons{'h1; 't1} = cons{'h2; 't2} in list{'A}; 'J['u] >- 'C['u] }
 
-(*!
- * @begin[doc]
- * @modsubsection{Computation}
- *
- * The @emph{only} representative on the empty list is the
- * @hrefterm[nil] term.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Computation}
+  
+   The @emph{only} representative on the empty list is the
+   @hrefterm[nil] term.
+   @end[doc]
+>>
 prim nilSqequal 'T :
    sequent [squash] { 'H >- 'u = nil in list{'T} } -->
    sequent ['ext] { 'H >- 'u ~ nil } =
    it
 
-(*!
- * @begin[doc]
- * @modsubsection{Subtyping}
- *
- * The list type $@list{A}$ is covariant in the type argument $A$.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Subtyping}
+  
+   The list type $@list{A}$ is covariant in the type argument $A$.
+   @end[doc]
+>>
 interactive listSubtype {| intro [] |} :
    ["subtype"] sequent [squash] { 'H >- \subtype{'A1; 'A2} } -->
    sequent ['ext] { 'H >- \subtype{list{'A1}; list{'A2}}}
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 (************************************************************************
  * PRIMITIVES                                                           *

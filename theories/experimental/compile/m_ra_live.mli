@@ -33,9 +33,7 @@ module MakeLive (Frame : FrameSig) : LiveSig
    with type 'a block = 'a Frame.block
    with type inst = Frame.inst
 
-(*!
- * @docoff
- *
+(*
  * -*-
  * Local Variables:
  * Caml-master: "compile"

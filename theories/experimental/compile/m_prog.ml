@@ -1,45 +1,45 @@
-(*!
- * @begin[spelling]
- * CPS prog
- * @end[spelling]
- *
- * @begin[doc]
- * @module[M_prog]
- *
- * Lift closed function definitions to the top level.
- * @end[doc]
- *
- * ----------------------------------------------------------------
- *
- * @begin[license]
- * Copyright (C) 2003 Jason Hickey, Caltech
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- *
- * Author: Jason Hickey
- * @email{jyh@cs.caltech.edu}
- * @end[license]
- *)
+doc <:doc< 
+   @begin[spelling]
+   CPS prog
+   @end[spelling]
+  
+   @begin[doc]
+   @module[M_prog]
+  
+   Lift closed function definitions to the top level.
+   @end[doc]
+  
+   ----------------------------------------------------------------
+  
+   @begin[license]
+   Copyright (C) 2003 Jason Hickey, Caltech
+  
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public License
+   as published by the Free Software Foundation; either version 2
+   of the License, or (at your option) any later version.
+  
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+  
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  
+   Author: Jason Hickey
+   @email{jyh@cs.caltech.edu}
+   @end[license]
+>>
 
-(*!
- * @begin[doc]
- * @parents
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @parents
+   @end[doc]
+>>
 extends M_ir
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 open M_ir
 open M_util
@@ -67,23 +67,23 @@ open Perv
  * REDUCTION RESOURCE                                                   *
  ************************************************************************)
 
-(*!
- * @begin[doc]
- * @resources
- *
- * @bf{The @Comment!resource[prog_resource]}
- *
- * The @tt{prog} resource provides a generic method for
- * defining @emph{CPS transformation}.  The @conv[progC] conversion
- * can be used to apply this evaluator.
- *
- * The implementation of the @tt{prog_resource} and the @tt[progC]
- * conversion rely on tables to store the shape of redices, together with the
- * conversions for the reduction.
- *
- * @docoff
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @resources
+  
+   @bf{The @Comment!resource[prog_resource]}
+  
+   The @tt{prog} resource provides a generic method for
+   defining @emph{CPS transformation}.  The @conv[progC] conversion
+   can be used to apply this evaluator.
+  
+   The implementation of the @tt{prog_resource} and the @tt[progC]
+   conversion rely on tables to store the shape of redices, together with the
+   conversions for the reduction.
+  
+   @docoff
+   @end[doc]
+>>
 let resource prog =
    table_resource_info identity extract_data
 
@@ -99,11 +99,11 @@ let progC =
  * Rewrites.
  *)
 
-(*!
- * @begin[doc]
- * Swap a recursive definition with anything before it.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   Swap a recursive definition with anything before it.
+   @end[doc]
+>>
 prim_rw letrec_atom_fun :
    AtomFun{x. LetRec{R1. 'fields['R1]; R2. 'e['R2; 'x]}} <-->
    LetRec{R1. 'fields['R1]; R2. AtomFun{x. 'e['R2; 'x]}}

@@ -1,36 +1,36 @@
-(*! -*- mode: text; -*-
- * @begin[spelling]
- * ML binop relop op AST compilable
- * @end[spelling]
- *
- * @begin[doc]
- * @section[m_doc_ir]{intermediate representation}
- * @docoff
- * @end[doc]
- *
- * ----------------------------------------------------------------
- *
- * @begin[license]
- * Copyright (C) 2003 Jason Hickey, Caltech
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- *
- * Author: Jason Hickey
- * @email{jyh@cs.caltech.edu}
- * @end[license]
- *)
+doc <:doc< -*- mode: text; -*-
+   @begin[spelling]
+   ML binop relop op AST compilable
+   @end[spelling]
+  
+   @begin[doc]
+   @section[m_doc_ir]{intermediate representation}
+   @docoff
+   @end[doc]
+  
+   ----------------------------------------------------------------
+  
+   @begin[license]
+   Copyright (C) 2003 Jason Hickey, Caltech
+  
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public License
+   as published by the Free Software Foundation; either version 2
+   of the License, or (at your option) any later version.
+  
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+  
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  
+   Author: Jason Hickey
+   @email{jyh@cs.caltech.edu}
+   @end[license]
+>>
 extends M_doc_comment
 
 (*
@@ -240,7 +240,7 @@ dform math_FunDef_df2 : mode[tex] :: math_FunDef{'label; 'exp; 'rest} =
 dform math_EndDef_df : mode[tex] :: math_EndDef =
    math_epsilon
 
-(*!
+doc <:doc< 
 @begin[doc]
 
 The intermediate representation of the program must serve two
@@ -393,7 +393,7 @@ $$
 
 @docoff
 @end[doc]
- *)
+>>
 
 (*
  * -*-

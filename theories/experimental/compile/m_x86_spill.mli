@@ -55,9 +55,7 @@ topval spillST : string -> tactic
  *)
 val spillT : SymbolSet.t -> tactic
 
-(*!
- * @docoff
- *
+(*
  * -*-
  * Local Variables:
  * Caml-master: "compile"

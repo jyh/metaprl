@@ -45,7 +45,7 @@ interactive_rw reduce_ind_base :
    (ind_lab{zero; 'base; l. 'up['l]}) <-->
    'base
 
-(*! @docoff *)
+doc <:doc< @docoff >>
 let resource reduce +=
    [<< ind_lab{next{'x}; 'base; l. 'up['l]} >>, reduce_ind_up;
     << ind_lab{zero; 'base; l. 'up['l]} >>, reduce_ind_base]

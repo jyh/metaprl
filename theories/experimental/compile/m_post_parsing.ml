@@ -1,46 +1,46 @@
-(*!
- * @begin[doc]
- *
- * @module[M_post_parsing]
- * Following parsing, we perform currying of function applications,
- * and identify function variables in the body of the program.
- *
- * Note that at this point, function definitions had been curried.
- * @end[doc]
- *
- * ----------------------------------------------------------------
- *
- * @begin[license]
- * Copyright (C) 2003 Adam Granicz, Caltech
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- *
- * Author: Adam Granicz
- * @email{granicz@cs.caltech.edu}
- * @end[license]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   @module[M_post_parsing]
+   Following parsing, we perform currying of function applications,
+   and identify function variables in the body of the program.
+  
+   Note that at this point, function definitions had been curried.
+   @end[doc]
+  
+   ----------------------------------------------------------------
+  
+   @begin[license]
+   Copyright (C) 2003 Adam Granicz, Caltech
+  
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public License
+   as published by the Free Software Foundation; either version 2
+   of the License, or (at your option) any later version.
+  
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+  
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  
+   Author: Adam Granicz
+   @email{granicz@cs.caltech.edu}
+   @end[license]
+>>
 
-(*!
- * @begin[doc]
- * @parents
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @parents
+   @end[doc]
+>>
 extends M_ir
 extends M_ast
 extends M_util
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 open M_ir
 open M_ast
@@ -66,22 +66,22 @@ open Tactic_type.Sequent
  * REDUCTION RESOURCE                                                   *
  ************************************************************************)
 
-(*!
- * @begin[doc]
- * @resources
- *
- * @bf{The @Comment!resource[pp_resource]}
- *
- * The @tt{pp} resource performs the @emph{post-parsing transformation}.
- * The @conv[ppC] conversion can be used to apply this evaluator.
- *
- * The implementation of the @tt{pp_resource} and the @tt[ppC]
- * conversion rely on tables to store the shape of redices, together with the
- * conversions for the reduction.
- *
- * @docoff
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @resources
+  
+   @bf{The @Comment!resource[pp_resource]}
+  
+   The @tt{pp} resource performs the @emph{post-parsing transformation}.
+   The @conv[ppC] conversion can be used to apply this evaluator.
+  
+   The implementation of the @tt{pp_resource} and the @tt[ppC]
+   conversion rely on tables to store the shape of redices, together with the
+   conversions for the reduction.
+  
+   @docoff
+   @end[doc]
+>>
 (*
  * Resource PP.
  *)
@@ -100,30 +100,30 @@ let ppC =
  * Post-parsing transformations
  ************************************************************************)
 
-(*!
- * @begin[doc]
- * @modsubsection{Application}
- *
- * Add an application that we will map through the program.
- * This should be eliminated by the end of PP conversion.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Application}
+  
+   Add an application that we will map through the program.
+   This should be eliminated by the end of PP conversion.
+   @end[doc]
+>>
 declare PP{'e}
 
 dform ps_df : PP{'e} =
    szone pushm[1] bf["POST-PARSING["] 'e popm bf["]"] ezone
 
-(*!
- * @begin[doc]
- * @modsubsection{Currying function applications}
- *
- * We curry each tailcall or function application with multiple
- * arguments. The results of the partial function applications
- * are stored in temporary variables.
- * Calls with one argument are mapped as identity (after removing
- * the useless pair wrapper from around the argument).
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Currying function applications}
+  
+   We curry each tailcall or function application with multiple
+   arguments. The results of the partial function applications
+   are stored in temporary variables.
+   Calls with one argument are mapped as identity (after removing
+   the useless pair wrapper from around the argument).
+   @end[doc]
+>>
 (*
  * Atoms.
  * We apply the tranlation to sub-atoms and expressions.

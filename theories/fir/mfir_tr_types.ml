@@ -1,46 +1,46 @@
-(*!
- * @begin[doc]
- * @module[Mfir_tr_types]
- *
- * The @tt[Mfir_tr_types] module defines type equality judgments, which are
- * used to determine the well-formedness of FIR types.
- * @end[doc]
- *
- * ------------------------------------------------------------------------
- *
- * @begin[license]
- * This file is part of MetaPRL, a modular, higher order
- * logical framework that provides a logical programming
- * environment for OCaml and other languages.  Additional
- * information about the system is available at
- * http://www.metaprl.org/
- *
- * Copyright (C) 2002 Brian Emre Aydemir, Caltech
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- *
- * Author: Brian Emre Aydemir
- * @email{emre@cs.caltech.edu}
- * @end[license]
- *)
+doc <:doc< 
+   @begin[doc]
+   @module[Mfir_tr_types]
+  
+   The @tt[Mfir_tr_types] module defines type equality judgments, which are
+   used to determine the well-formedness of FIR types.
+   @end[doc]
+  
+   ------------------------------------------------------------------------
+  
+   @begin[license]
+   This file is part of MetaPRL, a modular, higher order
+   logical framework that provides a logical programming
+   environment for OCaml and other languages.  Additional
+   information about the system is available at
+   http://www.metaprl.org/
+  
+   Copyright (C) 2002 Brian Emre Aydemir, Caltech
+  
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public License
+   as published by the Free Software Foundation; either version 2
+   of the License, or (at your option) any later version.
+  
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+  
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  
+   Author: Brian Emre Aydemir
+   @email{emre@cs.caltech.edu}
+   @end[license]
+>>
 
-(*!
- * @begin[doc]
- * @parents
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @parents
+   @end[doc]
+>>
 
 extends Mfir_option
 extends Mfir_record
@@ -55,14 +55,14 @@ extends Mfir_sequent
  * Rules.
  **************************************************************************)
 
-(*!
- * @begin[doc]
- * @rules
- * @modsubsection{Mutable types}
- *
- * The types must be equal, and the flags should be identical booleans.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @rules
+   @modsubsection{Mutable types}
+  
+   The types must be equal, and the flags should be identical booleans.
+   @end[doc]
+>>
 
 prim wf_mutable_ty :
    sequent [fir] { 'H >- "or"{ 'flag; "not"{ 'flag } } } -->
@@ -73,28 +73,28 @@ prim wf_mutable_ty :
    = it
 
 
-(*!************************************
- * @begin[doc]
- * @modsubsection{Numbers}
- *
- * The type $<< tyInt >>$ is well-formed.
- * @end[doc]
- *)
+doc <:doc< ************************************
+   @begin[doc]
+   @modsubsection{Numbers}
+  
+   The type $<< tyInt >>$ is well-formed.
+   @end[doc]
+>>
 
 prim wf_tyInt :
    sequent [fir] { 'H >- type_eq{ tyInt; tyInt; small_type } }
    = it
 
 
-(*!
- * @begin[doc]
- *
- * Enumeration types are well-formed if the parameter $i$ is within the
- * allowed range of values.  This latter restriction assists the Mojave
- * compiler's garbage collector in differentiating between enumeration
- * constants and pointers.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   Enumeration types are well-formed if the parameter $i$ is within the
+   allowed range of values.  This latter restriction assists the Mojave
+   compiler's garbage collector in differentiating between enumeration
+   constants and pointers.
+   @end[doc]
+>>
 
 prim wf_tyEnum :
    sequent [fir] { 'H >- member{ number[i:n]; enum_max } } -->
@@ -102,15 +102,15 @@ prim wf_tyEnum :
    = it
 
 
-(*!
- * @begin[doc]
- *
- * The types $<< tyRawInt[p:n, sign:s] >>$ and $<< tyFloat[p:n] >>$
- * are well-formed if their parameters are well-formed.  Note that
- * $<< tyRawInt[p:n, sign:s] >>$ and $<< tyFloat[p:n] >>$ cannot be
- * used as $<< small_type >>$ types.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   The types $<< tyRawInt[p:n, sign:s] >>$ and $<< tyFloat[p:n] >>$
+   are well-formed if their parameters are well-formed.  Note that
+   $<< tyRawInt[p:n, sign:s] >>$ and $<< tyFloat[p:n] >>$ cannot be
+   used as $<< small_type >>$ types.
+   @end[doc]
+>>
 
 prim wf_tyRawInt1 :
    sequent [fir] { 'H >-
@@ -143,14 +143,14 @@ prim wf_tyFloat :
    = it
 
 
-(*!************************************
- * @begin[doc]
- * @modsubsection{Functions}
- *
- * Function types are well-formed if the argument and result types
- * are well-formed.
- * @end[doc]
- *)
+doc <:doc< ************************************
+   @begin[doc]
+   @modsubsection{Functions}
+  
+   Function types are well-formed if the argument and result types
+   are well-formed.
+   @end[doc]
+>>
 
 prim wf_tyFun :
    sequent [fir] { 'H >- type_eq{ 'a1; 'a2; large_type } } -->
@@ -161,14 +161,14 @@ prim wf_tyFun :
    = it
 
 
-(*!************************************
- * @begin[doc]
- * @modsubsection{Tuples}
- *
- * Two union types are equal if they name the same union definition, select
- * the same subset of cases, and instantiate the definition at equal types.
- * @end[doc]
- *)
+doc <:doc< ************************************
+   @begin[doc]
+   @modsubsection{Tuples}
+  
+   Two union types are equal if they name the same union definition, select
+   the same subset of cases, and instantiate the definition at equal types.
+   @end[doc]
+>>
 
 prim wf_tyUnion 'H :
 
@@ -193,13 +193,13 @@ prim wf_tyUnion 'H :
    = it
 
 
-(*!
- * @begin[doc]
- *
- * Two tuple types are equal if they are the same kind of tuple and their
- * projections are pointwise equal.  Note that box tuples must have arity one.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   Two tuple types are equal if they are the same kind of tuple and their
+   projections are pointwise equal.  Note that box tuples must have arity one.
+   @end[doc]
+>>
 
 prim wf_tyTuple_normal :
    sequent [fir] { 'H >- type_eq_list{ 'tyl1; 'tyl2; small_type } } -->
@@ -223,12 +223,12 @@ prim wf_tyTuple_box :
    = it
 
 
-(*!
- * @begin[doc]
- *
- * (Documentation incomplete.)
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   (Documentation incomplete.)
+   @end[doc]
+>>
 
 (* XXX: documentation needs to be completed. *)
 
@@ -254,13 +254,13 @@ prim wf_tyTag 'H :
    = it
 
 
-(*!************************************
- * @begin[doc]
- * @modsubsection{Other aggregates}
- *
- * Two array types are equal if their element types are equal.
- * @end[doc]
- *)
+doc <:doc< ************************************
+   @begin[doc]
+   @modsubsection{Other aggregates}
+  
+   Two array types are equal if their element types are equal.
+   @end[doc]
+>>
 
 prim wf_tyArray :
    sequent [fir] { 'H >- type_eq{ 't1; 't2; large_type } } -->
@@ -268,24 +268,24 @@ prim wf_tyArray :
    = it
 
 
-(*!
- * @begin[doc]
- *
- * The type $<< tyRawData >>$ is well-formed.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   The type $<< tyRawData >>$ is well-formed.
+   @end[doc]
+>>
 
 prim wf_tyRawData :
    sequent [fir] { 'H >- type_eq{ tyRawData; tyRawData; small_type } }
    = it
 
 
-(*!
- * @begin[doc]
- *
- * (Documentation incomplete.)
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   (Documentation incomplete.)
+   @end[doc]
+>>
 
 (* XXX: documentation needs to be completed. *)
 
@@ -299,14 +299,14 @@ prim wf_tyFrame 'H :
    = it
 
 
-(*!************************************
- * @begin[doc]
- * @modsubsection{Polymorphism}
- *
- * Two type variables are considered equal if they name the same variable
- * and the variable is declared in the context with the specified kind.
- * @end[doc]
- *)
+doc <:doc< ************************************
+   @begin[doc]
+   @modsubsection{Polymorphism}
+  
+   Two type variables are considered equal if they name the same variable
+   and the variable is declared in the context with the specified kind.
+   @end[doc]
+>>
 
 (*
  * BUG: Is exact equality really the way to go?  I believe that exact
@@ -322,13 +322,13 @@ prim wf_tyVar 'H :
    = it
 
 
-(*!
- * @begin[doc]
- *
- * Two type applications are equal if they name the same parametrized type
- * and instantiate that type at equal types.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   Two type applications are equal if they name the same parametrized type
+   and instantiate that type at equal types.
+   @end[doc]
+>>
 
 (*
  * BUG: There's other rules that we can write down for tyApply,
@@ -344,18 +344,18 @@ prim wf_tyApply1 'H :
       type_eq{ tyApply{ 'tv; 'tyl1 }; tyApply{ 'tv; 'tyl2 }; 'k } }
    = it
 
-(*!
- * @docoff
- *)
+doc <:doc< 
+   @docoff
+>>
 
 
-(*!
- * @begin[doc]
- *
- * Two existential types are equal if when instantiated at the same
- * $<< small_type >>$ type, the resulting types are equal.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   Two existential types are equal if when instantiated at the same
+   $<< small_type >>$ type, the resulting types are equal.
+   @end[doc]
+>>
 
 prim wf_tyExists :
    sequent [fir] { 'H; tv: "type"; a: ty_def{ 'tv; small_type; no_def } >-
@@ -365,13 +365,13 @@ prim wf_tyExists :
    = it
 
 
-(*!
- * @begin[doc]
- *
- * Two universal types are equal if when instantiated at the same
- * $<< small_type >>$ type, the resulting types are equal.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   Two universal types are equal if when instantiated at the same
+   $<< small_type >>$ type, the resulting types are equal.
+   @end[doc]
+>>
 
 prim wf_tyAll :
    sequent [fir] { 'H; tv: "type"; a: ty_def{ 'tv; small_type; no_def } >-
@@ -381,12 +381,12 @@ prim wf_tyAll :
    = it
 
 
-(*!
- * @begin[doc]
- *
- * Type projections are well-formed if $i$ is in bounds.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   Type projections are well-formed if $i$ is in bounds.
+   @end[doc]
+>>
 
 (*
  * BUG: We might need another rule for tyProject since we can use
@@ -407,19 +407,19 @@ prim wf_tyProject 'H :
                small_type } }
    = it
 
-(*!
- * @docoff
- *)
+doc <:doc< 
+   @docoff
+>>
 
 
-(*!************************************
- * @begin[doc]
- * @modsubsection{Type definitions}
- *
- * Two parametrized types are equal if when instantiated at the same
- * $<< small_type >>$, the resulting types are equal.
- * @end[doc]
- *)
+doc <:doc< ************************************
+   @begin[doc]
+   @modsubsection{Type definitions}
+  
+   Two parametrized types are equal if when instantiated at the same
+   $<< small_type >>$, the resulting types are equal.
+   @end[doc]
+>>
 
 prim wf_tyDefPoly :
    sequent [fir] { 'H; tv: "type"; a: ty_def{ 'tv; small_type; no_def } >-
@@ -430,12 +430,12 @@ prim wf_tyDefPoly :
    = it
 
 
-(*!
- * @begin[doc]
- *
- * Well-formedness of frames and records is straightforward.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   Well-formedness of frames and records is straightforward.
+   @end[doc]
+>>
 
 prim wf_recordEnd_record :
    sequent [fir] { 'H >- type_eq{ recordEnd; recordEnd; record_type } }
@@ -462,9 +462,9 @@ prim wf_record_frame :
                                   frame_type } }
    = it
 
-(*!
- * @docoff
- *)
+doc <:doc< 
+   @docoff
+>>
 
 
 (*
@@ -476,14 +476,14 @@ prim wf_record_frame :
 declare union_type_eq_list{ 'cases1; 'cases2 }
 
 
-(*!
- * @begin[doc]
- *
- * Two union definitions are equal if the cases they define are equal, and if
- * they define the same kind of union.  Note that a union definition may
- * define zero cases.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   Two union definitions are equal if the cases they define are equal, and if
+   they define the same kind of union.  Note that a union definition may
+   define zero cases.
+   @end[doc]
+>>
 
 prim wf_tyDefUnion :
    sequent [fir] { 'H >- int_eq{ length{ 'cases1 }; number[i:n] } } -->
@@ -494,12 +494,12 @@ prim wf_tyDefUnion :
    = it
 
 
-(*!
- * @begin[doc]
- *
- * Equality of union case definitions is straightforward.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   Equality of union case definitions is straightforward.
+   @end[doc]
+>>
 
 prim wf_tyDefUnion_cases1 :
    sequent [fir] { 'H >- union_type_eq_list{ nil; nil } }
@@ -512,12 +512,12 @@ prim wf_tyDefUnion_cases2 :
    = it
 
 
-(*!
- * @begin[doc]
- *
- * (Documentation incomplete.)
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   (Documentation incomplete.)
+   @end[doc]
+>>
 
 (* XXX: documentation needs to be completed. *)
 
@@ -526,9 +526,9 @@ prim wf_tyDefDTuple 'H :
       type_eq{ tyDefDTuple{ 'tv }; tyDefDTuple{ 'tv }; dtuple_type } }
    = it
 
-(*!
- * @docoff
- *)
+doc <:doc< 
+   @docoff
+>>
 
 
 (**************************************************************************

@@ -1,12 +1,12 @@
-(*!
- * @begin[doc]
- * @module[Itt_pointwise]
- * @parents
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @module[Itt_pointwise]
+   @parents
+   @end[doc]
+>>
 
 extends Itt_equal
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 open Printf
 open Mp_debug
@@ -37,13 +37,13 @@ let _ = show_loading "Loading Itt_pointwise%t"
  * RULES                                                                *
  ************************************************************************)
 
-(*!
- * @begin[doc]
- * @rules
- * The following two rules are valid only for pointwise functionality.
- * They both contradict to @hrefrule[Let] rule.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @rules
+   The following two rules are valid only for pointwise functionality.
+   They both contradict to @hrefrule[Let] rule.
+   @end[doc]
+>>
 
 prim hypSubstPointwise 'H 'J_1 't1  bind{y. 'A['y]} :
    [equality] sequent ['ext] { 'H; t:'T; 'J_1['t];  x: 'A['t]; 'J_2['x;'t] >- 't = 't1 in 'T } -->
@@ -57,4 +57,4 @@ prim contextSubstPointwise 'H 'J_1 'J 't1  :
    sequent ['ext] { 'H; t:'T; 'J_1['t];  'J['t]; 'J_2['t] >- 'C['t] } =
    'c
 
-(*! @docoff *)
+doc <:doc< @docoff >>

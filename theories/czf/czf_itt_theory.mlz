@@ -1,277 +1,277 @@
-(*!
- * @spelling{CST Errett Myhill ZF eq practise}
- *
- * @begin[doc]
- * @theory{ITT Implementation of CZF Theory}
- * The @emph{CZF} theory formalizes Aczel's constructive
- * set theory @cite[Acz86].  In @emph{Notes on Constructive
- * Set Theory} @cite[Acz97], Aczel provides the central motivation
- * for the set theory.
- *
- * @begin[quote]
- * ``The general topic of Constructive Set Theory originated in the seminal 1975
- * paper of John Myhill, where a specific axiom system CST was introduced.
- * Constructive Set Theory provides a standard set theoretical framework for
- * the development of constructive mathematics in the style of Errett Bishop @cite[Bis67]
- * and is one of several such frameworks for constructive mathematics that
- * have been considered. It is distinctive in that it uses the standard first order
- * language of classical axiomatic set theory and makes no explicit use of
- * specifically constructive ideas. Of course its logic is intuitionistic, but there
- * is no special notion of construction or constructive object. There are just
- * the sets, as in classical set theory. This means that mathematics in constructive
- * set theory can look very much like ordinary classical mathematics.
- * The advantage of this is that the ideas, conventions and practise of the set
- * theoretical presentation of ordinary mathematics can be used also in the set
- * theoretical development of constructive mathematics, provided that a suitable
- * discipline is adhered to. In the first place only the methods of logical
- * reasoning available in intuitionistic logic should be used. In addition only the
- * set theoretical axioms allowed in constructive set theory can be used. With
- * some practise it is not difficult for the constructive mathematician to adhere
- * to this discipline.''
- * @end[quote]
- *
- * Aczel assures the constructivity of the set theory by using
- * @MartinLof's Constructive Set Theory as its foundation.
- * We follow Aczel's approach in the definition of our formalization of
- * the set theory.  We encode the sets within the @Nuprl type theory.
- * There are two main reasons for formalizing @emph{CZF}.  First, we
- * demonstrate the method for @emph{deriving} one non-trivial theory
- * from another (@emph{CZF} is @emph{derived} from the @Nuprl
- * type theory).  In addition, set theory can often present a convenient
- * framework for developing constructive mathematics using ordinary
- * mathematical concepts.  Aczel continues,
- *
- * @begin[quote]
- * ``Why not present constructive mathematics directly in the type theory?
- * This is an obvious option for the constructive mathematician. It has the
- * drawback that there is no extensive tradition of presenting mathematics in
- * a type theoretic setting. So, many techniques for representing mathematical
- * ideas in a set theoretical language have to be reconsidered for a type
- * theoretical language. This can be avoided by keeping to the set theoretical
- * language.''
- * @end[quote]
- *
- * The @emph{CZF} set theory is defined in an intuitionistic first-order
- * logic, with one additional primitive operator for set membership.
- * All non-propositional elements of the set theory are sets; the numbers
- * and other structures are coded in the usual manner.  Sets us an
- * @emph{extensional} equality; two sets considered equal if they have
- * the same elements.
- *
- * @module[Czf_itt_theory]
- *
- * The @emph{CZF} set theory is defined using a collection of axioms
- * about set membership in a manner similar to the definition of
- * @emph{ZF} set theory.  At the moment, the extent of our formalization
- * is to encode the sets and prove that each of these axioms is
- * valid given our interpretation of sets in the @Nuprl type theory
- * (defined in the @hrefmodule[Itt_theory] module).
- *
- * @modsection{Axioms}
- *
- * @modsubsection{Pairing}
- *
- * $$
- * @forall a. @forall b. @exists c. @forall y. (y @in c @Leftrightarrow y = a @vee y = b)
- * $$
- *
- * @modsubsection{Union}
- *
- * $$
- * @forall a. @exists b. @forall y. (y @in b @Leftrightarrow @exists x @in a. (y @in x))
- * $$
- *
- * @modsubsection{Infinity}
- *
- * $$
- * @exists a. (@exists x. x @in a @wedge @forall x @in a. @exists y @in a. x @in y)
- * $$
- *
- * @modsubsection{Extensionality}
- *
- * $$
- * @forall a. @forall b. ((@forall x. x @in a @Leftrightarrow x @in b) @Rightarrow a = b)
- * $$
- *
- * @modsubsection{Set induction}
- *
- * $$
- * @forall a. ((@forall x @in a. @phi(x) @Rightarrow @phi(a)) @Rightarrow (@forall a. @phi(a)))
- * $$
- *
- * @modsubsection{Restricted separation}
- *
- * The constructive version of separation is stated for an arbitrary
- * @emph{restricted} formula $@phi$, where a formula is restricted is
- * all quantifiers are restricted (either $@exists x @in y. @ldots$ or
- * $@forall x @in y. @ldots$.
- *
- * $$
- * @forall a. @exists b. @forall x. (x @in b @Leftrightarrow (x @in a @wedge @phi(x)))
- * $$
- *
- * @modsubsection{Collection}
- *
- * The @emph{CZF} set theory uses the @emph{collection} schemes instead of
- * the general replacement axiom, which would be defined as follows:
- *
- * $$
- * @forall a. ((@forall x @in a. @exists ! y. @phi(x, y)) @Rightarrow
- *    @exists b. @forall y. (y @in b @Leftrightarrow @exists x @in a. @phi(x, y))
- * $$
- *
- * The collection axioms are defined in terms of a predicate $@bb{B}$.
- *
- * $$
- * @bb{B} x @in a, y @in b. @phi @equiv (@forall x @in a. @exists y @in b. @phi)
- *    @wedge (@forall y @in b. @exists x @in a. @phi)
- * $$
- *
- * The @emph{strong collection} scheme is defined as follows:
- *
- * $$
- * @forall a. (@forall x @in a. @exists y. @phi(x, y)) @Rightarrow
- *    (@exists b. @bb{B} x @in a, y @in b. @phi(x, y)).
- * $$
- *
- * The @emph{subset collection} scheme defines a collection of
- * subsets.
- *
- * $$
- * @begin[array, l]
- * @line{@item{@forall a. @forall b. @exists c. (@forall u.
- *    @forall x @in a. @exists y @in b. @phi(x, y, u) @Rightarrow}}
- * @line{@item{@space @space @space
- *       @exists z @in c. @bb{B} x @in a, y @in b. @phi(x, y, u))}}
- * @end[array]
- * $$
- *
- * @modsection{Theory organization}
- *
- * For our formalization of the set theory, we present a rule-based approach
- * more suitable to a presentation in a sequent calculus.  We present the set
- * theory in three parts.  Fir we introduce the primitive propositions
- * for membership and equality; we then characterize the first order logic;
- * and the in the final section we present set @emph{constructors} that
- * correspond to each of the axioms of the set theory, together with
- * well-formedness rules.  The rules for the constructors are presented
- * in the form of introduction and elimination rules for reasoning about
- * membership in each of the set constructions.  The following is a
- * brief summary of the the account.
- *
- * @modsubsection{Encoding}
- *
- * The type of sets is defined in @hrefmodule[Czf_itt_set] module as the
- * $W$-type $@set @equiv @w{T; @univ{1}; T}$.  That is, each set has an
- * index type $T @in @univ{1}$, and a function $T @rightarrow @set$ that
- * lists the elements of the set.
- *
- * @modsubsection{Propositions}
- *
- * @begin[description]
- * @item{Equality $@equal{s_1; s_2}$;
- *   {The @hrefmodule[Czf_itt_eq] module defines extensional set equality.
- *    The type-theoretic equality on the $W$-type is too fine for use in the set
- *    theory --- two sets will differ if they have different index types, even
- *    though they may have the same elements.  The @hrefmodule[Czf_itt_set]
- *    module contains a discussion of the inadequacy of a quotient construction.
- *    Instead the @tt{Czf_itt_eq} module defines several @emph{functionality}
- *    judgments that are used to state well-formedness and functionality properties
- *    of set propositions and constructors.}}
- *
- * @item{Membership $@mem{s_1; s_2}$;
- *   {The @hrefmodule[Czf_itt_member] module defines membership, and proves
- *    the theorem of @emph{extensionality}: two sets are equal if they have the same
- *    elements.}}
- *
- * @item{Logic;
- *   {The modules in @hrefmodule[Czf_itt_fol] define the first-order
- *    logic, including the restricted quantifiers $@dall{x; s; P[x]}$ and
- *    $@dexists{x; s; P[x]}$, and the unrestricted quantifiers
- *    $@sall{x; P[x]}$ and $@sall{x; P[x]}$.  The modules in the logic
- *    prove the functionality of the logical operators in addition to
- *    the $@restricted{P}$ judgment for use in the separation construction.}}
- *
- * @item{Subset $@subset{s_1; s_2}$;
- *   {The subset judgment $@subset{s_1; s_2}$ is defined in the
- *    @hrefmodule[Czf_itt_subset] module as the proposition
- *    $@dall{x; s_1; @mem{x; s_2}}$.}}
- * @end[description]
- *
- * @modsubsection{Constructors}
- *
- * @begin[description]
- * @item{Separation $@sep{x; s; P[x]}$;
- *   {The @hrefmodule[Czf_itt_sep] defines the constructor for restricted
- *    separation $@sep{x; s; P[x]}$, where $s$ is a set, and $P[x]$ must be
- *    a @emph{restricted} proposition for any set $x$.  The definition of
- *    restriction is equivalent to Aczel's definition (that $P[x]$ contain
- *    no unrestricted quantifiers), but we give it a somewhat more general
- *    definition $@restricted{P} @equiv P @in @univ{1}$.  This definition is
- *    never exposed in the set theory; we provide rules for proving
- *    restriction for each of the restricted logical operators.}}
- *
- * @item{Empty set $@empty$;
- *   {The empty set is defined in the @hrefmodule[Czf_itt_empty] module.}}
- *
- * @item{Singleton set $@sing{s}$;
- *   {The singleton $@sing{s}$ set, defined in the @hrefmodule[Czf_itt_singleton]
- *    module, defines a set containing one element, the set $s$.}}
- *
- * @item{Binary union $@union{s_1; s_2}$, general union $@union{s}$;
- *   {The @hrefmodule[Czf_itt_union] module defines two forms of union.
- *    The binary union $@union{s_1; s_2}$ is the set containing
- *    the elements of $s_1$ and $s_2$.  The general union $@union{s}$
- *    forms the set containing the elements of all the sets in $s$.}}
- *
- * @item{Pairing $@pair{s_1; s_2}$;
- *   {The @hrefmodule[Czf_itt_pair] module defines the unordered
- *    pair $@pair{s_1; s_2}$, which is a set containing the two
- *    elements $s_1$ and $s_1$.}}
- *
- * @item{Infinity (the natural numbers) $@inf$;
- *   {The @hrefmodule[Czf_itt_nat] module defines an infinite set
- *    $@inf$ that corresponds to the set of natural numbers.  It
- *    also defines a zero element $@mem{@zero; @inf}$, and a successor
- *    $@succ{i}$, where $@mem{@succ{i}; @inf}$ if $@mem{i; @inf}$.  We
- *    also formalize an induction principle over the natural numbers,
- *    as well as the total order $@lt{i; j}$.}}
- *
- * @end[description]
- * @end[doc]
- *
- * ----------------------------------------------------------------
- *
- * @begin[license]
- * Copyright (C) 2000 Jason Hickey, Caltech
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- *
- * Author: Jason Hickey
- * @email{jyh@cs.caltech.edu}
- * @end[license]
- *)
+doc <:doc< 
+   @spelling{CST Errett Myhill ZF eq practise}
+  
+   @begin[doc]
+   @theory{ITT Implementation of CZF Theory}
+   The @emph{CZF} theory formalizes Aczel's constructive
+   set theory @cite[Acz86].  In @emph{Notes on Constructive
+   Set Theory} @cite[Acz97], Aczel provides the central motivation
+   for the set theory.
+  
+   @begin[quote]
+   ``The general topic of Constructive Set Theory originated in the seminal 1975
+   paper of John Myhill, where a specific axiom system CST was introduced.
+   Constructive Set Theory provides a standard set theoretical framework for
+   the development of constructive mathematics in the style of Errett Bishop @cite[Bis67]
+   and is one of several such frameworks for constructive mathematics that
+   have been considered. It is distinctive in that it uses the standard first order
+   language of classical axiomatic set theory and makes no explicit use of
+   specifically constructive ideas. Of course its logic is intuitionistic, but there
+   is no special notion of construction or constructive object. There are just
+   the sets, as in classical set theory. This means that mathematics in constructive
+   set theory can look very much like ordinary classical mathematics.
+   The advantage of this is that the ideas, conventions and practise of the set
+   theoretical presentation of ordinary mathematics can be used also in the set
+   theoretical development of constructive mathematics, provided that a suitable
+   discipline is adhered to. In the first place only the methods of logical
+   reasoning available in intuitionistic logic should be used. In addition only the
+   set theoretical axioms allowed in constructive set theory can be used. With
+   some practise it is not difficult for the constructive mathematician to adhere
+   to this discipline.''
+   @end[quote]
+  
+   Aczel assures the constructivity of the set theory by using
+   @MartinLof's Constructive Set Theory as its foundation.
+   We follow Aczel's approach in the definition of our formalization of
+   the set theory.  We encode the sets within the @Nuprl type theory.
+   There are two main reasons for formalizing @emph{CZF}.  First, we
+   demonstrate the method for @emph{deriving} one non-trivial theory
+   from another (@emph{CZF} is @emph{derived} from the @Nuprl
+   type theory).  In addition, set theory can often present a convenient
+   framework for developing constructive mathematics using ordinary
+   mathematical concepts.  Aczel continues,
+  
+   @begin[quote]
+   ``Why not present constructive mathematics directly in the type theory?
+   This is an obvious option for the constructive mathematician. It has the
+   drawback that there is no extensive tradition of presenting mathematics in
+   a type theoretic setting. So, many techniques for representing mathematical
+   ideas in a set theoretical language have to be reconsidered for a type
+   theoretical language. This can be avoided by keeping to the set theoretical
+   language.''
+   @end[quote]
+  
+   The @emph{CZF} set theory is defined in an intuitionistic first-order
+   logic, with one additional primitive operator for set membership.
+   All non-propositional elements of the set theory are sets; the numbers
+   and other structures are coded in the usual manner.  Sets us an
+   @emph{extensional} equality; two sets considered equal if they have
+   the same elements.
+  
+   @module[Czf_itt_theory]
+  
+   The @emph{CZF} set theory is defined using a collection of axioms
+   about set membership in a manner similar to the definition of
+   @emph{ZF} set theory.  At the moment, the extent of our formalization
+   is to encode the sets and prove that each of these axioms is
+   valid given our interpretation of sets in the @Nuprl type theory
+   (defined in the @hrefmodule[Itt_theory] module).
+  
+   @modsection{Axioms}
+  
+   @modsubsection{Pairing}
+  
+   $$
+   @forall a. @forall b. @exists c. @forall y. (y @in c @Leftrightarrow y = a @vee y = b)
+   $$
+  
+   @modsubsection{Union}
+  
+   $$
+   @forall a. @exists b. @forall y. (y @in b @Leftrightarrow @exists x @in a. (y @in x))
+   $$
+  
+   @modsubsection{Infinity}
+  
+   $$
+   @exists a. (@exists x. x @in a @wedge @forall x @in a. @exists y @in a. x @in y)
+   $$
+  
+   @modsubsection{Extensionality}
+  
+   $$
+   @forall a. @forall b. ((@forall x. x @in a @Leftrightarrow x @in b) @Rightarrow a = b)
+   $$
+  
+   @modsubsection{Set induction}
+  
+   $$
+   @forall a. ((@forall x @in a. @phi(x) @Rightarrow @phi(a)) @Rightarrow (@forall a. @phi(a)))
+   $$
+  
+   @modsubsection{Restricted separation}
+  
+   The constructive version of separation is stated for an arbitrary
+   @emph{restricted} formula $@phi$, where a formula is restricted is
+   all quantifiers are restricted (either $@exists x @in y. @ldots$ or
+   $@forall x @in y. @ldots$.
+  
+   $$
+   @forall a. @exists b. @forall x. (x @in b @Leftrightarrow (x @in a @wedge @phi(x)))
+   $$
+  
+   @modsubsection{Collection}
+  
+   The @emph{CZF} set theory uses the @emph{collection} schemes instead of
+   the general replacement axiom, which would be defined as follows:
+  
+   $$
+   @forall a. ((@forall x @in a. @exists ! y. @phi(x, y)) @Rightarrow
+      @exists b. @forall y. (y @in b @Leftrightarrow @exists x @in a. @phi(x, y))
+   $$
+  
+   The collection axioms are defined in terms of a predicate $@bb{B}$.
+  
+   $$
+   @bb{B} x @in a, y @in b. @phi @equiv (@forall x @in a. @exists y @in b. @phi)
+      @wedge (@forall y @in b. @exists x @in a. @phi)
+   $$
+  
+   The @emph{strong collection} scheme is defined as follows:
+  
+   $$
+   @forall a. (@forall x @in a. @exists y. @phi(x, y)) @Rightarrow
+      (@exists b. @bb{B} x @in a, y @in b. @phi(x, y)).
+   $$
+  
+   The @emph{subset collection} scheme defines a collection of
+   subsets.
+  
+   $$
+   @begin[array, l]
+   @line{@item{@forall a. @forall b. @exists c. (@forall u.
+      @forall x @in a. @exists y @in b. @phi(x, y, u) @Rightarrow}}
+   @line{@item{@space @space @space
+         @exists z @in c. @bb{B} x @in a, y @in b. @phi(x, y, u))}}
+   @end[array]
+   $$
+  
+   @modsection{Theory organization}
+  
+   For our formalization of the set theory, we present a rule-based approach
+   more suitable to a presentation in a sequent calculus.  We present the set
+   theory in three parts.  Fir we introduce the primitive propositions
+   for membership and equality; we then characterize the first order logic;
+   and the in the final section we present set @emph{constructors} that
+   correspond to each of the axioms of the set theory, together with
+   well-formedness rules.  The rules for the constructors are presented
+   in the form of introduction and elimination rules for reasoning about
+   membership in each of the set constructions.  The following is a
+   brief summary of the the account.
+  
+   @modsubsection{Encoding}
+  
+   The type of sets is defined in @hrefmodule[Czf_itt_set] module as the
+   $W$-type $@set @equiv @w{T; @univ{1}; T}$.  That is, each set has an
+   index type $T @in @univ{1}$, and a function $T @rightarrow @set$ that
+   lists the elements of the set.
+  
+   @modsubsection{Propositions}
+  
+   @begin[description]
+   @item{Equality $@equal{s_1; s_2}$;
+     {The @hrefmodule[Czf_itt_eq] module defines extensional set equality.
+      The type-theoretic equality on the $W$-type is too fine for use in the set
+      theory --- two sets will differ if they have different index types, even
+      though they may have the same elements.  The @hrefmodule[Czf_itt_set]
+      module contains a discussion of the inadequacy of a quotient construction.
+      Instead the @tt{Czf_itt_eq} module defines several @emph{functionality}
+      judgments that are used to state well-formedness and functionality properties
+      of set propositions and constructors.}}
+  
+   @item{Membership $@mem{s_1; s_2}$;
+     {The @hrefmodule[Czf_itt_member] module defines membership, and proves
+      the theorem of @emph{extensionality}: two sets are equal if they have the same
+      elements.}}
+  
+   @item{Logic;
+     {The modules in @hrefmodule[Czf_itt_fol] define the first-order
+      logic, including the restricted quantifiers $@dall{x; s; P[x]}$ and
+      $@dexists{x; s; P[x]}$, and the unrestricted quantifiers
+      $@sall{x; P[x]}$ and $@sall{x; P[x]}$.  The modules in the logic
+      prove the functionality of the logical operators in addition to
+      the $@restricted{P}$ judgment for use in the separation construction.}}
+  
+   @item{Subset $@subset{s_1; s_2}$;
+     {The subset judgment $@subset{s_1; s_2}$ is defined in the
+      @hrefmodule[Czf_itt_subset] module as the proposition
+      $@dall{x; s_1; @mem{x; s_2}}$.}}
+   @end[description]
+  
+   @modsubsection{Constructors}
+  
+   @begin[description]
+   @item{Separation $@sep{x; s; P[x]}$;
+     {The @hrefmodule[Czf_itt_sep] defines the constructor for restricted
+      separation $@sep{x; s; P[x]}$, where $s$ is a set, and $P[x]$ must be
+      a @emph{restricted} proposition for any set $x$.  The definition of
+      restriction is equivalent to Aczel's definition (that $P[x]$ contain
+      no unrestricted quantifiers), but we give it a somewhat more general
+      definition $@restricted{P} @equiv P @in @univ{1}$.  This definition is
+      never exposed in the set theory; we provide rules for proving
+      restriction for each of the restricted logical operators.}}
+  
+   @item{Empty set $@empty$;
+     {The empty set is defined in the @hrefmodule[Czf_itt_empty] module.}}
+  
+   @item{Singleton set $@sing{s}$;
+     {The singleton $@sing{s}$ set, defined in the @hrefmodule[Czf_itt_singleton]
+      module, defines a set containing one element, the set $s$.}}
+  
+   @item{Binary union $@union{s_1; s_2}$, general union $@union{s}$;
+     {The @hrefmodule[Czf_itt_union] module defines two forms of union.
+      The binary union $@union{s_1; s_2}$ is the set containing
+      the elements of $s_1$ and $s_2$.  The general union $@union{s}$
+      forms the set containing the elements of all the sets in $s$.}}
+  
+   @item{Pairing $@pair{s_1; s_2}$;
+     {The @hrefmodule[Czf_itt_pair] module defines the unordered
+      pair $@pair{s_1; s_2}$, which is a set containing the two
+      elements $s_1$ and $s_1$.}}
+  
+   @item{Infinity (the natural numbers) $@inf$;
+     {The @hrefmodule[Czf_itt_nat] module defines an infinite set
+      $@inf$ that corresponds to the set of natural numbers.  It
+      also defines a zero element $@mem{@zero; @inf}$, and a successor
+      $@succ{i}$, where $@mem{@succ{i}; @inf}$ if $@mem{i; @inf}$.  We
+      also formalize an induction principle over the natural numbers,
+      as well as the total order $@lt{i; j}$.}}
+  
+   @end[description]
+   @end[doc]
+  
+   ----------------------------------------------------------------
+  
+   @begin[license]
+   Copyright (C) 2000 Jason Hickey, Caltech
+  
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public License
+   as published by the Free Software Foundation; either version 2
+   of the License, or (at your option) any later version.
+  
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+  
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  
+   Author: Jason Hickey
+   @email{jyh@cs.caltech.edu}
+   @end[license]
+>>
 
-(*!
- * @begin[doc]
- * @parents
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @parents
+   @end[doc]
+>>
 extends Czf_itt_subset
 extends Czf_itt_power
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 (*
  * -*-

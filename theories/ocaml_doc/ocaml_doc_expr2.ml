@@ -1,43 +1,43 @@
-(*! -*- Mode: text -*-
- *
- * @begin[spelling]
- * hoc cons deconstructed destructed doesn
- * ll namespace obfuscation
- * @end[spelling]
- *
- * @begin[doc]
- * @chapter[tuples]{Tuples, Lists, and Polymorphism}
- * @end[doc]
- *
- * ----------------------------------------------------------------
- *
- * @begin[license]
- * Copyright (C) 2000 Jason Hickey, Caltech
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- *
- * Author: Jason Hickey
- * @email{jyh@cs.caltech.edu}
- * @end[license]
- * @docoff
- *)
+doc <:doc< -*- Mode: text -*-
+  
+   @begin[spelling]
+   hoc cons deconstructed destructed doesn
+   ll namespace obfuscation
+   @end[spelling]
+  
+   @begin[doc]
+   @chapter[tuples]{Tuples, Lists, and Polymorphism}
+   @end[doc]
+  
+   ----------------------------------------------------------------
+  
+   @begin[license]
+   Copyright (C) 2000 Jason Hickey, Caltech
+  
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public License
+   as published by the Free Software Foundation; either version 2
+   of the License, or (at your option) any later version.
+  
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+  
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  
+   Author: Jason Hickey
+   @email{jyh@cs.caltech.edu}
+   @end[license]
+   @docoff
+>>
 
 extends Base_theory
 
-(*!
- * @begin[doc]
+doc <:doc< 
+   @begin[doc]
 In the chapters leading up to this one, we have seen simple
 expressions involving numbers, characters, strings, functions and
 variables.  This language is already Turing complete---we can code
@@ -424,7 +424,7 @@ and the semicolon separates the items of the list.
 
 @end[doc]
 @docoff
-*)
+>>
 
 (*
  * -*-

@@ -1,16 +1,6 @@
-(*!
- * @spelling{MCC Mojave}
- *
- * @begin[doc]
- * @theory{Phobos Theory}
- * @module[Phobos_theory]
- *
+(*
  * The Phobos theory supplies rewrites needed for Phobos in the 
  * Mojave compiler (MCC).
- *
- * (Documentation incomplete.)
- *
- * @end[doc]
  *
  * ----------------------------------------------------------------
  *
@@ -43,11 +33,6 @@
  * @end[license]
  *)
 
-(*!
- * @begin[doc]
- * @parents
- * @end[doc]
- *)
 extends Base_meta
 
 extends Itt_atom
@@ -58,5 +43,3 @@ extends Itt_list2
 extends Itt_rfun
 
 extends Phobos_base
-
-(*! @docoff *)

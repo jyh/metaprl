@@ -1,49 +1,49 @@
-(*!
- * @spelling{int number ind add minus beq_int lt_bool}
- *
- * @begin[doc]
- * @module[Itt_int_base]
- *
- * The integers are formalized as a @emph{primitive}
- * type in the @Nuprl type theory.
- * @end[doc]
- *
- * ----------------------------------------------------------------
- *
- * @begin[license]
- * This file is part of MetaPRL, a modular, higher order
- * logical framework that provides a logical programming
- * environment for OCaml and other languages.
- *
- * See the file doc/index.html for information on Nuprl,
- * OCaml, and more information about this system.
- *
- * Copyright (C) 1998 Jason Hickey, Cornell University
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- *
- * Author: Yegor Bryukhov
- * @email{ynb@mail.ru}
- * @end[license]
- *)
+doc <:doc< 
+   @spelling{int number ind add minus beq_int lt_bool}
+  
+   @begin[doc]
+   @module[Itt_int_base]
+  
+   The integers are formalized as a @emph{primitive}
+   type in the @Nuprl type theory.
+   @end[doc]
+  
+   ----------------------------------------------------------------
+  
+   @begin[license]
+   This file is part of MetaPRL, a modular, higher order
+   logical framework that provides a logical programming
+   environment for OCaml and other languages.
+  
+   See the file doc/index.html for information on Nuprl,
+   OCaml, and more information about this system.
+  
+   Copyright (C) 1998 Jason Hickey, Cornell University
+  
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public License
+   as published by the Free Software Foundation; either version 2
+   of the License, or (at your option) any later version.
+  
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+  
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  
+   Author: Yegor Bryukhov
+   @email{ynb@mail.ru}
+   @end[license]
+>>
 
-(*!
- * @begin[doc]
- * @parents
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @parents
+   @end[doc]
+>>
 extends Itt_equal
 extends Itt_squash
 extends Itt_rfun
@@ -51,7 +51,7 @@ extends Itt_bool
 extends Itt_logic
 extends Itt_struct
 extends Itt_decidable
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 open Printf
 open Mp_debug
@@ -84,59 +84,59 @@ let _ = show_loading "Loading Itt_int_base%t"
  * TERMS                                                                *
  ************************************************************************)
 
-(*!
- * @begin[doc]
- * @terms
- *
- * The @tt{int} term is the type of integers with elements
- * $$@ldots, @number{-2}, @number{-1}, @number{0}, @number{1}, @number{2},
+doc <:doc< 
+   @begin[doc]
+   @terms
+  
+   The @tt{int} term is the type of integers with elements
+   $$@ldots, @number{-2}, @number{-1}, @number{0}, @number{1}, @number{2},
  @ldots$$
- * @end[doc]
- *)
+   @end[doc]
+>>
 declare int
 declare number[n:n]
 declare number{'a}
 
-(*!
- * @begin[doc]
- * The basic arithmetic operators are defined with
- * the following terms. Basic predicates are boolean.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   The basic arithmetic operators are defined with
+   the following terms. Basic predicates are boolean.
+   @end[doc]
+>>
 declare "add"{'a; 'b}
 declare minus{'a}
 
 declare beq_int{'a; 'b}
 declare lt_bool{'a; 'b}
 
-(*!
- * @begin[doc]
- * Subtraction is composition of addition and unary minus
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   Subtraction is composition of addition and unary minus
+   @end[doc]
+>>
 define unfold_sub :
    "sub"{'a ; 'b} <--> ('a +@ minus{'b})
 
-(*!
- * @begin[doc]
- * The @tt{ind} term is the induction combinator for building
- * loops indexed by an integer argument.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   The @tt{ind} term is the induction combinator for building
+   loops indexed by an integer argument.
+   @end[doc]
+>>
 declare ind{'i; m, z. 'down; 'base; m, z. 'up}
 
-(*!
- * @begin[doc]
- * Derived typed relations
- *
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   Derived typed relations
+  
+   @end[doc]
+>>
 (*
  Prop-int-lt definition
  *)
 define unfold_lt :
    lt{'a; 'b} <--> "assert"{lt_bool{'a; 'b}}
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 let int_term = << int >>
 let int_opname = opname_of_term int_term
@@ -290,13 +290,13 @@ let testT p =
       failT p
    end
 
-(*!
- * @begin[doc]
- * @modsection{Rules and rewrites}
- * @modsubsection{Typehood and well-formedness of arithmetic operators}
- *
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsection{Rules and rewrites}
+   @modsubsection{Typehood and well-formedness of arithmetic operators}
+  
+   @end[doc]
+>>
 (*
  * Integers are canonical.
  *)
@@ -314,15 +314,15 @@ let int_sqequalC = int_sqequal_rw
  * REWRITES                                                             *
  ************************************************************************)
 
-(*!
- * @begin[doc]
- * @rewrites
- *
- * The binary arithmetic operators are defined using the
- * the @emph{meta} arithmetic operators that are @MetaPRL
- * builtin operations.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @rewrites
+  
+   The binary arithmetic operators are defined using the
+   the @emph{meta} arithmetic operators that are @MetaPRL
+   builtin operations.
+   @end[doc]
+>>
 prim_rw reduce_numeral : number{meta_num[n:n]} <--> number[n:n]
 
 prim_rw reduce_add_meta : (number[i:n] +@ number[j:n]) <-->
@@ -340,7 +340,7 @@ prim_rw reduce_lt_meta : lt_bool{number[i:n]; number[j:n]} <-->
 prim_rw reduce_beq_int_meta : beq_int{number[i:n]; number[j:n]} <-->
    meta_eq[i:n, j:n]{btrue; bfalse}
 
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 let reduce_add =
    reduce_add_meta thenC (addrC [0] reduce_meta_sum) thenC reduce_numeral
@@ -389,7 +389,7 @@ prim beq_wf {| intro []; eqcd |} :
    [wf] sequent [squash] { 'H >- 'a = 'a1 in int } -->
    [wf] sequent [squash] { 'H >- 'b = 'b1 in int } -->
    sequent ['ext] { 'H >- beq_int{'a; 'b} = beq_int{'a1; 'b1} in bool } = it
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 interactive lt_squashStable {| squash |} :
    sequent [squash] { 'H >- 'a < 'b } -->
@@ -400,12 +400,12 @@ interactive lt_wf {| intro [] |} :
    [wf] sequent [squash] { 'H >- 'b in int } -->
    sequent ['ext] { 'H >- "type"{lt{'a; 'b}} }
 
-(*!
- * @begin[doc]
- * @modsubsection{@tt{beq_int} and @tt{= in int} correspondence}
- *
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{@tt{beq_int} and @tt{= in int} correspondence}
+  
+   @end[doc]
+>>
 prim beq_int2prop :
    [main] sequent [squash] { 'H >- "assert"{beq_int{'a; 'b}} } -->
    [wf] sequent [squash] { 'H >- 'a in int } -->
@@ -443,20 +443,20 @@ interactive lt_bool_member {| intro [] |} :
   [wf] sequent [squash] { 'H >- 'b in int } --> *)
   sequent ['ext] { 'H >- "assert"{lt_bool{'a; 'b}} }
 
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 (************************************************************************
  * RULES                                                                *
  ************************************************************************)
 
-(*!
- * @begin[doc]
- * @modsubsection{Typehood and well-formedness of @tt{int} and @tt{number}}
- *
- * The $@int$ type inhabits every universe, and it
- * is a type.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Typehood and well-formedness of @tt{int} and @tt{number}}
+  
+   The $@int$ type inhabits every universe, and it
+   is a type.
+   @end[doc]
+>>
 (*
  * H >- Z = Z in Ui ext Ax
  * by intEquality
@@ -469,7 +469,7 @@ prim intEquality {| intro []; eqcd |} :
  *)
 interactive intType {| intro [] |} :
    sequent ['ext] { 'H >- "type"{int} }
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 (*
  * H >- Ui ext Z
@@ -485,13 +485,13 @@ interactive intFormation :
 prim numberFormation {| intro [] |} number[n:n] :
    sequent ['ext] { 'H >- int } = number[n:n]
 
-(*!
- * @begin[doc]
- * @modsubsection{Decidability}
- * The following rules establish decidability of integer relations and
- * improve the @hreftactic[decideT] tactic.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Decidability}
+   The following rules establish decidability of integer relations and
+   improve the @hreftactic[decideT] tactic.
+   @end[doc]
+>>
 interactive lt_decidable {| intro [] |} :
    [wf] sequent[squash] { 'H >- 'a in int } -->
    [wf] sequent[squash] { 'H >- 'b in int } -->
@@ -502,13 +502,13 @@ interactive eq_int_decidable {| intro [] |} :
    [wf] sequent[squash] { 'H >- 'b in int } -->
    sequent['ext] { 'H >- decidable{('a = 'b in int)} }
 
-(*!
- * @begin[doc]
- * @modsubsection{Membership}
- *
- * The $@int$ type contains the @hrefterm[number] terms.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Membership}
+  
+   The $@int$ type contains the @hrefterm[number] terms.
+   @end[doc]
+>>
 (*
  * H >- i = i in int
  * by numberEquality
@@ -516,14 +516,14 @@ interactive eq_int_decidable {| intro [] |} :
 prim numberEquality {| intro []; eqcd |} :
    sequent ['ext] { 'H >- number[n:n] in int } = it
 
-(*!
- * @begin[doc]
- * @modsubsection{Order relation properties}
- *
- * @tt{lt_bool} defines reflexive, decidable, transitive and
- * discrete order on @tt{int}
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Order relation properties}
+  
+   @tt{lt_bool} defines reflexive, decidable, transitive and
+   discrete order on @tt{int}
+   @end[doc]
+>>
 (*
  Definition of basic operations (and relations) on int
  *)
@@ -629,13 +629,13 @@ interactive_rw lt_Discret_rw :
 
 let lt_DiscretC = lt_Discret_rw
 
-(*!
- * @begin[doc]
- *
- * Monotonicity:
- *
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   Monotonicity:
+  
+   @end[doc]
+>>
 prim lt_addMono 'c :
    [wf] sequent [squash] { 'H >- 'a in int } -->
    [wf] sequent [squash] { 'H >- 'b in int } -->
@@ -651,16 +651,16 @@ interactive_rw lt_addMono_rw 'c :
 
 let lt_addMonoC = lt_addMono_rw
 
-(*!
- * @begin[doc]
- * @modsubsection{Elimination}
- *
- * Induction on an integer assumption produces three cases:
- * one for the base case $0$, one for induction on negative arguments,
- * and another for induction on positive arguments.  The proof extract term
- * uses the @tt{ind} term, which performs a case analysis on its argument.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Elimination}
+  
+   Induction on an integer assumption produces three cases:
+   one for the base case $0$, one for induction on negative arguments,
+   and another for induction on positive arguments.  The proof extract term
+   uses the @tt{ind} term, which performs a case analysis on its argument.
+   @end[doc]
+>>
 (*
  * Induction:
  * H, n:Z, J[n] >- C[n] ext ind(i; m, z. down[n, m, it, z]; base[n]; m, z.
@@ -680,18 +680,18 @@ prim intElimination {| elim [ThinOption thinT] |} 'H :
    sequent ['ext] { 'H; n: int; 'J['n] >- 'C['n] } =
       ind{'n; m, z. 'down['n; 'm; it; 'z]; 'base['n]; m, z. 'up['n; 'm; it; 'z]}
 
-(*!
- * @begin[doc]
- * @modsubsection {Induction and recursion}
- * Reduction of the induction combinator @tt{ind} has three cases.
- * If the argument $x$ is $0$, the combinator reduces to the @i{base}
- * case; if it is positive, it reduces to the @i{up} case; and
- * if it is negative, it reduces to the @i{down} case.
- * The first argument in the @i{up} and @i{down} cases represents
- * the induction value, and the second argument represents the
- * ``next'' computational step.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsubsection {Induction and recursion}
+   Reduction of the induction combinator @tt{ind} has three cases.
+   If the argument $x$ is $0$, the combinator reduces to the @i{base}
+   case; if it is positive, it reduces to the @i{up} case; and
+   if it is negative, it reduces to the @i{down} case.
+   The first argument in the @i{up} and @i{down} cases represents
+   the induction value, and the second argument represents the
+   ``next'' computational step.
+   @end[doc]
+>>
 (*
  * Reduction on induction combinator:
  * Three cases:
@@ -772,14 +772,14 @@ prim indEquality {| intro []; eqcd |} lambda{z. 'T['z]} :
                    in 'T['x1] } =
   it
 
-(*!
- * @begin[doc]
- * @modsubsection{Addition properties}
- *
- * @tt{add} is commutative and associative.
- *
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Addition properties}
+  
+   @tt{add} is commutative and associative.
+  
+   @end[doc]
+>>
 prim add_Commut :
    [wf] sequent [squash] { 'H >- 'a in int } -->
    [wf] sequent [squash] { 'H >- 'b in int } -->
@@ -825,13 +825,13 @@ interactive_rw add_Assoc2_rw :
 
 let add_Assoc2C = add_Assoc2_rw
 
-(*!
- * @begin[doc]
- *
- * 0 is neutral element for @tt{add} in @tt{int}
- *
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   0 is neutral element for @tt{add} in @tt{int}
+  
+   @end[doc]
+>>
 prim add_Id :
    [wf] sequent [squash] { 'H >- 'a in int } -->
    sequent ['ext] { 'H >- ('a +@ 0) ~ 'a } = it
@@ -872,13 +872,13 @@ interactive_rw add_Id4_rw :
 
 let add_Id4C = add_Id4_rw
 
-(*!
- * @begin[doc]
- *
- * @tt{- 'a} is a inverse element for 'a in @tt{int}
- *
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   @tt{- 'a} is a inverse element for 'a in @tt{int}
+  
+   @end[doc]
+>>
 prim minus_add_inverse :
    [wf] sequent [squash] { 'H >- 'a in int } -->
    sequent ['ext] { 'H >- ( 'a +@ (- 'a ) ) ~ 0 } = it
@@ -948,7 +948,7 @@ interactive_rw minus_plus_rw :
    ('b in int) -->
    (('a -@ 'b) +@ 'b) <--> 'a
 
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 (***********************************************************
  * TYPE INFERENCE

@@ -1,9 +1,5 @@
-(*!
- * @begin[doc]
- * @module[M_closure]
- *
- * Closure conversion for the @emph{M} language.
- * @end[doc]
+(*
+ * Closure conversion for the M language.
  *
  * ----------------------------------------------------------------
  *
@@ -53,9 +49,7 @@ topval pushT : tactic
  *)
 topval closeT : tactic
 
-(*!
- * @docoff
- *
+(*
  * -*-
  * Local Variables:
  * Caml-master: "compile"

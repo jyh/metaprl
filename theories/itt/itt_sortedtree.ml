@@ -1,10 +1,10 @@
-(*!
- * @begin[doc]
- * @module[Itt_sortedtree]
- *
- * This is a theory of sorted binary trees.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @module[Itt_sortedtree]
+  
+   This is a theory of sorted binary trees.
+   @end[doc]
+>>
 
 extends Itt_datatree
 extends Itt_bintree
@@ -12,7 +12,7 @@ extends Itt_relation_str
 extends Itt_record
 extends Itt_logic
 
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 open Printf
 open Mp_debug
@@ -62,11 +62,11 @@ let _ =
    show_loading "Loading Itt_binatatree%t"
 
 
-(*!
- * @begin[doc]
- * @terms
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @terms
+   @end[doc]
+>>
 
 
 define dataNode: DataNode{'D;data.'N['data]} <--> record["data":t]{'D;data.'N['data]}
@@ -177,7 +177,7 @@ interactive insert_wf {| intro[] |}  univ[i:l]:
 
 
 
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 
 

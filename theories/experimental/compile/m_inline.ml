@@ -1,45 +1,45 @@
-(*!
- * @begin[spelling]
- * inlining
- * @end[spelling]
- *
- * @begin[doc]
- * @module[Inline]
- *
- * Constant-folding and function inlining.
- * @end[doc]
- *
- * ----------------------------------------------------------------
- *
- * @begin[license]
- * Copyright (C) 2003 Jason Hickey, Caltech
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- *
- * Author: Jason Hickey
- * @email{jyh@cs.caltech.edu}
- * @end[license]
- *)
+doc <:doc< 
+   @begin[spelling]
+   inlining
+   @end[spelling]
+  
+   @begin[doc]
+   @module[Inline]
+  
+   Constant-folding and function inlining.
+   @end[doc]
+  
+   ----------------------------------------------------------------
+  
+   @begin[license]
+   Copyright (C) 2003 Jason Hickey, Caltech
+  
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public License
+   as published by the Free Software Foundation; either version 2
+   of the License, or (at your option) any later version.
+  
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+  
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  
+   Author: Jason Hickey
+   @email{jyh@cs.caltech.edu}
+   @end[license]
+>>
 
-(*!
- * @begin[doc]
- * @parents
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @parents
+   @end[doc]
+>>
 extends M_ir
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 open Base_meta
 
@@ -48,22 +48,22 @@ open Tactic_type.Conversionals
 
 open Top_conversionals
 
-(*!
- * @begin[doc]
- * We use the @MetaPRL builtin meta-arithmetic.
- * Arithmetic is performed using meta-terms, and we need a
- * way to convert back to a number.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   We use the @MetaPRL builtin meta-arithmetic.
+   Arithmetic is performed using meta-terms, and we need a
+   way to convert back to a number.
+   @end[doc]
+>>
 declare MetaInt{'e}
 
 prim_rw meta_int_elim : MetaInt{meta_num[i:n]} <--> AtomInt[i:n]
 
-(*! @doc{@rewrites} *)
+doc <:doc< @doc{@rewrites} >>
 
-(*!
- * @doc{Simple constant folding.}
- *)
+doc <:doc< 
+   @doc{Simple constant folding.}
+>>
 prim_rw reduce_add :
    AtomBinop{AddOp; AtomInt[i:n]; AtomInt[j:n]} <--> MetaInt{meta_sum[i:n, j:n]}
 
@@ -76,9 +76,9 @@ prim_rw reduce_mul :
 prim_rw reduce_div :
    AtomBinop{DivOp; AtomInt[i:n]; AtomInt[j:n]} <--> MetaInt{meta_quot[i:n, j:n]}
 
-(*!
- * @doc{Constant inlining.}
- *)
+doc <:doc< 
+   @doc{Constant inlining.}
+>>
 prim_rw reduce_let_atom_true :
    LetAtom{AtomTrue; v. 'e['v]} <--> 'e[AtomTrue]
 
@@ -106,7 +106,7 @@ prim_rw unfold_atom_var_false :
 prim_rw unfold_atom_var_int :
    AtomVar{AtomInt[i:n]} <--> AtomInt[i:n]
 
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 (*
  * Add all these rules to the reduce resource.

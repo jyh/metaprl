@@ -1,49 +1,49 @@
-(*!
- * @begin[doc]
- * @module[Mp_mc_fir_exp]
- *
- * The @tt[Mp_mc_fir_exp] module defines terms to represent
- * FIR expressions.
- * @end[doc]
- *
- * ----------------------------------------------------------------
- *
- * @begin[license]
- * This file is part of MetaPRL, a modular, higher order
- * logical framework that provides a logical programming
- * environment for OCaml and other languages.
- *
- * See the file doc/index.html for information on Nuprl,
- * OCaml, and more information about this system.
- *
- * Copyright (C) 2002 Brian Emre Aydemir, Caltech
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- *
- * Author: Brian Emre Aydemir
- * @email{emre@its.caltech.edu}
- * @end[license]
- *)
+doc <:doc< 
+   @begin[doc]
+   @module[Mp_mc_fir_exp]
+  
+   The @tt[Mp_mc_fir_exp] module defines terms to represent
+   FIR expressions.
+   @end[doc]
+  
+   ----------------------------------------------------------------
+  
+   @begin[license]
+   This file is part of MetaPRL, a modular, higher order
+   logical framework that provides a logical programming
+   environment for OCaml and other languages.
+  
+   See the file doc/index.html for information on Nuprl,
+   OCaml, and more information about this system.
+  
+   Copyright (C) 2002 Brian Emre Aydemir, Caltech
+  
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public License
+   as published by the Free Software Foundation; either version 2
+   of the License, or (at your option) any later version.
+  
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+  
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  
+   Author: Brian Emre Aydemir
+   @email{emre@its.caltech.edu}
+   @end[license]
+>>
 
-(*!
- * @begin[doc]
- * @parents
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @parents
+   @end[doc]
+>>
 extends Base_theory
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
@@ -53,67 +53,67 @@ open Mp_mc_base
  * Declarations.
  *************************************************************************)
 
-(*!
- * @begin[doc]
- * @terms
- * @modsubsection{Unary operations}
- *
- * These are the unary operations in the FIR.  They are used in
- * @hrefterm[letUnop] as the @tt[unop] subterm.  Each of these
- * operators encodes enough information about the type
- * of its operand, and in some case, the type of the resulting value.
- * (For some operators, this type information is implicit and does not
- * require any subterms.)  In most cases, the type of an operator's
- * operand is the same as the type of its resulting value.
- * The notable exceptions are the conversion operators.
- *
- * @tt[idOp] is a polymorphic identity operator.  It leaves
- * its operand unchanged.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @terms
+   @modsubsection{Unary operations}
+  
+   These are the unary operations in the FIR.  They are used in
+   @hrefterm[letUnop] as the @tt[unop] subterm.  Each of these
+   operators encodes enough information about the type
+   of its operand, and in some case, the type of the resulting value.
+   (For some operators, this type information is implicit and does not
+   require any subterms.)  In most cases, the type of an operator's
+   operand is the same as the type of its resulting value.
+   The notable exceptions are the conversion operators.
+  
+   @tt[idOp] is a polymorphic identity operator.  It leaves
+   its operand unchanged.
+   @end[doc]
+>>
 
 declare idOp
 
-(*!
- * @begin[doc]
- *
- * @tt[uminusIntOp] is unary arithmetic negation and @tt[notIntOp]
- * is bitwise negation.  They operate of values of type @hrefterm[tyInt].
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   @tt[uminusIntOp] is unary arithmetic negation and @tt[notIntOp]
+   is bitwise negation.  They operate of values of type @hrefterm[tyInt].
+   @end[doc]
+>>
 
 declare uminusIntOp
 declare notIntOp
 
-(*!
- * @begin[doc]
- *
- * Bit fields. (Documentation incomplete.)
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   Bit fields. (Documentation incomplete.)
+   @end[doc]
+>>
 
 declare rawBitFieldOp{ 'int_precision; 'int_signed; 'int1; 'int2 }
 
-(*!
- * @begin[doc]
- *
- * @tt[uminusRawIntOp] and @tt[notRawIntOp] are analogous to
- * @hrefterm[uminusIntOp] and @hrefterm[notIntOp], except they
- * operate on values of type @hrefterm[tyRawInt].
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   @tt[uminusRawIntOp] and @tt[notRawIntOp] are analogous to
+   @hrefterm[uminusIntOp] and @hrefterm[notIntOp], except they
+   operate on values of type @hrefterm[tyRawInt].
+   @end[doc]
+>>
 
 declare uminusRawIntOp{ 'int_precision; 'int_signed }
 declare notRawIntOp{ 'int_precision; 'int_signed }
 
-(*!
- * @begin[doc]
- *
- * The next five terms are basic unary operations on values of type
- * @hrefterm[tyFloat].  They represent unary negation, absolute value,
- * sine, cosine, and square root.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   The next five terms are basic unary operations on values of type
+   @hrefterm[tyFloat].  They represent unary negation, absolute value,
+   sine, cosine, and square root.
+   @end[doc]
+>>
 
 declare uminusFloatOp{ 'float_precision }
 declare absFloatOp{ 'float_precision }
@@ -121,43 +121,43 @@ declare sinOp{ 'float_precision }
 declare cosOp{ 'float_precision }
 declare sqrtOp{ 'float_precision }
 
-(*!
- * @begin[doc]
- *
- * @tt[intOfFloatOp] specifies the conversion of a value of type
- * @hrefterm[tyFloat] to a value of type @hrefterm[tyInt]. Note
- * that the precision of the resulting float value needs to be specified.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   @tt[intOfFloatOp] specifies the conversion of a value of type
+   @hrefterm[tyFloat] to a value of type @hrefterm[tyInt]. Note
+   that the precision of the resulting float value needs to be specified.
+   @end[doc]
+>>
 
 declare intOfFloatOp{ 'float_precision }
 
-(*!
- * @begin[doc]
- *
- * The next three terms convert values of type
- * @hrefterm[tyInt], @hrefterm[tyFloat], and @hrefterm[tyRawInt], respectively,
- * to values of type @hrefterm[tyFloat].  The precision of the resulting
- * float value is the first subterm.  Additional subterms, when present,
- * specify information about the source type.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   The next three terms convert values of type
+   @hrefterm[tyInt], @hrefterm[tyFloat], and @hrefterm[tyRawInt], respectively,
+   to values of type @hrefterm[tyFloat].  The precision of the resulting
+   float value is the first subterm.  Additional subterms, when present,
+   specify information about the source type.
+   @end[doc]
+>>
 
 declare floatOfIntOp{ 'float_precision }
 declare floatOfFloatOp{ 'float_precision_dest; 'float_precision_src }
 declare floatOfRawIntOp{ 'float_precision; 'int_precision; 'int_signed }
 
-(*!
- * @begin[doc]
- *
- * The next four terms convert values of type @hrefterm[tyInt],
- * @hrefterm[tyEnum], @hrefterm[tyFloat], and @hrefterm[tyRawInt],
- * respectively, to values of type @hrefterm[tyRawInt].  The precision
- * and signing of the resulting integer value is encoded in the first
- * two subterms. Additional subterms, when present, specify information
- * about the source type.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   The next four terms convert values of type @hrefterm[tyInt],
+   @hrefterm[tyEnum], @hrefterm[tyFloat], and @hrefterm[tyRawInt],
+   respectively, to values of type @hrefterm[tyRawInt].  The precision
+   and signing of the resulting integer value is encoded in the first
+   two subterms. Additional subterms, when present, specify information
+   about the source type.
+   @end[doc]
+>>
 
 declare rawIntOfIntOp{ 'int_precision; 'int_signed }
 declare rawIntOfEnumOp{ 'int_precision; 'int_signed; 'int }
@@ -165,12 +165,12 @@ declare rawIntOfFloatOp{ 'int_precision; 'int_signed; 'float_precision }
 declare rawIntOfRawIntOp{ 'dest_int_precision; 'dest_int_signed;
                           'src_int_precision;  'src_int_signed }
 
-(*!
- * @begin[doc]
- *
- * (Documentation incomplete.)
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   (Documentation incomplete.)
+   @end[doc]
+>>
 (* Integer/pointer coercions. *)
 
 declare rawIntOfPointerOp{ 'int_precision; 'int_signed }
@@ -180,39 +180,39 @@ declare pointerOfRawIntOp{ 'int_precision; 'int_signed }
 
 declare pointerOfBlockOp{ 'sub_block }
 
-(*!
- * @begin[doc]
- * @modsubsection{Binary operations}
- *
- * These are the binary operations in the FIR.  They are used in
- * @hrefterm[letBinop] as the @tt[binop] subterm.  Each of these
- * operators encodes enough information about the type
- * of its operands, and in some case, the type of the resulting value.
- * (For some operators, this type information is implicit and does not
- * require any subterms.)  In most cases, the type of an operator's
- * operands is the same as the type of its resulting value.
- *
- * (Documentation incomplete.)
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Binary operations}
+  
+   These are the binary operations in the FIR.  They are used in
+   @hrefterm[letBinop] as the @tt[binop] subterm.  Each of these
+   operators encodes enough information about the type
+   of its operands, and in some case, the type of the resulting value.
+   (For some operators, this type information is implicit and does not
+   require any subterms.)  In most cases, the type of an operator's
+   operands is the same as the type of its resulting value.
+  
+   (Documentation incomplete.)
+   @end[doc]
+>>
 
 declare andEnumOp{ 'int }
 declare orEnumOp{ 'int }
 declare xorEnumOp{ 'int }
 
-(*!
- * @begin[doc]
- *
- * The following set of @tt[IntOp]s operate on values of type
- * @hrefterm[tyInt].  They encode basic arithmetic and boolean
- * comparison operations.  In order, the arithmetic operations are:
- * addition, subtraction, multiplication, division, remainder (@misspelled{mod}),
- * logical shift left, logical shift right, arithmetic shift right,
- * bitwise and, bitwise or, bitwise @misspelled{xor}, max (returns the greater
- * of its operands), min (returns the lesser of its operands).
- * (Documentation incomplete.)
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   The following set of @tt[IntOp]s operate on values of type
+   @hrefterm[tyInt].  They encode basic arithmetic and boolean
+   comparison operations.  In order, the arithmetic operations are:
+   addition, subtraction, multiplication, division, remainder (@misspelled{mod}),
+   logical shift left, logical shift right, arithmetic shift right,
+   bitwise and, bitwise or, bitwise @misspelled{xor}, max (returns the greater
+   of its operands), min (returns the lesser of its operands).
+   (Documentation incomplete.)
+   @end[doc]
+>>
 
 declare plusIntOp
 declare minusIntOp
@@ -236,15 +236,15 @@ declare gtIntOp
 declare geIntOp
 declare cmpIntOp
 
-(*!
- * @begin[doc]
- *
- * The following set of @tt[RawIntOp]s operate on values of type
- * @hrefterm[tyRawInt]. They encode basic arithmetic and boolean
- * comparison operations.
- * (Documentation incomplete.)
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   The following set of @tt[RawIntOp]s operate on values of type
+   @hrefterm[tyRawInt]. They encode basic arithmetic and boolean
+   comparison operations.
+   (Documentation incomplete.)
+   @end[doc]
+>>
 declare plusRawIntOp{ 'int_precision; 'int_signed }
 declare minusRawIntOp{ 'int_precision; 'int_signed }
 declare mulRawIntOp{ 'int_precision; 'int_signed }
@@ -268,15 +268,15 @@ declare gtRawIntOp{ 'int_precision; 'int_signed }
 declare geRawIntOp{ 'int_precision; 'int_signed }
 declare cmpRawIntOp{ 'int_precision; 'int_signed }
 
-(*!
- * @begin[doc]
- *
- * The following set of @tt[FloatOp]s operate on values of type
- * @hrefterm[tyFloat]. They encode basic arithmetic and boolean
- * comparison operations.
- * (Documentation incomplete.)
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   The following set of @tt[FloatOp]s operate on values of type
+   @hrefterm[tyFloat]. They encode basic arithmetic and boolean
+   comparison operations.
+   (Documentation incomplete.)
+   @end[doc]
+>>
 
 declare plusFloatOp{ 'float_precision }
 declare minusFloatOp{ 'float_precision }
@@ -305,23 +305,23 @@ declare neqEqOp
 
 declare plusPointerOp{ 'sub_block; 'int_precision; 'int_signed }
 
-(*!
- * @begin[doc]
- * @modsubsection{Fields (frame labels)}
- *
- * (Documentation incomplete.)
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Fields (frame labels)}
+  
+   (Documentation incomplete.)
+   @end[doc]
+>>
 
 declare frameLabel{ 'label1; 'label2; 'label3 }
 
-(*!
- * @begin[doc]
- * @modsubsection{Normal values}
- *
- * Atoms represent values in the FIR. (Documentation incomplete.)
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Normal values}
+  
+   Atoms represent values in the FIR. (Documentation incomplete.)
+   @end[doc]
+>>
 
 declare atomNil{ 'ty }
 declare atomInt{ 'int }
@@ -333,13 +333,13 @@ declare atomSizeof{ 'var_list; 'atom_rawint }
 declare atomConst{ 'ty; 'ty_var; 'int }
 declare atomVar{ 'var }
 
-(*!
- * @begin[doc]
- * @modsubsection{Allocation operators}
- *
- * (Documentation incomplete.)
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Allocation operators}
+  
+   (Documentation incomplete.)
+   @end[doc]
+>>
 
 declare allocTuple{ 'tuple_class; 'ty; 'atom_list }
 declare allocUnion{ 'ty; 'ty_var; 'int; 'atom_list }
@@ -348,45 +348,45 @@ declare allocVArray{ 'ty; 'sub_index; 'atom1; 'atom2 }
 declare allocMalloc{ 'ty; 'atom }
 declare allocFrame{ 'var }
 
-(*!
- * @begin[doc]
- * @modsubsection{Tail calls / operations}
- *
- * These operators are used in the @hrefterm[specialCall] expression.
- * They specify the actions that need to occur before control
- * is passed to another local function.
- * (Documentation incomplete.)
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Tail calls / operations}
+  
+   These operators are used in the @hrefterm[specialCall] expression.
+   They specify the actions that need to occur before control
+   is passed to another local function.
+   (Documentation incomplete.)
+   @end[doc]
+>>
 
 declare tailSysMigrate{ 'int; 'atom1; 'atom2; 'var; 'atom_list }
 declare tailAtomic{ 'var; 'atom; 'atom_list }
 declare tailAtomicRollback{ 'atom1; 'atom2 }
 declare tailAtomicCommit{ 'atom; 'var; 'atom_list }
 
-(*!
- * @begin[doc]
- * @modsubsection{Predicates and assertions}
- *
- * These terms encode the safety checks that an FIR program must
- * perform in order to ensure that programs execute safely.
- * (Documentation incomplete.)
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Predicates and assertions}
+  
+   These terms encode the safety checks that an FIR program must
+   perform in order to ensure that programs execute safely.
+   (Documentation incomplete.)
+   @end[doc]
+>>
 
 declare isMutable{ 'var }
 declare reserve{ 'atom1; 'atom2 }
 declare boundsCheck{ 'subop; 'var; 'atom1; 'atom2 }
 declare elementCheck{ 'ty; 'subop; 'var; 'atom }
 
-(*!
- * @begin[doc]
- * @modsubsection{Debugging info}
- *
- * These terms are used to encode debugging information.
- * (Documentation incomplete.)
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Debugging info}
+  
+   These terms are used to encode debugging information.
+   (Documentation incomplete.)
+   @end[doc]
+>>
 
 declare debugLine{ 'string; 'int }
 declare debugVarItem{ 'var1; 'ty; 'var2 }
@@ -394,13 +394,13 @@ declare debugVars{ 'debugVarItem_list }
 declare debugString{ 'string }
 declare debugContext{ 'debug_line; 'debug_vars }
 
-(*!
- * @begin[doc]
- * @modsubsection{Expressions}
- *
- * (Documentation incomplete.)
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Expressions}
+  
+   (Documentation incomplete.)
+   @end[doc]
+>>
 
 (* Primitive operations. *)
 
@@ -440,7 +440,7 @@ declare assertExp{ 'label; 'pred; 'exp }
 
 declare debug{ 'debug_info; 'exp }
 
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 (*************************************************************************
  * Display forms.

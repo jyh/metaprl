@@ -1,46 +1,46 @@
-(*!
- * @begin[spelling]
- * CPS CPSFunVar CPSRecordVar EMRE compilable cont cps nop var
- * @end[spelling]
- *
- * @begin[doc]
- * @module[M_cps]
- *
- * CPS conversion for the M language.
- * @end[doc]
- *
- * ----------------------------------------------------------------
- *
- * @begin[license]
- * Copyright (C) 2003 Jason Hickey, Caltech
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- *
- * Author: Jason Hickey
- * @email{jyh@cs.caltech.edu}
- * @end[license]
- *)
+doc <:doc< 
+   @begin[spelling]
+   CPS CPSFunVar CPSRecordVar EMRE compilable cont cps nop var
+   @end[spelling]
+  
+   @begin[doc]
+   @module[M_cps]
+  
+   CPS conversion for the M language.
+   @end[doc]
+  
+   ----------------------------------------------------------------
+  
+   @begin[license]
+   Copyright (C) 2003 Jason Hickey, Caltech
+  
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public License
+   as published by the Free Software Foundation; either version 2
+   of the License, or (at your option) any later version.
+  
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+  
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  
+   Author: Jason Hickey
+   @email{jyh@cs.caltech.edu}
+   @end[license]
+>>
 
-(*!
- * @begin[doc]
- * @parents
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @parents
+   @end[doc]
+>>
 extends M_ir
 extends M_util
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 open M_ir
 open M_util
@@ -65,23 +65,23 @@ open Tactic_type.Sequent
  * REDUCTION RESOURCE                                                   *
  ************************************************************************)
 
-(*!
- * @begin[doc]
- * @resources
- *
- * @bf{The @Comment!resource[cps_resource]}
- *
- * The @tt{cps} resource provides a generic method for
- * defining @emph{CPS transformation}.  The @conv[cpsC] conversion
- * can be used to apply this evaluator.
- *
- * The implementation of the @tt{cps_resource} and the @tt[cpsC]
- * conversion rely on tables to store the shape of redices, together with the
- * conversions for the reduction.
- *
- * @docoff
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @resources
+  
+   @bf{The @Comment!resource[cps_resource]}
+  
+   The @tt{cps} resource provides a generic method for
+   defining @emph{CPS transformation}.  The @conv[cpsC] conversion
+   can be used to apply this evaluator.
+  
+   The implementation of the @tt{cps_resource} and the @tt[cpsC]
+   conversion rely on tables to store the shape of redices, together with the
+   conversions for the reduction.
+  
+   @docoff
+   @end[doc]
+>>
 let resource cps =
    table_resource_info identity extract_data
 
@@ -97,53 +97,53 @@ let cpsC =
  * CPS transformation
  ************************************************************************)
 
-(*!
- * @begin[doc]
- * @modsubsection{Application}
- *
- * Add an application that we will map through the program.
- * This should be eliminated by the end of CPS conversion.
- *
- * @begin[itemize]
- * @item{CPSRecordVar{R} represents the application of the record $R$ to
- *       the identity function.}
- *
- * @item{CPSFunVar{f} represents the application of the function $f$ to
- *       the identity function.}
- *
- * @item{
- *    @begin[verbatim]
- *    CPS{'cont; 'a; v. 'e['v]}
- *    @end[verbatim]
- *    means
- *    @begin[verbatim]
- *    let v = apply{'cont; 'a} in 'e['v]
- *    @end[verbatim]}
- *
- * @item{
- *    @begin[verbatim]
- *    CPS{'cont; 'e}
- *    @end[verbatim]
- *    is the CPS conversion of expression $e$ with continuation ${cont}$.
- *    The interpretation is as the application ${cont}@space{}e$.}
- *
- * @item{
- *    @begin[verbatim]
- *    CPS{cont. 'fields}
- *    @end[verbatim]
- *    is the CPS conversion of a record body.  We think of a record
- *    @begin[verbatim]
- *    { f1 = e1; ...; fn = en }
- *    @end[verbatim]
- *    as a function from labels to expressions (on label $f_i$, the function returns $e_i$).
- *    The CPS form is $@lambda l. @lambda c. CPS(c, {fields}(l))$.}
- * @end[itemize]
- * @end[doc]
- *
- * EMRE BUG: The CPS term in the third item in the list above is never
- * actually declared.  The meaning is made clear in the rewrites below,
- * though.
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Application}
+  
+   Add an application that we will map through the program.
+   This should be eliminated by the end of CPS conversion.
+  
+   @begin[itemize]
+   @item{CPSRecordVar{R} represents the application of the record $R$ to
+         the identity function.}
+  
+   @item{CPSFunVar{f} represents the application of the function $f$ to
+         the identity function.}
+  
+   @item{
+      @begin[verbatim]
+      CPS{'cont; 'a; v. 'e['v]}
+      @end[verbatim]
+      means
+      @begin[verbatim]
+      let v = apply{'cont; 'a} in 'e['v]
+      @end[verbatim]}
+  
+   @item{
+      @begin[verbatim]
+      CPS{'cont; 'e}
+      @end[verbatim]
+      is the CPS conversion of expression $e$ with continuation ${cont}$.
+      The interpretation is as the application ${cont}@space{}e$.}
+  
+   @item{
+      @begin[verbatim]
+      CPS{cont. 'fields}
+      @end[verbatim]
+      is the CPS conversion of a record body.  We think of a record
+      @begin[verbatim]
+      { f1 = e1; ...; fn = en }
+      @end[verbatim]
+      as a function from labels to expressions (on label $f_i$, the function returns $e_i$).
+      The CPS form is $@lambda l. @lambda c. CPS(c, {fields}(l))$.}
+   @end[itemize]
+   @end[doc]
+  
+   EMRE BUG: The CPS term in the third item in the list above is never
+   actually declared.  The meaning is made clear in the rewrites below,
+   though.
+>>
 declare CPSRecordVar{'R}
 declare CPSFunVar{'f}
 
@@ -166,18 +166,18 @@ dform cps_exp_df : CPS{'cont; 'e} =
 dform cps_fields_df : CPS{cont. 'e} =
    szone pushm[1] bf["CPS["] 'cont bf["."] hspace 'e popm bf["]"] ezone
 
-(*!
- * @begin[doc]
- * @modsubsection{Formalizing CPS conversion}
- *
- * CPS conversion work by transformation of function application.
- * Each rewrite in the transformation preserves the operational
- * semantics of the program.
- *
- * For atoms, the transformation is a nop unless the atom is
- * a function var.  If so, the function must be partially applied.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Formalizing CPS conversion}
+  
+   CPS conversion work by transformation of function application.
+   Each rewrite in the transformation preserves the operational
+   semantics of the program.
+  
+   For atoms, the transformation is a nop unless the atom is
+   a function var.  If so, the function must be partially applied.
+   @end[doc]
+>>
 prim_rw cps_atom_true : CPS{AtomTrue} <-->
    AtomTrue
 
@@ -215,11 +215,11 @@ prim_rw cps_arg_nil : CPS{ArgNil} <-->
 prim_rw cps_length : CPS{Length[i:n]} <-->
    Length[i:n]
 
-(*!
- * @begin[doc]
- * CPS transformation for expressions.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   CPS transformation for expressions.
+   @end[doc]
+>>
 prim_rw cps_let_atom : CPS{'cont; LetAtom{'a; v. 'e['v]}} <-->
    LetAtom{CPS{'a}; v. CPS{'cont; 'e['v]}}
 
@@ -250,11 +250,11 @@ prim_rw cps_let_apply :
           LetFun{'R; Label["g":t]; g.
           TailCall{AtomVar{'f}; ArgCons{AtomVar{'g}; ArgCons{CPS{'a2}; ArgNil}}}}}
 
-(*!
- * @begin[doc]
- * Converting functions is the hard part.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   Converting functions is the hard part.
+   @end[doc]
+>>
 prim_rw cps_let_rec : CPS{'cont; LetRec{R1. 'fields['R1]; R2. 'e['R2]}} <-->
    LetRec{R1. CPS{cont. CPS{'cont; 'fields[CPSRecordVar{'R1}]}};
           R2. CPS{'cont; 'e[CPSRecordVar{'R2}]}}
@@ -282,7 +282,7 @@ prim_rw cps_tailcall : CPS{'cont; TailCall{CPSFunVar{'f}; 'args}} <-->
 
 prim_rw cps_fun_var_cleanup :
    AtomVar{CPSFunVar{'f}} <--> CPSFunVar{'f}
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 (*
  * Add all these rules to the CPS resource.
@@ -318,18 +318,18 @@ let resource cps +=
      << AtomVar{CPSFunVar{'f}} >>, cps_fun_var_cleanup;
      << CPS{'cont; Initialize{'e}} >>, cps_initialize]
 
-(*!
- * @begin[doc]
- * The program is compilable if the CPS version is compilable.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   The program is compilable if the CPS version is compilable.
+   @end[doc]
+>>
 interactive cps_prog :
    sequent [m] { 'H; cont: exp >-
       compilable{LetRec{R. FunDef{Label[".init":t]; AtomFun{cont. CPS{'cont; 'e}}; EndDef};
                         R. LetFun{'R; Label[".init":t]; init. Initialize{TailCall{AtomVar{'init}; ArgCons{AtomVar{'cont}; ArgNil}}}}}} } -->
    sequent [m] { 'H >- compilable{'e} }
 
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 (*
  * Toplevel CPS conversion tactic.

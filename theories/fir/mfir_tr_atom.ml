@@ -1,45 +1,45 @@
-(*!
- * @begin[doc]
- * @module[Mfir_tr_atom]
- *
- * The @tt[Mfir_tr_atom] module defines the typing rules for FIR atoms.
- * @end[doc]
- *
- * ------------------------------------------------------------------------
- *
- * @begin[license]
- * This file is part of MetaPRL, a modular, higher order
- * logical framework that provides a logical programming
- * environment for OCaml and other languages.  Additional
- * information about the system is available at
- * http://www.metaprl.org/
- *
- * Copyright (C) 2002 Brian Emre Aydemir, Caltech
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- *
- * Author: Brian Emre Aydemir
- * @email{emre@cs.caltech.edu}
- * @end[license]
- *)
+doc <:doc< 
+   @begin[doc]
+   @module[Mfir_tr_atom]
+  
+   The @tt[Mfir_tr_atom] module defines the typing rules for FIR atoms.
+   @end[doc]
+  
+   ------------------------------------------------------------------------
+  
+   @begin[license]
+   This file is part of MetaPRL, a modular, higher order
+   logical framework that provides a logical programming
+   environment for OCaml and other languages.  Additional
+   information about the system is available at
+   http://www.metaprl.org/
+  
+   Copyright (C) 2002 Brian Emre Aydemir, Caltech
+  
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public License
+   as published by the Free Software Foundation; either version 2
+   of the License, or (at your option) any later version.
+  
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+  
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  
+   Author: Brian Emre Aydemir
+   @email{emre@cs.caltech.edu}
+   @end[license]
+>>
 
-(*!
- * @begin[doc]
- * @parents
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @parents
+   @end[doc]
+>>
 
 extends Mfir_list
 extends Mfir_int_set
@@ -55,14 +55,14 @@ extends Mfir_tr_atom_base
  * Rules.
  **************************************************************************)
 
-(*!
- * @begin[doc]
- * @rules
- * @modsubsection{Normal atoms}
- *
- * The type of the nil-value of a type is simply that type.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @rules
+   @modsubsection{Normal atoms}
+  
+   The type of the nil-value of a type is simply that type.
+   @end[doc]
+>>
 
 prim ty_atomNil :
    sequent [fir] { 'H >- type_eq{ 'ty; 'ty; large_type } } -->
@@ -70,13 +70,13 @@ prim ty_atomNil :
    = it
 
 
-(*!
- * @begin[doc]
- *
- * The atom $<< atomInt{'i} >>$ has type $<< tyInt >>$ if $<< 'i >>$ is in the
- * set of 31-bit, signed integers.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   The atom $<< atomInt{'i} >>$ has type $<< tyInt >>$ if $<< 'i >>$ is in the
+   set of 31-bit, signed integers.
+   @end[doc]
+>>
 
 prim ty_atomInt :
    sequent [fir] { 'H >- member{ 'i; intset_max[31, "signed"] } } -->
@@ -84,13 +84,13 @@ prim ty_atomInt :
    = it
 
 
-(*!
- * @begin[doc]
- *
- * An enumeration atom $<< atomEnum[i:n]{'n} >>$ has type $<< tyEnum[i:n] >>$
- * if $ 0 <<le>> n < i $, and if $<< tyEnum[i:n] >>$ is a well-formed type.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   An enumeration atom $<< atomEnum[i:n]{'n} >>$ has type $<< tyEnum[i:n] >>$
+   if $ 0 <<le>> n < i $, and if $<< tyEnum[i:n] >>$ is a well-formed type.
+   @end[doc]
+>>
 
 prim ty_atomEnum :
    sequent [fir] { 'H >- type_eq{ tyEnum[i:n]; tyEnum[i:n]; small_type } } -->
@@ -99,14 +99,14 @@ prim ty_atomEnum :
    = it
 
 
-(*!
- * @begin[doc]
- *
- * The atom $<< atomRawInt[p:n, sign:s]{'i} >>$ has type
- * $<< tyRawInt[p:n, sign:s] >>$, if $i$ is in the appropriate set of
- * integers, and if $<< tyRawInt[p:n, sign:s] >>$ is a well-formed type.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   The atom $<< atomRawInt[p:n, sign:s]{'i} >>$ has type
+   $<< tyRawInt[p:n, sign:s] >>$, if $i$ is in the appropriate set of
+   integers, and if $<< tyRawInt[p:n, sign:s] >>$ is a well-formed type.
+   @end[doc]
+>>
 
 prim ty_atomRawInt :
    sequent [fir] { 'H >- type_eq{ tyRawInt[p:n, sign:s];
@@ -118,14 +118,14 @@ prim ty_atomRawInt :
    = it
 
 
-(*!
- * @begin[doc]
- *
- * Due to the representation of floating-point values in the FIR theory,
- * the typing rule for $<< atomFloat[p:n, value:s] >>$ reduces to
- * checking if $<< tyFloat[p:n] >>$ is a well-formed type.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   Due to the representation of floating-point values in the FIR theory,
+   the typing rule for $<< atomFloat[p:n, value:s] >>$ reduces to
+   checking if $<< tyFloat[p:n] >>$ is a well-formed type.
+   @end[doc]
+>>
 
 prim ty_atomFloat :
    sequent [fir] { 'H >-
@@ -135,13 +135,13 @@ prim ty_atomFloat :
    = it
 
 
-(*!
- * @begin[doc]
- *
- * A variable $<< atomVar{'v} >>$ has type $<< 'ty >>$ if it is declared in
- * the context to have type $<< 'ty >>$.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   A variable $<< atomVar{'v} >>$ has type $<< 'ty >>$ if it is declared in
+   the context to have type $<< 'ty >>$.
+   @end[doc]
+>>
 
 prim ty_atomVar 'H :
    sequent [fir] { 'H; a: var_def{ 'v; 'ty; 'd }; 'J >-
@@ -149,17 +149,17 @@ prim ty_atomVar 'H :
    = it
 
 
-(*!************************************
- * @begin[doc]
- * @modsubsection{Frames and constant constructors}
- *
- * The atom $<< atomLabel[field:s, subfield:s]{ 'frame; 'num } >>$
- * is used to index subfields of frame objects.  They are unsafe and
- * treated as 32-bit, signed integers.  To be well-formed, the frame
- * named must have the specified field and subfield, and $<< 'num >>$
- * should be a 32-bit, signed integer.
- * @end[doc]
- *)
+doc <:doc< ************************************
+   @begin[doc]
+   @modsubsection{Frames and constant constructors}
+  
+   The atom $<< atomLabel[field:s, subfield:s]{ 'frame; 'num } >>$
+   is used to index subfields of frame objects.  They are unsafe and
+   treated as 32-bit, signed integers.  To be well-formed, the frame
+   named must have the specified field and subfield, and $<< 'num >>$
+   should be a 32-bit, signed integer.
+   @end[doc]
+>>
 
 prim ty_atomLabel 'H :
    sequent [fir] { 'H; a: ty_def{ 'frame; polyKind{ 'i; 'k }; 'd }; 'J >-
@@ -172,16 +172,16 @@ prim ty_atomLabel 'H :
    = it
 
 
-(*!
- * @begin[doc]
- *
- * The atom $<< atomSizeof{ 'tvl; 'num } >>$ is a constant representing
- * the size of the frames named in the list $<< 'tvl >>$ plus some constant
- * $<< 'num >>$.  To be well-formed, each element of $<< 'tvl >>$ should
- * be a type variable $<< tyVar{'tv} >>$ that names a frame definition,
- * and $<< 'num >>$ should be a 32-bit, signed integer.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   The atom $<< atomSizeof{ 'tvl; 'num } >>$ is a constant representing
+   the size of the frames named in the list $<< 'tvl >>$ plus some constant
+   $<< 'num >>$.  To be well-formed, each element of $<< 'tvl >>$ should
+   be a type variable $<< tyVar{'tv} >>$ that names a frame definition,
+   and $<< 'num >>$ should be a 32-bit, signed integer.
+   @end[doc]
+>>
 
 prim ty_atomSizeof :
    sequent [fir] { 'H >- member{'num; intset_max[32, "signed"]} } -->
@@ -202,14 +202,14 @@ prim ty_atomSizeof_aux_ind 'H :
    = it
 
 
-(*!
- * @begin[doc]
- *
- * The atom $<< atomConst{ 'ty; 'tv; 'n } >>$ is a constant constructor
- * for case $<< 'n >>$ of a union.  It is well-formed if it references
- * a constant case of a union type and if the union type is well-formed.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   The atom $<< atomConst{ 'ty; 'tv; 'n } >>$ is a constant constructor
+   for case $<< 'n >>$ of a union.  It is well-formed if it references
+   a constant case of a union type and if the union type is well-formed.
+   @end[doc]
+>>
 
 prim ty_atomConst 'H :
    sequent [fir] { 'H; a: ty_def{ 'tv; 'k; 'd }; 'J >-
@@ -224,15 +224,15 @@ prim ty_atomConst 'H :
    = it
 
 
-(*!************************************
- * @begin[doc]
- * @modsubsection{Polymorphism}
- *
- * The atom $<< atomTyApply{ atomVar{'v}; 'u1; 'types } >>$ instantiates
- * $<< atomVar{'v} >>$ at a list of types, where $<< atomVar{'v} >>$ should
- * have a universal type.
- * @end[doc]
- *)
+doc <:doc< ************************************
+   @begin[doc]
+   @modsubsection{Polymorphism}
+  
+   The atom $<< atomTyApply{ atomVar{'v}; 'u1; 'types } >>$ instantiates
+   $<< atomVar{'v} >>$ at a list of types, where $<< atomVar{'v} >>$ should
+   have a universal type.
+   @end[doc]
+>>
 
 prim ty_atomTyApply 'H :
    (* The type of the atom must agree with what it thinks its own type is. *)
@@ -263,19 +263,19 @@ prim ty_atomTyApply 'H :
                         'u2 } }
    = it
 
-(*!
- * @docoff
- *)
+doc <:doc< 
+   @docoff
+>>
 
 
-(*!
- * @begin[doc]
- *
- * The atom $<< atomTyPack{ 'var; 'u; 'types } >>$ is the introduction
- * form for type packing.  A value is packaged with a list of types
- * to form a value with an existential type.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   The atom $<< atomTyPack{ 'var; 'u; 'types } >>$ is the introduction
+   form for type packing.  A value is packaged with a list of types
+   to form a value with an existential type.
+   @end[doc]
+>>
 
 prim ty_atomTyPack :
    sequent [fir] { 'H >-
@@ -290,15 +290,15 @@ prim ty_atomTyPack :
    = it
 
 
-(*!
- * @begin[doc]
- *
- * The atom $<< atomTyUnpack{ atomVar{'v} } >>$ is the elimination
- * form for type packing.  If $<< atomVar{'v} >>$ has an existential type
- * $t$, then the type unpacking has a type equal to $t$ instantiated
- * at the types from the original packing.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   The atom $<< atomTyUnpack{ atomVar{'v} } >>$ is the elimination
+   form for type packing.  If $<< atomVar{'v} >>$ has an existential type
+   $t$, then the type unpacking has a type equal to $t$ instantiated
+   at the types from the original packing.
+   @end[doc]
+>>
 
 prim ty_atomTyUnpack 'H :
    sequent [fir] { 'H;
@@ -313,21 +313,21 @@ prim ty_atomTyUnpack 'H :
       has_type["atom"]{ atomTyUnpack{ atomVar{'v} }; 'u } }
    = it
 
-(*!
- * @docoff
- *)
+doc <:doc< 
+   @docoff
+>>
 
 
-(*!************************************
- * @begin[doc]
- * @modsubsection{Unary and binary operators}
- *
- * For the atoms $<< atomUnop{ 'unop; 'a } >>$ and
- * $<< atomBinop{ 'binop; 'a1; 'a2 } >>$, the typing rules are
- * straightforward.  The arguments should have the correct type, and
- * the result type of the operator should be equal to $<< 'ty >>$.
- * @end[doc]
- *)
+doc <:doc< ************************************
+   @begin[doc]
+   @modsubsection{Unary and binary operators}
+  
+   For the atoms $<< atomUnop{ 'unop; 'a } >>$ and
+   $<< atomBinop{ 'binop; 'a1; 'a2 } >>$, the typing rules are
+   straightforward.  The arguments should have the correct type, and
+   the result type of the operator should be equal to $<< 'ty >>$.
+   @end[doc]
+>>
 
 prim ty_atomUnop :
    sequent [fir] { 'H >- type_eq{ 'ty; res_type{ 'op }; large_type } } -->
@@ -342,6 +342,6 @@ prim ty_atomBinop :
    sequent [fir] { 'H >- has_type["atom"]{ atomBinop{ 'op; 'a1; 'a2 }; 'ty } }
    = it
 
-(*!
- * @docoff
- *)
+doc <:doc< 
+   @docoff
+>>

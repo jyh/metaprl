@@ -1,49 +1,49 @@
-(*!
- * @begin[doc]
- * @module[Mp_mc_fir_base]
- *
- * The @tt[Mp_mc_fir_base] module defines terms to represent basic FIR
- * terms and supporting @OCaml values.
- * @end[doc]
- *
- * ----------------------------------------------------------------
- *
- * @begin[license]
- * This file is part of MetaPRL, a modular, higher order
- * logical framework that provides a logical programming
- * environment for OCaml and other languages.
- *
- * See the file doc/index.html for information on Nuprl,
- * OCaml, and more information about this system.
- *
- * Copyright (C) 2002 Brian Emre Aydemir, Caltech
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- *
- * Author: Brian Emre Aydemir
- * @email{emre@its.caltech.edu}
- * @end[license]
- *)
+doc <:doc< 
+   @begin[doc]
+   @module[Mp_mc_fir_base]
+  
+   The @tt[Mp_mc_fir_base] module defines terms to represent basic FIR
+   terms and supporting @OCaml values.
+   @end[doc]
+  
+   ----------------------------------------------------------------
+  
+   @begin[license]
+   This file is part of MetaPRL, a modular, higher order
+   logical framework that provides a logical programming
+   environment for OCaml and other languages.
+  
+   See the file doc/index.html for information on Nuprl,
+   OCaml, and more information about this system.
+  
+   Copyright (C) 2002 Brian Emre Aydemir, Caltech
+  
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public License
+   as published by the Free Software Foundation; either version 2
+   of the License, or (at your option) any later version.
+  
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+  
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  
+   Author: Brian Emre Aydemir
+   @email{emre@its.caltech.edu}
+   @end[license]
+>>
 
-(*!
- * @begin[doc]
- * @parents
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @parents
+   @end[doc]
+>>
 extends Base_theory
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
@@ -53,44 +53,44 @@ open Mp_mc_base
  * Term declarations.
  *************************************************************************)
 
-(*!
- * @begin[doc]
- * @terms
- *
- * @tt[noneOpt] and @tt[someOpt] represent @OCaml option
- * values, in other words, values of the type @tt{'a option}.
- * @tt{Some v} is represented as @misspelled{@tt{someOpt@{v@}}}.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @terms
+  
+   @tt[noneOpt] and @tt[someOpt] represent @OCaml option
+   values, in other words, values of the type @tt{'a option}.
+   @tt{Some v} is represented as @misspelled{@tt{someOpt@{v@}}}.
+   @end[doc]
+>>
 
 declare noneOpt
 declare someOpt{ 'a }
 
-(*!
- * @begin[doc]
- *
- * @tt[val_true] and @tt[val_false] represent the @OCaml
- * boolean constants @tt[true] and @tt[false].  Within the FIR,
- * true and false are actually represented as
- * @hrefterm[atomEnum]s (see @hrefmodule[Mp_mc_fir_eval]).
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   @tt[val_true] and @tt[val_false] represent the @OCaml
+   boolean constants @tt[true] and @tt[false].  Within the FIR,
+   true and false are actually represented as
+   @hrefterm[atomEnum]s (see @hrefmodule[Mp_mc_fir_eval]).
+   @end[doc]
+>>
 declare val_true
 declare val_false
 
-(*!
- * @begin[doc]
- *
- * The FIR has support for integer and floating point types of
- * various precisions (see @hrefterm[tyRawInt] and @hrefterm[tyFloat]
- * in @hrefmodule[Mp_mc_fir_ty]).  The following seven terms specify
- * 8-bit, 16-bit, 32-bit, and 64-bit integer precision as well as
- * single precision (4 byte), double precision (8 byte), and
- * long double (10 byte) precision floats.  By convention,
- * subterms called @tt[int_precision] and @tt[float_precision]
- * refer to one of these terms.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   The FIR has support for integer and floating point types of
+   various precisions (see @hrefterm[tyRawInt] and @hrefterm[tyFloat]
+   in @hrefmodule[Mp_mc_fir_ty]).  The following seven terms specify
+   8-bit, 16-bit, 32-bit, and 64-bit integer precision as well as
+   single precision (4 byte), double precision (8 byte), and
+   long double (10 byte) precision floats.  By convention,
+   subterms called @tt[int_precision] and @tt[float_precision]
+   refer to one of these terms.
+   @end[doc]
+>>
 
 declare int8
 declare int16
@@ -100,65 +100,65 @@ declare floatSingle
 declare floatDouble
 declare floatLongDouble
 
-(*!
- * @begin[doc]
- *
- * @hrefterm[tyRawInt] also requires information about whether
- * the integer type is signed or unsigned, which is what the following
- * two terms specify.  By convention, subterms called @tt[int_signed]
- * refer to one of these terms.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   @hrefterm[tyRawInt] also requires information about whether
+   the integer type is signed or unsigned, which is what the following
+   two terms specify.  By convention, subterms called @tt[int_signed]
+   refer to one of these terms.
+   @end[doc]
+>>
 
 declare signedInt
 declare unsignedInt
 
-(*!
- * @begin[doc]
- *
- * The FIR has support for basic integer (@hrefterm[tyInt])
- * and raw-integer (@hrefterm[tyRawInt]) sets.  @tt[int_set] and
- * @tt[rawint_set] encode sets as a list (see @hrefmodule[Itt_list])
- * of closed @tt[interval]s.  Each @tt[interval] has subterms for
- * the left and right bounds, which should be @hrefterm[number]s.
- * @tt[rawint_set]s also require subterms to encode the precision
- * and signing of the @hrefterm[tyRawInt]s.  It is assumed that each
- * bound in the list has the same precision and signing.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   The FIR has support for basic integer (@hrefterm[tyInt])
+   and raw-integer (@hrefterm[tyRawInt]) sets.  @tt[int_set] and
+   @tt[rawint_set] encode sets as a list (see @hrefmodule[Itt_list])
+   of closed @tt[interval]s.  Each @tt[interval] has subterms for
+   the left and right bounds, which should be @hrefterm[number]s.
+   @tt[rawint_set]s also require subterms to encode the precision
+   and signing of the @hrefterm[tyRawInt]s.  It is assumed that each
+   bound in the list has the same precision and signing.
+   @end[doc]
+>>
 
 declare interval{ 'left; 'right } (* closed bounds, i.e. [left, right] *)
 declare int_set{ 'interval_list }
 declare rawint_set{ 'int_precision; 'int_signed; 'interval_list }
 
-(*!
- * @begin[doc]
- *
- * Tuple classes. (Documentation incomplete.)
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   Tuple classes. (Documentation incomplete.)
+   @end[doc]
+>>
 
 declare normalTuple
 declare boxedTuple
 declare rawTuple
 
 
-(*!
- * @begin[doc]
- *
- * Union types. (Documentation incomplete.)
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   Union types. (Documentation incomplete.)
+   @end[doc]
+>>
 
 declare normalUnion
 declare exnUnion
 
-(*!
- * @begin[doc]
- *
- * Subscript operators. (Documentation incomplete.)
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   Subscript operators. (Documentation incomplete.)
+   @end[doc]
+>>
 
 (* Kind of block. *)
 
@@ -190,18 +190,18 @@ declare rawIntIndex{ 'int_precision; 'int_signed }
 
 declare subop{ 'sub_block; 'sub_value; 'sub_index; 'sub_script }
 
-(*!
- * @begin[doc]
- *
- * Tables, maps, and other structures.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   Tables, maps, and other structures.
+   @end[doc]
+>>
 
 (* Represent an item in a table (a value) indexed by some key. *)
 
 declare tableItem{ 'key; 'value }
 
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 (*************************************************************************
  * Term declarations.

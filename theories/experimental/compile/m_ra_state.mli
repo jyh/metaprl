@@ -36,9 +36,7 @@ val debug_live : bool ref
  *)
 val debug_regalloc : int ref
 
-(*!
- * @docoff
- *
+(*
  * -*-
  * Local Variables:
  * Caml-master: "compile"

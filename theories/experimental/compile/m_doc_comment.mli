@@ -43,9 +43,7 @@ declare math_semleft
 declare math_semright
 declare math_compilable{'e}
 
-(*!
- * @docoff
- *
+(*
  * -*-
  * Local Variables:
  * Caml-master: "compile"

@@ -25,13 +25,13 @@
  * @end[license]
  *)
 
-(*!
- * @begin[doc]
- * @parents
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @parents
+   @end[doc]
+>>
 extends Base_theory
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 open Mp_debug
 open Printf

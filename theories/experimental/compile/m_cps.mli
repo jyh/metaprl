@@ -46,9 +46,7 @@ topval cpsC : conv
 
 topval cpsT : tactic
 
-(*!
- * @docoff
- *
+(*
  * -*-
  * Local Variables:
  * Caml-master: "compile"

@@ -42,9 +42,7 @@ topval convertT : tactic
 topval codeT    : tactic
 topval compileT : tactic
 
-(*!
- * @docoff
- *
+(*
  * -*-
  * Local Variables:
  * Caml-master: "compile"

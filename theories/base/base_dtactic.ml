@@ -1,155 +1,155 @@
-(*!
- * @begin[spelling]
- * ElimArgsOption IntroArgsOption SelectOption ThinOption
- * selT dT ext intro
- * @end[spelling]
- *
- * @begin[doc]
- * @module[Base_dtactic]
- *
- * The @tactic[dT] tactic is the cornerstone of reasoning in
- * most logics; it provides generic application of introduction
- * elimination reasoning.  The @hrefmodule[Base_dtactic] defines a @emph{generic}
- * resource that can be used to add introduction and elimination reasoning.
- * In addition, it add resource @emph{annotations} that can be used in rule
- * definitions to add them automatically to the @tt[dT] resources.
- *
- * The @tt[dT] tactic uses two resources.  The @resource[intro_resource]
- * is used to collect introduction rules; and the @resource[elim_resource]
- * is used to collect elimination rules.  The components of both resources
- * take a term that describes the shape of the goals to which they apply,
- * and a tactic to use when goals of that form are recognized.  The
- * @hrefresource[elim_resource] takes a tactic of type @code{int -> tactic} (the
- * tactic takes the number of the hypothesis to which it applies), and the
- * @hrefresource[intro_resource] takes a tactic of type @code{tactic}.
- *
- * The (@hreftactic[dT] $i$) tactic is a generic tactic that takes the clause number
- * of the clause (either hypothesis or conclusion) to ``decompose,'' and it
- * applies the most appropriate entry from the resources.
- *
- * The resources also allow resource annotations in rule definitions.
- * Typically, the annotation is added to explicit introduction or
- * elimination rules, like the following:
- *
- * $$
- * @defrule{@tt{and@_intro};
- *     @{| @tt{intro@_resource} [ ] |@} H;
- *     @sequent{ext; H; A}@cr
- *        @sequent{ext; H; B};
- *     @sequent{ext; H; A @wedge B}}
- * $$
- *
- * Once this rule is defined, an application of the tactic (@hreftactic[dT] 0)
- * to a conjunction will result in an application of the @hrefrule[and_intro]
- * rule.
- *
- * The resource annotations take a list of optional arguments.  The
- * @hrefresource[intro_resource] takes arguments of the following type:
- *
- * @begin[center]
- * @begin[verbatim]
- * type intro_option =
- *    SelectOption of int
- *  | IntroArgsOption of (tactic_arg -> term -> term list) * term option
- *  | AutoMustComplete
- * @end[verbatim]
- * @end[center]
- *
- * The @tt[SelectOption] is used for rules that require a selection argument.
- * For instance, the disjunction introduction rule has two forms for the left
- * and right-hand forms.
- *
- * $$
- * @defrule{or@_intro@_left;
- *    @{| @tt{intro@_resource} [SelectOption 1] |@} H;
- *    @sequent{ext; H; B @Type}
- *        @cr @sequent{ext; H; A};
- *    @sequent{ext; H; A @wedge B}}
- * $$
- *
- * $$
- * @defrule{or@_intro@_right;
- *   @{| @tt{intro@_resource} [SelectOption 2] |@} H;
- *   @sequent{ext; H; A @Type}@cr
- *      @sequent{ext; H; B};
- *   @sequent{ext; H; A @wedge B}}
- * $$
- *
- * These options require @hreftactic[selT] arguments: the left rule is applied with
- * @tt{selT 1 (dT 0)} and the right rule is applied with @tt{selT 2 (dT 0)}.
- *
- * The @tt[IntroArgsOption] is used to @emph{infer} arguments to the rule.
- * The function argument takes the current goal and a subterm, and it provides
- * an argument list that can be used in the rule application.  The @code{term option}
- * entry describes the subterm to be used for the second function argument.
- *
- * The @tt[AutoMustComplete] option can be used to indicate that the
- * @hreftactic[autoT] tactic should not use this rule unless it is capable
- * of finishing the proof on its own. This option can be used to mark irreversible
- * rules that may take a provable goal and produce potentially unprovable
- * subgoals.
- *
- * The @hrefresource[elim_resource] options are defined with the following type:
- *
- * @begin[center]
- * @begin[verbatim]
- * type elim_option =
- *    ThinOption of (int -> tactic)
- *  | ElimArgsOption of (tactic_arg -> term -> term list) * term option
- * @end[verbatim]
- * @end[center]
- *
- * The @tt[ElimArgsOption] provides arguments in the same way as the
- * @tt[IntroArgsOption].  The @tt[ThinOption] is an argument that provides an
- * optional tactic to ``thin'' the hypothesis after application of the
- * elimination rule.
- *
- * The @hreftactic[dT] resources are implemented as tables that store
- * the term descriptions and tactics for ``decomposition''
- * reasoning.  The @hreftactic[dT] tactic select the most appropriate
- * rule for a given goal and applies it.  The @tt{(dT 0)} tactic
- * is added to the @hrefresource[auto_resource] by default.
- * @end[doc]
- *
- * ---------------------------------------------------------------
- *
- * @begin[license]
- *
- * This file is part of MetaPRL, a modular, higher order
- * logical framework that provides a logical programming
- * environment for OCaml and other languages.
- *
- * See the file doc/index.html for information on Nuprl,
- * OCaml, and more information about this system.
- *
- * Copyright (C) 1998 Jason Hickey, Cornell University
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- *
- * Author: Jason Hickey @email{jyh@cs.caltech.edu}
- * Modified by: Aleksey Nogin @email{nogin@cs.cornell.edu}
- * @end[license]
- *)
+doc <:doc< 
+   @begin[spelling]
+   ElimArgsOption IntroArgsOption SelectOption ThinOption
+   selT dT ext intro
+   @end[spelling]
+  
+   @begin[doc]
+   @module[Base_dtactic]
+  
+   The @tactic[dT] tactic is the cornerstone of reasoning in
+   most logics; it provides generic application of introduction
+   elimination reasoning.  The @hrefmodule[Base_dtactic] defines a @emph{generic}
+   resource that can be used to add introduction and elimination reasoning.
+   In addition, it add resource @emph{annotations} that can be used in rule
+   definitions to add them automatically to the @tt[dT] resources.
+  
+   The @tt[dT] tactic uses two resources.  The @resource[intro_resource]
+   is used to collect introduction rules; and the @resource[elim_resource]
+   is used to collect elimination rules.  The components of both resources
+   take a term that describes the shape of the goals to which they apply,
+   and a tactic to use when goals of that form are recognized.  The
+   @hrefresource[elim_resource] takes a tactic of type @code{int -> tactic} (the
+   tactic takes the number of the hypothesis to which it applies), and the
+   @hrefresource[intro_resource] takes a tactic of type @code{tactic}.
+  
+   The (@hreftactic[dT] $i$) tactic is a generic tactic that takes the clause number
+   of the clause (either hypothesis or conclusion) to ``decompose,'' and it
+   applies the most appropriate entry from the resources.
+  
+   The resources also allow resource annotations in rule definitions.
+   Typically, the annotation is added to explicit introduction or
+   elimination rules, like the following:
+  
+   $$
+   @defrule{@tt{and@_intro};
+       @{| @tt{intro@_resource} [ ] |@} H;
+       @sequent{ext; H; A}@cr
+          @sequent{ext; H; B};
+       @sequent{ext; H; A @wedge B}}
+   $$
+  
+   Once this rule is defined, an application of the tactic (@hreftactic[dT] 0)
+   to a conjunction will result in an application of the @hrefrule[and_intro]
+   rule.
+  
+   The resource annotations take a list of optional arguments.  The
+   @hrefresource[intro_resource] takes arguments of the following type:
+  
+   @begin[center]
+   @begin[verbatim]
+   type intro_option =
+      SelectOption of int
+    | IntroArgsOption of (tactic_arg -> term -> term list) * term option
+    | AutoMustComplete
+   @end[verbatim]
+   @end[center]
+  
+   The @tt[SelectOption] is used for rules that require a selection argument.
+   For instance, the disjunction introduction rule has two forms for the left
+   and right-hand forms.
+  
+   $$
+   @defrule{or@_intro@_left;
+      @{| @tt{intro@_resource} [SelectOption 1] |@} H;
+      @sequent{ext; H; B @Type}
+          @cr @sequent{ext; H; A};
+      @sequent{ext; H; A @wedge B}}
+   $$
+  
+   $$
+   @defrule{or@_intro@_right;
+     @{| @tt{intro@_resource} [SelectOption 2] |@} H;
+     @sequent{ext; H; A @Type}@cr
+        @sequent{ext; H; B};
+     @sequent{ext; H; A @wedge B}}
+   $$
+  
+   These options require @hreftactic[selT] arguments: the left rule is applied with
+   @tt{selT 1 (dT 0)} and the right rule is applied with @tt{selT 2 (dT 0)}.
+  
+   The @tt[IntroArgsOption] is used to @emph{infer} arguments to the rule.
+   The function argument takes the current goal and a subterm, and it provides
+   an argument list that can be used in the rule application.  The @code{term option}
+   entry describes the subterm to be used for the second function argument.
+  
+   The @tt[AutoMustComplete] option can be used to indicate that the
+   @hreftactic[autoT] tactic should not use this rule unless it is capable
+   of finishing the proof on its own. This option can be used to mark irreversible
+   rules that may take a provable goal and produce potentially unprovable
+   subgoals.
+  
+   The @hrefresource[elim_resource] options are defined with the following type:
+  
+   @begin[center]
+   @begin[verbatim]
+   type elim_option =
+      ThinOption of (int -> tactic)
+    | ElimArgsOption of (tactic_arg -> term -> term list) * term option
+   @end[verbatim]
+   @end[center]
+  
+   The @tt[ElimArgsOption] provides arguments in the same way as the
+   @tt[IntroArgsOption].  The @tt[ThinOption] is an argument that provides an
+   optional tactic to ``thin'' the hypothesis after application of the
+   elimination rule.
+  
+   The @hreftactic[dT] resources are implemented as tables that store
+   the term descriptions and tactics for ``decomposition''
+   reasoning.  The @hreftactic[dT] tactic select the most appropriate
+   rule for a given goal and applies it.  The @tt{(dT 0)} tactic
+   is added to the @hrefresource[auto_resource] by default.
+   @end[doc]
+  
+   ---------------------------------------------------------------
+  
+   @begin[license]
+  
+   This file is part of MetaPRL, a modular, higher order
+   logical framework that provides a logical programming
+   environment for OCaml and other languages.
+  
+   See the file doc/index.html for information on Nuprl,
+   OCaml, and more information about this system.
+  
+   Copyright (C) 1998 Jason Hickey, Cornell University
+  
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public License
+   as published by the Free Software Foundation; either version 2
+   of the License, or (at your option) any later version.
+  
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+  
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  
+   Author: Jason Hickey @email{jyh@cs.caltech.edu}
+   Modified by: Aleksey Nogin @email{nogin@cs.cornell.edu}
+   @end[license]
+>>
 
-(*!
- * @begin[doc]
- * @parents
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @parents
+   @end[doc]
+>>
 extends Base_auto_tactic
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 open Printf
 open Mp_debug

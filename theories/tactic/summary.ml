@@ -1,73 +1,73 @@
-(*!
- * @begin[spelling]
- * ML prl tex
- * @end[spelling]
- *
- * @begin[doc]
- * @module[Summary]
- *
- * The @tt{Summary} module implements display forms for top level
- * module summaries.  A @emph{summary} is a term representation of
- * a top-level module.  In most cases, @MetaPRL produces the summary
- * when the ML file corresponding to the module is compiled.  The term
- * contains @emph{all} the information in the original file, and it
- * also contains terms that represent the proof structure of the
- * module.
- *
- * The term representation of the summary is used to represent the module
- * in the logical library (or the filesystem).  It is also used by the
- * @MetaPRL{} editor to display the module so that it can be browsed.
- * Various parts of the summary, such as terms representing rules,
- * proofs, are used during proof editing to display the current node
- * and goal in a proof.
- *
- * The @tt{Summary} module is built-in: the summary term is constructed by
- * the @MetaPRL{} compiler.  This module is the connection to the compiler,
- * and its purpose is to allow the inner data structures of the compiler
- * to be browsed and edited.
- *
- * The file contains a declaration for each of the types of term produced by
- * the compiler, and it also contains display definitions to display the
- * terms in a natural way.  In some cases, such as for @LaTeX{} and HTML
- * mode, special display forms are used to produce code to display
- * the terms correctly.  The display forms can be quite complex; we do not
- * include their description in this document.
- *
- * @docoff
- * @end[doc]
- *
- * ----------------------------------------------------------------
- *
- * @begin[license]
- *
- * This file is part of MetaPRL, a modular, higher order
- * logical framework that provides a logical programming
- * environment for OCaml and other languages.
- *
- * See the file doc/index.html for information on Nuprl,
- * OCaml, and more information about this system.
- *
- * Copyright (C) 1998 Jason Hickey, Cornell University
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- *
- * Author: Jason Hickey
- * @email{jyh@cs.caltech.edu}
- *
- * @end[license]
- *)
+doc <:doc< 
+   @begin[spelling]
+   ML prl tex
+   @end[spelling]
+  
+   @begin[doc]
+   @module[Summary]
+  
+   The @tt{Summary} module implements display forms for top level
+   module summaries.  A @emph{summary} is a term representation of
+   a top-level module.  In most cases, @MetaPRL produces the summary
+   when the ML file corresponding to the module is compiled.  The term
+   contains @emph{all} the information in the original file, and it
+   also contains terms that represent the proof structure of the
+   module.
+  
+   The term representation of the summary is used to represent the module
+   in the logical library (or the filesystem).  It is also used by the
+   @MetaPRL{} editor to display the module so that it can be browsed.
+   Various parts of the summary, such as terms representing rules,
+   proofs, are used during proof editing to display the current node
+   and goal in a proof.
+  
+   The @tt{Summary} module is built-in: the summary term is constructed by
+   the @MetaPRL{} compiler.  This module is the connection to the compiler,
+   and its purpose is to allow the inner data structures of the compiler
+   to be browsed and edited.
+  
+   The file contains a declaration for each of the types of term produced by
+   the compiler, and it also contains display definitions to display the
+   terms in a natural way.  In some cases, such as for @LaTeX{} and HTML
+   mode, special display forms are used to produce code to display
+   the terms correctly.  The display forms can be quite complex; we do not
+   include their description in this document.
+  
+   @docoff
+   @end[doc]
+  
+   ----------------------------------------------------------------
+  
+   @begin[license]
+  
+   This file is part of MetaPRL, a modular, higher order
+   logical framework that provides a logical programming
+   environment for OCaml and other languages.
+  
+   See the file doc/index.html for information on Nuprl,
+   OCaml, and more information about this system.
+  
+   Copyright (C) 1998 Jason Hickey, Cornell University
+  
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public License
+   as published by the Free Software Foundation; either version 2
+   of the License, or (at your option) any later version.
+  
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+  
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  
+   Author: Jason Hickey
+   @email{jyh@cs.caltech.edu}
+  
+   @end[license]
+>>
 
 extends Perv
 extends Nuprl_font
@@ -98,101 +98,101 @@ declare package_link[name:s]
  * TERMS                                                                *
  ************************************************************************)
 
-(*!
- * @begin[doc]
- * @terms
- *
- * There are two outermost terms for modules: the interface is
- * wrapped with @tt{interface} term, and the
- * implementation is wrapped with @tt{implementation}.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @terms
+  
+   There are two outermost terms for modules: the interface is
+   wrapped with @tt{interface} term, and the
+   implementation is wrapped with @tt{implementation}.
+   @end[doc]
+>>
 declare "interface"{'intf}
 declare "implementation"{'impl}
 
-(*!
- * @begin[doc]
- *
- * The @tt{comment} term is used to enclose structured comments (term
- * comments).
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   The @tt{comment} term is used to enclose structured comments (term
+   comments).
+   @end[doc]
+>>
 declare comment{'t}
 
-(*!
- * @begin[doc]
- * Each of the components in an interface or implementation
- * also has a term description.
- * The @tt[parent] term describes an
- * @bf[extends] statement: the @it{path} is the pathname of the parent
- * module; the @it{opens} is the complete list of parents (the transitive
- * closure) and the @it{resources} are the complete list of resources
- * defined or used by the module.
- *
- * The @tt[opname] term described a @bf{declare}
- * statement.  The @it{term} is the term being declared, and the @it{name} is
- * the operator name of the declaration.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   Each of the components in an interface or implementation
+   also has a term description.
+   The @tt[parent] term describes an
+   @bf[extends] statement: the @it{path} is the pathname of the parent
+   module; the @it{opens} is the complete list of parents (the transitive
+   closure) and the @it{resources} are the complete list of resources
+   defined or used by the module.
+  
+   The @tt[opname] term described a @bf{declare}
+   statement.  The @it{term} is the term being declared, and the @it{name} is
+   the operator name of the declaration.
+   @end[doc]
+>>
 declare "parent"{'path; 'opens; 'resources}
 declare "opname"[name:s]{'term}
 
-(*! @docoff *)
+doc <:doc< @docoff >>
 declare "parent"[name:s]
 
-(*!
- * @begin[doc]
- * Rewrites are defined with the @tt[rewrite] and @tt[cond_rewrite]
- * terms.  The @it{redex} and @it{contractum} define the rewrite; the @it{proof} is
- * the proof of the rewrite (which is empty if the rewrite is primitive).  for the conditional
- * rewrite the @it[params] and @it[args] are the terms the defined the assumptions
- * under which the rewrite is valid.  The @it{name} is the name of the rewrite.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   Rewrites are defined with the @tt[rewrite] and @tt[cond_rewrite]
+   terms.  The @it{redex} and @it{contractum} define the rewrite; the @it{proof} is
+   the proof of the rewrite (which is empty if the rewrite is primitive).  for the conditional
+   rewrite the @it[params] and @it[args] are the terms the defined the assumptions
+   under which the rewrite is valid.  The @it{name} is the name of the rewrite.
+   @end[doc]
+>>
 declare "rewrite"[name:s]{'redex; 'contractum; 'proof; 'res}
 declare "cond_rewrite"[name:s]{'params; 'args; 'redex; 'contractum; 'proof; 'res}
 
-(*!
- * @begin[doc]
- * Rules are defined using the @tt[rule] term.
- * The @it[stmt] is the statement of the rule, and @it{proof}
- * is it's proof.  The rule also includes a @it[param] list that defines the subgoals
- * of the rule and the @it[res] list of resource annotations.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   Rules are defined using the @tt[rule] term.
+   The @it[stmt] is the statement of the rule, and @it{proof}
+   is it's proof.  The rule also includes a @it[param] list that defines the subgoals
+   of the rule and the @it[res] list of resource annotations.
+   @end[doc]
+>>
 declare "rule"[name:s]{'params; 'stmt; 'proof; 'res}
 
-(*!
- * @begin[doc]
- * Resources are declared with the @tt[resource]
- * term, which has three subterms corresponding to the three types in the resource definition.  The
- * @it{extract} is the type of values provided by the resource, @it{data} is the internal
- * type used to represent the resource data, and @it{improve} is the type of arguments that
- * are required to make additions to the resource.
- *
- * Resources are improved with the @tt[improve] term which has the name of a resource
- * to improve and the expression to improve the resource with.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   Resources are declared with the @tt[resource]
+   term, which has three subterms corresponding to the three types in the resource definition.  The
+   @it{extract} is the type of values provided by the resource, @it{data} is the internal
+   type used to represent the resource data, and @it{improve} is the type of arguments that
+   are required to make additions to the resource.
+  
+   Resources are improved with the @tt[improve] term which has the name of a resource
+   to improve and the expression to improve the resource with.
+   @end[doc]
+>>
 declare "resource"[name:s]{'expr}
 declare "resource_defs"[name:s]{'res}
 declare "improve"[name:s]{'expr}
-(*! @docoff *)
+doc <:doc< @docoff >>
 declare "resource_defs"[start:n, finish:n, name:s]{'res}
 
-(*!
- * @begin[doc]
- * Infix definitions (like the tacticals @tt[thenT] and @tt[orelseT]) are defined with
- * the @tt{infix} declaration.
- *
- * OCaml definitions are also represented as terms using the
- * @tt{summary_item} term, where the @it{term} is the
- * term that represents the OCaml code.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   Infix definitions (like the tacticals @tt[thenT] and @tt[orelseT]) are defined with
+   the @tt{infix} declaration.
+  
+   OCaml definitions are also represented as terms using the
+   @tt{summary_item} term, where the @it{term} is the
+   term that represents the OCaml code.
+   @end[doc]
+>>
 declare "infix"[name:s]
 declare "summary_item"{'term}
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 declare "magic_block"[name:s]{'items}
 declare "id"[n:n]
@@ -201,16 +201,16 @@ declare "mlterm"{'term; 'cons; 'oexpr}
 declare "condition"{'term; 'cons; 'oexpr}
 declare "mlrewrite"[name:s]{'params; 'redex; 'contracta; 'body; 'resources}
 
-(*!
- * @begin[doc]
- * Display forms are represented using the @tt[dform] term.
- * The @it{modes} are the valid modes of the display form (for example,
- * the normal display mode ``prl'', or the ``html'' or ``tex'' display modes),
- * as well as parenthesization and precedence definitions.
- * The @it{redex} is the term to be displayed, and the @it{@misspelled{def}} is
- * the term describing the displayed definition.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   Display forms are represented using the @tt[dform] term.
+   The @it{modes} are the valid modes of the display form (for example,
+   the normal display mode ``prl'', or the ``html'' or ``tex'' display modes),
+   as well as parenthesization and precedence definitions.
+   The @it{redex} is the term to be displayed, and the @it{@misspelled{def}} is
+   the term describing the displayed definition.
+   @end[doc]
+>>
 declare "dform"[name:s]{'modes; 'redex; 'def}
 declare "prec"[name:s]
 declare "prec_rel"[pr:s]
@@ -219,7 +219,7 @@ declare "prec_df"[name:s]
 declare "parens_df"
 declare "mode_df"[mode:s]
 declare "except_mode_df"[mode:s]
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 declare "df_none"
 declare "df_term"{'t}
@@ -228,25 +228,25 @@ declare "df_ml"[printer:s, buffer:s]{'contracta; 'code}
 declare "none"
 declare "some"{'t}
 
-(*!
- * @begin[doc]
- * Rules and axioms are described with @emph{meta}-terms.
- * The meta-terms are defined inductively:
- * a term (a @tt[meta_theorem]) is a meta-term,
- * and given two meta-terms $A$ and $B$, so are the
- * meta-implication @tt[meta_implies], the meta-@misspelled{bi}-implication
- * @tt[meta_iff], and the dependent meta-function @tt{meta_function}
- * where @it[arg] is a variable quantified over $A$ and bound in $B$.  The
- * @tt{meta_labeled} term is used to add a label to a meta-term.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   Rules and axioms are described with @emph{meta}-terms.
+   The meta-terms are defined inductively:
+   a term (a @tt[meta_theorem]) is a meta-term,
+   and given two meta-terms $A$ and $B$, so are the
+   meta-implication @tt[meta_implies], the meta-@misspelled{bi}-implication
+   @tt[meta_iff], and the dependent meta-function @tt{meta_function}
+   where @it[arg] is a variable quantified over $A$ and bound in $B$.  The
+   @tt{meta_labeled} term is used to add a label to a meta-term.
+   @end[doc]
+>>
 declare "meta_theorem"{'A}
 declare "meta_implies"{'A; 'B}
 declare "meta_function"{'arg; 'A; 'B}
 declare "meta_iff"{'A; 'B}
 declare "meta_labeled"[label:s]{'meta}
 declare "meta_theory"{'A}
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 declare "context_param"[name:s]
 declare "var_param"[name:s]
@@ -267,26 +267,26 @@ declare "interactive"{'t}
 
 declare "href"[command:s]{'t}
 
-(*!
- * @begin[doc]
- * A proof has a goal define with the @tt[goal] term,
- * where the @it{status} is the status of the proof, the @tt{label} is the label
- * of the outermost proof node, the @it[assums] are the assumptions (the subgoals)
- * of the theorem being proved, and the @it{goal} is the goal term.
- *
- * The status of a proof can have four values: a proof is @it{bad} if
- * it can be shown that the proof is inconsistent; it is @it{partial}
- * if it has unproven subgoals; it is @it{asserted} if it is primitive
- * or if it has not been checked; and it is @it{complete} if it has been checked.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   A proof has a goal define with the @tt[goal] term,
+   where the @it{status} is the status of the proof, the @tt{label} is the label
+   of the outermost proof node, the @it[assums] are the assumptions (the subgoals)
+   of the theorem being proved, and the @it{goal} is the goal term.
+  
+   The status of a proof can have four values: a proof is @it{bad} if
+   it can be shown that the proof is inconsistent; it is @it{partial}
+   if it has unproven subgoals; it is @it{asserted} if it is primitive
+   or if it has not been checked; and it is @it{complete} if it has been checked.
+   @end[doc]
+>>
 declare "goal"{'status; 'label; 'assums; 'goal}
 declare "status_bad"
 declare "status_partial"
 declare "status_asserted"
 declare "status_complete"
 declare "status"{'sl}
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 declare "goal_status"{'sl}
 declare "goal_label"[s:s]

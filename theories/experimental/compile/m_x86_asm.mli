@@ -1,11 +1,7 @@
-(*!
- * @begin[doc]
- * @module[Assembly]
- *
+(*
  * This module define x86 assembly code.
  * The one difference here is that we continue to
  * use variable scoping.
- * @end[doc]
  *
  * ----------------------------------------------------------------
  *
@@ -31,19 +27,9 @@
  * @end[license]
  *)
 
-(*!
- * @begin[doc]
- * @parents
- * @end[doc]
- *)
 extends Base_theory
-(*! @docoff *)
 
-(*!
- * @begin[doc]
- * @modsubsection{x86 operands}
- * @end[doc]
- *)
+(* x86 operands *)
 declare ImmediateNumber[i:n]
 declare ImmediateLabel[label:t]{'R}
 declare ImmediateCLabel[label:t]{'R}
@@ -55,11 +41,7 @@ declare MemReg{'r}
 declare MemRegOff[i:n]{'r}
 declare MemRegRegOffMul[off:n, mul:n]{'r1; 'r2}
 
-(*!
- * @begin[doc]
- * @modsubsection{Condition codes}
- * @end[doc]
- *)
+(* Condition codes *)
 declare CC["lt"]
 declare CC["le"]
 declare CC["z"]
@@ -71,35 +53,7 @@ declare CC["be"]
 declare CC["a"]
 declare CC["ae"]
 
-(*!
- * @begin[doc]
- * @modsubsection{Instructions}
- *
- * We want the assembly to have "semi-functional" property,
- * meaning that registers are immutable.  The register allocator
- * will coalesce registers, creating implicit assignments
- * in the process.
- *
- * This presents an interesting problem for the x86, since it
- * uses the two-operand instruction form.  To get around this,
- * we define a normal two-operand instruction set for _memory_
- * operands.  Then we define a three-operand set for register
- * destination operands.  Again, the allocator is responsible
- * for making sure the dst and the first src register are the
- * same.
- *
- * Further, for simplicity, we categorize instructions into
- * several kinds.
- *
- * Mov defines a new register from an arbitrary operand
- * Inst1[opname]: a normal one-operand instruction
- * Inst2[opname]: this is a normal two-operand instruction
- * Inst3[opname]: a MUL/DIV instruction
- * Shift[opname]: a shift instruction
- * Cmp[opname]: a comparison; both operands are sources
- * Set[opname]: the set/cc instruction
- * @end[doc]
- *)
+(* Instructions *)
 declare Mov{'src; dst. 'rest['dst]}
 declare Spill[opcode:s]{'src; dst. 'rest['dst]}
 declare Inst1[opcode:s]{'dst; 'rest}
@@ -137,13 +91,7 @@ declare AsmReserve[words:n]{'params}
 declare Comment[comment:s]{'rest}
 declare Init{'rest}
 
-(*!
- * @begin[doc]
- * @modsubsection{Programs}
- *
- * A program is a set of recursive definitions.
- * @end[doc]
- *)
+(* Programs *)
 declare LabelAsm[label:t]{'R}
 
 declare LabelRec{R1. 'fields['R1]; R2. 'rest['R2]}
@@ -152,9 +100,7 @@ declare LabelEnd
 
 declare LabelFun{v. 'insts['v]}
 
-(*!
- * @docoff
- *
+(*
  * -*-
  * Local Variables:
  * Caml-master: "compile"

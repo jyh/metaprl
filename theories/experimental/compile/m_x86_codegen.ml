@@ -1,46 +1,46 @@
-(*!
- * @begin[spelling]
- * compilable
- * @end[spelling]
- *
- * @begin[doc]
- * @module[M_x86]
- *
- * Compile @emph{M} programs to x86 assembly.
- * @end[doc]
- *
- * ----------------------------------------------------------------
- *
- * @begin[license]
- * Copyright (C) 2003 Jason Hickey, Caltech
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- *
- * Author: Jason Hickey
- * @email{jyh@cs.caltech.edu}
- * @end[license]
- *)
+doc <:doc< 
+   @begin[spelling]
+   compilable
+   @end[spelling]
+  
+   @begin[doc]
+   @module[M_x86]
+  
+   Compile @emph{M} programs to x86 assembly.
+   @end[doc]
+  
+   ----------------------------------------------------------------
+  
+   @begin[license]
+   Copyright (C) 2003 Jason Hickey, Caltech
+  
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public License
+   as published by the Free Software Foundation; either version 2
+   of the License, or (at your option) any later version.
+  
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+  
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  
+   Author: Jason Hickey
+   @email{jyh@cs.caltech.edu}
+   @end[license]
+>>
 
-(*!
- * @begin[doc]
- * @parents
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @parents
+   @end[doc]
+>>
 extends M_ir
 extends M_x86_frame
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 open M_util
 
@@ -55,11 +55,11 @@ open Tactic_type.Sequent
 
 open Top_conversionals
 
-(*!
- * @begin[doc]
- * @modsubsection{Terms}
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Terms}
+   @end[doc]
+>>
 declare ASM{'e}
 declare ASM{'a; v. 'e['v]}
 declare ASM{'args1; 'args2; v. 'e['v]}
@@ -227,11 +227,11 @@ prim_rw asm_arg_nil :
  * Atoms
  *)
 
-(*!
- * @begin[doc]
- * @modsubsection{Code generation}
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Code generation}
+   @end[doc]
+>>
 prim_rw asm_atom_false :
    ASM{AtomFalse; v. 'e['v]}
    <-->
@@ -621,16 +621,16 @@ declare register
 dform register_df : register =
    bf["register"]
 
-(*!
- * @begin[doc]
- * The program is compilable if the assembly is compilable.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   The program is compilable if the assembly is compilable.
+   @end[doc]
+>>
 interactive codegen_prog :
    sequent [m] { 'H >- compilable{ASM{'e}} } -->
    sequent [m] { 'H >- compilable{'e} }
 
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 (*
  * Assembler.

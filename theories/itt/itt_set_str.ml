@@ -1,53 +1,53 @@
-(*!
- * @begin[doc]
- * @module[Itt_set_str]
+doc <:doc< 
+   @begin[doc]
+   @module[Itt_set_str]
 
   In this module we define the most common data structures: Sets and Tables.
- *
- * @end[doc]
- *
- * ----------------------------------------------------------------
- *
- * @begin[license]
- * This file is part of MetaPRL, a modular, higher order
- * logical framework that provides a logical programming
- * environment for OCaml and other languages.
- *
- * See the file doc/index.html for information on Nuprl,
- * OCaml, and more information about this system.
- *
- * Copyright (C) 1998 Jason Hickey, Cornell University
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- *
- * Author: Alexei Kopylov
- * @email{kopylov@cs.cornell.edu}
- * @end[license]
- *)
+  
+   @end[doc]
+  
+   ----------------------------------------------------------------
+  
+   @begin[license]
+   This file is part of MetaPRL, a modular, higher order
+   logical framework that provides a logical programming
+   environment for OCaml and other languages.
+  
+   See the file doc/index.html for information on Nuprl,
+   OCaml, and more information about this system.
+  
+   Copyright (C) 1998 Jason Hickey, Cornell University
+  
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public License
+   as published by the Free Software Foundation; either version 2
+   of the License, or (at your option) any later version.
+  
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+  
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  
+   Author: Alexei Kopylov
+   @email{kopylov@cs.cornell.edu}
+   @end[license]
+>>
 
-(*!
- * @begin[doc]
- * @parents
+doc <:doc< 
+   @begin[doc]
+   @parents
    This module depends on the following ones:
- * @end[doc]
- *)
+   @end[doc]
+>>
 extends Itt_record
 extends Itt_algebra_df
 extends Itt_logic
 extends Itt_union2
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 open Refiner.Refiner.TermType
 open Refiner.Refiner.Term
@@ -71,15 +71,15 @@ open Itt_record
 open Itt_logic
 open Itt_bisect
 
-(*!
- * @begin[doc]
- * @modsection{Set data structure}
+doc <:doc< 
+   @begin[doc]
+   @modsection{Set data structure}
    Set is a data structures for storing collection of values.
- * @modsubsection{Definitions}
- *
- * Here is a definition of a data structure Set.
- * @end[doc]
- *)
+   @modsubsection{Definitions}
+  
+   Here is a definition of a data structure Set.
+   @end[doc]
+>>
 
 define set_sig: Set[i:l]{'T} <-->
    {car : univ[i:l];
@@ -93,7 +93,7 @@ define set_sig: Set[i:l]{'T} <-->
    }
 
 
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 dform set_df : except_mode[src] :: Set[i:l]{'T} = mathbbS `"et" sub{slot[i:l]} "(" 'T ")"
 
@@ -112,16 +112,16 @@ interactive set_intro  {| intro[] |}:
 
 
 
- (*!
- * @begin[doc]
- * The $<<label["car":t]>>$ is an abstract carrier for sets (in concrete implementations it could be, for example, list or tree type),
+ doc <:doc< 
+   @begin[doc]
+   The $<<label["car":t]>>$ is an abstract carrier for sets (in concrete implementations it could be, for example, list or tree type),
    $<<label["empty":t]>>$ is a constant of this type for an empty set.
- * Set data type has also the following functions:
- * @begin[itemize]
+   Set data type has also the following functions:
+   @begin[itemize]
     @item{ <<label["member":t] 'S 'a>> checks whether element $a$ is a member of set $S$.}
     @item{ <<label["insert":t] 'S 'a>> inserts element $a$ in set $S$.}
     @item{<<label["delete":t] 'S 'a>> deletes element $a$ from set $S$.}
- * @end[itemize]
+   @end[itemize]
 
    There are three specifications that guarantees that sets works properly:
   @begin[itemize]
@@ -132,19 +132,19 @@ interactive set_intro  {| intro[] |}:
     @item{ $<< iff{"assert"{.(self{'self}^member) ((self{'self}^delete) 'S 'b) 'a}; ("assert"{.((self{'self}^member) 'S 'a)} and not{.'a='b in 'T})}>>$
 
      guarantees that  $<<label["delete":t] 'S 'b>>$ has all elements that $S$ had except element $b$.}
- * @end[itemize]
- * @end[doc]
- *)
+   @end[itemize]
+   @end[doc]
+>>
 
 
-(*!
- * @begin[doc]
- * @modsubsection{Example: Sets as lists}
- *
- * The simplest example of an implementation of Set data structure uses lists.
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Example: Sets as lists}
+  
+   The simplest example of an implementation of Set data structure uses lists.
    The theory @hrefmodule[Itt_fset] already defined
    a type of finite sets as a type of lists,
- * quotiented over all permutations:
+   quotiented over all permutations:
    $$<< fset{'eq; 'T} >> = << (quot x, y : list{'T} // "assert"{fequal{'eq; 'x; 'y}}) >>$$
 
   where $T$ is an arbitrary type and $<<'eq>>$ is an equivalence relation on this type.
@@ -154,14 +154,14 @@ interactive set_intro  {| intro[] |}:
    Since @hrefmodule[Itt_fset]'s definition of sets needs a  decidable equality,
    we will define a functor that take a type with decidable equality $A$
    and construct a data structure of the type $<<Set[i:l]{.'A^car}>>$.
- * @end[doc]
- *)
+   @end[doc]
+>>
 extends Itt_fset
 extends Itt_relation_str
 
-(*!
- * @doc{Definition:}
- *)
+doc <:doc< 
+   @doc{Definition:}
+>>
 define set_as_list: set_as_list{'A} <-->
    {car =  fset{.'A^"=";. 'A^car};
     empty =  fempty;
@@ -170,26 +170,26 @@ define set_as_list: set_as_list{'A} <-->
     delete = lambda {S. lambda{x.fsub{.'A^"="; 'S;  fsingleton{'x}} }}
    }
 
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 dform sal_df : except_mode[src] :: set_as_list{'A} = `"set_as_list" "(" 'A ")"
 
-(*!
- * @doc{Theorem:}
- *)
+doc <:doc< 
+   @doc{Theorem:}
+>>
 interactive set_as_list_correct :
    sequent [squash] { 'H >- 'A in  DecEquality[i:l] } -->
    sequent ['ext] { 'H >- set_as_list{'A} in Set[i:l]{.'A^car} }
 
 
-(*!
- * @begin[doc]
- * @modsubsection{Remarks}
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Remarks}
     Note that decidable equality is important to define @tt[set_as_list].
     Actually we can prove that it is necessary for a type $T$ to have a decidable equality
     to implement a Set data structure:
- * @end[doc]
- *)
+   @end[doc]
+>>
 
 interactive necessity_of_deicidability univ[i:l]:
    [wf] sequent [squash] { 'H >- "type"{'T} } -->
@@ -197,24 +197,24 @@ interactive necessity_of_deicidability univ[i:l]:
    sequent ['ext] { 'H >- all a:'T. all b:'T. decidable{'a='b in 'T} }
 
 
-(*!
- * @begin[doc]
+doc <:doc< 
+   @begin[doc]
 More efficient implementation of Sets could be defined when type have an order.
 We will define such structures in  @hrefmodule[Itt_sorted_tree] and  @hrefmodule[Itt_rbtree].
- * @end[doc]
- *)
+   @end[doc]
+>>
 
 
-(*!
- * @begin[doc]
- * @modsection{Map data structure}
- *
- * Another common data structure is Table. A table is a partial function with a finite domain.
- * It can be viewed as a set of pairs $<<('argument,'value)>>$, where the first components of all pairs are different.
+doc <:doc< 
+   @begin[doc]
+   @modsection{Map data structure}
+  
+   Another common data structure is Table. A table is a partial function with a finite domain.
+   It can be viewed as a set of pairs $<<('argument,'value)>>$, where the first components of all pairs are different.
 
- * @modsubsection{Definitions}
- * @end[doc]
- *)
+   @modsubsection{Definitions}
+   @end[doc]
+>>
 
 
 
@@ -235,7 +235,7 @@ define table_sig: Table[i:l]{'T; x.'M['x]} <-->
        (not{'x_1='x_2 in 'T} => ^apply (^delete 'F 'x_2) 'x_1 = ^apply 'F 'x_1 in  'M['x_1] + unit)
    }
 
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 dform table_df : except_mode[src] :: Table[i:l]{'T; x.'M} = mathbbT `"able" sub{slot[i:l]} "(" (x:'T -> 'M)  ")"
 
@@ -244,12 +244,12 @@ define table_sig: Table[i:l]{'T;'M} <--> Table[i:l]{'T; x.'M}
 dform table_df2 : except_mode[src] :: Table[i:l]{'T; 'M} = mathbbT `"able" sub{slot[i:l]} "(" ('T -> 'M)  ")"
 
 
- (*!
- * @begin[doc]
+ doc <:doc< 
+   @begin[doc]
    This definitions says that table data structure has a constant $<<label["empty":t]>>$
    (an empty table, i.e. function that undefined on all elements).
- * Table has also the following functions:
- * @begin[itemize]
+   Table has also the following functions:
+   @begin[itemize]
     @item{ <<label["apply":t] 'F 'a>> applies the function $F$ to $a$.
      It returns $<<inr{'y}>>$  if $y$ is an result of the application
      and  $<<inl{it}>>$ if $a$ is not in domain of function $F$.
@@ -262,7 +262,7 @@ dform table_df2 : except_mode[src] :: Table[i:l]{'T; 'M} = mathbbT `"able" sub{s
     @item{<<label["delete":t] 'F 'a>> makes the function undefined at the point $a$.
     In other words it deletes a pair $<<'a,'y>>$
     from table $F$.}
- * @end[itemize]
+   @end[itemize]
 
    There are five specifications that guarantees that sets works properly:
   @begin[itemize]
@@ -281,17 +281,17 @@ dform table_df2 : except_mode[src] :: Table[i:l]{'T; 'M} = mathbbT `"able" sub{s
     @item{
    $<< (not{'x_1='x_2 in 'T} => label[apply:t] (label[delete:t] 'F 'x_2) 'x_1 = label[apply:t] 'F 'x_1 in  'M['x_1] + unit) >>$
     }
- * @end[itemize]
- * @end[doc]
- *)
+   @end[itemize]
+   @end[doc]
+>>
 
- (*!
- * @begin[doc]
+ doc <:doc< 
+   @begin[doc]
    @modsubsection{Sets as tables}
    Set is partial case of Table. We can construct a data structure $Set:<<Set[i:l]{'T}>>$ of sets of elements of type $T$
    from a given table $Table:<<Table[i:l]{'T; unit}>>$.
- * @end[doc]
- *)
+   @end[doc]
+>>
 
 define set_as_table: set_as_table{'Table} <-->
    {car =  'Table^car;
@@ -308,21 +308,21 @@ interactive set_as_table_correct :
 
 
 (*
-(*!
- * @begin[doc]
- * @modsubsection{Tables as lists}
- *
- * The simplest way to implement Tables is to use lists as carrier in the same way as we defined sets.
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Tables as lists}
+  
+   The simplest way to implement Tables is to use lists as carrier in the same way as we defined sets.
 
    Let us construct a $<<Table[i:l]{'A^car; x.'S['x]}>>$, where $A$ is an ordered set.
- * @end[doc]
- *)
+   @end[doc]
+>>
 
 
-(*! @docoff *)
+doc <:doc< @docoff >>
 define rel_prod: rel_prod{'R_1;'R_2} <--> lambda {a. lambda {b. 'R_1 fst{'a} fst{'b} band  'R_2 snd{'a} snd{'b} }}
 define rel_true: rel_true <--> lambda {a. lambda {b. btrue }}
-(*! @doc *)
+doc <:doc< @doc >>
 
 define set_as_list: set_as_list{'A} <-->
    {car =  fset{.rel_prod{'A^"="; rel_true};. 'A^car * 'S['x]};
@@ -332,13 +332,13 @@ define set_as_list: set_as_list{'A} <-->
     delete = lambda {S. lambda{x.lambda{y.fsub{.'A^"="; 'S;  fsingleton{'x,'y}} }}
    }
 
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 dform sal_df : except_mode[src] :: set_as_list{'A} = `"set_as_list" "(" 'A ")"
 
-(*!
- * @doc{Theorem:}
- *)
+doc <:doc< 
+   @doc{Theorem:}
+>>
 interactive set_as_list_correct :
    sequent [squash] { 'H >- 'A in  DecEquality[i:l] } -->
    sequent ['ext] { 'H >- set_as_list{'A} in Set[i:l]{.'A^car} }
@@ -346,4 +346,4 @@ interactive set_as_list_correct :
 *)
 
 
-(*! @docoff *)
+doc <:doc< @docoff >>

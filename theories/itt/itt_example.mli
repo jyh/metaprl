@@ -34,9 +34,7 @@ topval fold_door : conv
 topval fold_action : conv
 topval reduce_next : conv
 
-(*!
- * @docoff
- *
+(*
  * -*-
  * Local Variables:
  * Caml-master: "compile"

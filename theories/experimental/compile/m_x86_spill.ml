@@ -1,33 +1,33 @@
-(*!
- * @begin[spelling]
- * CPS SpillCopy SpillRegister dst vars
- * @end[spelling]
- *
- * Split a live range.
- *
- * ----------------------------------------------------------------
- *
- * @begin[license]
- * Copyright (C) 2003 Jason Hickey, Caltech
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- *
- * Author: Jason Hickey
- * @email{jyh@cs.caltech.edu}
- * @end[license]
- *)
+doc <:doc< 
+   @begin[spelling]
+   CPS SpillCopy SpillRegister dst vars
+   @end[spelling]
+  
+   Split a live range.
+  
+   ----------------------------------------------------------------
+  
+   @begin[license]
+   Copyright (C) 2003 Jason Hickey, Caltech
+  
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public License
+   as published by the Free Software Foundation; either version 2
+   of the License, or (at your option) any later version.
+  
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+  
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  
+   Author: Jason Hickey
+   @email{jyh@cs.caltech.edu}
+   @end[license]
+>>
 extends M_util
 extends M_x86_backend
 
@@ -60,23 +60,23 @@ open Tactic_type.Sequent
  * Reduction resource
  *)
 
-(*!
- * @begin[doc]
- * @resources
- *
- * @bf{The @Comment!resource[spill_resource]}
- *
- * The @tt{spill} resource provides a generic method for
- * defining @emph{CPS transformation}.  The @conv[spillC] conversion
- * can be used to apply this evaluator.
- *
- * The implementation of the @tt{spill_resource} and the @tt[spillC]
- * conversion rely on tables to store the shape of redices, together with the
- * conversions for the reduction.
- *
- * @docoff
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @resources
+  
+   @bf{The @Comment!resource[spill_resource]}
+  
+   The @tt{spill} resource provides a generic method for
+   defining @emph{CPS transformation}.  The @conv[spillC] conversion
+   can be used to apply this evaluator.
+  
+   The implementation of the @tt{spill_resource} and the @tt[spillC]
+   conversion rely on tables to store the shape of redices, together with the
+   conversions for the reduction.
+  
+   @docoff
+   @end[doc]
+>>
 let resource spill =
    table_resource_info identity extract_data
 
@@ -92,27 +92,27 @@ let spillC =
  * Spill code.
  *)
 
-(*!
- * @begin[doc]
- * @modsubsection{Spilling}
- *
- * Spilling is done in two parts.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Spilling}
+  
+   Spilling is done in two parts.
+   @end[doc]
+>>
 
-(*!
- ************************************************************************
- * @begin[doc]
- * @modsubsection{Spill phase 1}
- *
- * When the register allocator first asks that a register be spilled,
- * we make it a "potential spill," meaning that we assign it a spill
- * location, but leave it in a register.  The operand changes from
- * Register{'v} to SpillRegister{'v; 'spill} where 'spill is the new
- * spill location.  The following rules add the spill after a binding
- * occurrence.
- * @end[doc]
- *)
+doc <:doc< 
+  ***********************************************************************
+   @begin[doc]
+   @modsubsection{Spill phase 1}
+  
+   When the register allocator first asks that a register be spilled,
+   we make it a "potential spill," meaning that we assign it a spill
+   location, but leave it in a register.  The operand changes from
+   Register{'v} to SpillRegister{'v; 'spill} where 'spill is the new
+   spill location.  The following rules add the spill after a binding
+   occurrence.
+   @end[doc]
+>>
 prim_rw spill_mov :
    Mov{'src; dst. 'rest['dst]}
    <-->
@@ -162,12 +162,12 @@ prim_rw spill_set :
    Spill["set"]{Register{'dst}; spill.
    'rest[SpillRegister{'dst; 'spill}]}}
 
-(*!
- * @begin[doc]
- * We define a conversion for the first phase that searches for the spill
- * binding occurrences and applies the appropriate rewrites.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   We define a conversion for the first phase that searches for the spill
+   binding occurrences and applies the appropriate rewrites.
+   @end[doc]
+>>
 let phase1C vars =
    let convC inst =
       match inst with
@@ -202,21 +202,21 @@ let phase1C vars =
    in
       funC convC
 
-(*!
- * @begin[doc]
- * In the next part of phase1, find all instructions that now have a
- * SpillRegister operand, and copy the operand.  This splits the live
- * range, but keeps the spill location.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   In the next part of phase1, find all instructions that now have a
+   SpillRegister operand, and copy the operand.  This splits the live
+   range, but keeps the spill location.
+   @end[doc]
+>>
 prim_rw spill_split bind{v. 'e['v]} :
    Spill["copy"]{SpillRegister{'v1; 'spill}; v2. 'e[SpillRegister{'v2; 'spill}]} <--> 'e[SpillRegister{'v1; 'spill}]
 
-(*!
- * @begin[doc]
- * This is the conversion that splits the spill range.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   This is the conversion that splits the spill range.
+   @end[doc]
+>>
 let rec splitC_aux vars =
    match vars with
       [] ->
@@ -323,12 +323,12 @@ let splitTopC =
 
 let splitC = sweepUpFailC splitTopC
 
-(*!
- * @begin[doc]
- * Once the splits have been added, cleanup the remaining instructions
- * by removing spill vars.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   Once the splits have been added, cleanup the remaining instructions
+   by removing spill vars.
+   @end[doc]
+>>
 prim_rw register_spill_register :
    Register{SpillRegister{'v; 'spill}}
    <-->
@@ -366,17 +366,17 @@ let phase1T vars =
    thenT rw splitC 0
    thenT rw spillC 0
 
-(*!
- ************************************************************************
- * @begin[doc]
- * @modsubsection{Spill phase 2}
- *
- * We assume that the live range of a variable has already been split.
- * If the register allocator chooses to spill one of the variables,
- * we eliminate the register associated with that variable, forcing the
- * fetch from the spill.
- * @end[doc]
- *)
+doc <:doc< 
+  ***********************************************************************
+   @begin[doc]
+   @modsubsection{Spill phase 2}
+  
+   We assume that the live range of a variable has already been split.
+   If the register allocator chooses to spill one of the variables,
+   we eliminate the register associated with that variable, forcing the
+   fetch from the spill.
+   @end[doc]
+>>
 prim_rw spill_fetch :
    Spill["copy"]{SpillRegister{'v1; 'spill}; v2. 'e['v2]}
    <-->
@@ -408,24 +408,24 @@ let phase2C vars =
 let phase2T vars =
    rw (sweepUpFailC (phase2C vars)) 0
 
-(*!
- ************************************************************************
- * @begin[doc]
- * @modsubsection{Main spill code}
- *
- * The main spill code generator gets a set of variables to spill
- * from the register allocator.  It first classifies every variable
- * in the program.
- *
- *    1. A variable is a phase1 variable if it is the dst of a non-spill
- *       instruction.
- *    2. A variable is a phase2 variable if it is the dst of a SpillCopy
- *       instruction.
- *
- * The main spiller then runs phase1 on the phase1 vars, and
- * phase2 on the phase2 vars.
- * @end[doc]
- *)
+doc <:doc< 
+  ***********************************************************************
+   @begin[doc]
+   @modsubsection{Main spill code}
+  
+   The main spill code generator gets a set of variables to spill
+   from the register allocator.  It first classifies every variable
+   in the program.
+  
+      1. A variable is a phase1 variable if it is the dst of a non-spill
+         instruction.
+      2. A variable is a phase2 variable if it is the dst of a SpillCopy
+         instruction.
+  
+   The main spiller then runs phase1 on the phase1 vars, and
+   phase2 on the phase2 vars.
+   @end[doc]
+>>
 
 (*
  * Classify the vars by waling the entire program.
@@ -504,7 +504,7 @@ let spillT vars p =
    in
       tac p
 
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 (*
  * Debug version.

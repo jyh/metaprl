@@ -1,52 +1,52 @@
-(*!
- * @begin[doc]
- * @module[Mfir_bool]
- *
- * The @tt[Mfir_bool] module implements meta-booleans; the booleans in this
- * module are not the same as the booleans found in FIR programs.
- * @end[doc]
- *
- * ------------------------------------------------------------------------
- *
- * @begin[license]
- * This file is part of MetaPRL, a modular, higher order
- * logical framework that provides a logical programming
- * environment for OCaml and other languages.  Additional
- * information about the system is available at
- * http://www.metaprl.org/
- *
- * Copyright (C) 2002 Brian Emre Aydemir, Caltech
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- *
- * Author: Brian Emre Aydemir
- * @email{emre@cs.caltech.edu}
- * @end[license]
- *)
+doc <:doc< 
+   @begin[doc]
+   @module[Mfir_bool]
+  
+   The @tt[Mfir_bool] module implements meta-booleans; the booleans in this
+   module are not the same as the booleans found in FIR programs.
+   @end[doc]
+  
+   ------------------------------------------------------------------------
+  
+   @begin[license]
+   This file is part of MetaPRL, a modular, higher order
+   logical framework that provides a logical programming
+   environment for OCaml and other languages.  Additional
+   information about the system is available at
+   http://www.metaprl.org/
+  
+   Copyright (C) 2002 Brian Emre Aydemir, Caltech
+  
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public License
+   as published by the Free Software Foundation; either version 2
+   of the License, or (at your option) any later version.
+  
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+  
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  
+   Author: Brian Emre Aydemir
+   @email{emre@cs.caltech.edu}
+   @end[license]
+>>
 
-(*!
- * @begin[doc]
- * @parents
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @parents
+   @end[doc]
+>>
 
 extends Base_theory
 
-(*!
- * @docoff
- *)
+doc <:doc< 
+   @docoff
+>>
 
 open Top_conversionals
 
@@ -55,36 +55,36 @@ open Top_conversionals
  * Declarations.
  **************************************************************************)
 
-(*!
- * @begin[doc]
- * @terms
- *
- * The terms @tt[true] and @tt[false] are boolean constants.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @terms
+  
+   The terms @tt[true] and @tt[false] are boolean constants.
+   @end[doc]
+>>
 
 declare "true"
 declare "false"
 
 
-(*!
- * @begin[doc]
- *
- * The terms @tt[or], @tt[and], and @tt[not] are boolean connectives.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   The terms @tt[or], @tt[and], and @tt[not] are boolean connectives.
+   @end[doc]
+>>
 
 declare "or"{ 'bool1; 'bool2 }
 declare "and"{ 'bool1; 'bool2 }
 declare "not"{ 'boolean }
 
 
-(*!
- * @begin[doc]
- *
- * The term @tt[ifthenelse] performs a case analysis on @tt[test].
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   The term @tt[ifthenelse] performs a case analysis on @tt[test].
+   @end[doc]
+>>
 
 declare ifthenelse{ 'test; 'true_case; 'false_case }
 
@@ -93,13 +93,13 @@ declare ifthenelse{ 'test; 'true_case; 'false_case }
  * Rewrites.
  **************************************************************************)
 
-(*!
- * @begin[doc]
- * @rewrites
- *
- * Case analysis on booleans is straightforward.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @rewrites
+  
+   Case analysis on booleans is straightforward.
+   @end[doc]
+>>
 
 prim_rw reduce_ifthenelse_true :
    ifthenelse{ "true"; 't; 'f } <-->
@@ -109,20 +109,20 @@ prim_rw reduce_ifthenelse_false :
    ifthenelse{ "false"; 't; 'f } <-->
    'f
 
-(*!
- * @docoff
- *)
+doc <:doc< 
+   @docoff
+>>
 
 let reduce_ifthenelse =
    reduce_ifthenelse_true orelseC reduce_ifthenelse_false
 
 
-(*!
- * @begin[doc]
- *
- * The logical connectives are treated classically.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   The logical connectives are treated classically.
+   @end[doc]
+>>
 
 prim_rw reduce_and :
    "and"{ 'bool1; 'bool2 } <-->
@@ -136,9 +136,9 @@ prim_rw reduce_not :
    "not"{ 'b } <-->
    ifthenelse{ 'b; "false"; "true" }
 
-(*!
- * @docoff
- *)
+doc <:doc< 
+   @docoff
+>>
 
 let resource reduce += [
    << "and"{ 'bool1; 'bool2 } >>, reduce_and;

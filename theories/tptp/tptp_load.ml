@@ -50,12 +50,12 @@ open Tptp
 (*
  * string -> path commands
  *)
-let set_path doc var path =
+let set_path _ var path =
    let path' = String_util.split ':' path in
       var := path'
 
-let set_path_arg doc var =
-   Arg.String (set_path doc var)
+let set_path_arg d var =
+   Arg.String (set_path d var)
 
 (*
  * This is a list of hosts to use for database lookup.

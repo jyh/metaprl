@@ -1,102 +1,102 @@
-(*!
- * @spelling{fol}
- *
- * @begin[doc]
- * @module[Czf_itt_fol]
- *
- * The @tt{Czf_itt_fol} module defines the first-order logic for
- * the set theory.  The predicates are defined as follows.
- *
- * $$
- * @begin[array, ccl]
- * @line{@sfalse @equiv @void}
- * @line{@strue @equiv @unit}
- * @line{@sor{A; B} @equiv  <<'A+'B>>}
- * @line{@sand{A; B} @equiv @prod{A; B}}
- * @line{@simplies{A; B} @equiv @fun{A; B}}
- * @line{@sexists{x; A; B[x]} @equiv @prod{x; A; B[x]}}
- * @line{@sall{x; A; B[x]} @equiv @fun{x; A; B[x]}}
- * @end[array]
- * $$
- *
- * The first-order logic is defined in seven modules, one
- * for each logical operator: @tt{Czf_itt_false}, @tt{Czf_itt_true},
- * @tt{Czf_itt_or}, @tt{Czf_itt_and}, @tt{Czf_itt_implies},
- * @tt{Czf_itt_exists}, and @tt{Czf_itt_all}.
- *
- * We omit the modules, the proofs are straightforward.  The
- * goal of these modules is to prove @emph{functionality} and
- * @emph{restriction} of each of the operators.  The restriction
- * judgment follows directly from the well-formedness of the
- * logical operators.  The disjunction demonstrates a typical argument
- * of functionality for a propositional operator.
- *
- * @begin[description]
- * @item{Functionality of disjunction;
- *   {The goal is $@funprop{z; @sor{A[z]; B[z]}}$, assuming $@funprop{z; A[z]}$
- *    and $@funprop{z; B[z]}$.  To prove this, assume $@sor{A[s_1]; B[s_1]}$ for
- *    some set $s_1$, and prove $@sor{A[s_2]; B[s_2]}$ for some set $s_2 = s_1$.
- *
- *    First, perform a case analysis on $@sor{A[s_1]; B[s_1]}$.  In the case
- *    where $A[s_1]$, a proof of $A[s_2]$ can be constructed from the proof
- *    of functionality of $A$.  This proof is sufficient for proving
- *    $@sor{A[s_2]; B[s_2]}$.  The case for $B$ is similar.}}
- * @end[description]
- *
- * The quantifiers are somewhat more difficult.  Strictly speaking,
- * the quantifiers are unnecessary, because the set theory can't reason
- * about the programs in the first-order logic directly.  The
- * usual set-theoretic quantifiers are defined in the
- * @hrefmodule[Czf_itt_dall], @hrefmodule[Czf_itt_dexists],
- * @hrefmodule[Czf_itt_sall], and @hrefmodule[Czf_itt_sexists]
- * modules. The existential demonstrates a typical functionality
- * argument.
- *
- * @begin[description]
- * @item{Functionality of existential quantification;
- *   {The goal is to prove $@funprop{z; @prod{w; A[z]; B[z, w]}}$,
- *    given $@funprop{z; A[z]}$ and $@dfunprop{w; A[z]; B[z, w]}$
- *    for any set $z$.  This means that we must produce a proof
- *    of $@prod{w; A[z_1]; B[z_1, w]}$ from a proof of
- *    $@prod{w; A[z_2]; B[z_2, w]}$ for any two equal sets
- *    $z_1$ and $z_2$.
- *
- *    The assumption $@funprop{z; A[z]}$ means that a proof
- *    of $A[z_2]$ can be computed from a proof $A[z_1]$ for
- *    any equal sets $z_1$ and $z_2$.  The second assumption
- *    means that a proof $B[z_2, w_2]$ can be found given
- *    @emph{any} proofs $w_1@colon A[z_1]$, $w_2@colon A[z_2]$,
- *    and $B[z_1; w_1]$.  The proof of the goal is constructed
- *    from the proof $w_2@colon A[z_2]$ and the proof of
- *    $B[z_2, w_2]$.}}
- * @end[description]
- *
- * @docoff
- * @end[doc]
- *
- * ----------------------------------------------------------------
- *
- * @begin[license]
- * Copyright (C) 2000 Jason Hickey, Caltech
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- *
- * Author: Jason Hickey
- * @email{jyh@cs.caltech.edu}
- * @end[license]
- *)
+doc <:doc< 
+   @spelling{fol}
+  
+   @begin[doc]
+   @module[Czf_itt_fol]
+  
+   The @tt{Czf_itt_fol} module defines the first-order logic for
+   the set theory.  The predicates are defined as follows.
+  
+   $$
+   @begin[array, ccl]
+   @line{@sfalse @equiv @void}
+   @line{@strue @equiv @unit}
+   @line{@sor{A; B} @equiv  <<'A+'B>>}
+   @line{@sand{A; B} @equiv @prod{A; B}}
+   @line{@simplies{A; B} @equiv @fun{A; B}}
+   @line{@sexists{x; A; B[x]} @equiv @prod{x; A; B[x]}}
+   @line{@sall{x; A; B[x]} @equiv @fun{x; A; B[x]}}
+   @end[array]
+   $$
+  
+   The first-order logic is defined in seven modules, one
+   for each logical operator: @tt{Czf_itt_false}, @tt{Czf_itt_true},
+   @tt{Czf_itt_or}, @tt{Czf_itt_and}, @tt{Czf_itt_implies},
+   @tt{Czf_itt_exists}, and @tt{Czf_itt_all}.
+  
+   We omit the modules, the proofs are straightforward.  The
+   goal of these modules is to prove @emph{functionality} and
+   @emph{restriction} of each of the operators.  The restriction
+   judgment follows directly from the well-formedness of the
+   logical operators.  The disjunction demonstrates a typical argument
+   of functionality for a propositional operator.
+  
+   @begin[description]
+   @item{Functionality of disjunction;
+     {The goal is $@funprop{z; @sor{A[z]; B[z]}}$, assuming $@funprop{z; A[z]}$
+      and $@funprop{z; B[z]}$.  To prove this, assume $@sor{A[s_1]; B[s_1]}$ for
+      some set $s_1$, and prove $@sor{A[s_2]; B[s_2]}$ for some set $s_2 = s_1$.
+  
+      First, perform a case analysis on $@sor{A[s_1]; B[s_1]}$.  In the case
+      where $A[s_1]$, a proof of $A[s_2]$ can be constructed from the proof
+      of functionality of $A$.  This proof is sufficient for proving
+      $@sor{A[s_2]; B[s_2]}$.  The case for $B$ is similar.}}
+   @end[description]
+  
+   The quantifiers are somewhat more difficult.  Strictly speaking,
+   the quantifiers are unnecessary, because the set theory can't reason
+   about the programs in the first-order logic directly.  The
+   usual set-theoretic quantifiers are defined in the
+   @hrefmodule[Czf_itt_dall], @hrefmodule[Czf_itt_dexists],
+   @hrefmodule[Czf_itt_sall], and @hrefmodule[Czf_itt_sexists]
+   modules. The existential demonstrates a typical functionality
+   argument.
+  
+   @begin[description]
+   @item{Functionality of existential quantification;
+     {The goal is to prove $@funprop{z; @prod{w; A[z]; B[z, w]}}$,
+      given $@funprop{z; A[z]}$ and $@dfunprop{w; A[z]; B[z, w]}$
+      for any set $z$.  This means that we must produce a proof
+      of $@prod{w; A[z_1]; B[z_1, w]}$ from a proof of
+      $@prod{w; A[z_2]; B[z_2, w]}$ for any two equal sets
+      $z_1$ and $z_2$.
+  
+      The assumption $@funprop{z; A[z]}$ means that a proof
+      of $A[z_2]$ can be computed from a proof $A[z_1]$ for
+      any equal sets $z_1$ and $z_2$.  The second assumption
+      means that a proof $B[z_2, w_2]$ can be found given
+      @emph{any} proofs $w_1@colon A[z_1]$, $w_2@colon A[z_2]$,
+      and $B[z_1; w_1]$.  The proof of the goal is constructed
+      from the proof $w_2@colon A[z_2]$ and the proof of
+      $B[z_2, w_2]$.}}
+   @end[description]
+  
+   @docoff
+   @end[doc]
+  
+   ----------------------------------------------------------------
+  
+   @begin[license]
+   Copyright (C) 2000 Jason Hickey, Caltech
+  
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public License
+   as published by the Free Software Foundation; either version 2
+   of the License, or (at your option) any later version.
+  
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+  
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  
+   Author: Jason Hickey
+   @email{jyh@cs.caltech.edu}
+   @end[license]
+>>
 
 extends Czf_itt_false
 extends Czf_itt_true

@@ -41,9 +41,7 @@ resource (term * conv, conv) after_ra
 topval opt_before_raT : tactic
 topval opt_after_raT : tactic
 
-(*!
- * @docoff
- *
+(*
  * -*-
  * Local Variables:
  * Caml-master: "compile"

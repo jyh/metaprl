@@ -1,7 +1,7 @@
 extends Itt_theory
 extends Itt_nat
 
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 open Printf
 open Mp_debug

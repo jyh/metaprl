@@ -1,49 +1,49 @@
-(*!
- * @begin[doc]
- * @theory{ITT: Intuitionistic Type Theory}
- * @module[Itt_theory]
- *
- * The @tt{Itt_theory} module collects all of the modules in the
- * @Nuprl type theory.  This is the basic module to use when
- * stating and proving theorems in the @Nuprl type theory.
- * @end[doc]
- *
- * ----------------------------------------------------------------
- *
- * @begin[license]
- * This file is part of MetaPRL, a modular, higher order
- * logical framework that provides a logical programming
- * environment for OCaml and other languages.
- *
- * See the file doc/index.html for information on Nuprl,
- * OCaml, and more information about this system.
- *
- * Copyright (C) 1998 Jason Hickey, Cornell University
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- *
- * Author: Jason Hickey
- * @email{jyh@cs.cornell.edu}
- * @end[license]
- *)
+doc <:doc< 
+   @begin[doc]
+   @theory{ITT: Intuitionistic Type Theory}
+   @module[Itt_theory]
+  
+   The @tt{Itt_theory} module collects all of the modules in the
+   @Nuprl type theory.  This is the basic module to use when
+   stating and proving theorems in the @Nuprl type theory.
+   @end[doc]
+  
+   ----------------------------------------------------------------
+  
+   @begin[license]
+   This file is part of MetaPRL, a modular, higher order
+   logical framework that provides a logical programming
+   environment for OCaml and other languages.
+  
+   See the file doc/index.html for information on Nuprl,
+   OCaml, and more information about this system.
+  
+   Copyright (C) 1998 Jason Hickey, Cornell University
+  
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public License
+   as published by the Free Software Foundation; either version 2
+   of the License, or (at your option) any later version.
+  
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+  
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  
+   Author: Jason Hickey
+   @email{jyh@cs.cornell.edu}
+   @end[license]
+>>
 
-(*!
- * @begin[doc]
- * @parents
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @parents
+   @end[doc]
+>>
 extends Base_theory
 extends Itt_equal
 extends Itt_struct
@@ -78,12 +78,12 @@ extends Itt_list2
 extends Itt_esquash
 extends Itt_quotient
 
-(*!
- * Theories we do not want to include in the
- * documentation.
- *
- * @docoff
- *)
+doc <:doc< 
+   Theories we do not want to include in the
+   documentation.
+  
+   @docoff
+>>
 extends Itt_atom_bool
 extends Itt_derive
 extends Itt_prop_decide

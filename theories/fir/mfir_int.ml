@@ -1,51 +1,51 @@
-(*!
- * @begin[doc]
- * @module[Mfir_int]
- *
- * The @tt[Mfir_int] module defines integers and operations on integers.
- * @end[doc]
- *
- * ------------------------------------------------------------------------
- *
- * @begin[license]
- * This file is part of MetaPRL, a modular, higher order
- * logical framework that provides a logical programming
- * environment for OCaml and other languages.  Additional
- * information about the system is available at
- * http://www.metaprl.org/
- *
- * Copyright (C) 2002 Brian Emre Aydemir, Caltech
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- *
- * Author: Brian Emre Aydemir
- * @email{emre@cs.caltech.edu}
- * @end[license]
- *)
+doc <:doc< 
+   @begin[doc]
+   @module[Mfir_int]
+  
+   The @tt[Mfir_int] module defines integers and operations on integers.
+   @end[doc]
+  
+   ------------------------------------------------------------------------
+  
+   @begin[license]
+   This file is part of MetaPRL, a modular, higher order
+   logical framework that provides a logical programming
+   environment for OCaml and other languages.  Additional
+   information about the system is available at
+   http://www.metaprl.org/
+  
+   Copyright (C) 2002 Brian Emre Aydemir, Caltech
+  
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public License
+   as published by the Free Software Foundation; either version 2
+   of the License, or (at your option) any later version.
+  
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+  
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  
+   Author: Brian Emre Aydemir
+   @email{emre@cs.caltech.edu}
+   @end[license]
+>>
 
-(*!
- * @begin[doc]
- * @parents
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @parents
+   @end[doc]
+>>
 
 extends Mfir_bool
 
-(*!
- * @docoff
- *)
+doc <:doc< 
+   @docoff
+>>
 
 open Base_meta
 open Top_conversionals
@@ -56,23 +56,23 @@ open Mfir_bool
  * Declarations.
  **************************************************************************)
 
-(*!
- * @begin[doc]
- * @terms
- *
- * The term @tt{number[i:n]} represents the integer $i$.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @terms
+  
+   The term @tt{number[i:n]} represents the integer $i$.
+   @end[doc]
+>>
 
 declare number[i:n]
 
 
-(*!
- * @begin[doc]
- *
- * Basic arithmetic operations can be applied to integers.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   Basic arithmetic operations can be applied to integers.
+   @end[doc]
+>>
 
 declare add{ 'num1; 'num2 }
 declare sub{ 'num1; 'num2 }
@@ -85,12 +85,12 @@ declare int_min{ 'num1; 'num2 }
 declare int_max{ 'num1; 'num2 }
 
 
-(*!
- * @begin[doc]
- *
- * Integers can be compared using the following six binary operators.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   Integers can be compared using the following six binary operators.
+   @end[doc]
+>>
 
 declare int_eq{ 'num1; 'num2 }
 declare int_neq{ 'num1; 'num2 }
@@ -104,19 +104,19 @@ declare int_ge{ 'num1; 'num2 }
  * Rewrites.
  **************************************************************************)
 
-(*!
- * @begin[doc]
- * @rewrites
- *
- * The arithmetic and comparison operators above can be rewritten to numbers
- * and booleans using meta operations from the @tt[Base_meta] module.  These
- * rewrites are straightforward, and we omit an explicit listing of them.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @rewrites
+  
+   The arithmetic and comparison operators above can be rewritten to numbers
+   and booleans using meta operations from the @tt[Base_meta] module.  These
+   rewrites are straightforward, and we omit an explicit listing of them.
+   @end[doc]
+>>
 
-(*!
- * @docoff
- *)
+doc <:doc< 
+   @docoff
+>>
 
 (*
  * Intermediate term for arithmetic operations.

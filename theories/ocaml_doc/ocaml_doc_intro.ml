@@ -1,42 +1,42 @@
-(*! -*- Mode: text -*-
- *
- * @begin[spelling]
- * API CS Caml LCF ML Milner Monolithic Scalability Vino rec scalability
- * stance filesystems ll gcd updatable coercions destructors vs
- * @end[spelling]
- *
- * @begin[doc]
- * @chapter[ocaml_doc_intro]{Introduction}
- * @end[doc]
- *
- * ----------------------------------------------------------------
- *
- * @begin[license]
- * Copyright (C) 2000 Jason Hickey, Caltech
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- *
- * Author: Jason Hickey
- * @email{jyh@cs.caltech.edu}
- * @end[license]
- *)
+doc <:doc< -*- Mode: text -*-
+  
+   @begin[spelling]
+   API CS Caml LCF ML Milner Monolithic Scalability Vino rec scalability
+   stance filesystems ll gcd updatable coercions destructors vs
+   @end[spelling]
+  
+   @begin[doc]
+   @chapter[ocaml_doc_intro]{Introduction}
+   @end[doc]
+  
+   ----------------------------------------------------------------
+  
+   @begin[license]
+   Copyright (C) 2000 Jason Hickey, Caltech
+  
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public License
+   as published by the Free Software Foundation; either version 2
+   of the License, or (at your option) any later version.
+  
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+  
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  
+   Author: Jason Hickey
+   @email{jyh@cs.caltech.edu}
+   @end[license]
+>>
 
-(*! @docoff *)
+doc <:doc< @docoff >>
 extends Base_theory
 
-(*!
+doc <:doc< 
 @begin[doc]
 
 This document is an introduction to ML programming, specifically for
@@ -127,9 +127,9 @@ algorithm would normally be written in an imperative language like C.
 
 @begin[verbatim]
 /*
-* * Determine the greatest common divisor of two positive
-* * numbers a and b.  We assume a>b.
-* */
+  * Determine the greatest common divisor of two positive
+  * numbers a and b.  We assume a>b.
+  */
 int gcd(int a, int b)
 {
    int r;
@@ -197,13 +197,13 @@ OCaml home page @url["http://www.ocaml.org/"].
 The author can be reached at @email{jyh@cs.caltech.edu}.
 
 @end[doc]
-*)
+>>
 
-(*!
- * @docoff
- * -*-
- * Local Variables:
- * Caml-master: "compile"
- * End:
- * -*-
- *)
+doc <:doc< 
+   @docoff
+   -*-
+   Local Variables:
+   Caml-master: "compile"
+   End:
+   -*-
+>>

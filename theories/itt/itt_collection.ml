@@ -1,49 +1,49 @@
-(*!
- * @begin[doc]
- * @module[Itt_collection]
- * The @tt{Itt_collection} module formalized the type of indexed collections.
- * See @cite["Nog02a,Nog02b"] for more information.
- * @end[doc]
- *
- * ----------------------------------------------------------------
- *
- * @begin[license]
- *
- * This file is part of MetaPRL, a modular, higher order
- * logical framework that provides a logical programming
- * environment for OCaml and other languages.
- *
- * See the file doc/index.html for information on Nuprl,
- * OCaml, and more information about this system.
- *
- * Copyright (C) 2000-2001
- * Alexei Kopylov & Aleksey Nogin, Cornell University
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- *
- * Authors: Alexei Kopylov @email{kopylov@cs.cornell.edu}
- *          Aleksey Nogin @email{nogin@cs.cornell.edu}
- *
- * @end[license]
- *)
+doc <:doc< 
+   @begin[doc]
+   @module[Itt_collection]
+   The @tt{Itt_collection} module formalized the type of indexed collections.
+   See @cite["Nog02a,Nog02b"] for more information.
+   @end[doc]
+  
+   ----------------------------------------------------------------
+  
+   @begin[license]
+  
+   This file is part of MetaPRL, a modular, higher order
+   logical framework that provides a logical programming
+   environment for OCaml and other languages.
+  
+   See the file doc/index.html for information on Nuprl,
+   OCaml, and more information about this system.
+  
+   Copyright (C) 2000-2001
+   Alexei Kopylov & Aleksey Nogin, Cornell University
+  
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public License
+   as published by the Free Software Foundation; either version 2
+   of the License, or (at your option) any later version.
+  
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+  
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  
+   Authors: Alexei Kopylov @email{kopylov@cs.cornell.edu}
+            Aleksey Nogin @email{nogin@cs.cornell.edu}
+  
+   @end[license]
+>>
 
-(*!
- * @begin[doc]
- * @parents
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @parents
+   @end[doc]
+>>
 
 extends Itt_bool
 extends Itt_subtype
@@ -52,7 +52,7 @@ extends Itt_esquash
 extends Itt_quotient
 extends Itt_logic
 
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 open Itt_struct
 open Itt_squash
@@ -80,12 +80,12 @@ open Typeinf
 open Base_auto_tactic
 open Base_dtactic
 
-(*!
- * @begin[doc]
- * @rules
- * @modsubsection{Basic definitions}
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @rules
+   @modsubsection{Basic definitions}
+   @end[doc]
+>>
 
 (*--- col ---*)
 
@@ -221,7 +221,7 @@ interactive col_type_wf {| intro [intro_univ_arg] |} univ[l:l] :
    sequent['ext]   {'H >- "type"{col_type{'C;'T}}}
 
 
-(*! @doc{@modsubsection{Basic operations}} *)
+doc <:doc< @doc{@modsubsection{Basic operations}} >>
 
 (*--- singleton ---*)
 
@@ -271,7 +271,7 @@ interactive member_union_elim {| elim [ThinOption thinT] |} 'H :
    sequent['ext] {'H; u:col_member{"union"{'X;x.'Y['x]};'y}; 'J >- squash{'Z} }
 
 
-(*! @doc{@modsubsection{Other operations}} *)
+doc <:doc< @doc{@modsubsection{Other operations}} >>
 
 (*--- col_filter ---*)
 
@@ -478,7 +478,7 @@ interactive singleton_if  univ[l:l] :
 
 *)
 
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 (********************** Tactics *********************)
 

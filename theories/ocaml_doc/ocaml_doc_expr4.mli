@@ -25,9 +25,7 @@
  * @end[license]
  *)
 
-(*!
- * @docoff
- *
+(*
  * -*-
  * Local Variables:
  * Caml-master: "compile"

@@ -46,9 +46,7 @@ topval deadC : conv
  *)
 topval deadT : tactic
 
-(*!
- * @docoff
- *
+(*
  * -*-
  * Local Variables:
  * Caml-master: "compile"

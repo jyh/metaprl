@@ -1,71 +1,71 @@
-(*!
- * @begin[doc]
- * @module[Itt_w]
- *
- * The @tt{Itt_w} module defines the recursive @i{W}-type.
- * The @i{W} type has the form $@w{x; A; B[x]}$, where
- * $A$ is a type, and $B[a]$ is a family of types indexed by
- * $a @in A$.
- *
- * The elements of the @i{W}-type are the nodes $@tree{a; f}$,
- * where $a @in A$, and $f$ is a function with domain $B[a]$ that produces
- * the ``children'' of the node.  The children also inhabit the
- * @i{W}-type, and $f$ is required to have type
- * $B[a] @rightarrow @w{x; A; B[x]}$.
- *
- * The @i{W}-type is defined as primitive.  It @emph{can}
- * be derived from the recursive type @hrefmodule[Itt_srec], with
- * the definition:
- *
- * $$@w{x; A; B[x]} @equiv @srec{T; @prod{x; A; @fun{B[a]; T}}}.$$
- *
- * However, the $W$ type has a simpler semantics than the recursive
- * type.  We keep it as primitive so that the recursive type can
- * be omitted if the semantics are questionable.
- * @end[doc]
- *
- * ----------------------------------------------------------------
- *
- * @begin[license]
- * This file is part of MetaPRL, a modular, higher order
- * logical framework that provides a logical programming
- * environment for OCaml and other languages.
- *
- * See the file doc/index.html for information on Nuprl,
- * OCaml, and more information about this system.
- *
- * Copyright (C) 1998 Jason Hickey, Cornell University
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- *
- * Author: Jason Hickey
- * @email{jyh@cs.cornell.edu}
- * @end[license]
- *)
+doc <:doc< 
+   @begin[doc]
+   @module[Itt_w]
+  
+   The @tt{Itt_w} module defines the recursive @i{W}-type.
+   The @i{W} type has the form $@w{x; A; B[x]}$, where
+   $A$ is a type, and $B[a]$ is a family of types indexed by
+   $a @in A$.
+  
+   The elements of the @i{W}-type are the nodes $@tree{a; f}$,
+   where $a @in A$, and $f$ is a function with domain $B[a]$ that produces
+   the ``children'' of the node.  The children also inhabit the
+   @i{W}-type, and $f$ is required to have type
+   $B[a] @rightarrow @w{x; A; B[x]}$.
+  
+   The @i{W}-type is defined as primitive.  It @emph{can}
+   be derived from the recursive type @hrefmodule[Itt_srec], with
+   the definition:
+  
+   $$@w{x; A; B[x]} @equiv @srec{T; @prod{x; A; @fun{B[a]; T}}}.$$
+  
+   However, the $W$ type has a simpler semantics than the recursive
+   type.  We keep it as primitive so that the recursive type can
+   be omitted if the semantics are questionable.
+   @end[doc]
+  
+   ----------------------------------------------------------------
+  
+   @begin[license]
+   This file is part of MetaPRL, a modular, higher order
+   logical framework that provides a logical programming
+   environment for OCaml and other languages.
+  
+   See the file doc/index.html for information on Nuprl,
+   OCaml, and more information about this system.
+  
+   Copyright (C) 1998 Jason Hickey, Cornell University
+  
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public License
+   as published by the Free Software Foundation; either version 2
+   of the License, or (at your option) any later version.
+  
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+  
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  
+   Author: Jason Hickey
+   @email{jyh@cs.cornell.edu}
+   @end[license]
+>>
 
-(*!
- * @begin[doc]
- * @parents
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @parents
+   @end[doc]
+>>
 extends Itt_equal
 extends Itt_rfun
 extends Itt_struct
 extends Itt_struct2
 extends Itt_inv_typing
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 open Opname
 open Refiner.Refiner
@@ -89,52 +89,52 @@ open Itt_struct
  * TERMS                                                                *
  ************************************************************************)
 
-(*!
- * @begin[doc]
- * @terms
- *
- * The $W$ type is type of trees, $W = @prod{a; A; @fun{B[a]; W}}$.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @terms
+  
+   The $W$ type is type of trees, $W = @prod{a; A; @fun{B[a]; W}}$.
+   @end[doc]
+>>
 declare w{'A; x. 'B['x]}
 
-(*!
- * @begin[doc]
- * The @tt{tree} terms inhabit the $W$-type.
- * Each node has a label $a @in A$, and a function $f$ with
- * domain $B[a]$ to compute the children of the node.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   The @tt{tree} terms inhabit the $W$-type.
+   Each node has a label $a @in A$, and a function $f$ with
+   domain $B[a]$ to compute the children of the node.
+   @end[doc]
+>>
 declare tree{'a; 'f}
 
-(*!
- * @begin[doc]
- * The @tt[tree_ind] term is the induction combinator, which
- * provides computation over trees.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   The @tt[tree_ind] term is the induction combinator, which
+   provides computation over trees.
+   @end[doc]
+>>
 declare tree_ind{'z; a, f, g. 'body['a; 'f; 'g]}
 
 (************************************************************************
  * REWRITING                                                            *
  ************************************************************************)
 
-(*!
- * @begin[doc]
- * @rewrites
- *
- * The induction combinator takes a $W$-node
- * as its first argument, and a body that expects three arguments $a_2$,
- * $f_2$, and $g_2$.  The $a_2$ argument is the label of the current node,
- * the $f_2$ argument is the function that computes the children, and
- * $g_2$ is the value that is returned by a recursive call.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @rewrites
+  
+   The induction combinator takes a $W$-node
+   as its first argument, and a body that expects three arguments $a_2$,
+   $f_2$, and $g_2$.  The $a_2$ argument is the label of the current node,
+   the $f_2$ argument is the function that computes the children, and
+   $g_2$ is the value that is returned by a recursive call.
+   @end[doc]
+>>
 prim_rw reduce_tree_ind :
    tree_ind{tree{'a1; 'f1}; a2, f2, g2. 'body['a2; 'f2; 'g2]}
    <--> 'body['a1; 'f1; lambda{a. tree_ind{.'f1 'a; a2, f2, g2. 'body['a2; 'f2; 'g2]}}]
 
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 let resource reduce +=
    (<< tree_ind{tree{'a1; 'f1}; a2, f2, g2. 'body['a2; 'f2; 'g2]} >>, reduce_tree_ind)
@@ -173,15 +173,15 @@ prim wFormation 'A :
    sequent ['ext] { 'H >- univ[i:l] } =
    w{'A; x. 'B['x]}
 
-(*!
- * @begin[doc]
- * @rules
- * @modsubsection{Typehood and equality}
- *
- * The $W$-type $@w{x; A; B[x]}$ is well-formed if $A$ is a type,
- * and $B[a]$ is a type for any $a @in A$.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @rules
+   @modsubsection{Typehood and equality}
+  
+   The $W$-type $@w{x; A; B[x]}$ is well-formed if $A$ is a type,
+   and $B[a]$ is a type for any $a @in A$.
+   @end[doc]
+>>
 prim wEquality {| intro []; eqcd |} :
    [wf] sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
    [wf] sequent [squash] { 'H; y: 'A1 >- 'B1['y] = 'B2['y] in univ[i:l] } -->
@@ -197,9 +197,9 @@ prim wType {| intro [] |} :
    sequent ['ext] { 'H >- "type"{.w{'A1; y.'A2['y]}} } =
    it
 
-(*!
- * @docoff
- *)
+doc <:doc< 
+   @docoff
+>>
 prim treeFormation {| intro [] |} 'a :
    [wf] sequent [squash] { 'H >- 'a = 'a in 'A } -->
    [main] ('f : sequent ['ext] { 'H >- 'B['a] -> w{'A; x. 'B['x]} }) -->
@@ -207,15 +207,15 @@ prim treeFormation {| intro [] |} 'a :
    sequent ['ext] { 'H >- w{'A; x. 'B['x]} } =
    tree{'a; 'f}
 
-(*!
- * @begin[doc]
- * @modsubsection{Membership}
- *
- * The elements of the $W$-type $@w{x; A; B[x]}$ are the
- * @hrefterm[tree] terms $@tree{a; f}$, where $a @in A$,
- * and $f @in B[a] @rightarrow @w{x; A; B[x]}$.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Membership}
+  
+   The elements of the $W$-type $@w{x; A; B[x]}$ are the
+   @hrefterm[tree] terms $@tree{a; f}$, where $a @in A$,
+   and $f @in B[a] @rightarrow @w{x; A; B[x]}$.
+   @end[doc]
+>>
 prim treeEquality {| intro []; eqcd |} :
    [wf] sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
    [wf] sequent [squash] { 'H >- 'b1 = 'b2 in 'B['a1] -> w{'A; x. 'B['x]} } -->
@@ -223,16 +223,16 @@ prim treeEquality {| intro []; eqcd |} :
    sequent ['ext] { 'H >- tree{'a1; 'b1} = tree{'a2; 'b2} in w{'A; x. 'B['x]} } =
    it
 
-(*!
- * @begin[doc]
- * @modsubsection{Elimination}
- *
- * The elimination rule performs induction over the $W$-type
- * $@w{x; A; B[x]}$.  The conclusion is true for all $z$ in the
- * $W$-type if it is true for an arbitrary term $@tree{a; f}$, where
- * the induction hypothesis holds on all children given by $f$.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Elimination}
+  
+   The elimination rule performs induction over the $W$-type
+   $@w{x; A; B[x]}$.  The conclusion is true for all $z$ in the
+   $W$-type if it is true for an arbitrary term $@tree{a; f}$, where
+   the induction hypothesis holds on all children given by $f$.
+   @end[doc]
+>>
 prim wElimination {| elim [ThinOption thinT] |} 'H :
    [main] ('t['z; 'a; 'f; 'g] :
    sequent ['ext] { 'H;
@@ -246,16 +246,16 @@ prim wElimination {| elim [ThinOption thinT] |} 'H :
    sequent ['ext] { 'H; z: w{'A; x. 'B['x]}; 'J['z] >- 'T['z] } =
       tree_ind{'z; a, f, g. 't['z; 'a; 'f; 'g]}
 
-(*!
- * @begin[doc]
- * @modsubsection{Combinator equality}
- *
- * The tree-induction term computes a value of type $T$ if the body
- * computes a value of type $T$ given and argument $a @in A$, a child
- * function $f$, and a function $g$ that computes the recursive values
- * for each of the children.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Combinator equality}
+  
+   The tree-induction term computes a value of type $T$ if the body
+   computes a value of type $T$ given and argument $a @in A$, a child
+   function $f$, and a function $g$ that computes the recursive values
+   for each of the children.
+   @end[doc]
+>>
 interactive tree_indEquality {| intro []; eqcd |} (w{'A; x. 'B['x]}) bind{z.'T['z]} :
    [wf] sequent [squash] { 'H >- 'z1 = 'z2 in w{'A; x. 'B['x]} } -->
    [wf] sequent [squash] { 'H;
@@ -267,7 +267,7 @@ interactive tree_indEquality {| intro []; eqcd |} (w{'A; x. 'B['x]}) bind{z.'T['
                           = tree_ind{'z2; a2, f2, g2. 'body2['a2; 'f2; 'g2]}
                           in 'T['z1] }
 
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 (************************************************************************
  * PRIMITIVES                                                           *

@@ -1,47 +1,47 @@
-(*!
- * @begin[doc]
- * @module[Itt_relation_str]
- *
- * The @tt[Itt_relation_str] module defines algebraic structures such as
- * ordered sets, @misspelled{PERs}, types with decidable equality and so on.
- * @end[doc]
- *
- * ----------------------------------------------------------------
- *
- * @begin[license]
- * This file is part of MetaPRL, a modular, higher order
- * logical framework that provides a logical programming
- * environment for OCaml and other languages.
- *
- * See the file doc/index.html for information on Nuprl,
- * OCaml, and more information about this system.
- *
- * Copyright (C) 1998 Jason Hickey, Cornell University
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- *
- * Author: Alexei Kopylov
- * @email{apk6@cs.cornell.edu}
- * @end[license]
- *)
+doc <:doc< 
+   @begin[doc]
+   @module[Itt_relation_str]
+  
+   The @tt[Itt_relation_str] module defines algebraic structures such as
+   ordered sets, @misspelled{PERs}, types with decidable equality and so on.
+   @end[doc]
+  
+   ----------------------------------------------------------------
+  
+   @begin[license]
+   This file is part of MetaPRL, a modular, higher order
+   logical framework that provides a logical programming
+   environment for OCaml and other languages.
+  
+   See the file doc/index.html for information on Nuprl,
+   OCaml, and more information about this system.
+  
+   Copyright (C) 1998 Jason Hickey, Cornell University
+  
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public License
+   as published by the Free Software Foundation; either version 2
+   of the License, or (at your option) any later version.
+  
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+  
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  
+   Author: Alexei Kopylov
+   @email{apk6@cs.cornell.edu}
+   @end[license]
+>>
 
-(*!
- * @begin[doc]
- * @parents
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @parents
+   @end[doc]
+>>
 extends Itt_equal
 extends Itt_int_ext
 extends Itt_decidable
@@ -50,7 +50,7 @@ extends Itt_algebra_df
 extends Itt_logic
 extends Itt_bisect
 extends Itt_comment
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 open Refiner.Refiner.TermType
 open Refiner.Refiner.Term
@@ -97,15 +97,15 @@ let softrec_reduce term unfold  = term, (reduceByRecDefC term unfold)
 
 
 
-(*!
- * @begin[doc]
- * @modsection{Order}
+doc <:doc< 
+   @begin[doc]
+   @modsection{Order}
    @modsubsection{Definition}
    Order is a type  $<<label["car":t]>>$ with an irreflexive transitive complete
   relation:
      $$<<label["<":t]>>  : <<label["car":t]-> label["car":t] -> bool>>$$
- * @end[doc]
- *)
+   @end[doc]
+>>
 
 
 
@@ -134,21 +134,21 @@ dform porder_df : except_mode[src] :: PartialOrder[i:l] = `"PartialOrder" sub{sl
 define order1 : order[i:l] <-->  { self : PartialOrder[i:l] | all x:^car.all y:^car. ("assert"{.'x ^< 'y} or  "assert"{.'y ^< 'x} or 'x='y in ^car) }
 *)
 
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 define less: less{'self; 'a;'b} <--> "assert"{.'a ^< 'b}
 
 dform less_df : parens :: except_mode[src] :: less{'self; 'a;'b}
  = 'a  bf[" <"]sub{'self} `" " 'b
 
-(*!
- * @begin[doc]
- * @modsection{Decidable Equality}
+doc <:doc< 
+   @begin[doc]
+   @modsection{Decidable Equality}
    @modsubsection{Definition}
    @tt[DecEquality] is a type (@tt[car]) with an equality solver:
   $$<<label["=":t]>> : <<label[car:t]-> label[car:t] -> bool>>$$
- * @end[doc]
- *)
+   @end[doc]
+>>
 
 define decEquality : DecEquality[i:l] <-->
     { car : univ[i:l];
@@ -156,7 +156,7 @@ define decEquality : DecEquality[i:l] <-->
        all x:^car. all y:^car. iff{"assert"{.'x ^= 'y}; . 'x='y in ^car}
     }
 
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 
 dform order_df : except_mode[src] :: order[i:l] = `"Order" sub{slot[i:l]}
@@ -175,11 +175,11 @@ let order = order1 thenC higherC fold_less
 
 let resource elim += soft_elim <<order[i:l]>> order
 
-(*!
- * @begin[doc]
- * @rules
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @rules
+   @end[doc]
+>>
 
 interactive less_wf  {| intro[] |} order[i:l] :
    [wf] sequent [squash] { 'H >- 'ord in order[i:l] }  -->
@@ -202,7 +202,7 @@ interactive three_cases  compare{'ord; 'x;'y; 'less_case; 'equal_case; 'greater_
    sequent ['ext]   { 'H >- 'T[compare{'ord; 'x;'y; 'less_case; 'equal_case; 'greater_case}]}
 
 
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 let decideOrder3T compare_term order_term p =
    let z = get_opt_var_arg "z" p in
@@ -219,7 +219,7 @@ let decideOrder3T compare_term order_term p =
    in
     three_cases compare_term order_term bind p
 
-(*! @doc { } *)
+doc <:doc< @doc { } >>
 
 interactive compare_wf {| intro [] |} order[i:l] :
    [wf] sequent [squash] { 'H >- 'ord in order[i:l] }  -->
@@ -240,10 +240,10 @@ dform match_tree_df : except_mode[src] :: compare{'O; 'a;'b; 'less_case; 'equal_
 
 
 
-(*! @begin[doc]
+doc <:doc< @begin[doc]
   Corollary: The equality is decidable in ordered sets
   @end[doc]
-*)
+>>
 
 interactive dec_equalaty  order[i:l] :
    sequent [squash] { 'H >- 'ord in order[i:l] }  -->
@@ -252,14 +252,14 @@ interactive dec_equalaty  order[i:l] :
    sequent ['ext]   { 'H >-  decidable{.'x='y in 'ord^car} }
 
 
-(*! @begin[doc]
+doc <:doc< @begin[doc]
 @modsection{Example: integers}
   @end[doc]
-*)
+>>
 
 define int_order: int_order <--> {car= int; "<"= lambda{a.lambda{b.lt_bool{'a;'b}}}}
 
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 
 

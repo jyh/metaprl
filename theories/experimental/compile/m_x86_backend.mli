@@ -57,9 +57,7 @@ val rename_find : rename -> var -> var
  *)
 val pp_print_prog : formatter -> term -> unit
 
-(*!
- * @docoff
- *
+(*
  * -*-
  * Local Variables:
  * Caml-master: "compile"

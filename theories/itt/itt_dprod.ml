@@ -1,128 +1,128 @@
-(*!
- * @spelling{dprod fst snd productElimination weakProductElimination}
- *
- * @begin[doc]
- * @module[Itt_dprod]
- *
- * The @emph{dependent product} $@prod{x; A; B}$ is a space of @emph{pairs},
- * where $A$ is a type, and $B[x]$ is a family of types indexed by $x @in A$.
- * The elements of the product space are the pairs $@pair{a; b}$, where $a @in A$
- * and $b @in B[a]$.
- *
- * The dependent product uses an @emph{intensional} membership equality.
- * The only elements are the @hrefterm[pair] terms, which allows a
- * strong elimination rule @hrefrule[productElimination] of the form:
- *
- * $$
- * @defrule{productElimination; i;
- *    @sequent{ext; {H; a@colon A; b@colon B[a]; J[@pair{a; b}]}; C[@pair{a; b}]};
- *    @sequent{ext; {H; x@colon @prod{y; A; B[u]}; J[x]}; C[x]}.}
- * $$
- *
- * Because of this intensional equality, the @tt{Itt_dprod} module is
- * primitive.  An alternative formulation would be to @emph{derive}
- * the product space from the very-dependent function @hrefterm[rfun]
- * (in the @hrefmodule[Itt_rfun] module), the @hrefterm[union] (in the
- * @hrefmodule[Itt_union] module), and the @hrefterm[unit] type (in the
- * and @hrefmodule[Itt_union]) module).  The construction is as follows.
- *
- * First, the Boolean values are defined with the @tt{union} and @tt{unit}
- * types.
- *
- * $$
- * @begin[array; rcl]
- * @line{@item{@bool} @item{@equiv} @item{@unit + @unit}}
- * @line{@item{@bfalse} @item{@equiv} @item{@inl{@it}}}
- * @line{@item{@btrue} @item{@equiv} @item{@inr{@it}}}
- * @line{@item{@if{e_1; e_2; e_3}} @item{@equiv} @item{@decide{e_1; @_; e_2; @_; e_3}}}
- * @end[array]
- * $$
- *
- * Next, the dependent product space is defined as a function on
- * a Boolean domain.
- *
- * $$
- * @begin[array, rcl]
- * @line{@prod{x; A; B[x]} @equiv @rfun{f; x; @bool; @if{x; A; B[f(@bfalse)]}}}
- * @end[array]
- * $$
- *
- * The elements of this type are the functions that return the first
- * projection on the $@false$ argument, and the second projection on
- * the $@btrue$ argument.
- *
- * $$
- * @begin[array, rcl]
- * @line{@pair{a; b} @equiv @lambda{x; @if{x; a; b}}}
- * @line{@fst{p} @equiv @item{p(@false)}}
- * @line{@snd{p} @equiv @item{p(@btrue)}}
- * @end[array]
- * $$
- *
- * This encoding is satisfactory in all respects except for the
- * elimination form.  The problem is that the function space uses
- * an @emph{extensional} equality; the elements of the function
- * space $@rfun{f; x; @bool; @if{x; A; B[f(@false)]}}$ are not
- * just the terms $@lambda{x; @if{x; a; b}}$, but all equal functions.
- *
- * One alternative is to weaken the elimination form to a
- * more extensional version:
- *
- * $$
- * @defrule{weakProductElimination; p;
- *   @sequent{ext; {@ldots;
- *                    a@colon A; b@colon B[a];
- *                    w@colon @pair{a; b} = p @in @prod{x; A; B[x]}}; C[p]};
- *   @sequent{ext; {H; p@colon @prod{x; A; B[x]}; J[p]}; C[p]}.}
- * $$
- *
- * This rule @emph{can} be derived from the very-dependent function
- * encoding, but it is probably too weak to be useful.  For this reason
- * the @tt{Itt_dprod} module and the @tt{prod} type are defined
- * as primitive.
- * @end[doc]
- *
- * ----------------------------------------------------------------
- *
- * @begin[license]
- * This file is part of MetaPRL, a modular, higher order
- * logical framework that provides a logical programming
- * environment for OCaml and other languages.
- *
- * See the file doc/index.html for information on Nuprl,
- * OCaml, and more information about this system.
- *
- * Copyright (C) 1998 Jason Hickey, Cornell University
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- *
- * Author: Jason Hickey
- * @email{jyh@cs.cornell.edu}
- * @end[license]
- *)
+doc <:doc< 
+   @spelling{dprod fst snd productElimination weakProductElimination}
+  
+   @begin[doc]
+   @module[Itt_dprod]
+  
+   The @emph{dependent product} $@prod{x; A; B}$ is a space of @emph{pairs},
+   where $A$ is a type, and $B[x]$ is a family of types indexed by $x @in A$.
+   The elements of the product space are the pairs $@pair{a; b}$, where $a @in A$
+   and $b @in B[a]$.
+  
+   The dependent product uses an @emph{intensional} membership equality.
+   The only elements are the @hrefterm[pair] terms, which allows a
+   strong elimination rule @hrefrule[productElimination] of the form:
+  
+   $$
+   @defrule{productElimination; i;
+      @sequent{ext; {H; a@colon A; b@colon B[a]; J[@pair{a; b}]}; C[@pair{a; b}]};
+      @sequent{ext; {H; x@colon @prod{y; A; B[u]}; J[x]}; C[x]}.}
+   $$
+  
+   Because of this intensional equality, the @tt{Itt_dprod} module is
+   primitive.  An alternative formulation would be to @emph{derive}
+   the product space from the very-dependent function @hrefterm[rfun]
+   (in the @hrefmodule[Itt_rfun] module), the @hrefterm[union] (in the
+   @hrefmodule[Itt_union] module), and the @hrefterm[unit] type (in the
+   and @hrefmodule[Itt_union]) module).  The construction is as follows.
+  
+   First, the Boolean values are defined with the @tt{union} and @tt{unit}
+   types.
+  
+   $$
+   @begin[array; rcl]
+   @line{@item{@bool} @item{@equiv} @item{@unit + @unit}}
+   @line{@item{@bfalse} @item{@equiv} @item{@inl{@it}}}
+   @line{@item{@btrue} @item{@equiv} @item{@inr{@it}}}
+   @line{@item{@if{e_1; e_2; e_3}} @item{@equiv} @item{@decide{e_1; @_; e_2; @_; e_3}}}
+   @end[array]
+   $$
+  
+   Next, the dependent product space is defined as a function on
+   a Boolean domain.
+  
+   $$
+   @begin[array, rcl]
+   @line{@prod{x; A; B[x]} @equiv @rfun{f; x; @bool; @if{x; A; B[f(@bfalse)]}}}
+   @end[array]
+   $$
+  
+   The elements of this type are the functions that return the first
+   projection on the $@false$ argument, and the second projection on
+   the $@btrue$ argument.
+  
+   $$
+   @begin[array, rcl]
+   @line{@pair{a; b} @equiv @lambda{x; @if{x; a; b}}}
+   @line{@fst{p} @equiv @item{p(@false)}}
+   @line{@snd{p} @equiv @item{p(@btrue)}}
+   @end[array]
+   $$
+  
+   This encoding is satisfactory in all respects except for the
+   elimination form.  The problem is that the function space uses
+   an @emph{extensional} equality; the elements of the function
+   space $@rfun{f; x; @bool; @if{x; A; B[f(@false)]}}$ are not
+   just the terms $@lambda{x; @if{x; a; b}}$, but all equal functions.
+  
+   One alternative is to weaken the elimination form to a
+   more extensional version:
+  
+   $$
+   @defrule{weakProductElimination; p;
+     @sequent{ext; {@ldots;
+                      a@colon A; b@colon B[a];
+                      w@colon @pair{a; b} = p @in @prod{x; A; B[x]}}; C[p]};
+     @sequent{ext; {H; p@colon @prod{x; A; B[x]}; J[p]}; C[p]}.}
+   $$
+  
+   This rule @emph{can} be derived from the very-dependent function
+   encoding, but it is probably too weak to be useful.  For this reason
+   the @tt{Itt_dprod} module and the @tt{prod} type are defined
+   as primitive.
+   @end[doc]
+  
+   ----------------------------------------------------------------
+  
+   @begin[license]
+   This file is part of MetaPRL, a modular, higher order
+   logical framework that provides a logical programming
+   environment for OCaml and other languages.
+  
+   See the file doc/index.html for information on Nuprl,
+   OCaml, and more information about this system.
+  
+   Copyright (C) 1998 Jason Hickey, Cornell University
+  
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public License
+   as published by the Free Software Foundation; either version 2
+   of the License, or (at your option) any later version.
+  
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+  
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  
+   Author: Jason Hickey
+   @email{jyh@cs.cornell.edu}
+   @end[license]
+>>
 
-(*!
- * @begin[doc]
- * @parents
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @parents
+   @end[doc]
+>>
 extends Itt_void
 extends Itt_equal
 extends Itt_struct
 extends Itt_subtype
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 open Printf
 open Mp_debug
@@ -161,25 +161,25 @@ let _ =
  * TERMS                                                                *
  ************************************************************************)
 
-(*!
- * @begin[doc]
- * @terms
- *
- * The @tt{prod} term defines the dependent-product space,
- * and the @tt{pair} term defines the elements.
- * The @tt{spread} term is the induction combinator that
- * performs a pattern match on the argument @i{e}.  The
- * @tt{fst} and @tt{snd} terms are the normal projections
- * derived from the @tt{spread} term.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @terms
+  
+   The @tt{prod} term defines the dependent-product space,
+   and the @tt{pair} term defines the elements.
+   The @tt{spread} term is the induction combinator that
+   performs a pattern match on the argument @i{e}.  The
+   @tt{fst} and @tt{snd} terms are the normal projections
+   derived from the @tt{spread} term.
+   @end[doc]
+>>
 declare prod{'A; x. 'B['x]}
 declare prod{'A; 'B}
 declare pair{'a; 'b}
 declare spread{'e; u, v. 'b['u; 'v]}
 define unfoldFst : fst{'e} <--> spread{'e; u, v. 'u}
 define unfoldSnd : snd{'e} <--> spread{'e; u, v. 'v}
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 let dprod_term = << x: 'A * 'B['x] >>
 let dprod_opname = opname_of_term dprod_term
@@ -209,32 +209,32 @@ let mk_spread_term = mk_dep0_dep2_term spread_opname
  * REWRITES                                                             *
  ************************************************************************)
 
-(*!
- * @begin[doc]
- * @rewrites
- *
- * The @hrefterm[spread] term performs a pattern match
- * and substitutes the components of the pair into the
- * body term $c$.  This reduction is added to the
- * @hrefconv[reduceC] resource.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @rewrites
+  
+   The @hrefterm[spread] term performs a pattern match
+   and substitutes the components of the pair into the
+   body term $c$.  This reduction is added to the
+   @hrefconv[reduceC] resource.
+   @end[doc]
+>>
 prim_rw reduceSpread : spread{'u, 'v; a, b. 'c['a; 'b]} <--> 'c['u; 'v]
 
-(*! @docoff *)
+doc <:doc< @docoff >>
 let resource reduce += << spread{pair{'u; 'v}; x, y. 'b['x; 'y]} >>, reduceSpread
 
-(*!
- * @begin[doc]
- * The @hrefterm[fst] and @hrefterm[snd] terms are simplified forms
- * of @hrefterm[spread] that produce the first and second projections.
- * They also have derived reduction rules that are also added to the
- * @hrefconv[reduceC] resource.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   The @hrefterm[fst] and @hrefterm[snd] terms are simplified forms
+   of @hrefterm[spread] that produce the first and second projections.
+   They also have derived reduction rules that are also added to the
+   @hrefconv[reduceC] resource.
+   @end[doc]
+>>
 interactive_rw reduceFst : fst{pair{'a; 'b}} <--> 'a
 interactive_rw reduceSnd : snd{pair{'a; 'b}} <--> 'b
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 let resource reduce +=
    [<< fst{pair{'u; 'v}} >>, reduceFst;
@@ -288,16 +288,16 @@ prim productFormation 'A :
    sequent ['ext] { 'H >- univ[i:l] } =
    x:'A * 'B['x]
 
-(*!
- * @begin[doc]
- * @rules
- * @modsubsection{Typehood and equality}
- *
- * The type equality is intensional.  A product type
- * $<< x: 'A * 'B['x] >>$ is a type if $A$ is a type, and
- * $B[x]$ is a family of types indexed by $x @in A$.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @rules
+   @modsubsection{Typehood and equality}
+  
+   The type equality is intensional.  A product type
+   $<< x: 'A * 'B['x] >>$ is a type if $A$ is a type, and
+   $B[x]$ is a family of types indexed by $x @in A$.
+   @end[doc]
+>>
 prim productEquality {| intro []; eqcd |} :
    [wf] sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
    [wf] sequent [squash] { 'H; y: 'A1 >- 'B1['y] = 'B2['y] in univ[i:l] } -->
@@ -313,16 +313,16 @@ prim productType {| intro [] |} :
    sequent ['ext] { 'H >- "type"{.y:'A1 * 'A2['y]} } =
    it
 
-(*!
- * @begin[doc]
- * @modsubsection{Introduction}
- *
- * The propositional interpretation of the product space
- * is the bounded existential $@exists{x; A; B[x]}$.  The
- * proposition is true if it is a type, and if there is
- * some element $a @in A$ where $B[a]$ is true.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Introduction}
+  
+   The propositional interpretation of the product space
+   is the bounded existential $@exists{x; A; B[x]}$.  The
+   proposition is true if it is a type, and if there is
+   some element $a @in A$ where $B[a]$ is true.
+   @end[doc]
+>>
 prim pairFormation {| intro [] |} 'a :
    [wf] sequent [squash] { 'H >- 'a in 'A } -->
    [main] ('b : sequent ['ext] { 'H >- 'B['a] }) -->
@@ -330,18 +330,18 @@ prim pairFormation {| intro [] |} 'a :
    sequent ['ext] { 'H >- x:'A * 'B['x] } =
    'a, 'b
 
-(*!
- * @begin[doc]
- * @modsubsection{Membership}
- *
- * The elements of the product space are the pairs.  For
- * the equality judgment to be valid, the $@prod{x; A; B[x]}$
- * term must be a type.  The first subgoal ensures that $A$ is
- * a type, and the second ensures that $B[a_1]$ is a type,
- * but $B[y]$ must be well-formed for @emph{any} element
- * $y @in A$, which is the purpose of the third subgoal.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Membership}
+  
+   The elements of the product space are the pairs.  For
+   the equality judgment to be valid, the $@prod{x; A; B[x]}$
+   term must be a type.  The first subgoal ensures that $A$ is
+   a type, and the second ensures that $B[a_1]$ is a type,
+   but $B[y]$ must be well-formed for @emph{any} element
+   $y @in A$, which is the purpose of the third subgoal.
+   @end[doc]
+>>
 prim pairEquality {| intro []; eqcd |} :
    [wf] sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
    [wf] sequent [squash] { 'H >- 'b1 = 'b2 in 'B['a1] } -->
@@ -349,26 +349,26 @@ prim pairEquality {| intro []; eqcd |} :
    sequent ['ext] { 'H >- ('a1, 'b1) = ('a2, 'b2) in x:'A * 'B['x] } =
    it
 
-(*!
- * @begin[doc]
- * @modsubsection{Elimination}
- *
- * The elimination rule performs a case analysis on the
- * hypothesis $x@colon @prod{x; A; B[x]}$.  The @emph{only}
- * elements are the pairs, and the rule splits the hypothesis
- * into its parts.  The proof extract term is the @hrefterm[spread]
- * induction combinator.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Elimination}
+  
+   The elimination rule performs a case analysis on the
+   hypothesis $x@colon @prod{x; A; B[x]}$.  The @emph{only}
+   elements are the pairs, and the rule splits the hypothesis
+   into its parts.  The proof extract term is the @hrefterm[spread]
+   induction combinator.
+   @end[doc]
+>>
 prim productElimination {| elim [ThinOption thinT] |} 'H :
    [wf] ('t['u; 'v] : sequent ['ext] { 'H; z: x:'A * 'B['x]; u: 'A; v: 'B['u]; 'J['u, 'v] >- 'T['u, 'v] }) -->
    sequent ['ext] { 'H; z: x:'A * 'B['x]; 'J['z] >- 'T['z] } =
    spread{'z; u, v. 't['u; 'v]}
 
-(*!
- * @docoff
- * The equality reasoning requires type inference.
- *)
+doc <:doc< 
+   @docoff
+   The equality reasoning requires type inference.
+>>
 let d_spread_equalT tac p =
    let rt, spread, _ = dest_equal (Sequent.concl p) in
    let type_type = mk_xbind_term (maybe_new_var_arg p "v") rt in
@@ -388,14 +388,14 @@ let d_spread_equalT tac p =
    in
       tac type_type pair_type p
 
-(*!
- * @begin[doc]
- * @modsubsection{Combinator equality}
- *
- * The @hrefterm[spread] combinator is well-formed if all
- * its parts are well-formed.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Combinator equality}
+  
+   The @hrefterm[spread] combinator is well-formed if all
+   its parts are well-formed.
+   @end[doc]
+>>
 prim spreadEquality {| eqcd |} bind{z. 'T['z]} (w:'A * 'B['w]) :
    [wf] sequent [squash] { 'H >- 'e1 = 'e2 in w:'A * 'B['w] } -->
    [wf] sequent [squash] { 'H; u: 'A; v: 'B['u]; a: 'e1 = ('u, 'v) in w:'A * 'B['w] >-
@@ -403,27 +403,27 @@ prim spreadEquality {| eqcd |} bind{z. 'T['z]} (w:'A * 'B['w]) :
    sequent ['ext] { 'H >- spread{'e1; u1, v1. 'b1['u1; 'v1]} = spread{'e2; u2, v2. 'b2['u2; 'v2]} in 'T['e1] } =
    it
 
-(*! @docoff *)
+doc <:doc< @docoff >>
 let spread_equal_term = << spread{'e1; u1, v1. 'b1['u1; 'v1]} = spread{'e2; u2, v2. 'b2['u2; 'v2]} in 'T >>
 
 let resource intro +=
    (spread_equal_term, wrap_intro (d_spread_equalT spreadEquality))
 
-(*!
- * @begin[doc]
- * @modsubsection{Subtyping}
- *
- * The subtype judgment is @emph{covariant} in the
- * first type $A$, and pointwise-covariant in the second
- * type $B[a]$ for each $a @in A$.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Subtyping}
+  
+   The subtype judgment is @emph{covariant} in the
+   first type $A$, and pointwise-covariant in the second
+   type $B[a]$ for each $a @in A$.
+   @end[doc]
+>>
 prim productSubtype {| intro [] |} :
    ["subtype"] sequent [squash] { 'H >- \subtype{'A1; 'A2} } -->
    ["subtype"] sequent [squash] { 'H; a: 'A1 >- \subtype{'B1['a]; 'B2['a]} } -->
    sequent ['ext] { 'H >- \subtype{ (a1:'A1 * 'B1['a1]); (a2:'A2 * 'B2['a2]) } } =
    it
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 (************************************************************************
  * TYPE INFERENCE                                                       *

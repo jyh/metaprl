@@ -36,7 +36,7 @@ let _ =
 (*  Definitions   *)
 (******************)
 
-(*! *)
+doc <:doc< >>
 
 (*** Empty Record Type ***)
 
@@ -56,11 +56,11 @@ interactive_rw stepRecord_rw  :
    ('n in label) -->
    record{.next{'n};'A} <--> (top * record{'n;'A})
 
-(*! @docoff *)
+doc <:doc< @docoff >>
 let resource reduce +=
    [<< record{zero;'A} >>, baseRecord;
     << record{next{'n};'A} >>,stepRecord_rw]
-(*! *)
+doc <:doc< >>
 
 (*** records ***)
 
@@ -79,7 +79,7 @@ interactive_rw stepRcrd_rw  :
    ('n in label) -->
    rcrd{.next{'n};'a; 'r} <--> (fst{'r},rcrd{'n;'a;snd{'r}})
 
-(*! @docoff *)
+doc <:doc< @docoff >>
 let resource reduce +=
    [<< rcrd{zero;'a; 'r} >>, baseRcrd;
     << rcrd{next{'n};'a; 'r} >>, stepRcrd_rw;
@@ -99,11 +99,11 @@ interactive_rw stepField_rw  :
    ('n in label) -->
    field{'r;next{'n}} <--> (field{snd{'r};'n})
 
-(*! @docoff *)
+doc <:doc< @docoff >>
 let resource reduce +=
    [<< field{'A;zero} >>, baseField;
     << field{'r;next{'n}} >>, stepField_rw]
-(*! *)
+doc <:doc< >>
 
 (******************)
 (*   Rules        *)
@@ -214,7 +214,7 @@ interactive field_member {| intro[] |} :
 (*  Display Forms *)
 (******************)
 
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 
 

@@ -1,63 +1,63 @@
-(*!
- * @begin[spelling]
- * CloseFrame CloseRec CloseRecVar CloseSubscript CloseVar LetAtom LetRec
- * LetSubscript args rec var vars
- * @end[spelling]
- *
- * @begin[doc]
- * @module[M_closure]
- *
- * Closure conversion for the @emph{M} language.  The program is
- * closed in four steps.
- *
- * 1. In the first step, all LetRec terms are replaced
- *    with CloseRec terms, which include an extra frame
- *    parameter.  The frame is allocated as a tuple, and
- *    and the free variables are projected from the tuple.
- *
- * 2. In the second step, for each CloseRec that has a free
- *    variable, the free variable is added to the frame,
- *    and projected within the record.
- *
- * 3. In the third step, the CloseRec is converted back to
- *    a LetRec followed by a tuple allocation.
- *
- * 4. The fourth phase moves code around an generally cleans
- *    up.
- *
- * @end[doc]
- *
- * ----------------------------------------------------------------
- *
- * @begin[license]
- * Copyright (C) 2003 Jason Hickey, Caltech
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- *
- * Author: Jason Hickey
- * @email{jyh@cs.caltech.edu}
- * @end[license]
- *)
+doc <:doc< 
+   @begin[spelling]
+   CloseFrame CloseRec CloseRecVar CloseSubscript CloseVar LetAtom LetRec
+   LetSubscript args rec var vars
+   @end[spelling]
+  
+   @begin[doc]
+   @module[M_closure]
+  
+   Closure conversion for the @emph{M} language.  The program is
+   closed in four steps.
+  
+   1. In the first step, all LetRec terms are replaced
+      with CloseRec terms, which include an extra frame
+      parameter.  The frame is allocated as a tuple, and
+      and the free variables are projected from the tuple.
+  
+   2. In the second step, for each CloseRec that has a free
+      variable, the free variable is added to the frame,
+      and projected within the record.
+  
+   3. In the third step, the CloseRec is converted back to
+      a LetRec followed by a tuple allocation.
+  
+   4. The fourth phase moves code around an generally cleans
+      up.
+  
+   @end[doc]
+  
+   ----------------------------------------------------------------
+  
+   @begin[license]
+   Copyright (C) 2003 Jason Hickey, Caltech
+  
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public License
+   as published by the Free Software Foundation; either version 2
+   of the License, or (at your option) any later version.
+  
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+  
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  
+   Author: Jason Hickey
+   @email{jyh@cs.caltech.edu}
+   @end[license]
+>>
 
-(*!
- * @begin[doc]
- * @parents
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @parents
+   @end[doc]
+>>
 extends M_ir
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 open M_ir
 open M_util
@@ -85,14 +85,14 @@ open Base_meta
  * REDUCTION RESOURCE                                                   *
  ************************************************************************)
 
-(*!
- * @begin[doc]
- * @resources
- *
- * @bf{The @Comment!resource[closure_resource]}
- * @docoff
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @resources
+  
+   @bf{The @Comment!resource[closure_resource]}
+   @docoff
+   @end[doc]
+>>
 let resource closure =
    table_resource_info identity extract_data
 
@@ -108,37 +108,37 @@ let closureC =
  * Terms
  *)
 
-(*!
- * @begin[doc]
- * @modsubsection{Terms}
- *
- * We define several auxiliary terms.
- *
- * The CloseVar{v. e[v]; 'a} term is the same as LetAtom{a; v. e[v]}.
- * We use a special term for variables that are being closed.
- *
- * The CloseRecVar{R; frame} term is used to wrap record variables.
- * The term represents the partial application of the record R to
- * the frame variable.
- *
- * The CloseRec{R1, frame1. fields[R1; frame1];
- *              R2, frame2. body[R2; frame2];
- *              length, tuple}
- * is a recursive record definition.  The function defined by the
- * fields[R1; frame1] take the frame1 as an extra argument; frame1
- * represents the environment containing all the functions' free vars.
- * The body[R2, frame2] is the rest of the program.  The frame2
- * represents the frame to be used for the functions in R2.  The
- * frame2 is allocated as the tuple, which has "length" fields.
- *
- * CloseSubscript{'a1; 'a2; v. e[v]} is the same as LetSubscript,
- * but we use a special term to guide the closure conversion
- * process.
- *
- * CloseFrame{frame. e[frame]} is the term that adds an extra
- * frame argument to each of the functions in the record.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Terms}
+  
+   We define several auxiliary terms.
+  
+   The CloseVar{v. e[v]; 'a} term is the same as LetAtom{a; v. e[v]}.
+   We use a special term for variables that are being closed.
+  
+   The CloseRecVar{R; frame} term is used to wrap record variables.
+   The term represents the partial application of the record R to
+   the frame variable.
+  
+   The CloseRec{R1, frame1. fields[R1; frame1];
+                R2, frame2. body[R2; frame2];
+                length, tuple}
+   is a recursive record definition.  The function defined by the
+   fields[R1; frame1] take the frame1 as an extra argument; frame1
+   represents the environment containing all the functions' free vars.
+   The body[R2, frame2] is the rest of the program.  The frame2
+   represents the frame to be used for the functions in R2.  The
+   frame2 is allocated as the tuple, which has "length" fields.
+  
+   CloseSubscript{'a1; 'a2; v. e[v]} is the same as LetSubscript,
+   but we use a special term to guide the closure conversion
+   process.
+  
+   CloseFrame{frame. e[frame]} is the term that adds an extra
+   frame argument to each of the functions in the record.
+   @end[doc]
+>>
 declare CloseVar{v. 'e['v]; 'a}
 declare CloseRecVar{'R; 'frame}
 declare CloseRec{R1, frame1. 'fields['R1; 'frame1];
@@ -181,58 +181,58 @@ let is_close_rec_term   = is_dep2_dep2_dep0_dep0_term close_rec_opname
 let dest_close_rec_term = dest_dep2_dep2_dep0_dep0_term close_rec_opname
 let mk_close_rec_term   = mk_dep2_dep2_dep0_dep0_term close_rec_opname
 
-(*!
- * @begin[doc]
- * @modsubsection{Phase 1}
- *
- * Convert all LetRec to CloseRec so that each function will
- * have a frame var for its free vars.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Phase 1}
+  
+   Convert all LetRec to CloseRec so that each function will
+   have a frame var for its free vars.
+   @end[doc]
+>>
 prim_rw add_frame : LetRec{R1. 'fields['R1]; R2. 'e['R2]} <-->
    CloseRec{R1, frame. 'fields[CloseRecVar{'R1; 'frame}];
             R2, frame. 'e[CloseRecVar{'R2; 'frame}];
             Length[0:n];
             AllocTupleNil}
 
-(*!
- * @begin[doc]
- * @modsubsection{Phase 1}
- *
- * In the first phase, we abstract free variables using inverse beta-reduction.
- * That is, suppose we have a recursive definition:
- *
- * close rec R, frame.
- *    fun f_1 = e_1
- *    ...
- *    fun f_n = e_n
- * in ...
- *
- * and suppose that one of the function bodies $e_i$ has a free variable $v$.
- * Then we first abstract the variable:
- *
- * CloseVar{v. close rec ...; v}
- *
- * Next, we apply the close_frame rewrite, which takes the free
- * var, adds it to the frame, and projects it in the record.
- *
- * close var v = a in
- * close rec R, frame.
- *    fun f_1 = e_1
- *    ...
- *    fun f_n = e_n
- * R, frame (length = i)(args) in
- * ...
- *
- * close rec R, frame.
- *    let v = frame[i] in
- *    fun f_1 = e_1
- *    ...
- *    fun f_n = e_n
- * R, frame (length = i + 1)(v :: args) in
- * ...
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Phase 1}
+  
+   In the first phase, we abstract free variables using inverse beta-reduction.
+   That is, suppose we have a recursive definition:
+  
+   close rec R, frame.
+      fun f_1 = e_1
+      ...
+      fun f_n = e_n
+   in ...
+  
+   and suppose that one of the function bodies $e_i$ has a free variable $v$.
+   Then we first abstract the variable:
+  
+   CloseVar{v. close rec ...; v}
+  
+   Next, we apply the close_frame rewrite, which takes the free
+   var, adds it to the frame, and projects it in the record.
+  
+   close var v = a in
+   close rec R, frame.
+      fun f_1 = e_1
+      ...
+      fun f_n = e_n
+   R, frame (length = i)(args) in
+   ...
+  
+   close rec R, frame.
+      let v = frame[i] in
+      fun f_1 = e_1
+      ...
+      fun f_n = e_n
+   R, frame (length = i + 1)(v :: args) in
+   ...
+   @end[doc]
+>>
 
 (*
  * Variable closure is a beta-rewrite.
@@ -257,14 +257,14 @@ prim_rw close_frame :
             Length{meta_sum[i:n, 1:n]};
             AllocTupleCons{AtomVar{'a}; 'tuple}}
 
-(*!
- * @begin[doc]
- * Now, a conversional to apply the inverse-beta reduction.
- * The "vars" parameter is the set of function variables.
- * Function variables are not treated as free; we don't
- * need closure conversion for them.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   Now, a conversional to apply the inverse-beta reduction.
+   The "vars" parameter is the set of function variables.
+   Function variables are not treated as free; we don't
+   need closure conversion for them.
+   @end[doc]
+>>
 let abstractTopC =
    let convC e =
       let t = env_term e in
@@ -291,13 +291,13 @@ let abstractTopC =
    in
       funC convC
 
-(*!
- * @begin[doc]
- * @modsubsection{Phase 3}
- *
- * Convert the CloseRec term to a LetRec plus a frame allocation.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Phase 3}
+  
+   Convert the CloseRec term to a LetRec plus a frame allocation.
+   @end[doc]
+>>
 prim_rw close_close_rec :
    CloseRec{R1, frame1. 'fields['R1; 'frame1];
             R2, frame2. 'body['R2; 'frame2];
@@ -306,13 +306,13 @@ prim_rw close_close_rec :
    LetRec{R1. CloseFrame{frame1. 'fields['R1; 'frame1]};
           R2. LetTuple{'length; 'tuple; frame2. 'body['R2; 'frame2]}}
 
-(*!
- * @begin[doc]
- * @modsubsection{Phase 4}
- *
- * Generally clean up and move code around.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Phase 4}
+  
+   Generally clean up and move code around.
+   @end[doc]
+>>
 prim_rw close_fields :
    CloseSubscript{'a1; 'a2; v. Fields{'fields['v]}} <-->
    Fields{CloseSubscript{'a1; 'a2; v. 'fields['v]}}
@@ -377,11 +377,11 @@ let resource closure +=
      << LetTuple{'length; 'tuple; v. Initialize{'e['v]}} >>, close_initialize_2;
      << LetClosure{'f; 'frame; g. TailCall{AtomVar{'g}; 'args}} >>, close_tailcall]
 
-(*!
- * @docoff
- *
- * These are the main tactics.
- *)
+doc <:doc< 
+   @docoff
+  
+   These are the main tactics.
+>>
 let frameT =
    repeatT (rwh add_frame 0)
 

@@ -47,9 +47,7 @@ topval allocT : tactic
  *)
 topval printT : string -> tactic
 
-(*!
- * @docoff
- *
+(*
  * -*-
  * Local Variables:
  * Caml-master: "compile"

@@ -26,9 +26,7 @@
  *)
 extends M_doc_x86_asm
 
-(*!
- * @docoff
- *
+(*
  * -*-
  * Local Variables:
  * Caml-master: "compile"

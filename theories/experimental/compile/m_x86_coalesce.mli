@@ -34,9 +34,7 @@ open Tactic_type.Tacticals
 topval renameT : tactic
 val coalesceT : symbol SymbolTable.t -> tactic
 
-(*!
- * @docoff
- *
+(*
  * -*-
  * Local Variables:
  * Caml-master: "compile"

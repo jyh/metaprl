@@ -31,9 +31,7 @@ open Tactic_type.Tacticals
 
 topval reserveT : tactic
 
-(*!
- * @docoff
- *
+(*
  * -*-
  * Local Variables:
  * Caml-master: "compile"

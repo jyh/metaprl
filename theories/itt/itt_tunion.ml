@@ -1,69 +1,69 @@
-(*!
- * @spelling{tunion}
- *
- * @begin[doc]
- * @module[Itt_tunion]
- *
- * The @tt{Itt_tunion} module defines a (joint) union type
- * $@tunion{x; A; B[x]}$.  The elements of the union are the
- * elements of any of the types $B[x]$ for any $x @in A$.
- *
- * The membership equality is the @emph{the transitive closure of union}
- * of the equalities
- * in each of the cases $B[x]$.  That is, two elements are equal
- * in the union if they are equal in @emph{any} of the cases.  This
- * may be surprising.  For example, the type
- * $$@tunion{T; @univ{i}; T @rightarrow T}$$
- * may seem to contain all of the polymorphic functions
- * with type $T @rightarrow T$, for any $T @in @univ{i}$.
- * It does--but the union also contains the type case
- * $@fun{@void; @void}$, in which all functions are equal.
- * As a consequence, the union space also has the trivial
- * equality, and thus it has no useful elimination form.
- * @end[doc]
- *
- * ----------------------------------------------------------------
- *
- * @begin[license]
- * This file is part of MetaPRL, a modular, higher order
- * logical framework that provides a logical programming
- * environment for OCaml and other languages.
- *
- * See the file doc/index.html for information on Nuprl,
- * OCaml, and more information about this system.
- *
- * Copyright (C) 1998 Jason Hickey, Cornell University
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- *
- * Author: Jason Hickey
- * @email{jyh@cs.cornell.edu}
- * @end[license]
- *)
+doc <:doc< 
+   @spelling{tunion}
+  
+   @begin[doc]
+   @module[Itt_tunion]
+  
+   The @tt{Itt_tunion} module defines a (joint) union type
+   $@tunion{x; A; B[x]}$.  The elements of the union are the
+   elements of any of the types $B[x]$ for any $x @in A$.
+  
+   The membership equality is the @emph{the transitive closure of union}
+   of the equalities
+   in each of the cases $B[x]$.  That is, two elements are equal
+   in the union if they are equal in @emph{any} of the cases.  This
+   may be surprising.  For example, the type
+   $$@tunion{T; @univ{i}; T @rightarrow T}$$
+   may seem to contain all of the polymorphic functions
+   with type $T @rightarrow T$, for any $T @in @univ{i}$.
+   It does--but the union also contains the type case
+   $@fun{@void; @void}$, in which all functions are equal.
+   As a consequence, the union space also has the trivial
+   equality, and thus it has no useful elimination form.
+   @end[doc]
+  
+   ----------------------------------------------------------------
+  
+   @begin[license]
+   This file is part of MetaPRL, a modular, higher order
+   logical framework that provides a logical programming
+   environment for OCaml and other languages.
+  
+   See the file doc/index.html for information on Nuprl,
+   OCaml, and more information about this system.
+  
+   Copyright (C) 1998 Jason Hickey, Cornell University
+  
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public License
+   as published by the Free Software Foundation; either version 2
+   of the License, or (at your option) any later version.
+  
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+  
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  
+   Author: Jason Hickey
+   @email{jyh@cs.cornell.edu}
+   @end[license]
+>>
 
-(*!
- * @begin[doc]
- * @parents
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @parents
+   @end[doc]
+>>
 extends Itt_struct
 extends Itt_struct2
 extends Itt_equal
 extends Itt_set
 extends Itt_logic
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 open Refiner.Refiner.TermType
 open Refiner.Refiner.Term
@@ -82,16 +82,16 @@ open Itt_equal
  * SYNTAX                                                               *
  ************************************************************************)
 
-(*!
- * @begin[doc]
- * @terms
- *
- * The @tt{tunion} term defines the union type.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @terms
+  
+   The @tt{tunion} term defines the union type.
+   @end[doc]
+>>
 
 declare tunion{'A; x. 'B['x]}
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 (************************************************************************
  * DISPLAY                                                              *
@@ -115,15 +115,15 @@ prim tunionFormation 'A :
    sequent ['ext] { 'H >- univ[i:l] } =
    tunion{'A; x. 'B['x]}
 
-(*!
- * @begin[doc]
- * @rules
- * @modsubsection{Typehood and equality}
- *
- * The union type $@tunion{x; A; B[x]}$ is well-formed if $A$ is
- * a type, and $B[a]$ is a type for any $a @in A$.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @rules
+   @modsubsection{Typehood and equality}
+  
+   The union type $@tunion{x; A; B[x]}$ is well-formed if $A$ is
+   a type, and $B[a]$ is a type for any $a @in A$.
+   @end[doc]
+>>
 prim tunionEquality {| intro []; eqcd |} :
    [wf] sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
    [wf] sequent [squash] { 'H; x: 'A1 >- 'B1['x] = 'B2['x] in univ[i:l] } -->
@@ -136,16 +136,16 @@ prim tunionType {| intro [] |} :
    sequent ['ext] { 'H >- "type"{.Union x:'A. 'B['x] } } =
    it
 
-(*!
- * @begin[doc]
- * @modsubsection{Membership}
- *
- * The elements $t$ of the union type are the elements in
- * any one of the branches $t @in B[a]$ for any $a @in A$.
- * Two elements are equal if they are equal in @emph{any}
- * of the branches $B[a]$.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Membership}
+  
+   The elements $t$ of the union type are the elements in
+   any one of the branches $t @in B[a]$ for any $a @in A$.
+   Two elements are equal if they are equal in @emph{any}
+   of the branches $B[a]$.
+   @end[doc]
+>>
 prim tunionMemberEquality {| intro []; eqcd |} 'a :
    [wf] sequent [squash] { 'H >- 'a = 'a in 'A } -->
    [wf] sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
@@ -153,16 +153,16 @@ prim tunionMemberEquality {| intro []; eqcd |} 'a :
    sequent ['ext] { 'H >- 'x1 = 'x2 in Union x:'A. 'B['x]  } =
    it
 
-(*!
- * @begin[doc]
- * @modsubsection{Introduction}
- *
- * The propositional interpretation of the union type
- * is similar to the existential $@exists{x; A; B[x]}$.
- * The union is inhabited if-and-only-if the existential
- * is also inhabited.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Introduction}
+  
+   The propositional interpretation of the union type
+   is similar to the existential $@exists{x; A; B[x]}$.
+   The union is inhabited if-and-only-if the existential
+   is also inhabited.
+   @end[doc]
+>>
 prim tunionMemberFormation {| intro [] |} 'a :
    [wf] sequent [squash] { 'H >- 'a = 'a in 'A } -->
    [wf] sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
@@ -170,16 +170,16 @@ prim tunionMemberFormation {| intro [] |} 'a :
    sequent ['ext] { 'H >- Union x:'A. 'B['x]  } =
    't
 
-(*!
- * @begin[doc]
- * @modsubsection{Elimination}
- *
- * The elimination form is weak.  The desired rule would be that if
- * $x@colon @tunion{y; A; B[y]}$, then $x @in B[a]$ for some
- * $a @in A$.  This rule is allowed, but only for equality goals,
- * where the computational content of the proof can be omitted.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Elimination}
+  
+   The elimination form is weak.  The desired rule would be that if
+   $x@colon @tunion{y; A; B[y]}$, then $x @in B[a]$ for some
+   $a @in A$.  This rule is allowed, but only for equality goals,
+   where the computational content of the proof can be omitted.
+   @end[doc]
+>>
 prim tunionElimination {| elim [ThinOption thinT] |} 'H :
    sequent [squash] { 'H; x: tunion{'A; y. 'B['y]}; 'J['x]; w: 'A; z: 'B['w] >- 't1['z] = 't2['z] in 'C['z] } -->
    sequent ['ext] { 'H; x: tunion{'A; y. 'B['y]}; 'J['x] >- 't1['x] = 't2['x] in 'C['x] } =
@@ -200,7 +200,7 @@ interactive tunionElimination_disjoint (*{| elim [ThinOption thinLastT] |}*) 'H 
                        u: 'z='x in tunion{'A; y. 'B['y]} >- 'C['z] } -->
    sequent ['ext] { 'H; x: tunion{'A; y. 'B['y]}; 'J['x] >- 'C['x] }
 
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 (************************************************************************
  * TACTICS                                                              *

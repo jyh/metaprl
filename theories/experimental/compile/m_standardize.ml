@@ -53,7 +53,7 @@ interactive subst 'e2 :
    ["wf"] sequent [m] { 'H >- equal{'e1; 'e2} } -->
    sequent [m] { 'H >- 'e1 }
 
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 let standardizeT =
    (fun p -> subst (standardize (concl p)) p)

@@ -1,45 +1,45 @@
-(*!
- * @begin[doc]
- * @module[Mfir_tr_exp]
- *
- * The @tt[Mfir_tr_exp] module defines the typing rules for FIR expressions.
- * @end[doc]
- *
- * ------------------------------------------------------------------------
- *
- * @begin[license]
- * This file is part of MetaPRL, a modular, higher order
- * logical framework that provides a logical programming
- * environment for OCaml and other languages.  Additional
- * information about the system is available at
- * http://www.metaprl.org/
- *
- * Copyright (C) 2002 Brian Emre Aydemir, Caltech
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- *
- * Author: Brian Emre Aydemir
- * @email{emre@cs.caltech.edu}
- * @end[license]
- *)
+doc <:doc< 
+   @begin[doc]
+   @module[Mfir_tr_exp]
+  
+   The @tt[Mfir_tr_exp] module defines the typing rules for FIR expressions.
+   @end[doc]
+  
+   ------------------------------------------------------------------------
+  
+   @begin[license]
+   This file is part of MetaPRL, a modular, higher order
+   logical framework that provides a logical programming
+   environment for OCaml and other languages.  Additional
+   information about the system is available at
+   http://www.metaprl.org/
+  
+   Copyright (C) 2002 Brian Emre Aydemir, Caltech
+  
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public License
+   as published by the Free Software Foundation; either version 2
+   of the License, or (at your option) any later version.
+  
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+  
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  
+   Author: Brian Emre Aydemir
+   @email{emre@cs.caltech.edu}
+   @end[license]
+>>
 
-(*!
- * @begin[doc]
- * @parents
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @parents
+   @end[doc]
+>>
 
 extends Mfir_ty
 extends Mfir_exp
@@ -54,17 +54,17 @@ extends Mfir_tr_store
  * Rules.
  **************************************************************************)
 
-(*!
- * @begin[doc]
- * @rules
- * @modsubsection{Basic expressions}
- *
- * Operationally, the $<< letAtom{ 'ty1; 'atom; v. 'exp['v] } >>$ expression
- * binds $<< 'atom >>$ to $<< 'v >>$ in $<< 'exp >>$.  The expression has type
- * $<< 'ty2 >>$ if $<< 'atom >>$ has type $<< 'ty1 >>$, and $<< 'exp['v] >>$
- * has type $<< 'ty2 >>$ assuming that $<< 'v >>$ has type $<< 'ty1 >>$.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @rules
+   @modsubsection{Basic expressions}
+  
+   Operationally, the $<< letAtom{ 'ty1; 'atom; v. 'exp['v] } >>$ expression
+   binds $<< 'atom >>$ to $<< 'v >>$ in $<< 'exp >>$.  The expression has type
+   $<< 'ty2 >>$ if $<< 'atom >>$ has type $<< 'ty1 >>$, and $<< 'exp['v] >>$
+   has type $<< 'ty2 >>$ assuming that $<< 'v >>$ has type $<< 'ty1 >>$.
+   @end[doc]
+>>
 
 prim ty_letAtom :
    sequent [fir] { 'H >- has_type["atom"]{ 'atom; 'ty1 } } -->
@@ -75,16 +75,16 @@ prim ty_letAtom :
    = it
 
 
-(*!
- * @begin[doc]
- *
- * The expression $<< letExt[str:s]{ 'u; 'tyl; 'args; v. 'exp['v] } >>$ binds
- * the result of a call to an external (e.g.~standard library) function
- * $<< 'str >>$ to $<< 'v >>$ in $<< 'exp >>$.  We make no attempt to see that
- * the types in the expression correspond to the actual types for the function
- * @tt[str].
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   The expression $<< letExt[str:s]{ 'u; 'tyl; 'args; v. 'exp['v] } >>$ binds
+   the result of a call to an external (e.g.~standard library) function
+   $<< 'str >>$ to $<< 'v >>$ in $<< 'exp >>$.  We make no attempt to see that
+   the types in the expression correspond to the actual types for the function
+   @tt[str].
+   @end[doc]
+>>
 
 prim ty_letExt :
    sequent [fir] { 'H >- has_type["atom_list"]{ 'args; 'tyl } } -->
@@ -96,15 +96,15 @@ prim ty_letExt :
    = it
 
 
-(*!
- * @begin[doc]
- *
- * The next three rules assume that FIR programs are written in continuation
- * passing style.  A function call is well-formed if the variable
- * $<< atomVar{'v} >>$ is a function, and if the arguments have the
- * appropriate types.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   The next three rules assume that FIR programs are written in continuation
+   passing style.  A function call is well-formed if the variable
+   $<< atomVar{'v} >>$ is a function, and if the arguments have the
+   appropriate types.
+   @end[doc]
+>>
 
 prim ty_tailCall 'H :
    sequent [fir] { 'H; a: var_def{ 'v; tyFun{'t1; 't2}; 'd }; 'J >-
@@ -124,25 +124,25 @@ prim ty_tailCall_args2 :
       has_type["tailCall"]{ cons{ 'h; 't }; tyFun{ 't1; 't2 } } }
    = it
 
-(*!
- * @docoff
- *)
+doc <:doc< 
+   @docoff
+>>
 
 
-(*!************************************
- * @begin[doc]
- * @modsubsection{Pattern matching}
- *
- * Match statements allow pattern matching on numbers, where each pattern
- * is a set of constant intervals.  Operationally, the first case for which
- * the number is a member of the cases's set is selected for execution.
- * One case must always match; that is, the list of cases for a match
- * expression cannot be empty, and they must cover all possible values
- * of the number (atom) being matched.
- *
- * (Documentation incomplete.)
- * @end[doc]
- *)
+doc <:doc< ************************************
+   @begin[doc]
+   @modsubsection{Pattern matching}
+  
+   Match statements allow pattern matching on numbers, where each pattern
+   is a set of constant intervals.  Operationally, the first case for which
+   the number is a member of the cases's set is selected for execution.
+   One case must always match; that is, the list of cases for a match
+   expression cannot be empty, and they must cover all possible values
+   of the number (atom) being matched.
+  
+   (Documentation incomplete.)
+   @end[doc]
+>>
 
 (* XXX: documentation needs to be completed. *)
 
@@ -158,12 +158,12 @@ prim ty_match_cases_ind :
    = it
 
 
-(*!
- * @begin[doc]
- *
- * (Documentation incomplete.)
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   (Documentation incomplete.)
+   @end[doc]
+>>
 
 (* XXX: documentation needs to be completed. *)
 
@@ -200,12 +200,12 @@ prim ty_matchExp_tyInt_var 'H :
    = it
 
 
-(*!
- * @begin[doc]
- *
- * (Documentation incomplete.)
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   (Documentation incomplete.)
+   @end[doc]
+>>
 
 (* XXX: documentation needs to be completed. *)
 
@@ -243,12 +243,12 @@ prim ty_matchExp_tyEnum_var 'H :
    = it
 
 
-(*!
- * @begin[doc]
- *
- * (Documentation incomplete.)
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   (Documentation incomplete.)
+   @end[doc]
+>>
 
 prim ty_matchExp_tyRawInt_atom :
    (* The  atom being matched should be well-formed. *)
@@ -284,12 +284,12 @@ prim ty_matchExp_tyRawInt_var 'H :
    = it
 
 
-(*!
- * @begin[doc]
- *
- * (Documentation incomplete.)
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   (Documentation incomplete.)
+   @end[doc]
+>>
 
 (* XXX: documentation needs to be completed. *)
 
@@ -330,16 +330,16 @@ prim ty_matchExp_tyUnion_cases_ind 'H :
    = it
 
 
-(*!************************************
- * @begin[doc]
- * @modsubsection{Offsets}
- *
- * An offset atom should either be an integer or a raw integer.
- * Note that offsets cannot be negative, but in the case of variables,
- * this cannot be checked; variables are not defined (with some value)
- * during type checking.
- * @end[doc]
- *)
+doc <:doc< ************************************
+   @begin[doc]
+   @modsubsection{Offsets}
+  
+   An offset atom should either be an integer or a raw integer.
+   Note that offsets cannot be negative, but in the case of variables,
+   this cannot be checked; variables are not defined (with some value)
+   during type checking.
+   @end[doc]
+>>
 
 prim ty_offset_tyInt :
    sequent [fir] { 'H >- int_le{ 0; 'i } } -->
@@ -366,24 +366,24 @@ prim ty_offset_tyRawInt_var 'H :
    = it
 
 
-(*!************************************
- * @begin[doc]
- * @modsubsection{Allocation}
- *
- * The rules for the expression $<< letAlloc{ 'op; v. 'exp['v] } >>$
- * defer, when possible, to the rules for the well-formedness of
- * the value allocated.  The result of the allocation is bound to $<< 'v >>$
- * in $<< 'exp >>$.
- * @end[doc]
- *)
+doc <:doc< ************************************
+   @begin[doc]
+   @modsubsection{Allocation}
+  
+   The rules for the expression $<< letAlloc{ 'op; v. 'exp['v] } >>$
+   defer, when possible, to the rules for the well-formedness of
+   the value allocated.  The result of the allocation is bound to $<< 'v >>$
+   in $<< 'exp >>$.
+   @end[doc]
+>>
 
 
-(*!
- * @begin[doc]
- *
- * (Documentation incomplete.)
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   (Documentation incomplete.)
+   @end[doc]
+>>
 
 (* XXX: documentation needs to be completed. *)
 
@@ -397,12 +397,12 @@ prim ty_letAlloc_array :
    = it
 
 
-(*!
- * @begin[doc]
- *
- * (Documentation incomplete.)
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   (Documentation incomplete.)
+   @end[doc]
+>>
 
 (* XXX: documentation needs to be completed. *)
 
@@ -418,12 +418,12 @@ prim ty_letAlloc_varray :
    = it
 
 
-(*!
- * @begin[doc]
- *
- * (Documentation incomplete.)
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   (Documentation incomplete.)
+   @end[doc]
+>>
 
 (* XXX: documentation needs to be completed. *)
 
@@ -443,12 +443,12 @@ prim ty_letAlloc_malloc :
    = it
 
 
-(*!
- * @begin[doc]
- *
- * (Documentation incomplete.)
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   (Documentation incomplete.)
+   @end[doc]
+>>
 
 (* XXX: documentation needs to be completed. *)
 
@@ -464,13 +464,13 @@ prim ty_letAlloc_frame :
    = it
 
 
-(*!************************************
- * @begin[doc]
- * @modsubsection{Subscripting}
- *
- * (Documentation incomplete.)
- * @end[doc]
- *)
+doc <:doc< ************************************
+   @begin[doc]
+   @modsubsection{Subscripting}
+  
+   (Documentation incomplete.)
+   @end[doc]
+>>
 
 (* XXX: documentation needs to be completed. *)
 
@@ -503,12 +503,12 @@ prim ty_setSubscript_tyTuple 'H :
    = it
 
 
-(*!
- * @begin[doc]
- *
- * (Documentation incomplete.)
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   (Documentation incomplete.)
+   @end[doc]
+>>
 
 (* XXX: documentation needs to be completed. *)
 
@@ -531,12 +531,12 @@ prim ty_setSubscript_tyArray :
    = it
 
 
-(*!
- * @begin[doc]
- *
- * (Documentation incomplete.)
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   (Documentation incomplete.)
+   @end[doc]
+>>
 
 (* XXX: documentation needs to be completed. *)
 (* XXX: union subscripting rules need to be completed. *)
@@ -548,12 +548,12 @@ prim ty_letSubscript_tyUnion 'H :
 *)
 
 
-(*!
- * @begin[doc]
- *
- * (Documentation incomplete.)
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   (Documentation incomplete.)
+   @end[doc]
+>>
 
 (* XXX: documentation needs to be completed. *)
 
@@ -576,28 +576,28 @@ prim ty_setSubscript_rawdata :
    = it
 
 
-(*!
- * @begin[doc]
- *
- * (Documentation incomplete.)
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   (Documentation incomplete.)
+   @end[doc]
+>>
 
 (* XXX: documentation needs to be completed. *)
 (* XXX: frame subscripting rules need to be completed. *)
 
 
-(*!************************************
- * @begin[doc]
- * @modsubsection{Global Values}
- *
- * The expression $<< letGlobal{ 'ty1; 'label; v. 'exp['v] } >>$ is used to
- * read a global value, and the expression
- * $<< setGlobal{ 'label; 'ty1; 'atom; 'exp } >>$ is used to set a global
- * value.  There is no way to use global values directly.  The typing rules
- * for these expressions are straightforward.
- * @end[doc]
- *)
+doc <:doc< ************************************
+   @begin[doc]
+   @modsubsection{Global Values}
+  
+   The expression $<< letGlobal{ 'ty1; 'label; v. 'exp['v] } >>$ is used to
+   read a global value, and the expression
+   $<< setGlobal{ 'label; 'ty1; 'atom; 'exp } >>$ is used to set a global
+   value.  There is no way to use global values directly.  The typing rules
+   for these expressions are straightforward.
+   @end[doc]
+>>
 
 prim ty_label 'H :
    sequent [fir] { 'H; a: global_def{ 'l; 'ty; 'd }; 'J >-
@@ -620,6 +620,6 @@ prim ty_setGlobal :
       has_type["exp"]{ setGlobal{ 'label; 'ty1; 'atom; 'exp }; 'ty2 } }
    = it
 
-(*!
- * @docoff
- *)
+doc <:doc< 
+   @docoff
+>>

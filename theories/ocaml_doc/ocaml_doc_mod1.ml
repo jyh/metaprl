@@ -1,42 +1,42 @@
-(*! -*- Mode: text -*-
- *
- * @begin[spelling]
- * ADT ADTs Fset acts expr fset goto grep linenum ll
- * mem namespace stdin timestep cc ed
- * @end[spelling]
- *
- * @begin[doc]
- * @chapter[files]{Files, Compilation Units, and Programs}
- * @end[doc]
- *
- * ----------------------------------------------------------------
- *
- * @begin[license]
- * Copyright (C) 2000 Jason Hickey, Caltech
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- *
- * Author: Jason Hickey
- * @email{jyh@cs.caltech.edu}
- * @end[license]
- *)
+doc <:doc< -*- Mode: text -*-
+  
+   @begin[spelling]
+   ADT ADTs Fset acts expr fset goto grep linenum ll
+   mem namespace stdin timestep cc ed
+   @end[spelling]
+  
+   @begin[doc]
+   @chapter[files]{Files, Compilation Units, and Programs}
+   @end[doc]
+  
+   ----------------------------------------------------------------
+  
+   @begin[license]
+   Copyright (C) 2000 Jason Hickey, Caltech
+  
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public License
+   as published by the Free Software Foundation; either version 2
+   of the License, or (at your option) any later version.
+  
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+  
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  
+   Author: Jason Hickey
+   @email{jyh@cs.caltech.edu}
+   @end[license]
+>>
 
-(*! @docoff *)
+doc <:doc< @docoff >>
 extends Base_theory
 
-(*!
+doc <:doc< 
 @begin[doc]
 
 One of the principles of modern programming is @emph{data hiding}
@@ -71,9 +71,9 @@ be defined in a @code{.mli} file with the same name.  If there is no
 functions defined in the @code[".ml"] file.
 
 @end[doc]
-*)
+>>
 
-(*!
+doc <:doc< 
 @begin[doc]
 
 @section[signatures]{Signatures}
@@ -172,9 +172,9 @@ implementation, these functions will be private to the
 implementation and inaccessible to other program modules.
 
 @end[doc]
-*)
+>>
 
-(*!
+doc <:doc< 
 @begin[doc]
 
 @section[implementations]{Implementations}
@@ -273,9 +273,9 @@ let insert x s =
 @end[verbatim]
 
 @end[doc]
-*)
+>>
 
-(*!
+doc <:doc< 
 @begin[doc]
 
 @section[using_comp_unit]{Building a program}
@@ -337,9 +337,9 @@ top level expression.  Another way to accomplish this is by adding the
 @code{loop} function.
 
 @end[doc]
-*)
+>>
 
-(*!
+doc <:doc< 
 @begin[doc]
 
 @section[compiling]{Compiling the program}
@@ -533,9 +533,9 @@ which file is out of date, and the best solution is to recompile them
 all.
 
 @end[doc]
-*)
+>>
 
-(*!
+doc <:doc< 
 @begin[doc]
 
 @section[open]{Using @tt{open} to expose a namespace}
@@ -611,9 +611,9 @@ preserves a simple semantics: the implementation must provide a
 definition for each declaration in the signature.
 
 @end[doc]
-*)
+>>
 
-(*!
+doc <:doc< 
 @begin[doc]
 
 @section[debugging]{Debugging a program}
@@ -786,7 +786,7 @@ documentation can be found in the OCaml reference manual.
 
 @end[doc]
 @docoff
-*)
+>>
 
 (*
  * -*-

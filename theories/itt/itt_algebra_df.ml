@@ -1,15 +1,15 @@
-(*!
- * @begin[doc]
- * @module[Itt_algebra_df]
- *
- * This theory does not contain any mathematical object.
- * It defines only display forms for the most common algebraic operations.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @module[Itt_algebra_df]
+  
+   This theory does not contain any mathematical object.
+   It defines only display forms for the most common algebraic operations.
+   @end[doc]
+>>
 
 extends Itt_record
 
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 open Printf
 open Mp_debug

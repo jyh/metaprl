@@ -1,11 +1,8 @@
-(*!
- * @begin[doc]
+(*
  * This file defines the terms needed to represent the M AST.
  * The language is a superset of the M IR. So far, the only
  * extension is tuples, which are used to encode function
  * arguments.
- *
- * @end[doc]
  *
  * ----------------------------------------------------------------
  *
@@ -26,25 +23,13 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
- * Author: Adam Granicz
- * @email{granicz@cs.caltech.edu}
+ * Author: Adam Granicz @email{granicz@cs.caltech.edu}
  * @end[license]
  *)
 
-(*!
- * @begin[doc]
- * @parents
- * @end[doc]
- *)
 extends M_util
 extends M_ir
-(*! @docoff *)
 
-(*!
- * @begin[doc]
- * We define our own tuple terms.
- * @end[doc]
- *)
 declare mnil
 declare mcons{'e; 'list}
 

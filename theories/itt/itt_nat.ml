@@ -1,47 +1,47 @@
-(*!
- * @spelling{gt_bool le_bool ge_bool gt le ge nequal}
- *
- * @begin[doc]
- * @module[Itt_nat]
- *
- * Theory of natural numbers.
- * @end[doc]
- *
- * ----------------------------------------------------------------
- *
- * @begin[license]
- * This file is part of MetaPRL, a modular, higher order
- * logical framework that provides a logical programming
- * environment for OCaml and other languages.
- *
- * See the file doc/index.html for information on Nuprl,
- * OCaml, and more information about this system.
- *
- * Copyright (C) 2001 Alexei Kopylov, Cornell University
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- *
- * Author: Alexei Kopylov @email{kopylov@cs.cornell.edu}
- * @end[license]
- *)
+doc <:doc< 
+   @spelling{gt_bool le_bool ge_bool gt le ge nequal}
+  
+   @begin[doc]
+   @module[Itt_nat]
+  
+   Theory of natural numbers.
+   @end[doc]
+  
+   ----------------------------------------------------------------
+  
+   @begin[license]
+   This file is part of MetaPRL, a modular, higher order
+   logical framework that provides a logical programming
+   environment for OCaml and other languages.
+  
+   See the file doc/index.html for information on Nuprl,
+   OCaml, and more information about this system.
+  
+   Copyright (C) 2001 Alexei Kopylov, Cornell University
+  
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public License
+   as published by the Free Software Foundation; either version 2
+   of the License, or (at your option) any later version.
+  
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+  
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  
+   Author: Alexei Kopylov @email{kopylov@cs.cornell.edu}
+   @end[license]
+>>
 
-(*!
- * @begin[doc]
- * @parents
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @parents
+   @end[doc]
+>>
 extends Itt_equal
 extends Itt_rfun
 extends Itt_logic
@@ -50,7 +50,7 @@ extends Itt_struct3
 extends Itt_int_base
 extends Itt_int_ext
 extends Itt_int_arith
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 open Printf
 open Mp_debug
@@ -76,7 +76,7 @@ open Base_dtactic
 open Base_auto_tactic
 open Itt_bool
 
-(*! @doc{@terms} *)
+doc <:doc< @doc{@terms} >>
 
 define unfold_nat : nat <--> ({x:int | 'x>=0})
 
@@ -88,7 +88,7 @@ define unfoldInd : ind{'n; 'base; k,l. 'up['k;'l]} <-->
                    ind{'n; i,j.it; 'base; k,l . 'up['k;'l]}
 
 
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 dform nat_prl_df : except_mode [src] :: nat = mathbbN
 dform nat_src_df : mode[src] :: nat = `"nat"
@@ -103,7 +103,7 @@ dform ind_df : parens :: "prec"[prec_bor] :: except_mode[src] ::
    'up[display_var["n":v]{nil}; display_ind{(display_var["n":v]{nil} -@ 1)}]}))
    popm ezone
 
-(*! @doc{@rewrites} *)
+doc <:doc< @doc{@rewrites} >>
 
 interactive_rw reduce_ind_up :
    ('x in nat) -->
@@ -114,12 +114,12 @@ interactive_rw reduce_ind_base :
    (ind{0; 'base; k,l. 'up['k;'l]}) <-->
    'base
 
-(*! @docoff *)
+doc <:doc< @docoff >>
 let resource reduce +=
    [<< ind{.'x +@ 1; 'base; k,l. 'up['k;'l]} >>, reduce_ind_up;
     << ind{0; 'base; k,l. 'up['k;'l]} >>, reduce_ind_base]
 
-(*! @doc{@rules} *)
+doc <:doc< @doc{@rules} >>
 
 interactive natType {| intro [] |} :
    sequent ['ext] { 'H >- "type"{nat} }
@@ -158,7 +158,7 @@ interactive well_ordering_principle bind{i.'P['i]} 'i :
       all n:nat. ("not"{'P['n]} or "not"{.all n2:nat. ('P['n2] => 'n < 'n2)})} -->
    sequent['ext] {'H >- "not"{'P['i]}}
 
-(*! @docoff *)
+doc <:doc< @docoff >>
 
 let natBackInductionT n p =
    let bind =

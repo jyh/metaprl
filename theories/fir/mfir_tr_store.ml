@@ -1,45 +1,45 @@
-(*!
- * @begin[doc]
- * @module[Mfir_tr_store]
- *
- * The @tt[Mfir_tr_store] module defines the typing rules for store values.
- * @end[doc]
- *
- * ------------------------------------------------------------------------
- *
- * @begin[license]
- * This file is part of MetaPRL, a modular, higher order
- * logical framework that provides a logical programming
- * environment for OCaml and other languages.  Additional
- * information about the system is available at
- * http://www.metaprl.org/
- *
- * Copyright (C) 2002 Brian Emre Aydemir, Caltech
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- *
- * Author: Brian Emre Aydemir
- * @email{emre@cs.caltech.edu}
- * @end[license]
- *)
+doc <:doc< 
+   @begin[doc]
+   @module[Mfir_tr_store]
+  
+   The @tt[Mfir_tr_store] module defines the typing rules for store values.
+   @end[doc]
+  
+   ------------------------------------------------------------------------
+  
+   @begin[license]
+   This file is part of MetaPRL, a modular, higher order
+   logical framework that provides a logical programming
+   environment for OCaml and other languages.  Additional
+   information about the system is available at
+   http://www.metaprl.org/
+  
+   Copyright (C) 2002 Brian Emre Aydemir, Caltech
+  
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public License
+   as published by the Free Software Foundation; either version 2
+   of the License, or (at your option) any later version.
+  
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+  
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  
+   Author: Brian Emre Aydemir
+   @email{emre@cs.caltech.edu}
+   @end[license]
+>>
 
-(*!
- * @begin[doc]
- * @parents
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @parents
+   @end[doc]
+>>
 
 extends Mfir_list
 extends Mfir_ty
@@ -54,14 +54,14 @@ extends Mfir_tr_atom
  * Rules.
  **************************************************************************)
 
-(*!
- * @begin[doc]
- * @rules
- * @modsubsection{Tuple and array values}
- *
- * Store values of a tuple types are represented as lists of atoms.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+   @rules
+   @modsubsection{Tuple and array values}
+  
+   Store values of a tuple types are represented as lists of atoms.
+   @end[doc]
+>>
 
 prim ty_store_tuple_normal :
    sequent [fir] { 'H >- has_type["atom_list"]{ 'elts; 'types } } -->
@@ -80,12 +80,12 @@ prim ty_store_tuple_box :
    = it
 
 
-(*!
- * @begin[doc]
- *
- * Store values of array types are also represented as lists of atoms.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   Store values of array types are also represented as lists of atoms.
+   @end[doc]
+>>
 
 prim ty_store_array1 :
    sequent [fir] { 'H >- has_type["store"]{ nil; tyArray{'t} } }
@@ -98,15 +98,15 @@ prim ty_store_array2 :
    = it
 
 
-(*!************************************
- * @begin[doc]
- * @modsubsection{Functions}
- *
- * The typing rules for functions are straightforward.  These rules use the
- * ``@tt[exp]'' tag since in $<< polyFun{ x. 'f['x] } >>$ and
- * $<< lambda{ x. 'f['x] } >>$, $f$ may be an expression.
- * @end[doc]
- *)
+doc <:doc< ************************************
+   @begin[doc]
+   @modsubsection{Functions}
+  
+   The typing rules for functions are straightforward.  These rules use the
+   ``@tt[exp]'' tag since in $<< polyFun{ x. 'f['x] } >>$ and
+   $<< lambda{ x. 'f['x] } >>$, $f$ may be an expression.
+   @end[doc]
+>>
 
 prim ty_store_lambda :
    sequent [fir] { 'H >- type_eq{ 'u; 'u; large_type } } -->
@@ -124,15 +124,15 @@ prim ty_store_polyFun :
    = it
 
 
-(*!************************************
- * @begin[doc]
- * @modsubsection{Union values}
- *
- * A value $<< union_val[i:n]{ 'tv; 'atom_list } >>$ belongs to a union type
- * if the union type is well-formed, and if the atoms belong to the specific
- * case of the union definition given by the union type.
- * @end[doc]
- *)
+doc <:doc< ************************************
+   @begin[doc]
+   @modsubsection{Union values}
+  
+   A value $<< union_val[i:n]{ 'tv; 'atom_list } >>$ belongs to a union type
+   if the union type is well-formed, and if the atoms belong to the specific
+   case of the union definition given by the union type.
+   @end[doc]
+>>
 
 prim ty_store_union 'H :
    (* well-formedness of the union type. *)
@@ -158,13 +158,13 @@ prim ty_store_union 'H :
    = it
 
 
-(*!
- * @begin[doc]
- *
- * The next two rules check that the atoms used to initialize a union value
- * have the appropriate types.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   The next two rules check that the atoms used to initialize a union value
+   have the appropriate types.
+   @end[doc]
+>>
 
 prim ty_store_union_atoms1 :
    sequent [fir] { 'H >- has_type["union_atoms"]{ nil; nil } }
@@ -179,18 +179,18 @@ prim ty_store_union_atoms2 :
    = it
 
 
-(*!************************************
- * @begin[doc]
- * @modsubsection{Raw data values}
- *
- * Raw data is represented abstractly as the value $<< raw_data >>$.
- * @end[doc]
- *)
+doc <:doc< ************************************
+   @begin[doc]
+   @modsubsection{Raw data values}
+  
+   Raw data is represented abstractly as the value $<< raw_data >>$.
+   @end[doc]
+>>
 
 prim ty_store_raw_data :
    sequent [fir] { 'H >- has_type["store"]{ raw_data; tyRawData } }
    = it
 
-(*!
- * @docoff
- *)
+doc <:doc< 
+   @docoff
+>>

@@ -1,20 +1,20 @@
-(*!
- * @spelling{reduceEta}
- *
- * @begin[doc]
- * @module[Itt_eta]
- * @parents
- * @end[doc]
- *)
+doc <:doc< 
+   @spelling{reduceEta}
+  
+   @begin[doc]
+   @module[Itt_eta]
+   @parents
+   @end[doc]
+>>
 extends Itt_dfun
 
-(*!
- * @begin[doc]
- *
- * The @tt{reduceEta} rewrite defines eta-reduction.
- * This is conditional reduction: one can apply it only for functions.
- * @end[doc]
- *)
+doc <:doc< 
+   @begin[doc]
+  
+   The @tt{reduceEta} rewrite defines eta-reduction.
+   This is conditional reduction: one can apply it only for functions.
+   @end[doc]
+>>
 
  prim_rw reduceEta (x: 'A -> 'B['x]) :
    ('f in (x: 'A -> 'B['x])) -->

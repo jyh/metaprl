@@ -25,14 +25,8 @@
  * @end[license]
  *)
 
-(*!
- * @begin[doc]
- * @parents
- * @end[doc]
- *)
 extends M_ir
 extends M_x86_frame
-(*! @docoff *)
 
 open Refiner.Refiner.Term
 
@@ -44,9 +38,7 @@ open Tactic_type.Conversionals
  *)
 topval codegenT : tactic
 
-(*!
- * @docoff
- *
+(*
  * -*-
  * Local Variables:
  * Caml-master: "compile"

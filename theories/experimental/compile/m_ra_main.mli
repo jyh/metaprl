@@ -32,9 +32,7 @@ module MakeRegAlloc (Frame : FrameSig)
 : RegAllocSig
   with type block = Frame.inst Frame.block
 
-(*!
- * @docoff
- *
+(*
  * -*-
  * Local Variables:
  * Caml-master: "compile"

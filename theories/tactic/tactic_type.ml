@@ -75,7 +75,7 @@ struct
    let compose ext extl = Compose (ext, extl)
 end
 
-module ThreadRefiner = Thread_refiner_tree.MakeThreadRefiner (ThreadRefinerArg)
+module ThreadRefiner = Thread_refiner_null.MakeThreadRefiner (ThreadRefinerArg)
 
 (*
  * Many tactics wish to examine their argument, so

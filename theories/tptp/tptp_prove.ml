@@ -49,6 +49,17 @@ let debug_tptp_prove =
  ************************************************************************)
 
 (*
+ * Sets for hyp lists.
+ *)
+module StringOrd =
+struct
+   type t = string
+   let compare = compare
+end
+
+module StringSet = Splay_set.Make (StringOrd)
+
+(*
  * Keep a list of the hyps in exploded form.
  *    the positive vars are the head constants
  *       of the positive disjuncts in the clause,
@@ -58,8 +69,8 @@ let debug_tptp_prove =
 type tptp_clause_info =
    { tptp_vars : string list;
      tptp_body : term list;
-     tptp_positive : string list;
-     tptp_negative : string list
+     tptp_positive : StringSet.t;
+     tptp_negative : StringSet.t
    }
 
 (*
@@ -107,6 +118,18 @@ let tab out i =
       output_char out ' '
    done
 
+(*
+ * Build a set from a list.
+ *)
+let set_of_list =
+   let rec collect set = function
+      s :: tl ->
+         collect (StringSet.add s set) tl
+    | [] ->
+         set
+   in
+      collect StringSet.empty
+
 (************************************************************************
  * TERM SET                                                             *
  ************************************************************************)
@@ -151,16 +174,20 @@ let first_clause hyps =
  * Figure out which atoms are positive,
  * which are negative.
  *)
-let rec split_atoms = function
-   term :: terms ->
-      let positive, negative = split_atoms terms in
+let split_atoms =
+   let rec collect positive negative = function
+      term :: terms ->
          if is_not_term term then
             let term = dest_not term in
-               positive, dest_var (head_of_apply term) :: negative
+            let v = dest_var (head_of_apply term) in
+               collect positive (StringSet.add v negative) terms
          else
-            dest_var (head_of_apply term) :: positive, negative
- | [] ->
-      [], []
+            let v = dest_var (head_of_apply term) in
+               collect (StringSet.add v positive) negative terms
+    | [] ->
+         positive, negative
+   in
+      collect StringSet.empty StringSet.empty
 
 (*
  * Spread the clause.
@@ -181,8 +208,8 @@ let dest_hyps hyps =
    let null_hyp =
       { tptp_vars = [];
         tptp_body = [];
-        tptp_negative = [];
-        tptp_positive = []
+        tptp_negative = StringSet.empty;
+        tptp_positive = StringSet.empty
       }
    in
    let hyps' = Array.create len null_hyp in
@@ -213,6 +240,7 @@ let dest_goal t =
         tptp_positive = positive;
         tptp_negative = negative
       }
+
 
 (************************************************************************
  * UNIFICATION                                                          *
@@ -272,6 +300,15 @@ let rec unify_term_lists constants terms1 terms2 =
          end
     | [] ->
          raise unify_exn
+
+(*
+ * Check that the goal and the hyp have some hope at unification.
+ *)
+let check_unify
+    { tptp_positive = pos1; tptp_negative = neg1 }
+    { tptp_positive = pos2; tptp_negative = neg2 } =
+   if not (StringSet.intersectp pos1 pos2 || StringSet.intersectp neg1 neg2) then
+      raise unify_exn
 
 (************************************************************************
  * TACTICS                                                              *
@@ -537,6 +574,7 @@ let rec prove_auxT
             else
                try
                   let hyp_info = hyps.(i - 1) in
+                  (* let _ = check_unify hyp_info goal_info in *)
                   let subst, terms1, terms2 = unify_term_lists constants body hyp_info.tptp_body in
                   let goal_info = new_goal constants subst terms1 terms2 in
                   let goal = mk_goal goal_info in
@@ -570,7 +608,7 @@ let proveT p =
  * This tactic is just for performance testing.
  *)
 let loopTestT p =
-   for i = 0 to 20 do
+   for i = 0 to 100 do
       Tactic_type.refine proveT p
    done
 

@@ -80,8 +80,8 @@ axiom setMemberEquality 'H 'x :
  * H, u: { x:A | B }, y: A; v: hide{B[y]}; J[y] >- T[y]
  *)
 axiom setElimination 'H 'J 'u 'y 'v :
-   sequent ['ext] { 'H; u: { x:'A | 'B['x] }; y: 'A; v: 'B['y]; 'J['y] >- 'T['y] } -->
-   sequent ['ext] { 'H; u: { x:'A | 'B['x] }; 'J['u] >- 'T['u] }
+   sequent [squash] { 'H; u: { x:'A | 'B['x] }; y: 'A; v: 'B['y]; 'J['y] >- 'T['y] } -->
+   sequent [squash] { 'H; u: { x:'A | 'B['x] }; 'J['u] >- 'T['u] }
 
 (*
  * H, u: { x:A | B }, J[u] >> T[u] ext t[y]
@@ -129,6 +129,9 @@ val mk_hide_term : term -> term
 
 (*
  * $Log$
+ * Revision 1.3  1998/04/09 18:26:09  jyh
+ * Working compiler once again.
+ *
  * Revision 1.2  1997/08/06 16:18:41  jyh
  * This is an ocaml version with subtyping, type inference,
  * d and eqcd tactics.  It is a basic system, but not debugged.

@@ -10,6 +10,7 @@ open Resource
 open Refine_sig
 
 include Var
+include Tactic_type
 
 include Itt_equal
 include Itt_dprod
@@ -174,6 +175,9 @@ let sub_resource =
 
 (*
  * $Log$
+ * Revision 1.3  1998/04/09 18:26:07  jyh
+ * Working compiler once again.
+ *
  * Revision 1.2  1997/08/06 16:18:36  jyh
  * This is an ocaml version with subtyping, type inference,
  * d and eqcd tactics.  It is a basic system, but not debugged.

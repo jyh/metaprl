@@ -12,7 +12,7 @@ open Term_stable
 open Refine_sig
 open Resource
 
-open Tactic_type
+include Tactic_type
 
 include Base_theory
 
@@ -23,9 +23,6 @@ include Itt_squash
 (************************************************************************
  * TERMS                                                                *
  ************************************************************************)
-
-declare ext
-declare squash
 
 declare "type"{'a}
 declare univ[@i:l]
@@ -58,8 +55,8 @@ mldform mode[prl] :: univ[@i:l] term_print buf =
  * H >- T ext b
  *)
 prim equalityFormation 'H 'T :
-   ('a : sequent [ext] { 'H >- 'T }) -->
-   ('b : sequent [ext] { 'H >- 'T }) -->
+   ('a : sequent ['ext] { 'H >- 'T }) -->
+   ('b : sequent ['ext] { 'H >- 'T }) -->
    sequent ['ext] { 'H >- univ[@i:l] } =
    'a = 'b in 'T
 
@@ -115,7 +112,7 @@ prim typeEquality 'H :
  * Squash elim.
  *)
 prim equality_squashElimination 'H :
-   sequent [squash] { 'H >- 'a = 'b in 'T } :
+   sequent [squash] { 'H >- 'a = 'b in 'T } -->
    sequent ['ext] { 'H >- 'a = 'b in 'T } =
    it
 
@@ -321,6 +318,9 @@ let squash_resource = squash_resource.resource_improve squash_resource (equal_te
 
 (*
  * $Log$
+ * Revision 1.3  1998/04/09 18:26:03  jyh
+ * Working compiler once again.
+ *
  * Revision 1.2  1997/08/06 16:18:26  jyh
  * This is an ocaml version with subtyping, type inference,
  * d and eqcd tactics.  It is a basic system, but not debugged.

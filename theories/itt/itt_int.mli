@@ -214,8 +214,8 @@ val int_term : term
 
 val natural_number_term : term
 val is_natural_number_term : term -> bool
-val dest_natural_number : term -> int
-val mk_natural_number_term : int -> term
+val dest_natural_number : term -> Num.num
+val mk_natural_number_term : Num.num -> term
 
 val ind_term : term
 val is_ind_term : term -> bool
@@ -224,6 +224,9 @@ val mk_ind_term : term -> string -> string -> term -> term -> string -> string -
 
 (*
  * $Log$
+ * Revision 1.3  1998/04/09 18:26:05  jyh
+ * Working compiler once again.
+ *
  * Revision 1.2  1997/08/06 16:18:32  jyh
  * This is an ocaml version with subtyping, type inference,
  * d and eqcd tactics.  It is a basic system, but not debugged.

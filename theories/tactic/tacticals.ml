@@ -2,6 +2,9 @@
  * Some basic tacticals.
  *
  * $Log$
+ * Revision 1.4  1998/04/09 18:26:13  jyh
+ * Working compiler once again.
+ *
  * Revision 1.3  1998/02/18 18:48:05  jyh
  * Initial ocaml semantics.
  *
@@ -735,7 +738,7 @@ let get_thinning_arg =
 (*
  * -*-
  * Local Variables:
- * Caml-master: "editor.run"
+ * Caml-master: "/usr/local/lib/nuprl-light/camlp4o.run"
  * End:
  * -*-
  *)

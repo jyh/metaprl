@@ -3,6 +3,7 @@ open Evaluator
 
 include Itt_theory
 
+(*
 let _ = add_simple_rule <<apply{lambda{x.'b};'a}>> (make_1subst_term <<'b>> "x" <<'a>>)
 
 let _ = add_simple_rule <<spread{'a,'b;x,y.'t}>> (make_2subst_term <<'t>> "x" "y" <<'a>> <<'b>>)
@@ -51,5 +52,6 @@ let _ =
                  else make_2subst_term <<'s>> "x" "y" (mk_natural_number_term n) (make_ind_term (n+1)) |
               _ ->  raise (Failure "Evaluator: ITT!ind"))
 
+*)
 
 

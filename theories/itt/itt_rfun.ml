@@ -10,6 +10,8 @@ open Resource
 
 include Var
 
+include Tactic_type
+
 include Itt_equal
 include Itt_void
 include Itt_set
@@ -366,6 +368,9 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (apply
 
 (*
  * $Log$
+ * Revision 1.3  1998/04/09 18:26:09  jyh
+ * Working compiler once again.
+ *
  * Revision 1.2  1997/08/06 16:18:38  jyh
  * This is an ocaml version with subtyping, type inference,
  * d and eqcd tactics.  It is a basic system, but not debugged.

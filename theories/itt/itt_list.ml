@@ -10,6 +10,7 @@ open Resource
 open Refine_sig
 
 include Var
+include Tactic_type
 
 include Itt_equal
 include Itt_rfun
@@ -329,6 +330,9 @@ let sub_resource =
 
 (*
  * $Log$
+ * Revision 1.4  1998/04/09 18:26:07  jyh
+ * Working compiler once again.
+ *
  * Revision 1.3  1997/08/07 19:43:52  jyh
  * Updated and added Lori's term modifications.
  * Need to update all pattern matchings.

@@ -11,6 +11,7 @@ open Sequent
 open Term
 open Resource
 
+include Tactic_type
 include Itt_equal
 
 (*
@@ -147,6 +148,9 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (it_te
 
 (*
  * $Log$
+ * Revision 1.2  1998/04/09 18:26:11  jyh
+ * Working compiler once again.
+ *
  * Revision 1.1  1997/08/06 16:18:47  jyh
  * This is an ocaml version with subtyping, type inference,
  * d and eqcd tactics.  It is a basic system, but not debugged.

@@ -681,10 +681,10 @@ let typeAssertT p =
 (*
  * Automation.
  *)
-let triv_equalT i =
-   equalAssumT i
+let triv_equalT i p =
+   (equalAssumT i
    orelseT memberAssumT i
-   orelseT univAssumT i
+   orelseT univAssumT i) p
 
 let trivial_resource =
    Mp_resource.improve trivial_resource (**)

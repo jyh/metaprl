@@ -140,7 +140,7 @@ prim_rw bterm_op_bdepth2 {| reduce |} : op_bdepth{ bterm{| x:term; <H> >- 'op |}
 
 prim_rw bterm_shape :
     if_quoted_op{'op<||>;"true"} -->
-    shape{'op} <-->  map{lambda{x.op_bdepth{'x}}; list_of_rlist{subterms{'op}} }
+    shape{'op} <-->  map{lambda{x.op_bdepth{'x}}; list_of_rlist{Base_reflection!subterms{'op}} }
 
 let resource reduce += (<<shape{bterm{| <K> >- 't |}}>>,bterm_shape)
 
@@ -213,5 +213,11 @@ prim_rw reflection_subst 'H :
        bterm{| <H>;x:term;<J> >- 'x |};
        bterm{| <H>;x:term;<J> >- 's['x] |}} <-->
  bterm{| <H>;x:term;<J> >- 't['s['x]] |}
-
+(*
+interactive_rw is_same_op_make_bterm :
+   ('bt in BOperator) -->
+   ('btl in list{BTerm}) -->
+   (compatible_shapes{'bt; 'btl}) -->
+   is_same_op{make_bterm{'bt; 'btl}; 'bt} <--> btrue
+*)
 doc docoff

@@ -77,10 +77,17 @@ interactive_rw mk_lambda2 {| reduce |}: mk_lambda 'f <-->  make_bterm{lambda_ter
 define dom_lambda: dom_lambda{'T} <--> {t:BTerm isect 'T | bdepth{'t} >= 1}
 
 
+interactive dom_lambda_wf  {| intro[] |}:
+   sequent { <H> >- "type"{'T} } -->
+   sequent { <H> >- dom_lambda{'T} Type }
+
 interactive mk_lambda_wf  {| intro[] |}:
    sequent { <H> >- "type"{'T} } -->
    sequent { <H> >- mk_lambda: dom_lambda{'T} -> BTerm }
 
+interactive dom_lambda_subtype  {| intro[] |}:
+   sequent { <H> >- 'T_1 subtype 'T_2 } -->
+   sequent { <H> >- dom_lambda{'T_1} subtype dom_lambda{'T_2} }
 
 define dom: dom{'T} <--> Var + (dom_app{'T;'T} + dom_lambda{'T})
 

@@ -95,6 +95,8 @@ define unfold_bneq_int :
 
 doc docoff
 
+let fold_bneq_int = makeFoldC << bneq_int{'a; 'b} >> unfold_bneq_int
+
 let bneq_int_term = << bneq_int{'x; 'y} >>
 let bneq_int_opname = opname_of_term bneq_int_term
 let is_bneq_int_term = is_dep0_dep0_term bneq_int_opname
@@ -191,6 +193,7 @@ doc <:doc< @docoff >>
 
 let fold_le = makeFoldC << le{'a; 'b} >> unfold_le
 let fold_ge = makeFoldC << ge{'a; 'b} >> unfold_ge
+let fold_neq_int = makeFoldC << nequal{'a; 'b} >> unfold_neq_int
 
 let reduce_lt_prop = unfold_lt thenC (addrC [Subterm 1] reduce_lt)
 let reduce_gt_prop = unfold_gt thenC reduce_lt_prop

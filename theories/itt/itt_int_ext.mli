@@ -118,6 +118,9 @@ prec prec_mul
  * REWRITES                                                             *
  ************************************************************************)
 
+topval fold_bneq_int : conv
+topval fold_neq_int : conv
+
 topval reduce_mul: conv
 topval reduce_div: conv
 topval reduce_rem: conv

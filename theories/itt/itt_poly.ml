@@ -245,13 +245,11 @@ define unfold_deg : deg{'p} <-->
 define unfold_coeff : coeff{'p; 'i; 'F} <-->
    if ('i <@ (fst{'p} +@ 1)) then (snd{'p} 'i) else 'F^"0"
 
-declare normalize{'p; 'F}
-
-prim_rw unfold_normalize : normalize{'p; 'F} <-->
-   ind{ fst{'p}; 'p; k,l.
-        if isZero{(snd{'p} fst{'p}); 'F}
-                then normalize{(fst{'p} -@ 1, snd{'p}); 'F}
-                else 'p }
+define unfold_normalize : normalize{'p; 'F} <-->
+   ind{ fst{'p}; (0, snd{'p}); i,up.
+        if isZero{(snd{'p} 'i); 'F}
+                then 'up
+                else ('i, snd{'p}) }
 
 define unfold_add_const : add_const{'p; 'a; 'F} <-->
    (fst{'p}, lambda{x. if ('x=@0) then (snd{'p} 0 +['F] 'a) else (snd{'p} 'x)})
@@ -263,15 +261,8 @@ define unfold_mul_const : mul_const{'p; 'a; 'F} <-->
 define unfold_add_poly : add_poly{'p; 'q; 'F} <-->
    normalize{(max{fst{'p}; fst{'q}}, lambda{x. coeff{'p;'x;'F} +['F] coeff{'q;'x;'F}}); 'F}
 
-declare sum{'j; x.'P['x]; 'F}
-
-prim_rw unfold_sum1 : sum{'j; x.'P['x]; 'F} <-->
-   ind{'j; m,n. sum{('j +@ 1); x.'P['x]; 'F} +['F] 'P['j]; 'P[0]; k,l. sum{('j -@ 1); x.'P['x]; 'F} +['F] 'P['j] }
-
-declare sum{'i; 'j; x.'P['x]; 'F}
-
-prim_rw unfold_sum2: sum{'i; 'j; x.'P['x]; 'F} <-->
-   ind{('j -@ 'i); m,n. sum{'i; ('j+@1); x.'P['x]; 'F} +['F] 'P['j]; 'P['i]; k,l. sum{'i; ('j-@1); x.'P['x]; 'F} +['F] 'P['j] }
+define unfold_sum : sum{'i; 'j; x.'P['x]; 'F} <-->
+   ind{('j -@ 'i); k,down. 'down +['F] 'P['i +@ 'k]; 'P['i]; k,up. 'up +['F] 'P['i +@ 'k] }
 
 define unfold_mul_poly : mul_poly{'p; 'q; 'F} <-->
    if bor{isZeroPoly{'p;'F}; isZeroPoly{'q;'F}} then zero_poly{'F}
@@ -296,8 +287,6 @@ let fold_mul_const = makeFoldC << mul_const{'p; 'a; 'F} >> unfold_mul_const
 let fold_add_poly = makeFoldC << add_poly{'p; 'q; 'F} >> unfold_add_poly
 let fold_mul_poly = makeFoldC << mul_poly{'p; 'q; 'F} >> unfold_mul_poly
 let fold_eval_poly = makeFoldC << eval_poly{'p; 'a; 'F} >> unfold_eval_poly
-let fold_sum1 = makeFoldC << sum{'j; x.'P['x]; 'F} >> unfold_sum1
-let fold_sum2 = makeFoldC << sum{'i; 'j; x.'P['x]; 'F} >> unfold_sum2
 
 interactive nat_is_int {| intro[AutoMustComplete] |} :
    [wf] sequent { <H> >- 'a='b in nat} -->
@@ -424,26 +413,11 @@ interactive add_poly_wf {| intro [] |} :
    [wf] sequent { <H> >- 'q in poly{'F} } -->
    sequent { <H> >- add_poly{'p; 'q; 'F} in poly{'F} }
 
-interactive sum1_wf {| intro [] |} :
-   [wf] sequent { <H> >- 'j in int } -->
-   [wf] sequent { <H>; x: int; ('x >= min{0; 'j}); (max{0; 'j} >= 'x) >- 'P['x] in 'F^car } -->
-   [wf] sequent { <H>; x: 'F^car; y: 'F^car >- 'x +['F] 'y in 'F^car } -->
-   sequent { <H> >- sum{'j; x.'P['x]; 'F} in 'F^car }
-
-interactive sum2_sum1 {| intro [] |} :
+interactive sum_wf {| intro [] |} :
    [wf] sequent { <H> >- 'i in int } -->
    [wf] sequent { <H> >- 'j in int } -->
    [wf] sequent { <H>; x: int; ('x >= min{'i; 'j}); (max{'i; 'j} >= 'x) >- 'P['x] in 'F^car } -->
    [wf] sequent { <H>; x: 'F^car; y: 'F^car >- 'x +['F] 'y in 'F^car } -->
-   [wf] sequent { <H>; x1: 'F^car; y1: 'F^car; x2: 'F^car; y2: 'F^car; 'x1 = 'x2 in 'F^car; 'y1 = 'y2 in 'F^car >- 'x1 +['F] 'y1 = 'x2 +['F] 'y2 in 'F^car } -->
-   sequent { <H> >- sum{'i; 'j; x.'P['x]; 'F} = sum{'j -@ 'i; x.'P[('x +@ 'i)]; 'F} in 'F^car }
-
-interactive sum2_wf {| intro [] |} :
-   [wf] sequent { <H> >- 'i in int } -->
-   [wf] sequent { <H> >- 'j in int } -->
-   [wf] sequent { <H>; x: int; ('x >= min{'i; 'j}); (max{'i; 'j} >= 'x) >- 'P['x] in 'F^car } -->
-   [wf] sequent { <H>; x: 'F^car; y: 'F^car >- 'x +['F] 'y in 'F^car } -->
-   [wf] sequent { <H>; x1: 'F^car; y1: 'F^car; x2: 'F^car; y2: 'F^car; 'x1 = 'x2 in 'F^car; 'y1 = 'y2 in 'F^car >- 'x1 +['F] 'y1 = 'x2 +['F] 'y2 in 'F^car } -->
    sequent { <H> >- sum{'i; 'j; x.'P['x]; 'F} in 'F^car }
 
 interactive mulpoly_leading_coeff {| intro [] |} :

@@ -343,7 +343,7 @@ interactive implies_univ {| intro []; eqcd |} :
 
 interactive implies_type {| intro [] |} :
    [wf] sequent { <H> >- "type"{'a1} } -->
-   [wf] sequent { <H>; x: 'a1 >- "type"{'a2} } -->
+   [wf] sequent { <H>; 'a1 >- "type"{'a2} } -->
    sequent { <H> >- "type"{."implies"{'a1; 'a2}} }
 
 interactive implies_intro {| intro [] |} :

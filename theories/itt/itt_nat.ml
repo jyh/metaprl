@@ -52,7 +52,6 @@ extends Itt_int_ext
 extends Itt_int_arith
 doc <:doc< @docoff >>
 
-
 open Tactic_type.Tacticals
 open Var
 
@@ -60,6 +59,7 @@ open Dtactic
 open Top_conversionals
 open Itt_bool
 open Itt_subtype
+open Itt_equal
 
 doc <:doc< @doc{@terms} >>
 
@@ -153,6 +153,12 @@ interactive well_ordering_principle bind{i.'P['i]} 'i :
    sequent{ <H> >-
       all n:nat. ("not"{'P['n]} or "not"{.all n2:nat. ('P['n2] => 'n < 'n2)})} -->
    sequent{ <H> >- "not"{'P['i]}}
+
+interactive indEquality {| intro [complete_unless_member]; eqcd |} bind{z. 'T['z]} :
+   sequent { <H> >- 'n1 = 'n2 in nat } -->
+   sequent { <H> >- 'base1 = 'base2 in 'T[0] } -->
+   sequent { <H>; x: nat; le{'x;'n1}; y: 'T['x -@ 1] >- 'up1['x; 'y] = 'up2['x; 'y] in 'T['x] } -->
+   sequent { <H> >- ind{'n1; 'base1; k1, l1. 'up1['k1; 'l1]} = ind{'n2; 'base2; k2, l2. 'up2['k2; 'l2]} in 'T['n1] }
 
 interactive finiteNatType {| intro [] |} :
    sequent { <H> >- 'k in int} -->

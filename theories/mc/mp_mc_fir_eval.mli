@@ -1,9 +1,11 @@
 (*
  * Functional Intermediate Representation formalized in MetaPRL.
  *
- * Define how to evaluate the FIR in MetaPRL.
+ * Define how to evaluate the FIR.
  *
  * ----------------------------------------------------------------
+ *
+ * Copyright (C) 2002 Brian Emre Aydemir, Caltech
  *
  * This file is part of MetaPRL, a modular, higher order
  * logical framework that provides a logical programming
@@ -30,12 +32,12 @@
  * Email:  emre@its.caltech.edu
  *)
 
-include Mp_mc_set
-include Fir_ty
-include Fir_exp
-include Itt_list2
+include Mp_mc_fir_base
+include Mp_mc_fir_ty
+include Mp_mc_fir_exp
 include Itt_int_base
 include Itt_int_ext
+include Itt_rfun
 
 open Tactic_type.Conversionals
 
@@ -60,29 +62,9 @@ declare pow{ 'base; 'exp }
  * signed or unsigned.
  *)
 
-declare mod_arith{ 'precision; 'sign; 'num }
-declare mod_arith_signed{ 'precision; 'num }
-declare mod_arith_unsigned{ 'precision; 'num }
-
-(*
- * Boolean type.
- * true_set and false_set define true and false for use in matches.
- * I also put a test for atomEnum here since they are used to
- *    represent val_true and val_false.
- *)
-
-declare true_set
-declare false_set
-declare atomEnum_eq{ 'a; 'b }
-
-(*
- * Functions.
- *)
-
-declare lambda{ x. 'f['x] }   (* for functions with >= 1 arguments *)
-declare lambda{ 'f }          (* function with no arguments *)
-declare apply{ 'f; 'x }
-declare fix{ f. 'b['f] }
+declare mod_arith{ 'int_precision; 'int_signed; 'num }
+declare mod_arith_signed{ 'int_precision; 'num }
+declare mod_arith_unsigned{ 'int_precision; 'num }
 
 (*
  * Expressions.
@@ -95,7 +77,9 @@ declare binop_exp{ 'op; 'ty; 'a1; 'a2 }
  * Rewrites.
  *************************************************************************)
 
-(* Modular arithmetic for integers. *)
+(*
+ * Modular arithmetic for integers.
+ *)
 
 topval reduce_naml_prec : conv
 topval reduce_int8 : conv
@@ -114,47 +98,29 @@ topval reduce_pow_2_32 : conv
 topval reduce_pow_2_63 : conv
 topval reduce_pow_2_64 : conv
 
-topval reduce_mod_arith : conv
+topval reduce_mod_arith1 : conv  (* signedInt   -> mod_arith_signed   *)
+topval reduce_mod_arith2 : conv  (* unsignedInt -> mod_arith_unsigned *)
 topval reduce_mod_arith_signed : conv
 topval reduce_mod_arith_unsigned : conv
 
-(* Boolean type. *)
+(*
+ * Unary operations.
+ *)
 
-topval reduce_true_set : conv
-topval reduce_false_set : conv
-topval reduce_val_true : conv
-topval reduce_val_false : conv
-topval reduce_atomEnum_eq_atom : conv
-topval reduce_atomEnum_eq_num : conv
-
-(* Functions. *)
-
-topval reduce_beta : conv
-topval reduce_apply_nil : conv
-topval reduce_fix : conv
-
-(* Types. *)
-
-topval reduce_tyVar : conv
-
-(* Expressions. *)
+(* Identity (polymorphic). *)
 
 topval reduce_idOp : conv
-topval reduce_atomInt : conv
-topval reduce_atomEnum : conv
-topval reduce_atomRawInt : conv
-topval reduce_atomVar : conv
-topval reduce_letUnop : conv
-topval reduce_letBinop : conv
-topval reduce_letExt : conv
-topval reduce_allocTuple : conv
-topval reduce_allocArray : conv
-topval reduce_letSubscript : conv
-topval reduce_setSubscript : conv
 
-(* Naml integers. *)
+(* Naml ints. *)
 
 topval reduce_uminusIntOp : conv
+
+(*
+ * Binary operations.
+ *)
+
+(* Naml ints. *)
+
 topval reduce_plusIntOp : conv
 topval reduce_minusIntOp : conv
 topval reduce_mulIntOp : conv
@@ -162,15 +128,8 @@ topval reduce_divIntOp : conv
 topval reduce_remIntOp : conv
 topval reduce_maxIntOp : conv
 topval reduce_minIntOp : conv
-topval reduce_eqIntOp : conv
-topval reduce_neqIntOp : conv
-topval reduce_ltIntOp : conv
-topval reduce_leIntOp : conv
-topval reduce_gtIntOp : conv
-topval reduce_geIntOp : conv
-topval reduce_cmpIntOp : conv
 
-(* Native integers. *)
+(* Native ints. *)
 
 topval reduce_plusRawIntOp : conv
 topval reduce_minusRawIntOp : conv
@@ -179,13 +138,26 @@ topval reduce_divRawIntOp : conv
 topval reduce_remRawIntOp : conv
 topval reduce_maxRawIntOp : conv
 topval reduce_minRawIntOp : conv
-topval reduce_eqRawIntOp : conv
-topval reduce_neqRawIntOp : conv
-topval reduce_ltRawIntOp : conv
-topval reduce_leRawIntOp : conv
-topval reduce_gtRawIntOp : conv
-topval reduce_geRawIntOp : conv
-topval reduce_cmpRawIntOp : conv
+
+(*
+ * Normal values.
+ *)
+
+topval reduce_atomVar_atomNil : conv
+topval reduce_atomVar_atomInt : conv
+topval reduce_atomVar_atomEnum : conv
+topval reduce_atomVar_atomRawInt : conv
+topval reduce_atomVar_atomFloat : conv
+topval reduce_atomVar_atomConst : conv
+
+(*
+ * Expressions.
+ *)
+
+(* Primitive operations. *)
+
+topval reduce_letUnop : conv
+topval reduce_letBinop : conv
 
 (*************************************************************************
  * Automation.

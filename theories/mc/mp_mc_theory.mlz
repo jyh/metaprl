@@ -5,6 +5,8 @@
  *
  * ----------------------------------------------------------------
  *
+ * Copyright (C) 2002 Brian Emre Aydemir, Caltech
+ *
  * This file is part of MetaPRL, a modular, higher order
  * logical framework that provides a logical programming
  * environment for OCaml and other languages.
@@ -30,9 +32,8 @@
  * Email:  emre@its.caltech.edu
  *)
 
-include Mp_mc_set
-include Fir_ty
-include Fir_exp
+include Mp_mc_term_op
+include Mp_mc_fir_base
+include Mp_mc_fir_ty
+include Mp_mc_fir_exp
 include Mp_mc_fir_eval
-include Fir_deadcode
-include Fir_const_elim

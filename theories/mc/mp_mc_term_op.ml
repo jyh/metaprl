@@ -6,6 +6,8 @@
  *
  * ----------------------------------------------------------------
  *
+ * Copyright (C) 2002 Brian Emre Aydemir, Caltech
+ *
  * This file is part of MetaPRL, a modular, higher order
  * logical framework that provides a logical programming
  * environment for OCaml and other languages.
@@ -129,6 +131,30 @@ let dest_3_dep0_1_dep1_term opname t =
  * 5 subterms.
  *************************************************************************)
 
+let is_5_dep0_term opname t =
+   let (opname', arities, subterms) = pre_dest_term t in
+      opname_arity_check opname' [0;0;0;0;0] opname arities
+
+let mk_5_dep0_term opname t1 t2 t3 t4 t5 =
+   mk_term  (make_op { op_name = opname; op_params = [] })
+            [ mk_simple_bterm t1; mk_simple_bterm t2;
+              mk_simple_bterm t3; mk_simple_bterm t4;
+              mk_simple_bterm t5
+            ]
+
+let dest_5_dep0_term opname t =
+   let (opname', arities, subterms) = pre_dest_term t in
+      if opname_arity_check opname' [0;0;0;0;0] opname arities then
+         match subterms with
+            [t1; t2; t3; t4; t5] ->
+               t1, t2, t3, t4, t5
+          | _ ->
+               raise (RefineError ("dest_5_dep0_term", StringTermError
+                     ("internal error", t)))
+      else
+         raise (RefineError ("dest_5_dep0_term", StringTermError
+               ("invalid term structure", t)))
+
 let is_4_dep0_1_dep1_term opname t =
    let (opname', arities, subterms) = pre_dest_term t in
       opname_arity_check opname [0;0;0;0;1] opname' arities
@@ -155,6 +181,30 @@ let dest_4_dep0_1_dep1_term opname t =
 (*************************************************************************
  * 6 subterms.
  *************************************************************************)
+
+let is_6_dep0_term opname t =
+   let (opname', arities, subterms) = pre_dest_term t in
+      opname_arity_check opname' [0;0;0;0;0;0] opname arities
+
+let mk_6_dep0_term opname t1 t2 t3 t4 t5 t6 =
+   mk_term  (make_op { op_name = opname; op_params = [] })
+            [ mk_simple_bterm t1; mk_simple_bterm t2;
+              mk_simple_bterm t3; mk_simple_bterm t4;
+              mk_simple_bterm t5; mk_simple_bterm t6
+            ]
+
+let dest_6_dep0_term opname t =
+   let (opname', arities, subterms) = pre_dest_term t in
+      if opname_arity_check opname' [0;0;0;0;0;0] opname arities then
+         match subterms with
+            [t1; t2; t3; t4; t5; t6] ->
+               t1, t2, t3, t4, t5, t6
+          | _ ->
+               raise (RefineError ("dest_6_dep0_term", StringTermError
+                     ("internal error", t)))
+      else
+         raise (RefineError ("dest_6_dep0_term", StringTermError
+               ("invalid term structure", t)))
 
 let is_5_dep0_1_dep1_term opname t =
    let (opname', arities, subterms) = pre_dest_term t in
@@ -205,4 +255,32 @@ let dest_7_dep0_term opname t =
                      ("internal error", t)))
       else
          raise (RefineError ("dest_7_dep0_term", StringTermError
+               ("invalid term structure", t)))
+
+(*************************************************************************
+ * 8 subterms.
+ *************************************************************************)
+
+let is_8_dep0_term opname t =
+   let (opname', arities, subterms) = pre_dest_term t in
+      opname_arity_check opname [0;0;0;0;0;0;0;0] opname' arities
+
+let mk_8_dep0_term opname t1 t2 t3 t4 t5 t6 t7 t8 =
+   mk_term  (make_op { op_name = opname; op_params = [] })
+            [ mk_simple_bterm t1; mk_simple_bterm t2; mk_simple_bterm t3;
+              mk_simple_bterm t4; mk_simple_bterm t5; mk_simple_bterm t6;
+              mk_simple_bterm t7; mk_simple_bterm t8
+            ]
+
+let dest_8_dep0_term opname t =
+   let (opname', arities, subterms) = pre_dest_term t in
+      if opname_arity_check opname [0;0;0;0;0;0;0;0] opname' arities then
+         match subterms with
+            [t1; t2; t3; t4; t5; t6; t7; t8] ->
+               t1, t2, t3, t4, t5, t6, t7, t8
+          | _ ->
+               raise (RefineError ("dest_8_dep0_term", StringTermError
+                     ("internal error", t)))
+      else
+         raise (RefineError ("dest_8_dep0_term", StringTermError
                ("invalid term structure", t)))

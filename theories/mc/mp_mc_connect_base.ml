@@ -1,10 +1,12 @@
 (*
  * Functional Intermediate Representation formalized in MetaPRL.
  *
- * Basic operations for converting between the MC Fir and
+ * Basic operations for converting between the MC FIR and
  * MetaPRL terms.
  *
  * ----------------------------------------------------------------
+ *
+ * Copyright (C) 2002 Brian Emre Aydemir, Caltech
  *
  * This file is part of MetaPRL, a modular, higher order
  * logical framework that provides a logical programming
@@ -36,6 +38,7 @@
 open Interval_set
 open Rawint
 open Rawfloat
+open Symbol
 open Fir_set
 open Fir
 
@@ -47,44 +50,32 @@ open Refiner.Refiner.RefineError
 open Itt_atom
 open Itt_int_base
 open Itt_list
-open Mp_mc_set
-open Fir_ty
+open Mp_mc_fir_base
 
 (*************************************************************************
- * Convert between symbols and variable terms (e.g. 'a).
+ * Basic conversions.
  *************************************************************************)
 
 (*
- * Implement the string <--> symbol lookup table.
+ * Convert between var's, ty_var's, label's, and terms.
+ * The idea here is to use our own table to go between the string
+ * version of the << 'a >> terms and the Symbol.symbol's they represent.
  *)
 
-module Base =
-struct
-   type t = string
-   let compare = Pervasives.compare
-end
+let table = Hashtbl.create 128
 
-module StringSymbolMap = Map.Make (Base)
-
-let table = ref StringSymbolMap.empty
-
-let clear_symbol_table () =
-   table := StringSymbolMap.empty
-
-(*
- * Conversion functions.
- *)
-
-let string_of_symbol s =
-   let str = Symbol.string_of_symbol s in
-      table := StringSymbolMap.add str s !table;
+let string_of_symbol sym =
+   let str = Symbol.string_of_symbol sym in
+      Hashtbl.add table str sym;
       str
 
 let symbol_of_string str =
    try
-      StringSymbolMap.find str !table
+      Hashtbl.find table str
    with
-      Not_found -> Symbol.new_symbol_string str
+      Not_found ->
+         raise (Invalid_argument
+               ("symbol_of_string: string \"" ^ str ^ "\" not in table."))
 
 let var_term_of_symbol s =
    mk_var_term (string_of_symbol s)
@@ -92,9 +83,26 @@ let var_term_of_symbol s =
 let symbol_of_var_term v =
    symbol_of_string (dest_var v)
 
-(*************************************************************************
+(* Alias the below functions to keep the interface as general as possible. *)
+
+let term_of_var = var_term_of_symbol
+let var_of_term = symbol_of_var_term
+let string_of_var = string_of_symbol
+let var_of_string = symbol_of_string
+
+let term_of_ty_var = var_term_of_symbol
+let ty_var_of_term = symbol_of_var_term
+let string_of_ty_var = string_of_symbol
+let ty_var_of_string = symbol_of_string
+
+let term_of_label = var_term_of_symbol
+let label_of_term = symbol_of_var_term
+let string_of_label = string_of_symbol
+let label_of_string = symbol_of_string
+
+(*
  * Convert between integer constants and numbers.
- *************************************************************************)
+ *)
 
 let number_term_of_int i =
    mk_number_term (num_of_int i)
@@ -114,9 +122,71 @@ let number_term_of_rawfloat f =
 let rawfloat_of_number_term p t =
    Rawfloat.of_string p (string_of_num (dest_number t))
 
+(*
+ * Convert to and from string values.
+ *)
+
+let term_of_string str =
+   mk_token_term str
+
+let string_of_term t =
+   if is_token_term t then
+      dest_token t
+   else
+      raise (RefineError ("string_of_term", StringTermError
+            ("not a string (token term)", t)))
+
+(*
+ * Convert a list to a "term list", i.e. << cons{ ... } >>.
+ *)
+
+let rec term_of_list f l =
+   match l with
+      [] ->
+         nil_term
+    | h :: t ->
+         let h' = f h in
+         let t' = term_of_list f t in
+            mk_cons_term h' t'
+
+let rec list_of_term f_conv t =
+   if is_cons_term t then
+      let head, tail = dest_cons t in
+      let tail' = list_of_term f_conv tail in
+      let head' = f_conv head in
+         head' :: tail'
+   else if t = nil_term then
+      []
+   else
+      raise (RefineError ("list_of_term", StringTermError
+            ("not a term representing a list", t)))
+
 (*************************************************************************
- * Convert to and from bool values.
+ * Conversions for terms in Mp_mc_fir_base.
  *************************************************************************)
+
+(*
+ * Convert to and from options.
+ *)
+
+let term_of_option converter opt_val =
+   match opt_val with
+      None ->     noneOpt_term
+    | Some a ->   (converter a)
+
+let option_of_term converter t =
+   if is_noneOpt_term t then
+      None
+   else if is_someOpt_term t then
+      Some (converter (dest_someOpt_term t))
+
+   else
+      raise (RefineError ("option_of_term", StringTermError
+            ("not an option", t)))
+
+(*
+ * Convert to and from bool values.
+ *)
 
 let term_of_bool b =
    if b then
@@ -133,25 +203,9 @@ let bool_of_term t =
       raise (RefineError ("term_of_bool", StringTermError
             ("not a bool", t)))
 
-(*************************************************************************
- * Convert to and from string values.
- *************************************************************************)
-
-(* Construct/deconstruct token terms, essentially. *)
-
-let term_of_string str =
-   mk_token_term str
-
-let string_of_term t =
-   if is_token_term t then
-      dest_token t
-   else
-      raise (RefineError ("string_of_term", StringTermError
-            ("not a string (token term)", t)))
-
-(*************************************************************************
- * Convert to and from int_precision, int_signed, and float_precision.
- *************************************************************************)
+(*
+ * Convert to and from int_precision and float_precision.
+ *)
 
 let term_of_int_precision ip =
    match ip with
@@ -173,12 +227,6 @@ let int_precision_of_term t =
       raise (RefineError ("term_of_int_precision", StringTermError
             ("not an int_precision", t)))
 
-(* Wrappers as long as int_signed = bool. *)
-
-let term_of_int_signed = term_of_bool
-
-let int_signed_of_term = bool_of_term
-
 let term_of_float_precision fp =
    match fp with
       Single ->      floatSingle_term
@@ -196,13 +244,30 @@ let float_precision_of_term t =
       raise (RefineError ("float_precision_of_term", StringTermError
             ("not a float_precision", t)))
 
-(*************************************************************************
- * Conver to and from int_set, rawint_set, and set.
- *************************************************************************)
+(*
+ * Convert to and from int_signed.
+ *)
+
+let term_of_int_signed is =
+   if is then
+      signedInt_term
+   else
+      unsignedInt_term
+
+let int_signed_of_term t =
+   if is_signedInt_term t then
+      true
+   else if is_unsignedInt_term t then
+      false
+   else
+      raise (RefineError ("int_signed_of_term", StringTermError
+            ("not an int_signed", t)))
 
 (*
- * Deal with bounds.  I assume that they're always closed.
+ * Convert to and from int_set, rawint_set, and set.
  *)
+
+(* Convert bounds.  I assume that they're always closed. *)
 
 let number_term_of_int_bound b =
    match b with
@@ -219,24 +284,53 @@ let number_term_of_raw_bound b =
     | _ -> raise (Invalid_argument
                   "number_term_of_raw_bound: not a closed rawint bound")
 
-let bound_of_raw_number_term t =
-   Closed (rawint_of_number_term t)
+let bound_of_raw_number_term precision sign t =
+   Closed (rawint_of_number_term precision sign t)
 
-(*
- * Deconstruct intervals.
- *)
+(* Here, we're given something like cons{ interval{'l;'r}; ... }.
+   We turn this into a list [('l,'r); ...]. *)
+
+let rec extract_intervals_as_number_pairs intervals =
+   if is_cons_term intervals then
+      let head, tail = dest_cons intervals in
+         (dest_interval_term head) :: (extract_intervals_as_number_pairs tail)
+   else if intervals = nil_term then
+      []
+   else
+      raise (Invalid_argument
+             "extract_intervals_as_number_pairs: not a \"list\" term")
+
+(* Folding functions to be used below. *)
+
+let int_interval_folder existing_set (left, right) =
+   IntSet.union existing_set
+                (IntSet.of_interval (bound_of_int_number_term left)
+                                    (bound_of_int_number_term right))
+
+let rawint_interval_folder p s existing_set (left, right) =
+   RawIntSet.union existing_set
+                    (RawIntSet.of_interval
+                              p
+                              s
+                              (bound_of_raw_number_term p s left)
+                              (bound_of_raw_number_term p s right))
+
+(* Here, we're given something like cons{ interval{'l;'r}; ... }.
+   We use the folding function and "interval extraction" functions above
+   to make a new set. *)
 
 let intSet_of_intervals i =
-   let intset = IntSet.empty in
-      intset
+   List.fold_left int_interval_folder
+                  IntSet.empty
+                  (extract_intervals_as_number_pairs i)
 
 let rawIntSet_of_intervals precision sign i =
-   let rawintset = RawIntSet.empty precision sign in
-      rawintset
+   List.fold_left (rawint_interval_folder precision sign)
+                  (RawIntSet.empty precision sign)
+                  (extract_intervals_as_number_pairs i)
 
-(*
- * Actual conversion functions for the sets.
- *)
+(* Actual conversion functions for the sets. The idea is to turn each
+   interval into an interval term, and vica versa (see above functions). *)
 
 let term_of_int_set s =
    mk_int_set_term
@@ -300,27 +394,38 @@ let set_of_term t =
       raise (RefineError ("set_of_term", StringTermError
             ("not a set", t)))
 
-(*************************************************************************
- * Convert a list to a "term list", i.e. << cons{ ... } >>.
- *************************************************************************)
+(*
+ * Convert to and from tuple_class.
+ *)
 
-let rec term_of_list f l =
-   match l with
-      [] ->
-         nil_term
-    | h :: t ->
-         let h' = f h in
-         let t' = term_of_list f t in
-            mk_cons_term h' t'
+let term_of_tuple_class tc =
+   match tc with
+      NormalTuple -> normalTuple_term
+    | RawTuple    -> rawTuple_term
 
-let rec list_of_term f_conv t =
-   if is_cons_term t then
-      let head, tail = dest_cons t in
-      let tail' = list_of_term f_conv tail in
-      let head' = f_conv head in
-         head' :: tail'
-   else if t = nil_term then
-      []
+let tuple_class_of_term t =
+   if is_normalTuple_term t then
+      NormalTuple
+   else if is_rawTuple_term t then
+      RawTuple
    else
-      raise (RefineError ("list_of_term", StringTermError
-            ("not a term representing a list", t)))
+      raise (RefineError ("tuple_class_of_term", StringTermError
+            ("not a tuple_class", t)))
+
+(*
+ * Convert to and from union_type.
+ *)
+
+let term_of_union_type ut =
+   match ut with
+      NormalUnion -> normalUnion_term
+    | ExnUnion    -> exnUnion_term
+
+let union_type_of_term t =
+   if is_normalUnion_term t then
+      NormalUnion
+   else if is_exnUnion_term t then
+      ExnUnion
+   else
+      raise (RefineError ("union_type_of_term", StringTermError
+            ("not a union_type", t)))

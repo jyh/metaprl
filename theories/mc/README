@@ -1,5 +1,5 @@
 Maintainer of this theory: Brian Emre Aydemir (emre@its.caltech.edu)
-Last update to this file: 28 January 2002
+Last update to this file: 18 March 2002
 
 I describe the purpose of this theory and its implementation in this file.
 The sections here are:
@@ -11,7 +11,9 @@ The sections here are:
 Overview:
 --------------------------------------------------------------------------
 The purpose of this theory is to provide a formal representation of the
-Mojave compiler's FIR. (And I need to put more information here eventually.)
+Mojave compiler's FIR.
+
+<< more information should go here eventually >>
 
 
 General notes:

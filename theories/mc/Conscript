@@ -1,3 +1,6 @@
+#
+# Import environment
+#
 Import qw( env );
 
 #
@@ -12,9 +15,18 @@ $env = $env->clone(
 );
 
 #
+# Set up file lists.
+#
+
+my @src_no_mc =
+   qw( term_op fir_base fir_ty fir_exp fir_eval deadcode );
+my @src_mc =
+   qw( term_op fir_base fir_ty fir_exp fir_eval deadcode compile );
+     # not included (yet): connect_base connect_ty connect_exp
+
+#
 # Determine the source file list and library files based on whether
 # or now we have the MC compiler source tree.
-# This is a _really_ ugly hack.  Simplifications welcome!
 #
 if(defined($ENV{'MC_ROOT'})) {
    $env = $env->clone(
@@ -23,58 +35,12 @@ if(defined($ENV{'MC_ROOT'})) {
                   "$env->{MC}/fir/type",
                   "$env->{MC}/fir/util"]
    );
-   OCamlSources $env
-      'mp_mc_term_op.ml',
-      'mp_mc_set.ml',
-      'fir_ty.ml',
-      'fir_exp.ml',
-      'mp_mc_fir_eval.ml',
-      'fir_deadcode.ml',
-      'fir_const_elim.ml',
-      'mp_mc_connect_base.ml',
-      'mp_mc_connect_ty.ml',
-      'mp_mc_connect_exp.ml',
-      'mp_mc_connect.ml',
-      'mp_mc_compile.ml',
-      'mp_mc_theory.mlz',
-      'fir_test.ml';
-   OCamlLibrary $env 'base',
-      'mp_mc_term_op',
-      'mp_mc_set',
-      'fir_ty',
-      'fir_exp',
-      'mp_mc_fir_eval',
-      'fir_deadcode',
-      'fir_const_elim',
-      'mp_mc_connect_base',
-      'mp_mc_connect_ty',
-      'mp_mc_connect_exp',
-      'mp_mc_connect',
-      'mp_mc_compile',
-      'mp_mc_theory',
-      'fir_test';
+   OCamlSources $env (map "mp_mc_$_.ml", @src_mc), 'mp_mc_theory.mlz';
+   OCamlLibrary $env 'base', (map "mp_mc_$_", @src_mc), 'mp_mc_theory';
    Default qw( base.cmxa );
    Build qw( tests/Conscript );
 } else {
-   OCamlSources $env
-      'mp_mc_term_op.ml',
-      'mp_mc_set.ml',
-      'fir_ty.ml',
-      'fir_exp.ml',
-      'mp_mc_fir_eval.ml',
-      'fir_deadcode.ml',
-      'fir_const_elim.ml',
-      'mp_mc_theory.mlz',
-      'fir_test.ml';
-   OCamlLibrary $env 'base',
-      'mp_mc_term_op',
-      'mp_mc_set',
-      'fir_ty',
-      'fir_exp',
-      'mp_mc_fir_eval',
-      'fir_deadcode',
-      'fir_const_elim',
-      'mp_mc_theory',
-      'fir_test';
+   OCamlSources $env (map "mp_mc_$_.ml", @src_no_mc), 'mp_mc_theory.mlz';
+   OCamlLibrary $env 'base', (map "mp_mc_$_", @src_no_mc), 'mp_mc_theory';
    Default qw( base.cmxa );
 }

@@ -1,9 +1,11 @@
 (*
  * Functional Intermediate Representation formalized in MetaPRL.
  *
- * Define how to evaluate the FIR in MetaPRL.
+ * Define how to evaluate the FIR.
  *
  * ----------------------------------------------------------------
+ *
+ * Copyright (C) 2002 Brian Emre Aydemir, Caltech
  *
  * This file is part of MetaPRL, a modular, higher order
  * logical framework that provides a logical programming
@@ -30,12 +32,12 @@
  * Email:  emre@its.caltech.edu
  *)
 
-include Mp_mc_set
-include Fir_ty
-include Fir_exp
-include Itt_list2
+include Mp_mc_fir_base
+include Mp_mc_fir_ty
+include Mp_mc_fir_exp
 include Itt_int_base
 include Itt_int_ext
+include Itt_rfun
 
 open Top_conversionals
 open Tactic_type.Conversionals
@@ -48,28 +50,23 @@ open Tactic_type.Conversionals
  * Modular arithmetic for integers.
  *)
 
+(* Precision of naml integers. *)
+
 declare naml_prec
+
+(* Computes base ^ exp where base and exp are integers, with exp non-neg. *)
+
 declare pow{ 'base; 'exp }
-declare mod_arith{ 'precision; 'sign; 'num }
-declare mod_arith_signed{ 'precision; 'num }
-declare mod_arith_unsigned{ 'precision; 'num }
 
 (*
- * Boolean type.
+ * Converts num to an appropriate value for an integer of precision bytes,
+ * signed or unsigned.
  *)
 
-declare true_set
-declare false_set
-declare atomEnum_eq{ 'a; 'b }
+declare mod_arith{ 'int_precision; 'int_signed; 'num }
+declare mod_arith_signed{ 'int_precision; 'num }
+declare mod_arith_unsigned{ 'int_precision; 'num }
 
-(*
- * Functions.
- *)
-
-declare lambda{ x. 'f['x] }
-declare lambda{ 'f }
-declare apply{ 'f; 'x }
-declare fix{ f. 'b['f] }
 
 (*
  * Expressions.
@@ -82,12 +79,14 @@ declare binop_exp{ 'op; 'ty; 'a1; 'a2 }
  * Display forms.
  *************************************************************************)
 
-(* Modular arithmetic for integers. *)
+(*
+ * Modular arithmetic for integers.
+ *)
 
 dform naml_prec_df : except_mode[src] :: naml_prec =
    `"naml_prec"
 dform pow_df : except_mode[src] :: pow{ 'base; 'exp } =
-   slot{'base}  Nuprl_font!sup{'exp}
+   `"(" slot{'base}  Nuprl_font!sup{'exp} `")"
 dform mod_arith_df : except_mode[src] ::
    mod_arith{ 'precision; 'sign; 'num } =
    `"mod_arith(" slot{'precision} `", " slot{'sign}
@@ -99,27 +98,9 @@ dform _mod_arith_unsigned_df : except_mode[src] ::
    mod_arith_unsigned{ 'precision; 'num } =
    `"mod_arith_unsigned(" slot{'precision} `", " slot{'num} `")"
 
-(* Boolean type *)
-
-dform true_set_df : except_mode[src] :: true_set = `"true_set"
-dform false_set_df : except_mode[src] :: false_set = `"false_set"
-dform atomEnum_eq_df : except_mode[src] :: atomEnum_eq{ 'a; 'b } =
-   `"AtomEnum_Eq(" slot{'a} `", " slot{'b} `")"
-
-(* Functions. *)
-
-dform lambda_df1 : except_mode[src] :: lambda{ x. 'f } =
-   `"(" Nuprl_font!lambda slot{'x} `"." slot{'f} `")"
-dform lambda_df0 : except_mode[src] :: lambda{ 'f } =
-   `"(" Nuprl_font!lambda `"()." slot{'f} `")"
-dform apply_df : except_mode[src] :: apply{ 'f; 'x } =
-   `"(" slot{'f} `" " slot{'x} `")"
-dform fix_df : except_mode[src] :: fix{ f. 'b } =
-   pushm[0] szone push_indent `"(fix " slot{'f} `"." hspace
-   szone slot{'b} `")" ezone popm
-   ezone popm
-
-(* Expressions. *)
+(*
+ * Expressions.
+ *)
 
 dform unop_exp_df : except_mode[src] :: unop_exp{ 'op; 'ty; 'a1 } =
    slot{'op} `"(" slot{'a1} `"):" slot{'ty}
@@ -128,18 +109,22 @@ dform binop_exp_df : except_mode[src] :: binop_exp{ 'op; 'ty; 'a1; 'a2 } =
 
 (*************************************************************************
  * Rewrites.
- * These are how we express FIR evaluation.
  *************************************************************************)
 
 (*
  * Modular arithmetic for integers.
  *)
 
-prim_rw reduce_naml_prec : naml_prec <--> 31
-prim_rw reduce_int8 : int8 <--> 8
-prim_rw reduce_int16 : int16 <--> 16
-prim_rw reduce_int32 : int32 <--> 32
-prim_rw reduce_int64 : int64 <--> 64
+prim_rw reduce_naml_prec :
+   naml_prec <--> 31
+prim_rw reduce_int8 :
+   int8 <--> 8
+prim_rw reduce_int16 :
+   int16 <--> 16
+prim_rw reduce_int32 :
+   int32 <--> 32
+prim_rw reduce_int64 :
+   int64 <--> 64
 
 prim_rw reduce_pow :
    pow{ 'base; 'exp } <-->
@@ -159,257 +144,136 @@ interactive_rw reduce_pow_2_31 :
 interactive_rw reduce_pow_2_32 :
    pow{ 2; 32 } <--> 4294967296
 interactive_rw reduce_pow_2_63 :
-   pow{ 2; 63 } <-->  9223372036854775808
+   pow{ 2; 63 } <--> 9223372036854775808
 interactive_rw reduce_pow_2_64 :
    pow{ 2; 64 } <--> 18446744073709551616
 
-prim_rw reduce_mod_arith :
-   mod_arith{ 'precision; 'sign; 'num } <-->
-   ifthenelse{ atomEnum_eq{'sign; val_true};
-      mod_arith_signed{ 'precision; 'num };
-      mod_arith_unsigned{ 'precision; 'num }}
+prim_rw reduce_mod_arith1 :
+   mod_arith{ 'int_precision; signedInt; 'num } <-->
+   mod_arith_signed{ 'int_precision; 'num }
+prim_rw reduce_mod_arith2 :
+   mod_arith{ 'int_precision; unsignedInt; 'num } <-->
+   mod_arith_unsigned{ 'int_precision; 'num }
+
 prim_rw reduce_mod_arith_signed :
-   mod_arith_signed{ 'precision; 'num } <-->
+   mod_arith_signed{ 'int_precision; 'num } <-->
    (lambda{ x.
-      ifthenelse{ ge_bool{'x; pow{2; ('precision -@ 1)}};
-         ('x -@ pow{2; 'precision});
+      ifthenelse{ ge_bool{'x; pow{2; ('int_precision -@ 1)}};
+         ('x -@ pow{2; 'int_precision});
          'x
       }
-    } ('num %@ pow{2; 'precision}) )
+    } ('num %@ pow{2; 'int_precision}) )
+
 prim_rw reduce_mod_arith_unsigned :
-   mod_arith_unsigned{ 'precision; 'num } <-->
-   ( 'num %@ pow{2; 'precision} )
+   mod_arith_unsigned{ 'int_precision; 'num } <-->
+   ( 'num %@ pow{2; 'int_precision} )
 
 (*
- * Boolean type.
+ * Unary operations.
  *)
-
-prim_rw reduce_true_set : true_set <--> int_set{ cons{interval{1;1}; nil} }
-prim_rw reduce_false_set : false_set <--> int_set{ cons{interval{0;0}; nil} }
-prim_rw reduce_val_true : val_true <--> atomEnum{ 2; 1 }
-prim_rw reduce_val_false : val_false <--> atomEnum{ 2; 0 }
-prim_rw reduce_atomEnum_eq_atom :
-   atomEnum_eq{ atomEnum{'a; 'b}; atomEnum{'c; 'd} } <-->
-   band{ beq_int{'a; 'c}; beq_int{'b; 'd} }
-prim_rw reduce_atomEnum_eq_num :
-   atomEnum_eq{ 'a; 'b } <-->
-   beq_int{ 'a; 'b }
-
-
-(*
- * Functions.
- *)
-
-prim_rw reduce_beta : apply{ lambda{ x. 'f['x] }; 'y } <--> 'f['y]
-prim_rw reduce_apply_nil : apply{ lambda{ 'f }; nil } <--> 'f
-prim_rw reduce_fix : fix{ f. 'b['f] } <--> 'b[ fix{ f. 'b['f] } ]
-
-(*
- * Types.
- *)
-
-prim_rw reduce_tyVar : tyVar{ 'ty_var } <--> 'ty_var
-
-(**************
- * Expressions.
- **************)
 
 (* Identity (polymorphic). *)
 
-prim_rw reduce_idOp : unop_exp{ idOp; 'ty; 'a1 } <--> 'a1
+prim_rw reduce_idOp :
+   unop_exp{ idOp; 'ty; 'atom1 } <--> 'atom1
+
+(* Naml ints. *)
+
+prim_rw reduce_uminusIntOp :
+   unop_exp{ uminusIntOp; tyInt; atomInt{'atom1} } <-->
+   atomInt{ ."minus"{'atom1} }
 
 (*
- * Normal values.
- * I could turn reduce_atomEnum into a conditional rewrite
- *    to make sure that 0 <= 'num < 'bound,
- *    but I don't see a compelling reason to do this as it
- *    just complicates evaluation.
+ * Binary operations.
  *)
 
-prim_rw reduce_atomInt : atomInt{ 'num } <--> 'num
-prim_rw reduce_atomEnum : atomEnum{ 'bound; 'num } <--> 'num
-prim_rw reduce_atomRawInt : atomRawInt{ 'p; 's; 'num } <--> 'num
-prim_rw reduce_atomVar : atomVar{ 'var } <--> 'var
+(* Naml ints. *)
+
+prim_rw reduce_plusIntOp :
+   binop_exp{ plusIntOp; tyInt; atomInt{'atom1}; atomInt{'atom2} } <-->
+   atomInt{ mod_arith{ naml_prec; signedInt; ('atom1 +@ 'atom2) } }
+prim_rw reduce_minusIntOp :
+   binop_exp{ minusIntOp; tyInt; atomInt{'atom1}; atomInt{'atom2} } <-->
+   atomInt{ mod_arith{ naml_prec; signedInt; ('atom1 -@ 'atom2) } }
+prim_rw reduce_mulIntOp :
+   binop_exp{ mulIntOp; tyInt; atomInt{'atom1}; atomInt{'atom2} } <-->
+   atomInt{ mod_arith{ naml_prec; signedInt; ('atom1 *@ 'atom2) } }
+prim_rw reduce_divIntOp :
+   binop_exp{ divIntOp; tyInt; atomInt{'atom1}; atomInt{'atom2} } <-->
+   atomInt{ mod_arith{ naml_prec; signedInt; ('atom1 /@ 'atom2) } }
+prim_rw reduce_remIntOp :
+   binop_exp{ remIntOp; tyInt; atomInt{'atom1}; atomInt{'atom2} } <-->
+   atomInt{ mod_arith{ naml_prec; signedInt; ('atom1 %@ 'atom2) } }
+prim_rw reduce_maxIntOp :
+   binop_exp{ maxIntOp; tyInt; atomInt{'atom1}; atomInt{'atom2} } <-->
+   atomInt{ ifthenelse{ lt_bool{'atom1; 'atom2}; 'atom2; 'atom1 } }
+prim_rw reduce_minIntOp :
+   binop_exp{ minIntOp; tyInt; atomInt{'atom1}; atomInt{'atom2} } <-->
+   atomInt{ ifthenelse{ lt_bool{'atom1; 'atom2}; 'atom1; 'atom2 } }
+
+(* Native ints. *)
+
+prim_rw reduce_plusRawIntOp :
+   binop_exp{ plusRawIntOp{'p; 's}; tyRawInt{'p; 's};
+              atomRawInt{'p; 's; 'a1}; atomRawInt{'p; 's; 'a2} } <-->
+   atomRawInt{ 'p; 's; mod_arith{ 'p; 's; ('a1 +@ 'a2) } }
+prim_rw reduce_minusRawIntOp :
+   binop_exp{ minusRawIntOp{'p; 's}; tyRawInt{'p; 's};
+              atomRawInt{'p; 's; 'a1}; atomRawInt{'p; 's; 'a2} } <-->
+   atomRawInt{ 'p; 's; mod_arith{ 'p; 's; ('a1 -@ 'a2) } }
+prim_rw reduce_mulRawIntOp :
+   binop_exp{ mulRawIntOp{'p; 's}; tyRawInt{'p; 's};
+              atomRawInt{'p; 's; 'a1}; atomRawInt{'p; 's; 'a2} } <-->
+   atomRawInt{ 'p; 's; mod_arith{ 'p; 's; ('a1 *@ 'a2) } }
+prim_rw reduce_divRawIntOp :
+   binop_exp{ divRawIntOp{'p; 's}; tyRawInt{'p; 's};
+              atomRawInt{'p; 's; 'a1}; atomRawInt{'p; 's; 'a2} } <-->
+   atomRawInt{ 'p; 's; mod_arith{ 'p; 's; ('a1 /@ 'a2) } }
+prim_rw reduce_remRawIntOp :
+   binop_exp{ remRawIntOp{'p; 's}; tyRawInt{'p; 's};
+              atomRawInt{'p; 's; 'a1}; atomRawInt{'p; 's; 'a2} } <-->
+   atomRawInt{ 'p; 's; mod_arith{ 'p; 's; ('a1 %@ 'a2) } }
+prim_rw reduce_maxRawIntOp :
+   binop_exp{ maxRawIntOp{'p; 's}; tyRawInt{'p; 's};
+              atomRawInt{'p; 's; 'a1}; atomRawInt{'p; 's; 'a2} } <-->
+   atomRawInt{ 'p; 's; ifthenelse{ lt_bool{'a1; 'a2}; 'a2; 'a1 } }
+prim_rw reduce_minRawIntOp :
+   binop_exp{ minRawIntOp{'p; 's}; tyRawInt{'p; 's};
+              atomRawInt{'p; 's; 'a1}; atomRawInt{'p; 's; 'a2} } <-->
+   atomRawInt{ 'p; 's; ifthenelse{ lt_bool{'a1; 'a2}; 'a1; 'a2 } }
+
+(*
+ * Normal values. *)
+
+prim_rw reduce_atomVar_atomNil :
+   atomVar{ atomNil{ 'ty } } <--> atomNil{ 'ty }
+prim_rw reduce_atomVar_atomInt :
+   atomVar{ atomInt{'int} } <--> atomInt{'int}
+prim_rw reduce_atomVar_atomEnum :
+   atomVar{ atomEnum{ 'int1; 'int2 } } <-->
+   atomEnum{ 'int1; 'int2 }
+prim_rw reduce_atomVar_atomRawInt :
+   atomVar{ atomRawInt{ 'int_precision; 'int_signed; 'num } } <-->
+   atomRawInt{ 'int_precision; 'int_signed; 'num }
+prim_rw reduce_atomVar_atomFloat :
+   atomVar{ atomFloat{ 'float_precision; 'num } } <-->
+   atomFloat{ 'float_precision; 'num }
+prim_rw reduce_atomVar_atomConst :
+   atomVar{ atomConst{ 'ty; 'ty_var; 'int } } <-->
+   atomConst{ 'ty; 'ty_var; 'int }
+
+(*
+ * Expressions.
+ *)
 
 (* Primitive operations. *)
 
 prim_rw reduce_letUnop :
-   letUnop{ 'op; 'ty; 'a1; v. 'exp['v] } <-->
-   'exp[ unop_exp{ 'op; 'ty; 'a1 } ]
+   letUnop{ 'ty; 'unop; 'atom; var. 'exp['var] } <-->
+   'exp[ unop_exp{ 'unop; 'ty; 'atom } ]
 prim_rw reduce_letBinop :
-   letBinop{ 'op; 'ty; 'a1; 'a2; v. 'exp['v] } <-->
-   'exp[ binop_exp{ 'op; 'ty; 'a1; 'a2 } ]
-
-(*
- * Function application.
- * letExt is treated as a no-op, on the assumption that it
- * has a side-effect that we don't need to worry about here.
- * If that's not true... uh-oh.
- *)
-
-prim_rw reduce_letExt :
-   letExt{ 'ty; 'string; 'ty_of_str; 'atom_list; v. 'exp['v] } <-->
-   'exp[it]
-
-(* Allocation. *)
-
-prim_rw reduce_allocTuple :
-   letAlloc{ allocTuple{ 'ty; 'atom_list }; v. 'exp['v] } <-->
-   'exp['atom_list]
-prim_rw reduce_allocArray :
-   letAlloc{ allocArray{ 'ty; 'atom_list }; v. 'exp['v] } <-->
-   'exp['atom_list]
-
-(*
- * Subscripting.
- * For evaluation purposes, 'subop is completely ignored.
- *)
-
-prim_rw reduce_letSubscript :
-   letSubscript{ 'subop; 'ty; 'var; 'index; v. 'exp['v] } <-->
-   'exp[ nth{ 'var; 'index } ]
-prim_rw reduce_setSubscript :
-   setSubscript{ 'subop; 'ty; 'var; 'index; 'new_val; v. 'exp['v] } <-->
-   'exp[ replace_nth{ 'var; 'index; 'new_val } ]
-
-(****************
- * Naml integers.
- ****************)
-
-(* Unary and bitwise negation. *)
-
-prim_rw reduce_uminusIntOp :
-   unop_exp{ uminusIntOp; tyInt; 'a1 } <-->
-   "minus"{'a1}
-
-(*
- * Standard binary arithmetic operators.
- * We rely on base_meta and friends to stop div and rem by zero.
- *)
-
-prim_rw reduce_plusIntOp :
-   binop_exp{ plusIntOp; tyInt; 'a1; 'a2 } <-->
-   atomInt{ mod_arith{ naml_prec; val_true; ('a1 +@ 'a2) } }
-prim_rw reduce_minusIntOp :
-   binop_exp{ minusIntOp; tyInt; 'a1; 'a2 } <-->
-   atomInt{ mod_arith{ naml_prec; val_true; ('a1 -@ 'a2) } }
-prim_rw reduce_mulIntOp :
-   binop_exp{ mulIntOp; tyInt; 'a1; 'a2 } <-->
-   atomInt{ mod_arith{ naml_prec; val_true; ('a1 *@ 'a2) } }
-prim_rw reduce_divIntOp :
-   binop_exp{ divIntOp; tyInt; 'a1; 'a2 } <-->
-   atomInt{ mod_arith{ naml_prec; val_true; ('a1 /@ 'a2) } }
-prim_rw reduce_remIntOp :
-   binop_exp{ remIntOp; tyInt; 'a1; 'a2 } <-->
-   atomInt{ mod_arith{ naml_prec; val_true; ('a1 %@ 'a2) } }
-
-(* Max / min. *)
-
-prim_rw reduce_maxIntOp :
-   binop_exp{ maxIntOp; tyInt; 'a1; 'a2 } <-->
-   atomInt{ ifthenelse{ lt_bool{'a1; 'a2}; 'a2; 'a1 } }
-prim_rw reduce_minIntOp :
-   binop_exp{ minIntOp; tyInt; 'a1; 'a2 } <-->
-   atomInt{ ifthenelse{ lt_bool{'a1; 'a2}; 'a1; 'a2 } }
-
-(* Boolean comparisons. *)
-
-prim_rw reduce_eqIntOp :
-   binop_exp{ eqIntOp; tyEnum{ 2 }; 'a1; 'a2 } <-->
-   ifthenelse{ beq_int{ 'a1; 'a2 }; val_true; val_false }
-prim_rw reduce_neqIntOp :
-   binop_exp{ neqIntOp; tyEnum{ 2 }; 'a1; 'a2 } <-->
-   ifthenelse{ bneq_int{ 'a1; 'a2 }; val_true; val_false }
-prim_rw reduce_ltIntOp :
-   binop_exp{ ltIntOp; tyEnum{ 2 }; 'a1; 'a2 } <-->
-   ifthenelse{ lt_bool{ 'a1; 'a2 }; val_true; val_false }
-prim_rw reduce_leIntOp :
-   binop_exp{ leIntOp; tyEnum{ 2 }; 'a1; 'a2 } <-->
-   ifthenelse{ le_bool{ 'a1; 'a2 }; val_true; val_false }
-prim_rw reduce_gtIntOp :
-   binop_exp{ gtIntOp; tyEnum{ 2 }; 'a1; 'a2 } <-->
-   ifthenelse{ gt_bool{ 'a1; 'a2 }; val_true; val_false }
-prim_rw reduce_geIntOp :
-   binop_exp{ geIntOp; tyEnum{ 2 }; 'a1; 'a2 } <-->
-   ifthenelse{ ge_bool{ 'a1; 'a2 }; val_true; val_false }
-prim_rw reduce_cmpIntOp :
-   binop_exp{ cmpIntOp; tyInt; 'a1; 'a2 } <-->
-   ifthenelse{ beq_int{'a1; 'a2};
-      atomInt{ 0 };
-      ifthenelse{ lt_bool{'a1; 'a2};
-         atomInt{ (-1) };
-         atomInt{ 1 }
-      }
-   }
-
-(******************
- * Native integers.
- ******************)
-
-(*
- * Here, I rely on the fact that MetaPRL will represent abitrarily
- * large integers natively.
- *)
-
-(*
- * Standard binary arithmetic operators.
- * I rely on base_meta and friends to stop div and rem by zero.
- *)
-
-prim_rw reduce_plusRawIntOp :
-   binop_exp{ plusRawIntOp{'p; 's}; tyRawInt{'p; 's}; 'a1; 'a2 } <-->
-   atomRawInt{ 'p; 's; mod_arith{ 'p; 's; ('a1 +@ 'a2) } }
-prim_rw reduce_minusRawIntOp :
-   binop_exp{ minusRawIntOp{'p; 's}; tyRawInt{'p; 's}; 'a1; 'a2 } <-->
-   atomRawInt{ 'p; 's; mod_arith{ 'p; 's; ('a1 -@ 'a2) } }
-prim_rw reduce_mulRawIntOp :
-   binop_exp{ mulRawIntOp{'p; 's}; tyRawInt{'p; 's}; 'a1; 'a2 } <-->
-   atomRawInt{ 'p; 's; mod_arith{ 'p; 's; ('a1 *@ 'a2) } }
-prim_rw reduce_divRawIntOp :
-   binop_exp{ divRawIntOp{'p; 's}; tyRawInt{'p; 's}; 'a1; 'a2 } <-->
-   atomRawInt{ 'p; 's; mod_arith{ 'p; 's; ('a1 /@ 'a2) } }
-prim_rw reduce_remRawIntOp :
-   binop_exp{ remRawIntOp{'p; 's}; tyRawInt{'p; 's}; 'a1; 'a2 } <-->
-   atomRawInt{ 'p; 's; mod_arith{ 'p; 's; ('a1 %@ 'a2) } }
-
-(* Max / min. *)
-
-prim_rw reduce_maxRawIntOp :
-   binop_exp{ maxRawIntOp{'p; 's}; tyRawInt{'p; 's}; 'a1; 'a2 } <-->
-   atomRawInt{ 'p; 's; ifthenelse{ lt_bool{'a1; 'a2}; 'a2; 'a1 } }
-prim_rw reduce_minRawIntOp :
-   binop_exp{ minRawIntOp{'p; 's}; tyRawInt{'p; 's}; 'a1; 'a2 } <-->
-   atomRawInt{ 'p; 's; ifthenelse{ lt_bool{'a1; 'a2}; 'a1; 'a2 } }
-
-(* Boolean comparisons. *)
-
-prim_rw reduce_eqRawIntOp :
-   binop_exp{ eqRawIntOp{'p; 's}; tyEnum{ 2 }; 'a1; 'a2 } <-->
-   ifthenelse{ beq_int{ 'a1; 'a2 }; val_true; val_false }
-prim_rw reduce_neqRawIntOp :
-   binop_exp{ neqRawIntOp{'p; 's}; tyEnum{ 2 }; 'a1; 'a2 } <-->
-   ifthenelse{ bneq_int{ 'a1; 'a2 }; val_true; val_false }
-prim_rw reduce_ltRawIntOp :
-   binop_exp{ ltRawIntOp{'p; 's}; tyEnum{ 2 }; 'a1; 'a2 } <-->
-   ifthenelse{ lt_bool{ 'a1; 'a2 }; val_true; val_false }
-prim_rw reduce_leRawIntOp :
-   binop_exp{ leRawIntOp{'p; 's}; tyEnum{ 2 }; 'a1; 'a2 } <-->
-   ifthenelse{ le_bool{ 'a1; 'a2 }; val_true; val_false }
-prim_rw reduce_gtRawIntOp :
-   binop_exp{ gtRawIntOp{'p; 's}; tyEnum{ 2 }; 'a1; 'a2 } <-->
-   ifthenelse{ gt_bool{ 'a1; 'a2 }; val_true; val_false }
-prim_rw reduce_geRawIntOp :
-   binop_exp{ geRawIntOp{'p; 's}; tyEnum{ 2 }; 'a1; 'a2 } <-->
-   ifthenelse{ ge_bool{ 'a1; 'a2 }; val_true; val_false }
-prim_rw reduce_cmpRawIntOp :
-   binop_exp{ cmpRawIntOp{'p; 's}; tyRawInt{ int32; val_true }; 'a1; 'a2 } <-->
-   ifthenelse{ beq_int{'a1; 'a2};
-      atomRawInt{ int32; val_true; 0 };
-      ifthenelse{ lt_bool{'a1; 'a2};
-         atomRawInt{ int32; val_true; (-1) };
-         atomRawInt{ int32; val_true; 1 }
-      }
-   }
+   letBinop{ 'ty; 'binop; 'atom1; 'atom2; var. 'exp['var] } <-->
+   'exp[ binop_exp{ 'binop; 'ty; 'atom1; 'atom2 } ]
 
 (*************************************************************************
  * Automation.
@@ -417,13 +281,12 @@ prim_rw reduce_cmpRawIntOp :
 
 let firEvalT i =
    rwh (repeatC (applyAllC [
+
       reduce_naml_prec;
       reduce_int8;
       reduce_int16;
       reduce_int32;
       reduce_int64;
-
-
       reduce_pow_2_7;
       reduce_pow_2_8;
       reduce_pow_2_15;
@@ -434,38 +297,11 @@ let firEvalT i =
       reduce_pow_2_63;
       reduce_pow_2_64;
       reduce_pow;
-
-      reduce_mod_arith;
+      reduce_mod_arith1;
+      reduce_mod_arith2;
       reduce_mod_arith_signed;
       reduce_mod_arith_unsigned;
 
-      reduce_true_set;
-      reduce_false_set;
-      reduce_val_true;
-      reduce_val_false;
-      reduce_atomEnum_eq_atom;
-      reduce_atomEnum_eq_num;
-
-      reduce_beta;
-      reduce_apply_nil;
-      reduce_fix;
-
-      reduce_tyVar;
-
-      reduce_idOp;
-      reduce_atomInt;
-      reduce_atomEnum;
-      reduce_atomRawInt;
-      reduce_atomVar;
-      reduce_letUnop;
-      reduce_letBinop;
-      reduce_letExt;
-      reduce_allocTuple;
-      reduce_allocArray;
-      reduce_letSubscript;
-      reduce_setSubscript;
-
-      reduce_uminusIntOp;
       reduce_plusIntOp;
       reduce_minusIntOp;
       reduce_mulIntOp;
@@ -473,13 +309,6 @@ let firEvalT i =
       reduce_remIntOp;
       reduce_maxIntOp;
       reduce_minIntOp;
-      reduce_eqIntOp;
-      reduce_neqIntOp;
-      reduce_ltIntOp;
-      reduce_leIntOp;
-      reduce_gtIntOp;
-      reduce_geIntOp;
-      reduce_cmpIntOp;
 
       reduce_plusRawIntOp;
       reduce_minusRawIntOp;
@@ -488,13 +317,16 @@ let firEvalT i =
       reduce_remRawIntOp;
       reduce_maxRawIntOp;
       reduce_minRawIntOp;
-      reduce_eqRawIntOp;
-      reduce_neqRawIntOp;
-      reduce_ltRawIntOp;
-      reduce_leRawIntOp;
-      reduce_gtRawIntOp;
-      reduce_geRawIntOp;
-      reduce_cmpRawIntOp;
 
-      reduceTopC
+      reduce_atomVar_atomNil;
+      reduce_atomVar_atomInt;
+      reduce_atomVar_atomEnum;
+      reduce_atomVar_atomRawInt;
+      reduce_atomVar_atomFloat;
+      reduce_atomVar_atomConst;
+
+      reduce_letUnop;
+      reduce_letBinop;
+
+      reduceTopC (* reduce everything else; mainly for Itt term reductions. *)
    ] )) i

@@ -5,6 +5,8 @@
  *
  * ----------------------------------------------------------------
  *
+ * Copyright (C) 2002 Brian Emre Aydemir, Caltech
+ *
  * This file is part of MetaPRL, a modular, higher order
  * logical framework that provides a logical programming
  * environment for OCaml and other languages.
@@ -38,22 +40,12 @@ open Fir
 
 open Refiner.Refiner.RefineError
 open Itt_list
-open Fir_ty
+open Mp_mc_fir_ty
 open Mp_mc_connect_base
 
-(*************************************************************************
- * Convert to and from ty_var.
- *************************************************************************)
-
-(* Just wrappers right now, since ty_var = symbol. *)
-
-let term_of_ty_var = var_term_of_symbol
-
-let ty_var_of_term = symbol_of_var_term
-
-(*************************************************************************
+(*
  * Convert to and from ty.
- *************************************************************************)
+ *)
 
 let rec term_of_ty t =
    match t with
@@ -63,26 +55,31 @@ let rec term_of_ty t =
     | TyEnum i -> mk_tyEnum_term (number_term_of_int i)
 
       (* Native types. *)
-    | TyRawInt (p,s) ->
+    | TyRawInt (p, s) ->
          mk_tyRawInt_term  (term_of_int_precision p) (term_of_int_signed s)
     | TyFloat p ->
          mk_tyFloat_term   (term_of_float_precision p)
 
       (* Functions. *)
-    | TyFun (tl,t) ->
-         mk_tyFun_term  (term_of_list term_of_ty tl) (term_of_ty t)
+    | TyFun (tyl, t) ->
+         mk_tyFun_term  (term_of_list term_of_ty tyl) (term_of_ty t)
 
       (* Tuples. *)
-    | TyUnion (tv,tyl,s) ->
+    | TyUnion (tv, tyl, is) ->
          mk_tyUnion_term (term_of_ty_var tv)
                          (term_of_list term_of_ty tyl)
-                         (term_of_int_set s)
-    | TyTuple tyl ->
-         mk_tyTuple_term (term_of_list term_of_ty tyl)
+                         (term_of_int_set is)
+    | TyTuple (tc, tyl) ->
+         mk_tyTuple_term (term_of_tuple_class tc)
+                         (term_of_list term_of_ty tyl)
     | TyArray t ->
          mk_tyArray_term (term_of_ty t)
     | TyRawData ->
          tyRawData_term
+    | TyPointer (v, t) ->
+         mk_tyPointer_term (term_of_var v)      (term_of_ty t)
+    | TyFrame (lbl, t) ->
+         mk_tyFrame_term   (term_of_label lbl)  (term_of_ty t)
 
       (* Polymorphism. *)
     | TyVar tv ->
@@ -96,9 +93,17 @@ let rec term_of_ty t =
     | TyAll (tvl, t) ->
          mk_tyAll_term     (term_of_list term_of_ty_var tvl)
                            (term_of_ty t)
-    | TyProject (tv,i) ->
-         mk_tyProject_term (term_of_ty_var tv)
+    | TyProject (v,i) ->
+         mk_tyProject_term (term_of_var v)
                            (number_term_of_int i)
+
+      (* Object-oriented. *)
+    | TyCase t ->
+         mk_tyCase_term    (term_of_ty t)
+    | TyObject (tv, t) ->
+         mk_tyObject_term  (term_of_ty_var tv) (term_of_ty t)
+    | TyOption t ->
+         mk_tyOption_term  (term_of_ty t)
 
       (* Type should be inferred. *)
     | TyDelayed -> tyDelayed_term
@@ -130,11 +135,19 @@ let rec ty_of_term t =
                  (list_of_term ty_of_term tyl)
                  (int_set_of_term s)
    else if is_tyTuple_term t then
-      TyTuple (list_of_term ty_of_term (dest_tyTuple_term t))
+      let tc, tyl = dest_tyTuple_term t in
+         TyTuple (tuple_class_of_term tc)
+                 (list_of_term ty_of_term tyl)
    else if is_tyArray_term t then
       TyArray (ty_of_term (dest_tyArray_term t))
    else if is_tyRawData_term t then
       TyRawData
+   else if is_tyPointer_term t then
+      let v, t = dest_tyPointer_term t in
+         TyPointer (var_of_term v) (ty_of_term t)
+   else if is_tyFrame_term t then
+      let lbl, t = dest_tyFrame_term t in
+         TyFrame (label_of_term lbl) (ty_of_term t)
 
    (* Polymorphism. *)
    else if is_tyVar_term t then
@@ -149,8 +162,17 @@ let rec ty_of_term t =
       let tvl, t = dest_tyAll_term t in
          TyAll (list_of_term ty_var_of_term tvl) (ty_of_term t)
    else if is_tyProject_term t then
-      let tv, i = dest_tyProject_term t in
-         TyProject (ty_var_of_term tv) (int_of_number_term i)
+      let v, i = dest_tyProject_term t in
+         TyProject (var_of_term v) (int_of_number_term i)
+
+   (* Object-oriented. *)
+   else if is_tyCase_term t then
+      TyCase (ty_of_term (dest_tyCase_term t))
+   else if is_tyObject_term t then
+      let tv, t = dest_tyObject_term t in
+         TyObject (ty_var_of_term tv) (ty_of_term t)
+   else if is_tyOption_term t then
+      TyOption (ty_of_term (dest_tyOption_term t))
 
    (* Type should be inferred. *)
    else if is_tyDelayed_term t then
@@ -160,31 +182,11 @@ let rec ty_of_term t =
       raise (RefineError ("ty_of_term", StringTermError
             ("not a ty", t)))
 
-(*************************************************************************
- * Convert to and from union_type.
- *************************************************************************)
-
-let term_of_union_type ut =
-   match ut with
-      NormalUnion -> normalUnion_term
-    | ExnUnion ->    exnUnion_term
-
-let union_type_of_term t =
-   if is_normalUnion_term t then
-      NormalUnion
-   else if is_exnUnion_term t then
-      ExnUnion
-   else
-      raise (RefineError ("union_type_of_term", StringTermError
-            ("not a union_type", t)))
-
-(*************************************************************************
- * Convert to and from tydef.
- *************************************************************************)
-
 (*
- * Define helper functions.
+ * Convert to and from tydef.
  *)
+
+(* Define helper functions. *)
 
 let term_of_ty_bool (t, b) =
    mk_unionElt_term (term_of_ty t) (term_of_bool b)
@@ -195,7 +197,7 @@ let ty_bool_of_term t =
          (ty_of_term t), (bool_of_term b)
    else
       raise (RefineError ("ty_bool_of_term", StringTermError
-            ("not an unionElt", t)))
+            ("not an unionElt / (ty, bool)", t)))
 
 let term_of_ty_bool_list_list tbll =
    (term_of_list (term_of_list term_of_ty_bool) tbll)
@@ -203,9 +205,7 @@ let term_of_ty_bool_list_list tbll =
 let ty_bool_list_list_of_term tbll =
    (list_of_term (list_of_term ty_bool_of_term) tbll)
 
-(*
- * Actual functions.
- *)
+(* Actual functions. *)
 
 let term_of_tydef tyd =
    match tyd with

@@ -1,9 +1,12 @@
 (*
- * Function Intermediate Representation formalized in MetaPRL.
+ * Functional Intermediate Representation formalized in MetaPRL.
  *
- * Defines the types in the FIR.
+ * Define terms to represent FIR types and terms.
+ * Specific FIR types represented here: ty, tydef.
  *
  * ----------------------------------------------------------------
+ *
+ * Copyright (C) 2002 Brian Emre Aydemir, Caltech
  *
  * This file is part of MetaPRL, a modular, higher order
  * logical framework that provides a logical programming
@@ -35,62 +38,31 @@ include Base_theory
 open Refiner.Refiner.Term
 
 (*************************************************************************
- * Declarations.
+ * Term declarations.
  *************************************************************************)
 
-(*
- * Integer and floating point precision.
- * The floating point precision terms are here for completeness.
- *    It'll be a while before we do any work with floating point numbers.
- *)
-
-declare int8
-declare int16
-declare int32
-declare int64
-declare floatSingle
-declare floatDouble
-declare floatLongDouble
-
-(* Integer type. *)
+(* Base types. *)
 
 declare tyInt
+declare tyEnum{ 'int }
 
-(*
- * Enumeration type.
- * Represents a set of integers from 0 to ('num - 1).
- *)
+(* Native types. *)
 
-declare tyEnum{ 'num }
+declare tyRawInt{ 'int_precision; 'int_signed }
+declare tyFloat{ 'float_precision }
 
-(*
- * Native data types.
- * 'precision is the precision (number of bits).
- * 'sign should be val_true or val_false if this is, respectively,
- *    a signed or unsigned integral type.
- *)
-
-declare tyRawInt{ 'precision; 'sign }
-declare tyFloat{ 'precision }
-
-(*
- *  Function type.
- * 'ty_list is a list of the types of the function's arguments.
- * 'ty is the type of the return value of the function.
- *)
+(* Functions. *)
 
 declare tyFun{ 'ty_list; 'ty }
 
-(*
- * Tuples.
- * 'ty_list in tyTuple is a list of the types in the tuple.
- * 'ty in tyArray is the type of the elements in the array.
- *)
+(* Tuples. *)
 
 declare tyUnion{ 'ty_var; 'ty_list; 'int_set }
-declare tyTuple{ 'ty_list }
+declare tyTuple{ 'tuple_class; 'ty_list }
 declare tyArray{ 'ty }
 declare tyRawData
+declare tyPointer{ 'var; 'ty }
+declare tyFrame{ 'label; 'ty }
 
 (* Polymorphism. *)
 
@@ -98,85 +70,39 @@ declare tyVar{ 'ty_var }
 declare tyApply{ 'ty_var; 'ty_list }
 declare tyExists{ 'ty_var_list; 'ty }
 declare tyAll{ 'ty_var_list; 'ty }
-declare tyProject{ 'ty_var; 'num }
+declare tyProject{ 'var; 'int }
 
-(*
- * Delayed type.
- * Type should be inferred later.
- *)
+(* Object-oriented. *)
+
+declare tyCase{ 'ty }
+declare tyObject{ 'ty_var; 'ty }
+declare tyOption{ 'ty }
+
+(* Delayed type. *)
 
 declare tyDelayed
-
-(*
- * Union tags.
- * normalUnion : all the fields are known and ordered.
- * exnUnion : not all the fields are known, nor are they ordered.
- *)
-
-declare normalUnion
-declare exnUnion
 
 (* Defining types. *)
 
 declare unionElt{ 'ty; 'bool }
-declare tyDefUnion{ 'ty_var_list; 'union_ty; 'elts }
+declare tyDefUnion{ 'ty_var_list; 'union_type; 'elts }
 declare tyDefLambda{ 'ty_var_list; 'ty }
-
-(*
- * Boolean type.
- *)
-
-declare val_true
-declare val_false
 
 (*************************************************************************
  * Term operations.
  *************************************************************************)
 
-(*
- * Precisions.
- *)
-
-val int8_term : term
-val is_int8_term : term -> bool
-
-val int16_term : term
-val is_int16_term : term -> bool
-
-val int32_term : term
-val is_int32_term : term -> bool
-
-val int64_term : term
-val is_int64_term : term -> bool
-
-val floatSingle_term : term
-val is_floatSingle_term : term -> bool
-
-val floatDouble_term : term
-val is_floatDouble_term : term -> bool
-
-val floatLongDouble_term : term
-val is_floatLongDouble_term : term -> bool
-
-(*
- * Integer type.
- *)
+(* Base types. *)
 
 val tyInt_term : term
 val is_tyInt_term : term -> bool
-
-(*
- * Enumeration type.
- *)
 
 val tyEnum_term : term
 val is_tyEnum_term : term -> bool
 val mk_tyEnum_term : term -> term
 val dest_tyEnum_term : term -> term
 
-(*
- * Native data types.
- *)
+(* Native types. *)
 
 val tyRawInt_term : term
 val is_tyRawInt_term : term -> bool
@@ -188,18 +114,14 @@ val is_tyFloat_term : term -> bool
 val mk_tyFloat_term : term -> term
 val dest_tyFloat_term : term -> term
 
-(*
- * Function type.
- *)
+(* Functions. *)
 
 val tyFun_term : term
 val is_tyFun_term : term -> bool
 val mk_tyFun_term : term -> term -> term
 val dest_tyFun_term : term -> term * term
 
-(*
- * Tuples.
- *)
+(* Tuples. *)
 
 val tyUnion_term : term
 val is_tyUnion_term : term -> bool
@@ -208,8 +130,8 @@ val dest_tyUnion_term : term -> term * term * term
 
 val tyTuple_term : term
 val is_tyTuple_term : term -> bool
-val mk_tyTuple_term : term -> term
-val dest_tyTuple_term : term -> term
+val mk_tyTuple_term : term -> term -> term
+val dest_tyTuple_term : term -> term * term
 
 val tyArray_term : term
 val is_tyArray_term : term -> bool
@@ -219,9 +141,17 @@ val dest_tyArray_term : term -> term
 val tyRawData_term : term
 val is_tyRawData_term : term -> bool
 
-(*
- * Polymorphism.
- *)
+val tyPointer_term : term
+val is_tyPointer_term : term -> bool
+val mk_tyPointer_term : term -> term -> term
+val dest_tyPointer_term : term -> term * term
+
+val tyFrame_term : term
+val is_tyFrame_term : term -> bool
+val mk_tyFrame_term : term -> term -> term
+val dest_tyFrame_term : term -> term * term
+
+(* Polymorphism *)
 
 val tyVar_term : term
 val is_tyVar_term : term -> bool
@@ -248,26 +178,29 @@ val is_tyProject_term : term -> bool
 val mk_tyProject_term : term -> term -> term
 val dest_tyProject_term : term -> term * term
 
-(*
- * Delayed type.
- *)
+(* Object-oriented. *)
+
+val tyCase_term : term
+val is_tyCase_term : term -> bool
+val mk_tyCase_term : term -> term
+val dest_tyCase_term : term -> term
+
+val tyObject_term : term
+val is_tyObject_term : term -> bool
+val mk_tyObject_term : term -> term -> term
+val dest_tyObject_term : term -> term * term
+
+val tyOption_term : term
+val is_tyOption_term : term -> bool
+val mk_tyOption_term : term -> term
+val dest_tyOption_term : term -> term
+
+(* Delayed type. *)
 
 val tyDelayed_term : term
 val is_tyDelayed_term : term -> bool
 
-(*
- * Union tags.
- *)
-
-val normalUnion_term : term
-val is_normalUnion_term : term -> bool
-
-val exnUnion_term : term
-val is_exnUnion_term : term -> bool
-
-(*
- * Defining types.
- *)
+(* Defining types. *)
 
 val unionElt_term : term
 val is_unionElt_term : term -> bool
@@ -283,13 +216,3 @@ val tyDefLambda_term : term
 val is_tyDefLambda_term : term -> bool
 val mk_tyDefLambda_term : term -> term -> term
 val dest_tyDefLambda_term : term -> term * term
-
-(*
- * Boolean type.
- *)
-
-val val_true_term : term
-val is_val_true_term : term -> bool
-
-val val_false_term : term
-val is_val_false_term : term -> bool

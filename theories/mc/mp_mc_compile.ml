@@ -5,6 +5,8 @@
  *
  * ----------------------------------------------------------------
  *
+ * Copyright (C) 2002 Brian Emre Aydemir, Caltech
+ *
  * This file is part of MetaPRL, a modular, higher order
  * logical framework that provides a logical programming
  * environment for OCaml and other languages.
@@ -38,5 +40,5 @@ open Fir
  * This is an identity operation for an FIR program.
  *)
 
-let compile fir =
-   fir
+let compile fir_prog =
+   fir_prog

@@ -5,6 +5,8 @@
  *
  * ----------------------------------------------------------------
  *
+ * Copyright (C) 2002 Brian Emre Aydemir, Caltech
+ *
  * This file is part of MetaPRL, a modular, higher order
  * logical framework that provides a logical programming
  * environment for OCaml and other languages.
@@ -39,25 +41,11 @@ open Fir
 open Refiner.Refiner.Term
 
 (*
- * Convert to and from ty_var.
- *)
-
-val term_of_ty_var : ty_var -> term
-val ty_var_of_term : term -> ty_var
-
-(*
  * Convert to and from ty.
  *)
 
 val term_of_ty : ty -> term
 val ty_of_term : term -> ty
-
-(*
- * Convert to and from union_type.
- *)
-
-val term_of_union_type : union_type -> term
-val union_type_of_term : term -> union_type
 
 (*
  * Convert to and from tydef.

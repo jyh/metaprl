@@ -1,56 +1,39 @@
 Maintainer of this theory: Brian Emre Aydemir (emre@its.caltech.edu)
-Last update to this file: 28 January 2002
+Last update to this file: 23 March 2002
 
 This file lists what I have remaining to do to complete this theory,
 and some other miscellaneous notes to myself.
 
 Todo list:
 --------------------------------------------------------------------------
--  Improve display forms: they work, but they could look nicer.
-   Specifically, fix Fir_exp and Fir_eval once I understand allocation,
-   unions, etc. Fir_ty might also need looking at.
--  Make a comprehensive test file: probably a bunch of sequents with
-   a .prla file to store the proofs.  Useful as a check to see if I
-   break anything.  Add this .prla file to the repository.
--  Fir_deadcode: dead function paramater and dead function elimination
-   would be quite nice to have.
--  FIR modelling: I need a better understanding / implementation (e.g.
-   Fir_eval), of such things as union, allocation, type construction, etc.
-   Once I have this, I can actually update Fir_eval to be complete...
-   I can also update the appropriate docs...
--  Fir_eval: re-export .prla sometime to solve copy_proof errors.
--  Mc_fir_connect*: Debugging runs, and lots of them, need to be performed.
-   I should do this once I settle other issues with my FIR
-   representation.
--  Fir_exp: debugging display forms, and term operations.
--  Finish the README file.
--  The tests: sets and symbols still need work...
+-  Display forms: These need to be tested and improved so that
+   things print in a reasonable fashion.
+-  FIR evaluation: This needs to be completed.
+-  Test cases: I've fallen way behind on these.  These cases need
+   to test display forms, rewrites, any tactic like things I define,
+   and the MC FIR <--> MetaPRL connection code.
+-  Documentation: Other than making a decent README file, I also
+   need to document code in a slightly more useful fashion.  It would
+   be nice if the same mechanism used to produce the docs for all
+   the theories was used here as well.
+-  Deadcode elimination: Implement more forms of it. Prove the
+   forms that aren't proven.
+-  Mp_mc_connect_base (special notes):
+   .  Check float converstion code.
+   .  Check string conversion code.
 
--  ACK! Update everything to match the new FIR.
-   Reorganize code so as to make all the term construction and
-   deconstruction functions less of a hassle to modify and edit.
-
-
-Notes to myself (things to do, but only if I feel so inclined):
+Notes to myself:
 --------------------------------------------------------------------------
--  building with cons breaks the "up-arrow" thingy in mpopt.
--  get the Conscript's to be more intelligent (e.g. read mk/config).
-   they also don't catch all dependencies (hard to describe this problem).
--  clean up the Conscript in this theory.
--  Understand all of MetaPRL code.  Clean it up where possible.
-   .  Not needed?:
-         mllib/register
-         mllib/marshal_buf
-         mllib/bitset
--  Get a better understanding of MC code.
-   .  What the heck is geoff's home dir doing in lib/cutil/Conscript
--  "open Bad_module" doesn't seme to be caught by prlc.
--  ensemble/thread_refiner.mli or somethign... wants to be a .mlz
--  is the naml front-end working?
+-  None at the moment.
 
 Scratch space (random thoughts to myself):
 --------------------------------------------------------------------------
-I think for now I'll just make some functions that take various
-slots in a Fir.prog and turn them into "TermTable"s.  Won't
-really be useful as a final solution, but it should work for
-testing (I hope).
+-  Checklist for when I need to add/remove/change a term:
+   1) .mli file: term declaration, term operation function signatures
+   2) .ml file: term declaration, display form, term operation functions,
+   3) connect: change cases appropriately
+   4) test: change cases appropriately
+   5) eval: change evaluation as needed
+-  Checklist for when files are added/removed:
+   1) Conscript: 4 file lists to check!
+   2) Makefile: 1 file list to check!

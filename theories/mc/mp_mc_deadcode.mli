@@ -1,9 +1,11 @@
 (*
  * Functional Intermediate Representation formalized in MetaPRL.
  *
- * Implement deadcode elimination.
+ * Deadcode elimination.
  *
  * ----------------------------------------------------------------
+ *
+ * Copyright (C) 2002 Brian Emre Aydemir, Caltech
  *
  * This file is part of MetaPRL, a modular, higher order
  * logical framework that provides a logical programming
@@ -30,51 +32,34 @@
  * Email:  emre@its.caltech.edu
  *)
 
-include Fir_exp
+include Mp_mc_fir_exp
 include Mp_mc_fir_eval
 
-open Top_conversionals
 open Tactic_type.Conversionals
 
 (*************************************************************************
  * Rewrites.
  *************************************************************************)
 
+(*
+ * Expressions.
+ *)
+
 (* Primitive operations. *)
 
-interactive_rw reduce_letUnop_deadcode :
-   letUnop{ 'op; 'ty; 'a1; v. 'exp } <-->
-   'exp
-interactive_rw reduce_letBinop_deadcode :
-   letBinop{ 'op; 'ty; 'a1; 'a2; v. 'exp } <-->
-   'exp
+topval reduce_letUnop_deadcode : conv
+topval reduce_letBinop_deadcode : conv
 
 (* Allocation. *)
 
-interactive_rw reduce_allocTuple_deadcode :
-   letAlloc{ allocTuple{ 'ty; 'atom_list }; v. 'exp } <-->
-   'exp
-interactive_rw reduce_allocArray_deadcode :
-   letAlloc{ allocArray{ 'ty; 'atom_list }; v. 'exp } <-->
-   'exp
+topval reduce_letAlloc_deadcode : conv
 
 (* Subscripting. *)
 
-interactive_rw reduce_letSubscript_deadcode :
-   letSubscript{ 'subop; 'ty; 'var; 'index; v. 'exp } <-->
-   'exp
+topval reduce_letSubscript_deadcode : conv
 
 (*************************************************************************
  * Automation.
  *************************************************************************)
 
-let firDeadcodeElimT i =
-   rwh (repeatC (applyAllC [
-      reduce_letUnop_deadcode;
-      reduce_letBinop_deadcode;
-
-      reduce_allocTuple_deadcode;
-      reduce_allocArray_deadcode;
-
-      reduce_letSubscript_deadcode
-   ] )) i
+topval firDeadcodeT : int -> tactic

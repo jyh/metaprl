@@ -1,9 +1,14 @@
 (*
  * Functional Intermediate Representation formalized in MetaPRL.
  *
- * Define the basic expression forms in the FIR.
+ * Define terms to represent FIR types and terms.
+ * Specific FIR types represented here: unop, binop, sub_block, sub_value,
+ * sub_index, sub_script, atom, alloc_op, tailop, pred_nop, pred_unop,
+ * pred_binop, pred, debug_line, debug_vars, debug_info, exp.
  *
  * ----------------------------------------------------------------
+ *
+ * Copyright (C) 2002 Brian Emre Aydemir, Caltech
  *
  * This file is part of MetaPRL, a modular, higher order
  * logical framework that provides a logical programming
@@ -53,41 +58,43 @@ declare notIntOp
 
 (* Bit fields. *)
 
-declare rawBitFieldOp{ 'precision; 'sign; 'num1; 'num2 }
+declare rawBitFieldOp{ 'int_precision; 'int_signed; 'int1; 'int2 }
 
 (* Native ints. *)
 
-declare uminusRawIntOp{ 'precision; 'sign }
-declare notRawIntOp{ 'precision; 'sign }
+declare uminusRawIntOp{ 'int_precision; 'int_signed }
+declare notRawIntOp{ 'int_precision; 'int_signed }
 
 (* Floats. *)
 
-declare uminusFloatOp{ 'precision }
-declare absFloatOp{ 'precision }
-declare sinOp{ 'precision }
-declare cosOp{ 'precision }
-declare sqrtOp{ 'precision }
+declare uminusFloatOp{ 'float_precision }
+declare absFloatOp{ 'float_precision }
+declare sinOp{ 'float_precision }
+declare cosOp{ 'float_precision }
+declare sqrtOp{ 'float_precision }
 
 (* Coerce to int. *)
 
-declare intOfFloatOp{ 'precision }
+declare intOfFloatOp{ 'float_precision }
 
 (* Coerce to float. *)
 
-declare floatOfIntOp{ 'precision }
-declare floatOfFloatOp{ 'prec1; 'prec2 }
-declare floatOfRawIntOp{ 'float_prec; 'int_prec; 'int_sign }
+declare floatOfIntOp{ 'float_precision }
+declare floatOfFloatOp{ 'float_precision1; 'float_precision2 }
+declare floatOfRawIntOp{ 'float_precision; 'int_precision; 'int_signed }
 
 (* Coerce to rawint. *)
 
-declare rawIntOfEnumOp{ 'precision; 'sign; 'num }
-declare rawIntOfFloatOp{ 'int_prec; 'int_sign; 'float_prec }
-declare rawIntOfRawIntOp{ 'dest_prec; 'dest_sign; 'src_prec; 'src_sign }
+declare rawIntOfIntOp{ 'int_precision; 'int_signed }
+declare rawIntOfEnumOp{ 'int_precision; 'int_signed; 'int }
+declare rawIntOfFloatOp{ 'int_precision; 'int_signed; 'float_precision }
+declare rawIntOfRawIntOp{ 'dest_int_precision; 'dest_int_signed;
+                          'src_int_precision;  'src_int_signed }
 
 (* Integer/pointer coercions. *)
 
-declare rawIntOfPointerOp{ 'precision; 'sign }
-declare pointerOfRawIntOp{ 'precision; 'sign }
+declare rawIntOfPointerOp{ 'int_precision; 'int_signed }
+declare pointerOfRawIntOp{ 'int_precision; 'int_signed }
 
 (*
  * Binary operations.
@@ -95,8 +102,9 @@ declare pointerOfRawIntOp{ 'precision; 'sign }
 
 (* Enums. *)
 
-declare andEnumOp{ 'num }
-declare orEnumOp{ 'num }
+declare andEnumOp{ 'int }
+declare orEnumOp{ 'int }
+declare xorEnumOp{ 'int }
 
 (* Naml ints. *)
 
@@ -124,85 +132,148 @@ declare cmpIntOp
 
 (* Native ints. *)
 
-declare plusRawIntOp{ 'precision; 'sign }
-declare minusRawIntOp{ 'precision; 'sign }
-declare mulRawIntOp{ 'precision; 'sign }
-declare divRawIntOp{ 'precision; 'sign }
-declare remRawIntOp{ 'precision; 'sign }
-declare slRawIntOp{ 'precision; 'sign }
-declare srRawIntOp{ 'precision; 'sign }
-declare andRawIntOp{ 'precision; 'sign }
-declare orRawIntOp{ 'precision; 'sign }
-declare xorRawIntOp{ 'precision; 'sign }
-declare maxRawIntOp{ 'precision; 'sign }
-declare minRawIntOp{ 'precision; 'sign }
+declare plusRawIntOp{ 'int_precision; 'int_signed }
+declare minusRawIntOp{ 'int_precision; 'int_signed }
+declare mulRawIntOp{ 'int_precision; 'int_signed }
+declare divRawIntOp{ 'int_precision; 'int_signed }
+declare remRawIntOp{ 'int_precision; 'int_signed }
+declare slRawIntOp{ 'int_precision; 'int_signed }
+declare srRawIntOp{ 'int_precision; 'int_signed }
+declare andRawIntOp{ 'int_precision; 'int_signed }
+declare orRawIntOp{ 'int_precision; 'int_signed }
+declare xorRawIntOp{ 'int_precision; 'int_signed }
+declare maxRawIntOp{ 'int_precision; 'int_signed }
+declare minRawIntOp{ 'int_precision; 'int_signed }
 
-declare rawSetBitFieldOp{ 'precision; 'sign; 'num1; 'num2 }
+declare rawSetBitFieldOp{ 'int_precision; 'int_signed; 'int1; 'int2 }
 
-declare eqRawIntOp{ 'precision; 'sign }
-declare neqRawIntOp{ 'precision; 'sign }
-declare ltRawIntOp{ 'precision; 'sign }
-declare leRawIntOp{ 'precision; 'sign }
-declare gtRawIntOp{ 'precision; 'sign }
-declare geRawIntOp{ 'precision; 'sign }
-declare cmpRawIntOp{ 'precision; 'sign }
+declare eqRawIntOp{ 'int_precision; 'int_signed }
+declare neqRawIntOp{ 'int_precision; 'int_signed }
+declare ltRawIntOp{ 'int_precision; 'int_signed }
+declare leRawIntOp{ 'int_precision; 'int_signed }
+declare gtRawIntOp{ 'int_precision; 'int_signed }
+declare geRawIntOp{ 'int_precision; 'int_signed }
+declare cmpRawIntOp{ 'int_precision; 'int_signed }
 
 (* Floats. *)
 
-declare plusFloatOp{ 'precision }
-declare minusFloatOp{ 'precision }
-declare mulFloatOp{ 'precision }
-declare divFloatOp{ 'precision }
-declare remFloatOp{ 'precision }
-declare maxFloatOp{ 'precision }
-declare minFloatOp{ 'precision }
+declare plusFloatOp{ 'float_precision }
+declare minusFloatOp{ 'float_precision }
+declare mulFloatOp{ 'float_precision }
+declare divFloatOp{ 'float_precision }
+declare remFloatOp{ 'float_precision }
+declare maxFloatOp{ 'float_precision }
+declare minFloatOp{ 'float_precision }
 
-declare eqFloatOp{ 'precision }
-declare neqFloatOp{ 'precision }
-declare ltFloatOp{ 'precision }
-declare leFloatOp{ 'precision }
-declare gtFloatOp{ 'precision }
-declare geFloatOp{ 'precision }
-declare cmpFloatOp{ 'precision }
+declare eqFloatOp{ 'float_precision }
+declare neqFloatOp{ 'float_precision }
+declare ltFloatOp{ 'float_precision }
+declare leFloatOp{ 'float_precision }
+declare gtFloatOp{ 'float_precision }
+declare geFloatOp{ 'float_precision }
+declare cmpFloatOp{ 'float_precision }
 
-declare atan2Op{ 'precision }
+declare atan2Op{ 'float_precision }
 
 (* Pointer equality. *)
 
 declare eqEqOp
 declare neqEqOp
 
+(* Pointer arithmetic. *)
+
+declare plusPointerOp{ 'int_precision; 'int_signed }
+
 (*
  * Subscript operators.
  *)
 
-declare blockPolySub
-declare blockRawIntSub{ 'precision; 'sign }
-declare blockFloatSub{ 'precision }
-declare rawRawIntSub{ 'precision; 'sign }
-declare rawFloatSub{ 'precision }
+(* Blocks. *)
+
+declare blockSub
 declare rawDataSub
-declare rawFunctionSub
+declare tupleSub
+declare rawTupleSub
 
-(*
- * Allocation operators.
- *)
+(* Values. *)
 
-declare allocTuple{ 'ty; 'atom_list }
-declare allocArray{ 'ty; 'atom_list }
-declare allocUnion{ 'ty; 'ty_var; 'num; 'atom_list }
-declare allocMalloc{ 'atom }
+declare polySub
+declare rawIntSub{ 'int_precision; 'int_signed }
+declare rawFloatSub{ 'float_precision }
+declare pointerSub
+declare functionSub
+
+(* Indexing. *)
+
+declare byteIndex
+declare wordIndex
+
+(* Subscripting. *)
+
+declare intIndex
+declare rawIntIndex{ 'int_precision; 'int_signed }
+
+(* Subscripting op. *)
+
+declare subop{ 'sub_block; 'sub_value; 'sub_index; 'sub_script }
 
 (*
  * Normal values.
  *)
 
+declare atomNil{ 'ty }
 declare atomInt{ 'int }
-declare atomEnum{ 'bound; 'num }
-declare atomRawInt{ 'precision; 'sign; 'num }
-declare atomFloat{ 'precision; 'f }
-declare atomConst{ 'ty; 'ty_var; 'num }
+declare atomEnum{ 'int1; 'int2 }
+declare atomRawInt{ 'int_precision; 'int_signed; 'num }
+declare atomFloat{ 'float_precision; 'num }
+declare atomConst{ 'ty; 'ty_var; 'int }
 declare atomVar{ 'var }
+
+(*
+ * Allocation operators.
+ *)
+
+declare allocTuple{ 'tuple_class; 'ty; 'atom_list }
+declare allocUnion{ 'ty; 'ty_var; 'int; 'atom_list }
+declare allocArray{ 'ty; 'atom_list }
+declare allocVArray{ 'ty; 'sub_index; 'atom1; 'atom2 }
+declare allocMalloc{ 'ty; 'atom }
+
+(*
+ * Tail calls / operations.
+ *)
+
+declare tailSysMigrate{ 'int; 'atom1; 'atom2; 'var; 'atom_list }
+declare tailAtomic{ 'var; 'atom; 'atom_list }
+declare tailAtomicRollback{ 'atom }
+declare tailAtomicCommit{ 'var; 'atom_list }
+
+(*
+ * Predicates and assertions.
+ *)
+
+(* No-ops. *)
+
+declare isMutable
+
+(* Unary operations. *)
+
+declare reserve
+declare boundsCheckLower
+declare boundsCheckUpper
+declare polyCheck
+declare pointerCheck
+declare functionCheck
+
+(* Binary operations. *)
+
+declare boundsCheck
+
+(* Predicates. *)
+
+declare predNop{ 'var; 'pred_nop }
+declare predUnop{ 'var; 'pred_unop; 'atom }
+declare predBinop{ 'var; 'pred_binop; 'atom1; 'atom2 }
 
 (*
  * Debugging info.
@@ -220,48 +291,48 @@ declare debugContext{ 'debug_line; 'debug_vars }
 
 (* Primitive operations. *)
 
-declare letUnop{ 'op; 'ty; 'a1; v. 'exp['v] }
-declare letBinop{ 'op; 'ty; 'a1; 'a2; v. 'exp['v] }
+declare letUnop{ 'ty; 'unop; 'atom; var. 'exp['var] }
+declare letBinop{ 'ty; 'binop; 'atom1; 'atom2; var. 'exp['var] }
 
 (* Function application. *)
 
-declare letExt{ 'ty; 'string; 'ty_of_str; 'atom_list; v. 'exp['v] }
+declare letExt{ 'ty1; 'string; 'ty2; 'atom_list; var. 'exp['var] }
 declare tailCall{ 'var; 'atom_list }
+declare specialCall{ 'tailop }
 
-(*
- * Control.
- * A matchCase consists of an int_set and an expression.
- * A match statement has a 'key (a number/int or block), and a list
- * of matchCases.
- *)
+(* Control. *)
 
 declare matchCase{ 'set; 'exp }
-declare "match"{ 'key; 'cases }
+declare matchExp{ 'atom; 'matchCase_list }
+declare typeCase{ 'atom1; 'atom2; 'var1; 'var2; 'exp1; 'exp2 }
 
 (* Allocation. *)
 
-declare letAlloc{ 'alloc_op; v. 'exp['v] }
+declare letAlloc{ 'alloc_op; var. 'exp['var] }
 
-(*
- * Subscripting.
- * In setSubscript, we bind the updated value to v in 'exp.
- *)
+(* Subscripting. *)
 
-declare letSubscript{ 'subop; 'ty; 'var; 'index; v. 'exp['v] }
-declare setSubscript{ 'subop; 'ty; 'var; 'index; 'new_val; v. 'exp['v] }
-declare memcpy{ 'subop; 'var1; 'atom1; 'var2; 'atom2; 'len; 'exp }
+declare letSubscript{ 'subop; 'ty; 'var2; 'atom; var1. 'exp['var1] }
+declare setSubscript{ 'subop; 'label; 'var; 'atom1; 'ty; 'atom2; 'exp }
+declare setGlobal{ 'sub_value; 'label; 'var; 'ty; 'atom; 'exp }
+declare memcpy{ 'subop; 'label; 'var1; 'atom1; 'var2; 'atom2; 'atom3; 'exp }
+
+(* Assertions. *)
+
+declare call{ 'var; 'atom_option_list; 'exp }
+declare assertExp{ 'label; 'pred; 'exp }
 
 (* Debugging. *)
 
-declare debugExp{ 'debug_info; 'exp }
+declare debug{ 'debug_info; 'exp }
 
 (*************************************************************************
  * Term operations.
  *************************************************************************)
 
-(*******************
+(*
  * Unary operations.
- *******************)
+ *)
 
 (* Identity (polymorphic). *)
 
@@ -348,6 +419,11 @@ val dest_floatOfRawIntOp_term : term -> term * term * term
 
 (* Coerce to rawint. *)
 
+val rawIntOfIntOp_term : term
+val is_rawIntOfIntOp_term : term -> bool
+val mk_rawIntOfIntOp_term : term -> term -> term
+val dest_rawIntOfIntOp_term : term -> term * term
+
 val rawIntOfEnumOp_term : term
 val is_rawIntOfEnumOp_term : term -> bool
 val mk_rawIntOfEnumOp_term : term -> term -> term -> term
@@ -375,9 +451,9 @@ val is_pointerOfRawIntOp_term : term -> bool
 val mk_pointerOfRawIntOp_term : term -> term -> term
 val dest_pointerOfRawIntOp_term : term -> term * term
 
-(********************
+(*
  * Binary operations.
- ********************)
+ *)
 
 (* Enums. *)
 
@@ -390,6 +466,11 @@ val orEnumOp_term : term
 val is_orEnumOp_term : term -> bool
 val mk_orEnumOp_term : term -> term
 val dest_orEnumOp_term : term -> term
+
+val xorEnumOp_term : term
+val is_xorEnumOp_term : term -> bool
+val mk_xorEnumOp_term : term -> term
+val dest_xorEnumOp_term : term -> term
 
 (* Naml ints. *)
 
@@ -645,66 +726,85 @@ val is_eqEqOp_term : term -> bool
 val neqEqOp_term : term
 val is_neqEqOp_term : term -> bool
 
-(**********************
+(* Pointer arithmetic. *)
+
+val plusPointerOp_term : term
+val is_plusPointerOp_term : term -> bool
+val mk_plusPointerOp_term : term -> term -> term
+val dest_plusPointerOp_term : term -> term * term
+
+(*
  * Subscript operators.
- **********************)
+ *)
 
-val blockPolySub_term : term
-val is_blockPolySub_term : term -> bool
+(* Blocks. *)
 
-val blockRawIntSub_term : term
-val is_blockRawIntSub_term : term -> bool
-val mk_blockRawIntSub_term : term -> term -> term
-val dest_blockRawIntSub_term : term -> term * term
+val blockSub_term : term
+val is_blockSub_term : term -> bool
 
-val blockFloatSub_term : term
-val is_blockFloatSub_term : term -> bool
-val mk_blockFloatSub_term : term -> term
-val dest_blockFloatSub_term : term -> term
+val rawDataSub_term : term
+val is_rawDataSub_term : term -> bool
 
-val rawRawIntSub_term : term
-val is_rawRawIntSub_term : term -> bool
-val mk_rawRawIntSub_term : term -> term -> term
-val dest_rawRawIntSub_term : term -> term * term
+val tupleSub_term : term
+val is_tupleSub_term : term -> bool
+
+val rawTupleSub_term : term
+val is_rawTupleSub_term : term -> bool
+
+(* Values. *)
+
+val polySub_term : term
+val is_polySub_term : term -> bool
+
+val rawIntSub_term : term
+val is_rawIntSub_term : term -> bool
+val mk_rawIntSub_term : term -> term -> term
+val dest_rawIntSub_term : term -> term * term
 
 val rawFloatSub_term : term
 val is_rawFloatSub_term : term -> bool
 val mk_rawFloatSub_term : term -> term
 val dest_rawFloatSub_term : term -> term
 
-val rawDataSub_term : term
-val is_rawDataSub_term : term -> bool
+val pointerSub_term : term
+val is_pointerSub_term : term -> bool
 
-val rawFunctionSub_term : term
-val is_rawFunctionSub_term : term -> bool
+val functionSub_term : term
+val is_functionSub_term : term -> bool
 
-(***********************
- * Allocation operators.
- ***********************)
+(* Indexing. *)
 
-val allocTuple_term : term
-val is_allocTuple_term : term -> bool
-val mk_allocTuple_term : term -> term -> term
-val dest_allocTuple_term : term -> term * term
+val byteIndex_term : term
+val is_byteIndex_term : term -> bool
 
-val allocArray_term : term
-val is_allocArray_term : term -> bool
-val mk_allocArray_term : term -> term -> term
-val dest_allocArray_term : term -> term * term
+val wordIndex_term : term
+val is_wordIndex_term : term -> bool
 
-val allocUnion_term : term
-val is_allocUnion_term : term -> bool
-val mk_allocUnion_term : term -> term -> term -> term -> term
-val dest_allocUnion_term : term -> term * term * term * term
+(* Subscripting. *)
 
-val allocMalloc_term : term
-val is_allocMalloc_term : term -> bool
-val mk_allocMalloc_term : term -> term
-val dest_allocMalloc_term : term -> term
+val intIndex_term : term
+val is_intIndex_term : term -> bool
 
-(****************
+val rawIntIndex_term : term
+val is_rawIntIndex_term : term -> bool
+val mk_rawIntIndex_term : term -> term -> term
+val dest_rawIntIndex_term : term -> term * term
+
+(* Susbscripting op. *)
+
+val subop_term : term
+val is_subop_term : term -> bool
+val mk_subop_term : term -> term -> term -> term -> term
+val dest_subop_term : term -> term * term * term * term
+
+(*
  * Normal values.
- ****************)
+ *)
+
+val atomNil_term : term
+val is_atomNil_term : term -> bool
+val mk_atomNil_term : term -> term
+val dest_atomNil_term : term -> term
 
 val atomInt_term : term
 val is_atomInt_term : term -> bool
@@ -736,9 +836,113 @@ val is_atomVar_term : term -> bool
 val mk_atomVar_term : term -> term
 val dest_atomVar_term : term -> term
 
-(*****************
+(*
+ * Allocation operators.
+ *)
+
+val allocTuple_term : term
+val is_allocTuple_term : term -> bool
+val mk_allocTuple_term : term -> term -> term -> term
+val dest_allocTuple_term : term -> term * term * term
+
+val allocUnion_term : term
+val is_allocUnion_term : term -> bool
+val mk_allocUnion_term : term -> term -> term -> term -> term
+val dest_allocUnion_term : term -> term * term * term * term
+
+val allocArray_term : term
+val is_allocArray_term : term -> bool
+val mk_allocArray_term : term -> term -> term
+val dest_allocArray_term : term -> term * term
+
+val allocVArray_term : term
+val is_allocVArray_term : term -> bool
+val mk_allocVArray_term : term -> term -> term -> term -> term
+val dest_allocVArray_term : term -> term * term * term * term
+
+val allocMalloc_term : term
+val is_allocMalloc_term : term -> bool
+val mk_allocMalloc_term : term -> term -> term
+val dest_allocMalloc_term : term -> term * term
+
+(*
+ * Tail calls / operations.
+ *)
+
+val tailSysMigrate_term : term
+val is_tailSysMigrate_term : term -> bool
+val mk_tailSysMigrate_term : term -> term -> term -> term -> term -> term
+val dest_tailSysMigrate_term : term -> term * term * term * term * term
+
+val tailAtomic_term : term
+val is_tailAtomic_term : term -> bool
+val mk_tailAtomic_term : term -> term -> term -> term
+val dest_tailAtomic_term : term -> term * term * term
+
+val tailAtomicRollback_term : term
+val is_tailAtomicRollback_term : term -> bool
+val mk_tailAtomicRollback_term : term -> term
+val dest_tailAtomicRollback_term : term -> term
+
+val tailAtomicCommit_term : term
+val is_tailAtomicCommit_term : term -> bool
+val mk_tailAtomicCommit_term : term -> term -> term
+val dest_tailAtomicCommit_term : term -> term * term
+
+(*
+ * Predicates and assertions.
+ *)
+
+(* No-ops. *)
+
+val isMutable_term : term
+val is_isMutable_term : term -> bool
+
+(* Unary operations. *)
+
+val reserve_term : term
+val is_reserve_term : term -> bool
+
+val boundsCheckLower_term : term
+val is_boundsCheckLower_term : term -> bool
+
+val boundsCheckUpper_term : term
+val is_boundsCheckUpper_term : term -> bool
+
+val polyCheck_term : term
+val is_polyCheck_term : term -> bool
+
+val pointerCheck_term : term
+val is_pointerCheck_term : term -> bool
+
+val functionCheck_term : term
+val is_functionCheck_term : term -> bool
+
+(* Binary operations. *)
+
+val boundsCheck_term : term
+val is_boundsCheck_term : term -> bool
+
+(* Predicates. *)
+
+val predNop_term : term
+val is_predNop_term : term -> bool
+val mk_predNop_term : term -> term -> term
+val dest_predNop_term : term -> term * term
+
+val predUnop_term : term
+val is_predUnop_term : term -> bool
+val mk_predUnop_term : term -> term -> term -> term
+val dest_predUnop_term : term -> term * term * term
+
+val predBinop_term : term
+val is_predBinop_term : term -> bool
+val mk_predBinop_term : term -> term -> term -> term -> term
+val dest_predBinop_term : term -> term * term * term * term
+
+(*
  * Debugging info.
- *****************)
+ *)
 
 val debugLine_term : term
 val is_debugLine_term : term -> bool
@@ -765,9 +969,11 @@ val is_debugContext_term : term -> bool
 val mk_debugContext_term : term -> term -> term
 val dest_debugContext_term : term -> term * term
 
-(**************
+(*
  * Expressions.
- **************)
+ *)
+
+(* Primitive operations. *)
 
 val letUnop_term : term
 val is_letUnop_term : term -> bool
@@ -779,6 +985,8 @@ val is_letBinop_term : term -> bool
 val mk_letBinop_term : term -> term -> term -> term -> string -> term -> term
 val dest_letBinop_term : term -> term * term * term * term * string * term
 
+(* Function application. *)
+
 val letExt_term : term
 val is_letExt_term : term -> bool
 val mk_letExt_term : term -> term -> term -> term -> string -> term -> term
@@ -789,41 +997,82 @@ val is_tailCall_term : term -> bool
 val mk_tailCall_term : term -> term -> term
 val dest_tailCall_term : term -> term * term
 
+val specialCall_term : term
+val is_specialCall_term : term -> bool
+val mk_specialCall_term : term -> term
+val dest_specialCall_term : term -> term
+
+(* Control. *)
+
 val matchCase_term : term
 val is_matchCase_term : term -> bool
 val mk_matchCase_term : term -> term -> term
 val dest_matchCase_term : term -> term * term
 
-val match_term : term
-val is_match_term : term -> bool
-val mk_match_term : term -> term -> term
-val dest_match_term : term -> term * term
+val matchExp_term : term
+val is_matchExp_term : term -> bool
+val mk_matchExp_term : term -> term -> term
+val dest_matchExp_term : term -> term * term
+
+val typeCase_term : term
+val is_typeCase_term : term -> bool
+val mk_typeCase_term :
+   term -> term -> term -> term -> term -> term -> term
+val dest_typeCase_term :
+   term-> term * term * term * term * term * term
+
+(* Allocation. *)
 
 val letAlloc_term : term
 val is_letAlloc_term : term -> bool
 val mk_letAlloc_term : string -> term -> term -> term
 val dest_letAlloc_term : term -> string * term * term
 
+(* Subscripting *)
+
 val letSubscript_term : term
 val is_letSubscript_term : term -> bool
 val mk_letSubscript_term :
    term -> term -> term -> term -> string -> term -> term
-val dest_letSubscript_term : term -> term * term * term * term * string * term
+val dest_letSubscript_term :
+   term -> term * term * term * term * string * term
 
 val setSubscript_term : term
 val is_setSubscript_term : term -> bool
 val mk_setSubscript_term :
-   term -> term -> term -> term -> term -> string -> term -> term
+   term -> term -> term -> term -> term -> term -> term -> term
 val dest_setSubscript_term :
-   term -> term * term * term * term * term * string * term
+   term -> term * term * term * term * term * term * term
+
+val setGlobal_term : term
+val is_setGlobal_term : term -> bool
+val mk_setGlobal_term :
+   term -> term -> term -> term -> term -> term -> term
+val dest_setGlobal_term :
+   term -> term * term * term * term * term * term
 
 val memcpy_term : term
 val is_memcpy_term : term -> bool
 val mk_memcpy_term :
-   term -> term -> term -> term -> term -> term -> term -> term
-val dest_memcpy_term : term -> term * term * term * term * term * term * term
+   term -> term -> term -> term -> term -> term -> term -> term -> term
+val dest_memcpy_term :
+   term -> term * term * term * term * term * term * term * term
 
-val debugExp_term : term
-val is_debugExp_term : term -> bool
-val mk_debugExp_term : term -> term -> term
-val dest_debugExp_term : term -> term * term
+(* Assertions. *)
+
+val call_term : term
+val is_call_term : term -> bool
+val mk_call_term : term -> term -> term -> term
+val dest_call_term : term -> term * term * term
+
+val assertExp_term : term
+val is_assertExp_term : term -> bool
+val mk_assertExp_term : term -> term -> term -> term
+val dest_assertExp_term : term -> term * term * term
+
+(* Debugging. *)
+
+val debug_term : term
+val is_debug_term : term -> bool
+val mk_debug_term : term -> term -> term
+val dest_debug_term : term -> term * term

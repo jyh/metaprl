@@ -1,10 +1,12 @@
 (*
  * Functional Intermediate Representation formalized in MetaPRL.
  *
- * Basic operations for converting between the MC Fir and
+ * Basic operations for converting between the MC FIR and
  * and MetaPRL terms.
  *
  * ----------------------------------------------------------------
+ *
+ * Copyright (C) 2002 Brian Emre Aydemir, Caltech
  *
  * This file is part of MetaPRL, a modular, higher order
  * logical framework that provides a logical programming
@@ -42,28 +44,32 @@ open Fir
 
 open Refiner.Refiner.Term
 
+(*************************************************************************
+ * Basic conversions.
+ *************************************************************************)
+
 (*
- * Convert between symbols and variable terms and strings.
- * A variable term is << 'a >> (for example).
- * string <--> symbol conversions here go through a lookup table,
- *    as do var term <--> symbol conversions.
- * clear_symbol_table should be called every time conversion of a
- *    new program begins, in order to avoid problems with old table entries.
+ * Convert between var's, ty_var's, label's, and terms.
  *)
 
-val clear_symbol_table : unit -> unit
+val term_of_var : var -> term
+val var_of_term : term -> var
+val string_of_var : var -> string
+val var_of_string : string -> var
 
-val string_of_symbol : symbol -> string
-val symbol_of_string : string -> symbol
+val term_of_ty_var : ty_var -> term
+val ty_var_of_term : term -> ty_var
+val string_of_ty_var : ty_var -> string
+val ty_var_of_string : string -> ty_var
 
-val var_term_of_symbol : symbol -> term
-val symbol_of_var_term : term -> symbol
+val term_of_label : label -> term
+val label_of_term : term -> label
+val string_of_label : label -> string
+val label_of_string : string -> label
 
 (*
  * Convert between integer and floating point constants and numbers.
  * A number term is number[i:n].
- * Rawfloats are represented as integers! (See the README file for
- *    why this is the case.)
  *)
 
 val number_term_of_int : int -> term
@@ -76,13 +82,6 @@ val number_term_of_rawfloat : rawfloat -> term
 val rawfloat_of_number_term : float_precision -> term -> rawfloat
 
 (*
- * Convert to and from bool values.
- *)
-
-val term_of_bool : bool -> term
-val bool_of_term : term -> bool
-
-(*
  * Convert to and from string values.
  *)
 
@@ -90,17 +89,50 @@ val term_of_string : string -> term
 val string_of_term : term -> string
 
 (*
- * Convert to and from int_precision, int_signed, and float_precision.
+ * Convert a list to a "term list", i.e. << cons{ ... } >>.
+ * For term_of_list:
+ *    ('a -> term)   -- converts an item of type 'a to a corresponding term.
+ * For list_of_term:
+ *    (term -> 'a)   -- converts a term representing an 'a to an 'a.
+ *)
+
+val term_of_list : ('a -> term) -> 'a list -> term
+val list_of_term : (term -> 'a) -> term -> 'a list
+
+(*************************************************************************
+ * Conversions for terms in Mp_mc_fir_base.
+ *************************************************************************)
+
+(*
+ * Convert to and from options.
+ *)
+
+val term_of_option : ('a -> term) -> 'a option -> term
+val option_of_term : (term -> 'a) -> term -> 'a option
+
+(*
+ * Convert to and from bool values.
+ *)
+
+val term_of_bool : bool -> term
+val bool_of_term : term -> bool
+
+(*
+ * Convert to and from int_precision and float_precision.
  *)
 
 val term_of_int_precision : int_precision -> term
 val int_precision_of_term : term -> int_precision
 
-val term_of_int_signed : int_signed -> term
-val int_signed_of_term : term -> int_signed
-
 val term_of_float_precision : float_precision -> term
 val float_precision_of_term : term -> float_precision
+
+(*
+ * Convert to and from int_signed.
+ *)
+
+val term_of_int_signed : int_signed -> term
+val int_signed_of_term : term -> int_signed
 
 (*
  * Convert to and from int_set, rawint_set, and set.
@@ -116,12 +148,15 @@ val term_of_set : set -> term
 val set_of_term : term -> set
 
 (*
- * Convert a list to a "term list", i.e. << cons{ ... } >>.
- * For term_of_list:
- *    ('a -> term)   -- converts an item of type 'a to a corresponding term.
- * For list_of_term:
- *    (term -> 'a)   -- converts a term representing an 'a to an 'a.
+ * Convert to and from tuple_class.
  *)
 
-val term_of_list : ('a -> term) -> 'a list -> term
-val list_of_term : (term -> 'a) -> term -> 'a list
+val term_of_tuple_class : tuple_class -> term
+val tuple_class_of_term : term -> tuple_class
+
+(*
+ * Convert to and from union_type.
+ *)
+
+val term_of_union_type : union_type -> term
+val union_type_of_term : term -> union_type

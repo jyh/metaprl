@@ -12,14 +12,12 @@ OCAMLDEPFLAGS := -prl
 # Library files
 MPFILES := \
    mp_mc_term_op \
-   mp_mc_set \
-   fir_ty \
-   fir_exp \
+   mp_mc_fir_base \
+   mp_mc_fir_ty \
+   mp_mc_fir_exp \
    mp_mc_fir_eval \
-   fir_deadcode \
-   fir_const_elim \
-   mp_mc_theory \
-   fir_test
+   mp_mc_deadcode \
+   mp_mc_theory
 
 # Name of main libraries
 MAIN = theory
@@ -27,8 +25,11 @@ MAIN = theory
 all: $(MAIN).cma
 opt: $(MAIN).cmxa
 
+
+# Clean out generated files, including symlinks.
 clean::
 	$(RM) *.cm* *.o *.p4* *.pp* *.exec
+	$(RM) mp_mc_theory.ml mp_mc_theory.mli
 	$(MAKE) -C tests clean
 
 # Real makefile

@@ -6,6 +6,8 @@
  *
  * ----------------------------------------------------------------
  *
+ * Copyright (C) 2002 Brian Emre Aydemir, Caltech
+ *
  * This file is part of MetaPRL, a modular, higher order
  * logical framework that provides a logical programming
  * environment for OCaml and other languages.
@@ -69,6 +71,10 @@ val dest_3_dep0_1_dep1_term :
  * 5 subterms.
  *************************************************************************)
 
+val is_5_dep0_term : opname -> term -> bool
+val mk_5_dep0_term : opname -> term -> term -> term -> term -> term -> term
+val dest_5_dep0_term : opname -> term -> term * term * term * term * term
+
 val is_4_dep0_1_dep1_term : opname -> term -> bool
 val mk_4_dep0_1_dep1_term :
    opname -> term -> term -> term -> term -> string -> term -> term
@@ -78,6 +84,12 @@ val dest_4_dep0_1_dep1_term :
 (*************************************************************************
  * 6 subterms.
  *************************************************************************)
+
+val is_6_dep0_term : opname -> term -> bool
+val mk_6_dep0_term :
+   opname -> term -> term -> term -> term -> term -> term -> term
+val dest_6_dep0_term :
+   opname -> term -> term * term * term * term * term * term
 
 val is_5_dep0_1_dep1_term : opname -> term -> bool
 val mk_5_dep0_1_dep1_term :
@@ -94,3 +106,14 @@ val mk_7_dep0_term :
    opname -> term -> term -> term -> term -> term -> term -> term -> term
 val dest_7_dep0_term :
    opname -> term -> term * term * term * term * term * term * term
+
+(*************************************************************************
+ * 8 subterms
+ *************************************************************************)
+
+val is_8_dep0_term : opname -> term -> bool
+val mk_8_dep0_term :
+   opname -> term -> term -> term -> term ->
+             term -> term -> term -> term -> term
+val dest_8_dep0_term :
+   opname -> term -> term * term * term * term * term * term * term * term

@@ -11,9 +11,11 @@ include Itt_rfun
 open Printf
 open Debug
 open Refiner.Refiner.Term
+open Refiner.Refiner.TermOp
+open Refiner.Refiner.TermSubst
+open Refiner.Refiner.Refine
 open Options
 open Resource
-open Refine_sig
 
 open Var
 open Sequent
@@ -57,11 +59,11 @@ primrw list_indReduceStep :
  * DISPLAY FORMS                                                        *
  ************************************************************************)
 
-dform nil = "[" "]"
-dform cons{'a; 'b} = slot{'a} `"::" slot{'b}
+dform nil_df1 : nil = "[" "]"
+dform cons_df1 : cons{'a; 'b} = slot{'a} `"::" slot{'b}
 
-dform mode[prl] :: list{'a} = slot{'a} `"List"
-dform mode[prl] :: list_ind{'e; 'base; h, t, f. 'step['h; 't; 'f]} =
+dform list_df1 : mode[prl] :: list{'a} = slot{'a} `"List"
+dform list_ind_df1 : mode[prl] :: list_ind{'e; 'base; h, t, f. 'step['h; 't; 'f]} =
    pushm[1] pushm[3]
    `"case " slot{'e} `" of" space
       nil `" -> " slot{'base} space popm
@@ -177,7 +179,7 @@ prim list_indEquality 'H lambda{l. 'T['l]} list{'A} 'u 'v 'w :
                    in 'T['e1]
            } =
    it
-   
+
 (*
  * H >- list(A1) <= list(A2)
  * by listSubtype
@@ -192,7 +194,7 @@ prim listSubtype 'H :
 (************************************************************************
  * PRIMITIVES                                                           *
  ************************************************************************)
-     
+
 let list_term = << list{'A} >>
 let list_opname = opname_of_term list_term
 let is_list_term = is_dep0_term list_opname
@@ -342,6 +344,9 @@ let sub_resource =
 
 (*
  * $Log$
+ * Revision 1.8  1998/06/01 13:55:57  jyh
+ * Proving twice one is two.
+ *
  * Revision 1.7  1998/05/28 13:47:43  jyh
  * Updated the editor to use new Refiner structure.
  * ITT needs dform names.

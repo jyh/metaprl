@@ -9,8 +9,12 @@ include Itt_equal
 
 open Printf
 open Debug
+open Refiner.Refiner
 open Refiner.Refiner.Term
-open Refine_sig
+open Refiner.Refiner.TermOp
+open Refiner.Refiner.TermMan
+open Refiner.Refiner.TermSubst
+open Refiner.Refiner.Refine
 
 open Tactic_type
 open Sequent
@@ -203,7 +207,7 @@ let substConclT t p =
       try dest_equal t with
          Term.TermMatch _ -> raise (RefineError (StringTermError ("substT: arg should be an equality: ", t)))
    in
-   let bind = 
+   let bind =
       try
          let t1 = get_term_arg 0 p in
             if is_bind_term t1 then
@@ -271,6 +275,9 @@ let revHypSubstT i p =
 
 (*
  * $Log$
+ * Revision 1.7  1998/06/01 13:56:24  jyh
+ * Proving twice one is two.
+ *
  * Revision 1.6  1998/05/28 13:48:11  jyh
  * Updated the editor to use new Refiner structure.
  * ITT needs dform names.

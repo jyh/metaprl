@@ -52,10 +52,10 @@ let rec join_resource base1 base2 =
         resource_extract = extract_resource;
         resource_improve = improve_resource
       }
-      
+
 and extract_resource { resource_data = data } =
    data
-   
+
 and improve_resource { resource_data = data } x =
    { resource_data = improve_data x data;
      resource_join = join_resource;
@@ -77,6 +77,9 @@ let cache = cache_resource.resource_extract cache_resource
 
 (*
  * $Log$
+ * Revision 1.3  1998/06/01 13:55:34  jyh
+ * Proving twice one is two.
+ *
  * Revision 1.2  1998/05/28 13:47:09  jyh
  * Updated the editor to use new Refiner structure.
  * ITT needs dform names.

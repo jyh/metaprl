@@ -7,9 +7,9 @@ include Tactic_type
 
 include Itt_equal
 
+open Refiner.Refiner
 open Refiner.Refiner.Term
 open Resource
-open Refine
 
 open Tactic_type
 open Base_dtactic
@@ -19,12 +19,15 @@ val add_soft_abs :
        (term * (int -> tactic), int -> tactic, d_data) rsrc ->
        (term * tactic, tactic, eqcd_data) rsrc ->
        term ->
-       tactic_argument Refiner.rw ->
+       tactic_argument Refine.rw ->
        (term * (int -> tactic), int -> tactic, d_data) rsrc *
        (term * tactic, tactic, eqcd_data) rsrc
 
 (*
  * $Log$
+ * Revision 1.4  1998/06/01 13:56:17  jyh
+ * Proving twice one is two.
+ *
  * Revision 1.3  1998/05/28 13:48:05  jyh
  * Updated the editor to use new Refiner structure.
  * ITT needs dform names.

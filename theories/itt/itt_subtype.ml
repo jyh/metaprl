@@ -8,10 +8,13 @@ include Itt_equal
 open Printf
 open Debug
 open Options
+open Refiner.Refiner
 open Refiner.Refiner.Term
+open Refiner.Refiner.TermOp
+open Refiner.Refiner.TermMan
+open Refiner.Refiner.Refine
 open Resource
 open Term_dtable
-open Refine_sig
 
 open Var
 
@@ -26,7 +29,7 @@ open Itt_equal
 let _ =
    if !debug_load then
       eprintf "Loading Itt_subtype%t" eflush
-     
+
 (* debug_string DebugLoad "Loading itt_subtype..." *)
 
 (************************************************************************
@@ -39,7 +42,7 @@ declare subtype{'A; 'B}
  * DISPLAY FORMS                                                        *
  ************************************************************************)
 
-dform mode[prl] :: subtype{'A; 'B} = slot{'A} subseteq slot{'B}
+dform subtype_df1 : mode[prl] :: subtype{'A; 'B} = slot{'A} subseteq slot{'B}
 
 (************************************************************************
  * RULES                                                                *
@@ -154,7 +157,7 @@ type sub_resource_info =
  * Subtype resource is a DAG.
  *)
 type sub_data = tactic term_dtable
-     
+
 (*
  * The resource itself.
  *)
@@ -220,10 +223,10 @@ let rec join_resource { resource_data = data1 } { resource_data = data2 } =
      resource_extract = extract_resource;
      resource_improve = improve_resource
    }
-      
+
 and extract_resource { resource_data = data } =
    extract_data data
-   
+
 and improve_resource { resource_data = data } arg =
    { resource_data = improve_data data arg;
      resource_join = join_resource;
@@ -311,6 +314,9 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (subty
 
 (*
  * $Log$
+ * Revision 1.7  1998/06/01 13:56:26  jyh
+ * Proving twice one is two.
+ *
  * Revision 1.6  1998/05/28 13:48:14  jyh
  * Updated the editor to use new Refiner structure.
  * ITT needs dform names.

@@ -11,10 +11,13 @@ include Itt_rfun
 
 open Printf
 open Debug
+open Refiner.Refiner
 open Refiner.Refiner.Term
+open Refiner.Refiner.TermOp
+open Refiner.Refiner.TermMan
+open Refiner.Refiner.Refine
 open Options
 open Resource
-open Refine_sig
 
 open Var
 open Sequent
@@ -41,10 +44,10 @@ declare "quot"{'A; x, y. 'E['x; 'y]}
  * DISPLAY FORMS                                                        *
  ************************************************************************)
 
-dform mode[prl] :: "quot"{'A; x, y. 'E['x; 'y]} =
+dform quot_df1 : mode[prl] :: "quot"{'A; x, y. 'E['x; 'y]} =
    slot{'x} `"," slot{'y} `":" slot{'A} `"//" slot{'E['x; 'y]}
 
-dform mode[src] :: "quot"{'A; x, y. 'E['x; 'y]} =
+dform quot_df2 : mode[src] :: "quot"{'A; x, y. 'E['x; 'y]} =
    `"quot " slot{'x} `", " slot{'y} `":" slot{'A} `"//" slot{'E['x; 'y]}
 
 (************************************************************************
@@ -86,7 +89,7 @@ prim quotientWeakEquality 'H 'x 'y 'z 'u 'v :
    sequent [squash] { 'H; x: 'A1 >- 'E1['x; 'x] } -->
    sequent [squash] { 'H; x: 'A1; y: 'A1; u: 'E1['x; 'y] >- 'E1['y; 'x] } -->
    sequent [squash] { 'H; x: 'A1; y: 'A1; z: 'A1; u: 'E1['x; 'y]; v: 'E1['y; 'z] >- 'E1['x; 'z] } -->
-   sequent ['ext] { 'H >- quot x1, y1: 'A1 // 'E1['x1; 'y1] 
+   sequent ['ext] { 'H >- quot x1, y1: 'A1 // 'E1['x1; 'y1]
                    = quot x2, y2: 'A2 // 'E2['x2; 'y2]
                    in univ[@i:l]
            } =
@@ -288,7 +291,7 @@ let quotient_subtypeT p =
                    addHiddenLabelT "aux";
                    addHiddenLabelT "wf";
                    addHiddenLabelT "wf"])
-         
+
      | _ -> failT) p
 
 let sub_resource =
@@ -300,6 +303,9 @@ let sub_resource =
 
 (*
  * $Log$
+ * Revision 1.7  1998/06/01 13:56:09  jyh
+ * Proving twice one is two.
+ *
  * Revision 1.6  1998/05/28 13:47:54  jyh
  * Updated the editor to use new Refiner structure.
  * ITT needs dform names.

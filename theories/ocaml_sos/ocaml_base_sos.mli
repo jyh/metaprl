@@ -87,7 +87,7 @@ declare lookup{'S; 'n}
 declare replace{'S; 'n; 'v}
 declare allocate{'S; 'v}
 
-rewrite state_unfold : 
+rewrite state_unfold :
    state{'S; 'e} <--> spread{process{'S; 'e}; v, S2. 'S2}
 
 rewrite expr_unfold :
@@ -114,6 +114,9 @@ axiom functional_apply_value 'H 't1 :
 
 (*
  * $Log$
+ * Revision 1.2  1998/06/01 13:56:52  jyh
+ * Proving twice one is two.
+ *
  * Revision 1.1  1998/04/29 14:49:43  jyh
  * Added ocaml_sos.
  *

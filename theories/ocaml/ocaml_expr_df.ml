@@ -243,7 +243,7 @@ dform se_list_cons_df2 : slot{se_list; cons{'s; 'e}; nil} =
 
 dform se_list_cons_df3 : slot{se_list; cons{'s; 'e}; cons{'e2; 'e3}} =
    slot{'s} `"XXX" slot{'e} ";" hspace slot{se_list; 'e2; 'e3}
-   
+
 (*
  * Tuples.
  *)
@@ -396,6 +396,9 @@ dform fix_df2 : "fix"[@start:n, @finish:n]{'p} =
 
 (*
  * $Log$
+ * Revision 1.9  1998/06/01 13:56:42  jyh
+ * Proving twice one is two.
+ *
  * Revision 1.8  1998/05/04 23:46:16  jyh
  * Most display forms now work.
  *

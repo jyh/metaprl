@@ -1,6 +1,6 @@
 (*
  * Structural rules.
- * Could add thinning etc. 
+ * Could add thinning etc.
  *)
 
 (*
@@ -11,6 +11,9 @@ axiom hyp 'H 'J :
 
 (*
  * $Log$
+ * Revision 1.2  1998/06/01 13:55:43  jyh
+ * Proving twice one is two.
+ *
  * Revision 1.1  1997/04/28 15:52:02  jyh
  * This is the initial checkin of Nuprl-Light.
  * I am porting the editor, so it is not included

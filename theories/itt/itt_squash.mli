@@ -7,6 +7,9 @@
  *     sequent [it; it] { H >> T }
  *
  * $Log$
+ * Revision 1.4  1998/06/01 13:56:20  jyh
+ * Proving twice one is two.
+ *
  * Revision 1.3  1998/05/28 13:48:07  jyh
  * Updated the editor to use new Refiner structure.
  * ITT needs dform names.
@@ -38,7 +41,7 @@ declare squash
  * Internal type.
  *)
 type squash_data
-     
+
 (*
  * The resource itself.
  *)

@@ -12,8 +12,11 @@ include Itt_struct
 open Printf
 open Debug
 open Options
+open Refiner.Refiner
 open Refiner.Refiner.Term
-open Refine_sig
+open Refiner.Refiner.TermOp
+open Refiner.Refiner.TermMan
+open Refiner.Refiner.Refine
 open Resource
 
 open Tacticals
@@ -44,8 +47,8 @@ declare hide{'A}
  * DISPLAY FORMS                                                        *
  ************************************************************************)
 
-dform set{'A; x. 'B['x]} = "{" bvar{'x} `":" 'A `"|" 'B['x] "}"
-dform mode[prl] :: hide{'A} = "[" 'A "]"
+dform set_df1 : set{'A; x. 'B['x]} = "{" bvar{'x} `":" 'A `"|" 'B['x] "}"
+dform hide_df1 : mode[prl] :: hide{'A} = "[" 'A "]"
 
 (************************************************************************
  * RULES                                                                *
@@ -58,7 +61,7 @@ dform mode[prl] :: hide{'A} = "[" 'A "]"
  * H >- A = A in Ui
  * H, a: A >- Ui ext B
  *)
-prim setFormation 'H 'a 'A : 
+prim setFormation 'H 'a 'A :
    sequent [squash] { 'H >- 'A = 'A in univ[@i:l] }
    ('B['a] : sequent ['ext] { 'H; a: 'A >- univ[@i:l] }) :
    sequent ['ext] { 'H >- univ[@i:l] } =
@@ -85,7 +88,7 @@ prim setEquality 'H 'x :
  * H, z: A >- B[z] = B[z] in Ui
  *)
 prim setMemberFormation 'H 'a 'z :
-   sequent [squash] { 'H >- 'a = 'a in 'A } 
+   sequent [squash] { 'H >- 'a = 'a in 'A }
    sequent ['ext]   { 'H >- 'B['a] }
    sequent [squash] { 'H; z: 'A >- "type"{'B['z]} } :
    sequent ['ext]   { 'H >- { x:'A | 'B['x] } } =
@@ -99,7 +102,7 @@ prim setMemberFormation 'H 'a 'z :
  * H >- B[a1]
  * H, x: A >- B[x] = B[x] in Ui
  *)
-prim setMemberEquality 'H 'x : 
+prim setMemberEquality 'H 'x :
    sequent [squash] { 'H >- 'a1 = 'a2 in 'A }
    sequent [squash] { 'H >- 'B['a1] }
    sequent [squash] { 'H; x: 'A >- "type"{'B['x]} } :
@@ -147,7 +150,7 @@ prim set_subtype 'H :
  ************************************************************************)
 
 let set_term = << { a: 'A | 'B['x] } >>
-     
+
 (*
  * D
  *)
@@ -169,7 +172,7 @@ let d_set i p =
                setElimination i' (count - i' - 1) u y v p
           | _ ->
                failwith "d_set: match"
-         
+
 let d_resource = d_resource.resource_improve d_resource (set_term, d_set)
 let d = d_resource.resource_extract d_resource
 
@@ -279,7 +282,7 @@ let d_setT i =
       d_set_concl
    else
       d_set_hyp i
-         
+
 let d_resource = d_resource.resource_improve d_resource (set_term, d_setT)
 
 (*
@@ -326,6 +329,9 @@ let sub_resource =
 
 (*
  * $Log$
+ * Revision 1.6  1998/06/01 13:56:15  jyh
+ * Proving twice one is two.
+ *
  * Revision 1.5  1998/05/28 13:48:01  jyh
  * Updated the editor to use new Refiner structure.
  * ITT needs dform names.

@@ -16,7 +16,7 @@ open Refiner.Refiner.Term
 type 'a cache
 type 'a extract
 type 'a synthesis
-     
+
 (*
  * A forward-chaining rule.
  * The justification (which is probably going to be a tactic),
@@ -80,6 +80,9 @@ val used_hyps : 'a synthesis -> int list
 
 (*
  * $Log$
+ * Revision 1.4  1998/06/01 13:57:06  jyh
+ * Proving twice one is two.
+ *
  * Revision 1.3  1998/05/28 13:48:38  jyh
  * Updated the editor to use new Refiner structure.
  * ITT needs dform names.

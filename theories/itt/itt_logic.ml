@@ -12,9 +12,12 @@ include Itt_soft
 
 open Printf
 open Debug
+open Refiner.Refiner
 open Refiner.Refiner.Term
+open Refiner.Refiner.TermOp
+open Refiner.Refiner.TermMan
+open Refiner.Refiner.Refine
 open Resource
-open Refine_sig
 
 open Itt_equal
 open Itt_soft
@@ -59,44 +62,44 @@ prec prec_and
 prec prec_or
 prec prec_quant
 
-dform mode[src] :: "true" = `"True"
+dform true_df1 : mode[src] :: "true" = `"True"
 
-dform mode[src] :: "false" = `"False"
+dform false_df1 : mode[src] :: "false" = `"False"
 
-dform mode[src] :: parens :: "prec"[prec_implies] :: "not"{'a} =
+dform not_df1 : mode[src] :: parens :: "prec"[prec_implies] :: "not"{'a} =
    `"not " slot[le]{'a}
 
-dform mode[src] :: parens :: "prec"[prec_implies] :: implies{'a; 'b} =
+dform implies_df1 : mode[src] :: parens :: "prec"[prec_implies] :: implies{'a; 'b} =
    slot[le]{'a} `" => " slot[lt]{'b}
-   
-dform mode[src] :: parens :: "prec"[prec_and] :: "and"{'a; 'b} =
+
+dform and_df1 : mode[src] :: parens :: "prec"[prec_and] :: "and"{'a; 'b} =
    slot[le]{'a} `" /\\ " slot[lt]{'b}
-   
-dform mode[src] :: parens :: "prec"[prec_or] :: "or"{'a; 'b} =
+
+dform or_df1 : mode[src] :: parens :: "prec"[prec_or] :: "or"{'a; 'b} =
    slot[le]{'a} `" \\/ " slot[lt]{'b}
-   
-dform mode[src] :: parens :: "prec"[prec_quant] :: "all"{'A; x. 'B['x]} =
+
+dform all_df1 : mode[src] :: parens :: "prec"[prec_quant] :: "all"{'A; x. 'B['x]} =
    `"all " slot{'x} `": " slot{'A}`"." slot{'B['x]}
 
-dform mode[src] :: parens :: "prec"[prec_quant] :: "exists"{'A; x. 'B['x]} =
+dform exists_df1 : mode[src] :: parens :: "prec"[prec_quant] :: "exists"{'A; x. 'B['x]} =
   `"exists " slot{'x} `": " slot{'A} `"." slot{'B['x]}
 
-dform mode[prl] :: parens :: "prec"[prec_implies] :: "not"{'a} =
+dform not_df2 : mode[prl] :: parens :: "prec"[prec_implies] :: "not"{'a} =
    Nuprl_font!tneg slot[le]{'a}
-   
-dform mode[prl] :: parens :: "prec"[prec_implies] :: implies{'a; 'b} =
+
+dform implies_df1 : mode[prl] :: parens :: "prec"[prec_implies] :: implies{'a; 'b} =
    slot[le]{'a} Nuprl_font!Rightarrow " " slot[lt]{'b}
-   
-dform mode[prl] :: parens :: "prec"[prec_and] :: "and"{'a; 'b} =
+
+dform and_df1 : mode[prl] :: parens :: "prec"[prec_and] :: "and"{'a; 'b} =
    slot[le]{'a} Nuprl_font!wedge " " slot[lt]{'b}
-   
-dform mode[prl] :: parens :: "prec"[prec_or] :: "or"{'a; 'b} =
+
+dform or_df2 : mode[prl] :: parens :: "prec"[prec_or] :: "or"{'a; 'b} =
    slot[le]{'a} Nuprl_font!vee " " slot[lt]{'b}
-   
-dform mode[prl] :: parens :: "prec"[prec_quant] :: "all"{'A; x. 'B['x]} =
+
+dform all_df2 : mode[prl] :: parens :: "prec"[prec_quant] :: "all"{'A; x. 'B['x]} =
    pushm[3] Nuprl_font!forall slot{'x} `":" slot{'A} sbreak["",". "] slot{'B['x]} popm
 
-dform mode[prl] :: parens :: "prec"[prec_quant] :: "exists"{'A; x. 'B['x]} =
+dform exists_df2 : mode[prl] :: parens :: "prec"[prec_quant] :: "exists"{'A; x. 'B['x]} =
    pushm[3] Nuprl_font!"exists" slot{'x} `":" slot{'A} sbreak["",". "] slot{'B['x]}
 
 (************************************************************************
@@ -114,37 +117,37 @@ let all_opname = opname_of_term all_term
 let is_all_term = is_dep0_dep1_term all_opname
 let dest_all = dest_dep0_dep1_term all_opname
 let mk_all_term = mk_dep0_dep1_term all_opname
-     
+
 let exists_term = << exst x: 'A. 'B['x] >>
 let exists_opname = opname_of_term exists_term
 let is_exists_term = is_dep0_dep1_term exists_opname
 let dest_exists = dest_dep0_dep1_term exists_opname
 let mk_exists_term = mk_dep0_dep1_term exists_opname
-     
+
 let or_term = << 'A or 'B >>
 let or_opname = opname_of_term or_term
 let is_or_term = is_dep0_dep0_term or_opname
 let dest_or = dest_dep0_dep0_term or_opname
 let mk_or_term = mk_dep0_dep0_term or_opname
-     
+
 let and_term = << 'A and 'B >>
 let and_opname = opname_of_term and_term
 let is_and_term = is_dep0_dep0_term and_opname
 let dest_and = dest_dep0_dep0_term and_opname
 let mk_and_term = mk_dep0_dep0_term and_opname
-     
+
 let implies_term = << 'A => 'B >>
 let implies_opname = opname_of_term implies_term
 let is_implies_term = is_dep0_dep0_term implies_opname
 let dest_implies = dest_dep0_dep0_term implies_opname
 let mk_implies_term = mk_dep0_dep0_term implies_opname
-     
+
 let not_term = << 'A => 'B >>
 let not_opname = opname_of_term not_term
 let is_not_term = is_dep0_term not_opname
 let dest_not = dest_dep0_term not_opname
 let mk_not_term = mk_dep0_term not_opname
-     
+
 (*
  * D
  *)
@@ -225,6 +228,9 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (not_t
 
 (*
  * $Log$
+ * Revision 1.7  1998/06/01 13:56:01  jyh
+ * Proving twice one is two.
+ *
  * Revision 1.6  1998/05/28 13:47:46  jyh
  * Updated the editor to use new Refiner structure.
  * ITT needs dform names.

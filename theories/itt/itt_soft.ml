@@ -9,7 +9,9 @@ include Itt_equal
 
 open Printf
 open Debug
+open Refiner.Refiner
 open Refiner.Refiner.Term
+open Refiner.Refiner.TermAddr
 open Refine
 open Resource
 
@@ -35,13 +37,13 @@ let d_soft rw i p =
       else
          get_pos_hyp_index i count
    in
-      (Refiner.rwtactic (Refiner.rwaddr (make_seq_address i') rw)) p
-       
+      (Refine.rwtactic (Refine.rwaddr (make_seq_address i') rw)) p
+
 (*
  * EqCD.
  *)
 let eqcd_soft rw p =
-   (Refiner.rwtactic (Refiner.rwaddr (make_seq_address (hyp_count p)) rw)) p
+   (Refine.rwtactic (Refine.rwaddr (make_seq_address (hyp_count p)) rw)) p
 
 (*
  * Combine them.
@@ -52,6 +54,9 @@ let add_soft_abs dres eqcdres t rw =
 
 (*
  * $Log$
+ * Revision 1.5  1998/06/01 13:56:16  jyh
+ * Proving twice one is two.
+ *
  * Revision 1.4  1998/05/28 13:48:03  jyh
  * Updated the editor to use new Refiner structure.
  * ITT needs dform names.

@@ -14,9 +14,9 @@ open Refiner.Refiner.TermSubst
 type attribute =
    VarArgs of string list
  | TermArgs of term list
- | TypeArg of term 
+ | TypeArg of term
  | IntArgs of int list
- | ThinArg of bool 
+ | ThinArg of bool
  | SubstArg of (string * term) list
 
 (*
@@ -55,6 +55,9 @@ type tactic_arg = tactic_argument Refine.tactic_arg
 
 (*
  * $Log$
+ * Revision 1.8  1998/06/01 13:57:08  jyh
+ * Proving twice one is two.
+ *
  * Revision 1.7  1998/05/28 13:48:40  jyh
  * Updated the editor to use new Refiner structure.
  * ITT needs dform names.

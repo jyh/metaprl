@@ -13,6 +13,7 @@ open Printf
 open Debug
 open Sequent
 open Refiner.Refiner.Term
+open Refiner.Refiner.TermMan
 open Resource
 
 open Tactic_type
@@ -40,7 +41,7 @@ declare unit
  * DISPLAY FORMS                                                        *
  ************************************************************************)
 
-dform mode[prl] :: unit = `"Unit"
+dform unit_df1 : mode[prl] :: unit = `"Unit"
 
 (************************************************************************
  * RULES                                                                *
@@ -159,6 +160,9 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (it_te
 
 (*
  * $Log$
+ * Revision 1.6  1998/06/01 13:56:32  jyh
+ * Proving twice one is two.
+ *
  * Revision 1.5  1998/05/28 13:48:20  jyh
  * Updated the editor to use new Refiner structure.
  * ITT needs dform names.

@@ -174,10 +174,10 @@ type 'a inferenceInfo =
      inf_args : 'a inference list;
      inf_world : 'a world
    }
-   
+
 and 'a hypInfo =
    { hyp_world : 'a world }
-   
+
 and 'a infInfo =
    Inference of 'a inferenceInfo
  | Hyp of 'a hypInfo
@@ -209,7 +209,7 @@ and 'a subgoals =
    Unexplored
  | Unsolvable
  | Subgoals of 'a subgoal list
-   
+
 and assumption =
    { assum_term : term;
      assum_hash : Term_template.t
@@ -221,7 +221,7 @@ and 'a goal =
      goal_assums : assumption list;
      mutable goal_subgoals : 'a subgoals
    }
-   
+
 (*
  * The search DAG is a bi-directional DAG of goals, with
  * a flag indicating if the goal is satisfied.  The goal
@@ -240,14 +240,14 @@ and 'a node_status =
  | Derivable
  | Derived
  | Primitive of 'a inference
-   
+
 and 'a goalnode =
    { node_goal : 'a goal;
      node_world : 'a world;
      mutable node_children : 'a goalnode list list;
      mutable node_status : 'a node_status
    }
-   
+
 (*
  * Stack is always OR-AND branching.
  *)
@@ -370,7 +370,7 @@ type 'a chain =
       (* Forward chaining *)
       mutable ext_index : int;
       mutable ext_fqueue : 'a inference list;
-      
+
       (* Possible worlds *)
       mutable ext_worlds : 'a world list
    }
@@ -382,7 +382,7 @@ type 'a extract =
       ext_names : string list;
       ext_gnames : string list;
       ext_hyps : 'a world list;
-      
+
       (* Backward chaining *)
       ext_goal : 'a goal option;
       ext_node : 'a goalnode option;
@@ -391,7 +391,7 @@ type 'a extract =
 
       (* Current world *)
       ext_world : 'a world;
-      
+
       (* Chaining base *)
       ext_base : 'a chain
    }
@@ -418,7 +418,7 @@ let mk_var_name { ext_base = { ext_index = index } as base } =
 (*
  * Functional record update.
  *)
-let set_used 
+let set_used
     { ext_used = used;
       ext_hcount = hcount;
       ext_names = names;
@@ -798,7 +798,7 @@ let hash_goal { ext_base = { ext_terms = terms } }
     ({ goal_goal = t; goal_hash = hash } as goal) =
    let { entry_goals = goals } = Hashtbl.find terms hash in
       List_util.find (eq_goal goal) goals
-      
+
 (************************************************************************
  * UTILITIES                                                            *
  ************************************************************************)
@@ -905,7 +905,7 @@ let build_world_extension ({ ext_base = base } as extract) world assums =
                      world'
          in
             aux world' tl
-            
+
     | [] ->
          world
    in
@@ -1024,7 +1024,7 @@ let set_node_children
          node.node_children <- find_node_children extract node subgoals'
     | Unexplored ->
          raise (Invalid_argument "set_node_children")
-   
+
 (*
  * Expand a backward chain on a specific node in the tree.
  * Assume that node_status is Unproved.
@@ -1144,20 +1144,20 @@ let new_bchain node =
          Unproved ->
             (* Expand subgoals, and restart *)
             expand_node extract node
-            
+
        | Unprovable ->
             (* Failed node *)
             pop_failed_branch fstack
-            
+
        | Derivable ->
             (* Push the subgoals *)
             push_derivable_node subgoals fstack
-            
+
        | Derived | Primitive _ ->
             (* This node is provable *)
             Ref_util.pop fstack;
             ()
-                  
+
    in
    let search extract =
       (* Process the top goal *)
@@ -1171,7 +1171,7 @@ let new_bchain node =
             (* Success of all items in this branch *)
             pop_succeeded_node fstack;
             false
-                  
+
        | OrBranch ->
             (* All subgoals failed, pop the node, and fail its branch *)
             Ref_util.pop fstack;
@@ -1211,7 +1211,7 @@ let new_goals world goal =
             in
                bset_tbl_node tbl node;
                Some node, tbl, new_bchain node
-      
+
        | None ->
             None, tbl, (function _ -> false)
 
@@ -1438,7 +1438,7 @@ let compute_wild t =
          Some (List.rev wildi, term_rewrite ([||], [||]) terms' (List.rev wilds))
    in
       terms', wilds'
-      
+
 let add_frule cache { fc_ants = ants; fc_concl = concl; fc_just = just } =
    let args, wild = compute_wild ants in
    let info =
@@ -1570,7 +1570,7 @@ let extract_cache cache =
    in
    let finfo, binfo, _ = collect [] [] [] cache in
       finfo, binfo
- 
+
 (*
  * Construct the extract.
  *)
@@ -1583,16 +1583,16 @@ let extract cache =
          ext_names = [];
          ext_gnames = [];
          ext_hyps = [];
-      
+
          (* Back chaining *)
          ext_goal = None;
          ext_node = node;
          ext_goals = goals;
          ext_bchain = bchain;
-                                  
+
          (* Current world *)
          ext_world = Empty;
-      
+
          (* Chaining base *)
          ext_base =
             { (* Rule tables *)
@@ -1604,7 +1604,7 @@ let extract cache =
                (* Forward chaining *)
                ext_index = 0;
                ext_fqueue = [];
-      
+
                (* Possible worlds *)
                ext_worlds = []
             }
@@ -1627,7 +1627,7 @@ let add_hyp
        ext_world = world;
        ext_base = base
      } as extract) i gname t =
-   (* Have we already explored this world? *) 
+   (* Have we already explored this world? *)
    let t' = subst t (List.map mk_var_term names) gnames in
    let hash = Term_template.of_term t' in
    let i' = hcount - i - 1 in
@@ -1737,7 +1737,7 @@ let del_hyp
 let ref_hyp ({ ext_hcount = hcount;
                ext_hyps = hyps;
                ext_used = used
-             } as extract) i = 
+             } as extract) i =
    let hyp = List.nth hyps (hcount - i - 1) in
       if List.memq hyp used then
          extract
@@ -1798,7 +1798,7 @@ let set_goal ({ ext_used = used;
         ext_base = base
       }
 
-                       
+
 (************************************************************************
  * LOOKUP                                                               *
  ************************************************************************)
@@ -1900,7 +1900,7 @@ let hyp_add_info { hyp_count = hcount; hyp_hyps = hyps }
          { hyp_count = hcount + i; hyp_hyps = l }
    in
       aux 0 hyps values
-      
+
 (*
  * Find the particular branch of the node that succeeded.
  *)
@@ -1966,7 +1966,7 @@ let rec forechain hyps = function
                 | { inf_info = Hyp _ } ->
                      failwith "forechain: hyp_error"
       end
-         
+
  | [] ->
       [], hyps
 
@@ -1989,7 +1989,7 @@ let rec backchain hyps infs
          SeqTactic [ForeTactics fjust; bproof]
    in
       proof
-      
+
 (*
  * Derive the backchain tree, and collect the inferences that
  * must be satisfied by forward chaining.
@@ -2005,7 +2005,7 @@ let collect_infs node =
             raise (Invalid_argument "collect")
    in
       search [] node
- 
+
 (*
  * Produce a proof of the goal in the current world.
  * This will be a combination of forward and backward chaining.
@@ -2053,9 +2053,12 @@ let used_hyps
       syn_used = used
     } =
    List.map (function inf -> hcount - (List_util.find_indexq inf hyps) - 1) used
-   
+
 (*
  * $Log$
+ * Revision 1.9  1998/06/01 13:57:04  jyh
+ * Proving twice one is two.
+ *
  * Revision 1.8  1998/05/28 13:48:36  jyh
  * Updated the editor to use new Refiner structure.
  * ITT needs dform names.

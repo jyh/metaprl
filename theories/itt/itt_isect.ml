@@ -11,10 +11,13 @@ include Itt_rfun
 
 open Printf
 open Debug
+open Refiner.Refiner
 open Refiner.Refiner.Term
+open Refiner.Refiner.TermOp
+open Refiner.Refiner.TermMan
+open Refiner.Refiner.Refine
 open Options
 open Resource
-open Refine_sig
 
 open Var
 open Sequent
@@ -41,8 +44,8 @@ declare "isect"{'A; x. 'B['x]}
  * DISPLAY FORMS                                                        *
  ************************************************************************)
 
-dform mode[prl] :: (isect x: 'A. 'B['x]) = cap slot{'x} `":" slot{'A} `"." slot{'B['x]}
-dform mode[src] :: (isect x: 'A. 'B['x]) = `"isect " slot{'x} `":" slot{'A} `"." slot{'B['x]}
+dform isect_df1 : mode[prl] :: (isect x: 'A. 'B['x]) = cap slot{'x} `":" slot{'A} `"." slot{'B['x]}
+dform isect_df2 : mode[src] :: (isect x: 'A. 'B['x]) = `"isect " slot{'x} `":" slot{'A} `"." slot{'B['x]}
 
 (************************************************************************
  * RULES                                                                *
@@ -227,6 +230,9 @@ let sub_resource =
 
 (*
  * $Log$
+ * Revision 1.7  1998/06/01 13:55:56  jyh
+ * Proving twice one is two.
+ *
  * Revision 1.6  1998/05/28 13:47:40  jyh
  * Updated the editor to use new Refiner structure.
  * ITT needs dform names.

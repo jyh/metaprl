@@ -2,6 +2,9 @@
  * Valid contexts.
  *
  * $Log$
+ * Revision 1.2  1998/06/01 13:56:35  jyh
+ * Proving twice one is two.
+ *
  * Revision 1.1  1997/04/28 15:52:33  jyh
  * This is the initial checkin of Nuprl-Light.
  * I am porting the editor, so it is not included
@@ -22,7 +25,7 @@ declare ctx{'S; 'C};;
 declare nil_ctx;;
 
 axiom empty_ctx : sig{'S} --> ctx{'S; nil_ctx};;
-                     
+
 axiom type_ctx 'S 'C : ctx{'S[nil_sig]; 'C[nil_ctx] } -->
     sequent { 'S; 'C >> mem{'A; type} } -->
     ctx{'S[nil_sig]; 'C[hyp{'A; x. nil_ctx}]};;

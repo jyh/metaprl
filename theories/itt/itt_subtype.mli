@@ -117,7 +117,7 @@ type sub_resource_info =
  * Internal type.
  *)
 type sub_data
-     
+
 (*
  * The resource itself.
  *)
@@ -141,6 +141,9 @@ val mk_subtype_term : term -> term -> term
 
 (*
  * $Log$
+ * Revision 1.5  1998/06/01 13:56:28  jyh
+ * Proving twice one is two.
+ *
  * Revision 1.4  1998/05/28 13:48:16  jyh
  * Updated the editor to use new Refiner structure.
  * ITT needs dform names.

@@ -113,7 +113,7 @@ axiom universeFormation 'H univ[@j:l] :
  ************************************************************************)
 
 type eqcd_data
-     
+
 resource (term * tactic, tactic, eqcd_data) eqcd_resource
 
 val eqcd_of_proof : tactic_arg -> tactic
@@ -142,7 +142,7 @@ val dest_univ : term -> level_exp
 val mk_univ_term : level_exp -> term
 
 val it_term : term
-      
+
 val d_equalT : int -> tactic
 val eqcd_univT : tactic
 val eqcd_itT : tactic
@@ -150,6 +150,9 @@ val squash_equalT : tactic
 
 (*
  * $Log$
+ * Revision 1.6  1998/06/01 13:55:51  jyh
+ * Proving twice one is two.
+ *
  * Revision 1.5  1998/05/28 13:47:32  jyh
  * Updated the editor to use new Refiner structure.
  * ITT needs dform names.

@@ -46,7 +46,7 @@ axiom independentPairFormation 'H :
 
 (*
  * H, A * B, J >- T ext t
- * by independentProductElimination 
+ * by independentProductElimination
  * H, A * B, u: A, v: B, J >- T ext t
  *)
 axiom independentProductElimination 'H 'J 'z 'u 'v :
@@ -85,6 +85,9 @@ val eqcd_prodT : tactic
 
 (*
  * $Log$
+ * Revision 1.4  1998/06/01 13:56:07  jyh
+ * Proving twice one is two.
+ *
  * Revision 1.3  1998/04/22 22:45:01  jyh
  * *** empty log message ***
  *

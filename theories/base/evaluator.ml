@@ -19,14 +19,14 @@ let (evaltable : (shape, eval_rule) Hashtbl.t) = Hashtbl.create 499
 
 let rec check_lhs_bvars = function
    [] -> () |
-   h::t -> 
-   if List.mem h t 
-      then raise (Invalid_argument "All bound variables should be different in lhs of reduction rules") 
+   h::t ->
+   if List.mem h t
+      then raise (Invalid_argument "All bound variables should be different in lhs of reduction rules")
       else check_lhs_bvars t
 
 let rec get_arg_bvars = function
    [] -> [] |
-   h::t -> 
+   h::t ->
       let hd = dest_bterm h in
       hd.bvars @ (get_term_bvars hd.bterm @ get_arg_bvars t)
 
@@ -34,7 +34,7 @@ and get_term_bvars trm = get_arg_bvars (dest_term trm).term_terms
 
 let check_lhs lhs = check_lhs_bvars (get_term_bvars lhs)
 
-let add_new s (t,f) = 
+let add_new s (t,f) =
    check_lhs t;
    Hashtbl.add evaltable s (t,f)
 
@@ -60,43 +60,43 @@ let rec get_prin_args = function
 
 let rec check_rule_args rule_args args = function
    [] -> check_rule_args rule_args args [true;true;true;true;true] |
-   h::t -> 
+   h::t ->
    begin
       match (args,rule_args) with
       [],[] -> true |
-      ha::ta,hr::tr -> 
-         (if h then 
+      ha::ta,hr::tr ->
+         (if h then
             let r_term = (dest_bterm hr).bterm in
-            is_var_term r_term 
-               or is_canon_var_term r_term 
+            is_var_term r_term
+               or is_canon_var_term r_term
                or let ha_term = (dest_bterm ha).bterm in
                   (shape_of_term r_term = shape_of_term ha_term
                      & check_rule (dest_term ha_term).term_terms [] r_term )
-         else true) 
+         else true)
             & check_rule_args tr ta t |
       _ -> false
    end
 
-(* 
+(*
  * prin_args = [] - all arguments are principal
  *)
-and check_rule args prin_args rule_term = 
+and check_rule args prin_args rule_term =
    check_rule_args (dest_term rule_term).term_terms args prin_args
 
 let rec get_arg_par_list = function
-   arg::args, rule_arg::rule_args -> 
+   arg::args, rule_arg::rule_args ->
       let r_term = (dest_bterm rule_arg).bterm in
       ( if is_var_term r_term or is_canon_var_term r_term then [] else
          get_par_list (dest_term (dest_bterm arg).bterm) (dest_term r_term) )
       @ get_arg_par_list (args,rule_args) |
    _ -> []
 
-and get_par_list trm rule_trm = 
+and get_par_list trm rule_trm =
    (dest_op trm.term_op).op_params @ get_arg_par_list (trm.term_terms,rule_trm.term_terms)
 
 let add_substs (bvs1,vs1) (bvs2,vs2) = (bvs1@bvs2,vs1@vs2)
 
-let rec get_term_substs term lhs = 
+let rec get_term_substs term lhs =
    if is_var_term lhs then
       let v = dest_var lhs in
       ([],[v,term])
@@ -110,7 +110,7 @@ and get_args_substs = function
    ht::tt, hr::tr ->
       let htd = dest_bterm ht in
       let hrd = dest_bterm hr in
-      add_substs (List.combine hrd.bvars htd.bvars,[]) (add_substs (get_term_substs htd.bterm hrd.bterm) (get_args_substs (tt,tr))) | 
+      add_substs (List.combine hrd.bvars htd.bvars,[]) (add_substs (get_term_substs htd.bterm hrd.bterm) (get_args_substs (tt,tr))) |
    _ -> raise (Failure "Bug in the evaluator: get_args_substs got wrong arguments")
 
 let var_assoc v vvsub =
@@ -120,7 +120,7 @@ let var_assoc v vvsub =
 let vterm_assoc v vtsub =
    try List.assoc v vtsub with
    Not_found -> mk_var_term v
-      
+
 let rec make_substs bvsub vsub term =
    if is_var_term term then vterm_assoc (dest_var term) vsub else
    let trm = dest_term term in
@@ -128,21 +128,21 @@ let rec make_substs bvsub vsub term =
 
 and make_arg_substs bvsub vsub = function
    [] -> [] |
-   h::t -> 
+   h::t ->
       let hd = dest_bterm h in
       make_bterm {
          bvars=List.map (function v -> var_assoc v bvsub) hd.bvars;
          bterm = make_substs bvsub vsub hd.bterm
       } :: make_arg_substs bvsub vsub t
-   
 
-let do_reduce term rule_lhs rule_rhs = 
+
+let do_reduce term rule_lhs rule_rhs =
    let substs = get_term_substs term rule_lhs in
    let bvsub = fst substs in
    let vsub = snd substs in
    make_substs bvsub vsub rule_rhs
 
-let apply_matching_rule term rule = 
+let apply_matching_rule term rule =
    let rule_lhs = fst rule in
    let rule_func = snd rule in
    let trm = dest_term term in
@@ -150,17 +150,17 @@ let apply_matching_rule term rule =
    do_reduce term rule_lhs rule_rhs
 
 let rec eval_prin_args args prin_args =
-   match args with 
+   match args with
       [] -> [] |
       ha::ta -> (match prin_args with
          [] -> args |
-         hp::tp -> 
-            (if hp then 
+         hp::tp ->
+            (if hp then
                let arg=dest_bterm ha in
                mk_bterm arg.bvars (evaluate_term arg.bterm)
              else ha) :: eval_prin_args ta tp)
 
-and eval_term_with_rules term rules = 
+and eval_term_with_rules term rules =
    match rules with
    [] -> term,false |
    hrule :: trules ->
@@ -174,16 +174,16 @@ and eval_term_with_rules term rules =
       let try_first = eval_term_with_rules term (hrule::[]) in
       if snd try_first then try_first else eval_term_with_rules (fst try_first) trules
 
-and evaluate_term term = 
+and evaluate_term term =
    if is_subst_term term then evaluate_term (eval_subst term) else
    let shape = shape_of_term term in
-   let rules = Hashtbl.find_all evaltable shape in 
+   let rules = Hashtbl.find_all evaltable shape in
    let eval = eval_term_with_rules term rules in
    let new_term = fst eval in
    if snd eval then evaluate_term new_term else new_term
 
-(* 
- *let del_all s = 
+(*
+ *let del_all s =
  *   let del_it s
  *let del_reduction_rule = Hashtbl.remove evaltable
  *let del_abstraction t = Hashtbl.remove evaltable (shape_of_term t)

@@ -11,8 +11,12 @@ include Itt_set
 
 open Printf
 open Debug
+open Refiner.Refiner
 open Refiner.Refiner.Term
-open Refine_sig
+open Refiner.Refiner.TermOp
+open Refiner.Refiner.TermMan
+open Refiner.Refiner.TermSubst
+open Refiner.Refiner.Refine
 open Resource
 
 open Tactic_type
@@ -56,20 +60,20 @@ prec prec_lambda
 prec prec_lambda < prec_apply
 prec prec_fun < prec_apply
 
-dform parens :: "prec"[prec_fun] :: "fun"{'A; 'B} =
+dform fun_df1 : parens :: "prec"[prec_fun] :: "fun"{'A; 'B} =
    slot{'A} rightarrow " " slot{'B}
 
-dform parens :: "prec"[prec_fun] :: "fun"{'A; x. 'B['x]} =
+dform fun_df2 : parens :: "prec"[prec_fun] :: "fun"{'A; x. 'B['x]} =
    slot{bvar{'x}} `":" slot{'A} rightarrow " " slot{'B}
 
-dform rfun{'A; f, x. 'B['f; 'x]} =
+dform fun_df3 : rfun{'A; f, x. 'B['f; 'x]} =
    "{" " " slot{bvar{'f}} `"|" "fun"{'A; x. 'B['f; 'x]} "}"
 
-dform parens :: "prec"[prec_apply] :: apply{'f; 'a} =
+dform apply_df1 : parens :: "prec"[prec_apply] :: apply{'f; 'a} =
    slot[lt]{'f} " " slot[le]{'a}
 
-dform mode[prl] :: parens :: "prec"[prec_lambda] :: lambda{x. 'b['x]} =
-   Nuprl_font!lambda slot{'x} `"." slot{'b['x]}
+dform lambda_df1 : mode[prl] :: parens :: "prec"[prec_lambda] :: lambda{x. 'b} =
+   Nuprl_font!lambda slot{'x} `"." slot{'b}
 
 (************************************************************************
  * REWRITES                                                             *
@@ -296,7 +300,7 @@ let d_rfunT i =
       d_hyp_rfun i
 
 let d_resource = d_resource.resource_improve d_resource (rfun_term, d_rfunT)
- 
+
 (************************************************************************
  * EQCD TACTICS                                                         *
  ************************************************************************)
@@ -348,7 +352,7 @@ let inf_lambda (f : typeinf_func) (decl : term_subst) (t : term) =
    let v, b = dest_lambda t in
    let a = new_var v (List.map fst decl) in
    let decl', b' = f ((v, mk_var_term a)::decl) b in
-   let decl'', a' = 
+   let decl'', a' =
       try decl', List.assoc a decl' with
          Not_found -> (a, void_term)::decl', void_term
    in
@@ -382,6 +386,9 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (apply
 
 (*
  * $Log$
+ * Revision 1.7  1998/06/01 13:56:13  jyh
+ * Proving twice one is two.
+ *
  * Revision 1.6  1998/05/28 13:47:58  jyh
  * Updated the editor to use new Refiner structure.
  * ITT needs dform names.

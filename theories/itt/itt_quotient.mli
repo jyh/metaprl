@@ -57,7 +57,7 @@ axiom quotientWeakEquality 'H 'x 'y 'z 'u 'v :
    sequent [squash] { 'H; x: 'A1 >- 'E1['x; 'x] } -->
    sequent [squash] { 'H; x: 'A1; y: 'A1; u: 'E1['x; 'y] >- 'E1['y; 'x] } -->
    sequent [squash] { 'H; x: 'A1; y: 'A1; z: 'A1; u: 'E1['x; 'y]; v: 'E1['y; 'z] >- 'E1['x; 'z] } -->
-   sequent ['ext] { 'H >- quot x1, y1: 'A1 // 'E1['x1; 'y1] 
+   sequent ['ext] { 'H >- quot x1, y1: 'A1 // 'E1['x1; 'y1]
                    = quot x2, y2: 'A2 // 'E2['x2; 'y2]
                    in univ[@i:l]
            }
@@ -177,6 +177,9 @@ val mk_quotient_term : string -> string -> term -> term -> term
 
 (*
  * $Log$
+ * Revision 1.5  1998/06/01 13:56:10  jyh
+ * Proving twice one is two.
+ *
  * Revision 1.4  1998/05/28 13:47:55  jyh
  * Updated the editor to use new Refiner structure.
  * ITT needs dform names.

@@ -2,6 +2,9 @@
  * Display forms for basic objects.
  *)
 
+include Perv
+include Nuprl_font
+
 open Printf
 open Debug
 
@@ -108,6 +111,15 @@ mldform bvar_df : bvar{var[@v:v]} format_term buf =
    format_string buf v
 
 (*
+ * Rewriting.
+ *)
+dform rewrite_df : mode["src"] :: "rewrite"{'redex; 'contractum} =
+   slot{'redex} `"<-->" slot{'contractum}
+
+dform rewrite_df : mode["prl"] :: "rewrite"{'redex; 'contractum} =
+   slot{'redex} " " longleftrightarrow " " slot{'contractum}
+
+(*
  * For sequents.
  * In the "format" function,
  *    i is the hyp number, if it is known
@@ -181,13 +193,13 @@ mldform sequent_prl_df : mode["prl"] :: "sequent"{'seq} format_term buf =
          else if is_concl_term t then
             let a, b = dest_concl t in
                format_xbreak buf
-	       (if cflag then "   " else "\140  ")
-	       (if cflag then sep else " \140 ");
+	       (if cflag then "   " else "\159  ")
+	       (if cflag then sep else " \159 ");
                format_term buf NOParens a;
                format (i + 1, true, true, b)
 
          else
-            raise (Term.TermMatch ("sequent printer", seq, "not a sequent"))
+            format_term buf NOParens t
    in
       format_szone buf;
       format_pushm buf 0;
@@ -213,6 +225,9 @@ dform newline_df : "\\" = \newline
 (*
  *
  * $Log$
+ * Revision 1.8  1998/06/01 13:55:35  jyh
+ * Proving twice one is two.
+ *
  * Revision 1.7  1998/05/28 13:47:12  jyh
  * Updated the editor to use new Refiner structure.
  * ITT needs dform names.

@@ -146,7 +146,7 @@ dform type_record_df1 : type_record{cons{'sbt; 'sbtl}} =
 dform type_record_cons_df1 : slot{type_record; cons{'sbt; 'sbtl}} =
    ";" hspace `" " slot{'sbt}
    slot{type_record; 'sbtl}
-      
+
 dform type_record_nil_df1 : slot{type_record; nil} =
    `""
 
@@ -205,6 +205,9 @@ dform stl_df4 : slot{stl; cons{'t; 'tl}} =
 
 (*
  * $Log$
+ * Revision 1.6  1998/06/01 13:56:48  jyh
+ * Proving twice one is two.
+ *
  * Revision 1.5  1998/05/04 13:01:40  jyh
  * Ocaml display without let rec.
  *

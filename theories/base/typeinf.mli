@@ -40,7 +40,7 @@ type typeinf_resource_info = term * typeinf_comp
  * Internal type.
  *)
 type typeinf_data
-     
+
 (*
  * The resource itself.
  *)
@@ -53,6 +53,9 @@ val typeinf_of_proof : tactic_arg -> typeinf_func
 
 (*
  * $Log$
+ * Revision 1.4  1998/06/01 13:55:42  jyh
+ * Proving twice one is two.
+ *
  * Revision 1.3  1998/05/28 13:47:19  jyh
  * Updated the editor to use new Refiner structure.
  * ITT needs dform names.

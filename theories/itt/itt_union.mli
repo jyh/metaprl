@@ -142,7 +142,7 @@ axiom unionSubtype 'H :
 
 (************************************************************************
  * TACTICS                                                              *
- ************************************************************************)       
+ ************************************************************************)
 
 val d_unionT : int -> tactic
 val eqcd_unionT : tactic
@@ -172,6 +172,9 @@ val mk_decide_term : term -> string -> term -> string -> term -> term
 
 (*
  * $Log$
+ * Revision 1.5  1998/06/01 13:56:31  jyh
+ * Proving twice one is two.
+ *
  * Revision 1.4  1998/05/28 13:48:19  jyh
  * Updated the editor to use new Refiner structure.
  * ITT needs dform names.

@@ -1,7 +1,30 @@
 (*
  * Display forms for basic objects.
- *
+ *)
+
+include Perv
+include Nuprl_font
+
+(*
+ * Other commands.
+ *)
+declare bvar{var[@v:v]}
+declare " "
+declare "^"
+declare "_"
+declare "{"
+declare "}"
+declare "$"
+declare "["
+declare "]"
+declare ";"
+declare "\\"
+
+(*
  * $Log$
+ * Revision 1.2  1998/06/01 13:55:36  jyh
+ * Proving twice one is two.
+ *
  * Revision 1.1  1997/04/28 15:51:54  jyh
  * This is the initial checkin of Nuprl-Light.
  * I am porting the editor, so it is not included
@@ -20,24 +43,6 @@
  * Revision 1.1  1996/04/11 13:33:26  jyh
  * This is the final version with the old syntax for terms.
  *
- *)
-
-(*
- * Other commands.
- *)
-declare bvar{var[@v:v]}
-declare " "
-declare "^"
-declare "_"
-declare "{"
-declare "}"
-declare "$"
-declare "["
-declare "]"
-declare ";"
-declare "\\"
-
-(*
  * -*-
  * Local Variables:
  * Caml-master: "refiner"

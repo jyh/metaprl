@@ -10,10 +10,12 @@ include Itt_dprod
 
 open Printf
 open Debug
+open Refiner.Refiner
 open Refiner.Refiner.Term
+open Refiner.Refiner.TermMan
+open Refiner.Refiner.Refine
 open Options
 open Resource
-open Refine_sig
 
 open Var
 open Sequent
@@ -70,7 +72,7 @@ prim independentPairFormation 'H :
 
 (*
  * H, A * B, J >- T ext t
- * by independentProductElimination 
+ * by independentProductElimination
  * H, A * B, u: A, v: B, J >- T ext t
  *)
 prim independentProductElimination 'H 'J 'z 'u 'v :
@@ -162,7 +164,8 @@ let inf_prod f decl t =
    let decl'', b' = f decl' b in
    let le1, le2 =
       try dest_univ a', dest_univ b' with
-         Term.TermMatch _ -> raise (RefineError (StringTermError ("typeinf: can't infer type for", t)))
+         Term.TermMatch _ ->
+            raise (RefineError (StringTermError ("typeinf: can't infer type for", t)))
    in
       decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2)
 
@@ -189,6 +192,9 @@ let sub_resource =
 
 (*
  * $Log$
+ * Revision 1.7  1998/06/01 13:56:06  jyh
+ * Proving twice one is two.
+ *
  * Revision 1.6  1998/05/28 13:47:52  jyh
  * Updated the editor to use new Refiner structure.
  * ITT needs dform names.

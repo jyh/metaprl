@@ -61,7 +61,7 @@ dform str_module_type_df2 : str_module_type[@start:n, @finish:n, @name:s]{'mt} =
 (*
  * Open a module in scope.
  *)
-dform str_open_df1 : str_open{'sl} = 
+dform str_open_df1 : str_open{'sl} =
    sig_open{'sl}
 
 dform str_open_df2 : str_open[@start:n, @finish:n]{'sl} =
@@ -122,6 +122,9 @@ dform str_fix_df2 : str_fix[@start:n, @finish:n]{'p} =
 
 (*
  * $Log$
+ * Revision 1.9  1998/06/01 13:56:46  jyh
+ * Proving twice one is two.
+ *
  * Revision 1.8  1998/05/04 23:46:19  jyh
  * Most display forms now work.
  *

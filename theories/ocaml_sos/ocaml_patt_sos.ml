@@ -200,7 +200,7 @@ primrw patt_apply_skip_reduce :
 primrw patt_apply_try_reduce :
    process{'S; match_apply{cons{inj{'n1; 'e1}; 'e2}; patt_try{'flags; patt_apply{'n2; 'p2}}}} <-->
       process{'S; try_match_name{'n1; 'n2; match_apply{cons{'e1; 'e2}; patt_try{'flags; 'p2}}}}
-   
+
 (*
  * Tuple pattern.
  *)
@@ -353,11 +353,11 @@ primrw patt_choice_reduce :
 primrw patt_choice_skip_reduce :
    process{'S; match_apply{cons{'e1; 'e2}; patt_skip{'flags; patt_choice{'p}}}} <-->
       process{'S; match_apply{cons{'e1; cons{'e1; 'e2}}; patt_try{'flags; 'p}}}
-   
+
 primrw patt_choice_try_reduce :
    process{'S; match_apply{cons{'e1; 'e2}; patt_try{'flags; patt_choice{'p}}}} <-->
       process{'S; match_apply{cons{'e1; cons{'e1; 'e2}}; patt_try{cons{skip_flag["try"]; 'flags}; 'p}}}
-   
+
 primrw patt_choice_arg_skip_failed_reduce :
    process{'S; match_apply{cons{'e1; 'e2}; patt_skip{cons{skip_flag["failed"]; 'flags}; patt_choice_arg{'p}}}} <-->
       process{'S; match_apply{cons{'e1; cons{'e1; 'e2}}; patt_try{'flags; 'p}}}
@@ -399,7 +399,7 @@ primrw patt_with_reduce :
 primrw patt_ifelse_reduce :
    process{'S; ."match"{'e; patt_ifelse{'pwe; 'pwel}}} <-->
       process{'S; ."try"{."match"{'e; 'pwe}; inj["match_failed"]{."match"{'e; 'pwel}}}}
-        
+
 primrw patt_body_reduce :
    process{'S; match_apply{nil; patt_body{'e1}}} <-->
       process{'S; 'e1}
@@ -416,6 +416,9 @@ primrw patt_body_reduce :
 
 (*
  * $Log$
+ * Revision 1.2  1998/06/01 13:56:57  jyh
+ * Proving twice one is two.
+ *
  * Revision 1.1  1998/04/29 14:50:04  jyh
  * Added ocaml_sos.
  *

@@ -7,7 +7,9 @@ include Itt_equal
 
 open Printf
 open Debug
+open Refiner.Refiner
 open Refiner.Refiner.Term
+open Refiner.Refiner.TermMan
 open Rformat
 open Sequent
 open Resource
@@ -34,8 +36,8 @@ declare token[@t:t]
  * DISPLAY FORMS                                                        *
  ************************************************************************)
 
-dform mode[prl] :: atom = `"Atom"
-mldform mode[prl] :: token[@t:t] print_term buf =
+dform atom_df : mode[prl] :: atom = `"Atom"
+mldform token_df : mode[prl] :: token[@t:t] print_term buf =
    format_quoted_string buf t
 
 (************************************************************************
@@ -70,13 +72,13 @@ prim tokenEquality 'H : : sequent ['ext] { 'H >- token[@t:t] = token[@t:t] in at
 (************************************************************************
  * TACTICS                                                              *
  ************************************************************************)
-     
+
 let atom_term = << atom >>
 let token_term = << token[@x:t] >>
 let token_opname = opname_of_term token_term
-let is_token_term = Term.is_token_term token_opname
-let dest_token = Term.dest_token_term token_opname
-let mk_token_term = Term.mk_token_term token_opname
+let is_token_term = TermOp.is_token_term token_opname
+let dest_token = TermOp.dest_token_term token_opname
+let mk_token_term = TermOp.mk_token_term token_opname
 
 (*
  * D
@@ -125,6 +127,9 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (token
 
 (*
  * $Log$
+ * Revision 1.6  1998/06/01 13:55:45  jyh
+ * Proving twice one is two.
+ *
  * Revision 1.5  1998/05/28 13:47:22  jyh
  * Updated the editor to use new Refiner structure.
  * ITT needs dform names.

@@ -28,7 +28,7 @@ let library_copy t =
     *)
    let connect = Library.connect "alfheim" 7401 7400 in
    let library = Library.lib_open connect in
-       
+
    (*
     * Save the term.
     *)
@@ -38,7 +38,7 @@ let library_copy t =
          id
    in
    let id = Library.with_transaction library save in
-       
+
    (*
     * Retrieve the same term.
     *)
@@ -54,7 +54,7 @@ let library_copy t =
       Library.disconnect connect;
       t'
 *)
-       
+
 (*
  * Main function
  *)
@@ -76,6 +76,9 @@ let _ = Printexc.catch main ()
 
 (*
  * $Log$
+ * Revision 1.4  1998/06/01 13:57:02  jyh
+ * Proving twice one is two.
+ *
  * Revision 1.3  1998/05/28 13:48:30  jyh
  * Updated the editor to use new Refiner structure.
  * ITT needs dform names.

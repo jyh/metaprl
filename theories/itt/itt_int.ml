@@ -12,8 +12,9 @@ include Itt_logic
 open Printf
 open Debug
 open Refiner.Refiner.Term
+open Refiner.Refiner.TermOp
+open Refiner.Refiner.Refine
 open Rformat
-open Refine_sig
 open Resource
 
 open Var
@@ -62,50 +63,50 @@ prec prec_add < prec_mul
 prec prec_compare < prec_add
 *)
 
-dform mode[prl] :: int = mathbbZ
+dform int_prl_df1 : mode[prl] :: int = mathbbZ
 
-mldform natural_number[@n:n] print_term buf =
+mldform natural_number_df : natural_number[@n:n] print_term buf =
    format_int buf n
 
-dform mode[prl] :: parens :: "prec"[prec_add] :: "add"{'a; 'b} =
+dform add_df1 :  mode[prl] :: parens :: "prec"[prec_add] :: "add"{'a; 'b} =
    slot[le]{'a} `" + " slot[lt]{'b}
-dform mode[src] :: parens :: "prec"[prec_add] :: "add"{'a; 'b} =
+dform add_df2 : mode[src] :: parens :: "prec"[prec_add] :: "add"{'a; 'b} =
    slot[le]{'a} `" add " slot[lt]{'b}
 
-dform mode[prl] :: parens :: "prec"[prec_add] :: "sub"{'a; 'b} =
+dform sub_df1 : mode[prl] :: parens :: "prec"[prec_add] :: "sub"{'a; 'b} =
    slot[lt]{'a} `" - " slot[le]{'b}
-dform mode[src] :: parens :: "prec"[prec_add] :: "sub"{'a; 'b} =
+dform sub_df2 : mode[src] :: parens :: "prec"[prec_add] :: "sub"{'a; 'b} =
    slot[lt]{'a} `" sub " slot[le]{'b}
 
-dform mode[prl] :: parens :: "prec"[prec_mul] :: "mul"{'a; 'b} =
+dform mul_df1 : mode[prl] :: parens :: "prec"[prec_mul] :: "mul"{'a; 'b} =
    slot[lt]{'a} `" * " slot[le]{'b}
-dform mode[src] :: parens :: "prec"[prec_mul] :: "mul"{'a; 'b} =
+dform mul_df2 : mode[src] :: parens :: "prec"[prec_mul] :: "mul"{'a; 'b} =
    slot[lt]{'a} `" mul " slot[le]{'b}
 
-dform mode[prl] :: parens :: "prec"[prec_mul] :: "div"{'a; 'b} =
+dform div_df1 : mode[prl] :: parens :: "prec"[prec_mul] :: "div"{'a; 'b} =
    slot[lt]{'a} Nuprl_font!"div" slot[le]{'b}
-dform mode[src] :: parens :: "prec"[prec_mul] :: "div"{'a; 'b} =
+dform div_df2 : mode[src] :: parens :: "prec"[prec_mul] :: "div"{'a; 'b} =
    slot[lt]{'a} `" div " slot[le]{'b}
 
-dform mode[prl] :: parens :: "prec"[prec_mul] :: "rem"{'a; 'b} =
+dform rem_df1 : mode[prl] :: parens :: "prec"[prec_mul] :: "rem"{'a; 'b} =
    slot[lt]{'a} `" % " slot[le]{'b}
-dform mode[src] :: parens :: "prec"[prec_mul] :: "rem"{'a; 'b} =
+dform rem_df2 : mode[src] :: parens :: "prec"[prec_mul] :: "rem"{'a; 'b} =
    slot[lt]{'a} `" rem " slot[le]{'b}
 
-dform parens :: "prec"[prec_compare] :: lt{'a; 'b} =
+dform lt_df1 : parens :: "prec"[prec_compare] :: lt{'a; 'b} =
    slot[lt]{'a} `" < " slot[le]{'b}
 
-dform mode[prl] :: parens :: "prec"[prec_compare] :: le{'a; 'b} =
+dform le_df1 : mode[prl] :: parens :: "prec"[prec_compare] :: le{'a; 'b} =
    slot[lt]{'a} Nuprl_font!le slot[le]{'b}
-dform mode[src] :: parens :: "prec"[prec_compare] :: le{'a; 'b} =
+dform le_df2 : mode[src] :: parens :: "prec"[prec_compare] :: le{'a; 'b} =
    slot[lt]{'a} `" <= " slot[le]{'b}
 
-dform mode[prl] :: parens :: "prec"[prec_compare] :: ge{'a; 'b} =
+dform ge_df1 : mode[prl] :: parens :: "prec"[prec_compare] :: ge{'a; 'b} =
    slot[lt]{'a} Nuprl_font!ge slot[le]{'b}
-dform mode[src] :: parens :: "prec"[prec_compare] :: ge{'a; 'b} =
+dform ge_df2 : mode[src] :: parens :: "prec"[prec_compare] :: ge{'a; 'b} =
    slot[lt]{'a} `" >= " slot[le]{'b}
 
-dform parens :: "prec"[prec_compare] :: gt{'a; 'b} =
+dform gt_df1 : parens :: "prec"[prec_compare] :: gt{'a; 'b} =
    slot[lt]{'a} `" > " slot[le]{'b}
 
 (************************************************************************
@@ -306,7 +307,7 @@ prim arith : arith_check{'t} --> 't = it
 (************************************************************************
  * TACTICS                                                              *
  ************************************************************************)
-     
+
 let int_term = << int >>
 
 let natural_number_term = << natural_number[@n:n] >>
@@ -342,7 +343,7 @@ let d_intT i p =
                intElimination i' (count - i' - 1) n m v z p
           | _ ->
                failwith "d_int: match"
-         
+
 let d_resource = d_resource.resource_improve d_resource (int_term, d_intT)
 
 (************************************************************************
@@ -385,6 +386,9 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (ind_t
 
 (*
  * $Log$
+ * Revision 1.8  1998/06/01 13:55:54  jyh
+ * Proving twice one is two.
+ *
  * Revision 1.7  1998/05/28 13:47:37  jyh
  * Updated the editor to use new Refiner structure.
  * ITT needs dform names.

@@ -99,7 +99,7 @@ declare state{'S; 'e}
 declare expr{'S; 'e}
 declare expr_value{'S; 'e}
 
-primrw state_unfold : 
+primrw state_unfold :
    state{'S; 'e} <--> spread{process{'S; 'e}; v, S2. 'S2}
 
 primrw expr_unfold :
@@ -138,6 +138,9 @@ prim functional_apply_value 'H 't1 :
 
 (*
  * $Log$
+ * Revision 1.2  1998/06/01 13:56:50  jyh
+ * Proving twice one is two.
+ *
  * Revision 1.1  1998/04/29 14:49:41  jyh
  * Added ocaml_sos.
  *

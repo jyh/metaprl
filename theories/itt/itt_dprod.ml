@@ -10,11 +10,14 @@ include Itt_rfun
 
 open Printf
 open Debug
+open Refiner.Refiner
 open Refiner.Refiner.Term
+open Refiner.Refiner.TermOp
+open Refiner.Refiner.TermMan
+open Refiner.Refiner.TermSubst
+open Refiner.Refiner.Refine
 open Options
-open Refine_sig
 open Resource
-open Refine_sig
 
 open Var
 open Tacticals
@@ -57,22 +60,22 @@ primrw spreadReduce : spread{'u, 'v; a, b. 'c['a; 'b]} <--> 'c['u; 'v]
 prec prod
 prec spread
 
-dform parens :: "prec"[prod] :: mode[src] :: prod{'A; 'B} =
+dform prod_src_df : parens :: "prec"[prod] :: mode[src] :: prod{'A; 'B} =
    slot{'A} `" * " slot{'B}
 
-dform parens :: "prec"[prod] :: mode[prl] :: prod{'A; 'B} =
+dform prod_prl_df : parens :: "prec"[prod] :: mode[prl] :: prod{'A; 'B} =
    slot{'A} times " " slot{'B}
 
-dform parens :: "prec"[prod] :: mode[src] :: prod{'A; x. 'B['x]} =
+dform prod_src_df2 : parens :: "prec"[prod] :: mode[src] :: prod{'A; x. 'B['x]} =
    slot{'x} `":" slot{'A} `" * " slot{'B}
 
-dform parens :: "prec"[prod] :: mode[prl] :: prod{'A; x. 'B['x]} =
+dform prod_prl_df2 :  parens :: "prec"[prod] :: mode[prl] :: prod{'A; x. 'B['x]} =
    slot{'x} `":" slot{'A} times " " slot{'B}
 
-dform mode[prl] :: pair{'a; 'b} =
+dform pair_prl_df1 : mode[prl] :: pair{'a; 'b} =
    `"<" slot{'a}`"," slot{'b} `">"
 
-dform parens :: "prec"[spread] :: mode[prl] :: spread{'e; u, v. 'b['u; 'v]} =
+dform spread_prl_df1 : parens :: "prec"[spread] :: mode[prl] :: spread{'e; u, v. 'b['u; 'v]} =
    `"let " pair{'u; 'v} `" = " slot{'e} `" in " slot{'b['u; 'v]}
 
 (************************************************************************
@@ -349,6 +352,9 @@ let sub_resource =
 
 (*
  * $Log$
+ * Revision 1.7  1998/06/01 13:55:48  jyh
+ * Proving twice one is two.
+ *
  * Revision 1.6  1998/05/28 13:47:28  jyh
  * Updated the editor to use new Refiner structure.
  * ITT needs dform names.

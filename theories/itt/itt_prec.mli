@@ -145,7 +145,7 @@ axiom precindEquality 'H lambda{x. 'S['x]} (a:'A * "prec"{T, y. 'B['T; 'y]; 'a})
            }
 
 (************************************************************************
- * TACTICS                                                              *        
+ * TACTICS                                                              *
  ************************************************************************)
 
 val is_prec_term : term -> bool
@@ -158,6 +158,9 @@ val mk_precind_term : string -> string -> term -> term -> term
 
 (*
  * $Log$
+ * Revision 1.5  1998/06/01 13:56:04  jyh
+ * Proving twice one is two.
+ *
  * Revision 1.4  1998/05/28 13:47:51  jyh
  * Updated the editor to use new Refiner structure.
  * ITT needs dform names.

@@ -37,7 +37,7 @@ declare squash
 
 (************************************************************************
  * TYPES                                                                *
- ************************************************************************)        
+ ************************************************************************)
 
 (*
  * Keep a table of tactics to prove squash stability.
@@ -69,7 +69,7 @@ let is_squash_goal { tac_goal = s } =
 (************************************************************************
  * IMPLEMENTATION                                                       *
  ************************************************************************)
-     
+
 (*
  * Extract an SQUASH tactic from the data.
  * The tactic checks for an optable.
@@ -93,10 +93,10 @@ let rec join_resource { resource_data = data1 } { resource_data = data2 } =
      resource_extract = extract_resource;
      resource_improve = improve_resource
    }
-      
+
 and extract_resource { resource_data = data } =
    extract_data data
-   
+
 and improve_resource { resource_data = data } (t, tac) =
    { resource_data = sinsert data t tac;
      resource_join = join_resource;
@@ -121,6 +121,9 @@ let squash_of_proof { tac_arg = { ref_rsrc = { ref_squash = squash } } } = squas
 
 (*
  * $Log$
+ * Revision 1.6  1998/06/01 13:56:19  jyh
+ * Proving twice one is two.
+ *
  * Revision 1.5  1998/05/28 13:48:06  jyh
  * Updated the editor to use new Refiner structure.
  * ITT needs dform names.

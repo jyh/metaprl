@@ -11,6 +11,7 @@ include Itt_void
 open Printf
 open Debug
 open Refiner.Refiner.Term
+open Refiner.Refiner.TermOp
 open Resource
 
 open Itt_void
@@ -97,10 +98,10 @@ prim srec_memberEquality 'H :
  * by srecElimination T1 u v w z
  *
  * H, x: srec(T. B[T]), J[x],
- *   T1: Ui, 
- *   u: subtype(T1; srec(T. B[T])), 
- *   w: v: T1 -> C[v], 
- *   z: T[T1] 
+ *   T1: Ui,
+ *   u: subtype(T1; srec(T. B[T])),
+ *   w: v: T1 -> C[v],
+ *   z: T[T1]
  * >- C[z]
  *)
 prim srecElimination 'H 'J 'x srec{T. 'B['T]} 'T1 'u 'v 'w 'z univ[@i:l] :
@@ -140,7 +141,7 @@ prim srecindEquality 'H lambda{x. 'S['x]} srec{T. 'B['T]} 'T1 'u 'v 'w 'z univ[@
                v: w: 'T1 -> 'S['w]; w: 'B['T1]
            >- 't1['v; 'w] = 't2['v; 'w] in 'S['w]
            } -->
-   sequent ['ext] { 'H >- srecind{'r1; h1, z1. 't1['h1; 'z1]} 
+   sequent ['ext] { 'H >- srecind{'r1; h1, z1. 't1['h1; 'z1]}
                    = srecind{'r2; h2, z2. 't2['h2; 'z2]}
                    in 'S['r1]
            } =
@@ -188,6 +189,9 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (sreci
 
 (*
  * $Log$
+ * Revision 1.6  1998/06/01 13:56:22  jyh
+ * Proving twice one is two.
+ *
  * Revision 1.5  1998/05/28 13:48:09  jyh
  * Updated the editor to use new Refiner structure.
  * ITT needs dform names.

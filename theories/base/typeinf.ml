@@ -48,7 +48,7 @@ type typeinf_resource_info = term * typeinf_comp
  * Internal type.
  *)
 type typeinf_data = typeinf_comp term_table
-     
+
 (*
  * The resource itself.
  *)
@@ -82,10 +82,10 @@ let rec join_resource { resource_data = tbl1 } { resource_data = tbl2 } =
         resource_extract = extract_resource;
         resource_improve = improve_resource
       }
-      
+
 and extract_resource { resource_data = tbl } =
    infer tbl
-   
+
 and improve_resource { resource_data = tbl } (t, inf) =
    { resource_data = insert tbl t inf;
      resource_join = join_resource;
@@ -110,6 +110,9 @@ let typeinf_of_proof { tac_arg = { ref_rsrc = { ref_typeinf = inf } } } = inf
 
 (*
  * $Log$
+ * Revision 1.9  1998/06/01 13:55:41  jyh
+ * Proving twice one is two.
+ *
  * Revision 1.8  1998/05/28 13:47:18  jyh
  * Updated the editor to use new Refiner structure.
  * ITT needs dform names.

@@ -78,10 +78,10 @@ axiom srec_memberEquality 'H :
  * by srecElimination T1 u v w z
  *
  * H, x: srec(T. B[T]), J[x],
- *   T1: Ui, 
- *   u: subtype(T1; srec(T. B[T])), 
- *   w: v: T1 -> C[v], 
- *   z: T[T1] 
+ *   T1: Ui,
+ *   u: subtype(T1; srec(T. B[T])),
+ *   w: v: T1 -> C[v],
+ *   z: T[T1]
  * >- C[z]
  *)
 axiom srecElimination 'H 'J 'x srec{T. 'B['T]} 'T1 'u 'v 'w 'z univ[@i:l] :
@@ -119,13 +119,13 @@ axiom srecindEquality 'H lambda{x. 'S['x]} srec{T. 'B['T]} 'T1 'u 'v 'w 'z univ[
                v: w: 'T1 -> 'S['w]; w: 'B['T1]
            >- 't1['v; 'w] = 't2['v; 'w] in 'S['w]
            } -->
-   sequent ['ext] { 'H >- srecind{'r1; h1, z1. 't1['h1; 'z1]} 
+   sequent ['ext] { 'H >- srecind{'r1; h1, z1. 't1['h1; 'z1]}
                    = srecind{'r2; h2, z2. 't2['h2; 'z2]}
                    in 'S['r1]
            }
 
 (************************************************************************
- * TACTICS                                                              *        
+ * TACTICS                                                              *
  ************************************************************************)
 
 val is_srec_term : term -> bool
@@ -138,6 +138,9 @@ val mk_srecind_term : string -> string -> term -> term -> term
 
 (*
  * $Log$
+ * Revision 1.4  1998/06/01 13:56:23  jyh
+ * Proving twice one is two.
+ *
  * Revision 1.3  1998/05/28 13:48:10  jyh
  * Updated the editor to use new Refiner structure.
  * ITT needs dform names.

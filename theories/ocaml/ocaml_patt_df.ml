@@ -240,7 +240,7 @@ dform patt_list_arg_df1 : slot{patt_format; patt_list_arg{'p1}; cons{'p2; 'p3}} 
 
 dform patt_list_end_df1 : slot{patt_format; patt_list_end{'p1}; cons{'p2; cons{'p3; 'p4}}} =
    slot{patt_format; 'p1; cons{rcons{'p2; 'p3}; 'p4}}
-   
+
 dform patt_list_df2 : slot{patt_format; patt_list[@start:n, @finish:n]{'p1}; 'p2} =
    slot{patt_format; patt_list{'p1}; 'p2}
 
@@ -267,7 +267,7 @@ dform patt_tuple_rev_df1 : slot{patt_tuple; 'p1; 'p2; nil; 'p3} =
 
 dform patt_tuple_rev_df2 : slot{patt_tuple; 'p1; 'p2; cons{'p3; 'p4}; 'p5} =
    slot{patt_tuple; 'p1; cons{'p3; 'p2}; 'p4; 'p5}
-   
+
 dform patt_tuple_df2 : slot{patt_format; patt_tuple[@start:n, @finish:n]{'p1}; 'p2} =
    slot{patt_format; patt_tuple{'p1}; 'p2}
 
@@ -389,6 +389,9 @@ dform patt_body_df3 : slot{patt_format; patt_body[@start:n, @finish:n]{'e}; 'pwe
 
 (*
  * $Log$
+ * Revision 1.7  1998/06/01 13:56:44  jyh
+ * Proving twice one is two.
+ *
  * Revision 1.6  1998/05/04 23:46:18  jyh
  * Most display forms now work.
  *

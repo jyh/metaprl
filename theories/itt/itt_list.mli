@@ -137,7 +137,7 @@ axiom list_indEquality 'H lambda{l. 'T['l]} list{'A} 'u 'v 'w :
                    = list_ind{'e2; 'base2; u2, v2, z2. 'step2['u2; 'v2; 'z2]}
                    in 'T['e1]
            }
-   
+
 (*
  * H >- list(A1) <= list(A2)
  * by listSubtype
@@ -172,6 +172,9 @@ val mk_list_ind_term : term -> term -> string -> string -> string -> term -> ter
 
 (*
  * $Log$
+ * Revision 1.5  1998/06/01 13:55:59  jyh
+ * Proving twice one is two.
+ *
  * Revision 1.4  1998/05/28 13:47:44  jyh
  * Updated the editor to use new Refiner structure.
  * ITT needs dform names.

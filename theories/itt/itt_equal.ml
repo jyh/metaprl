@@ -10,11 +10,14 @@ include Itt_squash
 open Printf
 open Debug
 open Opname
+open Refiner.Refiner
 open Refiner.Refiner.Term
+open Refiner.Refiner.TermOp
+open Refiner.Refiner.TermMan
+open Refiner.Refiner.Refine
 open Rformat
 open Simple_print
 open Term_stable
-open Refine_sig
 open Resource
 
 open Tactic_type
@@ -42,13 +45,13 @@ declare it
  * DISPLAY FORMS                                                        *
  ************************************************************************)
 
-dform equal{'T; 'a; 'b} =
+dform equal_df1 : equal{'T; 'a; 'b} =
    szone pushm slot{'a} space `"= " slot{'b} space `"in " slot{'T} popm ezone
-dform mode[prl] :: it = cdot
+dform it_df1 : mode[prl] :: it = cdot
 
-dform mode[prl] :: "type" = `"Type"
+dform type_prl_df1 : mode[prl] :: "type" = `"Type"
 
-mldform mode[prl] :: univ[@i:l] term_print buf =
+mldform term_df2 : mode[prl] :: univ[@i:l] term_print buf =
    format_char buf '\134';
    format_simple_level_exp buf i
 
@@ -90,7 +93,7 @@ prim equalityEquality 'H :
  *
  * H >- a = b in T
  *)
-prim axiomEquality 'H : 
+prim axiomEquality 'H :
    sequent [squash] { 'H >- 'a = 'b in 'T } :
    sequent ['ext] { 'H >- it = it in ('a = 'b in 'T) } =
    it
@@ -127,11 +130,11 @@ prim equality_squashElimination 'H :
 
 (*
  * There should be only one param, of String type.
- * Get it. 
+ * Get it.
  *)
 let dest_level_param t =
    let { term_op = op } = dest_term t in
-      match dest_op op with 
+      match dest_op op with
          { op_params = [param] } ->
             begin
                match dest_param param with
@@ -168,7 +171,7 @@ prim universeEquality 'H :
  * H >- Ui ext Uj
  * by universeFormation
  *)
-prim universeFormation 'H univ[@j:l] : 
+prim universeFormation 'H univ[@j:l] :
    cumulativity{univ[@j:l]; univ[@i:l]} :
    sequent ['ext] {'H >- univ[@i:l] } =
    univ[@j:l]
@@ -189,9 +192,9 @@ let mk_equal_term = mk_dep0_dep0_dep0_term equal_opname
 let univ_term = << univ[@i:l] >>
 let univ1_term = << univ[1:l] >>
 let univ_opname = opname_of_term univ_term
-let is_univ_term = Term.is_univ_term univ_opname
-let dest_univ = Term.dest_univ_term univ_opname
-let mk_univ_term = Term.mk_univ_term univ_opname
+let is_univ_term = TermOp.is_univ_term univ_opname
+let dest_univ = TermOp.dest_univ_term univ_opname
+let mk_univ_term = TermOp.mk_univ_term univ_opname
 
 let it_term = << it >>
 
@@ -235,10 +238,10 @@ let rec join_resource { resource_data = data1 } { resource_data = data2 } =
      resource_extract = extract_resource;
      resource_improve = improve_resource
    }
-      
+
 and extract_resource { resource_data = data } =
    extract_data data
-   
+
 and improve_resource { resource_data = data } (t, tac) =
    { resource_data = sinsert data t tac;
      resource_join = join_resource;
@@ -330,6 +333,9 @@ let squash_resource = squash_resource.resource_improve squash_resource (equal_te
 
 (*
  * $Log$
+ * Revision 1.8  1998/06/01 13:55:50  jyh
+ * Proving twice one is two.
+ *
  * Revision 1.7  1998/05/28 13:47:31  jyh
  * Updated the editor to use new Refiner structure.
  * ITT needs dform names.

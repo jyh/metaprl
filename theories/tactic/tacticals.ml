@@ -325,7 +325,7 @@ let ifET tac p =
        tac
     else
        idT) p
-   
+
 let ifAT tac p =
    (if List.mem (proof_label p) main_labels then
        idT
@@ -430,7 +430,7 @@ let rec seqOnMT = function
    [tac] -> tac
  | tac::tactl -> tac thenMT (seqOnMT tactl)
  | [] -> idT
-            
+
 (*
  * Make sure no main subgoals.
  *)
@@ -545,7 +545,7 @@ let onAllMHypsT tac p =
          idT
    in
       aux ((hyp_count p) - 1) p
-   
+
 let onAllMClausesT tac =
    onAllMHypsT tac thenMT onConclT tac
 
@@ -625,7 +625,7 @@ let withArgT arg tac
     } =
    let restoreArgListT { tac_goal = goal';
                          tac_hyps = hyps';
-                         tac_arg = { ref_label = label'; ref_fcache = fcache; ref_rsrc = rsrc } 
+                         tac_arg = { ref_label = label'; ref_fcache = fcache; ref_rsrc = rsrc }
        } =
       idT { tac_goal = goal';
             tac_hyps = hyps';
@@ -759,6 +759,9 @@ let get_thinning_arg =
 
 (*
  * $Log$
+ * Revision 1.10  1998/06/01 13:57:09  jyh
+ * Proving twice one is two.
+ *
  * Revision 1.9  1998/05/28 13:48:41  jyh
  * Updated the editor to use new Refiner structure.
  * ITT needs dform names.

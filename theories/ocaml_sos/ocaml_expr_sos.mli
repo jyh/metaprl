@@ -73,11 +73,11 @@ declare prim_record_set{'r; 'n; 'v}
  *)
 axiom bool_equiv 'H :
    sequent { 'H >- value_equiv{'S; ."bool"[@f:s]; ."bool"[@f:s]; type_bool} }
-             
+
 axiom bool_value 'H :
    sequent { 'H >- is_value{."bool"[@f:s]} }
 
-axiom char_equiv 'H : 
+axiom char_equiv 'H :
    sequent { 'H >- value_equiv{'S; ."char"[@c:s]; ."char"[@c:s]; type_char} }
 
 axiom char_value 'H :
@@ -160,7 +160,7 @@ rewrite for_downto_eval :
           ifthenelse{ge_int{'e1; 'e2};
                      sequence{'e3['e1]; for_downto{sub{'e1; ."int"[1]}; 'e2; x. 'e3['x]}};
                      unit})
-                       
+
 rewrite while_eval :
    "while"{'e1; 'e2} <-->
       ifthenelse{'e1; sequence{'e2; ."while"{'e1; 'e2}}; unit}
@@ -345,17 +345,17 @@ rewrite string_set_array_raise :
    (is_value{'S; 'e1} & is_value{'S; 'e2} & is_value{'S; 'e3}) -->
       (process{'S; string_set{raise{'e1}; 'e2; 'e3}} <-->
           process{'S; raise{'e1}})
-   
+
 rewrite string_set_index_raise :
    (is_value{'S; 'e1} & is_value{'S; 'e2} & is_value{'S; 'e3}) -->
       (process{'S; string_set{'e1; raise{'e2}; 'e3}} <-->
           process{'S; raise{'e2}})
-   
+
 rewrite string_set_value_raise :
    (is_value{'S; 'e1} & is_value{'S; 'e2} & is_value{'S; 'e3}) -->
       (process{'S; string_set{'e1; 'e2; raise{'e3}}} <-->
           process{'S; raise{'e3}})
-   
+
 (************************************************************************
  * ARRAYS                                                               *
  ************************************************************************)
@@ -510,7 +510,7 @@ axiom record_set_value_equiv 'H 't :
    sequent { 'H >- name_equiv{'S; 'n1; 'n2} } -->
    sequent { 'H >- value_equiv{'S; 'e2; 'e4; 't} } -->
    sequent { 'H >- value_equiv{'S;
-                               record_set{'e1; 'n1; 'e2}; 
+                               record_set{'e1; 'n1; 'e2};
                                record_set{'e3; 'n2; 'e4};
                                type_unit} }
 
@@ -519,7 +519,7 @@ axiom record_set_record_equiv 'H 't :
    sequent { 'H >- name_equiv{'S; 'n1; 'n2} } -->
    sequent { 'H >- value_equiv{'S; 'e2; 'e4; 't} } -->
    sequent { 'H >- equiv{'S;
-                         record_set{'e1; 'n1; 'e2}; 
+                         record_set{'e1; 'n1; 'e2};
                          record_set{'e3; 'n2; 'e4};
                          type_unit;
                          'exn} }
@@ -529,7 +529,7 @@ axiom record_set_arg_equiv 'H 't :
    sequent { 'H >- name_equiv{'S; 'n1; 'n2} } -->
    sequent { 'H >- equiv{'S; 'e2; 'e4; 't; 'exn} } -->
    sequent { 'H >- equiv{'S;
-                         record_set{'e1; 'n1; 'e2}; 
+                         record_set{'e1; 'n1; 'e2};
                          record_set{'e3; 'n2; 'e4};
                          type_unit;
                          'exn} }
@@ -586,17 +586,17 @@ axiom match_equiv 'H :
    sequent { 'H >- equiv{'S; 'e1; 'e2; 't2; 'exn} } -->
    sequent { 'H >- equiv{'S; 'p1; 'p2; type_fun{'t2; 't1}; 'exn} } -->
    sequent { 'H >- equiv{'S; ."match"{'e1; 'p1}; ."match"{'e2; 'p2}; 't; 'exn} }
-             
+
 axiom match_value_equiv 'H :
    sequent { 'H >- value_equiv{'S; 'e1; 'e2; 't2} } -->
    sequent { 'H >- value_equiv{'S; 'p1; 'p2; functional{'t2; 't1}} } -->
    sequent { 'H >- value_equiv{'S; ."match"{'e1; 'p1}; ."match"{'e2; 'p2}; 't} }
 *)
-             
+
 (************************************************************************
  * FUNCTIONS                                                            *
  ************************************************************************)
-             
+
 (*
  * Application.
  *)
@@ -604,14 +604,14 @@ axiom apply_equiv 'H 't1 :
    sequent { 'H >- equiv{'S; 'f1; 'f2; type_fun{'t1; 't2}; 'exn} } -->
    sequent { 'H >- equiv{'S; 'a1; 'a2; 't1; 'exn} } -->
    sequent { 'H >- equiv{'S; apply{'f1; 'a1}; apply{'f2; 'a2}; 't2; 'exn}}
-             
+
 axiom apply_value_equiv 'H 't1 :
    sequent { 'H >- value_equiv{'S; 'f1; 'f2; functional{'t1; 't2}} } -->
    sequent { 'H >- value_equiv{'S; 'a1; 'a2; 't1} } -->
    sequent { 'H >- value_equiv{'S; apply{'f1; 'a1}; apply{'f2; 'a2}; 't2} }
 
 rewrite apply_eval :
-   process{'S; apply{'e1; 'e2}} <--> 
+   process{'S; apply{'e1; 'e2}} <-->
        spread{process{'S; 'e1}; f, S2.
           process{'S2; apply{'f; 'e2}}}
 
@@ -621,6 +621,9 @@ rewrite apply_apply_eval :
 
 (*
  * $Log$
+ * Revision 1.2  1998/06/01 13:56:55  jyh
+ * Proving twice one is two.
+ *
  * Revision 1.1  1998/04/29 14:49:48  jyh
  * Added ocaml_sos.
  *

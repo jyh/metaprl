@@ -13,6 +13,7 @@ open Printf
 open Debug
 open Sequent
 open Refiner.Refiner.Term
+open Refiner.Refiner.TermMan
 open Resource
 
 open Tactic_type
@@ -41,7 +42,7 @@ declare void
  * DISPLAY FORMS                                                        *
  ************************************************************************)
 
-dform mode[prl] :: void = `"Void"
+dform void_df1 : mode[prl] :: void = `"Void"
 
 (************************************************************************
  * RULES                                                                *
@@ -149,6 +150,9 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (void_
 
 (*
  * $Log$
+ * Revision 1.7  1998/06/01 13:56:34  jyh
+ * Proving twice one is two.
+ *
  * Revision 1.6  1998/05/28 13:48:23  jyh
  * Updated the editor to use new Refiner structure.
  * ITT needs dform names.

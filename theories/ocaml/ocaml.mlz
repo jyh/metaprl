@@ -184,7 +184,7 @@ declare patt_char[@c:s]
 declare patt_int[@i:n]
 declare patt_string[@s:s]
 declare patt_float[@f:s]
-        
+
 (*
  * Binding.
  *)
@@ -304,7 +304,7 @@ declare type_proj{'t1; 't2}
  * "As" type.
  *)
 declare type_as{'t1; 't2}
-           
+
 (*
  * Wildcard type.
  *)
@@ -314,7 +314,7 @@ declare type_wildcard
  * Application.
  *)
 declare type_apply{'t1; 't2}
-           
+
 (*
  * Function type.
  *)
@@ -392,7 +392,7 @@ declare sig_external[@name:s]{'t; 'sl}
  * Module declaration.
  *)
 declare sig_module[@name:s]{'mt}
-           
+
 (*
  * Module type declaration.
  *)
@@ -466,7 +466,7 @@ declare sslt{'s; 'sl; 't}
 (************************************************************************
  * MODULE TYPE                                                          *
  ************************************************************************)
-                          
+
 (*
  * Projection.
  *)
@@ -481,7 +481,7 @@ declare mt_apply{'mt1; 'mt2}
  * Functor.
  *)
 declare mt_functor[@name:s]{'mt1; 'mt2}
-           
+
 (*
  * Id.
  *)
@@ -497,7 +497,7 @@ declare mt_sig{'sil}
  * Module type with clause.
  *)
 declare mt_with{'mt; 'wcl}
-           
+
 (*
  * With clauses.
  * I'm not sure what these mean.
@@ -508,7 +508,7 @@ declare wc_module{'sl1; 'mt}
 (************************************************************************
  * MODULE EXPRESSION                                                    *
  ************************************************************************)
- 
+
 (*
  * Projection.
  *)
@@ -542,6 +542,9 @@ declare me_uid[@name:s]
 
 (*
  * $Log$
+ * Revision 1.7  1998/06/01 13:56:38  jyh
+ * Proving twice one is two.
+ *
  * Revision 1.6  1998/05/04 23:46:15  jyh
  * Most display forms now work.
  *

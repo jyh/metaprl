@@ -10,9 +10,13 @@ include Itt_rfun
 
 open Printf
 open Debug
+open Refiner.Refiner
 open Refiner.Refiner.Term
+open Refiner.Refiner.TermOp
+open Refiner.Refiner.TermMan
+open Refiner.Refiner.TermSubst
+open Refiner.Refiner.Refine
 open Options
-open Refine_sig
 open Resource
 
 open Var
@@ -361,6 +365,9 @@ let sub_resource =
 
 (*
  * $Log$
+ * Revision 1.7  1998/06/01 13:56:29  jyh
+ * Proving twice one is two.
+ *
  * Revision 1.6  1998/05/28 13:48:18  jyh
  * Updated the editor to use new Refiner structure.
  * ITT needs dform names.

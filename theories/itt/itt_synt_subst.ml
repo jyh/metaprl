@@ -87,9 +87,6 @@ doc <:doc<
    $$ add@_var(<<Gamma>>, <<Delta>>.s; <<Gamma>>,x,<<Delta>>_1.x) = <<Gamma>>,x,<<Delta>>.s$$
    @end[doc]
 >>
-(*
- *  add_var( <H>;<J>.s; <H>,x,<J'>.x ) = <H>,x,<J>.s
- *)
 define unfold_add_var:
    add_var{'bt;'v} <-->
       fix{add.lambda{bt.
@@ -143,9 +140,6 @@ doc <:doc<
    $$ add@_var(<<Gamma>>.s) = <<Gamma>>,x.s$$
    @end[doc]
 >>
-(*
- *  add_var( <H>.s ) = <H>,x.s
- *)
 define unfold_add_new_var:
    add_var{'bt} <--> add_var{'bt; new_var{'bt}}
 
@@ -176,9 +170,6 @@ doc <:doc<
    $$ add@_vars@_upto(<<Gamma>>.s; <<Gamma>>,<<Delta>>.t) = <<Gamma>>,<<Delta>>.s$$
    @end[doc]
 >>
-(*
- *  add_vars_upto( <H>.s; <H>,<J>.t ) = <H>,<J>.s
- *)
 define unfold_add_vars_upto:
    add_vars_upto{'s;'t} <--> ind{bdepth{'t} -@ bdepth{'s};'s; k,s.add_var{'s}}
 doc docoff
@@ -206,9 +197,6 @@ doc <:doc<
    $$ subst(<<Gamma>>,x,<<Delta>>_1,<<Delta>>_2.t[x]; <<Gamma>>,x,<<Delta>>_3.x; <<Gamma>>,x,<<Delta>>_1.s[x]) = <<Gamma>>,x,<<Delta>>_1, <<Delta>>_2.t[s[x]] $$
    @end[doc]
 >>
-(*
- *  subst( <H>,x,<J_1>,<J_2>.t[x]; var(<H>,x,<J_3>.x); <H>,x,<J_1>.s[x] ) = <H>,x,<J_1>,<J_2>.t[s[x]]
- *)
 define unfold_subst:
    subst{'t;'v;'s} <-->
       fix{subst.lambda{t.
@@ -389,32 +377,6 @@ dform not_free_df : not_free{'v;'t} =
    `"not_free(" slot{'v} `"; " slot{'t} `")"
 
 (*
- * Iterated subst - the relative position of the two variables may matter
- *
- *  subst( subst( <H>,v1,<J>,v2,<K>.t[v1;v2]; var(<H>,v1,<J2>.v1); <H>,<J>,v2,<K>.s1[v2] );
- *         var(<H>,<J>,v2,<K2>.v2);
- *         <H>,<J>,<K>.s2) =
- * <H>,<J>,<K>.t[s1[s2];s2] =
- *  subst( subst( <H>,v1,<J>,v2,<K>.t[v1;v2]; var(<H>,vx,<J>,v2,<K2>.v2); <H>,vx,<J>,<K>.s2 );
- *         var(<H>,v1,<J2>.v1);
- *         subst(<H>,<J>,v2,<K>.s1[v2]; var(<H>,<J>,v2,<K2>.v2); <H>,<J>,<K>.s2 ))
- *
- *  subst( subst( <H>,v2,<J>,v1,<K>.t[v1;v2]; var(<H>,v2,<J>,v1,<K2>.v1); <H>,v2,<J>,<K>.s1[v2] );
- *         var(<H>,v2,<J2>.v2);
- *         <H>,<J>,<K>.s2) =
- * <H>,<J>,<K>.t[s1[s2];s2] =
- *  subst( subst( <H>,v2,<J>,v1,<K>.t[v1;v2]; var(<H>,v2,<J2>.v2); <H>,<J>,vx,<K>.s2);
- *         var(<H>,<J>,v1,<K2>.v1);
- *         subst(<H>,v2,<J>,<K2>.s1[v2]; var(<H>,v2,<J2>.v2); <H>,<J>,<K>.s2))
- *)
-
-(*
-interactive subst_commutes {| intro |}
-   sequent{<H> >- subst{subst{'t;'v1;'s1};'v2;'s2} = ...
- *)
-
-
-(*
  *  bind(x. bterm{<H>.b[x]} ) = bterm{x,<H>.b[x]}
  *)
 (*
@@ -439,8 +401,6 @@ interactive_rw bind_nobind_rw:
 
 interactive_rw nobind_rw:
    bind{x.'t}  <--> add_var{'t; var{0;0}}
-
-
 
 interactive_rw bind__makebterm_rw:
    bind{x.make_bterm{'op['x]; 'subterms['x]}}  <--> make_bterm{'op[var{-1;0}]; map{'bt.bind{x.'bt['x]};'subterms}}

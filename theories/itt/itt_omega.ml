@@ -178,7 +178,7 @@ sig
    val get: af -> vars -> ring
    val remove: af -> vars -> af
    val split: af -> (ring * vars * af)
-	val any_var : af -> ring * vars
+	val any_var : af -> vars
    val isNumber: af -> bool
 	val gcd: af -> ring
 
@@ -278,7 +278,7 @@ struct
 
 	let any_var f =
 		let c,v,_ = split f in
-		(c,v)
+		v
 
    let isNumber f =
       let test=ref true in
@@ -428,9 +428,9 @@ struct
 				if Ring.compare f.(i) Ring.ringZero <> 0 then
 					raise (Found i)
 			done;
-			(f.(constvar), constvar)
+			constvar
 		with
-			Found i -> (f.(i), i)
+			Found i -> i
 
    let isNumber f =
       let test=ref true in
@@ -634,10 +634,11 @@ struct
 			end
 
 	let any_var (f1,f2) =
-		let c1, v = AF1.any_var f1 in
+		let v = AF1.any_var f1 in
+		let c1 = AF1.coef f1 v in
 		let c2 = AF2.coef f2 v in
 		if Ring.compare c1 c2 = 0 then
-			(c1,v)
+			v
 		else
 			begin
 				eprintf "MakeDebugAF.any_var:\n%a -> %a %i\n%a -> %a %i@."
@@ -784,24 +785,83 @@ struct
 
 	let create dim size = (dim, Hash.create size)
 
-	let get_key dim f =
-		Array.init (pred dim) (fun i -> AF.coef f (succ i))
+	let length (dim, table) = Hash.length table
 
-	let add info f =
-		let (dim,table) = info in
-		let key = get_key dim f in
+	let get_key dim f =
+		Array.init dim (fun i -> AF.coef f (succ i))
+
+	let add_aux info key constr =
+		let dim, table = info in
+		let tree, f = constr in
 		try
-			let old = Hash.find table key in
-			let old_const = AF.coef old AF.constvar in
+			let old_tree, old_f = Hash.find table key in
+			let old_const = AF.coef old_f AF.constvar in
 			if Ring.compare old_const (AF.coef f AF.constvar) > 0 then
-				Hash.replace table key f
+				Hash.replace table key constr
 			else
 				()
 		with
 			Not_found ->
-				Hash.add table key f
+				Hash.add table key constr
 
-	let get (table,dim) f = Hash.find table (get_key dim f)
+	let add info constr =
+		let dim, table = info in
+		let tree, f = constr in
+		let key = get_key dim f in
+		add_aux info key constr
+
+	let get (dim,table) key =
+		Hash.find table key
+
+	let iter f (dim,table) = Hash.iter f table
+
+	let rec of_list_aux constrs = function
+		hd::tl ->
+			add constrs hd;
+			of_list_aux constrs tl
+	 | [] ->
+			constrs
+
+	let of_list dim l =
+		let constrs = create dim (List.length l) in
+		of_list_aux constrs l
+(*
+	let append constrs (d',table') =
+		Hash.iter (fun k d -> add_aux constrs k d) table';
+		constrs
+*)
+
+	let append_list constrs l =
+		List.iter (fun (k,d) -> add_aux constrs k d) l
+
+	let filter_aux predicate new_constrs k d =
+		if predicate k d then
+			add new_constrs d
+		else
+			()
+
+	let filter predicate (dim,table) =
+		let new_constrs = create dim (Hash.length table) in
+		Hash.iter (filter_aux predicate new_constrs) table;
+		new_constrs
+
+	exception Found of HashedAF.t
+
+	let find_aux predicate k d =
+		if predicate k d then
+			raise (Found k)
+		else
+			()
+
+	let find predicate (dim,table) =
+		try
+			Hash.iter (find_aux predicate) table;
+			raise Not_found
+		with
+			Found k -> k
+
+	let fold f (dim,table) init_val =
+		Hash.fold f table init_val
 
 end
 
@@ -814,6 +874,7 @@ module AF=MakeAF(R)
 module AF=MakeArrayAF(R)
 *)
 module VI=Var2Index(R)
+module C=Constraints(IntRing)(AF)
 open IntRing
 
 module Var =
@@ -961,7 +1022,7 @@ let norm constr =
 let omega_aux v ((c1,t1,l),(c2,t2,u)) =
 	let s = (Solve (v,c1,t1,l,c2,t2,u),	AF.sub (AF.scale c1 u) (AF.scale c2 l)) in
 	norm s
-
+(*
 let rec compute_metric pool (tree,f) =
 	Array.iteri (fun v m -> pool.(v) <- add m (abs (AF.coef f (succ v)))) pool
 
@@ -992,45 +1053,44 @@ let pick_var info pool constrs =
 		succ result
 	else
 		raise (RefineError ("omegaT", StringError "failed to find a contradiction - no variables left"))
-
-(*
-let rec pick_var info = function
-	[] ->
-		raise (RefineError ("omegaT", StringError "failed to find a contradiction - no variables left"))
- | (tree,f)::tl ->
-		let c,v = AF.any_var f in
-		if v=AF.constvar then
-			pick_var info tl
-		else
-			v
 *)
 
-let rec get_bounds v l u rest = function
-	[] -> (l,u,rest)
- | (tree, f) as original :: tl ->
-		let c = AF.coef f v in
-		if isPositive c then
+let pick_var_aux key (tree,f) =
+	let v = AF.any_var f in
+	v<>AF.constvar
+
+let pick_var pool constrs =
+	try
+		let k = C.find pick_var_aux constrs in
+		let tree, f = C.get constrs k in
+		AF.any_var f
+	with
+		Not_found ->
+			raise (RefineError ("omegaT", StringError "failed to find a contradiction - no variables left"))
+
+let rec get_bounds_aux v key constr (l,u,rest) =
+	let tree, f = constr in
+	let c = AF.coef f v in
+	if isPositive c then
+		let f' = AF.remove f v in
+		(((c, tree, (AF.scale (neg ringUnit) f'))::l), u, rest)
+	else
+		if isNegative c then
 			let f' = AF.remove f v in
-			get_bounds v ((c, tree, (AF.scale (neg ringUnit) f'))::l) u rest tl
+			(l, ((neg c, tree, f')::u), rest)
 		else
-			if isNegative c then
-				let f' = AF.remove f v in
-				get_bounds v l ((neg c, tree, f')::u) rest tl
-			else
-				get_bounds v l u (original::rest) tl
+			(l, u, ((key, constr)::rest))
 
-
-let rec print_constrs info = function
-	[] ->
-		eprintf "@."
- | (tree, f)::tl ->
-		eprintf "%a@." AF.print f;
-		print_constrs info tl
+let get_bounds v constrs = C.fold (get_bounds_aux v) constrs ([],[],[])
 
 (*
-let print_constrs info l =
-	eprintf "%i constraints@." (List.length l)
+let print_constrs constrs =
+	C.iter (fun k (tree,f) -> eprintf "%a@." AF.print f) constrs
 *)
+
+let print_constrs constrs =
+	eprintf "%i constraints@." (C.length constrs)
+
 
 let var_bounds (old_upper, old_lower) f v =
 	let c = AF.coef f (succ v) in
@@ -1072,32 +1132,45 @@ let rec no_unbound_vars f = function
 			no_unbound_vars f tl
  | [] ->	true
 
-let remove_unbound_vars pool constrs =
+let remove_unbound_vars_aux pool constrs =
 	Array.fill pool 0 (Array.length pool) (false,false);
-	List.iter (fun (tree,f) -> Array.iteri (fun v bounds -> pool.(v) <- var_bounds bounds f v) pool) constrs;
+	C.iter (fun key (tree,f) -> Array.iteri (fun v bounds -> pool.(v) <- var_bounds bounds f v) pool) constrs;
 	let unbound_vars = collect_unbound_vars pool [] 0 in
-	List.filter (fun (tree,f) -> no_unbound_vars f unbound_vars) constrs
+	C.filter (fun k (tree,f) -> no_unbound_vars f unbound_vars) constrs
 
-let rec omega info pool pool2 constrs =
+let rec remove_unbound_vars pool constrs =
+	let new_constrs = remove_unbound_vars_aux pool constrs in
+	(*
+	if C.length new_constrs < C.length constrs then
+		remove_unbound_vars pool new_constrs
+	else
+	*)
+		new_constrs
+
+let rec omega pool pool2 constrs =
 	if !debug_omega then
-		print_constrs info constrs;
+		print_constrs constrs;
 	let constrs = remove_unbound_vars pool constrs in
-	let v = pick_var info pool2 constrs in
+	let v = pick_var pool2 constrs in
 	if !debug_omega then
 		eprintf "picked %a@." AF.print_var v;
-	let l, u, rest = get_bounds v [] [] [] constrs in
+	let l, u, rest = get_bounds v constrs in
 	let pairs = all_pairs l u in
 	if !debug_omega then
 		eprintf "generated %i pairs@." (List.length pairs);
-	let new_constrs = List.rev_map (omega_aux v) pairs in
+	let new_constrs = List.map (omega_aux v) pairs in
 	if !debug_omega then
 		eprintf "new constraints generated@.";
 	try
 		List.find (fun (tree, f) -> is_neg_number f) new_constrs
 	with Not_found ->
 		if !debug_omega then
-			eprintf "no contradiction found, calling omega@.";
-		omega info pool pool2 (List.rev_append rest new_constrs)
+			eprintf "no contradiction found, building new table@.";
+		let new_constrs = C.of_list (Array.length pool) new_constrs in
+		C.append_list new_constrs rest;
+		if !debug_omega then
+			eprintf "calling omega@.";
+		omega pool pool2 new_constrs
 
 interactive_rw ge_to_ge0 :
 	('a in int) -->
@@ -1141,10 +1214,23 @@ interactive ge_scaleAndWeaken2 number[k:n] number[c:n] :
 
 let scaleAndWeakenT k c = ge_scaleAndWeaken2 k c
 
+let endT i =
+	if !debug_omega then
+		eprintf "end %i@." i;
+	assertT << 1 in int >>
+
+let rec tree_stats h m mw s = function
+	Hyp i -> ((succ h), m, mw, s)
+ | Mul (tree, gcd) -> tree_stats h (succ m) mw s tree
+ | MulAndWeaken (tree, gcd, c) -> tree_stats h m (succ mw) s tree
+ | Solve (v,c1,t1,l,c2,t2,u) ->
+		let h1,m1,mw1,s1 = tree_stats h m mw (succ s) t1 in
+		tree_stats h1 m1 mw1 s1 t2
+
 let rec source2hyp info src = funT (fun p ->
 match src with
  | Hyp i ->
-		rw normalize2C i
+		rw normalize2C i thenMT endT 1
  | Mul (tree, gcd) ->
 		rw ((scaleC (mk_number_term gcd)) thenC ge_normC) 0 thenMT
 		source2hyp info tree
@@ -1174,12 +1260,14 @@ let omegaCoreT = funT (fun p ->
    	Constraints constrs ->
 			let n0 = VI.length var2index in
 			let n = succ n0 in
-			let constrs = List.map (fun (i,f) -> norm (Hyp i, AF.grow n f)) constrs in
+			let constrs = List.rev_map (fun (i,f) -> norm (Hyp i, AF.grow n f)) constrs in
+			let constrs = C.of_list n0 constrs in
 			let pool = Array.make n0 (false,false) in
 			let pool2 = Array.make n0 ringZero in
-			let tree, f = omega info pool pool2 constrs in
+			let tree, f = omega pool pool2 constrs in
+			let h,m,mw,s = tree_stats 0 0 0 0 tree in
 			if !debug_omega then
-				eprintf "Solved, reconstructing the proof@.";
+				eprintf "Solved (%i hyps, %i muls, %i mul&weaken, %i eliminations), reconstructing the proof@." h m mw s;
 			(
 			match tree with
 			 | Hyp i ->
@@ -1196,6 +1284,7 @@ let omegaCoreT = funT (fun p ->
 							(mk_sub_term (mk_mul_term c1t (AF.term_of info u)) (mk_mul_term c2t (AF.term_of info l)))
 							(mk_number_term num0))
 					thenLT [omegaAuxT info tree; rw ge_normC (-1)]
+					thenMT endT 2
 			)
 	 | Contradiction (i,f) ->
 			if !debug_omega then

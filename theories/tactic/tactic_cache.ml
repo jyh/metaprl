@@ -1470,7 +1470,7 @@ let try_arglist_normal ({ ext_base = base } as extract) rw just world = function
  | (arg::args) as all_args ->
       let args' = List.map (function inf -> inf.inf_value) args in
          try
-            let values = apply_rewrite rw ([||], [||], []) arg.inf_value args' in
+            let values = apply_rewrite rw empty_args arg.inf_value args' in
             let root =
                Inference { inf_values = values;
                            inf_just = just;
@@ -1509,9 +1509,9 @@ let try_arglist_wild extract rw wrw nargs just world args =
          let terms = List.map (function inf -> inf.inf_value) argstl in
          let term = arg.inf_value in
             try
-               let wilds = apply_rewrite wrw ([||], [||], []) term terms in
+               let wilds = apply_rewrite wrw empty_args term terms in
                let wargs = List.map (function t -> find_inf extract world t (shape_of_term t)) wilds in
-               let values = apply_rewrite rw ([||], [||], []) term terms in
+               let values = apply_rewrite rw empty_args term terms in
                let facts = mix_wild nargs args wargs in
                let root =
                   Inference { inf_values = values;
@@ -1616,7 +1616,7 @@ let compute_wild t =
       if wilds = [] then
          None
       else
-         Some (List.rev wildi, term_rewrite Strict ([||], [||]) terms' (List.rev wilds))
+         Some (List.rev wildi, term_rewrite Strict empty_args_spec terms' (List.rev wilds))
    in
       terms', wilds'
 
@@ -1625,7 +1625,7 @@ let add_frule cache { fc_ants = ants; fc_concl = concl; fc_just = just } =
    let info =
       { finfo_plates = List.map shape_of_term args;
         finfo_wild = wild;
-        finfo_rw = term_rewrite Strict ([||], [||]) args concl;
+        finfo_rw = term_rewrite Strict empty_args_spec args concl;
         finfo_just = just
       }
    in
@@ -1682,10 +1682,10 @@ let compute_spread_ants ants =
  *)
 let add_brule cache { bc_concl = concl; bc_ants = ants; bc_just = just } =
    let flat_ants = flatten_ants ants in
-   let rw = term_rewrite Strict ([||], [||]) [concl] flat_ants in
+   let rw = term_rewrite Strict empty_args_spec [concl] flat_ants in
    let spread_ants = compute_spread_ants ants in
    let trw t =
-      let values = apply_rewrite rw ([||], [||], []) t [] in
+      let values = apply_rewrite rw empty_args t [] in
          spread_ants values
    in
    let info =

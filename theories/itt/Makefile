@@ -56,6 +56,7 @@ MPFILES :=\
 	itt_quotient\
 	itt_list\
 	itt_list2\
+	itt_fun2\
 	itt_union2\
 	itt_derive\
 	itt_prop_decide\

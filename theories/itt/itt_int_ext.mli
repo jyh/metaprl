@@ -96,6 +96,10 @@ define unfold_neq_int :
 define unfold_int_seg :
    int_seg{'i; 'j} <--> {x:int | 'x >= 'i & 'x < 'j}
 
+define unfold_max: max{'i;'j} <--> if 'i<@ 'j then 'j else 'i
+
+define unfold_min: min{'i;'j} <--> if 'i<@ 'j then 'i else 'j
+
 (************************************************************************
  * DISPLAY FORMS                                                        *
  ************************************************************************)

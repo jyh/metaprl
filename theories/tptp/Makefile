@@ -7,7 +7,8 @@ INCLUDE := -I . -I ../itt -I ../tactic -I ../ocaml -I ../base -I $(ROOT)/lib
 OCAMLDEPFLAGS := -prl
 
 MLZFILES :=\
-	tptp_type
+	tptp_type\
+	tptp_parse
 
 # Library files
 LMFILES :=\

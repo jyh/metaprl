@@ -666,8 +666,8 @@ let values =
     "::",               cons_expr;
     "()",               UnitExpr ();
     "[]",               ListExpr [];
-    "true",             BoolExpr true;
-    "false",            BoolExpr false]
+    "True",             BoolExpr true;
+    "False",            BoolExpr false]
 
 
 let rec add_resources base = function

@@ -64,7 +64,6 @@ define unfold_compare_lt : compare_lt{'lt; 'a; 'b} <-->
  *)
 define unfold_partial_order : partial_order{'A; 'lt} <-->
    ((all a: 'A. not{compare_lt{'lt; 'a; 'a}})
-    & (all a: 'A. all b: 'A. (compare_lt{'lt; 'a; 'b} => not{compare_lt{'lt; 'b; 'a}}))
     & (all a: 'A. all b: 'A. all c: 'A. (compare_lt{'lt; 'a; 'b} => compare_lt{'lt; 'b; 'c} => compare_lt{'lt; 'a; 'c})))
 
 (*

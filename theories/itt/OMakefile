@@ -154,6 +154,7 @@ PRINT_THEORIES =\
     itt_eq_base\
     itt_record\
     itt_record_exm\
+    itt_record_renaming\
     itt_relation_str\
     itt_set_str\
     itt_bintree\
@@ -173,6 +174,9 @@ PRINT_THEORIES =\
     itt_intdomain_e\
     itt_field2\
     itt_field_e\
+    itt_order\
+    itt_rat\
+    itt_supinf\
     itt_collection\
     itt_pointwise\
     itt_pointwise2

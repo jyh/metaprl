@@ -1324,16 +1324,16 @@ struct
 
    let append_inf inf hyp inst_term r =
       match r, inf with
-         Ax,  _ -> (fun subst assums -> find_hyp (apply_subst hyp subst) assums nthHypT ) :: inf
-       | Andl,t::ts -> (fun subst assums -> (find_hyp (apply_subst hyp subst) assums (thenTi and_elim (t subst assums)))) :: ts
-       | Negl,t::ts -> (fun subst assums -> (find_hyp (apply_subst hyp subst) assums (thenTi not_elim (t subst assums)))) :: ts
+         Ax,  _ -> (fun subst assums -> find_hyp (apply_subst subst hyp) assums nthHypT ) :: inf
+       | Andl,t::ts -> (fun subst assums -> (find_hyp (apply_subst subst hyp) assums (thenTi and_elim (t subst assums)))) :: ts
+       | Negl,t::ts -> (fun subst assums -> (find_hyp (apply_subst subst hyp) assums (thenTi not_elim (t subst assums)))) :: ts
        | Orl, t1::t2::ts ->
             (fun subst assums ->
-               (find_hyp (apply_subst hyp subst) assums (thenLTi or_elim [t1 subst assums; t2 subst assums])))
+               (find_hyp (apply_subst subst hyp) assums (thenLTi or_elim [t1 subst assums; t2 subst assums])))
             :: ts
        | Impl,t1::t2::ts ->
             (fun subst assums ->
-               (find_hyp (apply_subst hyp subst) assums (thenLTi implies_elim [t1 subst assums; t2 subst assums])))
+               (find_hyp (apply_subst subst hyp) assums (thenLTi implies_elim [t1 subst assums; t2 subst assums])))
             :: ts
        | Andr,t1::t2::ts -> (fun subst assums -> and_intro thenLT [t1 subst assums; t2 subst assums]) :: ts
        | Orr1,t::ts -> (fun subst assums -> or_intro_left thenLT [idT; t subst assums]) :: ts
@@ -1342,20 +1342,20 @@ struct
        | Negr,t::ts -> (fun subst assums -> not_intro thenLT [idT; t subst assums]) :: ts
        | Exr, t::ts ->
             (fun subst assums ->
-               exists_intro (apply_subst inst_term subst) thenLT [idT; t subst assums; idT]) :: ts
+               exists_intro (apply_subst subst inst_term) thenLT [idT; t subst assums; idT]) :: ts
        | Alll,t::ts ->
             (fun subst assums ->
-               (find_hyp (apply_subst hyp subst) assums
-                  (thenLTi (aTi all_elim (apply_subst inst_term subst)) [idT; t subst assums])))
+               (find_hyp (apply_subst subst hyp) assums
+                  (thenLTi (aTi all_elim (apply_subst subst inst_term)) [idT; t subst assums])))
             :: ts
        | Exl, t::ts ->
             (fun subst assums ->
-               (find_hyp (apply_subst hyp subst) assums
-                  (thenTi exists_elim (append_subst subst (apply_subst hyp subst) inst_term assums t))))
+               (find_hyp (apply_subst subst hyp) assums
+                  (thenTi exists_elim (append_subst subst (apply_subst subst hyp) inst_term assums t))))
             :: ts
        | Allr,t::ts ->
             (fun subst assums ->
-               all_intro thenLT [idT;goal_append_subst subst (apply_subst hyp subst) inst_term assums t])
+               all_intro thenLT [idT;goal_append_subst subst (apply_subst subst hyp) inst_term assums t])
             :: ts
     (* | Orr, ->  *)
        | Fail,_ -> raise (RefineError("Itt_JLogic.create_inf", StringError "failed"))

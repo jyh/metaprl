@@ -583,7 +583,7 @@ let infer_univ_dep0_dep0 destruct inf consts decls eqs opt_eqs defs t =
    let eqs', opt_eqs', defs', a' = inf consts decls eqs opt_eqs defs a in
    let eqs'', opt_eqs'', defs'', b' = inf consts decls eqs' opt_eqs' defs' b in
    let eqs''', opt_eqs''', subst, a'' = Typeinf.typeinf_final consts eqs'' opt_eqs'' defs'' a' in
-   let b'' = apply_subst (apply_subst b' subst) defs in
+   let b'' = apply_subst defs (apply_subst subst b') in
    let le1 = try_dest_univ a'' in
    let le2 = try_dest_univ b'' in
       eqs''', opt_eqs''', defs'', mk_univ_term (max_level_exp le1 le2 0)
@@ -594,7 +594,7 @@ let infer_univ_dep0_dep1 destruct inf consts decls eqs opt_eqs defs t =
    let eqs'', opt_eqs'', defs'', b' =
       inf (SymbolSet.add consts v) ((v,a)::decls) eqs' opt_eqs' defs' b in
    let eqs''', opt_eqs''', subst, a'' = Typeinf.typeinf_final consts eqs'' opt_eqs'' defs'' a' in
-   let b'' = apply_subst (apply_subst b' subst) defs in
+   let b'' = apply_subst defs (apply_subst subst b') in
    let le1 = try_dest_univ a'' in
    let le2 = try_dest_univ b'' in
       eqs''', opt_eqs''', defs'', mk_univ_term (max_level_exp le1 le2 0)

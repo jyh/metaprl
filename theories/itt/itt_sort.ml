@@ -78,31 +78,31 @@ declare sort{'l; 'lt}
  * Comparisons.
  *)
 prim_rw unfold_compare_lt : compare_lt{'lt; 'a; 'b} <-->
-   ('lt 'a 'b)
+   "assert"{('lt 'a 'b)}
 
 (*
  * Definition of partial order.
  *)
 prim_rw unfold_partial_order : partial_order{'A; 'lt} <-->
-   ((all a: 'A. "assert"{bnot{compare_lt{'lt; 'a; 'a}}})
-    & (all a: 'A. all b: 'A. ("assert"{compare_lt{'lt; 'a; 'b}} => "assert"{bnot{compare_lt{'lt; 'b; 'a}}}))
-    & (all a: 'A. all b: 'A. all c: 'A. ("assert"{compare_lt{'lt; 'a; 'b}} => "assert"{compare_lt{'lt; 'b; 'c}} => "assert"{compare_lt{'lt; 'a; 'c}})))
+   ((all a: 'A. not{compare_lt{'lt; 'a; 'a}})
+    & (all a: 'A. all b: 'A. (compare_lt{'lt; 'a; 'b} => not{compare_lt{'lt; 'b; 'a}}))
+    & (all a: 'A. all b: 'A. all c: 'A. (compare_lt{'lt; 'a; 'b} => compare_lt{'lt; 'b; 'c} => compare_lt{'lt; 'a; 'c})))
 
 (*
  * Definition of a sorted list.
  *)
 prim_rw unfold_bounded : bounded{'u1; 'l; 'lt} <-->
-   list_ind{'l; ."btrue"; u2, v, g. band{bnot{compare_lt{'lt; 'u2; 'u1}}; 'g}}
+   list_ind{'l; ."true"; u2, v, g. "and"{."not"{compare_lt{'lt; 'u2; 'u1}}; 'g}}
 
 prim_rw unfold_sorted : sorted{'l; 'lt} <-->
-   list_ind{'l; ."btrue"; u, v, g. band{bounded{'u; 'v; 'lt}; 'g}}
+   list_ind{'l; ."true"; u, v, g. "and"{bounded{'u; 'v; 'lt}; 'g}}
 
 (*
  * Define it.
  *)
 prim_rw unfold_insert : insert{'u1; 'l; 'lt} <-->
    list_ind{'l; cons{'u1; nil}; u2, v, g.
-      ifthenelse{compare_lt{'lt; 'u1; 'u2}; cons{'u1; cons{'u2; 'v}}; cons{'u2; 'g}}}
+      ifthenelse{('lt 'u1 'u2); cons{'u1; cons{'u2; 'v}}; cons{'u2; 'g}}}
 
 prim_rw unfold_sort : sort{'l; 'lt} <-->
    list_ind{'l; nil; u, v, g. insert{'u; 'g; 'lt}}
@@ -110,6 +110,7 @@ prim_rw unfold_sort : sort{'l; 'lt} <-->
 (*
  * Folding.
  *)
+let fold_compare_lt = makeFoldC << compare_lt{'lt; 'u; 'v} >> unfold_compare_lt
 let fold_bounded = makeFoldC << bounded{'u; 'l; 'lt} >> unfold_bounded
 let fold_sorted = makeFoldC << sorted{'l; 'lt} >> unfold_sorted
 let fold_insert = makeFoldC << insert{'u; 'l; 'lt} >> unfold_insert
@@ -157,20 +158,20 @@ dform list_ind_df : list_ind{'l; 'base; u, v, g. 'step} =
  * REWRITE LEMMAS                                                       *
  ************************************************************************)
 
-interactive_rw reduce_bounded_nil : bounded{'u; nil; 'lt} <--> btrue
+interactive_rw reduce_bounded_nil : bounded{'u; nil; 'lt} <--> "true"
 
 interactive_rw reduce_bounded_cons : bounded{'u1; cons{'u2; 'v}; 'lt} <-->
-   band{bnot{compare_lt{'lt; 'u2; 'u1}}; bounded{'u1; 'v; 'lt}}
+   "and"{."not"{compare_lt{'lt; 'u2; 'u1}}; bounded{'u1; 'v; 'lt}}
 
-interactive_rw reduce_sorted_nil : sorted{nil; 'lt} <--> btrue
+interactive_rw reduce_sorted_nil : sorted{nil; 'lt} <--> "true"
 
 interactive_rw reduce_sorted_cons : sorted{cons{'u; 'v}; 'lt} <-->
-   band{bounded{'u; 'v; 'lt}; sorted{'v; 'lt}}
+   "and"{bounded{'u; 'v; 'lt}; sorted{'v; 'lt}}
 
 interactive_rw reduce_insert_nil : insert{'u1; nil; 'lt} <--> cons{'u1; nil}
 
 interactive_rw reduce_insert_cons : insert{'u1; cons{'u2; 'v}; 'lt} <-->
-   ifthenelse{compare_lt{'lt; 'u1; 'u2}; cons{'u1; cons{'u2; 'v}}; cons{'u2; insert{'u1; 'v; 'lt}}}
+   ifthenelse{('lt 'u1 'u2); cons{'u1; cons{'u2; 'v}}; cons{'u2; insert{'u1; 'v; 'lt}}}
 
 interactive_rw reduce_sort_nil : sort{nil; 'lt} <--> nil
 
@@ -200,7 +201,7 @@ interactive compare_lt_wf {| intro_resource [IntroArgsOption (infer_type_args, S
    [wf] sequent [squash] { 'H >- member{.'A -> 'A -> bool; 'lt} } -->
    [wf] sequent [squash] { 'H >- member{'A; 'a} } -->
    [wf] sequent [squash] { 'H >- member{'A; 'b} } -->
-   sequent ['ext] { 'H >- member{bool; compare_lt{'lt; 'a; 'b}} }
+   sequent ['ext] { 'H >- "type" {compare_lt{'lt; 'a; 'b}} }
 
 (*
  * Well-typing of partial_order predicate.
@@ -218,13 +219,13 @@ interactive bounded_wf {| intro_resource [IntroArgsOption (infer_type_args, Some
    [wf] sequent [squash] { 'H >- member{list{'A}; 'l} } -->
    [wf] sequent [squash] { 'H >- member{'A; 'u} } -->
    [wf] sequent [squash] { 'H >- member{.'A -> 'A -> bool; 'lt} } -->
-   sequent ['ext] { 'H >- member{bool; bounded{'u; 'l; 'lt}} }
+   sequent ['ext] { 'H >- "type"{bounded{'u; 'l; 'lt}} }
 
 interactive sorted_wf {| intro_resource [IntroArgsOption (infer_type_args, Some << 'l >>)] |} 'H list{'A} :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H >- member{list{'A}; 'l} } -->
    [wf] sequent [squash] { 'H >- member{.'A -> 'A -> bool; 'lt} } -->
-   sequent ['ext] { 'H >- member{bool; sorted{'l; 'lt}} }
+   sequent ['ext] { 'H >- "type"{sorted{'l; 'lt}} }
 
 (*
  * Well formedness of sort and insert functions.
@@ -246,12 +247,12 @@ interactive sort_wf {| intro_resource [] |} 'H :
  * Some useful ordering theorems.
  *)
 interactive symetric_elim {| elim_resource [ElimArgsOption (infer_type_args, Some << 'a >>)] |} 'H 'J 'A 'v :
-   [wf] sequent [squash] { 'H; w: "assert"{compare_lt{'lt; 'a; 'b}}; 'J['w] >- member{.'A -> 'A -> bool; 'lt} } -->
-   [wf] sequent [squash] { 'H; w: "assert"{compare_lt{'lt; 'a; 'b}}; 'J['w] >- member{'A; 'a} } -->
-   [wf] sequent [squash] { 'H; w: "assert"{compare_lt{'lt; 'a; 'b}}; 'J['w] >- member{'A; 'b} } -->
-   [main] sequent ['ext] { 'H; w: "assert"{compare_lt{'lt; 'a; 'b}}; 'J['w] >- partial_order{'A; 'lt} } -->
-   [main] sequent ['ext] { 'H; w: "assert"{compare_lt{'lt; 'a; 'b}}; 'J['w]; v: "assert"{bnot{compare_lt{'lt; 'b; 'a}}} >- 'C['w] } -->
-   sequent ['ext] { 'H; w: ("assert"{compare_lt{'lt; 'a; 'b}}); 'J['w] >- 'C['w] }
+   [wf] sequent [squash] { 'H; w: compare_lt{'lt; 'a; 'b}; 'J['w] >- member{.'A -> 'A -> bool; 'lt} } -->
+   [wf] sequent [squash] { 'H; w: compare_lt{'lt; 'a; 'b}; 'J['w] >- member{'A; 'a} } -->
+   [wf] sequent [squash] { 'H; w: compare_lt{'lt; 'a; 'b}; 'J['w] >- member{'A; 'b} } -->
+   [main] sequent ['ext] { 'H; w: compare_lt{'lt; 'a; 'b}; 'J['w] >- partial_order{'A; 'lt} } -->
+   [main] sequent ['ext] { 'H; w: compare_lt{'lt; 'a; 'b}; 'J['w]; v: not{compare_lt{'lt; 'b; 'a}} >- 'C['w] } -->
+   sequent ['ext] { 'H; w: (compare_lt{'lt; 'a; 'b}); 'J['w] >- 'C['w] }
 
 interactive bounded_inclusion 'H list{'A} 'u1 :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
@@ -260,17 +261,23 @@ interactive bounded_inclusion 'H list{'A} 'u1 :
    [wf] sequent [squash] { 'H >- member{.'A -> 'A -> bool; 'lt} } -->
    [wf] sequent [squash] { 'H >- member{'A; 'u1} } -->
    [main] sequent ['ext] { 'H >- partial_order{'A; 'lt} } -->
-   [main] sequent [squash] { 'H >- "assert"{compare_lt{'lt; 'u; 'u1}} } -->
-   [main] sequent [squash] { 'H >- "assert"{bounded{'u1; 'l; 'lt}} } -->
-   sequent ['ext] { 'H >- "assert"{bounded{'u; 'l; 'lt}} }
+   [main] sequent ['ext] { 'H >- compare_lt{'lt; 'u; 'u1} } -->
+   [main] sequent ['ext] { 'H >- bounded{'u1; 'l; 'lt} } -->
+   sequent ['ext] { 'H >- bounded{'u; 'l; 'lt} }
 
 let boundInclusionT t p =
    let goal = Sequent.concl p in
-   let _, l, _ = three_subterms (one_subterm goal) in
+   let _, l, _ =
+      try three_subterms goal with
+         RefineError _ ->
+            raise (RefineError("boundInclusion", StringTermError("not a \"bounded\" term",goal)))
+   in
    let a_type =
       try get_with_arg p with
          RefineError _ ->
-            snd (infer_type p l)
+            try snd (infer_type p l) with
+               RefineError _ ->
+                  raise (RefineError("boundInclusion", StringTermError("can not infer type",l)))
    in
       bounded_inclusion (Sequent.hyp_count_addr p) a_type t p
 
@@ -281,13 +288,13 @@ interactive insert_inclusion 'H 'A :
    [wf] sequent [squash] { 'H >- member{.'A -> 'A -> bool; 'lt} } -->
    [wf] sequent [squash] { 'H >- member{'A; 'u1} } -->
    [main] sequent ['ext] { 'H >- partial_order{'A; 'lt} } -->
-   [main] sequent [squash] { 'H >- "assert"{bnot{compare_lt{'lt; 'u1; 'u}}} } -->
-   [main] sequent [squash] { 'H >- "assert"{bounded{'u; 'l; 'lt}} } -->
-   sequent ['ext] { 'H >- "assert"{bounded{'u; insert{'u1; 'l; 'lt}; 'lt}} }
+   [main] sequent ['ext] { 'H >- not{compare_lt{'lt; 'u1; 'u}} } -->
+   [main] sequent ['ext] { 'H >- bounded{'u; 'l; 'lt} } -->
+   sequent ['ext] { 'H >- bounded{'u; insert{'u1; 'l; 'lt}; 'lt} }
 
 let insertInclusionT p =
    let goal = Sequent.concl p in
-   let u, _, _ = three_subterms (one_subterm goal) in
+   let u, _, _ = three_subterms goal in
    let a_type =
       try get_with_arg p with
          RefineError _ ->
@@ -303,16 +310,16 @@ interactive insert_thm {| intro_resource [IntroArgsOption (infer_type_args, Some
    [wf] sequent [squash] { 'H >- member{list{'A}; 'l} } -->
    [wf] sequent [squash] { 'H >- member{'A; 'u} } -->
    [wf] sequent [squash] { 'H >- member{.'A -> 'A -> bool; 'lt} } -->
-   [wf] sequent [squash] { 'H >- partial_order{'A; 'lt} } -->
-   [main] sequent ['ext] { 'H >- "assert"{sorted{'l; 'lt}} } -->
-   sequent ['ext] { 'H >- "assert"{sorted{insert{'u; 'l; 'lt}; 'lt}} }
+   [wf] sequent ['ext] { 'H >- partial_order{'A; 'lt} } -->
+   [main] sequent ['ext] { 'H >- sorted{'l; 'lt} } -->
+   sequent ['ext] { 'H >- sorted{insert{'u; 'l; 'lt}; 'lt} }
 
 interactive sorted_thm {| intro_resource [IntroArgsOption (infer_type_args, Some << 'l >>)] |} 'H list{'A} :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H >- member{list{'A}; 'l} } -->
    [wf] sequent [squash] { 'H >- member{.'A -> 'A -> bool; 'lt} } -->
-   [wf] sequent [squash] { 'H >- partial_order{'A; 'lt} } -->
-   sequent ['ext] { 'H >- "assert"{sorted{sort{'l; 'lt}; 'lt}} }
+   [wf] sequent ['ext] { 'H >- partial_order{'A; 'lt} } -->
+   sequent ['ext] { 'H >- sorted{sort{'l; 'lt}; 'lt} }
 
 (*
  * -*-

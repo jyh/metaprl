@@ -64,6 +64,7 @@ declare sort{'l; 'lt}
 topval boundInclusionT : term -> tactic
 topval insertInclusionT : tactic
 
+topval fold_compare_lt : conv
 topval fold_bounded : conv
 topval fold_sorted : conv
 topval fold_insert : conv

@@ -461,10 +461,12 @@ dform exists_df2 : mode[prl] :: parens :: "prec"[prec_quant] :: "exists"{'A; x. 
  ************************************************************************)
 
 let true_term = << "true" >>
-let is_true_term t = t = true_term
+let true_opname = opname_of_term true_term
+let is_true_term = is_no_subterms_term true_opname
 
 let false_term = << "false" >>
-let is_false_term t = t = false_term
+let false_opname = opname_of_term false_term
+let is_false_term = is_no_subterms_term false_opname
 
 let all_term = << all x: 'A. 'B['x] >>
 let all_opname = opname_of_term all_term

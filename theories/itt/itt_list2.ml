@@ -380,14 +380,13 @@ dform length_df : except_mode[src] :: length{'l} =
    `"|" slot{'l} `"|"
 
 dform nth_df : except_mode[src] :: nth{'l; 'i} =
-    slot{'l} sub{'i}
+    slot{'l} sub{slot{'i}}
 
 dform replace_nth_df : except_mode[src] :: replace_nth{'l; 'i; 'v} =
    szone `"replace_nth(" pushm[0] slot{'l} `"," hspace slot{'i} `"," hspace slot{'v} `")" popm ezone
 
 dform rev_df : except_mode[src] :: rev{'l} =
    `"rev(" slot{'l} `")"
-
 
 interactive listelim {| elim [] |} 'H :
    sequent { <H>; l: list; <J['l]> >- 'C[nil] } -->
@@ -401,7 +400,6 @@ interactive listelim {| elim [] |} 'H :
 interactive_rw reduce_hd {| reduce |} : hd{cons{'h; 't}} <--> 'h
 
 interactive_rw reduce_tl {| reduce |} : tl{cons{'h; 't}} <--> 't
-
 
 doc <:doc<
    @begin[doc]

@@ -661,13 +661,17 @@ interactive_rw mul_Zero3C 'a :
    ('a in int) -->
    0 <--> (0 *@ 'a)
 
-interactive_rw negative1_2uniC :
+interactive_rw negative1_2uni :
 	('a in int) -->
 	((-1) *@ 'a) <--> (- 'a)
 
 interactive_rw uni2negative1C :
 	('a in int) -->
 	(- 'a) <--> ((-1) *@ 'a)
+
+let resource arith_unfold +=[
+	<<- 'a>>, (uni2negative1C thenC (addrC [0] reduce_minus));
+]
 
 interactive lt_mulPositMonoEq 'c :
    sequent { <H> >- 0 < 'c } -->

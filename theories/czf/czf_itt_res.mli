@@ -16,11 +16,6 @@ axiom member_res 'H :
    sequent ['ext] { 'H >- restricted{z. member{'s1['z]; 's2['z]}} }
 
 (*
- * $Log$
- * Revision 1.1  1998/07/14 15:43:23  jyh
- * Intermediate version with auto tactic.
- *
- *
  * -*-
  * Local Variables:
  * Caml-master: "refiner"

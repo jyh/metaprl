@@ -88,14 +88,6 @@ val eqInnerSymT : tactic
 val eqInnerTransT : term -> tactic
 
 (*
- * $Log$
- * Revision 1.2  1998/07/21 22:45:28  jyh
- * Added NL toploop so that we can compile NL native code.
- *
- * Revision 1.1  1998/07/14 15:43:16  jyh
- * Intermediate version with auto tactic.
- *
- *
  * -*-
  * Local Variables:
  * Caml-master: "refiner"

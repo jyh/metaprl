@@ -59,11 +59,6 @@ let rel_type_term = << "type"{rel{a, b. 'P['a; 'b]; 's1; 's2}} >>
 let d_resource = d_resource.resource_improve d_resource (rel_type_term, d_rel_typeT)
 
 (*
- * $Log$
- * Revision 1.2  1998/07/21 22:45:35  jyh
- * Added NL toploop so that we can compile NL native code.
- *
- *
  * -*-
  * Local Variables:
  * Caml-master: "refiner"

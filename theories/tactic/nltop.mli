@@ -67,11 +67,6 @@ val expr_of_ocaml_expr : top_table -> MLast.expr -> expr
 val expr_of_ocaml_str_item : top_table -> MLast.str_item -> expr
 
 (*
- * $Log$
- * Revision 1.1  1998/07/21 22:47:00  jyh
- * Added NL toploop so that we can compile NL native code.
- *
- *
  * -*-
  * Local Variables:
  * Caml-master: "refiner"

@@ -22,11 +22,6 @@ rewrite unfold_rel : rel{a, b. 'P['a; 'b]; 's1; 's2} <-->
    (dall{'s1; x. dexists{'s2; y. 'P['x; 'y]}} & dall{'s2; y. dexists{'s1; x. 'P['x; 'y]}})
 
 (*
- * $Log$
- * Revision 1.2  1998/07/21 22:45:36  jyh
- * Added NL toploop so that we can compile NL native code.
- *
- *
  * -*-
  * Local Variables:
  * Caml-master: "refiner"

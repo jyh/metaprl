@@ -96,17 +96,6 @@ val smallTypeT : tactic
 val smallAssumT : int -> tactic
 
 (*
- * $Log$
- * Revision 1.3  1998/07/09 21:08:43  jyh
- * Upgraded czf.
- *
- * Revision 1.2  1998/07/08 15:41:53  jyh
- * Pushed higherC into the refiner for efficiency.
- *
- * Revision 1.1  1998/07/06 21:39:26  jyh
- * Working czf_itt_set.
- *
- *
  * -*-
  * Local Variables:
  * Caml-master: "refiner"

@@ -680,11 +680,6 @@ let expr_of_ocaml_expr = mk_expr
 let expr_of_ocaml_str_item = mk_str_item
 
 (*
- * $Log$
- * Revision 1.1  1998/07/21 22:47:00  jyh
- * Added NL toploop so that we can compile NL native code.
- *
- *
  * -*-
  * Local Variables:
  * Caml-master: "refiner"

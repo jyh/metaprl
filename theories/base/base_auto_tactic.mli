@@ -110,14 +110,6 @@ val auto_hyp_progress : (int -> tactic_arg -> bool) -> (int -> tactic) -> auto_t
 val auto_assum_progress : (int -> tactic_arg -> bool) -> (int -> tactic) -> auto_tac
 
 (*
- * $Log$
- * Revision 1.2  1998/07/21 22:45:04  jyh
- * Added NL toploop so that we can compile NL native code.
- *
- * Revision 1.1  1998/07/14 15:42:56  jyh
- * Intermediate version with auto tactic.
- *
- *
  * -*-
  * Local Variables:
  * Caml-master: "refiner"

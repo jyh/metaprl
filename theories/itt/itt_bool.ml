@@ -222,10 +222,7 @@ dform bnot_df : parens :: "prec"[prec_bnot] :: except_mode[src] :: bnot{'a} =
    tneg subb slot{'a}
 
 dform ifthenelse_df : parens :: "prec"[prec_bor] :: except_mode[src] :: ifthenelse{'e1; 'e2; 'e3} =
-   szone pushm[0] pushm[3] `"if" `" " slot{'e1} `" " `"then" hspace
-   szone slot{'e2} ezone popm hspace
-   pushm[3] `"else" hspace
-   szone slot{'e3} ezone popm popm ezone
+   math_if{'e1; 'e2; 'e3}
 
 dform assert_df : parens :: "prec"[prec_assert] :: except_mode[src] :: "assert"{'t} =
    downarrow slot{'t}

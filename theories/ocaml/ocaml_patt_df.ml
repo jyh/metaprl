@@ -330,7 +330,7 @@ dform patt_record_proj_df1 : internal :: patt_format{patt_record_proj{'e1; 'p1};
    patt_format{'p1; cons{'e1; cons{cons{ee{'e2; 'p2}; 'ee}; 'p3}}}
 
 dform patt_record_end_df1 : internal :: patt_format{patt_record_end{'p1}; cons{'p2; cons{'e2; cons{'ee; 'p3}}}} =
-   patt_format{'p1; cons{record{cons{ee{'e2; 'p2}; 'ee}}; 'p3}}
+   patt_format{'p1; cons{record{cons{ee{'e2; 'p2}; 'ee}; none}; 'p3}}
 
 dform patt_record_df2 : internal :: patt_format{patt_record[start:n, finish:n]{'p1}; 'p2} =
    patt_format{patt_record{'p1}; 'p2}
@@ -357,13 +357,13 @@ dform patt_and_df2 : internal :: patt_format{patt_and[start:n, finish:n]{'p1}; '
    patt_format{patt_and{'p1}; 'e1}
 
 dform patt_done_df1 : internal :: patt_format{patt_done; cons{'p; cons{'e; 'el}}} =
-   pushm[0] slot{'p} `" " "=" hspace szone slot{'e} ezone popm
+   pushm[0] slot{'p} `" " "=" hspace szone{'e} popm
 
 dform patt_done_df2 : internal :: patt_format{patt_done[start:n, finish:n]; 'e1} =
    patt_format{patt_done; 'e1}
 
 dform patt_in_df1 : internal :: patt_format{patt_in{'e1}; cons{'p; cons{'e2; 'el}}} =
-   pushm[0] szone slot{'p} ezone `" " "=" hspace szone slot{'e2} ezone popm hspace "_in"
+   pushm[0] szone{'p} `" " "=" hspace szone{'e2} popm hspace "_in"
    szone hspace slot{'e1} ezone
 
 dform patt_in_df2 : internal :: patt_format{patt_in[start:n, finish:n]{'e1}; 'e2} =
@@ -381,11 +381,11 @@ dform patt_fix_and_df2 : internal :: patt_format{patt_fix_and[start:n, finish:n]
    patt_format{patt_fix_and{'p1}; 'p2}
 
 dform patt_fix_arg_df1 : internal :: patt_format{patt_fix_arg{'e1; 'p1}; cons{'p2; 'p3}} =
-   szone pushm[0] slot{'p2} `" " "=" hspace szone slot {'e1} ezone popm ezone
+   szone pushm[0] slot{'p2} `" " "=" hspace szone{'e1} popm ezone
    patt_format{'p1; cons{patt_fix_arg; 'p3}}
 
 dform patt_fix_arg_df2 : internal :: patt_format{patt_fix_arg{'e1; 'p1}; cons{patt_fix_arg; cons{'p2; 'p3}}} =
-   newline szone `"and " pushm[0] slot{'p2} `" " "=" hspace szone slot {'e1} ezone popm ezone
+   newline szone `"and " pushm[0] slot{'p2} `" " "=" hspace szone{'e1} popm ezone
    patt_format{'p1; cons{patt_fix_arg; 'p3}}
 
 dform patt_fix_arg_df3 : internal :: patt_format{patt_fix_arg[start:n, finish:n]{'e1; 'p1}; 'p2} =
@@ -407,7 +407,7 @@ dform patt_if_df1 : internal :: patt_format{patt_if{'pwe}; nil} =
    patt_format{'pwe; nil}
 
 dform patt_with_df1 : internal :: patt_format{patt_with{'e1; 'e2}; 'pwel} =
-   "_with" `" " szone slot{'e1} ezone "->" `" " szone slot{'e2} ezone
+   "_with" `" " szone{'e1} "->" `" " szone{'e2}
    patt_format{'pwel; nil}
 
 dform patt_ifelse_df2 : internal :: patt_format{patt_ifelse{'pwe; 'pwel}; patt_else} =
@@ -417,7 +417,7 @@ dform patt_if_df2 : internal :: patt_format{patt_if{'pwe}; patt_else} =
    hspace "|" `" " szone patt_format{'pwe; nil} ezone
 
 dform patt_body_df1 : internal :: patt_format{patt_body{'e1}; cons{'e2; 'pwel}} =
-   szone slot{'e2} ezone `" " "->" hspace szone slot{'e1} ezone
+   szone{'e2} `" " keyword["->"] hspace szone{'e1}
    patt_format{'pwel; patt_else}
 
 dform patt_ifelse_df3 : internal :: patt_format{patt_ifelse[start:n, finish:n]{'pwe; 'pwel}; 'e} =

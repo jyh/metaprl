@@ -359,31 +359,6 @@ dform dform_modes_df2 : internal :: dform_modes{nil} =
    `""
 
 (*
- * Space the items.
- *)
-declare space_list{'l}
-
-dform space_list_df1 : internal :: space_list{cons{'hd; cons{'tl1; 'tl2}}} =
-   slot{'hd} " " space_list{cons{'tl1; 'tl2}}
-
-dform space_list_df2 : internal :: space_list{cons{'hd; nil}} =
-   slot{'hd}
-
-dform space_list_df2 : internal :: space_list{nil} =
-   `""
-
-declare hspace_list{'l}
-
-dform space_list_df1 : internal :: hspace_list{cons{'hd; cons{'tl1; 'tl2}}} =
-   slot{'hd} hspace hspace_list{cons{'tl1; 'tl2}}
-
-dform space_list_df2 : internal :: hspace_list{cons{'hd; nil}} =
-   slot{'hd}
-
-dform space_list_df2 : internal :: hspace_list{nil} =
-   `""
-
-(*
  * Print term in raw format.
  *)
 declare raw_list{'l}
@@ -406,7 +381,7 @@ dform lines_nil_df : internal :: lines{nil} =
    `""
 
 dform lines_cons_df : internal :: lines{cons{'e1; 'e2}} =
-   newline szone slot{'e1} ezone lines{'e2}
+   newline szone{'e1} lines{'e2}
 
 dform interface_df : "interface"{'body} =
    szone pushm[0]
@@ -432,10 +407,10 @@ declare res_def_list{'res}
 declare resources{'resources}
 
 dform resources_nil_df : internal :: resources{nil} =
-   `""
+   " "
 
 dform resources_cons_df : internal :: resources{cons{'h; 't}} =
-   szone keyword["{| "] pushm res_def_list{cons{'h; 't}} popm keyword[" |} "] ezone
+   hspace szone keyword["{| "] pushm res_def_list{cons{'h; 't}} popm keyword[" |} "] ezone
 
 dform res_def_list_df1 : internal :: res_def_list{cons{'a; nil}} =
    slot{'a}
@@ -454,7 +429,7 @@ dform resource_defs_dfs : internal :: resource_defs[start:n, finish:n, name:s]{'
  *)
 dform rewrite_df : "rewrite"[name:s]{'redex; 'contractum; 'v; 'res} =
    szone pushm[4]
-   ensuremath{'v} info[" rewrite"] " " rewrite_name[name:s] hspace resources{'res} keyword[":"] hspace
+   ensuremath{'v} info[" rewrite"] " " rewrite_name[name:s] resources{'res} keyword[":"] hspace
    szone pushm[4]
    ensuremath{'redex} `" " ensuremath{longleftrightarrow} hspace ensuremath{'contractum}
    popm ezone
@@ -482,7 +457,7 @@ dform term_param_df : "term_param"{'t} =
 
 dform cond_rewrite_df : "cond_rewrite"[name:s]{'params; 'args; 'redex; 'contractum; 'proof; 'res} =
    szone pushm[4]
-   ensuremath{'proof} info[" rewrite"] " " rewrite_name[name:s] " " resources{'res} space_list{'params} keyword[":"] " " ensuremath{'args} " " ensuremath{longrightarrow} hspace
+   ensuremath{'proof} info[" rewrite"] " " rewrite_name[name:s] resources{'res} df_concat{slot[" "];'params} keyword[":"] " " ensuremath{'args} " " ensuremath{longrightarrow} hspace
    szone pushm[4]
    ensuremath{'redex} " " ensuremath{longleftrightarrow} hspace ensuremath{'contractum}
    popm ezone
@@ -490,12 +465,12 @@ dform cond_rewrite_df : "cond_rewrite"[name:s]{'params; 'args; 'redex; 'contract
 
 dform axiom_df : "axiom"[name:s]{'stmt; 'proof; 'res} =
    szone pushm[4]
-   ensuremath{'proof} info[" rule"] " " rule_name[name:s] `" " resources{'res} keyword[":"] hspace ensuremath{'stmt}
+   ensuremath{'proof} info[" rule"] " " rule_name[name:s] resources{'res} keyword[":"] hspace ensuremath{'stmt}
    popm ezone
 
 dform rule_df : "rule"[name:s]{'params; 'stmt; 'proof; 'res} =
    hzone pushm[4]
-   ensuremath{'proof} info[" rule"] " " szone rule_name[name:s] hspace resources{'res} space_list{'params} keyword[":"] ezone hspace ensuremath{'stmt}
+   ensuremath{'proof} info[" rule"] " " szone rule_name[name:s] resources{'res} df_concat{slot[" "];'params} keyword[":"] ezone hspace ensuremath{'stmt}
    ezone popm
 
 dform opname_df : "opname"[name:s]{'term} =
@@ -516,7 +491,7 @@ dform condition_df : "condition"{'term; 'cons; 'oexpr} =
 
 dform mlrewrite_df1 : "mlrewrite"[name:s]{'params; 'redex; 'contracta; 'body; 'res} =
    szone pushm[4]
-   info["mlrewrite"] " " rewrite_name[name:s] " " resources{'res} space_list{'params} keyword[":"] hspace
+   info["mlrewrite"] " " rewrite_name[name:s] " " resources{'res} df_concat{slot[" "];'params} keyword[":"] hspace
    ensuremath{'redex} keyword["="] slot{'body}
    popm ezone
 
@@ -573,7 +548,7 @@ dform dform_df : "dform"[name:s]{'modes; 'redex; 'def} =
    szone pushm[4]
    info["dform"] " " slot[name:s]
    " " keyword[": "] dform_modes{'modes} hspace slot["raw"]{'redex}
-   " " keyword["="] hspace pushm slot{'def} popm
+   " " keyword["="] hspace pushm szone{'def} popm
    ezone popm
 
 (*
@@ -597,14 +572,12 @@ dform id_df : "id"[n:n] =
 dform resource_df : "resource"[name]{'expr} =
    pushm[3] szone
    info["let"] " " info["resource"] " " resource_name[name:s] " " keyword ["="] hspace
-   szone slot{'expr} ezone
-   ezone popm
+   szone{'expr} ezone popm
 
 dform improve_df : "improve"[name]{'expr} =
    pushm[3] szone
    info["let"] " " info["resource"] " " resource_name[name:s] " " keyword ["+="] hspace
-   szone slot{'expr} ezone
-   ezone popm
+   szone{'expr} ezone popm
 
 dform infix_df : "infix"[name:s] =
    info["infix"] " " slot[name:s]
@@ -613,7 +586,7 @@ dform magic_block_df : "magic_block"[name:s]{'items} =
    info["magic_block"] " " slot[name:s] keyword[" ="] space slot{'items}
 
 dform summary_item_df : "summary_item"{'term} =
-   szone slot{'term} ezone
+   szone{'term}
 
 dform df_term_df : df_term{'t} =
    raw_list{'t}
@@ -680,10 +653,10 @@ dform subst_arg_df : internal :: subst_arg{'t} =
    't
 
 dform term_list_arg_df : internal :: term_list_arg{'terms} =
-   space_list{'terms}
+   df_concat{slot[" "];'terms}
 
 dform arglist_df1 : internal :: arglist{'args} =
-   szone pushm space_list{'args} popm ezone
+   szone pushm df_concat{slot[" "];'args} popm ezone
 
 (********************************
  * Proofs.

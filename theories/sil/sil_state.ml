@@ -112,10 +112,9 @@ dform next_loop_df3 : internal :: next_loop{'index; 'l} =
    `"L{" slot{'l} `"+" df_length{'index} `"}"
 
 dform ifthenelse_df : parens :: "prec"[prec_if_eq_label] :: if_eq_label{'e1; 'e2; 'e3; 'e4} =
-   szone pushm[0] pushm[3] keyword["if "] slot{'e1} `" =l" hspace slot{'e2} keyword[" then"] hspace
-   szone slot{'e3} ezone popm hspace
-   pushm[3] keyword["else"] hspace
-   szone slot{'e4} ezone popm popm ezone
+   szone pushm[0] pushm[3] keyword["if "] szone{'e1} `" =l" hspace slot{'e2} keyword[" then"] hspace
+   szone{'e3} popm hspace
+   pushm[3] keyword["else"] hspace szone{'e4} popm popm ezone
 
 (*
  * Store operations.

@@ -26,8 +26,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
- * Author: Jason Hickey
- * jyh@cs.cornell.edu
+ * Author: Jason Hickey <jyh@cs.cornell.edu>
+ * Modified by: Aleksey Nogin <nogin@cs.cornell.edu>
  *)
 
 include Perv
@@ -49,10 +49,14 @@ declare ";"
 declare "\\"
 
 (*
- * Length of a list.
+ * List utilities.
  *)
-declare df_length{'l}
-declare df_last{'l}
+declare df_length{'l}          (* Prints l's length *)
+declare df_last{'l}            (* Prints l's last element *)
+declare df_concat{'sep;'l}     (* Prints l's elements separated by sep *)
+declare df_rev_concat{'sep;'l} (* Same as df_concat, but prints l in reverse order *)
+
+declare szone{'e}
 
 (*
  * -*-

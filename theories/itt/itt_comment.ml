@@ -210,13 +210,12 @@ dform math_assert_df1 : mode[tex] :: math_assert{'a} =
    izone `"}" ezone
 
 dform math_if_df1 : mode[tex] :: math_if{'a; 'b; 'c} =
-   izone `"{\\mathop{\\bf if}" ezone
-   slot{'a}
+   izone `"\\mathop{\\bf if}" ezone
+   szone{'a}
    izone `"\\mathrel{\\bf then}" ezone
-   slot{'b}
+   szone{'b}
    izone `"\\mathrel{\\bf else}" ezone
-   slot{'c}
-   izone `"}" ezone
+   szone{'c}
 
 (************************************************
  * Normal mode.
@@ -245,10 +244,9 @@ dform bnot_df : parens :: "prec"[prec_bnot] :: except_mode[tex] :: math_bnot{'a}
    tneg subb slot{'a}
 
 dform ifthenelse_df : parens :: "prec"[prec_bor] :: except_mode[tex] :: math_if{'e1; 'e2; 'e3} =
-   szone pushm[0] pushm[3] `"if" `" " slot{'e1} `" " `"then" hspace
-   szone slot{'e2} ezone popm hspace
-   pushm[3] `"else" hspace
-   szone slot{'e3} ezone popm popm ezone
+   szone pushm[0] pushm[3] `"if" `" " szone{'e1} `" " `"then" hspace
+   szone{'e2} popm hspace
+   pushm[3] `"else" hspace szone{'e3} popm popm ezone
 
 dform assert_df : parens :: "prec"[prec_assert] :: except_mode[tex] :: math_assert{'t} =
    downarrow slot{'t}

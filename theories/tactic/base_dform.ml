@@ -35,8 +35,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
- * Author: Jason Hickey
- * @email{jyh@cs.caltech.edu}
+ * Author: Jason Hickey @email{jyh@cs.caltech.edu}
+ * Modified by: Aleksey Nogin @email{nogin@cs.cornell.edu}
  *
  * @end[license]
  *)
@@ -84,10 +84,15 @@ declare ";"
 declare "\\"
 
 (*
- * Length of a list.
+ * List helper operations.
  *)
 declare df_length{'l}
 declare df_last{'l}
+declare df_concat{'sep;'l}
+declare df_rev_concat{'sep;'l}
+
+(* same as "szone 'e ezone" *)
+declare szone{'e}
 (* @docoff *)
 
 (*
@@ -476,9 +481,33 @@ dform df_last_df2 : internal :: df_last{cons{'a; nil}} =
    'a
 
 (*
+ * List concatenation
+ *)
+dform df_concat_cons : internal :: df_concat{'sep; cons{'hd; 'tl}} =
+   slot{'hd} slot{'sep} df_concat{'sep;'tl}
+
+dform df_concat_nil : internal :: df_concat{'sep; cons{'hd; nil}} =
+   slot{'hd}
+
+dform df_concat_nil2 : internal :: df_concat{'sep; nil} =
+   `""
+
+(*
+ * List rev_concatenation
+ *)
+dform df_rev_concat_cons : internal :: df_rev_concat{'sep; cons{'hd; 'tl}} =
+   df_rev_concat{'sep; 'tl} slot{'sep} slot{'hd}
+
+dform df_rev_concat_nil : internal :: df_rev_concat{'sep; cons{'hd; nil}} =
+   slot{'hd}
+
+dform df_rev_concat_nil2 : internal :: df_rev_concat{'sep; nil} =
+   `""
+
+(*
  * Perv!bind
  *)
-dform bind_df : bind{x. 'T} =
+dform bind_df : except_mode[src] :: bind{x. 'T} =
    tt["bind"] `"(" slot{'x} `"." slot{'T} `")"
 
 (************************************************************************
@@ -495,6 +524,9 @@ dform left_brack_df : internal :: "[" = `"["
 dform right_brack_df : internal :: "]" = `"]"
 dform semicolon_df : internal :: ";" = `";"
 dform newline_df : internal :: "\\" = \newline
+
+dform szone_df : internal :: szone{'e} =
+   szone slot{'e} ezone
 
 (*
  * -*-

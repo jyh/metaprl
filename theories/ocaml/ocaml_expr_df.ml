@@ -49,7 +49,6 @@ declare se_list{'l}
 declare ee_list{'l}
 declare ee_list'{'l}
 declare e_list{'l}
-declare e_list'{'l}
 
 (*
  * Precedences.
@@ -123,6 +122,7 @@ dform proj_df2 : internal :: "proj"[start:n, finish:n]{'A; 'B} =
  * Application.
  *)
 declare "apply"[lid:s]{'e1; 'e2}
+declare apply_cons_list_parse{'reversed_parsed; 'tail}
 
 dform apply_df1 : parens :: "prec"[prec_apply] :: "apply"{'e1; 'e2} =
    pushm[0] slot{'e1} hspace slot{'e2} popm
@@ -138,6 +138,9 @@ dform apply_df4 : internal :: "apply"{."apply"[start1:n, finish1:n]{.lid[start2:
 
 dform apply_df4 : internal :: "apply"{."apply"[start1:n, finish1:n]{.uid[start2:n, finish2:n]{uid[name:s]}; 'e1}; 'e2} =
    "apply"{."apply"{lid{lid[name:s]}; 'e1}; 'e2}
+
+dform apply_any_df : internal :: "apply"[name:s]{'e1; 'e2} =
+   pushm[0] slot[name:s] hspace slot{'e1} hspace slot{'e2} popm
 
 dform apply_plus_df : internal :: "apply"["+"]{'e1; 'e2} =
    pushm[0] slot{'e1} hspace "+" hspace slot{'e2} popm
@@ -176,10 +179,16 @@ dform apply_gt_df : internal :: "apply"[">"]{'e1; 'e2} =
    pushm[0] slot{'e1} hspace keyword[">"] hspace slot{'e2} popm
 
 dform apply_cons_df : internal :: "apply"["::"]{'e1; 'e2} =
-   pushm[0] `"[" slot{'e1} `"]" popm
+   apply_cons_list_parse{cons{szone{'e1};nil}; 'e2}
 
-dform apply_any_df : internal :: "apply"[name:s]{'e1; 'e2} =
-   pushm[0] slot[name:s] hspace slot{'e1} hspace slot{'e2} popm
+dform apply_cons_parse_df1 : internal :: apply_cons_list_parse{'list;."apply"[start:n,finish:n]{."apply"[start1:n, finish1:n]{.uid[start2:n, finish2:n]{uid["::"]}; 'e1}; 'e2}} =
+   apply_cons_list_parse{cons{szone{'e1};'list};'e2}
+
+dform apply_cons_parse_df2 : internal :: apply_cons_list_parse{'e1; uid[start1:n, finish1:n]{uid["[]"]}} =
+   `"[" pushm[0] df_rev_concat{cons{keyword[";"];hspace};'e1} popm `"]"
+
+dform apply_cons_parse_df3 : internal :: parens :: apply_cons_list_parse{'e1; 'e2} =
+   pushm[0] df_rev_concat{cons{hspace;cons{keyword["::"];hspace}};cons{szone{'e2};'e1}} popm
 
 (*
  * Subscripting.
@@ -218,14 +227,14 @@ dform array_df1 : "array"{'e1} =
 dform stream_df1 : "stream"{'e1} =
    "[<" pushm[0] se_list{'e1} popm ">]"
 
-dform record_df1 : "record"{'e1} =
+dform record_df1 : "record"{'e1; none} =
    "{" pushm[0] ee_list{'e1} popm "}"
+
+dform record_df2 : "record"{'e1; some{'e2}} =
+   "{" pushm[0] szone{'e2} " " keyword["with"] hspace ee_list{'e1} popm "}"
 
 dform tuple_df1 : "tuple"{'e1} =
    "(" pushm[0] e_list{'e1} popm ")"
-
-dform list_df2 : internal :: "list"[start:n, finish:n]{'e1} =
-   "list"{'e1}
 
 dform array_df2 : internal :: "array"[start:n, finish:n]{'e1} =
    "array"{'e1}
@@ -233,8 +242,8 @@ dform array_df2 : internal :: "array"[start:n, finish:n]{'e1} =
 dform stream_df2 : internal :: "stream"[start:n, finish:n]{'e1} =
    "stream"{'e1}
 
-dform record_df2 : internal :: "record"[start:n, finish:n]{'e1} =
-   "record"{'e1}
+dform record_df : internal :: "record"[start:n, finish:n]{'e1; 'e2} =
+   "record"{'e1; 'e2}
 
 dform tuple_df2 : internal :: "tuple"[start:n, finish:n]{'e1} =
    "tuple"{'e1}
@@ -242,11 +251,8 @@ dform tuple_df2 : internal :: "tuple"[start:n, finish:n]{'e1} =
 (*
  * Lists & arrays.
  *)
-dform list_expr_cons_df : internal :: list_expr{cons{'e1; cons{'e2; 'e3}}} =
-   szone slot{'e1} ezone ";" hspace list_expr{cons{'e2; 'e3}}
-
-dform list_expr_nil_df : internal :: list_expr{cons{'e1; nil}} =
-   szone slot{'e1} ezone
+dform list_expr_df : internal :: list_expr{'e} =
+   df_concat{cons{keyword[";"];hspace};'e}
 
 (*
  * Module name.
@@ -272,17 +278,8 @@ dform se_list_cons_df2 : internal :: se_list{cons{cons{'s; 'e}; cons{'e2; 'e3}}}
 (*
  * Tuples.
  *)
-dform e_list_nil_df1 : internal :: e_list{nil} =
-   `""
-
-dform e_list_nil_df2 : internal :: e_list'{nil} =
-   `""
-
-dform e_list_cons_df1 : internal :: e_list{cons{'e1; 'e2}} =
-   slot{'e1} e_list'{'e2}
-
-dform e_list_cons_df2 : internal :: e_list'{cons{'e1; 'e2}} =
-   `"," hspace slot{'e1} e_list'{'e2}
+dform e_list_df : internal :: e_list{'e} =
+   df_concat{cons{keyword[","];hspace}; 'e}
 
 (*
  * Records.
@@ -314,10 +311,9 @@ dform assign_df2 : internal :: assign[start:n, finish:n]{'e1; 'e2} =
  * Conditional.
  *)
 dform ifthenelse_df : parens :: "prec"[prec_if] :: ifthenelse{'e1; 'e2; 'e3} =
-   pushm[0] szone push_indent "_if" `" " slot{'e1} `" " "_then" hspace
-   szone slot{'e2} ezone popm hspace
-   push_indent "_else" hspace
-   szone slot{'e3} ezone popm popm
+   pushm[0] szone push_indent "_if" `" " szone{'e1} `" " "_then" hspace
+   szone{'e2} popm hspace
+   push_indent "_else" hspace szone{'e3} popm popm
 
 dform ifthenelse_df2 : internal :: ifthenelse[start:n, finish:n]{'e1; 'e2; 'e3} =
    ifthenelse{'e1; 'e2; 'e3}

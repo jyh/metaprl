@@ -214,8 +214,7 @@ declare stl{'lst}
 declare type_list_aux{'stll}
 
 dform type_list_df1 : internal :: type_list{cons{'stl; 'stll}} =
-   szone slot{'stl} ezone
-   type_list_aux{'stll}
+   szone{'stl} type_list_aux{'stll}
 
 dform type_list_df2 : internal :: type_list[start:n, finish:n]{'stl} =
    type_list{'stl}
@@ -224,8 +223,7 @@ dform type_list_nil_df1 : internal :: internal :: type_list_aux{nil} =
    `""
 
 dform type_list_cons_df1 : internal :: type_list_aux{cons{'stl; 'stll}} =
-   hspace "|" `" " szone slot{'stl} ezone
-   type_list_aux{'stll}
+   hspace keyword["|"] `" " szone{'stl} type_list_aux{'stll}
 
 dform stl_df1 : internal :: stl{.Ocaml!"string"[name:s]; nil} =
    slot[name:s]

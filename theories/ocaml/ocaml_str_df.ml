@@ -113,7 +113,7 @@ dform str_let_df1 : internal :: str_let{patt_var[s1:n, f1:n]{v. patt_in[s2:n, f2
    (* slot{'v} *) "=" slot{'e}
 
 dform str_let_df2 : internal :: str_let{patt_var[s1:n, f1:n]{f. patt_done[s2:n, f2:n]}; 'p} =
-   pushm[0] "_let" `" " slot{'f} `" " str_let{'p} popm
+   pushm[3] "_let" `" " slot{'f} `" " str_let{'p} popm
 
 dform str_let_df3 : internal :: str_let{."fun"[s3:n, f3:n]{
                               ."patt_if"[s4:n, f4:n]{
@@ -122,15 +122,15 @@ dform str_let_df3 : internal :: str_let{."fun"[s3:n, f3:n]{
    slot{'x} `" " str_let{'p}
 
 dform str_let_df4 : internal :: str_let{'e} =
-   "=" hspace slot{'e}
+   "=" hspace szone{'e}
 
-dform str_let_df5 : internal :: str_let[start:n, finish:n]{str_let[s:n, f:n]{'p; 'e}; 'pel} =
+dform str_let_df5 : internal :: str_let[start:n, finish:n]{cons{str_let[s:n, f:n]{'p; 'e}; 'pel}} =
    szone pushm[0] str_let{'p; 'e}
    and_let{'pel}
    popm ezone
 
 dform and_let_df1 : internal :: and_let{cons{str_let[s:n, f:n]{'p; 'e}; 'pel}} =
-   newline "_and" `" " str_let{'p; 'e}
+   popm newline pushm[3] "_and" `" " str_let{'p; 'e}
    and_let{'pel}
 
 dform and_let_df2 : internal :: and_let{nil} =

@@ -125,6 +125,9 @@ define unfold_lt :
    lt{'a; 'b} <--> "assert"{lt_bool{'a; 'b}}
 (*! @docoff *)
 
+let finishSq2ExT t i =
+   unsquashT t thenT nthAssumT i
+
 (*!
  * @begin[doc]
  * @thysection{Rules and rewrites}
@@ -135,7 +138,7 @@ define unfold_lt :
 (*
  * Integers are canonical.
  *)
-prim int_sqequal 'H :
+prim int_sqequal {| intro_resource [] |} 'H :
    sequent [squash] { 'H >- 'a = 'b in int } -->
    sequent ['ext] { 'H >- 'a ~ 'b } = it
 

@@ -66,6 +66,12 @@ define unfold_lt :
    lt{'a; 'b} <--> "assert"{lt_bool{'a; 'b}}
 
 (*
+ * Useful tactic to prove _rw from ~-rules
+ *)
+
+topval finishSq2ExT : term -> int -> tactic
+
+(*
  * Integers are canonical.
  *)
 rule int_sqequal 'H :

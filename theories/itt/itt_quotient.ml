@@ -325,11 +325,14 @@ let d_resource = Mp_resource.improve d_resource (quotient_term, d_quotientT)
  *)
 let eqcd_quotientT p =
    let count = hyp_count_addr p in
-      (match maybe_new_vars ["r"; "s"; "t"] (declared_vars p) with
-          [r; s; t] ->
-             quotientEquality count r s t
-             thenT addHiddenLabelT "wf"
-        | _ -> failT) p
+   let tac =
+      if get_alt_arg p then
+         let r, s, t = maybe_new_vars3 p "r" "s" "t" in
+         quotientEquality count r s t
+      else
+         let x, y, z, u, v = maybe_new_vars5 p "x" "y" "z" "u" "v" in
+         quotientWeakEquality count x y z u v
+   in (tac thenT addHiddenLabelT "wf") p
 
 let eqcd_resource = Mp_resource.improve eqcd_resource (quotient_term, eqcd_quotientT)
 

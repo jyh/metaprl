@@ -303,10 +303,9 @@ l}$ represents the function with label $l$ in record $R$.
 
 While this representation has an easy formal interpretation as a fixpoint of the single variable
 $R$, it is awkward to use, principally because it violates the rule of higher-order abstract syntax:
-namely, that (function) variables be represented as variables in the meta-language.  In some sense,
-this representation is an artifact of the @MetaPRL term language: it is not possible, given the term
-language described in Section @refsection[terminology], to define more than one recursive variable
-at a time.  We are currently investigating extending the meta-language to address this problem.
+namely, that (function) variables be represented as variables in the meta-language.  We are
+currently investigating the use of @emph{sequents} to represent mutual recursion in order to address
+these problems.
 
 @subsection[m_ir_conv]{AST to IR conversion}
 

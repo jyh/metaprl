@@ -127,8 +127,10 @@ an ML-like language using the @MetaPRL logical framework
 online as part of the Mojave research project @cite[MojaveHome].
 This document is generated from the program sources (@MetaPRL provides
 a form of literate programming), and the complete source code is
-available online at @url["http://metaprl.org/"] as well as in the
-Caltech Technical Report caltechCSTR:2003.002.
+available online at @url["http://metaprl.org/"].
+(*
+as well as in the Caltech Technical Report caltechCSTR:2003.002.
+*)
 
 @subsection[organization]{Organization}
 

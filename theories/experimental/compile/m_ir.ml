@@ -65,6 +65,10 @@ doc <:doc<
 doc <:doc<
    @begin[doc]
    @parents
+
+     Modules in @MetaPRL are organized in a theory hierarchy.  Each theory
+     module extends its parent theories.  In this case, the M_ir module
+     extends base theories that define generic proof automation.
    @end[doc]
 >>
 extends Shell
@@ -78,7 +82,8 @@ open Refiner.Refiner.TermOp
 doc <:doc<
    @begin[doc]
    @terms
-   Binary operators.
+
+   The IR defines several binary operators for arithmetic and Boolean operations.
    @end[doc]
 >>
 declare AddOp
@@ -97,7 +102,7 @@ doc <:doc<
    @begin[doc]
    @modsubsection{Atoms}
 
-   Atoms are values: integers, variables, binary operations
+   Atoms represent expressions that are values: integers, variables, binary operations
    on atoms, and functions.
 
    @tt[AtomFun] is a lambda-abstraction, and @tt[AtomFunVar] is the projection
@@ -117,7 +122,8 @@ doc <:doc<
    @begin[doc]
    @modsubsection{Expressions}
 
-   There are several simple kinds of expressions.
+     General expressions are not values.  There are several simple kinds of expressions,
+     for conditionals, allocation, function calls, and array operations.
    @end[doc]
 >>
 declare LetAtom{'a; v. 'e['v]}
@@ -136,7 +142,12 @@ declare SetSubscript{'a1; 'a2; 'a3; 'e}
 
 doc <:doc<
    @begin[doc]
-   Reserve statements are inserted later in each function header.
+     Reserve statements are used to specify how much memory may be allocated
+     in a function body.  The M_reserve module defines an explicit phase that
+     calculates memory usage and adds reserve statements.  In the << Reserve[words:n]{'args; 'e} >>
+     expressions, the @it[words] constant defines how much memory is to be reserved; the @it[args]
+     defines the set of live variables (this information is used by the garbage collector), and @it[e]
+     is the nested expression that performs the allocation.
    @end[doc]
 >>
 declare Reserve[words:n]{'e}
@@ -145,9 +156,9 @@ declare ReserveCons{'a; 'rest}
 declare ReserveNil
 
 doc <:doc<
-   @begin[doc]
+     @begin[doc]
    @tt[LetApply], @tt[Return] are eliminated during CPS conversion.
-   @tt[LetClosure] is like @tt[LetApply], but it is a partial application.
+   @tt[LetClosure] is like @tt[LetApply], but it represents a partial application.
    @end[doc]
 >>
 declare LetApply{'f; 'a; v. 'e['v]}
@@ -161,11 +172,12 @@ doc <:doc<
    @begin[doc]
    @modsubsection{Recursive values}
 
-   We need some way to represent mutually recursive functions.
-   The normal way to do this is to define a single recursive function,
-   and use a switch to split the different parts.  The method to do this
-   would use a record.  For example, suppose we define two mutually
-   recursive functions $f$ and $g$:
+     We need some way to represent mutually recursive functions.
+     The normal way to do this is to define a single recursive function,
+     and use a switch to split the different parts.  For this purpose, we
+     define a fixpoint over a record of functions.
+     For example, suppose we define two mutually
+     recursive functions $f$ and $g$:
 
    @begin[verbatim]
    let r2 = fix{r1. record{
@@ -179,13 +191,13 @@ doc <:doc<
 declare LetRec{R1. 'e1['R1]; R2. 'e2['R2]}
 
 doc <:doc<
-   @begin[doc]
-   Records have a set of tagged fields.
-   We require that all the fields be functions.
+     @begin[doc]
+     The following terms define the set of tagged fields used in the record definition.
+     We require that all the fields be functions.
 
-   The record construction is recursive.  The @tt[Label] term is used for
-   field tags; the @tt[FunDef] defines a new field in the record; and the
-   @tt[EndDef] term terminates the record fields.
+     The record construction is recursive.  The @tt[Label] term is used for
+     field tags; the @tt[FunDef] defines a new field in the record; and the
+     @tt[EndDef] term terminates the record fields.
    @end[doc]
 >>
 declare Fields{'fields}
@@ -214,7 +226,7 @@ doc <:doc<
       <<sequent{ <declarations>; <definitions> >- exp }>>
 
    For now the language is untyped, so each declaration
-   has the form @tt["v: exp"].  A definition is an equality judgment.
+   has the form @tt["v = exp"].  A definition is an equality judgment.
    @end[doc]
 >>
 declare exp
@@ -249,7 +261,7 @@ prec prec_fun < prec_if
 prec prec_comma < prec_fun
 prec prec_compilable < prec_comma
 
-doc <:doc< @doc{Some convenient keywords (used in only display forms and do not have a formal meaning).} >>
+doc <:doc< Some convenient keywords (used in only display forms and do not have a formal meaning). >>
 declare xlet
 declare xin
 doc <:doc< @docoff >>
@@ -359,7 +371,7 @@ dform reserve_cons_df2 : parens :: "prec"[prec_comma] :: ReserveCons{'a; ArgNil}
 dform reserve_nil_df : parens :: "prec"[prec_comma] :: ReserveNil =
    `""
 
-doc <:doc< @doc{Sequent tag for the M language.} >>
+doc <:doc< Sequent tag for the M language. >>
 
 declare sequent_arg
 
@@ -372,10 +384,8 @@ declare default_extract
 dform default_extract_df : sequent { <H> >- default_extract } = `""
 
 doc <:doc<
-   @begin[doc]
    @modsubsection{Subscripting.}
    Tuples are listed in reverse order.
-   @end[doc]
 >>
 declare alloc_tuple{'l1; 'l2}
 declare alloc_tuple{'l}

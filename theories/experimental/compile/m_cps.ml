@@ -6,7 +6,12 @@ doc <:doc<
    @begin[doc]
    @module[M_cps]
 
-   CPS conversion for the M language.
+     CPS conversion uses a method similar to that presented in Danvy and Fellinski @cite[DF92].
+     However, there are two significant differences.  First, instead of using normal and administrative
+     redices, we use second-order notation for the administrative redices (in other words, the administrative
+     redices are coded in the meta-language).  Second, we define the transformations in CPS so that
+     preservation of program semantics is easy to verify.  This represents only a small change to the
+     transformation.
    @end[doc]
 
    ----------------------------------------------------------------
@@ -35,7 +40,9 @@ doc <:doc<
 
 doc <:doc<
    @begin[doc]
-   @parents
+     @parents
+
+     CPS conversion is a direct logical extension of the IR language.
    @end[doc]
 >>
 extends M_ir
@@ -69,7 +76,6 @@ doc <:doc<
    The implementation of the @tt[cps] resource and the @tt[cpsC]
    conversion rely on tables to store the shape of redices, together with the
    conversions for the reduction.
-
    @end[doc]
    @docoff
 >>
@@ -94,8 +100,10 @@ doc <:doc<
    @begin[doc]
    @modsubsection{Application}
 
-   Add an application that we will map through the program.
-   This should be eliminated by the end of CPS conversion.
+     CPS conversion is formalized by adding @tt[CPS] terms that
+     represent applications.  The CPS conversion is defined
+     as a transformation that maps these applications to a
+     term that is the result of a CPS transformation.
 
    @begin[itemize]
    @item{<<CPSRecordVar{'R}>> represents the application of the record $R$ to
@@ -149,7 +157,7 @@ doc <:doc<
    @begin[doc]
    @modsubsection{Formalizing CPS conversion}
 
-   CPS conversion work by transformation of function application.
+   CPS conversion is specified as a transformation of function application.
    Each rewrite in the transformation preserves the operational
    semantics of the program.
 
@@ -196,7 +204,9 @@ prim_rw cps_length {| cps |} : CPS{Length[i:n]} <-->
 
 doc <:doc<
    @begin[doc]
-   CPS transformation for expressions.
+     CPS transformation for expressions.  In the following cases, the
+     transformation is defined by the CPS conversion of the subterms.
+     In other words, CPS conversion commutes with the following terms.
    @end[doc]
 >>
 prim_rw cps_let_atom {| cps |} : CPS{'cont; LetAtom{'a; v. 'e['v]}} <-->
@@ -235,9 +245,10 @@ prim_rw cps_let_apply {| cps |} :
           TailCall{AtomVar{'f}; ArgCons{AtomVar{'g}; ArgCons{CPS{'a2}; ArgNil}}}}}
 
 doc <:doc<
-   @begin[doc]
-   Converting functions is the hard part.
-   @end[doc]
+     @begin[doc]
+     The following rules specify CPS transformation of functions and application
+     expressions.
+     @end[doc]
 >>
 prim_rw cps_let_rec {| cps |} : CPS{'cont; LetRec{R1. 'fields['R1]; R2. 'e['R2]}} <-->
    LetRec{R1. CPS{cont. CPS{'cont; 'fields[CPSRecordVar{'R1}]}};
@@ -269,9 +280,10 @@ prim_rw cps_fun_var_cleanup {| cps |} :
 doc <:doc< @docoff >>
 
 doc <:doc<
-   @begin[doc]
-   The program is compilable if the CPS version is compilable.
-   @end[doc]
+     @begin[doc]
+     CPS conversion is specified as a proof rule: a program is ``compilable''
+     if the CPS conversion of the program is also compilable.
+     @end[doc]
 >>
 prim cps_prog :
    sequent { <H>; cont: exp >-

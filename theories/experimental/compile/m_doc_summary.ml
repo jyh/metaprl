@@ -91,6 +91,19 @@ programming languages. We are currently working on the ...
 ... compare with CPS...
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+JYH: is this appropriate?
+
+We are currently working on the construction of a compiler for a @emph{typed} language, using
+sequent notation to address the problem of retaining higher order abstract syntax in the definition
+of mutually recursive functions.
+
+JYH: does this belong here?
+
+Or formalization of CPS conversion is nearly identical to CPS conversion as defined by Danvy and
+Fellinski @cite[DF92].  Our account differs slightly because it is intended to preserve program
+semantics during all steps of CPS conversion.
+
 Unfinished
 
 @section["related-work"]{Related work}

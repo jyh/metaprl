@@ -115,22 +115,24 @@ interactive dom_monotone  {| intro[] |}:
    sequent { <H> >- dom{'S} subtype dom{'T} }
 
 define dest_lambda: dest_lambda{'bt; body.'match_case['body]; 'orelse} <-->
-   if is_same_op{lambda_term;'bt} then
+   if Itt_synt_operator!is_same_op{lambda_term; op_of{'bt}} then
        list_ind{subterms{'bt}; it; h,t,"_". 'match_case['h]}
    else
       'orelse
 
 define dest_app: dest_app{'bt; f,a.'match_case['f;'a]; 'orelse} <-->
-   if is_same_op{app_term;'bt} then
+   if Itt_synt_operator!is_same_op{app_term; op_of{'bt}} then
       list_ind{subterms{'bt}; it; h1,t,"_".
          list_ind{'t;        it; h2,t,"_". 'match_case['h1;'h2]}}
    else
       'orelse
 
 interactive_rw dest_app_reduce {| reduce |}:
+   (('t,'s) in dom_app{top; top}) -->
    dest_app{mk_app ('t,'s); x,y.'a['x;'y]; 'b} <--> 'a['t;'s]
 
 interactive_rw dest_lambda_reduce {| reduce |}:
+   ('t in dom_lambda{top}) -->
    dest_lambda{mk_lambda 't; x.'a['x]; 'b} <--> 'a['t]
 
 interactive_rw dest_app_reduce2 {| reduce |}:

@@ -143,11 +143,6 @@ doc <:doc< @begin[doc]
 define unfold_compatible_shapes: compatible_shapes{'op; 'btl} <-->
       length{shape{'op}} = length{'btl} in int &
       all i:Index{'btl}. bdepth{nth{'btl;'i}} =  op_bdepth{'op} +@ nth{shape{'op};'i} in int
-
-interactive compatible_shapes_wf {| intro [] |} :
-   sequent { <H> >- length{shape{'op}} = length{'btl} in int } -->
-   sequent { <H> >- all i:Index{'btl}. bdepth{nth{'btl;'i}} =  op_bdepth{'op} +@ nth{shape{'op};'i} in int } -->
-   sequent { <H> >- compatible_shapes{'op; 'btl} }
 doc docoff
 
 dform compatible_shapes_df: compatible_shapes{'op;'btl} = `"compatible_shapes(" slot{'op} `";" slot{'btl} `")"
@@ -207,6 +202,16 @@ interactive bdepth_wf {| intro[] |} :
 interactive bdepth_wf2 {| intro[] |} :
    sequent { <H> >- 'bt in BTerm } -->
    sequent { <H> >- bdepth{'bt} in int }
+
+interactive compatible_shapes_wf {| intro [] |} :
+   sequent { <H> >- 'op in BOperator } -->
+   sequent { <H> >- 'btl in list{BTerm} } -->
+   sequent { <H> >- compatible_shapes{'op; 'btl} Type }
+
+interactive compatible_shapes_intro {| intro [] |} :
+   sequent { <H> >- length{shape{'op}} = length{'btl} in int } -->
+   sequent { <H> >- all i:Index{'btl}. bdepth{nth{'btl;'i}} =  op_bdepth{'op} +@ nth{shape{'op};'i} in int } -->
+   sequent { <H> >- compatible_shapes{'op; 'btl} }
 
 interactive var_subtype {| intro [] |} :
    sequent { <H> >- Var subtype BTerm }
@@ -557,6 +562,12 @@ interactive same_op_trans 'b2:
    sequent { <H> >- same_op{'b1; 'b2} } -->
    sequent { <H> >- same_op{'b2; 'b3} } -->
    sequent { <H> >- same_op{'b1; 'b3} }
+
+interactive_rw is_same_op_make_bterm :
+   ('op in BOperator) -->
+   ('btl in list{BTerm}) -->
+   (compatible_shapes{'op; 'btl}) -->
+   Itt_synt_operator!is_same_op{op_of{make_bterm{'op; 'btl}}; 'op} <--> btrue
 doc docoff
 
 let sameOpSymT = same_op_sym

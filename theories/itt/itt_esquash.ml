@@ -75,16 +75,16 @@ interactive esquash_bool_type {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- "type"{esquash_bool{'P}} }
 
 interactive esquash_bool_univ {| intro_resource [] |} 'H :
-   [wf] sequent [squash] { 'H >- member{univ[i:l]; 'P} } -->
-   sequent ['ext] { 'H >- member{univ[i:l]; esquash_bool{'P}} }
+   [wf] sequent [squash] { 'H >- 'P IN univ[i:l] } -->
+   sequent ['ext] { 'H >- esquash_bool{'P} IN univ[i:l] }
 
 interactive esquash_bool_true {| intro_resource [] |} 'H :
    [wf] sequent [squash] { 'H >- "type"{'P} } -->
-   sequent ['ext] { 'H >- member{esquash_bool{'P}; btrue} }
+   sequent ['ext] { 'H >- btrue IN esquash_bool{'P} }
 
 interactive esquash_bool_false {| intro_resource [] |} 'H :
    [wf] sequent [squash] { 'H >- "type"{'P} } -->
-   sequent ['ext] { 'H >- member{esquash_bool{'P}; bfalse} }
+   sequent ['ext] { 'H >- bfalse IN esquash_bool{'P} }
 
 (*
  * Typehood.
@@ -94,8 +94,8 @@ interactive esquash_type {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- "type"{esquash{'P}} }
 
 interactive esquash_univ {| intro_resource [] |} 'H :
-   [wf] sequent [squash] { 'H >- member{univ[i:l]; 'P} } -->
-   sequent ['ext] { 'H >- member{univ[i:l]; esquash{'P}} }
+   [wf] sequent [squash] { 'H >- 'P IN univ[i:l] } -->
+   sequent ['ext] { 'H >- esquash{'P} IN univ[i:l] }
 
 (*
  * Introduction is not safe enough to add to the
@@ -115,10 +115,6 @@ interactive esquash_equal_elim 'H 'J :
    [main] sequent [squash] { 'H; x: 'P1; 'J[it] >- 't1[it] = 't2[it] in 'T3[it] } -->
    sequent ['ext] { 'H; x: esquash{'P1}; 'J['x] >- 't1['x] = 't2['x] in 'T3['x] }
 
-interactive esquash_member_elim 'H 'J :
-   [main] sequent [squash] { 'H; x: 'P1; 'J[it] >- member{'T3[it]; 't1[it]} } -->
-   sequent ['ext] { 'H; x: esquash{'P1}; 'J['x] >- member{'T3['x]; 't1['x]} }
-
 interactive esquash_void_elim 'H 'J :
    [main] sequent [squash] { 'H; x: 'P1; 'J[it] >- void } -->
    sequent ['ext] { 'H; x: esquash{'P1}; 'J['x] >- void }
@@ -132,8 +128,6 @@ let d_esquash_elim i p =
    let j, k = Sequent.hyp_indices p i in
       if is_equal_term goal then
          esquash_equal_elim j k p
-      else if is_member_term goal then
-         esquash_member_elim j k p
       else if is_void_term goal then
          esquash_void_elim j k p
       else
@@ -144,10 +138,6 @@ let elim_resource = Mp_resource.improve elim_resource (<< esquash{'P} >>, d_esqu
 interactive esquash_equal_elim2 {| elim_resource [] |} 'H 'J :
    sequent ['ext] { 'H; x: ('t1 = 't2 in 'T3); 'J[it] >- 'C[it] } -->
    sequent ['ext] { 'H; x: esquash{.'t1 = 't2 in 'T3}; 'J['x] >- 'C['x] }
-
-interactive esquash_member_elim2 {| elim_resource [] |} 'H 'J :
-   sequent ['ext] { 'H; x: member{'T; 't}; 'J[it] >- 'C[it] } -->
-   sequent ['ext] { 'H; x: esquash{member{'T; 't}}; 'J['x] >- 'C['x] }
 
 interactive esquash_void_elim2 {| elim_resource [] |} 'H 'J :
    sequent ['ext] { 'H; x: esquash{void}; 'J['x] >- 'C['x] }
@@ -164,8 +154,8 @@ interactive esquash_esquash_elim2 {| elim_resource [] |} 'H 'J :
  * Equality is extensional.
  *)
 interactive esquash_equal_intro {| intro_resource [] |} 'H 'x :
-   [wf] sequent [squash] { 'H >- member{univ[i:l]; 'P1} } -->
-   [wf] sequent [squash] { 'H >- member{univ[i:l]; 'P2} } -->
+   [wf] sequent [squash] { 'H >- 'P1 IN univ[i:l] } -->
+   [wf] sequent [squash] { 'H >- 'P2 IN univ[i:l] } -->
    [main] sequent [squash] { 'H; x: 'P1 >- 'P2 } -->
    [main] sequent [squash] { 'H; x: 'P2 >- 'P1 } -->
    sequent ['ext] { 'H >- esquash{'P1} = esquash{'P2} in univ[i:l] }

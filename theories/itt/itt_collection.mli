@@ -22,13 +22,12 @@ topval revHypSubstT : int -> int -> tactic
 
 topval unhideT : int -> tactic
 topval reverseT : tactic
-topval  cutMemberT:  term -> tactic
-topval  cutMember1T :  term -> tactic
+topval cutMemberT:  term -> tactic
+topval cutMember1T :  term -> tactic
 topval useAssumptionT : int -> tactic
-topval memberTypeT : term -> tactic
 topval autoRT : tactic
-topval univTypeT : term -> tactic
-topval  equalRefComplT : term -> tactic
+topval memberTypeT : term -> tactic
+topval equalRefComplT : term -> tactic
 
 topval mem_col_memT : term -> tactic
 

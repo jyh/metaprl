@@ -83,11 +83,6 @@ interactive bisectEquality {| intro_resource []; eqcd_resource |} 'H :
    [wf] sequent [squash] { 'H >- 'B1 = 'B2 in univ[i:l] } -->
    sequent ['ext] { 'H >- bisect{'A1; 'B1} = bisect{'A2; 'B2} in univ[i:l] }
 
-interactive bisectMember {| intro_resource [] |} 'H :
-   [wf] sequent [squash] { 'H >- member{univ[i:l]; 'A} } -->
-   [wf] sequent [squash] { 'H >- member{univ[i:l]; 'B} } -->
-   sequent ['ext] { 'H >- member{univ[i:l]; bisect{'A; 'B}} }
-
 interactive bisectType {| intro_resource [] |} 'H :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H >- "type"{'B} } -->
@@ -108,11 +103,6 @@ interactive bisectMemberEquality {| intro_resource []; eqcd_resource |} 'H :
    [wf] sequent [squash] { 'H >- 'x = 'y in 'A } -->
    [wf] sequent [squash] { 'H >- 'x = 'y in 'B } -->
    sequent ['ext] { 'H >- 'x = 'y in bisect{'A; 'B} }
-
-interactive bisectMemberMember {| intro_resource [] |} 'H :
-   [wf] sequent [squash] { 'H >- member{'A; 'x} } -->
-   [wf] sequent [squash] { 'H >- member{'B; 'x} } -->
-   sequent ['ext] { 'H >- member{bisect{'A; 'B}; 'x} }
 
 (*
  * Elimination.

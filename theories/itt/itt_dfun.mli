@@ -56,7 +56,7 @@ rewrite unfold_dfun : (x: 'A -> 'B['x]) <--> ({ f | x: 'A -> 'B['x] })
  * H, a: A >- Ui ext B
  *)
 rule functionFormation 'H 'a 'A :
-   sequent [squash] { 'H >- member{univ[i:l]; 'A} } -->
+   sequent [squash] { 'H >- 'A IN univ[i:l] } -->
    sequent ['ext] { 'H; a: 'A >- univ[i:l] } -->
    sequent ['ext] { 'H >- univ[i:l] }
 
@@ -128,7 +128,7 @@ rule functionExtensionality 'H (y:'C -> 'D['y]) (z:'E -> 'F['z]) 'u :
  * H, f: (x:A -> B), J[x], y: B[a], v: y = f(a) in B[a] >- T[f] ext t[f, y, v]
  *)
 rule functionElimination 'H 'J 'f 'a 'y 'v :
-   sequent [squash] { 'H; f: x:'A -> 'B['x]; 'J['f] >- member{'A; 'a} } -->
+   sequent [squash] { 'H; f: x:'A -> 'B['x]; 'J['f] >- 'a IN 'A } -->
    sequent ['ext] { 'H; f: x:'A -> 'B['x]; 'J['f]; y: 'B['a]; v: 'y = ('f 'a) in 'B['a] >- 'T['f] } -->
    sequent ['ext] { 'H; f: x:'A -> 'B['x]; 'J['f] >- 'T['f] }
 
@@ -144,13 +144,7 @@ rule applyEquality 'H (x:'A -> 'B['x]) :
    sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
    sequent ['ext] { 'H >- ('f1 'a1) = ('f2 'a2) in 'B['a1] }
 
-rule applyMember 'H (x:'A -> 'B['x]) :
-   sequent [squash] { 'H >- member{. x:'A -> 'B['x]; 'f1} } -->
-   sequent [squash] { 'H >- member{'A; 'a1} } -->
-   sequent ['ext] { 'H >- member{'B['a1]; .'f1 'a1} }
-
 topval applyEquality' : term -> tactic
-topval applyMember' : term -> tactic
 
 (*
  * H >- a1:A1 -> B1 <= a2:A2 -> B2

@@ -80,7 +80,7 @@ rule intersectionType 'H 'y :
    sequent ['ext] { 'H >- "type"{."isect"{'A; x. 'B['x]}} }
 
 rule topUniv 'H :
-   sequent ['ext] { 'H >- member{univ[i:l]; top} }
+   sequent ['ext] { 'H >- top IN univ[i:l] }
 
 rule topType 'H :
    sequent ['ext] { 'H >- "type"{top} }

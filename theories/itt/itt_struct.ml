@@ -94,7 +94,7 @@ prim hypothesis 'H 'J 'x :
  * by thin
  * H, J >- A ext t
  *)
-prim thin 'H 'J : 
+prim thin 'H 'J :
    ('t : sequent ['ext] { 'H; 'J >- 'C }) -->
    sequent ['ext] { 'H; x: 'A; 'J >- 'C } =
    't
@@ -126,7 +126,7 @@ interactive dup 'H :
  * H >- t = t in T
  *)
 prim introduction 'H 't :
-   [wf] sequent [squash] { 'H >- member{'T; 't} } -->
+   [wf] sequent [squash] { 'H >- 't IN 'T } -->
    sequent ['ext] { 'H >- 'T } =
    't
 
@@ -208,7 +208,7 @@ let assertT s p =
    let v = maybe_new_vars1 p "v" in
       cut j k s v p
 
-let tryAssertT s ta tm p = 
+let tryAssertT s ta tm p =
    let concl = Sequent.concl p in
    if alpha_equal s concl then ta p else
       (assertT s thenLT [ta;tm]) p

@@ -107,11 +107,6 @@ prim intersectionEquality {| intro_resource []; eqcd_resource |} 'H 'y :
    sequent ['ext] { 'H >- isect x1: 'A1. 'B1['x1] = isect x2: 'A2. 'B2['x2] in univ[i:l] } =
    it
 
-interactive intersectionMember {| intro_resource [] |} 'H 'y :
-   [wf] sequent [squash] { 'H >- member{univ[i:l]; 'A1} } -->
-   [wf] sequent [squash] { 'H; y: 'A1 >- member{univ[i:l]; 'B1['y]} } -->
-   sequent ['ext] { 'H >- member{univ[i:l]; .isect x1: 'A1. 'B1['x1]} }
-
 prim intersectionType {| intro_resource [] |} 'H 'y :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
@@ -119,7 +114,7 @@ prim intersectionType {| intro_resource [] |} 'H 'y :
    it
 
 interactive topUniv {| intro_resource [] |} 'H :
-   sequent ['ext] { 'H >- member{univ[i:l]; top} }
+   sequent ['ext] { 'H >- top IN univ[i:l] }
 
 interactive topType {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- "type"{top} }
@@ -148,17 +143,8 @@ prim intersectionMemberEquality {| intro_resource []; eqcd_resource |} 'H 'z :
    sequent ['ext] { 'H >- 'b1 = 'b2 in isect x: 'A. 'B['x] } =
    it
 
-prim intersectionMemberMember {| intro_resource [] |} 'H 'z :
-   [wf] sequent [squash] { 'H >- "type"{'A} } -->
-   [wf] sequent [squash] { 'H; z: 'A >- member{'B['z]; 'b1} } -->
-   sequent ['ext] { 'H >- member{.isect x: 'A. 'B['x]; 'b1} } =
-   it
-
 interactive topMemberEquality {| intro_resource []; eqcd_resource |} 'H :
    sequent ['ext] { 'H >- 'b1 = 'b2 in top }
-
-interactive topMemberMember {| intro_resource [] |} 'H :
-   sequent ['ext] { 'H >- member{top; 'b1} }
 
 (*
  * H >- b1 = b2 in B[a]

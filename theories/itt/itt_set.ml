@@ -121,11 +121,6 @@ prim setEquality {| intro_resource []; eqcd_resource |} 'H 'x :
    [wf] sequent [squash] { 'H; x: 'A1 >- 'B1['x] = 'B2['x] in univ[i:l] } -->
    sequent ['ext] { 'H >- { a1:'A1 | 'B1['a1] } = { a2:'A2 | 'B2['a2] } in univ[i:l] } = it
 
-interactive setMember {| intro_resource [] |} 'H 'x :
-   [wf] sequent [squash] { 'H >- member{univ[i:l]; 'A1} } -->
-   [wf] sequent [squash] { 'H; x: 'A1 >- member{univ[i:l]; 'B1['x]} } -->
-   sequent ['ext] { 'H >- member{univ[i:l]; .{ a1:'A1 | 'B1['a1] }} }
-
 prim setType {| intro_resource [] |} 'H 'x :
    [wf] sequent [squash] { 'H >- "type"{'A1} } -->
    [wf] sequent [squash] { 'H; x: 'A1 >- "type"{'B1['x]} } -->
@@ -162,12 +157,6 @@ prim setMemberEquality {| intro_resource []; eqcd_resource |} 'H 'x :
    sequent ['ext] { 'H >- 'a1 = 'a2 in { a:'A | 'B['a] } } =
    it
 
-interactive setMemberMember {| intro_resource [] |} 'H 'x :
-   [wf] sequent [squash] { 'H >- member{'A; 'a1} } -->
-   [assertion] sequent [squash] { 'H >- 'B['a1] } -->
-   [wf] sequent [squash] { 'H; x: 'A >- "type"{'B['x]} } -->
-   sequent ['ext] { 'H >- member{.{ a:'A | 'B['a] }; 'a1} }
-
 (*
  * H, u: { x:A | B }, J[u] >> T[u] ext t[y]
  * by setElimination2 y v z
@@ -199,10 +188,6 @@ prim unhideGoalEqual 'H 'J 'u :
    sequent ['ext] { 'H; u: hide{'P}; 'J['u] >- 'x['u] = 'y['u] in 'T['u] } =
    it
 
-interactive unhideGoalMember 'H 'J 'u :
-   sequent [squash] { 'H; u: 'P; 'J['u] >- member{'T['u]; 'x['u]} } -->
-   sequent ['ext] { 'H; u: hide{'P}; 'J['u] >- member{'T['u]; 'x['u]} }
-
 (************************************************************************
  * TACTICS                                                              *
  ************************************************************************)
@@ -222,10 +207,8 @@ let unhideT i p =
    let j, k = Sequent.hyp_indices p i in
       if is_equal_term t then
          unhideEqual j k u p
-      else if is_equal_term (Sequent.concl p) then
+      else (* if is_equal_term (Sequent.concl p) then *)
          unhideGoalEqual j k u p
-      else
-         unhideGoalMember j k u p
 
 (************************************************************************
  * TYPE INFERENCE                                                       *

@@ -190,10 +190,6 @@ prim listEquality {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- list{'A} = list{'B} in univ[i:l] } =
    it
 
-interactive listMember {| intro_resource [] |} 'H :
-   [wf] sequent [squash] { 'H >- member{univ[i:l]; 'A} } -->
-   sequent ['ext] { 'H >- member{univ[i:l]; list{'A}} }
-
 (*
  * H >- list(A) ext nil
  * by nilFormation
@@ -213,12 +209,8 @@ prim nilFormation {| intro_resource [] |} 'H :
  *)
 prim nilEquality {| intro_resource [] |} 'H :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
-   sequent ['ext] { 'H >- nil = nil in list{'A} } =
+   sequent ['ext] { 'H >- nil IN list{'A} } =
    it
-
-interactive nilMember {| intro_resource [] |} 'H :
-   [wf] sequent [squash] { 'H >- "type"{'A} } -->
-   sequent ['ext] { 'H >- member{list{'A}; nil} }
 
 (*
  * H >- list(A) ext cons(h; t)
@@ -245,11 +237,6 @@ prim consEquality {| intro_resource []; eqcd_resource |} 'H :
    [wf] sequent [squash] { 'H >- 'v1 = 'v2 in list{'A} } -->
    sequent ['ext] { 'H >- cons{'u1; 'v1} = cons{'u2; 'v2} in list{'A} } =
    it
-
-interactive consMember {| intro_resource [] |} 'H :
-   [wf] sequent [squash] { 'H >- member{'A; 'u1} } -->
-   [wf] sequent [squash] { 'H >- member{list{'A}; 'v1} } -->
-   sequent ['ext] { 'H >- member{list{'A}; cons{'u1; 'v1}} }
 
 (*
  * H; l: list(A); J[l] >- C[l]
@@ -286,14 +273,6 @@ prim list_indEquality {| intro_resource []; eqcd_resource |} 'H lambda{l. 'T['l]
                    in 'T['e1]
            } =
    it
-
-interactive list_indMember {| intro_resource [] |} 'H lambda{l. 'T['l]} list{'A} 'u 'v 'w :
-   [wf] sequent [squash] { 'H >- member{list{'A}; 'e1} } -->
-   [wf] sequent [squash] { 'H >- member{'T[nil]; 'base1} } -->
-   [wf] sequent [squash] { 'H; u: 'A; v: list{'A}; w: 'T['v] >-
-             member{'T['u::'v]; 'step1['u; 'v; 'w]}
-           } -->
-   sequent ['ext] { 'H >- member{'T['e1]; list_ind{'e1; 'base1; u1, v1, z1. 'step1['u1; 'v1; 'z1]}} }
 
 (*
  * Nil is canonical.
@@ -385,7 +364,7 @@ let inf_list_ind inf consts decls eqs opt_eqs defs t =
    let e, base, hd, tl, f, step = dest_list_ind t in
    let eqs', opt_eqs', defs', e' = inf consts decls eqs opt_eqs defs e in
    let t = Typeinf.vnewname consts defs' "T" in
-      inf consts decls eqs' 
+      inf consts decls eqs'
           ((mk_list_term (mk_var_term t),e)::opt_eqs') ((t,<<void>>)::defs') base
 
 let typeinf_resource = Mp_resource.improve typeinf_resource (list_ind_term, inf_list_ind)

@@ -188,10 +188,10 @@ interactive two_type {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- "type"{two} }
 
 interactive left_member {| intro_resource [] |} 'H :
-   sequent ['ext] { 'H >- member{two; left} }
+   sequent ['ext] { 'H >- left IN two }
 
 interactive right_member {| intro_resource [] |} 'H :
-   sequent ['ext] { 'H >- member{two; right} }
+   sequent ['ext] { 'H >- right IN two }
 
 interactive two_elim {| elim_resource [ThinOption thinT] |} 'H 'J :
    [main] sequent ['ext] { 'H; x: two; 'J[left] >- 'C[left] } -->
@@ -213,9 +213,9 @@ interactive productEquality {| intro_resource []; eqcd_resource |} 'H 'y :
    sequent ['ext] { 'H >- x1:'A1 * 'B1['x1] = x2:'A2 * 'B2['x2] in univ[i:l] }
 
 interactive productMember {| intro_resource [] |} 'H 'y :
-   [wf] sequent [squash] { 'H >- member{univ[i:l]; 'A} } -->
-   [wf] sequent [squash] { 'H; y: 'A >- member{univ[i:l]; 'B['y]} } -->
-   sequent ['ext] { 'H >- member{univ[i:l]; .x:'A * 'B['x]} }
+   [wf] sequent [squash] { 'H >- 'A IN univ[i:l] } -->
+   [wf] sequent [squash] { 'H; y: 'A >- 'B['y] IN univ[i:l] } -->
+   sequent ['ext] { 'H >- (x:'A * 'B['x]) IN univ[i:l] }
 
 (*
  * H >- Ui ext x:A * B
@@ -224,7 +224,7 @@ interactive productMember {| intro_resource [] |} 'H 'y :
  * H, x:A >- Ui ext B
  *)
 interactive productFormation 'H 'A 'x :
-   [wf] sequent [squash] { 'H >- member{univ[i:l]; 'A} } -->
+   [wf] sequent [squash] { 'H >- 'A IN univ[i:l] } -->
    [main] ('B['x] : sequent ['ext] { 'H; x: 'A >- univ[i:l] }) -->
    sequent ['ext] { 'H >- univ[i:l] }
 
@@ -243,8 +243,8 @@ interactive productType {| intro_resource [] |} 'H 'x :
  * H >- B[a] ext b
  * H, y:A >- B[y] = B[y] in Ui
  *)
-interactive pairFormation 'H 'a 'y :
-   [wf] sequent [squash] { 'H >- 'a = 'a in 'A } -->
+interactive pairFormation {| intro_resource [] |} 'H 'a 'y :
+   [wf] sequent [squash] { 'H >- 'a IN 'A } -->
    [main] ('b : sequent ['ext] { 'H >- 'B['a] }) -->
    [wf] sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
    sequent ['ext] { 'H >- x:'A * 'B['x] }
@@ -252,12 +252,6 @@ interactive pairFormation 'H 'a 'y :
 let pairFormation' t p =
    let y = maybe_new_vars1 p "y" in
       pairFormation (Sequent.hyp_count_addr p) t y p
-
-interactive pairFormation2 {| intro_resource [] |} 'H 'a 'y :
-   [wf] sequent [squash] { 'H >- member{'A; 'a} } -->
-   [main] ('b : sequent ['ext] { 'H >- 'B['a] }) -->
-   [wf] sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
-   sequent ['ext] { 'H >- x:'A * 'B['x] }
 
 (*
  * H >- (a1, b1) = (a2, b2) in x:A * B

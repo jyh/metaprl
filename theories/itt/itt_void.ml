@@ -97,11 +97,8 @@ prim voidFormation 'H :
  * by voidEquality
  *)
 prim voidEquality {| intro_resource []; eqcd_resource |} 'H :
-   sequent ['ext] { 'H >- void = void in univ[i:l] } =
+   sequent ['ext] { 'H >- void IN univ[i:l] } =
    it
-
-interactive voidMember {| intro_resource [] |} 'H :
-   sequent ['ext] { 'H >- member{univ[i:l]; void} }
 
 (*
  * Typehood.

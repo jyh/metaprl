@@ -99,11 +99,6 @@ interactive functionEquality {| intro_resource []; eqcd_resource |} 'H 'x :
    [wf] sequent [squash] { 'H; x: 'A1 >- 'B1['x] = 'B2['x] in univ[i:l] } -->
    sequent ['ext] { 'H >- (a1:'A1 -> 'B1['a1]) = (a2:'A2 -> 'B2['a2]) in univ[i:l] }
 
-interactive functionMember {| intro_resource [] |} 'H 'x :
-   [wf] sequent [squash] { 'H >- member{univ[i:l]; 'A1} } -->
-   [wf] sequent [squash] { 'H; x: 'A1 >- member{univ[i:l]; 'B1['x]} } -->
-   sequent ['ext] { 'H >- member{univ[i:l]; .a1:'A1 -> 'B1['a1]} }
-
 (*
  * Typehood.
  *)
@@ -136,11 +131,6 @@ interactive lambdaEquality {| intro_resource [] |} 'H 'x :
    [wf] sequent [squash] { 'H; x: 'A >- 'b1['x] = 'b2['x] in 'B['x] } -->
    sequent ['ext] { 'H >- lambda{a1. 'b1['a1]} = lambda{a2. 'b2['a2]} in a:'A -> 'B['a] }
 
-interactive lambdaMember {| intro_resource [] |} 'H 'x :
-   [wf] sequent [squash] { 'H >- "type"{'A} } -->
-   [wf] sequent [squash] { 'H; x: 'A >- member{'B['x]; 'b1['x]} } -->
-   sequent ['ext] { 'H >- member{.a:'A -> 'B['a]; lambda{a1. 'b1['a1]}} }
-
 (*
  * H >- f = g in x:A -> B
  * by functionExtensionality Ui (y:C -> D) (z:E -> F) u
@@ -157,12 +147,6 @@ interactive functionExtensionality 'H (y:'C -> 'D['y]) (z:'E -> 'F['z]) 'u :
    [wf] sequent [squash] { 'H >- 'g = 'g in z:'E -> 'F['z] } -->
    sequent ['ext] { 'H >- 'f = 'g in x:'A -> 'B['x] }
 
-interactive functionExtensionalityMember 'H (y:'C -> 'D['y]) 'u :
-   [main] sequent [squash] { 'H; u: 'A >- member{'B['u]; .'f 'u} } -->
-   [wf] sequent [squash] { 'H >- "type"{'A} } -->
-   [wf] sequent [squash] { 'H >- member{.y:'C -> 'D['y]; 'f} } -->
-   sequent ['ext] { 'H >- member{.x:'A -> 'B['x]; 'f} }
-
 (*
  * H, f: (x:A -> B), J[x] >- T[x] t[f, f a, it]
  * by functionElimination i a y v
@@ -171,7 +155,7 @@ interactive functionExtensionalityMember 'H (y:'C -> 'D['y]) 'u :
  * H, f: (x:A -> B), J[x], y: B[a], v: y = f(a) in B[a] >- T[x] ext t[f, y, v]
  *)
 interactive functionElimination {| elim_resource [] |} 'H 'J 'f 'a 'y 'v :
-   [wf] sequent [squash] { 'H; f: x:'A -> 'B['x]; 'J['f] >- member{'A; 'a} } -->
+   [wf] sequent [squash] { 'H; f: x:'A -> 'B['x]; 'J['f] >- 'a IN 'A } -->
    ('t['f; 'y; 'v] : sequent ['ext] { 'H; f: x:'A -> 'B['x]; 'J['f]; y: 'B['a]; v: 'y = ('f 'a) in 'B['a] >- 'T['f] }) -->
    sequent ['ext] { 'H; f: x:'A -> 'B['x]; 'J['f] >- 'T['f] }
 
@@ -189,14 +173,6 @@ interactive applyEquality {| eqcd_resource |} 'H (x:'A -> 'B['x]) :
 
 let applyEquality' t p =
    applyEquality (Sequent.hyp_count_addr p) t p
-
-interactive applyMember 'H (x:'A -> 'B['x]) :
-   sequent [squash] { 'H >- member{. x:'A -> 'B['x]; 'f1} } -->
-   sequent [squash] { 'H >- member{'A; 'a1} } -->
-   sequent ['ext] { 'H >- member{'B['a1]; .'f1 'a1} }
-
-let applyMember' t p =
-   applyMember (Sequent.hyp_count_addr p) t p
 
 (*
  * H >- a1:A1 -> B1 <= a2:A2 -> B2
@@ -252,7 +228,7 @@ interactive function_equalityElimination {| elim_resource [ThinOption thinT] |} 
  * H, a: A >- Ui ext B
  *)
 interactive functionFormation 'H 'a 'A :
-   [wf] sequent [squash] { 'H >- member{univ[i:l]; 'A} } -->
+   [wf] sequent [squash] { 'H >- 'A IN univ[i:l] } -->
    ('B['a] : sequent ['ext] { 'H; a: 'A >- univ[i:l] }) -->
    sequent ['ext] { 'H >- univ[i:l] }
 

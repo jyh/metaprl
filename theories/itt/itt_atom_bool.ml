@@ -76,9 +76,9 @@ let reduce_eq_atom =
  ************************************************************************)
 
 prim eq_atom_wf {| intro_resource [] |} 'H :
-   [wf] sequent [squash] { 'H >- member{atom; 'x} } -->
-   [wf] sequent [squash] { 'H >- member{atom; 'y} } -->
-   sequent ['ext] { 'H >- member{bool; eq_atom{'x; 'y}} } =
+   [wf] sequent [squash] { 'H >- 'x IN atom } -->
+   [wf] sequent [squash] { 'H >- 'y IN atom } -->
+   sequent ['ext] { 'H >- eq_atom{'x; 'y} IN bool } =
    it
 
 prim eq_atom_assert_intro {| intro_resource [] |} 'H :

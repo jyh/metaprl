@@ -305,16 +305,16 @@ let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_i
  * Is_nil.
  *)
 interactive is_nil_wf {| intro_resource [] |} 'H 'T :
-   [wf] sequent [squash] { 'H >- member{list{'T}; 'l} } -->
-   sequent ['ext] { 'H >- member{bool; is_nil{'l}} }
+   [wf] sequent [squash] { 'H >- 'l IN list{'T} } -->
+   sequent ['ext] { 'H >- is_nil{'l} IN bool }
 
 (*
  * Append.
  *)
 interactive append_wf2 {| intro_resource [] |} 'H :
-   [wf] sequent [squash] { 'H >- member{list{'T}; 'l1} } -->
-   [wf] sequent [squash] { 'H >- member{list{'T}; 'l2} } -->
-   sequent ['ext] { 'H >- member{list{'T}; append{'l1; 'l2}} }
+   [wf] sequent [squash] { 'H >- 'l1 IN list{'T} } -->
+   [wf] sequent [squash] { 'H >- 'l2 IN list{'T} } -->
+   sequent ['ext] { 'H >- append{'l1; 'l2} IN list{'T} }
 
 (*
  * Ball2.
@@ -322,31 +322,31 @@ interactive append_wf2 {| intro_resource [] |} 'H :
 interactive ball2_wf2 {| intro_resource [] |} 'H 'T1 'T2 'u 'v :
    [wf] sequent [squash] { 'H >- "type"{'T1} } -->
    [wf] sequent [squash] { 'H >- "type"{'T2} } -->
-   [wf] sequent [squash] { 'H >- member{list{'T1}; 'l1} } -->
-   [wf] sequent [squash] { 'H >- member{list{'T2}; 'l2} } -->
-   [wf] sequent [squash] { 'H; u: 'T1; v: 'T2 >- member{bool; 'b['u; 'v]} } -->
-   sequent ['ext] { 'H >- member{bool; ball2{'l1; 'l2; x, y. 'b['x; 'y]}} }
+   [wf] sequent [squash] { 'H >- 'l1 IN list{'T1} } -->
+   [wf] sequent [squash] { 'H >- 'l2 IN list{'T2} } -->
+   [wf] sequent [squash] { 'H; u: 'T1; v: 'T2 >- 'b['u; 'v] IN bool } -->
+   sequent ['ext] { 'H >- ball2{'l1; 'l2; x, y. 'b['x; 'y]} IN bool }
 
 (*
  * assoc2.
  *)
 interactive assoc_wf {| intro_resource [] |} 'H 'z 'T1 'T2 :
    [wf] sequent [squash] { 'H >- "type"{'T2} } -->
-   [wf] sequent [squash] { 'H >- member{.'T1 -> 'T1 -> bool; 'eq} } -->
-   [wf] sequent [squash] { 'H >- member{'T1; 'x} } -->
-   [wf] sequent [squash] { 'H >- member{list{.'T1 * 'T2}; 'l} } -->
-   [wf] sequent [squash] { 'H; z: 'T2 >- member{'T; 'b['z]} } -->
-   [wf] sequent [squash] { 'H >- member{'T; 'z} } -->
-   sequent ['ext] { 'H >- member{'T; assoc{'eq; 'x; 'l; v. 'b['v]; 'z}} }
+   [wf] sequent [squash] { 'H >- 'eq IN 'T1 -> 'T1 -> bool } -->
+   [wf] sequent [squash] { 'H >- 'x IN 'T1 } -->
+   [wf] sequent [squash] { 'H >- 'l IN list{.'T1 * 'T2} } -->
+   [wf] sequent [squash] { 'H; z: 'T2 >- 'b['z] IN 'T } -->
+   [wf] sequent [squash] { 'H >- 'z IN 'T } -->
+   sequent ['ext] { 'H >- assoc{'eq; 'x; 'l; v. 'b['v]; 'z} IN 'T }
 
 interactive rev_assoc_wf {| intro_resource [] |} 'H 'z 'T1 'T2 :
    [wf] sequent [squash] { 'H >- "type"{'T1} } -->
-   [wf] sequent [squash] { 'H >- member{.'T2 -> 'T2 -> bool; 'eq} } -->
-   [wf] sequent [squash] { 'H >- member{'T2; 'x} } -->
-   [wf] sequent [squash] { 'H >- member{list{.'T1 * 'T2}; 'l} } -->
-   [wf] sequent [squash] { 'H; z: 'T1 >- member{'T; 'b['z]} } -->
-   [wf] sequent [squash] { 'H >- member{'T; 'z} } -->
-   sequent ['ext] { 'H >- member{'T; rev_assoc{'eq; 'x; 'l; v. 'b['v]; 'z}} }
+   [wf] sequent [squash] { 'H >- 'eq IN 'T2 -> 'T2 -> bool } -->
+   [wf] sequent [squash] { 'H >- 'x IN 'T2 } -->
+   [wf] sequent [squash] { 'H >- 'l IN list{.'T1 * 'T2} } -->
+   [wf] sequent [squash] { 'H; z: 'T1 >- 'b['z] IN 'T } -->
+   [wf] sequent [squash] { 'H >- 'z IN 'T } -->
+   sequent ['ext] { 'H >- rev_assoc{'eq; 'x; 'l; v. 'b['v]; 'z} IN 'T }
 
 (*
  * map.
@@ -354,9 +354,9 @@ interactive rev_assoc_wf {| intro_resource [] |} 'H 'z 'T1 'T2 :
 interactive map_wf {| intro_resource [] |} 'H 'T1 :
    [wf] sequent [squash] { 'H >- "type"{'T1} } -->
    [wf] sequent [squash] { 'H >- "type"{'T2} } -->
-   [wf] sequent [squash] { 'H >- member{.'T1 -> 'T2; 'f} } -->
-   [wf] sequent [squash] { 'H >- member{.list{'T1}; 'l} } -->
-   sequent ['ext] { 'H >- member{list{'T2}; map{'f; 'l}} }
+   [wf] sequent [squash] { 'H >- 'f IN 'T1 -> 'T2 } -->
+   [wf] sequent [squash] { 'H >- 'l IN list{'T1} } -->
+   sequent ['ext] { 'H >- map{'f; 'l} IN list{'T2} }
 
 (*
  * Fold_left.
@@ -364,33 +364,33 @@ interactive map_wf {| intro_resource [] |} 'H 'T1 :
 interactive fold_left_wf {| intro_resource [] |} 'H 'T1 'T2 :
    [wf] sequent [squash] { 'H >- "type"{'T1} } -->
    [wf] sequent [squash] { 'H >- "type"{'T2} } -->
-   [wf] sequent [squash] { 'H >- member{.'T1 -> 'T2 -> 'T2; 'f} } -->
-   [wf] sequent [squash] { 'H >- member{'T2; 'v} } -->
-   [wf] sequent [squash] { 'H >- member{list{'T1}; 'l} } -->
-   sequent ['ext] { 'H >- member{'T2; fold_left{'f; 'v; 'l}} }
+   [wf] sequent [squash] { 'H >- 'f IN 'T1 -> 'T2 -> 'T2 } -->
+   [wf] sequent [squash] { 'H >- 'v IN 'T2 } -->
+   [wf] sequent [squash] { 'H >- 'l IN list{'T1} } -->
+   sequent ['ext] { 'H >- fold_left{'f; 'v; 'l} IN 'T2 }
 
 (*
  * Length.
  *)
 interactive length_wf {| intro_resource [] |} 'H 'T1 :
    [wf] sequent [squash] { 'H >- "type"{'T1} } -->
-   [wf] sequent [squash] { 'H >- member{list{'T1}; 'l} } -->
-   sequent ['ext] { 'H >- member{int; length{'l}} }
+   [wf] sequent [squash] { 'H >- 'l IN list{'T1} } -->
+   sequent ['ext] { 'H >- length{'l} IN int }
 
 interactive nth_wf {| intro_resource [] |} 'H :
    [wf] sequent [squash] { 'H >- "type"{'T} } -->
-   [wf] sequent [squash] { 'H >- member{list{'T}; 'l} } -->
+   [wf] sequent [squash] { 'H >- 'l IN list{'T} } -->
    [wf] sequent [squash] { 'H >- ge{'i; 0} } -->
    [wf] sequent [squash] { 'H >- lt{'i; length{'l}} } -->
-   sequent ['ext] { 'H >- member{'T; nth{'l; 'i}} }
+   sequent ['ext] { 'H >- nth{'l; 'i} IN 'T }
 
 interactive replace_nth_wf {| intro_resource [] |} 'H :
    [wf] sequent [squash] { 'H >- "type"{'T} } -->
-   [wf] sequent [squash] { 'H >- member{list{'T}; 'l} } -->
+   [wf] sequent [squash] { 'H >- 'l IN list{'T} } -->
    [wf] sequent [squash] { 'H >- ge{'i; 0} } -->
    [wf] sequent [squash] { 'H >- lt{'i; length{'l}} } -->
-   [wf] sequent [squash] { 'H >- member{'T; 't} } -->
-   sequent ['ext] { 'H >- member{list{'T}; replace_nth{'l; 'i; 't}} }
+   [wf] sequent [squash] { 'H >- 't IN 'T } -->
+   sequent ['ext] { 'H >- replace_nth{'l; 'i; 't} IN list{'T} }
 
 (************************************************************************
  * TACTICS                                                              *

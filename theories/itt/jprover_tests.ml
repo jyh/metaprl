@@ -17,7 +17,7 @@ interactive notnot2 :
    sequent ['ext] { >- "not"{'A} or "not"{'B} => "not"{'B} or "not"{'A} }
 
 interactive implies :
-   sequent ['ext] { >- ('A => 'B) => ('A => 'B) } 
+   sequent ['ext] { >- ('A => 'B) => ('A => 'B) }
 
 
 
@@ -57,10 +57,10 @@ interactive jens_prop :
 
 
 (* Generic formulae from the paper [10], as documented in the file *)
-(* refiner/reflib/jall.mli, for n = 1,2,3,4. *) 
-(* These formulae cause exponential proof length in EVERY LJ proof wrt. the *) 
+(* refiner/reflib/jall.mli, for n = 1,2,3,4. *)
+(* These formulae cause exponential proof length in EVERY LJ proof wrt. the *)
 (* proof length of a given LJmc proof in propositional intuitionistic logic *)
-(* The examples can easily be extended to n > 4 *) 
+(* The examples can easily be extended to n > 4 *)
 
 
 interactive prop_n1 :
@@ -69,10 +69,10 @@ interactive prop_n1 :
 interactive prop_n2 :
    sequent ['ext] { >- 'A2 & (('B0 => (('B1 or 'A1) or 'B1)) & (('B0 or 'A0) or 'B0)) => 'A0 or ('B0 & 'A1) or ('B1 & 'A2) }
 
-interactive prop_n3 : 
+interactive prop_n3 :
    sequent ['ext] { >- 'A3 & (('B1 => (('B2 or 'A2) or 'B2)) & ('B0 => (('B1 or 'A1) or 'B1)) & (('B0 or 'A0) or 'B0)) => 'A0 or ('B0 & 'A1) or ('B1 & 'A2) or ('B2 & 'A3) }
 
-interactive prop_n4 : 
+interactive prop_n4 :
    sequent ['ext] { >- 'A4 & (('B2 => (('B3 or 'A3) or 'B3)) & ('B1 => (('B2 or 'A2) or 'B2)) & ('B0 => (('B1 or 'A1) or 'B1)) & (('B0 or 'A0) or 'B0)) => 'A0 or ('B0 & 'A1) or ('B1 & 'A2) or ('B2 & 'A3) or ('B3 & 'A4) }
 
 
@@ -114,7 +114,7 @@ interactive jens_fo :
 (* ----------------------- *)
 
 
-(* Making branches independent from eigenvariables introduced in other branches *) 
+(* Making branches independent from eigenvariables introduced in other branches *)
 (* Involves the vo_jprover parameter with the cut rule *)
 
 interactive subst :
@@ -125,7 +125,7 @@ interactive subst :
 
 interactive barber 'H 'barber :
    sequent [squash] { 'H >- "type"{'People} } -->
-   sequent [squash] { 'H >- member{'People; 'barber} } -->
+   sequent [squash] { 'H >- 'barber IN 'People } -->
    sequent [squash] { 'H; p1: 'People; p2: 'People >- "type"{'shaves['p1;'p2]} } -->
    sequent ['ext] { 'H; x: all person:'People. "iff"{'shaves['barber;'person];."not"{'shaves['person;'person]}} >- "false" }
 
@@ -134,14 +134,14 @@ interactive barber 'H 'barber :
 (* Eliminating given free variables: *)
 (* --------------------------------- *)
 
-(* These examples take care of previously constructed objects *) 
+(* These examples take care of previously constructed objects *)
 (* during an interactive proof session *)
 
 
-interactive fv1 : 
+interactive fv1 :
    sequent ['ext] { >- 'A['x] => 'A['y] }
 
-interactive fv2 : 
+interactive fv2 :
    sequent ['ext] { >- all x:'T. 'A['x,'b] => 'A['f('a),'b] }
 
 interactive fv3 :
@@ -166,7 +166,7 @@ interactive jens_fo_fv :
 (* Functions *)
 (* --------- *)
 
-(* Some examples with function symbols *) 
+(* Some examples with function symbols *)
 (* These formula are generic benchmarks if one increases the number *)
 (* of function symbols in the righmost implication's conclusion *)
 
@@ -186,17 +186,17 @@ interactive fun2 :
 
 
 (* Generic formulae from the paper [9], as documented in the file *)
-(* refiner/reflib/jall.mli, for n = 1,2,3,4. *) 
-(* These formulae cause exponential proof length in EVERY LJ proof wrt. the *) 
+(* refiner/reflib/jall.mli, for n = 1,2,3,4. *)
+(* These formulae cause exponential proof length in EVERY LJ proof wrt. the *)
 (* proof length of a given LJmc proof in first-order intuitionistic logic *)
-(* The examples can easily be extended to n > 4 *) 
+(* The examples can easily be extended to n > 4 *)
 
 
 
-interactive fo_n1 : 
+interactive fo_n1 :
    sequent ['ext] { >- (all w:'T. 'A1['w]) & (all x:'T. (('B0 or 'A0['x]) or 'B0)) & "not"{('B0 & (all y:'T. 'A1['y]))} => all z:'T. 'A0['z] }
 
-interactive fo_n2 : 
+interactive fo_n2 :
    sequent ['ext] { >- (all w:'T. 'A2['w]) & (all x:'T. (('B0 or 'A0['x]) or 'B0)) & "not"{('B0 & (all y:'T. 'A1['y]))} & "not"{('B1 & (all y:'T. 'A2['y]))} & (all x:'T. (('B1 or 'A1['x]) or 'B1)) => all z:'T. 'A0['z] }
 
 interactive fo_n3 :
@@ -213,13 +213,13 @@ interactive fo_n4 : (* takes really long *)
 (* ------------------------- *)
 
 
-(* These formulae show a deeper difference between the rule non-permutabilities *) 
+(* These formulae show a deeper difference between the rule non-permutabilities *)
 (* of the sequent calculi LJmc and LJ.*)
-(* As a consequence, it requires the permutation-based proof transformations *) 
-(* from the papers [9,10], as documented in the file refiner/reflib/jall.mli. *) 
+(* As a consequence, it requires the permutation-based proof transformations *)
+(* from the papers [9,10], as documented in the file refiner/reflib/jall.mli. *)
 
 
-(* deadlock1 is the example presented in the papers [9,10] *) 
+(* deadlock1 is the example presented in the papers [9,10] *)
 
 interactive deadlock1 :
    sequent ['ext] { >- (all x:'T. ('A['x] or 'B['x])) & ((exst y:'T. 'A['y]) => (exst z:'T. ("not"{'A['z]}))) => (exst x:'T. 'B['x]) }
@@ -238,7 +238,7 @@ interactive deadlock2 :
 (* embedding LJ deadlocks into bigger non-deadlock proofs *)
 
 
-interactive deadlock3 : 
+interactive deadlock3 :
    sequent ['ext] { >- 'P & (all x:'T. ('A['x] or 'B['x])) & ((exst y:'T. 'A['y]) => (exst z:'T. ("not"{'A['z]}))) => (exst x:'T. 'B['x]) & 'P }
 
 
@@ -274,7 +274,7 @@ interactive mult_rename :
 
 
 
-(* The following does not use single-conclusion ITT - saved for future reference 
+(* The following does not use single-conclusion ITT - saved for future reference
 
 
 jtest <<(('A or 'A) & ("not"{('A)} or 'A) => 'A)>> "J" "LJmc";;
@@ -283,15 +283,15 @@ jtest <<(("not"{('A)} or 'A) & ('A or 'A) => 'A)>> "J" "LJmc";;
 
 
 Dealing with LJmc / LJ deadlocks -- beta proofs (also for single-conclusioned ITT!!!)
-===================================================================================== 
+=====================================================================================
 
 
-(* The following examples require some sophisticated techniques for *) 
-(* a complete and search-free proof reconstruction process. *) 
+(* The following examples require some sophisticated techniques for *)
+(* a complete and search-free proof reconstruction process. *)
 (* Namely, the integration of additional knowledge from the proof search *)
-(* process is needed, the so-called beta-proofs.*) 
-(* Details can be found in the papers [7,8] (although the examples there are in *) 
-(* modal logic T), as documented in the file refiner/reflib/jall.mli. *) 
+(* process is needed, the so-called beta-proofs.*)
+(* Details can be found in the papers [7,8] (although the examples there are in *)
+(* modal logic T), as documented in the file refiner/reflib/jall.mli. *)
 
 
 jtest <<(("not"{'A} or "not"{'D}) & ('A or 'B) & "not"{(('A or 'B) & 'B)} => "not"{'D})>> "J" "LJmc";;
@@ -318,7 +318,7 @@ Propositional logic: ONLY clasically valid
 
 jtest << 'A or "not"{'A} >> "C" "LK";;
 jtest << 'A or "not"{'A} >> "J" "LJmc";;   (* INVALID *)
-jtest << 'A or "not"{'A} >> "J" "LJ";;     (* INVALID *) 
+jtest << 'A or "not"{'A} >> "J" "LJ";;     (* INVALID *)
 
 
 
@@ -326,7 +326,7 @@ jtest <<"not"{("not"{'A})} => 'A >> "C" "LK";;
 
 
 
-simple test for search: 
+simple test for search:
 -----------------------
 
 
@@ -351,7 +351,7 @@ n=3
 << ('A & 'B & 'C) or ('A & "not"{'B} & 'C) or ("not"{'A} & 'B & 'C) or ("not"{'A} & "not"{'B} & 'C) or ('A & 'B & "not"{'C}) or ('A & "not"{'B} & "not"{'C}) or ("not"{'A} & 'B & "not"{'C}) or ("not"{'A} & "not"{'B} & "not"{'C}) >>
 
 
-n=4   (* Jprover cannot solve this -- I run it several days *) 
+n=4   (* Jprover cannot solve this -- I run it several days *)
 
 
 jtest << ('A & 'B & "not"{'C} & 'D) or ('A & "not"{'B} & "not"{'C} & 'D) or ("not"{'A} & 'B & "not"{'C} & 'D) or ('A & 'B & 'C & 'D) or ('A & "not"{'B} & 'C & 'D) or ("not"{'A} & 'B & 'C & 'D) or ("not"{'A} & "not"{'B} & 'C & 'D) or ("not"{'A} & "not"{'B} & "not"{'C} & 'D) or ('A & 'B & 'C & "not"{'D}) or ('A & "not"{'B} & 'C & "not"{'D}) or ("not"{'A} & 'B & 'C & "not"{'D}) or ("not"{'A} & "not"{'B} & 'C & "not"{'D}) or ('A & 'B & "not"{'C} & "not"{'D}) or ('A & "not"{'B} & "not"{'C} & "not"{'D}) or ("not"{'A} & 'B & "not"{'C} & "not"{'D}) or ("not"{'A} & "not"{'B} & "not"{'C} & "not"{'D}) >> "C" "LK";;
@@ -366,14 +366,14 @@ jtest << ('A & 'B & "not"{'C} & 'D) or ('A & "not"{'B} & "not"{'C} & 'D) or ("no
 First-order logic: ONLY clasically valid
 ==========================================
 
-(* needs two instances of the exists-right formula *) 
+(* needs two instances of the exists-right formula *)
 
 
-jtest << (exst x:'T. all y:'T. ('A['x] => 'A['y])) >> "C" "LK";; 
+jtest << (exst x:'T. all y:'T. ('A['x] => 'A['y])) >> "C" "LK";;
 
 
 
-First-order logic: INVALID 
+First-order logic: INVALID
 ==========================
 
 jtest << (exst x:'T. all y:'T. ('A['x,'y] => 'A['y,'x])) >> "C" "LK";;  (* INVALID *)

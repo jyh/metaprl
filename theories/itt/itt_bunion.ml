@@ -89,11 +89,6 @@ interactive bunionEquality {| intro_resource []; eqcd_resource |} 'H :
    [wf] sequent [squash] { 'H >- 'B1 = 'B2 in univ[i:l] } -->
    sequent ['ext] { 'H >- bunion{'A1; 'B1} = bunion{'A2; 'B2} in univ[i:l] }
 
-interactive bunionMember {| intro_resource [] |} 'H :
-   [wf] sequent [squash] { 'H >- member{univ[i:l]; 'A} } -->
-   [wf] sequent [squash] { 'H >- member{univ[i:l]; 'B} } -->
-   sequent ['ext] { 'H >- member{univ[i:l]; bunion{'A; 'B}} }
-
 interactive bunionType {| intro_resource [] |} 'H :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H >- "type"{'B} } -->

@@ -139,7 +139,7 @@ interactive true_univ {| intro_resource []; eqcd_resource |} 'H :
    sequent ['ext] { 'H >- "true" = "true" in univ[i:l] }
 
 interactive true_member {| intro_resource [] |} 'H :
-   sequent ['ext] { 'H >- member{univ[i:l]; ."true"} }
+   sequent ['ext] { 'H >- "true" IN univ[i:l] }
 
 interactive true_type {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- "type"{."true"} }
@@ -151,7 +151,7 @@ interactive false_univ {| intro_resource []; eqcd_resource |} 'H :
    sequent ['ext] { 'H >- "false" = "false" in univ[i:l] }
 
 interactive false_member {| intro_resource [] |} 'H :
-   sequent ['ext] { 'H >- "member"{univ[i:l]; ."false"} }
+   sequent ['ext] { 'H >- "false" IN univ[i:l] }
 
 interactive false_type {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- "type"{."false"} }
@@ -169,10 +169,6 @@ interactive false_squash 'H :
 interactive not_univ {| intro_resource []; eqcd_resource |} 'H :
    [wf] sequent [squash] { 'H >- 't1 = 't2 in univ[i:l] } -->
    sequent ['ext] { 'H >- "not"{'t1} = "not"{'t2} in univ[i:l] }
-
-interactive not_member {| intro_resource [] |} 'H :
-   [wf] sequent [squash] { 'H >- member{univ[i:l]; 't} } -->
-   sequent ['ext] { 'H >- member{univ[i:l]; ."not"{'t}} }
 
 interactive not_type {| intro_resource [] |} 'H :
    [wf] sequent [squash] { 'H >- "type"{'t} } -->
@@ -195,11 +191,6 @@ interactive and_univ {| intro_resource []; eqcd_resource |} 'H :
    [wf] sequent [squash] { 'H >- 'a2 = 'b2 in univ[i:l] } -->
    sequent ['ext] { 'H >- "and"{'a1; 'a2} = "and"{'b1; 'b2} in univ[i:l] }
 
-interactive and_member {| intro_resource [] |} 'H :
-   [wf] sequent [squash] { 'H >- member{univ[i:l]; 'a1} } -->
-   [wf] sequent [squash] { 'H >- member{univ[i:l]; 'a2} } -->
-   sequent ['ext] { 'H >- member{univ[i:l]; ."and"{'a1; 'a2}} }
-
 interactive and_type {| intro_resource [] |} 'H :
    [wf] sequent [squash] { 'H >- "type"{'a1} } -->
    [wf] sequent [squash] { 'H >- "type"{'a2} } -->
@@ -221,11 +212,6 @@ interactive or_univ {| intro_resource []; eqcd_resource |} 'H :
    [wf] sequent [squash] { 'H >- 'a1 = 'b1 in univ[i:l] } -->
    [wf] sequent [squash] { 'H >- 'a2 = 'b2 in univ[i:l] } -->
    sequent ['ext] { 'H >- "or"{'a1; 'a2} = "or"{'b1; 'b2} in univ[i:l] }
-
-interactive or_member {| intro_resource [] |} 'H :
-   [wf] sequent [squash] { 'H >- member{univ[i:l]; 'a1} } -->
-   [wf] sequent [squash] { 'H >- member{univ[i:l]; 'a2} } -->
-   sequent ['ext] { 'H >- member{univ[i:l]; ."or"{'a1; 'a2}} }
 
 interactive or_type {| intro_resource [] |} 'H :
    [wf] sequent [squash] { 'H >- "type"{'a1} } -->
@@ -255,11 +241,6 @@ interactive implies_univ {| intro_resource []; eqcd_resource |} 'H :
    [wf] sequent [squash] { 'H >- 'a2 = 'b2 in univ[i:l] } -->
    sequent ['ext] { 'H >- "implies"{'a1; 'a2} = "implies"{'b1; 'b2} in univ[i:l] }
 
-interactive implies_member {| intro_resource [] |} 'H :
-   [wf] sequent [squash] { 'H >- member{univ[i:l]; 'a1} } -->
-   [wf] sequent [squash] { 'H >- member{univ[i:l]; 'a2} } -->
-   sequent ['ext] { 'H >- member{univ[i:l]; ."implies"{'a1; 'a2}} }
-
 interactive implies_type {| intro_resource [] |} 'H :
    [wf] sequent [squash] { 'H >- "type"{'a1} } -->
    [wf] sequent [squash] { 'H >- "type"{'a2} } -->
@@ -283,11 +264,6 @@ interactive iff_univ {| intro_resource []; eqcd_resource |} 'H :
    [wf] sequent [squash] { 'H >- 'a2 = 'b2 in univ[i:l] } -->
    sequent ['ext] { 'H >- "iff"{'a1; 'a2} = "iff"{'b1; 'b2} in univ[i:l] }
 
-interactive iff_member {| intro_resource [] |} 'H :
-   [wf] sequent [squash] { 'H >- member{univ[i:l]; 'a1} } -->
-   [wf] sequent [squash] { 'H >- member{univ[i:l]; 'a2} } -->
-   sequent ['ext] { 'H >- member{univ[i:l]; ."iff"{'a1; 'a2}} }
-
 interactive iff_type {| intro_resource [] |} 'H :
    [wf] sequent [squash] { 'H >- "type"{'a1} } -->
    [wf] sequent [squash] { 'H >- "type"{'a2} } -->
@@ -310,11 +286,6 @@ interactive cand_univ {| intro_resource []; eqcd_resource |} 'H 'x :
    [wf] sequent [squash] { 'H; x: 'a1 >- 'a2 = 'b2 in univ[i:l] } -->
    sequent ['ext] { 'H >- "cand"{'a1; 'a2} = "cand"{'b1; 'b2} in univ[i:l] }
 
-interactive cand_member {| intro_resource [] |} 'H 'x :
-   [wf] sequent [squash] { 'H >- member{univ[i:l]; 'a1} } -->
-   [wf] sequent [squash] { 'H; x: 'a1 >- member{univ[i:l]; 'a2} } -->
-   sequent ['ext] { 'H >- member{univ[i:l]; ."cand"{'a1; 'a2}} }
-
 interactive cand_type {| intro_resource [] |} 'H 'x :
    [wf] sequent [squash] { 'H >- "type"{'a1} } -->
    [wf] sequent [squash] { 'H; x: 'a1 >- "type"{'a2} } -->
@@ -336,11 +307,6 @@ interactive cor_univ {| intro_resource []; eqcd_resource |} 'H 'x :
    [wf] sequent [squash] { 'H >- 'a1 = 'b1 in univ[i:l] } -->
    [wf] sequent [squash] { 'H; x: "not"{'a1} >- 'a2 = 'b2 in univ[i:l] } -->
    sequent ['ext] { 'H >- "cor"{'a1; 'a2} = "cor"{'b1; 'b2} in univ[i:l] }
-
-interactive cor_member {| intro_resource [] |} 'H 'x :
-   [wf] sequent [squash] { 'H >- member{univ[i:l]; 'a1} } -->
-   [wf] sequent [squash] { 'H; x: "not"{'a1} >- member{univ[i:l]; 'a2} } -->
-   sequent ['ext] { 'H >- member{univ[i:l]; ."cor"{'a1; 'a2}} }
 
 interactive cor_type {| intro_resource [] |} 'H 'x :
    [wf] sequent [squash] { 'H >- "type"{'a1} } -->
@@ -371,11 +337,6 @@ interactive all_univ {| intro_resource []; eqcd_resource |} 'H 'x :
    [wf] sequent [squash] { 'H; x : 't1 >- 'b1['x] = 'b2['x] in univ[i:l] } -->
    sequent ['ext] { 'H >- "all"{'t1; x1. 'b1['x1]} = "all"{'t2; x2. 'b2['x2]} in univ[i:l] }
 
-interactive all_member {| intro_resource [] |} 'H 'x :
-   [wf] sequent [squash] { 'H >- member{univ[i:l]; 't} } -->
-   [wf] sequent [squash] { 'H; x: 't >- member{univ[i:l]; 'b['x]} } -->
-   sequent ['ext] { 'H >- member{univ[i:l]; ."all"{'t; v. 'b['v]}} }
-
 interactive all_type {| intro_resource [] |} 'H 'x :
    [wf] sequent [squash] { 'H >- "type"{'t} } -->
    [wf] sequent [squash] { 'H; x: 't >- "type"{'b['x]} } -->
@@ -387,7 +348,7 @@ interactive all_intro {| intro_resource [] |} 'H 'x :
    sequent ['ext] { 'H >- "all"{'t; v. 'b['v]} }
 
 interactive all_elim {| elim_resource [ThinOption thinT] |} 'H 'J 'w 'z :
-   [wf] sequent [squash] { 'H; x: all a: 'A. 'B['a]; 'J['x] >- member{'A; 'z} } -->
+   [wf] sequent [squash] { 'H; x: all a: 'A. 'B['a]; 'J['x] >- 'z IN 'A } -->
    [main] sequent ['ext] { 'H; x: all a: 'A. 'B['a]; 'J['x]; w: 'B['z] >- 'C['x] } -->
    sequent ['ext] { 'H; x: all a: 'A. 'B['a]; 'J['x] >- 'C['x] }
 
@@ -399,18 +360,13 @@ interactive exists_univ {| intro_resource []; eqcd_resource |} 'H 'x :
    [wf] sequent [squash] { 'H; x : 't1 >- 'b1['x] = 'b2['x] in univ[i:l] } -->
    sequent ['ext] { 'H >- "exists"{'t1; x1. 'b1['x1]} = "exists"{'t2; x2. 'b2['x2]} in univ[i:l] }
 
-interactive exists_member {| intro_resource [] |} 'H 'x :
-   [wf] sequent [squash] { 'H >- member{univ[i:l]; 't} } -->
-   [wf] sequent [squash] { 'H; x: 't >- member{univ[i:l]; 'b['x]} } -->
-   sequent ['ext] { 'H >- member{univ[i:l]; ."exists"{'t; v. 'b['v]}} }
-
 interactive exists_type {| intro_resource [] |} 'H 'x :
    [wf] sequent [squash] { 'H >- "type"{'t} } -->
    [wf] sequent [squash] { 'H; x: 't >- "type"{'b['x]} } -->
    sequent ['ext] { 'H >- "type"{."exists"{'t; v. 'b['v]}} }
 
 interactive exists_intro {| intro_resource [] |} 'H 'z 'x :
-   [wf] sequent [squash] { 'H >- member{'t; 'z} } -->
+   [wf] sequent [squash] { 'H >- 'z IN 't } -->
    [main] sequent ['ext] { 'H >- 'b['z] } -->
    [wf] sequent [squash] { 'H; x: 't >- "type"{'b['x]} } -->
    sequent ['ext] { 'H >- "exists"{'t; v. 'b['v]} }
@@ -656,7 +612,7 @@ let moveToConclVarsT vars p =
                   assertT goal'
                   thenLT [thinT i thenT tac tl goal';
                           withT (mk_var_term v) (dT (len + 1)) (**)
-                             thenLT [memberAssumT i; nthHypT (len + 2)]]
+                             thenLT [equalAssumT i; nthHypT (len + 2)]]
 
             else
                let goal' = mk_implies_term hyp goal in
@@ -973,7 +929,7 @@ let backThruAssumT i p =
 
 (*
  * Generalize on a membership assumption:
- *         i. sequent [...] { ... >- member{T; t} } -->
+ *         i. sequent [...] { ... >- t IN T } -->
  *         ...
  *         sequent [...] { ... >- 'T2 }
  *         BY genAssumT [i; and any others you want to include...]
@@ -995,7 +951,7 @@ let genAssumT indices p =
          let t = make_gen_term t indices in
          let t' = TermMan.nth_concl (List.nth assums (pred i)) 1 in
          if is_member_term t' then
-            let t_type, t_var = dest_member t' in
+            let t_type, t_var, _ = dest_equal t' in
                if is_var_term t_var then
                   mk_all_term (dest_var t_var) t_type t
                else
@@ -1104,9 +1060,9 @@ struct
 
    type inference = (term_subst -> tactic) list
    let empty_inf = []
-   
+
    let tryfind_hyp_exn = RefineError("find_hyp_exn", StringError "hypothesys not found")
-   
+
    let tryfind_hyp term tact i p =
       match Sequent.nth_hyp p i with
          (_,t) when alpha_equal t term -> tact i p
@@ -1115,13 +1071,13 @@ struct
 
    let find_hyp_fail _ =
       raise (Invalid_argument "Itt_logic.Itt_JLogic.find_hyp failed")
-      
+
    let find_hyp term tact = onSomeHypT (tryfind_hyp term tact) orelseT find_hyp_fail
 
    let tryappend_subst subst t tact i p =
       tact (match_terms subst t (snd (Sequent.nth_hyp p i))) p
 
-   let append_subst subst t v tact = 
+   let append_subst subst t v tact =
       match (dest_term t).term_terms with
          [_;bt] ->
             let bt = dest_bterm bt in
@@ -1132,7 +1088,7 @@ struct
             end
        | _ -> raise (Invalid_argument "Itt_logic.append_subst")
 
-   let goal_append_subst subst t v tact p = 
+   let goal_append_subst subst t v tact p =
       match (dest_term t).term_terms with
          [_;bt] ->
             let bt = dest_bterm bt in
@@ -1194,7 +1150,7 @@ let rec filter_hyps = function
  | Hypothesis (_, h) :: hs -> h :: filter_hyps hs
 
 (* input a list_term of hyps,concl *)
-let jproverT p = 
+let jproverT p =
    let seq = explode_sequent (Sequent.goal p) in
    match
       ITT_JProver.prover (filter_hyps (SeqHyp.to_list seq.sequent_hyps)) (SeqGoal.get seq.sequent_goals 0)

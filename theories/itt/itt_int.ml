@@ -326,11 +326,8 @@ prim intType {| intro_resource [] |} 'H :
  * by intEquality
  *)
 prim intEquality {| intro_resource []; eqcd_resource |} 'H :
-   sequent ['ext] { 'H >- int = int in univ[i:l] } =
+   sequent ['ext] { 'H >- int IN univ[i:l] } =
    it
-
-interactive intMember {| intro_resource [] |} 'H :
-   sequent ['ext] { 'H >- member{univ[i:l]; int} }
 
 (*
  * H >- Z ext n
@@ -345,11 +342,8 @@ prim numberFormation 'H number[n:n] :
  * by numberEquality
  *)
 prim numberEquality {| intro_resource []; eqcd_resource |} 'H :
-   sequent ['ext] { 'H >- number[n:n] = number[n:n] in int } =
+   sequent ['ext] { 'H >- number[n:n] IN int } =
    it
-
-interactive numberMember {| intro_resource [] |} 'H :
-   sequent ['ext] { 'H >- member{int; number[n:n]} }
 
 (*
  * Induction:
@@ -425,7 +419,7 @@ prim less_thanEquality {| intro_resource []; eqcd_resource |} 'H :
  *)
 prim less_than_memberEquality {| intro_resource []; eqcd_resource |} 'H :
    [wf] sequent [squash] { 'H >- 'a < 'b } -->
-   sequent ['ext] { 'H >- it = it in ('a < 'b) } =
+   sequent ['ext] { 'H >- it IN ('a < 'b) } =
    it
 
 (*
@@ -451,71 +445,66 @@ prim int_sqequal 'H :
  * Derive the wf rules.
  *)
 interactive add_wf {| intro_resource [] |} 'H :
-   sequent [squash] { 'H >- member{int; 'i} } -->
-   sequent [squash] { 'H >- member{int; 'j} } -->
-   sequent ['ext] { 'H >- member{int; add{'i; 'j}} }
+   sequent [squash] { 'H >- 'i IN int } -->
+   sequent [squash] { 'H >- 'j IN int } -->
+   sequent ['ext] { 'H >- add{'i; 'j} IN int }
 
 interactive sub_wf {| intro_resource [] |} 'H :
-   sequent [squash] { 'H >- member{int; 'i} } -->
-   sequent [squash] { 'H >- member{int; 'j} } -->
-   sequent ['ext] { 'H >- member{int; sub{'i; 'j}} }
+   sequent [squash] { 'H >- 'i IN int } -->
+   sequent [squash] { 'H >- 'j IN int } -->
+   sequent ['ext] { 'H >- sub{'i; 'j} IN int }
 
 interactive mul_wf {| intro_resource [] |} 'H :
-   sequent [squash] { 'H >- member{int; 'i} } -->
-   sequent [squash] { 'H >- member{int; 'j} } -->
-   sequent ['ext] { 'H >- member{int; mul{'i; 'j}} }
+   sequent [squash] { 'H >- 'i IN int } -->
+   sequent [squash] { 'H >- 'j IN int } -->
+   sequent ['ext] { 'H >- mul{'i; 'j} IN int }
 
 interactive div_wf {| intro_resource [] |} 'H :
-   sequent [squash] { 'H >- member{int; 'i} } -->
-   sequent [squash] { 'H >- member{int; 'j} } -->
+   sequent [squash] { 'H >- 'i IN int } -->
+   sequent [squash] { 'H >- 'j IN int } -->
    sequent [squash] { 'H >- not{.'j = 0 in int} } -->
-   sequent ['ext] { 'H >- member{int; ."div"{'i; 'j}} }
+   sequent ['ext] { 'H >- "div"{'i; 'j} IN int }
 
 interactive rem_wf {| intro_resource [] |} 'H :
-   sequent [squash] { 'H >- member{int; 'i} } -->
-   sequent [squash] { 'H >- member{int; 'j} } -->
+   sequent [squash] { 'H >- 'i IN int } -->
+   sequent [squash] { 'H >- 'j IN int } -->
    sequent [squash] { 'H >- not{.'j = 0 in int} } -->
-   sequent ['ext] { 'H >- member{int; ."rem"{'i; 'j}} }
+   sequent ['ext] { 'H >- "rem"{'i; 'j} IN int }
 
 interactive lt_type {| intro_resource [] |} 'H :
-   sequent [squash] { 'H >- member{int; 'i} } -->
-   sequent [squash] { 'H >- member{int; 'j} } -->
+   sequent [squash] { 'H >- 'i IN int } -->
+   sequent [squash] { 'H >- 'j IN int } -->
    sequent ['ext] { 'H >- "type"{lt{'i; 'j}} }
 
 interactive gt_type {| intro_resource [] |} 'H :
-   sequent [squash] { 'H >- member{int; 'i} } -->
-   sequent [squash] { 'H >- member{int; 'j} } -->
+   sequent [squash] { 'H >- 'i IN int } -->
+   sequent [squash] { 'H >- 'j IN int } -->
    sequent ['ext] { 'H >- "type"{gt{'i; 'j}} }
 
 interactive le_type {| intro_resource [] |} 'H :
-   sequent [squash] { 'H >- member{int; 'i} } -->
-   sequent [squash] { 'H >- member{int; 'j} } -->
+   sequent [squash] { 'H >- 'i IN int } -->
+   sequent [squash] { 'H >- 'j IN int } -->
    sequent ['ext] { 'H >- "type"{le{'i; 'j}} }
 
 interactive ge_type {| intro_resource [] |} 'H :
-   sequent [squash] { 'H >- member{int; 'i} } -->
-   sequent [squash] { 'H >- member{int; 'j} } -->
+   sequent [squash] { 'H >- 'i IN int } -->
+   sequent [squash] { 'H >- 'j IN int } -->
    sequent ['ext] { 'H >- "type"{ge{'i; 'j}} }
 
-interactive lt_member {| intro_resource [] |} 'H :
-   sequent [squash] { 'H >- member{int; 'i} } -->
-   sequent [squash] { 'H >- member{int; 'j} } -->
-   sequent ['ext] { 'H >- member{univ[i:l]; lt{'i; 'j}} }
-
 interactive gt_member {| intro_resource [] |} 'H :
-   sequent [squash] { 'H >- member{int; 'i} } -->
-   sequent [squash] { 'H >- member{int; 'j} } -->
-   sequent ['ext] { 'H >- member{univ[i:l]; gt{'i; 'j}} }
+   sequent [squash] { 'H >- 'i IN int } -->
+   sequent [squash] { 'H >- 'j IN int } -->
+   sequent ['ext] { 'H >- gt{'i; 'j} IN univ[i:l] }
 
 interactive le_member {| intro_resource [] |} 'H :
-   sequent [squash] { 'H >- member{int; 'i} } -->
-   sequent [squash] { 'H >- member{int; 'j} } -->
-   sequent ['ext] { 'H >- member{univ[i:l]; le{'i; 'j}} }
+   sequent [squash] { 'H >- 'i IN int } -->
+   sequent [squash] { 'H >- 'j IN int } -->
+   sequent ['ext] { 'H >- le{'i; 'j} IN univ[i:l] }
 
 interactive ge_member {| intro_resource [] |} 'H :
-   sequent [squash] { 'H >- member{int; 'i} } -->
-   sequent [squash] { 'H >- member{int; 'j} } -->
-   sequent ['ext] { 'H >- member{univ[i:l]; ge{'i; 'j}} }
+   sequent [squash] { 'H >- 'i IN int } -->
+   sequent [squash] { 'H >- 'j IN int } -->
+   sequent ['ext] { 'H >- ge{'i; 'j} IN univ[i:l] }
 
 interactive lt_reverse {| elim_resource [] |} 'H 'J 'y :
    sequent ['ext] { 'H; x: ('i < 'j); 'J['x]; y: "not"{.'j < 'i} >- 'C['x] } -->
@@ -530,15 +519,15 @@ interactive lt_sub {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- ('i -@ 'k) < ('j -@ 'k) }
 
 interactive decide_lt 'H 'i 'j 'w :
-   [wf] sequent [squash] { 'H >- member{int; 'i} } -->
-   [wf] sequent [squash] { 'H >- member{int; 'j} } -->
+   [wf] sequent [squash] { 'H >- 'i IN int } -->
+   [wf] sequent [squash] { 'H >- 'j IN int } -->
    [main] sequent ['ext] { 'H; w: 'i < 'j >- 'C } -->
    [main] sequent ['ext] { 'H; w: "not"{.'i < 'j} >- 'C } -->
    sequent ['ext] { 'H >- 'C }
 
 interactive decide_eq 'H 'i 'j 'w :
-   [wf] sequent [squash] { 'H >- member{int; 'i} } -->
-   [wf] sequent [squash] { 'H >- member{int; 'j} } -->
+   [wf] sequent [squash] { 'H >- 'i IN int } -->
+   [wf] sequent [squash] { 'H >- 'j IN int } -->
    [main] sequent ['ext] { 'H; w: 'i = 'j in int >- 'C } -->
    [main] sequent ['ext] { 'H; w: "not"{.'i = 'j in int} >- 'C } -->
    sequent ['ext] { 'H >- 'C }

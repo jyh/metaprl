@@ -158,8 +158,8 @@ rule quotient_memberWeakEquality 'H :
  *)
 rule quotient_memberEquality 'H :
    sequent [squash] { 'H >- "type"{(quot x, y: 'A // 'E['x; 'y])} } -->
-   sequent [squash] { 'H >- member{'A; 'a1} } -->
-   sequent [squash] { 'H >- member{'A; 'a2} } -->
+   sequent [squash] { 'H >- 'a1 IN 'A } -->
+   sequent [squash] { 'H >- 'a2 IN 'A } -->
    sequent [squash] { 'H >- 'E['a1; 'a2] } -->
    sequent ['ext] { 'H >- 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y] }
 

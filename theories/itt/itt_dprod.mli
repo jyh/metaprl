@@ -85,7 +85,7 @@ rewrite reduceSnd : snd{pair{'a; 'b}} <--> 'b
  * H, x:A >- Ui ext B
  *)
 rule productFormation 'H 'A 'x :
-   sequent [squash] { 'H >- member{univ[i:l]; 'A} } -->
+   sequent [squash] { 'H >- 'A IN univ[i:l] } -->
    sequent ['ext] { 'H; x: 'A >- univ[i:l] } -->
    sequent ['ext] { 'H >- univ[i:l] }
 
@@ -116,7 +116,7 @@ rule productType 'H 'x :
  * H, y:A >- B[y] = B[y] in Ui
  *)
 rule pairFormation 'H 'a 'y :
-   sequent [squash] { 'H >- member{'A; 'a} } -->
+   sequent [squash] { 'H >- 'a IN 'A } -->
    sequent ['ext] { 'H >- 'B['a] } -->
    sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
    sequent ['ext] { 'H >- x:'A * 'B['x] }

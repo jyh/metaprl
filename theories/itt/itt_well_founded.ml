@@ -87,8 +87,8 @@ interactive well_founded_type {| intro_resource [] |} 'H 'a 'b :
  * Primitive well-foundedness can be derived.
  *)
 interactive well_founded_reduction 'H 'a 'b univ[i:l] :
-   [wf] sequent [squash] { 'H >- member{univ[i:l]; 'A} } -->
-   [wf] sequent [squash] { 'H; a: 'A; b: 'A >- member{univ[i:l]; 'R['a; 'b]} } -->
+   [wf] sequent [squash] { 'H >- 'A IN univ[i:l] } -->
+   [wf] sequent [squash] { 'H; a: 'A; b: 'A >- 'R['a; 'b] IN univ[i:l] } -->
    [main] sequent ['ext] { 'H >- well_founded[i:l]{'A; x, y. 'R['x; 'y]} } -->
    sequent ['ext] { 'H >- Itt_rfun!well_founded{'A; x, y. 'R['x; 'y]} }
 

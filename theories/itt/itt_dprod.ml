@@ -161,7 +161,7 @@ dform snd_df1 : snd{'e} =
  * H, x:A >- Ui ext B
  *)
 prim productFormation 'H 'A 'x :
-   [wf] sequent [squash] { 'H >- member{univ[i:l]; 'A} } -->
+   [wf] sequent [squash] { 'H >- 'A IN univ[i:l] } -->
    [main] ('B['x] : sequent ['ext] { 'H; x: 'A >- univ[i:l] }) -->
    sequent ['ext] { 'H >- univ[i:l] } =
    x:'A * 'B['x]
@@ -177,11 +177,6 @@ prim productEquality {| intro_resource []; eqcd_resource |} 'H 'y :
    [wf] sequent [squash] { 'H; y: 'A1 >- 'B1['y] = 'B2['y] in univ[i:l] } -->
    sequent ['ext] { 'H >- x1:'A1 * 'B1['x1] = x2:'A2 * 'B2['x2] in univ[i:l] } =
    it
-
-interactive productMember {| intro_resource [] |} 'H 'y :
-   [wf] sequent [squash] { 'H >- member{univ[i:l]; 'A1} } -->
-   [wf] sequent [squash] { 'H; y: 'A1 >- member{univ[i:l]; 'B1['y]} } -->
-   sequent ['ext] { 'H >- member{.univ[i:l]; .x1:'A1 * 'B1['x1]} }
 
 (*
  * Typehood.
@@ -200,7 +195,7 @@ prim productType {| intro_resource [] |} 'H 'x :
  * H, y:A >- B[y] = B[y] in Ui
  *)
 prim pairFormation {| intro_resource [] |} 'H 'a 'y :
-   [wf] sequent [squash] { 'H >- member{'A; 'a} } -->
+   [wf] sequent [squash] { 'H >- 'a IN 'A } -->
    [main] ('b : sequent ['ext] { 'H >- 'B['a] }) -->
    [wf] sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
    sequent ['ext] { 'H >- x:'A * 'B['x] } =
@@ -219,12 +214,6 @@ prim pairEquality {| intro_resource []; eqcd_resource |} 'H 'y :
    [wf] sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
    sequent ['ext] { 'H >- ('a1, 'b1) = ('a2, 'b2) in x:'A * 'B['x] } =
    it
-
-interactive pairMember {| intro_resource [] |} 'H 'y :
-   [wf] sequent [squash] { 'H >- member{'A; 'a1} } -->
-   [wf] sequent [squash] { 'H >- member{'B['a1]; 'b1} } -->
-   [wf] sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
-   sequent ['ext] { 'H >- member{.x:'A * 'B['x]; .('a1, 'b1)} }
 
 (*
  * H, x:A * B[x], J[x] >- T[x] ext spread(x; u, v. t[u, v])
@@ -246,14 +235,7 @@ prim productElimination {| elim_resource [ThinOption thinT] |} 'H 'J 'z 'u 'v :
  * These require type inference.
  *)
 let d_spread_equalT tac p =
-   let rt, spread =
-      try
-         let rt, spread, _ = dest_equal (Sequent.concl p) in
-            rt, spread
-      with
-         RefineError _ ->
-            dest_member (Sequent.concl p)
-   in
+   let rt, spread, _ = dest_equal (Sequent.concl p) in
    let u, v, a = maybe_new_vars3 p "u" "v" "a" in
    let type_type = mk_bind_term v rt in
    let _, _, pair, _ = dest_spread spread in
@@ -282,15 +264,6 @@ prim spreadEquality {| eqcd_resource |} 'H bind{z. 'T['z]} (w:'A * 'B['w]) 'u 'v
 let spread_equal_term = << spread{'e1; u1, v1. 'b1['u1; 'v1]} = spread{'e2; u2, v2. 'b2['u2; 'v2]} in 'T >>
 
 let intro_resource = Mp_resource.improve intro_resource (spread_equal_term, d_spread_equalT spreadEquality)
-
-interactive spreadMember 'H bind{z. 'T['z]} (w:'A * 'B['w]) 'u 'v 'a :
-   [wf] sequent [squash] { 'H >- member{.w:'A * 'B['w]; 'e1} } -->
-   [wf] sequent [squash] { 'H; u: 'A; v: 'B['u]; a: 'e1 = ('u, 'v) in w:'A * 'B['w] >- member{'T['u, 'v]; 'b1['u; 'v]} } -->
-   sequent ['ext] { 'H >- member{'T['e1]; spread{'e1; u1, v1. 'b1['u1; 'v1]}} }
-
-let spread_member_term = << member{'T; spread{'e1; u1, v1. 'b1['u1; 'v1]}} >>
-
-let intro_resource = Mp_resource.improve intro_resource (spread_member_term, d_spread_equalT spreadMember)
 
 (*
  * H >- a1:A1 * B1 <= a2:A2 * B2

@@ -88,11 +88,6 @@ interactive independentFunctionEquality {| intro_resource []; eqcd_resource |} '
    [wf] sequent [squash] { 'H >- 'B1 = 'B2 in univ[i:l] } -->
    sequent ['ext] { 'H >- ('A1 -> 'B1) = ('A2 -> 'B2) in univ[i:l] }
 
-interactive independentFunctionMember {| intro_resource [] |} 'H :
-   [wf] sequent [squash] { 'H >- member{univ[i:l]; 'A1} } -->
-   [wf] sequent [squash] { 'H >- member{univ[i:l]; 'B1} } -->
-   sequent ['ext] { 'H >- member{univ[i:l]; .'A1 -> 'B1} }
-
 (*
  * Typehood.
  *)
@@ -125,11 +120,6 @@ interactive independentLambdaEquality {| intro_resource []; eqcd_resource |} 'H 
    [wf] sequent [squash] { 'H; x: 'A >- 'b1['x] = 'b2['x] in 'B } -->
    sequent ['ext] { 'H >- lambda{a1. 'b1['a1]} = lambda{a2. 'b2['a2]} in 'A -> 'B }
 
-interactive independentLambdaMember {| intro_resource [] |} 'H 'x :
-   [wf] sequent [squash] { 'H >- "type"{'A} } -->
-   [wf] sequent [squash] { 'H; x: 'A >- member{'B; 'b1['x]} } -->
-   sequent ['ext] { 'H >- member{.'A -> 'B; lambda{a1. 'b1['a1]}} }
-
 (*
  * H, f: A -> B, J[x] >- T[x]                   ext t[f, f a]
  * by independentFunctionElimination i y
@@ -146,7 +136,7 @@ interactive independentFunctionElimination 'H 'J 'f 'y :
  * Explicit function elimination.
  *)
 interactive independentFunctionElimination2 'H 'J 'f 'y 'z 'a :
-   [wf] sequent [squash] { 'H; f: 'A -> 'B; 'J['f] >- member{'A; 'a} } -->
+   [wf] sequent [squash] { 'H; f: 'A -> 'B; 'J['f] >- 'a IN 'A } -->
    [main] ('t['y; 'z] : sequent ['ext] { 'H; f: 'A -> 'B; 'J['f]; y: 'B; z: 'y = ('f 'a) in 'B >- 'T['f] }) -->
    sequent ['ext] { 'H; f: 'A -> 'B; 'J['f] >- 'T['f] }
 
@@ -161,11 +151,6 @@ interactive independentApplyEquality {| eqcd_resource |} 'H ('A -> 'B) :
    [wf] sequent [squash] { 'H >- 'f1 = 'f2 in 'A -> 'B } -->
    [wf] sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
    sequent ['ext] { 'H >- ('f1 'a1) = ('f2 'a2) in 'B }
-
-interactive independentApplyMember 'H ('A -> 'B) :
-   [wf] sequent [squash] { 'H >- member{.'A -> 'B; 'f1} } -->
-   [wf] sequent [squash] { 'H >- member{'A; 'a1} } -->
-   sequent ['ext] { 'H >- member{'B; .'f1 'a1} }
 
 (*
  * H >- A1 -> B1 <= A2 -> B2
@@ -221,30 +206,6 @@ let d_apply_equalT p =
 let apply_equal_term = << 'f1 'a1 = 'f2 'a2 in 'T >>
 
 let intro_resource = Mp_resource.improve intro_resource (apply_equal_term, d_apply_equalT)
-
-let d_apply_memberT p =
-   let _, app = dest_member (Sequent.concl p) in
-   let f, _ = dest_apply app in
-   let f_type =
-      try get_with_arg p with
-         RefineError _ ->
-            infer_type p f
-   in
-   let tac =
-      if is_rfun_term f_type then
-         rfunction_applyMember
-      else if is_dfun_term f_type then
-         applyMember
-      else if is_fun_term f_type then
-         independentApplyMember
-      else
-         raise (RefineError ("d_apply_memberT", StringTermError ("inferred type is not a function type", f_type)))
-   in
-      tac (Sequent.hyp_count_addr p) f_type p
-
-let apply_member_term = << member{'T; .'f1 'a1} >>
-
-let intro_resource = Mp_resource.improve intro_resource (apply_member_term, d_apply_memberT)
 
 (*
  * Typehood of application depends on the ability to infer a type.

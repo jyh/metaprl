@@ -127,14 +127,6 @@ prim quotientWeakEquality {| intro_resource []; eqcd_resource |} 'H 'x 'y 'z 'u 
            } =
    it
 
-interactive quotientWeakMember {| intro_resource [] |} 'H 'x 'y 'z 'u 'v :
-   [wf] sequent [squash] { 'H >- member{univ[i:l]; 'A1} } -->
-   [wf] sequent [squash] { 'H; x: 'A1; y: 'A1 >- member{univ[i:l]; 'E1['x; 'y]} } -->
-   [wf] sequent [squash] { 'H; x: 'A1 >- 'E1['x; 'x] } -->
-   [wf] sequent [squash] { 'H; x: 'A1; y: 'A1; u: 'E1['x; 'y] >- 'E1['y; 'x] } -->
-   [wf] sequent [squash] { 'H; x: 'A1; y: 'A1; z: 'A1; u: 'E1['x; 'y]; v: 'E1['y; 'z] >- 'E1['x; 'z] } -->
-   sequent ['ext] { 'H >- member{univ[i:l]; .quot x1, y1: 'A1 // 'E1['x1; 'y1]} }
-
 (*
  * H >- quot x1, y1: A1 // E1 = quot x2, y2. A2 // E2 in Ui
  * by quotientEquality r s v
@@ -145,7 +137,7 @@ interactive quotientWeakMember {| intro_resource [] |} 'H 'x 'y 'z 'u 'v :
  * H; v: A1 = A2 in Ui; r: A1; s: A1 >- E1[r, s] -> E2[r, s]
  * H; v: A1 = A2 in Ui; r: A1; s: A1 >- E2[r, s] -> E1[r, s]
  *)
-prim quotientEquality {| intro_resource []; eqcd_resource |} 'H 'r 's 'v :
+prim quotientEquality {| intro_resource [SelectOption 1] |} 'H 'r 's 'v :
    [wf] sequent [squash] { 'H >- quot x1, y1: 'A1 // 'E1['x1; 'y1] = quot x1, y1: 'A1 // 'E1['x1; 'y1] in univ[i:l] } -->
    [wf] sequent [squash] { 'H >- quot x2, y2: 'A2 // 'E2['x2; 'y2] = quot x2, y2: 'A2 // 'E2['x2; 'y2] in univ[i:l] } -->
    [wf] sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
@@ -193,6 +185,15 @@ prim quotient_memberWeakEquality {| intro_resource [] |} 'H :
    it
 
 (*
+ * Membership.
+ *)
+prim quotientMember {| intro_resource [] |}  'H :
+   [wf] sequent [squash] { 'H >- "type"{(quot x, y: 'A // 'E['x; 'y])} } -->
+   [wf] sequent [squash] { 'H >- 'l IN 'A } -->
+   sequent ['ext] { 'H >- 'l IN (quot x, y: 'A // 'E['x; 'y]) } =
+   it
+
+(*
  * H >- a1 = a2 in quot x, y: A // E
  * by quotient_memberEquality
  *
@@ -203,19 +204,10 @@ prim quotient_memberWeakEquality {| intro_resource [] |} 'H :
  *)
 prim quotient_memberEquality {| intro_resource []; eqcd_resource |} 'H :
    [wf] sequent [squash] { 'H >- "type"{(quot x, y: 'A // 'E['x; 'y])} } -->
-   [wf] sequent [squash] { 'H >- member{'A; 'a1} } -->
-   [wf] sequent [squash] { 'H >- member{'A; 'a2} } -->
+   [wf] sequent [squash] { 'H >- 'a1 IN 'A } -->
+   [wf] sequent [squash] { 'H >- 'a2 IN 'A } -->
    [wf] sequent [squash] { 'H >- 'E['a1; 'a2] } -->
    sequent ['ext] { 'H >- 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y] } =
-   it
-
-(*
- * Membership.
- *)
-prim quotientMember {| intro_resource [] |}  'H :
-   [wf] sequent [squash] { 'H >- "type"{(quot x, y: 'A // 'E['x; 'y])} } -->
-   [wf] sequent [squash] { 'H >- member{'A; 'l} } -->
-   sequent ['ext] { 'H >- member{(quot x, y: 'A // 'E['x; 'y]); 'l} } =
    it
 
 (*
@@ -233,33 +225,13 @@ prim quotientElimination1 'H 'J 'v 'w 'z :
    sequent ['ext] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a] >- 's['a] = 't['a] in 'T['a] } =
    it
 
-prim quotientElimination2 'H 'J 'v 'w 'z :
+prim quotientElimination2 {| elim_resource [ThinOption thinT] |} 'H 'J 'v 'w 'z :
    [wf] sequent [squash] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a] >- "type"{'T['a]} } -->
    [main] sequent [squash] { 'H; a: quot x, y: 'A // 'E['x; 'y];
              v: 'A; w: 'A; z: 'E['v; 'w]; 'J['v] >- 's['v] = 't['w] in 'T['v]
            } -->
    sequent ['ext] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a] >- 's['a] = 't['a] in 'T['a] } =
    it
-
-interactive quotient_memberElimination {| elim_resource [ThinOption thinT] |} 'H 'J 'v 'w 'z :
-   [wf] sequent [squash] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a] >- "type"{'T['a]} } -->
-   [main] sequent [squash] { 'H; a: quot x, y: 'A // 'E['x; 'y];
-             v: 'A; w: 'A; z: 'E['v; 'w]; 'J['v] >- 's['v] = 's['w] in 'T['v]
-           } -->
-   sequent ['ext] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a] >- member{'T['a]; 's['a]} }
-
-let d_quot_elim i p =
-   let j, k = Sequent.hyp_indices p i in
-   let v, w, z = Var.maybe_new_vars3 p "v" "w" "z" in
-   let goal = Sequent.concl p in
-      if is_equal_term goal then
-         quotientElimination1 j k v w z p
-      else if is_member_term goal then
-         quotient_memberElimination j k v w z p
-      else
-         raise (RefineError ("d_quot_elim", StringError "conclusion is not an equality or membership"))
-
-let elim_resource = Mp_resource.improve elim_resource (<< quot x, y: 'A // 'E['x; 'y] >>, d_quot_elim)
 
 (*
  * Equality in a quotient space.

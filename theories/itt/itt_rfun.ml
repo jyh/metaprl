@@ -196,7 +196,7 @@ let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_i
  * Well-founded means that there is an induction principle.
  *)
 prim well_founded_assum_elim {| elim_resource [ThinOption thinT] |} 'H 'J 'a 'a3 'u :
-   [main] sequent [squash] { 'H; p: well_founded_assum{'A; a1, a2. 'R['a1; 'a2]; 'P}; 'J['p] >- member{'A; 'a} } -->
+   [main] sequent [squash] { 'H; p: well_founded_assum{'A; a1, a2. 'R['a1; 'a2]; 'P}; 'J['p] >- 'a IN 'A } -->
    [main] sequent [squash] { 'H; p: well_founded_assum{'A; a1, a2. 'R['a1; 'a2]; 'P}; 'J['p]; a3: 'A; u: 'R['a3; 'a] >- well_founded_apply{'P; 'a3} } -->
    [main] ('t['u] : sequent [squash] { 'H; p: well_founded_assum{'A; a1, a2. 'R['a1; 'a2]; 'P}; 'J['p]; u: well_founded_apply{'P; 'a} >- 'C['p] }) -->
    sequent ['ext] { 'H; p: well_founded_assum{'A; a1, a2. 'R['a1; 'a2]; 'P}; 'J['p] >- 'C['p] } =
@@ -213,10 +213,10 @@ prim well_founded {| intro_resource [] |} 'H 'a1 'a2 'a3 'u 'v 'p 'P :
    it
 
 prim well_founded_apply_type {| intro_resource [] |} 'H 'A :
-   [wf] sequent [squash] { 'H >- member{well_founded_prop{'A}; 'P} } -->
-   [wf] sequent [squash] { 'H >- member{univ[i:l]; 'A} } -->
-   [wf] sequent [squash] { 'H >- member{'A; 'a} } -->
-   sequent ['ext] { 'H >- member{univ[i:l]; well_founded_apply{'P; 'a}} } =
+   [wf] sequent [squash] { 'H >- 'P IN well_founded_prop{'A} } -->
+   [wf] sequent [squash] { 'H >- 'A IN univ[i:l] } -->
+   [wf] sequent [squash] { 'H >- 'a IN 'A } -->
+   sequent ['ext] { 'H >- well_founded_apply{'P; 'a} IN univ[i:l] } =
    it
 
 (*
@@ -251,16 +251,6 @@ prim rfunctionEquality  {| intro_resource []; eqcd_resource |} 'H lambda{a. lamb
                    in univ[i:l]
            } =
    it
-
-interactive rfunctionMember  {| intro_resource [] |} 'H lambda{a. lambda{b. 'R['a; 'b]}} 'g 'y 'z :
-   [wf] sequent [squash] { 'H >- member{univ[i:l]; 'A1} } -->
-   [wf] sequent [squash] { 'H >- well_founded{'A1; a, b. 'R['a; 'b]} } -->
-   [wf] sequent [squash] { 'H;
-             y: 'A1;
-             g: { f1 | x1: { z: 'A1 | 'R['z; 'y] } -> 'B1['f1; 'x1] }
-             >- member{univ[i:l]; 'B1['g; 'y]}
-           } -->
-   sequent ['ext] { 'H >- member{univ[i:l]; { f1 | a1:'A1 -> 'B1['f1; 'a1] }} }
 
 prim rfunctionType  {| intro_resource [] |} 'H lambda{a. lambda{b. 'R['a; 'b]}} 'g 'y 'z :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
@@ -301,11 +291,6 @@ prim rfunction_lambdaEquality {| intro_resource []; eqcd_resource |} 'H 'y :
    sequent ['ext] { 'H >- lambda{x1. 'b1['x1]} = lambda{x2. 'b2['x2]} in { f | x: 'A -> 'B['f; 'x] } } =
    it
 
-interactive rfunction_lambdaMember {| intro_resource [] |} 'H 'y :
-   [wf] sequent [squash] { 'H >- "type"{{ f | x: 'A -> 'B['f; 'x] }} } -->
-   [wf] sequent [squash] { 'H; y: 'A >- member{'B[lambda{x1. 'b1['x1]}; 'y]; 'b1['y]} } -->
-   sequent ['ext] { 'H >- member{.{ f | x: 'A -> 'B['f; 'x] }; lambda{x1. 'b1['x1]}} }
-
 (*
  * H >- f1 = f2 in { g | x:A -> B[g, x] }
  * by rfunctionExtensionality { g1 | x1:A1 -> B1[g1, x1] } { g2 | x2:A2 -> B2[g2, x2] } y
@@ -321,18 +306,10 @@ prim rfunctionExtensionality 'H
         'y :
    [wf] sequent [squash] { 'H >- "type"{{ g | x:'A -> 'B['g; 'x] }} } -->
    [main] sequent [squash] { 'H; y: 'A >- 'f1 'y = 'f2 'y in 'B['f1; 'x] } -->
-   [wf] sequent [squash] { 'H >- 'f1 = 'f1 in { g1 | x1:'A1 -> 'B1['g1; 'x1] } } -->
-   [wf] sequent [squash] { 'H >- 'f2 = 'f2 in { g2 | x2:'A2 -> 'B2['g2; 'x2] } } -->
+   [wf] sequent [squash] { 'H >- 'f1 IN { g1 | x1:'A1 -> 'B1['g1; 'x1] } } -->
+   [wf] sequent [squash] { 'H >- 'f2 IN { g2 | x2:'A2 -> 'B2['g2; 'x2] } } -->
    sequent ['ext] { 'H >- 'f1 = 'f2 in { g | x:'A -> 'B['g; 'x] } } =
    it
-
-interactive rfunctionExtensionalityMember 'H
-        ({ g1 | x1:'A1 -> 'B1['g1; 'x1] })
-        'y :
-   [wf] sequent [squash] { 'H >- "type"{.{ g | x:'A -> 'B['g; 'x] }} } -->
-   [main] sequent [squash] { 'H; y: 'A >- member{'B['f1; 'x]; .'f1 'y} } -->
-   [wf] sequent [squash] { 'H >- member{.{ g1 | x1:'A1 -> 'B1['g1; 'x1] }; 'f1} } -->
-   sequent ['ext] { 'H >- member{.{ g | x:'A -> 'B['g; 'x] }; 'f1} }
 
 (*
  * H, f: { g | x:A -> B[g, x] }, J[f] >- T[f] ext t[f, f a, it]
@@ -342,7 +319,7 @@ interactive rfunctionExtensionalityMember 'H
  * H, f: { g | x:A -> B[g, x] }, J[f], y: B[f, a], v: y = f a in B[f, a] >- T[f] ext t[f, y, v]
  *)
 prim rfunctionElimination {| elim_resource [] |} 'H 'J 'f 'a 'y 'v :
-   [wf] sequent [squash] { 'H; f: { g | x:'A -> 'B['g; 'x] }; 'J['f] >- member{'A; 'a} } -->
+   [wf] sequent [squash] { 'H; f: { g | x:'A -> 'B['g; 'x] }; 'J['f] >- 'a IN 'A } -->
    ('t['f; 'y; 'v] : sequent ['ext] { 'H;
                                f: { g | x:'A -> 'B['g; 'x] };
                                'J['f];
@@ -367,14 +344,6 @@ prim rfunction_applyEquality {| eqcd_resource |} 'H ({ f | x:'A -> 'B['f; 'x] })
 
 let rfunction_applyEquality' t p =
    rfunction_applyEquality (Sequent.hyp_count_addr p) t p
-
-interactive rfunction_applyMember 'H ({ f | x:'A -> 'B['f; 'x] }) :
-   [wf] sequent [squash] { 'H >- member{.{ f | x:'A -> 'B['f; 'x] }; 'f1} } -->
-   [wf] sequent [squash] { 'H >- member{'A; 'a1} } -->
-   sequent ['ext] { 'H >- member{.'B['f1; 'a1]; .'f1 'a1} }
-
-let rfunction_applyMember' t p =
-   rfunction_applyMember (Sequent.hyp_count_addr p) t p
 
 (*
  * Subtyping.

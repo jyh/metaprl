@@ -124,7 +124,7 @@ rule independentFunctionElimination 'H 'J 'f 'y :
  * Explicit function elimination.
  *)
 rule independentFunctionElimination2 'H 'J 'f 'y 'z 'a :
-   sequent [squash] { 'H; f: 'A -> 'B; 'J['f] >- member{'A; 'a} } -->
+   sequent [squash] { 'H; f: 'A -> 'B; 'J['f] >- 'a IN 'A } -->
    sequent ['ext] { 'H; f: 'A -> 'B; 'J['f]; y: 'B; z: 'y = ('f 'a) in 'B >- 'T['f] } -->
    sequent ['ext] { 'H; f: 'A -> 'B; 'J['f] >- 'T['f] }
 

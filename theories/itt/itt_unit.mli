@@ -63,7 +63,7 @@ rule unitFormation 'H : sequent ['ext] { 'H >- univ[i:l] }
  * H >- Unit = Unit in Ui ext Ax
  * by unitEquality
  *)
-rule unitEquality 'H : sequent ['ext] { 'H >- unit = unit in univ[i:l] }
+rule unitEquality 'H : sequent ['ext] { 'H >- unit IN univ[i:l] }
 
 (*
  * Is a type.
@@ -80,7 +80,7 @@ rule unit_memberFormation 'H : sequent ['ext] { 'H >- unit }
  * H >- Unit = Unit in Ui ext Ax
  * by unitEquality
  *)
-rule unit_memberEquality 'H : sequent ['ext] { 'H >- it = it in unit }
+rule unit_memberEquality 'H : sequent ['ext] { 'H >- it IN unit }
 
 (*
  * H; i:x:Unit; J >- C

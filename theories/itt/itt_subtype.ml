@@ -139,7 +139,7 @@ prim subtypeTypeRight 'H 'B :
  *)
 prim subtype_axiomFormation {| intro_resource [] |} 'H 'x :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
-   [main] sequent [squash] { 'H; x: 'A >- member{'B; 'x} } -->
+   [main] sequent [squash] { 'H; x: 'A >- 'x IN 'B } -->
    sequent ['ext] { 'H >- subtype{'A; 'B} } =
    it
 
@@ -151,12 +151,8 @@ prim subtype_axiomFormation {| intro_resource [] |} 'H 'x :
  *)
 prim subtype_axiomEquality {| intro_resource []; eqcd_resource |} 'H :
    [main] sequent [squash] { 'H >- subtype{'A; 'B} } -->
-   sequent ['ext] { 'H >- it = it in subtype{'A; 'B} } =
+   sequent ['ext] { 'H >- it IN subtype{'A; 'B} } =
    it
-
-interactive subtype_axiomMember {| intro_resource [] |} 'H :
-   [main] sequent [squash] { 'H >- subtype{'A; 'B} } -->
-   sequent ['ext] { 'H >- member{subtype{'A; 'B}; it} }
 
 (*
  * H, x: subtype(A; B); J[x] >- C[x]
@@ -177,8 +173,8 @@ prim subtypeElimination {| elim_resource [ThinOption thinT] |} 'H 'J :
  * H >- subtype(A; B)
  *)
 prim subtypeElimination2 'H 'J 'a 'y :
-   [wf] sequent [squash] { 'H; x: subtype{'A; 'B}; 'J['x] >- member{'A; 'a} } -->
-   ('t['y] : sequent ['ext] { 'H; x: subtype{'A; 'B}; 'J['x]; y: member{'B; 'a} >- 'C['x] }) -->
+   [wf] sequent [squash] { 'H; x: subtype{'A; 'B}; 'J['x] >- 'a IN 'A } -->
+   ('t['y] : sequent ['ext] { 'H; x: subtype{'A; 'B}; 'J['x]; y: 'a IN 'B >- 'C['x] }) -->
    sequent ['ext] { 'H; x: subtype{'A; 'B}; 'J['x] >- 'C['x] } =
    't[it]
 

@@ -115,9 +115,9 @@ let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_i
  ************************************************************************)
 
 prim eq_int_wf {| intro_resource [] |} 'H :
-   [wf] sequent [squash] { 'H >- member{int; 'i} } -->
-   [wf] sequent [squash] { 'H >- member{int; 'j} } -->
-   sequent ['ext] { 'H >- member{bool; eq_int{'i; 'j}} } =
+   [wf] sequent [squash] { 'H >- 'i IN int } -->
+   [wf] sequent [squash] { 'H >- 'j IN int } -->
+   sequent ['ext] { 'H >- eq_int{'i; 'j} IN bool } =
    it
 
 prim eq_int_assert_intro {| intro_resource [] |} 'H :

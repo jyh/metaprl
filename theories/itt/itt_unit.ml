@@ -101,11 +101,8 @@ prim unitFormation 'H :
  * by unitEquality
  *)
 prim unitEquality {| intro_resource []; eqcd_resource |} 'H :
-   sequent ['ext] { 'H >- unit = unit in univ[i:l] } =
+   sequent ['ext] { 'H >- unit IN univ[i:l] } =
    it
-
-interactive unitMember {| intro_resource [] |} 'H :
-   sequent ['ext] { 'H >- member{univ[i:l]; unit} }
 
 (*
  * Is a type.
@@ -127,11 +124,8 @@ prim unit_memberFormation {| intro_resource [] |} 'H :
  * by unitEquality
  *)
 prim unit_memberEquality {| intro_resource []; eqcd_resource |} 'H :
-   sequent ['ext] { 'H >- it = it in unit } =
+   sequent ['ext] { 'H >- it IN unit } =
    it
-
-interactive unit_memberMember {| intro_resource [] |} 'H :
-   sequent ['ext] { 'H >- member{unit; it} }
 
 (*
  * H; i:x:Unit; J >- C

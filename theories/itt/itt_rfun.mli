@@ -158,7 +158,7 @@ rule rfunctionExtensionality 'H
  * H, f: { g | x:A -> B[g, x] }, J[f], y: B[f, a], v: y = f a in B[f, a] >- T[f] ext t[f, y, v]
  *)
 rule rfunctionElimination 'H 'J 'f 'a 'y 'v :
-   sequent [squash] { 'H; f: { g | x:'A -> 'B['g; 'x] }; 'J['f] >- member{'A; 'a} } -->
+   sequent [squash] { 'H; f: { g | x:'A -> 'B['g; 'x] }; 'J['f] >- 'a IN 'A } -->
    sequent ['ext] { 'H;
              f: { g | x:'A -> 'B['g; 'x] };
              'J['f];
@@ -179,13 +179,7 @@ rule rfunction_applyEquality 'H ({ f | x:'A -> 'B['f; 'x] }) :
    sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
    sequent ['ext] { 'H >- 'f1 'a1 = 'f2 'a2 in 'B['f1; 'a1] }
 
-rule rfunction_applyMember 'H ({ f | x:'A -> 'B['f; 'x] }) :
-   [wf] sequent [squash] { 'H >- member{.{ f | x:'A -> 'B['f; 'x] }; 'f1} } -->
-   [wf] sequent [squash] { 'H >- member{'A; 'a1} } -->
-   sequent ['ext] { 'H >- member{.'B['f1; 'a1]; .'f1 'a1} }
-
 topval rfunction_applyEquality' : term -> tactic
-topval rfunction_applyMember' : term -> tactic
 
 (************************************************************************
  * TACTICS                                                              *

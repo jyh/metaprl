@@ -78,11 +78,6 @@ interactive independentProductEquality {| intro_resource []; eqcd_resource |} 'H
    [wf] sequent [squash] { 'H >- 'B1 = 'B2 in univ[i:l] } -->
    sequent ['ext] { 'H >- 'A1 * 'B1 = 'A2 * 'B2 in univ[i:l] }
 
-interactive independentProductMember {| intro_resource [] |} 'H :
-   [wf] sequent [squash] { 'H >- member{univ[i:l]; 'A1} } -->
-   [wf] sequent [squash] { 'H >- member{univ[i:l]; 'B1} } -->
-   sequent ['ext] { 'H >- member{univ[i:l]; .'A1 * 'B1} }
-
 (*
  * Typehood.
  *)
@@ -121,11 +116,6 @@ interactive independentPairEquality {| intro_resource []; eqcd_resource |} 'H :
    [wf] sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
    [wf] sequent [squash] { 'H >- 'b1 = 'b2 in 'B } -->
    sequent ['ext] { 'H >- ('a1, 'b1) = ('a2, 'b2) in 'A * 'B }
-
-interactive independentPairMember {| intro_resource [] |} 'H :
-   [wf] sequent [squash] { 'H >- member{'A; 'a} } -->
-   [wf] sequent [squash] { 'H >- member{'B; 'b} } -->
-   sequent ['ext] { 'H >- member{.'A * 'B; .('a, 'b)} }
 
 (*
  * H >- A * B ext (a, b)

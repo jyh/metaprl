@@ -81,7 +81,6 @@ let x = 1
 declare "type"{'a}
 declare univ[i:l]
 declare equal{'T; 'a; 'b}
-declare member{'T; 'x}
 declare "true"
 declare "false"
 declare cumulativity[i:l, j:l]
@@ -102,11 +101,10 @@ let is_equal_term = is_dep0_dep0_dep0_term equal_opname
 let dest_equal = dest_dep0_dep0_dep0_term equal_opname
 let mk_equal_term = mk_dep0_dep0_dep0_term equal_opname
 
-let member_term = << member{'T; 'x} >>
-let member_opname = opname_of_term member_term
-let is_member_term = is_dep0_dep0_term member_opname
-let dest_member = dest_dep0_dep0_term member_opname
-let mk_member_term = mk_dep0_dep0_term member_opname
+let is_member_term t =
+   is_equal_term t &&
+   match dest_equal t with
+      _, t1, t2 -> alpha_equal t1 t2
 
 let type_term = << "type"{'t} >>
 let type_opname = opname_of_term type_term
@@ -250,15 +248,11 @@ let eqcdT p =
  * DEFINITIONS                                                          *
  ************************************************************************)
 
-prim_rw unfold_member : member{'T; 'x} <--> ('x = 'x in 'T)
-
 prim_rw reduce_cumulativity' : cumulativity[i:l, j:l] <-->
    meta_lt{univ[i:l]; univ[j:l]; ."true"; ."false"}
 
 let reduce_cumulativity =
    reduce_cumulativity' andthenC reduce_meta_lt
-
-let fold_member = makeFoldC << member{'T; 'x} >> unfold_member
 
 (************************************************************************
  * DISPLAY FORMS                                                        *
@@ -267,11 +261,12 @@ let fold_member = makeFoldC << member{'T; 'x} >> unfold_member
 prec prec_type
 prec prec_equal
 
+(* HACK! HACK! HACK! - this should be replaced with a proper I/O abstruction *)
+dform equal_df0 : parens :: "prec"[prec_equal] :: ('x IN 'T) =
+   szone pushm slot{'x} space Nuprl_font!member hspace slot{'T} popm ezone
+
 dform equal_df1 : parens :: "prec"[prec_equal] :: equal{'T; 'a; 'b} =
    szone pushm slot{'a} space `"= " slot{'b} space Nuprl_font!member `" " slot{'T} popm ezone
-
-dform member_df1 : parens :: "prec"[prec_equal] :: member{'T; 'x} =
-   szone pushm slot{'x} space Nuprl_font!member hspace slot{'T} popm ezone
 
 dform it_df1 : it = cdot
 
@@ -302,18 +297,15 @@ prim trueIntro {| intro_resource [] |} 'H :
  * Typehood is equality.
  *)
 prim equalityAxiom 'H 'J :
-   sequent ['ext] { 'H; x: 'T; 'J['x] >- 'x = 'x in 'T } =
+   sequent ['ext] { 'H; x: 'T; 'J['x] >- 'x IN 'T } =
    it
-
-interactive memberAxiom 'H 'J :
-   sequent ['ext] { 'H; x: 'T; 'J['x] >- member{'T; 'x} }
 
 (*
  * Reflexivity.
  *)
 prim equalityRef 'H 'y :
    sequent ['ext] { 'H >- 'x = 'y in 'T } -->
-   sequent ['ext] { 'H >- 'x = 'x in 'T } =
+   sequent ['ext] { 'H >- 'x IN 'T } =
    it
 
 (*
@@ -361,52 +353,34 @@ prim equalityEquality {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- ('a1 = 'b1 in 'T1) = ('a2 = 'b2 in 'T2) in univ[i:l] } =
    it
 
-interactive equalityUnivMember {| intro_resource [] |} 'H :
-   [wf] sequent [squash] { 'H >- member{univ[i:l]; 'T1} } -->
-   [wf] sequent [squash] { 'H >- member{'T1; 'a1} } -->
-   [wf] sequent [squash] { 'H >- member{'T1; 'b1} } -->
-   sequent ['ext] { 'H >- member{univ[i:l]; .'a1 = 'b1 in 'T1} }
-
 (*
  * Typehood.
  *)
 prim equalityType {| intro_resource [] |} 'H :
-   [wf] sequent [squash] { 'H >- member{'T; 'a} } -->
-   [wf] sequent [squash] { 'H >- member{'T; 'b} } -->
+   [wf] sequent [squash] { 'H >- 'a IN 'T } -->
+   [wf] sequent [squash] { 'H >- 'b IN 'T } -->
    sequent ['ext] { 'H >- "type"{. 'a = 'b in 'T } } =
    it
 
 interactive equalityType2 {| intro_resource [] |} 'H :
-   [wf] sequent [squash] { 'H >- 'a = 'a in 'T } -->
-   sequent ['ext] { 'H >- "type"{. 'a = 'a in 'T } }
+   [wf] sequent [squash] { 'H >- 'a IN 'T } -->
+   sequent ['ext] { 'H >- "type"{. 'a IN 'T } }
 
 prim equalityTypeIsType 'H 'a 'b :
    [wf] sequent [squash] { 'H >- 'a = 'b in 'T } -->
    sequent ['ext] { 'H >- "type"{'T} } =
    it
 
-interactive memberType {| intro_resource [] |} 'H :
-   [wf] sequent [squash] { 'H >- member{'T; 'x} } -->
-   sequent ['ext] { 'H >- "type"{member{'T; 'x}} }
-
 (*
- * H >- it = it in (a = b in T)
- * by axiomEquality
+ * H >- it in (a = b in T)
+ * by axiomMember
  *
  * H >- a = b in T
  *)
-prim axiomEquality {| intro_resource []; eqcd_resource |} 'H :
+prim axiomMember {| intro_resource []; eqcd_resource |} 'H :
    [wf] sequent [squash] { 'H >- 'a = 'b in 'T } -->
-   sequent ['ext] { 'H >- it = it in ('a = 'b in 'T) } =
+   sequent ['ext] { 'H >- it IN ('a = 'b in 'T) } =
    it
-
-interactive axiomMember1 {| intro_resource [] |} 'H :
-   [wf] sequent [squash] { 'H >- 'a = 'b in 'T } -->
-   sequent ['ext] { 'H >- member{.'a = 'b in 'T; it} }
-
-interactive axiomMember2 {| intro_resource [] |} 'H :
-   [wf] sequent [squash] { 'H >- member{'T; 'a} } -->
-   sequent ['ext] { 'H >- member{.member{'T; 'a}; it} }
 
 (*
  * H, x: a = b in T, J[x] >- C[x]
@@ -417,11 +391,6 @@ interactive axiomMember2 {| intro_resource [] |} 'H :
 prim equalityElimination {| elim_resource [] |} 'H 'J :
    ('t : sequent ['ext] { 'H; x: 'a = 'b in 'T; 'J[it] >- 'C[it] }) -->
    sequent ['ext] { 'H; x: 'a = 'b in 'T; 'J['x] >- 'C['x] } =
-   't
-
-prim memberElimination {| elim_resource [] |} 'H 'J :
-   ('t : sequent ['ext] { 'H; x: member{'T; 'a}; 'J[it] >- 'C[it] }) -->
-   sequent ['ext] { 'H; x: member{'T; 'a}; 'J['x] >- 'C['x] } =
    't
 
 (*
@@ -443,10 +412,6 @@ prim equality_squashElimination 'H :
    sequent ['ext] { 'H >- 'a = 'b in 'T } =
    it
 
-interactive member_squashElimination 'H :
-   sequent [squash] { 'H >- member{'T; 'a} } -->
-   sequent ['ext] { 'H >- member{'T; 'a} }
-
 prim type_squashElimination 'H :
    sequent [squash] { 'H >- "type"{'T} } -->
    sequent ['ext] { 'H >- "type"{'T} } =
@@ -458,20 +423,16 @@ prim rewrite_squashElimination 'H :
    it
 
 (*
- * H >- Uj = Uj in Ui
- * by universeEquality (side (j < i))
+ * H >- Uj in Ui
+ * by universeMember (side (j < i))
  *
  * Add a tactic later that will automatically
  * unfold the cumulativity.
  *)
-prim universeEquality 'H :
+prim universeMember 'H :
    sequent ['ext] { 'H >- cumulativity[j:l, i:l] } -->
-   sequent ['ext] { 'H >- univ[j:l] = univ[j:l] in univ[i:l] } =
+   sequent ['ext] { 'H >- univ[j:l] IN univ[i:l] } =
   it
-
-interactive universeMember 'H :
-   sequent ['ext] { 'H >- cumulativity[j:l, i:l] } -->
-   sequent ['ext] { 'H >- member{univ[i:l]; univ[j:l]} }
 
 (*
  * H >- x = x in Ui
@@ -486,20 +447,15 @@ prim universeCumulativity 'H univ[j:l] :
    sequent ['ext] { 'H >- 'x = 'y in univ[i:l] } =
    it
 
-interactive universeMemberCumulativity 'H univ[j:l] :
-   sequent [squash] { 'H >- cumulativity[j:l, i:l] } -->
-   sequent [squash] { 'H >- member{univ[j:l]; 'a} } -->
-   sequent ['ext] { 'H >- member{univ[i:l]; 'a} }
-
-let univ_equal_term = << univ[i:l] = univ[i:l] in univ[j:l] >>
+let univ_member_term = << univ[i:l] IN univ[j:l] >>
 
 let eqcd_univT p =
    let i = Sequent.hyp_count_addr p in
-      (universeEquality i
+      (universeMember i
        thenT tryT (rw reduce_cumulativity 0 thenT trueIntro i)) p
 
 let eqcd_resource = Mp_resource.improve eqcd_resource (univ_term, eqcd_univT)
-let intro_resource = Mp_resource.improve intro_resource (univ_equal_term, eqcd_univT)
+let intro_resource = Mp_resource.improve intro_resource (univ_member_term, eqcd_univT)
 
 (*
  * Universe is a type.
@@ -512,7 +468,7 @@ prim universeType {| intro_resource [] |} 'H :
  * Anything in a universe is a type.
  *)
 prim universeMemberType 'H univ[i:l] :
-   [wf] sequent [squash] { 'H >- member{univ[i:l]; 'x} } -->
+   [wf] sequent [squash] { 'H >- 'x IN univ[i:l] } -->
    sequent ['ext] { 'H >- "type"{'x} } =
    it
 
@@ -564,22 +520,10 @@ let infer_equal subst (so, t) =
       else
          subst
 
-let infer_member subst (so, t) =
-   let t, x1 = dest_member t in
-      if is_var_term x1 then
-         (dest_var x1, t) :: subst
-      else
-         subst
-
 let typeinf_subst_resource =
    Mp_resource.improve (**)
       typeinf_subst_resource
       (equal_term, infer_equal)
-
-let typeinf_subst_resource =
-   Mp_resource.improve (**)
-      typeinf_subst_resource
-      (member_term, infer_member)
 
 (*
  * Type of a universe is incremented by one.
@@ -636,9 +580,6 @@ let infer_univ1 = Typeinf.infer_const univ1_term
 let squash_equalT p =
    equality_squashElimination (Sequent.hyp_count_addr p) p
 
-let squash_memberT p =
-   member_squashElimination (Sequent.hyp_count_addr p) p
-
 let squash_rewriteT p =
    rewrite_squashElimination (Sequent.hyp_count_addr p) p
 
@@ -663,10 +604,6 @@ let equalAssumT i p =
    let i, j = Sequent.hyp_indices p i in
       equalityAxiom i j p
 
-let memberAssumT i p =
-   let j, k = Sequent.hyp_indices p i in
-      memberAxiom j k p
-
 (*
  * Assumed membership.
  *)
@@ -679,12 +616,11 @@ let univAssumT i p =
  *
  * let triv_equalT i p =
  *    (equalAssumT i
- *    orelseT memberAssumT i
  *    orelseT univAssumT i) p
  *)
 let triv_equalT i p =
    let i, j = Sequent.hyp_indices p i in
-   (equalityAxiom i j orelseT memberAxiom i j orelseT universeAssumType i j) p
+   (equalityAxiom i j orelseT universeAssumType i j) p
 
 (*
  * Reflexivity.

@@ -51,7 +51,6 @@ open Typeinf
 declare "type"{'a}
 declare univ[i:l]
 declare equal{'T; 'a; 'b}
-declare member{'T; 'x}
 declare "true"
 declare "false"
 declare cumulativity[i:l, j:l]
@@ -60,10 +59,7 @@ declare cumulativity[i:l, j:l]
  * DEFINITIONS                                                          *
  ************************************************************************)
 
-rewrite unfold_member : member{'T; 'x} <--> ('x = 'x in 'T)
-
 topval reduce_cumulativity : conv
-topval fold_member : conv
 
 (************************************************************************
  * DISPLAY                                                              *
@@ -86,14 +82,14 @@ rule trueIntro 'H :
  * Typehood is equality.
  *)
 rule equalityAxiom 'H 'J :
-   sequent ['ext] { 'H; x: 'T; 'J['x] >- 'x = 'x in 'T }
+   sequent ['ext] { 'H; x: 'T; 'J['x] >- 'x IN 'T }
 
 (*
  * Reflexivity.
  *)
 rule equalityRef 'H 'y :
    sequent ['ext] { 'H >- 'x = 'y in 'T } -->
-   sequent ['ext] { 'H >- 'x = 'x in 'T }
+   sequent ['ext] { 'H >- 'x IN 'T }
 
 (*
  * Symettry.
@@ -140,8 +136,8 @@ rule equalityEquality 'H :
  * Typehood.
  *)
 rule equalityType 'H :
-   sequent [squash] { 'H >- member{'T; 'a} } -->
-   sequent [squash] { 'H >- member{'T; 'b} } -->
+   sequent [squash] { 'H >- 'a IN 'T } -->
+   sequent [squash] { 'H >- 'b IN 'T } -->
    sequent ['ext] { 'H >- "type"{. 'a = 'b in 'T } }
 
 rule equalityTypeIsType 'H 'a 'b :
@@ -149,14 +145,14 @@ rule equalityTypeIsType 'H 'a 'b :
    sequent ['ext] { 'H >- "type"{'T} }
 
 (*
- * H >- it = it in (a = b in T)
- * by axiomEquality
+ * H >- it in (a = b in T)
+ * by axiomMember
  *
  * H >- a = b in T
  *)
-rule axiomEquality 'H :
+rule axiomMember 'H :
    sequent [squash] { 'H >- 'a = 'b in 'T } -->
-   sequent ['ext] { 'H >- it = it in ('a = 'b in 'T) }
+   sequent ['ext] { 'H >- it IN ('a = 'b in 'T) }
 
 (*
  * H, x: a = b in T, J[x] >- C[x]
@@ -185,21 +181,17 @@ rule equality_squashElimination 'H :
    sequent [squash] { 'H >- 'a = 'b in 'T } -->
    sequent ['ext] { 'H >- 'a = 'b in 'T }
 
-rule member_squashElimination 'H :
-   sequent [squash] { 'H >- member{'T; 'a} } -->
-   sequent ['ext] { 'H >- member{'T; 'a} }
-
 rule type_squashElimination 'H :
    sequent [squash] { 'H >- "type"{'T} } -->
    sequent ['ext] { 'H >- "type"{'T} }
 
 (*
- * H >- Uj = Uj in Ui
- * by universeEquality (side (j < i))
+ * H >- Uj in Ui
+ * by universeMember (side (j < i))
  *)
-rule universeEquality 'H :
+rule universeMember 'H :
    sequent ['ext] { 'H >- cumulativity[j:l, i:l] } -->
-   sequent ['ext] { 'H >- univ[j:l] = univ[j:l] in univ[i:l] }
+   sequent ['ext] { 'H >- univ[j:l] IN univ[i:l] }
 
 (*
  * H >- x = x in Ui
@@ -223,7 +215,7 @@ rule universeType 'H :
  * Anything in a universe is a type.
  *)
 rule universeMemberType 'H univ[i:l] :
-   sequent [squash] { 'H >- member{univ[i:l]; 'x} } -->
+   sequent [squash] { 'H >- 'x IN univ[i:l] } -->
    sequent ['ext] { 'H >- "type"{'x} }
 
 (*
@@ -274,13 +266,9 @@ val is_false_term : term -> bool
 
 val equal_term : term
 val is_equal_term : term -> bool
+val is_member_term : term -> bool
 val dest_equal : term -> term * term * term
 val mk_equal_term : term -> term -> term -> term
-
-val member_term : term
-val is_member_term : term -> bool
-val dest_member : term -> term * term
-val mk_member_term : term -> term -> term
 
 val type_term : term
 val is_type_term : term -> bool
@@ -304,7 +292,6 @@ val infer_univ_dep0_dep1 : (term -> string * term * term) -> typeinf_comp
 val infer_univ1 : typeinf_comp
 
 topval squash_equalT : tactic
-topval squash_memberT : tactic
 topval squash_typeT : tactic
 topval squash_rewriteT : tactic
 
@@ -316,8 +303,6 @@ topval typeAssertT : tactic
 (*
  * Turn an eqcd tactic into a d tactic.
  *)
-topval memberAssumT : int -> tactic
-
 topval unsquashT : term -> tactic
 topval equalAssumT : int -> tactic
 topval equalRefT : term -> tactic

@@ -78,7 +78,7 @@ extends Itt_isect
 extends Itt_tsquash
 extends Itt_subtype
 extends Itt_ext_equal
-doc <:doc< @docoff >>
+doc docoff
 
 open Lm_debug
 open Lm_printf
@@ -116,7 +116,7 @@ doc <:doc<
 
 declare bisect{'A; x. 'B['x]}
 
-doc <:doc< @docoff >>
+doc docoff
 
 (************************************************************************
  * DISPLAY FORMS                                                        *
@@ -285,6 +285,8 @@ interactive disectEliminationRight (*{| elim [SelectOption 2] |}*) 'H :
                     a: 'A; u: 'a = 'x in 'A;  b: 'B['a]; v: 'b = 'x in 'B['a] >- 'C['b] } -->
    sequent { <H>; x: bisect{'A; y.'B['y]}; <J['x]> >- 'C['x] }
 
+doc docoff
+
 let disectEliminationT = argfunT (fun n p ->
    let n = Sequent.get_pos_hyp_num p n in
    match get_sel_arg p with
@@ -346,7 +348,7 @@ interactive set_is_disect {| intro [] |} :
    [wf] sequent{ <H>; x:'A >- "type"{'P['x]}} -->
    sequent { <H> >- ext_equal{ {x: 'A | 'P['x]}; bisect{'A;x.tsquash{'P['x]}}}}
 
-doc <:doc< @docoff >>
+doc docoff
 
 (************************************************************************
  * TACTICS                                                              *

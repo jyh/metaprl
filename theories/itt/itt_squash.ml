@@ -304,6 +304,7 @@ doc <:doc<
    to add support for other kinds of rules if necessary.
 
    The squash resource represents data using a shape table.
+   @docoff
    @end[doc]
 >>
 type squash_inf =

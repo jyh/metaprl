@@ -97,13 +97,13 @@ define unfold_ge_bool :
 define unfold_bneq_int :
    bneq_int{'a; 'b} <--> bnot{beq_int{'a; 'b}}
 
+doc docoff
+
 let bneq_int_term = << bneq_int{'x; 'y} >>
 let bneq_int_opname = opname_of_term bneq_int_term
 let is_bneq_int_term = is_dep0_dep0_term bneq_int_opname
 let mk_bneq_int_term = mk_dep0_dep0_term bneq_int_opname
 let dest_bneq_int = dest_dep0_dep0_term bneq_int_opname
-
-doc docoff
 
 let resource reduce += [
    << bnot{lt_bool{'b; 'a}} >>, (makeFoldC << le_bool{'a;'b} >> unfold_le_bool);

@@ -90,7 +90,7 @@ doc <:doc<
    @terms
 
    The @tt{union} type is the binary union of two types $A$ and $B$.
-   The elements are @inl{a} for $a @in A$ and @inr{b} for $b @in B$.
+   The elements are $@inl{a}$ for $a @in A$ and $@inr{b}$ for $b @in B$.
    The @tt{decide} term @emph{decides} the handedness of the term $x @in A + B$.
    @end[doc]
 >>

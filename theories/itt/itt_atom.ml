@@ -101,9 +101,12 @@ let bogus_token = << token["token":t] >>
  * DISPLAY FORMS                                                        *
  ************************************************************************)
 
+declare df_token[t:t]
 dform atom_df : except_mode[src] :: atom = `"Atom"
 dform atom_df2 : mode[src] :: atom = `"atom"
 dform token_df : except_mode[src] :: token[t:t] =
+   ensuremath{math_mbox{df_token[t:t]}}
+dform token_df2 : df_token[t:t] =
    `"`" slot[t:t] `"'"
 
 (************************************************************************

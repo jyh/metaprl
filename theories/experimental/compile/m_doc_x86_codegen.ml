@@ -1,6 +1,6 @@
 doc <:doc< -*- mode: text; -*-
    @begin[spelling]
-   env gc op tmp args vargs
+   env gc op tmp args vargs NZ
    @end[spelling]
   
    @begin[doc]

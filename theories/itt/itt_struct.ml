@@ -83,18 +83,18 @@ doc <:doc<
    @begin[doc]
    @rules
   
-   @modsubsection{Thinning (of hypotheses)}
+   @modsubsection{Structural rules}
   
-   The @tt[thin_many] rule states that if the conclusion $C$ can be proved
-   from hypotheses defined in $H$ and $K$, then it can also be proved with
-   additional assumptions $J$.  The name comes from the
-   goal-directed view: the hypotheses $J$ are removed (``thinned'')
-   by the application of the rule.
+   The @tt[thin_many] rule states that if the conclusion <<'C>> can be proved
+   from hypotheses defined in <<df_context_var[H:v]>> and <<df_context_var[K:v]>>,
+   then it can also be proved with additional assumptions <<df_context_var[J:v]>>.
+   The name comes from the goal-directed view: the hypotheses <<df_context_var[J:v]>>
+   are removed (``thinned'') by the application of the rule.
   
-   Note that the rule requires that variables introduced by $J$ may not occur
-   free in $K$ or $C$.
+   Note that the rule requires that variables introduced by <<df_context_var[J:v]>>
+   may not occur free in <<df_context_var[K:v]>> or <<'C>>.
   
-   The proof extract term $t$ is unchanged.
+   The proof extract term <<'t>> is unchanged.
    @end[doc]
 >>
 prim thin_many 'H 'J :
@@ -116,12 +116,12 @@ doc <:doc<
    @modsubsection{Cut (lemma instantiation)}
   
    The @tt{cut} rule is an alternate form of @emph{modus-ponens}.
-   If the lemma $S$ can be proved from the current assumptions $H$
-   and $J$, and the goal $T$ can be proved with this additional assumption,
-   the lemma can be instantiated to obtain a proof of the goal.
+   If the lemma <<'S>> can be proved from the current assumptions <<df_context_var[H:v]>>
+   and <<df_context_var[J:v]>>, and the goal <<'T>> can be proved with
+   this additional assumption, the lemma can be instantiated to obtain a proof of the goal.
   
-   The extract term is formed by instantiating the proof $a$ of the lemma
-   in the abstracted proof $f[x]$, to get a proof $f[a]$ of $T$.
+   The extract term is formed by instantiating the proof <<'a>> of the lemma
+   in the abstracted proof <<'f['x]>>, to get a proof <<'f['a]>> of <<'T>>.
    @end[doc]
 >>
 prim cut 'H 'S :
@@ -183,7 +183,7 @@ doc <:doc<
   
    There are three rules to define substitution.
    The @tt{substitution} rule defines substitution of an arbitrary
-   subterm of the conclusion $T_1[t_1]$ with a new term $t_2$.  For the
+   subterm $t_1$ of the conclusion $T_1[t_1]$ with a new term $t_2$.  For the
    substitution to be valid, the terms $t_1$ and $t_2$ must be equal
    in some type $T_2$, the goal $T_1[t_2]$ must be provable, and the
    conclusion $T_1[x]$ must also be @emph{functional} for arbitrary terms
@@ -386,10 +386,10 @@ doc <:doc<
    example illustrates the use.
   
    $$
-   @rulebox{substT; 1 + 2 = 3 @in @int;
+   @rulebox{substT; (1 + 2 = 3 @in @int)@space@tt[0];
       @ldots @i{equality} @ldots <<sequent{ <H> >- <:doc<1 + 2 = 3 @in @int>>}>>@cr
       @ldots @i{main} @ldots <<sequent{ <H> >- <:doc<3 < 1 * 3>>}>>@cr
-      @ldots @i{wf} @ldots <<sequent{ <H>; i: (<:doc<@int>>) >- "type"{.<:doc<(x < 1 * x)>>}}>>;
+      @ldots @i{wf} @ldots <<sequent{ <H>; x: (<:doc<@int>>) >- "type"{.<:doc<(x < 1 * x)>>}}>>;
       <<sequent{ <H> >- <:doc< (1 + 2) < 1 * (1 + 2)>>}>>}
    $$
   

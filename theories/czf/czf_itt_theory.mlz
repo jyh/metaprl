@@ -2,7 +2,7 @@ doc <:doc<
    @spelling{CST Errett Myhill ZF eq practise}
   
    @begin[doc]
-   @theory{ITT Implementation of CZF Theory}
+   @theory{Type Theory Implementation of CZF Theory}
    The @emph{CZF} theory formalizes Aczel's constructive
    set theory @cite[Acz86].  In @emph{Notes on Constructive
    Set Theory} @cite[Acz97], Aczel provides the central motivation
@@ -33,10 +33,10 @@ doc <:doc<
    Aczel assures the constructivity of the set theory by using
    @MartinLof's Constructive Set Theory as its foundation.
    We follow Aczel's approach in the definition of our formalization of
-   the set theory.  We encode the sets within the @Nuprl type theory.
+   the set theory.  We encode the sets within our Computational Type Theory.
    There are two main reasons for formalizing @emph{CZF}.  First, we
    demonstrate the method for @emph{deriving} one non-trivial theory
-   from another (@emph{CZF} is @emph{derived} from the @Nuprl
+   from another (@emph{CZF} is @emph{derived} from the
    type theory).  In addition, set theory can often present a convenient
    framework for developing constructive mathematics using ordinary
    mathematical concepts.  Aczel continues,
@@ -64,7 +64,7 @@ doc <:doc<
    about set membership in a manner similar to the definition of
    @emph{ZF} set theory.  At the moment, the extent of our formalization
    is to encode the sets and prove that each of these axioms is
-   valid given our interpretation of sets in the @Nuprl type theory
+   valid given our interpretation of sets in the type theory
    (defined in the @hrefmodule[Itt_theory] module).
   
    @modsection{Axioms}

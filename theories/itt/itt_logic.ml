@@ -585,7 +585,7 @@ dform cor_df2 : cor_df{."cor"{'a; 'b}} =
    cor_df{'a} cor_df{'b}
 
 dform cor_df3 : cor_df{'a} =
-   hspace Nuprl_font!vee `"c" " " slot{'a}
+   hspace Nuprl_font!vee subc " " slot{'a}
 
 (*
  * Conjunction.
@@ -613,7 +613,7 @@ dform cand_df2 : and_df{."cand"{'a; 'b}} =
    cand_df{'a} cand_df{'b}
 
 dform cand_df3 : cand_df{'a} =
-   hspace Nuprl_font!wedge `"c" " " slot{'a}
+   hspace Nuprl_font!wedge subc " " slot{'a}
 
 (*
  * Quantifiers.
@@ -748,7 +748,7 @@ doc <:doc<
       These hypotheses are also moved to the conclusion.
 
       $$
-      @rulebox{moveToConclT; i;
+      @rulebox{moveToConclT; @tt[2];
       <<sequent{ <H>; j: <:doc<@int>> >- all i:(<:doc<@int>>).(<:doc< (i < j) @Rightarrow T_2[i]>>)}>>;
       <<sequent{ <H>; i:<:doc<@int>>; j: <:doc<@int>>; <:doc<i < j>> >- 'T_2['i]}>>}
       $$

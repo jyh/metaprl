@@ -1,5 +1,5 @@
 doc <:doc< 
-   @spelling{IR}
+   @spelling{IR AST}
    @begin[doc]
    @module[M_ast]
    This file defines the terms needed to represent the M AST.

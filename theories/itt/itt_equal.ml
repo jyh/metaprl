@@ -3,7 +3,7 @@ doc <:doc<
    @module[Itt_equal]
 
    The @tt{Itt_equal} module defines type @emph{universes},
-   @emph{cumulativity} of type universes, and equality.
+   @emph{cumulativity} of type universes, and @emph{equality}.
    @end[doc]
 
    ----------------------------------------------------------------
@@ -98,10 +98,10 @@ doc <:doc<
    The $@type{t}$ term is used to define the @emph{type} judgment.  A term $T$ is a
    type if <<sequent{ <H> >- 'T Type}>>.
 
-   The semantic meaning of an open equality is that:
+   The semantic meaning of an equality << 't_1 = 't_2 in 'T >> is that:
    @begin[enumerate]
    @item{$T$ is a type,}
-   @item{$t_1$ and $t_2$ are well-formed elements of type $T$.}
+   @item{$t_1$ and $t_2$ are well-formed elements of type $T$,}
    @item{and $t_1$ and $t_2$ are equal using the equality of type $T$.}
    @end[enumerate]
    @end[doc]
@@ -350,6 +350,7 @@ prim equalityTrans 'z :
    sequent { <H> >- 'x = 'y in 'T } =
    it
 
+doc <<docoff>>
 (*
  * H >- Ui ext a = b in T
  * by equalityFormation T

@@ -1,11 +1,11 @@
 doc <:doc< 
    @begin[doc]
-   @theory{ITT: Intuitionistic Type Theory}
+   @theory{@Nuprl-style Computational Type Theory}
    @module[Itt_theory]
   
-   The @tt{Itt_theory} module collects all of the modules in the
-   @Nuprl type theory.  This is the basic module to use when
-   stating and proving theorems in the @Nuprl type theory.
+   The @tt[Itt_theory] module collects all of the modules in our
+   computational type theory.  This is the basic module to use when
+   stating and proving theorems in the type theory.
    @end[doc]
   
    ----------------------------------------------------------------

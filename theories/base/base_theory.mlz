@@ -30,9 +30,9 @@ doc <:doc<
 
    The @tt[Base_theory] module itself defines no new primitives; it
    simply brings together all the parts of the base logic into a unified
-   module.  Descendent theories (such as the @MartinLof-style Type Theory, Section
-   @refmodule[Itt_theory], and the Constructive Set Theory Section @refmodule[Czf_itt_theory])
-   include the @hrefmodule[Base_theory] directly.
+   module.  Descendent theories (such as the @MartinLof-style Computational
+   Type Theory, Section @refmodule[Itt_theory], and the Constructive Set Theory,
+   Section @refmodule[Czf_itt_theory]) include the @hrefmodule[Base_theory] directly.
    @end[doc]
 
    ----------------------------------------------------------------
@@ -71,6 +71,9 @@ doc <:doc<
 doc <:doc<
    @begin[doc]
    @parents
+   The @tt[Base_theory] brings together modules from the @tt["support/display"],
+   @tt["support/shell"], @tt["support/tactics"] and @tt["theories/base"] source tree
+   directories.
    @end[doc]
 >>
 extends Summary

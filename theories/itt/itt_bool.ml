@@ -602,36 +602,14 @@ doc <:doc<
  * Split a bool in the conclusion.
  *)
 let splitBoolCT = argfunT (fun a p ->
-   let bind =
-      try
-         let t1 = get_with_arg p in
-            if is_xbind_term t1 then
-               t1
-            else
-               raise (RefineError ("splitBoolT", StringTermError ("need a
- \"bind\" term: ", t1)))
-      with
-         RefineError _ ->
-            var_subst_to_bind (Sequent.concl p) a
-   in
+   let bind = get_bind_from_arg_or_concl_subst p a in
       bool_subst_concl bind a)
 
 (*
  * Split a bool in a hyp.
  *)
 let splitBoolHT i a = funT (fun p ->
-   let bind =
-      try
-         let b = get_with_arg p in
-            if is_xbind_term b then
-               b
-            else
-               raise (RefineError ("splitBoolT", StringTermError ("need a
- \"bind\" term: ", b)))
-      with
-         RefineError _ ->
-            var_subst_to_bind (Sequent.nth_hyp p i) a
-   in
+   let bind = get_bind_from_arg_or_hyp_subst p i a in
       bool_subst_hyp (Sequent.get_pos_hyp_num p i) bind a)
 
 let splitBoolT t i =

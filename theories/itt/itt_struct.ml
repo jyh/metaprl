@@ -67,7 +67,7 @@ open Mp_resource
 
 open Tactic_type
 open Tactic_type.Tacticals
-open Perv
+open Var
 open Mptop
 
 open Base_auto_tactic
@@ -393,17 +393,7 @@ doc <:doc<
 >>
 let substConclT = argfunT (fun t p ->
    let _, a, _ = dest_equal t in
-   let bind =
-      try
-         let t1 = get_with_arg p in
-            if is_xbind_term t1 then
-               t1
-            else
-               raise generic_refiner_exn (* will be immedeiatelly caugh *)
-      with
-         RefineError _ ->
-            var_subst_to_bind (Sequent.concl p) a
-   in
+   let bind = get_bind_from_arg_or_concl_subst p a in
       substitution t bind)
 
 (*
@@ -412,17 +402,7 @@ let substConclT = argfunT (fun t p ->
 let substHypT i t = funT (fun p ->
    let i = Sequent.get_pos_hyp_num p i in
    let _, a, _ = dest_equal t in
-   let bind =
-      try
-         let b = get_with_arg p in
-            if is_xbind_term b then
-               b
-            else
-               raise generic_refiner_exn (* will be immedeiatelly caugh *)
-      with
-         RefineError _ ->
-            var_subst_to_bind (Sequent.nth_hyp p i) a
-   in
+   let bind = get_bind_from_arg_or_hyp_subst p i a in
       hypSubstitution i t bind)
 
 (*

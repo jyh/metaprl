@@ -99,7 +99,7 @@ open Refiner.Refiner.RefineError
 open Tactic_type
 open Tactic_type.Sequent
 open Tactic_type.Tacticals
-open Perv
+open Var
 open Mptop
 
 open Base_dtactic

@@ -51,9 +51,6 @@ val mk_bind1_term : string -> term -> term
 val is_bind1_term : term -> bool
 val dest_bind1 : term -> string * term
 
-(* var_subst_to_bind 'A[t] t = bind{v.'A['v]} *)
-val var_subst_to_bind : term -> term -> term 
-
 val mk_bind2_term : string -> string -> term -> term
 val is_bind2_term : term -> bool
 val dest_bind2 : term -> string * string * term

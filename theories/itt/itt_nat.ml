@@ -155,20 +155,8 @@ interactive well_ordering_principle bind{i.'P['i]} 'i :
 
 doc <:doc< @docoff >>
 
-let natBackInductionT = argfunT (fun n p ->
-   let bind =
-      try
-         let b = get_with_arg p in
-            if is_xbind_term b then
-               b
-            else
-               raise (RefineError ("natBackInduction", StringTermError ("need a \"bind\" term: ", b)))
-      with
-         RefineError _ ->
-               let z = get_opt_var_arg "z" p in
-                  mk_xbind_term z (var_subst  (Sequent.concl p) <<0>> z)
-   in
-      natBackInduction n bind)
+let natBackInductionT =
+   argfunT (fun n p -> natBackInduction n (get_bind_from_arg_or_concl_subst p <<0>>))
 
 (*
  * Some applications

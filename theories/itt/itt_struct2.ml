@@ -272,17 +272,7 @@ doc <:doc<
 
 let substConclT = argfunT (fun t p ->
    let _, a, _ = dest_equal t in
-   let bind =
-      try
-         let t1 = get_with_arg p in
-            if is_xbind_term t1 then
-               t1
-            else
-               raise (RefineError ("substT", StringTermError ("need a \"bind\" term: ", t)))
-      with
-         RefineError _ ->
-            var_subst_to_bind (Sequent.concl p) a
-   in
+   let bind = get_bind_from_arg_or_concl_subst p a in
       (substitutionInType t bind orelseT substitution2 t bind) thenWT thinIfThinningT [-1;-1])
 
 (*
@@ -291,17 +281,7 @@ let substConclT = argfunT (fun t p ->
 let substHypT i t = funT (fun p ->
    let i = Sequent.get_pos_hyp_num p i in
    let _, a, _ = dest_equal t in
-   let bind =
-      try
-         let b = get_with_arg p in
-            if is_xbind_term b then
-               b
-            else
-               raise (RefineError ("substT", StringTermError ("need a \"bind\" term: ", b)))
-      with
-         RefineError _ ->
-            var_subst_to_bind (Sequent.nth_hyp p i) a
-   in
+   let bind = get_bind_from_arg_or_hyp_subst p i a in
      if get_thinning_arg p
        then hypSubstitution i t bind
        else hypSubstitution2 i t bind)
@@ -345,18 +325,8 @@ let revHypSubstT i j = funT (fun p ->
 let letT x_is_s_in_S = funT (fun p ->
    let _S, x, s = dest_equal x_is_s_in_S in
    let xname = dest_var x in
-   let bind =
-      try
-         get_with_arg p
-      with
-         RefineError _ ->
-               var_subst_to_bind (Sequent.concl p) s
-   in
-      if is_xbind_term bind then
-           cutMem s  _S bind thenMT nameHypT (-2) xname thenMT thinIfThinningT [-1]
-      else
-           raise (RefineError ("letT", StringTermError ("need a \"bind\" term: ", bind))))
-
+   let bind = get_bind_from_arg_or_concl_subst p s in
+      cutMem s  _S bind thenMT nameHypT (-2) xname thenMT thinIfThinningT [-1])
 
 (* cutEq *)
 
@@ -367,7 +337,7 @@ let assertEqT = argfunT (fun eq p ->
          get_with_arg p
       with
          RefineError _ ->
-            let x = get_opt_var_arg "z" p in
+            let x = maybe_new_var_arg p "z" in
             let t, t1,  t2 = dest_equal (Sequent.concl p) in
             let t' = var_subst t s1 x in
             let t1' = var_subst t1 s1 x in

@@ -66,6 +66,7 @@ open Tactic_type.Conversionals
 
 (* XXX Bootstrapping HACK *)
 let _ = Theory.substitute_dforms "comment" "summary"
+let _ = Theory.substitute_dforms "perv" "summary"
 
 (************************************************************************
  * TYPES                                                                *

@@ -112,7 +112,7 @@ doc <:doc<
    @begin[doc]
    @begin[description]
    @item{@tactic[funT]; When @i[tac] is a function from @tt[tactic_arg] to @tt[tactic]
-   (e.g. a function that takes a look at the current goal and choses the tactic to apply
+   (e.g. a function that takes a look at the current goal and chooses the tactic to apply
    based on what is being proven), then @tt[funT] @i[tac] would be the corresponding tactic.}
    @end[description]
   

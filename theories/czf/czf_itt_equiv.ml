@@ -99,7 +99,7 @@ open Tactic_type.Tacticals
 open Tactic_type.Sequent
 open Tactic_type.Conversionals
 open Mptop
-open Perv
+open Var
 
 open Base_dtactic
 open Base_auto_tactic

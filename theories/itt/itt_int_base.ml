@@ -1,6 +1,4 @@
 doc <:doc<
-   @spelling{int number ind add minus beq_int lt_bool}
-  
    @begin[doc]
    @module[Itt_int_base]
   
@@ -87,7 +85,7 @@ doc <:doc<
    @begin[doc]
    @terms
   
-   The @tt{int} term is the type of integers with elements
+   The @tt[int] term is the type of integers with elements
    $$@ldots, @number{-2}, @number{-1}, @number{0}, @number{1}, @number{2},
  @ldots$$
    @end[doc]
@@ -128,7 +126,7 @@ define unfold_lt :
 
 doc <:doc<
    @begin[doc]
-   The @tt{ind} term is the induction combinator for building
+   The @tt[ind] term is the induction combinator for building
    loops indexed by an integer argument.
    @end[doc]
 >>
@@ -335,7 +333,7 @@ let int_sqequalC = int_sqequal_rw
 
 doc <:doc<
    @begin[doc]
-   @modsubsection{Typehood and well-formedness of @tt{int} and @tt{number}}
+   @modsubsection{Typehood and well-formedness of @tt[int] and @tt[number]}
 
    The $@int$ type inhabits every universe, and it
    is a type.
@@ -487,8 +485,8 @@ doc <:doc<
    @begin[doc]
    @modsubsection{Order relation properties}
 
-   <<lt_bool{'a;'b}>> defines irreflexive, asymmetrical, transitive and
-   discrete order on @tt{int}
+   <<lt_bool{'a;'b}>> defines irreflexive, asymmetric, transitive and
+   discrete order on @tt[int]
    @end[doc]
 >>
 
@@ -554,7 +552,7 @@ interactive splitInt 'a 'b :
 doc <:doc<
    @begin[description]
    @item{@tactic[splitIntT];
-    { The @tt{splitIntT a b} tactic uses @tt{splitInt} rule to split
+    { The @tt[splitIntT] <<'a>> <<'b>> tactic uses @tt[splitInt] rule to split
       reasoning into three cases - when <<'a>> is less then, equal to or
       greater then <<'b>>.}}
    @end[description]
@@ -610,7 +608,7 @@ doc <:doc<
    Induction on an integer assumption produces three cases:
    one for the base case $0$, one for induction on negative arguments,
    and another for induction on positive arguments.  The proof extract term
-   uses the @tt{ind} term, which performs a case analysis on its argument.
+   uses the @tt[ind] term, which performs a case analysis on its argument.
    @end[doc]
 >>
 (*
@@ -637,7 +635,7 @@ prim intElimination {| elim [ThinOption thinT] |} 'H :
 doc <:doc<
    @begin[doc]
    @modsubsection {Induction and recursion}
-   Reduction of the induction combinator @tt{ind} has three cases.
+   Reduction of the induction combinator @tt[ind] has three cases.
    If the argument $x$ is $0$, the combinator reduces to the @i{base}
    case; if it is positive, it reduces to the @i{up} case; and
    if it is negative, it reduces to the @i{down} case.
@@ -695,7 +693,7 @@ let reduce_ind_numberC =
  * @begin[doc]
  * @modsubsection{Combinator equality}
  *
- * Two @tt{ind} term compute values of type $T$ if each of the three
+ * Two @tt[ind] term compute values of type $T$ if each of the three
  * cases (zero, positive, and negative) produces values of type $T$.
  * @end[doc]
  *)
@@ -730,7 +728,7 @@ doc <:doc<
    @begin[doc]
    @modsubsection{Addition properties}
 
-   @tt{add} is commutative and associative.
+   @tt[add] is commutative and associative.
 
    @end[doc]
 >>
@@ -771,7 +769,7 @@ let add_Assoc2C = add_Assoc2_rw
 doc <:doc<
    @begin[doc]
 
-   0 is neutral element for @tt{add} in @tt{int}
+   0 is neutral element for @tt[add] in @tt[int]
 
    @end[doc]
 >>

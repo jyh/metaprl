@@ -1,4 +1,5 @@
 doc <:doc< 
+   @spelling{groupoid semigroup}
    @begin[doc]
    @module[Itt_grouplikeobj]
   

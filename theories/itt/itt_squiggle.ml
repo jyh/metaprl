@@ -225,22 +225,9 @@ doc <:doc< @docoff >>
 
 (* substitution *)
 
-
 let sqSubstConclT = argfunT (fun t p ->
    let a, _ = dest_squiggle t in
-   let bind =
-      try
-         let t1 = get_with_arg p in
-            if is_xbind_term t1 then
-               t1
-            else
-               raise (RefineError ("substT", StringTermError ("need a \"bind\" term: ", t)))
-      with
-         RefineError _ ->
-            let x = get_opt_var_arg "z" p in
-               mk_xbind_term x (var_subst (Sequent.concl p) a x)
-   in
-      squiggleSubstitution t bind)
+      squiggleSubstitution t (get_bind_from_arg_or_concl_subst p a))
 
 (*
  * Hyp substitution requires a replacement.
@@ -248,18 +235,7 @@ let sqSubstConclT = argfunT (fun t p ->
 let sqSubstHypT i t = funT (fun p ->
    let a, _ = dest_squiggle t in
    let i = Sequent.get_pos_hyp_num p i in
-   let bind =
-      try
-         let b = get_with_arg p in
-            if is_xbind_term b then
-               b
-            else
-               raise (RefineError ("substT", StringTermError ("need a \"bind\" term: ", b)))
-      with
-         RefineError _ ->
-            let z = get_opt_var_arg "z" p in
-               mk_xbind_term z (var_subst (Sequent.nth_hyp p i) a z)
-   in
+   let bind = get_bind_from_arg_or_hyp_subst p i a in
       squiggleHypSubstitution i t bind)
 
 (*

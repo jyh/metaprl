@@ -174,11 +174,7 @@ let order = order1 thenC higherC fold_less
 
 let resource elim += soft_elim <<order[i:l]>> order
 
-doc <:doc< 
-   @begin[doc]
-   @rules
-   @end[doc]
->>
+doc "doc"{rules}
 
 interactive less_wf  {| intro[] |} order[i:l] :
    [wf] sequent [squash] { <H> >- 'ord in order[i:l] }  -->
@@ -189,8 +185,6 @@ interactive less_wf  {| intro[] |} order[i:l] :
 
 define compare: compare{'self; 'a;'b; 'less_case; 'equal_case; 'greater_case} <--> if 'a ^< 'b then 'less_case else if 'b ^< 'a then 'greater_case else 'equal_case
 
-
-
 interactive three_cases  compare{'ord; 'x;'y; 'less_case; 'equal_case; 'greater_case}  order[i:l]  bind{t.'T['t]}:
    [wf] sequent [squash] { <H> >- 'ord in order[i:l] }  -->
    [wf] sequent [squash] { <H> >- 'x in 'ord^car }  -->
@@ -200,25 +194,13 @@ interactive three_cases  compare{'ord; 'x;'y; 'less_case; 'equal_case; 'greater_
    sequent ['ext] { <H>; u:  'x = 'y in 'ord^car >- 'T['equal_case] }  -->
    sequent ['ext]   { <H> >- 'T[compare{'ord; 'x;'y; 'less_case; 'equal_case; 'greater_case}]}
 
-
-doc <:doc< @docoff >>
+doc docoff
 
 let decideOrder3T compare_term order_term = funT (fun p ->
-   let z = get_opt_var_arg "z" p in
-   let bind =
-      try
-         let b = get_with_arg p in
-            if is_xbind_term b then
-               b
-            else
-               raise generic_refiner_exn (* will be immedeiatelly caugh *)
-      with
-         RefineError _ ->
-            mk_xbind_term z (var_subst (Sequent.concl p) compare_term  z)
-   in
-    three_cases compare_term order_term bind)
+   let bind = get_bind_from_arg_or_concl_subst p compare_term in
+      three_cases compare_term order_term bind)
 
-doc <:doc< @doc { } >>
+doc <:doc< @doc{ } >>
 
 interactive compare_wf {| intro [] |} order[i:l] :
    [wf] sequent [squash] { <H> >- 'ord in order[i:l] }  -->
@@ -229,15 +211,11 @@ interactive compare_wf {| intro [] |} order[i:l] :
    sequent [squash] { <H>; u: 'x = 'y in 'ord^car >- 'equal_case in 'T } -->
    sequent ['ext]   { <H> >-  compare{'ord; 'x;'y; 'less_case; 'equal_case; 'greater_case} in 'T}
 
-
-
 dform match_tree_df : except_mode[src] :: compare{'O; 'a;'b; 'less_case; 'equal_case; 'greater_case} =
    szone pushm[0] pushm[3] `"Compare in " slot{'O} `": " hspace
        'a `"<" 'b `" -> " slot{'less_case} hspace
        'a `"=" 'b `" -> " slot{'equal_case}  hspace
        'a `">" 'b `" -> " slot{'greater_case} popm popm ezone
-
-
 
 doc <:doc< @begin[doc]
   Corollary: The equality is decidable in ordered sets
@@ -258,7 +236,4 @@ doc <:doc< @begin[doc]
 
 define int_order: int_order <--> {car= int; "<"= lambda{a.lambda{b.lt_bool{'a;'b}}}}
 
-doc <:doc< @docoff >>
-
-
-
+doc docoff

@@ -75,7 +75,7 @@ open Tactic_type
 open Tactic_type.Conversionals
 open Tactic_type.Tacticals
 open Tactic_type.Sequent
-open Perv
+open Var
 
 open Base_dtactic
 

@@ -126,7 +126,7 @@ open Term_stable
 open Tactic_type
 open Tactic_type.Tacticals
 open Tactic_type.Sequent
-open Perv
+open Var
 open Mptop
 
 open Base_dtactic

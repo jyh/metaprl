@@ -42,7 +42,7 @@ open Refiner.Refiner.TermMan
 open Refiner.Refiner.RefineError
 open Mp_resource
 
-open Perv
+open Var
 open Mptop
 open Typeinf
 

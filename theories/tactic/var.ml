@@ -51,8 +51,8 @@ doc <:doc<
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
   
-   Author: Jason Hickey
-   @email{jyh@cs.caltech.edu}
+   Author: Jason Hickey @email{jyh@cs.caltech.edu}
+   Modified By: Aleksey Nogin @email{nogin@cs.caltech.edu}
   
    @end[license]
 >>
@@ -63,16 +63,19 @@ doc <:doc<
    @end[doc]
 >>
 extends Summary
-doc <:doc< @docoff >>
-
-open Refiner.Refiner.Term
-open Refiner.Refiner.RefineError
+doc docoff
 
 open Printf
 open Mp_debug
 open String_util
+open String_set
+
+open Refiner.Refiner.Term
+open Refiner.Refiner.TermSubst
+open Refiner.Refiner.RefineError
 
 open Tactic_type
+open Perv
 
 (*
  * Debug statement.
@@ -130,13 +133,30 @@ let maybe_new_var_arg p v =
    let vars = Sequent.declared_vars p in
       maybe_new_var v vars
 
-(*
- * Optional vars.
- *)
-let get_opt_var_arg v p =
-   try dest_var (Sequent.get_term_arg p "var") with
-      RefineError _ ->
-         maybe_new_var v (Sequent.declared_vars p)
+let bv = "bnd"
+
+let var_subst_to_bind t1 t2 =
+   let vs = free_vars_set t1 in
+   let v =
+      if StringSet.mem vs bv then vnewname bv (StringSet.mem vs) else bv
+   in
+      mk_bind1_term v (var_subst t1 t2 v)
+
+let get_bind_from_arg_or_concl_subst p t =
+   try
+      let b = Tacticals.get_with_arg p in
+         if is_bind1_term b then b
+         else raise generic_refiner_exn (* will be immedeiatelly caugh *)
+   with RefineError _ ->
+      var_subst_to_bind (Sequent.concl p) t
+
+let get_bind_from_arg_or_hyp_subst p i t =
+   try
+      let b = Tacticals.get_with_arg p in
+         if is_bind1_term b then b
+         else raise generic_refiner_exn (* will be immedeiatelly caugh *)
+   with RefineError _ ->
+      var_subst_to_bind (Sequent.nth_hyp p i) t
 
 (*
  * -*-

@@ -169,7 +169,10 @@ let d_hyp_prod i p =
    let j, k = hyp_indices p i in
    let u, v = maybe_new_vars2 p "u" "v" in
    let tac = independentProductElimination j k z u v in
-      tac p
+      if get_thinning_arg p then
+         (tac thenT thinT i) p
+      else
+         tac p
 
 (*
  * Join them.

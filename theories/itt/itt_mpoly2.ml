@@ -2,6 +2,7 @@ extends Itt_bisect
 extends Itt_cyclic_group
 extends Itt_list2
 extends Itt_ring_uce
+extends Itt_w
 
 open Lm_symbol
 open Lm_printf
@@ -124,11 +125,51 @@ interactive eval_standardizeElim {| elim [elim_typeinf <<'R>>] |} 'H unitringCE[
 		=eval_mpoly{standardize{'p; 'R; length{'vals}}; 'vals; 'R} in 'R^car); <J> >- 'C } -->
 	sequent{ <H>; 't = eval_mpoly{'p; 'vals; 'R} in 'R^car; <J> >- 'C }
 
+define unfold_mpolyTerm : mpolyTerm{'R;'nvars} <-->
+	w{(unit + unit) + ('R^car + nat{'nvars});
+		node.decide{'node;
+			op.(unit + unit);
+			leaf.void}}
+
+define unfold_addOp : addOp <--> inl{inl{it}}
+define unfold_mulOp : mulOp <--> inl{inr{it}}
+define unfold_constLeaf : constLeaf{'c} <--> inr{inl{'c}}
+define unfold_varLeaf : varLeaf{'v} <--> inr{inr{'v}}
+
+define unfold_addTerm : addTerm{'l;'r} <-->
+	tree{addOp; lambda{child.decide{'child; x.'l; x.'r}}}
+
+define unfold_mulTerm : mulTerm{'l;'r} <-->
+	tree{mulOp; lambda{child.decide{'child; x.'l; x.'r}}}
+
+define unfold_constTerm : constTerm{'c} <--> tree{constLeaf{'c}; lambda{x.'x}}
+define unfold_varTerm : varTerm{'i} <--> tree{varLeaf{'i}; lambda{x.'x}}
+
+define unfold_leftOperand : leftOperand <--> inl{it}
+define unfold_rightOperand : rightOperand <--> inr{it}
+
+define unfold_eval_mpolyTerm : eval_mpolyTerm{'pt; 'vals; 'R} <-->
+	tree_ind{'pt; a,f,g.(
+		decide{'a;
+			op.decide{'op;
+				l.(('g leftOperand) +['R] ('g rightOperand));
+				r.(('g leftOperand) *['R] ('g rightOperand))};
+			leaf.decide{'leaf; c.'c; var.nth{'vals; 'var}}})}
+
+define unfold_mpoly_ofTerm : mpoly_ofTerm{'pt; 'R} <-->
+	tree_ind{'pt; a,f,g.(
+		decide{'a;
+			op.decide{'op;
+				l.add_mpoly{('g leftOperand); ('g rightOperand)};
+				r.mul_mpoly{('g leftOperand); ('g rightOperand); 'R}};
+			leaf.decide{'leaf; c.const_mpoly{'c}; var.id_mpoly{'R; 'var}}})}
+
+(*
 declare mpolyTerm{'R;'nvars}
 
 define unfold_polyOp : polyOp <--> unit + unit
 define unfold_addOp : addOp <--> inl{it}
-define unfold_mulOp : mulOp <--> inl{it}
+define unfold_mulOp : mulOp <--> inr{it}
 define unfold_addTerm : addTerm{'l;'r} <--> inl{(addOp,('l,'r))}
 define unfold_mulTerm : mulTerm{'l;'r} <--> inl{(mulOp,('l,'r))}
 define unfold_constTerm : constTerm{'c} <--> inr{inl{'c}}
@@ -136,33 +177,40 @@ define unfold_varTerm : varTerm{'i} <--> inr{inr{'i}}
 
 prim_rw unfold_mpolyTerm : mpolyTerm{'R;'nvars} <-->
 	((polyOp * (mpolyTerm{'R;'nvars} * mpolyTerm{'R;'nvars})) + ('R^car + nat{'nvars}))
+*)
 
-interactive addTerm_wf {| intro [intro_typeinf <<'R>>] |} unitringCE[i:l] :
+interactive mpolyTerm_wf {| intro [] |} :
+	sequent { <H> >- 'R^car Type } -->
+	sequent { <H> >- 'n in nat } -->
+	sequent { <H> >- mpolyTerm{'R; 'n} Type }
+
+interactive addTerm_wf {| intro [] |} :
 	sequent { <H> >- 'l in mpolyTerm{'R; 'n} } -->
 	sequent { <H> >- 'r in mpolyTerm{'R; 'n} } -->
-	sequent { <H> >- 'R in unitringCE[i:l] } -->
+	sequent { <H> >- 'R^car Type } -->
 	sequent { <H> >- 'n in nat } -->
 	sequent { <H> >- addTerm{'l;'r} in mpolyTerm{'R; 'n} }
 
-interactive mulTerm_wf {| intro [intro_typeinf <<'R>>] |} unitringCE[i:l] :
+interactive mulTerm_wf {| intro [] |} :
 	sequent { <H> >- 'l in mpolyTerm{'R; 'n} } -->
 	sequent { <H> >- 'r in mpolyTerm{'R; 'n} } -->
-	sequent { <H> >- 'R in unitringCE[i:l] } -->
+	sequent { <H> >- 'R^car Type } -->
 	sequent { <H> >- 'n in nat } -->
 	sequent { <H> >- mulTerm{'l;'r} in mpolyTerm{'R; 'n} }
 
-interactive constTerm_wf {| intro [intro_typeinf <<'R>>] |} unitringCE[i:l] :
+interactive constTerm_wf {| intro [] |} :
 	sequent { <H> >- 'c in 'R^car } -->
-	sequent { <H> >- 'R in unitringCE[i:l] } -->
+	sequent { <H> >- 'R^car Type } -->
 	sequent { <H> >- 'n in nat } -->
 	sequent { <H> >- constTerm{'c} in mpolyTerm{'R; 'n} }
 
-interactive varTerm_wf {| intro [intro_typeinf <<'R>>] |} unitringCE[i:l] :
+interactive varTerm_wf {| intro [] |} :
 	sequent { <H> >- 'j in nat{'n} } -->
-	sequent { <H> >- 'R in unitringCE[i:l] } -->
+	sequent { <H> >- 'R^car Type } -->
 	sequent { <H> >- 'n in nat } -->
 	sequent { <H> >- varTerm{'j} in mpolyTerm{'R; 'n} }
 
+(*
 declare eval_mpolyTerm{'pt; 'vals; 'R}
 
 prim_rw reduce_eval_mpolyTerm : eval_mpolyTerm{'pt; 'vals; 'R} <-->
@@ -171,6 +219,7 @@ prim_rw reduce_eval_mpolyTerm : eval_mpolyTerm{'pt; 'vals; 'R} <-->
 			add.(eval_mpolyTerm{'l; 'vals; 'R} +['R] eval_mpolyTerm{'r; 'vals; 'R});
 			mul.(eval_mpolyTerm{'l; 'vals; 'R} *['R] eval_mpolyTerm{'r; 'vals; 'R})}}};
 		leaf.decide{'leaf; const.'const; var.nth{'vals; 'var}}}
+*)
 
 interactive_rw reduce_eval_mpolyTermAdd :
 	eval_mpolyTerm{addTerm{'l;'r}; 'vals; 'R} <-->
@@ -188,6 +237,7 @@ interactive_rw reduce_eval_mpolyTermVar :
 	eval_mpolyTerm{varTerm{'i}; 'vals; 'R} <-->
 	nth{'vals; 'i}
 
+(*
 declare mpoly_ofTerm{'pt; 'R}
 
 prim_rw reduce_mpoly_ofTerm : mpoly_ofTerm{'pt; 'R} <-->
@@ -196,6 +246,7 @@ prim_rw reduce_mpoly_ofTerm : mpoly_ofTerm{'pt; 'R} <-->
 			add.(add_mpoly{mpoly_ofTerm{'l; 'R}; mpoly_ofTerm{'r; 'R}});
 			mul.(mul_mpoly{mpoly_ofTerm{'l; 'R}; mpoly_ofTerm{'r; 'R};'R})}}};
 		leaf.decide{'leaf; const.const_mpoly{'const}; var.id_mpoly{'R;'var}}}
+*)
 
 interactive_rw reduce_mpoly_ofTermAdd :
 	mpoly_ofTerm{addTerm{'l;'r}; 'R} <-->

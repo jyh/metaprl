@@ -97,7 +97,6 @@ MPFILES :=\
 	itt_intdomain_e\
 	itt_field2\
 	itt_field_e\
-	itt_mpoly\
 	itt_mpoly2\
 	itt_order\
 	itt_example\

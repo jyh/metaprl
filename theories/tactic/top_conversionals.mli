@@ -52,7 +52,8 @@ topval idC : conv
 topval foldC : term -> conv -> conv
 topval makeFoldC : term -> conv -> conv
 topval cutC : term -> conv
-topval failC : string -> conv
+topval failC : conv
+topval failWithC : string -> conv
 topval tryC : conv -> conv
 topval someSubC : conv -> conv
 topval allSubC : conv -> conv
@@ -61,6 +62,8 @@ topval lowerC : conv -> conv
 topval sweepUpC : conv -> conv
 topval sweepDnC : conv -> conv
 topval firstC : conv list -> conv
+topval whileProgressC : conv -> conv
+topval untilFailC : conv -> conv
 topval repeatC : conv -> conv
 topval repeatForC : int -> conv -> conv
 

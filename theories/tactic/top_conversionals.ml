@@ -4,6 +4,7 @@
  * cutC dprod failC firstC foldC higherC idC inl
  * inr Itt lowerC orelseC reduceC reduceDecideInl reduceSpread repeatC
  * rw rwh someSubC sweepDnC sweepUpC tryC
+ * whileProgressC  untilFailC
  * @end[spelling]
  *
  * @begin[doc]
@@ -149,6 +150,7 @@ let rwch = Tactic_type.Conversionals.rwch
  *)
 let idC = Tactic_type.Conversionals.idC
 let failC = Tactic_type.Conversionals.failC
+let failWithC = Tactic_type.Conversionals.failWithC
 
 (*!
  * @begin[doc]
@@ -169,6 +171,15 @@ let failC = Tactic_type.Conversionals.failC
  * conversions to try in order until the first one succeeds.  The conversion (@tt{firstC}
  * $[c_1; @cdots; c_n]$) is equivalent to @tt{$c_1$ orelseC $@cdots$ orelseC $c_n$}.}
  *
+ * @item{@conv[untilFailC];
+ * The (@tt{repeatC} $c$) conversion applies conversion $c$ repeatedly
+ * until it fails. It catches all exception and never fails itself}
+ *
+ *
+ * @item{@conv[whileProgressC];
+ * The (@tt{repeatC} $c$) conversion applies conversion $c$ repeatedly
+ * while it makes a progress. If it $c$ fails then  @tt{whileProgressC} also fails.}
+ *
  * @item{@conv[repeatC];
  * The (@tt{repeatC} $c$) conversion applies conversion $c$ repeatedly
  * until it fails, or until it fails to make progress.}
@@ -181,6 +192,8 @@ let prefix_andthenC = Tactic_type.Conversionals.prefix_andthenC
 let prefix_orelseC = Tactic_type.Conversionals.prefix_orelseC
 let tryC = Tactic_type.Conversionals.tryC
 let firstC = Tactic_type.Conversionals.firstC
+let untilFailC = Tactic_type.Conversionals.untilFailC
+let whileProgressC = Tactic_type.Conversionals.whileProgressC
 let repeatC = Tactic_type.Conversionals.repeatC
 let repeatForC = Tactic_type.Conversionals.repeatForC
 

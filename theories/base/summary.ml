@@ -134,6 +134,7 @@ declare "goal"{'status; 'label; 'assums; 'goal}
 declare "subgoals"{'subgoals; 'extras}
 declare "rule_box"[text:s]
 declare "proof"{'main; 'goal; 'text; 'subgoals}
+declare "tactic_arg"[label:s]{'goal; 'attrs; 'parents}
 
 (* Packages *)
 declare "package"[name:s]
@@ -446,7 +447,7 @@ dform arglist_df1 : internal :: arglist{'args} =
 (********************************
  * Proofs.
  *)
-declare msequent
+declare msequent{'goal; 'assums}
 declare goals_df
 declare goal_list_status
 
@@ -454,10 +455,10 @@ dform proof_df : internal :: proof{'main; goal_list{'goal}; 'text; 'subgoals} =
    szone pushm pagebreak goals_df{'main; 'goal} 'text 'subgoals popm ezone
 
 dform goals_df : internal :: goals_df{goal{'status; 'label; 'assums; 'goal}; 'cache} =
-   'status `"[" goal_list_status{'cache} `"]" newline 'label msequent{'assums; 'goal}
+   'status `"[" goal_list_status{'cache} `"]" newline 'label msequent{'goal; 'assums}
 
 dform goal_df : internal :: goal{'status; 'label; 'assums; 'goal} =
-   'status `"[]" newline 'label msequent{'assums; 'goal}
+   'status `"[]" newline 'label msequent{'goal; 'assums}
 
 dform goal_list_status_df1 : internal :: goal_list_status{cons{goal{goal_status{'status}; 'label; 'assums; 'goal}; cons{'hd; 'tl}}} =
    df_last{'status} `" " goal_list_status{cons{'hd; 'tl}}
@@ -470,10 +471,10 @@ dform goal_list_status_df2 : internal :: goal_list_status{cons{goal{goal_status{
  *)
 declare numbered_assums
 
-dform msequent_df1 : internal :: msequent{nil; 'goal} =
+dform msequent_df1 : internal :: msequent{'goal; nil} =
    'goal newline
 
-dform msequent_df2 : internal :: msequent{'assums; 'goal} =
+dform msequent_df2 : internal :: msequent{'goal; 'assums} =
    numbered_assums{cons{nil; nil}; 'assums} 'goal newline
 
 dform numbered_assums_df1 : internal :: numbered_assums{'number; cons{'a; 'b}} =
@@ -584,6 +585,12 @@ dform child_df1 : internal :: child_df{'number; goal_list{'child}} =
 dform child_df2 : internal :: child_df{cons{goal{'status; 'label; 'assums; 'goal}; 'tl}} =
    'label 'goal
 
+dform tactic_arg_df1 : internal :: tactic_arg[label:s]{'goal;'args;'parents} =
+   szone `"[" slot[label:s] `"] " pushm 'goal popm ezone
+
+dform tactic_arg_df2 : internal :: tactic_arg[label:s]{'goal;'args;'parents} =
+   szone `"[" slot[label:s] `"] " pushm 'goal ezone `" " popm szone `"with args " pushm `"<" 'args `">" popm ezone
+
 (************************************************************************
  * ML INTERFACE                                                         *
  ************************************************************************)
@@ -651,7 +658,7 @@ let mk_rule_box_string_term s =
 let mk_rule_box_term t =
    mk_dep0_term rule_box_opname t
 let append_rule_box t s =
-   if is_dep0_term rule_box_opname t then 
+   if is_dep0_term rule_box_opname t then
       let t = one_subterm t in
       mk_string_dep0_term rule_box_opname s t
    else if is_string_term rule_box_opname t then

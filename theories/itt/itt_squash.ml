@@ -230,7 +230,7 @@ interactive squashMemberEquality {| intro []; eqcd |} :
 doc <:doc< 
    @begin[doc]
    The @tt[squashStable] rule establishes that we can unsquash a proposition
-   when it is possible to recover it's witness from simply knowing the proposition
+   when it is possible to recover its witness from simply knowing the proposition
    to be true.
    @end[doc]
 >>
@@ -292,7 +292,7 @@ doc <:doc<
    of proving <<sequent{ <H> >- 't in 'T}>> from <<sequent{ <H> >- 'T}>>. Third,
    the $@tt[SqUnsquashGoal](T,@i[tac])$ is used when @i["tac i"] can unsquash
    @i{i}-th hypothesis provided the conclusion of the sequent is $T$. Finally, 
-   $@tt[SqStableGoal](T,@i[tac])$ is used when @i[tac] can prover $T$ from
+   $@tt[SqStableGoal](T,@i[tac])$ is used when @i[tac] can prove $T$ from
    $@squash{T}$.
   
    The only way to improve the @tt{squash_resource} outside of the

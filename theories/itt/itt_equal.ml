@@ -124,7 +124,7 @@ declare "false"
 doc <:doc<
    @begin[doc]
    The $@cumulativity{i; j}$ term is a primitive judgment that defines level
-   @emph{inclusion} (this is a builtin judgment in @MetaPRL).
+   @emph{inclusion} (this is a built-in judgment in @MetaPRL).
    @end[doc]
 >>
 define unfold_cumulativity :

@@ -254,12 +254,12 @@ doc <:doc<
    proposition (predicate) on $A$; the @hrefterm[well_founded_apply] $@"well_founded_apply"{P; a}$
    represents the application of the proposition $P$ to $a$.  The @hrefterm[well_founded_assum]
    term $@"well_founded_assum"{A; a_1; a_2; R[a_1, a_2]; P}$ asserts that predicate $P$ holds on
-   all elements of $a$ by induction on the relation $R[a_1, a_2]$.
+   all elements of $A$ by induction on the relation $R[a_1, a_2]$.
 
    The reason this definition is so convoluted is that the definition of
    well-foundness must be given @emph{before} defining functions and application.
    The @hrefmodule[Itt_well_founded] module provides simplified definitions
-   of well-foundness.
+   of @emph{well-foundness}.
    @end[doc]
 >>
 prim well_founded_assum_elim {| elim [ThinOption thinT] |} 'H 'a :
@@ -301,7 +301,7 @@ doc <:doc<
    The well-formedness of the very-dependent function
    requires that the domain type $A$ be a type, that the domain
    be well-founded with some relation $R$, and that $B[f, x]$ be
-   a type for any restricted function $@rfun{f; y; @set{A; x; R[z, y]}; B[f, y]}$.
+   a type for any restricted function $@rfun{f; y; @set{z; A; R[z, y]}; B[f, y]}$.
    @end[doc]
 >>
 prim rfunctionEquality  {| intro []; eqcd |} lambda{a. lambda{b. 'R['a; 'b]}} :
@@ -335,10 +335,10 @@ doc <:doc<
 
    Viewed as a proposition, the very-dependent function type
    represents a @emph{recursive} proposition.  The function type
-   $@rfun{f; x; A; B[f, x]}$ must be well-formed with well-founded
+   $@rfun{f; x; A; B[f, x]}$ must be well-formed with a well-founded
    order $R$ on $A$, and $B[f, x]$ must be true for each $B[g, y]$
    for $y @in A$ and $g$ a function in the restricted function space
-   $@rfun{f; x; @set{A; z; R[z, y]}; B[f, x]}$ (the induction
+   $@rfun{f; x; @set{z; A; R[z, y]}; B[f, x]}$ (the induction
    hypothesis).  The proof extract term contains a fixpoint, due to
    the induction.  The fixpoint is guaranteed to terminate
    because the domain is well-founded.
@@ -435,6 +435,15 @@ doc <:doc<
    an arbitrary instance $f$ in the function space.
    @end[doc]
 >>
+interactive rfunction_rfunction_subtype1 {| intro [] |} :
+   [main] sequent { <H> >- \subtype{'A2; 'A1} } -->
+   [wf] sequent { <H> >- "type"{.{f1 | x1: 'A1 -> 'B1['f1; 'x1] }} } -->
+   [wf] sequent { <H> >- "type"{.{f2 | x2: 'A2 -> 'B2['f2; 'x2] }} } -->
+   [main] sequent { <H>; f: {f1 | x1: 'A1 -> 'B1['f1; 'x1]}; a: 'A2 >-
+                          \subtype{'B1['f; 'a]; 'B2['f; 'a]}
+                    } -->
+   sequent { <H> >- \subtype{.{ f1 | x1: 'A1 -> 'B1['f1; 'x1] }; .{ f2 | x2: 'A2 -> 'B2['f2; 'x2] } } }
+
 interactive rfunction_rfunction_subtype {| intro [] |} lambda{a. lambda{b. 'R['a; 'b]}} :
    [main] sequent { <H> >- \subtype{'A2; 'A1} } -->
    [wf] sequent { <H> >- "type"{.{f1 | x1: 'A1 -> 'B1['f1; 'x1] }} } -->

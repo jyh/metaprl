@@ -151,7 +151,7 @@ doc <:doc<
   
    The elements in the function space $@fun{A; B}$ are the
    @hrefterm[lambda] functions.  The space $@fun{A; B}$ must be a
-   type, and the body of the function must be an $B$ for any argument
+   type, and the body of the function must be in $B$ for any argument
    in $A$.
    @end[doc]
 >>

@@ -90,7 +90,7 @@ doc <:doc<
    @terms
 
    The @tt{union} type is the binary union of two types $A$ and $B$.
-   The elements are @inl{'a} for $a @in A$ and @inr{b} for $b @in B$.
+   The elements are @inl{a} for $a @in A$ and @inr{b} for $b @in B$.
    The @tt{decide} term @emph{decides} the handedness of the term $x @in A + B$.
    @end[doc]
 >>
@@ -276,7 +276,8 @@ doc <:doc<
    @modsubsection{Subtyping}
 
    The union type $A_1 + A_2$ is a subtype of type $A_2 + B_2$ if
-   $A_1 @subseteq A_2$ and $B_1 @subseteq B_2$.
+   $A_1 @subseteq A_2$ and $B_1 @subseteq B_2$.  This rule is added
+   to the @hrefresource[subtype_resource].
    @end[doc]
 >>
 prim unionSubtype {| intro [] |} :

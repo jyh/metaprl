@@ -91,7 +91,7 @@ doc <:doc<
    goal-directed view: the hypotheses $J$ are removed (``thinned'')
    by the application of the rule.
   
-   Note that the rule requires that variables introduces by $J$ may not occur
+   Note that the rule requires that variables introduced by $J$ may not occur
    free in $K$ or $C$.
   
    The proof extract term $t$ is unchanged.
@@ -279,7 +279,7 @@ doc <:doc<
    $$
   
    @noindent
-   The @tactic[thinAllT] tactic thins a sequence of hypothesis.
+   The @tactic[thinAllT] tactic thins a sequence of hypotheses.
   
    $$
    @rulebox{thinAllT; i@ j;

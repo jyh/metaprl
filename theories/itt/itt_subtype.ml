@@ -3,7 +3,7 @@ doc <:doc<
    @module[Itt_subtype]
   
    The @tt[Itt_subtype] module provides the definition of
-   @emph{subtyping}.  Informally a type $T_1$ is a subtype of
+   @emph{subtyping}.  Informally, a type $T_1$ is a subtype of
    a type $T_2$, <<'T_1 subtype 'T_2>>, if any two equal elements of $T_1$ are also
    equal in $T_2$.  This is slightly different from the set-theoretic
    definition.  In set theory, the quotiented set $@int_2$ contains

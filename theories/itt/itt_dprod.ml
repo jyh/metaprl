@@ -334,7 +334,7 @@ doc <:doc<
    @modsubsection{Elimination}
 
    The elimination rule performs a case analysis on the
-   hypothesis $x@colon @prod{x; A; B[x]}$.  The @emph{only}
+   hypothesis $z@colon @prod{x; A; B[x]}$.  The @emph{only}
    elements are the pairs, and the rule splits the hypothesis
    into its parts.  The proof extract term is the @hrefterm[spread]
    induction combinator.
@@ -371,7 +371,7 @@ doc <:doc<
    @modsubsection{Subtyping}
 
    The subtype judgment is @emph{covariant} in the
-   first type $A$, and pointwise-covariant in the second
+   first type $A$, and @emph{pointwise-covariant} in the second
    type $B[a]$ for each $a @in A$.
    @end[doc]
 >>

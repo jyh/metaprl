@@ -135,7 +135,7 @@ doc <:doc<
 
    The @emph{conditional} forms $@cand{A; B}$ and
    $@cor{A; B}$ encode the propositional truth
-   from left-to-right.
+   from left to right.
    @end[doc]
 >>
 define unfold_true : "true" <--> unit
@@ -208,12 +208,12 @@ doc <:doc<
    @begin[doc]
    @modsubsection{Negation}
 
-   The negation << "not"{'A} >> is well-formed if
-   $A$ is a type.  The negation states that the type $A$
-   is not inhabited: any proof of $A$ is also a proof of
-   <<void>>.  To prove the negation, assume $A$ and find
+   The negation << "not"{'t} >> is well-formed if
+   $t$ is a type.  The negation states that the type $t$
+   is not inhabited: any proof of $t$ is also a proof of
+   <<void>>.  To prove the negation, assume $t$ and find
    a contradiction.  The elimination form forms a proof
-   of the goal from a proof of $A$.
+   of the goal from a proof of $t$.
    @end[doc]
 >>
 interactive not_univ {| intro []; eqcd |} :
@@ -242,10 +242,10 @@ doc <:doc<
    @begin[doc]
    @modsubsection{Conjunction}
 
-   The conjunction << "and"{'A; 'B} >> is well-formed if
-   both $A$ and $B$ are types.  It is true if both $A$ and
-   $B$ are true.  The elimination form splits the assumption
-   into it two component proofs.
+   The conjunction << "and"{'a_1; 'a_2} >> is well-formed if
+   both $a_1$ and $a_2$ are types.  It is true if both $a_1$ and
+   $a_2$ are true.  The elimination form splits the assumption
+   into its two component proofs.
    @end[doc]
 >>
 interactive and_univ {| intro []; eqcd |} :
@@ -280,16 +280,16 @@ doc <:doc<
    @begin[doc]
    @modsubsection{Disjunction}
 
-   The disjunction << "or"{'A; 'B} >> is well-formed if both
-   $A$ and $B$ are types.  The disjunction is true if it is
-   a type and one of $A$ or $B$ is true.  The introduction
+   The disjunction << "or"{'a_1; 'a_2} >> is well-formed if both
+   $a_1$ and $a_2$ are types.  The disjunction is true if it is
+   a type and one of $a_1$ or $a_2$ is true.  The introduction
    rules use the @tt[SelectOption] to allow application with
    the @hreftactic[selT] tactical.  The @tt{selT 1 (dT 0)} tactic applies
    the @hrefrule[or_intro_left] rule, and @tt{selT 2 (dT 0)} applies the
    @hrefrule[or_intro_right] rule.  The elimination rule performs
    a case analysis on the disjunctive assumption, producing
-   a case for the left proof of $A$, and another for the
-   right proof of $B$.
+   a case for the left proof of $a_1$, and another for the
+   right proof of $a_2$.
    @end[doc]
 >>
 interactive or_univ {| intro []; eqcd |} :
@@ -321,12 +321,12 @@ doc <:doc<
    @begin[doc]
    @modsubsection{Implication}
 
-   The implication << implies{'A; 'B} >> is well-formed if both
-   $A$ and $B$ are types.  The implication is true if it is a
-   type, and a proof of $B$ can be produced from a proof of
-   $A$.  The elimination rule corresponds to @emph{modus-ponens}:
-   if a proof of $A$ can be found, so can a proof of $B$ by
-   application of the proof of << implies{'A; 'B} >>.
+   The implication << implies{'a_1; 'a_2} >> is well-formed if both
+   $a_1$ and $a_2$ are types.  The implication is true if it is a
+   type, and a proof of $a_2$ can be produced from a proof of
+   $a_1$.  The elimination rule corresponds to @emph{modus-ponens}:
+   if a proof of $a_1$ can be found, so can a proof of $a_2$ by
+   application of the proof of << implies{'a_1; 'a_2} >>.
    @end[doc]
 >>
 interactive implies_univ {| intro []; eqcd |} :
@@ -353,8 +353,8 @@ doc <:doc<
    @begin[doc]
    @modsubsection{Bi-implication}
 
-   The bi-implication << "iff"{'A; 'B} >> is well-formed if
-   both $A$ and $B$ are types.  The introduction and elimination rules
+   The bi-implication << "iff"{'a_1; 'a_2} >> is well-formed if
+   both $a_1$ and $a_2$ are types.  The introduction and elimination rules
    perform the top-level conjunctive reasoning.
    @end[doc]
 >>
@@ -381,10 +381,10 @@ doc <:doc<
    @begin[doc]
    @modsubsection{Conditional conjunction}
 
-   The conditional conjunction << "cand"{'A; 'B} >> differs from
+   The conditional conjunction << "cand"{'a_1; 'a_2} >> differs from
    the conjunction only in the introduction rule.  The conjunction
-   is true if $A$ is true, and a proof of $B$ can be produced from
-   a proof of $A$.
+   is true if $a_1$ is true, and a proof of $a_2$ can be produced from
+   a proof of $a_1$.
    @end[doc]
 >>
 interactive cand_univ {| intro []; eqcd |} :
@@ -410,13 +410,13 @@ doc <:doc<
    @begin[doc]
    @modsubsection{Conditional disjunction}
 
-   The conditional disjunction << "cor"{'A; 'B} >> differs from
-   the disjunction in that a proof of $B$ is needed only if
-   a proof of $A$ can't be found.  The conditional disjunction
-   is true if $A$ is true, or $B$ is true @emph{assuming} that
-   $A$ is false.  The elimination rule produces the two cases,
-   one where there is a proof of $A$, and another where
-   there is a proof of $B$ and a proof of falsehood for $A$.
+   The conditional disjunction << "cor"{'a_1; 'a_2} >> differs from
+   the disjunction in that a proof of $a_2$ is needed only if
+   a proof of $a_1$ can't be found.  The conditional disjunction
+   is true if $a_1$ is true, or $a_2$ is true @emph{assuming} that
+   $a_1$ is false.  The elimination rule produces the two cases,
+   one where there is a proof of $a_1$, and another where
+   there is a proof of $a_2$ and a proof of falsehood for $a_1$.
    @end[doc]
 >>
 interactive cor_univ {| intro []; eqcd |} :
@@ -452,7 +452,7 @@ doc <:doc<
    The universal quantification << all x: 'A. 'B['x] >> is well-formed
    if $A$ is a type, and $B[x]$ is a type for any $x @in A$.
    The quantification is true if it is well-formed and
-   a $B[a]$ is true for any element $a @in A$.  The elimination
+   $B[a]$ is true for any element $a @in A$.  The elimination
    form allows @emph{instantiation} of quantification on
    a particular element $a @in A$, to produce a proof of
    $B[a]$.

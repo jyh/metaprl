@@ -69,7 +69,7 @@ doc <:doc<
    @begin[doc]
    @terms
   
-   The definition of $@decidable{P}$ if $@or{P; @not{P}}$.
+   The definition of $@decidable{P}$ is $@or{P; @not{P}}$.
    @end[doc]
 >>
 define unfold_decidable : decidable{'p} <--> ( 'p or not {'p} )

@@ -115,7 +115,7 @@ doc <:doc<
    @begin[doc]
    @modsubsection{Elimination}
   
-   The elimination form splits the hypothesis $x@colon @prod{A; B}$ into
+   The elimination form splits the hypothesis $z@colon @prod{A; B}$ into
    its parts $u@colon A$ and $v@colon B$.
    @end[doc]
 >>

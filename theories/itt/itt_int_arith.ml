@@ -711,7 +711,8 @@ let ge_addContractC = ge_addContract_rw
 let reduceContradRelT i p = (rw ((addrC [0] normalizeC) thenC
                                  (addrC [1] normalizeC) thenC
 		                 ge_addContractC thenC
-				 (unfold_ge thenC unfold_le thenC (addrC [0] unfold_le_bool)) thenC
+(*				 (
+				 unfold_ge thenC unfold_le thenC (addrC [0] unfold_le_bool)) thenC*)
 			         reduceC)
                                 i) p
 

@@ -57,7 +57,8 @@ define unfold_bool : bool <--> (unit + unit)
 define unfold_btrue : btrue <--> inl{it}
 define unfold_bfalse : bfalse <--> inr{it}
 
-define unfold_ifthenelse : ifthenelse{'b; 'e1; 'e2} <--> decide{'b; x. 'e1; y. 'e2}
+define unfold_ifthenelse : ifthenelse{'b; 'e1; 'e2} <--> decide{'b; x. 'e1; y.
+ 'e2}
 define unfold_bor : bor{'a; 'b} <--> ifthenelse{'a; btrue; 'b}
 define unfold_band : band{'a; 'b} <--> ifthenelse{'a; 'b; bfalse}
 define unfold_bimplies : bimplies{'a; 'b} <--> ifthenelse{'a; 'b; btrue}
@@ -144,6 +145,12 @@ topval extBoolT : tactic
 topval magicT : tactic
 topval splitBoolT : term -> int -> tactic
 topval splitITE : int -> tactic
+
+(***********************************************************************
+ * ADDITIONAL FACTS                                                    *
+ ***********************************************************************)
+
+topval reduce_bnot_bnotC : conv
 
 (*
  * -*-

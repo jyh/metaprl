@@ -110,7 +110,8 @@ define unfold_bfalse : bfalse <--> inr{it}
  * The Boolean connectives are defined in terms of @tt{ifthenelse}.
  * @end[doc]
  *)
-define unfold_ifthenelse : ifthenelse{'b; 'e1; 'e2} <--> decide{'b; x. 'e1; y. 'e2}
+define unfold_ifthenelse : ifthenelse{'b; 'e1; 'e2} <--> decide{'b; x. 'e1; y.
+ 'e2}
 define unfold_bor : bor{'a; 'b} <--> ifthenelse{'a; btrue; 'b}
 define unfold_band : band{'a; 'b} <--> ifthenelse{'a; 'b; bfalse}
 define unfold_bimplies : bimplies{'a; 'b} <--> ifthenelse{'a; 'b; btrue}
@@ -213,19 +214,23 @@ dform bfalse_df : except_mode[src] :: bfalse =
 dform bor_df : parens :: "prec"[prec_bor] :: except_mode[src] :: bor{'a; 'b} =
    slot{'a} " " vee subb " " slot{'b}
 
-dform band_df : parens :: "prec"[prec_band] :: except_mode[src] :: band{'a; 'b} =
+dform band_df : parens :: "prec"[prec_band] :: except_mode[src] :: band{'a; 'b}
+ =
    slot{'a} " " wedge subb " " slot{'b}
 
-dform bimplies_df : parens :: "prec"[prec_bimplies] :: except_mode[src] :: bimplies{'a; 'b} =
+dform bimplies_df : parens :: "prec"[prec_bimplies] :: except_mode[src] ::
+ bimplies{'a; 'b} =
    slot{'a} " " Rightarrow subb " " slot{'b}
 
 dform bnot_df : parens :: "prec"[prec_bnot] :: except_mode[src] :: bnot{'a} =
    tneg subb slot{'a}
 
-dform ifthenelse_df : parens :: "prec"[prec_bor] :: except_mode[src] :: ifthenelse{'e1; 'e2; 'e3} =
+dform ifthenelse_df : parens :: "prec"[prec_bor] :: except_mode[src] ::
+ ifthenelse{'e1; 'e2; 'e3} =
    math_if{'e1; 'e2; 'e3}
 
-dform assert_df : parens :: "prec"[prec_assert] :: except_mode[src] :: "assert"{'t} =
+dform assert_df : parens :: "prec"[prec_assert] :: except_mode[src] ::
+ "assert"{'t} =
    downarrow slot{'t}
 
 (************************************************************************
@@ -310,7 +315,8 @@ interactive ifthenelse_equality {| intro []; eqcd |} 'H 'w :
    [wf] sequent [squash] { 'H >- 'e1 = 'e2 in bool } -->
    [wf] sequent [squash] { 'H; w: 'e1 = btrue in bool >- 'x1 = 'x2 in 'T } -->
    [wf] sequent [squash] { 'H; w: 'e1 = bfalse in bool >- 'y1 = 'y2 in 'T } -->
-   sequent ['ext] { 'H >- ifthenelse{'e1; 'x1; 'y1} = ifthenelse{'e2; 'x2; 'y2} in 'T }
+   sequent ['ext] { 'H >- ifthenelse{'e1; 'x1; 'y1} = ifthenelse{'e2; 'x2; 'y2}
+ in 'T }
 
 (*!
  * @begin[doc]
@@ -428,8 +434,10 @@ interactive bool_subst_concl 'H bind{x. 'C['x]} 'e 'y :
 
 interactive bool_subst_hyp 'H 'J bind{x. 'A['x]} 'e 'y :
    [wf] sequent [squash] { 'H; x: 'A['e]; 'J['x] >- 'e IN bool } -->
-   [main] sequent ['ext] { 'H; x: 'A[btrue]; 'J['x]; y: "assert"{'e} >- 'C['x] } -->
-   [main] sequent ['ext] { 'H; x: 'A[bfalse]; 'J['x]; y: "assert"{bnot{'e}} >- 'C['x] } -->
+   [main] sequent ['ext] { 'H; x: 'A[btrue]; 'J['x]; y: "assert"{'e} >- 'C['x] }
+ -->
+   [main] sequent ['ext] { 'H; x: 'A[bfalse]; 'J['x]; y: "assert"{bnot{'e}} >-
+ 'C['x] } -->
    sequent ['ext] { 'H; x: 'A['e]; 'J['x] >- 'C['x] }
 
 (*!
@@ -505,14 +513,17 @@ interactive assert_is_decidable {| intro [] |} 'H:
  * @end[doc]
  *)
 interactive assert_bor_elim {| elim [] |} 'H 'J :
-   [wf] sequent [squash] { 'H; x: "assert"{bor{'t1; 't2}}; 'J['x] >- 't1 IN bool } -->
+   [wf] sequent [squash] { 'H; x: "assert"{bor{'t1; 't2}}; 'J['x] >- 't1 IN bool
+ } -->
    [main] sequent ['ext] { 'H; x: "assert"{'t1}; 'J[it] >- 'C[it] } -->
    [main] sequent ['ext] { 'H; x: "assert"{'t2}; 'J[it] >- 'C[it] } -->
    sequent ['ext] { 'H; x: "assert"{bor{'t1; 't2}}; 'J['x] >- 'C['x] }
 
 interactive assert_band_elim {| elim [] |} 'H 'J 'y 'z :
-   [wf] sequent [squash] { 'H; x: "assert"{band{'t1; 't2}}; 'J['x] >- 't1 IN bool } -->
-   [main] sequent ['ext] { 'H; y: "assert"{'t1}; z: "assert"{'t2}; 'J[it] >- 'C[it] } -->
+   [wf] sequent [squash] { 'H; x: "assert"{band{'t1; 't2}}; 'J['x] >- 't1 IN
+ bool } -->
+   [main] sequent ['ext] { 'H; y: "assert"{'t1}; z: "assert"{'t2}; 'J[it] >-
+ 'C[it] } -->
    sequent ['ext] { 'H; x: "assert"{band{'t1; 't2}}; 'J['x] >- 'C['x] }
 
 interactive assert_bimplies_elim {| elim [] |} 'H 'J :
@@ -621,7 +632,8 @@ let splitBoolCT a p =
             if is_xbind_term t1 then
                t1
             else
-               raise (RefineError ("splitBoolT", StringTermError ("need a \"bind\" term: ", t1)))
+               raise (RefineError ("splitBoolT", StringTermError ("need a
+ \"bind\" term: ", t1)))
       with
          RefineError _ ->
             mk_xbind_term x (var_subst (Sequent.concl p) a x)
@@ -640,7 +652,8 @@ let splitBoolHT i a p =
             if is_xbind_term b then
                b
             else
-               raise (RefineError ("splitBoolT", StringTermError ("need a \"bind\" term: ", b)))
+               raise (RefineError ("splitBoolT", StringTermError ("need a
+ \"bind\" term: ", b)))
       with
          RefineError _ ->
             mk_xbind_term z (var_subst t1 a z)
@@ -744,7 +757,8 @@ let splitITE i p =
                (_, t) :: _ ->
                   t
              | [] ->
-                  raise (RefineError ("search_ifthenelse", StringError "no free ifthenelse"))
+                  raise (RefineError ("search_ifthenelse", StringError "no free
+ ifthenelse"))
    in
    let addrs = filter_ifthenelse t addrs in
    let _ =
@@ -772,6 +786,19 @@ let resource typeinf += [
    bfalse_term, inf_b;
 ]
 
+(***********************************************************************
+ * ADDITIONAL FACTS                                                    *
+ ***********************************************************************)
+
+interactive_rw reduce_bnot_bnot :
+   ( 'e1 IN bool ) -->
+   bnot{bnot{'e1}} <--> 'e1
+
+let reduce_bnot_bnotC = reduce_bnot_bnot
+
+let resource reduce +=
+   [<< bnot{bnot{'e}} >>, reduce_bnot_bnot;
+   ]
 (*
  * -*-
  * Local Variables:

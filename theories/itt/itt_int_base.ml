@@ -89,7 +89,8 @@ let _ = show_loading "Loading Itt_int_base%t"
  * @terms
  *
  * The @tt{int} term is the type of integers with elements
- * $$@ldots, @number{-2}, @number{-1}, @number{0}, @number{1}, @number{2}, @ldots$$
+ * $$@ldots, @number{-2}, @number{-1}, @number{0}, @number{1}, @number{2},
+ @ldots$$
  * @end[doc]
  *)
 declare int
@@ -213,7 +214,8 @@ dform number_df : number[n:n] =
 dform beq_int_df1 : parens :: "prec"[prec_compare] :: beq_int{'a; 'b} =
    slot["lt"]{'a} `" =" Nuprl_font!subb `" " slot["le"]{'b}
 
-dform add_df1 : except_mode[src] :: parens :: "prec"[prec_add] :: "add"{'a; 'b} =
+dform add_df1 : except_mode[src] :: parens :: "prec"[prec_add] :: "add"{'a; 'b}
+ =
    slot["le"]{'a} `" + " slot["lt"]{'b}
 dform add_df2 : mode[src] :: parens :: "prec"[prec_add] :: "add"{'a; 'b} =
    slot["le"]{'a} `" +@ " slot["lt"]{'b}
@@ -223,7 +225,8 @@ dform minus_df1 : except_mode[src] :: parens :: "prec"[prec_unary] :: (- 'a) =
 dform minus_df2 : mode[src] :: parens :: "prec"[prec_unary] :: (- 'a) =
    `" - " slot["le"]{'a}
 
-dform sub_df1 : except_mode[src] :: parens :: "prec"[prec_add] :: "sub"{'a; 'b} =
+dform sub_df1 : except_mode[src] :: parens :: "prec"[prec_add] :: "sub"{'a; 'b}
+ =
    slot["lt"]{'a} `" - " slot["le"]{'b}
 dform sub_df2 : mode[src] :: parens :: "prec"[prec_add] :: "sub"{'a; 'b} =
    slot["lt"]{'a} `" -@ " slot["le"]{'b}
@@ -245,10 +248,15 @@ dform display_ind_df2 : internal :: display_ind_n =
 
 dform ind_df : parens :: "prec"[prec_bor] :: except_mode[src] ::
    ind{'x; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]} =
-   szone pushm[3] szone display_ind{'x} space `"where" space display_ind_n space `"=" ezone hspace
-   ((display_var["n":v]{nil} < 0) => beq_int{display_ind_n; 'down[display_var["n":v]{nil}; display_ind{(display_var["n":v]{nil} +@ 1)}]}) hspace
+   szone pushm[3] szone display_ind{'x} space `"where" space display_ind_n space
+ `"=" ezone hspace
+   ((display_var["n":v]{nil} < 0) => beq_int{display_ind_n;
+ 'down[display_var["n":v]{nil}; display_ind{(display_var["n":v]{nil} +@ 1)}]})
+ hspace
    (beq_int{display_var["n":v]{nil};0} => beq_int{display_ind_n; 'base}) hspace
-   ((0 < display_var["n":v]{nil}) => beq_int{display_ind_n; 'up[display_var["n":v]{nil}; display_ind{(display_var["n":v]{nil} -@ 1)}]}) popm ezone
+   ((0 < display_var["n":v]{nil}) => beq_int{display_ind_n;
+ 'up[display_var["n":v]{nil}; display_ind{(display_var["n":v]{nil} -@ 1)}]})
+ popm ezone
 
 (*
  * Useful tactic to prove _rw from ~-rules
@@ -262,7 +270,9 @@ let sqFromRwT t =
 let testT p =
    let g =Sequent.goal p in
 (*  let (g,_):(term * term list)=Refiner.Refiner.Refine.dest_msequent mseq in
-   let es : Refiner.Refiner.TermMan.Term.esequent=Refiner.Refiner.TermMan.explode_sequent g in
+   let es :
+ Refiner.Refiner.TermMan.Term.esequent=Refiner.Refiner.TermMan.explode_sequent g
+ in
    let (args,hyps,goals)=es in
    let gl = SEQ_SET.to_list goals in*)
    let (s2,h2)=Refiner.Refiner.TermMan.nth_hyp g 2 in
@@ -539,7 +549,8 @@ prim lt_Trichot 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    [wf] sequent [squash] { 'H >- 'b IN int } -->
    sequent ['ext]
-     { 'H >- bor{bor{lt_bool{'a; 'b};lt_bool{'b; 'a}}; beq_int{'a; 'b}} ~ btrue } = it
+     { 'H >- bor{bor{lt_bool{'a; 'b};lt_bool{'b; 'a}}; beq_int{'a; 'b}} ~ btrue
+ } = it
 
 interactive_rw lt_Trichot_rw :
    ( 'a IN int ) -->
@@ -601,7 +612,8 @@ prim lt_Discret 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    [wf] sequent [squash] { 'H >- 'b IN int } -->
    sequent ['ext] { 'H >- lt_bool{'a; 'b} ~
-                          bor{beq_int{('a +@ 1); 'b}; lt_bool{('a +@ 1); 'b}} } = it
+                          bor{beq_int{('a +@ 1); 'b}; lt_bool{('a +@ 1); 'b}} }
+ = it
 
 interactive_rw lt_Discret_rw :
    ( 'a IN int ) -->
@@ -621,7 +633,8 @@ prim lt_addMono 'H 'c :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    [wf] sequent [squash] { 'H >- 'b IN int } -->
    [wf] sequent [squash] { 'H >- 'c IN int } -->
-   sequent ['ext] { 'H >- lt_bool{'a; 'b} ~ lt_bool{('a +@ 'c); ('b +@ 'c)} } = it
+   sequent ['ext] { 'H >- lt_bool{'a; 'b} ~ lt_bool{('a +@ 'c); ('b +@ 'c)} } =
+ it
 
 interactive_rw lt_addMono_rw 'c :
    ( 'a IN int ) -->
@@ -652,9 +665,11 @@ up[n, m, it, z])
  * H, n:Z, J[n], m:Z, v: 0 < m, z: C[m - 1] >- C[m] ext up[n, m, v, z]
  *)
 prim intElimination {| elim [ThinOption thinT] |} 'H 'J 'm 'v 'z :
-   ( 'down['n; 'm; 'v; 'z] : sequent ['ext] { 'H; n: int; 'J['n]; m: int; v: 'm < 0; z: 'C['m +@ 1] >- 'C['m] } ) -->
+   ( 'down['n; 'm; 'v; 'z] : sequent ['ext] { 'H; n: int; 'J['n]; m: int; v: 'm
+ < 0; z: 'C['m +@ 1] >- 'C['m] } ) -->
    ( 'base['n] : sequent ['ext] { 'H; n: int; 'J['n] >- 'C[0] } ) -->
-   ( 'up['n; 'm; 'v; 'z] : sequent ['ext] { 'H; n: int; 'J['n]; m: int; v: 0 < 'm; z: 'C['m -@ 1] >- 'C['m] } ) -->
+   ( 'up['n; 'm; 'v; 'z] : sequent ['ext] { 'H; n: int; 'J['n]; m: int; v: 0 <
+ 'm; z: 'C['m -@ 1] >- 'C['m] } ) -->
    sequent ['ext] { 'H; n: int; 'J['n] >- 'C['n] } =
       ind{'n; m, z. 'down['n; 'm; it; 'z]; 'base['n]; m, z. 'up['n; 'm; it; 'z]}
 
@@ -697,18 +712,23 @@ interactive_rw unfold_ind :
    ind{'i; m, z. 'down['m;'z]; 'base; m, z. 'up['m;'z]} <-->
       (if beq_int{'i; 0} then 'base else
          if lt_bool{0;'i}
-         then 'up['i; ind{('i -@ 1); m, z. 'down['m; 'z]; 'base; m, z. 'up['m; 'z]}]
-         else 'down['i; ind{('i +@ 1); m, z. 'down['m; 'z]; 'base; m,z. 'up['m; 'z]}])
+         then 'up['i; ind{('i -@ 1); m, z. 'down['m; 'z]; 'base; m, z. 'up['m;
+ 'z]}]
+         else 'down['i; ind{('i +@ 1); m, z. 'down['m; 'z]; 'base; m,z. 'up['m;
+ 'z]}])
 
 interactive_rw unfold_ind_number :
    ind{number[n:n]; m, z. 'down['m;'z]; 'base; m, z. 'up['m;'z]} <-->
       (if beq_int{number[n:n]; 0} then 'base else
          if lt_bool{0;number[n:n]}
-         then 'up[number[n:n]; ind{(number[n:n] -@ 1); m, z. 'down['m; 'z]; 'base; m, z. 'up['m; 'z]}]
-         else 'down[number[n:n]; ind{(number[n:n] +@ 1); m, z. 'down['m; 'z]; 'base; m,z. 'up['m; 'z]}])
+         then 'up[number[n:n]; ind{(number[n:n] -@ 1); m, z. 'down['m; 'z];
+ 'base; m, z. 'up['m; 'z]}]
+         else 'down[number[n:n]; ind{(number[n:n] +@ 1); m, z. 'down['m; 'z];
+ 'base; m,z. 'up['m; 'z]}])
 
 let reduce_ind_numberC =
-   unfold_ind_number thenC addrC [2;0] reduce_lt thenC addrC [2] reduceTopC thenC addrC [0] reduce_eq_int thenC reduceTopC
+   unfold_ind_number thenC addrC [2;0] reduce_lt thenC addrC [2] reduceTopC
+ thenC addrC [0] reduce_eq_int thenC reduceTopC
 
 (*
  * @begin[doc]
@@ -733,11 +753,15 @@ let reduce_ind_numberC =
  *)
 prim indEquality {| intro []; eqcd |} 'H lambda{z. 'T['z]} 'x 'y 'w :
    sequent [squash] { 'H >- 'x1 = 'x2 in int } -->
-   sequent [squash] { 'H; x: int; w: 'x < 0; y: 'T['x +@ 1] >- 'down1['x; 'y] = 'down2['x; 'y] in 'T['x] } -->
+   sequent [squash] { 'H; x: int; w: 'x < 0; y: 'T['x +@ 1] >- 'down1['x; 'y] =
+ 'down2['x; 'y] in 'T['x] } -->
    sequent [squash] { 'H >- 'base1 = 'base2 in 'T[0] } -->
-   sequent [squash] { 'H; x: int; w: 0 < 'x; y: 'T['x -@ 1] >- 'up1['x; 'y] = 'up2['x; 'y] in 'T['x] } -->
-   sequent ['ext] { 'H >- ind{'x1; i1, j1. 'down1['i1; 'j1]; 'base1; k1, l1. 'up1['k1; 'l1]}
-                   = ind{'x2; i2, j2. 'down2['i2; 'j2]; 'base2; k2, l2. 'up2['k2; 'l2]}
+   sequent [squash] { 'H; x: int; w: 0 < 'x; y: 'T['x -@ 1] >- 'up1['x; 'y] =
+ 'up2['x; 'y] in 'T['x] } -->
+   sequent ['ext] { 'H >- ind{'x1; i1, j1. 'down1['i1; 'j1]; 'base1; k1, l1.
+ 'up1['k1; 'l1]}
+                   = ind{'x2; i2, j2. 'down2['i2; 'j2]; 'base2; k2, l2.
+ 'up2['k2; 'l2]}
                    in 'T['x1] } =
   it
 

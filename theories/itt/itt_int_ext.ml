@@ -73,6 +73,7 @@ open Base_auto_tactic
 open Itt_equal
 open Itt_struct
 open Itt_squash
+open Itt_bool
 open Itt_int_base
 
 let _ = show_loading "Loading Itt_int_ext%t"
@@ -111,8 +112,10 @@ define unfold_bneq_int :
 
 let resource reduce += [
    << gt_bool{'a; 'b} >>, unfold_gt_bool;
-(*
-   << le_bool{'a; 'b} >>, unfold_le_bool;
+   << bnot{lt_bool{'b; 'a}} >>, makeFoldC << le_bool{'a;'b} >> unfold_le_bool;
+   << bnot{le_bool{'a; 'b}} >>, ((addrC [0] unfold_le_bool) thenC
+                                 reduce_bnot_bnotC);
+(*    << le_bool{'a; 'b} >>, unfold_le_bool;
    << ge_bool{'a; 'b} >>, unfold_ge_bool;
    << bneq_int{'a; 'b} >>, unfold_bneq_int;
 *)
@@ -155,17 +158,20 @@ let dest_gt = dest_dep0_dep0_term gt_opname
 
 prec prec_mul
 
-dform mul_df1 : except_mode[src] :: parens :: "prec"[prec_mul] :: "mul"{'a; 'b} =
+dform mul_df1 : except_mode[src] :: parens :: "prec"[prec_mul] :: "mul"{'a; 'b}
+ =
    slot["lt"]{'a} `" * " slot["le"]{'b}
 dform mul_df2 : mode[src] :: parens :: "prec"[prec_mul] :: "mul"{'a; 'b} =
    slot["lt"]{'a} `" *@ " slot["le"]{'b}
 
-dform div_df1 : except_mode[src] :: parens :: "prec"[prec_mul] :: "div"{'a; 'b} =
+dform div_df1 : except_mode[src] :: parens :: "prec"[prec_mul] :: "div"{'a; 'b}
+ =
    slot["lt"]{'a} Nuprl_font!"div" slot["le"]{'b}
 dform div_df2 : mode[src] :: parens :: "prec"[prec_mul] :: "div"{'a; 'b} =
    slot["lt"]{'a} `" /@ " slot["le"]{'b}
 
-dform rem_df1 : except_mode[src] :: parens :: "prec"[prec_mul] :: "rem"{'a; 'b} =
+dform rem_df1 : except_mode[src] :: parens :: "prec"[prec_mul] :: "rem"{'a; 'b}
+ =
    slot["lt"]{'a} `" % " slot["le"]{'b}
 dform rem_df2 : mode[src] :: parens :: "prec"[prec_mul] :: "rem"{'a; 'b} =
    slot["lt"]{'a} `" %@ " slot["le"]{'b}
@@ -188,9 +194,15 @@ define unfold_neq_int :
 
 let resource reduce += [
    << gt{'a; 'b} >>, unfold_gt;
+   << ge{'a; 'b} >>, unfold_ge;
+   <<number[i:n] <= number[j:n]>>, (unfold_le thenC
+                                   (addrC [0] (unfold_le_bool thenC
+                                   (addrC [0] reduce_lt))));
+   <<nequal{number[i:n]; number[j:n]}>>, (unfold_neq_int thenC
+                                         (addrC [0] (unfold_bneq_int thenC
+					 (addrC [0] reduce_eq_int))))
 (*
    << le{'a; 'b} >>, unfold_le;
-   << ge{'a; 'b} >>, unfold_ge;
    << nequal{'a; 'b} >>, unfold_neq_int;
 *)
 ]
@@ -213,12 +225,14 @@ let is_bneq_int_term = is_dep0_dep0_term bneq_int_opname
 let mk_bneq_int_term = mk_dep0_dep0_term bneq_int_opname
 let dest_bneq_int = dest_dep0_dep0_term bneq_int_opname
 
-dform le_df1 : except_mode[src] :: parens :: "prec"[prec_compare] :: le{'a; 'b} =
+dform le_df1 : except_mode[src] :: parens :: "prec"[prec_compare] :: le{'a; 'b}
+ =
    slot["lt"]{'a} Nuprl_font!le slot["le"]{'b}
 dform le_df2 : mode[src] :: parens :: "prec"[prec_compare] :: le{'a; 'b} =
    slot["lt"]{'a} `" <= " slot["le"]{'b}
 
-dform ge_df1 : except_mode[src] :: parens :: "prec"[prec_compare] :: ge{'a; 'b} =
+dform ge_df1 : except_mode[src] :: parens :: "prec"[prec_compare] :: ge{'a; 'b}
+ =
    slot["lt"]{'a} Nuprl_font!ge slot["le"]{'b}
 dform ge_df2 : mode[src] :: parens :: "prec"[prec_compare] :: ge{'a; 'b} =
    slot["lt"]{'a} `" >= " slot["le"]{'b}
@@ -386,7 +400,8 @@ interactive lt_mulPositMonoEq 'H 'c :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    [wf] sequent [squash] { 'H >- 'b IN int } -->
    [wf] sequent [squash] { 'H >- 'c IN int } -->
-   sequent ['ext] { 'H >- lt_bool{'a; 'b} = lt_bool{('c *@ 'a); ('c *@ 'b) } in bool }
+   sequent ['ext] { 'H >- lt_bool{'a; 'b} = lt_bool{('c *@ 'a); ('c *@ 'b) } in
+ bool }
 
 interactive lt_mulPositMono 'H 'c :
    sequent [squash] { 'H >- 0 < 'c } -->

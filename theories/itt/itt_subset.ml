@@ -275,7 +275,7 @@ interactive use_superset2  'B :
  * @begin[doc]
     As a corollary we have that if two element are equal in $B$ then if one of them is in $A$ then another one is also in $A$.
  * @end[doc]
-*)
+ *)
 interactive use_superset 'B 'y:
    [assertion] sequent [squash] { 'H >- 'A subset 'B } -->
    sequent [squash] { 'H >- 'y in 'A } -->
@@ -294,10 +294,9 @@ interactive counterexample1 :
 
 (*!
  * @begin[doc]
-    If $<<'A subset 'B>>$ is true, then both $A$
- * and $B$ are types.
+ * If $<<'A subset 'B>>$ is true, then both $A$ and $B$ are types.
  * @end[doc]
-*)
+ *)
 (* Note than if would have reverse functionality we could say that if A subset B Type then both A and B are types *)
       
 interactive subsetTypeRight  'B :
@@ -308,16 +307,14 @@ interactive subsetTypeLeft  'A :
    [main] sequent [squash] { 'H >- 'A subset 'B }  -->
    sequent ['ext] { 'H >- "type"{'B} }
 
-
-
-
 (*!
- @begin[doc]
+ * @begin[doc]
  * @modsubsection{Membership}
-  Proposition $<<'a in 'A subset 'B>>$ is almost equal to conjunction of $<<'a in 'A>>$ and $<<'A subset 'B>>$, but its well-formedness is more liberal.
-  Indeed, $<<'a in 'A subset 'B>>$ is well-formed whenever $<<'a in 'B>>$ and $A$ and $B$ are types.
- @end[doc]
-  *)
+ * Proposition $<<'a in 'A subset 'B>>$ is almost equal to conjunction of
+ * $<<'a in 'A>>$ and $<<'A subset 'B>>$, but its well-formedness is more liberal.
+ * Indeed, $<<'a in 'A subset 'B>>$ is well-formed whenever $<<'a in 'B>>$ and $A$ and $B$ are types.
+ * @end[doc]
+ *)
 
 (* Note that we don't need this membership if we add a rule: A subset B --> x in B --> x in A Type  *)
       
@@ -326,32 +323,30 @@ interactive member_wf {| intro [] |}  :
    sequent [squash] { 'H >- "type"{'A} } -->
    sequent ['ext] { 'H >- "type"{'a in 'A subset 'B} }
 
-
 (*!
- @begin[doc]
-  Introduction and elimination rules reflect the fact that $<<'a in 'A subset 'B>>$ if and only if $<<'a in 'A>>$ and $<<'A subset 'B>>$.
-  @end[doc]
-  *)
+ * @begin[doc]
+ * Introduction and elimination rules reflect the fact that $<<'a in 'A subset 'B>>$
+ * if and only if $<<'a in 'A>>$ and $<<'A subset 'B>>$.
+ * @end[doc]
+ *)
       
 interactive member_intro {| intro [] |}  :
    sequent [squash] { 'H >- 'a in 'A } -->
    sequent [squash] { 'H >- 'A subset 'B } -->
    sequent ['ext] { 'H >- 'a in 'A subset 'B }
 
-      
 interactive member_elim {| elim [] |} 'H :
-   sequent ['ext] { 'H; u: 'a in 'A; u: 'A subset 'B; 'J >- 'C } --> 
+   sequent ['ext] { 'H; u: 'a in 'A; v: 'A subset 'B; 'J >- 'C } --> 
    sequent ['ext] { 'H; u: 'a in 'A subset 'B; 'J >- 'C  }
 
-
 (*!
- @begin[doc]
-  Note that the truth of predicate $<<'a in 'A subset 'B>>$ does not depend on $B$ whenever $<<'A subtype 'B>>$ and this predicate is well-formed.
-  @end[doc]
-  This fact establish the right of introducing a binary membership <<'a in 'A>> with the liberal well-formedness rule.
-  *)
+ * @begin[doc]
+ * Note that the truth of predicate $<<'a in 'A subset 'B>>$ does not depend on $B$ whenever
+ * $<<'A subtype 'B>>$ and this predicate is well-formed.
+ * @end[doc]
+ * This fact establishes a validity of introducing a binary membership <<'a in 'A>> with the liberal well-formedness rule.
+ *)
 
-      
 interactive member_doesnot_depend_on_B  'H:
    sequent [squash] { 'H >- 'A subtype 'B } -->
    sequent [squash] { 'H >- 'A subtype '"B'" } -->

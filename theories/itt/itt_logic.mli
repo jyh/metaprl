@@ -152,7 +152,6 @@ topval assumT : int -> tactic
 topval backThruAssumT : int -> tactic
 
 topval moveToConclT : int -> tactic
-topval moveToConclVarsT : string list -> tactic
 
 topval genAssumT : int list -> tactic
 

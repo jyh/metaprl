@@ -214,7 +214,7 @@ let mk_fun_decl (v, arity) =
    if arity > Array.length atoms then
       raise (Failure (sprintf "mk_fun_decl: arity is out of range: %d" arity))
    else
-      Hypothesis (v, atoms.(arity))
+      HypBinding (v, atoms.(arity))
 
 (*
  * Predicates are over atoms.
@@ -232,13 +232,13 @@ let mk_pred_decl (v, arity) =
    if arity > Array.length props then
       raise (Failure (sprintf "mk_pred_decl: arity is out of range: %d" arity))
    else
-      Hypothesis (v, props.(arity))
+      HypBinding (v, props.(arity))
 
 (*
  * Axiom declaration wrap a Hypothesis.
  *)
 let mk_axiom_decl (v, ax) =
-   Hypothesis (v, ax)
+   HypBinding (v, ax)
 
 (*
  * Collect the sequent.

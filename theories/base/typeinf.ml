@@ -125,10 +125,17 @@ let collect_decls p =
          subst
       else
          match SeqHyp.get hyps i with
-            Hypothesis (v, t) ->
+            HypBinding (v, t) ->
                let subst = (v, t) :: subst in
                let subst =
                   try collect subst (Some v, t) with
+                     RefineError _ ->
+                        subst
+               in
+                  filter_hyps subst hyps (i + 1) len
+          | Hypothesis t ->
+               let subst =
+                  try collect subst (None, t) with
                      RefineError _ ->
                         subst
                in

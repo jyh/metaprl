@@ -142,9 +142,6 @@ interactive markov2'' : (*  = Markov, proved from Markov4 *)
    sequent [squash] {'H >- not{not{'A}} } -->
    sequent ['ext]   {'H >- squash{'A} }
 
-
-
-
 interactive markovPrinciple :
    [wf] sequent [squash] {'H; n:nat >- "type"{.'A 'n} } -->
    sequent ['ext]   {'H >- all n:nat. ('A 'n or  not{.'A 'n}) =>

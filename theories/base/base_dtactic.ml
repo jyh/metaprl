@@ -492,8 +492,10 @@ let process_elim_resource_annotation name context_args var_args term_args _ stat
             raise (Invalid_argument (sprintf "Base_dtactic.improve_elim: %s: must be an elimination rule" name))
          else
             match SeqHyp.get hyps i with
-               Hypothesis (v, t) ->
-                  v, t, i
+               HypBinding (v, t) ->
+                  Some v, t, i
+             | Hypothesis t ->
+                  None, t, i
              | Context _ ->
                   search (succ i) len
       in
@@ -529,16 +531,17 @@ let process_elim_resource_annotation name context_args var_args term_args _ stat
                               args)
    in
    let new_vars =
-      if Array_util.mem v var_args then
-         let index = Array_util.index v var_args in
-            (fun i p ->
+      match v with
+         Some v when Array_util.mem v var_args ->
+            let index = Array_util.index v var_args in
+               (fun i p ->
                   let v = Sequent.nth_binding p i in
                   let vars = Array.copy var_args in
                   let vars = Var.maybe_new_vars_array p vars in
                      vars.(index) <- v;
                      vars)
-      else
-         (fun i p -> Var.maybe_new_vars_array p var_args)
+       | _ ->
+            (fun i p -> Var.maybe_new_vars_array p var_args)
    in
    let thinT =
       let rec collect = function
@@ -562,7 +565,8 @@ let process_elim_resource_annotation name context_args var_args term_args _ stat
                if i = len then
                   raise (Invalid_argument (sprintf "Base_dtactic.improve_elim: %s: can not find what to thin in one of the subgoals" name));
                match SeqHyp.get hyps i with
-                  Hypothesis (v', _) when v=v' -> i
+                  HypBinding (_, t') | Hypothesis t' when alpha_equal t t' -> i
+                | HypBinding (v', _) when v = Some v' -> i
                 | _ -> find_thin_num_aux hyps len (succ i)
             in
             let find_thin_num (_,_,assum) =

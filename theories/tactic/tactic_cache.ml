@@ -1956,15 +1956,23 @@ let set_goal extract t =
  *    2. add all the hyps using add_hyp
  *    3. set the goal using sewt_goal
  *)
+(*
+ * XXX Nogin: this sym and HACK stuff is here because I do not know
+ *  how the names are used and what should be done when we do not have one 
+ *)
 let set_msequent extract seq =
+   let sym = ref 0 in
    let rec collect i len extract hyps =
       if i = len then
          extract
       else
          let extract =
             match SeqHyp.get hyps i with
-               TermType.Hypothesis (name, hyp) ->
+               TermType.HypBinding (name, hyp) ->
                   add_hyp extract i name hyp
+             | TermType.Hypothesis hyp ->
+                  incr sym;
+                  add_hyp extract i ("HACK" ^ (string_of_int !sym)) hyp
              | TermType.Context (name, _) ->
                   add_hyp extract i name context_term
          in

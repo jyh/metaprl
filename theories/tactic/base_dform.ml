@@ -219,10 +219,14 @@ ml_dform sequent_src_df : mode["src"] :: "sequent"{'ext; 'seq} format_term buf =
          in
          let _ =
             match SeqHyp.get hyps i with
-               Hypothesis (v, a) ->
+               HypBinding (v, a) ->
                   format_space buf;
                   format_string buf v;
                   format_string buf ": ";
+                  format_term buf NOParens a
+             | Hypothesis a ->
+                  format_space buf;
+                  format_string buf "_: ";
                   format_term buf NOParens a
              | Context (v, values) ->
                   format_space buf;
@@ -285,11 +289,19 @@ ml_dform sequent_prl_df : mode["prl"] :: "sequent"{'ext; 'seq} format_term buf =
                Context (v, values) ->
                   (* This is a context hypothesis *)
                   format_term buf NOParens (mk_so_var_term v values)
-             | Hypothesis (v, a) ->
+             | HypBinding (v, a) ->
                   format_szone buf;
                   format_pushm buf 0;
                   format_string buf v;
                   format_string buf ":";
+                  format_space buf;
+                  format_term buf NOParens a;
+                  format_popm buf;
+                  format_ezone buf
+             | Hypothesis a ->
+                  format_szone buf;
+                  format_pushm buf 0;
+                  format_string buf "_:";
                   format_space buf;
                   format_term buf NOParens a;
                   format_popm buf;
@@ -363,10 +375,16 @@ ml_dform sequent_html_df : mode["html"] :: "sequent"{'ext; 'seq} format_term buf
                Context (v, values) ->
                   (* This is a context hypothesis *)
                   format_term buf NOParens (mk_so_var_term v values)
-             | Hypothesis (v, a) ->
+             | HypBinding (v, a) ->
                   format_szone buf;
                   format_string buf v;
                   format_string buf ":";
+                  format_space buf;
+                  format_term buf NOParens a;
+                  format_ezone buf
+             | Hypothesis a ->
+                  format_szone buf;
+                  format_string buf "_:";
                   format_space buf;
                   format_term buf NOParens a;
                   format_ezone buf
@@ -431,10 +449,16 @@ ml_dform sequent_tex_df : mode["tex"] :: "sequent"{'ext; 'seq} format_term buf =
                Context (v, values) ->
                   (* This is a context hypothesis *)
                   format_term buf NOParens (mk_so_var_term v values)
-             | Hypothesis (v, a) ->
+             | HypBinding (v, a) ->
                   format_szone buf;
                   format_string buf v;
                   format_string buf ":";
+                  format_space buf;
+                  format_term buf NOParens a;
+                  format_ezone buf
+             | Hypothesis a ->
+                  format_szone buf;
+                  format_string buf "_:";
                   format_space buf;
                   format_term buf NOParens a;
                   format_ezone buf

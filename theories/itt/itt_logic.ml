@@ -1,7 +1,7 @@
 (*!
  * @begin[spelling]
  * bi SelectOption assumT backThruAssumT backThruHypT dT genAssumT
- * genUnivCDT instHypT moveToConclT moveToConclVarsT
+ * genUnivCDT instHypT moveToConclT
  * ponens selT univCDT
  * @end[spelling]
  *
@@ -748,7 +748,7 @@ let rec intersects vars fv =
  * @emph{generic} reasoning of @Nuprl sequents.
  *
  * @begin[description]
- * @item{@tactic[moveToConclT], @tactic[moveToConclVarsT];
+ * @item{@tactic[moveToConclT];
  * {  The @tt{moveToConclT} tactic ``moves'' a hypothesis to the conclusion
  *    using the implication form.  The generic usage is as follows:
  *
@@ -768,24 +768,37 @@ let rec intersects vars fv =
  *    @sequent{ext; {H; j@colon @int}; @all{i; @int; (i < j) @Rightarrow T_2[i]}};
  *    @sequent{ext; {H; i@colon @int; j@colon @int; w@colon i < j}; T_2[i]}}
  *    $$
- *
- *    The @tt{moveToConclVarsT} takes a list of hypotheses, identified
- *    by their binding variables, to move to the conclusion.}}
+ * }}
  * @end[description]
  * @docoff
  * @end[doc]
  *)
-let moveToConclVarsT vars p =
-   let { sequent_hyps = hyps } = Sequent.explode_sequent p in
+let moveToConclT i p =
+   let i = Sequent.get_pos_hyp_num p i in
+   let hyps = (Sequent.explode_sequent p).sequent_hyps in
+   let vars, indices =
+      match SeqHyp.get hyps (i - 1) with
+         HypBinding (v, hyp) ->
+            [v], [i, v, hyp]
+       | Hypothesis hyp ->
+            [], [i, "none", hyp]
+       | Context _ ->
+            raise(RefineError("moveToConclT",StringError "is a context"))
+   in
    let len = SeqHyp.length hyps in
    let rec collect i vars indices =
       if i > len then
          indices
       else
          match SeqHyp.get hyps (i - 1) with
-            Hypothesis (v, hyp) ->
+            HypBinding (v, hyp) ->
                if (List.mem v vars) or (is_some_var_free vars hyp) then
                   collect (i + 1) (v :: vars) ((i, v, hyp) :: indices)
+               else
+                  collect (i + 1) vars indices
+          | Hypothesis hyp ->
+               if is_some_var_free vars hyp then
+                  collect (i + 1) vars ((i, "none", hyp) :: indices)
                else
                   collect (i + 1) vars indices
           | _ ->
@@ -809,10 +822,7 @@ let moveToConclVarsT vars p =
        | [] ->
             idT
    in
-      tac (collect 1 vars []) (Sequent.concl p) p
-
-let moveToConclT i p =
-   moveToConclVarsT [Sequent.nth_binding p i] p
+      tac (collect (i+1) vars indices) (Sequent.concl p) p
 
 (*!
  * @begin[doc]
@@ -1126,14 +1136,15 @@ let assum_term goal assum =
     * This is approximate.  Right now, we look
     * for the last context hyp.
     *)
-   let len = TermMan.num_hyps assum in
-   let hyps = (TermMan.explode_sequent assum).sequent_hyps in
+   let eassum = (TermMan.explode_sequent assum) in
+   let hyps = eassum.sequent_hyps in
+   let len = SeqHyp.length hyps in
    let rec last_match last_con hyp_index =
       if hyp_index > len then
          last_con
       else
          match SeqHyp.get hyps (pred hyp_index) with
-            Hypothesis _ ->
+            HypBinding _ | Hypothesis _ ->
                last_match last_con (succ hyp_index)
           | Context _ ->
                last_match (succ hyp_index) (succ hyp_index)
@@ -1147,15 +1158,16 @@ let assum_term goal assum =
    (* Construct the assumption as a universal formula *)
    let rec collect j =
       if j > len then
-         TermMan.nth_concl assum 1
+         SeqGoal.get eassum.sequent_goals 0
       else
-         let hyp = TermMan.nth_hyp assum j in
-         let v = TermMan.nth_binding assum j in
          let goal = collect (j + 1) in
-            if is_var_free v goal then
-               mk_all_term v hyp goal
-            else
-               mk_implies_term hyp goal
+            match SeqHyp.get hyps (j - 1) with
+               HypBinding (v, hyp) when is_var_free v goal ->
+                  mk_all_term v hyp goal
+             | HypBinding (_, hyp) | Hypothesis hyp ->
+                  mk_implies_term hyp goal
+             | Context _ ->
+                  raise(Invalid_argument("Bug in Itt_logic.assumT"))
    in
    let form = collect index in
       if !debug_auto then
@@ -1167,9 +1179,9 @@ let make_assumT i goal assum form index =
 
    (* Call intro form on each arg *)
    let rec introT j p =
-      if j > len then
+      if j > len then begin
          Itt_squash.nthAssumT i p
-      else
+      end else
          (dT 0 thenMT introT (succ j)) p
    in
       tryAssertT form
@@ -1360,7 +1372,7 @@ module ITT_JProver = Jall.JProver(Itt_JLogic)
 let rec filter_hyps = function
    [] -> []
  | Context _ :: hs -> filter_hyps hs
- | Hypothesis (_, h) :: hs -> h :: filter_hyps hs
+ | (HypBinding (_, h) | Hypothesis h) :: hs -> h :: filter_hyps hs
 
 (* input a list_term of hyps,concl *)
 let base_jproverT def_mult p =
@@ -1423,7 +1435,7 @@ let auto_assumT i p =
       if (i = 0) then () else
       let i = pred i in
          match SeqHyp.get hyps i with
-            Hypothesis (_,t) when alpha_equal t gen_assum ->
+            HypBinding (_, t) | Hypothesis t when alpha_equal t gen_assum ->
                raise assum_exn
           | _ ->
                check_hyps i

@@ -267,7 +267,7 @@ interactive member_union {| intro [intro_univ_with_args] |} univ[l:l] 'z :
 interactive member_union_elim {| elim [ThinOption thinT] |} 'H :
    [wf] sequent['ext] {'H; u:col_member{"union"{'X;x.'Y['x]};'y}; 'J >- "type"{'X} } -->
    [wf] sequent['ext] {'H; u:col_member{"union"{'X;x.'Y['x]};'y}; 'J; x:'X >- "type"{col_member{'Y['x];'y}} } -->
-   sequent['ext] {'H; u:col_member{"union"{'X;x.'Y['x]};'y}; x:'X; u: col_member{'Y['x];'y}; 'J >- squash{'Z} } -->
+   sequent['ext] {'H; u:col_member{"union"{'X;x.'Y['x]};'y}; x:'X; v: col_member{'Y['x];'y}; 'J >- squash{'Z} } -->
    sequent['ext] {'H; u:col_member{"union"{'X;x.'Y['x]};'y}; 'J >- squash{'Z} }
 
 

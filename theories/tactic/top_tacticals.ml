@@ -43,6 +43,14 @@
  * @end[license]
  *)
 
+open Refiner.Refiner
+open Refiner.Refiner.TermType
+open Refiner.Refiner.Term
+open Refiner.Refiner.TermMan
+open Refiner.Refiner.RefineError
+
+open Tactic_type
+
 (*!
  * @begin[doc]
  * @parents
@@ -68,7 +76,7 @@ extends Mptop
  * @docoff
  * @end[doc]
  *)
-let idT = Tactic_type.Tacticals.idT
+let idT = Tacticals.idT
 
 (*!
  * @begin[doc]
@@ -87,7 +95,7 @@ let idT = Tactic_type.Tacticals.idT
  * @docoff
  * @end[doc]
  *)
-let cutT = Tactic_type.Tacticals.cutT
+let cutT = Tacticals.cutT
 
 (*!
  * @begin[doc]
@@ -100,8 +108,8 @@ let cutT = Tactic_type.Tacticals.cutT
  * @docoff
  * @end[doc]
  *)
-let failT = Tactic_type.Tacticals.failT
-let failWithT = Tactic_type.Tacticals.failWithT
+let failT = Tacticals.failT
+let failWithT = Tacticals.failWithT
 
 (*!
  * @begin[doc]
@@ -127,7 +135,7 @@ let failWithT = Tactic_type.Tacticals.failWithT
  * @docoff
  * @end[doc]
  *)
-let nthAssumT = Tactic_type.Tacticals.nthAssumT
+let nthAssumT = Tacticals.nthAssumT
 
 (*!************************************************************************
  * @begin[doc]
@@ -162,14 +170,14 @@ let nthAssumT = Tactic_type.Tacticals.nthAssumT
  * @docoff
  * @end[doc]
  *)
-let prefix_orelseT = Tactic_type.Tacticals.prefix_orelseT
-let prefix_andalsoT = Tactic_type.Tacticals.prefix_andalsoT
-let prefix_orthenT = Tactic_type.Tacticals.prefix_orthenT
-let firstT = Tactic_type.Tacticals.firstT
-let prefix_thenT = Tactic_type.Tacticals.prefix_thenT
-let prefix_thenLT = Tactic_type.Tacticals.prefix_thenLT
-let seqT = Tactic_type.Tacticals.seqT
-let seqOnSameConclT = Tactic_type.Tacticals.seqOnSameConclT
+let prefix_orelseT = Tacticals.prefix_orelseT
+let prefix_andalsoT = Tacticals.prefix_andalsoT
+let prefix_orthenT = Tacticals.prefix_orthenT
+let firstT = Tacticals.firstT
+let prefix_thenT = Tacticals.prefix_thenT
+let prefix_thenLT = Tacticals.prefix_thenLT
+let seqT = Tacticals.seqT
+let seqOnSameConclT = Tacticals.seqOnSameConclT
 
 (*!
  * @begin[doc]
@@ -191,9 +199,9 @@ let seqOnSameConclT = Tactic_type.Tacticals.seqOnSameConclT
  * @docoff
  * @end[doc]
  *)
-let prefix_then_OnFirstT = Tactic_type.Tacticals.prefix_then_OnFirstT
-let prefix_then_OnLastT = Tactic_type.Tacticals.prefix_then_OnLastT
-let prefix_then_OnSameConclT = Tactic_type.Tacticals.prefix_then_OnSameConclT
+let prefix_then_OnFirstT = Tacticals.prefix_then_OnFirstT
+let prefix_then_OnLastT = Tacticals.prefix_then_OnLastT
+let prefix_then_OnSameConclT = Tacticals.prefix_then_OnSameConclT
 
 (*!
  * @begin[doc]
@@ -214,7 +222,7 @@ let prefix_then_OnSameConclT = Tactic_type.Tacticals.prefix_then_OnSameConclT
  * @docoff
  * @end[doc]
  *)
-let timingT = Tactic_type.Tacticals.timingT
+let timingT = Tacticals.timingT
 
 (*!
  * @begin[doc]
@@ -228,8 +236,8 @@ let timingT = Tactic_type.Tacticals.timingT
  * @docoff
  * @end[doc]
  *)
-let tryT = Tactic_type.Tacticals.tryT
-let completeT = Tactic_type.Tacticals.completeT
+let tryT = Tacticals.tryT
+let completeT = Tacticals.completeT
 
 (*!
  * @begin[doc]
@@ -243,7 +251,7 @@ let completeT = Tactic_type.Tacticals.completeT
  * @docoff
  * @end[doc]
  *)
-let progressT = Tactic_type.Tacticals.progressT
+let progressT = Tacticals.progressT
 
 (*!
  * @begin[doc]
@@ -270,10 +278,10 @@ let progressT = Tactic_type.Tacticals.progressT
  * @docoff
  * @end[doc]
  *)
-let repeatT = Tactic_type.Tacticals.repeatT
-let whileProgressT = Tactic_type.Tacticals.whileProgressT
-let untilFailT = Tactic_type.Tacticals.untilFailT
-let repeatForT = Tactic_type.Tacticals.repeatForT
+let repeatT = Tacticals.repeatT
+let whileProgressT = Tacticals.whileProgressT
+let untilFailT = Tacticals.untilFailT
+let repeatForT = Tacticals.repeatForT
 
 (*!************************************************************************
  * @begin[doc]
@@ -313,16 +321,16 @@ let repeatForT = Tactic_type.Tacticals.repeatForT
  * @docoff
  * @end[doc]
  *)
-let withTermT = Tactic_type.Tacticals.withTermT
-let withTypeT = Tactic_type.Tacticals.withTypeT
-let withBoolT = Tactic_type.Tacticals.withBoolT
-let withIntT = Tactic_type.Tacticals.withIntT
-let withT = Tactic_type.Tacticals.withT
-let withTermsT = Tactic_type.Tacticals.withTermsT
-let atT = Tactic_type.Tacticals.atT
-let selT = Tactic_type.Tacticals.selT
-let altT = Tactic_type.Tacticals.altT
-let thinningT = Tactic_type.Tacticals.thinningT
+let withTermT = Tacticals.withTermT
+let withTypeT = Tacticals.withTypeT
+let withBoolT = Tacticals.withBoolT
+let withIntT = Tacticals.withIntT
+let withT = Tacticals.withT
+let withTermsT = Tacticals.withTermsT
+let atT = Tacticals.atT
+let selT = Tacticals.selT
+let altT = Tacticals.altT
+let thinningT = Tacticals.thinningT
 let doNotThinT = thinningT false
 
 (*!************************************************************************
@@ -367,26 +375,26 @@ let doNotThinT = thinningT false
  * @docoff
  * @end[doc]
  *)
-let onClauseT = Tactic_type.Tacticals.onClauseT
-let onHypT = Tactic_type.Tacticals.onHypT
-let onConclT = Tactic_type.Tacticals.onConclT
-let onClausesT = Tactic_type.Tacticals.onClausesT
-let onHypsT = Tactic_type.Tacticals.onHypsT
-let onMClausesT = Tactic_type.Tacticals.onMClausesT
-let onMHypsT = Tactic_type.Tacticals.onMHypsT
-let onAllHypsT = Tactic_type.Tacticals.onAllHypsT
-let onAllClausesT = Tactic_type.Tacticals.onAllClausesT
-let tryOnHypsT = Tactic_type.Tacticals.tryOnHypsT
-let tryOnClausesT = Tactic_type.Tacticals.tryOnClausesT
-let tryOnAllHypsT = Tactic_type.Tacticals.tryOnAllHypsT
-let tryOnAllClausesT = Tactic_type.Tacticals.tryOnAllClausesT
-let onAllMHypsT = Tactic_type.Tacticals.onAllMHypsT
-let onAllAssumT = Tactic_type.Tacticals.onAllAssumT
-let onAllMAssumT = Tactic_type.Tacticals.onAllMAssumT
-let tryOnAllMHypsT = Tactic_type.Tacticals.tryOnAllMHypsT
-let tryOnAllMClausesT = Tactic_type.Tacticals.tryOnAllMClausesT
-let onSomeAssumT = Tactic_type.Tacticals.onSomeAssumT
-let onSomeHypT = Tactic_type.Tacticals.onSomeHypT
+let onClauseT = Tacticals.onClauseT
+let onHypT = Tacticals.onHypT
+let onConclT = Tacticals.onConclT
+let onClausesT = Tacticals.onClausesT
+let onHypsT = Tacticals.onHypsT
+let onMClausesT = Tacticals.onMClausesT
+let onMHypsT = Tacticals.onMHypsT
+let onAllHypsT = Tacticals.onAllHypsT
+let onAllClausesT = Tacticals.onAllClausesT
+let tryOnHypsT = Tacticals.tryOnHypsT
+let tryOnClausesT = Tacticals.tryOnClausesT
+let tryOnAllHypsT = Tacticals.tryOnAllHypsT
+let tryOnAllClausesT = Tacticals.tryOnAllClausesT
+let onAllMHypsT = Tacticals.onAllMHypsT
+let onAllAssumT = Tacticals.onAllAssumT
+let onAllMAssumT = Tacticals.onAllMAssumT
+let tryOnAllMHypsT = Tacticals.tryOnAllMHypsT
+let tryOnAllMClausesT = Tacticals.tryOnAllMClausesT
+let onSomeAssumT = Tacticals.onSomeAssumT
+let onSomeHypT = Tacticals.onSomeHypT
 
 (*!************************************************************************
  * @begin[doc]
@@ -431,30 +439,30 @@ let onSomeHypT = Tactic_type.Tacticals.onSomeHypT
  * @docoff
  * @end[doc]
  *)
-let addHiddenLabelT = Tactic_type.Tacticals.addHiddenLabelT
-let removeHiddenLabelT = Tactic_type.Tacticals.removeHiddenLabelT
-let keepingLabelT = Tactic_type.Tacticals.keepingLabelT
-let ifLabT = Tactic_type.Tacticals.ifLabT
-let prefix_thenMT = Tactic_type.Tacticals.prefix_thenMT
-let prefix_thenMLT = Tactic_type.Tacticals.prefix_thenMLT
-let prefix_thenAT = Tactic_type.Tacticals.prefix_thenAT
-let prefix_thenALT = Tactic_type.Tacticals.prefix_thenALT
-let prefix_thenWT = Tactic_type.Tacticals.prefix_thenWT
-let prefix_thenET = Tactic_type.Tacticals.prefix_thenET
-let prefix_thenPT = Tactic_type.Tacticals.prefix_thenPT
-let repeatMT = Tactic_type.Tacticals.repeatMT
-let untilFailMT = Tactic_type.Tacticals.untilFailMT
-let whileProgressMT = Tactic_type.Tacticals.whileProgressMT
-let repeatMForT = Tactic_type.Tacticals.repeatMForT
-let seqOnMT = Tactic_type.Tacticals.seqOnMT
-let completeMT = Tactic_type.Tacticals.completeMT
-let labProgressT = Tactic_type.Tacticals.labProgressT
+let addHiddenLabelT = Tacticals.addHiddenLabelT
+let removeHiddenLabelT = Tacticals.removeHiddenLabelT
+let keepingLabelT = Tacticals.keepingLabelT
+let ifLabT = Tacticals.ifLabT
+let prefix_thenMT = Tacticals.prefix_thenMT
+let prefix_thenMLT = Tacticals.prefix_thenMLT
+let prefix_thenAT = Tacticals.prefix_thenAT
+let prefix_thenALT = Tacticals.prefix_thenALT
+let prefix_thenWT = Tacticals.prefix_thenWT
+let prefix_thenET = Tacticals.prefix_thenET
+let prefix_thenPT = Tacticals.prefix_thenPT
+let repeatMT = Tacticals.repeatMT
+let untilFailMT = Tacticals.untilFailMT
+let whileProgressMT = Tacticals.whileProgressMT
+let repeatMForT = Tacticals.repeatMForT
+let seqOnMT = Tacticals.seqOnMT
+let completeMT = Tacticals.completeMT
+let labProgressT = Tacticals.labProgressT
 
 let thinMatchT thinT assum p =
-   let goal = Tactic_type.Sequent.goal p in
+   let goal = Sequent.goal p in
    let index = Match_seq.match_hyps
-      (Refiner.Refiner.TermMan.explode_sequent goal)
-      (Refiner.Refiner.TermMan.explode_sequent assum) in
+      (explode_sequent goal)
+      (explode_sequent assum) in
    let rec tac j =
       if j = 0 then idT else
          match index.(pred j) with
@@ -463,7 +471,29 @@ let thinMatchT thinT assum p =
           | None ->
                thinT j thenT tac (pred j)
    in
-      tac (Tactic_type.Sequent.hyp_count p) p
+      tac (Sequent.hyp_count p) p
+
+let nameHypT i v p =
+   let v = Var.maybe_new_vars1 p v in
+   let i = Sequent.get_pos_hyp_num p i - 1 in
+   let goal = Sequent.goal p in
+   let eseq = explode_sequent goal in
+   let map i' hyp =
+      if i = i' then match hyp with
+         Hypothesis hyp -> HypBinding (v,hyp)
+       | _ -> raise(RefineError("nameHypT",StringError "not a name-free hypothesis"))
+     else hyp
+   in
+   let eseq = {eseq with sequent_hyps = SeqHyp.mapi map eseq.sequent_hyps } in
+   let goal = mk_sequent_term eseq in
+   let a = Sequent.num_assums p + 1 in
+      (cutT goal thenLT [removeHiddenLabelT; nthAssumT a]) p
+
+let rec nameHypsT is vs =
+   match is, vs with
+      [i], [v] -> nameHypT i v
+    | i::is, v::vs -> nameHypT i v thenT nameHypsT is vs
+    | _ -> raise (Invalid_argument("nameHypsT"))
 
 (*
  * -*-

@@ -68,7 +68,6 @@ open Tactic_type.Tacticals
 open Top_tacticals
 open Var
 
-open Auto_tactic
 open Dtactic
 
 open Itt_equal

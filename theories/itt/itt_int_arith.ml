@@ -50,14 +50,12 @@ doc docoff
 open Printf
 open Lm_debug
 open Lm_num
-open Opname
 open Term_sig
 open Refiner.Refiner
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermMan
 open Refiner.Refiner.TermSubst
 open Refiner.Refiner.TermType
-open Refiner.Refiner.RefineError
 open Term_order
 open Mp_resource
 

@@ -46,11 +46,8 @@ open Tactic_type.Tacticals
 open Dtactic
 open Top_conversionals
 
-open Itt_grouplikeobj
-open Itt_intdomain_e
 open Itt_field2
 open Itt_ring_e
-open Itt_poly
 open Itt_equal
 
 let _ =

@@ -40,7 +40,6 @@ extends Itt_cyclic_group
 doc docoff
 
 open Lm_debug
-open Tactic_type.Tacticals
 open Dtactic
 open Top_conversionals
 

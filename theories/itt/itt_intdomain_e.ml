@@ -46,11 +46,9 @@ open Tactic_type.Tacticals
 open Dtactic
 open Top_conversionals
 
-open Itt_grouplikeobj
 open Itt_intdomain
 open Itt_ring_uce
 open Itt_ring_e
-open Itt_equal
 
 let _ =
    show_loading "Loading Itt_intdomain_e%t"

@@ -49,7 +49,6 @@ open Top_conversionals
 open Itt_grouplikeobj
 open Itt_unitring
 open Itt_ring_e
-open Itt_poly
 open Itt_equal
 
 let _ =

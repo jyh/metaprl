@@ -41,11 +41,8 @@ extends Itt_decidable
 open Lm_symbol
 
 open Mp_resource
-open Refiner.Refiner.Term
 open Refiner.Refiner.Refine
 
-(*
-*)
 open Tactic_type.Sequent
 
 (************************************************************************

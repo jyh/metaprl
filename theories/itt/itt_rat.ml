@@ -64,11 +64,8 @@ open Tactic_type.Tacticals
 open Top_conversionals
 open Dtactic
 
-open Itt_equal
 open Itt_struct
-open Itt_bool
 open Itt_int_base
-open Itt_squash
 open Itt_int_ext
 
 let _ = show_loading "Loading Itt_rat%t"

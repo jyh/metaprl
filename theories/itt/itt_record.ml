@@ -30,7 +30,6 @@ open Auto_tactic
 open Dtactic
 open Top_conversionals
 
-open Itt_equal
 open Itt_struct
 open Itt_record_label
 

@@ -68,10 +68,8 @@ doc <:doc< @docoff >>
 
 open Lm_debug
 
-open Mp_resource
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
-open Refiner.Refiner.Refine
 open Refiner.Refiner.RefineError
 
 open Tactic_type

@@ -187,7 +187,7 @@ and close_resource { resource_data = data } mod_name =
  * Right now most things are not supported.
  *)
 let not_supported loc str =
-   Stdpp.raise_with_loc loc (RefineError ("nltop", StringStringError ("operation is not implemented", str)))
+   Stdpp.raise_with_loc loc (RefineError ("mptop", StringStringError ("operation is not implemented", str)))
 
 let type_error loc str =
    Stdpp.raise_with_loc loc (RefineError ("type error", StringError str))

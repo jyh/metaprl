@@ -235,6 +235,7 @@ declare suba
 declare subb
 declare subc
 declare subq
+declare subt
 declare subz
 
 declare math_div
@@ -556,7 +557,7 @@ dform mathbbO_df		: internal :: mode[prl] :: mathbbO                   = `"𝕆"
 dform mathbbP_df		: internal :: mode[prl] :: mathbbP                   = `"ℙ"
 dform mathbbQ_df		: internal :: mode[prl] :: mathbbQ                   = `"ℚ"
 dform mathbbR_df		: internal :: mode[prl] :: mathbbR                   = `"ℝ"
-dform mathbbS_df		: internal :: mode[prl] :: mathbbS                   = `"𝕊"
+dform mathbbS_df		: internal :: mode[prl] :: mathbbS                   = `"S" (* or `"𝕊" *)
 dform mathbbT_df		: internal :: mode[prl] :: mathbbT                   = `"𝕋"
 dform mathbbU_df		: internal :: mode[prl] :: mathbbU                   = `"Ů" (* or: `"Ⓤ", or `"U" *) (* real: `"𝕌" *)
 dform mathbbV_df		: internal :: mode[prl] :: mathbbV                   = `"𝕍"
@@ -770,6 +771,7 @@ dform suba_df			: internal :: mode[prl] :: suba                      = `"⒜"
 dform subb_df			: internal :: mode[prl] :: subb                      = `"⒝"
 dform subc_df			: internal :: mode[prl] :: subc                      = `"⒞"
 dform subq_df			: internal :: mode[prl] :: subq                      = `"⒬"
+dform subt_df			: internal :: mode[prl] :: subt                      = `"⒯"
 dform subz_df			: internal :: mode[prl] :: subz                      = `"⒵"
 
 dform wedge_df			: internal :: mode[html] :: wedge                     = html_uni[8743]
@@ -820,6 +822,7 @@ dform suba_df			: internal :: mode[html] :: suba                      = sub["a"]
 dform subb_df			: internal :: mode[html] :: subb                      = sub["b"]
 dform subc_df			: internal :: mode[html] :: subc                      = sub["c"]
 dform subq_df			: internal :: mode[html] :: subq                      = sub["q"]
+dform subq_df			: internal :: mode[html] :: subq                      = sub["t"]
 dform subz_df			: internal :: mode[html] :: subz                      = sub["z"]
 
 dform wedge_df			: internal :: mode[tex] :: wedge                     = mathmacro["wedge"]
@@ -870,6 +873,7 @@ dform suba_df			: internal :: mode[tex] :: suba                      = izone `"_
 dform subb_df			: internal :: mode[tex] :: subb                      = izone `"_b" ezone
 dform subc_df			: internal :: mode[tex] :: subc                      = izone `"_c" ezone
 dform subq_df			: internal :: mode[tex] :: subq                      = izone `"_q" ezone
+dform subt_df			: internal :: mode[tex] :: subt                      = izone `"_t" ezone
 dform subz_df			: internal :: mode[tex] :: subz                      = izone `"_z" ezone
 
 (*

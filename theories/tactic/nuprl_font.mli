@@ -206,6 +206,7 @@ declare suba
 declare subb
 declare subc
 declare subq
+declare subt
 declare subz
 
 declare math_div

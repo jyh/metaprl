@@ -151,7 +151,7 @@ let process_ge_elim_resource_annotation name context_args term_args statement pr
             raise (Invalid_argument (sprintf "Itt_int_arith.improve_ge_elim: %s: must be an elimination rule" name))
    in
    let seq_terms = on_main_subgoals assums in
-	let tac = argfunT (fun i p -> Tactic_type.Tactic.tactic_of_rule pre_tactic [| i |] []) in
+	let tac = argfunT (fun i p -> Tactic_type.Tactic.tactic_of_rule pre_tactic { arg_ints = [| i |]; arg_addrs = [||] } []) in
    [mk_pair_term (mk_var_term v) t, seq_terms, tac]
 
 let process_ge_intro_resource_annotation name context_args term_args statement pre_tactic =
@@ -162,7 +162,7 @@ let process_ge_intro_resource_annotation name context_args term_args statement p
 	      eprintf "Itt_int_arith.improve_ge_intro: %s goal: %s%t" name (SimplePrint.short_string_of_term t) eflush
    in
    let seq_terms = on_main_subgoals assums in
-	let tac = funT (fun p -> Tactic_type.Tactic.tactic_of_rule pre_tactic [| |] []) in
+	let tac = funT (fun p -> Tactic_type.Tactic.tactic_of_rule pre_tactic empty_rw_args []) in
    [t, seq_terms, tac]
 
 let hyp2geT = argfunT (fun i p ->

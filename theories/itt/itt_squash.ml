@@ -331,10 +331,12 @@ let unsquash_tactic tbl = argfunT (fun i p ->
          raise (RefineError ("squash", StringTermError ("squash tactic doesn't know about ", mk_xlist_term [hyp;<<slot[" |- "]>>;conc]))))
 
 let process_squash_resource_annotation name contexts args stmt tac =
+   if contexts.spec_addrs <> [||] then
+      raise (Invalid_argument ("squash_stable resource annotation: " ^ name ^ ": contexts (address) arguments are not supported yet"));
    let assums, goal = unzip_mfunction stmt in
    let egoal = TermMan.explode_sequent goal in
    let concl = egoal.sequent_concl in
-   match contexts, args, assums, (SeqHyp.to_list egoal.sequent_hyps) with
+   match contexts.spec_ints, args, assums, (SeqHyp.to_list egoal.sequent_hyps) with
       (* H |- [T] --> H |- T *)
       [||], [], [_, _, assum], [Context(h,[],[])] when
          let eassum = TermMan.explode_sequent assum in
@@ -343,7 +345,7 @@ let process_squash_resource_annotation name contexts args stmt tac =
          is_squash_term aconcl &&
          alpha_equal (dest_squash aconcl) concl
       ->
-         [concl, SqStableGoal(Tactic_type.Tactic.tactic_of_rule tac [||] [])]
+         [concl, SqStableGoal(Tactic_type.Tactic.tactic_of_rule tac empty_rw_args [])]
       (* H |- T --> H |- a in T *)
     | [||], [], [_, _, assum], [Context(h,[],[])] when
          is_equal_term concl &&
@@ -354,13 +356,13 @@ let process_squash_resource_annotation name contexts args stmt tac =
          alpha_equal eassum.sequent_concl t
       ->
          let t,a,_ = dest_equal concl in
-            [t, SqStable(a, Tactic_type.Tactic.tactic_of_rule tac [||] [])]
+            [t, SqStable(a, Tactic_type.Tactic.tactic_of_rule tac empty_rw_args [])]
       (* H |- a in T *)
     | [||], [], [], [Context(_,[],[])] when
          (let t,a,b = dest_equal concl in (alpha_equal a b) )
       ->
          let t,a,_ = dest_equal concl in
-            [t, SqStable(a, Tactic_type.Tactic.tactic_of_rule tac [||] [])]
+            [t, SqStable(a, Tactic_type.Tactic.tactic_of_rule tac empty_rw_args [])]
       (* H; x:T; J[x] |- C[x] *)
     | [| h |], [], [], [Context(h',[],[]); Hypothesis(v,t); Context(_, [h''], [v'])] when
          h = h' && h' = h'' && is_var_term v' && (dest_var v') = v &&
@@ -371,11 +373,11 @@ let process_squash_resource_annotation name contexts args stmt tac =
          end
       ->
          let tac = funT (fun p ->
-            Tactic_type.Tactic.tactic_of_rule tac [| Sequent.hyp_count p |] [])
+            Tactic_type.Tactic.tactic_of_rule tac { arg_ints = [| Sequent.hyp_count p |] ; arg_addrs = [||] } [])
          in
             [t, SqStable(it_term, (assertT t thenMT tac))]
     | _ ->
-         raise (Invalid_argument "squash_stable resource annotation")
+         raise (Invalid_argument ("squash_stable resource annotation: " ^ name ^ ": the rule is not a squash-stability rule"))
 
 (*
  * Resource.

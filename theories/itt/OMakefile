@@ -1,3 +1,6 @@
+THEORYNAME = itt
+THEORYDESCR = Computational Type Theory
+
 OCAMLINCLUDES +=\
    $(addprefix -I , $(SUPPORT_DIRS))\
    -I ../base

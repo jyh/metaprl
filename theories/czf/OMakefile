@@ -1,3 +1,6 @@
+THEORYNAME = czf
+THEORYDESCR = Constructive Set Theory
+
 OCAMLINCLUDES +=\
 	$(addprefix -I , $(SUPPORT_DIRS))\
 	-I ../itt\

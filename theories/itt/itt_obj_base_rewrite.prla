@@ -562,9 +562,9 @@ T	t203	o198 b201 b202 b4
 B	b203	t203
 T	t204	o197 b203
 B	b204	t204
-P	p204	Number 242
-P	p205	Number 305
-O	o205	location p204 p205
+P	p3	Number 236
+P	p4	Number 299
+O	o6	location p3 p4
 P	p206	String unfold_empty_obj
 O	o206	definition p206
 T	t206	o199
@@ -577,20 +577,20 @@ B	b207	t207 self
 T	t208	o199 b207
 B	b208	t208
 NSummary!resource_defs	resource_defs	resource_defs Summary
+P	p12	Number 263
 P	p208	Number 269
-P	p209	Number 275
-O	o209	resource_defs p208 p209 p108
-T	t209	o209 b4
-B	b209	t209
-T	t210	o b209 b4
-B	b210	t210
-T	t211	o206 b206 b208 b210
-B	b211	t211
-T	t212	o205 b211
-B	b212	t212
-P	p212	Number 307
-P	p213	Number 371
-O	o213	location p212 p213
+O	o12	resource_defs p12 p208 p108
+T	t18	o12 b4
+B	b18	t18
+T	t19	o b18 b4
+B	b19	t19
+T	t22	o206 b206 b208 b19
+B	b22	t22
+T	t23	o6 b22
+B	b23	t23
+P	p28	Number 301
+P	p29	Number 365
+O	o29	location p28 p29
 P	p214	String unfold_apply
 O	o214	definition p214
 NItt_obj_base_rewrite!apply	apply	apply Itt_obj_base_rewrite
@@ -611,11 +611,11 @@ T	t218	o216 b217
 B	b218	t218
 T	t219	o214 b216 b218 b4
 B	b219	t219
-T	t220	o213 b219
-B	b220	t220
-P	p220	Number 373
-P	p221	Number 467
-O	o221	location p220 p221
+T	t33	o29 b219
+B	b33	t33
+P	p38	Number 367
+P	p39	Number 461
+O	o39	location p38 p39
 P	p222	String unfold_update_field
 O	o222	definition p222
 NItt_obj_base_rewrite!update	update	update Itt_obj_base_rewrite
@@ -635,11 +635,11 @@ T	t227	o201 b227
 B	b228	t227
 T	t228	o222 b224 b228 b4
 B	b229	t228
-T	t229	o221 b229
-B	b230	t229
-P	p230	Number 472
-P	p231	Number 586
-O	o231	location p230 p231
+T	t41	o39 b229
+B	b41	t41
+P	p50	Number 463
+P	p51	Number 577
+O	o51	location p50 p51
 P	p232	String unfold_update_method
 O	o232	definition p232
 Vf	f232	f\\ \\ t200
@@ -653,11 +653,11 @@ T	t235	o201 b235
 B	b236	t235
 T	t236	o232 b233 b236 b4
 B	b237	t236
-T	t237	o231 b237
-B	b238	t237
-P	p238	Number 652
-P	p239	Number 788
-O	o239	location p238 p239
+T	t53	o51 b237
+B	b53	t53
+P	p61	Number 643
+P	p62	Number 779
+O	o62	location p61 p62
 NSummary!rewrite	rewrite	rewrite Summary
 P	p240	String apply_reduce
 O	o240	rewrite p240
@@ -703,20 +703,20 @@ T	t253	o243 b244 b252 b4 b4
 B	b253	t253
 T	t254	o242 b253
 B	b254	t254
-P	p254	Number 683
-P	p255	Number 689
-O	o255	resource_defs p254 p255 p108
-T	t255	o255 b4
-B	b255	t255
-T	t256	o b255 b4
-B	b256	t256
-T	t257	o240 b240 b242 b254 b256
-B	b257	t257
-T	t258	o239 b257
-B	b258	t258
-P	p258	Number 792
-P	p259	Number 925
-O	o259	location p258 p259
+P	p63	Number 674
+P	p64	Number 680
+O	o64	resource_defs p63 p64 p108
+T	t66	o64 b4
+B	b66	t66
+T	t71	o b66 b4
+B	b71	t71
+T	t72	o240 b240 b242 b254 b71
+B	b72	t72
+T	t74	o62 b72
+B	b74	t74
+P	p76	Number 781
+P	p77	Number 914
+O	o77	location p76 p77
 P	p260	String update_f_reduce
 O	o260	rewrite p260
 T	t260	o223 b223 b201
@@ -741,20 +741,20 @@ T	t267	o263 b244 b267 b4 b4
 B	b268	t267
 T	t268	o242 b268
 B	b269	t268
-P	p269	Number 826
-P	p270	Number 832
-O	o270	resource_defs p269 p270 p108
-T	t270	o270 b4
-B	b270	t270
-T	t271	o b270 b4
-B	b271	t271
-T	t272	o260 b260 b263 b269 b271
-B	b272	t272
-T	t273	o259 b272
-B	b273	t273
-P	p273	Number 927
-P	p274	Number 1079
-O	o274	location p273 p274
+P	p78	Number 815
+P	p88	Number 821
+O	o88	resource_defs p78 p88 p108
+T	t90	o88 b4
+B	b90	t90
+T	t91	o b90 b4
+B	b91	t91
+T	t93	o260 b260 b263 b269 b91
+B	b93	t93
+T	t95	o77 b93
+B	b95	t95
+P	p99	Number 916
+P	p100	Number 1068
+O	o100	location p99 p100
 P	p275	String update_m_reduce
 O	o275	rewrite p275
 T	t275	o223 b232 b201
@@ -778,36 +778,37 @@ T	t282	o277 b244 b281 b4 b4
 B	b282	t282
 T	t283	o242 b282
 B	b283	t283
-P	p283	Number 961
-P	p284	Number 967
-O	o284	resource_defs p283 p284 p108
-T	t284	o284 b4
-B	b284	t284
-T	t285	o b284 b4
-B	b285	t285
-T	t286	o275 b275 b277 b283 b285
-B	b286	t286
-T	t287	o274 b286
-B	b287	t287
-P	p287	Number 1147
-P	p288	Number 1160
-O	o288	location p287 p288
-O	o289	str_open p287 p288
+P	p101	Number 950
+P	p102	Number 956
+O	o102	resource_defs p101 p102 p108
+T	t104	o102 b4
+B	b104	t104
+T	t109	o b104 b4
+B	b109	t109
+T	t110	o275 b275 b277 b283 b109
+B	b110	t110
+T	t118	o100 b110
+B	b118	t118
+P	p124	Number 1136
+P	p133	Number 1149
+O	o133	location p124 p133
+O	o135	str_open p124 p133
 P	p289	String Itt_rfun
 O	o290	string p289
 T	t290	o290
 B	b290	t290
 T	t291	o b290 b4
 B	b291	t291
-T	t292	o289 b291
-B	b292	t292
-T	t293	o190 b292
-B	b293	t293
-T	t294	o288 b293
-B	b294	t294
+T	t135	o135 b291
+B	b135	t135
+T	t136	o190 b135
+B	b136	t136
+T	t141	o133 b136
+B	b141	t141
+P	p150	Number 1151
+P	p153	Number 1166
+O	o153	location p150 p153
 P	p294	Number 1167
-P	p295	Number 1182
-O	o295	location p294 p295
 NSummary!opname	opname	opname Summary
 P	p296	String obj_dot
 O	o296	opname p296
@@ -817,11 +818,10 @@ T	t297	o297
 B	b297	t297
 T	t298	o296 b297
 B	b298	t298
-T	t299	o295 b298
-B	b299	t299
-P	p299	Number 1183
-P	p300	Number 1219
-O	o300	location p299 p300
+T	t156	o153 b298
+B	b156	t156
+P	p162	Number 1203
+O	o162	location p294 p162
 NSummary!dform	dform	dform Summary
 P	p301	String obj_dot_df
 O	o301	dform p301
@@ -838,11 +838,11 @@ T	t305	o302 b304
 B	b305	t305
 T	t306	o301 b4 b297 b305
 B	b306	t306
-T	t307	o300 b306
-B	b307	t307
-P	p307	Number 1220
-P	p308	Number 1238
-O	o308	location p307 p308
+T	t164	o162 b306
+B	b164	t164
+P	p170	Number 1204
+P	p171	Number 1222
+O	o171	location p170 p171
 P	p309	String obj_assign
 O	o309	opname p309
 NItt_obj_base_rewrite!obj_assign	obj_assign	obj_assign Itt_obj_base_rewrite
@@ -851,11 +851,11 @@ T	t310	o310
 B	b310	t310
 T	t311	o309 b310
 B	b311	t311
-T	t312	o308 b311
-B	b312	t312
-P	p312	Number 1239
-P	p313	Number 1279
-O	o313	location p312 p313
+T	t189	o171 b311
+B	b189	t189
+P	p190	Number 1223
+P	p192	Number 1263
+O	o193	location p190 p192
 P	p314	String obj_assign_df
 O	o314	dform p314
 NPerv!string	string314	string Perv
@@ -869,10 +869,11 @@ T	t317	o302 b316
 B	b317	t317
 T	t318	o314 b4 b310 b317
 B	b318	t318
-T	t319	o313 b318
-B	b319	t319
-P	p319	Number 1287
-O	o319	location p319 p36
+T	t197	o193 b318
+B	b197	t197
+P	p200	Number 1265
+P	p201	Number 1389
+O	o202	location p200 p201
 P	p320	String obj_df
 O	o320	dform p320
 NSummary!except_mode_df	except_mode_df	except_mode_df Summary
@@ -928,11 +929,11 @@ T	t338	o302 b338
 B	b339	t338
 T	t339	o320 b326 b328 b339
 B	b340	t339
-T	t340	o319 b340
-B	b341	t340
-P	p341	Number 1413
-P	p342	Number 1515
-O	o342	location p341 p342
+T	t205	o202 b340
+B	b205	t205
+P	p207	Number 1391
+P	p210	Number 1493
+O	o210	location p207 p210
 P	p343	String obj_empty_df
 O	o343	dform p343
 B	b343	t207
@@ -944,11 +945,11 @@ T	t345	o302 b345
 B	b346	t345
 T	t346	o343 b326 b206 b346
 B	b347	t346
-T	t347	o342 b347
-B	b348	t347
-P	p348	Number 1534
-P	p349	Number 1633
-O	o349	location p348 p349
+T	t213	o210 b347
+B	b213	t213
+P	p216	Number 1495
+P	p217	Number 1594
+O	o218	location p216 p217
 P	p350	String apply_df
 O	o350	dform p350
 T	t350	o b321 b324
@@ -974,11 +975,11 @@ T	t357	o302 b357
 B	b358	t357
 T	t358	o350 b350 b352 b358
 B	b359	t358
-T	t359	o349 b359
-B	b360	t359
-P	p360	Number 1637
-P	p361	Number 1767
-O	o361	location p360 p361
+T	t221	o218 b359
+B	b221	t221
+P	p223	Number 1596
+P	p224	Number 1726
+O	o225	location p223 p224
 P	p362	String update_field_df
 O	o362	dform p362
 T	t362	o223 b223 b351
@@ -999,11 +1000,11 @@ T	t369	o302 b368
 B	b369	t369
 T	t370	o362 b350 b362 b369
 B	b370	t370
-T	t371	o361 b370
-B	b371	t371
-P	p371	Number 1799
-P	p372	Number 1952
-O	o372	location p371 p372
+T	t230	o225 b370
+B	b231	t230
+P	p233	Number 1728
+P	p234	Number 1881
+O	o234	location p233 p234
 P	p373	String update_method_df
 O	o373	dform p373
 B	b373	f s
@@ -1035,11 +1036,11 @@ T	t384	o302 b384
 B	b385	t384
 T	t385	o373 b350 b374 b385
 B	b386	t385
-T	t386	o372 b386
-B	b387	t386
-P	p387	Number 2021
-P	p388	Number 2325
-O	o388	location p387 p388
+T	t238	o234 b386
+B	b239	t238
+P	p241	Number 1948
+P	p243	Number 2252
+O	o250	location p241 p243
 P	p389	String flea
 O	o389	definition p389
 NItt_obj_base_rewrite!flea	flea	flea Itt_obj_base_rewrite
@@ -1085,11 +1086,11 @@ T	t403	o199 b402
 B	b403	t403
 T	t404	o389 b390 b403 b4
 B	b404	t404
-T	t405	o388 b404
-B	b405	t405
-P	p405	Number 2327
-P	p406	Number 2415
-O	o406	location p405 p406
+T	t259	o250 b404
+B	b259	t259
+P	p261	Number 2254
+P	p262	Number 2342
+O	o262	location p261 p262
 P	p407	String example1
 O	o407	rewrite p407
 O	o408	apply p398
@@ -1121,11 +1122,11 @@ T	t418	o242 b417
 B	b418	t418
 T	t419	o407 b411 b412 b418 b4
 B	b419	t419
-T	t420	o406 b419
-B	b420	t420
-P	p420	Number 2420
-P	p421	Number 2509
-O	o421	location p420 p421
+T	t269	o262 b419
+B	b274	t269
+P	p276	Number 2344
+P	p278	Number 2433
+O	o278	location p276 p278
 P	p422	String fastFlea
 O	o422	definition p422
 NItt_obj_base_rewrite!fastFlea	fastFlea	fastFlea Itt_obj_base_rewrite
@@ -1143,11 +1144,11 @@ T	t427	o424 b426 b390
 B	b427	t427
 T	t428	o422 b423 b427 b4
 B	b428	t428
-T	t429	o421 b428
-B	b429	t429
-P	p429	Number 2560
-P	p430	Number 2652
-O	o430	location p429 p430
+T	t288	o278 b428
+B	b288	t288
+P	p290	Number 2481
+P	p291	Number 2573
+O	o291	location p290 p291
 P	p431	String example2
 O	o431	rewrite p431
 T	t431	o409 b423
@@ -1177,8 +1178,95 @@ T	t440	o242 b439
 B	b440	t440
 T	t441	o431 b433 b434 b440 b4
 B	b441	t441
-T	t442	o430 b441
-B	b442	t442
+T	t295	o291 b441
+B	b295	t295
+P	p297	Number 2726
+P	p298	Number 3125
+O	o298	location p297 p298
+P	p302	String feeFoo
+O	o304	definition p302
+NItt_obj_base_rewrite!feeFoo	feeFoo	feeFoo Itt_obj_base_rewrite
+O	o305	feeFoo
+T	t308	o305
+B	b308	t308
+P	p310	Token fee
+O	o311	rcrd224 p310
+NItt_bool	Itt_bool	Itt_bool NIL
+NItt_bool!ifthenelse	ifthenelse	ifthenelse Itt_bool
+O	o312	ifthenelse
+NItt_int_base!beq_int	beq_int	beq_int Itt_int_base
+O	o316	beq_int
+P	p316	Var n
+O	o317	var p316
+T	t320	o317
+B	b320	t320
+O	o324	number p
+T	t329	o324
+B	b342	t329
+T	t342	o316 b320 b342
+B	b349	t342
+P	p351	Token foo
+O	o352	apply p351
+T	t360	o352 b225
+B	b361	t360
+NItt_int_base!sub	sub	sub Itt_int_base
+O	o363	sub
+T	t372	o363 b320 b397
+B	b372	t372
+T	t375	o217 b361 b372
+B	b388	t375
+T	t388	o312 b349 b397 b388
+B	b389	t388 n
+T	t389	o201 b389
+B	b391	t389
+O	o400	rcrd224 p351
+O	o401	apply p310
+T	t406	o401 b225
+B	b406	t406
+T	t407	o217 b406 b372
+B	b407	t407
+T	t408	o312 b349 b342 b407
+B	b408	t408 n
+T	t421	o201 b408
+B	b421	t421
+T	t422	o400 b421 b343
+B	b422	t422
+T	t424	o311 b391 b422
+B	b424	t424 self
+T	t430	o199 b424
+B	b430	t430
+T	t470	o304 b308 b430 b4
+B	b470	t470
+T	t471	o298 b470
+B	b471	t471
+P	p471	Number 3128
+P	p472	Number 3187
+O	o472	location p471 p472
+P	p473	String example4
+O	o473	rewrite p473
+T	t473	o352 b308
+B	b473	t473
+T	t474	o217 b473 b434
+B	b474	t474
+P	p474	String "byDefT feeFoo thenT reduceT ttca"
+O	o474	ext_rule p474
+T	t475	o249 b474 b397
+S	s475	t248\\ h\\ t475
+B	b475	s475
+T	t476	o247 b475 b4
+B	b476	t476
+T	t477	o246 b476 b4
+B	b477	t477
+T	t478	o245 b477 b4
+B	b478	t478
+T	t479	o474 b244 b478 b4 b4
+B	b479	t479
+T	t480	o242 b479
+B	b480	t480
+T	t481	o473 b474 b397 b480 b4
+B	b481	t481
+T	t482	o472 b481
+B	b482	t482
 O	o442	location p p
 NSummary!id	id	id Summary
 P	p442	Number 717058532
@@ -1189,50 +1277,54 @@ T	t444	o442 b443
 B	b444	t444
 T	t445	o b444 b4
 B	b445	t445
-T	t446	o b442 b445
-B	b446	t446
-T	t447	o b429 b446
-B	b447	t447
-T	t448	o b420 b447
-B	b448	t448
-T	t449	o b405 b448
-B	b449	t449
-T	t450	o b387 b449
-B	b450	t450
-T	t451	o b371 b450
-B	b451	t451
-T	t452	o b360 b451
-B	b452	t452
-T	t453	o b348 b452
-B	b453	t453
-T	t454	o b341 b453
-B	b454	t454
-T	t455	o b319 b454
-B	b455	t455
-T	t456	o b312 b455
-B	b456	t456
-T	t457	o b307 b456
-B	b457	t457
-T	t458	o b299 b457
-B	b458	t458
-T	t459	o b294 b458
-B	b459	t459
-T	t460	o b287 b459
-B	b460	t460
-T	t461	o b273 b460
-B	b461	t461
-T	t462	o b258 b461
-B	b462	t462
-T	t463	o b238 b462
-B	b463	t463
-T	t464	o b230 b463
-B	b464	t464
-T	t465	o b220 b464
-B	b465	t465
-T	t466	o b212 b465
-B	b466	t466
-T	t467	o b204 b466
-B	b467	t467
-T	t468	o b196 b467
-B	b468	t468
-T	t469	o b188 b468
+T	t483	o b482 b445
+B	b483	t483
+T	t484	o b471 b483
+B	b484	t484
+T	t485	o b295 b484
+B	b485	t485
+T	t486	o b288 b485
+B	b486	t486
+T	t487	o b274 b486
+B	b487	t487
+T	t488	o b259 b487
+B	b488	t488
+T	t489	o b239 b488
+B	b489	t489
+T	t490	o b231 b489
+B	b490	t490
+T	t491	o b221 b490
+B	b491	t491
+T	t492	o b213 b491
+B	b492	t492
+T	t493	o b205 b492
+B	b493	t493
+T	t494	o b197 b493
+B	b494	t494
+T	t495	o b189 b494
+B	b495	t495
+T	t496	o b164 b495
+B	b496	t496
+T	t497	o b156 b496
+B	b497	t497
+T	t498	o b141 b497
+B	b498	t498
+T	t499	o b118 b498
+B	b499	t499
+T	t500	o b95 b499
+B	b500	t500
+T	t501	o b74 b500
+B	b501	t501
+T	t502	o b53 b501
+B	b502	t502
+T	t503	o b41 b502
+B	b503	t503
+T	t504	o b33 b503
+B	b504	t504
+T	t505	o b23 b504
+B	b505	t505
+T	t506	o b204 b505
+B	b506	t506
+T	t507	o b196 b506
+B	b507	t507
+T	t508	o b188 b507

@@ -84,3 +84,24 @@ define fastFlea: fastFlea <--> update["getNextX":t]{self. apply["x":t]{'self} +@
 interactive_rw example2 : apply["getX":t]{apply["move":t]{apply["move":t]{fastFlea}}} <--> 5
 
 
+(******************)
+(*  Recursion     *)
+(******************)
+(*
+define recursiveFlea:  recursiveFlea <-->
+   update["moveBy":t]{self.x:=1;flea}
+
+*)
+define feeFoo: feeFoo <-->
+   obj{ self.
+           {foo =  lambda{n. ifthenelse{ 'n =@ 0 ;
+                                         0 ;
+                                         .apply["fee":t]{'self} ('n -@ 1)}};
+            fee =  lambda{n. ifthenelse{ 'n =@ 0 ;
+                                         1 ;
+                                         .apply["foo":t]{'self} ('n -@ 1)}}
+           }}
+
+
+interactive_rw example4 : (apply["foo":t]{feeFoo} 5) <--> 1
+

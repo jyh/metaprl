@@ -323,7 +323,7 @@ let fold_ball2 = makeFoldC << ball2{'l1; 'l2; x, y. 'b['x; 'y]} >> unfold_ball2
 (*!
  * @begin[doc]
  * The @hrefterm[assoc] term performs induction over the list,
- * splitting each pair and comparing it the the key.
+ * splitting each pair and comparing it with the key.
  * @end[doc]
  *)
 interactive_rw reduce_assoc_nil :

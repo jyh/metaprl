@@ -44,7 +44,7 @@
  * @end[verbatim]
  *
  * There is also a @emph{math} mode, which is entered for terms between
- * @code{$} or @code{$$} forms.  The contents of math mode is
+ * @tt["$"] or @tt["$$"] forms.  The contents of math mode is
  * parsed in a similar manner to normal mode, but the `_' and `^' characters
  * are significant in math mode (they are normal text in normal mode).
  * The `_' term identifies a subscript operation, and the `^' term
@@ -70,12 +70,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
- * Author: Jason Hickey
- * @email{jyh@cs.caltech.edu}
+ * Author: Jason Hickey @email{jyh@cs.caltech.edu}
  * @end[license]
  *)
 
-(*
+(*!
  * @begin[doc]
  * @parents
  * @end[doc]
@@ -816,8 +815,8 @@ dform math_slot_df1 : math_slot[tag:s]{'t} =
  * @thysubsection{Math mode}
  *
  * Terms are formatted in @emph{math mode} if they are
- * placed between matching @code{$} symbols (for inline
- * math expressions), or matching @code{$$} symbols (for
+ * placed between matching @tt["$"] symbols (for inline
+ * math expressions), or matching @tt["$$"] symbols (for
  * centered math expressions).  All terms in math mode
  * have an @tt{opname} that begins with the prefix @tt{math_}.
  *
@@ -1450,6 +1449,7 @@ dform normal_math_hline_df1 : except_mode[tex] :: math_hline =
 declare math_defrule{'name; 'args; 'hyps; 'goal}
 declare math_rulebox{'tac; 'args; 'hyps; 'goal}
 declare math_sequent{'ext; 'hyps; 'goal}
+(*! @docoff *)
 
 (*
  * TeX display.
@@ -1506,7 +1506,7 @@ dform normal_math_sequent_df1 : except_mode[tex] :: math_sequent{'ext; 'hyps; 'g
    slot{'goal}
    ezone popm
 
-(*!
+(*
  * -*-
  * Local Variables:
  * Caml-master: "compile"

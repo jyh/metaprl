@@ -98,7 +98,7 @@ prim rewriteAxiom1 'H :
 
 (*!
  * @begin[doc]
- * The @Comment!rewrite[rewriteAxiom2] conditional rewrite provides a link to the primitive
+ * The @tt[rewriteAxiom2] conditional rewrite provides a link to the primitive
  * rewriter: a proof of $<<Perv!"rewrite"{'a; 'b}>>$ shows that the terms
  * $a$ and $b$ are computationally equivalent.
  * @end[doc]

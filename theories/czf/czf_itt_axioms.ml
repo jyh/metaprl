@@ -116,7 +116,7 @@ let setInduction i p =
  * of a @misspelled{forall}/exists formula $@dall{x; s_1; @sexists{s_2; P[x; y]}}$,
  * there is a set $s_3$ that contains the collection of sets that
  * were chosen by the existential.  The reason that the collection is
- * not defined as a set constructor is the the proof of the @misspelled{forall}/exists
+ * not defined as a set constructor is that the proof of the @misspelled{forall}/exists
  * formula is part of the construction.  If the set $s_1$ has canonical
  * for $s_1 = @collect{x; T; f[x]}$, the proof provides a witness
  * that inhabits the function space $T @rightarrow @set$.  The canonical

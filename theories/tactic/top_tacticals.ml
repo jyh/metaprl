@@ -366,7 +366,7 @@ let doNotThinT = thinningT false
  * including all the hypothesis and the conclusion.  The @tt{onHypsT} applies the
  * argument only to the hypotheses.}
  *
- * @item{@tactic[onAllClausesT], @tactic[onAllHypsT];
+ * @item{@tactic[onAllAssumT];
  * The (@tt{onAllAssumT} @i{tac}) applies the argument tactic to all the assumptions.
   ,
  * including all the hypothesis and the conclusion.  The @tt{onHypsT} applies the
@@ -423,7 +423,7 @@ let onVarT = Tactic_type.Tacticals.onVarT
  * the current goal, the @tt{removeHiddenLabelT} tactic assigns
  * the label ``main'', and the (@tt{keepingLabelT} $@i{tac}$) applies
  * the tactic $@i{tac}$ and assigns the label of the current goal
- * to all the the remaining subgoals.  The ``@tt{Hidden}'' is of historical
+ * to all of the remaining subgoals.  The ``@tt{Hidden}'' is of historical
  * significance only@; the labels are hidden only in the sense that they
  * have no logical significance.}
  *

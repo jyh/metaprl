@@ -64,6 +64,9 @@ open Mp_resource
 open Tactic_type.Tacticals
 open Tactic_type.Conversionals
 
+(* XXX Bootstrapping HACK *)
+let _ = Theory.substitute_dforms "comment" "summary"
+
 (************************************************************************
  * TYPES                                                                *
  ************************************************************************)

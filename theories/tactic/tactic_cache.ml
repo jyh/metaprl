@@ -414,7 +414,7 @@ type 'a bchain_table = (shape, 'a goal_node list) Hashtbl.t
  *       ext_ftable, and we apply all of them in turn.
  *          For each rule, this means that we must find an
  *          instance that applies, which means that we have
- *          to find all hyps that apply.  We do an an exhaustive
+ *          to find all hyps that apply.  We do an exhaustive
  *          search through all the inferences we have made in
  *          the current world.  If we find a potential instance,
  *          we apply the forward rule.  If it fails, drop it.

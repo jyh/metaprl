@@ -189,11 +189,8 @@ prec prec_lambda < prec_apply
 prec prec_fun < prec_apply
 prec prec_fun < prec_lambda
 
-dform fun_df1 : parens :: "prec"[prec_fun] :: "fun"{'A; 'B} =
-   slot["le"]{'A} " " rightarrow " " slot["lt"]{'B}
-
-dform fun_df2 : parens :: "prec"[prec_fun] :: "fun"{'A; x. 'B} =
-   slot{bvar{'x}} `":" slot{'A} " " rightarrow " " slot{'B}
+dform fun_df1 : "fun"{'A; 'B} = math_fun{'A; 'B}
+dform fun_df2 : "fun"{'A; x. 'B} = math_fun{'x; 'A; 'B}
 
 dform fun_df3 : rfun{'A; f, x. 'B} =
    "{" " " slot{bvar{'f}} `" | "  "fun"{'A; x. 'B} `" }"
@@ -302,7 +299,7 @@ prim rfunctionFormation 'H { f | a: 'A -> 'B['f; 'a] } :
  * @thysubsection{Typehood and equality}
  *
  * The well-formedness of the very-dependent function
- * requires that the domain type $A$ be a type, the the domain
+ * requires that the domain type $A$ be a type, that the domain
  * be well-founded with some relation $R$, and that $B[f, x]$ be
  * a type for any restricted function $@rfun{f; y; @set{A; x; R[z, y]}; B[f, y]}$.
  * @end[doc]

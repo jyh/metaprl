@@ -4,7 +4,7 @@
  *
  * The @tt{Itt_well_founded} module provides a more convenient
  * description of well-foundness than the @hrefterm[well_founded_prop]
- * term formalized the the @hreftheory[Itt_rfun] module.  The definition
+ * term formalized in the @hreftheory[Itt_rfun] module.  The definition
  * of well-foundness requires the derivation of an induction
  * principle.
  * @end[doc]

@@ -744,7 +744,7 @@ let rec intersects vars fv =
  * @tactics
  *
  * The @hreftheory[Itt_logic] module defines several tactics for
- * reasoning the the @Nuprl type theory.  The tactics perform
+ * reasoning in the @Nuprl type theory.  The tactics perform
  * @emph{generic} reasoning of @Nuprl sequents.
  *
  * @begin[description]

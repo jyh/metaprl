@@ -8,7 +8,7 @@
  * Contrary to the name, the subset collection is @emph{not} a
  * power set, but it has some similarities.  The subset collection
  * constructor has the form $@power{s_1; s_2}$, where $s_1$ and
- * $s_2$ are sets.  If the the canonical forms are $s_1 = @collect{x_1; T_1; f_1[x_1]}$
+ * $s_2$ are sets.  If the canonical forms are $s_1 = @collect{x_1; T_1; f_1[x_1]}$
  * and $s_2 = @collect{x_2; T_2; f_2[x_2]}$, the elements of the
  * power set are the subsets of $s_2$ that are defined by
  * the images of the computable functions in the space $@fun{T_1; T_2}$.

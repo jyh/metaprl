@@ -126,7 +126,7 @@ dform rel_df : parens :: "prec"[prec_quant] :: rel{a, b. 'P; 's1; 's2} =
  * @begin[doc]
  * @rules
  *
- * The @tt{rel} term is well-formed if the the proposition $P$
+ * The @tt{rel} term is well-formed if the proposition $P$
  * is well-formed, and if the arguments $s_1$ and $s_2$ are sets.
  * @end[doc]
  *)

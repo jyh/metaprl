@@ -176,7 +176,7 @@ interactive bisect_member_elim {| elim [] |} 'H 'J :
 (*!
  * @begin[doc]
  * The elimination form for the general isect $@mem{x; @isect{s}}$ performs
- * instantiation of of the assumption on a particular set $@mem{z; 's}$.
+ * instantiation of the assumption on a particular set $@mem{z; 's}$.
  * @end[doc]
  *)
 interactive isect_member_elim {| elim [] |} 'H 'J 'z :

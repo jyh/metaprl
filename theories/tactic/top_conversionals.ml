@@ -394,7 +394,7 @@ let cutC = Tactic_type.Conversionals.cutC
  * conversion will recursively search for applications of these three
  * rewrites in an attempt to fully reduce the term.
  *
- * The implementation of the the @tt{reduce_resource} and the @tt{reduceC}
+ * The implementation of the @tt{reduce_resource} and the @tt{reduceC}
  * conversion rely on tables to store the shape of redices, together with the
  * conversions for the reduction.
  *

@@ -102,8 +102,8 @@ What is the value of $z$ in the following definition?
 @section[ocaml_doc_functions]{Functions}
 
 Functions are defined with the @tt{fun} keyword.  The @tt{fun} is
-followed by a sequence of variables that name the arguments, and
-@code{->} separator, and the the body of the function.  By default,
+followed by a sequence of variables that name the arguments, the
+@code{->} separator, and then the body of the function.  By default,
 functions are not @emph{named}.  In ML, functions are values like any
 other.  They may be constructed, passed as arguments, and applied to
 specific arguments.  Like any other value, they may be named by using
@@ -225,7 +225,7 @@ function where the value of @tt{i} is determined by the argument $i$.
 Suppose we want to define a recursive function: that is, a function
 where the function is used in its own function body.  In functional
 languages, recursion is used to express repetition and looping.  For
-example, the the ``power'' function that computes $x^i$ would be
+example, the ``power'' function that computes $x^i$ would be
 defined as follows.
 
 @begin[verbatim]

@@ -523,7 +523,7 @@ declare math_not{'A}
  * TeX mode
  *)
 dform math_rfun_df1 : mode[tex] :: math_rfun{'f; 'x; 'A; 'B} =
-   izone `"{\\left\\{"
+   izone `"\\left\\{" ezone
    'f
    izone `"\\mathrel{|}" ezone
    'x
@@ -531,40 +531,33 @@ dform math_rfun_df1 : mode[tex] :: math_rfun{'f; 'x; 'A; 'B} =
    'A
    izone `"\\rightarrow " ezone
    'B
-   izone `"\\right\\}}" ezone
+   izone `"\\right\\}" ezone
 
 dform math_dfun_df1 : mode[tex] :: math_fun{'x; 'A; 'B} =
-   izone `"{" ezone
    'x
    izone `"\\colon " ezone
    'A
    izone `"\\rightarrow " ezone
    'B
-   izone `"}" ezone
 
 dform math_fun_df1 : mode[tex] :: math_fun{'A; 'B} =
-   izone `"{" ezone
    'A
    izone `"\\rightarrow " ezone
    'B
-   izone `"}" ezone
 
 dform math_lambda_df1 : mode[tex] :: math_lambda{'v; 'b} =
-   izone `"{\\lambda " ezone
+   izone `"\\lambda " ezone
    'v
    izone `"." ezone
    'b
-   izone `"}" ezone
 
 dform math_lambda_df1 : mode[tex] :: math_lambda =
    izone `"\\lambda " ezone
 
 dform math_apply_df1 : mode[tex] :: math_apply{'f; 'a} =
-   izone `"{" ezone
    'f
    izone `"\\ " ezone
    'a
-   izone `"}" ezone
 
 dform math_well_founded_df1 : mode[tex] :: math_well_founded{'A; 'x; 'y; 'R} =
    izone `"{{\\it well\\_founded}(" ezone

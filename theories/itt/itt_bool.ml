@@ -494,7 +494,7 @@ interactive assert_magic 'H 'x :
  * The following rule establishes that @tt[assert] is always decidable.
  * @end[doc]
  *)
-interactive assert_decidable {| intro [] |} 'H:
+interactive assert_is_decidable {| intro [] |} 'H:
    [wf] sequent [squash] { 'H >- 't IN bool } -->
    sequent ['ext] { 'H >- decidable{."assert"{'t}} }
 

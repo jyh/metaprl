@@ -744,12 +744,6 @@ doc <:doc< @docoff >>
  * TACTICS                                                              *
  ************************************************************************)
 
-let ball2_term = << ball2{'l1; 'l2; x, y. 'b['x; 'y]} >>
-let ball2_opname = opname_of_term ball2_term
-let is_ball2_term = is_dep0_dep0_dep2_term ball2_opname
-let mk_ball2_term = mk_dep0_dep0_dep2_term ball2_opname
-let dest_ball2 = dest_dep0_dep0_dep2_term ball2_opname
-
 let samesetSymT = sameset_sym
 let samesetTransT = sameset_trans
 

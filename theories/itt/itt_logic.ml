@@ -1354,7 +1354,7 @@ struct
             :: ts
        | Exl, t::ts ->
             (fun subst ->
-               (find_hyp hyp dT) thenT
+               (find_hyp (apply_subst hyp subst) dT) thenT
                append_subst subst (apply_subst hyp subst) inst_term t)
             :: ts
        | Allr,t::ts ->

@@ -300,7 +300,11 @@ interactive deadlock1 'v0_jprover :
 
 
 
-interactive deadlock2 bind{x,y.'A['x;'y]} 'c :
+interactive deadlock2 bind{x,y.'A['x;'y]} 'c 'v0_jprover :
+   sequent { >- 'v0_jprover in 'T } -->
+   sequent { x: 'T >- "type"{'A['x; 'c]} } -->
+   sequent { x: 'T; y: 'T >- "type"{'B['x; 'y]} } -->
+   sequent { x: 'T; y: 'T >- "type"{'P['x; 'y]} } -->
    sequent { >- (all x: 'T. all y:'T. ('P['x;'y] or 'B['x;'y])) & ((exst x:'T. exst y:'T. 'P['x;'y]) => (exst a:'T. 'A['a;'c])) & (all z:'T. ('A['z;'c] => (exst b:'T. "not"{('P['z;'b])}))) => exst x:'T. exst y:'T. 'B['x;'y] }
 
 
@@ -328,7 +332,10 @@ interactive deadlock4 'v0_jprover :
 
 (* ebedding multiple use of eigenvariable formula WITHOUT eigenvariable renaming *)
 
-interactive mult_no_rename :
+interactive mult_no_rename 'v0_jprover :
+   sequent { >- 'v0_jprover in 'T } -->
+   sequent { x: 'T >- "type"{'A['x]} } -->
+   sequent { x: 'T; y: 'T >- "type"{'B['x; 'y]} } -->
    sequent { >- (all x:'T. ('A['x] or (exst a:'T. 'B['x;'a]))) & ((exst y:'T. 'A['y]) => (exst z:'T. ("not"{'A['z]}))) => (exst x:'T. exst y:'T. 'B['x;'y]) }
 
 interactive mult_no_rename2 'v0_jprover :
@@ -352,7 +359,11 @@ interactive mult_eigen_del 'v0_jprover :
 
 (* ebedding multiple use of eigenvariable formula WITH eigenvariable renaming *)
 
-interactive mult_rename :
+interactive mult_rename 'v0_jprover :
+   sequent { >- 'v0_jprover in 'T } -->
+   sequent { x: 'T >- "type"{'A['x]} } -->
+   sequent { x: 'T >- "type"{'B['x]} } -->
+   sequent { x: 'T; y: 'T >- "type"{'C['x; 'y]} } -->
    sequent { >- (all x:'T. (('A['x] or 'B['x]) & (exst a:'T. 'C['a;'x]))) & ((exst y:'T. 'A['y]) => (exst z:'T. ("not"{'A['z]}))) => (exst x:'T. ('B['x] & (exst z:'T. 'C['z;'x]))) }
 
 

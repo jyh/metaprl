@@ -85,11 +85,13 @@ prim rewriteConclCut 'H 'T1 :
    sequent ['ext] { 'H >- 'T2 } =
    't
 
+(*
 prim rewriteContextCut 'H 'J (lambda{v. 'T['v]}) :
    ('t : "sequent"{'ext; ."context"[H:v]{'T["concl"{'C; ."concl"}]}}) -->
    "sequent"{'ext; ."context"[H:v]{."concl"{."rewrite"{.'T[rewrite_just]; ."context"[J:v]{rewrite_just}}; concl}}} -->
    "sequent"{'ext; ."context"[H:v]{."context"[J:v]{."concl"{'C; ."concl"}}}} =
    't
+*)
 
 (************************************************************************
  * IMPLEMENTATION                                                       *
@@ -316,7 +318,8 @@ let cutT i addr t p =
                else
                   i - 1, count - i + 1
             in
-               rewriteContextCut i j t1 p
+               raise (RefineError ("cutT", StringError "rewriteContextCut needs to be reimplemented"))
+               (* rewriteContextCut i j t1 p *)
          else
             let _, t1 = Sequent.nth_hyp p i in
             let i, j = Sequent.hyp_indices p i in

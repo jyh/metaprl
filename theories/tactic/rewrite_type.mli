@@ -50,10 +50,12 @@ axiom rewriteConclCut 'H 'T1 :
    sequent ['ext] { 'H >- "rewrite"{'T1; 'T2} } -->
    sequent ['ext] { 'H >- 'T2 }
 
+(*
 axiom rewriteContextCut 'H 'J (lambda{v. 'T['v]}) :
    "sequent"{'ext; ."context"[H:v]{'T["concl"{'C; ."concl"}]}} -->
    "sequent"{'ext; ."context"[H:v]{."concl"{."rewrite"{.'T[rewrite_just]; ."context"[J:v]{rewrite_just}}; concl}}} -->
    "sequent"{'ext; ."context"[H:v]{."context"[J:v]{."concl"{'C; ."concl"}}}}
+*)
 
 (************************************************************************
  * OPERATIONS                                                           *

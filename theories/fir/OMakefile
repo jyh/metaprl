@@ -63,6 +63,6 @@ TheoryDocumentInstall(fir, $(PRINT_THEORIES))
 # Generic commands
 #
 clean:
-    $(CLEAN) fir.tex fir-body.tex fir.ps fir.pdf fir_print.ml
+    $(CLEAN) theory.tex theory-body.tex theory_print.ml
 
 all: theory$(LIB_SUFFIX)

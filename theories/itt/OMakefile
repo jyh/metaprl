@@ -154,6 +154,6 @@ TheoryDocumentInstall(itt, $(PRINT_THEORIES))
 # Clean up
 #
 clean:
-    $(CLEAN) itt.tex itt-body.tex itt.pdf itt.ps itt_print.ml
+    $(CLEAN) theory.tex theory-body.tex theory_print.ml
 
 all: theory$(LIB_SUFFIX)

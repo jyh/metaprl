@@ -102,6 +102,6 @@ TheoryDocumentInstall(czf, $(PRINT_THEORIES))
 # Clean up
 #
 clean:
-    $(CLEAN) czf.tex czf-body.tex czf.ps czf.pdf czf_print.ml
+    $(CLEAN) theory.tex theory-body.tex theory_print.ml
 
 all: theory$(LIB_SUFFIX)

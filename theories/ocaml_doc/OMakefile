@@ -45,6 +45,6 @@ TheoryDocumentInstall(book2, $(PRINT_THEORIES))
 # Clean up
 #
 clean:
-    $(CLEAN)
+    $(CLEAN) theory.tex theory-body.tex theory_print.ml
 
 all: theory$(LIB_SUFFIX)

@@ -200,9 +200,19 @@ interactive_rw beq_int_is_true_rw :
 let beq_int_is_trueC = beq_int_is_true_rw 
 
 (* Derived from previous *)
+(*
 interactive eq_int_assert_elim {| elim_resource [ThinOption thinT] |} 'H 'J :
-   [main] sequent ['ext] { 'H; x: 'a = 'b in int; 'J[it] >- 'C[it] } -->
-   sequent ['ext] { 'H; x: "assert"{beq_int{'a; 'b}}; 'J['x] >- 'C['x] }
+   [main] sequent ['ext] { 'H; x: 'a = 'b in int; 'J >- 'C } -->
+   sequent ['ext] { 'H; y: 'a IN int; z: 'b IN int; 
+                        t: "assert"{beq_int{'a; 'b}}; 'J 
+                  >- 'C }
+*)
+interactive eq_int_assert_elim {| elim_resource [ThinOption thinT] |} 'H 'J 'y:
+   [main]sequent['ext]{ 'H; x:"assert"{beq_int{'a;'b}}; 'J['x];
+                            y: 'a = 'b in int >- 'C['x]} -->
+   [wf]sequent['ext]{ 'H; x:"assert"{beq_int{'a;'b}}; 'J['x] >- 'a IN int} -->
+   [wf]sequent['ext]{ 'H; x:"assert"{beq_int{'a;'b}}; 'J['x] >- 'b IN int} -->
+   sequent['ext]{ 'H; x:"assert"{beq_int{'a;'b}}; 'J['x] >- 'C['x]}
 
 (*
  Derived from previous rewrite
@@ -522,6 +532,11 @@ interactive_rw add_Id2_rw :
    (0 +@ 'a) <--> 'a
 
 let add_Id2C = add_Id2_rw
+
+interactive add_Functionality 'H :
+   [main] sequent ['ext] { 'H >- 'a = 'b in int } -->
+   [wf] sequent ['ext] { 'H >- 'c IN int } -->
+   sequent ['ext] { 'H >- ('a +@ 'c) = ('b +@ 'c) in int }
 
 (*!
  * @begin[doc]

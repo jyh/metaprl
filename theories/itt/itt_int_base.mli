@@ -120,9 +120,19 @@ rule beq_int_is_true 'H :
 topval beq_int_is_trueC: conv
 
 (* Derived from previous *)
+(*
 rule eq_int_assert_elim 'H 'J :
-   [main] sequent ['ext] { 'H; x: 'a = 'b in int; 'J[it] >- 'C[it] } -->
-   sequent ['ext] { 'H; x: "assert"{beq_int{'a; 'b}}; 'J['x] >- 'C['x] }
+   [main] sequent ['ext] { 'H; x: 'a = 'b in int; 'J >- 'C } -->
+   sequent ['ext] { 'H; y: 'a IN int; z: 'b IN int; 
+                        t: "assert"{beq_int{'a; 'b}}; 'J 
+                  >- 'C }
+*)
+rule eq_int_assert_elim 'H 'J 'y :
+   [main]sequent['ext]{ 'H; x:"assert"{beq_int{'a;'b}}; 'J['x];
+                            y: 'a = 'b in int >- 'C['x]} -->
+   [wf]sequent['ext]{ 'H; x:"assert"{beq_int{'a;'b}}; 'J['x] >- 'a IN int} -->
+   [wf]sequent['ext]{ 'H; x:"assert"{beq_int{'a;'b}}; 'J['x] >- 'b IN int} -->
+   sequent['ext]{ 'H; x:"assert"{beq_int{'a;'b}}; 'J['x] >- 'C['x]}
 
 (*
  Derived from previous rewrite
@@ -307,6 +317,11 @@ rule add_Id2 'H :
    sequent ['ext] { 'H >- (0 +@ 'a) ~ 'a }
 
 topval add_Id2C: conv
+
+rule add_Functionality 'H :
+   [main] sequent ['ext] { 'H >- 'a = 'b in int } -->
+   [wf] sequent ['ext] { 'H >- 'c IN int } -->
+   sequent ['ext] { 'H >- ('a +@ 'c) = ('b +@ 'c) in int }
 
 rule uni_add_inverse 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->

@@ -35,7 +35,7 @@ open Printf
 open Lm_debug
 open Lm_symbol
 open Lm_string_set
-open Set_sig
+open Lm_set_sig
 
 open Refiner.Refiner.TermType
 open Refiner.Refiner.Term

@@ -802,14 +802,14 @@ let moveToConclT = argfunT (fun i p ->
                let goal' = mk_all_term v hyp goal in
                   assertT goal'
                   thenLT [thinT i thenT tac tl goal';
-                          withT (mk_var_term v) (dT (len + 1)) (**)
+                          all_elim (len + 1) (mk_var_term v) (**)
                              thenLT [equalAssumT i; nthHypT (-1)]]
 
             else
                let goal' = mk_implies_term hyp goal in
                   assertT goal'
                   thenLT [thinT i thenT tac tl goal';
-                          (dT (len + 1)) thenLT [nthHypT i; nthHypT (-1)]]
+                          (implies_elim (len + 1)) thenLT [nthHypT i; nthHypT (-1)]]
        | [] ->
             idT
    in
@@ -905,11 +905,11 @@ let instHypT args i =
                   thinT i thenT inst i false args
             in
                if is_all_term hyp then
-                  withT arg (dT i) thenMT tailT args'
+                  all_elim i arg thenMT tailT args'
                else if is_dfun_term hyp then
                   withT arg (dT i) thenMT (thinT (-1) thenT tailT args')
                else if is_implies_term hyp or is_fun_term hyp then
-                  dT i thenMT tailT args
+                  implies_elim i thenMT tailT args
                else
                   raise (RefineError ("instHypT", StringTermError ("hyp is not quantified", hyp))))
    in
@@ -1222,25 +1222,31 @@ let genAssumT = argfunT (fun indices p ->
    in
    let rec make_gen_term t = function
       [] ->
-         t, idT
+         t, nthHypT (-1), idT
     | i :: indices ->
-         let t, tac = make_gen_term t indices in
+         let t, tac1, tac2 = make_gen_term t indices in
          let t' = TermMan.nth_concl (Sequent.nth_assum p i) 1 in
          if is_member_term t' then
-            let t_type, t_var, _ = dest_equal t' in
+            let t_type, t_var, t_var' = dest_equal t' in
                (if is_var_term t_var then
                   mk_all_term (dest_var t_var) t_type t
                else
                   let v = maybe_new_var_arg p (Lm_symbol.add "v") in
                      mk_all_term v t_type (var_subst t t_var v)),
-               (dT 0 thenLT [
-                  equalTypeT t_var t_var thenT nthAssumT i;
-                  idT])
+               (let t_tac = if alpha_equal t_var t_var' then
+                  nthAssumT i
+               else
+                  equalRefT t_var' thenT nthAssumT i
+               in
+                  all_elim (-1) t_var thenLT [t_tac; tac1]),
+               (all_intro thenLT [equalTypeT t_var t_var' thenT nthAssumT i; idT])
          else
-            mk_implies_term t' t, (dT 0 thenLT [typeAssertT thenT nthAssumT i; tac])
+            mk_implies_term t' t, 
+            (implies_elim (-1) thenLT [nthAssumT i; tac1]),
+            (implies_intro thenLT [typeAssertT thenT nthAssumT i; tac2])
    in
-   let t, tac = make_gen_term (TermMan.nth_concl goal 1) indices in
-      (assertT t thenMT (backThruHypT (-1) thenT autoT)) thenT tac)
+   let t, tac1, tac2 = make_gen_term (TermMan.nth_concl goal 1) indices in
+      (assertT t thenLT [tac2; tac1]))
 
 (************ logic instance for j-prover in refiner/reflib/jall.ml  **********)
 
@@ -1313,46 +1319,47 @@ struct
             end
        | _ -> raise (Invalid_argument "Itt_logic.goal_append_subst")
 
-   (* Do not do any thinning *)
-   let nt_dT i = thinningT false (dT i)
-
    let thenTi tac1 tac2 i = tac1 i thenT tac2
    let thenLTi tac1 tacl i = tac1 i thenLT tacl
-   let withTi t tac i = withT t (tac i)
+   let aTi tac t i = tac i t
+
+   let and_elim =
+      argfunT (fun i p -> if is_iff_term (Sequent.nth_hyp p i) then iff_elim i else and_elim i)
 
    let append_inf inf hyp inst_term r =
       match r, inf with
          Ax,  _ -> (fun subst assums -> find_hyp (apply_subst hyp subst) assums nthHypT ) :: inf
-       | Andl,t::ts -> (fun subst assums -> (find_hyp (apply_subst hyp subst) assums (thenTi dT (t subst assums)))) :: ts
-       | Negl,t::ts -> (fun subst assums -> (find_hyp (apply_subst hyp subst) assums (thenTi nt_dT (t subst assums)))) :: ts
+       | Andl,t::ts -> (fun subst assums -> (find_hyp (apply_subst hyp subst) assums (thenTi and_elim (t subst assums)))) :: ts
+       | Negl,t::ts -> (fun subst assums -> (find_hyp (apply_subst hyp subst) assums (thenTi not_elim (t subst assums)))) :: ts
        | Orl, t1::t2::ts ->
             (fun subst assums ->
-               (find_hyp (apply_subst hyp subst) assums (thenLTi dT [t1 subst assums; t2 subst assums])))
+               (find_hyp (apply_subst hyp subst) assums (thenLTi or_elim [t1 subst assums; t2 subst assums])))
             :: ts
        | Impl,t1::t2::ts ->
             (fun subst assums ->
-               (find_hyp (apply_subst hyp subst) assums (thenLTi nt_dT [t1 subst assums; t2 subst assums])))
+               (find_hyp (apply_subst hyp subst) assums (thenLTi implies_elim [t1 subst assums; t2 subst assums])))
             :: ts
-       | Andr,t1::t2::ts -> (fun subst assums -> dT 0 thenLT [t1 subst assums; t2 subst assums]) :: ts
-       | Orr1,t::ts -> (fun subst assums -> selT 1 (dT 0) thenLT [idT; t subst assums]) :: ts
-       | Orr2,t::ts -> (fun subst assums -> selT 2 (dT 0) thenLT [idT; t subst assums]) :: ts
-       | Impr,t::ts | Negr,t::ts -> (fun subst assums -> dT 0 thenLT [idT; t subst assums]) :: ts
+       | Andr,t1::t2::ts -> (fun subst assums -> and_intro thenLT [t1 subst assums; t2 subst assums]) :: ts
+       | Orr1,t::ts -> (fun subst assums -> or_intro_left thenLT [idT; t subst assums]) :: ts
+       | Orr2,t::ts -> (fun subst assums -> or_intro_right thenLT [idT; t subst assums]) :: ts
+       | Impr,t::ts -> (fun subst assums -> implies_intro thenLT [idT; t subst assums]) :: ts
+       | Negr,t::ts -> (fun subst assums -> not_intro thenLT [idT; t subst assums]) :: ts
        | Exr, t::ts ->
             (fun subst assums ->
-               withT (apply_subst inst_term subst) (dT 0) thenLT [idT; t subst assums; idT]) :: ts
+               exists_intro (apply_subst inst_term subst) thenLT [idT; t subst assums; idT]) :: ts
        | Alll,t::ts ->
             (fun subst assums ->
                (find_hyp (apply_subst hyp subst) assums
-                  (thenLTi (withTi (apply_subst inst_term subst) nt_dT) [idT; t subst assums])))
+                  (thenLTi (aTi all_elim (apply_subst inst_term subst)) [idT; t subst assums])))
             :: ts
        | Exl, t::ts ->
             (fun subst assums ->
                (find_hyp (apply_subst hyp subst) assums
-                  (thenTi dT (append_subst subst (apply_subst hyp subst) inst_term assums t))))
+                  (thenTi exists_elim (append_subst subst (apply_subst hyp subst) inst_term assums t))))
             :: ts
        | Allr,t::ts ->
             (fun subst assums ->
-               dT 0 thenLT [idT;goal_append_subst subst (apply_subst hyp subst) inst_term assums t])
+               all_intro thenLT [idT;goal_append_subst subst (apply_subst hyp subst) inst_term assums t])
             :: ts
     (* | Orr, ->  *)
        | Fail,_ -> raise (RefineError("Itt_JLogic.create_inf", StringError "failed"))

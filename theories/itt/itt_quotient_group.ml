@@ -42,37 +42,11 @@ extends Itt_subset
 extends Itt_subset2
 doc docoff
 
-open Printf
 open Lm_debug
-open Refiner.Refiner.TermType
-open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
-open Refiner.Refiner.TermAddr
-open Refiner.Refiner.TermMan
-open Refiner.Refiner.TermSubst
-open Refiner.Refiner.Refine
-open Refiner.Refiner.RefineError
-open Mp_resource
-open Simple_print
-
-open Tactic_type
-open Tactic_type.Tacticals
-open Tactic_type.Sequent
-open Tactic_type.Conversionals
-open Mptop
-open Var
 
 open Dtactic
-open Auto_tactic
 open Top_conversionals
-
-open Itt_struct
-open Itt_record
-open Itt_grouplikeobj
-open Itt_squash
-open Itt_fun
-open Itt_equal
-open Itt_subtype
 
 let _ =
    show_loading "Loading Itt_quotient_group%t"

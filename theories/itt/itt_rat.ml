@@ -56,23 +56,13 @@ open Lm_debug
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
 
-open Tactic_type
-open Tactic_type.Tacticals
 open Top_conversionals
-
-open Base_meta
-open Auto_tactic
 open Dtactic
 
 open Itt_equal
 open Itt_struct
-open Itt_squash
 open Itt_bool
-open Itt_squiggle
-
 open Itt_int_base
-open Itt_int_ext
-open Itt_int_arith
 
 let _ = show_loading "Loading Itt_rat%t"
 

@@ -32,14 +32,6 @@
 
 extends Itt_theory
 
-open Printf
-open Lm_debug
-
-open Refiner.Refiner.Refine
-
-open Mp_resource
-
-open Tactic_type.Tacticals
 open Top_conversionals
 
 open Itt_rfun

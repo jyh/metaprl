@@ -11,6 +11,7 @@ OCAMLDEPFLAGS := -prl
 
 # Library files
 MPFILES :=\
+	m_util\
 	m_ir\
 	m_cps\
 	m_closure\

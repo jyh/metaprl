@@ -43,7 +43,6 @@ declare CPS{'cont; 'e}
  * CPS resource
  *)
 resource (term * conv, conv) cps
-val process_cps_resource_annotation : (conv, term * conv) annotation_processor
 
 (*
  * For debugging.

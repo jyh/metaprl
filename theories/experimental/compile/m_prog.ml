@@ -38,6 +38,7 @@ extends M_ir
 (*! @docoff *)
 
 open M_ir
+open M_util
 
 open Mp_debug
 open Printf
@@ -88,37 +89,6 @@ let debug_prog =
  *
  * @docoff
  * @end[doc]
- *)
-let identity x = x
-
-let extract_data tbl =
-   let rw e =
-      let t = env_term e in
-      let conv =
-         try
-            (* Find and apply the right tactic *)
-            if !debug_prog then
-               eprintf "M_prog: lookup %a%t" debug_print t eflush;
-            snd (Term_match_table.lookup tbl t)
-         with
-            Not_found ->
-               raise (RefineError ("M_prog.extract_data", StringTermError ("no reduction for", t)))
-      in
-         if !debug_prog then
-            eprintf "M_prog: applying %a%t" debug_print t eflush;
-         conv
-   in
-      funC rw
-
-let process_prog_resource_annotation name cvars vars args params mterm conv =
-   match mterm with
-      MetaIff (MetaTheorem t, _) ->
-         (t, conv)
-    | _ ->
-         raise (RefineError ("M_prog.improve_resource_arg", StringError "not a simple rewrite"))
-
-(*
- * Resource.
  *)
 let resource prog =
    table_resource_info identity extract_data

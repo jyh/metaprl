@@ -35,9 +35,11 @@
  * @end[doc]
  *)
 extends M_ir
+extends M_util
 (*! @docoff *)
 
 open M_ir
+open M_util
 
 open Mp_debug
 open Printf
@@ -59,16 +61,6 @@ open Tactic_type.Sequent
  * REDUCTION RESOURCE                                                   *
  ************************************************************************)
 
-(*
- * Display reductions.
- *)
-let debug_cps =
-   create_debug (**)
-      { debug_name = "cps";
-        debug_description = "display reductions during CPS conversion";
-        debug_value = false
-      }
-
 (*!
  * @begin[doc]
  * @resources
@@ -86,34 +78,6 @@ let debug_cps =
  * @docoff
  * @end[doc]
  *)
-let identity x = x
-
-let extract_data tbl =
-   let rw e =
-      let t = env_term e in
-      let conv =
-         try
-            (* Find and apply the right tactic *)
-            if !debug_cps then
-               eprintf "M_cps: lookup %a%t" debug_print t eflush;
-            snd (Term_match_table.lookup tbl t)
-         with
-            Not_found ->
-               raise (RefineError ("M_cps.extract_data", StringTermError ("no reduction for", t)))
-      in
-         if !debug_cps then
-            eprintf "M_cps: applying %a%t" debug_print t eflush;
-         conv
-   in
-      funC rw
-
-let process_cps_resource_annotation name cvars vars args params mterm conv =
-   match mterm with
-      MetaIff (MetaTheorem t, _) ->
-         (t, conv)
-    | _ ->
-         raise (RefineError ("M_cps.improve_resource_arg", StringError "not a simple rewrite"))
-
 (*
  * Resource.
  *)

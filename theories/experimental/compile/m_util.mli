@@ -1,5 +1,5 @@
 (*
- * Hoist function declarations and definitions to the top level.
+ * Generic utilities for M language.
  *
  * ----------------------------------------------------------------
  *
@@ -24,26 +24,27 @@
  * @email{jyh@cs.caltech.edu}
  * @end[license]
  *)
-extends M_ir
 
-open Mp_resource
+(*!
+ * @begin[doc]
+ * @parents
+ * @end[doc]
+ *)
+extends Base_theory
+(*! @docoff *)
 
-open Refiner.Refiner.Term
+open Term_match_table
 
-open Tactic_type.Tacticals
+open Refiner.Refiner.TermType
+
 open Tactic_type.Conversionals
 
 (*
- * CPS resource
+ * Utilities.
  *)
-resource (term * conv, conv) prog
-
-topval progTopC : conv
-topval progC : conv
-
-topval hoistOnceT : tactic
-topval hoistT : tactic
-topval progT : tactic
+val identity : 'a -> 'a
+val extract_data : conv term_table -> conv
+val process_resource_annotation : 'a -> 'b -> 'c -> 'd -> 'e -> meta_term -> 'f -> term * 'f
 
 (*!
  * @docoff

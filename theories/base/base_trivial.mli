@@ -33,6 +33,7 @@
  *)
 
 declare it
+declare trivial
 
 (*
  * -*-

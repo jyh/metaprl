@@ -42,10 +42,14 @@ doc <:doc<
 
 doc <:doc< @doc{@parents} >>
 extends Summary
+extends Shell
 
 doc "doc"{terms}
 declare it
+define unfold_trivial : trivial <--> it (* A better name for it *)
 doc docoff
+
+dform trivial_df : trivial = cdot
 
 (*
  * -*-

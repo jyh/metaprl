@@ -44,7 +44,6 @@ declare prodH     (*{ <H> >- 'T }*)
 declare display_sequent{'s}
 declare display_hyp{v. 'e}
 declare display_concl{'e}
-declare display_context{'c}
 declare display_hyps{'s}
 declare display_hyps_emph{'s}
 
@@ -64,23 +63,6 @@ dform display_hyps_cons_df : display_hyps{sequent ['arg] { x: 't; <H> >- 'e }} =
 dform display_hyps_cons_df : display_hyps{sequent ['arg] { x: 't >- 'e }} =
    display_hyp{x. 't} display_hyps{sequent ['arg] { >- 'e }}
 
-ml_dform display_hyps_ctx_df : display_hyps{sequent ['arg] { <H> >- 'e }} format_term buf =
-   fun t ->
-      let t = explode_sequent (one_subterm t) in
-      match SeqHyp.get t.sequent_hyps 0 with
-         Context (v, contexts, terms) ->
-            let v = <:con< display_context { $mk_so_var_term v contexts terms$ } >> in
-            let f i h =
-               if i = 0 then
-                  Hypothesis (Lm_symbol.make "" 0, v)
-               else
-                  h
-            in
-            let t' = { t with sequent_hyps = SeqHyp.mapi f t.sequent_hyps } in
-               format_term buf Dform.NOParens <:con< display_hyps{ $mk_sequent_term t'$ } >>
-       | _ ->
-            raise (Invalid_argument "display_hyps_ctx_df: internal error")
-
 (*
  * Strip sequent_args if necessary.
  * Note, you can always override this by defining a more specific display form.
@@ -89,14 +71,8 @@ ml_dform display_hyps_ctx_df : display_hyps{sequent ['arg] { <H> >- 'e }} format
 dform display_concl_df : display_concl{sequent ['arg] { <H> >- 'e<||> } } =
 	slot{'e}
 
-dform display_context_df : except_mode["tex"] :: display_context{'c} =
-   `"<" 'c `">"
-
-dform display_context_df : mode["tex"] :: display_context{'c} =
-   mathmacro["left<"] `"<" 'c `">" mathmacro["right>"]
-
-dform context_hyp_df : display_hyp{x. display_context{'c}} =
-   display_context{'c}
+dform context_hyp_df : display_hyp{x. df_context{'c}} =
+   df_context{'c}
 
 dform display_hyp_df : display_hyp{x. 't[]} =
 	slot{'x} `": " slot{'t}

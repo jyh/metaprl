@@ -8,7 +8,6 @@ open Tactic_type.Tacticals
 open Base_theory
 
 
-declare "sqeq"{'t;'s}
 
 val is_squiggle_term : term -> bool
 val dest_squiggle : term -> term * term

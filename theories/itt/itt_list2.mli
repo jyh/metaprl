@@ -121,6 +121,14 @@ declare rev{'l}
  *)
 declare mklist{'n;'f}
 
+(************************************************************************
+ * HELPERS                                                              *
+ ************************************************************************)
+
+val length_term : term
+val is_length_term : term -> bool
+val mk_length_term : term -> term
+val dest_length : term -> term
 
 (************************************************************************
  * DISPLAY                                                              *

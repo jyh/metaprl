@@ -50,6 +50,8 @@ extends Itt_int_ext
 extends Itt_int_arith
 doc <:doc< @docoff >>
 
+open Refiner.Refiner.Term
+open Refiner.Refiner.TermOp
 open Dtactic
 open Top_conversionals
 
@@ -257,6 +259,12 @@ define unfold_mklist: mklist{'n;'f} <-->
 
 
 doc <:doc< @docoff >>
+
+let length_term = << length{'l} >>
+let length_opname = opname_of_term length_term
+let is_length_term = is_dep0_term length_opname
+let mk_length_term = mk_dep0_term length_opname
+let dest_length = dest_dep0_term length_opname
 
 (************************************************************************
  * DISPLAY                                                              *

@@ -81,6 +81,7 @@ topval fold_ring : conv
 topval unfold_Z : conv
 topval unfold_Zeven : conv
 topval fold_Z : conv
+topval fold_Z_car : conv
 topval fold_Zeven : conv
 
 topval unfold_subring : conv

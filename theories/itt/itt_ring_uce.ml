@@ -637,6 +637,14 @@ interactive poly_ring_uce {| intro [] |} :
    sequent { <H> >- poly_ring{'F} in unitringCE[i:l] }
 doc docoff
 
+interactive int_ring_uce {| intro [] |} :
+	sequent { <H> >- Z in unitringCE[i:l] }
+
+let inf_Z _ _ _ eqs opt_eqs defs _ =
+	eqs, opt_eqs, defs, <<unitringCE[i:l]>>
+
+let resource typeinf += (<<Z>>, inf_Z)
+
 (************************************************************************
  * DISPLAY FOfMS                                                        *
  ************************************************************************)

@@ -520,10 +520,14 @@ define unfold_Z : Z <-->
 doc docoff
 
 let fold_Z = makeFoldC << Z >> unfold_Z
+let fold_Z_car = foldC << Z^car >> ((addrC [0] unfold_Z) thenC reduceC)
 
 doc <:doc< @doc{ } >>
 interactive integer_ring {| intro [] |} :
    sequent { <H> >- Z in ring[i:l] }
+
+interactive integer_ring_number_membership {| intro [] |} :
+	sequent { <H> >- number[i:n] in Z^car }
 
 doc <:doc<
    @begin[doc]

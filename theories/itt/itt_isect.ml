@@ -339,6 +339,12 @@ interactive intersectionMemberCaseEquality 'H (isect x: 'A. 'B['x]) 'a :
    sequent ['ext] { 'H >- 'b1 = 'b2 in 'B['a] }
 
 
+(*! @doc{The elimination form of hrefrule[intersectionMemberCaseEquality].} *)
+
+interactive intersectionEqualityElim {| elim [] |} 'H 'J 'a 'v :
+   [wf] sequent[squash] { 'H; u: 'b1 = 'b2 in isect x: 'A. 'B['x]; 'J['u] >- 'a in 'A } -->
+   sequent ['ext] { 'H; u: 'b1 = 'b2 in isect x: 'A. 'B['x]; v: 'b1 = 'b2 in 'B['a]; 'J['u] >- 'C['u] } -->
+   sequent ['ext] { 'H; u: 'b1 = 'b2 in isect x: 'A. 'B['x]; 'J['u] >- 'C['u] }
 
 (*! @docoff *)
 
@@ -348,10 +354,6 @@ interactive intersectionEliminationFromCaseEquality 'H 'J 'a 'z :
    [wf] sequent [squash] { 'H; x: isect y: 'A. 'B['y]; 'J['x] >- 'a IN 'A } -->
    [main] sequent ['ext] { 'H; x: isect y: 'A. 'B['y]; 'J['x]; z: 'B['a] >- 'T['z] } -->
    sequent ['ext] { 'H; x: isect y: 'A. 'B['y]; 'J['x] >- 'T['x] }
-
-
-
-
 
 (*!
  * @begin[doc]

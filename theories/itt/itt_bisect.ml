@@ -219,6 +219,11 @@ let bisectEliminationT n p =
 
 let resource elim += (<<bisect{'A; 'B}>>,bisectEliminationT)
 
+(*! @doc{Equality elimination.} *)
+
+interactive bisectEqualityElim {| elim [ThinOption thinT] |} 'H 'J 'u 'v:
+   sequent['ext] { 'H; x: 't1 = 't2 in bisect{'A; 'B}; u : 't1 = 't2 in 'A; v : 't1 = 't2 in 'B; 'J['x] >- 'C['x] } -->
+   sequent['ext] { 'H; x: 't1 = 't2 in bisect{'A; 'B}; 'J['x] >- 'C['x] }
 
 (*!
  * @begin[doc]

@@ -3107,7 +3107,7 @@ T	t1181	o b1181 b4
 B	b1182	t1181
 T	t1182	o1147 b1178 b1182
 B	b1183	t1182
-P	p1183	String "d_rewriteT 0"
+P	p1183	String "trivialT"
 O	o1183	ext_rule p1183
 T	t1183	o1147 b1181 b4
 B	b1184	t1183
@@ -3130,7 +3130,7 @@ P	p1192	String reduce_bterm_term
 O	o1192	rewrite p1192
 T	t1192	o563 b558
 B	b1192	t1192
-P	p1193	String "rwh unfold_bterm 0 thenT rwh unfold_bterm_term 0 thenT rw reduceC 0 thenT d_rewriteT 0"
+P	p1193	String "rwh unfold_bterm 0 thenT rwh unfold_bterm_term 0 thenT rw reduceC 0 thenT trivialT"
 O	o1193	ext_rule p1193
 T	t1193	o1151 b1192 b557
 S	s1193	t1151 h

@@ -156,25 +156,24 @@ interactive_rw reduce_eq_var_ivar3 : eq_var{ivar{'i1; 'v1}; tvar{'t2; 'v2}} <-->
 interactive_rw reduce_eq_var_ivar4 : eq_var{ivar{'i1; 'v1}; ivar{'i2; 'v2}} <-->
    band{eq_int{'i1; 'i2}; eq_var{'v1; 'v2}}
 
-let reduce_info =
-   [<< eq_var{vnil; vnil} >>, reduce_eq_var_nil1;
-    << eq_var{vnil; var[t:t]} >>, reduce_eq_var_nil2;
-    << eq_var{vnil; tvar{'t; 'v}} >>, reduce_eq_var_nil3;
-    << eq_var{vnil; ivar{'i; 'v}} >>, reduce_eq_var_nil4;
-    << eq_var{var[t:t]; vnil} >>, reduce_eq_var_var1;
-    << eq_var{var[t1:t]; var[t2:t]} >>, reduce_eq_var_var2;
-    << eq_var{var[t2:t]; tvar{token[t2:t]; 'v}} >>, reduce_eq_var_var3;
-    << eq_var{var[t:t]; ivar{'i; 'v}} >>, reduce_eq_var_var4;
-    << eq_var{tvar{'t1; 'v1}; vnil} >>, reduce_eq_var_tvar1;
-    << eq_var{tvar{token[t1:t]; 'v1}; var[t2:t]} >>, reduce_eq_var_tvar2;
-    << eq_var{tvar{'t1; 'v1}; tvar{'t2; 'v2}} >>, reduce_eq_var_tvar3;
-    << eq_var{tvar{'t1; 'v1}; ivar{'i2; 'v2}} >>, reduce_eq_var_tvar4;
-    << eq_var{ivar{'i1; 'v1}; vnil} >>, reduce_eq_var_ivar1;
-    << eq_var{ivar{'i1; 'v1}; var[t:t]} >>, reduce_eq_var_ivar2;
-    << eq_var{ivar{'i1; 'v1}; tvar{'t2; 'v2}} >>, reduce_eq_var_ivar3;
-    << eq_var{ivar{'i1; 'v1}; ivar{'i2; 'v2}} >>, reduce_eq_var_ivar4]
-
-let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
+let resource reduce += [
+   << eq_var{vnil; vnil} >>, reduce_eq_var_nil1;
+   << eq_var{vnil; var[t:t]} >>, reduce_eq_var_nil2;
+   << eq_var{vnil; tvar{'t; 'v}} >>, reduce_eq_var_nil3;
+   << eq_var{vnil; ivar{'i; 'v}} >>, reduce_eq_var_nil4;
+   << eq_var{var[t:t]; vnil} >>, reduce_eq_var_var1;
+   << eq_var{var[t1:t]; var[t2:t]} >>, reduce_eq_var_var2;
+   << eq_var{var[t2:t]; tvar{token[t2:t]; 'v}} >>, reduce_eq_var_var3;
+   << eq_var{var[t:t]; ivar{'i; 'v}} >>, reduce_eq_var_var4;
+   << eq_var{tvar{'t1; 'v1}; vnil} >>, reduce_eq_var_tvar1;
+   << eq_var{tvar{token[t1:t]; 'v1}; var[t2:t]} >>, reduce_eq_var_tvar2;
+   << eq_var{tvar{'t1; 'v1}; tvar{'t2; 'v2}} >>, reduce_eq_var_tvar3;
+   << eq_var{tvar{'t1; 'v1}; ivar{'i2; 'v2}} >>, reduce_eq_var_tvar4;
+   << eq_var{ivar{'i1; 'v1}; vnil} >>, reduce_eq_var_ivar1;
+   << eq_var{ivar{'i1; 'v1}; var[t:t]} >>, reduce_eq_var_ivar2;
+   << eq_var{ivar{'i1; 'v1}; tvar{'t2; 'v2}} >>, reduce_eq_var_ivar3;
+   << eq_var{ivar{'i1; 'v1}; ivar{'i2; 'v2}} >>, reduce_eq_var_ivar4
+]
 
 (************************************************************************
  * RULES                                                                *

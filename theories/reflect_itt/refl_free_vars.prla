@@ -1609,7 +1609,7 @@ B	b574	t530
 NSummary!interactive	interactive	interactive Summary
 O	o574	interactive
 NSummary!ext_rule	ext_rule	ext_rule Summary
-P	p574	String "rw (addrC [0] unfold_free_vars) 0 thenT rw reduceC 0 thenT d_rewriteT 0"
+P	p574	String "rw (addrC [0] unfold_free_vars) 0 thenT rw reduceC 0 thenT trivialT"
 O	o575	ext_rule p574
 NSummary!status_incomplete	status_incomplete	status_incomplete Summary
 O	o576	status_incomplete

@@ -164,13 +164,12 @@ interactive_rw reduce_match_bterm :
 interactive_rw reduce_bterm_term :
    bterm_term{bterm{'sl; 't}} <--> 't
 
-let reduce_info =
-   [<< match_term{bvar{'v; 'tl}; x, y. 'bvar_case['x; 'y]; u, v. 'term_case['u; 'v]} >>, reduce_match_term_bvar;
-    << match_term{term{'op; 'bterms}; x, y. 'bvar_case['x; 'y]; u, v. 'term_case['u; 'v]} >>, reduce_match_term_term;
-    << bterm_term{bterm{'sl; 't}} >>, reduce_bterm_term;
-    << match_bterm{bterm{'sl; 't}; u, v. 'body['u; 'v]} >>, reduce_match_bterm]
-
-let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
+let resource reduce += [
+   << match_term{bvar{'v; 'tl}; x, y. 'bvar_case['x; 'y]; u, v. 'term_case['u; 'v]} >>, reduce_match_term_bvar;
+   << match_term{term{'op; 'bterms}; x, y. 'bvar_case['x; 'y]; u, v. 'term_case['u; 'v]} >>, reduce_match_term_term;
+   << bterm_term{bterm{'sl; 't}} >>, reduce_bterm_term;
+   << match_bterm{bterm{'sl; 't}; u, v. 'body['u; 'v]} >>, reduce_match_bterm
+]
 
 (************************************************************************
  * RULES                                                                *

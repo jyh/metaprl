@@ -78,11 +78,10 @@ interactive_rw reduce_free_vars_term :
       list_ind{'bterms; vempty; h, t, g.
                   match_bterm{'h; sl, t. vunion{vsub{free_vars{'t}; voflist{'sl}}; 'g}}}
 
-let reduce_info =
-   [<< free_vars{bvar{'v; 'tl}} >>, reduce_free_vars_bvar;
-    << free_vars{term{'op; 'bterms}} >>, reduce_free_vars_term]
-
-let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
+let resource reduce += [
+   << free_vars{bvar{'v; 'tl}} >>, reduce_free_vars_bvar;
+   << free_vars{term{'op; 'bterms}} >>, reduce_free_vars_term
+]
 
 (************************************************************************
  * RULES                                                                *

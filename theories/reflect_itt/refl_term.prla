@@ -4185,7 +4185,7 @@ P	p1619	String reduce_vmap_invert_nil
 O	o1619	rewrite p1619
 T	t1619	o659 b624
 B	b1619	t1619
-P	p1620	String "rwh unfold_vmap_invert 0 thenT rwh unfold_vmap_nil 0 thenT rw reduceC 0 thenT d_rewriteT 0"
+P	p1620	String "rwh unfold_vmap_invert 0 thenT rwh unfold_vmap_nil 0 thenT rw reduceC 0 thenT trivialT"
 O	o1620	ext_rule p1620
 T	t1620	o1534 b1619 b624
 S	s1620	t1534 h
@@ -4481,7 +4481,7 @@ P	p1735	String reduce_vmap_join_nil_nil
 O	o1735	rewrite p1735
 T	t1735	o674 b624 b624
 B	b1735	t1735
-P	p1736	String "rwh unfold_vmap_join 0 thenT rwh unfold_vmap_nil 0 thenT rwh unfold_vmap_cons 0 thenT rw reduceC 0 thenT d_rewriteT 0"
+P	p1736	String "rwh unfold_vmap_join 0 thenT rwh unfold_vmap_nil 0 thenT rwh unfold_vmap_cons 0 thenT rw reduceC 0 thenT trivialT"
 O	o1736	ext_rule p1736
 T	t1736	o1534 b1735 b624
 S	s1736	t1534 h
@@ -4585,7 +4585,7 @@ P	p1776	String reduce_vmap_fst_nil
 O	o1776	rewrite p1776
 T	t1776	o679 b624
 B	b1776	t1776
-P	p1777	String "rwh unfold_vmap_fst 0 thenT rwh unfold_vmap_nil 0 thenT rw reduceC 0 thenT d_rewriteT 0"
+P	p1777	String "rwh unfold_vmap_fst 0 thenT rwh unfold_vmap_nil 0 thenT rw reduceC 0 thenT trivialT"
 O	o1777	ext_rule p1777
 T	t1777	o1534 b1776 b1051
 S	s1777	t1534 h
@@ -4638,7 +4638,7 @@ T	t1795	o b1794 b4
 B	b1795	t1795
 T	t1796	o1530 b1790 b1795
 B	b1796	t1796
-P	p1796	String "rwh fold_vmap_fst 0 thenT d_rewriteT 0"
+P	p1796	String "rwh fold_vmap_fst 0 thenT trivialT"
 O	o1796	ext_rule p1796
 T	t1797	o1530 b1794 b4
 B	b1797	t1797
@@ -4702,7 +4702,7 @@ T	t1819	o b1818 b4
 B	b1819	t1819
 T	t1820	o1530 b1814 b1819
 B	b1820	t1820
-P	p1820	String "rwh fold_vmap_snd 0 thenT d_rewriteT 0"
+P	p1820	String "rwh fold_vmap_snd 0 thenT trivialT"
 O	o1820	ext_rule p1820
 T	t1821	o1530 b1818 b4
 B	b1821	t1821

@@ -418,35 +418,34 @@ interactive_rw reduce_term_depth_bterm :
  * REDUCTIONS                                                           *
  ************************************************************************)
 
-let reduce_info =
-   [<< vmap_compare{'v1; 'v2; vmap_nil} >>, reduce_vmap_compare_nil;
-    << vmap_compare{'v1; 'v2; vmap_cons{'v3; 'v4; 'vm}} >>, reduce_vmap_compare_cons;
-    << vmap_compose{nil; nil; 'vm; g. 'b['g]} >>, reduce_vmap_compose_nil_nil;
-    << vmap_compose{nil; cons{'h; 't}; 'vm; g. 'b['g]} >>, reduce_vmap_compose_nil_cons;
-    << vmap_compose{cons{'h; 't}; nil; 'vm; g. 'b['g]} >>, reduce_vmap_compose_cons_nil;
-    << vmap_compose{cons{'h1; 't1}; cons{'h2; 't2}; 'vm; g. 'b['g]} >>, reduce_vmap_compose_cons_cons;
-    << vmap_invert{vmap_nil} >>, reduce_vmap_invert_nil;
-    << vmap_invert{vmap_cons{'v1; 'v2; 'vm}} >>, reduce_vmap_invert_cons;
-    << vmap_id{vmap_nil} >>, reduce_vmap_id_nil;
-    << vmap_id{vmap_cons{'v1; 'v2; 'f}} >>, reduce_vmap_id_cons;
-    << vmap_length{vmap_nil; vmap_nil} >>, reduce_vmap_length_nil_nil;
-    << vmap_length{vmap_nil; vmap_cons{'v1; 'v2; 'f}} >>, reduce_vmap_length_nil_cons;
-    << vmap_length{vmap_cons{'v1; 'v2; 'f}; vmap_nil} >>, reduce_vmap_length_cons_nil;
-    << vmap_length{vmap_cons{'v1; 'v2; 'f}; vmap_cons{'v3; 'v4; 'g}} >>, reduce_vmap_length_cons_cons;
-    << vmap_join{vmap_nil; vmap_nil} >>, reduce_vmap_join_nil_nil;
-    << vmap_join{vmap_nil; vmap_cons{'v1; 'v2; 'f}} >>, reduce_vmap_join_nil_cons;
-    << vmap_join{vmap_cons{'v1; 'v2; 'f}; vmap_nil} >>, reduce_vmap_join_cons_nil;
-    << vmap_join{vmap_cons{'v1; 'v2; 'f}; vmap_cons{'v3; 'v4; 'g}} >>, reduce_vmap_join_cons_cons;
-    << vmap_fst{vmap_nil} >>, reduce_vmap_fst_nil;
-    << vmap_fst{vmap_cons{'v1; 'v2; 'f}} >>, reduce_vmap_fst_cons;
-    << vmap_snd{vmap_nil} >>, reduce_vmap_snd_nil;
-    << vmap_snd{vmap_cons{'v1; 'v2; 'f}} >>, reduce_vmap_snd_cons;
-    << eq_alpha_term{'vm; bvar{'v1; 'tl1}; bvar{'v2; 'tl2}} >>, reduce_eq_alpha_term_bvar_bvar;
-    << eq_alpha_term{'vm; bvar{'v; 'tl}; term{'op; 'bterms}} >>, reduce_eq_alpha_term_bvar_term;
-    << eq_alpha_term{'vm; term{'op; 'bterms}; bvar{'v; 'tl}} >>, reduce_eq_alpha_term_term_bvar;
-    << eq_alpha_term{'vm; term{'op1; 'bterms1}; term{'op2; 'bterms2}} >>, reduce_eq_alpha_term_term_term]
-
-let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
+let resource reduce += [
+   << vmap_compare{'v1; 'v2; vmap_nil} >>, reduce_vmap_compare_nil;
+   << vmap_compare{'v1; 'v2; vmap_cons{'v3; 'v4; 'vm}} >>, reduce_vmap_compare_cons;
+   << vmap_compose{nil; nil; 'vm; g. 'b['g]} >>, reduce_vmap_compose_nil_nil;
+   << vmap_compose{nil; cons{'h; 't}; 'vm; g. 'b['g]} >>, reduce_vmap_compose_nil_cons;
+   << vmap_compose{cons{'h; 't}; nil; 'vm; g. 'b['g]} >>, reduce_vmap_compose_cons_nil;
+   << vmap_compose{cons{'h1; 't1}; cons{'h2; 't2}; 'vm; g. 'b['g]} >>, reduce_vmap_compose_cons_cons;
+   << vmap_invert{vmap_nil} >>, reduce_vmap_invert_nil;
+   << vmap_invert{vmap_cons{'v1; 'v2; 'vm}} >>, reduce_vmap_invert_cons;
+   << vmap_id{vmap_nil} >>, reduce_vmap_id_nil;
+   << vmap_id{vmap_cons{'v1; 'v2; 'f}} >>, reduce_vmap_id_cons;
+   << vmap_length{vmap_nil; vmap_nil} >>, reduce_vmap_length_nil_nil;
+   << vmap_length{vmap_nil; vmap_cons{'v1; 'v2; 'f}} >>, reduce_vmap_length_nil_cons;
+   << vmap_length{vmap_cons{'v1; 'v2; 'f}; vmap_nil} >>, reduce_vmap_length_cons_nil;
+   << vmap_length{vmap_cons{'v1; 'v2; 'f}; vmap_cons{'v3; 'v4; 'g}} >>, reduce_vmap_length_cons_cons;
+   << vmap_join{vmap_nil; vmap_nil} >>, reduce_vmap_join_nil_nil;
+   << vmap_join{vmap_nil; vmap_cons{'v1; 'v2; 'f}} >>, reduce_vmap_join_nil_cons;
+   << vmap_join{vmap_cons{'v1; 'v2; 'f}; vmap_nil} >>, reduce_vmap_join_cons_nil;
+   << vmap_join{vmap_cons{'v1; 'v2; 'f}; vmap_cons{'v3; 'v4; 'g}} >>, reduce_vmap_join_cons_cons;
+   << vmap_fst{vmap_nil} >>, reduce_vmap_fst_nil;
+   << vmap_fst{vmap_cons{'v1; 'v2; 'f}} >>, reduce_vmap_fst_cons;
+   << vmap_snd{vmap_nil} >>, reduce_vmap_snd_nil;
+   << vmap_snd{vmap_cons{'v1; 'v2; 'f}} >>, reduce_vmap_snd_cons;
+   << eq_alpha_term{'vm; bvar{'v1; 'tl1}; bvar{'v2; 'tl2}} >>, reduce_eq_alpha_term_bvar_bvar;
+   << eq_alpha_term{'vm; bvar{'v; 'tl}; term{'op; 'bterms}} >>, reduce_eq_alpha_term_bvar_term;
+   << eq_alpha_term{'vm; term{'op; 'bterms}; bvar{'v; 'tl}} >>, reduce_eq_alpha_term_term_bvar;
+   << eq_alpha_term{'vm; term{'op1; 'bterms1}; term{'op2; 'bterms2}} >>, reduce_eq_alpha_term_term_term
+]
 
 (************************************************************************
  * RULES                                                                *

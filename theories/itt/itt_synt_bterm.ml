@@ -90,11 +90,13 @@ interactive_rw bterm_ind_var_reduce2 :
 define unfold_bdepth: bdepth{'bt} <--> bterm_ind{'bt; v. depth{'v}; op,btl,ind. op_bdepth{'op}}
 
 define unfold_compatible_shapes: compatible_shapes{'op; 'btl} <-->
+   squash{
    fix{ f. lambda{ diff. lambda{ arity. lambda{ btl.
       list_ind{ 'arity; is_nil{'btl}; h1,t1,g.
          list_ind{ 'btl; bfalse; h2,t2,g.
             (bdepth{'h2} -@ 'h1 = 'diff in int) and  ('f 'diff 't1 't2) } }
       } } } } op_bdepth{'op} arity{'op} 'btl
+   }
 
 prim btermUniv {| intro [] |} :
    sequent { <H> >- BTerm in univ[i:l] } =
@@ -115,16 +117,6 @@ prim makebterm_wf {| intro [] |} :
    sequent { <H> >- make_bterm{'op; 'btl} in BTerm } =
    it
 
-prim bterm_ind_wf {| intro [] |} bind{bt.'C['bt]}:
-   sequent { <H> >- 'bt in BTerm } -->
-   sequent { <H>; v:Var >- 'var_case['v] in 'C['v] } -->
-   sequent { <H>; op:BOperator; subterms:list{BTerm}; compatible_shapes{'op;'subterms}; ind_hyp:all_list{'subterms; x.'C['x]}
-                >- 'op_case['op;'subterms;'ind_hyp] in 'C[make_bterm{'op;'subterms}] } -->
-   sequent { <H> >-  bterm_ind{'bt;
-                               v.'var_case['v];
-                               op,subterms,ind_hyp. 'op_case['op; 'subterms; 'ind_hyp] } in 'C['bt] } =
-   it
-
 prim operatorSquiggle {| intro[] |} :
    sequent { <H> >- 'op1 = 'op2 in BOperator } -->
    sequent { <H> >- 'btl in list{BTerm} } -->
@@ -132,21 +124,25 @@ prim operatorSquiggle {| intro[] |} :
    sequent { <H> >- make_bterm{'op1; 'btl} ~ make_bterm{'op2; 'btl} } =
    it
 
+prim bterm_elim {| elim [] |} 'H :
+   ('var_case['b;'v]: sequent { <H>; b: BTerm; <J['b]>; v:Var >- 'C['v] }) -->
+   ('op_case['b;'op;'bl;'cs;'ind_hyp]: sequent { <H>; b: BTerm; <J['b]>; op: BOperator; bl: list{BTerm}; cs:compatible_shapes{'op;'bl};
+      ind_hyp:all_list{'bl; a.'C['a]} >- 'C[make_bterm{'op; 'bl}] })  -->
+   sequent { <H>; b: BTerm; <J['b]> >- 'C['b] }
+      =  bterm_ind{'b;
+                       v.'var_case['b;'v];
+                       op,bl,ind_hyp. 'op_case['b;'op; 'bl; it; 'ind_hyp] }
+
 (* Derivable rules *)
 
-(* XXX: Do we need this?
-define compatible_shapes_witness ...
-
-interactive compatible_shapes_sqstable {| squash |} :
-   ... -->
-   compatible_shapes_witness ... in compatible_shapes ...
-*)
-
-interactive bterm_elim {| elim [] |} 'H :
-   sequent { <H>; b: BTerm; <J['b]>; v:Var >- 'C['v] } -->
-   sequent { <H>; b: BTerm; <J['b]>; op: BOperator; bl: list{BTerm}; compatible_shapes{'op;'bl};
-      ind_hyp:all_list{'bl; a.'C['a]} >- 'C[make_bterm{'op; 'bl}] }  -->
-   sequent { <H>; b: BTerm; <J['b]> >- 'C['b] }
+interactive bterm_ind_wf {| intro [] |} bind{bt.'C['bt]}:
+   sequent { <H> >- 'bt in BTerm } -->
+   sequent { <H>; v:Var >- 'var_case['v] in 'C['v] } -->
+   sequent { <H>; op:BOperator; subterms:list{BTerm}; compatible_shapes{'op;'subterms}; ind_hyp:all_list{'subterms; x.'C['x]}
+                >- 'op_case['op;'subterms;'ind_hyp] in 'C[make_bterm{'op;'subterms}] } -->
+   sequent { <H> >-  bterm_ind{'bt;
+                               v.'var_case['v];
+                               op,subterms,ind_hyp. 'op_case['op; 'subterms; 'ind_hyp] } in 'C['bt] }
 
 define unfold_dest_bterm:
       dest_bterm{'bt; v.'var_case['v];

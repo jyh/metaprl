@@ -65,7 +65,7 @@ dform uid_df2 : "uid"[@start:n, @finish:n]{'v} =
  * Projection.
  *)
 dform proj_df1 : parens :: "prec"[prec_proj] :: "proj"{'A; 'B} =
-   pushm[0] slot{'A} proj slot{'B} popm
+   pushm[0] slot{'A} "." slot{'B} popm
 
 dform proj_df2 : "proj"[@start:n, @finish:n]{'A; 'B} =
    "proj"{'A; 'B}
@@ -174,9 +174,9 @@ dform assign_df : parens :: "prec"[prec_assign] :: assign{'e1; 'e2} =
  * Conditional.
  *)
 dform ifthenelse_df : parens :: "prec"[prec_if] :: ifthenelse{'e1; 'e2; 'e3} =
-   pushm[0] szone push_indent "if" space slot{'e1} space "then" sbreak
-   slot{'e2} popm sbreak
-   push_indent "else" sbreak
+   pushm[0] szone push_indent "if" space slot{'e1} space "then" space
+   slot{'e2} popm space
+   push_indent "else" space
    slot{'e3} popm popm
 
 dform ifthenelse_df2 : ifthenelse[@start:n, @finish:n]{'e1; 'e2; 'e3} =
@@ -204,8 +204,8 @@ dform for_downto_df2 : for_downto[@start:n, @finish:n]{'e1; 'e2; x. 'e3} =
    for_downto{'e1; 'e2; x. 'e3}
 
 dform while_df1 : "while"{'e1; 'e2} =
-   szone pushm[0] push_indent "while" space slot{'e1} space "do" sbreak
-   slot{'e2} popm sbreak
+   szone pushm[0] push_indent "while" space slot{'e1} space "do" space
+   slot{'e2} popm space
    "done" popm ezone
 
 dform while_df2 : "while"[@start:n, @finish:n]{'e1; 'e2} =
@@ -247,7 +247,7 @@ dform fun_df2 : "fun"[@start:n, @finish:n]{'pwel} =
    "fun"{'pwel}
 
 dform match_df1 : parens :: "prec"[prec_fun] :: "match"{'e; 'pwel} =
-   szone push_indent "match" space slot{'e} space "with" sbreak
+   szone push_indent "match" space slot{'e} space "with" space
    slot{patt_format; 'pwel; nil}
    popm ezone
 
@@ -255,7 +255,7 @@ dform match_df2 : "match"[@start:n, @finish:n]{'e; 'pwel} =
    "match"{'e; 'pwel}
 
 dform try_df1 : parens :: "prec"[prec_fun] :: "try"{'e; 'pwel} =
-   szone push_indent "try" space slot{'e} space "with" sbreak
+   szone push_indent "try" space slot{'e} space "with" space
    slot{patt_format; 'pwel; nil}
    popm ezone
 
@@ -279,6 +279,9 @@ dform fix_df2 : "fix"[@start:n, @finish:n]{x. 'p} =
 
 (*
  * $Log$
+ * Revision 1.6  1998/05/01 18:43:42  jyh
+ * Added raw display.
+ *
  * Revision 1.5  1998/05/01 14:59:51  jyh
  * Updating display forms.
  *

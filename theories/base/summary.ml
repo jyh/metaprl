@@ -159,7 +159,7 @@ dform rule_df : "rule"[@name:s]{'params; 'stmt; 'proof} =
 
 dform opname_df : "opname"[@name:s]{'term} =
    szone pushm[4]
-   `"declare" " " slot{'term}
+   `"declare" " " slot["raw"]{'term}
    ezone popm
 
 dform mlterm_df : "mlterm"{'term; 'cons; 'oexpr} =
@@ -194,9 +194,9 @@ dform module_df : "module"[@name:s]{'info} =
    `"module" " " slot[@name:s] `" = " break slot{'info}
    ezone popm
 
-dform dform_df : "dform"{'modes; 'redex; 'def} =
+dform dform_df : "dform"[@name:s]{'modes; 'redex; 'def} =
    szone pushm[4]
-   `"dform" " " slot{'modes} slot{'redex} `" = " slot{'def}
+   `"dform" " " slot[@name:s] `" : " slot{'modes} slot["raw"]{'redex} `" = " slot{'def}
    ezone popm
 
 (*
@@ -231,8 +231,14 @@ dform magic_block_df : "magic_block"[@name:s]{'items} =
 dform summary_item_df : "summary_item"{'term} =
    slot{'term}
 
+dform df_term_df : df_term{'t} =
+   slot{'t}
+
 (*
  * $Log$
+ * Revision 1.8  1998/05/01 18:43:38  jyh
+ * Added raw display.
+ *
  * Revision 1.7  1998/04/30 14:20:30  jyh
  * Updating term_table.
  *

@@ -197,7 +197,7 @@ mldform sequent_prl_df : mode["prl"] :: "sequent"{'seq} format_term buf =
  * COMMANDS                                                             *
  ************************************************************************)
 
-dform space_df : " " = `" "
+dform space_df : " " = space
 dform hat_df : "^" = `"^"
 dform underscore_df : "_" = `"_"
 dform left_curly_df : "{" = `"{"
@@ -211,6 +211,9 @@ dform newline_df : "\\" = \newline
 (*
  *
  * $Log$
+ * Revision 1.6  1998/05/01 18:43:36  jyh
+ * Added raw display.
+ *
  * Revision 1.5  1998/04/29 20:53:45  jyh
  * Initial working display forms.
  *

@@ -206,7 +206,7 @@ prim squashMemberFormation {| intro [AutoMustComplete] |} 'H :
  * be unsquashed (because the proof can always be inferred).
  * The second rule, @tt[squashElim] shows that $@it$ is the only element
  * of a non-empty squashed type.
- * The third rule, @tt[squashFromAny] allowed to infer a squashed
+ * The third rule, @tt[squashFromAny] allows inferring a squashed
  * sequent form from any sequent form, effectively allowing us to
  * "forget" a meta-witness (extract) if we do not need it.
  * @end[doc]

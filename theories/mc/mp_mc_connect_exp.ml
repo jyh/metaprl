@@ -653,14 +653,14 @@ let term_of_tailop t =
          mk_tailAtomic_term         (term_of_var v)
                                     (term_of_atom a)
                                     (term_of_list term_of_atom al)
-(*
-    | TailAtomicRollback a ->
-         mk_tailAtomicRollback_term (term_of_atom a)
+    | TailAtomicRollback (level, a) ->
+         mk_tailAtomicRollback_term (term_of_atom level)
+                                    (term_of_atom a)
 
-    | TailAtomicCommit (v, al) ->
-         mk_tailAtomicCommit_term   (term_of_var v)
+    | TailAtomicCommit (level, v, al) ->
+         mk_tailAtomicCommit_term   (term_of_atom level)
+                                    (term_of_var v)
                                     (term_of_list term_of_atom al)
-*)
 
 let tailop_of_term t =
    if is_tailSysMigrate_term t then
@@ -675,15 +675,15 @@ let tailop_of_term t =
          TailAtomic           (var_of_term v)
                               (atom_of_term a)
                               (list_of_term atom_of_term al)
-(*
    else if is_tailAtomicRollback_term t then
-      TailAtomicRollback (atom_of_term (dest_tailAtomicRollback_term t))
+      let level, a = dest_tailAtomicRollback_term t in
+         TailAtomicRollback   (atom_of_term level)
+                              (atom_of_term a)
    else if is_tailAtomicCommit_term t then
-      let v, al = dest_tailAtomicCommit_term t in
-         TailAtomicCommit     (var_of_term v)
+      let level, v, al = dest_tailAtomicCommit_term t in
+         TailAtomicCommit     (atom_of_term level)
+                              (var_of_term v)
                               (list_of_term atom_of_term al)
-*)
-
    else
       report_error "term_of_tailop" t
 

@@ -221,8 +221,8 @@ declare allocFrame{ 'var }
 
 declare tailSysMigrate{ 'int; 'atom1; 'atom2; 'var; 'atom_list }
 declare tailAtomic{ 'var; 'atom; 'atom_list }
-declare tailAtomicRollback{ 'atom }
-declare tailAtomicCommit{ 'var; 'atom_list }
+declare tailAtomicRollback{ 'atom1; 'atom2 }
+declare tailAtomicCommit{ 'atom; 'var; 'atom_list }
 
 (*
  * Predicates and assertions.
@@ -805,13 +805,13 @@ val dest_tailAtomic_term : term -> term * term * term
 
 val tailAtomicRollback_term : term
 val is_tailAtomicRollback_term : term -> bool
-val mk_tailAtomicRollback_term : term -> term
-val dest_tailAtomicRollback_term : term -> term
+val mk_tailAtomicRollback_term : term -> term -> term
+val dest_tailAtomicRollback_term : term -> term * term
 
 val tailAtomicCommit_term : term
 val is_tailAtomicCommit_term : term -> bool
-val mk_tailAtomicCommit_term : term -> term -> term
-val dest_tailAtomicCommit_term : term -> term * term
+val mk_tailAtomicCommit_term : term -> term -> term -> term
+val dest_tailAtomicCommit_term : term -> term * term * term
 
 (*
  * Predicates and assertions.

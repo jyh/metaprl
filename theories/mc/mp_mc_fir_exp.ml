@@ -361,8 +361,8 @@ declare allocFrame{ 'var }
 
 declare tailSysMigrate{ 'int; 'atom1; 'atom2; 'var; 'atom_list }
 declare tailAtomic{ 'var; 'atom; 'atom_list }
-declare tailAtomicRollback{ 'atom }
-declare tailAtomicCommit{ 'var; 'atom_list }
+declare tailAtomicRollback{ 'atom1; 'atom2 }
+declare tailAtomicCommit{ 'atom; 'var; 'atom_list }
 
 (*!
  * @begin[doc]
@@ -844,11 +844,11 @@ dform tailAtomic_df : except_mode[src] ::
    tailAtomic{ 'var; 'atom; 'atom_list } =
    `"TailAtom(" slot{'var} `"," slot{'atom} `"," slot{'atom_list} `")"
 dform tailAtomicRollBack_df : except_mode[src] ::
-   tailAtomicRollback{ 'atom } =
-   `"TailAtomicRollback(" slot{'atom} `")"
+   tailAtomicRollback{ 'atom1; 'atom2 } =
+   `"TailAtomicRollback(" slot{'atom1} `"," slot{'atom2} `")"
 dform tailAtomicCommit_df : except_mode[src] ::
-   tailAtomicCommit{ 'var; 'atom_list } =
-   `"TailAtomicCommit(" slot{'var} `"," slot{'atom_list} `")"
+   tailAtomicCommit{ 'atom; 'var; 'atom_list } =
+   `"TailAtomicCommit(" slot{'atom} `"," slot{'var} `"," slot{'atom_list} `")"
 
 (*
  * Predicates and assertions.
@@ -1599,17 +1599,17 @@ let is_tailAtomic_term = is_dep0_dep0_dep0_term tailAtomic_opname
 let mk_tailAtomic_term = mk_dep0_dep0_dep0_term tailAtomic_opname
 let dest_tailAtomic_term = dest_dep0_dep0_dep0_term tailAtomic_opname
 
-let tailAtomicRollback_term = << tailAtomicRollback{ 'atom } >>
+let tailAtomicRollback_term = << tailAtomicRollback{ 'atom1; 'atom2 } >>
 let tailAtomicRollback_opname = opname_of_term tailAtomicRollback_term
-let is_tailAtomicRollback_term = is_dep0_term tailAtomicRollback_opname
-let mk_tailAtomicRollback_term = mk_dep0_term tailAtomicRollback_opname
-let dest_tailAtomicRollback_term = dest_dep0_term tailAtomicRollback_opname
+let is_tailAtomicRollback_term = is_dep0_dep0_term tailAtomicRollback_opname
+let mk_tailAtomicRollback_term = mk_dep0_dep0_term tailAtomicRollback_opname
+let dest_tailAtomicRollback_term = dest_dep0_dep0_term tailAtomicRollback_opname
 
-let tailAtomicCommit_term = << tailAtomicCommit{ 'var; 'atom_list } >>
+let tailAtomicCommit_term = << tailAtomicCommit{ 'atom; 'var; 'atom_list } >>
 let tailAtomicCommit_opname = opname_of_term tailAtomicCommit_term
-let is_tailAtomicCommit_term = is_dep0_dep0_term tailAtomicCommit_opname
-let mk_tailAtomicCommit_term = mk_dep0_dep0_term tailAtomicCommit_opname
-let dest_tailAtomicCommit_term = dest_dep0_dep0_term tailAtomicCommit_opname
+let is_tailAtomicCommit_term = is_dep0_dep0_dep0_term tailAtomicCommit_opname
+let mk_tailAtomicCommit_term = mk_dep0_dep0_dep0_term tailAtomicCommit_opname
+let dest_tailAtomicCommit_term = dest_dep0_dep0_dep0_term tailAtomicCommit_opname
 
 (*
  * Predicates and assertions.

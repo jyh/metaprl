@@ -97,6 +97,7 @@ open Base_dtactic
 
 open Itt_equal
 open Itt_subtype
+open Perv
 
 (*
  * Show that the file is loading.
@@ -263,11 +264,42 @@ interactive topMemberFormation {| intro [] |} 'H:
  * to get a proof that $x @in B[a]$.
  * @end[doc]
  *)
-prim intersectionElimination {| elim [] |} 'H 'J 'a 'x 'z 'v :
+prim intersectionElimination {| elim [] |} 'H 'J 'a 'z :
    [wf] sequent [squash] { 'H; x: isect y: 'A. 'B['y]; 'J['x] >- 'a IN 'A } -->
-   [main] ('t['x; 'z; 'v] : sequent ['ext] { 'H; x: isect y: 'A. 'B['y]; 'J['x]; z: 'B['a]; v: 'z = 'x in 'B['a] >- 'T['x] }) -->
+   [main] ('t['x; 'z] : sequent ['ext] { 'H; x: isect y: 'A. 'B['y]; 'J['x]; z: 'B['a] >- 'T['z] }) -->
    sequent ['ext] { 'H; x: isect y: 'A. 'B['y]; 'J['x] >- 'T['x] } =
-   't['x; 'x; it]
+   't['x; 'x]
+
+(*! docoff *)
+
+interactive intersectionElimination_eq 'H 'J 'v 'a bind{x,HACK.bind{z.'T['x;'z;'HACK]}}:
+(* HACK: see bug 4.11 *)
+   [wf] sequent [squash] { 'H; x: isect y: 'A. 'B['y]; 'J['x] >- 'a IN 'A } -->
+   [main] sequent ['ext] { 'H; x: isect y: 'A. 'B['y]; 'J['x]; z: 'B['a]; v: 'z = 'x in 'B['a] >- 'T['x;'z;it] } -->
+   sequent ['ext] { 'H; x: isect y: 'A. 'B['y]; 'J['x] >- 'T['x;'x; it] }
+
+
+let intersectionEliminationT n p =
+   let z,v = maybe_new_vars2 p "z" "v" in
+   let i, j = Sequent.hyp_indices p n in
+   let x,_ = Sequent.nth_hyp p n in
+   let x_var = mk_var_term x in
+   let args=
+      try get_with_args p with
+        RefineError _ -> raise (RefineError ("intersectionElimination", StringError ("arguments required")))
+   in
+   let (a,bind) =
+      match args with
+         [] -> raise (RefineError ("intersectionElimination", StringError ("arguments required"))) |
+         [a] -> (a,mk_xbind_term z (var_subst (Sequent.concl p) x_var z)) |
+         [a1;a2] -> if is_xbind_term a1 then (a2,a1) else
+                    if is_xbind_term a2 then (a1,a2) else
+                       raise (RefineError ("intersectionElimination", StringError ("need a bind term"))) |
+         _ -> raise (RefineError ("intersectionElimination", StringError ("too many arguments")))
+   in
+   let bind2 = mk_bind2_term x "HACK" bind in
+      intersectionElimination_eq i j v a bind2 p
+
 
 (*!
  * @begin[doc]
@@ -275,18 +307,23 @@ prim intersectionElimination {| elim [] |} 'H 'J 'a 'x 'z 'v :
  * @end[doc]
  *)
 
-interactive intersectionElimination2 (*{| elim [] |}*) 'H 'J 'x 'z 'v :
-   [wf] sequent [squash] { 'H; x: isect y: 'A. 'B; 'J['x] >- 'A } -->
-   [main] sequent ['ext] { 'H; x: isect y: 'A. 'B; 'J['x]; z: 'B; v: 'z = 'x in 'B >- 'T['x] } -->
+interactive intersectionElimination2 (*{| elim [] |}*) 'H 'J 'z 'v :
+   [wf] sequent [squash] { 'H; x: isect y: 'A. 'B; 'J['x] >- squash{'A} } -->
+   [main] sequent ['ext] { 'H; x: isect y: 'A. 'B; 'J['x]; z: 'B; v: 'z = 'x in 'B >- 'T['z] } -->
    sequent ['ext] { 'H; x: isect y: 'A. 'B; 'J['x] >- 'T['x] }
 
+let intersectionEliminationT n p =
+   let z,v = maybe_new_vars2 p "z" "v" in
+   let i, j = Sequent.hyp_indices p n in
+     (intersectionElimination2 i j z v orelseT intersectionEliminationT n) p
+
+let resource elim += (<<isect y: 'A. 'B['y]>>, intersectionEliminationT)
 
 (*!
  * @begin[doc]
  * As a corollary of elimination rule we have that if
  * two terms are equal in the intersection, they are also
  * equal in each of the case of the intersection.
- * The @tactic[intersectionMemberCaseEqualityT] applies this rule
  * @end[doc]
  *)
 
@@ -294,6 +331,19 @@ interactive intersectionMemberCaseEquality 'H (isect x: 'A. 'B['x]) 'a :
    [wf] sequent [squash] { 'H >- 'b1 = 'b2 in isect x: 'A. 'B['x] } -->
    [wf] sequent [squash] { 'H >- 'a IN 'A } -->
    sequent ['ext] { 'H >- 'b1 = 'b2 in 'B['a] }
+
+
+
+(*! @docoff *)
+
+(* We could declare intersectionMemberCaseEquality as primitive and derive intersectionElimination *)
+
+interactive intersectionEliminationFromCaseEquality 'H 'J 'a 'z :
+   [wf] sequent [squash] { 'H; x: isect y: 'A. 'B['y]; 'J['x] >- 'a IN 'A } -->
+   [main] sequent ['ext] { 'H; x: isect y: 'A. 'B['y]; 'J['x]; z: 'B['a] >- 'T['z] } -->
+   sequent ['ext] { 'H; x: isect y: 'A. 'B['y]; 'J['x] >- 'T['x] }
+
+
 
 
 

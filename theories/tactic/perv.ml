@@ -46,6 +46,10 @@ open Mp_debug
 
 open Refiner.Refiner
 
+open Refiner.Refiner.Term
+open Refiner.Refiner.TermOp
+
+
 (*
  * Show that the file is loading.
  *)
@@ -91,7 +95,7 @@ declare "bind"{x,y,z,u,v,w. 'b}
 declare "bind"{x,y,z,u,v,w,t. 'b}
 declare "bind"{x,y,z,u,v,w,t,s. 'b}
 
-(*
+
 let bind_opname = opname_of_term <<"bind"{x. 'b}>>
 
 let is_bind1_term = is_dep1_term bind_opname
@@ -101,7 +105,7 @@ let dest_bind1 = dest_dep1_term bind_opname
 let is_bind2_term = is_dep2_term bind_opname
 let mk_bind2_term = mk_dep2_term bind_opname
 let dest_bind2 = dest_dep2_term bind_opname
-
+(*
 let is_bind3_term = is_dep3_term bind_opname
 let mk_bind3_term = mk_dep3_term bind_opname
 let dest_bind3 = dest_dep3_term bind_opname

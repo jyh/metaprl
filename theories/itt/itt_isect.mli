@@ -124,17 +124,6 @@ rule intersectionMemberCaseEquality 'H (isect x: 'A. 'B['x]) 'a :
    sequent [squash] { 'H >- 'a = 'a in 'A } -->
    sequent ['ext] { 'H >- 'b1 = 'b2 in 'B['a] }
 
-(*
- * H, x: isect y: A. B[y], J[x] >- T[x]
- * by intersectionElimination a z v
- * H, x: isect y: A. B[y], J[x] >- a = a in A
- * H, x: isect y: A. B[y], J[x], z: B[a], v: z = f in B[a] >- T[x]
- *)
-
-rule intersectionElimination 'H 'J 'a 'x 'z 'v :
-   sequent [squash] { 'H; x: isect y: 'A. 'B['y]; 'J['x] >- 'a = 'a in 'A } -->
-   sequent ['ext] { 'H; x: isect y: 'A. 'B['y]; 'J['x]; z: 'B['a]; v: 'z = 'x in 'B['a] >- 'T['x] } -->
-   sequent ['ext] { 'H; x: isect y: 'A. 'B['y]; 'J['x] >- 'T['x] }
 
 (*
  * H >- isect a1:A1. B1 <= isect a2:A2. B2

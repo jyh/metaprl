@@ -46,6 +46,10 @@ open Tactic_type.Tacticals
 
 declare "disect"{'A; x. 'B['x]}
 
+val is_disect_term : term -> bool
+val dest_disect : term -> string * term * term
+val mk_disect_term : string -> term -> term -> term
+
 (************************************************************************
  * RULES                                                                *
  ************************************************************************)
@@ -61,9 +65,7 @@ rule dintersectionTypeElimination 'H 'J 'a 'v:
  * TACTICS                                                              *
  ************************************************************************)
 
-val is_disect_term : term -> bool
-val dest_disect : term -> string * term * term
-val mk_disect_term : string -> term -> term -> term
+topval disectCaseEqualityT : term -> tactic
 
 (*
  * -*-

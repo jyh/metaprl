@@ -100,7 +100,7 @@ open Tactic_type.Tacticals
 open Base_auto_tactic
 open Base_dtactic
 
-
+open Perv
 open Itt_equal
 open Itt_subtype
 open Itt_struct
@@ -222,22 +222,92 @@ interactive dintersectionMemberFormation {| intro [] |} 'H 't:
  * @end[doc]
  *)
 
-prim dintersectionElimination {| elim [] |} 'H 'J  bind{a,b,dumb.'T['a;'b;'dumb]}:
+prim disectElimination {| elim [] |} 'H 'J  bind{a,b,HACK.'T['a;'b;'HACK]}:
    [main] ('t['a; 'b] :
    sequent ['ext] { 'H; x: disect{'A; y.'B['y]}; 'J['x];  a:'A; b: 'B['a]  >- 'T['a;'b; it] }) -->
    sequent ['ext] { 'H; x: disect{'A; y.'B['y]}; 'J['x] >- 'T['x;'x; it] } =
    't['x; 'x]
-(*
-prim dintersectionElimination {| elim [] |} 'H 'J  bind{a,b.'T['a;'b]}:
-   [main] ('t['a; 'b] :
-   sequent ['ext] { 'H; x: disect{'A; y.'B['y]}; 'J['x];  a:'A; b: 'B['a]  >- 'T['a;'b] }) -->
-   sequent ['ext] { 'H; x: disect{'A; y.'B['y]}; 'J['x] >- 'T['x;'x] } =
-   't['x; 'x]
-*)
-interactive dintersectionElimination2 'H 'J 'x 'a 'b 'v 'w:
+(*! docoff *)
+
+(*!
+ * @begin[doc]
+ * As a corollary of elimination rule we have that if
+ * two terms are equal in dependent the intersection, they are also
+ * equal in both cases of the intersection.
+ * The @tactic[disectCaseEqualityT] applies this rule
+ * @end[doc]
+ *)
+
+interactive disectMemberCaseEquality1 'H (disect{'A;x.'B['x]}) :
+   [wf] sequent [squash] { 'H >- 'x1 = 'x2 in disect{'A; y.'B['y]}  } -->
+   sequent ['ext] { 'H >- 'x1 = 'x2 in 'A }
+
+interactive disectMemberCaseEquality2 'H (disect{'A;x.'B['x]}) :
+   [wf] sequent [squash] { 'H >- 'x1 = 'x2 in disect{'A; y.'B['y]}  } -->
+   sequent ['ext] { 'H >- 'x1 = 'x2 in 'B['x1] }
+
+let disectCaseEqualityT t p =
+   let i = Sequent.hyp_count_addr p in
+   let tac = disectMemberCaseEquality2 i t orelseT disectMemberCaseEquality1 i t in
+      tac p
+
+
+
+interactive disectElimination_eq {| elim [] |} 'H 'J  'u 'v bind{x,HACK.bind{a,b.'C['x;'a;'b;'HACK]}} :
+   [main] sequent ['ext] { 'H; x: disect{'A; y.'B['y]}; 'J['x];
+                           a: 'A; u: 'a = 'x in 'A; b: 'B['a]; v: 'b = 'x in 'B['a]  >- 'C['x;'a;'b; it] } -->
+   sequent ['ext] { 'H; x: disect{'A; y.'B['y]}; 'J['x] >- 'C['x;'x;'x; it] }
+
+let disectEliminationT n p =
+   let u,v = maybe_new_vars2 p "u" "v" in
+   let i, j = Sequent.hyp_indices p n in
+   let x,_ = Sequent.nth_hyp p n in
+   let x_var = mk_var_term x in
+   let bind =  get_with_arg p in
+      if is_bind2_term bind then
+         let bind2 = mk_bind2_term x "HACK" bind in
+            disectElimination_eq i j u v bind2 p
+      else
+         raise (RefineError
+           ("disectElimination", StringTermError ("required the bind term:",<<bind{a,b.'C['a;'b]}>>)))
+
+let resource elim += (<<disect{'A; x.'B['x]}>>,disectEliminationT)
+
+(*!
+ * @begin[doc]
+ *
+ * The elimination rule has also two simpler forms.
+ * The first produces a witness $a$ for $A$, and the second produces two witness $a$ for $A$
+ * and $b$ for $B[a]$.
+ * @end[doc]
+ *)
+
+
+interactive disectEliminationLeft (*{| elim [SelectOption 1] |}*) 'H 'J 'a 'u :
+   sequent ['ext] { 'H; x: disect{'A; y.'B['y]}; 'J['x]; a: 'A; u: 'a = 'x in 'A >- 'C['a] } -->
+   sequent ['ext] { 'H; x: disect{'A; y.'B['y]}; 'J['x] >- 'C['x] }
+
+interactive disectEliminationRight (*{| elim [SelectOption 2] |}*) 'H 'J 'a 'u 'b 'v :
    sequent ['ext] { 'H; x: disect{'A; y.'B['y]}; 'J['x];
-     a:'A; v: 'a='x in 'A; b: 'B['a]; w: 'b = 'x in 'B['a] >- 'T['x] } -->
-   sequent ['ext] { 'H; x: disect{'A; y.'B['y]}; 'J['x] >- 'T['x] }
+                    a: 'A; u: 'a = 'x in 'A;  b: 'B['a]; v: 'b = 'x in 'B['a] >- 'C['b] } -->
+   sequent ['ext] { 'H; x: disect{'A; y.'B['y]}; 'J['x] >- 'C['x] }
+
+let disectEliminationT n p =
+   try
+      let sel = get_sel_arg p in
+      let a,u,b,v = maybe_new_vars4 p "a" "u" "b" "v" in
+      let i, j = Sequent.hyp_indices p n in
+         if sel = 1 then disectEliminationLeft i j a u p else
+         if sel = 2 then disectEliminationRight i j a u b v p else
+            raise (RefineError ("disectElimination", StringError ("select option is out of range ([1,2])")))
+   with RefineError ("get_attribute",_) ->
+      try disectEliminationT n p
+      with RefineError ("get_attribute",_) ->
+         raise (RefineError
+            ("disectElimination", StringTermError ("need a select option or a bind term:",<<bind{a,b.'C['a;'b]}>>)))
+
+let resource elim += (<<disect{'A; x.'B['x]}>>,disectEliminationT)
+
 
 (*!
  * @begin[doc]

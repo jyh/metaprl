@@ -64,7 +64,10 @@ open Tactic_type.Tacticals
 
 open Base_dtactic
 
+open Perv
+
 open Itt_equal
+
 
 (************************************************************************
  * SYNTAX                                                               *
@@ -142,36 +145,82 @@ interactive bisectMemberEquality {| intro []; eqcd |} 'H :
  * @begin[doc]
  * @thysubsection{Elimination}
  *
- * The elimination rule has two forms for an assumption $x@colon @bisect{A; B}$.
+ * The elimination rule for an assumption $x@colon @bisect{A; B}$ states that  $x$ can be replaced by
+ * $a @in A$ or by $b @in B$.
+ * @end[doc]
+ *)
+(*!@docoff *)
+
+interactive bisectElimination_eq 'H 'J 'u 'v bind{x,HACK.bind{a,b.'C['x;'a;'b;'HACK]}} :
+   sequent ['ext] { 'H; x: bisect{'A; 'B}; 'J['x]; a: 'A; u: 'a = 'x in 'A;
+                                                   b: 'B; v: 'b = 'x in 'B >- 'C['x;'a;'b;it] } -->
+   sequent ['ext] { 'H; x: bisect{'A; 'B}; 'J['x] >- 'C['x;'x;'x;it] }
+
+let bisectEliminationT n p =
+   let u,v = maybe_new_vars2 p "u" "v" in
+   let i, j = Sequent.hyp_indices p n in
+   let x,_ = Sequent.nth_hyp p n in
+   let x_var = mk_var_term x in
+   let bind =  get_with_arg p in
+      if is_bind2_term bind then
+         let bind2 = mk_bind2_term x "HACK" bind in
+            bisectElimination_eq i j u v bind2 p
+      else
+         raise (RefineError
+           ("bisectElimination", StringTermError ("required the bind term:",<<bind{a,b.'C['a;'b]}>>)))
+
+let resource elim += (<<bisect{'A; 'B}>>,bisectEliminationT)
+
+(*! *)
+
+interactive bisectElimination 'H 'J bind{a,b.'C['a;'b]} :
+   sequent ['ext] { 'H; x: bisect{'A; 'B}; 'J['x]; a: 'A; b: 'B >- 'C['a;'b] } -->
+   sequent ['ext] { 'H; x: bisect{'A; 'B}; 'J['x] >- 'C['x;'x] }
+
+(*!
+ * @begin[doc]
+ *
+ * The elimination rule has also two simpler forms.
  * The first produces a witness that $x @in A$, and the second produces a witness
  * for $x @in B$.
  * @end[doc]
  *)
-interactive bisectElimination 'H 'J bind{z,a,b.'C['z;'a;'b]} 'u 'v :
-   sequent ['ext] { 'H; x: bisect{'A; 'B}; 'J['x]; a: 'A; u: 'a = 'x in 'A;
-                                                   b: 'B; v: 'b = 'x in 'B >- 'C['x;'a;'b] } -->
-   sequent ['ext] { 'H; x: bisect{'A; 'B}; 'J['x] >- 'C['x;'x;'x] }
 
-interactive bisectElimination0 'H 'J 'a 'b 'u 'v :
-   sequent ['ext] { 'H; x: bisect{'A; 'B}; 'J['x]; a: 'A; u: 'a = 'x in 'A;
-                                                   b: 'B; v: 'b = 'x in 'B >- 'C['x] } -->
+
+interactive bisectEliminationLeft (*{| elim [SelectOption 1] |}*) 'H 'J 'a 'u :
+   sequent ['ext] { 'H; x: bisect{'A; 'B}; 'J['x]; a: 'A; u: 'a = 'x in 'A >- 'C['a] } -->
    sequent ['ext] { 'H; x: bisect{'A; 'B}; 'J['x] >- 'C['x] }
 
-interactive bisectEliminationLeft 'H 'J 'a 'b 'u 'v :
-   sequent ['ext] { 'H; x: bisect{'A; 'B}; 'J['x]; a: 'A; u: 'a = 'x in 'A;
-                                                   b: 'B; v: 'b = 'x in 'B >- 'C['a] } -->
+interactive bisectEliminationRight (*{| elim [SelectOption 2] |}*) 'H 'J 'b 'v :
+   sequent ['ext] { 'H; x: bisect{'A; 'B}; 'J['x]; b: 'B; v: 'b = 'x in 'B >- 'C['b] } -->
    sequent ['ext] { 'H; x: bisect{'A; 'B}; 'J['x] >- 'C['x] }
 
-interactive bisectEliminationRight 'H 'J 'a 'b 'u 'v :
-   sequent ['ext] { 'H; x: bisect{'A; 'B}; 'J['x]; a: 'A; u: 'a = 'x in 'A;
-                                                   b: 'B; v: 'b = 'x in 'B >- 'C['b] } -->
-   sequent ['ext] { 'H; x: bisect{'A; 'B}; 'J['x] >- 'C['x] }
+let bisectEliminationT n p =
+   try
+      let sel = get_sel_arg p in
+      let a,u = maybe_new_vars2 p "a" "u" in
+      let i, j = Sequent.hyp_indices p n in
+         if sel = 1 then bisectEliminationLeft i j a u p else
+         if sel = 2 then bisectEliminationRight i j a u p else
+            raise (RefineError ("bisectElimination", StringError ("select option is out of range ([1,2])")))
+   with RefineError ("get_attribute",_) ->
+      try bisectEliminationT n p
+      with RefineError ("get_attribute",_) ->
+         raise (RefineError
+            ("bisectElimination", StringTermError ("need a select option or a bind term:",<<bind{a,b.'C['a;'b]}>>)))
+
+let resource elim += (<<bisect{'A; 'B}>>,bisectEliminationT)
+
+
+interactive test 'H 'J :
+  sequent['ext] {'H; x:bisect{'A;'B}; 'J['x] >- 'x,('x,'x) }
+
 
 (*!
  * D tactic.
  * @docoff
  *)
-
+(*
 let elim_bisectT i p =
    let j, k = Sequent.hyp_indices p i in
    try
@@ -188,10 +237,21 @@ let elim_bisectT i p =
          else
            bisectElimination0 j k a b u v p
 
+let elim_bisectT i p =
+   let j, k = Sequent.hyp_indices p i in
+   let sel = get_sel_arg p in
+   let a, u = maybe_new_vars2 p "x" "u" in
+         if sel = 1 then
+           bisectEliminationLeft j k a u p
+         else if sel = 2 then
+           bisectEliminationRight j k a u p
+         else
+            raise (RefineError ("bisectElimination",StringError("Select option should be 1 or 2")))
 
 let bisect_term = << bisect{'A; 'B} >>
 
 let resource elim += (bisect_term, elim_bisectT)
+*)
 
 
 

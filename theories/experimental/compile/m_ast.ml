@@ -199,7 +199,7 @@ dform lambda_expr_df : parens :: "prec"[prec_fun] :: LambdaExpr{v. 'e} =
    szone pushm[3] Nuprl_font!lambda slot{'v} `"." hspace slot{'e} popm ezone
 
 dform fun_lambda_expr_df : parens :: "prec"[prec_fun] :: FunLambdaExpr{v. 'e} =
-   szone pushm[3] Nuprl_font!lambda slot{'v} `"." hspace slot{'e} popm ezone
+   szone pushm[3] Nuprl_font!lambda `"*" slot{'v} `"." hspace slot{'e} popm ezone
 
 (* if expressions *)
 dform if_expr_df1 : parens :: "prec"[prec_if] :: except_mode[tex] :: IfExpr{'e1; 'e2; 'e3} =

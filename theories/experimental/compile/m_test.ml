@@ -85,6 +85,20 @@ interactive spill_prog :
       R. LetFun{'R; Label["spill":t]; spill.
          TailCall{AtomVar{'spill}; ArgCons{AtomInt[25:n]; ArgNil}}}}} }
 
+interactive spill_prog2 :
+   sequent { <H> >- compilable{.
+      <:ext<
+         let spill (i) =
+            let i1 = i + 1 in
+            let i2 = i + 2 in
+            let i3 = i + 3 in
+            let i4 = i + 4 in
+            let i5 = i + 5 in
+            let i6 = i + 6 in
+               i1 + i2 + i3 + i4 + i5 + i6
+         in
+            spill (25)
+      >>} }
 
 interactive ext_fib_prog2 :
    sequent { <H> >- compilable{.
@@ -97,7 +111,19 @@ interactive ext_fib_prog2 :
                let v2 = fib (i - 2) in
                   v1 + v2
          in
-            fib (25) >>} }
+            fib (25)
+      >> } }
+
+interactive ext_test1 :
+   sequent { <H> >- compilable{.
+      <:ext<
+         let rec f (i) =
+            g (if i <> 1 then 0 else 1)
+         and g (i) =
+             if i = 1 then 0 else 1
+         in
+            f (2)
+      >> } }
 
 
 (*

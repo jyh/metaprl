@@ -230,7 +230,7 @@ prim_rw ir_arg_cons {| ir |} :
    IR{AstArgCons{'hd; 'tl}; 'f; v. 'e['v]}
    <-->
    IR{'hd; v1.
-   LetApply{AtomVar{'f}; AtomVar{'v1}; v2.
+   LetApply{'f; AtomVar{'v1}; v2.
    IR{'tl; 'v2; v. 'e['v]}}}
 
 prim_rw ir_arg_nil {| ir |} :

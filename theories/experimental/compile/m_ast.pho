@@ -105,7 +105,8 @@ Terms -extend "$" {
    declare project_functions{'R; 'fvars; 'rest}
    declare first_bind_vars{'R; 'fvars; 'vars; 'e}
    declare bind_vars{'R; 'fvars; 'vars; 'e}
-   declare norec_bind_vars{'vars; 'e}
+   declare first_norec_bind_vars{'R; 'vars; 'e}
+   declare norec_bind_vars{'R; 'vars; 'e}
 
    // Define our own list terms
    declare mcons{'element; 'list}
@@ -309,11 +310,17 @@ Rewrites {
 
    // Perform binding of function parameters (currying).
    // No function projection.
-   norec_bind_vars{'R; 'fvars; mnil{}; 'body} ->
+   first_norec_bind_vars{'R; mnil{}; 'body} ->
       'body
 
-   norec_bind_vars{'R; 'fvars; mcons{var_term[v:s]; 'vars}; 'body} ->
-      LambdaExpr{v. norec_bind_vars{'R; 'fvars; 'vars; 'body}}
+   first_norec_bind_vars{'R; mcons{var_term[v:s]; 'vars}; 'body} ->
+      FunLambdaExpr{v. norec_bind_vars{'R; 'vars; 'body}}
+
+   norec_bind_vars{'R; mnil{}; 'body} ->
+      'body
+
+   norec_bind_vars{'R; mcons{var_term[v:s]; 'vars}; 'body} ->
+      LambdaExpr{v. norec_bind_vars{'R; 'vars; 'body}}
 
    // project_functions{...} projects a list of functions into variables.
    project_functions{'R; mcons{var_term[f:s]; 'fvars}; 'rest} ->
@@ -325,7 +332,7 @@ Rewrites {
    // Process non-recursive functions.
    NewFun{SimpleFun{var_term[f:s]; 'params; 'body}; 'rest} ->
       AstLetRec{R. AstFields{
-         AstFunDef{AstLabel[f:t]; norec_bind_vars{'R; mcons{var_term[f:s]; mnil{}}; 'params; 'body}; AstEndDef{}}};
+         AstFunDef{AstLabel[f:t]; first_norec_bind_vars{'R; 'params; 'body}; AstEndDef{}}};
          R. project_functions{'R; mcons{var_term[f:s]; mnil{}}; 'rest}}
 }
 

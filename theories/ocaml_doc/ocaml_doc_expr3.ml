@@ -215,7 +215,7 @@ be skipped by the reader who is already familiar with advanced pattern
 matching.
 
 We'll use a functional implementation of red-black trees due to Chris
-Okasaki @cite["okasaki:red-black-trees"].  Red-black trees add a label, either
+Okasaki @cite[Oka99].  Red-black trees add a label, either
 @code{Red} or @code{Black} to each of the interior nodes.  Several new
 invariants are maintained.
 

@@ -69,7 +69,7 @@ OCaml is a @emph{strongly typed} language: every expression must have
 a type, and expressions of one type may not be used as expressions in
 another type.  There are no implicit coercions.  Normally, you do not
 have to input the types of expressions.  @emph{Type inference}
-@cite[damas82principal] is used to figure out the types for you.
+@cite[DM82] is used to figure out the types for you.
 
 The basic types are @code{unit}, @code{int}, @code{char}, @code{float},
 @code{bool}, and @code{string}.

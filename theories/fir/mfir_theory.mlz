@@ -8,11 +8,11 @@
  * the ``Function Intermediate Representation'' (FIR) of the Mojave
  * compiler. The FIR is an explicitly typed language that supports
  * polymorphism, process migration, and transactions
- * @cite["fir:tech-report1"].
+ * @cite["fir-tr1"].
  *
  * The FIR theory differs from the Mojave Compiler theory in its
  * approach to modelling the FIR.  Here, FIR programs are represented
- * using sequents, and the results of @cite["fir:tech-report1"] have
+ * using sequents, and the results of @cite["fir-tr1"] have
  * been used as a basis for developing the @MetaPRL formalization.
  *
  * Our current goal is to formalize the FIR type system, and then use that

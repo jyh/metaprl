@@ -41,11 +41,11 @@ extends Base_theory
 
 This document is an introduction to ML programming, specifically for
 the Objective Caml (@emph{OCaml}) programming language from INRIA
-@cite["leroy:ocaml,remy:ocaml"].  OCaml is a dialect of the ML
+@cite["Ler02,RV97"].  OCaml is a dialect of the ML
 (@emph{Meta-Language}) family of languages, which derive from the
 Classic ML language designed by Robin Milner in 1975 for the LCF
 (@emph{Logic of Computable Functions}) theorem prover
-@cite["lcf,GMW79"].
+@cite[GMW79].
 
 OCaml shares many features with other dialects of ML, and it provides
 several new features of its own.  Throughout this document, we use the
@@ -191,7 +191,7 @@ This document was originally used for a course in compiler
 construction at Caltech.  The course material, including exercises, is
 available at @tt{http://www.cs.caltech.edu/courses/cs134/cs134b}.
 
-The OCaml reference manual @cite["leroy:ocaml"] is available on the
+The OCaml reference manual @cite["Ler02"] is available on the
 OCaml home page @tt{http://www.ocaml.org/}.
 
 The author can be reached at @email{jyh@cs.caltech.edu}.

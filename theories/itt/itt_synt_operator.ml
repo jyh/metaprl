@@ -268,6 +268,11 @@ interactive_rw unbind_red {| reduce |} :
    op_bdepth{unbind{'op}} <--> op_bdepth{'op} -@ 1
 doc docoff
 
+interactive inject_wf2 {| intro [] |} :
+   sequent { <H> >- 'op1 = 'op2 in Operator } -->
+   sequent { <H> >- 'n in nat } -->
+   sequent { <H> >- inject{'op1; 'n} = inject{'op2; 'n} in BOperator }
+
 interactive shape_int_list {| intro [] |} :
    sequent { <H> >- 'op in Operator } -->
    sequent { <H> >- shape{'op} in list{int} }

@@ -37,9 +37,15 @@ define unfold_dom: dom{'ops;'T} <--> Var + (i:Index{'ops} * depth : nat * { bts:
 
 define unfold_mk: mk{'ops} <--> lambda{d. decide{'d; v. 'v; p.spread{'p; i,q. spread{'q; depth,bts. make_bterm{nth{'ops;'i}; 'depth; 'bts }} }}}
 
-define unfould_language: Language{'ops} <-->  srec{X. Img{mk{'ops}; dom{'ops;'X}; BTerm}}
+define unfold_language: Language{'ops} <-->  srec{X. Img{mk{'ops}; dom{'ops;'X}; BTerm}}
+doc docoff
 
+let fold_language = makeFoldC << Language{'ops} >> unfold_language
 
+doc <:doc<
+   @begin[doc]
+   @end[doc]
+>>
 interactive dom_wf  {| intro[] |}:
    sequent { <H> >- 'ops in list{Operator} } -->
    sequent { <H> >- 'T Type } -->
@@ -92,6 +98,10 @@ interactive mk_reverse {| intro[] |} :
    sequent { <H> >- 'T subtype BTerm } -->
    sequent { <H> >- dest{'ops} in RReverse{mk{'ops}; dom{'ops;'T}; BTerm} }
 
+interactive language_wf  {| intro[] |} :
+   sequent { <H> >- 'ops in list{Operator} } -->
+   sequent { <H> >- Language{'ops} Type }
+
 interactive language_induction  {| elim[] |} 'H:
    [wf] sequent { <H> >- 'ops in diff_list{Operator} } -->
    [base] sequent { <H>; <J>; v:Var >- 'P[ 'v ] } -->
@@ -101,6 +111,10 @@ interactive language_induction  {| elim[] |} 'H:
    sequent { <H>; x: Language{'ops}; <J> >- 'P['x] }
 
 interactive language_intro  {| intro[] |} :
+   sequent { <H> >- 'op in Operator } -->
+   sequent { <H> >- 'ops in list{Operator} } -->
+   sequent { <H> >- 'depth in nat } -->
+   sequent { <H> >- 'bts in list{BTerm isect Language{'ops}} } -->
    sequent { <H> >- mem{'op;'ops;Operator}  } -->
    sequent { <H> >- all_list{'bts;t.'t in Language{'ops}} } -->
    sequent { <H> >- compatible_shapes{inject{'op;'depth};'bts}  } -->
@@ -108,4 +122,5 @@ interactive language_intro  {| intro[] |} :
 
 interactive language_intro_var  {| intro[AutoMustComplete] |} :
    sequent { <H> >- 'v in Var } -->
+   sequent { <H> >- 'ops in list{Operator} } -->
    sequent { <H> >- 'v in Language{'ops} }

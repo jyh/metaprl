@@ -1,6 +1,7 @@
-include Czf_itt_set
 include Czf_itt_group
 include Czf_itt_equiv
+include Czf_itt_group_bvd
+include Czf_itt_set_bvd
 
 open Printf
 open Mp_debug
@@ -25,9 +26,17 @@ open Base_dtactic
 open Base_auto_tactic
 
 declare hom{'g1; 'g2; x. 'f['x]}
+declare kernel{'h; 'g1; 'g2; x. 'f['x]}
 
 rewrite unfold_hom : hom{'g1; 'g2; x. 'f['x]} <-->
    (group{'g1} & group{'g2} & (all a: set. (mem{'a; car{'g1}} => mem{'f['a]; car{'g2}})) & (all a: set. all b: set. (mem{'a; car{'g1}} => mem{'b; car{'g1}} => equiv{car{'g1}; eqG{'g1}; 'a; 'b} => equiv{car{'g2}; eqG{'g2}; 'f['a]; 'f['b]})) & (all a: set. all b: set. (mem{'a; car{'g1}} => mem{'b; car{'g1}} => equiv{car{'g2}; eqG{'g2}; 'f[op{'g1; 'a; 'b}]; op{'g2; 'f['a]; 'f['b]}})))
 
+rewrite unfold_kernel : kernel{'h; 'g1; 'g2; x. 'f['x]} <-->
+   (hom{'g1; 'g2; x. 'f['x]} & group_bvd{'h; 'g1; setbvd_prop{car{'g1}; x. equiv{car{'g2}; eqG{'g2}; 'f['x]; id{'g2}}}})
+
 topval homIdT : int -> tactic
 topval homInvT : term -> int -> tactic
+topval kernelSubgroupT : int -> tactic
+topval kernelLcosetT : term -> int -> tactic
+topval kernelRcosetT : term -> int -> tactic
+topval kernelNormalSubgT : int -> tactic

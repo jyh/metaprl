@@ -335,7 +335,7 @@ rule lt_Trichot 'H :
 
 topval lt_TrichotC: conv
 
-topval splitIntC : term -> term -> conv 
+topval splitIntC : term -> term -> conv
 
 rule splitInt 'H 'a 'b 'w :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
@@ -430,6 +430,12 @@ rule add_Id2 'H :
    sequent ['ext] { 'H >- (0 +@ 'a) ~ 'a }
 
 topval add_Id2C: conv
+
+rule add_Id3 'H :
+   [wf] sequent [squash] { 'H >- 'a IN int } -->
+   sequent ['ext] { 'H >- 'a ~ ('a +@ 0) }
+
+topval add_Id3C: conv
 
 rule minus_add_inverse 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->

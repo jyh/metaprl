@@ -184,6 +184,12 @@ rule mul_Id2 'H :
 
 topval mul_Id2C: conv
 
+rule mul_Id3 'H :
+   [wf] sequent [squash] { 'H >- 'a IN int } -->
+   sequent ['ext] { 'H >- 'a ~ (1 *@ 'a) }
+
+topval mul_Id3C: conv
+
 rule mul_Zero 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    sequent ['ext] { 'H >- (0 *@ 'a) ~ 0 }

@@ -50,11 +50,23 @@ topval anyArithRel2geT : int -> tactic
 
 topval arithRelInConcl2HypT : tactic
 
+topval ct : term -> term -> int
+
 topval add_BubblePrimitiveC : conv
 topval add_BubbleStepC : term -> conv
 topval add_BubbleSortC : conv
 
 topval add_normalizeC : conv
+
+topval mul_BubblePrimitiveC : conv
+topval mul_BubbleStepC : term -> conv
+topval mul_BubbleSortC : conv
+
+topval inject_coefC : term -> conv
+topval mul_normalizeC : conv
+topval open_parenthesesC : conv
+topval same_productC : term -> conv
+topval normalizeC : conv
 
 topval ge_addContractC : conv
 

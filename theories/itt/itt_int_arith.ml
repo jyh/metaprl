@@ -467,6 +467,12 @@ and compare_lvars v1 v2 =
        else if o1>o2 then Greater
        else Equal
 
+let ct a b =
+  match compare_terms a b with
+    Less -> -1
+  | Equal -> 0
+  | Greater -> 1
+
 interactive_rw mul_BubblePrimitive_rw :
    ( 'a IN int ) -->
    ( 'b IN int ) -->
@@ -495,9 +501,6 @@ let mul_BubbleStepC tm =
             if (is_number_term a) & (is_number_term s) then
 	       reduce_mul
 	    else
-(* it is incorrect here to compare terms this way because
-result depends on term internal representation. We have to
-implement some kind of term ordering and use it here *)
                if (compare_terms s a)=Less or
                 (is_number_term s) then
 	          mul_CommutC
@@ -511,10 +514,17 @@ implement some kind of term ordering and use it here *)
  *)
 let mul_BubbleSortC = sweepDnC (termC mul_BubbleStepC)
 
+let inject_coefC t =
+   if is_mul_term t then
+      mul_Id3C
+   else
+      failC
+
 (* Before terms sorting we have to put parentheses in the rightmost-first
 manner
  *)
 let mul_normalizeC = (sweepDnC mul_Assoc2C) thenC
+                     (higherC (termC inject_coefC)) thenC
                      (whileProgressC mul_BubbleSortC)
 
 interactive_rw sum_same_products1_rw :
@@ -552,27 +562,27 @@ let same_productC t =
                if (compare_terms a2 b2)=Equal then
                   sum_same_products1C
                else
-                  failC
+                  idC
             else
                if (compare_terms a1 b)=Equal then
                   sum_same_products2C
                else
-                  failC
+                  idC
          else
             if is_number_term b1 then
                if (compare_terms a b1)=Equal then
                   sum_same_products3C
                else
-                  failC
+                  idC
             else
                if (compare_terms a b)=Equal then
                   sum_same_products4C
                else
-                  failC
+                  idC
       else
-         failC
+         idC
    else
-      failC
+      idC
 
 interactive_rw add_BubblePrimitive_rw :
    ( 'a IN int ) -->
@@ -593,7 +603,7 @@ let add_BubbleStepC tm =
 	       if (is_number_term a) & (is_number_term b) then
 	          (add_AssocC thenC (addrC [0] reduce_add))
 	       else
-                  if b<a then
+                  if (compare_terms b a)=Less then
                      add_BubblePrimitiveC
                   else
                      idC
@@ -601,10 +611,7 @@ let add_BubbleStepC tm =
             if (is_number_term a) & (is_number_term s) then
 	       reduce_add
 	    else
-(* it is incorrect here to compare terms this way because
-result depends on term internal representation. We have to
-implement some kind of term ordering and use it here *)
-               if s<a then
+               if (compare_terms s a)=Less then
 	          add_CommutC
 	       else
 	          idC
@@ -614,13 +621,21 @@ implement some kind of term ordering and use it here *)
 (* here we apply add_BubbleStepC as many times as possible thus
    finally we have all sum subterms positioned in order
  *)
-let add_BubbleSortC = sweepDnC (termC add_BubbleStepC)
+let add_BubbleSortC = (sweepDnC (termC same_productC)) thenC
+                      (sweepDnC (termC add_BubbleStepC))
 
 (* Before terms sorting we have to put parentheses in the rightmost-first
 manner
  *)
 let add_normalizeC = (sweepDnC add_Assoc2C) thenC
                      (whileProgressC add_BubbleSortC)
+
+let open_parenthesesC = whileProgressC (sweepDnC mul_add_DistribC)
+
+let normalizeC = (sweepDnC reduce_minus) thenC
+                 open_parenthesesC thenC
+                 mul_normalizeC thenC
+                 add_normalizeC
 
 interactive_rw ge_addContract_rw :
    ( 'a IN int ) -->
@@ -629,11 +644,11 @@ interactive_rw ge_addContract_rw :
 
 let ge_addContractC = ge_addContract_rw
 
-(* Reduce contradictory relation a>=a+b where b>0. autoT should be removed
-later to permit incorporation of this tactic into autoT.
+(*
+   Reduce contradictory relation a>=a+b where b>0.
  *)
-let reduceContradRelT i p = (rw ((addrC [0] add_normalizeC) thenC
-                                 (addrC [1] add_normalizeC) thenC
+let reduceContradRelT i p = (rw ((addrC [0] normalizeC) thenC
+                                 (addrC [1] normalizeC) thenC
 		                 ge_addContractC thenC
 			         reduceC)
                                 i) p
@@ -641,8 +656,8 @@ let reduceContradRelT i p = (rw ((addrC [0] add_normalizeC) thenC
 let tryReduce_geT i p =
    let t=get_term i p in
       if is_ge_term t then
-         (rw ((addrC [0] add_normalizeC) thenC
-             (addrC [1] add_normalizeC))
+         (rw ((addrC [0] normalizeC) thenC
+             (addrC [1] (add_Id3C thenC normalizeC)))
              i) p
       else
 	 idT p
@@ -685,7 +700,7 @@ let good_term t =
    if is_ge_term t then
      let (_,b)=dest_ge t in
         if is_add_term b then
-           let (_,d)=dest_add b in
+           let (d,_)=dest_add b in
               (is_number_term d)
         else
            false
@@ -747,10 +762,7 @@ let findContradRelT p =
  *)
 let arithT = arithRelInConcl2HypT thenMT
    (onAllHypsT anyArithRel2geT)
-(*
    thenMT (onAllHypsT tryReduce_geT)
-*)
-
    thenMT findContradRelT
    thenMT reduceContradRelT (-1)
 
@@ -782,4 +794,19 @@ sequent [squash] { 'H >- 'a IN int } -->
 sequent [squash] { 'H >- 'b IN int } -->
 sequent ['ext] { 'H; x: ('a >= 'b);
                      t: ('a < 'b)
-                >- "assert"{bfalse}  }
+                >- "assert"{bfalse} }
+
+interactive test5 'H 'a 'b :
+sequent [squash] { 'H >- 'a IN int } -->
+sequent [squash] { 'H >- 'b IN int } -->
+sequent ['ext] { 'H; x: ('a >= 'b +@ 0);
+                     t: ('a < 'b)
+                >- "assert"{bfalse} }
+
+interactive test6 'H 'a 'b 'c :
+sequent [squash] { 'H >- 'a IN int } -->
+sequent [squash] { 'H >- 'b IN int } -->
+sequent [squash] { 'H >- 'c IN int } -->
+sequent ['ext] { 'H; x: (('c *@ ('b +@ ('a *@ 'c)) +@ ('b *@ 'c)) >= 'b +@ 0);
+                     t: (((((('c *@ 'b) *@ 1) +@ (2 *@ ('a *@ ('c *@ 'c)))) +@ (('c *@ ((-1) *@ 'a)) *@ 'c)) +@ ('b *@ 'c)) < 'b)
+                >- "assert"{bfalse} }

@@ -347,6 +347,16 @@ interactive_rw mul_Id2_rw :
 
 let mul_Id2C = mul_Id2_rw
 
+interactive mul_Id3 'H :
+   [wf] sequent [squash] { 'H >- 'a IN int } -->
+   sequent ['ext] { 'H >- 'a ~ (1 *@ 'a) }
+
+interactive_rw mul_Id3_rw :
+   ('a IN int) -->
+   'a <--> (1 *@ 'a)
+
+let mul_Id3C = mul_Id3_rw
+
 prim mul_Zero 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    sequent ['ext] { 'H >- (0 *@ 'a) ~ 0 } = it

@@ -243,7 +243,7 @@ dform display_ind_df1 : internal :: display_ind{'x} =
 dform display_ind_df2 : internal :: display_ind_n =
    display_ind{display_var["n":v]{nil}}
 
-dform ind_df : parens :: "prec"[prec_bor] :: except_mode[src] :: 
+dform ind_df : parens :: "prec"[prec_bor] :: except_mode[src] ::
    ind{'x; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]} =
    szone pushm[3] szone display_ind{'x} space `"where" space display_ind_n space `"=" ezone hspace
    ((display_var["n":v]{nil} < 0) => beq_int{display_ind_n; 'down[display_var["n":v]{nil}; display_ind{(display_var["n":v]{nil} +@ 1)}]}) hspace
@@ -821,6 +821,16 @@ interactive_rw add_Id2_rw :
    (0 +@ 'a) <--> 'a
 
 let add_Id2C = add_Id2_rw
+
+interactive add_Id3 'H :
+   [wf] sequent [squash] { 'H >- 'a IN int } -->
+   sequent ['ext] { 'H >- 'a ~ ('a +@ 0) }
+
+interactive_rw add_Id3_rw :
+   ( 'a IN int ) -->
+   'a <--> ('a +@ 0)
+
+let add_Id3C = add_Id3_rw
 
 (*!
  * @begin[doc]

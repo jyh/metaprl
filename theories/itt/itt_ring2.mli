@@ -47,6 +47,8 @@ declare prering[i:l]
 declare isRing{'G}
 declare ring[i:l]
 
+declare Z
+
 (************************************************************************
  * DISPLAY FORMS                                                        *
  ************************************************************************)
@@ -74,6 +76,14 @@ topval fold_isRing1 : conv
 topval fold_isRing : conv
 topval fold_ring1 : conv
 topval fold_ring : conv
+
+topval unfold_Z : conv
+(*topval unfold_Zeven : conv*)
+topval fold_Z : conv
+(*topval fold_Zeven : conv*)
+
+topval unfold_subring : conv
+topval fold_subring : conv
 
 (*
  * -*-

@@ -247,6 +247,12 @@ interactive ring_elim {| elim [] |} 'H :
    sequent { <H>; R: {car: univ[i:l]; "*": ^car -> ^car -> ^car; "+": ^car -> ^car -> ^car; "0": ^car; neg: ^car -> ^car}; u1: all x: 'R^car. all y: 'R^car. all z: 'R^car. (('x *['R] 'y) *['R] 'z = 'x *['R] ('y *['R] 'z) in 'R^car); u2: all x: 'R^car. all y: 'R^car. all z: 'R^car. (('x +['R] 'y) +['R] 'z = 'x +['R] ('y +['R] 'z) in 'R^car); v2: all x: 'R^car. ('R^"0" +['R] 'x = 'x in 'R^car); w2: all x: 'R^car. ('R^neg 'x) +['R] 'x = 'R^"0" in 'R^car; u3: all x: 'R^car. all y: 'R^car. ('x +['R] 'y = 'y +['R] 'x in 'R^car); u4: all x: 'R^car. all y: 'R^car. all z: 'R^car. (('x +['R] 'y) *['R] 'z = ('x *['R] 'z) +['R] ('y *['R] 'z) in 'R^car); u5: all x: 'R^car. all y: 'R^car. all z: 'R^car. ('x *['R] ('y +['R] 'z) = ('x *['R] 'y) +['R] ('x *['R] 'z) in 'R^car); <J['R]> >- 'C['R] } -->
    sequent { <H>; R: ring[i:l]; <J['R]> >- 'C['R] }
 
+doc <:doc<
+   @begin[doc]
+   @modsubsection{Properties}
+
+   @end[doc]
+>>
 interactive car_wf {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} ring[i:l] :
    sequent { <H> >- 'R in ring[i:l] } -->
    sequent { <H> >- 'R^car Type }
@@ -336,6 +342,34 @@ interactive ring_left_neg2 {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} 
    sequent { <H> >- 'a in 'R^car } -->
    sequent { <H> >- 'R^"0" = ('R^neg 'a) +['R] 'a in 'R^car }
 
+interactive ring_right_distib {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} ring[i:l] :
+   sequent { <H> >- 'R in ring[i:l] } -->
+   sequent { <H> >- 'a in 'R^car } -->
+   sequent { <H> >- 'b in 'R^car } -->
+   sequent { <H> >- 'c in 'R^car } -->
+   sequent { <H> >- ('a +['R] 'b) *['R] 'c = ('a *['R] 'c) +['R] ('b *['R] 'c) in 'R^car }
+
+interactive ring_right_distib1 {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} ring[i:l] :
+   sequent { <H> >- 'R in ring[i:l] } -->
+   sequent { <H> >- 'a in 'R^car } -->
+   sequent { <H> >- 'b in 'R^car } -->
+   sequent { <H> >- 'c in 'R^car } -->
+   sequent { <H> >- ('a *['R] 'c) +['R] ('b *['R] 'c) = ('a +['R] 'b) *['R] 'c in 'R^car }
+
+interactive ring_left_distib {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} ring[i:l] :
+   sequent { <H> >- 'R in ring[i:l] } -->
+   sequent { <H> >- 'a in 'R^car } -->
+   sequent { <H> >- 'b in 'R^car } -->
+   sequent { <H> >- 'c in 'R^car } -->
+   sequent { <H> >- 'a *['R] ('b +['R] 'c) = ('a *['R] 'b) +['R] ('a *['R] 'c) in 'R^car }
+
+interactive ring_left_distib1 {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} ring[i:l] :
+   sequent { <H> >- 'R in ring[i:l] } -->
+   sequent { <H> >- 'a in 'R^car } -->
+   sequent { <H> >- 'b in 'R^car } -->
+   sequent { <H> >- 'c in 'R^car } -->
+   sequent { <H> >- ('a *['R] 'b) +['R] ('a *['R] 'c) = 'a *['R] ('b +['R] 'c) in 'R^car }
+
 interactive add_eq1 {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} ring[i:l] :
    sequent { <H> >- 'R in ring[i:l] } -->
    sequent { <H> >- 'a = 'b in 'R^car } -->
@@ -360,8 +394,6 @@ interactive mul_eq2 {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} ring[i:
    sequent { <H> >- 'c in 'R^car } -->
    sequent { <H> >- 'c *['R] 'a = 'c *['R] 'b in 'R^car }
 
-doc docoff
-
 doc <:doc<
    @begin[doc]
    @modsection{Hierarchy}
@@ -372,11 +404,11 @@ doc <:doc<
 interactive ring_subtype_semigroup {| intro [] |} :
    sequent { <H> >- ring[i:l] subtype semigroup[i:l] }
 
-interactive ring_additive_group {| intro [] |} :
+interactive ring_additive_group {| intro [AutoMustComplete] |} :
    sequent { <H> >- 'R in ring[i:l] } -->
    sequent { <H> >- as_additive{'R} in group[i:l] }
 
-interactive ring_additive_abelgroup {| intro [] |} :
+interactive ring_additive_abelgroup {| intro [AutoMustComplete] |} :
    sequent { <H> >- 'R in ring[i:l] } -->
    sequent { <H> >- as_additive{'R} in abelg[i:l] }
 
@@ -407,6 +439,11 @@ let resource typeinf += [
    <<'g^"+">>, inf_add
 ]
 
+let inf_add_group _ _ _ eqs opt_eqs defs t =
+      eqs, opt_eqs, defs, <<group[i:l]>>   (* hack *)
+
+let resource typeinf += (<< as_additive{'R}>>, inf_add_group)
+
 (************************************************************************
  * RING EXAMPLES                                                        *
  ************************************************************************)
@@ -418,11 +455,60 @@ doc <:doc<
 
    @end[doc]
 >>
-interactive zero_ring :
-   sequent { <H> >- {car=singleton{0; int}; "*"=lambda{x. lambda{y. 'x *@ 'y}}; "+"=lambda{x. lambda{y. 'x +@ 'y}}; "0"=0; neg=lambda{x. (-'x)}} in ring[i:l] }
-
+define unfold_ZeroRing : ZeroRing <-->
+   {car=singleton{0; int}; "*"=lambda{x. lambda{y. 'x *@ 'y}}; "+"=lambda{x. lambda{y. 'x +@ 'y}}; "0"=0; neg=lambda{x. (-'x)}}
 doc docoff
 
+dform zeroRing_df1 : except_mode[src] :: ZeroRing =
+   `"ZeroRing"
+
+doc <:doc< >>
+interactive zero_ring {| intro [] |}:
+   sequent { <H> >- ZeroRing in ring[i:l] }
+
+doc <:doc<
+   @begin[doc]
+   Ring of Integers.
+   @end[doc]
+>>
+define unfold_Z : Z <-->
+   {car=int; "*"=lambda{x. lambda{y. 'x *@ 'y}}; "+"=lambda{x. lambda{y. 'x +@ 'y}}; "0"=0; neg=lambda{x. (-'x)}}
+doc docoff
+
+let fold_Z = makeFoldC << Z >> unfold_Z
+
+doc <:doc< >>
+interactive integer_ring {| intro [] |} :
+   sequent { <H> >- Z in ring[i:l] }
+
+(**** The next rule cannot be proved for now due to the ****
+ **** incompleteness of axioms about the rem operation  ****
+ **** in Itt_int_ext.                                   ****)
+(*
+doc <:doc<
+   @begin[doc]
+   Ring of Even Integers.
+   @end[doc]
+>>
+define unfold_Zeven : Zeven <-->
+   {car={x:int|'x %@ 2 = 0 in int}; "*"=lambda{x. lambda{y. 'x *@ 'y}}; "+"=lambda{x. lambda{y. 'x +@ 'y}}; "0"=0; neg=lambda{x. (-'x)}}
+doc docoff
+
+let fold_Zeven = makeFoldC << Zeven >> unfold_Zeven
+
+doc <:doc< >>
+interactive eveninteger_ring {| intro [] |} :
+   sequent { <H> >- Zeven in ring[i:l] }
+doc docoff
+*)
+
+
+doc <:doc<
+   @begin[doc]
+   @modsubsection{Theorems}
+
+   @end[doc]
+>>
 interactive mul_addid1 {| intro [intro_typeinf <<'R>>] |} ring[i:l] :
    sequent { <H> >- 'R in ring[i:l] } -->
    sequent { <H> >- 'a in 'R^car } -->
@@ -433,6 +519,118 @@ interactive mul_addid2 {| intro [intro_typeinf <<'R>>] |} ring[i:l] :
    sequent { <H> >- 'a in 'R^car } -->
    sequent { <H> >- 'R^"0" *['R] 'a = 'R^"0" in 'R^car }
 
+
+
+
+
+(************************************************************************
+ * SUBRING                                                              *
+ ************************************************************************)
+
+doc <:doc<
+   @begin[doc]
+   @modsection{Subring}
+   @modsubsection{Rewrites}
+
+   @end[doc]
+>>
+define unfold_subring : subring[i:l]{'S; 'R} <-->
+   ((('S in ring[i:l]) & ('R in ring[i:l])) & subStructure{'S; 'R}) & subStructure{as_additive{'S}; as_additive{'R}}
+doc docoff
+
+(*
+interactive_rw unfold_subring1 : subring[i:l]{'S; 'R} <-->
+   (((('S in ring[i:l]) & ('R in ring[i:l])) & subStructure{'S; 'R}) & ('R^"+" = 'S^"+" in 'S^car -> 'S^car -> 'S^car))
+*)
+
+let fold_subring = makeFoldC << subring[i:l]{'S; 'R} >> unfold_subring
+
+let subringDT n = copyHypT n (n+1) thenT rw unfold_subring (n+1) thenT dT (n+1) thenT dT (n+1) thenT dT (n+1)
+
+let resource elim +=
+   [<<subring[i:l]{'S; 'R}>>, subringDT]
+
+doc <:doc<
+   @begin[doc]
+   @modsubsection{Well-formedness}
+
+   @end[doc]
+>>
+interactive subring_wf {| intro [] |} :
+   sequent { <H> >- 'S in ring[i:l] } -->
+   sequent { <H> >- 'R in ring[i:l] } -->
+   sequent { <H> >- 'R^"*" = 'S^"*" in 'S^car -> 'S^car -> 'S^car } -->
+   sequent { <H> >- 'R^"+" = 'S^"+" in 'S^car -> 'S^car -> 'S^car } -->
+   sequent { <H> >- "type"{subring[i:l]{'S; 'R}} }
+
+doc <:doc<
+   @begin[doc]
+   @modsubsection{Introduction and Elimination}
+
+   @end[doc]
+>>
+interactive subring_intro {| intro [] |} :
+   [wf] sequent { <H> >- 'S in ring[i:l] } -->
+   [wf] sequent { <H> >- 'R in ring[i:l] } -->
+   [main] sequent { <H> >- subStructure{'S; 'R} } -->
+   sequent { <H> >- 'R^"+" = 'S^"+" in 'S^car -> 'S^car -> 'S^car } -->
+   sequent { <H> >- subring[i:l]{'S; 'R} }
+
+interactive subring_elim {| elim [] |} 'H :
+   [main] sequent { <H>; x: subring[i:l]{'S; 'R}; u: 'S in ring[i:l]; v: 'R in ring[i:l]; w: subStructure{'S; 'R}; y: 'R^"+" = 'S^"+" in 'S^car -> 'S^car -> 'S^car; <J['x]> >- 'C['x] } -->
+   sequent { <H>; x: subring[i:l]{'S; 'R}; <J['x]> >- 'C['x] }
+
+doc <:doc<
+   @begin[doc]
+   @modsubsection{Rules}
+
+   Subring is squash-stable.
+   @end[doc]
+>>
+interactive subring_sqStable {| squash |} :
+   [wf] sequent { <H> >- squash{subring[i:l]{'S; 'R}} } -->
+   sequent { <H> >- subring[i:l]{'S; 'R} }
+
+doc <:doc<
+   @begin[doc]
+
+   If <<'S>> is a subring of <<'R>>, then <<'S>> is also a subgroup of <<'R>> under addition.
+   @end[doc]
+>>
+interactive subring_subgroup :
+   [wf] sequent { <H> >- subring[i:l]{'S; 'R} } -->
+   sequent { <H> >- subgroup[i:l]{as_additive{'S}; as_additive{'R}} }
+doc docoff
+
+interactive subring_ref {| intro [] |} :
+   sequent { <H> >- 'R in ring[i:l] } -->
+   sequent { <H> >- subring[i:l]{'R; 'R} }
+
+doc <:doc<
+   @begin[doc]
+   @modsubsection{Examples}
+
+   Zero ring is a subring of the ring of integers.
+   @end[doc]
+>>
+interactive zeroring_subring_int {| intro [] |} :
+   sequent { <H> >- subring[i:l]{ZeroRing; Z} }
+doc docoff
+
+(**** The next rule cannot be proved for now due to the ****
+ **** incompleteness of axioms about the rem operation  ****
+ **** in Itt_int_ext.                                   ****)
+(*
+doc <:doc<
+   @begin[doc]
+
+   The ring of even integers is a subring of the ring of integers.
+   @end[doc]
+>>
+interactive subring_even_int {| intro [] |} :
+   sequent { <H> >- subring[i:l]{Zeven; Z} }
+doc docoff
+*)
 (************************************************************************
  * DISPLAY FORMS                                                        *
  ************************************************************************)
@@ -466,7 +664,7 @@ dform add_df2 : mode[prl] :: parens :: "prec"[prec_add] :: ('R^"+" 'a 'b) =
 dform addid_df1 : except_mode[src] :: except_mode[prl] :: ('R^"0") =
    0 sub{'R}
 
-dform id_df2 : mode[prl] :: ('R^"0") =
+dform addid_df2 : mode[prl] :: ('R^"0") =
    slot{'R} `".0"
 
 dform neg_df1 : except_mode[src] :: except_mode[prl] :: parens :: "prec"[prec_neg] :: ('R^neg 'a) =
@@ -483,6 +681,18 @@ dform isLDistrib_df : except_mode[src] :: isLDistrib{'R} =
 
 dform isDistrib_df : except_mode[src] :: isDistrib{'R} =
    `"isDistrib(" slot{'R} `")"
+
+dform int_ring_df : except_mode[src] :: Z =
+   mathbbZ
+
+(*dform even_int_ring_df : except_mode[src] :: Zeven =
+   `"2" mathbbZ
+*)
+dform subring_df1 : except_mode[src] :: except_mode[prl] :: parens :: "prec"[prec_subtype] :: subring[i:l]{'S; 'R} =
+   slot{'S} `" " subseteq izone `"_{" ezone `"ring" izone `"_{" ezone slot[i:l] izone `"}}" ezone `" " slot{'R}
+
+dform subring_df2 : mode[prl] :: parens :: "prec"[prec_subtype] :: subring[i:l]{'S; 'R} =
+   slot{'S} `" " subseteq `"(Ring[" slot[i:l] `"]) " slot{'R}
 
 (*
  * -*-

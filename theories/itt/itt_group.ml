@@ -159,6 +159,12 @@ interactive group_elim {| elim [] |} 'H :
    sequent { <H>; G: {car: univ[i:l]; "*": ^car -> ^car -> ^car; "1": ^car; inv: ^car -> ^car}; u: all x: 'G^car. all y: 'G^car. all z: 'G^car. (('x *['G] 'y) *['G] 'z = 'x *['G] ('y *['G] 'z) in 'G^car); v: all x: 'G^car. 'G^"1" *['G] 'x = 'x in 'G^car; w: all x: 'G^car. ('G^inv 'x) *['G] 'x = 'G^"1" in 'G^car; <J['G]> >- 'C['G] } -->
    sequent { <H>; G: group[i:l]; <J['G]> >- 'C['G] }
 
+doc <:doc<
+   @begin[doc]
+   @modsubsection{Properties}
+
+   @end[doc]
+>>
 interactive car_wf {| intro [AutoMustComplete; intro_typeinf <<'G>>] |} group[i:l] :
    sequent { <H> >- 'G in group[i:l] } -->
    sequent { <H> >- "type"{('G^car)} }

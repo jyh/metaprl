@@ -90,7 +90,7 @@ doc <:doc<
    @end[doc]
    @docoff
 >>
-let resource ir =
+let resource (term * conv, conv) ir =
    table_resource_info extract_data
 
 let process_ir_resource_rw_annotation = redex_and_conv_of_rw_annotation "ir"

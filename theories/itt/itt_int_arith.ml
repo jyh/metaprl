@@ -121,8 +121,11 @@ let extract_ge_intro_data tbl p =
 	let terms, tac = Term_match_table.lookup_rmap tbl select_all t in
 	terms, tac
 
-let resource ge_elim = rmap_table_resource_info extract_ge_elim_data
-let resource ge_intro = rmap_table_resource_info extract_ge_intro_data
+let resource (term * (term list) * (int -> tactic), ge_elim_type) ge_elim =
+   rmap_table_resource_info extract_ge_elim_data
+
+let resource (term * (term list) * tactic, ge_intro_type) ge_intro =
+   rmap_table_resource_info extract_ge_intro_data
 
 let rec filter_ge = function
 	Hypothesis(v,t)::tl when (is_ge_term t) -> t::(filter_ge tl)

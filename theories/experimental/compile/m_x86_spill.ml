@@ -80,7 +80,7 @@ doc <:doc<
    @end[doc]
    @docoff
 >>
-let resource spill =
+let resource (term * conv, conv) spill =
    table_resource_info extract_data
 
 let spillTopC_env e =

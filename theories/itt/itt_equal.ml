@@ -238,7 +238,7 @@ let process_eqcd_resource_annotation name context_args term_args statement pre_t
 (*
  * Resource.
  *)
-let resource eqcd =
+let resource (term * tactic, tactic) eqcd =
    stable_resource_info extract_data
 
 (*

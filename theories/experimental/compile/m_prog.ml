@@ -66,7 +66,7 @@ doc <:doc<
    @end[doc]
    @docoff
 >>
-let resource prog =
+let resource (term * conv, conv) prog =
    table_resource_info extract_data
 
 let progTopC_env e =

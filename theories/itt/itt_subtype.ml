@@ -300,11 +300,12 @@ let extract_data base =
 (*
  * Resource.
  *)
-let resource sub = Functional {
-   fp_empty = empty_dtable;
-   fp_add = improve_data;
-   fp_retr = extract_data
-}
+let resource (sub_resource_info, tactic) sub =
+   Functional {
+      fp_empty = empty_dtable;
+      fp_add = improve_data;
+      fp_retr = extract_data
+   }
 
 (*
  * Resource argument.

@@ -84,7 +84,7 @@ doc <:doc<
    @docoff
    @end[doc]
 >>
-let resource closure =
+let resource (term * conv, conv) closure =
    table_resource_info extract_data
 
 let closureTopC_env e =

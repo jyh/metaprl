@@ -73,7 +73,7 @@ doc <:doc<
    @end[doc]
    @docoff
 >>
-let resource cps =
+let resource (term * conv, conv) cps =
    table_resource_info extract_data
 
 let process_cps_resource_rw_annotation = redex_and_conv_of_rw_annotation "cps"

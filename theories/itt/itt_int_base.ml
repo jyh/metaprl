@@ -125,7 +125,7 @@ let process_arith_unfold_resource_rw_annotation =
 (*
  * Resource.
  *)
-let resource arith_unfold =
+let resource (term * conv, conv) arith_unfold =
    Term_match_table.table_resource_info extract_data
 
 let arith_unfoldTopC_env e =

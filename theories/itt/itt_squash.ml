@@ -396,7 +396,7 @@ let process_squash_resource_annotation name contexts args stmt tac =
 (*
  * Resource.
  *)
-let resource squash =
+let resource (squash_info, int -> tactic) squash =
    stable_resource_info unsquash_tactic
 
 (********************************************************************

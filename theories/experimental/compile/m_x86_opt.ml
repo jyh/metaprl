@@ -67,7 +67,7 @@ doc <:doc<
    @docoff
    @end[doc]
 >>
-let resource before_ra =
+let resource (term * conv, conv) before_ra =
    table_resource_info extract_data
 
 let before_raTopC_env e =
@@ -78,7 +78,7 @@ let before_raTopC = funC before_raTopC_env
 let before_raC =
    repeatC (higherC before_raTopC)
 
-let resource after_ra =
+let resource (term * conv, conv) after_ra =
    table_resource_info extract_data
 
 let after_raTopC_env e =

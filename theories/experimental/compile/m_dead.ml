@@ -73,7 +73,7 @@ doc <:doc<
    @end[doc]
    @docoff
 >>
-let resource dead =
+let resource (term * conv, conv) dead =
    table_resource_info extract_data
 
 let deadTopC_env e =

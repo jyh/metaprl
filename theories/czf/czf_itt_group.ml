@@ -181,15 +181,6 @@ interactive id_eq1 {| intro[] |} 'H :
    sequent ['ext] { 'H >- mem{'s; car{'g}} } -->
    sequent ['ext] { 'H >- equiv{car{'g}; 'R; op{'g; id{'g}; 's}; 's} }
 
-interactive id_eq2 {| intro[] |} 'H :
-   sequent [squash] { 'H >- isset{'s} } -->
-   sequent [squash] { 'H >- isset{'R} } -->
-   sequent [squash] { 'H >- 'g IN label } -->
-   sequent ['ext] { 'H >- group{'g} } -->
-   sequent ['ext] { 'H >- equiv{car{'g}; 'R} } -->
-   sequent ['ext] { 'H >- mem{'s; car{'g}} } -->
-   sequent ['ext] { 'H >- equiv{car{'g}; 'R; op{'g; 's; id{'g}}; 's} }
-
 interactive inv_wf1 {| intro[] |} 'H :
    sequent [squash] { 'H >- isset{'s1} } -->
    sequent [squash] { 'H >- 'g IN label } -->
@@ -225,19 +216,39 @@ interactive inv_id1 {| intro[] |} 'H :
    sequent ['ext] { 'H >- mem{'s1; car{'g}} } -->
    sequent ['ext] { 'H >- equiv{car{'g}; 'R; op{'g; inv{'g; 's1}; 's1}; id{'g}} }
 
+(*
+ * lemmas
+ *)
+interactive id_judge_elim {| elim [] |} 'H 'J :
+   sequent [squash] { 'H; x: equiv{car{'g}; 'R; op{'g; 's; 's}; 's}; 'J['x] >- isset{'s} } -->
+   sequent [squash] { 'H; x: equiv{car{'g}; 'R; op{'g; 's; 's}; 's}; 'J['x] >- isset{'R} } -->
+   sequent [squash] { 'H; x: equiv{car{'g}; 'R; op{'g; 's; 's}; 's}; 'J['x] >- 'g IN label } -->
+   sequent ['ext] { 'H; x: equiv{car{'g}; 'R; op{'g; 's; 's}; 's}; 'J['x] >- group{'g} } -->
+   sequent ['ext] { 'H; x: equiv{car{'g}; 'R; op{'g; 's; 's}; 's}; 'J['x] >- equiv{car{'g}; 'R} } -->
+   sequent ['ext] { 'H; x: equiv{car{'g}; 'R; op{'g; 's; 's}; 's}; 'J['x]; y: equiv{car{'g}; 'R; 's; id{'g}} >- 'C['x] } -->
+   sequent ['ext] { 'H; x: equiv{car{'g}; 'R; op{'g; 's; 's}; 's}; 'J['x] >- 'C['x] }
+
 interactive inv_id2 {| intro[] |} 'H :
-   sequent [squash] { 'H >- isset{'s1} } -->
+   sequent [squash] { 'H >- isset{'s} } -->
    sequent [squash] { 'H >- isset{'R} } -->
    sequent [squash] { 'H >- 'g IN label } -->
    sequent ['ext] { 'H >- group{'g} } -->
    sequent ['ext] { 'H >- equiv{car{'g}; 'R} } -->
-   sequent ['ext] { 'H >- mem{'s1; car{'g}} } -->
-   sequent ['ext] { 'H >- equiv{car{'g}; 'R; op{'g; 's1; inv{'g; 's1}}; id{'g}} }
+   sequent ['ext] { 'H >- mem{'s; car{'g}} } -->
+   sequent ['ext] { 'H >- equiv{car{'g}; 'R; op{'g; 's; inv{'g; 's}}; id{'g}} }
+
+interactive id_eq2 {| intro[] |} 'H :
+   sequent [squash] { 'H >- isset{'s} } -->
+   sequent [squash] { 'H >- isset{'R} } -->
+   sequent [squash] { 'H >- 'g IN label } -->
+   sequent ['ext] { 'H >- group{'g} } -->
+   sequent ['ext] { 'H >- equiv{car{'g}; 'R} } -->
+   sequent ['ext] { 'H >- mem{'s; car{'g}} } -->
+   sequent ['ext] { 'H >- equiv{car{'g}; 'R; op{'g; 's; id{'g}}; 's} }
 
 (*
  * theorems
  *)
-
 interactive equiv_op_fun1 {| intro[] |} 'H :
    sequent [squash] { 'H >- isset{'a} } -->
    sequent [squash] { 'H >- isset{'b} } -->
@@ -259,44 +270,6 @@ interactive equiv_op_fun2 {| intro[] |} 'H :
    sequent ['ext] { 'H >- mem{'a; car{'g}} } -->
    sequent ['ext] { 'H >- mem{'b; car{'g}} } -->
    sequent ['ext] { 'H >- equiv_fun_prop{car{'g}; 'R; z. equiv{car{'g}; 'R; op{'g; 'a; 'z}; op{'g; 'b; 'z}}} }
-
-(*
-(* Cancellation: a * b = a * c => b = c *)
-interactive cancel1 {| intro [] |} 'H (*'g 's1*) :
-   sequent [squash] { 'H >- isset{'s1} } -->
-   sequent [squash] { 'H >- isset{'s2} } -->
-   sequent [squash] { 'H >- isset{'s3} } -->
-   sequent [squash] { 'H >- isset{'R} } -->
-   sequent [squash] { 'H >- 'g IN label } -->
-   sequent ['ext] { 'H >- group{'g} } -->
-   sequent ['ext] { 'H >- equiv{car{'g}; 'R} } -->
-   sequent ['ext] { 'H >- mem{'s1; car{'g}} } -->
-   sequent ['ext] { 'H >- mem{'s2; car{'g}} } -->
-   sequent ['ext] { 'H >- mem{'s3; car{'g}} } -->
-   sequent ['ext] { 'H >- equiv{car{'g}; 'R; op{'g; 's1; 's2}; op{'g; 's1; 's3}} } -->
-   sequent ['ext] { 'H >- equiv{car{'g}; 'R; 's2; 's3} }
-
-(* Cancellation: b * a = c * a => b = c *)
-interactive cancel2 {| intro [] |} 'H 'g 's3 :
-   sequent [squash] { 'H >- isset{'s1} } -->
-   sequent [squash] { 'H >- isset{'s2} } -->
-   sequent [squash] { 'H >- isset{'s3} } -->
-   sequent [squash] { 'H >- isset{'R} } -->
-   sequent [squash] { 'H >- 'g IN label } -->
-   sequent ['ext] { 'H >- group{'g} } -->
-   sequent ['ext] { 'H >- equiv{car{'g}; 'R} } -->
-   sequent ['ext] { 'H >- mem{'s1; car{'g}} } -->
-   sequent ['ext] { 'H >- mem{'s2; car{'g}} } -->
-   sequent ['ext] { 'H >- mem{'s3; car{'g}} } -->
-   sequent ['ext] { 'H >- equiv{car{'g}; 'R; op{'g; 's1; 's3}; op{'g; 's2; 's3}} } -->
-   sequent ['ext] { 'H >- equiv{car{'g}; 'R; 's1; 's2} }
-
-let groupCancelLeftT t1 t2 p =
-   cancel1 (Sequent. hyp_count_addr p) t1 t2 p
-
-let groupCancelRightT t1 t2 p =
-   cancel2 (Sequent. hyp_count_addr p) t1 t2 p
-*)
 
 (* Cancellation: a * b = a * c => b = c *)
 interactive cancel1 (*{| elim [] |}*) 'H 'J :
@@ -428,3 +401,23 @@ interactive inv_of_id {| intro [] |} 'H :
    sequent ['ext] { 'H >- group{'g} } -->
    sequent ['ext] { 'H >- equiv{car{'g}; 'R} } -->
    sequent ['ext] { 'H >- equiv{car{'g}; 'R; inv{'g; id{'g}}; id{'g}} }
+
+(* e * a = a * e *)
+interactive id_commut1 {| intro [] |} 'H :
+   sequent [squash] { 'H >- isset{'a} } -->
+   sequent [squash] { 'H >- isset{'R} } -->
+   sequent [squash] { 'H >- 'g IN label } -->
+   sequent ['ext] { 'H >- group{'g} } -->
+   sequent ['ext] { 'H >- mem{'a; car{'g}} } -->
+   sequent ['ext] { 'H >- equiv{car{'g}; 'R} } -->
+   sequent ['ext] { 'H >- equiv{car{'g}; 'R; op{'g; id{'g}; 'a}; op{'g; 'a; id{'g}}} }
+
+(* a * e = e * a *)
+interactive id_commut2 {| intro [] |} 'H :
+   sequent [squash] { 'H >- isset{'a} } -->
+   sequent [squash] { 'H >- isset{'R} } -->
+   sequent [squash] { 'H >- 'g IN label } -->
+   sequent ['ext] { 'H >- group{'g} } -->
+   sequent ['ext] { 'H >- mem{'a; car{'g}} } -->
+   sequent ['ext] { 'H >- equiv{car{'g}; 'R} } -->
+   sequent ['ext] { 'H >- equiv{car{'g}; 'R; op{'g; 'a; id{'g}}; op{'g; id{'g}; 'a}} }

@@ -363,6 +363,13 @@ interactive ge_addWeakMono {| intro [] |} :
    sequent { <H> >- 'a >= 'b } -->
    sequent { <H> >- ('a +@ 'c) >= ('b +@ 'c) }
 
+interactive ge_addWeakMono2 {| intro [] |} :
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   [wf] sequent { <H> >- 'c in int } -->
+   sequent { <H> >- 'a >= 'b } -->
+   sequent { <H> >- ('c +@ 'a) >= ('c +@ 'b) }
+
 interactive ge_Transit 'b :
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->

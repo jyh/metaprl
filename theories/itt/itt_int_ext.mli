@@ -161,6 +161,13 @@ rule ge_addWeakMono :
    sequent { <H> >- 'a >= 'b } -->
    sequent { <H> >- ('a +@ 'c) >= ('b +@ 'c) }
 
+rule ge_addWeakMono2 :
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   [wf] sequent { <H> >- 'c in int } -->
+   sequent { <H> >- 'a >= 'b } -->
+   sequent { <H> >- ('c +@ 'a) >= ('c +@ 'b) }
+
 rule ge_Transit 'b :
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->

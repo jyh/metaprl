@@ -1,4 +1,4 @@
-#PRL version 1.0.0 ASCII term
+#PRL version 1.0.7 ASCII term
 NPerv	Perv	Perv NIL
 NPerv!cons	cons	cons Perv
 O	o	cons
@@ -2691,21 +2691,9 @@ O	o1144	location p1143 p1144
 NSummary!rule	rule	rule Summary
 P	p1145	String rewriteAxiom1
 O	o1145	rule p1145
-NSummary!context_param	context_param	context_param Summary
-P	p1146	String H
-O	o1146	context_param p1146
-T	t1146	o1146
-B	b1146	t1146
-T	t1147	o b1146 b9
-B	b1147	t1147
 NSummary!meta_theorem	meta_theorem	meta_theorem Summary
 O	o1147	meta_theorem
 Nvar	var	var NIL
-P	p1147	Var ext
-O	o1148	var p1147
-T	t1148	o1148
-B	b1148	t1148
-T	t1149	o b1148 b9
 C	h	H
 NPerv!rewrite	rewrite	rewrite Perv
 O	o1149	rewrite
@@ -2714,12 +2702,10 @@ O	o1150	var p1149
 T	t1150	o1150
 B	b1150	t1150
 T	t1151	o1149 b1150 b1150
-NBase_rewrite	Base_rw	Base_rewrite NIL
-NBase_rewrite!sequent_arg	brwsqarg	sequent_arg Base_rw
+NBase_rewrite!sequent_arg	brwsqarg	sequent_arg Base_rewrite
 O	obrarg	brwsqarg
 T	tbrarg	obrarg
-S	s	tbrarg h
-G	s	t1151
+S	s	tbrarg\\ h\\ t1151
 B	b1151	s
 T	t1152	o1147 b1151
 B	b1152	t1152
@@ -2727,10 +2713,10 @@ NSummary!prim	prim	prim Summary
 O	o1152	prim
 T	t1153	o1152 b1055
 B	b1153	t1153
-T	t1154	o1145 b1147 b1152 b1153 b9
-B	b1154	t1154
-T	t1155	o1144 b1154
-B	b1155	t1155
+T	t1	o1145 b9 b1152 b1153 b9
+B	b1	t1
+T	t2	o1144 b1
+B	b2	t2
 P	p1155	Number 2674
 P	p1156	Number 2675
 O	o1156	location p1155 p1156
@@ -3083,14 +3069,12 @@ P	p1310	String rewriteSym
 O	o1311	rule p1310
 NSummary!meta_implies	meta_implies	meta_implies Summary
 O	o1312	meta_implies
-S	s1312	tbrarg h
-G	s1312	t1161
+S	s1312	tbrarg\\ h\\ t1161
 B	b1312	s1312
 T	t1312	o1147 b1312
 B	b1313	t1312
 T	t1313	o1149 b1160 b1150
-S	s1313	tbrarg h
-G	s1313	t1313
+S	s1313	tbrarg\\ h\\ t1313
 B	b1314	s1313
 T	t1314	o1147 b1314
 B	b1315	t1314
@@ -3123,8 +3107,7 @@ B	b1323	t1323
 T	t1324	o1320 b1322 b9 b1323
 B	b1324	t1324
 T	t1325	o1149 b1160 b1160
-S	s1325	tbrarg h
-G	s1325	t1325
+S	s1325	tbrarg\\ h\\ t1325
 B	b1325	s1325
 T	t1326	o1321 b1325 b1321
 B	b1326	t1326
@@ -3144,8 +3127,7 @@ T	t1332	o b1328 b1331
 B	b1332	t1332
 T	t1333	o1319 b1324 b1332
 B	b1333	t1333
-P	p1333	String "rewriteAxiom1"
-O	o1333	ext_rule p1333
+O	o1333	ext_rule p1145
 T	t1334	o1319 b1328 b9
 B	b1334	t1334
 T	t1335	o1333 b1318 b1334 b9 b9
@@ -3164,10 +3146,10 @@ T	t1340	o1317 b1318 b1333 b1339 b9
 B	b1340	t1340
 T	t1341	o1316 b1340
 B	b1341	t1341
-T	t1342	o1311 b1147 b1316 b1341 b9
-B	b1342	t1342
-T	t1046	o1042 b1342
-B	b1046	t1046
+T	t3	o1311 b9 b1316 b1341 b9
+B	b3	t3
+T	t4	o1042 b3
+B	b4	t4
 P	p1047	Number 3354
 P	p1048	Number 3355
 O	o1049	location p1047 p1048
@@ -3737,54 +3719,54 @@ T	t1721	o b1426 b1720
 B	b1721	t1721
 T	t1722	o b1053 b1721
 B	b1722	t1722
-T	t1723	o b1046 b1722
-B	b1723	t1723
-T	t1724	o b1039 b1723
-B	b1724	t1724
-T	t1725	o b1031 b1724
-B	b1725	t1725
-T	t1726	o b1024 b1725
-B	b1726	t1726
-T	t1727	o b1155 b1726
-B	b1727	t1727
-T	t1728	o b1143 b1727
-B	b1728	t1728
-T	t1729	o b1066 b1728
-B	b1729	t1729
-T	t1730	o b1057 b1729
-B	b1730	t1730
-T	t1731	o b1052 b1730
-B	b1731	t1731
-T	t1732	o b1045 b1731
-B	b1732	t1732
-T	t1733	o b1038 b1732
-B	b1733	t1733
-T	t1734	o b1030 b1733
-B	b1734	t1734
-T	t1735	o b1022 b1734
-B	b1735	t1735
-T	t1736	o b1015 b1735
-B	b1736	t1736
-T	t1737	o b1006 b1736
-B	b1737	t1737
-T	t1738	o b997 b1737
-B	b1738	t1738
-T	t1739	o b988 b1738
-B	b1739	t1739
-T	t1740	o b979 b1739
-B	b1740	t1740
-T	t1741	o b969 b1740
-B	b1741	t1741
-T	t1742	o b962 b1741
-B	b1742	t1742
-T	t1743	o b954 b1742
-B	b1743	t1743
-T	t1744	o b921 b1743
-B	b1744	t1744
-T	t1745	o b919 b1744
-B	b1745	t1745
-T	t1746	o b963 b1745
-B	b1746	t1746
-T	t1747	o b813 b1746
-B	b1747	t1747
-T	t1748	o b800 b1747
+T	t6	o b4 b1722
+B	b6	t6
+T	t840	o b1039 b6
+B	b840	t840
+T	t844	o b1031 b840
+B	b844	t844
+T	t845	o b1024 b844
+B	b845	t845
+T	t846	o b2 b845
+B	b846	t846
+T	t847	o b1143 b846
+B	b847	t847
+T	t848	o b1066 b847
+B	b848	t848
+T	t849	o b1057 b848
+B	b849	t849
+T	t850	o b1052 b849
+B	b850	t850
+T	t851	o b1045 b850
+B	b851	t851
+T	t852	o b1038 b851
+B	b852	t852
+T	t853	o b1030 b852
+B	b853	t853
+T	t855	o b1022 b853
+B	b855	t855
+T	t856	o b1015 b855
+B	b856	t856
+T	t857	o b1006 b856
+B	b857	t857
+T	t858	o b997 b857
+B	b858	t858
+T	t859	o b988 b858
+B	b859	t859
+T	t860	o b979 b859
+B	b860	t860
+T	t861	o b969 b860
+B	b861	t861
+T	t862	o b962 b861
+B	b862	t862
+T	t863	o b954 b862
+B	b863	t863
+T	t864	o b921 b863
+B	b864	t864
+T	t865	o b919 b864
+B	b865	t865
+T	t866	o b963 b865
+B	b866	t866
+T	t867	o b813 b866
+B	b867	t867
+T	t869	o b800 b867

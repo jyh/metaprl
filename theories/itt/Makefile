@@ -48,8 +48,13 @@ MPFILES :=\
 	itt_fset\
 	itt_theory\
 	itt_collection\
-	itt_test\
 	itt_sort
+
+ifeq ($(TESTS),YES)
+	MPFILES:= $(MPFILES)\
+	itt_test\
+
+endif
 
 # Name of main libraris
 MAIN = theory

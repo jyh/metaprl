@@ -204,10 +204,10 @@ interactive false_univ {| intro [] |} :
 interactive false_type {| intro [] |} :
    sequent { <H> >- "type"{."false"} }
 
-interactive false_elim {| elim []; squash |} 'H :
+interactive false_elim {| elim []; squash; nth_hyp |} 'H :
    sequent { <H>; x: "false"; <J['x]> >- 'C['x] }
 
-interactive false_esquash_elim {| elim [] |} 'H :
+interactive false_esquash_elim {| elim []; nth_hyp |} 'H :
    sequent { <H>; x: esquash{."false"}; <J['x]> >- 'C['x] }
 
 doc <:doc<

@@ -590,60 +590,31 @@ let splitBoolT t i =
 (*
  * Split ifthenelse.
  *)
-let search_ifthenelse goal =
-   let rec search addrs vars addr goal =
-      if is_ifthenelse_term goal then
-         let t, _, _ = dest_ifthenelse goal in
-            if is_some_var_free_list vars [t] then
-               search_term addrs vars addr goal
-            else
-               search_term ((addr, t) :: addrs) vars addr goal
-      else
-         search_term addrs vars addr goal
-   and search_term addrs vars addr goal =
-      let { term_terms = bterms } = dest_term goal in
-         search_bterms addrs vars (Subterm 1 :: addr) bterms
-   and search_bterms addrs vars addr = function
-      bterm :: bterms ->
-         let { bvars = bvars; bterm = bterm } = dest_bterm bterm in
-         let addrs = search addrs (bvars @ vars) addr bterm in
-         let addr =
-            match addr with
-               Subterm i :: t ->
-                  Subterm (succ i) :: t
-             | _ ->
-                  raise (Invalid_argument "search_ifthenelse: internal error")
-         in
-            search_bterms addrs vars addr bterms
-    | [] ->
-         addrs
-   in
-      search [] [] [] goal
+let search_ifthenelse t vars  =
+   (is_ifthenelse_term t) &&
+   let t, _, _ = dest_ifthenelse t in
+      not (SymbolSet.intersectp vars (free_vars_set t))
 
 (*
  * Filter out all the addresses for the term.
  *)
-let rec filter_ifthenelse t = function
-   (addr, t') :: tl ->
-      if alpha_equal t t' then
-         List.rev addr :: filter_ifthenelse t tl
-      else
-         filter_ifthenelse t tl
- | [] ->
-      []
+let rec filter_ifthenelse term t vars =
+   (is_ifthenelse_term t) &&
+      let t, _, _ = dest_ifthenelse t in
+         (alpha_equal t term) && not (SymbolSet.intersectp vars (free_vars_set t))
 
 (*
  * Reduce the ifthenelse true cases.
  *)
 let rec reduce_ite_trueC = function
    addr :: addrs ->
-      addrC addr reduce_ifthenelse_true thenC reduce_ite_trueC addrs
+      addrLiteralC addr reduce_ifthenelse_true thenC reduce_ite_trueC addrs
  | [] ->
       idC
 
 let rec reduce_ite_falseC = function
    addr :: addrs ->
-      addrC addr reduce_ifthenelse_false thenC reduce_ite_falseC addrs
+      addrLiteralC addr reduce_ifthenelse_false thenC reduce_ite_falseC addrs
  | [] ->
       idC
 
@@ -662,25 +633,23 @@ doc <:doc<
    @end[doc]
 >>
 let splitITE = argfunT (fun i p ->
-   let t =
+   let term =
       if i = 0 then
          Sequent.concl p
       else
          Sequent.nth_hyp p i
    in
-   let addrs = search_ifthenelse t in
    let t =
       try get_with_arg p with
          RefineError _ ->
-            match addrs with
-               (_, t) :: _ ->
-                  t
+            match find_subterm term search_ifthenelse with
+               addr :: _ ->
+                  let t, _, _ = dest_ifthenelse (term_subterm term addr) in t
              | [] ->
-                  raise (RefineError ("search_ifthenelse", StringError "no free
- ifthenelse"))
+                  raise (RefineError ("search_ifthenelse", StringError "no free ifthenelse"))
    in
-   let addrs = filter_ifthenelse t addrs in
-   let _ =
+   let addrs = find_subterm term (filter_ifthenelse t) in
+   let () =
       if addrs = [] then
          raise (RefineError ("splitITE", StringTermError ("no condition", t)))
    in

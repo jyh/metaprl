@@ -205,8 +205,8 @@ prim_rw unfold_set_ind : set_ind{'s; x, f, g. 'b['x; 'f; 'g]} <-->
  * @end[doc]
  *)
 interactive_rw reduce_set_ind :
-   set_ind{collect{'T; x. 'a['x]}; a, f, g. 'b['a; 'f; 'g]}
-   <--> 'b['T; lambda{x. 'a['x]}; lambda{a2. set_ind{.'a['a2]; a, f, g. 'b['a; 'f; 'g]}}]
+   set_ind{collect{'T; x. 'A['x]}; a, f, g. 'b['a; 'f; 'g]}
+   <--> 'b['T; lambda{x. 'A['x]}; lambda{a2. set_ind{.'A['a2]; a, f, g. 'b['a; 'f; 'g]}}]
 (*! @docoff *)
 
 let fold_set        = makeFoldC << set >> unfold_set
@@ -215,7 +215,7 @@ let fold_collect    = makeFoldC << collect{'T; x. 'a['x]} >> unfold_collect
 let fold_set_ind    = makeFoldC << set_ind{'s; a, f, g. 'b['a; 'f; 'g]} >> unfold_set_ind
 
 let resource reduce +=
-   << set_ind{collect{'T; x. 'a['x]}; a, f, g. 'b['a; 'f; 'g]} >>, reduce_set_ind
+   << set_ind{collect{'T; x. 'A['x]}; a, f, g. 'b['a; 'f; 'g]} >>, reduce_set_ind
 
 (************************************************************************
  * DISPLAY FORMS                                                        *

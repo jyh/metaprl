@@ -90,8 +90,8 @@ rewrite unfold_set_ind : set_ind{'s; x, f, g. 'b['x; 'f; 'g]} <-->
    tree_ind{'s; x, f, g. 'b['x; 'f; 'g]}
 
 rewrite reduce_set_ind :
-   set_ind{collect{'T; x. 'a['x]}; a, f, g. 'b['a; 'f; 'g]}
-   <--> 'b['T; lambda{x. 'a['x]}; lambda{a2. set_ind{.'a['a2]; a, f, g. 'b['a; 'f; 'g]}}]
+   set_ind{collect{'T; x. 'A['x]}; a, f, g. 'b['a; 'f; 'g]}
+   <--> 'b['T; lambda{x. 'A['x]}; lambda{a2. set_ind{.'A['a2]; a, f, g. 'b['a; 'f; 'g]}}]
 
 topval fold_set : conv
 topval fold_isset : conv

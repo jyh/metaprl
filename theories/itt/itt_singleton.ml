@@ -95,10 +95,14 @@ let _ =
 
 define singleton: singleton{'a;'A} <--> {x:'A | 'a='x in 'A}
 
+(*! @docoff *)
+
+dform singleton_df: singleton{'a;'A} = `"{" slot{'a} `"}" sub{'A}
+   
 (*!
  * @begin[doc]
  * @modsection{Rules}
-   Rules for singleton follows immediately from definition.
+   Rules for singleton follow immediately from the definition.
  * @end[doc]
  *)
 
@@ -120,4 +124,4 @@ interactive singleton_equal {| intro[] |}:
    sequent[squash]  {'H >- 'c  in singleton{'a;'A}} -->
    sequent['ext] {'H >- 'b = 'c in singleton{'a;'A} }
 
-
+(*! @docoff *) 

@@ -2,7 +2,7 @@
  * @begin[doc]
  * @module[Itt_subset2]
  *
- * In this theory we prove some facts about subset relation defines in @refmodule[Itt_subset]. 
+ * In this theory we prove some facts about subset relation defines in Section @refmodule[Itt_subset]. 
  * @end[doc]
  *
  * ----------------------------------------------------------------
@@ -94,8 +94,8 @@ let _ =
  @begin[doc]
  * @modsection{Sets}
   The subset relation corresponds to set type (Section @refmodule[Itt_set]) in the following way:
-  $<<'A subset 'B>>$ if and only if there is a proposition $P: <<'B -> univ[i:l]>>, such that
-  $<<ext_equal{'A; {x:'B | 'P['x]}}>>.
+  $<<'A subset 'B>>$ if and only if there is a proposition $P: <<'B -> univ[i:l]>>$, such that
+  $<<ext_equal{'A; {x:'B | 'P['x]}}>>$.
  @end[doc]
   *)
 
@@ -118,7 +118,7 @@ interactive subset_iff  :
 (*!
  @begin[doc]
  @modsection{Lattice}
-  Subsets of a given type forms a lattice with respect to $<<'""  subset '"">>$ relation and intersection and union operations.
+  Subsets of a given type forms a lattice with respect to $<<space subset space>>$ relation and intersection and union operations.
 
   @modsubsection{Order}
   Subset relation forms a partial order on types.
@@ -195,7 +195,7 @@ interactive subset_bunion {| intro[] |}:
 (*!
  * @begin[doc]
  * @modsection{Monotonicity}
-    Most of the type constructors are monotone with respect to <<space subset space>>.
+    Most of the type constructors are monotone with respect to $<<space subset space>>$.
  * @end[doc]
  *)
 
@@ -208,6 +208,9 @@ interactive union_subset {| intro [] |} :
    sequent [squash] { 'H >- 'A subset '"A'" } -->
    sequent [squash] { 'H >- 'B subset '"B'" } -->
    sequent ['ext] { 'H >- 'A + 'B subset '"A'" + '"B'" } 
+
+(*! @docoff *)
+
       
 (*
  * -*-

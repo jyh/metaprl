@@ -6,9 +6,9 @@
  *
  * The @tt[Itt_subset] module provides the set-theoretic definition of
  * @emph{subset}. A type $A$ is a subset of a type $B$,
- * $@subset{A; B}$, if $A$ is a subtype of $B$ and if any two equal
- * elements in $B$ are either both in $A$ or both not in $A$.
-
+ * $@subset{A; B}$, if $A$ is a subtype of $B$ and if any one of two equal
+ * elements in $B$ is in $A$ then another element is also in $A$
+ * (that is, two equal elements in $B$ are either both in $A$ or both not in $A$).
  * As a corollary we have that $A$ and $B$ have the same equality on the
  * elements of $A$. That is, for any two elements of $A$ if they are equal in $B$,
  * then they are also equal in $A$ (see rule @hrefrule[use_superset1]).
@@ -193,7 +193,7 @@ interactive mem_intro {| intro [] |}  :
  * @begin[doc]
  * @modsubsection{Subset}
    @modsubsection{Well-formedness}
-   Type $<<'A subset 'B>>$ is well-formed whenever $A$ and $B$ are types..
+   Type $<<'A subset 'B>>$ is well-formed whenever $A$ and $B$ are types.
  * @end[doc]
  *)
 
@@ -204,7 +204,7 @@ interactive subset_wf {| intro [] |} :
 
 (*!
  * @begin[doc]
-   @modsubsection{Introduction Rules}
+   @modsubsection{Introduction Rule}
  * @end[doc]
  *)
       
@@ -231,7 +231,7 @@ interactive subset_sqstable (* {| squash |} *) :
  * @begin[doc]
  * @modsubsection{Elimination Rules}
 
-   By definition if $<<'A subset 'B>>$ then  $<<'A subtype 'B>>$. The opposite is not true (see @hrefrule[counterexample1] below).
+   By definition if $<<'A subset 'B>>$ then  $<<'A subtype 'B>>$. (The opposite is not true --- see @hrefrule[counterexample1] below).
  * @end[doc]
 *)
 
@@ -255,7 +255,7 @@ interactive use_subset  'A :
 
 (*!
  * @begin[doc]
-   To prove that two elements are equal in $A$ it is sufficient to prove that they are equal in a superset of $A$, and at least one of them is in $A$.
+   If two elements are equal in a type $B$ then they are equal in a subtype $A$ of $B$, if at least one of them is in $A$.
  * @end[doc]
 *)
 
@@ -273,7 +273,7 @@ interactive use_superset2  'B :
 
 (*!
  * @begin[doc]
-    As a corollary we have that to prove that an elements is in $A$ it is sufficient to prove that it is is equal some other element of $A$ in a superset:
+    As a corollary we have that if two element are equal in $B$ then if one of them is in $A$ then another one is also in $A$.
  * @end[doc]
 *)
 interactive use_superset 'B 'y:
@@ -314,7 +314,7 @@ interactive subsetTypeLeft  'A :
 (*!
  @begin[doc]
  * @modsubsection{Membership}
-  Proposition $<<'a in 'A subset 'B>>$ is almost equal to conjunction of $<<'a in 'A>>$ and $<<'A subset 'B>>$, but the its well-formedness is more liberal.
+  Proposition $<<'a in 'A subset 'B>>$ is almost equal to conjunction of $<<'a in 'A>>$ and $<<'A subset 'B>>$, but its well-formedness is more liberal.
   Indeed, $<<'a in 'A subset 'B>>$ is well-formed whenever $<<'a in 'B>>$ and $A$ and $B$ are types.
  @end[doc]
   *)
@@ -335,7 +335,7 @@ interactive member_wf {| intro [] |}  :
       
 interactive member_intro {| intro [] |}  :
    sequent [squash] { 'H >- 'a in 'A } -->
-   sequent [squash] { 'H >- 'A subtype 'B } -->
+   sequent [squash] { 'H >- 'A subset 'B } -->
    sequent ['ext] { 'H >- 'a in 'A subset 'B }
 
       
@@ -356,6 +356,9 @@ interactive member_doesnot_depend_on_B  'H:
    sequent [squash] { 'H >- 'A subtype 'B } -->
    sequent [squash] { 'H >- 'A subtype '"B'" } -->
    sequent ['ext] { 'H; u: 'a in 'A subset 'B >- 'a in 'A subset '"B'" }
+
+(*! @docoff *)
+      
 (*
  * -*-
  * Local Variables:

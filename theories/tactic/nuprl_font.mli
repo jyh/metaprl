@@ -209,6 +209,7 @@ declare subthree
 declare suba
 declare subb
 declare subc
+declare sube
 declare subq
 declare subt
 declare subz

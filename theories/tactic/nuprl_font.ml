@@ -238,6 +238,7 @@ declare subthree
 declare suba
 declare subb
 declare subc
+declare sube
 declare subq
 declare subt
 declare subz
@@ -778,6 +779,7 @@ dform subthree_df		: internal :: mode[prl] :: subthree                  = `"₃"
 dform suba_df			: internal :: mode[prl] :: suba                      = `"⒜"
 dform subb_df			: internal :: mode[prl] :: subb                      = `"⒝"
 dform subc_df			: internal :: mode[prl] :: subc                      = `"⒞"
+dform subc_df			: internal :: mode[prl] :: subc                      = `"e"   (* is any symbol for sube? *)
 dform subq_df			: internal :: mode[prl] :: subq                      = `"⒬"
 dform subt_df			: internal :: mode[prl] :: subt                      = `"⒯"
 dform subz_df			: internal :: mode[prl] :: subz                      = `"⒵"
@@ -833,6 +835,7 @@ dform subthree_df		: internal :: mode[html] :: subthree                  = sub["
 dform suba_df			: internal :: mode[html] :: suba                      = sub["a"]
 dform subb_df			: internal :: mode[html] :: subb                      = sub["b"]
 dform subc_df			: internal :: mode[html] :: subc                      = sub["c"]
+dform subc_df			: internal :: mode[html] :: subc                      = sub["e"]
 dform subq_df			: internal :: mode[html] :: subq                      = sub["q"]
 dform subq_df			: internal :: mode[html] :: subq                      = sub["t"]
 dform subz_df			: internal :: mode[html] :: subz                      = sub["z"]
@@ -888,6 +891,7 @@ dform subthree_df		: internal :: mode[tex] :: subthree                  = izone 
 dform suba_df			: internal :: mode[tex] :: suba                      = izone `"_a" ezone
 dform subb_df			: internal :: mode[tex] :: subb                      = izone `"_b" ezone
 dform subc_df			: internal :: mode[tex] :: subc                      = izone `"_c" ezone
+dform sube_df			: internal :: mode[tex] :: sube                      = izone `"_e" ezone
 dform subq_df			: internal :: mode[tex] :: subq                      = izone `"_q" ezone
 dform subt_df			: internal :: mode[tex] :: subt                      = izone `"_t" ezone
 dform subz_df			: internal :: mode[tex] :: subz                      = izone `"_z" ezone

@@ -26,17 +26,11 @@
  *)
 extends Base_theory
 
-declare typeclass A-> Dform
-declare typeclass B -> A
+declare sequent { Term : Term >- Term } : Judgment
 
-declare foo{'x : A} : Judgment
-declare bar{'x : B} : Judgment
-
-interactive foo : foo{'t} --> bar{'t}
-interactive bar : bar{'t} --> foo{'t :> B}
-
-dform foo : foo{'x} =
-   `"foo(" 'x `")"
+interactive foo :
+   sequent { <H> >- 'C } -->
+   sequent { <H> >- 'A }
 
 (*!
  * @docoff

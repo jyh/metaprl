@@ -14,6 +14,7 @@ MPFILES :=\
 	m_ir\
 	m_cps\
 	m_closure\
+	m_prog\
 	m_theory\
 	m_test
 

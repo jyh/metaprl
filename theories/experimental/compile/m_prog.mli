@@ -1,5 +1,5 @@
 (*
- * The general theory for the M language.
+ * Hoist function declarations and definitions to the top level.
  *
  * ----------------------------------------------------------------
  *
@@ -24,22 +24,11 @@
  * @email{jyh@cs.caltech.edu}
  * @end[license]
  *)
-extends M_cps
-extends M_closure
-extends M_prog
-
-open M_cps
-open M_closure
+extends M_ir
 
 open Tactic_type.Tacticals
-open Tactic_type.Conversionals
 
-let compileT =
-   (* CPS conversion *)
-   rw cpsC 0
-
-   (* Closure conversion *)
-   thenT closeT
+topval declareT : tactic
 
 (*!
  * @docoff

@@ -342,7 +342,6 @@ let applyAllC = Tactic_type.Conversionals.applyAllC
  * @end[doc]
  *)
 let addrC = Tactic_type.Conversionals.addrC
-let clauseC = Tactic_type.Conversionals.clauseC
 let foldC = Tactic_type.Conversionals.foldC
 let makeFoldC = Tactic_type.Conversionals.makeFoldC
 let cutC = Tactic_type.Conversionals.cutC

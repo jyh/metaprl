@@ -64,7 +64,6 @@ topval rwaAllAll : conv list -> tactic
 topval prefix_thenC : conv -> conv -> conv
 topval prefix_orelseC : conv -> conv -> conv
 topval addrC : int list -> conv -> conv
-topval clauseC : int -> conv -> conv
 topval idC : conv
 topval foldC : term -> conv -> conv
 topval makeFoldC : term -> conv -> conv

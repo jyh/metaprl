@@ -2661,8 +2661,8 @@ B	b995	t995
 T	t996	o993 b994 b4 b995
 B	b996	t996
 NItt_equal	Itt_equal	Itt_equal NIL
-NItt_equal!member	member996	member Itt_equal
-O	o996	member996
+NItt_equal!equal	equal	equal Itt_equal
+O	o1010	equal
 NItt_rfun!fun	fun	fun Itt_rfun
 O	o997	fun
 NItt_bool	Itt_bool	Itt_bool NIL
@@ -2674,7 +2674,7 @@ T	t999	o997 b732 b998
 B	b999	t999
 T	t1000	o997 b732 b999
 B	b1000	t1000
-T	t1001	o996 b1000 b725
+T	t1001	o1010 b1000 b725 b725
 S	s1001	t987 h
 G	s1001	t1001
 B	b1001	s1001
@@ -2704,8 +2704,6 @@ T	t1009	o720 b1007 b1008
 B	b1009	t1009
 T	t1010	o1006 b1009
 H	h1010	v t1010
-NItt_equal!equal	equal	equal Itt_equal
-O	o1010	equal
 T	t1011	o1010 b732 b1008 b1007
 S	s1011	t1005 h h1005 h1006 h1010
 G	s1011	t1011
@@ -3115,7 +3113,7 @@ T	t1171	o985 b1170
 B	b1171	t1171
 P	p1171	String "rwh unfold_vempty 0 thenT rwh unfold_var_set 0 thenT autoT"
 O	o1171	ext_rule p1171
-T	t1172	o996 b532 b550
+T	t1172	o1010 b532 b550 b550
 S	s1172	t987 h
 G	s1172	t1172
 B	b1172	s1172
@@ -3226,11 +3224,11 @@ T	t1214	o1147 b1152 b1213
 B	b1214	t1214
 P	p1214	String "rwh unfold_vsingleton 0 thenT rwh unfold_var_set 0 thenT dT 0"
 O	o1214	ext_rule p1214
-T	t1215	o996 b532 b555
+T	t1215	o1010 b532 b555 b555
 S	s1215	t987 h
 G	s1215	t1215
 B	b1215	s1215
-T	t1216	o996 b732 b543
+T	t1216	o1010 b732 b543 b543
 S	s1216	t1005 h
 G	s1216	t1216
 B	b1216	s1216
@@ -3460,11 +3458,11 @@ T	t1306	o1147 b1295 b1306
 B	b1307	t1306
 P	p1307	String "assertAtT 2 << \"assert\"{vmember{'v1; vsingleton{'v2}}} >> thenAT trivialT"
 O	o1307	ext_rule p1307
-T	t1307	o996 b732 b721
+T	t1307	o1010 b732 b721 b721
 S	s1307	t1005 h h1293 h1197
 G	s1307	t1307
 B	b1308	s1307
-T	t1308	o996 b732 b722
+T	t1308	o1010 b732 b722 b722
 S	s1308	t1005 h h1293 h1197
 G	s1308	t1308
 B	b1309	s1308
@@ -3784,15 +3782,15 @@ T	t1440	o1147 b1433 b1439
 B	b1440	t1440
 P	p1440	String "rwh unfold_var_set 0 thenT rwh unfold_vunion 0 thenT dT 0"
 O	o1440	ext_rule p1440
-T	t1441	o996 b532 b563
+T	t1441	o1010 b532 b563 b563
 S	s1441	t987 h
 G	s1441	t1441
 B	b1441	s1441
-T	t1442	o996 b532 b561
+T	t1442	o1010 b532 b561 b561
 S	s1442	t1005 h
 G	s1442	t1442
 B	b1442	s1442
-T	t1443	o996 b532 b562
+T	t1443	o1010 b532 b562 b562
 S	s1443	t1005 h
 G	s1443	t1443
 B	b1443	s1443
@@ -3812,7 +3810,7 @@ T	t1450	o994 b1124 b1445
 B	b1450	t1450
 T	t1451	o993 b1450 b4 b995
 B	b1451	t1451
-T	t1452	o996 b733 b561
+T	t1452	o1010 b733 b561 b561
 S	s1452	t1005 h
 G	s1452	t1452
 B	b1452	s1452
@@ -3820,7 +3818,7 @@ T	t1453	o994 b1452 b1445
 B	b1453	t1453
 T	t1454	o993 b1453 b4 b995
 B	b1454	t1454
-T	t1455	o996 b733 b562
+T	t1455	o1010 b733 b562 b562
 S	s1455	t1005 h
 G	s1455	t1455
 B	b1455	s1455
@@ -4406,7 +4404,7 @@ T	t1705	o1147 b1433 b1704
 B	b1705	t1705
 P	p1705	String "rwh unfold_visect 0 thenT rwh unfold_var_set 0 thenT dT 0"
 O	o1705	ext_rule p1705
-T	t1706	o996 b532 b568
+T	t1706	o1010 b532 b568 b568
 S	s1706	t987 h
 G	s1706	t1706
 B	b1706	s1706
@@ -4490,7 +4488,7 @@ T	t1738	o1147 b1722 b1737
 B	b1738	t1738
 P	p1738	String "rwh unfold_visect 0 thenT rwh unfold_vmember 0 thenT atT << fset{vequal; var_type} >> (dT 0)"
 O	o1738	ext_rule p1738
-T	t1739	o996 b732 b1007
+T	t1739	o1010 b732 b1007 b1007
 S	s1739	t1005 h
 G	s1739	t1739
 B	b1739	s1739
@@ -4871,7 +4869,7 @@ T	t1899	o1147 b1433 b1898
 B	b1899	t1899
 P	p1899	String "rwh unfold_vsub 0 thenT rwh unfold_var_set 0 thenT dT 0"
 O	o1899	ext_rule p1899
-T	t1900	o996 b532 b573
+T	t1900	o1010 b532 b573 b573
 S	s1900	t987 h
 G	s1900	t1900
 B	b1900	s1900
@@ -5281,11 +5279,11 @@ T	t2074	o1147 b2070 b2073
 B	b2074	t2074
 P	p2074	String "rwh unfold_voflist 0 thenT rwh unfold_var_set 0 thenT dT 0 thenT autoT"
 O	o2074	ext_rule p2074
-T	t2075	o996 b532 b2071
+T	t2075	o1010 b532 b2071 b2071
 S	s2075	t987 h
 G	s2075	t2075
 B	b2075	s2075
-T	t2076	o996 b2066 b2067
+T	t2076	o1010 b2066 b2067 b2067
 S	s2076	t1005 h
 G	s2076	t2076
 B	b2076	s2076
@@ -5369,7 +5367,7 @@ T	t2109	o1147 b2101 b2108
 B	b2109	t2109
 P	p2109	String "rwh unfold_voflist 0 thenT rwh unfold_vmember 0 thenT atT << fset{vempty; var_type} >> (selT 1 (dT 0))"
 O	o2109	ext_rule p2109
-T	t2110	o996 b2066 b2098
+T	t2110	o1010 b2066 b2098 b2098
 S	s2110	t1005 h
 G	s2110	t2110
 B	b2110	s2110

@@ -83,6 +83,8 @@ let compile_phobos_fir program post_rewrites inline_targets =
 
    (* General reductions and simplifications. *)
    let program = apply_rw_top reduceC program in
+   let program = apply_rw_top applyMetaBaseC program in
+   let program = apply_rw_top reduceC program in
    debug_string "\n\nAfter general reductions:\n\n";
    debug_term program;
 

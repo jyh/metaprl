@@ -41,6 +41,7 @@
  * @parents
  * @end[doc]
  *)
+include Base_meta
 include Mp_mc_theory
 (*! @docoff *)
 
@@ -70,4 +71,17 @@ let applyIFormsC iform_rewrites =
 
       ) iform_rewrites
    in
-      (repeatC (higherC (applyAllC patterns)))
+      (repeatC (higherC (applyAllC ([
+      Base_meta.reduce_meta_sum;
+      Base_meta.reduce_meta_diff;
+      Base_meta.reduce_meta_prod;
+      Base_meta.reduce_meta_quot;
+      Base_meta.reduce_meta_rem] @ patterns))))
+
+let applyMetaBaseC =
+   (repeatC (higherC (applyAllC [
+      Base_meta.reduce_meta_sum;
+      Base_meta.reduce_meta_diff;
+      Base_meta.reduce_meta_prod;
+      Base_meta.reduce_meta_quot;
+      Base_meta.reduce_meta_rem])))

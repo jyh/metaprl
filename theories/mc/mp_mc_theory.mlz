@@ -48,6 +48,8 @@
  * @parents
  * @end[doc]
  *)
+include Base_meta
+
 include Itt_atom
 include Itt_int_base
 include Itt_int_ext

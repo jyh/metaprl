@@ -438,13 +438,13 @@ interactive le_sqstable {| squash; intro [] |} :
    sequent { <H> >- 'a <= 'b } -->
    sequent { <H> >- it in ('a <= 'b) }
 
-interactive gt_sqstable {| squash; intro [] |} :
-   sequent { <H> >- 'a > 'b } -->
-   sequent { <H> >- it in ('a > 'b) }
-
 interactive lt_sqstable {| squash; intro [] |} :
    sequent { <H> >- 'a < 'b } -->
    sequent { <H> >- it in ('a < 'b) }
+
+interactive gt_sqstable {| squash; intro [] |} :
+   sequent { <H> >- 'a > 'b } -->
+   sequent { <H> >- it in ('a > 'b) }
 
 interactive ne_sqstable {| squash; intro [] |} :
    sequent { <H> >- 'a <> 'b } -->

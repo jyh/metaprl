@@ -50,6 +50,7 @@
  *)
 include Itt_equal
 include Itt_struct
+include Itt_squiggle
 (*! @docoff *)
 
 open Printf
@@ -68,6 +69,7 @@ open Base_dtactic
 
 open Itt_equal
 open Itt_struct
+open Itt_squiggle
 
 (*
  * Show that the file is loading.

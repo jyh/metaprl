@@ -50,6 +50,7 @@
  * @end[doc]
  *)
 include Itt_equal
+include Itt_squiggle
 (*! @docoff *)
 
 open Printf
@@ -66,6 +67,7 @@ open Tactic_type
 open Base_dtactic
 
 open Itt_equal
+open Itt_squiggle
 
 (*
  * Show that the file is loading.

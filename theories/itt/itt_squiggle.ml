@@ -1,7 +1,65 @@
+(*!
+ * @begin[spelling]
+ * sqSubstT sqeq
+ * @end[spelling]
+
+
+ * @begin[doc]
+ * @theory[Itt_squiggle]
+ *
+ * The @tt{Itt_squiggle} module defines the squiggle equality.
+ * The squiggle equality <<'t ~ 's>> holds for closed terms $t$ and $s$ iff
+ * $t$ can be reduced to $s$. We can expand this semantics for open terms
+   in the given context the same way as for any other type.
+ * For example one can prove that
+$$      @sequent{ext; {H; x@colon @prod{A;B}}; x  ~  @pair{@fst{x};@snd{x}}}$$
+   This is a conditional rewrite: it states that we can replace $x$ with
+   $@pair{@fst{x};@snd{x}}$ only when we know that $x$ is from a product type.
+   The rules @hrefrule[squiggleSubstitution] and @hrefrule[squiggleHypSubstitution]
+   define when such substitution would be valid.
+ * @end[doc]
+ *
+ * ----------------------------------------------------------------
+ *
+ * @begin[license]
+ *
+ * This file is part of MetaPRL, a modular, higher order
+ * logical framework that provides a logical programming
+ * environment for OCaml and other languages.
+ *
+ * See the file doc/index.html for information on Nuprl,
+ * OCaml, and more information about this system.
+ *
+ * Copyright (C) 1998 Jason Hickey, Cornell University
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *
+ * @end[license]
+ *)
+
+(*!************************************************************************
+ * @begin[doc]
+ * @parents
+ * @end[doc]
+ *)
+
 include Itt_equal
 include Itt_struct
 
 (*! @docoff *)
+include Itt_comment
 
 open Printf
 open Mp_debug
@@ -26,12 +84,49 @@ open Base_dtactic
 open Itt_equal
 open Itt_struct
 
+(*
+ * Show that the file is loading.
+ *)
+let _ =
+   show_loading "Loading Itt_squiggle%t"
+
+
+(************************************************************************
+ * TERMS                                                                *
+ ************************************************************************)
+
+(*!************************************************************************
+ * @begin[doc]
+ * @terms
+ * The @tt{sqeq} term defines the squiggle equality.
+ *
+ * @end[doc]
+ *)
+
+declare "sqeq"{'t;'s}
+
+(*! @docoff *)
+
+dform sqeq_df : ('a ~ 'b) = slot{'a} sim slot{'b}
+
+
 let squiggle_term = << 'a ~ 'b >>
 let squiggle_opname = opname_of_term squiggle_term
 let is_squiggle_term = is_dep0_dep0_term squiggle_opname
 let dest_squiggle = dest_dep0_dep0_term squiggle_opname
 let mk_squiggle_term = mk_dep0_dep0_term squiggle_opname
 
+
+
+(*!
+ * @begin[doc]
+   @rewrites
+ * @thysubsection{Typehood and equality}
+   The squiggle relation <<'t ~ 's>> is a type if and only if
+   it holds.  Two squiggle relation <<'t1 ~ 's1>> and  <<'t2 ~ 's2>>
+   are equal as types whenever they are correct types.
+ * @end[doc]
+*)
 prim squiggleEquality {| intro_resource []; eqcd_resource |} 'H :
   [wf] sequent[squash] { 'H >- 't1 ~ 's1 } -->
   [wf] sequent[squash] { 'H >- 't2 ~ 's2 } -->
@@ -47,6 +142,14 @@ interactive squiggleType {| intro_resource [] |} 'H :
   [wf] sequent[squash] { 'H >- 't ~ 's } -->
   sequent['ext] { 'H >- "type"{.'t ~ 's}}
 
+(*!
+ * @begin[doc]
+ * @thysubsection{Membership}
+ * The $@it$ term is the one-and-only element
+ * in a provable squiggle equality type.
+ * @end[doc]
+ *)
+
 prim squiggle_memberEquality {| intro_resource []; eqcd_resource |} 'H :
   [wf] sequent[squash] { 'H >- 't ~ 's } -->
   sequent['ext] { 'H >- it IN ('t ~ 's)} =
@@ -57,10 +160,18 @@ prim squiggleElimination {|  elim_resource [ThinOption thinT] |} 'H 'J :
    sequent ['ext] { 'H; x: ('t ~ 's); 'J['x] >- 'C['x] } =
    't
 
-prim squiggleSubstitution 'H ('t ~ 's) bind{x. 'C['x]} :
+(*!
+ * @begin[doc]
+ * @thysubsection{Substitution}
+ * If we can prove that <<'t ~ 's>>, then we can substitute $s$ for $t$
+ * in any place without generating any well-formedness subgoals.
+ * @end[doc]
+ *)
+
+prim squiggleSubstitution 'H ('t ~ 's) bind{x. 'A['x]} :
   ["rewrite"] sequent[squash] { 'H >- 't ~ 's } -->
-  [main] ('t : sequent['ext] { 'H >- 'C['s] }) -->
-   sequent ['ext] { 'H >-  'C['t] } =
+  [main] ('t : sequent['ext] { 'H >- 'A['s] }) -->
+   sequent ['ext] { 'H >-  'A['t] } =
    't
 
 prim squiggleHypSubstitution 'H 'J ('t ~ 's) bind{x. 'A['x]}:
@@ -69,6 +180,23 @@ prim squiggleHypSubstitution 'H 'J ('t ~ 's) bind{x. 'A['x]}:
    sequent ['ext] { 'H; x: 'A['t]; 'J['x] >- 'C['x] } =
    't
 
+(*!
+ * @begin[doc]
+ * The  @tt{sqSubstT} tactic takes a clause number $i$, and
+ * a term <<'t ~ 's>> and applies one of two above rules.
+ * This tactic substitutes the term $s$ for
+ * @emph{all} occurrences of the term $t$ in the clause.
+ * One can give a term  << bind{x. 'A['x]} >> as an optional with-argument
+ * to specify exact location of the subterm to be replaced.
+ * @end[doc]
+ *)
+
+(*!
+ * @begin[doc]
+ * @thysubsection{Squiggle equality is an equivalence relation}
+ * Squiggle equality is reflexive, symmetric and transitive.
+ * @end[doc]
+ *)
 
 
 prim squiggleRef {|  intro_resource [] |} 'H :
@@ -83,6 +211,16 @@ interactive squiggleTrans 'H 'r :
    sequent [squash] { 'H >- 't ~ 'r } -->
    sequent [squash] { 'H >- 'r ~ 's } -->
    sequent ['ext] { 'H >- 't ~ 's }
+
+(*! @docoff *)
+
+
+
+(************************************************************************
+ * TACTICS                                                              *
+ ************************************************************************)
+
+(* substitution *)
 
 
 let sqSubstConclT t p =
@@ -130,3 +268,13 @@ let sqSubstT t i =
       sqSubstConclT t
    else
       sqSubstHypT i t
+
+prim rewrite_squashElimination 'H :
+   sequent [squash] { 'H >- 'a ~ 'b } -->
+   sequent ['ext] { 'H >- 'a ~ 'b } =
+   it
+
+let squash_rewriteT p =
+   rewrite_squashElimination (Sequent.hyp_count_addr p) p
+
+

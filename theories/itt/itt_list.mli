@@ -195,7 +195,7 @@ rule listSubtype 'H :
  *)
 rule nilSqequal 'H 'T :
    sequent [squash] { 'H >- 'u = nil in list{'T} } -->
-   sequent ['ext] { 'H >- Perv!"rewrite"{'u; nil} }
+   sequent ['ext] { 'H >- 'u ~ nil }
 
 (************************************************************************
  * TACTICS                                                              *

@@ -293,7 +293,6 @@ val infer_univ1 : typeinf_comp
 
 topval squash_equalT : tactic
 topval squash_typeT : tactic
-topval squash_rewriteT : tactic
 
 (*
  * Typehood from truth.

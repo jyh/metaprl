@@ -526,10 +526,6 @@ prim type_squashElimination 'H :
    sequent ['ext] { 'H >- "type"{'T} } =
    it
 
-prim rewrite_squashElimination 'H :
-   sequent [squash] { 'H >- 'a ~ 'b } -->
-   sequent ['ext] { 'H >- 'a ~ 'b } =
-   it
 
 (*
  * Squash from any.
@@ -706,8 +702,6 @@ let infer_univ1 = Typeinf.infer_const univ1_term
 let squash_equalT p =
    equality_squashElimination (Sequent.hyp_count_addr p) p
 
-let squash_rewriteT p =
-   rewrite_squashElimination (Sequent.hyp_count_addr p) p
 
 let squash_resource = Mp_resource.improve squash_resource (equal_term, squash_equalT)
 

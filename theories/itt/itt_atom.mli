@@ -35,6 +35,7 @@
  * Derived from baseTheory.
  *)
 include Itt_equal
+include Itt_squiggle
 
 open Refiner.Refiner.Term
 

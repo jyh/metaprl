@@ -707,7 +707,7 @@ dform longleftrightarrow_df	: internal :: mode[prl] :: longleftrightarrow       
 dform longleftarrow_df		: internal :: mode[prl] :: longleftarrow             = `"\220\221\221"
 dform longrightarrow_df		: internal :: mode[prl] :: longrightarrow            = `"\221\221\222"
 dform neq_df			: internal :: mode[prl] :: neq                       = `"225"
-dform sim_df			: internal :: mode[prl] :: sim                       = `"XXX"
+dform sim_df			: internal :: mode[prl] :: sim                       = `"~"
 dform le_df			: internal :: mode[prl] :: le                        = `"\218"
 dform ge_df			: internal :: mode[prl] :: ge                        = `"\219"
 dform equiv_df			: internal :: mode[prl] :: equiv                     = `"\226"

@@ -34,7 +34,7 @@
  * jyh@cs.cornell.edu
  *)
 
-include Itt_equal
+include Itt_squiggle
 
 open Refiner.Refiner.Term
 
@@ -51,7 +51,7 @@ declare unit
  *)
 rule unitSqequal 'H :
    sequent [squash] { 'H >- 'x = 'y in unit } -->
-   sequent ['ext] { 'H >- Perv!"rewrite"{'x; 'y} }
+   sequent ['ext] { 'H >- 'x ~ 'y }
 
 (*
  * H >- Ui ext Unit

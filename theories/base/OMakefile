@@ -11,6 +11,7 @@ MPFILES =\
     base_trivial\
     base_meta\
     base_rewrite\
+    base_reflection\
     base_theory
 
 Theory($(MPFILES))

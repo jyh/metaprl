@@ -1,39 +1,41 @@
-doc <:doc< 
+doc <:doc<
    @begin[spelling]
-   CPS prog
+   prog
    @end[spelling]
-  
+
    @begin[doc]
    @module[M_prog]
-  
-   Lift closed function definitions to the top level.
+
+   This module defines rewrites to lift closed function definitions to
+   the top level of the program.  Ideally, these transformations would
+   be applied after closure conversion.
    @end[doc]
-  
+
    ----------------------------------------------------------------
-  
+
    @begin[license]
    Copyright (C) 2003 Jason Hickey, Caltech
-  
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
    as published by the Free Software Foundation; either version 2
    of the License, or (at your option) any later version.
-  
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-  
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-  
+
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
 >>
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @parents
    @end[doc]
@@ -67,22 +69,19 @@ open Perv
  * REDUCTION RESOURCE                                                   *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @resources
-  
-   @bf{The @Comment!resource[prog_resource]}
-  
-   The @tt{prog} resource provides a generic method for
-   defining @emph{CPS transformation}.  The @conv[progC] conversion
-   can be used to apply this evaluator.
-  
+
+   The @tt["prog"] resource provides a generic method for defining a method
+   of lifting closed function definitions to the top level of a program.
+   The @conv[progC] conversion can be used to apply this evaluator.
+
    The implementation of the @tt{prog_resource} and the @tt[progC]
    conversion rely on tables to store the shape of redices, together with the
    conversions for the reduction.
-  
-   @docoff
    @end[doc]
+   @docoff
 >>
 let resource prog =
    table_resource_info identity extract_data
@@ -99,9 +98,12 @@ let progC =
  * Rewrites.
  *)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-   Swap a recursive definition with anything before it.
+   @rewrites
+
+   The rewrites for this transformation are straightforward.  They swap a
+   closed function definition with any expression that comes before it.
    @end[doc]
 >>
 prim_rw letrec_atom_fun :
@@ -144,7 +146,7 @@ prim_rw letrec_letrec :
    LetRec{R1. LetRec{R2. 'fields['R2]; R3. 'e1['R1; 'R3]}; R4. 'e2['R4]} <-->
    LetRec{R2. 'fields['R2]; R3. LetRec{R1. 'e1['R1; 'R3]; R4. 'e2['R4]}}
 
-(* @docoff *)
+doc <:doc< @docoff >>
 
 (*
  * Add all these rules to the prog resource.

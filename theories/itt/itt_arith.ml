@@ -15,6 +15,7 @@ open Printf
 open Nl_debug
 
 open Refiner.Refiner.Term
+open Refiner.Refiner.TermType
 open Refiner.Refiner.TermMan
 open Refiner.Refiner.RefineError
 
@@ -357,7 +358,7 @@ let rec parse_hyps table hyps i len =
    if i = len then
       []
    else
-      match hyps.(i) with
+      match SeqHyp.get hyps i with
          Hypothesis (_, t)  ->
             begin
                try parse_form table t :: parse_hyps table hyps (i + 1) len with
@@ -375,7 +376,7 @@ let rec parse_goals table goals i len =
    if i = len then
       []
    else
-      let hd = goals.(i) in
+      let hd = SeqGoal.get goals i in
          try parse_form table hd :: parse_goals table goals (i + 1) len with
             RefineError _ ->
                parse_goals table goals (i + 1) len
@@ -420,8 +421,8 @@ let sort_atoms atoms =
 let sequent_of_term t =
    let { sequent_hyps = hyps; sequent_goals = goals } = explode_sequent t in
    let table = { index = 0; table = Hashtbl.create 97 } in
-   let hyps = parse_hyps table hyps 0 (Array.length hyps) in
-   let goals = parse_goals table goals 0 (Array.length goals) in
+   let hyps = parse_hyps table hyps 0 (SeqHyp.length hyps) in
+   let goals = parse_goals table goals 0 (SeqGoal.length goals) in
    let table' = { index = table.index; table = Hashtbl.create 97 } in
    let seq =
       { hyps = List.map (linear_form_of_expr_form table') hyps;

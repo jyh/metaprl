@@ -10,6 +10,7 @@ open Printf
 open Nl_debug
 
 open Refiner.Refiner.Term
+open Refiner.Refiner.TermType
 open Refiner.Refiner.TermMan
 open Refiner.Refiner.TermSubst
 open Refiner.Refiner.RefineError
@@ -149,14 +150,14 @@ let infer_type p t =
       if i = len then
          []
       else
-         match hyps.(i) with
+         match SeqHyp.get hyps i with
             Hypothesis (v, t) ->
                (v, t) :: filter hyps (i + 1) len
           | _ ->
                filter hyps (i + 1) len
    in
    let { sequent_hyps = hyps } = Sequent.explode_sequent p in
-   let subst = filter hyps 0 (Array.length hyps) in
+   let subst = filter hyps 0 (SeqHyp.length hyps) in
       (get_typeinf_arg p "typeinf") subst t
 
 (*

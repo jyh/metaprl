@@ -10,6 +10,7 @@ open Nl_debug
 open Dag
 open Imp_dag
 
+open Refiner.Refiner.TermType
 open Refiner.Refiner.TermMan
 open Refiner.Refiner.TermSubst
 open Refiner.Refiner.Refine
@@ -386,7 +387,7 @@ let rec try_hyp_progressT test hyps tac p =
       if i > len then
          []
       else
-         match hyps'.(i - 1) with
+         match SeqHyp.get hyps' (i - 1) with
             Hypothesis (_, hyp)  ->
                if not (test i p) or check_hyp_progress i hyp hyps then
                   expand hyps' (i + 1) len
@@ -397,7 +398,7 @@ let rec try_hyp_progressT test hyps tac p =
                expand hyps' (i + 1) len
    in
    let { sequent_hyps = hyps } = Sequent.explode_sequent p in
-      expand hyps 1 (Array.length hyps)
+      expand hyps 1 (SeqHyp.length hyps)
 
 let auto_hyp_progress test (tac : int -> tactic) =
    AutoTac (try_hyp_progressT test [] tac)

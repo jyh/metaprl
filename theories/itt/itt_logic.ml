@@ -15,6 +15,7 @@ open Printf
 open Nl_debug
 open Refiner.Refiner
 open Refiner.Refiner.Term
+open Refiner.Refiner.TermType
 open Refiner.Refiner.TermOp
 open Refiner.Refiner.TermMan
 open Refiner.Refiner.TermSubst
@@ -356,12 +357,12 @@ let rec intersects vars fv =
 
 let moveToConclVarsT vars p =
    let { sequent_hyps = hyps } = explode_sequent p in
-   let len = Array.length hyps in
+   let len = SeqHyp.length hyps in
    let rec collect i vars indices =
       if i > len then
          indices
       else
-         match hyps.(i - 1) with
+         match SeqHyp.get hyps (i - 1) with
             Hypothesis (v, hyp) ->
                if List.mem v vars or intersects vars (free_vars hyp) then
                   collect (i + 1) (v :: vars) ((i, v, hyp) :: indices)
@@ -630,7 +631,7 @@ let assumT i p =
       if hyp_index > len then
          last_con
       else
-         match hyps.(hyp_index - 1) with
+         match SeqHyp.get hyps (hyp_index - 1) with
             Hypothesis _ ->
                last_match last_con (hyp_index + 1) hyps
           | Context _ ->

@@ -10,6 +10,7 @@ open Nl_debug
 
 open Refiner.Refiner
 open Refiner.Refiner.Term
+open Refiner.Refiner.TermType
 open Refiner.Refiner.TermMan
 open Refiner.Refiner.RefineError
 open Dform
@@ -132,7 +133,7 @@ mldform sequent_src_df : mode["src"] :: "sequent"{'ext; 'seq} format_term buf =
          begin
             format_string buf (if i = 0 then ">-" else ";");
             format_space buf;
-            format_term buf NOParens goals.(i);
+            format_term buf NOParens (SeqGoal.get goals i);
             format_goal goals (i + 1) len
          end
    in
@@ -143,7 +144,7 @@ mldform sequent_src_df : mode["src"] :: "sequent"{'ext; 'seq} format_term buf =
                format_string buf ";"
          in
          let _ =
-            match hyps.(i) with
+            match SeqHyp.get hyps i with
                Hypothesis (v, a) ->
                   format_space buf;
                   format_string buf v;
@@ -163,8 +164,8 @@ mldform sequent_src_df : mode["src"] :: "sequent"{'ext; 'seq} format_term buf =
       format_szone buf;
       format_pushm buf 0;
       format_string buf "sequent {";
-      format_hyp hyps 0 (Array.length hyps);
-      format_goal goals 0 (Array.length goals);
+      format_hyp hyps 0 (SeqHyp.length hyps);
+      format_goal goals 0 (SeqGoal.length goals);
       format_string buf " }";
       format_popm buf;
       format_ezone buf
@@ -198,7 +199,7 @@ mldform sequent_prl_df : mode["prl"] :: "sequent"{'ext; 'seq} format_term buf =
                format_break buf lead "; "
          in
          let _ =
-            match hyps.(i) with
+            match SeqHyp.get hyps i with
                Context (v, values) ->
                   (* This is a context hypothesis *)
                   format_term buf NOParens (mk_so_var_term v values)
@@ -211,7 +212,7 @@ mldform sequent_prl_df : mode["prl"] :: "sequent"{'ext; 'seq} format_term buf =
    in
    let rec format_goal goals i len =
       if i <> len then
-         let a = goals.(i) in
+         let a = SeqGoal.get goals i in
          let _ =
             if i = 0 then
                format_ibreak buf "   " " \159 "
@@ -229,8 +230,8 @@ mldform sequent_prl_df : mode["prl"] :: "sequent"{'ext; 'seq} format_term buf =
       format_szone buf;
       format_pushm buf 0;
       format_arg (dest_xlist args);
-      format_hyp hyps 0 (Array.length hyps);
-      format_goal goals 0 (Array.length goals);
+      format_hyp hyps 0 (SeqHyp.length hyps);
+      format_goal goals 0 (SeqGoal.length goals);
       format_popm buf;
       format_ezone buf
 

@@ -39,6 +39,7 @@ open Printf
 open Nl_debug
 open Refiner.Refiner
 open Refiner.Refiner.Term
+open Refiner.Refiner.TermType
 open Refiner.Refiner.TermMan
 open Refiner.Refiner.TermShape
 open Refiner.Refiner.TermSubst
@@ -1942,10 +1943,10 @@ let set_msequent extract seq =
          extract
       else
          let extract =
-            match hyps.(i) with
-               TermMan.Hypothesis (name, hyp) ->
+            match SeqHyp.get hyps i with
+               TermType.Hypothesis (name, hyp) ->
                   add_hyp extract i name hyp
-             | TermMan.Context (name, _) ->
+             | TermType.Context (name, _) ->
                   add_hyp extract i name context_term
          in
             collect (i + 1) len extract hyps
@@ -1953,7 +1954,7 @@ let set_msequent extract seq =
    let goal, _ = dest_msequent seq in
       match explode_sequent goal with
          { sequent_hyps = hyps; sequent_goals = goals } ->
-            set_goal (collect 0 (Array.length hyps) (del_hyp extract 0) hyps) goals.(0)
+            set_goal (collect 0 (SeqHyp.length hyps) (del_hyp extract 0) hyps) (SeqGoal.get goals 0)
 
 (************************************************************************
  * LOOKUP                                                               *

@@ -115,9 +115,9 @@ dform tyEnum_df : except_mode[src] :: tyEnum{ 'num } =
 
 (* Native data types. *)
 dform tyRawInt_df : except_mode[src] :: tyRawInt{ 'precision; 'sign } =
-   `"TyRawInt(" slot{'precision} `", " slot{'sign} `")"
+   lzone `"TyRawInt(" slot{'precision} `", " slot{'sign} `")" ezone
 dform tyFloat_df : except_mode[src] :: tyFloat{ 'precision } =
-   `"TyFloat(" slot{'precision} `")"
+   lzone `"TyFloat(" slot{'precision} `")" ezone
 
 (* Function type. *)
 dform tyFun_df : except_mode[src] :: tyFun{ 'ty_list; 'ty } =

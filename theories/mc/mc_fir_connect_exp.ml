@@ -594,7 +594,7 @@ let alloc_op_of_term t =
             ("not an alloc_op", t)))
 
 (*************************************************************************
- * Convert debuggin info to and from terms.
+ * Convert debugging info to and from terms.
  *************************************************************************)
 
 (*
@@ -629,8 +629,11 @@ let term_of_exp e =
 
       (* Primitive operations. *)
       LetUnop (v, t, op, a1, expr) ->
+         mk_letUnop_term
     | LetBinop (v t, op, a1, a2, expr) ->
+         mk_letBinop_term
 
+(*
       (* Function application. *)
     | LetExt (v, t, str, t, al, expr) ->
     | TailCall (v, al) ->
@@ -648,9 +651,11 @@ let term_of_exp e =
 
       (* Debugging. *)
     | Debug (info, expr) ->
+*)
 
 let exp_of_term t =
-   if
+   if is_letUnop_term t then
+   else if is_letBinop_term t then
    else
       raise (RefineError ("exp_of_term", StringTermError
             ("not an exp",  t)))

@@ -1,31 +1,32 @@
 Maintainer of this theory: Brian Emre Aydemir (emre@its.caltech.edu)
-Last update to this file: 7 December 2001
+Last update to this file: 16 December 2001
 
 This file lists what I have remaining to do to complete this theory,
 and some other miscellaneous notes to myself.
 
 Todo list:
 --------------------------------------------------------------------------
--  Get semantics for union / allocation / type-construction ops.
-   I guess I'll include memcpy in this.
--  Make a comprehensive test file.
--  fir_deadcode - get dead parameter and function removal working.
--  fir_exp - Atomic, Debug, and Migrate term are missing.  I should
-   at least declare these or something. I don't want to lose information
--  symbol_of_var_term NEEDS SERIOUS CORRECTION!!
--  term_of_rawfloat and the other needs MORE CHECKING!!
--  mc_fir_connect_ty : the set conversions (depending on
-   set representation todo above).
--  re-export fir_eval.prla
--  check to see if unknownFun (Fir_eval) is dead or not.
--  Fir_eval: I need to finish this sometime...
--  rawint_set: don't I need to store the precision / signing?
-
 -  Improve display forms: they work, but they could look nicer
+   (Mc_set is done I think).
+-  Make a comprehensive test file: probably a bunch of sequents with
+   a .prla file to store the proofs.  Useful as a check to see if I
+   break anything.
+-  Fir_deadcode: dead function paramater and dead function elimination
+   would be quite nice to have.
+-  FIR modelling: I need a better understanding / implementation (e.g.
+   Fir_eval), of such things as union, allocation, type construction, etc.
+-  Fir_eval: re-export .prla sometime to solve copy_proof errors.
+-  Mc_fir_connect_exp: fill in the missing functions (declared already).
+   I may wait on the debugging stuff, as it isn't completely
+   essential at this point.
+-  Mc_fir_connect*: Debugging runs, and lots of them, need to be performed.
+-  Fir_ty: rewrites into more managable terms will probably have to
+   happen sometime.
 
 
 Notes to myself (things to do, but only if I feel so inclined):
 --------------------------------------------------------------------------
 -  building with cons breaks the "up-arrow" thingy in mpopt.
--  get the conscripts to be more intelligent (read mk/config).
--  clean up the Conscript here.
+-  get the Conscript's to be more intelligent (e.g. read mk/config).
+   they also don't catch all dependencies (hard to describe this problem).
+-  clean up the Conscript in this theory.

@@ -43,9 +43,17 @@ open Fir
 open Refiner.Refiner.Term
 
 (*
- * Convert between symbols and variable terms.
+ * Convert between symbols and variable terms and strings.
  * A variable term is << 'a >> (for example).
+ * string <--> symbol conversions here go through a lookup table.
+ * clear_symbol_table should be called every time conversion of a
+ *    new program begins.
  *)
+
+val clear_symbol_table : unit -> unit
+
+val string_of_symbol : symbol -> string
+val symbol_of_string : string -> symbol
 
 val var_term_of_symbol : symbol -> term
 val symbol_of_var_term : term -> symbol

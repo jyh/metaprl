@@ -1,5 +1,5 @@
 Maintainer of this theory: Brian Emre Aydemir (emre@its.caltech.edu)
-Last update to this file: 7 December 2001
+Last update to this file: 15 December 2001
 
 I describe the purpose of this theory and its implementation in this file.
 The sections here are:
@@ -36,7 +36,7 @@ environment variable is defined.  (You'll probably want to define
 that variable in order to sensibly use MC.)  Otherwise, the build
 is the exact same as if the build was done with make.
    Note that the Conscript is pretty messy since I don't know perl
-at all.
+at all.  Please tell me if you know of a better way to write the script.
 
 
 Mc_term_op:
@@ -62,7 +62,8 @@ necessary to know what "sizes" the rawints are in the intervals.
 Note also that this implies that all the rawints are of the same
 precision and signing.
    The one provided operation on these sets and intervals is membership
-testing.
+testing. The test assumes that the left end point of an interval is not
+greater than the right end point.
    Further information is documented in mc_set.mli.
 
 

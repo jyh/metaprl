@@ -58,22 +58,29 @@ declare is_member{ 'num; 'set }
  *************************************************************************)
 
 (* Closed intervals. *)
-dform interval_df : except_mode[src] :: interval{ 'l; 'r }  =
-   lzone `"[" slot{'l} `"," slot{'r} `"]" ezone
+dform interval_df : except_mode[src] :: interval{ 'left; 'right }  =
+   lzone `"[" slot{'left} `"," slot{'right} `"]" ezone
 
 (* int and rawint sets. *)
 dform int_set_df : except_mode[src] :: int_set{ 'intervals } =
-   pushm[0] szone `"int_set(" slot{'intervals} `")" ezone popm
+   pushm[0] szone push_indent `"int_set(" hspace
+   szone slot{'intervals} ezone popm hspace
+   `")" ezone popm
 dform rawint_set_df : except_mode[src] ::
    rawint_set{ 'precision; 'sign; 'intervals } =
-   pushm[0] szone `"rawint_set(" slot{'precision} `", "
-   slot{'sign} `", " slot{'intervals} `")" ezone popm
+   pushm[0] szone push_indent `"rawint_set(" hspace
+   szone slot{'precision} `"," hspace slot{'sign} `"," ezone popm
+   push_indent hspace
+   szone slot{'intervals} ezone popm hspace
+   `")" ezone popm
 
 (* Membership tests. *)
 dform in_interval_df : except_mode[src] :: in_interval{'num; 'interval} =
-   lzone slot{'num} `" " Nuprl_font!member `" " slot{'interval} ezone
-dform member_df : except_mode[src] :: is_member{ 'num; 'int_set } =
-   szone slot{'num} space Nuprl_font!member space slot{'int_set} ezone
+   lzone slot{'num} Nuprl_font!member slot{'interval} ezone
+dform member_df : except_mode[src] :: is_member{ 'num; 'set } =
+   pushm[0] szone slot{'num} `" " Nuprl_font!member hspace
+   szone slot{'set} ezone
+   ezone popm
 
 (*************************************************************************
  * Rewrites.

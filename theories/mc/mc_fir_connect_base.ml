@@ -36,7 +36,6 @@
 open Interval_set
 open Rawint
 open Rawfloat
-open Symbol
 open Fir_set
 open Fir
 
@@ -54,11 +53,43 @@ open Fir_ty
  * Convert between symbols and variable terms (e.g. 'a).
  *************************************************************************)
 
+(*
+ * Implement the string <--> symbol lookup table.
+ *)
+
+module Base =
+struct
+   type t = string
+   let compare = Pervasives.compare
+end
+
+module StringSymbolMap = Map.Make (Base)
+
+let table = ref StringSymbolMap.empty
+
+let clear_symbol_table () =
+   table := StringSymbolMap.empty
+
+(*
+ * Conversion functions.
+ *)
+
+let string_of_symbol s =
+   let str = Symbol.string_of_symbol s in
+      table := StringSymbolMap.add str s !table;
+      str
+
+let symbol_of_string str =
+   try
+      StringSymbolMap.find str !table
+   with
+      Not_found -> Symbol.new_symbol_string str
+
 let var_term_of_symbol s =
    mk_var_term (string_of_symbol s)
 
 let symbol_of_var_term v =
-   new_symbol_string (dest_var v)
+   symbol_of_string (dest_var v)
 
 (*************************************************************************
  * Convert between integer constants and numbers.
@@ -173,18 +204,6 @@ let number_term_of_raw_bound b =
 
 let bound_of_raw_number_term t =
    Closed (rawint_of_number_term t)
-
-let precision_of_rawint_bound b =
-   match b with
-      Closed r -> Rawint.precision r
-    | _ -> raise (Invalid_argument
-                  "precision_of_rawint_bound: not a closed rawint bound")
-
-let sign_of_rawint_bound b =
-   match b with
-      Closed r -> Rawint.signed r
-    | _ -> raise (Invalid_argument
-                  "sign_of_rawint_bound: not a closed rawint bound")
 
 (*
  * Deconstruct intervals.

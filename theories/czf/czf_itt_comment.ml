@@ -580,12 +580,47 @@ dform equiv_fun_prop_df : except_mode[tex] :: parens :: "prec"[prec_apply] :: ma
    Nuprl_font!forall slot{'z} `"." slot{'P} `" equiv_fun_prop"
 
 (************************************************************************
+ * SET BUILDER
+ ************************************************************************)
+
+declare math_setbvd{'x; 's; 'a}
+
+dform set_bvd_df1 : mode[tex] :: math_setbvd{'x; 's; 'a} =
+   izone `"{\\left\\{" ezone
+   slot{'a} `"| " 
+   slot{'x}
+   izone `"\\in_s " ezone
+   slot{'s}
+   izone `"\\right\\}}" ezone
+
+dform set_bvd_df : parens :: except_mode[tex] :: math_setbvd{'x; 's; 'a} =
+   pushm[0] `"{" slot{'a} mid slot{'x} " " Nuprl_font!member `"s " slot{'s} `"}" popm
+
+(************************************************************************
+ * INVERSE IMAGE
+ ************************************************************************)
+
+declare math_invimage{'x; 's; 'a; 't}
+
+dform inv_image_df1 : mode[tex] :: math_invimage{'x; 's; 'a; 't} =
+   izone `"{\\left\\{" ezone
+   slot{'x}
+   izone `"\\in_s " ezone
+   slot{'s} `"| " 
+   slot{'a}
+   izone `"\\in_s " ezone
+   slot{'t}
+   izone `"\\right\\}}" ezone
+
+dform inv_image_df : parens :: except_mode[tex] :: math_invimage{'x; 's; 'a; 't} =
+   pushm[0] `"{" slot{'x} " " Nuprl_font!member `"s " slot{'s} mid slot{'a} " " Nuprl_font!member `"s " slot{'t} `"}" popm
+
+(************************************************************************
  * GROUP
  ************************************************************************)
 
 declare math_group{'g}
 declare math_car{'g}
-declare math_eqG{'g}
 declare math_op{'g; 'a; 'b}
 declare math_id{'g}
 declare math_inv{'g; 'a}
@@ -597,11 +632,6 @@ dform group_df1 : mode[tex] :: math_group{'g} =
 
 dform car_df1 : mode[tex] :: math_car{'g} =
    izone `"{{\\it car}(" ezone
-   slot{'g}
-   izone `")}" ezone
-
-dform eqG_df1 : mode[tex] :: math_eqG{'g} =
-   izone `"{{\\it eqG}(" ezone
    slot{'g}
    izone `")}" ezone
 
@@ -631,9 +661,6 @@ dform group_df : except_mode[tex] :: math_group{'g} =
 
 dform car_df : except_mode[tex] :: math_car{'g} =
    `"car(" slot{'g} `")"
-
-dform eqG_df1 : except_mode[tex] :: math_eqG{'g} =
-   `"eqG(" slot{'g} `")"
 
 dform id_df : except_mode[tex] :: math_id{'g} =
    `"id(" slot{'g} `")"
@@ -693,11 +720,10 @@ dform subgroup_df : except_mode[tex] :: math_subgroup{'s; 'g} =
    `"subgroup(" slot{'s} `"; " slot{'g} `")"
 
 (************************************************************************
- * CYCLIC SUBGROUP
+ * GROUP POWER
  ************************************************************************)
 
 declare math_power{'g; 'z; 'n}
-declare math_cycsubg{'s; 'g; 'a}
 
 dform power_df1 : mode[tex] :: math_power{'g; 'z; 'n} =
    izone `"{{\\it power}(" ezone
@@ -708,6 +734,15 @@ dform power_df1 : mode[tex] :: math_power{'g; 'z; 'n} =
    slot{'n}
    izone `")}" ezone
 
+dform power_df : parens :: except_mode[tex] :: math_power{'g; 'z; 'n} =
+   `"power(" slot{'g} `"; " slot{'z}  `"; " slot{'n} `")"
+
+(************************************************************************
+ * CYCLIC SUBGROUP
+ ************************************************************************)
+
+declare math_cycsubg{'s; 'g; 'a}
+
 dform cycsubg_df1 : mode[tex] :: math_cycsubg{'s; 'g; 'a} =
    izone `"{{\\it cyclic\\_subgroup}(" ezone
    slot{'s}
@@ -716,9 +751,6 @@ dform cycsubg_df1 : mode[tex] :: math_cycsubg{'s; 'g; 'a} =
    izone `"," ezone
    slot{'a}
    izone `")}" ezone
-
-dform power_df : parens :: except_mode[tex] :: math_power{'g; 'z; 'n} =
-   `"power(" slot{'g} `"; " slot{'z}  `"; " slot{'n} `")"
 
 dform cycsubg_df : except_mode[tex] :: math_cycsubg{'s; 'g; 'a} =
    `"cyclic_subgroup(" slot{'s} `"; " slot{'g} `"; " slot{'a} `")"
@@ -785,42 +817,6 @@ dform normalsubg_df1 : mode[tex] :: math_normalsubg{'s; 'g} =
 
 dform normalsubg_df : except_mode[tex] :: math_normalsubg{'s; 'g} =
    `"normal_subgroup(" slot{'s} `"; " slot{'g} `")"
-
-(************************************************************************
- * SET BUILDER
- ************************************************************************)
-
-declare math_setbvd{'x; 's; 'a}
-
-dform set_bvd_df1 : mode[tex] :: math_setbvd{'x; 's; 'a} =
-   izone `"{\\left\\{" ezone
-   slot{'a} `"| " 
-   slot{'x}
-   izone `"\\in_s " ezone
-   slot{'s}
-   izone `"\\right\\}}" ezone
-
-dform set_bvd_df : parens :: except_mode[tex] :: math_setbvd{'x; 's; 'a} =
-   pushm[0] `"{" slot{'a} mid slot{'x} " " Nuprl_font!member `"s " slot{'s} `"}" popm
-
-(************************************************************************
- * INVERSE IMAGE
- ************************************************************************)
-
-declare math_invimage{'x; 's; 'a; 't}
-
-dform inv_image_df1 : mode[tex] :: math_invimage{'x; 's; 'a; 't} =
-   izone `"{\\left\\{" ezone
-   slot{'x}
-   izone `"\\in_s " ezone
-   slot{'s} `"| " 
-   slot{'a}
-   izone `"\\in_s " ezone
-   slot{'t}
-   izone `"\\right\\}}" ezone
-
-dform inv_image_df : parens :: except_mode[tex] :: math_invimage{'x; 's; 'a; 't} =
-   pushm[0] `"{" slot{'x} " " Nuprl_font!member `"s " slot{'s} mid slot{'a} " " Nuprl_font!member `"s " slot{'t} `"}" popm
 
 (************************************************************************
  * HOMOMORPHISM

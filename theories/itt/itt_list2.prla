@@ -12174,7 +12174,7 @@ T	t1269	o4184 b1211 b1269
 B	b1280	t1269
 T	t1280	o4184 b1196 b1280
 B	b1281	t1280
-P	p6048	String "byDefT unfold_list thenT dT 2 ttca"
+P	p6048	String "dT 2 ttca"
 O	o6049	ext_rule p6048
 T	t1281	o b1210 b15
 B	b1325	t1281
@@ -14570,7 +14570,7 @@ T	t8222	o2698 b8221
 B	b8222	t8222
 T	t8230	o4186 b6093
 B	b8230	t8230
-P	p8231	String "dT 2 thenT byDefT unfold_list"
+P	p8231	String "dT 2 thenT byDefT reduceC"
 O	o8231	ext_rule p8231
 T	t8231	o8231 b2700 b6096 b15 b15
 B	b8231	t8231
@@ -16313,7 +16313,7 @@ T	t6912	o6911 b2700 b6911 b15 b15
 B	b6912	t6912
 T	t6913	o2698 b6912
 B	b6913	t6913
-P	p8393	String "dT 0 thenMT dT (-1) thenMT dT 0 thenMT dT (-1) thenT byDefT unfold_list thenT byDefT unfold_list"
+P	p8393	String "dT 0 thenMT dT (-1) thenMT dT 0 thenMT dT (-1) thenT autoT"
 O	o8393	ext_rule p8393
 T	t8393	o8393 b2700 b5724 b5818 b15
 B	b8393	t8393

@@ -89,9 +89,6 @@ define unfold_bind :
 define unfold_bind1 :
    bind{'op} <--> inject{'op; op_bdepth{'op} +@ 1 }
 
-declare arity{'op}
-iform unfold_arity : arity{'op} <--> length{shape{'op}}
-
 define unfold_op :
    Operator <--> quot o1, o2 : BOperator // "assert"{is_same_op{'o1; 'o2}}
 doc docoff

@@ -101,9 +101,6 @@ doc <:doc< @begin[doc]
 define unfold_is_eq:
    is_eq{'v;'u} <--> (left{'v} =@ left{'u})
 
-declare eq{'v;'u}
-iform unfold_eq: eq{'v;'u} <--> "assert"{is_eq{'v;'u}}
-
 interactive_rw eq_equal {| reduce |} :
    'left_1 in nat -->
    'left_2 in nat -->

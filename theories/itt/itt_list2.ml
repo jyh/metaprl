@@ -298,8 +298,6 @@ iform unfold_list: list <--> list{top}
 
 doc <:doc< @docoff >>
 
-
-
 let length_term = << length{'l} >>
 let length_opname = opname_of_term length_term
 let is_length_term = is_dep0_term length_opname

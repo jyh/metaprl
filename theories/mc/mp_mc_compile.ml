@@ -98,7 +98,10 @@ let compile_phobos_fir program post_rewrites inline_targets =
 
    (* Inlining. *)
    let program =
-      apply_rw_inline (firInlineC program inline_targets) program
+      if List.length inline_targets > 0 then
+         apply_rw_inline (firInlineC program inline_targets) program
+      else
+         program
    in
    debug_string "\n\nAfter inlining\n\n";
    debug_term program;

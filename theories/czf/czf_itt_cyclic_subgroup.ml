@@ -126,6 +126,7 @@ interactive exst_power_res {| intro [] |} 'H :
 
 (*!
  * @begin[doc]
+ * @rules
  * @thysubsection{Typehood}
  *
  * The $@cycsubg{s; g; a}$ is well-formed if $s$ and $g$ are labels

@@ -113,13 +113,10 @@ dform inv_df : parens :: except_mode[src] :: inv{'g; 'a} =
 
 (*!
  * @begin[doc]
- * @rules
+ * @thysection{Axioms}
  *
  * The @tt{group} is defined by a set of axioms.
- * @end[doc]
- *)
-(*!
- * @begin[doc]
+ *
  * @thysubsection{Well-formedness}
  *
  * The @tt{group}, @tt{car}, @tt{op}, @tt{inv}, and @tt{id}
@@ -277,6 +274,7 @@ interactive op_eq2 {| intro[] |} 'H :
 
 (*!
  * @begin[doc]
+ * @rules
  * @thysubsection{Lemmas}
  *
  * If $@group{g}$, then

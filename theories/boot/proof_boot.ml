@@ -102,6 +102,8 @@ let debug_proof =
         debug_value = false
       }
 
+type term_io = Refiner_io.TermType.term
+
 module Proof =
 struct
    (************************************************************************

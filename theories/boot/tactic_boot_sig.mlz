@@ -671,12 +671,12 @@ sig
       (string -> MLast.expr) ->    (* Parser *)
       (MLast.expr -> tactic) ->    (* Evaluator *)
       io_proof ->
-      term_io
+      Refiner_io.TermType.term
 
    val io_proof_of_term_io :
       (string -> MLast.expr) ->    (* Parser *)
       (MLast.expr -> tactic) ->    (* Evaluator *)
-      term_io ->
+      Refiner_io.TermType.term ->
       io_proof
 
    (*

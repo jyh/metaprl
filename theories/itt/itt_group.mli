@@ -66,6 +66,7 @@ declare abelg[i:l]
 declare lcoset{'s; 'g; 'b}
 declare rcoset{'s; 'g; 'b}
 declare normalSubg[i:l]{'s; 'g}
+declare groupHom{'A; 'B}
 
 (************************************************************************
  * DISPLAY FORMS                                                        *
@@ -86,6 +87,7 @@ topval fold_abelg : conv
 topval fold_lcoset : conv
 topval fold_rcoset : conv
 topval fold_normalSubg : conv
+topval fold_groupHom : conv
 
 (*
  * -*-

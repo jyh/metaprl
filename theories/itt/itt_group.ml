@@ -105,6 +105,9 @@ define unfold_rcoset : rcoset{'s; 'g; 'b} <-->
 
 define unfold_normalSubg : normalSubg[i:l]{'s; 'g} <-->
    subStructure{'s; 'g} & all x: 'g^car. lcoset{'s; 'g; 'x} = rcoset{'s; 'g; 'x} in univ[i:l]
+
+define unfold_groupHom : groupHom{'A; 'B} <-->
+   { f: 'A^car -> 'B^car | all x: 'A^car. all y: 'A^car. ('f ('x *['A] 'y)) = ('f 'x) *['B] ('f 'y) in 'B^car }
 (*! @docoff *)
 
 interactive_rw unfold_pregroup :
@@ -122,6 +125,7 @@ let fold_abelg = makeFoldC << abelg[i:l] >> unfold_abelg
 let fold_lcoset = makeFoldC << lcoset{'s; 'g; 'b} >> unfold_lcoset
 let fold_rcoset = makeFoldC << rcoset{'s; 'g; 'b} >> unfold_rcoset
 let fold_normalSubg = makeFoldC << normalSubg[i:l]{'s; 'g} >> unfold_normalSubg
+let fold_groupHom = makeFoldC <<groupHom{'A; 'B}  >> unfold_groupHom
 
 let groupDT n = rw unfold_group n thenT dT n
 let abelgDT n = rw unfold_abelg n thenT dT n
@@ -161,6 +165,9 @@ dform rcoset_df : except_mode[src] :: rcoset{'h; 'g; 'a} =
 
 dform normalSubg_df : except_mode[src] :: normalSubg[i:l]{'s; 'g} =
    math_normalSubg{slot[i:l]; 's; 'g}
+
+dform groupHom_df : except_mode[src] :: groupHom{'A; 'B} =
+   math_groupHom{'A; 'B}
 
 (************************************************************************
  * RULES                                                                *
@@ -624,6 +631,30 @@ interactive abel_subg_normal 'H :
    [main] sequent ['ext] { 'H >- subStructure{'s; 'g} } -->
    sequent ['ext] { 'H >- normalSubg[i:l]{'s; 'g} }
 
+(*!
+ * @begin[doc]
+ * @rules
+ * @modsubsection{Group Homomorphism}
+ *
+ * @end[doc]
+ *)
+interactive groupHom_type {| intro [intro_typeinf <<'G>>] |} 'H group[i:l] :
+   [wf] sequent [squash] {'H >- 'G in group[i:l] } -->
+   [wf] sequent [squash] {'H >- 'H in group[i:l] } -->
+    sequent ['ext] { 'H >- "type"{groupHom{'G; 'H}} }
+
+interactive groupHom_intro {| intro [intro_typeinf <<'G>>] |} 'H group[i:l] :
+   [wf] sequent [squash] {'H >- 'G in group[i:l] } -->
+   [wf] sequent [squash] {'H >- 'H in group[i:l] } -->
+   [wf] sequent [squash] {'H >- 'f in 'G^car -> 'H^car } -->
+   [main] sequent ['ext] { 'H; x: 'G^car; y: 'G^car >- ('f ('x *['G] 'y)) = ('f 'x) *['H] ('f 'y) in 'H^car } -->
+    sequent ['ext] { 'H >- 'f in groupHom{'G; 'H} }
+
+interactive groupHom_elim {| elim [elim_typeinf <<'G>>] |} 'H 'J group[i:l] :
+   [wf] sequent [squash] {'H; f: groupHom{'G; 'H}; 'J['f] >- 'G in group[i:l] } -->
+   [wf] sequent [squash] {'H; f: groupHom{'G; 'H}; 'J['f] >- 'H in group[i:l] } -->
+   [main] sequent ['ext] { 'H; f: 'G^car -> 'H^car; u: all x: 'G^car. all y: 'G^car. ('f ('x *['G] 'y)) = ('f 'x) *['H] ('f 'y) in 'H^car; 'J['f] >- 'C['f] } -->
+   sequent ['ext] { 'H; f: groupHom{'G; 'H}; 'J['f] >- 'C['f] }   
 (*! @docoff *)
 
 (*

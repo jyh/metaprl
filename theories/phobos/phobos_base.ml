@@ -39,9 +39,35 @@ open Refiner.Refiner.TermOp
 open Refiner.Refiner.RefineError
 
 (*
+ * Basic Phobos error terms.
+ *)
+declare error[msg:s]
+
+(*
  * Parameter operations.
  *)
 declare param_add_string[s:s]{'term}
+
+(*
+ * Error term raises exception.
+ * If it has other than one string parameter, it is not touched.
+ *)
+let raise_error goal =
+   let term = dest_term goal in
+   let { term_op = operator; term_terms = subterms } = term in
+   let { op_name = opname; op_params = params } = dest_op operator in
+   match params with
+      [s1] ->
+         (match dest_param s1 with
+            String msg ->
+               raise (Invalid_argument ("Phobos: " ^ msg))
+          | _ ->
+               goal)
+    | _ ->
+         goal
+
+ml_rw reduce_error0 : ('goal: error[msg:s]) =
+   raise_error goal
 
 let error fn s term =
    raise (RefineError ("Phobos_base." ^ fn, StringTermError (s, term)))

@@ -8,7 +8,7 @@ Import qw( env );
 #
 OCamlSources $env
    'phobos_base.ml',
-   'phobos_theory.mlz';
+   'phobos_theory.ml';
 
 OCamlLibrary $env 'base',
    'phobos_base',

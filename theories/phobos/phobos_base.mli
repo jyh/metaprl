@@ -39,6 +39,11 @@ open Refiner.Refiner.TermOp
 open Refiner.Refiner.RefineError
 
 (*
+ * Phobos error terms.
+ *)
+declare error[msg:s]
+
+(*
  * Parameter operations.
  *)
 declare param_add_string[s:s]{'term}
@@ -46,6 +51,7 @@ declare param_add_string[s:s]{'term}
 (*
  * Rewrite tactics.
  *)
+ml_rw reduce_error0 : error[msg:s]
 ml_rw reduce_param_add_string : param_add_string[s:s]{'term}
 
 (*

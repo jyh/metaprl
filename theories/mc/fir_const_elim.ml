@@ -194,38 +194,9 @@ let firConstElimT i =
 
       reduce_val_true;
       reduce_val_false;
+      reduce_atomEnum_eq;
 
       reduce_beta;
-
-      reduce_plusIntOp;
-      reduce_minusIntOp;
-      reduce_mulIntOp;
-      reduce_divIntOp;
-      reduce_remIntOp;
-      reduce_maxIntOp;
-      reduce_minIntOp;
-      reduce_eqIntOp;
-      reduce_neqIntOp;
-      reduce_ltIntOp;
-      reduce_leIntOp;
-      reduce_gtIntOp;
-      reduce_geIntOp;
-      reduce_cmpIntOp;
-
-      reduce_plusRawIntOp;
-      reduce_minusRawIntOp;
-      reduce_mulRawIntOp;
-      reduce_divRawIntOp;
-      reduce_remRawIntOp;
-      reduce_maxRawIntOp;
-      reduce_minRawIntOp;
-      reduce_eqRawIntOp;
-      reduce_neqRawIntOp;
-      reduce_ltRawIntOp;
-      reduce_leRawIntOp;
-      reduce_gtRawIntOp;
-      reduce_geRawIntOp;
-      reduce_cmpRawIntOp;
 
       (* Now we get to the rewrites we defined above. *)
 

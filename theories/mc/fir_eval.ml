@@ -60,6 +60,7 @@ declare true_set
 declare false_set
 declare val_true
 declare val_false
+declare atomEnum_eq{ 'a; 'b }
 
 (*
  * Functions.
@@ -108,6 +109,8 @@ dform true_set_df : except_mode[src] :: true_set = `"true_set"
 dform false_set_df : except_mode[src] :: false_set = `"false_set"
 dform val_true_df : except_mode[src] :: val_true = `"val_true"
 dform val_false_df : except_mode[src] :: val_false = `"val_false"
+dform atomEnum_eq_df : except_mode[src] :: atomEnum_eq{ 'a; 'b } =
+   `"AtomEnum_Eq(" slot{'a} `", " slot{'b} `")"
 
 (* Functions. *)
 dform lambda_df1 : except_mode[src] :: lambda{ x. 'f } =
@@ -161,7 +164,7 @@ interactive_rw reduce_pow_2_64 :
 
 prim_rw reduce_mod_arith :
    mod_arith{ 'precision; 'sign; 'num } <-->
-   ifthenelse{ beq_int{'sign; val_true};
+   ifthenelse{ atomEnum_eq{'sign; val_true};
       mod_arith_signed{ 'precision; 'num };
       mod_arith_unsigned{ 'precision; 'num }}
 prim_rw reduce_mod_arith_signed :
@@ -184,6 +187,9 @@ prim_rw reduce_true_set : true_set <--> int_set{ 1; 1 }
 prim_rw reduce_false_set : false_set <--> int_set{ 0; 0 }
 prim_rw reduce_val_true : val_true <--> atomEnum{ 2; 1 }
 prim_rw reduce_val_false : val_false <--> atomEnum{ 2; 0 }
+prim_rw reduce_atomEnum_eq :
+   atomEnum_eq{ atomEnum{'a; 'b}; atomEnum{'c; 'd} } <-->
+   band{ beq_int{'a; 'c}; beq_int{'b; 'd} }
 
 (*
  * Functions.
@@ -424,6 +430,7 @@ let firEvalT i =
       reduce_false_set;
       reduce_val_true;
       reduce_val_false;
+      reduce_atomEnum_eq;
 
       reduce_beta;
       reduce_apply_nil;

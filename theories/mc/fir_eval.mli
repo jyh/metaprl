@@ -63,11 +63,14 @@ declare mod_arith_unsigned{ 'precision; 'num }
  * true_set and false_set define true and false for use in matches.
  * val_true and val_false should be used for returning true and false
  *    in FIR evaluation.
+ * I also put a test for atomEnum here since they are used to
+ *    represent val_true and val_false.
  *)
 declare true_set
 declare false_set
 declare val_true
 declare val_false
+declare atomEnum_eq{ 'a; 'b }
 
 (*
  * Functions.
@@ -121,6 +124,7 @@ topval reduce_true_set : conv
 topval reduce_false_set : conv
 topval reduce_val_true : conv
 topval reduce_val_false : conv
+topval reduce_atomEnum_eq : conv
 
 (* Functions. *)
 

@@ -1,0 +1,13 @@
+# Library files
+MPFILES =\
+	support_algebra \
+	base_select \
+	kat_terms \
+	kat_axioms \
+	kat_ax \
+	kat_std \
+	kat_bool \
+	kat_star \
+	kat_hoare \
+	kat_denest \
+	kat_MSDriver \

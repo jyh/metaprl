@@ -1,0 +1,19 @@
+OCAMLINCLUDES +=\
+	$(addprefix -I , $(SUPPORT_DIRS))\
+	-I ../itt\
+	-I ../base
+
+.INCLUDE: Files
+
+#
+# The theory
+#
+Theory($(MPFILES))
+
+#
+# Clean up
+#
+clean:
+    $(CLEAN)
+
+all: theory$(LIB_SUFFIX)

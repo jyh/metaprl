@@ -17,6 +17,8 @@ open Tacticals
 declare "all"{v. 'b['v]}
 declare "exists"{v. 'b['v]}
 declare "atomic"{'b}
+declare "t"
+
 declare "atom0"
 declare "atom1"
 declare "atom2"
@@ -99,10 +101,14 @@ val fold_exists : conv
 (*
  * Nested terms.
  *)
+val t_term : term
+val is_t_term : term -> bool
+
 val is_atomic_term : term -> bool
 val mk_atomic_term : term -> term
 val dest_atomic : term -> term
 
+val is_apply_term : term -> bool
 val mk_apply_term : term list -> term
 val dest_apply : term -> term list
 val arity_of_apply : term -> int
@@ -133,6 +139,7 @@ val var_of_exists : term -> string
  *)
 val tptp_autoT : tactic
 
+val t_atomicT : tactic
 val atomicT : int -> tactic
 val typeT : int -> tactic
 

@@ -45,6 +45,8 @@ let debug_tptp_prove =
         debug_value = false
       }
 
+let debug_subst = load_debug "subst"
+
 (************************************************************************
  * TYPES                                                                *
  ************************************************************************)
@@ -269,8 +271,8 @@ let rec unify_term_list foundp subst constants term1 = function
                   eflush;
             let subst = unify subst constants term1 term2 in
                if !debug_tptp then
-                  eprintf "Unification:%t%a%t" (**)
-                     eflush print_subst subst
+                  eprintf "Unification:%a%t" (**)
+                     print_subst subst
                      eflush;
                unify_term_list true subst constants term1 terms2
          with
@@ -339,29 +341,61 @@ let negate_term t =
 (*
  * New variable from an index.
  *)
-let rec new_vars varcount l = function
-   _ :: vars ->
-      let v = "Y" ^ string_of_int varcount in
-         new_vars (varcount + 1) (v :: l) vars
- | [] ->
+let rec new_vars varcount l vars i =
+   if i = 0 then
       l
+   else
+      let v = "Y" ^ string_of_int varcount in
+         if List.mem v vars then
+            new_vars (varcount + 1) l vars i
+         else
+            new_vars (varcount + 1) (v :: l) vars (i - 1)
+
+(*
+ * Substitute recursively.
+ *)
+let rec expand subst term =
+   match subst with
+      (v, t) :: substs ->
+         expand substs (TermSubst.subst term [t] [v])
+    | [] ->
+         term
 
 (*
  * Build the new goal after a unification.
  *)
 let new_goal constants subst terms1 terms2 =
    let vars, terms = List.split subst in
-   let terms1 = List.map (fun t -> TermSubst.subst t terms vars) terms1 in
-   let terms2 = List.map (fun t -> TermSubst.subst (negate_term t) terms vars) terms2 in
+   let terms1 = List.map (expand subst) terms1 in
+   let terms2 = List.map (fun t -> expand subst (negate_term t)) terms2 in
    let body = merge_term_lists terms1 terms2 in
-   let vars = StringSet.not_mem_filt constants (free_vars_terms body) in
-   let vars' = new_vars 1 [] vars in
-   let varst = List.map mk_var_term vars' in
-   let subst' = List.combine vars varst in
-   let body = List.map (fun t -> TermSubst.subst t varst vars) body in
+   let free_vars = StringSet.not_mem_filt constants (free_vars_terms body) in
+   let new_vars = new_vars 1 [] vars (List.length free_vars) in
+   let new_vars_terms = List.map mk_var_term new_vars in
+   let subst' = List.combine free_vars new_vars_terms in
+   let _ =
+      if !debug_tptp then
+         begin
+            eprintf "Standardizing:\n\tTerms: %a\n\tSubst: %a%t" (**)
+               print_term_list body
+               print_subst (List.combine free_vars new_vars_terms)
+               eflush;
+            debug_subst := true
+         end
+   in
+   let body = List.map (fun t -> TermSubst.subst t new_vars_terms free_vars) body in
+   let _ =
+      if !debug_tptp then
+         begin
+            debug_subst := false;
+            eprintf "Standardized:\n\tTerms: %a%t" (**)
+               print_term_list body
+               eflush
+         end
+   in
    let positive, negative = split_atoms body in
    let info =
-      { tptp_vars = vars';
+      { tptp_vars = new_vars;
         tptp_body = body;
         tptp_positive = positive;
         tptp_negative = negative
@@ -374,6 +408,15 @@ let mk_goal { tptp_vars = vars; tptp_body = body } =
       true_term
    else
       mk_exists_term vars (mk_and_term body)
+
+(*
+ * We draw in the default for vars that remain free.
+ *)
+let add_defaults vars vars' subst =
+   let add_unit v =
+      (v, t_term)
+   in
+      subst @ (List.map add_unit vars) @ (List.map add_unit vars)
 
 (*
  * Prove well-formedness of a function.
@@ -389,22 +432,28 @@ let rec prove_wf p =
    let goal = Sequent.concl p in
       if is_atomic_term goal then
          let t = dest_atomic goal in
-         let v = get_apply_var t in
-         let _ =
-            if !debug_tptp then
-               eprintf "Tptp_prove.prove_wf: atomic %s%t" v eflush
-         in
-         let i = Sequent.get_decl_number p v in
-            (atomicT i thenT prove_wf) p
+            if is_t_term t then
+               t_atomicT p
+            else
+               let v = get_apply_var t in
+               let _ =
+                  if !debug_tptp then
+                     eprintf "Tptp_prove.prove_wf: atomic %s%t" v eflush
+               in
+               let i = Sequent.get_decl_number p v in
+                  (atomicT i thenT prove_wf) p
       else if is_type_term goal then
          let t = dest_type_term goal in
-         let v = get_apply_var t in
-         let _ =
-            if !debug_tptp then
-               eprintf "Tptp_prove.prove_wf: type %s%t" v eflush
-         in
-         let i = Sequent.get_decl_number p v in
-            (typeT i thenT prove_wf) p
+            if is_apply_term t then
+               let v = get_apply_var t in
+               let _ =
+                  if !debug_tptp then
+                     eprintf "Tptp_prove.prove_wf: type %s%t" v eflush
+               in
+               let i = Sequent.get_decl_number p v in
+                  (typeT i thenT prove_wf) p
+            else
+               (dT 0 thenT prove_wf) p
       else
          raise (RefineError ("prove_wf", StringTermError ("goal not recognized", goal)))
 
@@ -414,7 +463,9 @@ let rec prove_wf p =
 let rec neg_trivial i j p =
    if !debug_tptp then
       eprintf "Tptp_prove.neg_trivial: %d %d%t" i j eflush;
-   if j = i then
+   if j < 0 then
+      idT p
+   else if j = i then
       neg_trivial i (j - 1) p
    else if j > i then
       ((dT i thenT nthHypT (j - 1)) orelseT neg_trivial i (j - 1)) p
@@ -427,7 +478,9 @@ let rec neg_trivial i j p =
 let rec pos_trivial i j p =
    if !debug_tptp then
       eprintf "Tptp_prove.pos_trivial: %d %d%t" i j eflush;
-   if j = i then
+   if j < 0 then
+      idT p
+   else if j = i then
       pos_trivial i (j - 1) p
    else if j > i then
       ((dT j thenT nthHypT i) orelseT pos_trivial i (j - 1)) p
@@ -471,7 +524,7 @@ let rec instantiate_hyp subst i p =
    let _, hyp = Sequent.nth_hyp p i in
       if is_all_term hyp then
          let v = var_of_all hyp in
-         let t = List.assoc v subst in
+         let t = expand subst (mk_var_term v) in
             (withT t (dT i)
              thenLT [prove_wf;
                      instantiate_hyp subst (Sequent.hyp_count p + 1)]) p
@@ -492,14 +545,15 @@ let rec trivial_goal i n p =
  *)
 let rec instantiate_goal subst i n p =
    if !debug_tptp then
-      eprintf "Tptp_prove.instantiate_goal%t" eflush;
+      eprintf "Tptp_prove.instantiate_goal:%a %t" print_subst subst eflush;
    let goal = Sequent.concl p in
       if is_exists_term goal then
          let v = var_of_exists goal in
-         let t = List.assoc v subst in
+         let t = expand subst (mk_var_term v) in
             (withT t (dT 0)
              thenLT [prove_wf;
-                     instantiate_goal subst i n]) p
+                     instantiate_goal subst i n;
+                     prove_wf]) p
       else if is_and_term goal then
          (dT 0 thenT instantiate_goal subst i n) p
       else
@@ -548,6 +602,7 @@ let resolveT i p =
    in
    let subst, terms1, terms2 = unify_term_lists constants goal_info.tptp_body hyp_info.tptp_body in
    let subst, new_info = new_goal constants subst terms1 terms2 in
+   let subst = add_defaults hyp_info.tptp_vars goal_info.tptp_vars subst in
    let goal = mk_goal new_info in
       if !debug_tptp then
          eprintf "New goal %a%t" print_term goal eflush;
@@ -604,10 +659,11 @@ let rec prove_auxT
                   let hyp_info = hyps.(i - 1) in
                   (* let _ = check_unify hyp_info goal_info in *)
                   let subst, terms1, terms2 = unify_term_lists constants body hyp_info.tptp_body in
-                  let subst, goal_info = new_goal constants subst terms1 terms2 in
-                  let goal = mk_goal goal_info in
+                  let subst, goal_info' = new_goal constants subst terms1 terms2 in
+                  let subst = add_defaults hyp_info.tptp_vars goal_info.tptp_vars subst in
+                  let goal = mk_goal goal_info' in
                      incr refine_count;
-                     assert_new_goal level subst i goal (nextT goal_info), i + 1
+                     assert_new_goal level subst i goal (nextT goal_info'), i + 1
                with
                   RefineError _ ->
                      find_hyp (i + 1)

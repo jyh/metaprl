@@ -31,6 +31,7 @@ open Itt_derive
 declare "all"{v. 'b['v]}
 declare "exists"{v. 'b['v]}
 declare atomic{'b}
+declare "t"
 
 declare "atom0"
 declare "atom1"
@@ -48,6 +49,7 @@ declare "prop5"
 primrw unfold_atomic : "atomic"{'x} <--> ('x = 'x in atom)
 primrw unfold_all : "all"{v. 'b['v]} <--> Itt_logic!"all"{atom; v. 'b['v]}
 primrw unfold_exists : "exists"{v. 'b['v]} <--> Itt_logic!"exists"{atom; v. 'b['v]}
+primrw unfold_t : "t" <--> token["default-token":t]
 
 primrw unfold_atom0 : atom0 <-->
                           atom
@@ -83,6 +85,7 @@ primrw unfold_apply5 : "apply"{'f1; 'x1; 'x2; 'x3; 'x4; 'x5} <--> ('f1 'x1 'x2 '
 let fold_atomic = makeFoldC << atomic{'x} >> unfold_atomic
 let fold_all    = makeFoldC << "all"{v. 'b['v]} >> unfold_all
 let fold_exists = makeFoldC << "exists"{v. 'b['v]} >> unfold_exists
+let fold_t      = makeFoldC << "t" >> unfold_t
 
 let fold_atom0  = makeFoldC << atom0 >> unfold_atom0
 let fold_atom1  = makeFoldC << atom1 >> unfold_atom1
@@ -128,6 +131,9 @@ dform exists_df2 : exists_df{."exists"{v. 'b}} =
 dform exists_df3 : exists_df{'b} =
    `"." " " slot{'b}
 
+dform t_df : t =
+   `"t"
+
 dform atomic_df : mode[prl] :: parens :: "prec"[prec_apply] :: atomic{'x} =
    slot{'x} `" atomic"
 
@@ -160,6 +166,12 @@ dform apply5_df : mode[prl] :: parens :: "prec"[prec_apply] :: apply{'f; 'x1; 'x
 (************************************************************************
  * RULES                                                                *
  ************************************************************************)
+
+(*
+ * t is an atom.
+ *)
+interactive t_atomic 'H : :
+   sequent ['ext] { 'H >- atomic{t} }
 
 (*
  * Intro and elimination forms.
@@ -270,6 +282,13 @@ interactive tptp2_type_intro5 'H 'J :
 (************************************************************************
  * OPERATIONS                                                           *
  ************************************************************************)
+
+let t_term = << t >>
+let t_opname = opname_of_term t_term
+let is_t_term = is_no_subterms_term t_opname
+
+let t_atomicT p =
+   t_atomic (Sequent.hyp_count_addr p) p
 
 (*
  * Applications.

@@ -73,6 +73,7 @@ Notable differences from the actual Mojave FIR:
       TyExists
       TyDefUnion  (using tyDefPoly)
       TyDefLambda (using tyDefPoly)
+      frames      (using tyDefPoly)
 
 -- The actual FIR specification (mcc/fir/type/fir.ml) has terms
    whose subterms are (ML) lists.  In some cases, if these lists are

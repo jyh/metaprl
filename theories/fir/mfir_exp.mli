@@ -199,10 +199,10 @@ declare atomBinop{ 'binop; 'atom1; 'atom2 }
  * Allocation operators.
  *)
 
-declare allocTuple[tc:s]{ 'ty; 'atom_list }
-declare allocUnion[case:n]{ 'ty; 'ty_var; 'atom_list }
+declare allocArray{ 'ty; 'atom_list }
 declare allocVArray{ 'ty; 'atom1; 'atom2 }
 declare allocMalloc{ 'ty; 'atom }
+declare allocFrame{ 'tv; 'ty_list }
 
 
 (*

@@ -335,27 +335,13 @@ declare atomBinop{ 'binop; 'atom1; 'atom2 }
  * @begin[doc]
  * @modsubsection{Allocation operators}
  *
- * Allocation operators are used in the @hrefterm[letAlloc] expression below
- * to allocate data aggregates.  The term @tt[allocTuple] is used to allocate
- * a tuple value with type @tt[ty], tuple class @tt[tc], and elements
- * @tt[atom_list].
+ * (Documentation incomplete.)
  * @end[doc]
  *)
 
-declare allocTuple[tc:s]{ 'ty; 'atom_list }
+(* XXX: documentation needs to be completed. *)
 
-
-(*!
- * @begin[doc]
- *
- * The term @tt[allocUnion] is used to allocate a union value of type @tt[ty].
- * The union definition is given by @tt[ty_var], and the case allocated is
- * given by @tt[case].  The list @tt[atom_list] contains the atoms used to
- * initialize the case.
- * @end[doc]
- *)
-
-declare allocUnion[case:n]{ 'ty; 'ty_var; 'atom_list }
+declare allocArray{ 'ty; 'atom_list }
 
 
 (*!
@@ -378,6 +364,18 @@ declare allocVArray{ 'ty; 'atom1; 'atom2 }
  *)
 
 declare allocMalloc{ 'ty; 'atom }
+
+
+(*!
+ * @begin[doc]
+ *
+ * (Documentation incomplete.)
+ * @end[doc]
+ *)
+
+(* XXX: documentation needs to be completed. *)
+
+declare allocFrame{ 'tv; 'ty_list }
 
 
 (*!************************************
@@ -594,23 +592,22 @@ dform atomBinop_df : except_mode[src] ::
  * Allocation operators.
  *)
 
-dform allocTuple_df : except_mode[src] ::
-   allocTuple[tc:s]{ 'ty; 'atom_list } =
-   bf["alloc "] slot{'atom_list} sub{slot[tc:s]} `": " slot{'ty}
-
-dform allocUnion_df : except_mode[src] ::
-   allocUnion[case:n]{ 'ty; 'ty_var; 'atom_list } =
-   bf["alloc union"] `"(" slot{'ty_var} `"(" slot{'atom_list} `"),"
-      slot[case:n] `"): " slot{'ty}
+dform allocArray_df : except_mode[src] ::
+   allocArray{ 'ty; 'atom_list } =
+   bf["alloc_array"] `"(" slot{'atom_list} `"): " slot{'ty}
 
 dform allocVArray_df : except_mode[src] ::
    allocVArray{ 'ty; 'atom1; 'atom2 } =
-   bf["alloc array"] `"(" slot{'atom1} `", " slot{'atom2} `"): "
+   bf["alloc_varray"] `"(" slot{'atom1} `", " slot{'atom2} `"): "
       slot{'ty}
 
 dform allocMalloc_df : except_mode[src] ::
    allocMalloc{ 'ty; 'atom } =
-   bf["alloc malloc"] `"(" slot{'atom} `"): " slot{'ty}
+   bf["alloc_malloc"] `"(" slot{'atom} `"): " slot{'ty}
+
+dform allocFrame_df : except_mode[src] ::
+   allocFrame{ 'tv; 'ty_list } =
+   bf["alloc_frame"] `"(" slot{'tv} `"," slot{'ty_list} `")"
 
 
 (*

@@ -1059,17 +1059,11 @@ let is_atomBinop_term = is_3_dep0_term atomBinop_opname
 let mk_atomBinop_term = mk_3_dep0_term atomBinop_opname
 let dest_atomBinop_term = dest_3_dep0_term atomBinop_opname
 
-let allocTuple_term = << allocTuple[tc:s]{ 'ty; 'atom_list } >>
-let allocTuple_opname = opname_of_term allocTuple_term
-let is_allocTuple_term = is_str_2_dep0_term allocTuple_opname
-let mk_allocTuple_term = mk_str_2_dep0_term allocTuple_opname
-let dest_allocTuple_term = dest_str_2_dep0_term allocTuple_opname
-
-let allocUnion_term = << allocUnion[case:n]{ 'ty; 'ty_var; 'atom_list } >>
-let allocUnion_opname = opname_of_term allocUnion_term
-let is_allocUnion_term = is_num_3_dep0_term allocUnion_opname
-let mk_allocUnion_term = mk_num_3_dep0_term allocUnion_opname
-let dest_allocUnion_term = dest_num_3_dep0_term allocUnion_opname
+let allocArray_term = << allocArray{ 'ty; 'atom_list } >>
+let allocArray_opname = opname_of_term allocArray_term
+let is_allocArray_term = is_2_dep0_term allocArray_opname
+let mk_allocArray_term = mk_2_dep0_term allocArray_opname
+let dest_allocArray_term = dest_2_dep0_term allocArray_opname
 
 let allocVArray_term = << allocVArray{ 'ty; 'atom1; 'atom2 } >>
 let allocVArray_opname = opname_of_term allocVArray_term
@@ -1082,6 +1076,12 @@ let allocMalloc_opname = opname_of_term allocMalloc_term
 let is_allocMalloc_term = is_2_dep0_term allocMalloc_opname
 let mk_allocMalloc_term = mk_2_dep0_term allocMalloc_opname
 let dest_allocMalloc_term = dest_2_dep0_term allocMalloc_opname
+
+let allocFrame_term = << allocFrame{ 'tv; 'ty_list } >>
+let allocFrame_opname = opname_of_term allocFrame_term
+let is_allocFrame_term = is_2_dep0_term allocFrame_opname
+let mk_allocFrame_term = mk_2_dep0_term allocFrame_opname
+let dest_allocFrame_term = dest_2_dep0_term allocFrame_opname
 
 let letAtom_term = << letAtom{ 'ty; 'atom; var. 'exp['var] } >>
 let letAtom_opname = opname_of_term letAtom_term

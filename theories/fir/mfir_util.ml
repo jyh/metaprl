@@ -243,7 +243,7 @@ let resource reduce += [
  * @end[doc]
  *)
 
-(* XXX: Documentation incomplete. *)
+(* XXX: documentation needs to be completed. *)
 
 prim_rw reduce_project_in_bounds_main :
    project_in_bounds{ number[i:n]; tyExists{ t. 'ty['t] } } <-->

@@ -1,6 +1,12 @@
 #!/usr/bin/python2
 
-# XXX: documentation needs to be completed.
+# This script is intended to automate the process of generating
+# all the rewrites needed to determine the argument and result
+# types of the FIR unary and binary operators.
+
+# BUG: The documentation in this script is a bit lacking.
+# But it is pretty straightforward, and mfir_tr_atom_base.spec
+# explains (briefly) the input format the script expects.
 
 from string     import *
 from xreadlines import *

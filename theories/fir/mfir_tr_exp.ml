@@ -107,9 +107,9 @@ prim ty_letExt 'H 'a 'b :
  *)
 
 prim ty_tailCall 'H 'J :
-   sequent [fir] { 'H; a: var_def{ 'v; tyFun{'t1; 't2}; no_def }; 'J >-
+   sequent [fir] { 'H; a: var_def{ 'v; tyFun{'t1; 't2}; 'd }; 'J >-
       has_type["tailCall"]{ 'atoms; tyFun{ 't1; 't2 } } } -->
-   sequent [fir] { 'H; a: var_def{ 'v; tyFun{'t1; 't2}; no_def }; 'J >-
+   sequent [fir] { 'H; a: var_def{ 'v; tyFun{'t1; 't2}; 'd }; 'J >-
       has_type["exp"]{ tailCall{ atomVar{'v}; 'atoms }; tyEnum[0] } }
    = it
 
@@ -167,7 +167,7 @@ prim ty_match_cases_ind 'H :
 
 (* XXX: documentation needs to be completed. *)
 
-prim ty_matchExp_tyInt 'H :
+prim ty_matchExp_tyInt_atom 'H :
    (* The  atom being matched should be well-formed. *)
    sequent [fir] { 'H >- has_type["atom"]{ atomInt{'i}; tyInt } } -->
 
@@ -184,7 +184,32 @@ prim ty_matchExp_tyInt 'H :
       has_type["exp"]{ matchExp{ atomInt{'i}; 'cases }; 't } }
    = it
 
-prim ty_matchExp_tyEnum 'H :
+prim ty_matchExp_tyInt_var 'H 'J :
+   (* The cases should cover all of tyInt. *)
+   sequent [fir] { 'H; a: var_def{ 'v; tyInt; 'd }; 'J >-
+      set_eq{ intset_max[31, "signed"];
+              union_cases{ intset[31, "signed"]{ nil }; 'cases } } } -->
+
+   (* The cases should have the right type. *)
+   sequent [fir] { 'H; a: var_def{ 'v; tyInt; 'd }; 'J >-
+       has_type["match_cases"]{ 'cases; 't } } -->
+
+   (* Then the matchExp is well-typed. *)
+   sequent [fir] { 'H; a: var_def{ 'v; tyInt; 'd }; 'J >-
+      has_type["exp"]{ matchExp{ atomVar{'v}; 'cases }; 't } }
+   = it
+
+
+(*!
+ * @begin[doc]
+ *
+ * (Documentation incomplete.)
+ * @end[doc]
+ *)
+
+(* XXX: documentation needs to be completed. *)
+
+prim ty_matchExp_tyEnum_atom 'H :
    (* The  atom being matched should be well-formed. *)
    sequent [fir] { 'H >-
       has_type["atom"]{ atomEnum[i:n]{'j}; tyEnum[i:n] } } -->
@@ -202,7 +227,30 @@ prim ty_matchExp_tyEnum 'H :
       has_type["exp"]{ matchExp{ atomEnum[i:n]{'j}; 'cases }; 't } }
    = it
 
-prim ty_matchExp_tyRawInt 'H :
+prim ty_matchExp_tyEnum_var 'H 'J :
+   (* The cases should cover all of tyEnum. *)
+   sequent [fir] { 'H; a: var_def{ 'v; tyEnum[i:n]; 'd }; 'J >-
+      set_eq{ intset[31, "signed"]{ (interval{0; (number[i:n] -@ 1)} :: nil) };
+              union_cases{ intset[31, "signed"]{ nil }; 'cases } } } -->
+
+   (* The cases should have the right type. *)
+   sequent [fir] { 'H; a: var_def{ 'v; tyEnum[i:n]; 'd }; 'J >-
+      has_type["match_cases"]{ 'cases; 't } } -->
+
+   (* Then the matchExp is well-typed. *)
+   sequent [fir] { 'H; a: var_def{ 'v; tyEnum[i:n]; 'd }; 'J >-
+      has_type["exp"]{ matchExp{ atomVar{'v}; 'cases }; 't } }
+   = it
+
+
+(*!
+ * @begin[doc]
+ *
+ * (Documentation incomplete.)
+ * @end[doc]
+ *)
+
+prim ty_matchExp_tyRawInt_atom 'H :
    (* The  atom being matched should be well-formed. *)
    sequent [fir] { 'H >-
       has_type["atom"]{ atomRawInt[p:n, s:s]{'i}; tyRawInt[p:n, s:s] } } -->
@@ -217,6 +265,21 @@ prim ty_matchExp_tyRawInt 'H :
 
    (* Then the matchExp is well-typed. *)
    sequent [fir] { 'H >-
+      has_type["exp"]{ matchExp{ atomRawInt[p:n, s:s]{'i}; 'cases }; 't } }
+   = it
+
+prim ty_matchExp_tyRawInt_var 'H 'J :
+   (* The cases should cover all of tyRawInt. *)
+   sequent [fir] { 'H; a: var_def{ 'v; tyRawInt[p:n, s:s]; 'd }; 'J >-
+      set_eq{ intset_max[p:n, s:s];
+              union_cases{ intset[p:n, s:s]{ nil }; 'cases } } } -->
+
+   (* The cases should have the right type. *)
+   sequent [fir] { 'H; a: var_def{ 'v; tyRawInt[p:n, s:s]; 'd }; 'J >-
+      has_type["match_cases"]{ 'cases; 't } } -->
+
+   (* Then the matchExp is well-typed. *)
+   sequent [fir] { 'H; a: var_def{ 'v; tyRawInt[p:n, s:s]; 'd }; 'J >-
       has_type["exp"]{ matchExp{ atomRawInt[p:n, s:s]{'i}; 'cases }; 't } }
    = it
 
@@ -273,13 +336,9 @@ prim ty_matchExp_tyUnion_cases_ind 'H 'J :
  *
  * An offset atom should either be an integer or a raw integer.
  * Note that offsets cannot be negative, but in the case of variables,
- * this cannot be checked.
+ * this cannot be checked; variables are not defined (with some value)
+ * during type checking.
  * @end[doc]
- *)
-
-(*
- * BUG: If a variable is defined as an atom, then I should be able
- * to check that it has an appropriate value.
  *)
 
 prim ty_offset_tyInt 'H :
@@ -318,60 +377,91 @@ prim ty_offset_tyRawInt_var 'H 'J :
  * @end[doc]
  *)
 
-(*
-prim ty_letAlloc_tuple 'H 'a :
-   sequent [mfir] { 'H >- has_type["store"]{'atoms; tyTuple[tc:s]{'tyl}} } -->
-   sequent [mfir] { 'H; a: var_def{ tyTuple[tc:s]{'tyl}; no_def } >-
-      has_type["exp"]{ 'exp['a]; 't } } -->
-   sequent [mfir] { 'H >-
-      has_type["exp"]{
-         letAlloc{allocTuple[tc:s]{tyTuple[tc:s]{'tyl}; 'atoms}; v. 'exp['v]};
-         't } }
-   = it
 
-prim ty_letAlloc_union 'H 'a :
-   sequent [mfir] { 'H >-
-      has_type["store"]{ union_val[i:n]{ 'tv; 'atoms }; 'ty } } -->
-   sequent [mfir] { 'H; a: var_def{ 'ty; no_def } >-
-      has_type["exp"]{ 'exp['a]; 't } } -->
-   sequent [mfir] { 'H >-
+(*!
+ * @begin[doc]
+ *
+ * (Documentation incomplete.)
+ * @end[doc]
+ *)
+
+(* XXX: documentation needs to be completed. *)
+
+prim ty_letAlloc_array 'H 'a 'b :
+   sequent [fir] { 'H >- has_type["store"]{ 'atoms; tyArray{'u} } } -->
+   sequent [fir] { 'H; b: variable; a: var_def{ 'b; tyArray{'u}; no_def } >-
+      has_type["exp"]{ 'exp['b]; 't } } -->
+   sequent [fir] { 'H >-
       has_type["exp"]{
-         letAlloc{ allocUnion[i:n]{ 'ty; 'tv; 'atoms }; v. 'exp['v] };
-         't } }
+         letAlloc{ allocArray{ tyArray{'u}; 'atoms }; v. 'exp['v] }; 't } }
    = it
-*)
 
 
 (*!
  * @begin[doc]
  *
- * For array and raw data allocation, we only validate the size
- * of the area allocated, and in the case of arrays, the initializer value.
+ * (Documentation incomplete.)
  * @end[doc]
  *)
 
-(*
-prim ty_letAlloc_varray 'H 'a :
-   sequent [mfir] { 'H >- has_type["offset"]{ 'a1; offset } } -->
-   sequent [mfir] { 'H >- has_type["atom"]{ 'a2; 'u } } -->
-   sequent [mfir] { 'H; a: var_def{ tyArray{'u}; no_def } >-
-      has_type["exp"]{ 'exp['a]; 't } } -->
-   sequent [mfir] { 'H >-
+(* XXX: documentation needs to be completed. *)
+
+prim ty_letAlloc_varray 'H 'a 'b :
+   sequent [fir] { 'H >- has_type["atom"]{ 'a1; tyRawInt[32, "signed"] } } -->
+   sequent [fir] { 'H >- has_type["atom"]{ 'a2; 'u } } -->
+   sequent [fir] { 'H; b: variable; a: var_def{ 'b; tyArray{'u}; no_def } >-
+      has_type["exp"]{ 'exp['b]; 't } } -->
+   sequent [fir] { 'H >-
       has_type["exp"]{
          letAlloc{ allocVArray{tyArray{'u}; 'a1; 'a2 }; v. 'exp['v] };
          't } }
    = it
 
-prim ty_letAlloc_malloc 'H 'a :
-   sequent [mfir] { 'H >- has_type["offset"]{ 'atom; offset } } -->
-   sequent [mfir] { 'H; a: var_def{ tyRawData; no_def } >-
-      has_type["exp"]{ 'exp['a]; 't } } -->
-   sequent [mfir] { 'H >-
+
+(*!
+ * @begin[doc]
+ *
+ * (Documentation incomplete.)
+ * @end[doc]
+ *)
+
+(* XXX: documentation needs to be completed. *)
+
+(*
+ * NOTE: Going with the FIR type checker (version 1.56) for allocMalloc.
+ *)
+
+prim ty_letAlloc_malloc 'H 'a 'b :
+   sequent [fir] { 'H >-
+      has_type["atom"]{ 'atom; tyRawInt[32, "signed"] } } -->
+   sequent [fir] { 'H; b: variable; a: var_def{ 'b; tyRawData; no_def } >-
+      has_type["exp"]{ 'exp['b]; 't } } -->
+   sequent [fir] { 'H >-
       has_type["exp"]{
          letAlloc{ allocMalloc{ tyRawData; 'atom }; v. 'exp['v] };
          't } }
    = it
-*)
+
+
+(*!
+ * @begin[doc]
+ *
+ * (Documentation incomplete.)
+ * @end[doc]
+ *)
+
+(* XXX: documentation needs to be completed. *)
+
+prim ty_letAlloc_frame 'H 'a 'b :
+   sequent [fir] { 'H >-
+      type_eq{ tyFrame{ 'tv; 'tyl }; tyFrame{ 'tv; 'tyl }; small_type } } -->
+   sequent [fir] { 'H;
+                   b: variable;
+                   a: var_def{ 'b; tyFrame{'tv; 'tyl}; no_def } >-
+      has_type["exp"]{ 'exp['b]; 't } } -->
+   sequent [fir] { 'H >-
+      has_type["exp"]{ letAlloc{ allocFrame{ 'tv; 'tyl }; v. 'exp['v] }; 't } }
+   = it
 
 
 (*!************************************

@@ -878,15 +878,10 @@ val is_atomBinop_term : term -> bool
 val mk_atomBinop_term : term -> term -> term -> term
 val dest_atomBinop_term : term -> term * term * term
 
-val allocTuple_term : term
-val is_allocTuple_term : term -> bool
-val mk_allocTuple_term : string -> term -> term -> term
-val dest_allocTuple_term : term -> string * term * term
-
-val allocUnion_term : term
-val is_allocUnion_term : term -> bool
-val mk_allocUnion_term : Mp_num.num -> term -> term -> term -> term
-val dest_allocUnion_term : term -> Mp_num.num * term * term * term
+val allocArray_term : term
+val is_allocArray_term : term -> bool
+val mk_allocArray_term : term -> term -> term
+val dest_allocArray_term : term -> term * term
 
 val allocVArray_term : term
 val is_allocVArray_term : term -> bool
@@ -897,6 +892,11 @@ val allocMalloc_term : term
 val is_allocMalloc_term : term -> bool
 val mk_allocMalloc_term : term -> term -> term
 val dest_allocMalloc_term : term -> term * term
+
+val allocFrame_term : term
+val is_allocFrame_term : term -> bool
+val mk_allocFrame_term : term -> term -> term
+val dest_allocFrame_term : term -> term * term
 
 val letAtom_term : term
 val is_letAtom_term : term -> bool

@@ -104,8 +104,7 @@ doc <:doc<
    The Boolean connectives are defined in terms of @tt{ifthenelse}.
    @end[doc]
 >>
-define unfold_ifthenelse : ifthenelse{'b; 'e1; 'e2} <--> decide{'b; x. 'e1; y.
- 'e2}
+define unfold_ifthenelse : ifthenelse{'b; 'e1; 'e2} <--> decide{'b; x. 'e1; y. 'e2}
 define unfold_bor : bor{'a; 'b} <--> ifthenelse{'a; btrue; 'b}
 define unfold_band : band{'a; 'b} <--> ifthenelse{'a; 'b; bfalse}
 define unfold_bimplies : bimplies{'a; 'b} <--> ifthenelse{'a; 'b; btrue}

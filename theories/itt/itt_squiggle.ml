@@ -1,7 +1,7 @@
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @module[Itt_squiggle]
-  
+
    The @tt[Itt_squiggle] module defines the squiggle equality.
    The squiggle equality <<'t ~ 's>> holds for closed terms $t$ and $s$ iff
    $t$ can be reduced to $s$. We can expand this semantics for open terms
@@ -13,34 +13,34 @@ doc <:doc<
    The rules @hrefrule[squiggleSubstitution] and @hrefrule[squiggleHypSubstitution]
    define when such substitution would be valid.
    @end[doc]
-  
+
    ----------------------------------------------------------------
-  
+
    @begin[license]
-  
+
    This file is part of MetaPRL, a modular, higher order
    logical framework that provides a logical programming
    environment for OCaml and other languages.
-  
+
    See the file doc/index.html for information on Nuprl,
    OCaml, and more information about this system.
-  
+
    Copyright (C) 1998 Jason Hickey, Cornell University
-  
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
    as published by the Free Software Foundation; either version 2
    of the License, or (at your option) any later version.
-  
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-  
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-  
+
    @end[license]
 >>
 
@@ -58,13 +58,16 @@ doc <:doc< @docoff >>
 extends Itt_comment
 
 open Lm_debug
+open Refiner.Refiner
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
 
 open Var
 open Tactic_type.Tacticals
 open Tactic_type
-open Tactic_type.Tacticals
+open Tactic_type.Sequent
+open Tactic_type.Conversionals
+open Base_rewrite
 
 open Dtactic
 
@@ -103,7 +106,7 @@ let is_squiggle_term = is_dep0_dep0_term squiggle_opname
 let dest_squiggle = dest_dep0_dep0_term squiggle_opname
 let mk_squiggle_term = mk_dep0_dep0_term squiggle_opname
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @rewrites
    @modsubsection{Typehood and equality}
@@ -122,7 +125,7 @@ interactive squiggleType {| intro [] |} :
   [wf] sequent{ <H> >- 't ~ 's } -->
   sequent{ <H> >- "type"{.'t ~ 's}}
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Membership}
    The <<it>> term is the one-and-only element
@@ -139,7 +142,7 @@ interactive squiggle_memberEquality {| intro []; eqcd; squash |} :
   [wf] sequent{ <H> >- 't ~ 's } -->
   sequent{ <H> >- it in ('t ~ 's)}
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Squiggle equality is an equivalence relation}
    Squiggle equality is reflexive, symmetric and transitive
@@ -151,7 +154,7 @@ prim squiggleRef {|  intro [] |} :
    sequent { <H> >- 't ~ 't } =
    it
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Substitution}
    If we can prove that <<'t ~ 's>>, then we can substitute $s$ for $t$
@@ -170,7 +173,7 @@ interactive squiggleSubstitution ('t ~ 's) bind{x. 'A['x]} :
    [main] sequent{ <H> >- 'A['s] } -->
    sequent { <H> >-  'A['t] }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    The  @tt[sqSubstT] tactic takes a clause number $i$, and
    a term <<'t ~ 's>> and applies one of two above rules.
@@ -226,3 +229,26 @@ let sqSubstT t i =
       sqSubstHypT i t
 
 let sqSymT = squiggleSym
+
+let revSqTerm trm =
+      let a, b = dest_squiggle trm in
+        mk_squiggle_term  b a
+
+let hypC i = funC (fun p ->
+   let trm = Sequent.nth_hyp (env_arg p) i in
+   rewriteC trm  thenTC nthHypT i)
+
+let revHypC i = funC (fun p ->
+   let trm = Sequent.nth_hyp (env_arg p) i in
+   rewriteC (revSqTerm trm) thenTC (sqSymT thenT nthHypT i))
+
+
+let assumC i = funC (fun p ->
+   let trm = TermMan.nth_concl (Sequent.nth_assum (env_arg p) i) 1 in
+   rewriteC trm  thenTC nthHypT i)
+
+let revAssumC i = funC (fun p ->
+   let trm = TermMan.nth_concl (Sequent.nth_assum (env_arg p) i) 1 in
+   rewriteC (revSqTerm trm)  thenTC (sqSymT thenT nthAssumT i))
+
+

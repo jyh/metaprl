@@ -3,6 +3,8 @@ include Itt_theory
 include Itt_record_label
 include Itt_record0
 include Itt_struct3
+include Itt_bisect
+include Itt_disect
 include Itt_logic
 
 open Printf
@@ -52,32 +54,23 @@ let _ =
 (*  Definitions   *)
 (******************)
 
+define unfoldRcrd : rcrd[t:t]{'a;'r} <--> rcrd{label[t:t];'a;'r}
 
-define unfoldRecordS : record[t:s]{'A} <--> record{label[t:s];'A}
+define unfoldRcrdS : rcrd[t:t]{'a} <--> rcrd[t:t]{'a;rcrd}
 
-define unfoldRecord : record[t:s]{'A;'R} <--> record{label[t:s];'A;'R}
+define unfoldField : field[t:t]{'r} <--> field{'r;label[t:t]}
 
-define unfoldRcrd : rcrd[t:s]{'a;'r} <--> rcrd{label[t:s];'a;'r}
+define unfoldRecordS : record[t:t]{'A} <--> record{label[t:t];'A}
 
-define unfoldRcrdS : rcrd[t:s]{'a} <--> rcrd[t:s]{'a;rcrd}
+define unfoldRecordL : record[n:t]{self.'A['self];'R} <--> disect{'R; self.record[n:t]{'A['self]}}
 
-define unfoldField : field[t:s]{'r} <--> field{'r;label[t:s]}
+define unfoldRecordR : record[n:t]{'A;a.'R['a]} <--> disect{record[n:t]{'A};r.'R[field[n:t]{'r}]}
 
-define unfoldRecordOrt : record_ort[t:s]{'a;'R} <--> record_ort{label[t:s];'a;'R}
+define unfoldRecordI : record[n:t]{'A;'R} <--> record[n:t]{'A;a.'R}
 
-let unfoldAllT = rwaAll [unfoldRecordS;unfoldRecord;unfoldRcrdS;unfoldRcrd;unfoldField;unfoldRecordOrt]
+(* let foldRecordI = makeFoldC  <<record{'n;'A;'R}>> unfoldRecordI *)
 
-(*! @docoff *)
-let reduce_info =
-   [<< rcrd[n:s]{'a} >>, unfoldRcrdS]
-
-let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
-
-let intro_resource =
-   Mp_resource.improve intro_resource (<<rcrd[n:s]{'a} = 'r in 'R>>, (rwh unfoldRcrdS 0 thenT dT 0))
-let intro_resource =
-   Mp_resource.improve intro_resource (<<'r = rcrd[n:s]{'a} in 'R>>, (rwh unfoldRcrdS 0 thenT dT 0))
-(*! *)
+define unfoldRecordOrt : record_ort[t:t]{'a;'R} <--> (all r:'R. (rcrd[t:t]{'a;'r} IN 'R))
 
 
 (******************)
@@ -86,137 +79,261 @@ let intro_resource =
 
 (*** Typing ***)
 
-interactive recordType {| intro_resource [] |} 'H :
+interactive recordTypeS {| intro_resource [] |} 'H :
    sequent[squash]{'H >- "type"{'A} } -->
-   sequent['ext]  {'H >- "type"{record[n:s]{'A}} }
+   sequent['ext]  {'H >- "type"{record[n:t]{'A}} }
 
-interactive recordType2 {| intro_resource [] |} 'H :
+interactive field_member (*{| intro_resource[] |}*) 'H:
+   sequent[squash]{'H >- 'r IN record[n:t]{'A} } -->
+   sequent['ext]  {'H >- field[n:t]{'r} IN 'A }
+
+interactive recordTypeL {| intro_resource [] |} 'H :
+   sequent[squash]{'H >- "type"{'R} } -->
+   sequent[squash]{'H; self:'R >- "type"{'A['self]} } -->
+   sequent['ext]  {'H >- "type"{record[n:t]{self.'A['self];'R}} }
+
+interactive recordTypeR {| intro_resource [] |} 'H :
+   sequent[squash]{'H >- "type"{'A} } -->
+   sequent[squash]{'H; x:'A >- "type"{'R['x]} } -->
+   sequent['ext]  {'H >- "type"{record[n:t]{'A;x.'R['x]}} }
+
+interactive recordTypeI {| intro_resource [] |} 'H :
    sequent[squash]{'H >- "type"{'A} } -->
    sequent[squash]{'H >- "type"{'R} } -->
-   sequent['ext]  {'H >- "type"{record[n:s]{'A;'R}} }
+   sequent['ext]  {'H >- "type"{record[n:t]{'A;'R}} }
 
 (*** Introductions ***)
 
+interactive recordEqualS1 'H:
+   [equality] sequent[squash]{'H >- not{.label[n:t]=label[m:t] in label} } -->
+   sequent[squash]{'H >- 'r1='r2 in record[m:t]{'A} } -->
+   sequent['ext]  {'H >- rcrd[n:t]{'a;'r1}='r2 in record[m:t]{'A} }
+
+interactive recordEqualS2 'H:
+   [equality] sequent[squash]{'H >- not{.label[n:t]=label[m:t] in label} } -->
+   sequent[squash]{'H >- 'r1='r2 in record[m:t]{'A} } -->
+   sequent['ext]  {'H >- 'r1=rcrd[n:t]{'a;'r2} in record[m:t]{'A} }
 
 interactive recordEqualS  'H:
-   sequent[squash]{'H >- eq_label[n1:s,m:s]{
-                            eq_label[n2:s,m:s]{
+   sequent[squash]{'H >- eq_label[n1:t,m:t]{
+                            eq_label[n2:t,m:t]{
                                ('a1 ='a2 in 'A);                                  (* x1 = y = x2 *)
-                               (rcrd[n1:s]{'a1;'r1} = 'r2 in record[m:s]{'A})};   (* x1 = y <> x2 *)
-                               ('r1 = rcrd[n2:s]{'a2;'r2}  in record[m:s]{'A})}    (* x1 <> y  *)
+                               (rcrd[n1:t]{'a1;'r1} = 'r2 in record[m:t]{'A})};   (* x1 = y <> x2 *)
+                               ('r1 = rcrd[n2:t]{'a2;'r2}  in record[m:t]{'A})}    (* x1 <> y  *)
                   } -->
-   sequent['ext]  {'H >- rcrd[n1:s]{'a1;'r1} = rcrd[n2:s]{'a2;'r2} in record[m:s]{'A} }
+   sequent['ext]  {'H >- rcrd[n1:t]{'a1;'r1} = rcrd[n2:t]{'a2;'r2} in record[m:t]{'A} }
 
-let recordEqualST p =
-      (recordEqualS (Sequent.hyp_count_addr p)
-          thenT rw reduce_eq_label 0
-          thenT tryT (rw reduce_eq_label 0)) p
+interactive recordMemberS  'H:
+   sequent[squash]{'H >- eq_label[n:t,m:t]{('a IN 'A); ('r IN record[m:t]{'A})} } -->
+   sequent['ext]  {'H >- rcrd[n:t]{'a;'r} IN record[m:t]{'A} }
 
-let intro_resource =
-   Mp_resource.improve intro_resource
-      (<<rcrd[n1:s]{'a1;'r1} = rcrd[n2:s]{'a2;'r2} in record[m:s]{'A}>>, recordEqualST )
-
-
-interactive recordIntroS  'H:
-   sequent[squash]{'H >- eq_label[n:s,m:s]{('a IN 'A); ('r IN record[m:s]{'A})} } -->
-   sequent['ext]  {'H >- rcrd[n:s]{'a;'r} IN record[m:s]{'A} }
-
-let recordIntroST p =
-      (recordIntroS (Sequent.hyp_count_addr p) thenT rw reduce_eq_label 0) p
-
-let intro_resource =
-   Mp_resource.improve intro_resource (<<rcrd[n:s]{'a;'r} IN record[m:s]{'A}>>, recordIntroST )
-
-interactive recordIntro  {| intro_resource[] |} 'H:
-   sequent[squash]{'H >- 'r = 's in record[n:s]{'A} } -->
+interactive recordEqualL   'H:
+   [wf] sequent[squash]{'H; self:'R >- "type"{'A['self]} } -->
    sequent[squash]{'H >- 'r = 's in 'R } -->
-   sequent['ext]  {'H >- 'r = 's in record[n:s]{'A;'R} }
+   sequent[squash]{'H >- 'r = 's in record[n:t]{'A['r]} } -->
+   sequent['ext]  {'H >- 'r = 's in record[n:t]{self.'A['self];'R} }
 
-interactive recordIntro0  {| intro_resource[SelectOption 0] |} 'H:
+interactive recordEqualR   'H:
+   [wf] sequent[squash]{'H; x:'A >- "type"{'R['x]} } -->
+   sequent[squash]{'H >- 'r = 's in record[n:t]{'A} } -->
+   sequent[squash]{'H >- 'r = 's in 'R[field[n:t]{'r}] } -->
+   sequent['ext]  {'H >- 'r = 's in record[n:t]{'A;x.'R['x]} }
+
+interactive recordEqualI   'H:
+   sequent[squash]{'H >- 'r = 's in record[n:t]{'A} } -->
+   sequent[squash]{'H >- 'r = 's in 'R } -->
+   sequent['ext]  {'H >- 'r = 's in record[n:t]{'A;'R} }
+
+interactive recordMemberOrt (* {| intro_resource[SelectOption 0] |} *) 'H:
    sequent[squash]{'H >- 'r IN 'R } -->
-   [ort] sequent[squash]{'H; u:'R >- record_ort[n:s]{'a;'R} } -->
-   sequent['ext]  {'H >- rcrd[n:s]{'a;'r} IN 'R }
+   [ort] sequent[squash]{'H; u:'R >- record_ort[n:t]{'a;'R} } -->
+   sequent['ext]  {'H >- rcrd[n:t]{'a;'r} IN 'R }
 
 (*** Reductions ***)
 
+interactive_rw record_beta1:
+   field[n:t]{rcrd[n:t]{'a; 'r}} <--> 'a
+
+interactive_rw record_beta2:
+   (not{.label[n:t] = label[m:t] in label}) -->
+   field[n:t]{rcrd[m:t]{'a; 'r}} <--> field[n:t]{'r}
+
 interactive_rw record_beta:
-   field[n:s]{rcrd[m:s]{'a; 'r}} <--> eq_label[n:s,m:s]{'a;
-                                                        field[n:s]{'r}}
-let reduce_info =
-   [<< field[n:s]{rcrd[m:s]{'a; 'r}} >>, (record_beta andthenC reduce_eq_label)]
-
-let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
-
+   field[n:t]{rcrd[m:t]{'a; 'r}} <--> eq_label[n:t,m:t]{'a;
+                                                        field[n:t]{'r}}
 
 interactive record_eta {| intro_resource [] |} 'H 'A:
-   sequent[squash]{'H >- 'r IN record[n:s]{'A} } -->
-   sequent['ext]  {'H >- rcrd[n:s]{field[n:s]{'r}; 'r} ~ 'r }
+   sequent[squash]{'H >- 'r IN record[n:t]{'A} } -->
+   sequent['ext]  {'H >- rcrd[n:t]{field[n:t]{'r}; 'r} ~ 'r }
 
 interactive_rw record_eta_rw  :
-   ('r IN record[n:s]{top} ) -->
-   rcrd[n:s]{field[n:s]{'r}; 'r} <--> 'r
+   ('r IN record[n:t]{top} ) -->
+   rcrd[n:t]{field[n:t]{'r}; 'r} <--> 'r
 
 interactive_rw record_exchange :
-   rcrd[n:s]{'a; rcrd[m:s]{'b; 'r}} <--> eq_label[n:s,m:s]{rcrd[n:s]{'a;'r};
-                                                           rcrd[m:s]{'b; rcrd[n:s]{'a; 'r}}}
+   rcrd[n:t]{'a; rcrd[m:t]{'b; 'r}} <--> eq_label[n:t,m:t]{rcrd[n:t]{'a;'r};
+                                                           rcrd[m:t]{'b; rcrd[n:t]{'a; 'r}}}
 
 
 (*** Eliminations ***)
 
+(* Single Records *)
+
 interactive recordEliminationS {| elim_resource[] |} 'H 'J 'x:
-   sequent['ext]  {'H; x:'A; r:record; 'J[rcrd[n:s]{'x;'r}] >- 'C[rcrd[n:s]{'x;'r}]} -->
-   sequent['ext]  {'H; r:record[n:s]{'A}; 'J['r] >- 'C['r]}
+   sequent['ext]  {'H; x:'A; r:record; 'J[rcrd[n:t]{'x;'r}] >- 'C[rcrd[n:t]{'x;'r}]} -->
+   sequent['ext]  {'H; r:record[n:t]{'A}; 'J['r] >- 'C['r]}
 
+(* Left-associated Records *)
 
-interactive recordElimination  'H 'J 'x 'rr:
-   [ort] sequent[squash]{'H; r:record[n:s]{'A;'R}; 'J['r]; x:'A; rr:'R >- record_ort[n:s]{'x;'R} } -->
-   [main] sequent['ext]  {'H; x:'A; r:'R; 'J[rcrd[n:s]{'x;'r}] >- 'C[rcrd[n:s]{'x;'r}]} -->
-   sequent['ext]  {'H; r:record[n:s]{'A;'R}; 'J['r] >- 'C['r]}
+interactive recordEliminationL2 {| elim_resource[] |} 'H 'J   bind{rr,x.'C['rr;'x]} :
+   sequent['ext]  {'H; r:record[n:t]{self.'A['self];'R}; 'J['r]; rr:'R; x:'A['rr] >- 'C['rr;'x]} -->
+   sequent['ext]  {'H; r:record[n:t]{self.'A['self];'R}; 'J['r] >- 'C['r; field[n:t]{'r}]}
 
-interactive recordElimination0  'H 'J  'x 'rr :
-   sequent['ext]  {'H; r:record[n:s]{'A;'R}; 'J['r]; x:'A; rr:'R >- 'C['r]} -->
-   sequent['ext]  {'H; r:record[n:s]{'A;'R}; 'J['r] >- 'C['r]}
+interactive recordEliminationL1  'H 'J  'x :
+   sequent['ext]  {'H; r:'R; x:'A['r]; 'J  >- 'C[rcrd[n:t]{'x;'r}]} -->
+   sequent['ext]  {'H; r:record[n:t]{self.'A['self];'R}; 'J >- 'C['r]}
 
-interactive recordElimination1  'H 'J  'x 'rr :
-   sequent['ext]  {'H; r:record[n:s]{'A;'R}; 'J['r]; x:'A; rr:'R >- 'C[rcrd[n:s]{'x;'rr}]} -->
-   sequent['ext]  {'H; r:record[n:s]{'A;'R}; 'J['r] >- 'C['r]}
+interactive recordEliminationL 'H 'J 'x 'rr:
+   [wf] sequent[squash]{'H; r:record[n:t]{self.'A['self];'R}; 'J['r]; rr:'R >- "type"{'A['rr]} } -->
+   [ort] sequent[squash]{'H; r:record[n:t]{self.'A['self];'R}; 'J['r]; rr:'R; x:'A['rr]
+                                                                >- record_ort[n:t]{'x;'R} } -->
+   [main] sequent['ext]  {'H; r:'R; x:'A['r]; 'J[rcrd[n:t]{'x;'r}] >- 'C[rcrd[n:t]{'x;'r}]} -->
+   sequent['ext]  {'H; r:record[n:t]{self.'A['self];'R}; 'J['r] >- 'C['r]}
 
-interactive recordElimination2  'H 'J  'x 'rr :
-   sequent['ext]  {'H; r:record[n:s]{'A;'R}; 'J['r]; x:'A; rr:'R >- 'C['rr]} -->
-   sequent['ext]  {'H; r:record[n:s]{'A;'R}; 'J['r] >- 'C['r]}
+(* Right-assotiated Records *)
+
+interactive recordEliminationR2 {| elim_resource[] |} 'H 'J    bind{rr,z.'C['rr;'z]}:
+   sequent['ext]  {'H; r:record[n:t]{'A;x.'R['x]}; 'J['r]; x:'A; rr:'R['x] >- 'C['rr;'x]} -->
+   sequent['ext]  {'H; r:record[n:t]{'A;x.'R['x]}; 'J['r] >- 'C['r; field[n:t]{'r}]}
+
+interactive recordEliminationR1 'H 'J   :
+   sequent['ext]  {'H; x:'A; r:'R['x]; 'J  >- 'C[rcrd[n:t]{'x;'r}]} -->
+   sequent['ext]  {'H; r:record[n:t]{'A;x.'R['x]}; 'J >- 'C['r]}
+
+interactive recordEliminationR 'H 'J 'rr:
+   [wf] sequent[squash]{'H; r:record[n:t]{'A;x.'R['x]}; 'J['r]; x:'A >- "type"{'R['x]} } -->
+   [ort] sequent[squash]{'H; r:record[n:t]{'A;x.'R['x]}; 'J['r]; x:'A; rr:'R['x] >- record_ort[n:t]{'x;'R['x]} } -->
+   [main] sequent['ext]  {'H; x:'A; r:'R['x]; 'J[rcrd[n:t]{'x;'r}] >- 'C[rcrd[n:t]{'x;'r}]} -->
+   sequent['ext]  {'H; r:record[n:t]{'A;x.'R['x]}; 'J['r] >- 'C['r]}
+
+(* Independent Records *)
+
+interactive recordEliminationI  'H 'J 'x 'rr:
+   [ort] sequent[squash]{'H; r:record[n:t]{'A;'R}; 'J['r]; x:'A; rr:'R >- record_ort[n:t]{'x;'R} } -->
+   [main] sequent['ext]  {'H; x:'A; r:'R; 'J[rcrd[n:t]{'x;'r}] >- 'C[rcrd[n:t]{'x;'r}]} -->
+   sequent['ext]  {'H; r:record[n:t]{'A;'R}; 'J['r] >- 'C['r]}
+
+interactive recordEliminationI1  'H 'J  'x :
+   sequent['ext]  {'H; x:'A; r:'R; 'J  >- 'C[rcrd[n:t]{'x;'r}]} -->
+   sequent['ext]  {'H; r:record[n:t]{'A;'R}; 'J >- 'C['r]}
+
+interactive recordEliminationI2  'H 'J  'x 'rr :
+   sequent['ext]  {'H; r:record[n:t]{'A;'R}; 'J['r]; x:'A; rr:'R >- 'C['rr]} -->
+   sequent['ext]  {'H; r:record[n:t]{'A;'R}; 'J['r] >- 'C['r]}
 
 
 (*** Orthogonality ***)
 
 interactive recordOrtIntro0 {| intro_resource[] |} 'H  :
-   sequent['ext]  {'H  >- record_ort[n:s]{'a;record} }
+   sequent['ext]  {'H  >- record_ort[n:t]{'a;record} }
 
 interactive recordOrtIntroS 'H  'x  :
-   [wf] sequent[squash]{'H >- "type"{record[m:s]{'A}} } -->
-   [main] sequent[squash]{'H; x:'A >- eq_label[n:s,m:s]{.'a IN 'A;."true"} } -->
-   sequent['ext]  {'H >- record_ort[n:s]{'a;record[m:s]{'A}} }
+   [wf] sequent[squash]{'H >- "type"{record[m:t]{'A}} } -->
+   [main] sequent[squash]{'H; x:'A >- eq_label[n:t,m:t]{.'a IN 'A;."true"} } -->
+   sequent['ext]  {'H >- record_ort[n:t]{'a;record[m:t]{'A}} }
 
-interactive recordOrtIntroSM 'H  'x  :
-   [main] sequent[squash]  {'H; x:'A >- eq_label[n:s,m:s]{.'a IN 'A;."true"} } -->
-   sequent['ext]  {'H; r:record[m:s]{'A}  >- record_ort[n:s]{'a;record[m:s]{'A}} }
+interactive recordOrtIntroR  'H  'x  :
+   [wf] sequent[squash]{'H >- "type"{record[m:t]{self.'A['self];'R}} } -->
+   [main] sequent[squash]  {'H; r:'R; x:'A['r] >-  eq_label[n:t,m:t]{.'a IN 'A['r];
+                                                                     record_ort[n:t]{'a;'R}} } -->
+   sequent['ext]  {'H >- record_ort[n:t]{'a;record[m:t]{self.'A['self];'R}} }
 
+interactive recordOrtIntroL  'H   :
+   [wf] sequent[squash]{'H >- "type"{record[m:t]{'A;x.'R['x]}} } -->
+   [main] sequent[squash]  {'H; x:'A; r:'R['x] >-  eq_label[n:t,m:t]{.'a IN 'A;
+                                                                      record_ort[n:t]{'a;'R['x]}} } -->
+   sequent['ext]  {'H >- record_ort[n:t]{'a;record[m:t]{'A;x.'R['x]}} }
 
-interactive recordOrtIntro  'H  'x  :
-   [wf] sequent[squash]{'H >- "type"{record[m:s]{'A;'R}} } -->
-   [main] sequent[squash]  {'H; x:'A; r:'R >-  eq_label[n:s,m:s]{.'a IN 'A; record_ort[n:s]{'a;'R}} } -->
-   sequent['ext]  {'H >- record_ort[n:s]{'a;record[m:s]{'A;'R}} }
+interactive recordOrtIntroI  'H  'x  :
+   [wf] sequent[squash]{'H >- "type"{record[m:t]{'A;'R}} } -->
+   [main] sequent[squash]  {'H; x:'A; r:'R >-  eq_label[n:t,m:t]{.'a IN 'A; record_ort[n:t]{'a;'R}} } -->
+   sequent['ext]  {'H >- record_ort[n:t]{'a;record[m:t]{'A;'R}} }
 
-interactive recordOrtIntroM 'H  'x  :
-   [main] sequent[squash]  {'H; x:'A; r:'R >-  eq_label[n:s,m:s]{.'a IN 'A; record_ort[n:s]{'a;'R}} } -->
-   sequent['ext]  {'H; r:record[m:s]{'A;'R}  >- record_ort[n:s]{'a;record[m:s]{'A;'R}} }
 
 
 (******************)
 (*  Tactics       *)
 (******************)
 
-(*** Ortogonality ***)
+(*! @docoff *)
 
+
+(* Reduction *)
+
+let record_beta_rw = record_beta andthenC reduce_eq_label
+
+let record_beta2_rw = record_beta2
+
+let reduce_info =
+   [<< field[n:t]{rcrd[m:t]{'a; 'r}} >>, record_beta_rw;
+    << field[n:t]{rcrd[n:t]{'a; 'r}} >>, record_beta1;
+    << rcrd[n:t]{'a} >>, unfoldRcrdS]
+
+let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
+
+let record_reduce = repeatC (higherC (firstC [unfoldRcrdS;record_beta1;record_beta_rw]))
+
+let record_reduceT = rwhAll record_reduce
+
+(* Introduction *)
+
+let record_eqcdS addr  =
+      (recordMemberS addr orelseT recordEqualS addr)
+      thenT rw reduce_eq_label 0
+      thenT tryT (rw reduce_eq_label 0)
+
+let record_eqcd p =
+   let n= Sequent.hyp_count_addr p in
+      firstT [record_eqcdS n; recordEqualI n; recordEqualL n; recordEqualR n] p
+
+let record_repeat_eqcd =
+   rwh unfoldRcrdS 0 thenT record_eqcd thenT untilFailT record_eqcd
+
+let intro_resource =
+   Mp_resource.improve intro_resource (<<'r='s in record[m:t]{'A}>>,record_repeat_eqcd)
+let intro_resource =
+   Mp_resource.improve intro_resource (<<'r='s in record[m:t]{'A;'R}>>,record_repeat_eqcd)
+let intro_resource =
+   Mp_resource.improve intro_resource (<<'r='s in record[m:t]{'A;a.'R['a]}>>,record_repeat_eqcd)
+let intro_resource =
+   Mp_resource.improve intro_resource (<<'r='s in record[m:t]{self.'A['self];'R}>>,record_repeat_eqcd)
+
+
+(*
+let elim0 rule p n =
+   let j, k = Sequent.hyp_indices p n in
+   let bind =
+      try
+         let b = get_with_arg p in
+            if is_bind2_term b then
+               b
+            else
+               raise (RefineError ("recordElimination2",
+                                   StringTermError ("need a \"bind{r,x.'A['r;'x]}\" term: ", b)))
+      with
+         RefineError _ ->
+            let r, record = Sequent.nth_hyp p n in
+            let x = field_name record
+            let rr,xx = maybe_new_vars2 rr xx in
+            let field = mk_rcrd_term x
+            let concl = (Sequent.concl p) in
+            let concl1 = var_subst concl r.x
+
+            mk_bind2_term z (var_subst ) a z)
+*)
+
+(*** Ortogonality ***)
+(*
 let recordOrtIntro0T p = recordOrtIntro0 ( Sequent.hyp_count_addr p) p
 
 let recordOrtIntroST p =
@@ -225,11 +342,12 @@ let recordOrtIntroST p =
    let x= maybe_new_vars1 p "x" in
       ( (recordOrtIntroSM m x orelseT recordOrtIntroS n x)
         thenMT  rw reduce_eq_label 0
+        thenWT tryT (typeAssertT thenT trivialT)
         thenT tryT (completeT (dT 0))
       ) p
 
 let intro_resource =
-   Mp_resource.improve intro_resource (<<record_ort[n:s]{'a;record[m:s]{'A}}>>,recordOrtIntroST)
+   Mp_resource.improve intro_resource (<<record_ort[n:t]{'a;record[m:t]{'A}}>>,recordOrtIntroST)
 
 let recordOrtIntroT p =
    let m, _ = Sequent.hyp_indices p (-1) in
@@ -241,11 +359,28 @@ let recordOrtIntroT p =
 let repeatRecordOrtIntroT = (untilFailT recordOrtIntroT) thenT tryT (recordOrtIntroST orelseT recordOrtIntro0T)
 
 let intro_resource =
-   Mp_resource.improve intro_resource (<<record_ort[n:s]{'a;record[m:s]{'A;'R}}>>,repeatRecordOrtIntroT)
+   Mp_resource.improve intro_resource (<<record_ort[n:t]{'a;record[m:t]{'A;'R}}>>,repeatRecordOrtIntroT)
 
-
+*)
 (*** Elimination ***)
+(*
+let makeElimTac1 rule p  =
+ let j, k = Sequent.hyp_indices p n in
+   let x = maybe_new_vars2 p "x" "r" in
+      tac j k x p
 
+
+let makeElimTac2 rule p  =
+ let j, k = Sequent.hyp_indices p n in
+   let x,r = maybe_new_vars2 p "x" "r" in
+      tac j k x r p
+
+let repeatRecEl tac n p =
+   dT n thenMT dT (n+1)
+      tac n thenMT tryT (tac (n+1))
+          orelseT recordEliminationS j k x) p
+*)
+(*
 let rec repeatRecordEliminationT n p =
    let j, k = Sequent.hyp_indices p n in
    let x,r = maybe_new_vars2 p "x" "r" in
@@ -261,15 +396,13 @@ let recordEliminationT n p =
    let x,r = maybe_new_vars2 p "x" "r" in
    try
       let sel = get_sel_arg p in
-         if sel = 0 then recordElimination0 j k x r p else
-         if sel = 1 then recordElimination1 j k x r p else
-         if sel = 2 then recordElimination2 j k x r p else
-            recordDefEliminationT n p
+         if sel = 0 then recordElimination2 j k x r p else
+            (recordElimination1 j k x r orelse recordElimination j k x r) p
    with
          RefineError _ -> recordDefEliminationT n p
 
-let elim_resource = Mp_resource.improve elim_resource (<<record[n:s]{'A;'R}>>, recordEliminationT)
-
+let elim_resource = Mp_resource.improve elim_resource (<<record[n:t]{'A;'R}>>, recordEliminationT)
+*)
 (*** Reductions ***)
 
 let record_exchangeC n =
@@ -295,17 +428,17 @@ let record_exchangeC n =
 
 
 
-dform field_df : except_mode [src] :: field[t:s]{'r} = field{'r;label[t:s]}
+dform field_df : except_mode [src] :: field[t:t]{'r} = field{'r;label[t:t]}
 
-dform recordS_df : except_mode [src] :: record[t:s]{'A} = record{label[t:s];'A}
-dform record_df : except_mode [src] :: record[t:s]{'A;'R} = record{label[t:s];'A;'R}
+dform recordS_df : except_mode [src] :: record[t:t]{'A} = record{label[t:t];'A}
+dform record_df : except_mode [src] :: record[t:t]{'A;'R} = record{label[t:t];'A;'R}
 
-dform rcrdS_df : except_mode [src] :: rcrd[t:s]{'a} = rcrd{label[t:s];'a}
-dform rcrd_df : except_mode [src] :: rcrd[t:s]{'a;'r} = rcrd{label[t:s];'a;'r}
+dform rcrdS_df : except_mode [src] :: rcrd[t:t]{'a} = rcrd{label[t:t];'a}
+dform rcrd_df : except_mode [src] :: rcrd[t:t]{'a;'r} = rcrd{label[t:t];'a;'r}
 
-dform record_ort_df :  except_mode [src] :: record_ort[t:s]{'a;'r} = record_ort{label[t:s];'a;'r}
+dform record_ort_df :  except_mode [src] :: record_ort[t:t]{'a;'r} = record_ort{label[t:t];'a;'r}
 
-
+(* set_dfmode *)
 
 
 

@@ -79,6 +79,8 @@ topval prefix_thenET : tactic -> tactic -> tactic
 topval prefix_thenPT : tactic -> tactic -> tactic
 topval repeatMT : tactic -> tactic
 topval repeatMForT : int -> tactic -> tactic
+topval whileProgressMT : tactic -> tactic
+topval untilFailMT : tactic -> tactic
 topval seqOnMT : tactic list -> tactic
 topval seqT : tactic list -> tactic
 topval completeMT : tactic -> tactic

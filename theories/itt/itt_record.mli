@@ -1,6 +1,8 @@
 include Itt_record_label
 include Itt_record0
 include Itt_struct3
+include Itt_logic
+include Itt_disect
 
 open Refiner.Refiner.Term
 open Tactic_type.Tacticals
@@ -10,19 +12,26 @@ open Tactic_type.Conversionals
 
 topval record_exchangeC : int -> conv
 
+topval record_reduce : conv
+topval record_reduceT : tactic
+topval record_beta2 : conv
+topval record_beta2_rw : conv
+
+topval record_eqcd : tactic
+topval record_repeat_eqcd : tactic
 
 
+define unfoldRcrd : rcrd[t:t]{'a;'r} <--> rcrd{label[t:t];'a;'r}
 
-define unfoldRecordS : record[t:s]{'A} <--> record{label[t:s];'A}
+define unfoldRcrdS : rcrd[t:t]{'a} <--> rcrd[t:t]{'a;rcrd}
 
-define unfoldRecord : record[t:s]{'A;'R} <--> record{label[t:s];'A;'R}
+define unfoldField : field[t:t]{'r} <--> field{'r;label[t:t]}
 
-define unfoldRcrd : rcrd[t:s]{'a;'r} <--> rcrd{label[t:s];'a;'r}
+define unfoldRecordS : record[t:t]{'A} <--> record{label[t:t];'A}
 
-define unfoldRcrdS : rcrd[t:s]{'a} <--> rcrd[t:s]{'a;rcrd}
+define unfoldRecordL : record[n:t]{self.'A['self];'R} <--> disect{'R; self.record[n:t]{'A['self]}}
 
-define unfoldField : field[t:s]{'r} <--> field{'r;label[t:s]}
+define unfoldRecordR : record[n:t]{'A;a.'R['a]} <--> disect{record[n:t]{'A};r.'R[field[n:t]{'r}]}
 
-define unfoldRecordOrt : record_ort[t:s]{'a;'R} <--> record_ort{label[t:s];'a;'R}
+define unfoldRecordI : record[n:t]{'A;'R} <--> record[n:t]{'A;a.'R}
 
-topval unfoldAllT : tactic

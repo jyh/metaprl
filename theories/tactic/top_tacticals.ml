@@ -3,7 +3,8 @@
  * OnFirstT OnLastT OnSameConclT addHiddenLabelT cutT dT failT failWithT
  * firstT idT ifLabT keepingLabelT nthAssumT onAllClausesT onClauseT
  * onClausesT onConclT onHypT onHypsT onSomeHypT onVarT orelseT progressT
- * removeHiddenLabelT repeatForT repeatMT repeatT whileProgressT untilFailT selT
+ * removeHiddenLabelT repeatForT repeatMT repeatT whileProgressT untilFailT
+ * whileProgressMT untilFailMT selT
  * seqOnSameConclT seqT tactical thenAT thenET thenMT thenT thenWT timingT
  * tryT withBoolT withIntT withT withTypeT
  *
@@ -428,9 +429,9 @@ let onVarT = Tactic_type.Tacticals.onVarT
  * @tt{thenAT} applies its second argument only to the goal that @emph{not}
  * labeled ``main''.}
  *
- * @item{@tactic[repeatMT];
- * The @tt{repeatMT} tactic is similar to @tt{repeatT}, but it applies only
- * to the subgoals labeled ``main''.}
+ * @item{@tactic[whileProgressMT], @tactic[untilFailMT], @tactic[repeatMT], @tactic[repeatMForT];
+ * These tactics repeat the argument tactic  only
+ * on the subgoals labeled ``main''.}
  * @end[description]
  *
  * @docoff
@@ -448,6 +449,8 @@ let prefix_thenWT = Tactic_type.Tacticals.prefix_thenWT
 let prefix_thenET = Tactic_type.Tacticals.prefix_thenET
 let prefix_thenPT = Tactic_type.Tacticals.prefix_thenPT
 let repeatMT = Tactic_type.Tacticals.repeatMT
+let untilFailMT = Tactic_type.Tacticals.untilFailMT
+let whileProgressMT = Tactic_type.Tacticals.whileProgressMT
 let repeatMForT = Tactic_type.Tacticals.repeatMForT
 let seqOnMT = Tactic_type.Tacticals.seqOnMT
 let completeMT = Tactic_type.Tacticals.completeMT

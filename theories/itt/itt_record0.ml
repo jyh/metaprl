@@ -64,6 +64,7 @@ let reduce_info =
 let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
 (*! *)
 
+(*** Dependent Record Type ***)
 
 (*** Recursive Record Type ***)
 
@@ -265,21 +266,16 @@ interactive recordElimination  'H 'J :
    sequent['ext]  {'H; x:'A; r:'R; 'J[rcrd{'n;'x;'r}] >- 'C[rcrd{'n;'x;'r}]} -->
    sequent['ext]  {'H; r:record{'n;'A;'R}; 'J['r] >- 'C['r]}
 
-interactive recordElimination0  'H 'J :
-   [wf]  sequent[squash]{'H; r:record{'n;'A;'R}; 'J['r] >- 'n IN label } -->
-   sequent['ext]  {'H; r:record{'n;'A;'R}; 'J['r]; x:'A; r':'R >- 'C['r]} -->
-   sequent['ext]  {'H; r:record{'n;'A;'R}; 'J['r] >- 'C['r]}
-
 interactive recordElimination1  'H 'J :
-   [wf]  sequent[squash]{'H; r:record{'n;'A;'R}; 'J['r] >- 'n IN label } -->
-   sequent['ext]  {'H; r:record{'n;'A;'R}; 'J['r]; x:'A; rr:'R >- 'C[rcrd{'n;'x;'rr}]} -->
-   sequent['ext]  {'H; r:record{'n;'A;'R}; 'J['r] >- 'C['r]}
+   [wf]  sequent[squash]{'H; r:record{'n;'A;'R}; 'J >- 'n IN label } -->
+   sequent['ext]  {'H; x:'A; r:'R; 'J >- 'C[rcrd{'n;'x;'r}]} -->
+   sequent['ext]  {'H; r:record{'n;'A;'R}; 'J >- 'C['r]}
 
 interactive recordElimination2  'H 'J :
    [wf]  sequent[squash]{'H; r:record{'n;'A;'R}; 'J['r] >- 'n IN label } -->
    sequent['ext]  {'H; r:record{'n;'A;'R}; 'J['r]; x:'A; rr:'R >- 'C['rr]} -->
    sequent['ext]  {'H; r:record{'n;'A;'R}; 'J['r] >- 'C['r]}
-
+(*
 let recordEliminationT n p =
    let j, k = Sequent.hyp_indices p n in
    try
@@ -292,7 +288,7 @@ let recordEliminationT n p =
          RefineError _ -> recordElimination j k p
 
 let elim_resource = Mp_resource.improve elim_resource (<<record{'n;'A;'R}>>, recordEliminationT)
-
+*)
 (*** Orthogonality ***)
 
 interactive recordOrtIntro0 {| intro_resource[] |} 'H  :

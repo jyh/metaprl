@@ -32,13 +32,13 @@ open Base_dtactic
 
 (**** label ****)
 
-declare label[t:s]
+declare label[t:t]
 
 prim labelMember {| intro_resource []; eqcd_resource |} 'H :
-   sequent ['ext] { 'H >- label[t:s] IN label } =
+   sequent ['ext] { 'H >- label[t:t] IN label } =
    it
 
-let label_term = << label[x:s] >>
+let label_term = << label[x:t] >>
 let label_opname = opname_of_term label_term
 let is_label_term = TermOp.is_string_term label_opname
 let dest_label = TermOp.dest_string_term label_opname
@@ -48,16 +48,7 @@ let mk_label_term = TermOp.mk_string_term label_opname
 
 (**** equality ****)
 
-define unfold_eq_label : eq_label[x:s,y:s]{'A;'B} <-->  meta_eq{label[x:s]; label[y:s]; 'A; 'B}
-
-let reduce_eq_label =  unfold_eq_label andthenC reduce_meta_eq
-
-(*! @docoff *)
-let reduce_info =
-   [<< eq_label[x:s,y:s]{'A;'B}  >>, reduce_eq_label]
-
-let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
-
+define unfold_eq_label : eq_label[x:t,y:t]{'A;'B} <-->  meta_eq{label[x:t]; label[y:t]; 'A; 'B}
 
 (******************)
 (*   Rules        *)
@@ -66,33 +57,48 @@ let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_i
 
 
 prim reduce_eq_label_true {| intro_resource [] |} 'H:
-   sequent[squash] {'H >- label[x:s] = label[y:s]  in label} -->
-   sequent['ext] {'H >- eq_label[x:s,y:s]{'A;'B} ~ 'A}
+   sequent[squash] {'H >- label[x:t] = label[y:t]  in label} -->
+   sequent['ext] {'H >- eq_label[x:t,y:t]{'A;'B} ~ 'A}
       = it
 
 interactive reduce_eq_label_false {| intro_resource [] |} 'H:
-   sequent[squash] {'H >- not{.label[x:s] = label[y:s]  in label}} -->
-   sequent['ext] {'H >- eq_label[x:s,y:s]{'A;'B} ~ 'B}
+   sequent[squash] {'H >- not{.label[x:t] = label[y:t]  in label}} -->
+   sequent['ext] {'H >- eq_label[x:t,y:t]{'A;'B} ~ 'B}
 
 
 interactive_rw reduce_eq_label_true_rw :
-   (label[x:s] = label[y:s]  in label) -->
-   eq_label[x:s,y:s]{'A;'B} <--> 'A
+   (label[x:t] = label[y:t]  in label) -->
+   eq_label[x:t,y:t]{'A;'B} <--> 'A
+
+interactive_rw reduce_eq_label_trivial_rw :
+      eq_label[x:t,x:t]{'A;'B} <--> 'A
 
 interactive_rw reduce_eq_label_false_rw :
-   (not{.label[x:s] = label[y:s]  in label}) -->
-   eq_label[x:s,y:s]{'A;'B} <--> 'B
+   (not{.label[x:t] = label[y:t]  in label}) -->
+   eq_label[x:t,y:t]{'A;'B} <--> 'B
 
 
 interactive not_eq_label  'H:
-   sequent[squash] {'H >- eq_label[x:s,y:s]{."false";."true"} } -->
-   sequent['ext] {'H >- not{.label[x:s] = label[y:s]  in label}}
+   sequent[squash] {'H >- eq_label[x:t,y:t]{."false";."true"} } -->
+   sequent['ext] {'H >- not{.label[x:t] = label[y:t]  in label}}
+
+
+let reduce_eq_label =  reduce_eq_label_trivial_rw orelseC
+                       (unfold_eq_label andthenC reduce_meta_eq)
 
 let not_eq_labelT p =
       (not_eq_label (Sequent.hyp_count_addr p) thenT rw reduce_eq_label 0 thenT tryT (dT 0)) p
 
 let into_resource =
-   Mp_resource.improve intro_resource (<< not{.label[x:s] = label[y:s]  in label}>>, not_eq_labelT )
+   Mp_resource.improve intro_resource (<< not{.label[x:t] = label[y:t]  in label}>>, not_eq_labelT )
+
+
+let reduce_info =
+    [<< eq_label[x:t,y:t]{'A;'B}  >>, reduce_eq_label]
+
+let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
+
+
 
 (******************)
 (*   Tactic       *)
@@ -121,13 +127,13 @@ let decideEqLabelT x y =
 (*  Display Forms *)
 (******************)
 
-dform label_df : except_mode[src] :: except_mode[tex] :: label[t:s] =  slot[t:s]
+dform label_df : except_mode[src] :: except_mode[tex] :: label[t:t] =  slot[t:t]
 
-dform label_df_tex : mode[tex] :: label[t:s] =
+dform label_df_tex : mode[tex] :: label[t:t] =
    izone `"\\mathtt{" ezone
-    slot[t:s]
+    slot[t:t]
    izone "}" ezone
 
 dform eq_label_df : except_mode[src] ::
-   eq_label[x:s,y:s]{'A;'B} = ifthenelse{eq_label{label[x:s];label[y:s]};'A;'B}
+   eq_label[x:t,y:t]{'A;'B} = ifthenelse{eq_label{label[x:t];label[y:t]};'A;'B}
 

@@ -169,6 +169,18 @@ prim dintersectionType {| intro_resource [] |} 'H 'y :
    sequent ['ext] { 'H >- "type"{.disect{'A; x. 'B['x]}} } =
    it
 
+(*
+prim dintersectionInverseType1 'H  disect{'A; x. 'B['x]} :
+   sequent [squash]{ 'H >- "type"{.disect{'A; x. 'B['x]}} } -->
+   sequent ['ext]  { 'H >- "type"{'A} } =
+   it
+
+prim dintersectionInverseType2 'H  disect{'A; x. 'B['x]} 'a:
+   sequent [squash] { 'H >- "type"{.disect{'A; x. 'B['x]}} } -->
+   sequent [squash] { 'H >- 'a IN 'A } -->
+   sequent ['ext] { 'H >- "type"{'B['a]} }  =
+   it
+*)
 
 (*!
  * @begin[doc]
@@ -210,13 +222,16 @@ interactive dintersectionMemberFormation {| intro_resource [] |} 'H 't:
  * @end[doc]
  *)
 
-prim dintersectionElimination {| elim_resource [] |} 'H 'J 'x 'a 'b 'v 'w:
-   [main] ('t['x; 'a; 'v; 'b; 'w] :
-     sequent ['ext] { 'H; x: disect{'A; y.'B['y]}; 'J['x];
-     a:'A; v: 'a='x in 'A; b: 'B['a]; w: 'b = 'x in 'B['a] >- 'T['x] }) -->
-   sequent ['ext] { 'H; x: disect{'A; y.'B['y]}; 'J['x] >- 'T['x] } =
-   't['x; 'x; it; 'x; it]
+prim dintersectionElimination {| elim_resource [] |} 'H 'J  bind{a,b,dumb.'T['a;'b;'dumb]}:
+   [main] ('t['a; 'b] :
+   sequent ['ext] { 'H; x: disect{'A; y.'B['y]}; 'J['x];  a:'A; b: 'B['a]  >- 'T['a;'b; it] }) -->
+   sequent ['ext] { 'H; x: disect{'A; y.'B['y]}; 'J['x] >- 'T['x;'x; it] } =
+   't['x; 'x]
 
+interactive dintersectionElimination2 'H 'J 'x 'a 'b 'v 'w:
+   sequent ['ext] { 'H; x: disect{'A; y.'B['y]}; 'J['x];
+     a:'A; v: 'a='x in 'A; b: 'B['a]; w: 'b = 'x in 'B['a] >- 'T['x] } -->
+   sequent ['ext] { 'H; x: disect{'A; y.'B['y]}; 'J['x] >- 'T['x] }
 
 (*!
  * @begin[doc]

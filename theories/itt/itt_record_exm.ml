@@ -40,9 +40,9 @@ open Itt_record
  * @end[doc]
  *)
 
-define unfold_plane:  plane <--> record["x"]{int;record["y"]{int}}
+define unfold_plane:  plane <--> record["x":t]{int;record["y":t]{int}}
 
-define unfold_space:  space <--> record["x"]{int;record["y"]{int;record["z"]{int}}}
+define unfold_space:  space <--> record["x":t]{int;record["y":t]{int;record["z":t]{int}}}
 
 interactive planeType {|intro_resource[] |} 'H :
    sequent['ext] {'H >- "type"{plane} }
@@ -57,7 +57,7 @@ interactive spaceType {|intro_resource[] |} 'H :
  * @end[doc]
  *)
 
-define unfold_0: O <--> rcrd["x"]{0; rcrd["y"]{0; rcrd["z"]{0}}}
+define unfold_O: O <--> rcrd["x":t]{0; rcrd["y":t]{0; rcrd["z":t]{0}}}
 
 interactive oInSpace {|intro_resource[] |} 'H :
    sequent['ext] {'H >- O IN space }
@@ -87,8 +87,8 @@ interactive spacePlane {|intro_resource[] |} 'H :
  *)
 
 
-define unfold_A: A <--> rcrd["x"]{1; rcrd["y"]{2; rcrd["z"]{3;rcrd}}}
-define unfold_B: B <--> rcrd["z"]{0; rcrd["y"]{2; rcrd["x"]{1}}}
+define unfold_A: A <--> rcrd["x":t]{1; rcrd["y":t]{2; rcrd["z":t]{3;rcrd}}}
+define unfold_B: B <--> rcrd["z":t]{0; rcrd["y":t]{2; rcrd["x":t]{1}}}
 
 (*! @docoff *)
 
@@ -102,8 +102,8 @@ interactive bInSpace {|intro_resource[] |} 'H :
 (*!
  * @begin[doc]
  * These points are equal in $<<plane>>$, since they have
- * the same $<<label["x"]>>$ and $<<label["y"]>>$ coordinates,
- * But they are not equal in $<<space>>$, since they differ in $<<label["z"]>>$ coordinate.
+ * the same $<<label["x":t]>>$ and $<<label["y":t]>>$ coordinates,
+ * But they are not equal in $<<space>>$, since they differ in $<<label["z":t]>>$ coordinate.
  * @end[doc]
  *)
 
@@ -120,7 +120,7 @@ interactive abInSpace {|intro_resource[] |} 'H :
  *)
 
 interactive_rw a_rw  :
-   A <--> rcrd["y"]{2; rcrd["z"]{3; rcrd["x"]{1}}}
+   A <--> rcrd["y":t]{2; rcrd["z":t]{3; rcrd["x":t]{1}}}
 
 (*!
  * @begin[doc]
@@ -129,17 +129,17 @@ interactive_rw a_rw  :
  *)
 
 interactive_rw cover_rw  :
-   rcrd["x"]{2; rcrd["x"]{3}} <-->    rcrd["x"]{2}
+   rcrd["x":t]{2; rcrd["x":t]{3}} <-->    rcrd["x":t]{2}
 
 
 (*!
  * @begin[doc]
- * The field operator $<<field[x:s]{'r}>>$ gets the field $<<label[x:s]>>$ of the record $<<'r>>$. E.g.,
+ * The field operator $<<field[x:t]{'r}>>$ gets the field $<<label[x:t]>>$ of the record $<<'r>>$. E.g.,
  * @end[doc]
  *)
 
 interactive_rw a_z_rw  :
-   field["z"]{A} <--> 3
+   field["z":t]{A} <--> 3
 
 (*!
  * @begin[doc]
@@ -147,8 +147,8 @@ interactive_rw a_z_rw  :
  * @end[doc]
  *)
 
-define plane_point: point{'a;'b;'e} <--> rcrd["x"]{'a; rcrd["y"]{'b;'e }}
-define space_point: point{'a;'b; 'c;'e} <--> rcrd["x"]{'a; rcrd["y"]{'b; rcrd["z"]{'c;'e}}}
+define plane_point: point{'a;'b;'e} <--> rcrd["x":t]{'a; rcrd["y":t]{'b;'e }}
+define space_point: point{'a;'b; 'c;'e} <--> rcrd["x":t]{'a; rcrd["y":t]{'b; rcrd["z":t]{'c;'e}}}
 
 let unfold_point = plane_point orelseC space_point
 
@@ -174,20 +174,20 @@ interactive spaceIntro {|intro_resource[] |} 'H :
  *)
 
 
-interactive_rw point_beta1_rw : field["x"]{point{'a;'b;'e}} <--> 'a
+interactive_rw point_beta1_rw : field["x":t]{point{'a;'b;'e}} <--> 'a
 
-interactive_rw point_beta2_rw : field["y"]{point{'a;'b;'e}} <--> 'b
+interactive_rw point_beta2_rw : field["y":t]{point{'a;'b;'e}} <--> 'b
 
 
 let reduce_info =
-   [<< field["x"]{point{'a;'b;'e}}  >>, point_beta1_rw;
-    << field["y"]{point{'a;'b;'e}}  >>, point_beta2_rw]
+   [<< field["x":t]{point{'a;'b;'e}}  >>, point_beta1_rw;
+    << field["y":t]{point{'a;'b;'e}}  >>, point_beta2_rw]
 
 let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
 
 interactive point_eta 'H :
    sequent[squash]{'H >- 'p IN plane } -->
-   sequent['ext]{'H >-   point{field["x"]{'p};field["y"]{'p};'p} ~ 'p }
+   sequent['ext]{'H >-   point{field["x":t]{'p};field["y":t]{'p};'p} ~ 'p }
 
 
 (*!
@@ -216,7 +216,7 @@ interactive spaceElim {|elim_resource[] |} 'H 'J:
  *)
 
 
-define unfold_length: length{'p} <--> (field["x"]{'p}*@field["x"]{'p} +@ field["y"]{'p}*@field["y"]{'p})
+define unfold_length: length{'p} <--> (field["x":t]{'p}*@field["x":t]{'p} +@ field["y":t]{'p}*@field["y":t]{'p})
 
 (*!
  * @begin[doc]
@@ -257,10 +257,10 @@ interactive length_wf {|intro_resource[] |} 'H :
  * @end[doc]
  *)
 
-define unfold_colored_plane:  cplane <--> record["color"]{atom;plane}
-define unfold_colored_space:  cspace <--> record["color"]{atom;space}
+define unfold_colored_plane:  cplane <--> record["color":t]{atom;plane}
+define unfold_colored_space:  cspace <--> record["color":t]{atom;space}
 
-define unfold_redA: redA <--> rcrd["color"]{token["red":t]; A}
+define unfold_redA: redA <--> rcrd["color":t]{token["red":t]; A}
 
 interactive redAInCSpace {|intro_resource[] |} 'H :
    sequent['ext] {'H >- redA IN cspace }
@@ -272,7 +272,7 @@ interactive redAInCSpace {|intro_resource[] |} 'H :
 
 
 interactive cspaceElim {|elim_resource[] |} 'H 'J:
-   sequent['ext]{'H; a:int; b:int; c:int; color:atom; e:record; 'J[rcrd["color"]{'color;point{'a;'b; 'c; 'e}}] >- 'C[rcrd["color"]{'color;point{'a;'b; 'c; 'e}}] } -->
+   sequent['ext]{'H; a:int; b:int; c:int; color:atom; e:record; 'J[rcrd["color":t]{'color;point{'a;'b; 'c; 'e}}] >- 'C[rcrd["color":t]{'color;point{'a;'b; 'c; 'e}}] } -->
    sequent['ext]  {'H; p:cspace; 'J['p] >- 'C['p] }
 
 

@@ -9,9 +9,9 @@ open Tactic_type.Sequent
 open Tactic_type.Conversionals
 
 
-declare label[t:s]
+declare label[t:t]
 
-declare eq_label[x:s,y:s]{'A;'B}
+declare eq_label[x:t,y:t]{'A;'B}
 
 topval reduce_eq_label : conv
 

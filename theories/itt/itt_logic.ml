@@ -1435,13 +1435,19 @@ let rec filter_hyps = function
  | Hypothesis (_, h) :: hs -> h :: filter_hyps hs
 
 (* input a list_term of hyps,concl *)
-let jproverT p =
+let base_jproverT def_mult p =
+   let mult_limit =
+      try Some (Sequent.get_int_arg p "jprover")
+      with RefineError _ -> def_mult
+   in
    let seq = explode_sequent (Sequent.goal p) in
    match
-      ITT_JProver.prover (filter_hyps (SeqHyp.to_list seq.sequent_hyps)) (SeqGoal.get seq.sequent_goals 0)
+      ITT_JProver.prover def_mult (filter_hyps (SeqHyp.to_list seq.sequent_hyps)) (SeqGoal.get seq.sequent_goals 0)
    with
       [t] -> t [] p
     | _ -> raise (Invalid_argument "Problems decoding ITT_JProver.prover proof")
+
+let jproverT = base_jproverT None
 
 (*
  * -*-

@@ -101,7 +101,7 @@ let allSubC conv env =
  * We use our own sub, so that we can track the addresses.
  *)
 let rec higherC rw env =
-   (rw orelseC (someSubC (higherC rw))) env
+   (rw orelseC (allSubC (higherC rw))) env
 
 (*
  * Apply to leftmost-innermost term.
@@ -149,6 +149,9 @@ let rec repeatForC i conv env =
 
 (*
  * $Log$
+ * Revision 1.4  1998/06/12 20:46:09  jyh
+ * Switched to term_ds.
+ *
  * Revision 1.3  1998/06/12 18:36:47  jyh
  * Working factorial proof.
  *

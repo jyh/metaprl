@@ -324,7 +324,7 @@ doc <:doc<
 >>
 interactive pairFormation {| intro [] |} 'a :
    [wf] sequent { <H> >- 'a in 'A } -->
-   [main] ('b : sequent { <H> >- 'B['a] }) -->
+   [main] sequent { <H> >- 'B['a] } -->
    [wf] sequent { <H>; y: 'A >- "type"{'B['y]} } -->
    sequent { <H> >- x:'A * 'B['x] }
 
@@ -378,11 +378,11 @@ doc <:doc<
    type $B[a]$ for each $a @in A$.
    @end[doc]
 >>
-prim productSubtype {| intro [] |} :
-   ["subtype"] sequent { <H> >- \subtype{'A1; 'A2} } -->
-   ["subtype"] sequent { <H>; a: 'A1 >- \subtype{'B1['a]; 'B2['a]} } -->
-   sequent { <H> >- \subtype{ (a1:'A1 * 'B1['a1]); (a2:'A2 * 'B2['a2]) } } =
-   it
+interactive productSubtype {| intro [] |} :
+   ["subtype"] sequent { <H> >- 'A1 subtype 'A2 } -->
+   ["subtype"] sequent { <H>; a: 'A1 >- 'B1['a] subtype 'B2['a] } -->
+   ["subtype"] sequent { <H>; a: 'A2 >- 'B2['a] Type } -->
+   sequent { <H> >- (a1:'A1 * 'B1['a1]) subtype (a2:'A2 * 'B2['a2]) }
 doc <:doc< @docoff >>
 
 (************************************************************************

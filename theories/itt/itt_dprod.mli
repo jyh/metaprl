@@ -152,18 +152,6 @@ rule spreadEquality bind{z. 'T['z]} (w:'A * 'B['w]) :
              'b1['u; 'v] = 'b2['u; 'v] in 'T['u, 'v] } -->
    sequent { <H> >- spread{'e1; u1, v1. 'b1['u1; 'v1]} = spread{'e2; u2, v2. 'b2['u2; 'v2]} in 'T['e1] }
 
-(*
- * H >- a1:A1 * B1 <= a2:A2 * B2
- * by functionSubtype
- *
- * H >- A1 <= A2
- * H, a: A1 >- B1[a] <= B2[a]
- *)
-rule productSubtype :
-   sequent { <H> >- \subtype{'A1; 'A2} } -->
-   sequent { <H>; a: 'A1 >- \subtype{'B1['a]; 'B2['a]} } -->
-   sequent { <H> >- \subtype{ (a1:'A1 * 'B1['a1]); (a2:'A2 * 'B2['a2]) } }
-
 (************************************************************************
  * TACTICS                                                              *
  ************************************************************************)

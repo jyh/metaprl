@@ -80,6 +80,8 @@ declare block{ 'tag; 'args }
  *)
 define unfold_true_set : true_set <--> int_set{ cons{ interval{1; 1}; nil } }
 define unfold_false_set : false_set <--> int_set{ cons{ interval{0; 0}; nil } }
+define unfold_val_true : val_true <--> 1
+define unfold_val_false : val_false <--> 0
 
 define unfold_tyBool : tyBool <-->
    tyUnion{ normalUnion; cons{ nil; cons{ nil; nil } }; int_set{ nil } }

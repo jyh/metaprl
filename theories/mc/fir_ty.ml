@@ -55,6 +55,8 @@ declare block{ 'tag; 'args }
 (* Boolean type. *)
 define unfold_true_set : true_set <--> int_set{ cons{ interval{1; 1}; nil } }
 define unfold_false_set : false_set <--> int_set{ cons{ interval{0; 0}; nil } }
+define unfold_val_true : val_true <--> 1
+define unfold_val_false : val_false <--> 0
 
 define unfold_tyBool : tyBool <-->
    tyUnion{ normalUnion; cons{ nil; cons{ nil; nil } }; int_set{ nil } }
@@ -117,6 +119,8 @@ dform block_df : except_mode[src] :: block{ 'tag; 'args } =
 (* Boolean type *)
 dform true_set_df : except_mode[src] :: true_set = `"true_set"
 dform false_set_df : except_mode[src] :: false_set = `"false_set"
+dform val_true_df : except_mode[src] :: val_true = `"val_true"
+dform val_false_df : except_mode[src] :: val_false = `"val_false"
 
 dform tyBool_df : except_mode[src] :: tyBool = `"TyBool(Union)"
 dform tyBool2_df : except_mode[src] :: tyBool2 = `"TyBool(Enum)"
@@ -130,6 +134,8 @@ dform tyFalse_df : except_mode[src] :: tyFalse = `"TyFalse"
 let resource reduce += [
    << true_set >>, unfold_true_set;
    << false_set >>, unfold_false_set;
+   << val_true >>, unfold_val_true;
+   << val_false >>, unfold_val_false;
    << tyBool >>, unfold_tyBool;
    << tyBool2 >>, unfold_tyBool2;
    << tyTrue >>, unfold_tyTrue;

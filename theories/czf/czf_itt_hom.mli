@@ -24,7 +24,10 @@ open Var
 open Base_dtactic
 open Base_auto_tactic
 
-declare hom{'g1; 'g2; 'r1; 'r2; x. 'f['x]}
+declare hom{'g1; 'g2; x. 'f['x]}
 
-rewrite unfold_hom : hom{'g1; 'g2; 'r1; 'r2; x. 'f['x]} <-->
-   (group{'g1} & group{'g2} & isset{'r1} & isset{'r2} & equiv{car{'g1}; 'r1} & equiv{car{'g2}; 'r2} & fun_set{x. 'f['x]} & "dall"{car{'g1}; a. mem{'f['a]; car{'g2}}} & (all a: set. all b: set. (mem{'a; car{'g1}} => mem{'b; car{'g1}} => equiv{car{'g2}; 'r2; 'f[op{'g1; 'a; 'b}]; op{'g2; 'f['a]; 'f['b]}})))
+rewrite unfold_hom : hom{'g1; 'g2; x. 'f['x]} <-->
+   (group{'g1} & group{'g2} & (all a: set. (mem{'a; car{'g1}} => mem{'f['a]; car{'g2}})) & (all a: set. all b: set. (mem{'a; car{'g1}} => mem{'b; car{'g1}} => equiv{car{'g1}; eqG{'g1}; 'a; 'b} => equiv{car{'g2}; eqG{'g2}; 'f['a]; 'f['b]})) & (all a: set. all b: set. (mem{'a; car{'g1}} => mem{'b; car{'g1}} => equiv{car{'g2}; eqG{'g2}; 'f[op{'g1; 'a; 'b}]; op{'g2; 'f['a]; 'f['b]}})))
+
+topval homIdT : int -> tactic
+topval homInvT : term -> int -> tactic

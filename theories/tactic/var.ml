@@ -43,8 +43,7 @@ open Tactic_type
  * Debug statement.
  *)
 let _ =
-   if !debug_load then
-      eprintf "Loading Var%t" eflush
+   show_loading "Loading Var%t"
 
 (*
  * Split a varname into root, suffix

@@ -47,8 +47,7 @@ open Refiner.Refiner.TermMan
  * Show that the file is loading.
  *)
 let _ =
-   if !debug_load then
-      eprintf "Loading Summary%t" eflush
+   show_loading "Loading Summary%t"
 
 (************************************************************************
  * HTML                                                                 *

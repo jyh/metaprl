@@ -57,8 +57,7 @@ open Mptop
  * Show that the file is loading.
  *)
 let _ =
-   if !debug_load then
-      eprintf "Loading Base_dtactic%t" eflush
+   show_loading "Loading Base_dtactic%t"
 
 let debug_dtactic =
    create_debug (**)

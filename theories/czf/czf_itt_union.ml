@@ -46,8 +46,7 @@ open Var
 open Itt_logic
 
 let _ =
-   if !debug_load then
-      eprintf "Loading Czf_itt_union%t" eflush
+   show_loading "Loading Czf_itt_union%t"
 
 (************************************************************************
  * TERMS                                                                *

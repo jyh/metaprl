@@ -47,8 +47,7 @@ open Printf
 open Mp_debug
 
 let _ =
-   if !debug_load then
-      eprintf "Loading CZF_itt_axioms%t" eflush
+   show_loading "Loading CZF_itt_axioms%t"
 
 (*
  * Set induction.

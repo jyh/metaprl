@@ -54,8 +54,7 @@ open Tactic_type.Sequent
  * Show that the file is loading.
  *)
 let _ =
-   if !debug_load then
-      eprintf "Loading Typeinf%t" eflush
+   show_loading "Loading Typeinf%t"
 
 (************************************************************************
  * TYPES                                                                *

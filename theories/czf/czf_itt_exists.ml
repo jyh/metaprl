@@ -61,8 +61,7 @@ open Itt_dprod
 open Czf_itt_all
 
 let _ =
-   if !debug_load then
-      eprintf "Loading Czf_itt_and%t" eflush
+   show_loading "Loading Czf_itt_and%t"
 
 (************************************************************************
  * RULES                                                                *

@@ -49,8 +49,7 @@ open Var
 open Itt_equal
 
 let _ =
-   if !debug_load then
-      eprintf "Loading Czf_itt_small%t" eflush
+   show_loading "Loading Czf_itt_small%t"
 
 (************************************************************************
  * TERMS                                                                *

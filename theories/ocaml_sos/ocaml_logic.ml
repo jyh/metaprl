@@ -34,8 +34,7 @@ open Mp_debug
 open Printf
 
 let _ =
-   if !debug_load then
-      eprintf "Loading Ocaml_logic%t" eflush
+   show_loading "Loading Ocaml_logic%t"
 
 (*
  * Basic propositional logic.

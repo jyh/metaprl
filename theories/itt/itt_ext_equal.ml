@@ -45,8 +45,7 @@ include Itt_logic
  * Show that the file is loading.
  *)
 let _ =
-   if !debug_load then
-      eprintf "Loading Itt_ext_equal%t" eflush
+   show_loading "Loading Itt_ext_equal%t"
 
 (*
  * Terms type{'T} and subtype{'A; 'B} have already been defined.

@@ -49,8 +49,7 @@ open Refiner.Refiner.TermMeta
 open Refiner.Refiner.RefineError
 
 let _ =
-   if !debug_load then
-      eprintf "Loading Base_dtactic%t" eflush
+   show_loading "Loading Base_dtactic%t"
 
 (************************************************************************
  * decidable                                                            *

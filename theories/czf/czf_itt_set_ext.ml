@@ -78,8 +78,7 @@ open Itt_logic
 open Itt_w
 
 let _ =
-   if !debug_load then
-      eprintf "Loading Czf_itt_set%t" eflush
+   show_loading "Loading Czf_itt_set%t"
 
 let debug_czf_set =
    create_debug (**)

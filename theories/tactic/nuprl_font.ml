@@ -37,8 +37,7 @@ open Mp_debug
  * Show that the file is loading.
  *)
 let _ =
-   if !debug_load then
-      eprintf "Loading Nuprl_font%t" eflush
+   show_loading "Loading Nuprl_font%t"
 
 (************************************************************************
  * TERMS                                                                *

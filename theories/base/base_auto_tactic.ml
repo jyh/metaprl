@@ -56,8 +56,7 @@ open Mptop
  * Debugging.
  *)
 let _ =
-   if !debug_load then
-      eprintf "Loading Base_auto_tactic%t" eflush
+   show_loading "Loading Base_auto_tactic%t"
 
 let debug_auto =
    create_debug (**)

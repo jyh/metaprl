@@ -40,8 +40,7 @@ open Printf
 open Ocaml_expr_df
 
 let _ =
-   if !debug_load then
-      eprintf "Loading Ocaml_mt_df%t" eflush
+   show_loading "Loading Ocaml_mt_df%t"
 
 (*
  * Projection.

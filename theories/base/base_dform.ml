@@ -49,8 +49,7 @@ open Rformat
  * Show that the file is loading.
  *)
 let _ =
-   if !debug_load then
-      eprintf "Loading Base_dform%t" eflush
+   show_loading "Loading Base_dform%t"
 
 (*
  * Display forms.

@@ -38,8 +38,7 @@ open Printf
 open Refiner.Refiner
 
 let _ =
-   if !debug_load then
-      eprintf "Loading Ocaml_base_df%t" eflush
+   show_loading "Loading Ocaml_base_df%t"
 
 (************************************************************************
  * DISPLAY TERMS                                                        *

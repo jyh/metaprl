@@ -56,8 +56,7 @@ open Itt_subtype
  * Show that the file is loading.
  *)
 let _ =
-   if !debug_load then
-      eprintf "Loading Itt_void%t" eflush
+   show_loading "Loading Itt_void%t"
 
 (*
  * incr_debug_level DebugMessage

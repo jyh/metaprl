@@ -38,8 +38,7 @@ open Util;;
  * Show that the file is loading.
  *)
 let _ =
-   if !debug_load then
-      eprintf "Loading Main%t" eflush
+   show_loading "Loading Main%t"
 
 debug_string DebugLoad "Loading itt main...";;
 

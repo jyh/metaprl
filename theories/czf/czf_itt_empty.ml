@@ -42,8 +42,7 @@ open Mp_resource
 open Tactic_type.Tacticals
 
 let _ =
-   if !debug_load then
-      eprintf "Loading Czf_itt_empty%t" eflush
+   show_loading "Loading Czf_itt_empty%t"
 
 (************************************************************************
  * TERMS                                                                *

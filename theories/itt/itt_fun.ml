@@ -59,8 +59,7 @@ open Itt_dfun
  * Show that the file is loading.
  *)
 let _ =
-   if !debug_load then
-      eprintf "Loading Itt_fun%t" eflush
+   show_loading "Loading Itt_fun%t"
 
 (* debug_string DebugLoad "Loading itt_fun..." *)
 

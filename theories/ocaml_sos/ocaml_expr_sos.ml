@@ -49,8 +49,7 @@ open Mp_debug
 open Printf
 
 let _ =
-   if !debug_load then
-      eprintf "Loading Ocaml_expr_sos%t" eflush
+   show_loading "Loading Ocaml_expr_sos%t"
 
 (************************************************************************
  * EXCEPTIONS                                                           *

@@ -52,8 +52,7 @@ open Czf_itt_set
 open Czf_itt_eq
 
 let _ =
-   if !debug_load then
-      eprintf "Loading Czf_itt_set_ind%t" eflush
+   show_loading "Loading Czf_itt_set_ind%t"
 
 (************************************************************************
  * RULES                                                                *

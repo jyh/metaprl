@@ -69,8 +69,7 @@ open Mp_debug
 open Printf
 
 let _ =
-   if !debug_load then
-      eprintf "Loading Ocaml_patt_df%t" eflush
+   show_loading "Loading Ocaml_patt_df%t"
 
 (*
  * Special forms.

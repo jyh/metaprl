@@ -79,8 +79,7 @@ open Refiner.Refiner.Refine
  * Debug statement.
  *)
 let _ =
-   if !debug_load then
-      eprintf "Loading Tactic_cache%t" eflush
+   show_loading "Loading Tactic_cache%t"
 
 (************************************************************************
  * TYPES                                                                *

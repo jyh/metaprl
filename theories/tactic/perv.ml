@@ -39,8 +39,7 @@ open Refiner.Refiner
  * Show that the file is loading.
  *)
 let _ =
-   if !debug_load then
-      eprintf "Loading Perv%t" eflush
+   show_loading "Loading Perv%t"
 
 (************************************************************************
  * TERMS                                                                *

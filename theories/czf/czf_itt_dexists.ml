@@ -48,8 +48,7 @@ open Itt_logic
 open Itt_rfun
 
 let _ =
-   if !debug_load then
-      eprintf "Loading Czf_itt_dexists%t" eflush
+   show_loading "Loading Czf_itt_dexists%t"
 
 (************************************************************************
  * TERMS                                                                *

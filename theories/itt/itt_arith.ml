@@ -55,8 +55,7 @@ open Itt_logic
  * Show that the file is loading.
  *)
 let _ =
-   if !debug_load then
-      eprintf "Loading Itt_arith%t" eflush
+   show_loading "Loading Itt_arith%t"
 
 let debug_arith =
    create_debug (**)

@@ -339,12 +339,12 @@ interactive bor_member {| intro [] |} :
 
 interactive band_member {| intro [] |} :
    [wf] sequent { <H> >- 't1 in bool } -->
-   [wf] sequent { <H> >- 't2 in bool } -->
+   [wf] sequent { <H>; "assert"{'t1} >- 't2 in bool } -->
    sequent { <H> >- band{'t1; 't2} in bool }
 
 interactive bimplies_member {| intro [] |} :
    [wf] sequent { <H> >- 't1 in bool } -->
-   [wf] sequent { <H> >- 't2 in bool } -->
+   [wf] sequent { <H>; "assert"{'t1} >- 't2 in bool } -->
    sequent { <H> >- bimplies{'t1; 't2} in bool }
 
 interactive bnot_equal {| intro []; eqcd |} :

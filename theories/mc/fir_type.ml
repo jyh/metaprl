@@ -33,6 +33,7 @@
 include Base_theory
 include Itt_theory
 include Fir_ty
+include Fir_exp
 
 open Base_dtactic
 
@@ -204,6 +205,7 @@ interactive minus_int_tyInt_membership {| intro [] |} 'H :
 
 prim tyEnum_equality {| intro [] |} 'H :
    [wf] sequent ['ext] { 'H >- 'a = 'b in int } -->
+   [main] sequent ['ext] { 'H >- "assert"{ le_bool{0; 'a} } } -->
    sequent ['ext] { 'H >- tyEnum{'a} = tyEnum{'b} in fir_univ }
    = it
 
@@ -214,17 +216,25 @@ prim number_tyEnum_membership {| intro [] |} 'H :
    sequent ['ext]{ 'H >- 'a = 'b in tyEnum{'c} }
    = it
 
-interactive atomEnum_tyEnum_membership {| intro [] |} 'H :
+prim atomEnum_tyEnum_membership {| intro [] |} 'H :
    [wf] sequent ['ext] { 'H >- 'a = 'b in int } -->
+   [wf] sequent ['ext] { 'H >- 'x = 'y in int } -->
+   [wf] sequent ['ext] { 'H >- 'x = 'c in int } -->
    [main] sequent ['ext] { 'H >- "assert"{ lt_bool{'a; 'c} } } -->
    [main] sequent ['ext] { 'H >- "assert"{ le_bool{0; 'a} } } -->
-   sequent ['ext]{ 'H >- 'a = 'b in tyEnum{'c} }
+   sequent ['ext]{ 'H >- atomEnum{'x; 'a} = atomEnum{'y; 'b} in tyEnum{'c} }
+   = it
 
 (*
  * Product type.
  * The ITT rules should be sufficient here. If needed,
  *    pair membership/equality may need to be defined here since that
  *    seems to depend on the Itt_equal!"type" judgement.
+ *)
+
+(*
+ * Considering my treatment of tyTuple, I'm thinking this will need to change
+ * in the near future.
  *)
 
 prim prod_equality {| intro [] |} 'H :
@@ -295,7 +305,7 @@ prim array_elim {| elim [] |} 'H 'J 'u 'a 'b 'c :
 
 (*
  * Function type.
- * We use an intentional equality.
+ * We use an extensional equality.
  *)
 
 prim ty_fun_equality {| intro [] |} 'H :
@@ -322,10 +332,11 @@ prim apply_equality {| intro [] |} 'H 'A :
  *)
 
 prim all_equality {| intro [] |} 'H 'a :
-   [wf] sequent ['ext] { 'H; a: 'T >- 'ty1['a] = 'ty2['a] in 'T } -->
+   [wf] sequent ['ext]
+      { 'H; a: fir_univ >- 'ty1['a] = 'ty2['a] in fir_univ } -->
    sequent ['ext] { 'H >-
       ty_all{ x1. 'ty1['x1] } =
-      ty_all{ x2. 'ty2['x2] } in 'T }
+      ty_all{ x2. 'ty2['x2] } in fir_univ }
    = it
 
 (*
@@ -333,10 +344,11 @@ prim all_equality {| intro [] |} 'H 'a :
  *)
 
 prim exist_equality {| intro [] |} 'H 'a :
-   [wf] sequent ['ext] { 'H; a: 'T >- 'ty1['a] = 'ty2['a] in 'T } -->
+   [wf] sequent ['ext]
+      { 'H; a: fir_univ >- 'ty1['a] = 'ty2['a] in fir_univ } -->
    sequent ['ext] { 'H >-
       ty_exists{ x1. 'ty1['x1] } =
-      ty_exists{ x2. 'ty2['x2] } in 'T }
+      ty_exists{ x2. 'ty2['x2] } in fir_univ }
    = it
 
 (*

@@ -33,6 +33,7 @@
 include Base_theory
 include Itt_theory
 include Fir_ty
+include Fir_exp
 
 open Tactic_type.Conversionals
 
@@ -93,6 +94,7 @@ declare ty_int_set
 (*
  * FIR value type.
  * Used to abstract the type of an FIR value.
+ * Only here becuase Fir_type_state requires it still.
  *)
 declare fir_value
 

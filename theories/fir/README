@@ -9,6 +9,8 @@ is likely to be in the form of comments in .ml files.
 
 ---------------------------------------------------------------------------
 
+XXX: Need to clarify intset normalizatio / well-formedness.
+
 The following remarks by Brian Emre Aydemir (emre) are intended to
 serve as notes to himself.  They may not make sense to others.
 
@@ -29,6 +31,9 @@ serve as notes to himself.  They may not make sense to others.
 -- I should consider using the ``sequent tags'' to help simplify the rules.
    This would probably involve using them to store information in some
    manner.
+
+-- I'm not convinced ``sequent'' idea is going to work so well for the
+   operational semantics.
 
 Notable differences from the actual Mojave FIR:
 

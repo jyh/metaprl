@@ -367,7 +367,11 @@ struct
 		let n'= succ n in
 		([], Array.make n' None, Array.make n' None)
 
-   let addConstr (s,l,u) f = (f::s,l,u)
+   let addConstr ((s,l,u) as original) f =
+		if AF.isNumber f then
+			original
+		else
+			(f::s,l,u)
 
    let print out (s,l,u) =
       List.iter (fun x -> begin fprintf out "%a>=0\n" AF.print x end) s

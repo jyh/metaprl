@@ -125,9 +125,12 @@ define unfold_lt :
    lt{'a; 'b} <--> "assert"{lt_bool{'a; 'b}}
 (*! @docoff *)
 
-let finishSq2ExT t i =
-   unsquashT t thenT nthAssumT i
+let finishSq2ExT i =
+   unsquashT <<'ext>> thenT nthAssumT i
 
+let sqeq2rwT t =
+   t thenT onSomeAssumT finishSq2ExT
+ 
 (*!
  * @begin[doc]
  * @thysection{Rules and rewrites}
@@ -180,7 +183,7 @@ prim beq_wf {| intro_resource []; eqcd_resource |} 'H :
  *
  * @end[doc]
  *)
-prim beq_int2prop {| intro_resource []; eqcd_resource |} 'H :
+prim beq_int2prop 'H :
    [main] sequent [squash] { 'H >- "assert"{beq_int{'a; 'b}} } -->
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    [wf] sequent [squash] { 'H >- 'b IN int } -->

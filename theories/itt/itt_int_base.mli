@@ -69,7 +69,9 @@ define unfold_lt :
  * Useful tactic to prove _rw from ~-rules
  *)
 
-topval finishSq2ExT : term -> int -> tactic
+topval finishSq2ExT : int -> tactic
+
+topval sqeq2rwT : tactic -> tactic
 
 (*
  * Integers are canonical.

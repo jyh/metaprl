@@ -173,7 +173,7 @@ interactive independentFunctionExtensionality {| intro[intro_typeinf <<'f,'g>>] 
    [wf] sequent { <H> >- 'g in 'E -> 'F } -->
    sequent { <H> >- 'f = 'g in 'A -> 'B }
 
-interactive independentFunctionExtensionality2 {| intro[AutoMustComplete] |} :
+interactive independentFunctionExtensionality2 :
    [main] sequent { <H>; u: 'A >- ('f 'u) = ('g 'u) in 'B } -->
    [wf] sequent { <H> >- "type"{'A} } -->
    [wf] sequent { <H> >- 'f in void -> void } -->
@@ -283,8 +283,6 @@ let d_apply_equalT = funT (fun p ->
    in
       tac f_type)
 
-let apply_equal_term = << 'f1 'a1 = 'f2 'a2 in 'T >>
-
 (*
  * Typehood of application depends on the ability to infer a type.
  *)
@@ -310,11 +308,9 @@ let d_apply_typeT = funT (fun p ->
       else
          raise (RefineError ("d_apply_typeT", StringTermError ("inferred type is not a univ", univ))))
 
-let apply_type_term = << "type"{'f 'a} >>
-
 let resource intro += [
-   apply_equal_term, wrap_intro d_apply_equalT;
-   apply_type_term, wrap_intro d_apply_typeT
+   << 'f1 'a1 = 'f2 'a2 in 'T >>, wrap_intro d_apply_equalT;
+   << "type"{'f 'a} >>, wrap_intro d_apply_typeT
 ]
 
 (*

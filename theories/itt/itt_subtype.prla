@@ -5233,7 +5233,7 @@ T	t3997	o1180 b3997
 B	b3998	t3997
 T	t3998	o4129 b1507 b3991 b3998 b4
 B	b3999	t3998
-P	p4141	String by_subtype2
+P	p4141	String by_subtype
 O	o4141	rule p4141
 S	s4001	tbrarg\\ h1138 h1404 h1510\\ t3951
 B	b4001	s4001

@@ -171,7 +171,7 @@ doc <:doc<
    proof extract term is always the $@it$ term.
    @end[doc]
 >>
-prim subtype_axiomFormation {| intro [AutoMustComplete] |} :
+prim subtype_axiomFormation {| intro [] |} :
    [wf] sequent { <H> >- "type"{'A} } -->
    [main] sequent { <H>; x: 'A >- 'x in 'B } -->
    sequent { <H> >- 'A subtype 'B } =
@@ -343,13 +343,21 @@ let subtypeT = argfunT (fun t p ->
    else
       use_subtype2 t)
 
-interactive by_subtype1 'H: (* Add to auto??? then remove subtype_axiomFormation from auto *)
-   sequent { <H>; 'A; <J> >- 'A subtype 'B } -->
-   sequent { <H>; x:'A; <J> >- 'x in 'B }
-
-interactive by_subtype2 'H: (* Add to AutoMustComplete ??? *)
+interactive by_subtype 'H:
    sequent { <H>; x:'A; <J['x]> >- 'A subtype 'B } -->
    sequent { <H>; x:'A; <J['x]> >- 'x in 'B }
+
+let bySubtypeT = funT (fun p ->
+   let b, x, _ = dest_equal (concl p) in
+   let x = dest_var x in
+   let xdecl = get_decl_number p x in
+   let a = nth_hyp p xdecl in
+   let t = <:con< "subtype"{$a$; $b$} >> in
+   let subt = get_hyp_number p t in
+      by_subtype xdecl thenT hypothesis subt)
+
+let resource intro +=
+   << !x in 'B >>, wrap_intro bySubtypeT
 
 interactive subtypeReflexivity {| intro[] |} :
    [wf] sequent { <H> >- "type"{'A} } -->

@@ -46,6 +46,8 @@ open Itt_int_ext
 topval bnot_lt2geC : conv
 topval ltInConcl2HypT : term -> tactic
 
+topval anyArithRel2geT : int -> tactic
+
 topval add_BubblePrimitiveC : conv
 topval add_BubbleStepC : term -> conv
 topval add_BubbleSortC : conv
@@ -55,6 +57,7 @@ topval add_normalizeC : conv
 topval ge_addContractC : conv
 
 topval reduceContradRelT : int -> tactic
+topval tryReduce_geT : int -> tactic
 
 topval sumListT : int list -> tactic
 topval proveSumT : tactic

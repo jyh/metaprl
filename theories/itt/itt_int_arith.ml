@@ -80,6 +80,15 @@ let _ = show_loading "Loading Itt_int_ext%t"
  * ARITH
  *******************************************************)
 
+let get_term i p =
+(* We skip first item because it is a context *)
+   if i<>1 then
+      let g=Sequent.goal p in
+      let (_,t)=Refiner.Refiner.TermMan.nth_hyp g i in
+         t
+   else
+      mk_simple_term xperv []
+
 let le2geT t p =
    let (left,right)=dest_le t in
    let newt=mk_ge_term right left in
@@ -144,26 +153,22 @@ let notle2geT t =
 
 let anyArithRel2geT i p =
 (* We skip first item because it is a context *)
-   if i<>1 then
-      let g=Sequent.goal p in
-      let (_,t)=Refiner.Refiner.TermMan.nth_hyp g i in
-      if is_le_term t then le2geT t p
-      else if is_lt_term t then lt2geT t p
-      else if is_gt_term t then gt2geT t p
-      else if is_equal_term t then
-         let (tt,l,r)=dest_equal t in
-            if tt=int_term then
-               (eq2geT t p)
-            else
-	       idT p
-      else idT p (*if is_not_term t then
-         let t1=dest_not t in
-            if is_ge_term t1 then notge2geT t1
-            else if is_le_term t1 then notle2geT t1
-            else if is_lt_term t1 then notlt2geT t1
-            else if is_gt_term t1 then notgt2geT t1 *)
-   else
-      idT p
+   let t=get_term i p in
+   if is_le_term t then le2geT t p
+   else if is_lt_term t then lt2geT t p
+   else if is_gt_term t then gt2geT t p
+   else if is_equal_term t then
+      let (tt,l,r)=dest_equal t in
+         if tt=int_term then
+            (eq2geT t p)
+         else
+            idT p
+   else idT p (*if is_not_term t then
+      let t1=dest_not t in
+         if is_ge_term t1 then notge2geT t1
+         else if is_le_term t1 then notle2geT t1
+         else if is_lt_term t1 then notlt2geT t1
+         else if is_gt_term t1 then notgt2geT t1 *)
 
 interactive_rw bnot_lt2ge_rw :
    ('a IN int) -->
@@ -242,11 +247,20 @@ let ge_addContractC = ge_addContract_rw
 (* Reduce contradictory relation a>=a+b where b>0. autoT should be removed
 later to permit incorporation of this tactic into autoT.
  *)
-let reduceContradRelT i p = ((rw ((addrC [0] add_normalizeC) thenC
-                               (addrC [1] add_normalizeC) thenC
-			       ge_addContractC thenC
-			       reduceC)
-                              i)) p
+let reduceContradRelT i p = (rw ((addrC [0] add_normalizeC) thenC
+                                 (addrC [1] add_normalizeC) thenC
+		                 ge_addContractC thenC
+			         reduceC)
+                                i) p
+
+let tryReduce_geT i p =
+   let t=get_term i p in
+      if is_ge_term t then
+         (rw ((addrC [0] add_normalizeC) thenC
+             (addrC [1] add_normalizeC))
+             i) p
+      else
+	 idT p
 
 (* Generate sum of ge-relations
  *)
@@ -279,6 +293,10 @@ let sumListT l p =
 (* Test if term has a form of a>=b+i where i is a number
  *)
 let good_term t =
+(*
+   print_term stdout t;
+   eprintf "\n %s \n" (Opname.string_of_opname (opname_of_term t));
+*)
    if is_ge_term t then
      let (_,b)=dest_ge t in
         if is_add_term b then
@@ -311,9 +329,10 @@ let findContradRelT p =
 *)
    let g=Sequent.goal p in
    let l = Arith.TermHyps.collect good_term g in
-(*  (List.map (fun x->let (_,t)=(Refiner.Refiner.TermMan.nth_hyp g x)
+(**) begin
+           List.map (fun x->let (_,t)=(Refiner.Refiner.TermMan.nth_hyp g x)
                      in print_term stdout t) l;
-*)
+(**)
    let ar=Array.of_list l in
    match Arith.TG.solve (g,ar) with
       Arith.TG.Int (_,r),_ ->
@@ -329,18 +348,22 @@ let findContradRelT p =
               prerr_endline "";
               List.map aux rl;
               flush stderr;
-	    *)
+            *)
             sumListT rl p
          end
       | Arith.TG.Disconnected,_ ->
          begin
-            (*eprintf "No contradiction found";*)
+            eprintf "No contradiction found";
+            prerr_endline "";
             failT p
          end
+end
 
 (* Finds and proves contradiction among ge-relations
  *)
 let arithT = (onAllHypsT anyArithRel2geT)
+(*   thenMT (onAllHypsT tryReduce_geT)
+*)
    thenMT findContradRelT
    thenMT reduceContradRelT (-1)
 
@@ -366,3 +389,10 @@ sequent [squash] { 'H >- 'b IN int } -->
 sequent ['ext] { 'H; x: (('b +@ 1) <= 'a);
                      t: ('c > ('b +@ 2))
                 >- ('b < ('a +@ 0))  }
+
+interactive test4 'H 'a 'b :
+sequent [squash] { 'H >- 'a IN int } -->
+sequent [squash] { 'H >- 'b IN int } -->
+sequent ['ext] { 'H; x: ('a >= 'b);
+                     t: ('a < 'b)
+                >- "assert"{bfalse}  }

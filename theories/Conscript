@@ -22,4 +22,5 @@ Build qw(
 	ocaml/Conscript
 	base/Conscript
 	itt/Conscript
+	mc/Conscript
 );

@@ -285,6 +285,37 @@ let insertInclusionT p =
       insert_inclusion (Sequent.hyp_count_addr p) a_type p
 
 (*
+ * Properties of insert
+ *)
+interactive insert_mem {| intro [] |} 'H :
+   [wf] sequent [squash] { 'H >- "type"{'A} } -->
+   [wf] sequent [squash] { 'H >- 'l IN list{'A} } -->
+   [wf] sequent [squash] { 'H >- 'u IN 'A } -->
+   [wf] sequent [squash] { 'H >- 'lt IN 'A -> 'A -> bool } -->
+   [wf] sequent ['ext] { 'H >- partial_order{'A; 'lt} } -->
+   sequent ['ext] { 'H >- mem{'u; insert{'u; 'l; 'lt}; 'A} }
+
+interactive insert_subset {| intro [] |} 'H :
+   [wf] sequent [squash] { 'H >- "type"{'A} } -->
+   [wf] sequent [squash] { 'H >- 'u IN 'A } -->
+   [wf] sequent [squash] { 'H >- 'v IN list{'A} } -->
+   [wf] sequent [squash] { 'H >- 'l IN list{'A} } -->
+   [wf] sequent [squash] { 'H >- 'lt IN 'A -> 'A -> bool } -->
+   [wf] sequent ['ext] { 'H >- partial_order{'A; 'lt} } -->
+   sequent ['ext] { 'H >- subset{'v; 'l; 'A} } -->
+   sequent ['ext] { 'H >- subset{'v; insert{'u; 'l; 'lt}; 'A} }
+
+interactive subset_insert_cons {| intro [] |} 'H :
+   [wf] sequent [squash] { 'H >- "type"{'A} } -->
+   [wf] sequent [squash] { 'H >- 'u IN 'A } -->
+   [wf] sequent [squash] { 'H >- 'v IN list{'A} } -->
+   [wf] sequent [squash] { 'H >- 'l IN list{'A} } -->
+   [wf] sequent [squash] { 'H >- 'lt IN 'A -> 'A -> bool } -->
+   [wf] sequent ['ext] { 'H >- partial_order{'A; 'lt} } -->
+   sequent ['ext] { 'H >- subset{'v; 'l; 'A} } -->
+   sequent ['ext] { 'H >- subset{insert{'u; 'v; 'lt}; cons{'u; 'l}; 'A} }
+
+(*
  * Verifications of the functions.
  *)
 interactive insert_thm {| intro [intro_typeinf << 'l >>] |} 'H list{'A} :
@@ -302,6 +333,13 @@ interactive sorted_thm {| intro [intro_typeinf << 'l >>] |} 'H list{'A} :
    [wf] sequent [squash] { 'H >- 'lt IN 'A -> 'A -> bool } -->
    [wf] sequent ['ext] { 'H >- partial_order{'A; 'lt} } -->
    sequent ['ext] { 'H >- sorted{sort{'l; 'lt}; 'lt} }
+
+interactive sort_sameset {| intro [intro_typeinf << 'l >>] |} 'H list{'A} :
+   [wf] sequent [squash] { 'H >- "type"{'A} } -->
+   [wf] sequent [squash] { 'H >- 'l IN list{'A} } -->
+   [wf] sequent [squash] { 'H >- 'lt IN 'A -> 'A -> bool } -->
+   [wf] sequent ['ext] { 'H >- partial_order{'A; 'lt} } -->
+   sequent ['ext] { 'H >- sameset{sort{'l; 'lt}; 'l; 'A} }
 
 (*
  * -*-

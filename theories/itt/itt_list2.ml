@@ -59,6 +59,7 @@ open Refiner.Refiner.TermOp
 open Refiner.Refiner.RefineError
 open Mp_resource
 
+open Tactic_type
 open Tactic_type.Tacticals
 open Tactic_type.Conversionals
 open Var
@@ -85,6 +86,41 @@ open Itt_dprod
  *)
 define unfold_is_nil :
    is_nil{'l} <--> list_ind{'l; btrue; h, t, g. bfalse}
+
+(*!
+ * @begin[doc]
+ * @terms
+ *
+ * The @tt{mem} term defines list membership.
+ * @end[doc]
+ *)
+define unfold_mem :
+   mem{'x; 'l; 'T} <-->
+      list_ind{'l; "false"; h, t, g. "or"{('x = 'h IN 'T); 'g}}
+
+(*!
+ * @begin[doc]
+ * @terms
+ *
+ * The @tt{subset} term determines whether the elements in $l_1$ are also
+ * in $l_2$.
+ * @end[doc]
+ *)
+define unfold_subset :
+   subset{'l1; 'l2; 'T} <-->
+      list_ind{'l1; "true"; h, t, g. "and"{mem{'h; 'l2; 'T}; 'g}}
+
+(*!
+ * @begin[doc]
+ * @terms
+ *
+ * The @tt{sameset} term determines whether the two lists contain the same
+ * set of elements.
+ * @end[doc]
+ *)
+define unfold_sameset :
+   sameset{'l1; 'l2; 'T} <-->
+      "and"{subset{'l1; 'l2; 'T}; subset{'l2; 'l1; 'T}}
 
 (*!
  * @begin[doc]
@@ -219,6 +255,15 @@ prec prec_assoc
 dform is_nil_df : except_mode[src] :: parens :: "prec"[prec_equal] :: is_nil{'l} =
    slot{'l} `" =" subb `" []"
 
+dform mem_df : except_mode[src] :: mem{'x; 'l; 'T} =
+   `"(" slot{'x} " " Nuprl_font!member `" " slot{'l} `" in " slot{'T} `")"
+
+dform subset_df : except_mode[src] :: subset{'l1; 'l2; 'T} =
+   `"(" slot{'l1} " " Nuprl_font!subseteq `"[" slot{'T} `"] " slot{'l2} `")"
+
+dform sameset_df : except_mode[src] :: sameset{'l1; 'l2; 'T} =
+   (keyword["sameset"] 'l1 'l2 'T)
+
 dform append_df : except_mode[src] :: parens :: "prec"[prec_append] :: append{'l1; 'l2} =
    slot{'l1} `" @" space slot{'l2}
 
@@ -266,8 +311,6 @@ dform replace_nth_df : except_mode[src] :: replace_nth{'l; 'i; 'v} =
  * REWRITES                                                             *
  ************************************************************************)
 
-let fold_is_nil = makeFoldC << is_nil{'l} >> unfold_is_nil
-
 (*!
  * @begin[doc]
  * @rewrites
@@ -283,6 +326,32 @@ interactive_rw reduce_is_nil_cons : is_nil{cons{'h; 't}} <--> bfalse
 (*! @docoff *)
 
 let fold_is_nil = makeFoldC << is_nil{'l} >> unfold_is_nil
+
+(*!
+ * @begin[doc]
+ * The @hrefterm[mem] term performs induction over the list.
+ * @end[doc]
+ *)
+interactive_rw reduce_mem_nil : mem{'x; nil; 'T} <--> "false"
+
+interactive_rw reduce_mem_cons : mem{'x; cons{'u; 'v}; 'T} <--> "or"{('x = 'u IN 'T); mem{'x; 'v; 'T}}
+(*! @docoff *)
+
+let fold_mem = makeFoldC << mem{'x; 'l; 'T} >> unfold_mem
+
+(*!
+ * @begin[doc]
+ * The @hrefterm[subset] term performs induction over the first list.
+ * @end[doc]
+ *)
+interactive_rw reduce_subset_nil : subset{nil; 'l; 'T} <--> "true"
+
+interactive_rw reduce_subset_cons : subset{cons{'u; 'v}; 'l; 'T} <--> "and"{mem{'u; 'l; 'T}; subset{'v; 'l; 'T}}
+(*! @docoff *)
+
+let fold_subset = makeFoldC << subset{'l1; 'l2; 'T} >> unfold_subset
+
+let fold_sameset = makeFoldC << sameset{'l1; 'l2; 'T} >> unfold_sameset
 
 (*!
  * @begin[doc]
@@ -445,6 +514,10 @@ let fold_rev = makeFoldC << rev{'l} >> unfold_rev
 let resource reduce +=
    [<< is_nil{nil} >>, reduce_is_nil_nil;
     << is_nil{cons{'h; 't}} >>, reduce_is_nil_cons;
+    << mem{'x; nil; 'T} >>, reduce_mem_nil;
+    << mem{'x; cons{'u; 'v}; 'T} >>, reduce_mem_cons;
+    << subset{nil; 'l; 'T} >>, reduce_subset_nil;
+    << subset{cons{'u; 'v}; 'l; 'T} >>, reduce_subset_cons;
     << append{cons{'h; 't}; 'l} >>, reduce_append_cons;
     << append{nil; 'l} >>, reduce_append_nil;
     << ball2{nil; nil; x, y. 'b['x; 'y]} >>, reduce_ball2_nil_nil;
@@ -505,6 +578,33 @@ interactive_rw rev2 :
 interactive is_nil_wf {| intro [] |} 'H 'T :
    [wf] sequent [squash] { 'H >- 'l IN list{'T} } -->
    sequent ['ext] { 'H >- is_nil{'l} IN bool }
+
+(*
+ * Membership.
+ *)
+interactive mem_wf {| intro [] |} 'H :
+   [wf] sequent [squash] { 'H >- "type"{'T} } -->
+   [wf] sequent [squash] { 'H >- 'x IN 'T } -->
+   [wf] sequent [squash] { 'H >- 'l IN list{'T} } -->
+   sequent ['ext] { 'H >- "type"{mem{'x; 'l; 'T}} }
+
+(*
+ * Subset.
+ *)
+interactive subset_wf {| intro [] |} 'H :
+   [wf] sequent [squash] { 'H >- "type"{'T} } -->
+   [wf] sequent [squash] { 'H >- 'l1 IN list{'T} } -->
+   [wf] sequent [squash] { 'H >- 'l2 IN list{'T} } -->
+   sequent ['ext] { 'H >- "type"{subset{'l1; 'l2; 'T}} }
+
+(*
+ * Sameset.
+ *)
+interactive sameset_wf {| intro [] |} 'H :
+   [wf] sequent [squash] { 'H >- "type"{'T} } -->
+   [wf] sequent [squash] { 'H >- 'l1 IN list{'T} } -->
+   [wf] sequent [squash] { 'H >- 'l2 IN list{'T} } -->
+   sequent ['ext] { 'H >- "type"{sameset{'l1; 'l2; 'T}} }
 
 (*
  * Append.
@@ -600,6 +700,71 @@ interactive rev_wf {| intro [] |} 'H :
    sequent ['ext] { 'H >- rev{'l} IN list{'A} }
 (*! @docoff *)
 
+(*!
+ * @begin[doc]
+ * @rules
+ *
+ * A list $v$ is a subset of the list $cons{'u; 'v}$.
+ * @end[doc]
+ *)
+interactive subset_cons 'H :
+   [wf] sequent [squash] { 'H >- "type"{'A} } -->
+   [wf] sequent [squash] { 'H >- 'u IN 'A } -->
+   [wf] sequent [squash] { 'H >- 'v IN list{'A} } -->
+   [wf] sequent [squash] { 'H >- 'l IN list{'A} } -->
+   sequent ['ext] { 'H >- subset{'v; 'l; 'A} } -->
+   sequent ['ext] { 'H >- subset{'v; cons{'u; 'l}; 'A} }
+
+(*!
+ * @begin[doc]
+ * @rules
+ *
+ * @tt[subset] is reflexive and transitive.
+ * @end[doc]
+ *)
+interactive subset_ref {| intro [] |} 'H :
+   [wf] sequent [squash] { 'H >- "type"{'A} } -->
+   [wf] sequent [squash] { 'H >- 'l IN list{'A} } -->
+   sequent ['ext] { 'H >- subset{'l; 'l; 'A} }
+
+interactive subset_trans {| intro [] |} 'H 'l2 :
+   [wf] sequent [squash] { 'H >- "type"{'A} } -->
+   [wf] sequent [squash] { 'H >- 'l1 IN list{'A} } -->
+   [wf] sequent [squash] { 'H >- 'l2 IN list{'A} } -->
+   [wf] sequent [squash] { 'H >- 'l3 IN list{'A} } -->
+   sequent ['ext] { 'H >- subset{'l1; 'l2; 'A} } -->
+   sequent ['ext] { 'H >- subset{'l2; 'l3; 'A} } -->
+   sequent ['ext] { 'H >- subset{'l1; 'l3; 'A} }
+
+(*!
+ * @begin[doc]
+ * @rules
+ *
+ * @tt[sameset] is reflexive, symmetric, and transitive.
+ * @end[doc]
+ *)
+interactive sameset_ref {| intro [] |} 'H :
+   [wf] sequent [squash] { 'H >- "type"{'A} } -->
+   [wf] sequent [squash] { 'H >- 'l IN list{'A} } -->
+   sequent ['ext] { 'H >- sameset{'l; 'l; 'A} }
+
+interactive sameset_sym {| intro [] |} 'H :
+   [wf] sequent [squash] { 'H >- "type"{'A} } -->
+   [wf] sequent [squash] { 'H >- 'l1 IN list{'A} } -->
+   [wf] sequent [squash] { 'H >- 'l2 IN list{'A} } -->
+   sequent ['ext] { 'H >- sameset{'l1; 'l2; 'A} } -->
+   sequent ['ext] { 'H >- sameset{'l2; 'l1; 'A} }
+
+interactive sameset_trans {| intro [] |} 'H 'l2 :
+   [wf] sequent [squash] { 'H >- "type"{'A} } -->
+   [wf] sequent [squash] { 'H >- 'l1 IN list{'A} } -->
+   [wf] sequent [squash] { 'H >- 'l2 IN list{'A} } -->
+   [wf] sequent [squash] { 'H >- 'l3 IN list{'A} } -->
+   sequent ['ext] { 'H >- sameset{'l1; 'l2; 'A} } -->
+   sequent ['ext] { 'H >- sameset{'l2; 'l3; 'A} } -->
+   sequent ['ext] { 'H >- sameset{'l1; 'l3; 'A} }
+(*! @docoff *)
+
 (************************************************************************
  * TACTICS                                                              *
  ************************************************************************)
@@ -609,6 +774,18 @@ let ball2_opname = opname_of_term ball2_term
 let is_ball2_term = is_dep0_dep0_dep2_term ball2_opname
 let mk_ball2_term = mk_dep0_dep0_dep2_term ball2_opname
 let dest_ball2 = dest_dep0_dep0_dep2_term ball2_opname
+
+let subsetConsT p =
+   subset_cons (Sequent.hyp_count_addr p) p
+
+let samesetRefT p =
+   sameset_ref (Sequent.hyp_count_addr p) p
+
+let samesetSymT p =
+   sameset_sym (Sequent.hyp_count_addr p) p
+
+let samesetTransT t p =
+   sameset_trans (Sequent.hyp_count_addr p) t p
 
 (*
  * -*-

@@ -34,6 +34,9 @@ extends Itt_list
 extends Itt_logic
 extends Itt_bool
 
+open Refiner.Refiner.TermType
+
+open Tactic_type.Tacticals
 open Tactic_type.Conversionals
 
 (************************************************************************
@@ -44,6 +47,21 @@ open Tactic_type.Conversionals
  * Boolean test if a list is empty.
  *)
 declare is_nil{'l}
+
+(*
+ * List membership.
+ *)
+declare mem{'x; 'l; 'T}
+
+(*
+ * The elements in one list are also in another.
+ *)
+declare subset{'l1; 'l2; 'T}
+
+(*
+ * Two lists contain the same set of elements.
+ *)
+declare sameset{'l1; 'l2; 'T}
 
 (*
  * Append two lists.
@@ -99,6 +117,9 @@ prec prec_assoc
  ************************************************************************)
 
 topval unfold_is_nil : conv
+topval unfold_mem : conv
+topval unfold_subset : conv
+topval unfold_sameset : conv
 topval unfold_append : conv
 topval unfold_ball2 : conv
 topval unfold_assoc : conv
@@ -110,6 +131,9 @@ topval unfold_replace_nth : conv
 topval unfold_length : conv
 
 topval fold_is_nil : conv
+topval fold_mem : conv
+topval fold_subset : conv
+topval fold_sameset : conv
 topval fold_append : conv
 topval fold_ball2 : conv
 topval fold_assoc : conv
@@ -119,6 +143,15 @@ topval fold_fold_left : conv
 topval fold_nth : conv
 topval fold_replace_nth : conv
 topval fold_length : conv
+
+(************************************************************************
+ * TACTICS                                                              *
+ ************************************************************************)
+
+topval subsetConsT : tactic
+topval samesetRefT : tactic
+topval samesetSymT : tactic
+topval samesetTransT : term -> tactic
 
 (*
  * -*-

@@ -7,18 +7,22 @@ extends Itt_logic
 (* simple formulae, just getting started *)
 
 interactive ax :
+   sequent { >- "type"{'A} } -->
    sequent { >- 'A => 'A}
 
 interactive notnot :
+   sequent { >- "type"{'A} } -->
    sequent { >- 'A => "not"{("not"{'A})} }
 
-
 interactive notnot2 :
+   sequent { >- "type"{'A} } -->
+   sequent { >- "type"{'B} } -->
    sequent { >- "not"{'A} or "not"{'B} => "not"{'B} or "not"{'A} }
 
 interactive implies :
+   sequent { >- "type"{'A} } -->
+   sequent { >- "type"{'B} } -->
    sequent { >- ('A => 'B) => ('A => 'B) }
-
 
 
 (* MULT = x *)
@@ -26,17 +30,20 @@ interactive implies :
 (* be used x times in a proof, for x = 2,3,4 *)
 (* Remark: these formulae are generic and can easily be extended to multiple uses for x > 4 *)
 
-
 interactive mult2 :
+   sequent { >- "type"{'A} } -->
    sequent { >- "not"{("not"{('A or "not"{'A})})} }
 
 interactive mult3 :
+   sequent { >- "type"{'A} } -->
+   sequent { >- "type"{'B} } -->
    sequent { >- "not"{("not"{(('A & 'B) or "not"{'A} or "not"{'B})})} }
 
 interactive mult4 :
+   sequent { >- "type"{'A} } -->
+   sequent { >- "type"{'B} } -->
+   sequent { >- "type"{'C} } -->
    sequent { >- "not"{("not"{(('A & 'B & 'C) or "not"{'A} or "not"{'B} or "not"{'C})})} }
-
-
 
 
 (* Example in Jens paper (prop. case): *)
@@ -64,17 +71,40 @@ interactive jens_prop :
 
 
 interactive prop_n1 :
-   sequent { >- 'A1 & (('B0 or 'A0) or 'B0) => 'A0 or ('B0 & 'A1) }
+   sequent { >- "type"{'A} } -->
+   sequent { >- "type"{'B} } -->
+   sequent { >- "type"{'C} } -->
+   sequent { >- 'C & (('B or 'A) or 'B) => 'A or ('B & 'C) }
 
 interactive prop_n2 :
-   sequent { >- 'A2 & (('B0 => (('B1 or 'A1) or 'B1)) & (('B0 or 'A0) or 'B0)) => 'A0 or ('B0 & 'A1) or ('B1 & 'A2) }
+   sequent { >- "type"{'A} } -->
+   sequent { >- "type"{'A1} } -->
+   sequent { >- "type"{'A2} } -->
+   sequent { >- "type"{'B} } -->
+   sequent { >- "type"{'B1} } -->
+   sequent { >- 'A2 & (('B => (('B1 or 'A1) or 'B1)) & (('B or 'A) or 'B)) => 'A or ('B & 'A1) or ('B1 & 'A2) }
 
 interactive prop_n3 :
-   sequent { >- 'A3 & (('B1 => (('B2 or 'A2) or 'B2)) & ('B0 => (('B1 or 'A1) or 'B1)) & (('B0 or 'A0) or 'B0)) => 'A0 or ('B0 & 'A1) or ('B1 & 'A2) or ('B2 & 'A3) }
+   sequent { >- "type"{'A} } -->
+   sequent { >- "type"{'A1} } -->
+   sequent { >- "type"{'A2} } -->
+   sequent { >- "type"{'A3} } -->
+   sequent { >- "type"{'B} } -->
+   sequent { >- "type"{'B1} } -->
+   sequent { >- "type"{'B2} } -->
+   sequent { >- 'A3 & (('B1 => (('B2 or 'A2) or 'B2)) & ('B => (('B1 or 'A1) or 'B1)) & (('B or 'A) or 'B)) => 'A or ('B & 'A1) or ('B1 & 'A2) or ('B2 & 'A3) }
 
 interactive prop_n4 :
-   sequent { >- 'A4 & (('B2 => (('B3 or 'A3) or 'B3)) & ('B1 => (('B2 or 'A2) or 'B2)) & ('B0 => (('B1 or 'A1) or 'B1)) & (('B0 or 'A0) or 'B0)) => 'A0 or ('B0 & 'A1) or ('B1 & 'A2) or ('B2 & 'A3) or ('B3 & 'A4) }
-
+   sequent { >- "type"{'A} } -->
+   sequent { >- "type"{'A1} } -->
+   sequent { >- "type"{'A2} } -->
+   sequent { >- "type"{'A3} } -->
+   sequent { >- "type"{'A4} } -->
+   sequent { >- "type"{'B} } -->
+   sequent { >- "type"{'B1} } -->
+   sequent { >- "type"{'B2} } -->
+   sequent { >- "type"{'B3} } -->
+   sequent { >- 'A4 & (('B2 => (('B3 or 'A3) or 'B3)) & ('B1 => (('B2 or 'A2) or 'B2)) & ('B => (('B1 or 'A1) or 'B1)) & (('B or 'A) or 'B)) => 'A or ('B & 'A1) or ('B1 & 'A2) or ('B2 & 'A3) or ('B3 & 'A4) }
 
 
 
@@ -90,10 +120,10 @@ interactive ax_all :
 
 (* involves the vo_jprover parameter with the cut rule *)
 
-interactive all_exst :
+interactive all_exst 'v0_jprover :
+   sequent { >- 'v0_jprover in 'T } -->
+   sequent { x: 'T >- "type"{'A['x]} } -->
    sequent { >- ((all x:'T. 'A['x]) => (exst x:'T. 'A['x])) }
-
-
 
 
 (* Example in Jens paper (first-order case): *)
@@ -142,6 +172,8 @@ interactive fv1 bind{x.'A['x]} 'x 'y :
    sequent { >- 'A['x] => 'A['y] }
 
 interactive fv2 bind{x.'A['x]} 'a 'b 'f :
+   sequent { x: 'T >- "type"{'A['x,'b]} } -->
+   sequent { >- 'f('a) in 'T } -->
    sequent { >- all x:'T. 'A['x,'b] => 'A['f('a),'b] }
 
 interactive fv3 bind{x.'A['x]} 'a 'b 'f :
@@ -172,12 +204,17 @@ interactive jens_fo_fv 'a 'b :
 
 
 interactive fun1 'a bind{x.'f['x]} :
+   sequent { >- 'a in 'O } -->
+   sequent { >- all x: 'O. "type"{'P['x]} } -->
+   sequent { >- all x: 'O . ('f['x] in 'O) } -->
    sequent { >- 'P['a] & (all x:'O. ('P['x] => 'P['f['x]])) => 'P['f['f['f['f['a]]]]] }
 
 interactive fun2 bind{x.'A['x]} 'a bind{x.'f['x]} bind{x.'g['x]} :
+   sequent { >- 'a in 'O } -->
+   sequent { >- all x: 'O . ('g['x] in 'O) } -->
+   sequent { >- all x: 'O . ('f['x] in 'O) } -->
+   sequent { >- all x: ('O * 'O). "type"{'A['x]} } -->
    sequent { >- 'A['a,'g['a]] & (all x:'O. ('A['x,'g['x]] => 'A['f['x],'g['f['x]]])) => 'A['f['f['f['a]]],'g['f['f['f['a]]]]] }
-
-
 
 
 
@@ -190,8 +227,6 @@ interactive fun2 bind{x.'A['x]} 'a bind{x.'f['x]} bind{x.'g['x]} :
 (* These formulae cause exponential proof length in EVERY LJ proof wrt. the *)
 (* proof length of a given LJmc proof in first-order intuitionistic logic *)
 (* The examples can easily be extended to n > 4 *)
-
-
 
 interactive fo_n1 :
    sequent { >- (all w:'T. 'A1['w]) & (all x:'T. (('B0 or 'A0['x]) or 'B0)) & "not"{('B0 & (all y:'T. 'A1['y]))} => all z:'T. 'A0['z] }

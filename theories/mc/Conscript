@@ -2,7 +2,7 @@ Import qw( env );
 
 $env = $env->clone(
    INCPATH  => [@{$env->{INCPATH}}, "../tactic", "../ocaml", "../base",
-                "../itt", "$env->{MC}/fir/util"]
+                "../itt", "$env->{MC}/fir/type", "$env->{MC}/fir/util"]
 );
 
 OCamlSources $env

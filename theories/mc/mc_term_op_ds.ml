@@ -32,219 +32,138 @@
  *)
 
 open Opname
-open Refine_error_sig
-open Term_ds_sig
-open Term_ds
+open Refiner.Refiner.Term
+open Refiner.Refiner.TermType
+
+(*************************************************************************
+ * General utility.
+ *************************************************************************)
 
 (*
- * The function naming scheme here is as follows:
- * X_depY pairs represent X terms in a row, each with Y bound variables.
- * The strings for a given subterm with bound variables come right
- * before the term they appear in both function parameters and
- * return values.
+ * Indicates I've screwed up my sanity checks since this should never happen.
  *)
 
-module type McTermOp_sig =
-sig
-
-   type term
-
-   (*
-    * 4 subterms.
-    *)
-
-   val is_4_dep0_term : opname -> term -> bool
-   val mk_4_dep0_term : opname -> term -> term -> term -> term -> term
-   val dest_4_dep0_term : opname -> term -> term * term * term * term
-
-   val is_3_dep0_1_dep1_term : opname -> term -> bool
-   val mk_3_dep0_1_dep1_term :
-      opname -> term -> term -> term -> string -> term -> term
-   val dest_3_dep0_1_dep1_term :
-      opname -> term -> term * term * term * string * term
-
-   (*
-    * 5 subterms.
-    *)
-
-   val is_4_dep0_1_dep1_term : opname -> term -> bool
-   val mk_4_dep0_1_dep1_term :
-      opname -> term -> term -> term -> term -> string -> term -> term
-   val dest_4_dep0_1_dep1_term :
-      opname -> term -> term * term * term * term * string * term
-
-   (*
-    * 6 subterms.
-    *)
-
-   val is_5_dep0_1_dep1_term : opname -> term -> bool
-   val mk_5_dep0_1_dep1_term :
-      opname -> term -> term -> term -> term -> term -> string -> term -> term
-   val dest_5_dep0_1_dep1_term :
-      opname -> term -> term * term * term * term * term * string * term
-end
+exception SanityError of string
 
 (*
- * Define the actual module now.
+ * Indicates a mis-application of a dest_* function.
  *)
 
-module McTermOp
-   (Term : TermDsSig
-    with type level_exp_var = TermType.level_exp_var
-    with type level_exp = TermType.level_exp
-    with type param = TermType.param
-    with type operator = TermType.operator
-    with type term = TermType.term
-    with type term_core = TermType.term_core
-    with type bound_term = TermType.bound_term
+exception DestFailure of string * term
 
-    with type level_exp_var' = TermType.level_exp_var'
-    with type level_exp' = TermType.level_exp'
-    with type object_id = TermType.object_id
-    with type param' = TermType.param'
-    with type operator' = TermType.operator'
-    with type term' = TermType.term'
-    with type bound_term' = TermType.bound_term')
-   (RefineError : RefineErrorSig
-    with type level_exp = TermType.level_exp
-    with type param = TermType.param
-    with type term = TermType.term
-    with type bound_term = TermType.bound_term)
-=
-struct
+(*
+ * Several functions for convinience.
+ *)
 
-   open RefineError
-   open Term
-   open TermType
+let string_of_binding_var t =
+   match dest_term t with
+      { term_op = _; term_terms = [bt1] } ->
+         (match dest_bterm bt1 with
+            { bvars = [s1]; bterm = t1 } ->
+               s1
+          | _ ->
+            raise (SanityError "string_of_binding_var: match failure (1)"))
+    | _ ->
+         raise (SanityError "string_of_binding_var: match failure (2)")
 
-   (*
-    * Term type.
-    *)
+let pre_dest_term t =
+   ( opname_of_term t, subterm_arities t, subterms_of_term t )
 
-   type term = TermType.term
+let opname_arity_check opname_requested arities_requested opname arities =
+   Opname.eq opname_requested opname && arities_requested = arities
 
-   (*
-    * 4 subterms.
-    *)
+(*************************************************************************
+ * 4 subterms.
+ *************************************************************************)
 
-   let is_4_dep0_term opname t = match get_core t with
-      Term { term_op = { op_name = opname'; op_params = [] };
-             term_terms = [bt1; bt2; bt3; bt4]
-           } when Opname.eq opname' opname ->
-         bt1.bvars = [] && bt2.bvars = [] && bt3.bvars = [] && bt4.bvars = []
-    | _ -> false
+let is_4_dep0_term opname t =
+   let (opname', arities, subterms) = pre_dest_term t in
+      opname_arity_check opname' [0;0;0;0] opname arities
 
-   let mk_4_dep0_term opname t1 t2 t3 t4 =
-      { free_vars = VarsDelayed;
-        core = Term
-         { term_op = { op_name = opname; op_params = [] };
-           term_terms = [ mk_simple_bterm t1; mk_simple_bterm t2;
-                          mk_simple_bterm t3; mk_simple_bterm t4 ] } }
+let mk_4_dep0_term opname t1 t2 t3 t4 =
+   mk_term  (make_op { op_name = opname; op_params = [] })
+            [ mk_simple_bterm t1; mk_simple_bterm t2;
+              mk_simple_bterm t3; mk_simple_bterm t4
+            ]
 
-   let dest_4_dep0_term opname t = match dest_term t with
-      { term_op = { op_name = opname'; op_params = [] };
-        term_terms = [ bt1; bt2; bt3; bt4 ]
-      } when Opname.eq opname' opname ->
-         dest_simple_bterm bt1, dest_simple_bterm bt2,
-         dest_simple_bterm bt3, dest_simple_bterm bt4
-    | _ -> raise (RefineError ("dest_4_dep0_term",
-                              TermMatchError(t, "bad arity")))
+let dest_4_dep0_term opname t =
+   let (opname', arities, subterms) = pre_dest_term t in
+      if opname_arity_check opname' [0;0;0;0] opname arities then
+         match subterms with
+            [t1; t2; t3; t4] ->
+               t1, t2, t3, t4
+          | _ ->
+               raise (SanityError "dest_4_dep0_term")
+      else
+         raise (DestFailure ("dest_4_dep0_term: ", t))
 
-   let is_3_dep0_1_dep1_term opname t = match get_core t with
-      Term { term_op  = { op_name = opname'; op_params = [] };
-             term_terms = [ { bvars = [] }; { bvars = [] };
-                            { bvars = [] }; { bvars = [_] } ]
-           } -> Opname.eq opname' opname
-    | _ -> false
+let is_3_dep0_1_dep1_term opname t =
+   let (opname', arities, subterms) = pre_dest_term t in
+      opname_arity_check opname [0;0;0;1] opname' arities
 
-   let mk_3_dep0_1_dep1_term opname t1 t2 t3 b4 t4 =
-      { free_vars = VarsDelayed;
-        core = Term
-         { term_op = { op_name = opname; op_params = [] };
-           term_terms = [ mk_simple_bterm t1;
-                          mk_simple_bterm t2;
-                          mk_simple_bterm t3;
-                          { bvars = [b4]; bterm = t4 } ] } }
+let mk_3_dep0_1_dep1_term opname t1 t2 t3 b4 t4 =
+   mk_term  (make_op { op_name = opname; op_params = [] })
+            [ mk_simple_bterm t1; mk_simple_bterm t2; mk_simple_bterm t3;
+              mk_bterm [b4] t4
+            ]
 
-   let dest_3_dep0_1_dep1_term opname t = match dest_term t with
-      { term_op = { op_name = opname'; op_params = [] };
-        term_terms = [ { bvars = []; bterm = t1 };
-                       { bvars = []; bterm = t2 };
-                       { bvars = []; bterm = t3 };
-                       { bvars = [v]; bterm = t4 } ]
-      } when Opname.eq opname' opname ->
-         t1, t2, t3, v, t4
-    | _ -> raise (RefineError ("dest_3_dep0_1_dep1_term",
-                              TermMatchError(t, "bad arity")))
+let dest_3_dep0_1_dep1_term opname t =
+   let (opname', arities, subterms) = pre_dest_term t in
+      if opname_arity_check opname [0;0;0;1] opname' arities then
+         match subterms with
+            [t1; t2; t3; t4] ->
+               t1, t2, t3, string_of_binding_var t4, t4
+          | _ ->
+               raise (SanityError "dest_3_dep0_1_dep1_term")
+      else
+         raise (DestFailure ("dest_3_dep0_1_dep1_term: ", t))
 
-   (*
-    * 5 subterms.
-    *)
+(*************************************************************************
+ * 5 subterms.
+ *************************************************************************)
 
-   let is_4_dep0_1_dep1_term opname t = match get_core t with
-      Term { term_op = { op_name = opname'; op_params = [] };
-             term_terms = [ { bvars = [] }; { bvars = [] };
-                            { bvars = [] }; { bvars = [] };
-                            { bvars = [_] } ]
-           } -> Opname.eq opname' opname
-    | _ -> false
+let is_4_dep0_1_dep1_term opname t =
+   let (opname', arities, subterms) = pre_dest_term t in
+      opname_arity_check opname [0;0;0;0;1] opname' arities
 
-   let mk_4_dep0_1_dep1_term opname t1 t2 t3 t4 b5 t5 =
-      { free_vars = VarsDelayed;
-        core = Term
-         { term_op = { op_name = opname; op_params = [] };
-           term_terms = [ mk_simple_bterm t1;
-                          mk_simple_bterm t2;
-                          mk_simple_bterm t3;
-                          mk_simple_bterm t4;
-                          { bvars = [b5]; bterm = t5 } ] } }
+let mk_4_dep0_1_dep1_term opname t1 t2 t3 t4 b5 t5 =
+   mk_term  (make_op { op_name = opname; op_params = [] })
+            [ mk_simple_bterm t1; mk_simple_bterm t2; mk_simple_bterm t3;
+              mk_simple_bterm t4; mk_bterm [b5] t5
+            ]
 
-   let dest_4_dep0_1_dep1_term opname t = match dest_term t with
-      { term_op = { op_name = opname'; op_params = [] };
-        term_terms = [ { bvars = []; bterm = t1 };
-                       { bvars = []; bterm = t2 };
-                       { bvars = []; bterm = t3 };
-                       { bvars = []; bterm = t4 };
-                       { bvars = [v]; bterm = t5 } ]
-      } when Opname.eq opname' opname ->
-         t1, t2, t3, t4, v, t5
-    | _ -> raise (RefineError ("dest_4_dep0_1_dep1_term",
-                               TermMatchError(t, "bad arity")))
+let dest_4_dep0_1_dep1_term opname t =
+   let (opname', arities, subterms) = pre_dest_term t in
+      if opname_arity_check opname [0;0;0;0;1] opname' arities then
+         match subterms with
+            [t1; t2; t3; t4; t5] ->
+               t1, t2, t3, t4, string_of_binding_var t5, t5
+          | _ ->
+               raise (SanityError "dest_4_dep0_1_dep1_term")
+      else
+         raise (DestFailure("dest_4_dep0_1_dep1_term: ", t))
 
-   (*
-    * 6 subterms.
-    *)
+(*************************************************************************
+ * 6 subterms.
+ *************************************************************************)
 
-   let is_5_dep0_1_dep1_term opname t = match get_core t with
-      Term { term_op = { op_name = opname'; op_params = [] };
-             term_terms = [ { bvars = [] }; { bvars = [] };
-                            { bvars = [] }; { bvars = [] };
-                            { bvars = [] }; { bvars = [_] } ]
-           } -> Opname.eq opname' opname
-    | _ -> false
+let is_5_dep0_1_dep1_term opname t =
+   let (opname', arities, subterms) = pre_dest_term t in
+      opname_arity_check opname [0;0;0;0;0;1] opname' arities
 
-   let mk_5_dep0_1_dep1_term opname t1 t2 t3 t4 t5 b6 t6 =
-      { free_vars = VarsDelayed;
-        core = Term
-         { term_op = { op_name = opname; op_params = [] };
-           term_terms = [ mk_simple_bterm t1;
-                          mk_simple_bterm t2;
-                          mk_simple_bterm t3;
-                          mk_simple_bterm t4;
-                          mk_simple_bterm t5;
-                          { bvars = [b6]; bterm = t6 } ] } }
+let mk_5_dep0_1_dep1_term opname t1 t2 t3 t4 t5 b6 t6 =
+   mk_term  (make_op { op_name = opname; op_params = [] })
+            [ mk_simple_bterm t1; mk_simple_bterm t2; mk_simple_bterm t3;
+              mk_simple_bterm t4; mk_simple_bterm t5; mk_bterm [b6] t6
+            ]
 
-   let dest_5_dep0_1_dep1_term opname t = match dest_term t with
-      { term_op = { op_name = opname'; op_params = [] };
-        term_terms = [ { bvars = []; bterm = t1 };
-                       { bvars = []; bterm = t2 };
-                       { bvars = []; bterm = t3 };
-                       { bvars = []; bterm = t4 };
-                       { bvars = []; bterm = t5 };
-                       { bvars = [v]; bterm = t6 } ]
-      } when Opname.eq opname' opname ->
-         t1, t2, t3, t4, t5, v, t6
-    | _ -> raise (RefineError ("dest_5_dep0_1_dep1_term",
-                               TermMatchError(t, "bad arity")))
-
-end
+let dest_5_dep0_1_dep1_term opname t =
+   let (opname', arities, subterms) = pre_dest_term t in
+      if opname_arity_check opname [0;0;0;0;0;1] opname' arities then
+         match subterms with
+            [t1; t2; t3; t4; t5; t6] ->
+               t1, t2, t3, t4, t5, string_of_binding_var t6, t6
+          | _ ->
+               raise (SanityError "dest_5_dep0_1_dep1_term")
+      else
+         raise (DestFailure("dest_5_dep0_1_dep1_term: ", t))

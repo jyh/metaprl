@@ -32,9 +32,7 @@
  *)
 
 open Opname
-open Refine_error_sig
-open Term_ds_sig
-open Term_ds
+open Refiner.Refiner.Term
 
 (*
  * The function naming scheme here is as follows:
@@ -44,75 +42,36 @@ open Term_ds
  * return values.
  *)
 
-module type McTermOp_sig =
-sig
+(*************************************************************************
+ * 4 subterms.
+ *************************************************************************)
 
-   (*
-    * Term type.
-    *)
+val is_4_dep0_term : opname -> term -> bool
+val mk_4_dep0_term : opname -> term -> term -> term -> term -> term
+val dest_4_dep0_term : opname -> term -> term * term * term * term
 
-   type term
+val is_3_dep0_1_dep1_term : opname -> term -> bool
+val mk_3_dep0_1_dep1_term :
+   opname -> term -> term -> term -> string -> term -> term
+val dest_3_dep0_1_dep1_term :
+   opname -> term -> term * term * term * string * term
 
-   (*
-    * 4 subterms.
-    *)
+(*************************************************************************
+ * 5 subterms.
+ *************************************************************************)
 
-   val is_4_dep0_term : opname -> term -> bool
-   val mk_4_dep0_term : opname -> term -> term -> term -> term -> term
-   val dest_4_dep0_term : opname -> term -> term * term * term * term
+val is_4_dep0_1_dep1_term : opname -> term -> bool
+val mk_4_dep0_1_dep1_term :
+   opname -> term -> term -> term -> term -> string -> term -> term
+val dest_4_dep0_1_dep1_term :
+   opname -> term -> term * term * term * term * string * term
 
-   val is_3_dep0_1_dep1_term : opname -> term -> bool
-   val mk_3_dep0_1_dep1_term :
-      opname -> term -> term -> term -> string -> term -> term
-   val dest_3_dep0_1_dep1_term :
-      opname -> term -> term * term * term * string * term
+(*************************************************************************
+ * 6 subterms.
+ *************************************************************************)
 
-   (*
-    * 5 subterms.
-    *)
-
-   val is_4_dep0_1_dep1_term : opname -> term -> bool
-   val mk_4_dep0_1_dep1_term :
-      opname -> term -> term -> term -> term -> string -> term -> term
-   val dest_4_dep0_1_dep1_term :
-      opname -> term -> term * term * term * term * string * term
-
-   (*
-    * 6 subterms.
-    *)
-
-   val is_5_dep0_1_dep1_term : opname -> term -> bool
-   val mk_5_dep0_1_dep1_term :
-      opname -> term -> term -> term -> term -> term -> string -> term -> term
-   val dest_5_dep0_1_dep1_term :
-      opname -> term -> term * term * term * term * term * string * term
-end
-
-(*
- * Define the actual module now (or at least its interface).
- *)
-
-module McTermOp
-   (Term : TermDsSig
-    with type level_exp_var = TermType.level_exp_var
-    with type level_exp = TermType.level_exp
-    with type param = TermType.param
-    with type operator = TermType.operator
-    with type term = TermType.term
-    with type term_core = TermType.term_core
-    with type bound_term = TermType.bound_term
-
-    with type level_exp_var' = TermType.level_exp_var'
-    with type level_exp' = TermType.level_exp'
-    with type object_id = TermType.object_id
-    with type param' = TermType.param'
-    with type operator' = TermType.operator'
-    with type term' = TermType.term'
-    with type bound_term' = TermType.bound_term')
-   (RefineError : RefineErrorSig
-    with type level_exp = TermType.level_exp
-    with type param = TermType.param
-    with type term = TermType.term
-    with type bound_term = TermType.bound_term)
- : McTermOp_sig
-    with type term = TermType.term
+val is_5_dep0_1_dep1_term : opname -> term -> bool
+val mk_5_dep0_1_dep1_term :
+   opname -> term -> term -> term -> term -> term -> string -> term -> term
+val dest_5_dep0_1_dep1_term :
+   opname -> term -> term * term * term * term * term * string * term

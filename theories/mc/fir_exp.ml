@@ -32,6 +32,7 @@
 
 include Base_theory
 
+open Mc_term_op_ds
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
 
@@ -578,14 +579,11 @@ let is_notIntOp_term = is_no_subterms_term notIntOp_opname
 
 (* Bit fields. *)
 
-(*
 let rawBitFieldOp_term = << rawBitFieldOp{ 'precision; 'sign; 'num1; 'num2 } >>
 let rawBitFieldOp_opname = opname_of_term rawBitFieldOp_term
-let is_rawBitFieldOp_term = is_dep0_dep0_dep0_dep0_term rawBitFieldOp_opname
-let mk_rawBitFieldOp_term = mk_dep0_dep0_dep0_dep0_term rawBitFieldOp_opname
-let dest_rawBitFieldOp_term =
-   dest_dep0_dep0_dep0_dep0_term rawBitFieldOp_opname
-*)
+let is_rawBitFieldOp_term = is_4_dep0_term rawBitFieldOp_opname
+let mk_rawBitFieldOp_term = mk_4_dep0_term rawBitFieldOp_opname
+let dest_rawBitFieldOp_term = dest_4_dep0_term rawBitFieldOp_opname
 
 (* Native ints. *)
 
@@ -677,15 +675,12 @@ let is_rawIntOfFloatOp_term = is_dep0_dep0_dep0_term rawIntOfFloatOp_opname
 let mk_rawIntOfFloatOp_term = mk_dep0_dep0_dep0_term rawIntOfFloatOp_opname
 let dest_rawIntOfFloatOp_term = dest_dep0_dep0_dep0_term rawIntOfFloatOp_opname
 
-(*
 let rawIntOfRawIntOp_term =
    << rawIntOfRawIntOp{ 'dest_prec; 'dest_sign; 'src_prec; 'src_sign } >>
 let rawIntOfRawIntOp_opname = opname_of_term rawIntOfRawIntOp_term
-let is_rawIntOfRawIntOp_term = is_dep0_dep0_dep0_term rawIntOfRawIntOp_opname
-let mk_rawIntOfRawIntOp_term = mk_dep0_dep0_dep0_term rawIntOfRawIntOp_opname
-let dest_rawIntOfRawIntOp_term =
-   dest_dep0_dep0_dep0_term rawIntOfRawIntOp_opname
-*)
+let is_rawIntOfRawIntOp_term = is_4_dep0_term rawIntOfRawIntOp_opname
+let mk_rawIntOfRawIntOp_term = mk_4_dep0_term rawIntOfRawIntOp_opname
+let dest_rawIntOfRawIntOp_term = dest_4_dep0_term rawIntOfRawIntOp_opname
 
 (* Integer/pointer coercions. *)
 
@@ -875,7 +870,12 @@ let is_minRawIntOp_term = is_dep0_dep0_term minRawIntOp_opname
 let mk_minRawIntOp_term = mk_dep0_dep0_term minRawIntOp_opname
 let dest_minRawIntOp_term = dest_dep0_dep0_term minRawIntOp_opname
 
-(* raw set bit field op goes here *)
+let rawSetBitFieldOp_term =
+   << rawSetBitFieldOp{ 'precision; 'sign; 'num1; 'num2 } >>
+let rawSetBitFieldOp_opname = opname_of_term rawSetBitFieldOp_term
+let is_rawSetBitFieldOp_term = is_4_dep0_term rawSetBitFieldOp_opname
+let mk_rawSetBitFieldOp_term = mk_4_dep0_term rawSetBitFieldOp_opname
+let dest_rawSetBitFieldOp_term = dest_4_dep0_term rawSetBitFieldOp_opname
 
 let eqRawIntOp_term = << eqRawIntOp{ 'precision; 'sign } >>
 let eqRawIntOp_opname = opname_of_term eqRawIntOp_term
@@ -1077,7 +1077,11 @@ let is_allocArray_term = is_dep0_dep0_term allocArray_opname
 let mk_allocArray_term = mk_dep0_dep0_term allocArray_opname
 let dest_allocArray_term = dest_dep0_dep0_term allocArray_opname
 
-(* alloc union should go here *)
+let allocUnion_term = << allocUnion{ 'ty; 'ty_var; 'num; 'atom_list } >>
+let allocUnion_opname = opname_of_term allocUnion_term
+let is_allocUnion_term = is_4_dep0_term allocUnion_opname
+let mk_allocUnion_term = mk_4_dep0_term allocUnion_opname
+let dest_allocUnion_term = dest_4_dep0_term allocUnion_opname
 
 let allocMalloc_term = << allocMalloc{ 'term } >>
 let allocMalloc_opname = opname_of_term allocMalloc_term

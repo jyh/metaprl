@@ -242,7 +242,10 @@ val is_notIntOp_term : term -> bool
 
 (* Bit fields. *)
 
-(* raw bit field op goes ehre *)
+val rawBitFieldOp_term : term
+val is_rawBitFieldOp_term : term -> bool
+val mk_rawBitFieldOp_term : term -> term -> term -> term -> term
+val dest_rawBitFieldOp_term : term -> term * term * term * term
 
 (* Native ints. *)
 
@@ -319,12 +322,10 @@ val is_rawIntOfFloatOp_term : term -> bool
 val mk_rawIntOfFloatOp_term : term -> term -> term -> term
 val dest_rawIntOfFloatOp_term : term -> term * term * term
 
-(*
 val rawIntOfRawIntOp_term : term
 val is_rawIntOfRawIntOp_term : term -> bool
 val mk_rawIntOfRawIntOp_term : term -> term -> term -> term -> term
 val dest_rawIntOfRawIntOp_term : term -> term * term * term * term
-*)
 
 (* Integer/pointer coercions. *)
 
@@ -478,7 +479,10 @@ val is_minRawIntOp_term : term -> bool
 val mk_minRawIntOp_term : term -> term -> term
 val dest_minRawIntOp_term : term -> term * term
 
-(* that bit field op goes here *)
+val rawSetBitFieldOp_term : term
+val is_rawSetBitFieldOp_term : term -> bool
+val mk_rawSetBitFieldOp_term : term -> term -> term -> term -> term
+val dest_rawSetBitFieldOp_term : term -> term * term * term * term
 
 val eqRawIntOp_term : term
 val is_eqRawIntOp_term : term -> bool
@@ -652,7 +656,10 @@ val is_allocArray_term : term -> bool
 val mk_allocArray_term : term -> term -> term
 val dest_allocArray_term : term -> term * term
 
-(* allocUnion term should go here *)
+val allocUnion_term : term
+val is_allocUnion_term : term -> bool
+val mk_allocUnion_term : term -> term -> term -> term -> term
+val dest_allocUnion_term : term -> term * term * term * term
 
 val allocMalloc_term : term
 val is_allocMalloc_term : term -> bool

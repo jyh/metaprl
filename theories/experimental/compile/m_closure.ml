@@ -60,6 +60,7 @@ doc <:doc< @docoff >>
 open M_ir
 open M_util
 
+open Refiner.Refiner.TermType
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
 open Refiner.Refiner.TermSubst

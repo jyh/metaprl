@@ -55,7 +55,7 @@ extends Itt_order
 extends Itt_int_arith
 doc <:doc< @docoff >>
 
-open Refiner.Refiner.TermOp
+open Refiner.Refiner.TermType
 
 open Tactic_type.Sequent
 

@@ -46,6 +46,8 @@ open Tactic_type.Conversionals
 rewrite reduceIndependentEta ('A -> 'B) : ('f = 'f in 'A -> 'B) -->
    lambda{x. 'f 'x} <--> 'f
 
+rewrite unfold_fun : ('A -> 'B) <--> (x: 'A -> 'B)
+
 (************************************************************************
  * RULES                                                                *
  ************************************************************************)
@@ -122,7 +124,7 @@ rule independentFunctionElimination 'H 'J 'f 'y :
  * Explicit function elimination.
  *)
 rule independentFunctionElimination2 'H 'J 'f 'y 'z 'a :
-   sequent ['ext] { 'H; f: 'A -> 'B; 'J['f] >- 'a = 'a in 'A } -->
+   sequent [squash] { 'H; f: 'A -> 'B; 'J['f] >- member{'A; 'a} } -->
    sequent ['ext] { 'H; f: 'A -> 'B; 'J['f]; y: 'B; z: 'y = ('f 'a) in 'B >- 'T['f] } -->
    sequent ['ext] { 'H; f: 'A -> 'B; 'J['f] >- 'T['f] }
 

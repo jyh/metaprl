@@ -47,10 +47,10 @@ type elim_data
 type intro_data
 
 type intro_option =
-   SelectOption of int        (* Select among multiple introduction rules *)
+   SelectOption of int            (* Select among multiple introduction rules *)
 
 type elim_option =
-   ThinOption                 (* Normally thin the eliminated hyp, unless overridden *)
+   ThinOption of (int -> tactic)  (* Thin the eliminated hyp, unless overridden *)
 
 resource (term * (int -> tactic), int -> tactic, elim_data, Tactic.pre_tactic * elim_option list) elim_resource
 resource (term * tactic, tactic, intro_data, Tactic.pre_tactic * intro_option list) intro_resource

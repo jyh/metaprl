@@ -32,8 +32,8 @@
  *)
 
 include Itt_equal
-include Itt_rfun
 include Itt_struct
+include Itt_subtype
 
 open Printf
 open Mp_debug
@@ -46,13 +46,17 @@ open Refiner.Refiner.RefineError
 open Mp_resource
 
 open Var
+open Tactic_type
 open Tactic_type.Tacticals
 open Tactic_type.Conversionals
-open Tactic_type.Sequent
+
+open Typeinf
+open Base_dtactic
 
 open Itt_equal
 open Itt_subtype
 open Itt_struct
+open Itt_rfun
 
 (*
  * Show that the file is loading.
@@ -149,6 +153,11 @@ prim productEquality {| intro_resource []; eqcd_resource |} 'H 'y :
    sequent ['ext] { 'H >- x1:'A1 * 'B1['x1] = x2:'A2 * 'B2['x2] in univ[i:l] } =
    it
 
+interactive productMember {| intro_resource [] |} 'H 'y :
+   [wf] sequent [squash] { 'H >- member{univ[i:l]; 'A1} } -->
+   [wf] sequent [squash] { 'H; y: 'A1 >- member{univ[i:l]; 'B1['y]} } -->
+   sequent ['ext] { 'H >- member{.univ[i:l]; .x1:'A1 * 'B1['x1]} }
+
 (*
  * Typehood.
  *)
@@ -186,12 +195,18 @@ prim pairEquality {| intro_resource []; eqcd_resource |} 'H 'y :
    sequent ['ext] { 'H >- ('a1, 'b1) = ('a2, 'b2) in x:'A * 'B['x] } =
    it
 
+interactive pairMember {| intro_resource [] |} 'H 'y :
+   [wf] sequent [squash] { 'H >- member{'A; 'a1} } -->
+   [wf] sequent [squash] { 'H >- member{'B['a1]; 'b1} } -->
+   [wf] sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
+   sequent ['ext] { 'H >- member{.x:'A * 'B['x]; .('a1, 'b1)} }
+
 (*
  * H, x:A * B[x], J[x] >- T[x] ext spread(x; u, v. t[u, v])
  * by productElimination u v
  * H, x:A * B, u:A, v:B[u], J[u, v] >- T[u, v] ext t[u, v]
  *)
-prim productElimination {| elim_resource [] |} 'H 'J 'z 'u 'v :
+prim productElimination {| elim_resource [ThinOption thinT] |} 'H 'J 'z 'u 'v :
    [wf] ('t['u; 'v] : sequent ['ext] { 'H; z: x:'A * 'B['x]; u: 'A; v: 'B['u]; 'J['u, 'v] >- 'T['u, 'v] }) -->
    sequent ['ext] { 'H; z: x:'A * 'B['x]; 'J['z] >- 'T['z] } =
    spread{'z; u, v. 't['u; 'v]}
@@ -202,12 +217,17 @@ prim productElimination {| elim_resource [] |} 'H 'J 'z 'u 'v :
  * H >- e1 = e2 in w:A * B
  * H, u:A, v: B[u], a: e1 = (u, v) in w:A * B >- b1[u; v] = b2[u; v] in T[u, v]
  *)
-prim spreadEquality {| intro_resource []; eqcd_resource |} 'H lambda{z. 'T['z]} (w:'A * 'B['w]) 'u 'v 'a :
+prim spreadEquality {| intro_resource []; eqcd_resource |} 'H bind{z. 'T['z]} (w:'A * 'B['w]) 'u 'v 'a :
    [wf] sequent [squash] { 'H >- 'e1 = 'e2 in w:'A * 'B['w] } -->
    [wf] sequent [squash] { 'H; u: 'A; v: 'B['u]; a: 'e1 = ('u, 'v) in w:'A * 'B['w] >-
              'b1['u; 'v] = 'b2['u; 'v] in 'T['u, 'v] } -->
    sequent ['ext] { 'H >- spread{'e1; u1, v1. 'b1['u1; 'v1]} = spread{'e2; u2, v2. 'b2['u2; 'v2]} in 'T['e1] } =
    it
+
+interactive spreadMember {| intro_resource [] |} 'H bind{z. 'T['z]} (w:'A * 'B['w]) 'u 'v 'a :
+   [wf] sequent [squash] { 'H >- member{.w:'A * 'B['w]; 'e1} } -->
+   [wf] sequent [squash] { 'H; u: 'A; v: 'B['u]; a: 'e1 = ('u, 'v) in w:'A * 'B['w] >- member{'T['u, 'v]; 'b1['u; 'v]} } -->
+   sequent ['ext] { 'H >- member{'T['e1]; spread{'e1; u1, v1. 'b1['u1; 'v1]}} }
 
 (*
  * H >- a1:A1 * B1 <= a2:A2 * B2
@@ -262,6 +282,48 @@ let dest_spread = dest_dep0_dep2_term spread_opname
 let mk_spread_term = mk_dep0_dep2_term spread_opname
 
 (************************************************************************
+ * SPREAD EQUALITY                                                      *
+ ************************************************************************)
+
+(*
+ * These require type inference.
+ *)
+let d_spread_equalT p =
+   let rt, spread =
+      try
+         let rt, spread, _ = dest_equal (Sequent.concl p) in
+            rt, spread
+      with
+         RefineError _ ->
+            dest_member (Sequent.concl p)
+   in
+   let v = maybe_new_vars1 p "v" in
+   let type_type = mk_bind_term v rt in
+   let _, _, pair, _ = dest_spread spread in
+   let type_type, pair_type =
+      try
+         match get_with_args p with
+            type_type :: pair_type :: _ ->
+               type_type, pair_type
+          | [pair_type] ->
+               type_type, pair_type
+          | [] ->
+               raise (RefineError ("d_spread_equalT", StringError "terms are required"))
+      with
+         RefineError _ ->
+            type_type, snd (infer_type p pair)
+   in
+      (withTermsT [type_type; pair_type] (dT 0)) p
+
+let spread_equal_term = << spread{'e1; u1, v1. 'b1['u1; 'v1]} = spread{'e2; u2, v2. 'b2['u2; 'v2]} in 'T >>
+
+let intro_resource = Mp_resource.improve intro_resource (spread_equal_term, d_spread_equalT)
+
+let spread_member_term = << member{'T; spread{'e1; u1, v1. 'b1['u1; 'v1]}} >>
+
+let intro_resource = Mp_resource.improve intro_resource (spread_member_term, d_spread_equalT)
+
+(************************************************************************
  * TYPE INFERENCE                                                       *
  ************************************************************************)
 
@@ -314,7 +376,7 @@ let typeinf_resource = Mp_resource.improve typeinf_resource (spread_term, inf_sp
  *)
 let dprod_subtypeT p =
    let a = get_opt_var_arg "x" p in
-      (productSubtype (hyp_count_addr p) a
+      (productSubtype (Sequent.hyp_count_addr p) a
        thenT addHiddenLabelT "subtype") p
 
 let sub_resource =

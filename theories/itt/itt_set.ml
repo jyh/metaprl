@@ -122,6 +122,11 @@ prim setEquality {| intro_resource []; eqcd_resource |} 'H 'x :
    [wf] sequent [squash] { 'H; x: 'A1 >- 'B1['x] = 'B2['x] in univ[i:l] } -->
    sequent ['ext] { 'H >- { a1:'A1 | 'B1['a1] } = { a2:'A2 | 'B2['a2] } in univ[i:l] } = it
 
+interactive setMember {| intro_resource [] |} 'H 'x :
+   [wf] sequent [squash] { 'H >- member{univ[i:l]; 'A1} } -->
+   [wf] sequent [squash] { 'H; x: 'A1 >- member{univ[i:l]; 'B1['x]} } -->
+   sequent ['ext] { 'H >- member{univ[i:l]; .{ a1:'A1 | 'B1['a1] }} }
+
 prim setType {| intro_resource [] |} 'H 'x :
    [wf] sequent [squash] { 'H >- "type"{'A1} } -->
    [wf] sequent [squash] { 'H; x: 'A1 >- "type"{'B1['x]} } -->
@@ -158,12 +163,18 @@ prim setMemberEquality {| intro_resource []; eqcd_resource |} 'H 'x :
    sequent ['ext] { 'H >- 'a1 = 'a2 in { a:'A | 'B['a] } } =
    it
 
+interactive setMemberMember {| intro_resource [] |} 'H 'x :
+   [wf] sequent [squash] { 'H >- member{'A; 'a1} } -->
+   [assertion] sequent [squash] { 'H >- 'B['a1] } -->
+   [wf] sequent [squash] { 'H; x: 'A >- "type"{'B['x]} } -->
+   sequent ['ext] { 'H >- member{.{ a:'A | 'B['a] }; 'a1} }
+
 (*
  * H, u: { x:A | B }, J[u] >> T[u] ext t[y]
  * by setElimination2 y v z
  * H, u: { x:A | B }, y: A; v: hide(B[y]); J[y] >> T[y]
  *)
-prim setElimination {| elim_resource [ThinOption] |} 'H 'J 'u 'v :
+prim setElimination {| elim_resource [] |} 'H 'J 'u 'v :
    ('t : sequent [it; 'prop] { 'H; u: 'A; v: hide{'B['u]}; 'J['u] >- 'T['u] }) -->
    sequent [it; 'prop] { 'H; u: { x:'A | 'B['x] }; 'J['u] >- 'T['u] } =
    't

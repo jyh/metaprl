@@ -47,6 +47,8 @@ open Var
 open Tactic_type.Sequent
 open Tactic_type.Tacticals
 
+open Base_dtactic
+
 open Itt_equal
 open Itt_subtype
 open Itt_dprod
@@ -117,7 +119,7 @@ prim independentPairFormation {| intro_resource [] |} 'H :
  * by independentProductElimination
  * H, A * B, u: A, v: B, J >- T ext t
  *)
-prim independentProductElimination {| elim_resource [] |} 'H 'J 'z 'u 'v :
+prim independentProductElimination {| elim_resource [ThinOption thinT] |} 'H 'J 'z 'u 'v :
    ('t['u; 'v] : sequent ['ext] { 'H; z: 'A * 'B; u: 'A; v: 'B; 'J['u, 'v] >- 'T['u, 'v] }) -->
    sequent ['ext] { 'H; z: 'A * 'B; 'J['z] >- 'T['z] } =
    't[fst{'z}; snd{'z}]

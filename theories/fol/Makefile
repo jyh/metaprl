@@ -9,6 +9,7 @@ OCAMLDEPFLAGS := -prl
 # Library files
 MPFILES :=\
 	fol_type\
+	fol_struct\
 	fol_false\
 	fol_true\
 	fol_implies\
@@ -18,7 +19,6 @@ MPFILES :=\
 	fol_univ\
 	fol_all\
 	fol_exists\
-	fol_struct\
 	fol_ctheory\
 	fol_class\
 	fol_theory

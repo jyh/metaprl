@@ -458,7 +458,7 @@ let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_i
 interactive vmap_type_type2 {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- "type"{vmap_type} }
 
-interactive vmap_elim {| elim_resource [] |} 'H 'J 'v1 'v2 'g 'w :
+interactive vmap_elim {| elim_resource [ThinOption thinT] |} 'H 'J 'v1 'v2 'g 'w :
    [main] sequent ['ext] { 'H; f: vmap_type; 'J['f] >- 'C[vmap_nil] } -->
    [main] sequent ['ext] { 'H; f: vmap_type; 'J['f]; v1: var_type; v2: var_type; g: vmap_type; w: 'C['g] >- 'C[vmap_cons{'v1; 'v2; 'g}] } -->
    sequent ['ext] { 'H; f: vmap_type; 'J['f] >- 'C['f] }

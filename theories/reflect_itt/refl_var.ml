@@ -42,6 +42,7 @@ open Var
 open Base_dtactic
 
 open Itt_equal
+open Itt_struct
 open Itt_atom_bool
 
 (************************************************************************
@@ -188,7 +189,7 @@ interactive var_type_type {| intro_resource [] |} 'H :
 (*
  * Induction.
  *)
-interactive var_type_elim {| elim_resource [] |} 'H 'J 'i 't 'v 'w :
+interactive var_type_elim {| elim_resource [ThinOption thinT] |} 'H 'J 'i 't 'v 'w :
    [main] sequent ['ext] { 'H; x: var_type; 'J['x] >- 'C[vnil] } -->
    [main] sequent ['ext] { 'H; x: var_type; 'J['x]; i: int; v: var_type; w: 'C['v] >- 'C[ivar{'i; 'v}] } -->
    [main] sequent ['ext] { 'H; x: var_type; 'J['x]; t: atom; v: var_type; w: 'C['v] >- 'C[tvar{'t; 'v}] } -->
@@ -232,7 +233,7 @@ interactive eq_var_assert_intro {| intro_resource [] |} 'H :
    [wf] sequent [squash] { 'H >- 'v1 = 'v2 in var_type } -->
    sequent ['ext] { 'H >- "assert"{eq_var{'v1; 'v2}} }
 
-interactive eq_var_assert_elim2 {| elim_resource [ThinOption] |} 'H 'J :
+interactive eq_var_assert_elim2 {| elim_resource [] |} 'H 'J :
    [wf] sequent [squash] { 'H; x: "assert"{eq_var{'v1; 'v2}}; 'J['x] >- member{var_type; 'v1} } -->
    [wf] sequent [squash] { 'H; x: "assert"{eq_var{'v1; 'v2}}; 'J['x] >- member{var_type; 'v2} } -->
    [main] sequent ['ext] { 'H; x: 'v1 = 'v2 in var_type; 'J[it] >- 'C[it] } -->

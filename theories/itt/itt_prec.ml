@@ -36,6 +36,7 @@ include Itt_subtype
 include Itt_void
 include Itt_fun
 include Itt_prod
+include Itt_struct
 
 open Printf
 open Mp_debug
@@ -44,7 +45,10 @@ open Refiner.Refiner.TermOp
 open Refiner.Refiner.TermSubst
 open Mp_resource
 
+open Base_dtactic
+
 open Itt_void
+open Itt_struct
 
 (*
  * Show that the file is loading.
@@ -140,7 +144,7 @@ prim precMemberEquality {| intro_resource []; eqcd_resource |} 'H 'z :
  *   p: a: A * B[Z, a]
  * >- T[p] ext g[r, u, h, p]
  *)
-prim precElimination {| elim_resource [] |} 'H 'J lambda{z. 'G['z]} 'a 'A 'Z 'r 'p 'u 'h univ[i:l] :
+prim precElimination {| elim_resource [ThinOption thinT] |} 'H 'J lambda{z. 'G['z]} 'a 'A 'Z 'r 'p 'u 'h univ[i:l] :
    [wf] sequent [squash] { 'H; r: "prec"{T, x. 'B['T; 'x]; 'a}; 'J['r] >- 'a = 'a in 'A } -->
    [main] ('g['r; 'u; 'p; 'h] : sequent ['ext] { 'H; r: "prec"{T, x. 'B['T; 'x]; 'a}; 'J['r];
       Z: 'A -> univ[i:l];
@@ -161,7 +165,7 @@ prim precElimination {| elim_resource [] |} 'H 'J lambda{z. 'G['z]} 'a 'A 'Z 'r 
  *   u: r = y in B[lambda(a. prec(T, x. B[T; x]); a); a]
  *   >- T[y]
  *)
-prim precUnrollElimination {| elim_resource [] |} 'H 'J 'z 'y 'u :
+prim precUnrollElimination {| elim_resource [ThinOption thinT] |} 'H 'J 'z 'y 'u :
    ('g['z; 'y; 'u] : sequent ['ext] { 'H; r: "prec"{T, x. 'B['T; 'x]; 'a}; 'J['r];
              y: 'B[lambda{z. "prec"{T, x. 'B['T; 'x]; 'z}}; 'a];
              u: 'r = 'y in 'B[lambda{z. "prec"{T, x. 'B['T; 'x]; 'z}}; 'a]

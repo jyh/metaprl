@@ -125,7 +125,7 @@ prim eq_int_assert_intro {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- "assert"{eq_int{'x; 'y}} } =
    it
 
-prim eq_int_assert_elim {| elim_resource [ThinOption] |} 'H 'J :
+prim eq_int_assert_elim {| elim_resource [] |} 'H 'J :
    sequent ['ext] { 'H; x: 'a = 'b in int; 'J[it] >- 'C[it] } -->
    sequent ['ext] { 'H; x: "assert"{eq_int{'a; 'b}}; 'J['x] >- 'C['x] } =
    it

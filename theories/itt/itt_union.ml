@@ -33,7 +33,7 @@
 
 include Itt_equal
 include Itt_struct
-include Itt_rfun
+include Itt_subtype
 
 open Printf
 open Mp_debug
@@ -145,6 +145,11 @@ prim unionEquality {| intro_resource []; eqcd_resource |} 'H :
    sequent ['ext] { 'H >- 'A1 + 'B1 = 'A2 + 'B2 in univ[i:l] } =
    it
 
+interactive unionMember {| intro_resource [] |} 'H :
+   [wf] sequent [squash] { 'H >- member{univ[i:l]; 'A1} } -->
+   [wf] sequent [squash] { 'H >- member{univ[i:l]; 'B1} } -->
+   sequent ['ext] { 'H >- member{univ[i:l]; .'A1 + 'B1} }
+
 (*
  * Typehood.
  *)
@@ -190,6 +195,11 @@ prim inlEquality {| intro_resource []; eqcd_resource |} 'H :
    sequent ['ext] { 'H >- inl{'a1} = inl{'a2} in 'A + 'B } =
    it
 
+interactive inlMember {| intro_resource [] |} 'H :
+   [wf] sequent [squash] { 'H >- member{'A; 'a1} } -->
+   [wf] sequent [squash] { 'H >- "type"{'B} } -->
+   sequent ['ext] { 'H >- member{.'A + 'B; inl{'a1}} }
+
 (*
  * H >- inr b1 = inr b2 in A + B
  * by inrEquality
@@ -202,12 +212,17 @@ prim inrEquality {| intro_resource []; eqcd_resource |} 'H :
    sequent ['ext] { 'H >- inr{'b1} = inr{'b2} in 'A + 'B } =
    it
 
+interactive inrMember {| intro_resource [] |} 'H :
+   [wf] sequent [squash] { 'H >- member{'B; 'b1} } -->
+   [wf] sequent [squash] { 'H >- "type"{'A} } -->
+   sequent ['ext] { 'H >- member{.'A + 'B; inr{'b1}} }
+
 (*
  * H, x: A + B, J[x] >- T[x] ext decide(x; u. 'left['u]; v. 'right['v])
  * by unionElimination x u v
  * H, x: A # B, u:A, v:B[u], J[u, v] >- T[u, v] ext t[u, v]
  *)
-prim unionElimination {| elim_resource [] |} 'H 'J 'x 'u 'v :
+prim unionElimination {| elim_resource [ThinOption thinT] |} 'H 'J 'x 'u 'v :
    [left] ('left['u] : sequent ['ext] { 'H; x: 'A + 'B; u: 'A; 'J[inl{'u}] >- 'T[inl{'u}] }) -->
    [right] ('right['u] : sequent ['ext] { 'H; x: 'A + 'B; v: 'B; 'J[inr{'v}] >- 'T[inr{'v}] }) -->
    sequent ['ext] { 'H; x: 'A + 'B; 'J['x] >- 'T['x] } =
@@ -220,7 +235,7 @@ prim unionElimination {| elim_resource [] |} 'H 'J 'x 'u 'v :
  * H, u:A, w: e1 = inl u in A + B >- l1[u] = l2[u] in T[inl{u}]
  * H, v:A, w: e1 = inr v in A + B >- r1[v] = r2[v] in T[inr{v}]
  *)
-prim decideEquality {| intro_resource []; eqcd_resource |} 'H lambda{z. 'T['z]} ('A + 'B) 'u 'v 'w :
+prim decideEquality {| intro_resource []; eqcd_resource |} 'H bind{z. 'T['z]} ('A + 'B) 'u 'v 'w :
    [wf] sequent [squash] { 'H >- 'e1 = 'e2 in 'A + 'B } -->
    [wf] sequent [squash] { 'H; u: 'A; w: 'e1 = inl{'u} in 'A + 'B >- 'l1['u] = 'l2['u] in 'T[inl{'u}] } -->
    [wf] sequent [squash] { 'H; v: 'B; w: 'e1 = inr{'v} in 'A + 'B >- 'r1['v] = 'r2['v] in 'T[inr{'v}] } -->
@@ -228,6 +243,14 @@ prim decideEquality {| intro_resource []; eqcd_resource |} 'H lambda{z. 'T['z]} 
                    decide{'e2; u2. 'l2['u2]; v2. 'r2['v2]} in
                    'T['e1] } =
    it
+
+interactive decideMember {| intro_resource []; eqcd_resource |} 'H bind{z. 'T['z]} ('A + 'B) 'u 'v 'w :
+   [wf] sequent [squash] { 'H >- member{.'A + 'B; 'e1} } -->
+   [wf] sequent [squash] { 'H; u: 'A; w: 'e1 = inl{'u} in 'A + 'B >- member{'T[inl{'u}]; 'l1['u]} } -->
+   [wf] sequent [squash] { 'H; v: 'B; w: 'e1 = inr{'v} in 'A + 'B >- member{'T[inr{'v}]; 'r1['v]} } -->
+   sequent ['ext] { 'H >- decide{'e1; u1. 'l1['u1]; v1. 'r1['v1]} =
+                   decide{'e2; u2. 'l2['u2]; v2. 'r2['v2]} in
+                   'T['e1] }
 
 (*
  * H >- A1 + B1 <= A2 + B2

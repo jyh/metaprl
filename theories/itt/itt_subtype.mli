@@ -32,6 +32,7 @@
  *)
 
 include Itt_equal
+include Itt_struct
 
 open Refiner.Refiner.Term
 

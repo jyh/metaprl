@@ -53,7 +53,7 @@ prim and_intro {| intro_resource [] |} 'H :
    [main] ('b : sequent ['ext] { 'H >- 'B }) -->
    sequent ['ext] { 'H >- 'A & 'B } = pair{'a; 'b}
 
-prim and_elim {| elim_resource [ThinOption] |} 'H 'J 'x 'y 'z :
+prim and_elim {| elim_resource [] |} 'H 'J 'x 'y 'z :
    [main] ('body['y; 'z] : sequent ['ext] { 'H; y: 'A; z: 'B; 'J['y, 'z] >- 'C['y, 'z] }) -->
    sequent ['ext] { 'H; x: 'A & 'B; 'J['x] >- 'C['x] } =
    spread{'x; y, z. 'body['y; 'z]}

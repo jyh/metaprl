@@ -151,7 +151,7 @@ interactive false_univ {| intro_resource []; eqcd_resource |} 'H :
 interactive false_type {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- "type"{."false"} }
 
-interactive false_elim {| elim_resource [] |} 'H 'J :
+interactive false_elim {| elim_resource [ThinOption thinT] |} 'H 'J :
    sequent ['ext] { 'H; x: "false"; 'J['x] >- 'C['x] }
 
 interactive false_squash 'H :
@@ -174,7 +174,7 @@ interactive not_intro {| intro_resource [] |} 'H 'x :
    [main] sequent ['ext] { 'H; x: 't >- "false" } -->
    sequent ['ext] { 'H >- "not"{'t} }
 
-interactive not_elim {| elim_resource [ThinOption] |} 'H 'J :
+interactive not_elim {| elim_resource [] |} 'H 'J :
    [assertion] sequent ['ext] { 'H; x: "not"{'t}; 'J['x] >- 't } -->
    sequent ['ext] { 'H; x: "not"{'t}; 'J['x] >- 'C }
 
@@ -196,7 +196,7 @@ interactive and_intro {| intro_resource [] |} 'H :
    [wf] sequent ['ext] { 'H >- 'a2 } -->
    sequent ['ext] { 'H >- "and"{'a1; 'a2} }
 
-interactive and_elim {| elim_resource [ThinOption] |} 'H 'J 'y 'z :
+interactive and_elim {| elim_resource [] |} 'H 'J 'y 'z :
    [main] sequent ['ext] { 'H; y: 'a1; z: 'a2; 'J['y, 'z] >- 'C['y, 'z] } -->
    sequent ['ext] { 'H; x: "and"{'a1; 'a2}; 'J['x] >- 'C['x] }
 
@@ -223,7 +223,7 @@ interactive or_intro_right {| intro_resource [SelectOption 2] |} 'H :
    [main] sequent ['ext] { 'H >- 'a2 } -->
    sequent ['ext] { 'H >- "or"{'a1; 'a2} }
 
-interactive or_elim {| elim_resource [ThinOption] |} 'H 'J 'y :
+interactive or_elim {| elim_resource [] |} 'H 'J 'y :
    [main] sequent ['ext] { 'H; y: 'a1; 'J[inl{'y}] >- 'C[inl{'y}] } -->
    [main] sequent ['ext] { 'H; y: 'a2; 'J[inr{'y}] >- 'C[inr{'y}] } -->
    sequent ['ext] { 'H; x: "or"{'a1; 'a2}; 'J['x] >- 'C['x] }
@@ -246,7 +246,7 @@ interactive implies_intro {| intro_resource [] |} 'H 'x :
    [main] sequent ['ext] { 'H; x: 'a1 >- 'a2 } -->
    sequent ['ext] { 'H >- "implies"{'a1; 'a2} }
 
-interactive implies_elim {| elim_resource [] |} 'H 'J 'y :
+interactive implies_elim {| elim_resource [ThinOption thinT] |} 'H 'J 'y :
    [assertion] sequent ['ext] { 'H; x: "implies"{'a1; 'a2}; 'J['x] >- 'a1 } -->
    [main] sequent ['ext] { 'H; x: "implies"{'a1; 'a2}; 'J['x]; y: 'a2 >- 'C['x] } -->
    sequent ['ext] { 'H; x: "implies"{'a1; 'a2}; 'J['x] >- 'C['x] }
@@ -269,7 +269,7 @@ interactive iff_intro {| intro_resource [] |} 'H :
    [wf] sequent ['ext] { 'H >- 'a2 => 'a1 } -->
    sequent ['ext] { 'H >- "iff"{'a1; 'a2} }
 
-interactive iff_elim {| elim_resource [ThinOption] |} 'H 'J 'y 'z :
+interactive iff_elim {| elim_resource [] |} 'H 'J 'y 'z :
    sequent ['ext] { 'H; y: "implies"{'a1; 'a2}; z: "implies"{'a2; 'a1}; 'J['y, 'z] >- 'C['y, 'z] } -->
    sequent ['ext] { 'H; x: "iff"{'a1; 'a2}; 'J['x] >- 'C['x] }
 
@@ -291,7 +291,7 @@ interactive cand_intro {| intro_resource [] |} 'H 'x :
    [main] sequent ['ext] { 'H; x: 'a1 >- 'a2 } -->
    sequent ['ext] { 'H >- "cand"{'a1; 'a2} }
 
-interactive cand_elim {| elim_resource [ThinOption] |} 'H 'J 'y 'z :
+interactive cand_elim {| elim_resource [] |} 'H 'J 'y 'z :
    [main] sequent ['ext] { 'H; y: 'a1; z: 'a2; 'J['y, 'z] >- 'C['y, 'z] } -->
    sequent ['ext] { 'H; x: "cand"{'a1; 'a2}; 'J['x] >- 'C['x] }
 
@@ -319,7 +319,7 @@ interactive cor_intro_right {| intro_resource [SelectOption 2] |} 'H 'x :
    [main] sequent ['ext] { 'H; x: "not"{'a1} >- 'a2 } -->
    sequent ['ext] { 'H >- "cor"{'a1; 'a2} }
 
-interactive cor_elim {| elim_resource [ThinOption] |} 'H 'J 'u 'v :
+interactive cor_elim {| elim_resource [] |} 'H 'J 'u 'v :
    [main] sequent ['ext] { 'H; u: 'a1; 'J[inl{'u}] >- 'C[inl{'u}] } -->
    [main] sequent ['ext] { 'H; u: "not"{'a1}; v: 'a2; 'J[inr{'u, 'v}] >- 'C[inr{'u, 'v}] } -->
    sequent ['ext] { 'H; x: "cor"{'a1; 'a2}; 'J['x] >- 'C['x] }
@@ -342,7 +342,7 @@ interactive all_intro {| intro_resource [] |} 'H 'x :
    [main] sequent ['ext] { 'H; x: 't >- 'b['x] } -->
    sequent ['ext] { 'H >- "all"{'t; v. 'b['v]} }
 
-interactive all_elim {| elim_resource [] |} 'H 'J 'w 'z :
+interactive all_elim {| elim_resource [ThinOption thinT] |} 'H 'J 'w 'z :
    [wf] sequent [squash] { 'H; x: all a: 'A. 'B['a]; 'J['x] >- member{'A; 'z} } -->
    [main] sequent ['ext] { 'H; x: all a: 'A. 'B['a]; 'J['x]; w: 'B['z] >- 'C['x] } -->
    sequent ['ext] { 'H; x: all a: 'A. 'B['a]; 'J['x] >- 'C['x] }
@@ -366,7 +366,7 @@ interactive exists_intro {| intro_resource [] |} 'H 'z 'x :
    [wf] sequent [squash] { 'H; x: 't >- "type"{'b['x]} } -->
    sequent ['ext] { 'H >- "exists"{'t; v. 'b['v]} }
 
-interactive exists_elim {| elim_resource [ThinOption] |} 'H 'J 'y 'z :
+interactive exists_elim {| elim_resource [] |} 'H 'J 'y 'z :
    [main] sequent ['ext] { 'H; y: 'a; z: 'b['y]; 'J['y, 'z] >- 'C['y, 'z] } -->
    sequent ['ext] { 'H; x: exst v: 'a. 'b['v]; 'J['x] >- 'C['x] }
 

@@ -42,7 +42,7 @@ prim exists_intro {| intro_resource [] |} 'H 'a :
    sequent ['ext] { 'H >- "exists"{y. 'B['y]} } =
    pair{'a; 'b}
 
-prim exists_elim {| elim_resource [ThinOption] |} 'H 'J 'x 'y 'z :
+prim exists_elim {| elim_resource [] |} 'H 'J 'x 'y 'z :
    [wf] ('b['y; 'z] : sequent ['ext] { 'H; y: univ; z: 'B[prop{'y}]; 'J['y, 'z] >- 'C['y, 'z] }) -->
    sequent ['ext] { 'H; x: "exists"{w. 'B['w]}; 'J['x] >- 'C['x] } =
    spread{'x; y, z. 'b['y; 'z]}

@@ -35,6 +35,7 @@
  *)
 
 include Itt_equal
+include Itt_struct
 
 open Printf
 open Mp_debug
@@ -47,7 +48,11 @@ open Mp_resource
 
 open Tactic_type
 open Tactic_type.Tacticals
+
+open Base_dtactic
+
 open Itt_equal
+open Itt_struct
 
 (*
  * Show that the file is loading.
@@ -123,12 +128,15 @@ prim unit_memberEquality {| intro_resource []; eqcd_resource |} 'H :
    sequent ['ext] { 'H >- it = it in unit } =
    it
 
+interactive unit_memberMember {| intro_resource [] |} 'H :
+   sequent ['ext] { 'H >- member{unit; it} }
+
 (*
  * H; i:x:Unit; J >- C
  * by unitElimination i
  * H; i:x:Unit; J[it / x] >- C[it / x]
  *)
-prim unitElimination {| elim_resource [] |} 'H 'J :
+prim unitElimination {| elim_resource [ThinOption thinT] |} 'H 'J :
    ('t : sequent['ext] { 'H; x: unit; 'J[it] >- 'C[it] }) -->
    sequent ['ext] { 'H; x: unit; 'J['x] >- 'C['x] } =
    't

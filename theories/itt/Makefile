@@ -10,18 +10,19 @@ OCAMLDEPFLAGS := -prl
 MPFILES :=\
 	itt_squash\
 	itt_equal\
-	itt_subtype\
 	itt_struct\
+	itt_subtype\
 	itt_void\
 	itt_unit\
 	itt_atom\
 	itt_set\
+	itt_union\
 	itt_rfun\
 	itt_dfun\
 	itt_fun\
 	itt_dprod\
+	itt_dprod_imp\
 	itt_prod\
-	itt_union\
 	itt_logic\
 	itt_bool\
 	itt_ext_equal\

@@ -37,9 +37,12 @@ include Itt_rfun
 open Refiner.Refiner.Term
 
 open Tactic_type.Tacticals
+open Tactic_type.Conversionals
 
 rewrite reduceEta (x: 'A -> 'B['x]) : ('f = 'f in (x: 'A -> 'B['x])) -->
    lambda{x. 'f 'x} <--> 'f
+
+rewrite unfold_dfun : (x: 'A -> 'B['x]) <--> ({ f | x: 'A -> 'B['x] })
 
 (************************************************************************
  * RULES                                                                *
@@ -125,7 +128,7 @@ rule functionExtensionality 'H (y:'C -> 'D['y]) (z:'E -> 'F['z]) 'u :
  * H, f: (x:A -> B), J[x], y: B[a], v: y = f(a) in B[a] >- T[f] ext t[f, y, v]
  *)
 rule functionElimination 'H 'J 'f 'a 'y 'v :
-   sequent [squash] { 'H; f: x:'A -> 'B['x]; 'J['f] >- 'a = 'a in 'A } -->
+   sequent [squash] { 'H; f: x:'A -> 'B['x]; 'J['f] >- member{'A; 'a} } -->
    sequent ['ext] { 'H; f: x:'A -> 'B['x]; 'J['f]; y: 'B['a]; v: 'y = ('f 'a) in 'B['a] >- 'T['f] } -->
    sequent ['ext] { 'H; f: x:'A -> 'B['x]; 'J['f] >- 'T['f] }
 
@@ -170,11 +173,13 @@ rule function_subtypeElimination 'H 'J 'x 'y 'z 'a :
    sequent { 'H; x: subtype{(a1:'A1 -> 'B1['a1]); (a2:'A2 -> 'B2['a2])}; 'J['x] >- 'T['x] }
 
 (*
+ * JYH: this rule assumes an intentional type theory, and the rule doesn't belong
+ * in this module.
+ *
  * H; x: a1:A1 -> B1 = a2:A2 -> B2 in Ui; J[x] >- T[x]
  * by function_equalityElimination
  *
  * H; x: a1:A1 -> B1 = a2:A2 -> B2 in Ui; y: A1 = A2 in Ui; z: a:A1 -> B1[a] = B2[a] in Ui; J[x] >- T[x]
- *)
 rule function_equalityElimination 'H 'J 'x 'y 'z 'a :
    sequent { 'H;
              x: (a1:'A1 -> 'B1['a1]) = (a2:'A2 -> 'B2['a2]) in univ[i:l];
@@ -184,6 +189,9 @@ rule function_equalityElimination 'H 'J 'x 'y 'z 'a :
              >- 'T['x]
            } -->
    sequent { 'H; x: (a1:'A1 -> 'B1['a1]) = (a2:'A2 -> 'B2['a2]) in univ[i:l]; 'J['x] >- 'T['x] }
+ *)
+
+topval dfun_extensionalityT : term -> term -> tactic
 
 (*
  * -*-

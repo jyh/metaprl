@@ -33,7 +33,7 @@
 
 include Itt_equal
 include Itt_struct
-include Itt_rfun
+include Itt_subtype
 
 open Refiner.Refiner.Term
 

@@ -32,6 +32,7 @@
  *)
 
 include Itt_equal
+include Itt_struct
 
 open Printf
 open Mp_debug
@@ -48,7 +49,11 @@ open Var
 open Tactic_type
 open Tactic_type.Tacticals
 open Tactic_type.Sequent
+
+open Base_dtactic
+
 open Itt_equal
+open Itt_struct
 
 (*
  * Show that the file is loading.
@@ -155,7 +160,7 @@ prim subtype_axiomEquality 'H :
  *
  * H, x: subtype(A; B); J[it] >- C[it]
  *)
-prim subtypeElimination {| elim_resource [] |} 'H 'J :
+prim subtypeElimination {| elim_resource [ThinOption thinT] |} 'H 'J :
    ('t : sequent ['ext] { 'H; x: subtype{'A; 'B}; 'J[it] >- 'C[it] }) -->
    sequent ['ext] { 'H; x: subtype{'A; 'B}; 'J['x] >- 'C['x] } =
    't

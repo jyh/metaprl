@@ -35,6 +35,9 @@ include Var
 
 include Itt_equal
 include Itt_rfun
+include Itt_struct
+include Itt_void
+include Itt_unit
 
 open Printf
 open Mp_debug
@@ -48,12 +51,14 @@ open Mp_resource
 open Var
 open Tactic_type
 open Tactic_type.Tacticals
+open Tactic_type.Conversionals
 
 open Base_dtactic
 
 open Itt_equal
 open Itt_subtype
 open Itt_rfun
+open Itt_struct
 
 (*
  * Show that the file is loading.
@@ -70,22 +75,18 @@ let _ =
 prim_rw reduceEta (x: 'A -> 'B['x]) : ('f = 'f in (x: 'A -> 'B['x])) -->
    lambda{x. 'f 'x} <--> 'f
 
+prim_rw unfold_dfun : (x: 'A -> 'B['x]) <--> ({ f | x: 'A -> 'B['x] })
+
 (************************************************************************
  * RULES                                                                *
  ************************************************************************)
 
 (*
- * H >- Ui ext a:A -> B
- * by functionFormation a A
- *
- * H >- A = A in Ui
- * H, a: A >- Ui ext B
+ * Use the discrete ordering.
  *)
-prim functionFormation 'H 'a 'A :
-   [wf] sequent [squash] { 'H >- 'A = 'A in univ[i:l] } -->
-   ('B['a] : sequent ['ext] { 'H; a: 'A >- univ[i:l] }) -->
-   sequent ['ext] { 'H >- univ[i:l] } =
-   a:'A -> 'B
+interactive void_well_founded {| intro_resource [] |} 'H :
+   [wf] sequent [squash] { 'H >- "type"{'A} } -->
+   sequent ['ext] { 'H >- well_founded{'A; a1, a2. void} }
 
 (*
  * H >- (a1:A1 -> B1[a1]) = (a2:A2 -> B2[a2]) in Ui
@@ -94,20 +95,23 @@ prim functionFormation 'H 'a 'A :
  * H >- A1 = A2 in Ui
  * H, x: A1 >- B1[x] = B2[x] in Ui
  *)
-prim functionEquality {| intro_resource []; eqcd_resource |} 'H 'x :
+interactive functionEquality {| intro_resource []; eqcd_resource |} 'H 'x :
    [wf] sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
    [wf] sequent [squash] { 'H; x: 'A1 >- 'B1['x] = 'B2['x] in univ[i:l] } -->
-   sequent ['ext] { 'H >- (a1:'A1 -> 'B1['a1]) = (a2:'A2 -> 'B2['a2]) in univ[i:l] } =
-   it
+   sequent ['ext] { 'H >- (a1:'A1 -> 'B1['a1]) = (a2:'A2 -> 'B2['a2]) in univ[i:l] }
+
+interactive functionMember {| intro_resource [] |} 'H 'x :
+   [wf] sequent [squash] { 'H >- member{univ[i:l]; 'A1} } -->
+   [wf] sequent [squash] { 'H; x: 'A1 >- member{univ[i:l]; 'B1['x]} } -->
+   sequent ['ext] { 'H >- member{univ[i:l]; .a1:'A1 -> 'B1['a1]} }
 
 (*
  * Typehood.
  *)
-prim functionType {| intro_resource [] |} 'H 'x :
+interactive functionType {| intro_resource [] |} 'H 'x :
    [wf] sequent [squash] { 'H >- "type"{'A1} } -->
    [wf] sequent [squash] { 'H; x: 'A1 >- "type"{'B1['x]} } -->
-   sequent ['ext] { 'H >- "type"{. a1:'A1 -> 'B1['a1] } } =
-   it
+   sequent ['ext] { 'H >- "type"{. a1:'A1 -> 'B1['a1] } }
 
 (*
  * H >- a:A -> B[a] ext lambda(z. b[z])
@@ -116,11 +120,10 @@ prim functionType {| intro_resource [] |} 'H 'x :
  * H >- A = A in Ui
  * H, z: A >- B[z] ext b[z]
  *)
-prim lambdaFormation {| intro_resource [] |} 'H 'z :
+interactive lambdaFormation {| intro_resource [] |} 'H 'z :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [main] ('b['z] : sequent ['ext] { 'H; z: 'A >- 'B['z] }) -->
-   sequent ['ext] { 'H >- a:'A -> 'B['a] } =
-   lambda{z. 'b['z]}
+   sequent ['ext] { 'H >- a:'A -> 'B['a] }
 
 (*
  * H >- lambda(a1. b1[a1]) = lambda(a2. b2[a2]) in a:A -> B
@@ -129,11 +132,15 @@ prim lambdaFormation {| intro_resource [] |} 'H 'z :
  * H >- A = A in Ui
  * H, x: A >- b1[x] = b2[x] in B[x]
  *)
-prim lambdaEquality {| intro_resource [] |} 'H 'x :
+interactive lambdaEquality {| intro_resource [] |} 'H 'x :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H; x: 'A >- 'b1['x] = 'b2['x] in 'B['x] } -->
-   sequent ['ext] { 'H >- lambda{a1. 'b1['a1]} = lambda{a2. 'b2['a2]} in a:'A -> 'B['a] } =
-   it
+   sequent ['ext] { 'H >- lambda{a1. 'b1['a1]} = lambda{a2. 'b2['a2]} in a:'A -> 'B['a] }
+
+interactive lambdaMember {| intro_resource [] |} 'H 'x :
+   [wf] sequent [squash] { 'H >- "type"{'A} } -->
+   [wf] sequent [squash] { 'H; x: 'A >- member{'B['x]; 'b1['x]} } -->
+   sequent ['ext] { 'H >- member{.a:'A -> 'B['a]; lambda{a1. 'b1['a1]}} }
 
 (*
  * H >- f = g in x:A -> B
@@ -144,13 +151,18 @@ prim lambdaEquality {| intro_resource [] |} 'H 'x :
  * H >- f = f in y:C -> D
  * H >- g = g in z:E -> F
  *)
-prim functionExtensionality 'H (y:'C -> 'D['y]) (z:'E -> 'F['z]) 'u :
+interactive functionExtensionality 'H (y:'C -> 'D['y]) (z:'E -> 'F['z]) 'u :
    [main] sequent [squash] { 'H; u: 'A >- ('f 'u) = ('g 'u) in 'B['u] } -->
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H >- 'f = 'f in y:'C -> 'D['y] } -->
    [wf] sequent [squash] { 'H >- 'g = 'g in z:'E -> 'F['z] } -->
-   sequent ['ext] { 'H >- 'f = 'g in x:'A -> 'B['x] } =
-   it
+   sequent ['ext] { 'H >- 'f = 'g in x:'A -> 'B['x] }
+
+interactive functionExtensionalityMember 'H (y:'C -> 'D['y]) 'u :
+   [main] sequent [squash] { 'H; u: 'A >- member{'B['u]; .'f 'u} } -->
+   [wf] sequent [squash] { 'H >- "type"{'A} } -->
+   [wf] sequent [squash] { 'H >- member{.y:'C -> 'D['y]; 'f} } -->
+   sequent ['ext] { 'H >- member{.x:'A -> 'B['x]; 'f} }
 
 (*
  * H, f: (x:A -> B), J[x] >- T[x] t[f, f a, it]
@@ -159,11 +171,10 @@ prim functionExtensionality 'H (y:'C -> 'D['y]) (z:'E -> 'F['z]) 'u :
  * H, f: (x:A -> B), J[x] >- a = a in A
  * H, f: (x:A -> B), J[x], y: B[a], v: y = f(a) in B[a] >- T[x] ext t[f, y, v]
  *)
-prim functionElimination {| elim_resource [ThinOption] |} 'H 'J 'f 'a 'y 'v :
-   [wf] sequent [squash] { 'H; f: x:'A -> 'B['x]; 'J['f] >- 'a = 'a in 'A } -->
+interactive functionElimination {| elim_resource [] |} 'H 'J 'f 'a 'y 'v :
+   [wf] sequent [squash] { 'H; f: x:'A -> 'B['x]; 'J['f] >- member{'A; 'a} } -->
    ('t['f; 'y; 'v] : sequent ['ext] { 'H; f: x:'A -> 'B['x]; 'J['f]; y: 'B['a]; v: 'y = ('f 'a) in 'B['a] >- 'T['f] }) -->
-   sequent ['ext] { 'H; f: x:'A -> 'B['x]; 'J['f] >- 'T['f] } =
-   't['f; 'f 'a; it]
+   sequent ['ext] { 'H; f: x:'A -> 'B['x]; 'J['f] >- 'T['f] }
 
 (*
  * H >- (f1 a1) = (f2 a2) in B[a1]
@@ -172,11 +183,15 @@ prim functionElimination {| elim_resource [ThinOption] |} 'H 'J 'f 'a 'y 'v :
  * H >- f1 = f2 in x:A -> B[x]
  * H >- a1 = a2 in A
  *)
-prim applyEquality 'H (x:'A -> 'B['x]) :
+interactive applyEquality {| intro_resource [] |} 'H (x:'A -> 'B['x]) :
    sequent [squash] { 'H >- 'f1 = 'f2 in x:'A -> 'B['x] } -->
    sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
-   sequent ['ext] { 'H >- ('f1 'a1) = ('f2 'a2) in 'B['a1] } =
-   it
+   sequent ['ext] { 'H >- ('f1 'a1) = ('f2 'a2) in 'B['a1] }
+
+interactive applyMember {| intro_resource [] |} 'H (x:'A -> 'B['x]) :
+   sequent [squash] { 'H >- member{. x:'A -> 'B['x]; 'f1} } -->
+   sequent [squash] { 'H >- member{'A; 'a1} } -->
+   sequent ['ext] { 'H >- member{'B['a1]; .'f1 'a1} }
 
 (*
  * H >- a1:A1 -> B1 <= a2:A2 -> B2
@@ -185,22 +200,6 @@ prim applyEquality 'H (x:'A -> 'B['x]) :
  * H >- A2 <= A1
  * H, a: A1 >- B1[a] <= B2[a]
 *)
-(*
-interactive function_rfunction_subtype {| intro_resource [] |} 'H 'a 'b :
-   [wf] sequent [squash] { 'H >- "type"{.a1: 'A1 -> 'B1['a]} } -->
-   [wf] sequent [squash] { 'H >- "type"{.{ f2 | x2 : 'A2 -> 'B2['f2; 'x2] }} } -->
-   sequent [squash] { 'H >- subtype{'A2; 'A1} } -->
-   sequent [squash] { 'H; a: 'A1; f: (a1: 'A1 -> 'B1['a]) >- subtype{'B1['a]; 'B2['f; 'a]} } -->
-   sequent ['ext] { 'H >- subtype{ .a1: 'A1 -> 'B1['a]; .{ f2 | x2 : 'A2 -> 'B2['f2; 'x2] }} }
-
-interactive rfunction_function_subtype {| intro_resource [] |} 'H 'a 'b :
-   [wf] sequent [squash] { 'H >- "type"{.a1: 'A1 -> 'B1['a]} } -->
-   [wf] sequent [squash] { 'H >- "type"{.{ f2 | x2 : 'A2 -> 'B2['f2; 'x2] }} } -->
-   sequent [squash] { 'H >- subtype{'A1; 'A2} } -->
-   sequent [squash] { 'H; a: 'A1; f: (a1: 'A1 -> 'B1['a]) >- subtype{'B2['f; 'a]; 'B1['a]} } -->
-   sequent ['ext] { 'H >- subtype{ .{ f2 | x2 : 'A2 -> 'B2['f2; 'x2] }; .a1: 'A1 -> 'B1[a]} }
-*)
-
 interactive functionSubtype {| intro_resource [] |} 'H 'a :
    sequent [squash] { 'H >- subtype{'A2; 'A1} } -->
    sequent [squash] { 'H; a: 'A1 >- subtype{'B1['a]; 'B2['a]} } -->
@@ -212,7 +211,7 @@ interactive functionSubtype {| intro_resource [] |} 'H 'a :
  *
  * H; x: a1:A1 -> B1 <= a2:A2 -> B2; y: A2 <= A1; z: a:A2 -> B2[a] <= B1[a]; J[x] >- T[x]
  *)
-interactive function_subtypeElimination {| elim_resource [ThinOption] |} 'H 'J 'x 'y 'z 'a :
+interactive function_subtypeElimination {| elim_resource [] |} 'H 'J 'x 'y 'z 'a :
    ('t['x; 'y; 'z] : sequent { 'H;
              x: subtype{(a1:'A1 -> 'B1['a1]); (a2:'A2 -> 'B2['a2])};
              'J['x];
@@ -227,8 +226,7 @@ interactive function_subtypeElimination {| elim_resource [ThinOption] |} 'H 'J '
  * by function_equalityElimination
  *
  * H; x: a1:A1 -> B1 = a2:A2 -> B2 in Ui; y: A1 = A2 in Ui; z: a:A1 -> B1[a] = B2[a] in Ui; J[x] >- T[x]
- *)
-prim function_equalityElimination {| elim_resource [] |} 'H 'J 'x 'y 'z 'a :
+interactive function_equalityElimination {| elim_resource [ThinOption thinT] |} 'H 'J 'x 'y 'z 'a :
    ('t['x; 'y; 'z] : sequent { 'H;
              x: (a1:'A1 -> 'B1['a1]) = (a2:'A2 -> 'B2['a2]) in univ[i:l];
              'J['x];
@@ -236,8 +234,33 @@ prim function_equalityElimination {| elim_resource [] |} 'H 'J 'x 'y 'z 'a :
              z: a:'A1 -> ('B1['a] = 'B2['a] in univ[i:l])
              >- 'T['x]
            }) -->
-   sequent { 'H; x: (a1:'A1 -> 'B1['a1]) = (a2:'A2 -> 'B2['a2]) in univ[i:l]; 'J['x] >- 'T['x] } =
-   't['x; it; lambda{x. it}]
+   sequent { 'H; x: (a1:'A1 -> 'B1['a1]) = (a2:'A2 -> 'B2['a2]) in univ[i:l]; 'J['x] >- 'T['x] }
+ *)
+
+(*
+ * H >- Ui ext a:A -> B
+ * by functionFormation a A
+ *
+ * H >- A = A in Ui
+ * H, a: A >- Ui ext B
+ *)
+interactive functionFormation 'H 'a 'A :
+   [wf] sequent [squash] { 'H >- 'A = 'A in univ[i:l] } -->
+   ('B['a] : sequent ['ext] { 'H; a: 'A >- univ[i:l] }) -->
+   sequent ['ext] { 'H >- univ[i:l] }
+
+(************************************************************************
+ * EXTENSIOANLITY                                                       *
+ ************************************************************************)
+
+(*
+ * Takes two arguments.
+ *)
+let dfun_extensionalityT t1 t2 p =
+   let t, _, _ = dest_equal (Sequent.concl p) in
+   let v, _, _ = dest_dfun t in
+   let v = maybe_new_vars1 p v in
+      functionExtensionality (Sequent.hyp_count_addr p) t1 t2 v p
 
 (************************************************************************
  * TYPE INFERENCE                                                       *

@@ -201,7 +201,7 @@ interactive tptp2_exists_intro {| intro_resource [] |} 'H 'x 'z :
    sequent [squash] { 'H; x: atom0 >- "type"{'b['x]} } -->
    sequent ['ext] { 'H >- "exists"{v. 'b['v]} }
 
-interactive tptp2_exists_elim {| elim_resource [ThinOption] |} 'H 'J 'y 'z :
+interactive tptp2_exists_elim {| elim_resource [] |} 'H 'J 'y 'z :
    sequent ['ext] { 'H; y: atom0; z: 'b['y]; 'J['y, 'z] >- 'C['y, 'z] } -->
    sequent ['ext] { 'H; x: "exists"{v. 'b['v]}; 'J['x] >- 'C['x] }
 

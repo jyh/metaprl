@@ -35,6 +35,7 @@ include Itt_equal
 include Itt_rfun
 include Itt_bool
 include Itt_logic
+include Itt_struct
 
 open Printf
 open Mp_debug
@@ -51,8 +52,10 @@ open Tactic_type.Tacticals
 open Tactic_type.Conversionals
 
 open Base_meta
+open Base_dtactic
 
 open Itt_equal
+open Itt_struct
 
 (*
  * Show that the file is loading.
@@ -352,7 +355,7 @@ prim numberEquality {| intro_resource []; eqcd_resource |} 'H :
  * H, n:Z, J[n] >- C[0] ext base[n]
  * H, n:Z, J[n], m:Z, v: 0 < m, z: C[m - 1] >- C[m] ext up[n, m, v, z]
  *)
-prim intElimination {| elim_resource [] |} 'H 'J 'n 'm 'v 'z :
+prim intElimination {| elim_resource [ThinOption thinT] |} 'H 'J 'n 'm 'v 'z :
    [main] ('down['n; 'm; 'v; 'z] : sequent ['ext] { 'H; n: int; 'J['n]; m: int; v: 'm < 0; z: 'C['m add 1] >- 'C['m] }) -->
    [main] ('base['n] : sequent ['ext] { 'H; n: int; 'J['n] >- 'C[0] }) -->
    [main] ('up['n; 'm; 'v; 'z] : sequent ['ext] { 'H; n: int; 'J['n]; m: int; v: 0 < 'm; z: 'C['m sub 1] >- 'C['m] }) -->
@@ -426,7 +429,7 @@ prim less_than_memberEquality {| intro_resource []; eqcd_resource |} 'H :
  *
  * H, x: a < b; J[it] >- C[it]
  *)
-prim less_thanElimination {| elim_resource [] |} 'H 'J :
+prim less_thanElimination {| elim_resource [ThinOption thinT] |} 'H 'J :
    ('t : sequent ['ext] { 'H; x: 'a < 'b; 'J[it] >- 'C[it] }) -->
    sequent ['ext] { 'H; x: 'a < 'b; 'J['x] >- 'C['x] } =
    't

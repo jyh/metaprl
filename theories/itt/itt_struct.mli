@@ -79,7 +79,7 @@ rule cut 'H 'J 'S 'x :
  * H >- t = t in T
  *)
 rule introduction 'H 't :
-   sequent [squash] { 'H >- 't = 't in 'T } -->
+   sequent [squash] { 'H >- member{'T; 't} } -->
    sequent ['ext] { 'H >- 'T }
 
 (*

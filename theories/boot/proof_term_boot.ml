@@ -870,7 +870,7 @@ struct
       let status, goal, subgoals, extras = four_subterms t in
       let subgoals = dest_xlist subgoals in
       let extras = dest_xlist extras in
-         HeadRule (dest_status status,
+         HeadRule (LazyStatusDelayed,
                    text,
                    term_add_extract info goal,
                    List.map (term_add_extract info) subgoals,

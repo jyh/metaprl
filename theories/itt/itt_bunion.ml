@@ -32,6 +32,7 @@
 
 include Itt_tunion
 include Itt_bool
+include Itt_struct
 
 open Printf
 open Mp_debug
@@ -50,6 +51,7 @@ open Tactic_type.Conversionals
 open Base_dtactic
 
 open Itt_equal
+open Itt_struct
 
 (************************************************************************
  * SYNTAX                                                               *
@@ -116,7 +118,7 @@ interactive bunionMemberEqualityRight {| intro_resource [SelectOption 2]; eqcd_r
 (*
  * Elimination.
  *)
-interactive bunionElimination {| elim_resource [] |} 'H 'J 'y 'z :
+interactive bunionElimination {| elim_resource [ThinOption thinT] |} 'H 'J 'y 'z :
    [main] sequent ['ext] { 'H; x: bunion{'A; 'B}; 'J['x]; y: 'A; z: 'y = 'x in bunion{'A; 'B} >- 'C['x] } -->
    [main] sequent ['ext] { 'H; x: bunion{'A; 'B}; 'J['x]; y: 'B; z: 'y = 'x in bunion{'A; 'B} >- 'C['x] } -->
    sequent ['ext] { 'H; x: bunion{'A; 'B}; 'J['x] >- 'C['x] }

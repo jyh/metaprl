@@ -81,7 +81,7 @@ type intro_option =
    SelectOption of int        (* Select among multiple introduction rules *)
 
 type elim_option =
-   ThinOption                 (* Normally thin the eliminated hyp, unless overridden *)
+   ThinOption of (int -> tactic)
 
 resource (term * (int -> tactic), int -> tactic, elim_data, Tactic.pre_tactic * elim_option list) elim_resource
 resource (term * tactic, tactic, intro_data, Tactic.pre_tactic * intro_option list) intro_resource
@@ -289,6 +289,12 @@ let improve_intro_arg rsrc name context_args var_args term_args _ statement (pre
 (*
  * Compile an elimination tactic.
  *)
+let tryThinT thinT i p =
+   if get_thinning_arg p then
+      tryT (thinT i) p
+   else
+      idT p
+
 let improve_elim_arg rsrc name context_args var_args term_args _ statement (pre_tactic, options) =
    let _, goal = unzip_mfunction statement in
    let { sequent_hyps = hyps } =
@@ -332,18 +338,35 @@ let improve_elim_arg rsrc name context_args var_args term_args _ statement (pre_
             (fun i p ->
                   let v, _ = Sequent.nth_hyp p i in
                   let vars = Array.copy var_args in
+                  let vars = Var.maybe_new_vars_array p vars in
                      vars.(index) <- v;
-                     Var.maybe_new_vars_array p vars)
+                     vars)
       else
          (fun i p -> Var.maybe_new_vars_array p var_args)
    in
+   let thinT =
+      let rec collect = function
+         ThinOption thinT :: _ ->
+            Some thinT
+       | [] ->
+            None
+      in
+         collect options
+   in
    let tac =
-      match context_args with
-         [| _; _ |] ->
+      match context_args, thinT with
+         [| _; _ |], None ->
             (fun i p ->
                   let vars = new_vars i p in
                   let j, k = Sequent.hyp_indices p i in
                      Tactic_type.Tactic.tactic_of_rule pre_tactic ([| j; k |], new_vars i p) (term_args p) p)
+
+       | [| _; _ |], Some thinT ->
+            (fun i p ->
+                  let vars = new_vars i p in
+                  let j, k = Sequent.hyp_indices p i in
+                     (Tactic_type.Tactic.tactic_of_rule pre_tactic ([| j; k |], new_vars i p) (term_args p)
+                      thenT tryThinT thinT i) p)
        | _ ->
             raise (Invalid_argument (sprintf "Base_dtactic: %s: not an elimination rule" name))
    in

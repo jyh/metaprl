@@ -547,12 +547,11 @@ struct
          StatusBad
     | LazyStatusPartial ->
          StatusPartial
-    | LazyStatusIncomplete ->
+    | LazyStatusIncomplete
+    | LazyStatusDelayed ->
          StatusIncomplete
     | LazyStatusComplete ->
          StatusComplete
-    | LazyStatusDelayed ->
-         raise (Invalid_argument "Proof.translate_status")
 
    let rec status_ext = function
       Goal _ ->
@@ -577,7 +576,7 @@ struct
          status_ext ext
     | RuleBox ({ rule_status = status; rule_extract = goal; rule_subgoals = subgoals } as info) ->
          if status = LazyStatusDelayed then
-            let status = compute_status goal subgoals in
+            let status = compute_status_subgoals LazyStatusComplete subgoals in
                info.rule_status <- status;
                status
          else
@@ -1062,6 +1061,61 @@ struct
       let node = sweep_up_ext proof f proof.pf_node in
          fold_proof postf proof node
 
+   (*
+    * Sweep a function over the tactic_args in the tree.
+    *)
+   let rec map_tactic_arg_ext (f : tactic_arg -> tactic_arg) node =
+      match node with
+         Goal arg ->
+            Goal (f arg)
+       | Identity arg ->
+            Identity (f arg)
+       | Unjustified (goal, subgoals) ->
+            Unjustified (f goal, List.map f subgoals)
+       | Extract (goal, subgoals, ext) ->
+            Unjustified (f goal, List.map f subgoals)
+       | ExtractRewrite (goal, subgoal, addr, ext) ->
+            Unjustified (f goal, [f subgoal])
+       | ExtractCondRewrite (goal, subgoals, addr, ext) ->
+            Unjustified (f goal, List.map f subgoals)
+       | ExtractNthHyp (arg, i) ->
+            ExtractNthHyp (f arg, i)
+       | ExtractCut (goal, hyp, cut_lemma, cut_then) ->
+            ExtractCut (f goal, hyp, f cut_lemma, f cut_then)
+       | Compose { comp_goal = goal; comp_subgoals = subgoals; comp_extras = extras } ->
+            Compose { comp_status = LazyStatusDelayed;
+                      comp_goal = map_tactic_arg_ext f goal;
+                      comp_subgoals = List.map (map_tactic_arg_ext f) subgoals;
+                      comp_extras = List.map (map_tactic_arg_ext f) extras;
+                      comp_leaves = LazyLeavesDelayed
+               }
+       | Wrapped (label, goal) ->
+            Wrapped (label, map_tactic_arg_ext f goal)
+       | RuleBox { rule_expr = expr;
+                   rule_string = text;
+                   rule_tactic = tac;
+                   rule_extract = goal;
+                   rule_subgoals = subgoals;
+                   rule_extras = extras
+         } ->
+            RuleBox { rule_status = LazyStatusDelayed;
+                      rule_expr = expr;
+                      rule_string = text;
+                      rule_tactic = tac;
+                      rule_extract = map_tactic_arg_ext f goal;
+                      rule_subgoals = List.map (map_tactic_arg_ext f) subgoals;
+                      rule_leaves = LazyLeavesDelayed;
+                      rule_extras = List.map (map_tactic_arg_ext f) extras
+               }
+       | Pending g ->
+            map_tactic_arg_ext f (g ())
+       | Locked ext ->
+            Locked (map_tactic_arg_ext f ext)
+
+   let map_tactic_arg postf f proof =
+      let node = map_tactic_arg_ext f proof.pf_node in
+         fold_proof postf proof node
+
    (************************************************************************
     * EXTRACT UNFOLDING                                                    *
     ************************************************************************)
@@ -1492,16 +1546,16 @@ struct
    (*
     * Set the goal of the current node.
     *)
-   let set_goal postf proof mseq =
+   let set_goal_ext proof node mseq =
       let { ref_goal = goal;
             ref_label = label;
             ref_parent = parent;
             ref_attributes = attributes;
             ref_sentinal = sentinal
-          } = goal proof
+          } = goal_ext node
       in
          if Refine.msequent_alpha_equal mseq goal then
-            proof
+            node
          else
             let arg =
                Goal { ref_goal = mseq;
@@ -1511,7 +1565,6 @@ struct
                       ref_sentinal = sentinal
                }
             in
-            let ext =
                (* Take special care if this is the root node *)
                match proof with
                   { pf_address = [];
@@ -1532,8 +1585,61 @@ struct
                      }
                 | _ ->
                      arg
-            in
-               fold_proof postf proof ext
+
+   let set_goal postf proof mseq =
+      let node = set_goal_ext proof proof.pf_node mseq in
+         fold_proof postf proof node
+
+   (*
+    * Copy a proof from one location to another.
+    *)
+   let copy postf proof from_addr to_addr =
+      let { pf_address = address;
+            pf_node = node
+          } = proof
+      in
+      let from_node = index_ext proof node [] from_addr in
+      let to_proof = index proof to_addr in
+      let goal = goal proof in
+      let from_node = set_goal_ext to_proof from_node goal.ref_goal in
+      let to_proof = fold_proof postf to_proof from_node in
+         index to_proof address
+
+   (*
+    * Paste an alternate proof at this location.
+    *)
+   let paste postf to_proof { pf_node = from_node } =
+      let goal = goal to_proof in
+      let from_node = set_goal_ext to_proof from_node goal.ref_goal in
+         fold_proof postf to_proof from_node
+
+   (*
+    * Make the current subgoal an assumption.
+    *)
+   let make_assum_arg goal i arg =
+      let goal, hyps = Refine.dest_msequent arg.ref_goal in
+      let hyps = List_util.insert_nth i goal hyps in
+        replace_msequent arg (Refine.mk_msequent goal hyps)
+
+   let make_assum postf proof =
+      (* Add the goal as an assumption to all proof nodes *)
+      let mseq = (goal proof).ref_goal in
+      let goal, _ = Refine.dest_msequent mseq in
+      let mseq = (goal_ext proof.pf_root).ref_goal in
+      let _, hyps = Refine.dest_msequent mseq in
+      let len = List.length hyps in
+      let root = map_tactic_arg_ext (make_assum_arg goal len) proof.pf_root in
+
+      (* Replace the current node with ExtractNthHyp *)
+      let address = proof.pf_address in
+      let node = index_ext proof root [] address in
+      let proof =
+         { pf_root = root;
+           pf_address = address;
+           pf_node = node
+         }
+      in
+         fold_proof postf proof node
 
    (************************************************************************
     * CACHE & CACHED NAVIGATION                                            *

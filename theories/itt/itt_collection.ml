@@ -482,7 +482,7 @@ interactive member_type_col {| intro_resource [] |} 'H :
    sequent[squash] {'H >- member{'T;'x}} -->
    sequent['ext]  {'H >- col_member{'T;type_col{'T};'x}}
 
-interactive member_type_col_elim {| elim_resource [ThinOption] |} 'H 'J :
+interactive member_type_col_elim {| elim_resource [] |} 'H 'J :
    sequent['ext]   {'H; 'J; w:member{'T;'x} >- 'Z } -->
    sequent['ext]   {'H; u:col_member{'T;type_col{'T};'x}; 'J >- 'Z }
 
@@ -525,7 +525,7 @@ interactive member_singlenton {| intro_resource [] |} 'H :
    sequent[squash]{'H >- equal{'T;'x;'y}} -->
    sequent['ext]  {'H >- col_member{'T; singlenton{'x}; 'y}}
 
-interactive member_singlenton_elim {| elim_resource [ThinOption] |} 'H 'J :
+interactive member_singlenton_elim {| elim_resource [] |} 'H 'J :
    sequent['ext]{'H; 'J; v:equal{'T;'x;'y} >- 'Z} -->
    sequent['ext]  {'H; u:col_member{'T; singlenton{'x}; 'y}; 'J >- 'Z}
 
@@ -578,7 +578,7 @@ interactive member_union {| intro_resource [] |} 'H univ[l:l] member{'T;'x} :
    sequent['ext] {'H >- col_member{'S;'Y['x];'y}} -->
    sequent['ext] {'H >- col_member{'S;union{'X;x.'Y['x]};'y}}
 
-interactive member_union_elim {| elim_resource [ThinOption] |} 'H 'J univ[l:l] 'T:
+interactive member_union_elim {| elim_resource [] |} 'H 'J univ[l:l] 'T:
    sequent[squash]{'H; 'J >- member{col[l:l]{'T};'X}} -->
    sequent[squash]{'H; 'J; x:'T; u:col_member{'T;'X;'x} >- member{col[l:l]{'S};'Y['x]}} -->
    sequent['ext]   {'H; 'J; x:'T; v:col_member{'T;'X;'x}; u: col_member{'S;'Y['x];'y} >- 'Z } -->
@@ -688,7 +688,7 @@ interactive member_col_filter {| intro_resource [] |} 'H univ[l:l] :
    sequent['ext]{'H >- 'P['x]} -->
    sequent['ext]  {'H >- col_member{'T;col_filter{'C; x.'P['x]};'x}}
 
-interactive member_col_filter_elim {| elim_resource [ThinOption] |} 'H 'J univ[l:l] :
+interactive member_col_filter_elim {| elim_resource [] |} 'H 'J univ[l:l] :
    sequent[squash]{'H; 'J; x:'T >- "type"{'P['x]}} -->
    sequent[squash]{'H; 'J >- member{col[l:l]{'T};'C}} -->
    sequent['ext]  {'H; w:'P['x]; 'J; v:col_member{'T;'C;'x} >- 'Z } -->
@@ -750,7 +750,7 @@ interactive member_map {| intro_resource [] |} 'H univ[l:l] 'T:
    sequent['ext]{'H >- exst x:'T. (col_member{'T;'C;'x} and ('y='f['x] in 'S)) } -->
    sequent['ext]  {'H >- col_member{'S;map{'C; x.'f['x]};'y}}
 
-interactive member_map_elim {| elim_resource [ThinOption] |} 'H 'J univ[l:l] 'T:
+interactive member_map_elim {| elim_resource [] |} 'H 'J univ[l:l] 'T:
    sequent[squash]{'H; 'J; x:'T >- member{'S;'f['x]}} -->
    sequent[squash]{'H; 'J >- member{col[l:l]{'T};'C}} -->
    sequent['ext]  {'H; 'J;  x:'T; v: col_member{'T;'C;'x}; w: ('y='f['x] in 'S) >- 'Z } -->
@@ -805,7 +805,7 @@ interactive member_isect {| intro_resource [] |} 'H univ[l:l]:
    sequent['ext]  {'H >-  member{'T;'x}} -->
    sequent['ext]  {'H >- col_member{'T;."isect"{'S;s.'C['s];'T};'x}}
 
-interactive member_isect_elim {| elim_resource [ThinOption] |} 'H 'J univ[l:l] :
+interactive member_isect_elim {| elim_resource [] |} 'H 'J univ[l:l] :
    sequent[squash]{'H; 'J >- member{univ[l:l];'T}} -->
    sequent[squash]{'H; 'J >- member{univ[l:l];'S}} -->
    sequent[squash]{'H; 'J; s:'S >- member{col[l:l]{'T};'C['s]}} -->
@@ -884,7 +884,7 @@ interactive member_add2 {| intro_resource [SelectOption 2] |} 'H  univ[l:l] :
    sequent['ext]   {'H >- col_member{'T; 'C_2 ; 'x}} -->
    sequent['ext]   {'H >- col_member{'T; add{'C_1;'C_2} ; 'x}}
 
-interactive member_add_elim {| elim_resource [ThinOption] |} 'H 'J univ[l:l] :
+interactive member_add_elim {| elim_resource [] |} 'H 'J univ[l:l] :
    sequent[squash] {'H; 'J >- member{col[l:l]{'T};'C_1}} -->
    sequent[squash] {'H; 'J >- member{col[l:l]{'T};'C_2}} -->
    sequent['ext]   {'H; 'J; v: col_member{'T; 'C_1 ; 'x} >- 'Z} -->

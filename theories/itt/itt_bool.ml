@@ -31,8 +31,9 @@
  *)
 
 include Itt_equal
-include Itt_logic
 include Itt_struct
+include Itt_union
+include Itt_set
 
 open Refiner.Refiner.TermType
 open Refiner.Refiner.Term
@@ -158,6 +159,9 @@ dform assert_df : mode[prl] :: parens :: "prec"[prec_assert] :: "assert"{'t} =
 interactive boolEquality {| intro_resource []; eqcd_resource |} 'H :
    sequent ['ext] { 'H >- "bool" = "bool" in univ[i:l] }
 
+interactive boolMember {| intro_resource [] |} 'H :
+   sequent ['ext] { 'H >- member{univ[i:l]; ."bool"} }
+
 interactive boolType {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- "type"{bool} }
 
@@ -171,12 +175,18 @@ interactive bool_trueEquality {| intro_resource []; eqcd_resource |} 'H :
 interactive bool_falseEquality {| intro_resource []; eqcd_resource |} 'H :
    sequent ['ext] { 'H >- bfalse = bfalse in "bool" }
 
+interactive bool_trueMember {| intro_resource [] |} 'H :
+  sequent ['ext] { 'H >- member{."bool"; btrue} }
+
+interactive bool_falseMember {| intro_resource [] |} 'H :
+   sequent ['ext] { 'H >- member{."bool"; bfalse} }
+
 (*
  * H; i:x:Unit; J >- C
  * by boolElimination i
  * H; i:x:Unit; J[it / x] >- C[it / x]
  *)
-interactive boolElimination2 {| elim_resource [ThinOption] |} 'H 'J 'x :
+interactive boolElimination2 {| elim_resource [] |} 'H 'J 'x :
    [main] sequent['ext] { 'H; 'J[btrue] >- 'C[btrue] } -->
    [main] sequent['ext] { 'H; 'J[bfalse] >- 'C[bfalse] } -->
    sequent ['ext] { 'H; x: "bool"; 'J['x] >- 'C['x] }
@@ -184,7 +194,7 @@ interactive boolElimination2 {| elim_resource [ThinOption] |} 'H 'J 'x :
 (*
  * Typing rules for ifthenelse.
  *)
-interactive ifthenelse_type {| intro_resource [] |} 'H 'x :
+interactive ifthenelse_type2 {| intro_resource [] |} 'H 'x :
    [wf] sequent [squash] { 'H >- 'e = 'e in bool } -->
    [wf] sequent [squash] { 'H; x: 'e = btrue in bool >- "type"{'A} } -->
    [wf] sequent [squash] { 'H; x: 'e = bfalse in bool >- "type"{'B} } -->
@@ -193,10 +203,10 @@ interactive ifthenelse_type {| intro_resource [] |} 'H 'x :
 (*
  * True is not false.
  *)
-interactive boolContradiction1 {| elim_resource [] |} 'H 'J :
+interactive boolContradiction1 {| elim_resource [ThinOption thinT] |} 'H 'J :
    sequent ['ext] { 'H; x: btrue = bfalse in bool; 'J['x] >- 'C['x] }
 
-interactive boolContradiction2 {| elim_resource [] |} 'H 'J :
+interactive boolContradiction2 {| elim_resource [ThinOption thinT] |} 'H 'J :
    sequent ['ext] { 'H; x: bfalse = btrue in bool; 'J['x] >- 'C['x] }
 
 interactive ifthenelse_equality {| intro_resource []; eqcd_resource |} 'H 'w :
@@ -205,6 +215,12 @@ interactive ifthenelse_equality {| intro_resource []; eqcd_resource |} 'H 'w :
    [wf] sequent [squash] { 'H; w: 'e1 = bfalse in bool >- 'y1 = 'y2 in 'T } -->
    sequent ['ext] { 'H >- ifthenelse{'e1; 'x1; 'y1} = ifthenelse{'e2; 'x2; 'y2} in 'T }
 
+interactive ifthenelse_member {| intro_resource [] |} 'H 'w :
+   [wf] sequent [squash] { 'H >- member{."bool"; 'e1} } -->
+   [wf] sequent [squash] { 'H; w: 'e1 = btrue in bool >- member{'T; 'x1} } -->
+   [wf] sequent [squash] { 'H; w: 'e1 = bfalse in bool >- member{'T; 'y1} } -->
+   sequent ['ext] { 'H >- member{'T; ifthenelse{'e1; 'x1; 'y1}} }
+
 (*
  * Squiggle rule.
  *)
@@ -212,7 +228,7 @@ interactive boolSqequal 'H :
    sequent [squash] { 'H >- 'x = 'y in bool } -->
    sequent ['ext] { 'H >- Perv!"rewrite"{'x; 'y} }
 
-interactive boolElimination3 {| elim_resource [ThinOption] |} 'H 'J 'x :
+interactive boolElimination3 {| elim_resource [] |} 'H 'J 'x :
    sequent['ext] { 'H; 'J[btrue] >- 'C[btrue] } -->
    sequent['ext] { 'H; 'J[bfalse] >- 'C[bfalse] } -->
    sequent ['ext] { 'H; x: hide{."bool"}; 'J['x] >- 'C['x] }
@@ -278,7 +294,7 @@ interactive assert_type {| intro_resource [] |} 'H :
 interactive assert_true {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- "assert"{btrue} }
 
-interactive assert_false {| elim_resource [] |} 'H 'J :
+interactive assert_false {| elim_resource [ThinOption thinT] |} 'H 'J :
    sequent ['ext] { 'H; x: "assert"{bfalse}; 'J['x] >- 'C['x] }
 
 (*
@@ -311,7 +327,7 @@ interactive assert_bnot_intro {| intro_resource [] |} 'H 'x :
    [main] sequent [squash] { 'H; x: "assert"{'t1} >- "false" } -->
    sequent ['ext] { 'H >- "assert"{bnot{'t1}} }
 
-interactive assert_bnot_elim {| elim_resource [ThinOption] |} 'H 'J :
+interactive assert_bnot_elim {| elim_resource [] |} 'H 'J :
    [wf] sequent [squash] { 'H; 'J[it] >- "assert"{'t} } -->
    sequent ['ext] { 'H; x: "assert"{bnot{'t}}; 'J['x] >- 'C['x] }
 
@@ -320,18 +336,18 @@ interactive assert_magic 'H 'x :
    [wf] sequent [squash] { 'H; x: "assert"{bnot{'t}} >- "false" } -->
    sequent ['ext] { 'H >- "assert"{'t} }
 
-interactive assert_bor_elim {| elim_resource [ThinOption] |} 'H 'J :
+interactive assert_bor_elim {| elim_resource [] |} 'H 'J :
    [wf] sequent [squash] { 'H; x: "assert"{bor{'t1; 't2}}; 'J['x] >- member{bool; 't1} } -->
    [main] sequent ['ext] { 'H; x: "assert"{'t1}; 'J[it] >- 'C[it] } -->
    [main] sequent ['ext] { 'H; x: "assert"{'t2}; 'J[it] >- 'C[it] } -->
    sequent ['ext] { 'H; x: "assert"{bor{'t1; 't2}}; 'J['x] >- 'C['x] }
 
-interactive assert_band_elim {| elim_resource [ThinOption] |} 'H 'J 'y 'z :
+interactive assert_band_elim {| elim_resource [] |} 'H 'J 'y 'z :
    [wf] sequent [squash] { 'H; x: "assert"{band{'t1; 't2}}; 'J['x] >- member{bool; 't1} } -->
    [main] sequent ['ext] { 'H; y: "assert"{'t1}; z: "assert"{'t2}; 'J[it] >- 'C[it] } -->
    sequent ['ext] { 'H; x: "assert"{band{'t1; 't2}}; 'J['x] >- 'C['x] }
 
-interactive assert_bimplies_elim {| elim_resource [ThinOption] |} 'H 'J :
+interactive assert_bimplies_elim {| elim_resource [] |} 'H 'J :
    [assertion] sequent [squash] { 'H; 'J[it] >- "assert"{'t1} } -->
    [main] sequent ['ext] { 'H; 'J[it]; y: "assert"{'t2} >- 'C[it] } -->
    sequent ['ext] { 'H; x: "assert"{bimplies{'t1; 't2}}; 'J['x] >- 'C['x] }
@@ -466,10 +482,7 @@ let splitBoolCT a p =
          RefineError _ ->
             mk_bind_term x (var_subst (Sequent.concl p) a x)
    in
-      (bool_subst_concl (Sequent.hyp_count_addr p) bind a x
-       thenLT [addHiddenLabelT "wf";
-               addHiddenLabelT "true case";
-               addHiddenLabelT "false case"]) p
+      bool_subst_concl (Sequent.hyp_count_addr p) bind a x p
 
 (*
  * Split a bool in a hyp.
@@ -489,10 +502,7 @@ let splitBoolHT i a p =
             mk_bind_term z (var_subst t1 a z)
    in
    let j, k = Sequent.hyp_indices p i in
-      (bool_subst_hyp j k bind a z
-       thenLT [addHiddenLabelT "wf";
-               addHiddenLabelT "true case";
-               addHiddenLabelT "false case"]) p
+      bool_subst_hyp j k bind a z p
 
 let splitBoolT t i =
    if i = 0 then

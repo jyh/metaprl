@@ -35,6 +35,7 @@ include Itt_equal
 include Itt_prec
 include Itt_subtype
 include Itt_void
+include Itt_struct
 
 open Printf
 open Mp_debug
@@ -47,8 +48,11 @@ open Mp_resource
 open Tactic_type.Tacticals
 open Var
 
+open Base_dtactic
+
 open Itt_void
 open Itt_equal
+open Itt_struct
 
 (*
  * Show that the file is loading.
@@ -148,7 +152,7 @@ prim srec_memberEquality {| intro_resource [] |} 'H :
  *   z: T[T1]
  * >- C[z]
  *)
-prim srecElimination {| elim_resource [] |} 'H 'J 'x srec{T. 'B['T]} 'T1 'u 'v 'w 'z univ[i:l] :
+prim srecElimination {| elim_resource [ThinOption thinT] |} 'H 'J 'x srec{T. 'B['T]} 'T1 'u 'v 'w 'z univ[i:l] :
    [main] ('g['x; 'T1; 'u; 'w; 'z] : sequent ['ext] {
              'H;
              x: srec{T. 'B['T]};
@@ -168,7 +172,7 @@ prim srecElimination {| elim_resource [] |} 'H 'J 'x srec{T. 'B['T]} 'T1 'u 'v '
  *
  * H, x: srec(T. B[T]); J[x]; y: B[srec(T. B[T])]; u: x = y in B[srec(T. B[T])] >- C[y]
  *)
-prim srecUnrollElimination {| elim_resource [] |} 'H 'J 'x 'y 'u :
+prim srecUnrollElimination {| elim_resource [ThinOption thinT] |} 'H 'J 'x 'y 'u :
    [main] ('g['x; 'y; 'u] : sequent ['ext] { 'H; x: srec{T. 'B['T]}; 'J['x]; y: 'B[srec{T. 'B['T]}]; u: 'x = 'y in 'B[srec{T. 'B['T]}] >- 'C['y] }) -->
    sequent ['ext] { 'H; x: srec{T. 'B['T]}; 'J['x] >- 'C['x] } =
    'g['x; 'x; it]

@@ -33,6 +33,7 @@
 
 include Itt_equal
 include Itt_set
+include Itt_void
 
 open Refiner.Refiner.Term
 
@@ -154,7 +155,7 @@ rule rfunctionExtensionality 'H
  * H, f: { g | x:A -> B[g, x] }, J[f], y: B[f, a], v: y = f a in B[f, a] >- T[f] ext t[f, y, v]
  *)
 rule rfunctionElimination 'H 'J 'f 'a 'y 'v :
-   sequent [squash] { 'H; f: { g | x:'A -> 'B['g; 'x] }; 'J['f] >- 'a = 'a in 'A } -->
+   sequent [squash] { 'H; f: { g | x:'A -> 'B['g; 'x] }; 'J['f] >- member{'A; 'a} } -->
    sequent ['ext] { 'H;
              f: { g | x:'A -> 'B['g; 'x] };
              'J['f];
@@ -233,8 +234,6 @@ rewrite reduce_fix : fix{f. 'b['f]} <--> 'b[fix{f. 'b['f]}]
  * TACTICS                                                              *
  ************************************************************************)
 
-topval eqcd_rfunction_lambdaT : tactic
-topval eqcd_rfunction_applyT : term -> tactic
 topval rfunction_extensionalityT : term -> term -> tactic
 
 (*

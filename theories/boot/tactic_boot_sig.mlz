@@ -610,6 +610,21 @@ sig
    val set_goal : update_fun -> proof -> msequent -> proof
 
    (*
+    * Copy a proof node from one location to another.
+    *)
+   val copy : update_fun -> proof -> address -> address -> proof
+
+   (*
+    * Paste a proof in at the current location.
+    *)
+   val paste : update_fun -> proof -> proof -> proof
+
+   (*
+    * Make the current goal an assumption of the entire proof.
+    *)
+   val make_assum : update_fun -> proof -> proof
+
+   (*
     * Refine the current proof.
     *)
    val refine : update_fun -> proof -> string -> MLast.expr -> tactic -> proof

@@ -14,7 +14,10 @@ open Tactic_type.Tacticals
 open Tactic_type.Conversionals
 open Var
 
+open Base_dtactic
+
 open Itt_equal
+open Itt_struct
 
 (************************************************************************
  * SYNTAX                                                               *
@@ -242,7 +245,7 @@ interactive term_wf {| intro_resource [] |} 'H :
    [wf] sequent [squash] { 'H >- member{list{raw_bterm_type{raw_term_type}}; 'bterms} } -->
    sequent ['ext] { 'H >- member{raw_term_type; term{'op; 'bterms}} }
 
-interactive term_elim1 {| elim_resource [] |} 'H 'J 'T 'y 'z 'w 'v 'op 'bterms 'terms :
+interactive term_elim1 {| elim_resource [ThinOption thinT] |} 'H 'J 'T 'y 'z 'w 'v 'op 'bterms 'terms :
    [main] sequent ['ext] { 'H; x: raw_term_type; 'J['x];
       T: univ[1:l];
       y: subtype{'T; raw_term_type};

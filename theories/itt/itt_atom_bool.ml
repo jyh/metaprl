@@ -32,6 +32,7 @@
 
 include Itt_atom
 include Itt_bool
+include Itt_struct
 
 open Mp_resource
 
@@ -43,6 +44,7 @@ open Base_dtactic
 
 open Itt_equal
 open Itt_bool
+open Itt_struct
 
 (************************************************************************
  * SYNTAX                                                               *
@@ -84,7 +86,7 @@ prim eq_atom_assert_intro {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- "assert"{eq_atom{'x; 'y}} } =
    it
 
-prim eq_atom_assert_elim {| elim_resource [ThinOption] |} 'H 'J :
+prim eq_atom_assert_elim {| elim_resource [ThinOption thinT] |} 'H 'J :
    [main] sequent ['ext] { 'H; x: 'a = 'b in atom; 'J[it] >- 'C[it] } -->
    sequent ['ext] { 'H; x: "assert"{eq_atom{'a; 'b}}; 'J['x] >- 'C['x] } =
    it

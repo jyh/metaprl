@@ -466,7 +466,7 @@ dform msequent_df1 : internal :: msequent{nil; 'goal} =
    'goal newline
 
 dform msequent_df2 : internal :: msequent{'assums; 'goal} =
-   numbered_assums{nil; 'assums} 'goal newline
+   numbered_assums{cons{nil; nil}; 'assums} 'goal newline
 
 dform numbered_assums_df1 : internal :: numbered_assums{'number; cons{'a; 'b}} =
    szone df_length{'number} `". " pushm 'a popm newline ezone numbered_assums{cons{nil; 'number}; 'b}

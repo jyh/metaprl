@@ -31,8 +31,9 @@
  *)
 
 include Itt_equal
-include Itt_logic
 include Itt_struct
+include Itt_union
+include Itt_set
 
 open Refiner.Refiner.Term
 open Tactic_type.Tacticals

@@ -354,6 +354,12 @@ prim equalityEquality {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- ('a1 = 'b1 in 'T1) = ('a2 = 'b2 in 'T2) in univ[i:l] } =
    it
 
+interactive equalityUnivMember {| intro_resource [] |} 'H :
+   [wf] sequent [squash] { 'H >- member{univ[i:l]; 'T1} } -->
+   [wf] sequent [squash] { 'H >- member{'T1; 'a1} } -->
+   [wf] sequent [squash] { 'H >- member{'T1; 'b1} } -->
+   sequent ['ext] { 'H >- member{univ[i:l]; .'a1 = 'b1 in 'T1} }
+
 (*
  * Typehood.
  *)
@@ -387,6 +393,14 @@ prim axiomEquality {| intro_resource []; eqcd_resource |} 'H :
    sequent ['ext] { 'H >- it = it in ('a = 'b in 'T) } =
    it
 
+interactive axiomMember1 {| intro_resource [] |} 'H :
+   [wf] sequent [squash] { 'H >- 'a = 'b in 'T } -->
+   sequent ['ext] { 'H >- member{.'a = 'b in 'T; it} }
+
+interactive axiomMember2 {| intro_resource [] |} 'H :
+   [wf] sequent [squash] { 'H >- member{'T; 'a} } -->
+   sequent ['ext] { 'H >- member{.member{'T; 'a}; it} }
+
 (*
  * H, x: a = b in T, J[x] >- C[x]
  * by equalityElimination i
@@ -396,6 +410,11 @@ prim axiomEquality {| intro_resource []; eqcd_resource |} 'H :
 prim equalityElimination {| elim_resource [] |} 'H 'J :
    ('t : sequent ['ext] { 'H; x: 'a = 'b in 'T; 'J[it] >- 'C[it] }) -->
    sequent ['ext] { 'H; x: 'a = 'b in 'T; 'J['x] >- 'C['x] } =
+   't
+
+prim memberElimination {| elim_resource [] |} 'H 'J :
+   ('t : sequent ['ext] { 'H; x: member{'T; 'a}; 'J[it] >- 'C[it] }) -->
+   sequent ['ext] { 'H; x: member{'T; 'a}; 'J['x] >- 'C['x] } =
    't
 
 (*
@@ -438,6 +457,10 @@ prim universeEquality 'H :
    sequent ['ext] { 'H >- univ[j:l] = univ[j:l] in univ[i:l] } =
   it
 
+interactive universeMember 'H :
+   sequent ['ext] { 'H >- cumulativity[j:l, i:l] } -->
+   sequent ['ext] { 'H >- member{univ[i:l]; univ[j:l]} }
+
 (*
  * H >- x = x in Ui
  * by universeCumulativity
@@ -451,13 +474,17 @@ prim universeCumulativity 'H univ[j:l] :
    sequent ['ext] { 'H >- 'x = 'y in univ[i:l] } =
    it
 
+interactive universeMemberCumulativity 'H univ[j:l] :
+   sequent [squash] { 'H >- cumulativity[j:l, i:l] } -->
+   sequent [squash] { 'H >- member{univ[j:l]; 'a} } -->
+   sequent ['ext] { 'H >- member{univ[i:l]; 'a} }
+
 let univ_equal_term = << univ[i:l] = univ[i:l] in univ[j:l] >>
 
 let eqcd_univT p =
    let i = Sequent.hyp_count_addr p in
       (universeEquality i
-       thenT rw reduce_cumulativity 0
-       thenT trueIntro i) p
+       thenT tryT (rw reduce_cumulativity 0 thenT trueIntro i)) p
 
 let eqcd_resource = Mp_resource.improve eqcd_resource (univ_term, eqcd_univT)
 let intro_resource = Mp_resource.improve intro_resource (univ_equal_term, eqcd_univT)
@@ -633,7 +660,7 @@ let univAssumT i p =
 let cumulativityT u p =
    let i = Sequent.hyp_count_addr p in
       (universeCumulativity i u
-       thenLT [rw reduce_cumulativity 0 thenT trueIntro i; idT]) p
+       thenLT [tryT (rw reduce_cumulativity 0 thenT trueIntro i); idT]) p
 
 (*
  * Typehood from truth.

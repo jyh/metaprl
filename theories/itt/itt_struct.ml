@@ -116,28 +116,11 @@ ml_rule thin 'H 'J : ('goal : sequent ['ext] { 'H; x: 'A; 'J >- 'C }) =
  * H, J >- S ext s
  * H, x: S, J >- T ext t[x]
  *)
-ml_rule cut 'H 'J 'S 'x : ('goal : sequent ['ext] { 'H; 'J >- 'T }) =
-   let cut_ext (bvars, _) extracts =
-      match bvars, extracts with
-         [|x|], [s; t] ->
-            subst t [s] [x]
-       | _ ->
-          raise (RefineError ("cut", StringError "bogus extract"))
-   in
-   let goal, assums = dest_msequent goal in
-   let x = dest_var <:con< 'x >> in
-   let tail = <:con< sequent { 'J >- 'T } >> in
-      if is_free_var x tail then
-         raise (RefineError ("cut", StringStringError ("variable causes capture", x)))
-      else
-         let s = <:con< 'S >> in
-         let fv = free_vars s in
-         let dv = TermMan.declared_vars tail in
-            if List_util.intersects fv dv then
-               raise (RefineError ("cut", StringTermError ("assertion would be captured", s)))
-            else
-               [mk_msequent (mk_xstring_dep0_term "assertion" <:con< sequent ['ext] { 'H; 'J >- 'S } >>) assums;
-                mk_msequent (mk_xstring_dep0_term "main" <:con< sequent ['ext] { 'H; x: 'S; 'J >- 'T } >>) assums], cut_ext
+prim cut 'H 'J 'S 'x :
+   [assertion] ('a : sequent ['ext] { 'H; 'J >- 'S }) -->
+   [main] ('f['x] : sequent ['ext] { 'H; x: 'S; 'J >- 'T }) -->
+   sequent ['ext] { 'H; 'J >- 'T } =
+   'f['a]
 
 (*
  * This is usually used for performance testing.
@@ -153,7 +136,7 @@ interactive dup 'H :
  * H >- t = t in T
  *)
 prim introduction 'H 't :
-   [wf] sequent [squash] { 'H >- 't = 't in 'T } -->
+   [wf] sequent [squash] { 'H >- member{'T; 't} } -->
    sequent ['ext] { 'H >- 'T } =
    't
 
@@ -232,7 +215,7 @@ let thinAllT i j p =
 let assertT s p =
    let j, k = Sequent.hyp_split_addr p (Sequent.hyp_count p) in
    let v = get_opt_var_arg "v" p in
-      cut j k s (mk_var_term v) p
+      cut j k s v p
 
 (*
  * Cut in at a certain point.
@@ -240,7 +223,7 @@ let assertT s p =
 let assertAtT i s p =
    let i, j = Sequent.hyp_split_addr p i in
    let v = get_opt_var_arg "v" p in
-      cut i j s (mk_var_term v) p
+      cut i j s v p
 
 let dupT p =
    dup (Sequent.hyp_count_addr p) p

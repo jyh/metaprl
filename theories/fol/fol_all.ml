@@ -4,6 +4,7 @@
 
 include Fol_implies
 include Fol_univ
+include Fol_struct
 
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
@@ -11,7 +12,10 @@ open Refiner.Refiner.RefineError
 open Mp_resource
 open Tactic_type.Tacticals
 
+open Base_dtactic
+
 open Fol_type
+open Fol_struct
 
 (************************************************************************
  * TERMS                                                                *
@@ -42,7 +46,7 @@ prim all_intro {| intro_resource [] |} 'H 'x :
    sequent ['ext] { 'H >- "all"{y. 'B['y]} } =
    lambda{y. 'b['y]}
 
-prim all_elim {| elim_resource [] |} 'H 'J 'x 'z 'a :
+prim all_elim {| elim_resource [ThinOption thinT] |} 'H 'J 'x 'z 'a :
    [wf] sequent ['ext] { 'H; x: "all"{y. 'B['y]}; 'J['x] >- "type"{'a} } -->
    [main] ('b['x; 'z] : sequent ['ext] { 'H; x: "all"{y. 'B['y]}; 'J['x]; z: 'B['a] >- 'C['x] }) -->
    sequent ['ext] { 'H; x: "all"{y. 'B['y]}; 'J['x] >- 'C['x] } =

@@ -33,6 +33,7 @@
 
 include Itt_equal
 include Itt_rfun
+include Itt_struct
 
 open Printf
 open Mp_debug
@@ -51,9 +52,11 @@ open Tactic_type.Tacticals
 open Tactic_type.Conversionals
 
 open Typeinf
+open Base_dtactic
 
 open Itt_equal
 open Itt_subtype
+open Itt_struct
 
 (*
  * Show that the file is loading.
@@ -232,7 +235,7 @@ prim consEquality {| intro_resource []; eqcd_resource |} 'H :
  * H; l: list(A); J[l] >- C[nil]
  * H; l: list(A); J[l]; u: A; v: list(A); w: C[v] >- C[u::v]
  *)
-prim listElimination {| elim_resource [] |} 'H 'J 'l 'w 'u 'v :
+prim listElimination {| elim_resource [ThinOption thinT] |} 'H 'J 'l 'w 'u 'v :
    [main] ('base['l] : sequent ['ext] { 'H; l: list{'A}; 'J['l] >- 'C[nil] }) -->
    [main] ('step['l; 'u; 'v; 'w] : sequent ['ext] { 'H; l: list{'A}; 'J['l]; u: 'A; v: list{'A}; w: 'C['v] >- 'C['u::'v] }) -->
    sequent ['ext] { 'H; l: list{'A}; 'J['l] >- 'C['l] } =

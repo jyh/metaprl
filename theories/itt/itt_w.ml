@@ -32,6 +32,7 @@
 
 include Itt_equal
 include Itt_rfun
+include Itt_struct
 
 open Opname
 open Refiner.Refiner
@@ -46,7 +47,10 @@ open Tactic_type
 open Tactic_type.Tacticals
 open Var
 
+open Base_dtactic
+
 open Itt_equal
+open Itt_struct
 
 (************************************************************************
  * TERMS                                                                *
@@ -168,7 +172,7 @@ prim treeEquality {| intro_resource []; eqcd_resource |} 'H 'y :
  * by wElimination u v
  * H, x:W(y:A; B[y]), u:A, v:B[u] -> W(y:A; B[y]), J[tree(u, v)] >- T[tree(u, v)] ext t[u, v]
  *)
-prim wElimination {| elim_resource [] |} 'H 'J 'z 'a 'f 'g 'b 'v :
+prim wElimination {| elim_resource [ThinOption thinT] |} 'H 'J 'z 'a 'f 'g 'b 'v :
    [main] ('t['z; 'a; 'f; 'g] :
    sequent ['ext] { 'H;
                     z: w{'A; x. 'B['x]};

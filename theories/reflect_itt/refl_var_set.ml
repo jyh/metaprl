@@ -42,6 +42,7 @@ open Var
 open Base_dtactic
 
 open Itt_equal
+open Itt_struct
 
 (************************************************************************
  * SYNTAX                                                               *
@@ -173,7 +174,7 @@ interactive vsingleton_member_intro {| intro_resource [] |} 'H :
    [wf] sequent [squash] { 'H >- 'v1 = 'v2 in var_type } -->
    sequent ['ext] { 'H >- "assert"{vmember{'v1; vsingleton{'v2}}} }
 
-interactive vsingleton_member_elim {| elim_resource [ThinOption] |} 'H 'J :
+interactive vsingleton_member_elim {| elim_resource [] |} 'H 'J :
    [wf] sequent [squash] { 'H; x: "assert"{vmember{'v1; vsingleton{'v2}}}; 'J['x] >- member{var_type; 'v1} } -->
    [wf] sequent [squash] { 'H; x: "assert"{vmember{'v1; vsingleton{'v2}}}; 'J['x] >- member{var_type; 'v2} } -->
    [main] sequent ['ext] { 'H; x: 'v1 = 'v2 in var_type; 'J[it] >- 'C[it] } -->
@@ -201,7 +202,7 @@ interactive vunion_member_intro_right {| intro_resource [SelectOption 2] |} 'H :
    [main] sequent [squash] { 'H >- "assert"{vmember{'v; 's2}} } -->
    sequent ['ext] { 'H >- "assert"{vmember{'v; vunion{'s1; 's2}}} }
 
-interactive vunion_member_elim {| elim_resource [] |} 'H 'J :
+interactive vunion_member_elim {| elim_resource [ThinOption thinT] |} 'H 'J :
    [wf] sequent [squash] { 'H; x: "assert"{vmember{'v; vunion{'s1; 's2}}}; 'J['x] >- member{var_type; 'v} } -->
    [wf] sequent [squash] { 'H; x: "assert"{vmember{'v; vunion{'s1; 's2}}}; 'J['x] >- member{var_set; 's1} } -->
    [wf] sequent [squash] { 'H; x: "assert"{vmember{'v; vunion{'s1; 's2}}}; 'J['x] >- member{var_set; 's2} } -->
@@ -225,7 +226,7 @@ interactive visect_member_intro3 {| intro_resource [] |} 'H :
    [main] sequent [squash] { 'H >- "assert"{vmember{'x; 's2}} } -->
    sequent ['ext] { 'H >- "assert"{vmember{'x; visect{'s1; 's2}}} }
 
-interactive visect_member_elim3 {| elim_resource [] |} 'H 'J 'u 'v :
+interactive visect_member_elim3 {| elim_resource [ThinOption thinT] |} 'H 'J 'u 'v :
    [wf] sequent [squash] { 'H; z: "assert"{vmember{'x; visect{'s1; 's2}}}; 'J['z] >- member{var_type; 'x} } -->
    [wf] sequent [squash] { 'H; z: "assert"{vmember{'x; visect{'s1; 's2}}}; 'J['z] >- member{var_set; 's1} } -->
    [wf] sequent [squash] { 'H; z: "assert"{vmember{'x; visect{'s1; 's2}}}; 'J['z] >- member{var_set; 's2} } -->
@@ -248,7 +249,7 @@ interactive vsub_member_intro3 {| intro_resource [] |} 'H :
    [main] sequent [squash] { 'H >- "assert"{bnot{vmember{'x; 's2}}} } -->
    sequent ['ext] { 'H >- "assert"{vmember{'x; vsub{'s1; 's2}}} }
 
-interactive vsub_member_elim3 {| elim_resource [] |} 'H 'J 'u 'v :
+interactive vsub_member_elim3 {| elim_resource [ThinOption thinT] |} 'H 'J 'u 'v :
    [wf] sequent [squash] { 'H; z: "assert"{vmember{'x; vsub{'s1; 's2}}}; 'J['z] >- member{var_type; 'x} } -->
    [wf] sequent [squash] { 'H; z: "assert"{vmember{'x; vsub{'s1; 's2}}}; 'J['z] >- member{var_set; 's1} } -->
    [wf] sequent [squash] { 'H; z: "assert"{vmember{'x; vsub{'s1; 's2}}}; 'J['z] >- member{var_set; 's2} } -->
@@ -277,7 +278,7 @@ interactive voflist_member_intro_right {| intro_resource [SelectOption 2] |} 'H 
 interactive voflist_member_elim_nil {| elim_resource [] |}  'H 'J :
    sequent ['ext] { 'H; x: "assert"{vmember{'v; voflist{nil}}}; 'J['x] >- 'C['x] }
 
-interactive voflist_member_elim_cons2 {| elim_resource [ThinOption] |} 'H 'J :
+interactive voflist_member_elim_cons2 {| elim_resource [] |} 'H 'J :
    [wf] sequent [squash] { 'H; x: "assert"{vmember{'v1; voflist{cons{'v2; 't}}}}; 'J['x] >- member{var_type; 'v1} } -->
    [wf] sequent [squash] { 'H; x: "assert"{vmember{'v1; voflist{cons{'v2; 't}}}}; 'J['x] >- member{var_type; 'v2} } -->
    [wf] sequent [squash] { 'H; x: "assert"{vmember{'v1; voflist{cons{'v2; 't}}}}; 'J['x] >- member{list{var_type}; 't} } -->

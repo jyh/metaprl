@@ -34,6 +34,7 @@
 include Itt_equal
 include Itt_set
 include Itt_rfun
+include Itt_struct
 
 open Printf
 open Mp_debug
@@ -49,8 +50,11 @@ open Var
 open Tactic_type.Sequent
 open Tactic_type.Tacticals
 
+open Base_dtactic
+
 open Itt_equal
 open Itt_subtype
+open Itt_struct
 
 (*
  * Show that the file is loading.
@@ -214,7 +218,7 @@ prim quotientMember {| intro_resource [] |}  'H :
  * H, a: quot x, y: A // E, J[x] >- T[a] = T[a] in Ui
  * H, a: quot x, y: A // E, J[x], v: A, w: A, z: E[v, w] >- s[v] = t[w] in T[v]
  *)
-prim quotientElimination1 {| elim_resource [] |} 'H 'J 'v 'w 'z :
+prim quotientElimination1 {| elim_resource [ThinOption thinT] |} 'H 'J 'v 'w 'z :
    [wf] sequent [squash] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a] >- "type"{'T['a]} } -->
    [main] sequent [squash] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a];
              v: 'A; w: 'A; z: 'E['v; 'w] >- 's['v] = 't['w] in 'T['v]
@@ -222,7 +226,7 @@ prim quotientElimination1 {| elim_resource [] |} 'H 'J 'v 'w 'z :
    sequent ['ext] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a] >- 's['a] = 't['a] in 'T['a] } =
    it
 
-prim quotientElimination2 {| elim_resource [] |} 'H 'J 'v 'w 'z :
+prim quotientElimination2 {| elim_resource [ThinOption thinT] |} 'H 'J 'v 'w 'z :
    [wf] sequent [squash] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a] >- "type"{'T['a]} } -->
    [main] sequent [squash] { 'H; a: quot x, y: 'A // 'E['x; 'y];
              v: 'A; w: 'A; z: 'E['v; 'w]; 'J['v] >- 's['v] = 't['w] in 'T['v]
@@ -236,7 +240,7 @@ prim quotientElimination2 {| elim_resource [] |} 'H 'J 'v 'w 'z :
  *
  * H, x: a1 = a2 in quot x, y: A // E, J[x], v: hide(E[a, b]) >- T[x]
  *)
-prim quotient_equalityElimination {| elim_resource [] |} 'H 'J 'v :
+prim quotient_equalityElimination {| elim_resource [ThinOption thinT] |} 'H 'J 'v :
    [main] ('g['v] : sequent ['ext] { 'H; x: 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]; 'J['x]; v: hide('E['a1; 'a2]) >- 'T['x] }) -->
    sequent ['ext] { 'H; x: 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]; 'J['x] >- 'T['x] } =
    'g[it]
@@ -244,7 +248,7 @@ prim quotient_equalityElimination {| elim_resource [] |} 'H 'J 'v :
 (*
  * Elimination under membership.
  *)
-prim quotient_memberElimination {| elim_resource [] |} 'H 'J 'v 'w 'z :
+prim quotient_memberElimination {| elim_resource [ThinOption thinT] |} 'H 'J 'v 'w 'z :
    [wf] sequent [squash] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a] >- "type"{'T['a]} } -->
    [main] sequent [squash] { 'H; a: quot x, y: 'A // 'E['x; 'y];
              v: 'A; w: 'A; z: 'E['v; 'w]; 'J['v] >- 's['v] = 's['w] in 'T['v]

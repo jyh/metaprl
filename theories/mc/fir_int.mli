@@ -5,10 +5,10 @@
  * Define and implement operations for ints in the FIR.
  *)
 
+include Base_theory
 include Itt_theory
+include Fir_ty
 include Fir_exp
-
-open Tactic_type.Conversionals
 
 (*************************************************************************
  * Declarations.

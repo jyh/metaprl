@@ -7,16 +7,11 @@
 
 include Base_theory
 include Itt_theory
-
-open Tactic_type.Conversionals
+include Fir_int_set
 
 (*************************************************************************
  * Declarations.
  *************************************************************************)
-
-(*
- * Types.
- *)
 
 (* Integer type. *)
 declare tyInt
@@ -36,39 +31,42 @@ declare tyEnum{ 'num }
 declare tyFun{ 'ty_list; 'ty }
 
 (*
- * Union type.
+ * Tuples.
+ * 'ty_list in tyTuple is a list of the types in the tuple.
+ * 'ty in tyArray is the type of the elements in the array.
+ *)
+declare tyUnion{ 'union_ty; 'ty_list; 'int_opt }
+declare tyTuple{ 'ty_list }
+declare tyArray{ 'ty }
+
+(* Polymorphism. *)
+declare tyVar{ 'ty_var }
+declare tyApply{ 'ty_var; 'ty_list }
+declare tyExists{ 'ty_var_list; 'ty }
+declare tyAll{ 'ty_var_list; 'ty }
+declare tyProject{ 'ty_var; 'num }
+
+(* Subscripting. *)
+declare tySubscript{ 'ty1; 'ty2 }
+
+(*
+ * Delayed type.
+ * Type should be inferred later.
+ *)
+declare tyDelayed
+
+(*
+ * Union tags.
  * normalUnion : all the fields are known and ordered.
  * exnUnion : not all the fields are known, nor are they ordered.
- * unionElt :
- *    'ty is a type.
- *    'bool is a mutable flag.
- * tyUnion :
- *    'union_ty is one of normalUnion and exnUnion.
- *    'elts is a list of unionElt lists.
- *
- * This is intended to represent something like:
- *    type t =
- *       A of t11 * t12
- *     | B of t21
- *    ...
  *)
 declare normalUnion
 declare exnUnion
+
+(* Defining types. *)
 declare unionElt{ 'ty; 'bool }
-declare tyUnion{ 'union_ty; 'elts }
-
-(*
- * Array type.
- * 'ty is the type of elements in the array.
- *)
-declare tyArray{ 'ty }
-
-(*
- * Subscripting.
- * 't1 should be an array.
- * 't2 is the type of the index variable used to index the array.
- *)
-declare tySubscript{ 't1; 't2 }
+declare tyDefUnion{ 'ty_var_list; 'union_ty; 'elts }
+declare tyDefLambda{ 'ty_var_list; 'ty }
 
 (*
  * Memory is allocated in blocks.
@@ -78,32 +76,15 @@ declare block{ 'tag; 'args }
 
 (*
  * Boolean type.
- * tyBool is the type.
- * ftrue and ffalse represent true and false.
- * ftrueSet and fflaseSet are int_set versions of ftrue and ffalse for
- * use in match expressions.
- * eq_fbool is intended to test equality on booleans within MetaPRL
- *    and isn't intended to model the FIR.
+ * true_set and false_set define true and false.
  *)
+define unfold_true_set : true_set <--> int_set{ cons{ interval{1; 1}; nil } }
+define unfold_false_set : false_set <--> int_set{ cons{ interval{0; 0}; nil } }
+
 define unfold_tyBool : tyBool <-->
-   tyUnion{ normalUnion; cons{ nil; cons{ nil; nil } } }
-define unfold_ftrue : ftrue <--> block{ 1; nil }
-define unfold_ffalse : ffalse <--> block{ 0; nil }
-(*define unfold_eq_fbool : eq_fbool{ block{'a1; nil}; block{'a2; nil} } <-->
-   beq_int{ 'a1; 'a2 }*)
-
-(*
- * Normal values.
- *)
-
-(*
- * Integer atom.
- * 'int is the integer itself (a number).
- *)
-declare atomInt{ 'int }
-
-(*
- * Variable atom.
- * 'var is the variable itself.
- *)
-declare atomVar{ 'var }
+   tyUnion{ normalUnion; cons{ nil; cons{ nil; nil } }; int_set{ nil } }
+define unfold_tyBool2 : tyBool2 <--> tyEnum{ 2 }
+define unfold_tyTrue : tyTrue <-->
+   tyUnion{ normalUnion; cons{ nil; cons{ nil; nil } }; true_set }
+define unfold_tyFalse : tyFalse <-->
+   tyUnion{ normalUnion; cons{ nil; cons{ nil; nil } }; false_set }

@@ -6,5 +6,9 @@
  * See fir_test.ml for the actual test code.
  *)
 
+include Base_theory
+include Itt_theory
+include Fir_int_set
+include Fir_ty
 include Fir_exp
 include Fir_int

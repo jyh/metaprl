@@ -3,16 +3,12 @@
  * Brian Emre Aydemir, emre@its.caltech.edu
  *
  * Define and implement operations for ML ints in the FIR.
- * See fir_int.mli for a description of what the operators below do.
- *
- * Todo:
- *    -  Complete the implementation of the bitwise operators.
  *)
 
+include Base_theory
 include Itt_theory
+include Fir_ty
 include Fir_exp
-
-open Tactic_type.Conversionals
 
 (*************************************************************************
  * Declarations.
@@ -83,7 +79,7 @@ dform geIntOp_df : except_mode[src] :: geIntOp = Nuprl_font!ge
 
 (* Exponentiation. *)
 dform pow_df : except_mode[src] :: pow{ 'base; 'exp } =
-   lzone `"(" slot{'base} `"^" slot{'exp} `")" ezone
+   lzone  slot{'base}  Nuprl_font!sup{'exp} ezone
 
 (*************************************************************************
  * Rewrites.
@@ -119,17 +115,23 @@ prim_rw reduce_xorIntOp : binOp{ xorIntOp; 'a1; 'a2; v. 'exp['v] } <-->*)
 
 (* Comparison. *)
 prim_rw reduce_eqIntOp : binOp{ eqIntOp; 'a1; 'a2; v. 'exp['v] } <-->
-   'exp[ ifthenelse{ beq_int{ 'a1; 'a2 }; ftrue; ffalse } ]
+   (*'exp[ ifthenelse{ beq_int{ 'a1; 'a2 }; ftrue; ffalse } ]*)
+   'exp[ beq_int{ 'a1; 'a2 } ]
 prim_rw reduce_neqIntOp : binOp{ neqIntOp; 'a1; 'a2; v. 'exp['v] } <-->
-   'exp[ ifthenelse{ bneq_int{ 'a1; 'a2 }; ftrue; ffalse } ]
+   (*'exp[ ifthenelse{ bneq_int{ 'a1; 'a2 }; ftrue; ffalse } ]*)
+   'exp[ bneq_int{ 'a1; 'a2 } ]
 prim_rw reduce_ltIntOp : binOp{ ltIntOp; 'a1; 'a2; v. 'exp['v] } <-->
-   'exp[ ifthenelse{ lt_bool{ 'a1; 'a2 }; ftrue; ffalse } ]
+   (*'exp[ ifthenelse{ lt_bool{ 'a1; 'a2 }; ftrue; ffalse } ]*)
+   'exp[ lt_bool{ 'a1; 'a2 } ]
 prim_rw reduce_leIntOp : binOp{ leIntOp; 'a1; 'a2; v. 'exp['v] } <-->
-   'exp[ ifthenelse{ le_bool{ 'a1; 'a2 }; ftrue; ffalse } ]
+   (*'exp[ ifthenelse{ le_bool{ 'a1; 'a2 }; ftrue; ffalse } ]*)
+   'exp[ le_bool{ 'a1; 'a2 } ]
 prim_rw reduce_gtIntOp : binOp{ gtIntOp; 'a1; 'a2; v. 'exp['v] } <-->
-   'exp[ ifthenelse{ gt_bool{ 'a1; 'a2 }; ftrue; ffalse } ]
+   (*'exp[ ifthenelse{ gt_bool{ 'a1; 'a2 }; ftrue; ffalse } ]*)
+   'exp[ gt_bool{ 'a1; 'a2 } ]
 prim_rw reduce_geIntOp : binOp{ geIntOp; 'a1; 'a2; v. 'exp['v] } <-->
-   'exp[ ifthenelse{ ge_bool{ 'a1; 'a2 }; ftrue; ffalse } ]
+   (*'exp[ ifthenelse{ ge_bool{ 'a1; 'a2 }; ftrue; ffalse } ]*)
+   'exp[ ge_bool{ 'a1; 'a2 } ]
 
 (*************************************************************************
  * Automation.

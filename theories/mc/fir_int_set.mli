@@ -7,7 +7,6 @@
 
 include Base_theory
 include Itt_theory
-include Fir_ty
 
 (*************************************************************************
  * Declarations.
@@ -22,7 +21,8 @@ declare interval{ 'left; 'right }
 
 (*
  * The set.
- * 'intervals should be a list of intervals
+ * 'intervals should be a list of intervals, or nil in order to
+ *    represent the empty set.
  *)
 declare int_set{ 'intervals }
 
@@ -31,15 +31,8 @@ declare int_set{ 'intervals }
  * in_interval reduces to btrue if 'num is in the interval and
  *    bfalse otherwise.
  * member reduces to btrue if 'num is in 'int_set and bfalse otherwise.
+ *    'num is in 'int_set if its in any one of the intervals of the set.
  *)
 define unfold_in_interval : in_interval{ 'num; interval{'l; 'r} } <-->
    band{ le_bool{'l; 'num}; le_bool{'num; 'r} }
 declare member{ 'num; 'int_set }
-
-(*
- * int_set representations of ftrue and ffalse.
- * Placed here as a matter of convinience for evaluations "match"
- *    expressions.
- *)
-define unfold_ftrueSet : ftrueSet <--> int_set{cons{interval{1; 1}; nil}}
-define unfold_ffalseSet : ffalseSet <--> int_set{cons{interval{0; 0}; nil}}

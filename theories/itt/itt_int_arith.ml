@@ -346,34 +346,32 @@ interactive_rw sum_same_products1_rw :
    ((number[i:n] *@ 'a) +@ (number[j:n] *@ 'a)) <-->
    ((number[i:n] +@ number[j:n]) *@ 'a)
 
-let sum_same_products1C = sum_same_products1_rw
+let sum_same_products1C = sum_same_products1_rw thenC (addrC [0] reduce_add)
 
-(*
 interactive_rw sum_same_products2_rw :
    ('a in int) -->
    ((number[i:n] *@ 'a) +@ 'a) <--> ((number[i:n] +@ 1) *@ 'a)
 
-let sum_same_products2C = sum_same_products2_rw
+let sum_same_products2C = sum_same_products2_rw thenC (addrC [0] reduce_add)
 
 interactive_rw sum_same_products3_rw :
    ('a in int) -->
    ('a +@ (number[j:n] *@ 'a)) <--> ((number[j:n] +@ 1) *@ 'a)
 
-let sum_same_products3C = sum_same_products3_rw
+let sum_same_products3C = sum_same_products3_rw thenC (addrC [0] reduce_add)
 
 interactive_rw sum_same_products4_rw :
    ('a in int) -->
    ('a +@ 'a) <--> (2 *@ 'a)
 
 let sum_same_products4C = sum_same_products4_rw
-*)
 
 let same_product_aux a b =
    if (is_mul_term a) & (is_mul_term b) then
       let (a1,a2)=dest_mul a in
       let (b1,b2)=dest_mul b in
       if alpha_equal a2 b2 then
-         (true, sum_same_products1C)
+         (true, sum_same_products1_rw)
       else
          (false, failC)
    else
@@ -450,7 +448,9 @@ let add_BubbleStepC tm =
 		       		reduceC
                end
 	    		else
-     				if (compare_terms s a)=Less then
+               let a'=stripCoef a in
+               let s'=stripCoef s in
+     				if (compare_terms s' a')=Less then
 	          		add_CommutC
 	       		else
 	          		failC
@@ -476,6 +476,21 @@ interactive_rw sub_elim_rw {| arith_unfold |} :
 let sub_elimC = repeatC (higherC sub_elim_rw)
 
 let add_normalizeC = add_BubbleSortC
+
+let resource arith_unfold +=[
+	<<'a *@ 'b>>, termC mul_BubbleStepC;
+	<<'a +@ 'b>>, termC add_BubbleStepC;
+	<<('a +@ 'b) +@ 'c>>, add_Assoc2C;
+	<<('a *@ 'b) *@ 'c>>, mul_Assoc2C;
+	<<(number[i:n] *@ 'a) +@ (number[j:n] *@ 'a)>>, sum_same_products1C;
+	<<(number[i:n] *@ 'a) +@ 'a>>, sum_same_products2C;
+	<<'a +@ (number[j:n] *@ 'a)>>, sum_same_products3C;
+	<<'a +@ 'a>>, sum_same_products4C;
+	<<(number[i:n] *@ 'a) +@ ((number[j:n] *@ 'a) +@ 'b)>>, (add_AssocC thenC (addrC [0] sum_same_products1C));
+	<<(number[i:n] *@ 'a) +@ ('a +@ 'b)>>, (add_AssocC thenC (addrC [0] sum_same_products2C));
+	<<'a +@ ((number[j:n] *@ 'a) +@ 'b)>>, (add_AssocC thenC (addrC [0] sum_same_products3C));
+	<<'a +@ ('a +@ 'b)>>, (add_AssocC thenC (addrC [0] sum_same_products4C));
+]
 
 doc <:doc<
 	@begin[doc]
@@ -518,6 +533,7 @@ doc <:doc<
 
 	@end[doc]
 >>
+(*
 let normalizeC = arith_unfoldC thenC
 					(*sub_elimC thenC
 					  (repeatC (higherC mul_add_DistribC)) thenC
@@ -526,6 +542,8 @@ let normalizeC = arith_unfoldC thenC
                  mul_normalizeC thenC
                  add_normalizeC thenC
                  reduceC
+*)
+let normalizeC = reduceC thenC arith_unfoldC thenC reduceC
 
 doc <:doc< @docoff >>
 
@@ -908,6 +926,28 @@ sequent { <H> >- 'b in int } -->
 sequent { <H>; x: ('a >= 'b +@ 0);
                      t: ('a < 'b)
                 >- "assert"{bfalse} }
+(*
+let mul_sort2C t =
+	let a,b=dest_mul t in
+   if ((compare_terms b a)=Less & not (is_number_term a)) or
+     	(is_number_term b) then
+  		mul_CommutC
+	else
+  		failC
+
+let mul_sort3C t =
+	let a,t'=dest_mul t in
+	let b,_=dest_mul t' in
+	if (compare_terms b a)=Less or (is_number_term b) then
+		mul_BubblePrimitiveC
+	else
+		failC
+
+let resource arith_unfold +=[
+	<<'a *@ 'b>>, termC mul_sort2C;
+	<<'a *@ ('b *@ 'c)>>, termC mul_sort3C;
+]
+*)
 
 interactive test6 'b 'c :
 sequent { <H> >- 'a in int } -->

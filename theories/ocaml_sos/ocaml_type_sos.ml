@@ -2,7 +2,7 @@
  * There is no content to the semantics of types.
  *)
 
-open Debug
+open Nl_debug
 open Printf
 
 let _ =

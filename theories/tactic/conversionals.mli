@@ -2,7 +2,7 @@
  * These are the basic rewriting operations.
  *)
 
-include Tacticals
+include Nltop
 
 open Refiner.Refiner.Term
 open Refiner.Refiner.RefineError
@@ -27,16 +27,16 @@ val env_goal : env -> term
  * All rewrites are wrapped by the rewrite function.
  * The argument is the hyp number, or concl to apply to.
  *)
-val rw : conv -> int -> tactic
-val rwh : conv -> int -> tactic
+topval rw : conv -> int -> tactic
+topval rwh : conv -> int -> tactic
 
-val prefix_andthenC : conv -> conv -> conv
-val prefix_orelseC : conv -> conv -> conv
-val addrC : int list -> conv -> conv
-val idC : conv
-val foldC : term -> conv -> conv
-val makeFoldC : term -> conv -> conv
-val cutC : term -> conv
+topval prefix_andthenC : conv -> conv -> conv
+topval prefix_orelseC : conv -> conv -> conv
+topval addrC : int list -> conv -> conv
+topval idC : conv
+topval foldC : term -> conv -> conv
+topval makeFoldC : term -> conv -> conv
+topval cutC : term -> conv
 val funC : (env -> conv) -> conv
 
 (************************************************************************
@@ -46,50 +46,50 @@ val funC : (env -> conv) -> conv
 (*
  * Fail with a message.
  *)
-val failC : string -> conv
+topval failC : string -> conv
 val failWithC : (string * refine_error) -> conv
 
 (*
  * Try a conversion.
  *)
-val tryC : conv -> conv
+topval tryC : conv -> conv
 
 (*
  * Subterm application.
  *)
-val someSubC : conv -> conv
-val allSubC : conv -> conv
+topval someSubC : conv -> conv
+topval allSubC : conv -> conv
 
 (*
  * First term, leftmost, outermost.
  *)
-val higherC : conv -> conv
+topval higherC : conv -> conv
 
 (*
  * First term, leftmost, innermost.
  *)
-val lowerC : conv -> conv
+topval lowerC : conv -> conv
 
 (*
  * Sweep the rewrite up from the leaves to the root.
  *)
-val sweepUpC : conv -> conv
+topval sweepUpC : conv -> conv
 
 (*
  * Sweep down from the root to the leaves.
  *)
-val sweepDnC : conv -> conv
+topval sweepDnC : conv -> conv
 
 (*
  * Use the first conversion that works.
  *)
-val firstC : conv list -> conv
+topval firstC : conv list -> conv
 
 (*
  * Repeat the conversion until nothing more happens.
  *)
-val repeatC : conv -> conv
-val repeatForC : int -> conv -> conv
+topval repeatC : conv -> conv
+topval repeatForC : int -> conv -> conv
 
 (*
  * -*-

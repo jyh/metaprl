@@ -16,7 +16,7 @@ include Czf_itt_dexists
 include Czf_itt_rel
 
 open Printf
-open Debug
+open Nl_debug
 
 let _ =
    if !debug_load then
@@ -70,7 +70,6 @@ interactive subset_collection 'H 's1 's2 's3 (bind{x. bind{y. 'P['x; 'y]}}) 'c '
    sequent ['ext] { 'H >- isset{'s2} } -->
    sequent [squash] { 'H; u: set; x: set; y: set >- "type"{'P['u; 'x; 'y]} } -->
    sequent ['ext] { 'H; u: set; x: set >- fun_prop{y. 'P['u; 'x; 'y]} } -->
-   sequent ['ext] { 'H; u: set; y: set >- fun_prop{x. 'P['u; 'x; 'y]} } -->
    sequent ['ext] { 'H; c: set; w: sall{u. (dall{'s1; x. dexists{'s2; y. 'P['u; 'x; 'y]}}) => (dexists{'c; s3. rel{x, y. 'P['u; 'x; 'y]; 's1; 's3}})} >- 'C } -->
    sequent ['ext] { 'H >- 'C }
 

@@ -12,7 +12,7 @@ include Itt_equal
 include Itt_logic
 
 open Printf
-open Debug
+open Nl_debug
 
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermMan

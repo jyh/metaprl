@@ -8,7 +8,7 @@ include Base_dform
 include Ocaml_df
 
 open Printf
-open Debug
+open Nl_debug
 
 (*
  * Show that the file is loading.

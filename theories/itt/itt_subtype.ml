@@ -6,7 +6,7 @@
 include Itt_equal
 
 open Printf
-open Debug
+open Nl_debug
 open Refiner.Refiner
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
@@ -195,6 +195,26 @@ let improve_data base = function
       insert base goal (subtype_f tac)
 
 (*
+ * Keep a list of resources for lookup by the toploop.
+ *)
+let resources = ref []
+
+let save name rsrc =
+   resources := (name, rsrc) :: !resources
+
+let get_resource name =
+   let rec search = function
+      (name', rsrc) :: tl ->
+         if name' = name then
+            rsrc
+         else
+            search tl
+    | [] ->
+         raise Not_found
+   in
+      search !resources
+
+(*
  * Extract a subtype tactic from the data.
  * Chain the tactics together.
  *)
@@ -234,7 +254,8 @@ and improve_resource { resource_data = data } arg =
      resource_close = close_resource
    }
 
-and close_resource rsrc =
+and close_resource rsrc modname =
+   save modname rsrc;
    rsrc
 
 (*

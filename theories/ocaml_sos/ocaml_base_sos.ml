@@ -6,7 +6,7 @@
 
 include Ocaml
 
-open Debug
+open Nl_debug
 open Printf
 
 let _ =

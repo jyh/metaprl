@@ -2,7 +2,7 @@
  * Simple tester.
  *)
 
-open Debug;;
+open Nl_debug;;
 open Util;;
 
 debug_string DebugLoad "Loading LF main...";;

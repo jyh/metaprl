@@ -6,11 +6,11 @@ open Refiner.Refiner.Term
 open Refiner.Refiner.RefineError
 
 open Printf
-open Debug
+open Nl_debug
 open Ctype
 
 open Sequent
-open Tacticals
+open Tactic_type
 
 (*
  * Debug statement.

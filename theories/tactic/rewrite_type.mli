@@ -7,8 +7,8 @@ include Perv
 
 open Refiner.Refiner.Refine
 
+open Tactic_type
 open Sequent
-open Tacticals
 
 (************************************************************************
  * TYPES                                                                *

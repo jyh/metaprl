@@ -40,15 +40,15 @@ define unfoldExists : "exists"{'A; x. 'B['x]} <--> x: 'A * 'B['x]
 rewrite reducePropTrue : "prop"["true":t] <--> "true"
 rewrite reducePropFalse : "prop"["false":t] <--> "false"
 
-val foldTrue : conv
-val foldFalse : conv
-val foldNot : conv
-val foldImplies : conv
-val foldIff : conv
-val foldAnd : conv
-val foldOr : conv
-val foldAll : conv
-val foldExists : conv
+topval foldTrue : conv
+topval foldFalse : conv
+topval foldNot : conv
+topval foldImplies : conv
+topval foldIff : conv
+topval foldAnd : conv
+topval foldOr : conv
+topval foldAll : conv
+topval foldExists : conv
 
 (************************************************************************
  * EXTRA RULES                                                          *
@@ -122,19 +122,19 @@ val mk_not_term : term -> term
  * AUTOMATION                                                           *
  ************************************************************************)
 
-val univCDT : tactic
-val genUnivCDT : tactic
-val instHypT : term list -> int -> tactic
+topval univCDT : tactic
+topval genUnivCDT : tactic
+topval instHypT : term list -> int -> tactic
 
 val back_hyp_prec : auto_prec
 val back_assum_prec : auto_prec
 
-val backThruHypT : int -> tactic
-val assumT : int -> tactic
-val backThruAssumT : int -> tactic
+topval backThruHypT : int -> tactic
+topval assumT : int -> tactic
+topval backThruAssumT : int -> tactic
 
-val moveToConclT : int -> tactic
-val moveToConclVarsT : string list -> tactic
+topval moveToConclT : int -> tactic
+topval moveToConclVarsT : string list -> tactic
 
 (*
  * -*-

@@ -20,7 +20,7 @@
 include Czf_itt_eq_inner
 
 open Printf
-open Debug
+open Nl_debug
 
 open Refiner.Refiner
 open Refiner.Refiner.Term

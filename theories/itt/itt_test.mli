@@ -4,7 +4,7 @@
 
 include Itt_theory
 
-val test : unit -> unit
+topval test : unit -> unit
 
 (*
  * -*-

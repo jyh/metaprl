@@ -6,7 +6,7 @@ include Czf_itt_sep
 include Czf_itt_set_ind
 
 open Printf
-open Debug
+open Nl_debug
 
 open Refiner.Refiner.RefineError
 open Resource
@@ -86,16 +86,6 @@ interactive dexists_elim 'H 'J 'x 'z 'v 'w :
    sequent ['ext] { 'H; x: "dexists"{'s; y. 'A['y]}; 'J['x] >- 'C['x] }
 
 (*
- * When this is a functional formula.
- *)
-interactive dexists_fun 'H 'w 'x :
-   sequent [squash] { 'H; w: set; x: set >- "type"{'B['w; 'x]} } -->
-   sequent ['ext] { 'H >- fun_set{w. 'A['w]} } -->
-   sequent ['ext] { 'H; w: set >- fun_prop{x. 'B['w; 'x]} } -->
-   sequent ['ext] { 'H; x: set >- fun_prop{w. 'B['w; 'x]} } -->
-   sequent ['ext] { 'H >- fun_prop{z. dexists{'A['z]; y. 'B['z; 'y]}} }
-
-(*
  * This is a restricted formula.
  *)
 interactive dexists_res 'H 'w 'x :
@@ -127,7 +117,6 @@ let d_dexistsT i p =
          (dexists_elim i j x z v w
           thenLT [addHiddenLabelT "wf";
                   addHiddenLabelT "wf";
-                  addHiddenLabelT "main";
                   addHiddenLabelT "main"]) p
 
 let dexists_term = << "dexists"{'T; x. 'A['x]} >>
@@ -147,24 +136,6 @@ let d_dexists_typeT i p =
 let dexists_type_term = << "type"{."dexists"{'s; z. 'A['z]}} >>
 
 let d_resource = d_resource.resource_improve d_resource (dexists_type_term, d_dexists_typeT)
-
-(*
- * Functional.
- *)
-let d_dexists_funT i p =
-   if i = 0 then
-      let w, x = maybe_new_vars2 p "w" "x" in
-         (dexists_fun (hyp_count p) w x
-          thenLT [addHiddenLabelT "wf";
-                  idT;
-                  idT;
-                  idT]) p
-   else
-      raise (RefineError ("d_dexists_funT", StringError "no eliminaton form"))
-
-let dexists_fun_term = << fun_prop{z. dexists{'A['z]; y. 'B['z; 'y]}} >>
-
-let d_resource = d_resource.resource_improve d_resource (dexists_fun_term, d_dexists_funT)
 
 (*
  * Restricted.

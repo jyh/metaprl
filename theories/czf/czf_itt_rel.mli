@@ -23,8 +23,8 @@ rewrite unfold_rel : rel{a, b. 'P['a; 'b]; 's1; 's2} <-->
 
 (*
  * $Log$
- * Revision 1.1  1998/07/17 15:39:09  jyh
- * CZF is complete, although we may wish to add pairing and inf.
+ * Revision 1.2  1998/07/21 22:45:36  jyh
+ * Added NL toploop so that we can compile NL native code.
  *
  *
  * -*-

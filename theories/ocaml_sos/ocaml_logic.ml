@@ -2,7 +2,7 @@
  * Utilities for the semantics.
  *)
 
-open Debug
+open Nl_debug
 open Printf
 
 let _ =

@@ -11,7 +11,7 @@ include Itt_bool
 include Itt_logic
 
 open Printf
-open Debug
+open Nl_debug
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
 open Refiner.Refiner.RefineError

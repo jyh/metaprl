@@ -12,7 +12,7 @@ include Sequent
 include Base_theory
 
 open Printf
-open Debug
+open Nl_debug
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermMan
 open Refiner.Refiner.RefineError
@@ -98,6 +98,26 @@ let extract_data base =
       squash
 
 (*
+ * Keep a list of resources for lookup by the toploop.
+ *)
+let resources = ref []
+
+let save name rsrc =
+   resources := (name, rsrc) :: !resources
+
+let get_resource name =
+   let rec search = function
+      (name', rsrc) :: tl ->
+         if name' = name then
+            rsrc
+         else
+            search tl
+    | [] ->
+         raise Not_found
+   in
+      search !resources
+
+(*
  * Wrap up the joiner.
  *)
 let rec join_resource { resource_data = data1 } { resource_data = data2 } =
@@ -119,7 +139,8 @@ and improve_resource { resource_data = data } (t, tac) =
      resource_close = close_resource
    }
 
-and close_resource rsrc =
+and close_resource rsrc modname =
+   save modname rsrc;
    rsrc
 
 (*

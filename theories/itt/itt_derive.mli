@@ -14,9 +14,9 @@ open Tacticals
  * RULES                                                                *
  ************************************************************************)
 
-val applyT : term -> int -> tactic
-val anyApplyT : term list -> int -> tactic
-val autoApplyT : int -> tactic
+topval applyT : term -> int -> tactic
+topval anyApplyT : term list -> int -> tactic
+topval autoApplyT : int -> tactic
 
 (*
  * -*-

@@ -20,7 +20,7 @@
 include Itt_theory
 
 open Printf
-open Debug
+open Nl_debug
 
 open Refiner.Refiner
 open Refiner.Refiner.Term
@@ -36,6 +36,7 @@ open Tacticals
 open Conversionals
 open Sequent
 open Var
+open Nltop
 
 open Base_dtactic
 open Base_auto_tactic

@@ -2,7 +2,7 @@
  * Semantics of sig_item's
  *)
 
-open Debug
+open Nl_debug
 open Printf
 
 let _ =

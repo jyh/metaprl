@@ -10,7 +10,7 @@ include Itt_set
 include Itt_rfun
 
 open Printf
-open Debug
+open Nl_debug
 open Refiner.Refiner
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp

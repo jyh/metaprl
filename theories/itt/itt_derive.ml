@@ -16,6 +16,7 @@ open Resource
 open Tacticals
 open Sequent
 open Var
+open Nltop
 
 open Typeinf
 

@@ -6,7 +6,7 @@ include Perv
 include Nuprl_font
 
 open Printf
-open Debug
+open Nl_debug
 
 open Refiner.Refiner
 open Refiner.Refiner.Term

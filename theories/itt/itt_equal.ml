@@ -8,7 +8,7 @@ include Base_theory
 include Itt_squash
 
 open Printf
-open Debug
+open Nl_debug
 open Opname
 open Refiner.Refiner
 open Refiner.Refiner.Term
@@ -23,6 +23,7 @@ open Resource
 
 open Tacticals
 open Sequent
+open Nltop
 
 open Base_auto_tactic
 
@@ -331,6 +332,26 @@ let extract_data base =
       eqcd
 
 (*
+ * Keep a list of resources for lookup by the toploop.
+ *)
+let resources = ref []
+
+let save name rsrc =
+   resources := (name, rsrc) :: !resources
+
+let get_resource name =
+   let rec search = function
+      (name', rsrc) :: tl ->
+         if name' = name then
+            rsrc
+         else
+            search tl
+    | [] ->
+         raise Not_found
+   in
+      search !resources
+
+(*
  * Wrap up the joiner.
  *)
 let rec join_resource { resource_data = data1 } { resource_data = data2 } =
@@ -352,7 +373,7 @@ and improve_resource { resource_data = data } (t, tac) =
      resource_close = close_resource
    }
 
-and close_resource rsrc =
+and close_resource rsrc _ =
    rsrc
 
 (*

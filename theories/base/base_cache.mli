@@ -21,6 +21,11 @@ type t
 resource (cache_rule, cache, t) cache_resource
 
 (*
+ * Access to caches for toploop.
+ *)
+val get_resource : string -> cache_resource
+
+(*
  * -*-
  * Local Variables:
  * Caml-master: "refiner"

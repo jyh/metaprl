@@ -10,7 +10,7 @@ include Itt_fun
 include Itt_prod
 
 open Printf
-open Debug
+open Nl_debug
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
 open Resource

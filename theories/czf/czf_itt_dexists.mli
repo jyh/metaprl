@@ -63,16 +63,6 @@ axiom dexists_elim 'H 'J 'x 'z 'v 'w :
    sequent ['ext] { 'H; x: "dexists"{'s; y. 'A['y]}; 'J['x] >- 'C['x] }
 
 (*
- * When this is a functional formula.
- *)
-axiom dexists_fun 'H 'w 'x :
-   sequent [squash] { 'H; w: set; x: set >- "type"{'B['w; 'x]} } -->
-   sequent ['ext] { 'H >- fun_set{w. 'A['w]} } -->
-   sequent ['ext] { 'H; w: set >- fun_prop{x. 'B['w; 'x]} } -->
-   sequent ['ext] { 'H; x: set >- fun_prop{w. 'B['w; 'x]} } -->
-   sequent ['ext] { 'H >- fun_prop{z. dexists{'A['z]; y. 'B['z; 'y]}} }
-
-(*
  * This is a restricted formula.
  *)
 axiom dexists_res 'H 'w 'x :

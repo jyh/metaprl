@@ -18,7 +18,7 @@
  *    1. It contains a Refine.tactic
  *)
 
-open Debug
+open Nl_debug
 open Printf
 
 open Refiner.Refiner

@@ -2,7 +2,7 @@
  * Semantics of module expressions.
  *)
 
-open Debug
+open Nl_debug
 open Printf
 
 let _ =

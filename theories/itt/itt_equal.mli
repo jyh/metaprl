@@ -189,7 +189,12 @@ type eqcd_data
 
 resource (term * tactic, tactic, eqcd_data) eqcd_resource
 
-val eqcdT : tactic
+(*
+ * Access to resources from toploop.
+ *)
+val get_resource : string -> eqcd_resource
+
+topval eqcdT : tactic
 
 (************************************************************************
  * PRIMITIVES AND TACTICS                                               *
@@ -216,22 +221,22 @@ val it_term : term
 val d_equalT : int -> tactic
 val eqcd_univT : tactic
 val eqcd_itT : tactic
-val squash_equalT : tactic
-val squash_typeT : tactic
+topval squash_equalT : tactic
+topval squash_typeT : tactic
 
 (*
  * Turn an eqcd tactic into a d tactic.
  *)
 val d_wrap_eqcd : tactic -> int -> tactic
 
-val unsquashT : term -> tactic
-val equalAssumT : int -> tactic
-val equalRefT : term -> tactic
-val equalSymT : tactic
-val equalTransT : term -> tactic
+topval unsquashT : term -> tactic
+topval equalAssumT : int -> tactic
+topval equalRefT : term -> tactic
+topval equalSymT : tactic
+topval equalTransT : term -> tactic
 
-val univTypeT : term -> tactic
-val univAssumT : int -> tactic
+topval univTypeT : term -> tactic
+topval univAssumT : int -> tactic
 
 (*
  * -*-

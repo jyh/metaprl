@@ -10,7 +10,7 @@ include Itt_equal
 include Itt_subtype
 
 open Printf
-open Debug
+open Nl_debug
 open Sequent
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp

@@ -5,7 +5,7 @@
 include Czf_itt_and
 
 open Printf
-open Debug
+open Nl_debug
 
 open Refiner.Refiner.RefineError
 open Resource

@@ -173,17 +173,17 @@ val dest_set_ind : term -> string * string * string * term * term
 (*
  * isset{'s} => 's = 's in set
  *)
-val eqSetT : tactic
+topval eqSetT : tactic
 
 (*
  * H, x: set, J >- isset{x}
  *)
-val setAssumT : int -> tactic
+topval setAssumT : int -> tactic
 
 (*
  * Replace a set with a collect.
  *)
-val splitT : term -> int -> tactic
+topval splitT : term -> int -> tactic
 
 (*
  * Automation.

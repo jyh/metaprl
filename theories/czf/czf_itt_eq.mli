@@ -201,27 +201,30 @@ val dest_fun_prop : term -> string * term
 (*
  * Equality relations.
  *)
-val eqSetRefT : tactic
-val eqSetSymT : tactic
-val eqSetTransT : term -> tactic
+topval eqSetRefT : tactic
+topval eqSetSymT : tactic
+topval eqSetTransT : term -> tactic
 
 (*
  * 's1 = 's2 => isset{'s1}
  *)
-val eqSetLeftT : term -> tactic
+topval eqSetLeftT : term -> tactic
 
 (*
  * 's1 = 's2 => isset{'s2}
  *)
-val eqSetRightT : term -> tactic
+topval eqSetRightT : term -> tactic
 
 (*
  * Substitution.
  *)
-val setSubstT : term -> int -> tactic
+topval setSubstT : term -> int -> tactic
 
 (*
  * $Log$
+ * Revision 1.3  1998/07/21 22:45:26  jyh
+ * Added NL toploop so that we can compile NL native code.
+ *
  * Revision 1.2  1998/07/17 15:39:05  jyh
  * CZF is complete, although we may wish to add pairing and inf.
  *

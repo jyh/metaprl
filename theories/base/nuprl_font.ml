@@ -3,7 +3,7 @@
  *)
 
 open Printf
-open Debug
+open Nl_debug
 
 (*
  * Show that the file is loading.

@@ -10,6 +10,8 @@
  * that trivialT either proves the goal or fails.
  *)
 
+include Nltop
+
 open Resource
 
 open Tacticals
@@ -49,6 +51,12 @@ resource (tactic auto_info, tactic, tactic auto_data) trivial_resource
 resource (auto_tac auto_info, tactic, auto_tac auto_data) auto_resource
 
 (*
+ * Get values for the toploop.
+ *)
+val get_trivial_resource : string -> trivial_resource
+val get_auto_resource : string -> auto_resource
+
+(*
  * Operations on precedences.
  * The create operation takes a list of precedences that
  * are smaller, and another list that are larger.
@@ -72,18 +80,18 @@ val trivial_prec : auto_prec
 (*
  * Trivial tactic.
  *)
-val trivialT : tactic
+topval trivialT : tactic
 
 (*
  * The inherited tactic.
  *)
-val autoT : tactic
+topval autoT : tactic
 
 (*
  * These tactics are useful for trivial search.
  *)
-val onSomeHypT : (int -> tactic) -> tactic
-val onSomeAssumT : (int -> tactic) -> tactic
+topval onSomeHypT : (int -> tactic) -> tactic
+topval onSomeAssumT : (int -> tactic) -> tactic
 
 (*
  * Most times, a normal tactic is passed as auto_tac.
@@ -103,6 +111,9 @@ val auto_assum_progress : (int -> tactic_arg -> bool) -> (int -> tactic) -> auto
 
 (*
  * $Log$
+ * Revision 1.2  1998/07/21 22:45:04  jyh
+ * Added NL toploop so that we can compile NL native code.
+ *
  * Revision 1.1  1998/07/14 15:42:56  jyh
  * Intermediate version with auto tactic.
  *

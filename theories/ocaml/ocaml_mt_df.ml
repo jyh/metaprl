@@ -6,7 +6,7 @@ include Ocaml
 include Ocaml_base_df
 include Ocaml_expr_df
 
-open Debug
+open Nl_debug
 open Printf
 
 open Ocaml_expr_df

@@ -11,7 +11,7 @@ include Ocaml
 include Ocaml_base_sos
 include Ocaml_expr_sos
 
-open Debug
+open Nl_debug
 open Printf
 
 let _ =

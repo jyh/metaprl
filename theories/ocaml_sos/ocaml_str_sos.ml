@@ -2,7 +2,7 @@
  * Semantics of structure items.
  *)
 
-open Debug
+open Nl_debug
 open Printf
 
 let _ =

@@ -6,7 +6,7 @@
 include Itt_equal
 
 open Printf
-open Debug
+open Nl_debug
 open Refiner.Refiner
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermMan

@@ -3,7 +3,7 @@
 #
 DIR := theories/tactic
 ROOT := ../..
-INCLUDE := -I $(ROOT)/lib -I .
+INCLUDE := -I . -I $(ROOT)/lib -I $(CAMLP4LIB)
 OCAMLDEPFLAGS := -prl_init
 
 # Library files
@@ -12,9 +12,10 @@ NLFILES :=\
 	tactic_cache\
 	tactic_type\
 	sequent\
-	tacticals\
 	var\
 	rewrite_type\
+	nltop\
+	tacticals\
 	conversionals
 
 # Name of main libraries

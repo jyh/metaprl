@@ -6,18 +6,14 @@
  * rewrite tree.
  *)
 
-include Tacticals
+include Nltop
 
-open Debug
+open Nl_debug
 open Printf
 
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermSubst
 open Refiner.Refiner.RefineError
-
-open Tacticals
-
-open Tacticals
 
 (*
  * Debug statement.

@@ -132,9 +132,14 @@ type sub_data
 resource (sub_resource_info, tactic, sub_data) sub_resource
 
 (*
+ * Access to resources from the toploop.
+ *)
+val get_resource : string -> sub_resource
+
+(*
  * Utilities.
  *)
-val subtypeT : tactic
+topval subtypeT : tactic
 
 (************************************************************************
  * TACTICS                                                              *

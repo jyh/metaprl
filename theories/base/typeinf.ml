@@ -7,7 +7,7 @@
 include Tacticals
 
 open Printf
-open Debug
+open Nl_debug
 
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermMan
@@ -81,6 +81,26 @@ let infer tbl =
       aux
 
 (*
+ * Keep a list of resources for lookup by the toploop.
+ *)
+let resources = ref []
+
+let save name rsrc =
+   resources := (name, rsrc) :: !resources
+
+let get_resource name =
+   let rec search = function
+      (name', rsrc) :: tl ->
+         if name' = name then
+            rsrc
+         else
+            search tl
+    | [] ->
+         raise Not_found
+   in
+      search !resources
+
+(*
  * Wrap up the algorithm.
  *)
 let rec join_resource { resource_data = tbl1 } { resource_data = tbl2 } =
@@ -103,7 +123,8 @@ and improve_resource { resource_data = tbl } (t, inf) =
      resource_close = close_resource
    }
 
-and close_resource rsrc =
+and close_resource rsrc modname =
+   save modname rsrc;
    rsrc
 
 (*

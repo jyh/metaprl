@@ -3,7 +3,7 @@
  * for ocaml terms.
  *)
 
-open Debug
+open Nl_debug
 open Printf
 
 open Refiner.Refiner

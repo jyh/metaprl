@@ -3,8 +3,10 @@
  * all the of tactics given.
  *)
 
+include Nltop
+
 open Printf
-open Debug
+open Nl_debug
 open Dag
 open Imp_dag
 
@@ -16,6 +18,7 @@ open Resource
 
 open Tacticals
 open Sequent
+open Nltop
 
 (*
  * Debugging.
@@ -210,6 +213,30 @@ let extract compile info =
       compile tactics
 
 (*
+ * Keep a list of resources for lookup by the toploop.
+ *)
+let trivial_resources = ref []
+let auto_resources = ref []
+
+let save resources name rsrc =
+   resources := (name, rsrc) :: !resources
+
+let get_resource resources name =
+   let rec search = function
+      (name', rsrc) :: tl ->
+         if name' = name then
+            rsrc
+         else
+            search tl
+    | [] ->
+         raise Not_found
+   in
+      search !resources
+
+let get_trivial_resource = get_resource trivial_resources
+let get_auto_resource = get_resource auto_resources
+
+(*
  * Wrap up the joiner.
  *)
 let rec join_resource
@@ -243,19 +270,23 @@ and improve_resource
      resource_close = close_resource
    }
 
-and close_resource
-    { resource_data = data;
-      resource_join = join_resource;
-      resource_extract = extract_resource;
-      resource_improve = improve_resource;
-      resource_close = close_resource
-    } =
-   { resource_data = Label data;
-     resource_join = join_resource;
-     resource_extract = extract_resource;
-     resource_improve = improve_resource;
-     resource_close = close_resource
-   }
+and close_resource resources rsrc modname =
+   let { resource_data = data;
+         resource_join = join_resource;
+         resource_extract = extract_resource;
+         resource_improve = improve_resource;
+         resource_close = close_resource
+       } = rsrc in
+   let rsrc =
+      { resource_data = Label data;
+        resource_join = join_resource;
+        resource_extract = extract_resource;
+        resource_improve = improve_resource;
+        resource_close = close_resource
+      }
+   in
+      save resources modname rsrc;
+      rsrc
 
 (*
  * Resource.
@@ -268,7 +299,7 @@ let trivial_resource =
      resource_join = join_resource;
      resource_extract = extract_triv_resource;
      resource_improve = improve_resource;
-     resource_close = close_resource
+     resource_close = close_resource trivial_resources
    }
 
 let extract_auto_resource { resource_data = data } =
@@ -279,7 +310,7 @@ let auto_resource =
      resource_join = join_resource;
      resource_extract = extract_auto_resource;
      resource_improve = improve_resource;
-     resource_close = close_resource
+     resource_close = close_resource auto_resources
    }
 
 (*
@@ -443,11 +474,6 @@ let onSomeHypT tac p =
          some 1 len p
 
 (*
- * $Log$
- * Revision 1.1  1998/07/14 15:42:56  jyh
- * Intermediate version with auto tactic.
- *
- *
  * -*-
  * Local Variables:
  * Caml-master: "refiner"

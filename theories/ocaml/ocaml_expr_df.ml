@@ -6,7 +6,7 @@
 include Ocaml
 include Ocaml_base_df
 
-open Debug
+open Nl_debug
 open Printf
 
 let _ =

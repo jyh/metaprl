@@ -12,7 +12,7 @@ include Itt_soft
 include Itt_struct
 
 open Printf
-open Debug
+open Nl_debug
 open Refiner.Refiner
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
@@ -25,6 +25,7 @@ open Resource
 open Tacticals
 open Conversionals
 open Sequent
+open Nltop
 
 open Base_auto_tactic
 open Base_dtactic

@@ -48,6 +48,11 @@ type typeinf_data
 resource (typeinf_resource_info, typeinf_func, typeinf_data) typeinf_resource
 
 (*
+ * Resources that have been created.
+ *)
+val get_resource : string -> typeinf_resource
+
+(*
  * Utilities.
  *)
 val typeinf_of_proof : tactic_arg -> typeinf_func

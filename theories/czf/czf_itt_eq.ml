@@ -20,6 +20,7 @@ open Resource
 open Sequent
 open Tacticals
 open Var
+open Nltop
 
 open Base_auto_tactic
 
@@ -443,14 +444,6 @@ let auto_resource =
       }
 
 (*
- * $Log$
- * Revision 1.2  1998/07/17 15:39:04  jyh
- * CZF is complete, although we may wish to add pairing and inf.
- *
- * Revision 1.1  1998/07/14 15:43:16  jyh
- * Intermediate version with auto tactic.
- *
- *
  * -*-
  * Local Variables:
  * Caml-master: "refiner"

@@ -34,9 +34,14 @@ type squash_data
 resource (term * tactic, tactic, squash_data) squash_resource
 
 (*
+ * Access to resources from the toploop.
+ *)
+val get_resource : string -> squash_resource
+
+(*
  * Utilities.
  *)
-val squashT : tactic
+topval squashT : tactic
 
 val is_squash_goal : tactic_arg -> bool
 val is_squash_sequent : term -> bool

@@ -9,7 +9,7 @@ include Itt_subtype
 include Itt_void
 
 open Printf
-open Debug
+open Nl_debug
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
 open Resource

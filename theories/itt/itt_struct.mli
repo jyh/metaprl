@@ -97,18 +97,18 @@ val is_bind_term : term -> bool
 val dest_bind : term -> string * term
 val mk_bind_term : string -> term -> term
 
-val nthHypT : int -> tactic
-val thinT : int -> tactic
-val thinAllT : int -> int -> tactic
-val assertT : term -> tactic
-val assertAtT : int -> term -> tactic
-val useWitnessT : term -> tactic
+topval nthHypT : int -> tactic
+topval thinT : int -> tactic
+topval thinAllT : int -> int -> tactic
+topval assertT : term -> tactic
+topval assertAtT : int -> term -> tactic
+topval useWitnessT : term -> tactic
 
-val substT : term -> int -> tactic
-val hypSubstT : int -> int -> tactic
-val revHypSubstT : int -> int -> tactic
+topval substT : term -> int -> tactic
+topval hypSubstT : int -> int -> tactic
+topval revHypSubstT : int -> int -> tactic
 
-val replaceHypT : term -> int -> tactic
+topval replaceHypT : term -> int -> tactic
 
 (*
  * -*-

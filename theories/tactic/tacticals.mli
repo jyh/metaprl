@@ -2,6 +2,8 @@
  * Some basic tacticals.
  *)
 
+include Nltop
+
 open Refiner.Refiner
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermSubst
@@ -18,39 +20,39 @@ val compose : extract -> extract list -> extract
 val term_of_extract : Refine.refiner -> extract -> term list -> term
 
 (* Trivial tactics *)
-val idT : tactic
-val failT : tactic
-val failWithT : string -> tactic
-val nthAssumT : int -> tactic
+topval idT : tactic
+topval failT : tactic
+topval failWithT : string -> tactic
+topval nthAssumT : int -> tactic
 
 (* Print timing information *)
-val timingT : tactic -> tactic
+topval timingT : tactic -> tactic
 
 (* Allow tactic only if no subgoals *)
-val completeT : tactic -> tactic
+topval completeT : tactic -> tactic
 
 (*
  * Repeatedly apply the tactic as long as there
  * is only one subgoal, and there is progress.
  *)
-val progressT : tactic -> tactic
-val repeatT : tactic -> tactic
-val repeatForT : int -> tactic -> tactic
-val seqOnSameConclT : tactic list -> tactic
+topval progressT : tactic -> tactic
+topval repeatT : tactic -> tactic
+topval repeatForT : int -> tactic -> tactic
+topval seqOnSameConclT : tactic list -> tactic
 
 (* Sequencing *)
-val prefix_orelseT : tactic -> tactic -> tactic
-val prefix_andalsoT : tactic -> tactic -> tactic
-val prefix_orthenT : tactic -> tactic -> tactic
-val firstT : tactic list -> tactic
-val tryT : tactic -> tactic
+topval prefix_orelseT : tactic -> tactic -> tactic
+topval prefix_andalsoT : tactic -> tactic -> tactic
+topval prefix_orthenT : tactic -> tactic -> tactic
+topval firstT : tactic list -> tactic
+topval tryT : tactic -> tactic
 
-val prefix_thenT : tactic -> tactic -> tactic
-val prefix_thenLT : tactic -> tactic list -> tactic
+topval prefix_thenT : tactic -> tactic -> tactic
+topval prefix_thenLT : tactic -> tactic list -> tactic
 val prefix_thenFLT : tactic -> (tactic_arg list -> tactic_value list) -> tactic
-val prefix_then_OnFirstT : tactic -> tactic -> tactic
-val prefix_then_OnLastT : tactic -> tactic -> tactic
-val prefix_then_OnSameConclT : tactic -> tactic -> tactic
+topval prefix_then_OnFirstT : tactic -> tactic -> tactic
+topval prefix_then_OnLastT : tactic -> tactic -> tactic
+topval prefix_then_OnSameConclT : tactic -> tactic -> tactic
 
 (*
  * Conditionals.
@@ -71,75 +73,75 @@ val untilT : (term -> bool) -> tactic -> tactic
 val main_labels : string list
 val predicate_labels : string list
 
-val addHiddenLabelT : string -> tactic
-val removeHiddenLabelT : tactic
-val keepingLabelT : tactic -> tactic
+topval addHiddenLabelT : string -> tactic
+topval removeHiddenLabelT : tactic
+topval keepingLabelT : tactic -> tactic
 val ifLabLT : (string * tactic) list -> tactic
-val ifLabT : string -> tactic -> tactic -> tactic
+topval ifLabT : string -> tactic -> tactic -> tactic
 
 (*
  * Label tacticals.
  *)
 val prefix_thenLabLT : tactic -> (string * tactic) list -> tactic
-val prefix_thenMT : tactic -> tactic -> tactic
-val prefix_thenMLT : tactic -> tactic list -> tactic
-val prefix_thenAT : tactic -> tactic -> tactic
-val prefix_thenALT : tactic -> tactic list -> tactic
-val prefix_thenWT : tactic -> tactic -> tactic
-val prefix_thenET : tactic -> tactic -> tactic
-val prefix_thenPT : tactic -> tactic -> tactic
+topval prefix_thenMT : tactic -> tactic -> tactic
+topval prefix_thenMLT : tactic -> tactic list -> tactic
+topval prefix_thenAT : tactic -> tactic -> tactic
+topval prefix_thenALT : tactic -> tactic list -> tactic
+topval prefix_thenWT : tactic -> tactic -> tactic
+topval prefix_thenET : tactic -> tactic -> tactic
+topval prefix_thenPT : tactic -> tactic -> tactic
 
-val repeatMT : tactic -> tactic
-val repeatMForT : int -> tactic -> tactic
-val seqOnMT : tactic list -> tactic
-val seqT : tactic list -> tactic
-val completeMT : tactic -> tactic
-val labProgressT : tactic -> tactic
+topval repeatMT : tactic -> tactic
+topval repeatMForT : int -> tactic -> tactic
+topval seqOnMT : tactic list -> tactic
+topval seqT : tactic list -> tactic
+topval completeMT : tactic -> tactic
+topval labProgressT : tactic -> tactic
 
 (*
  * Hyp and Clausal tactics.
  *)
-val onClauseT : int -> (int -> tactic) -> tactic
-val onHypT : int -> (int -> tactic) -> tactic
-val onConclT : (int -> tactic) -> tactic
+topval onClauseT : int -> (int -> tactic) -> tactic
+topval onHypT : int -> (int -> tactic) -> tactic
+topval onConclT : (int -> tactic) -> tactic
 
-val onClausesT : int list -> (int -> tactic) -> tactic
-val onHypsT : int list -> (int -> tactic) -> tactic
+topval onClausesT : int list -> (int -> tactic) -> tactic
+topval onHypsT : int list -> (int -> tactic) -> tactic
 
-val onMClausesT : int list -> (int -> tactic) -> tactic
-val onMHypsT : int list -> (int -> tactic) -> tactic
+topval onMClausesT : int list -> (int -> tactic) -> tactic
+topval onMHypsT : int list -> (int -> tactic) -> tactic
 
-val onAllHypsT : (int -> tactic) -> tactic
-val onAllClausesT : (int -> tactic) -> tactic
-val tryOnAllHypsT : (int -> tactic) -> tactic
-val tryOnAllClausesT : (int -> tactic) -> tactic
+topval onAllHypsT : (int -> tactic) -> tactic
+topval onAllClausesT : (int -> tactic) -> tactic
+topval tryOnAllHypsT : (int -> tactic) -> tactic
+topval tryOnAllClausesT : (int -> tactic) -> tactic
 
-val onAllMHypsT : (int -> tactic) -> tactic
-val onAllMClausesT : (int -> tactic) -> tactic
-val tryOnAllMHypsT : (int -> tactic) -> tactic
-val tryOnAllMClausesT : (int -> tactic) -> tactic
+topval onAllMHypsT : (int -> tactic) -> tactic
+topval onAllMClausesT : (int -> tactic) -> tactic
+topval tryOnAllMHypsT : (int -> tactic) -> tactic
+topval tryOnAllMClausesT : (int -> tactic) -> tactic
 
-val onSomeHypT : (int -> tactic) -> tactic
-val onVarT : string -> (int -> tactic) -> tactic
+topval onSomeHypT : (int -> tactic) -> tactic
+topval onVarT : string -> (int -> tactic) -> tactic
 
 (*
  * General argument functions.
  *)
-val withTermT : string -> term -> tactic -> tactic
-val withTypeT : string -> term -> tactic -> tactic
-val withBoolT : string -> bool -> tactic -> tactic
-val withIntT : string -> int -> tactic -> tactic
+topval withTermT : string -> term -> tactic -> tactic
+topval withTypeT : string -> term -> tactic -> tactic
+topval withBoolT : string -> bool -> tactic -> tactic
+topval withIntT : string -> int -> tactic -> tactic
 val withSubstT : term_subst -> tactic -> tactic
-val withTacticT : string -> tactic -> tactic -> tactic
+topval withTacticT : string -> tactic -> tactic -> tactic
 
 (*
  * Specific argument functions.
  *)
-val withT : term -> tactic -> tactic
+topval withT : term -> tactic -> tactic
 val usingT : term_subst -> tactic -> tactic
-val atT : term -> tactic -> tactic
-val selT : int -> tactic -> tactic
-val thinningT : bool -> tactic -> tactic
+topval atT : term -> tactic -> tactic
+topval selT : int -> tactic -> tactic
+topval thinningT : bool -> tactic -> tactic
 
 val get_with_arg : tactic_arg -> term
 val get_univ_arg : tactic_arg -> term

@@ -6,7 +6,7 @@
 include Perv
 
 open Printf
-open Debug
+open Nl_debug
 
 open Refiner.Refiner
 open Refiner.Refiner.Term
@@ -16,8 +16,8 @@ open Refiner.Refiner.RefineError
 open Refiner.Refiner.Rewrite
 open Refiner.Refiner.Refine
 
+open Tactic_type
 open Sequent
-open Tacticals
 open Var
 
 let debug_rewrite = load_debug "rewrite"

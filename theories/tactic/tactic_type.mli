@@ -3,7 +3,7 @@
  * A file with this name is required for every theory.
  *)
 
-open Debug
+open Nl_debug
 open Refiner.Refiner
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermSubst

@@ -18,16 +18,21 @@ type d_data
 resource (term * (int -> tactic), int -> tactic, d_data) d_resource
 
 (*
+ * Get a resource for the toploop.
+ *)
+val get_resource : string -> d_resource
+
+(*
  * The inherited d tactic.
  *)
 val d_prec : auto_prec
 
-val dT : int -> tactic
+topval dT : int -> tactic
 
 (*
  * Run dT 0 so many times.
  *)
-val dForT : int -> tactic
+topval dForT : int -> tactic
 
 (*
  * -*-

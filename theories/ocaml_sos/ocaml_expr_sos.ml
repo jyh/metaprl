@@ -17,7 +17,7 @@ include Ocaml
 include Ocaml_logic
 include Ocaml_base_sos
 
-open Debug
+open Nl_debug
 open Printf
 
 let _ =

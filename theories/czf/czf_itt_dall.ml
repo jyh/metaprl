@@ -5,7 +5,7 @@
 include Czf_itt_all
 include Czf_itt_set_ind
 
-open Debug
+open Nl_debug
 open Printf
 
 open Refiner.Refiner.RefineError
@@ -78,16 +78,6 @@ interactive dall_elim 'H 'J 'z 'w :
    sequent ['ext] { 'H; x: "dall"{'s; y. 'A['y]}; 'J['x] >- 'C['x] }
 
 (*
- * When this is a functional formula.
- *)
-interactive dall_fun 'H 'w 'x :
-   sequent [squash] { 'H; w: set; x: set >- "type"{'B['w; 'x]} } -->
-   sequent ['ext] { 'H >- fun_set{w. 'A['w]} } -->
-   sequent ['ext] { 'H; w: set >- fun_prop{x. 'B['w; 'x]} } -->
-   sequent ['ext] { 'H; x: set >- fun_prop{w. 'B['w; 'x]} } -->
-   sequent ['ext] { 'H >- fun_prop{z. dall{'A['z]; y. 'B['z; 'y]}} }
-
-(*
  * This is a restricted formula.
  *)
 interactive dall_res2 'H 'w 'x :
@@ -138,24 +128,6 @@ let d_dall_typeT i p =
 let dall_type_term = << "type"{."dall"{'s; x. 'A['x]}} >>
 
 let d_resource = d_resource.resource_improve d_resource (dall_type_term, d_dall_typeT)
-
-(*
- * Functional.
- *)
-let d_dall_funT i p =
-   if i = 0 then
-      let w, x = maybe_new_vars2 p "w" "x" in
-         (dall_fun (hyp_count p) w x
-          thenLT [addHiddenLabelT "wf";
-                  idT;
-                  idT;
-                  idT]) p
-   else
-      raise (RefineError ("d_dall_funT", StringError "no eliminaton form"))
-
-let dall_fun_term = << fun_prop{z. dall{'A['z]; y. 'B['z; 'y]}} >>
-
-let d_resource = d_resource.resource_improve d_resource (dall_fun_term, d_dall_funT)
 
 (*
  * Restricted.

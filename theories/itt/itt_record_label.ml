@@ -50,7 +50,7 @@ let mk_label_term = TermOp.mk_string_term label_opname
 
 (**** equality ****)
 
-define unfold_eq_label : eq_label[x:t,y:t]{'A;'B} <-->  meta_eq{label[x:t]; label[y:t]; 'A; 'B}
+define unfold_eq_label : eq_label[x:t,y:t]{'A;'B} <-->  meta_eq[x:t, y:t]{'A; 'B}
 
 (******************)
 (*   Rules        *)
@@ -80,7 +80,7 @@ interactive_rw reduce_eq_label_trivial_rw :
       eq_label[x:t,x:t]{'A;'B} <--> 'A
 
 let reduce_eq_label =  reduce_eq_label_trivial_rw orelseC
-                       (unfold_eq_label thenC reduce_meta_eq)
+                       (unfold_eq_label thenC reduce_meta_eq_tok)
 
 let resource reduce += << eq_label[x:t,y:t]{'A;'B}  >>, reduce_eq_label
 

@@ -47,9 +47,16 @@ declare meta_prod{'a; 'b}
 declare meta_quot{'a; 'b}
 declare meta_rem{'a; 'b}
 
-declare meta_eq{'a; 'b; 'tt; 'ff}
-declare meta_le{'a; 'b; 'tt; 'ff}
-declare meta_lt{'a; 'b; 'tt; 'ff}
+declare meta_eq[a:n,b:n]{'tt; 'ff}
+declare meta_eq[a:s,b:s]{'tt; 'ff}
+declare meta_eq[a:v,b:v]{'tt; 'ff}
+declare meta_eq[a:t,b:t]{'tt; 'ff}
+declare meta_eq[a:l,b:l]{'tt; 'ff}
+
+declare meta_lt[a:n,b:n]{'tt; 'ff}
+declare meta_lt[a:s,b:s]{'tt; 'ff}
+declare meta_lt[a:t,b:t]{'tt; 'ff}
+declare meta_lt[a:l,b:l]{'tt; 'ff}
 
 (*
  * Arithmetic operations.
@@ -99,96 +106,52 @@ ml_rw reduce_meta_rem  : ('goal : meta_rem{'a; 'b}) =
    arith (check_zero Mp_num.rem_num) goal
 
 (*
- * eq{op1[@t:t]; op2[p1]; op3[p2]} --> op1["true":t] if p1 = p2
- *                                 --> op2["false":t] if p1 <> p2
+ * eq[p1,p2]{t1,t2} --> t1 if p1 = p2
+ *                  --> t2 if p1 <> p2
  *)
 let eq goal =
-   let a, b, true_term, false_term = four_subterms goal in
-   let { term_op = op1; term_terms = terms1 } = dest_term a in
-   let { term_op = op2; term_terms = terms2 } = dest_term b in
-   let { op_name = name1; op_params = params1 } = dest_op op1 in
-   let { op_name = name2; op_params = params2 } = dest_op op2 in
-      match params1, params2, terms1, terms2 with
-         [p1], [p2], [], [] when Opname.eq name1 name2 ->
-            let flag =
-               match dest_param p1, dest_param p2 with
-                  Number i1, Number i2 ->
-                     Mp_num.eq_num i1 i2
-                | String s1, String s2
-                | Var s1, Var s2 ->
-                     s1 = s2
-                | Token t1, Token t2 ->
-                     t1 = t2
-                | MLevel l1, MLevel l2 ->
-                     l1 == l2
-                | _ ->
-                     raise (RefineError ("meta_eq", StringTermError ("ill-formed operation", goal)))
-            in
-               if flag then true_term else false_term
-       | _ ->
-            raise (RefineError ("Base_int.eq", StringTermError ("ill-formed operation", goal)))
+   let true_term, false_term = two_subterms goal in
+   let flag = match List.map dest_param (dest_op (dest_term goal).term_op).op_params with
+      [ Number i1; Number i2 ] ->
+         Mp_num.eq_num i1 i2
+    | [ String s1; String s2 ]
+    | [ Var s1; Var s2 ] ->
+         s1 = s2
+    | [ Token t1; Token t2 ] ->
+         t1 = t2
+    | [ MLevel l1; MLevel l2 ] ->
+         l1 == l2
+    | _ ->
+         raise (RefineError ("meta_eq", StringTermError ("ill-formed operation", goal)))
+   in
+      if flag then true_term else false_term
 
-ml_rw reduce_meta_eq : ('goal : meta_eq{'a; 'b; 'tt; 'ff}) =
-   eq goal
+ml_rw reduce_meta_eq_num : ('goal : meta_eq[a:n,b:n]{'tt; 'ff}) = eq goal
+ml_rw reduce_meta_eq_str : ('goal : meta_eq[a:s,b:s]{'tt; 'ff}) = eq goal
+ml_rw reduce_meta_eq_var : ('goal : meta_eq[a:v,b:v]{'tt; 'ff}) = eq goal
+ml_rw reduce_meta_eq_tok : ('goal : meta_eq[a:t,b:t]{'tt; 'ff}) = eq goal
+ml_rw reduce_meta_eq_lev : ('goal : meta_eq[a:l,b:l]{'tt; 'ff}) = eq goal
 
 let lt goal =
-   let a, b, true_term, false_term = four_subterms goal in
-   let { term_op = op1; term_terms = terms1 } = dest_term a in
-   let { term_op = op2; term_terms = terms2 } = dest_term b in
-   let { op_name = name1; op_params = params1 } = dest_op op1 in
-   let { op_name = name2; op_params = params2 } = dest_op op2 in
-      match params1, params2, terms1, terms2 with
-         [p1], [p2], [], [] when Opname.eq name1 name2 ->
-            let flag =
-               match dest_param p1, dest_param p2 with
-                  Number i1, Number i2 ->
-                     Mp_num.lt_num i1 i2
-                | String s1, String s2 ->
-                     s1 < s2
-                | Token t1, Token t2 ->
-                     t1 < t2
-                | MLevel l1, MLevel l2 ->
-                     level_lt l1 l2
-                | Var s1, Var s2 ->
-                     s1 = s2
-                | _ ->
-                     raise (RefineError ("meta_lt", StringTermError ("ill-formed operation", goal)))
-            in
-               if flag then true_term else false_term
-       | _ ->
-            raise (RefineError ("Base_int.lt", StringTermError ("ill-formed operation", goal)))
+   let true_term, false_term = two_subterms goal in
+   let flag = match List.map dest_param (dest_op (dest_term goal).term_op).op_params with
+      [ Number i1; Number i2 ] ->
+         Mp_num.lt_num i1 i2
+    | [ String s1; String s2 ] ->
+         s1 < s2
+    | [ Token t1; Token t2 ] ->
+         t1 < t2
+    | [ MLevel l1; MLevel l2 ] ->
+         level_lt l1 l2
+    | _ ->
+         raise (RefineError ("meta_lt", StringTermError ("ill-formed operation", goal)))
+   in
+      if flag then true_term else false_term
 
-ml_rw reduce_meta_lt : ('goal : meta_lt{'a; 'b; 'tt; 'ff}) =
-   lt goal
-
-let le goal =
-   let a, b, true_term, false_term = four_subterms goal in
-   let { term_op = op1; term_terms = terms1 } = dest_term a in
-   let { term_op = op2; term_terms = terms2 } = dest_term b in
-   let { op_name = name1; op_params = params1 } = dest_op op1 in
-   let { op_name = name2; op_params = params2 } = dest_op op2 in
-      match params1, params2, terms1, terms2 with
-         [p1], [p2], [], [] when Opname.eq name1 name2 ->
-            let flag =
-               match dest_param p1, dest_param p2 with
-                  Number i1, Number i2 ->
-                     Mp_num.le_num i1 i2
-                | String s1, String s2
-                | Var s1, Var s2 ->
-                     s1 <= s2
-                | Token t1, Token t2 ->
-                     t1 <= t2
-                | MLevel l1, MLevel l2 ->
-                     level_le l1 l2
-                | _ ->
-                     raise (RefineError ("meta_le", StringTermError ("ill-formed operation", goal)))
-            in
-               if flag then true_term else false_term
-       | _ ->
-            raise (RefineError ("Base_int.le", StringTermError ("ill-formed operation", goal)))
-
-ml_rw reduce_meta_le : ('goal : meta_le{'a; 'b; 'tt; 'ff}) =
-   le goal
+ml_rw reduce_meta_lt_num : ('goal : meta_lt[a:n, b:n]{'tt; 'ff}) = lt goal
+ml_rw reduce_meta_lt_str : ('goal : meta_lt[a:s, b:s]{'tt; 'ff}) = lt goal
+ml_rw reduce_meta_lt_tok : ('goal : meta_lt[a:t, b:t]{'tt; 'ff}) = lt goal
+ml_rw reduce_meta_lt_lev : ('goal : meta_lt[a:l, b:l]{'tt; 'ff}) = lt goal
 
 (*
  * -*-

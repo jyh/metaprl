@@ -66,10 +66,10 @@ dform eq_atom_df : parens :: "prec"[prec_eq_atom] :: except_mode[src] :: eq_atom
  ************************************************************************)
 
 prim_rw reduce_eq_atom' : eq_atom{token[x:t]; token[y:t]} <-->
-   meta_eq{token[x:t]; token[y:t]; btrue; bfalse}
+   meta_eq[x:t, y:t]{btrue; bfalse}
 
 let reduce_eq_atom =
-   reduce_eq_atom' thenC reduce_meta_eq
+   reduce_eq_atom' thenC reduce_meta_eq_tok
 
 let resource reduce += << eq_atom{token[x:t]; token[y:t]} >>, reduce_eq_atom
 

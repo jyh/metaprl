@@ -42,9 +42,16 @@ declare meta_prod{'a; 'b}
 declare meta_quot{'a; 'b}
 declare meta_rem{'a; 'b}
 
-declare meta_eq{'a; 'b; 'tt; 'ff}
-declare meta_le{'a; 'b; 'tt; 'ff}
-declare meta_lt{'a; 'b; 'tt; 'ff}
+declare meta_eq[a:n,b:n]{'tt; 'ff}
+declare meta_eq[a:s,b:s]{'tt; 'ff}
+declare meta_eq[a:v,b:v]{'tt; 'ff}
+declare meta_eq[a:t,b:t]{'tt; 'ff}
+declare meta_eq[a:l,b:l]{'tt; 'ff}
+
+declare meta_lt[a:n,b:n]{'tt; 'ff}
+declare meta_lt[a:s,b:s]{'tt; 'ff}
+declare meta_lt[a:t,b:t]{'tt; 'ff}
+declare meta_lt[a:l,b:l]{'tt; 'ff}
 
 (*
  * sum{op1[@i1:n]; op2[@i2:n]} --> op1[@i1 + @i2]
@@ -54,9 +61,17 @@ ml_rw reduce_meta_diff : meta_diff{'a; 'b}
 ml_rw reduce_meta_prod : meta_prod{'a; 'b}
 ml_rw reduce_meta_quot : meta_quot{'a; 'b}
 ml_rw reduce_meta_rem  : meta_rem{'a; 'b}
-ml_rw reduce_meta_eq : meta_eq{'a; 'b; 'tt; 'ff}
-ml_rw reduce_meta_lt : meta_lt{'a; 'b; 'tt; 'ff}
-ml_rw reduce_meta_le : meta_le{'a; 'b; 'tt; 'ff}
+
+ml_rw reduce_meta_eq_num : meta_eq[a:n,b:n]{'tt; 'ff}
+ml_rw reduce_meta_eq_str : meta_eq[a:s,b:s]{'tt; 'ff}
+ml_rw reduce_meta_eq_var : meta_eq[a:v,b:v]{'tt; 'ff}
+ml_rw reduce_meta_eq_tok : meta_eq[a:t,b:t]{'tt; 'ff}
+ml_rw reduce_meta_eq_lev : meta_eq[a:l,b:l]{'tt; 'ff}
+
+ml_rw reduce_meta_lt_num : meta_lt[a:n, b:n]{'tt; 'ff}
+ml_rw reduce_meta_lt_str : meta_lt[a:s, b:s]{'tt; 'ff}
+ml_rw reduce_meta_lt_tok : meta_lt[a:t, b:t]{'tt; 'ff}
+ml_rw reduce_meta_lt_lev : meta_lt[a:l, b:l]{'tt; 'ff}
 
 (*
  * -*-

@@ -251,10 +251,10 @@ let eqcdT p =
  ************************************************************************)
 
 prim_rw reduce_cumulativity' : cumulativity[i:l, j:l] <-->
-   meta_lt{univ[i:l]; univ[j:l]; ."true"; ."false"}
+   meta_lt[i:l, j:l]{."true"; ."false"}
 
 let reduce_cumulativity =
-   reduce_cumulativity' thenC reduce_meta_lt
+   reduce_cumulativity' thenC reduce_meta_lt_lev
 
 (************************************************************************
  * DISPLAY FORMS                                                        *

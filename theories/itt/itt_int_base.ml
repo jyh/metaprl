@@ -317,10 +317,10 @@ prim_rw reduce_sub_meta : (number[i:n] -@ number[j:n]) <-->
    meta_diff{number[i:n]; number[j:n]}
 
 prim_rw reduce_lt_meta : lt_bool{number[i:n]; number[j:n]} <-->
-   meta_lt{number[i:n]; number[j:n]; btrue; bfalse}
+   meta_lt[i:n, j:n]{btrue; bfalse}
 
 prim_rw reduce_beq_int_meta : beq_int{number[i:n]; number[j:n]} <-->
-   meta_eq{number[i:n]; number[j:n]; btrue; bfalse}
+   meta_eq[i:n, j:n]{btrue; bfalse}
 
 (*! @docoff *)
 
@@ -334,10 +334,10 @@ let reduce_sub =
    reduce_sub_meta thenC reduce_meta_diff
 
 let reduce_lt =
-   reduce_lt_meta thenC reduce_meta_lt
+   reduce_lt_meta thenC reduce_meta_lt_num
 
 let reduce_eq_int =
-   reduce_beq_int_meta thenC reduce_meta_eq
+   reduce_beq_int_meta thenC reduce_meta_eq_num
 
 let resource reduce += [
    <<number[i:n] +@ number[j:n]>>, reduce_add;

@@ -36,9 +36,8 @@ doc <:doc<
 >>
 
 doc <:doc< @doc{@parents} >>
-extends Itt_field2
-doc docoff
 extends Itt_cyclic_group
+doc docoff
 
 open Lm_debug
 open Tactic_type.Tacticals
@@ -46,167 +45,10 @@ open Dtactic
 open Top_conversionals
 
 open Itt_grouplikeobj
-open Itt_field2
-open Itt_ring2
 open Itt_equal
 
 let _ =
    show_loading "Loading Itt_poly%t"
-
-(************************************************************************
- * Decidable Equality                                                   *
- ************************************************************************)
-
-doc <:doc<
-   @begin[doc]
-   @modsection{Decidable Equality}
-   @modsubsection{Rewrites}
-
-   @end[doc]
->>
-define unfold_eqDecidable : eqDecidable{'f} <-->
-   all x: 'f^car. all y: 'f^car. "iff"{'x = 'y in 'f^car; "assert"{'f^eq 'x 'y}}
-doc docoff
-
-let fold_eqDecidable = makeFoldC << eqDecidable{'f} >> unfold_eqDecidable
-
-(* Rules about eqDecidable *)
-doc <:doc<
-   @begin[doc]
-   @modsection{Well-formedness, Introduction, Elimination}
-   @modsubsection{Rewrites}
-
-   @end[doc]
->>
-interactive eqDecidable_wf {| intro [] |} :
-   sequent { <H> >- 'f^car Type } -->
-   sequent { <H>; x: 'f^car; y: 'f^car >- 'f^eq 'x 'y in bool } -->
-   sequent { <H> >- eqDecidable{'f} Type }
-
-interactive eqDecidable_intro {| intro [] |} :
-   sequent { <H> >- 'f^car Type } -->
-   sequent { <H>; x: 'f^car; y: 'f^car >- 'f^eq 'x 'y in bool } -->
-   sequent { <H>; x: 'f^car; y: 'f^car; 'x = 'y in 'f^car >- "assert"{'f^eq 'x 'y} } -->
-   sequent { <H>; x: 'f^car; y: 'f^car; "assert"{'f^eq 'x 'y} >- 'x = 'y in 'f^car } -->
-   sequent { <H> >- eqDecidable{'f} }
-
-interactive eqDecidable_elim {| elim [] |} 'H :
-   sequent { <H>; u: all x: 'f^car. all y: 'f^car. "iff"{'x = 'y in 'f^car; "assert"{'f^eq 'x 'y}}; <J['u]> >- 'C['u] } -->
-   sequent { <H>; u: eqDecidable{'f}; <J['u]> >- 'C['u] }
-doc docoff
-
-(************************************************************************
- * Field with Decidable Equality                                        *
- ************************************************************************)
-doc <:doc<
-   @begin[doc]
-   @modsection{Field with decidable equality}
-   @modsubsection{Rewrites}
-
-   @end[doc]
->>
-define unfold_prefieldE1 : prefieldE[i:l] <-->
-   record["eq":t]{r. ('r^car -> 'r^car -> bool); prefield[i:l]}
-
-define unfold_isFieldE1 : isFieldE{'f} <-->
-   isField{'f} & eqDecidable{'f}
-
-define unfold_fieldE1 : fieldE[i:l] <-->
-   {f: prefieldE[i:l] | isFieldE{'f}}
-doc docoff
-
-let unfold_prefieldE = unfold_prefieldE1 thenC addrC [1] unfold_prefield
-let unfold_isFieldE = unfold_isFieldE1 thenC addrC [0] unfold_isField thenC addrC [1] unfold_eqDecidable
-let unfold_fieldE = unfold_fieldE1 thenC addrC [0] unfold_prefieldE thenC addrC [1] unfold_isFieldE
-
-let fold_prefieldE1 = makeFoldC << prefieldE[i:l] >> unfold_prefieldE1
-let fold_prefieldE = makeFoldC << prefieldE[i:l] >> unfold_prefieldE
-let fold_isFieldE1 = makeFoldC << isFieldE{'f} >> unfold_isFieldE1
-let fold_isFieldE = makeFoldC << isFieldE{'f} >> unfold_isFieldE
-let fold_fieldE1 = makeFoldC << fieldE[i:l] >> unfold_fieldE1
-let fold_fieldE = makeFoldC << fieldE[i:l] >> unfold_fieldE
-
-let fieldEDT n = rw unfold_fieldE n thenT dT n
-
-let resource elim +=
-   [<<fieldE[i:l]>>, fieldEDT]
-
-doc <:doc<
-   @begin[doc]
-   @modsubsection{Well-formedness}
-
-   @end[doc]
->>
-interactive prefieldE_wf {| intro [] |} :
-   sequent { <H> >- prefieldE[i:l] Type }
-
-interactive isFieldE_wf {| intro [] |} :
-   sequent { <H> >- isField{'f} Type } -->
-   sequent { <H> >- eqDecidable{'f} Type } -->
-   sequent { <H> >- isFieldE{'f} Type }
-
-interactive fieldE_wf {| intro [] |} :
-   sequent { <H> >- fieldE[i:l] Type }
-
-doc <:doc<
-   @begin[doc]
-   @modsubsection{Introduction and Elimination}
-
-   @end[doc]
->>
-interactive prefieldE_intro {| intro [AutoMustComplete] |} :
-   sequent { <H> >- 'f in prefield[i:l] } -->
-   sequent { <H> >- 'f in {"eq": 'f^car -> 'f^car -> bool} } -->
-   sequent { <H> >- 'f in prefieldE[i:l] }
-
-interactive prefieldE_equality {| intro [complete_unless_member] |} :
-   sequent { <H> >- 'A = 'B in prefield[i:l] } -->
-   sequent { <H> >- 'A = 'B in {"eq": 'A^car -> 'A^car -> bool} } -->
-   sequent { <H> >- 'A = 'B in prefieldE[i:l] }
-
-interactive prefieldE_elim {| elim [] |} 'H :
-   sequent { <H>; f: prefield[i:l]; x: 'f^car -> 'f^car -> bool; <J['f^eq:='x]> >- 'C['f^eq:='x] } -->
-   sequent { <H>; f: prefieldE[i:l]; <J['f]> >- 'C['f] }
-doc docoff
-
-interactive car_prefieldE_wf {| intro [AutoMustComplete; intro_typeinf <<'f>>] |} prefieldE[i:l] :
-   sequent { <H> >- 'f in prefieldE[i:l] } -->
-   sequent { <H> >- 'f^car Type }
-
-doc <:doc< @doc{ } >>
-interactive isFieldE_intro {| intro [AutoMustComplete] |} :
-   sequent { <H> >- isField{'f} } -->
-   sequent { <H> >- eqDecidable{'f} } -->
-   sequent { <H> >- isFieldE{'f} }
-
-interactive isFieldE_elim1 {| elim [] |} 'H :
-   sequent { <H>; x: isField{'f}; y: eqDecidable{'f}; <J['x, 'y]> >- 'C['x, 'y] } -->
-   sequent { <H>; u: isFieldE{'f}; <J['u]> >- 'C['u] }
-
-interactive isFieldE_elim2 {| elim [] |} 'H :
-   sequent { <H>; x: isField{'f}; y: all x: 'f^car. all y: 'f^car. "iff"{'x = 'y in 'f^car; "assert"{'f^eq 'x 'y}}; <J['x, 'y]> >- 'C['x, 'y] } -->
-   sequent { <H>; u: isFieldE{'f}; <J['u]> >- 'C['u] }
-
-interactive fieldE_intro {| intro [AutoMustComplete] |} :
-   [wf] sequent { <H> >- 'f in prefieldE[i:l] } -->
-   [main] sequent { <H> >- isFieldE{'f} } -->
-   sequent { <H> >- 'f in fieldE[i:l] }
-
-interactive fieldE_intro1 {| intro [AutoMustComplete] |} :
-   [wf] sequent { <H> >- 'f in field[i:l] } -->
-   sequent { <H> >- 'f in {"eq": 'f^car -> 'f^car -> bool} } -->
-   sequent { <H> >- eqDecidable{'f} } -->
-   sequent { <H> >- 'f in fieldE[i:l] }
-
-interactive fieldE_equality {| intro [AutoMustComplete] |} :
-   sequent { <H> >- 'A = 'B in prefieldE[i:l] } -->
-   [main] sequent { <H> >- isFieldE{'A} } -->
-   sequent { <H> >- 'A = 'B in fieldE[i:l] }
-
-interactive fieldE_elim1 {| elim [] |} 'H :
-   sequent { <H>; f: prefieldE[i:l]; u: isFieldE{'f}; <J['f]> >- 'C['f] } -->
-   sequent { <H>; f: fieldE[i:l]; <J['f]> >- 'C['f] }
-doc docoff
 
 (************************************************************************
  * Polynomials                                                          *
@@ -496,7 +338,7 @@ interactive eval_normalize {| intro [] |} :
    [wf] sequent { <H>; x: 'F^car; y: 'F^car >- 'x *['F] 'y in 'F^car } -->
    sequent { <H> >- eval_poly{normalize{'p; 'F}; 'a; 'F} = eval_poly{'p; 'a; 'F} in 'F^car }
 
-interactive eval_add_distrib {| intro [intro_typeinf <<'F>>] |} fieldE[i:l] :
+(*interactive eval_add_distrib {| intro [intro_typeinf <<'F>>] |} fieldE[i:l] :
    [wf] sequent { <H> >- 'p in poly{'F} } -->
    [wf] sequent { <H> >- 'q in poly{'F} } -->
    [wf] sequent { <H> >- 'a in 'F^car } -->
@@ -509,35 +351,13 @@ interactive eval_mul_distrib {| intro [intro_typeinf <<'F>>] |} fieldE[i:l] :
    [wf] sequent { <H> >- 'a in 'F^car } -->
    [wf] sequent { <H> >- 'F in fieldE[i:l] } -->
    sequent { <H> >- eval_poly{'p; 'a; 'F} *['F] eval_poly{'q; 'a; 'F} = eval_poly{mul_poly{'p; 'q; 'F}; 'a; 'F} in 'F^car }
-
+*)
 (************************************************************************
  * DISPLAY FOfMS                                                        *
  ************************************************************************)
 
-dform fieldE_df1 : except_mode[src] :: except_mode[prl] :: fieldE[i:l] =
-   mathbbF `"ieldE" sub{slot[i:l]}
-
-dform fieldE_df2 : mode[prl] :: fieldE[i:l] =
-   `"FieldE[" slot[i:l] `"]"
-
-dform prefieldE_df1 : except_mode[src] :: except_mode[prl] :: prefieldE[i:l] =
-   `"prefieldE" sub{slot[i:l]}
-
-dform prefieldE_df2 : mode[prl] :: prefieldE[i:l] =
-   `"prefieldE[" slot[i:l] `"]"
-
-dform isFieldE_df : except_mode[src] :: isFieldE{'F} =
-   `"isFieldE(" slot{'F} `")"
-
-dform eqDecidable_df : except_mode[src] :: eqDecidable{'F} =
-   `"eqDecidable(" slot{'F} `")"
-
-dform eq_df1 : except_mode[src] :: except_mode[prl] :: parens :: ('F^eq 'a 'b)
- =
-   slot["le"]{'a} `"=" sub{'F} slot["le"]{'b}
-
-dform eq_df2 : mode[prl] :: parens :: ('F^eq 'a 'b) =
-   slot["le"]{'a} `" " slot{'F} `".eq " slot["le"]{'b}
+prec prec_add
+prec prec_add < prec_mul
 
 dform poly_df : except_mode[src] :: poly{'F} =
    slot{'F} `"[x]"

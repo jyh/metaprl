@@ -2,7 +2,7 @@ doc <:doc<
    @begin[doc]
    @module[Itt_unitring]
 
-   This theory defines unit rings.
+   This theory defines unitrings.
    @end[doc]
 
    ----------------------------------------------------------------

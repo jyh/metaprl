@@ -90,11 +90,15 @@ MPFILES :=\
 	itt_quotient_group\
 	itt_ring\
 	itt_field\
-	itt_ring2\
-        itt_unitring\
-	itt_intdomain\
-	itt_field2\
 	itt_poly\
+	itt_ring2\
+	itt_ringE\
+	itt_unitring\
+	itt_unitringCE\
+	itt_intdomain\
+	itt_intdomainE\
+	itt_field2\
+	itt_fieldE\
 	itt_order\
 	itt_example\
 	itt_rat\

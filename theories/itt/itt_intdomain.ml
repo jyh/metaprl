@@ -427,7 +427,7 @@ doc <:doc<
  ************************************************************************)
 
 dform intDomain_df1 : except_mode[src] :: except_mode[prl] :: intDomain[i:l] =
-   mathbbF `"ield" sub{slot[i:l]}
+   mathbbI `"ntDomain" sub{slot[i:l]}
 
 dform intDomain_df2 : mode[prl] :: intDomain[i:l] =
    `"IntDomain[" slot[i:l] `"]"

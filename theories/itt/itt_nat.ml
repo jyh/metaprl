@@ -55,6 +55,7 @@ doc <:doc< @docoff >>
 open Tactic_type.Tacticals
 open Var
 
+open Auto_tactic
 open Dtactic
 open Top_conversionals
 open Itt_bool
@@ -127,11 +128,8 @@ interactive nat_is_int :
    sequent { <H> >- 'a='b in nat} -->
    sequent { <H> >- 'a='b in int}
 
-interactive nat_is_int2 'H :
+interactive nat_is_int2 {| nth_hyp |} 'H :
    sequent { <H>; a: nat; <J['a]> >- 'a in int }
-
-let resource intro += 
-   ( <<'a in int>>, ( "nat_is_int2", None, onSomeHypT nat_is_int2 ))
 
 interactive nat_is_subtype_of_int  {| intro[] |} :
    sequent { <H> >- nat subtype int }

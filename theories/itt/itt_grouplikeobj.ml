@@ -87,25 +87,25 @@ let _ =
  * @end[doc]
  *)
 define unfold_groupoid : groupoid[i:l] <-->
-   {"G": univ[i:l]; "*": ^"G" -> ^"G" -> ^"G"}
+   {car: univ[i:l]; "*": ^car -> ^car -> ^car}
 
 define unfold_isSemigroup : isSemigroup{'g} <-->
-   all x: 'g^"G". all y: 'g^"G". all z: 'g^"G". (('g^"*") (('g^"*") 'x 'y) 'z = ('g^"*") 'x (('g^"*") 'y 'z) in 'g^"G")
+   all x: 'g^car. all y: 'g^car. all z: 'g^car. (('g^"*") (('g^"*") 'x 'y) 'z = ('g^"*") 'x (('g^"*") 'y 'z) in 'g^car)
 
 define unfold_semigroup1 : semigroup[i:l] <-->
    {g: groupoid[i:l] | isSemigroup{'g}}
 
 define unfold_premonoid1 : premonoid[i:l] <-->
-   record["e":t]{r. 'r^"G"; groupoid[i:l]}
+   record["1":t]{r. 'r^car; groupoid[i:l]}
 
 define unfold_isMonoid : isMonoid{'g} <-->
-   isSemigroup{'g} & all x: 'g^"G". (('g^"*") ('g^"e") 'x = 'x  in 'g^"G" & ('g^"*") 'x ('g^"e") = 'x in 'g^"G" )
+   isSemigroup{'g} & all x: 'g^car. (('g^"*") ('g^"1") 'x = 'x  in 'g^car & ('g^"*") 'x ('g^"1") = 'x in 'g^car )
 
 define unfold_monoid1 : monoid[i:l] <-->
    {g: premonoid[i:l] | isMonoid{'g}}
 
 define unfold_isCommutative : isCommutative{'g} <-->
-   all x: 'g^"G". all y: 'g^"G". (('g^"*") 'x 'y = ('g^"*") 'y 'x in 'g^"G")
+   all x: 'g^car. all y: 'g^car. (('g^"*") 'x 'y = ('g^"*") 'y 'x in 'g^car)
 
 define unfold_csemigroup1 : csemigroup[i:l] <-->
    {g: groupoid[i:l] | isSemigroup{'g} & isCommutative{'g}}
@@ -115,19 +115,19 @@ define unfold_cmonoid1 : cmonoid[i:l] <-->
 (*! @docoff *)
 
 interactive_rw unfold_semigroup :
-   semigroup[i:l] <--> {self: {"G": univ[i:l]; "*": ^"G" -> ^"G" -> ^"G"} | all x: ^"G". all y: ^"G". all z: ^"G". ('x ^* 'y) ^* 'z = 'x ^* ('y ^* 'z) in ^"G"}
+   semigroup[i:l] <--> {car: univ[i:l]; "*": ^car -> ^car -> ^car; all x: ^car. all y: ^car. all z: ^car. ('x ^* 'y) ^* 'z = 'x ^* ('y ^* 'z) in ^car}
 
 interactive_rw unfold_premonoid : 
-   premonoid[i:l] <--> record["e":t]{r. 'r^"G"; {"G": univ[i:l]; "*": ^"G" -> ^"G" -> ^"G"}}
+   premonoid[i:l] <--> record["1":t]{r. 'r^car; {car: univ[i:l]; "*": ^car -> ^car -> ^car}}
 
 interactive_rw unfold_monoid :
-   monoid[i:l] <--> {self: {"G": univ[i:l]; "*": ^"G" -> ^"G" -> ^"G"; "e": ^"G"} | (all x: ^"G". all y: ^"G". all z: ^"G". ('x ^* 'y) ^* 'z = 'x ^* ('y ^* 'z) in ^"G") & (all x: ^"G". (^"e" ^* 'x = 'x in ^"G" & 'x ^* ^"e" = 'x in ^"G"))}
+   monoid[i:l] <--> {car: univ[i:l]; "*": ^car -> ^car -> ^car; "1": ^car; (all x: ^car. all y: ^car. all z: ^car. ('x ^* 'y) ^* 'z = 'x ^* ('y ^* 'z) in ^car) & (all x: ^car. (^"1" ^* 'x = 'x in ^car & 'x ^* ^"1" = 'x in ^car))}
 
 interactive_rw unfold_csemigroup :
-   csemigroup[i:l] <--> {self: {"G": univ[i:l]; "*": ^"G" -> ^"G" -> ^"G"} | (all x: ^"G". all y: ^"G". all z: ^"G". ('x ^* 'y) ^* 'z = 'x ^* ('y ^* 'z) in ^"G") & (all x: ^"G". all y: ^"G". 'x ^* 'y = 'y ^* 'x in ^"G")}
+   csemigroup[i:l] <--> {car: univ[i:l]; "*": ^car -> ^car -> ^car; (all x: ^car. all y: ^car. all z: ^car. ('x ^* 'y) ^* 'z = 'x ^* ('y ^* 'z) in ^car) & (all x: ^car. all y: ^car. 'x ^* 'y = 'y ^* 'x in ^car)}
 
 interactive_rw unfold_cmonoid :
-   cmonoid[i:l] <--> {self: {"G": univ[i:l]; "*": ^"G" -> ^"G" -> ^"G"; "e": ^"G"} | ((all x: ^"G". all y: ^"G". all z: ^"G". ('x ^* 'y) ^* 'z = 'x ^* ('y ^* 'z) in ^"G") & (all x: ^"G". (^"e" ^* 'x = 'x in ^"G" & 'x ^* ^"e" = 'x in ^"G"))) & (all x: ^"G". all y: ^"G". 'x ^* 'y = 'y ^* 'x in ^"G")}
+   cmonoid[i:l] <--> {car: univ[i:l]; "*": ^car -> ^car -> ^car; "1": ^car; ((all x: ^car. all y: ^car. all z: ^car. ('x ^* 'y) ^* 'z = 'x ^* ('y ^* 'z) in ^car) & (all x: ^car. (^"1" ^* 'x = 'x in ^car & 'x ^* ^"1" = 'x in ^car))) & (all x: ^car. all y: ^car. 'x ^* 'y = 'y ^* 'x in ^car)}
 
 let fold_groupoid = makeFoldC << groupoid[i:l] >> unfold_groupoid
 let fold_isSemigroup = makeFoldC << isSemigroup{'g} >> unfold_isSemigroup
@@ -211,11 +211,11 @@ interactive monoid_type {| intro [] |} 'H :
    sequent ['ext] { 'H >- "type"{monoid[i:l]} }
 
 interactive semigroup_elim {| elim [] |} 'H 'J :
-   sequent ['ext] { 'H; g: {"G": univ[i:l]; "*": ^"G" -> ^"G" -> ^"G"}; u: squash{.all x: 'g^"G". all y: 'g^"G". all z: 'g^"G". (('g^"*") (('g^"*") 'x 'y) 'z = ('g^"*") 'x (('g^"*") 'y 'z) in 'g^"G")}; 'J['g] >- 'C['g] } -->
+   sequent ['ext] { 'H; g: {car: univ[i:l]; "*": ^car -> ^car -> ^car}; u: squash{.all x: 'g^car. all y: 'g^car. all z: 'g^car. (('g^"*") (('g^"*") 'x 'y) 'z = ('g^"*") 'x (('g^"*") 'y 'z) in 'g^car)}; 'J['g] >- 'C['g] } -->
    sequent ['ext] { 'H; g: semigroup[i:l]; 'J['g] >- 'C['g] }   
 
 interactive monoid_elim {| elim [] |} 'H 'J :
-   sequent ['ext] { 'H; g: {"G": univ[i:l]; "*": ^"G" -> ^"G" -> ^"G"; "e": ^"G"}; u: squash{.all x: 'g^"G". all y: 'g^"G". all z: 'g^"G". (('g^"*") (('g^"*") 'x 'y) 'z = ('g^"*") 'x (('g^"*") 'y 'z) in 'g^"G")}; v: squash{.all x: 'g^"G". (('g^"*") ('g^"e") 'x = 'x in 'g^"G" & ('g^"*") 'x ('g^"e") = 'x in 'g^"G")}; 'J['g] >- 'C['g] } -->
+   sequent ['ext] { 'H; g: {car: univ[i:l]; "*": ^car -> ^car -> ^car; "1": ^car}; u: squash{.all x: 'g^car. all y: 'g^car. all z: 'g^car. (('g^"*") (('g^"*") 'x 'y) 'z = ('g^"*") 'x (('g^"*") 'y 'z) in 'g^car)}; v: squash{.all x: 'g^car. (('g^"*") ('g^"1") 'x = 'x in 'g^car & ('g^"*") 'x ('g^"1") = 'x in 'g^car)}; 'J['g] >- 'C['g] } -->
    sequent ['ext] { 'H; g: monoid[i:l]; 'J['g] >- 'C['g] }   
 
 interactive semigrp_is_grpoid2 'H :

@@ -65,7 +65,7 @@ let _ =
 (*  Definitions   *)
 (******************)
 
-(*! @terms *)
+(*! @doc{@terms} *)
 
 (*! @docoff *)
 
@@ -104,8 +104,11 @@ define unfoldRecordOrt : record_ort[t:t]{'a;'R} <-->  function_ort{r.rcrd[t:t]{'
 (*   Rules        *)
 (******************)
 
-(*! @rules
+(*! 
+ * @begin[doc]
+ * @rules
  * @modsubsection{Typehood and equality}
+ * @end[doc]
  *)
 
 (*!
@@ -142,7 +145,7 @@ interactive recordTypeI {| intro [] |} 'H :
 
 (*** Reductions ***)
 
-(*! @modsubsection{Reductions} *)
+(*! @doc{@modsubsection{Reductions}} *)
 
 interactive_rw record_beta1:
    field[n:t]{rcrd[n:t]{'a; 'r}} <--> 'a
@@ -182,7 +185,7 @@ interactive_rw record_exchange :
                                                            rcrd[m:t]{'b; rcrd[n:t]{'a; 'r}}}
 
 (*** Introductions ***)
-(*! @modsubsection{Introduction} *)
+(*! @doc{@modsubsection{Introduction}} *)
 
 interactive recordEqualS1 'H:
    [equality] sequent[squash]{'H >- not{.label[n:t]=label[m:t] in label} } -->
@@ -335,7 +338,7 @@ let resource intro += [
 *)
 
 (*** Eliminations ***)
-(*! @modsubsection{Elimination} *)
+(*! @doc{@modsubsection{Elimination}} *)
 
 (* Single Records *)
 
@@ -439,7 +442,7 @@ let resource elim += [
 
 
 (*** Orthogonality ***)
-(*! @modsubsection{Orthogonality} *)
+(*! @doc{@modsubsection{Orthogonality}} *)
 
 interactive functionOrtDinter {| intro[] |} 'H 'b :
    [wf] sequent[squash]{'H >- "type"{disect{'A;a.'B['a]}} } -->

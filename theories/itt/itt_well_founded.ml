@@ -135,6 +135,8 @@ interactive well_founded_reduction 'H 'a 'b univ[i:l] :
    [main] sequent ['ext] { 'H >- well_founded[i:l]{'A; x, y. 'R['x; 'y]} } -->
    sequent ['ext] { 'H >- Itt_rfun!well_founded{'A; x, y. 'R['x; 'y]} }
 
+(*! @docoff *)
+
 (*
  * -*-
  * Local Variables:

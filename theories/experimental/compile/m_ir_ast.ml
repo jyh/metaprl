@@ -42,12 +42,16 @@ open M_util
 
 declare IR{'e}
 declare IR{'e1; v. 'e2['v]}
+declare IR{'args; 'f; v. 'e['v]}
 
 dform ir_df1 : IR{'e} =
    keyword["IR["] slot{'e} `"]"
 
 dform ir_df2 : IR{'e1; v. 'e2} =
    keyword["IR "] slot{'v} `" = " slot{'e1} keyword[" in"] hspace slot{'e2}
+
+dform ir_df3 : IR{'args; 'f; v. 'e2} =
+   keyword["IR "] slot{'v} `" = " slot{'f} `"(" slot{'args} `")" keyword[" in"] hspace slot{'e2}
 
 (************************************************************************
  * REDUCTION RESOURCE                                                   *
@@ -126,7 +130,7 @@ prim_rw ir_relop {| ir |} :
 
 doc <:doc<
    @begin[doc]
-   Translating a function in a let.
+   Translating a function in a let definition.
    @end[doc]
 >>
 prim_rw ir_lambda {| ir |} :
@@ -162,8 +166,8 @@ prim_rw ir_if {| ir |} :
    R. LetFun{'R; Label["g":t]; g.
       IR{'e1; v1.
          If{AtomRelop{EqOp; AtomVar{'v1}; AtomTrue};
-            IR{'e2; v2. TailCall{'g; ArgCons{AtomVar{'v2}; ArgNil}}};
-            IR{'e3; v3. TailCall{'g; ArgCons{AtomVar{'v3}; ArgNil}}}}}}}
+            IR{'e2; v2. TailCall{'g; AtomVar{'v2}}};
+            IR{'e3; v3. TailCall{'g; AtomVar{'v3}}}}}}}
    
 doc <:doc<
    @begin[doc]
@@ -193,6 +197,56 @@ prim_rw ir_let_fun {| ir |} :
    IR{AstLetFun{'R; 'label; f. 'e['f]}; v. 'cont['v]}
    <-->
    LetFun{'R; IR{'label}; f. IR{'e['f]; v. 'cont['v]}}
+
+doc <:doc<
+   @begin[doc]
+   Translating a let variable definition.
+   @end[doc]
+>>
+prim_rw ir_let_var {| ir |} :
+   IR{LetVarExpr{'e1; v. 'e2['v]}; v2. 'e3['v2]}
+   <-->
+   IR{'e1; v1.
+   LetAtom{AtomVar{'v1}; v.
+   IR{'e2['v]; v2. 'e3['v2]}}}
+
+doc <:doc<
+   @begin[doc]
+   Translating a function application.
+   @end[doc]
+>>
+prim_rw ir_apply {| ir |} :
+   IR{ApplyExpr{'fe; 'args}; v. 'e['v]}
+   <-->
+   IR{'fe; f.
+   IR{'args; 'f; v. 'e['v]}}
+
+doc <:doc<
+   @begin[doc]
+   Translating a list of arguments.
+   @end[doc]
+>>
+prim_rw ir_arg_cons {| ir |} :
+   IR{AstArgCons{'hd; 'tl}; 'f; v. 'e['v]}
+   <-->
+   IR{'hd; v1.
+   LetApply{AtomVar{'f}; AtomVar{'v1}; v2.
+   IR{'tl; 'v2; v. 'e['v]}}}
+
+prim_rw ir_arg_nil {| ir |} :
+   IR{AstArgNil; 'f; v. 'e['v]}
+   <-->
+   'e['f]
+
+doc <:doc<
+   @begin[doc]
+   Some optimizations.
+   @end[doc]
+>>
+prim_rw opt_let_var {| ir |} :
+   LetAtom{AtomVar{'v1}; v2. 'e['v2]}
+   <-->
+   'e['v1]
 
 (* *)
 

@@ -3,7 +3,10 @@
  * Conversionals addr addrC allSubC thenC conv
  * cutC dprod failC firstC foldC higherC idC inl
  * inr Itt lowerC orelseC reduceC reduceDecideInl reduceSpread repeatC
- * rw rwh someSubC sweepDnC sweepUpC tryC
+ * rw rwc rwAll rwcAll rwAllAll
+ * rwa rwca rwaAll rwcaAll rwaAllAll
+ * rwh rwch rwhAll rwchAll rwhAllAl
+ * someSubC sweepDnC sweepUpC tryC
  * whileProgressC  untilFailC
  * @end[spelling]
  *
@@ -125,6 +128,21 @@ let debug_reduce =
  * are defined only for a sequent calculus).  The (@tt{rw} @it{conv} $i$)
  * @emph{tactic} applies the conversion @it{conv} to clause $i$ in
  * the current goal sequent.}
+ *
+ * @item{@conv[rwc];
+ * Conversions may be applied also to assumptions.
+ * The (@tt{rw} @it{conv} $a$ $c$) @emph{tactic} applies the
+ * conversion @it{conv} to the $c$-th clause in the $a$-th assumtion.}
+ *
+ * @item{@conv[rwAll,rwcAll,rwAllAll];
+ * The (@tt{rwAll} @it{conv}) @emph{tactic} applies the
+ * conversion @it{conv} to the whole goal sequent.
+ *
+ * The (@tt{rwcAll} @it{conv} $a$) @emph{tactic} applies the
+ * conversion @it{conv} to the whole $a$-th assumption.
+ *
+ * The (@tt{rwAllAll} @it{conv}) @emph{tactic} applies the
+ * conversion @it{conv} to all assumptions and to the goal sequent.}
  * @end[description]
  *
  * @docoff
@@ -259,10 +277,27 @@ let repeatForC = Tactic_type.Conversionals.repeatForC
  * Note that these conversions never fail@; however they may fail to
  * make progress if the conversion $c$ never succeeds.}
  *
- * @item{@conv[rwh];
- * For convenience, the @tt{rwh} function automatically
- * applies the @tt{higherC} conversion, the tactic (@tt{rwh $c$ $i$})
- * is equivalent to (@tt{rw (higherC $c$) $i$}).}
+ * @item{@conv[applyAllC];
+ * The @tt{applyAllC} conversion takes a list of conversions
+ * and applies them to all subterms possible from outermost to
+ * innermost (it applies at most one conversion from the list at most once
+ * to each subterm).
+ * @begin[center]
+ * @code{let applyAllC convs = sweepUpC (firstC convs)}
+ * @end[center]}
+ *
+ * @item{@conv[rwh, rwch, rwhAll, rwchAll, rwhAllAll];
+ * For convenience, the @tt{rwh},  @tt{rwch}, @tt{rwhAll}, @tt{rwchAll},
+ * @tt{rwhAllAll} functions automatically
+ * apply the @tt{higherC} conversion. For example, the tactic (@tt{rwh $conv$ $i$})
+ * is equivalent to (@tt{rw (higherC $conv$) $i$}).}
+ *
+ * @item{@conv[rwa, rwca, rwaAll, rwcaAll, rwaAllAll];
+ * The @tt{rwa},  @tt{rwca}, @tt{rwaAll}, @tt{rwcaAll},
+ * @tt{rwaAllAll} functions takes a list of conversions and
+ * apply the @tt{applyAllC} conversion. For example, the tactic (@tt{rwh $convs$ $i$})
+ * is equivalent to (@tt{rw (applyAllC $convs$) $i$}).}
+ *
  * @end[description]
  *
  * @docoff

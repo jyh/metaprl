@@ -365,6 +365,12 @@ let thinningT = Tactic_type.Tacticals.thinningT
  * including all the hypothesis and the conclusion.  The @tt{onHypsT} applies the
  * argument only to the hypotheses.}
  *
+ * @item{@tactic[onAllClausesT], @tactic[onAllHypsT];
+ * The (@tt{onAllAssumT} @i{tac}) applies the argument tactic to all the assumptions.
+  ,
+ * including all the hypothesis and the conclusion.  The @tt{onHypsT} applies the
+ * argument only to the hypotheses.}
+ *
  * @item{@tactic[onSomeHypT];
  * The (@tt{onSomeHypT} @i{tac}) applies the argument tactic to the
  * hypotheses from the last to the first, returning once an application

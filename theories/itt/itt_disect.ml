@@ -330,7 +330,7 @@ let resource elim += (<<disect{'A; x.'B['x]}>>,disectEliminationT)
  * @end[doc]
  *)
 
-prim dintersectionSubtype {| intro [] |} 'H 'a :
+prim dintersectionSubtype  'H 'a :
    sequent [squash] { 'H >- subtype{'A1; 'A2} } -->
    sequent [squash] { 'H; a: 'A1 >- subtype{'B1['a]; 'B2['a]} } -->
    sequent ['ext] { 'H >- subtype{ disect{'A1; a1.'B1['a1]}; disect{'A2; a2.'B2['a2]} } } =
@@ -339,6 +339,18 @@ prim dintersectionSubtype {| intro [] |} 'H 'a :
 (************************************************************************
  * INTERACTIVE RULES                                                    *
  ************************************************************************)
+
+interactive dinter_associativity 'H :
+   [wf] sequent[squash] { 'H >- "type"{'A}} -->
+   [wf] sequent[squash] { 'H; a:'A >- "type"{'B['a]}} -->
+   [wf] sequent[squash] { 'H; a:'A; b:'B['a] >- "type"{'C['a;'b]}} -->
+   sequent ['ext] { 'H >- ext_equal{
+                       disect{'A;a.disect{'B['a];b.'C['a;'b]}};
+                       disect{disect{'A;a.'B['a]};ab.'C['ab;'ab]}
+                  }}
+
+
+
 (*!
  * @begin[doc]
  * @thysubsection{Set type as dependent intersection}

@@ -267,15 +267,14 @@ sig
 	type bfield
    type af
    type saf
-   type step
 	type source
    type sacs
 
    val empty: int -> sacs
    val addConstr: sacs -> af -> sacs
 
-   val upper: (term array) -> sacs -> vars -> (saf * step list)
-   val lower: (term array) -> sacs -> vars -> (saf * step list)
+   val upper: (term array) -> sacs -> vars -> saf
+   val lower: (term array) -> sacs -> vars -> saf
 
 	val addUpperBound : sacs -> vars -> bfield -> sacs
 	val addLowerBound : sacs -> vars -> bfield -> sacs
@@ -353,16 +352,14 @@ module MakeSACS(BField : BoundFieldSig)
 	type bfield=BField.bfield and
   	type source=Source.source and
  	type af=AF.af and
-  	type saf=SAF.saf and
-   type step = tactic SAF.step =
+  	type saf=SAF.saf =
 struct
    type vars   = VarType.t
 	type bfield = BField.bfield
    type af     = AF.af
    type saf    = SAF.saf
-   type step   = tactic SAF.step
 	type source = Source.source
-   type sacs   = (af list) * ((saf * (step list)) option array) * ((saf * (step list)) option array)
+   type sacs   = (af list) * (saf option array) * (saf option array)
 
 	module VI=Var2Index(BField)
 
@@ -377,7 +374,7 @@ struct
 
    let rec upper' info s v =
       match s with
-         [] -> SAF.affine AF.plusInfinity, []
+         [] -> SAF.affine AF.plusInfinity
        | f::tl ->
 				let v_coef = AF.coef f v in
             if BField.compare v_coef BField.fieldZero >=0 then
@@ -393,18 +390,11 @@ struct
                let rest=AF.remove f v in
 					let u0=AF.scale k rest in
 					let u1=AF.extract2rightSource v u0 in
-               let r0,a0=upper' info tl v in
-               let r1=SAF.min r0 (SAF.affine u1) in
-					let saf_v=SAF.affine (AF.mk_var v) in
-					let conv=(positive_multiply_ge (BField.term_of k)) thenC (extract2rightC (SAF.term_of info saf_v)) in
-                  if SAF.isAffine r1 then
-                     r1,(SAF.Assert ("upper 0",r1,saf_v, rw conv hyp))::a0
-                  else
-                     r1,(SAF.Assert ("upper 1",r1,saf_v, rw conv hyp))::a0
-(*						r1,(SAF.Assert ("upper 1",r1,saf_v, ge_minLeftIntro))::a0*)
+               let r0=upper' info tl v in
+               SAF.min r0 (SAF.affine u1)
 
    let upper info (s,l,u) v =
-		let result, actions =
+		let result =
 			match u.(v) with
 				Some b -> b
 			 | None ->
@@ -412,11 +402,11 @@ struct
 		in
 		if !debug_supinf_steps then
 			eprintf "upper: %a <= %a@." AF.print_var v SAF.print result;
-		result,actions
+		result
 
    let rec lower' info s v =
       match s with
-         [] -> SAF.affine AF.minusInfinity,[]
+         [] -> SAF.affine AF.minusInfinity
        | f::tl ->
 				let v_coef = AF.coef f v in
             if BField.compare v_coef BField.fieldZero <=0 then
@@ -426,17 +416,11 @@ struct
                let rest=AF.remove f v in
 					let u0=AF.scale k rest in
 					let u1=AF.extract2leftSource v u0 in
-               let r0,a0=lower' info tl v in
-               let r1=SAF.max r0 (SAF.affine u1) in
-					let saf_v=SAF.affine (AF.mk_var v) in
-                  if SAF.isAffine r1 then
-                     r1,(SAF.Assert ("lower 0",saf_v, r1, idT))::a0
-                  else
-                     r1,(SAF.Assert ("lower 1",saf_v, r1, idT))::a0
-(*						r1,(SAF.Assert ("lower 1",saf_v, r1, ge_maxRightIntro))::a0*)
+               let r0=lower' info tl v in
+               SAF.max r0 (SAF.affine u1)
 
    let lower info (s,l,u) v =
-		let result, actions =
+		let result =
 			match l.(v) with
 				Some b -> b
 			 | None ->
@@ -444,29 +428,29 @@ struct
 		in
       if !debug_supinf_steps then
          eprintf "lower: %a <= %a@." SAF.print result AF.print_var v;
-      result,actions
+      result
 
 	let addUpperBound constrs v b =
 		let (s,l,u)=constrs in
 		if BField.compare b BField.plusInfinity < 0 then
-			u.(v) <- Some (SAF.affine (AF.mk_number b),[]);
+			u.(v) <- Some (SAF.affine (AF.mk_number b));
 		constrs
 
 	let addLowerBound constrs v b =
 		let (s,l,u)=constrs in
 		if BField.compare b BField.minusInfinity > 0 then
-			l.(v) <- Some (SAF.affine (AF.mk_number b),[]);
+			l.(v) <- Some (SAF.affine (AF.mk_number b));
 		constrs
 
 	let print_bounds info (s,l,u) out =
 		for i=1 to (Array.length l -1) do
 			match l.(i), u.(i) with
 				None, None -> ()
-			 | Some (lv,_), None ->
+			 | Some lv, None ->
 					fprintf out "%s >= %s@." (SimplePrint.short_string_of_term (VI.restore info i)) (SimplePrint.short_string_of_term (SAF.term_of info lv))
-			 | None, Some (uv,_) ->
+			 | None, Some uv ->
 					fprintf out "%s >= %s@." (SimplePrint.short_string_of_term (SAF.term_of info uv)) (SimplePrint.short_string_of_term (VI.restore info i))
-			 |Some (lv,_), Some (uv,_) ->
+			 |Some lv, Some uv ->
 					fprintf out "%s >= %s >= %s@." (SimplePrint.short_string_of_term (SAF.term_of info uv)) (SimplePrint.short_string_of_term (VI.restore info i)) (SimplePrint.short_string_of_term (SAF.term_of info lv))
 		done;
 
@@ -502,72 +486,56 @@ let suppa' info (x:AF.vars) (f:AF.af) =
    let saf_x=SAF.affine af_x in
       if compare b fieldUnit < 0 then
          let result0=AF.scale (inv (sub fieldUnit b)) c in
-			let result=AF.extract2rightSource x result0 in
-            (result, [SAF.Assert("suppa case 0",SAF.affine result, saf_x, idT)])
-		(* SAF.AssertT <<'x <= result>> thenAT
-			'x<='y <-->
-			(1-'b)*'x <= (1-'b)*'y <-->
-			'x <= 'b*'x + (1-'b)*'y <-->(normalize) 'x <= 'f *)
+			AF.extract2rightSource x result0
       else
       if (compare b fieldUnit = 0) && (AF.isNumber c) then
          let cmp=compare (AF.coef c AF.constvar) fieldZero in
             if cmp<0 then
-               (AF.contrSource f AF.minusInfinity, [SAF.Assert ("suppa case 100",SAF.affine f, saf_x, idT)])
+               AF.contrSource f AF.minusInfinity
             else
             if cmp=0 then
-               (af_x, [SAF.Assert("suppa case 1010",SAF.affine f, saf_x, idT)])
+               af_x
             else
-               (AF.plusInfinity, [])
+               AF.plusInfinity
       else
-         (AF.plusInfinity, [])
+         AF.plusInfinity
 
 let suppa info x f =
-   let (result,actions)=suppa' info x f in
+   let result = suppa' info x f in
       if !debug_supinf_steps then
          begin
             eprintf "suppa<: %a <= %a@." AF.print_var x AF.print f;
             eprintf "suppa>: %a <= %a@." AF.print_var x AF.print result
          end;
-      (result,actions)
+      result
 
 let rec supp' info (x:AF.vars) (saf:SAF.saf) =
 	let src,s=saf in
    match s with
       SAF.Affine f ->
-         let r,a=suppa info x (AF.setSource src f) in
-            SAF.affine r, a
+         let r=suppa info x (AF.setSource src f) in
+			SAF.affine r
     | SAF.Min (a,b) ->
-         let f1,a1=supp' info x (SAF.setSource (Sleft src) a) in
-         let f2,a2=supp' info x (SAF.setSource (Sright src) b) in
+         let f1 = supp' info x (SAF.setSource (Sleft src) a) in
+         let f2 = supp' info x (SAF.setSource (Sright src) b) in
 			(match SAF.getSource f1, SAF.getSource f2 with
 				Scontradiction s, _ ->
-					f1,a1
+					f1
 			 | _, Scontradiction s ->
-					f2,a2
+					f2
 			 | _, _ ->
-				let result=SAF.min f1 f2 in
-				let act=SAF.Assert ("supp",result,
-										  (SAF.affine (AF.mk_var x)),
-										  idT
-(*										  (ge_minLeftIntro)*)
-										 )
-				in
-				result, act::(a1@a2)
+					SAF.min f1 f2
 			)
-			(*result, act::(a1@(a2@[SAF.Tactic (tryT (ge_minLeftElim (-1)))]))*)
     | SAF.Max _ -> raise (Invalid_argument "Itt_supinf.supp applied to max(...,...)")
-	(* SAF.AssertT << 'x <= min('a;'b) >> thenAT
-		'x <= min('a;'b) <-->
-		'x <= 'a & 'x <= 'b *)
 
 let supp info x s =
-   let result,actions=supp' info x s in
+   let result = supp' info x s in
       if !debug_supinf_steps then
          begin
             eprintf"supp<: %a <= %a@." AF.print_var x SAF.print s;
             eprintf"supp>: %a <= %a@." AF.print_var x SAF.print result
          end;
-      result,actions
+      result
 
 let inffa' info (x:AF.vars) (f:AF.af) =
    if !debug_supinf_trace then
@@ -578,66 +546,56 @@ let inffa' info (x:AF.vars) (f:AF.af) =
    let saf_x=SAF.affine af_x in
       if compare b fieldUnit < 0 then
          let result0=AF.scale (inv (sub fieldUnit b)) c in
-			let result=AF.extract2leftSource x result0 in
-            (result, [SAF.Assert ("inffa case 0",saf_x,SAF.affine result, idT)])
-		(* SAF.AssertT <<'x >= result>> thenAT
-			'x>='y <-->
-			(1-'b)*'x >= (1-'b)*'y <-->
-			'x >= 'b*'x + (1-'b)*'y <-->(normalize) 'x >= 'f *)
+			AF.extract2leftSource x result0
       else
       if (compare b fieldUnit = 0) && (AF.isNumber c) then
          let cmp=compare (AF.coef c AF.constvar) fieldZero in
             if cmp>0 then
-               (AF.contrSource f AF.plusInfinity, [SAF.Assert ("inffa case 100",saf_x, SAF.affine f, idT)])
+               AF.contrSource f AF.plusInfinity
             else
             if cmp=0 then
-               (af_x, [SAF.Assert("inffa case 1010",saf_x, SAF.affine f, idT)])
+               af_x
             else
-               (AF.minusInfinity,[])
+               AF.minusInfinity
       else
-         (AF.minusInfinity,[])
+         AF.minusInfinity
 
 let inffa info x f =
-   let result,actions=inffa' info x f in
+   let result = inffa' info x f in
       if !debug_supinf_steps then
          begin
             eprintf"inffa<: %a <= %a@." AF.print f AF.print_var x;
             eprintf"inffa>: %a <= %a@." AF.print result AF.print_var x
          end;
-      (result,actions)
+      result
 
 let rec inff' info (x:AF.vars) (saf:SAF.saf) =
 	let src,s=saf in
    match s with
       SAF.Affine f ->
-         let r,a=inffa info x (AF.setSource src f) in
-            SAF.affine r, a
+         let r = inffa info x (AF.setSource src f) in
+			SAF.affine r
     | SAF.Max (a,b) ->
-         let f1,a1=inff' info x (SAF.setSource (Sleft src) a) in
-         let f2,a2=inff' info x (SAF.setSource (Sright src) b) in
+         let f1 = inff' info x (SAF.setSource (Sleft src) a) in
+         let f2 = inff' info x (SAF.setSource (Sright src) b) in
 			(match SAF.getSource f1, SAF.getSource f2 with
 				Scontradiction s, _ ->
-					f1,a1
+					f1
 			 | _, Scontradiction s ->
-					f2,a2
+					f2
 			 | _, _ ->
-				let result=SAF.max f1 f2 in
-				result, (SAF.Assert ("inff",SAF.affine (AF.mk_var x), result, idT))::(a1@a2)
+					SAF.max f1 f2
 			)
-(*			result, (SAF.Assert (SAF.affine (AF.mk_var x), result, (addHiddenLabelT "inff" thenT ge_maxRightIntro)))::(a1@(a2@[SAF.Tactic (tryT (ge_maxRightElim (-1)))]))*)
     | SAF.Min _ -> raise (Invalid_argument "Itt_supinf.inff applied to min(...,...)")
-	(* SAF.AssertT << 'x >= max('a;'b) >> thenAT
-		'x >= max('a;'b) <-->
-		'x >= 'a & 'x >= 'b *)
 
 let inff info x s =
-   let result,actions=inff' info x s in
+   let result = inff' info x s in
       if !debug_supinf_steps then
          begin
             eprintf"inff<: %a <= %a@." SAF.print s AF.print_var x;
             eprintf"inff>: %a <= %a@." SAF.print result AF.print_var x
          end;
-      (result,actions)
+      result
 
 let rec supa info (c:SACS.sacs) (f:AF.af) (h:CS.t) =
    if !debug_supinf_trace then
@@ -652,7 +610,7 @@ let rec supa info (c:SACS.sacs) (f:AF.af) (h:CS.t) =
          begin
             if !debug_supinf_trace then
                (eprintf "supa case 0@.");
-				(SAF.affine (AF.mk_number r), [])
+				SAF.affine (AF.mk_number r)
 			end
       else
          begin
@@ -672,20 +630,17 @@ let rec supa info (c:SACS.sacs) (f:AF.af) (h:CS.t) =
                                  if !debug_supinf_trace then
                                     (eprintf "supa case 1000@.");
 											let af_v = AF.mk_var v in
-											(SAF.affine af_v, [])
+											SAF.affine af_v
 										end
 									else
 										begin
 											if !debug_supinf_trace then
 												(eprintf "supa case 1001@.");
-											let r0,a0=SACS.upper info c v in
+											let r0 = SACS.upper info c v in
 											let saf_v=SAF.affine af_v in
-									(*let a0=[r0, saf_v, addHiddenLabelT "supa 1001 a0"] in*)
-											let r1,a1=sup info c r0 (CS.add h v) in
+											let r1 = sup info c r0 (CS.add h v) in
 											let r1'=SAF.transitiveLeftSource r1 r0 v in
-											let a11=[SAF.Transitive("supa 1001 a11",r1',r0,saf_v)] in
-											let r2,a2=supp info v r1' in
-												(r2,a2@(a11@(a1@a0)))
+											supp info v r1'
 										end
 								end
 							else
@@ -697,15 +652,15 @@ let rec supa info (c:SACS.sacs) (f:AF.af) (h:CS.t) =
                               begin
                                  if !debug_supinf_trace then
                                     (eprintf "supa case 1010@.");
-											let r0,a0=inf info c saf_v h in
-												SAF.scale r r0, a0
+											let r0 = inf info c saf_v h in
+											SAF.scale r r0
 										end
 									else
                               begin
                                  if !debug_supinf_trace then
                                     (eprintf "supa case 1011@.");
-											let r0,a0=sup info c saf_v h in
-												SAF.scale r r0, a0
+											let r0 = sup info c saf_v h in
+											SAF.scale r r0
 										end
 								end
 						end
@@ -713,31 +668,25 @@ let rec supa info (c:SACS.sacs) (f:AF.af) (h:CS.t) =
                   begin
                      if !debug_supinf_trace then
                         (eprintf "supa case 11@.");
-							let b',a0 = sup info c (SAF.affine b) (CS.add h v) in
+							let b' = sup info c (SAF.affine b) (CS.add h v) in
 							let scaled_av=AF.scale r af_v in
 							let scaled_v=SAF.affine scaled_av in
 							let f'=SAF.add scaled_v b' in
 							let saf_f=SAF.affine f in
 							(*let f''=SAF.addVarSource r v f' in*)
-							let a01=SAF.Assert("supa 11",f', saf_f, idT) in
 								if SAF.occurs v b' then
                            begin
                               if !debug_supinf_trace then
                                  (eprintf "supa case 110 var:%a@." SAF.print scaled_v);
-										let r1,a1=sup info c f' h in
-										let r1'=SAF.transitiveLeftSource r1 f' 0 in
-										(r1',a1@(a01::a0))
+										let r1=sup info c f' h in
+										SAF.transitiveLeftSource r1 f' 0
 									end
 								else
                            begin
                               if !debug_supinf_trace then
                                  (eprintf "supa case 111 var:%a@." SAF.print scaled_v);
-										let r1,a1=sup info c scaled_v h in
-										let r2=SAF.add r1 b' in
-										let b''=SAF.scale (neg fieldUnit) b' in
-										let a2=SAF.Assert("supa case 1110",r2,f',ge_addMono (SAF.term_of info b'')) in
-										let a3=SAF.Transitive("supa case 1111",r2,f',saf_f) in
-											(r2, (a3::(a2::(a1@(a01::a0)))))
+										let r1=sup info c scaled_v h in
+										SAF.add r1 b'
 									end
 						end
 			end
@@ -747,26 +696,18 @@ and sup' info (c:SACS.sacs) (saf:SAF.saf) (h:CS.t) =
    match s with
       SAF.Affine f -> supa info c (AF.setSource src f) h
     | SAF.Min (a,b) ->
-         let f1,a1=sup' info c (SAF.setSource (Sleft src) a) h in
-         let f2,a2=sup' info c (SAF.setSource (Sright src) b) h in
-         let result=SAF.min f1 f2 in
-         let actions=
-            if SAF.isAffine result then
-               (SAF.Assert("sup 0",result, saf, ge_minLeftIntro))::(a1@a2)
-            else
-               (SAF.Assert("sup 1",result, saf, idT))::(a1@a2)
-(*					(SAF.Assert("sup 1",result, s, (tryT min_ge_minIntro)))::(a1@a2)*)
-         in
-            result, actions
+         let f1 = sup' info c (SAF.setSource (Sleft src) a) h in
+         let f2 = sup' info c (SAF.setSource (Sright src) b) h in
+         SAF.min f1 f2
     | SAF.Max _ -> raise (Invalid_argument "Itt_supinf.sup applied to max(...,...)")
 
 and sup info (c:SACS.sacs) (s:SAF.saf) (h:CS.t) =
-   let result,actions=sup' info c s h in
+   let result = sup' info c s h in
       if !debug_supinf_steps then
          begin
             eprintf"sup: %a <= %a@." SAF.print s SAF.print result
          end;
-      (result,actions)
+      result
 
 and infa info (c:SACS.sacs) (f:AF.af) (h:CS.t) =
    if !debug_supinf_trace then
@@ -781,7 +722,7 @@ and infa info (c:SACS.sacs) (f:AF.af) (h:CS.t) =
          begin
             if !debug_supinf_trace then
                (eprintf "infa case 0@.");
-				(SAF.affine (AF.mk_number r), [])
+				SAF.affine (AF.mk_number r)
          end
       else
          begin
@@ -802,19 +743,16 @@ and infa info (c:SACS.sacs) (f:AF.af) (h:CS.t) =
                                  if !debug_supinf_trace then
                                     (eprintf "infa case 1000@.");
 											let af_v = AF.mk_var v in
-											(SAF.affine af_v, [])
+											SAF.affine af_v
                               end
                            else
                               begin
                                  if !debug_supinf_trace then
                                     (eprintf "infa case 1001@.");
-                                 let r0,a0=SACS.lower info c v in
-									(*let a0=[saf_v, r0, addHiddenLabelT "infa 1001 a0"] in*)
-                                 let r1,a1=inf info c r0 (CS.add h v) in
+                                 let r0=SACS.lower info c v in
+                                 let r1=inf info c r0 (CS.add h v) in
 											let r1'=SAF.transitiveRightSource v r0 r1 in
-                                 let a11=[SAF.Transitive("infa 1001 a11",saf_v,r0,r1')] in
-                                 let r2,a2=inff info v r1' in
-                                    (r2, a2@(a11@(a1@a0)))
+                                 inff info v r1'
                               end
                         end
                      else
@@ -825,15 +763,15 @@ and infa info (c:SACS.sacs) (f:AF.af) (h:CS.t) =
                               begin
                                  if !debug_supinf_trace then
                                     (eprintf "infa case 1010@.");
-                                 let r0,a0=sup info c saf_v h in
-												SAF.scale r r0, a0
+                                 let r0=sup info c saf_v h in
+											SAF.scale r r0
                               end
                            else
                               begin
                                  if !debug_supinf_trace then
                                     (eprintf "infa case 1011@.");
-                                 let r0,a0=inf info c saf_v h in
-												SAF.scale r r0, a0
+                                 let r0=inf info c saf_v h in
+											SAF.scale r r0
                               end
                         end
                   end
@@ -841,30 +779,24 @@ and infa info (c:SACS.sacs) (f:AF.af) (h:CS.t) =
                   begin
                      if !debug_supinf_trace then
                         (eprintf "infa case 11@.");
-                     let b',a0 = inf info c (SAF.affine b) (CS.add h v) in
+                     let b' = inf info c (SAF.affine b) (CS.add h v) in
                      let scaled_v=SAF.affine (AF.scale r af_v) in
                      let f'=SAF.add scaled_v b' in
                      let saf_f=SAF.affine f in
 							(*let f''=SAF.addVarSource r v f' in*)
-                     let a01=SAF.Assert("infa 11",saf_f, f', idT) in
                         if SAF.occurs v b' then
                            begin
                               if !debug_supinf_trace then
                                  (eprintf "infa case 110 var:%a@." SAF.print scaled_v);
-                              let r1,a1=inf info c f' h in
-										let r1'=SAF.transitiveRightSource 0 f' r1 in
-                                 r1', a1@(a01::a0)
+                              let r1=inf info c f' h in
+										SAF.transitiveRightSource 0 f' r1
                            end
                         else
                            begin
                               if !debug_supinf_trace then
                                  (eprintf "infa case 111 var:%a@." SAF.print scaled_v);
-                              let r1,a1=inf info c scaled_v h in
-                              let r2=SAF.add r1 b' in
-                              let b''=SAF.scale (neg fieldUnit) b' in
-                              let a2=SAF.Assert("infa case 1110",f',r2,ge_addMono (SAF.term_of info b'')) in
-                              let a3=SAF.Transitive("infa case 1111",saf_f,f',r2) in
-                                 (r2, (a3::(a2::(a1@(a01::a0)))))
+                              let r1=inf info c scaled_v h in
+                              SAF.add r1 b'
                            end
                   end
          end
@@ -874,26 +806,18 @@ and inf' info (c:SACS.sacs) (saf:SAF.saf) (h:CS.t) =
    match s with
       SAF.Affine f -> infa info c (AF.setSource src f) h
     | SAF.Max (a,b) ->
-         let f1,a1=inf' info c (SAF.setSource (Sleft src) a) h in
-         let f2,a2=inf' info c (SAF.setSource (Sright src) b) h in
-         let result=SAF.max f1 f2 in
-         let actions=
-            if SAF.isAffine result then
-               (SAF.Assert("inf 0",saf, result, ge_maxRightIntro))::(a1@a2)
-            else
-               (SAF.Assert("inf 1",saf, result, idT))::(a1@a2)
-(*					(SAF.Assert("inf 1",s, result, (tryT max_ge_maxIntro)))::(a1@a2)*)
-         in
-            result, actions
+         let f1 = inf' info c (SAF.setSource (Sleft src) a) h in
+         let f2 = inf' info c (SAF.setSource (Sright src) b) h in
+         SAF.max f1 f2
     | SAF.Min _ -> raise (Invalid_argument "Itt_supinf.inf applied to min(...,...)")
 
 and inf info (c:SACS.sacs) (s:SAF.saf) (h:CS.t) =
-   let result,actions=inf' info c s h in
+   let result = inf' info c s h in
       if !debug_supinf_steps then
          begin
             eprintf"inf: %a <= %a@." SAF.print result SAF.print s
          end;
-      (result,actions)
+      result
 
 let monom2af var2index t =
 	match explode_term t with
@@ -952,12 +876,26 @@ let rec make_sacs_aux p i l = function
 				)
 		 | Context _ -> make_sacs_aux p i' l tl
 
+type sacs' = Constraints of SACS.sacs | Contradiction of source
+
+let is_neg_number f =
+	if AF.isNumber f then
+		isNegative (AF.coef f AF.constvar)
+	else
+		false
+
 let make_sacs var2index p =
    let hyps = Term.SeqHyp.to_list (Sequent.explode_sequent p).sequent_hyps in
 	let ihyps = make_sacs_aux p 1 [] hyps in
 	let afs=List.map (ge2af var2index) ihyps in
-	List.fold_left SACS.addConstr (SACS.empty (VI.length var2index)) afs
+	try
+ 		let f = List.find is_neg_number afs in
+ 		Contradiction (AF.getSource f)
+	with Not_found ->
+		let s = List.fold_left SACS.addConstr (SACS.empty (VI.length var2index)) afs in
+		Constraints s
 
+(*
 module TermPos=
 struct
 	type data = int
@@ -969,204 +907,7 @@ module TTable=Term_eq_table.MakeTermTable(TermPos)
 let mem h t = TTable.mem !h t
 let add h t d = h:=(TTable.add !h t d)
 let empty _ = ref (TTable.empty)
-
-(*
-let assert_geT info history f1 f2 = funT (fun p ->
-	let t=(mk_ge_rat_term (SAF.term_of info f1) (SAF.term_of info f2)) in
-	if mem history t then
-		idT
-	else
-		begin
-			add history t ((Sequent.hyp_count p)+1);
-			assertT t
-		end
-)
 *)
-
-let runAssertT info (history,wf) label f1 f2 tac =
-   funT (fun p ->
-         if tac==idT then
-            let left=SAF.term_of info f1 in
-            let right=SAF.term_of info f2 in
-            let t=(mk_ge_rat_term left right) in
-               if mem history t then
-                  idT
-               else
-               if mem wf left then
-                  if mem wf right then
-                     begin
-                        add history t ((Sequent.hyp_count p)+1);
-                        assertT t thenAT (addHiddenLabelT label)
-                     end
-                  else
-                     begin
-                        add wf right ((Sequent.hyp_count p)+1);
-                        add history t ((Sequent.hyp_count p)+2);
-                        let rmem=mk_equal_term rationals_term right right in
-                           assertT rmem thenMT (assertT t thenAT (addHiddenLabelT label))
-                     end
-               else
-               if mem wf right then
-                  begin
-                     add wf left ((Sequent.hyp_count p)+1);
-                     add history t ((Sequent.hyp_count p)+2);
-                     let lmem=mk_equal_term rationals_term left left in
-                        assertT lmem thenMT (assertT t thenAT (addHiddenLabelT label))
-                  end
-               else
-                  begin
-                     add wf left ((Sequent.hyp_count p)+1);
-                     add wf right ((Sequent.hyp_count p)+2);
-                     add history t ((Sequent.hyp_count p)+3);
-                     let lmem=mk_equal_term rationals_term left left in
-                     let rmem=mk_equal_term rationals_term right right in
-                        assertT lmem thenMT assertT rmem thenMT (assertT t thenAT (addHiddenLabelT label))
-                  end
-(*		assert_geT info history f1 f2 thenAT (addHiddenLabelT label)*)
-         else
-            let left=SAF.term_of info f1 in
-            let right=SAF.term_of info f2 in
-            let t=(mk_ge_rat_term left right) in
-               if mem history t then
-                  idT
-               else
-               if mem wf left then
-                  if mem wf right then
-                     begin
-                        add history t ((Sequent.hyp_count p)+1);
-                        assertT t thenAT (addHiddenLabelT label thenT tac)
-                     end
-                  else
-                     begin
-                        add wf right ((Sequent.hyp_count p)+1);
-                        add history t ((Sequent.hyp_count p)+2);
-                        let rmem=mk_equal_term rationals_term right right in
-                           assertT rmem thenMT (assertT t thenAT (addHiddenLabelT label thenT tac))
-                     end
-               else
-               if mem wf right then
-                  begin
-                     add wf left ((Sequent.hyp_count p)+1);
-                     add history t ((Sequent.hyp_count p)+2);
-                     let lmem=mk_equal_term rationals_term left left in
-                        assertT lmem thenMT (assertT t thenAT (addHiddenLabelT label thenT tac))
-                  end
-               else
-                  begin
-                     add wf left ((Sequent.hyp_count p)+1);
-                     add wf right ((Sequent.hyp_count p)+2);
-                     add history t ((Sequent.hyp_count p)+3);
-                     let lmem=mk_equal_term rationals_term left left in
-                     let rmem=mk_equal_term rationals_term right right in
-                        assertT lmem thenMT assertT rmem thenMT (assertT t thenAT (addHiddenLabelT label thenT tac))
-                  end
-(*		assert_geT info history f1 f2 thenAT (addHiddenLabelT label thenT tac)*)
-   )
-
-let rec runAssertStepT info h label tac f1 f2 =
-	let src1,f1'=f1 in
-	let src2,f2'=f2 in
-   match f1',f2' with
-      SAF.Affine _, SAF.Affine _ -> runAssertT info h label f1 f2 tac
-    |	SAF.Affine _, SAF.Max(s21,s22) -> runAssertStepListT info h label tac [(f1,s21);(f1,s22)]
-    | SAF.Min(s11,s12), SAF.Affine _ -> runAssertStepListT info h label tac [(s11,f2);(s12,f2)]
-    | SAF.Min(s11,s12),SAF.Max(s21,s22) ->
-         runAssertStepListT info h label tac [(s11,s21);(s11,s22);(s12,s21);(s12,s22)]
-    | SAF.Max(s11,s12),SAF.Max(s21,s22) -> runAssertStepListT info h label tac [(s11,s21);(s12,s22)]
-    | SAF.Min(s11,s12),SAF.Min(s21,s22) -> runAssertStepListT info h label tac [(s11,s21);(s12,s22)]
-    | _,_ -> idT(*runAssertT info label f1 f2 tac*)
-
-and runAssertStepListT info h label tac = function
-   [(f1,f2)] -> runAssertStepT info h label tac f1 f2
- | (f1,f2)::tl ->
-      runAssertStepT info h label tac f1 f2 thenMT (runAssertStepListT info h label tac tl)
- | [] -> raise (Invalid_argument "runAssertStepListT applied to an empty list")
-
-let runTransitiveT info h label f1 f2 f3 =
-	try
-		runAssertT info h label f1 f3 (geTransitive (SAF.term_of info f2))
-	with RefineError(a,b) ->
-		begin
-			eprintf"RefineError caught in runTransitiveT";
-			raise (RefineError(a,b))
-		end
-
-let rec runTransitiveStepT info h label f1 f2 f3 =
-	let src1,f1'=f1 in
-	let src2,f2'=f2 in
-	let src2,f3'=f3 in
-   match f1',f2',f3' with
-      SAF.Affine _, SAF.Affine _, SAF.Affine _ -> runTransitiveT info h label f1 f2 f3
-    |	_, SAF.Max(s21,s22), SAF.Max(s31,s32) -> runTransitiveStepListT info h label [(f1,s21,s31);(f1,s22,s32)]
-    |	SAF.Min (s11,s12), SAF.Min(s21,s22), _ -> runTransitiveStepListT info h label [(s11,s21,f3);(s12,s22,f3)]
-    |	_, SAF.Affine _, SAF.Max(s31,s32) -> runTransitiveStepListT info h label [(f1,f2,s31);(f1,f2,s32)]
-    |	SAF.Min (s11,s12), SAF.Affine _, _ -> runTransitiveStepListT info h label [(s11,f2,f3);(s12,f2,f3)]
-    | _,_,_ -> idT(*runTransitiveT info label f1 f2 f3*)
-
-and runTransitiveStepListT info h label = function
-   [(f1,f2,f3)] -> runTransitiveStepT info h label f1 f2 f3
- | (f1,f2,f3)::tl ->
-      runTransitiveStepT info h label f1 f2 f3 thenMT (runTransitiveStepListT info h label tl)
- | [] -> raise (Invalid_argument "runTransitiveStepListT applied to an empty list")
-
-let rec runListT info h = function
-   [] -> idT
- | [SAF.Assert (label,f1,f2,tac)] ->
-      begin
-         if !debug_supinf_steps then
-            (eprintf "%s %a >= %a@." label SAF.print f1 SAF.print f2);
-         if SAF.isInfinite f1 || SAF.isInfinite f2 then
-            idT
-         else
-            runAssertStepT info h label tac f1 f2
-      end
- | [SAF.Transitive (label,f1,f2,f3)] ->
-      begin
-         if !debug_supinf_steps then
-            (eprintf "%s %a >= %a >= %a@." (**)
-                label
-                SAF.print f1
-                SAF.print f2
-                SAF.print f3);
-         if SAF.isInfinite f1 || SAF.isInfinite f2 || SAF.isInfinite f3 then
-            idT
-         else
-            runTransitiveStepT info h label f1 f2 f3
-      end
- | [SAF.Tactic(label,tac)] ->
-      begin
-         if !debug_supinf_steps then
-            eprintf "%s%t" label eflush;
-         addHiddenLabelT label thenT tac
-      end
- | (SAF.Assert (label,f1,f2,tac))::tl ->
-      begin
-         if !debug_supinf_steps then
-            (eprintf "%s %a >= %a@." label SAF.print f1 SAF.print f2);
-         if SAF.isInfinite f1 || SAF.isInfinite f2 then
-            runListT info h tl
-         else
-            runAssertStepT info h label tac f1 f2 thenMT (runListT info h tl)
-      end
- | (SAF.Transitive (label,f1,f2,f3))::tl ->
-      begin
-         if !debug_supinf_steps then
-            (eprintf "%s %a >= %a >= %a@." (**)
-                label
-                SAF.print f1
-                SAF.print f2
-                SAF.print f3);
-         if SAF.isInfinite f1 || SAF.isInfinite f2 || SAF.isInfinite f3 then
-            runListT info h tl
-         else
-            runTransitiveStepT info h label f1 f2 f3 thenMT (runListT info h tl)
-      end
- | (SAF.Tactic(label,tac))::tl ->
-      begin
-         if !debug_supinf_steps then
-            eprintf "%s%t" label eflush;
-         addHiddenLabelT label thenT (tac thenMT (runListT info h tl))
-      end
 
 let resource intro += [
 	<<ge_rat{rat{number[i:n];number[j:n]}; rat{number[k:n];number[l:n]}}>>, wrap_intro (rw reduceC 0);
@@ -1175,6 +916,7 @@ let resource intro += [
 	<<le_rat{rat{number[i:n];number[j:n]}; rat{number[k:n];number[l:n]}}>>, wrap_intro (rw reduceC 0);
 ]
 
+(*
 interactive ge2leftMin 'H 'J :
 	[wf] sequent { <H>; ge_rat{'a; 'c}; <J>; ge_rat{'b; 'c}; <K> >- 'a in rationals } -->
 	[wf] sequent { <H>; ge_rat{'a; 'c}; <J>; ge_rat{'b; 'c}; <K> >- 'b in rationals } -->
@@ -1216,6 +958,7 @@ let ge2rightMaxT i j = funT (fun p ->
 	end;
 	ge2rightMax i (j-i)
 )
+*)
 
 interactive ge2transitive 'H 'J :
 	[wf] sequent { <H>; ge_rat{'a; 'b}; <J>; ge_rat{'b; 'c}; <K> >- 'a in rationals } -->
@@ -1380,52 +1123,6 @@ let source2hypT info s = funT (fun p ->
 	seqOnMT taclist thenMT rw normalizeC (-1)
 )
 
-let testT =
-   funT (fun p ->
-         let var2index = VI.create 13 in
-         let constrs=make_sacs var2index p in
-         let info=VI.invert var2index in
-            if !debug_supinf_steps then
-               begin
-                  eprintf "Vars:\n%a\nSACS:\n%a@." (**)
-                     VI.print var2index
-                     SACS.print constrs
-               end;
-            begin
-               let saf'=SAF.affine (AF.mk_var 1) in
-               let sup',a1=sup info constrs saf' CS.empty in
-					if SAF.isMinusInfinity sup' then
-						let actions=List.rev a1 in
-							begin
-								if !debug_supinf_steps then
-									begin
-										eprintf "start=%a@." SAF.print saf';
-										eprintf"sup=%a@." SAF.print sup';
-										eprintf "%a <= %a@." (**)
-											SAF.print saf'
-											SAF.print sup'
-									end;
-								runListT info (empty (),empty ()) actions
-							end
-					else
-						let inf',a2=inf info constrs saf' CS.empty in
-						let actions=List.rev (SAF.Transitive("final",sup',(SAF.affine (AF.mk_var 1)),inf')::(a1@a2)) in
-							begin
-								if !debug_supinf_steps then
-									begin
-										eprintf "start=%a@." SAF.print saf';
-										eprintf"sup=%a@." SAF.print sup';
-										eprintf"inf=%a@." SAF.print inf';
-										eprintf "%a <= %a <= %a@." (**)
-											SAF.print inf'
-											SAF.print saf'
-											SAF.print sup'
-									end;
-								runListT info (empty (),empty ()) actions
-							end
-            end
-   )
-
 interactive inseparable_rat 'H 'n :
 	[wf] sequent { <H>; ge_rat{'a; 'b}; <J> >- 'a in rationals } -->
 	[wf] sequent { <H>; ge_rat{'a; 'b}; <J> >- 'b in rationals } -->
@@ -1455,7 +1152,7 @@ let rec iter p info constrs v =
 		end
 	else
 		let saf'=SAF.affine (AF.mk_var v) in
-		let sup',a1=sup info constrs saf' CS.empty in
+		let sup' = sup info constrs saf' CS.empty in
 		let supsrc=SAF.getSource sup' in
 		if SAF.isMinusInfinity sup' then
 			begin
@@ -1470,7 +1167,7 @@ let rec iter p info constrs v =
 				source2hypT info supsrc
 			end
 		else
-			let inf',a2=inf info constrs saf' CS.empty in
+			let inf' = inf info constrs saf' CS.empty in
 			let infsrc=SAF.getSource inf' in
 			begin
 				if !debug_supinf_steps then
@@ -1520,17 +1217,21 @@ let rec iter p info constrs v =
 					end
 			end
 
-let test2T = funT (fun p ->
+let coreT = funT (fun p ->
    let var2index = VI.create 13 in
-   let constrs=make_sacs var2index p in
+   let s = make_sacs var2index p in
    let info=VI.invert var2index in
    if !debug_supinf_steps or !debug_supinf_post then
-      begin
-			eprintf "Vars:\n%a\nSACS:\n%a@." (**)
-			VI.print var2index
-			SACS.print constrs
-		end;
-	iter p info constrs 1
+		eprintf "Vars:\n%a@." VI.print var2index;
+   match s with
+   	Constraints constrs ->
+		   if !debug_supinf_steps or !debug_supinf_post then
+				eprintf "SACS:\n%a@." SACS.print constrs;
+			iter p info constrs 1
+	 | Contradiction s ->
+		   if !debug_supinf_steps or !debug_supinf_post then
+		   	eprintf "Contradiction at %a@." S.print s;
+	 		source2hypT info (Scontradiction s)
 )
 
 let ge_int2ratT = argfunT (fun i p ->
@@ -1547,9 +1248,8 @@ let preT = funT (fun p ->
 	tryOnAllMHypsT ge_int2ratT*))
 )
 
-let coreT = test2T
-let core2T = test2T
-let supinfT = preT thenMT core2T
+let core2T = coreT
+let supinfT = preT thenMT coreT
 
 interactive test 'a 'b 'c :
 sequent { <H> >- 'a in rationals } -->
@@ -1586,26 +1286,6 @@ sequent { <H>; ge_rat{'a; add_rat{'b;rat{3;1}}};
 					ge_rat{'a; add_rat{rat{3;1};mul_rat{rat{-1;1};'b}}};
 					ge_rat{add_rat{'b;rat{2;1}}; 'a}
 					>- "assert"{bfalse} }
-
-(*
-interactive test 'H 'a 'b 'c :
-sequent { <H> >- 'a in rationals } -->
-sequent { <H> >- 'b in rationals } -->
-sequent { <H> >- 'c in rationals } -->
-sequent { <H>; ge_rat{add_rat{rat{-1;1};add_rat{mul_rat{rat{1;1};'a};mul_rat{rat{-1;1};'b}}}; rat{0;1}};
-					ge_rat{add_rat{rat{-3;1};add_rat{mul_rat{rat{-1;1};'b};mul_rat{rat{1;1};'c}}}; rat{0;1}};
-					ge_rat{add_rat{mul_rat{rat{-1;1};'a};mul_rat{rat{1;1};'b}}; rat{0;1}}
-               >- "assert"{bfalse} }
-
-interactive test2 'H 'a 'b 'c :
-sequent { <H> >- 'a in rationals } -->
-sequent { <H> >- 'b in rationals } -->
-sequent { <H> >- 'c in rationals } -->
-sequent { <H>; ge_rat{mul_rat{rat{1;1};'a}; rat{0;1}};
-					ge_rat{mul_rat{rat{1;1};'b}; rat{0;1}};
-					ge_rat{add_rat{rat{-1;1};add_rat{mul_rat{rat{-1;1};'a};mul_rat{rat{-1;1};'b}}}; rat{0;1}}
-					>- "assert"{bfalse} }
-*)
 
 interactive inttest 'a 'b 'c :
 sequent { <H> >- 'a in int } -->

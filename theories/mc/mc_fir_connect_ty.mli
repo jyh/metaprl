@@ -54,13 +54,18 @@ val term_of_float_precision : float_precision -> term
 val float_precision_of_term : term -> float_precision
 
 (*
+ * Convert to and from ty_var.
+ *)
+
+val term_of_ty_var : ty_var -> term
+val ty_var_of_term : term -> ty_var
+
+(*
  * Convert to and from ty.
  *)
 
-(*
-val ty_to_term : ty -> term
-val term_to_ty : term -> ty
-*)
+val term_of_ty : ty -> term
+val ty_of_term : term -> ty
 
 (*
  * Convert to and from union_type.

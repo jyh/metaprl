@@ -34,6 +34,7 @@
 (* Open MC ML namespaces. *)
 
 open Rawint
+open Rawfloat
 open Symbol
 
 (* Open MetaPRL ML namespaces. *)
@@ -46,17 +47,31 @@ open Refiner.Refiner.Term
  *)
 
 val var_term_of_symbol : symbol -> term
-(*
-val symbol_of_var_term : term -> symbol
-*)
+val symbol_of_var_term : term -> symbol (* THIS NEEDS FIXING! *)
 
 (*
- * Convert between integer constants and numbers.
+ * Convert between integer and floating point constants and numbers.
  * A number term is number[i:n] (for example).
+ * Rawfloats are represented as integers!
  *)
 
 val number_term_of_int : int -> term
 val int_of_number_term : term -> int
 
 val number_term_of_rawint : rawint -> term
-val rawint_of_number_term : int_precision -> bool -> term -> rawint
+val rawint_of_number_term : int_precision -> int_signed -> term -> rawint
+
+(* THESE NEED CHECKING (MORE SO THAN OTHER FUNCS) *)
+val number_term_of_rawfloat : rawfloat -> term
+val rawfloat_of_number_term : float_precision -> term -> rawfloat
+
+(*
+ * Convert a list to a "term list", i.e. << cons{ ... } >>.
+ * For term_of_list:
+ *    ('a -> term)   -- converts an item of type 'a to a corresponding term.
+ * For list_of_term:
+ *    (term -> 'a)   -- converts a term representing an 'a to an 'a.
+ *)
+
+val term_of_list : ('a -> term) -> 'a list -> term
+val list_of_term : (term -> 'a) -> term -> 'a list

@@ -41,22 +41,22 @@ open Symbol
 open Mp_num
 open Refiner.Refiner.Term
 open Itt_int_base
+open Itt_list
 
-(*
+(*************************************************************************
  * Convert between symbols and variable terms (e.g. 'a).
- *)
+ *************************************************************************)
 
 let var_term_of_symbol s =
    mk_var_term (string_of_symbol s)
 
-(*
+(* THIS NEEDS FIXING! *)
 let symbol_of_var_term v =
-   (dest_var v) (* so I have a string now... now what? ... *)
-*)
+   new_symbol_string (dest_var v)
 
-(*
+(*************************************************************************
  * Convert between integer constants and numbers.
- *)
+ *************************************************************************)
 
 let number_term_of_int i =
    mk_number_term (num_of_int i)
@@ -69,3 +69,34 @@ let number_term_of_rawint r =
 
 let rawint_of_number_term precision sign t =
    Rawint.of_string precision sign (string_of_num (dest_number t))
+
+(* THESE NEED CHECKING (MORE SO THAN OTHER FUNCS) *)
+let number_term_of_rawfloat f =
+   mk_number_term (num_of_string (Rawfloat.to_string f))
+
+let rawfloat_of_number_term p t =
+   Rawfloat.of_string p (string_of_num (dest_number t))
+
+(*************************************************************************
+ * Convert a list to a "term list", i.e. << cons{ ... } >>.
+ *************************************************************************)
+
+let rec term_of_list f l =
+   match l with
+      [] ->
+         nil_term
+    | h :: t ->
+         let h' = f h in
+         let t' = term_of_list f t in
+            mk_cons_term h' t'
+
+let rec list_of_term f_conv t =
+   if is_cons_term t then
+      let head, tail = dest_cons t in
+      let tail' = list_of_term f_conv tail in
+      let head' = f_conv head in
+         head' :: tail'
+   else if t = nil_term then
+      []
+   else
+      raise (Invalid_argument "list_of_term: not a term representing a list")

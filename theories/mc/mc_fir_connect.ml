@@ -38,6 +38,9 @@ open Fir
 
 open Fir_ty
 open Fir_exp
+open Mc_fir_connect_base
+open Mc_fir_connect_ty
+open Mc_fir_connect_exp
 
 (*************************************************************************
  * Convert between Fir.prog and MetaPRL terms.

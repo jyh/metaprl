@@ -39,6 +39,13 @@ open Fir
 open Refiner.Refiner.Term
 
 (*
+ * Convert to and from var.
+ *)
+
+val term_of_var : var -> term
+val var_of_term : term -> var
+
+(*
  * Convert to and from unop.
  *)
 
@@ -51,3 +58,24 @@ val unop_of_term : term -> unop
 
 val term_of_binop : binop -> term
 val binop_of_term : term -> binop
+
+(*
+ * Convert to and from subop.
+ *)
+
+val term_of_subop : subop -> term
+val subop_of_term : term -> subop
+
+(*
+ * Convert to and from atom.
+ *)
+
+val term_of_atom : atom -> term
+val atom_of_term : term -> atom
+
+(*
+ * Convert to and from alloc_op.
+ *)
+
+val term_of_alloc_op : alloc_op -> term
+val alloc_op_of_term : term -> alloc_op

@@ -32,6 +32,8 @@
 
 (* Open MC ML namespaces. *)
 
+open Rawint
+open Rawfloat
 open Fir
 
 (* Open MetaPRL ML namespaces. *)
@@ -40,9 +42,19 @@ open Fir_exp
 open Mc_fir_connect_base
 open Mc_fir_connect_ty
 
-(*
+(*************************************************************************
+ * Convert to and from var / ty_var.
+ *************************************************************************)
+
+(* Just wrappers right now, since var = symbol. *)
+
+let term_of_var = var_term_of_symbol
+
+let var_of_term = symbol_of_var_term
+
+(*************************************************************************
  * Convert to and from unop.
- *)
+ *************************************************************************)
 
 let term_of_unop op =
    match op with
@@ -53,6 +65,65 @@ let term_of_unop op =
       (* Naml ints. *)
     | UMinusIntOp -> uminusIntOp_term
     | NotIntOp ->    notIntOp_term
+
+      (* Bit fields. *)
+    | RawBitFieldOp (p,s,i1,i2) ->
+         mk_rawBitFieldOp_term  (term_of_int_precision p)
+                                (term_of_int_signed s)
+                                (number_term_of_int i1)
+                                (number_term_of_int i2)
+
+      (* Native ints. *)
+    | UMinusRawIntOp (p,s) ->
+         mk_uminusRawIntOp_term (term_of_int_precision p)
+                                (term_of_int_signed s)
+    | NotRawIntOp (p,s) ->
+         mk_notRawIntOp_term    (term_of_int_precision p)
+                                (term_of_int_signed s)
+
+      (* Floats. *)
+    | UMinusFloatOp p ->   mk_uminusFloatOp_term   (term_of_float_precision p)
+    | AbsFloatOp p ->      mk_absFloatOp_term      (term_of_float_precision p)
+    | SinOp p ->           mk_sinOp_term           (term_of_float_precision p)
+    | CosOp p ->           mk_cosOp_term           (term_of_float_precision p)
+    | SqrtOp p ->          mk_sqrtOp_term          (term_of_float_precision p)
+
+      (* Coerce to int. *)
+    | IntOfFloatOp p ->    mk_intOfFloatOp_term    (term_of_float_precision p)
+
+      (* COerce to float. *)
+    | FloatOfIntOp p ->
+         mk_floatOfIntOp_term    (term_of_float_precision p)
+    | FloatOfFloatOp (p1,p2) ->
+         mk_floatOfFloatOp_term  (term_of_float_precision p1)
+                                 (term_of_float_precision p2)
+    | FloatOfRawIntOp (pf,pi,s) ->
+         mk_floatOfRawIntOp_term (term_of_float_precision pf)
+                                 (term_of_int_precision pi)
+                                 (term_of_int_signed s)
+
+      (* Coerce to rawint. *)
+    | RawIntOfEnumOp (p,s,i) ->
+         mk_rawIntOfEnumOp_term     (term_of_int_precision p)
+                                    (term_of_int_signed s)
+                                    (number_term_of_int i)
+    | RawIntOfFloatOp (p,s,pf) ->
+         mk_rawIntOfFloatOp_term    (term_of_int_precision p)
+                                    (term_of_int_signed s)
+                                    (term_of_float_precision pf)
+    | RawIntOfRawIntOp (pd,sd,ps,ss) ->
+         mk_rawIntOfRawIntOp_term   (term_of_int_precision pd)
+                                    (term_of_int_signed sd)
+                                    (term_of_int_precision ps)
+                                    (term_of_int_signed ss)
+
+      (* Integer/pointer coercions (only for C). *)
+    | RawIntOfPointerOp (p,s) ->
+         mk_rawIntOfPointerOp_term  (term_of_int_precision p)
+                                    (term_of_int_signed s)
+    | PointerOfRawIntOp (p,s) ->
+         mk_pointerOfRawIntOp_term  (term_of_int_precision p)
+                                    (term_of_int_signed s)
 
 let unop_of_term t =
 
@@ -66,12 +137,85 @@ let unop_of_term t =
    else if is_notIntOp_term t then
       NotIntOp
 
+   (* Bit fields. *)
+   else if is_rawBitFieldOp_term t then
+      let p, s, i1, i2 = dest_rawBitFieldOp_term t in
+         RawBitFieldOp (int_precision_of_term p)
+                       (int_signed_of_term s)
+                       (int_of_number_term i1)
+                       (int_of_number_term i2)
+
+   (* Native ints. *)
+   else if is_uminusRawIntOp_term t then
+      let p, s = dest_uminusRawIntOp_term t in
+         UMinusRawIntOp (int_precision_of_term p) (int_signed_of_term s)
+   else if is_notRawIntOp_term t then
+      let p, s = dest_notRawIntOp_term t in
+         NotRawIntOp    (int_precision_of_term p) (int_signed_of_term s)
+
+   (* Floats. *)
+   else if is_uminusFloatOp_term t then
+      UMinusFloatOp  (float_precision_of_term (dest_uminusFloatOp_term t))
+   else if is_absFloatOp_term t then
+      AbsFloatOp     (float_precision_of_term (dest_absFloatOp_term t))
+   else if is_sinOp_term t then
+      SinOp          (float_precision_of_term (dest_sinOp_term t))
+   else if is_cosOp_term t then
+      CosOp          (float_precision_of_term (dest_cosOp_term t))
+   else if is_sqrtOp_term t then
+      SqrtOp         (float_precision_of_term (dest_sqrtOp_term t))
+
+   (* Coerce to int. *)
+   else if is_intOfFloatOp_term t then
+      IntOfFloatOp   (float_precision_of_term (dest_intOfFloatOp_term t))
+
+   (* Coerce to float. *)
+   else if is_floatOfIntOp_term t then
+      FloatOfIntOp   (float_precision_of_term (dest_floatOfIntOp_term t))
+   else if is_floatOfFloatOp_term t then
+      let p1, p2 = dest_floatOfFloatOp_term t in
+         FloatOfFloatOp    (float_precision_of_term p1)
+                           (float_precision_of_term p2)
+   else if is_floatOfRawIntOp_term t then
+      let pf, pi, s = dest_floatOfRawIntOp_term t in
+         FloatOfRawIntOp   (float_precision_of_term pf)
+                           (int_precision_of_term pi)
+                           (int_signed_of_term s)
+
+   (* Coerce to rawint. *)
+   else if is_rawIntOfEnumOp_term t then
+      let p, s, i = dest_rawIntOfEnumOp_term t in
+         RawIntOfEnumOp    (int_precision_of_term p)
+                           (int_signed_of_term s)
+                           (int_of_number_term i)
+   else if is_rawIntOfFloatOp_term t then
+      let pi, s, pf = dest_rawIntOfFloatOp_term t in
+         RawIntOfFloatOp   (int_precision_of_term pi)
+                           (int_signed_of_term s)
+                           (float_precision_of_term pf)
+   else if is_rawIntOfRawIntOp_term t then
+      let pd, sd, ps, ss = dest_rawIntOfRawIntOp_term t in
+         RawIntOfRawIntOp  (int_precision_of_term pd)
+                           (int_signed_of_term sd)
+                           (int_precision_of_term ps)
+                           (int_signed_of_term ss)
+
+   (* Integer/pointer coercions (only for C). *)
+   else if is_rawIntOfPointerOp_term t then
+      let p, s = dest_rawIntOfPointerOp_term t in
+         RawIntOfPointerOp (int_precision_of_term p)
+                           (int_signed_of_term s)
+   else if is_pointerOfRawIntOp_term t then
+      let p, s = dest_pointerOfRawIntOp_term t in
+         PointerOfRawIntOp (int_precision_of_term p)
+                           (int_signed_of_term s)
+
    else
       raise (Invalid_argument "unop_of_term: not a unop")
 
-(*
+(*************************************************************************
  * Convert to and from binop.
- *)
+ *************************************************************************)
 
 let term_of_binop op =
    match op with
@@ -273,52 +417,37 @@ let binop_of_term t =
 
    (* Floats. *)
    else if is_plusFloatOp_term t then
-      let p = dest_plusFloatOp_term t in
-         PlusFloatOp    (float_precision_of_term p)
+      PlusFloatOp    (float_precision_of_term (dest_plusFloatOp_term t))
    else if is_minusFloatOp_term t then
-      let p = dest_minusFloatOp_term t in
-         MinusFloatOp   (float_precision_of_term p)
+      MinusFloatOp   (float_precision_of_term (dest_minusFloatOp_term t))
    else if is_mulFloatOp_term t then
-      let p = dest_mulFloatOp_term t in
-         MulFloatOp     (float_precision_of_term p)
+      MulFloatOp     (float_precision_of_term (dest_mulFloatOp_term t))
    else if is_divFloatOp_term t then
-      let p = dest_divFloatOp_term t in
-         DivFloatOp     (float_precision_of_term p)
+      DivFloatOp     (float_precision_of_term (dest_divFloatOp_term t))
    else if is_remFloatOp_term t then
-      let p = dest_remFloatOp_term t in
-         RemFloatOp     (float_precision_of_term p)
+      RemFloatOp     (float_precision_of_term (dest_remFloatOp_term t))
    else if is_maxFloatOp_term t then
-      let p = dest_maxFloatOp_term t in
-         MaxFloatOp     (float_precision_of_term p)
+      MaxFloatOp     (float_precision_of_term (dest_maxFloatOp_term t))
    else if is_minFloatOp_term t then
-      let p = dest_minFloatOp_term t in
-         MinFloatOp     (float_precision_of_term p)
+      MinFloatOp     (float_precision_of_term (dest_minFloatOp_term t))
 
    else if is_eqFloatOp_term t then
-      let p = dest_eqFloatOp_term t in
-         EqFloatOp      (float_precision_of_term p)
+      EqFloatOp      (float_precision_of_term (dest_eqFloatOp_term t))
    else if is_neqFloatOp_term t then
-      let p = dest_neqFloatOp_term t in
-         NeqFloatOp     (float_precision_of_term p)
+      NeqFloatOp     (float_precision_of_term (dest_neqFloatOp_term t))
    else if is_ltFloatOp_term t then
-      let p = dest_ltFloatOp_term t in
-         LtFloatOp      (float_precision_of_term p)
+      LtFloatOp      (float_precision_of_term (dest_ltFloatOp_term t))
    else if is_leFloatOp_term t then
-      let p = dest_leFloatOp_term t in
-         LeFloatOp      (float_precision_of_term p)
+      LeFloatOp      (float_precision_of_term (dest_leFloatOp_term t))
    else if is_gtFloatOp_term t then
-      let p = dest_gtFloatOp_term t in
-         GtFloatOp      (float_precision_of_term p)
+      GtFloatOp      (float_precision_of_term (dest_gtFloatOp_term t))
    else if is_geFloatOp_term t then
-      let p = dest_geFloatOp_term t in
-         GeFloatOp      (float_precision_of_term p)
+      GeFloatOp      (float_precision_of_term (dest_geFloatOp_term t))
    else if is_cmpFloatOp_term t then
-      let p = dest_cmpFloatOp_term t in
-         CmpFloatOp     (float_precision_of_term p)
+      CmpFloatOp     (float_precision_of_term (dest_cmpFloatOp_term t))
 
    else if is_atan2Op_term t then
-      let p = dest_atan2Op_term t in
-         Atan2Op        (float_precision_of_term p)
+      Atan2Op        (float_precision_of_term (dest_atan2Op_term t))
 
    (* Pointer equality *)
    else if is_eqEqOp_term t then
@@ -328,3 +457,132 @@ let binop_of_term t =
 
    else
       raise (Invalid_argument "term_to_binop: not a binop")
+
+(*************************************************************************
+ * Convert to and from subop.
+ *************************************************************************)
+
+let term_of_subop op =
+   match op with
+      BlockPolySub ->
+         blockPolySub_term
+    | BlockRawIntSub (p,s) ->
+         mk_blockRawIntSub_term (term_of_int_precision p) (term_of_int_signed s)
+    | BlockFloatSub p ->
+         mk_blockFloatSub_term (term_of_float_precision p)
+    | RawRawIntSub (p,s) ->
+         mk_rawRawIntSub_term (term_of_int_precision p) (term_of_int_signed s)
+    | RawFloatSub p ->
+         mk_rawFloatSub_term (term_of_float_precision p)
+    | RawDataSub ->
+         rawDataSub_term
+    | RawFunctionSub ->
+         rawFunctionSub_term
+
+let subop_of_term t =
+   if is_blockPolySub_term t then
+      BlockPolySub
+   else if is_blockRawIntSub_term t then
+      let p, s = dest_blockRawIntSub_term t in
+         BlockRawIntSub (int_precision_of_term p) (int_signed_of_term s)
+   else if is_blockFloatSub_term t then
+      BlockFloatSub (float_precision_of_term (dest_blockFloatSub_term t))
+   else if is_rawRawIntSub_term t then
+      let p, s = dest_rawRawIntSub_term t in
+         RawRawIntSub (int_precision_of_term p) (int_signed_of_term s)
+   else if is_rawFloatSub_term t then
+      RawFloatSub (float_precision_of_term (dest_rawFloatSub_term t))
+   else if is_rawDataSub_term t then
+      RawDataSub
+   else if is_rawFunctionSub_term t then
+      RawFunctionSub
+   else
+      raise (Invalid_argument "subop_of_term: not a subop")
+
+(*************************************************************************
+ * Convert to and from atom.
+ *************************************************************************)
+
+let term_of_atom a =
+   match a with
+      AtomInt i ->
+         mk_atomInt_term      (number_term_of_int i)
+    | AtomEnum (i1,i2) ->
+         mk_atomEnum_term     (number_term_of_int i1) (number_term_of_int i2)
+    | AtomRawInt r ->
+         mk_atomRawInt_term   (term_of_int_precision (Rawint.precision r))
+                              (term_of_int_signed (signed r))
+                              (number_term_of_rawint r)
+    | AtomFloat f ->
+         mk_atomFloat_term    (term_of_float_precision (Rawfloat.precision f))
+                              (number_term_of_rawfloat f)
+    | AtomConst (t,tv,i) ->
+         mk_atomConst_term    (term_of_ty t)
+                              (term_of_ty_var tv)
+                              (number_term_of_int i)
+    | AtomVar v ->
+         mk_atomVar_term      (term_of_var v)
+
+let atom_of_term t =
+   if is_atomInt_term t then
+      AtomInt (int_of_number_term (dest_atomInt_term t))
+   else if is_atomEnum_term t then
+      let i1, i2 = dest_atomEnum_term t in
+         AtomEnum (int_of_number_term i1) (int_of_number_term i2)
+   else if is_atomRawInt_term t then
+      let p, s, i = dest_atomRawInt_term t in
+         AtomRawInt (rawint_of_number_term (int_precision_of_term p)
+                                           (int_signed_of_term s)
+                                           t)
+   else if is_atomFloat_term t then
+      let p, f = dest_atomFloat_term t in
+         AtomFloat (rawfloat_of_number_term (float_precision_of_term p) t)
+   else if is_atomConst_term t then
+      let t, tv, i = dest_atomConst_term t in
+         AtomConst (ty_of_term t) (ty_var_of_term tv) (int_of_number_term i)
+   else if is_atomVar_term t then
+      AtomVar (var_of_term (dest_atomVar_term t))
+
+   else
+      raise (Invalid_argument "atom_of_term: not an atom")
+
+(*************************************************************************
+ * Convert to and from alloc_op.
+ *************************************************************************)
+
+let term_of_alloc_op op =
+   match op with
+      AllocTuple (t,al) ->
+         mk_allocTuple_term   (term_of_ty t)
+                              (term_of_list term_of_atom al)
+    | AllocUnion (t,tv,i,al) ->
+         mk_allocUnion_term   (term_of_ty t)
+                              (term_of_ty_var tv)
+                              (number_term_of_int i)
+                              (term_of_list term_of_atom al)
+    | AllocArray (t,al) ->
+         mk_allocArray_term   (term_of_ty t)
+                              (term_of_list term_of_atom al)
+    | AllocMalloc a ->
+         mk_allocMalloc_term  (term_of_atom a)
+
+let alloc_op_of_term t =
+   if is_allocTuple_term t then
+      let t, al = dest_allocTuple_term t in
+         AllocTuple  (ty_of_term t)
+                     (list_of_term atom_of_term al)
+   else if is_allocUnion_term t then
+      let t, tv, i, al = dest_allocUnion_term t in
+         AllocUnion  (ty_of_term t)
+                     (ty_var_of_term tv)
+                     (int_of_number_term i)
+                     (list_of_term atom_of_term al)
+   else if is_allocArray_term t then
+      let t, al = dest_allocArray_term t in
+         AllocArray  (ty_of_term t)
+                     (list_of_term atom_of_term al)
+   else if is_allocMalloc_term t then
+      AllocMalloc (atom_of_term (dest_allocMalloc_term t))
+
+   else
+      raise (Invalid_argument "alloc_op_of_term: not an alloc_op")

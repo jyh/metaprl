@@ -42,6 +42,6 @@ open Refiner.Refiner.Term
  * Convert between Fir.prog and MetaPRL terms.
  *************************************************************************)
 
-val fir_prog_to_term : Fir.prog -> unit
+val fir_prog_to_term : prog -> unit
 
 val term_to_fir_prog : term -> unit

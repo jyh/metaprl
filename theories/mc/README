@@ -35,6 +35,8 @@ Todo list:
 -  fir_deadcode - get dead parameter and function removal working.
 -  fir_exp - Atomic, Debug, and Migrate term are missing.  I should
    at least declare these or something.
+-  symbol_of_var_term NEEDS SERIOUS CORRECTION!!
+-  term_of_rawfloat and the other needs MORE CHECKING!!
 
 Notes to myself:
 --------------------------------------------------------------------------

@@ -2,7 +2,7 @@
  * @begin[spelling]
  * Conversionals addr addrC allSubC andthenC conv
  * cutC dprod failC firstC foldC higherC idC inl
- * inr lowerC orelseC reduceC reduceDecideInl reduceSpread repeatC
+ * inr Itt lowerC orelseC reduceC reduceDecideInl reduceSpread repeatC
  * rw rwh someSubC sweepDnC sweepUpC tryC
  * @end[spelling]
  *

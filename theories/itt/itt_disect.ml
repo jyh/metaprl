@@ -1,4 +1,7 @@
 (*!
+ * @begin[spelling]
+ * disect
+ * @end[spelling]
  * @begin[doc]
  * @theory[Itt_disect]
  *
@@ -15,7 +18,7 @@
  * in the @hreftheory[itt_isect] theory.
  * The latter type refers to the intersection of a family of types.
  *
- * Im some sence the dependent intersection is similar to
+ * In some sence the dependent intersection is similar to
  * the dependent product type $@prod{x;A;B[x]}$
  * (when $@isect{x;A;B[x]}$ is similar to the function space
  * $@fun{x; A; B[x]}$).
@@ -202,8 +205,8 @@ interactive dintersectionMemberFormation {| intro_resource [] |} 'H 't:
 (*!
  * @begin[doc]
  * @thysubsection{Elimination}
- * The elimimination rule for an assumption $x@colon @bisect{y@colon A;B[y]}$
- * prodeces two witnesses that $x @in A$ and that $x @in B[x]$
+ * The elimination rule for an assumption $x@colon @bisect{y@colon A;B[y]}$
+ * produces two witnesses that $x @in A$ and that $x @in B[x]$
  * @end[doc]
  *)
 
@@ -235,7 +238,7 @@ prim dintersectionSubtype {| intro_resource [] |} 'H 'a :
  ************************************************************************)
 (*!
  * @begin[doc]
- * @thysubsection{Set type as dependent intesection}
+ * @thysubsection{Set type as dependent intersection}
  *
  * As an example of using dependent intersection we show that
  * sets (@hreftheory[itt_set]) are extensionally equal to dependent intersections.

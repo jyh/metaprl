@@ -159,7 +159,7 @@ interactive cutMem 'H ('s IN 'S) bind{x.'T['x]} :
  * If this argument is omitted then the tactic finds all occurrences of $s$
  * in the conclusion and replace them with $x$.
  *
- * This tactic is ussualy used when we have an assumption $s @in S$,
+ * This tactic is usually used when we have an assumption $s @in S$,
  * and want to use the elimination rule corresponding to S.
  *
  * @end[doc]

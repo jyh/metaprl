@@ -1,4 +1,7 @@
 (*!
+ * @begin[spelling]
+ * isect
+ * @end[spelling]
  * @begin[doc]
  * @theory{Czf_itt_isect}
  *

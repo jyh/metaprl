@@ -1,4 +1,7 @@
 (*!
+ * @begin[spelling]
+ * assum isset
+ * @end[spelling]
  * @begin[doc]
  * @theory[Czf_itt_set]
  *

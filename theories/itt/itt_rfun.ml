@@ -252,7 +252,7 @@ let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_i
 
 (*!
  * @begin[doc]
- * @thysubsection{Well-foundedness}
+ * @thysubsection{Well-foundness}
  *
  * The following three rules are used to define a well-founded order.
  * The term @hrefterm[well_founded_prop] $@"well_founded_prop"{A}$ represents an arbitrary
@@ -262,9 +262,9 @@ let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_i
  * all elements of $a$ by induction on the relation $R[a_1, a_2]$.
  *
  * The reason this definition is so convoluted is that the definition of
- * well-foundedness must be give @emph{before} defining functions and application.
+ * well-foundness must be give @emph{before} defining functions and application.
  * The @hreftheory[Itt_well_founded] module provides simplified definitions
- * of well-foundedness.
+ * of well-foundness.
  * @end[doc]
  *)
 prim well_founded_assum_elim {| elim_resource [ThinOption thinT] |} 'H 'J 'a 'a3 'u :

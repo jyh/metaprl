@@ -3,9 +3,9 @@
  * @theory[Itt_well_founded]
  *
  * The @tt{Itt_well_founded} module provides a more convenient
- * description of well-foundedness than the @hrefterm[well_founded_prop]
+ * description of well-foundness than the @hrefterm[well_founded_prop]
  * term formalized the the @hreftheory[Itt_rfun] module.  The definition
- * of well-foundedness requires the derivation of an induction
+ * of well-foundness requires the derivation of an induction
  * principle.
  * @end[doc]
  *
@@ -119,11 +119,11 @@ interactive well_founded_type {| intro_resource [] |} 'H 'a 'b :
 (*!
  * @begin[doc]
  * The purpose of this definition is to give a more convenient
- * specification of well-foundedness that uses normal quantification
+ * specification of well-foundness that uses normal quantification
  * in its formalization (the @hrefterm[well_founded_prop] predicate defined
  * in the @hreftheory[Itt_rfun] can't use the function type in its
  * definition).  The following rule specifies that the new
- * description of well-foundedness is sufficient to derive the
+ * description of well-foundness is sufficient to derive the
  * primitive definition.
  * @end[doc]
  *)

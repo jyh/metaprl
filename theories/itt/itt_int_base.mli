@@ -408,6 +408,7 @@ rule add_Commut :
 
 topval add_CommutC: conv
 
+(* BUG WEAK
 rule lt_add_lt :
    [main] sequent { <H> >- 'a < 'b} -->
    [main] sequent { <H> >- 'c < 'd} -->
@@ -416,6 +417,7 @@ rule lt_add_lt :
    [wf] sequent { <H> >- 'c in int } -->
    [wf] sequent { <H> >- 'd in int } -->
    sequent { <H> >- ('a +@ 'c) < ('b +@ 'd) }
+*)
 
 topval lt_add_ltT : tactic
 
@@ -446,20 +448,26 @@ rule minus_add_inverse :
 
 topval minus_add_inverseC: conv
 
+(* BUG WEAK
 rule add_Functionality 'c :
    [main] sequent { <H> >- ('a +@ 'c) ~ ('b +@ 'c) } -->
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->
    [wf] sequent { <H> >- 'c in int } -->
    sequent { <H> >- 'a ~ 'b }
+*)
 
 topval add_FunctionalityC : term -> term -> conv
 
+(* BUG WEAK
 rule minus_add_Distrib :
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->
    sequent { <H> >- (- ('a +@ 'b)) ~ ( (- 'a) +@ (- 'b) ) }
+*)
 
+(* BUG WEAK
 rule minus_minus_reduce :
    [wf] sequent { <H> >- 'a in int } -->
    sequent { <H> >- (-(-'a)) ~ 'a }
+*)

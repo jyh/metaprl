@@ -62,6 +62,15 @@ let apply_rewrite =
  * Automation.
  *************************************************************************)
 
+(*
+ * This builds the rewrite to unfold a function call.  It requires
+ * a list of inline targets, and the program term.  We create
+ * and reduce a get_func_body{...} term to extract the program body.
+ * The contractum is a inline_tailCall term, which takes
+ * care of extracting the matched argument list from the tail
+ * call and applying the body of the target function to that list.
+ *)
+
 let firInlineTargetsC program inline_forms =
    let rewrites = List.map
       (fun (target, _) ->
@@ -78,13 +87,19 @@ let firInlineTargetsC program inline_forms =
          debug_term contractum;
 
          (* Build the rewrite. *)
-         create_iform "inliner" true target contractum;
-         debug_string "\n\nmade it this far\n\n";
-         create_iform "inliner" true target contractum;
+         create_iform "inliner" true target contractum
 
       ) inline_forms
    in
       (higherC (applyAllC rewrites))
+
+(*
+ * Given a program term, and a list of targets to inline, this conversional
+ * will inline all the targets it can find, until a fix point is
+ * reached.  It's recommended that the inline targets not be recursive
+ * function calls, unless the recursive function calls eventually
+ * terminate.
+ *)
 
 let firInlineC program inline_forms =
 
@@ -93,7 +108,7 @@ let firInlineC program inline_forms =
       (* Make one pass at inlining targets. *)
       (firInlineTargetsC program inline_forms) thenC
 
-      (* Remvoe the inline_tailCall_prep term. *)
+      (* Remove the inline_tailCall term. *)
       firInlineInlineTailCallC thenC
 
       (* Normalize the program. *)

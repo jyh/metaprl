@@ -72,8 +72,7 @@ declare inline_tailCall{ 'body; 'args }
  *************************************************************************)
 
 (*
- * Creating an association list of ('name, 'func_body).
- * These need to be tried in order.
+ * Extract a function body from an firProg based on an inline target.
  *)
 
 prim_rw reduce_get_func_body_1 :
@@ -100,7 +99,7 @@ prim_rw reduce_get_func_body_3 :
    get_func_body{ 'target_tailCall; 'tail }
 
 (*
- * Expanding a tailCall so that we can further reduce it (inline it).
+ * Expand a tailCall so that we can further reduce it (inline it).
  *)
 
 prim_rw reduce_inline_tailCall_real_1 :

@@ -45,6 +45,7 @@ open Mp_mc_base
 open Mp_mc_fir_phobos
 open Mp_mc_fir_eval
 open Mp_mc_deadcode
+open Mp_mc_const_elim
 open Mp_mc_connect_prog
 open Mp_mc_inline
 
@@ -105,6 +106,7 @@ let compile_phobos_fir program post_rewrites inline_targets =
    (* Apply optimizations. *)
    let program = apply_rw_top firDeadcodeC program in
    let program = apply_rw_top firExpEvalC program in
+   let program = apply_rw_top firConstElimC program in
    debug_string "\n\nFinal term (i.e. after remaining optimizations) =\n\n";
    debug_term program;
    debug_string "\n\nfirProg -> Fir.prog not implemented yet\n"
@@ -129,6 +131,7 @@ let compile_mc_fir prog =
 
    let table = SymbolTable.map (apply_rw_top firDeadcodeC) table in
    let table = SymbolTable.map (apply_rw_top firExpEvalC) table in
+   let table = SymbolTable.map (apply_rw_top firConstElimC) table in
 
    debug_string "Printing optimized term structure.";
    let _ = SymbolTable.map debug_term table in

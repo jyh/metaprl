@@ -31,9 +31,9 @@
  * Email:  emre@its.caltech.edu
  *)
 
+include Itt_int_base
 include Mp_mc_fir_ty
 include Mp_mc_fir_exp
-include Mp_mc_fir_eval
 
 open Tactic_type.Conversionals
 
@@ -42,38 +42,16 @@ open Tactic_type.Conversionals
  *************************************************************************)
 
 (*
- * Unary operations.
+ * Basic facts about multiplication.
  *)
 
-topval const_elim_uminusIntOp : conv
-topval const_elim_uminusRawIntOp : conv
-
-(*
- * Binary operations.
- *)
-
-(* Naml ints. *)
-
-topval const_elim_plusIntOp : conv
-topval const_elim_minusIntOp : conv
-topval const_elim_mulIntOp : conv
-
-(* Native ints. *)
-
-topval const_elim_plusRawIntOp : conv
-topval const_elim_minusRawIntOp : conv
-topval const_elim_mulRawIntOp : conv
-
-(*
- * Normal values.
- *)
-
-topval const_elim_atomVar_atomInt : conv
-topval const_elim_atomVar_atomRawInt : conv
+topval reduce_mulRawIntOp_opt1 : conv
+topval reduce_mulRawIntOp_opt2 : conv
+topval reduce_mulRawIntOp_opt3 : conv
+topval reduce_mulRawIntOp_opt4 : conv
 
 (*************************************************************************
  * Automation.
  *************************************************************************)
 
-(* Currently broken - reduces all precisions, at the very least *)
 topval firConstElimC : conv

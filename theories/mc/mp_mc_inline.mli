@@ -42,4 +42,12 @@ open Tactic_type.Conversionals
  * Automation.
  *************************************************************************)
 
+(*
+ * Given a program term, and a list of targets to inline, this conversional
+ * will inline all the targets it can find, until a fix point is
+ * reached.  It's recommended that the inline targets not be recursive
+ * function calls, unless the recursive function calls eventually
+ * terminate.
+ *)
+
 val firInlineC : term -> mp_pre_term list -> conv

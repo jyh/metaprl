@@ -42,12 +42,9 @@
  * @parents
  * @end[doc]
  *)
-include Itt_bool
 include Itt_int_base
-include Itt_int_ext
 include Mp_mc_fir_ty
 include Mp_mc_fir_exp
-include Mp_mc_fir_eval
 (*! @docoff *)
 
 open Mp_mc_fir_eval
@@ -58,130 +55,39 @@ open Top_conversionals
  *************************************************************************)
 
 (*
- * Unary operations.
+ * Basic facts about multiplication.
  *)
 
-interactive_rw const_elim_uminusIntOp :
-   letUnop{ tyInt; uminusIntOp; atomInt{ 'int }; var. 'exp['var] } <-->
-   'exp[ unop_exp{ uminusIntOp; tyInt; 'int} ]
+prim_rw reduce_mulRawIntOp_opt1 :
+   letBinop{ tyRawInt{'p;'s}; mulRawIntOp{'p;'s};
+             atomRawInt{'p;'s;1}; atomVar{ 'v }; v. 'exp['v] } <-->
+   'exp[ 'v ]
 
-interactive_rw const_elim_uminusRawIntOp :
-   letUnop{ tyRawInt{'p; 's}; uminusRawIntOp{'p; 's};
-            atomRawInt{'p; 's; 'num}; var. 'exp['var] } <-->
-   'exp[ unop_exp{ uminusRawIntOp{'p; 's}; tyRawInt{'p; 's}; 'num } ]
+prim_rw reduce_mulRawIntOp_opt2 :
+   letBinop{ tyRawInt{'p;'s}; mulRawIntOp{'p;'s};
+             atomVar{ 'v }; atomRawInt{'p;'s;1}; v. 'exp['v] } <-->
+   'exp[ 'v ]
 
-(*
- * Binary operations.
- *)
+prim_rw reduce_mulRawIntOp_opt3 :
+   letBinop{ tyRawInt{'p;'s}; mulRawIntOp{'p;'s};
+             atomRawInt{'p;'s;0}; atomVar{ 'v }; v. 'exp['v] } <-->
+   'exp[ atomRawInt{'p;'s;0} ]
 
-(* Naml ints. *)
-
-interactive_rw const_elim_plusIntOp :
-   letBinop{ tyInt; plusIntOp; atomInt{'i1}; atomInt{'i2}; v. 'exp['v] } <-->
-   'exp[ binop_exp{ plusIntOp; tyInt; 'i1; 'i2 } ]
-
-interactive_rw const_elim_minusIntOp :
-   letBinop{ tyInt; minusIntOp; atomInt{'i1}; atomInt{'i2}; v. 'exp['v] } <-->
-   'exp[ binop_exp{ minusIntOp; tyInt; 'i1; 'i2 } ]
-
-interactive_rw const_elim_mulIntOp :
-   letBinop{ tyInt; mulIntOp; atomInt{'i1}; atomInt{'i2}; v. 'exp['v] } <-->
-   'exp[ binop_exp{ mulIntOp; tyInt; 'i1; 'i2 } ]
-
-(* Native ints. *)
-
-interactive_rw const_elim_plusRawIntOp :
-   letBinop{ tyRawInt{'p; 's}; plusRawIntOp{'p; 's};
-      atomRawInt{'p; 's; 'i1}; atomRawInt{'p; 's; 'i2}; v. 'exp['v] } <-->
-   'exp[ binop_exp{ plusRawIntOp{'p; 's}; tyRawInt{'p; 's}; 'i1; 'i2 } ]
-
-interactive_rw const_elim_minusRawIntOp :
-   letBinop{ tyRawInt{'p; 's}; minusRawIntOp{'p; 's};
-      atomRawInt{'p; 's; 'i1}; atomRawInt{'p; 's; 'i2}; v. 'exp['v] } <-->
-   'exp[ binop_exp{ minusRawIntOp{'p; 's}; tyRawInt{'p; 's}; 'i1; 'i2 } ]
-
-interactive_rw const_elim_mulRawIntOp :
-   letBinop{ tyRawInt{'p; 's}; mulRawIntOp{'p; 's};
-      atomRawInt{'p; 's; 'i1}; atomRawInt{'p; 's; 'i2}; v. 'exp['v] } <-->
-   'exp[ binop_exp{ mulRawIntOp{'p; 's}; tyRawInt{'p; 's}; 'i1; 'i2 } ]
-
-(*
- * Normal values.
- *)
-
-interactive_rw const_elim_atomVar_atomInt :
-   atomVar{ atomInt{'i} } <--> atomInt{'i}
-
-interactive_rw const_elim_atomVar_atomRawInt :
-   atomVar{ atomRawInt{'p; 's; 'i} } <--> atomRawInt{'p; 's; 'i}
+prim_rw reduce_mulRawIntOp_opt4 :
+   letBinop{ tyRawInt{'p;'s}; mulRawIntOp{'p;'s};
+             atomVar{ 'v }; atomRawInt{'p;'s;0}; v. 'exp['v] } <-->
+   'exp[ atomRawInt{'p;'s;0} ]
 
 (*************************************************************************
  * Automation
  *************************************************************************)
 
-(* Currently broken - reduces all precisions, at the very least *)
 let firConstElimC =
    repeatC (higherC (applyAllC [
 
-      (* Many other rewrites are needed to support this optimization. *)
+      reduce_mulRawIntOp_opt1;
+      reduce_mulRawIntOp_opt2;
+      reduce_mulRawIntOp_opt3;
+      reduce_mulRawIntOp_opt4
 
-(*
-      reduce_pow_2_7;
-      reduce_pow_2_8;
-      reduce_pow_2_15;
-      reduce_pow_2_16;
-      reduce_pow_2_30;
-      reduce_pow_2_31;
-      reduce_pow_2_32;
-      reduce_pow_2_63;
-      reduce_pow_2_64;
-      reduce_pow;
-      reduce_arith_signed_int8;
-      reduce_arith_signed_int16;
-      reduce_arith_signed_int32;
-      reduce_arith_signed_int64;
-      reduce_arith_signed_naml;
-      reduce_arith_unsigned_int8;
-      reduce_arith_unsigned_int16;
-      reduce_arith_unsigned_int32;
-      reduce_arith_unsigned_int64;
-      reduce_mod_arith_signed;
-      reduce_mod_arith_unsigned;
-
-      reduce_plusIntOp;
-      reduce_minusIntOp;
-      reduce_mulIntOp;
-      reduce_divIntOp;
-      reduce_remIntOp;
-      reduce_maxIntOp;
-      reduce_minIntOp;
-
-      reduce_plusRawIntOp;
-      reduce_minusRawIntOp;
-      reduce_mulRawIntOp;
-      reduce_divRawIntOp;
-      reduce_remRawIntOp;
-      reduce_maxRawIntOp;
-      reduce_minRawIntOp;
-*)
-
-      (* Now we include the rewrites we defined above. *)
-
-      const_elim_uminusIntOp;
-      const_elim_uminusRawIntOp;
-
-      const_elim_plusIntOp;
-      const_elim_minusIntOp;
-      const_elim_mulIntOp;
-
-      const_elim_plusRawIntOp;
-      const_elim_minusRawIntOp;
-      const_elim_mulRawIntOp;
-
-      const_elim_atomVar_atomInt;
-      const_elim_atomVar_atomRawInt;
-
-      (* Clean up anything else that remains. *)
-
-      reduceTopC
    ] ))

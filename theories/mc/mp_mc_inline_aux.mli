@@ -58,7 +58,7 @@ declare inline_tailCall{ 'body; 'args }
  *************************************************************************)
 
 (*
- * Creating an association list of ('name, 'func_body).
+ * Extract a function body from an firProg based on an inline target.
  *)
 
 topval reduce_get_func_body_1 : conv

@@ -32,7 +32,6 @@
  *)
 
 include Mp_mc_fir_exp
-include Mp_mc_fir_eval
 
 open Tactic_type.Conversionals
 

@@ -43,7 +43,6 @@
  * @end[doc]
  *)
 include Mp_mc_fir_exp
-include Mp_mc_fir_eval
 (*! @docoff *)
 
 open Top_conversionals
@@ -62,6 +61,15 @@ open Tactic_type.Conversionals
 prim_rw reduce_letUnop_deadcode :
    letUnop{ 'ty; 'unop; 'atom; var. 'exp } <-->
    'exp
+
+(*
+ * Okay, technically, I should expand this out into a bunch of
+ * individual cases, one for each binop.  The reason for this is
+ * that we cannot deadcode eliminate division by zero, and other
+ * such "errors".  While division by zero is indeed bad, we
+ * _can't_ change the program semantics.  For now, I'm a bit
+ * too lazy to do all these cases.
+ *)
 prim_rw reduce_letBinop_deadcode :
    letBinop{ 'ty; 'binop; 'atom1; 'atom2; var. 'exp } <-->
    'exp

@@ -450,7 +450,7 @@ doc <:doc<
 >>
 interactive all_univ {| intro [] |} :
    [wf] sequent { <H> >- 't1 = 't2 in univ[i:l] } -->
-   [wf] sequent { <H>; x : 't1 >- 'b1['x] = 'b2['x] in univ[i:l] } -->
+   [wf] sequent { <H>; x1 : 't1 >- 'b1['x1] = 'b2['x1] in univ[i:l] } -->
    sequent { <H> >- "all"{'t1; x1. 'b1['x1]} = "all"{'t2; x2. 'b2['x2]} in univ[i:l] }
 
 interactive all_type {| intro [] |} :
@@ -481,7 +481,7 @@ doc <:doc<
 >>
 interactive exists_univ {| intro [] |} :
    [wf] sequent { <H> >- 't1 = 't2 in univ[i:l] } -->
-   [wf] sequent { <H>; x : 't1 >- 'b1['x] = 'b2['x] in univ[i:l] } -->
+   [wf] sequent { <H>; x1 : 't1 >- 'b1['x1] = 'b2['x1] in univ[i:l] } -->
    sequent { <H> >- "exists"{'t1; x1. 'b1['x1]} = "exists"{'t2; x2. 'b2['x2]} in univ[i:l] }
 
 interactive exists_type {| intro [] |} :
@@ -496,7 +496,7 @@ interactive exists_intro {| intro [] |} 'z :
    sequent { <H> >- "exists"{'t; v. 'b['v]} }
 
 interactive exists_elim {| elim [] |} 'H :
-   [main] sequent { <H>; y: 'a; z: 'b['y]; <J['y, 'z]> >- 'C['y, 'z] } -->
+   [main] sequent { <H>; v: 'a; z: 'b['v]; <J['v, 'z]> >- 'C['v, 'z] } -->
    sequent { <H>; x: exst v: 'a. 'b['v]; <J['x]> >- 'C['x] }
 doc <:doc< @docoff >>
 

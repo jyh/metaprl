@@ -279,7 +279,7 @@ doc <:doc<
 >>
 prim productEquality {| intro [] |} :
    [wf] sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
-   [wf] sequent { <H>; y: 'A1 >- 'B1['y] = 'B2['y] in univ[i:l] } -->
+   [wf] sequent { <H>; x1: 'A1 >- 'B1['x1] = 'B2['x1] in univ[i:l] } -->
    sequent { <H> >- x1:'A1 * 'B1['x1] = x2:'A2 * 'B2['x2] in univ[i:l] } =
    it
 
@@ -289,7 +289,7 @@ prim productEquality {| intro [] |} :
 prim productType {| intro [] |} :
    [wf] sequent { <H> >- "type"{'A1} } -->
    [wf] sequent { <H>; x: 'A1 >- "type"{'A2['x]} } -->
-   sequent { <H> >- "type"{y:'A1 * 'A2['y]} } =
+   sequent { <H> >- "type"{x:'A1 * 'A2['x]} } =
    it
 
 doc <:doc<
@@ -307,7 +307,7 @@ doc <:doc<
 prim pairEquality {| intro [] |} :
    [wf] sequent { <H> >- 'a1 = 'a2 in 'A } -->
    [wf] sequent { <H> >- 'b1 = 'b2 in 'B['a1] } -->
-   [wf] sequent { <H>; y: 'A >- "type"{'B['y]} } -->
+   [wf] sequent { <H>; x: 'A >- "type"{'B['x]} } -->
    sequent { <H> >- ('a1, 'b1) = ('a2, 'b2) in x:'A * 'B['x] } =
    it
 
@@ -324,7 +324,7 @@ doc <:doc<
 interactive pairFormation {| intro [] |} 'a :
    [wf] sequent { <H> >- 'a in 'A } -->
    [main] sequent { <H> >- 'B['a] } -->
-   [wf] sequent { <H>; y: 'A >- "type"{'B['y]} } -->
+   [wf] sequent { <H>; x: 'A >- "type"{'B['x]} } -->
    sequent { <H> >- x:'A * 'B['x] }
 
 doc <:doc<
@@ -339,9 +339,9 @@ doc <:doc<
    @end[doc]
 >>
 prim productElimination {| elim [ThinOption thinT] |} 'H :
-   ('t['z; 'u; 'v] : sequent { <H>; z: x:'A * 'B['x]; u: 'A; v: 'B['u]; <J['u, 'v]> >- 'T['u, 'v] }) -->
+   ('t['z; 'x; 'y] : sequent { <H>; z: x:'A * 'B['x]; x: 'A; y: 'B['x]; <J['x, 'y]> >- 'T['x, 'y] }) -->
    sequent { <H>; z: x:'A * 'B['x]; <J['z]> >- 'T['z] } =
-   spread{'z; u, v. 't['z; 'u; 'v]}
+   spread{'z; x, y. 't['z; 'x; 'y]}
 
 doc <:doc<
    @begin[doc]
@@ -379,8 +379,8 @@ doc <:doc<
 >>
 interactive productSubtype {| intro [] |} :
    ["subtype"] sequent { <H> >- 'A1 subtype 'A2 } -->
-   ["subtype"] sequent { <H>; a: 'A1 >- 'B1['a] subtype 'B2['a] } -->
-   ["subtype"] sequent { <H>; a: 'A2 >- 'B2['a] Type } -->
+   ["subtype"] sequent { <H>; a1: 'A1 >- 'B1['a1] subtype 'B2['a1] } -->
+   ["subtype"] sequent { <H>; a2: 'A2 >- 'B2['a2] Type } -->
    sequent { <H> >- (a1:'A1 * 'B1['a1]) subtype (a2:'A2 * 'B2['a2]) }
 doc <:doc< @docoff >>
 

@@ -112,16 +112,16 @@ interactive void_well_founded {| intro [] |} :
  *)
 interactive functionEquality {| intro [] |} :
    [wf] sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
-   [wf] sequent { <H>; x: 'A1 >- 'B1['x] = 'B2['x] in univ[i:l] } -->
+   [wf] sequent { <H>; a1: 'A1 >- 'B1['a1] = 'B2['a1] in univ[i:l] } -->
    sequent { <H> >- (a1:'A1 -> 'B1['a1]) = (a2:'A2 -> 'B2['a2]) in univ[i:l] }
 
 (*
  * Typehood.
  *)
 interactive functionType {| intro [] |} :
-   [wf] sequent { <H> >- "type"{'A1} } -->
-   [wf] sequent { <H>; x: 'A1 >- "type"{'B1['x]} } -->
-   sequent { <H> >- "type"{ a1:'A1 -> 'B1['a1] } }
+   [wf] sequent { <H> >- "type"{'A} } -->
+   [wf] sequent { <H>; a: 'A >- "type"{'B['a]} } -->
+   sequent { <H> >- "type"{ a:'A -> 'B['a] } }
 
 doc <:doc<
    @begin[doc]
@@ -135,7 +135,7 @@ doc <:doc<
 >>
 interactive lambdaFormation {| intro [] |} :
    [wf] sequent { <H> >- "type"{'A} } -->
-   [main] ('b['z] : sequent { <H>; z: 'A >- 'B['z] }) -->
+   [main] ('b['z] : sequent { <H>; a: 'A >- 'B['a] }) -->
    sequent { <H> >- a:'A -> 'B['a] }
 
 doc <:doc<
@@ -147,7 +147,7 @@ doc <:doc<
 >>
 interactive lambdaEquality {| intro [] |} :
    [wf] sequent { <H> >- "type"{'A} } -->
-   [wf] sequent { <H>; x: 'A >- 'b1['x] = 'b2['x] in 'B['x] } -->
+   [wf] sequent { <H>; a1: 'A >- 'b1['a1] = 'b2['a1] in 'B['a1] } -->
    sequent { <H> >- lambda{a1. 'b1['a1]} = lambda{a2. 'b2['a2]} in a:'A -> 'B['a] }
 
 doc <:doc<
@@ -160,7 +160,7 @@ doc <:doc<
    @end[doc]
 >>
 interactive functionExtensionality (y:'C -> 'D['y]) (z:'E -> 'F['z]) :
-   [main] sequent { <H>; u: 'A >- ('f 'u) = ('g 'u) in 'B['u] } -->
+   [main] sequent { <H>; x: 'A >- ('f 'x) = ('g 'x) in 'B['x] } -->
    [wf] sequent { <H> >- "type"{'A} } -->
    [wf] sequent { <H> >- 'f in y:'C -> 'D['y] } -->
    [wf] sequent { <H> >- 'g in z:'E -> 'F['z] } -->
@@ -177,7 +177,7 @@ doc <:doc<
 >>
 interactive functionElimination {| elim [] |} 'H 'a :
    [wf] sequent { <H>; f: x:'A -> 'B['x]; <J['f]> >- 'a in 'A } -->
-   ('t['f; 'y; 'v] : sequent { <H>; f: x:'A -> 'B['x]; <J['f]>; y: 'B['a]; v: 'y = ('f 'a) in 'B['a] >- 'T['f] }) -->
+   sequent { <H>; f: x:'A -> 'B['x]; <J['f]>; y: 'B['a]; 'y = ('f 'a) in 'B['a] >- 'T['f] } -->
    sequent { <H>; f: x:'A -> 'B['x]; <J['f]> >- 'T['f] }
 
 doc <:doc<
@@ -206,7 +206,7 @@ doc <:doc<
 >>
 interactive functionSubtype {| intro [] |} :
    ["subtype"] sequent { <H> >- 'A2 subtype 'A1 } -->
-   ["subtype"] sequent { <H>; a: 'A1 >- 'B1['a] subtype 'B2['a] } -->
+   ["subtype"] sequent { <H>; a1: 'A1 >- 'B1['a1] subtype 'B2['a1] } -->
    sequent { <H> >- a1:'A1 -> 'B1['a1]  subtype  a2:'A2 -> 'B2['a2] }
 doc <:doc< @docoff >>
 

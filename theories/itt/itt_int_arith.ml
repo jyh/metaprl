@@ -82,12 +82,7 @@ let _ = show_loading "Loading Itt_int_ext%t"
 
 let get_term i p =
 (* We skip first item because it is a context *)
-   if i<>1 then
-      let g=Sequent.goal p in
-      let (_,t)=Refiner.Refiner.TermMan.nth_hyp g i in
-         t
-   else
-      mk_simple_term xperv []
+   if i<>1 then Sequent.nth_hyp p i else mk_simple_term xperv []
 
 let le2geT t p =
    let (left,right)=dest_le t in
@@ -743,10 +738,10 @@ let sumList tl g =
    match tl with
    h::t ->
       let aux a (l,r) =
-         let (_,tm) = nth_hyp g a in
+         let tm = nth_hyp g a in
          let (al,ar) = dest_ge tm in
          (mk_add_term al l, mk_add_term ar r) in
-      let (_,h_tm) = nth_hyp g h in
+      let h_tm = nth_hyp g h in
       let (sl, sr)=List.fold_right aux t (dest_ge h_tm) in
       mk_ge_term sl sr
    | [] ->
@@ -805,7 +800,7 @@ let findContradRelT p =
    let g=Sequent.goal p in
    let l = Arith.TermHyps.collect good_term g in
 (* begin
-           List.map (fun x->let (_,t)=(Refiner.Refiner.TermMan.nth_hyp g x)
+           List.map (fun x->let t=(Refiner.Refiner.TermMan.nth_hyp g x)
                      in print_term stdout t) l;
 *)
    let ar=Array.of_list l in

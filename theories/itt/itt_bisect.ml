@@ -160,7 +160,7 @@ interactive bisectElimination_eq 'H 'J 'u 'v bind{x,HACK.bind{a,b.'C['x;'a;'b;'H
 let bisectEliminationT n p =
    let u,v = maybe_new_vars2 p "u" "v" in
    let i, j = Sequent.hyp_indices p n in
-   let x,_ = Sequent.nth_hyp p n in
+   let x = Sequent.nth_binding p n in
    let x_var = mk_var_term x in
    let bind =  get_with_arg p in
       if is_bind2_term bind then

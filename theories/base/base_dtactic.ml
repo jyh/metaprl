@@ -315,7 +315,7 @@ let identity x = x
 let extract_elim_data data =
    let tbl = create_table data identity in
    fun i p ->
-      let t = snd (Sequent.nth_hyp p i) in
+      let t = Sequent.nth_hyp p i in
       let tac =
          try
             (* Find and apply the right tactic *)
@@ -510,10 +510,10 @@ let process_elim_resource_annotation name context_args var_args term_args _ stat
                   let get_arg =
                      match arg with
                         None ->
-                           (fun p i -> snd (Sequent.nth_hyp p i))
+                           (fun p i -> Sequent.nth_hyp p i)
                       | Some arg ->
                            let addr = find_subterm t arg in
-                              (fun p i -> term_subterm (snd (Sequent.nth_hyp p i)) addr)
+                              (fun p i -> term_subterm (Sequent.nth_hyp p i) addr)
                   in
                      (fun i p -> f p (get_arg p i))
              | None ->
@@ -533,7 +533,7 @@ let process_elim_resource_annotation name context_args var_args term_args _ stat
       if Array_util.mem v var_args then
          let index = Array_util.index v var_args in
             (fun i p ->
-                  let v, _ = Sequent.nth_hyp p i in
+                  let v = Sequent.nth_binding p i in
                   let vars = Array.copy var_args in
                   let vars = Var.maybe_new_vars_array p vars in
                      vars.(index) <- v;
@@ -652,10 +652,10 @@ let d_elim_prec = create_auto_prec [trivial_prec; d_prec] []
 let eq_exn = RefineError ("dT", StringError "elim rule not suitable for autoT")
 
 let not_equal t i p =
-   if alpha_equal t (snd (Sequent.nth_hyp p i)) then raise eq_exn else idT p
+   if alpha_equal t (Sequent.nth_hyp p i) then raise eq_exn else idT p
 
 let auto_dT i p =
-   (dT i thenT not_equal (snd (Sequent.nth_hyp p i)) i) p
+   (dT i thenT not_equal (Sequent.nth_hyp p i) i) p
 
 let resource auto += [ {
    auto_name = "dT";

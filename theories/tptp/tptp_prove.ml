@@ -541,7 +541,7 @@ let rec pos_trivial i j p =
  * it negates an existing hyp.
  *)
 let goal_or_trivial i p =
-   let _, hyp = Sequent.nth_hyp p i in
+   let hyp = Sequent.nth_hyp p i in
    let j = Sequent.hyp_count p in
       if !debug_tptp then
          eprintf "Tptp_prove.goal_or_trivial: %a%t" debug_print hyp eflush;
@@ -557,7 +557,7 @@ let goal_or_trivial i p =
 let rec decompose_clause i p =
    if !debug_tptp then
       eprintf "Tptp_prove.decompose_clause%t" eflush;
-   let _, hyp = Sequent.nth_hyp p i in
+   let hyp = Sequent.nth_hyp p i in
       if is_or_term hyp then
          (dT i thenLT [goal_or_trivial i;
                        decompose_clause i]) p
@@ -570,7 +570,7 @@ let rec decompose_clause i p =
 let rec instantiate_hyp constants subst i p =
    if !debug_tptp then
       eprintf "Tptp_prove.instantiate_hyp%t" eflush;
-   let _, hyp = Sequent.nth_hyp p i in
+   let hyp = Sequent.nth_hyp p i in
       if is_all_term hyp then
          let v = var_of_all hyp in
          let t = expand_instance constants subst (mk_var_term v) in
@@ -616,7 +616,7 @@ let rec decompose_exists arg p =
    if !debug_tptp then
       eprintf "Tptp_prove.decompose_exists%t" eflush;
    let i = Sequent.hyp_count p in
-   let _, hyp = Sequent.nth_hyp p i in
+   let hyp = Sequent.nth_hyp p i in
       if is_exists_term hyp then
          (dT i thenT decompose_exists arg) p
       else if is_and_term hyp then
@@ -639,7 +639,7 @@ let assert_new_goal level constants subst hyp_index goal tac p =
  * Main tactic to unify on a hyp.
  *)
 let resolveT i p =
-   let _, hyp = Sequent.nth_hyp p i in
+   let hyp = Sequent.nth_hyp p i in
    let { sequent_hyps = hyps; sequent_goals = goals } = Sequent.explode_sequent p in
    let j, constants = first_clause hyps in
    let hyp_info = dest_hyp hyp in

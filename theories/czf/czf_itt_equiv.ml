@@ -344,7 +344,7 @@ interactive equiv_fun_mem 'H 'J equiv_fun_set{'s; 'r; z. 'f['z]} :
 
 (*! @docoff *)
 let equivFunSetT i p =
-   let z, _ = Sequent.nth_hyp p i in
+   let z = Sequent.nth_binding p i in
    let t = dest_isset (Sequent.concl p) in
    let t =
       try
@@ -359,7 +359,7 @@ let equivFunSetT i p =
          equiv_fun_isset j k t p
 
 let equivFunMemT t i p =
-   let z, _ = Sequent.nth_hyp p i in
+   let z = Sequent.nth_binding p i in
    let t =
       try
          let l = Sequent.get_term_list_arg p "with" in
@@ -662,7 +662,7 @@ let equivConclSubstT t p =
 let equivHypSubstT t i p =
    let s, r, s1, s2 = dest_equiv t in
    let j, k = hyp_indices p i in
-   let _, hyp = nth_hyp p i in
+   let hyp = nth_hyp p i in
    let z = maybe_new_vars1 p "z" in
    let bind =
       try

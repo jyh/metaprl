@@ -283,7 +283,7 @@ interactive intersectionElimination_eq 'H 'J 'v 'a bind{x,HACK.bind{z.'T['x;'z;'
 let intersectionEliminationT n p =
    let z,v = maybe_new_vars2 p "z" "v" in
    let i, j = Sequent.hyp_indices p n in
-   let x,_ = Sequent.nth_hyp p n in
+   let x = Sequent.nth_binding p n in
    let x_var = mk_var_term x in
    let args=
       try get_with_args p with

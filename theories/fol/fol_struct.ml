@@ -12,7 +12,7 @@ open Base_auto_tactic
 (*
  * Hypothesis.
  *)
-prim hypothesis 'H 'J 'x :
+prim hypothesis 'H 'J :
    sequent ['ext] { 'H; x: 'T; 'J['x] >- 'T } = 'x
 
 (*
@@ -35,9 +35,8 @@ prim cut 'H 'T 'x :
  * Tactics.
  *)
 let nthHypT i p =
-   let v, _ = Sequent.nth_hyp p i in
    let j, k = Sequent.hyp_indices p i in
-      hypothesis j k v p
+      hypothesis j k p
 
 let thinT i p =
    let i, j = Sequent.hyp_indices p i in

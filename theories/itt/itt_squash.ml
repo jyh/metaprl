@@ -406,7 +406,7 @@ let is_squash_goal p =
  *)
 let unsquash_tactic tbl i p =
    let conc = concl p in
-   let hyp = dest_squash (snd (nth_hyp p i)) in
+   let hyp = dest_squash (nth_hyp p i) in
    match slookup_all tbl conc, slookup_all tbl hyp with
       ((SqUnsquashGoal tac :: _)|(_ :: SqUnsquashGoal tac :: _)|(_ :: _ :: SqUnsquashGoal tac :: _)), _
     | _, ((SqUnsquash tac :: _)|(_ :: SqUnsquash tac :: _)|(_ :: _ :: SqUnsquash tac :: _)) ->

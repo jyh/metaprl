@@ -124,7 +124,7 @@ let ifNotWT tac p =
 
 (* Try to decompose a hypothesis *)
 let rec decompPropDecideHypT i p =
-   (let _, term = Sequent.nth_hyp p i in
+   (let term = Sequent.nth_hyp p i in
        if is_false_term term then
           dT i
        else if is_and_term term or is_or_term term then

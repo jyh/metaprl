@@ -331,8 +331,7 @@ let resource intro +=
 let d_hyp_subtypeT i p =
    let j, k = hyp_indices p i in
    try
-      let v, _ = Sequent.nth_hyp p i in
-      let v = maybe_new_vars1 p v in
+      let v = maybe_new_vars1 p (Sequent.nth_binding p i) in
       let args = get_with_args p in
             match args with
               [a] -> subtypeElimination2 j k a a v p |

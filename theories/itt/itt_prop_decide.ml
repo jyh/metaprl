@@ -144,7 +144,7 @@ let d_imp_impT i p =
 
 (* Try to decompose a hypothesis *)
 let rec decompPropDecideHypT count i p =
-   (let term = snd (Sequent.nth_hyp p i) in
+   (let term = Sequent.nth_hyp p i in
        if is_false_term term then
           dT i
        else if is_and_term term or is_or_term term then

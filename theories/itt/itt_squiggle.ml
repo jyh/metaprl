@@ -247,7 +247,6 @@ let sqSubstConclT t p =
  *)
 let sqSubstHypT i t p =
    let a, _ = dest_squiggle t in
-   let _, t1 = Sequent.nth_hyp p i in
    let bind =
       try
          let b = get_with_arg p in
@@ -258,7 +257,7 @@ let sqSubstHypT i t p =
       with
          RefineError _ ->
             let z = get_opt_var_arg "z" p in
-               mk_xbind_term z (var_subst t1 a z)
+               mk_xbind_term z (var_subst (Sequent.nth_hyp p i) a z)
    in
    let i, j = Sequent.hyp_indices p i in
       squiggleHypSubstitution i j t bind p

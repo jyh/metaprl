@@ -356,7 +356,7 @@ let assertAtT i s p =
       cut i j s v p
 
 let copyHypT i j p =
-   let _, t = Sequent.nth_hyp p i in
+   let t = Sequent.nth_hyp p i in
       (assertAtT j t thenLT [nthHypT i; idT]) p
 
 let dupT p =
@@ -423,7 +423,6 @@ let substConclT t p =
  *)
 let substHypT i t p =
    let _, a, _ = dest_equal t in
-   let _, t1 = Sequent.nth_hyp p i in
    let z = get_opt_var_arg "z" p in
    let bind =
       try
@@ -434,7 +433,7 @@ let substHypT i t p =
                raise generic_refiner_exn (* will be immedeiatelly caugh *)
       with
          RefineError _ ->
-            mk_xbind_term z (var_subst t1 a z)
+            mk_xbind_term z (var_subst (Sequent.nth_hyp p i) a z)
    in
    let i, j = Sequent.hyp_indices p i in
       hypSubstitution i j t bind z p
@@ -452,11 +451,10 @@ let substT t i =
  * Derived versions.
  *)
 let hypSubstT i j p =
-   let _, h = Sequent.nth_hyp p i in
-      (substT h j thenET nthHypT i) p
+      (substT (Sequent.nth_hyp p i) j thenET nthHypT i) p
 
 let revHypSubstT i j p =
-   let t, a, b = dest_equal (snd (Sequent.nth_hyp p i)) in
+   let t, a, b = dest_equal (Sequent.nth_hyp p i) in
    let h' = mk_equal_term t b a in
       (substT h' j thenET (equalSymT thenT nthHypT i)) p
 

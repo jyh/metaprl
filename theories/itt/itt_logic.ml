@@ -812,8 +812,7 @@ let moveToConclVarsT vars p =
       tac (collect 1 vars []) (Sequent.concl p) p
 
 let moveToConclT i p =
-   let v, _ = Sequent.nth_hyp p i in
-      moveToConclVarsT [v] p
+   moveToConclVarsT [Sequent.nth_binding p i] p
 
 (*!
  * @begin[doc]
@@ -897,7 +896,7 @@ let instHypT args i =
          [] ->
             idT p
        | arg :: args' ->
-            let _, hyp = Sequent.nth_hyp p i in
+            let hyp = Sequent.nth_hyp p i in
             let tailT args =
                if firstp then
                   inst ((Sequent.hyp_count p) + 1) false args
@@ -1080,9 +1079,7 @@ let backThruHypT i p =
                  | AllTerm (v, t) ->
                       withT t (dT i) thenLT tailT) p
    in
-   let _, hyp = Sequent.nth_hyp p i in
-   let goal = Sequent.concl p in
-   let info = match_goal [] hyp goal in
+   let info = match_goal [] (Sequent.nth_hyp p i) (Sequent.concl p) in
       if !debug_auto then
          begin
             eprintf "backThruHyp %d%t" i eflush;
@@ -1152,7 +1149,8 @@ let assum_term goal assum =
       if j > len then
          TermMan.nth_concl assum 1
       else
-         let v, hyp = TermMan.nth_hyp assum j in
+         let hyp = TermMan.nth_hyp assum j in
+         let v = TermMan.nth_binding assum j in
          let goal = collect (j + 1) in
             if is_var_free v goal then
                mk_all_term v hyp goal
@@ -1281,10 +1279,8 @@ struct
    let tryfind_hyp_exn = RefineError("find_hyp_exn", StringError "hypothesys not found")
 
    let tryfind_hyp term tact i p =
-      match Sequent.nth_hyp p i with
-         (_,t) when alpha_equal t term -> tact i p
-       | _ ->
-            raise tryfind_hyp_exn
+      if alpha_equal (Sequent.nth_hyp p i) term then tact i p
+      else raise tryfind_hyp_exn
 
    let find_hyp_fail _ =
       raise (Invalid_argument "Itt_logic.Itt_JLogic.find_hyp failed")
@@ -1293,7 +1289,7 @@ struct
       onSomeHypT (tryfind_hyp term tact) orelseT find_hyp_fail
 
    let tryappend_subst subst t tact i p =
-      tact (match_terms subst t (snd (Sequent.nth_hyp p i))) p
+      tact (match_terms subst t (Sequent.nth_hyp p i)) p
 
    let append_subst subst t v tact =
       match (dest_term t).term_terms with
@@ -1391,7 +1387,7 @@ let jproverT = base_jproverT None
  * In auto tactic, Ok to decompose product hyps.
  *)
 let logic_trivT i p =
-   let _, hyp = Sequent.nth_hyp p i in
+   let hyp = Sequent.nth_hyp p i in
       if is_void_term hyp or is_false_term hyp then
          dT i p
       else
@@ -1401,7 +1397,7 @@ let logic_trivT i p =
  * Backchaining in auto tactic.
  *)
 let logic_autoT i p =
-   let _, hyp = Sequent.nth_hyp p i in
+   let hyp = Sequent.nth_hyp p i in
       if is_and_term hyp
          or is_prod_term hyp
          or is_dprod_term hyp
@@ -1484,8 +1480,7 @@ let autoBackT compare_aux get_aux tac_aux onsome auto_aux =
       auto_back []
 
 let hypAutoT =
-   let nth_hyp p i = snd (Sequent.nth_hyp p i) in
-      autoBackT alpha_equal nth_hyp backThruHypT onSomeHypT autoT
+      autoBackT alpha_equal Sequent.nth_hyp backThruHypT onSomeHypT autoT
 
 let logicAutoT = autoBackT (=) (fun i p -> i) backThruAssumT onSomeAssumT hypAutoT
 

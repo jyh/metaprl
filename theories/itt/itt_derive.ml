@@ -184,11 +184,8 @@ let autoApplyT i p =
       else
          let vars = Sequent.declared_vars p in
          let apps =
-            if i = 0 then
-               search_apply vars (Sequent.concl p)
-            else
-               let _, hyp = Sequent.nth_hyp p i in
-                  search_apply vars hyp
+            search_apply vars (**)
+               (if i = 0 then Sequent.concl p else Sequent.nth_hyp p i)
          in
             anyApplyT apps i p
 

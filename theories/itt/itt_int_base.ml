@@ -275,7 +275,8 @@ let testT p =
  in
    let (args,hyps,goals)=es in
    let gl = SEQ_SET.to_list goals in*)
-   let (s2,h2)=Refiner.Refiner.TermMan.nth_hyp g 2 in
+   let h2=Refiner.Refiner.TermMan.nth_hyp g 2 in
+   let s2=Refiner.Refiner.TermMan.nth_binding g 2 in
    begin
       print_term stdout g;
       printf "\nHL%sHL\n" s2;

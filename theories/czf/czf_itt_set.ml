@@ -418,7 +418,7 @@ let splitT t i p =
                      addHiddenLabelT "wf";
                      addHiddenLabelT "main"]) p
       else
-         let _, hyp = nth_hyp p i in
+         let hyp = nth_hyp p i in
          let hyp = var_subst hyp t v_z in
          let bind = mk_xbind_term v_z hyp in
          let j, k = hyp_indices p i in

@@ -283,7 +283,7 @@ let resource intro += [
  * We take the argument.
  *)
 let d_hyp_fun i p =
-   let f, _ = Sequent.nth_hyp p i in
+   let f = Sequent.nth_binding p i in
    let i, j = Sequent.hyp_indices p i in
    let y, z = maybe_new_vars2 p "y" "z" in
       try

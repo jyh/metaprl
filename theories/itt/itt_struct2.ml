@@ -296,7 +296,6 @@ let substConclT t p =
 let substHypT i t p =
    let v,w = maybe_new_vars2 p "v" "w" in
    let _, a, _ = dest_equal t in
-   let _, t1 = Sequent.nth_hyp p i in
    let z = get_opt_var_arg "z" p in
    let bind =
       try
@@ -307,7 +306,7 @@ let substHypT i t p =
                raise (RefineError ("substT", StringTermError ("need a \"bind\" term: ", b)))
       with
          RefineError _ ->
-            mk_xbind_term z (var_subst t1 a z)
+            mk_xbind_term z (var_subst (Sequent.nth_hyp p i) a z)
    in
    let i, j = Sequent.hyp_indices p i in
      if get_thinning_arg p
@@ -337,11 +336,10 @@ let substT t =
  *)
 
 let hypSubstT i j p =
-   let _, h = Sequent.nth_hyp p i in
-      (substT h j thenET nthHypT i) p
+      (substT (Sequent.nth_hyp p i) j thenET nthHypT i) p
 
 let revHypSubstT i j p =
-   let trm = snd (Sequent.nth_hyp p i) in
+   let trm = Sequent.nth_hyp p i in
    if is_squiggle_term trm then
       let a, b = dest_squiggle trm in
       let h' = mk_squiggle_term  b a in

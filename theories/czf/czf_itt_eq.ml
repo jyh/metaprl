@@ -343,7 +343,7 @@ interactive eq_isset 'H 'J fun_set{z. 'f['z]} :
 
 (*! @docoff *)
 let funSetT i p =
-   let z, _ = Sequent.nth_hyp p i in
+   let z = Sequent.nth_binding p i in
    let t = dest_isset (Sequent.concl p) in
    let t = mk_fun_set_term z t in
    let j, k = Sequent.hyp_indices p i in
@@ -451,7 +451,7 @@ let setConclSubstT t p =
 
 let setHypSubstT t i p =
    let s1, s2 = dest_eq t in
-   let _, hyp = nth_hyp p i in
+   let hyp = nth_hyp p i in
    let z = maybe_new_vars1 p "v" in
    let bind = mk_xbind_term z (var_subst hyp s1 z) in
    let j, k = hyp_indices p i in

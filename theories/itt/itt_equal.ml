@@ -662,7 +662,7 @@ let typeAssertT p =
  *)
 let triv_equalT i p =
    let concl = Sequent.concl p in
-   let hyp = snd (Sequent.nth_hyp p i) in
+   let hyp = Sequent.nth_hyp p i in
       if is_type_term concl then
          let _ = dest_univ hyp in univAssumT i p
       else

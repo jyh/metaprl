@@ -644,7 +644,6 @@ let splitBoolCT a p =
  * Split a bool in a hyp.
  *)
 let splitBoolHT i a p =
-   let _, t1 = Sequent.nth_hyp p i in
    let z = get_opt_var_arg "z" p in
    let bind =
       try
@@ -656,7 +655,7 @@ let splitBoolHT i a p =
  \"bind\" term: ", b)))
       with
          RefineError _ ->
-            mk_xbind_term z (var_subst t1 a z)
+            mk_xbind_term z (var_subst (Sequent.nth_hyp p i) a z)
    in
    let j, k = Sequent.hyp_indices p i in
       bool_subst_hyp j k bind a z p
@@ -746,8 +745,7 @@ let splitITE i p =
       if i = 0 then
          Sequent.concl p
       else
-         let _, t = Sequent.nth_hyp p i in
-            t
+         Sequent.nth_hyp p i
    in
    let addrs = search_ifthenelse t in
    let t =

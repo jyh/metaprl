@@ -323,7 +323,7 @@ let cutC = Tactic_type.Conversionals.cutC
  * @begin[description]
  * @item{beta; $(@lambda v. b[v])@space a @longleftrightarrow b[a]$}
  * @item{pair; $(@bf{match}@space (a, b)@space @bf{with}@space u, v @rightarrow c[u, v]) @longleftrightarrow c[a, b]$}
- * @item{union; $(@bf{match}@space @i{inl}(a)@space @bf{with}
+ * @item{union; $(@bf{match}@space @i{inl}(a)@space @bf{with}@space
  *                @i{inl}(u) @rightarrow b[u]
  *                @mathrel{|} @i{inr}(v) @rightarrow c[v]) @longleftrightarrow b[a]$}
  * @end[description]
@@ -335,7 +335,7 @@ let cutC = Tactic_type.Conversionals.cutC
  * @tt{Itt_dprod} adds the @tt{reduceSpread} rewrite with redex
  * $(@bf{match}@space (a, b)@space @bf{with}@space u, v @rightarrow c[u, v])$@; and the
  * @tt{Itt_union} adds the @tt{reduceDecideInl} rewrite with
- * redex $(@bf{match}@space @i{inl}(a)@space @bf{with}
+ * redex $(@bf{match}@space @i{inl}(a)@space @bf{with}@space
  *                @i{inl}(u) @rightarrow b[u]
  *                @mathrel{|} @i{inr}(v) @rightarrow c[v])$
  *

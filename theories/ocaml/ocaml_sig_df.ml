@@ -107,19 +107,20 @@ dform sig_open_df2 : internal :: sig_open[start:n, finish:n]{'sl} =
  *)
 declare type_arg
 declare type_constraint
+declare sig_type_aux{'tdls}
 
-dform sig_type_df1 : sig_type{cons{'tdl; 'tdl}} =
-   szone pushm[0] "_type" `" " slot{'tdl} sig_type{'tdl} popm ezone
+dform sig_type_df : sig_type{cons{'tdl; 'tdls}} =
+   szone pushm[0] "_type" `" " slot{'tdl} sig_type_aux{'tdls} popm ezone
 
-dform sig_type_df2 : internal :: sig_type{cons{'tdl; 'tdl}} =
+dform sig_type_aux_df : internal :: sig_type_aux{cons{'tdl; 'tdls}} =
    newline "_and" `" " slot{'tdl}
-   sig_type{'tdl}
+   sig_type_aux{'tdls}
 
-dform sig_type_df3 : internal :: sig_type[start:n, finish:n]{'tdl} =
-   sig_type{'tdl}
-
-dform sig_type_df3 : internal :: sig_type{nil} =
+dform sig_type_aux_df : internal :: sig_type_aux{nil} =
    `""
+
+dform sig_type_df2 : internal :: sig_type[start:n, finish:n]{'tdl} =
+   sig_type{'tdl}
 
 dform tdl_df1 : tdl{.Ocaml!"string"[name:s]; nil; 't; nil} =
    slot[name:s] `" =" hspace slot{'t}

@@ -775,7 +775,7 @@ let testT p =
    let finalize () =
       eprintf "Refine count: %d Fail count: %d%t" !refine_count !fail_count eflush
    in
-      (finalT finalize thenT timingT (loopTestT 100)) p
+      (finalT finalize thenT timingT (loopTestT 200)) p
 
 (*
  * -*-

@@ -250,10 +250,10 @@ let print_tactic_arg out { ref_goal = goal } =
 
 let args = ThreadRefinerAux.args
 
-let remote_server = Register.set 0 (ThreadRefinerAux.create print_tactic_arg)
+let remote_server = (* Register.set 0 *) (ThreadRefinerAux.create print_tactic_arg)
 
 let get_remote_server () =
-   Register.get remote_server
+   (* Register.get *) remote_server
 
 (*
  * Create an initial tactic_arg for a proof.

@@ -34,7 +34,7 @@ extends Czf_itt_singleton
 extends Czf_itt_union
 extends Czf_itt_empty
 
-open Refiner.Refiner.Term
+open Refiner.Refiner.TermType
 
 open Tactic_type.Conversionals
 

@@ -37,7 +37,7 @@ extends Itt_void
 
 open Lm_symbol
 
-open Refiner.Refiner.Term
+open Refiner.Refiner.TermType
 
 open Tactic_type.Conversionals
 

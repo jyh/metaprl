@@ -33,7 +33,7 @@
  *)
 
 open Opname
-open Refiner.Refiner.Term
+open Refiner.Refiner.TermType
 open Lm_symbol
 
 (*

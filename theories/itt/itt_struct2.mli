@@ -33,7 +33,7 @@
 
 extends Itt_struct
 
-open Refiner.Refiner.Term
+open Refiner.Refiner.TermType
 
 open Tactic_type.Sequent
 

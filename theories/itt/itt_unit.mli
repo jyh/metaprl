@@ -36,7 +36,7 @@
 
 extends Itt_squiggle
 
-open Refiner.Refiner.Term
+open Refiner.Refiner.TermType
 
 declare unit
 

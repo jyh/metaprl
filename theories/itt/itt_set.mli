@@ -39,7 +39,7 @@ extends Itt_struct
 
 open Lm_symbol
 
-open Refiner.Refiner.Term
+open Refiner.Refiner.TermType
 
 declare set{'A; x. 'B['x]}
 

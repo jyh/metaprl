@@ -56,7 +56,7 @@ extends Top_conversionals
 
 open Lm_symbol
 open Opname
-open Refiner.Refiner.Term
+open Refiner.Refiner.TermType
 
 (*
  * Display form precendences.

@@ -26,7 +26,7 @@
  *)
 extends M_ir
 
-open Refiner.Refiner.Term
+open Refiner.Refiner.TermType
 
 open Tactic_type.Conversionals
 

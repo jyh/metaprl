@@ -36,7 +36,7 @@ extends Itt_union
 extends Itt_set
 extends Itt_decidable
 
-open Refiner.Refiner.Term
+open Refiner.Refiner.TermType
 open Tactic_type.Conversionals
 
 (************************************************************************

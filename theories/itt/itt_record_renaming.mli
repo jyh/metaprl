@@ -1,4 +1,4 @@
-open Refiner.Refiner.Term
+open Refiner.Refiner.TermType
 open Tactic_type.Conversionals
 
 declare rename[a:t, b:t]{'r}

@@ -33,7 +33,7 @@
 
 open Lm_symbol
 
-open Refiner.Refiner.Term
+open Refiner.Refiner.TermType
 
 extends Itt_equal
 extends Itt_prec

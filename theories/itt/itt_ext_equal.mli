@@ -36,7 +36,7 @@ extends Itt_equal
 extends Itt_subtype
 extends Itt_logic
 
-open Refiner.Refiner.Term
+open Refiner.Refiner.TermType
 
 (*
  * Terms type{'T} and \subtype{'A; 'B} have already been defined.

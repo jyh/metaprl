@@ -46,7 +46,7 @@ doc <:doc< @docoff >>
 
 open M_util
 
-open Refiner.Refiner.Term
+open Refiner.Refiner.TermType
 
 open Term_match_table
 

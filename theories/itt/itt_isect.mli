@@ -39,7 +39,7 @@ extends Itt_struct2
 
 open Lm_symbol
 
-open Refiner.Refiner.Term
+open Refiner.Refiner.TermType
 
 (************************************************************************
  * TERMS                                                                *

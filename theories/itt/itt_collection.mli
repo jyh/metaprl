@@ -4,7 +4,7 @@ extends Itt_esquash
 extends Itt_quotient
 extends Itt_logic
 
-open Refiner.Refiner.Term
+open Refiner.Refiner.TermType
 
 open Tactic_type.Conversionals
 

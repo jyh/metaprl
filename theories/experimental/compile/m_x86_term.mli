@@ -28,7 +28,7 @@ extends M_ir
 extends M_x86_asm
 extends M_x86_inst_type
 
-open Refiner.Refiner.Term
+open Refiner.Refiner.TermType
 
 open M_x86_inst_type
 

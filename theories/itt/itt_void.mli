@@ -36,7 +36,7 @@
 extends Itt_equal
 extends Itt_subtype
 
-open Refiner.Refiner.Term
+open Refiner.Refiner.TermType
 
 (************************************************************************
  * TERMS                                                                *

@@ -34,7 +34,7 @@
 extends Itt_equal
 extends Itt_rfun
 
-open Refiner.Refiner.Term
+open Refiner.Refiner.TermType
 
 open Tactic_type.Conversionals
 

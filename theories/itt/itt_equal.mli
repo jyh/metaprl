@@ -36,7 +36,7 @@ extends Base_theory
 extends Itt_comment
 
 open Lm_symbol
-open Refiner.Refiner.Term
+open Refiner.Refiner.TermType
 open Mp_resource
 open Tactic_type
 open Tactic_type.Conversionals

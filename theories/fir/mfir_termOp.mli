@@ -43,7 +43,7 @@ extends Mfir_ty
 extends Mfir_exp
 
 open Lm_symbol
-open Refiner.Refiner.Term
+open Refiner.Refiner.TermType
 
 val none_term : term
 val is_none_term : term -> bool

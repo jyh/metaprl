@@ -36,7 +36,7 @@ extends Itt_rfun
 
 open Lm_symbol
 
-open Refiner.Refiner.Term
+open Refiner.Refiner.TermType
 
 (************************************************************************
  * TERMS                                                                *

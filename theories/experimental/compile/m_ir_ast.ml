@@ -37,7 +37,7 @@ extends M_ir
 
 doc <<docoff>>
 
-open Refiner.Refiner.Term
+open Refiner.Refiner.TermType
 open Term_match_table
 
 open Tactic_type.Sequent

@@ -1,7 +1,7 @@
 extends Itt_int_ext
 
 open Lm_symbol
-open Refiner.Refiner.Term
+open Refiner.Refiner.TermType
 open Tactic_type.Conversionals
 
 val ind_term : term

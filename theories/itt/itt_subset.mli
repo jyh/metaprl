@@ -42,7 +42,7 @@ extends Itt_bool
 extends Itt_int_base
 extends Itt_ext_equal
 
-open Refiner.Refiner.Term
+open Refiner.Refiner.TermType
 
 open Tactic_type.Sequent
 
@@ -50,7 +50,7 @@ open Tactic_type.Sequent
  * TERMS                                                                *
  ************************************************************************)
 
-declare  "subset"{'A; 'B} 
+declare  "subset"{'A; 'B}
 
 declare  member{'a; 'A; 'B}
 
@@ -127,7 +127,7 @@ rule member_intro :
    sequent { <H> >- 'a in 'A } -->
    sequent { <H> >- 'A subset 'B } -->
    sequent { <H> >- 'a in 'A subset 'B }
-      
+
 rule member_elim 'H :
-   sequent { <H>; u: 'a in 'A; v: 'A subset 'B; <J> >- 'C } --> 
+   sequent { <H>; u: 'a in 'A; v: 'A subset 'B; <J> >- 'C } -->
    sequent { <H>; u: 'a in 'A subset 'B; <J> >- 'C  }

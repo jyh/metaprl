@@ -216,6 +216,8 @@ val is_list_ind_term : term -> bool
 val dest_list_ind : term -> term * term * var * var * var * term
 val mk_list_ind_term : term -> term -> var -> var -> var -> term -> term
 
+val mk_list_of_list : term list -> term
+
 (*
  * -*-
  * Local Variables:

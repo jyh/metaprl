@@ -349,6 +349,10 @@ let is_list_ind_term = is_dep0_dep0_dep3_term list_ind_opname
 let dest_list_ind = dest_dep0_dep0_dep3_term list_ind_opname
 let mk_list_ind_term = mk_dep0_dep0_dep3_term list_ind_opname
 
+let rec mk_list_of_list = function
+	h::t -> mk_cons_term h (mk_list_of_list t)
+ | [] -> nil_term
+
 (************************************************************************
  * TYPE INFERENCE                                                       *
  ************************************************************************)

@@ -529,6 +529,10 @@ interactive integer_ring {| intro [] |} :
 interactive integer_ring_number_membership {| intro [] |} :
 	sequent { <H> >- number[i:n] in Z^car }
 
+interactive integer_ring_is_int {| intro [AutoMustComplete] |} :
+	sequent { <H> >- 'i in Z^car } -->
+	sequent { <H> >- 'i in int }
+
 doc <:doc<
    @begin[doc]
    Ring of Even Integers.

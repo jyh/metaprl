@@ -713,6 +713,21 @@ interactive length_wf {| intro [intro_typeinf <<'l>>] |} list{'T1} :
    [wf] sequent { <H> >- 'l in list{'T1} } -->
    sequent { <H> >- length{'l} in int }
 
+interactive length_nonneg {| intro [intro_typeinf <<'l>>] |} list{'T1} :
+   [wf] sequent { <H> >- "type"{'T1} } -->
+   [wf] sequent { <H> >- 'l in list{'T1} } -->
+   sequent { <H> >- 0 <= length{'l} }
+
+interactive length_wf2 {| intro [intro_typeinf <<'h>>] |} 'T1 :
+   [wf] sequent { <H> >- 'h in 'T1 } -->
+   [wf] sequent { <H> >- 't in list{'T1} } -->
+   sequent { <H> >- length{cons{'h;'t}} in nat }
+
+interactive length_cons_pos {| intro [intro_typeinf <<'h>>] |} 'T1 :
+   [wf] sequent { <H> >- 'h in 'T1 } -->
+   [wf] sequent { <H> >- 't in list{'T1} } -->
+   sequent { <H> >- 0 < length{cons{'h;'t}} }
+
 interactive nth_wf {| intro [] |} :
    [wf] sequent { <H> >- "type"{'T} } -->
    [wf] sequent { <H> >- 'l in list{'T} } -->

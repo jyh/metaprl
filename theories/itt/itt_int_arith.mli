@@ -75,6 +75,8 @@ topval sum_same_products4C : conv
 *)
 topval normalizeC : conv
 
+topval preArithT : tactic
+topval reduceContradRelT : int -> tactic
 topval arithT : tactic
 
 (*
@@ -88,7 +90,6 @@ topval neqInConcl2HypT : tactic
 topval arithRelInConcl2HypT : tactic
 topval negativeHyp2ConclT : int -> tactic
 topval findContradRelT : tactic
-topval reduceContradRelT : int -> tactic
 (**)
 (*
 topval testT : int -> tactic

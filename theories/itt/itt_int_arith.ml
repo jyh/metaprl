@@ -992,13 +992,15 @@ doc <:doc<
 	@docoff
 >>
 
-(* Finds and proves contradiction among ge-relations
- *)
-let arithT = funT (fun p ->
+let preArithT = funT (fun p ->
    arithRelInConcl2HypT thenMT
    ((tryOnAllMCumulativeHypsT negativeHyp2ConclT) thenMT
-	(findContradRelT thenMT reduceContradRelT (-1)))
+	findContradRelT)
 )
+
+(* Finds and proves contradiction among ge-relations
+ *)
+let arithT = preArithT thenMT reduceContradRelT (-1)
 
 interactive test 'a 'b 'c :
 sequent { <H> >- 'a in int } -->

@@ -2,8 +2,7 @@
  * @begin[doc]
  * @theory[Mp_mc_fir_phobos_exp]
  *
- * The @tt[Mp_mc_fir_phobos_exp] module provides term declarations
- * for the Phobos FIR output.
+ * preFIR term declarations and reductions (conversionals).
  * @end[doc]
  *
  * ----------------------------------------------------------------
@@ -45,23 +44,18 @@
 include Base_theory
 (*! @docoff *)
 
+open Top_conversionals
+
+(*
+ * Instead of MetaPRL variable[v:v] variables, Phobos
+ * generates variable[v:s] with Mp_mc_fir_phobos_exp as the
+ * module.  Due to how iforms work, it is necessary to
+ * define the reduction here and apply it as the final
+ * rewrite in taking a preFIR term to a proper FIR term.
+ * (See Mp_mc_fir_phobos.)
+ *)
+
 declare variable[v:s]
-declare string[s:s]
-declare number[n:s]
 
-declare letUnop[v:s]{ 'ty; 'unop; 'a}
-declare letBinop[v:s]{ 'ty; 'binop; 'a1; 'a2 }
-declare letExt[v:s]{'ty1; 'filename; 'ty2; 'args}
-declare call{'label; 'f; 'args}
-declare letAlloc[v:s]{'op}
-declare letSubscript[v:s]{'op; 'ty; 'v2; 'a}
-declare setSubscript{'op; 'label; 'var; 'a1; 'ty; 'a2}
-declare setGlobal{'sub_value; 'label; 'var; 'ty; 'a}
-declare memcpy{'op; 'label; 'v1; 'a1; 'v2; 'a2; 'a3}
-declare assertExp{'var; 'pred}
-declare debug{'debug_info}
-declare tailCall_com[f:s]{'label; 'f; 'params}
-declare specialCall{'label; 'tailop}
-declare matchExp{'a; 'list}
-declare typeCase{'a1; 'a2; 'v1; 'v2; 'e1; 'e2}
-
+let reduce_phobos_variable =
+   create_iform "phobos" false << variable[v:s] >> << 'v >>

@@ -45,9 +45,9 @@
 include Base_theory
 (*! @docoff *)
 
-open Mp_mc_term_op
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
+open Mp_mc_base
 
 (*************************************************************************
  * Declarations.
@@ -72,6 +72,7 @@ declare initNames{ 'ty_var; 'initNameItem_list }
  *)
 
 declare fundef{ 'debug_line; 'ty; 'func }
+declare fundef_com[f:s]{ 'debug_line; 'ty; 'func }
 
 (*
  * Program globals.

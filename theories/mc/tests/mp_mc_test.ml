@@ -33,7 +33,12 @@
  *)
 
 include Base_theory
+include Itt_rfun
+include Itt_atom
 include Mp_mc_theory
+include Mp_mc_inline
+include Mp_mc_inline_aux
+include Mp_mc_fir_phobos_exp
 
 open Simple_print.SimplePrint
 open Top_conversionals
@@ -41,12 +46,18 @@ open Mp_mc_fir_eval
 open Mp_mc_deadcode
 open Mp_mc_const_elim
 open Mp_mc_inline
+open Mp_mc_inline_aux
+open Mp_mc_fir_phobos_exp
 
 (*
- * This is the outermost rewriter we want to use to rewrite the program.
+ * These are the rewriters we want to use to rewrite terms.
  *)
 
-let apply_rewrite = apply_rewrite (Mp_resource.theory_bookmark "Mp_mc_theory")
+let apply_rewrite_top =
+    apply_rewrite (Mp_resource.theory_bookmark "Mp_mc_theory")
+
+let apply_rewrite_phobos =
+    apply_rewrite (Mp_resource.theory_bookmark "Mp_mc_fir_phobos_exp")
 
 (*************************************************************************
  * Define tests.
@@ -67,7 +78,7 @@ let test1 () =
          nil }}}}} >> in
    print_simple_term t;
    print_string "\n\nApplying firExpEvalC...\n\n";
-   let t = apply_rewrite firExpEvalC t in
+   let t = apply_rewrite_top firExpEvalC t in
    print_simple_term t;
    print_string "\n"
 
@@ -86,7 +97,7 @@ let test2 () =
          nil }}}}} >> in
    print_simple_term t;
    print_string "\n\nApplying firExpEvalC...\n\n";
-   let t = apply_rewrite firExpEvalC t in
+   let t = apply_rewrite_top firExpEvalC t in
    print_simple_term t;
    print_string "\n"
 
@@ -95,7 +106,7 @@ let test3 () =
    let t = << member{ 0; interval{0; 0} } >> in
    print_simple_term t;
    print_string "\n\nApplying firExpEvalC...\n\n";
-   let t = apply_rewrite firExpEvalC t in
+   let t = apply_rewrite_top firExpEvalC t in
    print_simple_term t;
    print_string "\n"
 
@@ -104,7 +115,7 @@ let test4 () =
    let t = << member{ 0; int_set{ cons{ interval{0; 0}; nil } } } >> in
    print_simple_term t;
    print_string "\n\nApplying firExpEvalC...\n\n";
-   let t = apply_rewrite firExpEvalC t in
+   let t = apply_rewrite_top firExpEvalC t in
    print_simple_term t;
    print_string "\n"
 
@@ -118,7 +129,7 @@ let test5 () =
          nil }} >> in
    print_simple_term t;
    print_string "\n\nApplying firExpEvalC...\n\n";
-   let t = apply_rewrite firExpEvalC t in
+   let t = apply_rewrite_top firExpEvalC t in
    print_simple_term t;
    print_string "\n"
 
@@ -129,7 +140,7 @@ let test6 () =
       setSubscript{ 'subop; 'label; 'y; 'atom1; 'ty; 'atom2; 'y }} >> in
    print_simple_term t;
    print_string "\n\nApplying firExpEvalC...\n\n";
-   let t = apply_rewrite firExpEvalC t in
+   let t = apply_rewrite_top firExpEvalC t in
    print_simple_term t;
    print_string "\n"
 
@@ -141,7 +152,7 @@ let test7 () =
    >> in
    print_simple_term t;
    print_string "\n\nApplying firDeadcodeC...\n\n";
-   let t = apply_rewrite firDeadcodeC t in
+   let t = apply_rewrite_top firDeadcodeC t in
    print_simple_term t;
    print_string "\nNothing should have changed...\n"
 
@@ -153,65 +164,18 @@ let test8 () =
    >> in
    print_simple_term t;
    print_string "\n\nApplying firDeadcodeC...\n\n";
-   let t = apply_rewrite firDeadcodeC t in
+   let t = apply_rewrite_top firDeadcodeC t in
    print_simple_term t;
    print_string "\nWe should be down to 'nothing...\n"
 
 let test9 () =
    print_string "\n\n*** Beginning test 9...\n\n";
-   let t = << inline{ 'f; nil; letUnop{tyInt; idOp; atomInt{2}; x. 'y} } >> in
+   let t = << variable["blah":s] >> in
    print_simple_term t;
-   print_string "\n\nApplying firInlineC...\n\n";
-   let t = apply_rewrite firInlineC t in
+   print_string "\n\nApplying reduce_phobos_variable\n\n";
+   let t = apply_rewrite_phobos reduce_phobos_variable t in
    print_simple_term t;
-   print_string "\ninline term should have propogated down\n"
-
-let test10 () =
-   print_string "\n\n*** Beginning test 10...\n\n";
-   let t = << inline{ 'f; nil; letUnop{tyInt; idOp; atomInt{2}; x. 'x} } >> in
-   print_simple_term t;
-   print_string "\n\nApplying firInlineC...\n\n";
-   let t = apply_rewrite firInlineC t in
-   print_simple_term t;
-   print_string "\ninline term should have propogated down\n"
-
-let test11 () =
-   print_string "\n\n*** Beginning test 11...\n\n";
-   let t = <<
-      inline{ tailCall{'q_diff; 'fee; cons{'a1;nil}}; nil;
-         letUnop{ tyInt; idOp; atomEnum{2;1}; x.
-         matchExp{ 'x;
-            cons{ matchCase{ 'lbl1;
-                             int_set{cons{interval{0;0};nil}};
-                             letBinop{ tyInt; plusIntOp;
-                                       atomInt{1}; atomInt{2}; q.
-                                       tailCall{'q; 'fee; cons{'a1;nil}}} };
-            cons{ matchCase{ 'lbl3;
-                             int_set{cons{interval{1;1};nil}};
-                             tailCall{'lbl4; 'foo; cons{'a2;nil}} };
-            nil}}}}}
-   >> in
-   print_simple_term t;
-   print_string "\n\nApplying firInlineC...\n\n";
-   let t = apply_rewrite firInlineC t in
-   print_simple_term t;
-   print_string "\ninline should be gone and ";
-   print_string "one call should be halfway inlined\n"
-
-let test12 () =
-   print_string "\n\n*** Beginning test 12...\n\n";
-   let t = <<
-      extract_sym_func_pairs{
-         cons{ tableItem{ 'name1; fundef{ 'a1; 'a2; 'a3 } };
-         cons{ tableItem{ 'name2; fundef{ 'b1; 'b2; 'b3 } };
-         nil }}}
-   >> in
-   print_simple_term t;
-   print_string "\n\nApplying firInlineGetGlobalInfoC...\n\n";
-   let t = apply_rewrite firInlineGetGlobalInfoC t in
-   print_simple_term t;
-   print_string "\nDid we extract the info?"
-
+   print_string "\nWe should be down to 'blah...\n"
 
 (*************************************************************************
  * Run tests.
@@ -226,7 +190,4 @@ let _ =
    test6 ();
    test7 ();
    test8 ();
-   test9 ();
-   test10 ();
-   test11 ();
-   test12 ()
+   test9 ()

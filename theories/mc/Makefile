@@ -11,7 +11,7 @@ OCAMLDEPFLAGS := -prl
 
 # Library files
 MPFILES := \
-   mp_mc_term_op \
+   mp_mc_base \
    mp_mc_fir_base \
    mp_mc_fir_ty \
    mp_mc_fir_exp \
@@ -19,7 +19,6 @@ MPFILES := \
    mp_mc_fir_eval \
    mp_mc_deadcode \
    mp_mc_const_elim \
-   mp_mc_inline \
    mp_mc_theory
 
 # Name of main libraries

@@ -2,7 +2,7 @@
  * @begin[doc]
  * @theory[Mp_mc_fir_phobos]
  *
- * The @tt[Mp_mc_fir_phobos] module provides phobosC.
+ * Convert preFIR terms to FIR terms.
  * @end[doc]
  *
  * ----------------------------------------------------------------
@@ -41,47 +41,36 @@
  * @parents
  * @end[doc]
  *)
-include Base_theory
-include Itt_theory
-include Mp_mc_fir_exp
+include Mp_mc_theory
 include Mp_mc_fir_phobos_exp
 (*! @docoff *)
 
-open Opname
-open Refiner.Refiner.Term
-open Refiner.Refiner.TermType
-open Refiner.Refiner.RefineError
 open Top_conversionals
-open Simple_print.SimplePrint
-open Phobos_type
+open Mp_mc_base
+open Mp_mc_fir_phobos_exp
 
 (*
- * Simple debugging utilities.
- * They depend on -debug_compiler
- *)
-let debug_string s =
-   if !Fir_state.debug_compiler then
-      print_string s
-
-let debug_term t =
-   if !Fir_state.debug_compiler then
-      print_simple_term t
-
-(*
- * Examining special terms.
+ * This function takes a list of ((redex, _), (contractum, _)),
+ * representing a list of iforms.  The conversional returned
+ * applies all these rewrites until a fix point is reached.
+ * It also reduces "Phobos variables" (i.e. variable[v:s]
+ * from Mp_mc_fir_phobos_exp).
  *)
 
-(*
- * Return a conversion that applies all given iforms.
- *)
-let applyAllIFormC iform_rewrites =
-   let patterns =
-      List.map (fun ((redex, _), (contractum, _)) ->
-            debug_string "post-rewrite : ";
-            debug_term redex;
-            debug_string "  ->  ";
-            debug_term contractum;
-            debug_string "\n";
-               create_iform "post_proc" false redex contractum) iform_rewrites
+let applyIFormsC iform_rewrites =
+   let patterns = List.map
+      (fun ((redex, _), (contractum, _)) ->
+
+         (* Debugging output. *)
+         debug_string "\n\ncreating the following iform\n\n";
+         debug_term redex;
+         debug_string "\n\n<-->\n\n";
+         debug_term contractum;
+
+         (* Create the iform now. *)
+         create_iform "post_proc" false redex contractum
+
+      ) iform_rewrites
    in
-      repeatC (higherC (applyAllC patterns))
+      (repeatC (higherC (applyAllC patterns))) thenC
+      (repeatC (higherC reduce_phobos_variable))

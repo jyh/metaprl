@@ -1,5 +1,6 @@
 (*
- * preFIR term declarations.
+ * preFIR term declarations and reductions (conversionals).
+ *
  * ----------------------------------------------------------------
  *
  * This file is part of MetaPRL, a modular, higher order
@@ -26,35 +27,22 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  * Author: Adam Granicz
- * @email{granicz@cs.caltech.edu}
- * @end[license]
+ * Email:  granicz@cs.caltech.edu
  *)
 
-(*!
- * @begin[doc]
- * @parents
- * @end[doc]
- *)
 include Base_theory
-(*! @docoff *)
+
+open Tactic_type.Conversionals
+
+(*
+ * Instead of MetaPRL variable[v:v] variables, Phobos
+ * generates variable[v:s] with Mp_mc_fir_phobos_exp as the
+ * module.  Due to how iforms work, it is necessary to
+ * define the reduction here and apply it as the final
+ * rewrite in taking a preFIR term to a proper FIR term.
+ * (See Mp_mc_fir_phobos.)
+ *)
 
 declare variable[v:s]
-declare string[s:s]
-declare number[n:s]
 
-declare letUnop[v:s]{ 'ty; 'unop; 'a}
-declare letBinop[v:s]{ 'ty; 'binop; 'a1; 'a2 }
-declare letExt[v:s]{'ty1; 'filename; 'ty2; 'args}
-declare call{'label; 'f; 'args}
-declare letAlloc[v:s]{'op}
-declare letSubscript[v:s]{'op; 'ty; 'v2; 'a}
-declare setSubscript{'op; 'label; 'var; 'a1; 'ty; 'a2}
-declare setGlobal{'sub_value; 'label; 'var; 'ty; 'a}
-declare memcpy{'op; 'label; 'v1; 'a1; 'v2; 'a2; 'a3}
-declare assertExp{'var; 'pred}
-declare debug{'debug_info}
-declare tailCall_com[f:s]{'label; 'f; 'params}
-declare specialCall{'label; 'tailop}
-declare matchExp{'a; 'list}
-declare typeCase{'a1; 'a2; 'v1; 'v2; 'e1; 'e2}
-
+val reduce_phobos_variable : conv

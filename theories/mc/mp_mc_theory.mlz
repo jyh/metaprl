@@ -48,9 +48,12 @@
  * @parents
  * @end[doc]
  *)
+include Itt_int_base
+include Itt_int_ext
 include Itt_list
 include Itt_list2
-include Mp_mc_term_op
+include Itt_rfun
+
 include Mp_mc_fir_base
 include Mp_mc_fir_ty
 include Mp_mc_fir_exp
@@ -58,5 +61,4 @@ include Mp_mc_fir_prog
 include Mp_mc_fir_eval
 include Mp_mc_deadcode
 include Mp_mc_const_elim
-include Mp_mc_inline
 (*! @docoff *)

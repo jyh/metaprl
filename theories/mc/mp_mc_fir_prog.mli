@@ -54,6 +54,7 @@ declare initNames{ 'ty_var; 'initNameItem_list }
  *)
 
 declare fundef{ 'debug_line; 'ty; 'func }
+declare fundef_com[f:s]{ 'debug_line; 'ty; 'func }
 
 (*
  * Program globals.

@@ -256,6 +256,7 @@ declare letBinop{ 'ty; 'binop; 'atom1; 'atom2; var. 'exp['var] }
 
 declare letExt{ 'ty1; 'string; 'ty2; 'atom_list; var. 'exp['var] }
 declare tailCall{ 'label; 'var; 'atom_list }
+declare tailCall_com[f:s]{ 'label; 'atom_list }
 declare specialCall{ 'label; 'tailop }
 
 (* Control. *)

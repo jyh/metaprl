@@ -47,7 +47,7 @@ include Base_theory
 
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
-open Mp_mc_term_op
+open Mp_mc_base
 
 (*************************************************************************
  * Term declarations.

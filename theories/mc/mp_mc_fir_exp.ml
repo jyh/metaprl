@@ -45,9 +45,9 @@
 include Base_theory
 (*! @docoff *)
 
-open Mp_mc_term_op
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
+open Mp_mc_base
 
 (*************************************************************************
  * Declarations.
@@ -411,6 +411,7 @@ declare letBinop{ 'ty; 'binop; 'atom1; 'atom2; var. 'exp['var] }
 
 declare letExt{ 'ty1; 'string; 'ty2; 'atom_list; var. 'exp['var] }
 declare tailCall{ 'label; 'var; 'atom_list }
+declare tailCall_com[f:s]{ 'label; 'atom_list }
 declare specialCall{ 'label; 'tailop }
 
 (* Control. *)

@@ -29,17 +29,18 @@
  * Author: Adam Granicz
  * Email:  granicz@cs.caltech.edu
  *)
-
-include Base_theory
-include Itt_theory
+include Mp_mc_theory
 include Mp_mc_fir_phobos_exp
-include Mp_mc_fir_exp
 
-open Opname
-open Refiner.Refiner.Term
-open Refiner.Refiner.TermType
-open Refiner.Refiner.RefineError
 open Tactic_type.Conversionals
 open Phobos_type
 
-val applyAllIFormC : (mp_pre_term * mp_pre_term) list -> conv
+(*
+ * This function takes a list of ((redex, _), (contractum, _)),
+ * representing a list of iforms.  The conversional returned
+ * applies all these rewrites until a fix point is reached.
+ * It also reduces "Phobos variables" (i.e. variable[v:s]
+ * from Mp_mc_fir_phobos_exp).
+ *)
+
+val applyIFormsC : (mp_pre_term * mp_pre_term) list -> conv

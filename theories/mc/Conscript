@@ -4,7 +4,7 @@
 Import qw( env );
 
 #
-# Set up basic include path.
+# Set up basic include paths.
 #
 $env = $env->clone(
    INCPATH  => [@{$env->{INCPATH}},
@@ -22,11 +22,9 @@ $env = $env->clone(
 # Set up file lists.
 #
 my @src =
-   qw( term_op fir_base fir_ty fir_exp fir_prog fir_eval
-       fir_phobos fir_phobos_exp
-       deadcode const_elim inline
-       connect_base connect_ty connect_exp connect_prog
-       compile );
+   qw( base fir_base fir_ty fir_exp fir_prog fir_eval
+       fir_phobos fir_phobos_exp deadcode const_elim inline inline_aux
+       connect_base connect_ty connect_exp connect_prog compile );
 
 #
 # Set up file lists and build everything.

@@ -1,8 +1,12 @@
 (*
- * The Mp_mc_term_op module provides term construction and
- * deconstruction convinience functions for MC theory terms.
+ * Functional Intermediate Representation formalized in MetaPRL.
+ *
+ * Provides basic code for debugging and term
+ * construction / deconstruction.
  *
  * ----------------------------------------------------------------
+ *
+ * Copyright (C) 2002 Brian Emre Aydemir, Caltech
  *
  * This file is part of MetaPRL, a modular, higher order
  * logical framework that provides a logical programming
@@ -10,8 +14,6 @@
  *
  * See the file doc/index.html for information on Nuprl,
  * OCaml, and more information about this system.
- *
- * Copyright (C) 2002 Brian Emre Aydemir, Caltech
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,10 +33,28 @@
  * Email:  emre@its.caltech.edu
  *)
 
-include Base_theory
-
 open Opname
 open Refiner.Refiner.Term
+
+(*************************************************************************
+ * Debugging.
+ ************************************************************************)
+
+(* Set this to true to enable debugging output from the functions below. *)
+
+val debug : bool ref
+
+(*
+ * If debug is set to true, then the following will output
+ * the given string or term.  Otherwise, they do nothing.
+ *)
+
+val debug_string : string -> unit
+val debug_term : term -> unit
+
+(*************************************************************************
+ * Term operations.
+ *************************************************************************)
 
 (*
  * The functions here are essentially the same in function as those
@@ -51,9 +71,9 @@ open Refiner.Refiner.Term
  * error in my code).
  *)
 
-(*************************************************************************
+(*
  * 4 subterms.
- *************************************************************************)
+ *)
 
 val is_4_dep0_term : opname -> term -> bool
 val mk_4_dep0_term : opname -> term -> term -> term -> term -> term
@@ -65,11 +85,11 @@ val mk_3_dep0_1_dep1_term :
 val dest_3_dep0_1_dep1_term :
    opname -> term -> term * term * term * string * term
 
-(*************************************************************************
+(*
  * 5 subterms.
- *************************************************************************)
+ *)
 
-val is_5_dep0_term : opname -> term -> bool
+val is_5_dep0_term : opname -> term -> bool 
 val mk_5_dep0_term : opname -> term -> term -> term -> term -> term -> term
 val dest_5_dep0_term : opname -> term -> term * term * term * term * term
 
@@ -79,9 +99,9 @@ val mk_4_dep0_1_dep1_term :
 val dest_4_dep0_1_dep1_term :
    opname -> term -> term * term * term * term * string * term
 
-(*************************************************************************
+(*
  * 6 subterms.
- *************************************************************************)
+ *)
 
 val is_6_dep0_term : opname -> term -> bool
 val mk_6_dep0_term :
@@ -95,9 +115,9 @@ val mk_5_dep0_1_dep1_term :
 val dest_5_dep0_1_dep1_term :
    opname -> term -> term * term * term * term * term * string * term
 
-(*************************************************************************
+(*
  * 7 subterms
- *************************************************************************)
+ *)
 
 val is_7_dep0_term : opname -> term -> bool
 val mk_7_dep0_term :
@@ -105,9 +125,9 @@ val mk_7_dep0_term :
 val dest_7_dep0_term :
    opname -> term -> term * term * term * term * term * term * term
 
-(*************************************************************************
+(*
  * 8 subterms
- *************************************************************************)
+ *)
 
 val is_8_dep0_term : opname -> term -> bool
 val mk_8_dep0_term :

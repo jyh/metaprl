@@ -32,14 +32,57 @@
  *)
 
 include Mp_mc_theory
-include Mp_mc_inline_aux
 
 open Phobos_type
 open Refiner.Refiner.Term
 open Tactic_type.Conversionals
 
 (*************************************************************************
+ * Declarations.
+ *************************************************************************)
+
+(*
+ * Extracting function bodies from an firProg.
+ *)
+
+declare get_func_body{ 'target_tailCall; 'prog }
+
+(*
+ * Inlining tailCall's.
+ *)
+
+declare inline_tailCall{ 'body; 'args }
+
+(*************************************************************************
+ * Rewrites.
+ *************************************************************************)
+
+(*
+ * Creating an association list of ('name, 'func_body).
+ *)
+
+topval reduce_get_func_body_1 : conv
+topval reduce_get_func_body_2 : conv
+topval reduce_get_func_body_3 : conv
+
+(*
+ * Expanding a tailCall so that we can further reduce it (inline it).
+ *)
+
+topval reduce_inline_tailCall_real_1 : conv
+topval reduce_inline_tailCall_real_2 : conv
+topval reduce_inline_tailCall_real_3 : conv
+
+(*************************************************************************
  * Automation.
  *************************************************************************)
 
-val firInlineC : term -> mp_pre_term list -> conv
+topval firInlineGetFuncBodyC : conv
+topval firInlineInlineTailCallC : conv
+
+(*************************************************************************
+ * Term operations.
+ *************************************************************************)
+
+val mk_get_func_body_term : term -> term -> term
+val mk_inline_tailCall_term : term -> term -> term

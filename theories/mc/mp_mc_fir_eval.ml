@@ -203,11 +203,11 @@ prim_rw reduce_arith_signed_int16 :
    mod_arith_signed{ 16; 'num }
 
 prim_rw reduce_arith_signed_int32 :
-   mod_arith{ int16; signedInt; 'num } <-->
+   mod_arith{ int32; signedInt; 'num } <-->
    mod_arith_signed{ 32; 'num }
 
 prim_rw reduce_arith_signed_int64 :
-   mod_arith{ int16; signedInt; 'num } <-->
+   mod_arith{ int64; signedInt; 'num } <-->
    mod_arith_signed{ 64; 'num }
 
 prim_rw reduce_arith_signed_naml :
@@ -223,11 +223,11 @@ prim_rw reduce_arith_unsigned_int16 :
    mod_arith_unsigned{ 16; 'num }
 
 prim_rw reduce_arith_unsigned_int32 :
-   mod_arith{ int16; unsignedInt; 'num } <-->
+   mod_arith{ int32; unsignedInt; 'num } <-->
    mod_arith_unsigned{ 32; 'num }
 
 prim_rw reduce_arith_unsigned_int64 :
-   mod_arith{ int16; unsignedInt; 'num } <-->
+   mod_arith{ int64; unsignedInt; 'num } <-->
    mod_arith_unsigned{ 64; 'num }
 
 (* These perform the actual arithmetic. *)
@@ -323,6 +323,10 @@ prim_rw reduce_atomVar_atomConst :
    atomVar{ atomConst{ 'ty; 'ty_var; 'int } } <-->
    atomConst{ 'ty; 'ty_var; 'int }
 
+prim_rw reduce_atomVar_atomVar :
+   atomVar{ atomVar{ 'v } } <-->
+   atomVar{ 'v }
+
 (*
  * Unary operations.
  *)
@@ -359,18 +363,36 @@ prim_rw reduce_idOp_atomVar :
 
 prim_rw reduce_plusIntOp :
    letBinop{ tyInt; plusIntOp; atomInt{'a1}; atomInt{'a2}; v. 'exp['v] } <-->
-   'exp[ mod_arith{ naml_prec; signedInt; ('a1 +@ 'a2) } ]
+   'exp[ atomInt{ mod_arith{ naml_prec; signedInt; ('a1 +@ 'a2) } } ]
 
 prim_rw reduce_minusIntOp :
    letBinop{ tyInt; minusIntOp; atomInt{'a1}; atomInt{'a2}; v. 'exp['v] } <-->
-   'exp[ mod_arith{ naml_prec; signedInt; ('a1 -@ 'a2) } ]
+   'exp[ atomInt{ mod_arith{ naml_prec; signedInt; ('a1 -@ 'a2) } } ]
 
 prim_rw reduce_mulIntOp :
    letBinop{ tyInt; mulIntOp; atomInt{'a1}; atomInt{'a2}; v. 'exp['v] } <-->
-   'exp[ mod_arith{ naml_prec; signedInt; ('a1 *@ 'a2) } ]
+   'exp[ atomInt{ mod_arith{ naml_prec; signedInt; ('a1 *@ 'a2) } } ]
 
 prim_rw reduce_eqIntOp :
    letBinop{ tyEnum{2}; eqIntOp; atomInt{'a1}; atomInt{'a2}; v. 'exp['v] } <-->
+   'exp[ ifthenelse{ beq_int{'a1;'a2}; fir_true; fir_false } ]
+
+(* Native ints. *)
+
+prim_rw reduce_plusRawIntOp :
+   letBinop{ tyRawInt{'p;'s}; plusRawIntOp{'p;'s}; atomRawInt{'p;'s;'a1}; atomRawInt{'p;'s;'a2}; v. 'exp['v] } <-->
+   'exp[ atomRawInt{'p; 's; mod_arith{ 'p; 's; ('a1 +@ 'a2) } } ]
+
+prim_rw reduce_minusRawIntOp :
+   letBinop{ tyRawInt{'p;'s}; minusRawIntOp{'p;'s}; atomRawInt{'p;'s;'a1}; atomRawInt{'p;'s;'a2}; v. 'exp['v] } <-->
+   'exp[ atomRawInt{'p; 's; mod_arith{ 'p; 's; ('a1 -@ 'a2) } } ]
+
+prim_rw reduce_mulRawIntOp :
+   letBinop{ tyRawInt{'p;'s}; mulRawIntOp{'p;'s}; atomRawInt{'p;'s;'a1}; atomRawInt{'p;'s;'a2}; v. 'exp['v] } <-->
+   'exp[ atomRawInt{'p; 's; mod_arith{ 'p; 's; ('a1 *@ 'a2) } } ]
+
+prim_rw reduce_eqRawIntOp :
+   letBinop{ tyEnum{2}; eqRawIntOp{'p;'s}; atomRawInt{'p;'s;'a1}; atomRawInt{'p;'s;'a2}; v. 'exp['v] } <-->
    'exp[ ifthenelse{ beq_int{'a1;'a2}; fir_true; fir_false } ]
 
 (*
@@ -390,6 +412,26 @@ prim_rw reduce_matchExp_number :
    ifthenelse{ member{number[i:n]; 'set};
                'exp;
                matchExp{ number[i:n]; 'tail } }
+
+(*
+ * "Optimizations."
+ *)
+
+prim_rw reduce_mulRawIntOp_opt1 :
+   letBinop{ tyRawInt{'p;'s}; mulRawIntOp{'p;'s}; atomRawInt{'p;'s;1}; atomVar{ 'v }; v. 'exp['v] } <-->
+   'exp[ atomVar{ 'v } ]
+
+prim_rw reduce_mulRawIntOp_opt2 :
+   letBinop{ tyRawInt{'p;'s}; mulRawIntOp{'p;'s}; atomVar{ 'v }; atomRawInt{'p;'s;1}; v. 'exp['v] } <-->
+   'exp[ atomVar{ 'v } ]
+
+prim_rw reduce_mulRawIntOp_opt3 :
+   letBinop{ tyRawInt{'p;'s}; mulRawIntOp{'p;'s}; atomRawInt{'p;'s;0}; atomVar{ 'v }; v. 'exp['v] } <-->
+   'exp[ atomRawInt{'p;'s;0} ]
+
+prim_rw reduce_mulRawIntOp_opt4 :
+   letBinop{ tyRawInt{'p;'s}; mulRawIntOp{'p;'s}; atomVar{ 'v }; atomRawInt{'p;'s;0}; v. 'exp['v] } <-->
+   'exp[ atomRawInt{'p;'s;0} ]
 
 (*************************************************************************
  * Automation
@@ -439,6 +481,7 @@ let firExpEvalC =
       reduce_atomVar_atomLabel;
       reduce_atomVar_atomSizeof;
       reduce_atomVar_atomConst;
+      reduce_atomVar_atomVar;
 
       reduce_idOp_atomInt;
       reduce_idOp_atomEnum;
@@ -450,6 +493,16 @@ let firExpEvalC =
       reduce_minusIntOp;
       reduce_mulIntOp;
       reduce_eqIntOp;
+
+      reduce_plusRawIntOp;
+      reduce_minusRawIntOp;
+      reduce_mulRawIntOp;
+      reduce_eqRawIntOp;
+
+      reduce_mulRawIntOp_opt1;
+      reduce_mulRawIntOp_opt2;
+      reduce_mulRawIntOp_opt3;
+      reduce_mulRawIntOp_opt4;
 
       reduce_matchExp_atomEnum;
       reduce_matchExp_atomInt;

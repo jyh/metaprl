@@ -480,33 +480,21 @@ let rec get_elim_args_arg = function
  | [] ->
       None
 
-let tryThinT thinT v i p =
-   if get_thinning_arg p then
-      let i =
-         try
-            let v', _ = Sequent.nth_hyp p i in
-            if (v=v') then i else Sequent.get_decl_number p v
-         with RefineError _ -> Sequent.get_decl_number p v
-      in
-         tryT (thinT i) p
-   else
-      idT p
-
 let process_elim_resource_annotation name context_args var_args term_args _ statement (pre_tactic, options) =
-   let _, goal = unzip_mfunction statement in
+   let assums, goal = unzip_mfunction statement in
    let { sequent_hyps = hyps } =
       try TermMan.explode_sequent goal with
          RefineError _ ->
             raise (Invalid_argument (sprintf "Base_dtactic.improve_elim: %s: must be a sequent" name))
    in
-   let v, t =
+   let v, t, hnum =
       let rec search i len =
          if i = len then
             raise (Invalid_argument (sprintf "Base_dtactic.improve_elim: %s: must be an elimination rule" name))
          else
             match SeqHyp.get hyps i with
                Hypothesis (v, t) ->
-                  v, t
+                  v, t, i
              | Context _ ->
                   search (succ i) len
       in
@@ -573,12 +561,39 @@ let process_elim_resource_annotation name context_args var_args term_args _ stat
                      Tactic_type.Tactic.tactic_of_rule pre_tactic ([| j; k |], new_vars i p) (term_args i p) p)
 
        | [| _; _ |], Some thinT ->
+            let rec find_thin_num_aux hyps len i =
+               if i = len then
+                  raise (Invalid_argument (sprintf "Base_dtactic.improve_elim: %s: can not find what to thin in one of the subgoals" name));
+               match SeqHyp.get hyps i with
+                  Hypothesis (v', _) when v=v' -> i
+                | _ -> find_thin_num_aux hyps len (succ i)
+            in
+            let find_thin_num (_,_,assum) =
+               try
+                  let hyps = (TermMan.explode_sequent assum).sequent_hyps in
+                  find_thin_num_aux hyps (SeqHyp.length hyps) 0
+               with RefineError _ ->
+                  raise (Invalid_argument (sprintf "Base_dtactic.improve_elim: %s: assumtions must be sequents" name))
+            in
+            let thin_nums = List.map find_thin_num assums in
+            let rec check_thin_nums = function
+               [i] -> i
+             | i :: ((i'::_) as tl) when (i=i') -> check_thin_nums tl
+             | [] ->
+                  raise (Invalid_argument (sprintf "Base_dtactic.improve_elim: %s: should not use ThinOption in a rule with no assumptions" name))
+             | _ -> raise (Invalid_argument (sprintf "Base_dtactic.improve_elim: %s: ThinOption: different assumptions have the eliminated hypothesis in a different place" name))
+            in
+            let thin_incr = (check_thin_nums thin_nums) - hnum in
             (fun i p ->
-                  let v, _ = Sequent.nth_hyp p i in
+                  let i = Sequent.get_pos_hyp_num p i in
                   let vars = new_vars i p in
                   let j, k = Sequent.hyp_indices p i in
-                     (Tactic_type.Tactic.tactic_of_rule pre_tactic ([| j; k |], new_vars i p) (term_args i p)
-                      thenT tryThinT thinT v i) p)
+                  let tac = Tactic_type.Tactic.tactic_of_rule pre_tactic ([| j; k |], new_vars i p) (term_args i p)
+                  in 
+                     if get_thinning_arg p then
+                        (tac thenT tryT (thinT (i + thin_incr))) p
+                     else
+                        tac p)
        | _ ->
             raise (Invalid_argument (sprintf "Base_dtactic: %s: not an elimination rule" name))
    in

@@ -295,10 +295,10 @@ interactive ifthenelse_type2 {| intro [] |} 'H 'x :
  * $@true$ and $@false$ are provably distinct.
  * @end[doc]
  *)
-interactive boolContradiction1 {| elim [ThinOption thinT] |} 'H 'J :
+interactive boolContradiction1 {| elim [] |} 'H 'J :
    sequent ['ext] { 'H; x: btrue = bfalse in bool; 'J['x] >- 'C['x] }
 
-interactive boolContradiction2 {| elim [ThinOption thinT] |} 'H 'J :
+interactive boolContradiction2 {| elim [] |} 'H 'J :
    sequent ['ext] { 'H; x: bfalse = btrue in bool; 'J['x] >- 'C['x] }
 
 (*!
@@ -413,7 +413,7 @@ interactive assert_type {| intro [] |} 'H :
 interactive assert_true {| intro [] |} 'H :
    sequent ['ext] { 'H >- "assert"{btrue} }
 
-interactive assert_false {| elim [ThinOption thinT] |} 'H 'J :
+interactive assert_false {| elim [] |} 'H 'J :
    sequent ['ext] { 'H; x: "assert"{bfalse}; 'J['x] >- 'C['x] }
 
 (*!

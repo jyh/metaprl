@@ -104,6 +104,11 @@ interactive depth_wf {| intro [] |} :
    sequent { <H> >- 'v in Var } -->
    sequent { <H> >- depth{'v} in nat }
 
+interactive eq_wf {| intro [] |} :
+   sequent { <H> >- 'v1 in Var } -->
+   sequent { <H> >- 'v2 in Var } -->
+   sequent { <H> >- is_eq{'v1; 'v2} in bool }
+
 (* XXX: TODO: arith tactics need to know abot the next 3 rules *)
 
 interactive depth_pos {| intro [] |} :

@@ -11,10 +11,10 @@ doc <:doc<
    logical framework that provides a logical programming
    environment for OCaml and other languages.
 
-   See the file doc/index.html for information on Nuprl,
+   See the file doc/index.html for information on Nbindrl,
    OCaml, and more information about this system.
 
-   Copyright (C) 2005, MetaPRL Group
+   Copyright (C) 2005, MetaPRL Grobind
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -39,6 +39,7 @@ doc <:doc<
 
 doc "doc"{parents}
 
+extends Itt_quotient
 extends Itt_int_base
 extends Itt_nat
 
@@ -46,20 +47,29 @@ open Basic_tactics
 
 doc "doc"{terms}
 
-declare Operator
 declare BOperator
-declare binding_depth{'op}
+declare op_bdepth{'op}
 declare arity{'op}
-declare same_op{'op_1;'op_2} (* Do not consider  binding_depth *)
-declare down{'op} (* reduces binding depth by 1 *)
+declare same_op{'op_1;'op_2} (* Do not consider  op_bdepth *)
+declare inject{'op; 'n} (* Op * Nat -> BOp *)
+
+define unfold_unbind :
+   unbind{'op} <--> inject{'op; op_bdepth{'op} -@ 1 }
+
+define unfold_bind :
+   bind{'op; 'n} <--> inject{'op; op_bdepth{'op} +@ 'n }
+
+define unfold_op :
+   Operator <--> quot o1, o2 : BOperator // "assert"{same_op{'o1; 'o2}}
+
+doc "doc"{rewrites}
+
+prim_rw op_bdepth_inject_id {| reduce |} :
+   'op in Operator -->
+   'n in nat -->
+   op_bdepth{inject{'op; 'n}} <--> 'n
 
 doc "doc"{rules}
-
-prim op_univ {| intro [] |}:
-   sequent { <H> >- Operator in univ[l:l] } = it
-
-interactive op_type {| intro [] |}:
-   sequent { <H> >- Operator Type }
 
 prim bop_univ {| intro [] |}:
    sequent { <H> >- BOperator in univ[l:l] } = it
@@ -67,27 +77,47 @@ prim bop_univ {| intro [] |}:
 interactive bop_type {| intro [] |}:
    sequent { <H> >- BOperator Type }
 
-
-prim bop_subtype_op {| intro [] |}:
-   sequent { <H> >- 'op in BOperator } -->
-   sequent { <H> >- 'op in Operator }
-   = it
-
 prim same_op_wf {| intro [] |} :
    sequent { <H> >- 'op_1 in BOperator } -->
    sequent { <H> >- 'op_2 in BOperator } -->
    sequent { <H> >- same_op{'op_1;'op_2} in bool }
    = it
 
-prim same_op_eq {| intro [] |} :
-   sequent { <H> >- 'op_1 in BOperator } -->
-   sequent { <H> >- 'op_2 in BOperator } -->
-   sequent { <H> >- iff{'op_1 = 'op_2 in Operator; "assert"{same_op{'op_1;'op_2}}} }
+prim same_op_ref {| intro [] |} :
+   [wf] sequent { <H> >- 'op in BOperator } -->
+   sequent { <H> >- "assert"{same_op{'op;'op}} }
    = it
 
-prim binding_depth_wf {| intro [] |} :
+prim same_op_sym :
+   [wf] sequent { <H> >- 'op1 in BOperator } -->
+   [wf] sequent { <H> >- 'op2 in BOperator } -->
+   sequent { <H> >- "assert"{same_op{'op1;'op2}} } -->
+   sequent { <H> >- "assert"{same_op{'op2;'op1}} } = it
+
+prim same_op_trans 'op2 :
+   [wf] sequent { <H> >- 'op1 in BOperator } -->
+   [wf] sequent { <H> >- 'op2 in BOperator } -->
+   [wf] sequent { <H> >- 'op3 in BOperator } -->
+   sequent { <H> >- "assert"{same_op{'op1;'op2}} } -->
+   sequent { <H> >- "assert"{same_op{'op2;'op3}} } -->
+   sequent { <H> >- "assert"{same_op{'op1;'op3}} } = it
+
+interactive op_univ {| intro [] |}:
+   sequent { <H> >- Operator in univ[l:l] }
+
+interactive op_type {| intro [] |}:
+   sequent { <H> >- Operator Type }
+
+interactive bop_subtype_op {| intro [AutoMustComplete] |}:
    sequent { <H> >- 'op in BOperator } -->
-   sequent { <H> >- binding_depth{'op} in nat }
+   sequent { <H> >- 'op in Operator }
+
+interactive bop_subtype_op2 {| nth_hyp |} 'H :
+   sequent { <H>; op: BOperator; <J['op]> >- 'op in Operator }
+
+prim op_bdepth_wf {| intro [] |} :
+   sequent { <H> >- 'op in BOperator } -->
+   sequent { <H> >- op_bdepth{'op} in nat }
    = it
 
 prim arity_wf {| intro [] |} :
@@ -95,18 +125,35 @@ prim arity_wf {| intro [] |} :
    sequent { <H> >- arity{'op} in list{nat} }
    = it
 
-prim down_wf {| intro [] |} :
-   sequent { <H> >- 'op in BOperator } -->
-   sequent { <H> >- binding_depth{'op} > 0 } -->
-   sequent { <H> >- down{'op} in  BOperator }
+prim inject_wf {| intro [] |} :
+   sequent { <H> >- 'op in Operator } -->
+   sequent { <H> >- 'n in nat } -->
+   sequent { <H> >- inject{'op; 'n} in BOperator }
    = it
 
-prim down_red {| intro [] |} :
-   sequent { <H> >- 'op in BOperator } -->
-   sequent { <H> >- binding_depth{'op} > 0 } -->
-   sequent { <H> >- binding_depth{down{'op}} =  binding_depth{'op} -@ 1 in nat }
+prim inject_id {| intro [] |} :
+   [wf] sequent { <H> >- 'op in BOperator } -->
+   sequent { <H> >- inject{'op; op_bdepth{'op}} = 'op in BOperator }
    = it
 
+interactive bind_wf {| intro [] |} :
+   sequent { <H> >- 'op in BOperator } -->
+   sequent { <H> >- 'n in nat } -->
+   sequent { <H> >- bind{'op; 'n} in  BOperator }
 
+interactive_rw bind_red {| reduce |} :
+   'op in BOperator -->
+   'n in nat ->
+   op_bdepth{bind{'op; 'n}} <--> op_bdepth{'op} +@ 'n
+
+interactive unbind_wf {| intro [] |} :
+   sequent { <H> >- 'op in BOperator } -->
+   sequent { <H> >- op_bdepth{'op} > 0 } -->
+   sequent { <H> >- unbind{'op} in  BOperator }
+
+interactive_rw unbind_red {| reduce |} :
+   'op in BOperator -->
+   op_bdepth{'op} > 0 -->
+   op_bdepth{unbind{'op}} <--> op_bdepth{'op} -@ 1
 
 doc <:doc< @docoff >>

@@ -9,3 +9,5 @@ declare compatible_shapes{'op; 'btl}
 
 declare bdepth{'bt}
 declare dest_bterm{'bt; v.'var_case['v]; op,subterms. 'op_case['op; 'subterms] }
+
+declare Vars_of{'bt}

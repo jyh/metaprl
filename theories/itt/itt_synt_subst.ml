@@ -182,6 +182,37 @@ interactive subst_wf {| intro [] |} :
    sequent { <H> >- bdepth{'t} >= bdepth{'s} } -->
    sequent { <H> >- subst{'t;'v;'s} in BTerm }
 
+
+define unfold_not_free: not_free{'v;'t} <-->
+      fix{not_free.lambda{t.
+         dest_bterm{'t;
+                    u. "assert"{bnot{is_eq{'v;'u}}};
+                    op,subterms. all_list{'subterms; t.'not_free 't} }
+         }} 't
+
+interactive_rw not_free_reduce1 {| reduce |} :
+      not_free{'v;make_bterm{'op;'subterms}} <--> all_list{'subterms; t.not_free{'v;'t}}
+
+interactive_rw not_free_var_reduce :
+      ('u in Var) -->
+      not_free{'v; 'u} <-->  "assert"{bnot{is_eq{'v;'u}}}
+
+interactive not_free_wf {| intro[] |}:
+   sequent { <H> >- 'v in Var } -->
+   sequent { <H> >- 't in BTerm } -->
+   sequent { <H> >- not_free{'v;'t} Type  }
+
+interactive subst_commute {| intro [] |} :
+   sequent { <H> >- 'v1 in Var } -->
+   sequent { <H> >- 'v2 in Var } -->
+   sequent { <H> >- 't in BTerm } -->
+   sequent { <H> >- 's1 in BTerm } -->
+   sequent { <H> >- 's2 in BTerm } -->
+   sequent { <H> >- bdepth{'t} >= bdepth{'s1} } -->
+   sequent { <H> >- bdepth{'t} >= bdepth{'s2} } -->
+   sequent { <H> >- not_free{'v1;'s2} } -->
+   sequent { <H> >- not_free{'v2;'s1} } -->
+   sequent { <H> >- subst{subst{'t;'v1;'s1};'v2;'s2} ~ subst{subst{'t;'v2;'s2};'v1;'s1} }
 (*
  * Iterated subst - the relative position of the two variables may matter
  *
@@ -211,14 +242,33 @@ interactive subst_commutes {| intro |}
 (*
  *  bind(x. bterm{<H>.b[x]} ) = bterm{x,<H>.b[x]}
  *)
+(*
+define unfold_var_0: var_0 <--> var{0;0}
+define unfold_tmp_var: tmp_var <--> var{-1;0} (* Not a real var *)
+
 define unfold_bind:
+   bind{x.'bt['x]} <-->  subst{add_var{'bt[tmp_var];var_0};tmp_var;var_0}
+(*
    bind{x.'bt['x]} <-->
       fix{bind.lambda{bt.
          dest_bterm{'bt;
                     u. var{left{'u}+@1;right{'u}};
                     op,subterms. make_bterm{bind{'op}; map{x.'bind 'x; 'subterms}} }
          }} 'bt[var{-1;0}]
+*)
+interactive_rw bind_id_rw:
+   bind{x.'x}  <--> var[0;0]
+
+interactive_rw bind_nobind_rw:
+   bind{x.bind{y.'t['x]}}  <--> add_var{{bind{x.'t['x]}}; var{1;0}}
+
+interactive_rw nobind_rw:
+   bind{x.'t}  <--> add_var{'t; var{0;0}}
 
 
-doc docoff
+
+interactive_rw bind__makebterm_rw:
+   bind{x.make_bterm{'op['x]; 'subterms['x]}}  <--> make_bterm{'op[var{-1;0}]; map{'bt.bind{x.'bt['x]};'subterms}}
+ docoff
+*)
 

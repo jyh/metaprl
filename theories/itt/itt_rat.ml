@@ -133,6 +133,8 @@ define unfold_fieldQ : fieldQ <-->
 	 inv=lambda{x.(snd{'x},fst{'x})}
 	}
 
+let fold_rationals = makeFoldC <<rationals>> unfold_rationals
+
 let fold_fieldQ = makeFoldC <<fieldQ>> unfold_fieldQ
 
 doc <:doc< @docoff >>
@@ -162,7 +164,7 @@ let resource elim += [
 	]
 
 interactive rationalsElimination1Eq{| elim [ThinOption thinT] |} 'H :
-   [wf] sequent { <H>; a: quot x,y: (int * posnat) // "assert"{beq_rat{'x;'y}}; <J['a]> >- "type"{'T['a]} } -->
+   [wf] sequent { <H>; a: rationals; <J['a]> >- "type"{'T['a]} } -->
    [main] sequent { <H>; a: quot x,y: (int * posnat) // "assert"{beq_rat{'x;'y}}; <J['a]>;
              u1: int; v1: int; w1:'v1>0;
 				 u2: int; v2: int; w2:'v2>0;
@@ -171,7 +173,7 @@ interactive rationalsElimination1Eq{| elim [ThinOption thinT] |} 'H :
    sequent { <H>; a: rationals; <J['a]> >- 's['a] = 't['a] in 'T['a] }
 
 interactive rationalsElimination {| elim [ThinOption thinT] |} 'H :
-   [wf] sequent { <H>; a: quot x,y: (int * posnat) // "assert"{beq_rat{'x;'y}}; <J['a]> >- "type"{'C['a]} } -->
+   [wf] sequent { <H>; a: rationals; <J['a]> >- "type"{'C['a]} } -->
    [main] sequent { <H>; a: quot x,y: (int * posnat) // "assert"{beq_rat{'x;'y}}; x: int; y: int; 'y>0; <J['a]> >- squash{'C[('x,'y)]} } -->
    sequent { <H>; a: rationals; <J['a]> >- squash{'C['a]} }
 
@@ -197,19 +199,19 @@ interactive lt_bool_rat_wf1 {| intro [] |} :
 	sequent { <H> >- 'd in int } -->
 	sequent { <H> >- lt_bool_rat{('a,'b); ('c,'d)} in bool }
 
-interactive lt_bool_rat_wf2 {| intro [] |} :
+interactive lt_bool_rat_wf2 {| intro [AutoMustComplete] |} :
 	sequent { <H> >- 'a in rationals } -->
 	sequent { <H> >- 'b in int } -->
 	sequent { <H> >- 'c in int } -->
 	sequent { <H> >- lt_bool_rat{'a; ('b,'c)} in bool }
 
-interactive lt_bool_rat_wf3 {| intro [] |} :
+interactive lt_bool_rat_wf3 {| intro [AutoMustComplete] |} :
 	sequent { <H> >- 'a in int } -->
 	sequent { <H> >- 'b in int } -->
 	sequent { <H> >- 'c in rationals } -->
 	sequent { <H> >- lt_bool_rat{('a,'b); 'c} in bool }
 
-interactive lt_bool_rat_wf {| intro [] |} :
+interactive lt_bool_rat_wf {| intro [AutoMustComplete] |} :
 	sequent { <H> >- 'a in rationals } -->
 	sequent { <H> >- 'b in rationals } -->
 	sequent { <H> >- lt_bool_rat{'a; 'b} in bool }
@@ -230,6 +232,13 @@ interactive beq_rat_wf2 {| intro [] |} :
 	sequent { <H> >- 'b in quot x,y: (int * posnat) // "assert"{beq_rat{'x;'y}} } -->
 	sequent { <H> >- beq_rat{'a; 'b} in bool }
 *)
+
+interactive ratEquality {| intro [AutoMustComplete] |} :
+	[wf] sequent { <H> >- 'a in rationals } -->
+	[wf] sequent { <H> >- 'b in rationals } -->
+	sequent { <H> >- "assert"{beq_rat{'a;'b}} } -->
+	sequent { <H> >- 'a = 'b in rationals }
+
 interactive q_is_field {| intro [] |} :
 	sequent { <H> >- fieldQ in field[i:l] }
 

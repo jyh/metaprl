@@ -57,5 +57,6 @@ open Refiner.Refiner.TermOp
 
 open Tactic_type.Sequent
 
+topval fold_rationals : conv
 
 doc <:doc< @docoff >>

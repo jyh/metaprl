@@ -123,7 +123,7 @@ interactive decide_eq_label 'H 'x 'y :
 
 let decideEqLabelT x y =
    let tac p =
-      Itt_record_label0.decide_eq_label (Sequent.hyp_count_addr p) x y p
+      decide_eq_label (Sequent.hyp_count_addr p) x y p
    in
       tac thenLT [idT;
                   idT;

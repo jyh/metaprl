@@ -248,6 +248,15 @@ interactive inject_equal {| intro [] |} :
    [wf] sequent { <H> >- 'n in nat } -->
    sequent { <H> >- inject{'op;'n} = 'op in Operator }
 
+interactive bind_equal {| intro [] |} :
+   [wf] sequent { <H> >- 'op in BOperator } -->
+   [wf] sequent { <H> >- 'n in nat } -->
+   sequent { <H> >- bind{'op;'n} = 'op in Operator }
+
+interactive bind1_equal {| intro [] |} :
+   [wf] sequent { <H> >- 'op in BOperator } -->
+   sequent { <H> >- bind{'op} = 'op in Operator }
+
 interactive_rw bind_red {| reduce |} :
    'op in BOperator -->
    'n in nat -->

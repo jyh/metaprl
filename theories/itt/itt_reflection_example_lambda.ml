@@ -60,6 +60,9 @@ interactive lambda_intro  {| intro[] |} :
 
 interactive lambda_intro2  {| intro[] |} :
    sequent { <H> >- bterm{| <K<||> >; x:term >- 't<|K|>['x] |} in LambdaTerm } -->
+   sequent { <H> >- if_quoted_op{ bterm{| <K<||> >; x:term >- 't<|K|>['x] |}; "true" } } -->
+(*   sequent { <H> >- bterm{| <K<||> >; x:term >- 't<|K|>['x] |} in BTerm } -->
+   sequent { <H> >- compatible_shapes{ bterm{| <K<||> > >- lambda[@]{x.'t<|K|>['x]} |}; bterm{| <K<||> >; x:term >- 't<|K|>['x] |} :: nil } -->*)
    sequent { <H> >- bterm{| <K<||> > >- lambda[@]{x.'t<|K|>['x]} |} in LambdaTerm }
 
 
@@ -67,10 +70,25 @@ define unfold_mk_apply: mk_apply{'t;'s} <--> let depth=max{bdepth{'t};bdepth{'s}
 
 define unfold_mk_lambda: mk_lambda{'f} <--> let depth=max{bdepth{'f}; 1} in  make_bterm{lambda_term; 'depth -@ 1; make_depth{'f;'depth}::nil}
 
-interactive add_var_lambdaterm :
+(*interactive add_var_lambdaterm :
    sequent { <H> >- 't in LambdaTerm } -->
    sequent { <H> >- bdepth{'t} ~ 0 } -->
    sequent { <H> >- add_var{'t} in LambdaTerm }
+*)
+interactive add_var_lambdaterm {| intro[] |} :
+   sequent { <H> >- 's in LambdaTerm } -->
+   sequent { <H> >- 'v in Var } -->
+   sequent { <H> >- add_var{'s; 'v} in LambdaTerm }
+
+interactive add_new_var_lambdaterm {| intro[] |} :
+   sequent { <H> >- 's in LambdaTerm } -->
+   sequent { <H> >- add_var{'s} in LambdaTerm }
+
+interactive make_depth_lambdaterm {| intro[] |} :
+   sequent { <H> >- 's in LambdaTerm } -->
+   sequent { <H> >- 'n in nat } -->
+   sequent { <H> >- 'n >= bdepth{'s} } -->
+   sequent { <H> >- make_depth{'s;'n} in LambdaTerm }
 
 interactive mk_lambda_wf  {| intro[] |} :
    sequent { <H> >- 't in LambdaTerm } -->

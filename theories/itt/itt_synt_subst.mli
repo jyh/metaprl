@@ -52,3 +52,4 @@ topval fold_add_var : conv
 topval fold_subst : conv
 topval fold_add_vars_upto : conv
 topval fold_not_free : conv
+topval fold_make_depth : conv

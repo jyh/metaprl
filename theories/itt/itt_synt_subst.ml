@@ -225,7 +225,8 @@ interactive make_depth_wf {| intro [] |} :
    sequent { <H> >- 'n >= bdepth{'s} } -->
    sequent { <H> >- make_depth{'s;'n} in BTerm }
 
-
+doc docoff
+let fold_make_depth = makeFoldC << make_depth{'s;'n} >> unfold_make_depth
 
 doc <:doc<
    @begin[doc]

@@ -196,7 +196,7 @@ let extract_data tbl =
 (*
  * Add info from a rule definition.
  *)
-let process_eqcd_resource_annotation name context_args term_args _ statement pre_tactic =
+let process_eqcd_resource_annotation name context_args term_args statement pre_tactic =
    let _, goal = unzip_mfunction statement in
    let t =
       try TermMan.nth_concl goal 1 with

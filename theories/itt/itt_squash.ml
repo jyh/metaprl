@@ -344,7 +344,7 @@ let unsquash_tactic tbl = argfunT (fun i p ->
     | [], [] ->
          raise (RefineError ("squash", StringTermError ("squash tactic doesn't know about ", mk_xlist_term [hyp;<<slot[" |- "]>>;conc]))))
 
-let process_squash_resource_annotation name contexts args _ stmt tac =
+let process_squash_resource_annotation name contexts args stmt tac =
    let assums, goal = unzip_mfunction stmt in
    let egoal = TermMan.explode_sequent goal in
    let concl = SeqGoal.get egoal.sequent_goals 0 in

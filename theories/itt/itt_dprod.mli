@@ -96,8 +96,8 @@ axiom pairEquality 'H 'y :
  * H, x:A * B, u:A, v:B[u], J[u, v] >- T[u, v] ext t[u, v]
  *)
 axiom productElimination 'H 'J 'z 'u 'v :
-   sequent ['ext] { 'H; z: x:'A * 'B; u: 'A; v: 'B['u]; 'J['u, 'v] >- 'T['u, 'v] } -->
-   sequent ['ext] { 'H; z: x:'A * 'B; 'J['z] >- 'T['z] }
+   sequent ['ext] { 'H; z: x:'A * 'B['x]; u: 'A; v: 'B['u]; 'J['u, 'v] >- 'T['u, 'v] } -->
+   sequent ['ext] { 'H; z: x:'A * 'B['x]; 'J['z] >- 'T['z] }
 
 (*
  * H >- spread(e1; u1, v1. b1) = spread(e2; u2, v2. b2) in T[e1]
@@ -154,6 +154,9 @@ val mk_spread_term : string -> string -> term -> term -> term
 
 (*
  * $Log$
+ * Revision 1.7  1998/06/23 22:12:31  jyh
+ * Improved rewriter speed with conversion tree and flist.
+ *
  * Revision 1.6  1998/06/22 19:46:14  jyh
  * Rewriting in contexts.  This required a change in addressing,
  * and the body of the context is the _last_ subterm, not the first.

@@ -13,10 +13,8 @@ open Tactic_type
  * TYPES                                                                *
  ************************************************************************)
 
-type t
 type env
-
-type conv = env -> t
+type conv
 
 (************************************************************************
  * RULES                                                                *
@@ -95,6 +93,11 @@ val prefix_orelseC : conv -> conv -> conv
 val idC : conv
 
 (*
+ * Pull out the argument.
+ *)
+val funC : (env -> conv) -> conv
+
+(*
  * Apply a conversion at an address.
  *)
 val addrC : int list -> conv -> conv
@@ -109,7 +112,15 @@ val foldC : term -> conv -> conv
 val cutC : term -> conv
 
 (*
+ * Create a fold operation automatically.
+ *)
+val makeFoldC : term -> conv -> conv
+
+(*
  * $Log$
+ * Revision 1.4  1998/06/23 22:12:42  jyh
+ * Improved rewriter speed with conversion tree and flist.
+ *
  * Revision 1.3  1998/06/22 20:01:44  jyh
  * Fixed syntax error in term_addr_gen.ml
  *

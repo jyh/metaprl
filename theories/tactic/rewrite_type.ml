@@ -9,6 +9,7 @@ open Refiner.Refiner
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermMan
 open Refiner.Refiner.TermAddr
+open Refiner.Refiner.Rewrite
 open Refiner.Refiner.Refine
 
 open Tactic_type
@@ -22,20 +23,23 @@ open Var
 (*
  * A conversion is wither a regular rewrite,
  * or a conditional rewrite, or a composition.
+ *
+ * NOTE: we need to use a better data structure for
+ * Compose and Choose that has more efficient
+ * operations.
  *)
-type t =
+type env = tactic_arg * address
+
+type conv =
    Rewrite of rw
  | CondRewrite of cond_rewrite
- | Compose of conv * conv
- | Choice of conv * conv
+ | Compose of conv Flist.t
+ | Choose of conv Flist.t
  | Address of address * conv
  | Fold of term * conv
  | Cut of term
+ | Fun of (env -> conv)
  | Identity
-
-and env = tactic_arg * address
-
-and conv = env -> t
 
 (************************************************************************
  * RULES                                                                *
@@ -100,54 +104,148 @@ let env_goal (arg, _) =
  * Create a conversion from a basic rewrite.
  * This function is required by filter_prog.
  *)
-let rewrite_of_rewrite rw (_, addr) =
-   Rewrite (rwaddr addr rw)
+let rewrite_of_rewrite rw =
+   Rewrite rw
 
 (*
  * Create a conversion from a conditional rewrite.
  * This function is required by filter_prog.
  *)
-let rewrite_of_cond_rewrite crw args (_, addr) =
-   CondRewrite (crwaddr addr (crw args))
+let rewrite_of_cond_rewrite crw args =
+   CondRewrite (crw args)
 
 (*
- * Composition.
+ * Combine two lissts of conversion.
+ * Note if the adjacent conversion can be combined.
  *)
+let combine rw_f crw_f make clist1 clist2 =
+   match Flist.last clist1, Flist.first clist2 with
+      Rewrite rw1, Rewrite rw2 ->
+         let rw = Rewrite (rw_f rw1 rw2) in
+            if Flist.singleton clist1 & Flist.singleton clist2 then
+               rw
+            else
+               make (Flist.append_skip clist1 rw clist2)
+    | CondRewrite crw1, CondRewrite crw2 ->
+         let crw = CondRewrite (crw_f crw1 crw2) in
+            if Flist.singleton clist1 & Flist.singleton clist2 then
+               crw
+            else
+               make (Flist.append_skip clist1 crw clist2)
+    | _ ->
+         make (Flist.append clist1 clist2)
+
+let compose clist1 clist2 =
+   combine andthenrw candthenrw (fun l -> Compose l) clist1 clist2
+
+let choose clist1 clist2 =
+   combine orelserw corelserw (fun l -> Choose l) clist1 clist2
+
 let prefix_andthenC conv1 conv2 =
-   let conv = Compose (conv1, conv2) in
-      (fun _ -> conv)
+   let clist1 =
+      match conv1 with
+         Compose clist1 ->
+            clist1
+       | _ ->
+            Flist.create conv1
+   in
+   let clist2 =
+      match conv2 with
+         Compose clist2 ->
+            clist2
+       | _ ->
+            Flist.create conv2
+   in
+      compose clist1 clist2
 
 let prefix_orelseC conv1 conv2 =
-   let conv = Choice (conv1, conv2) in
-      (fun _ -> conv)
+   let clist1 =
+      match conv1 with
+         Choose clist1 ->
+            clist1
+       | _ ->
+            Flist.create conv1
+   in
+   let clist2 =
+      match conv2 with
+         Choose clist2 ->
+            clist2
+       | _ ->
+            Flist.create conv2
+   in
+      choose clist1 clist2
 
 (*
  * No action.
  *)
-let idC _ =
-   Identity
+let idC = Identity
+
+(*
+ * Function conversion needs an argument.
+ *)
+let funC f =
+   Fun f
 
 (*
  * Apply the conversion at the specified address.
  *)
-let addrC addr conv =
-   let conv = Address (make_address addr, conv) in
-      (fun _ -> conv)
+let addrC addr =
+   let addr = make_address addr in
+      (function
+         Rewrite rw ->
+            Rewrite (rwaddr addr rw)
+       | CondRewrite crw ->
+            CondRewrite (crwaddr addr crw)
+       | conv ->
+            Address (addr, conv))
 
 (*
  * Reverse the conversion at the specified address.
  *)
 let foldC t conv =
-   let conv = Fold (t, conv) in
-      (fun _ -> conv)
+   Fold (t, conv)
+
+(*
+ * Build a fold conversion from the contractum
+ * and the unfolding conversion.
+ *)
+let makeFoldC contractum conv =
+   let fold_aux = function
+      Rewrite rw ->
+         let mseq = { mseq_hyps = []; mseq_goal = contractum } in
+         let tac = rwtactic rw in
+            begin
+               (* Apply the unfold conversion *)
+               match Refine.refine tac mseq with
+                  [{ mseq_goal = redex }], _ ->
+                     (* Unfolded it, so create a rewrite that reverses it *)
+                     let rw' = term_rewrite ([||], [||]) [redex] [contractum] in
+                     let doCE env =
+                        try
+                        match apply_rewrite rw' ([||], [||]) [env_term env] with
+                           [contractum], _ ->
+                              Fold (contractum, conv)
+                         | _ ->
+                              raise (RefineError ("Rewrite_type.fold", StringTermError ("rewrite failed", redex)))
+                        with
+                           Rewrite.RewriteError err ->
+                              raise (RefineError ("Rewrite_Type.fold", RewriteError err))
+                     in
+                        Fun doCE
+                | _ ->
+                     raise (RefineError ("Rewrite_type.fold", StringTermError ("fold failed", contractum)))
+            end
+    | _ ->
+         raise (RefineError ("Rewrite_type.fold", StringError "can't fold nontrivial rewrites"))
+   in
+      Refine_exn.print Dform.null_base fold_aux conv
 
 (*
  * Cut just replaces the term an generates a rewrite
  * subgoal.
  *)
 let cutC t =
-   let conv = Cut t in
-      (fun _ -> conv)
+   Cut t
 
 (*
  * Apply cut sequent rule.
@@ -212,32 +310,50 @@ let rw conv i p =
     * addr: compose_addrress root rel
     *)
    let rec apply i rel addr conv p =
-      match conv (p, addr) with
+      match conv with
          Rewrite rw ->
-            tactic_of_rewrite rw p
+            tactic_of_rewrite (rwaddr addr rw) p
        | CondRewrite crw ->
-            tactic_of_cond_rewrite crw p
-       | Compose (conv1, conv2) ->
-            let tac1 p = apply i rel addr conv1 p in
-            let tac2 p = apply i rel addr conv2 p in
-               (tac1 then_OnFirstT tac2) p
-       | Choice (conv1, conv2) ->
-            let tac1 p = apply i rel addr conv1 p in
-            let tac2 p = apply i rel addr conv2 p in
-               (tac1 orelseT tac2) p
+            tactic_of_cond_rewrite (crwaddr addr crw) p
+       | Compose clist ->
+            composeT i rel addr (Flist.tree_of_list clist) p
+       | Choose clist ->
+            chooseT i rel addr (Flist.tree_of_list clist) p
        | Address (addr', conv) ->
             let rel = compose_address rel addr' in
             let addr = compose_address addr addr' in
                apply i rel addr conv p
        | Identity ->
             idT p
+       | Fun f ->
+            apply i rel addr (f (p, addr)) p
        | Fold (t, conv) ->
             (cutT i rel t thenLT [idT; solveCutT i rel conv]) p
        | Cut t ->
             cutT i rel t p
 
+   and composeT i rel addr tree p =
+      match tree with
+         Flist.Empty ->
+            idT p
+       | Flist.Leaf conv ->
+            apply i rel addr conv p
+       | Flist.Append (tree1, tree2) ->
+            (composeT i rel addr tree1
+             thenT composeT i rel addr tree2) p
+
+   and chooseT i rel addr tree p =
+      match tree with
+         Flist.Empty ->
+            idT p
+       | Flist.Leaf conv ->
+            apply i rel addr conv p
+       | Flist.Append (tree1, tree2) ->
+            (chooseT i rel addr tree1
+             orelseT chooseT i rel addr tree2) p
+
    and solveCutT i rel conv p =
-      let rel = compose_address (make_address [1]) rel in
+      let rel = compose_address (make_address [0]) rel in
       let root = Sequent.clause_addr p 0 in
       let addr = compose_address root rel in
          (apply i rel addr conv thenT rwSeqAxiomT) p
@@ -247,6 +363,9 @@ let rw conv i p =
 
 (*
  * $Log$
+ * Revision 1.4  1998/06/23 22:12:41  jyh
+ * Improved rewriter speed with conversion tree and flist.
+ *
  * Revision 1.3  1998/06/22 20:01:43  jyh
  * Fixed syntax error in term_addr_gen.ml
  *

@@ -121,13 +121,10 @@ let d_concl_prod p =
  * We take the argument.
  *)
 let d_hyp_prod i p =
-   let i, j = hyp_indices p i in
    let z, _ = Sequent.nth_hyp p i in
-      (match maybe_new_vars ["%u"; "%v"] (declared_vars p) with
-          [u; v] ->
-             independentProductElimination i j z u v
-        | _ ->
-             failT) p
+   let i, j = hyp_indices p i in
+   let u, v = maybe_new_vars2 p "u" "v" in
+      independentProductElimination i j z u v p
 
 (*
  * Join them.
@@ -191,6 +188,9 @@ let sub_resource =
 
 (*
  * $Log$
+ * Revision 1.10  1998/06/23 22:12:35  jyh
+ * Improved rewriter speed with conversion tree and flist.
+ *
  * Revision 1.9  1998/06/12 13:47:34  jyh
  * D tactic works, added itt_bool.
  *

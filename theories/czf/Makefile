@@ -15,7 +15,14 @@ NLFILES :=\
 	czf_itt_wf\
 	czf_itt_true\
 	czf_itt_false\
-	czf_itt_or
+	czf_itt_or\
+	czf_itt_and\
+	czf_itt_implies\
+	czf_itt_all\
+	czf_itt_exists\
+	czf_itt_dall\
+	czf_itt_dexists\
+	czf_itt_axioms
 
 # Name of main libraris
 MAIN = czf

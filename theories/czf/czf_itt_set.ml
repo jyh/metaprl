@@ -24,6 +24,7 @@ open Debug
 
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
+open Refiner.Refiner.TermSubst
 open Refiner.Refiner.Refine
 open Resource
 open Term_stable
@@ -145,6 +146,21 @@ prim small_elim 'H 'J (a1: 'A1 -> 'B1) (a2:'A2 * 'B2) ('A3 + 'B3) ('a4 = 'b4 in 
  ************************************************************************)
 
 (*
+ * A set is a type.
+ *)
+prim set_type 'H : :
+   sequent ['ext] { 'H >- "type"{set} } =
+   it
+
+(*
+ * Every set is a type.
+ *)
+prim subset_type 'H :
+   sequent ['ext] { 'H >- member{'T; set} } -->
+   sequent ['ext] { 'H >- "type"{'T} } =
+   it
+
+(*
  * This is how a set is constructed.
  *)
 prim collect_set 'H :
@@ -154,12 +170,42 @@ prim collect_set 'H :
    it
 
 (*
+ * Elements of a set are also sets.
+ *)
+prim member_set 'H 'y :
+   sequent ['ext] { 'H >- member{'y; set } } -->
+   sequent ['ext] { 'H >- member{'x; 'y} } -->
+   sequent ['ext] { 'H >- member{'x; set} } =
+   it
+
+(*
  * Transfinite induction.
  * BUG: we need to work out the induction combinator.
  *)
 prim set_elim 'H 'J 'a 'T 'f 'w :
    ('t['a; 'T; 'f; 'w] : sequent ['ext] { 'H; a: set; 'J['a]; T: small; f: 'T -> set; w: (all x : 'T. 'C['f 'x]) >- 'C[collect{'T; x. 'f 'x}] }) -->
    sequent ['ext] { 'H; a: set; 'J['a] >- 'C['a] } =
+   it
+
+(************************************************************************
+ * MEMBERSHIP                                                           *
+ ************************************************************************)
+
+prim equal_member 'H :
+   sequent ['ext] { 'H >- member{'x; 'T} } -->
+   sequent ['ext] { 'H >- 'x = 'x in 'T } =
+   it
+
+(*
+ * By assumption.
+ *)
+prim hyp_set_member 'H 'J : :
+   sequent ['ext] { 'H; x: set; 'J['x] >- member{'x; set} } =
+   it
+
+prim hyp_member 'H 'J :
+   sequent ['ext] { 'H; x: 'y; 'J['x] >- member{'y; set} } -->
+   sequent ['ext] { 'H; x: 'y; 'J['x] >- member{'x; 'y} } =
    it
 
 (************************************************************************
@@ -234,11 +280,7 @@ let d_small_typeT i p =
       in
          rule p
 
-let x0_resource = d_resource
-
 let d_resource = d_resource.resource_improve d_resource (small_type_term, d_small_typeT)
-
-let x1_resource = d_resource
 
 (*
  * Small elim.
@@ -260,8 +302,6 @@ let d_smallT i p =
          small_elim i j fun_t prod_t union_t equal_t p
 
 let d_resource = d_resource.resource_improve d_resource (small_term, d_smallT)
-
-let x2_resource = d_resource
 
 (************************************************************************
  * MEM RESOURCE                                                         *
@@ -351,19 +391,53 @@ let d_setT i p =
    if i = 0 then
       raise (RefineError ("d_setT", StringTermError ("no formation rule", set_term)))
    else
-      let i, j = hyp_indices p i in
       let v_a, _ = nth_hyp p i in
+      let i, j = hyp_indices p i in
       let v_T, v_f, v_b = maybe_new_vars3 p "T" "f" "b" in
          set_elim i j v_a v_T v_f v_b p
 
 let d_resource = d_resource.resource_improve d_resource (set_term, d_setT)
 
-let x3_resource = d_resource
+(*
+ * The type of sets is a type.
+ *)
+let d_setTypeT p =
+   set_type (hyp_count p) p
 
-let dT = d_resource.resource_extract d_resource
+(*
+ * Every set is a type.
+ *)
+let d_subsetTypeT p =
+   subset_type (hyp_count p) p
+
+(*
+ * Membership is equality.
+ *)
+let d_eqMemberT p =
+   equal_member (hyp_count p) p
+
+(*
+ * Assumption.
+ *)
+let d_assumSetT i p =
+   let _, t = nth_hyp p i in
+   let i, j = hyp_indices p i in
+      if alpha_equal t set_term then
+         hyp_set_member i j p
+      else
+         hyp_member i j p
+
+(*
+ * Every element of a set is a set.
+ *)
+let d_subsetT s p =
+   member_set (hyp_count p) s p
 
 (*
  * $Log$
+ * Revision 1.3  1998/06/23 22:12:24  jyh
+ * Improved rewriter speed with conversion tree and flist.
+ *
  * Revision 1.2  1998/06/16 16:26:04  jyh
  * Added itt_test.
  *

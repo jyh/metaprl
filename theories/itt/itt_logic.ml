@@ -90,11 +90,11 @@ dform and_df1 : mode[src] :: parens :: "prec"[prec_and] :: "and"{'a; 'b} =
 dform or_df1 : mode[src] :: parens :: "prec"[prec_or] :: "or"{'a; 'b} =
    slot[le]{'a} `" \\/ " slot[lt]{'b}
 
-dform all_df1 : mode[src] :: parens :: "prec"[prec_quant] :: "all"{'A; x. 'B['x]} =
-   `"all " slot{'x} `": " slot{'A}`"." slot{'B['x]}
+dform all_df1 : mode[src] :: parens :: "prec"[prec_quant] :: "all"{'A; x. 'B} =
+   `"all " slot{'x} `": " slot{'A}`"." slot{'B}
 
-dform exists_df1 : mode[src] :: parens :: "prec"[prec_quant] :: "exists"{'A; x. 'B['x]} =
-  `"exists " slot{'x} `": " slot{'A} `"." slot{'B['x]}
+dform exists_df1 : mode[src] :: parens :: "prec"[prec_quant] :: "exists"{'A; x. 'B} =
+  `"exists " slot{'x} `": " slot{'A} `"." slot{'B}
 
 dform not_df2 : mode[prl] :: parens :: "prec"[prec_implies] :: "not"{'a} =
    Nuprl_font!tneg slot[le]{'a}
@@ -108,11 +108,11 @@ dform and_df1 : mode[prl] :: parens :: "prec"[prec_and] :: "and"{'a; 'b} =
 dform or_df2 : mode[prl] :: parens :: "prec"[prec_or] :: "or"{'a; 'b} =
    slot[le]{'a} Nuprl_font!vee " " slot[lt]{'b}
 
-dform all_df2 : mode[prl] :: parens :: "prec"[prec_quant] :: "all"{'A; x. 'B['x]} =
-   pushm[3] Nuprl_font!forall slot{'x} `":" slot{'A} sbreak["",". "] slot{'B['x]} popm
+dform all_df2 : mode[prl] :: parens :: "prec"[prec_quant] :: "all"{'A; x. 'B} =
+   pushm[3] Nuprl_font!forall slot{'x} `":" slot{'A} sbreak["",". "] slot{'B} popm
 
-dform exists_df2 : mode[prl] :: parens :: "prec"[prec_quant] :: "exists"{'A; x. 'B['x]} =
-   pushm[3] Nuprl_font!"exists" slot{'x} `":" slot{'A} sbreak["",". "] slot{'B['x]}
+dform exists_df2 : mode[prl] :: parens :: "prec"[prec_quant] :: "exists"{'A; x. 'B} =
+   pushm[3] Nuprl_font!"exists" slot{'x} `":" slot{'A} sbreak["",". "] slot{'B}
 
 (************************************************************************
  * TACTICS                                                              *
@@ -240,6 +240,9 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (not_t
 
 (*
  * $Log$
+ * Revision 1.11  1998/06/23 22:12:33  jyh
+ * Improved rewriter speed with conversion tree and flist.
+ *
  * Revision 1.10  1998/06/22 19:46:20  jyh
  * Rewriting in contexts.  This required a change in addressing,
  * and the body of the context is the _last_ subterm, not the first.

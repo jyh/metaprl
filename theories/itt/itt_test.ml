@@ -48,7 +48,7 @@ let resources =
      ref_subtype = sub_resource.resource_extract sub_resource
    }
 
-let goal = { mseq_hyps = []; mseq_goal = << sequent { 'H >- fact{60} = 0 in int } >> }
+let goal = { mseq_hyps = []; mseq_goal = << sequent { 'H >- fact{80} = 0 in int } >> }
 
 let cache = Tactic_cache.extract (cache_resource.resource_extract cache_resource)
 
@@ -70,10 +70,13 @@ let test () =
             eprintf "No subgoals%t" eflush
        | _ ->
             eprintf "Too many subgoals%t" eflush
-		
+
 
 (*
  * $Log$
+ * Revision 1.3  1998/06/23 22:12:38  jyh
+ * Improved rewriter speed with conversion tree and flist.
+ *
  * Revision 1.2  1998/06/17 15:46:02  jyh
  * Optimizing compiler.
  *

@@ -49,7 +49,9 @@ let prefix_orelseC = Rewrite_type.prefix_orelseC
 let addrC = Rewrite_type.addrC
 let idC = Rewrite_type.idC
 let foldC = Rewrite_type.foldC
+let makeFoldC = Rewrite_type.makeFoldC
 let cutC = Rewrite_type.cutC
+let funC = Rewrite_type.funC
 
 (************************************************************************
  * SEARCH                                                               *
@@ -58,11 +60,11 @@ let cutC = Rewrite_type.cutC
 (*
  * Failure.
  *)
-let failC err env =
-   raise (RefineError ("failC", StringError err))
+let failC err =
+   funC (fun _ -> raise (RefineError ("failC", StringError err)))
 
-let failWithC err env =
-   raise (RefineError err)
+let failWithC err =
+   funC (fun _ -> raise (RefineError err))
 
 (*
  * Trial.
@@ -85,37 +87,46 @@ let subterm_count t =
 (*
  * First subterm that works.
  *)
-let someSubC conv env =
-   let t = env_term env in
-   let count = subterm_count t in
-   let rec subC i =
-      if i = count then
-         failWithC ("subC", StringError "all subterms failed")
-      else
-         (addrC [i] conv) orelseC (subC (i + 1))
+let someSubC conv =
+   let someSubCE env =
+      let t = env_term env in
+      let count = subterm_count t in
+      let rec subC i =
+         if i = count then
+            failWithC ("subC", StringError "all subterms failed")
+         else
+            (addrC [i] conv) orelseC (subC (i + 1))
+      in
+         subC 0
    in
-      subC 0 env
+      funC someSubCE
 
 (*
  * Apply to all subterms.
  *)
-let allSubC conv env =
-   let t = env_term env in
-   let count = subterm_count t in
-   let rec subC i =
-      if i = count then
-         idC
-      else
-         (addrC [i] conv) andthenC (subC (i + 1))
+let allSubC conv =
+   let allSubCE conv env =
+      let t = env_term env in
+      let count = subterm_count t in
+      let rec subC conv count i =
+         if i = count then
+            idC
+         else
+            (addrC [i] conv) andthenC (subC conv count (i + 1))
+      in
+         subC conv count 0
    in
-      subC 0 env
+      funC (allSubCE conv)
 
 (*
  * Apply to leftmost-outermost term.
  * We use our own sub, so that we can track the addresses.
  *)
-let rec higherC rw env =
-   (rw orelseC (allSubC (higherC rw))) env
+let higherC rw =
+   let rec higherCE rw env =
+      (rw orelseC (allSubC (funC (higherCE rw))))
+   in
+      funC (higherCE rw)
 
 let rwh conv i =
    rw (higherC conv) i
@@ -123,17 +134,26 @@ let rwh conv i =
 (*
  * Apply to leftmost-innermost term.
  *)
-let rec lowerC rw e =
-   ((someSubC (lowerC rw)) orelseC rw) e
+let rec lowerC rw =
+   let lowerCE e =
+      ((someSubC (lowerC rw)) orelseC rw)
+   in
+      funC lowerCE
 
 (*
  * Apply to all terms possible from innermost to outermost.
  *)
-let rec sweepUpC rw e =
-   ((allSubC (sweepUpC rw)) andthenC (tryC rw)) e
+let rec sweepUpC rw =
+   let sweepUpCE e =
+      ((allSubC (sweepUpC rw)) andthenC (tryC rw))
+   in
+      funC sweepUpCE
 
-let rec sweepDnC rw e =
-   ((tryC rw) andthenC (allSubC (sweepDnC rw))) e
+let rec sweepDnC rw =
+   let sweepDnCE e =
+      ((tryC rw) andthenC (allSubC (sweepDnC rw)))
+   in
+      funC sweepDnCE
 
 (*
  * Use the first conversion that works.
@@ -147,25 +167,34 @@ let rec firstC = function
 (*
  * Repeat the conversion until nothing more happens.
  *)
-let repeatC conv env =
-   let rec repeat t env =
-      let t' = env_term env in
-         (if alpha_equal t t' then
-             idC
-          else
-             conv andthenC tryC (repeat t')) env
+let repeatC conv =
+   let repeatCE env =
+      let rec repeat t env =
+         let t' = env_term env in
+            (if alpha_equal t t' then
+                idC
+             else
+                conv andthenC tryC (funC (repeat t')))
+      in
+      let t = env_term env in
+         (conv andthenC (funC (repeat t)))
    in
-   let t = env_term env in
-      (conv andthenC (repeat t)) env
+      funC repeatCE
 
-let rec repeatForC i conv env =
-   (if i = 0 then
-       idC
-    else
-       conv andthenC (repeatForC (i - 1) conv)) env
+let rec repeatForC i conv =
+   let repeatForCE env =
+      if i = 0 then
+         idC
+      else
+         conv andthenC (repeatForC (i - 1) conv)
+   in
+      funC repeatForCE
 
 (*
  * $Log$
+ * Revision 1.7  1998/06/23 22:12:39  jyh
+ * Improved rewriter speed with conversion tree and flist.
+ *
  * Revision 1.6  1998/06/22 19:46:40  jyh
  * Rewriting in contexts.  This required a change in addressing,
  * and the body of the context is the _last_ subterm, not the first.

@@ -551,16 +551,34 @@ let compile_rule refiner tac =
    tac
 
 (*
+ * Utility for reconstructing the subgoals
+ * in a tactic application.
+ *)
+let make_subgoal
+    { ref_label = label;
+      ref_attributes = attributes;
+      ref_cache = cache;
+      ref_rsrc = resources
+    } goal =
+   let cache =
+      match cache with
+         Current cache ->
+            OutOfDate cache
+       | cache ->
+            cache
+   in
+      { ref_goal = goal;
+        ref_label = label;
+        ref_attributes = attributes;
+        ref_cache = cache;
+        ref_rsrc = resources
+      }
+
+(*
  * Construct polymorphic tactic.
  *)
 let tactic_of_rule rule (addrs, names) params arg =
-   let { ref_goal = goal;
-         ref_label = label;
-         ref_attributes = attributes;
-         ref_cache = cache;
-         ref_rsrc = resources
-       } = arg
-   in
+   let goal = arg.ref_goal in
    let _ =
       if !debug_tactic then
          eprintf "Collecting addresses%t" eflush
@@ -575,29 +593,28 @@ let tactic_of_rule rule (addrs, names) params arg =
          eprintf "Starting refinement%t" eflush
    in
    let subgoals, ext = Refine.refine rule goal in
-   let cache =
-      match cache with
-         Current cache ->
-            OutOfDate cache
-       | cache ->
-            cache
-   in
-   let make_subgoal goal =
-      { ref_goal = goal;
-        ref_label = label;
-        ref_attributes = attributes;
-        ref_cache = cache;
-        ref_rsrc = resources
-      }
-   in
       if !debug_tactic then
          eprintf "tactic_of_rule done%t" eflush;
-      List.map make_subgoal subgoals, Extract (ext, List.length subgoals)
+      List.map (make_subgoal arg) subgoals, Extract (ext, List.length subgoals)
 
 (*
  * Construct polymorphic tactic.
  *)
 let tactic_of_refine_tactic rule arg =
+   let _ =
+      if !debug_tactic then
+         eprintf "Starting refinement%t" eflush
+   in
+   let subgoals, ext = Refine.refine rule arg.ref_goal in
+      if !debug_tactic then
+         eprintf "tactic_of_rule done%t" eflush;
+      List.map (make_subgoal arg) subgoals, Extract (ext, List.length subgoals)
+
+(*
+ * Convert a rewrite into a tactic.
+ *)
+let tactic_of_rewrite rw arg =
+   let rule = rwtactic rw in
    let { ref_goal = goal;
          ref_label = label;
          ref_attributes = attributes;
@@ -605,9 +622,40 @@ let tactic_of_refine_tactic rule arg =
          ref_rsrc = resources
        } = arg
    in
-   let _ =
-      if !debug_tactic then
-         eprintf "Starting refinement%t" eflush
+      match Refine.refine rule goal with
+         [subgoal], ext ->
+            let cache =
+               match cache with
+                  Current cache ->
+                     OutOfDate cache
+                | cache ->
+                     cache
+            in
+            let subgoal =
+               { ref_goal = subgoal;
+                 ref_label = label;
+                 ref_attributes = attributes;
+                 ref_cache = cache;
+                 ref_rsrc = resources
+               }
+            in
+               [subgoal], Extract (ext, 1)
+       | [], _ ->
+            raise (RefineError ("tactic_of_rewrite", StringError "rewrite did not produce a goal"))
+       | _ ->
+            raise (RefineError ("tactic_of_rewrite", StringError "rewrite produced too many goals"))
+
+(*
+ * Convert a conditional rewrite to a tactic.
+ *)
+let tactic_of_cond_rewrite crw arg =
+   let rule = crwtactic crw in
+   let { ref_goal = goal;
+         ref_label = label;
+         ref_attributes = attributes;
+         ref_cache = cache;
+         ref_rsrc = resources
+       } = arg
    in
    let subgoals, ext = Refine.refine rule goal in
    let cache =
@@ -625,80 +673,7 @@ let tactic_of_refine_tactic rule arg =
         ref_rsrc = resources
       }
    in
-      if !debug_tactic then
-         eprintf "tactic_of_rule done%t" eflush;
       List.map make_subgoal subgoals, Extract (ext, List.length subgoals)
-
-(*
- * Convert a rewrite into a tactic.
- *)
-let tactic_of_rewrite rw =
-   let rule = rwtactic rw in
-   let tac arg =
-      let { ref_goal = goal;
-            ref_label = label;
-            ref_attributes = attributes;
-            ref_cache = cache;
-            ref_rsrc = resources
-          } = arg
-      in
-         match Refine.refine rule goal with
-            [subgoal], ext ->
-               let cache =
-                  match cache with
-                     Current cache ->
-                        OutOfDate cache
-                   | cache ->
-                        cache
-               in
-               let subgoal =
-                  { ref_goal = subgoal;
-                    ref_label = label;
-                    ref_attributes = attributes;
-                    ref_cache = cache;
-                    ref_rsrc = resources
-                  }
-               in
-                  [subgoal], Extract (ext, 1)
-          | [], _ ->
-               raise (RefineError ("tactic_of_rewrite", StringError "rewrite did not produce a goal"))
-          | _ ->
-               raise (RefineError ("tactic_of_rewrite", StringError "rewrite produced too many goals"))
-   in
-      tac
-
-(*
- * Convert a conditional rewrite to a tactic.
- *)
-let tactic_of_cond_rewrite crw =
-   let rule = crwtactic crw in
-   let tac arg =
-      let { ref_goal = goal;
-            ref_label = label;
-            ref_attributes = attributes;
-            ref_cache = cache;
-            ref_rsrc = resources
-          } = arg
-      in
-      let subgoals, ext = Refine.refine rule goal in
-      let cache =
-         match cache with
-            Current cache ->
-               OutOfDate cache
-          | cache ->
-               cache
-      in
-      let make_subgoal goal =
-         { ref_goal = goal;
-           ref_label = label;
-           ref_attributes = attributes;
-           ref_cache = cache;
-           ref_rsrc = resources
-         }
-      in
-         List.map make_subgoal subgoals, Extract (ext, List.length subgoals)
-   in
-      tac
 
 (************************************************************************
  * EXTRACTS                                                             *
@@ -946,6 +921,9 @@ let timingT tac arg =
 
 (*
  * $Log$
+ * Revision 1.9  1998/06/23 22:12:44  jyh
+ * Improved rewriter speed with conversion tree and flist.
+ *
  * Revision 1.8  1998/06/22 19:46:45  jyh
  * Rewriting in contexts.  This required a change in addressing,
  * and the body of the context is the _last_ subterm, not the first.

@@ -64,16 +64,16 @@ dform prod_src_df : parens :: "prec"[prec_prod] :: mode[src] :: prod{'A; 'B} =
    slot{'A} `" * " slot{'B}
 
 dform prod_prl_df : parens :: "prec"[prec_prod] :: mode[prl] :: prod{'A; 'B} =
-   slot{'A} times " " slot{'B}
+   pushm[0] slot{'A} " " times " " slot{'B} popm
 
-dform prod_src_df2 : parens :: "prec"[prec_prod] :: mode[src] :: prod{'A; x. 'B['x]} =
+dform prod_src_df2 : parens :: "prec"[prec_prod] :: mode[src] :: prod{'A; x. 'B} =
    slot{'x} `":" slot{'A} `" * " slot{'B}
 
-dform prod_prl_df2 :  parens :: "prec"[prec_prod] :: mode[prl] :: prod{'A; x. 'B['x]} =
-   slot{'x} `":" slot{'A} times " " slot{'B}
+dform prod_prl_df2 :  parens :: "prec"[prec_prod] :: mode[prl] :: prod{'A; x. 'B} =
+   slot{'x} `":" slot{'A} " " times " " slot{'B}
 
 dform pair_prl_df1 : mode[prl] :: pair{'a; 'b} =
-   `"<" slot{'a}`"," slot{'b} `">"
+   pushm[0] `"<" slot{'a}`"," slot{'b} `">" popm
 
 dform spread_prl_df1 : parens :: "prec"[prec_spread] :: mode[prl] :: spread{'e; u, v. 'b['u; 'v]} =
    `"let " pair{'u; 'v} `" = " slot{'e} `" in " slot{'b['u; 'v]}
@@ -140,8 +140,8 @@ prim pairEquality 'H 'y :
  * H, x:A * B, u:A, v:B[u], J[u, v] >- T[u, v] ext t[u, v]
  *)
 prim productElimination 'H 'J 'z 'u 'v :
-   ('t['u; 'v] : sequent ['ext] { 'H; z: x:'A * 'B; u: 'A; v: 'B['u]; 'J['u, 'v] >- 'T['u, 'v] }) -->
-   sequent ['ext] { 'H; z: x:'A * 'B; 'J['z] >- 'T['z] } =
+   ('t['u; 'v] : sequent ['ext] { 'H; z: x:'A * 'B['x]; u: 'A; v: 'B['u]; 'J['u, 'v] >- 'T['u, 'v] }) -->
+   sequent ['ext] { 'H; z: x:'A * 'B['x]; 'J['z] >- 'T['z] } =
    spread{'z; u, v. 't['u; 'v]}
 
 (*
@@ -222,14 +222,10 @@ let d_concl_dprod p =
  * We take the argument.
  *)
 let d_hyp_dprod i p =
-   let a = get_with_arg p in
-   let i, j = hyp_indices p i in
    let z, _ = Sequent.nth_hyp p i in
-      (match maybe_new_vars ["u"; "v"] (declared_vars p) with
-          [u; v] ->
-             productElimination i j z u v
-        | _ ->
-             failT) p
+   let i, j = hyp_indices p i in
+   let u, v = maybe_new_vars2 p "u" "v" in
+      productElimination i j z u v p
 
 (*
  * Join them.
@@ -351,6 +347,9 @@ let sub_resource =
 
 (*
  * $Log$
+ * Revision 1.12  1998/06/23 22:12:30  jyh
+ * Improved rewriter speed with conversion tree and flist.
+ *
  * Revision 1.11  1998/06/22 19:46:13  jyh
  * Rewriting in contexts.  This required a change in addressing,
  * and the body of the context is the _last_ subterm, not the first.

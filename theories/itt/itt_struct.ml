@@ -147,8 +147,8 @@ let mk_bind_term = mk_dep1_term bind_opname
  * Prove by hypothesis.
  *)
 let nthHypT i p =
-   let i, j = hyp_indices p i in
    let x, _ = nth_hyp p i in
+   let i, j = hyp_indices p i in
       hypothesis i j x p
 
 (*
@@ -157,8 +157,8 @@ let nthHypT i p =
  * (although the rule is still valid otherwise).
  *)
 let thinT i p =
-   let i, j = hyp_indices p i in
    let x, _ = nth_hyp p i in
+   let i, j = hyp_indices p i in
       if is_free_seq_var (i + 1) x p then
          raise (RefineError ("thinT", StringStringError ("free variable: ", x)))
       else
@@ -169,7 +169,7 @@ let thinT i p =
  *)
 let assertT s p =
    let count = hyp_count p in
-   let v = get_opt_var_arg "%x" p in
+   let v = get_opt_var_arg "x" p in
       (cut count 0 s v
        thenLT [addHiddenLabelT "assertion"; idT]) p
 
@@ -178,7 +178,7 @@ let assertT s p =
  *)
 let assertAtT i s p =
    let i, j = hyp_indices p i in
-   let v = get_opt_var_arg "%x" p in
+   let v = get_opt_var_arg "x" p in
       (cut i j s v
        thenLT [addHiddenLabelT "assertion"; idT]) p
 
@@ -225,7 +225,6 @@ let substConclT t p =
  * Hyp substitution requires a replacement.
  *)
 let substHypT i t p =
-   let i, j = hyp_indices p i in
    let _, a, _ =
       try dest_equal t with
          Term.TermMatch _ ->
@@ -244,6 +243,7 @@ let substHypT i t p =
          Not_found ->
             mk_bind_term z (var_subst t1 a z)
    in
+   let i, j = hyp_indices p i in
       (hypSubstitution i j t bind z
        thenLT [addHiddenLabelT "equality";
                addHiddenLabelT "main";
@@ -272,6 +272,9 @@ let revHypSubstT i p =
 
 (*
  * $Log$
+ * Revision 1.11  1998/06/23 22:12:37  jyh
+ * Improved rewriter speed with conversion tree and flist.
+ *
  * Revision 1.10  1998/06/22 19:46:24  jyh
  * Rewriting in contexts.  This required a change in addressing,
  * and the body of the context is the _last_ subterm, not the first.

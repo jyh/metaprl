@@ -8,6 +8,7 @@ open Refiner.Refiner.Refine
 open Resource
 
 open Tacticals
+open Conversionals
 open Sequent
 
 open Itt_logic
@@ -28,6 +29,10 @@ declare inr{'A}
 primrw unfold_or : "or"{'A; 'B} <--> union{'A; 'B}
 primrw unfold_inl : inl{'a} <--> Itt_union!inl{'a}
 primrw unfold_inr : inr{'a} <--> Itt_union!inr{'a}
+
+let fold_or  = makeFoldC << "or"{'A; 'B} >> unfold_or
+let fold_inl = makeFoldC << inl{'a} >> unfold_inl
+let fold_inr = makeFoldC << inr{'a} >> unfold_inr
 
 (************************************************************************
  * DISPLAY FORMS                                                        *
@@ -151,6 +156,9 @@ let d_resource = d_resource.resource_improve d_resource (res_or_term, d_res_orT)
 
 (*
  * $Log$
+ * Revision 1.4  1998/06/23 22:12:22  jyh
+ * Improved rewriter speed with conversion tree and flist.
+ *
  * Revision 1.3  1998/06/22 20:01:42  jyh
  * Fixed syntax error in term_addr_gen.ml
  *

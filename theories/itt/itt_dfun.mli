@@ -86,9 +86,9 @@ axiom functionExtensionality 'H (y:'C -> 'D['y]) (z:'E -> 'F['z]) 'u :
  * H, f: (x:A -> B), J[x], y: B[a], v: y = f(a) in B[a] >- T[f] ext t[f, y, v]
  *)
 axiom functionElimination 'H 'J 'f 'a 'y 'v :
-   sequent [squash] { 'H; f: x:'A -> 'B; 'J['f] >- 'a = 'a in 'A } -->
-   sequent ['ext] { 'H; f: x:'A -> 'B; 'J['f]; y: 'B['a]; v: 'y = ('f 'a) in 'B['a] >- 'T['f] } -->
-   sequent ['ext] { 'H; f: x:'A -> 'B; 'J['f] >- 'T['f] }
+   sequent [squash] { 'H; f: x:'A -> 'B['x]; 'J['f] >- 'a = 'a in 'A } -->
+   sequent ['ext] { 'H; f: x:'A -> 'B['x]; 'J['f]; y: 'B['a]; v: 'y = ('f 'a) in 'B['a] >- 'T['f] } -->
+   sequent ['ext] { 'H; f: x:'A -> 'B['x]; 'J['f] >- 'T['f] }
 
 (*
  * H >- (f1 a1) = (f2 a2) in B[a1]
@@ -155,6 +155,9 @@ val eqcd_dfunT : tactic
 
 (*
  * $Log$
+ * Revision 1.6  1998/06/23 22:12:29  jyh
+ * Improved rewriter speed with conversion tree and flist.
+ *
  * Revision 1.5  1998/05/28 13:47:26  jyh
  * Updated the editor to use new Refiner structure.
  * ITT needs dform names.

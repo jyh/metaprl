@@ -62,10 +62,10 @@ prec prec_fun < prec_apply
 prec prec_fun < prec_lambda
 
 dform fun_df1 : parens :: "prec"[prec_fun] :: "fun"{'A; 'B} =
-   slot{'A} rightarrow " " slot{'B}
+   slot{'A} " " rightarrow " " slot{'B}
 
 dform fun_df2 : parens :: "prec"[prec_fun] :: "fun"{'A; x. 'B['x]} =
-   slot{bvar{'x}} `":" slot{'A} rightarrow " " slot{'B}
+   slot{bvar{'x}} `":" slot{'A} " " rightarrow " " slot{'B}
 
 dform fun_df3 : rfun{'A; f, x. 'B['f; 'x]} =
    "{" " " slot{bvar{'f}} `"|" "fun"{'A; x. 'B['f; 'x]} "}"
@@ -389,6 +389,9 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (apply
 
 (*
  * $Log$
+ * Revision 1.13  1998/06/23 22:12:36  jyh
+ * Improved rewriter speed with conversion tree and flist.
+ *
  * Revision 1.12  1998/06/22 19:46:23  jyh
  * Rewriting in contexts.  This required a change in addressing,
  * and the body of the context is the _last_ subterm, not the first.

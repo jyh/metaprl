@@ -90,11 +90,11 @@ opt: $(MAIN).cmxa
 
 $(TEST).run: $(CMOBJS)
 	rm -f $@
-	$(OCAMLCP) -o $@ -custom -linkall $(CMOBJS) $(CCLIBS)
+	$(OCAMLCP) -o $@ -custom $(CMOBJS) $(CCLIBS)
 
 $(TEST).opt: $(CMXOBJS)
 	rm -f $@
-	$(OCAMLOPT) $(PROFILE) -o $@ -linkall $(CMXOBJS) $(CCLIBS)
+	$(OCAMLOPT) $(PROFILE) -o $@ $(CMXOBJS) $(CCLIBS)
 
 clean::
 	del -f *.p4* *.pp*

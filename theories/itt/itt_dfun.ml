@@ -110,9 +110,9 @@ prim functionExtensionality 'H (y:'C -> 'D['y]) (z:'E -> 'F['z]) 'u :
  * H, f: (x:A -> B), J[x], y: B[a], v: y = f(a) in B[a] >- T[x] ext t[f, y, v]
  *)
 prim functionElimination 'H 'J 'f 'a 'y 'v :
-   sequent [squash] { 'H; f: x:'A -> 'B; 'J['f] >- 'a = 'a in 'A } -->
-   ('t['f; 'y; 'v] : sequent ['ext] { 'H; f: x:'A -> 'B; 'J['f]; y: 'B['a]; v: 'y = ('f 'a) in 'B['a] >- 'T['f] }) -->
-   sequent ['ext] { 'H; f: x:'A -> 'B; 'J['f] >- 'T['f] } =
+   sequent [squash] { 'H; f: x:'A -> 'B['x]; 'J['f] >- 'a = 'a in 'A } -->
+   ('t['f; 'y; 'v] : sequent ['ext] { 'H; f: x:'A -> 'B['x]; 'J['f]; y: 'B['a]; v: 'y = ('f 'a) in 'B['a] >- 'T['f] }) -->
+   sequent ['ext] { 'H; f: x:'A -> 'B['x]; 'J['f] >- 'T['f] } =
    't['f; 'f 'a; it]
 
 (*
@@ -200,8 +200,8 @@ let d_hyp_dfun i p =
             raise (RefineError ("d_hyp_dfun", StringError "requires an argument"))
    in
    let count = hyp_count p in
-   let i, j = hyp_indices p i in
    let f, _ = Sequent.nth_hyp p i in
+   let i, j = hyp_indices p i in
       (match maybe_new_vars ["y"; "v"] (declared_vars p) with
           [y; v] ->
              functionElimination i j f a y v
@@ -306,6 +306,9 @@ let sub_resource =
 
 (*
  * $Log$
+ * Revision 1.10  1998/06/23 22:12:28  jyh
+ * Improved rewriter speed with conversion tree and flist.
+ *
  * Revision 1.9  1998/06/12 13:47:23  jyh
  * D tactic works, added itt_bool.
  *

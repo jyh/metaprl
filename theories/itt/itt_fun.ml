@@ -115,8 +115,8 @@ let d_concl_fun p =
  * We take the argument.
  *)
 let d_hyp_fun i p =
-   let i, j = hyp_indices p i in
    let f, _ = Sequent.nth_hyp p i in
+   let i, j = hyp_indices p i in
    let y = get_opt_var_arg "y" p in
       independentFunctionElimination i j f y p
 
@@ -188,6 +188,9 @@ let sub_resource =
 
 (*
  * $Log$
+ * Revision 1.10  1998/06/23 22:12:32  jyh
+ * Improved rewriter speed with conversion tree and flist.
+ *
  * Revision 1.9  1998/06/12 13:47:27  jyh
  * D tactic works, added itt_bool.
  *

@@ -137,6 +137,9 @@ declare comment{'t}
 declare "parent"{'path; 'opens; 'resources}
 declare "opname"[name:s]{'term}
 
+(*! @docoff *)
+declare "parent"[name:s]
+
 (*!
  * @begin[doc]
  * Rewrites are defined with the @tt[rewrite] and @tt[cond_rewrite]
@@ -146,8 +149,8 @@ declare "opname"[name:s]{'term}
  * under which the rewrite is valid.  The @it{name} is the name of the rewrite.
  * @end[doc]
  *)
-declare "rewrite"[name:s]{'redex; 'contractum; 'proof}
-declare "cond_rewrite"[name:s]{'params; 'args; 'redex; 'contractum; 'proof}
+declare "rewrite"[name:s]{'redex; 'contractum; 'proof; 'res}
+declare "cond_rewrite"[name:s]{'params; 'args; 'redex; 'contractum; 'proof; 'res}
 
 (*!
  * @begin[doc]
@@ -158,8 +161,8 @@ declare "cond_rewrite"[name:s]{'params; 'args; 'redex; 'contractum; 'proof}
  * of the rule.
  * @end[doc]
  *)
-declare "axiom"[name:s]{'stmt; 'proof}
-declare "rule"[name:s]{'params; 'stmt; 'proof}
+declare "axiom"[name:s]{'stmt; 'proof; 'res}
+declare "rule"[name:s]{'params; 'stmt; 'proof; 'res}
 
 (*!
  * @begin[doc]
@@ -170,8 +173,10 @@ declare "rule"[name:s]{'params; 'stmt; 'proof}
  * are required to make additions to the resource.
  * @end[doc]
  *)
-declare "resource"[name:s]{'extract; 'improve; 'data}
-declare "resource_defs"{'res}
+declare "resource"[name:s]{'extract; 'improve; 'data; 'arg}
+declare "resource_defs"[name:s]{'res}
+(*! @docoff *)
+declare "resource_defs"[start:n, finish:n, name:s]{'res}
 
 (*!
  * @begin[doc]
@@ -204,7 +209,7 @@ declare "mlrewrite"[name:s]{'params; 'redex; 'contracta; 'body; 'resources}
  * the term describing the displayed definition.
  * @end[doc]
  *)
-declare "dform"{'modes; 'redex; 'def}
+declare "dform"[name:s]{'modes; 'redex; 'def}
 declare "prec"[name:s]
 declare "prec_rel"[pr:s]
 declare "inherit_df"
@@ -285,7 +290,10 @@ declare "goal_status"{'sl}
 declare "goal_label"[s:s]
 declare "goal_list"{'goals}
 declare "subgoals"{'subgoals; 'extras}
+declare "subgoals"{'number; 'subgoals; 'extras}
 declare "rule_box"[text:s]
+declare "rule_box"{'text}
+declare "rule_box"[text:s]{'text}
 declare "proof"{'main; 'goal; 'text; 'subgoals}
 declare "tactic_arg"[label:s]{'goal; 'attrs; 'parents}
 
@@ -341,15 +349,9 @@ dform resource_name_df1 : except_mode[tex] :: resource_name[name:s] =
 declare dform_modes{'l}
 
 dform dform_modes_df1 : dform_modes{cons{'hd; 'tl}} =
-   slot{'hd} " " keyword["::"] " " dform_modes{dform_modes; 'tl}
+   slot{'hd} " " keyword["::"] " " dform_modes{'tl}
 
-dform dform_modes_df2 : internal :: dform_modes{dform_modes; cons{'hd; 'tl}} =
-   slot{'hd} " " keyword["::"] " " dform_modes{dform_modes; 'tl}
-
-dform dform_modes_df3 : internal :: dform_modes{nil} =
-   `""
-
-dform dform_modes_df3 : internal :: dform_modes{dform_modes; nil} =
+dform dform_modes_df2 : internal :: dform_modes{nil} =
    `""
 
 (*
@@ -422,15 +424,9 @@ dform location_df : "location"[start:n, finish:n]{'body} =
 (*
  * Display a simple rewrite.
  *)
-dform rewrite_df1 : "rewrite"[name:s]{'redex; 'contractum; var[v:v]; 'res} =
+dform rewrite_df : "rewrite"[name:s]{'redex; 'contractum; 'v; 'res} =
    szone pushm[4]
-   var[v:v] info[" rewrite"] " " rewrite_name[name:s] `" :" hspace slot{'res} slot{'redex} " " longleftrightarrow hspace slot{'contractum}
-   popm ezone
-
-dform rewrite_df2 : "rewrite"[name:s]{'redex; 'contractum; var[v:v]{'t}; 'res} =
-   szone pushm[4]
-   var[v:v] info[" rewrite"] " " rewrite_name[name:s] `" :" hspace slot{'res} slot{'redex} " " longleftrightarrow hspace slot{'contractum}
-   hspace
+   'v info[" rewrite"] " " rewrite_name[name:s] `" :" hspace slot{'res} slot{'redex} " " longleftrightarrow hspace slot{'contractum}
    popm ezone
 
 (*
@@ -488,15 +484,9 @@ dform axiom_df : "axiom"[name:s]{'stmt; 'proof; 'res} =
    slot{'proof} info[" rule"] " " rule_name[name:s] `" " resources{'res} `":" hspace slot{'stmt}
    popm ezone
 
-dform rule_df1 : "rule"[name:s]{'params; 'stmt; var[v:v]; 'res} =
+dform rule_df : "rule"[name:s]{'params; 'stmt; 'v; 'res} =
    hzone pushm[4]
-   var[v:v] info[" rule"] " " szone rule_name[name:s] hspace resources{'res} space_list{'params} `":" ezone hspace slot{'stmt}
-   ezone popm
-
-dform rule_df2 : "rule"[name:s]{'params; 'stmt; var[v:v]{'t}; 'res} =
-   hzone pushm[4]
-   var[v:v] info[" rule"] " " szone rule_name[name:s] hspace resources{'res} space_list{'params} `":" ezone hspace slot{'stmt}
-   hspace `"= " slot{'t}
+   'v info[" rule"] " " szone rule_name[name:s] hspace resources{'res} space_list{'params} `":" ezone hspace slot{'stmt}
    ezone popm
 
 dform opname_df : "opname"[name:s]{'term} =
@@ -567,7 +557,7 @@ dform parent_df : "parent"{'path; 'opens; 'resources} =
  *)
 dform module_df : "module"[name:s]{'info} =
    szone pushm[4]
-   info["module"] " " slot[name:s] `" = " hbreak slot{'info}
+   info["module"] " " slot[name:s] `" = " hspace slot{'info}
    ezone popm
 
 dform dform_df : "dform"[name:s]{'modes; 'redex; 'def} =
@@ -580,7 +570,7 @@ dform dform_df : "dform"[name:s]{'modes; 'redex; 'def} =
 (*
  * Precedence relations.
  *)
-declare "rel"{'op}
+declare "rel"[op:s]
 
 dform rel_lt_df : internal :: "rel"["lt"] = keyword["<"]
 dform rel_eq_df : internal :: "rel"["eq"] = keyword["="]
@@ -645,7 +635,7 @@ dform parens_df : parens_df =
 (*
  * Packages.
  *)
-declare packages_df
+declare packages_df{'t}
 
 dform packages_df1 : internal :: packages{'packages} =
    szone pushm[0] pushm[4] info["Root theories:"] hspace
@@ -689,8 +679,8 @@ dform arglist_df1 : internal :: arglist{'args} =
  * Proofs.
  *)
 declare msequent{'goal; 'assums}
-declare goals_df
-declare goal_list_status
+declare goals_df{'main; 'goal}
+declare goal_list_status{'cache}
 
 dform proof_df : internal :: proof{'main; goal_list{'goal}; 'text; 'subgoals} =
    szone pushm pagebreak goals_df{'main; 'goal} 'text 'subgoals popm ezone
@@ -710,7 +700,7 @@ dform goal_list_status_df2 : internal :: goal_list_status{cons{goal{goal_status{
 (*
  * Display the meta-sequent.
  *)
-declare numbered_assums
+declare numbered_assums{'number; 'assums}
 
 dform msequent_df1 : internal :: msequent{'goal; nil} =
    'goal newline
@@ -727,22 +717,23 @@ dform numbered_assums_df2 : internal :: numbered_assums{'number; nil} =
 (*
  * Status line includes commands to move up the tree.
  *)
-declare goal_status_cd
+declare goal_status_df{'a; 'b}
+declare goal_status_cd{'a; 'b}
 declare goal_cd_dot
 declare goal_cd_up
-declare goal_cd_begin
-declare goal_cd_middle
+declare goal_cd_begin{'cd}
+declare goal_cd_middle{'cd}
 declare goal_cd_end
 
 dform status_df2 : internal :: goal_status{nil} = `""
 
 dform status_df1 : internal :: goal_status{cons{'a; 'b}} =
-   goal_status{cons{'a; nil}; 'b}
+   goal_status_df{cons{'a; nil}; 'b}
 
-dform status_df3 : internal :: goal_status{'l; cons{'a; 'b}} =
-   goal_status{cons{'a; 'l}; 'b}
+dform status_df3 : internal :: goal_status_df{'l; cons{'a; 'b}} =
+   goal_status_df{cons{'a; 'l}; 'b}
 
-dform status_df4 : internal :: goal_status{'l; nil} =
+dform status_df4 : internal :: goal_status_df{'l; nil} =
    goal_status_cd{goal_cd_dot; 'l}
 
 dform status_df5 : internal :: goal_status_cd{'cd; cons{'a; 'b}} =
@@ -802,7 +793,8 @@ dform rule_box_df3 : internal :: rule_box[text:s]{'t} =
 (*
  * Subgoals are printed in simplified form.
  *)
-declare child_df
+declare child_df{'number; 'child}
+declare child_df{'child}
 
 dform subgoals_df1 : internal :: subgoals{'children; 'extras} =
    newline subgoals{cons{nil; nil}; 'children; 'extras}
@@ -864,7 +856,7 @@ let packages_opname = opname_of_term packages_term
 let mk_packages_term tl =
    mk_simple_term packages_opname [mk_xlist_term tl]
 
-let href_term = << "href"[s:s] >>
+let href_term = << "href"[s:s]{'t} >>
 let href_opname = opname_of_term href_term
 let mk_href_term = mk_string_dep0_term href_opname
 

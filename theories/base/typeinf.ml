@@ -3,7 +3,7 @@
  * @theory[Typeinf]
  *
  * This module implements a simple type inference algorithm based
- * on Hindley-Milner type inference~@cite{damas84principle}.  This is
+ * on Hindley-Milner type inference~@cite[damas84principle].  This is
  * a @emph{generic} resource definition that can be used to implement
  * type inference in various logics.
  *

@@ -303,7 +303,7 @@ prim_rw reduce_minus : minus{number[i:n]} <-->
    meta_diff{number[0:n]; number[i:n]}
 
 prim_rw reduce_lt : "lt"{number[i:n]; number[j:n]} <-->
-   meta_lt{number[i:n]; number[j:n]}
+   meta_lt{number[i:n]; number[j:n]; btrue; bfalse}
 
 (*
 prim_rw reduce_eq : (number[i:n] = number[j:n] in int) <-->

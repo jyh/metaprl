@@ -106,7 +106,7 @@ let reduce_info =
 
 let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
 
-(*! @doc *)
+(*! @doc{nil} *)
 prim_rw unfold_member : member{'x; 'y} <-->
    ((isset{'x} & isset{'y}) & mem{'x; 'y})
 
@@ -195,7 +195,7 @@ interactive mem_fun_left 'H 's1 :
 let memSubstLeftT t p =
    mem_fun_left (Sequent.hyp_count_addr p) t p
 
-(*! @doc *)
+(*! @doc{nil} *)
 interactive mem_fun_right 'H 's1 :
    ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
    ["wf"] sequent [squash] { 'H >- isset{'s2} } -->

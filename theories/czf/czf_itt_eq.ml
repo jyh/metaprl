@@ -28,10 +28,10 @@
  * produce the equal element in the other set.  Note that there is
  * significant computational content in this judgment.
  *
- * The @tt{eq} judgment is a predicate in $@univ_1$ for any two
+ * The @tt{eq} judgment is a predicate in $@univ{1}$ for any two
  * sets.  The $@equal{s_1; s_2}$ judgment adds the additional requirement
  * $@isset{s_1} @wedge @isset{s_2}$ (which raises it to a predicate
- * in $@univ_2$).
+ * in $@univ{2}$).
  *
  * In addition to the equality judgments, the @tt{Czf_itt_eq} module
  * also defines @emph{functionality} judgments.  The $@funset{s; f[s]}$
@@ -215,9 +215,6 @@ prim_rw unfold_fun_prop : fun_prop{z. 'P['z]} <-->
 (*
  * This is _pointwise_ functionality.
  *)
-prim_rw unfold_dfun_prop2 : dfun_prop{'A; x. 'B['x]} <-->
-  (u1: 'A -> 'B['u1] -> u2: 'A -> 'B['u2])
-
 prim_rw unfold_dfun_prop : dfun_prop{u. 'A['u]; x, y. 'B['x; 'y]} <-->
   (all s1: set. all s2: set. (equal{'s1; 's2} => (u1: 'A['s1] -> 'B['s1; 'u1] -> u2: 'A['s2] -> 'B['s2; 'u2])))
 (*! @docoff *)
@@ -238,12 +235,7 @@ dform fun_set_df : except_mode[src] :: parens :: "prec"[prec_apply] :: fun_set{x
 dform fun_set_df : except_mode[src] :: parens :: "prec"[prec_apply] :: fun_prop{x. 'P} =
    Nuprl_font!forall slot{'x} `"." slot{'P} `" fun_prop"
 
-dform dfun_prop_df1 : except_mode[src] :: parens :: "prec"[prec_apply] :: dfun_prop{'A; x. 'P} =
-   szone pushm[0]
-   Nuprl_font!forall slot{'x} `":" slot{'A} `"." hspace slot{'P} `" fun_prop"
-   popm ezone
-
-dform dfun_prop_df2 : except_mode[src] :: parens :: "prec"[prec_apply] :: dfun_prop{u. 'A; x, y. 'P} =
+dform dfun_prop_df : except_mode[src] :: parens :: "prec"[prec_apply] :: dfun_prop{u. 'A; x, y. 'P} =
    szone pushm[0]
    Nuprl_font!forall slot{'u} `":" slot{'A} `"." hspace slot{'x} `"," slot{'y} `"." slot{'P} `" fun_prop"
    popm ezone

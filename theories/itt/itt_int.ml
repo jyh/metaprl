@@ -280,9 +280,9 @@ prim_rw reduce_rem : "rem"{number[i:n]; number[j:n]} <-->
    meta_rem{number[i:n]; number[j:n]}
 
 prim_rw reduce_lt : "lt"{number[i:n]; number[j:n]} <-->
-   meta_lt{number[i:n]; number[j:n]}
+   meta_lt{number[i:n]; number[j:n]; btrue; bfalse}
 prim_rw reduce_eq : (number[i:n] = number[j:n] in int) <-->
-   meta_eq{number[i:n]; number[j:n]}
+   meta_eq{number[i:n]; number[j:n]; btrue; bfalse}
 (*! @docoff *)
 
 let reduce_add =
@@ -434,9 +434,9 @@ prim intElimination {| elim_resource [ThinOption thinT] |} 'H 'J 'n 'm 'v 'z :
  *)
 prim indEquality {| intro_resource []; eqcd_resource |} 'H lambda{z. 'T['z]} 'x 'y 'w :
    [wf] sequent [squash] { 'H >- 'x1 = 'x2 in int } -->
-   [wf] sequent [squash] { 'H; x: int; w: 'x < 0; y: 'T['x add 1] >- 'down1['x; 'y] = 'down2['x; 'y] in 'T['x] } -->
+   [wf] sequent [squash] { 'H; x: int; w: 'x < 0; y: 'T['x +@ 1] >- 'down1['x; 'y] = 'down2['x; 'y] in 'T['x] } -->
    [wf] sequent [squash] { 'H >- 'base1 = 'base2 in 'T[0] } -->
-   [wf] sequent [squash] { 'H; x: int; w: 'x > 0; y: 'T['x sub 1] >- 'up1['x; 'y] = 'up2['x; 'y] in 'T['x] } -->
+   [wf] sequent [squash] { 'H; x: int; w: 'x > 0; y: 'T['x -@ 1] >- 'up1['x; 'y] = 'up2['x; 'y] in 'T['x] } -->
    sequent ['ext] { 'H >- ind{'x1; i1, j1. 'down1['i1; 'j1]; 'base1; k1, l1. 'up1['k1; 'l1]}
                    = ind{'x2; i2, j2. 'down2['i2; 'j2]; 'base2; k2, l2. 'up2['k2; 'l2]}
                    in 'T['x1] } =

@@ -153,7 +153,7 @@ let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_i
  * REDUCTIONS                                                           *
  ************************************************************************)
 
-(*! @doc *)
+(*! @doc{nil} *)
 interactive_rw reduce_bnot_true : bnot{btrue} <--> bfalse
 
 interactive_rw reduce_bnot_false : bnot{bfalse} <--> btrue

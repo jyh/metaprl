@@ -107,7 +107,7 @@ let _ =
  * @terms
  *
  * The @tt{rfun} type defines the very-dependent function $@rfun{f; x; A; B}$;
- * the @tt{fun} type is used to define dependent functions $@fun{A; x. B[x]}$ and
+ * the @tt{fun} type is used to define dependent functions $@fun{x; A; B[x]}$ and
  * nondependent functions $@fun{A; B}$.
  *
  * The elements of the function types are
@@ -119,7 +119,7 @@ let _ =
  * @end[doc]
  *)
 
-(* declare "fun"{'A; 'B} *)
+declare "fun"{'A; 'B}
 declare "fun"{'A; x. 'B['x]}
 declare rfun{'A; f, x. 'B['f; 'x]}
 
@@ -258,7 +258,7 @@ let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_i
  * The term @hrefterm[well_founded_prop] $@"well_founded_prop"{A}$ represents an arbitrary
  * proposition (predicate) on $A$; the @hrefterm[well_founded_apply] $@"well_founded_apply"{P; a}$
  * represents the application of the proposition $P$ to $a$.  The @hrefterm[well_founded_assum]
- * term $@"well_founded_assum"{A; a_1, a_2. R[a_1, a_2]; P}$ asserts that predicate $P$ holds on
+ * term $@"well_founded_assum"{A; a_1; a_2; R[a_1, a_2]; P}$ asserts that predicate $P$ holds on
  * all elements of $a$ by induction on the relation $R[a_1, a_2]$.
  *
  * The reason this definition is so convoluted is that the definition of
@@ -306,7 +306,7 @@ prim rfunctionFormation 'H { f | a: 'A -> 'B['f; 'a] } :
  * The well-formedness of the very-dependent function
  * requires that the domain type $A$ be a type, the the domain
  * be well-founded with some relation $R$, and that $B[f, x]$ be
- * a type for any restricted function $@rfun{f; y; @set{A; x. R[z, y]}; B[f, y]}$.
+ * a type for any restricted function $@rfun{f; y; @set{A; x; R[z, y]}; B[f, y]}$.
  * @end[doc]
  *)
 prim rfunctionEquality  {| intro_resource []; eqcd_resource |} 'H lambda{a. lambda{b. 'R['a; 'b]}} 'g 'y 'z :

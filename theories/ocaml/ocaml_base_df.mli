@@ -116,7 +116,7 @@ declare push_indent
 (*
  * Display control tags.
  *)
-declare patt_format
+declare patt_format{'a;'b}
 
 (*
  * -*-

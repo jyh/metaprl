@@ -20,7 +20,7 @@
  * the intersection contains @emph{every} term $t$ because the
  * quantification is empty.
  *
- * Another example is the type $@isect{T; @univ_i; T @rightarrow T}$,
+ * Another example is the type $@isect{T; @univ{i}; T @rightarrow T}$,
  * which contains all the identity functions.  The set-theoretic
  * interpretation of functions as sets of ordered pairs would again
  * be empty.

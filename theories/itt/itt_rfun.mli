@@ -44,6 +44,7 @@ open Tactic_type.Tacticals
  ************************************************************************)
 
 declare "fun"{'A; x. 'B['x]}
+declare "fun"{'A; 'B}
 declare rfun{'A; f, x. 'B['f; 'x]}
 
 declare lambda{x. 'b['x]}

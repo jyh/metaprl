@@ -73,6 +73,7 @@ declare tex_comment{'t}
  * The @theory[name:s] term produces a section header for the current module.
  * @end[doc]
  *)
+declare "theory"[name:s]
 declare "theory"[name:s]{'t}
 
 (*
@@ -140,7 +141,7 @@ declare "end"[name:s]
  *)
 declare docoff
 declare noindent
-declare cite{'t}
+declare cite[s:s]
 
 (*
  * Special terms.
@@ -156,7 +157,9 @@ declare "MartinLof"
  * Formatting.
  *)
 declare math[s:s]
+declare math{'t}
 declare centermath[s:s]
+declare centermath{'t}
 
 declare code[text:s]
 declare verbatim[text:s]
@@ -168,6 +171,7 @@ declare enumerate{'t}
 declare itemize{'t}
 declare description{'t}
 declare item{'t}
+declare item{'label; 'body}
 
 (************************************************************************
  * MATH MODE                                                            *
@@ -190,6 +194,7 @@ declare math_bb{'t}
 declare math_tt{'t}
 declare math_bf{'t}
 declare math_i{'t}
+declare math_i[text:s]
 declare math_emph{'t}
 declare math_mathop{'t}
 declare math_mathrel{'t}

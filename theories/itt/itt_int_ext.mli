@@ -216,20 +216,20 @@ rule rem_baseReduce 'H :
    sequent [squash] { 'H >- 'a < 'b } -->
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    [wf] sequent [squash] { 'H >- 'b IN int } -->
-   sequent ['ext] { 'H >- ('a rem 'b) ~ 'a }
+   sequent ['ext] { 'H >- ('a %@ 'b) ~ 'a }
 
 rule rem_indReduce 'H :
    sequent [squash] { 'H >- 0 < 'b } -->
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    [wf] sequent [squash] { 'H >- 'b IN int } -->
    [wf] sequent [squash] { 'H >- 'c IN int } -->
-   sequent ['ext] { 'H >- ((('a *@ 'b) +@ 'c) rem 'b) ~ ('c rem 'b) }
+   sequent ['ext] { 'H >- ((('a *@ 'b) +@ 'c) %@ 'b) ~ ('c %@ 'b) }
 
 rule rem_wf 'H :
    sequent [squash] { 'H >- "nequal"{'b ; 0} } -->
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    [wf] sequent [squash] { 'H >- 'b IN int } -->
-   sequent ['ext] { 'H >- ('a rem 'b) IN int }
+   sequent ['ext] { 'H >- ('a %@ 'b) IN int }
 
 rule div_baseReduce 'H :
    sequent [squash] { 'H >- 0 <= 'a } -->

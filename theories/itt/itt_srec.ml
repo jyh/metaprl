@@ -11,7 +11,7 @@
  * The syntax of the recursive type is $@srec{T; B[T]}$.  The variable
  * $T$ represents the type itself, which is given through the
  * interpretation $T = B[T]$.  The body $B[T]$ must be a type for
- * @emph{any} type $T @in @univ_i$, and in addition $B[T]$ must be
+ * @emph{any} type $T @in @univ{i}$, and in addition $B[T]$ must be
  * monotone in the type argument $T$.
  * @end[doc]
  *
@@ -147,7 +147,7 @@ prim srecFormation 'H 'T :
  * @thysubsection{Typehood and equality}
  *
  * The simple recursive type $@srec{T; B[T]}$ is a type if $B[T]$ is
- * a monotone type over types type $T @in @univ_i$.
+ * a monotone type over types type $T @in @univ{i}$.
  * @end[doc]
  *)
 prim srecEquality {| intro_resource []; eqcd_resource |} 'H 'T 'S1 'S2 'z :

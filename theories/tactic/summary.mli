@@ -41,25 +41,25 @@ declare "interface"{'intf}
 declare "implementation"{'impl}
 declare "location"[start:n, finish:n]{'body}
 
-declare "rewrite"[name:s]{'redex; 'contractum; 'proof}
-declare "cond_rewrite"[name:s]{'params; 'args; 'redex; 'contractum; 'proof}
-declare "axiom"[name:s]{'stmt; 'proof}
-declare "rule"[name:s]{'params; 'stmt; 'proof}
+declare "rewrite"[name:s]{'redex; 'contractum; 'proof; 'res}
+declare "cond_rewrite"[name:s]{'params; 'args; 'redex; 'contractum; 'proof; 'res}
+declare "axiom"[name:s]{'stmt; 'proof; 'res}
+declare "rule"[name:s]{'params; 'stmt; 'proof; 'res}
 declare "opname"[name:s]{'term}
 declare "mlterm"{'term; 'cons; 'oexpr}
 declare "condition"{'term; 'cons; 'oexpr}
 declare "mlrewrite"[name:s]{'params; 'redex; 'contracta; 'body; 'resources}
 declare "parent"{'path; 'opens; 'resources}
 declare "module"[name:s]{'info}
-declare "dform"{'modes; 'redex; 'def}
+declare "dform"[name:s]{'modes; 'redex; 'def}
 declare "prec"[name:s]
 declare "prec_rel"[pr:s]
 declare "id"[n:n]
-declare "resource"[name:s]{'extract; 'improve; 'data}
+declare "resource"[name:s]{'extract; 'improve; 'data; 'arg}
 declare "infix"[name:s]
 declare "magic_block"[name:s]{'items}
 declare "summary_item"{'term}
-declare "resource_defs"{'res}
+declare "resource_defs"[name:s]{'res}
 declare "comment"{'t}
 
 declare "inherit_df"

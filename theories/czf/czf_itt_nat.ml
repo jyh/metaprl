@@ -14,7 +14,7 @@
  * @begin[array, lcl]
  * @line{@zero @equiv @empty}
  * @line{@succ{@zero} @equiv @union{@zero; @sing{@zero}}}
- * @line{@item @vdots @item}
+ * @line{nil @vdots nil}
  * @line{@succ{i} @equiv @union{i; @sing{i}}}
  * @end[array]
  * $$

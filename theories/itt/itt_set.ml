@@ -142,7 +142,7 @@ prim setFormation 'H 'a 'A :
  * type is @emph{intensional}.  Two set types are equal only if their
  * parts are equal.  An alternative formulation would be to allow sets
  * $@set{x; A_1; B_1[x]}$ and $@set{x; A_2; B_2[x]}$ to be equal
- * if $A_1 = A_2 @in @univ_i$ and $B_1[x] @Leftrightarrow B_2[x]$ for
+ * if $A_1 = A_2 @in @univ{i}$ and $B_1[x] @Leftrightarrow B_2[x]$ for
  * any $x @in A_2$.
  * @end[doc]
  *)

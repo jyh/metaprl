@@ -407,14 +407,14 @@ prim rem_baseReduce 'H :
    sequent [squash] { 'H >- 'a < 'b } -->
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    [wf] sequent [squash] { 'H >- 'b IN int } -->
-   sequent ['ext] { 'H >- ('a rem 'b) ~ 'a } = it
+   sequent ['ext] { 'H >- ('a %@ 'b) ~ 'a } = it
 
 interactive_rw rem_baseReduce_rw :
    (0 <= 'a) -->
    ('a < 'b) -->
    ('a IN int) -->
    ('b IN int) -->
-   ('a rem 'b) <--> 'a
+   ('a %@ 'b) <--> 'a
 
 let rem_baseReduceC = rem_baseReduce_rw
 
@@ -423,14 +423,14 @@ prim rem_indReduce 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    [wf] sequent [squash] { 'H >- 'b IN int } -->
    [wf] sequent [squash] { 'H >- 'c IN int } -->
-   sequent ['ext] { 'H >- ((('a *@ 'b) +@ 'c) rem 'b) ~ ('c rem 'b) } = it
+   sequent ['ext] { 'H >- ((('a *@ 'b) +@ 'c) %@ 'b) ~ ('c %@ 'b) } = it
 
 interactive_rw rem_indReduce_rw :
    (0 < 'b) -->
    ('a IN int) -->
    ('b IN int) -->
    ('c IN int) -->
-   ((('a *@ 'b) +@ 'c) rem 'b) <--> ('c rem 'b)
+   ((('a *@ 'b) +@ 'c) %@ 'b) <--> ('c %@ 'b)
 
 let rem_indReduceC = rem_indReduce_rw
 
@@ -438,7 +438,7 @@ interactive rem_wf {| intro_resource []; eqcd_resource |} 'H :
    sequent [squash] { 'H >- "nequal"{'b ; 0} } -->
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    [wf] sequent [squash] { 'H >- 'b IN int } -->
-   sequent ['ext] { 'H >- ('a rem 'b) IN int }
+   sequent ['ext] { 'H >- ('a %@ 'b) IN int }
 
 (*!
  * @begin[doc]
@@ -530,7 +530,7 @@ rewrite rem_Assoc 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    [wf] sequent [squash] { 'H >- 'b IN int } -->
    [wf] sequent [squash] { 'H >- 'c IN int } -->
-   sequent ['ext] { 'H >- ('a rem 'b) rem 'c <--> ('a rem 'c) rem 'b }
+   sequent ['ext] { 'H >- ('a %@ 'b) %@ 'c <--> ('a %@ 'c) %@ 'b }
 
 *)
 

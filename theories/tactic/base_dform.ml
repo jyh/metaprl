@@ -68,8 +68,10 @@ open Rformat
 let _ =
    show_loading "Loading Base_dform%t"
 
+let debug_dform = load_debug "dform"
+
 (* @terms *)
-declare bvar{var[v:v]}
+declare bvar{'v}
 declare " "
 declare "^"
 declare "_"
@@ -94,87 +96,45 @@ declare df_last{'l}
  * parameter.  @emph{Second-order} variables also have (unbound) subterms
  * that correspond to the free variables in the term being represented (in
  * a redex), or terms to be substituted for those variables (in a contractum).
- * Two examples of the display forms are shown below.
+ *
+ * Display for mechanism would convert the variable term into a @tt{display_var}
+ * term to avoid having to deal with argument lists of arbitrary length.
  * @end[doc]
  *)
-dform var_prl_df : mode[prl] :: var[v:v] =
+declare var_list{'t}
+
+dform var_prl_df : mode[prl] :: display_var[v:v]{nil} =
    slot[v:v]
 
-dform so_var1_df : var[v:v]{'x1} = var[v:v] "[" 'x1  "]"
-(* @docoff *)
-
-dform var_src_df : mode[src] :: var[v:v] =
+dform var_src_df : mode[src] :: display_var[v:v]{nil} =
    `"'" slot[v:v]
 
-dform var_tex_df : mode[tex] :: var[v:v] =
+dform var_tex_df : mode[tex] :: display_var[v:v]{nil} =
    izone `"{\\it " ezone slot[v:v] izone `"\\/}" ezone
 
-dform var_html_df : mode[html] :: var[v:v] =
+dform var_html_df : mode[html] :: display_var[v:v]{nil} =
    izone `"<font color=\"#114466\"><b>" ezone slot[v:v] izone `"</b></font>" ezone
 
-dform so_var2_df : var[v:v]{'x1; 'x2} =
-   szone var[v:v] "[" pushm[0] 'x1 ";"
-                      hspace 'x2 popm "]" ezone
+dform so_var_df : display_var[v:v]{'t} =
+   display_var[v:v]{nil} "[" pushm[0] var_list{'t} popm "]"
 
-dform so_var3_df : var[v:v]{'x1; 'x2; 'x3} =
-   szone var[v:v] "[" pushm[0] 'x1 ";"
-                       hspace 'x2 ";"
-                       hspace 'x3 popm "]" ezone
+dform var_list_df1 : var_list{cons{'a;'b}} =
+   'a `";" hspace var_list{'b}
 
-dform so_var4_df : var[v:v]{'x1; 'x2; 'x3; 'x4} =
-   szone var[v:v] "[" pushm[0] 'x1 ";"
-                       hspace 'x2 ";"
-                       hspace 'x3 ";"
-                       hspace 'x4 popm "]" ezone
+dform var_list_df2 : var_list{cons{'a;nil}} =
+   'a
 
-dform so_var5_df : var[v:v]{'x1; 'x2; 'x3; 'x4; 'x5} =
-   szone var[v:v] "[" pushm[0] 'x1 ";"
-                       hspace 'x2 ";"
-                       hspace 'x3 ";"
-                       hspace 'x4 ";"
-                       hspace 'x5 popm "]" ezone
+(* @docoff *)
 
-dform so_var6_df : var[v:v]{'x1; 'x2; 'x3; 'x4; 'x5; 'x6} =
-   szone var[v:v] "[" pushm[0] 'x1 ";"
-                       hspace 'x2 ";"
-                       hspace 'x3 ";"
-                       hspace 'x4 ";"
-                       hspace 'x5 ";"
-                       hspace 'x6 popm "]" ezone
+let bvar_opname = opname_of_term <<bvar{'v}>>
 
-dform so_var7_df : var[v:v]{'x1; 'x2; 'x3; 'x4; 'x5; 'x6; 'x7} =
-   szone var[v:v] "[" pushm[0] 'x1 ";"
-                       hspace 'x2 ";"
-                       hspace 'x3 ";"
-                       hspace 'x4 ";"
-                       hspace 'x5 ";"
-                       hspace 'x6 ";"
-                       hspace 'x7 popm "]" ezone
-
-dform so_var8_df : var[v:v]{'x1; 'x2; 'x3; 'x4; 'x5; 'x6; 'x7; 'x8} =
-   szone var[v:v] "[" pushm[0] 'x1 ";"
-                       hspace 'x2 ";"
-                       hspace 'x3 ";"
-                       hspace 'x4 ";"
-                       hspace 'x5 ";"
-                       hspace 'x6 ";"
-                       hspace 'x7 ";"
-                       hspace 'x8 popm "]" ezone
-
-dform so_var9_df : var[v:v]{'x1; 'x2; 'x3; 'x4; 'x5; 'x6; 'x7; 'x8; 'x9} =
-   szone var[v:v] "[" pushm[0] 'x1 ";"
-                       hspace 'x2 ";"
-                       hspace 'x3 ";"
-                       hspace 'x4 ";"
-                       hspace 'x5 ";"
-                       hspace 'x6 ";"
-                       hspace 'x7 ";"
-                       hspace 'x8 ";"
-                       hspace 'x9 popm "]" ezone
-
-ml_dform bvar_df : bvar{var[v:v]} format_term buf = fun
+ml_dform bvar_df : bvar{'v} format_term buf = fun
    term ->
-      format_string buf v
+      let t = dest_dep0_term bvar_opname term in
+         if is_var_term t then
+            format_string buf (dest_var t)
+         else
+            format_term buf LTParens t
 
 (*
  * Rewriting.

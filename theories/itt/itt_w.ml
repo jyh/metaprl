@@ -293,7 +293,7 @@ let is_tree_term = is_dep0_dep0_term tree_opname
 let dest_tree = dest_dep0_dep0_term tree_opname
 let mk_tree_term = mk_dep0_dep0_term tree_opname
 
-let tree_ind_term = << tree_ind{'e; u, v. 'b['u; 'v]} >>
+let tree_ind_term = << tree_ind{'e; u, v, w. 'b['u; 'v; 'w]} >>
 let tree_ind_opname = opname_of_term tree_ind_term
 let is_tree_ind_term = is_dep0_dep3_term tree_ind_opname
 let dest_tree_ind = dest_dep0_dep3_term tree_ind_opname

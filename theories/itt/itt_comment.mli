@@ -25,7 +25,7 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  * Author: Jason Hickey
- * @email{jyh@cs.caltech['f; 'x]}.edu}
+ * @email{jyh@cs.caltech.edu}
  * @end[doc]
  *)
 
@@ -73,7 +73,7 @@ declare math_bfalse
 declare math_bor{'a; 'b}
 declare math_band{'a; 'b}
 declare math_bimplies{'a; 'b}
-declare math_bnot{'a; 'b}
+declare math_bnot{'a}
 declare math_assert{'t}
 declare math_if{'a; 'b; 'c}
 
@@ -110,6 +110,7 @@ declare math_cor{'a; 'b}
  ************************************************************************)
 
 declare math_rfun{'f; 'x; 'A; 'B}
+declare math_fun{'x; 'A; 'B}
 declare math_fun{'A; 'B}
 declare math_lambda{'v; 'b}
 declare math_apply{'f; 'a}
@@ -129,6 +130,7 @@ declare math_iff{'A; 'B}
  ************************************************************************)
 
 declare math_prod{'x; 'A; 'B}
+declare math_prod{'A; 'B}
 declare math_pair{'a; 'b}
 declare math_spread{'e; 'u; 'v; 'b}
 declare math_fst{'e}
@@ -192,6 +194,11 @@ declare math_quot{'T; 'x; 'y; 'E}
 declare math_esquashbool{'P}
 declare math_esquash{'P}
 declare math_squash{'P}
+
+(* OTHER *)
+
+declare colons{'a}
+declare semicolons{'a}
 
 (*
  * -*-

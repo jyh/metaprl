@@ -88,7 +88,7 @@ include Base_dform
 
 (*!
  * @begin[doc]
- * @term
+ * @terms
  *
  * The @tt{comment_white} term represents white space.
  * The @tt{comment_string} term is a literal string.
@@ -201,10 +201,7 @@ dform tex_comment_item_df4 : tex_comment_item{comment_term{docoff}} =
 dform tex_comment_item_df5 : tex_comment_item{comment_term{doc{'t}}} =
    izone slot["raw", "\\kill\\end{tabbing}\n\\fi\\textrue\n"] ezone
    't
-   izone slot["raw", "\n\\iftex\\begin{tabbing}%"] ezone
-
-dform tex_comment_item_df5 : tex_comment_item{comment_term{doc}} =
-   izone slot["raw", "\\kill\\end{tabbing}\n\\fi\\textrue\n\\iftex\\begin{tabbing}%"] ezone
+   izone `"\\iftex\\begin{tabbing}%" ezone
 
 dform tex_comment_white_df1 : mode[tex] :: comment_white =
    izone slot["raw", "\n"] ezone
@@ -249,6 +246,7 @@ dform prl_comment_df1 : except_mode[tex] :: prl_comment{'t} =
  * @end[doc]
  *)
 declare "theory"[name:s]{'t}
+declare "theory"[name:s]
 (*! @docoff *)
 
 dform theory_df1 : mode[tex] :: "theory"[name:s]{'t} =
@@ -526,17 +524,11 @@ dform noindent_df2 : except_mode[tex] :: noindent =
  * only has effect on @LaTeX display mode.
  * @end[doc]
  *)
-declare cite{'t}
+declare cite[s:s]
 (*! @docoff *)
-
-dform cite_df1 : mode[tex] :: cite{'t} =
-   izone `"\\cite{" slot{'t} `"}" ezone
 
 dform cite_df1 : mode[tex] :: cite[text:s] =
    izone `"\\cite{" slot[text:s] `"}" ezone
-
-dform cite_df2 : except_mode[tex] :: cite{'t} =
-   `"cite{" slot{'t} `"}"
 
 dform cite_df2 : except_mode[tex] :: cite[text:s] =
    `"cite{" slot[text:s] `"}"
@@ -596,7 +588,9 @@ dform latex_df2 : except_mode[tex] :: "LaTeX" =
  * @end[doc]
  *)
 declare math[s:s]
+declare math{'t}
 declare centermath[s:s]
+declare centermath{'t}
 (*! @docoff *)
 
 dform math_df1 : mode[tex] :: math[s:s] =
@@ -609,7 +603,7 @@ dform math_df3 : except_mode[tex] :: math[s:s] =
    `"$" it[s:s] `"$"
 
 dform math_df4 : except_mode[tex] :: math{'t} =
-   `"$" it{slot{'t}} `"$"
+   `"$" it{'t} `"$"
 
 dform centermath_df1 : mode[tex] :: centermath[s:s] =
    izone `"$$" slot[s:s] `"$$" ezone
@@ -687,8 +681,11 @@ declare center{'t}
 dform center_df1 : mode[tex] :: center{'t} =
    izone `"\\begin{center}" ezone 't izone `"\\end{center}" ezone
 
-dform center_df2 : except_mode[tex] :: center{'t} =
-   hbreak 't hbreak
+dform center_df2 : mode[html] :: center{'t} =
+   izone `"<center>" ezone 't izone `"</center>" ezone
+
+dform center_df3 : except_mode[tex] :: except_mode[html] :: center{'t} =
+   hspace 't hspace
 
 (*!
  * @begin[doc]
@@ -712,13 +709,13 @@ dform quote_df1 : mode[tex] :: quote{'t} =
    izone `"\\begin{quote}" ezone 't izone `"\\end{quote}" ezone
 
 dform quote_df2 : except_mode[tex] :: quote{'t} =
-   hbreak 't hbreak
+   hspace 't hspace
 
 dform quotation_df1 : mode[tex] :: quotation{'t} =
    izone `"\\begin{quotation}" ezone 't izone `"\\end{quotation}" ezone
 
 dform quotation_df2 : except_mode[tex] :: quotation{'t} =
-   hbreak 't hbreak
+   hspace 't hspace
 
 (*!
  * @begin[doc]
@@ -745,6 +742,7 @@ dform quotation_df2 : except_mode[tex] :: quotation{'t} =
  * @end[doc]
  *)
 declare item{'t}
+declare item{'label; 'body}
 (*! @docoff *)
 
 dform item_df2 : except_mode[tex] :: item{'t} =
@@ -759,7 +757,7 @@ dform item_df1 : mode[tex] :: item{'t} =
 dform item_df1 : mode[tex] :: item{'t1; 't2} =
    izone `"\\item[" ezone slot{'t1} izone `"]" ezone slot{'t2}
 
-(*! @doc *)
+(*! @doc{ } *)
 declare enumerate{'t}
 (*! @docoff *)
 declare normal_enumerate{'count; 't}
@@ -784,7 +782,7 @@ dform normal_enumerate_df5 : normal_enumerate{'count; cons{comment_term{item{'t1
 dform enumerate_df1 : mode[tex] :: enumerate{'t} =
    izone `"\\begin{enumerate}" ezone 't izone `"\\end{enumerate}" ezone
 
-(*! @doc *)
+(*! @doc{ } *)
 declare itemize{'t}
 (*! @docoff *)
 
@@ -794,7 +792,7 @@ dform itemize_df1 : mode[tex] :: itemize{'t} =
 dform itemize_df2 : except_mode[tex] :: itemize{'t} =
    't
 
-(*! @doc *)
+(*! @doc{ } *)
 declare description{'t}
 (*! @docoff *)
 
@@ -850,11 +848,17 @@ dform math_slot_df1 : math_slot[tag:s]{'t} =
  * @end[doc]
  *)
 declare math_mathop{'t}
+declare math_mathop[text:s]
 declare math_mathrel{'t}
+declare math_mathrel[text:s]
 declare math_bb{'t}
+declare math_bb[text:s]
 declare math_tt{'t}
+declare math_tt[text:s]
 declare math_bf{'t}
+declare math_bf[text:s]
 declare math_i{'t}
+declare math_i[text:s]
 declare math_emph{'t}
 (*! @docoff *)
 
@@ -1307,16 +1311,18 @@ declare tex_reverse{'l1; 'l2; 't}
 declare tex_apply{'t; 'l}
 
 declare tex_array_lines{'l}
+declare tex_array_lns
 declare tex_array_line{'l}
+declare tex_array_ln
 
 dform array_df1 : mode[tex] :: math_array[tags:s]{'t} =
    izone `"\\begin{array}{" slot[tags:s] `"}" ezone
-   tex_strip_white{nil; 't; tex_array_lines}
+   tex_strip_white{nil; 't; tex_array_lns}
    izone `"\\end{array}" ezone
 
 dform tabular_df1 : mode[tex] :: math_tabular[tags:s]{'t} =
    izone `"\\begin{tabular}{" slot[tags:s] `"}" ezone
-   tex_strip_white{nil; 't; tex_array_lines}
+   tex_strip_white{nil; 't; tex_array_lns}
    izone `"\\end{tabular}" ezone
 
 (*
@@ -1346,22 +1352,22 @@ dform tex_reverse_df2 : tex_reverse{'l; nil; 't} =
 (*
  * Array lines.
  *)
-dform tex_apply_array_lines_df1 : tex_apply{tex_array_lines; 'l} =
+dform tex_apply_array_lines_df1 : tex_apply{tex_array_lns; 'l} =
    tex_array_lines{'l}
 
 dform tex_array_lines_df1 : tex_array_lines{cons{math_line{'l}; nil}} =
-   tex_strip_white{nil; 'l; tex_array_line}
+   tex_strip_white{nil; 'l; tex_array_ln}
 
 dform tex_array_lines_df1 : tex_array_lines{cons{comment_block{'l}; nil}} =
-   tex_strip_white{nil; 'l; tex_array_line}
+   tex_strip_white{nil; 'l; tex_array_ln}
 
 dform tex_array_lines_df2 : tex_array_lines{cons{math_line{'l}; cons{'h; 't}}} =
-   tex_strip_white{nil; 'l; tex_array_line}
+   tex_strip_white{nil; 'l; tex_array_ln}
    izone `"\\\\" ezone
    tex_array_lines{cons{'h; 't}}
 
 dform tex_array_lines_df2 : tex_array_lines{cons{comment_block{'l}; cons{'h; 't}}} =
-   tex_strip_white{nil; 'l; tex_array_line}
+   tex_strip_white{nil; 'l; tex_array_ln}
    izone `"\\\\" ezone
    tex_array_lines{cons{'h; 't}}
 
@@ -1371,7 +1377,7 @@ dform tex_array_lines_df3 : tex_array_lines{nil} =
 (*
  * Math line.
  *)
-dform tex_apply_array_line_df1 : tex_apply{tex_array_line; 'l} =
+dform tex_apply_array_line_df1 : tex_apply{tex_array_ln; 'l} =
    tex_array_line{'l}
 
 dform tex_array_line_df1 : tex_array_line{cons{'h; nil}} =
@@ -1391,9 +1397,6 @@ dform tex_array_line_df3 : tex_array_line{nil} =
 dform math_item_df1 : mode[tex] :: math_item{'t} =
    't
 
-dform math_item_df1 : mode[tex] :: math_item =
-   `""
-
 (*
  * Return.
  *)
@@ -1408,12 +1411,12 @@ dform math_hline : mode[tex] :: math_hline =
  *)
 dform normal_math_array_df1 : except_mode[tex] :: math_array[tags:s]{'t} =
    pushm[0] szone
-   tex_strip_white{nil; 't; tex_array_lines}
+   tex_strip_white{nil; 't; tex_array_lns}
    ezone popm
 
 dform normal_math_tabular_df1 : except_mode[tex] :: math_tabular[tags:s]{'t} =
    pushm[0] szone
-   tex_strip_white{nil; 't; tex_array_lines}
+   tex_strip_white{nil; 't; tex_array_lns}
    ezone popm
 
 dform normal_math_line_df1 : except_mode[tex] :: math_line{'l} =
@@ -1488,13 +1491,6 @@ dform tex_math_sequent_df1 : mode[tex] :: math_sequent{'ext; 'hyps; 'goal} =
    izone `"{\\xsequent{" ezone
    'ext
    izone `"}{" ezone
-   'hyps
-   izone `"}{" ezone
-   'goal
-   izone `"}}" ezone
-
-dform tex_math_sequent_df1 : mode[tex] :: math_sequent{'hyps; 'goal} =
-   izone `"{\\xsequent{}{" ezone
    'hyps
    izone `"}{" ezone
    'goal

@@ -43,11 +43,13 @@ let _ =
 (*
  * Special flags.
  *)
-declare ident_expr
-declare list_expr
-declare se_list
-declare ee_list
-declare e_list
+declare ident_expr{'expr}
+declare list_expr{'l}
+declare se_list{'l}
+declare ee_list{'l}
+declare ee_list'{'l}
+declare e_list{'l}
+declare e_list'{'l}
 
 (*
  * Precedences.
@@ -120,6 +122,8 @@ dform proj_df2 : internal :: "proj"[start:n, finish:n]{'A; 'B} =
 (*
  * Application.
  *)
+declare "apply"[lid:s]{'e1; 'e2}
+
 dform apply_df1 : parens :: "prec"[prec_apply] :: "apply"{'e1; 'e2} =
    pushm[0] slot{'e1} hspace slot{'e2} popm
 
@@ -181,13 +185,13 @@ dform apply_any_df : internal :: "apply"[name:s]{'e1; 'e2} =
  * Subscripting.
  *)
 dform array_subscript_df1 : parens :: "prec"[prec_proj] :: "array_subscript"{'e1; 'e2} =
-   slot{'e1} array_subscript pushm[0] slot{'e2} popm ")"
+   slot{'e1} `"array_subscript(" pushm[0] slot{'e2} popm ")"
 
 dform array_subscript_df2 : internal :: "array_subscript"[start:n, finish:n]{'e1; 'e2} =
    "array_subscript"{'e1; 'e2}
 
 dform string_subscript_df1 : parens :: "prec"[prec_proj] :: "string_subscript"{'e1; 'e2} =
-   slot{'e1} string_subscript pushm[0] slot{'e2} popm ")"
+   slot{'e1} `"string_subscript(" pushm[0] slot{'e2} popm ")"
 
 dform string_subscript_df2 : internal :: "string_subscript"[start:n, finish:n]{'e1; 'e2} =
    "string_subscript"{'e1; 'e2}
@@ -238,25 +242,19 @@ dform tuple_df2 : internal :: "tuple"[start:n, finish:n]{'e1} =
 (*
  * Lists & arrays.
  *)
-dform list_expr_cons_df1 : internal :: list_expr{cons{'e1; 'e2}} =
-   list_expr{'e1; 'e2}
-
-dform list_expr_cons_df2 : internal :: list_expr{'e1; cons{'e2; 'e3}} =
+dform list_expr_cons_df : internal :: list_expr{cons{'e1; cons{'e2; 'e3}}} =
    szone slot{'e1} ezone ";" hspace list_expr{cons{'e2; 'e3}}
 
-dform nil_df : internal :: list_expr{'e1; nil} =
+dform list_expr_nil_df : internal :: list_expr{cons{'e1; nil}} =
    szone slot{'e1} ezone
 
 (*
  * Module name.
  *)
-dform ident_expr_cons_df1 : internal :: ident_expr{cons{'e1; 'e2}} =
-   ident_expr{'e1; 'e2}
+dform ident_expr_cons_df : internal :: ident_expr{cons{.Ocaml!"string"[name:s]; cons{'e1; 'e2}}} =
+   slot[name:s] `"." ident_expr{cons{'e1; 'e2}}
 
-dform ident_expr_cons_df2 : internal :: ident_expr{.Ocaml!"string"[name:s]; cons{'e1; 'e2}} =
-   slot[name:s] `"." ident_expr{'e1; 'e2}
-
-dform ident_expr_nil_df : internal :: ident_expr{.Ocaml!"string"[name:s]; nil} =
+dform ident_expr_nil_df : internal :: ident_expr{cons{.Ocaml!"string"[name:s]; nil}} =
    slot[name:s]
 
 (*
@@ -265,14 +263,11 @@ dform ident_expr_nil_df : internal :: ident_expr{.Ocaml!"string"[name:s]; nil} =
 dform se_list_nil_df : internal :: se_list{nil} =
    `""
 
-dform se_list_cons_df1 : internal :: se_list{cons{'e1; 'e2}} =
-   se_list{'e1; 'e2}
-
-dform se_list_cons_df2 : internal :: se_list{cons{'s; 'e}; nil} =
+dform se_list_cons_df1 : internal :: se_list{cons{cons{'s; 'e}; nil}} =
    slot{'s} `"XXX" slot{'e}
 
-dform se_list_cons_df3 : internal :: se_list{cons{'s; 'e}; cons{'e2; 'e3}} =
-   slot{'s} `"XXX" slot{'e} ";" hspace se_list{'e2; 'e3}
+dform se_list_cons_df2 : internal :: se_list{cons{cons{'s; 'e}; cons{'e2; 'e3}}} =
+   slot{'s} `"XXX" slot{'e} ";" hspace se_list{cons{'e2; 'e3}}
 
 (*
  * Tuples.
@@ -280,16 +275,14 @@ dform se_list_cons_df3 : internal :: se_list{cons{'s; 'e}; cons{'e2; 'e3}} =
 dform e_list_nil_df1 : internal :: e_list{nil} =
    `""
 
-dform e_list_nil_df2 : internal :: e_list{nil; e_list} =
+dform e_list_nil_df2 : internal :: e_list'{nil} =
    `""
 
 dform e_list_cons_df1 : internal :: e_list{cons{'e1; 'e2}} =
-   slot{'e1}
-   e_list{'e2; e_list}
+   slot{'e1} e_list'{'e2}
 
-dform e_list_cons_df2 : internal :: e_list{cons{'e1; 'e2}; e_list} =
-   `"," hspace slot{'e1}
-   e_list{'e2; e_list}
+dform e_list_cons_df2 : internal :: e_list'{cons{'e1; 'e2}} =
+   `"," hspace slot{'e1} e_list'{'e2}
 
 (*
  * Records.
@@ -297,22 +290,22 @@ dform e_list_cons_df2 : internal :: e_list{cons{'e1; 'e2}; e_list} =
 dform ee_list_nil_df : internal :: ee_list{nil} =
    `""
 
-dform ee_list_nil_df : internal :: ee_list{nil; ee_list} =
+dform ee_list2_nil_df : internal :: ee_list'{nil} =
    `""
 
-dform ee_list_nil_df1 : internal :: ee_list{cons{ee{'e1; 'e2}; 'e3}} =
+dform ee_list_nil_df2 : internal :: ee_list{cons{ee{'e1; 'e2}; 'e3}} =
    szone slot{'e1} hspace "=" hspace slot{'e2} ezone
-   ee_list{'e3; ee_list}
+   ee_list'{'e3}
 
-dform ee_list_nil_df2 : internal :: ee_list{cons{ee{'e1; 'e2}; 'e3}; ee_list} =
+dform ee_list2_nil_df2 : internal :: ee_list'{cons{ee{'e1; 'e2}; 'e3}} =
    ";" hspace szone slot{'e1} `" " "=" hspace slot{'e2} ezone
-   ee_list{'e3; ee_list}
+   ee_list'{'e3}
 
 (*
  * Assignment.
  *)
 dform assign_df1 : parens :: "prec"[prec_assign] :: assign{'e1; 'e2} =
-   push_indent slot{'e1} hspace assign slot{'e2} popm
+   push_indent slot{'e1} hspace `"= " slot{'e2} popm
 
 dform assign_df2 : internal :: assign[start:n, finish:n]{'e1; 'e2} =
    assign{'e1; 'e2}
@@ -334,8 +327,8 @@ dform ifthenelse_df2 : internal :: ifthenelse[start:n, finish:n]{'e1; 'e2; 'e3} 
  *)
 dform for_upto_df1 : for_upto{'e1; 'e2; x. 'e3} =
    pushm[0] push_indent
-   "_for" hspace slot{'x} hspace assign slot{'e2} hspace "_to" slot{'e3} hspace "_do" hbreak
-      slot{'e3} popm hbreak
+   "_for" hspace slot{'x} hspace `"= " slot{'e2} hspace "_to" slot{'e3} hspace "_do" hspace
+      slot{'e3} popm hspace
       "_done" popm
 
 dform for_upto_df2 : internal :: for_upto[start:n, finish:n]{'e1; 'e2; x. 'e3} =
@@ -343,8 +336,8 @@ dform for_upto_df2 : internal :: for_upto[start:n, finish:n]{'e1; 'e2; x. 'e3} =
 
 dform for_downto_df1 : for_downto{'e1; 'e2; x. 'e3} =
    pushm[0] push_indent
-   "_for" hspace slot{'x} hspace assign slot{'e2} hspace "_downto" slot{'e3} hspace "_do" hbreak
-      slot{'e3} popm hbreak
+   "_for" hspace slot{'x} hspace `"= " slot{'e2} hspace "_downto" slot{'e3} hspace "_do" hspace
+      slot{'e3} popm hspace
       "_done" popm
 
 dform for_downto_df2 : internal :: for_downto[start:n, finish:n]{'e1; 'e2; x. 'e3} =
@@ -371,7 +364,7 @@ dform cast_df2 : internal :: cast[start:n, finish:n]{'e; 't} =
  * Class coercion.
  *)
 dform class_coerce_df1 : parens :: "prec"[prec_rel] :: class_coerce{'e1; 'e2} =
-   push_indent slot{'e1} hspace class_coerce slot{'e2} popm
+   push_indent slot{'e1} hspace `"Ocaml!class_coerce" slot{'e2} popm
 
 dform class_coerce_df2 : internal :: class_coerce[start:n, finish:n]{'e1; 'e2} =
    class_coerce{'e1; 'e2}

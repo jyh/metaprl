@@ -3,7 +3,7 @@
  * isect
  * @end[spelling]
  * @begin[doc]
- * @theory{Czf_itt_isect}
+ * @theory[Czf_itt_isect]
  *
  * The @tt{Czf_itt_isect} module gives defines a binary
  * and general intersection.  The intersection is a @emph{derived} form,
@@ -78,6 +78,7 @@ let _ =
 
 (*! @doc{@terms} *)
 declare "isect"{'s1; 's2}
+declare "isect"{'s1}
 
 (************************************************************************
  * REWRITES                                                             *

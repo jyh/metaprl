@@ -107,6 +107,7 @@ dform str_type_df2 : internal :: str_type[start:n, finish:n]{'tdl} =
  * Value definition.
 *)
 declare and_let{'pel}
+declare str_let{'e}
 
 dform str_let_df1 : internal :: str_let{patt_var[s1:n, f1:n]{v. patt_in[s2:n, f2:n]{'p}}; 'e} =
    (* slot{'v} *) "=" slot{'e}
@@ -123,13 +124,10 @@ dform str_let_df3 : internal :: str_let{."fun"[s3:n, f3:n]{
 dform str_let_df4 : internal :: str_let{'e} =
    "=" hspace slot{'e}
 
-dform str_let_df5 : internal :: str_let[start:n, finish:n]{cons{str_let[s:n, f:n]{'p; 'e}; 'pel}} =
+dform str_let_df5 : internal :: str_let[start:n, finish:n]{str_let[s:n, f:n]{'p; 'e}; 'pel} =
    szone pushm[0] str_let{'p; 'e}
    and_let{'pel}
    popm ezone
-
-dform str_let_df6 : internal :: str_let[start:n, finish:n]{nil} =
-   `""
 
 dform and_let_df1 : internal :: and_let{cons{str_let[s:n, f:n]{'p; 'e}; 'pel}} =
    newline "_and" `" " str_let{'p; 'e}

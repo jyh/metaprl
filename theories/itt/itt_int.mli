@@ -33,6 +33,7 @@
 
 include Itt_equal
 include Itt_rfun
+include Itt_bool
 include Itt_logic
 
 open Refiner.Refiner.Term
@@ -89,9 +90,9 @@ rewrite reduce_rem : "rem"{number[i:n]; number[j:n]} <-->
    meta_rem{number[i:n]; number[j:n]}
 
 rewrite reduce_lt : "lt"{number[i:n]; number[j:n]} <-->
-   meta_lt{number[i:n]; number[j:n]}
+   meta_lt{number[i:n]; number[j:n]; btrue; bfalse}
 rewrite reduce_eq : (number[i:n] = number[j:n] in int) <-->
-   meta_eq{number[i:n]; number[j:n]}
+   meta_eq{number[i:n]; number[j:n]; btrue; bfalse}
 
 (************************************************************************
  * RULES                                                                *
@@ -184,9 +185,9 @@ rule intElimination 'H 'J 'n 'm 'v 'z :
  *)
 rule indEquality 'H lambda{z. 'T['z]} 'x 'y 'w :
    sequent [squash] { 'H >- 'x1 = 'x2 in int } -->
-   sequent [squash] { 'H; x: int; w: 'x < 0; y: 'T['x add 1] >- 'down1['x; 'y] = 'down2['x; 'y] in 'T['x] } -->
+   sequent [squash] { 'H; x: int; w: 'x < 0; y: 'T['x +@ 1] >- 'down1['x; 'y] = 'down2['x; 'y] in 'T['x] } -->
    sequent [squash] { 'H >- 'base1 = 'base2 in 'T[0] } -->
-   sequent [squash] { 'H; x: int; w: 'x > 0; y: 'T['x sub 1] >- 'up1['x; 'y] = 'up2['x; 'y] in 'T['x] } -->
+   sequent [squash] { 'H; x: int; w: 'x > 0; y: 'T['x -@ 1] >- 'up1['x; 'y] = 'up2['x; 'y] in 'T['x] } -->
    sequent ['ext] { 'H >- ind{'x1; i1, j1. 'down1['i1; 'j1]; 'base1; k1, l1. 'up1['k1; 'l1]}
                    = ind{'x2; i2, j2. 'down2['i2; 'j2]; 'base2; k2, l2. 'up2['k2; 'l2]}
                    in 'T['x1] }

@@ -95,7 +95,7 @@ let debug_eqcd =
  * @begin[doc]
  * @terms
  *
- * The universe type $@univ_i$ is a @emph{type of types}.  The individual type
+ * The universe type $@univ{i}$ is a @emph{type of types}.  The individual type
  * universe judgments are listed in the modules for each of the types.
  * Furthermore, there is no elimination rule, since each universe is just a set of
  * points, with no order.
@@ -585,8 +585,8 @@ let intro_resource = Mp_resource.improve intro_resource (univ_member_term, eqcd_
  * @begin[doc]
  * @thysubsection{The type universe is a type}
  *
- * The next three rules state that every universe $@univ_l$ is a type, and
- * every inhabitant $x @in @univ_l$ is also a type.
+ * The next three rules state that every universe $@univ{l}$ is a type, and
+ * every inhabitant $x @in @univ{l}$ is also a type.
  * @end[doc]
  *)
 prim universeType {| intro_resource [] |} 'H :

@@ -33,9 +33,9 @@
  * $$@squash{P} @equiv @set{x; @unit; P}.$$
  *
  * The elements of @hrefterm[esquash] and @tt{squash} are the same,
- * but the equalities differ, $@esquash{P_1} = @esquash{P_2} @in @univ_i$ if
- * $P_1 @Leftrightarrow P_2$, and $@squash{P_1} = @squash{P_2} @in @univ_i$ if
- * $P_1 = P_2 @in @univ_i$.  This is because the quotient type uses
+ * but the equalities differ, $@esquash{P_1} = @esquash{P_2} @in @univ{i}$ if
+ * $P_1 @Leftrightarrow P_2$, and $@squash{P_1} = @squash{P_2} @in @univ{i}$ if
+ * $P_1 = P_2 @in @univ{i}$.  This is because the quotient type uses
  * an @emph{extensional} equality on it's equivalence relation, and
  * the @tt{set} type uses an @emph{intensional} equality on it's predicate.
  * @end[doc]
@@ -143,8 +143,8 @@ interactive esquash_bool_false {| intro_resource [] |} 'H :
 
 (*!
  * @begin[doc]
- * The @tt{esquash} term inhabits the type universe $@univ_i$
- * if the proposition $P$ is also in $@univ_i$.
+ * The @tt{esquash} term inhabits the type universe $@univ{i}$
+ * if the proposition $P$ is also in $@univ{i}$.
  * @end[doc]
  *)
 interactive esquash_type {| intro_resource [] |} 'H :

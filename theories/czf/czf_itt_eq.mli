@@ -83,9 +83,6 @@ rewrite unfold_fun_set : fun_set{z. 'f['z]} <-->
 rewrite unfold_fun_prop : fun_prop{z. 'P['z]} <-->
     (all s1: set. all s2: set. (equal{'s1; 's2} => 'P['s1] => 'P['s2]))
 
-rewrite unfold_dfun_prop2 : dfun_prop{'A; x. 'B['x]} <-->
-  (u1: 'A -> 'B['u1] -> u2: 'A -> 'B['u2])
-
 rewrite unfold_dfun_prop : dfun_prop{u. 'A['u]; x, y. 'B['x; 'y]} <-->
   (all s1: set. all s2: set. (equal{'s1; 's2} => (u1: 'A['s1] -> 'B['s1; 'u1] -> u2: 'A['s2] -> 'B['s2; 'u2])))
 

@@ -173,6 +173,7 @@ let _ =
  * @end[doc]
  *)
 declare prod{'A; x. 'B['x]}
+declare prod{'A; 'B}
 declare pair{'a; 'b}
 declare spread{'e; u, v. 'b['u; 'v]}
 define unfoldFst : fst{'e} <--> spread{'e; u, v. 'u}

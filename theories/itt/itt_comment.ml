@@ -49,10 +49,7 @@ dform math_type_df1 : mode[tex] :: math_type{'t} =
    slot{'t}
    izone `"\\ {\\it Type}}" ezone
 
-dform math_univ_df1 : mode[tex] :: math_univ =
-   izone `"{\\mathbb U}" ezone
-
-dform math_univ_df2 : mode[tex] :: math_univ{'i} =
+dform math_univ_df : mode[tex] :: math_univ{'i} =
    izone `"{{\\mathbb U}_" ezone
    slot{'i}
    izone `"}" ezone
@@ -97,9 +94,6 @@ dform type_df1 : except_mode[tex] :: parens :: "prec"[prec_type] :: math_type{'a
 
 dform univ_df1 : except_mode[tex] :: math_univ{'i} =
    mathbbU `"[" slot{'i} `"]"
-
-dform univ_df1 : except_mode[tex] :: math_univ =
-   mathbbU
 
 dform cumulativity_df : except_mode[tex] :: math_cumulativity{'i; 'j} =
    `"cumulativity[" slot{'i} `";" slot{'j} `"]"
@@ -166,7 +160,7 @@ declare math_bfalse
 declare math_bor{'a; 'b}
 declare math_band{'a; 'b}
 declare math_bimplies{'a; 'b}
-declare math_bnot{'a; 'b}
+declare math_bnot{'a}
 declare math_assert{'t}
 declare math_if{'a; 'b; 'c}
 
@@ -510,6 +504,7 @@ dform cor_df3 : cor_df{'a} =
  ************************************************************************)
 
 declare math_rfun{'f; 'x; 'A; 'B}
+declare math_fun{'x; 'A; 'B}
 declare math_fun{'A; 'B}
 declare math_lambda{'v; 'b}
 declare math_apply{'f; 'a}
@@ -623,9 +618,6 @@ dform math_all_df1 : mode[tex] :: math_all{'x; 'A; 'B} =
    'B
    izone `"}" ezone
 
-dform math_all_df1 : mode[tex] :: math_all =
-   izone `"\\forall " ezone
-
 dform math_implies_df1 : mode[tex] :: math_implies{'A; 'B} =
    izone `"{" ezone
    'A
@@ -666,8 +658,8 @@ dform fun_df1 : parens :: "prec"[prec_fun] :: except_mode[tex] :: math_fun{'A; '
 dform fun_df2 : parens :: "prec"[prec_fun] :: except_mode[tex] :: math_fun{'x; 'A; 'B} =
    slot{bvar{'x}} `":" slot{'A} " " rightarrow " " slot{'B}
 
-dform fun_df3 : math_rfun{'f; 'x; 'A; 'B} =
-   "{" " " slot{bvar{'f}} `" | "  "fun"{'A; x. 'B} `" }"
+dform fun_df3 : except_mode[tex] :: math_rfun{'f; 'x; 'A; 'B} =
+   "{" " " slot{bvar{'f}} `" | "  math_fun{'x; 'A; 'B} `" }"
 
 dform apply_df1 : parens :: "prec"[prec_apply] :: except_mode[tex] :: math_apply{'f; 'a} =
    slot["lt"]{'f} " " slot["le"]{'a}
@@ -712,6 +704,7 @@ dform all_df1 : except_mode[tex] :: parens :: "prec"[prec_quant] :: except_mode[
  ************************************************************************)
 
 declare math_prod{'x; 'A; 'B}
+declare math_prod{'A; 'B}
 declare math_pair{'a; 'b}
 declare math_spread{'e; 'u; 'v; 'b}
 declare math_fst{'e}
@@ -1071,7 +1064,7 @@ dform math_tree_df1 : mode[tex] :: math_tree{'A; 'B} =
    slot{'B}
    izone `")}" ezone
 
-dform math_treeind_df1 : mode[tex] :: math_tree{'t; 'a; 'b; 'c; 'd} =
+dform math_treeind_df1 : mode[tex] :: math_treeind{'t; 'a; 'b; 'c; 'd} =
    izone `"{{\\it prec\\_ind}(" ezone
    slot{'t}
    izone `";" ezone
@@ -1113,7 +1106,7 @@ dform math_listind_df1 : mode[tex] :: math_listind{'e; 'base; 'h; 't; 'f; 'step}
 (************************************************
  * Normal mode
  *)
-dform srec_df : except_mode[tex] :: math_srec{T. 'B} =
+dform srec_df : except_mode[tex] :: math_srec{'T; 'B} =
    szone mu `"{" slot{'T} `"." pushm[0] slot{'B} `"}" popm ezone
 
 prec prec_w
@@ -1134,8 +1127,8 @@ prec prec_cons
 prec prec_list
 
 declare search{'a; 'b}
-declare semicolons{'a; 'b}
-declare colons{'a; 'b}
+declare semicolons{'a}
+declare colons{'a}
 
 (* Empty list *)
 dform nil_df : except_mode[tex] :: math_nil = `"[]"

@@ -152,7 +152,7 @@ dform precind_df : except_mode[src] :: precind{'a; p, h. 'g} =
  * The @tt{prec} type $@prec{T; x; B[T, x]; a}$ is well-formed if: 1) there
  * is a type of parameters $A$; 2) the initial parameter $a$ has type $A$;
  * and 3) the body $B[T, x]$ is well-formed for any argument $x @in A$ and
- * @emph{any} type $T @in @univ_i$.  In addition, $B[T, x]$ must be
+ * @emph{any} type $T @in @univ{i}$.  In addition, $B[T, x]$ must be
  * @emph{monotone} in the type argument $T$.  If $T_1 @subseteq T_2$, then
  * $B[T_1, x] @subseteq B[T_2, x]$.
  * @end[doc]

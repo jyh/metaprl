@@ -12,21 +12,21 @@
  * OCaml, and more information about this system.
  *
  * Copyright (C) 1998 Jason Hickey, Cornell University
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- * 
+ *
  * Author: Jason Hickey
  * jyh@cs.cornell.edu
  *)
@@ -43,14 +43,16 @@ include Perv
 declare "unit"
 declare "bool"[f:s]
 declare "char"[c:s]
-declare "int"[i:s]
+declare "int"[i:n]
 declare "string"[s:s]
 declare "float"[s:s]
 declare "true"
 declare "false"
 
 declare "lid"{'v}
+declare "lid"[s:s]
 declare "uid"{'v}
+declare "uid"[s:s]
 
 (*
  * Primitive operations on numbers.
@@ -113,7 +115,7 @@ declare record_set{'e1; 'e2; 'e3}
 (*
  * Sequencing.
  *)
-declare sequence{'e1; 'e2}
+declare sequence{'e1}
 
 (*
  * Conditional.
@@ -158,7 +160,7 @@ declare "match"{'e; 'pwel}
  * "Let" forms.  The real work is performed in the patterns.
  *)
 declare "let"{'p; 'e}
-declare "fix"{x. 'pel}
+declare "fix"{'pel}
 
 (*
  * Pairing.
@@ -191,8 +193,11 @@ declare "ee"{'e1; 'e2}
  * Here is how a "let rec" expression looks:
  * The arguments are _inside_ the pattern.
  *    3. letrec (p1, e1), ..., (pn, en), e
- *       fix{x. let{pl; x}}, where
+ *       fix{x.let{pl; x}}, where
  *       pl = patt_arg{...; patt_end{... patt_match{e1; ... patt_in{e}}}}
+ *
+ * BUG!!! nogin: the actual code in filter/base/filter_ocaml does
+ * something else, there is no bound variable in the fix term in creates!
  *
  * These three forms are different, but we can combine their
  * display forms somewhat.
@@ -218,7 +223,9 @@ declare patt_float[f:s]
  *)
 declare patt_var{x. 'p}
 declare patt_lid{'p1; 'p2}
+declare patt_lid[name:s]
 declare patt_uid{'p1; 'p2}
+declare patt_uid[name:s]
 
 (*
  * Typed pattern.
@@ -356,8 +363,10 @@ declare type_class_id{'t1}
 (*
  * Identifiers.
  *)
-declare type_lid[v:v]
-declare type_uid[v:v]
+declare type_lid[v:s]
+declare type_uid[v:s]
+declare type_lid{'v}
+declare type_uid{'v}
 
 (*
  * Type parameter.
@@ -519,7 +528,9 @@ declare mt_functor[name:s]{'mt1; 'mt2}
  * Id.
  *)
 declare mt_lid[name:s]
+declare mt_lid{'name}
 declare mt_uid[name:s]
+declare mt_uid{'name}
 
 (*
  * Signature.
@@ -572,6 +583,116 @@ declare me_cast{'me; 'mt}
  *)
 declare me_lid[name:s]
 declare me_uid[name:s]
+
+(*
+ * Locations
+ *)
+
+declare "apply"[start:n, finish:n]{'e1; 'e2}
+declare "array"[start:n, finish:n]{'e1}
+declare "array_subscript"[start:n, finish:n]{'e1; 'e2}
+declare assign[start:n, finish:n]{'e1; 'e2}
+declare cast[start:n, finish:n]{'e; 't}
+declare "char"[start:n, finish:n, c:s]
+declare class_coerce[start:n, finish:n]{'e1; 'e2}
+declare "fix"[start:n, finish:n]{'p}
+declare "float"[start:n, finish:n, f:s]
+declare for_downto[start:n, finish:n]{'e1; 'e2; x. 'e3}
+declare for_upto[start:n, finish:n]{'e1; 'e2; x. 'e3}
+declare "fun"[start:n, finish:n]{'pwel}
+declare ifthenelse[start:n, finish:n]{'e1; 'e2; 'e3}
+declare "int"[start:n, finish:n, i:n]
+declare "let"[start:n, finish:n]{'p; 'e}
+declare "lid"[start:n, finish:n]{'v}
+declare "list"[start:n, finish:n]{'e1}
+declare "match"[start:n, finish:n]{'e; 'pwel}
+declare mt_apply[start:n, finish:n]{'mt1; 'mt2}
+declare mt_functor[start:n, finish:n, name:s]{'mt1; 'mt2}
+declare mt_lid[start:n, finish:n]{'v}
+declare mt_proj[start:n, finish:n]{'mt1; 'mt2}
+declare mt_sig[start:n, finish:n]{'sil}
+declare mt_uid[start:n, finish:n]{'v}
+declare mt_with[start:n, finish:n]{'mt; 'wcl}
+declare patt_and[start:n, finish:n]{'p1}
+declare patt_apply_arg[start:n, finish:n]{'p1}
+declare patt_apply_end[start:n, finish:n]{'p1}
+declare patt_apply[start:n, finish:n]{'p1}
+declare patt_as_arg[start:n, finish:n]{'p1}
+declare patt_as_end[start:n, finish:n]{'p1}
+declare patt_as[start:n, finish:n]{'p1}
+declare patt_body[start:n, finish:n]{'e}
+declare patt_char[start:n, finish:n, c:s]{'p1}
+declare patt_choice_arg[start:n, finish:n]{'p1}
+declare patt_choice_end[start:n, finish:n]{'p1}
+declare patt_choice[start:n, finish:n]{'p1}
+declare patt_done[start:n, finish:n]
+declare patt_fix_and[start:n, finish:n]{'p1}
+declare patt_fix_arg[start:n, finish:n]{'e1; 'p1}
+declare patt_float[start:n, finish:n, x:s]{'p1}
+declare patt_ifelse[start:n, finish:n]{'pwe; 'pwel}
+declare patt_if[start:n, finish:n]{'pwe}
+declare patt_in[start:n, finish:n]{'e1}
+declare patt_int[start:n, finish:n, i:n]{'p1}
+declare patt_lid[start:n, finish:n]{'p1; 'p2}
+declare patt_list_arg[start:n, finish:n]{'p1}
+declare patt_list_end[start:n, finish:n]{'p1}
+declare patt_list[start:n, finish:n]{'p1}
+declare patt_proj_arg[start:n, finish:n]{'p1}
+declare patt_proj_end[start:n, finish:n]{'p1}
+declare patt_proj[start:n, finish:n]{'p1}
+declare patt_range_arg[start:n, finish:n]{'p1}
+declare patt_range_end[start:n, finish:n]{'p1}
+declare patt_range[start:n, finish:n]{'p1}
+declare patt_record_end[start:n, finish:n]{'p1}
+declare patt_record_proj[start:n, finish:n]{'e1; 'p1}
+declare patt_record[start:n, finish:n]{'p1}
+declare patt_string[start:n, finish:n, s:s]{'p1}
+declare patt_tuple_arg[start:n, finish:n]{'p1}
+declare patt_tuple_end[start:n, finish:n]{'p1}
+declare patt_tuple[start:n, finish:n]{'p1}
+declare patt_uid[start:n, finish:n]{'p1; 'p2}
+declare patt_var[start:n, finish:n]{x. 'p1}
+declare patt_wildcard[start:n, finish:n]{'p1}
+declare patt_with[start:n, finish:n]{'e1; 'e2}
+declare "proj"[start:n, finish:n]{'A; 'B}
+declare "record"[start:n, finish:n]{'e1}
+declare "sequence"[start:n, finish:n]{'e1}
+declare sig_exception[start:n, finish:n, name:s]{'tl}
+declare sig_external[start:n, finish:n, name:s]{'t; 'sl}
+declare sig_module[start:n, finish:n, name:s]{'mt}
+declare sig_module_type[start:n, finish:n, name:s]{'mt}
+declare sig_open[start:n, finish:n]{'sl}
+declare sig_type[start:n, finish:n]{'tdl}
+declare sig_value[start:n, finish:n, name:s]{'t}
+declare "stream"[start:n, finish:n]{'e1}
+declare str_exception[start:n, finish:n, name:s]{'tl}
+declare str_expr[start:n, finish:n]{'e}
+declare str_external[start:n, finish:n, name:s]{'t; 'sl}
+declare str_fix[start:n, finish:n]{'p}
+declare "string"[start:n, finish:n, s:s]
+declare "string_subscript"[start:n, finish:n]{'e1; 'e2}
+declare str_let[start:n, finish:n]{'p; 'e}
+declare str_module[name:s, start:n, finish:n]{'me}
+declare str_module_type[start:n, finish:n, name:s]{'mt}
+declare str_open[start:n, finish:n]{'sl}
+declare str_type[start:n, finish:n]{'tdl}
+declare "try"[start:n, finish:n]{'e; 'pwel}
+declare "tuple"[start:n, finish:n]{'e1}
+declare type_apply[start:n, finish:n]{'t1; 't2}
+declare type_as[start:n, finish:n]{'t1; 't2}
+declare type_class_id[start:n, finish:n]{'t1}
+declare type_equal[start:n, finish:n]{'t1; 't2}
+declare type_fun[start:n, finish:n]{'t1; 't2}
+declare type_lid[start:n, finish:n]{'v}
+declare type_list[start:n, finish:n]{'stl}
+declare type_param[start:n, finish:n, s:s]
+declare type_prod[start:n, finish:n]{'tl}
+declare type_proj[start:n, finish:n]{'t1; 't2}
+declare type_record[start:n, finish:n]{'t}
+declare type_uid[start:n, finish:n]{'v}
+declare type_wildcard[start:n, finish:n]
+declare "uid"[start:n, finish:n]{'v}
+declare "while"[start:n, finish:n]{'e1; 'e2}
 
 (*
  * -*-

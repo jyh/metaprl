@@ -105,6 +105,8 @@ dform mt_sig_df2 : internal :: mt_sig[start:n, finish:n]{'sil} =
 (*
  * Module type with clause.
  *)
+declare mt_with{'lst}
+
 dform mt_with_df1 : mt_with{'mt; 'wcl} =
    szone pushm[0] slot{'mt} mt_with{'wcl} popm ezone
 

@@ -63,7 +63,9 @@ declare math_simplies{'A; 'B}
 declare math_snot{'A}
 declare math_siff{'A; 'B}
 declare math_sall{'x; 'A; 'B}
+declare math_sall{'x; 'A}
 declare math_sexists{'x; 'A; 'B}
+declare math_sexists{'x; 'A}
 declare math_dall{'x; 'A; 'B}
 declare math_dexists{'x; 'A; 'B}
 
@@ -96,6 +98,7 @@ declare math_union{'s}
  * INTERSECTION
  ************************************************************************)
 
+declare math_isect{'s1; 's2}
 declare math_isect{'s}
 
 (************************************************************************

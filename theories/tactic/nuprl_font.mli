@@ -52,20 +52,25 @@ declare keyword[name:s]
 declare keyword_begin
 declare keyword_end
 declare bf[name:s]
+declare bf{'t}
 declare bf_begin
 declare bf_end
 declare i[name:s]
+declare i{'t}
 declare it[name:s]
+declare it{'t}
 declare it_begin
 declare it_end
 declare sym[name:s]
 declare sym_begin
 declare sym_end
-declare em[name:s]
+declare em[s:s]
+declare em{'s}
 declare em_begin
 declare em_end
 declare emph{'t}
 declare tt[name:s]
+declare tt{'t}
 declare tt_begin
 declare tt_end
 declare sub[name:s]
@@ -89,6 +94,7 @@ declare cd_end
  *)
 declare mathBB[name:s]
 declare ensuremath[name:s]
+declare ensuremath{'t}
 declare mathmacro[name:s]
 
 (* Displays *)

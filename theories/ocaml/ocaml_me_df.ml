@@ -60,9 +60,9 @@ dform me_functor_df : me_functor[name:s]{'mt; 'me} = mt_functor[name:s]{'mt; 'me
  * Structure.
  *)
 dform me_struct_df : me_struct{'sil} =
-   szone pushm[0] push_indent "_struct" sbreak
+   szone pushm[0] push_indent "_struct" space
    list_expr{'sil}
-   popm sbreak "_end" popm ezone
+   popm space "_end" popm ezone
 
 (*
  * Type cast.

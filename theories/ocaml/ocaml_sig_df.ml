@@ -105,8 +105,8 @@ dform sig_open_df2 : internal :: sig_open[start:n, finish:n]{'sl} =
 (*
  * Type definition.
  *)
-declare type_arg
-declare type_constraint
+declare type_arg{'sl}
+declare type_constraint{'sl}
 declare sig_type_aux{'tdls}
 
 dform sig_type_df : sig_type{cons{'tdl; 'tdls}} =

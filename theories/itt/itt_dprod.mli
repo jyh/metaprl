@@ -45,6 +45,7 @@ open Tactic_type.Tacticals
 
 (* declare prod{'A; 'B} *)
 declare prod{'A; x. 'B['x]}
+declare prod{'A; 'B}
 declare pair{'a; 'b}
 declare spread{'e; u, v. 'b['u; 'v]}
 
@@ -145,7 +146,7 @@ rule productElimination 'H 'J 'z 'u 'v :
  * H >- e1 = e2 in w:A * B
  * H, u:A, v: B[u], a: e1 = (u, v) in w:A * B >- b1[u; v] = b2[u; v] in T[u, v]
  *)
-rule spreadEquality 'H lambda{z. 'T['z]} (w:'A * 'B['w]) 'u 'v 'a :
+rule spreadEquality 'H bind{z. 'T['z]} (w:'A * 'B['w]) 'u 'v 'a :
    sequent [squash] { 'H >- 'e1 = 'e2 in w:'A * 'B['w] } -->
    sequent [squash] { 'H; u: 'A; v: 'B['u]; a: 'e1 = ('u, 'v) in w:'A * 'B['w] >-
              'b1['u; 'v] = 'b2['u; 'v] in 'T['u, 'v] } -->

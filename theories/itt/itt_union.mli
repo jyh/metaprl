@@ -158,12 +158,12 @@ rule unionElimination 'H 'J 'x 'u 'v :
 
 (*
  * H >- decide(e1; u1. l1[u1]; v1. r1[v1]) = decide(e2; u2. l2[u2]; v2. r2[v2]) in T[e1]
- * by unionEquality lambda(z. T[z]) (A + B) u v w
+ * by unionEquality bind(z. T[z]) (A + B) u v w
  * H >- e1 = e2 in A + B
  * H, u:A, w: e1 = inl u in A + B >- l1[u] = l2[u] in T[inl u]
  * H, v:A, w: e1 = inr v in A + B >- r1[v] = r2[v] in T[inr v]
  *)
-rule decideEquality 'H lambda{z. 'T['z]} ('A + 'B) 'u 'v 'w :
+rule decideEquality 'H bind{z. 'T['z]} ('A + 'B) 'u 'v 'w :
    sequent [squash] { 'H >- 'e1 = 'e2 in 'A + 'B } -->
    sequent [squash] { 'H; u: 'A; w: 'e1 = inl{'u} in 'A + 'B >- 'l1['u] = 'l2['u] in 'T[inl{'u}] } -->
    sequent [squash] { 'H; v: 'B; w: 'e1 = inr{'v} in 'A + 'B >- 'r1['v] = 'r2['v] in 'T[inr{'v}] } -->

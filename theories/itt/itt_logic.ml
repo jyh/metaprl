@@ -772,7 +772,7 @@ let rec intersects vars fv =
  *
  *    $$
  *    @rulebox{moveToConclT; i;
- *    @sequent{ext; {H; j@colon @int}; @all i@colon @int. (i < j) @Rightarrow T_2[i]};
+ *    @sequent{ext; {H; j@colon @int}; @all{i; @int; (i < j) @Rightarrow T_2[i]}};
  *    @sequent{ext; {H; i@colon @int; j@colon @int; w@colon i < j}; T_2[i]}}
  *    $$
  *
@@ -838,7 +838,7 @@ let moveToConclT i p =
  *       @sequent{squash; {H; x_1@colon T_1; @cdots; x_{n - 1}@colon T_{n - 1}}; @type{T_n}}@cr
  *       @vdots@cr
  *       @sequent{squash; H; @type{T_1}};
- *       @sequent{ext; H; @all x_1@colon T_1. @ldots @all x_n@colon T_n. T_{n + 1}}}
+ *       @sequent{ext; H; @all{x_1; T_1; @ldots @all{x_n; T_n; T_{n + 1}}}}}
  *      $$}}
  * @end[description]
  * @docoff
@@ -885,14 +885,14 @@ let genUnivCDT =
  *
  *      $$
  *      @rulebox{instHypT; t_1@space @cdots  t_n;
- *       @sequent{ext; {H; y@colon @all x_1@colon T_1. @ldots . T_{n + 1}[x_1, @ldots, x_n]; J[y];
+ *       @sequent{ext; {H; y@colon @all{x_1; T_1; @ldots T_{n + 1}[x_1, @ldots, x_n]}; J[y];
  *                      z@colon T_{n + 1}[t_1, @ldots, t_n]}; C}@cr
- *       @sequent{squash; {H; y@colon @all x_1@colon T_1. @ldots . T_{n + 1}[x_1, @ldots, x_n]; J[y]};
+ *       @sequent{squash; {H; y@colon @all{x_1; T_1; @ldots T_{n + 1}[x_1, @ldots, x_n]}; J[y]};
  *                        t_1 @in T_1}@cr
  *       @vdots@cr
- *       @sequent{squash; {H; y@colon @all x_1@colon T_1. @ldots . T_{n + 1}[x_1, @ldots, x_n]; J[y]};
+ *       @sequent{squash; {H; y@colon @all{x_1; T_1; @ldots . T_{n + 1}[x_1, @ldots, x_n]}; J[y]};
  *                        t_n @in T_n};
- *       @sequent{ext; {H; y@colon @all x_1@colon T_1. @ldots . T_{n + 1}[x_1, @ldots, x_n]; J[y]}; C}}
+ *       @sequent{ext; {H; y@colon @all{x_1; T_1; @ldots . T_{n + 1}[x_1, @ldots, x_n]}; J[y]}; C}}
  *      $$}}
  * @end[description]
  * @docoff
@@ -1053,12 +1053,12 @@ let rec match_goal args form goal =
  *
  *      $$
  *      @rulebox{backThruHypT; i;
- *       @sequent{squash; {H; y@colon @all x_1@colon T_1. @ldots . T_{n + 1}[x_1, @ldots, x_n]; J[y]};
+ *       @sequent{squash; {H; y@colon @all{x_1; T_1; @ldots . T_{n + 1}[x_1, @ldots, x_n]}; J[y]};
  *                         t_1 @in T_1}@cr
  *       @vdots@cr
- *       @sequent{squash; {H; y@colon @all x_1@colon T_1. @ldots . T_{n + 1}[x_1, @ldots, x_n]; J[y]};
+ *       @sequent{squash; {H; y@colon @all{x_1; T_1; @ldots . T_{n + 1}[x_1, @ldots, x_n]}; J[y]};
  *                         t_n @in T_n};
- *       @sequent{ext; {H; y@colon @all x_1@colon T_1. @ldots . T_{n + 1}[x_1, @ldots, x_n]; J[y]};
+ *       @sequent{ext; {H; y@colon @all{x_1; T_1; @ldots . T_{n + 1}[x_1, @ldots, x_n]}; J[y]};
  *                      T_{n + 1}[t_1, @ldots, t_n]}}
  *      $$
  *
@@ -1114,24 +1114,24 @@ let backThruHypT i p =
  *
  *      $$
  *      @rulebox{assumT; i;
- *       @sequent{{H; @ldots}; T_1}@cr
+ *       @sequent{'ext; {H; @ldots}; T_1}@cr
  *       @vdots@cr
- *       @sequent{{H; x_1@colon A_1; @cdots; x_n@colon A_n}; T_i}@cr
+ *       @sequent{'ext; {H; x_1@colon A_1; @cdots; x_n@colon A_n}; T_i}@cr
  *       @vdots@cr
- *       @sequent{{H; @ldots}; T_m}@cr
+ *       @sequent{'ext; {H; @ldots}; T_m}@cr
  *       @hline
- *       @sequent{{H; J; w@colon @all x_1@colon A_1. @ldots. @all x_n@colon A_n. T_i}; C}@cr
- *       @sequent{{H; J}; @type{A_1}}@cr
+ *       @sequent{'ext; {H; J; w@colon @all{x_1; A_1; @ldots. @all{x_n; A_n; T_i}}}; C}@cr
+ *       @sequent{squash; {H; J}; @type{A_1}}@cr
  *       @vdots@cr
- *       @sequent{{H; J}; @type{A_n}};
+ *       @sequent{squash; {H; J}; @type{A_n}};
  *
- *       @sequent{{H; @ldots}; T_1}@cr
+ *       @sequent{'ext; {H; @ldots}; T_1}@cr
  *       @vdots@cr
- *       @sequent{{H; x_1@colon A_1; @cdots; x_n@colon A_n}; T_i}@cr
+ *       @sequent{'ext; {H; x_1@colon A_1; @cdots; x_n@colon A_n}; T_i}@cr
  *       @vdots@cr
- *       @sequent{{H; @ldots}; T_m}@cr
+ *       @sequent{'ext; {H; @ldots}; T_m}@cr
  *       @hline
- *       @sequent{{H; J}; C}}
+ *       @sequent{'ext; {H; J}; C}}
  *      $$}}
  * @end[description]
  * @docoff
@@ -1229,7 +1229,7 @@ let backThruAssumT i p =
  *    @vdots@cr
  *    @sequent{ext; {H; @ldots}; T_n}@cr
  *    @hline
- *    @sequent{ext; H; @all x@colon T_i. C};
+ *    @sequent{ext; H; @all{x; T_i; C}};
  *
  *    @sequent{ext; {H; @ldots}; T_1}@cr
  *    @vdots@cr

@@ -80,8 +80,9 @@ dform type_wildcard_df2 : internal :: type_wildcard[start:n, finish:n] =
 (*
  * Application.
  *)
-declare type_apply_list
+declare type_apply_list{'t}
 declare type_apply_aux{'t1; 't2}
+declare type_apply_aux{'t1}
 
 dform type_apply_df1 : parens :: "prec"[prec_apply] :: type_apply{'t1; 't2} =
    type_apply_aux{'t1; cons{'t2; nil}}
@@ -209,6 +210,7 @@ dform type_prod_df2 : internal :: type_prod[start:n, finish:n]{'tl} =
 (*
  * Disjoint unions.
  *)
+declare stl{'lst}
 declare type_list_aux{'stll}
 
 dform type_list_df1 : internal :: type_list{cons{'stl; 'stll}} =

@@ -119,7 +119,7 @@ rewrite reduce_rem : "rem"{number[i:n]; number[j:n]} <-->
 *)
 
 rewrite reduce_lt : "lt"{number[i:n]; number[j:n]} <-->
-   meta_lt{number[i:n]; number[j:n]}
+   meta_lt{number[i:n]; number[j:n]; btrue; bfalse}
 
 (*
 rewrite reduce_eq : (number[i:n] = number[j:n] in int) <-->

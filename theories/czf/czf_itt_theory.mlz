@@ -161,8 +161,8 @@
  * @thysubsection{Encoding}
  *
  * The type of sets is defined in @hreftheory[Czf_itt_set] module as the
- * $W$-type $@set @equiv @w{T; @univ_1; T}$.  That is, each set has an
- * index type $T @in @univ_1$, and a function $T @rightarrow @set$ that
+ * $W$-type $@set @equiv @w{T; @univ{1}; T}$.  That is, each set has an
+ * index type $T @in @univ{1}$, and a function $T @rightarrow @set$ that
  * lists the elements of the set.
  *
  * @thysubsection{Propositions}
@@ -206,7 +206,7 @@
  *    a @emph{restricted} proposition for any set $x$.  The definition of
  *    restriction is equivalent to Aczel's definition (that $P[x]$ contain
  *    no unrestricted quantifiers), but we give it a somewhat more general
- *    definition $@restricted{P} @equiv P @in @univ_1$.  This definition is
+ *    definition $@restricted{P} @equiv P @in @univ{1}$.  This definition is
  *    never exposed in the set theory; we provide rules for proving
  *    restriction for each of the restricted logical operators.}}
  *

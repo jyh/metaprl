@@ -10,18 +10,18 @@
  * the type of all sets, defined using the $W$-type in
  * the module @hreftheory[Itt_w], as follows:
  *
- * $$@set @equiv @w{T; @univ_1; T}.$$
+ * $$@set @equiv @w{T; @univ{1}; T}.$$
  *
- * That is, the @emph{sets} are pairs of a type $T @in @univ_1$,
+ * That is, the @emph{sets} are pairs of a type $T @in @univ{1}$,
  * and a function $T @rightarrow @set$ that specifies the
  * elements of the set.  Note that the type $T$ can be @emph{any}
- * type in $@univ_1$; equality of sets is is general undecidable, and
+ * type in $@univ{1}$; equality of sets is is general undecidable, and
  * their members can't necessarily be enumerated.  This is a
  * @emph{constructive} theory, not a decidable theory.  Of course,
  * there will be special cases where equality of sets is decidable.
  *
  * The sets are defined with the terms $@collect{x; T; f[x]}$, where
- * $T$ is a type in $@univ_1$, and $f[x]$ is a set for any index $x @in T$.
+ * $T$ is a type in $@univ{1}$, and $f[x]$ is a set for any index $x @in T$.
  * The sets $f[x]$ are the @emph{elements} of the set, and $T$ is
  * the a type used as their index.  For example, the following set
  * is empty.
@@ -70,7 +70,7 @@
  * set operations.
  *
  * One avenue for improvement in this theory would be to stratify
- * the set types to arbitrary type universes $@univ_i$, which would
+ * the set types to arbitrary type universes $@univ{i}$, which would
  * allow for higher-order reasoning on sets, classes, etc.
  * @end[doc]
  *
@@ -271,7 +271,7 @@ interactive isset_assum 'H 'J :
 (*!
  * @begin[doc]
  * The @hrefterm[collect] terms are well-formed, if their
- * index type $T$ is a type in $@univ_1$, and their element function
+ * index type $T$ is a type in $@univ{1}$, and their element function
  * $a$ produces a set for any argument $x @in T$.
  * @end[doc]
  *)
@@ -346,9 +346,9 @@ interactive set_split_concl 'H 's (bind{v. 'C['v]}) 'T 'f 'z :
  * @thysubsection{Combinator equality}
  * The induction combinator computes a value of type $T$ if its
  * argument $z$ is a set, and the body $b[z, f, g]$ computes a value
- * of type $T$, for any type $z @in @univ_1$, any function
+ * of type $T$, for any type $z @in @univ{1}$, any function
  * $f @in z @rightarrow @set$, and a recursive invocation
- * $g @in x@colon @univ_1 @rightarrow x @rightarrow T$.
+ * $g @in x@colon @univ{1} @rightarrow x @rightarrow T$.
  * @end[doc]
  *)
 interactive set_ind_equality2 {| intro_resource [] |} 'H :

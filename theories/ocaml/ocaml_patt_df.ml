@@ -23,6 +23,9 @@
  *       fix{x. let{pl; x}}, where
  *       pl = patt_arg{...; patt_end{... patt_match{e1; ... patt_in{e}}}}
  *
+ * BUG!!! nogin: the actual code in filter/base/filter_ocaml does
+ * something else, there is no bound variable in the fix term in creates!
+ *
  * These three forms are different, but we can combine their
  * display forms somewhat.
  *
@@ -33,6 +36,11 @@
  *       being constructed
  *
  * For the "let" form, we initialize the stack with the list "el".
+ *
+ * BUG!!! I edited a lot of these display forms when I added
+ * the argument-checking code to parser, but haven't really tested them.
+ * I am pretty sure I broke some of the display forms and they would have to
+ * be fixed if we want them back.
  *
  * ----------------------------------------------------------------
  *
@@ -75,13 +83,18 @@ let _ =
 (*
  * Special forms.
  *)
-declare "as"
+declare "as"{'a;'b}
 declare wildcard
-declare rcons
-declare range
+declare rcons{'a;'b}
+declare range{'a;'b}
 declare patt_let
 declare patt_fix
 declare patt_reverse
+declare patt_else
+declare patt_char[s:s]{'p1}
+declare patt_int[i:n]{'p1}
+declare patt_string[s:s]{'p1}
+declare patt_float[s:s]{'p1}
 
 (*
  * Final form.
@@ -89,7 +102,7 @@ declare patt_reverse
 dform patt_null_df1 : internal :: patt_format{nil; nil} =
    `""
 
-dform patt_null_df2 : internal :: patt_format{nil; patt_ifelse} =
+dform patt_null_df2 : internal :: patt_format{nil; patt_else} =
    `""
 
 (*
@@ -150,7 +163,7 @@ dform patt_proj_arg_df1 : internal :: patt_format{patt_proj_arg{'p1}; 'p2} =
    patt_format{'p1; 'p2}
 
 dform patt_proj_end_df1 : internal :: patt_format{patt_proj_end{'p1}; cons{'p2; cons{'p3; 'p4}}} =
-   patt_proj{'p1; cons{proj{'p2; 'p3}; 'p4}}
+   patt_format{'p1; cons{proj{'p2; 'p3}; 'p4}}
 
 dform patt_proj_df2 : internal :: patt_format{patt_proj[start:n, finish:n]{'p1}; 'p2} =
    patt_format{patt_proj{'p1}; 'p2}
@@ -222,7 +235,7 @@ dform patt_choice_df1 : internal :: patt_format{patt_choice{'p1}; 'p2} =
    patt_format{'p1; cons{nil; 'p2}}
 
 dform patt_choice_arg_df1 : internal :: patt_format{patt_choice_arg{'p1}; cons{'p2; 'p3}} =
-   patt_choice{'p1; 'p2; 'p3}
+   patt_format{'p1; cons{'p2; 'p3}}
 
 dform patt_choice_end_df1 : internal :: patt_format{patt_choice_end{'p1}; cons{'p2; cons{'p3; 'p4}}} =
    patt_format{'p1; cons{rcons{'p2; 'p3}; 'p4}}
@@ -264,7 +277,7 @@ dform patt_list_df1 : internal :: patt_format{patt_list{'p1}; 'p2} =
    patt_format{'p1; 'p2}
 
 dform patt_list_arg_df1 : internal :: patt_format{patt_list_arg{'p1}; cons{'p2; 'p3}} =
-   patt_list{'p1; 'p2; 'p3}
+   patt_format{'p1; cons{'p2; 'p3}}
 
 dform patt_list_end_df1 : internal :: patt_format{patt_list_end{'p1}; cons{'p2; cons{'p3; 'p4}}} =
    patt_format{'p1; cons{rcons{'p2; 'p3}; 'p4}}
@@ -281,6 +294,8 @@ dform patt_list_end_df2 : internal :: patt_format{patt_list_end[start:n, finish:
 (*
  * Tuple pattern.
  *)
+declare patt_tuple{'p1; 'p2; 'p3; 'p4}
+
 dform patt_tuple_df1 : internal :: patt_format{patt_tuple{'p1}; 'p2} =
    patt_format{'p1; cons{nil; 'p2}}
 
@@ -357,6 +372,8 @@ dform patt_in_df2 : internal :: patt_format{patt_in[start:n, finish:n]{'e1}; 'e2
 (*
  * "Fix" forms.
  *)
+declare patt_fix_arg
+
 dform patt_fix_and_df1 : internal :: patt_format{patt_fix_and{'p1}; 'p2} =
    patt_format{'p1; 'p2}
 
@@ -393,15 +410,15 @@ dform patt_with_df1 : internal :: patt_format{patt_with{'e1; 'e2}; 'pwel} =
    "_with" `" " szone slot{'e1} ezone "->" `" " szone slot{'e2} ezone
    patt_format{'pwel; nil}
 
-dform patt_ifelse_df2 : internal :: patt_format{patt_ifelse{'pwe; 'pwel}; patt_ifelse} =
+dform patt_ifelse_df2 : internal :: patt_format{patt_ifelse{'pwe; 'pwel}; patt_else} =
    hspace "|" `" " szone patt_format{'pwe; 'pwel} ezone
 
-dform patt_if_df2 : internal :: patt_format{patt_if{'pwe}; patt_ifelse} =
+dform patt_if_df2 : internal :: patt_format{patt_if{'pwe}; patt_else} =
    hspace "|" `" " szone patt_format{'pwe; nil} ezone
 
 dform patt_body_df1 : internal :: patt_format{patt_body{'e1}; cons{'e2; 'pwel}} =
    szone slot{'e2} ezone `" " "->" hspace szone slot{'e1} ezone
-   patt_format{'pwel; patt_ifelse}
+   patt_format{'pwel; patt_else}
 
 dform patt_ifelse_df3 : internal :: patt_format{patt_ifelse[start:n, finish:n]{'pwe; 'pwel}; 'e} =
    patt_format{patt_ifelse{'pwe; 'pwel}; 'e}
@@ -409,8 +426,8 @@ dform patt_ifelse_df3 : internal :: patt_format{patt_ifelse[start:n, finish:n]{'
 dform patt_if_df3 : internal :: patt_format{patt_if[start:n, finish:n]{'pwe}; 'e} =
    patt_format{patt_if{'pwe}; 'e}
 
-dform patt_with_df3 : internal :: patt_format{patt_with[start:n, finish:n]{'pwe}; 'e} =
-   patt_format{patt_with{'pwe}; 'e}
+dform patt_with_df3 : internal :: patt_format{patt_with[start:n, finish:n]{'e1; 'e2}; 'e} =
+   patt_format{patt_with{'e1;'e2}; 'e}
 
 dform patt_body_df3 : internal :: patt_format{patt_body[start:n, finish:n]{'e}; 'pwel} =
    patt_format{patt_body{'e}; 'pwel}

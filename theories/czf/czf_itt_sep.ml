@@ -17,7 +17,7 @@
  * $P[x]$ is restricted if it contains no @emph{unbounded}
  * quantifiers $@forall s@ldots$ and $@exists s@ldots$.  In
  * our construction, a predicate $P$ is restricted if it
- * is a well-formed proposition in $@univ_1$.
+ * is a well-formed proposition in $@univ{1}$.
  *
  * The separation constructor $@sep{z; @collect{x; T; f[x]}; P[z]}$
  * is defined with the product type as the set
@@ -118,7 +118,7 @@ let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_i
 (*!
  * @begin[doc]
  * The $@restricted{P}$ predicate means that the proposition is
- * well-formed in $@univ_1$.
+ * well-formed in $@univ{1}$.
  * @end[doc]
  *)
 prim_rw unfold_restricted : restricted{'P} <-->
@@ -137,9 +137,6 @@ dform sep_df : except_mode[src] :: sep{'s; x. 'P} =
 
 dform restricted_df : except_mode[src] :: parens :: "prec"[prec_quant] :: restricted{'P} =
    `"<" slot{'P} `">"
-
-dform restricted_df : except_mode[src] :: parens :: "prec"[prec_quant] :: restricted{z. 'P} =
-   Nuprl_font!forall slot{'z} `"." restricted{'P}
 
 (************************************************************************
  * RULES                                                                *

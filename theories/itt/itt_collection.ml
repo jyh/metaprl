@@ -996,14 +996,19 @@ interactive singlenton_if  'H univ[l:l] :
 
 (********************** dforms **********************)
 
+declare display_col{'T}
 
-dform col_df : except_mode[src] :: Col[l:l]{'T} =`"Collection[" slot[l:l] `"](" slot{'T} `")"
-dform col_df : except_mode[src] :: Col{'T} =`"Collection(" slot{'T} `")"
+dform col_df : except_mode[src] :: Col[l:l]{'T} =
+   `"Collection[" slot[l:l] `"](" slot{'T} `")"
 
-dform col_member_df : except_mode[src] :: Col_member[l:l]{'T;'C;'x} = ('x IN 'C) `" in " Col[l:l]{'T}
+dform col_member_df : except_mode[src] :: Col_member[l:l]{'T;'C;'x} =
+   ('x IN 'C) `" in " Col[l:l]{'T}
 
-dform col_equal_df : except_mode[src] :: col_equal{'T;'c_1;'c_2} = equal{col{'T};'c_1;'c_2}
+dform col_equal_df : except_mode[src] :: col_equal{'T;'c_1;'c_2} =
+   equal{display_col{'T};'c_1;'c_2}
 
+dform display_col_df : display_col{'T} =
+   `"collection{" slot{'T} `"}"
 
 dform type_col_df : except_mode[src] :: type_col{'T} = downarrow slot{'T}
 dform col_type_df : except_mode[src] :: col_type{'C;'T} = uparrow slot{'C}

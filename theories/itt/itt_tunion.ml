@@ -13,9 +13,9 @@
  * in each of the cases $B[x]$.  That is, two elements are equal
  * in the union if they are equal in @emph{any} of the cases.  This
  * may be surprising.  For example, the type
- * $$@tunion{T; @univ_i; T @rightarrow T}$$
+ * $$@tunion{T; @univ{i}; T @rightarrow T}$$
  * may seem to contain all of the polymorphic functions
- * with type $T @rightarrow T$, for any $T @in @univ_i$.
+ * with type $T @rightarrow T$, for any $T @in @univ{i}$.
  * It does--but the union also contains the type case
  * $@fun{@void; @void}$, in which all functions are equal.
  * As a consequence, the union space also has the trivial

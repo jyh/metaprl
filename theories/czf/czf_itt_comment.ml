@@ -161,10 +161,10 @@ dform member_df1 : mode[tex] :: math_member{'s1; 's2} =
    slot{'s2}
    izone `"}" ezone
 
-dform mem_df : except_mode[tex] :: parens :: "prec"[prec_apply] :: member{'x; 't} =
+dform mem_df : except_mode[tex] :: parens :: "prec"[prec_apply] :: math_mem{'x; 't} =
    slot{'x} " " Nuprl_font!member `"s" " " slot{'t}
 
-dform member_df : except_mode[tex] :: parens :: "prec"[prec_apply] :: member{'x; 't} =
+dform member_df : except_mode[tex] :: parens :: "prec"[prec_apply] :: math_member{'x; 't} =
    slot{'x} " " Nuprl_font!member `"S" " " slot{'t}
 
 (************************************************************************
@@ -207,7 +207,9 @@ declare math_simplies{'A; 'B}
 declare math_snot{'A}
 declare math_siff{'A; 'B}
 declare math_sall{'x; 'A; 'B}
+declare math_sall{'x; 'A}
 declare math_sexists{'x; 'A; 'B}
+declare math_sexists{'x; 'A}
 declare math_dall{'x; 'A; 'B}
 declare math_dexists{'x; 'A; 'B}
 
@@ -394,6 +396,7 @@ dform union_df4 : except_mode[tex] :: parens :: "prec"[prec_or] :: math_union{'s
  * INTERSECTION
  ************************************************************************)
 
+declare math_isect{'s1; 's2}
 declare math_isect{'s}
 
 dform isect_df1 : mode[tex] :: math_isect{'s} =
@@ -504,7 +507,7 @@ dform rel_df1 : mode[tex] :: math_rel{'x; 'y; 'P; 's1; 's2} =
    slot{'P}
    izone `")}" ezone
 
-dform rel_df : except_mode[tex] :: parens :: "prec"[prec_quant] :: math_rel{a, b. 'P; 's1; 's2} =
+dform rel_df : except_mode[tex] :: parens :: "prec"[prec_quant] :: math_rel{'a; 'b; 'P; 's1; 's2} =
    szone pushm[3]
    Nuprl_font!mathbbB slot{'a} " " Nuprl_font!member slot{'s1} `"," hspace
    slot{'b} " " Nuprl_font!member " " slot{'s2} `"." hspace

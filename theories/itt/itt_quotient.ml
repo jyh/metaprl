@@ -29,8 +29,8 @@
  *
  * $$
  * @begin[array, lllll]
- * @line{@i{Set}  @equiv T               @colon @item{@univ_i}}
- * @line{{}       @times @i{member}      @colon @item{T @rightarrow @int @rightarrow @univ_i}}
+ * @line{@i{Set}  @equiv T               @colon @item{@univ{i}}}
+ * @line{{}       @times @i{member}      @colon @item{T @rightarrow @int @rightarrow @univ{i}}}
  * @line{{}       @times @i{empty}       @colon T}
  * @line{{}       @times @i{add}         @colon @item{T @rightarrow @int @rightarrow T}}
  * @line{{}       @times @i{empty_axiom} @colon
@@ -79,7 +79,7 @@
  * $$
  * @begin[array, lcl]
  * @line{{@i{empty}'}  @colon @item{@i{Set} @rightarrow @i{Set}'}}
- * @line{{@i{member}'} @colon @item{@i{Set}' @rightarrow @int @rightarrow @univ_i}}
+ * @line{{@i{member}'} @colon @item{@i{Set}' @rightarrow @int @rightarrow @univ{i}}}
  * @line{{@i{add}'}    @colon @item{@i{Set}' @rightarrow @int @rightarrow @i{Set}'}}
  * @end[array]
  * $$

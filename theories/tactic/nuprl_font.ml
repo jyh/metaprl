@@ -73,35 +73,46 @@ declare pagebreak
  *    bf_begin "[" bf_end
  *)
 declare info[name:s]
+declare info{'t}
 declare info_begin
 declare info_end
 declare keyword[name:s]
+declare keyword{'t}
 declare keyword_begin
 declare keyword_end
 declare bf[name:s]
+declare bf{'t}
 declare bf_begin
 declare bf_end
 declare i[name:s]
+declare i{'t}
 declare it[name:s]
+declare it{'t}
 declare it_begin
 declare it_end
 declare sym[name:s]
+declare sym{'t}
 declare sym_begin
 declare sym_end
-declare em[name:s]
+declare em[s:s]
+declare em{'s}
 declare em_begin
 declare em_end
 declare emph{'t}
 declare tt[name:s]
+declare tt{'t}
 declare tt_begin
 declare tt_end
 declare sub[name:s]
+declare sub{'t}
 declare sub_begin
 declare sub_end
 declare sup[name:s]
+declare sup{'t}
 declare sup_begin
 declare sup_end
 declare small[name:s]
+declare small{'t}
 declare small_begin
 declare small_end
 
@@ -422,6 +433,7 @@ dform small_df2 : internal :: small{'t} =
 
 declare mathBB[name:s]
 declare ensuremath[name:s]
+declare ensuremath{'t}
 declare mathmacro[name:s]
 
 dform mathBB_df : internal :: mode[tex] :: mathBB[text:s] =

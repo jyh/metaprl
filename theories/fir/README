@@ -47,7 +47,7 @@ Notable differences from the actual Mojave FIR:
    whose subterms are lists.  In some cases, if these lists are
    empty, the term is degenerate in some sense, e.g TyExists ([], t).
    For my own sanity, I'm not going to consider such degenerate terms,
-   and instead, I will assume everything is a normalized form.
+   and instead, I will assume everything is in a normalized form.
 
 -- No term is declared for TyDelayed.  This is intentional, since we
    we do not plan on formalizing type inference in the near future.

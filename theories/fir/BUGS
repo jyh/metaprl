@@ -19,7 +19,7 @@ at the end, things that might be considered bugs, but really aren't.
       pointerOfBlockOp     lengthOfBlockOp
    These should go in Mfir_exp.  (They depend on subops.)
 
--- No term is declared for the binary operators plusPointerOp.
+-- No term is declared for the binary operator plusPointerOp.
    It should go in Mfir_exp.  (It depends on subops.)
 
 
@@ -27,6 +27,8 @@ Things that might look like bugs, but really aren't
 (see the README for further information):
 
 -- The term tyDelayed is not declared.
+
+-- The term atomFloat encodes the value as a string.
 
 -- The term atomFun is declared.
 

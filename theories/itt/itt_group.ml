@@ -639,14 +639,14 @@ interactive lcoset_intro {| intro [intro_typeinf <<'G>>] |} group[i:l] 'x :
    [main] sequent [squash] { <H> >- subgroup[i:l]{'S; 'G} } -->
    [wf] sequent [squash] { <H> >- 'b in 'G^car } -->
    [wf] sequent [squash] { <H> >- 'x in 'G^car } -->
-   [main] sequent [squash] { <H> >- exst a: 'S^car. 'x = 'b *['G] 'a in 'G^car } -->
+   [main] sequent ['ext] { <H> >- exst a: 'S^car. 'x = 'b *['G] 'a in 'G^car } -->
    sequent ['ext] { <H> >- lcoset{'S; 'G; 'b} }
 
 interactive rcoset_intro {| intro [intro_typeinf <<'G>>] |} group[i:l] 'x :
    [main] sequent [squash] { <H> >- subgroup[i:l]{'S; 'G} } -->
    [wf] sequent [squash] { <H> >- 'b in 'G^car } -->
    [wf] sequent [squash] { <H> >- 'x in 'G^car } -->
-   [main] sequent [squash] { <H> >- exst a: 'S^car. 'x = 'a *['G] 'b in 'G^car } -->
+   [main] sequent ['ext] { <H> >- exst a: 'S^car. 'x = 'a *['G] 'b in 'G^car } -->
    sequent ['ext] { <H> >- rcoset{'S; 'G; 'b} }
 
 interactive lcoset_member_intro {| intro [intro_typeinf <<'G>>] |} group[i:l] 'a :
@@ -814,17 +814,16 @@ interactive isGroupHom_elim {| elim [] |} 'H :
    [main] sequent ['ext] { <H>; x: isGroupHom{'f; 'A; 'B}; y: all u: 'A^car. all v: 'A^car. ('f ('u *['A] 'v)) = ('f 'u) *['B] ('f 'v) in 'B^car; <J['x]> >- 'C['x] } -->
    sequent ['ext] { <H>; x: isGroupHom{'f; 'A; 'B}; <J['x]> >- 'C['x] }
 
-interactive groupHom_intro {| intro [] |} :
-   sequent [squash] { <H> >- "type"{'A^car} } -->
-   sequent [squash] { <H> >- "type"{'B^car} } -->
+interactive groupHom_intro {| intro [intro_typeinf <<'A>>] |} group[i:l] :
+   [wf] sequent [squash] { <H> >- 'A in group[i:l] } -->
+   [wf] sequent [squash] { <H> >- 'B in group[i:l] } -->
    sequent [squash] { <H> >- 'f in 'A^car -> 'B^car } -->
-   sequent [squash] { <H>; x: 'A^car; y: 'A^car >- 'x *['A] 'y in 'A^car} -->
-   sequent [squash] { <H>; x: 'B^car; y: 'B^car >- 'x *['B] 'y in 'B^car} -->
    [main] sequent ['ext] { <H> >- isGroupHom{'f; 'A; 'B} } -->
    sequent ['ext] { <H> >- 'f in groupHom{'A; 'B} }
 
-interactive groupHom_elim {| elim [] |} 'H :
-   [wf] sequent [squash] { <H>; f: groupHom{'A; 'B}; <J['f]> >- "type"{'A^car} } -->
+interactive groupHom_elim {| elim [elim_typeinf <<'B>>] |} 'H group[i:l] :
+   [wf] sequent [squash] { <H>; f: groupHom{'A; 'B}; <J['f]> >- 'A in group[i:l] } -->
+   [wf] sequent [squash] { <H>; f: groupHom{'A; 'B}; <J['f]> >- 'B in group[i:l] } -->
    [main] sequent ['ext] { <H>; f: 'A^car -> 'B^car; u: all x: 'A^car. all y: 'A^car. ('f ('x *['A] 'y)) = ('f 'x) *['B] ('f 'y) in 'B^car; <J['f]> >- 'C['f] } -->
    sequent ['ext] { <H>; f: groupHom{'A; 'B}; <J['f]> >- 'C['f] }
 
@@ -977,18 +976,92 @@ interactive isBijective_elim {| elim [] |} 'H :
    [main] sequent ['ext] { <H>; p: isBijective{'f; 'A; 'B}; v: all x: 'A^car. all y: 'A^car. ('f 'x = 'f 'y in 'B^car => 'x = 'y in 'A^car); w: all z: 'B^car. exst u: 'A^car. ('z = 'f 'u in 'B^car); <J['p]> >- 'C['p] } -->
    sequent ['ext] { <H>; p: isBijective{'f; 'A; 'B}; <J['p]> >- 'C['p] }
 
-interactive groupIso_intro {| intro [] |} :
-   [wf] sequent [squash] { <H> >- "type"{'A^car} } -->
-   [wf] sequent [squash] { <H> >- "type"{'B^car} } -->
+
+interactive groupIso_intro {| intro [intro_typeinf <<'A>>] |} group[i:l] :
+   [wf] sequent [squash] { <H> >- 'A in group[i:l] } -->
+   [wf] sequent [squash] { <H> >- 'B in group[i:l] } -->
    [wf] sequent [squash] { <H> >- 'f in groupHom{'A; 'B} } -->
    [main] sequent ['ext] { <H> >- isBijective{'f; 'A; 'B} } -->
    sequent ['ext] { <H> >- 'f in groupIso{'A; 'B} }
 
-interactive groupIso_elim {| elim [] |} 'H :
-   [wf] sequent [squash] { <H>; f: groupIso{'A; 'B}; <J['f]> >- "type"{'A^car} } -->
-   [wf] sequent [squash] { <H>; f: groupIso{'A; 'B}; <J['f]> >- "type"{'B^car} } -->
+interactive groupIso_elim {| elim [elim_typeinf <<'B>>] |} 'H group[i:l] :
+   [wf] sequent [squash] { <H>; f: groupIso{'A; 'B}; <J['f]> >- 'A in group[i:l] } -->
+   [wf] sequent [squash] { <H>; f: groupIso{'A; 'B}; <J['f]> >- 'B in group[i:l] } -->
    [main] sequent ['ext] { <H>; f: groupHom{'A; 'B}; u: squash{isBijective{'f; 'A; ' B}}; <J['f]> >- 'C['f] } -->
    sequent ['ext] { <H>; f: groupIso{'A; 'B}; <J['f]> >- 'C['f] }
+
+doc <:doc< @docoff >>
+
+(************************************************************************
+ * GROUP KERNEL                                                         *
+ ************************************************************************)
+
+doc <:doc< 
+   @begin[doc]
+   @modsection{Group kernel}
+   @modsubsection{Rewrites}
+  
+   @end[doc]
+>>
+define unfold_groupKer : groupKer{'f; 'A; 'B} <-->
+   { x: 'A^car | 'f 'x = 'B^"1" in 'B^car }
+
+doc <:doc< @docoff >>
+
+let fold_groupKer = makeFoldC << groupKer{'f; 'A; 'B}  >> unfold_groupKer
+
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Well-formedness}
+  
+   @end[doc]
+>>
+interactive groupKer_wf {| intro [] |} :
+   sequent [squash] { <H> >- "type"{'A^car} } -->
+   sequent [squash] { <H> >- 'f in 'A^car -> 'B^car } -->
+   sequent [squash] { <H> >- 'B^"1" in 'B^car } -->
+   sequent ['ext] { <H> >- "type"{groupKer{'f; 'A; 'B}} }
+
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Introduction and Elimination}
+  
+   @end[doc]
+>>
+interactive groupKer_intro {| intro [intro_typeinf <<'A>>] |} group[i:l] 'x :
+   sequent [squash] { <H> >- 'A in group[i:l] } -->
+   sequent [squash] { <H> >- 'B in group[i:l] } -->
+   sequent [squash] { <H> >- 'f in groupHom{'A; 'B} } -->
+   sequent [squash] { <H> >- 'x in 'A^car } -->
+   sequent [squash] { <H> >- 'f 'x = 'B^"1" in 'B^car } -->
+   sequent ['ext] { <H> >- groupKer{'f; 'A; 'B} }
+
+interactive groupKer_member_intro {| intro [intro_typeinf <<'A>>] |} group[i:l] :
+   sequent [squash] { <H> >- 'A in group[i:l] } -->
+   sequent [squash] { <H> >- 'B in group[i:l] } -->
+   sequent [squash] { <H> >- 'f in groupHom{'A; 'B} } -->
+   sequent [squash] { <H> >- 'x1 = 'x2 in 'A^car } -->
+   sequent [squash] { <H> >- 'f 'x1 = 'B^"1" in 'B^car } -->
+   sequent ['ext] { <H> >- 'x1 = 'x2 in groupKer{'f; 'A; 'B} }
+
+interactive groupKer_elim {| elim [elim_typeinf <<'B>>] |} 'H group[i:l] :
+   [wf] sequent [squash] { <H>; x: groupKer{'f; 'A; 'B}; <J['x]> >- 'A in group[i:l] } -->
+   [wf] sequent [squash] { <H>; x: groupKer{'f; 'A; 'B}; <J['x]> >- 'B in group[i:l] } -->
+   [main] sequent ['ext] { <H>; x: 'A^car; u: 'f 'x = 'B^"1" in 'B^car; <J['x]> >- 'C['x] } -->
+   sequent ['ext] { <H>; x: groupKer{'f; 'A; 'B}; <J['x]> >- 'C['x] }
+
+doc <:doc< 
+   @begin[doc]
+   @modsubsection{Rules}
+  
+     Kernel is a subgroup.
+   @end[doc]
+>>
+interactive groupKer_subg :
+   [wf] sequent [squash] { <H> >- 'A in group[i:l] } -->
+   [wf] sequent [squash] { <H> >- 'B in group[i:l] } -->
+   [wf] sequent [squash] { <H> >- 'f in groupHom{'A; 'B} } -->
+   sequent ['ext] { <H> >- subgroup[i:l]{{car=groupKer{'f; 'A; 'B}; "*"='A^"*"; "1"='A^"1"; inv='A^inv}; 'A} }
 
 doc <:doc< @docoff >>
 
@@ -1037,6 +1110,9 @@ dform isBijective_df : except_mode[src] :: isBijective{'f; 'A; 'B} =
 
 dform groupIso_df : except_mode[src] :: groupIso{'A; 'B} =
    math_groupIso{'A; 'B}
+
+dform groupKer_df : except_mode[src] :: groupKer{'f; 'A; 'B} =
+   math_groupKer{'f; 'A; 'B}
 
 (*
  * -*-

@@ -233,6 +233,7 @@ declare math_cycSubg{'g; 'a}
 declare math_isBijective{'f; 'A; 'B}
 declare math_groupHom{'A; 'B}
 declare math_groupIso{'A; 'B}
+declare math_groupKer{'f; 'A; 'B}
 
 (* OTHER *)
 

@@ -1255,6 +1255,7 @@ declare math_cycSubg{'g; 'a}
 declare math_isBijective{'f; 'A; 'B}
 declare math_groupHom{'A; 'B}
 declare math_groupIso{'A; 'B}
+declare math_groupKer{'f; 'A; 'B}
 
 (************************************************
  * TeX mode
@@ -1348,31 +1349,31 @@ dform subgroup_df1 : mode[tex] :: math_subgroup{'i; 's; 'g} =
    izone `")" ezone
 
 dform lcoset_df1 : mode[tex] :: math_lcoset{'h; 'g; 'a} =
-   izone `"{{\\it Left\\_coset}(" ezone
+   izone `"{\\it Left\\_coset}(" ezone
    slot{'h}
    izone `"," ezone
    slot{'g}
    izone `"," ezone
    slot{'a}
-   izone `")}" ezone
+   izone `")" ezone
 
 dform rcoset_df1 : mode[tex] :: math_rcoset{'h; 'g; 'a} =
-   izone `"{{\\it Right\\_coset}(" ezone
+   izone `"{\\it Right\\_coset}(" ezone
    slot{'h}
    izone `"," ezone
    slot{'g}
    izone `"," ezone
    slot{'a}
-   izone `")}" ezone
+   izone `")" ezone
 
 dform normalSubg_df1 : mode[tex] :: math_normalSubg{'i; 's; 'g} =
-   izone `"{{\\it Normal\\_subgroup}_{" ezone
+   izone `"{\\it Normal\\_subgroup}_{" ezone
    slot{'i}
    izone `"}(" ezone
    slot{'s}
    izone `"," ezone
    slot{'g}
-   izone `")}" ezone
+   izone `")" ezone
 
 dform group_power_df1 : mode[tex] :: math_group_power{'g; 'a; 'n} =
    izone `"{" ezone
@@ -1384,30 +1385,23 @@ dform group_power_df1 : mode[tex] :: math_group_power{'g; 'a; 'n} =
    izone `"}" ezone
 
 dform cycGroup_df1 : mode[tex] :: math_cycGroup{'g} =
-   izone `"{{\\it Cyclic\\_group}(" ezone
+   izone `"{\\it Cyclic\\_group}(" ezone
    slot{'g}
-   izone `")}" ezone
+   izone `")" ezone
 
 dform cycSubg_df1 : mode[tex] :: math_cycSubg{'g; 'a} =
-   izone `"{{\\it Cyclic\\_subgroup}(" ezone
+   izone `"{\\it Cyclic\\_subgroup}(" ezone
    slot{'g}
    izone `"," ezone
    slot{'a}
-   izone `")}" ezone
+   izone `")" ezone
 
 dform groupHom_df1 : mode[tex] :: math_groupHom{'A; 'B} =
-   izone `"{{\\it Group\\_homomorphism}(" ezone
+   izone `"{\\it Group\\_homomorphism}(" ezone
    slot{'A}
    izone `"," ezone
    slot{'B}
-   izone `")}" ezone
-
-dform groupIso_df1 : mode[tex] :: math_groupIso{'A; 'B} =
-   izone `"{{\\it Group\\_isomorphism}(" ezone
-   slot{'A}
-   izone `"," ezone
-   slot{'B}
-   izone `")}" ezone
+   izone `")" ezone
 
 dform math_isBijective_df1 : mode[tex] :: math_isBijective{'f; 'A; 'B} =
    'f
@@ -1415,7 +1409,23 @@ dform math_isBijective_df1 : mode[tex] :: math_isBijective{'f; 'A; 'B} =
    'A
    izone `"\\rightarrow " ezone
    'B
-   izone `"{is bijective}" ezone
+   izone `"{\\it \\ is \\  bijective}" ezone
+
+dform groupIso_df1 : mode[tex] :: math_groupIso{'A; 'B} =
+   izone `"{\\it Group\\_isomorphism}(" ezone
+   slot{'A}
+   izone `"," ezone
+   slot{'B}
+   izone `")" ezone
+
+dform groupKer_df1 : mode[tex] :: math_groupKer{'f; 'A; 'B} =
+   izone `"{\\it Group\\_kernel\\_of}(" ezone
+   'f
+   izone `"\\colon " ezone
+   'A
+   izone `"\\rightarrow " ezone
+   'B
+   izone `")" ezone
 
 (************************************************
  * Normal mode
@@ -1493,11 +1503,14 @@ dform cycSubg_df : except_mode[tex] :: math_cycSubg{'g; 'a} =
 dform groupHom_df : except_mode[tex] :: math_groupHom{'A; 'B} =
    `"Group_homomorphism(" slot{'A} `"; " slot{'B}  `")"
 
+dform isBijective_df : except_mode[tex] :: math_isBijective{'f; 'A; 'B} =
+   `"(" slot{'f} `":" slot{'A} " " rightarrow " " slot{'B}  `") is bijective"
+
 dform groupIso_df : except_mode[tex] :: math_groupIso{'A; 'B} =
    `"Group_isomorphism(" slot{'A} `"; " slot{'B}  `")"
 
-dform isBijective_df : except_mode[tex] :: math_isBijective{'f; 'A; 'B} =
-   `"isBijective(" slot{'f} `"; " slot{'A} `"; " slot{'B}  `")"
+dform groupKer_df : except_mode[tex] :: math_groupKer{'f; 'A; 'B} =
+   `"Group_kernel_of (" slot{'f} `":" slot{'A} " " rightarrow " " slot{'B} `")"
 
 (*
  * -*-

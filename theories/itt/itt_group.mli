@@ -87,6 +87,7 @@ topval unfold_isGroupHom : conv
 topval unfold_groupHom : conv
 topval unfold_isBijective : conv
 topval unfold_groupIso : conv
+topval unfold_groupKer : conv
 
 topval fold_pregroup1 : conv
 topval fold_pregroup : conv
@@ -104,6 +105,7 @@ topval fold_groupHom1 : conv
 topval fold_groupHom : conv
 topval fold_isBijective : conv
 topval fold_groupIso : conv
+topval unfold_groupKer : conv
 
 (*
  * -*-

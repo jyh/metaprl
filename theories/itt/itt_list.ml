@@ -166,6 +166,12 @@ prim consEquality {| intro [] |} :
    sequent { <H> >- cons{'u1; 'v1} = cons{'u2; 'v2} in list{'A} } =
    it
 
+prim consSquiddleEq {| intro [] |} :
+   sequent  { <H> >- 'h1 ~ 'h2 } -->
+   sequent  { <H> >- 't1 ~ 't2 } -->
+   sequent  { <H> >- 'h1 :: 't1 ~ 'h2 :: 't2 } =
+   it
+
 doc <:doc<
    @begin[doc]
    @modsubsection{Combinator equality}

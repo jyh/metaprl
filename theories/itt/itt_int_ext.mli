@@ -161,6 +161,22 @@ val is_neq_int_term : term -> bool
 val mk_neq_int_term : term -> term -> term
 val dest_neq_int : term -> term * term
 
+rule beq_int_is_false :
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   [wf] sequent { <H> >- 'a <> 'b } -->
+   sequent { <H> >- beq_int{'a; 'b} ~ bfalse }
+
+topval beq_int_is_falseC: conv
+
+rule not_nequal :
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   [wf] sequent { <H> >- not{'a <> 'b} } -->
+   sequent { <H> >- 'a = 'b in int }
+
+topval notNequalT: tactic
+
 rule ge_addWeakMono :
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->

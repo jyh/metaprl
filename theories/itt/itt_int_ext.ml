@@ -403,6 +403,28 @@ interactive ge_wf {| intro [] |} :
    [wf] sequent { <H> >- 'b in int } -->
    sequent { <H> >- "type"{ge{'a; 'b}} }
 
+interactive beq_int_is_false :
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   [wf] sequent { <H> >- 'a <> 'b } -->
+   sequent { <H> >- beq_int{'a; 'b} ~ bfalse }
+
+interactive_rw beq_int_is_false_rw :
+   ('a in int) -->
+   ('b in int) -->
+   ('a <> 'b) -->
+   beq_int{'a; 'b} <--> bfalse
+
+let beq_int_is_falseC = beq_int_is_false_rw
+
+interactive not_nequal :
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   [wf] sequent { <H> >- not{'a <> 'b} } -->
+   sequent { <H> >- 'a = 'b in int }
+
+let notNequalT = not_nequal
+
 interactive le_refl {| intro [] |} :
    [wf] sequent { <H> >- 'a in int } -->
    sequent { <H> >- le{'a;'a} }

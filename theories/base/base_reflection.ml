@@ -182,6 +182,7 @@ let resource reduce +=
  * replaces the subterms with the ones in 'btl (provided they have a
  * correct arity).
  *
+ * rewrite axiom: make_bterm{bterm{<H>; x:_; <J> >- x}; []} <--> bterm{<H>; x:_; <J> >- x}
  * ML rewrite_axiom:
  *     make_bterm{bterm{<K> >- _op_{<J1>.r1, ..., <Jn>.rn}}};
  *        [bterm{<H>; <J1> >- t1}; ...; bterm{<H>; <Jn> >- tn}] }
@@ -192,6 +193,9 @@ let resource reduce +=
  *)
 
 declare make_bterm{'bt; 'bt1}
+
+prim_rw reduce_make_bterm1 'H :
+   make_bterm{ bterm{| <H>; x: term; <J> >- 'x |}; Perv!nil } <--> bterm{| <H>; x: term; <J> >- 'x |}
 
 let rec make_bterm_aux lista listb fvars hvar lenh =
    match lista, listb with
@@ -205,8 +209,7 @@ let rec make_bterm_aux lista listb fvars hvar lenh =
             else raise (Invalid_argument "Base_reflection.make_bterm_aux: unmatched arity.")
     | _, _ -> raise (Invalid_argument "Base_reflection.make_bterm_aux: unmatched arity.")
 
-
-ml_rw reduce_make_bterm {| reduce |} : ('goal :  make_bterm{ 'bt; 'bt1 }) =
+ml_rw reduce_make_bterm2 : ('goal :  make_bterm{ 'bt; 'bt1 }) =
    let bt, bt1 = two_subterms goal in
    let hyps1, t = dest_bterm_sequent bt in
    let t' = dest_term (unquote_term t) in
@@ -226,8 +229,20 @@ ml_rw reduce_make_bterm {| reduce |} : ('goal :  make_bterm{ 'bt; 'bt1 }) =
                      let fvars = SymbolSet.add_list fvars hvar in
                      let terms = (mk_bterm j1 b1g) :: make_bterm_aux lenJr_list' b fvars hvar lenh in
                         make_bterm_sequent (List.map hyp_of_var hvar) (quote_term (mk_term t'.term_op terms))
-                  else raise (RefineError ("reduce_make_bterm", StringTermError ("not a qualified bterm for replacement", b1)))
-      else  raise (RefineError ("reduce_make_bterm", StringError "unmatched arities"))
+                  else raise (RefineError ("reduce_make_bterm2", StringTermError ("not a qualified bterm for replacement", b1)))
+      else  raise (RefineError ("reduce_make_bterm2", StringError "unmatched arities"))
+
+let reduce_make_bterm =
+   termC (fun goal ->
+      let bt, btl =  two_subterms goal in
+      let seq = TermMan.explode_sequent  bt in
+      let goal = SeqGoal.get seq.sequent_goals 0 in
+         if is_quoted_term goal then reduce_make_bterm2
+         else if is_var_term goal then onSomeHypC reduce_make_bterm1 (SeqHyp.length seq.sequent_hyps)
+         else failC)
+
+let resource reduce +=
+   (<< make_bterm{ bterm{| <H> >- 't|}; 'btl } >>, reduce_make_bterm)
 
 (**************************************************************************
  * if_same_op{'bt1; 'bt2; 'tt; 'ff} evaluates to 'tt if 'bt1 and 'bt2

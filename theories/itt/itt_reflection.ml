@@ -101,12 +101,20 @@ prim bterm_memberEquality {| intro [AutoMustComplete] |} :
    sequent { <H> >- 'x<||> in BTerm } =
    it
 
-prim btermSquiggle {| nth_hyp |} :
+(* ???
+interactive bterm_memberEquality2 {| intro [AutoMustComplete] |} :
+   sequent { <H> >- is_bterm{'x<||>} } -->
+   sequent { <H> >- is_bterm{'y<||>} } -->
+   sequent { <H> >- ? } -->
+   sequent { <H> >- 'x<||> = 'y<||> in BTerm }
+*)
+
+prim btermSquiddle {| nth_hyp |} :
    sequent { <H> >- 'b1 = 'b2 in BTerm } -->
    sequent { <H> >- 'b1 ~ 'b2 } =
    it
 
-interactive btermListSquiggle {| nth_hyp |} :
+interactive btermlistSquiddle {| nth_hyp |} :
    sequent { <H> >- 'b1 = 'b2 in list{BTerm} } -->
    sequent { <H> >- 'b1 ~ 'b2 }
 
@@ -242,6 +250,18 @@ interactive_rw opbterm_is_not_var:
 interactive itbterm_is_opbterm {| intro [] |} :
    sequent { <H> >- itbterm in OpBTerm }
 
+interactive var_or_opbterm_concl bind{x. 'C['x]} 'b :
+   [wf] sequent { <H> >- 'b in BTerm } -->
+   [main] sequent { <H>; b: Var >- 'C['b] } -->
+   [main] sequent { <H>; b: OpBTerm >- 'C['b] } -->
+   sequent { <H> >- 'C['b] }
+
+interactive var_or_opbterm_hyp 'H bind{x. 'A['x]} 'b :
+   [wf] sequent { <H>; x: 'A['b]; <J['x]> >- 'b in BTerm } -->
+   [main] sequent { <H>; x: 'A['b]; <J['x]>; 'b in Var >- 'C['x] } -->
+   [main] sequent { <H>; x: 'A['b]; <J['x]>; 'b in OpBTerm >- 'C['x] } -->
+   sequent { <H>; x: 'A['b]; <J['x]> >- 'C['x] }
+
 (************************************************************************
  * Subterms                                                             *
  ************************************************************************)
@@ -280,6 +300,22 @@ prim subterms_wf {| intro [] |} :
    sequent { <H> >- subterms{'bt} in list{BTerm} } =
    it
 
+prim subterms_var :
+   sequent { <H> >- 'bt in Var } -->
+   sequent { <H> >- subterms{'bt} = nil in list{BTerm} } =
+   it
+
+interactive subterms_expl1 {| intro [] |} :
+   sequent { <H> >- subterms{bterm{| x: term >- it[@] |}} ~ nil }
+
+interactive bterm_expl0 {| intro [] |} :
+   sequent { <H> >- bterm{| x: term >- it[@] |} in BTerm }
+
+(*???
+interactive bterm_expl1 {| intro [] |} :
+   sequent { <H> >- bterm{| x: term >- it[@] |} ~ itbterm }
+*)
+
 (************************************************************************
  * TYPE INFERENCE                                                       *
  ************************************************************************)
@@ -311,8 +347,8 @@ let resource reduce +=
      << same_op{ bterm{| <H1> >- 't1 |}; bterm{| <H2> >- 't2 |} } >>, same_op_reduce ]
 
 prim is_same_op_wf {| intro [] |} :
-   sequent { <H> >- 'b1 in BTerm } -->
-   sequent { <H> >- 'b2 in BTerm } -->
+   sequent { <H> >- 'b1 in OpBTerm } -->
+   sequent { <H> >- 'b2 in OpBTerm } -->
    sequent { <H> >- is_same_op{'b1; 'b2} in bool } =
    it
 
@@ -321,33 +357,52 @@ interactive_rw sameop_is_sameop :
    is_same_op{'b1; 'b2} <--> btrue
 
 interactive_rw notsameop_is_not_sameop :
-   ('b1 in BTerm ) -->
-   ('b2 in BTerm ) -->
+   ('b1 in OpBTerm ) -->
+   ('b2 in OpBTerm ) -->
    (not{same_op{'b1; 'b2}} ) -->
    is_same_op{'b1; 'b2} <--> bfalse
 
 interactive same_op_wf {| intro [] |} :
-   sequent { <H> >- 'b1 in BTerm } -->
-   sequent { <H> >- 'b2 in BTerm } -->
+   sequent { <H> >- 'b1 in OpBTerm } -->
+   sequent { <H> >- 'b2 in OpBTerm } -->
    sequent { <H> >- same_op{'b1; 'b2} Type }
 
 interactive same_op_decidable {| intro [] |} :
-   [wf] sequent { <H> >- 'b1 in BTerm } -->
-   [wf] sequent { <H> >- 'b2 in BTerm } -->
+   [wf] sequent { <H> >- 'b1 in OpBTerm } -->
+   [wf] sequent { <H> >- 'b2 in OpBTerm } -->
    sequent { <H> >- decidable{same_op{'b1; 'b2}} }
 
 prim is_same_op_id {| intro [] |} :
-   sequent { <H> >- 'b in BTerm } -->
+   sequent { <H> >- 'b in OpBTerm } -->
    sequent { <H> >- is_same_op{'b; 'b} = btrue in bool} =
    it
 
 interactive same_op_id {| intro [] |} :
-   sequent { <H> >- 'b in BTerm } -->
+   sequent { <H> >- 'b in OpBTerm } -->
    sequent { <H> >- same_op{'b; 'b} }
 
 interactive same_op_id2 {| intro [AutoMustComplete] |} :
-   sequent { <H> >- 'b1 = 'b2 in BTerm } -->
+   sequent { <H> >- 'b1 = 'b2 in OpBTerm } -->
    sequent { <H> >- same_op{'b1; 'b2} }
+
+prim same_op_sym :
+   sequent { <H> >- 'b1 in OpBTerm } -->
+   sequent { <H> >- 'b2 in OpBTerm } -->
+   sequent { <H> >- same_op{'b1; 'b2} } -->
+   sequent { <H> >- same_op{'b2; 'b1} } =
+   it
+
+prim same_op_trans 'b2:
+   sequent { <H> >- 'b1 in OpBTerm } -->
+   sequent { <H> >- 'b2 in OpBTerm } -->
+   sequent { <H> >- 'b3 in OpBTerm } -->
+   sequent { <H> >- same_op{'b1; 'b2} } -->
+   sequent { <H> >- same_op{'b2; 'b3} } -->
+   sequent { <H> >- same_op{'b1; 'b3} } =
+   it
+
+let sameOpSymT = same_op_sym
+let sameOpTransT = same_op_trans
 
 (************************************************************************
  * Simple_bterm                                                         *
@@ -397,6 +452,12 @@ interactive simple_bterm_decidable {| intro [] |} :
 
 interactive itbterm_is_simplebterm {| intro [] |} :
    sequent { <H> >- simple_bterm{ itbterm } }
+
+interactive simple_bterm_expl1 {| intro [] |} :
+   sequent { <H> >- not{simple_bterm{bterm{| x: term >- it[@] |}}} }
+
+interactive same_op_expl1 {| intro [] |} :
+   sequent { <H> >- same_op{bterm{| x: term >- it[@] |}; itbterm} }
 
 (************************************************************************
  * The Term type.                                                       *
@@ -463,6 +524,18 @@ interactive_rw bbterm_is_not_simple:
    ('v in BBTerm) -->
    is_simple_bterm{'v} <--> bfalse
 
+interactive term_or_bbterm_concl bind{x. 'C['x]} 'b :
+   [wf] sequent { <H> >- 'b in BTerm } -->
+   [main] sequent { <H>; b: Term >- 'C['b] } -->
+   [main] sequent { <H>; b: BBTerm >- 'C['b] } -->
+   sequent { <H> >- 'C['b] }
+
+interactive term_or_bbterm_hyp 'H bind{x. 'A['x]} 'b :
+   [wf] sequent { <H>; x: 'A['b]; <J['x]> >- 'b in BTerm } -->
+   [main] sequent { <H>; x: 'A['b]; <J['x]>; 'b in Term >- 'C['x] } -->
+   [main] sequent { <H>; x: 'A['b]; <J['x]>; 'b in BBTerm >- 'C['x] } -->
+   sequent { <H>; x: 'A['b]; <J['x]> >- 'C['x] }
+
 (************************************************************************
  * Subst                                                                *
  ************************************************************************)
@@ -480,6 +553,20 @@ prim subst_wf1 {| intro [AutoMustComplete] |} :
    sequent { <H> >- 't1 ='t2 in Term } -->
    sequent { <H> >- subst{'bt1; 't1} = subst{'bt2; 't2} in BTerm } =
    it
+
+prim subst_wf2 {| intro [] |} :
+   sequent { <H> >- 'bt1 = 'bt2 in BBTerm } -->
+   sequent { <H> >- 'bt1 in OpBTerm } -->
+   sequent { <H> >- 't1 ='t2 in Term } -->
+   sequent { <H> >- subst{'bt1; 't1} = subst{'bt2; 't2} in OpBTerm } =
+   it
+
+prim_rw subst_nilsubterms :
+   'bt in BBTerm -->
+   't in Term -->
+   'bt in OpBTerm -->
+   subterms{'bt} = nil in list{BTerm} -->
+   subst{'bt; 't} <--> 'bt
 
 (************************************************************************
  * Var_arity                                                            *
@@ -558,15 +645,34 @@ interactive subterms_arity_wf1 {| intro [] |} :
    sequent { <H> >- 'bt in BTerm } -->
    sequent { <H> >- subterms_arity{'bt} in int }
 
+interactive subterms_lengthzero {| elim [] |} 'H :
+   sequent { <H>; x: subterms_arity{'bt} = 0 in int; <J[it]> >- 'bt in BTerm } -->
+   sequent { <H>; x: subterms_arity{'bt} = 0 in int; <J[it]>; y: subterms{'bt} = nil in list{BTerm} >- 'C[it] } -->
+   sequent { <H>; x: subterms_arity{'bt} = 0 in int; <J['x]> >- 'C['x] }
+
 (************************************************************************
  * Depth                                                                *
  ************************************************************************)
 
 define unfold_depth: depth{'t} <-->
-   fix{ f. lambda{b. (1 +@ list_max{ map{lambda{x. 'f 'x}; subterms{'b}} })} } 't
+   fix{ f. lambda{ b.
+             if beq_int{subterms_arity{'b}; 0}
+               then 0
+               else (1 +@ list_max{ map{lambda{x. 'f 'x}; subterms{'b}} })
+        } } 't
 
-interactive_rw unroll_depth:
+(*
+  interactive_rw unroll_depth:
    depth{'t} <--> 1 +@ list_max{ map{lambda{x.depth{'x}}; subterms{'t}}}
+*)
+interactive_rw depth_not_zero :
+   't in BTerm -->
+   subterms_arity{'t} <> 0 -->
+   depth{'t} <--> 1 +@ list_max{ map{lambda{x.depth{'x}}; subterms{'t}}}
+
+interactive_rw depth_0 :
+   subterms_arity{'t} = 0 in int -->
+   depth{'t} <--> 0
 
 dform depth_df : except_mode[src] :: depth{'t} =
    `"depth(" slot{'t} `")"
@@ -583,8 +689,9 @@ interactive depth_wf2 {| intro [] |} :
    sequent { <H> >- depth{'bt} in int }
 
 interactive depth_subterms {| intro [] |} :
-   sequent { <H> >- 'b in BTerm } -->
    sequent { <H> >- 'a in BTerm } -->
+   sequent { <H> >- 'b in BTerm } -->
+   sequent { <H> >- subterms_arity{'b} <> 0 } -->
    sequent { <H> >- mem{'a; subterms{'b}; BTerm} } -->
    sequent { <H> >- depth {'a} < depth {'b} }
 
@@ -600,7 +707,6 @@ prim_rw xlist_list_cons {| reduce |} :
 prim_rw xlist_list_nil {| reduce |} :
    xlist_of_list{ nil } <--> (Perv!nil)
 
-
 define unfold_make_bterm : make_bterm{'bt; 'bt_list} <--> Base_reflection!make_bterm{'bt; xlist_of_list{'bt_list}}
 
 dform make_bterm_df : except_mode[src] :: make_bterm{'bt; 'btl} =
@@ -608,6 +714,15 @@ dform make_bterm_df : except_mode[src] :: make_bterm{'bt; 'btl} =
 
 let resource reduce +=
    ( << make_bterm{ bterm{| <H> >- 't |}; 'btl } >>, (unfold_make_bterm thenC reduceC) )
+
+interactive make_bterm_itbterm {| intro [] |} :
+   sequent { <H> >- make_bterm{itbterm; nil} = itbterm in BTerm }
+
+interactive make_bterm_itbterm2 {| intro [] |} :
+   sequent { <H> >- make_bterm{bterm{| x: term >- it[@] |}; nil} = itbterm in BTerm }
+
+interactive make_bterm_var_expl {| intro [] |} :
+   sequent { <H> >- make_bterm{bterm{| x: term >- 'x |}; nil} = bterm{| x: term >- 'x |} in BTerm }
 
 
 define unfold_are_compatible_shapes_aux: are_compatible_shapes_aux{'diff; 'l1; 'l2} <-->
@@ -619,7 +734,7 @@ define unfold_are_compatible_shapes_aux: are_compatible_shapes_aux{'diff; 'l1; '
       } } } } 'diff 'l1 'l2
 
 define unfold_are_compatible_shapes: are_compatible_shapes{'bt; 'l} <-->
-   list_ind{ 'l; is_var_bterm{'bt}; h1,t1,f.list_ind{ subterms{'bt}; bfalse; h2,t2,f.are_compatible_shapes_aux{var_arity{'h2} -@ var_arity{'h1}; 't1; 't2} } }
+   list_ind{ 'l; beq_int{subterms_arity{'bt}; 0}; h1,t1,f.list_ind{ subterms{'bt}; bfalse; h2,t2,f.are_compatible_shapes_aux{var_arity{'h2} -@ var_arity{'h1}; 't1; 't2} } }
 
 define unfold_compatible_shapes:
    compatible_shapes{'bt; 'l} <--> "assert"{ are_compatible_shapes{'bt; 'l} }
@@ -642,6 +757,10 @@ interactive compatible_shapes_wf {| intro [] |} :
    sequent { <H> >- 'l in list{BTerm} } -->
    sequent { <H> >- compatible_shapes{'bt; 'l} Type }
 
+prim_rw makebterm_var :
+   'b in Var -->
+   make_bterm{'b; nil} <--> 'b
+
 prim makebterm_wf {| intro [] |} :
    sequent { <H> >- 'bt in OpBTerm } -->
    sequent { <H> >- 'btl in list{BTerm} } -->
@@ -649,11 +768,41 @@ prim makebterm_wf {| intro [] |} :
    sequent { <H> >- make_bterm{'bt; 'btl} in OpBTerm } =
    it
 
-interactive make_bterm_is_bterm {| intro [] |} :
-   sequent { <H> >- 'bt in OpBTerm } -->
+(* ??? *)
+prim_rw makebterm_same_op :
+   'b1 in BTerm -->
+   'b2 in BTerm -->
+   same_op{'b1; 'b2} -->
+   make_bterm{'b1; subterms{'b2}} <--> 'b2
+
+(* ??? *)
+interactive_rw makebterm_reduce {| reduce |} :
+   'b in BTerm -->
+    make_bterm{'b; subterms{'b}} <--> 'b
+
+(* ??? *)
+interactive_rw make_bterm_nilsubterms :
+   'bt in BTerm -->
+   subterms{'bt} = nil in list{BTerm} -->
+   make_bterm{'bt; nil} <--> 'bt
+
+interactive_rw compatible_shapes_var 'bt :
+   'bt in Var -->
+   'btl in list{BTerm} -->
+   compatible_shapes{'bt; 'btl} -->
+   'btl <--> nil
+
+interactive compatible_shapes_var1 'bt:
+   sequent { <H> >- 'bt in Var } -->
    sequent { <H> >- 'btl in list{BTerm} } -->
    sequent { <H> >- compatible_shapes{'bt; 'btl} } -->
-   sequent { <H> >-  make_bterm{'bt; 'btl} in BTerm }
+   sequent { <H> >- 'btl ~ nil }
+
+interactive makebterm_wf1 {| intro [] |} :
+   sequent { <H> >- 'bt in BTerm } -->
+   sequent { <H> >- 'btl in list{BTerm} } -->
+   sequent { <H> >- compatible_shapes{'bt; 'btl} } -->
+   sequent { <H> >- make_bterm{'bt; 'btl} in BTerm }
 
 interactive make_bterm_is_not_varbterm {| intro [] |} :
    sequent { <H> >- 'bt in OpBTerm } -->
@@ -661,27 +810,12 @@ interactive make_bterm_is_not_varbterm {| intro [] |} :
    sequent { <H> >- compatible_shapes{'bt; 'btl} } -->
    sequent { <H> >-  not{var_bterm{ make_bterm{'bt; 'btl} }} }
 
-interactive make_bterm_not_var_elim {| elim [] |} 'H :
-   sequent { <H>; u: var_bterm{ make_bterm{'bt; 'btl} }; <J['u]> >- 'bt in OpBTerm } -->
-   sequent { <H>; u: var_bterm{ make_bterm{'bt; 'btl} }; <J['u]> >- 'btl in list{BTerm} } -->
-   sequent { <H>; u: var_bterm{ make_bterm{'bt; 'btl} }; <J['u]> >- compatible_shapes{'bt; 'btl} } -->
-   sequent { <H>; u: var_bterm{ make_bterm{'bt; 'btl} }; <J['u]> >- 'C }
-
-interactive make_bterm_opbterm_elim {| elim [] |} 'H :
-   sequent { <H>; u: make_bterm{'bt; 'btl} in Var; <J['u]> >- 'bt in OpBTerm } -->
-   sequent { <H>; u: make_bterm{'bt; 'btl} in Var; <J['u]> >- 'btl in list{BTerm} } -->
-   sequent { <H>; u: make_bterm{'bt; 'btl} in Var; <J['u]> >- compatible_shapes{'bt; 'btl} } -->
-   sequent { <H>; u: make_bterm{'bt; 'btl} in Var; <J['u]> >- 'C }
-
-prim_rw makebterm_same_op :
-   'b1 in BTerm -->
-   'b2 in BTerm -->
-   same_op{'b1; 'b2} -->
-   make_bterm{'b1; subterms{'b2}} <--> 'b2
-
-interactive_rw makebterm_reduce {| reduce |} :
-   'b in BTerm -->
-    make_bterm{'b; subterms{'b}} <--> 'b
+prim makebterm_wf_elim {| elim [] |} 'H :
+   sequent { <H>; x: make_bterm{'bt; 'btl} in BTerm; <J[it]> >- 'bt in BTerm } -->
+   sequent { <H>; x: make_bterm{'bt; 'btl} in BTerm; <J[it]> >- 'btl in list{BTerm} } -->
+   ('t['x; 'y] : sequent { <H>; x: make_bterm{'bt; 'btl} in BTerm; <J[it]>; y: compatible_shapes{'bt; 'btl} >- 'C[it] }) -->
+   sequent { <H>; x: make_bterm{'bt; 'btl} in BTerm; <J['x]> >- 'C['x] } =
+   't[it; it]
 
 (************************************************************************
  * Bterm elimination rules                                              *
@@ -698,13 +832,91 @@ interactive bterm_elim2 {| elim [] |} 'H :
    sequent { <H>; b: BTerm; <J['b]> >- 'C['b] }
 
 interactive bterm_elim3 {| elim [] |} 'H :
-   sequent { <H>; b: BTerm; <J['b]>; a: BTerm >- 'C['a] Type} -->
    sequent { <H>; b: BTerm; <J['b]>; c: BTerm; simple_bterm{'c} >- 'C['c] } -->
    sequent { <H>; b: BTerm; <J['b]>; c: BTerm; not{simple_bterm{'c}}; all a: Term. 'C[subst{'c; 'a}] >- 'C['c] } -->
    sequent { <H>; b: BTerm; <J['b]> >- 'C['b] }
 
 interactive bterm_elim4 {| elim [] |} 'H :
-   sequent { <H>; b: BTerm; <J['b]>; a: BTerm >- 'C['a] Type} -->
    sequent { <H>; b: BTerm; <J['b]>; c: Term >- 'C['c] } -->
    sequent { <H>; b: BTerm; <J['b]>; c: BBTerm; all a: Term. 'C[subst{'c; 'a}] >- 'C['c] } -->
    sequent { <H>; b: BTerm; <J['b]> >- 'C['b] }
+
+(************************************************************************
+ * Properties                                                           *
+ ************************************************************************)
+
+(* may need other well-formedness assumptions for the 4 rules below *)
+interactive subterms_make_bterm {| intro [] |} :
+   sequent { <H> >- 'bt in BTerm } -->
+   sequent { <H> >- 'btl in list{BTerm} } -->
+   sequent { <H> >- compatible_shapes{'bt; 'btl} } -->
+   sequent { <H> >- subterms{make_bterm{'bt; 'btl}} ~ 'btl }
+
+interactive same_op_make_bterm {| intro [] |} :
+   sequent { <H> >- 'bt in BTerm } -->
+   sequent { <H> >- 'btl in list{BTerm} } -->
+   sequent { <H> >- compatible_shapes{'bt; 'btl} } -->
+   sequent { <H> >- same_op{make_bterm{'bt; 'btl}; 'bt} }
+
+interactive same_op_subst {| intro [] |} :
+   sequent { <H> >- 'bt in BBTerm } -->
+   sequent { <H> >- 't in Term } -->
+   sequent { <H> >- same_op{subst{'bt; 't}; 'bt} }
+
+interactive subterms_subst {| intro [] |} :
+   sequent { <H> >- 'bt in BBTerm } -->
+   sequent { <H> >- 't in Term } -->
+   sequent { <H> >- subterms{subst{'bt; 't}} ~ map{lambda{x.subst{'x; 't}}; subterms{'bt}} }
+
+
+interactive subst_make_bterm {| intro [] |} :
+   sequent { <H> >- 't in Term } -->
+   sequent { <H> >- 'bt in OpBTerm } -->
+   sequent { <H> >- 'btl in list{BBTerm} } -->
+   sequent { <H> >- make_bterm{'bt; 'btl} in BBTerm } -->
+   sequent { <H> >- subst{make_bterm{'bt; 'btl}; 't} ~ make_bterm{'bt; map{lambda{x.subst{'x; 't}}; 'btl}} }
+
+
+
+(************************************************************************
+ * Tactics                                                              *
+ ************************************************************************)
+(*
+ * Split a bterm into var and opbterm in the conclusion.
+ *)
+let splitBTermVCT = argfunT (fun a p ->
+   let bind = get_bind_from_arg_or_concl_subst p a in
+      var_or_opbterm_concl bind a)
+
+(*
+ * Split a bterm into var and opbterm in a hyp.
+ *)
+let splitBTermVHT i a = funT (fun p ->
+   let bind = get_bind_from_arg_or_hyp_subst p i a in
+      var_or_opbterm_hyp (Sequent.get_pos_hyp_num p i) bind a)
+
+let splitBTermVT t i =
+   if i = 0 then
+      splitBTermVCT t
+   else
+      splitBTermVHT i t
+
+(*
+ * Split a bterm into term and bbterm in the conclusion.
+ *)
+let splitBTermTCT = argfunT (fun a p ->
+   let bind = get_bind_from_arg_or_concl_subst p a in
+      term_or_bbterm_concl bind a)
+
+(*
+ * Split a bterm into term and bbterm in a hyp.
+ *)
+let splitBTermTHT i a = funT (fun p ->
+   let bind = get_bind_from_arg_or_hyp_subst p i a in
+      term_or_bbterm_hyp (Sequent.get_pos_hyp_num p i) bind a)
+
+let splitBTermTT t i =
+   if i = 0 then
+      splitBTermTCT t
+   else
+      splitBTermTHT i t

@@ -59,3 +59,8 @@ topval unfold_are_compatible_shapes_aux : conv
 topval fold_are_compatible_shapes_aux : conv
 topval unfold_are_compatible_shapes : conv
 topval unfold_compatible_shapes : conv
+
+topval sameOpSymT : tactic
+topval sameOpTransT : term -> tactic
+topval splitBTermVT : term -> int -> tactic
+topval splitBTermTT : term -> int -> tactic

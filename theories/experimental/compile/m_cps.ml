@@ -209,6 +209,11 @@ prim_rw cps_let_tuple {| cps |} : CPS{'cont; LetTuple{'length; 'tuple; v. 'e['v]
 prim_rw cps_let_subscript {| cps |} : CPS{'cont; LetSubscript{'a1; 'a2; v. 'e['v]}} <-->
    LetSubscript{CPS{'a1}; CPS{'a2}; v. CPS{'cont; 'e['v]}}
 
+prim_rw cps_set_subscript {| cps |} :
+   CPS{'cont; SetSubscript{'a1; 'a2; 'a3; 'e}}
+   <-->
+   SetSubscript{CPS{'a1}; CPS{'a2}; CPS{'a3}; CPS{'cont; 'e}}
+
 prim_rw cps_if {| cps |} : CPS{'cont; If{'a; 'e1; 'e2}} <-->
    If{CPS{'a}; CPS{'cont; 'e1}; CPS{'cont; 'e2}}
 

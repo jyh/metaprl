@@ -1,4 +1,4 @@
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @module[Itt_pointwise]
    @parents
@@ -19,7 +19,7 @@ let _ = show_loading "Loading Itt_pointwise%t"
  * RULES                                                                *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @rules
    The following two rules are valid only for pointwise functionality.
@@ -27,9 +27,9 @@ doc <:doc<
    @end[doc]
 >>
 
-prim hypSubstPointwise 'H 'J_1 't1  bind{y. 'A['y]} :
-   [equality] sequent { <H>; t:'T; <J_1['t]>;  x: 'A['t]; <J_2['x;'t]> >- 't = 't1 in 'T } -->
-   [main] ('c['t;'x] : sequent { <H>; t:'T; <J_1['t]>;  x: 'A['t1]; <J_2['x;'t]> >- 'C['x;'t] }) -->
+prim hypSubstPointwise 'H 'J_1 bind{t.'t1['t]}  bind{y. 'A['y]} :
+   [equality] sequent { <H>; t:'T; <J_1['t]>;  x: 'A['t]; <J_2['x;'t]> >- 't = 't1<|H;J_1|>['t] in 'T } -->
+   [main] ('c['t;'x] : sequent { <H>; t:'T; <J_1['t]>;  x: 'A['t1<|H;J_1|>['t]]; <J_2['x;'t]> >- 'C['x;'t] }) -->
    sequent { <H>; t:'T; <J_1['t]>;  x: 'A['t]; <J_2['x;'t]> >- 'C['x;'t] } =
    'c['t;'x]
 

@@ -8,9 +8,7 @@ OCAMLDEPFLAGS := -prl
 
 # Library files
 MPFILES :=\
-	fol_type
-
-X=\
+	fol_type\
 	fol_false\
 	fol_true\
 	fol_implies\

@@ -11,11 +11,9 @@ declare prop{'t}
 declare "type"{'A}
 declare trivial
 
-(*
 val is_type_term : term -> bool
 val mk_type_term : term -> term
 val dest_type : term -> term
-*)
 
 (*
  * -*-

@@ -56,7 +56,7 @@ declare comment_block{'t}
  * These are the valid comment blocks.
  * @end[doc]
  *)
-declare doc{'t}
+declare "doc"{'t}
 declare license{'t}
 declare spelling{'t}
 declare misspelled{'t}

@@ -55,6 +55,10 @@ open Top_conversionals
 open Simple_print.SimplePrint
 open Phobos_type
 
+(*
+ * Simple debugging utilities.
+ * They depend on -debug_compiler
+ *)
 let debug_string s =
    if !Fir_state.debug_compiler then
       print_string s
@@ -62,6 +66,10 @@ let debug_string s =
 let debug_term t =
    if !Fir_state.debug_compiler then
       print_simple_term t
+
+(*
+ * Examining special terms.
+ *)
 
 (*
  * Return a conversion that applies all given iforms.

@@ -51,7 +51,7 @@ val debug : bool ref
  * be given back to MCC as an Fir.prog struct for further compilation.
  *)
 
-val compile_phobos_fir : term -> mp_pre_term_rewrite list -> unit
+val compile_phobos_fir : term -> mp_pre_term_rewrite list list -> mp_pre_term list -> unit
 
 (*
  * Takes a MCC Fir.prog structure and applies some rewrites to it,

@@ -48,6 +48,8 @@
  * @parents
  * @end[doc]
  *)
+include Itt_list
+include Itt_list2
 include Mp_mc_term_op
 include Mp_mc_fir_base
 include Mp_mc_fir_ty

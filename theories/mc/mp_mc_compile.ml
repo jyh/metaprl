@@ -79,17 +79,22 @@ let apply_rewrite_post =
  *)
 
 (*
- * NOTE: post_rewrites is (mp_term * mp_term) list, where
+ * NOTE: post_rewrites is (mp_term * mp_term) list list, where
  *       type mp_term = term * pos
  *)
-let compile_phobos_fir term post_rewrites =
+let compile_phobos_fir term post_rewrites_list inline_forms =
    debug_string "\n\nBefore PhoFIR -> FIR:\n\n";
    debug_term term;
    (* General reductions *)
    let term = apply_rewrite_top reduceC term in
    debug_string "\n\nAfter general reductions:\n\n";
    debug_term term;
-   let term = apply_rewrite_post (applyAllIFormC post_rewrites) term in
+   (*
+    * We apply each set of post-parsing rewrites one
+    * after another.
+    *)
+   let term = List.fold_left (fun term post_rewrites ->
+      apply_rewrite_post (applyAllIFormC post_rewrites) term) term post_rewrites_list in
    debug_string "\n\nAfter PhoFIR -> FIR\n\n";
    debug_term term;
    (*

@@ -34,4 +34,4 @@ OCamlProgram $env 'test.exec',
 #
 # What to build.
 #
-Default qw( test.exec test_connect.exec );
+#Default qw( test.exec test_connect.exec );

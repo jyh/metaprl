@@ -34,5 +34,5 @@ my @src =
 OCamlSources $env (map "mp_mc_$_.ml", @src), 'mp_mc_theory.mlz';
 OCamlLibrary $env 'base', (map "mp_mc_$_", @src), 'mp_mc_theory';
 Export qw( env );
-Default ( "base$env->{SUFLIB}" );
+#Default ( "base$env->{SUFLIB}" );
 Build qw( tests/Conscript );

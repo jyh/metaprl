@@ -25,4 +25,4 @@ OCamlLibrary $env 'base',
 	'base_theory';
 
 ## Add the library to the default target list
-Default ( "base$env->{SUFLIB}" );
+#Default ( "base$env->{SUFLIB}" );

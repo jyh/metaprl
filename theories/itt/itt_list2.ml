@@ -948,26 +948,6 @@ interactive tail_induction 'H :
    sequent { <H>; l:list{'A}; <J['l]>; n:Index{'l}; 'P[tail{'l;'n}] >- 'P[ cons{nth{'l;length{'l} -@ ('n +@ 1)};  tail{'l;'n}}] } -->
    sequent { <H>; l:list{'A}; <J['l]> >-  'P['l] }
 
-(*
- * map.
- *)
-interactive map_wf {| intro [intro_typeinf <<'l>>] |} list{'T1} :
-   [wf] sequent { <H> >- "type"{'T1} } -->
-   [wf] sequent { <H> >- "type"{'T2} } -->
-   [wf] sequent { <H> >- 'f in 'T1 -> 'T2 } -->
-   [wf] sequent { <H> >- 'l in list{'T1} } -->
-   sequent { <H> >- map{'f; 'l} in list{'T2} }
-
-interactive map_wf2 {| intro [] |} :
-   [wf] sequent { <H> >- "type"{'T2} } -->
-   [wf] sequent { <H> >- 'l in list } -->
-   [wf] sequent { <H> >- all_list{'l;x.'f['x] in 'T2} } -->
-   sequent { <H> >- map{x.'f['x]; 'l} in list{'T2} }
-
-interactive map_wf3 {| intro [] |} :
-   [wf] sequent { <H> >- 'l in list } -->
-   sequent { <H> >- map{x.'f['x]; 'l} in list }
-
 doc <:doc<
    @begin[doc]
    @rules
@@ -1019,6 +999,26 @@ interactive all_list_witness_wf2  {| intro[] |} :
    sequent { <H> >- 'l in list } -->
    sequent { <H> >- all_list{'l;  x. 'p['x] in 'P['x]}  } -->
    sequent { <H> >- all_list_witness{'l;  x. 'p['x]} in all_list{'l;  x. 'P['x]} }
+
+(*
+ * map.
+ *)
+interactive map_wf {| intro [intro_typeinf <<'l>>] |} list{'T1} :
+   [wf] sequent { <H> >- "type"{'T1} } -->
+   [wf] sequent { <H> >- "type"{'T2} } -->
+   [wf] sequent { <H> >- 'f in 'T1 -> 'T2 } -->
+   [wf] sequent { <H> >- 'l in list{'T1} } -->
+   sequent { <H> >- map{'f; 'l} in list{'T2} }
+
+interactive map_wf2 {| intro [] |} :
+   [wf] sequent { <H> >- "type"{'T2} } -->
+   [wf] sequent { <H> >- 'l in list } -->
+   [wf] sequent { <H> >- all_list{'l;x.'f['x] in 'T2} } -->
+   sequent { <H> >- map{x.'f['x]; 'l} in list{'T2} }
+
+interactive map_wf3 {| intro [] |} :
+   [wf] sequent { <H> >- 'l in list } -->
+   sequent { <H> >- map{x.'f['x]; 'l} in list }
 
 doc <:doc<
    @begin[doc]

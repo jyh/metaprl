@@ -593,32 +593,50 @@ let compare_terms a b =
 		else Less
 	else
 		if is_number_term b then Greater
-		else compare_terms a b
+		else
+			if is_mul_term a then
+				if is_mul_term b then
+					compare_terms a b
+				else
+					Greater
+			else
+				if is_mul_term b then
+					Less
+				else
+					compare_terms a b
 
 let addSwap1C t =
 	match explode_term t with
-		<<'a +@ 'b>> when (compare_terms (stripCoef b) (stripCoef a))=Less -> add_CommutC
+		<<'a +@ 'b>> when
+			let a' = stripCoef a in
+			let b' = stripCoef b in
+			(compare_terms b' a')=Less -> add_CommutC
 	 | _ -> failC
 
 let addSwap2C t =
 	match explode_term t with
 		<<'a +@ 'b>> ->
 			(match explode_term b with
-				<<'c +@ 'd>> when (compare_terms (stripCoef c) (stripCoef a))=Less -> add_BubblePrimitiveC
+				<<'c +@ 'd>> when
+					let a' = stripCoef a in
+					let c' = stripCoef c in
+					(compare_terms c' a')=Less -> add_BubblePrimitiveC
 			 | _ -> failC
 			)
 	 | _ -> failC
 
 let mulSwap1C t =
 	match explode_term t with
-		<<'a *@ 'b>> when (compare_terms b a)=Less -> mul_CommutC
+		<<'a *@ 'b>> when
+			(compare_terms b a)=Less -> mul_CommutC
 	 | _ -> failC
 
 let mulSwap2C t =
 	match explode_term t with
 		<<'a *@ 'b>> ->
 			(match explode_term b with
-				<<'c *@ 'd>> when (compare_terms c a)=Less -> mul_BubblePrimitiveC
+				<<'c *@ 'd>> when
+					(compare_terms c a)=Less -> mul_BubblePrimitiveC
 			 | _ -> failC
 			)
 	 | _ -> failC

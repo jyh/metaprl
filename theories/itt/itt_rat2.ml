@@ -42,8 +42,11 @@ interactive_rw add_rat_BubblePrimitive_rw :
 let add_rat_BubblePrimitiveC = add_rat_BubblePrimitive_rw
 
 let is_rat_number_term t =
-	let a,b=dest_rat t in
-	(is_number_term a) && (is_number_term b)
+	if is_rat_term t then
+		let a,b=dest_rat t in
+		(is_number_term a) && (is_number_term b)
+	else
+		false
 
 let stripRatCoef t =
 	if is_mul_rat_term t then
@@ -55,13 +58,30 @@ let stripRatCoef t =
    else
       t
 
+let compare_terms a b =
+	if is_rat_number_term a then
+		if is_rat_number_term b then Equal
+		else Less
+	else
+		if is_rat_number_term b then Greater
+		else
+			if is_mul_rat_term a then
+				if is_mul_rat_term b then
+					compare_terms a b
+				else
+					Greater
+			else
+				if is_mul_rat_term b then
+					Less
+				else
+					compare_terms a b
+
 let add_rat_Swap1C t =
 	match explode_term t with
 		<<add_rat{'a; 'b}>> when
 			let a' = stripRatCoef a in
 			let b' = stripRatCoef b in
-			((compare_terms b' a')=Less &&
-			(if is_mul_rat_term b' then is_mul_rat_term a' else true)) -> add_rat_CommutC
+			(compare_terms b' a')=Less -> add_rat_CommutC
 	 | _ -> failC
 
 let add_rat_Swap2C t =
@@ -71,8 +91,7 @@ let add_rat_Swap2C t =
 				<<add_rat{'c; 'd}>> when
 					let a' = stripRatCoef a in
 					let c' = stripRatCoef c in
-					((compare_terms c' a')=Less &&
-					(if is_mul_rat_term c' then is_mul_rat_term a' else true)) -> add_rat_BubblePrimitiveC
+					(compare_terms c' a')=Less -> add_rat_BubblePrimitiveC
 			 | _ -> failC
 			)
 	 | _ -> failC
@@ -87,18 +106,14 @@ let mul_rat_BubblePrimitiveC = mul_rat_BubblePrimitive_rw
 
 let mul_rat_Swap1C t =
 	match explode_term t with
-		<<mul_rat{'a; 'b}>> when
-			((compare_terms b a)=Less &&
-			(if is_mul_rat_term b then is_mul_rat_term a else true)) -> mul_rat_CommutC
+		<<mul_rat{'a; 'b}>> when (compare_terms b a)=Less -> mul_rat_CommutC
 	 | _ -> failC
 
 let mul_rat_Swap2C t =
 	match explode_term t with
 		<<mul_rat{'a; 'b}>> ->
 			(match explode_term b with
-				<<mul_rat{'c; 'd}>> when
-					((compare_terms c a)=Less &&
-					(if is_mul_rat_term c then is_mul_rat_term a else true)) -> mul_rat_BubblePrimitiveC
+				<<mul_rat{'c; 'd}>> when (compare_terms c a)=Less -> mul_rat_BubblePrimitiveC
 			 | _ -> failC
 			)
 	 | _ -> failC

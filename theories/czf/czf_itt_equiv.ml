@@ -247,7 +247,7 @@ prim equiv_rel_intro {| intro [] |} :
    ('B : sequent { <H>; b: set; c: set; x: mem{'b; 's}; y: mem{'c; 's}; u: equiv{'s; 'r; 'b; 'c} >- equiv{'s; 'r; 'c; 'b} }) -->
    ('C: sequent { <H>; d: set; e: set; f: set; x: mem{'d; 's}; y: mem{'e; 's}; z: mem{'f; 's}; u: equiv{'s; 'r; 'd; 'e}; v: equiv{'s; 'r; 'e; 'f} >- equiv{'s; 'r; 'd; 'f}}) -->
    sequent { <H> >- equiv{'s; 'r} } =
-   'A & 'B & 'C
+   (('A, 'B), 'C)
 
 doc <:doc<
    @begin[doc]
@@ -281,7 +281,7 @@ prim equiv_sym :
    sequent { <H> >- mem{'b; 's} } -->
    ('A : sequent { <H> >- equiv{'s; 'r; 'a; 'b} }) -->
    sequent { <H> >- equiv{'s; 'r; 'b; 'a} } =
-   'E & 'A
+   'E, 'A
 
 (*
  * Transitivity.
@@ -298,7 +298,7 @@ prim equiv_trans 'b :
    ('A : sequent { <H> >- equiv{'s; 'r; 'a; 'b} }) -->
    ('B : sequent { <H> >- equiv{'s; 'r; 'b; 'c} }) -->
    sequent { <H> >- equiv{'s; 'r; 'a; 'c} } =
-   'E & 'A & 'B
+   ('E, ('A, 'B))
 
 doc <:doc<@docoff >>
 (*

@@ -161,7 +161,7 @@ prim op_fun {| intro[] |} :
    ('A: sequent { <H> >- fun_set{z. 's1['z]} }) -->
    ('B: sequent { <H> >- fun_set{z. 's2['z]} }) -->
    sequent { <H> >- fun_set{z. op{'g; 's1['z]; 's2['z]}} } =
-   'A & 'B
+   'A, 'B
 
 doc <:doc<
    @begin[doc]

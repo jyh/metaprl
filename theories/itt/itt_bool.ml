@@ -246,16 +246,16 @@ dform assert_df : parens :: "prec"[prec_assert] :: except_mode[src] ::
  * contains the terms $@true$ and $@false$.
  * @end[doc]
  *)
-interactive boolEquality {| intro []; eqcd |} 'H :
+interactive boolEquality {| intro []; eqcd |} :
    sequent ['ext] { 'H >- "bool" in univ[i:l] }
 
-interactive boolType {| intro [] |} 'H :
+interactive boolType {| intro [] |} :
    sequent ['ext] { 'H >- "type"{bool} }
 
-interactive btrue_member {| intro []; eqcd |} 'H :
+interactive btrue_member {| intro []; eqcd |} :
   sequent ['ext] { 'H >- btrue in "bool" }
 
-interactive bfalse_member {| intro []; eqcd |} 'H :
+interactive bfalse_member {| intro []; eqcd |} :
    sequent ['ext] { 'H >- bfalse in "bool" }
 
 (*!
@@ -267,7 +267,7 @@ interactive bfalse_member {| intro []; eqcd |} 'H :
  * true, and another where it is false.
  * @end[doc]
  *)
-interactive boolElimination2 {| elim [] |} 'H 'J 'x :
+interactive boolElimination2 {| elim [] |} 'H 'x :
    [main] sequent['ext] { 'H; 'J[btrue] >- 'C[btrue] } -->
    [main] sequent['ext] { 'H; 'J[bfalse] >- 'C[bfalse] } -->
    sequent ['ext] { 'H; x: "bool"; 'J['x] >- 'C['x] }
@@ -281,7 +281,7 @@ interactive boolElimination2 {| elim [] |} 'H 'J 'x :
  * a case analysis on the condition.
  * @end[doc]
  *)
-interactive ifthenelse_type2 {| intro [] |} 'H 'x :
+interactive ifthenelse_type2 {| intro [] |} 'x :
    [wf] sequent [squash] { 'H >- 'e in bool } -->
    [wf] sequent [squash] { 'H; x: 'e = btrue in bool >- "type"{'A} } -->
    [wf] sequent [squash] { 'H; x: 'e = bfalse in bool >- "type"{'B} } -->
@@ -295,10 +295,10 @@ interactive ifthenelse_type2 {| intro [] |} 'H 'x :
  * $@true$ and $@false$ are provably distinct.
  * @end[doc]
  *)
-interactive boolContradiction1 {| elim [] |} 'H 'J :
+interactive boolContradiction1 {| elim [] |} 'H :
    sequent ['ext] { 'H; x: btrue = bfalse in bool; 'J['x] >- 'C['x] }
 
-interactive boolContradiction2 {| elim [] |} 'H 'J :
+interactive boolContradiction2 {| elim [] |} 'H :
    sequent ['ext] { 'H; x: bfalse = btrue in bool; 'J['x] >- 'C['x] }
 
 (*!
@@ -311,7 +311,7 @@ interactive boolContradiction2 {| elim [] |} 'H 'J :
  * condition.
  * @end[doc]
  *)
-interactive ifthenelse_equality {| intro []; eqcd |} 'H 'w :
+interactive ifthenelse_equality {| intro []; eqcd |} 'w :
    [wf] sequent [squash] { 'H >- 'e1 = 'e2 in bool } -->
    [wf] sequent [squash] { 'H; w: 'e1 = btrue in bool >- 'x1 = 'x2 in 'T } -->
    [wf] sequent [squash] { 'H; w: 'e1 = bfalse in bool >- 'y1 = 'y2 in 'T } -->
@@ -328,41 +328,33 @@ interactive ifthenelse_equality {| intro []; eqcd |} 'H 'w :
  * $@inl{@it}$ ($@true$) and $@inr{@it}$ ($@false$).
  * @end[doc]
  *)
-interactive boolSqequal 'H :
+interactive boolSqequal :
    sequent [squash] { 'H >- 'x = 'y in bool } -->
    sequent ['ext] { 'H >- 'x ~ 'y }
 (*! @docoff *)
 
-let d_bool_sqequalT p =
-   boolSqequal (Sequent.hyp_count_addr p) p
-
-let bool_sqequal_term1 = << 'e ~ btrue >>
-let bool_sqequal_term2 = << 'e ~ bfalse >>
-let bool_sqequal_term3 = << btrue ~ 'e >>
-let bool_sqequal_term4 = << bfalse ~ 'e >>
-
 let resource intro += [
-   bool_sqequal_term1, wrap_intro d_bool_sqequalT;
-   bool_sqequal_term2, wrap_intro d_bool_sqequalT;
-   bool_sqequal_term3, wrap_intro d_bool_sqequalT;
-   bool_sqequal_term4, wrap_intro d_bool_sqequalT
+   << 'e ~ btrue >>, wrap_intro boolSqequal;
+   << 'e ~ bfalse >>, wrap_intro boolSqequal;
+   << btrue ~ 'e >>, wrap_intro boolSqequal;
+   << bfalse ~ 'e >>, wrap_intro boolSqequal
 ]
 
 (*
  * H >- Ui ext Unit
  * by boolFormation
  *)
-interactive boolFormation 'H :
+interactive boolFormation :
    sequent ['ext] { 'H >- univ[i:l] }
 
 (*
  * H >- Bool ext btrue
  * by bool_*Formation
  *)
-interactive bool_trueFormation 'H :
+interactive bool_trueFormation :
    sequent ['ext] { 'H >- "bool" }
 
-interactive bool_falseFormation 'H :
+interactive bool_falseFormation :
    sequent ['ext] { 'H >- "bool" }
 
 (*!
@@ -373,22 +365,22 @@ interactive bool_falseFormation 'H :
  * immediate subterms are also Boolean values.
  * @end[doc]
  *)
-interactive bor_member {| intro [] |} 'H :
+interactive bor_member {| intro [] |} :
    [wf] sequent [squash] { 'H >- 't1 in bool } -->
    [wf] sequent [squash] { 'H >- 't2 in bool } -->
    sequent ['ext] { 'H >- bor{'t1; 't2} in bool }
 
-interactive band_member {| intro [] |} 'H :
+interactive band_member {| intro [] |} :
    [wf] sequent [squash] { 'H >- 't1 in bool } -->
    [wf] sequent [squash] { 'H >- 't2 in bool } -->
    sequent ['ext] { 'H >- band{'t1; 't2} in bool }
 
-interactive bimplies_member {| intro [] |} 'H :
+interactive bimplies_member {| intro [] |} :
    [wf] sequent [squash] { 'H >- 't1 in bool } -->
    [wf] sequent [squash] { 'H >- 't2 in bool } -->
    sequent ['ext] { 'H >- bimplies{'t1; 't2} in bool }
 
-interactive bnot_equal {| intro []; eqcd |} 'H :
+interactive bnot_equal {| intro []; eqcd |} :
    [wf] sequent [squash] { 'H >- 'a = 'b in bool } -->
    sequent ['ext] { 'H >- bnot{'a} = bnot{'b} in bool }
 
@@ -406,14 +398,14 @@ interactive bnot_equal {| intro []; eqcd |} 'H :
  * the $@assert{@false}$ assumption is contradictory.
  * @end[doc]
  *)
-interactive assert_type {| intro [] |} 'H :
+interactive assert_type {| intro [] |} :
    [wf] sequent [squash] { 'H >- 't in bool } -->
    sequent ['ext] { 'H >- "type"{."assert"{'t}} }
 
-interactive assert_true {| intro [] |} 'H :
+interactive assert_true {| intro [] |} :
    sequent ['ext] { 'H >- "assert"{btrue} }
 
-interactive assert_false {| elim [] |} 'H 'J :
+interactive assert_false {| elim [] |} 'H :
    sequent ['ext] { 'H; x: "assert"{bfalse}; 'J['x] >- 'C['x] }
 
 (*!
@@ -426,13 +418,13 @@ interactive assert_false {| elim [] |} 'H 'J :
  * are just $@true$ and $@false$.
  * @end[doc]
  *)
-interactive bool_subst_concl 'H bind{x. 'C['x]} 'e 'y :
+interactive bool_subst_concl bind{x. 'C['x]} 'e 'y :
    [wf] sequent [squash] { 'H >- 'e in bool } -->
    [main] sequent ['ext] { 'H; y: "assert"{'e} >- 'C[btrue] } -->
    [main] sequent ['ext] { 'H; y: "assert"{bnot{'e}} >- 'C[bfalse] } -->
    sequent ['ext] { 'H >- 'C['e] }
 
-interactive bool_subst_hyp 'H 'J bind{x. 'A['x]} 'e 'y :
+interactive bool_subst_hyp 'H bind{x. 'A['x]} 'e 'y :
    [wf] sequent [squash] { 'H; x: 'A['e]; 'J['x] >- 'e in bool } -->
    [main] sequent ['ext] { 'H; x: 'A[btrue]; 'J['x]; y: "assert"{'e} >- 'C['x] }
  -->
@@ -448,7 +440,7 @@ interactive bool_subst_hyp 'H 'J bind{x. 'A['x]} 'e 'y :
  * @misspelled{bi}-implication $A @Leftrightarrow_b B$ holds.
  * @end[doc]
  *)
-interactive bool_ext_equality 'H 'u :
+interactive bool_ext_equality 'u :
    [wf] sequent [squash] { 'H >- 'x in bool } -->
    [wf] sequent [squash] { 'H >- 'y in bool } -->
    [main] sequent [squash] { 'H; u: "assert"{'x} >- "assert"{'y} } -->
@@ -463,7 +455,7 @@ interactive bool_ext_equality 'H 'u :
  * term $@it$ term; the proof itself can be omitted.
  * @end[doc]
  *)
-interactive assertSquashElim {| squash; intro [] |} 'H :
+interactive assertSquashElim {| squash; intro [] |} :
    sequent [squash] { 'H >- "assert"{'t} } -->
    sequent ['ext] { 'H >- it in "assert"{'t} }
 
@@ -475,12 +467,12 @@ interactive assertSquashElim {| squash; intro [] |} 'H :
  * elimination reasoning on the Boolean negation.
  * @end[doc]
  *)
-interactive assert_bnot_intro {| intro [] |} 'H 'x :
+interactive assert_bnot_intro {| intro [] |} 'x :
    [wf] sequent [squash] { 'H >- 't1 in bool } -->
    [main] sequent [squash] { 'H; x: "assert"{'t1} >- "false" } -->
    sequent ['ext] { 'H >- "assert"{bnot{'t1}} }
 
-interactive assert_bnot_elim {| elim [] |} 'H 'J :
+interactive assert_bnot_elim {| elim [] |} 'H :
    [wf] sequent [squash] { 'H; 'J[it] >- "assert"{'t} } -->
    sequent ['ext] { 'H; x: "assert"{bnot{'t}}; 'J['x] >- 'C['x] }
 
@@ -492,7 +484,7 @@ interactive assert_bnot_elim {| elim [] |} 'H 'J :
  * only the elimination rules.
  * @end[doc]
  *)
-interactive assert_magic 'H 'x :
+interactive assert_magic 'x :
    [wf] sequent [squash] { 'H >- 't in bool } -->
    sequent [squash] { 'H; x: "assert"{bnot{'t}} >- "false" } -->
    sequent ['ext] { 'H >- "assert"{'t} }
@@ -502,7 +494,7 @@ interactive assert_magic 'H 'x :
  * The following rule establishes that @tt[assert] is always decidable.
  * @end[doc]
  *)
-interactive assert_is_decidable {| intro [] |} 'H:
+interactive assert_is_decidable {| intro [] |} :
    [wf] sequent [squash] { 'H >- 't in bool } -->
    sequent ['ext] { 'H >- decidable{."assert"{'t}} }
 
@@ -512,21 +504,21 @@ interactive assert_is_decidable {| intro [] |} 'H:
  * on the Boolean binary connectives.
  * @end[doc]
  *)
-interactive assert_bor_elim {| elim [] |} 'H 'J :
+interactive assert_bor_elim {| elim [] |} 'H :
    [wf] sequent [squash] { 'H; x: "assert"{bor{'t1; 't2}}; 'J['x] >- 't1 in bool
  } -->
    [main] sequent ['ext] { 'H; x: "assert"{'t1}; 'J[it] >- 'C[it] } -->
    [main] sequent ['ext] { 'H; x: "assert"{'t2}; 'J[it] >- 'C[it] } -->
    sequent ['ext] { 'H; x: "assert"{bor{'t1; 't2}}; 'J['x] >- 'C['x] }
 
-interactive assert_band_elim {| elim [] |} 'H 'J 'y 'z :
+interactive assert_band_elim {| elim [] |} 'H 'y 'z :
    [wf] sequent [squash] { 'H; x: "assert"{band{'t1; 't2}}; 'J['x] >- 't1 IN
  bool } -->
    [main] sequent ['ext] { 'H; y: "assert"{'t1}; z: "assert"{'t2}; 'J[it] >-
  'C[it] } -->
    sequent ['ext] { 'H; x: "assert"{band{'t1; 't2}}; 'J['x] >- 'C['x] }
 
-interactive assert_bimplies_elim {| elim [] |} 'H 'J :
+interactive assert_bimplies_elim {| elim [] |} 'H :
    [assertion] sequent [squash] { 'H; 'J[it] >- "assert"{'t1} } -->
    [main] sequent ['ext] { 'H; 'J[it]; y: "assert"{'t2} >- 'C[it] } -->
    sequent ['ext] { 'H; x: "assert"{bimplies{'t1; 't2}}; 'J['x] >- 'C['x] }
@@ -538,22 +530,22 @@ interactive assert_bimplies_elim {| elim [] |} 'H 'J :
  * connectives.
  * @end[doc]
  *)
-interactive assert_bor_intro_left {| intro [SelectOption 1] |} 'H :
+interactive assert_bor_intro_left {| intro [SelectOption 1] |} :
    [wf] sequent [squash] { 'H >- 't2 in bool } -->
    [main] sequent [squash] { 'H >- "assert"{'t1} } -->
    sequent ['ext] { 'H >- "assert"{bor{'t1; 't2}} }
 
-interactive assert_bor_intro_right {| intro [SelectOption 2] |} 'H :
+interactive assert_bor_intro_right {| intro [SelectOption 2] |} :
    [wf] sequent [squash] { 'H >- 't1 in bool } -->
    [main] sequent [squash] { 'H >- "assert"{'t2} } -->
    sequent ['ext] { 'H >- "assert"{bor{'t1; 't2}} }
 
-interactive assert_band_intro {| intro [] |} 'H :
+interactive assert_band_intro {| intro [] |} :
    [main] sequent [squash] { 'H >- "assert"{'t1} } -->
    [main] sequent [squash] { 'H >- "assert"{'t2} } -->
    sequent ['ext] { 'H >- "assert"{band{'t1; 't2}} }
 
-interactive assert_bimplies_intro {| intro [] |} 'H 'x :
+interactive assert_bimplies_intro {| intro [] |} 'x :
    [wf] sequent [squash] { 'H >- 't1 in bool } -->
    [main] sequent [squash] { 'H; x: "assert"{'t1} >- "assert"{'t2} } -->
    sequent ['ext] { 'H >- "assert"{bimplies{'t1; 't2}} }
@@ -591,11 +583,11 @@ let dest_bor = dest_dep0_dep0_term bor_opname
 
 let extBoolT p =
    let v = maybe_new_vars1 p "u" in
-      bool_ext_equality (Sequent.hyp_count_addr p) v p
+      bool_ext_equality v p
 
 let d_magic_assertT p =
    let v = maybe_new_vars1 p "v" in
-      assert_magic (Sequent.hyp_count_addr p) v p
+      assert_magic v p
 
 let magicT = d_magic_assertT
 
@@ -638,7 +630,7 @@ let splitBoolCT a p =
          RefineError _ ->
             mk_xbind_term x (var_subst (Sequent.concl p) a x)
    in
-      bool_subst_concl (Sequent.hyp_count_addr p) bind a x p
+      bool_subst_concl bind a x p
 
 (*
  * Split a bool in a hyp.
@@ -657,8 +649,7 @@ let splitBoolHT i a p =
          RefineError _ ->
             mk_xbind_term z (var_subst (Sequent.nth_hyp p i) a z)
    in
-   let j, k = Sequent.hyp_indices p i in
-      bool_subst_hyp j k bind a z p
+      bool_subst_hyp (Sequent.get_pos_hyp_num p i) bind a z p
 
 let splitBoolT t i =
    if i = 0 then
@@ -794,18 +785,18 @@ interactive_rw reduce_bnot_bnot :
 
 let reduce_bnot_bnotC = reduce_bnot_bnot
 
-interactive eq_bfalse2assert {| intro []; eqcd |} 'H :
+interactive eq_bfalse2assert {| intro []; eqcd |} :
    [wf] sequent ['ext] { 'H >- 'e1 in bool } -->
    [main] sequent ['ext] { 'H >- "assert"{bnot{'e1}} } -->
    sequent ['ext] { 'H >- 'e1 = bfalse in bool }
 
-let eq_bfalse2assertT i p = eq_bfalse2assert (Sequent.clause_addr p i) p
+let eq_bfalse2assertT = eq_bfalse2assert
 
-interactive assert2eq_bfalse 'H :
+interactive assert2eq_bfalse :
    [main] sequent ['ext] { 'H >- 'e1 = bfalse in bool } -->
    sequent ['ext] { 'H >- "assert"{bnot{'e1}} }
 
-let assert2eq_bfalseT i p = assert2eq_bfalse (Sequent.clause_addr p i) p
+let assert2eq_bfalseT = assert2eq_bfalse
 
 interactive_rw reduce_band_same :
    ( 'e in bool ) -->

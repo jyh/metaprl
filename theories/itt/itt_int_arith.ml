@@ -155,7 +155,7 @@ let le2geT t p =
    let newt=mk_ge_term right left in
    thenLocalAT (assertT newt) (thenLocalMT (rwh unfold_ge 0) (onSomeHypT nthHypT)) p
 
-interactive lt2ge 'H :
+interactive lt2ge :
    [wf] sequent [squash] { 'H >- 'a in int } -->
    [wf] sequent [squash] { 'H >- 'b in int } -->
    sequent [squash] { 'H >- 'a < 'b } -->
@@ -166,9 +166,9 @@ let lt2geT t p =
    let newt=mk_ge_term right
                       (mk_add_term left
                                   (mk_number_term (Mp_num.num_of_int 1))) in
-      (thenLocalAT (assertT newt) (lt2ge (Sequent.hyp_count_addr p))) p
+      (thenLocalAT (assertT newt) lt2ge) p
 
-interactive gt2ge 'H :
+interactive gt2ge :
    [wf] sequent [squash] { 'H >- 'a in int } -->
    [wf] sequent [squash] { 'H >- 'b in int } -->
    sequent [squash] { 'H >- 'a > 'b } -->
@@ -179,19 +179,19 @@ let gt2geT t p =
    let newt=mk_ge_term left
                       (mk_add_term right
                                   (mk_number_term (Mp_num.num_of_int 1))) in
-      (thenLocalAT (assertT newt) (gt2ge (Sequent.hyp_count_addr p))) p
+      (thenLocalAT (assertT newt) gt2ge ) p
 
-interactive eq2ge1 'H :
+interactive eq2ge1 :
    sequent [squash] { 'H >- 'a = 'b in int } -->
    sequent ['ext] { 'H >- 'a >= 'b }
 
-let eq2ge1T p = eq2ge1 (Sequent.hyp_count_addr p) p
+let eq2ge1T = eq2ge1
 
-interactive eq2ge2 'H :
+interactive eq2ge2 :
    sequent [squash] { 'H >- 'a = 'b in int } -->
    sequent ['ext] { 'H >- 'b >= 'a }
 
-let eq2ge2T p = eq2ge2 (Sequent.hyp_count_addr p) p
+let eq2ge2T = eq2ge2
 
 let eq2geT t =
    let (_,l,r)=dest_equal t in
@@ -199,7 +199,7 @@ let eq2geT t =
    (thenLocalAT (assertT (mk_ge_term l r)) (eq2ge1T thenT (onSomeHypT nthHypT)))
    (thenLocalAT (assertT (mk_ge_term r l)) (eq2ge2T thenT (onSomeHypT nthHypT)))
 
-interactive notle2ge 'H :
+interactive notle2ge :
    [wf] sequent [squash] { 'H >- 'a in int } -->
    [wf] sequent [squash] { 'H >- 'b in int } -->
    [aux] sequent [squash] { 'H >- "not"{('a <= 'b)} } -->
@@ -268,7 +268,7 @@ let arithRelInConcl2HypT p =
    else if is_ge_term t then geInConcl2HypT p
    else idT p
 
-interactive ge_addMono 'H :
+interactive ge_addMono :
    sequent [squash] { 'H >- 'a in int } -->
    sequent [squash] { 'H >- 'b in int } -->
    sequent [squash] { 'H >- 'c in int } -->
@@ -795,7 +795,7 @@ let provideConstantC t =
    else
       add_Id3C
 
-interactive ge_addMono2 'H 'c :
+interactive ge_addMono2 'c :
    [wf] sequent [squash] { 'H >- 'a in int } -->
    [wf] sequent [squash] { 'H >- 'b in int } -->
    [wf] sequent [squash] { 'H >- 'c in int } -->
@@ -862,8 +862,7 @@ let sumList tl g =
 (* autoT should be removed to permit incorporation
 of this tactic into autoT
  *)
-let proveSumT p =
-   (ge_addMono (Sequent.hyp_count_addr p)) p
+let proveSumT = ge_addMono
 
 (* Asserts sum of ge-relations and grounds it
  *)
@@ -987,7 +986,7 @@ sequent ['ext] { 'H; x: ('a >= 'b +@ 0);
                      t: ('a < 'b)
                 >- "assert"{bfalse} }
 
-interactive test6 'H 'a 'b 'c :
+interactive test6 'H 'b 'c :
 sequent [squash] { 'H >- 'a in int } -->
 sequent [squash] { 'H >- 'b in int } -->
 sequent [squash] { 'H >- 'c in int } -->

@@ -122,7 +122,7 @@ let mk_fun_term = mk_dep0_dep0_term fun_opname
  * The non-dependent function has an intensional type equality.
  * @end[doc]
  *)
-interactive independentFunctionEquality {| intro []; eqcd |} 'H :
+interactive independentFunctionEquality {| intro []; eqcd |} :
    [wf] sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
    [wf] sequent [squash] { 'H >- 'B1 = 'B2 in univ[i:l] } -->
    sequent ['ext] { 'H >- ('A1 -> 'B1) = ('A2 -> 'B2) in univ[i:l] }
@@ -130,7 +130,7 @@ interactive independentFunctionEquality {| intro []; eqcd |} 'H :
 (*
  * Typehood.
  *)
-interactive independentFunctionType {| intro [] |} 'H 'x :
+interactive independentFunctionType {| intro [] |} 'x :
    [wf] sequent [squash] { 'H >- "type"{'A1} } -->
    [wf] sequent [squash] { 'H; x: 'A1 >- "type"{'B1} } -->
    sequent ['ext] { 'H >- "type"{. 'A1 -> 'B1 } }
@@ -145,7 +145,7 @@ interactive independentFunctionType {| intro [] |} 'H 'x :
  * there is a proof of $B$.
  * @end[doc]
  *)
-interactive independentLambdaFormation {| intro [] |} 'H 'z :
+interactive independentLambdaFormation {| intro [] |} 'z :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [main] ('b['z] : sequent ['ext] { 'H; z: 'A >- 'B }) -->
    sequent ['ext] { 'H >- 'A -> 'B }
@@ -160,7 +160,7 @@ interactive independentLambdaFormation {| intro [] |} 'H 'z :
  * in $A$.
  * @end[doc]
  *)
-interactive independentLambdaEquality {| intro []; eqcd |} 'H 'x :
+interactive independentLambdaEquality {| intro []; eqcd |} 'x :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H; x: 'A >- 'b1['x] = 'b2['x] in 'B } -->
    sequent ['ext] { 'H >- lambda{a1. 'b1['a1]} = lambda{a2. 'b2['a2]} in 'A -> 'B }
@@ -174,7 +174,7 @@ interactive independentLambdaEquality {| intro []; eqcd |} 'H 'x :
  * derived from the @hrefrule[functionExtensionality] rule.
  * @end[doc]
  *)
-interactive independentFunctionExtensionality 'H ('C -> 'D) ('E -> 'F) 'u :
+interactive independentFunctionExtensionality ('C -> 'D) ('E -> 'F) 'u :
    [main] sequent [squash] { 'H; u: 'A >- ('f 'u) = ('g 'u) in 'B } -->
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H >- 'f in 'C -> 'D } -->
@@ -192,7 +192,7 @@ interactive independentFunctionExtensionality 'H ('C -> 'D) ('E -> 'F) 'u :
  * more appropriate for the functional application to a specific argument $a @in A$.
  * @end[doc]
  *)
-interactive independentFunctionElimination 'H 'J 'f 'y :
+interactive independentFunctionElimination 'H 'f 'y :
    [assertion] ('a : sequent ['ext] { 'H; f: 'A -> 'B; 'J['f] >- 'A }) -->
    [main] ('t['f; 'y] : sequent ['ext] { 'H; f: 'A -> 'B; 'J['f]; y: 'B >- 'T['f] }) -->
    sequent ['ext] { 'H; f: 'A -> 'B; 'J['f] >- 'T['f] }
@@ -200,7 +200,7 @@ interactive independentFunctionElimination 'H 'J 'f 'y :
 (*
  * Explicit function elimination.
  *)
-interactive independentFunctionElimination2 'H 'J 'f 'y 'z 'a :
+interactive independentFunctionElimination2 'H 'f 'y 'z 'a :
    [wf] sequent [squash] { 'H; f: 'A -> 'B; 'J['f] >- 'a in 'A } -->
    [main] ('t['y; 'z] : sequent ['ext] { 'H; f: 'A -> 'B; 'J['f]; y: 'B; z: 'y = ('f 'a) in 'B >- 'T['f] }) -->
    sequent ['ext] { 'H; f: 'A -> 'B; 'J['f] >- 'T['f] }
@@ -213,7 +213,7 @@ interactive independentFunctionElimination2 'H 'J 'f 'y 'z 'a :
  * functions and arguments are equal.
  * @end[doc]
  *)
-interactive independentApplyEquality {| eqcd |} 'H ('A -> 'B) :
+interactive independentApplyEquality {| eqcd |} ('A -> 'B) :
    [wf] sequent [squash] { 'H >- 'f1 = 'f2 in 'A -> 'B } -->
    [wf] sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
    sequent ['ext] { 'H >- ('f1 'a1) = ('f2 'a2) in 'B }
@@ -228,7 +228,7 @@ interactive independentApplyEquality {| eqcd |} 'H ('A -> 'B) :
  * @docoff
  * @end[doc]
  *)
-interactive independentFunctionSubtype {| intro [] |} 'H :
+interactive independentFunctionSubtype {| intro [] |} :
    sequent [squash] { 'H >- \subtype{'A2; 'A1} } -->
    sequent [squash] { 'H >- \subtype{'B1; 'B2} } -->
    sequent ['ext] { 'H >- \subtype{ ('A1 -> 'B1); ('A2 -> 'B2) } }
@@ -240,7 +240,7 @@ interactive independentFunctionSubtype {| intro [] |} 'H :
  * H >- Ui ext A
  * H >- Ui ext B
  *)
-interactive independentFunctionFormation 'H :
+interactive independentFunctionFormation :
    ('A : sequent ['ext] { 'H >- univ[i:l] }) -->
    ('B : sequent ['ext] { 'H >- univ[i:l] }) -->
    sequent ['ext] { 'H >- univ[i:l] }
@@ -274,7 +274,7 @@ let d_apply_equalT p =
       else
          raise (RefineError ("d_apply_equalT", StringTermError ("inferred type is not a function type", f_type)))
    in
-      tac (Sequent.hyp_count_addr p) f_type p
+      tac f_type p
 
 let apply_equal_term = << 'f1 'a1 = 'f2 'a2 in 'T >>
 
@@ -315,15 +315,15 @@ let resource intro += [
  * We take the argument.
  *)
 let d_hyp_fun i p =
+   let i = Sequent.get_pos_hyp_num p i in
    let f = Sequent.nth_binding p i in
-   let i, j = Sequent.hyp_indices p i in
    let y, z = maybe_new_vars2 p "y" "z" in
       try
          let a = get_with_arg p in
-            independentFunctionElimination2 i j f y z a p
+            independentFunctionElimination2 i f y z a p
       with
          RefineError _ ->
-            independentFunctionElimination i j f y p
+            independentFunctionElimination i f y p
 
 let resource elim += (fun_term, d_hyp_fun)
 
@@ -342,7 +342,7 @@ let fnExtensionalityT t1 t2 p =
    else if is_fun_term t1 then
       let t, _, _ = dest_equal (Sequent.concl p) in
       let o = maybe_new_vars1 p "o" in
-         independentFunctionExtensionality (Sequent.hyp_count_addr p) t1 t2 o p
+         independentFunctionExtensionality t1 t2 o p
    else raise (RefineError ("extensionalityT", StringTermError ("first arg is not a function type", t1)))
 
 let fnExtenT t = fnExtensionalityT t t
@@ -360,14 +360,11 @@ let resource typeinf += (fun_term, infer_univ_dep0_dep0 dest_fun)
 (*
  * Subtyping of two function types.
  *)
-let fun_subtypeT p =
-   independentFunctionSubtype (Sequent.hyp_count_addr p) p
-
 let resource sub +=
    (DSubtype ([<< 'A1 -> 'B1 >>, << 'A2 -> 'B2 >>;
                << 'A2 >>, << 'A1 >>;
                << 'B1 >>, << 'B2 >>],
-              fun_subtypeT))
+              independentFunctionSubtype))
 
 (*
  * -*-

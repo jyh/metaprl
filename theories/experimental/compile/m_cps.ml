@@ -228,7 +228,7 @@ let resource cps +=
  * The program is compilable if the CPS version is compilable.
  * @end[doc]
  *)
-interactive cps_prog 'H :
+interactive cps_prog :
    sequent [m] { 'H; cont: exp >-
       compilable{FunDecl{init.
                  FunDef{'init; AtomFun{cont. CPS{'cont; 'e}};
@@ -238,8 +238,8 @@ interactive cps_prog 'H :
 (*
  * Toplevel CPS conversion tactic.
  *)
-let cpsT p =
-   (cps_prog (hyp_count_addr p) thenT rw cpsC 0) p
+let cpsT =
+   cps_prog thenT rw cpsC 0
 
 (*!
  * @docoff

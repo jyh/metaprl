@@ -34,7 +34,7 @@
 (*
  * Hyp.
  *)
-rule hyp 'H 'J :
+rule hyp 'H :
    sequent { 'H; x: 'A; 'J >> 'A };;
 
 (*

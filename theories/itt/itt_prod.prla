@@ -3461,7 +3461,7 @@ T	t247	o771 b245
 B	b247	t247
 T	t249	o498 b500 b507 b247 b4
 B	b249	t249
-P	p1083	String "assertAtT 1 << 'A * 'B >> thenAT trivialT"
+P	p1083	String "assertAtT 2 << 'A * 'B >> thenAT trivialT"
 O	o1083	ext_rule p1083
 T	t1083	o b587 b4
 B	b1083	t1083

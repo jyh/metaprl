@@ -5660,7 +5660,7 @@ T	t1585	o1282 b1583 b1585
 B	b1586	t1585
 T	t1586	o1282 b1580 b1586
 B	b1587	t1586
-P	p1587	String "assertAtT 1 <<squash{'S}>>"
+P	p1587	String "assertAtT 2 <<squash{'S}>>"
 O	o1587	ext_rule p1587
 T	t1587	o b1581 b23
 B	b1588	t1587
@@ -6839,7 +6839,7 @@ T	t872	o b870 b23
 B	b872	t872
 T	t873	o1306 b848 b872
 B	b873	t873
-P	p873	String "assertAtT 5 <<'s_1='z in 'S>> thenMT autoT"
+P	p873	String "assertAtT 6 <<'s_1='z in 'S>> thenMT autoT"
 O	o873	ext_rule p873
 S	s873	t1286 h h1422 h610 h671 h3289 h828 h3293
 G	s873	t3291
@@ -7008,7 +7008,7 @@ T	t1003	o1282 b991 b1001
 B	b1003	t1003
 T	t1004	o1282 b985 b1003
 B	b1004	t1004
-P	p1004	String "cutEq0 2 <<'c_1='c_2 in 'C['t_2]>> <<bind{c.'c 'c}>> \"v\" \"u\" thenMT onHypsT[-1;-1] thinT thenAT autoT"
+P	p1004	String "cutEq0 <<'c_1='c_2 in 'C['t_2]>> <<bind{c.'c 'c}>> \"v\" \"u\" thenMT onHypsT[-1;-1] thinT thenAT autoT"
 O	o1004	ext_rule p1004
 T	t1005	o b992 b23
 B	b1005	t1005
@@ -7086,7 +7086,7 @@ T	t1132	o714 b1132
 B	b1133	t1132
 T	t1133	o1324 b1068 b23 b1133
 B	b1136	t1133
-P	p1142	String "exchange 5 2 2 1 thenT autoT"
+P	p1142	String "exchange 5 2 2 thenT autoT"
 O	o1142	ext_rule p1142
 T	t1142	o1306 b1136 b23
 B	b1143	t1142
@@ -7159,7 +7159,7 @@ T	t1221	o1282 b1199 b1221
 B	b1227	t1221
 T	t1227	o1282 b3219 b1227
 B	b1228	t1227
-P	p1228	String "cutEq0 2 <<'s_1='s_2 in 'S>> <<bind{x.'t_1['x] 't_2['x]}>> \"v\" \"u\"  thenAT autoT"
+P	p1228	String "cutEq0 <<'s_1='s_2 in 'S>> <<bind{x.'t_1['x] 't_2['x]}>> \"v\" \"u\"  thenAT autoT"
 O	o1228	ext_rule p1228
 T	t1228	o b1197 b23
 B	b1232	t1228

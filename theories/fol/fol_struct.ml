@@ -12,20 +12,20 @@ open Base_auto_tactic
 (*
  * Hypothesis.
  *)
-prim hypothesis 'H 'J :
+prim hypothesis 'H :
    sequent ['ext] { 'H; x: 'T; 'J['x] >- 'T } = 'x
 
 (*
  * Thinning.
  *)
-prim thin 'H 'J :
+prim thin 'H :
    ('t : sequent ['ext] { 'H; 'J >- 'C }) -->
    sequent ['ext] { 'H; x: 'T; 'J >- 'C } = 't
 
 (*
  * Cut rule.
  *)
-prim cut 'H 'T 'x :
+prim cut 'T 'x :
    ('a : sequent ['ext] { 'H >- 'T }) -->
    ('b['x] : sequent ['ext] { 'H; x: 'T >- 'C }) -->
    sequent ['ext] { 'H >- 'C } =
@@ -35,12 +35,10 @@ prim cut 'H 'T 'x :
  * Tactics.
  *)
 let nthHypT i p =
-   let j, k = Sequent.hyp_indices p i in
-      hypothesis j k p
+   hypothesis (Sequent.get_pos_hyp_num p i) p
 
 let thinT i p =
-   let i, j = Sequent.hyp_indices p i in
-      thin i j p
+   thin (Sequent.get_pos_hyp_num p i) p
 
 let nthAssumT i p =
    let assum = Sequent.nth_assum p i in
@@ -48,7 +46,7 @@ let nthAssumT i p =
 
 let assertT t p =
    let v = Var.maybe_new_vars1 p "v" in
-      cut (Sequent.hyp_count_addr p) t v p
+      cut t v p
 
 (*
  * Add to trivialT tactic.

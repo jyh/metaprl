@@ -124,7 +124,7 @@ dform set_bvd_df : parens :: except_mode[src] :: set_bvd{'s; x. 'a} =
  * if $s$ is a set, and $a[x]$ is a family of sets.
  * @end[doc]
  *)
-interactive set_bvd_isset {| intro [] |} 'H :
+interactive set_bvd_isset {| intro [] |} :
    sequent [squash] { 'H >- isset{'s} } -->
    sequent [squash] { 'H; x: set >- isset{'a['x]} } -->
    sequent ['ext] { 'H >- isset{set_bvd{'s; x. 'a['x]}} }
@@ -139,7 +139,7 @@ interactive set_bvd_isset {| intro [] |} 'H :
  * $@dexists{z; s; @eq{y; a[z]}}$.
  * @end[doc]
  *)
-interactive set_bvd_member_intro {| intro [] |} 'H :
+interactive set_bvd_member_intro {| intro [] |} :
    sequent [squash] { 'H >- isset{'s} } -->
    sequent [squash] { 'H >- isset{'y} } -->
    sequent [squash] { 'H; x: set >- isset{'a['x]} } -->
@@ -155,7 +155,7 @@ interactive set_bvd_member_intro {| intro [] |} 'H :
  * produces a witness $@mem{z; s}$ for which $@eq{y; a[z]}$.
  * @end[doc]
  *)
-interactive set_bvd_member_elim {| elim [] |} 'H 'J :
+interactive set_bvd_member_elim {| elim [] |} 'H :
    sequent [squash] { 'H; x: mem{'y; set_bvd{'s; x. 'a['x]}}; 'J['x] >- isset{'y} } -->
    sequent [squash] { 'H; x: mem{'y; set_bvd{'s; x. 'a['x]}}; 'J['x] >- isset{'s} } -->
    sequent [squash] { 'H; x: mem{'y; set_bvd{'s; x. 'a['x]}}; 'J['x]; z: set >- isset{'a['z]} } -->
@@ -171,7 +171,7 @@ interactive set_bvd_member_elim {| elim [] |} 'H 'J :
  * argument and the mapping.
  * @end[doc]
  *)
-interactive set_bvd_fun {| intro [] |} 'H :
+interactive set_bvd_fun {| intro [] |} :
    sequent ['ext] { 'H >- fun_set{z. 'A['z]} } -->
    sequent ['ext] { 'H; z: set >- fun_set{x. 'B['z; 'x]} } -->
    sequent ['ext] { 'H; z: set >- fun_set{x. 'B['x; 'z]} } -->

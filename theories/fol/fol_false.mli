@@ -6,7 +6,7 @@ extends Fol_type
 
 declare "false"
 
-rule false_type 'H :
+rule false_type :
    sequent ['ext] { 'H >- "type"{."false"} }
 
 (*

@@ -831,7 +831,7 @@ B	b703	t703
 NSummary!interactive	interactive	interactive Summary
 O	o703	interactive
 NSummary!ext_rule	ext_rule	ext_rule Summary
-P	p703	String "rwh unfoldRecordS 0 thenT rwh reduceC 0  thenT autoT"
+P	p703	String "rwh unfoldRecordS 0 thenT rwh reduceC 0 thenT autoT"
 O	o704	ext_rule p703
 NSummary!status_incomplete	status_incomplete	status_incomplete Summary
 O	o705	status_incomplete
@@ -1060,7 +1060,7 @@ O	o843	rewrite p843
 T	t843	o819 b702 b823 b824
 B	b843	t843
 B	b844	t832
-P	p844	String "rwh unfoldRcrd 0 thenT rwh reduceC 0  thenT autoT"
+P	p844	String "rwh unfoldRcrd 0 thenT rwh reduceC 0 thenT autoT"
 O	o844	ext_rule p844
 T	t844	o710 b843 b844
 S	s844	t710 h
@@ -1153,7 +1153,7 @@ P	p933	String baseField
 O	o933	rewrite p933
 T	t933	o922 b824 b702
 B	b933	t933
-P	p934	String "rwh unfoldField 0 thenT rwh reduceC 0  thenT autoT"
+P	p934	String "rwh unfoldField 0 thenT rwh reduceC 0 thenT autoT"
 O	o934	ext_rule p934
 T	t934	o710 b933 b834
 S	s934	t710 h
@@ -2313,7 +2313,7 @@ T	t1077	o b1073 b1077
 B	b1078	t1077
 T	t1078	o706 b1069 b1078
 B	b1079	t1078
-P	p1079	String "labelBackInduction 2 <<'n>> <<bind{x.record{'x;'A}}>> \"m\" \"z\" thenT autoT"
+P	p1079	String "labelBackInduction <<'n>> <<bind{x.record{'x;'A}}>> \"m\" \"z\" thenT autoT"
 O	o1079	ext_rule p1079
 H	h1079	m t726
 P	p1080	Var m
@@ -2348,7 +2348,7 @@ T	t1091	o b1090 b4
 B	b1091	t1091
 T	t1092	o1079 b705 b1088 b1091 b4
 B	b1092	t1092
-P	p1092	String "typeAssertT thenT   rwh reduceC 2 thenT autoT"
+P	p1092	String "typeAssertT thenT rwh reduceC 2 thenT autoT"
 O	o1092	ext_rule p1092
 T	t1093	o706 b1076 b4
 B	b1093	t1093
@@ -2439,7 +2439,7 @@ T	t1124	o723 b1122 b1124
 B	b1125	t1124
 T	t1125	o723 b1119 b1125
 B	b1126	t1125
-P	p1126	String "assertAtT 2 <<\"type\"{'A}>> thenMT autoT"
+P	p1126	String "assertAtT 3 <<\"type\"{'A}>> thenMT autoT"
 O	o1126	ext_rule p1126
 T	t1126	o b1121 b4
 B	b1127	t1126
@@ -2488,7 +2488,7 @@ T	t1144	o b1140 b1144
 B	b1145	t1144
 T	t1145	o706 b1134 b1145
 B	b1146	t1145
-P	p1146	String "labelBackInduction 4 <<'n>> <<bind{k.\"type\"{record{'k;'A}}}>> \"k\" \"z\""
+P	p1146	String "labelBackInduction <<'n>> <<bind{k.\"type\"{record{'k;'A}}}>> \"k\" \"z\""
 O	o1146	ext_rule p1146
 T	t1146	o708 b1118 b1128
 B	b1147	t1146
@@ -2916,7 +2916,7 @@ T	t1491	o b1491 b1476
 B	b1492	t1491
 P	p1512	String "assertT <<\"type\"{'A}>>"
 O	o1512	ext_rule p1512
-P	p1521	String "record_elim1 2 <<'m>> thenT autoT"
+P	p1521	String "record_elim1 <<'m>> thenT autoT"
 O	o1521	ext_rule p1521
 T	t1531	o725 b726 b702 b702
 B	b1532	t1531
@@ -3404,7 +3404,7 @@ T	t2254	o2 b2254
 B	b2255	t2254
 T	t2255	o1462 b2248 b4 b2255
 B	b2256	t2255
-P	p2258	String "equalRefT <<'m>> thenT  autoT"
+P	p2258	String "equalRefT <<'m>> thenT autoT"
 O	o2258	ext_rule p2258
 T	t2258	o706 b2256 b4
 B	b2259	t2258
@@ -3907,13 +3907,13 @@ T	t2719	o707 b2719 b4 b2684
 B	b2720	t2719
 T	t2720	o2 b2720
 B	b2721	t2720
-P	p2734	String "record_elim1 2 <<'n>> thenT autoT thenT useWitnessT <<'r>> thenT autoT"
+P	p2734	String "record_elim1 <<'n>> thenT autoT thenT useWitnessT <<'r>> thenT autoT"
 O	o2734	ext_rule p2734
 T	t2734	o706 b2644 b4
 B	b2735	t2734
 T	t2735	o2734 b705 b2735 b4 b4
 B	b2736	t2735
-P	p2736	String "record_elim1 4 <<'n>> thenT autoT thenT useWitnessT <<'r>> thenT autoT"
+P	p2736	String "record_elim1 <<'n>> thenT autoT thenT useWitnessT <<'r>> thenT autoT"
 O	o2736	ext_rule p2736
 T	t2736	o706 b2689 b4
 B	b2737	t2736
@@ -5263,7 +5263,7 @@ T	t3898	o707 b3897 b4 b713
 B	b3898	t3898
 T	t3899	o3625 b3898
 B	b3899	t3899
-P	p683	String "letT <<'r_1='r1 in record>> thenAT autoT  thenT moveToConclT 2"
+P	p683	String "letT <<'r_1='r1 in record>> thenAT autoT thenT moveToConclT 2"
 O	o685	ext_rule p683
 T	t3900	o708 b1286 b3896
 B	b3900	t3900
@@ -5323,7 +5323,7 @@ T	t3926	o b3925 b4
 B	b3926	t3926
 T	t3927	o706 b3911 b3926
 B	b3927	t3927
-P	p686	String "letT <<'n='m in label>>   thenMT moveToConclT 2"
+P	p686	String "letT <<'n='m in label>> thenMT moveToConclT 2"
 O	o687	ext_rule p686
 T	t3928	o708 b1325 b3896
 B	b3928	t3928
@@ -5587,7 +5587,7 @@ T	t795	o b791 b795
 B	b797	t795
 T	t797	o706 b783 b797
 B	b798	t797
-P	p799	String "record_elim1 3 <<'m>> thenT autoT"
+P	p799	String "record_elim1 <<'m>> thenT autoT"
 O	o799	ext_rule p799
 T	t799	o706 b791 b4
 B	b799	t799
@@ -5639,7 +5639,7 @@ T	t325	o b3998 b324
 B	b325	t325
 T	t326	o706 b3989 b325
 B	b326	t326
-P	p326	String "repeatMForT 2 (dT 0 thenMT dT (-1) thenMT rwh reduceC 0) thenT autoT  thenT  rwh reduceC 0 thenT logicAutoT"
+P	p326	String "repeatMForT 2 (dT 0 thenMT dT (-1) thenMT rwh reduceC 0) thenT autoT thenT rwh reduceC 0 thenT logicAutoT"
 O	o326	ext_rule p326
 T	t327	o706 b3998 b4
 B	b327	t327
@@ -5763,7 +5763,7 @@ B	b4374	t4374
 P	p4374	Number 4263
 P	p4375	Number 4571
 O	o4375	location p4374 p4375
-P	p4376	String "equalSymT thenT  record_eqcdST thenT autoT thenT equalSymT thenT autoT"
+P	p4376	String "equalSymT thenT record_eqcdST thenT autoT thenT equalSymT thenT autoT"
 O	o4376	ext_rule p4376
 T	t4376	o4376 b705 b2202 b4 b4
 B	b4376	t4376
@@ -6042,7 +6042,7 @@ T	t4477	o724 b2234
 B	b4477	t4477
 T	t4478	o723 b1059 b4477
 B	b4478	t4478
-P	p4478	String "assertT <<all n:label. all r: record.  (field{rcrd{'n; 'a; 'r};'n} ~ 'a )>>"
+P	p4478	String "assertT <<all n:label. all r: record. (field{rcrd{'n; 'a; 'r};'n} ~ 'a )>>"
 O	o4478	ext_rule p4478
 T	t4479	o708 b2234 b737
 B	b4479	t4479
@@ -6493,7 +6493,7 @@ T	t13	o b12 b4
 B	b13	t13
 T	t14	o706 b4526 b13
 B	b14	t14
-P	p1367	String "letT <<'x='n in label>>  thenMT moveToConclT 2"
+P	p1367	String "letT <<'x='n in label>> thenMT moveToConclT 2"
 O	o1367	ext_rule p1367
 T	t15	o1034 b b4 b2918
 B	b15	t15

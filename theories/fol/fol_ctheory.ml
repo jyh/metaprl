@@ -28,7 +28,7 @@ prec prec_and < prec_not
 prec prec_all < prec_implies
 prec prec_exists < prec_implies
 
-interactive or_choice 'H :
+interactive or_choice :
    sequent ['ext] { 'H >- "type"{'A} } -->
    sequent ['ext] { 'H >- "type"{'B} } -->
    sequent ['ext] { 'H >- "type"{'C} } -->

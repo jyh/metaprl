@@ -167,7 +167,7 @@ dform tree_ind_df : except_mode[src] :: parens :: "prec"[prec_tree_ind] :: tree_
  * H >- A = A in Ui
  * H, x:A >- Ui ext B
  *)
-prim wFormation 'H 'A 'x :
+prim wFormation 'A 'x :
    sequent [squash] { 'H >- 'A = 'A in univ[i:l] } -->
    ('B['x] : sequent ['ext] { 'H; x: 'A >- univ[i:l] }) -->
    sequent ['ext] { 'H >- univ[i:l] } =
@@ -182,7 +182,7 @@ prim wFormation 'H 'A 'x :
  * and $B[a]$ is a type for any $a @in A$.
  * @end[doc]
  *)
-prim wEquality {| intro []; eqcd |} 'H 'y :
+prim wEquality {| intro []; eqcd |} 'y :
    [wf] sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
    [wf] sequent [squash] { 'H; y: 'A1 >- 'B1['y] = 'B2['y] in univ[i:l] } -->
    sequent ['ext] { 'H >- w{'A1; x1. 'B1['x1]} = w{'A2; x2. 'B2['x2]} in univ[i:l] } =
@@ -191,7 +191,7 @@ prim wEquality {| intro []; eqcd |} 'H 'y :
 (*
  * Typehood.
  *)
-prim wType {| intro [] |} 'H 'x :
+prim wType {| intro [] |} 'x :
    [wf] sequent [squash] { 'H >- "type"{'A1} } -->
    [wf] sequent [squash] { 'H; x: 'A1 >- "type"{'A2['x]} } -->
    sequent ['ext] { 'H >- "type"{.w{'A1; y.'A2['y]}} } =
@@ -200,7 +200,7 @@ prim wType {| intro [] |} 'H 'x :
 (*!
  * @docoff
  *)
-prim treeFormation {| intro [] |} 'H 'a 'y :
+prim treeFormation {| intro [] |} 'a 'y :
    [wf] sequent [squash] { 'H >- 'a = 'a in 'A } -->
    [main] ('f : sequent ['ext] { 'H >- 'B['a] -> w{'A; x. 'B['x]} }) -->
    [wf] sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
@@ -216,7 +216,7 @@ prim treeFormation {| intro [] |} 'H 'a 'y :
  * and $f @in B[a] @rightarrow @w{x; A; B[x]}$.
  * @end[doc]
  *)
-prim treeEquality {| intro []; eqcd |} 'H 'y :
+prim treeEquality {| intro []; eqcd |} 'y :
    [wf] sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
    [wf] sequent [squash] { 'H >- 'b1 = 'b2 in 'B['a1] -> w{'A; x. 'B['x]} } -->
    [wf] sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
@@ -233,7 +233,7 @@ prim treeEquality {| intro []; eqcd |} 'H 'y :
  * the induction hypothesis holds on all children given by $f$.
  * @end[doc]
  *)
-prim wElimination {| elim [ThinOption thinT] |} 'H 'J 'z 'a 'f 'g 'b :
+prim wElimination {| elim [ThinOption thinT] |} 'H 'z 'a 'f 'g 'b :
    [main] ('t['z; 'a; 'f; 'g] :
    sequent ['ext] { 'H;
                     z: w{'A; x. 'B['x]};
@@ -256,7 +256,7 @@ prim wElimination {| elim [ThinOption thinT] |} 'H 'J 'z 'a 'f 'g 'b :
  * for each of the children.
  * @end[doc]
  *)
-interactive tree_indEquality {| intro []; eqcd |} 'H (w{'A; x. 'B['x]}) bind{z.'T['z]} :
+interactive tree_indEquality {| intro []; eqcd |} (w{'A; x. 'B['x]}) bind{z.'T['z]} :
    [wf] sequent [squash] { 'H >- 'z1 = 'z2 in w{'A; x. 'B['x]} } -->
    [wf] sequent [squash] { 'H;
                            a: 'A;

@@ -97,7 +97,7 @@ interactive_rw fold_decidable : ( 'p or not {'p} ) <--> decidable{'p}
  * over a decidable proposition $p$.
  * @end[doc]
  *)
-interactive assert_decidable 'H 'p :
+interactive assert_decidable 'p :
    [decidable] sequent ['ext]  { 'H >- decidable {'p} } -->
    sequent ['ext] { 'H; x: 'p >- 'G } -->
    sequent ['ext] { 'H; x: not{'p} >- 'G } -->
@@ -127,9 +127,8 @@ let dest_decidable_term = dest_dep0_term decidable_opname
  * @docoff
  * @end[doc]
  *)
-let decideT t p =
-   (assert_decidable (Sequent.hyp_count_addr p) t
-      thenLT [tcaT; idT; idT]) p
+let decideT t =
+   assert_decidable t thenLT [tcaT; idT; idT]
 
 (*!
  * @begin[doc]
@@ -138,9 +137,9 @@ let decideT t p =
  * The propositions $@true$ and $@false$ are always decidable.
  * @end[doc]
  *)
-interactive dec_false {| intro [] |} 'H :
+interactive dec_false {| intro [] |} :
    sequent ['ext] { 'H >- decidable{."false"} }
 
-interactive dec_true {| intro [] |} 'H :
+interactive dec_true {| intro [] |} :
    sequent ['ext] { 'H >- decidable{."true"} }
 (*! @docoff *)

@@ -249,7 +249,7 @@ dform dfun_prop_df : except_mode[src] :: parens :: "prec"[prec_apply] :: dfun_pr
  * the set arguments to be equal (in the native @hrefterm[set] type).
  * @end[doc]
  *)
-interactive eq_equality1 {| intro [] |} 'H :
+interactive eq_equality1 {| intro [] |} :
    sequent [squash] { 'H >- isset{'s1} } -->
    sequent [squash] { 'H >- isset{'s2} } -->
    sequent ['ext] { 'H >- eq{'s1; 's2} =  eq{'s1; 's2} in univ[1:l] }
@@ -257,7 +257,7 @@ interactive eq_equality1 {| intro [] |} 'H :
 (*
  * Membership in a universe.
  *)
-interactive eq_type {| intro [] |} 'H :
+interactive eq_type {| intro [] |} :
    sequent [squash] { 'H >- isset{'s1} } -->
    sequent [squash] { 'H >- isset{'s2} } -->
    sequent ['ext] { 'H >- "type"{eq{'s1; 's2}} }
@@ -265,7 +265,7 @@ interactive eq_type {| intro [] |} 'H :
 (*
  * More general equality in a universe.
  *)
-interactive eq_equality2 {| intro [] |} 'H :
+interactive eq_equality2 {| intro [] |} :
    sequent [squash] { 'H >- 's1 = 's3 in set } -->
    sequent [squash] { 'H >- 's2 = 's4 in set } -->
    sequent ['ext] { 'H >-  eq{'s1; 's2}=  eq{'s3; 's4} in univ[1:l]  }
@@ -277,12 +277,12 @@ interactive eq_equality2 {| intro [] |} 'H :
  * that both $s_1$ and $s_2$ are types.
  * @end[doc]
  *)
-interactive equal_type {| intro [] |} 'H :
+interactive equal_type {| intro [] |} :
    sequent [squash] { 'H >- isset{'s1} } -->
    sequent [squash] { 'H >- isset{'s2} } -->
    sequent ['ext] { 'H >- "type"{.'s1='s2} }
 
-interactive equal_intro {| intro [] |} 'H :
+interactive equal_intro {| intro [] |} :
    [wf] sequent [squash] { 'H >- isset{'s1} } -->
    [wf] sequent [squash] { 'H >- isset{'s2} } -->
    sequent ['ext] { 'H >- eq{'s1; 's2} } -->
@@ -291,11 +291,11 @@ interactive equal_intro {| intro [] |} 'H :
 (*
  * Equality is over sets.
  *)
-interactive equal_isset_left 'H 's2 :
+interactive equal_isset_left 's2 :
    sequent ['ext] { 'H >- equal{'s1; 's2} } -->
    sequent ['ext] { 'H >- isset{'s1} }
 
-interactive equal_isset_right 'H 's1 :
+interactive equal_isset_right 's1 :
    sequent ['ext] { 'H >- equal{'s1; 's2} } -->
    sequent ['ext] { 'H >- isset{'s2} }
 
@@ -306,14 +306,14 @@ interactive equal_isset_right 'H 's1 :
  * transitive.
  * @end[doc]
  *)
-interactive eq_ref {| intro [] |} 'H :
+interactive eq_ref {| intro [] |} :
    sequent [squash] { 'H >- isset{'s1} } -->
    sequent ['ext] { 'H >- eq{'s1; 's1} }
 
 (*
  * Symettry.
  *)
-interactive eq_sym 'H :
+interactive eq_sym :
    [wf] sequent [squash] {'H >- isset{'s1} } -->
    [wf] sequent [squash] {'H >- isset{'s2} } -->
    sequent ['ext] { 'H >- eq{'s2; 's1} } -->
@@ -322,7 +322,7 @@ interactive eq_sym 'H :
 (*
  * Transitivity.
  *)
-interactive eq_trans 'H 's2 :
+interactive eq_trans 's2 :
    [wf] sequent [squash] {'H >- isset{'s1} } -->
    [wf] sequent [squash] {'H >- isset{'s2} } -->
    [wf] sequent [squash] {'H >- isset{'s3} } -->
@@ -337,7 +337,7 @@ interactive eq_trans 'H 's2 :
  * set for any set $z$.
  * @end[doc]
  *)
-interactive eq_isset 'H 'J fun_set{z. 'f['z]} :
+interactive eq_isset 'H fun_set{z. 'f['z]} :
    sequent ['ext] { 'H; z: set; 'J['z] >- fun_set{z. 'f['z]} } -->
    sequent ['ext] { 'H; z: set; 'J['z] >- isset{'f['z]} }
 
@@ -346,8 +346,7 @@ let funSetT i p =
    let z = Sequent.nth_binding p i in
    let t = dest_isset (Sequent.concl p) in
    let t = mk_fun_set_term z t in
-   let j, k = Sequent.hyp_indices p i in
-      eq_isset j k t p
+      eq_isset (Sequent.get_pos_hyp_num p i) t p
 
 (*!
  * @begin[doc]
@@ -355,12 +354,12 @@ let funSetT i p =
  * @emph{functional} with respect to their set arguments.
  * @end[doc]
  *)
-interactive eq_fun {| intro [] |} 'H :
+interactive eq_fun {| intro [] |} :
    sequent ['ext] { 'H >- fun_set{z. 'f1['z]} } -->
    sequent ['ext] { 'H >- fun_set{z. 'f2['z]} } -->
    sequent ['ext] { 'H >- fun_prop{z. eq{'f1['z]; 'f2['z]}} }
 
-interactive equal_fun {| intro [] |} 'H :
+interactive equal_fun {| intro [] |} :
    sequent ['ext] { 'H >- fun_set{z. 'f1['z]} } -->
    sequent ['ext] { 'H >- fun_set{z. 'f2['z]} } -->
    sequent ['ext] { 'H >- fun_prop{z. 'f1['z] = 'f2['z]} }
@@ -375,13 +374,13 @@ interactive equal_fun {| intro [] |} 'H :
  * context $P[x]$ is @emph{functional} on set arguments.
  * @end[doc]
  *)
-interactive eq_hyp_subst 'H 'J 's1 's2 (bind{v. 'P['v]}) 'z :
+interactive eq_hyp_subst 'H 's1 's2 (bind{v. 'P['v]}) 'z :
    sequent ['ext] { 'H; x: 'P['s1]; 'J['x] >- equal{'s1; 's2} } -->
    sequent ['ext] { 'H; x: 'P['s1]; 'J['x]; z: 'P['s2] >- 'C['x] } -->
    sequent ['ext] { 'H; x: 'P['s1]; 'J['x] >- fun_prop{z. 'P['z]} } -->
    sequent ['ext] { 'H; x: 'P['s1]; 'J['x] >- 'C['x] }
 
-interactive eq_concl_subst 'H 's1 's2 (bind{v. 'C['v]}) 'z :
+interactive eq_concl_subst 's1 's2 (bind{v. 'C['v]}) 'z :
    sequent ['ext] { 'H >- equal{'s1; 's2} } -->
    sequent ['ext] { 'H >- 'C['s2] } -->
    sequent ['ext] { 'H >- fun_prop{z. 'C['z]} } -->
@@ -395,11 +394,11 @@ interactive eq_concl_subst 'H 's1 's2 (bind{v. 'C['v]}) 'z :
  * it's argument be a family of propositions.
  * @end[doc]
  *)
-interactive fun_set_type {| intro [] |} 'H :
+interactive fun_set_type {| intro [] |} :
    sequent [squash] { 'H; z: set >- isset{'f['z]} } -->
    sequent ['ext] { 'H >- "type"{fun_set{z. 'f['z]}} }
 
-interactive fun_prop_type {| intro [] |} 'H :
+interactive fun_prop_type {| intro [] |} :
    sequent [squash] { 'H; z: set >- "type"{'f['z]} } -->
    sequent ['ext] { 'H >- "type"{fun_prop{z. 'f['z]}} }
 
@@ -410,14 +409,14 @@ interactive fun_prop_type {| intro [] |} 'H :
  * The identity function is also functional.
  * @end[doc]
  *)
-interactive fun_set {| intro [] |} 'H :
+interactive fun_set {| intro [] |} :
    sequent [squash] { 'H >- isset{'u} } -->
    sequent ['ext] { 'H >- fun_set{z. 'u} }
 
-interactive fun_ref {| intro [] |} 'H :
+interactive fun_ref {| intro [] |} :
    sequent ['ext] { 'H >- fun_set{z. 'z} }
 
-interactive fun_prop {| intro [] |} 'H :
+interactive fun_prop {| intro [] |} :
    sequent [squash] { 'H >- "type"{'P} } -->
    sequent ['ext] { 'H >- fun_prop{z. 'P} }
 
@@ -444,7 +443,7 @@ let setConclSubstT t p =
    let goal = Sequent.concl p in
    let z = maybe_new_vars1 p "v" in
    let bind = mk_xbind_term z (var_subst goal s1 z) in
-      (eq_concl_subst (hyp_count_addr p) s1 s2 bind z
+      (eq_concl_subst s1 s2 bind z
        thenLT [addHiddenLabelT "eq";
                addHiddenLabelT "main";
                addHiddenLabelT "wf"]) p
@@ -454,8 +453,7 @@ let setHypSubstT t i p =
    let hyp = nth_hyp p i in
    let z = maybe_new_vars1 p "v" in
    let bind = mk_xbind_term z (var_subst hyp s1 z) in
-   let j, k = hyp_indices p i in
-      (eq_hyp_subst j k s1 s2 bind z
+      (eq_hyp_subst (get_pos_hyp_num p i) s1 s2 bind z
        thenLT [addHiddenLabelT "eq";
                addHiddenLabelT "main";
                addHiddenLabelT "wf"]) p
@@ -478,29 +476,20 @@ let setSubstT t i =
  * @docoff
  * @end[doc]
  *)
-let eqSetRefT p =
-   eq_ref (hyp_count_addr p) p
-
-let eqSetSymT p =
-   eq_sym (hyp_count_addr p) p
-
-let eqSetTransT t p =
-   eq_trans (hyp_count_addr p) t p
+let eqSetRefT = eq_ref
+let eqSetSymT = eq_sym
+let eqSetTransT = eq_trans
 
 (*
  * Apply reference by default.
  *)
-let funSetRefT p =
-   fun_ref (hyp_count_addr p) p
+let funSetRefT = fun_ref
 
 (*
  * Sethood.
  *)
-let eqSetLeftT t p =
-   equal_isset_left (hyp_count_addr p) t p
-
-let eqSetRightT t p =
-   equal_isset_right (hyp_count_addr p) t p
+let eqSetLeftT = equal_isset_left
+let eqSetRightT = equal_isset_right
 
 (*
  * Always reasonable to try reflexivity.

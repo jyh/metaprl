@@ -3839,7 +3839,7 @@ B	b2777	t2777
 NSummary!interactive	interactive	interactive Summary
 O	o2777	interactive
 NSummary!ext_rule	ext_rule	ext_rule Summary
-P	p2777	String "squashElim 2 2 thenT unsquashEqualWeak 2 2 thenT trivialT"
+P	p2777	String "squashElim 2 thenT unsquashEqualWeak 2 thenT trivialT"
 O	o2778	ext_rule p2777
 NSummary!status_incomplete	status_incomplete	status_incomplete Summary
 O	o2779	status_incomplete
@@ -4094,7 +4094,7 @@ T	t2887	o2307 b2887
 B	b2888	t2887
 T	t2888	o2305 b2886 b2888
 B	b2889	t2888
-P	p2889	String "sqsqEqual 2 thenT assertT <<squash{'A}>> thenAT trivialT"
+P	p2889	String "sqsqEqual thenT assertT <<squash{'A}>> thenAT trivialT"
 O	o2889	ext_rule p2889
 T	t2889	o b2884 b19
 B	b2890	t2889
@@ -4146,7 +4146,7 @@ T	t2908	o b2907 b19
 B	b2908	t2908
 T	t2909	o2780 b2900 b2908
 B	b2909	t2909
-P	p2909	String "unsquashEqual 2 2 thenT autoT"
+P	p2909	String "unsquashEqual 2 thenT autoT"
 O	o2909	ext_rule p2909
 T	t2910	o2780 b2907 b19
 B	b2910	t2910
@@ -4336,7 +4336,7 @@ T	t4226	o2307 b4226
 B	b4227	t4226
 T	t4227	o2305 b4225 b4227
 B	b4228	t4227
-P	p4228	String "useWitnessT <<'t>> thenT unsquashEqual 2 2 thenT autoT"
+P	p4228	String "useWitnessT <<'t>> thenT unsquashEqual 2 thenT autoT"
 O	o4228	ext_rule p4228
 T	t4228	o b4224 b19
 B	b4229	t4228
@@ -4404,7 +4404,7 @@ T	t3023	o b3023 b19
 B	b3024	t3023
 T	t3024	o2780 b3016 b3024
 B	b3025	t3024
-P	p3025	String "unsquashEqual 2 1 thenT autoT"
+P	p3025	String "unsquashEqual 2 thenT autoT"
 O	o3025	ext_rule p3025
 T	t3025	o2780 b3023 b19
 B	b3026	t3025
@@ -4436,7 +4436,7 @@ T	t3037	o2307 b3037
 B	b3038	t3037
 T	t3038	o2305 b3035 b3038
 B	b3039	t3038
-P	p3039	String "assertAtT 2 <<'x = 'y in 'A>> thenAT (unsquashEqual 2 2 thenT autoT)"
+P	p3039	String "assertAtT 3 <<'x = 'y in 'A>> thenAT (unsquashEqual 2 thenT autoT)"
 O	o3039	ext_rule p3039
 T	t3039	o b3034 b19
 B	b3040	t3039
@@ -4479,7 +4479,7 @@ T	t3062	o2307 b3061
 B	b3062	t3062
 T	t3063	o2305 b3059 b3062
 B	b3063	t3063
-P	p3063	String "useWitnessT <<it>> thenT unsquashEqual 2 2 thenT autoT"
+P	p3063	String "useWitnessT <<it>> thenT unsquashEqual 2 thenT autoT"
 O	o3063	ext_rule p3063
 T	t3064	o b3058 b19
 B	b3064	t3064
@@ -4820,7 +4820,7 @@ T	t4380	o2305 b4380 b4276
 B	b4381	t4380
 T	t4381	o2305 b4378 b4381
 B	b4382	t4381
-P	p4382	String "assertAtT 2 <<'A>> thenAT autoT"
+P	p4382	String "assertAtT 3 <<'A>> thenAT autoT"
 O	o4382	ext_rule p4382
 T	t4382	o b4379 b19
 B	b4383	t4382
@@ -4863,7 +4863,7 @@ T	t4405	o2305 b4405 b4276
 B	b4406	t4405
 T	t4406	o2305 b4378 b4406
 B	b4407	t4406
-P	p4407	String "assertAtT 2 <<'A>>"
+P	p4407	String "assertAtT 3 <<'A>>"
 O	o4407	ext_rule p4407
 T	t4407	o b4404 b19
 B	b4408	t4407
@@ -4889,7 +4889,7 @@ T	t4417	o b4414 b4417
 B	b4418	t4417
 T	t4418	o2780 b4411 b4418
 B	b4419	t4418
-P	p4419	String "squashStable 4 <<'t>> thenT autoT"
+P	p4419	String "squashStable <<'t>> thenT autoT"
 O	o4419	ext_rule p4419
 T	t4419	o2780 b4414 b19
 B	b4420	t4419
@@ -8473,7 +8473,7 @@ B	b5916	t5916
 P	p5918	Number 9828
 P	p5919	Number 10000
 O	o5920	location p5918 p5919
-P	p5358	String "squashElim 2 3 thenT nthAssumT 1"
+P	p5358	String "squashElim 2 thenT nthAssumT 1"
 O	o5358	ext_rule p5358
 T	t5365	o5358 b2779 b3049 b19 b19
 B	b5365	t5365
@@ -8500,7 +8500,7 @@ B	b5929	t5929
 P	p5929	Number 10177
 P	p5933	Number 10412
 O	o5935	location p5929 p5933
-P	p504	String "unsquash 2 2 thenT autoT"
+P	p504	String "unsquash 2 thenT autoT"
 O	o504	ext_rule p504
 T	t504	o504 b2779 b4289 b19 b19
 B	b504	t504

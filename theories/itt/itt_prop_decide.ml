@@ -87,21 +87,21 @@ let is_imp_or_term term =
 let is_imp_imp_term term =
    is_implies_term term & is_implies_term (term_subterm term (make_address [0]))
 
-interactive imp_and_rule 'H 'J 'u :
+interactive imp_and_rule 'H 'u :
    sequent [squash] { 'H; x: "and"{'C; 'D} => 'B; 'J['x] >- "type"{'C} } -->
    sequent [squash] { 'H; x: "and"{'C; 'D} => 'B; 'J['x] >- "type"{'D} } -->
    sequent ['ext] { 'H; x: "and"{'C; 'D} => 'B; 'J['x];
                      u: 'C => 'D => 'B >- 'T['x] } -->
    sequent ['ext] { 'H; x: "and"{'C; 'D} => 'B; 'J['x] >- 'T['x] }
 
-interactive imp_or_rule 'H 'J 'u 'v :
+interactive imp_or_rule 'H 'u 'v :
    sequent [squash] { 'H; x: "or"{'C; 'D} => 'B; 'J['x] >- "type"{'C} } -->
    sequent [squash] { 'H; x: "or"{'C; 'D} => 'B; 'J['x] >- "type"{'D} } -->
    sequent ['ext] { 'H; x: "or"{'C; 'D} => 'B; 'J['x];
                      u: 'C => 'B; v: 'D => 'B >- 'T['x] } -->
    sequent ['ext] { 'H; x: "or"{'C; 'D} => 'B; 'J['x] >- 'T['x] }
 
-interactive imp_imp_rule 'H 'J 'u :
+interactive imp_imp_rule 'H 'u :
    sequent [squash] { 'H; x: "implies"{'C; 'D} => 'B; 'J['x] >- "type"{'C} } -->
    sequent [squash] { 'H; x: "implies"{'C; 'D} => 'B; 'J['x] >- "type"{'D} } -->
    sequent ['ext] { 'H; x: "implies"{'C; 'D} => 'B; 'J['x];
@@ -114,8 +114,7 @@ let d_and_impT i p =
       raise (RefineError ("d_and_impT", StringError "no introduction form"))
    else
       let u = maybe_new_vars1 p "u" in
-      let j, k = Sequent.hyp_indices p i in
-         (imp_and_rule j k u
+         (imp_and_rule i u
           thenLT [addHiddenLabelT "wf";
                   addHiddenLabelT "wf";
                   thinT i]) p
@@ -125,8 +124,7 @@ let d_or_impT i p =
       raise (RefineError ("d_or_impT", StringError "no introduction form"))
    else
       let u, v = maybe_new_vars2 p "u" "v" in
-      let j, k = Sequent.hyp_indices p i in
-         (imp_or_rule j k u v
+         (imp_or_rule i u v
           thenLT [addHiddenLabelT "wf";
                   addHiddenLabelT "wf";
                   thinT i]) p
@@ -136,8 +134,7 @@ let d_imp_impT i p =
       raise (RefineError ("d_and_impT", StringError "no introduction form"))
    else
       let u = maybe_new_vars1 p "u" in
-      let j, k = Sequent.hyp_indices p i in
-         (imp_and_rule j k u
+         (imp_and_rule i u
           thenLT [addHiddenLabelT "wf";
                   addHiddenLabelT "wf";
                   thinT i]) p

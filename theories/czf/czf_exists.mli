@@ -59,7 +59,7 @@ rule bounded_exists_intro 'a :
  * by bounded_exists_elim a
  * H, y: (exists x: A. B[x]), a: A, z: B[a], J >> T
  *)
-rule bounded_exists_elim 'H 'J 'a 'z :
+rule bounded_exists_elim 'H 'a 'z :
    sequent { 'H; y: (exists x: 'A. 'B['y]); a: 'A; b: 'B['a]; 'J['a, 'b] >> 'T['a, 'b] } -->
    sequent { 'H; y: (exists x: 'A. 'B['y]); 'J['y] >> 'T['y] };;
 
@@ -83,7 +83,7 @@ rule exists_intro 'z :
  * by exists_elim z w
  * H, y: (exists x. B[x]), z: set, b: 'B['z], J>> T
  *)
-rule all_elim 'H 'J 'z 'b :
+rule all_elim 'H 'z 'b :
    sequent { 'H; y: "exists"{x. 'B['x]}; z: set; b: 'B['z]; 'J[z, b] >> 'T['z, 'b] } -->
    sequent { 'H; y: "exists"{x. 'B['x]}; 'J['y] >> 'T['y] };;
 

@@ -44,16 +44,16 @@ prim_rw unfold_all : "all"{x. 'B['x]} <--> bisect{'B[void]; 'B[unit]}
  * RULES                                                                *
  ************************************************************************)
 
-interactive all_type 'H 'x :
+interactive all_type 'x :
    sequent ['ext] { 'H; x: univ >- "type"{'B[prop{'x}]} } -->
    sequent ['ext] { 'H >- "type"{."all"{y. 'B['y]}} }
 
-interactive all_intro 'H 'x :
+interactive all_intro 'x :
    sequent ['ext] { 'H; x: univ >- 'B[prop{'x}] } -->
    sequent ['ext] { 'H; x: univ >- "type"{'B[prop{'x}]} } -->
    sequent ['ext] { 'H >- "all"{y. 'B['y]} }
 
-interactive all_elim 'H 'J 'x 'z 'a :
+interactive all_elim 'H 'x 'z 'a :
    sequent ['ext] { 'H; x: "all"{y. 'B['y]}; 'J['x] >- "type"{'a} } -->
    sequent ['ext] { 'H; x: "all"{y. 'B['y]}; 'J['x]; z: 'B['a] >- 'C['x] } -->
    sequent ['ext] { 'H; x: "all"{y. 'B['y]}; 'J['x] >- 'C['x] }

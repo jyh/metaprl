@@ -4032,7 +4032,7 @@ T	t1461	o1489 b1461
 B	b1471	t1461
 T	t1471	o1487 b1458 b1471
 B	b1472	t1471
-P	p1475	String "copyHypT 2 2 thenT rwh unfold_subset 3 thenT autoT"
+P	p1475	String "copyHypT 2 3 thenT rwh unfold_subset 3 thenT autoT"
 O	o1476	ext_rule p1475
 T	t1484	o b1457 b21
 B	b1484	t1484

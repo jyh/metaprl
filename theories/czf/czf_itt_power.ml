@@ -108,7 +108,7 @@ dform power_df3 : power{'s1; 's2} =
  * are sets.
  * @end[doc]
  *)
-interactive power_isset1 {| intro [] |} 'H :
+interactive power_isset1 {| intro [] |} :
    ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
    ["wf"] sequent [squash] { 'H >- isset{'s2} } -->
    sequent ['ext] { 'H >- isset{power{'s1; 's2}} }
@@ -121,7 +121,7 @@ interactive power_isset1 {| intro [] |} 'H :
  * function $@fun{s_1; s_2}$.
  * @end[doc]
  *)
-interactive power_thm 'H bind{x. bind{y. 'P['x; 'y]}} 'a 'b :
+interactive power_thm bind{x. bind{y. 'P['x; 'y]}} 'a 'b :
    ["wf"] sequent [squash] { 'H >- isset{'a} } -->
    ["wf"] sequent [squash] { 'H >- isset{'b} } -->
    ["wf"] sequent [squash] { 'H; x: set; y: set >- "type"{'P['x; 'y]} } -->
@@ -149,7 +149,7 @@ let powerT t p =
    let x, y, prop, a, b = dest_rel (Sequent.concl p) in
    let prop = mk_xbind_term y prop in
    let prop = mk_xbind_term x prop in
-      power_thm (Sequent.hyp_count_addr p) prop a b p
+      power_thm prop a b p
 
 (*
  * -*-

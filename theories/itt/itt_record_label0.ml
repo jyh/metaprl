@@ -55,22 +55,22 @@ let resource reduce +=
 (*   Rules        *)
 (******************)
 
-interactive labelType {| intro [] |} 'H :
+interactive labelType {| intro [] |} :
    sequent ['ext] { 'H >- "type"{label} }
 
-interactive zeroMember {| intro [] |} 'H :
+interactive zeroMember {| intro [] |} :
    sequent ['ext] { 'H >- zero in label}
 
-interactive nextMember {| intro [] |} 'H :
+interactive nextMember {| intro [] |} :
    sequent [squash] { 'H >- 'x='y in label} -->
    sequent ['ext] { 'H >- next{'x} = next{'y} in label}
 
-interactive labelInduction {| elim [ThinOption thinT] |} 'H 'J 'm 'z :
+interactive labelInduction {| elim [ThinOption thinT] |} 'H 'm 'z :
    sequent ['ext] { 'H; n: label; 'J['n] >- 'C[zero] }  -->
    sequent ['ext] { 'H; n: label; 'J['n]; m: label;  z: 'C['m] >- 'C[next{'m}] }  -->
    sequent ['ext] { 'H; n: label; 'J['n] >- 'C['n] }
 
-interactive labelBackInduction 'H 'n bind{x.'C['x]} 'm 'z :
+interactive labelBackInduction 'n bind{x.'C['x]} 'm 'z :
    sequent [squash]{'H >- 'n in label }  -->
    sequent ['ext] { 'H >- 'C['n] }  -->
    sequent ['ext] { 'H; m: label;  z: 'C[next{'m}] >- 'C['m] }  -->
@@ -80,11 +80,11 @@ interactive labelBackInduction 'H 'n bind{x.'C['x]} 'm 'z :
 
 (**** equality ****)
 
-interactive label_sqequal 'H:
+interactive label_sqequal :
    sequent[squash] {'H >-'n = 'm  in label} -->
    sequent['ext] {'H >- 'n ~ 'm}
 
-interactive decide_eq_label 'H 'x 'y :
+interactive decide_eq_label 'x 'y :
    [wf] sequent[squash] {'H >- 'x in label} -->
    [wf] sequent[squash] {'H >- 'y in label} -->
    [main] sequent['ext] {'H; u:'x='y in label >- 'C} -->

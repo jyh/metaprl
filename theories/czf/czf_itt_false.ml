@@ -52,25 +52,25 @@ let _ =
 (*
  * False is a restricted formula.
  *)
-interactive void_fun {| intro [] |} 'H :
+interactive void_fun {| intro [] |} :
    sequent ['ext] { 'H >- fun_prop{x ."void"} }
 
 (*
  * False is a restricted formula.
  *)
-interactive void_res {| intro [] |} 'H :
+interactive void_res {| intro [] |} :
    sequent ['ext] { 'H >- restricted{."void"} }
 
 (*
  * False is a restricted formula.
  *)
-interactive false_fun {| intro [] |} 'H :
+interactive false_fun {| intro [] |} :
    sequent ['ext] { 'H >- fun_prop{x ."false"} }
 
 (*
  * False is a restricted formula.
  *)
-interactive false_res {| intro [] |} 'H :
+interactive false_res {| intro [] |} :
    sequent ['ext] { 'H >- restricted{."false"} }
 
 (*

@@ -114,7 +114,7 @@ dform subgroup_df : except_mode[src] :: subgroup{'s; 'g} =
  * The $@subgroup{s; g}$ is well-formed if its arguments are labels.
  * @end[doc]
  *)
-interactive subgroup_wf {| intro [] |} 'H :
+interactive subgroup_wf {| intro [] |} :
    sequent [squash] { 'H >- 's IN label } -->
    sequent [squash] { 'H >- 'g IN label } -->
    sequent ['ext] { 'H >- "type"{subgroup{'s; 'g}} }
@@ -128,7 +128,7 @@ interactive subgroup_wf {| intro [] |} 'H :
  * $@op{s; a; b}$ is defined as $@op{g; a; b}$ for $a, b @in @car{s}$.
  * @end[doc]
  *)
-interactive subgroup_intro {| intro [] |} 'H :
+interactive subgroup_intro {| intro [] |} :
    sequent [squash] { 'H >- 's IN label } -->
    sequent [squash] { 'H >- 'g IN label } -->
    sequent ['ext] { 'H >- group{'s} } -->
@@ -149,7 +149,7 @@ interactive subgroup_intro {| intro [] |} 'H :
  * @end[enumerate]
  * @end[doc]
  *)
-interactive subgroup_op {| intro [] |} 'H :
+interactive subgroup_op {| intro [] |} :
    sequent [squash] { 'H >- 's IN label } -->
    sequent [squash] { 'H >- 'g IN label } -->
    sequent [squash] { 'H >- isset{'a} } -->
@@ -159,19 +159,19 @@ interactive subgroup_op {| intro [] |} 'H :
    sequent ['ext] { 'H >- subgroup{'s; 'g} } -->
    sequent ['ext] { 'H >- mem{op{'g; 'a; 'b}; car{'s}} }
 
-interactive subgroup_id1 {| intro [] |} 'H :
+interactive subgroup_id1 {| intro [] |} :
    sequent [squash] { 'H >- 's IN label } -->
    sequent [squash] { 'H >- 'g IN label } -->
    sequent ['ext] { 'H >- subgroup{'s; 'g} } -->
    sequent ['ext] { 'H >- eq{id{'s}; id{'g}} }
 
-interactive subgroup_id2 {| intro [] |} 'H :
+interactive subgroup_id2 {| intro [] |} :
    sequent [squash] { 'H >- 's IN label } -->
    sequent [squash] { 'H >- 'g IN label } -->
    sequent ['ext] { 'H >- subgroup{'s; 'g} } -->
    sequent ['ext] { 'H >- mem{id{'g}; car{'s}} }
 
-interactive subgroup_inv1 {| intro [] |} 'H :
+interactive subgroup_inv1 {| intro [] |} :
    sequent [squash] { 'H >- 's IN label } -->
    sequent [squash] { 'H >- 'g IN label } -->
    sequent [squash] { 'H >- isset{'a} } -->
@@ -179,7 +179,7 @@ interactive subgroup_inv1 {| intro [] |} 'H :
    sequent ['ext] { 'H >- subgroup{'s; 'g} } -->
    sequent ['ext] { 'H >- eq{inv{'s; 'a}; inv{'g; 'a}} }
 
-interactive subgroup_inv2 {| intro [] |} 'H :
+interactive subgroup_inv2 {| intro [] |} :
    sequent [squash] { 'H >- 's IN label } -->
    sequent [squash] { 'H >- 'g IN label } -->
    sequent [squash] { 'H >- isset{'a} } -->
@@ -195,7 +195,7 @@ interactive subgroup_inv2 {| intro [] |} 'H :
  * a group $g$ is again a subgroup of $g$.
  * @end[doc]
  *)
-interactive subgroup_isect 'H 'h1 'h2 :
+interactive subgroup_isect 'h1 'h2 :
    sequent [squash] { 'H >- 'g IN label } -->
    sequent [squash] { 'H >- 'h1 IN label } -->
    sequent [squash] { 'H >- 'h2 IN label } -->
@@ -225,8 +225,7 @@ interactive subgroup_isect 'H 'h1 'h2 :
  * @docoff
  * @end[doc]
  *)
-let subgroupIsectT t1 t2 p =
-   subgroup_isect (hyp_count_addr p) t1 t2 p
+let subgroupIsectT = subgroup_isect
 
 (*
  * -*-

@@ -123,14 +123,14 @@ dform rcoset_df : parens :: except_mode[src] :: rcoset{'h; 'g; 'a} =
  * if $h$ and $g$ are labels, and $a$ is a set.
  * @end[doc]
  *)
-interactive lcoset_isset {| intro [] |} 'H :
+interactive lcoset_isset {| intro [] |} :
    sequent [squash] { 'H >- 'h IN label } -->
    sequent [squash] { 'H >- 'g IN label } -->
    sequent [squash] { 'H >- isset{'a} } -->
 (*   sequent ['ext] { 'H >- group{'g} } -->*)
    sequent ['ext] { 'H >- isset{lcoset{'h; 'g; 'a}} }
 
-interactive rcoset_isset {| intro [] |} 'H :
+interactive rcoset_isset {| intro [] |} :
    sequent [squash] { 'H >- 'h IN label } -->
    sequent [squash] { 'H >- 'g IN label } -->
    sequent [squash] { 'H >- isset{'a} } -->
@@ -149,7 +149,7 @@ interactive rcoset_isset {| intro [] |} 'H :
  * in $@car{g}$. The case for @tt[rcoset] is similar.
  * @end[doc]
  *)
-interactive lcoset_intro {| intro [] |} 'H 'z :
+interactive lcoset_intro {| intro [] |} 'z :
    sequent [squash] { 'H >- 'h IN label } -->
    sequent [squash] { 'H >- 'g IN label } -->
    sequent [squash] { 'H >- isset{'a} } -->
@@ -162,7 +162,7 @@ interactive lcoset_intro {| intro [] |} 'H 'z :
    sequent ['ext] { 'H >- eq{'x; op{'g; 'a; 'z}} } -->
    sequent ['ext] { 'H >- mem{'x; lcoset{'h; 'g; 'a}} }
 
-interactive rcoset_intro {| intro [] |} 'H 'z :
+interactive rcoset_intro {| intro [] |} 'z :
    sequent [squash] { 'H >- 'h IN label } -->
    sequent [squash] { 'H >- 'g IN label } -->
    sequent [squash] { 'H >- isset{'a} } -->
@@ -185,7 +185,7 @@ interactive rcoset_intro {| intro [] |} 'H 'z :
  * $@eq{y; @op{g; a; z}}$. The case for @tt[rcoset] is similar.
  * @end[doc]
  *)
-interactive lcoset_elim {| elim [] |} 'H 'J :
+interactive lcoset_elim {| elim [] |} 'H :
    sequent [squash] { 'H; x: mem{'y; lcoset{'h; 'g; 'a}}; 'J['x] >- 'h IN label } -->
    sequent [squash] { 'H; x: mem{'y; lcoset{'h; 'g; 'a}}; 'J['x] >- 'g IN label } -->
    sequent [squash] { 'H; x: mem{'y; lcoset{'h; 'g; 'a}}; 'J['x] >- isset{'a} } -->
@@ -195,7 +195,7 @@ interactive lcoset_elim {| elim [] |} 'H 'J :
    sequent ['ext] { 'H; x: mem{'y; lcoset{'h; 'g; 'a}}; 'J['x]; u: mem{'y; car{'g}}; z: set; v: mem{'z; car{'h}}; w: eq{'y; op{'g; 'a; 'z}} >- 'C['x] } -->
    sequent ['ext] { 'H; x: mem{'y; lcoset{'h; 'g; 'a}}; 'J['x] >- 'C['x] }
 
-interactive rcoset_elim {| elim [] |} 'H 'J :
+interactive rcoset_elim {| elim [] |} 'H :
    sequent [squash] { 'H; x: mem{'y; rcoset{'h; 'g; 'a}}; 'J['x] >- 'h IN label } -->
    sequent [squash] { 'H; x: mem{'y; rcoset{'h; 'g; 'a}}; 'J['x] >- 'g IN label } -->
    sequent [squash] { 'H; x: mem{'y; rcoset{'h; 'g; 'a}}; 'J['x] >- isset{'a} } -->
@@ -214,7 +214,7 @@ interactive rcoset_elim {| elim [] |} 'H 'J :
  * $g$.
  * @end[doc]
  *)
-interactive lcoset_subset {| intro [] |} 'H :
+interactive lcoset_subset {| intro [] |} :
    sequent [squash] { 'H >- 'h IN label } -->
    sequent [squash] { 'H >- 'g IN label } -->
    sequent [squash] { 'H >- isset{'a} } -->
@@ -222,7 +222,7 @@ interactive lcoset_subset {| intro [] |} 'H :
    sequent ['ext] { 'H >- subgroup{'h; 'g} } -->
    sequent ['ext] { 'H >- \subset{lcoset{'h; 'g; 'a}; car{'g}} }
 
-interactive rcoset_subset {| intro [] |} 'H :
+interactive rcoset_subset {| intro [] |} :
    sequent [squash] { 'H >- 'h IN label } -->
    sequent [squash] { 'H >- 'g IN label } -->
    sequent [squash] { 'H >- isset{'a} } -->

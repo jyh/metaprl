@@ -55,44 +55,44 @@ declare squash{'A}
  ************************************************************************)
 
 
-rule squashEquality 'H  :
+rule squashEquality :
    sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
    sequent ['ext] { 'H >- squash{'A1} = squash{'A2} in univ[i:l] }
 
-rule squashType 'H :
+rule squashType :
    sequent [squash] { 'H >- "type"{'A} } -->
    sequent ['ext] { 'H >- "type"{squash{'A}} }
 
-rule squashMemberFormation 'H :
+rule squashMemberFormation :
    sequent [squash] { 'H >- 'A } -->
    sequent ['ext]   { 'H >- squash{'A} }
 
-rule squashElim 'H 'J :
+rule squashElim 'H :
    sequent ['ext] { 'H; u: squash{'P}; 'J[it] >- 'C[it] } -->
    sequent ['ext] { 'H; u: squash{'P}; 'J['u] >- 'C['u] }
 
-rule unsquashEqual 'H 'J :
+rule unsquashEqual 'H :
    sequent [squash] { 'H; u: 'P; 'J[it] >- 'x[it] = 'y[it] in 'A[it] } -->
    sequent ['ext] { 'H; u: squash{'P}; 'J['u] >- 'x['u] = 'y['u] in 'A['u] }
 
-rule squashFromAny 'H 'ext :
+rule squashFromAny 'ext :
    sequent ['ext] { 'H >- 'T } -->
    sequent [squash] { 'H >- 'T }
 
-rule squashMemberEquality 'H :
+rule squashMemberEquality :
    [wf] sequent [squash] { 'H >- squash{'A} } -->
    sequent ['ext] { 'H >- it in squash{'A} }
 
-rule squashStable 'H 't :
+rule squashStable 't :
    [main] sequent [squash] { 'H >- squash{'A} } -->
    [wf] sequent [squash] { 'H; x: 'A >- 't in 'A } -->
    sequent ['ext] { 'H >- 'A}
 
-rule unsquashHypEqual 'H 'J :
+rule unsquashHypEqual 'H :
    sequent ['ext] { 'H; u: 'x = 'y in 'A; 'J[it] >- 'C[it] } -->
    sequent ['ext] { 'H; u: squash{('x = 'y in 'A)}; 'J['u] >- 'C['u] }
 
-rule unsquash 'H 'J :
+rule unsquash 'H :
    sequent [squash] { 'H; u: 'P; 'J[it] >- squash{'T[it]} } -->
    sequent ['ext] { 'H; u: squash{'P}; 'J['u] >- squash{'T['u]} }
 
@@ -101,7 +101,7 @@ rule unsquash 'H 'J :
  * by squashFormation
  * H >- Ui ext A
  *)
-rule squashFormation 'H :
+rule squashFormation :
    sequent ['ext] { 'H >- univ[i:l] } -->
    sequent ['ext] { 'H >- univ[i:l] }
 

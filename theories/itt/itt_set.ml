@@ -124,7 +124,7 @@ dform set_df1 : {x:'A | 'B} = math_set {'x; 'A; 'B}
  * H >- A = A in Ui
  * H, a: A >- Ui ext B
  *)
-prim setFormation 'H 'a 'A :
+prim setFormation 'a 'A :
    [wf] sequent [squash] { 'H >- 'A = 'A in univ[i:l] } -->
    ('B['a] : sequent ['ext] { 'H; a: 'A >- univ[i:l] }) -->
    sequent ['ext] { 'H >- univ[i:l] } =
@@ -143,13 +143,13 @@ prim setFormation 'H 'a 'A :
  * by applying the @hrefterm[esquash] operator to the set predicate.
  * @end[doc]
  *)
-prim setEquality {| intro []; eqcd |} 'H 'x :
+prim setEquality {| intro []; eqcd |} 'x :
    [wf] sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
    [wf] sequent [squash] { 'H; x: 'A1 >- 'B1['x] = 'B2['x] in univ[i:l] } -->
    sequent ['ext] { 'H >- { a1:'A1 | 'B1['a1] } = { a2:'A2 | 'B2['a2] } in univ[i:l] } =
    it
 
-prim setType {| intro [] |} 'H 'x :
+prim setType {| intro [] |} 'x :
    [wf] sequent [squash] { 'H >- "type"{'A1} } -->
    [wf] sequent [squash] { 'H; x: 'A1 >- "type"{'B1['x]} } -->
    sequent ['ext] { 'H >- "type"{.{ a1:'A1 | 'B1['a1] }} } =
@@ -163,7 +163,7 @@ prim setType {| intro [] |} 'H 'x :
  * where $B[a]$ is true.
  * @end[doc]
  *)
-prim setMemberFormation {| intro [] |} 'H 'a 'z :
+prim setMemberFormation {| intro [] |} 'a 'z :
    [wf] sequent [squash] { 'H >- 'a = 'a in 'A } -->
    [main] sequent [squash]   { 'H >- squash{'B['a]} } -->
    [wf] sequent [squash] { 'H; z: 'A >- "type"{'B['z]} } -->
@@ -178,7 +178,7 @@ prim setMemberFormation {| intro [] |} 'H 'a 'z :
  * if they are equal in $A$ and also $B[a_1]$ is true.
  * @end[doc]
  *)
-prim setMemberEquality {| intro []; eqcd |} 'H 'x :
+prim setMemberEquality {| intro []; eqcd |} 'x :
    [wf] sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
    [assertion] sequent [squash] { 'H >- squash{'B['a1]} } -->
    [wf] sequent [squash] { 'H; x: 'A >- "type"{'B['x]} } -->
@@ -195,7 +195,7 @@ prim setMemberEquality {| intro []; eqcd |} 'H 'x :
  * omitted.
  * @end[doc]
  *)
-prim setElimination {| elim [] |} 'H 'J 'u 'v :
+prim setElimination {| elim [] |} 'H 'u 'v :
    ('t : sequent ['ext] { 'H; u: 'A; v: squash{'B['u]}; 'J['u] >- 'T['u] }) -->
    sequent ['ext] { 'H; u: { x:'A | 'B['x] }; 'J['u] >- 'T['u] } =
    't
@@ -209,7 +209,7 @@ prim setElimination {| elim [] |} 'H 'J 'u 'v :
  * @hrefresource[subtype_resource].
  * @end[doc]
  *)
-prim set_subtype {| intro [] |} 'H :
+prim set_subtype {| intro [] |} :
    sequent [squash] { 'H >- "type"{ { a: 'A | 'B['a] } } } -->
    sequent ['ext] { 'H >- \subtype{ { a: 'A | 'B['a] }; 'A } } =
    it
@@ -227,10 +227,7 @@ let resource typeinf += (set_term,  infer_univ_dep0_dep1 dest_set)
  * SUBTYPING                                                            *
  ************************************************************************)
 
-let set_subtypeT p =
-   set_subtype (Sequent.hyp_count_addr p) p
-
-let resource sub += (LRSubtype ([<< { a: 'A | 'B['a] } >>, << 'A >>], set_subtypeT))
+let resource sub += (LRSubtype ([<< { a: 'A | 'B['a] } >>, << 'A >>], set_subtype))
 
 (*
  * -*-

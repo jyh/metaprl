@@ -108,12 +108,12 @@ dform well_founded_df : except_mode[src] :: well_founded[i:l]{'A; x, y. 'R} =
  * relation $R$ is a binary relation.
  * @end[doc]
  *)
-interactive partial_order_type {| intro [] |} 'H 'a 'b :
+interactive partial_order_type {| intro [] |} 'a 'b :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H; a: 'A; b: 'A >- "type"{'R['a; 'b]} } -->
    sequent ['ext] { 'H >- "type"{partial_order{'A; x, y. 'R['x; 'y]}} }
 
-interactive well_founded_type {| intro [] |} 'H 'a 'b :
+interactive well_founded_type {| intro [] |} 'a 'b :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H; a: 'A; b: 'A >- "type"{'R['a; 'b]} } -->
    sequent ['ext] { 'H >- "type"{well_founded[i:l]{'A; x, y. 'R['x; 'y]}} }
@@ -129,7 +129,7 @@ interactive well_founded_type {| intro [] |} 'H 'a 'b :
  * primitive definition.
  * @end[doc]
  *)
-interactive well_founded_reduction 'H 'a 'b univ[i:l] :
+interactive well_founded_reduction 'a 'b univ[i:l] :
    [wf] sequent [squash] { 'H >- 'A in univ[i:l] } -->
    [wf] sequent [squash] { 'H; a: 'A; b: 'A >- 'R['a; 'b] in univ[i:l] } -->
    [main] sequent ['ext] { 'H >- well_founded[i:l]{'A; x, y. 'R['x; 'y]} } -->

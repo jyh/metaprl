@@ -36,7 +36,7 @@ open Itt_equal
 
 declare label[t:t]
 
-prim labelMember {| intro []; eqcd |} 'H :
+prim labelMember {| intro []; eqcd |} :
    sequent ['ext] { 'H >- label[t:t] in label } =
    it
 
@@ -57,12 +57,12 @@ define unfold_eq_label : eq_label[x:t,y:t]{'A;'B} <-->  meta_eq[x:t, y:t]{'A; 'B
 (******************)
 
 
-prim reduce_eq_label_true {| intro [] |} 'H:
+prim reduce_eq_label_true {| intro [] |} :
    sequent[squash] {'H >- label[x:t] = label[y:t]  in label} -->
    sequent['ext] {'H >- eq_label[x:t,y:t]{'A;'B} ~ 'A}
       = it
 
-prim reduce_eq_label_false {| intro [] |} 'H:
+prim reduce_eq_label_false {| intro [] |} :
    sequent[squash] {'H >- not{.label[x:t] = label[y:t]  in label}} -->
    sequent['ext] {'H >- eq_label[x:t,y:t]{'A;'B} ~ 'B}
       = it
@@ -85,36 +85,26 @@ let reduce_eq_label =  reduce_eq_label_trivial_rw orelseC
 let resource reduce += << eq_label[x:t,y:t]{'A;'B}  >>, reduce_eq_label
 
 
-interactive eq_label_false  'H:
+interactive eq_label_false :
    sequent['ext] {'H >- not{.label[x:t] = label[y:t]  in label}} -->
    sequent['ext] {'H >- 'B} -->
    sequent['ext] {'H >- eq_label[x:t,y:t]{'A;'B}}
 
-interactive eq_label_true  'H:
+interactive eq_label_true :
    sequent['ext] {'H >- 'A} -->
    sequent['ext] {'H >- eq_label[x:t,x:t]{'A;'B}}
 
-let eq_labelIntroT p =
-   let tac =
-      rw reduce_eq_label 0 orelseT
-      eq_label_false (Sequent.hyp_count_addr p)
-   in tac p
+let eq_labelIntroT =
+   rw reduce_eq_label 0 orelseT eq_label_false
 
 let resource intro += (<< eq_label[x:t,y:t]{'A;'B} >>, wrap_intro eq_labelIntroT )
 
-
-
-
-interactive not_eq_label  'H:
+interactive not_eq_label :
    sequent[squash] {'H >- eq_label[x:t,y:t]{."false";."true"} } -->
    sequent['ext] {'H >- not{.label[x:t] = label[y:t]  in label}}
 
-let not_eq_labelT p =
-   let n=Sequent.hyp_count_addr p in
-   let tac =
-      (not_eq_label n thenT rw reduce_eq_label 0 thenT tryT (dT 0))
-      orelseT trivialT
-   in tac p
+let not_eq_labelT =
+   (not_eq_label thenT rw reduce_eq_label 0 thenT tryT (dT 0)) orelseT trivialT
 
 let resource intro +=
    (<< not{.label[x:t] = label[y:t]  in label}>>, wrap_intro not_eq_labelT )
@@ -124,14 +114,12 @@ let resource intro +=
 (******************)
 
 let decideEqLabelT x y =
-   let tac p =
-      Itt_record_label0.decide_eq_label (Sequent.hyp_count_addr p) x y p
-   in
-      tac thenLT [tryT (dT 0);
-                  tryT (dT 0);
-                  tryT (rwhAll reduce_eq_label_true_rw thenAT nthHypT (-1));
-                  tryT (rwhAll reduce_eq_label_false_rw thenAT nthHypT (-1));
-                 ]
+   Itt_record_label0.decide_eq_label x y
+      thenLT [tryT (dT 0);
+              tryT (dT 0);
+              tryT (rwhAll reduce_eq_label_true_rw thenAT nthHypT (-1));
+              tryT (rwhAll reduce_eq_label_false_rw thenAT nthHypT (-1));
+             ]
 
 
 (******************)

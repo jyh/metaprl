@@ -175,11 +175,11 @@ dform squash_df : except_mode[src] :: squash{'A} = math_squash{'A}
  * $<<squash{'A}>>$ is a type if $A$ is a type.
  * @end[doc]
  *)
-prim squashEquality {| intro []; eqcd |} 'H  :
+prim squashEquality {| intro []; eqcd |}  :
    [wf] sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
    sequent ['ext] { 'H >- squash{'A1} = squash{'A2} in univ[i:l] } = it
 
-prim squashType {| intro [] |} 'H :
+prim squashType {| intro [] |} :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    sequent ['ext] { 'H >- "type"{.squash{'A}} } =
    it
@@ -193,7 +193,7 @@ prim squashType {| intro [] |} 'H :
  * @hreftactic[autoT] from using it.
  * @end[doc]
  *)
-prim squashMemberFormation {| intro [AutoMustComplete] |} 'H :
+prim squashMemberFormation {| intro [AutoMustComplete] |} :
    sequent [squash] { 'H >- 'A } -->
    sequent ['ext]   { 'H >- squash{'A} } =
    it
@@ -211,17 +211,17 @@ prim squashMemberFormation {| intro [AutoMustComplete] |} 'H :
  * "forget" a meta-witness (extract) if we do not need it.
  * @end[doc]
  *)
-prim unsquashEqualWeak 'H 'J :
+prim unsquashEqualWeak 'H :
    sequent [squash] { 'H; u: 'P; 'J >- 'x = 'y in 'A } -->
    sequent ['ext] { 'H; u: squash{'P}; 'J >- 'x = 'y in 'A } =
    it
 
-prim squashElim 'H 'J :
+prim squashElim 'H :
    ('t : sequent ['ext] { 'H; u: squash{'P}; 'J[it] >- 'C[it] }) -->
    sequent ['ext] { 'H; u: squash{'P}; 'J['u] >- 'C['u] } =
    't
 
-prim squashFromAny 'H 'ext :
+prim squashFromAny 'ext :
    sequent ['ext] { 'H >- 'T } -->
    sequent [squash] { 'H >- 'T } =
    it
@@ -246,12 +246,12 @@ let resource typeinf += (squash_term,  Typeinf.infer_map dest_squash)
  * combining it with @tt[squashElim].
  * @end[doc]
  *)
-interactive unsquashEqual 'H 'J :
+interactive unsquashEqual 'H :
    sequent [squash] { 'H; u: 'P; 'J[it] >- 'x[it] = 'y[it] in 'A[it] } -->
    sequent ['ext] { 'H; u: squash{'P}; 'J['u] >- 'x['u] = 'y['u] in 'A['u] }
 
 (*! @docoff *)
-interactive unsquashWWitness 'H 'J 't:
+interactive unsquashWWitness 'H 't:
    sequent [squash] { 'H; u: 'P; 'J[it] >- 't in 'A[it] } -->
    sequent ['ext] { 'H; u: squash{'P}; 'J['u] >- 'A['u] }
 
@@ -260,7 +260,7 @@ interactive unsquashWWitness 'H 'J 't:
  * Next, we prove that equality witness can always be recovered on meta-level.
  * @end[doc]
  *)
-interactive sqsqEqual 'H :
+interactive sqsqEqual :
    sequent [squash] { 'H >- 't in 'A} -->
    sequent ['ext] { 'H >- 't in 'A}
 
@@ -269,7 +269,7 @@ interactive sqsqEqual 'H :
  * Next, we show that a witness of a provable hidden type is $@it$.
  * @end[doc]
  *)
-interactive squashMemberEquality {| intro []; eqcd |} 'H :
+interactive squashMemberEquality {| intro []; eqcd |} :
    [wf] sequent [squash] { 'H >- squash{'A} } -->
    sequent ['ext] { 'H >- it in squash{'A} }
 
@@ -280,46 +280,44 @@ interactive squashMemberEquality {| intro []; eqcd |} 'H :
  * to be true.
  * @end[doc]
  *)
-interactive squashStable 'H 't :
+interactive squashStable 't :
    [main] sequent [squash] { 'H >- squash{'A} } -->
    [wf] sequent [squash] { 'H; x: 'A >- 't in 'A } -->
    sequent ['ext] { 'H >- 'A}
 
-interactive unsquashHypEqual 'H 'J :
+interactive unsquashHypEqual 'H :
    sequent ['ext] { 'H; u: 'x = 'y in 'A; 'J[it] >- 'C[it] } -->
    sequent ['ext] { 'H; u: squash{('x = 'y in 'A)}; 'J['u] >- 'C['u] }
 
-interactive unsquash 'H 'J :
+interactive unsquash 'H :
    sequent [squash] { 'H; u: 'P; 'J[it] >- squash{'T[it]} } -->
    sequent ['ext] { 'H; u: squash{'P}; 'J['u] >- squash{'T['u]} }
 
 (*! @docoff *)
-interactive unsquashStableGoal 'H 'J 'x :
+interactive unsquashStableGoal 'H 'x :
    sequent [squash] { 'H; u: 'A; 'J[it] >- 'C[it] } -->
    sequent ['ext] { 'H; u: squash{'A}; 'J['u]; x: squash{'C['u]} >- 'C['u] } -->
    sequent ['ext] { 'H; u: squash{'A}; 'J['u] >- 'C['u]}
 
 let unsquashStableGoalT i p =
-   let h, j = Sequent.hyp_indices p i in
    let x = maybe_new_vars1 p "x" in
-   unsquashStableGoal h j x p
+   unsquashStableGoal i x p
 
-interactive unsquashHypGoalStable 'H 'J :
+interactive unsquashHypGoalStable 'H :
    sequent ['ext] { 'H; u: 'A; 'J[it] >- 'C[it] } -->
    sequent ['ext] { 'H; u: squash{'A}; 'J['u] >- 'A } -->
    sequent ['ext] { 'H; u: squash{'A}; 'J['u] >- 'C['u]}
 
-interactive unsquashStable 'H 'J 't 'x :
+interactive unsquashStable 'H 't 'x :
    sequent ['ext] { 'H; u: 'A; 'J[it] >- 'C[it] } -->
    sequent [squash] { 'H; u: squash{'A}; 'J['u]; x: 'A >- 't in 'A } -->
    sequent ['ext] { 'H; u: squash{'A}; 'J['u] >- 'C['u]}
 
 let unsquashStableT i t p =
-   let h, j = Sequent.hyp_indices p i in
    let x = maybe_new_vars1 p "x"in
-   unsquashStable h j t x p
+   unsquashStable i t x p
 
-interactive squashAssert 'H 'A :
+interactive squashAssert 'A :
    sequent [squash] { 'H >- squash{'A} } -->
    sequent ['ext] { 'H; x: squash{'A} >- 'C } -->
    sequent ['ext] { 'H >- 'C }
@@ -329,7 +327,7 @@ interactive squashAssert 'H 'A :
  * by squashFormation
  * H >- Ui ext A
  *)
-interactive squashFormation 'H :
+interactive squashFormation :
    sequent ['ext] { 'H >- univ[i:l] } -->
    sequent ['ext] { 'H >- univ[i:l] }
 
@@ -412,13 +410,11 @@ let unsquash_tactic tbl i p =
     | _, ((SqUnsquash tac :: _)|(_ :: SqUnsquash tac :: _)|(_ :: _ :: SqUnsquash tac :: _)) ->
          tac i p
     | (SqStable (t,tac) :: _), _ ->
-         let h, j = Sequent.hyp_indices p i in
-            (unsquashWWitness h j t thenT tac) p
+         (unsquashWWitness i t thenT tac) p
     | _, (SqStable (t,tac) :: _) ->
          (unsquashStableT i t thenLT [ idT; tac thenT trivialT]) p
     | _, (SqUnsquashGoal tac :: _) ->
-         let h, j = Sequent.hyp_indices p i in
-            (unsquashHypGoalStable h j thenLT [idT; tac i thenT trivialT]) p
+          (unsquashHypGoalStable i thenLT [idT; tac i thenT trivialT]) p
     | (SqUnsquash tac :: _), _ ->
          (unsquashStableGoalT i thenLT [idT; tac (-1) thenT trivialT ]) p
     | [], [] ->
@@ -432,8 +428,7 @@ let process_squash_resource_annotation name contexts vars args _ stmt tac =
    let concl = SeqGoal.get egoal.sequent_goals 0 in
    match contexts, vars, args, assums, (SeqHyp.to_list egoal.sequent_hyps) with
       (* H |- T --> H |- a in T *)
-      [|h|], [||], [], [_, _, assum], [Context(h',[])] when
-         is_equal_term concl && h' = h &&
+      [||], [||], [], [_, _, assum], [Context(h,[])] when
          let t,a,b = dest_equal concl in
          alpha_equal a b &&
          let eassum = TermMan.explode_sequent assum in
@@ -444,24 +439,21 @@ let process_squash_resource_annotation name contexts vars args _ stmt tac =
             raise (Invalid_argument "squash_stable resource annotation: assumption sequent should be squashed");
          let t,a,_ = dest_equal concl in
          let tac p =
-            let addr = Sequent.hyp_count_addr p in
-            Tactic_type.Tactic.tactic_of_rule tac ([|addr|], [||]) [] p
+            Tactic_type.Tactic.tactic_of_rule tac ([||], [||]) [] p
          in
             t, SqStable(a, tac)
       (* H |- a in T *)
-    | [|h|], [||], [], [], [Context(h',[])] when
-         is_equal_term concl && h = h' &&
+    | [| |], [||], [], [], [Context(_,[])] when
          (let t,a,b = dest_equal concl in (alpha_equal a b) )
       ->
          let t,a,_ = dest_equal concl in
          let tac p =
-            let addr = Sequent.hyp_count_addr p in
-            Tactic_type.Tactic.tactic_of_rule tac ([|addr|], [||]) [] p
+            Tactic_type.Tactic.tactic_of_rule tac ([||], [||]) [] p
          in
             t, SqStable(a, tac)
       (* H; x:T; J[x] |- C[x] *)
-    | [| h; j |], [||], [], [], [Context(h',[]); Hypothesis(v,t); Context(j', [v'])] when
-         h = h' && j = j' && is_var_term v' && (dest_var v') = v &&
+    | [| h |], [||], [], [], [Context(h',[]); Hypothesis(v,t); Context(_, [v'])] when
+         h = h' && is_var_term v' && (dest_var v') = v &&
          is_so_var_term concl &&
          begin match dest_so_var concl with
             _, [v''] -> alpha_equal v' v''
@@ -469,8 +461,7 @@ let process_squash_resource_annotation name contexts vars args _ stmt tac =
          end
       ->
          let tac p =
-            let h, j = Sequent.hyp_indices p (-1) in
-            Tactic_type.Tactic.tactic_of_rule tac ([| h; j|], [||]) [] p
+            Tactic_type.Tactic.tactic_of_rule tac ([| Sequent.hyp_count p |], [||]) [] p
          in
             t, SqStable(it_term, (assertT t thenMT tac))
     | _ ->
@@ -488,24 +479,12 @@ let resource squash =
 
 (* For efficiency, we provide several entries for the most common types *)
 
-let unsquashHypEqualT i p =
-   let h, j = Sequent.hyp_indices p i in
-   unsquashHypEqual h j p
-
-let unsquashEqualT i p =
-   let h, j = Sequent.hyp_indices p i in
-   unsquashEqual h j p
-
-let unsquashSquashT i p =
-   let h, j = Sequent.hyp_indices p i in
-   unsquash h j p
-
 let resource squash += [
-   equal_term, SqUnsquash unsquashHypEqualT;
+   equal_term, SqUnsquash unsquashHypEqual;
    equal_term, SqStable (<<it>>, dT 0);
-   equal_term, SqUnsquashGoal unsquashEqualT;
+   equal_term, SqUnsquashGoal unsquashEqual;
    squash_term, SqStable (<<it>>, dT 0);
-   squash_term, SqUnsquashGoal(unsquashSquashT);
+   squash_term, SqUnsquashGoal(unsquash);
    type_term, SqStable(<<it>>, dT 0)
 ]
 
@@ -555,19 +534,15 @@ let resource squash += [
  * @end[doc]
  *)
 let unsquashT i p =
-   Sequent.get_resource_arg p get_squash_resource i p
+   Sequent.get_resource_arg p get_squash_resource (Sequent.get_pos_hyp_num p i) p
 
 let squashT p =
-   (squashAssert (hyp_count_addr p) (concl p) thenLT
+   (squashAssert (concl p) thenLT
       [ idT; unsquashT (-1) thenT trivialT ]) p
 
-let squashElimT i p =
-   let h,j = Sequent.hyp_indices p i in
-      squashElim h j p
-
-(* We want to see unsquashT's error message when squashElimT is useless *)
+(* We want to see unsquashT's error message when squashElim is useless *)
 let squash_elimT i =
-   (progressT (squashElimT i) thenT tryT (unsquashT i)) orelseT (unsquashT i)
+   (progressT (pos_hypT squashElim i) thenT tryT (unsquashT i)) orelseT (unsquashT i)
 
 let resource elim += (squash_term, squash_elimT)
 
@@ -586,11 +561,9 @@ let sqsquashT p =
    if is_squash_goal p then
       raise (RefineError("sqsquashT", StringError("goal sequent already squashed")))
    else
-      let h = hyp_count_addr p in
-      (squashT thenT squashMemberFormation h) p
+      (squashT thenT squashMemberFormation) p
 
-let unsqsquashT t p =
-   squashFromAny (hyp_count_addr p) t p
+let unsqsquashT = squashFromAny
 
 (************************************************************************
  * AUTO TACTIC                                                          *

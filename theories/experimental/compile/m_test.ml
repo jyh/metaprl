@@ -29,7 +29,7 @@ extends M_theory
 (************************************************************************
  * Just for testing.
  *)
-interactive test_prog 'H :
+interactive test_prog :
    sequent [m] { 'H >-
       compilable{
          LetAtom{AtomInt[1:n]; v1.
@@ -54,7 +54,7 @@ interactive fib_prog 'H :
       TailCall{AtomFunVar{'fib}; AtomInt[35:n]}}}}} }
 
 
-interactive ext_test_prog 'H :
+interactive ext_test_prog :
    sequent [m] { 'H >- compilable{.<:ext<
                           let v1 = 1 in
                           let v2 = 2+v1 in
@@ -65,7 +65,7 @@ interactive ext_test_prog 'H :
                           in
                              f(17)>>} }
 
-interactive ext_test_prog2 'H :
+interactive ext_test_prog2 :
    sequent [m] { 'H >- compilable{PP{.<:ext<
                            let f (x, y) = g(y, x)
                            and g (x, y) = x-y

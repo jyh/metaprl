@@ -135,14 +135,14 @@ rewrite expr_unfold :
 (*
  * Two equivalent values are equivalent.
  *)
-rule value_equiv_is_equiv 'H :
+rule value_equiv_is_equiv :
    sequent { 'H >- value_equiv{'S; 'e1; 'e2; 't} } -->
    sequent { 'H >- equiv{'S; 'e1; 'e2; 't} }
 
 (*
  * A functional function application to a value is a value.
  *)
-rule functional_apply_value 'H 't1 :
+rule functional_apply_value 't1 :
    sequent { 'H >- value_equiv{'S; 'a1; 'a2; 't2} } -->
    sequent { 'H >- value_equiv{'S; 'f1; 'f2; functional{'t1; 't2}} } -->
    sequent { 'H >- value_equiv{'S; apply{'f1; 'a1}; apply{'f2; 'a2}; 't2} }

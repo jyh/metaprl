@@ -212,12 +212,12 @@ dform equiv_fun_prop_df : except_mode[src] :: parens :: "prec"[prec_apply] :: eq
  * arguments are sets.
  * @end[doc]
  *)
-interactive equiv_rel_type {| intro [] |} 'H :
+interactive equiv_rel_type {| intro [] |} :
    sequent [squash] { 'H >- isset{'s} } -->
    sequent [squash] { 'H >- isset{'r} } -->
    sequent ['ext] { 'H >- "type"{equiv{'s; 'r}} }
 
-interactive equiv_type {| intro [] |} 'H :
+interactive equiv_type {| intro [] |} :
    sequent [squash] { 'H >- isset{'s} } -->
    sequent [squash] { 'H >- isset{'r} } -->
    sequent [squash] { 'H >- isset{'a} } -->
@@ -231,7 +231,7 @@ interactive equiv_type {| intro [] |} 'H :
  * The binary relation @tt{equiv} is defined reflexive.
  * @end[doc]
  *)
-interactive equiv_ref_intro {| intro [] |} 'H :
+interactive equiv_ref_intro {| intro [] |} :
    [wf] sequent [squash] { 'H >- isset{'s} } -->
    [wf] sequent [squash] { 'H >- isset{'r} } -->
    [wf] sequent [squash] { 'H >- isset{'a} } -->
@@ -245,7 +245,7 @@ interactive equiv_ref_intro {| intro [] |} 'H :
  * on S satisfying reflexivity, symmetry, and transitivity.
  * @end[doc]
  *)
-interactive equiv_rel_intro {| intro [] |} 'H :
+interactive equiv_rel_intro {| intro [] |} :
    [wf] sequent [squash] { 'H >- isset{'s} } -->
    [wf] sequent [squash] { 'H >- isset{'r} } -->
    sequent ['ext] { 'H; a: set; x: mem{'a; 's} >- equiv{'s; 'r; 'a; 'a} } -->
@@ -263,7 +263,7 @@ interactive equiv_rel_intro {| intro [] |} 'H :
 (*
  * Reflexity.
  *)
-interactive equiv_ref 'H  :
+interactive equiv_ref :
    sequent [squash] { 'H >- isset{'s} } -->
    sequent [squash] { 'H >- isset{'r} } -->
    sequent [squash] { 'H >- isset{'a} } -->
@@ -275,7 +275,7 @@ interactive equiv_ref 'H  :
 (*
  * Symmetry.
  *)
-interactive equiv_sym 'H  :
+interactive equiv_sym :
    sequent [squash] { 'H >- isset{'s} } -->
    sequent [squash] { 'H >- isset{'r} } -->
 (* sequent [squash] { 'H >- isset{'a} } -->
@@ -289,7 +289,7 @@ interactive equiv_sym 'H  :
 (*
  * Transitivity.
  *)
-interactive equiv_trans 'H 'b :
+interactive equiv_trans 'b :
    sequent [squash] { 'H >- isset{'s} } -->
    sequent [squash] { 'H >- isset{'r} } -->
 (* sequent [squash] { 'H >- isset{'a} } -->
@@ -306,7 +306,7 @@ interactive equiv_trans 'H 'b :
 (*
  * Symmetry in another form.
  *)
-interactive equiv_sym1 'H 'J 'u :
+interactive equiv_sym1 'H 'u :
    sequent [squash] { 'H; x: equiv{'s; 'r; 'a; 'b}; 'J['x] >- isset{'s} } -->
    sequent [squash] { 'H; x: equiv{'s; 'r; 'a; 'b}; 'J['x] >- isset{'r} } -->
 (* sequent [squash] { 'H; x: equiv{'s; 'r; 'a; 'b}; 'J['x] >- isset{'a} } -->
@@ -326,7 +326,7 @@ interactive equiv_sym1 'H 'J 'u :
  * $f[z]$ is a set and is also in $s$.
  * @end[doc]
  *)
-interactive equiv_fun_isset 'H 'J equiv_fun_set{'s; 'r; z. 'f['z]} :
+interactive equiv_fun_isset 'H equiv_fun_set{'s; 'r; z. 'f['z]} :
    sequent [squash] { 'H; z: set; 'J['z] >- isset{'s} } -->
    sequent [squash] { 'H; z: set; 'J['z] >- isset{'r} } -->
    sequent ['ext] { 'H; z: set; 'J['z] >- equiv{'s; 'r} } -->
@@ -334,7 +334,7 @@ interactive equiv_fun_isset 'H 'J equiv_fun_set{'s; 'r; z. 'f['z]} :
    sequent ['ext] { 'H; z: set; 'J['z] >- equiv_fun_set{'s; 'r; z. 'f['z]} } -->
    sequent ['ext] { 'H; z: set; 'J['z] >- isset{'f['z]} }
 
-interactive equiv_fun_mem 'H 'J equiv_fun_set{'s; 'r; z. 'f['z]} :
+interactive equiv_fun_mem 'H equiv_fun_set{'s; 'r; z. 'f['z]} :
    sequent [squash] { 'H; z: set; 'J['z] >- isset{'s} } -->
    sequent [squash] { 'H; z: set; 'J['z] >- isset{'r} } -->
    sequent ['ext] { 'H; z: set; 'J['z] >- equiv{'s; 'r} } -->
@@ -355,8 +355,7 @@ let equivFunSetT i p =
       with RefineError ("get_attribute",_) ->
          raise (RefineError ("equivFunSetT", StringError ("need a term list")))
    in
-      let j, k = Sequent.hyp_indices p i in
-         equiv_fun_isset j k t p
+      equiv_fun_isset (get_pos_hyp_num p i) t p
 
 let equivFunMemT t i p =
    let z = Sequent.nth_binding p i in
@@ -369,8 +368,7 @@ let equivFunMemT t i p =
       with RefineError ("get_attribute",_) ->
          raise (RefineError ("equivFunSetT", StringError ("need a term list")))
    in
-      let j, k = Sequent.hyp_indices p i in
-         equiv_fun_mem j k t p
+      equiv_fun_mem (get_pos_hyp_num p i) t p
 
 (*!
  * @begin[doc]
@@ -379,27 +377,27 @@ let equivFunMemT t i p =
  * with respect to their set arguments.
  * @end[doc]
  *)
-interactive equiv_fun {| intro [] |} 'H :
+interactive equiv_fun {| intro [] |} :
    sequent ['ext] { 'H >- fun_set{z. 'f1['z]} } -->
    sequent ['ext] { 'H >- fun_set{z. 'f2['z]} } -->
    sequent ['ext] { 'H >- fun_set{z. 'f3['z]} } -->
    sequent ['ext] { 'H >- fun_set{z. 'f4['z]} } -->
    sequent ['ext] { 'H >- fun_prop{z. equiv{'f1['z]; 'f2['z]; 'f3['z]; 'f4['z]}} }
 
-interactive equiv_rel_fun {| intro [] |} 'H :
+interactive equiv_rel_fun {| intro [] |} :
    sequent ['ext] { 'H >- fun_set{z. 'f1['z]} } -->
    sequent ['ext] { 'H >- fun_set{z. 'f2['z]} } -->
    sequent ['ext] { 'H >- fun_prop{z. equiv{'f1['z]; 'f2['z]}} }
 
 (*! @docoff *)
-interactive equiv_set_fun1 {| intro [] |} 'H :
+interactive equiv_set_fun1 {| intro [] |} :
    [wf] sequent [squash] { 'H >- isset{'a} } -->
    [wf] sequent [squash] { 'H >- isset{'b} } -->
    sequent ['ext] { 'H >- fun_set{z. 'f1['z]} } -->
    sequent ['ext] { 'H >- fun_set{z. 'f2['z]} } -->
    sequent ['ext] { 'H >- fun_prop{z. equiv{'f1['z]; 'f2['z]; 'a; 'b}} }
 
-interactive equiv_elem_fun1 {| intro [] |} 'H :
+interactive equiv_elem_fun1 {| intro [] |} :
    [wf] sequent [squash] { 'H >- isset{'s} } -->
    [wf] sequent [squash] { 'H >- isset{'r} } -->
    sequent ['ext] { 'H >- equiv{'s; 'r} } -->
@@ -407,7 +405,7 @@ interactive equiv_elem_fun1 {| intro [] |} 'H :
    sequent ['ext] { 'H >- fun_set{z. 'f2['z]} } -->
    sequent ['ext] { 'H >- fun_prop{z. equiv{'s; 'r; 'f1['z]; 'f2['z]}} }
 
-interactive equiv_elem_fun2 {| intro [] |} 'H :
+interactive equiv_elem_fun2 {| intro [] |} :
    [wf] sequent [squash] { 'H >- isset{'s} } -->
    [wf] sequent [squash] { 'H >- isset{'r} } -->
    [wf] sequent [squash] { 'H >- isset{'a} } -->
@@ -416,7 +414,7 @@ interactive equiv_elem_fun2 {| intro [] |} 'H :
    sequent ['ext] { 'H >- fun_set{z. 'f1['z]} } -->
    sequent ['ext] { 'H >- fun_prop{z. equiv{'s; 'r; 'a; 'f1['z]}} }
 
-interactive equiv_elem_fun3 {| intro [] |} 'H :
+interactive equiv_elem_fun3 {| intro [] |} :
    [wf] sequent [squash] { 'H >- isset{'s} } -->
    [wf] sequent [squash] { 'H >- isset{'r} } -->
    [wf] sequent [squash] { 'H >- isset{'b} } -->
@@ -425,7 +423,7 @@ interactive equiv_elem_fun3 {| intro [] |} 'H :
    sequent ['ext] { 'H >- fun_set{z. 'f1['z]} } -->
    sequent ['ext] { 'H >- fun_prop{z. equiv{'s; 'r; 'f1['z]; 'b}} }
 
-interactive equiv_elem_fun4 {| intro [] |} 'H :
+interactive equiv_elem_fun4 {| intro [] |} :
    [wf] sequent [squash] { 'H >- isset{'s} } -->
    [wf] sequent [squash] { 'H >- isset{'r} } -->
    [wf] sequent [squash] { 'H >- isset{'a} } -->
@@ -433,7 +431,7 @@ interactive equiv_elem_fun4 {| intro [] |} 'H :
    sequent ['ext] { 'H >- mem{'a; 's} } -->
    sequent ['ext] { 'H >- fun_prop{z. equiv{'s; 'r; 'a; 'z}} }
 
-interactive equiv_elem_fun5 {| intro [] |} 'H :
+interactive equiv_elem_fun5 {| intro [] |} :
    [wf] sequent [squash] { 'H >- isset{'s} } -->
    [wf] sequent [squash] { 'H >- isset{'r} } -->
    [wf] sequent [squash] { 'H >- isset{'b} } -->
@@ -441,7 +439,7 @@ interactive equiv_elem_fun5 {| intro [] |} 'H :
    sequent ['ext] { 'H >- mem{'b; 's} } -->
    sequent ['ext] { 'H >- fun_prop{z. equiv{'s; 'r; 'z; 'b}} }
 
-interactive equiv_elem_equiv_fun1 {| intro [] |} 'H :
+interactive equiv_elem_equiv_fun1 {| intro [] |} :
    [wf] sequent [squash] { 'H >- isset{'s} } -->
    [wf] sequent [squash] { 'H >- isset{'r} } -->
    sequent ['ext] { 'H >- equiv{'s; 'r} } -->
@@ -449,7 +447,7 @@ interactive equiv_elem_equiv_fun1 {| intro [] |} 'H :
    sequent ['ext] { 'H >- equiv_fun_set{'s; 'r; z. 'f2['z]} } -->
    sequent ['ext] { 'H >- equiv_fun_prop{'s; 'r; z. equiv{'s; 'r; 'f1['z]; 'f2['z]}} }
 
-interactive equiv_elem_equiv_fun2 {| intro [] |} 'H :
+interactive equiv_elem_equiv_fun2 {| intro [] |} :
    [wf] sequent [squash] { 'H >- isset{'s} } -->
    [wf] sequent [squash] { 'H >- isset{'r} } -->
    [wf] sequent [squash] { 'H >- isset{'a} } -->
@@ -458,7 +456,7 @@ interactive equiv_elem_equiv_fun2 {| intro [] |} 'H :
    sequent ['ext] { 'H >- equiv_fun_set{'s; 'r; z. 'f1['z]} } -->
    sequent ['ext] { 'H >- equiv_fun_prop{'s; 'r; z. equiv{'s; 'r; 'a; 'f1['z]}} }
 
-interactive equiv_elem_equiv_fun3 {| intro [] |} 'H :
+interactive equiv_elem_equiv_fun3 {| intro [] |} :
    [wf] sequent [squash] { 'H >- isset{'s} } -->
    [wf] sequent [squash] { 'H >- isset{'r} } -->
    [wf] sequent [squash] { 'H >- isset{'b} } -->
@@ -467,7 +465,7 @@ interactive equiv_elem_equiv_fun3 {| intro [] |} 'H :
    sequent ['ext] { 'H >- equiv_fun_set{'s; 'r; z. 'f1['z]} } -->
    sequent ['ext] { 'H >- equiv_fun_prop{'s; 'r; z. equiv{'s; 'r; 'f1['z]; 'b}} }
 
-interactive equiv_elem_equiv_fun4 {| intro [] |} 'H :
+interactive equiv_elem_equiv_fun4 {| intro [] |} :
    [wf] sequent [squash] { 'H >- isset{'s} } -->
    [wf] sequent [squash] { 'H >- isset{'r} } -->
    [wf] sequent [squash] { 'H >- isset{'a} } -->
@@ -475,7 +473,7 @@ interactive equiv_elem_equiv_fun4 {| intro [] |} 'H :
    sequent ['ext] { 'H >- equiv{'s; 'r} } -->
    sequent ['ext] { 'H >- equiv_fun_prop{'s; 'r; z. equiv{'s; 'r; 'a; 'z}} }
 
-interactive equiv_elem_equiv_fun5 {| intro [] |} 'H :
+interactive equiv_elem_equiv_fun5 {| intro [] |} :
    [wf] sequent [squash] { 'H >- isset{'s} } -->
    [wf] sequent [squash] { 'H >- isset{'r} } -->
    [wf] sequent [squash] { 'H >- isset{'b} } -->
@@ -494,14 +492,14 @@ interactive equiv_elem_equiv_fun5 {| intro [] |} 'H :
  * equivalence) on set arguments.
  * @end[doc]
  *)
-interactive equiv_hyp_subst 'H 'J 's 'r 's1 's2 (bind{w. 'P['w]}) 'z :
+interactive equiv_hyp_subst 'H 's 'r 's1 's2 (bind{w. 'P['w]}) 'z :
    sequent ['ext] { 'H; x: 'P['s1]; 'J['x] >- equiv{'s; 'r} } -->
    sequent ['ext] { 'H; x: 'P['s1]; 'J['x] >- equiv{'s; 'r; 's1; 's2} } -->
    sequent ['ext] { 'H; x: 'P['s1]; 'J['x]; z: 'P['s2] >- 'C['x] } -->
    sequent ['ext] { 'H; x: 'P['s1]; 'J['x] >- equiv_fun_prop{'s; 'r; z. 'P['z]} } -->
    sequent ['ext] { 'H; x: 'P['s1]; 'J['x] >- 'C['x] }
 
-interactive equiv_concl_subst 'H 's 'r 's1 's2 (bind{w. 'C['w]}) :
+interactive equiv_concl_subst 's 'r 's1 's2 (bind{w. 'C['w]}) :
    sequent ['ext] { 'H >- equiv{'s; 'r} } -->
    sequent ['ext] { 'H >- equiv{'s; 'r; 's1; 's2} } -->
    sequent ['ext] { 'H >- 'C['s2] } -->
@@ -520,14 +518,14 @@ interactive equiv_concl_subst 'H 's 'r 's1 's2 (bind{w. 'C['w]}) :
  * equivalence relation on $s$.
  * @end[doc]
  *)
-interactive equiv_fun_set_type {| intro [] |} 'H :
+interactive equiv_fun_set_type {| intro [] |} :
    [wf] sequent [squash] { 'H >- isset{'s} } -->
    [wf] sequent [squash] { 'H >- isset{'r} } -->
    sequent ['ext] { 'H >- equiv{'s; 'r} } -->
    sequent [squash] { 'H; z: set >- isset{'f['z]} } -->
    sequent ['ext] { 'H >- "type"{equiv_fun_set{'s; 'r; z. 'f['z]}} }
 
-interactive equiv_fun_prop_type {| intro [] |} 'H :
+interactive equiv_fun_prop_type {| intro [] |} :
    [wf] sequent [squash] { 'H >- isset{'s} } -->
    [wf] sequent [squash] { 'H >- isset{'r} } -->
    sequent ['ext] { 'H >- equiv{'s; 'r} } -->
@@ -542,7 +540,7 @@ interactive equiv_fun_prop_type {| intro [] |} 'H :
  * The identity function is also functional.
  * @end[doc]
  *)
-interactive equiv_fun_set {| intro [] |} 'H :
+interactive equiv_fun_set {| intro [] |} :
    [wf] sequent [squash] { 'H >- isset{'s} } -->
    [wf] sequent [squash] { 'H >- isset{'r} } -->
    sequent ['ext] { 'H >- equiv{'s; 'r} } -->
@@ -550,13 +548,13 @@ interactive equiv_fun_set {| intro [] |} 'H :
    sequent ['ext] { 'H >- mem{'u; 's} } -->
    sequent ['ext] { 'H >- equiv_fun_set{'s; 'r; z. 'u} }
 
-interactive equiv_fun_ref {| intro [] |} 'H :
+interactive equiv_fun_ref {| intro [] |} :
    [wf] sequent [squash] { 'H >- isset{'s} } -->
    [wf] sequent [squash] { 'H >- isset{'r} } -->
    sequent ['ext] { 'H >- equiv{'s; 'r} } -->
    sequent ['ext] { 'H >- equiv_fun_set{'s; 'r; z. 'z} }
 
-interactive equiv_fun_prop {| intro [] |} 'H :
+interactive equiv_fun_prop {| intro [] |} :
    [wf] sequent [squash] { 'H >- isset{'s} } -->
    [wf] sequent [squash] { 'H >- isset{'r} } -->
    sequent ['ext] { 'H >- equiv{'s; 'r} } -->
@@ -572,7 +570,7 @@ interactive equiv_fun_prop {| intro [] |} 'H :
  * equivalence relations, then $a$ is equal to $b$.
  * @end[doc]
  *)
-interactive eq_equiv_elim {| elim [] |} 'H 'J 's 'r :
+interactive eq_equiv_elim {| elim [] |} 'H 's 'r :
    sequent [squash] { 'H; x: eq{'a; 'b}; 'J['x] >- isset{'s} } -->
    sequent [squash] { 'H; x: eq{'a; 'b}; 'J['x] >- isset{'r} } -->
    sequent [squash] { 'H; x: eq{'a; 'b}; 'J['x] >- isset{'a} } -->
@@ -584,7 +582,7 @@ interactive eq_equiv_elim {| elim [] |} 'H 'J 's 'r :
    sequent ['ext] { 'H; x: eq{'a; 'b}; 'J['x] >- 'C['x] }
 
 (*! @docoff *)
-interactive equal_equiv_elim {| elim [] |} 'H 'J 's 'r :
+interactive equal_equiv_elim {| elim [] |} 'H 's 'r :
    sequent [squash] { 'H; x: equal{'a; 'b}; 'J['x] >- isset{'s} } -->
    sequent [squash] { 'H; x: equal{'a; 'b}; 'J['x] >- isset{'r} } -->
    sequent [squash] { 'H; x: equal{'a; 'b}; 'J['x] >- isset{'a} } -->
@@ -595,7 +593,7 @@ interactive equal_equiv_elim {| elim [] |} 'H 'J 's 'r :
    sequent ['ext] { 'H; x: equal{'a; 'b}; 'J['x]; y: equiv{'s; 'r; 'a; 'b} >- 'C['x] } -->
    sequent ['ext] { 'H; x: equal{'a; 'b}; 'J['x] >- 'C['x] }
 
-interactive pair_eq1 {| elim [] |} 'H 'J :
+interactive pair_eq1 {| elim [] |} 'H :
    sequent [squash] { 'H; x: eq{pair{'a; 'b}; pair{'z; 'z}}; 'J['x] >- isset{'z} } -->
    sequent [squash] { 'H; x: eq{pair{'a; 'b}; pair{'z; 'z}}; 'J['x] >- isset{'a} } -->
    sequent [squash] { 'H; x: eq{pair{'a; 'b}; pair{'z; 'z}}; 'J['x] >- isset{'b} } -->
@@ -603,7 +601,7 @@ interactive pair_eq1 {| elim [] |} 'H 'J :
    sequent ['ext] { 'H; x: eq{pair{'a; 'b}; pair{'z; 'z}}; 'J['x] >- 'C['x] }
 
 (*
-interactive pair_eq {| elim [] |} 'H 'J :
+interactive pair_eq {| elim [] |} 'H :
    sequent [squash] { 'H; x: eq{pair{'a; 'b}; pair{'z; 'z}}; 'J['x] >- isset{'z} } -->
    sequent [squash] { 'H; x: eq{pair{'a; 'b}; pair{'z; 'z}}; 'J['x] >- isset{'a} } -->
    sequent [squash] { 'H; x: eq{pair{'a; 'b}; pair{'z; 'z}}; 'J['x] >- isset{'b} } -->
@@ -614,7 +612,7 @@ interactive pair_eq {| elim [] |} 'H 'J :
  * @begin[doc]
  * @end[doc]
  *)
-interactive equiv_equal_elim {| elim [] |} 'H 'J :
+interactive equiv_equal_elim {| elim [] |} 'H :
    sequent [squash] { 'H; x: (all r: set. (equiv{'s; 'r} => equiv{'s; 'r; 'a; 'b})); 'J['x] >- isset{'s} } -->
    sequent [squash] { 'H; x: (all r: set. (equiv{'s; 'r} => equiv{'s; 'r; 'a; 'b})); 'J['x] >- isset{'a} } -->
    sequent [squash] { 'H; x: (all r: set. (equiv{'s; 'r} => equiv{'s; 'r; 'a; 'b})); 'J['x] >- isset{'b} } -->
@@ -657,11 +655,10 @@ let equivConclSubstT t p =
             let w = maybe_new_vars1 p "w" in
                 mk_xbind_term w (var_subst goal s1 w)
    in
-      equiv_concl_subst (hyp_count_addr p) s r s1 s2 bind p
+      equiv_concl_subst s r s1 s2 bind p
 
 let equivHypSubstT t i p =
    let s, r, s1, s2 = dest_equiv t in
-   let j, k = hyp_indices p i in
    let hyp = nth_hyp p i in
    let z = maybe_new_vars1 p "z" in
    let bind =
@@ -676,7 +673,7 @@ let equivHypSubstT t i p =
             let w = maybe_new_vars1 p "w" in
                 mk_xbind_term w (var_subst hyp s1 w)
    in
-      equiv_hyp_subst j k s r s1 s2 bind z p
+      equiv_hyp_subst (get_pos_hyp_num p i) s r s1 s2 bind z p
 
 let equivSubstT t i =
    if i = 0 then
@@ -696,19 +693,13 @@ let equivSubstT t i =
  * @docoff
  * @end[doc]
  *)
-let equivRefT p =
-   equiv_ref_intro (hyp_count_addr p) p
-
-let equivSymT p =
-   equiv_sym (hyp_count_addr p) p
-
-let equivTransT t p =
-   equiv_trans (hyp_count_addr p) t p
+let equivRefT = equiv_ref_intro
+let equivSymT = equiv_sym
+let equivTransT = equiv_trans
 
 let equivSym1T i p =
    let u = maybe_new_vars1 p "u" in
-   let j, k = Sequent.hyp_indices p i in
-      equiv_sym1 j k u p
+      equiv_sym1 (get_pos_hyp_num p i) u p
 
 (*
  * Always reasonable to try reflexivity.

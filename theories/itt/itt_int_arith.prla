@@ -16223,7 +16223,7 @@ T	t10324	o b10324 b10
 B	b10325	t10324
 T	t10325	o2973 b10322 b10325
 B	b10326	t10325
-P	p10326	String "ge_addMono2 2 <<'c>> ttca"
+P	p10326	String "ge_addMono2 <<'c>> ttca"
 O	o10326	ext_rule p10326
 T	t10326	o2973 b10324 b10
 B	b10327	t10326

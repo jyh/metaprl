@@ -4441,7 +4441,7 @@ S	s3382	t2132 h
 G	s3382	t2250
 B	b3383	s3382
 T	t3386	o2176 b2249 b2249
-P	p3392	String "mul_Commut 2 thenT trivialT"
+P	p3392	String "mul_Commut thenT trivialT"
 O	o3392	ext_rule p3392
 O	o2266	lid p2257
 T	t2266	o2266
@@ -4990,7 +4990,7 @@ S	s3422	t2132 h
 G	s3422	t2278
 B	b3423	s3422
 T	t3426	o2176 b2277 b2277
-P	p3432	String "mul_Assoc 2 thenT trivialT"
+P	p3432	String "mul_Assoc thenT trivialT"
 O	o3432	ext_rule p3432
 T	t1485	o2190 b3423 b2192
 B	b1485	t1485
@@ -5027,7 +5027,7 @@ S	s3458	t2132 h
 G	s3458	t2306
 B	b3459	s3458
 T	t3462	o2176 b2305 b2305
-P	p3468	String "mul_add_Distrib 2 thenT trivialT"
+P	p3468	String "mul_add_Distrib thenT trivialT"
 O	o3468	ext_rule p3468
 T	t1531	o2190 b3459 b2192
 B	b1531	t1531
@@ -5058,7 +5058,7 @@ T	t1550	o b1550 b17
 B	b1551	t1550
 T	t1551	o b1548 b1551
 B	b1552	t1551
-P	p3493	String "sqFromRwT (mul_Id 2)"
+P	p3493	String "sqFromRwT (mul_Id)"
 O	o3493	ext_rule p3493
 S	s1570	t2132 h
 G	s1570	t2332
@@ -5077,11 +5077,11 @@ T	t1579	o2185 b1579
 B	b1582	t1579
 T	t1582	o2338 b17 b2338 b2331 b1255 b1582 b17
 B	b1583	t1582
-P	p3515	String "sqFromRwT (mul_Id2 2)"
+P	p3515	String "sqFromRwT (mul_Id2)"
 O	o3515	ext_rule p3515
-P	p3536	String "sqFromRwT (mul_Zero 2)"
+P	p3536	String "sqFromRwT (mul_Zero)"
 O	o3536	ext_rule p3536
-P	p3556	String "sqFromRwT (mul_Zero2 2)"
+P	p3556	String "sqFromRwT (mul_Zero2)"
 O	o3556	ext_rule p3556
 S	s1658	t2132 h
 G	s1658	t2399
@@ -8913,7 +8913,7 @@ T	t2062	o1911 b2187 b1945 b2061 b17
 B	b2062	t2062
 T	t2070	o b2062 b17
 B	b2070	t2070
-P	p3892	String "sqFromRwT (lt_mulPositMono 2 <<'c>>)"
+P	p3892	String "sqFromRwT (lt_mulPositMono <<'c>>)"
 O	o3892	ext_rule p3892
 S	s1697	t2132 h
 G	s1697	t2180
@@ -9072,7 +9072,7 @@ B	b4812	t4812
 P	p4812	Number 12650
 P	p4813	Number 12963
 O	o4813	location p4812 p4813
-P	p3914	String "sqFromRwT (mul_uni_Assoc 2)"
+P	p3914	String "sqFromRwT (mul_uni_Assoc)"
 O	o3914	ext_rule p3914
 S	s1729	t2132 h
 G	s1729	t2425
@@ -9222,7 +9222,7 @@ B	b4848	t4848
 P	p4850	Number 14124
 P	p4851	Number 14291
 O	o4851	location p4850 p4851
-P	p3935	String "sqFromRwT (lt_mulNegMono 2 <<'c>>)"
+P	p3935	String "sqFromRwT (lt_mulNegMono <<'c>>)"
 O	o3935	ext_rule p3935
 NItt_list2!ball2	ball2	ball2 Itt_list2
 O	o4852	ball2
@@ -9349,7 +9349,7 @@ T	t2521	o b2521 b2258
 B	b2522	t2521
 T	t2522	o b2520 b2522
 B	b2523	t2522
-P	p3960	String "sqFromRwT (rem_baseReduce 2)"
+P	p3960	String "sqFromRwT (rem_baseReduce)"
 O	o3960	ext_rule p3960
 S	s1799	t2132 h
 G	s1799	t1787
@@ -9444,7 +9444,7 @@ O	o2555	cond_rewrite p2555
 B	b2555	t2539
 T	t2555	o b2555 b2229
 B	b2556	t2555
-P	p3985	String "sqFromRwT (rem_indReduce 2)"
+P	p3985	String "sqFromRwT (rem_indReduce)"
 O	o3985	ext_rule p3985
 NItt_list2!append	append	append Itt_list2
 O	o4901	append
@@ -9608,7 +9608,7 @@ T	t2619	o2613 b2128 b2618 b2150 b17
 B	b2619	t2619
 P	p2622	String div_baseReduce_rw
 O	o2622	cond_rewrite p2622
-P	p4021	String "sqFromRwT (div_baseReduce 2)"
+P	p4021	String "sqFromRwT (div_baseReduce)"
 O	o4021	ext_rule p4021
 S	s1915	t2132 h
 G	s1915	t2613
@@ -9654,7 +9654,7 @@ T	t2646	o2637 b2128 b2645 b2150 b17
 B	b2646	t2646
 P	p2649	String div_indReduce_rw
 O	o2649	cond_rewrite p2649
-P	p4042	String "sqFromRwT (div_indReduce 2)"
+P	p4042	String "sqFromRwT (div_indReduce)"
 O	o4042	ext_rule p4042
 S	s1992	t2132 h
 G	s1992	t2640
@@ -9925,7 +9925,7 @@ T	t2723	o b2555 b2230
 B	b2723	t2723
 T	t2724	o b2520 b2723
 B	b2724	t2724
-P	p4078	String "sqFromRwT (div_Assoc 2)"
+P	p4078	String "sqFromRwT (div_Assoc)"
 O	o4078	ext_rule p4078
 S	s2192	t2132 h
 G	s2192	t2712

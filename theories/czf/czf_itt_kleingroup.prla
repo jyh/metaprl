@@ -5563,7 +5563,7 @@ T	t2266	o2043 b2255 b2266
 B	b2267	t2266
 T	t2267	o2043 b2252 b2267
 B	b2268	t2267
-P	p2268	String "copyHypT 2 3 thenT rwh unfold_klein4_car 4 thenT dT 4 ttca thenT dT 5 ttca thenT dT 6 ttca thenT dT 7 ttca"
+P	p2268	String "copyHypT 2 4 thenT rwh unfold_klein4_car 4 thenT dT 4 ttca thenT dT 5 ttca thenT dT 6 ttca thenT dT 7 ttca"
 O	o2268	ext_rule p2268
 T	t2268	o b2260 b14
 B	b2269	t2268

@@ -207,7 +207,7 @@ dform quot_df2 : mode[src] :: parens :: "prec"[prec_quot] :: "quot"{'A; x, y. 'E
  * @end[itemize]
  * @end[doc]
  *)
-prim quotientType {| intro [] |} 'H 'u 'v 'w 'x1 'x2 :
+prim quotientType {| intro [] |} 'u 'v 'w 'x1 'x2 :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H; u: 'A; v: 'A >- "type"{'E['u; 'v]} } -->
    [wf] sequent [squash] { 'H; u: 'A >- 'E['u; 'u] } -->
@@ -223,7 +223,7 @@ prim quotientType {| intro [] |} 'H 'u 'v 'w 'x1 'x2 :
  * the equivalence relations $E_1$ and $E_2$ are equal.
  * @end[doc]
  *)
-prim quotientEquality {| intro []; eqcd |} 'H 'x 'y :
+prim quotientEquality {| intro []; eqcd |} 'x 'y :
    [wf] sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
    [wf] sequent [squash] { 'H; x: 'A1; y: 'A1 >- 'E1['x; 'y] = 'E2['x; 'y] in univ[i:l] } -->
    [wf] sequent [squash] { 'H >- "type"{.quot x1, y1: 'A1 // 'E1['x1; 'y1]} } -->
@@ -242,7 +242,7 @@ prim quotientEquality {| intro []; eqcd |} 'H 'x 'y :
  * equivalence relation $E$.
  * @end[doc]
  *)
-prim quotient_memberWeakEquality {| intro [AutoMustComplete] |} 'H :
+prim quotient_memberWeakEquality {| intro [AutoMustComplete] |} :
    [wf] sequent [squash] { 'H >- "type"{(quot x, y: 'A // 'E['x; 'y])} } -->
    [wf] sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
    sequent ['ext] { 'H >- 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y] } =
@@ -251,7 +251,7 @@ prim quotient_memberWeakEquality {| intro [AutoMustComplete] |} 'H :
 (*!
  * @docoff
  *)
-interactive quotient_memberFormation {| intro [] |} 'H :
+interactive quotient_memberFormation {| intro [] |} :
    [wf] sequent [squash] { 'H >- "type"{(quot x, y: 'A // 'E['x; 'y])} } -->
    [main] ('a : sequent ['ext] { 'H >- 'A }) -->
    sequent ['ext] { 'H >- quot x, y: 'A // 'E['x; 'y] }
@@ -263,7 +263,7 @@ interactive quotient_memberFormation {| intro [] |} 'H :
  * in $A$, and they are related with the equivalence relation $E[a_1, a_2]$.
  * @end[doc]
  *)
-prim quotient_memberEquality 'H :
+prim quotient_memberEquality :
    [wf] sequent [squash] { 'H >- 'a1 in quot x, y: 'A // 'E['x; 'y] } -->
    [wf] sequent [squash] { 'H >- 'a2 in quot x, y: 'A // 'E['x; 'y] } -->
    sequent [squash] { 'H >- esquash{'E['a1; 'a2]} } -->
@@ -278,9 +278,9 @@ let quotientIntroT p =
          with RefineError _ -> false
       then
          raise generic_refiner_exn;
-      quotient_memberWeakEquality (Sequent.hyp_count_addr p) p
+      quotient_memberWeakEquality p
    end else
-      quotient_memberEquality (Sequent.hyp_count_addr p) p
+      quotient_memberEquality p
 
 let resource intro +=
    (<<'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]>>, ("quotientIntroT", None, quotientIntroT))
@@ -297,7 +297,7 @@ let resource intro +=
  * the @tactic[quotientT] tactic.
  * @end[doc]
  *)
-prim quotientElimination1 {| elim [ThinOption thinT] |} 'H 'J 'v 'w 'z :
+prim quotientElimination1 {| elim [ThinOption thinT] |} 'H 'v 'w 'z :
    [wf] sequent [squash] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a] >- "type"{'T['a]} } -->
    [main] sequent [squash] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a];
              v: 'A; w: 'A; z: 'E['v; 'w] >- 's['v] = 't['w] in 'T['v]
@@ -305,7 +305,7 @@ prim quotientElimination1 {| elim [ThinOption thinT] |} 'H 'J 'v 'w 'z :
    sequent ['ext] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a] >- 's['a] = 't['a] in 'T['a] } =
    it
 
-interactive quotientElimination1_eq 'H 'J 'v 'w 'z 'e1 'e2:
+interactive quotientElimination1_eq 'H 'v 'w 'z 'e1 'e2:
    [wf] sequent [squash] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a] >- "type"{'T['a]} } -->
    [main] sequent [squash] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a];
              v: 'A; w: 'A; z: 'E['v; 'w];
@@ -316,10 +316,10 @@ interactive quotientElimination1_eq 'H 'J 'v 'w 'z 'e1 'e2:
 
 (*! @docoff *)
 let quotientT i p =
-   let i,j = Sequent.hyp_indices p i in
+   let i = Sequent.get_pos_hyp_num p i in
    match Var.maybe_new_vars ["v"; "w"; "z"; "e1"; "e2"] (Sequent.declared_vars p) with
       [v; w; z; e1; e2] ->
-         quotientElimination1_eq i j v w z e1 e2 p
+         quotientElimination1_eq i v w z e1 e2 p
     | _ ->
          raise (Invalid_argument "Itt_quotient.quotientT")
 
@@ -329,7 +329,7 @@ let quotientT i p =
  * that $E[a_1, a_2]$.
  * @end[doc]
  *)
-prim quotient_equalityElimination {| elim [ThinOption thinT] |} 'H 'J 'v :
+prim quotient_equalityElimination {| elim [ThinOption thinT] |} 'H 'v :
    [main] ('g['v] : sequent ['ext] { 'H; e: 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]; 'J['e]; v: esquash{'E['a1; 'a2]} >- 'T['e] }) -->
    sequent ['ext] { 'H; e: 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]; 'J['e] >- 'T['e] } =
    'g[it]
@@ -342,7 +342,7 @@ prim quotient_equalityElimination {| elim [ThinOption thinT] |} 'H 'J 'v :
  * the equivalence relation $E$ (the relation must become coarser).
  * @end[doc]
  *)
-interactive quotientSubtype 'H 'a1 'a2 :
+interactive quotientSubtype 'a1 'a2 :
    ["subtype"] sequent [squash] { 'H >- \subtype{'A1; 'A2} } -->
    [aux] sequent [squash] { 'H; a1: 'A1; a2: 'A1 (* ; 'E1['a1; 'a2] *) >- 'E2['a1; 'a2] } -->
    [wf] sequent [squash] { 'H >- "type"{(quot x1, y1: 'A1 // 'E1['x1; 'y1])} } -->
@@ -382,7 +382,7 @@ let resource typeinf += (quotient_term, infer_univ_dep0_dep1 dest_quotient_inf)
  *)
 let quotient_subtypeT p =
    let x, y = maybe_new_vars2 p "x" "y" in
-      quotientSubtype (Sequent.hyp_count_addr p) x y p
+      quotientSubtype x y p
 
 let resource sub +=
    (DSubtype ([<< quot x1, y1: 'A1 // 'E1['x1; 'y1] >>, << quot x2, y2: 'A2 // 'E2['x2; 'y2] >>;

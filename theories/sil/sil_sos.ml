@@ -76,23 +76,23 @@ dform neq_int_df : parens :: "prec"[prec_eq_int] :: "neq_int"{'t1; 't2} =
 (*
  * Numbers.
  *)
-prim snumber_eval 'H :
+prim snumber_eval :
    sequent ['ext] { 'H >- evalsto{eval{number[i:n]; 's}; ."value"{number[i:n]; 's}}} =
    it
 
-prim add_eval 'H 's2 :
+prim add_eval 's2 :
    [main] sequent [squash] { 'H >- evalsto{eval{'e1; 's1}; ."value"{number[i:n]; 's2}} } -->
    [main] sequent [squash] { 'H >- evalsto{eval{'e2; 's2}; ."value"{number[j:n]; 's3}} } -->
    sequent ['ext] { 'H >- evalsto{eval{add{'e1; 'e2}; 's1}; ."value"{meta_sum[i:n, j:n]; 's3}} } =
    it
 
-prim sub_eval 'H 's2 :
+prim sub_eval 's2 :
    [main] sequent [squash] { 'H >- evalsto{eval{'e1; 's1}; ."value"{number[i:n]; 's2}} } -->
    [main] sequent [squash] { 'H >- evalsto{eval{'e2; 's2}; ."value"{number[j:n]; 's3}} } -->
    sequent ['ext] { 'H >- evalsto{eval{sub{'e1; 'e2}; 's1}; eval{meta_diff[i:n, j:n]; 's3}} } =
    it
 
-prim if_eval_true 'H (number[i:n]) 's2 (number[j:n]) 's3 :
+prim if_eval_true (number[i:n]) 's2 (number[j:n]) 's3 :
    [main] sequent [squash] { 'H >- evalsto{eval{'e1; 's1}; ."value"{number[i:n]; 's2}} } -->
    [main] sequent [squash] { 'H >- evalsto{eval{'e2; 's2}; ."value"{number[j:n]; 's3}} } -->
    [assertion] sequent [squash] { 'H >- meta_eq[i:n, j:n]{."true"; ."false"} } -->
@@ -103,23 +103,23 @@ prim if_eval_true 'H (number[i:n]) 's2 (number[j:n]) 's3 :
 (*
  * Disjoint union.
  *)
-prim inl_eval 'H :
+prim inl_eval :
    [main] sequent [squash] { 'H >- evalsto{eval{'e1; 's1}; ."value"{'v1; 's2}} } -->
    sequent ['ext] { 'H >- evalsto{eval{inl{'e1}; 's1}; ."value"{inl{'v1}; 's2}} } =
    it
 
-prim inr_eval 'H :
+prim inr_eval :
    [main] sequent [squash] { 'H >- evalsto{eval{'e1; 's1}; ."value"{'v1; 's2}} } -->
    sequent ['ext] { 'H >- evalsto{eval{inr{'e1}; 's1}; ."value"{inr{'v1}; 's2}} } =
    it
 
-prim decide_eval_left 'H 'v1 's2 :
+prim decide_eval_left 'v1 's2 :
    [main] sequent [squash] { 'H >- evalsto{eval{'e1; 's1}; ."value"{.inl{'v1}; 's2}} } -->
    [main] sequent [squash] { 'H >- evalsto{eval{'e2['v1]; 's2}; ."value"{'v2; 's3}} } -->
    sequent ['ext] { 'H >- evalsto{eval{decide{'e1; x. 'e2['x]; y. 'e3['y]}; 's1}; ."value"{'v2; 's3}} } =
    it
 
-prim decide_eval_right 'H 'v1 's2 :
+prim decide_eval_right 'v1 's2 :
    [main] sequent [squash] { 'H >- evalsto{eval{'e1; 's1}; ."value"{inr{'v1}; 's2}} } -->
    [main] sequent [squash] { 'H >- evalsto{eval{'e3['v1]; 's2}; ."value"{'v3; 's3}} } -->
    sequent ['ext] { 'H >- evalsto{eval{decide{'e1; x. 'e2['x]; y. 'e3['y]}; 's1}; ."value"{'v3; 's3}} } =
@@ -128,13 +128,13 @@ prim decide_eval_right 'H 'v1 's2 :
 (*
  * Pairs.
  *)
-prim pair_eval 'H 's2 :
+prim pair_eval 's2 :
    [main] sequent [squash] { 'H >- evalsto{eval{'e1; 's1}; ."value"{'v1; 's2}} } -->
    [main] sequent [squash] { 'H >- evalsto{eval{'e2; 's2}; ."value"{'v2; 's3}} } -->
    sequent ['ext] { 'H >- evalsto{eval{pair{'e1; 'e2}; 's1}; ."value"{pair{'v1; 'v2}; 's3}} } =
    it
 
-prim spread_eval 'H 'v1 'v2 's2 :
+prim spread_eval 'v1 'v2 's2 :
    [main] sequent [squash] { 'H >- evalsto{eval{'e1; 's1}; ."value"{pair{'v1; 'v2}; 's2}} } -->
    [main] sequent [squash] { 'H >- evalsto{eval{'e2['v1; 'v2]; 's2}; ."value"{'v3; 's3}} } -->
    sequent ['ext] { 'H >- evalsto{eval{spread{'e1; x, y. 'e2['x; 'y]}; 's1}; ."value"{'v3; 's3}} } =
@@ -143,34 +143,34 @@ prim spread_eval 'H 'v1 'v2 's2 :
 (*
  * Reference cells.
  *)
-prim ref_eval 'H 'v1 's2 :
+prim ref_eval 'v1 's2 :
    [main] sequent [squash] { 'H >- evalsto{eval{'e1; 's1}; ."value"{'v1; 's2}} } -->
    sequent ['ext] { 'H >- evalsto{eval{ref{'e1}; 's1}; alloc{'s2; 'v1; s3, l. "value"{'l; 's3}}} } =
    it
 
-prim deref_eval 'H 'v1 :
+prim deref_eval 'v1 :
    [main] sequent [squash] { 'H >- evalsto{eval{'e1; 's1}; ."value"{'v1; 's2}} } -->
    sequent ['ext] { 'H >- evalsto{eval{deref{'e1}; 's1}; ."value"{fetch{'s2; 'v1}; 's2}} } =
    it
 
-prim assign_eval 'H 's2 :
+prim assign_eval 's2 :
    [main] sequent [squash] { 'H >- evalsto{eval{'e1; 's1}; ."value"{'v1; 's2}} } -->
    [main] sequent [squash] { 'H >- evalsto{eval{'e2; 's2}; ."value"{'v2; 's3}} } -->
    sequent ['ext] { 'H >- evalsto{eval{assign{'e1; 'e2}; 's1}; ."value"{.dot; store{'s3; 'v1; 'v2}}} } =
    it
 
-prim dot_eval 'H :
+prim dot_eval :
    sequent ['ext] { 'H >- evalsto{eval{dot; 's1}; ."value"{dot; 's1}} } =
    it
 
 (*
  * Functions.
  *)
-prim lambda_eval 'H :
+prim lambda_eval :
    sequent ['ext] { 'H >- evalsto{eval{lambda{v. 'e1['v]}; 's1}; ."value"{lambda{v. 'e1['v]}; 's1}} } =
    it
 
-prim apply_eval 'H 'v2 's2 (lambda{v. 'e3['v]}) 's3 :
+prim apply_eval 'v2 's2 (lambda{v. 'e3['v]}) 's3 :
    [main] sequent [squash] { 'H >- evalsto{eval{'e2; 's1}; ."value"{'v2; 's2}} } -->
    [main] sequent [squash] { 'H >- evalsto{eval{'e1; 's2}; ."value"{lambda{v. 'e3['v]}; 's3}} } -->
    [main] sequent [squash] { 'H >- evalsto{eval{'e3['v2]; 's3}; ."value"{'v3; 's4}} } -->

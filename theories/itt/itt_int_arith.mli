@@ -100,7 +100,7 @@ topval findContradRelT : tactic
 topval arithT : tactic
 
 (*
-rule test 'H 'a 'b 'c :
+rule test 'a 'b 'c :
 sequent [squash] { 'H >- 'a in int } -->
 sequent ['ext] { 'H; x: ('a >= ('b +@ 1));
                      y: (5 in int); z: (6 in int);

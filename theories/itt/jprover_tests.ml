@@ -123,7 +123,7 @@ interactive subst :
 
 (* barber *)
 
-interactive barber 'H 'barber :
+interactive barber 'barber :
    sequent [squash] { 'H >- "type"{'People} } -->
    sequent [squash] { 'H >- 'barber in 'People } -->
    sequent [squash] { 'H; p1: 'People; p2: 'People >- "type"{'shaves['p1;'p2]} } -->
@@ -381,7 +381,7 @@ jtest << (exst x:'T. all y:'T. ('A['x,'y] => 'A['y,'x])) >> "C" "LK";;  (* INVAL
 
 *)
 
-interactive agatha 'H 'Butler 'Agatha 'Charles:
+interactive agatha 'Butler 'Agatha 'Charles:
    sequent ['ext] {'H >- "type"{'Person} } -->
    sequent ['ext] {'H; x: 'Person >- "type"{'Lives['x]} } -->
    sequent ['ext] {'H; x: 'Person; y:'Person >- "type"{'Hates['x; 'y]} } -->

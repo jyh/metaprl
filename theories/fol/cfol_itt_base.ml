@@ -61,38 +61,37 @@ let fold_type = makeFoldC << Fol_type!"type"{'t} >> unfold_type
 let fold_pred = makeFoldC << Fol_pred!"pred" >> unfold_pred
 
 (* Lemmas *)
-interactive false_univ {| intro [] |} 'H :
+interactive false_univ {| intro [] |} :
    sequent ['ext] { 'H >- "false" IN univ[1:l] }
 
-interactive true_univ {| intro [] |} 'H :
+interactive true_univ {| intro [] |} :
    sequent ['ext] { 'H >- "true" IN univ[1:l] }
 
-interactive type_univ 'H :
+interactive type_univ :
    [wf] sequent ['ext] { 'H >- "type"{'A} } -->
    sequent ['ext] { 'H >- 'A IN univ[1:l] }
 
-let typeT p =
-   type_univ (Sequent.hyp_count_addr p) p
+let typeT = type_univ
 
 (* Rules for false *)
-derived false_type {| intro [] |} 'H :
+derived false_type {| intro [] |} :
    sequent ['ext] { 'H >- "type"{."false"} }
 
-derived false_elim {| elim [] |} 'H 'J :
+derived false_elim {| elim [] |} 'H :
    sequent ['ext] { 'H; x: "false"; 'J['x] >- 'C['x] }
 
 (* Rules for true *)
-derived true_type {| intro [] |} 'H :
+derived true_type {| intro [] |} :
    sequent ['ext] { 'H >- "type"{."true"} }
 
-derived true_intro {| intro [] |} 'H :
+derived true_intro {| intro [] |} :
    sequent ['ext] { 'H >- "true" }
 
-interactive true_concl_elim 'H :
+interactive true_concl_elim :
    [main] sequent ['ext] { 'H >- 'P = "true" in univ[1:l] } -->
    sequent ['ext] { 'H >- 'P }
 
-interactive true_concl_intro 'H :
+interactive true_concl_intro :
    [wf] sequent ['ext] { 'H >- "type"{'P} } -->
    [main] sequent ['ext] { 'H >- 'P } -->
    sequent ['ext] { 'H >- 'P = "true" in univ[1:l] }
@@ -100,25 +99,25 @@ interactive true_concl_intro 'H :
 let trueT p =
    let goal = Sequent.concl p in
       if is_equal_term goal then
-         true_concl_intro (Sequent.hyp_count_addr p) p
+         true_concl_intro p
       else
-         true_concl_elim (Sequent.hyp_count_addr p) p
+         true_concl_elim p
 
 (* Rules for pred *)
-interactive pred_elim {| elim [] |} 'H 'J 'y :
+interactive pred_elim {| elim [] |} 'H 'y :
    sequent ['ext] { 'H; x: univ[1:l]; y: "type"{'x}; 'J['x] >- 'C['x] } -->
    sequent ['ext] { 'H; x: pred; 'J['x] >- 'C['x] }
 
-interactive true_pred {| intro [] |} 'H :
+interactive true_pred {| intro [] |} :
    sequent ['ext] { 'H >- "true" IN pred }
 
-interactive false_pred {| intro [] |} 'H :
+interactive false_pred {| intro [] |} :
    sequent ['ext] { 'H >- "false" IN pred }
 
-interactive pred_type1 {| intro [] |} 'H :
+interactive pred_type1 {| intro [] |} :
    sequent ['ext] { 'H >- Itt_equal!"type"{pred} }
 
-derived pred_type {| elim [] |} 'H 'J :
+derived pred_type {| elim [] |} 'H :
    sequent ['ext] { 'H; x: pred; 'J['x] >- "type"{'x} }
 
 (*

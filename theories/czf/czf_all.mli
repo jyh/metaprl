@@ -59,7 +59,7 @@ rule bounded_all_intro 'y :
  * H, y: (all x: A. B[x]), J, z: B[a] >> T
  * H, y: (all x: A. B[x]), J >> member{'a; 'A}
  *)
-rule bounded_all_elim 'H 'J 'z 'a :
+rule bounded_all_elim 'H 'z 'a :
    sequent { 'H; y: (all x: 'A. 'B['y]); 'J; z: 'B['a] >> 'T } -->
    sequent { 'H; y: (all x: 'A. 'B['y]); 'J >> member{'a; 'A} } -->
    sequent { 'H; y: (all x: 'A. 'B['y]); 'J >> 'T };;
@@ -83,7 +83,7 @@ rule all_intro 'y :
  * H, y: (all x. B[x]), J, w: B[z] >> T
  * H, y: (all x. B[x]), J >> member{z; set}
  *)
-rule all_elim 'H 'J 'w 'z :
+rule all_elim 'H 'w 'z :
    sequent { 'H; y: "all"{x. 'B['x]}; 'J; w: 'B['z] >> 'T } -->
    sequent { 'H; y: "all"{x. 'B['x]}; 'J >> member{'z; set} };;
 

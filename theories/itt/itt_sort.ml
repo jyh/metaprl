@@ -178,7 +178,7 @@ let resource reduce +=
 (*
  * Well-formedness of comparisons.
  *)
-interactive compare_lt_wf {| intro [intro_typeinf << 'a >>] |} 'H 'A :
+interactive compare_lt_wf {| intro [intro_typeinf << 'a >>] |} 'A :
    [wf] sequent [squash] { 'H >- 'lt in 'A -> 'A -> bool } -->
    [wf] sequent [squash] { 'H >- 'a in 'A } -->
    [wf] sequent [squash] { 'H >- 'b in 'A } -->
@@ -187,7 +187,7 @@ interactive compare_lt_wf {| intro [intro_typeinf << 'a >>] |} 'H 'A :
 (*
  * Well-typing of partial_order predicate.
  *)
-interactive partial_order_wf {| intro [] |} 'H :
+interactive partial_order_wf {| intro [] |} :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H >- 'lt in 'A -> 'A -> bool } -->
    sequent ['ext] { 'H >- "type"{partial_order{'A; 'lt}} }
@@ -195,14 +195,14 @@ interactive partial_order_wf {| intro [] |} 'H :
 (*
  * Well-formedness of bounded and sorted Boolean functions.
  *)
-interactive bounded_wf {| intro [intro_typeinf << 'l >>] |} 'H list{'A} :
+interactive bounded_wf {| intro [intro_typeinf << 'l >>] |} list{'A} :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H >- 'l in list{'A} } -->
    [wf] sequent [squash] { 'H >- 'u in 'A } -->
    [wf] sequent [squash] { 'H >- 'lt in 'A -> 'A -> bool } -->
    sequent ['ext] { 'H >- "type"{bounded{'u; 'l; 'lt}} }
 
-interactive sorted_wf {| intro [intro_typeinf << 'l >>] |} 'H list{'A} :
+interactive sorted_wf {| intro [intro_typeinf << 'l >>] |} list{'A} :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H >- 'l in list{'A} } -->
    [wf] sequent [squash] { 'H >- 'lt in 'A -> 'A -> bool } -->
@@ -211,14 +211,14 @@ interactive sorted_wf {| intro [intro_typeinf << 'l >>] |} 'H list{'A} :
 (*
  * Well formedness of sort and insert functions.
  *)
-interactive insert_wf {| intro [] |} 'H :
+interactive insert_wf {| intro [] |} :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H >- 'u in 'A } -->
    [wf] sequent [squash] { 'H >- 'l in list{'A} } -->
    [wf] sequent [squash] { 'H >- 'lt in 'A -> 'A -> bool } -->
    sequent ['ext] { 'H >- insert{'u; 'l; 'lt} in list{'A} }
 
-interactive sort_wf {| intro [] |} 'H :
+interactive sort_wf {| intro [] |} :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H >- 'l in list{'A} } -->
    [wf] sequent [squash] { 'H >- 'lt in 'A -> 'A -> bool } -->
@@ -227,7 +227,7 @@ interactive sort_wf {| intro [] |} 'H :
 (*
  * Some useful ordering theorems.
  *)
-interactive symetric_elim {| elim [elim_typeinf << 'a >>] |} 'H 'J 'A 'v :
+interactive symetric_elim {| elim [elim_typeinf << 'a >>] |} 'H 'A 'v :
    [wf] sequent [squash] { 'H; w: compare_lt{'lt; 'a; 'b}; 'J['w] >- 'lt in 'A -> 'A -> bool } -->
    [wf] sequent [squash] { 'H; w: compare_lt{'lt; 'a; 'b}; 'J['w] >- 'a in 'A } -->
    [wf] sequent [squash] { 'H; w: compare_lt{'lt; 'a; 'b}; 'J['w] >- 'b in 'A } -->
@@ -235,7 +235,7 @@ interactive symetric_elim {| elim [elim_typeinf << 'a >>] |} 'H 'J 'A 'v :
    [main] sequent ['ext] { 'H; w: compare_lt{'lt; 'a; 'b}; 'J['w]; v: not{compare_lt{'lt; 'b; 'a}} >- 'C['w] } -->
    sequent ['ext] { 'H; w: (compare_lt{'lt; 'a; 'b}); 'J['w] >- 'C['w] }
 
-interactive bounded_inclusion 'H list{'A} 'u1 :
+interactive bounded_inclusion list{'A} 'u1 :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H >- 'u in 'A } -->
    [wf] sequent [squash] { 'H >- 'l in list{'A} } -->
@@ -261,9 +261,9 @@ let boundInclusionT t p =
                   raise (RefineError("boundInclusion", StringTermError("can not infer type",l)))
             end
    in
-      bounded_inclusion (Sequent.hyp_count_addr p) a_type t p
+      bounded_inclusion a_type t p
 
-interactive insert_inclusion 'H 'A :
+interactive insert_inclusion 'A :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H >- 'u in 'A } -->
    [wf] sequent [squash] { 'H >- 'l in list{'A} } -->
@@ -282,12 +282,12 @@ let insertInclusionT p =
          RefineError _ ->
             infer_type p u
    in
-      insert_inclusion (Sequent.hyp_count_addr p) a_type p
+      insert_inclusion a_type p
 
 (*
  * Properties of insert
  *)
-interactive insert_mem {| intro [] |} 'H :
+interactive insert_mem {| intro [] |} :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H >- 'l in list{'A} } -->
    [wf] sequent [squash] { 'H >- 'u in 'A } -->
@@ -295,7 +295,7 @@ interactive insert_mem {| intro [] |} 'H :
    [wf] sequent ['ext] { 'H >- partial_order{'A; 'lt} } -->
    sequent ['ext] { 'H >- mem{'u; insert{'u; 'l; 'lt}; 'A} }
 
-interactive insert_subset {| intro [AutoMustComplete] |} 'H :
+interactive insert_subset {| intro [AutoMustComplete] |} :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H >- 'u in 'A } -->
    [wf] sequent [squash] { 'H >- 'v in list{'A} } -->
@@ -305,7 +305,7 @@ interactive insert_subset {| intro [AutoMustComplete] |} 'H :
    sequent ['ext] { 'H >- \subset{'v; 'l; 'A} } -->
    sequent ['ext] { 'H >- \subset{'v; insert{'u; 'l; 'lt}; 'A} }
 
-interactive subset_insert_cons {| intro [] |} 'H :
+interactive subset_insert_cons {| intro [] |} :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H >- 'u in 'A } -->
    [wf] sequent [squash] { 'H >- 'v in list{'A} } -->
@@ -318,7 +318,7 @@ interactive subset_insert_cons {| intro [] |} 'H :
 (*
  * Verifications of the functions.
  *)
-interactive insert_thm {| intro [intro_typeinf << 'l >>] |} 'H list{'A} :
+interactive insert_thm {| intro [intro_typeinf << 'l >>] |} list{'A} :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H >- 'l in list{'A} } -->
    [wf] sequent [squash] { 'H >- 'u in 'A } -->
@@ -327,14 +327,14 @@ interactive insert_thm {| intro [intro_typeinf << 'l >>] |} 'H list{'A} :
    [main] sequent ['ext] { 'H >- sorted{'l; 'lt} } -->
    sequent ['ext] { 'H >- sorted{insert{'u; 'l; 'lt}; 'lt} }
 
-interactive sorted_thm {| intro [intro_typeinf << 'l >>] |} 'H list{'A} :
+interactive sorted_thm {| intro [intro_typeinf << 'l >>] |} list{'A} :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H >- 'l in list{'A} } -->
    [wf] sequent [squash] { 'H >- 'lt in 'A -> 'A -> bool } -->
    [wf] sequent ['ext] { 'H >- partial_order{'A; 'lt} } -->
    sequent ['ext] { 'H >- sorted{sort{'l; 'lt}; 'lt} }
 
-interactive sort_sameset {| intro [intro_typeinf << 'l >>] |} 'H list{'A} :
+interactive sort_sameset {| intro [intro_typeinf << 'l >>] |} list{'A} :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H >- 'l in list{'A} } -->
    [wf] sequent [squash] { 'H >- 'lt in 'A -> 'A -> bool } -->

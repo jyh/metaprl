@@ -42,16 +42,16 @@ prim_rw unfold_all : "all"{x. 'b['x]} <--> ('b["true"] & 'b["false"])
 (* Lemmas *)
 
 (* Derived rules *)
-derived all_type 'H 'x :
+derived all_type 'x :
    [wf] sequent ['ext] { 'H; x: pred >- "type"{'B['x]} } -->
    sequent ['ext] { 'H >- "type"{."all"{y. 'B['y]}} }
 
-derived all_intro 'H 'x :
+derived all_intro 'x :
    [main] ('b['x] : sequent ['ext] { 'H; x: pred >- 'B['x] }) -->
    [wf] sequent ['ext] { 'H; x: pred >- "type"{'B['x]} } -->
    sequent ['ext] { 'H >- "all"{y. 'B['y]} }
 
-derived all_elim 'H 'J 'x 'z 'a :
+derived all_elim 'H 'x 'z 'a :
    [wf] sequent ['ext] { 'H; x: "all"{y. 'B['y]}; 'J['x] >- "type"{'a} } -->
    [wf] sequent ['ext] { 'H; x: "all"{y. 'B['y]}; 'J['x]; z: pred >- "type"{'B['z]} } -->
    [main] ('b['x; 'z] : sequent ['ext] { 'H; x: "all"{y. 'B['y]}; 'J['x]; z: 'B['a] >- 'C['x] }) -->

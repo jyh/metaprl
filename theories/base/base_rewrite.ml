@@ -92,7 +92,7 @@ dform rw_just_df : except_mode[src] :: rw_just = `"rw"
  * primitive rewrite judgment.
  * @end[doc]
  *)
-prim rewriteAxiom1 'H :
+prim rewriteAxiom1 :
    sequent ['ext] { 'H >- Perv!"rewrite"{'a; 'a} } =
    rw_just
 
@@ -112,7 +112,7 @@ prim_rw rewriteAxiom2 'a 'b : (Perv!"rewrite"{'a; 'b}) --> 'a <--> 'b
  * substitution @hrefrewrite[rewriteAxiom2].
  * @end[doc]
  *)
-interactive rewriteSym 'H :
+interactive rewriteSym :
    sequent ['ext] { 'H >- Perv!"rewrite"{'a; 'b} } -->
    sequent ['ext] { 'H >- Perv!"rewrite"{'b; 'a} }
 (*! @docoff *)
@@ -128,8 +128,7 @@ let rewriteC t =
 let rewriteT t =
    rwh (rewriteC t) 0
 
-let rewriteSymT p =
-   rewriteSym (Sequent.hyp_count_addr p) p
+let rewriteSymT = rewriteSym
 
 (*!
  * @begin[doc]
@@ -138,13 +137,11 @@ let rewriteSymT p =
  * @docoff
  * @end[doc]
  *)
-let d_rewrite_axiomT p =
-   rewriteAxiom1 (Sequent.hyp_count_addr p) p
 
 let resource auto += {
    auto_name = "Base_rewrite.triv_equalT";
    auto_prec = trivial_prec;
-   auto_tac = d_rewrite_axiomT;
+   auto_tac = rewriteAxiom1;
    auto_type = AutoTrivial;
 }
 

@@ -206,12 +206,12 @@ dform list_ind_df1 : except_mode[src] :: parens :: "prec"[prec_list] :: list_ind
  * $T$ is a type.
  * @end[doc]
  *)
-prim listType {| intro [] |} 'H :
+prim listType {| intro [] |} :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    sequent ['ext] { 'H >- "type"{list{'A}} } =
    it
 
-prim listEquality {| intro [] |} 'H :
+prim listEquality {| intro [] |} :
    [wf] sequent [squash] { 'H >- 'A = 'B in univ[i:l] } -->
    sequent ['ext] { 'H >- list{'A} = list{'B} in univ[i:l] } =
    it
@@ -219,7 +219,7 @@ prim listEquality {| intro [] |} 'H :
 (*
  * @docoff
  *)
-interactive listFormation 'H :
+interactive listFormation :
    sequent ['ext] { 'H >- univ[i:l] } -->
    sequent ['ext] { 'H >- univ[i:l] }
 
@@ -230,12 +230,12 @@ interactive listFormation 'H :
  * The @hrefterm[nil] term is a member of every list type $@list{A}$.
  * @end[doc]
  *)
-prim nilEquality {| intro [] |} 'H :
+prim nilEquality {| intro [] |} :
    [wf] sequent [squash] { 'H >- "type"{list{'A}} } -->
    sequent ['ext] { 'H >- nil in list{'A} } =
    it
 
-interactive nilFormation {| intro [] |} 'H :
+interactive nilFormation {| intro [] |} :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    sequent ['ext] { 'H >- list{'A} }
 
@@ -246,7 +246,7 @@ interactive nilFormation {| intro [] |} 'H :
  * of $@list{A}$.
  * @end[doc]
  *)
-prim consEquality {| intro []; eqcd |} 'H :
+prim consEquality {| intro []; eqcd |} :
    [wf] sequent [squash] { 'H >- 'u1 = 'u2 in 'A } -->
    [wf] sequent [squash] { 'H >- 'v1 = 'v2 in list{'A} } -->
    sequent ['ext] { 'H >- cons{'u1; 'v1} = cons{'u2; 'v2} in list{'A} } =
@@ -260,7 +260,7 @@ prim consEquality {| intro []; eqcd |} 'H :
  * H >- A ext h
  * H >- list(A) ext t
  *)
-interactive consFormation 'H :
+interactive consFormation :
    sequent ['ext] { 'H >- 'A } -->
    sequent ['ext] { 'H >- list{'A} } -->
    sequent ['ext] { 'H >- list{'A} }
@@ -275,7 +275,7 @@ interactive consFormation 'H :
  * of type $T$ for any elements $u @in A$, $v @in @list{A}$, and $z @in T$.
  * @end[doc]
  *)
-prim list_indEquality {| intro []; eqcd |} 'H lambda{l. 'T['l]} list{'A} 'u 'v 'w :
+prim list_indEquality {| intro []; eqcd |} lambda{l. 'T['l]} list{'A} 'u 'v 'w :
    [wf] sequent [squash] { 'H >- 'e1 = 'e2 in list{'A} } -->
    [wf] sequent [squash] { 'H >- 'base1 = 'base2 in 'T[nil] } -->
    [wf] sequent [squash] { 'H; u: 'A; v: list{'A}; w: 'T['v] >-
@@ -299,7 +299,7 @@ prim list_indEquality {| intro []; eqcd |} 'H lambda{l. 'T['l]} list{'A} 'u 'v '
  * $C[t]$ holds on $t$.
  * @end[doc]
  *)
-prim listElimination {| elim [ThinOption thinT] |} 'H 'J 'w 'u 'v :
+prim listElimination {| elim [ThinOption thinT] |} 'H 'w 'u 'v :
    [main] ('base['l] : sequent ['ext] { 'H; l: list{'A}; 'J['l] >- 'C[nil] }) -->
    [main] ('step['l; 'u; 'v; 'w] : sequent ['ext] { 'H; l: list{'A}; 'J['l]; u: 'A; v: list{'A}; w: 'C['v] >- 'C['u::'v] }) -->
    sequent ['ext] { 'H; l: list{'A}; 'J['l] >- 'C['l] } =
@@ -313,10 +313,10 @@ prim listElimination {| elim [ThinOption thinT] |} 'H 'J 'w 'u 'v :
  * every list type.
  * @end[doc]
  *)
-interactive nil_neq_cons {| elim [] |} 'H 'J :
+interactive nil_neq_cons {| elim [] |} 'H :
    sequent ['ext] { 'H; x: nil = cons{'h; 't} in list{'T}; 'J['x] >- 'C['x] }
 
-interactive cons_neq_nil {| elim [] |} 'H 'J :
+interactive cons_neq_nil {| elim [] |} 'H :
    sequent ['ext] { 'H; x: cons{'h; 't} = nil in list{'T}; 'J['x] >- 'C['x] }
 
 (*
@@ -324,7 +324,7 @@ interactive cons_neq_nil {| elim [] |} 'H 'J :
  * @modsubsection{Equality elimination}
  * @end[doc]
  *)
-interactive consEqElimination {| elim [ThinOption thinT] |} 'H 'J 'v 'w :
+interactive consEqElimination {| elim [ThinOption thinT] |} 'H 'v 'w :
    sequent ['ext] {'H; u: cons{'h1; 't1} = cons{'h2; 't2} in list{'A};
                        v: 'h1 = 'h2 in 'A; w: 't1 = 't2 in list{'A};   'J['u] >- 'C['u] } -->
    sequent ['ext] {'H; u: cons{'h1; 't1} = cons{'h2; 't2} in list{'A}; 'J['u] >- 'C['u] }
@@ -337,7 +337,7 @@ interactive consEqElimination {| elim [ThinOption thinT] |} 'H 'J 'v 'w :
  * @hrefterm[nil] term.
  * @end[doc]
  *)
-prim nilSqequal 'H 'T :
+prim nilSqequal 'T :
    sequent [squash] { 'H >- 'u = nil in list{'T} } -->
    sequent ['ext] { 'H >- 'u ~ nil } =
    it
@@ -349,7 +349,7 @@ prim nilSqequal 'H 'T :
  * The list type $@list{A}$ is covariant in the type argument $A$.
  * @end[doc]
  *)
-interactive listSubtype {| intro [] |} 'H :
+interactive listSubtype {| intro [] |} :
    ["subtype"] sequent [squash] { 'H >- \subtype{'A1; 'A2} } -->
    sequent ['ext] { 'H >- \subtype{list{'A1}; list{'A2}}}
 (*! @docoff *)

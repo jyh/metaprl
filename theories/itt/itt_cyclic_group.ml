@@ -140,7 +140,7 @@ let resource reduce +=
  * Well-formedness.
  * @end[doc]
  *)
-interactive group_power_wf {| intro [intro_typeinf <<'g>>] |} 'H group[i:l] :
+interactive group_power_wf {| intro [intro_typeinf <<'g>>] |} group[i:l] :
    sequent [squash] { 'H >- 'g in group[i:l] } -->
    sequent [squash] { 'H >- 'a in 'g^car } -->
    sequent [squash] { 'H >- 'n in int } -->
@@ -148,26 +148,26 @@ interactive group_power_wf {| intro [intro_typeinf <<'g>>] |} 'H group[i:l] :
 (*! @docoff *)
 
 (* a ^ 0 = e *)
-interactive group_power_0 {| intro [intro_typeinf <<'g>>] |} 'H group[i:l] :
+interactive group_power_0 {| intro [intro_typeinf <<'g>>] |} group[i:l] :
    sequent [squash] { 'H >- 'g in group[i:l] } -->
    sequent [squash] { 'H >- 'a in 'g^car } -->
    sequent ['ext] { 'H >- group_power{'g; 'a; 0} = 'g^"1" in 'g^car }
 
 (* a ^ 1 = a *)
-interactive group_power_1 {| intro [intro_typeinf <<'g>>] |} 'H group[i:l] :
+interactive group_power_1 {| intro [intro_typeinf <<'g>>] |} group[i:l] :
    sequent [squash] { 'H >- 'g in group[i:l] } -->
    sequent [squash] { 'H >- 'a in 'g^car } -->
    sequent ['ext] { 'H >- group_power{'g; 'a; 1} = 'a in 'g^car }
 
 (* a ^ (n + 1) * a ^ (-1) = a ^ n *)
-interactive group_power_less {| intro [intro_typeinf <<'g>>] |} 'H group[i:l] :
+interactive group_power_less {| intro [intro_typeinf <<'g>>] |} group[i:l] :
    sequent [squash] { 'H >- 'g in group[i:l] } -->
    sequent [squash] { 'H >- 'a in 'g^car } -->
    sequent [squash] { 'H >- 'n in int } -->
    sequent ['ext] { 'H >- group_power{'g; 'a; ('n +@ 1)} *['g] ('g^inv 'a) = group_power{'g; 'a; 'n} in 'g^car }
 
 (* a ^ n * x = a ^ (n + 1) *)
-interactive group_power_more {| intro [intro_typeinf <<'g>>] |} 'H group[i:l] :
+interactive group_power_more {| intro [intro_typeinf <<'g>>] |} group[i:l] :
    sequent [squash] { 'H >- 'g in group[i:l] } -->
    sequent [squash] { 'H >- 'a in 'g^car } -->
    sequent [squash] { 'H >- 'n in int } -->
@@ -179,7 +179,7 @@ interactive group_power_more {| intro [intro_typeinf <<'g>>] |} 'H group[i:l] :
  * Power reduction 1: $a^m * a^n = a^{m + n}$
  * @end[doc]
  *)
-interactive group_power_reduce {| intro [intro_typeinf <<'g>>] |} 'H group[i:l] :
+interactive group_power_reduce {| intro [intro_typeinf <<'g>>] |} group[i:l] :
    sequent [squash] { 'H >- 'g in group[i:l] } -->
    sequent [squash] { 'H >- 'a in 'g^car } -->
    sequent [squash] { 'H >- 'm in int } -->
@@ -187,7 +187,7 @@ interactive group_power_reduce {| intro [intro_typeinf <<'g>>] |} 'H group[i:l] 
    sequent ['ext] { 'H >- group_power{'g; 'a; 'm} *['g] group_power{'g; 'a; 'n} = group_power{'g; 'a; ('m +@ 'n)} in 'g^car }
 (*! @docoff *)
 
-interactive group_power_inv_reduce {| intro [intro_typeinf <<'g>>] |} 'H group[i:l] :
+interactive group_power_inv_reduce {| intro [intro_typeinf <<'g>>] |} group[i:l] :
    sequent [squash] { 'H >- 'g in group[i:l] } -->
    sequent [squash] { 'H >- 'a in 'g^car } -->
    sequent [squash] { 'H >- 'n in int } -->
@@ -199,7 +199,7 @@ interactive group_power_inv_reduce {| intro [intro_typeinf <<'g>>] |} 'H group[i
  * Power reduction 2: $(a^m)^n = a^{m * n}$
  * @end[doc]
  *)
-interactive group_power_power_reduce {| intro [intro_typeinf <<'g>>] |} 'H group[i:l] :
+interactive group_power_power_reduce {| intro [intro_typeinf <<'g>>] |} group[i:l] :
    sequent [squash] { 'H >- 'g in group[i:l] } -->
    sequent [squash] { 'H >- 'a in 'g^car } -->
    sequent [squash] { 'H >- 'm in int } -->
@@ -213,7 +213,7 @@ interactive group_power_power_reduce {| intro [intro_typeinf <<'g>>] |} 'H group
  * that on $g$.
  * @end[doc]
  *)
-interactive subgroup_power {| intro [AutoMustComplete; intro_typeinf <<'g>>] |} 'H group[i:l] :
+interactive subgroup_power {| intro [AutoMustComplete; intro_typeinf <<'g>>] |} group[i:l] :
    [wf] sequent [squash] { 'H >- 's in group[i:l] } -->
    [wf] sequent [squash] { 'H >- 'g in group[i:l] } -->
    [main] sequent ['ext] { 'H >- subStructure{'s; 'g} } -->
@@ -227,17 +227,17 @@ interactive subgroup_power {| intro [AutoMustComplete; intro_typeinf <<'g>>] |} 
  *
  * @end[doc]
  *)
-interactive cycGroup_type {| intro [intro_typeinf <<'g>>] |} 'H group[i:l] :
+interactive cycGroup_type {| intro [intro_typeinf <<'g>>] |} group[i:l] :
    sequent [squash] { 'H >- 'g in group[i:l] } -->
    sequent ['ext] { 'H >- "type"{cycGroup{'g}} }
 
-interactive cycGroup_intro {| intro [intro_typeinf <<'g>>] |} 'H group[i:l] 'a :
+interactive cycGroup_intro {| intro [intro_typeinf <<'g>>] |} group[i:l] 'a :
    sequent [squash] { 'H >- 'g in group[i:l] } -->
    sequent [squash] { 'H >- 'a in 'g^car } -->
    sequent ['ext] { 'H; x: 'g^car >- exst n: int. 'x = group_power{'g; 'a; 'n} in 'g^car } -->
    sequent ['ext] { 'H >- cycGroup{'g} }
 
-interactive cycGroup_elim {| elim [elim_typeinf <<'g>>] |} 'H 'J group[i:l] :
+interactive cycGroup_elim {| elim [elim_typeinf <<'g>>] |} 'H group[i:l] :
    [wf] sequent [squash] { 'H; x: cycGroup{'g}; 'J['x] >- 'g in group[i:l] } -->
    [main] sequent ['ext] { 'H; x: cycGroup{'g}; 'J['x]; a: 'g^car; b: all x: 'g^car. exst n: int. ('x = group_power{'g; 'a; 'n} in 'g^car) >- 'C['x] } -->
    sequent ['ext] { 'H; x: cycGroup{'g}; 'J['x] >- 'C['x] }
@@ -248,12 +248,12 @@ interactive cycGroup_elim {| elim [elim_typeinf <<'g>>] |} 'H 'J group[i:l] :
  * Every cyclic group is abelian.
  * @end[doc]
  *)
-interactive cycGroup_commutative {| intro [AutoMustComplete; intro_typeinf <<'g>>] |} 'H group[i:l] :
+interactive cycGroup_commutative {| intro [AutoMustComplete; intro_typeinf <<'g>>] |} group[i:l] :
    [wf] sequent [squash] { 'H >- 'g in group[i:l] } -->
    [main] sequent ['ext] { 'H >- cycGroup{'g} } -->
    sequent ['ext] { 'H >- isCommutative{'g} }
 
-interactive cycGroup_abelian {| intro [AutoMustComplete] |} 'H :
+interactive cycGroup_abelian {| intro [AutoMustComplete] |} :
    [wf] sequent [squash] { 'H >- 'g in group[i:l] } -->
    [main] sequent ['ext] { 'H >- cycGroup{'g} } -->
    sequent ['ext] { 'H >- 'g in abelg[i:l] }
@@ -265,7 +265,7 @@ interactive cycGroup_abelian {| intro [AutoMustComplete] |} 'H :
  * Every non-trivial subgroup of a cyclic group is cyclic.
  * @end[doc]
  *)
-interactive subg_cycGroup 'H group[i:l] 'g :
+interactive subg_cycGroup group[i:l] 'g :
    [wf] sequent [squash] { 'H >- 's in group[i:l] } -->
    [wf] sequent [squash] { 'H >- 'g in group[i:l] } -->
    [main] sequent ['ext] { 'H >- cycGroup{'g} } -->
@@ -280,7 +280,7 @@ interactive subg_cycGroup 'H group[i:l] 'g :
  *
  * @end[doc]
  *)
-interactive cycSubg_intro {| intro [] |} 'H :
+interactive cycSubg_intro {| intro [] |} :
    [wf] sequent [squash] { 'H >- 's in group[i:l] } -->
    [wf] sequent [squash] { 'H >- 'g in group[i:l] } -->
    [wf] sequent [squash] { 'H >- 'a in 'g^car } -->
@@ -288,7 +288,7 @@ interactive cycSubg_intro {| intro [] |} 'H :
    [main] sequent ['ext] { 'H >- 's^"*" = 'g^"*" in 's^car -> 's^car -> 's^car } -->
    sequent ['ext] { 'H >- cycSubg[i:l]{'s; 'g; 'a} }
 
-interactive cycSubg_elim {| elim [] |} 'H 'J :
+interactive cycSubg_elim {| elim [] |} 'H :
    [wf] sequent [squash] { 'H; u: cycSubg[i:l]{'s; 'g; 'a}; 'J['u] >- 's in group[i:l] } -->
    [wf] sequent [squash] { 'H; u: cycSubg[i:l]{'s; 'g; 'a}; 'J['u] >- 'g in group[i:l] } -->
    [wf] sequent [squash] { 'H; u: cycSubg[i:l]{'s; 'g; 'a}; 'J['u] >- 'a in 'g^car } -->
@@ -301,7 +301,7 @@ interactive cycSubg_elim {| elim [] |} 'H 'J :
  * A cyclic subgroup is a subgroup.
  * @end[doc]
  *)
-interactive cycsubg_subgroup {| intro [AutoMustComplete; intro_typeinf <<'g>>] |} 'H group[i:l] 'a :
+interactive cycsubg_subgroup {| intro [AutoMustComplete; intro_typeinf <<'g>>] |} group[i:l] 'a :
    [wf] sequent [squash] { 'H >- 's in group[i:l] } -->
    [wf] sequent [squash] { 'H >- 'g in group[i:l] } -->
    [wf] sequent [squash] { 'H >- 'a in 'g^car } -->

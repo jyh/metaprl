@@ -45,17 +45,17 @@ prim_rw beta : (lambda{x. 'b['x]} 'a) <--> 'b['a]
  * RULES                                                                *
  ************************************************************************)
 
-prim implies_type {| intro [] |} 'H :
+prim implies_type {| intro [] |} :
    [wf] sequent ['ext] { 'H >- "type"{'A} } -->
    [wf] sequent ['ext] { 'H >- "type"{'B} } -->
    sequent ['ext] { 'H >- "type"{implies{'A; 'B}} } = trivial
 
-prim implies_intro {| intro [] |} 'H 'x :
+prim implies_intro {| intro [] |} 'x :
    [wf] sequent ['ext] { 'H >- "type"{'A} } -->
    [main] ('b['x] : sequent ['ext] { 'H; x: 'A >- 'B }) -->
    sequent ['ext] { 'H >- 'A => 'B } = lambda{x. 'b['x]}
 
-prim implies_elim {| elim [] |} 'H 'J 'f 'b :
+prim implies_elim {| elim [] |} 'H 'f 'b :
    [assertion] ('a : sequent ['ext] { 'H; f: 'A => 'B; 'J['f] >- 'A }) -->
    [main] ('t['f; 'b] : sequent ['ext] { 'H; f: 'A => 'B; 'J['f]; b: 'B >- 'C['f] }) -->
    sequent ['ext] { 'H; f: 'A => 'B; 'J['f] >- 'C['f] } = 't['f; 'f 'a]

@@ -54,7 +54,7 @@ declare set{'A; x. 'B['x]}
  * H >- A = A in Ui
  * H, a: A >- Ui ext B
  *)
-rule setFormation 'H 'a 'A :
+rule setFormation 'a 'A :
    sequent [squash] { 'H >- 'A = 'A in univ[i:l] } -->
    sequent ['ext] { 'H; a: 'A >- univ[i:l] } -->
    sequent ['ext] { 'H >- univ[i:l] }
@@ -66,7 +66,7 @@ rule setFormation 'H 'a 'A :
  * H >- A1 = A2 in Ui
  * H, x: A1 >- B1[x] = B2[x] in Ui
  *)
-rule setEquality 'H 'x :
+rule setEquality 'x :
    sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
    sequent [squash] { 'H; x: 'A1 >- 'B1['x] = 'B2['x] in univ[i:l] } -->
    sequent ['ext] { 'H >- { a1:'A1 | 'B1['a1] } = { a2:'A2 | 'B2['a2] } in univ[i:l] }
@@ -79,7 +79,7 @@ rule setEquality 'H 'x :
  * H >- B[a]
  * H, z: A >- B[z] = B[z] in Ui
  *)
-rule setMemberFormation 'H 'a 'z :
+rule setMemberFormation 'a 'z :
    sequent [squash] { 'H >- 'a = 'a in 'A } -->
    sequent [squash]   { 'H >- squash{'B['a]} } -->
    sequent [squash] { 'H; z: 'A >- "type"{'B['z]} } -->
@@ -93,7 +93,7 @@ rule setMemberFormation 'H 'a 'z :
  * H >- B[a1]
  * H, x: A >- B[x] = B[x] in Ui
  *)
-rule setMemberEquality 'H 'x :
+rule setMemberEquality 'x :
    sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
    sequent [squash] { 'H >- squash{'B['a1]} } -->
    sequent [squash] { 'H; x: 'A >- "type"{'B['x]} } -->
@@ -105,14 +105,14 @@ rule setMemberEquality 'H 'x :
  *
  * H, u: { x:A | B }, y: A; v: squash{B[y]}; J[y] >- T[y]
  *)
-rule setElimination 'H 'J 'u 'v :
+rule setElimination 'H 'u 'v :
    sequent ['ext] { 'H; u: 'A; v: squash{'B['u]}; 'J['u] >- 'T['u] } -->
    sequent ['ext] { 'H; u: { x:'A | 'B['x] }; 'J['u] >- 'T['u] }
 
 (*
  * Subtyping.
  *)
-rule set_subtype 'H :
+rule set_subtype :
    sequent [squash] { 'H >- "type"{ { a: 'A | 'B['a] } } } -->
    sequent ['ext] { 'H >- \subtype{ { a: 'A | 'B['a] }; 'A } }
 

@@ -4317,7 +4317,7 @@ T	t872	o574 b638 b871
 B	b872	t872
 T	t873	o574 b636 b872
 B	b873	t873
-P	p873	String "copyHypT 2 2 thenT rwh unfold_inv_image 3 thenT dT 3 thenT autoT thenT funSetT 5 ttca"
+P	p873	String "copyHypT 2 3 thenT rwh unfold_inv_image 3 thenT dT 3 thenT autoT thenT funSetT 5 ttca"
 O	o873	ext_rule p873
 T	t781	o b327 b4
 B	b781	t781

@@ -86,7 +86,7 @@ let debug_subst = load_debug "subst"
 (*
  * Just create a rule to duplicate the goal for testing.
  *)
-interactive duplicate 'H :
+interactive duplicate :
    sequent ['ext] { 'H >- 'T } -->
    sequent ['ext] { 'H >- 'T } -->
    sequent ['ext] { 'H >- 'T }
@@ -484,7 +484,7 @@ let rec prove_wf p =
       if is_atomic_term goal then
          let t = dest_atomic goal in
             if is_t_term t then
-               t_atomicT p
+               t_atomic p
             else
                let v = get_apply_var t in
                let _ =
@@ -751,8 +751,7 @@ let proveT bound p =
 (*
  * This tactic is just for performance testing.
  *)
-let dupT p =
-   duplicate (Sequent.hyp_count_addr p) p
+let dupT = duplicate
 
 let rec loopTestT i p =
    if i = 0 then

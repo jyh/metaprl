@@ -77,18 +77,18 @@ let resource reduce += << eq_atom{token[x:t]; token[y:t]} >>, reduce_eq_atom
  * RULES                                                                *
  ************************************************************************)
 
-prim eq_atom_wf {| intro [] |} 'H :
+prim eq_atom_wf {| intro [] |} :
    [wf] sequent [squash] { 'H >- 'x in atom } -->
    [wf] sequent [squash] { 'H >- 'y in atom } -->
    sequent ['ext] { 'H >- eq_atom{'x; 'y} in bool } =
    it
 
-prim eq_atom_assert_intro {| intro [] |} 'H :
+prim eq_atom_assert_intro {| intro [] |} :
    [wf] sequent [squash] { 'H >- 'x = 'y in atom } -->
    sequent ['ext] { 'H >- "assert"{eq_atom{'x; 'y}} } =
    it
 
-prim eq_atom_assert_elim {| elim [] |} 'H 'J :
+prim eq_atom_assert_elim {| elim [] |} 'H :
    [main] sequent ['ext] { 'H; x: 'a = 'b in atom; 'J[it] >- 'C[it] } -->
    sequent ['ext] { 'H; x: "assert"{eq_atom{'a; 'b}}; 'J['x] >- 'C['x] } =
    it

@@ -10443,7 +10443,7 @@ T	t7272	o1458 b7258 b7272
 B	b7273	t7272
 T	t7273	o1458 b7255 b7273
 B	b7274	t7273
-P	p7274	String "copyHypT 2 3 thenT rwh unfold_normalSubg (-1) thenT autoT thenT withT << 'b >> (dT (-1)) ttca"
+P	p7274	String "copyHypT 2 (-1) thenT rwh unfold_normalSubg (-1) thenT autoT thenT withT << 'b >> (dT (-1)) ttca"
 O	o7274	ext_rule p7274
 T	t7274	o b7265 b8
 B	b7275	t7274
@@ -11862,7 +11862,7 @@ T	t1333	o1434 b1333
 B	b1334	t1333
 T	t1334	o1458 b1332 b1334
 B	b1337	t1334
-P	p1337	String "copyHypT 2 2 thenT rwh unfold_isGroup (-2) thenT autoT"
+P	p1337	String "copyHypT 2 (-2) thenT rwh unfold_isGroup (-2) thenT autoT"
 O	o1337	ext_rule p1337
 T	t1338	o b1328 b8
 B	b1338	t1338
@@ -12744,7 +12744,7 @@ T	t5806	o1254 b5806 b8
 B	b5807	t5806
 T	t5807	o5805 b1253 b5807 b8 b8
 B	b5808	t5807
-P	p5808	String "copyHypT 5 2 ttca"
+P	p5808	String "copyHypT 5 3 ttca"
 O	o5808	ext_rule p5808
 T	t5808	o1254 b5802 b8
 B	b5809	t5808

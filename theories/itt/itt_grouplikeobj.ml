@@ -109,7 +109,7 @@ let resource elim +=
  *
  * @end[doc]
  *)
-interactive groupoid_type {| intro [] |} 'H :
+interactive groupoid_type {| intro [] |} :
    sequent ['ext] { 'H >- "type"{groupoid[i:l]} }
 
 (*!
@@ -118,11 +118,11 @@ interactive groupoid_type {| intro [] |} 'H :
  *
  * @end[doc]
  *)
-interactive groupoid_intro {| intro [AutoMustComplete] |} 'H :
+interactive groupoid_intro {| intro [AutoMustComplete] |} :
    sequent [squash] { 'H >- 'g in {car: univ[i:l]; "*": ^car -> ^car -> ^car} } -->
    sequent ['ext] { 'H >- 'g in groupoid[i:l] }
 
-(*interactive groupoid_elim {| elim [] |} 'H 'J :
+(*interactive groupoid_elim {| elim [] |} 'H :
    sequent ['ext] { 'H; g: {car: univ[i:l]; "*": ^car -> ^car -> ^car}; 'J['g] >- 'C['g] } -->
    sequent ['ext] { 'H; g: groupoid[i:l]; 'J['g] >- 'C['g] }   
 *)
@@ -162,11 +162,11 @@ let resource elim +=
  * @end[doc]
  *)
 
-interactive isSemigroup_wf {| intro [intro_typeinf <<'x>>] |} 'H groupoid[i:l] :
+interactive isSemigroup_wf {| intro [intro_typeinf <<'x>>] |} groupoid[i:l] :
    sequent [squash] { 'H >- 'x in groupoid[i:l] } -->
    sequent ['ext] {'H >- "type"{isSemigroup{'x}} }
 
-interactive semigroup_type {| intro [] |} 'H :
+interactive semigroup_type {| intro [] |} :
    sequent ['ext] { 'H >- "type"{semigroup[i:l]} }
 
 (*!
@@ -175,21 +175,21 @@ interactive semigroup_type {| intro [] |} 'H :
  *
  * @end[doc]
  *)
-interactive isSemigroup_intro {| intro [AutoMustComplete] |} 'H :
+interactive isSemigroup_intro {| intro [AutoMustComplete] |} :
    [wf] sequent [squash] { 'H >- "type"{.'g^car} } -->
    [main] sequent ['ext] { 'H; x: 'g^car; y: 'g^car; z: 'g^car >- ('x *['g] 'y) *['g] 'z = 'x *['g] ('y *['g] 'z) in 'g^car } -->
    sequent ['ext] { 'H >- isSemigroup{'g} }
 
-interactive isSemigroup_elim {| elim [] |} 'H 'J :
+interactive isSemigroup_elim {| elim [] |} 'H :
    sequent ['ext] { 'H; u: all x: 'g^car. all y: 'g^car. all z: 'g^car. (('x *['g] 'y) *['g] 'z = 'x *['g] ('y *['g] 'z) in 'g^car); 'J['u] >- 'C['u] } -->
    sequent ['ext] { 'H; u: isSemigroup{'g}; 'J['u] >- 'C['u] }   
 
-interactive semigroup_intro {| intro [AutoMustComplete] |} 'H :
+interactive semigroup_intro {| intro [AutoMustComplete] |} :
    [wf] sequent [squash] { 'H >- 'g in groupoid[i:l] } -->
    [main] sequent ['ext] { 'H >- isSemigroup{'g} } -->
    sequent ['ext] { 'H >- 'g in semigroup[i:l] }
 
-interactive semigroup_elim {| elim [] |} 'H 'J :
+interactive semigroup_elim {| elim [] |} 'H :
    sequent ['ext] { 'H; g: {car: univ[i:l]; "*": ^car -> ^car -> ^car}; u: all x: 'g^car. all y: 'g^car. all z: 'g^car. (('x *['g] 'y) *['g] 'z = 'x *['g] ('y *['g] 'z) in 'g^car); 'J['g] >- 'C['g] } -->
    sequent ['ext] { 'H; g: semigroup[i:l]; 'J['g] >- 'C['g] }   
 
@@ -199,7 +199,7 @@ interactive semigroup_elim {| elim [] |} 'H 'J :
  *
  * @end[doc]
  *)
-interactive semigrp_is_grpoid 'H :
+interactive semigrp_is_grpoid :
    sequent [squash] { 'H >- 'h in semigroup[i:l] } -->
    sequent ['ext] { 'H >- 'h in groupoid[i:l] }
 
@@ -245,14 +245,14 @@ let resource elim +=
  *
  * @end[doc]
  *)
-interactive premonoid_type {| intro [] |} 'H :
+interactive premonoid_type {| intro [] |} :
    sequent ['ext] { 'H >- "type"{premonoid[i:l]} }
 
-interactive isMonoid_wf {| intro [intro_typeinf <<'x>>] |} 'H premonoid[i:l] :
+interactive isMonoid_wf {| intro [intro_typeinf <<'x>>] |} premonoid[i:l] :
    sequent [squash] { 'H >- 'x in premonoid[i:l] } -->
    sequent ['ext] {'H >- "type"{isMonoid{'x}} }
 
-interactive monoid_type {| intro [] |} 'H :
+interactive monoid_type {| intro [] |} :
    sequent ['ext] { 'H >- "type"{monoid[i:l]} }
 
 (*!
@@ -261,31 +261,31 @@ interactive monoid_type {| intro [] |} 'H :
  *
  * @end[doc]
  *)
-interactive premonoid_intro {| intro [AutoMustComplete] |} 'H :
+interactive premonoid_intro {| intro [AutoMustComplete] |} :
    sequent [squash] { 'H >- 'g in {car: univ[i:l]; "*": ^car -> ^car -> ^car; "1": ^car} } -->
    sequent ['ext] { 'H >- 'g in premonoid[i:l] }
 
-interactive premonoid_elim {| elim [] |} 'H 'J :
+interactive premonoid_elim {| elim [] |} 'H :
    sequent ['ext] { 'H; g: {car: univ[i:l]; "*": ^car -> ^car -> ^car; "1": ^car}; 'J['g] >- 'C['g] } -->
    sequent ['ext] { 'H; g: premonoid[i:l]; 'J['g] >- 'C['g] }   
 
-interactive isMonoid_intro {| intro [AutoMustComplete] |} 'H :
+interactive isMonoid_intro {| intro [AutoMustComplete] |} :
    [wf] sequent [squash] { 'H >- "type"{.'g^car} } -->
    [main] sequent ['ext] { 'H >- isSemigroup{'g} } -->
    [main] sequent ['ext] { 'H; x: 'g^car >- 'g^"1" *['g] 'x = 'x in 'g^car } -->
    [main] sequent ['ext] { 'H; x: 'g^car >- 'x *['g] 'g^"1" = 'x in 'g^car } -->
    sequent ['ext] { 'H >- isMonoid{'g} }
 
-interactive isMonoid_elim {| elim [] |} 'H 'J :
+interactive isMonoid_elim {| elim [] |} 'H :
    sequent ['ext] { 'H; u: isMonoid{'g}; v: all x: 'g^car. all y: 'g^car. all z: 'g^car. (('x *['g] 'y) *['g] 'z = 'x *['g] ('y *['g] 'z) in 'g^car); w: all x: 'g^car. (('g^"1" *['g] 'x = 'x in 'g^car) & ('x *['g] 'g^"1" = 'x in 'g^car)); 'J['u] >- 'C['u] } -->
    sequent ['ext] { 'H; u: isMonoid{'g}; 'J['u] >- 'C['u] }   
 
-interactive monoid_intro {| intro [AutoMustComplete] |} 'H :
+interactive monoid_intro {| intro [AutoMustComplete] |} :
    [wf] sequent [squash] { 'H >- 'g in premonoid[i:l] } -->
    [main] sequent ['ext] { 'H >- isMonoid{'g} } -->
    sequent ['ext] { 'H >- 'g in monoid[i:l] }
 
-interactive monoid_elim {| elim [] |} 'H 'J :
+interactive monoid_elim {| elim [] |} 'H :
    sequent ['ext] { 'H; g: {car: univ[i:l]; "*": ^car -> ^car -> ^car; "1": ^car}; u: all x: 'g^car. all y: 'g^car. all z: 'g^car. (('x *['g] 'y) *['g] 'z = 'x *['g] ('y *['g] 'z) in 'g^car); v: all x: 'g^car. ('g^"1" *['g] 'x = 'x in 'g^car & 'x *['g] 'g^"1" = 'x in 'g^car); 'J['g] >- 'C['g] } -->
    sequent ['ext] { 'H; g: monoid[i:l]; 'J['g] >- 'C['g] }   
 
@@ -295,7 +295,7 @@ interactive monoid_elim {| elim [] |} 'H 'J :
  *
  * @end[doc]
  *)
-interactive monoid_is_semigrp 'H :
+interactive monoid_is_semigrp :
    sequent [squash] { 'H >- 'g in monoid[i:l] } -->
    sequent ['ext] { 'H >- 'g in semigroup[i:l] }
 
@@ -338,14 +338,14 @@ let resource elim +=
  *
  * @end[doc]
  *)
-interactive isComutative_wf {| intro [intro_typeinf <<'g>>] |} 'H groupoid[i:l] :
+interactive isComutative_wf {| intro [intro_typeinf <<'g>>] |} groupoid[i:l] :
    sequent [squash] { 'H >- 'g in groupoid[i:l] } -->
    sequent ['ext] {'H >- "type"{isCommutative{'g}} }
 
-interactive csemigroup_type {| intro [] |} 'H :
+interactive csemigroup_type {| intro [] |} :
    sequent ['ext] { 'H >- "type"{csemigroup[i:l]} }
 
-interactive cmonoid_type {| intro [] |} 'H :
+interactive cmonoid_type {| intro [] |} :
    sequent ['ext] { 'H >- "type"{cmonoid[i:l]} }
 
 (*!
@@ -354,30 +354,30 @@ interactive cmonoid_type {| intro [] |} 'H :
  *
  * @end[doc]
  *)
-interactive isCommutative_intro {| intro [] |} 'H :
+interactive isCommutative_intro {| intro [] |} :
    [wf] sequent [squash] { 'H >- "type"{.'g^car} } -->
    [main] sequent ['ext] { 'H; x: 'g^car; y: 'g^car >- ('x *['g] 'y = 'y *['g] 'x in 'g^car) } -->
    sequent ['ext] { 'H >- isCommutative{'g} }
 
-interactive isCommutative_elim {| elim [] |} 'H 'J :
+interactive isCommutative_elim {| elim [] |} 'H :
    sequent ['ext] { 'H; u: isCommutative{'g}; v: all x: 'g^car. all y: 'g^car. ('x *['g] 'y = 'y *['g] 'x in 'g^car); 'J['u] >- 'C['u] } -->
    sequent ['ext] { 'H; u: isCommutative{'g}; 'J['u] >- 'C['u] }
 
-interactive csemigroup_intro {| intro [] |} 'H :
+interactive csemigroup_intro {| intro [] |} :
    [wf] sequent ['ext] { 'H >- 'g in semigroup[i:l] } -->
    [main] sequent ['ext] { 'H >- isCommutative{'g} } -->
    sequent ['ext] { 'H >- 'g in csemigroup[i:l] }
 
-interactive csemigroup_elim {| elim [] |} 'H 'J :
+interactive csemigroup_elim {| elim [] |} 'H :
    sequent ['ext] { 'H; g: semigroup[i:l]; x: isCommutative{'g}; 'J['g] >- 'C['g] } -->
    sequent ['ext] { 'H; g: csemigroup[i:l]; 'J['g] >- 'C['g] }
 
-interactive cmonoid_intro {| intro [] |} 'H :
+interactive cmonoid_intro {| intro [] |} :
    [wf] sequent ['ext] { 'H >- 'g in monoid[i:l] } -->
    [main] sequent ['ext] { 'H >- isCommutative{'g} } -->
    sequent ['ext] { 'H >- 'g in cmonoid[i:l] }
 
-interactive cmonoid_elim {| elim [] |} 'H 'J :
+interactive cmonoid_elim {| elim [] |} 'H :
    sequent ['ext] { 'H; g: monoid[i:l]; x: isCommutative{'g}; 'J['g] >- 'C['g] } -->
    sequent ['ext] { 'H; g: cmonoid[i:l]; 'J['g] >- 'C['g] }
 
@@ -387,11 +387,11 @@ interactive cmonoid_elim {| elim [] |} 'H 'J :
  *
  * @end[doc]
  *)
-interactive csemigrp_is_semigrp 'H :
+interactive csemigrp_is_semigrp :
    sequent [squash] { 'H >- 'h in csemigroup[i:l] } -->
    sequent ['ext] { 'H >- 'h in semigroup[i:l] }
 
-interactive cmonoid_is_monoid 'H :
+interactive cmonoid_is_monoid :
    sequent [squash] { 'H >- 'g in cmonoid[i:l] } -->
    sequent ['ext] { 'H >- 'g in monoid[i:l] }
 
@@ -420,12 +420,12 @@ let fold_subStructure = makeFoldC << subStructure{'s; 'g} >> unfold_subStructure
  *
  * @end[doc]
  *)
-interactive subStructure_intro {| intro [] |} 'H :
+interactive subStructure_intro {| intro [] |} :
    [wf] sequent [squash] { 'H >- 's^"*" = 'g^"*" in 's^car -> 's^car -> 's^car } -->
    [main] sequent ['ext] { 'H >- 's^car subset 'g^car } -->
    sequent ['ext] { 'H >- subStructure{'s; 'g} }
 
-interactive subStructure_elim {| elim [] |} 'H 'J :
+interactive subStructure_elim {| elim [] |} 'H :
    sequent ['ext] { 'H; u: subStructure{'s; 'g}; x: 's^car subtype 'g^car; y: all a: 's^car. all b: 's^car. (('a = 'b in 'g^car) => ('a = 'b in 's^car)); z: {b: 'g^car | exst a: 's^car. 'b = 'a in 'g^car} subtype 's^car; v: 's^"*" = 'g^"*" in 's^car -> 's^car -> 's^car; 'J['u] >- 'C['u] } -->
    sequent ['ext] { 'H; u: subStructure{'s; 'g}; 'J['u] >- 'C['u] }
 
@@ -436,7 +436,7 @@ interactive subStructure_elim {| elim [] |} 'H 'J :
  * Substructure is squash stable.
  * @end[doc]
  *)
-interactive subStructure_squashStable 'H :
+interactive subStructure_squashStable :
    [wf] sequent [squash] { 'H >- "type"{.'s^car} } -->
    [wf] sequent [squash] { 'H >- squash{subStructure{'s; 'g}} } -->
    sequent ['ext] { 'H >- subStructure{'s; 'g} }

@@ -124,7 +124,7 @@ dform power_df : parens :: except_mode[src] :: power{'g; 'z; 'n} =
  * $z$ is a set, and $n$ is an integer in ITT.
  * @end[doc]
  *)
-interactive power_wf {| intro [] |} 'H :
+interactive power_wf {| intro [] |} :
    sequent [squash] { 'H >- 'g IN label } -->
    sequent [squash] { 'H >- isset{'z} } -->
    sequent [squash] { 'H >- 'n IN int } -->
@@ -138,7 +138,7 @@ interactive power_wf {| intro [] |} 'H :
  * is also in $@car{g}$ for any integer $n$.
  * @end[doc]
  *)
-interactive power_mem {| intro [] |} 'H :
+interactive power_mem {| intro [] |} :
    sequent [squash] { 'H >- 'g IN label } -->
    sequent ['ext] { 'H >- group{'g} } -->
    sequent [squash] { 'H >- 'n IN int } -->
@@ -153,7 +153,7 @@ interactive power_mem {| intro [] |} 'H :
  * The @tt{power} is functional in its set argument.
  * @end[doc]
  *)
-interactive power_fun {| intro [] |} 'H :
+interactive power_fun {| intro [] |} :
    sequent [squash] { 'H >- 'g IN label } -->
    sequent ['ext] { 'H >- group{'g} } -->
    sequent [squash] { 'H >- 'n IN int } -->
@@ -163,7 +163,7 @@ interactive power_fun {| intro [] |} 'H :
 (*! @docoff *)
 
 (* x ^ (n + 1) * x ^ (-1) = x ^ n *)
-interactive power_less {| intro [] |} 'H :
+interactive power_less {| intro [] |} :
    sequent [squash] { 'H >- 'g IN label } -->
    sequent ['ext] { 'H >- group{'g} } -->
    sequent [squash] { 'H >- 'n IN int } -->
@@ -172,7 +172,7 @@ interactive power_less {| intro [] |} 'H :
    sequent ['ext] { 'H >- eq{op{'g; power{'g; 'x; ('n +@ 1)}; inv{'g; 'x}}; power{'g; 'x; 'n}} }
 
 (* x ^ n * x = x ^ (n + 1) *)
-interactive power_more {| intro [] |} 'H :
+interactive power_more {| intro [] |} :
    sequent [squash] { 'H >- 'g IN label } -->
    sequent ['ext] { 'H >- group{'g} } -->
    sequent [squash] { 'H >- 'n IN int } -->
@@ -187,7 +187,7 @@ interactive power_more {| intro [] |} 'H :
  * $x^m * x^n = x^{m + n}$
  * @end[doc]
  *)
-interactive power_reduce1 {| intro [] |} 'H :
+interactive power_reduce1 {| intro [] |} :
    sequent [squash] { 'H >- 'g IN label } -->
    sequent ['ext] { 'H >- group{'g} } -->
    sequent [squash] { 'H >- 'm IN int } -->

@@ -5381,7 +5381,7 @@ T	t3369	o1292 b3369 b10
 B	b3370	t3369
 T	t3370	o3368 b1291 b3370 b10 b10
 B	b3371	t3370
-P	p3371	String "copyHypT 5 2 ttca"
+P	p3371	String "copyHypT 5 3 ttca"
 O	o3371	ext_rule p3371
 T	t2467	o1292 b2436 b10
 B	b2467	t2467
@@ -6462,7 +6462,7 @@ T	t3199	o1617 b3199
 B	b3200	t3199
 T	t3200	o2073 b3198 b3200
 B	b3201	t3200
-P	p3201	String "copyHypT 2 2 thenT rwh unfold_isMonoid 3 thenT autoT"
+P	p3201	String "copyHypT 2 3 thenT rwh unfold_isMonoid 3 thenT autoT"
 O	o3201	ext_rule p3201
 T	t3201	o b3197 b10
 B	b3202	t3201
@@ -6678,7 +6678,7 @@ T	t3288	o b3288 b10
 B	b3289	t3288
 T	t3289	o3276 b1291 b3286 b3289 b10
 B	b3290	t3289
-P	p3290	String "repeatForT 2 (copyHypT 7 2) ttca"
+P	p3290	String "repeatForT 2 (copyHypT 7 3) ttca"
 O	o3290	ext_rule p3290
 T	t3290	o1292 b3273 b10
 B	b3291	t3290
@@ -7356,7 +7356,7 @@ T	t3688	o1617 b3688
 B	b3689	t3688
 T	t3689	o2073 b3687 b3689
 B	b3690	t3689
-P	p3690	String "copyHypT 2 2 thenT rwh unfold_isCommutative 3 ttca"
+P	p3690	String "copyHypT 2 3 thenT rwh unfold_isCommutative 3 ttca"
 O	o3690	ext_rule p3690
 T	t3690	o b3686 b10
 B	b3691	t3690
@@ -7971,7 +7971,7 @@ T	t3904	o1617 b3904
 B	b3905	t3904
 T	t3905	o2073 b3903 b3905
 B	b3906	t3905
-P	p3906	String "copyHypT 2 2 thenT rwh unfold_subStructure 3 thenT autoT"
+P	p3906	String "copyHypT 2 3 thenT rwh unfold_subStructure 3 thenT autoT"
 O	o3906	ext_rule p3906
 T	t3906	o b3902 b10
 B	b3907	t3906

@@ -3115,7 +3115,7 @@ P	p1856	String beq_int_is_true_rw
 O	o1856	cond_rewrite p1856
 P	p872	String "sqSubstT <<beq_int{'a;'b} ~ btrue>> 0"
 O	o872	ext_rule p872
-P	p1857	String "beq_int_is_true 2 thenT trivialT"
+P	p1857	String "beq_int_is_true thenT trivialT"
 O	o1857	ext_rule p1857
 T	t887	o1656 b1849 b1849
 O	o1869	lid p1856
@@ -3699,7 +3699,7 @@ B	b967	t967
 T	t968	o b1648 b967
 B	b968	t968
 H	h968	y t1653
-P	p1145	String "beq_int2prop 4 thenT autoT"
+P	p1145	String "beq_int2prop thenT autoT"
 O	o1146	ext_rule p1145
 P	p2543	String w
 O	o2543	var_param p2543
@@ -3896,7 +3896,7 @@ T	t2679	o b2677 b2679
 B	b2680	t2679
 P	p2200	String "sqSubstT <<band{lt_bool{'a;'b};lt_bool{'b;'a}} ~ bfalse>> 0"
 O	o2200	ext_rule p2200
-P	p2680	String "lt_Reflex 2 thenT trivialT"
+P	p2680	String "lt_Reflex thenT trivialT"
 O	o2680	ext_rule p2680
 S	s2680	t1656 h
 G	s2680	t1760
@@ -3924,7 +3924,7 @@ P	p2715	String lt_Trichot_rw
 O	o2715	cond_rewrite p2715
 P	p2719	String "sqSubstT <<bor{bor{lt_bool{'a;'b};lt_bool{'b;'a}};beq_int{'a;'b}} ~ btrue>> 0"
 O	o2719	ext_rule p2719
-P	p2716	String "lt_Trichot 2 thenT trivialT"
+P	p2716	String "lt_Trichot thenT trivialT"
 O	o2716	ext_rule p2716
 O	o2728	lid p2715
 T	t2728	o2728
@@ -3977,7 +3977,7 @@ T	t2760	o b2756 b2760
 B	b2761	t2760
 P	p3023	String "sqSubstT <<lt_bool{'a;'c} ~ btrue>> 0"
 O	o3023	ext_rule p3023
-P	p2761	String "lt_Transit 2 <<'b>> thenT trivialT"
+P	p2761	String "lt_Transit <<'b>> thenT trivialT"
 O	o2761	ext_rule p2761
 S	s2761	t1656 h
 G	s2761	t2740
@@ -4012,7 +4012,7 @@ P	p2799	String lt_Discret_rw
 O	o2799	cond_rewrite p2799
 P	p3267	String "sqSubstT <<lt_bool{'a;'b} ~ bor{beq_int{('a +@ 1);'b};lt_bool{('a+@1);'b}}>> 0"
 O	o3268	ext_rule p3267
-P	p2800	String "lt_Discret 2 thenT trivialT"
+P	p2800	String "lt_Discret thenT trivialT"
 O	o2800	ext_rule p2800
 T	t3404	o1656 b2791 b2791
 O	o2812	lid p2799
@@ -4044,7 +4044,7 @@ P	p2851	String lt_addMono_rw
 O	o2851	cond_rewrite p2851
 P	p3441	String "sqSubstT <<lt_bool{'a;'b} ~ lt_bool{('a +@ 'c);('b +@ 'c)}>> 0"
 O	o3441	ext_rule p3441
-P	p2852	String "lt_addMono 2 <<'c>> thenT trivialT"
+P	p2852	String "lt_addMono <<'c>> thenT trivialT"
 O	o2852	ext_rule p2852
 T	t3444	o1656 b2842 b2842
 O	o2864	lid p2851
@@ -4082,7 +4082,7 @@ P	p2918	String add_Commut_rw
 O	o2918	cond_rewrite p2918
 P	p3483	String "sqSubstT <<('a +@ 'b)~('b +@ 'a)>> 0"
 O	o3483	ext_rule p3483
-P	p2919	String "add_Commut 2 thenT trivialT"
+P	p2919	String "add_Commut thenT trivialT"
 O	o2919	ext_rule p2919
 T	t3486	o1656 b2910 b2910
 O	o2931	lid p2918
@@ -4103,7 +4103,7 @@ O	o2949	cond_rewrite p2949
 P	p3522	String "sqSubstT <<('a +@ ('b +@ 'c))~(('a +@ 'b) +@ 'c)>> 0"
 O	o3522	ext_rule p3522
 T	t3524	o1656 b2940 b2940
-P	p3530	String "add_Assoc 2 thenT trivialT"
+P	p3530	String "add_Assoc thenT trivialT"
 O	o3530	ext_rule p3530
 O	o2981	lid p2949
 T	t2981	o2981
@@ -4130,7 +4130,7 @@ T	t3027	o b2677 b18
 B	b3027	t3027
 P	p3560	String "sqSubstT <<('a +@ 0) ~ 'a>> 0"
 O	o3560	ext_rule p3560
-P	p3028	String "add_Id 2 thenT trivialT"
+P	p3028	String "add_Id thenT trivialT"
 O	o3028	ext_rule p3028
 T	t3563	o1656 b1438 b1438
 O	o3041	lid p3027
@@ -4181,7 +4181,7 @@ G	s3142	t3142
 B	b3142	s3142
 P	p3607	String "sqsquashT thenT nthAssumT 1"
 O	o3607	ext_rule p3607
-P	p3624	String "sqSubstT <<(0 +@ 'a) ~ 'a>> 0 thenMT autoT thenT add_Id2 2 thenT trivialT"
+P	p3624	String "sqSubstT <<(0 +@ 'a) ~ 'a>> 0 thenMT autoT thenT add_Id2 thenT trivialT"
 O	o3624	ext_rule p3624
 P	p3640	String add_Functionality
 O	o3640	rule p3640
@@ -4193,7 +4193,7 @@ P	p3148	String minus_add_inverse_rw
 O	o3148	cond_rewrite p3148
 P	p3689	String "sqSubstT <<('a +@ (- 'a)) ~ 0>> 0 thenMT autoT"
 O	o3689	ext_rule p3689
-P	p3693	String "minus_add_inverse 2 thenT trivialT"
+P	p3693	String "minus_add_inverse thenT trivialT"
 O	o3693	ext_rule p3693
 O	o3168	lid p3148
 T	t3168	o3168
@@ -5041,7 +5041,7 @@ T	t3812	o1656 b1439 b1439
 O	o3840	lid p3800
 T	t3840	o3840
 B	b3840	t3840
-P	p3850	String "add_Functionality 2 << 'a +@ 'b >> thenWT (sqsquashT thenT autoT)"
+P	p3850	String "add_Functionality << 'a +@ 'b >> thenWT (sqsquashT thenT autoT)"
 O	o3850	ext_rule p3850
 T	t3852	o1437 b3176 b1440
 B	b3853	t3852
@@ -5267,7 +5267,7 @@ B	b5839	t5838
 S	s5839	t1652 h
 G	s5839	t1657
 B	b5840	s5839
-P	p5847	String "add_Functionality 2 <<'c>> thenT trivialT"
+P	p5847	String "add_Functionality <<'c>> thenT trivialT"
 O	o5847	ext_rule p5847
 T	t5869	o1656 b3176 b3177
 S	s5869	t1656 h
@@ -8413,7 +8413,7 @@ T	t5541	o5541
 B	b5541	t5541
 T	t1901	o1647 b1649 b5005 b1661 b18
 B	b1901	t1901
-P	p1904	String "int_sqequal 2 thenT trivialT"
+P	p1904	String "int_sqequal thenT trivialT"
 O	o1904	ext_rule p1904
 T	t4022	o1681 b5840 b1934
 B	b4022	t4022
@@ -8477,7 +8477,7 @@ T	t4417	o1650 b4416
 B	b4417	t4417
 T	t4418	o1649 b4228 b4417
 B	b4418	t4418
-P	p4418	String "rwh unfold_lt 0 thenT assertSquashElim 2 thenT rwch unfold_lt 1 0 thenT trivialT"
+P	p4418	String "rwh unfold_lt 0 thenT assertSquashElim thenT rwch unfold_lt 1 0 thenT trivialT"
 O	o4418	ext_rule p4418
 T	t4419	o1681 b4416 b4244
 B	b4419	t4419
@@ -15016,7 +15016,7 @@ T	t5984	o1650 b5983
 B	b5984	t5984
 T	t5985	o1649 b1762 b5984
 B	b5985	t5985
-P	p3984	String "add_Functionality 2 <<- 'a>> thenAT (autoT thenT sqsquashT thenT autoT)"
+P	p3984	String "add_Functionality <<- 'a>> thenAT (autoT thenT sqsquashT thenT autoT)"
 O	o3984	ext_rule p3984
 T	t3994	o1437 b3189 b1445
 B	b3994	t3994
@@ -15040,7 +15040,7 @@ P	p4052	String "rw (allSubC minus_add_inverseC) 0 thenT autoT thenAT sqsquashT t
 O	o4061	ext_rule p4052
 P	p7076	String minus_minus_reduce_rw
 O	o7076	cond_rewrite p7076
-P	p7077	String "minus_minus_reduce 2 thenT trivialT"
+P	p7077	String "minus_minus_reduce thenT trivialT"
 O	o7077	ext_rule p7077
 T	t6533	o b47 b6502
 B	b6534	t6533

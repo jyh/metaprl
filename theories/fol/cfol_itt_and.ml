@@ -42,23 +42,23 @@ prim_rw unfold_and : "and"{'A; 'B} <--> esquash{prod{'A; 'B}}
 prim_rw unfold_pair : "pair"{'a; 'b} <--> Base_trivial!it
 
 (* Lemmas *)
-interactive and_univ {| intro [] |} 'H :
+interactive and_univ {| intro [] |} :
    [wf] sequent ['ext] { 'H >- "type"{'A} } -->
    [wf] sequent ['ext] { 'H >- "type"{'B} } -->
    sequent ['ext] { 'H >- "and"{'A; 'B} IN univ[1:l] }
 
 (* Derived rules *)
-derived and_type 'H :
+derived and_type :
    [wf] sequent ['ext] { 'H >- "type"{'A} } -->
    [wf] sequent ['ext] { 'H >- "type"{'B} } -->
    sequent ['ext] { 'H >- "type"{.'A & 'B} }
 
-derived and_intro 'H :
+derived and_intro :
    [main] sequent ['ext] { 'H >- 'A } -->
    [main] sequent ['ext] { 'H >- 'B } -->
    sequent ['ext] { 'H >- 'A & 'B }
 
-derived and_elim 'H 'J 'x 'y 'z :
+derived and_elim 'H 'x 'y 'z :
    [wf] sequent ['ext] { 'H; x: 'A & 'B; 'J['x] >- "type"{'A} } -->
    [wf] sequent ['ext] { 'H; x: 'A & 'B; 'J['x] >- "type"{'B} } -->
    [main] sequent ['ext] { 'H; y: 'A; z: 'B; 'J['y, 'z] >- 'C['y, 'z] } -->

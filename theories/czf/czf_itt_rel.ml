@@ -130,7 +130,7 @@ dform rel_df : parens :: "prec"[prec_quant] :: rel{a, b. 'P; 's1; 's2} =
  * is well-formed, and if the arguments $s_1$ and $s_2$ are sets.
  * @end[doc]
  *)
-interactive rel_type {| intro [] |} 'H 'u 'v :
+interactive rel_type {| intro [] |} 'u 'v :
    sequent [squash] { 'H; u: set; v: set >- "type"{'P['u; 'v]} } -->
    sequent [squash] { 'H >- isset{'s1} } -->
    sequent [squash] { 'H >- isset{'s2} } -->

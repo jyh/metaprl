@@ -55,7 +55,7 @@ rule and_intro :
  * by or_elim i
  * H, y: A; z: B; J[<y, z>] >> T[y, z]
  *)
-rule and_elim 'H 'J 'y 'z :
+rule and_elim 'H 'y 'z :
    sequent { 'H; y: 'A; z: 'B; 'J['y, 'z] >> 'T['y, 'z] } -->
    sequent { 'H; x: 'A /\ 'B; 'J['x] >> 'T['x] };;
 

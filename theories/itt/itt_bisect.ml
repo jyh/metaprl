@@ -108,12 +108,12 @@ dform bisect_df : except_mode[src] :: parens :: "prec"[prec_bisect] :: bisect{'A
  * and $B$ are types.
  * @end[doc]
  *)
-interactive bisectEquality {| intro []; eqcd |} 'H :
+interactive bisectEquality {| intro []; eqcd |} :
    [wf] sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
    [wf] sequent [squash] { 'H >- 'B1 = 'B2 in univ[i:l] } -->
    sequent ['ext] { 'H >- bisect{'A1; 'B1} = bisect{'A2; 'B2} in univ[i:l] }
 
-interactive bisectType {| intro [] |} 'H :
+interactive bisectType {| intro [] |} :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H >- "type"{'B} } -->
    sequent ['ext] { 'H >- "type"{bisect{'A; 'B}} }
@@ -122,7 +122,7 @@ interactive bisectType {| intro [] |} 'H :
  * Formation.
  * @docoff
  *)
-interactive bisectFormation 'H :
+interactive bisectFormation :
    sequent ['ext] { 'H >- univ[i:l] } -->
    sequent ['ext] { 'H >- univ[i:l] } -->
    sequent ['ext] { 'H >- univ[i:l] }
@@ -137,7 +137,7 @@ interactive bisectFormation 'H :
  * are members of both $A$ and $B$.
  * @end[doc]
  *)
-interactive bisectMemberEquality {| intro []; eqcd |} 'H :
+interactive bisectMemberEquality {| intro []; eqcd |} :
    [wf] sequent [squash] { 'H >- 'x = 'y in 'A } -->
    [wf] sequent [squash] { 'H >- 'x = 'y in 'B } -->
    sequent ['ext] { 'H >- 'x = 'y in 'A isect 'B }
@@ -152,33 +152,33 @@ interactive bisectMemberEquality {| intro []; eqcd |} 'H :
  *)
 (*!@docoff *)
 
-interactive bisectElimination_eq 'H 'J 'u 'v bind{x,HACK.bind{a,b.'C['x;'a;'b;'HACK]}} :
+interactive bisectElimination_eq 'H 'u 'v bind{x,HACK.bind{a,b.'C['x;'a;'b;'HACK]}} :
    sequent ['ext] { 'H; x: 'A isect 'B; 'J['x]; a: 'A; u: 'a = 'x in 'A;
                                                    b: 'B; v: 'b = 'x in 'B >- 'C['x;'a;'b;it] } -->
    sequent ['ext] { 'H; x: 'A isect 'B; 'J['x] >- 'C['x;'x;'x;it] }
 
 let bisectEliminationT n p =
+   let n = Sequent.get_pos_hyp_num p n in
    let u,v = maybe_new_vars2 p "u" "v" in
-   let i, j = Sequent.hyp_indices p n in
    let x = Sequent.nth_binding p n in
    let x_var = mk_var_term x in
    let bind =  get_with_arg p in
       if is_bind2_term bind then
          let bind2 = mk_bind2_term x "HACK" bind in
-            bisectElimination_eq i j u v bind2 p
+            bisectElimination_eq n u v bind2 p
       else
          raise (RefineError
            ("bisectElimination", StringTermError ("required the bind term:",<<bind{a,b.'C['a;'b]}>>)))
 
 let bisectEliminationT n p =
-  let n = if n<0 then (Sequent.hyp_count p) + n + 1 else n in
+   let n = Sequent.get_pos_hyp_num p n in
     (bisectEliminationT n thenT thinIfThinningT [-3;-1;n]) p
 
 let resource elim += (<<'A isect 'B>>,bisectEliminationT)
 
 (*! *)
 
-interactive bisectElimination 'H 'J bind{a,b.'C['a;'b]} :
+interactive bisectElimination 'H bind{a,b.'C['a;'b]} :
    sequent ['ext] { 'H; x: 'A isect 'B; 'J['x]; a: 'A; b: 'B >- 'C['a;'b] } -->
    sequent ['ext] { 'H; x: 'A isect 'B; 'J['x] >- 'C['x;'x] }
 
@@ -192,25 +192,24 @@ interactive bisectElimination 'H 'J bind{a,b.'C['a;'b]} :
  *)
 
 
-interactive bisectEliminationLeft (*{| elim [SelectOption 1] |}*) 'H 'J 'a 'u 'b 'v:
+interactive bisectEliminationLeft (*{| elim [SelectOption 1] |}*) 'H 'a 'u 'b 'v:
    sequent ['ext] { 'H; x: 'A isect 'B; 'J['x]; a: 'A; u: 'a = 'x in 'A; b: 'B; v: 'b = 'x in 'B >- 'C['a] } -->
    sequent ['ext] { 'H; x: 'A isect 'B; 'J['x] >- 'C['x] }
 
-interactive bisectEliminationRight (*{| elim [SelectOption 2] |}*) 'H 'J 'a 'u 'b 'v :
+interactive bisectEliminationRight (*{| elim [SelectOption 2] |}*) 'H 'a 'u 'b 'v :
    sequent ['ext] { 'H; x: 'A isect 'B; 'J['x]; a: 'A; u: 'a = 'x in 'A; b: 'B; v: 'b = 'x in 'B >- 'C['b] } -->
    sequent ['ext] { 'H; x: 'A isect 'B; 'J['x] >- 'C['x] }
 
 let bisectEliminationT n p =
-   let n = if n<0 then (Sequent.hyp_count p) + n + 1 else n in
+   let n = Sequent.get_pos_hyp_num p n in
    try
       let sel = get_sel_arg p in
       let a,u,b,v = maybe_new_vars4 p "a" "u" "b" "v" in
-      let i, j = Sequent.hyp_indices p n in
       let r =
          if sel = 1 then bisectEliminationLeft else
          if sel = 2 then bisectEliminationRight else
             raise (RefineError ("bisectElimination", StringError ("select option is out of range ([1,2])")))
-      in (r i j a u b v thenT thinIfThinningT [-3;-1;n]) p
+      in (r n a u b v thenT thinIfThinningT [-3;-1;n]) p
    with RefineError ("get_attribute",_) ->
       try bisectEliminationT n p
       with RefineError ("get_attribute",_) ->
@@ -221,7 +220,7 @@ let resource elim += (<<'A isect 'B>>,bisectEliminationT)
 
 (*! @doc{Equality elimination.} *)
 
-interactive bisectEqualityElim {| elim [ThinOption thinT] |} 'H 'J 'u 'v:
+interactive bisectEqualityElim {| elim [ThinOption thinT] |} 'H 'u 'v:
    sequent['ext] { 'H; x: 't1 = 't2 in 'A isect 'B; u : 't1 = 't2 in 'A; v : 't1 = 't2 in 'B; 'J['x] >- 'C['x] } -->
    sequent['ext] { 'H; x: 't1 = 't2 in 'A isect 'B; 'J['x] >- 'C['x] }
 
@@ -233,43 +232,21 @@ interactive bisectEqualityElim {| elim [ThinOption thinT] |} 'H 'J 'u 'v:
  * in both $A$ and $B$.
  * @end[doc]
  *)
-interactive bisectSubtypeLeft 'H :
+interactive bisectSubtypeLeft {| intro [SelectOption 1] |} :
    sequent [squash] { 'H >- "type"{'B} } -->
    sequent [squash] { 'H >- 'A  subtype 'C } -->
    sequent ['ext] { 'H >- 'A isect 'B  subtype 'C}
 
-interactive bisectSubtypeRight 'H :
+interactive bisectSubtypeRight {| intro [SelectOption 2] |} :
    sequent [squash] { 'H >- "type"{'A} } -->
    sequent [squash] { 'H >- 'B  subtype 'C } -->
    sequent ['ext] { 'H >- 'A isect 'B  subtype  'C }
 
-interactive bisectSubtypeBelow 'H :
+interactive bisectSubtypeBelow {| intro [] |}:
    sequent [squash] { 'H >- 'C  subtype 'A } -->
    sequent [squash] { 'H >- 'C  subtype 'B } -->
    sequent ['ext] { 'H >- 'C  subtype   'A isect 'B}
 (*! @docoff *)
-
-(*
- * Subtyping.
- *)
-let intro_bisect_aboveT p =
-   let j = get_sel_arg p in
-      if j = 1 then
-         bisectSubtypeLeft  (Sequent.hyp_count_addr p) p
-      else
-         bisectSubtypeRight  (Sequent.hyp_count_addr p) p
-
-let bisect_above_term = << 'A isect 'B   subtype  'C >>
-
-let intro_bisect_belowT p =
-   bisectSubtypeBelow (Sequent.hyp_count_addr p) p
-
-let bisect_below_term = << 'C  subtype 'A isect 'B >>
-
-let resource intro += [
-   bisect_above_term, wrap_intro intro_bisect_aboveT;
-   bisect_below_term, wrap_intro intro_bisect_belowT
-]
 
 (*
  * -*-

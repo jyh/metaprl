@@ -145,7 +145,7 @@ dform hom_df : parens :: except_mode[src] :: hom{'g1; 'g2; x. 'f} =
  * and $f[x]$ is a set for any set argument $x$.
  * @end[doc]
  *)
-interactive hom_type {| intro [] |} 'H :
+interactive hom_type {| intro [] |} :
    sequent [squash] { 'H >- 'g1 IN label } -->
    sequent [squash] { 'H >- 'g2 IN label } -->
    sequent [squash] { 'H; x: set >- isset{'f['x]} } -->
@@ -163,7 +163,7 @@ interactive hom_type {| intro [] |} 'H :
  * $@car{g_1}$.
  * @end[doc]
  *)
-interactive hom_intro {| intro [] |} 'H :
+interactive hom_intro {| intro [] |} :
    sequent [squash] { 'H >- 'g1 IN label } -->
    sequent [squash] { 'H >- 'g2 IN label } -->
    sequent ['ext] { 'H >- group{'g1} } -->
@@ -181,7 +181,7 @@ interactive hom_intro {| intro [] |} 'H :
  * argument.
  * @end[doc]
  *)
-interactive hom_fun {| intro [] |} 'H :
+interactive hom_fun {| intro [] |} :
    sequent [squash] { 'H >- 'g1 IN label } -->
    sequent [squash] { 'H >- 'g2 IN label } -->
    sequent ['ext] { 'H >- group{'g1} } -->
@@ -200,7 +200,7 @@ interactive hom_fun {| intro [] |} 'H :
  * is called the trivial homomorphism.
  * @end[doc]
  *)
-interactive trivial_hom1 'H :
+interactive trivial_hom1 :
    sequent [squash] { 'H >- 'g1 IN label } -->
    sequent [squash] { 'H >- 'g2 IN label } -->
    sequent ['ext] { 'H >- group{'g1} } -->
@@ -228,7 +228,7 @@ interactive trivial_hom1 'H :
  * implies $g_2$ is abelian.
  * @end[doc]
  *)*)
-interactive hom_abel 'H hom{'g1; 'g2; x. 'f['x]} :
+interactive hom_abel hom{'g1; 'g2; x. 'f['x]} :
    sequent [squash] { 'H >- 'g1 IN label } -->
    sequent [squash] { 'H >- 'g2 IN label } -->
    sequent ['ext] { 'H; x: set; y: mem{'x; car{'g2}} >- exst z: set. (mem{'z; car{'g1}} & eq{'x; 'f['z]}) } -->
@@ -237,7 +237,7 @@ interactive hom_abel 'H hom{'g1; 'g2; x. 'f['x]} :
    sequent ['ext] { 'H >- abel{'g2} }
 (*! @docoff *)
 
-interactive hom_id {| intro [] |} 'H hom{'g1; 'g2; x. 'f['x]} :
+interactive hom_id {| intro [] |} hom{'g1; 'g2; x. 'f['x]} :
    sequent [squash] { 'H >- 'g1 IN label } -->
    sequent [squash] { 'H >- 'g2 IN label } -->
    sequent ['ext] { 'H >- hom{'g1; 'g2; x. 'f['x]} } -->
@@ -249,14 +249,14 @@ interactive hom_id {| intro [] |} 'H hom{'g1; 'g2; x. 'f['x]} :
  *   $f$ maps the identity of $g_1$ into the identity of $g_2$.
  * @end[doc]
  *)
-interactive hom_id_elim (*{| elim [] |}*) 'H 'J :
+interactive hom_id_elim (*{| elim [] |}*) 'H :
    sequent [squash] { 'H; u: hom{'g1; 'g2; x. 'f['x]}; 'J['u] >- 'g1 IN label } -->
    sequent [squash] { 'H; u: hom{'g1; 'g2; x. 'f['x]}; 'J['u] >- 'g2 IN label } -->
    sequent ['ext] { 'H; u: hom{'g1; 'g2; x. 'f['x]}; 'J['u]; v: eq{'f[id{'g1}]; id{'g2}} >- 'C['u] } -->
    sequent ['ext] { 'H; u: hom{'g1; 'g2; x. 'f['x]}; 'J['u] >- 'C['u] }
 (*! @docoff *)
 
-interactive hom_inv {| intro [] |} 'H 'a hom{'g1; 'g2; x. 'f['x]} :
+interactive hom_inv {| intro [] |} 'a hom{'g1; 'g2; x. 'f['x]} :
    sequent [squash] { 'H >- 'g1 IN label } -->
    sequent [squash] { 'H >- 'g2 IN label } -->
    sequent ['ext] { 'H >- hom{'g1; 'g2; x. 'f['x]} } -->
@@ -271,7 +271,7 @@ interactive hom_inv {| intro [] |} 'H 'a hom{'g1; 'g2; x. 'f['x]} :
  *   the inverse of $f[a]$ in $@car{g_2}$.
  * @end[doc]
  *)
-interactive hom_inv_elim (*{| elim [] |}*) 'H 'J 'a :
+interactive hom_inv_elim (*{| elim [] |}*) 'H 'a :
    sequent [squash] { 'H; u: hom{'g1; 'g2; x. 'f['x]}; 'J['u] >- 'g1 IN label } -->
    sequent [squash] { 'H; u: hom{'g1; 'g2; x. 'f['x]}; 'J['u] >- 'g2 IN label } -->
    sequent ['ext] { 'H >- hom{'g1; 'g2; x. 'f['x]} } -->
@@ -291,7 +291,7 @@ interactive hom_inv_elim (*{| elim [] |}*) 'H 'J 'a :
  * Let f: G -> G' be a group homomorphism of G into G'.
  * If H is a subgroup of G, then f[H] is a subgroup of G'.
  *)
-interactive hom_subg1 'H hom{'g1; 'g2; x. 'f['x]} 'h1 'h2 :
+interactive hom_subg1 hom{'g1; 'g2; x. 'f['x]} 'h1 'h2 :
    sequent [squash] { 'H >- 'g1 IN label } -->
    sequent [squash] { 'H >- 'g2 IN label } -->
    sequent [squash] { 'H >- 'h1 IN label } -->
@@ -316,7 +316,7 @@ interactive hom_subg1 'H hom{'g1; 'g2; x. 'f['x]} 'h1 'h2 :
  * If H is a subgroup of G', then the inverse image of
  * H is a subgroup of G.
  *)
-interactive hom_subg2 'H hom{'g1; 'g2; x. 'f['x]} 'h1 'h2 :
+interactive hom_subg2 hom{'g1; 'g2; x. 'f['x]} 'h1 'h2 :
    sequent [squash] { 'H >- 'g1 IN label } -->
    sequent [squash] { 'H >- 'g2 IN label } -->
    sequent [squash] { 'H >- 'h1 IN label } -->
@@ -348,12 +348,10 @@ interactive hom_subg2 'H hom{'g1; 'g2; x. 'f['x]} 'h1 'h2 :
  * @end[doc]
  *)
 let homIdT i p =
-   let j, k = Sequent.hyp_indices p i in
-      hom_id_elim j k p
+   hom_id_elim (Sequent.get_pos_hyp_num p i) p
 
 let homInvT t i p =
-   let j, k = Sequent.hyp_indices p i in
-      hom_inv_elim j k t p
+   hom_inv_elim (Sequent.get_pos_hyp_num p i) t p
 
 (*! @docoff *)
 (*

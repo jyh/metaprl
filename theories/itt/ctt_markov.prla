@@ -2360,7 +2360,7 @@ T	t1050	o642 b1049
 B	b1050	t1050
 T	t1051	o641 b728 b1050
 B	b1051	t1051
-P	p1051	String "markov 2"
+P	p1051	String "markov"
 O	o1051	ext_rule p1051
 T	t1052	o657 b1049 b735
 B	b1052	t1052
@@ -2493,7 +2493,7 @@ T	t1104	o b1100 b1104
 B	b1105	t1104
 T	t1105	o655 b1097 b1105
 B	b1106	t1105
-P	p1106	String "markov3 2 thenT autoT"
+P	p1106	String "markov3 thenT autoT"
 O	o1106	ext_rule p1106
 T	t1106	o655 b1100 b4
 B	b1107	t1106
@@ -2578,7 +2578,7 @@ T	t1139	o641 b1134 b1139
 B	b1140	t1139
 T	t1140	o641 b728 b1140
 B	b1141	t1140
-P	p1141	String "markov1 2 <<'A>> thenT autoT"
+P	p1141	String "markov1 <<'A>> thenT autoT"
 O	o1141	ext_rule p1141
 T	t1141	o b1135 b4
 B	b1142	t1141
@@ -2605,7 +2605,7 @@ P	p1152	Number 3626
 O	o1152	location p1151 p1152
 P	p1153	String markov2'
 O	o1153	rule p1153
-P	p1154	String "useWitnessT <<it>> thenT markov0 2 <<'A>>"
+P	p1154	String "useWitnessT <<it>> thenT markov0 <<'A>>"
 O	o1154	ext_rule p1154
 T	t1154	o b1038 b4
 B	b1154	t1154
@@ -2800,7 +2800,7 @@ T	t1234	o b1230 b1234
 B	b1235	t1234
 T	t1235	o655 b1226 b1235
 B	b1236	t1235
-P	p1236	String "markov 2 thenT autoT"
+P	p1236	String "markov thenT autoT"
 O	o1236	ext_rule p1236
 T	t1236	o655 b1230 b4
 B	b1237	t1236
@@ -3213,7 +3213,7 @@ T	t267	o b259 b266
 B	b267	t267
 T	t268	o698 b654 b251 b252 b267
 B	b268	t268
-P	p1383	String "markovN 3 thenWT autoT"
+P	p1383	String "markovN thenWT autoT"
 O	o1383	ext_rule p1383
 T	t1383	o645 b1251 b1257 b1257
 B	b1384	t1383
@@ -3643,7 +3643,7 @@ T	t1580	o b1576 b1580
 B	b1581	t1580
 T	t1581	o655 b1567 b1581
 B	b1582	t1581
-P	p1582	String "markov 4 thenT autoT"
+P	p1582	String "markov thenT autoT"
 O	o1582	ext_rule p1582
 T	t1582	o655 b1576 b4
 B	b1583	t1582
@@ -4082,7 +4082,7 @@ T	t1847	o b1843 b1847
 B	b1848	t1847
 T	t1848	o655 b1837 b1848
 B	b1849	t1848
-P	p1849	String "markov3 3 thenT autoT"
+P	p1849	String "markov3 thenT autoT"
 O	o1849	ext_rule p1849
 T	t1849	o655 b1843 b4
 B	b1850	t1849
@@ -4240,7 +4240,7 @@ T	t1917	o b1909 b1917
 B	b1918	t1917
 T	t1918	o655 b1899 b1918
 B	b1919	t1918
-P	p1919	String "markov 3 thenT autoT"
+P	p1919	String "markov thenT autoT"
 O	o1919	ext_rule p1919
 T	t1919	o655 b1909 b4
 B	b1920	t1919

@@ -9366,7 +9366,7 @@ T	t4366	o581 b4359 b4366
 B	b4385	t4366
 T	t4385	o581 b4353 b4385
 B	b4386	t4385
-P	p4386	String "assertAtT 2 <<'b1 = 'b2 in 'B['a]>> ttca"
+P	p4386	String "assertAtT 3 <<'b1 = 'b2 in 'B['a]>> ttca"
 O	o4395	ext_rule p4386
 T	t4395	o b4358 b4
 B	b4395	t4395
@@ -9389,7 +9389,7 @@ T	t4407	o b4407 b4
 B	b4408	t4407
 T	t4408	o645 b4403 b4408
 B	b4409	t4408
-P	p4410	String "intersectionMemberCaseEquality 4 <<Isect x: 'A. 'B['x]>> <<'a>> ttca"
+P	p4410	String "intersectionMemberCaseEquality <<Isect x: 'A. 'B['x]>> <<'a>> ttca"
 O	o4425	ext_rule p4410
 T	t4426	o645 b4407 b4
 B	b4427	t4426
@@ -9459,7 +9459,7 @@ T	t2595	o b5504 b2595
 B	b2603	t2595
 T	t2603	o645 b5501 b2603
 B	b2607	t2603
-P	p5510	String "intersectionMemberCaseEquality 4 <<Isect x: 'A. 'B['x]>> <<'a>>"
+P	p5510	String "intersectionMemberCaseEquality <<Isect x: 'A. 'B['x]>> <<'a>>"
 O	o5510	ext_rule p5510
 S	s5510	t585 h h785 h786
 G	s5510	t1748

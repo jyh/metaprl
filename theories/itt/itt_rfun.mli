@@ -83,7 +83,7 @@ rewrite reduce_fix : fix{f. 'b['f]} <--> 'b[fix{f. 'b['f]}]
  *
  * H >- { f | a: A -> B } = { f | a: A -> B } in Ui
  *)
-rule rfunctionFormation 'H { f | a: 'A -> 'B['f; 'a] } :
+rule rfunctionFormation { f | a: 'A -> 'B['f; 'a] } :
    sequent [squash] { 'H >- { f | a: 'A -> 'B['f; 'a] } = { f | a: 'A -> 'B['f; 'a] } in univ[i:l] } -->
    sequent ['ext] { 'H >- univ[i:l] }
 
@@ -95,7 +95,7 @@ rule rfunctionFormation 'H { f | a: 'A -> 'B['f; 'a] } :
  * H >- well_founded(A1; a, b. R[a, b])
  * H, y:A, g : { f1 | x1: { z: A1 | R z y } -> B1[f1, x1] } >- B1[g, y] = B2[g, y] in Ui
  *)
-rule rfunctionEquality 'H lambda{a. lambda{b. 'R['a; 'b]}} 'g 'y 'z :
+rule rfunctionEquality lambda{a. lambda{b. 'R['a; 'b]}} 'g 'y 'z :
    sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
    sequent [squash] { 'H >- well_founded{'A1; a, b. 'R['a; 'b]} } -->
    sequent [squash] { 'H;
@@ -116,7 +116,7 @@ rule rfunctionEquality 'H lambda{a. lambda{b. 'R['a; 'b]}} 'g 'y 'z :
  * H >- well_founded(A; a, b. R[a, b])
  * H, y: A, g: { f | { z: A | R z y } -> B[f, x] } >- B[g, y] ext b[g, y]
  *)
-rule rfunction_lambdaFormation 'H lambda{a. lambda{b. 'R['a; 'b]}} 'g 'y 'z :
+rule rfunction_lambdaFormation lambda{a. lambda{b. 'R['a; 'b]}} 'g 'y 'z :
    sequent [squash] { 'H >- "type"{'A} } -->
    sequent [squash] { 'H >- well_founded{'A; a, b. 'R['a; 'b]} } -->
    sequent ['ext] { 'H; y: 'A; g: { f | x: { z: 'A | 'R['z; 'y] } -> 'B['f; 'x] } >- 'B['g; 'y] } -->
@@ -129,7 +129,7 @@ rule rfunction_lambdaFormation 'H lambda{a. lambda{b. 'R['a; 'b]}} 'g 'y 'z :
  * H >- { f | x:A -> B[f, x] } = { f | x:A -> B[f, x] } in type
  * H, y: A >- b1[y] = b2[y] in B[lambda(x1. b1[x1]); y]
  *)
-rule rfunction_lambdaEquality 'H 'y :
+rule rfunction_lambdaEquality 'y :
    sequent [squash] { 'H >- "type"{{ f | x: 'A -> 'B['f; 'x] }} } -->
    sequent [squash] { 'H; y: 'A >- 'b1['y] = 'b2['y] in 'B[lambda{x1. 'b1['x1]}; 'y] } -->
    sequent ['ext] { 'H >- lambda{x1. 'b1['x1]} = lambda{x2. 'b2['x2]} in { f | x: 'A -> 'B['f; 'x] } }
@@ -143,7 +143,7 @@ rule rfunction_lambdaEquality 'H 'y :
  * H >- f1 = f1 in { g1 | x1:A1 -> B1[g1, x1] }
  * H >- f2 = f2 in { g2 | x2:A2 -> B2[g2, x2] }
  *)
-rule rfunctionExtensionality 'H
+rule rfunctionExtensionality
         ({ g1 | x1:'A1 -> 'B1['g1; 'x1] })
         ({ g2 | x2:'A2 -> 'B2['g2; 'x2] })
         'y :
@@ -160,7 +160,7 @@ rule rfunctionExtensionality 'H
  * H, f: { g | x:A -> B[g, x] }, J[f] >- a = a in A
  * H, f: { g | x:A -> B[g, x] }, J[f], y: B[f, a], v: y = f a in B[f, a] >- T[f] ext t[f, y, v]
  *)
-rule rfunctionElimination 'H 'J 'f 'a 'y 'v :
+rule rfunctionElimination 'H 'f 'a 'y 'v :
    sequent [squash] { 'H; f: { g | x:'A -> 'B['g; 'x] }; 'J['f] >- 'a in 'A } -->
    sequent ['ext] { 'H;
              f: { g | x:'A -> 'B['g; 'x] };
@@ -177,12 +177,10 @@ rule rfunctionElimination 'H 'J 'f 'a 'y 'v :
  * H >- f1 = f2 in { f | x:A -> B[f, x] }
  * H >- a1 = a2 in A
  *)
-rule rfunction_applyEquality 'H ({ f | x:'A -> 'B['f; 'x] }) :
+rule rfunction_applyEquality ({ f | x:'A -> 'B['f; 'x] }) :
    sequent [squash] { 'H >- 'f1 = 'f2 in { f | x:'A -> 'B['f; 'x] } } -->
    sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
    sequent ['ext] { 'H >- 'f1 'a1 = 'f2 'a2 in 'B['f1; 'a1] }
-
-topval rfunction_applyEquality' : term -> tactic
 
 (************************************************************************
  * TACTICS                                                              *

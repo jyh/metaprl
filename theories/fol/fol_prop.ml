@@ -41,7 +41,7 @@ extends Fol_not
 extends Fol_struct
 
 (* An example theorem *)
-interactive distrib_or 'H :
+interactive distrib_or :
    [wf] sequent ['ext] { 'H >- "type"{'A} } -->
    [wf] sequent ['ext] { 'H >- "type"{'B} } -->
    [wf] sequent ['ext] { 'H >- "type"{'C} } -->
@@ -60,19 +60,19 @@ open Fol_not
 open Fol_struct
 
 (* Refinement of implication *)
-interactive imp_and_rule 'H 'J 'u :
+interactive imp_and_rule 'H 'u :
    [wf] sequent['ext] {'H; x: ('C & 'D) => 'B; 'J >- "type"{'C}} -->
    [wf] sequent['ext] {'H; x: ('C & 'D) => 'B; 'J >- "type"{'D}} -->
    [main] sequent['ext] {'H; 'J; u: 'C => 'D => 'B >- 'T} -->
    sequent['ext] {'H; x: ('C & 'D) => 'B; 'J >- 'T}
 
-interactive imp_or_rule 'H 'J 'u 'v :
+interactive imp_or_rule 'H 'u 'v :
    [wf] sequent['ext] {'H; x: ('C or 'D) => 'B; 'J >- "type"{'C}} -->
    [wf] sequent['ext] {'H; x: ('C or 'D) => 'B; 'J >- "type"{'D}} -->
    [main] sequent['ext] {'H; 'J; u: 'C => 'B; v: 'D => 'B >- 'T} -->
    sequent['ext] {'H; x: ('C or 'D) => 'B; 'J >- 'T}
 
-interactive imp_imp_rule 'H 'J 'u :
+interactive imp_imp_rule 'H 'u :
    [wf] sequent['ext] {'H; x: ('C => 'D) => 'B; 'J >- "type"{'C}} -->
    [wf] sequent['ext] {'H; x: ('C => 'D) => 'B; 'J >- "type"{'D}} -->
    [main] sequent['ext] {'H; 'J; u: 'D => 'B >- 'T} -->
@@ -80,18 +80,15 @@ interactive imp_imp_rule 'H 'J 'u :
 
 let d_and_impT i p =
    let u = Var.maybe_new_vars1 p "u" in
-   let j, k = Sequent.hyp_indices p i in
-      imp_and_rule j k u p
+      imp_and_rule i u p
 
 let d_or_impT i p =
    let u, v = Var.maybe_new_vars2 p "u" "v" in
-   let j, k = Sequent.hyp_indices p i in
-      imp_or_rule j k u v p
+      imp_or_rule i u v p
 
 let d_imp_impT i p =
    let u = Var.maybe_new_vars1 p "u" in
-   let j, k = Sequent.hyp_indices p i in
-      imp_and_rule j k u p
+      imp_and_rule i u p
 
 (* Term operations *)
 let false_opname = opname_of_term << "false" >>
@@ -124,6 +121,7 @@ let ifNotWT tac p =
 
 (* Try to decompose a hypothesis *)
 let rec decompPropDecideHypT i p =
+   let i = Sequent.get_pos_hyp_num p i in
    (let term = Sequent.nth_hyp p i in
        if is_false_term term then
           dT i
@@ -177,7 +175,7 @@ let proveTypeT p =
    (thinAllT 2 (Sequent.hyp_count p) thenT trivialT) p
 
 (* Try the example again *)
-interactive distrib_or2 'H :
+interactive distrib_or2 :
    [wf] sequent ['ext] { 'H >- "type"{'A} } -->
    [wf] sequent ['ext] { 'H >- "type"{'B} } -->
    [wf] sequent ['ext] { 'H >- "type"{'C} } -->

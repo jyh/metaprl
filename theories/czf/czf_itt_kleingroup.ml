@@ -186,19 +186,19 @@ dform k3_df : except_mode[src] :: k3 =
  * are all sets. These are axioms.
  * @end[doc]
  *)
-interactive klein4_label {| intro [] |} 'H :
+interactive klein4_label {| intro [] |} :
    sequent ['ext] { 'H >- klein4 IN label }
 
-interactive k0_isset {| intro [] |} 'H :
+interactive k0_isset {| intro [] |} :
    sequent ['ext] { 'H >- isset{k0} }
 
-interactive k1_isset {| intro [] |} 'H :
+interactive k1_isset {| intro [] |} :
    sequent ['ext] { 'H >- isset{k1} }
 
-interactive k2_isset {| intro [] |} 'H :
+interactive k2_isset {| intro [] |} :
    sequent ['ext] { 'H >- isset{k2} }
 
-interactive k3_isset {| intro [] |} 'H :
+interactive k3_isset {| intro [] |} :
    sequent ['ext] { 'H >- isset{k3} }
 
 (*!
@@ -210,18 +210,18 @@ interactive k3_isset {| intro [] |} 'H :
  *well-formed if its set argument is a set.
  * @end[doc]
  *)
-interactive klein4_car_isset {| intro[] |} 'H :
+interactive klein4_car_isset {| intro[] |} :
    sequent ['ext] { 'H >- isset{car{klein4}} }
 
-interactive klein4_op_isset {| intro[] |} 'H :
+interactive klein4_op_isset {| intro[] |} :
    sequent [squash] { 'H >- isset{'s1} } -->
    sequent [squash] { 'H >- isset{'s2} } -->
    sequent ['ext] { 'H >- isset{op{klein4; 's1; 's2}} }
 
-interactive klein4_id_isset {| intro [] |} 'H :
+interactive klein4_id_isset {| intro [] |} :
    sequent ['ext] { 'H >- isset{id{klein4}} }
 
-interactive klein4_inv_isset {| intro[] |} 'H :
+interactive klein4_inv_isset {| intro[] |} :
    sequent [squash] { 'H >- isset{'s1} } -->
    sequent ['ext] { 'H >- isset{inv{klein4; 's1}} }
 
@@ -232,19 +232,19 @@ interactive klein4_inv_isset {| intro[] |} 'H :
  * The $@car{@klein4}$ contains $@k0$, $@k1$, $@k2$, $@k3$ only.
  * @end[doc]
  *)
-interactive car_klein0 {| intro[] |} 'H :
+interactive car_klein0 {| intro[] |} :
    sequent ['ext] { 'H >- mem{k0; car{klein4}} }
 
-interactive car_klein1 {| intro[] |} 'H :
+interactive car_klein1 {| intro[] |} :
    sequent ['ext] { 'H >- mem{k1; car{klein4}} }
 
-interactive car_klein2 {| intro[] |} 'H :
+interactive car_klein2 {| intro[] |} :
    sequent ['ext] { 'H >- mem{k2; car{klein4}} }
 
-interactive car_klein3 {| intro[] |} 'H :
+interactive car_klein3 {| intro[] |} :
    sequent ['ext] { 'H >- mem{k3; car{klein4}} }
 
-interactive car_klein0_elim {| elim [] |} 'H 'J :
+interactive car_klein0_elim {| elim [] |} 'H :
    sequent [squash] { 'H; x: mem{'y; car{klein4}}; 'J['x] >- isset{'y} } -->
    sequent ['ext] { 'H; x: mem{'y; car{klein4}}; 'J['x]; z: eq{'y; k0} >- 'T['x] } -->
    sequent ['ext] { 'H; x: mem{'y; car{klein4}}; 'J['x]; z: eq{'y; k1} >- 'T['x] } -->
@@ -259,12 +259,12 @@ interactive car_klein0_elim {| elim [] |} 'H 'J :
  * The @tt[op] for @tt[klein4] is functional and is a mapping.
  * @end[doc]
  *)
-interactive klein4_op_fun {| intro[] |} 'H :
+interactive klein4_op_fun {| intro[] |} :
    sequent ['ext] { 'H >- fun_set{z. 's1['z]} } -->
    sequent ['ext] { 'H >- fun_set{z. 's2['z]} } -->
    sequent ['ext] { 'H >- fun_set{z. op{klein4; 's1['z]; 's2['z]}} }
 
-interactive klein4_op_closure {| intro[] |} 'H :
+interactive klein4_op_closure {| intro[] |} :
    sequent [squash] { 'H >- isset{'s1} } -->
    sequent [squash] { 'H >- isset{'s2} } -->
    sequent ['ext] { 'H >- mem{'s1; car{klein4}} } -->
@@ -272,7 +272,7 @@ interactive klein4_op_closure {| intro[] |} 'H :
    sequent ['ext] { 'H >- mem{op{klein4; 's1; 's2}; car{klein4}} }
 (*! @docoff *)
 
-interactive klein4_op_eq1 {| intro[] |} 'H :
+interactive klein4_op_eq1 {| intro[] |} :
    sequent [squash] { 'H >- isset{'s1} } -->
    sequent [squash] { 'H >- isset{'s2} } -->
    sequent [squash] { 'H >- isset{'s3} } -->
@@ -282,7 +282,7 @@ interactive klein4_op_eq1 {| intro[] |} 'H :
    sequent ['ext] { 'H >- eq{'s1; 's2} } -->
    sequent ['ext] { 'H >- eq{op{klein4; 's3; 's1}; op{klein4; 's3; 's2}} }
 
-interactive klein4_op_eq2 {| intro[] |} 'H :
+interactive klein4_op_eq2 {| intro[] |} :
    sequent [squash] { 'H >- isset{'s1} } -->
    sequent [squash] { 'H >- isset{'s2} } -->
    sequent [squash] { 'H >- isset{'s3} } -->
@@ -298,7 +298,7 @@ interactive klein4_op_eq2 {| intro[] |} 'H :
  * The @tt[op] for @tt[klein4] is associative.
  * @end[doc]
  *)
-interactive klein4_op_assoc1 {| intro[] |} 'H :
+interactive klein4_op_assoc1 {| intro[] |} :
    sequent [squash] { 'H >- isset{'s1} } -->
    sequent [squash] { 'H >- isset{'s2} } -->
    sequent [squash] { 'H >- isset{'s3} } -->
@@ -308,7 +308,7 @@ interactive klein4_op_assoc1 {| intro[] |} 'H :
    sequent ['ext] { 'H >- eq{op{klein4; op{klein4; 's1; 's2}; 's3}; op{klein4; 's1; op{klein4; 's2; 's3}}} }
 (*! @docoff *)
 
-interactive klein4_op_assoc2 {| intro[] |} 'H :
+interactive klein4_op_assoc2 {| intro[] |} :
    sequent [squash] { 'H >- isset{'s1} } -->
    sequent [squash] { 'H >- isset{'s2} } -->
    sequent [squash] { 'H >- isset{'s3} } -->
@@ -323,10 +323,10 @@ interactive klein4_op_assoc2 {| intro[] |} 'H :
  * The axioms for the identity are satisfied.
  * @end[doc]
  *)
-interactive klein4_id_mem {| intro[] |} 'H :
+interactive klein4_id_mem {| intro[] |} :
    sequent ['ext] { 'H >- mem{id{klein4}; car{klein4}} }
 
-interactive klein4_id_eq1 {| intro[] |} 'H :
+interactive klein4_id_eq1 {| intro[] |} :
    sequent [squash] { 'H >- isset{'s} } -->
    sequent ['ext] { 'H >- mem{'s; car{klein4}} } -->
    sequent ['ext] { 'H >- eq{op{klein4; id{klein4}; 's}; 's} }
@@ -337,15 +337,15 @@ interactive klein4_id_eq1 {| intro[] |} 'H :
  * The axioms for the inverse are satisfied.
  * @end[doc]
  *)
-interactive klein4_inv_fun {| intro[] |} 'H :
+interactive klein4_inv_fun {| intro[] |} :
    sequent ['ext] { 'H >- fun_set{z. inv{klein4; 'z}} }
 
-interactive klein4_inv_mem {| intro[] |} 'H :
+interactive klein4_inv_mem {| intro[] |} :
    sequent [squash] { 'H >- isset{'s1} } -->
    sequent ['ext] { 'H >- mem{'s1; car{klein4}} } -->
    sequent ['ext] { 'H >- mem{inv{klein4; 's1}; car{klein4}} }
 
-interactive klein4_inv_id1 {| intro[] |} 'H :
+interactive klein4_inv_id1 {| intro[] |} :
    sequent [squash] { 'H >- isset{'s1} } -->
    sequent ['ext] { 'H >- mem{'s1; car{klein4}} } -->
    sequent ['ext] { 'H >- eq{op{klein4; inv{klein4; 's1}; 's1}; id{klein4}} }

@@ -147,7 +147,7 @@ dform top_df : except_mode[src] :: top =
  * H >- A = A in Ui
  * H, x: A >- Ui ext B[x]
  *)
-prim intersectionFormation 'H 'x 'A :
+prim intersectionFormation 'x 'A :
    [wf] sequent [squash] { 'H >- 'A = 'A in univ[i:l] } -->
    ('B['x] : sequent ['ext] { 'H; x: 'A >- univ[i:l] }) -->
    sequent ['ext] { 'H >- univ[i:l] } =
@@ -163,13 +163,13 @@ prim intersectionFormation 'H 'x 'A :
  * $x @in A$.
  * @end[doc]
  *)
-prim intersectionEquality {| intro []; eqcd |} 'H 'y :
+prim intersectionEquality {| intro []; eqcd |} 'y :
    [wf] sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
    [wf] sequent [squash] { 'H; y: 'A1 >- 'B1['y] = 'B2['y] in univ[i:l] } -->
    sequent ['ext] { 'H >- Isect x1: 'A1. 'B1['x1] = Isect x2: 'A2. 'B2['x2] in univ[i:l] } =
    it
 
-prim intersectionType {| intro [] |} 'H 'y :
+prim intersectionType {| intro [] |} 'y :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
    sequent ['ext] { 'H >- "type"{."isect"{'A; x. 'B['x]}} } =
@@ -181,10 +181,10 @@ prim intersectionType {| intro [] |} 'H 'y :
  * The $@top$ type is a member of every type universe.
  * @end[doc]
  *)
-interactive topUniv {| intro [] |} 'H :
+interactive topUniv {| intro [] |} :
    sequent ['ext] { 'H >- top in univ[i:l] }
 
-interactive topType {| intro [] |} 'H :
+interactive topType {| intro [] |} :
    sequent ['ext] { 'H >- "type"{top} }
 
 
@@ -202,13 +202,13 @@ interactive topType {| intro [] |} 'H :
  * is trivial; all terms are equal in $@top$.
  * @end[doc]
  *)
-prim intersectionMemberEquality {| intro []; eqcd |} 'H 'z :
+prim intersectionMemberEquality {| intro []; eqcd |} 'z :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H; z: 'A >- 'b1 = 'b2 in 'B['z] } -->
    sequent ['ext] { 'H >- 'b1 = 'b2 in Isect x: 'A. 'B['x] } =
    it
 
-interactive topMemberEquality {| intro []; eqcd |} 'H :
+interactive topMemberEquality {| intro []; eqcd |} :
    sequent ['ext] { 'H >- 'b1 = 'b2 in top }
 
 
@@ -223,7 +223,7 @@ interactive topMemberEquality {| intro []; eqcd |} 'H :
  * @end[doc]
  *)
 
-interactive intersectionMemberFormation {| intro [] |} 'H 'z 'b :
+interactive intersectionMemberFormation {| intro [] |} 'z 'b :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H; z: 'A >- 'b in 'B['z] } -->
    sequent ['ext] { 'H >-  Isect x: 'A. 'B['x] }
@@ -237,7 +237,7 @@ interactive intersectionMemberFormation {| intro [] |} 'H 'z 'b :
  * @end[doc]
  *)
 
-interactive intersectionMemberFormation2 {| intro [] |} 'H 'z :
+interactive intersectionMemberFormation2 {| intro [] |} 'z :
     [wf] sequent [squash] { 'H >- "type"{'A} } -->
     [main] sequent ['ext] { 'H; z: squash{'A} >- 'B } -->
     sequent ['ext] { 'H >- Isect x: 'A. 'B }
@@ -250,7 +250,7 @@ interactive intersectionMemberFormation2 {| intro [] |} 'H 'z :
  * @end[doc]
  *)
 
-interactive topMemberFormation {| intro [] |} 'H:
+interactive topMemberFormation {| intro [] |} :
    sequent ['ext] { 'H >-  top }
 
 
@@ -265,7 +265,7 @@ interactive topMemberFormation {| intro [] |} 'H:
  * to get a proof that $x @in B[a]$.
  * @end[doc]
  *)
-prim intersectionElimination {| elim [] |} 'H 'J 'a 'z :
+prim intersectionElimination {| elim [] |} 'H 'a 'z :
    [wf] sequent [squash] { 'H; x: Isect y: 'A. 'B['y]; 'J['x] >- 'a in 'A } -->
    [main] ('t['x; 'z] : sequent ['ext] { 'H; x: Isect y: 'A. 'B['y]; 'J['x]; z: 'B['a] >- 'T['z] }) -->
    sequent ['ext] { 'H; x: Isect y: 'A. 'B['y]; 'J['x] >- 'T['x] } =
@@ -273,7 +273,7 @@ prim intersectionElimination {| elim [] |} 'H 'J 'a 'z :
 
 (*! @docoff *)
 
-interactive intersectionElimination_eq 'H 'J 'v 'a bind{x,HACK.bind{z.'T['x;'z;'HACK]}}:
+interactive intersectionElimination_eq 'H 'v 'a bind{x,HACK.bind{z.'T['x;'z;'HACK]}}:
 (* HACK: see bug 4.11 *)
    [wf] sequent [squash] { 'H; x: Isect y: 'A. 'B['y]; 'J['x] >- 'a in 'A } -->
    [main] sequent ['ext] { 'H; x: Isect y: 'A. 'B['y]; 'J['x]; z: 'B['a]; v: 'z = 'x in 'B['a] >- 'T['x;'z;it] } -->
@@ -282,7 +282,7 @@ interactive intersectionElimination_eq 'H 'J 'v 'a bind{x,HACK.bind{z.'T['x;'z;'
 
 let intersectionEliminationT n p =
    let z,v = maybe_new_vars2 p "z" "v" in
-   let i, j = Sequent.hyp_indices p n in
+   let n = Sequent.get_pos_hyp_num p n in
    let x = Sequent.nth_binding p n in
    let x_var = mk_var_term x in
    let args=
@@ -299,10 +299,10 @@ let intersectionEliminationT n p =
          _ -> raise (RefineError ("intersectionElimination", StringError ("too many arguments")))
    in
    let bind2 = mk_bind2_term x "HACK" bind in
-      intersectionElimination_eq i j v a bind2 p
+      intersectionElimination_eq n v a bind2 p
 
 let intersectionEliminationT n p =
-   let n = if n<0 then (Sequent.hyp_count p) + n + 1 else n in
+   let n = Sequent.get_pos_hyp_num p n in
      (intersectionEliminationT n thenT thinIfThinningT [-1;n]) p
 
 (*!
@@ -311,16 +311,15 @@ let intersectionEliminationT n p =
  * @end[doc]
  *)
 
-interactive intersectionElimination2 (*{| elim [] |}*) 'H 'J 'z 'v :
+interactive intersectionElimination2 (*{| elim [] |}*) 'H 'z 'v :
    [wf] sequent [squash] { 'H; x: Isect y: 'A. 'B; 'J['x] >- squash{'A} } -->
    [main] sequent ['ext] { 'H; x: Isect y: 'A. 'B; 'J['x]; z: 'B; v: 'z = 'x in 'B >- 'T['z] } -->
    sequent ['ext] { 'H; x: Isect y: 'A. 'B; 'J['x] >- 'T['x] }
 
 let intersectionEliminationT n p =
-   let n = if n<0 then (Sequent.hyp_count p) + n + 1 else n in
+   let n = Sequent.get_pos_hyp_num p n in
    let z,v = maybe_new_vars2 p "z" "v" in
-   let i, j = Sequent.hyp_indices p n in
-     ((intersectionElimination2 i j z v  thenT thinIfThinningT [-1;n])
+     ((intersectionElimination2 n z v  thenT thinIfThinningT [-1;n])
        orelseT intersectionEliminationT n) p
 
 let resource elim += (<<Isect y: 'A. 'B['y]>>, intersectionEliminationT)
@@ -333,7 +332,7 @@ let resource elim += (<<Isect y: 'A. 'B['y]>>, intersectionEliminationT)
  * @end[doc]
  *)
 
-interactive intersectionMemberCaseEquality 'H (Isect x: 'A. 'B['x]) 'a :
+interactive intersectionMemberCaseEquality (Isect x: 'A. 'B['x]) 'a :
    [wf] sequent [squash] { 'H >- 'b1 = 'b2 in Isect x: 'A. 'B['x] } -->
    [wf] sequent [squash] { 'H >- 'a in 'A } -->
    sequent ['ext] { 'H >- 'b1 = 'b2 in 'B['a] }
@@ -341,7 +340,7 @@ interactive intersectionMemberCaseEquality 'H (Isect x: 'A. 'B['x]) 'a :
 
 (*! @doc{The elimination form of @hrefrule[intersectionMemberCaseEquality].} *)
 
-interactive intersectionEqualityElim {| elim [] |} 'H 'J 'a 'v :
+interactive intersectionEqualityElim {| elim [] |} 'H 'a 'v :
    [wf] sequent[squash] { 'H; u: 'b1 = 'b2 in Isect x: 'A. 'B['x]; 'J['u] >- 'a in 'A } -->
    sequent ['ext] { 'H; u: 'b1 = 'b2 in Isect x: 'A. 'B['x]; v: 'b1 = 'b2 in 'B['a]; 'J['u] >- 'C['u] } -->
    sequent ['ext] { 'H; u: 'b1 = 'b2 in Isect x: 'A. 'B['x]; 'J['u] >- 'C['u] }
@@ -350,7 +349,7 @@ interactive intersectionEqualityElim {| elim [] |} 'H 'J 'a 'v :
 
 (* We could declare intersectionMemberCaseEquality as primitive and derive intersectionElimination *)
 
-interactive intersectionEliminationFromCaseEquality 'H 'J 'a 'z :
+interactive intersectionEliminationFromCaseEquality 'H 'a 'z :
    [wf] sequent [squash] { 'H; x: Isect y: 'A. 'B['y]; 'J['x] >- 'a in 'A } -->
    [main] sequent ['ext] { 'H; x: Isect y: 'A. 'B['y]; 'J['x]; z: 'B['a] >- 'T['z] } -->
    sequent ['ext] { 'H; x: Isect y: 'A. 'B['y]; 'J['x] >- 'T['x] }
@@ -365,7 +364,7 @@ interactive intersectionEliminationFromCaseEquality 'H 'J 'a 'z :
  * domain type $B[a]$ for each $a @in A$.
  * @end[doc]
  *)
-prim intersectionSubtype {| intro [] |} 'H 'a :
+prim intersectionSubtype {| intro [] |} 'a :
    ["subtype"] sequent [squash] { 'H >- \subtype{'A2; 'A1} } -->
    ["subtype"] sequent [squash] { 'H; a: 'A2 >- \subtype{'B1['a]; 'B2['a]} } -->
    sequent ['ext] { 'H >- \subtype{ (Isect a1:'A1. 'B1['a1]); (Isect a2:'A2. 'B2['a2]) } } =
@@ -380,13 +379,13 @@ prim intersectionSubtype {| intro [] |} 'H 'a :
  * of @emph{every} case $B[a]$ for $a @in A$.
  * @end[doc]
  *)
-interactive intersectionSubtype2 'H 'y 'a :
+interactive intersectionSubtype2 'y 'a :
    [wf] sequent [squash] { 'H >- 'a = 'a in 'A } -->
    [wf] sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
    ["subtype"] sequent [squash] { 'H >- \subtype{'B['a]; 'T} } -->
    sequent ['ext] { 'H >- \subtype{."isect"{'A; x. 'B['x]}; 'T} }
 
-interactive intersectionSubtype3 'H 'x :
+interactive intersectionSubtype3 'x :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H >- "type"{'C} } -->
    ["subtype"] sequent [squash] { 'H; x: 'A >- \subtype{'C; 'B['x]} } -->
@@ -398,7 +397,7 @@ interactive intersectionSubtype3 'H 'x :
  * @emph{Every} type is a subtype of $@top$.
  * @end[doc]
  *)
-interactive topSubtype {| intro [] |} 'H :
+interactive topSubtype {| intro [] |} :
    sequent [squash] { 'H >- "type"{'T} } -->
    sequent ['ext] { 'H >- \subtype{'T; top} }
 (*! @docoff *)
@@ -428,7 +427,7 @@ let resource typeinf += (isect_term, infer_univ_dep0_dep1 dest_isect)
  *)
 let isect_subtypeT p =
    let a = get_opt_var_arg "x" p in
-      intersectionSubtype (Sequent.hyp_count_addr p) a p
+      intersectionSubtype a p
 
 let resource sub +=
    (DSubtype ([<< Isect a1:'A1. 'B1['a1] >>, << Isect a2:'A2. 'B2['a2] >>;
@@ -442,7 +441,7 @@ let d_isect_subtypeT i p =
       let concl = Sequent.concl p in
       let v, _, _ = dest_isect concl in
       let v = maybe_new_vars1 p v in
-         intersectionSubtype2 (Sequent.hyp_count_addr p) v a p
+         intersectionSubtype2 v a p
    else
       raise (RefineError ("d_isect_subtypeT", StringError "no elimination form"))
 

@@ -113,7 +113,7 @@ dform normal_subg_df : except_mode[src] :: normal_subg{'s; 'g} =
  * arguments are labels.
  * @end[doc]
  *)
-interactive normalSubg_wf {| intro [] |} 'H :
+interactive normalSubg_wf {| intro [] |} :
    sequent [squash] { 'H >- 's IN label } -->
    sequent [squash] { 'H >- 'g IN label } -->
    sequent ['ext] { 'H >- "type"{normal_subg{'s; 'g}} }
@@ -127,7 +127,7 @@ interactive normalSubg_wf {| intro [] |} 'H :
  * $@equal{@lcoset{s; g; a}; @rcoset{s; g; a}}$.
  * @end[doc]
  *)
-interactive normalSubg_intro {| intro [] |} 'H :
+interactive normalSubg_intro {| intro [] |} :
    sequent [squash] { 'H >- 's IN label } -->
    sequent [squash] { 'H >- 'g IN label } -->
    sequent ['ext] { 'H >- subgroup{'s; 'g} } -->
@@ -141,7 +141,7 @@ interactive normalSubg_intro {| intro [] |} 'H :
  * All subgroups of abelian groups are normal.
  * @end[doc]
  *)
-interactive abel_subg_normal 'H 'J 's :
+interactive abel_subg_normal 'H 's :
    sequent [squash] { 'H; x: abel{'g}; 'J['x] >- 's IN label } -->
    sequent [squash] { 'H; x: abel{'g}; 'J['x] >- 'g IN label } -->
    sequent ['ext] { 'H; x: abel{'g}; 'J['x] >- subgroup{'s; 'g} } -->
@@ -150,8 +150,7 @@ interactive abel_subg_normal 'H 'J 's :
 
 (*! @docoff *)
 let abelNormalSubgT t i p =
-   let j, k = Sequent.hyp_indices p i in
-      abel_subg_normal j k t p
+   abel_subg_normal (Sequent.get_pos_hyp_num p i) t p
 
 (*
  * -*-

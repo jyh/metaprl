@@ -130,18 +130,18 @@ let mk_squiggle_term = mk_dep0_dep0_term squiggle_opname
    are equal as types whenever they are correct types.
  * @end[doc]
 *)
-prim squiggleEquality {| intro []; eqcd |} 'H :
+prim squiggleEquality {| intro []; eqcd |} :
   [wf] sequent[squash] { 'H >- 't1 ~ 's1 } -->
   [wf] sequent[squash] { 'H >- 't2 ~ 's2 } -->
   sequent['ext] { 'H >- ('t1 ~ 's1) = ('t2 ~ 's2) in univ[i:l]} =
   it
 
-interactive squiggleFormation 'H ('t ~ 's) :
+interactive squiggleFormation ('t ~ 's) :
   [wf] sequent[squash] { 'H >- 't ~ 's } -->
   sequent['ext] { 'H >- univ[i:l]}
      (* = 't ~ 's *)
 
-interactive squiggleType {| intro [] |} 'H :
+interactive squiggleType {| intro [] |} :
   [wf] sequent[squash] { 'H >- 't ~ 's } -->
   sequent['ext] { 'H >- "type"{.'t ~ 's}}
 
@@ -153,12 +153,12 @@ interactive squiggleType {| intro [] |} 'H :
  * @end[doc]
  *)
 
-prim squiggle_memberEquality {| intro []; eqcd; squash |} 'H :
+prim squiggle_memberEquality {| intro []; eqcd; squash |} :
   [wf] sequent[squash] { 'H >- 't ~ 's } -->
   sequent['ext] { 'H >- it in ('t ~ 's)} =
   it
 
-prim squiggleElimination {|  elim [ThinOption thinT] |} 'H 'J :
+prim squiggleElimination {|  elim [ThinOption thinT] |} 'H :
    ('t : sequent['ext] { 'H; x: ('t ~ 's); 'J[it] >- 'C[it] }) -->
    sequent ['ext] { 'H; x: ('t ~ 's); 'J['x] >- 'C['x] } =
    't
@@ -171,13 +171,13 @@ prim squiggleElimination {|  elim [ThinOption thinT] |} 'H 'J :
  * @end[doc]
  *)
 
-prim squiggleSubstitution 'H ('t ~ 's) bind{x. 'A['x]} :
+prim squiggleSubstitution ('t ~ 's) bind{x. 'A['x]} :
   [equality] sequent[squash] { 'H >- 't ~ 's } -->
   [main] ('t : sequent['ext] { 'H >- 'A['s] }) -->
    sequent ['ext] { 'H >-  'A['t] } =
    't
 
-prim squiggleHypSubstitution 'H 'J ('t ~ 's) bind{x. 'A['x]}:
+prim squiggleHypSubstitution 'H ('t ~ 's) bind{x. 'A['x]}:
    [equality] sequent [squash] { 'H; x: 'A['t]; 'J['x] >- 't ~ 's } -->
    [main] ('t : sequent ['ext] { 'H; x: 'A['s]; 'J['x] >- 'C['x] }) -->
    sequent ['ext] { 'H; x: 'A['t]; 'J['x] >- 'C['x] } =
@@ -202,15 +202,15 @@ prim squiggleHypSubstitution 'H 'J ('t ~ 's) bind{x. 'A['x]}:
  *)
 
 
-prim squiggleRef {|  intro [] |} 'H :
+prim squiggleRef {|  intro [] |} :
    sequent ['ext] { 'H >- 't ~ 't } =
    it
 
-interactive squiggleSym 'H :
+interactive squiggleSym :
    sequent [squash] { 'H >- 's ~ 't } -->
    sequent ['ext] { 'H >- 't ~ 's }
 
-interactive squiggleTrans 'H 'r :
+interactive squiggleTrans 'r :
    sequent [squash] { 'H >- 't ~ 'r } -->
    sequent [squash] { 'H >- 'r ~ 's } -->
    sequent ['ext] { 'H >- 't ~ 's }
@@ -240,13 +240,14 @@ let sqSubstConclT t p =
             let x = get_opt_var_arg "z" p in
                mk_xbind_term x (var_subst (Sequent.concl p) a x)
    in
-      squiggleSubstitution (Sequent.hyp_count_addr p) t bind p
+      squiggleSubstitution t bind p
 
 (*
  * Hyp substitution requires a replacement.
  *)
 let sqSubstHypT i t p =
    let a, _ = dest_squiggle t in
+   let i = Sequent.get_pos_hyp_num p i in
    let bind =
       try
          let b = get_with_arg p in
@@ -259,8 +260,7 @@ let sqSubstHypT i t p =
             let z = get_opt_var_arg "z" p in
                mk_xbind_term z (var_subst (Sequent.nth_hyp p i) a z)
    in
-   let i, j = Sequent.hyp_indices p i in
-      squiggleHypSubstitution i j t bind p
+      squiggleHypSubstitution i t bind p
 
 (*
  * General substition.
@@ -271,5 +271,4 @@ let sqSubstT t i =
    else
       sqSubstHypT i t
 
-
-let sqSymT p = squiggleSym (Sequent.hyp_count_addr p) p
+let sqSymT = squiggleSym

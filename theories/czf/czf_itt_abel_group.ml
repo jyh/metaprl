@@ -113,7 +113,7 @@ dform abel_df : except_mode[src] :: abel{'g} =
  * argument is a label.
  * @end[doc]
  *)
-interactive abel_type {| intro [] |} 'H :
+interactive abel_type {| intro [] |} :
    sequent [squash] { 'H >- 'g IN label } -->
    sequent ['ext] { 'H >- "type"{abel{'g}} }
 
@@ -125,7 +125,7 @@ interactive abel_type {| intro [] |} 'H :
  * is a group, and @tt[op] is commutative.
  * @end[doc]
  *)
-interactive abel_intro {| intro[] |} 'H :
+interactive abel_intro {| intro[] |} :
    sequent [squash] { 'H >- 'g IN label } -->
    sequent ['ext] { 'H >- group{'g} } -->
    sequent ['ext] { 'H; a: set; b: set; x: mem{'a; car{'g}}; y: mem{'b; car{'g}} >- eq{op{'g; 'a; 'b}; op{'g; 'b; 'a}} } -->

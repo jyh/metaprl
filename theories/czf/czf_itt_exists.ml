@@ -70,26 +70,26 @@ let _ =
 (*
  * Implication is restricted.
  *)
-interactive dprod_fun3 {| intro [] |} 'H 'u 'v 'z :
+interactive dprod_fun3 {| intro [] |} 'u 'v 'z :
    ["wf"]   sequent [squash] { 'H; u: set >- "type"{'A['u]} } -->
    ["wf"]   sequent [squash] { 'H; u: set; z: 'A['u] >- "type"{'B['u; 'z]} } -->
    sequent ['ext] { 'H >- fun_prop{z. 'A['z]} } -->
    sequent ['ext] { 'H >- dfun_prop{z. 'A['z]; u, v. 'B['u; 'v]} } -->
    sequent ['ext] { 'H >- fun_prop{z. "prod"{'A['z]; w. 'B['z; 'w]}} }
 
-interactive dprod_res {| intro [] |} 'H :
+interactive dprod_res {| intro [] |} :
    sequent [squash] { 'H >- restricted{'A} } -->
    sequent [squash] { 'H; u: 'A >- restricted{'B['u]} } -->
    sequent ['ext] { 'H >- restricted{."prod"{'A; u. 'B['u]}} }
 
-interactive exists_fun {| intro [] |} 'H 'u 'v 'z :
+interactive exists_fun {| intro [] |} 'u 'v 'z :
    ["wf"]   sequent [squash] { 'H; u: set >- "type"{'A['u]} } -->
    ["wf"]   sequent [squash] { 'H; u: set; z: 'A['u] >- "type"{'B['u; 'z]} } -->
    sequent ['ext] { 'H >- fun_prop{z. 'A['z]} } -->
    sequent ['ext] { 'H >- dfun_prop{z. 'A['z]; u, v. 'B['u; 'v]} } -->
    sequent ['ext] { 'H >- fun_prop{z. "exists"{'A['z]; w. 'B['z; 'w]}} }
 
-interactive exists_res {| intro [] |} 'H :
+interactive exists_res {| intro [] |} :
    sequent [squash] { 'H >- restricted{'A} } -->
    sequent [squash] { 'H; u: 'A >- restricted{'B['u]} } -->
    sequent ['ext] { 'H >- restricted{."exists"{'A; u. 'B['u]}} }

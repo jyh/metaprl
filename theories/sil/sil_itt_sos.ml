@@ -175,7 +175,7 @@ let resource reduce += [
    << stateof{."val"{'v; 's}} >>, reduce_stateof
 ]
 
-interactive evals_identity {| intro [] |} 'H :
+interactive evals_identity {| intro [] |} :
    sequent ['ext] { 'H >- evalsto{'t1; 't1} }
 
 let rwevalT i p =
@@ -196,7 +196,7 @@ let rwevalT i p =
 (*
  * Value.
  *)
-interactive value_thm 'H :
+interactive value_thm :
    [main] sequent [squash] { 'H >- "value"{'e1; 's} } -->
    sequent ['ext] { 'H >- Perv!"rewrite"{eval{'e1; 's}; ."val"{progof{eval{'e1; .Sil_itt_state!empty}}; 's}} }
 
@@ -214,9 +214,7 @@ let rwvalueT s2 i p =
    let a = mk_eval_term e2 s2 in
    let b = mk_val_term (mk_progof_term (mk_eval_term e2 empty_term)) s2 in
    let t = mk_xrewrite_term a b in
-      (rewriteT t
-       thenAT ((fun p -> value_thm (Sequent.hyp_count_addr p) p)
-               thenT autoT)) p
+      (rewriteT t thenAT value_thm thenT autoT) p
 
 let rwvalueRevT s2 i p =
    let mseq = Sequent.msequent p in
@@ -232,10 +230,7 @@ let rwvalueRevT s2 i p =
    let b = mk_eval_term e2 s2 in
    let a = mk_val_term (mk_progof_term (mk_eval_term e2 empty_term)) s2 in
    let t = mk_xrewrite_term a b in
-      (rewriteT t
-       thenAT (rewriteSymT
-               thenT (fun p -> value_thm (Sequent.hyp_count_addr p) p)
-               thenT autoT)) p
+      (rewriteT t thenAT (rewriteSymT thenT value_thm thenT autoT)) p
 
 (*
  * Need eta-contraction.
@@ -245,19 +240,16 @@ prim_rw eta : prog{s. eval{'v; 's}} <--> 'v
 (*
  * Squashing.
  *)
-interactive squash_evalsto 'H :
+interactive squash_evalsto :
    sequent [squash] { 'H >- evalsto{'t1; 't2} } -->
    sequent ['ext] { 'H >- evalsto{'t1; 't2} }
 
-interactive squash_value 'H :
+interactive squash_value :
    sequent [squash] { 'H >- "value"{'e1; 's} } -->
    sequent ['ext] { 'H >- "value"{'e1; 's} }
 
-let squash_evalstoT p =
-   squash_evalsto (Sequent.hyp_count_addr p) p
-
-let squash_valueT p =
-   squash_value (Sequent.hyp_count_addr p) p
+let squash_evalstoT = squash_evalsto
+let squash_valueT = squash_value
 
 (************************************************************************
  * DEFINITIONS                                                          *
@@ -366,32 +358,32 @@ prim_rw unfold_apply : Sil_programs!apply{'e1; 'e2} <-->
  * NATURAL SEMANTICS                                                    *
  ************************************************************************)
 
-interactive exprof_value {| intro [] |} 'H :
+interactive exprof_value {| intro [] |} :
    sequent ['ext] { 'H >- "value"{exprof{'e}; 's} }
 
-interactive exprof_eval {| intro [] |} 'H :
+interactive exprof_eval {| intro [] |} :
    sequent ['ext] { 'H >- evalsto{eval{exprof{'e}; 's}; eval{exprof{'e}; 's}} }
 
 (*
  * Number values.
  *)
-interactive number_value 'H :
+interactive number_value :
    sequent ['ext] { 'H >- "value"{.Sil_programs!number[i:n]; 's} }
 
-interactive number_eval 'H :
+interactive number_eval :
    sequent ['ext] { 'H >- evalsto{eval{number[i:n]; 's}; eval{number[i:n]; 's}}}
 
-interactive add_eval 'H 's2 :
+interactive add_eval 's2 :
    [main] sequent [squash] { 'H >- evalsto{eval{'e1; 's1}; eval{number[i:n]; 's2}} } -->
    [main] sequent [squash] { 'H >- evalsto{eval{'e2; 's2}; eval{number[j:n]; 's3}} } -->
    sequent ['ext] { 'H >- evalsto{eval{add{'e1; 'e2}; 's1}; eval{meta_sum[i:n, j:n]; 's3}} }
 
-interactive sub_eval 'H 's2 :
+interactive sub_eval 's2 :
    [main] sequent [squash] { 'H >- evalsto{eval{'e1; 's1}; eval{number[i:n]; 's2}} } -->
    [main] sequent [squash] { 'H >- evalsto{eval{'e2; 's2}; eval{number[j:n]; 's3}} } -->
    sequent ['ext] { 'H >- evalsto{eval{sub{'e1; 'e2}; 's1}; eval{meta_sum[i:n, j:n]; 's3}} }
 
-interactive if_eval 'H (number[i:n]) 's2 (number[j:n]) 's3 :
+interactive if_eval (number[i:n]) 's2 (number[j:n]) 's3 :
    [main] sequent [squash] { 'H >- evalsto{eval{'e1; 's1}; eval{number[i:n]; 's2}} } -->
    [main] sequent [squash] { 'H >- evalsto{eval{'e2; 's2}; eval{number[j:n]; 's3}} } -->
    [main] sequent [squash] { 'H; p: Sil_sos!eq_int{number[i:n]; number[j:n]} >- evalsto{eval{'e3; 's3}; eval{'v3; 's4}} } -->
@@ -401,31 +393,31 @@ interactive if_eval 'H (number[i:n]) 's2 (number[j:n]) 's3 :
 (*
  * Union values.
  *)
-interactive inl_value 'H :
+interactive inl_value :
    [main] sequent [squash] { 'H >- "value"{'e1; 's} } -->
    sequent ['ext] { 'H >- "value"{.Sil_programs!inl{'e1}; 's} }
 
-interactive inr_value 'H :
+interactive inr_value :
    [main] sequent [squash] { 'H >- "value"{'e1; 's} } -->
    sequent ['ext] { 'H >- "value"{.Sil_programs!inr{'e1}; 's} }
 
-interactive inl_eval 'H :
+interactive inl_eval :
    [main] sequent [squash] { 'H >- evalsto{eval{'e1; 's1}; eval{'v1; 's2}} } -->
    [main] sequent [squash] { 'H >- "value"{'v1; 's2} } -->
    sequent ['ext] { 'H >- evalsto{eval{inl{'e1}; 's1}; eval{inl{'v1}; 's2}} }
 
-interactive inr_eval 'H :
+interactive inr_eval :
    [main] sequent [squash] { 'H >- evalsto{eval{'e1; 's1}; eval{'v1; 's2}} } -->
    [main] sequent [squash] { 'H >- "value"{'v1; 's2} } -->
    sequent ['ext] { 'H >- evalsto{eval{inr{'e1}; 's1}; eval{inr{'v1}; 's2}} }
 
-interactive decide_left_eval 'H 'v1 's2 :
+interactive decide_left_eval 'v1 's2 :
    [main] sequent [squash] { 'H >- evalsto{eval{'e1; 's1}; eval{inl{'v1}; 's2}} } -->
    [main] sequent [squash] { 'H >- evalsto{eval{'e2['v1]; 's2}; eval{'v3; 's3}} } -->
    [main] sequent [squash] { 'H >- "value"{'v1; 's2} } -->
    sequent ['ext] { 'H >- evalsto{eval{decide{'e1; x. 'e2['x]; y. 'e3['y]}; 's1}; eval{'v3; 's3}} }
 
-interactive decide_right_eval 'H 'v1 's2 :
+interactive decide_right_eval 'v1 's2 :
    [main] sequent [squash] { 'H >- evalsto{eval{'e1; 's1}; eval{inr{'v1}; 's2}} } -->
    [main] sequent [squash] { 'H >- evalsto{eval{'e3['v1]; 's2}; eval{'v3; 's3}} } -->
    [main] sequent [squash] { 'H >- "value"{'v1; 's2} } -->
@@ -434,19 +426,19 @@ interactive decide_right_eval 'H 'v1 's2 :
 (*
  * Pairs.
  *)
-interactive pair_value 'H :
+interactive pair_value :
    [main] sequent [squash] { 'H >- "value"{'e1; 's} } -->
    [main] sequent [squash] { 'H >- "value"{'e2; 's} } -->
    sequent ['ext] { 'H >- "value"{pair{'e1; 'e2}; 's} }
 
-interactive pair_eval 'H 's2 :
+interactive pair_eval 's2 :
    [wf] sequent [squash] { 'H >- "value"{'v1; 's2} } -->
    [wf] sequent [squash] { 'H >- "value"{'v2; 's3} } -->
    [main] sequent [squash] { 'H >- evalsto{eval{'e1; 's1}; eval{'v1; 's2}} } -->
    [main] sequent [squash] { 'H >- evalsto{eval{'e2; 's2}; eval{'v2; 's3}} } -->
    sequent ['ext] { 'H >- evalsto{eval{pair{'e1; 'e2}; 's1}; eval{pair{'v1; 'v2}; 's3}} }
 
-interactive spread_eval 'H 'v1 'v2 's2 :
+interactive spread_eval 'v1 'v2 's2 :
    [wf] sequent [squash] { 'H >- "value"{'v1; 's2} } -->
    [wf] sequent [squash] { 'H >- "value"{'v2; 's2} } -->
    [wf] sequent [squash] { 'H >- "value"{'v3; 's3} } -->
@@ -457,42 +449,42 @@ interactive spread_eval 'H 'v1 'v2 's2 :
 (*
  * Reference cells.
  *)
-interactive pointer_value 'H :
+interactive pointer_value :
    sequent ['ext] { 'H >- "value"{pointer{'l}; 's} }
 
-interactive ref_eval 'H 'v1 's2 :
+interactive ref_eval 'v1 's2 :
    [wf] sequent [squash] { 'H >- "value"{'v1; 's2} } -->
    [main] sequent [squash] { 'H >- evalsto{eval{'e1; 's1}; eval{'v1; 's2}} } -->
    sequent ['ext] { 'H >- evalsto{eval{ref{'e1}; 's1}; .Sil_state!alloc{'s2; 'v1; s3, l. eval{'l; 's3}}} }
 
-interactive deref_eval 'H 'v1 :
+interactive deref_eval 'v1 :
    [wf] sequent [squash] { 'H >- "value"{'v1; 's2} } -->
    [main] sequent [squash] { 'H >- evalsto{eval{'e1; 's1}; eval{'v1; 's2}} } -->
    sequent ['ext] { 'H >- evalsto{eval{deref{'e1}; 's1}; eval{.Sil_state!fetch{'s2; 'v1}; 's2}} }
 
-interactive assign_eval 'H 's2 :
+interactive assign_eval 's2 :
    [wf] sequent [squash] { 'H >- "value"{'v1; 's2} } -->
    [wf] sequent [squash] { 'H >- "value"{'v2; 's3} } -->
    [main] sequent [squash] { 'H >- evalsto{eval{'e1; 's1}; eval{'v1; 's2}} } -->
    [main] sequent [squash] { 'H >- evalsto{eval{'e2; 's2}; eval{'v2; 's3}} } -->
    sequent ['ext] { 'H >- evalsto{eval{assign{'e1; 'e2}; 's1}; eval{.dot; .Sil_state!store{'s3; 'v1; 'v2}}} }
 
-interactive dot_value 'H :
+interactive dot_value :
    sequent ['ext] { 'H >- "value"{dot; 's} }
 
-interactive dot_eval 'H :
+interactive dot_eval :
    sequent ['ext] { 'H >- evalsto{eval{dot; 's1}; eval{dot; 's1}} }
 
 (*
  * Functions.
  *)
-interactive lambda_value 'H :
+interactive lambda_value :
    sequent ['ext] { 'H >- "value"{lambda{v. 'e1['v]}; 's} }
 
-interactive lambda_eval 'H :
+interactive lambda_eval :
    sequent ['ext] { 'H >- evalsto{eval{lambda{v. 'e1['v]}; 's1}; eval{lambda{v. 'e1['v]}; 's1}} }
 
-interactive apply_eval 'H 'v2 's2 (lambda{v. 'e3['v]}) 's3 :
+interactive apply_eval 'v2 's2 (lambda{v. 'e3['v]}) 's3 :
    [wf] sequent [squash] { 'H >- "value"{'v2; 's2} } -->
    [wf] sequent [squash] { 'H >- "value"{'v3; 's4} } -->
    [main] sequent [squash] { 'H >- evalsto{eval{'e2; 's1}; eval{'v2; 's2}} } -->

@@ -251,20 +251,20 @@ dform set_ind_df : parens :: "prec"[prec_tree_ind] :: set_ind{'z; a, f, g. 'body
  * default reasoning.
  * @end[doc]
  *)
-interactive set_type {| intro [] |} 'H :
+interactive set_type {| intro [] |} :
    sequent ['ext] { 'H >- "type"{set} }
 
 (*
  * Equality from sethood.
  *)
-interactive equal_set 'H :
+interactive equal_set :
    sequent ['ext] { 'H >- isset{'s} } -->
    sequent ['ext] { 'H >- 's = 's in set }
 
 (*
  * By assumption.
  *)
-interactive isset_assum 'H 'J :
+interactive isset_assum 'H :
    sequent ['ext] { 'H; x: set; 'J['x] >- isset{'x} }
 
 (*!
@@ -274,12 +274,12 @@ interactive isset_assum 'H 'J :
  * $a$ produces a set for any argument $x @in T$.
  * @end[doc]
  *)
-interactive isset_collect {| intro [] |} 'H 'y :
+interactive isset_collect {| intro [] |} 'y :
    sequent [squash] { 'H >- 'T = 'T in univ[1:l] } -->
    sequent [squash] { 'H; y: 'T >- isset{'a['y]} } -->
    sequent ['ext] { 'H >- isset{collect{'T; x. 'a['x]}} }
 
-interactive isset_collect2 {| intro [] |} 'H 'y :
+interactive isset_collect2 {| intro [] |} 'y :
    sequent [squash] { 'H >- 'T = 'T in univ[1:l] } -->
    sequent [squash] { 'H; y: 'T >- isset{'a['y]} } -->
    sequent ['ext] { 'H >- collect{'T; x. 'a['x]} IN set }
@@ -288,7 +288,7 @@ interactive isset_collect2 {| intro [] |} 'H 'y :
  * @docoff
  * This is how a set is constructed.
  *)
-interactive isset_apply {| intro [] |} 'H :
+interactive isset_apply {| intro [] |} :
    sequent [squash] { 'H >- ('f 'a) IN set } -->
    sequent ['ext] { 'H >- isset{.'f 'a} }
 
@@ -305,7 +305,7 @@ interactive isset_apply {| intro [] |} 'H :
  * (which is true for all $W$-types).
  * @end[doc]
  *)
-interactive set_elim {| elim [ThinOption thinT] |} 'H 'J 'a 'T 'f 'w 'z :
+interactive set_elim {| elim [ThinOption thinT] |} 'H 'a 'T 'f 'w 'z :
    sequent ['ext] { 'H;
                     a: set;
                     'J['a];
@@ -322,7 +322,7 @@ interactive set_elim {| elim [ThinOption thinT] |} 'H 'J 'a 'T 'f 'w 'z :
  * The next two rules allow any set argument to be replaced with
  * an @tt{collect} argument.  These rules are never used.
  *)
-interactive set_split_hyp 'H 'J 's (bind{v. 'A['v]}) 'T 'f 'z :
+interactive set_split_hyp 'H 's (bind{v. 'A['v]}) 'T 'f 'z :
    sequent [squash] { 'H; x: 'A['s]; 'J['x] >- isset{'s} } -->
    sequent [squash] { 'H; x: 'A['s]; 'J['x]; z: set >- "type"{'A['z]} } -->
    sequent ['ext] { 'H;
@@ -334,7 +334,7 @@ interactive set_split_hyp 'H 'J 's (bind{v. 'A['v]}) 'T 'f 'z :
                     >- 'C['z] } -->
    sequent ['ext] { 'H; x: 'A['s]; 'J['x] >- 'C['x] }
 
-interactive set_split_concl 'H 's (bind{v. 'C['v]}) 'T 'f 'z :
+interactive set_split_concl 's (bind{v. 'C['v]}) 'T 'f 'z :
    sequent [squash] { 'H >- isset{'s} } -->
    sequent [squash] { 'H; z: set >- "type"{'C['z]} } -->
    sequent ['ext] { 'H; T: univ[1:l]; f: 'T -> set >- 'C[collect{'T; y. 'f 'y}] } -->
@@ -350,7 +350,7 @@ interactive set_split_concl 'H 's (bind{v. 'C['v]}) 'T 'f 'z :
  * $g @in x@colon @univ{1} @rightarrow x @rightarrow T$.
  * @end[doc]
  *)
-interactive set_ind_equality2 {| intro [] |} 'H :
+interactive set_ind_equality2 {| intro [] |} :
    ["wf"]   sequent [squash] { 'H >- 'z1 = 'z2 in set } -->
    ["main"] sequent [squash] { 'H; a1: univ[1:l]; f1: 'a1 -> set; g1: x: 'a1 -> 'T >-
       'body1['a1; 'f1; 'g1] = 'body2['a1; 'f1; 'g1] in 'T } -->
@@ -395,15 +395,13 @@ let resource intro += (isset_type_term, wrap_intro d_isset_typeT)
 (*
  * Equal sets.
  *)
-let eqSetT p =
-   equal_set (hyp_count_addr p) p
+let eqSetT = equal_set
 
 (*
  * Assumption.
  *)
 let setAssumT i p =
-   let i, j = hyp_indices p i in
-      isset_assum i j p
+   isset_assum (get_pos_hyp_num p i) p
 
 (*
  * Split a set in a hyp or concl.
@@ -413,7 +411,7 @@ let splitT t i p =
       if i = 0 then
          let goal = var_subst (Sequent.concl p) t v_z in
          let bind = mk_xbind_term v_z goal in
-            (set_split_concl (hyp_count_addr p) t bind v_T v_f v_z
+            (set_split_concl t bind v_T v_f v_z
              thenLT [addHiddenLabelT "wf";
                      addHiddenLabelT "wf";
                      addHiddenLabelT "main"]) p
@@ -421,8 +419,7 @@ let splitT t i p =
          let hyp = nth_hyp p i in
          let hyp = var_subst hyp t v_z in
          let bind = mk_xbind_term v_z hyp in
-         let j, k = hyp_indices p i in
-            (set_split_hyp j k t bind v_T v_f v_z
+            (set_split_hyp (get_pos_hyp_num p i) t bind v_T v_f v_z
              thenLT [addHiddenLabelT "wf";
                      addHiddenLabelT "wf";
                      addHiddenLabelT "main"]) p

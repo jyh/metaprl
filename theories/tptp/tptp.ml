@@ -155,72 +155,72 @@ dform apply5_df : mode[prl] :: parens :: "prec"[prec_apply] :: apply{'f; 'x1; 'x
 (*
  * t is an atom.
  *)
-interactive t_atomic {| intro [] |} 'H :
+interactive t_atomic {| intro [] |} :
    sequent ['ext] { 'H >- atomic{t} }
 
 (*
  * Intro and elimination forms.
  *)
-interactive tptp2_all_type {| intro [] |} 'H 'x :
+interactive tptp2_all_type {| intro [] |} 'x :
    sequent [squash] { 'H; x: atom0 >- "type"{'b['x]} } -->
    sequent ['ext] { 'H >- "type"{."all"{v. 'b['v]}} }
 
-interactive tptp2_all_intro {| intro [] |} 'H 'v :
+interactive tptp2_all_intro {| intro [] |} 'v :
    sequent ['ext] { 'H; v: atom0 >- 'b['v] } -->
    sequent ['ext] { 'H >- "all"{x. 'b['x]} }
 
-interactive tptp2_all_elim {| elim [] |} 'H 'J 'z 'y :
+interactive tptp2_all_elim {| elim [] |} 'H 'z 'y :
    sequent [squash] { 'H; x: "all"{v. 'b['v]}; 'J['x] >- atomic{'z} } -->
    sequent ['ext] { 'H; x: "all"{v. 'b['v]}; 'J['x]; y: 'b['z] >- 'C['x] } -->
    sequent ['ext] { 'H; x: "all"{v. 'b['v]}; 'J['x] >- 'C['x] }
 
-interactive tptp2_exists_type {| intro [] |} 'H 'x :
+interactive tptp2_exists_type {| intro [] |} 'x :
    sequent [squash] { 'H; x: atom0 >- "type"{'b['x]} } -->
    sequent ['ext] { 'H >- "type"{."exists"{v. 'b['v]}} }
 
-interactive tptp2_exists_intro {| intro [] |} 'H 'x 'z :
+interactive tptp2_exists_intro {| intro [] |} 'x 'z :
    sequent [squash] { 'H >- atomic{'z} } -->
    sequent ['ext] { 'H >- 'b['z] } -->
    sequent [squash] { 'H; x: atom0 >- "type"{'b['x]} } -->
    sequent ['ext] { 'H >- "exists"{v. 'b['v]} }
 
-interactive tptp2_exists_elim {| elim [] |} 'H 'J 'y 'z :
+interactive tptp2_exists_elim {| elim [] |} 'H 'y 'z :
    sequent ['ext] { 'H; y: atom0; z: 'b['y]; 'J['y, 'z] >- 'C['y, 'z] } -->
    sequent ['ext] { 'H; x: "exists"{v. 'b['v]}; 'J['x] >- 'C['x] }
 
 (*
  * Simplified rule for atomicity.
  *)
-interactive tptp_atomic_type {| intro [] |} 'H :
+interactive tptp_atomic_type {| intro [] |} :
    sequent [squash] { 'H >- atomic{'x} } -->
    sequent ['ext] { 'H >- "type"{atomic{'x}} }
 
-interactive tptp2_atomic_intro0 'H 'J :
+interactive tptp2_atomic_intro0 'H :
    sequent ['ext] { 'H; x: atom0; 'J['x] >- atomic{'x} }
 
-interactive tptp2_atomic_intro1 'H 'J :
+interactive tptp2_atomic_intro1 'H :
    sequent [squash] { 'H; f: atom1; 'J['f] >- atomic{'x1} } -->
    sequent ['ext] { 'H; f: atom1; 'J['f] >- atomic{.'f 'x1} }
 
-interactive tptp2_atomic_intro2 'H 'J :
+interactive tptp2_atomic_intro2 'H :
    sequent [squash] { 'H; f: atom2; 'J['f] >- atomic{'x1} } -->
    sequent [squash] { 'H; f: atom2; 'J['f] >- atomic{'x2} } -->
    sequent ['ext] { 'H; f: atom2; 'J['f] >- atomic{.apply{'f; 'x1; 'x2}} }
 
-interactive tptp2_atomic_intro3 'H 'J :
+interactive tptp2_atomic_intro3 'H :
    sequent [squash] { 'H; f: atom3; 'J['f] >- atomic{'x1} } -->
    sequent [squash] { 'H; f: atom3; 'J['f] >- atomic{'x2} } -->
    sequent [squash] { 'H; f: atom3; 'J['f] >- atomic{'x3} } -->
    sequent ['ext] { 'H; f: atom3; 'J['f] >- atomic{.apply{'f; 'x1; 'x2; 'x3}} }
 
-interactive tptp2_atomic_intro4 'H 'J :
+interactive tptp2_atomic_intro4 'H :
    sequent [squash] { 'H; f: atom4; 'J['f] >- atomic{'x1} } -->
    sequent [squash] { 'H; f: atom4; 'J['f] >- atomic{'x2} } -->
    sequent [squash] { 'H; f: atom4; 'J['f] >- atomic{'x3} } -->
    sequent [squash] { 'H; f: atom4; 'J['f] >- atomic{'x4} } -->
    sequent ['ext] { 'H; f: atom4; 'J['f] >- atomic{.apply{'f; 'x1; 'x2; 'x3; 'x4}} }
 
-interactive tptp2_atomic_intro5 'H 'J :
+interactive tptp2_atomic_intro5 'H :
    sequent [squash] { 'H; f: atom5; 'J['f] >- atomic{'x1} } -->
    sequent [squash] { 'H; f: atom5; 'J['f] >- atomic{'x2} } -->
    sequent [squash] { 'H; f: atom5; 'J['f] >- atomic{'x3} } -->
@@ -231,32 +231,32 @@ interactive tptp2_atomic_intro5 'H 'J :
 (*
  * Simplified rules for typing.
  *)
-interactive tptp2_type_intro0 'H 'J :
+interactive tptp2_type_intro0 'H :
    sequent ['ext] { 'H; x: prop0; 'J['x] >- "type"{'x} }
 
-interactive tptp2_type_intro1 'H 'J :
+interactive tptp2_type_intro1 'H :
    sequent [squash] { 'H; f: prop1; 'J['f] >- atomic{'x1} } -->
    sequent ['ext] { 'H; f: prop1; 'J['f] >- "type"{.'f 'x1} }
 
-interactive tptp2_type_intro2 'H 'J :
+interactive tptp2_type_intro2 'H :
    sequent [squash] { 'H; f: prop2; 'J['f] >- atomic{'x1} } -->
    sequent [squash] { 'H; f: prop2; 'J['f] >- atomic{'x2} } -->
    sequent ['ext] { 'H; f: prop2; 'J['f] >- "type"{.apply{'f; 'x1; 'x2}} }
 
-interactive tptp2_type_intro3 'H 'J :
+interactive tptp2_type_intro3 'H :
    sequent [squash] { 'H; f: prop3; 'J['f] >- atomic{'x1} } -->
    sequent [squash] { 'H; f: prop3; 'J['f] >- atomic{'x2} } -->
    sequent [squash] { 'H; f: prop3; 'J['f] >- atomic{'x3} } -->
    sequent ['ext] { 'H; f: prop3; 'J['f] >- "type"{.apply{'f; 'x1; 'x2; 'x3}} }
 
-interactive tptp2_type_intro4 'H 'J :
+interactive tptp2_type_intro4 'H :
    sequent [squash] { 'H; f: prop4; 'J['f] >- atomic{'x1} } -->
    sequent [squash] { 'H; f: prop4; 'J['f] >- atomic{'x2} } -->
    sequent [squash] { 'H; f: prop4; 'J['f] >- atomic{'x3} } -->
    sequent [squash] { 'H; f: prop4; 'J['f] >- atomic{'x4} } -->
    sequent ['ext] { 'H; f: prop4; 'J['f] >- "type"{.apply{'f; 'x1; 'x2; 'x3; 'x4}} }
 
-interactive tptp2_type_intro5 'H 'J :
+interactive tptp2_type_intro5 'H :
    sequent [squash] { 'H; f: prop5; 'J['f] >- atomic{'x1} } -->
    sequent [squash] { 'H; f: prop5; 'J['f] >- atomic{'x2} } -->
    sequent [squash] { 'H; f: prop5; 'J['f] >- atomic{'x3} } -->
@@ -271,9 +271,6 @@ interactive tptp2_type_intro5 'H 'J :
 let t_term = << t >>
 let t_opname = opname_of_term t_term
 let is_t_term = is_no_subterms_term t_opname
-
-let t_atomicT p =
-   t_atomic (Sequent.hyp_count_addr p) p
 
 (*
  * Applications.
@@ -412,9 +409,8 @@ let atomic_intro_rules =
 
 let atomicT i p =
    let arity = arity_of_apply (dest_atomic (Sequent.concl p)) in
-   let j, k = Sequent.hyp_indices p i in
       if arity < Array.length atomic_intro_rules then
-         (atomic_intro_rules.(arity) j k
+         (atomic_intro_rules.(arity) i
           thenT addHiddenLabelT "wf") p
       else
          raise (RefineError ("atomicT", StringIntError ("no rule for arity", arity)))
@@ -435,9 +431,8 @@ let type_intro_rules =
 
 let typeT i p =
    let arity = arity_of_apply (dest_type_term (Sequent.concl p)) in
-   let j, k = Sequent.hyp_indices p i in
       if arity < Array.length type_intro_rules then
-         (type_intro_rules.(arity) j k
+         (type_intro_rules.(arity) i
           thenT addHiddenLabelT "wf") p
       else
          raise (RefineError ("typeT", StringIntError ("no rule for arity", arity)))

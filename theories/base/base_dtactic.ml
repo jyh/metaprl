@@ -446,7 +446,7 @@ let process_intro_resource_annotation name context_args var_args term_args _ sta
    in
    let tac =
       match context_args with
-         [|_|] ->
+         [||] ->
             let check_auto =
                if List.mem AutoMustComplete options then
                   let exn = RefineError("intro_annotation " ^ name, StringError("not appropriate in autoT")) in
@@ -462,8 +462,7 @@ let process_intro_resource_annotation name context_args var_args term_args _ sta
                (fun p ->
                   check_auto p;
                   let vars = Var.maybe_new_vars_array p var_args in
-                  let addr = Sequent.hyp_count_addr p in
-                     Tactic_type.Tactic.tactic_of_rule pre_tactic ([| addr |], vars) (term_args p) p)
+                     Tactic_type.Tactic.tactic_of_rule pre_tactic ([||], vars) (term_args p) p)
        | _ ->
             raise (Invalid_argument (sprintf "Base_dtactic.intro: %s: not an introduction rule" name))
    in
@@ -554,13 +553,11 @@ let process_elim_resource_annotation name context_args var_args term_args _ stat
    in
    let tac =
       match context_args, thinT with
-         [| _; _ |], None ->
+         [| _ |], None ->
             (fun i p ->
-                  let vars = new_vars i p in
-                  let j, k = Sequent.hyp_indices p i in
-                     Tactic_type.Tactic.tactic_of_rule pre_tactic ([| j; k |], new_vars i p) (term_args i p) p)
+               Tactic_type.Tactic.tactic_of_rule pre_tactic ([| i |], new_vars i p) (term_args i p) p)
 
-       | [| _; _ |], Some thinT ->
+       | [| _ |], Some thinT ->
             let rec find_thin_num_aux hyps len i =
                if i = len then
                   raise (Invalid_argument (sprintf "Base_dtactic.improve_elim: %s: can not find what to thin in one of the subgoals" name));
@@ -585,15 +582,12 @@ let process_elim_resource_annotation name context_args var_args term_args _ stat
             in
             let thin_incr = (check_thin_nums thin_nums) - hnum in
             (fun i p ->
-                  let i = Sequent.get_pos_hyp_num p i in
-                  let vars = new_vars i p in
-                  let j, k = Sequent.hyp_indices p i in
-                  let tac = Tactic_type.Tactic.tactic_of_rule pre_tactic ([| j; k |], new_vars i p) (term_args i p)
-                  in 
-                     if get_thinning_arg p then
-                        (tac thenT tryT (thinT (i + thin_incr))) p
-                     else
-                        tac p)
+               let tac = Tactic_type.Tactic.tactic_of_rule pre_tactic ([| i |], new_vars i p) (term_args i p)
+               in 
+                  if get_thinning_arg p then
+                     (tac thenT tryT (thinT (i + thin_incr))) p
+                  else
+                     tac p)
        | _ ->
             raise (Invalid_argument (sprintf "Base_dtactic: %s: not an elimination rule" name))
    in
@@ -635,7 +629,7 @@ let dT i p =
    if i = 0 then
       Sequent.get_resource_arg p get_intro_resource p
    else
-      Sequent.get_resource_arg p get_elim_resource i p
+      Sequent.get_resource_arg p get_elim_resource (Sequent.get_pos_hyp_num p i) p
 
 let rec dForT i =
    if i <= 0 then

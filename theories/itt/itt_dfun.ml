@@ -115,7 +115,7 @@ prim_rw unfold_dfun : (x: 'A -> 'B['x]) <--> ({ f | x: 'A -> 'B['x] })
  * type is trivially well-founded, since it has no elements.
  * @end[doc]
  *)
-interactive void_well_founded {| intro [] |} 'H :
+interactive void_well_founded {| intro [] |} :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    sequent ['ext] { 'H >- well_founded{'A; a1, a2. void} }
 
@@ -127,7 +127,7 @@ interactive void_well_founded {| intro [] |} 'H :
  * equality of the very-dependent type.
  * @end[doc]
  *)
-interactive functionEquality {| intro []; eqcd |} 'H 'x :
+interactive functionEquality {| intro []; eqcd |} 'x :
    [wf] sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
    [wf] sequent [squash] { 'H; x: 'A1 >- 'B1['x] = 'B2['x] in univ[i:l] } -->
    sequent ['ext] { 'H >- (a1:'A1 -> 'B1['a1]) = (a2:'A2 -> 'B2['a2]) in univ[i:l] }
@@ -135,7 +135,7 @@ interactive functionEquality {| intro []; eqcd |} 'H 'x :
 (*
  * Typehood.
  *)
-interactive functionType {| intro [] |} 'H 'x :
+interactive functionType {| intro [] |} 'x :
    [wf] sequent [squash] { 'H >- "type"{'A1} } -->
    [wf] sequent [squash] { 'H; x: 'A1 >- "type"{'B1['x]} } -->
    sequent ['ext] { 'H >- "type"{. a1:'A1 -> 'B1['a1] } }
@@ -150,7 +150,7 @@ interactive functionType {| intro [] |} 'H 'x :
  * and $B[a]$ is true for any $a @in A$.
  * @end[doc]
  *)
-interactive lambdaFormation {| intro [] |} 'H 'z :
+interactive lambdaFormation {| intro [] |} 'z :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [main] ('b['z] : sequent ['ext] { 'H; z: 'A >- 'B['z] }) -->
    sequent ['ext] { 'H >- a:'A -> 'B['a] }
@@ -162,7 +162,7 @@ interactive lambdaFormation {| intro [] |} 'H 'z :
  * The dependent function space contains the @hrefterm[lambda] functions.
  * @end[doc]
  *)
-interactive lambdaEquality {| intro [] |} 'H 'x :
+interactive lambdaEquality {| intro [] |} 'x :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H; x: 'A >- 'b1['x] = 'b2['x] in 'B['x] } -->
    sequent ['ext] { 'H >- lambda{a1. 'b1['a1]} = lambda{a2. 'b2['a2]} in a:'A -> 'B['a] }
@@ -176,7 +176,7 @@ interactive lambdaEquality {| intro [] |} 'H 'x :
  * derived from the @hrefrule[rfunctionExtensionality] rule.
  * @end[doc]
  *)
-interactive functionExtensionality 'H (y:'C -> 'D['y]) (z:'E -> 'F['z]) 'u :
+interactive functionExtensionality (y:'C -> 'D['y]) (z:'E -> 'F['z]) 'u :
    [main] sequent [squash] { 'H; u: 'A >- ('f 'u) = ('g 'u) in 'B['u] } -->
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H >- 'f in y:'C -> 'D['y] } -->
@@ -192,7 +192,7 @@ interactive functionExtensionality 'H (y:'C -> 'D['y]) (z:'E -> 'F['z]) 'u :
  * obtain a proof of $B[a]$.
  * @end[doc]
  *)
-interactive functionElimination {| elim [] |} 'H 'J 'f 'a 'y 'v :
+interactive functionElimination {| elim [] |} 'H 'f 'a 'y 'v :
    [wf] sequent [squash] { 'H; f: x:'A -> 'B['x]; 'J['f] >- 'a in 'A } -->
    ('t['f; 'y; 'v] : sequent ['ext] { 'H; f: x:'A -> 'B['x]; 'J['f]; y: 'B['a]; v: 'y = ('f 'a) in 'B['a] >- 'T['f] }) -->
    sequent ['ext] { 'H; f: x:'A -> 'B['x]; 'J['f] >- 'T['f] }
@@ -205,13 +205,10 @@ interactive functionElimination {| elim [] |} 'H 'J 'f 'a 'y 'v :
  * equal if their functions and arguments are equal.
  * @end[doc]
  *)
-interactive applyEquality {| intro[AutoMustComplete]; eqcd |} 'H (x:'A -> 'B['x]) :
+interactive applyEquality {| intro[AutoMustComplete]; eqcd |} (x:'A -> 'B['x]) :
    sequent [squash] { 'H >- 'f1 = 'f2 in x:'A -> 'B['x] } -->
    sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
    sequent ['ext] { 'H >- ('f1 'a1) = ('f2 'a2) in 'B['a1] }
-
-let applyEquality' t p =
-   applyEquality (Sequent.hyp_count_addr p) t p
 
 (*!
  * @begin[doc]
@@ -223,7 +220,7 @@ let applyEquality' t p =
  *
  * @end[doc]
  *)
-interactive functionSubtype {| intro [] |} 'H 'a :
+interactive functionSubtype {| intro [] |} 'a :
    ["subtype"] sequent [squash] { 'H >- 'A2 subtype 'A1 } -->
    ["subtype"] sequent [squash] { 'H; a: 'A1 >- 'B1['a] subtype 'B2['a] } -->
    sequent ['prop] { 'H >- a1:'A1 -> 'B1['a1]  subtype  a2:'A2 -> 'B2['a2] }
@@ -236,7 +233,7 @@ interactive functionSubtype {| intro [] |} 'H 'a :
  *
  * H; x: a1:A1 -> B1 <= a2:A2 -> B2; y: A2 <= A1; z: a:A2 -> B2[a] <= B1[a]; J[x] >- T[x]
  *)
-interactive function_subtypeElimination {| elim [] |} 'H 'J 'x 'y 'z 'a :
+interactive function_subtypeElimination {| elim [] |} 'H 'x 'y 'z 'a :
    ('t['x; 'y; 'z] : sequent ['ext] { 'H;
              x: \subtype{(a1:'A1 -> 'B1['a1]); (a2:'A2 -> 'B2['a2])};
              'J['x];
@@ -252,7 +249,7 @@ interactive function_subtypeElimination {| elim [] |} 'H 'J 'x 'y 'z 'a :
  * by function_equalityElimination
  *
  * H; x: a1:A1 -> B1 = a2:A2 -> B2 in Ui; y: A1 = A2 in Ui; z: a:A1 -> B1[a] = B2[a] in Ui; J[x] >- T[x]
-interactive function_equalityElimination {| elim [ThinOption thinT] |} 'H 'J 'x 'y 'z 'a :
+interactive function_equalityElimination {| elim [ThinOption thinT] |} 'H 'x 'y 'z 'a :
    ('t['x; 'y; 'z] : sequent { 'H;
              x: (a1:'A1 -> 'B1['a1]) = (a2:'A2 -> 'B2['a2]) in univ[i:l];
              'J['x];
@@ -270,7 +267,7 @@ interactive function_equalityElimination {| elim [ThinOption thinT] |} 'H 'J 'x 
  * H >- A = A in Ui
  * H, a: A >- Ui ext B
  *)
-interactive functionFormation 'H 'a 'A :
+interactive functionFormation 'a 'A :
    [wf] sequent [squash] { 'H >- 'A in univ[i:l] } -->
    ('B['a] : sequent ['ext] { 'H; a: 'A >- univ[i:l] }) -->
    sequent ['ext] { 'H >- univ[i:l] }
@@ -286,7 +283,7 @@ let dfun_extensionalityT t1 t2 p =
    let t, _, _ = dest_equal (Sequent.concl p) in
    let v, _, _ = dest_dfun t in
    let v = maybe_new_vars1 p v in
-      functionExtensionality (Sequent.hyp_count_addr p) t1 t2 v p
+      functionExtensionality t1 t2 v p
 
 (************************************************************************
  * TYPE INFERENCE                                                       *
@@ -303,7 +300,7 @@ let resource typeinf += (dfun_term, infer_univ_dep0_dep1 dest_dfun)
  *)
 let dfun_subtypeT p =
    let a = get_opt_var_arg "x" p in
-      functionSubtype (Sequent.hyp_count_addr p) a p
+      functionSubtype a p
 
 let resource sub +=
    (DSubtype ([<< a1:'A1 -> 'B1['a1] >>, << a2:'A2 -> 'B2['a2] >>;

@@ -1507,7 +1507,7 @@ P	p1017	Var x_3
 O	o1017	var p1017
 T	t1017	o1017
 B	b1017	t1017
-P	p1045	String "exchange 2 2 4 3 thenT autoT"
+P	p1045	String "exchange 2 2 4 thenT autoT"
 O	o1045	ext_rule p1045
 NSummary!ext_goal	ext_goal	ext_goal Summary
 O	o1051	ext_goal

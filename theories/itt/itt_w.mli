@@ -80,7 +80,7 @@ prec prec_tree_ind
  * H >- A = A in Ui
  * H, x:A >- Ui ext B
  *)
-rule wFormation 'H 'A 'x :
+rule wFormation 'A 'x :
    sequent [squash] { 'H >- 'A = 'A in univ[i:l] } -->
    sequent ['ext] { 'H; x: 'A >- univ[i:l] } -->
    sequent ['ext] { 'H >- univ[i:l] }
@@ -91,7 +91,7 @@ rule wFormation 'H 'A 'x :
  * H >- A1 = A2 in Ui
  * H, y:A1 >- B1[y] = B2[y] in Ui
  *)
-rule wEquality 'H 'y :
+rule wEquality 'y :
    sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
    sequent [squash] { 'H; y: 'A1 >- 'B1['y] = 'B2['y] in univ[i:l] } -->
    sequent ['ext] { 'H >- w{'A1; x1. 'B1['x1]} = w{'A2; x2. 'B2['x2]} in univ[i:l] }
@@ -99,7 +99,7 @@ rule wEquality 'H 'y :
 (*
  * Typehood.
  *)
-rule wType 'H 'x :
+rule wType 'x :
    sequent [squash] { 'H >- "type"{'A1} } -->
    sequent [squash] { 'H; x: 'A1 >- "type"{'A2['x]} } -->
    sequent ['ext] { 'H >- "type"{.w{'A1; y.'A2['y]}} }
@@ -111,7 +111,7 @@ rule wType 'H 'x :
  * H >- B[a] -> W(x:A; B[x]) ext f
  * H, y:A >- B[y] = B[y] in Ui
  *)
-rule treeFormation 'H 'a 'y :
+rule treeFormation 'a 'y :
    sequent [squash] { 'H >- 'a = 'a in 'A } -->
    sequent ['ext] { 'H >- 'B['a] -> w{'A; x. 'B['x]} } -->
    sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
@@ -124,7 +124,7 @@ rule treeFormation 'H 'a 'y :
  * H >- b1 = b2 in B[a1] -> W(x:A; B)
  * H, y:A >- B[y] = B[y] in Ui
  *)
-rule treeEquality 'H 'y :
+rule treeEquality 'y :
    sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
    sequent [squash] { 'H >- 'b1 = 'b2 in 'B['a1] -> w{'A; x. 'B['x]} } -->
    sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
@@ -133,7 +133,7 @@ rule treeEquality 'H 'y :
 (*
  * Elimination
  *)
-rule wElimination 'H 'J 'z 'a 'f 'g 'b :
+rule wElimination 'H 'z 'a 'f 'g 'b :
    sequent ['ext] { 'H;
                     z: w{'A; x. 'B['x]};
                     'J['z];
@@ -146,7 +146,7 @@ rule wElimination 'H 'J 'z 'a 'f 'g 'b :
 
 (*
  * Equality on tree induction forms.
-rule tree_indEquality 'H (w{'A; x. 'B['x]}) 'a 'f 'g :
+rule tree_indEquality (w{'A; x. 'B['x]}) 'a 'f 'g :
    sequent [squash] { 'H >- 'z1 = 'z2 in w{'A; x. 'B['x]} } -->
    sequent [squash] { 'H; a: 'A; f: 'B['a] -> w{'A; x. 'B['x]}; g: a: 'A -> 'B['a] -> 'T >-
       'body1['a; 'f; 'g] = 'body2['a; 'f; 'g] in 'T } -->

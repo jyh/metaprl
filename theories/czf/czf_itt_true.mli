@@ -35,25 +35,25 @@ extends Czf_itt_sep
 (*
  * True is functional.
  *)
-rule unit_fun 'H :
+rule unit_fun :
    sequent ['ext] { 'H >- fun_prop{z. "unit"} }
 
 (*
  * True is a restricted formula.
  *)
-rule unit_res 'H :
+rule unit_res :
    sequent ['ext] { 'H >- restricted{. "unit"} }
 
 (*
  * True is functional.
  *)
-rule true_fun 'H :
+rule true_fun :
    sequent ['ext] { 'H >- fun_prop{z. "true"} }
 
 (*
  * True is a restricted formula.
  *)
-rule true_res 'H :
+rule true_res :
    sequent ['ext] { 'H >- restricted{. "true"} }
 
 (*

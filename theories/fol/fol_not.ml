@@ -32,16 +32,16 @@ prim_rw unfold_not : "not"{'A} <--> implies{'A; ."false"}
  * RULES                                                                *
  ************************************************************************)
 
-interactive not_type {| intro [] |} 'H :
+interactive not_type {| intro [] |} :
    [wf] sequent ['ext] { 'H >- "type"{'A} } -->
    sequent ['ext] { 'H >- "type"{."not"{'A}} }
 
-interactive not_intro {| intro [] |} 'H 'x :
+interactive not_intro {| intro [] |} 'x :
    [wf] sequent ['ext] { 'H >- "type"{'A} } -->
    [main] sequent ['ext] { 'H; x: 'A >- "false" } -->
    sequent ['ext] { 'H >- "not"{'A} }
 
-interactive not_elim {| elim [] |} 'H 'J :
+interactive not_elim {| elim [] |} 'H :
    [main] sequent ['ext] { 'H; x: "not"{'A}; 'J['x] >- 'A } -->
    sequent ['ext] { 'H; x: "not"{'A}; 'J['x] >- 'C['x] }
 

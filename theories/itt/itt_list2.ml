@@ -578,14 +578,14 @@ interactive_rw rev2 :
  * well-formedness of each of the constructions.
  * @end[doc]
  *)
-interactive is_nil_wf {| intro [intro_typeinf <<'l>>] |} 'H list{'T} :
+interactive is_nil_wf {| intro [intro_typeinf <<'l>>] |} list{'T} :
    [wf] sequent [squash] { 'H >- 'l in list{'T} } -->
    sequent ['ext] { 'H >- is_nil{'l} in bool }
 
 (*
  * Membership.
  *)
-interactive mem_wf {| intro [] |} 'H :
+interactive mem_wf {| intro [] |} :
    [wf] sequent [squash] { 'H >- "type"{'T} } -->
    [wf] sequent [squash] { 'H >- 'x in 'T } -->
    [wf] sequent [squash] { 'H >- 'l in list{'T} } -->
@@ -594,7 +594,7 @@ interactive mem_wf {| intro [] |} 'H :
 (*
  * Subset.
  *)
-interactive subset_wf {| intro [] |} 'H :
+interactive subset_wf {| intro [] |} :
    [wf] sequent [squash] { 'H >- "type"{'T} } -->
    [wf] sequent [squash] { 'H >- 'l1 in list{'T} } -->
    [wf] sequent [squash] { 'H >- 'l2 in list{'T} } -->
@@ -603,7 +603,7 @@ interactive subset_wf {| intro [] |} 'H :
 (*
  * Sameset.
  *)
-interactive sameset_wf {| intro [] |} 'H :
+interactive sameset_wf {| intro [] |} :
    [wf] sequent [squash] { 'H >- "type"{'T} } -->
    [wf] sequent [squash] { 'H >- 'l1 in list{'T} } -->
    [wf] sequent [squash] { 'H >- 'l2 in list{'T} } -->
@@ -612,7 +612,7 @@ interactive sameset_wf {| intro [] |} 'H :
 (*
  * Append.
  *)
-interactive append_wf2 {| intro [] |} 'H :
+interactive append_wf2 {| intro [] |} :
    [wf] sequent [squash] { 'H >- 'l1 in list{'T} } -->
    [wf] sequent [squash] { 'H >- 'l2 in list{'T} } -->
    sequent ['ext] { 'H >- append{'l1; 'l2} in list{'T} }
@@ -620,7 +620,7 @@ interactive append_wf2 {| intro [] |} 'H :
 (*
  * Ball2.
  *)
-interactive ball2_wf2 {| intro [] |} 'H 'T1 'T2 'u 'v :
+interactive ball2_wf2 {| intro [] |} 'T1 'T2 'u 'v :
    [wf] sequent [squash] { 'H >- "type"{'T1} } -->
    [wf] sequent [squash] { 'H >- "type"{'T2} } -->
    [wf] sequent [squash] { 'H >- 'l1 in list{'T1} } -->
@@ -631,7 +631,7 @@ interactive ball2_wf2 {| intro [] |} 'H 'T1 'T2 'u 'v :
 (*
  * assoc2.
  *)
-interactive assoc_wf {| intro [intro_typeinf <<'l>>] |} 'H 'z list{.'T1 * 'T2} :
+interactive assoc_wf {| intro [intro_typeinf <<'l>>] |} 'z list{.'T1 * 'T2} :
    [wf] sequent [squash] { 'H >- "type"{'T2} } -->
    [wf] sequent [squash] { 'H >- 'eq in 'T1 -> 'T1 -> bool } -->
    [wf] sequent [squash] { 'H >- 'x in 'T1 } -->
@@ -640,7 +640,7 @@ interactive assoc_wf {| intro [intro_typeinf <<'l>>] |} 'H 'z list{.'T1 * 'T2} :
    [wf] sequent [squash] { 'H >- 'z in 'T } -->
    sequent ['ext] { 'H >- assoc{'eq; 'x; 'l; v. 'b['v]; 'z} in 'T }
 
-interactive rev_assoc_wf {| intro [intro_typeinf <<'l>>] |} 'H 'z list{.'T1 * 'T2} :
+interactive rev_assoc_wf {| intro [intro_typeinf <<'l>>] |} 'z list{.'T1 * 'T2} :
    [wf] sequent [squash] { 'H >- "type"{'T1} } -->
    [wf] sequent [squash] { 'H >- 'eq in 'T2 -> 'T2 -> bool } -->
    [wf] sequent [squash] { 'H >- 'x in 'T2 } -->
@@ -652,7 +652,7 @@ interactive rev_assoc_wf {| intro [intro_typeinf <<'l>>] |} 'H 'z list{.'T1 * 'T
 (*
  * map.
  *)
-interactive map_wf {| intro [intro_typeinf <<'l>>] |} 'H list{'T1} :
+interactive map_wf {| intro [intro_typeinf <<'l>>] |} list{'T1} :
    [wf] sequent [squash] { 'H >- "type"{'T1} } -->
    [wf] sequent [squash] { 'H >- "type"{'T2} } -->
    [wf] sequent [squash] { 'H >- 'f in 'T1 -> 'T2 } -->
@@ -662,7 +662,7 @@ interactive map_wf {| intro [intro_typeinf <<'l>>] |} 'H list{'T1} :
 (*
  * Fold_left.
  *)
-interactive fold_left_wf {| intro [intro_typeinf <<'l>>] |} 'H list{'T1} :
+interactive fold_left_wf {| intro [intro_typeinf <<'l>>] |} list{'T1} :
    [wf] sequent [squash] { 'H >- "type"{'T1} } -->
    [wf] sequent [squash] { 'H >- "type"{'T2} } -->
    [wf] sequent [squash] { 'H >- 'f in 'T1 -> 'T2 -> 'T2 } -->
@@ -673,12 +673,12 @@ interactive fold_left_wf {| intro [intro_typeinf <<'l>>] |} 'H list{'T1} :
 (*
  * Length.
  *)
-interactive length_wf {| intro [intro_typeinf <<'l>>] |} 'H list{'T1} :
+interactive length_wf {| intro [intro_typeinf <<'l>>] |} list{'T1} :
    [wf] sequent [squash] { 'H >- "type"{'T1} } -->
    [wf] sequent [squash] { 'H >- 'l in list{'T1} } -->
    sequent ['ext] { 'H >- length{'l} in int }
 
-interactive nth_wf {| intro [] |} 'H :
+interactive nth_wf {| intro [] |} :
    [wf] sequent [squash] { 'H >- "type"{'T} } -->
    [wf] sequent [squash] { 'H >- 'l in list{'T} } -->
    [wf] sequent [squash] { 'H >- ge{'i; 0} } -->
@@ -686,7 +686,7 @@ interactive nth_wf {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- 'i in int } -->
    sequent ['ext] { 'H >- nth{'l; 'i} in 'T }
 
-interactive replace_nth_wf {| intro [] |} 'H :
+interactive replace_nth_wf {| intro [] |} :
    [wf] sequent [squash] { 'H >- "type"{'T} } -->
    [wf] sequent [squash] { 'H >- 'l in list{'T} } -->
    [wf] sequent [squash] { 'H >- ge{'i; 0} } -->
@@ -698,7 +698,7 @@ interactive replace_nth_wf {| intro [] |} 'H :
 (*
  * Reverse.
  *)
-interactive rev_wf {| intro [] |} 'H :
+interactive rev_wf {| intro [] |} :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H >- 'l in list{'A} } -->
    sequent ['ext] { 'H >- rev{'l} in list{'A} }
@@ -711,7 +711,7 @@ interactive rev_wf {| intro [] |} 'H :
  * A list $v$ is a subset of the list $cons{'u; 'v}$.
  * @end[doc]
  *)
-interactive subset_cons {| intro [AutoMustComplete] |} 'H :
+interactive subset_cons {| intro [AutoMustComplete] |} :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H >- 'u in 'A } -->
    [wf] sequent [squash] { 'H >- 'v in list{'A} } -->
@@ -726,12 +726,12 @@ interactive subset_cons {| intro [AutoMustComplete] |} 'H :
  * @tt[subset] is reflexive and transitive.
  * @end[doc]
  *)
-interactive subset_ref {| intro [] |} 'H :
+interactive subset_ref {| intro [] |} :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H >- 'l in list{'A} } -->
    sequent ['ext] { 'H >- \subset{'l; 'l; 'A} }
 
-interactive subset_trans 'H 'l2 :
+interactive subset_trans 'l2 :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H >- 'l1 in list{'A} } -->
    [wf] sequent [squash] { 'H >- 'l2 in list{'A} } -->
@@ -747,19 +747,19 @@ interactive subset_trans 'H 'l2 :
  * @tt[sameset] is reflexive, symmetric, and transitive.
  * @end[doc]
  *)
-interactive sameset_ref {| intro [] |} 'H :
+interactive sameset_ref {| intro [] |} :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H >- 'l in list{'A} } -->
    sequent ['ext] { 'H >- sameset{'l; 'l; 'A} }
 
-interactive sameset_sym 'H :
+interactive sameset_sym :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H >- 'l1 in list{'A} } -->
    [wf] sequent [squash] { 'H >- 'l2 in list{'A} } -->
    sequent ['ext] { 'H >- sameset{'l1; 'l2; 'A} } -->
    sequent ['ext] { 'H >- sameset{'l2; 'l1; 'A} }
 
-interactive sameset_trans 'H 'l2 :
+interactive sameset_trans 'l2 :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H >- 'l1 in list{'A} } -->
    [wf] sequent [squash] { 'H >- 'l2 in list{'A} } -->
@@ -779,11 +779,8 @@ let is_ball2_term = is_dep0_dep0_dep2_term ball2_opname
 let mk_ball2_term = mk_dep0_dep0_dep2_term ball2_opname
 let dest_ball2 = dest_dep0_dep0_dep2_term ball2_opname
 
-let samesetSymT p =
-   sameset_sym (Sequent.hyp_count_addr p) p
-
-let samesetTransT t p =
-   sameset_trans (Sequent.hyp_count_addr p) t p
+let samesetSymT = sameset_sym
+let samesetTransT = sameset_trans
 
 (*
  * -*-

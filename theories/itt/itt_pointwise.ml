@@ -45,13 +45,13 @@ let _ = show_loading "Loading Itt_pointwise%t"
  * @end[doc]
  *)
 
-prim hypSubstPointwise 'H 'J_1 'J_2  't1  bind{y. 'A['y]} :
+prim hypSubstPointwise 'H 'J_1 't1  bind{y. 'A['y]} :
    [equality] sequent ['ext] { 'H; t:'T; 'J_1['t];  x: 'A['t]; 'J_2['x;'t] >- 't = 't1 in 'T } -->
    [main] ('c : sequent ['ext] { 'H; t:'T; 'J_1['t];  x: 'A['t1]; 'J_2['x;'t] >- 'C['x;'t] }) -->
    sequent ['ext] { 'H; t:'T; 'J_1['t];  x: 'A['t]; 'J_2['x;'t] >- 'C['x;'t] } =
    'c
 
-prim contextSubstPointwise 'H 'J_1 'J 'J_2 't1  :
+prim contextSubstPointwise 'H 'J_1 'J 't1  :
    [equality] sequent ['ext] { 'H; t:'T; 'J_1['t];  'J['t]; 'J_2['t] >- 't = 't1 in 'T } -->
    [main] ('c : sequent ['ext] { 'H; t:'T; 'J_1['t];  'J['t1]; 'J_2['t] >- 'C['t] }) -->
    sequent ['ext] { 'H; t:'T; 'J_1['t];  'J['t]; 'J_2['t] >- 'C['t] } =

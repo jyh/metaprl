@@ -3795,7 +3795,7 @@ T	t2072	o b2072 b17
 B	b2073	t2072
 T	t2073	o1219 b2187 b2071 b2073 b17
 B	b2074	t2073
-P	p2081	String "substUsingEpimorphism 5 4 <<nat>> <<bind{u.'u+@1}>>  <<bind{v.'v-@1}>> thenT byDefT reduceC"
+P	p2081	String "substUsingEpimorphism 5 <<nat>> <<bind{u.'u+@1}>>  <<bind{v.'v-@1}>> thenT byDefT reduceC"
 O	o2083	ext_rule p2081
 T	t4672	o1968 b4672 b4403
 B	b4673	t4672
@@ -3829,7 +3829,7 @@ T	t4684	o b4680 b4684
 B	b4685	t4684
 T	t4685	o2188 b4671 b4685
 B	b4686	t4685
-P	p4686	String "dT 0 thenMT natInduction 2 1 thenT dT 0 thenWT autoT"
+P	p4686	String "dT 0 thenMT natInduction 2 thenT dT 0 thenWT autoT"
 O	o4686	ext_rule p4686
 T	t4688	o1968 b2168 b4403
 H	h2083	v t4688
@@ -4139,7 +4139,7 @@ T	t2240	o b2236 b2240
 B	b2241	t2240
 T	t4778	o2189 b4777 b17 b4778
 B	b4779	t4778
-P	p4781	String "substUsingEpimorphism 3 4 <<nat>> <<bind{u.'n-@('u+@1)}>>  <<bind{v.'n-@('v+@1)}>>"
+P	p4781	String "substUsingEpimorphism 3 <<nat>> <<bind{u.'n-@('u+@1)}>>  <<bind{v.'n-@('v+@1)}>>"
 O	o4781	ext_rule p4781
 T	t4781	o1087 b4403 b4558
 B	b4782	t4781

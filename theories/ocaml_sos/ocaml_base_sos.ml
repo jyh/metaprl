@@ -135,7 +135,7 @@ prim_rw expr_unfold :
 (*
  * Two equivalent values are equivalent.
  *)
-prim value_equiv_is_equiv 'H :
+prim value_equiv_is_equiv :
    sequent { 'H >- value_equiv{'S; 'e1; 'e2; 't} } -->
    sequent { 'H >- equiv{'S; 'e1; 'e2; 't} } =
    it
@@ -143,7 +143,7 @@ prim value_equiv_is_equiv 'H :
 (*
  * A functional function application to a value is a value.
  *)
-prim functional_apply_value 'H 't1 :
+prim functional_apply_value 't1 :
    sequent { 'H >- value_equiv{'S; 'a1; 'a2; 't2} } -->
    sequent { 'H >- value_equiv{'S; 'f1; 'f2; functional{'t1; 't2}} } -->
    sequent { 'H >- value_equiv{'S; apply{'f1; 'a1}; apply{'f2; 'a2}; 't2} } =

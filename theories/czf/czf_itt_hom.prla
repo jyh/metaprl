@@ -9928,7 +9928,7 @@ T	t4166	o b4166 b8
 B	b4167	t4166
 T	t4167	o1998 b4162 b4167
 B	b4168	t4167
-P	p4168	String "copyHypT 2 2 thenT rwh unfold_hom 3 thenT autoT"
+P	p4168	String "copyHypT 2 3 thenT rwh unfold_hom 3 thenT autoT"
 O	o4168	ext_rule p4168
 S	s4168	t1990 h h4146 h2523 h2524 h3968 h3969 h3970 h4147
 G	s4168	t3959
@@ -11114,7 +11114,7 @@ T	t4680	o b4680 b8
 B	b4681	t4680
 T	t4681	o1998 b4676 b4681
 B	b4682	t4681
-P	p4682	String "copyHypT 2 3 thenT rwh unfold_hom 4 ttca"
+P	p4682	String "copyHypT 2 4 thenT rwh unfold_hom 4 ttca"
 O	o4682	ext_rule p4682
 S	s4682	t1990 h h4146 h4147 h3977
 G	s4682	t4370

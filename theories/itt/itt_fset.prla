@@ -16544,7 +16544,7 @@ T	t15775	o b15775 b4
 B	b15776	t15775
 T	t15776	o1378 b14791 b15776
 B	b15777	t15776
-P	p15777	String "exchange 2 3 3 1"
+P	p15777	String "exchange 2 3 3"
 O	o15777	ext_rule p15777
 S	s15777	t1382 h h2130 h15688 h4416 h4425
 G	s15777	t4425
@@ -18092,7 +18092,7 @@ T	t7587	o b7587 b4
 B	b7588	t7587
 T	t7591	o1378 b16093 b7588
 B	b7592	t7591
-P	p7592	String "dT (-1) thenT exchange 2 3 4 1"
+P	p7592	String "dT (-1) thenT exchange 2 3 4"
 O	o7592	ext_rule p7592
 H	h18056	y_1 t2935
 H	h3336	z_1 t2937
@@ -20286,7 +20286,7 @@ T	t18126	o b18126 b4
 B	b18127	t18126
 T	t18127	o1378 b18074 b18127
 B	b18128	t18127
-P	p10814	String "exchange 2 2 4 1 thenT trivialT"
+P	p10814	String "exchange 2 2 4 thenT trivialT"
 O	o10814	ext_rule p10814
 T	t10814	o1378 b18126 b4
 B	b10815	t10814
@@ -21297,7 +21297,7 @@ T	t16882	o b16882 b4
 B	b16883	t16882
 T	t16883	o1378 b16863 b16883
 B	b16884	t16883
-P	p6344	String "copyHypT (-1) 1"
+P	p6344	String "copyHypT (-1) 2"
 O	o6344	ext_rule p6344
 T	t6341	o1379 b16872 b4 b1385
 B	b6342	t6341
@@ -24701,7 +24701,7 @@ T	t22236	o b22236 b4
 B	b22237	t22236
 T	t22237	o1378 b21999 b22237
 B	b22238	t22237
-P	p11040	String "copyHypT (-1) 2"
+P	p11040	String "copyHypT (-1) 3"
 O	o11040	ext_rule p11040
 T	t22241	o2 b22236
 B	b22242	t22241
@@ -33260,7 +33260,7 @@ T	t5922	o b5922 b4
 B	b5923	t5922
 T	t5923	o2379 b1376 b5851 b5923 b4
 B	b5924	t5923
-P	p5924	String "withT <<'s>> (dT (-1)) thenMT dT (-1) thenMT copyHypT (-1) 2 thenAT autoT"
+P	p5924	String "withT <<'s>> (dT (-1)) thenMT dT (-1) thenMT copyHypT (-1) 3 thenAT autoT"
 O	o5924	ext_rule p5924
 H	h10474	v t11317
 H	h10475	y t11317
@@ -33682,7 +33682,7 @@ T	t6216	o b6216 b4
 B	b6217	t6216
 T	t6217	o1378 b6147 b6217
 B	b6218	t6217
-P	p6219	String "copyHypT 2 2"
+P	p6219	String "copyHypT 2 3"
 O	o6225	ext_rule p6219
 S	s6225	t1382 h h11649 h18664 h4425
 G	s6225	t4425
@@ -34430,7 +34430,7 @@ T	t8008	o1378 b7956 b4
 B	b8008	t8008
 T	t8011	o7994 b1376 b8008 b4 b4
 B	b8031	t8011
-P	p8033	String "assertAtT 2 <<\"assert\"{bor{fmember{'eq;'x;'s1};fmember{'eq;'x;'s2}}}>>"
+P	p8033	String "assertAtT 3 <<\"assert\"{bor{fmember{'eq;'x;'s1};fmember{'eq;'x;'s2}}}>>"
 O	o8033	ext_rule p8033
 S	s8033	t1382 h h4416 h4425 h2130
 G	s8033	t4467
@@ -35055,7 +35055,7 @@ T	t16559	o2099 b6946 b16558
 B	b16559	t16559
 T	t16560	o2099 b6945 b16559
 B	b16560	t16560
-P	p8915	String "assertAtT 2 <<\"assert\"{band{fmember{'eq; 'x; 's1};fmember{'eq; 'x; 's2}}}>>"
+P	p8915	String "assertAtT 3 <<\"assert\"{band{fmember{'eq; 'x; 's1};fmember{'eq; 'x; 's2}}}>>"
 O	o8915	ext_rule p8915
 T	t8915	o996 b980 b2936
 B	b8915	t8915
@@ -35635,7 +35635,7 @@ T	t16612	o2099 b10365 b16611
 B	b16612	t16612
 T	t16613	o2099 b10364 b16612
 B	b16613	t16613
-P	p9706	String "assertAtT 2 <<\"assert\"{band{fmember{'eq; 'x; 's1};bnot{fmember{'eq; 'x; 's2}}}}>>"
+P	p9706	String "assertAtT 3 <<\"assert\"{band{fmember{'eq; 'x; 's1};bnot{fmember{'eq; 'x; 's2}}}}>>"
 O	o9706	ext_rule p9706
 T	t9706	o996 b980 b5581
 B	b9707	t9706

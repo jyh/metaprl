@@ -40,7 +40,7 @@ declare false;;
  * H, x: false, J >> T
  * by false_elim i
  *)
-rule false_elim 'H :
+rule false_elim :
    sequent { 'H; x: false; 'J['x] >> 'T['x] };;
 
 (*

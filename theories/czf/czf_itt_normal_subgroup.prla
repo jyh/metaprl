@@ -4300,7 +4300,7 @@ T	t1721	o b1720 b11
 B	b1721	t1721
 T	t1722	o1458 b1700 b1721
 B	b1722	t1722
-P	p1722	String "copyHypT 2 3 thenT rwh unfold_abel 4 thenT autoT thenT instHypT [<< 'a >>; << 'z >>] 5 ttca thenT dT 14 ttca thenT dT 14 ttca"
+P	p1722	String "copyHypT 2 4 thenT rwh unfold_abel 4 thenT autoT thenT instHypT [<< 'a >>; << 'z >>] 5 ttca thenT dT 14 ttca thenT dT 14 ttca"
 O	o1722	ext_rule p1722
 H	h1722	y t1449
 P	p1723	Var b
@@ -4508,7 +4508,7 @@ T	t1808	o b1808 b11
 B	b1809	t1808
 T	t1809	o1458 b1708 b1809
 B	b1810	t1809
-P	p1810	String "copyHypT 2 3 thenT rwh unfold_abel 4 thenT autoT thenT instHypT [<< 'z >>; << 'a >>] 5 ttca thenT dT 14 ttca"
+P	p1810	String "copyHypT 2 4 thenT rwh unfold_abel 4 thenT autoT thenT instHypT [<< 'z >>; << 'a >>] 5 ttca thenT dT 14 ttca"
 O	o1810	ext_rule p1810
 S	s1810	t1448 h h1634 h1635 h1722 h1731 h1569 h1655 h1684 h1700 h1687 h1688 h1690 h1701
 G	s1810	t1732

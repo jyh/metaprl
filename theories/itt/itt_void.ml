@@ -107,7 +107,7 @@ dform void_df1 : except_mode[src] :: void = `"Void"
  * @end[doc]
  *
  *)
-prim voidEquality {| intro []; eqcd |} 'H :
+prim voidEquality {| intro []; eqcd |} :
    sequent ['ext] { 'H >- void in univ[i:l] } =
    it
 
@@ -115,13 +115,13 @@ prim voidEquality {| intro []; eqcd |} 'H :
  * H >- Ui ext Void
  * by voidFormation
  *)
-interactive voidFormation 'H :
+interactive voidFormation :
    sequent ['ext] { 'H >- univ[i:l] }
 
 (*
  * Typehood.
  *)
-prim voidType {| intro [] |} 'H :
+prim voidType {| intro [] |} :
    sequent ['ext] { 'H >- "type"{void} } =
    it
 
@@ -133,7 +133,7 @@ prim voidType {| intro [] |} 'H :
  * $@void$ type produces no cases.
  * @end[doc]
  *)
-prim voidElimination {| elim []; squash |} 'H 'J :
+prim voidElimination {| elim []; squash |} 'H :
    sequent ['ext] { 'H; x: void; 'J['x] >- 'C['x] } =
    it
 
@@ -146,7 +146,7 @@ prim voidElimination {| elim []; squash |} 'H 'J :
  * @hrefrule[voidElimination] rule.
  * @end[doc]
  *)
-interactive void_subtype 'H :
+interactive void_subtype {| intro[] |} :
    sequent ['ext] { 'H >- \subtype{void; 'T} }
 (*! @docoff *)
 
@@ -154,10 +154,7 @@ interactive void_subtype 'H :
  * SUBTYPING                                                            *
  ************************************************************************)
 
-let void_sub p =
-   void_subtype (hyp_count_addr p) p
-
-let resource sub += (RLSubtype ([void_term, << 'a >>], void_sub))
+let resource sub += (RLSubtype ([void_term, << 'a >>], void_subtype))
 
 (************************************************************************
  * TYPE INFERENCE                                                       *

@@ -67,7 +67,7 @@ dform subset_df : parens :: "prec"[prec_subset] :: \subset{'s1; 's2} =
  * if $s_1$ and $s_2$ are both sets.
  * @end[doc]
  *)
-interactive subset_type {| intro [] |} 'H :
+interactive subset_type {| intro [] |} :
    ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
    ["wf"] sequent [squash] { 'H >- isset{'s2} } -->
    sequent ['ext] { 'H >- "type"{.'s1  subset 's2} }
@@ -80,7 +80,7 @@ interactive subset_type {| intro [] |} 'H :
  * element $@mem{x; s_1}$ is also an element of $s_2$.
  * @end[doc]
  *)
-interactive subset_intro {| intro [] |} 'H 'x :
+interactive subset_intro {| intro [] |} 'x :
    ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
    ["wf"] sequent [squash] { 'H >- isset{'s2} } -->
    ["main"] sequent ['ext] { 'H; x: set; y: mem{'x; 's1} >- mem{'x; 's2} } -->
@@ -95,7 +95,7 @@ interactive subset_intro {| intro [] |} 'H 'x :
  * $@mem{x; s_2}$.
  * @end[doc]
  *)
-interactive subset_elim {| elim [] |} 'H 'J 's 'z :
+interactive subset_elim {| elim [] |} 'H 's 'z :
    ["wf"] sequent [squash] { 'H; x: 's1 subset 's2; 'J['x] >- isset{'s} } -->
    ["wf"] sequent [squash] { 'H; x: 's1 subset 's2; 'J['x] >- isset{'s1} } -->
    ["wf"] sequent [squash] { 'H; x: 's1 subset 's2; 'J['x] >- isset{'s2} } -->
@@ -111,12 +111,12 @@ interactive subset_elim {| elim [] |} 'H 'J 's 'z :
  * arguments, and it is a restricted proposition.
  * @end[doc]
  *)
-interactive subset_res {| intro [] |} 'H :
+interactive subset_res {| intro [] |} :
    ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
    ["wf"] sequent [squash] { 'H >- isset{'s2} } -->
    sequent ['ext] { 'H >- restricted{.'s1  subset 's2} }
 
-interactive subset_fun {| intro [] |} 'H :
+interactive subset_fun {| intro [] |} :
    sequent ['ext] { 'H >- fun_set{z. 's1['z]} } -->
    sequent ['ext] { 'H >- fun_set{z. 's2['z]} } -->
    sequent ['ext] { 'H >- fun_prop{z. 's1['z]  subset 's2['z]} }

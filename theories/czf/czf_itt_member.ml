@@ -137,12 +137,12 @@ dform member_df : except_mode[src] :: parens :: "prec"[prec_apply] :: member{'x;
  * sets.
  * @end[doc]
  *)
-interactive mem_type {| intro [] |} 'H :
+interactive mem_type {| intro [] |} :
    ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
    ["wf"] sequent [squash] { 'H >- isset{'s2} } -->
    sequent ['ext] { 'H >- "type"{mem{'s1; 's2}} }
 
-interactive mem_equal {| intro [] |} 'H :
+interactive mem_equal {| intro [] |} :
    ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
    ["wf"] sequent [squash] { 'H >- isset{'s2} } -->
    sequent ['ext] { 'H >- Itt_equal!equal{univ[1:l]; mem{'s1; 's2}; mem{'s1; 's2}} }
@@ -150,7 +150,7 @@ interactive mem_equal {| intro [] |} 'H :
 (*
  * Introduction.
  *)
-interactive member_intro {| intro [] |} 'H :
+interactive member_intro {| intro [] |} :
    ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
    ["wf"] sequent [squash] { 'H >- isset{'s2} } -->
    sequent ['ext] { 'H >- mem{'s1; 's2} } -->
@@ -159,14 +159,14 @@ interactive member_intro {| intro [] |} 'H :
 (*
  * Sets contain only sets.
  *)
-interactive elem_isset 'H 'y :
+interactive elem_isset 'y :
    sequent ['ext] { 'H >- member{'x; 'y} } -->
    sequent ['ext] { 'H >- isset{'x} }
 
 (*
  * Only sets have elements.
  *)
-interactive set_isset 'H 'x :
+interactive set_isset 'x :
    sequent ['ext] { 'H >- member{'x; 'y} } -->
    sequent ['ext] { 'H >- isset{'y} }
 
@@ -178,7 +178,7 @@ interactive set_isset 'H 'x :
  * for the two set arguments.
  * @end[doc]
  *)
-interactive mem_fun_left 'H 's1 :
+interactive mem_fun_left 's1 :
    ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
    ["wf"] sequent [squash] { 'H >- isset{'s2} } -->
    ["wf"] sequent [squash] { 'H >- isset{'s3} } -->
@@ -187,11 +187,10 @@ interactive mem_fun_left 'H 's1 :
    sequent ['ext] { 'H >- mem{'s2; 's3} }
 (*! @docoff *)
 
-let memSubstLeftT t p =
-   mem_fun_left (Sequent.hyp_count_addr p) t p
+let memSubstLeftT = mem_fun_left
 
 (*! @doc{nil} *)
-interactive mem_fun_right 'H 's1 :
+interactive mem_fun_right 's1 :
    ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
    ["wf"] sequent [squash] { 'H >- isset{'s2} } -->
    ["wf"] sequent [squash] { 'H >- isset{'s3} } -->
@@ -200,8 +199,7 @@ interactive mem_fun_right 'H 's1 :
    sequent ['ext] { 'H >- mem{'s3; 's2} }
 (*! @docoff *)
 
-let memSubstRightT t p =
-   mem_fun_right (Sequent.hyp_count_addr p) t p
+let memSubstRightT = mem_fun_right
 
 (*!
  * @begin[doc]
@@ -209,7 +207,7 @@ let memSubstRightT t p =
  * judgment.
  * @end[doc]
  *)
-interactive member_fun {| intro [] |} 'H :
+interactive member_fun {| intro [] |} :
    sequent ['ext] { 'H >- fun_set{z. 'f1['z]} } -->
    sequent ['ext] { 'H >- fun_set{z. 'f2['z]} } -->
    sequent ['ext] { 'H >- fun_prop{z. mem{'f1['z]; 'f2['z]}} }
@@ -225,7 +223,7 @@ interactive member_fun {| intro [] |} 'H :
  * can be proved with the pair of both choice functions.
  * @end[doc]
  *)
-interactive set_ext 'H 'x 'y :
+interactive set_ext 'x 'y :
    ["wf"] sequent ['ext] { 'H >- isset{'s1} } -->
    ["wf"] sequent ['ext] { 'H >- isset{'s2} } -->
    ["main"] sequent ['ext] { 'H; x: set; y: mem{'x; 's1} >- mem{'x; 's2} } -->
@@ -251,11 +249,8 @@ interactive set_ext 'H 'x 'y :
  * @docoff
  * @end[doc]
  *)
-let memberOfT t p =
-   elem_isset (hyp_count_addr p) t p
-
-let setOfT t p =
-   set_isset (hyp_count_addr p) t p
+let memberOfT = elem_isset
+let setOfT = set_isset
 
 (*!
  * @begin[doc]
@@ -272,7 +267,7 @@ let setOfT t p =
  *)
 let setExtT p =
    let u, v = maybe_new_vars2 p "u" "v" in
-      set_ext (Sequent.hyp_count_addr p) u v p
+      set_ext u v p
 
 (*
  * -*-

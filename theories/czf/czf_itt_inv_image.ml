@@ -117,7 +117,7 @@ dform inv_image_df : parens :: except_mode[src] :: inv_image{'s; x. 'a; 't} =
  * if $s$ and $t$ are sets, and $a[x]$ is functional.
  * @end[doc]
  *)
-interactive inv_image_isset {| intro [] |} 'H :
+interactive inv_image_isset {| intro [] |} :
    sequent [squash] { 'H >- isset{'s} } -->
    sequent [squash] { 'H >- isset{'t} } -->
    sequent ['ext] { 'H >- fun_set{z. 'a['z]} } -->
@@ -132,7 +132,7 @@ interactive inv_image_isset {| intro [] |} 'H :
  * and if $@mem{a[y]; t}$.
  * @end[doc]
  *)
-interactive inv_image_intro {| intro [] |} 'H :
+interactive inv_image_intro {| intro [] |} :
    sequent [squash] { 'H >- isset{'y} } -->
    sequent [squash] { 'H >- isset{'s} } -->
    sequent [squash] { 'H >- isset{'t} } -->
@@ -149,7 +149,7 @@ interactive inv_image_intro {| intro [] |} 'H :
  * $@mem{y; s}$ and $@mem{a[y]; t}$.
  * @end[doc]
  *)
-interactive inv_image_elim {| elim [] |} 'H 'J :
+interactive inv_image_elim {| elim [] |} 'H :
    sequent [squash] { 'H; x: mem{'y; inv_image{'s; x. 'a['x]; 't}}; 'J['x] >- isset{'y} } -->
    sequent [squash] { 'H; x: mem{'y; inv_image{'s; x. 'a['x]; 't}}; 'J['x] >- isset{'s} } -->
    sequent [squash] { 'H; x: mem{'y; inv_image{'s; x. 'a['x]; 't}}; 'J['x] >- isset{'t} } -->

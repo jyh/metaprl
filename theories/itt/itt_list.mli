@@ -79,7 +79,7 @@ rewrite reduce_listindCons :
  *
  * H >- Ui ext A
  *)
-rule listFormation 'H :
+rule listFormation :
    sequent ['ext] { 'H >- univ[i:l] } -->
    sequent ['ext] { 'H >- univ[i:l] }
 
@@ -88,7 +88,7 @@ rule listFormation 'H :
  * by listType
  * H >- A Type
  *)
-rule listType 'H :
+rule listType :
    sequent [squash] { 'H >- "type"{'A} } -->
    sequent ['ext] { 'H >- "type"{list{'A}} }
 
@@ -98,7 +98,7 @@ rule listType 'H :
  *
  * H >- A = B in Ui
  *)
-rule listEquality 'H :
+rule listEquality :
    sequent [squash] { 'H >- 'A = 'B in univ[i:l] } -->
    sequent ['ext] { 'H >- list{'A} = list{'B} in univ[i:l] }
 
@@ -108,7 +108,7 @@ rule listEquality 'H :
  *
  * H >- A = A in Ui
  *)
-rule nilFormation 'H :
+rule nilFormation :
    sequent [squash] { 'H >- "type"{'A} } -->
    sequent ['ext] { 'H >- list{'A} }
 
@@ -118,7 +118,7 @@ rule nilFormation 'H :
  *
  * H >- A = A in Ui
  *)
-rule nilEquality 'H :
+rule nilEquality :
    sequent [squash] { 'H >- "type"{list{'A}} } -->
    sequent ['ext] { 'H >- nil in list{'A} }
 
@@ -129,7 +129,7 @@ rule nilEquality 'H :
  * H >- A ext h
  * H >- list(A) ext t
  *)
-rule consFormation 'H :
+rule consFormation :
    sequent ['ext] { 'H >- 'A } -->
    sequent ['ext] { 'H >- list{'A} } -->
    sequent ['ext] { 'H >- list{'A} }
@@ -141,7 +141,7 @@ rule consFormation 'H :
  * H >- u1 = u2 in A
  * H >- v1 = v2 in list(A)
  *)
-rule consEquality 'H :
+rule consEquality :
    sequent [squash] { 'H >- 'u1 = 'u2 in 'A } -->
    sequent [squash] { 'H >- 'v1 = 'v2 in list{'A} } -->
    sequent ['ext] { 'H >- cons{'u1; 'v1} = cons{'u2; 'v2} in list{'A} };;
@@ -153,7 +153,7 @@ rule consEquality 'H :
  * H; l: list(A); J[l] >- C[nil]
  * H; l: list(A); J[l]; u: A; v: list(A); w: C[v] >- C[u::v]
  *)
-rule listElimination 'H 'J 'w 'u 'v :
+rule listElimination 'H 'w 'u 'v :
    sequent ['ext] { 'H; l: list{'A}; 'J['l] >- 'C[nil] } -->
    sequent ['ext] { 'H; l: list{'A}; 'J['l]; u: 'A; v: list{'A}; w: 'C['v] >- 'C['u::'v] } -->
    sequent ['ext] { 'H; l: list{'A}; 'J['l] >- 'C['l] }
@@ -169,7 +169,7 @@ rule listElimination 'H 'J 'w 'u 'v :
  * H >- base1 = base2 in T[nil]
  * H, u: A; v: list(A); w: T[v] >- step1[u; v; w] = step2[u; v; w] in T[u::v]
  *)
-rule list_indEquality 'H lambda{l. 'T['l]} list{'A} 'u 'v 'w :
+rule list_indEquality lambda{l. 'T['l]} list{'A} 'u 'v 'w :
    sequent [squash] { 'H >- 'e1 = 'e2 in list{'A} } -->
    sequent [squash] { 'H >- 'base1 = 'base2 in 'T[nil] } -->
    sequent [squash] { 'H; u: 'A; v: list{'A}; w: 'T['v] >-
@@ -186,14 +186,14 @@ rule list_indEquality 'H lambda{l. 'T['l]} list{'A} 'u 'v 'w :
  *
  * H >- A1 <= A2
  *)
-rule listSubtype 'H :
+rule listSubtype :
    sequent [squash] { 'H >- \subtype{'A1; 'A2} } -->
    sequent ['ext] { 'H >- \subtype{list{'A1}; list{'A2}}}
 
 (*
  * Nil is canonical.
  *)
-rule nilSqequal 'H 'T :
+rule nilSqequal 'T :
    sequent [squash] { 'H >- 'u = nil in list{'T} } -->
    sequent ['ext] { 'H >- 'u ~ nil }
 

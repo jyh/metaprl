@@ -106,12 +106,12 @@ let _ =
  * The proof extract term $t$ is unchanged.
  * @end[doc]
  *)
-prim thin 'H 'J :
+prim thin 'H :
    ('t : sequent ['ext] { 'H; 'J >- 'C }) -->
    sequent ['ext] { 'H; x: 'A; 'J >- 'C } =
    't
 
-prim exchange 'H 'K 'L 'J:
+prim exchange 'H 'K 'L:
    ('t : sequent ['ext] { 'H; 'L; 'K; 'J >- 'C }) -->
    sequent ['ext] { 'H; 'K; 'L; 'J >- 'C } =
    't
@@ -129,7 +129,7 @@ prim exchange 'H 'K 'L 'J:
  * in the abstracted proof $f[x]$, to get a proof $f[a]$ of $T$.
  * @end[doc]
  *)
-prim cut 'H 'J 'S 'x :
+prim cut 'H 'S 'x :
    [assertion] ('a : sequent ['ext] { 'H; 'J >- 'S }) -->
    [main] ('f['x] : sequent ['ext] { 'H; x: 'S; 'J >- 'T }) -->
    sequent ['ext] { 'H; 'J >- 'T } =
@@ -140,7 +140,7 @@ prim cut 'H 'J 'S 'x :
  *
  * This is usually used for performance testing.
  *)
-interactive dup 'H :
+interactive dup :
    sequent ['ext] { 'H >- 'T } -->
    sequent ['ext] { 'H >- 'T } -->
    sequent ['ext] { 'H >- 'T}
@@ -154,7 +154,7 @@ interactive dup 'H :
  * provable with proof extract $t$.
  * @end[doc]
  *)
-prim introduction 'H 't :
+prim introduction 't :
    [wf] sequent [squash] { 'H >- 't in 'T } -->
    sequent ['ext] { 'H >- 'T } =
    't
@@ -173,10 +173,10 @@ prim introduction 'H 't :
  * H; x: A; J >- A ext x
  * by hypothesis
  *)
-interactive hypothesis 'H 'J :
+interactive hypothesis 'H :
    sequent ['ext] { 'H; x: 'A; 'J['x] >- 'A }
 
-interactive hypothesisType 'H 'J :
+interactive hypothesisType 'H :
    sequent ['ext] { 'H; x: 'A; 'J['x] >- "type"{'A} }
 
 (*!
@@ -198,7 +198,7 @@ interactive hypothesisType 'H 'J :
  * of the subterm to be replaced.
  * @end[doc]
  *)
-prim substitution 'H ('t1 = 't2 in 'T2) bind{x. 'T1['x]} :
+prim substitution ('t1 = 't2 in 'T2) bind{x. 'T1['x]} :
    [equality] sequent [squash] { 'H >- 't1 = 't2 in 'T2 } -->
    [main] ('t : sequent ['ext] { 'H >- 'T1['t2] }) -->
    [wf] sequent [squash] { 'H; x: 'T2 >- "type"{'T1['x]} } -->
@@ -216,13 +216,13 @@ prim substitution 'H ('t1 = 't2 in 'T2) bind{x. 'T1['x]} :
  * subterm in a hypothesis, in a similar manner to conclusion substitution.
  * @end[doc]
  *)
-prim hypReplacement 'H 'J 'B univ[i:l] :
+prim hypReplacement 'H 'B univ[i:l] :
    [main] ('t : sequent ['ext] { 'H; x: 'B; 'J['x] >- 'T['x] }) -->
    [equality] sequent [squash] { 'H; x: 'A; 'J['x] >- 'A = 'B in univ[i:l] } -->
    sequent ['ext] { 'H; x: 'A; 'J['x] >- 'T['x] } =
    't
 
-prim hypSubstitution 'H 'J ('t1 = 't2 in 'T2) bind{y. 'A['y]} 'z :
+prim hypSubstitution 'H ('t1 = 't2 in 'T2) bind{y. 'A['y]} 'z :
    [equality] sequent [squash] { 'H; x: 'A['t1]; 'J['x] >- 't1 = 't2 in 'T2 } -->
    [main] ('t : sequent ['ext] { 'H; x: 'A['t2]; 'J['x] >- 'T1['x] }) -->
    [wf] sequent [squash] { 'H; x: 'A['t1]; 'J['x]; z: 'T2 >- "type"{'A['z]} } -->
@@ -236,7 +236,7 @@ prim hypSubstitution 'H 'J ('t1 = 't2 in 'T2) bind{y. 'A['y]} 'z :
  * Equality in any term $T$ means that $T$ is a type.
  * @end[doc]
  *)
-interactive equalityTypeIsType 'H 'a 'b :
+interactive equalityTypeIsType 'a 'b :
    [wf] sequent [squash] { 'H >- 'a = 'b in 'T } -->
    sequent ['ext] { 'H >- "type"{'T} }
 
@@ -262,8 +262,8 @@ interactive equalityTypeIsType 'H 'a 'b :
  * @end[doc]
  *)
 let nthHypT i p =
-   let i, j = Sequent.hyp_indices p i in
-      (hypothesis i j orelseT hypothesisType i j) p
+   let i = Sequent.get_pos_hyp_num p i in
+      (hypothesis i orelseT hypothesisType i) p
 
 (*!
  * @begin[doc]
@@ -289,9 +289,8 @@ let nthHypT i p =
  * @docoff
  * @end[doc]
  *)
-let thinT i p =
-   let i, j = Sequent.hyp_indices p i in
-      thin i j p
+let thinT =
+   pos_hypT thin
 
 let thinIfThinningT hyps p =
     (if get_thinning_arg p then
@@ -325,9 +324,8 @@ let thinAllT i j p =
  * @end[doc]
  *)
 let assertT s p =
-   let j, k = Sequent.hyp_split_addr p (Sequent.hyp_count p) in
    let v = maybe_new_vars1 p "v" in
-      cut j k s v p
+      cut (Sequent.hyp_count p + 1) s v p
 
 let tryAssertT s ta tm p =
    let concl = Sequent.concl p in
@@ -351,16 +349,15 @@ let tryAssertT s ta tm p =
  * @end[doc]
  *)
 let assertAtT i s p =
-   let i, j = Sequent.hyp_split_addr p i in
    let v = get_opt_var_arg "v" p in
-      cut i j s v p
+   let i = if i < 0 then Sequent.get_pos_hyp_num p i + 1 else i in
+      cut i s v p
 
 let copyHypT i j p =
    let t = Sequent.nth_hyp p i in
       (assertAtT j t thenLT [nthHypT i; idT]) p
 
-let dupT p =
-   dup (Sequent.hyp_count_addr p) p
+let dupT = dup
 
 (*!
  * @begin[doc]
@@ -378,8 +375,7 @@ let dupT p =
  * @docoff
  * @end[doc]
  *)
-let useWitnessT t p =
-   introduction (Sequent.hyp_count_addr p) t p
+let useWitnessT = introduction
 
 (*!
  * @begin[doc]
@@ -416,12 +412,13 @@ let substConclT t p =
             let x = get_opt_var_arg "z" p in
                mk_xbind_term x (var_subst (Sequent.concl p) a x)
    in
-      substitution (Sequent.hyp_count_addr p) t bind p
+      substitution t bind p
 
 (*
  * Hyp substitution requires a replacement.
  *)
 let substHypT i t p =
+   let i = Sequent.get_pos_hyp_num p i in
    let _, a, _ = dest_equal t in
    let z = get_opt_var_arg "z" p in
    let bind =
@@ -435,8 +432,7 @@ let substHypT i t p =
          RefineError _ ->
             mk_xbind_term z (var_subst (Sequent.nth_hyp p i) a z)
    in
-   let i, j = Sequent.hyp_indices p i in
-      hypSubstitution i j t bind z p
+      hypSubstitution i t bind z p
 
 (*
  * General substition.
@@ -462,15 +458,13 @@ let revHypSubstT i j p =
  * Replace the entire hypothesis.
  *)
 let replaceHypT t i p =
-   let j, k = Sequent.hyp_indices p i in
    let univ = get_univ_arg p in
-      hypReplacement j k t univ p
+      hypReplacement (Sequent.get_pos_hyp_num p i) t univ p
 
 (*
  * Typehood from equality.
  *)
-let equalTypeT a b p =
-   equalityTypeIsType (Sequent.hyp_count_addr p) a b p
+let equalTypeT = equalityTypeIsType
 let memberTypeT a = equalTypeT a a ttca
 
 let equalityAssumT i p =

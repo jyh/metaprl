@@ -135,7 +135,7 @@ dform subtype_df1 : except_mode[src] :: parens :: "prec"[prec_subtype] :: \subty
  * H >- Ui ext A
  * H >- Ui ext B
  *)
-prim subtypeFormation 'H :
+prim subtypeFormation :
    ('A : sequent ['ext] { 'H >- univ[i:l] }) -->
    ('B : sequent ['ext] { 'H >- univ[i:l] }) -->
    sequent ['ext] { 'H >- univ[i:l] } =
@@ -152,13 +152,13 @@ prim subtypeFormation 'H :
  * two subtype-types are equal if their subterms are equal.
  * @end[doc]
  *)
-prim subtypeEquality {| intro []; eqcd |} 'H :
+prim subtypeEquality {| intro []; eqcd |} :
    [wf] sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
    [wf] sequent [squash] { 'H >- 'B1 = 'B2 in univ[i:l] } -->
    sequent ['ext] { 'H >- 'A1 subtype 'B1 = 'A2 subtype 'B2 in univ[i:l] } =
    it
 
-prim subtypeType {| intro [] |} 'H :
+prim subtypeType {| intro [] |} :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H >- "type"{'B} } -->
    sequent ['ext] { 'H >- "type"{.'A subtype 'B} } =
@@ -171,12 +171,12 @@ prim subtypeType {| intro [] |} 'H :
  * and $B$ are types.
  * @end[doc]
  *)
-prim subtypeTypeRight 'H 'B :
+prim subtypeTypeRight 'B :
    [main] sequent [squash] { 'H >- 'A subtype 'B } -->
    sequent ['ext] { 'H >- "type"{'A} } =
    it
 
-prim subtypeTypeLeft 'H 'A :
+prim subtypeTypeLeft 'A :
    [main] sequent [squash] { 'H >- 'A subtype 'B }  -->
    sequent ['ext] { 'H >- "type"{'B} } =
    it
@@ -191,7 +191,7 @@ prim subtypeTypeLeft 'H 'A :
  * proof extract term is always the $@it$ term.
  * @end[doc]
  *)
-prim subtype_axiomFormation {| intro [] |} 'H 'x :
+prim subtype_axiomFormation {| intro [] |} 'x :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [main] sequent [squash] { 'H; x: 'A >- 'x in 'B } -->
    sequent ['ext] { 'H >- 'A subtype 'B } =
@@ -205,7 +205,7 @@ prim subtype_axiomFormation {| intro [] |} 'H 'x :
  * must be true.
  * @end[doc]
  *)
-prim subtype_axiomEquality {| intro []; eqcd; squash |} 'H :
+prim subtype_axiomEquality {| intro []; eqcd; squash |} :
    [main] sequent [squash] { 'H >- 'A subtype 'B } -->
    sequent ['ext] { 'H >- it in 'A subtype 'B } =
    it
@@ -221,12 +221,12 @@ prim subtype_axiomEquality {| intro []; eqcd; squash |} 'H :
  * additional assumption $a @in B$.
  * @end[doc]
  *)
-prim subtypeElimination {| elim [ThinOption thinT] |} 'H 'J :
+prim subtypeElimination {| elim [ThinOption thinT] |} 'H :
    ('t : sequent ['ext] { 'H; x: 'A subtype 'B; 'J[it] >- 'C[it] }) -->
    sequent ['ext] { 'H; x: 'A subtype 'B; 'J['x] >- 'C['x] } =
    't
 
-prim subtypeElimination2 'H 'J 'a 'b 'y :
+prim subtypeElimination2 'H 'a 'b 'y :
    [wf] sequent [squash] { 'H; x: 'A subtype 'B; 'J['x] >- 'a='b in 'A } -->
    ('t['y] : sequent ['ext] { 'H; x: 'A subtype 'B; 'J['x]; y: 'a='b in 'B >- 'C['x] }) -->
    sequent ['ext] { 'H; x: 'A subtype 'B; 'J['x] >- 'C['x] } =
@@ -329,34 +329,32 @@ let resource intro +=
  * We take the argument.
  *)
 let d_hyp_subtypeT i p =
-   let j, k = hyp_indices p i in
    try
       let v = maybe_new_vars1 p (Sequent.nth_binding p i) in
       let args = get_with_args p in
             match args with
-              [a] -> subtypeElimination2 j k a a v p |
-              [a;b] -> subtypeElimination2 j k a b v p |
+              [a] -> subtypeElimination2 i a a v p |
+              [a;b] -> subtypeElimination2 i a b v p |
               _ -> raise (RefineError ("subtypeElimination", StringError ("1 or 2 arguments required")))
-   with RefineError ("get_attribute",_) -> subtypeElimination j k p
+   with RefineError ("get_attribute",_) -> subtypeElimination i p
 
 let resource elim += (subtype_term, d_hyp_subtypeT)
 
-interactive use_subtype1 'H 'A :
+interactive use_subtype1 'A :
    [aux] sequent [squash] { 'H >- 'A subtype 'B } -->
    [main] sequent [squash] { 'H >- 't1 = 't2 in 'A } -->
    sequent ['ext] { 'H >- 't1 = 't2 in 'B }
 
-interactive use_subtype2 'H 'A :
+interactive use_subtype2 'A :
    [aux] sequent [squash] { 'H >- 'A subtype 'B } -->
    [main] sequent ['ext] { 'H >- 'A } -->
    sequent ['ext] { 'H >- 'B }
 
 let subtypeT t p =
-   let h = Sequent.hyp_count_addr p in
-      if is_equal_term (Sequent.concl p) then
-         use_subtype1 h t p
-      else
-         use_subtype2 h t p
+   if is_equal_term (Sequent.concl p) then
+      use_subtype1 t p
+   else
+      use_subtype2 t p
 
 (************************************************************************
  * TYPE INFERENCE                                                       *
@@ -368,11 +366,8 @@ let resource typeinf += (subtype_term, infer_univ_dep0_dep0 dest_subtype)
  * TYPEHOOD FROM SUBTYPE                                                *
  ************************************************************************)
 
-let type_subtype_leftT a p =
-   subtypeTypeLeft (Sequent.hyp_count_addr p) a p
-
-let type_subtype_rightT b p =
-   subtypeTypeRight (Sequent.hyp_count_addr p) b p
+let type_subtype_leftT = subtypeTypeLeft
+let type_subtype_rightT = subtypeTypeRight
 
 (*
  * -*-

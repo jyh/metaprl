@@ -73,7 +73,7 @@ dform setdiff_df : except_mode[src] :: parens :: "prec"[prec_setdiff] :: setdiff
  * A @tt[setdiff] is well-formed if its arguments are both sets.
  * @end[doc]
  *)
-interactive setdiff_isset {| intro [] |} 'H :
+interactive setdiff_isset {| intro [] |} :
    ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
    ["wf"] sequent [squash] { 'H >- isset{'s2} } -->
    sequent ['ext] { 'H >- isset{setdiff{'s1; 's2}} }
@@ -86,7 +86,7 @@ interactive setdiff_isset {| intro [] |} 'H :
  * member of $s_1$ and $x$ is not a member of $s_2$.
  * @end[doc]
  *)
-interactive setdiff_intro {| intro [] |} 'H 'x :
+interactive setdiff_intro {| intro [] |} 'x :
    ["wf"] sequent [squash] { 'H >- isset{'x} } -->
    ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
    ["wf"] sequent [squash] { 'H >- isset{'s2} } -->
@@ -102,7 +102,7 @@ interactive setdiff_intro {| intro [] |} 'H 'x :
  * $@mem{x; s_2}$ is wrong for which $@mem{x; s_1}$.
  * @end[doc]
  *)
-interactive setdiff_elim {| elim [] |} 'H 'J :
+interactive setdiff_elim {| elim [] |} 'H :
    ["wf"] sequent [squash] { 'H; x: mem{'y; setdiff{'s1; 's2}}; 'J['x] >- isset{'y} } -->
    ["wf"] sequent [squash] { 'H; x: mem{'y; setdiff{'s1; 's2}}; 'J['x] >- isset{'s1} } -->
    ["wf"] sequent [squash] { 'H; x: mem{'y; setdiff{'s1; 's2}}; 'J['x] >- isset{'s2} } -->
@@ -116,7 +116,7 @@ interactive setdiff_elim {| elim [] |} 'H 'J :
  * A @tt[setdiff] type is functional in both set arguments.
  * @end[doc]
  *)
-interactive setdiff_fun {| intro [] |} 'H :
+interactive setdiff_fun {| intro [] |} :
    sequent ['ext] { 'H >- fun_set{z. 's1['z]} } -->
    sequent ['ext] { 'H >- fun_set{z. 's2['z]} } -->
    sequent ['ext] { 'H >- fun_set{z. setdiff{'s1['z]; 's2['z]}} }
@@ -129,9 +129,9 @@ interactive setdiff_fun {| intro [] |} 'H :
  * -*-
  *)
 
-(* interactive setdiff1 'H :
+(* interactive setdiff1 :
    sequent ['ext] {'H >- eq{setdiff{succ{empty}; empty}; succ{empty}} }
 
-interactive setdiff2 'H :
+interactive setdiff2 :
    sequent ['ext] {'H >- eq{setdiff{succ{empty}; succ{empty}}; empty} }
 *)

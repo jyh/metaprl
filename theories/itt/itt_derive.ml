@@ -63,7 +63,7 @@ open Itt_equal
  * Show that the function is family of types,
  * and the argument is an index.
  *)
-interactive applyIntro 'H (x: 'A -> 'B['x]) (bind{y. 'C['y]}) 'f 'a :
+interactive applyIntro (x: 'A -> 'B['x]) (bind{y. 'C['y]}) 'f 'a :
    [wf] sequent [squash] { 'H >- 'a in 'A } -->
    [wf] sequent [squash] { 'H >- 'f in (x: 'A -> 'B['x]) } -->
    [wf] sequent [squash] { 'H >- "type"{'B['a]} } -->
@@ -76,7 +76,7 @@ interactive applyIntro 'H (x: 'A -> 'B['x]) (bind{y. 'C['y]}) 'f 'a :
  * Show that the function is family of types,
  * and the argument is an index.
  *)
-interactive independentApplyIntro 'H ('A -> 'B) (bind{y. 'C['y]}) 'f 'a :
+interactive independentApplyIntro ('A -> 'B) (bind{y. 'C['y]}) 'f 'a :
    [wf] sequent [squash] { 'H >- 'a in 'A } -->
    [wf] sequent [squash] { 'H >- 'f in ('A -> 'B) } -->
    [wf] sequent [squash] { 'H; y: 'B >- "type"{'C['y]} } -->
@@ -115,7 +115,7 @@ let applyT app i p =
       in
       let v = maybe_new_vars1 p "v" in
       let bind = mk_xbind_term v (var_subst (Sequent.concl p) app v) in
-         tac (Sequent.hyp_count_addr p) goal_type bind f a p
+         tac goal_type bind f a p
    else
       raise (RefineError ("d_applyT", StringError "no elimination form"))
 

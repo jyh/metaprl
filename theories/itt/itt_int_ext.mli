@@ -143,19 +143,19 @@ val is_bneq_int_term : term -> bool
 val mk_bneq_int_term : term -> term -> term
 val dest_bneq_int : term -> term * term
 
-rule mul_wf 'H :
+rule mul_wf :
    [wf] sequent [squash] { 'H >- 'a = 'a1 in int } -->
    [wf] sequent [squash] { 'H >- 'b = 'b1 in int } -->
    sequent ['ext] { 'H >- 'a *@ 'b = 'a1 *@ 'b1 in int }
 
-rule mul_Commut 'H :
+rule mul_Commut :
    [wf] sequent [squash] { 'H >- 'a in int } -->
    [wf] sequent [squash] { 'H >- 'b in int } -->
    sequent ['ext] { 'H >- ('a *@ 'b) ~ ('b *@ 'a) }
 
 topval mul_CommutC: conv
 
-rule mul_Assoc 'H :
+rule mul_Assoc :
    [wf] sequent [squash] { 'H >- 'a in int } -->
    [wf] sequent [squash] { 'H >- 'b in int } -->
    [wf] sequent [squash] { 'H >- 'c in int } -->
@@ -164,7 +164,7 @@ rule mul_Assoc 'H :
 topval mul_AssocC: conv
 topval mul_Assoc2C: conv
 
-rule mul_add_Distrib 'H :
+rule mul_add_Distrib :
    [wf] sequent [squash] { 'H >- 'a in int } -->
    [wf] sequent [squash] { 'H >- 'b in int } -->
    [wf] sequent [squash] { 'H >- 'c in int } -->
@@ -172,99 +172,99 @@ rule mul_add_Distrib 'H :
 
 topval mul_add_DistribC: conv
 
-rule mul_Id 'H :
+rule mul_Id :
    [wf] sequent [squash] { 'H >- 'a in int } -->
    sequent ['ext] { 'H >- (1 *@ 'a) ~ 'a }
 
 topval mul_IdC: conv
 
-rule mul_Id2 'H :
+rule mul_Id2 :
    [wf] sequent [squash] { 'H >- 'a in int } -->
    sequent ['ext] { 'H >- ('a *@ 1) ~ 'a }
 
 topval mul_Id2C: conv
 
-rule mul_Id3 'H :
+rule mul_Id3 :
    [wf] sequent [squash] { 'H >- 'a in int } -->
    sequent ['ext] { 'H >- 'a ~ (1 *@ 'a) }
 
 topval mul_Id3C: conv
 
-rule mul_Zero 'H :
+rule mul_Zero :
    [wf] sequent [squash] { 'H >- 'a in int } -->
    sequent ['ext] { 'H >- (0 *@ 'a) ~ 0 }
 
-rule mul_Zero2 'H :
+rule mul_Zero2 :
    [wf] sequent [squash] { 'H >- 'a in int } -->
    sequent ['ext] { 'H >- ('a *@ 0) ~ 0 }
 
-rule lt_mulPositMonoEq 'H 'c :
+rule lt_mulPositMonoEq 'c :
    sequent [squash] { 'H >- 0 < 'c } -->
    [wf] sequent [squash] { 'H >- 'a in int } -->
    [wf] sequent [squash] { 'H >- 'b in int } -->
    [wf] sequent [squash] { 'H >- 'c in int } -->
    sequent ['ext] { 'H >- lt_bool{'a; 'b} = lt_bool{('c *@ 'a); ('c *@ 'b) } in bool }
 
-rule lt_mulPositMono 'H 'c :
+rule lt_mulPositMono 'c :
    sequent [squash] { 'H >- 0 < 'c } -->
    [wf] sequent [squash] { 'H >- 'a in int } -->
    [wf] sequent [squash] { 'H >- 'b in int } -->
    [wf] sequent [squash] { 'H >- 'c in int } -->
    sequent ['ext] { 'H >- lt_bool{'a; 'b} ~ lt_bool{('c *@ 'a); ('c *@ 'b) } }
 
-rule mul_uni_Assoc 'H :
+rule mul_uni_Assoc :
    [wf] sequent [squash] { 'H >- 'a in int } -->
    [wf] sequent [squash] { 'H >- 'b in int } -->
    sequent ['ext] { 'H >- ('a *@ (- 'b)) ~ ((- 'a) *@ 'b) }
 
-rule lt_mulNegMono 'H 'c :
+rule lt_mulNegMono 'c :
    sequent [squash] { 'H >- 'c < 0 } -->
    [wf] sequent [squash] { 'H >- 'a in int } -->
    [wf] sequent [squash] { 'H >- 'b in int } -->
    [wf] sequent [squash] { 'H >- 'c in int } -->
    sequent ['ext] { 'H >- lt_bool{'a; 'b} ~ lt_bool{('c *@ 'b) ; ('c *@ 'a)} }
 
-rule rem_baseReduce 'H :
+rule rem_baseReduce :
    sequent [squash] { 'H >- 0 <= 'a } -->
    sequent [squash] { 'H >- 'a < 'b } -->
    [wf] sequent [squash] { 'H >- 'a in int } -->
    [wf] sequent [squash] { 'H >- 'b in int } -->
    sequent ['ext] { 'H >- ('a %@ 'b) ~ 'a }
 
-rule rem_indReduce 'H :
+rule rem_indReduce :
    sequent [squash] { 'H >- 0 < 'b } -->
    [wf] sequent [squash] { 'H >- 'a in int } -->
    [wf] sequent [squash] { 'H >- 'b in int } -->
    [wf] sequent [squash] { 'H >- 'c in int } -->
    sequent ['ext] { 'H >- ((('a *@ 'b) +@ 'c) %@ 'b) ~ ('c %@ 'b) }
 
-rule rem_wf 'H :
+rule rem_wf :
    sequent [squash] { 'H >- "nequal"{'b ; 0} } -->
    [wf] sequent [squash] { 'H >- 'a in int } -->
    [wf] sequent [squash] { 'H >- 'b in int } -->
    sequent ['ext] { 'H >- ('a %@ 'b) in int }
 
-rule div_baseReduce 'H :
+rule div_baseReduce :
    sequent [squash] { 'H >- 0 <= 'a } -->
    sequent [squash] { 'H >- 'a < 'b } -->
    [wf] sequent [squash] { 'H >- 'a in int } -->
    [wf] sequent [squash] { 'H >- 'b in int } -->
    sequent ['ext] { 'H >- ('a /@ 'b) ~ 0 }
 
-rule div_indReduce 'H :
+rule div_indReduce :
    sequent [squash] { 'H >- 0 < 'b } -->
    [wf] sequent [squash] { 'H >- 'a in int } -->
    [wf] sequent [squash] { 'H >- 'b in int } -->
    [wf] sequent [squash] { 'H >- 'c in int } -->
    sequent ['ext] { 'H >- ((('a *@ 'b) +@ 'c) /@ 'b) ~ ('a +@ ('c /@ 'b)) }
 
-rule div_wf 'H :
+rule div_wf :
    sequent [squash] { 'H >- "nequal"{'b ; 0} } -->
    [wf] sequent [squash] { 'H >- 'a in int } -->
    [wf] sequent [squash] { 'H >- 'b in int } -->
    sequent ['ext] { 'H >- 'a /@ 'b in int }
 
-rule lt_divMono 'H 'b :
+rule lt_divMono 'b :
    sequent [squash] { 'H >- 0 < 'c } -->
    sequent [squash] { 'H >- 'a < 'b } -->
    [wf] sequent [squash] { 'H >- 'a in int } -->
@@ -272,7 +272,7 @@ rule lt_divMono 'H 'b :
    [wf] sequent [squash] { 'H >- 'c in int } -->
    sequent ['ext] { 'H >- 'a /@ 'c <= 'b /@ 'c }
 
-rule add_divReduce 'H:
+rule add_divReduce :
    sequent [squash] {'H >- 0 < 'a } -->
    sequent [squash] {'H >- 0 < 'b } -->
    sequent [squash] {'H >- 0 < 'c } -->
@@ -281,7 +281,7 @@ rule add_divReduce 'H:
    [wf] sequent [squash] {'H >- 'c in int } -->
    sequent ['ext] {'H >- ('a /@ 'c) +@ ('b /@ 'c) <= ('a +@ 'b) /@ 'c }
 
-rule div_Assoc 'H :
+rule div_Assoc :
    sequent [squash] { 'H >- 0 <= 'a } -->
    sequent [squash] { 'H >- 0 < 'b } -->
    sequent [squash] { 'H >- 0 < 'c } -->

@@ -113,12 +113,12 @@ dform cyc_subg_df : except_mode[src] :: cyc_subg{'s; 'g; 'a} =
  * RULES                                                                *
  ************************************************************************)
 
-interactive exst_power_fun {| intro [] |} 'H :
+interactive exst_power_fun {| intro [] |} :
    sequent [squash] { 'H >- 'g IN label } -->
    sequent [squash] { 'H >- isset{'a} } -->
    sequent ['ext] { 'H >- fun_prop{z. (exst n: int. eq{'z; power{'g; 'a; 'n}})} }
 
-interactive exst_power_res {| intro [] |} 'H :
+interactive exst_power_res {| intro [] |} :
    sequent [squash] { 'H >- 'g IN label } -->
    sequent [squash] { 'H >- isset{'a} } -->
    sequent [squash] { 'H >- isset{'z} } -->
@@ -133,7 +133,7 @@ interactive exst_power_res {| intro [] |} 'H :
  * and $a$ is a set.
  * @end[doc]
  *)
-interactive cyc_subg_wf {| intro [] |} 'H :
+interactive cyc_subg_wf {| intro [] |} :
    sequent [squash] { 'H >- 'g IN label } -->
    sequent [squash] { 'H >- 's IN label } -->
    sequent [squash] { 'H >- isset{'a} } -->
@@ -149,7 +149,7 @@ interactive cyc_subg_wf {| intro [] |} 'H :
  * $@op{s; a; b}$ is defined as $@op{g; a; b}$ for $a, b @in @car{s}$.
  * @end[doc]
  *)
-interactive cyc_subg_intro {| intro [] |} 'H :
+interactive cyc_subg_intro {| intro [] |} :
    sequent [squash] { 'H >- 'g IN label } -->
    sequent [squash] { 'H >- 's IN label } -->
    sequent ['ext] { 'H >- group{'g} } -->
@@ -167,7 +167,7 @@ interactive cyc_subg_intro {| intro [] |} 'H :
  * A cyclic subgroup is a subgroup.
  * @end[doc]
  *)
-interactive cycsubg_subgroup 'H 'a :
+interactive cycsubg_subgroup 'a :
    sequent [squash] { 'H >- 'g IN label } -->
    sequent [squash] { 'H >- 's IN label } -->
    sequent ['ext] { 'H >- group{'g} } -->
@@ -195,8 +195,7 @@ interactive cycsubg_subgroup 'H 'a :
  * @docoff
  * @end[doc]
  *)
-let cycsubgSubgroupT t p =
-   cycsubg_subgroup (hyp_count_addr p) t p
+let cycsubgSubgroupT = cycsubg_subgroup
 
 (*
  * -*-

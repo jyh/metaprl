@@ -62,7 +62,7 @@ rule or_intro_right 'x :
  * H, x: A \/ B, y: A; J[inl y] >> T[inl y]
  * H, x: A \/ B, y: B; J[inr y] >> T[inr y]
  *)
-rule or_elim 'H 'J 'y :
+rule or_elim 'H 'y :
    sequent { 'H; x: 'A \/ 'B; y: 'A; 'J[inl{'y}] >> 'T[inl{'y}] } -->
    sequent { 'H; x: 'A \/ 'B; y: 'B; 'J[inr{'y}] >> 'T[inr{'y}] } -->
    sequent { 'H; x: 'A \/ 'B; 'J['x] >> 'T['x] };;

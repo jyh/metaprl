@@ -43,34 +43,32 @@ let _ =
  *)
 
 
-interactive substUsingEpimorphism 'H 'J 'B bind{y. 'f['y]} bind{x. 'g['x]}  : (* g does not depend on J *)
+interactive substUsingEpimorphism 'H 'B bind{y. 'f['y]} bind{x. 'g['x]}  : (* g does not depend on J *)
    [wf] sequent [squash] { 'H; x: 'A; 'J['x]; y: 'B >- 'f['y] in 'A } -->
    [wf] sequent [squash] { 'H; x: 'A; 'J['x] >-  'g['x] in 'B } -->
    [equality] sequent [squash] { 'H; x: 'A; 'J['x] >- 'f['g['x]] ~ 'x } -->
    [main] sequent ['ext] { 'H; y: 'B; 'J['f['y]] >- 'C['f['y]] } -->
    sequent ['ext] { 'H; x: 'A; 'J['x] >- 'C['x] }
 
-interactive hypReplacementStrong 'H 'J 'B 'y:
+interactive hypReplacementStrong 'H 'B 'y:
    [assertion] sequent [squash] { 'H; x: 'A; 'J['x]; y: 'B >- 'y in 'A } -->
    [assertion] sequent [squash] { 'H; x: 'A; 'J['x] >-  'x in 'B } -->
    [main] sequent ['ext] { 'H; x: 'B; 'J['x] >- 'C['x] } -->
    sequent ['ext] { 'H; x: 'A; 'J['x] >- 'C['x] }
 
-interactive hypReplacementExt 'H 'J 'B  :
+interactive hypReplacementExt 'H 'B  :
    [equality] sequent [squash] { 'H; x: 'A; 'J['x] >- ext_equal{'A;'B} } -->
    [main]  sequent ['ext] { 'H; x: 'B; 'J['x] >- 'T['x] } -->
    sequent ['ext] { 'H; x: 'A; 'J['x] >- 'T['x] }
 
 let changeHypT t i p =
    let y = maybe_new_vars1 p "y" in
-   let j, k = Sequent.hyp_indices p i in
-      hypReplacementStrong j k t y p
+      hypReplacementStrong i t y p
 
 let replaceHypT t i p =
-   let j, k = Sequent.hyp_indices p i in
    try
       let univ = get_univ_arg p in
-        hypReplacement j k t univ p
+        hypReplacement i t univ p
    with RefineError _ ->
-        hypReplacementExt j k t p
+        hypReplacementExt i t p
 

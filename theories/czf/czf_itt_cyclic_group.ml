@@ -127,11 +127,11 @@ dform cyclic_group_df : except_mode[src] :: cycgroup{'g; 'a} =
  * and $a$ is a set.
  * @end[doc]
  *)
-interactive cycg_wf {| intro [] |} 'H :
+interactive cycg_wf {| intro [] |} :
    sequent [squash] { 'H >- 'g IN label } -->
    sequent ['ext] { 'H >- "type"{cycg{'g}} }
 
-interactive cycgroup_wf {| intro [] |} 'H :
+interactive cycgroup_wf {| intro [] |} :
    sequent [squash] { 'H >- 'g IN label } -->
    sequent [squash] { 'H >- isset{'a} } -->
    sequent ['ext] { 'H >- "type"{cycgroup{'g; 'a}} }
@@ -143,7 +143,7 @@ interactive cycgroup_wf {| intro [] |} 'H :
  * The @tt{cycgroup} is functional in its set argument.
  * @end[doc]
  *)
-interactive cycgroup_fun {| intro [] |} 'H :
+interactive cycgroup_fun {| intro [] |} :
    sequent [squash] { 'H >- 'g IN label } -->
    sequent ['ext] { 'H >- group{'g} } -->
    sequent ['ext] { 'H >- fun_prop{z. cycgroup{'g; 'z}} }
@@ -162,7 +162,7 @@ interactive cycgroup_fun {| intro [] |} 'H :
  * $@equal{@car{g}; @sep{x; @car{g}; @exists{n; @int; @eq{x; @power{g; a; x}}}}}$.
  * @end[doc]
  *)
-interactive cycg_intro {| intro [] |} 'H 'a :
+interactive cycg_intro {| intro [] |} 'a :
    sequent [squash] { 'H >- 'g IN label } -->
    sequent ['ext] { 'H >- group{'g} } -->
    sequent [squash] { 'H >- isset{'a} } -->
@@ -170,7 +170,7 @@ interactive cycg_intro {| intro [] |} 'H 'a :
    sequent ['ext] { 'H; x: set; u: mem{'x; car{'g}} >- exst n: int. eq{'x; power{'g; 'a; 'n}} } -->
    sequent ['ext] { 'H >- cycg{'g} }
 
-interactive cycgroup_intro {| intro [] |} 'H :
+interactive cycgroup_intro {| intro [] |} :
    sequent [squash] { 'H >- 'g IN label } -->
    sequent ['ext] { 'H >- group{'g} } -->
    sequent [squash] { 'H >- isset{'a} } -->
@@ -185,13 +185,13 @@ interactive cycgroup_intro {| intro [] |} 'H :
  * $@cycg{g}$ is equivalent to there exists $a @in @car{g}$ such that $@cycgroup{g; a}$.
  * @end[doc]
  *)
-interactive cycg1 'H :
+interactive cycg1 :
    sequent [squash] { 'H >- 'g IN label } -->
    sequent ['ext] { 'H >- group{'g} } -->
    sequent ['ext] { 'H >- cycg{'g} } -->
    sequent ['ext] { 'H >- "dexists"{car{'g}; a. cycgroup{'g; 'a}} }
 
-interactive cycg2 'H :
+interactive cycg2 :
    sequent [squash] { 'H >- 'g IN label } -->
    sequent ['ext] { 'H >- group{'g} } -->
    sequent ['ext] { 'H >- "dexists"{car{'g}; a. cycgroup{'g; 'a}} } -->
@@ -204,7 +204,7 @@ interactive cycg2 'H :
  * Every cyclic group is abelian.
  * @end[doc]
  *)
-interactive cycg_abel 'H :
+interactive cycg_abel :
    sequent [squash] { 'H >- 'g IN label } -->
    sequent ['ext] { 'H >- group{'g} } -->
    sequent ['ext] { 'H >- cycg{'g} } -->
@@ -227,8 +227,7 @@ interactive cycg_abel 'H :
  * @docoff
  * @end[doc]
  *)
-let cycgAbelT p =
-   cycg_abel (hyp_count_addr p) p
+let cycgAbelT = cycg_abel
 
 (*
  * -*-

@@ -151,7 +151,7 @@ val var_of_exists : term -> string
  *)
 topval tptp_autoT : tactic
 
-topval t_atomicT : tactic
+topval t_atomic : tactic
 topval atomicT : int -> tactic
 topval typeT : int -> tactic
 

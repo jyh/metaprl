@@ -122,7 +122,7 @@ dform dexists_df : parens :: "prec"[prec_lambda] :: "dexists"{'s; x. 'A} =
  * for @emph{any} set argument $x$.
  * @end[doc]
  *)
-interactive dexists_type {| intro [] |} 'H 'y :
+interactive dexists_type {| intro [] |} 'y :
    ["wf"] sequent [squash] { 'H >- isset{'s} } -->
    ["wf"] sequent [squash] { 'H; y: set >- "type"{'A['y]} } -->
    sequent ['ext] { 'H >- "type"{."dexists"{'s; x. 'A['x]}} }
@@ -136,7 +136,7 @@ interactive dexists_type {| intro [] |} 'H 'y :
  * element $@mem{a; s}$.
  * @end[doc]
  *)
-interactive dexists_intro {| intro [] |} 'H 'z 'w :
+interactive dexists_intro {| intro [] |} 'z 'w :
    ["wf"] sequent [squash] { 'H; w: set >- "type"{'A['w]} } -->
    ["wf"] sequent ['ext] { 'H >- fun_prop{x. 'A['x]} } -->
    ["main"] sequent ['ext] { 'H >- member{'z; 's} } -->
@@ -152,7 +152,7 @@ interactive dexists_intro {| intro [] |} 'H 'z 'w :
  * produces these parts.
  * @end[doc]
  *)
-interactive dexists_elim {| elim [] |} 'H 'J 'x 'z 'v 'w :
+interactive dexists_elim {| elim [] |} 'H 'x 'z 'v 'w :
    ["wf"] sequent [squash] { 'H; x: "dexists"{'s; y. 'A['y]}; 'J['x] >- isset{'s} } -->
    ["wf"] sequent [squash] { 'H; x: "dexists"{'s; y. 'A['y]}; 'J['x]; z: set >- "type"{'A['z]} } -->
    ["wf"] sequent ['ext] { 'H; x: "dexists"{'s; y. 'A['y]}; 'J['x] >- fun_prop{z. 'A['z]} } -->
@@ -174,7 +174,7 @@ interactive dexists_elim {| elim [] |} 'H 'J 'x 'z 'v 'w :
  * arguments.
  * @end[doc]
  *)
-interactive dexists_fun {| intro [] |} 'H :
+interactive dexists_fun {| intro [] |} :
    sequent ['ext] { 'H >- fun_set{z. 'A['z]} } -->
    sequent ['ext] { 'H; z: set >- fun_prop{x. 'B['z; 'x]} } -->
    sequent ['ext] { 'H; z: set >- fun_prop{x. 'B['x; 'z]} } -->
@@ -190,7 +190,7 @@ interactive dexists_fun {| intro [] |} 'H :
  * argument.
  * @end[doc]
  *)
-interactive dexists_res2 {| intro [] |} 'H :
+interactive dexists_res2 {| intro [] |} :
    ["wf"]   sequent [squash] { 'H >- isset{'A} } -->
    sequent [squash] { 'H; u: set >- restricted{'B['u]} } -->
    sequent ['ext] { 'H >- restricted{."dexists"{'A; y. 'B['y]}} }

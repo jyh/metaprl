@@ -2269,7 +2269,7 @@ T	t1998	o548 b1992 b1997
 B	b1998	t1998
 T	t1999	o548 b1990 b1998
 B	b1999	t1999
-P	p3507	String "rfunction_applyEquality' << { h | x: 'A -> 'B['x] } >>"
+P	p3507	String "rfunction_applyEquality << { h | x: 'A -> 'B['x] } >>"
 O	o3507	ext_rule p3507
 T	t2000	o b1991 b4
 B	b2000	t2000
@@ -5494,7 +5494,7 @@ T	t3776	o569 b3769 b4
 B	b3777	t3776
 T	t3777	o1768 b563 b3777 b4 b4
 B	b3778	t3777
-P	p1051	String "applyEquality' << a: 'A -> univ[i:l] >> thenT autoT"
+P	p1051	String "applyEquality << a: 'A -> univ[i:l] >> thenT autoT"
 O	o1051	ext_rule p1051
 T	t3778	o569 b3772 b4
 B	b3779	t3778

@@ -57,14 +57,14 @@ prim eq_mem_eq 'H :
    sequent[squash] {'H; x1: 'X; x2: 'X >- ('x1 = 'x2 in 'A) => ('x1 = 'x2 in 'B)} -->
    sequent['ext] {'H; x: 'A; y: esquash{('x in 'X)} >- 'x in 'B } = it
 
-interactive antiquotient 'H univ[i:l] :
+interactive antiquotient univ[i:l] :
    sequent[squash] {'H >- \subtype{'A; 'B} } -->
    sequent[squash] {'H >- \subtype{'B; . quot x,y: 'A // "true" }} -->
    (* We know A Type, but need explicit univ number *)
    sequent[squash] {'H >- 'A in univ[i:l] } -->
    sequent['ext] {'H >- \subtype{'B ; . quot u,v: 'A // ('u='v in 'B)}}
 
-interactive quotent_isect 'H univ[i:l] :
+interactive quotent_isect univ[i:l] :
    [wf] sequent[squash] {'H >- 'A in univ[i:l] } -->
    [wf] sequent[squash] {'H >- "type"{ . quot x,y : 'A //'E1['x;'y]}} -->
    [wf] sequent[squash] {'H >- "type"{ . quot x,y : 'A //'E2['x;'y]}} -->

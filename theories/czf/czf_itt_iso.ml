@@ -112,7 +112,7 @@ dform iso_df : parens :: except_mode[src] :: iso{'g1; 'g2; x. 'f} =
  * set argument $x$.
  * @end[doc]
  *)
-interactive iso_type {| intro [] |} 'H :
+interactive iso_type {| intro [] |} :
    sequent [squash] { 'H >- 'g1 IN label } -->
    sequent [squash] { 'H >- 'g2 IN label } -->
    sequent [squash] { 'H; x: set >- isset{'f['x]} } -->
@@ -126,7 +126,7 @@ interactive iso_type {| intro [] |} 'H :
  * argument.
  * @end[doc]
  *)
-interactive iso_fun {| intro [] |} 'H :
+interactive iso_fun {| intro [] |} :
    sequent [squash] { 'H >- 'g1 IN label } -->
    sequent [squash] { 'H >- 'g2 IN label } -->
    sequent ['ext] { 'H >- group{'g1} } -->

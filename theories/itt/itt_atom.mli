@@ -52,30 +52,30 @@ declare token[t:t]
  * H >- Ui ext Atom
  * by atomFormation
  *)
-rule atomFormation 'H : sequent ['ext] { 'H >- univ[i:l] }
+rule atomFormation : sequent ['ext] { 'H >- univ[i:l] }
 
 (*
  * H >- Atom = Atom in Ui ext Ax
  * by atomEquality
  *)
-rule atomEquality 'H : sequent ['ext] { 'H >- atom = atom in univ[i:l] }
+rule atomEquality : sequent ['ext] { 'H >- atom = atom in univ[i:l] }
 
 (*
  * Typehood.
  *)
-rule atomType 'H : sequent ['ext] { 'H >- "type"{atom} }
+rule atomType : sequent ['ext] { 'H >- "type"{atom} }
 
 (*
  * H >- Atom ext "t"
  * by tokenFormation "t"
  *)
-rule tokenFormation 'H token[t:t] : sequent ['ext] { 'H >- atom }
+rule tokenFormation token[t:t] : sequent ['ext] { 'H >- atom }
 
 (*
  * H >- "t" = "t" in Atom
  * by tokenEquality
  *)
-rule tokenEquality 'H : sequent ['ext] { 'H >- token[t:t] = token[t:t] in atom }
+rule tokenEquality : sequent ['ext] { 'H >- token[t:t] = token[t:t] in atom }
 
 (************************************************************************
  * TACTICS                                                              *

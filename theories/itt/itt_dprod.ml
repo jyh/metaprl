@@ -282,7 +282,7 @@ dform snd_df1 : except_mode[src] :: snd{'e} =
  * H >- A = A in Ui
  * H, x:A >- Ui ext B
  *)
-prim productFormation 'H 'A 'x :
+prim productFormation 'A 'x :
    [wf] sequent [squash] { 'H >- 'A in univ[i:l] } -->
    [main] ('B['x] : sequent ['ext] { 'H; x: 'A >- univ[i:l] }) -->
    sequent ['ext] { 'H >- univ[i:l] } =
@@ -298,7 +298,7 @@ prim productFormation 'H 'A 'x :
  * $B[x]$ is a family of types indexed by $x @in A$.
  * @end[doc]
  *)
-prim productEquality {| intro []; eqcd |} 'H 'y :
+prim productEquality {| intro []; eqcd |} 'y :
    [wf] sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
    [wf] sequent [squash] { 'H; y: 'A1 >- 'B1['y] = 'B2['y] in univ[i:l] } -->
    sequent ['ext] { 'H >- x1:'A1 * 'B1['x1] = x2:'A2 * 'B2['x2] in univ[i:l] } =
@@ -307,7 +307,7 @@ prim productEquality {| intro []; eqcd |} 'H 'y :
 (*
  * Typehood.
  *)
-prim productType {| intro [] |} 'H 'x :
+prim productType {| intro [] |} 'x :
    [wf] sequent [squash] { 'H >- "type"{'A1} } -->
    [wf] sequent [squash] { 'H; x: 'A1 >- "type"{'A2['x]} } -->
    sequent ['ext] { 'H >- "type"{.y:'A1 * 'A2['y]} } =
@@ -323,7 +323,7 @@ prim productType {| intro [] |} 'H 'x :
  * some element $a @in A$ where $B[a]$ is true.
  * @end[doc]
  *)
-prim pairFormation {| intro [] |} 'H 'a 'y :
+prim pairFormation {| intro [] |} 'a 'y :
    [wf] sequent [squash] { 'H >- 'a in 'A } -->
    [main] ('b : sequent ['ext] { 'H >- 'B['a] }) -->
    [wf] sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
@@ -342,7 +342,7 @@ prim pairFormation {| intro [] |} 'H 'a 'y :
  * $y @in A$, which is the purpose of the third subgoal.
  * @end[doc]
  *)
-prim pairEquality {| intro []; eqcd |} 'H 'y :
+prim pairEquality {| intro []; eqcd |} 'y :
    [wf] sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
    [wf] sequent [squash] { 'H >- 'b1 = 'b2 in 'B['a1] } -->
    [wf] sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
@@ -360,7 +360,7 @@ prim pairEquality {| intro []; eqcd |} 'H 'y :
  * induction combinator.
  * @end[doc]
  *)
-prim productElimination {| elim [ThinOption thinT] |} 'H 'J 'u 'v :
+prim productElimination {| elim [ThinOption thinT] |} 'H 'u 'v :
    [wf] ('t['u; 'v] : sequent ['ext] { 'H; z: x:'A * 'B['x]; u: 'A; v: 'B['u]; 'J['u, 'v] >- 'T['u, 'v] }) -->
    sequent ['ext] { 'H; z: x:'A * 'B['x]; 'J['z] >- 'T['z] } =
    spread{'z; u, v. 't['u; 'v]}
@@ -387,7 +387,7 @@ let d_spread_equalT tac p =
          RefineError _ ->
             type_type, infer_type p pair
    in
-      tac (Sequent.hyp_count_addr p) type_type pair_type u v a p
+      tac type_type pair_type u v a p
 
 (*!
  * @begin[doc]
@@ -397,7 +397,7 @@ let d_spread_equalT tac p =
  * its parts are well-formed.
  * @end[doc]
  *)
-prim spreadEquality {| eqcd |} 'H bind{z. 'T['z]} (w:'A * 'B['w]) 'u 'v 'a :
+prim spreadEquality {| eqcd |} bind{z. 'T['z]} (w:'A * 'B['w]) 'u 'v 'a :
    [wf] sequent [squash] { 'H >- 'e1 = 'e2 in w:'A * 'B['w] } -->
    [wf] sequent [squash] { 'H; u: 'A; v: 'B['u]; a: 'e1 = ('u, 'v) in w:'A * 'B['w] >-
              'b1['u; 'v] = 'b2['u; 'v] in 'T['u, 'v] } -->
@@ -419,7 +419,7 @@ let resource intro +=
  * type $B[a]$ for each $a @in A$.
  * @end[doc]
  *)
-prim productSubtype {| intro [] |} 'H 'a :
+prim productSubtype {| intro [] |} 'a :
    ["subtype"] sequent [squash] { 'H >- \subtype{'A1; 'A2} } -->
    ["subtype"] sequent [squash] { 'H; a: 'A1 >- \subtype{'B1['a]; 'B2['a]} } -->
    sequent ['ext] { 'H >- \subtype{ (a1:'A1 * 'B1['a1]); (a2:'A2 * 'B2['a2]) } } =

@@ -121,37 +121,37 @@ let resource reduce +=
 
 (*! @doc{@rules} *)
 
-interactive natType {| intro [] |} 'H :
+interactive natType {| intro [] |} :
    sequent ['ext] { 'H >- "type"{nat} }
 
-interactive natMemberEquality {| intro [] |} 'H :
+interactive natMemberEquality {| intro [] |} :
    sequent [squash] { 'H >- 'a='b in int} -->
    sequent [squash] { 'H >- 'a >= 0}  -->
    sequent ['ext] { 'H >- 'a='b in nat}
 
-interactive natMemberZero {| intro [] |} 'H :
+interactive natMemberZero {| intro [] |} :
    sequent ['ext] { 'H >- 0 in nat}
 
-interactive nat_is_int {| intro[AutoMustComplete] |} 'H:
+interactive nat_is_int {| intro[AutoMustComplete] |} :
    sequent [squash] { 'H >- 'a='b in nat} -->
    sequent [squash] { 'H >- 'a='b in int}
 
-interactive natElimination  'H 'J 'v :
+interactive natElimination  'H 'v :
    sequent ['ext] { 'H; x: int; v:'x>=0; 'J['x] >- 'C['x]}  -->
    sequent ['ext] { 'H; x: nat; 'J['x] >- 'C['x]}
 
-interactive natInduction {| elim [] |} 'H 'J  :
+interactive natInduction {| elim [] |} 'H  :
    sequent ['ext] { 'H; n: nat; 'J['n] >- 'C[0] }  -->
    sequent ['ext] { 'H; n: nat; 'J['n]; m: nat;  z: 'C['m] >- 'C['m +@ 1] }  -->
    sequent ['ext] { 'H; n: nat; 'J['n] >- 'C['n] }
 
-interactive natBackInduction 'H 'n bind{x.'C['x]}  :
+interactive natBackInduction 'n bind{x.'C['x]}  :
    [wf] sequent [squash]{'H >- 'n in nat }  -->
    sequent ['ext] { 'H >- 'C['n] }  -->
    sequent ['ext] { 'H; m: nat;  z: 'C['m +@ 1] >- 'C['m] }  -->
    sequent ['ext] { 'H  >- 'C[0] }
 
-interactive well_ordering_principle 'H bind{i.'P['i]} 'i :
+interactive well_ordering_principle bind{i.'P['i]} 'i :
    [wf] sequent [squash] { 'H; n: nat >- "type"{'P['n]} } -->
    [wf] sequent [squash] { 'H >- 'i in nat } -->
    sequent['ext] {'H >-
@@ -173,14 +173,13 @@ let natBackInductionT n p =
                let z = get_opt_var_arg "z" p in
                   mk_xbind_term z (var_subst  (Sequent.concl p) <<0>> z)
    in
-      natBackInduction (Sequent.hyp_count_addr p) n bind p
-
+      natBackInduction n bind p
 
 (*
  * Some applications
  *)
 
-interactive int_div_rem {| intro [] |} 'H :
+interactive int_div_rem {| intro [] |} :
    sequent [squash] { 'H >- 'm in int } -->
    sequent [squash] { 'H >- 'k in int } -->
    sequent ['ext] { 'H >- 'k > 0 } -->
@@ -191,26 +190,24 @@ interactive int_div_rem {| intro [] |} 'H :
  * a smallest positive number k such that P[k], as long as P[y]
  * is well-formed and decidable for any integer y.
  *)
-interactive positive_rule1 {| intro [] |} 'H :
+interactive positive_rule1 {| intro [] |} :
    [wf] sequent [squash] { 'H; a: int >- "type"{'P['a]} } -->
    [wf] sequent [squash] { 'H >- 'n in int } -->
    [wf] sequent ['ext] { 'H >- 'n > 0 } -->
    [decidable] sequent ['ext] { 'H; a: int >- decidable{'P['a]} } -->
    sequent ['ext] { 'H >- (all b: int. ('b > 0 & 'b <= 'n => not{'P['b]})) or (exst u: int. ('u > 0 & 'u <= 'n & 'P['u] & all b: int. (('b > 0 & 'P['b]) => 'b >= 'u))) }
 
-let positiveRule1T p =
-   positive_rule1 (hyp_count_addr p) p
+let positiveRule1T = positive_rule1
 
-interactive smallest_positive {| intro [] |} 'H :
+interactive smallest_positive {| intro [] |} :
    [wf] sequent [squash] { 'H; a: int >- "type"{'P['a]} } -->
    [decidable] sequent ['ext] { 'H; a: int >- decidable{'P['a]} } -->
    [main] sequent ['ext] { 'H >- exst a: int. ('a > 0 & 'P['a]) } -->
    sequent ['ext] { 'H >- exst u: int. ('u > 0 & 'P['u] & all b: int. (('b > 0 & 'P['b]) => 'b >= 'u)) }
 
-let positiveRule2T p =
-   smallest_positive (hyp_count_addr p) p
+let positiveRule2T = smallest_positive
 
-(*interactive smallest_positive_elim {| elim [] |} 'H 'J :
+(*interactive smallest_positive_elim {| elim [] |} 'H :
    sequent ['ext] { 'H; x: exst a: int. ('a > 0 & 'P['a]); 'J['x]; y: exst u: int. ('u > 0 & 'P['u] & all b: int. (('b > 0 & 'P['b]) => 'b < 'u)) >- 'C['x] } -->
    sequent ['ext] { 'H; x: exst a: int. ('a > 0 & 'P['a]); 'J['x] >- 'C['x] }
 *)

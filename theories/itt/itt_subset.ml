@@ -122,13 +122,13 @@ dform subset_df1 : except_mode[src] :: parens :: "prec"[prec_subtype] :: ('A sub
  * RULES                                                                *
  ************************************************************************)
 
-interactive subset_wf {| intro [] |} 'H :
+interactive subset_wf {| intro [] |} :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H >- "type"{'B} } -->
    [wf] sequent [squash] { 'H; x: 'A >- 'x IN 'B } -->
    sequent ['ext] { 'H >- "type"{.'A subset 'B} }
 
-interactive subset_intro {| intro [] |} 'H :
+interactive subset_intro {| intro [] |} :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H >- "type"{'B} } -->
    [wf] sequent [squash] { 'H; x: 'A >- 'x IN 'B } -->
@@ -136,21 +136,21 @@ interactive subset_intro {| intro [] |} 'H :
    [main] sequent [squash] { 'H; a: 'A; b: 'A; u: 'a = 'b in 'B >- 'a = 'b in 'A } -->
    sequent ['ext] { 'H >- 'A subset 'B }
 
-interactive subset_elim {| elim [] |} 'H 'J :
+interactive subset_elim {| elim [] |} 'H :
    sequent ['ext] { 'H; u: 'A subset 'B; v: 'A subtype 'B; w: all a: 'A. all b: 'A. (('a = 'b in 'B) => ('a = 'b in 'A)); x: {b: 'B | exst a: 'A. 'b = 'a in 'B} subtype 'A; 'J['u] >- 'C['u] } -->
    sequent ['ext] { 'H; u: 'A subset 'B; 'J['u] >- 'C['u] }
 
-interactive set_subset_intro {| intro [] |} 'H :
+interactive set_subset_intro {| intro [] |} :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H; x: 'A >- 'P['x] } -->
    sequent ['ext] { 'H >- {a: 'A | 'P['a]} subset 'A }
 
-interactive subset_ref {| intro [] |} 'H :
+interactive subset_ref {| intro [] |} :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    sequent ['ext] { 'H >- 'A subset 'A }
 
 (*
-interactive subset_trans 'H 'B:
+interactive subset_trans 'B:
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H >- "type"{'B} } -->
    [wf] sequent [squash] { 'H >- "type"{'C} } -->
@@ -160,7 +160,7 @@ interactive subset_trans 'H 'B:
 *)
 
 (*
-interactive set_subset_elim1 {| elim [] |} 'H 'J :
+interactive set_subset_elim1 {| elim [] |} 'H :
    [wf] sequent [squash] { 'H; x: 'A subset 'B; 'J['x] >- 'a = 'b in 'A } -->
    sequent ['ext] { 'H; x: 'A subset 'B; 'J['x] >- 'a = 'b in 'B }
 *)

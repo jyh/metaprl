@@ -186,17 +186,16 @@ let resource prog +=
  * Lift function past the turnstile.
  * @end[doc]
  *)
-interactive hoist_fundecl 'H :
+interactive hoist_fundecl :
    sequent [m] { 'H; f : exp >- compilable{'e['f]} } -->
    sequent [m] { 'H >- compilable{FunDecl{f. 'e['f]}} }
 
-interactive hoist_fundef 'H :
+interactive hoist_fundef :
    sequent [m] { 'H; w: def{'f; 'e1} >- compilable{'e2} } -->
    sequent [m] { 'H >- compilable{FunDef{'f; 'e1; 'e2}} }
 
-let hoistOnceT p =
-   let addr = hyp_count_addr p in
-      (hoist_fundecl addr orelseT hoist_fundef addr) p
+let hoistOnceT =
+   hoist_fundecl orelseT hoist_fundef
 
 let hoistT = repeatT hoistOnceT
 

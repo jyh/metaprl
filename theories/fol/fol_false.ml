@@ -10,10 +10,10 @@ declare "false"
 
 dform false_df : except_mode[src] :: "false" = `"False"
 
-prim false_type {| intro [] |} 'H :
+prim false_type {| intro [] |} :
    sequent ['ext] { 'H >- "type"{."false"} } = trivial
 
-prim false_elim {| elim [] |} 'H 'J :
+prim false_elim {| elim [] |} 'H :
    sequent ['ext] { 'H; x: "false"; 'J['x] >- 'C['x] } = trivial
 
 (*

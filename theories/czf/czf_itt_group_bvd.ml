@@ -120,7 +120,7 @@ dform group_bvd_df : parens :: except_mode[src] :: group_bvd{'h; 'g; 's} =
  * if $h$ and $g$ are labels and $s$ is a set.
  * @end[doc]
  *)
-interactive group_bvd_wf {| intro [] |} 'H :
+interactive group_bvd_wf {| intro [] |} :
    sequent [squash] { 'H >- 'h IN label } -->
    sequent [squash] { 'H >- 'g IN label } -->
    sequent [squash] { 'H >- isset{'s} } -->
@@ -136,7 +136,7 @@ interactive group_bvd_wf {| intro [] |} 'H :
  * $@car{h}$, $@op{h; a; b}$ is equal to $@op{g; a; b}$.
  * @end[doc]
  *)
-interactive group_bvd_intro {| intro [] |} 'H :
+interactive group_bvd_intro {| intro [] |} :
    sequent [squash] { 'H >- 'h IN label } -->
    sequent [squash] { 'H >- 'g IN label } -->
    sequent [squash] { 'H >- isset{'s} } -->
@@ -155,14 +155,14 @@ interactive group_bvd_intro {| intro [] |} 'H :
  * for all $a @in @car{h}$, $@eq{@inv{h; a}; @inv{g; a}}$.
  * @end[doc]
  *)
-interactive group_bvd_id {| intro [] |} 'H 's :
+interactive group_bvd_id {| intro [] |} 's :
    sequent [squash] { 'H >- 'h IN label } -->
    sequent [squash] { 'H >- 'g IN label } -->
    sequent [squash] { 'H >- isset{'s} } -->
    sequent ['ext] { 'H >- group_bvd{'h; 'g; 's} } -->
    sequent ['ext] { 'H >- eq{id{'h}; id{'g}} }
 
-interactive group_bvd_inv {| intro [] |} 'H 's :
+interactive group_bvd_inv {| intro [] |} 's :
    sequent [squash] { 'H >- 'h IN label } -->
    sequent [squash] { 'H >- 'g IN label } -->
    sequent [squash] { 'H >- isset{'s} } -->

@@ -3215,7 +3215,7 @@ T	t1256	o b1236 b1256
 B	b1257	t1256
 T	t1257	o1032 b1217 b1257
 B	b1258	t1257
-P	p1258	String "subtype_axiomFormation 2 \"x\" ttca"
+P	p1258	String "subtype_axiomFormation \"x\" ttca"
 O	o1258	ext_rule p1258
 H	h1258	x t1201
 T	t1258	o986 b1191 b997 b997

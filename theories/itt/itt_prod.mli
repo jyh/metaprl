@@ -48,7 +48,7 @@ rewrite unfold_prod : ('A * 'B) <--> (x: 'A * 'B)
  * H >- Ui ext A
  * H >- Ui ext B
  *)
-rule independentProductFormation 'H :
+rule independentProductFormation :
    sequent ['ext] { 'H >- univ[i:l] } -->
    sequent ['ext] { 'H >- univ[i:l] } -->
    sequent ['ext] { 'H >- univ[i:l] }
@@ -59,7 +59,7 @@ rule independentProductFormation 'H :
  * H >- A1 = A2 in Ui
  * H >- B1 = B2 in Ui
  *)
-rule independentProductEquality 'H :
+rule independentProductEquality :
    sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
    sequent [squash] { 'H >- 'B1 = 'B2 in univ[i:l] } -->
    sequent ['ext] { 'H >- 'A1 * 'B1 = 'A2 * 'B2 in univ[i:l] }
@@ -67,7 +67,7 @@ rule independentProductEquality 'H :
 (*
  * Typehood.
  *)
-rule independentProductType 'H :
+rule independentProductType :
    sequent [squash] { 'H >- "type"{'A1} } -->
    sequent [squash] { 'H >- "type"{'A2} } -->
    sequent ['ext] { 'H >- "type"{.'A1 * 'A2} }
@@ -79,7 +79,7 @@ rule independentProductType 'H :
  * H >- B[a] ext b
  * H, y:A >- B[y] = B[y] in Ui
  *)
-rule independentPairFormation 'H :
+rule independentPairFormation :
    sequent ['ext] { 'H >- 'A } -->
    sequent ['ext] { 'H >- 'B } -->
    sequent ['ext] { 'H >- 'A * 'B }
@@ -89,7 +89,7 @@ rule independentPairFormation 'H :
  * by independentProductElimination
  * H, A * B, u: A, v: B, J >- T ext t
  *)
-rule independentProductElimination 'H 'J 'u 'v :
+rule independentProductElimination 'H 'u 'v :
    sequent ['ext] { 'H; z: 'A * 'B; u: 'A; v: 'B; 'J['u, 'v] >- 'T['u, 'v] } -->
    sequent ['ext] { 'H; z: 'A * 'B; 'J['z] >- 'T['z] }
 
@@ -99,7 +99,7 @@ rule independentProductElimination 'H 'J 'u 'v :
  * H >- a1 = a2 in A
  * H >- b1 = b2 in B
  *)
-rule independentPairEquality 'H :
+rule independentPairEquality :
    sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
    sequent [squash] { 'H >- 'b1 = 'b2 in 'B } -->
    sequent ['ext] { 'H >- ('a1, 'b1) = ('a2, 'b2) in 'A * 'B }
@@ -111,7 +111,7 @@ rule independentPairEquality 'H :
  * H >- A2 <= A1
  * H >- B1 <= B2
  *)
-rule independentProductSubtype 'H :
+rule independentProductSubtype :
    sequent [squash] { 'H >- \subtype{'A1; 'A2} } -->
    sequent [squash] { 'H >- \subtype{'B1; 'B2} } -->
    sequent ['ext] { 'H >- \subtype{ ('A1 * 'B1); ('A2 * 'B2) } }

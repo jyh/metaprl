@@ -4964,7 +4964,7 @@ T	t2042	o1651 b2023 b2042
 B	b2043	t2042
 T	t2043	o1651 b2021 b2043
 B	b2044	t2043
-P	p2044	String "assumT 6 thenT rwh unfold_subgroup 4 thenT copyHypT 2 3 thenT rwh unfold_lcoset 4 thenT autoT"
+P	p2044	String "assumT 6 thenT rwh unfold_subgroup 4 thenT copyHypT 2 4 thenT rwh unfold_lcoset 4 thenT autoT"
 O	o2044	ext_rule p2044
 T	t2044	o b2034 b9
 B	b2045	t2044
@@ -5269,7 +5269,7 @@ T	t2162	o1651 b2145 b2162
 B	b2163	t2162
 T	t2163	o1651 b2143 b2163
 B	b2164	t2163
-P	p2164	String "assumT 6 thenT rwh unfold_subgroup 4 thenT copyHypT 2 3 thenT rwh unfold_rcoset 4 thenT autoT"
+P	p2164	String "assumT 6 thenT rwh unfold_subgroup 4 thenT copyHypT 2 4 thenT rwh unfold_rcoset 4 thenT autoT"
 O	o2164	ext_rule p2164
 T	t2164	o b2154 b9
 B	b2165	t2164

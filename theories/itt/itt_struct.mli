@@ -43,7 +43,7 @@ open Tactic_type.Sequent
  * H; x: A; J >- A ext x
  * by hypothesis
  *)
-rule hypothesis 'H 'J :
+rule hypothesis 'H :
    sequent ['ext] { 'H; x: 'A; 'J['x] >- 'A }
 
 (*
@@ -52,7 +52,7 @@ rule hypothesis 'H 'J :
  * by thin
  * H, J >- A ext t
  *)
-rule thin 'H 'J :
+rule thin 'H :
    sequent ['ext] { 'H; 'J >- 'C } -->
    sequent ['ext] { 'H; x: 'A; 'J >- 'C }
 
@@ -62,7 +62,7 @@ rule thin 'H 'J :
  * H, J >- S ext s
  * H, x: S, J >- T ext t[x]
  *)
-rule cut 'H 'J 'S 'x :
+rule cut 'H 'S 'x :
    sequent ['ext] { 'H; 'J >- 'S } -->
    sequent ['ext] { 'H; x: 'S; 'J >- 'T } -->
    sequent ['ext] { 'H; 'J >- 'T }
@@ -73,7 +73,7 @@ rule cut 'H 'J 'S 'x :
  * by introduction t
  * H >- t = t in T
  *)
-rule introduction 'H 't :
+rule introduction 't :
    sequent [squash] { 'H >- 't in 'T } -->
    sequent ['ext] { 'H >- 'T }
 
@@ -84,7 +84,7 @@ rule introduction 'H 't :
  * H >- T1[t2]
  * H, x: T2 >- T1[x] = T1[x] in type
  *)
-rule substitution 'H ('t1 = 't2 in 'T2) bind{x. 'T1['x]} :
+rule substitution ('t1 = 't2 in 'T2) bind{x. 'T1['x]} :
    sequent [squash] { 'H >- 't1 = 't2 in 'T2 } -->
    sequent ['ext] { 'H >- 'T1['t2] } -->
    sequent [squash] { 'H; x: 'T2 >- "type"{'T1['x]} } -->
@@ -96,7 +96,7 @@ rule substitution 'H ('t1 = 't2 in 'T2) bind{x. 'T1['x]} :
  * H, x:B, J >- T
  * H, x: A, J >- A = B in type
  *)
-rule hypReplacement 'H 'J 'B univ[i:l] :
+rule hypReplacement 'H 'B univ[i:l] :
    sequent ['ext] { 'H; x: 'B; 'J['x] >- 'T['x] } -->
    sequent [squash] { 'H; x: 'A; 'J['x] >- 'A = 'B in univ[i:l] } -->
    sequent ['ext] { 'H; x: 'A; 'J['x] >- 'T['x] }
@@ -108,7 +108,7 @@ rule hypReplacement 'H 'J 'B univ[i:l] :
  * H; x: A[t2]; J[x] >> T1[x]
  * H, x: A[t1]; J[x]; z: T2 >> A[z] in type
  *)
-rule hypSubstitution 'H 'J ('t1 = 't2 in 'T2) bind{y. 'A['y]} 'z :
+rule hypSubstitution 'H ('t1 = 't2 in 'T2) bind{y. 'A['y]} 'z :
    sequent [squash] { 'H; x: 'A['t1]; 'J['x] >- 't1 = 't2 in 'T2 } -->
    sequent ['ext]  { 'H; x: 'A['t2]; 'J['x] >- 'T1['x] } -->
    sequent [squash] { 'H; x: 'A['t1]; 'J['x]; z: 'T2 >- "type"{'A['z]} } -->
@@ -117,7 +117,7 @@ rule hypSubstitution 'H 'J ('t1 = 't2 in 'T2) bind{y. 'A['y]} 'z :
 (*
  * Typehood.
  *)
-rule equalityTypeIsType 'H 'a 'b :
+rule equalityTypeIsType 'a 'b :
    sequent [squash] { 'H >- 'a = 'b in 'T } -->
    sequent ['ext] { 'H >- "type"{'T} }
 

@@ -64,7 +64,7 @@ extends Mfir_tr_atom_base
  * @end[doc]
  *)
 
-prim ty_atomNil 'H :
+prim ty_atomNil :
    sequent [fir] { 'H >- type_eq{ 'ty; 'ty; large_type } } -->
    sequent [fir] { 'H >- has_type["atom"]{ atomNil{ 'ty }; 'ty } }
    = it
@@ -78,7 +78,7 @@ prim ty_atomNil 'H :
  * @end[doc]
  *)
 
-prim ty_atomInt 'H :
+prim ty_atomInt :
    sequent [fir] { 'H >- member{ 'i; intset_max[31, "signed"] } } -->
    sequent [fir] { 'H >- has_type["atom"]{ atomInt{'i}; tyInt } }
    = it
@@ -92,7 +92,7 @@ prim ty_atomInt 'H :
  * @end[doc]
  *)
 
-prim ty_atomEnum 'H :
+prim ty_atomEnum :
    sequent [fir] { 'H >- type_eq{ tyEnum[i:n]; tyEnum[i:n]; small_type } } -->
    sequent [fir] { 'H >- "and"{int_le{0; 'n}; int_lt{'n; number[i:n]}} } -->
    sequent [fir] { 'H >- has_type["atom"]{atomEnum[i:n]{'n}; tyEnum[i:n]} }
@@ -108,7 +108,7 @@ prim ty_atomEnum 'H :
  * @end[doc]
  *)
 
-prim ty_atomRawInt 'H :
+prim ty_atomRawInt :
    sequent [fir] { 'H >- type_eq{ tyRawInt[p:n, sign:s];
                                   tyRawInt[p:n, sign:s];
                                   large_type } } -->
@@ -127,7 +127,7 @@ prim ty_atomRawInt 'H :
  * @end[doc]
  *)
 
-prim ty_atomFloat 'H :
+prim ty_atomFloat :
    sequent [fir] { 'H >-
       type_eq{ tyFloat[p:n]; tyFloat[p:n]; large_type } } -->
    sequent [fir] { 'H >-
@@ -143,7 +143,7 @@ prim ty_atomFloat 'H :
  * @end[doc]
  *)
 
-prim ty_atomVar 'H 'J :
+prim ty_atomVar 'H :
    sequent [fir] { 'H; a: var_def{ 'v; 'ty; 'd }; 'J >-
       has_type["atom"]{ atomVar{'v}; 'ty } }
    = it
@@ -161,7 +161,7 @@ prim ty_atomVar 'H 'J :
  * @end[doc]
  *)
 
-prim ty_atomLabel 'H 'J :
+prim ty_atomLabel 'H :
    sequent [fir] { 'H; a: ty_def{ 'frame; polyKind{ 'i; 'k }; 'd }; 'J >-
       field_mem[subfield:s]{ field[field:s]{ get_core{ 'i; 'd } } } } -->
    sequent [fir] { 'H; a: ty_def{ 'frame; polyKind{ 'i; 'k }; 'd }; 'J >-
@@ -183,18 +183,18 @@ prim ty_atomLabel 'H 'J :
  * @end[doc]
  *)
 
-prim ty_atomSizeof 'H :
+prim ty_atomSizeof :
    sequent [fir] { 'H >- member{'num; intset_max[32, "signed"]} } -->
    sequent [fir] { 'H >- has_type["atomSizeof"]{ 'tvl; frame_type } } -->
    sequent [fir] { 'H >-
       has_type["atom"]{ atomSizeof{ 'tvl; 'num }; tyRawInt[32, "signed"] } }
    = it
 
-prim ty_atomSizeof_aux_base 'H :
+prim ty_atomSizeof_aux_base :
    sequent [fir] { 'H >- has_type["atomSizeof"]{ nil; frame_type }}
    = it
 
-prim ty_atomSizeof_aux_ind 'H 'J :
+prim ty_atomSizeof_aux_ind 'H :
    sequent [fir] { 'H; a: ty_def{ 'tv; polyKind{'i; frame_type}; 'd }; 'J >-
       has_type["atomSizeof"]{ 'rest; frame_type } } -->
    sequent [fir] { 'H; a: ty_def{ 'tv; polyKind{'i; frame_type}; 'd }; 'J >-
@@ -211,7 +211,7 @@ prim ty_atomSizeof_aux_ind 'H 'J :
  * @end[doc]
  *)
 
-prim ty_atomConst 'H 'J :
+prim ty_atomConst 'H :
    sequent [fir] { 'H; a: ty_def{ 'tv; 'k; 'd }; 'J >-
       type_eq{ 'ty; tyUnion{ 'tv; 'tyl; intset[31, "signed"]{
          (interval{ 'n; 'n } :: nil) } }; small_type } } -->
@@ -234,7 +234,7 @@ prim ty_atomConst 'H 'J :
  * @end[doc]
  *)
 
-prim ty_atomTyApply 'H 'J :
+prim ty_atomTyApply 'H :
    (* The type of the atom must agree with what it thinks its own type is. *)
    sequent [fir] { 'H;
                     a: var_def{ 'v; tyAll{ t. 'ty['t] }; 'd };
@@ -277,7 +277,7 @@ prim ty_atomTyApply 'H 'J :
  * @end[doc]
  *)
 
-prim ty_atomTyPack 'H :
+prim ty_atomTyPack :
    sequent [fir] { 'H >-
       type_eq_list{ 'types; 'types; small_type } } -->
    sequent [fir] { 'H >-
@@ -300,7 +300,7 @@ prim ty_atomTyPack 'H :
  * @end[doc]
  *)
 
-prim ty_atomTyUnpack 'H 'J:
+prim ty_atomTyUnpack 'H :
    sequent [fir] { 'H;
                     a: var_def{ 'v; tyExists{ t. 'ty['t] }; 'd };
                     'J >-
@@ -329,13 +329,13 @@ prim ty_atomTyUnpack 'H 'J:
  * @end[doc]
  *)
 
-prim ty_atomUnop 'H :
+prim ty_atomUnop :
    sequent [fir] { 'H >- type_eq{ 'ty; res_type{ 'op }; large_type } } -->
    sequent [fir] { 'H >- has_type["atom"]{ 'a; arg1_type{ 'op } } } -->
    sequent [fir] { 'H >- has_type["atom"]{ atomUnop{ 'op; 'a }; 'ty } }
    = it
 
-prim ty_atomBinop 'H :
+prim ty_atomBinop :
    sequent [fir] { 'H >- type_eq{ 'ty; res_type{ 'op }; large_type } } -->
    sequent [fir] { 'H >- has_type["atom"]{ 'a1; arg1_type{ 'op } } } -->
    sequent [fir] { 'H >- has_type["atom"]{ 'a2; arg2_type{ 'op } } } -->

@@ -37,10 +37,10 @@ derive Fol_true
 
 prim_rw unfold_true : "true" <--> unit
 
-derived true_type 'H :
+derived true_type :
    sequent ['ext] { 'H >- "type"{."true"} }
 
-derived true_intro 'H :
+derived true_intro :
    sequent ['ext] { 'H >- "true" }
 
 (*

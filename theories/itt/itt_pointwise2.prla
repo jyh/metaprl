@@ -1474,7 +1474,7 @@ T	t537	o2 b533
 B	b537	t537
 T	t538	o528 b536 b4 b537
 B	b538	t538
-P	p540	String "contextSubstPointwise 2 1 2 6 <<'v>>"
+P	p540	String "contextSubstPointwise 2 1 2 <<'v>>"
 O	o540	ext_rule p540
 P	p541	String equality
 O	o541	tactic_arg p541
@@ -1516,7 +1516,7 @@ T	t550	o527 b544 b4
 B	b551	t550
 T	t551	o550 b526 b551 b4 b4
 B	b552	t551
-P	p552	String "exchange 3 2 4 3 thenT autoT"
+P	p552	String "exchange 3 2 4 thenT autoT"
 O	o552	ext_rule p552
 T	t151	o527 b146 b4
 B	b166	t151
@@ -1670,7 +1670,7 @@ T	t602	o2 b596
 B	b602	t602
 T	t603	o528 b601 b4 b602
 B	b603	t603
-P	p605	String "contextSubstPointwise 2 1 2 4 <<'z>>"
+P	p605	String "contextSubstPointwise 2 1 2 <<'z>>"
 O	o605	ext_rule p605
 T	t606	o511 b597 b498 b598
 S	s606	t495 h h590 h587 h508 h596 h598
@@ -1704,7 +1704,7 @@ T	t615	o527 b609 b4
 B	b616	t615
 T	t616	o550 b526 b616 b4 b4
 B	b617	t616
-P	p617	String "exchange 3 2 3 2 thenT autoT"
+P	p617	String "exchange 3 2 3 thenT autoT"
 O	o617	ext_rule p617
 T	t309	o527 b289 b4
 B	b309	t309
@@ -1799,7 +1799,7 @@ T	t362	o491 b354 b649
 B	b362	t362
 T	t363	o491 b353 b362
 B	b363	t363
-P	p364	String "doNotThinT(dT 2) thenT contextSubstPointwise 2 1 2 3 <<'y>> thenET equalSymT thenMT exchange 2 3 2 2 thenT autoT"
+P	p364	String "doNotThinT(dT 2) thenT contextSubstPointwise 2 1 2 <<'y>> thenET equalSymT thenMT exchange 2 3 2 thenT autoT"
 O	o365	ext_rule p364
 T	t651	o b645 b4
 B	b652	t651

@@ -76,33 +76,33 @@ prec prec_equal
 (*
  * True always holds.
  *)
-rule trueIntro 'H :
+rule trueIntro :
    sequent ['ext] { 'H >- "true" }
 
 (*
  * Typehood is equality.
  *)
-rule equalityAxiom 'H 'J :
+rule equalityAxiom 'H :
    sequent ['ext] { 'H; x: 'T; 'J['x] >- 'x in 'T }
 
 (*
  * Reflexivity.
  *)
-rule equalityRef 'H 'y :
+rule equalityRef 'y :
    sequent ['ext] { 'H >- 'x = 'y in 'T } -->
    sequent ['ext] { 'H >- 'x in 'T }
 
 (*
  * Symettry.
  *)
-rule equalitySym 'H :
+rule equalitySym :
    sequent ['ext] { 'H >- 'y = 'x in 'T } -->
    sequent ['ext] { 'H >- 'x = 'y in 'T }
 
 (*
  * Transitivity.
  *)
-rule equalityTrans 'H 'z :
+rule equalityTrans 'z :
    sequent ['ext] { 'H >- 'x = 'z in 'T } -->
    sequent ['ext] { 'H >- 'z = 'y in 'T } -->
    sequent ['ext] { 'H >- 'x = 'y in 'T }
@@ -114,7 +114,7 @@ rule equalityTrans 'H 'z :
  * H >- T ext a
  * H >- T ext b
  *)
-rule equalityFormation 'H 'T :
+rule equalityFormation 'T :
    sequent ['ext] { 'H >- 'T } -->
    sequent ['ext] { 'H >- 'T } -->
    sequent ['ext] { 'H >- univ[i:l] }
@@ -127,7 +127,7 @@ rule equalityFormation 'H 'T :
  * H >- a1 = a2 in T1
  * H >- b1 = b2 in T1
  *)
-rule equalityEquality 'H :
+rule equalityEquality :
    sequent [squash] { 'H >- 'T1 = 'T2 in univ[i:l] } -->
    sequent [squash] { 'H >- 'a1 = 'a2 in 'T1 } -->
    sequent [squash] { 'H >- 'b1 = 'b2 in 'T2 } -->
@@ -136,7 +136,7 @@ rule equalityEquality 'H :
 (*
  * Typehood.
  *)
-rule equalityType 'H :
+rule equalityType :
    sequent [squash] { 'H >- 'a in 'T } -->
    sequent [squash] { 'H >- 'b in 'T } -->
    sequent ['ext] { 'H >- "type"{. 'a = 'b in 'T } }
@@ -147,11 +147,11 @@ rule equalityType 'H :
  *
  * H >- a = b in T
  *)
-rule axiomMember 'H :
+rule axiomMember :
    sequent [squash] { 'H >- 'a = 'b in 'T } -->
    sequent ['ext] { 'H >- it in ('a = 'b in 'T) }
 
-rule type_axiomMember 'H :
+rule type_axiomMember :
    sequent [squash] { 'H >- "type"{'T} } -->
    sequent ['ext] { 'H >- it in "type"{'T} }
 
@@ -161,7 +161,7 @@ rule type_axiomMember 'H :
  *
  * H, x: a = b in T; J[it] >- C[it]
  *)
-rule equalityElimination 'H 'J :
+rule equalityElimination 'H :
    sequent ['ext] { 'H; x: 'a = 'b in 'T; 'J[it] >- 'C[it] } -->
    sequent ['ext] { 'H; x: 'a = 'b in 'T; 'J['x] >- 'C['x] }
 
@@ -171,7 +171,7 @@ rule equalityElimination 'H 'J :
  *
  * H >- T
  *)
-rule typeEquality 'H :
+rule typeEquality :
    sequent [squash] { 'H >- 'T } -->
    sequent ['ext] { 'H >- "type"{'T} }
 
@@ -179,7 +179,7 @@ rule typeEquality 'H :
  * H >- Uj in Ui
  * by universeMember (side (j < i))
  *)
-rule universeMember 'H :
+rule universeMember :
    sequent ['ext] { 'H >- cumulativity[j:l, i:l] } -->
    sequent ['ext] { 'H >- univ[j:l] in univ[i:l] }
 
@@ -190,7 +190,7 @@ rule universeMember 'H :
  * H >- x = x in Uj
  * H >- cumulativity(j, i)
  *)
-rule universeCumulativity 'H univ[j:l] :
+rule universeCumulativity univ[j:l] :
    sequent [squash] { 'H >- cumulativity[j:l, i:l] } -->
    sequent [squash] { 'H >- 'x = 'y in univ[j:l] } -->
    sequent ['ext] { 'H >- 'x = 'y in univ[i:l] }
@@ -198,27 +198,27 @@ rule universeCumulativity 'H univ[j:l] :
 (*
  * Universe is a type.
  *)
-rule universeType 'H :
+rule universeType :
    sequent ['ext] { 'H >- "type"{univ[l:l]} }
 
 (*
  * Anything in a universe is a type.
  *)
-rule universeMemberType 'H univ[i:l] :
+rule universeMemberType univ[i:l] :
    sequent [squash] { 'H >- 'x in univ[i:l] } -->
    sequent ['ext] { 'H >- "type"{'x} }
 
 (*
  * Derived form for known membership.
  *)
-rule universeAssumType 'H 'J :
+rule universeAssumType 'H :
    sequent ['ext] { 'H; x: univ[l:l]; 'J['x] >- "type"{'x} }
 
 (*
  * H >- Ui ext Uj
  * by universeFormation level{$j:l}
  *)
-rule universeFormation 'H univ[j:l] :
+rule universeFormation univ[j:l] :
    sequent ['ext] { 'H >- cumulativity[j:l, i:l] } -->
    sequent ['ext] {'H >- univ[i:l] }
 

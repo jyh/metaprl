@@ -57,7 +57,7 @@ rule implies_intro 'x :
  * H, x: A => B, J >> A
  * H, x: A => B, J, y: B >> T
  *)
-rule implies_elim 'H 'J 'y :
+rule implies_elim 'H 'y :
    sequent { 'H; x: 'A => 'B; 'J >> 'A } -->
    sequent { 'H; x: 'A => 'B; 'J; y: 'B >> 'T } -->
    sequent { 'H; x: 'A => 'B; 'J >> 'T };;

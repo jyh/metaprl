@@ -1178,7 +1178,7 @@ T	t848	o523 b843 b847
 B	b848	t848
 T	t849	o523 b840 b848
 B	b849	t849
-P	p849	String "applyEquality' << x: 'A -> 'B >>"
+P	p849	String "applyEquality << x: 'A -> 'B >>"
 O	o849	ext_rule p849
 T	t854	o b841 b4
 B	b854	t854

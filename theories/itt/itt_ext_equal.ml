@@ -60,7 +60,7 @@ prim_rw type_def : "type"{'T} <--> \subtype{'T; 'T}
 
 define unfoldExtEqual : ext_equal{'A; 'B} <--> (\subtype{'A; 'B} & \subtype{'B; 'A})
 
-interactive extEqualMember {|squash; intro[] |} 'H:
+interactive extEqualMember {|squash; intro[] |}: 
    sequent[squash] {'H >- ext_equal{'A;'B}} -->
    sequent['ext]  {'H >- (it,it) in ext_equal{'A;'B} }
 

@@ -100,7 +100,7 @@ dform sing_df : sing{'s} =
  * $s$ is a set.
  * @end[doc]
  *)
-interactive sing_isset {| intro [] |} 'H :
+interactive sing_isset {| intro [] |} :
    sequent [squash] { 'H >- isset{'s} } -->
    sequent ['ext] { 'H >- isset{sing{'s}} }
 
@@ -112,11 +112,11 @@ interactive sing_isset {| intro [] |} 'H :
  * the set $s$.
  * @end[doc]
  *)
-interactive sing_member_elim {| elim [] |} 'H 'J :
+interactive sing_member_elim {| elim [] |} 'H :
    sequent ['ext] { 'H; x: mem{'y; sing{'s}}; 'J['x]; w: eq{'y; 's} >- 'T['x] } -->
    sequent ['ext] { 'H; x: mem{'y; sing{'s}}; 'J['x] >- 'T['x] }
 
-interactive sing_member_intro {| intro [] |} 'H :
+interactive sing_member_intro {| intro [] |} :
    ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
    ["wf"] sequent [squash] { 'H >- isset{'s2} } -->
    sequent ['ext] { 'H >- eq{'s1; 's2} } -->
@@ -129,7 +129,7 @@ interactive sing_member_intro {| intro [] |} 'H :
  * The singleton is functional in it's set argument.
  * @end[doc]
  *)
-interactive sing_fun {| intro [] |} 'H :
+interactive sing_fun {| intro [] |} :
    sequent ['ext] { 'H >- fun_set{z. 's['z]} } -->
    sequent ['ext] { 'H >- fun_set{z. sing{'s['z]}} }
 (*! @docoff *)

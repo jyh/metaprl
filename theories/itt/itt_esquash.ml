@@ -92,7 +92,7 @@ dform esquash_df : except_mode[src] :: esquash{'P} =
  * if the proposition $P$ is also in $@univ{i}$.
  * @end[doc]
  *)
-prim esquash_type {| intro [AutoMustComplete] |} 'H :
+prim esquash_type {| intro [AutoMustComplete] |} :
    [wf] sequent [squash] { 'H >- "type"{'P} } -->
    sequent ['ext] { 'H >- "type"{esquash{'P}} } =
    it
@@ -103,7 +103,7 @@ prim esquash_type {| intro [AutoMustComplete] |} 'H :
  * are equal if both are types, and if each one implies another.
  * @end[doc]
  *)
-prim esquash_equal {| intro [SelectOption 0]; eqcd |} 'H :
+prim esquash_equal {| intro [SelectOption 0]; eqcd |} :
    [wf] sequent [squash] { 'H >- esquash{'P1} in univ[i:l] } -->
    [wf] sequent [squash] { 'H >- esquash{'P2} in univ[i:l] } -->
    sequent [squash] { 'H; x: esquash{'P1} >- esquash{'P2} } -->
@@ -111,7 +111,7 @@ prim esquash_equal {| intro [SelectOption 0]; eqcd |} 'H :
    sequent ['ext] { 'H >- esquash{'P1} = esquash{'P2} in univ[i:l] } =
    it
 
-prim esquash_univ {| intro [AutoMustComplete] |} 'H :
+prim esquash_univ {| intro [AutoMustComplete] |} :
    [wf] sequent [squash] { 'H >- 'P in univ[i:l] } -->
    sequent ['ext] { 'H >- esquash{'P} in univ[i:l] } =
    it
@@ -127,7 +127,7 @@ prim esquash_univ {| intro [AutoMustComplete] |} 'H :
  * apply this rule.
  * @end[doc]
  *)
-prim esquash_intro {| intro [AutoMustComplete] |} 'H :
+prim esquash_intro {| intro [AutoMustComplete] |} :
    [main] sequent [squash] { 'H >- squash{'P} } -->
    sequent ['ext] { 'H >- esquash{'P} } =
    it
@@ -140,7 +140,7 @@ prim esquash_intro {| intro [AutoMustComplete] |} 'H :
  * $@it$.
  * @end[doc]
  *)
-prim esquash_elim {| elim [] |} 'H 'J :
+prim esquash_elim {| elim [] |} 'H :
    ( 't['x] : sequent ['ext] { 'H; x: esquash{'A}; 'J[it] >- 'C[it] }) -->
    sequent ['ext] { 'H; x: esquash{'A}; 'J['x] >- 'C['x] } =
    't[it]
@@ -150,7 +150,7 @@ prim esquash_elim {| elim [] |} 'H 'J :
  * It can also be formulated as an introduction rule.
  * @end[doc]
  *)
-interactive esquash_mem {| intro []; squash |} 'H :
+interactive esquash_mem {| intro []; squash |} :
    sequent [squash] { 'H >- esquash{'A} } -->
    sequent ['ext] { 'H >- it in esquash{'A} }
 
@@ -161,7 +161,7 @@ interactive esquash_mem {| intro []; squash |} 'H :
  * true if and only if its @tt[squash] is true.
  * @end[doc]
  *)
-prim esquash 'H :
+prim esquash :
    [wf] sequent [squash] { 'H >- "type"{'P} } -->
    sequent [squash] { 'H >- esquash{'P} } -->
    sequent ['ext] { 'H >- squash{'P} } =
@@ -172,7 +172,7 @@ prim esquash 'H :
  * The following rule is equivalent to the previous one.
  * @end[doc]
  *)
-interactive unesquash 'H 'J :
+interactive unesquash 'H :
    [wf] sequent [squash] { 'H; x: esquash{'P}; 'J[it] >- "type"{'P} } -->
    sequent ['ext] { 'H; x: squash{'P}; 'J[it] >- 'C[it] } -->
    sequent ['ext] { 'H; x: esquash{'P}; 'J['x] >- 'C['x] }
@@ -182,10 +182,10 @@ interactive unesquash 'H 'J :
  * The $@esquash{@void}$ can not be inhabited.
  * @end[doc]
  *)
-interactive esquash_void_elim {| elim [] |} 'H 'J :
+interactive esquash_void_elim {| elim [] |} 'H :
    sequent ['ext] { 'H; x: esquash{void}; 'J['x] >- 'C['x] }
 
-interactive esquash_equal_intro {| intro [] |} 'H 'x :
+interactive esquash_equal_intro {| intro [] |} 'x :
    [wf] sequent [squash] { 'H >- 'P1 in univ[i:l] } -->
    [wf] sequent [squash] { 'H >- 'P2 in univ[i:l] } -->
    [main] sequent [squash] { 'H; x: 'P1 >- 'P2 } -->
@@ -204,14 +204,11 @@ interactive esquash_equal_intro {| intro [] |} 'H 'x :
  * @docoff
  * @end[doc]
  *)
-let esquashT i p =
-   if i = 0 then esquash (Sequent.hyp_count_addr p) p
-   else
-      let h,j = Sequent.hyp_indices p i in
-      unesquash h j p
+let esquashT i =
+   if i = 0 then esquash else pos_hypT unesquash i
 
 let esquashAutoT =
-   autoT thenT tryT (onSomeHypT esquashT orelseT esquashT 0) thenT autoT
+   autoT thenT tryT (onSomeHypT esquashT orelseT esquash) thenT autoT
 
 (*
  * -*-

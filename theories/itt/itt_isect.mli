@@ -59,7 +59,7 @@ rewrite unfold_top : top <--> "isect"{void; x. void}
  * H >- A = A in Ui
  * H, x: A >- Ui ext B[x]
  *)
-rule intersectionFormation 'H 'x 'A :
+rule intersectionFormation 'x 'A :
    sequent [squash] { 'H >- 'A = 'A in univ[i:l] } -->
    sequent ['ext] { 'H; x: 'A >- univ[i:l] } -->
    sequent ['ext] { 'H >- univ[i:l] }
@@ -70,20 +70,20 @@ rule intersectionFormation 'H 'x 'A :
  * H >- A1 = A2 in Ui
  * H, y: A1 >- B1[y] = B2[y] in Ui
  *)
-rule intersectionEquality 'H 'y :
+rule intersectionEquality 'y :
    sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
    sequent [squash] { 'H; y: 'A1 >- 'B1['y] = 'B2['y] in univ[i:l] } -->
    sequent ['ext] { 'H >- Isect x1: 'A1. 'B1['x1] = Isect x2: 'A2. 'B2['x2] in univ[i:l] }
 
-rule intersectionType 'H 'y :
+rule intersectionType 'y :
    sequent [squash] { 'H >- "type"{'A} } -->
    sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
    sequent ['ext] { 'H >- "type"{."isect"{'A; x. 'B['x]}} }
 
-rule topUniv 'H :
+rule topUniv :
    sequent ['ext] { 'H >- top in univ[i:l] }
 
-rule topType 'H :
+rule topType :
    sequent ['ext] { 'H >- "type"{top} }
 
 (*
@@ -92,7 +92,7 @@ rule topType 'H :
  * H >- A = A in type
  * H, z: squash(A) >- B ext b[z]
 
-rule intersectionMemberFormation 'H 'z :
+rule intersectionMemberFormation 'z :
     sequent [squash] { 'H >- "type"{'A} } -->
     sequent ['ext] { 'H; z: squash{'A} >- 'B } -->
     sequent ['ext] { 'H >- isect x: 'A. 'B }
@@ -105,12 +105,12 @@ rule intersectionMemberFormation 'H 'z :
  * H >- A = A in type
  * H, z: A >- b1 = b2 in B[z]
  *)
-rule intersectionMemberEquality 'H 'z :
+rule intersectionMemberEquality 'z :
    sequent [squash] { 'H >- "type"{'A} } -->
    sequent [squash] { 'H; z: 'A >- 'b1 = 'b2 in 'B['z] } -->
    sequent ['ext] { 'H >- 'b1 = 'b2 in Isect x: 'A. 'B['x] }
 
-rule topMemberEquality 'H :
+rule topMemberEquality :
    sequent ['ext] { 'H >- 'b1 = 'b2 in top }
 
 (*
@@ -119,7 +119,7 @@ rule topMemberEquality 'H :
  * H >- b1 = b2 in Isect x:A. B[x]
  * H >- a = a in A
  *)
-rule intersectionMemberCaseEquality 'H (Isect x: 'A. 'B['x]) 'a :
+rule intersectionMemberCaseEquality (Isect x: 'A. 'B['x]) 'a :
    sequent [squash] { 'H >- 'b1 = 'b2 in Isect x: 'A. 'B['x] } -->
    sequent [squash] { 'H >- 'a = 'a in 'A } -->
    sequent ['ext] { 'H >- 'b1 = 'b2 in 'B['a] }
@@ -132,12 +132,12 @@ rule intersectionMemberCaseEquality 'H (Isect x: 'A. 'B['x]) 'a :
  * H >- A2 <= A1
  * H, a: A2 >- B1[a] <= B2[a]
  *)
-rule intersectionSubtype 'H 'a :
+rule intersectionSubtype 'a :
    sequent [squash] { 'H >- \subtype{'A2; 'A1} } -->
    sequent [squash] { 'H; a: 'A2 >- \subtype{'B1['a]; 'B2['a]} } -->
    sequent ['ext] { 'H >- \subtype{ (Isect a1:'A1. 'B1['a1]); (Isect a2:'A2. 'B2['a2]) } }
 
-rule topSubtype 'H :
+rule topSubtype :
    sequent [squash] { 'H >- "type"{'T} } -->
    sequent ['ext] { 'H >- \subtype{'T; top} }
 

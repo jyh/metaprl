@@ -46,17 +46,13 @@ dform pred_df : pred = `"Pred"
 (*
  * Type judgment.
  *)
-prim pred_type 'H 'J :
+prim pred_type 'H :
    sequent ['ext] { 'H; x: pred; 'J['x] >- "type"{'x} } = trivial
-
-let d_pred_type i p =
-   let j, k = Sequent.hyp_indices p i in
-      pred_type j k p
 
 let resource auto += {
    auto_name = "d_pred_type";
    auto_prec = trivial_prec;
-   auto_tac = onSomeHypT d_pred_type;
+   auto_tac = onSomeHypT pred_type;
    auto_type = AutoTrivial;
 }
 

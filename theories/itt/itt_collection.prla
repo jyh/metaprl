@@ -4478,7 +4478,7 @@ T	t4001	o662 b3988 b4001
 B	b4002	t4001
 T	t4005	o662 b3983 b4002
 B	b4006	t4005
-P	p4006	String "copyHypT 2 2 thenT rwh unfold_union 3 thenT rwh unfold_col_member 3 thenT rwh reduceC 3"
+P	p4006	String "copyHypT 2 3 thenT rwh unfold_union 3 thenT rwh unfold_col_member 3 thenT rwh reduceC 3"
 O	o4006	ext_rule p4006
 T	t4006	o b3993 b4
 B	b4007	t4006
@@ -5282,7 +5282,7 @@ T	t5014	o662 b5008 b5014
 B	b5015	t5014
 T	t5015	o662 b5002 b5015
 B	b5016	t5015
-P	p5016	String "copyHypT 2 2"
+P	p5016	String "copyHypT 2 3"
 O	o5016	ext_rule p5016
 T	t5016	o b5009 b4
 B	b5017	t5016
@@ -5355,7 +5355,7 @@ T	t5060	o b5060 b4
 B	b5061	t5060
 T	t5080	o1263 b5025 b5061
 B	b5111	t5080
-P	p5111	String "esquashAutoT thenT assertAtT 2 <<col_member{'C['s];'x}>> thenT autoT"
+P	p5111	String "esquashAutoT thenT assertAtT 3 <<col_member{'C['s];'x}>> thenT autoT"
 O	o5111	ext_rule p5111
 T	t5111	o1263 b5060 b4
 B	b5112	t5111

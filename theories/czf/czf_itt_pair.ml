@@ -83,7 +83,7 @@ dform pair_df : pair{'s1; 's2} =
  * The pair is a set if both arguments are sets.
  * @end[doc]
  *)
-interactive pair_isset {| intro [] |} 'H :
+interactive pair_isset {| intro [] |} :
    ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
    ["wf"] sequent [squash] { 'H >- isset{'s2} } -->
    sequent ['ext] { 'H >- isset{pair{'s1; 's2}} }
@@ -96,14 +96,14 @@ interactive pair_isset {| intro [] |} 'H :
  * sets $s_1$ and $s_2$.
  * @end[doc]
  *)
-interactive pair_member_intro_left {| intro [SelectOption 1] |} 'H :
+interactive pair_member_intro_left {| intro [SelectOption 1] |} :
    ["wf"] sequent [squash] { 'H >- isset{'x} } -->
    ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
    ["wf"] sequent [squash] { 'H >- isset{'s2} } -->
    sequent ['ext] { 'H >- eq{'x; 's1} } -->
    sequent ['ext] { 'H >- mem{'x; pair{'s1; 's2}} }
 
-interactive pair_member_intro_right {| intro [SelectOption 2] |} 'H :
+interactive pair_member_intro_right {| intro [SelectOption 2] |} :
    ["wf"] sequent [squash] { 'H >- isset{'x} } -->
    ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
    ["wf"] sequent [squash] { 'H >- isset{'s2} } -->
@@ -118,7 +118,7 @@ interactive pair_member_intro_right {| intro [SelectOption 2] |} 'H :
  * the sets $s_1$ and $s_2$.
  * @end[doc]
  *)
-interactive pair_member_elim {| elim [] |} 'H 'J :
+interactive pair_member_elim {| elim [] |} 'H :
    ["wf"] sequent [squash] { 'H; x: mem{'y; pair{'s1; 's2}}; 'J['x] >- isset{'y} } -->
    ["wf"] sequent [squash] { 'H; x: mem{'y; pair{'s1; 's2}}; 'J['x] >- isset{'s1} } -->
    ["wf"] sequent [squash] { 'H; x: mem{'y; pair{'s1; 's2}}; 'J['x] >- isset{'s2} } -->
@@ -133,7 +133,7 @@ interactive pair_member_elim {| elim [] |} 'H 'J :
  * The pair is functional in both its arguments.
  * @end[doc]
  *)
-interactive pair_fun {| intro [] |} 'H :
+interactive pair_fun {| intro [] |} :
    sequent ['ext] { 'H >- fun_set{z. 's1['z]} } -->
    sequent ['ext] { 'H >- fun_set{z. 's2['z]} } -->
    sequent ['ext] { 'H >- fun_set{z. pair{'s1['z]; 's2['z]}} }

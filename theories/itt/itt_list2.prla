@@ -13366,7 +13366,7 @@ T	t6577	o b6537 b6577
 B	b6578	t6577
 T	t6578	o805 b380 b6578
 B	b6579	t6578
-P	p6579	String "assert2eq_bfalse 9 ttca"
+P	p6579	String "assert2eq_bfalse ttca"
 O	o6579	ext_rule p6579
 T	t6579	o805 b6537 b4
 B	b6580	t6579
@@ -14819,7 +14819,7 @@ T	t8018	o b8014 b8018
 B	b8019	t8018
 T	t8019	o805 b7958 b8019
 B	b8020	t8019
-P	p3415	String "subset_trans 6 << 'l2 >> ttca"
+P	p3415	String "subset_trans << 'l2 >> ttca"
 O	o3415	ext_rule p3415
 T	t8020	o805 b8014 b4
 B	b8021	t8020

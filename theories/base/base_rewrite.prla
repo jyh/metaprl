@@ -3140,7 +3140,7 @@ T	t1332	o b1328 b1331
 B	b1332	t1332
 T	t1333	o1319 b1324 b1332
 B	b1333	t1333
-P	p1333	String "rewriteAxiom1 2"
+P	p1333	String "rewriteAxiom1"
 O	o1333	ext_rule p1333
 T	t1334	o1319 b1328 b9
 B	b1334	t1334

@@ -66,7 +66,7 @@ extends Mfir_tr_store
  * @end[doc]
  *)
 
-prim ty_letAtom 'H 'a 'b :
+prim ty_letAtom 'a 'b :
    sequent [fir] { 'H >- has_type["atom"]{ 'atom; 'ty1 } } -->
    sequent [fir] { 'H; b: variable; a: var_def{ 'b; 'ty1; no_def } >-
       has_type["exp"]{ 'exp['b]; 'ty2 } } -->
@@ -86,7 +86,7 @@ prim ty_letAtom 'H 'a 'b :
  * @end[doc]
  *)
 
-prim ty_letExt 'H 'a 'b :
+prim ty_letExt 'a 'b :
    sequent [fir] { 'H >- has_type["atom_list"]{ 'args; 'tyl } } -->
    sequent [fir] { 'H; b: variable; a: var_def{ 'b; 'u; no_def } >-
       has_type["exp"]{ 'exp['b]; 't } } -->
@@ -106,18 +106,18 @@ prim ty_letExt 'H 'a 'b :
  * @end[doc]
  *)
 
-prim ty_tailCall 'H 'J :
+prim ty_tailCall 'H :
    sequent [fir] { 'H; a: var_def{ 'v; tyFun{'t1; 't2}; 'd }; 'J >-
       has_type["tailCall"]{ 'atoms; tyFun{ 't1; 't2 } } } -->
    sequent [fir] { 'H; a: var_def{ 'v; tyFun{'t1; 't2}; 'd }; 'J >-
       has_type["exp"]{ tailCall{ atomVar{'v}; 'atoms }; tyEnum[0] } }
    = it
 
-prim ty_tailCall_args1 'H :
+prim ty_tailCall_args1 :
    sequent [fir] { 'H >- has_type["tailCall"]{ nil; tyEnum[0] } }
    = it
 
-prim ty_tailCall_args2 'H :
+prim ty_tailCall_args2 :
    sequent [fir] { 'H >- has_type["atom"]{ 'h; 't1 } } -->
    sequent [fir] { 'H >- has_type["tailCall"]{ 't; 't2 } } -->
    sequent [fir] { 'H >-
@@ -146,11 +146,11 @@ prim ty_tailCall_args2 'H :
 
 (* XXX: documentation needs to be completed. *)
 
-prim ty_match_cases_base 'H :
+prim ty_match_cases_base :
    sequent [fir] { 'H >- has_type["match_cases"]{ nil; 'ty } }
    = it
 
-prim ty_match_cases_ind 'H :
+prim ty_match_cases_ind :
    sequent [fir] { 'H >- has_type["exp"]{ 'exp; 'ty } } -->
    sequent [fir] { 'H >- has_type["match_cases"]{ 'tail; 'ty } } -->
    sequent [fir] { 'H >-
@@ -167,7 +167,7 @@ prim ty_match_cases_ind 'H :
 
 (* XXX: documentation needs to be completed. *)
 
-prim ty_matchExp_tyInt_atom 'H :
+prim ty_matchExp_tyInt_atom :
    (* The  atom being matched should be well-formed. *)
    sequent [fir] { 'H >- has_type["atom"]{ atomInt{'i}; tyInt } } -->
 
@@ -184,7 +184,7 @@ prim ty_matchExp_tyInt_atom 'H :
       has_type["exp"]{ matchExp{ atomInt{'i}; 'cases }; 't } }
    = it
 
-prim ty_matchExp_tyInt_var 'H 'J :
+prim ty_matchExp_tyInt_var 'H :
    (* The cases should cover all of tyInt. *)
    sequent [fir] { 'H; a: var_def{ 'v; tyInt; 'd }; 'J >-
       set_eq{ intset_max[31, "signed"];
@@ -209,7 +209,7 @@ prim ty_matchExp_tyInt_var 'H 'J :
 
 (* XXX: documentation needs to be completed. *)
 
-prim ty_matchExp_tyEnum_atom 'H :
+prim ty_matchExp_tyEnum_atom :
    (* The  atom being matched should be well-formed. *)
    sequent [fir] { 'H >-
       has_type["atom"]{ atomEnum[i:n]{'j}; tyEnum[i:n] } } -->
@@ -227,7 +227,7 @@ prim ty_matchExp_tyEnum_atom 'H :
       has_type["exp"]{ matchExp{ atomEnum[i:n]{'j}; 'cases }; 't } }
    = it
 
-prim ty_matchExp_tyEnum_var 'H 'J :
+prim ty_matchExp_tyEnum_var 'H :
    (* The cases should cover all of tyEnum. *)
    sequent [fir] { 'H; a: var_def{ 'v; tyEnum[i:n]; 'd }; 'J >-
       set_eq{ intset[31, "signed"]{ (interval{0; (number[i:n] -@ 1)} :: nil) };
@@ -250,7 +250,7 @@ prim ty_matchExp_tyEnum_var 'H 'J :
  * @end[doc]
  *)
 
-prim ty_matchExp_tyRawInt_atom 'H :
+prim ty_matchExp_tyRawInt_atom :
    (* The  atom being matched should be well-formed. *)
    sequent [fir] { 'H >-
       has_type["atom"]{ atomRawInt[p:n, s:s]{'i}; tyRawInt[p:n, s:s] } } -->
@@ -268,7 +268,7 @@ prim ty_matchExp_tyRawInt_atom 'H :
       has_type["exp"]{ matchExp{ atomRawInt[p:n, s:s]{'i}; 'cases }; 't } }
    = it
 
-prim ty_matchExp_tyRawInt_var 'H 'J :
+prim ty_matchExp_tyRawInt_var 'H :
    (* The cases should cover all of tyRawInt. *)
    sequent [fir] { 'H; a: var_def{ 'v; tyRawInt[p:n, s:s]; 'd }; 'J >-
       set_eq{ intset_max[p:n, s:s];
@@ -302,7 +302,7 @@ prim ty_matchExp_tyRawInt_var 'H 'J :
  * its type could invalidate the well-formedness of the definition.
  *)
 
-prim ty_matchExp_tyUnion_start 'H 'J :
+prim ty_matchExp_tyUnion_start 'H :
    sequent [fir] { 'H; a: var_def{ 'v; tyUnion{ 'tv; 'tyl; 's }; 'd }; 'J >-
       not{ set_eq{ intset[31, "signed"]{ nil }; 's } } } -->
    sequent [fir] { 'H; a: var_def{ 'v; tyUnion{ 'tv; 'tyl; 's }; 'd }; 'J >-
@@ -313,12 +313,12 @@ prim ty_matchExp_tyUnion_start 'H 'J :
       has_type["exp"]{ matchExp{ atomVar{'v}; 'cases }; 't } }
    = it
 
-prim ty_matchExp_tyUnion_cases_base 'H 'J :
+prim ty_matchExp_tyUnion_cases_base 'H :
    sequent [fir] { 'H; a: var_def{ 'v; tyUnion{ 'tv; 'tyl; 's }; 'd }; 'J >-
       has_type["union_cases"]{ matchExp{ atomVar{'v}; nil }; 't } }
    = it
 
-prim ty_matchExp_tyUnion_cases_ind 'H 'J :
+prim ty_matchExp_tyUnion_cases_ind 'H :
    sequent [fir] { 'H; a: var_def{ 'v; tyUnion{ 'tv; 'tyl; 'set}; 'd}; 'J >-
       has_type["exp"]{ 'exp; 't } } -->
    sequent [fir] { 'H; a: var_def{ 'v; tyUnion{ 'tv; 'tyl; 's }; 'd }; 'J >-
@@ -341,18 +341,18 @@ prim ty_matchExp_tyUnion_cases_ind 'H 'J :
  * @end[doc]
  *)
 
-prim ty_offset_tyInt 'H :
+prim ty_offset_tyInt :
    sequent [fir] { 'H >- int_le{ 0; 'i } } -->
    sequent [fir] { 'H >- has_type["atom"]{ atomInt{'i}; tyInt } } -->
    sequent [fir] { 'H >- has_type["offset"]{ atomInt{'i}; offset } }
    = it
 
-prim ty_offset_tyInt_var 'H 'J :
+prim ty_offset_tyInt_var 'H :
    sequent [fir] { 'H; a: var_def{ 'v; tyInt; 'd }; 'J >-
       has_type["offset"]{ atomVar{'v}; offset } }
    = it
 
-prim ty_offset_tyRawInt 'H :
+prim ty_offset_tyRawInt :
    sequent [fir] { 'H >- int_le{ 0; 'i } } -->
    sequent [fir] { 'H >- has_type["atom"]{ atomRawInt[32, "signed"]{'i};
                                            tyRawInt[32, "signed"] } } -->
@@ -360,7 +360,7 @@ prim ty_offset_tyRawInt 'H :
                                              offset } }
    = it
 
-prim ty_offset_tyRawInt_var 'H 'J :
+prim ty_offset_tyRawInt_var 'H :
    sequent [fir] { 'H; a: var_def{ 'v; tyRawInt[32, "signed"]; 'd }; 'J >-
       has_type["offset"]{ atomVar{'v}; offset } }
    = it
@@ -387,7 +387,7 @@ prim ty_offset_tyRawInt_var 'H 'J :
 
 (* XXX: documentation needs to be completed. *)
 
-prim ty_letAlloc_array 'H 'a 'b :
+prim ty_letAlloc_array 'a 'b :
    sequent [fir] { 'H >- has_type["store"]{ 'atoms; tyArray{'u} } } -->
    sequent [fir] { 'H; b: variable; a: var_def{ 'b; tyArray{'u}; no_def } >-
       has_type["exp"]{ 'exp['b]; 't } } -->
@@ -406,7 +406,7 @@ prim ty_letAlloc_array 'H 'a 'b :
 
 (* XXX: documentation needs to be completed. *)
 
-prim ty_letAlloc_varray 'H 'a 'b :
+prim ty_letAlloc_varray 'a 'b :
    sequent [fir] { 'H >- has_type["atom"]{ 'a1; tyRawInt[32, "signed"] } } -->
    sequent [fir] { 'H >- has_type["atom"]{ 'a2; 'u } } -->
    sequent [fir] { 'H; b: variable; a: var_def{ 'b; tyArray{'u}; no_def } >-
@@ -431,7 +431,7 @@ prim ty_letAlloc_varray 'H 'a 'b :
  * NOTE: Going with the FIR type checker (version 1.56) for allocMalloc.
  *)
 
-prim ty_letAlloc_malloc 'H 'a 'b :
+prim ty_letAlloc_malloc 'a 'b :
    sequent [fir] { 'H >-
       has_type["atom"]{ 'atom; tyRawInt[32, "signed"] } } -->
    sequent [fir] { 'H; b: variable; a: var_def{ 'b; tyRawData; no_def } >-
@@ -452,7 +452,7 @@ prim ty_letAlloc_malloc 'H 'a 'b :
 
 (* XXX: documentation needs to be completed. *)
 
-prim ty_letAlloc_frame 'H 'a 'b :
+prim ty_letAlloc_frame 'a 'b :
    sequent [fir] { 'H >-
       type_eq{ tyFrame{ 'tv; 'tyl }; tyFrame{ 'tv; 'tyl }; small_type } } -->
    sequent [fir] { 'H;
@@ -474,7 +474,7 @@ prim ty_letAlloc_frame 'H 'a 'b :
 
 (* XXX: documentation needs to be completed. *)
 
-prim ty_letSubscript_tyTuple 'H 'J 'p 'q :
+prim ty_letSubscript_tyTuple 'H 'p 'q :
    sequent [fir] { 'H; y: var_def{ 'x; tyTuple[s:s]{'mtyl}; 'd }; 'J >-
       type_eq{ 'u;
                ty_of_mutable_ty{ nth_elt{ index_of_subscript{'a2}; 'mtyl } };
@@ -489,7 +489,7 @@ prim ty_letSubscript_tyTuple 'H 'J 'p 'q :
       has_type["exp"]{letSubscript{'u; atomVar{'x}; 'a2; v. 'exp['v]}; 't} }
    = it
 
-prim ty_setSubscript_tyTuple 'H 'J :
+prim ty_setSubscript_tyTuple 'H :
    sequent [fir] { 'H; y: var_def{ 'x; tyTuple[s:s]{'mtyl}; 'd }; 'J >-
       type_eq{ mutable_ty{ 'u; "true" };
                nth_elt{ index_of_subscript{'a2}; 'mtyl };
@@ -512,7 +512,7 @@ prim ty_setSubscript_tyTuple 'H 'J :
 
 (* XXX: documentation needs to be completed. *)
 
-prim ty_letSubsript_tyArray 'H 'a 'b :
+prim ty_letSubsript_tyArray 'a 'b :
    sequent [fir] { 'H >- has_type["atom"]{ 'a1; tyArray{ 'u } } } -->
    sequent [fir] { 'H >- has_type["offset"]{ 'a2; offset } } -->
    sequent [fir] { 'H; b: variable; a: var_def{ 'b; 'u; no_def } >-
@@ -521,7 +521,7 @@ prim ty_letSubsript_tyArray 'H 'a 'b :
       has_type["exp"]{ letSubscript{ 'u; 'a1; 'a2; v. 'exp['v] }; 't } }
    = it
 
-prim ty_setSubscript_tyArray 'H :
+prim ty_setSubscript_tyArray :
    sequent [fir] { 'H >- has_type["atom"]{ 'a1; tyArray{ 'u } } } -->
    sequent [fir] { 'H >- has_type["offset"]{ 'a2; offset } } -->
    sequent [fir] { 'H >- has_type["atom"]{ 'a3; 'u } } -->
@@ -542,7 +542,7 @@ prim ty_setSubscript_tyArray 'H :
 (* XXX: union subscripting rules need to be completed. *)
 
 (*
-prim ty_letSubscript_tyUnion 'H 'J :
+prim ty_letSubscript_tyUnion 'H :
    sequent [fir] { 'H; y: var_def{ 'x;
    = it
 *)
@@ -557,7 +557,7 @@ prim ty_letSubscript_tyUnion 'H 'J :
 
 (* XXX: documentation needs to be completed. *)
 
-prim ty_letSubscript_rawData 'H 'a 'b :
+prim ty_letSubscript_rawData 'a 'b :
    sequent [fir] { 'H >- has_type["atom"]{ 'a1; tyRawData } } -->
    sequent [fir] { 'H >- has_type["offset"]{ 'a2; offset } } -->
    sequent [fir] { 'H; b: variable; a: var_def{ 'b; 'u; no_def } >-
@@ -566,7 +566,7 @@ prim ty_letSubscript_rawData 'H 'a 'b :
       has_type["exp"]{ letSubscript{ 'u; 'a1; 'a2; v. 'exp['v] }; 't } }
    = it
 
-prim ty_setSubscript_rawdata 'H :
+prim ty_setSubscript_rawdata :
    sequent [fir] { 'H >- has_type["atom"]{ 'a1; tyRawData } } -->
    sequent [fir] { 'H >- has_type["offset"]{ 'a2; offset } } -->
    sequent [fir] { 'H >- has_type["atom"]{ 'a3; 'u } } -->
@@ -599,12 +599,12 @@ prim ty_setSubscript_rawdata 'H :
  * @end[doc]
  *)
 
-prim ty_label 'H 'J :
+prim ty_label 'H :
    sequent [fir] { 'H; a: global_def{ 'l; 'ty; 'd }; 'J >-
       has_type["label"]{ 'l; 'ty } }
    = it
 
-prim ty_letGlobal 'H 'a 'b :
+prim ty_letGlobal 'a 'b :
    sequent [fir] { 'H >- has_type["label"]{ 'label; 'ty1 } } -->
    sequent [fir] { 'H; b: global; a: var_def{ 'b; 'ty1; no_def } >-
       has_type["exp"]{ 'exp['b]; 'ty2 } } -->
@@ -612,7 +612,7 @@ prim ty_letGlobal 'H 'a 'b :
       has_type["exp"]{ letGlobal{ 'ty1; 'label; v. 'exp['v] }; 'ty2 } }
    = it
 
-prim ty_setGlobal 'H :
+prim ty_setGlobal :
    sequent [fir] { 'H >- has_type["label"]{ 'label; 'ty1 } } -->
    sequent [fir] { 'H >- has_type["atom"]{ 'atom; 'ty1 } } -->
    sequent [fir] { 'H >- has_type["exp"]{ 'exp; 'ty2 } } -->

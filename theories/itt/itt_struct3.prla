@@ -1159,7 +1159,7 @@ T	t642	o2 b634
 B	b642	t642
 T	t643	o620 b641 b4 b642
 B	b643	t643
-P	p645	String "exchange 3 2 2 2"
+P	p645	String "exchange 3 2 2"
 O	o645	ext_rule p645
 S	s645	t607 h h591 h593 h592 h640
 G	s645	t608
@@ -1170,7 +1170,7 @@ T	t647	o2 b643
 B	b648	t647
 T	t648	o620 b647 b4 b648
 B	b649	t648
-P	p651	String "contextSubstPointwise 2 2 2 2 <<'f['y]>>"
+P	p651	String "contextSubstPointwise 2 2 2 <<'f['y]>>"
 O	o651	ext_rule p651
 T	t651	o593 b593 b578 b594
 S	s651	t607 h h591 h593 h592 h640
@@ -1825,7 +1825,7 @@ T	t1106	o b569 b1105
 B	b1106	t1106
 T	t1107	o b568 b1106
 B	b1107	t1107
-P	p1107	String "substUsingEpimorphism 2 2 <<'B>> <<bind{y.'y}>> <<bind{y.'y}>> thenT autoT"
+P	p1107	String "substUsingEpimorphism 2 <<'B>> <<bind{y.'y}>> <<bind{y.'y}>> thenT autoT"
 O	o1107	ext_rule p1107
 T	t1108	o b742 b4
 B	b1108	t1108

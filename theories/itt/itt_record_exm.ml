@@ -51,10 +51,10 @@ define unfold_plane:  plane <--> record["x":t]{int;record["y":t]{int}}
 
 define unfold_space:  space <--> record["x":t]{int;record["y":t]{int;record["z":t]{int}}}
 
-interactive planeType {|intro[] |} 'H :
+interactive planeType {|intro[] |} :
    sequent['ext] {'H >- "type"{plane} }
 
-interactive spaceType {|intro[] |} 'H :
+interactive spaceType {|intro[] |} :
    sequent['ext] {'H >- "type"{space} }
 
 
@@ -66,7 +66,7 @@ interactive spaceType {|intro[] |} 'H :
 
 define unfold_O: O <--> rcrd["x":t]{0; rcrd["y":t]{0; rcrd["z":t]{0}}}
 
-interactive oInSpace {|intro[] |} 'H :
+interactive oInSpace {|intro[] |} :
    sequent['ext] {'H >- O in space }
 
 (*!
@@ -75,7 +75,7 @@ interactive oInSpace {|intro[] |} 'H :
  * @end[doc]
  *)
 
-interactive oInPlane {|intro[] |} 'H :
+interactive oInPlane {|intro[] |} :
    sequent['ext] {'H >- O in plane }
 
 (*!
@@ -84,7 +84,7 @@ interactive oInPlane {|intro[] |} 'H :
  * @end[doc]
  *)
 
-interactive spacePlane {|intro[] |} 'H :
+interactive spacePlane {|intro[] |} :
    sequent['ext] {'H >- \subtype{space;plane} }
 
 (*!
@@ -99,10 +99,10 @@ define unfold_B: B <--> rcrd["z":t]{0; rcrd["y":t]{2; rcrd["x":t]{1}}}
 
 (*! @docoff *)
 
-interactive aInSpace {|intro[] |} 'H :
+interactive aInSpace {|intro[] |} :
    sequent['ext] {'H >- A in space }
 
-interactive bInSpace {|intro[] |} 'H :
+interactive bInSpace {|intro[] |} :
    sequent['ext] {'H >- B in space }
 
 
@@ -114,10 +114,10 @@ interactive bInSpace {|intro[] |} 'H :
  * @end[doc]
  *)
 
-interactive abInPlane {|intro[] |} 'H :
+interactive abInPlane {|intro[] |} :
    sequent['ext] {'H >- A = B in plane }
 
-interactive abInSpace {|intro[] |} 'H :
+interactive abInSpace {|intro[] |} :
    sequent['ext] {'H >- not{.A = B in space} }
 
 (*!
@@ -163,12 +163,12 @@ let fold_point =
    makeFoldC <<point{'a;'b;'c;'e}>> space_point orelseC
    makeFoldC <<point{'a;'b;'e}>> plane_point
 
-interactive planeIntro {|intro[] |} 'H :
+interactive planeIntro {|intro[] |} :
    sequent[squash] {'H >- 'a in int} -->
    sequent[squash] {'H >- 'b in int} -->
    sequent['ext] {'H >- point{'a;'b;rcrd} in plane}
 
-interactive spaceIntro {|intro[] |} 'H :
+interactive spaceIntro {|intro[] |} :
    sequent[squash] {'H >- 'a in int} -->
    sequent[squash] {'H >- 'b in int} -->
    sequent[squash] {'H >- 'c in int} -->
@@ -189,7 +189,7 @@ let resource reduce +=
    [<< field["x":t]{point{'a;'b;'e}}  >>, point_beta1_rw;
     << field["y":t]{point{'a;'b;'e}}  >>, point_beta2_rw]
 
-interactive point_eta 'H :
+interactive point_eta :
    sequent[squash]{'H >- 'p in plane } -->
    sequent['ext]{'H >-   point{field["x":t]{'p};field["y":t]{'p};'p} ~ 'p }
 
@@ -201,14 +201,14 @@ interactive point_eta 'H :
  * @end[doc]
  *)
 
-interactive planeElim {|elim[] |} 'H 'J:
+interactive planeElim {|elim[] |} 'H :
    sequent['ext]{'H; a:int; b:int; e:record; 'J[point{'a;'b;'e}] >- 'C[point{'a;'b;'e}] } -->
    sequent['ext]  {'H; p:plane; 'J['p] >- 'C['p] }
 
 
 (*! @docoff *)
 
-interactive spaceElim {|elim[] |} 'H 'J:
+interactive spaceElim {|elim[] |} 'H :
    sequent['ext]{'H; a:int; b:int; c:int; e:record; 'J[point{'a;'b;'c;'e}] >- 'C[point{'a;'b;'c;'e}] } -->
    sequent['ext]  {'H; p:space; 'J['p] >- 'C['p] }
 
@@ -238,7 +238,7 @@ let resource reduce += << length{point{'a;'b;'e}}  >>, reduce_length
  * @end[doc]
  *)
 
-interactive length_A {|intro[] |} 'H :
+interactive length_A {|intro[] |} :
    sequent['ext]  {'H >- length{point{3;4;'e}} = 25 in int }
 
 (*!
@@ -247,7 +247,7 @@ interactive length_A {|intro[] |} 'H :
  * @end[doc]
  *)
 
-interactive length_wf {|intro[] |} 'H :
+interactive length_wf {|intro[] |} :
    sequent[squash]{'H >- 'p in plane } -->
    sequent['ext]  {'H >- length{'p} in int }
 
@@ -262,11 +262,11 @@ define unfold_colored_space:  cspace <--> record["color":t]{atom;space}
 
 define unfold_redA: redA <--> rcrd["color":t]{token["red":t]; A}
 
-interactive redAInCSpace {|intro[] |} 'H :
+interactive redAInCSpace {|intro[] |} :
    sequent['ext] {'H >- redA in cspace }
 
 
-interactive cspaceElim {|elim[] |} 'H 'J:
+interactive cspaceElim {|elim[] |} 'H :
    sequent['ext]{'H; a:int; b:int; c:int; color:atom; e:record; 'J[rcrd["color":t]{'color;point{'a;'b; 'c; 'e}}] >- 'C[rcrd["color":t]{'color;point{'a;'b; 'c; 'e}}] } -->
    sequent['ext]  {'H; p:cspace; 'J['p] >- 'C['p] }
 
@@ -301,21 +301,21 @@ define integers : integers <-->
    rcrd["*":t]{.lambda{x.lambda{y. 'x *@ 'y}}
               }}}
 
-interactive integers_add_semigroup 'H :
+interactive integers_add_semigroup :
    sequent['ext] {'H >- integers in semigroup["Z":t,"+":t,0:l]}
 
-interactive integers_mul_semigroup 'H :
+interactive integers_mul_semigroup :
    sequent['ext] {'H >- integers in semigroup["Z":t,"*":t,0:l]}
 
 
 define morphisms : morphisms{'A}  <-->
    rcrd["M":t]{.'A -> 'A;rcrd["*":t]{lambda{f.lambda{g. lambda{x. 'f ('g 'x)}}}}}
 
-interactive morphisms_semigroup 'H :
+interactive morphisms_semigroup :
    sequent[squash] {'H >- 'A in univ[i:l]} -->
    sequent['ext] {'H >- morphisms{'A} in semigroup["M":t,"*":t,i:l]}
 
-interactive semigroupAssos4 'H semigroup[i:l] :
+interactive semigroupAssos4 semigroup[i:l] :
    sequent[squash] {'H  >- 'g in semigroup[i:l]} -->
    sequent['ext] {'H  >-
     all a:field["G":t]{'g}. all b:field["G":t]{'g}. all c:field["G":t]{'g}. all d:field["G":t]{'g}.
@@ -352,7 +352,7 @@ define stack_as_list :
 
 
 
-interactive stack_as_list_wf 'H :
+interactive stack_as_list_wf {| intro [] |}:
    sequent[squash] {'H >- 'A in univ[i:l]} -->
    sequent['ext] {'H >- list_stack{'A} in Stack[i:l]{'A}}
 
@@ -394,7 +394,7 @@ interactive_rw example_of_evaluation :
 
 (*! @docoff *)
 
-interactive tst 'H :
+interactive tst :
    sequent['ext]  { 'H >-  'C} -->
    sequent['ext]  { 'H >-  'C}
 

@@ -157,7 +157,7 @@ dform precind_df : except_mode[src] :: precind{'a; p, h. 'g} =
  * $B[T_1, x] @subseteq B[T_2, x]$.
  * @end[doc]
  *)
-prim precEquality {| intro []; eqcd |} 'H 'A 'x 'y 'z 'T 'P1 'P2 :
+prim precEquality {| intro []; eqcd |} 'A 'x 'y 'z 'T 'P1 'P2 :
    [wf] sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
    [wf] sequent [squash] { 'H; x: 'A; T: 'A -> univ[i:l] >- 'B1['T; 'x] = 'B2['T; 'x] in univ[i:l] } -->
    [wf] sequent [squash] { 'H;
@@ -177,7 +177,7 @@ prim precEquality {| intro []; eqcd |} 'H 'A 'x 'y 'z 'T 'P1 'P2 :
 (*!
  * @docoff
  *)
-prim precMemberFormation {| intro [] |} 'H :
+prim precMemberFormation {| intro [] |} :
    [main] ('t : sequent ['ext] { 'H >- 'B[lambda{z. "prec"{T, x. 'B['T; 'x]; 'z}}; 'a] }) -->
    [wf] sequent [squash] { 'H >- "type"{("prec"{T, x. 'B['T; 'x]; 'a})} } -->
    sequent ['ext] { 'H >- "prec"{T, x. 'B['T; 'x]; 'a} } =
@@ -192,7 +192,7 @@ prim precMemberFormation {| intro [] |} 'H :
  * definition of the type has been unrolled.
  * @end[doc]
  *)
-prim precMemberEquality {| intro []; eqcd |} 'H 'z :
+prim precMemberEquality {| intro []; eqcd |} 'z :
    [wf] sequent [squash] { 'H >- "type"{("prec"{T, x. 'B['T; 'x]; 'a})} } -->
    [wf] sequent [squash] { 'H >- 'a1 = 'a2 in 'B[lambda{z. "prec"{T, x. 'B['T; 'x]; 'z}}; 'a] } -->
    sequent ['ext] { 'H >- 'a1 = 'a2 in "prec"{T, x. 'B['T; 'x]; 'a} } =
@@ -208,7 +208,7 @@ prim precMemberEquality {| intro []; eqcd |} 'H 'z :
  * on all the unrollings of $p$, it also holds on $p$.
  * @end[doc]
  *)
-prim precElimination {| elim [ThinOption thinT] |} 'H 'J lambda{z. 'G['z]} 'a 'A 'Z 'r 'p 'u 'h univ[i:l] :
+prim precElimination {| elim [ThinOption thinT] |} 'H lambda{z. 'G['z]} 'a 'A 'Z 'r 'p 'u 'h univ[i:l] :
    [wf] sequent [squash] { 'H; r: "prec"{T, x. 'B['T; 'x]; 'a}; 'J['r] >- 'a = 'a in 'A } -->
    [main] ('g['r; 'u; 'p; 'h] : sequent ['ext] { 'H; r: "prec"{T, x. 'B['T; 'x]; 'a}; 'J['r];
       Z: 'A -> univ[i:l];
@@ -226,7 +226,7 @@ prim precElimination {| elim [ThinOption thinT] |} 'H 'J lambda{z. 'G['z]} 'a 'A
  * type definition of the parameterized recursive type.
  * @end[doc]
  *)
-prim precUnrollElimination {| elim [ThinOption thinT] |} 'H 'J 'z 'y 'u :
+prim precUnrollElimination {| elim [ThinOption thinT] |} 'H 'z 'y 'u :
    ('g['z; 'y; 'u] : sequent ['ext] { 'H; r: "prec"{T, x. 'B['T; 'x]; 'a}; 'J['r];
              y: 'B[lambda{z. "prec"{T, x. 'B['T; 'x]; 'z}}; 'a];
              u: 'r = 'y in 'B[lambda{z. "prec"{T, x. 'B['T; 'x]; 'z}}; 'a]
@@ -247,7 +247,7 @@ prim precUnrollElimination {| elim [ThinOption thinT] |} 'H 'J 'z 'y 'u :
  * unrollings.
  * @end[doc]
  *)
-prim precindEquality {| intro []; eqcd |} 'H lambda{x. 'S['x]} (a:'A * "prec"{T, y. 'B['T; 'y]; 'a}) 'Z 'u 'h 'z univ[i:l] :
+prim precindEquality {| intro []; eqcd |} lambda{x. 'S['x]} (a:'A * "prec"{T, y. 'B['T; 'y]; 'a}) 'Z 'u 'h 'z univ[i:l] :
    [wf] sequent [squash] { 'H >- 'r1 = 'r2 in a: 'A * "prec"{T, y. 'B['T; 'y]; 'a} } -->
    [wf] sequent [squash] { 'H; Z: 'A -> univ[i:l];
              u: \subtype{(a: 'A * 'Z 'a); (a: 'A * "prec"{T, x. 'B['T; 'x]; 'a})};

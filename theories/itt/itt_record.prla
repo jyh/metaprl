@@ -2708,7 +2708,7 @@ G	s3657	t1645
 B	b3658	s3657
 T	t3658	o965 b3658
 B	b3659	t3658
-P	p3660	String "substUsingEpimorphism 2 2 <<'A * record>> <<bind{y.spread{'y;a,r.rcrd[n:t]{'a;'r}}}>>  <<bind{z.(field[n:t]{'z},'z)}>> thenT autoT thenT onAllClausesT (rwh reduceC) thenT autoT"
+P	p3660	String "substUsingEpimorphism 2 <<'A * record>> <<bind{y.spread{'y;a,r.rcrd[n:t]{'a;'r}}}>>  <<bind{z.(field[n:t]{'z},'z)}>> thenT autoT thenT onAllClausesT (rwh reduceC) thenT autoT"
 O	o3660	ext_rule p3660
 T	t3660	o b3656 b4
 B	b3661	t3660
@@ -3109,7 +3109,7 @@ T	t3852	o b3852 b4
 B	b3853	t3852
 T	t3853	o978 b3846 b3853
 B	b3854	t3853
-P	p3854	String "exchange 2 2 3 1 thenT autoT"
+P	p3854	String "exchange 2 2 3 thenT autoT"
 O	o3854	ext_rule p3854
 T	t3854	o978 b3852 b4
 B	b3855	t3854
@@ -3157,7 +3157,7 @@ T	t3878	o964 b3876 b3878
 B	b3879	t3878
 T	t3879	o964 b3873 b3879
 B	b3880	t3879
-P	p3881	String "substUsingEpimorphism 2 2 <<r:'R * 'A['r]>> <<bind{y.spread{'y;r,a.rcrd[n:t]{'a;'r}}}>>  <<bind{z.('z,field[n:t]{'z})}>>"
+P	p3881	String "substUsingEpimorphism 2 <<r:'R * 'A['r]>> <<bind{y.spread{'y;r,a.rcrd[n:t]{'a;'r}}}>>  <<bind{z.('z,field[n:t]{'z})}>>"
 O	o3881	ext_rule p3881
 T	t3881	o b3874 b4
 B	b3882	t3881
@@ -3600,7 +3600,7 @@ B	b4272	s4272
 S	s4277	t967 h h3990 h1645 h4271
 G	s4277	t4272
 B	b4278	s4277
-P	p4283	String "recordEliminationR1 4 1 thenT autoT"
+P	p4283	String "recordEliminationR1 4 thenT autoT"
 O	o4283	ext_rule p4283
 P	p4298	String "dT 2 thenT onAllClausesT (rwh reduceC)  thenT  autoT"
 O	o4298	ext_rule p4298
@@ -3654,7 +3654,7 @@ G	s4348	t1645
 B	b4349	s4348
 T	t4349	o965 b4349
 B	b4350	t4349
-P	p4351	String "rw unfoldRecordI 2 thenT recordEliminationR1 2 2  thenT autoT"
+P	p4351	String "rw unfoldRecordI 2 thenT recordEliminationR1 2  thenT autoT"
 O	o4351	ext_rule p4351
 T	t4351	o b4347 b4
 B	b4352	t4351
@@ -4122,7 +4122,7 @@ T	t544	o b544 b4
 B	b545	t544
 T	t545	o978 b510 b545
 B	b546	t545
-P	p547	String "substT <<label[m:t] ~ label[n:t]>> 0 thenET label_sqequal 3 thenT autoT"
+P	p547	String "substT <<label[m:t] ~ label[n:t]>> 0 thenET label_sqequal thenT autoT"
 O	o548	ext_rule p547
 T	t551	o978 b544 b4
 B	b551	t551
@@ -4214,7 +4214,7 @@ T	t873	o b873 b4
 B	b875	t873
 T	t875	o978 b1992 b875
 B	b876	t875
-P	p880	String "substT <<label[n:t] ~ label[m:t]>> 0 thenET label_sqequal 3 thenT autoT"
+P	p880	String "substT <<label[n:t] ~ label[m:t]>> 0 thenET label_sqequal thenT autoT"
 O	o881	ext_rule p880
 T	t881	o978 b873 b4
 B	b881	t881
@@ -6526,7 +6526,7 @@ T	t1445	o4298 b977 b1445 b4 b4
 B	b1446	t1445
 T	t1446	o b1446 b4
 B	b1447	t1446
-P	p1474	String "cutT  <<sequent[squash]{'H; r:record[n:t]{'A;x.'R['x]}; 'J['r]; x:'A >- \"type\"{'R['x]}}>> thenMT substUsingEpimorphism 2 2 <<x:'A * 'R['x]>> <<bind{y.spread{'y;a,r.rcrd[n:t]{'a;'r}}}>>  <<bind{z.(field[n:t]{'z},'z)}>>"
+P	p1474	String "cutT  <<sequent[squash]{'H; r:record[n:t]{'A;x.'R['x]}; 'J['r]; x:'A >- \"type\"{'R['x]}}>> thenMT substUsingEpimorphism 2 <<x:'A * 'R['x]>> <<bind{y.spread{'y;a,r.rcrd[n:t]{'a;'r}}}>>  <<bind{z.(field[n:t]{'z},'z)}>>"
 O	o1475	ext_rule p1474
 T	t1476	o980 b4120 b4126
 B	b1476	t1476
@@ -6662,7 +6662,7 @@ T	t1572	o978 b1547 b4
 B	b1573	t1572
 T	t1573	o1241 b977 b1573 b4 b4
 B	b1574	t1573
-P	p1576	String "recordMemberOrt 6 \"w\" thenT autoT"
+P	p1576	String "recordMemberOrt \"w\" thenT autoT"
 O	o1576	ext_rule p1576
 T	t3908	o1576 b977 b1249 b4 b4
 B	b3909	t3908
@@ -7934,7 +7934,7 @@ T	t3041	o b3041 b4
 B	b3042	t3041
 T	t3042	o978 b1370 b3042
 B	b3043	t3042
-P	p3044	String "recordEliminationL1 4 1 \"a\" thenT autoT"
+P	p3044	String "recordEliminationL1 4 \"a\" thenT autoT"
 O	o3044	ext_rule p3044
 T	t3044	o978 b3041 b4
 B	b3044	t3044
@@ -8184,7 +8184,7 @@ B	b1106	t1106
 P	p1107	Number 12898
 P	p1108	Number 13201
 O	o1108	location p1107 p1108
-P	p3043	String "rwhAllAll unfoldRecordI thenT recordEliminationR 2 2 \"rr\" thenT autoT"
+P	p3043	String "rwhAllAll unfoldRecordI thenT recordEliminationR 2 \"rr\" thenT autoT"
 O	o3047	ext_rule p3043
 T	t3060	o3047 b977 b1697 b4 b4
 B	b3060	t3060
@@ -10701,7 +10701,7 @@ P	p6211	String recordOrtIntroRT
 O	o6211	lid p6211
 T	t6211	o6211
 B	b6211	t6211
-P	p6219	String "rwaAllAll [unfoldRecordI] thenT recordOrtIntroR 2\"r\" thenT autoT"
+P	p6219	String "rwaAllAll [unfoldRecordI] thenT recordOrtIntroR \"r\" thenT autoT"
 O	o6219	ext_rule p6219
 T	t6219	o6219 b977 b2564 b4 b4
 B	b6219	t6219

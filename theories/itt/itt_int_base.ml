@@ -300,7 +300,7 @@ let testT p =
 (*
  * Integers are canonical.
  *)
-prim int_sqequal 'H :
+prim int_sqequal :
    sequent [squash] { 'H >- 'a = 'b in int } -->
    sequent ['ext] { 'H >- 'a ~ 'b } = it
 
@@ -366,36 +366,36 @@ let resource reduce += [
    <<beq_int{number[i:n]; number[j:n]}>>, reduce_eq_int;
 ]
 
-prim add_wf {| intro []; eqcd |} 'H :
+prim add_wf {| intro []; eqcd |} :
    [wf] sequent [squash] { 'H >- 'a = 'a1 in int } -->
    [wf] sequent [squash] { 'H >- 'b = 'b1 in int } -->
    sequent ['ext] { 'H >- 'a +@ 'b = 'a1 +@ 'b1 in int } = it
 
-prim minus_wf {| intro []; eqcd |} 'H :
+prim minus_wf {| intro []; eqcd |} :
    [wf] sequent [squash] { 'H >- 'a = 'a1 in int } -->
    sequent ['ext] { 'H >- (-'a) = (-'a1) in int } = it
 
-interactive sub_wf {| intro []; eqcd |} 'H :
+interactive sub_wf {| intro []; eqcd |} :
    [wf] sequent [squash] { 'H >- 'a = 'a1 in int } -->
    [wf] sequent [squash] { 'H >- 'b = 'b1 in int } -->
    sequent ['ext] { 'H >- 'a -@ 'b = 'a1 -@ 'b1 in int }
 
-prim lt_bool_wf {| intro []; eqcd |} 'H :
+prim lt_bool_wf {| intro []; eqcd |} :
    sequent [squash] { 'H >- 'a='a1 in int } -->
    sequent [squash] { 'H >- 'b='b1 in int } -->
    sequent ['ext] { 'H >- lt_bool{'a; 'b} = lt_bool{'a1; 'b1} in bool } = it
 
-prim beq_wf {| intro []; eqcd |} 'H :
+prim beq_wf {| intro []; eqcd |} :
    [wf] sequent [squash] { 'H >- 'a = 'a1 in int } -->
    [wf] sequent [squash] { 'H >- 'b = 'b1 in int } -->
    sequent ['ext] { 'H >- beq_int{'a; 'b} = beq_int{'a1; 'b1} in bool } = it
 (*! @docoff *)
 
-interactive lt_squashStable {| squash |} 'H :
+interactive lt_squashStable {| squash |} :
    sequent [squash] { 'H >- 'a < 'b } -->
    sequent ['ext] { 'H >- it in ('a < 'b) }
 
-interactive lt_wf {| intro [] |} 'H :
+interactive lt_wf {| intro [] |} :
    [wf] sequent [squash] { 'H >- 'a in int } -->
    [wf] sequent [squash] { 'H >- 'b in int } -->
    sequent ['ext] { 'H >- "type"{lt{'a; 'b}} }
@@ -406,21 +406,21 @@ interactive lt_wf {| intro [] |} 'H :
  *
  * @end[doc]
  *)
-prim beq_int2prop 'H :
+prim beq_int2prop :
    [main] sequent [squash] { 'H >- "assert"{beq_int{'a; 'b}} } -->
    [wf] sequent [squash] { 'H >- 'a in int } -->
    [wf] sequent [squash] { 'H >- 'b in int } -->
    sequent ['ext] { 'H >- 'a = 'b in int } = it
 
 (* Derived from previous *)
-interactive eq_int_assert_elim {| elim [ThinOption thinT] |} 'H 'J 'y:
+interactive eq_int_assert_elim {| elim [ThinOption thinT] |} 'H 'y:
    [main]sequent['ext]{ 'H; x:"assert"{beq_int{'a;'b}}; 'J[it];
                             y: 'a = 'b in int >- 'C[it]} -->
    [wf]sequent['ext]{ 'H; x:"assert"{beq_int{'a;'b}}; 'J[it] >- 'a in int} -->
    [wf]sequent['ext]{ 'H; x:"assert"{beq_int{'a;'b}}; 'J[it] >- 'b in int} -->
    sequent['ext]{ 'H; x:"assert"{beq_int{'a;'b}}; 'J['x] >- 'C['x]}
 
-prim beq_int_is_true 'H :
+prim beq_int_is_true :
    sequent [squash] { 'H >- 'a = 'b in int } -->
    sequent ['ext] { 'H >- beq_int{'a; 'b} ~ btrue } = it
 
@@ -433,11 +433,11 @@ let beq_int_is_trueC = beq_int_is_true_rw
 (*
  Derived from previous rewrite
  *)
-interactive eq_2beq_int {| intro [] |} 'H :
+interactive eq_2beq_int {| intro [] |} :
    sequent [squash] { 'H >- 'a = 'b in int } -->
    sequent ['ext] { 'H >- "assert"{beq_int{'a; 'b}} }
 
-interactive lt_bool_member {| intro [] |} 'H :
+interactive lt_bool_member {| intro [] |} :
   [main]  sequent [squash] { 'H >- 'a < 'b } -->
 (*  [wf] sequent [squash] { 'H >- 'a in int } -->
   [wf] sequent [squash] { 'H >- 'b in int } --> *)
@@ -461,13 +461,13 @@ interactive lt_bool_member {| intro [] |} 'H :
  * H >- Z = Z in Ui ext Ax
  * by intEquality
  *)
-prim intEquality {| intro []; eqcd |} 'H :
+prim intEquality {| intro []; eqcd |} :
    sequent ['ext] { 'H >- int in univ[i:l] } = it
 
 (*
  * H >- int Type
  *)
-interactive intType {| intro [] |} 'H :
+interactive intType {| intro [] |} :
    sequent ['ext] { 'H >- "type"{int} }
 (*! @docoff *)
 
@@ -475,14 +475,14 @@ interactive intType {| intro [] |} 'H :
  * H >- Ui ext Z
  * by intFormation
  *)
-interactive intFormation 'H :
+interactive intFormation :
    sequent ['ext] { 'H >- univ[i:l] }
 
 (*
  * H >- Z ext n
  * by numberFormation n
  *)
-prim numberFormation {| intro [] |} 'H number[n:n] :
+prim numberFormation {| intro [] |} number[n:n] :
    sequent ['ext] { 'H >- int } = number[n:n]
 
 (*!
@@ -492,12 +492,12 @@ prim numberFormation {| intro [] |} 'H number[n:n] :
  * improve the @hreftactic[decideT] tactic.
  * @end[doc]
  *)
-interactive lt_decidable {| intro [] |} 'H :
+interactive lt_decidable {| intro [] |} :
    [wf] sequent[squash] { 'H >- 'a in int } -->
    [wf] sequent[squash] { 'H >- 'b in int } -->
    sequent['ext] { 'H >- decidable{('a < 'b)} }
 
-interactive eq_int_decidable {| intro [] |} 'H :
+interactive eq_int_decidable {| intro [] |} :
    [wf] sequent[squash] { 'H >- 'a in int } -->
    [wf] sequent[squash] { 'H >- 'b in int } -->
    sequent['ext] { 'H >- decidable{('a = 'b in int)} }
@@ -513,7 +513,7 @@ interactive eq_int_decidable {| intro [] |} 'H :
  * H >- i = i in int
  * by numberEquality
  *)
-prim numberEquality {| intro []; eqcd |} 'H :
+prim numberEquality {| intro []; eqcd |} :
    sequent ['ext] { 'H >- number[n:n] in int } = it
 
 (*!
@@ -528,7 +528,7 @@ prim numberEquality {| intro []; eqcd |} 'H :
  Definition of basic operations (and relations) on int
  *)
 
-prim lt_Reflex 'H :
+prim lt_Reflex :
    [wf] sequent [squash] { 'H >- 'a in int } -->
    [wf] sequent [squash] { 'H >- 'b in int } -->
    sequent ['ext] { 'H >- band{lt_bool{'a; 'b}; lt_bool{'b; 'a}} ~ bfalse } = it
@@ -546,17 +546,16 @@ interactive_rw lt_irreflex_rw :
 
 let lt_IrreflexC = lt_irreflex_rw
 
-interactive lt_Asym 'H 'a 'b :
+interactive lt_Asym 'a 'b :
    [main] sequent [squash] { 'H >- 'a < 'b } -->
    [main] sequent [squash] { 'H >- 'b < 'a } -->
    [wf] sequent [squash] { 'H >- 'a in int } -->
    [wf] sequent [squash] { 'H >- 'b in int } -->
    sequent ['ext] { 'H >- 'C }
 
-let lt_AsymT t1 t2 p =
-      lt_Asym (Sequent.hyp_count_addr p) t1 t2 p
+let lt_AsymT = lt_Asym
 
-prim lt_Trichot 'H :
+prim lt_Trichot :
    [wf] sequent [squash] { 'H >- 'a in int } -->
    [wf] sequent [squash] { 'H >- 'b in int } -->
    sequent ['ext]
@@ -579,7 +578,7 @@ let splitIntC a b =
          (mk_beq_int_term a b))
       lt_TrichotC
 
-interactive splitInt 'H 'a 'b 'w :
+interactive splitInt 'a 'b 'w :
    [wf] sequent [squash] { 'H >- 'a in int } -->
    [wf] sequent [squash] { 'H >- 'b in int } -->
    [main] sequent ['ext] { 'H; w: ('a < 'b) >- 'C } -->
@@ -589,9 +588,9 @@ interactive splitInt 'H 'a 'b 'w :
 
 let splitIntT t1 t2 p =
    let w = maybe_new_vars1 p "w" in
-      splitInt (Sequent.hyp_count_addr p) t1 t2 w p
+      splitInt t1 t2 w p
 
-prim lt_Transit 'H 'b :
+prim lt_Transit 'b :
    [main] sequent [squash]
       { 'H >- band{lt_bool{'a; 'b};lt_bool{'b; 'c}} = btrue in bool } -->
    [wf] sequent [squash] { 'H >- 'a in int } -->
@@ -608,7 +607,7 @@ interactive_rw lt_Transit_rw 'b :
 
 let lt_TransitC = lt_Transit_rw
 
-interactive ltDissect 'H 'b:
+interactive ltDissect 'b:
    [main] sequent [squash] { 'H >- 'a < 'b } -->
    [main] sequent [squash] { 'H >- 'b < 'c } -->
    [wf] sequent [squash] { 'H >- 'a in int } -->
@@ -616,10 +615,9 @@ interactive ltDissect 'H 'b:
    [wf] sequent [squash] { 'H >- 'c in int } -->
    sequent ['ext] { 'H >- 'a < 'c }
 
-let ltDissectT t1 p =
-      ltDissect (Sequent.hyp_count_addr p) t1 p
+let ltDissectT = ltDissect
 
-prim lt_Discret 'H :
+prim lt_Discret :
    [wf] sequent [squash] { 'H >- 'a in int } -->
    [wf] sequent [squash] { 'H >- 'b in int } -->
    sequent ['ext] { 'H >- lt_bool{'a; 'b} ~
@@ -640,7 +638,7 @@ let lt_DiscretC = lt_Discret_rw
  *
  * @end[doc]
  *)
-prim lt_addMono 'H 'c :
+prim lt_addMono 'c :
    [wf] sequent [squash] { 'H >- 'a in int } -->
    [wf] sequent [squash] { 'H >- 'b in int } -->
    [wf] sequent [squash] { 'H >- 'c in int } -->
@@ -675,7 +673,7 @@ up[n, m, it, z])
  * H, n:Z, J[n] >- C[0] ext base[n]
  * H, n:Z, J[n], m:Z, v: 0 < m, z: C[m - 1] >- C[m] ext up[n, m, v, z]
  *)
-prim intElimination {| elim [ThinOption thinT] |} 'H 'J 'm 'v 'z :
+prim intElimination {| elim [ThinOption thinT] |} 'H 'm 'v 'z :
    ( 'down['n; 'm; 'v; 'z] : sequent ['ext] { 'H; n: int; 'J['n]; m: int; v: 'm
  < 0; z: 'C['m +@ 1] >- 'C['m] } ) -->
    ( 'base['n] : sequent ['ext] { 'H; n: int; 'J['n] >- 'C[0] } ) -->
@@ -762,7 +760,7 @@ let reduce_ind_numberC =
  * H >- base1 = base2 in T[0]
  * H, x: Z, w: 0 < x, y: T[x - 1] >- up1[x, y] = up2[x, y] in T[x]
  *)
-prim indEquality {| intro []; eqcd |} 'H lambda{z. 'T['z]} 'x 'y 'w :
+prim indEquality {| intro []; eqcd |} lambda{z. 'T['z]} 'x 'y 'w :
    sequent [squash] { 'H >- 'x1 = 'x2 in int } -->
    sequent [squash] { 'H; x: int; w: 'x < 0; y: 'T['x +@ 1] >- 'down1['x; 'y] =
  'down2['x; 'y] in 'T['x] } -->
@@ -784,7 +782,7 @@ prim indEquality {| intro []; eqcd |} 'H lambda{z. 'T['z]} 'x 'y 'w :
  *
  * @end[doc]
  *)
-prim add_Commut 'H :
+prim add_Commut :
    [wf] sequent [squash] { 'H >- 'a in int } -->
    [wf] sequent [squash] { 'H >- 'b in int } -->
    sequent ['ext] { 'H >- ('a +@ 'b) ~ ('b +@ 'a) } = it
@@ -796,7 +794,7 @@ interactive_rw add_Commut_rw :
 
 let add_CommutC = add_Commut_rw
 
-interactive lt_add_lt 'H :
+interactive lt_add_lt :
    [main] sequent [squash] { 'H >- 'a < 'b} -->
    [main] sequent [squash] { 'H >- 'c < 'd} -->
    [wf] sequent [squash] { 'H >- 'a in int } -->
@@ -805,10 +803,9 @@ interactive lt_add_lt 'H :
    [wf] sequent [squash] { 'H >- 'd in int } -->
    sequent ['ext] { 'H >- ('a +@ 'c) < ('b +@ 'd) }
 
-let lt_add_ltT p =
-      lt_add_lt (Sequent.hyp_count_addr p) p
+let lt_add_ltT = lt_add_lt
 
-prim add_Assoc 'H :
+prim add_Assoc :
    [wf] sequent [squash] { 'H >- 'a in int } -->
    [wf] sequent [squash] { 'H >- 'b in int } -->
    [wf] sequent [squash] { 'H >- 'c in int } -->
@@ -837,7 +834,7 @@ let add_Assoc2C = add_Assoc2_rw
  *
  * @end[doc]
  *)
-prim add_Id 'H :
+prim add_Id :
    [wf] sequent [squash] { 'H >- 'a in int } -->
    sequent ['ext] { 'H >- ('a +@ 0) ~ 'a } = it
 
@@ -847,7 +844,7 @@ interactive_rw add_Id_rw :
 
 let add_IdC = add_Id_rw
 
-interactive add_Id2 'H :
+interactive add_Id2 :
    [wf] sequent [squash] { 'H >- 'a in int } -->
    sequent ['ext] { 'H >- (0 +@ 'a) ~ 'a }
 
@@ -857,7 +854,7 @@ interactive_rw add_Id2_rw :
 
 let add_Id2C = add_Id2_rw
 
-interactive add_Id3 'H :
+interactive add_Id3 :
    [wf] sequent [squash] { 'H >- 'a in int } -->
    sequent ['ext] { 'H >- 'a ~ (0 +@ 'a) }
 
@@ -867,7 +864,7 @@ interactive_rw add_Id3_rw :
 
 let add_Id3C = add_Id3_rw
 
-interactive add_Id4 'H :
+interactive add_Id4 :
    [wf] sequent [squash] { 'H >- 'a in int } -->
    sequent ['ext] { 'H >- 'a ~ ('a +@ 0) }
 
@@ -884,7 +881,7 @@ let add_Id4C = add_Id4_rw
  *
  * @end[doc]
  *)
-prim minus_add_inverse 'H :
+prim minus_add_inverse :
    [wf] sequent [squash] { 'H >- 'a in int } -->
    sequent ['ext] { 'H >- ( 'a +@ (- 'a ) ) ~ 0 } = it
 
@@ -896,19 +893,19 @@ let minus_add_inverseC = minus_add_inverse_rw
 (*
 let unfold_zeroC t = foldC (mk_add_term t (mk_minus_term t)) minus_add_inverseC
 
-interactive minus_add_inverse2 'H :
+interactive minus_add_inverse2 :
    [wf] sequent [squash] { 'H >- 'c in int } -->
    sequent ['ext] { 'H >- 0 ~ ('c +@ (- 'c)) }
 *)
 (*
-interactive add_Functionality 'H :
+interactive add_Functionality :
    [main] sequent ['ext] { 'H >- 'a ~ 'b } -->
    [wf] sequent ['ext] { 'H >- 'a in int } -->
    [wf] sequent ['ext] { 'H >- 'b in int } -->
    [wf] sequent ['ext] { 'H >- 'c in int } -->
    sequent ['ext] { 'H >- ('a +@ 'c) ~ ('b +@ 'c) }
 *)
-interactive add_Functionality 'H 'c :
+interactive add_Functionality 'c :
    [main] sequent ['ext] { 'H >- ('a +@ 'c) ~ ('b +@ 'c) } -->
    [wf] sequent ['ext] { 'H >- 'a in int } -->
    [wf] sequent ['ext] { 'H >- 'b in int } -->
@@ -924,12 +921,12 @@ interactive_rw add_Functionality_rw 'b 'c :
 
 let add_FunctionalityC = add_Functionality_rw
 
-interactive minus_add_Distrib 'H :
+interactive minus_add_Distrib :
    [wf] sequent [squash] { 'H >- 'a in int } -->
    [wf] sequent [squash] { 'H >- 'b in int } -->
    sequent ['ext] { 'H >- (-('a +@ 'b)) ~ ((-'a) +@ (-'b)) }
 
-interactive minus_minus_reduce 'H :
+interactive minus_minus_reduce :
    [wf] sequent [squash] { 'H >- 'a in int } -->
    sequent ['ext] { 'H >- (-(-'a)) ~ 'a }
 

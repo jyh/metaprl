@@ -143,12 +143,11 @@ dform restricted_df : except_mode[src] :: parens :: "prec"[prec_quant] :: restri
 (*
  * Squash the restricted judgment.
  *)
-interactive squash_restricted 'H :
+interactive squash_restricted :
    sequent [squash] { 'H >- restricted{'P} } -->
    sequent ['ext] { 'H >- restricted{'P} }
 
-let squash_restrictedT p =
-   squash_restricted (hyp_count_addr p) p
+let squash_restrictedT = squash_restricted
 
 (*!
  * @begin[doc]
@@ -158,12 +157,12 @@ let squash_restrictedT p =
  * are restricted for any @hrefterm[set] arguments.
  * @end[doc]
  *)
-interactive eq_restricted {| intro [] |} 'H :
+interactive eq_restricted {| intro [] |} :
    ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
    ["wf"] sequent [squash] { 'H >- isset{'s2} } -->
    sequent ['ext] { 'H >- restricted{eq{'s1; 's2}} }
 
-interactive member_restricted {| intro [] |} 'H :
+interactive member_restricted {| intro [] |} :
    ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
    ["wf"] sequent [squash] { 'H >- isset{'s2} } -->
    sequent ['ext] { 'H >- restricted{mem{'s1; 's2}} }
@@ -177,7 +176,7 @@ interactive member_restricted {| intro [] |} 'H :
  * on any set argument $x$.
  * @end[doc]
  *)
-interactive sep_isset {| intro [] |} 'H 'z :
+interactive sep_isset {| intro [] |} 'z :
    ["wf"] sequent [squash] { 'H >- isset{'s} } -->
    ["wf"] sequent ['ext] { 'H >- fun_prop{z. 'P['z]} } -->
    ["wf"] sequent [squash] { 'H; z: set >- restricted{'P['z]} } -->
@@ -192,7 +191,7 @@ interactive sep_isset {| intro [] |} 'H 'z :
  * and $P[x]$.
  * @end[doc]
  *)
-interactive sep_intro2 {| intro [] |} 'H :
+interactive sep_intro2 {| intro [] |} :
    ["wf"]   sequent [squash] { 'H; w: set >- restricted{'P['w]} } -->
    ["wf"]   sequent ['ext] { 'H >- fun_prop{z. 'P['z]} } -->
    ["main"] sequent ['ext] { 'H >- member{'x; 's} } -->
@@ -209,7 +208,7 @@ interactive sep_intro2 {| intro [] |} 'H :
  * constructor in the @Nuprl type theory module @hrefmodule[Itt_set]).
  * @end[doc]
  *)
-interactive sep_elim {| elim [] |} 'H 'J 'u 'v 'z :
+interactive sep_elim {| elim [] |} 'H 'u 'v 'z :
    ["wf"]   sequent [squash] { 'H; w: mem{'x; sep{'s; y. 'P['y]}}; 'J['w] >- isset{'x} } -->
    ["wf"]   sequent [squash] { 'H; w: mem{'x; sep{'s; y. 'P['y]}}; 'J['w] >- isset{'s} } -->
    ["wf"]   sequent [squash] { 'H; w: mem{'x; sep{'s; y. 'P['y]}}; 'J['w]; z: set >- restricted{'P['z]} } -->
@@ -225,7 +224,7 @@ interactive sep_elim {| elim [] |} 'H 'J 'u 'v 'z :
  * set argument and the proposition.
  * @end[doc]
  *)
-interactive sep_fun {| intro [] |} 'H 'u 'v :
+interactive sep_fun {| intro [] |} 'u 'v :
    sequent [squash] { 'H; u: set; v: set >- restricted{'P['u; 'v]} } -->
    sequent ['ext] { 'H; u: set >- fun_prop{z. 'P['z; 'u]} } -->
    sequent ['ext] { 'H; u: set >- fun_prop{z. 'P['u; 'z]} } -->

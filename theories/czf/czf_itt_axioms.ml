@@ -86,7 +86,7 @@ let _ =
  * induction.
  * @end[doc]
  *)
-interactive set_induction 'H 'x 'w :
+interactive set_induction 'x 'w :
    sequent ['ext] { 'H; x: set >- "type"{'P['x]} } -->
    sequent ['ext] { 'H >- fun_prop{z. 'P['z]} } -->
    sequent ['ext] { 'H; x: set; w: dall{'x; z. 'P['z]} >- 'P['x] } -->
@@ -95,9 +95,9 @@ interactive set_induction 'H 'x 'w :
 
 let setInduction1 p =
    let x, w = maybe_new_vars2 p "x" "w" in
-      set_induction (Sequent.hyp_count_addr p) x w p
+      set_induction x w p
 
-interactive set_induction2 'H 'J 'x 'y 'w :
+interactive set_induction2 'H 'x 'y 'w :
    sequent ['ext] { 'H; x: set; 'J['x]; y: set >- "type"{'C['y]} } -->
    sequent ['ext] { 'H; x: set; 'J['x] >- fun_prop{y. 'C['y]} } -->
    sequent ['ext] { 'H; x: set; 'J['x]; y: set; z: dall{'y; w. 'C['w]} >- 'C['y] }-->
@@ -105,8 +105,7 @@ interactive set_induction2 'H 'J 'x 'y 'w :
 
 let setInduction i p =
    let x, y, w = maybe_new_vars3 p "x" "y" "w" in
-   let j, k = Sequent.hyp_indices p i in
-      set_induction2 j k x y w p
+      set_induction2 (Sequent.get_pos_hyp_num p i) x y w p
 
 (*!
  * @begin[doc]
@@ -124,7 +123,7 @@ let setInduction i p =
  * which can be used to form the set collection $@collect{x; T; s_x}$.
  * @end[doc]
  *)
-interactive collection 'H 's1 (bind{x. bind{y. 'P['x; 'y]}}) 's2 'x 'y 'w :
+interactive collection 's1 (bind{x. bind{y. 'P['x; 'y]}}) 's2 'x 'y 'w :
    sequent [squash] { 'H >- isset{'s1} } -->
    sequent [squash] { 'H; x: set; y: set >- "type"{'P['x; 'y]} } -->
    sequent ['ext] { 'H >- dall{'s1; x. sexists{y. 'P['x; 'y]}} } -->
@@ -140,7 +139,7 @@ interactive collection 'H 's1 (bind{x. bind{y. 'P['x; 'y]}}) 's2 'x 'y 'w :
  * axiom form of the subset collection.
  * @end[doc]
  *)
-interactive subset_collection 'H 'a 'b 'c bind{u. bind{x. bind{y. 'P['u; 'x; 'y]}}} :
+interactive subset_collection 'a 'b 'c bind{u. bind{x. bind{y. 'P['u; 'x; 'y]}}} :
    sequent ['ext] { 'H >- isset{'a} } -->
    sequent ['ext] { 'H >- isset{'b} } -->
    sequent [squash] { 'H; u: set; x: set; y: set >- "type"{'P['u; 'x; 'y]} } -->

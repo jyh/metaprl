@@ -4439,7 +4439,7 @@ T	t1791	o1596 b1772 b1791
 B	b1792	t1791
 T	t1792	o1596 b1770 b1792
 B	b1793	t1792
-P	p1793	String "assumT 6 thenT copyHypT 2 3 thenT rwh unfold_ker 4 thenT autoT"
+P	p1793	String "assumT 6 thenT copyHypT 2 4 thenT rwh unfold_ker 4 thenT autoT"
 O	o1793	ext_rule p1793
 T	t1793	o b1783 b8
 B	b1794	t1793
@@ -4972,7 +4972,7 @@ T	t2022	o b2022 b8
 B	b2023	t2022
 T	t2023	o1619 b2018 b2023
 B	b2024	t2023
-P	p2024	String "copyHypT 2 2 thenT rwh unfold_ker 3 thenT rwh unfold_hom 3 thenT autoT"
+P	p2024	String "copyHypT 2 3 thenT rwh unfold_ker 3 thenT rwh unfold_hom 3 thenT autoT"
 O	o2024	ext_rule p2024
 S	s2024	t1608 h h1767 h1863 h1864 h1870 h1879 h1886 h1887 h1888 h1805 h1768 h1889 h1890
 G	s2024	t1890
@@ -8629,7 +8629,7 @@ T	t3583	o b3571 b3583
 B	b3584	t3583
 T	t3584	o1619 b3563 b3584
 B	b3585	t3584
-P	p3585	String "copyHypT 2 3 thenT rwh unfold_ker 4 thenT rwh unfold_hom 4 thenT autoT thenT withT << 'a >> (dT 6) ttca thenT rwh fold_isset 0 ttca thenT dT 11 ttca thenT rwh unfold_member 11 thenT autoT"
+P	p3585	String "copyHypT 2 4 thenT rwh unfold_ker 4 thenT rwh unfold_hom 4 thenT autoT thenT withT << 'a >> (dT 6) ttca thenT rwh fold_isset 0 ttca thenT dT 11 ttca thenT rwh unfold_member 11 thenT autoT"
 O	o3585	ext_rule p3585
 T	t3585	o1619 b3571 b8
 B	b3586	t3585
@@ -8639,7 +8639,7 @@ T	t3587	o1619 b3574 b8
 B	b3588	t3587
 T	t3588	o3585 b1618 b3588 b8 b8
 B	b3589	t3588
-P	p3589	String "copyHypT 2 3 thenT rwh unfold_ker 4 thenT rwh unfold_hom 4 thenT assertT << equal{sep{car{'g1}; x. eq{'f['x]; 'f['a]}}; lcoset{'h; 'g1; 'a}} >> thenT autoT"
+P	p3589	String "copyHypT 2 4 thenT rwh unfold_ker 4 thenT rwh unfold_hom 4 thenT assertT << equal{sep{car{'g1}; x. eq{'f['x]; 'f['a]}}; lcoset{'h; 'g1; 'a}} >> thenT autoT"
 O	o3589	ext_rule p3589
 S	s3589	t1599 h h1767 h1768 h2165 h2166 h2167 h2168 h2169 h1803 h1804 h2170 h2171 h2172 h2173
 G	s3589	t2175
@@ -9032,7 +9032,7 @@ T	t3750	o b3750 b8
 B	b3751	t3750
 T	t3751	o1619 b3744 b3751
 B	b3752	t3751
-P	p3752	String "copyHypT 2 3 thenT rwh unfold_ker 4 thenT autoT thenT homInvT << 'a >> 4 ttca"
+P	p3752	String "copyHypT 2 4 thenT rwh unfold_ker 4 thenT autoT thenT homInvT << 'a >> 4 ttca"
 O	o3752	ext_rule p3752
 S	s3752	t1608 h h1767 h1768
 G	s3752	t1454
@@ -10116,7 +10116,7 @@ T	t4221	o b4212 b4221
 B	b4222	t4221
 T	t4222	o1619 b4206 b4222
 B	b4223	t4222
-P	p4223	String "copyHypT 2 3 thenT rwh unfold_ker 4 thenT rwh unfold_hom 4 thenT autoT thenT withT << 'a >> (dT 6) ttca thenT rwh fold_isset 0 ttca thenT dT 11 ttca thenT rwh unfold_member 11 ttca"
+P	p4223	String "copyHypT 2 4 thenT rwh unfold_ker 4 thenT rwh unfold_hom 4 thenT autoT thenT withT << 'a >> (dT 6) ttca thenT rwh fold_isset 0 ttca thenT dT 11 ttca thenT rwh unfold_member 11 ttca"
 O	o4223	ext_rule p4223
 T	t4223	o1619 b4212 b8
 B	b4224	t4223
@@ -10126,7 +10126,7 @@ T	t4225	o1619 b4214 b8
 B	b4226	t4225
 T	t4226	o4223 b1618 b4226 b8 b8
 B	b4227	t4226
-P	p4227	String "copyHypT 2 3 thenT rwh unfold_ker 4 thenT rwh unfold_hom 4 thenT assertT << equal{sep{car{'g1}; x. eq{'f['x]; 'f['a]}}; rcoset{'h; 'g1; 'a}} >> thenT autoT"
+P	p4227	String "copyHypT 2 4 thenT rwh unfold_ker 4 thenT rwh unfold_hom 4 thenT assertT << equal{sep{car{'g1}; x. eq{'f['x]; 'f['a]}}; rcoset{'h; 'g1; 'a}} >> thenT autoT"
 O	o4227	ext_rule p4227
 T	t4227	o1621 b3590 b4204
 B	b4228	t4227
@@ -11844,7 +11844,7 @@ T	t4985	o1619 b4972 b8
 B	b4986	t4985
 T	t4986	o4957 b1618 b4986 b8 b8
 B	b4987	t4986
-P	p4987	String "assumT 5 thenT copyHypT 2 3 thenT rwh unfold_ker 4 thenT rwh unfold_hom 4 thenT autoT"
+P	p4987	String "assumT 5 thenT copyHypT 2 4 thenT rwh unfold_ker 4 thenT rwh unfold_hom 4 thenT autoT"
 O	o4987	ext_rule p4987
 H	h4987	v t4891
 S	s4987	t1608 h h1767 h1768 h2165 h2166 h2167 h2168 h2169 h1803 h1804 h2170 h4918 h4919 h4920 h4921 h4948 h4972 h4973 h4987
@@ -12330,7 +12330,7 @@ T	t5190	o1619 b5177 b8
 B	b5191	t5190
 T	t5191	o4957 b1618 b5191 b8 b8
 B	b5192	t5191
-P	p5192	String "copyHypT 2 3 thenT rwh unfold_ker 4 thenT rwh unfold_hom 4 thenT setExtT thenT autoT"
+P	p5192	String "copyHypT 2 4 thenT rwh unfold_ker 4 thenT rwh unfold_hom 4 thenT setExtT thenT autoT"
 O	o5192	ext_rule p5192
 T	t5192	o1466 b3662 b1457
 H	h5192	v_2 t5192
@@ -12606,7 +12606,7 @@ T	t5305	o1619 b5299 b8
 B	b5306	t5305
 T	t5306	o3709 b1618 b5306 b8 b8
 B	b5307	t5306
-P	p5307	String "copyHypT 2 2 thenT rwh unfold_ker 3 thenT dT 3 thenT homIdT 3 ttca"
+P	p5307	String "copyHypT 2 3 thenT rwh unfold_ker 3 thenT dT 3 thenT homIdT 3 ttca"
 O	o5307	ext_rule p5307
 H	h5307	y_6 t1454
 T	t5307	o1362 b4888

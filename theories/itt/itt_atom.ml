@@ -122,7 +122,7 @@ dform token_df : except_mode[src] :: token[t:t] =
  * H >- Ui ext Atom
  * by atomFormation
  *)
-prim atomFormation 'H :
+prim atomFormation :
    sequent ['ext] { 'H >- univ[i:l] } =
    atom
 
@@ -134,14 +134,14 @@ prim atomFormation 'H :
  * The $@atom$ term is a member of every universe, and it is a type.
  * @end[doc]
  *)
-prim atomEquality {| intro []; eqcd |} 'H :
+prim atomEquality {| intro []; eqcd |} :
    sequent ['ext] { 'H >- atom = atom in univ[i:l] } =
    it
 
 (*
  * Typehood.
  *)
-prim atomType {| intro [] |} 'H :
+prim atomType {| intro [] |} :
    sequent ['ext] { 'H >- "type"{atom} } =
    it
 
@@ -153,7 +153,7 @@ prim atomType {| intro [] |} 'H :
  * a witness.
  * @end[doc]
  *)
-prim tokenFormation 'H token[t:t] :
+prim tokenFormation token[t:t] :
    sequent ['ext] { 'H >- atom } =
    token[t:t]
 
@@ -165,7 +165,7 @@ prim tokenFormation 'H token[t:t] :
  * same token.
  * @end[doc]
  *)
-prim tokenEquality {| intro []; eqcd |} 'H :
+prim tokenEquality {| intro []; eqcd |} :
    sequent ['ext] { 'H >- token[t:t] = token[t:t] in atom } =
    it
 
@@ -176,7 +176,7 @@ prim tokenEquality {| intro []; eqcd |} 'H :
  * are equal.
  * @end[doc]
  *)
-prim atomSqequal 'H :
+prim atomSqequal :
    sequent [squash] { 'H >- 'x = 'y in atom } -->
    sequent ['ext] { 'H >- 'x ~ 'y } =
    it
@@ -201,8 +201,7 @@ let bogus_token = << token["token":t] >>
 (*
  * Sqequal.
  *)
-let atomSqequalT p =
-   atomSqequal (Sequent.hyp_count_addr p) p
+let atomSqequalT = atomSqequal
 
 (************************************************************************
  * TYPE INFERENCE                                                       *

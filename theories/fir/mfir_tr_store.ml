@@ -63,17 +63,17 @@ extends Mfir_tr_atom
  * @end[doc]
  *)
 
-prim ty_store_tuple_normal 'H :
+prim ty_store_tuple_normal :
    sequent [fir] { 'H >- has_type["atom_list"]{ 'elts; 'types } } -->
    sequent [fir] { 'H >- has_type["store"]{'elts; tyTuple["normal"]{'types}} }
    = it
 
-prim ty_store_tuple_raw 'H :
+prim ty_store_tuple_raw :
    sequent [fir] { 'H >- has_type["atom_list"]{ 'elts; 'types } } -->
    sequent [fir] { 'H >- has_type["store"]{'elts; tyTuple["raw"]{'types}} }
    = it
 
-prim ty_store_tuple_box 'H :
+prim ty_store_tuple_box :
    sequent [fir] { 'H >- has_type["atom"]{ 'elt; 't } } -->
    sequent [fir] { 'H >-
       has_type["store"]{ ('elt :: nil); tyTuple["box"]{ ('t :: nil) } } }
@@ -87,11 +87,11 @@ prim ty_store_tuple_box 'H :
  * @end[doc]
  *)
 
-prim ty_store_array1 'H :
+prim ty_store_array1 :
    sequent [fir] { 'H >- has_type["store"]{ nil; tyArray{'t} } }
    = it
 
-prim ty_store_array2 'H :
+prim ty_store_array2 :
    sequent [fir] { 'H >- has_type["atom"]{ 'elt; 't } } -->
    sequent [fir] { 'H >- has_type["store"]{ 'tail; tyArray{'t} } } -->
    sequent [fir] { 'H >- has_type["store"]{cons{'elt; 'tail}; tyArray{'t}} }
@@ -108,7 +108,7 @@ prim ty_store_array2 'H :
  * @end[doc]
  *)
 
-prim ty_store_lambda 'H 'a 'v :
+prim ty_store_lambda 'a 'v :
    sequent [fir] { 'H >- type_eq{ 'u; 'u; large_type } } -->
    sequent [fir] { 'H; v: variable; a: var_def{ 'v; 'u; no_def } >-
       has_type["exp"]{ 'f['v]; 't } } -->
@@ -116,7 +116,7 @@ prim ty_store_lambda 'H 'a 'v :
       has_type["exp"]{ lambda{ x. 'f['x] }; tyFun{ 'u; 't } } }
    = it
 
-prim ty_store_polyFun 'H 'a 'tv :
+prim ty_store_polyFun 'a 'tv :
    sequent [fir] { 'H; tv: "type"; a: ty_def{ 'tv; small_type; no_def } >-
       has_type["exp"]{ 'f['tv]; 'ty['tv] } } -->
    sequent [fir] { 'H >-
@@ -134,7 +134,7 @@ prim ty_store_polyFun 'H 'a 'tv :
  * @end[doc]
  *)
 
-prim ty_store_union 'H 'J :
+prim ty_store_union 'H :
    (* well-formedness of the union type. *)
    sequent [fir] { 'H; a: ty_def{ 'tv; polyKind{'j; 'k}; 'tyd }; 'J >-
       type_eq{ tyUnion{'tv; 'tyl; intset[31, "signed"]{
@@ -166,11 +166,11 @@ prim ty_store_union 'H 'J :
  * @end[doc]
  *)
 
-prim ty_store_union_atoms1 'H :
+prim ty_store_union_atoms1 :
    sequent [fir] { 'H >- has_type["union_atoms"]{ nil; nil } }
    = it
 
-prim ty_store_union_atoms2 'H :
+prim ty_store_union_atoms2 :
    sequent [fir] { 'H >- has_type["atom"]{ 'elt; 'ty } } -->
    sequent [fir] { 'H >- has_type["union_atoms"]{ 'tail; 'rest } } -->
    sequent [fir] { 'H >-
@@ -187,7 +187,7 @@ prim ty_store_union_atoms2 'H :
  * @end[doc]
  *)
 
-prim ty_store_raw_data 'H :
+prim ty_store_raw_data :
    sequent [fir] { 'H >- has_type["store"]{ raw_data; tyRawData } }
    = it
 

@@ -224,11 +224,10 @@ let process_eqcd_resource_annotation name context_args var_args term_args _ stat
    in
    let tac =
       match context_args with
-         [|_|] ->
+         [||] ->
             (fun p ->
                   let vars = Var.maybe_new_vars_array p var_args in
-                  let addr = Sequent.hyp_count_addr p in
-                     Tactic_type.Tactic.tactic_of_rule pre_tactic ([| addr |], vars) (term_args p) p)
+                     Tactic_type.Tactic.tactic_of_rule pre_tactic ([| |], vars) (term_args p) p)
        | _ ->
             raise (Invalid_argument (sprintf "Itt_equal.intro: %s: not an introduction rule" name))
    in
@@ -300,7 +299,7 @@ dform it_df2 : mode[src] :: it = `"it"
 (*
  * True always holds.
  *)
-prim trueIntro {| intro [] |} 'H :
+prim trueIntro {| intro [] |} :
    sequent ['ext] { 'H >- "true" } =
    it
 
@@ -314,7 +313,7 @@ prim trueIntro {| intro [] |} 'H :
  * $T$ by assumption, then $T$ is a type, and $x$ is a member of $T$.
  * @end[doc]
  *)
-prim equalityAxiom 'H 'J :
+prim equalityAxiom 'H :
    sequent ['ext] { 'H; x: 'T; 'J['x] >- 'x in 'T } =
    it
 
@@ -332,7 +331,7 @@ prim equalityAxiom 'H 'J :
 (*
  * Reflexivity.
  *)
-prim equalityRef 'H 'y :
+prim equalityRef 'y :
    sequent ['ext] { 'H >- 'x = 'y in 'T } -->
    sequent ['ext] { 'H >- 'x in 'T } =
    it
@@ -340,7 +339,7 @@ prim equalityRef 'H 'y :
 (*
  * Symmetry.
  *)
-prim equalitySym 'H :
+prim equalitySym :
    sequent ['ext] { 'H >- 'y = 'x in 'T } -->
    sequent ['ext] { 'H >- 'x = 'y in 'T } =
    it
@@ -348,7 +347,7 @@ prim equalitySym 'H :
 (*
  * Transitivity.
  *)
-prim equalityTrans 'H 'z :
+prim equalityTrans 'z :
    sequent ['ext] { 'H >- 'x = 'z in 'T } -->
    sequent ['ext] { 'H >- 'z = 'y in 'T } -->
    sequent ['ext] { 'H >- 'x = 'y in 'T } =
@@ -361,7 +360,7 @@ prim equalityTrans 'H 'z :
  * H >- T ext a
  * H >- T ext b
  *)
-prim equalityFormation 'H 'T :
+prim equalityFormation 'T :
    [main] ('a : sequent ['ext] { 'H >- 'T }) -->
    [main] ('b : sequent ['ext] { 'H >- 'T }) -->
    sequent ['ext] { 'H >- univ[i:l] } =
@@ -385,7 +384,7 @@ prim equalityFormation 'H 'T :
  * H >- a1 = a2 in T1
  * H >- b1 = b2 in T1
  *)
-prim equalityEquality {| intro [] |} 'H :
+prim equalityEquality {| intro [] |} :
    [wf] sequent [squash] { 'H >- 'T1 = 'T2 in univ[i:l] } -->
    [wf] sequent [squash] { 'H >- 'a1 = 'a2 in 'T1 } -->
    [wf] sequent [squash] { 'H >- 'b1 = 'b2 in 'T2 } -->
@@ -395,7 +394,7 @@ prim equalityEquality {| intro [] |} 'H :
 (*
  * Typehood.
  *)
-prim equalityType {| intro [] |} 'H :
+prim equalityType {| intro [] |} :
    [wf] sequent [squash] { 'H >- 'a in 'T } -->
    [wf] sequent [squash] { 'H >- 'b in 'T } -->
    sequent ['ext] { 'H >- "type"{. 'a = 'b in 'T } } =
@@ -416,7 +415,7 @@ prim equalityType {| intro [] |} 'H :
  *
  * H >- a = b in T
  *)
-prim axiomMember {| intro []; eqcd |} 'H :
+prim axiomMember {| intro []; eqcd |} :
    [wf] sequent [squash] { 'H >- 'a = 'b in 'T } -->
    sequent ['ext] { 'H >- it in ('a = 'b in 'T) } =
    it
@@ -427,12 +426,12 @@ prim axiomMember {| intro []; eqcd |} 'H :
  *
  * H, x: a = b in T; J[it] >- C[it]
  *)
-prim equalityElimination {| elim [] |} 'H 'J :
+prim equalityElimination {| elim [] |} 'H :
    ('t : sequent ['ext] { 'H; x: 'a = 'b in 'T; 'J[it] >- 'C[it] }) -->
    sequent ['ext] { 'H; x: 'a = 'b in 'T; 'J['x] >- 'C['x] } =
    't
 
-prim type_axiomMember {| intro []; eqcd |} 'H :
+prim type_axiomMember {| intro []; eqcd |} :
    sequent [squash] { 'H >- "type"{'T} } -->
    sequent ['ext] { 'H >- it in "type"{'T} } =
    it
@@ -454,7 +453,7 @@ prim type_axiomMember {| intro []; eqcd |} 'H :
  *
  * H >- T
  *)
-prim typeEquality 'H :
+prim typeEquality :
    [main] sequent [squash] { 'H >- 'T } -->
    sequent ['ext] { 'H >- "type"{'T} } =
    it
@@ -476,7 +475,7 @@ prim typeEquality 'H :
  * Add a tactic later that will automatically
  * unfold the cumulativity.
  *)
-prim universeMember 'H :
+prim universeMember :
    sequent ['ext] { 'H >- cumulativity[j:l, i:l] } -->
    sequent ['ext] { 'H >- univ[j:l] in univ[i:l] } =
   it
@@ -488,7 +487,7 @@ prim universeMember 'H :
  * H >- x = x in Uj
  * H >- cumulativity(j, i)
  *)
-prim universeCumulativity 'H univ[j:l] :
+prim universeCumulativity univ[j:l] :
    sequent [squash] { 'H >- cumulativity[j:l, i:l] } -->
    sequent [squash] { 'H >- 'x = 'y in univ[j:l] } -->
    sequent ['ext] { 'H >- 'x = 'y in univ[i:l] } =
@@ -497,10 +496,8 @@ prim universeCumulativity 'H univ[j:l] :
 (*! @docoff *)
 let univ_member_term = << univ[i:l] in univ[j:l] >>
 
-let eqcd_univT p =
-   let i = Sequent.hyp_count_addr p in
-      (universeMember i
-       thenT tryT (rw reduce_cumulativity 0 thenT trueIntro i)) p
+let eqcd_univT =
+   universeMember thenT tryT (rw reduce_cumulativity 0 thenT trueIntro)
 
 let resource eqcd += (univ_term, eqcd_univT)
 let resource intro += (univ_member_term, wrap_intro eqcd_univT)
@@ -513,7 +510,7 @@ let resource intro += (univ_member_term, wrap_intro eqcd_univT)
  * every inhabitant $x @in @univ{l}$ is also a type.
  * @end[doc]
  *)
-prim universeMemberType 'H univ[i:l] :
+prim universeMemberType univ[i:l] :
    [wf] sequent [squash] { 'H >- 'x in univ[i:l] } -->
    sequent ['ext] { 'H >- "type"{'x} } =
    it
@@ -522,21 +519,20 @@ prim universeMemberType 'H univ[i:l] :
  * Derived form for known membership.
  * hypothesis rule is not know yet.
  *)
-interactive universeAssumType 'H 'J :
+interactive universeAssumType 'H :
    sequent ['ext] { 'H; x: univ[l:l]; 'J['x] >- "type"{'x} }
 
-interactive universeType {| intro [] |} 'H :
+interactive universeType {| intro [] |} :
    sequent ['ext] { 'H >- "type"{univ[l:l]} }
 
 (*! @docoff *)
-let univTypeT t p =
-   universeMemberType (Sequent.hyp_count_addr p) t p
+let univTypeT = universeMemberType
 
 (*
  * H >- Ui ext Uj
  * by universeFormation
  *)
-prim universeFormation 'H univ[j:l] :
+prim universeFormation univ[j:l] :
    sequent ['ext] { 'H >- cumulativity[j:l, i:l] } -->
    sequent ['ext] {'H >- univ[i:l] } =
    univ[j:l]
@@ -614,48 +610,30 @@ let infer_univ1 = Typeinf.infer_const univ1_term
 (*
  * H, x:T, J >- x = x in T
  *)
-let equalAssumT i p =
-   let i, j = Sequent.hyp_indices p i in
-      equalityAxiom i j p
+let equalAssumT = pos_hypT equalityAxiom
 
 (*
  * Assumed membership.
  *)
-let univAssumT i p =
-   let j, k = Sequent.hyp_indices p i in
-      universeAssumType j k p
+let univAssumT = pos_hypT universeAssumType
 
 (*
- * Reflexivity.
+ * Reflexivity, Symettry, Transitivity.
  *)
-let equalRefT t p =
-   equalityRef (Sequent.hyp_count_addr p) t p
-
-(*
- * Symettry.
- *)
-let equalSymT p =
-   equalitySym (Sequent.hyp_count_addr p) p
-
-(*
- * Transitivity.
- *)
-let equalTransT t p =
-   equalityTrans (Sequent.hyp_count_addr p) t p
+let equalRefT = equalityRef
+let equalSymT = equalitySym
+let equalTransT = equalityTrans
 
 (*
  * Universe cumulativity.
  *)
-let cumulativityT u p =
-   let i = Sequent.hyp_count_addr p in
-      (universeCumulativity i u
-       thenLT [tryT (rw reduce_cumulativity 0 thenT trueIntro i); idT]) p
+let cumulativityT u =
+   universeCumulativity u thenLT [tryT (rw reduce_cumulativity 0 thenT trueIntro); idT]
 
 (*
  * Typehood from truth.
  *)
-let typeAssertT p =
-   typeEquality (Sequent.hyp_count_addr p) p
+let typeAssertT = typeEquality
 
 (*
  * Automation.

@@ -11,7 +11,9 @@ OCAMLDEPFLAGS := -prl
 
 # Library files
 MPFILES :=\
-	m_ir
+	m_ir\
+	m_cps\
+	m_test
 
 # Name of main libraris
 MAIN = theory

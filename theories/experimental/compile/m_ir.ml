@@ -157,7 +157,7 @@ dform atom_binop_div_df : parens :: "prec"[prec_mul] :: AtomBinop{DivOp; 'e1; 'e
    slot["lt"]{'e1} " " `"/ " slot["le"]{'e2}
 
 dform atom_fun_df : parens :: "prec"[prec_fun] :: AtomFun{x. 'b} =
-   Nuprl_font!lambda slot{'x} `"." slot{'b}
+   pushm[3] Nuprl_font!lambda Nuprl_font!suba slot{'x} `"." slot{'b} popm
 
 (* Expressions *)
 dform exp_let_atom_df : LetAtom{'a; v. 'e} =
@@ -203,30 +203,6 @@ dform compilable_df : compilable{'e} =
 declare m
 
 dform m_df : m = bf["m"]
-
-(************************************************************************
- * Just for testing.
- *)
-interactive test_prog 'H :
-   sequent [m] { 'H >- compilable{LetAtom{AtomInt[1:n]; v1.
-                                  LetAtom{AtomBinop{AddOp; AtomInt[1:n]; 'v1}; v2.
-                                  LetAtom{AtomFun{v3.
-                                     LetPair{'v2; 'v3; v4.
-                                     LetSubscript{'v4; AtomInt[0:n]; v5.
-                                     Return{'v5}}}}; f.
-                                  TailCall{'f; AtomInt[17:n]}}}}}
-               }
-
-interactive ext_test_prog 'H :
-   sequent [m] { 'H >- compilable{.<:ext<
-                        let v1 = 1 in
-                        let v2 = 2+v1 in
-                        let f (v3) =
-                           let v4 = (v2, v3) in
-                           let v5 = v4[0] in
-                              v5
-                        in
-                           f(17)>>} }
 
 (*!
  * @docoff

@@ -2,6 +2,7 @@
 # No special includes
 #
 INCLUDE := -I $(NLLIB)
+OCAMLDEPFLAGS := -prl
 
 # Types files
 MLZFILES :=\

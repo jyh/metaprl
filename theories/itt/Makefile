@@ -1,5 +1,8 @@
+#
 # Libraries
+#
 INCLUDE := -I . -I ../tactic -I ../base -I $(NLLIB)
+OCAMLDEPFLAGS := -prl
 
 # Common files
 MLZFILES :=\

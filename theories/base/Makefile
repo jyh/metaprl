@@ -1,4 +1,8 @@
+#
+# Base theories.
+#
 INCLUDE := -I . -I ../tactic -I $(NLLIB)
+OCAMLDEPFLAGS := -prl
 
 # Common files
 MLZFILES :=\

@@ -6,6 +6,9 @@ include Perv
 include Nuprl_font
 include Base_dform
 
+declare "interface"{'intf}
+declare "implementation"{'impl}
+
 declare "rewrite"[@name:s]{'redex; 'contractum; 'proof}
 declare "cond_rewrite"[@name:s]{'params; 'args; 'redex; 'contractum; 'proof}
 declare "axiom"[@name:s]{'stmt; 'proof}
@@ -71,6 +74,9 @@ declare "proof_subst_arg"{'args}
 
 (*
  * $Log$
+ * Revision 1.2  1998/04/28 18:31:00  jyh
+ * ls() works, adding display.
+ *
  * Revision 1.1  1998/04/17 01:31:33  jyh
  * Editor is almost constructed.
  *

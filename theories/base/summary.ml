@@ -20,6 +20,9 @@ let _ =
  * TERMS                                                                *
  ************************************************************************)
 
+declare "interface"{'intf}
+declare "implementation"{'impl}
+
 declare "rewrite"[@name:s]{'redex; 'contractum; 'proof}
 declare "cond_rewrite"[@name:s]{'params; 'args; 'redex; 'contractum; 'proof}
 declare "axiom"[@name:s]{'stmt; 'proof}
@@ -88,21 +91,36 @@ declare "proof_subst_arg"{'args}
  ************************************************************************)
 
 (*
+ * Interface just declares it.
+ *)
+dform "interface"{'body} =
+   szone pushm[4]
+   `"Interface: " break
+   slot{'body} break
+   `"end"
+
+dform mode["prl"] :: "implementation"{'body} =
+   szone pushm[4]
+   `"Implementation: " break
+   slot{'body} break
+   `"end"
+
+(*
  * Display a simple rewrite.
  *)
 dform "rewrite"[@name:s]{'redex; 'contractum; 'proof} =
    szone pushm[4]
-   `"rewrite" " " slot{'name} " " slot{'redex} longleftrightarrow slot{'contractum}
+   `"rewrite" " " slot[@name:s] " " slot{'redex} longleftrightarrow slot{'contractum}
    popm ezone
 
 (*
  * A conditional rewrite requires special handling of the params.
  *)
 dform "context_param"[@name:s] =
-   `"context_param " slot{'name}
+   `"context_param " slot[@name:s]
 
 dform "var_param"[@name:s] =
-   `"var_param " slot{'name}
+   `"var_param " slot[@name:s]
 
 dform "term_param"{'t} =
    szone pushm[4]
@@ -111,18 +129,18 @@ dform "term_param"{'t} =
 
 dform "cond_rewrite"[@name:s]{'params; 'args; 'redex; 'contractum; 'proof} =
    szone pushm[4]
-   `"rewrite" " " slot{'name} " " slot{'params} `" :" " " slot{'args}
+   `"rewrite" " " slot[@name:s] " " slot{'params} `" :" " " slot{'args}
    " " longrightarrow slot{'redex} longleftrightarrow slot{'contractum}
    popm ezone
 
 dform "axiom"[@name:s]{'stmt; 'proof} =
    szone pushm[4]
-   `"axiom" " " slot{'name} `" : : " slot{'stmt}
+   `"axiom" " " slot[@name:s] `" : : " slot{'stmt}
    popm ezone
 
 dform "rule"[@name:s]{'params; 'stmt; 'proof} =
    szone pushm[4]
-   `"axiom" " " slot{'name} " " slot{'params} `" :" " " slot{'stmt}
+   `"axiom" " " slot[@name:s] " " slot{'params} `" :" " " slot{'stmt}
    ezone popm
 
 dform "opname"[@name:s]{'term} =
@@ -146,10 +164,10 @@ dform "condition"{'term; 'cons; 'oexpr} =
 declare path{'t}
 
 dform path{cons{."parent"[@name:s]; nil}} =
-   slot{'name}
+   slot[@name:s]
 
 dform path{cons{."parent"[@name:s]; .cons{'n1; 'n2}}} =
-   slot{'name} `"." cons{'n1; 'n2}
+   slot[@name:s] `"." cons{'n1; 'n2}
 
 dform "parent"{'path; 'opens; 'resources} =
    path{'path}
@@ -159,7 +177,7 @@ dform "parent"{'path; 'opens; 'resources} =
  *)
 dform "module"[@name:s]{'info} =
    szone pushm[4]
-   `"module" " " slot{'name} `" = " break slot{'info}
+   `"module" " " slot[@name:s] `" = " break slot{'info}
    ezone popm
 
 dform "dform"{'modes; 'redex; 'def} =
@@ -177,7 +195,7 @@ dform "rel"{."prec_rel"["eq"]} = `"="
 dform "rel"{."prec_rel"["gt"]} = `">"
 
 dform "prec"[@name:s] =
-   `"prec" " " slot{'name}
+   `"prec" " " slot[@name:s]
 
 dform "prec_rel"{'op; 'left; 'right} =
    `"prec_rel " slot{'left} "rel"{'op} slot{'right}
@@ -187,20 +205,23 @@ dform "id"{'id} =
 
 dform "resource"[@name]{'extract; 'improve; 'data} =
    szone pushm[4]
-   `"resource" " " slot{'name} `"(" pushm slot{'extract} `";" slot{'improve} `";" slot{'data} popm `")"
+   `"resource" " " slot[@name:s] `"(" pushm slot{'extract} `";" slot{'improve} `";" slot{'data} popm `")"
    popm ezone
 
 dform "infix"[@name] =
-   `"infix" " " slot{'name}
+   `"infix" " " slot[@name:s]
 
 dform "magic_block"[@name:s]{'items} =
-   `"magic_block" " " slot{'name} `" = " break slot{'items}
+   `"magic_block" " " slot[@name:s] `" = " break slot{'items}
 
 dform "summary_item"{'term} =
    slot{'term}
 
 (*
  * $Log$
+ * Revision 1.4  1998/04/28 18:30:58  jyh
+ * ls() works, adding display.
+ *
  * Revision 1.3  1998/04/24 19:39:12  jyh
  * Updated debugging.
  *

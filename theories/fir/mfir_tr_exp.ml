@@ -195,6 +195,28 @@ prim ty_matchExp_tyInt {| intro [] |} 'H :
                                            't } }
    = it
 
+(* NOTE: I'm going with the Mojave compiler rule for enumeration atoms. *)
+
+prim ty_matchExp_tyEnum {| intro [] |} 'H :
+   (* The  atom being matched should be well-formed. *)
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomEnum[i:n]{'j}; tyEnum[i:n] } } -->
+
+   (* The cases should cover all of tyEnum. *)
+   sequent [mfir] { 'H >-
+      set_eq{ intset[31, "signed"]{ cons{ interval{ 0; (number[i:n] -@ 1) };
+                                          nil } };
+              union_cases{ intset[31, "signed"]{ nil }; 'cases } } } -->
+
+   (* The cases should have the right type. *)
+   sequent [mfir] { 'H >- check_cases{ 't; 'cases } } -->
+
+   (* Then the matchExp is well-typed. *)
+   sequent [mfir] { 'H >-
+      has_type["exp"]{ matchExp{ atomEnum[i:n]{'j}; 'cases };
+                       't } }
+   = it
+
 prim ty_matchExp_tyRawInt {| intro [] |} 'H :
    (* The  atom being matched should be well-formed. *)
    sequent [mfir] { 'H >-
@@ -214,6 +236,46 @@ prim ty_matchExp_tyRawInt {| intro [] |} 'H :
                        't } }
    = it
 
+(*!
+ * @begin[doc]
+ *
+ * ..
+ * @end[doc]
+ *)
+
+(* NOTE: I'm using the technical report rule for union values here. *)
+
+prim ty_matchExp_tyUnion_start 'H 'J :
+   sequent [mfir] { 'H; v: var_def{ tyUnion{ 'tv; 'tyl; 's }; 'd }; 'J['v] >-
+      set_eq{ 's; union_cases{ intset[31, "signed"]{ nil }; 'cases } } } -->
+   sequent [hack] { 'H; v: var_def{ tyUnion{ 'tv; 'tyl; 's }; 'd }; 'J['v] >-
+      has_type["exp"]{ matchExp{ atomVar{'v}; 'cases }; 't } } -->
+   sequent [mfir] { 'H; v: var_def{ tyUnion{ 'tv; 'tyl; 's }; 'd }; 'J['v] >-
+      has_type["exp"]{ matchExp{ atomVar{'v}; 'cases }; 't } }
+   = it
+
+prim ty_matchExp_tyUnion_cases_base 'H 'J :
+   sequent [hack] { 'H; v: var_def{ tyUnion{ 'tv; 'tyl; 's }; 'd }; 'J['v] >-
+      has_type["exp"]{ matchExp{ atomVar{'v}; nil }; 't } }
+   = it
+
+prim ty_matchExp_tyUnion_cases_ind 'H 'J :
+   sequent [mfir] { 'H; v: var_def{ tyUnion{ 'tv; 'tyl; 'set}; 'd}; 'J['v] >-
+      has_type["exp"]{ 'exp; 't } } -->
+   sequent [hack] { 'H; v: var_def{ tyUnion{ 'tv; 'tyl; 's }; 'd }; 'J['v] >-
+      has_type["exp"]{ matchExp{ atomVar{'v}; 'tail };
+                       't } } -->
+   sequent [hack] { 'H; v: var_def{ tyUnion{ 'tv; 'tyl; 's }; 'd }; 'J['v] >-
+      has_type["exp"]{ matchExp{ atomVar{'v};
+                                 cons{ matchCase{ 'set; 'exp }; 'tail } };
+                       't } }
+   = it
+
+(*!
+ * @docoff
+ *)
+
+(* XXX auto for the above rules shoudl go here. *)
 
 (*!
  * @begin[doc]

@@ -62,12 +62,15 @@ extends Base_theory
  * @terms
  * @modsubsection{Sequent tags}
  *
- * The term @tt[mfir] is used to tag FIR theory sequents.  The term @tt[it] is
- * used in rules to express (the lack of) computational content of a proof.
+ * The term @tt[mfir] is used to tag FIR theory sequents.  The term @tt[hack]
+ * is used to declare (explicitly) that some ``hacking'' is being done to make
+ * things work out correctly. The term @tt[it] is used in rules to express
+ * (the lack of) computational content of a proof.
  * @end[doc]
  *)
 
 declare mfir
+declare hack
 declare it
 
 (*!
@@ -199,6 +202,10 @@ declare has_type[str:s]{ 't; 'ty }
 dform mfir_df : except_mode[src] ::
    mfir =
    it["mfir"]
+
+dform hack_df : except_mode[src] ::
+   hack =
+   it["hack"]
 
 dform it_df1 : except_mode[src] :: except_mode[tex] ::
    it =

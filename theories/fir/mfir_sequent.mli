@@ -43,6 +43,7 @@ extends Base_theory
  *)
 
 declare mfir
+declare hack
 declare it
 
 (*

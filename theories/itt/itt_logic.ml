@@ -68,6 +68,7 @@ doc <:doc< @docoff >>
 open Printf
 open Lm_debug
 open Lm_symbol
+open Term_sig
 open Refiner.Refiner
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermType

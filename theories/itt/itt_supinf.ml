@@ -7,6 +7,7 @@ extends Itt_int_ext
 open Printf
 open Lm_debug
 open Opname
+open Term_sig
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermMan
 open Refiner.Refiner.TermSubst
@@ -709,11 +710,25 @@ and inf (c:SACS.sacs) (s:SAF.saf) (h:CS.t) =
 	result
 
 let collect gl =
-   let sh = (explode_sequent gl).sequent_hyps in
-   let aux' h = match h with HypBinding (_,t) | Hypothesis t -> t
-    | Context (_,_,_) -> xnil_term in
-   let shl = List.map aux' (SeqHyp.to_list sh) in
-	List.filter is_ge_term shl
+   let hyps = (explode_sequent gl).sequent_hyps in
+   let rec aux l i =
+      if i < 0 then
+         l
+      else
+         let l =
+            match SeqHyp.get hyps i with
+               Hypothesis t
+             | HypBinding (_, t) ->
+                  if is_ge_term t then
+                     t :: l
+                  else
+                     l
+             | Context _ ->
+                  l
+         in
+            aux l (pred i)
+   in
+      aux [] (pred (SeqHyp.length hyps))
 
 module Var =
 struct

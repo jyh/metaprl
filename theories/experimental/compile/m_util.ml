@@ -25,7 +25,7 @@
  * @end[license]
  *)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @parents
    @end[doc]
@@ -36,6 +36,7 @@ doc <:doc< @docoff >>
 open Lm_debug
 open Printf
 
+open Term_sig
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermType
 open Refiner.Refiner.RefineError

@@ -39,6 +39,7 @@ open Lm_debug
 open Lm_symbol
 open Lm_string_set
 
+open Term_sig
 open Refiner.Refiner
 open Refiner.Refiner.TermType
 open Refiner.Refiner.Term

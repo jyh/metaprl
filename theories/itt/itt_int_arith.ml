@@ -86,18 +86,9 @@ let debug_int_arith =
  *******************************************************)
 
 let get_term i p =
-   let goal=Sequent.goal p in
-   let hyps = (explode_sequent goal).sequent_hyps in
-   let h=List.nth (SeqHyp.to_list hyps) (i-1) in
-   match h with
-   	HypBinding (_,t) | Hypothesis t ->
-		   if !debug_int_arith then
-   			eprintf "get_term %i=%a%t" i debug_print t eflush;
-	   	t
-    | Context (_,_,_) ->
-		   if !debug_int_arith then
-   			eprintf "get_term %i detected a context%t" i eflush;
-	   	xnil_term
+   try Sequent.nth_hyp p i with
+      RefineError _ ->
+         xnil_term
 
 let reportT = funT (fun p ->
 	if !debug_int_arith then

@@ -1,11 +1,11 @@
-doc <:doc< 
+doc <:doc<
    @begin[spelling]
    squashT th unsquashed unsquash unsquashT
    @end[spelling]
-  
+
    @begin[doc]
    @module[Itt_squash]
-  
+
    The @tt{Itt_squash} module defines a @i[squash] type.
    <<squash{'A}>> hides computational content of $A$.
    <<squash{'A}>> is inhabited @emph{iff} $A$ is inhabited.
@@ -18,61 +18,61 @@ doc <:doc<
    but extract of $C$ does not depend on the witness of $A$.
    Note that $x$ in this sequent stands not for a witness for $A$,
    but just for $@it$.
-  
+
    Squash types are needed to define set in @hrefmodule[Itt_set]. Also,
    it can be argued (see @cite[KN01]) that it is consistent to use
    @emph{classical} reasoning under @tt[squash] without losing
    constructive content.
-  
+
    The @tt[Itt_squash] module also defines a resource that can be used to
    help prove ``squash'' stability---that is, to infer the proof
    of a proposition given an assumption that it is true.
-  
+
    This module defines a generic resource @hrefresource[squash_resource] that
    can be used to recover computational content from a @tt[squash] proof.
    Additions to the resource are done through resource annotations, see the
    @hrefresource[squash_resource] section for more information. Tactics
    @hreftactic[squashT] and @hreftactic[unsquashT]
    make use of the @hrefresource[squash_resource].
-  
+
    @end[doc]
-  
+
    ----------------------------------------------------------------
-  
+
    @begin[license]
-  
+
    This file is part of MetaPRL, a modular, higher order
    logical framework that provides a logical programming
    environment for OCaml and other languages.
-  
+
    See the file doc/index.html for information on Nuprl,
    OCaml, and more information about this system.
-  
+
    Copyright (C) 1998 Jason Hickey, Cornell University
-  
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
    as published by the Free Software Foundation; either version 2
    of the License, or (at your option) any later version.
-  
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-  
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-  
+
    Authors:
      Jason Hickey @email{jyh@cs.caltech.edu}
      Alexei Kopylov @email{kopylov@cs.caltech.edu}
      Aleksey Nogin @email{nogin@cs.caltech.edu}
-  
+
    @end[license]
 >>
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @parents
    @end[doc]
@@ -82,6 +82,7 @@ extends Itt_struct
 doc <:doc< @docoff >>
 
 open Lm_debug
+open Term_sig
 open Refiner.Refiner
 open TermType
 open Term
@@ -112,10 +113,10 @@ let _ =
  * TERMS                                                                *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @terms
-  
+
    The @tt[squash] term defines the @tt[squash] type.
    @end[doc]
 >>
@@ -138,11 +139,11 @@ dform squash_df : except_mode[src] :: squash{'A} = math_squash{'A}
  * RULES                                                                *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @rules
    @modsubsection{Equality and typehood}
-  
+
    <<squash{'A}>> is a type if $A$ is a type.
    @end[doc]
 >>
@@ -155,10 +156,10 @@ prim squashType {| intro [] |} :
    sequent { <H> >- "type"{.squash{'A}} } =
    it
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Introduction}
-  
+
    A squashed type <<squash{'A}>> is true if $A$ is true.
    This rule is irreversible, so we use @tt[AutoMustComplete] to prevent
    @hreftactic[autoT] from using it.
@@ -169,10 +170,10 @@ prim squashMemberFormation {| intro [AutoMustComplete] |} :
    sequent { <H> >- squash{'A} } =
    it
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Elimination}
-  
+
    The first rule, @tt[unsquashEqual], allows equalities to
    be unsquashed (because the proof can always be inferred).
    The second rule, @tt[squashElim] shows that $@it$ is the only element
@@ -201,10 +202,10 @@ let resource typeinf += (squash_term,  Typeinf.infer_map dest_squash)
  * THEOREMS                                                             *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsection{Derived Rules}
-  
+
    First, we can prove a stronger version of @tt[unsquashEqualWeak] by
    combining it with @tt[squashElim].
    @end[doc]
@@ -218,7 +219,7 @@ interactive unsquashWWitness 'H 't:
    sequent { <H>; 'P; <J[it]> >- 't in 'A[it] } -->
    sequent { <H>; u: squash{'P}; <J['u]> >- 'A['u] }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    Next, we show that a witness of a provable hidden type is $@it$.
    @end[doc]
@@ -227,7 +228,7 @@ interactive squashMemberEquality {| intro []; eqcd |} :
    [wf] sequent { <H> >- squash{'A} } -->
    sequent { <H> >- it in squash{'A} }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    The @tt[squashStable] rule establishes that we can unsquash a proposition
    when it is possible to recover its witness from simply knowing the proposition
@@ -281,20 +282,20 @@ interactive squashFormation :
  * TYPES                                                                *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @resources
-  
+
    The @Comment!resource[squash_resource] keeps 4 kind of tactics, as described by the
    @tt[squash_info] type. The $@tt[SqUnsquash](T,@i[tac])$ is used when @i["tac i"]
    is capable turning @i{i}-th hypothesis from $@squash{T}$ into $T$.
    The $@tt[SqStable](T,t,@i[tac])$ variant is used when @i[tac] is capable
    of proving <<sequent{ <H> >- 't in 'T}>> from <<sequent{ <H> >- 'T}>>. Third,
    the $@tt[SqUnsquashGoal](T,@i[tac])$ is used when @i["tac i"] can unsquash
-   @i{i}-th hypothesis provided the conclusion of the sequent is $T$. Finally, 
+   @i{i}-th hypothesis provided the conclusion of the sequent is $T$. Finally,
    $@tt[SqStableGoal](T,@i[tac])$ is used when @i[tac] can prove $T$ from
    $@squash{T}$.
-  
+
    The only way to improve the @tt{squash_resource} outside of the
    @tt{Itt_squash} theory is to use @it{resource annotations}. Currently, the
    following kinds of rules are recognized by the @tt{squash_resource} annotations:
@@ -303,7 +304,7 @@ doc <:doc<
    <<sequent{ <H> >- 't in 'A}>> and <<sequent{ <H>; x: 'A; <J['x]> >- 'C['x]}>>
    (e.g $A$ is a falsity), although it is possible
    to add support for other kinds of rules if necessary.
-  
+
    The squash resource represents data using a shape table.
    @end[doc]
 >>
@@ -416,10 +417,10 @@ let resource squash += [
  * TACTICS                                                              *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @tactics
-  
+
    The @tactic[squashT] tactic uses @hrefresource[squash_resource]
    to perform the following inference:
    $$
@@ -429,7 +430,7 @@ doc <:doc<
    $$
    Term $T$ must be @emph{squash-stable} and known to @hrefresource[squash_resource]
    in order for @tt[squashT] to work.
-  
+
    The @tactic[unsquashT]{} tactic uses @hrefresource[squash_resource]
    to perform the following inference:
    $$
@@ -439,7 +440,7 @@ doc <:doc<
    $$
    Either $A$ or $C[x]$ must be @emph{squash-stable} and known
    to @hrefresource[squash_resource] in order for @tt[unsquashT] to work.
-  
+
    The @tt[unsquashT] tactic is added to @hrefresource[auto_resource],
    so @hreftactic[autoT] will unsquash the hypotheses whenever possible.
    @docoff

@@ -1,0 +1,11 @@
+Import qw( env );
+
+$env = $env->clone(
+	INCPATH	=> [@{$env->{INCPATH}}, "#mllib", "#lib"]
+);
+
+Export qw( env );
+
+Build qw(
+	base/Conscript
+);

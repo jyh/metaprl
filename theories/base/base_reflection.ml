@@ -72,8 +72,7 @@ open Lm_rformat
  *)
 let rnil_term = << rnil >>
 let rnil_opname = opname_of_term rnil_term
-let is_rnil_term t =
-   t = rnil_term
+let is_rnil_term = alpha_equal rnil_term
 
 let rcons_term = << rcons{'a; 'b} >>
 let rcons_opname = opname_of_term rcons_term
@@ -83,45 +82,18 @@ let mk_rcons_term = mk_dep0_dep0_term rcons_opname
 let dest_rcons = dest_dep0_dep0_term rcons_opname
 
 let rec is_rlist_term t =
-   match dest_term t with
-      { term_op = op; term_terms = [bterm1; bterm2] } ->
-         begin
-            match dest_bterm bterm1, dest_bterm bterm2, dest_op op  with
-               { bvars = []; bterm = _ }, { bvars = []; bterm = b }, { op_name = opname; op_params = [] } ->
-                  Opname.eq opname rcons_opname && is_rlist_term b
-             | _ ->
-                  false
-         end
-    | { term_op = op; term_terms = [] } ->
-         let op = dest_op op in
-            Opname.eq op.op_name rnil_opname && op.op_params = []
-    | _ ->
-         false
+   is_rnil_term t || (is_rcons_term t && is_rlist_term (snd (dest_rcons t)))
 
-let dest_rlist t =
-   let rec aux trm =
-      match dest_term trm with
-         { term_op = op; term_terms = [bterm1; bterm2] }
-            when let op = dest_op op in Opname.eq op.op_name rcons_opname && op.op_params = [] ->
-            begin
-               match (dest_bterm bterm1, dest_bterm bterm2) with
-                  ({ bvars = []; bterm = a },
-                   { bvars = []; bterm = b }) -> a::(aux b)
-                | _ -> raise (RefineError ("dest_rlist", TermMatchError (t, "not a list")))
-            end
-       | { term_op = op; term_terms = [] }
-            when let op = dest_op op in Opname.eq op.op_name rnil_opname && op.op_params = [] ->
-            []
-       | _ ->
-            raise (RefineError ("dest_rlist", TermMatchError (t, "not a list")))
-   in
-      aux t
-
-let rcons_op = mk_op rcons_opname []
+let rec dest_rlist t =
+   if is_rnil_term t then
+      []
+   else
+      let hd, tl = dest_rcons t in
+         hd :: (dest_rlist tl)
 
 let rec mk_rlist_term = function
    h::t ->
-      mk_term rcons_op [mk_simple_bterm h; mk_simple_bterm (mk_rlist_term t)]
+      mk_rcons_term h (mk_rlist_term t)
  | [] ->
       rnil_term
 

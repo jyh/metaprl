@@ -43,7 +43,7 @@ open Tactic_type.Sequent
  * H; x: A; J >- A ext x
  * by hypothesis
  *)
-rule hypothesis 'H 'J 'x :
+rule hypothesis 'H 'J :
    sequent ['ext] { 'H; x: 'A; 'J['x] >- 'A }
 
 (*

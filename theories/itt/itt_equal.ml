@@ -635,17 +635,6 @@ let univAssumT i p =
       universeAssumType j k p
 
 (*
- * Automation.
- *
- * let triv_equalT i p =
- *    (equalAssumT i
- *    orelseT univAssumT i) p
- *)
-let triv_equalT i p =
-   let i, j = Sequent.hyp_indices p i in
-   (equalityAxiom i j orelseT universeAssumType i j) p
-
-(*
  * Reflexivity.
  *)
 let equalRefT t p =
@@ -676,6 +665,13 @@ let cumulativityT u p =
  *)
 let typeAssertT p =
    typeEquality (Sequent.hyp_count_addr p) p
+
+(*
+ * Automation.
+ *)
+let triv_equalT i p =
+   let i, j = Sequent.hyp_indices p i in
+   (equalityAxiom i j orelseT universeAssumType i j) p
 
 let resource auto += {
    auto_name = "Itt_equal.triv_equalT";

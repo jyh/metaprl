@@ -173,8 +173,11 @@ prim introduction 'H 't :
  * H; x: A; J >- A ext x
  * by hypothesis
  *)
-interactive hypothesis 'H 'J 'x :
+interactive hypothesis 'H 'J :
    sequent ['ext] { 'H; x: 'A; 'J['x] >- 'A }
+
+interactive hypothesisType 'H 'J :
+   sequent ['ext] { 'H; x: 'A; 'J['x] >- "type"{'A} }
 
 (*!
  * @begin[doc]
@@ -259,9 +262,8 @@ interactive equalityTypeIsType 'H 'a 'b :
  * @end[doc]
  *)
 let nthHypT i p =
-   let x, h = Sequent.nth_hyp p i in
    let i, j = Sequent.hyp_indices p i in
-      hypothesis i j x p
+      (hypothesis i j orelseT hypothesisType i j) p
 
 (*!
  * @begin[doc]

@@ -132,28 +132,13 @@ declare union{ 'set1; 'set2 }
 declare intset_max[precision:n, sign:s]
 declare enum_max
 
-(*!
- * @begin[doc]
- * @modsubsection{Auxiliary terms}
- *
- * The following terms are not available outside the @tt[Mfir_int_set] module.
- * They are used internally to express the computations represented by the
- * above set operations.
- *
- * The term @tt[interval_lt] is used to determine if all the members of
- * @tt[interval1] are less than the members of @tt[interval2].
- * @end[doc]
+(*
+ * The following are auxiliary terms.  They are not available outside the
+ * Mfir_int_set module.  They are used to simplify the reductions for
+ * integer set operations.
  *)
 
 declare interval_lt{ 'interval1; 'interval2 }
-
-(*!
- * @begin[doc]
- *
- * The next two terms are used in computing the union of two sets.
- * @end[doc]
- *)
-
 declare union_aux{ 'interval; 'h1; 't1; 'h2; 't2 }
 declare union_interval{ 'interval1; 'interval2 }
 

@@ -9,38 +9,33 @@ is likely to be in the form of comments in .ml files.
 
 ---------------------------------------------------------------------------
 
+
 The following remarks by Brian Emre Aydemir (emre) are intended to
 serve as notes to himself.  They may not make sense to others.
+
+-- Sequent idea notes:
+   1. A sequent to reason about programs (which are sequents):
+         gamma_1 |- sequent { gamma_2; v : t = h |- dot } wf
+   2. gamma_2 above has the following syntax:
+         gamma ::=   empty
+                |    gamma, v : Type
+                |    gamma, v : Variable
+                |    ...
+                |    gamma, v : t      (implicit dummy label here)
+                |    gamma, v : t = h  (implicit dummy label here)
+                |    ...
+   3. gamma_1 above may contain things like (f: A -> B), i.e. the
+      program (sequent) is quantified over f.
 
 -- I have to check this, but I'm pretty sure these rules rely on the
    program being ``standardized''.
 
--- Idea to consider: The ``tag'' on the has_type term could be
-   moved into the ``sequent tag''.
-
 -- IMPORTANT: The term-set is no longer up-to-date!  I need to re-sync
    everything at some point.
-
--- Possible method for type checking FIR programs:
-      1) Build up a context that has all the declarations we'll need.
-      2) Type check the context.
-      3) Type check each definition given the context.
-   I have this sneaking suspicion that we're going to need type definitions
-   as well.  Without them, I don't see how we can type-check values of
-   a union type.
-
--- BUG: For tyDefUnion, I'm pretty much ignoring the difference between
-   ``normal'' and ``exn''.
 
 -- I should make sure automation, especially those rules added ``by hand'',
    is actually being done ``intelligently''.
 
--- I should consider using the ``sequent tags'' to help simplify the rules.
-   This would probably involve using them to store information in some
-   manner.
-
--- I'm not convinced ``sequent'' idea is going to work so well for the
-   operational semantics.
 
 Notable differences from the actual Mojave FIR:
 
@@ -48,12 +43,12 @@ Notable differences from the actual Mojave FIR:
    to deal with in MetaPRL, can get better binding variables, ...):
       TyFun
 
--- So the actual FIR specification (fir/type/fir.ml in Mojave) has
-   all these lists and whatnot.  In some cases, if these lists are
-   empty, the term is ``degenerate'' in some sense.  For my own
-   sanity, I'm not considering ``degenerate'' terms.  You could
-   think of this as some sort of enforcement of a ``normal'' form
-   for everything.  (What I've expressed is pretty vague...)
+-- So the actual FIR specification (mcc/fir/type/fir.ml) has terms
+   whose subterms are lists.  In some cases, if these lists are
+   empty, the term is degenerate in some sense, e.g TyExists ([], t).
+   For my own sanity, I'm not going to consider such degenerate terms,
+   and instead, I will assume everything is a normalized form.
+
 
 Comments that will be around a while:
 
@@ -62,10 +57,6 @@ Comments that will be around a while:
 
 -- Must _not_ include anything from ITT.  Otherwise, we get
    a soup of logical inconsistencies/differences.
-
--- Dropping anything that is related to the object system.
-   It is unsound.  Also dropping anything not covered in the
-   technical report.
 
 -- MetaPRL theories are open, so we can not do induction over a set of
    rules.  In particular, there's no way we can formalize the proofs

@@ -265,8 +265,6 @@ define unfold_redA: redA <--> rcrd["color":t]{token["red":t]; A}
 interactive redAInCSpace {|intro[] |} 'H :
    sequent['ext] {'H >- redA IN cspace }
 
-(*! @docoff *)
-
 
 interactive cspaceElim {|elim[] |} 'H 'J:
    sequent['ext]{'H; a:int; b:int; c:int; color:atom; e:record; 'J[rcrd["color":t]{'color;point{'a;'b; 'c; 'e}}] >- 'C[rcrd["color":t]{'color;point{'a;'b; 'c; 'e}}] } -->

@@ -93,14 +93,13 @@ doc <:doc<
 interactive substitution2 ('t1 = 't2 in 'T) bind{x. 'C['x]} :
    [equality] sequent { <H> >- 't1 = 't2 in 'T } -->
    [main]  sequent { <H> >- 'C['t2] } -->
-   [wf] sequent { <H>; x: 'T; v: 't1='x in 'T; w: 't2='x in 'T
-                           >- "type"{'C['x]} } -->
+   [wf] sequent { <H>; x: 'T; 't1='x in 'T; 't2='x in 'T >- "type"{'C['x]} } -->
    sequent { <H> >- 'C['t1] }
 
 interactive hypSubstitution2 'H ('t1 = 't2 in 'T) bind{y. 'A['y]} :
    [equality] sequent { <H>; x: 'A['t1]; <J['x]> >- 't1 = 't2<|H|> in 'T } -->
    [main] sequent { <H>; x: 'A['t2]; <J['x]> >- 'C['x] } -->
-   [wf] sequent { <H>; x: 'A['t1]; <J['x]>; z: 'T; v: 't1='z in 'T; w: 't2<|H|> = 'z in 'T
+   [wf] sequent { <H>; x: 'A['t1]; <J['x]>; z: 'T; 't1='z in 'T; 't2<|H|> = 'z in 'T
                            >- "type"{'A['z]} } -->
    sequent { <H>; x: 'A['t1]; <J['x]> >- 'C['x] }
 
@@ -127,8 +126,8 @@ doc <:doc<
 >>
 
 interactive cutMem 's 'S bind{x.'T['x]} :
-  [assertion] sequent{ <H> >- 's in 'S } -->
-   [main]      sequent { <H>; x: 'S; v: 'x='s in 'S >- 'T['x] } -->
+   [assertion] sequent{ <H> >- 's in 'S } -->
+   [main]      sequent { <H>; x: 'S; 'x='s in 'S >- 'T['x] } -->
    sequent { <H> >- 'T['s]}
 
 doc <:doc<
@@ -308,7 +307,7 @@ let revHypSubstT i j = funT (fun p ->
 
 (* cutMem *)
 
-let letT x_is_s_in_S = funT (fun p ->
+let letT = argfunT (fun x_is_s_in_S p ->
    let _S, x, s = dest_equal x_is_s_in_S in
    let xname = dest_var x in
    let bind = get_bind_from_arg_or_concl_subst p s in
@@ -321,24 +320,27 @@ let genT s_in_S = funT (fun p ->
 
 (* cutEq *)
 
-let assertEqT = argfunT (fun eq p ->
-   let _, s1, s2 = dest_equal eq in
-   let bind =
-      try
-         get_with_arg p
-      with
-         RefineError _ ->
-            let x = maybe_new_var_arg p (Lm_symbol.add "z") in
-            let t, t1,  t2 = dest_equal (Sequent.concl p) in
-            let t' = var_subst t s1 x in
-            let t1' = var_subst t1 s1 x in
-            let t2' = var_subst t2 s2 x in
-               <:con< bind{$x$. $mk_equal_term t' t1' t2'$} >>
-   in
-      if is_xbind_term bind then
-         cutEq eq bind thenMT thinIfThinningT [-2;-1]
-      else
-         raise (RefineError ("assertEqT", StringTermError ("need a \"bind\" term: ", bind))))
+let assertEqT =
+   let var_z = Lm_symbol.add "z" in
+   argfunT (fun eq p ->
+      let _, s1, s2 = dest_equal eq in
+      let bind =
+         try
+            get_with_arg p
+         with
+            RefineError _ ->
+               let concl = Sequent.concl p in
+               let x = maybe_new_var_set var_z (free_vars_terms [concl; eq]) in
+               let t, t1,  t2 = dest_equal concl in
+               let t' = var_subst t s1 x in
+               let t1' = var_subst t1 s1 x in
+               let t2' = var_subst t2 s2 x in
+                  <:con< bind{$x$. $mk_equal_term t' t1' t2'$} >>
+      in
+         if is_xbind_term bind then
+            cutEq eq bind thenMT thinIfThinningT [-2;-1]
+         else
+            raise (RefineError ("assertEqT", StringTermError ("need a \"bind\" term: ", bind))))
 
 (* cutSquash *)
 

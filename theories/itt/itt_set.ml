@@ -121,13 +121,13 @@ doc <:doc<
 >>
 prim setEquality {| intro [] |} :
    [wf] sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
-   [wf] sequent { <H>; x: 'A1 >- 'B1['x] = 'B2['x] in univ[i:l] } -->
+   [wf] sequent { <H>; a1: 'A1 >- 'B1['a1] = 'B2['a1] in univ[i:l] } -->
    sequent { <H> >- { a1:'A1 | 'B1['a1] } = { a2:'A2 | 'B2['a2] } in univ[i:l] } =
    it
 
 prim setType {| intro [] |} :
    [wf] sequent { <H> >- "type"{'A} } -->
-   [wf] sequent { <H>; x: 'A >- "type"{'B['x]} } -->
+   [wf] sequent { <H>; a: 'A >- "type"{'B['a]} } -->
    sequent { <H> >- "type"{ { a:'A | 'B['a] } } } =
    it
 
@@ -142,7 +142,7 @@ doc <:doc<
 prim setMemberEquality {| intro [] |} :
    [wf] sequent { <H> >- 'a1 = 'a2 in 'A } -->
    [assertion] sequent { <H> >- squash{'B['a1]} } -->
-   [wf] sequent { <H>; x: 'A >- "type"{'B['x]} } -->
+   [wf] sequent { <H>; a: 'A >- "type"{'B['a]} } -->
    sequent { <H> >- 'a1 = 'a2 in { a:'A | 'B['a] } } =
    it
 
@@ -157,7 +157,7 @@ doc <:doc<
 interactive setMemberFormation {| intro [] |} 'a :
    [wf] sequent { <H> >- 'a = 'a in 'A } -->
    [main] sequent { <H> >- squash{'B['a]} } -->
-   [wf] sequent { <H>; z: 'A >- "type"{'B['z]} } -->
+   [wf] sequent { <H>; x: 'A >- "type"{'B['x]} } -->
    sequent { <H> >- { x:'A | 'B['x] } }
 
 doc <:doc<

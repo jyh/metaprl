@@ -1187,41 +1187,37 @@ doc <:doc<
    @docoff
    @end[doc]
 >>
-let genAssumT = argfunT (fun indices p ->
-   let goal = Sequent.goal p in
-   let len = Sequent.num_assums p in
-   let _ =
-      List.iter (fun i ->
-            if i <= 0 || i > len then
-               raise (RefineError ("genAssumT", StringIntError ("assum index is out of range", i)))) indices
-   in
-   let rec make_gen_term t = function
-      [] ->
-         t, hypothesis (-1), idT
-    | i :: indices ->
-         let t, tac1, tac2 = make_gen_term t indices in
-         let t' = TermMan.concl (Sequent.nth_assum p i) in
-         if is_member_term t' then
-            let t_type, t_var, t_var' = dest_equal t' in
-               (if is_var_term t_var then
-                  mk_all_term (dest_var t_var) t_type t
-               else
-                  let v = maybe_new_var_arg p (Lm_symbol.add "v") in
-                     mk_all_term v t_type (var_subst t t_var v)),
-               (let t_tac = if alpha_equal t_var t_var' then
-                  nthAssumT i
-               else
-                  equalRefT t_var' thenT nthAssumT i
-               in
-                  all_elim (-1) t_var thenLT [t_tac; tac1]),
-               (all_intro thenLT [equalTypeT t_var t_var' thenT nthAssumT i; idT])
-         else
-            mk_implies_term t' t,
-            (implies_elim (-1) thenLT [nthAssumT i; tac1]),
-            (implies_intro thenLT [typeAssertT thenT nthAssumT i; tac2])
-   in
-   let t, tac1, tac2 = make_gen_term (TermMan.concl goal) indices in
-      (assertT t thenLT [tac2; tac1]))
+let genAssumT =
+   let var_v = Lm_symbol.add "v" in argfunT (fun indices p ->
+      let goal = Sequent.goal p in
+      let len = Sequent.num_assums p in
+      let _ =
+         List.iter (fun i ->
+               if i <= 0 || i > len then
+                  raise (RefineError ("genAssumT", StringIntError ("assum index is out of range", i)))) indices
+      in
+      let rec make_gen_term t = function
+         [] ->
+            t, hypothesis (-1), idT
+       | i :: indices ->
+            let t, tac1, tac2 = make_gen_term t indices in
+            let t' = TermMan.concl (Sequent.nth_assum p i) in
+            if is_member_term t' then
+               let t_type, t_var, _ = dest_equal t' in
+                  (if is_var_term t_var then
+                     mk_all_term (dest_var t_var) t_type t
+                  else
+                     let v = maybe_new_var_set var_v (free_vars_terms [t;t_var]) in
+                        mk_all_term v t_type (var_subst t t_var v)),
+                  (all_elim (-1) t_var thenLT [nthAssumT i; tac1]),
+                  (all_intro thenLT [equalTypeT t_var t_var thenT nthAssumT i; idT])
+            else
+               mk_implies_term t' t,
+               (implies_elim (-1) thenLT [nthAssumT i; tac1]),
+               (implies_intro thenLT [typeAssertT thenT nthAssumT i; tac2])
+      in
+      let t, tac1, tac2 = make_gen_term (TermMan.concl goal) indices in
+         (assertT t thenLT [tac2; tac1]))
 
 (************ logic instance for j-prover in refiner/reflib/jall.ml  **********)
 

@@ -29,9 +29,7 @@ let alle_at_predT = funT
      match explode_term concl with <<"alle-at"[]{'es; 'i; e.'impl}>> ->(
      match explode_term impl with <<'left => 'prop>> ->
      let pred_e = <:con<"es-pred"{$es$;$mk_var_term e$}>> in
-     let x = maybe_new_var_arg p (Lm_symbol.add "e") in
-     let prop' = var_subst prop pred_e x in
-     let bind = <:con< bind{$x$. $prop'$} >> in
+     let bind = var_subs_to_bing prop pred_e in
      let es_type =  infer_type p es in
         alle_at_pred es_type  bind
      | _ -> failT )| _ -> failT

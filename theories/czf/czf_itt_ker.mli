@@ -31,7 +31,6 @@
  *)
 
 include Czf_itt_group
-include Czf_itt_group_bvd
 include Czf_itt_hom
 include Czf_itt_sep
 
@@ -73,7 +72,7 @@ declare ker{'h; 'g1; 'g2; x. 'f['x]}
  * h of g called the kernel of f.
  *)
 rewrite unfold_ker : ker{'h; 'g1; 'g2; x. 'f['x]} <-->
-   (hom{'g1; 'g2; x. 'f['x]} & group_bvd{'h; 'g1; sep{car{'g1}; x. eq{'f['x]; id{'g2}}}})
+   (hom{'g1; 'g2; x. 'f['x]} & group{'h} & equal{car{'h}; sep{car{'g1}; x. eq{'f['x]; id{'g2}}}} & (all a: set. all b: set. (mem{'a; car{'h}} => mem{'b; car{'h}} => eq{op{'h; 'a; 'b}; op{'g1; 'a; 'b}})))
 
 (************************************************************************
  * TACTICS                                                              *

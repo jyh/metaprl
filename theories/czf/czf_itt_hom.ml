@@ -292,16 +292,17 @@ interactive hom_inv_elim (*{| elim [] |}*) 'H 'J 'a :
  * Let f: G -> G' be a group homomorphism of G into G'.
  * If H is a subgroup of G, then f[H] is a subgroup of G'.
  *)
-interactive hom_subgroup1 'H hom{'g1; 'g2; x. 'f['x]} 'h1 'h2 :
+interactive hom_subg1 'H hom{'g1; 'g2; x. 'f['x]} 'h1 'h2 :
    sequent [squash] { 'H >- 'g1 IN label } -->
    sequent [squash] { 'H >- 'g2 IN label } -->
    sequent [squash] { 'H >- 'h1 IN label } -->
    sequent [squash] { 'H >- 'h2 IN label } -->
-   sequent ['ext] { 'H >- group{'h2} } -->
    sequent ['ext] { 'H >- fun_set{x. 'f['x]} } -->
    sequent ['ext] { 'H >- hom{'g1; 'g2; x. 'f['x]} } -->
    sequent ['ext] { 'H >- subgroup{'h1; 'g1} } -->
-   sequent ['ext] { 'H >- group_bvd{'h2; 'g2; set_bvd{car{'h1}; x. 'f['x]}} } -->
+   sequent ['ext] { 'H >- group{'h2} } -->
+   sequent ['ext] { 'H >- equal{car{'h2}; set_bvd{car{'h1}; x. 'f['x]}} } -->
+   sequent ['ext] { 'H; a: set; b: set; x: mem{'a; car{'h2}}; y: mem{'b; car{'h2}} >- eq{op{'h2; 'a; 'b}; op{'g2; 'a; 'b}} } -->
    sequent ['ext] { 'H >- subgroup{'h2; 'g2} }
 
 (*!
@@ -316,16 +317,17 @@ interactive hom_subgroup1 'H hom{'g1; 'g2; x. 'f['x]} 'h1 'h2 :
  * If H is a subgroup of G', then the inverse image of
  * H is a subgroup of G.
  *)
-interactive hom_subgroup2 'H hom{'g1; 'g2; x. 'f['x]} 'h1 'h2 :
+interactive hom_subg2 'H hom{'g1; 'g2; x. 'f['x]} 'h1 'h2 :
    sequent [squash] { 'H >- 'g1 IN label } -->
    sequent [squash] { 'H >- 'g2 IN label } -->
    sequent [squash] { 'H >- 'h1 IN label } -->
    sequent [squash] { 'H >- 'h2 IN label } -->
-   sequent ['ext] { 'H >- group{'h1} } -->
    sequent ['ext] { 'H >- fun_set{x. 'f['x]} } -->
    sequent ['ext] { 'H >- hom{'g1; 'g2; x. 'f['x]} } -->
    sequent ['ext] { 'H >- subgroup{'h2; 'g2} } -->
-   sequent ['ext] { 'H >- group_bvd{'h1; 'g1; inv_image{car{'g1}; x. 'f['x]; car{'h2}}} } -->
+   sequent ['ext] { 'H >- group{'h1} } -->
+   sequent ['ext] { 'H >- equal{car{'h1}; inv_image{car{'g1}; x. 'f['x]; car{'h2}}} } -->
+   sequent ['ext] { 'H; a: set; b: set; x: mem{'a; car{'h1}}; y: mem{'b; car{'h1}} >- eq{op{'h1; 'a; 'b}; op{'g1; 'a; 'b}} } -->
    sequent ['ext] { 'H >- subgroup{'h1; 'g1} }
 
 (************************************************************************

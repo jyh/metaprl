@@ -31,6 +31,7 @@
  *)
 
 include Czf_itt_group
+include Czf_itt_subset
 
 open Printf
 open Mp_debug
@@ -60,7 +61,8 @@ open Base_auto_tactic
  ************************************************************************)
 
 (* Build a group h from group g. The underlying set of h is s;
- * the operation in h is the same as in g.
+ * the operation in h is the same as in g. s must be a subset of
+ * the underlying set of g.
  *)
 declare group_bvd{'h; 'g; 's}
 
@@ -69,7 +71,7 @@ declare group_bvd{'h; 'g; 's}
  ************************************************************************)
 
 rewrite unfold_group_bvd : group_bvd{'h; 'g; 's} <-->
-   (group{'h} & group{'g} & isset{'s} & equal{car{'h}; 's} & (all a: set. all b: set. (mem{'a; car{'h}} => mem{'b; car{'h}} => eq{op{'h; 'a; 'b}; op{'g; 'a; 'b}})))
+   (group{'h} & group{'g} & isset{'s} & subset{'s; car{'g}} & equal{car{'h}; 's} & (all a: set. all b: set. (mem{'a; car{'h}} => mem{'b; car{'h}} => eq{op{'h; 'a; 'b}; op{'g; 'a; 'b}})))
 
 (*
  * -*-

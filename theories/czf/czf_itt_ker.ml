@@ -45,7 +45,6 @@
 (*! @doc{@parents} *)
 include Czf_itt_group
 include Czf_itt_subgroup
-include Czf_itt_group_bvd
 include Czf_itt_hom
 include Czf_itt_sep
 include Czf_itt_inv_image
@@ -94,11 +93,14 @@ declare ker{'h; 'g1; 'g2; x. 'f['x]}
 (*!
  * @begin[doc]
  * @rewrites
- * The kernel of a homomorphism is defined by group builder.
+ * The @tt{ker} judgment requires that $@hom{x; g1; g2; f[x]}$
+ * and $h$ be a group which has the same binary operation as
+ * $g1$ and the elements of whose underlying set are mapped
+ * into the identity of $g2$.
  * @end[doc]
  *)
 prim_rw unfold_ker : ker{'h; 'g1; 'g2; x. 'f['x]} <-->
-   (hom{'g1; 'g2; x. 'f['x]} & group_bvd{'h; 'g1; sep{car{'g1}; x. eq{'f['x]; id{'g2}}}})
+   (hom{'g1; 'g2; x. 'f['x]} & group{'h} & equal{car{'h}; sep{car{'g1}; x. eq{'f['x]; id{'g2}}}} & (all a: set. all b: set. (mem{'a; car{'h}} => mem{'b; car{'h}} => eq{op{'h; 'a; 'b}; op{'g1; 'a; 'b}})))
 (*! @docoff *)
 
 (************************************************************************
@@ -144,7 +146,9 @@ interactive ker_intro {| intro [] |} 'H :
    sequent [squash] { 'H >- 'g2 IN label } -->
    sequent [squash] { 'H >- 'h IN label } -->
    sequent ['ext] { 'H >- hom{'g1; 'g2; x. 'f['x]} } -->
-   sequent ['ext] { 'H >- group_bvd{'h; 'g1; sep{car{'g1}; x. eq{'f['x]; id{'g2}}}} } -->
+   sequent ['ext] { 'H >- group{'h} } -->
+   sequent ['ext] { 'H >- equal{car{'h}; sep{car{'g1}; x. eq{'f['x]; id{'g2}}}} } -->
+   sequent ['ext] { 'H; a: set; b: set; x: mem{'a; car{'h}}; y: mem{'b; car{'h}} >- eq{op{'h; 'a; 'b}; op{'g1; 'a; 'b}} } -->
    sequent ['ext] { 'H >- ker{'h; 'g1; 'g2; x. 'f['x]} }
 (*! @docoff *)
 

@@ -33,7 +33,6 @@
 include Czf_itt_group
 include Czf_itt_subset
 include Czf_itt_isect
-include Czf_itt_group_bvd
 
 open Refiner.Refiner
 open Refiner.Refiner.Term

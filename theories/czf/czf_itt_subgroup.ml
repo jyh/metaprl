@@ -46,7 +46,6 @@
 include Czf_itt_group
 include Czf_itt_subset
 include Czf_itt_isect
-include Czf_itt_group_bvd
 (*! @docoff *)
 
 open Printf
@@ -87,8 +86,9 @@ declare subgroup{'s; 'g}
  * @begin[doc]
  * @rewrites
  *
- * A group $s$ is a subgroup of group $g$ if $s$ is built from
- * $g$ with its carrier being a subset of that of $g$.
+ * A group $s$ is a subgroup of group $g$ if the carrier of $s$
+ * is a subset of that of $g$ and the operation of $s$ is the same
+ * as that of $g$.
  * @end[doc]
  *)
 prim_rw unfold_subgroup : subgroup{'s; 'g} <-->
@@ -202,7 +202,9 @@ interactive subgroup_isect 'H 'h1 'h2 :
    sequent [squash] { 'H >- 'h IN label } -->
    sequent ['ext] { 'H >- subgroup{'h1; 'g} } -->
    sequent ['ext] { 'H >- subgroup{'h2; 'g} } -->
-   sequent ['ext] { 'H >- group_bvd{'h; 'h1; ."isect"{car{'h1}; car{'h2}}} } -->
+   sequent ['ext] { 'H >- group{'h} } -->
+   sequent ['ext] { 'H >- equal{car{'h}; ."isect"{car{'h1}; car{'h2}}} } -->
+   sequent ['ext] { 'H; a: set; b: set; x: mem{'a; car{'h}}; y: mem{'b; car{'h}} >- eq{op{'h; 'a; 'b}; op{'h1; 'a; 'b}} } -->
    sequent ['ext] { 'H >- subgroup{'h; 'g} }
 
 (*! @docoff *)

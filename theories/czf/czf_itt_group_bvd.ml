@@ -6,10 +6,11 @@
  *
  * The @tt{Czf_itt_group_bvd} module defines the @emph{group builder}
  * which builds a new group $g_1$ from an existing group $g_2$ which
- * shares the same operation, but has a different carrier. The same
- * operation requires that $a *_1 b$ is equal to $a *_2 b$ for any
- * $a$ and $b$ in $g_1$. Examples of use of @tt{groupbvd} are
- * subgroups, kernels, cyclic subgroups, etc.
+ * shares the same operation, but has a different carrier which must
+ * be a subset of the underlying set of $g_2$. The same operation
+ * requires that $a *_1 b$ is equal to $a *_2 b$ for any $a$ and $b$
+ * in $g_1$. Examples of use of @tt{groupbvd} are subgroups, kernels,
+ * cyclic subgroups, etc.
  * @end[doc]
  *
  * ----------------------------------------------------------------
@@ -45,6 +46,7 @@
 
 (*! @doc{@parents} *)
 include Czf_itt_group
+include Czf_itt_subset
 (*! @docoff *)
 
 open Printf
@@ -91,11 +93,11 @@ declare group_bvd{'h; 'g; 's}
  *
  * The $@groupbvd{h; g; s}$ builds a group $h$ from group $g$ which
  * satisfies $@equal{@car{h}; s}$ and the operation of $h$ is the
- * same as that of $g$.
+ * same as that of $g$. Here $s$ must be a subset of $@car{g}$
  * @end[doc]
  *)
 prim_rw unfold_group_bvd : group_bvd{'h; 'g; 's} <-->
-   (group{'h} & group{'g} & isset{'s} & equal{car{'h}; 's} & (all a: set. all b: set. (mem{'a; car{'h}} => mem{'b; car{'h}} => eq{op{'h; 'a; 'b}; op{'g; 'a; 'b}})))
+   (group{'h} & group{'g} & isset{'s} & subset{'s; car{'g}} & equal{car{'h}; 's} & (all a: set. all b: set. (mem{'a; car{'h}} => mem{'b; car{'h}} => eq{op{'h; 'a; 'b}; op{'g; 'a; 'b}})))
 (*! @docoff *)
 
 (************************************************************************
@@ -140,11 +142,36 @@ interactive group_bvd_intro {| intro [] |} 'H :
    sequent [squash] { 'H >- isset{'s} } -->
    sequent ['ext] { 'H >- group{'h} } -->
    sequent ['ext] { 'H >- group{'g} } -->
+   sequent ['ext] { 'H >- subset{'s; car{'g}} } -->
    sequent ['ext] { 'H >- equal{car{'h}; 's} } -->
    sequent ['ext] { 'H; a: set; b: set; x: mem{'a; car{'h}}; y: mem{'b; car{'h}} >- eq{op{'h; 'a; 'b}; op{'g; 'a; 'b}} } -->
    sequent ['ext] { 'H >- group_bvd{'h; 'g; 's} }
-(*! @docoff *)
 
+(*!
+ * @begin[doc]
+ * @thysubsection{Properties}
+ *
+ * If $h$ is built from $g$, then $@eq{@id{h}; @id{g}}$ and
+ * for all $a @in @car{h}$, $@eq{@inv{h; a}; @inv{g; a}}$.
+ * @end[doc]
+ *)
+interactive group_bvd_id {| intro [] |} 'H 's :
+   sequent [squash] { 'H >- 'h IN label } -->
+   sequent [squash] { 'H >- 'g IN label } -->
+   sequent [squash] { 'H >- isset{'s} } -->
+   sequent ['ext] { 'H >- group_bvd{'h; 'g; 's} } -->
+   sequent ['ext] { 'H >- eq{id{'h}; id{'g}} }
+
+interactive group_bvd_inv {| intro [] |} 'H 's :
+   sequent [squash] { 'H >- 'h IN label } -->
+   sequent [squash] { 'H >- 'g IN label } -->
+   sequent [squash] { 'H >- isset{'s} } -->
+   sequent [squash] { 'H >- isset{'a} } -->
+   sequent ['ext] { 'H >- group_bvd{'h; 'g; 's} } -->
+   sequent ['ext] { 'H >- mem{'a; car{'h}} } -->
+   sequent ['ext] { 'H >- eq{inv{'h; 'a}; inv{'g; 'a}} }
+
+(*! @docoff *)
 (*
  * -*-
  * Local Variables:

@@ -94,7 +94,7 @@ define unfold_mpoly : mpoly{'R; 'n} <--> list{monom{'R; 'n}}
 
 declare add_monom{'m1; 'm2; 'R}
 
-prim_rw reduce_add_monom : add_monom{('k1, 'f1); ('k2, 'f2); 'R} <--> ('k1 +['R] 'k2, 'f1)
+prim_rw reduce_add_monom : add_monom{('k1, 'f); ('k2, 'f); 'R} <--> ('k1 +['R] 'k2, 'f)
 
 define unfold_add_monom_mpoly : add_monom_mpoly{'mon; 'p} <--> cons{'mon; 'p}
 

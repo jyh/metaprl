@@ -889,6 +889,46 @@ dform iso_df1 : mode[tex] :: math_iso{'x; 'g1; 'g2; 'f} =
 dform iso_df : parens :: except_mode[tex] :: math_iso{'x; 'g1; 'g2; 'f} =
    `"iso(" slot{'g1} `"; " slot{'g2} `"; " slot{'f} `")"
 
+(************************************************************************
+ * KLEIN 4-GROUP
+ ************************************************************************)
+
+declare math_klein4
+declare math_k0
+declare math_k1
+declare math_k2
+declare math_k3
+
+dform klein4_df1 : mode[tex] :: math_klein4 =
+   izone `"{{\\it klein4}}" ezone
+
+dform k0_df1 : mode[tex] :: math_k0 =
+   izone `"{{\\it k0}}" ezone
+
+dform k1_df1 : mode[tex] :: math_k1 =
+   izone `"{{\\it k1}}" ezone
+
+dform k2_df1 : mode[tex] :: math_k2 =
+   izone `"{{\\it k2}}" ezone
+
+dform k3_df1 : mode[tex] :: math_k3 =
+   izone `"{{\\it k3}}" ezone
+
+dform klein4_df : except_mode[tex] :: math_klein4 =
+   `"klein4"
+
+dform k0_df : except_mode[tex] :: math_k0 =
+   `"k0"
+
+dform k1_df : except_mode[tex] :: math_k1 =
+   `"k1"
+
+dform k2_df : except_mode[tex] :: math_k2 =
+   `"k2"
+
+dform k3_df : except_mode[tex] :: math_k3 =
+   `"k3"
+
 (*
  * -*-
  * Local Variables:

@@ -228,6 +228,16 @@ declare math_ker{'x; 'h; 'g1; 'g2; 'f}
 
 declare math_iso{'x; 'g1; 'g2; 'f}
 
+(************************************************************************
+ * KLEIN 4-GROUP
+ ************************************************************************)
+
+declare math_klein4
+declare math_k0
+declare math_k1
+declare math_k2
+declare math_k3
+
 (*
  * -*-
  * Local Variables:

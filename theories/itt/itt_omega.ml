@@ -891,16 +891,20 @@ struct
 	let hash = Hashtbl.hash
 end
 
+(*
 let ge_normC = (addrC [Subterm 1] normalizeC) thenC (addrC [Subterm 2] normalizeC)
 
 let relNorm_aux t =
 	match explode_term t with
 		<<'a = 'b in 'T>> ->
-			(addrC [Subterm 1] normalizeC) thenC (addrC [Subterm 2] normalizeC)
+			(addrC [Subterm 2] normalizeC) thenC (addrC [Subterm 3] normalizeC)
 	 | _ ->
 			(addrC [Subterm 1] normalizeC) thenC (addrC [Subterm 2] normalizeC)
 
 let relNormC = termC relNorm_aux
+*)
+let relNormC = allSubC normalizeC
+let ge_normC = relNormC
 
 let monom2af var2index t =
 	match explode_term t with
@@ -944,38 +948,11 @@ let apply_rewrite p conv t =
 	let s'=Top_conversionals.apply_rewrite p (addrC concl_addr conv) s in
 	TermMan.concl s'
 
-let rec make_sacs_aux p i l = function
-	[] -> l
- | hd::tl ->
-		let i' = succ i in
-		match hd with
-			Hypothesis (_, t) ->
-				(match explode_term t with
-				 | <<ge{'left; 'right}>> when not (alpha_equal left right) ->
-						let t'=apply_rewrite p ge_normC t in
-						make_sacs_aux p i' ((i,t')::l) tl
-				 | _ ->
-						make_sacs_aux p i' l tl
-				)
-		 | Context _ -> make_sacs_aux p i' l tl
-
-type constraints = Constraints of (int * AF.af) list | Contradiction of (int * AF.af)
-
 let is_neg_number f =
 	if AF.isNumber f then
 		isNegative (AF.coef f AF.constvar)
 	else
 		false
-
-let make_sacs var2index p =
-   let hyps = Term.SeqHyp.to_list (Sequent.explode_sequent p).sequent_hyps in
-	let ihyps = make_sacs_aux p 1 [] hyps in
-	let afs=List.map (ge2af var2index) ihyps in
-	try
- 		let item = List.find (fun (i,f) -> is_neg_number f) afs in
- 		Contradiction item
-	with Not_found ->
-		Constraints afs
 
 (*********************************************************************
  * OMEGA
@@ -1043,6 +1020,13 @@ interactive_rw factor_out 'cleft 'tleft 'cright 'tright :
 	('left >= 'right) <-->
 	('cleft *@ 'tleft >= 'cright *@ 'tright)
 
+interactive_rw factor_out2 number[l:n] 'tleft number[r:n] 'tright :
+	('tleft in int) -->
+	('tright in int) -->
+	('left = (number[l:n] *@ 'tleft) -@ (number[r:n] *@ 'tright) in int) -->
+	('left >= 0) <-->
+	(number[l:n] *@ 'tleft >= number[r:n] *@ 'tright)
+
 interactive var_elim2 'v number[l:n] 'tleft number[r:n] 'tright :
 	[wf] sequent { <H> >- 'tleft in int } -->
 	[wf] sequent { <H> >- 'tright in int } -->
@@ -1068,7 +1052,7 @@ type omegaTree =
 	Solve of (AF.vars * ring * omegaTree * AF.af * ring * omegaTree * AF.af)
  | Mul of (omegaTree * ring)
  | MulAndWeaken of (omegaTree * ring * ring)
- | Hyp of int
+ | Hyp of (int * int * int)
 
 let norm constr =
 	let tree, f = constr in
@@ -1247,82 +1231,73 @@ let ge_to_ge0C t =
 	else
 		idC
 
-let normalize2C =	(termC ge_to_ge0C) thenC normalizeC
+let normalize2C =	(termC ge_to_ge0C) thenC relNormC
 
 let endT i =
 	if !debug_omega then
-		eprintf "end %i@." i;
-	assertT << 1 in int >>
+		begin
+			eprintf "end %i@." i;
+			let i' = mk_number_term (Lm_num.num_of_int i) in
+			let t = mk_equal_term <<int>> i' i' in
+			assertT t
+		end
+	else
+		idT
 
 let rec tree_stats h m mw s = function
-	Hyp i -> ((succ h), m, mw, s)
+	Hyp _ -> ((succ h), m, mw, s)
  | Mul (tree, gcd) -> tree_stats h (succ m) mw s tree
  | MulAndWeaken (tree, gcd, c) -> tree_stats h m (succ mw) s tree
  | Solve (v,c1,t1,l,c2,t2,u) ->
 		let h1,m1,mw1,s1 = tree_stats h m mw (succ s) t1 in
 		tree_stats h1 m1 mw1 s1 t2
 
-let rec source2hyp info src = funT (fun p ->
+let rec source2hyp info hyp_pos src = funT (fun p ->
 match src with
- | Hyp i ->
-		rw normalize2C i
+ | Hyp (i, pos, len) ->
+		if !debug_omega then
+			eprintf "Hyp %i %i %i hyp_pos.(i)=%i@." i pos len hyp_pos.(i);
+		if len = 0 then
+			(*endT i thenMT*) rw normalize2C i
+		else
+			(*endT i thenMT*) rw normalize2C (hyp_pos.(i) + pos)
  | Mul (tree, gcd) ->
 		rw (scaleC (mk_number_term gcd)) 0 thenMT
-		source2hyp info tree
+		source2hyp info hyp_pos tree
  | MulAndWeaken (tree, gcd, c) ->
 		scaleAndWeakenT (mk_number_term gcd) (mk_number_term c) thenMT
-		source2hyp info tree
+		source2hyp info hyp_pos tree
  | Solve (v,c1,t1,l,c2,t2,u) ->
 		let cleft = term_of c1 in
 		let tleft = AF.term_of info u in
 		let cright = term_of c2 in
 		let tright = AF.term_of info l in
 		tryT (var_elim2 (VI.restore info v) cleft tleft cright tright thenMLT
-			[source2hyp info t1; source2hyp info t2])
+			[source2hyp info hyp_pos t1; source2hyp info hyp_pos t2])
 )
 
-let omegaAuxT info tree = funT (fun p ->
-	source2hyp info tree thenMT rw ge_normC (-1)
-)
+let omegaAuxT info hyp_pos tree =
+	source2hyp info hyp_pos tree thenMT rw ge_normC (-1)
 
-let omegaCoreT = funT (fun p ->
-   let var2index = VI.create 13 in
-   let s = make_sacs var2index p in
-   let info=VI.invert var2index in
-   match s with
-   	Constraints constrs ->
-			let n0 = VI.length var2index in
-			let n = succ n0 in
-			let constrs = List.rev_map (fun (i,f) -> norm (Hyp i, AF.grow n f)) constrs in
-			let constrs = C.of_list n0 constrs in
-			let pool = Array.make n0 (false,false) in
-			let pool2 = Array.make n0 ringZero in
-			let tree, f = omega pool pool2 constrs in
-			let h,m,mw,s = tree_stats 0 0 0 0 tree in
-			if !debug_omega then
-				eprintf "Solved (%i hyps, %i muls, %i mul&weaken, %i eliminations), reconstructing the proof@." h m mw s;
-			(
-			match tree with
-			 | Hyp i ->
-					omegaAuxT info tree
-			 | Mul _ | MulAndWeaken _ ->
-					let tm = AF.term_of info f in
-					assertT (mk_ge_term tm (term_of num0))
-					thenLT [omegaAuxT info tree; rw ge_normC (-1)]
-			 | Solve (v,c1,t1,l,c2,t2,u) ->
-					let c1t = term_of c1 in
-					let c2t = term_of c2 in
-					assertT
-						(mk_ge_term
-							(mk_sub_term (mk_mul_term c1t (AF.term_of info u)) (mk_mul_term c2t (AF.term_of info l)))
-							(mk_number_term num0))
-					thenLT [omegaAuxT info tree; rw ge_normC (-1)]
-			)
-	 | Contradiction (i,f) ->
-			if !debug_omega then
-				eprintf "Immediate contradiction found, reconstructing the proof@.";
-	 		rw normalizeC i
-)
+let omegaCoreT info hyp_pos tree f =
+	let h,m,mw,s = tree_stats 0 0 0 0 tree in
+	if !debug_omega then
+		eprintf "Solved (%i hyps, %i muls, %i mul&weaken, %i eliminations), reconstructing the proof@." h m mw s;
+	match tree with
+	 | Hyp i ->
+			omegaAuxT info hyp_pos tree
+	 | Mul _ | MulAndWeaken _ ->
+			let tm = AF.term_of info f in
+			assertT (mk_ge_term tm (term_of num0))
+			thenLT [omegaAuxT info hyp_pos tree; rw ge_normC (-1)]
+	 | Solve (v,c1,t1,l,c2,t2,u) ->
+			let c1t = term_of c1 in
+			let c2t = term_of c2 in
+			assertT
+				(mk_ge_term
+					(mk_sub_term (mk_mul_term c1t (AF.term_of info u)) (mk_mul_term c2t (AF.term_of info l)))
+					(mk_number_term num0))
+			thenLT [omegaAuxT info hyp_pos tree; rw ge_normC (-1)]
 
 let rec all_hyps_aux hyps l i =
    if i = 0 then l else
@@ -1338,84 +1313,116 @@ let all_hyps arg =
 	let len = Term.SeqHyp.length hyps in
       all_hyps_aux hyps [] len
 
+type ('a, 'b) flexTree = Leaf of 'a | Node of ('b * (('a, 'b) flexTree)) list
+
 let rec append i tac len pos l = function
 	t::tail ->
 		append i tac len (succ pos) ((i,t,pos,len,tac)::l) tail
  | [] -> l
 
-let rec cons_to_all item acc = function
-	hd::tl -> cons_to_all item ((item::hd)::acc) tl
- | [] -> acc
-
-let rec rev_append_to_all prefix acc = function
-	hd::tl -> rev_append_to_all prefix ((List.rev_append prefix hd)::acc) tl
- | [] -> acc
-
-let make_option i tac terms =
+let make_option tree i tac t =
+	let terms = dest_xlist t in
 	let len=List.length terms in
 	let pos= -len in
-	append i tac len pos [] terms
+	let option = append i tac len pos [] terms in
+	(option, tree)
 
-let options l i tac t =
-	let terms = List.map dest_xlist t in
-	let new_options = List.rev_map (make_option i tac) terms in
-	let option_bags = List.rev_map (fun opt -> rev_append_to_all opt [] l) new_options in
-	rev_flatten option_bags
+(* It seems that interplay of map and rev_map is important here.
+Replacement of the first map with rev_map leads to 10x performance hit
+Although I don't see where it could affect anything
+*)
+let options tree i tac t =
+	Node (List.map (make_option tree i tac) t)
 
-let rec hyp2ge p l = function
+let rec hyp2ge p tree = function
 	(i,t)::tail ->
 		if !debug_arith_dtactic then
 			eprintf "Itt_int_arith.hyp2ge: looking for %ith hyp %s%t" i (SimplePrint.short_string_of_term t) eflush;
 		if is_member_term t then
-			hyp2ge p l tail
+			hyp2ge p tree tail
 		else if is_ge_term t then
-			let l' = cons_to_all (i,t,i,0,idT) [] l in
-			hyp2ge p l' tail
+			let tree' = Node [([(i,t,i,0,idT)], tree)] in
+			hyp2ge p tree' tail
 		else
 			(try
 				if !debug_arith_dtactic then
 					eprintf "Itt_int_arith.hyp2ge: searching ge_elim resource%t" eflush;
 				let terms, tac = Sequent.get_resource_arg p get_ge_elim_resource (Sequent.get_pos_hyp_num p i) p in
-				let l' = options l i (tac i) terms in
-				hyp2ge p l' tail
+				let tree' = options tree i (tac i) terms in
+				hyp2ge p tree' tail
 			with Not_found ->
 				if !debug_arith_dtactic then
 					eprintf "Itt_int_arith.hyp2ge: looking for %ith hyp %s - not found%t" i (SimplePrint.short_string_of_term t) eflush;
-				hyp2ge p l tail
+				hyp2ge p tree tail
 			)
- | [] -> l
+ | [] -> tree
 
-let allhyps2ge p tail =
-	hyp2ge p tail (all_hyps p)
+let rec push2leaves f acc tree =
+	let aux (data, subtree) =
+		let data', acc' = f data acc in
+		data', push2leaves f acc' subtree
+	in
+	match tree with
+		Node edges ->
+			Node (List.map aux edges)
+	 | Leaf _ ->
+			Leaf acc
+
+let rec map_leaves f = function
+	Node edges ->
+		Node (List.map (fun (data,tree) -> data, map_leaves f tree) edges)
+ | Leaf data ->
+		Leaf (f data)
+
+let rec leaves2list = function
+	Node edges ->
+		let lists = List.map (fun (data,tree) -> leaves2list tree) edges in
+		List.flatten lists
+ | Leaf data ->
+		[data]
+
+let allhyps2ge p tree =
+	hyp2ge p tree (all_hyps p)
+
+let print_option (i,t,pos,len,tac) =
+	(*eprintf "hyp%i pos=%i len=%i term:%s@." i pos len (SimplePrint.short_string_of_term t)*)
+	eprintf "hyp%i pos=%i len=%i@." i pos len
 
 let all2ge p =
-	(*let pos, l = concl2ge p (succ (Sequent.hyp_count p)) in*)
-	let l = allhyps2ge p [[]] in
-	if !debug_arith_dtactic then
-		eprintf "Itt_int_arith.all2ge: %i inequalities collected%t" (List.length l) eflush;
-	l
+	let tree = allhyps2ge p (Leaf ()) in
+	let tree' = push2leaves (fun data acc -> data, List.append data acc) [] tree in
+	tree'
 
-let rec count_used_hyps used_hyps = function
-	Hyp i ->
-		used_hyps.(i) <- true
+let rec count_used_hyps used_hyps hyp_length = function
+	Hyp (i,pos,len) ->
+		used_hyps.(i) <- true;
+		hyp_length.(i) <- len;
  | Mul (tree, gcd) ->
-		count_used_hyps used_hyps tree
+		count_used_hyps used_hyps hyp_length tree
  | MulAndWeaken (tree, gcd, c) ->
-		count_used_hyps used_hyps tree
+		count_used_hyps used_hyps hyp_length tree
  | Solve (v,c1,t1,l,c2,t2,u) ->
-		count_used_hyps used_hyps t1;
-		count_used_hyps used_hyps t2
+		count_used_hyps used_hyps hyp_length t1;
+		count_used_hyps used_hyps hyp_length t2
 
-let omegaSim dim pool pool2 used_hyps constrs =
+let omegaSim dim pool pool2 used_hyps hyp_length constrs =
 	if List.length constrs = 1 then
-		let i,f = List.hd constrs in
-		used_hyps.(i) <- true
+		begin
+			let coord,f = List.hd constrs in
+			let i, pos, len = coord in
+			used_hyps.(i) <- true;
+			hyp_length.(i) <- len;
+			(Hyp coord, f)
+		end
 	else
-		let n = succ dim in
-		let constrs = List.rev_map (fun (i,f) -> norm (Hyp i, AF.grow n f)) constrs in
-		let constrs = C.of_list dim constrs in
-		let tree, f = omega pool pool2 constrs in
-		count_used_hyps used_hyps tree
+		begin
+			let n = succ dim in
+			let constrs = List.rev_map (fun (i,f) -> norm (Hyp i, AF.grow n f)) constrs in
+			let constrs = C.of_list dim constrs in
+			let tree, f = omega pool pool2 constrs in
+			count_used_hyps used_hyps hyp_length tree;
+			(tree, f)
+		end
 
 let rec foldi_aux f ar acc current =
 	if current = Array.length ar then
@@ -1431,13 +1438,13 @@ let rec sim_make_sacs_aux p var2index l = function
 		(match explode_term t with
 		 | <<ge{'left; 'right}>> when not (alpha_equal left right) ->
 				let t'=apply_rewrite p ge_normC t in
-				sim_make_sacs_aux p var2index ((ge2af var2index (i,t'))::l) tl
+				sim_make_sacs_aux p var2index ((ge2af var2index ((i,pos,len),t'))::l) tl
 		 | _ ->
 				sim_make_sacs_aux p var2index l tl
 		)
 
 let sim_make_sacs p var2index constrs =
-	let afs = sim_make_sacs_aux p var2index [] constrs in
+	let afs = sim_make_sacs_aux p var2index [] (List.rev constrs) in
 	try
  		let item = List.find (fun (i,f) -> is_neg_number f) afs in
  		[item]
@@ -1452,18 +1459,65 @@ let ge_elimT = argfunT (fun i p ->
 		idT
 )
 
+let rec prune_tree used_hyps = function
+	Node edges ->
+		let terms, subtree = List.hd edges in
+		let i, term, pos, len, tac = List.hd terms in
+		if used_hyps.(i) then
+			let edges' = List.map (fun (data,subtree) -> (data, prune_tree used_hyps subtree)) edges in
+			Node edges'
+		else
+			prune_tree used_hyps subtree
+ | Leaf data -> Leaf data
+
+let isEmptyOrMainLabel l =
+   (l="") or (List.mem l main_labels)
+
+let count_main_goals goall =
+	let count = ref 0 in
+	let aux g =
+		if isEmptyOrMainLabel (Sequent.label g) then
+			count := succ (!count)
+	in
+	List.iter aux goall;
+	!count
+
+let prefix_thenMLT =
+   let rec combine tacl goall =
+     match tacl, goall with
+        [], [] -> []
+      | t::ts, g :: gs when isEmptyOrMainLabel (Sequent.label g) ->
+          t :: (combine ts gs)
+      | _, g :: gs  ->
+          idT :: (combine tacl gs)
+      | _ ->
+			raise (RefineError ("thenMLT", StringError "mismatch between number of main goals and number of"))
+	in
+	let combine1 tacl goall =
+		if !debug_omega then
+			eprintf "thenMLT: %itacs, %i goals, %i main@." (List.length tacl) (List.length goall) (count_main_goals goall);
+		combine tacl goall
+   in
+     fun (tac:tactic) (tacl:tactic list) -> tac thenFLT (combine1 tacl)
+
+let total = ref 0.
+
 let omegaPrepT = funT (fun p ->
-	let options = all2ge p in
 	if !debug_omega then
-		eprintf "%i options@." (List.length options);
+		eprintf "omegaPrepT started@.";
+	let start = Unix.time () in
+	let options = all2ge p in
    let var2index = VI.create 13 in
-   let option_constrs = List.map (sim_make_sacs p var2index) options in
+   let option_constrs = map_leaves (sim_make_sacs p var2index) options in
 	let hyp_num = succ (Sequent.hyp_count p) in
 	let used_hyps = Array.make hyp_num false in
+	let hyp_length = Array.make hyp_num 0 in
 	let n0 = VI.length var2index in
 	let pool = Array.make n0 (false,false) in
 	let pool2 = Array.make n0 ringZero in
-	List.iter (omegaSim n0 pool pool2 used_hyps) option_constrs;
+	let all_solutions = map_leaves (omegaSim n0 pool pool2 used_hyps hyp_length) option_constrs in
+	let pruned_solutions = prune_tree used_hyps all_solutions in
+	let solutions_list = leaves2list pruned_solutions in
 	let used_hyps = foldi (fun i v acc -> if v then i::acc else acc) used_hyps [] in
 	if !debug_omega then
 		begin
@@ -1471,17 +1525,39 @@ let omegaPrepT = funT (fun p ->
 			List.iter (eprintf "%i ") used_hyps;
 			eprintf "@.";
 		end;
- 	if List.length used_hyps = 1 then
- 		(* If hypothesis contains contradiction
- 		   do not normalize it because it could evaluate to falsum
- 			and the rest of our code would not understand it
- 		*)
- 		onMHypsT used_hyps ge_elimT
-	else
-		onMHypsT used_hyps (rw normalizeC) thenMT
-		onMHypsT used_hyps ge_elimT
+	let count = ref hyp_num in
+	for i=hyp_num-1 downto 0  do
+		count := !count + hyp_length.(i);
+		if !debug_omega then
+			eprintf "hyp_length.(%i)=%i@." i !count;
+		hyp_length.(i) <- !count
+	done;
+	let info = VI.invert var2index in
+	let tacs = List.map (fun (tree,f) -> omegaCoreT info hyp_length tree f) solutions_list in
+	total := !total +. (Unix.time() -. start);
+	if !debug_omega then
+		eprintf "actual number of cases is %i@." (List.length tacs);
+	(*eprintf "Total time spent in omegaPrepT is %f@." !total;*)
+	(*if List.length used_hyps = 1 then
+		(* If hypothesis contains contradiction
+			do not normalize it because it could evaluate to falsum
+			and the rest of our code would not understand it
+		*)
+		prefix_thenMLT
+			(onMHypsT used_hyps ge_elimT)
+			tacs
+	else*)
+		prefix_thenMLT
+			(onMHypsT used_hyps (rw relNormC) thenMT onMHypsT used_hyps ge_elimT)
+			tacs
 )
 
 let omegaT =
 	arithRelInConcl2HypT thenMT
-	omegaPrepT thenMT omegaCoreT thenT rw normalizeC 0
+	omegaPrepT (*thenMT endT 2*) thenT rw relNormC 0
+
+let getTimeT = funT (fun p ->
+	eprintf "spent %f seconds in omegaPrepT@." !total;
+	total := 0.;
+	failT
+)

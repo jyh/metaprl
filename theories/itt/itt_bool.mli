@@ -120,7 +120,7 @@ rule boolElimination2 'H 'J 'x :
  *)
 rule assertSquashElim 'H :
    sequent [squash] { 'H >- "assert"{'t} } -->
-   sequent ['ext] { 'H >- "assert"{'t} }
+   sequent ['ext] { 'H >- it IN "assert"{'t} }
 
 (************************************************************************
  * TACTICS                                                              *
@@ -143,7 +143,6 @@ topval extBoolT : tactic
 topval magicT : tactic
 topval splitBoolT : term -> int -> tactic
 topval splitITE : int -> tactic
-topval squash_assertT : tactic
 
 (*
  * -*-

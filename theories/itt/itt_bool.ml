@@ -453,6 +453,18 @@ interactive bool_ext_equality 'H 'u :
 
 (*!
  * @begin[doc]
+ * @thysubsection{Squash reasoning}
+ *
+ * The proof extract of a Boolean assertion is always the
+ * term $@it$ term; the proof itself can be omitted.
+ * @end[doc]
+ *)
+interactive assertSquashElim {| squash_resource |} 'H :
+   sequent [squash] { 'H >- "assert"{'t} } -->
+   sequent ['ext] { 'H >- it IN "assert"{'t} }
+
+(*!
+ * @begin[doc]
  * @thysubsection{Reasoning about the Boolean connectives}
  *
  * The following two rules define introduction and
@@ -530,17 +542,6 @@ interactive assert_bimplies_intro {| intro_resource [] |} 'H 'x :
    [main] sequent [squash] { 'H; x: "assert"{'t1} >- "assert"{'t2} } -->
    sequent ['ext] { 'H >- "assert"{bimplies{'t1; 't2}} }
 
-(*!
- * @begin[doc]
- * @thysubsection{Squash reasoning}
- *
- * The proof extract of a Boolean assertion is always the
- * term $@it$ term; the proof itself can be omitted.
- * @end[doc]
- *)
-interactive assertSquashElim 'H :
-   sequent [squash] { 'H >- "assert"{'t} } -->
-   sequent ['ext] { 'H >- "assert"{'t} }
 (*! @docoff *)
 
 (************************************************************************
@@ -766,28 +767,6 @@ let inf_b = Typeinf.infer_const bool_term
 
 let typeinf_resource = Mp_resource.improve typeinf_resource (btrue_term, inf_b)
 let typeinf_resource = Mp_resource.improve typeinf_resource (bfalse_term, inf_b)
-
-(************************************************************************
- * AUTO TACTIC                                                          *
- ************************************************************************)
-
-let squash_assertT p =
-   let _ =
-      match Sequent.args p with
-         [ext] ->
-            if is_squash_term ext then
-               raise (RefineError ("squash_assertT", StringError "already squashed"))
-       | _ ->
-            ()
-   in
-      assertSquashElim (Sequent.hyp_count_addr p) p
-
-let auto_resource =
-   Mp_resource.improve auto_resource (**)
-      { auto_name = "bool_squash_assertT";
-        auto_prec = trivial_prec;
-        auto_tac = auto_wrap squash_assertT
-      }
 
 (*
  * -*-

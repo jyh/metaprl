@@ -2975,7 +2975,7 @@ T	t3503	o b3492 b3503
 B	b3504	t3503
 T	t3504	o805 b1885 b3504
 B	b3505	t3504
-P	p3506	String "rw reduceC 0 thenT squash_equalT thenT autoT"
+P	p3506	String "rw reduceC 0 thenT autoT"
 O	o3506	ext_rule p3506
 T	t3506	o805 b3492 b4
 B	b3507	t3506
@@ -3573,7 +3573,7 @@ B	b2185	t2184
 P	p2187	String "dT 3 thenT rw reduceC 0"
 O	o2187	ext_rule p2187
 H	h2190	u t2127
-P	p2199	String "squash_equalT thenT autoT"
+P	p2199	String "autoT"
 O	o2199	ext_rule p2199
 P	p2292	String rev_assoc_wf
 O	o2292	rule p2292

@@ -79,10 +79,6 @@ prec prec_add
  * Useful tactic to prove _rw from ~-rules
  *)
 
-topval finishSq2ExT : int -> tactic
-
-topval sqeq2rwT : tactic -> tactic
-
 topval sqFromRwT : tactic -> tactic
 
 topval testT : tactic
@@ -198,10 +194,6 @@ rule beq_wf 'H :
    [wf] sequent [squash] { 'H >- 'a = 'a1 in int } -->
    [wf] sequent [squash] { 'H >- 'b = 'b1 in int } -->
    sequent ['ext] { 'H >- beq_int{'a; 'b} = beq_int{'a1; 'b1} in bool }
-
-rule lt_squashElimination 'H :
-   sequent [squash] { 'H >- 'a < 'b } -->
-   sequent ['ext] { 'H >- 'a < 'b }
 
 rule lt_wf 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->

@@ -74,13 +74,6 @@ rule voidType 'H : sequent ['ext] { 'H >- "type"{void} }
 rule voidElimination 'H 'J : sequent ['ext] { 'H; x: void; 'J['x] >- 'C['x] }
 
 (*
- * Squash elimination.
- *)
-rule void_squashElimination 'H :
-   sequent [squash] { 'H >- void } -->
-   sequent ['ext] { 'H >- void }
-
-(*
  * Subtyping.
  *)
 rule void_subtype 'H :
@@ -92,8 +85,6 @@ rule void_subtype 'H :
 
 val void_term : term
 val is_void_term : term -> bool
-
-topval squash_voidT : tactic
 
 (*
  * -*-

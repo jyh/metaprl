@@ -438,22 +438,10 @@ interactive equalityType2 {| intro_resource [] |} 'H :
 
 (*!************************************************************************
  * @begin[doc]
- * @thysubsection{Equality in a type}
- *
- * Equality in any term $T$ means that $T$ is a type.
- * @end[doc]
- *)
-prim equalityTypeIsType 'H 'a 'b :
-   [wf] sequent [squash] { 'H >- 'a = 'b in 'T } -->
-   sequent ['ext] { 'H >- "type"{'T} } =
-   it
-
-(*!************************************************************************
- * @begin[doc]
- * @thysubsection{Inhabitants of the equality type}
+ * @thysubsection{Inhabitants of the equality types}
  *
  * The two following rules state that $@it$ is the one-and-only element
- * in a provable equality type.
+ * in a provable equality or a provable @tt{Type} type.
  * @end[doc]
  *)
 
@@ -479,6 +467,11 @@ prim equalityElimination {| elim_resource [] |} 'H 'J :
    sequent ['ext] { 'H; x: 'a = 'b in 'T; 'J['x] >- 'C['x] } =
    't
 
+prim type_axiomMember {| intro_resource []; eqcd_resource |} 'H :
+   sequent [squash] { 'H >- "type"{'T} } -->
+   sequent ['ext] { 'H >- it IN "type"{'T} } =
+   it
+
 (*!************************************************************************
  * @begin[doc]
  * @thysubsection{Truth implies typehood}
@@ -498,27 +491,6 @@ prim equalityElimination {| elim_resource [] |} 'H 'J :
  *)
 prim typeEquality 'H :
    [main] sequent [squash] { 'H >- 'T } -->
-   sequent ['ext] { 'H >- "type"{'T} } =
-   it
-
-(*!************************************************************************
- * @begin[doc]
- * @thysubsection{Forgetting proof extracts}
- *
- * The following four rules state that the proof extract (the program
- * that inhabits the equality type) can always be found, even if the
- * proof is not known.  This is always true because the equality type
- * has only one proof ($@it$).
- * @end[doc]
- *)
-
-prim equality_squashElimination 'H :
-   sequent [squash] { 'H >- 'a = 'b in 'T } -->
-   sequent ['ext] { 'H >- 'a = 'b in 'T } =
-   it
-
-prim type_squashElimination 'H :
-   sequent [squash] { 'H >- "type"{'T} } -->
    sequent ['ext] { 'H >- "type"{'T} } =
    it
 
@@ -725,12 +697,6 @@ let equalSymT p =
  *)
 let equalTransT t p =
    equalityTrans (Sequent.hyp_count_addr p) t p
-
-(*
- * Typehood from equality.
- *)
-let equalTypeT a b p =
-   equalityTypeIsType (Sequent.hyp_count_addr p) a b p
 
 (*
  * Universe cumulativity.

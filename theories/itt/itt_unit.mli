@@ -91,13 +91,6 @@ rule unitElimination 'H 'J :
    sequent['ext] { 'H; x: unit; 'J[it] >- 'C[it] } -->
    sequent ['ext] { 'H; x: unit; 'J['x] >- 'C['x] }
 
-(*
- * Squash elimination.
- *)
-rule unit_squashElimination 'H :
-   sequent [squash] { 'H >- unit } -->
-   sequent ['ext] { 'H >- unit }
-
 (************************************************************************
  * TACTICS                                                              *
  ************************************************************************)

@@ -231,19 +231,11 @@ dform lt_bool_df1 : parens :: "prec"[prec_compare] :: lt_bool{'a; 'b} =
 (*
  * Useful tactic to prove _rw from ~-rules
  *)
-
-let finishSq2ExT i =
-   unsqsquashT <<'ext>> thenT nthAssumT i
-
-let sqeq2rwT t =
-   t thenT onSomeAssumT finishSq2ExT
-
 let sqFromRwT t =
    (fun p -> sqSubstT (Sequent.concl p) 0 p) 
     thenMT 
         autoT
-    thenT 
-        (sqeq2rwT t)
+    thenT t thenT trivialT
 
 let testT p = 
    let g =Sequent.goal p in
@@ -363,26 +355,14 @@ prim beq_wf {| intro_resource []; eqcd_resource |} 'H :
    sequent ['ext] { 'H >- beq_int{'a; 'b} = beq_int{'a1; 'b1} in bool } = it
 (*! @docoff *)
 
-interactive lt_squashElimination 'H :
+interactive lt_squashStable {| squash_resource |} 'H :
    sequent [squash] { 'H >- 'a < 'b } -->
-   sequent ['ext] { 'H >- 'a < 'b }
+   sequent ['ext] { 'H >- it IN ('a < 'b) }
 
 interactive lt_wf {| intro_resource [] |} 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    [wf] sequent [squash] { 'H >- 'b IN int } -->
    sequent ['ext] { 'H >- "type"{lt{'a; 'b}} }
-
-(************************************************************
- * SQUASH STABILITY
- ************************************************************)
-
-(*
- * lt is squash stable
- *)
-let squash_lt p =
-   lt_squashElimination (Sequent.hyp_count_addr p) p
-
-let squash_resource = Mp_resource.improve squash_resource (lt_term, squash_lt)
 
 (*!
  * @begin[doc]

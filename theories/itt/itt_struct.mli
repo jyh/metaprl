@@ -114,6 +114,13 @@ rule hypSubstitution 'H 'J ('t1 = 't2 in 'T2) bind{y. 'A['y]} 'z :
    sequent [squash] { 'H; x: 'A['t1]; 'J['x]; z: 'T2 >- "type"{'A['z]} } -->
    sequent ['ext]  { 'H; x: 'A['t1]; 'J['x] >- 'T1['x] }
 
+(*
+ * Typehood.
+ *)
+rule equalityTypeIsType 'H 'a 'b :
+   sequent [squash] { 'H >- 'a = 'b in 'T } -->
+   sequent ['ext] { 'H >- "type"{'T} }
+
 (************************************************************************
  * TACTICS                                                              *
  ************************************************************************)
@@ -133,6 +140,8 @@ topval hypSubstT : int -> int -> tactic
 topval revHypSubstT : int -> int -> tactic
 
 topval replaceHypT : term -> int -> tactic
+
+topval equalTypeT : term -> term -> tactic
 
 (*
  * -*-

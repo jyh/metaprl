@@ -221,6 +221,17 @@ prim hypSubstitution 'H 'J ('t1 = 't2 in 'T2) bind{y. 'A['y]} 'z :
    sequent ['ext] { 'H; x: 'A['t1]; 'J['x] >- 'T1['x] } =
    't
 
+(*!************************************************************************
+ * @begin[doc]
+ * @thysubsection{Equality in a type}
+ *
+ * Equality in any term $T$ means that $T$ is a type.
+ * @end[doc]
+ *)
+interactive equalityTypeIsType 'H 'a 'b :
+   [wf] sequent [squash] { 'H >- 'a = 'b in 'T } -->
+   sequent ['ext] { 'H >- "type"{'T} }
+
 (************************************************************************
  * TACTICS                                                              *
  ************************************************************************)
@@ -457,6 +468,12 @@ let trivial_resource =
         auto_prec = trivial_prec;
         auto_tac = onSomeHypT nthHypT
       }
+
+(*
+ * Typehood from equality.
+ *)
+let equalTypeT a b p =
+   equalityTypeIsType (Sequent.hyp_count_addr p) a b p
 
 (*
  * -*-

@@ -5834,7 +5834,7 @@ T	t2111	o2099 b2105 b2110
 B	b2111	t2111
 T	t2112	o2099 b2103 b2111
 B	b2112	t2112
-P	p2112	String "squash_equalT thenT assumT 1 thenT rwh unfold_fequalp (-1) thenT dT (-1)"
+P	p2112	String "sqsquashT thenT assumT 1 thenT rwh unfold_fequalp (-1) thenT dT (-1)"
 O	o2112	ext_rule p2112
 T	t2113	o b2106 b4
 B	b2113	t2113
@@ -6009,7 +6009,7 @@ T	t2181	o2099 b2105 b2181
 B	b2182	t2181
 T	t2182	o2099 b2103 b2182
 B	b2183	t2182
-P	p2183	String "rwh unfold_assert 0 thenT squash_equalT thenT rwh fold_assert 0"
+P	p2183	String sqsquashT
 O	o2183	ext_rule p2183
 T	t2183	o b2104 b4
 B	b2184	t2183
@@ -7753,7 +7753,7 @@ T	t2905	o b2901 b2905
 B	b2906	t2905
 T	t2906	o1378 b2896 b2906
 B	b2907	t2906
-P	p2907	String "rwh unfold_assert 0 thenT squash_equalT thenT rwh fold_assert 0 thenT autoT"
+P	p2907	String "rwh unfold_assert 0 thenT squashT thenT rwh fold_assert 0 thenT autoT"
 O	o2907	ext_rule p2907
 T	t2907	o1378 b2901 b4
 B	b2908	t2907
@@ -8745,7 +8745,7 @@ T	t3326	o b3326 b4
 B	b3327	t3326
 T	t3327	o1378 b3321 b3327
 B	b3328	t3327
-P	p3328	String "rwh unfold_assert 0 thenT squash_equalT thenT rwh fold_assert 0 thenT trivialT"
+P	p3328	String "rwh unfold_assert 0 thenT squashT thenT rwh fold_assert 0 thenT trivialT"
 O	o3328	ext_rule p3328
 T	t3328	o1378 b3326 b4
 B	b3329	t3328
@@ -10678,7 +10678,7 @@ T	t4123	o b4123 b4
 B	b4124	t4123
 T	t4124	o1378 b4118 b4124
 B	b4125	t4124
-P	p4125	String "squash_equalT thenT autoT"
+P	p4125	String "autoT"
 O	o4125	ext_rule p4125
 T	t4125	o1378 b4123 b4
 B	b4126	t4125
@@ -18114,7 +18114,7 @@ T	t7308	o b7304 b7308
 B	b7309	t7308
 T	t7309	o1378 b7301 b7309
 B	b7310	t7309
-P	p7310	String squash_equalT
+P	p7310	String squashT
 O	o7310	ext_rule p7310
 T	t7311	o1380 b7311 b7290
 B	b7312	t7311
@@ -22585,7 +22585,7 @@ T	t9215	o2099 b2103 b9214
 B	b9215	t9215
 T	t9216	o2099 b2648 b9215
 B	b9216	t9216
-P	p9216	String squash_typeT
+P	p9216	String squashT
 O	o9216	ext_rule p9216
 T	t9217	o1380 b9213 b3664
 B	b9217	t9217
@@ -25247,7 +25247,7 @@ T	t10354	o b10354 b4
 B	b10355	t10354
 T	t10355	o1378 b10351 b10355
 B	b10356	t10355
-P	p10356	String "squash_equalT thenT backThruAssumT 4 thenT autoT"
+P	p10356	String "squashT thenT backThruAssumT 4 thenT autoT"
 O	o10356	ext_rule p10356
 S	s10356	t2102 h h9551 h2723 h9557
 G	s10356	t9888
@@ -28498,7 +28498,7 @@ T	t11820	o b11820 b4
 B	b11821	t11820
 T	t14168	o1378 b3872 b11821
 B	b14168	t14168
-P	p11822	String "thinAllT 2 3 thenT rwh unfold_assert 0 thenT squash_equalT thenT rwh fold_assert 0"
+P	p11822	String "thinAllT 2 3 thenT rwh unfold_assert 0 thenT squashT thenT rwh fold_assert 0"
 O	o11822	ext_rule p11822
 T	t11822	o1380 b4151 b11753
 B	b11823	t11822
@@ -28649,7 +28649,7 @@ T	t11903	o b11903 b4
 B	b11904	t11903
 T	t14189	o1378 b4283 b11904
 B	b14189	t14189
-P	p11905	String "thinAllT 2 3 thenT rwh unfold_assert 0 thenT squash_equalT thenT rwh fold_assert 0 thenT trivialT"
+P	p11905	String "thinAllT 2 3 thenT rwh unfold_assert 0 thenT squashT thenT rwh fold_assert 0 thenT trivialT"
 O	o11905	ext_rule p11905
 T	t11905	o1378 b11903 b4
 B	b11906	t11905
@@ -29663,7 +29663,7 @@ T	t12410	o b12410 b4
 B	b12411	t12410
 T	t14321	o1378 b5963 b12411
 B	b14321	t14321
-P	p12412	String "thinAllT 2 3 thenT squash_assertT thenT trivialT"
+P	p12412	String "thinAllT 2 3 thenT autoT"
 O	o12412	ext_rule p12412
 T	t12412	o1378 b12410 b4
 B	b12413	t12412

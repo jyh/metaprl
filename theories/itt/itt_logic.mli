@@ -158,8 +158,6 @@ topval backThruAssumT : int -> tactic
 topval moveToConclT : int -> tactic
 topval moveToConclVarsT : string list -> tactic
 
-topval squash_falseT : tactic
-
 topval genAssumT : int list -> tactic
 
 (* jprover for itt_logic *)

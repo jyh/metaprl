@@ -7220,7 +7220,7 @@ T	t1185	o645 b1178 b4
 B	b1186	t1185
 T	t1186	o857 b644 b1186 b4 b4
 B	b1187	t1186
-P	p1188	String "withT <<'a>> (dT 0) thenT trivialT"
+P	p1188	String autoT
 O	o1188	ext_rule p1188
 T	t1188	o645 b1181 b4
 B	b1188	t1188

@@ -18800,7 +18800,7 @@ T	t5453	o663 b5452
 B	b5453	t5453
 T	t5454	o662 b5451 b5453
 B	b5454	t5454
-P	p5454	String "assertT <<\"false\">> thenT autoT thenT squash_falseT thenT autoT"
+P	p5454	String "assertT <<\"false\">> thenT autoT"
 O	o5454	ext_rule p5454
 T	t5455	o b5450 b4
 B	b5455	t5455

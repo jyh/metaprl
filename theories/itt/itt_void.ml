@@ -134,21 +134,9 @@ prim voidType {| intro_resource [] |} 'H :
  * $@void$ type produces no cases.
  * @end[doc]
  *)
-prim voidElimination {| elim_resource [] |} 'H 'J :
+prim voidElimination {| elim_resource []; squash_resource |} 'H 'J :
    sequent ['ext] { 'H; x: void; 'J['x] >- 'C['x] } =
    it
-
-(*!
- * @begin[doc]
- * @thysubsection{Squash}
- *
- * Any proof of void can be squashed because the proof will never be used.
- * This rule is added to the @hreftactic[squashT] resource.
- * @end[doc]
- *)
-interactive void_squashElimination 'H :
-   sequent [squash] { 'H >- void } -->
-   sequent ['ext] { 'H >- void }
 
 (*!
  * @begin[doc]
@@ -162,15 +150,6 @@ interactive void_squashElimination 'H :
 interactive void_subtype 'H :
    sequent ['ext] { 'H >- subtype{void; 'T} }
 (*! @docoff *)
-
-(************************************************************************
- * SQUASH STABILITY                                                     *
- ************************************************************************)
-
-let squash_voidT p =
-   void_squashElimination (hyp_count_addr p) p
-
-let squash_resource = Mp_resource.improve squash_resource (void_term, squash_voidT)
 
 (************************************************************************
  * SUBTYPING                                                            *

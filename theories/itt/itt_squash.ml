@@ -2,6 +2,7 @@
  * @begin[spelling]
  * squashT unhiding unsquashed unsquashEqual unsquashGoalEqual SelectOption
  * autoT squashElim squashFormation squashFromAny squashStable unsquashEqualWeak
+ * SqStable SqUnsquash SqUnsquashGoal tac
  * @end[spelling]
  *
  * @begin[doc]
@@ -114,10 +115,12 @@ include Itt_struct
 open Printf
 open Mp_debug
 open Refiner.Refiner
+open TermType
 open Term
 open TermOp
-open TermMan
 open TermSubst
+open TermMan
+open TermMeta
 open RefineError
 open Term_stable
 open Mp_resource
@@ -128,6 +131,7 @@ open Tactic_type.Sequent
 open Var
 
 open Base_dtactic
+open Base_auto_tactic
 
 open Itt_struct
 open Itt_equal
@@ -252,6 +256,11 @@ interactive unsquashEqual 'H 'J :
    sequent [squash] { 'H; u: 'P; 'J[it] >- 'x[it] = 'y[it] in 'A[it] } -->
    sequent ['ext] { 'H; u: squash{'P}; 'J['u] >- 'x['u] = 'y['u] in 'A['u] }
 
+(*! docoff *)
+interactive unsquashWWitness 'H 'J 't:
+   sequent [squash] { 'H; u: 'P; 'J[it] >- 't IN 'A[it] } -->
+   sequent ['ext] { 'H; u: squash{'P}; 'J['u] >- 'A['u] }
+
 (*!
  * @begin[doc]
  * Next, we prove that equality witness can always be recovered on meta-level.
@@ -277,8 +286,7 @@ interactive squashMemberEquality {| intro_resource []; eqcd_resource |} 'H :
  * to be true.
  * @end[doc]
  *)
-
-interactive squashStable 'H 'J 't :
+interactive squashStable 'H 't :
    [main] sequent [squash] { 'H >- squash{'A} } -->
    [wf] sequent [squash] { 'H; x: 'A >- 't IN 'A } -->
    sequent ['ext] { 'H >- 'A}
@@ -291,9 +299,38 @@ interactive unsquash 'H 'J :
    sequent [squash] { 'H; u: 'P; 'J[it] >- squash{'T[it]} } -->
    sequent ['ext] { 'H; u: squash{'P}; 'J['u] >- squash{'T['u]} }
 
-(*!
- * @docoff
- *
+(*! @docoff *)
+interactive unsquashStableGoal 'H 'J 'x :
+   sequent [squash] { 'H; u: 'A; 'J[it] >- 'C[it] } -->
+   sequent ['ext] { 'H; u: squash{'A}; 'J['u]; x: squash{'C['u]} >- 'C['u] } -->
+   sequent ['ext] { 'H; u: squash{'A}; 'J['u] >- 'C['u]}
+
+let unsquashStableGoalT i p =
+   let h, j = Sequent.hyp_indices p i in
+   let x = maybe_new_vars1 p "x" in
+   unsquashStableGoal h j x p
+
+interactive unsquashHypGoalStable 'H 'J :
+   sequent ['ext] { 'H; u: 'A; 'J[it] >- 'C[it] } -->
+   sequent ['ext] { 'H; u: squash{'A}; 'J['u] >- 'A } -->
+   sequent ['ext] { 'H; u: squash{'A}; 'J['u] >- 'C['u]}
+
+interactive unsquashStable 'H 'J 't 'x :
+   sequent ['ext] { 'H; u: 'A; 'J[it] >- 'C[it] } -->
+   sequent [squash] { 'H; u: squash{'A}; 'J['u]; x: 'A >- 't IN 'A } -->
+   sequent ['ext] { 'H; u: squash{'A}; 'J['u] >- 'C['u]}
+
+let unsquashStableT i t p =
+   let h, j = Sequent.hyp_indices p i in
+   let x = maybe_new_vars1 p "x"in
+   unsquashStable h j t x p
+
+interactive squashAssert 'H 'A :
+   sequent [squash] { 'H >- squash{'A} } -->
+   sequent ['ext] { 'H; x: squash{'A} >- 'C } -->
+   sequent ['ext] { 'H >- 'C }
+
+(*
  * H >- Ui ext squash(A)
  * by squashFormation
  * H >- Ui ext A
@@ -306,77 +343,53 @@ interactive squashFormation 'H :
  * TYPES                                                                *
  ************************************************************************)
 
-(*
- * Keep a table of tactics to prove squash stability.
- *)
-type squash_data = tactic term_stable
-
 (*!
  * @begin[doc]
  * @resources
  *
- * The squash resource represents data using a table that maps
- * goal terms to the tactic that performs squash inference on
- * goals of that form.  The argument @code{term * tactic} specifies
- * the matching term and the tactic.
+ * The squash resource keeps 3 kind of tactics, as described by the
+ * @tt{squash_info} type. The $@tt{SqUnsquash}(T,@i{tac})$ is used when @i{tac i}
+ * is capable turning @i{i}-th hypothesis from $@squash{T}$ into $T$.
+ * The $@tt{SqStable}(T,t,@i{tac})$ variant is used when @i{tac} is capable
+ * of proving $@sequent{;H;t @in T}$ from $@sequent{;H;T}$. Finally,
+ * the $@tt{SqUnsquashGoal}(T,@i{tac})$ is used when @i{tac i} can unsquash
+ * @i{i}-th hypothesis provided the conclusion of the sequent is $T$.
+ *
+ * The only way to improve the @tt{squash_resource} outside of the
+ * @tt{Itt_squash} theory is to use @it{resource annotations}. Currently, the
+ * following kinds of rules are recognized by the @tt{squash_resource} annotations:
+ * $@sequent{squash;H;A}@space@leftrightarrow@space@sequent{ext;H;t @in A}$,
+ * $@sequent{ext;H;t @in A}$ and $@sequent{ext;{H; x@colon A; J[x]};C[x]}$
+ * (e.g $A$ is a falsity), although it is possible
+ * to add support for other kinds of rules if necessary.
  * @end[doc]
  *)
-resource (term * tactic, tactic, squash_data, unit) squash_resource
+type squash_info =
+   SqUnsquash of term * (int -> tactic)
+ | SqStable of term * term * tactic
+ | SqUnsquashGoal of term * (int -> tactic)
+
+(*!
+ * @begin[doc]
+ *
+ * The squash resource represents data using 3 tables for
+ * each of the kinds of data.
+ * @end[doc]
+ *)
+type squash_data =
+   (int -> tactic) term_stable
+ * (term * tactic) term_stable
+ * (int -> tactic) term_stable
+
+resource (squash_info, int -> tactic, squash_data, Tactic.pre_tactic) squash_resource
 (*! @docoff *)
 
 (************************************************************************
- * IMPLEMENTATION                                                       *
- ************************************************************************)
-
-(*
- * Extract an SQUASH tactic from the data.
- * The tactic checks for an optable.
- *)
-let extract_data base =
-   let tbl = sextract base in
-   let squash p =
-      let t = concl p in
-         try (slookup tbl t) p with
-            Not_found ->
-               raise (RefineError ("squash", StringTermError ("SQUASH tactic doesn't know about ", t)))
-   in
-      squash
-
-(*
- * Wrap up the joiner.
- *)
-let join_resource = join_stables
-
-let extract_resource = extract_data
-
-let improve_resource data (t, tac) =
-   sinsert data t tac
-
-let close_resource rsrc modname =
-   rsrc
-
-(*
- * Resource.
- *)
-let squash_resource =
-   Mp_resource.create (**)
-      { resource_join = join_resource;
-        resource_extract = extract_resource;
-        resource_improve = improve_resource;
-        resource_improve_arg = Mp_resource.improve_arg_fail "squash_resource";
-        resource_close = close_resource
-      }
-      (new_stable ())
-
-let get_resource modname =
-   Mp_resource.find squash_resource modname
-
-(************************************************************************
- * PRIMITIVES                                                           *
+ * Sequent Squash PRIMITIVES                                            *
  ************************************************************************)
 
 let sqsquash_term = << squash >>
-let sqsquash_opname = opname_of_term squash_term
+let sqsquash_opname = opname_of_term sqsquash_term
 
 (*
  * Is a goal squashed?
@@ -401,6 +414,176 @@ let is_squash_goal p =
    is_squash_sequent (goal p)
 
 (************************************************************************
+ * IMPLEMENTATION                                                       *
+ ************************************************************************)
+
+(*
+ * Extract an SQUASH tactic from the data.
+ *)
+let extract_data (base1, base2, base3) =
+   let tbl1 = sextract base1 in
+   let tbl2 = sextract base2 in
+   let tbl3 = sextract base3 in
+   let unsquash i p =
+      let conc = concl p in
+      try (slookup tbl3 conc) i p
+      with Not_found -> begin
+      let hyp = dest_squash (snd (nth_hyp p i)) in
+      try (slookup tbl1 hyp) i p with Not_found -> begin
+      try
+         let t, tac = slookup tbl2 conc in
+         let h, j = Sequent.hyp_indices p i in
+            (unsquashWWitness h j t thenT tac) p
+      with Not_found -> begin
+      try
+         let t, tac = slookup tbl2 hyp in
+         (unsquashStableT i t thenLT [
+            idT;
+            tac thenT trivialT
+         ]) p
+      with Not_found -> begin
+      try
+         let tac = slookup tbl3 hyp in
+         let h, j = Sequent.hyp_indices p i in
+         (unsquashHypGoalStable h j thenLT [
+            idT;
+            tac i thenT trivialT
+         ]) p
+      with Not_found -> begin
+      try
+         let tac = slookup tbl1 conc in
+            (unsquashStableGoalT i thenLT [idT; tac (-1) thenT trivialT ]) p
+      with Not_found ->
+         raise (RefineError ("squash", StringTermError ("squash tactic doesn't know about ", hyp)))
+      end end end end end
+   in
+      unsquash
+
+(*
+ * Wrap up the joiner.
+ *)
+let join_resource (tbl1, tbl2, tbl3) (tbl1', tbl2', tbl3') =
+   join_stables tbl1 tbl1',
+   join_stables tbl2 tbl2',
+   join_stables tbl3 tbl3'
+
+let improve_resource (tbl1, tbl2, tbl3) = function
+   SqUnsquash(t, tac) -> sinsert tbl1 t tac, tbl2, tbl3
+ | SqStable(t, t', tac) -> tbl1, sinsert tbl2 t (t', tac), tbl3
+ | SqUnsquashGoal(t, tac) -> tbl1, tbl2, sinsert tbl3 t tac
+
+let improve_arg tables name contexts vars args _ stmt tac =
+   let assums, goal = unzip_mfunction stmt in
+   let egoal = TermMan.explode_sequent goal in
+   let concl = SeqGoal.get egoal.sequent_goals 0 in
+   match contexts, vars, args, assums, (SeqHyp.to_list egoal.sequent_hyps) with
+      (* H |- T --> H |- a in T *)
+      [|h|], [||], [], [_, _, assum], [Context(h',[])] when
+         is_equal_term concl && h' = h &&
+         let t,a,b = dest_equal concl in
+         alpha_equal a b &&
+         let eassum = TermMan.explode_sequent assum in
+         SeqHyp.get eassum.sequent_hyps 0 = Context(h,[]) &&
+         alpha_equal (SeqGoal.get eassum.sequent_goals 0) t
+      ->
+         if is_squash_sequent goal then
+            raise (Invalid_argument "squash_stable resource annotation: conclusion sequent should not be squashed");
+         if not (is_squash_sequent assum) then
+            raise (Invalid_argument "squash_stable resource annotation: assumption sequent should be squashed");
+         let t,a,_ = dest_equal concl in
+         let tac p =
+            let addr = Sequent.hyp_count_addr p in
+            Tactic_type.Tactic.tactic_of_rule tac ([|addr|], [||]) [] p
+         in
+            improve_resource tables (SqStable(t, a, tac))
+      (* H |- a in T *)
+    | [|h|], [||], [], [], [Context(h',[])] when
+         is_equal_term concl && h = h' &&
+         (let t,a,b = dest_equal concl in (alpha_equal a b) )
+      ->
+         if is_squash_sequent goal then
+            raise (Invalid_argument "squash_stable resource annotation: conclusion sequent should not be squashed");
+         let t,a,_ = dest_equal concl in
+         let tac p =
+            let addr = Sequent.hyp_count_addr p in
+            Tactic_type.Tactic.tactic_of_rule tac ([|addr|], [||]) [] p
+         in
+            improve_resource tables (SqStable(t, a, tac))
+      (* H; x:T; J[x] |- C[x] *)
+    | [| h; j |], [||], [], [], [Context(h',[]); Hypothesis(v,t); Context(j', [v'])] when
+         h = h' && j = j' && is_var_term v' && (dest_var v') = v &&
+         is_so_var_term concl &&
+         begin match dest_so_var concl with
+            _, [v''] -> alpha_equal v' v''
+          | _ -> false
+         end
+      ->
+         if is_squash_sequent goal then
+            raise (Invalid_argument "squash_stable resource annotation: conclusion sequent should not be squashed");
+         let tac i p =
+            let h, j = Sequent.hyp_indices p i in
+            Tactic_type.Tactic.tactic_of_rule tac ([| h; j|], [||]) [] p
+         in
+            improve_resource tables (SqUnsquash(t, tac))
+    | _ ->
+         raise (Invalid_argument "squash_stable resource annotation")
+
+let close_resource rsrc modname =
+   rsrc
+
+(*
+ * Resource.
+ *)
+let squash_resource =
+   Mp_resource.create (**)
+      { resource_join = join_resource;
+        resource_extract = extract_data;
+        resource_improve = improve_resource;
+        resource_improve_arg = improve_arg;
+        resource_close = close_resource
+      }
+      (new_stable (), new_stable (), new_stable ())
+
+let get_resource modname =
+   Mp_resource.find squash_resource modname
+
+(********************************************************************
+ * squash_resource info for base types                              *
+ ********************************************************************)
+
+(* For efficiency, we provide several entries for the most common types *)
+
+let unsquashHypEqualT i p =
+   let h, j = Sequent.hyp_indices p i in
+   unsquashHypEqual h j p
+
+let squash_resource =
+   Mp_resource.improve squash_resource (SqUnsquash(equal_term, unsquashHypEqualT))
+
+let squash_resource =
+   Mp_resource.improve squash_resource (SqStable(equal_term, <<it>>, dT 0))
+
+let unsquashEqualT i p =
+   let h, j = Sequent.hyp_indices p i in
+   unsquashEqual h j p
+
+let squash_resource =
+   Mp_resource.improve squash_resource (SqUnsquashGoal(equal_term, unsquashEqualT))
+
+let unsquashT i p =
+   let h, j = Sequent.hyp_indices p i in
+   unsquash h j p
+
+let squash_resource =
+   Mp_resource.improve squash_resource (SqStable(squash_term, <<it>>, dT 0))
+
+let squash_resource =
+    Mp_resource.improve squash_resource (SqUnsquashGoal(squash_term, unsquashEqualT))
+
+let squash_resource =
+   Mp_resource.improve squash_resource (SqStable(type_term, <<it>>, dT 0))
+
+(************************************************************************
  * TACTICS                                                              *
  ************************************************************************)
 
@@ -416,27 +599,61 @@ let is_squash_goal p =
  * @comment{Squash a goal}
  * @end[doc]
  *)
-let squashT p =
-   Sequent.get_tactic_arg p "squash" p
-
 let unsquashT i p =
-   let t = Sequent.concl p in
-   let j, k = Sequent.hyp_indices p i in
-      if is_equal_term t then
-         unsquashEqual j k p
-      else if is_squash_term t then
-         unsquash j k p
-      else (* if is_equal_term (dest_squash (fst (Sequent.nth_hyp p i)) then *)
-         unsquashHypEqual j k p
+   Sequent.get_int_tactic_arg p "squash" i p
+
+let squashT p =
+   (squashAssert (hyp_count_addr p) (concl p) thenLT
+      [ idT; unsquashT (-1) thenT trivialT ]) p
 
 let elim_resource =
    Mp_resource.improve elim_resource (squash_term, unsquashT)
 
-let sqsquashT =
-   squashT thenT dT 0
+let rec unsquashAllT_aux i seq hyps p =
+   if i > hyps then idT p else
+   match SeqHyp.get seq (pred i) with
+      Hypothesis (_, hyp) when is_squash_term hyp ->
+         (tryT (unsquashT i) thenT unsquashAllT_aux (succ i) seq hyps) p
+    | _ ->
+         unsquashAllT_aux (succ i) seq hyps p
+
+let unsquashAllT p =
+   unsquashAllT_aux 1 (explode_sequent p).sequent_hyps (hyp_count p) p
+
+let sqsquashT p =
+   if is_squash_goal p then
+      raise (RefineError("sqsquashT", StringError("goal sequent already squashed")))
+    else
+      let h = hyp_count_addr p in
+      (squashT thenT squashMemberFormation h) p
 
 let unsqsquashT t p =
-   squashFromAny (Sequent.hyp_count_addr p) t p
+   squashFromAny (hyp_count_addr p) t p
+
+(************************************************************************
+ * AUTO TACTIC                                                          *
+ ************************************************************************)
+
+let trysquashT p =
+   ( if is_squash_term (concl p) then
+      selT 0 (dT 0) thenT completeT autoT
+     else idT
+   ) p
+
+let allSquashT =
+   progressT (unsquashAllT thenT tryT sqsquashT thenT tryT trysquashT)
+
+let auto_none p = []
+
+let allSquashT_auto p =
+   [allSquashT, AutoTac auto_none]
+
+let auto_resource =
+   Mp_resource.improve auto_resource (**)
+      { auto_name = "Itt_squash.allSquashT";
+        auto_prec = trivial_prec;
+        auto_tac = AutoTac allSquashT_auto
+      }
 
 (*
  * -*-

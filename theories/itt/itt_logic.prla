@@ -1404,7 +1404,7 @@ T	t1114	o1015 b1114
 B	b1115	t1114
 T	t1115	o1110 b1113 b1115
 B	b1116	t1115
-P	p1116	String "rwh unfold_false 0 thenT squash_voidT thenT rwh fold_false 0 thenT trivialT"
+P	p1116	String "rwh unfold_false 0 thenT sqsquashT thenT rwh fold_false 0 thenT trivialT"
 O	o1116	ext_rule p1116
 T	t1116	o b1112 b4
 B	b1117	t1116

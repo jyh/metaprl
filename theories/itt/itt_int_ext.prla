@@ -5718,7 +5718,7 @@ T	t3390	o b3386 b3390
 B	b3391	t3390
 T	t3391	o2188 b3382 b3391
 B	b3392	t3391
-P	p3392	String "sqeq2rwT (mul_Commut 2)"
+P	p3392	String "mul_Commut 2 thenT trivialT"
 O	o3392	ext_rule p3392
 T	t3392	o2188 b3386 b17
 B	b3393	t3392
@@ -6347,7 +6347,7 @@ T	t3430	o b3426 b3430
 B	b3431	t3430
 T	t3431	o2188 b3422 b3431
 B	b3432	t3431
-P	p3432	String "sqeq2rwT (mul_Assoc 2)"
+P	p3432	String "mul_Assoc 2 thenT trivialT"
 O	o3432	ext_rule p3432
 T	t3432	o2188 b3426 b17
 B	b3433	t3432
@@ -6432,7 +6432,7 @@ T	t3466	o b3462 b3466
 B	b3467	t3466
 T	t3467	o2188 b3458 b3467
 B	b3468	t3467
-P	p3468	String "sqeq2rwT (mul_add_Distrib 2)"
+P	p3468	String "mul_add_Distrib 2 thenT trivialT"
 O	o3468	ext_rule p3468
 T	t3468	o2188 b3462 b17
 B	b3469	t3468

@@ -43,6 +43,7 @@ include Itt_struct
 
 open Refiner.Refiner.Term
 
+open Tactic_type
 open Tactic_type.Sequent
 open Tactic_type.Tacticals
 
@@ -81,7 +82,7 @@ rule squashMemberEquality 'H :
    [wf] sequent [squash] { 'H >- squash{'A} } -->
    sequent ['ext] { 'H >- it IN squash{'A} }
 
-rule squashStable 'H 'J 't :
+rule squashStable 'H 't :
    [main] sequent [squash] { 'H >- squash{'A} } -->
    [wf] sequent [squash] { 'H; x: 'A >- 't IN 'A } -->
    sequent ['ext] { 'H >- 'A}
@@ -115,12 +116,13 @@ val mk_squash_term : term -> term
 (*
  * Internal type.
  *)
+type squash_info
 type squash_data
 
 (*
  * The resource itself.
  *)
-resource (term * tactic, tactic, squash_data, unit) squash_resource
+resource (squash_info, int -> tactic, squash_data, Tactic.pre_tactic) squash_resource
 
 (*
  * Access to resources from the toploop.
@@ -137,6 +139,7 @@ val get_squash_arg : term -> term
 (* Squashing and unsquashing *)
 topval squashT : tactic
 topval unsquashT : int -> tactic
+topval unsquashAllT : tactic
 
 (* Sequent squash *)
 topval sqsquashT : tactic

@@ -139,10 +139,6 @@ rule equalityType 'H :
    sequent [squash] { 'H >- 'b IN 'T } -->
    sequent ['ext] { 'H >- "type"{. 'a = 'b in 'T } }
 
-rule equalityTypeIsType 'H 'a 'b :
-   sequent [squash] { 'H >- 'a = 'b in 'T } -->
-   sequent ['ext] { 'H >- "type"{'T} }
-
 (*
  * H >- it in (a = b in T)
  * by axiomMember
@@ -152,6 +148,10 @@ rule equalityTypeIsType 'H 'a 'b :
 rule axiomMember 'H :
    sequent [squash] { 'H >- 'a = 'b in 'T } -->
    sequent ['ext] { 'H >- it IN ('a = 'b in 'T) }
+
+rule type_axiomMember 'H :
+   sequent [squash] { 'H >- "type"{'T} } -->
+   sequent ['ext] { 'H >- it IN "type"{'T} }
 
 (*
  * H, x: a = b in T, J[x] >- C[x]
@@ -171,17 +171,6 @@ rule equalityElimination 'H 'J :
  *)
 rule typeEquality 'H :
    sequent [squash] { 'H >- 'T } -->
-   sequent ['ext] { 'H >- "type"{'T} }
-
-(*
- * Squash elim.
- *)
-rule equality_squashElimination 'H :
-   sequent [squash] { 'H >- 'a = 'b in 'T } -->
-   sequent ['ext] { 'H >- 'a = 'b in 'T }
-
-rule type_squashElimination 'H :
-   sequent [squash] { 'H >- "type"{'T} } -->
    sequent ['ext] { 'H >- "type"{'T} }
 
 (*
@@ -292,7 +281,6 @@ topval equalAssumT : int -> tactic
 topval equalRefT : term -> tactic
 topval equalSymT : tactic
 topval equalTransT : term -> tactic
-topval equalTypeT : term -> term -> tactic
 
 topval univTypeT : term -> tactic
 topval univAssumT : int -> tactic

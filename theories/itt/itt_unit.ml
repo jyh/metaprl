@@ -137,7 +137,7 @@ prim unitType {| intro_resource [] |} 'H :
  * The unique inhabitant of the $@unit$ type is the term $@it$.
  * @end[doc]
  *)
-prim unit_memberEquality {| intro_resource []; eqcd_resource |} 'H :
+prim unit_memberEquality {| intro_resource []; eqcd_resource; squash_resource |} 'H :
    sequent ['ext] { 'H >- it IN unit } =
    it
 
@@ -166,45 +166,14 @@ prim unitElimination {| elim_resource [ThinOption thinT] |} 'H 'J :
 
 (*!
  * @begin[doc]
- * @thysubsection{Squash}
- * The proof extract for a proof on $@unit$ can always be omitted;
- * the proof is always the term $@it$.  This rule is added to the
- * @hreftactic[squashT] resource.
- * @end[doc]
- *)
-interactive unit_squashElimination 'H :
-   sequent [squash] { 'H >- unit } -->
-   sequent ['ext] { 'H >- unit }
-
-(*!
- * @begin[doc]
  * @thysubsection{Rewriting}
  * Two terms in $@unit$ are always computationally equivalent.
- *
- * This rule is added to the @hreftactic[dT] resource for
- * goals that match $t @longleftrightarrow @unit$.
  * @end[doc]
  *)
-prim unitSqequal {| intro_resource [] |} 'H :
+prim unitSqequal 'H :
    sequent [squash] { 'H >- 'x = 'y in unit } -->
    sequent ['ext] { 'H >- 'x ~ 'y } = it
 (*! @docoff *)
-
-(************************************************************************
- * TACTICS                                                              *
- ************************************************************************)
-
-(************************************************************************
- * SQUASH STABILITY                                                     *
- ************************************************************************)
-
-(*
- * Unit is squash stable.
- *)
-let squash_unit p =
-   unit_squashElimination (hyp_count_addr p) p
-
-let squash_resource = Mp_resource.improve squash_resource (unit_term, squash_unit)
 
 (************************************************************************
  * TYPE INFERENCE                                                       *

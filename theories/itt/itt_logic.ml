@@ -208,12 +208,8 @@ interactive false_member {| intro_resource [] |} 'H :
 interactive false_type {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- "type"{."false"} }
 
-interactive false_elim {| elim_resource [ThinOption thinT] |} 'H 'J :
+interactive false_elim {| elim_resource [ThinOption thinT]; squash_resource |} 'H 'J :
    sequent ['ext] { 'H; x: "false"; 'J['x] >- 'C['x] }
-
-interactive false_squash 'H :
-   sequent [squash] { 'H >- "false" } -->
-   sequent ['ext] { 'H >- "false" }
 
 (*!
  * @begin[doc]
@@ -692,12 +688,6 @@ let not_opname = opname_of_term not_term
 let is_not_term = is_dep0_term not_opname
 let dest_not = dest_dep0_term not_opname
 let mk_not_term = mk_dep0_term not_opname
-
-(*
- * Squash elimination.
- *)
-let squash_falseT p =
-   false_squash (Sequent.hyp_count_addr p) p
 
 (************************************************************************
  * TYPE INFERENCE                                                       *

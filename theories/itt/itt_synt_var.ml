@@ -55,6 +55,8 @@ declare right{'v}
 define unfold_depth:
    depth{'v} <--> left{'v} +@ right{'v} +@ 1
 
+define unfold_var: Var{'n} <--> {v:Var| depth{'v} = 'n in int }
+
 define unfold_eq:
    is_eq{'v;'u} <--> (left{'v} =@ left{'u})
 
@@ -134,5 +136,26 @@ interactive rightSquiggle {| intro [] |} :
 interactive varSquiggle {| nth_hyp |} :
    sequent { <H> >- 'b1 = 'b2 in Var } -->
    sequent { <H> >- 'b1 ~ 'b2 }
+
+
+(************************************************************************
+ * Substitution                                                         *
+ ************************************************************************)
+
+define unfold_subst_var: subst_var{'u;'v;'s} <-->
+   if is_eq{'u;'v} then 's
+   else if left{'u} <@ left{'v}
+     then var{left{'u}; right{'u} -@ 1}
+     else var{left{'u} -@ 1; right{'u}}
+
+interactive subst_var_wf {| intro [] |} :
+   sequent { <H> >- 'u in Var } -->
+   sequent { <H> >- 'v in Var } -->
+   sequent { <H> >- depth{'u} >= depth{'v} } -->
+   sequent { <H>; "assert"{is_eq{'u;'v}} >- 's in 'T } -->
+   sequent { <H> >- Var{depth{'u} -@ 1} subtype 'T } -->
+   sequent { <H> >- subst_var{'u;'v;'s} in 'T }
+
+
 
 doc <:doc< @docoff >>

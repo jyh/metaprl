@@ -42,8 +42,10 @@ extends Itt_nat
 
 
 declare Var
+declare Var{'n}
 declare var{'left; 'right}
 declare left{'v}
 declare right{'v}
 declare depth{'v}
 declare is_eq{'v;'u}
+declare subst_var{'u;'v;'s}

@@ -414,3 +414,30 @@ interactive same_op_trans 'b2:
 let sameOpSymT = same_op_sym
 let sameOpTransT = same_op_trans
 
+
+(************************************************************************
+ * Substitution                                                         *
+ ************************************************************************)
+
+define unfold_subst:
+subst{'t;'v;'s} <-->
+   fix{subst.lambda{t.
+    dest_bterm{'t;
+               u. subst_var{'u;'v;'s};
+               op,subterms. make_bterm{'op;map{lambda{x.'subst 'x}; 'subterms}} }
+      }} 't
+
+interactive subst_wf {| intro [] |} :
+   sequent { <H> >- 't in BTerm } -->
+   sequent { <H> >- 'v in Var } -->
+   sequent { <H> >- bdepth{'t} >= depth{'v} } -->
+   sequent { <H> >- 's in BTerm } -->
+   sequent { <H> >- subst_var{'t;'v;'s} in BTerm }
+
+interactive_rw subst_bdepth {| reduce |} :
+   ('t in BTerm)  -->
+   ('v in Var)  -->
+   (bdepth{'t} >= depth{'v})  -->
+   ('s in BTerm)  -->
+   bdepth{subst_var{'t;'v;'s}} <--> bdepth{'t} -@ 1
+

@@ -6769,7 +6769,7 @@ G	s2623	t2623
 B	b2623	s2623
 T	t2624	o2343 b2623
 B	b2624	t2624
-P	p2624	String "rwh unfold_vmap_type 0 thenT rwh unfold_vmap_nil 0 thenT rwh unfold_member 0"
+P	p2624	String "rwh unfold_vmap_type 0 thenT rwh unfold_vmap_nil 0"
 O	o2624	ext_rule p2624
 T	t2625	o2463 b654 b624
 S	s2625	t1534 h
@@ -7244,7 +7244,7 @@ T	t2828	o b2823 b2827
 B	b2828	t2828
 T	t2829	o1530 b2820 b2828
 B	b2829	t2829
-P	p2829	String "rwh unfold_member 0 thenT dT 0 thenT rwh fold_member 0 thenT autoT"
+P	p2829	String "autoT"
 O	o2829	ext_rule p2829
 T	t2830	o1530 b2823 b4
 B	b2830	t2830

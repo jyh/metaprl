@@ -233,7 +233,7 @@ interactive not_type {| intro [] |} 'H :
 
 interactive not_intro {| intro [] |} 'H 'x :
    [wf] sequent [squash] { 'H >- "type"{'t} } -->
-   [main] sequent ['ext] { 'H; x: 't >- "false" } -->
+   [main] sequent [squash] { 'H; x: 't >- "false" } -->
    sequent ['ext] { 'H >- "not"{'t} }
 
 interactive not_elim {| elim [] |} 'H 'J :
@@ -698,24 +698,17 @@ let mk_not_term = mk_dep0_term not_opname
  * TYPE INFERENCE                                                       *
  ************************************************************************)
 
-(*
- * Type of true, false.
- *)
-let resource typeinf += (true_term, infer_univ1)
-let resource typeinf += (false_term, infer_univ1)
-
-(*
- * Type of quantifiers.
- *)
-let resource typeinf += (all_term, infer_univ_dep0_dep1 dest_all)
-let resource typeinf += (exists_term, infer_univ_dep0_dep1 dest_exists)
-
-let resource typeinf += (or_term, infer_univ_dep0_dep0 dest_or)
-let resource typeinf += (and_term, infer_univ_dep0_dep0 dest_and)
-let resource typeinf += (implies_term, infer_univ_dep0_dep0 dest_implies)
-let resource typeinf += (iff_term, infer_univ_dep0_dep0 dest_iff)
-
-let resource typeinf += (not_term, Typeinf.infer_map dest_not)
+let resource typeinf += [
+   true_term, infer_univ1;
+   false_term, infer_univ1;
+   all_term, infer_univ_dep0_dep1 dest_all;
+   exists_term, infer_univ_dep0_dep1 dest_exists;
+   or_term, infer_univ_dep0_dep0 dest_or;
+   and_term, infer_univ_dep0_dep0 dest_and;
+   implies_term, infer_univ_dep0_dep0 dest_implies;
+   iff_term, infer_univ_dep0_dep0 dest_iff;
+   not_term, Typeinf.infer_map dest_not
+]
 
 (************************************************************************
  * AUTOMATION                                                           *

@@ -2739,7 +2739,7 @@ T	t1022	o b1003 b1021
 B	b1022	t1022
 T	t1023	o992 b996 b1022
 B	b1023	t1023
-P	p1023	String "rwh unfold_member 0 thenT autoT"
+P	p1023	String "autoT"
 O	o1023	ext_rule p1023
 P	p1024	String wf
 O	o1024	tactic_arg p1024
@@ -2758,7 +2758,7 @@ T	t1028	o b1028 b4
 B	b1029	t1028
 T	t1029	o992 b1003 b1029
 B	b1030	t1029
-P	p1030	String "rwh fold_member 0 thenT autoT"
+P	p1030	String "autoT"
 O	o1030	ext_rule p1030
 T	t1030	o992 b1028 b4
 B	b1031	t1030
@@ -5431,13 +5431,13 @@ T	t2136	o992 b2117 b4
 B	b2137	t2136
 T	t2137	o1131 b991 b2137 b4 b4
 B	b2138	t2137
-P	p2138	String "rwh unfold_member 0 thenT equalRefT << 'v2 >> thenT trivialT"
+P	p2138	String "equalRefT << 'v2 >> thenT trivialT"
 O	o2138	ext_rule p2138
 T	t2138	o992 b2120 b4
 B	b2139	t2138
 T	t2139	o2138 b991 b2139 b4 b4
 B	b2140	t2139
-P	p2140	String "rwh unfold_member 0 thenT equalRefT << 'v1 >>"
+P	p2140	String "thenT equalRefT << 'v1 >>"
 O	o2140	ext_rule p2140
 T	t2140	o1010 b732 b722 b721
 S	s2140	t1005 h

@@ -4395,7 +4395,7 @@ T	t1675	o b1674 b4
 B	b1675	t1675
 T	t1676	o1147 b1671 b1675
 B	b1676	t1676
-P	p1676	String "rwh unfold_member 0 thenT dT 0 thenT rwh fold_raw_term_type 0"
+P	p1676	String "dT 0 thenT rwh fold_raw_term_type 0"
 O	o1676	ext_rule p1676
 T	t1677	o585 b598
 B	b1677	t1677
@@ -4428,7 +4428,7 @@ T	t1688	o b1684 b1688
 B	b1689	t1688
 T	t1689	o1147 b1674 b1689
 B	b1690	t1689
-P	p1690	String "rwh unfold_bvar_type 0 thenT autoT thenT rwh fold_member 0 thenT autoT"
+P	p1690	String "rwh unfold_bvar_type 0 thenT autoT"
 O	o1690	ext_rule p1690
 T	t1690	o1147 b1684 b4
 B	b1691	t1690
@@ -4540,7 +4540,7 @@ T	t1733	o b1732 b4
 B	b1733	t1733
 T	t1734	o1147 b1728 b1733
 B	b1734	t1734
-P	p1734	String "rwh unfold_member 0 thenT dT 0 thenT rwh fold_member 0 thenT autoT"
+P	p1734	String "autoT"
 O	o1734	ext_rule p1734
 T	t1735	o1147 b1732 b4
 B	b1735	t1735
@@ -4644,7 +4644,7 @@ T	t1773	o b1769 b1772
 B	b1773	t1773
 T	t1774	o1147 b1764 b1773
 B	b1774	t1774
-P	p1774	String "autoT thenT rwh fold_member 0 thenT autoT"
+P	p1774	String "autoT"
 O	o1774	ext_rule p1774
 T	t1775	o1147 b1769 b4
 B	b1775	t1775

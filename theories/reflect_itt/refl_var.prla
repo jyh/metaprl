@@ -4665,7 +4665,7 @@ T	t1794	o b1789 b1793
 B	b1794	t1794
 T	t1795	o878 b1784 b1794
 B	b1795	t1795
-P	p1795	String "rwh unfold_member 0 thenT autoT"
+P	p1795	String "autoT"
 O	o1795	ext_rule p1795
 T	t1796	o878 b1789 b4
 B	b1796	t1796
@@ -4797,7 +4797,7 @@ T	t1844	o b1844 b4
 B	b1845	t1844
 T	t1845	o878 b1835 b1845
 B	b1846	t1845
-P	p1846	String "rwh fold_member 0 thenT autoT"
+P	p1846	String "autoT"
 O	o1846	ext_rule p1846
 T	t1846	o878 b1844 b4
 B	b1847	t1846
@@ -4908,7 +4908,7 @@ T	t1888	o b1888 b4
 B	b1889	t1888
 T	t1889	o878 b1880 b1889
 B	b1890	t1889
-P	p1890	String "rwh fold_member 0 thenT trivialT"
+P	p1890	String "trivialT"
 O	o1890	ext_rule p1890
 T	t1890	o878 b1888 b4
 B	b1891	t1890
@@ -6919,7 +6919,7 @@ T	t2713	o b2705 b2713
 B	b2714	t2713
 T	t2714	o878 b2089 b2714
 B	b2715	t2714
-P	p2715	String "rwh unfold_member 0 thenT equalRefT << 'y >>"
+P	p2715	String "equalRefT << 'y >>"
 O	o2715	ext_rule p2715
 S	s2715	t1786 h h2086
 G	s2715	t2076
@@ -6932,7 +6932,7 @@ T	t2718	o b2718 b4
 B	b2719	t2718
 T	t2719	o878 b2705 b2719
 B	b2720	t2719
-P	p2720	String "thinT 2 thenT trivialT"
+P	p2720	String "trivialT"
 O	o2720	ext_rule p2720
 T	t2720	o878 b2718 b4
 B	b2721	t2720
@@ -6942,7 +6942,7 @@ T	t2722	o b2722 b4
 B	b2723	t2722
 T	t2723	o2715 b877 b2720 b2723 b4
 B	b2724	t2723
-P	p2724	String "rwh unfold_member 0 thenT equalRefT << 'x >>"
+P	p2724	String "equalRefT << 'x >>"
 O	o2724	ext_rule p2724
 T	t2724	o1764 b2075 b676 b675
 S	s2724	t1786 h h2086
@@ -7124,7 +7124,7 @@ T	t2794	o b2790 b2794
 B	b2795	t2794
 T	t2795	o878 b2769 b2795
 B	b2796	t2795
-P	p2796	String "rwh unfold_member 0 thenT equalRefT << 'v1 >>"
+P	p2796	String "equalRefT << 'v1 >>"
 O	o2796	ext_rule p2796
 T	t2796	o1764 b558 b565 b564
 S	s2796	t1786 h h2766

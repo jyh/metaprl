@@ -25,24 +25,20 @@ open Var
 open Base_dtactic
 open Base_auto_tactic
 
-declare abel{'g; 'r}
+declare abel{'g}
 
-prim_rw unfold_abel: abel{'g; 'r} <-->
-   (group{'g} & isset{'r} & equiv{car{'g}; 'r} & (all a: set. all b: set. (mem{'a; car{'g}} => mem{'b; car{'g}} => equiv{car{'g}; 'r; op{'g; 'a; 'b}; op{'g; 'b; 'a}})))
+prim_rw unfold_abel: abel{'g} <-->
+   (group{'g} & (all a: set. all b: set. (mem{'a; car{'g}} => mem{'b; car{'g}} => equiv{car{'g}; eqG{'g}; op{'g; 'a; 'b}; op{'g; 'b; 'a}})))
 
-dform abel_df : except_mode[src] :: abel{'g; 'r} =
-   `"abel(" slot{'g} `"; " slot{'r} `")"
+dform abel_df : except_mode[src] :: abel{'g} =
+   `"abel(" slot{'g} `")"
 
 interactive abel_type {| intro [] |} 'H :
    sequent [squash] { 'H >- 'g IN label } -->
-   sequent [squash] { 'H >- isset{'r} } -->
-   sequent ['ext] { 'H >- group{'g} } -->
-   sequent ['ext] { 'H >- "type"{abel{'g; 'r}} }
+   sequent ['ext] { 'H >- "type"{abel{'g}} }
 
 interactive abel_intro {| intro[] |} 'H :
    sequent [squash] { 'H >- 'g IN label } -->
    sequent ['ext] { 'H >- group{'g} } -->
-   sequent [squash] { 'H >- isset{'r} } -->
-   sequent ['ext] { 'H >- equiv{car{'g}; 'r} } -->
-   sequent ['ext] { 'H; a: set; b: set; x: mem{'a; car{'g}}; y: mem{'b; car{'g}} >- equiv{car{'g}; 'r; op{'g; 'a; 'b}; op{'g; 'b; 'a}} } -->
-   sequent ['ext] { 'H >- abel{'g; 'r} }
+   sequent ['ext] { 'H; a: set; b: set; x: mem{'a; car{'g}}; y: mem{'b; car{'g}} >- equiv{car{'g}; eqG{'g}; op{'g; 'a; 'b}; op{'g; 'b; 'a}} } -->
+   sequent ['ext] { 'H >- abel{'g} }

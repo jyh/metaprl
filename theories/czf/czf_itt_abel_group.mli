@@ -25,7 +25,7 @@ open Var
 open Base_dtactic
 open Base_auto_tactic
 
-declare abel{'g; 'r}
+declare abel{'g}
 
-rewrite unfold_abel: abel{'g; 'r} <-->
-   (group{'g} & isset{'r} & equiv{car{'g}; 'r} & (all a: set. all b: set. (mem{'a; car{'g}} => mem{'b; car{'g}} => equiv{car{'g}; 'r; op{'g; 'a; 'b}; op{'g; 'b; 'a}})))
+rewrite unfold_abel: abel{'g} <-->
+   (group{'g} & (all a: set. all b: set. (mem{'a; car{'g}} => mem{'b; car{'g}} => equiv{car{'g}; eqG{'g}; op{'g; 'a; 'b}; op{'g; 'b; 'a}})))

@@ -11,6 +11,8 @@ rule collapse_step :
 	sequent { <H>; x:'T >- sequent { <J['x]> >- 'C['x] } } -->
 	sequent { <H> >- sequent { x: 'T; <J['x]> >- 'C['x] } }
 
+topval collapseT : tactic
+
 (*********************************************
  *         INDUCTIVE DEFINITIONS PART        *
 **********************************************)
@@ -113,6 +115,10 @@ rule ind_ConstDef 'Hi :
 (* declaration of a multiple application, i.e. (...((Ip1)p2)p3...)pr *)
 declare applH (* { <H> >- 'T } *)
 
+topval fold_applHBase : conv
+topval fold_applHStep : conv
+topval fold_applH : conv
+
 declare IndParamsSubst
 declare IndTypesSubst
 declare IndConstrsSubst
@@ -169,8 +175,7 @@ rule arity_of_some_sort_prod bind{x.'U['x]} :
 	sequent { <H> >- arity_of_some_sort{ (x:'T1->'U['x]) } }
 
 rule arity_of_some_sort_m_base :
-   sequent { <H> >- arity_of_some_sort{'T} } -->
-	sequent { <H> >- sequent [arity_of_some_sort_m] { t:'T >- arity_of_some_sort_m } }
+   sequent { <H> >- sequent [arity_of_some_sort_m] { >- arity_of_some_sort_m } }
 
 rule arity_of_some_sort_m_step :
    sequent { <H> >- arity_of_some_sort{'T} } -->
@@ -216,7 +221,6 @@ declare positivity_cond{ 'T; 'x } (* the type of constructor 'T satisfies the po
 
 (* declaration of 'positivity condition' notion *)
 rule positivity_cond_1 'H :
-   sequent { <H>; x:'T; <J['x]> >- sequent [applH] { <T1> >- 'x} } -->
 	sequent { <H>; x:'T; <J['x]> >-
 	   positivity_cond{ sequent [applH] { <T1> >- 'x} ;'x } }
 
@@ -284,9 +288,8 @@ rule imbr_pos_cond_2 'H bind{x,y.'U['x;'y]} :
 declare imbr_params{'I;'x}
 
 rule imbr_pos_cond_m_base 'H :
-   sequent { <H>; x:'T; <J['x]> >- imbr_pos_cond{'C['x];'I['x];'x} } -->
 	sequent { <H>; x:'T; <J['x]> >-
-		sequent [imbr_pos_cond_m] { c:'C['x] >- imbr_params{'I['x];'x} } }
+		sequent [imbr_pos_cond_m] { >- imbr_params{'I['x];'x} } }
 
 rule imbr_pos_cond_m_step 'H :
    sequent { <H>; x:'T; <J['x]> >- imbr_pos_cond{'C['x];'I['x];'x} } -->
@@ -302,8 +305,7 @@ declare of_some_sort_m (* { <T> } *) (* any element of T is a type of some sort 
 
 (* inductive defenition of multiple of_come_sort_m *)
 rule of_some_sort_m_base :
-   sequent { <H> >- of_some_sort{'T} } -->
-	sequent { <H> >- sequent [of_some_sort_m] { t:'T >- of_some_sort_m } }
+   sequent { <H> >- sequent [of_some_sort_m] { >- of_some_sort_m } }
 
 rule of_some_sort_m_step :
    sequent { <H> >- of_some_sort{'T2} } -->
@@ -315,16 +317,15 @@ rule of_some_sort_m_step :
 declare req3{'C}
 declare req3_m
 
-rule req3_intro 'Hi 's :
-   sequent { <H> >- sequent { <Hi>; I:'A<|H|>; <Ji<|H|> > >- type_of_constructor{'C['I];'I} } } -->
+rule req3_intro 'H 'Hi 's :
+   sequent { <H>; <Hi>; I:'A<|H|>; <Ji<|H|> > >- type_of_constructor{'C['I];'I} } -->
    sequent { <H> >- sequent [positivity_cond_m] { <Hi>; I:'A<|H|>; <Ji<|H|> > >- 'I } } -->
 	sequent { <H> >- arity_of_sort{'A<|H|>;'s<||>} } -->
-	sequent { <H> >- sequent { <Hi>; I:'A<|H|>; <Ji<|H|> > >- 'C['I] in 's<||> } } -->
-   sequent { <H> >- sequent { <Hi>; I:'A<|H|>; <Ji<|H|> > >- req3{'C['I]} } }
+	sequent { <H>; <Hi>; I:'A<|H|>; <Ji<|H|> > >- 'C['I] in 's<||> } -->
+   sequent { <H>; <Hi>; I:'A<|H|>; <Ji<|H|> > >- req3{'C['I]} }
 
 rule req3_m_base :
-   sequent { <H> >- sequent { <Hi> >- req3{'C} } } -->
-	sequent { <H> >- sequent [req3_m] { <Hi> >- sequent  { c:'C >- it } } }
+	sequent { <H> >- sequent [req3_m] { <Hi> >- sequent  { >- it } } }
 
 rule req3_m_step :
 	sequent { <H> >- sequent [req3_m] { <Hi> >- sequent { <Hc> >- it } } } -->

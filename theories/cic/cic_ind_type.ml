@@ -12,15 +12,21 @@ open Term_sig
 
 open Tactic_type.Conversionals
 open Top_conversionals
+open Top_tacticals
 open Var
 
-prim collapse_base :
+open Dtactic
+open Auto_tactic
+
+prim collapse_base {| intro [] |} :
 	sequent { <H> >- 'C } -->
 	sequent { <H> >- sequent { >- 'C } } = it
 
-prim collapse_step :
+prim collapse_step {| intro [] |} :
 	sequent { <H>; x:'T >- sequent { <J['x]> >- 'C['x] } } -->
 	sequent { <H> >- sequent { x: 'T; <J['x]> >- 'C['x] } } = it
+
+let collapseT = (repeatT collapse_step) thenT collapse_base
 
 (*********************************************
  *         INDUCTIVE DEFINITIONS PART        *
@@ -279,7 +285,7 @@ prim ind_ConstDef 'Hi :
 declare applH (* { <H> >- 'T } *)
 
 dform applH_df : except_mode[src] :: sequent [applH] { <H> >- 'e } =
-	display_concl{sequent [applH] { <H> >- 'e }} display_hyps{sequent [applH] { <H> >- 'e }}
+	display_concl{sequent [applH] { <H> >- 'e }} display_hyps_emph{sequent [applH] { <H> >- 'e }}
 
 
 (*inductive definition of multiple application *)
@@ -288,11 +294,11 @@ prim_rw applHBase {| reduce |} :
 	'S
 
 prim_rw applHStep {| reduce |} :
-   sequent { x:'T; <H> >- 'S } <-->
-	sequent { <H> >- apply{'S;'T}}
+   sequent [applH] { x:'T; <H> >- 'S } <-->
+	sequent [applH] { <H> >- apply{'S;'T}}
 
 let fold_applHBase = makeFoldC <<sequent [applH] { >- 'S }>> applHBase
-let fold_applHStep = makeFoldC <<sequent { x:'T; <H> >- 'S }>> applHStep
+let fold_applHStep = makeFoldC <<sequent [applH] { x:'T; <H> >- 'S }>> applHStep
 let fold_applH = fold_applHBase thenC (repeatC fold_applHStep)
 
 (* declaration of multiple substitution C[I/(I p1)...pn] *)
@@ -556,24 +562,23 @@ dform arity_of_some_sort_m_df : sequent [arity_of_some_sort_m] { <T1> >- arity_o
 
 dform of_some_sort_df : of_some_sort{'t} = `"of_some_sort{" slot{'t} `"}"
 
-prim arity_of_some_sort_Set :
+prim arity_of_some_sort_Set {| intro [] |} :
    sequent { <H> >- arity_of_some_sort{Set} } = it
 
-prim arity_of_some_sort_Prop :
+prim arity_of_some_sort_Prop {| intro [] |} :
 	sequent { <H> >- arity_of_some_sort{Prop} } = it
 
-prim arity_of_some_sort_Type :
+prim arity_of_some_sort_Type {| intro [] |} :
    sequent { <H> >- arity_of_some_sort{"type"[i:l]} } = it
 
-prim arity_of_some_sort_prod bind{x.'U['x]} :
+prim arity_of_some_sort_prod {| intro [] |} bind{x.'U['x]} :
    sequent { <H>; x:'T1 >- arity_of_some_sort{'U['x]} } -->
 	sequent { <H> >- arity_of_some_sort{ (x:'T1 -> 'U['x])} } = it
 
-prim arity_of_some_sort_m_base :
-   sequent { <H> >- arity_of_some_sort{'T} } -->
-	sequent { <H> >- sequent [arity_of_some_sort_m] { t:'T >- arity_of_some_sort_m } } = it
+prim arity_of_some_sort_m_base {| intro [] |} :
+   sequent { <H> >- sequent [arity_of_some_sort_m] { >- arity_of_some_sort_m } } = it
 
-prim arity_of_some_sort_m_step :
+prim arity_of_some_sort_m_step {| intro [] |} :
    sequent { <H> >- arity_of_some_sort{'T} } -->
 	sequent { <H> >- sequent [arity_of_some_sort_m] { <T1> >- arity_of_some_sort_m} } -->
    sequent { <H> >- sequent [arity_of_some_sort_m] { <T1>; t:'T<||> >- arity_of_some_sort_m } } = it
@@ -583,16 +588,16 @@ declare arity_of_sort{'T;'s} (* type T is an arity of sort 's *)
 dform arity_of_sort_df : arity_of_sort{'T;'s} =
 	`"arity_of_sort{" slot{'T} `";" slot{'s} `"}"
 
-prim arity_of_sort_Set :
+prim arity_of_sort_Set {| intro [] |} :
    sequent { <H> >- arity_of_sort{Set;Set} } = it
 
-prim arity_of_sort_Prop :
+prim arity_of_sort_Prop {| intro [] |} :
    sequent { <H> >- arity_of_sort{Prop;Prop} } = it
 
-prim arity_of_sort_Type :
+prim arity_of_sort_Type {| intro [] |} :
    sequent { <H> >- arity_of_sort{"type"[i:l];"type"[i:l]} } = it
 
-prim arity_of_sort_prod bind{x.'U['x]} :
+prim arity_of_sort_prod {| intro [] |} bind{x.'U['x]} :
    sequent { <H>; x:'T1 >- arity_of_sort{'U['x]; 's} } -->
 	sequent { <H> >- arity_of_sort{(x:'T1 -> 'U['x]); 's} } = it
 
@@ -602,10 +607,10 @@ declare type_of_constructor{'T;'I} (* 'T is a type of constructor of 'I *)
 dform type_of_constructor_df : type_of_constructor{'T;'I} =
 	`"type_of_constructor{" slot{'T} `";" slot{'I} `"}"
 
-prim type_of_constructor_app :
+prim type_of_constructor_app {| intro [] |} :
    sequent { <H> >- type_of_constructor{ (sequent [applH]{ <T1> >- 'I}); 'I } } = it
 
-prim type_of_constructor_prod 'T1 bind{x.'C['x]} :
+prim type_of_constructor_prod {| intro [] |} 'T1 bind{x.'C['x]} :
    sequent { <H>; x:'T1 >- type_of_constructor{'C['x];'I} } -->
 	sequent { <H> >- type_of_constructor{ (x:'T1 -> 'C['x]); 'I } } = it
 
@@ -631,12 +636,11 @@ dform imbr_pos_cond_df : imbr_pos_cond{'T;'I;'x} =
 	`"imbr_pos_cond{" slot{'T} `";" slot{'I} `";" slot{'x} `"}"
 
 (* declaration of 'positivity condition' notion *)
-prim positivity_cond_1 'H :
-   sequent { <H>; x:'T; <J['x]> >- sequent [applH] { <T1> >- 'x} } -->
+prim positivity_cond_1 {| nth_hyp |} 'H :
 	sequent { <H>; x:'T; <J['x]> >-
 	   positivity_cond{ sequent [applH] { <T1> >- 'x} ;'x } } = it
 
-prim positivity_cond_2 'H bind{x.'T['x]} bind{y,x.'U['y;'x]}:
+prim positivity_cond_2 'H bind{x.'T['x]} bind{y,x.'U['y;'x]} :
    sequent { <H>; x:'S; <J['x]> >- strictly_pos{'x;'T['x]}} -->
 	sequent { <H>; x:'S; <J['x]>; y:'T['x] >- positivity_cond{'U['y;'x];'x} } -->
 	sequent { <H>; x:'S; <J['x]> >- positivity_cond{(y:'T['x] -> 'U['y;'x]);'x} } = it
@@ -648,20 +652,20 @@ dform positivity_cond_m_df : sequent [positivity_cond_m] { <Hi > >- 'C<||> } =
 	`"positivity_cond_m{" slot{'C} `" for "
 		display_hyps{sequent [positivity_cond_m] { <Hi > >- 'C<||> }} `"}"
 
-prim positivity_cond_m_base :
+prim positivity_cond_m_base {| intro [] |} :
    sequent { <H>; I:'A >- positivity_cond{'C['I];'I} } -->
 	sequent { <H> >- sequent [positivity_cond_m] { I:'A >- 'C['I] } } = it
 
-prim positivity_cond_m_step :
+prim positivity_cond_m_step {| intro [] |} :
    sequent { <H>; I:'A >- sequent { <Hi> >- positivity_cond{'C['I];'I} } } -->
 	sequent { <H>; I:'A >- sequent [positivity_cond_m] { <Hi > >- 'C['I] } } -->
 	sequent { <H> >- sequent [positivity_cond_m] { <Hi>; I:'A<|H|> >- 'C['I] } } = it
 
 (* declaration of 'strictly positive' notion *)
-prim strictly_pos_1 'H :
+prim strictly_pos_1 {| nth_hyp |} 'H :
    sequent { <H>; x:'T1; <J['x]>  >- strictly_pos{'x;'T} } = it
 
-prim strictly_pos_2 'H :
+prim strictly_pos_2 {| nth_hyp |} 'H :
 	sequent { <H>; x:'T1; <J['x]> >- strictly_pos{'x;sequent [applH] { <T2> >- 'x}} } = it
 
 prim strictly_pos_3 'H 'U bind{x,y.'V['x;'y]} :
@@ -708,10 +712,9 @@ dform imbr_params_df : imbr_params{'I;'x} = `"imbr_params{" slot{'I} `";" slot{'
 dform imbr_pos_cond_m_df : sequent [imbr_pos_cond_m] { <Hc> >- 'T<| |> } =
 	`"imbr_pos_cond_m{" display_hyps{ sequent [imbr_pos_cond_m] { <Hc> >- 'T<| |> } } `"|" slot{'T} `"}"
 
-prim imbr_pos_cond_m_base 'H :
-   sequent { <H>; x:'T; <J['x]> >- imbr_pos_cond{'C['x];'I['x];'x} } -->
-	sequent { <H>; x:'T; <J['x]> >-
-		sequent [imbr_pos_cond_m] { c:'C['x] >- imbr_params{'I['x];'x} } } = it
+prim imbr_pos_cond_m_base {| nth_hyp |} 'H :
+   sequent { <H>; x:'T; <J['x]> >-
+		sequent [imbr_pos_cond_m] { >- imbr_params{'I['x];'x} } } = it
 
 prim imbr_pos_cond_m_step 'H :
    sequent { <H>; x:'T; <J['x]> >- imbr_pos_cond{'C['x];'I['x];'x} } -->
@@ -729,11 +732,10 @@ dform of_some_sort_m_df : sequent [of_some_sort_m] { <T1> >- of_some_sort_m } =
 	`"of_some_sort_m{" display_hyps{ sequent [of_some_sort_m] { <T1> >- of_some_sort_m } } `"}"
 
 (* inductive defenition of multiple of_come_sort_m *)
-prim of_some_sort_m_base :
-   sequent { <H> >- of_some_sort{'T} } -->
-	sequent { <H> >- sequent [of_some_sort_m] { t:'T >- of_some_sort_m } } = it
+prim of_some_sort_m_base {| intro [] |} :
+	sequent { <H> >- sequent [of_some_sort_m] { >- of_some_sort_m } } = it
 
-prim of_some_sort_m_step :
+prim of_some_sort_m_step {| intro [] |} :
    sequent { <H> >- of_some_sort{'T2} } -->
 	sequent { <H> >- sequent [of_some_sort_m] { <T1> >- of_some_sort_m } } -->
 	sequent { <H> >- sequent [of_some_sort_m] { <T1>; t:'T2<|H|> >- of_some_sort_m } } = it
@@ -749,18 +751,17 @@ dform req3_m_df : sequent [req3_m] { <Hi> >- sequent { <Hc<| |> > >- it } } =
 	`"req3_m{" display_hyps{ sequent [req3_m] { <Hi> >- it } } `"|"
 		display_hyps{ sequent [Aux] { <Hc> >- it } } `"}"
 
-prim req3_intro 'Hi 's :
-   sequent { <H> >- sequent { <Hi>; I:'A<|H|>; <Ji<|H|> > >- type_of_constructor{'C['I];'I} } } -->
+prim req3_intro 'H 'Hi 's :
+   sequent { <H>; <Hi>; I:'A<|H|>; <Ji<|H|> > >- type_of_constructor{'C['I];'I} } -->
    sequent { <H> >- sequent [positivity_cond_m] { <Hi>; I:'A<|H|>; <Ji<|H|> > >- 'I } } -->
 	sequent { <H> >- arity_of_sort{'A<|H|>;'s<||>} } -->
-	sequent { <H> >- sequent { <Hi>; I:'A<|H|>; <Ji<|H|> > >- 'C['I] in 's<||> } } -->
-   sequent { <H> >- sequent { <Hi>; I:'A<|H|>; <Ji<|H|> > >- req3{'C['I]} } } = it
+	sequent { <H>; <Hi>; I:'A<|H|>; <Ji<|H|> > >- 'C['I] in 's<||> } -->
+   sequent { <H>; <Hi>; I:'A<|H|>; <Ji<|H|> > >- req3{'C['I]} } = it
 
-prim req3_m_base :
-   sequent { <H> >- sequent { <Hi> >- req3{'C} } } -->
-	sequent { <H> >- sequent [req3_m] { <Hi> >- sequent  { c:'C >- it } } } = it
+prim req3_m_base {| intro [] |} :
+	sequent { <H> >- sequent [req3_m] { <Hi> >- sequent  { >- it } } } = it
 
-prim req3_m_step :
+prim req3_m_step {| intro [] |} :
 	sequent { <H> >- sequent [req3_m] { <Hi> >- sequent { <Hc> >- it } } } -->
 	sequent { <H> >- sequent { <Hi> >- req3{'C<|Hi;H|>} } } -->
 	sequent { <H> >- sequent [req3_m] { <Hi> >- sequent { <Hc>; c:'C<|Hi;H|> >- it } } } = it

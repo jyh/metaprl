@@ -3,6 +3,8 @@ extends Base_theory
 open Refiner.Refiner.TermOp
 open Refiner.Refiner.Term
 open Top_conversionals
+open Dtactic
+open Auto_tactic
 
 (* MetaPRL doesn't allow to declare a variable twice  in one Context
 so in rules w-s, ... we skip such things as "x not in H" *)
@@ -19,8 +21,10 @@ declare "type"[i:l]
 declare of_some_sort{'P}    (* 'P has some sort *)
 declare prop_set{'s} (* type 's, is sort Prop or sort Set *)
 declare member{'t;'T} (* term 't has a type 'T*)
+(*
 declare decl{'T}        (* declaration of some variable having type 'T (as assumption) *)
 declare "let"{'t;'T}      (* declaration of some variable as definition (let it be 't:'T)*)
+*)
 declare "fun"{'T;x.'U['x]} (* product ('x:'T)'U, x-variable, T,U-terms *)
 
 declare "fun"{'A;'B}
@@ -33,8 +37,10 @@ let unfold_funC = unfold_fun
 declare lambda{'T;x.'t['x]}  (* the term ['x:'T]'t is a function which maps
                                    elements of 'T to 't - lambda_abstraction
                                    from lambda-calculus *)
+(*
 declare let_in{'t;x.'u['x]} (* declaration of the let-in expressions -
                             in term 'u the var 'x is locally bound to term 't *)
+*)
 declare apply{'t;'u} (* declaration of "term 't applied to term 'u" *)
 declare subst{'u;'x;'t} (* declaration of substitution of a term 't to all
                             free occurrences of a variable 'x in a term 'u *)
@@ -124,11 +130,13 @@ dform member_df : except_mode[src] :: parens :: "prec"[prec_equal] :: ('x in 'T)
 dform member_df2 : mode[src] :: parens :: "prec"[prec_equal] :: ('x in 'T) =
    szone pushm slot["le"]{'x} space `"in" hspace slot["le"]{'T} popm ezone
 
+(*
 dform let_df : except_mode[src] :: "let"{'t;'T} = `"=" slot{'t} `":" slot{'T}
 
 dform let_in_df : let_in{'t;x.'u} =
      szone pushm[3]  `"let " szone{declaration{'x;'t}} `" in" hspace
      szone{'u} popm ezone
+*)
 
 dform fun_df1 : "fun"{'A; 'B} = math_fun{'A; 'B}
 dform fun_df2 : "fun"{'A; x. 'B} = math_fun{'x; 'A; 'B}
@@ -156,17 +164,17 @@ dform bind2_df : except_mode[src] :: bind{x,y.'T} = `"bind{" slot{'x} `"," slot{
 ******************************************************)
 
 (* Prop is a sort *)
-prim prop_a_sort:
+prim prop_a_sort :
    sequent { <H> >- member{'P;Prop} } -->
    sequent { <H> >- of_some_sort{'P} } = it
 
 (* Set is a sort *)
-prim set_a_sort:
+prim set_a_sort :
    sequent { <H> >- member{'P;Set} } -->
    sequent { <H> >- of_some_sort{'P} } = it
 
 (* Type[i] is a sort *)
-prim type_a_sort "type"[i:l]:
+prim type_a_sort "type"[i:l] :
    sequent { <H> >- member{'P;"type"[i:l]} } -->
    sequent { <H> >- of_some_sort{'P} } = it
 
@@ -196,42 +204,47 @@ prim w_e :
 *
 *************************************************)
 
+(*
 prim w_s_decl :
    sequent { <H> >- of_some_sort{'T} } -->
    sequent { <H>; x: decl{'T} >- WF } = it
-
+*)
 
 (************************************************
 *
 *************************************************)
 
+(*
 prim w_s_let :
    sequent { <H> >-  member{'t;'T} } -->
    sequent { <H>; x: "let"{'t;'T} >- WF } = it
-
-
-(************************************************
- *                                              *
- ************************************************)
-
+*)
 
 (************************************************
  *                                              *
  ************************************************)
 
-prim ax_prop :
+prim w_s :
+   sequent { <H> >- of_some_sort{'T} } -->
+   sequent { <H>; x: 'T >- WF } = it
+
+(************************************************
+ *                                              *
+ ************************************************)
+
+prim ax_prop {| intro [] |} :
    sequent { <H> >- WF } -->
    sequent { <H> >- member{Prop;"type"[i:l]}  } = it
 
 
 
-prim ax_set :
+prim ax_set {| intro [] |} :
    sequent { <H> >- WF } -->
    sequent { <H> >- member{Set;"type"[i:l]}  } = it
 
 
 
-prim ax_type :
+prim ax_type {| intro [] |} :
    sequent { <H> >- WF } -->
    sequent { <H> >- member{"type"[i:l];"type"[i':l]}  } = it
 
@@ -240,36 +253,29 @@ prim ax_type :
  *                                              *
  ************************************************)
 
-prim var_decl 'H:
-   sequent { <H>; x: decl{'T}; <J['x]> >- WF } -->
-   sequent { <H>; x: decl{'T}; <J['x]> >- member{'x;'T}  } = it
-
-
-
-prim var_let 'H:
-   sequent { <H>; x: "let"{'t;'T}; <J['x]> >- WF } -->
-   sequent { <H>; x: "let"{'t;'T}; <J['x]> >- member{'x;'T}  } = it
-
+prim var 'H :
+   sequent { <H>; x: 'T; <J['x]> >- WF } -->
+   sequent { <H>; x: 'T; <J['x]> >- 'x in 'T  } = it
 
 (************************************************
  *                                              *
  ************************************************)
 
-prim prod_1 's1:
+prim prod_1 's1 :
    sequent { <H> >- prop_set{'s1}  } -->
    sequent { <H> >- member{ 'T; 's1 } } -->
-   sequent { <H>; x:decl{'T} >- member{ 'U['x]; 's2 } } -->
+   sequent { <H>; x:'T >- member{ 'U['x]; 's2 } } -->
    sequent { <H> >- member{ (x:'T -> 'U['x]); 's2  }  } = it
 
-prim prod_2 's1:
-   sequent { <H>; x:decl{'T} >- prop_set{'s2}  } -->
-   sequent { <H>; x:decl{'T} >- member{ 'U['x]; 's2 } } -->
+prim prod_2 's1 :
+   sequent { <H>; x:'T >- prop_set{'s2}  } -->
+   sequent { <H>; x:'T >- member{ 'U['x]; 's2 } } -->
    sequent { <H> >- member{ 'T; 's1 } } -->
    sequent { <H> >- member{ (x:'T -> 'U['x]); 's2  }  } = it
 
 prim prod_types "type"[i:l] "type"[j:l] :
    sequent { <H> >- member{'T;"type"[i:l]}  } -->
-   sequent { <H>; x:decl{'T} >- member{ 'U['x]; "type"[j:l] }  } -->
+   sequent { <H>; x:'T >- member{ 'U['x]; "type"[j:l] }  } -->
    sequent { >- le[i:l,k:l]  } -->
    sequent { >- le[j:l,k:l]  } -->
    sequent { <H> >- member{ (x:'T -> 'U['x]); "type"[k:l] } } = it
@@ -279,10 +285,10 @@ prim prod_types "type"[i:l] "type"[j:l] :
  *                                              *
  ************************************************)
 
-prim lam 's:
+prim lam {| intro [] |} 's :
    sequent { <H> >- member{ (x:'T -> 'U['x]); 's }  } -->
    sequent { <H> >- of_some_sort{'s }  } -->
-   sequent { <H>; x:decl{'T} >- member{ 't['x]; 'U['x] }  } -->
+   sequent { <H>; x:'T >- member{ 't['x]; 'U['x] }  } -->
    sequent { <H> >- member{ lambda{'T;x.'t['x]}; (x:'T -> 'U['x]) } } = it
 
 
@@ -290,7 +296,7 @@ prim lam 's:
  *                                              *
  ************************************************)
 
-prim app (x:'T -> 'U['x]) :
+prim app {| intro [] |} (x:'T -> 'U['x]) :
    sequent { <H> >- member{ 'u; (x:'T -> 'U['x]) }  } -->
    sequent { <H> >- member{ 't;'T }  } -->
    sequent { <H> >- member{ apply{'u;'t}; 'U['t]  } } = it
@@ -300,11 +306,12 @@ prim app (x:'T -> 'U['x]) :
  *                                              *
  ************************************************)
 
+(*
 prim let_in 'T bind{x.'U['x]}:
    sequent { <H> >- member{'t;'T}  } -->
    sequent { <H>; x:"let"{'t;'T} >- member{'u['x];'U['x]} } -->
    sequent { <H> >- member{ let_in{'t;x.'u['x]}; 'U['t] }  } = it
-
+*)
 
 (************************************************
 *                CONVERSION RULES               *
@@ -324,7 +331,6 @@ prim_rw beta {| reduce |} :
 (*
 prim delta_let 'H:
    sequent { <H>; x:"let"{'t;'T} ; <J['x]> >- red{ 'x ; 't } } = it
-*)
 
 prim delta_let_concl 'H bind{x.'C['x]} :
    sequent { <H>; x:"let"{'t;'T} ; <J['x]> >- 'C['t] } -->
@@ -338,13 +344,12 @@ prim delta_let_all 'H bind{x.'C['x]} :
    sequent { <H>; x:"let"{'t;'T} ; <J['t]> >- 'C['t] } -->
 	sequent { <H>; x:"let"{'t;'T} ; <J['x]> >- 'C['x] } = it
 
-(*
 prim zeta :
    sequent { <H> >- red{ let_in{ 'u; x.'t['x] }; 't['u] } } = it
-*)
 
 prim_rw zeta {| reduce |} :
    let_in{ 'u; x.'t['x] } <--> 't['u]
+*)
 
 (***************************************************
 *                 CONVERTIBILITY                   *
@@ -369,7 +374,7 @@ prim conv_le_4 :
    sequent { <H> >- conv_le{ Set; "type"[i:l] } } = it
 
 prim conv_le_5 :
-   sequent { <H>; x:decl{'T} >- conv_le{ 'T1['x]; 'U1['x] } } -->
+   sequent { <H>; x:'T >- conv_le{ 'T1['x]; 'U1['x] } } -->
    sequent { <H> >- conv_le{ (x:'T -> 'T1['x]); (x:'T -> 'U1['x]) }} = it
 
 prim conv_rule 's 'T:

@@ -15,6 +15,7 @@ LMFILES :=\
 NLFILES :=\
 	tptp\
 	tptp_load\
+	tptp_cache\
 	tptp_prove
 
 # Name of main libraris

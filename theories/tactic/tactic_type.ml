@@ -770,7 +770,11 @@ let withSubstT subst tac arg =
  * Time the tactic.
  *)
 let timingT tac arg =
-   Utils.time_it tac arg
+   let tac arg =
+      let subgoals, ext = ThreadRefiner.eval remote_server (tac arg) in
+         ThreadRefiner.create_value subgoals ext
+   in
+      Utils.time_it tac arg
 
 (*
  * -*-

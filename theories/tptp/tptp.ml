@@ -272,24 +272,18 @@ interactive tptp2_type_intro5 'H 'J :
  ************************************************************************)
 
 (*
- * Nested terms.
+ * Applications.
  *)
-let rec mk_apply_term_aux f = function
-   h::t ->
-      mk_apply_term_aux (Itt_rfun.mk_apply_term f h) t
- | [] ->
-      f
-
-let rec mk_apply_term = function
-   [t] ->
-      t
- | h::t ->
-      mk_apply_term_aux h t
- | [] ->
-      raise (RefineError ("mk_apply_term", StringError "no terms"))
-
 let apply_term = << 'f 'x >>
 let apply_opname = opname_of_term apply_term
+
+let rec mk_apply_term = function
+   [] ->
+      raise (Failure "mk_apply_term")
+ | [f] ->
+      f
+ | args ->
+      mk_simple_term apply_opname args
 
 let is_apply_term t =
    let opname = opname_of_term t in
@@ -310,6 +304,9 @@ let arity_of_apply t =
 let head_of_apply t =
    List.hd (dest_apply t)
 
+(*
+ * Disjunction.
+ *)
 let rec mk_or_term = function
    [t] ->
       t

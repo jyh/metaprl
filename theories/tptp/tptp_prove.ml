@@ -28,6 +28,7 @@ open Itt_logic
 open Itt_rfun
 
 open Tptp
+open Tptp_cache
 
 let debug_tptp =
    create_debug (**)
@@ -43,6 +44,61 @@ let debug_tptp_prove =
         debug_value = false
       }
 
+(************************************************************************
+ * TYPES                                                                *
+ ************************************************************************)
+
+(*
+ * Keep a list of the hyps in exploded form.
+ *    the positive vars are the head constants
+ *       of the positive disjuncts in the clause,
+ *    the negative vars are the head constants
+ *       of the negative disjuncts.
+ *)
+type tptp_clause_info =
+   { tptp_vars : string list;
+     tptp_body : term list;
+     tptp_positive : string list;
+     tptp_negative : string list
+   }
+
+(*
+ * This is the global info needed during the proof.
+ *    The first_hyp is the index of the first hyp that
+ *    is a clause (and not a typeing assumption).
+ *
+ *    The constants are the function and predicate symbols.
+ *
+ *    The hyps are saved in exploded form.
+ *)
+type tptp_info =
+   { tptp_first_hyp : int;
+     tptp_constants : string list;
+     tptp_hyps : tptp_clause_info array;
+     tptp_fail_cache : TptpCache.t ref
+   }
+
+(*
+ * During proof, we keep the set of goals that we
+ * are currently exploring.  If the same goal occurs,
+ * we abort the cycle.
+ *
+ * The level is the current depth of the search.
+ *
+ * The info is the constant info about the problem
+ * being explored.
+ *)
+type t =
+   { tptp_goal_cache : TptpCache.t;
+     tptp_goal : tptp_clause_info;
+     tptp_level : int;
+     tptp_info : tptp_info
+   }
+
+(************************************************************************
+ * UTILITIES                                                            *
+ ************************************************************************)
+
 (*
  * Tabbing for printing.
  *)
@@ -56,80 +112,107 @@ let tab out i =
  ************************************************************************)
 
 (*
- * This is a version of alpha equality on clauses
- * the returns a more more refined comparison.
+ * We first do some preprocessing on the sequent to figure
+ * which hypotheses are just declarations.
  *)
-let rec compare_terms bvars1 bvars2 term1 term2 =
-   if is_var_term term1 then
-      if is_var_term term2 then
-         let v1 = dest_var term1 in
-         let v2 = dest_var term2 in
-            compare_vars bvars1 bvars2 v1 v2
-      else
-         -1
-   else if is_var_term term2 then
-      1
+let decl_opnames =
+   List.map opname_of_term (**)
+      [<< atom0 >>;
+       << atom1 >>;
+       << atom2 >>;
+       << atom3 >>;
+       << atom4 >>;
+       << atom5 >>;
+       << prop0 >>;
+       << prop1 >>;
+       << prop2 >>;
+       << prop3 >>;
+       << prop4 >>;
+       << prop5 >>]
+
+let rec first_clause_aux i len constants hyps =
+   if i = len then
+      i, constants
    else
-      let shape1 = shape_of_term term1 in
-      let shape2 = shape_of_term term2 in
-         match compare shape1 shape2 with
-            0 ->
-               compare_term_lists bvars1 bvars2 (subterms_of_term term1) (subterms_of_term term2)
-          | ord ->
-               ord
+      match SeqHyp.get hyps i with
+         Hypothesis (v, hyp) ->
+            let opname = opname_of_term hyp in
+               if List.exists (Opname.eq opname) decl_opnames then
+                  first_clause_aux (i + 1) len (v :: constants) hyps
+               else
+                  i, constants
+       | Context _ ->
+            first_clause_aux (i + 1) len constants hyps
 
-and compare_term_lists bvars1 bvars2 terms1 terms2 =
-   match terms1, terms2 with
-      term1 :: terms1, term2 :: terms2 ->
-         let ord = compare_terms bvars1 bvars2 term1 term2 in
-            if ord = 0 then
-               compare_term_lists bvars1 bvars2 terms1 terms2
-            else
-               ord
-    | [], [] ->
-         0
-    | [], _ ->
-         -1
-    | _, [] ->
-         1
-
-and compare_vars bvars1 bvars2 v1 v2 =
-   match bvars1, bvars2 with
-      bvar1 :: bvars1, bvar2 :: bvars2 ->
-         if v1 = bvar1 then
-            if v2 = bvar2 then
-               0
-            else
-               -1
-         else if v2 = bvar2 then
-            1
-         else
-            compare_vars bvars1 bvars2 v1 v2
-    | _ ->
-         compare v1 v2
+let first_clause hyps =
+   first_clause_aux 0 (SeqHyp.length hyps) [] hyps
 
 (*
- * Splay set of terms.
+ * Figure out which atoms are positive,
+ * which are negative.
  *)
-module TermOrd =
-struct
-   type t = string list * term list
+let rec split_atoms = function
+   term :: terms ->
+      let positive, negative = split_atoms terms in
+         if is_not_term term then
+            let term = dest_not term in
+               positive, dest_var (head_of_apply term) :: negative
+         else
+            dest_var (head_of_apply term) :: positive, negative
+ | [] ->
+      [], []
 
-   let compare (bvars1, terms1) (bvars2, terms2) =
-      match List.length bvars1 - List.length bvars2 with
-         0 ->
-            begin
-               match List.length terms1 - List.length terms2 with
-                  0 ->
-                     compare_term_lists bvars1 bvars2 terms1 terms2
-                | ord ->
-                     ord
-            end
-       | ord ->
-            ord
-end
+(*
+ * Spread the clause.
+ *)
+let dest_hyp t =
+   let vars, body = dest_all t in
+   let body = dest_or body in
+   let positive, negative = split_atoms body in
+      { tptp_vars = vars;
+        tptp_body = sort_term_list body;
+        tptp_negative = negative;
+        tptp_positive = positive
+      }
 
-module TermSet = Splay_set.Make (TermOrd)
+let dest_hyps hyps =
+   let j, constants = first_clause hyps in
+   let len = SeqHyp.length hyps in
+   let null_hyp =
+      { tptp_vars = [];
+        tptp_body = [];
+        tptp_negative = [];
+        tptp_positive = []
+      }
+   in
+   let hyps' = Array.create len null_hyp in
+   let _ =
+      for i = j to len - 1 do
+         match SeqHyp.get hyps i with
+            Hypothesis (_, hyp) ->
+               hyps'.(i) <- dest_hyp hyp
+          | Context _ ->
+               ()
+      done
+   in
+      { tptp_first_hyp = j;
+        tptp_constants = constants;
+        tptp_hyps = hyps';
+        tptp_fail_cache = ref (TptpCache.create constants)
+      }
+
+(*
+ * Break apart a goal clause.
+ *)
+let dest_goal t =
+   let vars, body = dest_exists t in
+   let body = sort_term_list (dest_and body) in
+   let positive, negative = split_atoms body in
+      { tptp_vars = vars;
+        tptp_body = body;
+        tptp_positive = positive;
+        tptp_negative = negative
+      }
 
 (************************************************************************
  * UNIFICATION                                                          *
@@ -195,65 +278,6 @@ let rec unify_term_lists constants terms1 terms2 =
  ************************************************************************)
 
 (*
- * Spread the clause.
- *)
-let dest_hyp t =
-   let vars, body = dest_all t in
-      vars, dest_or body
-
-let dest_hyps hyps j =
-   let len = SeqHyp.length hyps in
-   let hyps' = Array.create len ([], []) in
-      for i = j to len - 1 do
-         match SeqHyp.get hyps i with
-            Hypothesis (_, hyp) ->
-               hyps'.(i) <- dest_hyp hyp
-          | Context _ ->
-               ()
-      done;
-      hyps'
-
-let dest_goal t =
-   let vars, body = dest_exists t in
-      vars, dest_and body
-
-(*
- * We first do some preprocessing on the sequent to figure
- * which hypotheses are just declarations.
- *)
-let decl_opnames =
-   List.map opname_of_term (**)
-      [<< atom0 >>;
-       << atom1 >>;
-       << atom2 >>;
-       << atom3 >>;
-       << atom4 >>;
-       << atom5 >>;
-       << prop0 >>;
-       << prop1 >>;
-       << prop2 >>;
-       << prop3 >>;
-       << prop4 >>;
-       << prop5 >>]
-
-let rec first_clause_aux i len constants hyps =
-   if i = len then
-      i, constants
-   else
-      match SeqHyp.get hyps i with
-         Hypothesis (v, hyp) ->
-            let opname = opname_of_term hyp in
-               if List.exists (Opname.eq opname) decl_opnames then
-                  first_clause_aux (i + 1) len (v :: constants) hyps
-               else
-                  i, constants
-       | Context _ ->
-            first_clause_aux (i + 1) len constants hyps
-
-let first_clause hyps =
-   first_clause_aux 0 (SeqHyp.length hyps) [] hyps
-
-(*
  * Double-negation elimination.
  *)
 let negate_term t =
@@ -267,47 +291,35 @@ let negate_term t =
  *)
 let rec new_vars varcount l = function
    _ :: vars ->
-      let v = "Y" ^ string_of_int !varcount in
-         incr varcount;
-         new_vars varcount (v :: l) vars
+      let v = "Y" ^ string_of_int varcount in
+         new_vars (varcount + 1) (v :: l) vars
  | [] ->
       l
 
 (*
- * Remove the duplicates after the substitution.
- *)
-let rec remove_term term = function
-   term' :: terms ->
-      if alpha_equal term term' then
-         remove_term term terms
-      else
-         term' :: remove_term term terms
- | [] ->
-      []
-
-let rec remove_duplicates = function
-   term :: terms ->
-      term :: remove_duplicates (remove_term term terms)
- | [] ->
-      []
-
-(*
  * Build the new goal after a unification.
  *)
-let mk_new_goal varcount subst constants terms1 terms2 =
+let new_goal constants subst terms1 terms2 =
    let vars, terms = List.split subst in
-   let terms2 = List.map negate_term terms2 in
-   let terms = List.map (fun t -> TermSubst.subst t terms vars) (terms1 @ terms2) in
-   let body =
-      if terms = [] then
-         true_term
-      else
-         mk_and_term (remove_duplicates terms)
-   in
-   let vars = List_util.subtract (free_vars body) constants in
-   let vars' = new_vars varcount [] vars in
-   let body = TermSubst.subst body (List.map mk_var_term vars') vars in
-      mk_exists_term vars' body
+   let terms1 = List.map (fun t -> TermSubst.subst t terms vars) terms1 in
+   let terms2 = List.map (fun t -> TermSubst.subst (negate_term t) terms vars) terms2 in
+   let body = merge_term_lists terms1 terms2 in
+   let vars = List_util.subtract (free_vars_terms body) constants in
+   let vars' = new_vars 1 [] vars in
+   let varst = List.map mk_var_term vars' in
+   let body = List.map (fun t -> TermSubst.subst t varst vars) body in
+   let positive, negative = split_atoms body in
+      { tptp_vars = vars';
+        tptp_body = body;
+        tptp_positive = positive;
+        tptp_negative = negative
+      }
+
+let mk_goal { tptp_vars = vars; tptp_body = body } =
+   if body = [] then
+      true_term
+   else
+      mk_exists_term vars (mk_and_term body)
 
 (*
  * Prove well-formedness of a function.
@@ -470,113 +482,86 @@ let assert_new_goal level subst hyp_index goal tac p =
  * Main tactic to unify on a hyp.
  *)
 let resolveT i p =
-   let varcount = ref 0 in
    let _, hyp = Sequent.nth_hyp p i in
-   let hvars, terms2 = dest_hyp hyp in
-   let gvars, terms1 = dest_goal (Sequent.concl p) in
-   let j, constants = first_clause (Sequent.explode_sequent p).sequent_hyps in
-   let subst, terms1, terms2 = unify_term_lists constants terms1 terms2 in
-   let goal = mk_new_goal varcount subst constants terms1 terms2 in
+   let { sequent_hyps = hyps; sequent_goals = goals } = Sequent.explode_sequent p in
+   let j, constants = first_clause hyps in
+   let hyp_info = dest_hyp hyp in
+   let goal_info = dest_goal (SeqGoal.get goals 0) in
+   let subst, terms1, terms2 = unify_term_lists constants goal_info.tptp_body hyp_info.tptp_body in
+   let new_info = new_goal constants subst terms1 terms2 in
+   let goal = mk_goal new_info in
       assert_new_goal 0 subst i goal idT p
 
 (************************************************************************
  * SEARCH                                                               *
  ************************************************************************)
 
-(*
- * We maintain a list of
- *)
-type t =
-   { tptp_set : TermSet.t;
-     tptp_level : int;
-     tptp_first_hyp : int;
-     tptp_constants : string list;
-     tptp_hyps : (string list * term list) array
-   }
-
-let varcount = ref 0
-
-(*
- * Failure cache.
- *)
-let fail_cache = ref TermSet.empty
-
-let add_failure vars terms =
-   if not (TermSet.mem !fail_cache (vars, terms)) then
-      fail_cache := TermSet.add (vars, terms) !fail_cache
-
-let check_failure vars terms =
-   if TermSet.mem !fail_cache (vars, terms) then
-      raise (RefineError ("check_failure", StringError "goal previously failed"))
-
-(*
- * Cycle detection.
- *)
-let check_cycle set vars terms =
-   if TermSet.mem set (vars, terms) then
-      raise (RefineError ("check_cycle", StringError "repeated goal"))
-
-(*
- * Proof procedure uses failure and cycle detection.
- *)
-let failT gvars terms1 p =
-   add_failure gvars terms1;
-   raise (RefineError ("findResolventT", StringError "no resolvent found"))
+let cycle_exn = RefineError ("proveT", StringError "cycle detected")
+let fail_exn = RefineError ("proveT", StringError "failed")
 
 let rec prove_auxT
-    { tptp_set = set;
+    { tptp_goal_cache = goal_cache;
+      tptp_goal = goal_info;
       tptp_level = level;
-      tptp_constants = constants;
-      tptp_first_hyp = first_hyp;
-      tptp_hyps = hyps
+      tptp_info =
+         { tptp_constants = constants;
+           tptp_first_hyp = first_hyp;
+           tptp_hyps = hyps;
+           tptp_fail_cache = fail_cache
+         } as info
     } p =
-   let goal = Sequent.concl p in
-      if !debug_tptp then
-         eprintf "proveT: %a%t" debug_print goal eflush;
-      if alpha_equal goal true_term then
+   match goal_info.tptp_body with
+      [] ->
          dT 0 p
-      else
-         let gvars, terms1 = dest_goal (Sequent.concl p) in
-            check_cycle set gvars terms1;
-            check_failure gvars terms1;
-            let nextT =
-               prove_auxT (**)
-                  { tptp_set = TermSet.add (gvars, terms1) set;
-                    tptp_level = level + 1;
-                    tptp_constants = constants;
-                    tptp_first_hyp = first_hyp;
-                    tptp_hyps = hyps
-                  }
-            in
-            let count = Sequent.hyp_count p in
-            let rec onSomeHypT l i =
-               if i = count then
-                  List.rev (failT gvars terms1 :: l)
-               else
-                  let l =
-                     try
-                        let hvars, terms2 = hyps.(i - 1) in
-                        let subst, terms1, terms2 = unify_term_lists constants terms1 terms2 in
-                        let goal = mk_new_goal varcount subst constants terms1 terms2 in
-                           (assert_new_goal level subst i goal nextT) :: l
-                     with
-                        RefineError _ ->
-                           l
-                  in
-                     onSomeHypT l (i + 1)
-            in
-               firstT (onSomeHypT [] first_hyp) p
+    | body ->
+         if TptpCache.subsumed !fail_cache body then
+            raise fail_exn;
+         if TptpCache.subsumed goal_cache body then
+            raise cycle_exn;
+         let cache = TptpCache.insert goal_cache body in
+         let nextT goal_info =
+            prove_auxT (**)
+               { tptp_goal_cache = cache;
+                 tptp_goal = goal_info;
+                 tptp_level = level + 1;
+                 tptp_info = info
+               }
+         in
+         let count = Sequent.hyp_count p in
+         let rec find_hyp i =
+            if i = count then
+               begin
+                  fail_cache := TptpCache.insert !fail_cache body;
+                  raise fail_exn
+               end
+            else
+               try
+                  let hyp_info = hyps.(i - 1) in
+                  let subst, terms1, terms2 = unify_term_lists constants body hyp_info.tptp_body in
+                  let goal_info = new_goal constants subst terms1 terms2 in
+                  let goal = mk_goal goal_info in
+                     assert_new_goal level subst i goal (nextT goal_info), i + 1
+               with
+                  RefineError _ ->
+                     find_hyp (i + 1)
+         in
+         let rec matchT i p =
+            let tac, next = find_hyp i in
+               (tac orelseT matchT next) p
+         in
+            matchT first_hyp p
 
 let proveT p =
-   let hyps = (Sequent.explode_sequent p).sequent_hyps in
-   let j, constants = first_clause hyps in
-   let hyps = dest_hyps hyps j in
+   let { sequent_goals = goals;
+         sequent_hyps = hyps
+       } = Sequent.explode_sequent p
+   in
+   let info = dest_hyps hyps in
    let info =
-      { tptp_set = TermSet.empty;
+      { tptp_goal_cache = TptpCache.create info.tptp_constants;
+        tptp_goal = dest_goal (SeqGoal.get goals 0);
         tptp_level = 0;
-        tptp_first_hyp = j;
-        tptp_constants = constants;
-        tptp_hyps = hyps
+        tptp_info = info
       }
    in
       prove_auxT info p

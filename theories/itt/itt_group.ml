@@ -1016,6 +1016,13 @@ doc <:doc<
   
    @end[doc]
 >>
+interactive groupKer_Equality {| intro []; eqcd |} :
+   [wf] sequent [squash] { <H> >- 'A1^car = 'A2^car in univ[i:l] } -->
+   [wf] sequent [squash] { <H> >- 'B1^car = 'B2^car in univ[i:l] } -->
+   [wf] sequent [squash] { <H>; x: 'A1^car >- 'f1 'x = 'f2 'x in 'B1^car } -->
+   [wf] sequent [squash] { <H> >- 'B1^"1" = 'B2^"1" in 'B2^car } -->
+   sequent ['ext] { <H> >- groupKer{'f1; 'A1; 'B1} = groupKer{'f2; 'A2; 'B2} in univ[i:l] }
+
 interactive groupKer_wf {| intro [] |} :
    sequent [squash] { <H> >- "type"{'A^car} } -->
    sequent [squash] { <H> >- 'f in 'A^car -> 'B^car } -->
@@ -1054,10 +1061,11 @@ doc <:doc<
    @begin[doc]
    @modsubsection{Rules}
   
-     Kernel is a subgroup.
+   The kernel of a group homomorphism from $A$ into $B$ is a subgroup
+   of $A$.
    @end[doc]
 >>
-interactive groupKer_subg :
+interactive groupKer_subg {| intro [] |} :
    [wf] sequent [squash] { <H> >- 'A in group[i:l] } -->
    [wf] sequent [squash] { <H> >- 'B in group[i:l] } -->
    [wf] sequent [squash] { <H> >- 'f in groupHom{'A; 'B} } -->

@@ -278,8 +278,8 @@ Rewrites {
 
    // Put all mutually recursive functions into a record.
    MutFuns{'fvars; 'pbunch; 'fbodies; 'rest} ->
-      AstLetRec{R. AstFields{process_functions{'R; 'fvars; 'fvars; 'pbunch; 'fbodies}};
-         R. project_functions{'R; 'fvars; 'rest}}
+      AstLetRec{R. AstFields{process_functions{var_term["R"]; 'fvars; 'fvars; 'pbunch; 'fbodies}};
+         R. project_functions{var_term["R"]; 'fvars; 'rest}}
 
    // process_functions{...} creates the fields of the record.
    process_functions{'R; 'funs; mcons{var_term[f:s]; 'fvars}; mcons{'params; 'pbunch}; mcons{'body; 'fbodies}} ->
@@ -331,7 +331,7 @@ Rewrites {
    // Process non-recursive functions.
    NewFun{SimpleFun{var_term[f:s]; 'params; 'body}; 'rest} ->
       AstLetRec{R. AstFields{
-         AstFunDef{AstLabel[f:t]; first_norec_bind_vars{'R; 'params; 'body}; AstEndDef{}}};
-         R. project_functions{'R; mcons{var_term[f:s]; mnil{}}; 'rest}}
+         AstFunDef{AstLabel[f:t]; first_norec_bind_vars{var_term["R"]; 'params; 'body}; AstEndDef{}}};
+         R. project_functions{var_term["R"]; mcons{var_term[f:s]; mnil{}}; 'rest}}
 }
 

@@ -7588,11 +7588,11 @@ P	p3754	String "equalSymT thenT autoT"
 O	o3754	ext_rule p3754
 P	p3762	String "rwh fold_assert 6"
 O	o3762	ext_rule p3762
-P	p3768	String "rwh (makeFoldC <<'x < 'y>> unfold_lt) 5"
+P	p3768	String "rwh fold_lt 5"
 O	o3768	ext_rule p3768
-P	p3774	String "rwh (makeFoldC <<'x < 'y>> unfold_lt) 6"
+P	p3774	String "rwh fold_lt 6"
 O	o3774	ext_rule p3774
-P	p3780	String "rwh (makeFoldC <<'x < 'y>> unfold_lt) 0"
+P	p3780	String "rwh fold_lt 0"
 O	o3780	ext_rule p3780
 P	p3786	String "assertT << ('a +@ (('m -@ 1) *@ 'a)) < ('b +@ (('m -@ 1) *@ 'b)) >>"
 O	o3786	ext_rule p3786

@@ -24543,7 +24543,7 @@ T	t16338	o b16337 b10
 B	b16338	t16338
 T	t16339	o2973 b16325 b16338
 B	b16339	t16339
-P	p13704	String "rwh (makeFoldC <<\"assert\"{'x}>> unfold_assert) 0"
+P	p13704	String "rwh fold_assert 0"
 O	o13704	ext_rule p13704
 T	t16340	o2965 b16295
 S	s16340	tbrarg\\ h2742 h16308 h16321\\ t16340

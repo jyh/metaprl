@@ -131,6 +131,8 @@ doc <:doc<
 define unfold_lt :
    lt{'a; 'b} <--> "assert"{lt_bool{'a; 'b}}
 
+let fold_lt = makeFoldC << 'a < 'b >> unfold_lt
+
 doc <:doc<
    @begin[doc]
    The @tt[ind] term is the induction combinator for building

@@ -118,64 +118,64 @@ prec prec_fisect < prec_fmember
 prec prec_fmember < prec_foflist
 prec prec_foflist < prec_bimplies
 
-dform fequalp_df : mode[prl] :: fequalp{'eq; 'T} =
+dform fequalp_df : fequalp{'eq; 'T} =
    `"fequalp(" slot{'eq} `"; " slot{'T} `")"
 
-dform fcompare_df : mode[prl] :: parens :: "prec"[prec_fsubseteq] :: fcompare{'eq; 'x1; 'x2} =
+dform fcompare_df : parens :: "prec"[prec_fsubseteq] :: fcompare{'eq; 'x1; 'x2} =
    slot{'x1} `" =" slot{'eq} space slot{'x2}
 
-dform fsubseteq_df1 : mode[prl] :: parens :: "prec"[prec_fsubseteq] :: fsubseteq{'eq; 'A; 'B} =
+dform fsubseteq_df1 : parens :: "prec"[prec_fsubseteq] :: fsubseteq{'eq; 'A; 'B} =
    slot{'A} `" " subseteq slot{'eq} space slot{'B}
 
-dform fequal_df1 : mode[prl] :: parens :: "prec"[prec_fsubseteq] :: fequal{'eq; 'A; 'B} =
+dform fequal_df1 : parens :: "prec"[prec_fsubseteq] :: fequal{'eq; 'A; 'B} =
    slot{'A} `" =" slot{'eq} space slot{'B}
 
-dform fmember_df : mode[prl] :: parens :: "prec"[prec_fmember] :: fmember{'eq; 'x; 's} =
+dform fmember_df : parens :: "prec"[prec_fmember] :: fmember{'eq; 'x; 's} =
    slot{'x} space Nuprl_font!member slot{'eq} space slot{'s}
 
-dform fset_df : mode[prl] :: fset{'eq; 'T} =
+dform fset_df : fset{'eq; 'T} =
    `"FSet(" slot{'eq} `"; " slot{'T} `")"
 
-dform fempty_df : mode[prl] :: fempty =
+dform fempty_df : fempty =
    `"{}"
 
-dform fsingleton_df : mode[prl] :: fsingleton{'x} =
+dform fsingleton_df : fsingleton{'x} =
    `"{" slot{'x} `"}"
 
-dform funion_df : mode[prl] :: parens :: "prec"[prec_funion] :: funion{'eq; 's1; 's2} =
+dform funion_df : parens :: "prec"[prec_funion] :: funion{'eq; 's1; 's2} =
    slot{'s1} space cup slot{'eq} space slot{'s2}
 
-dform fisect_df : mode[prl] :: parens :: "prec"[prec_fisect] :: fisect{'eq; 's1; 's2} =
+dform fisect_df : parens :: "prec"[prec_fisect] :: fisect{'eq; 's1; 's2} =
    slot["le"]{'s1} space cap slot{'eq} space slot{'s2}
 
-dform fsub_df : mode[prl] :: parens :: "prec"[prec_fisect] :: fsub{'eq; 's1; 's2} =
+dform fsub_df : parens :: "prec"[prec_fisect] :: fsub{'eq; 's1; 's2} =
    slot["le"]{'s1} space `"-" slot{'eq} space slot{'s2}
 
-dform fsquash_df : mode[prl] :: fsquash{'eq; 's1} =
+dform fsquash_df : fsquash{'eq; 's1} =
    `"|" slot{'s1} `"|" slot{'eq}
 
-dform fball_df : mode[prl] :: parens :: "prec"[prec_fall] :: fball{'s; x. 'b} =
+dform fball_df : parens :: "prec"[prec_fall] :: fball{'s; x. 'b} =
    pushm[3] Nuprl_font!"forall" subb slot{'x} space Nuprl_font!member space slot{'s} sbreak["",". "]
       slot{'b} popm
 
-dform fbexists_df : mode[prl] :: parens :: "prec"[prec_fexists] :: fbexists{'s; x. 'b} =
+dform fbexists_df : parens :: "prec"[prec_fexists] :: fbexists{'s; x. 'b} =
    pushm[3] Nuprl_font!"exists" subb slot{'x} space Nuprl_font!member space slot{'s} sbreak["",". "]
       slot{'b} popm
 
-dform fall_df : mode[prl] :: parens :: "prec"[prec_fall] :: fall{'eq; 'T; 's; x. 'b} =
+dform fall_df : parens :: "prec"[prec_fall] :: fall{'eq; 'T; 's; x. 'b} =
    pushm[3] Nuprl_font!"forall" slot{'x} space Nuprl_font!member slot{'eq} space slot{'s}
    Nuprl_font!member space slot{'T} sbreak["",". "]
       slot{'b} popm
 
-dform fexists_df : mode[prl] :: parens :: "prec"[prec_fexists] :: fexists{'eq; 'T; 's; x. 'b} =
+dform fexists_df : parens :: "prec"[prec_fexists] :: fexists{'eq; 'T; 's; x. 'b} =
    pushm[3] Nuprl_font!"exists" slot{'x} space Nuprl_font!member slot{'eq} space slot{'s}
    Nuprl_font!member space slot{'T} sbreak["",". "]
       slot{'b} popm
 
-dform feset_df : mode[prl] :: parens :: "prec"[prec_feset] :: feset{'eq; 'T} =
+dform feset_df : parens :: "prec"[prec_feset] :: feset{'eq; 'T} =
    slot{'T} `"//" slot{'eq}
 
-dform foflist_df : mode[prl] :: parens :: "prec"[prec_foflist] :: foflist{'l} =
+dform foflist_df : parens :: "prec"[prec_foflist] :: foflist{'l} =
    `"of_list " slot{'l}
 
 (************************************************************************

@@ -58,7 +58,7 @@ declare eq_atom{'x; 'y}
  * DISPLAY                                                              *
  ************************************************************************)
 
-dform eq_atom_df : mode[prl] :: parens :: "prec"[prec_eq_atom] :: eq_atom{'x; 'y} =
+dform eq_atom_df : parens :: "prec"[prec_eq_atom] :: eq_atom{'x; 'y} =
    slot{'x} space `"=" suba slot{'y}
 
 (************************************************************************

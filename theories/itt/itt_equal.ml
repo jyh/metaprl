@@ -75,6 +75,8 @@ let debug_eqcd =
  * TERMS                                                                *
  ************************************************************************)
 
+let x = 1
+
 declare "type"{'a}
 declare univ[i:l]
 declare equal{'T; 'a; 'b}
@@ -260,23 +262,23 @@ prec prec_type
 prec prec_equal
 
 dform equal_df1 : parens :: "prec"[prec_equal] :: equal{'T; 'a; 'b} =
-   szone pushm slot{'a} space `"= " slot{'b} space `"in " slot{'T} popm ezone
+   szone pushm slot{'a} space `"= " slot{'b} space Nuprl_font!member slot{'T} popm ezone
 
 dform member_df1 : parens :: "prec"[prec_equal] :: member{'T; 'x} =
    szone pushm slot{'x} space Nuprl_font!member hspace slot{'T} popm ezone
 
-dform it_df1 : mode[prl] :: it = cdot
+dform it_df1 : it = cdot
 
-dform type_prl_df1 : parens :: "prec"[prec_type] :: mode[prl] :: "type"{'a} =
+dform type_prl_df1 : parens :: "prec"[prec_type] :: "type"{'a} =
    slot{'a} " " `"Type"
 
-dform univ_df1 : mode[prl] :: univ[i:l] =
+dform univ_df1 : univ[i:l] =
    mathbbU `"[" slot[i:l] `"]"
 
 dform univ_df2 : mode[html] :: univ[i:l] =
    mathbbU `"[" slot[i:l] `"]"
 
-dform squash_df : mode[prl] :: squash =
+dform squash_df : squash =
    cdot
 
 (************************************************************************

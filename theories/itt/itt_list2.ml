@@ -76,18 +76,18 @@ prec prec_append
 prec prec_ball
 prec prec_assoc
 
-dform is_nil_df : mode[prl] :: parens :: "prec"[prec_equal] :: is_nil{'l} =
+dform is_nil_df : parens :: "prec"[prec_equal] :: is_nil{'l} =
    slot{'l} `" =" subb `" []"
 
-dform append_df : mode[prl] :: parens :: "prec"[prec_append] :: append{'l1; 'l2} =
+dform append_df : parens :: "prec"[prec_append] :: append{'l1; 'l2} =
    slot{'l1} `" @" space slot{'l2}
 
-dform ball2_df : mode[prl] :: parens :: "prec"[prec_ball] :: ball2{'l1; 'l2; x, y. 'b} =
+dform ball2_df : parens :: "prec"[prec_ball] :: ball2{'l1; 'l2; x, y. 'b} =
    pushm[3] Nuprl_font!forall subb slot{'x} `", " slot{'y} space
       Nuprl_font!member space slot{'l1} `", " slot{'l2} sbreak["",". "]
       slot{'b} popm
 
-dform assoc_df : mode[prl] :: parens :: "prec"[prec_assoc] :: assoc{'eq; 'x; 'l; v. 'b; 'z} =
+dform assoc_df : parens :: "prec"[prec_assoc] :: assoc{'eq; 'x; 'l; v. 'b; 'z} =
    szone pushm[0] pushm[3]
    `"try" hspace
       pushm[3]
@@ -97,7 +97,7 @@ dform assoc_df : mode[prl] :: parens :: "prec"[prec_assoc] :: assoc{'eq; 'x; 'l;
    pushm[3] `"with Not_found ->" hspace
    slot{'z} popm popm ezone
 
-dform rev_assoc_df : mode[prl] :: parens :: "prec"[prec_assoc] :: rev_assoc{'eq; 'x; 'l; v. 'b; 'z} =
+dform rev_assoc_df : parens :: "prec"[prec_assoc] :: rev_assoc{'eq; 'x; 'l; v. 'b; 'z} =
    szone pushm[0] pushm[3]
    `"try" hspace
       pushm[3]
@@ -107,10 +107,10 @@ dform rev_assoc_df : mode[prl] :: parens :: "prec"[prec_assoc] :: rev_assoc{'eq;
    pushm[3] `"with Not_found ->" hspace
    slot{'z} popm popm ezone
 
-dform map_df : mode[prl] :: parens :: "prec"[prec_apply] :: map{'f; 'l} =
+dform map_df : parens :: "prec"[prec_apply] :: map{'f; 'l} =
    `"map" space slot{'f} space slot{'l}
 
-dform fold_left_df : mode[prl] :: fold_left{'f; 'v; 'l} =
+dform fold_left_df : fold_left{'f; 'v; 'l} =
    `"fold_left(" slot{'f} `", " slot{'v} `", " slot{'l} `")"
 
 dform length_df : length{'l} =

@@ -56,7 +56,7 @@ declare tunion{'A; x. 'B['x]}
 
 prec prec_tunion
 
-dform isect_df : mode[prl] :: parens :: "prec"[prec_tunion] :: tunion{'A; x. 'B} =
+dform isect_df : parens :: "prec"[prec_tunion] :: tunion{'A; x. 'B} =
    cup slot{'x} `":" slot{'A} `"." slot{'B}
 
 (************************************************************************

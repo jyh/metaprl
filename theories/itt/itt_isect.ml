@@ -73,7 +73,7 @@ prim_rw unfold_top : top <--> "isect"{void; x. void}
  * DISPLAY FORMS                                                        *
  ************************************************************************)
 
-dform isect_df1 : mode[prl] :: (isect x: 'A. 'B) =
+dform isect_df1 : (isect x: 'A. 'B) =
    cap slot{'x} `":" slot{'A} `"." slot{'B}
 dform isect_df2 : mode[src] :: (isect x: 'A. 'B) =
    `"isect " slot{'x} `":" slot{'A} `"." slot{'B}

@@ -462,19 +462,19 @@ dform all_df1 : mode[src] :: parens :: "prec"[prec_quant] :: "all"{'A; x. 'B} =
 dform exists_df1 : mode[src] :: parens :: "prec"[prec_quant] :: "exists"{'A; x. 'B} =
   `"exists " slot{'x} `": " slot{'A} `"." slot{'B}
 
-dform true_df2 : mode[prl] :: "true" =
+dform true_df2 : "true" =
    `"True"
 
-dform false_df2 : mode[prl] :: "false" =
+dform false_df2 : "false" =
    `"False"
 
-dform not_df2 : mode[prl] :: parens :: "prec"[prec_not] :: "not"{'a} =
+dform not_df2 : parens :: "prec"[prec_not] :: "not"{'a} =
    Nuprl_font!tneg slot["le"]{'a}
 
-dform implies_df2 : mode[prl] :: parens :: "prec"[prec_implies] :: implies{'a; 'b} =
+dform implies_df2 : parens :: "prec"[prec_implies] :: implies{'a; 'b} =
    slot["le"]{'a} " " Nuprl_font!Rightarrow " " slot["lt"]{'b}
 
-dform iff_df2 : mode[prl] :: parens :: "prec"[prec_iff] :: iff{'a; 'b} =
+dform iff_df2 : parens :: "prec"[prec_iff] :: iff{'a; 'b} =
    slot["le"]{'a} " " Nuprl_font!Leftrightarrow " " slot["lt"]{'b}
 
 (*
@@ -511,7 +511,7 @@ dform and_df4 : and_df{'a} =
 dform all_df2 : parens :: "prec"[prec_quant] :: "all"{'A; x. 'B} =
    pushm[3] Nuprl_font!forall slot{'x} `":" slot{'A} sbreak["",". "] slot{'B} popm
 
-dform exists_df2 : mode[prl] :: parens :: "prec"[prec_quant] :: "exists"{'A; x. 'B} =
+dform exists_df2 : parens :: "prec"[prec_quant] :: "exists"{'A; x. 'B} =
    pushm[3] Nuprl_font!"exists" slot{'x} `":" slot{'A} sbreak["",". "] slot{'B} popm
 
 (************************************************************************

@@ -65,7 +65,7 @@ declare bunion{'A; 'B}
 
 prec prec_bunion
 
-dform bunion_df : mode[prl] :: parens :: "prec"[prec_bunion] :: bunion{'A; 'B} =
+dform bunion_df : parens :: "prec"[prec_bunion] :: bunion{'A; 'B} =
    slot["le"]{'A} `" " cup space slot{'B}
 
 (************************************************************************

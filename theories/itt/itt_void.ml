@@ -78,7 +78,7 @@ let is_void_term = is_no_subterms_term void_opname
  * DISPLAY FORMS                                                        *
  ************************************************************************)
 
-dform void_df1 : mode[prl] :: void = `"Void"
+dform void_df1 : void = `"Void"
 
 (************************************************************************
  * RULES                                                                *

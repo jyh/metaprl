@@ -82,7 +82,7 @@ let mk_subtype_term = mk_dep0_dep0_term subtype_opname
 
 prec prec_subtype
 
-dform subtype_df1 : mode[prl] :: parens :: "prec"[prec_subtype] :: subtype{'A; 'B} =
+dform subtype_df1 : parens :: "prec"[prec_subtype] :: subtype{'A; 'B} =
    slot{'A} `" " subseteq space slot{'B}
 
 (************************************************************************

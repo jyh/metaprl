@@ -83,7 +83,7 @@ let is_unit_term = is_no_subterms_term unit_opname
  * DISPLAY FORMS                                                        *
  ************************************************************************)
 
-dform unit_df1 : mode[prl] :: unit = `"Unit"
+dform unit_df1 : unit = `"Unit"
 
 (************************************************************************
  * RULES                                                                *

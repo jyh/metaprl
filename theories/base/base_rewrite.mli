@@ -36,14 +36,24 @@ include Base_auto_tactic
 open Refiner.Refiner.TermType
 
 open Tactic_type.Tacticals
+open Tactic_type.Conversionals
 
 declare rw_just
 
-rule rewriteAxiom 'H :
+rule rewriteAxiom1 'H :
    sequent ['ext] { 'H >- Perv!"rewrite"{'a; 'a} }
 
+rewrite rewriteAxiom2 'a 'b : (Perv!"rewrite"{'a; 'b}) --> 'a <--> 'b
+
+rule rewriteSym 'H :
+   sequent ['ext] { 'H >- Perv!"rewrite"{'a; 'b} } -->
+   sequent ['ext] { 'H >- Perv!"rewrite"{'b; 'a} }
+
 topval d_rewrite_axiomT : tactic
+
+topval rewriteC : term -> conv
 topval rewriteT : term -> tactic
+topval rewriteSymT : tactic
 
 (*
  * -*-

@@ -44,6 +44,7 @@ open Refiner.Refiner.RefineError
 
 open Tactic_type
 open Tactic_type.Tacticals
+open Tactic_type.Conversionals
 
 open Var
 
@@ -58,38 +59,32 @@ let is_bind_term = is_dep1_term bind_opname
 let mk_bind_term = mk_dep1_term bind_opname
 let dest_bind = dest_dep1_term bind_opname
 
-prim rewriteAxiom 'H :
+prim rewriteAxiom1 'H :
    sequent ['ext] { 'H >- Perv!"rewrite"{'a; 'a} } =
    rw_just
 
-prim rewriteConcl 'H bind{v. 'C['v]} Perv!"rewrite"{'a; 'b} :
+prim_rw rewriteAxiom2 'a 'b : (Perv!"rewrite"{'a; 'b}) --> 'a <--> 'b
+
+interactive rewriteSym 'H :
    sequent ['ext] { 'H >- Perv!"rewrite"{'a; 'b} } -->
-   ('t : sequent ['ext] { 'H >- 'C['b] }) -->
-   sequent ['ext] { 'H >- 'C['a] } =
-   't
+   sequent ['ext] { 'H >- Perv!"rewrite"{'b; 'a} }
 
 (*
  * Substitution.
  * The binding term may be optionally supplied.
  *)
-let rewriteT t p =
-   let a, _ = dest_xrewrite t in
-   let bind =
-      try
-         let t1 = get_with_arg p in
-            if is_bind_term t1 then
-               t1
-            else
-               raise (RefineError ("rewriteT", StringTermError ("need a \"bind\" term: ", t)))
-      with
-         RefineError _ ->
-            let x = get_opt_var_arg "z" p in
-               mk_bind_term x (var_subst (Sequent.concl p) a x)
-   in
-      rewriteConcl (Sequent.hyp_count_addr p) bind t p
+let rewriteC t =
+   let a, b = dest_xrewrite t in
+      rewriteAxiom2 a b
+
+let rewriteT t =
+   rwh (rewriteC t) 0
+
+let rewriteSymT p =
+   rewriteSym (Sequent.hyp_count_addr p) p
 
 let d_rewrite_axiomT p =
-   rewriteAxiom (Sequent.hyp_count_addr p) p
+   rewriteAxiom1 (Sequent.hyp_count_addr p) p
 
 let trivial_resource =
    Mp_resource.improve trivial_resource (**)

@@ -82,8 +82,15 @@ dform var_src_df : mode[src] :: var[v:v] =
 dform var_prl_df : mode[prl] :: var[v:v] =
    slot[v:s]
 
+dform var_tex_df : mode[tex] :: var[v:v] =
+   izone `"{\\it " ezone slot[v:s] izone `"\\/}" ezone
+
+(*
 dform var_html_df : mode[html] :: var[v:v] =
    izone `"<font color=\"#114466\"><b>" ezone slot[v:s] izone `"</b></font>" ezone
+*)
+dform var_html_df : mode[html] :: var[v:v] =
+   izone `"<b>" ezone slot[v:s] izone `"</b>" ezone
 
 dform so_var1_df : var[v:v]{'x1} = var[v:v] "[" 'x1  "]"
 
@@ -327,6 +334,78 @@ ml_dform sequent_html_df : mode["html"] :: "sequent"{'ext; 'seq} format_term buf
                format_break buf "<i>&#8866;</i> " " <i>&#8866;</i> "
             else
                format_break buf "; " "<i>&#8866;</i> ";
+            format_term buf NOParens a;
+            format_goal goals (i + 1) len
+   in
+   let format term =
+      let { sequent_args = args;
+            sequent_hyps = hyps;
+            sequent_goals = goals
+          } = explode_sequent term
+      in
+         format_szone buf;
+         format_pushm buf 0;
+         format_arg (dest_xlist args);
+         format_hyp hyps 0 (SeqHyp.length hyps);
+         format_goal goals 0 (SeqGoal.length goals);
+         format_popm buf;
+         format_ezone buf
+   in
+      format
+
+ml_dform sequent_prl_df : mode["tex"] :: "sequent"{'ext; 'seq} format_term buf =
+   let format_arg = function
+      [] ->
+         ()
+    | args ->
+         format_string buf "[";
+         let rec format = function
+            arg::t ->
+               format_term buf NOParens arg;
+               if t <> [] then
+                  format_string buf "; ";
+               format t
+          | [] ->
+               ()
+         in
+            format args;
+            format_string buf "]";
+            format_space buf
+   in
+   let rec format_hyp hyps i len =
+      if i <> len then
+         let lead = (string_of_int (i + 1)) ^ ". " in
+         let _ =
+            if i = 0 then
+               format_break buf lead ""
+            else
+               format_break buf lead "; ";
+            match SeqHyp.get hyps i with
+               Context (v, values) ->
+                  (* This is a context hypothesis *)
+                  format_term buf NOParens (mk_so_var_term v values)
+             | Hypothesis (v, a) ->
+                  format_szone buf;
+                  format_string buf v;
+                  format_string buf ":";
+                  format_space buf;
+                  format_term buf NOParens a;
+                  format_ezone buf
+         in
+            format_hyp hyps (i + 1) len
+   in
+   let rec format_goal goals i len =
+      if i <> len then
+         let a = SeqGoal.get goals i in
+            if i = 0 then
+               begin
+                  format_izone buf;
+                  format_string buf "$\\vdash$";
+                  format_ezone buf;
+                  format_space buf
+               end
+            else
+               format_break buf "; " "$\\vdash$ ";
             format_term buf NOParens a;
             format_goal goals (i + 1) len
    in

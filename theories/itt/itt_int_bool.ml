@@ -62,19 +62,19 @@ declare ge_int{'i; 'j}
  * DISPLAY FORMS                                                        *
  ************************************************************************)
 
-dform eq_int_df : mode[prl] :: parens :: "prec"[prec_implies] :: eq_int{'i; 'j} =
+dform eq_int_df : parens :: "prec"[prec_implies] :: eq_int{'i; 'j} =
    slot{'i} " " `"=" " " slot{'j}
 
-dform lt_int_df : mode[prl] :: parens :: "prec"[prec_implies] :: lt_int{'i; 'j} =
+dform lt_int_df : parens :: "prec"[prec_implies] :: lt_int{'i; 'j} =
    slot{'i} " " `"<" " " slot{'j}
 
-dform le_int_df : mode[prl] :: parens :: "prec"[prec_implies] :: le_int{'i; 'j} =
+dform le_int_df : parens :: "prec"[prec_implies] :: le_int{'i; 'j} =
    slot{'i} " " Nuprl_font!le " " slot{'j}
 
-dform gt_int_df : mode[prl] :: parens :: "prec"[prec_implies] :: gt_int{'i; 'j} =
+dform gt_int_df : parens :: "prec"[prec_implies] :: gt_int{'i; 'j} =
    slot{'i} " " `">" " " slot{'j}
 
-dform ge_int_df : mode[prl] :: parens :: "prec"[prec_implies] :: ge_int{'i; 'j} =
+dform ge_int_df : parens :: "prec"[prec_implies] :: ge_int{'i; 'j} =
    slot{'i} " " Nuprl_font!ge " " slot{'j}
 
 (************************************************************************

@@ -294,19 +294,25 @@ declare begin_cd{'t}
 declare cdinternal{'t}
 declare end_cd
 
-dform begin_cd_df1 : internal :: begin_cd{'path} =
+dform begin_cd_tex_df : internal :: begin_cd{'path} =
+   `""
+
+dform end_cd_tex_df : internal :: end_cd =
+   `""
+
+dform begin_cd_df1 : internal :: mode[html] :: begin_cd{'path} =
    izone `"<a href=\"http://cd.metaprl.local//" cdinternal{'path}
 
-dform cd_internal_df1 : internal :: cdinternal{cons{."parent"[name:s]; cons{'n2; 'n3}}} =
+dform cd_internal_df1 : internal :: mode[html] :: cdinternal{cons{."parent"[name:s]; cons{'n2; 'n3}}} =
    slot[name:s] `"/" cdinternal{cons{'n2; 'n3}}
 
-dform cd_internal_df2 : internal :: cdinternal{cons{."parent"[name:s]; nil}} =
+dform cd_internal_df2 : internal :: mode[html] :: cdinternal{cons{."parent"[name:s]; nil}} =
    slot[name:s] cdinternal{nil}
 
-dform cd_internal_df3 : internal :: cdinternal{nil} =
+dform cd_internal_df3 : internal :: mode[html] :: cdinternal{nil} =
    `"\">" ezone
 
-dform end_cd_df1 : internal :: end_cd =
+dform end_cd_df1 : internal :: mode[html] :: end_cd =
    izone `"</a>" ezone
 
 dform path_parent_nil_df : internal :: path{cons{."parent"[name:s]; nil}} =
@@ -501,16 +507,22 @@ dform status_df5 : internal :: goal_status_cd{'cd; cons{'a; 'b}} =
 dform status_df5b : internal :: goal_status_cd{'cd; nil} =
    `""
 
-dform status_df6 : internal :: goal_cd_begin{'cd} =
+dform status_df6a : internal :: goal_cd_begin{'cd} =
+   `""
+
+dform status_df9a : internal :: goal_cd_end =
+   `""
+
+dform status_df6 : internal :: mode[html] :: goal_cd_begin{'cd} =
    izone `"<a href=\"cd.metaprl.local/" goal_cd_middle{'cd}
 
-dform status_df7 : internal :: goal_cd_middle{goal_cd_dot} =
+dform status_df7 : internal :: mode[html] :: goal_cd_middle{goal_cd_dot} =
    `".\">" ezone
 
-dform status_df8 : internal :: goal_cd_middle{cons{goal_cd_up; 'cd}} =
+dform status_df8 : internal :: mode[html] :: goal_cd_middle{cons{goal_cd_up; 'cd}} =
    `"/.." goal_cd_middle{'cd}
 
-dform status_df9 : internal :: goal_cd_end =
+dform status_df9 : internal :: mode[html] :: goal_cd_end =
    izone `"</a>" ezone
 
 (*

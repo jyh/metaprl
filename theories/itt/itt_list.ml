@@ -135,10 +135,10 @@ dform colons_df1 : colons{cons{'a; nil}} =
 dform colons_df2 : colons{cons{'a; 'b}} =
    colons{'b} `"::" slot{'a}
 
-dform list_df1 : mode[prl] :: parens :: "prec"[prec_list] :: list{'a} =
+dform list_df1 : parens :: "prec"[prec_list] :: list{'a} =
    slot{'a} `" List"
 
-dform list_ind_df1 : mode[prl] :: parens :: "prec"[prec_list] :: list_ind{'e; 'base; h, t, f. 'step} =
+dform list_ind_df1 : parens :: "prec"[prec_list] :: list_ind{'e; 'base; h, t, f. 'step} =
    szone pushm[1] pushm[3]
    `"match " slot{'e} `" with" hspace
    `"  [] ->" hspace slot{'base} popm hspace

@@ -72,7 +72,7 @@ declare srecind{'a; p, h. 'g['p; 'h]}
  * DISPLAY                                                              *
  ************************************************************************)
 
-dform srec_df : mode[prl] :: srec{T. 'B} =
+dform srec_df : srec{T. 'B} =
    szone mu `"{" slot{'T} `"." pushm[0] slot{'B} `"}" popm ezone
 
 (************************************************************************

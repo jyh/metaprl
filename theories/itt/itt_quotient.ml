@@ -77,7 +77,7 @@ declare "quot"{'A; x, y. 'E['x; 'y]}
 
 prec prec_quot
 
-dform quot_df1 : mode[prl] :: parens :: "prec"[prec_quot] :: "quot"{'A; x, y. 'E} =
+dform quot_df1 : parens :: "prec"[prec_quot] :: "quot"{'A; x, y. 'E} =
    slot{'x} `", " slot{'y} `":" " " slot{'A} `" // " slot{'E}
 
 dform quot_df2 : mode[src] :: parens :: "prec"[prec_quot] :: "quot"{'A; x, y. 'E} =

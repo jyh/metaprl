@@ -153,10 +153,10 @@ dform fun_df3 : rfun{'A; f, x. 'B} =
 dform apply_df1 : parens :: "prec"[prec_apply] :: apply{'f; 'a} =
    slot["lt"]{'f} " " slot["le"]{'a}
 
-dform lambda_df1 : mode[prl] :: parens :: "prec"[prec_lambda] :: lambda{x. 'b} =
+dform lambda_df1 : parens :: "prec"[prec_lambda] :: lambda{x. 'b} =
    Nuprl_font!lambda slot{'x} `"." slot{'b}
 
-dform fix_df1 : mode[prl] :: fix{f. 'b} =
+dform fix_df1 : fix{f. 'b} =
    `"fix" "(" slot{'f} `"." slot{'b} ")"
 
 dform well_founded_prop_df : well_founded_prop{'A} =

@@ -127,34 +127,34 @@ prec prec_bor < prec_band
 prec prec_band < prec_bnot
 prec prec_bnot < prec_assert
 
-dform bool_df : mode[prl] :: bool =
+dform bool_df : bool =
    `"Bool"
 
-dform btrue_df : mode[prl] :: btrue =
+dform btrue_df : btrue =
    `"true"
 
-dform bfalse_df : mode[prl] :: bfalse =
+dform bfalse_df : bfalse =
    `"false"
 
-dform bor_df : mode[prl] :: parens :: "prec"[prec_bor] :: bor{'a; 'b} =
+dform bor_df : parens :: "prec"[prec_bor] :: bor{'a; 'b} =
    slot{'a} " " vee subb " " slot{'b}
 
-dform band_df : mode[prl] :: parens :: "prec"[prec_band] :: band{'a; 'b} =
+dform band_df : parens :: "prec"[prec_band] :: band{'a; 'b} =
    slot{'a} " " wedge subb " " slot{'b}
 
-dform bimplies_df : mode[prl] :: parens :: "prec"[prec_bimplies] :: bimplies{'a; 'b} =
+dform bimplies_df : parens :: "prec"[prec_bimplies] :: bimplies{'a; 'b} =
    slot{'a} " " Rightarrow subb " " slot{'b}
 
-dform bnot_df : mode[prl] :: parens :: "prec"[prec_bnot] :: bnot{'a} =
+dform bnot_df : parens :: "prec"[prec_bnot] :: bnot{'a} =
    tneg subb slot{'a}
 
-dform ifthenelse_df : mode[prl] :: parens :: "prec"[prec_bor] :: ifthenelse{'e1; 'e2; 'e3} =
+dform ifthenelse_df : parens :: "prec"[prec_bor] :: ifthenelse{'e1; 'e2; 'e3} =
    szone pushm[0] push_indent `"if" `" " slot{'e1} `" " `"then" hspace
    szone slot{'e2} ezone popm hspace
    push_indent `"else" hspace
    szone slot{'e3} ezone popm popm ezone
 
-dform assert_df : mode[prl] :: parens :: "prec"[prec_assert] :: "assert"{'t} =
+dform assert_df : parens :: "prec"[prec_assert] :: "assert"{'t} =
    downarrow slot{'t}
 
 (************************************************************************

@@ -82,6 +82,13 @@ declare small_end
 declare cd_begin[command:s]
 declare cd_end
 
+(*
+ * TeX control.
+ *)
+declare mathBB[name:s]
+declare ensuremath[name:s]
+declare mathmacro[name:s]
+
 (* Displays *)
 declare mathbbA
 declare mathbbB

@@ -28,7 +28,7 @@ opt: $(MAIN).cmxa
 install:: all
 
 clean::
-	$(RM) *.p4* *.pp*
+	$(CLEAN)
 
 # Real makefile
 include $(ROOT)/mk/rules

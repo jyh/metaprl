@@ -55,10 +55,11 @@ MPFILES =\
 
 Theory($(MPFILES))
 
-#
-# Clean up
-#
+MLZFILES =\
+   m_ra_type\
+   m_x86_inst_type\
+
 clean:
-    $(CLEAN) *.cph
+    $(CLEAN) *.cph *.output
 
 all: theory$(LIB_SUFFIX)

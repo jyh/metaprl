@@ -32,9 +32,8 @@ MPFILES = \
 
 Theory($(MPFILES))
 
-#
-# Clean up
-#
+MLZFILES = mfir_theory
+
 clean:
     $(CLEAN)
 

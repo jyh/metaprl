@@ -35,6 +35,6 @@ Theory($(MPFILES))
 # Clean up
 #
 clean:
-    $(CLEAN)
+    $(CLEAN) tptp_lex.ml
 
 all: theory$(LIB_SUFFIX)

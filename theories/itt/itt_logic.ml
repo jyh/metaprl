@@ -1157,7 +1157,7 @@ struct
             :: ts
        | Impl,t1::t2::ts ->
             (fun subst ->
-               (find_hyp (apply_subst hyp subst) dT) thenLT [t1 subst; t2 subst])
+               (find_hyp (apply_subst hyp subst) nt_dT) thenLT [t1 subst; t2 subst])
             :: ts
        | Andr,t1::t2::ts -> (fun subst -> dT 0 thenLT [t1 subst; t2 subst]) :: ts
        | Orr1,t::ts -> (fun subst -> selT 1 (dT 0) thenLT [idT; t subst]) :: ts

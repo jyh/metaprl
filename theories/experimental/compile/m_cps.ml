@@ -42,18 +42,29 @@ open M_ir
 open Mp_debug
 open Printf
 
-open Refiner.Refiner.TermType
+open Refiner.Refiner
 open Refiner.Refiner.Term
+open Refiner.Refiner.TermType
+open Refiner.Refiner.TermOp
+open Refiner.Refiner.TermMan
+open Refiner.Refiner.TermAddr
 open Refiner.Refiner.TermSubst
+open Refiner.Refiner.Refine
 open Refiner.Refiner.RefineError
 
 open Mp_resource
+open Var
+open Mptop
+
 open Simple_print
 open Term_match_table
 
+open Tactic_type
+open Tactic_type.Tacticals
 open Tactic_type.Conversionals
 open Tactic_type.Sequent
 
+(*
 (************************************************************************
  * REDUCTION RESOURCE                                                   *
  ************************************************************************)
@@ -126,6 +137,7 @@ let cpsTopC = funC cpsTopC_env
 
 let cpsC =
    repeatC (higherC cpsTopC)
+*)
 
 (************************************************************************
  * CPS transformation
@@ -133,62 +145,48 @@ let cpsC =
 
 (*!
  * @begin[doc]
- * @modsubsection{Application}
+ * @modsubsection{CPS Application}
  *
  * Add an application that we will map through the program.
  * This should be eliminated by the end of CPS conversion.
  * @end[doc]
  *)
-declare Apply{'e1; 'e2}
+declare CPS{'e1; 'e2}
 
-prec prec_apply
-prec prec_fun < prec_apply
-
-dform apply_df : parens :: "prec"[prec_apply] :: Apply{'e1; 'e2} =
-   slot["lt"]{'e1} `"@" slot["le"]{'e2}
+dform cps_df : CPS{'e1; 'e2} =
+   `"CPS[" pushm[0] slot{'e1} popm `";" " " pushm[0] slot{'e2} popm `"]"
 
 (*!
  * @begin[doc]
- * @modsubsection{Formalizing CPS conversion}
+ * @modsubsection{CPS conversion}
  *
- * CPS conversion work by transformation of function application.
- * Each rewrite in the transformation preserves the operational
- * semantics of the program.
+ * CPS conversion is expressed using inference rules.
  * @end[doc]
  *)
-prim_rw cps_let_atom : Apply{'cont; LetAtom{AtomInt[i:n]; v. 'e['v]}} <-->
-   LetAtom{AtomInt[i:n]; v. Apply{'cont; 'e['v]}}
+interactive cps_let_int 'H bind{x. 'A['x]} CPS{'cont; LetAtom{AtomInt[i:n]; v. 'e['v]}} :
+   sequent [m] { 'H >- 'A[LetAtom{AtomInt[i:n]; v. CPS{'cont; 'e['v]}}] } -->
+   sequent [m] { 'H >- 'A[CPS{'cont; LetAtom{AtomInt[i:n]; v. 'e['v]}}] }
 
-prim_rw cps_let_binop : Apply{'cont; LetAtom{AtomBinop{'op; 'a1; 'a2}; v. 'e['v]}} <-->
-   LetAtom{AtomBinop{'op; 'a1; 'a2}; v. Apply{'cont; 'e['v]}}
+interactive cps_let_binop 'H bind{x. 'A['x]} CPS{'cont; LetAtom{AtomBinop{'op; 'a1; 'a2}; v. 'e['v]}} :
+   sequent [m] { 'H >- 'A[LetAtom{AtomBinop{'op; 'a1; 'a2}; v. CPS{'cont; 'e['v]}}] } -->
+   sequent [m] { 'H >- 'A[CPS{'cont; LetAtom{AtomBinop{'op; 'a1; 'a2}; v. 'e['v]}}] }
 
-prim_rw cps_let_fun : Apply{'cont; LetAtom{AtomFun{x. 'e1['x]}; f. 'e2['f]}} <-->
-   LetAtom{AtomFun{cont. AtomFun{x. Apply{'cont; 'e1['x]}}}; f. Apply{'cont; 'e2[Apply{'f; AtomFun{x. 'x}}]}}
-
-prim_rw cps_let_pair : Apply{'cont; LetPair{'a1; 'a2; v. 'e['v]}} <-->
-   LetPair{'a1; 'a2; v. Apply{'cont; 'e['v]}}
-
-prim_rw cps_let_subscript : Apply{'cont; LetSubscript{'a1; 'a2; v. 'e['v]}} <-->
-   LetSubscript{'a1; 'a2; v. Apply{'cont; 'e['v]}}
-
-prim_rw cps_return : Apply{'cont; Return{'a}} <-->
-   TailCall{'cont; 'a}
+interactive cps_let_fun 'H bind{x. 'A['x]} CPS{'cont; LetAtom{AtomFun{x. 'e1['x]}; f. 'e2['f]}} :
+   sequent [m] { 'H >- 'A[LetAtom{AtomFun{g. AtomFun{x. CPS{'g; 'e1['x]}}}; f. CPS{'cont; 'e2[CPS{'f; AtomFun{z. 'z}}]}}] } -->
+   sequent [m] { 'H >- 'A[CPS{'cont; LetAtom{AtomFun{x. 'e1['x]}; f. 'e2['f]}}] }
 
 (*
- * This rewrite is bogus for now.
+ * Tactic to apply transformation.
  *)
-prim_rw cps_tailcall : Apply{'cont; Apply{'f; AtomFun{x. 'x}}} <-->
-   Apply{'f; 'cont}
-(*! @docoff *)
-
-let resource cps +=
-    [<< Apply{'cont; LetAtom{AtomInt[i:n]; v. 'e['v]}} >>, cps_let_atom;
-     << Apply{'cont; LetAtom{AtomBinop{'op; 'a1; 'a2}; v. 'e['v]}} >>, cps_let_binop;
-     << Apply{'cont; LetAtom{AtomFun{x. 'e1['x]}; f. 'e2['f]}} >>, cps_let_fun;
-     << Apply{'cont; LetPair{'a1; 'a2; v. 'e['v]}} >>, cps_let_pair;
-     << Apply{'cont; LetSubscript{'a1; 'a2; v. 'e['v]}} >>, cps_let_subscript;
-     << Apply{'cont; Return{'a}} >>, cps_return;
-     << Apply{'cont; Apply{'f; AtomFun{x. 'x}}} >>, cps_tailcall]
+let cpsAddrT a p =
+   let a = make_address a in
+   let x = get_opt_var_arg "z" p in
+   let x_term = mk_var_term x in
+   let goal = Sequent.concl p in
+   let apply = term_subterm goal a in
+   let goal' = replace_subterm goal a x_term in
+   let bind = mk_xbind_term x goal' in
+      cps_let_int (Sequent.hyp_count_addr p) bind apply p
 
 (*!
  * @docoff

@@ -60,6 +60,7 @@ prec prec_mul
 prec prec_add
 prec prec_if
 prec prec_fun
+prec prec_let
 
 (*
  * Binary operators.
@@ -95,6 +96,12 @@ declare LetSubscript{'a1; 'a2; v. 'e['v]}
 declare SetSubscript{'a1; 'a2; 'a3; 'e}
 declare LetApply{'f; 'a; v. 'e['v]}
 declare Return{'a}
+
+(*
+ * Recursive functions.
+ *)
+declare FunDecl{f. 'e['f]}
+declare FunDef{'f; 'e1; 'e2}
 
 (*
  * Programs are represented as sequents:

@@ -26,11 +26,24 @@
  *)
 extends M_cps
 
-(*
+(************************************************************************
  * Just for testing.
  *)
+interactive test_prog 'H :
+   sequent [m] { 'H; cont: exp >- compilable{CPS{'cont;
+                                  LetAtom{AtomInt[1:n]; v1.
+                                  LetAtom{AtomBinop{AddOp; AtomInt[1:n]; 'v1}; v2.
+                                  FunDecl{f.
+                                  FunDef{'f; AtomFun{v3.
+                                     LetPair{'v2; 'v3; v4.
+                                     LetSubscript{'v4; AtomInt[0:n]; v5.
+                                     Return{'v5}}}};
+                                  TailCall{'f; AtomInt[17:n]}}}}}}}
+               }
+
+(*
 interactive ext_test_prog 'H :
-   sequent [m] { 'H; cont: exp >- compilable{Apply{'cont; .<:ext<
+   sequent [m] { 'H >- compilable{.<:ext<
                           let v1 = 1 in
                           let v2 = 2+v1 in
                           let f (v3) =
@@ -38,9 +51,8 @@ interactive ext_test_prog 'H :
                              let v5 = v4[0] in
                                 v5
                           in
-                             f(17)>>}}
-               }
-
+                             f(17)>>} }
+*)
 
 (*!
  * @docoff

@@ -26,25 +26,17 @@
  *)
 extends M_ir
 
-open Refiner.Refiner.Term
-open Refiner.Refiner.RefineError
-open Mp_resource
-
-open Tactic_type.Conversionals
+open Tactic_type.Tacticals
 
 (*
  * Terms.
  *)
-declare Apply{'e1; 'e2}
+declare CPS{'e1; 'e2}
 
 (*
- * CPS resource
+ * Testing.
  *)
-resource (term * conv, conv) cps
-val process_cps_resource_annotation : (conv, term * conv) annotation_processor
-
-topval cpsTopC : conv
-topval cpsC : conv
+topval cpsAddrT : int list -> tactic
 
 (*!
  * @docoff

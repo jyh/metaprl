@@ -43,7 +43,6 @@ doc <:doc<
    @end[doc]
 >>
 extends Itt_equal
-extends Itt_squash
 extends Itt_rfun
 extends Itt_bool
 extends Itt_logic
@@ -89,6 +88,10 @@ define unfold_min_rat : min_rat{'a;'b} <-->
 	(min{lambda{x.lambda{y.le_bool_rat{'x;'y}}}} 'a 'b)
 
 topval fold_rat : conv
+topval reduce_add_rat : conv
+topval reduce_mul_rat : conv
+topval reduce_neg_rat : conv
+topval reduce_inv_rat : conv
 topval reduce_beq_rat2 : conv
 topval fold_rationals : conv
 
@@ -208,5 +211,18 @@ rule ge_addMonoElim 'H 'c :
 	[wf] sequent { <H>; w: ge_rat{'a;'b}; <J['w]> >- 'c in rationals } -->
 	sequent { <H>; w: ge_rat{'a;'b}; <J['w]>; ge_rat{add_rat{'a;'c};add_rat{'b;'c}} >- 'C['w] } -->
 	sequent { <H>; w: ge_rat{'a;'b}; <J['w]> >- 'C['w] }
+
+topval add_rat_IdC : conv
+topval add_rat_Id2C : conv
+topval add_rat_CommutC : conv
+topval add_rat_AssocC : conv
+topval add_rat_Assoc2C : conv
+topval mul_rat_IdC : conv
+topval mul_rat_Id2C : conv
+topval mul_rat_CommutC : conv
+topval mul_rat_AssocC : conv
+topval mul_rat_Assoc2C : conv
+topval mul_rat_add_DistribC : conv
+topval mul_rat_add_Distrib3C : conv
 
 doc <:doc< @docoff >>

@@ -43,7 +43,6 @@ doc <:doc<
    @end[doc]
 >>
 extends Itt_equal
-extends Itt_squash
 extends Itt_rfun
 extends Itt_bool
 extends Itt_logic
@@ -65,6 +64,9 @@ open Itt_equal
 open Itt_struct
 open Itt_int_base
 open Itt_int_ext
+
+open Itt_eq_base
+open Itt_esquash
 
 let _ = show_loading "Loading Itt_rat%t"
 
@@ -141,6 +143,8 @@ let resource reduce += [
    << mul_rat{rat{'a;'b}; rat{'c;'d}} >>, reduce_mul_rat;
    << neg_rat{rat{'a;'b}} >>, reduce_neg_rat;
    << neg_rat{('a,'b)} >>, (addrC [0] fold_rat thenC reduce_neg_rat);
+	<< inv_rat{rat{'a;'b}} >>, reduce_inv_rat;
+	<< inv_rat{('a,'b)} >>, (addrC [0] fold_rat thenC reduce_inv_rat);
    << lt_bool_rat{rat{'a;'b}; rat{'c;'d}} >>, reduce_lt_bool_rat;
    << beq_rat{('a,'b); ('c,'d)} >>, reduce_beq_rat;
    << beq_rat{rat{'a;'b}; rat{'c;'d}} >>, reduce_beq_rat2;
@@ -182,6 +186,24 @@ let fold_rationals = makeFoldC <<rationals>> unfold_rationals
 
 let fold_fieldQ = makeFoldC <<fieldQ>> unfold_fieldQ
 
+let rat_term = << rat{'x; 'y} >>
+let rat_opname = opname_of_term rat_term
+let is_rat_term = is_dep0_dep0_term rat_opname
+let mk_rat_term = mk_dep0_dep0_term rat_opname
+let dest_rat = dest_dep0_dep0_term rat_opname
+
+let add_rat_term = << add_rat{'x; 'y} >>
+let add_rat_opname = opname_of_term add_rat_term
+let is_add_rat_term = is_dep0_dep0_term add_rat_opname
+let mk_add_rat_term = mk_dep0_dep0_term add_rat_opname
+let dest_add_rat = dest_dep0_dep0_term add_rat_opname
+
+let mul_rat_term = << mul_rat{'x; 'y} >>
+let mul_rat_opname = opname_of_term mul_rat_term
+let is_mul_rat_term = is_dep0_dep0_term mul_rat_opname
+let mk_mul_rat_term = mk_dep0_dep0_term mul_rat_opname
+let dest_mul_rat = dest_dep0_dep0_term mul_rat_opname
+
 doc <:doc< @docoff >>
 
 (************************************************************************
@@ -207,7 +229,7 @@ dform add_rat_df1 : except_mode[src] :: parens :: "prec"[prec_add] :: add_rat{'a
  =
    slot["le"]{'a} `" +" Nuprl_font!subq `" " slot["lt"]{'b}
 
-dform mul_rat_df1 : except_mode[src] :: parens :: "prec"[prec_add] :: mul_rat{'a; 'b}
+dform mul_rat_df1 : except_mode[src] :: parens :: "prec"[prec_mul] :: mul_rat{'a; 'b}
  =
    slot["le"]{'a} `" *" Nuprl_font!subq `" " slot["lt"]{'b}
 
@@ -649,10 +671,227 @@ interactive_rw gt_bool_int2lt_bool_rat_rw :
 	('b in int) -->
 	('a >@ 'b) <--> (lt_bool_rat{rat_of_int{'b}; rat_of_int{'a}})
 
+interactive add_Commute :
+	[wf] sequent{ <H> >- 'a in rationals } -->
+	[wf] sequent{ <H> >- 'b in rationals } -->
+	sequent{ <H> >- add_rat{'a;'b} = add_rat{'b;'a} in rationals}
+
+interactive add_Commute_sqeq :
+	[wf] sequent{ <H> >- 'a in rationals } -->
+	[wf] sequent{ <H> >- 'b in rationals } -->
+	sequent{ <H> >- add_rat{'a;'b} ~ add_rat{'b;'a} }
+
+interactive mul_Commute :
+	[wf] sequent{ <H> >- 'a in rationals } -->
+	[wf] sequent{ <H> >- 'b in rationals } -->
+	sequent{ <H> >- mul_rat{'a;'b} = mul_rat{'b;'a} in rationals}
+
 interactive ge_int_elim 'H :
 	[wf] sequent { <H>; x: 'a >= 'b; <J['x]> >- 'a in int } -->
 	[wf] sequent { <H>; x: 'a >= 'b; <J['x]> >- 'b in int } -->
 	sequent { <H>; x: 'a >= 'b; <J['x]>; ge_rat{rat_of_int{'a};rat_of_int{'b}} >- 'C['x] } -->
 	sequent { <H>; x: 'a >= 'b; <J['x]> >- 'C['x] }
+(*---------------------------------------------*)
+interactive add_rat_Commut :
+   [wf] sequent { <H> >- 'a in rationals } -->
+   [wf] sequent { <H> >- 'b in rationals } -->
+   sequent { <H> >- add_rat{'a; 'b} ~ add_rat{'b; 'a} }
+
+interactive_rw add_rat_Commut_rw :
+   ( 'a in rationals ) -->
+   ( 'b in rationals ) -->
+   add_rat{'a; 'b} <--> add_rat{'b; 'a}
+
+let add_rat_CommutC = add_rat_Commut_rw
+
+interactive add_rat_Assoc :
+   [wf] sequent { <H> >- 'a in rationals } -->
+   [wf] sequent { <H> >- 'b in rationals } -->
+   [wf] sequent { <H> >- 'c in rationals } -->
+   sequent { <H> >- add_rat{'a; add_rat{'b; 'c}} ~ add_rat{add_rat{'a; 'b}; 'c} }
+
+interactive_rw add_rat_Assoc_rw :
+   ( 'a in rationals ) -->
+   ( 'b in rationals ) -->
+   ( 'c in rationals ) -->
+   add_rat{'a; add_rat{'b; 'c}} <--> add_rat{add_rat{'a; 'b}; 'c}
+
+let add_rat_AssocC = add_rat_Assoc_rw
+
+interactive_rw add_rat_Assoc2_rw {| reduce |} :
+   ( 'a in rationals ) -->
+   ( 'b in rationals ) -->
+   ( 'c in rationals ) -->
+   add_rat{add_rat{'a; 'b}; 'c} <--> add_rat{'a; add_rat{'b; 'c}}
+
+let add_rat_Assoc2C = add_rat_Assoc2_rw
+
+doc <:doc<
+   @begin[doc]
+
+   @rat{0; 1} is neutral element for @add_rat{Perv!nil;Perv!nil} in @rationals
+
+	@end[doc]
+>>
+
+interactive add_rat_Id :
+   [wf] sequent { <H> >- 'a in rationals } -->
+   sequent { <H> >- add_rat{'a; rat{0; 1}} ~ 'a }
+
+interactive_rw add_rat_Id_rw {| reduce |} :
+   ( 'a in rationals ) -->
+   add_rat{'a; rat{0; 1}} <--> 'a
+
+let add_rat_IdC = add_rat_Id_rw
+
+interactive_rw add_rat_Id2_rw {| reduce |} :
+   ( 'a in rationals ) -->
+   add_rat{rat{0; 1}; 'a} <--> 'a
+
+let add_rat_Id2C = add_rat_Id2_rw
+(*
+let resource reduce += [
+	<<'a -@ rat{0; 1}>>, (unfold_sub thenC (addrC [1] reduce_minus));
+]
+*)
+interactive_rw add_rat_Id3_rw :
+   ( 'a in rationals ) -->
+   'a <--> add_rat{rat{0; 1}; 'a}
+
+let add_rat_Id3C = add_rat_Id3_rw
+
+interactive_rw add_rat_Id4_rw :
+   ( 'a in rationals ) -->
+   'a <--> add_rat{'a; rat{0; 1}}
+
+let add_rat_Id4C = add_rat_Id4_rw
+
+interactive mul_rat_Commut :
+   [wf] sequent { <H> >- 'a in rationals } -->
+   [wf] sequent { <H> >- 'b in rationals } -->
+   sequent { <H> >- mul_rat{'a; 'b} ~ mul_rat{'b; 'a} }
+
+interactive_rw mul_rat_Commut_rw :
+   ('a in rationals) -->
+   ('b in rationals) -->
+   mul_rat{'a; 'b} <--> mul_rat{'b; 'a}
+
+let mul_rat_CommutC = mul_rat_Commut_rw
+
+interactive mul_rat_Assoc :
+   [wf] sequent { <H> >- 'a in rationals } -->
+   [wf] sequent { <H> >- 'b in rationals } -->
+   [wf] sequent { <H> >- 'c in rationals } -->
+   sequent { <H> >- mul_rat{'a; mul_rat{'b; 'c}} ~ mul_rat{mul_rat{'a; 'b}; 'c} }
+
+interactive_rw mul_rat_Assoc_rw :
+   ('a in rationals) -->
+   ('b in rationals) -->
+   ('c in rationals) -->
+   mul_rat{'a; mul_rat{'b; 'c}} <--> mul_rat{mul_rat{'a; 'b}; 'c}
+
+let mul_rat_AssocC = mul_rat_Assoc_rw
+
+interactive_rw mul_rat_Assoc2_rw {| reduce |} :
+   ('a in rationals) -->
+   ('b in rationals) -->
+   ('c in rationals) -->
+   mul_rat{mul_rat{'a; 'b}; 'c} <--> mul_rat{'a; mul_rat{'b; 'c}}
+
+let mul_rat_Assoc2C = mul_rat_Assoc2_rw
+
+interactive mul_rat_add_Distrib :
+   [wf] sequent { <H> >- 'a in rationals } -->
+   [wf] sequent { <H> >- 'b in rationals } -->
+   [wf] sequent { <H> >- 'c in rationals } -->
+   sequent { <H> >- mul_rat{'a; add_rat{'b; 'c}} ~ add_rat{mul_rat{'a; 'b}; mul_rat{'a; 'c}} }
+
+interactive_rw mul_rat_add_Distrib_rw :
+   ('a in rationals) -->
+   ('b in rationals) -->
+   ('c in rationals) -->
+   mul_rat{'a; add_rat{'b; 'c}} <--> add_rat{mul_rat{'a; 'b}; mul_rat{'a; 'c}}
+
+let mul_rat_add_DistribC = mul_rat_add_Distrib_rw
+
+interactive_rw mul_rat_add_Distrib2C :
+   ('a in rationals) -->
+   ('b in rationals) -->
+   ('c in rationals) -->
+   add_rat{mul_rat{'a; 'b}; mul_rat{'a; 'c}} <--> mul_rat{'a; add_rat{'b; 'c}}
+
+interactive_rw mul_rat_add_Distrib3C :
+   ('a in rationals) -->
+   ('b in rationals) -->
+   ('c in rationals) -->
+   mul_rat{add_rat{'a; 'b}; 'c} <--> add_rat{mul_rat{'a; 'c}; mul_rat{'b; 'c}}
+
+interactive mul_rat_Id :
+   [wf] sequent { <H> >- 'a in rationals } -->
+   sequent { <H> >- mul_rat{rat{1; 1}; 'a} ~ 'a }
+
+interactive_rw mul_rat_Id_rw {| reduce |} :
+   ('a in rationals) -->
+   mul_rat{rat{1; 1}; 'a} <--> 'a
+
+let mul_rat_IdC = mul_rat_Id_rw
+
+interactive mul_rat_Id2 :
+   [wf] sequent { <H> >- 'a in rationals } -->
+   sequent { <H> >- mul_rat{'a; rat{1; 1}} ~ 'a }
+
+interactive_rw mul_rat_Id2_rw {| reduce |} :
+   ('a in rationals) -->
+   mul_rat{'a; rat{1; 1}} <--> 'a
+
+let mul_rat_Id2C = mul_rat_Id2_rw
+
+interactive mul_rat_Id3 :
+   [wf] sequent { <H> >- 'a in rationals } -->
+   sequent { <H> >- 'a ~ mul_rat{rat{1; 1}; 'a} }
+
+interactive_rw mul_rat_Id3_rw :
+   ('a in rationals) -->
+   'a <--> mul_rat{rat{1; 1}; 'a}
+
+let mul_rat_Id3C = mul_rat_Id3_rw
+
+interactive mul_rat_Zero :
+   [wf] sequent { <H> >- 'a in rationals } -->
+   sequent { <H> >- mul_rat{rat{0; 1}; 'a} ~ rat{0; 1} }
+
+interactive_rw mul_rat_Zero_rw {| reduce |} :
+   ('a in rationals) -->
+   mul_rat{rat{0; 1}; 'a} <--> rat{0; 1}
+
+let mul_rat_ZeroC = mul_rat_Zero_rw
+
+interactive mul_rat_Zero2 :
+   [wf] sequent { <H> >- 'a in rationals } -->
+   sequent { <H> >- mul_rat{'a; rat{0; 1}} ~ rat{0; 1} }
+
+interactive_rw mul_rat_Zero2_rw {| reduce |} :
+   ('a in rationals) -->
+   mul_rat{'a; rat{0; 1}} <--> rat{0; 1}
+
+let mul_rat_Zero2C = mul_rat_Zero2_rw
+
+interactive_rw mul_rat_Zero3C 'a :
+   ('a in rationals) -->
+   rat{0; 1} <--> mul_rat{rat{0; 1}; 'a}
+
+(*
+interactive_rw negative_rat1_2uniC :
+	('a in rationals) -->
+	mul_rat{(-1); 'a} <--> neg_rat{'a}
+
+interactive_rw uni2negative_rat1C :
+	('a in rationals) -->
+	(- 'a) <--> ((-1) *@ 'a)
+
+let resource arith_unfold +=[
+	<<- 'a>>, (uni2negative_rat1C thenC (addrC [0] reduce_minus));
+]
+*)
 
 doc <:doc< @docoff >>

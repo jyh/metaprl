@@ -208,8 +208,6 @@ prim ty_matchExp_tyInt {| intro [] |} 'H :
                                            't } }
    = it
 
-(* NOTE: I'm going with the Mojave compiler rule for enumeration atoms. *)
-
 prim ty_matchExp_tyEnum {| intro [] |} 'H :
    (* The  atom being matched should be well-formed. *)
    sequent [mfir] { 'H >-
@@ -263,6 +261,8 @@ prim ty_matchExp_tyRawInt {| intro [] |} 'H :
 
 prim ty_matchExp_tyUnion_start 'H 'J :
    sequent [mfir] { 'H; v: var_def{ tyUnion{ 'tv; 'tyl; 's }; 'd }; 'J['v] >-
+      not{ set_eq{ intset[31, "signed"]{ nil }; 's } } } -->
+   sequent [mfir] { 'H; v: var_def{ tyUnion{ 'tv; 'tyl; 's }; 'd }; 'J['v] >-
       set_eq{ 's; union_cases{ intset[31, "signed"]{ nil }; 'cases } } } -->
    sequent [hack] { 'H; v: var_def{ tyUnion{ 'tv; 'tyl; 's }; 'd }; 'J['v] >-
       has_type["exp"]{ matchExp{ atomVar{'v}; 'cases }; 't } } -->
@@ -274,6 +274,11 @@ prim ty_matchExp_tyUnion_cases_base 'H 'J :
    sequent [hack] { 'H; v: var_def{ tyUnion{ 'tv; 'tyl; 's }; 'd }; 'J['v] >-
       has_type["exp"]{ matchExp{ atomVar{'v}; nil }; 't } }
    = it
+
+(*
+ * BUG: The following is just wrong given the current semantics
+ * of sequents we're using.
+ *)
 
 prim ty_matchExp_tyUnion_cases_ind 'H 'J :
    sequent [mfir] { 'H; v: var_def{ tyUnion{ 'tv; 'tyl; 'set}; 'd}; 'J['v] >-

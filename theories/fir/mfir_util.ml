@@ -361,7 +361,7 @@ dform nth_unionCase_df : except_mode[src] ::
 
 dform union_cases_df : except_mode[src] ::
    union_cases{ 'set; 'cases } =
-   bf["union_cases"] `"(" slot{'set} `"," slot{'cases} `")"
+   `"(" slot{'set} cup sub{it["cases"]} slot{'cases} `")"
 
 dform index_of_subscript_df : except_mode[src] ::
    index_of_subscript{ 'atom } =

@@ -141,26 +141,19 @@ prim ty_store_polyFun {| intro [] |} 'H 'a :
 
 prim ty_store_union 'H 'J :
    (* well-formedness of the union type. *)
-   sequent [mfir] { 'H;
-                    tv: ty_def{ polyKind{'j; 'k}; tyDefPoly{t. 'ty['t]} };
-                    'J['tv] >-
+   sequent [mfir] { 'H; tv: ty_def{ polyKind{'j; 'k}; 'tyd }; 'J['tv] >-
       type_eq{ tyUnion{'tv; 'tyl; singleton[31, "signed"]{number[i:n]}};
                tyUnion{'tv; 'tyl; singleton[31, "signed"]{number[i:n]}};
                small_type } } -->
 
    (* check that the atoms have the right types. *)
-   sequent [mfir] { 'H;
-                    tv: ty_def{ polyKind{'j; 'k}; tyDefPoly{t. 'ty['t]} };
-                    'J['tv] >-
+   sequent [mfir] { 'H; tv: ty_def{ polyKind{'j; 'k}; 'tyd }; 'J['tv] >-
       has_type["union_atoms"]{'atoms;
                               nth_unionCase{number[i:n];
-                                            do_tyApply{tyDefPoly{t. 'ty['t]};
-                                                       'tyl}}}} -->
+                                            do_tyApply{ 'tyd; 'tyl }}}} -->
 
    (* then the union value is well-typed. *)
-   sequent [mfir] { 'H;
-                    tv: ty_def{ polyKind{'j; 'k}; tyDefPoly{t. 'ty['t]} };
-                    'J['tv] >-
+   sequent [mfir] { 'H; tv: ty_def{ polyKind{'j; 'k}; 'tyd }; 'J['tv] >-
       has_type["store"]{ union_val[i:n]{ 'tv; 'atoms };
                          tyUnion{ 'tv; 'tyl;
                            intset[31, "signed"]{ cons{ interval{number[i:n];

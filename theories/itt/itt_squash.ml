@@ -457,7 +457,7 @@ let rec unsquashAllT_aux i seq hyps =
          unsquashAllT_aux (succ i) seq hyps
 
 let unsquashAllT = funT (fun p ->
-   unsquashAllT_aux 1 (explode_sequent p).sequent_hyps (hyp_count p))
+   unsquashAllT_aux 1 (explode_sequent_arg p).sequent_hyps (hyp_count p))
 
 (************************************************************************
  * AUTO TACTIC                                                          *

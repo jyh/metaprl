@@ -783,7 +783,7 @@ let moveToConclT =
                collect hyps len (i + 1) vars indices
    in argfunT (fun i p ->
       let i = Sequent.get_pos_hyp_num p i in
-      let hyps = (Sequent.explode_sequent p).sequent_hyps in
+      let hyps = (Sequent.explode_sequent_arg p).sequent_hyps in
          match SeqHyp.get hyps (i - 1) with
             Context _ -> raise err
           | Hypothesis (v, hyp) ->
@@ -1255,7 +1255,7 @@ struct
     | _ :: assums -> find_in_assums term tac assums
 
    let find_hyp term assums tac = funT (fun p ->
-      let hyps = (explode_sequent p).sequent_hyps in
+      let hyps = (explode_sequent_arg p).sequent_hyps in
       let len = SeqHyp.length hyps in
       let rec aux i =
          if i = len then find_in_assums term tac assums

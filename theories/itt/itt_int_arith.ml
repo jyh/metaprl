@@ -207,7 +207,7 @@ let rec all_hyps_aux hyps l i =
             all_hyps_aux hyps l j
 
 let all_hyps arg =
-   let hyps = (Sequent.explode_sequent arg).sequent_hyps in
+   let hyps = (Sequent.explode_sequent_arg arg).sequent_hyps in
 	let len = Term.SeqHyp.length hyps in
       all_hyps_aux hyps [] len
 

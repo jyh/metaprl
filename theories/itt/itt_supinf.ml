@@ -895,7 +895,7 @@ let is_neg_number f =
 		false
 
 let make_sacs var2index p =
-   let hyps = Term.SeqHyp.to_list (Sequent.explode_sequent p).sequent_hyps in
+   let hyps = Term.SeqHyp.to_list (Sequent.explode_sequent_arg p).sequent_hyps in
 	let ihyps = make_sacs_aux p 1 [] hyps in
 	let afs=List.map (ge2af var2index) ihyps in
 	try

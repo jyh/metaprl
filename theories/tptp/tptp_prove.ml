@@ -660,7 +660,7 @@ let assert_new_goal level constants subst hyp_index goal tac = funT (fun p ->
  *)
 let resolveT = argfunT (fun i p ->
    let hyp = Sequent.nth_hyp p i in
-   let { sequent_hyps = hyps; sequent_concl = concl } = Sequent.explode_sequent p in
+   let { sequent_hyps = hyps; sequent_concl = concl } = Sequent.explode_sequent_arg p in
    let j, constants = first_clause hyps in
    let hyp_info = dest_hyp hyp in
    let goal_info = dest_goal concl in
@@ -758,7 +758,7 @@ let proveT = argfunT (fun bound p ->
    eprintf "Tptp_prove.proveT: %d%t" bound eflush;
    let { sequent_concl = concl;
          sequent_hyps = hyps
-       } = Sequent.explode_sequent p
+       } = Sequent.explode_sequent_arg p
    in
    let info = dest_hyps bound hyps in
    let info =
@@ -779,14 +779,7 @@ let rec loopTestT i =
    if i = 0 then
       proveT 100
    else
-      begin
-(*
-         eprintf "Marshaling%t" eflush;
-         Marshal.to_string proveT [Marshal.Closures];
-         eprintf "Marshaled%t" eflush;
- *)
-         dupT thenLT [loopTestT (pred i); proveT 100]
-      end
+      dupT thenLT [loopTestT (pred i); proveT 100]
 
 let testT = funT (fun _ ->
    refine_count := 0;

@@ -59,13 +59,21 @@ The toploop prints the @emph{type} of the result (in this case,
 the end-of-file character (usually Control-D in Unix, and Control-Z in
 Microsoft Windows).
 
+@section["ocaml-doc-comments"]{Comment convention}
+
+In OCaml, comments are enclosed in matching @tt{({}*} and @tt{*{})}
+pairs.  Comments may be nested, and the comment is treated
+as white space.
+
 @section["ocaml-doc-expr1"]{Basic expressions}
 
-OCaml is a @emph{strongly typed} language.  In OCaml every valid expression must have
-a type, and expressions of one type may not be used as expressions in
-another type.  There are no implicit coercions.  Normally, you do not
-have to specify the types of expressions.  OCaml uses @emph{type inference}
-@cite[DM82] to figure out the types for you.
+OCaml is a @emph{strongly typed} language.  In OCaml every valid
+expression must have a type, and expressions of one type may not be
+used as expressions in another type.  Apart from polymorphism, which
+we discuss in Chapter @refchapter[polymorphism], there are no implicit
+coercions.  Normally, you do not have to specify the types of
+expressions.  OCaml uses @emph{type inference} @cite[DM82] to figure
+out the types for you.
 
 The primitive types are @code{unit}, @code{int}, @code{char}, @code{float},
 @code{bool}, and @code{string}.
@@ -74,7 +82,7 @@ The primitive types are @code{unit}, @code{int}, @code{char}, @code{float},
 
 The simplest type in OCaml is the @tt{unit} type, which contains one
 element: @code{()}.  This type seems to be a rather silly.  However,
-in a functional language every function must return a value; @tt{unit} is
+in a functional language every function must return a value; @code{()} is
 commonly used as the value of a procedure that computes by
 side-effect.  It corresponds to the @code{void} type in C.
 
@@ -110,7 +118,7 @@ and bitwise operations.
 
 @begin[quote]
 @begin[tabular,ll]
-@line{{-$i$}{negation.}}
+@line{{@target["ocaml-doc-expr-neg"]{@tt{-}}$i$ or @code{~-}$i$}{negation.}}
 @line{{$i$ @target["ocaml-doc-expr-add"]{@tt{+}} $j$}{addition.}}
 @line{{$i$ @target["ocaml-doc-expr-sub"]{@tt{-}} $j$}{subtraction.}}
 @line{{$i$ @target["ocaml-doc-expr-mul"]{@tt{*}} $j$}{multiplication.}}
@@ -138,6 +146,21 @@ and bitwise operations.
 @end[tabular]
 @end[quote]
 
+@noindent
+The precedences of the integer operators are as follows, listed in increasing order.
+
+@begin[quote]
+@begin[tabular,"l|l"]
+@line{{Operators}{Associativity}}
+@hline
+@line{{@tt{+}, @tt{-}}               {left}}
+@line{{@tt{*}, @tt{/}, @tt{mod}, @tt{land}, @tt{lor}, @tt{lxor}} {left}}
+@line{{@tt{lsl}, @tt{lsr}, @tt{asr}} {right}}
+@line{{@tt{lnot}}                    {left}}
+@line{{@code{~-}, @tt{-}}              {right}}
+@end[tabular]
+@end[quote]
+
 @begin[iverbatim]
 # 0b1100;;
 - : int = 12
@@ -149,21 +172,23 @@ and bitwise operations.
 
 @subsection["ocaml-doc-expr-float"]{@tt{float}: the floating-point numbers}
 
-The floating-point numbers provide dynamically scalled ``floating
+The floating-point numbers provide dynamically scaled ``floating
 point'' numbers.  The syntax of a floating point includes either a
 decimal point, or an exponent (base 10) denoted by an `@code{E}' or
 `@code{e}'.  A digit is required before the decimal point.  Here are a
 few examples:
 
 @begin[center]
-0.2, 2e7, 3.1415926, 31.415926e-1
+0.2, 2e7, 3.1415926, 31.415926E-1
 @end[center]
 
-The integer arithmetic operators (@code{+}, @code{-}, @code{*}, @code{/}, $@ldots$) @emph{do not work} with floating
-point values.  The corresponding operators include a `.' as follows:
+The integer arithmetic operators (@code{+}, @code{-}, @code{*},
+@code{/}, $@ldots$) @emph{do not work} with floating point values.
+The corresponding operators include a `.' as follows:
 
 @begin[quote]
 @begin[tabular,ll]
+@line{{@target["ocaml-doc-expr-negf"]{@tt{-.}}$x$ or @code{~-.}$x$} {floating-point negation}}
 @line{{$x$ @target["ocaml-doc-expr-plusf"]{@tt{+.}} $y$}{floating-point addition.}}
 @line{{$x$ @target["ocaml-doc-expr-minusf"]{@tt{-.}} $y$}{floating-point subtraction.}}
 @line{{$x$ @target["ocaml-doc-expr-starf"]{@tt{*.}} $y$}{float-point multiplication.}}
@@ -189,7 +214,7 @@ Characters 4-7:
 This expression has type float but is here used with type int
 @end[iverbatim]
 
-The final expression fails to typcheck because the @code{int} operator
+The final expression fails to typecheck because the @code{int} operator
 @code{+} is used with the floating-point value @code{2.0}.
 
 @subsection["ocaml-doc-expr-char"]{@tt{char}: the characters}
@@ -337,7 +362,7 @@ the expression ``$x$ @code{==} $y$'' evaluates to @code{true}, then so
 does the expression ``$x$ @code{=} $y$''.  However it is still
 possible for ``$x$ @code{=} $y$'' to be @code{true} even if ``$x$
 @code{==} $y$'' is not.  In the OCaml implementation from INRIA, the
-expression ``$x$ @code{==} $y$'' returns @code{true} only if the two
+expression ``$x$ @code{==} $y$'' evaluates to @code{true} only if the two
 values $x$ and $y$ are exactly the same value.  The comparison
 @code{==} is a constant-time operation that runs in a bounded number
 of machine instructions; the comparison @code{=} is not.
@@ -389,41 +414,25 @@ $e_1$ else $e_2$}.
 - : int = 10
 @end[iverbatim]
 
-@section["ocaml-compiling"]{Compiling your code}
+@section["ocaml-core-precedences"]{Operator precedences}
 
-If you wish to compile your code, you should place it in a file with
-the @tt{.ml} suffix.  In INRIA OCaml, there are two compilers: @tt[ocamlc] compiles to
-byte-code, and @tt[ocamlopt] compiles to native machine code.  The
-native code is several times faster, but compile time is
-longer.  The usage is similar to @tt{cc}.  The double-semicolon
-terminators are not necessary in @code{.ml} source files; you may omit them
-if the source text is unambiguous.
+The precedences of the operators in this section are as follows,
+listed in increasing order.
 
-@begin[itemize]
-
-@item{{To compile a single file, use @tt{ocamlc -g -c
-@emph{file}.ml}.  This will produce a file @tt{@emph{file}.cmo}.  The
-@tt[ocamlopt] programs produces a file @tt{@emph{file}.cmx}.  The
-@tt{-g} option is valid only for @tt{ocamlc}; it causes debugging
-information to be included in the output file.}}
-
-@item{To link together several files into a single executable, use
-@tt[ocamlc] to link the @tt{.cmo} files.  Normally, you would also
-specify the @tt{-o @emph{program_file}} option to specify the output
-file (the default is @tt{a.out}).  For example, if you have two program
-files @tt{x.cmo} and @tt{y.cmo}, the command would be:
-
-@begin[iverbatim]
-% ocamlc -g -o program x.cmo y.cmo
-% ./program
-...
-@end[iverbatim]}
-@end[itemize]
-
-There is also a debugger @tt[ocamldebug] that you can use to debug
-your programs.  The usage is a lot like @tt{gdb}, with one major
-exception: execution can go backwards.  The @tt{back} command will
-go back one instruction.
+@begin[quote]
+@begin[tabular,"l|l"]
+@line{{Operators}{Associativity}}
+@hline
+@line{{@code{||}} {left}}
+@line{{@code{&&}} {left}}
+@line{{@code{=}, @code{==}, @code{!=}, @code{<>}, @code{<}, @code{<=}, @code{>}, @code{>=}} {left}}
+@line{{@tt{+}, @tt{-}, @tt{+.}, @tt{-.}}               {left}}
+@line{{@tt{*}, @tt{/}, @tt{*.}, @tt{/.}, @tt{mod}, @tt{land}, @tt{lor}, @tt{lxor}} {left}}
+@line{{@tt{lsl}, @tt{lsr}, @tt{asr}} {right}}
+@line{{@tt{lnot}}                    {left}}
+@line{{@code{~-}, @tt{-}, @code{~-.}, @tt{-.}}              {right}}
+@end[tabular]
+@end[quote]
 
 @section["ocaml-type-system"]{The OCaml type system}
 
@@ -440,18 +449,19 @@ What is ``safety?''  There is a formal definition based on the
 operational semantics of the programming language, but an approximate
 definition is that a valid program will never fault because of an
 invalid machine operation.  All memory accesses will be valid.  ML
-guarantees safety by guaranteeing that every correctly-typed value is
-valid, and Lisp guarantees it by checking for validity at run
-time.  One surprising (some would say annoying) consequence is
-that ML has no @emph{nil} values; again, all correctly type values are
-valid.
+guarantees safety by proving that every program that passes the type
+checker can never produce a machine fault, and Lisp guarantees it by
+checking for validity at run time.  One surprising (some would say
+annoying) consequence is that ML has no @code{nil} or @code{NULL}
+values; these would potentially cause machine errors if used where
+a value is expected.
 
 As you learn OCaml, you will initially spend a lot of time getting the
 OCaml type checker to accept your programs.  Be patient, you will
 eventually find that the type checker is one of your best friends.  It
-will help you figure out which programs are bogus.  If you make a
-change, the type checker will help track down all the parts of your
-program that are affected.
+will help you figure out where errors may be lurking in your programs.
+If you make a change, the type checker will help track down the parts
+of your program that are affected.
 
 In the meantime, here are some rules about type checking.
 
@@ -518,11 +528,47 @@ In this case, the expression @tt[1] is flagged as a type error,
 because it does not have the same type as the omitted @tt{else}
 branch.
 
-@section["ocaml-doc-comments"]{Comment convention}
+@section["ocaml-compiling"]{Compiling your code}
 
-In OCaml, comments are enclosed in matching @tt{({}*} and @tt{*{})}
-pairs.  Comments may be nested, and the comment is treated
-as white space.
+You aren't required to use the toploop for all your programs.  In
+fact, as your programs become larger, you will begin to use the
+toploop less, and rely more on the OCaml compilers.  Here is a brief
+introduction to using the compiler; more information is given in the
+Chapter @refchapter[files].
+
+If you wish to compile your code, you should place it in a file with
+the @tt{.ml} suffix.  In INRIA OCaml, there are two compilers:
+@tt[ocamlc] compiles to byte-code, and @tt[ocamlopt] compiles to
+native machine code.  The native code is several times faster, but
+compile time is longer.  The usage is similar to @tt{cc}.  The
+double-semicolon terminators are not necessary in @code{.ml} source
+files; you may omit them if the source text is unambiguous.
+
+@begin[itemize]
+
+@item{{To compile a single file, use @tt{ocamlc -g -c
+@emph{file}.ml}.  This will produce a file @tt{@emph{file}.cmo}.  The
+@tt[ocamlopt] programs produces a file @tt{@emph{file}.cmx}.  The
+@tt{-g} option is valid only for @tt{ocamlc}; it causes debugging
+information to be included in the output file.}}
+
+@item{To link together several files into a single executable, use
+@tt[ocamlc] to link the @tt{.cmo} files.  Normally, you would also
+specify the @tt{-o @emph{program_file}} option to specify the output
+file (the default is @tt{a.out}).  For example, if you have two program
+files @tt{x.cmo} and @tt{y.cmo}, the command would be:
+
+@begin[iverbatim]
+% ocamlc -g -o program x.cmo y.cmo
+% ./program
+...
+@end[iverbatim]}
+@end[itemize]
+
+There is also a debugger @tt[ocamldebug] that you can use to debug
+your programs.  The usage is a lot like @tt{gdb}, with one major
+exception: execution can go backwards.  The @tt{back} command will
+go back one instruction.
 
 @end[doc]
 @docoff

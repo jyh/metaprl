@@ -38,13 +38,10 @@ extends Base_theory
 doc <:doc<
    @begin[doc]
 
-So far, we have only considered simple expressions not involving
-variables. In ML, variables are @emph{names} for values.  In a purely
-functional setting, it is not possible to tell the difference between
-a variable and the value it stands for.
-
+So far, we have considered only simple expressions not involving
+variables. In ML, variables are @emph{names} for values.
 Variable bindings are introduced with the @tt{let} keyword.
-The syntax of a simple top-level declaration is as follows.
+The syntax of a simple top-level definition is as follows.
 
 @begin[center]
 @tt{let @emph{name} = @emph{expr}}
@@ -73,11 +70,10 @@ Definitions using @tt{let} can also be nested using the
 
 The expression @emph{expr2} is called the @emph{body} of the @tt{let}.
 The variable @emph{name} is defined as the value of @emph{expr1}
-within the body.  If there is only one definition for @emph{name}, the
-variable @emph{name} is defined @emph{only} in the body @emph{expr2}
-and not @emph{expr1} (or anywhere else).
+within the body.  The variable named @emph{name} is defined only in
+the body @emph{expr2} and not @emph{expr1}.
 
-Lets with a body are expressions; the value of a @tt{let}
+@tt{Let}s with a body are expressions; the value of a @tt{let}
 expression is the value of the body.
 
 @begin[iverbatim]
@@ -92,28 +88,39 @@ expression is the value of the body.
 val z : int = 3
 @end[iverbatim]
 
-Binding is @emph{static} (lexical scoping): if there is more than one
-definition for a variable, the value of the variable is defined by the
-most recent @tt{let} definition for the variable.  The variable is
-bound only in the body of the let; or, for toplevel definitions, the
-rest of the file.
+Binding is static (lexical scoping), meaning that the value associated
+with a variable is determined by the nearest enclosing definition in
+the program text.  For example, when a variable is defined in a
+@code{let} expression, the defined value is used within the body of
+the let (or the rest of the file for toplevel @code{let} definitions).
+If the variable was defined previously, the previous value is shadowed,
+meaning that it becomes inaccessible while the new definition is in effect.
+
+For example, consider the following program, where the variable
+@code{x} is initially defined to be 7.  Within the definition for
+@code{y}, the variable @code{x} is redefined to be 2.  The value of
+@code{x} in the final expression @code{x + y} is still 7, and the
+final result is 10.
 
 @begin[iverbatim]
-# let x = 1 in
-  let x = 2 in
-  let y = x + x in
+# let x = 7 in
+  let y =
+     let x = 2 in
+        x + 1
+  in
      x + y;;
-- : int = 6
+- : int = 10
 @end[iverbatim]
 
 @noindent
-What is the value of $z$ in the following definition?
+Similarly, the value of @code{z} in the following program is 8,
+because of the definitions that double the value of @code{x}.
 
 @begin[iverbatim]
 # let x = 1;;
 val x : int = 1
 # let z =
-     let x = 2 in
+     let x = x + x in
      let x = x + x in
         x + x;;
 val z : int = 8
@@ -123,24 +130,30 @@ val z : int = 8
 
 @section["ocaml-doc-functions"]{Functions}
 
-Functions are defined with the @tt{fun} keyword.  The @tt{fun} is
-followed by a sequence of variables that name the arguments, the
-@code{->} separator, and then the body of the function.  By default,
-functions are not @emph{named}.  In ML, functions are values like any
-other.  They may be constructed, passed as arguments, and applied to
-arguments.  Like any other value, they may be named by using
-a @tt{let}.
+Functions are defined with the @tt{fun} keyword.
+
+@begin[center]
+@code{fun} $v_1$ $v_2$ $@cdots$ $v_n$ @code{->} @emph{expr}
+@end[center]
+
+The @tt{fun} is followed by a sequence of variables that define the
+formal parameters of the function, the @code{->} separator, and then
+the body of the function @emph{expr}.  By default, functions are
+anonymous, which is to say that they are not named.  In ML, functions
+are values like any other.  Functions may be constructed, passed as
+arguments, and applied to arguments, and, like any other value, they
+may be named by using a @tt{let}.
 
 @begin[iverbatim]
-# let incr = fun i -> i + 1;;
-val incr : int -> int = <fun>
+# let increment = fun i -> i + 1;;
+val increment : int -> int = <fun>
 @end[iverbatim]
 
-Note the type @code{int -> int} for the function.  The @code{->} is
-for a @emph{function type}.  The type before the arrow is the type of
-the function's argument, and the type after the arrow is the type of
-the result.  The @tt[incr] function takes an integer argument, and
-returns an integer.
+Note the type @code{int -> int} for the function.  The arrow @code{->}
+stands for a @emph{function type}.  The type before the arrow is the
+type of the function's argument, and the type after the arrow is the
+type of the result.  The @tt[increment] function takes an argument of
+type @tt[int], and returns a result of type @tt[int].
 
 The syntax for function application (function call) is concatenation:
 the function is followed by its arguments.  The precedence of function
@@ -148,16 +161,16 @@ application is higher than most operators.  Parentheses are needed for
 arguments that are not simple expressions.
 
 @begin[iverbatim]
-# incr 2;;
+# increment 2;;
 - : int = 3
-# incr 2 * 3;;
+# increment 2 * 3;;
 - : int = 9
-# incr (2 * 3);;
+# increment (2 * 3);;
 - : int = 7
 @end[iverbatim]
 
 Functions may also be defined with multiple arguments.  For example,
-a function to compute the sum of two integers can be defined as follows.
+a function to compute the sum of two integers might be defined as follows.
 
 @begin[iverbatim]
 # let sum = fun i j -> i + j;;
@@ -166,13 +179,13 @@ val sum : int -> int -> int = <fun>
 - : int = 7
 @end[iverbatim]
 
-Note the @emph{type} for @tt{sum}: @code{int -> int -> int}.  The
-arrow associates to the right, so this could also be written @code{int
--> (int -> int)}.  That is, @tt{sum} is a function that takes a single
-integer argument, and returns a function that takes another integer
-argument and returns an integer.  Strictly speaking, all functions in
-ML take a single argument; multiple-argument functions are implemented
-as @emph{nested} functions (this is called ``Currying'', after Haskell
+Note the type for @tt{sum}: @code{int -> int -> int}.  The arrow
+associates to the right, so this type is the same as @code{int -> (int
+-> int)}.  That is, @tt{sum} is a function that takes a single integer
+argument, and returns a function that takes another integer argument
+and returns an integer.  Strictly speaking, all functions in ML take a
+single argument; multiple-argument functions are implemented as
+@emph{nested} functions (this is called ``Currying,'' after Haskell
 Curry, a famous logician who had a significant impact on the design
 and interpretation of programming languages).  The definition of
 @tt{sum} above is equivalent to the following explicitly-curried
@@ -181,11 +194,12 @@ definition.
 @begin[iverbatim]
 # let sum = (fun i -> (fun j -> i + j));;
 val sum : int -> int -> int = <fun>
+# sum 4 5;;
+- : int = 9
 @end[iverbatim]
 
-@noindent
-The application of @tt{sum} to only one argument is called a ``partial
-application.''
+@noindent The application of a multi-argument function to only one
+argument is called a ``partial application.''
 
 @begin[iverbatim]
 # let incr = sum 1;;
@@ -199,6 +213,14 @@ syntax for functions using a @tt{let} definition.  The formal
 parameters of the function are listed after to the function name,
 before the equality symbol.
 
+@begin[center]
+@code{let} @emph{name} $v_1$ $v_2$ $@cdots$ $v_n$ = @emph{expr}
+@end[center]
+
+@noindent
+For example, the following definition of the @tt[sum] function
+is equivalent to the ones above.
+
 @begin[iverbatim]
 # let sum i j =
      i + j;;
@@ -207,7 +229,7 @@ val sum : int -> int -> int = <fun>
 
 @subsection["ocaml-doc-scoping"]{Scoping and nested functions}
 
-Functions may be arbitrarily nested.  They may also be defined and
+Functions may be arbitrarily nested.  They may also be
 passed as arguments.  The rule for scoping uses static binding: the
 value of a variable is determined by the code in which a function is
 defined---not by the code in which a function is evaluated.  For
@@ -249,8 +271,8 @@ has no effect on the definition for @tt[addi], and the application of
 
 Suppose we want to define a recursive function: that is, a function
 that is used in its own function body.  In functional languages,
-recursion is used to express repetition and looping.  For example, the
-``power'' function that computes $x^i$ would be defined as follows.
+recursion is used to express repetition or looping.  For example, the
+``power'' function that computes $x^i$ might be defined as follows.
 
 @begin[iverbatim]
 # let rec power i x =
@@ -264,21 +286,20 @@ val power : int -> float -> float = <fun>
 @end[iverbatim]
 
 Note the use of the @tt[rec] modifier after the @tt{let} keyword.
-Normally, the function is @bf{not} defined in its own body.  The
-following definition is very different.
+Normally, the function is not defined in its own body.  The
+following definition is rejected.
 
 @begin[iverbatim]
-# let power_broken i x =
-     (float_of_int i) +. x;;
-val power_broken : int -> float -> float = <fun>
 # let power_broken i x =
      if i = 0 then
         1.0
      else
         x *. (power_broken (i - 1) x);;
-val power_broken : int -> float -> float = <fun>
-# power_broken 5 2.0;;
-- : float = 12
+
+Characters 70-82:
+        x *. (power_broken (i - 1) x);;
+              ^^^^^^^^^^^^
+Unbound value power_broken
 @end[iverbatim]
 
 Mutually recursive definitions (functions that call one another) can
@@ -305,7 +326,7 @@ val g : int -> int = <fun>
 @subsection["ocaml-doc-hof"]{Higher order functions}
 
 Let's consider a definition where a function is passed as an
-argument, and another function is returned.  Given an arbitrary
+argument, and another function is returned as a result.  Given an arbitrary
 function $f$ on the real numbers, a numerical derivative is defined
 approximately as follows.
 
@@ -322,7 +343,7 @@ the type is @code{(float -> float) -> (float -> float)}.  That is, the
 derivative is a function that takes a function as an argument, and
 returns a function.
 
-Let's apply this to the @tt{power} function defined above, partially
+Let's apply the @code{deriv} function to the @tt{power} function defined above, partially
 applied to the argument 3.
 
 @begin[iverbatim]
@@ -372,17 +393,17 @@ val g' : float -> float = <fun>
 
 @section["ocaml-doc-naming"]{Variable names}
 
-As you may have noticed in the previous section, the @bf{'} character
+As you may have noticed in the previous section, the single quote symbol (@code{'})
 is a valid character in a variable name.  In general, a variable name
 may contain letters (lower and upper case), digits, and the @bf{'} and
-@bf{_} characters. but @bf{it must} begin with a lowercase letter or
-the underscore character, and it may not the the @bf{_} all by itself.
+@bf{_} characters. but it must begin with a lowercase letter or
+the underscore character, and it may not be the @bf{_} all by itself.
 
 In OCaml, sequences of characters from the infix operators, like
 @code{+, -, *, /, ...} are also valid names.  The normal prefix
 version is obtained by enclosing them in parentheses.  For example,
 the following code is a proper entry for the Obfuscated ML contest.
-Don't use this code in class.
+Don't use this style in your code.
 
 @begin[iverbatim]
 # let (+) = ( * )
@@ -398,7 +419,7 @@ val / : int -> int -> int = <fun>
 @end[iverbatim]
 
 Note that the @tt{*} operator requires space within the parenthesis.
-This is because of comment conventions: comments start with
+This is because of comment conventions---comments start with
 @tt{({}*} and end with @tt{*{})}.
 
 The redefinition of infix operators may make sense in some contexts.
@@ -413,6 +434,11 @@ val ** : float -> int -> float = <fun>
 # 10.0 ** 5;;
 - : float = 100000
 @end[iverbatim]
+
+the precedence and associativity of new infix operators is determined
+by its first character in the operator name.  For example an operator
+named @code{+/-} would have the same precedence and associativity as
+the @code{+} operator.
 
 @end[doc]
 @docoff

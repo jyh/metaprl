@@ -39,24 +39,37 @@ extends Base_theory
 doc <:doc<
    @begin[doc]
 
-One of the more powerful features of ML is that it uses @emph{pattern
-matching} to define functions by case analysis.  Pattern matching is
-performed by the @tt{match} expression, which has the following
-general form.
+One of ML's more powerful features is the use of @emph{pattern
+matching} to define expressions by case analysis.  Pattern matching is
+indicated syntactically by the @tt{match} expression, which has the following
+syntax.
 
 @begin[center]
 @begin[tabular, l]
 @line{{@tt{match} @emph{expr} @tt{with}}}
-@line{{@phantom{$$@space$$ |} $@emph{patt}_1$ @code{->} $@emph{expr}_1$}}
+@line{{@phantom{$@space$ |} $@emph{patt}_1$ @code{->} $@emph{expr}_1$}}
 @line{{$@space$ | $@emph{patt}_2$ @code{->} $@emph{expr}_2$}}
-@line{{@space @space $@vdots$}}
+@line{{$@space$ $@space$ $@vdots$}}
 @line{{$@space$ | $@emph{patt}_n$ @code{->} $@emph{expr}_n$}}
 @end[tabular]
 @end[center]
 
-A @emph{pattern} is an expression made of constants and variables.
-When the pattern matches with an argument, the variables are bound to the
-corresponding values in the argument.
+Each $@emph{patt}_i$ is called a @emph{pattern}; each sequence
+$@emph{patt}_i$ @code{->} $@emph{expr}_i$ is called a match
+@emph{clause} or @emph{case}; the clauses are separated by the
+vertical bar @code{|} (often called the ``pipe'' symbol).
+
+A @emph{pattern} is an expression made of constants and variables (we
+will see more complex patterns later when we look at tuples, lists,
+and unions).  A constant pattern $c$ matches an argument $e$ if $e =
+c$.  A variable pattern $v$ matches any expression $e$.  Pattern
+variables are binding occurrences.  When a ``@code{match} $e$
+@code{with} @emph{clauses}'' expression is evaluated, the clauses
+$@emph{patt}_i$ @code{->} $@emph{expr}_i$ are considered in order.  If
+pattern $@emph{patt}_i$ matches expression $e$, then the variables in
+the pattern are bound to values in $e$, and the expression
+$@emph{expr}_i$ is evaluated.  Otherwise, the next clause is
+considered.  It is an error if no pattern matches.
 
 For example, Fibonacci numbers can be defined succinctly using pattern
 matching.  Fibonacci numbers are defined inductively: $@tt{fib}@space
@@ -81,16 +94,16 @@ val fib : int -> int = <fun>
 @end[iverbatim]
 
 In this code, the argument $i$ is compared against the constants 0 and
-1.  If either of these cases match, the return value is $i$.  The final
+1.  If either of these cases match, the return value is equal to $i$.  The final
 pattern is the variable $j$, which matches any argument.  When this
 pattern is reached, $j$ takes on the value of the argument, and the
 body @code{fib (j - 2) + fib (j - 1)} computes the returned value.
 
-Note that the variables in a pattern are @emph{binding} occurrences
-unrelated to any previous definition of the variable.  For example,
-the following code produces a result you might not expect.  The first
-case matches all expressions, returning the value matched.  The
-toploop issues warning for the second and third cases.
+Note that variables occurring in a pattern are always binding
+occurrences.  For example, the following code produces a result you
+might not expect.  The first case matches all expressions, returning
+the value matched.  The toploop issues a warning for the second and
+third cases.
 
 @begin[iverbatim]
 # let zero = 0;;
@@ -100,8 +113,14 @@ toploop issues warning for the second and third cases.
         zero -> zero
       | one -> one
       | j -> fib (j - 2) + fib (j - 1);;
+Characters 57-60:
 Warning: this match case is unused.
+Characters 74-75:
 Warning: this match case is unused.
+      | one -> one
+        ^^^
+      | j -> fib (j - 2) + fib (j - 1);;
+        ^
 val fib : int -> int = <fun>
 # fib 1;;
 - : int = 1
@@ -111,13 +130,14 @@ val fib : int -> int = <fun>
 - : int = 2002
 @end[iverbatim]
 
-The general form of matching, where the function body is a @tt{match}
-expression applied to the function argument, is quite common in ML
-programs.  OCaml defines an equivalent syntactic form to handle this
-case, using the @tt{function} keyword (instead of @tt{fun}).  A
-@tt{function} definition is like a @tt{fun}, where a single argument
-is used in a pattern match.  The @tt{fib} definition using
-@tt{function} is as follows.
+@subsection[function]{Functions with matching}
+
+It is quite common for the body of an ML function to be a @code{match}
+expression.  To simplify the syntax somewhat, OCaml defines the
+@tt{function} keyword (instead of @tt{fun}) to represent a function
+that is defined by pattern matching.  A @tt{function} definition is
+like a @tt{fun}, where a single argument is used in a pattern match.
+The @tt{fib} definition using @tt{function} is as follows.
 
 @begin[iverbatim]
 # let rec fib = function
@@ -133,9 +153,8 @@ val fib : int -> int = <fun>
 
 Patterns can also be used with values having the other basic types,
 like characters, strings, and Boolean values.  In addition, multiple
-patterns @emph{without variables} can be used for a single body.  For
-example, one way to check for capital letters is with the following
-function definition.
+patterns can be used for a single body.  For example, one way to check
+for capital letters is with the following function definition.
 
 @begin[iverbatim]
 # let is_uppercase = function
@@ -153,8 +172,8 @@ val is_uppercase : char -> bool = <fun>
 - : bool = false
 @end[iverbatim]
 
-It is rather tedious to specify @emph{all} the letters one at a time.
-OCaml also allows pattern @emph{ranges} $c_1 .. c_2$,
+It is rather tedious to specify all the letters one at a time.
+OCaml also allows pattern ranges $c_1 .. c_2$,
 where $c_1$ and $c_2$ are character constants.
 
 @begin[iverbatim]
@@ -223,7 +242,7 @@ in Chapter @refchapter[exceptions]).  In this case, the exception
 means that an error occurred during evaluation (a pattern matching
 failure).
 
-A word to the wise, @emph{heed the compiler warnings!}  The compiler
+A word to the wise: @emph{heed the compiler warnings!}  The compiler
 generates warnings for possible program errors.  As you build and
 modify a program, these warnings will help you find places in the
 program text that need work.  In some cases, you may be tempted to
@@ -278,13 +297,13 @@ constructions.  The general forms are as follows.
 
 @begin[center]
 @begin[tabular, l]
-@line{@tt{let @emph{patt} = @emph{expr}}}
+@line{@tt{let @emph{pattern} = @emph{expr}}}
 @line{@tt{let @emph{name} @emph{patt} $@ldots$ @emph{patt} = @emph{expr}}}
 @line{@tt{fun @emph{patt} @tt{->} @emph{expr}}}
 @end[tabular]
 @end[center]
 
-These aren't much use with constants because the pattern match will
+These forms aren't much use with constants because the pattern match will
 always be inexhaustive (except for the @tt{()} pattern).  However,
 they will be handy when we introduce tuples and records in the next
 chapter.

@@ -80,6 +80,12 @@ define unfold_all_list_witness : all_list_witness{'l; x. 'f['x]} <-->
 define unfold_exists_list : exists_list{'l; x. 'P['x]} <-->
    list_ind{'l; "false"; x, t, g. 'P['x] or 'g}
 
+doc <:doc<
+   @begin[doc]
+     The @em[head] of the list is the first element of a list, and the @em[tail] is the rest.
+     Both these operations undefined when list is empty.
+   @end[doc]
+>>
 declare undefined
 
 define unfold_hd :
@@ -91,7 +97,7 @@ define unfold_tl :
 
 doc <:doc<
    @begin[doc]
-   @terms
+   @noindent
 
    The @tt{is_nil} term defines a Boolean value that is true
    @emph{iff} the argument list $l$ is empty.
@@ -102,7 +108,7 @@ define unfold_is_nil :
 
 doc <:doc<
    @begin[doc]
-   @terms
+   @noindent
 
    The @tt[mem] term defines list membership.
    @end[doc]
@@ -113,10 +119,10 @@ define unfold_mem :
 
 doc <:doc<
    @begin[doc]
-   @terms
+   @noindent
 
-   The @tt{subset} term determines whether the elements in $l_1$ are also
-   in $l_2$.
+   The @tt{subset} term determines whether the elements in $<<'l_1>>$ are also
+   in $<<'l_2>>$.
    @end[doc]
 >>
 define unfold_subset :
@@ -125,7 +131,7 @@ define unfold_subset :
 
 doc <:doc<
    @begin[doc]
-   @terms
+   @noindent
 
    The @tt[sameset] term determines whether the two lists contain the same
    set of elements.
@@ -249,6 +255,13 @@ doc <:doc<
 define unfold_length :
    length{'l} <--> list_ind{'l; 0; u, v, g. 'g +@ 1}
 
+
+doc <:doc<
+   @begin[doc]
+      <<Index{'l}>> of the list is a set of indexes of the list $l$, that is
+   @end[doc]
+>>
+
 define unfold_index :
    Index{'l} <--> nat{length{'l}}
 
@@ -262,11 +275,29 @@ doc <:doc<
 define unfold_rev : rev{'l} <-->
    list_ind{'l; nil; u, v, g. append{'g; cons{'u; nil} }}
 
+doc <:doc<
+   @begin[doc]
+   @noindent
+   If $f$ is a function then  $<<mklist{'n;'f}>>$ is the list $<<'f(0) :: 'f(1) :: math_ldots :: 'f('n):: nil>>$.
+   @end[doc]
+>>
 
 define unfold_mklist: mklist{'n;'f} <-->
    ind{'n; nil; x,l.('f ('n-@ 'x)) :: 'l}
 
+doc <:doc<
+   @begin[doc]
+   @noindent
+   The type <<list>> contains all lists. It is defined as <<top>> <<list>>.
+   Note that all lists of the same length are equal in the <<list>> type.
+   @end[doc]
+>>
+
+iform unfold_list: list <--> list{top}
+
 doc <:doc< @docoff >>
+
+
 
 let length_term = << length{'l} >>
 let length_opname = opname_of_term length_term
@@ -281,8 +312,6 @@ let dest_length = dest_dep0_term length_opname
 prec prec_append
 prec prec_ball
 prec prec_assoc
-
-iform unfold_list: list <--> list{top}
 
 dform list_df : list = `"List"
 

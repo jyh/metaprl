@@ -43,7 +43,7 @@ prim_rw unfold_pair : "pair"{'a; 'b} <--> Base_trivial!it
 interactive and_univ {| intro_resource [] |} 'H :
    [wf] sequent ['ext] { 'H >- "type"{'A} } -->
    [wf] sequent ['ext] { 'H >- "type"{'B} } -->
-   sequent ['ext] { 'H >- member{univ[1:l]; ."and"{'A; 'B}} }
+   sequent ['ext] { 'H >- "and"{'A; 'B} IN univ[1:l] }
 
 (* Derived rules *)
 derived and_type 'H :

@@ -7,7 +7,7 @@ open Tactic_type
 
 declare magic{x. 't['x]}
 
-dform magic_df : magic = `"magic"
+dform magic_df : magic {x. 't} = `"magic"
 
 prim magic 'H 'x :
    ('t['x] : sequent ['ext] { 'H; x: "not"{'T} >- "false" }) -->

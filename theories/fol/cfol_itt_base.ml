@@ -60,14 +60,14 @@ let fold_pred = makeFoldC << Fol_pred!"pred" >> unfold_pred
 
 (* Lemmas *)
 interactive false_univ {| intro_resource [] |} 'H :
-   sequent ['ext] { 'H >- member{univ[1:l]; ."false"} }
+   sequent ['ext] { 'H >- "false" IN univ[1:l] }
 
 interactive true_univ {| intro_resource [] |} 'H :
-   sequent ['ext] { 'H >- member{univ[1:l]; ."true"} }
+   sequent ['ext] { 'H >- "true" IN univ[1:l] }
 
 interactive type_univ 'H :
    [wf] sequent ['ext] { 'H >- "type"{'A} } -->
-   sequent ['ext] { 'H >- member{univ[1:l]; 'A} }
+   sequent ['ext] { 'H >- 'A IN univ[1:l] }
 
 let typeT p =
    type_univ (Sequent.hyp_count_addr p) p
@@ -108,10 +108,10 @@ interactive pred_elim {| elim_resource [] |} 'H 'J 'y :
    sequent ['ext] { 'H; x: pred; 'J['x] >- 'C['x] }
 
 interactive true_pred {| intro_resource [] |} 'H :
-   sequent ['ext] { 'H >- member{pred; ."true"} }
+   sequent ['ext] { 'H >- "true" IN pred }
 
 interactive false_pred {| intro_resource [] |} 'H :
-   sequent ['ext] { 'H >- member{pred; ."false"} }
+   sequent ['ext] { 'H >- "false" IN pred }
 
 interactive pred_type1 {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- Itt_equal!"type"{pred} }

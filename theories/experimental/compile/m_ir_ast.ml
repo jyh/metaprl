@@ -133,7 +133,7 @@ doc <:doc<
    Translating a function in a let definition.
    @end[doc]
 >>
-prim_rw ir_lambda {| ir |} :
+prim_rw ir_fun_lambda {| ir |} :
    IR{FunLambdaExpr{v1. 'body['v1]}; v2. 'e['v2]}
    <-->
    AtomFun{v1. IR{'body['v1]; v2. 'e['v2]}}
@@ -207,7 +207,7 @@ prim_rw ir_let_var {| ir |} :
    IR{LetVarExpr{'e1; v. 'e2['v]}; v2. 'e3['v2]}
    <-->
    IR{'e1; v1.
-   LetAtom{AtomVar{'v1}; v.
+   LetAtom{'v1; v.
    IR{'e2['v]; v2. 'e3['v2]}}}
 
 doc <:doc<
@@ -230,8 +230,8 @@ prim_rw ir_arg_cons {| ir |} :
    IR{AstArgCons{'hd; 'tl}; 'f; v. 'e['v]}
    <-->
    IR{'hd; v1.
-   LetApply{'f; AtomVar{'v1}; v2.
-   IR{'tl; 'v2; v. 'e['v]}}}
+   LetApply{'f; 'v1; v2.
+   IR{'tl; AtomVar{'v2}; v. 'e['v]}}}
 
 prim_rw ir_arg_nil {| ir |} :
    IR{AstArgNil; 'f; v. 'e['v]}

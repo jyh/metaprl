@@ -125,6 +125,19 @@ interactive ext_test1 :
             f (2)
       >> } }
 
+interactive ext_test2 :
+   sequent { <H> >- compilable{.
+      <:ext<
+         let x = 2 in
+         let f (i) = i + 2 in
+         let g (i) = i * 2 in
+         let h (i) = i * i in
+         let add3 (i, j, k) =
+            i + j + k
+         in
+            add3 (f (x), g (x), h (x))
+      >> } }
+
 
 (*
  * -*-

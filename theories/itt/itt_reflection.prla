@@ -10641,7 +10641,7 @@ T	t5183	o936 b1317 b5182
 B	b5183	t5183
 T	t5184	o936 b1104 b5183
 B	b5184	t5184
-P	p5184	String "rwh (addrC [1] (compatible_shapes_var << 'bt >>)) 0 ttca"
+P	p5184	String "rwh (addrC [1] (compatible_shapes_varC << 'bt >>)) 0 ttca"
 O	o5184	ext_rule p5184
 T	t5185	o b1316 b4447
 B	b5185	t5185
@@ -10722,7 +10722,7 @@ T	t5218	o b5213 b5218
 B	b5219	t5218
 T	t5219	o953 b5210 b5219
 B	b5220	t5219
-P	p5220	String "rwh (addrC [1] (compatible_shapes_var << 'b >>)) 0 ttca"
+P	p5220	String "rwh (addrC [1] (compatible_shapes_varC << 'b >>)) 0 ttca"
 O	o5220	ext_rule p5220
 T	t5220	o954 b5212 b8
 B	b5221	t5220

@@ -35,11 +35,180 @@ doc <:doc<
 @begin[doc]
 
 Exceptions are used in OCaml as a control mechanism, either to signal
-errors, or to control the flow of execution.  When an exception is
-raised, the current execution is aborted, and control is thrown to the
-most recently entered active exception handler, which may choose to
-handle the exception, or pass it through to the next exception
-handler.
+errors, or control the flow of execution in some other way.  In their
+simplest form, exceptions are used to signal that the current
+computation cannot proceed because of a run-time error.  For example,
+if we try to evaluate the quotient @code{1 / 0} in the toploop, the
+runtime signals a @code{Division_by_zero} error, the computation is
+aborted, and the toploop prints an error message.
+
+@begin[iverbatim]
+# 1 / 0;;
+Exception: Division_by_zero.
+@end[iverbatim]
+
+Exceptions can also be defined and used explicitly by the programmer.
+For example, suppose we define a function @code{head} that returns the
+first element in a list.  If the list is empty, we would like to
+signal an error.
+
+@begin[iverbatim]
+# exception Fail of string;;
+exception Fail of string
+# let head = function
+     h :: _ -> h
+   | [] -> raise (Fail "head: the list is empty");;
+val head : 'a list -> 'a = <fun>
+# head [3; 5; 7];;
+- : int = 3
+# head [];;
+Exception: Fail "head: the list is empty".
+@end[iverbatim]
+
+The first line of this program defines a new exception, declaring
+@code{Fail} as a new exception with a string argument.  The
+@code{head} function computes by pattern matching---the result is
+@code{h} if the list has first element @code{h}; otherwise, there is
+no first element, and the @code{head} function raises a @code{Fail}
+exception.  The expression @code{(Fail "head: the list is empty")} is
+a value of type @code{exn}; the @code{raise} function is responsible
+for aborting the current computation.
+
+@begin[iverbatim]
+# Fail "message";;
+- : exn = Fail "message"
+# raise;;
+- : exn -> 'a = <fun>
+# raise (Fail "message");;
+Exception: Fail "message".
+@end[iverbatim]
+
+The type @code{exn -> 'a} for the @code{raise} function may seem
+striking at first---it appears to say that the raise function can
+produce a value having @emph{any} type.  In fact, what it really means
+is that the @code{raise} function never returns, and so the type of
+the result doesn't matter.  When a @code{raise} expression occurs in a
+larger computation, the entire computation is aborted.
+
+@begin[iverbatim]
+# 1 + raise (Fail "abort") * 21;;
+Exception: Fail "abort".
+@end[iverbatim]
+
+When an exception is raised, the current computation is aborted, and
+control is passed directly to the currently active exception handler,
+which in this case is the toploop itself.  It is also possible to
+define explicit exception handlers.  For example, suppose we wish to
+define a function @code{head_default}, similar to @code{head}, but
+returning a default value if the list is empty.  One way would be to
+write a new function from scratch, but we can also choose to handle
+the exception from @code{head}.
+
+@begin[iverbatim]
+# let head_default l default =
+     try head l with
+        Fail _ -> default;;
+val head_default : 'a list -> 'a -> 'a = <fun>
+# head_default [3; 5; 7] 0;;
+- : int = 3
+# head_default [] 0;;
+- : int = 0
+@end[iverbatim]
+
+The @code{try} $e$ @code{with} @emph{cases} expression is very much
+like a @code{match} expression, but it matches exceptions that are
+raised during evaluation of the expression $e$.  If $e$ evaluates to a
+value without raising an exception, the value is returned as the
+result of the @code{try} expression.  Otherwise, the raised exception
+is matched against the patterns in @emph{cases}, and the first
+matching case is selected.  In the example, if evaluation of
+@code{head l} raises the @code{Fail} exception, the value
+@code{default} is returned.
+
+@section["nested-exceptions"]{Nested exception handlers}
+
+Exceptions are handled dynamically, and at run-time there may be many
+active exception handlers.  To illustrate this, let's consider an
+alternate form of a list-map function, defined using a function
+@code{split} that splits a non-empty list into its head and tail.
+
+@begin[iverbatim]
+# exception Empty;;
+exception Empty
+# let split = function
+     h :: t -> h, t
+   | [] -> raise Empty;;
+val split : 'a list -> 'a * 'a list = <fun>
+# let rec map f l =
+     try
+        let h, t = split l in
+           f h :: map f t
+     with
+        Empty -> [];;
+val map : ('a -> 'b) -> 'a list -> 'b list = <fun>
+# map (fun i -> i + 1) [3; 5; 7];;
+- : int list = [4; 6; 8]
+@end[iverbatim]
+
+The call to @code{map} on the three-element list @code{[3; 5; 7]}
+results in four recursive calls corresponding to @code{map f [3; 5;
+7]}, @code{map f [5; 7]}, @code{map f [7]}, and @code{map f []},
+before the function @code{split} is called on the empty list.  Each of
+the calls defines a new exception handler.
+
+It is appropriate to think of these handlers forming an exception
+stack corresponding to the call stack (this is, in fact, they way it
+is implemented in the OCaml implementation from INRIA).  When a
+@code{try} expression is evaluated, a new exception handler is pushed
+onto the the stack; the handler is removed when evaluation completes.
+When an exception is raised, the entries of the stack are examined in
+stack order.  If the topmost handler contains a apttern that matches
+the raised exception, it receives control.  Otherwise, the handler is
+popped from the stack, and the next handler is examined.
+
+In our example, when the @code{split} function raises the @code{Empty}
+exception, the top four elements of the exception stack contain
+handlers corresponding to each of the recursive calls of the
+@code{map} function.  When the @code{Empty} exception is raised,
+control is passed to the innermost call @code{map f []}, which returns
+the empty list as a result.
+
+@begin[tabular,"|c|"]
+@hline
+@line{@code{map f []}}
+@line{@code{map f [7]}}
+@line{@code{map f [5; 7]}}
+@line{@code{map f [3; 5; 7]}}
+@hline
+@end[tabular]
+
+This example also contains a something of a surprise.  Suppose the
+function @code{f} raises the @code{Empty} exception?  The program
+gives no special status to @code{f}, and control is passed to the
+uppermost handler on the exception stack.  As a result, the list is
+truncated at the point where the exception occurs.
+
+@begin[iverbatim]
+# map (fun i ->
+          if i = 0 then
+             raise Empty
+          else
+             i + 1) [3; 5; 0; 7; 0; 9];;
+- : int list = [4; 6]
+@end[iverbatim]
+
+@section["exception-examples"]{Examples of uses of exceptions}
+
+Like many other powerful language constructs, exceptions can used to
+simplify programs and improve their clarity.  They can also be abused
+in magnificent ways.  In this section we cover some standard uses of
+exceptions, and some of the abuses.
+
+@section["old-exceptions"]{Old text}
+
+Unlike a @code{match} expression, the cases in a @emph{try} expression do not have to exhaustive.  If an exception does not match one of the cases,
+
+
 
 Exceptions were designed as a more elegant alternative to explicit
 error handling in more traditional languages.  In Unix/C, for example,

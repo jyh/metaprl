@@ -105,7 +105,7 @@ doc <:doc<
    $a$ and $b$ are computationally equivalent.
    @end[doc]
 >>
-prim_rw rewriteAxiom2 'a 'b : (Perv!"rewrite"{'a; 'b}) --> 'a <--> 'b
+prim_rw rewriteAxiom2 Perv!"rewrite"{'a; 'b} : (Perv!"rewrite"{'a; 'b}) --> 'a <--> 'b
 
 doc <:doc<
    @begin[doc]
@@ -124,8 +124,7 @@ doc <:doc< @docoff >>
  * The binding term may be optionally supplied.
  *)
 let rewriteC t =
-   let a, b = dest_xrewrite t in
-      rewriteAxiom2 a b
+   rewriteAxiom2 t
 
 let rewriteT t =
    rwh (rewriteC t) 0

@@ -368,7 +368,7 @@ doc <:doc<
 
 
 
-interactive_rw use_as_additive 'add:  'add <-->  rename_mul_add{ as_additive{'add} }
+interactive_rw use_as_additive ('add :> Term) :  'add <-->  rename_mul_add{ as_additive{'add} }
 
 
 let foldAdditiveC term = allSubThenC (use_as_additive term) (reduceTopC)
@@ -534,7 +534,7 @@ doc <:doc<
    @end[doc]
 >>
 
-interactive_rw reverse_order_rw 'ord:  'ord <-->   reverse_order{reverse_order{'ord}}
+interactive_rw reverse_order_rw ('ord :> Term) :  'ord <-->   reverse_order{reverse_order{'ord}}
 
 doc docoff
 

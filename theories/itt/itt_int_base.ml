@@ -844,17 +844,17 @@ let resource reduce += [
 	<<'a -@ 0>>, (unfold_sub thenC (addrC [Subterm 2] reduce_minus));
 ]
 
-interactive_rw add_Id3_rw :
+interactive_rw add_Id3_rw ('a :> Term) :
    ( 'a in int ) -->
    'a <--> (0 +@ 'a)
 
-let add_Id3C = add_Id3_rw
+let add_Id3C = termC add_Id3_rw
 
-interactive_rw add_Id4_rw :
+interactive_rw add_Id4_rw ('a :> Term) :
    ( 'a in int ) -->
    'a <--> ('a +@ 0)
 
-let add_Id4C = add_Id4_rw
+let add_Id4C = termC add_Id4_rw
 
 doc <:doc<
    @begin[doc]
@@ -937,14 +937,15 @@ interactive add_Functionality 'c :
    [wf] sequent { <H> >- 'c in int } -->
    sequent { <H> >- 'a ~ 'b }
 
-interactive_rw add_Functionality_rw 'b 'c :
+interactive_rw add_Functionality_rw 'b 'c ('a :> Term) :
    (('a +@ 'c) ~ ('b +@ 'c)) -->
    ('a in int) -->
    ('b in int) -->
    ('c in int) -->
    'a <--> 'b
 
-let add_FunctionalityC = add_Functionality_rw
+let add_FunctionalityC b c =
+   termC (add_Functionality_rw b c)
 
 interactive minus_add_Distrib :
    [wf] sequent { <H> >- 'a in int } -->

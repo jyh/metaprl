@@ -41,7 +41,7 @@ declare sequent [sequent_arg] { Term : Term >- Term } : Judgment
 rule rewriteAxiom1 :
    sequent { <H> >- Perv!"rewrite"{'a; 'a} }
 
-rewrite rewriteAxiom2 'a 'b : (Perv!"rewrite"{'a; 'b}) --> 'a <--> 'b
+rewrite rewriteAxiom2 Perv!"rewrite"{'a; 'b} : (Perv!"rewrite"{'a; 'b}) --> 'a <--> 'b
 
 rule rewriteSym :
    sequent { <H> >- Perv!"rewrite"{'a; 'b} } -->

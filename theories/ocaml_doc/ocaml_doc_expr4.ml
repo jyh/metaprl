@@ -6,7 +6,7 @@ doc <:doc< -*- Mode: text -*-
    @end[spelling]
 
    @begin[doc]
-   @chapter[records]{Records, Arrays, and Side-Effects}
+   @chapter[records]{Records, Arrays, References, and Side-Effects}
    @end[doc]
 
    ----------------------------------------------------------------

@@ -687,11 +687,11 @@ interactive mul_Id3 {| nth_hyp |} :
    [wf] sequent { <H> >- 'a in int } -->
    sequent { <H> >- 'a ~ (1 *@ 'a) }
 
-interactive_rw mul_Id3_rw :
+interactive_rw mul_Id3_rw ('a :> Term) :
    ('a in int) -->
    'a <--> (1 *@ 'a)
 
-let mul_Id3C = mul_Id3_rw
+let mul_Id3C = termC mul_Id3_rw
 
 prim mul_Zero {| nth_hyp |} :
    [wf] sequent { <H> >- 'a in int } -->

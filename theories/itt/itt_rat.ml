@@ -600,17 +600,17 @@ let resource reduce += [
 	<<sub_rat{'a; rat{0; 1}}>>, (unfold_sub_rat thenC (addrC [Subterm 2] reduce_sub_rat));
 ]
 
-interactive_rw add_rat_Id3_rw :
+interactive_rw add_rat_Id3_rw ('a :> Term) :
    ( 'a in rationals ) -->
    'a <--> add_rat{rat{0; 1}; 'a}
 
-let add_rat_Id3C = add_rat_Id3_rw
+let add_rat_Id3C = termC add_rat_Id3_rw
 
-interactive_rw add_rat_Id4_rw :
+interactive_rw add_rat_Id4_rw ('a :> Term) :
    ( 'a in rationals ) -->
    'a <--> add_rat{'a; rat{0; 1}}
 
-let add_rat_Id4C = add_rat_Id4_rw
+let add_rat_Id4C = termC add_rat_Id4_rw
 
 interactive mul_rat_Commut :
    [wf] sequent { <H> >- 'a in rationals } -->
@@ -696,11 +696,11 @@ interactive mul_rat_Id3 {| nth_hyp |} :
    [wf] sequent { <H> >- 'a in rationals } -->
    sequent { <H> >- 'a ~ mul_rat{rat{1; 1}; 'a} }
 
-interactive_rw mul_rat_Id3_rw :
+interactive_rw mul_rat_Id3_rw ('a :> Term) :
    ('a in rationals) -->
    'a <--> mul_rat{rat{1; 1}; 'a}
 
-let mul_rat_Id3C = mul_rat_Id3_rw
+let mul_rat_Id3C = termC mul_rat_Id3_rw
 
 interactive mul_rat_Zero {| nth_hyp |} :
    [wf] sequent { <H> >- 'a in rationals } -->

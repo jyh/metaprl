@@ -27,6 +27,8 @@ declare are_compatible_shapes_aux{'diff; 'l1; 'l2}
 declare are_compatible_shapes{'bt; 'l}
 declare compatible_shapes{'bt; 'l}
 
+topval compatible_shapes_varC : term -> conv
+
 topval unfold_is_bterm : conv
 topval unfold_itbterm : conv
 topval unfold_is_var_bterm : conv

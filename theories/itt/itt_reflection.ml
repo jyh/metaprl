@@ -44,7 +44,6 @@ extends Base_reflection
 extends Itt_nat
 doc docoff
 
-
 open Dtactic
 
 open Base_reflection
@@ -798,11 +797,13 @@ interactive_rw make_bterm_nilsubterms :
    subterms{'bt} = nil in list{BTerm} -->
    make_bterm{'bt; nil} <--> 'bt
 
-interactive_rw compatible_shapes_var 'bt :
+interactive_rw compatible_shapes_var 'bt ('btl :> Perv!Term) :
    'bt in Var -->
    'btl in list{BTerm} -->
    compatible_shapes{'bt; 'btl} -->
    'btl <--> nil
+
+let compatible_shapes_varC bt = termC (compatible_shapes_var bt)
 
 interactive compatible_shapes_var1 'bt:
    sequent { <H> >- 'bt in Var } -->

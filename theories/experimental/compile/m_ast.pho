@@ -142,6 +142,8 @@ Grammar -start exp {
                                     => LetSubscript{'a1; 'a2; v. 'e}
     | LET ID<var[v:v]> EQ ID<var[f:v]> LPAREN a_list<'args> RPAREN IN exp<'e>
                                     => LetApply{'f; 'args; v. 'e}
+    | LET ID<var[v:v]> EQ LPAREN a<'a1> COMMA a<'a2> RPAREN IN exp<'e>
+                                    => LetPair{'a1; 'a2; v. 'e}
     | ID<var[f:v]> LPAREN a_list<'args> RPAREN %prec prec_apply
                                     => TailCall{'f; 'args}
     | IF a<'a> THEN exp<'e1> ELSE exp<'e2>

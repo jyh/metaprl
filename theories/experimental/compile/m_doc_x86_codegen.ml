@@ -62,16 +62,16 @@ dform math_Reserve_df2 : mode[tex] :: math_Reserve{'words; 'e} =
    bf["reserve"] `"(" slot{'words} `");" slot{'e}
 
 dform math_StoreTuple_df1 : mode[tex] :: math_StoreTuple{'p; 'i; 'args} =
-   bf["store_tuple"] `"(" slot{'p} `"," slot{'i} `"," slot{'args} `");"
+   bf["store"] `"(" slot{'p} `"," slot{'i} `"," slot{'args} `");"
 
 dform math_StoreTuple_df2 : mode[tex] :: math_StoreTuple{'p; 'i; 'args; 'e} =
-   bf["store_tuple"] `"(" slot{'p} `"," slot{'i} `"," slot{'args} `");" slot{'e}
+   bf["store"] `"(" slot{'p} `"," slot{'i} `"," slot{'args} `");" slot{'e}
 
 dform math_CopyArgs_df1 : mode[tex] :: math_CopyArgs{'src; 'dst; 'v} =
-   bf["copy_args"] `"(" slot{'src} `"," slot{'dst} `")" math_dst{'v}
+   bf["copy"] `"(" slot{'src} `"," slot{'dst} `")" math_dst{'v}
 
 dform math_CopyArgs_df2 : mode[tex] :: math_CopyArgs{'src; 'dst; 'v; 'e} =
-   bf["copy_args"] `"(" slot{'src} `"," slot{'dst} `")" math_dst{'v} slot{'e}
+   bf["copy"] `"(" slot{'src} `"," slot{'dst} `")" math_dst{'v} slot{'e}
 
 dform math_ReverseArgs_df1 : mode[tex] :: math_ReverseArgs{'e} =
    bf["reverse"] `"(" slot{'e} `")"
@@ -99,7 +99,8 @@ shifted to obtain the standard integer representation, the division operation is
 result is converted to a 31-bit representation.
 
 @begin[figure,asmatomtrans]
-$$
+@begin[small]
+$
 @begin[array,l]
 @line{@xrewrite[false]{@ASM{@AtomFalse; v; e[v]}; e[@ImmediateNumber{1}]}}
 @line{@xrewrite[true]{@ASM{@AtomTrue; v; e[v]}; e[@ImmediateNumber{3}]}}
@@ -130,7 +131,8 @@ $$
     @line{{e[@Register{q}]}}
     @end[array]}}}
 @end[array]
-$$
+$
+@end[small]
 @caption{Translation of atoms to x86 assembly}
 @end[figure]
 
@@ -143,7 +145,8 @@ simplest case, the atom $a$ is translated into an operand $v'$, which is copied 
 translated.  Conditionals translate into comparisons followed by a conditional branch.
 
 @begin[figure,asmexptrans]
-$$
+@begin[small]
+$
 @begin[array,l]
 @line{@xrewrite2[atom]{@ASM{@LetAtom{a; v; e[v]}};
   {@begin[array,t,l]
@@ -182,7 +185,8 @@ $$
    @line{@ASM{e[v]}}
    @end[array]}}}
 @end[array]
-$$
+$
+@end[small]
 @caption{Translation of expressions to x86 assembly}
 @end[figure]
 

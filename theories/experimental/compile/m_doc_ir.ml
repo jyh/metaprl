@@ -258,19 +258,19 @@ expressions are explicitly named.
 @begin[small]
 $
 @begin[array,cc]
-@line{{@begin[array,t,rcll]
-@line{@it{bop} {::=} {@AddOp @pipe @SubOp @pipe @MulOp @pipe @DivOp} @hbox{Binary arithmetic}}
-@line{@it{rop} {::=} {@LeOp @pipe @LtOp @pipe @GtOp} @hbox{Binary relations}}
-@line{{}         {@pipe} {@GeOp @pipe @EqOp @pipe @NeqOp} {}}
-@line{{l}        {::=} {@it{string}} @hbox{Function label}}
+@line{{@begin[array,t,rcl]
+@line{@it{bop} {::=}   {@AddOp @pipe @SubOp @pipe @MulOp @pipe @DivOp}}
+@line{@it{rop} {::=}   {@LeOp @pipe @LtOp @pipe @GtOp}}
+@line{{}       {@pipe} {@GeOp @pipe @EqOp @pipe @NeqOp}}
+@line{{l}      {::=}   {@it{string}}}
 
-@line{{}{}{}{}}
-@line{{a} {::=}     {@AtomTrue @pipe @AtomFalse}          @hbox{Boolean values}}
-@line{{}  {@pipe}   @AtomInt[i]                           @hbox{Integers}}
-@line{{}  {@pipe}   @AtomVar{v}                           @hbox{Variables}}
-@line{{}  {@pipe}   @AtomBinop{@it{bop}; a_1; a_2}        @hbox{Binary arithmetic}}
-@line{{}  {@pipe}   @AtomRelop{@it{rop}; a_1; a_2}        @hbox{Binary relations}}
-@line{{}  {@pipe}   @AtomFunVar{R; l}                     @hbox{Function labels}}
+@line{{}{}{}}
+@line{{a} {::=}     {@AtomTrue @pipe @AtomFalse}}
+@line{{}  {@pipe}   @AtomInt[i]}
+@line{{}  {@pipe}   @AtomVar{v}}
+@line{{}  {@pipe}   @AtomBinop{@it{bop}; a_1; a_2}}
+@line{{}  {@pipe}   @AtomRelop{@it{rop}; a_1; a_2}}
+@line{{}  {@pipe}   @AtomFunVar{R; l}}
 @end[array]}
 {@begin[array,t,rcll]
 @line{{e} {::=}   @LetAtom{a; v; e}                        @hbox{Variable definition}}

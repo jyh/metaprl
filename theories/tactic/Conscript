@@ -14,11 +14,11 @@ Depends $env ['tactic_cache',
 	'mptop',
 	'top_tacticals',
 	'top_conversionals'],
-	"$env->{MP}/filter/filter/prlc",
-	"$env->{MP}/lib/camlp4o",
-	"$env->{MP}/lib/camlp4n",
-	"$env->{MP}/lib/prlcn",
-	"$env->{MP}/lib/prlco";
+	"$env->{MP_HASH}/filter/filter/prlc",
+	"$env->{MP_HASH}/lib/camlp4o",
+	"$env->{MP_HASH}/lib/camlp4n",
+	"$env->{MP_HASH}/lib/prlcn",
+	"$env->{MP_HASH}/lib/prlco";
 
 OCamlSources $env
 	'tactic_cache.ml',

@@ -2,19 +2,19 @@ Import qw( env );
 
 $env = $env->clone(
     INCPATH => [@{$env->{INCPATH}},
-                "$env->{MP}/mllib",
-                "$env->{MP}/lib",
-                "$env->{MP}/refiner/refbase",
-                "$env->{MP}/refiner/refsig",
-                "$env->{MP}/refiner/term_gen",
-                "$env->{MP}/refiner/term_ds",
-                "$env->{MP}/refiner/term_std",
-                "$env->{MP}/refiner/rewrite",
-                "$env->{MP}/refiner/refiner",
-                "$env->{MP}/refiner/reflib",
-                "$env->{MP}/library",
-                "$env->{MP}/ensemble",
-                "$env->{MP}/filter/boot"],
+                "$env->{MP_HASH}/mllib",
+                "$env->{MP_HASH}/lib",
+                "$env->{MP_HASH}/refiner/refbase",
+                "$env->{MP_HASH}/refiner/refsig",
+                "$env->{MP_HASH}/refiner/term_gen",
+                "$env->{MP_HASH}/refiner/term_ds",
+                "$env->{MP_HASH}/refiner/term_std",
+                "$env->{MP_HASH}/refiner/rewrite",
+                "$env->{MP_HASH}/refiner/refiner",
+                "$env->{MP_HASH}/refiner/reflib",
+                "$env->{MP_HASH}/library",
+                "$env->{MP_HASH}/ensemble",
+                "$env->{MP_HASH}/filter/boot"],
     ENV => {
             PATH => "$ENV{'PATH'}:$env->{MP}/filter/filter",
             MPLIB => "$env->{MP}/lib",
@@ -25,7 +25,7 @@ $env = $env->clone(
 
    # All files compiled with prlc implicitly depend on these files and
    # modules.
-   HIDDEPS => "$env->{MP}/filter/filter/prlc $env->{MP}/lib/camlp4n $env->{MP}/lib/registry.txt $env->{MP}/lib/mbs-mpl.txt",
+   HIDDEPS => "$env->{MP_HASH}/filter/filter/prlc $env->{MP_HASH}/lib/camlp4n $env->{MP_HASH}/lib/registry.txt $env->{MP_HASH}/lib/mbs-mpl.txt",
    HIDMODDEPS => "Printf Mp_debug Refiner Refine_exn Term Term_util Theory Dform Dform_print Tactic Mp_resource Precedence Filter_summary",
 );
 

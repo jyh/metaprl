@@ -2571,7 +2571,7 @@ O	o2562	rule p2562
 T	t2578	o1250 b1212
 B	b2578	t2578
 T	t2579	o1619 b2578
-P	p2664	String isComutative_wf
+P	p2664	String isCommutative_wf
 O	o2664	rule p2664
 P	p1724	String "byDefT unfold_groupoid"
 O	o1724	ext_rule p1724

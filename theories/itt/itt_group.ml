@@ -494,9 +494,12 @@ doc <:doc<
 interactive abelg_wf {| intro [] |} :
    sequent { <H> >- "type"{abelg[i:l]} }
 
-interactive isAbelg_wf {| intro [intro_typeinf <<'g>>] |} group[i:l] :
-   sequent { <H> >- 'g in group[i:l] } -->
-   sequent { <H> >- isAbelg{'g} Type }
+interactive isAbelg_wf {| intro [] |} :
+   sequent { <H> >- 'G^car Type } -->
+   sequent { <H>; x: 'G^car; y: 'G^car >- 'x *['G] 'y in 'G^car} -->
+   sequent { <H> >- 'G^"1" in 'G^car} -->
+   sequent { <H>; x: 'G^car >- 'G^inv 'x in 'G^car} -->
+   sequent { <H> >- isAbelg{'G} Type }
 
 doc <:doc<
    @begin[doc]

@@ -328,7 +328,7 @@ doc <:doc<
 
    @end[doc]
 >>
-interactive isComutative_wf {| intro [] |} :
+interactive isCommutative_wf {| intro [] |} :
    sequent { <H> >- "type"{'A^car} } -->
    sequent { <H>; x: 'A^car; y: 'A^car >- 'x *['A] 'y in 'A^car} -->
    sequent { <H> >- "type"{isCommutative{'A}} }

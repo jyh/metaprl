@@ -99,7 +99,7 @@ dform fun_df3 : rfun{'A; f, x. 'B} =
    "{" " " slot{bvar{'f}} `" | "  "fun"{'A; x. 'B} `" }"
 
 dform apply_df1 : parens :: "prec"[prec_apply] :: apply{'f; 'a} =
-   slot[lt]{'f} " " slot[le]{'a}
+   slot["lt"]{'f} " " slot["le"]{'a}
 
 dform lambda_df1 : mode[prl] :: parens :: "prec"[prec_lambda] :: lambda{x. 'b} =
    Nuprl_font!lambda slot{'x} `"." slot{'b}

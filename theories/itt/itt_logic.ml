@@ -392,19 +392,19 @@ dform true_df1 : mode[src] :: "true" = `"True"
 dform false_df1 : mode[src] :: "false" = `"False"
 
 dform not_df1 : mode[src] :: parens :: "prec"[prec_implies] :: "not"{'a} =
-   `"not " slot[le]{'a}
+   `"not " slot["le"]{'a}
 
 dform implies_df1 : mode[src] :: parens :: "prec"[prec_implies] :: implies{'a; 'b} =
-   slot[le]{'a} `" => " slot[lt]{'b}
+   slot["le"]{'a} `" => " slot["lt"]{'b}
 
 dform iff_df1 : mode[src] :: parens :: "prec"[prec_iff] :: iff{'a; 'b} =
-   slot[le]{'a} `" <==> " slot[lt]{'b}
+   slot["le"]{'a} `" <==> " slot["lt"]{'b}
 
 dform and_df1 : mode[src] :: parens :: "prec"[prec_and] :: "and"{'a; 'b} =
-   slot[le]{'a} `" /\\ " slot[lt]{'b}
+   slot["le"]{'a} `" /\\ " slot["lt"]{'b}
 
 dform or_df1 : mode[src] :: parens :: "prec"[prec_or] :: "or"{'a; 'b} =
-   slot[le]{'a} `" \\/ " slot[lt]{'b}
+   slot["le"]{'a} `" \\/ " slot["lt"]{'b}
 
 dform all_df1 : mode[src] :: parens :: "prec"[prec_quant] :: "all"{'A; x. 'B} =
    `"all " slot{'x} `": " slot{'A}`"." slot{'B}
@@ -419,16 +419,16 @@ dform false_df2 : mode[prl] :: "false" =
    `"False"
 
 dform not_df2 : mode[prl] :: parens :: "prec"[prec_not] :: "not"{'a} =
-   Nuprl_font!tneg slot[le]{'a}
+   Nuprl_font!tneg slot["le"]{'a}
 
 dform implies_df2 : mode[prl] :: parens :: "prec"[prec_implies] :: implies{'a; 'b} =
-   slot[le]{'a} " " Nuprl_font!Rightarrow " " slot[lt]{'b}
+   slot["le"]{'a} " " Nuprl_font!Rightarrow " " slot["lt"]{'b}
 
 dform iff_df2 : mode[prl] :: parens :: "prec"[prec_iff] :: iff{'a; 'b} =
-   slot[le]{'a} " " Nuprl_font!Leftrightarrow " " slot[lt]{'b}
+   slot["le"]{'a} " " Nuprl_font!Leftrightarrow " " slot["lt"]{'b}
 
 dform and_df1 : mode[prl] :: parens :: "prec"[prec_and] :: "and"{'a; 'b} =
-   slot[le]{'a} " " Nuprl_font!wedge " " slot[lt]{'b}
+   slot["le"]{'a} " " Nuprl_font!wedge " " slot["lt"]{'b}
 
 (*
  * Disjunction.

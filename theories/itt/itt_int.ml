@@ -173,45 +173,45 @@ dform number_df : number[n:n] =
    slot[n:s]
 
 dform add_df1 :  mode[prl] :: parens :: "prec"[prec_add] :: "add"{'a; 'b} =
-   slot[le]{'a} `" + " slot[lt]{'b}
+   slot["le"]{'a} `" + " slot["lt"]{'b}
 dform add_df2 : mode[src] :: parens :: "prec"[prec_add] :: "add"{'a; 'b} =
-   slot[le]{'a} `" add " slot[lt]{'b}
+   slot["le"]{'a} `" add " slot["lt"]{'b}
 
 dform sub_df1 : mode[prl] :: parens :: "prec"[prec_add] :: "sub"{'a; 'b} =
-   slot[lt]{'a} `" - " slot[le]{'b}
+   slot["lt"]{'a} `" - " slot["le"]{'b}
 dform sub_df2 : mode[src] :: parens :: "prec"[prec_add] :: "sub"{'a; 'b} =
-   slot[lt]{'a} `" sub " slot[le]{'b}
+   slot["lt"]{'a} `" sub " slot["le"]{'b}
 
 dform mul_df1 : mode[prl] :: parens :: "prec"[prec_mul] :: "mul"{'a; 'b} =
-   slot[lt]{'a} `" * " slot[le]{'b}
+   slot["lt"]{'a} `" * " slot["le"]{'b}
 dform mul_df2 : mode[src] :: parens :: "prec"[prec_mul] :: "mul"{'a; 'b} =
-   slot[lt]{'a} `" mul " slot[le]{'b}
+   slot["lt"]{'a} `" mul " slot["le"]{'b}
 
 dform div_df1 : mode[prl] :: parens :: "prec"[prec_mul] :: "div"{'a; 'b} =
-   slot[lt]{'a} Nuprl_font!"div" slot[le]{'b}
+   slot["lt"]{'a} Nuprl_font!"div" slot["le"]{'b}
 dform div_df2 : mode[src] :: parens :: "prec"[prec_mul] :: "div"{'a; 'b} =
-   slot[lt]{'a} `" div " slot[le]{'b}
+   slot["lt"]{'a} `" div " slot["le"]{'b}
 
 dform rem_df1 : mode[prl] :: parens :: "prec"[prec_mul] :: "rem"{'a; 'b} =
-   slot[lt]{'a} `" % " slot[le]{'b}
+   slot["lt"]{'a} `" % " slot["le"]{'b}
 dform rem_df2 : mode[src] :: parens :: "prec"[prec_mul] :: "rem"{'a; 'b} =
-   slot[lt]{'a} `" rem " slot[le]{'b}
+   slot["lt"]{'a} `" rem " slot["le"]{'b}
 
 dform lt_df1 : parens :: "prec"[prec_compare] :: lt{'a; 'b} =
-   slot[lt]{'a} `" < " slot[le]{'b}
+   slot["lt"]{'a} `" < " slot["le"]{'b}
 
 dform le_df1 : mode[prl] :: parens :: "prec"[prec_compare] :: le{'a; 'b} =
-   slot[lt]{'a} Nuprl_font!le slot[le]{'b}
+   slot["lt"]{'a} Nuprl_font!le slot["le"]{'b}
 dform le_df2 : mode[src] :: parens :: "prec"[prec_compare] :: le{'a; 'b} =
-   slot[lt]{'a} `" <= " slot[le]{'b}
+   slot["lt"]{'a} `" <= " slot["le"]{'b}
 
 dform ge_df1 : mode[prl] :: parens :: "prec"[prec_compare] :: ge{'a; 'b} =
-   slot[lt]{'a} Nuprl_font!ge slot[le]{'b}
+   slot["lt"]{'a} Nuprl_font!ge slot["le"]{'b}
 dform ge_df2 : mode[src] :: parens :: "prec"[prec_compare] :: ge{'a; 'b} =
-   slot[lt]{'a} `" >= " slot[le]{'b}
+   slot["lt"]{'a} `" >= " slot["le"]{'b}
 
 dform gt_df1 : parens :: "prec"[prec_compare] :: gt{'a; 'b} =
-   slot[lt]{'a} `" > " slot[le]{'b}
+   slot["lt"]{'a} `" > " slot["le"]{'b}
 
 (************************************************************************
  * REWRITES                                                             *

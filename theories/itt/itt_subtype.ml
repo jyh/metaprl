@@ -82,7 +82,7 @@ open Tactic_type
 open Tactic_type.Tacticals
 open Tactic_type.Sequent
 
-open Base_dtactic
+open Dtactic
 
 open Itt_equal
 open Itt_struct

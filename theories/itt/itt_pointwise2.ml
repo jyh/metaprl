@@ -28,9 +28,9 @@ open Tactic_type.Tacticals
 open Var
 open Mptop
 
-open Base_auto_tactic
+open Auto_tactic
 
-open Base_dtactic
+open Dtactic
 
 open Itt_equal
 open Itt_struct

@@ -38,7 +38,7 @@ doc <:doc<
 doc <:doc< @doc{@parents} >>
 extends Czf_itt_dall
 
-open Base_dtactic
+open Dtactic
 
 doc <:doc< @doc{@terms} >>
 declare \subset{'s1; 's2}

@@ -5,7 +5,7 @@
 extends Fol_false
 extends Fol_implies
 
-open Base_dtactic
+open Dtactic
 
 (************************************************************************
  * TERMS                                                                *

@@ -63,7 +63,7 @@ open Tactic_type.Tacticals
 open Tactic_type.Conversionals
 
 open Base_meta
-open Base_dtactic
+open Dtactic
 
 open Top_conversionals
 

@@ -4,7 +4,7 @@ open Base_meta
 open Itt_int_ext
 open Itt_struct
 open Itt_struct2
-open Base_dtactic
+open Dtactic
 open Tactic_type.Conversionals
 open Var
 open Tactic_type
@@ -23,8 +23,8 @@ open Mp_resource
 
 open Tactic_type
 
-open Base_dtactic
-open Base_auto_tactic
+open Dtactic
+open Auto_tactic
 open Itt_equal
 
 

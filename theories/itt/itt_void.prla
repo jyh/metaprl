@@ -245,13 +245,13 @@ T	t337	o336
 B	b337	t337
 T	t338	o b337 b6
 B	b338	t338
-P	p338	String Base_dtactic
+P	p338	String Dtactic
 O	o338	parent p338
 T	t339	o338
 B	b339	t339
 T	t340	o b339 b6
 B	b340	t340
-P	p340	String Base_auto_tactic
+P	p340	String Auto_tactic
 O	o340	parent p340
 T	t341	o340
 B	b341	t341

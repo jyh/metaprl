@@ -1723,13 +1723,13 @@ T	t702	o701
 B	b702	t702
 T	t703	o b702 b13
 B	b703	t703
-P	p703	String Base_dtactic
+P	p703	String Dtactic
 O	o703	parent p703
 T	t704	o703
 B	b704	t704
 T	t705	o b704 b13
 B	b705	t705
-P	p705	String Base_auto_tactic
+P	p705	String Auto_tactic
 O	o705	parent p705
 T	t706	o705
 B	b706	t706

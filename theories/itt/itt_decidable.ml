@@ -55,8 +55,8 @@ open Mp_debug
 open Term_match_table
 open Tactic_type
 open Tactic_type.Tacticals
-open Base_dtactic
-open Base_auto_tactic
+open Dtactic
+open Auto_tactic
 
 open Refiner.Refiner
 open Refiner.Refiner.TermType

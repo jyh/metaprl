@@ -1728,13 +1728,13 @@ T	t737	o736
 B	b737	t737
 T	t738	o b737 b14
 B	b738	t738
-P	p738	String Base_dtactic
+P	p738	String Dtactic
 O	o738	parent p738
 T	t739	o738
 B	b739	t739
 T	t740	o b739 b14
 B	b740	t740
-P	p740	String Base_auto_tactic
+P	p740	String Auto_tactic
 O	o740	parent p740
 T	t741	o740
 B	b741	t741

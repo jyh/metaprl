@@ -69,8 +69,8 @@ open Tactic_type.Tacticals
 open Var
 open Perv
 
-open Base_dtactic
-open Base_auto_tactic
+open Dtactic
+open Auto_tactic
 open Top_conversionals
 
 open Itt_equal

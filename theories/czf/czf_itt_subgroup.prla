@@ -2063,13 +2063,13 @@ T	t813	o812
 B	b813	t813
 T	t814	o b813 b8
 B	b814	t814
-P	p814	String Base_dtactic
+P	p814	String Dtactic
 O	o814	parent p814
 T	t815	o814
 B	b815	t815
 T	t816	o b815 b8
 B	b816	t816
-P	p816	String Base_auto_tactic
+P	p816	String Auto_tactic
 O	o816	parent p816
 T	t817	o816
 B	b817	t817

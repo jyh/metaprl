@@ -40,7 +40,7 @@ extends Czf_itt_union
 extends Czf_itt_singleton
 doc <:doc< @docoff >>
 
-open Base_dtactic
+open Dtactic
 
 (************************************************************************
  * TERMS

@@ -100,13 +100,13 @@ T	t32	o31
 B	b32	t32
 T	t33	o b32 b4
 B	b33	t33
-P	p33	String Base_dtactic
+P	p33	String Dtactic
 O	o33	parent p33
 T	t34	o33
 B	b34	t34
 T	t35	o b34 b4
 B	b35	t35
-P	p35	String Base_auto_tactic
+P	p35	String Auto_tactic
 O	o35	parent p35
 T	t36	o35
 B	b36	t36

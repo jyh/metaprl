@@ -34,7 +34,7 @@
 
 extends Base_theory
 
-open Base_auto_tactic
+open Auto_tactic
 
 
 (*

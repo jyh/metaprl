@@ -25,8 +25,8 @@ open Mp_resource
 open Var
 open Tactic_type
 open Tactic_type.Tacticals
-open Base_dtactic
-open Base_auto_tactic
+open Dtactic
+open Auto_tactic
 open Top_conversionals
 
 open Itt_logic

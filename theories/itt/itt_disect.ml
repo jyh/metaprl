@@ -98,8 +98,8 @@ open Var
 open Tactic_type
 open Tactic_type.Tacticals
 
-open Base_auto_tactic
-open Base_dtactic
+open Auto_tactic
+open Dtactic
 
 open Perv
 open Itt_equal

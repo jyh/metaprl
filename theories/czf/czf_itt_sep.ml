@@ -68,7 +68,7 @@ open Tactic_type.Sequent
 open Tactic_type.Tacticals
 open Var
 
-open Base_dtactic
+open Dtactic
 open Top_conversionals
 
 open Itt_rfun

@@ -54,8 +54,8 @@ open Refiner.Refiner.RefineError
 open Tactic_type
 open Tactic_type.Tacticals
 open Tactic_type.Conversionals
-open Base_dtactic
-open Base_auto_tactic
+open Dtactic
+open Auto_tactic
 open Fol_not
 open Fol_struct
 

@@ -75,7 +75,7 @@ open Refiner.Refiner.TermOp
 open Refiner.Refiner.TermSubst
 open Mp_resource
 
-open Base_dtactic
+open Dtactic
 
 open Itt_equal
 open Itt_void

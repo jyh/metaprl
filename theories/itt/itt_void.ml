@@ -60,8 +60,8 @@ open Refiner.Refiner.RefineError
 
 open Tactic_type.Tacticals
 
-open Base_dtactic
-open Base_auto_tactic
+open Dtactic
+open Auto_tactic
 
 open Itt_equal
 open Itt_subtype

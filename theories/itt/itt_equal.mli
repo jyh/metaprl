@@ -41,7 +41,7 @@ open Mp_resource
 open Tactic_type
 open Tactic_type.Tacticals
 open Tactic_type.Conversionals
-open Base_auto_tactic
+open Auto_tactic
 open Base_theory
 open Typeinf
 

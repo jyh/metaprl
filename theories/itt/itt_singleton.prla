@@ -1627,13 +1627,13 @@ T	t653	o652
 B	b653	t653
 T	t654	o b653 b18
 B	b654	t654
-P	p654	String Base_dtactic
+P	p654	String Dtactic
 O	o654	parent p654
 T	t655	o654
 B	b655	t655
 T	t656	o b655 b18
 B	b656	t656
-P	p656	String Base_auto_tactic
+P	p656	String Auto_tactic
 O	o656	parent p656
 T	t657	o656
 B	b657	t657

@@ -47,7 +47,7 @@ open Refiner.Refiner.TermType
 open Tactic_type.Tacticals
 open Tactic_type.Conversionals
 
-open Base_auto_tactic
+open Auto_tactic
 
 (************************************************************************
  * TERMS                                                                *

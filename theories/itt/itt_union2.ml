@@ -7,8 +7,8 @@ doc <:doc<
 extends Itt_bool
 extends Itt_isect (* top *)
 
-open Base_dtactic
-open Base_auto_tactic
+open Dtactic
+open Auto_tactic
 open Top_conversionals
 
 

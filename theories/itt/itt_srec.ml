@@ -70,7 +70,7 @@ open Mp_resource
 open Tactic_type.Tacticals
 open Var
 
-open Base_dtactic
+open Dtactic
 
 open Itt_void
 open Itt_equal

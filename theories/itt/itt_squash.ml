@@ -125,8 +125,8 @@ open Tactic_type.Tacticals
 open Tactic_type.Sequent
 open Var
 
-open Base_dtactic
-open Base_auto_tactic
+open Dtactic
+open Auto_tactic
 
 open Itt_struct
 open Itt_equal

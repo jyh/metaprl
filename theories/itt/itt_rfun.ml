@@ -76,7 +76,7 @@ open Mp_resource
 open Unify_mm
 
 open Var
-open Base_dtactic
+open Dtactic
 open Top_conversionals
 
 open Tactic_type

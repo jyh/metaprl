@@ -40,7 +40,7 @@ open Refiner.Refiner.RefineError
 open Tactic_type.Sequent
 open Tactic_type.Tacticals
 
-open Base_dtactic
+open Dtactic
 
 let _ =
    show_loading "Loading Czf_itt_true%t"

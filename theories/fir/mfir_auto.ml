@@ -42,8 +42,8 @@ doc <:doc<
 
 extends Base_theory
 
-open Base_auto_tactic
-open Base_dtactic
+open Auto_tactic
+open Dtactic
 
 
 (*

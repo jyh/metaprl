@@ -1766,13 +1766,13 @@ T	t705	o704
 B	b705	t705
 T	t706	o b705 b8
 B	b706	t706
-P	p706	String Base_dtactic
+P	p706	String Dtactic
 O	o706	parent p706
 T	t707	o706
 B	b707	t707
 T	t708	o b707 b8
 B	b708	t708
-P	p708	String Base_auto_tactic
+P	p708	String Auto_tactic
 O	o708	parent p708
 T	t709	o708
 B	b709	t709

@@ -76,8 +76,8 @@ open Var
 open Top_conversionals
 
 open Typeinf
-open Base_auto_tactic
-open Base_dtactic
+open Auto_tactic
+open Dtactic
 
 doc <:doc< 
    @begin[doc]

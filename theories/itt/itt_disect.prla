@@ -2045,13 +2045,13 @@ T	t1115	o1114
 B	b1115	t1115
 T	t1116	o b1115 b13
 B	b1116	t1116
-P	p1116	String Base_dtactic
+P	p1116	String Dtactic
 O	o1116	parent p1116
 T	t1117	o1116
 B	b1117	t1117
 T	t1118	o b1117 b13
 B	b1118	t1118
-P	p1118	String Base_auto_tactic
+P	p1118	String Auto_tactic
 O	o1118	parent p1118
 T	t1119	o1118
 B	b1119	t1119

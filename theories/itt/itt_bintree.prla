@@ -413,13 +413,13 @@ T	t141	o140
 B	b141	t141
 T	t142	o b141 b17
 B	b142	t142
-P	p142	String Base_dtactic
+P	p142	String Dtactic
 O	o142	parent p142
 T	t143	o142
 B	b143	t143
 T	t144	o b143 b17
 B	b144	t144
-P	p144	String Base_auto_tactic
+P	p144	String Auto_tactic
 O	o144	parent p144
 T	t145	o144
 B	b145	t145

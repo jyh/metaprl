@@ -33,8 +33,8 @@ open Tactic_type.Sequent
 open Var
 open Mptop
 
-open Base_dtactic
-open Base_auto_tactic
+open Dtactic
+open Auto_tactic
 
 open Itt_rfun
 open Itt_logic

@@ -17,8 +17,8 @@ open Var
 open Tactic_type
 open Tactic_type.Tacticals
 
-open Base_auto_tactic
-open Base_dtactic
+open Auto_tactic
+open Dtactic
 
 prim dintersectionTypeElimination {| elim [ThinOption thinT] |} 'H 'a :
    [wf] sequent [squash] { <H>; u:"type"{.bisect{'A; x. 'B['x]}}; <J['u]>  >- 'a in 'A } -->

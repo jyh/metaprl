@@ -19,7 +19,7 @@ open Tactic_type.Tacticals
 open Tactic_type.Sequent
 open Var
 
-open Base_dtactic
+open Dtactic
 
 open Itt_struct
 open Itt_equal

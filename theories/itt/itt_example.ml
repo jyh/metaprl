@@ -34,7 +34,7 @@ open Top_conversionals
 extends Itt_theory
 extends Itt_nat
 
-open Base_dtactic
+open Dtactic
 
 open Itt_bool
 

@@ -2181,13 +2181,13 @@ T	t862	o861
 B	b862	t862
 T	t863	o b862 b11
 B	b863	t863
-P	p863	String Base_dtactic
+P	p863	String Dtactic
 O	o863	parent p863
 T	t864	o863
 B	b864	t864
 T	t865	o b864 b11
 B	b865	t865
-P	p865	String Base_auto_tactic
+P	p865	String Auto_tactic
 O	o865	parent p865
 T	t866	o865
 B	b866	t866

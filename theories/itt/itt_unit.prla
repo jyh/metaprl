@@ -1807,13 +1807,13 @@ T	t728	o727
 B	b728	t728
 T	t729	o b728 b8
 B	b729	t729
-P	p729	String Base_dtactic
+P	p729	String Dtactic
 O	o729	parent p729
 T	t730	o729
 B	b730	t730
 T	t731	o b730 b8
 B	b731	t731
-P	p731	String Base_auto_tactic
+P	p731	String Auto_tactic
 O	o731	parent p731
 T	t732	o731
 B	b732	t732

@@ -49,8 +49,8 @@ open Tactic_type
 open Tactic_type.Conversionals
 open Tactic_type.Tacticals
 
-open Base_dtactic
-open Base_auto_tactic
+open Dtactic
+open Auto_tactic
 open Base_rewrite
 
 open Itt_equal

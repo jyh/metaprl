@@ -69,8 +69,8 @@ open Tactic_type.Sequent
 open Mptop
 open Var
 
-open Base_dtactic
-open Base_auto_tactic
+open Dtactic
+open Auto_tactic
 open Top_conversionals
 
 let _ =

@@ -235,13 +235,13 @@ T	t74	o73
 B	b74	t74
 T	t75	o b74 b4
 B	b75	t75
-P	p75	String Base_dtactic
+P	p75	String Dtactic
 O	o75	parent p75
 T	t76	o75
 B	b76	t76
 T	t77	o b76 b4
 B	b77	t77
-P	p77	String Base_auto_tactic
+P	p77	String Auto_tactic
 O	o77	parent p77
 T	t78	o77
 B	b78	t78

@@ -34,7 +34,7 @@ extends Itt_theory
 
 extends Sil_state
 
-open Base_dtactic
+open Dtactic
 open Itt_struct
 
 (************************************************************************

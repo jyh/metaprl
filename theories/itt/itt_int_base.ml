@@ -67,8 +67,8 @@ open Tactic_type.Sequent
 open Top_conversionals
 
 open Base_meta
-open Base_auto_tactic
-open Base_dtactic
+open Auto_tactic
+open Dtactic
 
 open Itt_equal
 open Itt_struct

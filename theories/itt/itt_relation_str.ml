@@ -66,8 +66,8 @@ open Tactic_type.Tacticals
 open Var
 open Top_conversionals
 
-open Base_dtactic
-open Base_auto_tactic
+open Dtactic
+open Auto_tactic
 
 open Itt_decidable
 open Itt_record

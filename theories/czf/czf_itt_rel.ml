@@ -59,7 +59,7 @@ open Refiner.Refiner.RefineError
 open Tactic_type.Sequent
 open Var
 
-open Base_dtactic
+open Dtactic
 
 open Itt_logic
 

@@ -42,7 +42,7 @@ open Printf
 
 open Tactic_type
 open Var
-open Base_dtactic
+open Dtactic
 open Top_conversionals
 
 open Itt_struct

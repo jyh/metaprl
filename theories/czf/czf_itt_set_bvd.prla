@@ -402,13 +402,13 @@ T	t118	o117
 B	b118	t118
 T	t119	o b118 b4
 B	b119	t119
-P	p119	String Base_dtactic
+P	p119	String Dtactic
 O	o119	parent p119
 T	t120	o119
 B	b120	t120
 T	t121	o b120 b4
 B	b121	t121
-P	p121	String Base_auto_tactic
+P	p121	String Auto_tactic
 O	o121	parent p121
 T	t122	o121
 B	b122	t122

@@ -5,7 +5,7 @@
 extends Fol_and
 extends Fol_pred
 
-open Base_dtactic
+open Dtactic
 
 (************************************************************************
  * TERMS                                                                *

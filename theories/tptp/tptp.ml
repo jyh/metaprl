@@ -17,8 +17,8 @@ open Tactic_type.Tacticals
 open Tactic_type.Conversionals
 open Var
 
-open Base_auto_tactic
-open Base_dtactic
+open Auto_tactic
+open Dtactic
 
 open Itt_equal
 open Itt_rfun

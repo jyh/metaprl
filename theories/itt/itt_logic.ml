@@ -84,8 +84,8 @@ open Tactic_type.Conversionals
 open Mptop
 open Var
 
-open Base_auto_tactic
-open Base_dtactic
+open Auto_tactic
+open Dtactic
 
 open Itt_squash
 open Itt_void

@@ -48,7 +48,7 @@ doc <:doc<
 extends Itt_fun
 extends Itt_logic
 
-open Base_dtactic
+open Dtactic
 
 (************************************************************************
  * SYNTAX                                                               *

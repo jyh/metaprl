@@ -4,7 +4,7 @@
 
 extends Fol_type
 
-open Base_dtactic
+open Dtactic
 
 declare "true"
 declare "it"

@@ -63,7 +63,7 @@ open Var
 open Tactic_type.Tacticals
 open Tactic_type.Conversionals
 
-open Base_dtactic
+open Dtactic
 
 open Itt_equal
 open Itt_struct

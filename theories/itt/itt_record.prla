@@ -46,8 +46,8 @@ P	p107	String Ocaml_expr_df
 P	p109	String Ocaml_base_df
 P	p111	String Ocaml
 P	p113	String Base_rewrite
-P	p115	String Base_dtactic
-P	p117	String Base_auto_tactic
+P	p115	String Dtactic
+P	p117	String Auto_tactic
 P	p119	String Base_trivial
 P	p121	String Top_conversionals
 P	p123	String Top_tacticals

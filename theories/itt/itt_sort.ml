@@ -43,7 +43,7 @@ open Tactic_type.Tacticals
 
 open Var
 open Typeinf
-open Base_dtactic
+open Dtactic
 open Top_conversionals
 
 open Itt_rfun

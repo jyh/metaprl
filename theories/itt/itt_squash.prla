@@ -2339,13 +2339,13 @@ T	t1724	o1723
 B	b1724	t1724
 T	t1725	o b1724 b19
 B	b1725	t1725
-P	p1725	String Base_dtactic
+P	p1725	String Dtactic
 O	o1725	parent p1725
 T	t1726	o1725
 B	b1726	t1726
 T	t1727	o b1726 b19
 B	b1727	t1727
-P	p1727	String Base_auto_tactic
+P	p1727	String Auto_tactic
 O	o1727	parent p1727
 T	t1728	o1727
 B	b1728	t1728

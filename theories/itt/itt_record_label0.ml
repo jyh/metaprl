@@ -8,7 +8,7 @@ open Base_meta
 open Itt_int_ext
 open Itt_struct
 open Itt_struct3
-open Base_dtactic
+open Dtactic
 open Var
 open Tactic_type
 open Tactic_type.Tacticals

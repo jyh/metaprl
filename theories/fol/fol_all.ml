@@ -6,7 +6,7 @@ extends Fol_implies
 extends Fol_struct
 extends Fol_pred
 
-open Base_dtactic
+open Dtactic
 open Fol_struct
 
 (************************************************************************

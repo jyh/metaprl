@@ -52,7 +52,7 @@ open Refiner.Refiner.TermMan
 
 open Tactic_type
 open Tactic_type.Tacticals
-open Base_dtactic
+open Dtactic
 open Top_conversionals
 
 open Itt_struct

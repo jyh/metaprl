@@ -71,7 +71,7 @@ open Refiner.Refiner.TermOp
 open Refiner.Refiner.RefineError
 open Mp_resource
 
-open Base_dtactic
+open Dtactic
 open Tactic_type.Tacticals
 open Var
 

@@ -1821,13 +1821,13 @@ T	t751	o750
 B	b751	t751
 T	t752	o b751 b23
 B	b752	t752
-P	p752	String Base_dtactic
+P	p752	String Dtactic
 O	o752	parent p752
 T	t753	o752
 B	b753	t753
 T	t754	o b753 b23
 B	b754	t754
-P	p754	String Base_auto_tactic
+P	p754	String Auto_tactic
 O	o754	parent p754
 T	t755	o754
 B	b755	t755

@@ -182,13 +182,13 @@ T	t63	o62
 B	b63	t63
 T	t64	o b63 b5
 B	b64	t64
-P	p64	String Base_dtactic
+P	p64	String Dtactic
 O	o64	parent p64
 T	t65	o64
 B	b65	t65
 T	t66	o b65 b5
 B	b66	t66
-P	p66	String Base_auto_tactic
+P	p66	String Auto_tactic
 O	o66	parent p66
 T	t67	o66
 B	b67	t67

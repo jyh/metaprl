@@ -70,7 +70,7 @@ open Tactic_type.Tacticals
 open Var
 
 open Typeinf
-open Base_dtactic
+open Dtactic
 
 open Itt_equal
 open Itt_subtype

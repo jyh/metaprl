@@ -289,13 +289,13 @@ T	t84	o83
 B	b84	t84
 T	t85	o b84 b4
 B	b85	t85
-P	p85	String Base_dtactic
+P	p85	String Dtactic
 O	o85	parent p85
 T	t86	o85
 B	b86	t86
 T	t87	o b86 b4
 B	b87	t87
-P	p87	String Base_auto_tactic
+P	p87	String Auto_tactic
 O	o87	parent p87
 T	t88	o87
 B	b88	t88

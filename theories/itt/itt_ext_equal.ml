@@ -42,7 +42,7 @@ extends Itt_subtype
 extends Itt_logic
 
 open Itt_squash
-open Base_dtactic
+open Dtactic
 open Tactic_type.Tacticals
 open Tactic_type.Conversionals
 

@@ -9,7 +9,7 @@ open Mp_resource
 open Tactic_type
 open Tactic_type.Tacticals
 
-open Base_auto_tactic
+open Auto_tactic
 
 declare univ
 declare prop{'t}

@@ -3104,13 +3104,13 @@ T	t1991	o1990
 B	b1991	t1991
 T	t1992	o b1991 b10
 B	b1992	t1992
-P	p1992	String Base_dtactic
+P	p1992	String Dtactic
 O	o1992	parent p1992
 T	t1993	o1992
 B	b1993	t1993
 T	t1994	o b1993 b10
 B	b1994	t1994
-P	p1994	String Base_auto_tactic
+P	p1994	String Auto_tactic
 O	o1994	parent p1994
 T	t1995	o1994
 B	b1995	t1995

@@ -466,13 +466,13 @@ T	t160	o159
 B	b160	t160
 T	t161	o b160 b18
 B	b161	t161
-P	p161	String Base_dtactic
+P	p161	String Dtactic
 O	o161	parent p161
 T	t162	o161
 B	b162	t162
 T	t163	o b162 b18
 B	b163	t163
-P	p163	String Base_auto_tactic
+P	p163	String Auto_tactic
 O	o163	parent p163
 T	t164	o163
 B	b164	t164

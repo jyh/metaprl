@@ -55,7 +55,7 @@ open Tactic_type.Conversionals
 open Tactic_type.Sequent
 open Var
 
-open Base_dtactic
+open Dtactic
 
 open Itt_logic
 open Itt_rfun

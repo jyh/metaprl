@@ -65,7 +65,7 @@ ML rewrite axiom:
 
 declare if_bterm{'bt; 'tt}
 
-prim_rw reduce_ifbterm1 {| reduce |} 'H :
+prim_rw reduce_ifbterm1 'H :
    if_bterm{ sequent [bterm] { <H>; x: 't; <J> >- 'x }; 'tt } <--> 'tt
 
 let bterm_arg = <<sequent_arg{bterm}>>
@@ -86,7 +86,7 @@ let dest_bterm_sequent term =
          SeqHyp.to_list seq.sequent_hyps, (SeqGoal.get seq.sequent_goals 0)
       else raise (RefineError ("dest_bterm_sequent", StringTermError ("not a bterm sequent", term)))
 
-ml_rw reduce_ifbterm2 (* {| reduce |} *) : ('goal :  if_bterm{ sequent[bterm]{ <H> >- 't}; 'tt }) =
+ml_rw reduce_ifbterm2 : ('goal :  if_bterm{ sequent[bterm]{ <H> >- 't}; 'tt }) =
    let bt, tt = two_subterms goal in
    let hyps, t = dest_bterm_sequent bt in
    let t' = dest_term (unquote_term t) in
@@ -98,6 +98,19 @@ ml_rw reduce_ifbterm2 (* {| reduce |} *) : ('goal :  if_bterm{ sequent[bterm]{ <
             <:con<if_bterm{$new_bterm$;$wrap_if subterms$}>>
    in wrap_if t'.term_terms
 
+let rec onSomeHypC rw = function
+   1 -> rw 1
+ | i when i > 0 -> rw i thenC (onSomeHypC rw (i - 1))
+ | _ -> failC
+
+let reduce_ifbterm =
+   termC (fun t ->
+      let seq = TermMan.explode_sequent (one_subterm t) in
+      let goal = SeqGoal.get seq.sequent_goals 0 in
+         if is_quoted_term goal then reduce_ifbterm2
+         else if is_var_term goal then onSomeHypC reduce_ifbterm1 (SeqHyp.length seq.sequent_hyps)
+         else failC)
+
 let resource reduce +=
-   (<<if_bterm{ sequent[bterm]{ <H> >- 't}; 'tt }>>, reduce_ifbterm2)
+   (<<if_bterm{ sequent[bterm]{ <H> >- 't}; 'tt }>>, reduce_ifbterm)
 

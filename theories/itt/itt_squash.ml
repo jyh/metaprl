@@ -28,15 +28,16 @@
  *
  * In addition to the @tt{squash} operator on types, the @MetaPRL includes
  * the meta-theory @tt{squash} operator that works on sequents.
- * Namely, sequents in the @Nuprl type theory have two forms: one is the generic
+ * Namely, sequents in the @MetaPRL implementation of the
+ * @Nuprl type theory have two forms: one is the generic
  * form $@sequent{ext; H; T}$, where @i{ext} is a variable.  The variable
- * specifies that the proof extract may be needed for the computational content
+ * specifies that the subproof extract may be needed for the computational content
  * of the proof.
  *
  * The other form is $@sequent{squash; H; T}$, where @hrefterm[squash] is a
  * term defined in the @hreftheory[Base_trivial]{} module.
- * The @tt{squash} term specifies that the proof
- * extract is @em{not} needed for its computational content.
+ * The @tt{squash} term specifies that the extract of the proof of this
+ * subgoal is @em{not} needed for the computational content of the whole proof.
  *
  * Typically, @tt{squash} sequents are used for well-formedness
  * goals (the computational content of well-formedness is never

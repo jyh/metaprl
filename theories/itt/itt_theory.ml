@@ -103,8 +103,7 @@ open Itt_esquash
  * Combine the precedences.
  *)
 prec prec_assoc < prec_equal
-prec prec_equal < prec_esquash
-prec prec_esquash < prec_apply
+prec prec_equal < prec_apply
 prec prec_type = prec_apply
 prec prec_not < prec_apply
 prec prec_w = prec_quant

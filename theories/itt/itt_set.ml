@@ -139,10 +139,9 @@ prim setFormation 'H 'a 'A :
  * The set type $@set{x; A; B[x]}$ is a type if $A$ is a type,
  * and $B[x]$ is a type for any $x @in A$.  Equality of the set
  * type is @emph{intensional}.  Two set types are equal only if their
- * parts are equal.  An alternative formulation would be to allow sets
- * $@set{x; A_1; B_1[x]}$ and $@set{x; A_2; B_2[x]}$ to be equal
- * if $A_1 = A_2 @in @univ{i}$ and $B_1[x] @Leftrightarrow B_2[x]$ for
- * any $x @in A_2$.
+ * parts are equal. Note that it is possible to define
+ * an @emph{extensional} version of a set type usinf the @emph{intensional} one
+ * by applying the @hrefterm[esquash] operator to the set predicate.
  * @end[doc]
  *)
 prim setEquality {| intro []; eqcd |} 'H 'x :

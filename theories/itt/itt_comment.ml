@@ -1177,7 +1177,6 @@ dform list_ind_df1 : except_mode[tex] :: parens :: "prec"[prec_list] :: math_lis
  ************************************************************************)
 
 declare math_quot{'T; 'x; 'y; 'E}
-declare math_esquashbool{'P}
 declare math_esquash{'P}
 
 (************************************************
@@ -1194,15 +1193,10 @@ dform math_quot_df1 : mode[tex] :: math_quot{'T; 'x; 'y; 'E} =
    slot{'E}
    izone `"}" ezone
 
-dform math_esquash_df1 : mode[tex] :: math_esquashbool{'P} =
-   izone `"{{\\it esquash\\_bool}(" ezone
-   slot{'P}
-   izone `")}" ezone
-
 dform math_esquash_df1 : mode[tex] :: math_esquash{'P} =
-   izone `"{{\\it esquash}(" ezone
-   slot{'P}
-   izone `")}" ezone
+   izone `"[\!" ezone
+   `"[" slot{'P} `"]"
+   izone `"\!]" ezone
 
 (************************************************
  * Normal mode
@@ -1213,13 +1207,8 @@ prec prec_quot
 dform quot_df1 : except_mode[tex] :: parens :: "prec"[prec_quot] :: math_quot{'A; 'x; 'y; 'E} =
    slot{'x} `", " slot{'y} `":" " " slot{'A} `" // " slot{'E}
 
-prec prec_esquash
-
-dform esquash_bool : except_mode[tex] :: math_esquashbool{'P} =
-   `"esquash_bool(" slot{'P} `")"
-
-dform esquash_df : parens :: "prec"[prec_esquash] :: except_mode[tex] :: math_esquash{'P} =
-   Nuprl_font!downarrow slot{'P}
+dform math_esquash_df2 : except_mode[tex] :: math_esquash{'P} =
+   `"[[" slot{'P} `"]]"
 
 (*
  * -*-

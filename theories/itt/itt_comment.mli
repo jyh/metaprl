@@ -191,7 +191,6 @@ declare math_listind{'e; 'base; 'h; 't; 'f; 'step}
  ************************************************************************)
 
 declare math_quot{'T; 'x; 'y; 'E}
-declare math_esquashbool{'P}
 declare math_esquash{'P}
 
 (* OTHER *)

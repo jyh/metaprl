@@ -4,40 +4,17 @@
  * @begin[doc]
  * @theory[Itt_esquash]
  *
- * In many cases it is convenient to ``squash'' (omit) the
- * computational content of a proposition.  The ``set'' type
- * defined in the @hreftheory[Itt_set] module defines a squashed
- * proposition $P[x]$ with the type $@set{x; A; P[x]}$.  The
- * elements of the set are the elements in $a @in A$ where the proposition
- * $P[a]$ is true, but the computational content for $P[a]$ is omitted.
+ * The @hrefterm[squash] operator in @hreftheory[Itt_squash] theory
+ * allows us to ``squash'' (omit) the computational content
+ * of a proposition. But in many cases in addition to squashing
+ * the computational context we want to be able to squash the
+ * intentional term structure as well.
  *
  * The @tt{Itt_esquash} module defines a generic squash term
  * $@esquash{P}$.  The elements of the type are the trivial terms
- * $@it$, and two terms $@esquash{P_1}$ and $@esquash{P_2}$ have the
- * @emph{extensional} equality $P_1 @Leftrightarrow P_2$.
- *
- * The definition of the @hrefterm[esquash] term is in terms of
- * the quotient type @hrefterm[quot] in the @hreftheory[Itt_quotient] module
- * and the Boolean type in the @hreftheory[Itt_bool] module.  The definition
- * may look strange:
- *
- * $$@esquash{P} @equiv @btrue = @bfalse @in @quot{@bool; b_1; b_2; (b_1 = b_2 @in @bool) @vee P}.$$
- *
- * The quotient type $@quot{@bool; b_1; b_2; (b_1 = b_2 @in @bool) @vee P}$ equates
- * $@btrue$ and $@bfalse$ if $P$ is true.  Otherwise, $@btrue @neq @bfalse$
- * and the equality type is empty.
- *
- * A simpler construction (and the traditional @Nuprl construction)
- * defines the squash type with the set type:
- *
- * $$@squash{P} @equiv @set{x; @unit; P}.$$
- *
- * The elements of @hrefterm[esquash] and @tt{squash} are the same,
- * but the equalities differ, $@esquash{P_1} = @esquash{P_2} @in @univ{i}$ if
- * $P_1 @Leftrightarrow P_2$, and $@squash{P_1} = @squash{P_2} @in @univ{i}$ if
- * $P_1 = P_2 @in @univ{i}$.  This is because the quotient type uses
- * an @emph{extensional} equality on it's equivalence relation, and
- * the @tt{set} type uses an @emph{intensional} equality on it's predicate.
+ * $@it$ (provided $P$ itself is non-empty), and two terms
+ * $@esquash{P_1}$ and $@esquash{P_2}$ have the @emph{extensional}
+ * equality $P_1 @Leftrightarrow P_2$.
  * @end[doc]
  *
  * ----------------------------------------------------------------
@@ -66,8 +43,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
- * Author: Jason Hickey
- * @email{jyh@cs.cornell.edu}
+ * Authors: Jason Hickey @email{jyh@cs.cornell.edu}
+ *          Aleksey Nogin @email{nogin@cs.cornell.edu}
  * @end[license]
  *)
 
@@ -77,85 +54,66 @@
  * @end[doc]
  *)
 include Itt_void
-include Itt_unit
-include Itt_quotient
+include Itt_equal
+include Itt_squash
+include Itt_struct
 include Itt_set
-include Itt_bool
-include Itt_logic
 (*! @docoff *)
 
 open Tactic_type
-open Tactic_type.Conversionals
+open Tactic_type.Tacticals
 
 open Base_dtactic
+open Base_auto_tactic
 
 open Itt_equal
-open Itt_void
-open Itt_unit
+open Itt_squash
 
 (*!
  * @begin[doc]
  * @terms
  *
- * The @tt{esquash_bool} term defines the quotient type,
- * and the @tt{esquash} term defines the squash predicate $P$.
+ * The @tt{esquash} operator @i{extentionally squashes} a proposition.
  * @end[doc]
  *)
-define unfold_esquash_bool : esquash_bool{'P} <-->
-   (quot b1, b2 : bool // (('b1 = 'b2 in bool) or 'P))
-
-define unfold_esquash : esquash{'P} <--> (btrue = bfalse in esquash_bool{'P})
+declare esquash{'P}
 (*! @docoff *)
 
-prec prec_esquash
-
-dform esquash_bool : except_mode[src] :: esquash_bool{'P} =
-   `"esquash_bool(" slot{'P} `")"
-
-dform esquash_df : parens :: "prec"[prec_esquash] :: except_mode[src] :: esquash{'P} =
-   Nuprl_font!downarrow slot{'P}
-
-let fold_esquash_bool = makeFoldC << esquash_bool{'P} >> unfold_esquash_bool
-let fold_esquash = makeFoldC << esquash{'P} >> unfold_esquash
+dform esquash_df : except_mode[src] :: esquash{'P} =
+   math_esquash{'P}
 
 (*!
  * @begin[doc]
  * @rules
  * @thysubsection{Typehood and equality}
  *
- * The @tt{esquash_bool} term $@esquashbool{P}$ is well-formed if
- * $P$ is a type; it contains the terms $@btrue$ and $@bfalse$.
- * @end[doc]
- *)
-interactive esquash_bool_type {| intro [] |} 'H :
-   [wf] sequent [squash] { 'H >- "type"{'P} } -->
-   sequent ['ext] { 'H >- "type"{esquash_bool{'P}} }
-
-interactive esquash_bool_univ {| intro [] |} 'H :
-   [wf] sequent [squash] { 'H >- 'P IN univ[i:l] } -->
-   sequent ['ext] { 'H >- esquash_bool{'P} IN univ[i:l] }
-
-interactive esquash_bool_true {| intro [] |} 'H :
-   [wf] sequent [squash] { 'H >- "type"{'P} } -->
-   sequent ['ext] { 'H >- btrue IN esquash_bool{'P} }
-
-interactive esquash_bool_false {| intro [] |} 'H :
-   [wf] sequent [squash] { 'H >- "type"{'P} } -->
-   sequent ['ext] { 'H >- bfalse IN esquash_bool{'P} }
-
-(*!
- * @begin[doc]
  * The @tt{esquash} term inhabits the type universe $@univ{i}$
  * if the proposition $P$ is also in $@univ{i}$.
  * @end[doc]
  *)
-interactive esquash_type {| intro [] |} 'H :
+prim esquash_type {| intro [AutoMustComplete] |} 'H :
    [wf] sequent [squash] { 'H >- "type"{'P} } -->
-   sequent ['ext] { 'H >- "type"{esquash{'P}} }
+   sequent ['ext] { 'H >- "type"{esquash{'P}} } =
+   it
 
-interactive esquash_univ {| intro [] |} 'H :
+(*!
+ * @begin[doc]
+ * Two squashed propositions $@esquash{'A}$ and $@esquash{'B}$
+ * are equal if both are types, and if each one implies another.
+ * @end[doc]
+ *)
+prim esquash_equal {| intro []; eqcd |} 'H :
+   [wf] sequent [squash] { 'H >- esquash{'A} IN univ[i:l] } -->
+   [wf] sequent [squash] { 'H >- esquash{'B} IN univ[i:l] } -->
+   sequent [squash] { 'H; x: esquash{'A} >- esquash{'B} } -->
+   sequent [squash] { 'H; x: esquash{'B} >- esquash{'A} } -->
+   sequent ['ext] { 'H >- esquash{'A} = esquash{'B} in univ[i:l] } =
+   it
+
+prim esquash_univ {| intro [AutoMustComplete] |} 'H :
    [wf] sequent [squash] { 'H >- 'P IN univ[i:l] } -->
-   sequent ['ext] { 'H >- esquash{'P} IN univ[i:l] }
+   sequent ['ext] { 'H >- esquash{'P} IN univ[i:l] } =
+   it
 
 (*!
  * @begin[doc]
@@ -168,44 +126,51 @@ interactive esquash_univ {| intro [] |} 'H :
  * apply this rule.
  * @end[doc]
  *)
-interactive esquash_intro 'H :
-   [main] sequent [squash] { 'H >- 'P } -->
-   sequent ['ext] { 'H >- esquash{'P} }
+prim esquash_intro {| intro [AutoMustComplete] |} 'H :
+   [main] sequent [squash] { 'H >- squash{'P} } -->
+   sequent ['ext] { 'H >- esquash{'P} } =
+   it
+
+(*!
+ * @begin[doc]
+ * @thysubsection{Membership}
+ *
+ * The element in the $@esquash{P}$ term is always the term
+ * $@it$.
+ * @end[doc]
+ *)
+prim esquash_elim {| elim [] |} 'H 'J :
+   ( 't['x] : sequent ['ext] { 'H; x: esquash{'A}; 'J[it] >- 'C[it] }) -->
+   sequent ['ext] { 'H; x: esquash{'A}; 'J['x] >- 'C['x] } =
+   't[it]
+
+prim esquash_mem {| intro [] |} 'H :
+   sequent [squash] { 'H >- esquash{'A} } -->
+   sequent ['ext] { 'H >- it IN esquash{'A} } =
+   it
 
 (*!
  * @begin[doc]
  * @thysubsection{Elimination}
- *
- * The element in the $@esquash{P_1}$ term is always the term
- * $@it$.  The assumption $x@colon @esquash{P}$ can be ``exposed''
- * if the proof in not needed, as in the proof of $@void$.  As the type theory
- * evolves, it seems likely that we will allow the hypothesis to be
- * exposed in @hrefterm[squash] sequent.
+ * When a proposition is a type (i.e, functional), its @tt[esquash] is
+ * true if and only if its @tt[squash] is true.
  * @end[doc]
  *)
-interactive esquash_equal_elim 'H 'J :
-   [main] sequent [squash] { 'H; x: 'P1; 'J[it] >- 't1[it] = 't2[it] in 'T3[it] } -->
-   sequent ['ext] { 'H; x: esquash{'P1}; 'J['x] >- 't1['x] = 't2['x] in 'T3['x] }
+prim esquash 'H :
+   [wf] sequent [squash] { 'H >- "type"{'P} } -->
+   sequent [squash] { 'H >- esquash{'P} } -->
+   sequent ['ext] { 'H >- squash{'P} } =
+   it
 
-interactive esquash_void_elim 'H 'J :
-   [main] sequent [squash] { 'H; x: 'P1; 'J[it] >- void } -->
-   sequent ['ext] { 'H; x: esquash{'P1}; 'J['x] >- void }
-
-interactive esquash_esquash_elim 'H 'J :
-   [main] sequent [squash] { 'H; x: 'P1; 'J[it] >- esquash{'P2[it]} } -->
-   sequent ['ext] { 'H; x: esquash{'P1}; 'J['x] >- esquash{'P2['x]} }
-
-let d_esquash_elim i p =
-   let goal = Sequent.concl p in
-   let j, k = Sequent.hyp_indices p i in
-      if is_equal_term goal then
-         esquash_equal_elim j k p
-      else if is_void_term goal then
-         esquash_void_elim j k p
-      else
-         esquash_esquash_elim j k p
-
-let resource elim += (<< esquash{'P} >>, d_esquash_elim)
+(*!
+ * @begin[doc]
+ * The following rule is equivalent to the previous one.
+ * @end[doc]
+ *)
+interactive unesquash 'H 'J :
+   [wf] sequent [squash] { 'H; x: esquash{'P}; 'J[it] >- "type"{'P} } -->
+   sequent ['ext] { 'H; x: squash{'P}; 'J[it] >- 'C[it] } -->
+   sequent ['ext] { 'H; x: esquash{'P}; 'J['x] >- 'C['x] }
 
 (*!
  * @begin[doc]
@@ -215,29 +180,9 @@ let resource elim += (<< esquash{'P} >>, d_esquash_elim)
  * can be recovered).
  * @end[doc]
  *)
-interactive esquash_equal_elim2 {| elim [] |} 'H 'J :
-   sequent ['ext] { 'H; x: ('t1 = 't2 in 'T3); 'J[it] >- 'C[it] } -->
-   sequent ['ext] { 'H; x: esquash{.'t1 = 't2 in 'T3}; 'J['x] >- 'C['x] }
-
-interactive esquash_void_elim2 {| elim [] |} 'H 'J :
+interactive esquash_void_elim {| elim [] |} 'H 'J :
    sequent ['ext] { 'H; x: esquash{void}; 'J['x] >- 'C['x] }
 
-interactive esquash_unit_elim2 {| elim [] |} 'H 'J :
-   sequent ['ext] { 'H; 'J[it] >- 'C[it] } -->
-   sequent ['ext] { 'H; x: esquash{unit}; 'J['x] >- 'C['x] }
-
-interactive esquash_esquash_elim2 {| elim [] |} 'H 'J :
-   sequent ['ext] { 'H; x: esquash{'P}; 'J[it] >- 'C[it] } -->
-   sequent ['ext] { 'H; x: esquash{esquash{'P}}; 'J['x] >- 'C['x] }
-
-(*!
- * @begin[doc]
- * @thysubsection{Extensional equality}
- *
- * Two squashed propositions $@esquash{P_1}$ and $@esquash{P_2}$
- * are equal if both $P_1$ and $P_2$ are types, and $P_1 @Leftrightarrow P_2$.
- * @end[doc]
- *)
 interactive esquash_equal_intro {| intro [] |} 'H 'x :
    [wf] sequent [squash] { 'H >- 'P1 IN univ[i:l] } -->
    [wf] sequent [squash] { 'H >- 'P2 IN univ[i:l] } -->
@@ -268,8 +213,14 @@ interactive set_elim {| elim [] |} 'H 'J :
  * @docoff
  * @end[doc]
  *)
-let esquashT p =
-   esquash_intro (Sequent.hyp_count_addr p) p
+let esquashT i p =
+   if i = 0 then esquash (Sequent.hyp_count_addr p) p
+   else
+      let h,j = Sequent.hyp_indices p i in
+      unesquash h j p
+
+let esquashAutoT =
+   autoT thenT tryT (onSomeHypT esquashT orelseT esquashT 0) thenT autoT
 
 (*
  * -*-

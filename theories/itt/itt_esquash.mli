@@ -31,20 +31,16 @@
  * jyh@cs.cornell.edu
  *)
 
-include Itt_quotient
-include Itt_set
-include Itt_bool
+include Itt_equal
+include Itt_squash
 
 open Tactic_type.Tacticals
 open Tactic_type.Conversionals
 
 declare esquash{'P}
 
-prec prec_esquash
-
-topval esquashT : tactic
-topval fold_esquash : conv
-topval fold_esquash_bool : conv
+topval esquashT : int -> tactic
+topval esquashAutoT : tactic
 
 (*
  * -*-

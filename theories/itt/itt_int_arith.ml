@@ -50,11 +50,14 @@ doc docoff
 open Printf
 open Lm_debug
 open Opname
+open Term_sig
+open Refiner.Refiner
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermMan
 open Refiner.Refiner.TermSubst
 open Refiner.Refiner.TermType
 open Refiner.Refiner.RefineError
+open Term_order
 
 open Tactic_type
 open Tactic_type.Tacticals
@@ -71,6 +74,9 @@ open Itt_bool
 
 open Itt_int_base
 open Itt_int_ext
+
+module TO=TermOrder(Refiner.Refiner)
+open TO
 
 let _ = show_loading "Loading Itt_int_ext%t"
 
@@ -228,129 +234,6 @@ let negativeHyp2ConclT = argfunT (fun i p ->
       (eq_2beq_int thenMT arithRelInConcl2HypT))
    else
    	idT)
-
-type comparison = Less | Equal | Greater
-
-let simple_compare x y =
-   match compare x y with
-      0 -> Equal
-    | i when i > 0 -> Greater
-    | _ -> Less
-
-let rec compare_lists compare l1 l2 =
-   if l1==l2 then
-      Equal
-   else
-      match l1, l2 with
-         [], [] -> Equal
-       | [], _  -> Less
-       | _ , []  -> Greater
-       | hd1::tail1, hd2::tail2 ->
-            begin match compare hd1 hd2 with
-               Equal -> compare_lists compare tail1 tail2
-             | cmp -> cmp
-            end
-
-let rec compare_terms t1 t2 =
-   if t1==t2 then
-      Equal
-   else
-     let {term_op=op1; term_terms=subt1} = dest_term t1 in
-     let {term_op=op2; term_terms=subt2} = dest_term t2 in
-       match compare_ops op1 op2 with
-         Less -> Less
-       | Greater -> Greater
-       | Equal -> compare_btlists subt1 subt2
-
-and compare_ops op1 op2 =
-   if op1==op2 then
-      Equal
-   else
-     let {op_name = opn1; op_params = par1} = dest_op op1 in
-     let {op_name = opn2; op_params = par2} = dest_op op2 in
-     let str1 = string_of_opname opn1 in
-     let str2 = string_of_opname opn2 in
-        if str1 < str2 then
-          Less
-        else if str1 > str2 then
-          Greater
-        else
-          compare_plists par1 par2
-
-and compare_btlists btl1 btl2 = compare_lists compare_bterms btl1 btl2
-
-(* XXX BUG? Nogin: Is it OK to ignore bvars here? *)
-and compare_bterms b1 b2 =
-   if b1==b2 then
-      Equal
-   else
-      compare_terms (dest_bterm b1).bterm (dest_bterm b2).bterm
-
-and compare_plists pl1 pl2 = compare_lists compare_params pl1 pl2
-
-and compare_params par1 par2 =
-   if par1==par2 then
-      Equal
-   else
-      match dest_param par1, dest_param par2 with
-         Number n1    , Number n2     -> simple_compare n1 n2
-       | Number _     , _             -> Less
-       | _            , Number _      -> Greater
-       | String s1    , String s2     -> simple_compare s1 s2
-       | String _     , _             -> Less
-       | _            , String _      -> Greater
-       | Token t1     , Token t2      -> simple_compare t1 t2
-       | Token _      , _             -> Less
-       | _            , Token _       -> Greater
-       | Var v1       , Var v2        -> simple_compare v1 v2
-       | Var _        , _             -> Less
-       | _            , Var _         -> Greater
-       | MNumber s1   , MNumber s2    -> simple_compare s1 s2
-       | MNumber _    , _             -> Less
-       | _            , MNumber _     -> Greater
-       | MString s1   , MString s2    -> simple_compare s1 s2
-       | MString _    , _             -> Less
-       | _            , MString _     -> Greater
-       | MToken s1    , MToken s2     -> simple_compare s1 s2
-       | MToken _     , _             -> Less
-       | _            , MToken _      -> Greater
-       | MLevel l1    , MLevel l2     -> compare_levels l1 l2
-       | MLevel _     , _             -> Less
-       | _            , MLevel _      -> Greater
-       | ObId id1     , ObId id2      -> compare_plists id1 id2
-       | ObId _       , _             -> Less
-       | _            , ObId _        -> Greater
-       | ParamList pl1, ParamList pl2 -> compare_plists pl1 pl2
-
-and compare_levels l1 l2 =
-   if l1==l2 then
-      Equal
-   else
-      let {le_const = c1; le_vars = v1} = dest_level l1 in
-      let {le_const = c2; le_vars = v2} = dest_level l2 in
-        if c1<c2 then Less
-        else if c1>c2 then Greater
-        else compare_lvlists v1 v2
-
-and compare_lvlists lvl1 lvl2 = compare_lists compare_lvars lvl1 lvl2
-
-and compare_lvars v1 v2 =
-   if v1==v2 then
-      Equal
-   else
-      let {le_var=s1; le_offset=o1}=dest_level_var v1 in
-      let {le_var=s2; le_offset=o2}=dest_level_var v2 in
-        if s1<s2 then Less
-        else if s1>s2 then Greater
-        else simple_compare o1 o2
-
-(*
-let ct a b =
-  match compare_terms a b with
-    Less -> -1
-  | Equal -> 0
-  | Greater -> 1
-*)
 
 interactive_rw mul_BubblePrimitive_rw :
    ( 'a in int ) -->
@@ -593,7 +476,7 @@ doc <:doc<
    The @tt[normalizeC] converts polynomials to canonical form (normalizes),
    it is supposed to work not only when applied precisely
    on a polynomial but also when the polynomial is just a subterm of the
-   term the rewrite applied to. For instance, if you have a hypothesis
+   term the rewrite applied  For instance, if you have a hypothesis
    in the form of inequality or equality you can apply this rewrite to the whole
    hypothesis and it will normalize both sides of inequality (or equality).
 
@@ -716,12 +599,14 @@ let sumList tl p =
 
 (* Asserts sum of ge-relations and grounds it
  *)
+(*
 let sumListT = argfunT (fun l p ->
    let s = sumList l p in
    if !debug_int_arith then
    	eprintf "Contradictory term:%a%t" debug_print s eflush;
    (assertT s) thenAT
    				(repeatT (ge_addMono thenT (tryT (onSomeHypT nthHypT)))))
+*)
 (* This looks like another working solution:
  *					(repeatT ((progressT (onSomeHypT nthHypT)) orelseT ge_addMono)))
  *)
@@ -749,6 +634,7 @@ let good_term t =
 
 (* Searches for contradiction among ge-relations
  *)
+(*
 let findContradRelT =
    let rec lprint ch = function
       h::t -> (fprintf ch "%u " h; lprint ch t)
@@ -773,6 +659,60 @@ let findContradRelT =
          sumListT rl
     | Arith.TG.Disconnected,_ ->
          raise (RefineError("arithT", StringError "Proof by contradiction - No contradiction found")))
+*)
+
+interactive sumGe 'H :
+	[wf] 	sequent { <H>; v: 'a >= 'b; <J['v]>; w: 'c >= 'd >- 'a in int } -->
+	[wf] 	sequent { <H>; v: 'a >= 'b; <J['v]>; w: 'c >= 'd >- 'b in int } -->
+	[wf] 	sequent { <H>; v: 'a >= 'b; <J['v]>; w: 'c >= 'd >- 'c in int } -->
+	[wf] 	sequent { <H>; v: 'a >= 'b; <J['v]>; w: 'c >= 'd >- 'd in int } -->
+			sequent { <H>; v: 'a >= 'b; <J['v]>; w: 'c >= 'd; ('a +@ 'c) >= ('b +@ 'd) >- 'C['v;'w] } -->
+			sequent { <H>; v: 'a >= 'b; <J['v]>; w: 'c >= 'd >- 'C['v;'w] }
+
+let rec sumListAuxT l = funT ( fun p->
+	match l with
+		[] -> idT
+	 | [(_,_,_,tac)] ->
+			let i=Sequent.hyp_count p in
+			tac thenMT sumGe i
+	 | (_,_,_,tac)::tl ->
+			let i=Sequent.hyp_count p in
+			tac thenMT sumGe i thenMT sumListAuxT tl
+)
+
+let sumListT = function
+	[] -> idT
+ | [(_,_,_,tac)] -> tac
+ | (_,_,_,tac)::tl ->
+		tac thenMT (sumListAuxT tl)
+
+let term2inequality (i,t) =
+   let (a,b)=dest_ge t in
+   let (c,d)=dest_add b in
+	let n=dest_number c in
+	(a,d,n,copyHypT i (-1))
+
+let rec all_hyps_aux hyps l i =
+   if i = 0 then l else
+   let i = pred i in
+      match SeqHyp.get hyps i with
+         Hypothesis t | HypBinding (_, t) ->
+            all_hyps_aux hyps ((i+1,t)::l) i
+       | Context _ ->
+            all_hyps_aux hyps l i
+
+let all_hyps arg =
+   let hyps = (Sequent.explode_sequent arg).sequent_hyps in
+      all_hyps_aux hyps [] (Term.SeqHyp.length hyps)
+
+let findContradRelT = funT ( fun p ->
+	let hyps=all_hyps p in
+	let aux (i,t) = good_term t in
+	let l=List.filter aux hyps in
+	let l'=List.map term2inequality l in
+	let l''=Arith.find_contradiction l' in
+	sumListT l''
+)
 
 doc <:doc<
 	@begin[doc]

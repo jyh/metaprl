@@ -86,3 +86,6 @@ let _ = gen_bench ~name:"../../theories/itt/itt_int_bench.ml"
 
 let _ = gen_bench ~name:"../../theories/itt/itt_int_bench2.ml"
 	~seed:0 ~nrules:10 ~nineq:15 ~nvars:5 ~intrange:10 ~maxdepth:2
+
+let _ = gen_bench ~name:"../../theories/itt/itt_int_bench3.ml"
+	~seed:0 ~nrules:100 ~nineq:15 ~nvars:5 ~intrange:10 ~maxdepth:2

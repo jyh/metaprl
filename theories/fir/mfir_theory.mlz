@@ -1,5 +1,5 @@
 (*!
- * @spelling{Mojave FIR}
+ * @spelling{Mojave}
  *
  * @begin[doc]
  * @theory{Mojave FIR Theory}
@@ -59,10 +59,11 @@
  *)
 
 extends Base_theory
-extends Mfir_comment
 extends Mfir_basic
 extends Mfir_ty
 extends Mfir_exp
+extends Mfir_sequent
+extends Mfir_type_rules
 
 (*!
  * @docoff

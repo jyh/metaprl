@@ -1,12 +1,6 @@
-(*!
- * @spelling{deconstruction}
- *
- * @begin[doc]
- * @module[Mfir_termOp]
- *
- * The @code{Mfir_termOp} module provides term construction
+(*
+ * The Mfir_termOp module provides term construction
  * and deconstruction terms for FIR theory terms.
- * @end[doc]
  *
  * ------------------------------------------------------------------------
  *
@@ -45,11 +39,121 @@ extends Mfir_exp
 open Mfir_termOp_base
 open Refiner.Refiner.Term
 
+let true_term = << "true" >>
+let true_opname = opname_of_term true_term
+let is_true_term = is_0_dep0_term true_opname
+
+let false_term = << "false" >>
+let false_opname = opname_of_term false_term
+let is_false_term = is_0_dep0_term false_opname
+
+let or_term = << "or"{ 'bool1; 'bool2 } >>
+let or_opname = opname_of_term or_term
+let is_or_term = is_2_dep0_term or_opname
+let mk_or_term = mk_2_dep0_term or_opname
+let dest_or_term = dest_2_dep0_term or_opname
+
+let and_term = << "and"{ 'bool1; 'bool2 } >>
+let and_opname = opname_of_term and_term
+let is_and_term = is_2_dep0_term and_opname
+let mk_and_term = mk_2_dep0_term and_opname
+let dest_and_term = dest_2_dep0_term and_opname
+
+let not_term = << "not"{ 'boolean } >>
+let not_opname = opname_of_term not_term
+let is_not_term = is_1_dep0_term not_opname
+let mk_not_term = mk_1_dep0_term not_opname
+let dest_not_term = dest_1_dep0_term not_opname
+
+let ifthenelse_term = << ifthenelse{ 'test; 'true_case; 'false_case } >>
+let ifthenelse_opname = opname_of_term ifthenelse_term
+let is_ifthenelse_term = is_3_dep0_term ifthenelse_opname
+let mk_ifthenelse_term = mk_3_dep0_term ifthenelse_opname
+let dest_ifthenelse_term = dest_3_dep0_term ifthenelse_opname
+
 let number_term = << number[i:n] >>
 let number_opname = opname_of_term number_term
 let is_number_term = is_num_0_dep0_term number_opname
 let mk_number_term = mk_num_0_dep0_term number_opname
 let dest_number_term = dest_num_0_dep0_term number_opname
+
+let numeral_term = << numeral{ 'num } >>
+let numeral_opname = opname_of_term numeral_term
+let is_numeral_term = is_1_dep0_term numeral_opname
+let mk_numeral_term = mk_1_dep0_term numeral_opname
+let dest_numeral_term = dest_1_dep0_term numeral_opname
+
+let add_term = << add{ 'num1; 'num2 } >>
+let add_opname = opname_of_term add_term
+let is_add_term = is_2_dep0_term add_opname
+let mk_add_term = mk_2_dep0_term add_opname
+let dest_add_term = dest_2_dep0_term add_opname
+
+let sub_term = << sub{ 'num1; 'num2 } >>
+let sub_opname = opname_of_term sub_term
+let is_sub_term = is_2_dep0_term sub_opname
+let mk_sub_term = mk_2_dep0_term sub_opname
+let dest_sub_term = dest_2_dep0_term sub_opname
+
+let mul_term = << mul{ 'num1; 'num2 } >>
+let mul_opname = opname_of_term mul_term
+let is_mul_term = is_2_dep0_term mul_opname
+let mk_mul_term = mk_2_dep0_term mul_opname
+let dest_mul_term = dest_2_dep0_term mul_opname
+
+let div_term = << div{ 'num1; 'num2 } >>
+let div_opname = opname_of_term div_term
+let is_div_term = is_2_dep0_term div_opname
+let mk_div_term = mk_2_dep0_term div_opname
+let dest_div_term = dest_2_dep0_term div_opname
+
+let rem_term = << rem{ 'num1; 'num2 } >>
+let rem_opname = opname_of_term rem_term
+let is_rem_term = is_2_dep0_term rem_opname
+let mk_rem_term = mk_2_dep0_term rem_opname
+let dest_rem_term = dest_2_dep0_term rem_opname
+
+let minus_term = << minus{ 'num } >>
+let minus_opname = opname_of_term minus_term
+let is_minus_term = is_1_dep0_term minus_opname
+let mk_minus_term = mk_1_dep0_term minus_opname
+let dest_minus_term = dest_1_dep0_term minus_opname
+
+let int_eq_term = << int_eq{ 'num1; 'num2 } >>
+let int_eq_opname = opname_of_term int_eq_term
+let is_int_eq_term = is_2_dep0_term int_eq_opname
+let mk_int_eq_term = mk_2_dep0_term int_eq_opname
+let dest_int_eq_term = dest_2_dep0_term int_eq_opname
+
+let int_neq_term = << int_neq{ 'num1; 'num2 } >>
+let int_neq_opname = opname_of_term int_neq_term
+let is_int_neq_term = is_2_dep0_term int_neq_opname
+let mk_int_neq_term = mk_2_dep0_term int_neq_opname
+let dest_int_neq_term = dest_2_dep0_term int_neq_opname
+
+let int_lt_term = << int_lt{ 'num1; 'num2 } >>
+let int_lt_opname = opname_of_term int_lt_term
+let is_int_lt_term = is_2_dep0_term int_lt_opname
+let mk_int_lt_term = mk_2_dep0_term int_lt_opname
+let dest_int_lt_term = dest_2_dep0_term int_lt_opname
+
+let int_le_term = << int_le{ 'num1; 'num2 } >>
+let int_le_opname = opname_of_term int_le_term
+let is_int_le_term = is_2_dep0_term int_le_opname
+let mk_int_le_term = mk_2_dep0_term int_le_opname
+let dest_int_le_term = dest_2_dep0_term int_le_opname
+
+let int_gt_term = << int_gt{ 'num1; 'num2 } >>
+let int_gt_opname = opname_of_term int_gt_term
+let is_int_gt_term = is_2_dep0_term int_gt_opname
+let mk_int_gt_term = mk_2_dep0_term int_gt_opname
+let dest_int_gt_term = dest_2_dep0_term int_gt_opname
+
+let int_ge_term = << int_ge{ 'num1; 'num2 } >>
+let int_ge_opname = opname_of_term int_ge_term
+let is_int_ge_term = is_2_dep0_term int_ge_opname
+let mk_int_ge_term = mk_2_dep0_term int_ge_opname
+let dest_int_ge_term = dest_2_dep0_term int_ge_opname
 
 let nil_term = << nil >>
 let nil_opname = opname_of_term nil_term
@@ -61,11 +165,11 @@ let is_cons_term = is_2_dep0_term cons_opname
 let mk_cons_term = mk_2_dep0_term cons_opname
 let dest_cons_term = dest_2_dep0_term cons_opname
 
-let interval_term = << interval[left:n, right:n] >>
+let interval_term = << interval{ 'left; 'right } >>
 let interval_opname = opname_of_term interval_term
-let is_interval_term = is_num_num_0_dep0_term interval_opname
-let mk_interval_term = mk_num_num_0_dep0_term interval_opname
-let dest_interval_term = dest_num_num_0_dep0_term interval_opname
+let is_interval_term = is_2_dep0_term interval_opname
+let mk_interval_term = mk_2_dep0_term interval_opname
+let dest_interval_term = dest_2_dep0_term interval_opname
 
 let intset_term = << intset{ 'interval_list } >>
 let intset_opname = opname_of_term intset_term
@@ -78,6 +182,16 @@ let rawintset_opname = opname_of_term rawintset_term
 let is_rawintset_term = is_num_str_1_dep0_term rawintset_opname
 let mk_rawintset_term = mk_num_str_1_dep0_term rawintset_opname
 let dest_rawintset_term = dest_num_str_1_dep0_term rawintset_opname
+
+let member_term = << member{ 'num; 'set } >>
+let member_opname = opname_of_term member_term
+let is_member_term = is_2_dep0_term member_opname
+let mk_member_term = mk_2_dep0_term member_opname
+let dest_member_term = dest_2_dep0_term member_opname
+
+let intset_max_term = << intset_max >>
+let intset_max_opname = opname_of_term intset_max_term
+let is_intset_max_term = is_0_dep0_term intset_max_opname
 
 let tyInt_term = << tyInt >>
 let tyInt_opname = opname_of_term tyInt_term
@@ -171,11 +285,11 @@ let notIntOp_term = << notIntOp >>
 let notIntOp_opname = opname_of_term notIntOp_term
 let is_notIntOp_term = is_0_dep0_term notIntOp_opname
 
-let rawBitFieldOp_term = << rawBitFieldOp[precision:n, sign:s, i1:n, i2:n] >>
+let rawBitFieldOp_term = << rawBitFieldOp[precision:n, sign:s]{ 'num1; 'num2 } >>
 let rawBitFieldOp_opname = opname_of_term rawBitFieldOp_term
-let is_rawBitFieldOp_term = is_num_str_num_num_0_dep0_term rawBitFieldOp_opname
-let mk_rawBitFieldOp_term = mk_num_str_num_num_0_dep0_term rawBitFieldOp_opname
-let dest_rawBitFieldOp_term = dest_num_str_num_num_0_dep0_term rawBitFieldOp_opname
+let is_rawBitFieldOp_term = is_num_str_2_dep0_term rawBitFieldOp_opname
+let mk_rawBitFieldOp_term = mk_num_str_2_dep0_term rawBitFieldOp_opname
+let dest_rawBitFieldOp_term = dest_num_str_2_dep0_term rawBitFieldOp_opname
 
 let uminusRawIntOp_term = << uminusRawIntOp[precision:n, sign:s] >>
 let uminusRawIntOp_opname = opname_of_term uminusRawIntOp_term
@@ -278,12 +392,6 @@ let pointerOfRawIntOp_opname = opname_of_term pointerOfRawIntOp_term
 let is_pointerOfRawIntOp_term = is_num_str_0_dep0_term pointerOfRawIntOp_opname
 let mk_pointerOfRawIntOp_term = mk_num_str_0_dep0_term pointerOfRawIntOp_opname
 let dest_pointerOfRawIntOp_term = dest_num_str_0_dep0_term pointerOfRawIntOp_opname
-
-let pointerOfBlockOp_term = << pointerOfBlockOp{ 'sub_block } >>
-let pointerOfBlockOp_opname = opname_of_term pointerOfBlockOp_term
-let is_pointerOfBlockOp_term = is_1_dep0_term pointerOfBlockOp_opname
-let mk_pointerOfBlockOp_term = mk_1_dep0_term pointerOfBlockOp_opname
-let dest_pointerOfBlockOp_term = dest_1_dep0_term pointerOfBlockOp_opname
 
 let andEnumOp_term = << andEnumOp[i:n] >>
 let andEnumOp_opname = opname_of_term andEnumOp_term
@@ -455,11 +563,11 @@ let is_minRawIntOp_term = is_num_str_0_dep0_term minRawIntOp_opname
 let mk_minRawIntOp_term = mk_num_str_0_dep0_term minRawIntOp_opname
 let dest_minRawIntOp_term = dest_num_str_0_dep0_term minRawIntOp_opname
 
-let rawSetBitFieldOp_term = << rawSetBitFieldOp[precision:n, sign:s, i1:n, i2:n] >>
+let rawSetBitFieldOp_term = << rawSetBitFieldOp[precision:n, sign:s]{ 'num1; 'num2 } >>
 let rawSetBitFieldOp_opname = opname_of_term rawSetBitFieldOp_term
-let is_rawSetBitFieldOp_term = is_num_str_num_num_0_dep0_term rawSetBitFieldOp_opname
-let mk_rawSetBitFieldOp_term = mk_num_str_num_num_0_dep0_term rawSetBitFieldOp_opname
-let dest_rawSetBitFieldOp_term = dest_num_str_num_num_0_dep0_term rawSetBitFieldOp_opname
+let is_rawSetBitFieldOp_term = is_num_str_2_dep0_term rawSetBitFieldOp_opname
+let mk_rawSetBitFieldOp_term = mk_num_str_2_dep0_term rawSetBitFieldOp_opname
+let dest_rawSetBitFieldOp_term = dest_num_str_2_dep0_term rawSetBitFieldOp_opname
 
 let eqRawIntOp_term = << eqRawIntOp[precision:n, sign:s] >>
 let eqRawIntOp_opname = opname_of_term eqRawIntOp_term
@@ -601,29 +709,23 @@ let neqEqOp_term = << neqEqOp >>
 let neqEqOp_opname = opname_of_term neqEqOp_term
 let is_neqEqOp_term = is_0_dep0_term neqEqOp_opname
 
-let plusPointerOp_term = << plusPointerOp[precision:n, sign:s]{ 'sub_block } >>
-let plusPointerOp_opname = opname_of_term plusPointerOp_term
-let is_plusPointerOp_term = is_num_str_1_dep0_term plusPointerOp_opname
-let mk_plusPointerOp_term = mk_num_str_1_dep0_term plusPointerOp_opname
-let dest_plusPointerOp_term = dest_num_str_1_dep0_term plusPointerOp_opname
-
-let atomInt_term = << atomInt[value:n] >>
+let atomInt_term = << atomInt{ 'num } >>
 let atomInt_opname = opname_of_term atomInt_term
-let is_atomInt_term = is_num_0_dep0_term atomInt_opname
-let mk_atomInt_term = mk_num_0_dep0_term atomInt_opname
-let dest_atomInt_term = dest_num_0_dep0_term atomInt_opname
+let is_atomInt_term = is_1_dep0_term atomInt_opname
+let mk_atomInt_term = mk_1_dep0_term atomInt_opname
+let dest_atomInt_term = dest_1_dep0_term atomInt_opname
 
-let atomEnum_term = << atomEnum[bound:n, value:n] >>
+let atomEnum_term = << atomEnum[bound:n]{ 'num } >>
 let atomEnum_opname = opname_of_term atomEnum_term
-let is_atomEnum_term = is_num_num_0_dep0_term atomEnum_opname
-let mk_atomEnum_term = mk_num_num_0_dep0_term atomEnum_opname
-let dest_atomEnum_term = dest_num_num_0_dep0_term atomEnum_opname
+let is_atomEnum_term = is_num_1_dep0_term atomEnum_opname
+let mk_atomEnum_term = mk_num_1_dep0_term atomEnum_opname
+let dest_atomEnum_term = dest_num_1_dep0_term atomEnum_opname
 
-let atomRawInt_term = << atomRawInt[precision:n, sign:s, value:n] >>
+let atomRawInt_term = << atomRawInt[precision:n, sign:s]{ 'num } >>
 let atomRawInt_opname = opname_of_term atomRawInt_term
-let is_atomRawInt_term = is_num_str_num_0_dep0_term atomRawInt_opname
-let mk_atomRawInt_term = mk_num_str_num_0_dep0_term atomRawInt_opname
-let dest_atomRawInt_term = dest_num_str_num_0_dep0_term atomRawInt_opname
+let is_atomRawInt_term = is_num_str_1_dep0_term atomRawInt_opname
+let mk_atomRawInt_term = mk_num_str_1_dep0_term atomRawInt_opname
+let dest_atomRawInt_term = dest_num_str_1_dep0_term atomRawInt_opname
 
 let atomVar_term = << atomVar{ 'var } >>
 let atomVar_opname = opname_of_term atomVar_term

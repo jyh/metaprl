@@ -1,9 +1,8 @@
 (*!
  * @begin[doc]
- * @module[Mfir_comment]
+ * @module[Mfir_type_rules]
  *
- * The @tt[Mfir_comment] module declares terms and display forms
- * for formatting comments in the FIR theory.
+ * The @tt[Mfir_type_rules] module defines the FIR type system.
  * @end[doc]
  *
  * ------------------------------------------------------------------------
@@ -37,10 +36,39 @@
  *)
 
 extends Base_theory
+extends Mfir_basic
+extends Mfir_ty
+extends Mfir_exp
+extends Mfir_sequent
+
+open Base_dtactic
 
 (**************************************************************************
- * Declarations.
+ * Rules.
  **************************************************************************)
 
-(* Boldface text. *)
-declare mfir_bf[text:s]
+(*!
+ * @begin[doc]
+ *
+ * Just some dummy rules for the moment.
+ * @end[doc]
+ *)
+
+prim wf_empty_context {| intro [] |} :
+   sequent [mfir] { >- wf_context }
+   = it
+
+prim truth {| intro [] |} 'H :
+   sequent [mfir] { 'H >- wf_context } -->
+   sequent [mfir] { 'H >- "true" }
+   = it
+
+prim ty_atomInt {| intro [] |} 'H :
+   sequent [mfir] { 'H >- wf_context } -->
+   sequent [mfir] { 'H >- member{ 'i; intset_max } } -->
+   sequent [mfir] { 'H >- has_type["atom"]{ atomInt{'i}; tyInt } }
+   = it
+
+(*!
+ * @docoff
+ *)

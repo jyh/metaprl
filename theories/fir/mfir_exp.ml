@@ -44,7 +44,6 @@
  *)
 
 extends Base_theory
-extends Mfir_comment
 extends Mfir_ty
 
 (**************************************************************************
@@ -52,6 +51,8 @@ extends Mfir_ty
  **************************************************************************)
 
 (*
+ * DROPPED: PointerOfBlockOp     Contains a sub_block.
+ * DROPPED: PlusPointerOp        Contains a sub_block.
  * DROPPED: frame_label.         Can fold this into AtomLabel.
  * DROPPED: AtomNil.             Not sure if this is sound.
  * TODO:    AtomFloat.           MetaPRL doesn't have floats.
@@ -94,7 +95,7 @@ declare idOp
 declare uminusIntOp
 declare notIntOp
 
-declare rawBitFieldOp[precision:n, sign:s, i1:n, i2:n]
+declare rawBitFieldOp[precision:n, sign:s]{ 'num1; 'num2 }
 
 declare uminusRawIntOp[precision:n, sign:s]
 declare notRawIntOp[precision:n, sign:s]
@@ -118,8 +119,6 @@ declare rawIntOfRawIntOp[dest_prec:n, dest_sign:s, src_prec:n, src_sign:s]
 
 declare rawIntOfPointerOp[precision:n, sign:s]
 declare pointerOfRawIntOp[precision:n, sign:s]
-
-declare pointerOfBlockOp{ 'sub_block }
 
 (*!
  * @begin[doc]
@@ -170,7 +169,7 @@ declare xorRawIntOp[precision:n, sign:s]
 declare maxRawIntOp[precision:n, sign:s]
 declare minRawIntOp[precision:n, sign:s]
 
-declare rawSetBitFieldOp[precision:n, sign:s, i1:n, i2:n]
+declare rawSetBitFieldOp[precision:n, sign:s]{ 'num1; 'num2 }
 
 declare eqRawIntOp[precision:n, sign:s]
 declare neqRawIntOp[precision:n, sign:s]
@@ -201,8 +200,6 @@ declare atan2Op[precision:n]
 declare eqEqOp
 declare neqEqOp
 
-declare plusPointerOp[precision:n, sign:s]{ 'sub_block }
-
 (*!
  * @begin[doc]
  * @modsubsection{Atoms}
@@ -219,9 +216,9 @@ declare plusPointerOp[precision:n, sign:s]{ 'sub_block }
  * @end[doc]
  *)
 
-declare atomInt[value:n]
-declare atomEnum[bound:n, value:n]
-declare atomRawInt[precision:n, sign:s, value:n]
+declare atomInt{ 'num }
+declare atomEnum[bound:n]{ 'num }
+declare atomRawInt[precision:n, sign:s]{ 'num }
 
 (*!
  * @begin[doc]
@@ -365,7 +362,7 @@ declare tailCall{ 'atom; 'atom_list }
  * @begin[doc]
  *
  * The term @tt[matchExp] is a pattern matching expression that matches an
- * atom @tt{atom} against a list of cases @tt[matchCase_list]. A match case is
+ * atom @tt[atom] against a list of cases @tt[matchCase_list]. A match case is
  * specified by the term @tt[matchCase], which takes a set (either an integer
  * set or a raw integer set) @tt[set], and an expression @tt[exp].
  * Operationally, the first case for which @tt[atom] is an element of the
@@ -440,17 +437,17 @@ declare setGlobal{ 'label; 'ty; 'atom; 'exp }
  *)
 
 dform atomInt_df : except_mode[src] ::
-   atomInt[value:n] =
-   mfir_bf["int":s] `"(" slot[value:n] `")"
+   atomInt{ 'num } =
+   bf["int"] `"(" slot{'num} `")"
 
 dform atomEnum_df : except_mode[src] ::
-   atomEnum[bound:n, value:n] =
-   mfir_bf["enum":s] sub{slot[bound:n]} `"(" slot[value:n] `")"
+   atomEnum[bound:n]{ 'num } =
+   bf["enum"] sub{slot[bound:n]} `"(" slot{'num} `")"
 
 dform atomRawInt_df : except_mode[src] ::
-   atomRawInt[precision:n, sign:s, value:n] =
-   mfir_bf["rawint":s] sub{slot[precision:n]} sup{slot[sign:s]}
-      `"(" slot[value:n] `")"
+   atomRawInt[precision:n, sign:s]{ 'num } =
+   bf["rawint"] sub{slot[precision:n]} sup{slot[sign:s]}
+      `"(" slot{'num} `")"
 
 dform atomVar_df : except_mode[src] ::
    atomVar{ 'var } =
@@ -458,17 +455,17 @@ dform atomVar_df : except_mode[src] ::
 
 dform atomTyApply_df : except_mode[src] ::
    atomTyApply{ 'atom; 'ty; 'ty_list } =
-   mfir_bf["ty_apply":s] `"[" slot{'ty} `"]("
+   bf["ty_apply"] `"[" slot{'ty} `"]("
       slot{'atom} `", " slot{'ty_list} `")"
 
 dform atomTyPack_df : except_mode[src] ::
    atomTyPack{ 'var; 'ty; 'ty_list } =
-   mfir_bf["ty_pack":s] `"[" slot{'ty} `"]("
+   bf["ty_pack"] `"[" slot{'ty} `"]("
       slot{'var} `", " slot{'ty_list}
 
 dform atomTyUnpack_df : except_mode[src] ::
    atomTyUnpack{ 'var } =
-   mfir_bf["ty_unpack":s] `"(" slot{'var} `")"
+   bf["ty_unpack"] `"(" slot{'var} `")"
 
 dform atomUnop_df : except_mode[src] ::
    atomUnop{ 'unop; 'atom } =
@@ -484,21 +481,21 @@ dform atomBinop_df : except_mode[src] ::
 
 dform allocTuple_df : except_mode[src] ::
    allocTuple[tc:s]{ 'ty; 'atom_list } =
-   mfir_bf["alloc ":s] slot{'atom_list} sub{slot[tc:s]} `": " slot{'ty}
+   bf["alloc "] slot{'atom_list} sub{slot[tc:s]} `": " slot{'ty}
 
 dform allocUnion_df : except_mode[src] ::
    allocUnion[case:n]{ 'ty; 'ty_var; 'atom_list } =
-   mfir_bf["alloc union":s] `"(" slot{'ty_var} slot{'atom_list} `", "
+   bf["alloc union"] `"(" slot{'ty_var} slot{'atom_list} `", "
       slot[case:n] `"): " slot{'ty}
 
 dform allocVArray_df : except_mode[src] ::
    allocVArray{ 'ty; 'atom1; 'atom2 } =
-   mfir_bf["alloc array":s] `"(" slot{'atom1} `", " slot{'atom2} `"): "
+   bf["alloc array"] `"(" slot{'atom1} `", " slot{'atom2} `"): "
       slot{'ty}
 
 dform allocMalloc_df : except_mode[src] ::
    allocMalloc{ 'ty; 'atom } =
-   mfir_bf["alloc malloc":s] `"(" slot{'atom} `"): " slot{'ty}
+   bf["alloc malloc"] `"(" slot{'atom} `"): " slot{'ty}
 
 (*
  * Expressions.
@@ -506,19 +503,19 @@ dform allocMalloc_df : except_mode[src] ::
 
 dform letAtom_df : except_mode[src] ::
    letAtom{ 'ty; 'atom; v. 'exp } =
-   pushm[0] szone push_indent mfir_bf["let ":s]
-      slot{'v} `":" slot{'ty} `" =" hspace
+   pushm[0] szone push_indent bf["let "]
+      slot{'v} `":" slot{'ty} `"=" hspace
       szone slot{'atom} ezone popm hspace
-      push_indent mfir_bf["in":s] hspace
+      push_indent bf["in"] hspace
       szone slot{'exp} ezone popm
       ezone popm
 
 dform letExt_df : except_mode[src] ::
    letExt[str:s]{ 'fun_res_type; 'fun_arg_types; 'fun_args; v. 'exp } =
-   pushm[0] szone push_indent mfir_bf["let ":s] slot{'v} `" =" hspace
+   pushm[0] szone push_indent bf["let "] slot{'v} `"=" hspace
       szone slot[str:s] slot{'fun_args} `":"
          tyFun{'fun_arg_types; 'fun_res_type} ezone popm hspace
-      push_indent mfir_bf["in":s] hspace
+      push_indent bf["in"] hspace
       szone slot{'exp} ezone popm
       ezone popm
 
@@ -528,32 +525,32 @@ dform tailCall_df : except_mode[src] ::
 
 dform matchCase_df : except_mode[src] ::
    matchCase{ 'set; 'exp } =
-   pushm[0] szone push_indent slot{'set} `" ->" hspace
+   pushm[0] szone push_indent slot{'set} `"->" hspace
    szone slot{'exp} ezone popm
    ezone popm
 
 dform matchExp_df : except_mode[src] ::
    matchExp{ 'atom; 'matchCase_list } =
-   pushm[0] szone push_indent mfir_bf["match":s]  hspace
+   pushm[0] szone push_indent bf["match"]  hspace
    szone slot{'atom} ezone popm hspace
-   push_indent mfir_bf["in":s] hspace
+   push_indent bf["in"] hspace
    szone slot{'matchCase_list} ezone popm
    ezone popm
 
 dform letAlloc_df : except_mode[src] ::
    letAlloc{ 'alloc_op; v. 'exp } =
-   pushm[0] szone push_indent mfir_bf["let ":s] slot{'v} `" =" hspace
+   pushm[0] szone push_indent bf["let "] slot{'v} `"=" hspace
       szone slot{'alloc_op} ezone popm hspace
-      push_indent mfir_bf["in":s] hspace
+      push_indent bf["in"] hspace
       szone slot{'exp} ezone popm
       ezone popm
 
 dform letSubscript_df : except_mode[src] ::
    letSubscript{ 'ty; 'atom1; 'atom2; v. 'exp } =
-   pushm[0] szone push_indent mfir_bf["let ":s]
-      slot{'v} `":" slot{'ty} `" =" hspace
+   pushm[0] szone push_indent bf["let "]
+      slot{'v} `":" slot{'ty} `"=" hspace
       szone slot{'atom1} `"[" slot{'atom2} `"]" ezone popm hspace
-      push_indent mfir_bf["in":s] hspace
+      push_indent bf["in"] hspace
       szone slot{'exp} ezone popm
       ezone popm
 
@@ -565,10 +562,10 @@ dform setSubscript_df : except_mode[src] ::
 
 dform letGlobal_df : except_mode[src] ::
    letGlobal{ 'ty; 'label; v. 'exp } =
-   pushm[0] szone push_indent mfir_bf["let ":s]
-      slot{'v} `":" slot{'ty} `" =" hspace
+   pushm[0] szone push_indent bf["let "]
+      slot{'v} `":" slot{'ty} `"=" hspace
       szone slot{'label} ezone popm hspace
-      push_indent mfir_bf["in":s] hspace
+      push_indent bf["in"] hspace
       szone slot{'exp} ezone popm
       ezone popm
 

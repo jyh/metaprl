@@ -1,11 +1,10 @@
 (*!
- * @spelling{tyRawInt tyFloat tyApply tyEnum th ty var}
+ * @spelling{th ty tyRawInt tyFloat tyApply tyEnum var}
  *
  * @begin[doc]
  * @module[Mfir_ty]
  *
- * The @tt[Mfir_ty] module declares terms to
- * represent the FIR type system.
+ * The @tt[Mfir_ty] module declares terms to represent the FIR type system.
  * @end[doc]
  *
  * ------------------------------------------------------------------------
@@ -46,7 +45,6 @@
 
 extends Base_theory
 extends Mfir_basic
-extends Mfir_comment
 
 (**************************************************************************
  * Declarations.
@@ -205,7 +203,7 @@ dform tyInt_df : except_mode[src] ::
 
 dform tyEnum_df : except_mode[src] ::
    tyEnum[i:n] =
-   mfir_bf["enum":s] sub{slot[i:n]}
+   bf["enum"] sub{slot[i:n]}
 
 dform tyRawInt_df : except_mode[src] ::
    tyRawInt[precision:n, sign:s] =
@@ -229,20 +227,19 @@ dform tyFun_df : except_mode[src] ::
 
 dform tyUnion_df : except_mode[src] ::
    tyUnion{ 'ty_var; 'ty_list; 'intset } =
-   mfir_bf["union":s]
-   `"(" slot{'ty_var} slot{'ty_list} `", " slot{'intset} `")"
+   bf["union"] `"(" slot{'ty_var} slot{'ty_list} `", " slot{'intset} `")"
 
 dform tyTuple_df : except_mode[src] ::
    tyTuple[tc:s]{ 'ty_list } =
-   slot{'ty_list} sub{mfir_bf[tc:s]}
+   slot{'ty_list} sub{bf[tc:s]}
 
 dform tyArray_df : except_mode[src] ::
    tyArray{ 'ty } =
-   `"(" slot{'ty} `" " mfir_bf["array":s] `")"
+   `"(" slot{'ty} `" " bf["array"] `")"
 
 dform tyRawData_df : except_mode[src] ::
    tyRawData =
-   mfir_bf["data":s]
+   bf["data"]
 
 (*
  * Polymorphism.

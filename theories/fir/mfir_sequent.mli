@@ -1,6 +1,5 @@
 (*
- * The Mfir_ty module declares terms to represent the FIR type system.
- * @end[doc]
+ * The Mfir_sequent module declares terms used FIR theory sequents.
  *
  * ------------------------------------------------------------------------
  *
@@ -33,42 +32,21 @@
  *)
 
 extends Base_theory
-extends Mfir_basic
 
 (**************************************************************************
  * Declarations.
  **************************************************************************)
 
 (*
- * Numbers.
+ * Sequent tags.
  *)
 
-declare tyInt
-declare tyEnum[i:n]
-declare tyRawInt[precision:n, sign:s]
-declare tyFloat[precision:n]
+declare mfir
+declare it
 
 (*
- * Functions.
+ * Judgments.
  *)
 
-declare tyFun{ 'arg_type_list; 'res_type }
-
-(*
- * Aggregate data.
- *)
-
-declare tyUnion{ 'ty_var; 'ty_list; 'intset }
-declare tyTuple[tc:s]{ 'ty_list }
-declare tyArray{ 'ty }
-declare tyRawData
-
-(*
- * Polymorphism.
- *)
-
-declare tyVar{ 'ty_var }
-declare tyApply{ 'ty_var; 'ty_list }
-declare tyExists{ 'ty_var_list; 'ty }
-declare tyAll{ 'ty_var_list; 'ty }
-declare tyProject[i:n]{ 'var }
+declare wf_context
+declare has_type[str:s]{ 't; 'ty }

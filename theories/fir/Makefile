@@ -6,18 +6,20 @@ ROOT := ../..
 
 include $(ROOT)/mk/preface
 
-INCLUDE := -I . -I ../itt -I ../tactic -I ../base -I ../ocaml
+INCLUDE := -I . -I ../tactic -I ../base -I ../ocaml
 OCAMLDEPFLAGS := -prl
 
 # Library files
 MPFILES := \
-   mfir_comment \
    mfir_basic \
    mfir_ty \
    mfir_exp \
    mfir_termOp_base \
    mfir_termOp \
-   mfir_theory
+   mfir_sequent \
+   mfir_type_rules \
+   mfir_theory \
+   mfir_test
 
 # Name of main libraries
 MAIN = theory

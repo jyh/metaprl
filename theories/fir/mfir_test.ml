@@ -1,5 +1,11 @@
-(*
- * The Mfir_ty module declares terms to represent the FIR type system.
+(*!
+ * @spelling{autoT reduceC rwh thenT}
+ *
+ * @begin[doc]
+ * @module[Mfir_test]
+ *
+ * The @tt[Mfir_test] module is used to test the FIR theory.  Its contents
+ * may or may not be sensible.
  * @end[doc]
  *
  * ------------------------------------------------------------------------
@@ -32,43 +38,33 @@
  * @end[license]
  *)
 
-extends Base_theory
-extends Mfir_basic
+extends Mfir_theory
 
-(**************************************************************************
- * Declarations.
- **************************************************************************)
-
-(*
- * Numbers.
+(*!
+ * @begin[doc]
+ * Tactic to prove the next rule: @tt{rwh reduceC 0 thenT autoT}
+ * @end[doc]
  *)
 
-declare tyInt
-declare tyEnum[i:n]
-declare tyRawInt[precision:n, sign:s]
-declare tyFloat[precision:n]
+interactive arith1 :
+   sequent [mfir] { >- 42 } -->
+   sequent [mfir] { >-  (-(6 /@ -3) +@ 5) *@ (10 -@ 4) }
 
-(*
- * Functions.
+(*!
+ * @begin[doc]
+ * Temporary tests.
+ * @end[doc]
  *)
 
-declare tyFun{ 'arg_type_list; 'res_type }
+interactive t1 :
+   sequent [mfir] { >- has_type["atom"]{ atomInt{2}; tyInt } }
 
-(*
- * Aggregate data.
+interactive t2 :
+   sequent [mfir] { >- has_type["atom"]{ atomInt{222222222222222222}; tyInt } }
+
+interactive t3 :
+   sequent [mfir] { >- has_type["atom"]{ atomInt{. -2}; tyInt } }
+
+(*!
+ * @docoff
  *)
-
-declare tyUnion{ 'ty_var; 'ty_list; 'intset }
-declare tyTuple[tc:s]{ 'ty_list }
-declare tyArray{ 'ty }
-declare tyRawData
-
-(*
- * Polymorphism.
- *)
-
-declare tyVar{ 'ty_var }
-declare tyApply{ 'ty_var; 'ty_list }
-declare tyExists{ 'ty_var_list; 'ty }
-declare tyAll{ 'ty_var_list; 'ty }
-declare tyProject[i:n]{ 'var }

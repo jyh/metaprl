@@ -1,10 +1,6 @@
-(*!
- * @begin[doc]
- * @module[Mfir_termOp]
- *
- * The @code{Mfir_termOp} module provides term construction
+(*
+ * The Mfir_termOp module provides term construction
  * and deconstruction terms for FIR theory terms.
- * @end[doc]
  *
  * ------------------------------------------------------------------------
  *
@@ -42,10 +38,101 @@ extends Mfir_exp
 
 open Refiner.Refiner.Term
 
+val true_term : term
+val is_true_term : term -> bool
+
+val false_term : term
+val is_false_term : term -> bool
+
+val or_term : term
+val is_or_term : term -> bool
+val mk_or_term : term -> term -> term
+val dest_or_term : term -> term * term
+
+val and_term : term
+val is_and_term : term -> bool
+val mk_and_term : term -> term -> term
+val dest_and_term : term -> term * term
+
+val not_term : term
+val is_not_term : term -> bool
+val mk_not_term : term -> term
+val dest_not_term : term -> term
+
+val ifthenelse_term : term
+val is_ifthenelse_term : term -> bool
+val mk_ifthenelse_term : term -> term -> term -> term
+val dest_ifthenelse_term : term -> term * term * term
+
 val number_term : term
 val is_number_term : term -> bool
 val mk_number_term : Mp_num.num -> term
 val dest_number_term : term -> Mp_num.num
+
+val numeral_term : term
+val is_numeral_term : term -> bool
+val mk_numeral_term : term -> term
+val dest_numeral_term : term -> term
+
+val add_term : term
+val is_add_term : term -> bool
+val mk_add_term : term -> term -> term
+val dest_add_term : term -> term * term
+
+val sub_term : term
+val is_sub_term : term -> bool
+val mk_sub_term : term -> term -> term
+val dest_sub_term : term -> term * term
+
+val mul_term : term
+val is_mul_term : term -> bool
+val mk_mul_term : term -> term -> term
+val dest_mul_term : term -> term * term
+
+val div_term : term
+val is_div_term : term -> bool
+val mk_div_term : term -> term -> term
+val dest_div_term : term -> term * term
+
+val rem_term : term
+val is_rem_term : term -> bool
+val mk_rem_term : term -> term -> term
+val dest_rem_term : term -> term * term
+
+val minus_term : term
+val is_minus_term : term -> bool
+val mk_minus_term : term -> term
+val dest_minus_term : term -> term
+
+val int_eq_term : term
+val is_int_eq_term : term -> bool
+val mk_int_eq_term : term -> term -> term
+val dest_int_eq_term : term -> term * term
+
+val int_neq_term : term
+val is_int_neq_term : term -> bool
+val mk_int_neq_term : term -> term -> term
+val dest_int_neq_term : term -> term * term
+
+val int_lt_term : term
+val is_int_lt_term : term -> bool
+val mk_int_lt_term : term -> term -> term
+val dest_int_lt_term : term -> term * term
+
+val int_le_term : term
+val is_int_le_term : term -> bool
+val mk_int_le_term : term -> term -> term
+val dest_int_le_term : term -> term * term
+
+val int_gt_term : term
+val is_int_gt_term : term -> bool
+val mk_int_gt_term : term -> term -> term
+val dest_int_gt_term : term -> term * term
+
+val int_ge_term : term
+val is_int_ge_term : term -> bool
+val mk_int_ge_term : term -> term -> term
+val dest_int_ge_term : term -> term * term
 
 val nil_term : term
 val is_nil_term : term -> bool
@@ -57,8 +144,8 @@ val dest_cons_term : term -> term * term
 
 val interval_term : term
 val is_interval_term : term -> bool
-val mk_interval_term : Mp_num.num -> Mp_num.num -> term
-val dest_interval_term : term -> Mp_num.num * Mp_num.num
+val mk_interval_term : term -> term -> term
+val dest_interval_term : term -> term * term
 
 val intset_term : term
 val is_intset_term : term -> bool
@@ -69,6 +156,14 @@ val rawintset_term : term
 val is_rawintset_term : term -> bool
 val mk_rawintset_term : Mp_num.num -> string -> term -> term
 val dest_rawintset_term : term -> Mp_num.num * string * term
+
+val member_term : term
+val is_member_term : term -> bool
+val mk_member_term : term -> term -> term
+val dest_member_term : term -> term * term
+
+val intset_max_term : term
+val is_intset_max_term : term -> bool
 
 val tyInt_term : term
 val is_tyInt_term : term -> bool
@@ -147,8 +242,8 @@ val is_notIntOp_term : term -> bool
 
 val rawBitFieldOp_term : term
 val is_rawBitFieldOp_term : term -> bool
-val mk_rawBitFieldOp_term : Mp_num.num -> string -> Mp_num.num -> Mp_num.num -> term
-val dest_rawBitFieldOp_term : term -> Mp_num.num * string * Mp_num.num * Mp_num.num
+val mk_rawBitFieldOp_term : Mp_num.num -> string -> term -> term -> term
+val dest_rawBitFieldOp_term : term -> Mp_num.num * string * term * term
 
 val uminusRawIntOp_term : term
 val is_uminusRawIntOp_term : term -> bool
@@ -234,11 +329,6 @@ val pointerOfRawIntOp_term : term
 val is_pointerOfRawIntOp_term : term -> bool
 val mk_pointerOfRawIntOp_term : Mp_num.num -> string -> term
 val dest_pointerOfRawIntOp_term : term -> Mp_num.num * string
-
-val pointerOfBlockOp_term : term
-val is_pointerOfBlockOp_term : term -> bool
-val mk_pointerOfBlockOp_term : term -> term
-val dest_pointerOfBlockOp_term : term -> term
 
 val andEnumOp_term : term
 val is_andEnumOp_term : term -> bool
@@ -377,8 +467,8 @@ val dest_minRawIntOp_term : term -> Mp_num.num * string
 
 val rawSetBitFieldOp_term : term
 val is_rawSetBitFieldOp_term : term -> bool
-val mk_rawSetBitFieldOp_term : Mp_num.num -> string -> Mp_num.num -> Mp_num.num -> term
-val dest_rawSetBitFieldOp_term : term -> Mp_num.num * string * Mp_num.num * Mp_num.num
+val mk_rawSetBitFieldOp_term : Mp_num.num -> string -> term -> term -> term
+val dest_rawSetBitFieldOp_term : term -> Mp_num.num * string * term * term
 
 val eqRawIntOp_term : term
 val is_eqRawIntOp_term : term -> bool
@@ -496,25 +586,20 @@ val is_eqEqOp_term : term -> bool
 val neqEqOp_term : term
 val is_neqEqOp_term : term -> bool
 
-val plusPointerOp_term : term
-val is_plusPointerOp_term : term -> bool
-val mk_plusPointerOp_term : Mp_num.num -> string -> term -> term
-val dest_plusPointerOp_term : term -> Mp_num.num * string * term
-
 val atomInt_term : term
 val is_atomInt_term : term -> bool
-val mk_atomInt_term : Mp_num.num -> term
-val dest_atomInt_term : term -> Mp_num.num
+val mk_atomInt_term : term -> term
+val dest_atomInt_term : term -> term
 
 val atomEnum_term : term
 val is_atomEnum_term : term -> bool
-val mk_atomEnum_term : Mp_num.num -> Mp_num.num -> term
-val dest_atomEnum_term : term -> Mp_num.num * Mp_num.num
+val mk_atomEnum_term : Mp_num.num -> term -> term
+val dest_atomEnum_term : term -> Mp_num.num * term
 
 val atomRawInt_term : term
 val is_atomRawInt_term : term -> bool
-val mk_atomRawInt_term : Mp_num.num -> string -> Mp_num.num -> term
-val dest_atomRawInt_term : term -> Mp_num.num * string * Mp_num.num
+val mk_atomRawInt_term : Mp_num.num -> string -> term -> term
+val dest_atomRawInt_term : term -> Mp_num.num * string * term
 
 val atomVar_term : term
 val is_atomVar_term : term -> bool

@@ -43,7 +43,9 @@
  *)
 
 extends Base_theory
-extends Mfir_comment
+
+open Base_meta
+open Top_conversionals
 
 (**************************************************************************
  * Declarations.
@@ -52,13 +54,63 @@ extends Mfir_comment
 (*!
  * @begin[doc]
  * @terms
+ * @modsubsection{Booleans}
+ *
+ * The FIR theory uses meta-booleans to express simple judgments and
+ * conditionals.  The logical operators here are classical, not constructive.
+ * @end[doc]
+ *)
+
+declare "true"
+declare "false"
+declare "or"{ 'bool1; 'bool2 }
+declare "and"{ 'bool1; 'bool2 }
+declare "not"{ 'boolean }
+declare ifthenelse{ 'test; 'true_case; 'false_case }
+
+(*!
+ * @begin[doc]
  * @modsubsection{Integers}
  *
- * The term @tt{number@[i:n@]} represents the integer $i$.
+ * The term @tt{number[i:n]} represents the integer $i$.  The term
+ * @tt[numeral] takes a @tt[number] term as a subterm.  It is used as an
+ * intermediate representation for the arithmetic operations below.
  * @end[doc]
  *)
 
 declare number[i:n]
+declare numeral{ 'num }
+
+(*!
+ * @begin[doc]
+ *
+ * Basic arithmetic operations can be applied to integers, along with unary
+ * negation (@tt[minus]).
+ * @end[doc]
+ *)
+
+declare add{ 'num1; 'num2 }
+declare sub{ 'num1; 'num2 }
+declare mul{ 'num1; 'num2 }
+declare div{ 'num1; 'num2 }
+declare rem{ 'num1; 'num2 }
+declare minus{ 'num }
+
+(*!
+ * @begin[doc]
+ *
+ * Basic binary comparison operators can also be applied to integers.  The
+ * rewrites below can rewrite the comparisons to either @tt["\"true\""] or
+ * @tt["\"false\""].
+ * @end[doc]
+ *)
+
+declare int_eq{ 'num1; 'num2 }
+declare int_neq{ 'num1; 'num2 }
+declare int_lt{ 'num1; 'num2 }
+declare int_le{ 'num1; 'num2 }
+declare int_gt{ 'num1; 'num2 }
+declare int_ge{ 'num1; 'num2 }
 
 (*!
  * @begin[doc]
@@ -91,25 +143,362 @@ declare cons{ 'elt; 'tail }
  * @end[doc]
  *)
 
-declare interval[left:n, right:n]
+declare interval{ 'left; 'right }
 declare intset{ 'interval_list }
 declare rawintset[precision:n, sign:s]{ 'interval_list }
 
 (*!
+ * @begin[doc]
+ *
+ * The term @tt[member] is used to determine whether or not a number @tt[num]
+ * is in a set or interval @tt[set].  The rewrites below will reduce a
+ * @tt[member] term to either @tt["\"true\""] or @tt["\"false\""].
+ * @end[doc]
+ *)
+
+declare member{ 'num; 'set }
+
+(*!
+ * @begin[doc]
+ *
+ * The term @tt[intset_max] is the set of all 31-bit, signed integers.
+ * @end[doc]
+ *)
+
+declare intset_max
+
+(**************************************************************************
+ * Rewrites.
+ **************************************************************************)
+
+(*!
+ * @begin[doc]
+ * @rewrites
+ * @modsubsection{Conditionals}
+ *
+ * The logical connectives are treated in a classical fashion. Rewriting of
+ * ``if-then-else'' expressions is a straightforward case analysis on the
+ * test.  All of these rewrites are added to the @tt[reduce] resource.
+ * @end[doc]
+ *)
+
+prim_rw reduce_and :
+   "and"{ 'bool1; 'bool2 } <-->
+   ifthenelse{ 'bool1; 'bool2; "false" }
+
+prim_rw reduce_or :
+   "or"{ 'bool1; 'bool2 } <-->
+   ifthenelse{ 'bool1; "true"; 'bool2 }
+
+prim_rw reduce_not :
+   "not"{ 'boolean } <-->
+   ifthenelse{ 'boolean; "false"; "true" }
+
+prim_rw reduce_ifthenelse_true :
+   ifthenelse{ "true"; 'true_case; 'false_case } <-->
+   'true_case
+
+prim_rw reduce_ifthenelse_false :
+   ifthenelse{ "false"; 'true_case; 'false_case } <-->
+   'false_case
+
+(*!
  * @docoff
  *)
+
+let resource reduce += [
+   << "and"{ 'bool1; 'bool2 } >>, reduce_and;
+   << "or"{ 'bool1; 'bool2 } >>, reduce_or;
+   << "not"{ 'boolean } >>, reduce_not;
+   << ifthenelse{ "true"; 'true_case; 'false_case } >>,
+      reduce_ifthenelse_true;
+   << ifthenelse{ "false"; 'true_case; 'false_case } >>,
+      reduce_ifthenelse_false
+]
+
+(*!
+ * @begin[doc]
+ * @modsubsection{Arithmetic}
+ *
+ * Integer arithmetic and comparison is rewritten using meta operations from
+ * the @tt[Base_meta] module.  The rewrites are added to the @tt[reduce]
+ * resource.  They are straightforward, and we omit an explicit listing of
+ * them.
+ * @end[doc]
+ *)
+
+(*!
+ * @docoff
+ *)
+
+(* Define auxilary rewrites. *)
+
+prim_rw reduce_add_aux :
+   add{ number[i:n]; number[j:n] } <-->
+   numeral{ meta_sum[i:n, j:n] }
+
+prim_rw reduce_sub_aux :
+   sub{ number[i:n]; number[j:n] } <-->
+   numeral{ meta_diff[i:n, j:n] }
+
+prim_rw reduce_mul_aux :
+   mul{ number[i:n]; number[j:n] } <-->
+   numeral{ meta_prod[i:n, j:n] }
+
+prim_rw reduce_div_aux :
+   div{ number[i:n]; number[j:n] } <-->
+   numeral{ meta_quot[i:n, j:n] }
+
+prim_rw reduce_rem_aux :
+   rem{ number[i:n]; number[j:n] } <-->
+   numeral{ meta_rem[i:n, j:n] }
+
+prim_rw reduce_minus_aux :
+   minus{ number[i:n] } <-->
+   numeral{ meta_diff[0:n, i:n] }
+
+prim_rw reduce_numeral :
+   numeral{ meta_num[i:n] } <-->
+   number[i:n]
+
+prim_rw reduce_int_eq_aux :
+   int_eq{ number[i:n]; number[j:n] } <-->
+   meta_eq[i:n, j:n]{ "true"; "false" }
+
+prim_rw reduce_int_neq_aux :
+   int_neq{ number[i:n]; number[j:n] } <-->
+   meta_eq[i:n, j:n]{ "false"; "true" }
+
+prim_rw reduce_int_lt_aux :
+   int_lt{ number[i:n]; number[j:n] } <-->
+   meta_lt[i:n, j:n]{ "true"; "false" }
+
+prim_rw reduce_int_le_aux :
+   int_le{ number[i:n]; number[j:n] } <-->
+   meta_lt[j:n, i:n]{ "false"; "true" }
+
+prim_rw reduce_int_gt_aux :
+   int_gt{ number[i:n]; number[j:n] } <-->
+   meta_lt[j:n, i:n]{ "true"; "false" }
+
+prim_rw reduce_int_ge_aux :
+   int_ge{ number[i:n]; number[j:n] } <-->
+   meta_lt[i:n, j:n]{ "false"; "true" }
+
+(* Define the actual rewrites. *)
+
+let reduce_add =
+   reduce_add_aux thenC (addrC [0] reduce_meta_sum) thenC reduce_numeral
+
+let reduce_sub =
+   reduce_sub_aux thenC (addrC [0] reduce_meta_diff) thenC reduce_numeral
+
+let reduce_mul =
+   reduce_mul_aux thenC (addrC [0] reduce_meta_prod) thenC reduce_numeral
+
+let reduce_div =
+   reduce_div_aux thenC (addrC [0] reduce_meta_quot) thenC reduce_numeral
+
+let reduce_rem =
+   reduce_rem_aux thenC (addrC [0] reduce_meta_rem) thenC reduce_numeral
+
+let reduce_minus =
+   reduce_minus_aux thenC (addrC [0] reduce_meta_diff) thenC reduce_numeral
+
+let reduce_int_eq =
+   reduce_int_eq_aux thenC reduce_meta_eq_num
+
+let reduce_int_neq =
+   reduce_int_neq_aux thenC reduce_meta_eq_num
+
+let reduce_int_lt =
+   reduce_int_lt_aux thenC reduce_meta_lt_num
+
+let reduce_int_le =
+   reduce_int_le_aux thenC reduce_meta_lt_num
+
+let reduce_int_gt =
+   reduce_int_gt_aux thenC reduce_meta_lt_num
+
+let reduce_int_ge =
+   reduce_int_ge_aux thenC reduce_meta_lt_num
+
+
+(* Add the above rewrites to the reduce resource. *)
+
+let resource reduce += [
+   << add{ 'num1; 'num2 } >>, reduce_add;
+   << sub{ 'num1; 'num2 } >>, reduce_sub;
+   << mul{ 'num1; 'num2 } >>, reduce_mul;
+   << div{ 'num1; 'num2 } >>, reduce_div;
+   << rem{ 'num1; 'num2 } >>, reduce_rem;
+   << minus{ 'num } >>, reduce_minus;
+   << numeral{ 'num } >>, reduce_numeral;
+   << int_eq{ 'num1; 'num2 } >>, reduce_int_eq;
+   << int_neq{ 'num1; 'num2 } >>, reduce_int_neq;
+   << int_lt{ 'num1; 'num2 } >>, reduce_int_lt;
+   << int_le{ 'num1; 'num2 } >>, reduce_int_le;
+   << int_gt{ 'num1; 'num2 } >>, reduce_int_gt;
+   << int_ge{ 'num1; 'num2 } >>, reduce_int_ge
+]
+
+(*!
+ * @begin[doc]
+ * @modsubsection{Set membership}
+ *
+ * Set and interval membership is a straightforward comparison against
+ * each of the intervals in a set and the endpoints of an interval.
+ * Recall that intervals are closed.
+ * @end[doc]
+ *)
+
+prim_rw reduce_member_interval :
+   member{ 'num; interval{ 'left; 'right } } <-->
+   "and"{ int_le{ 'left; 'num }; int_le{ 'num; 'right } }
+
+prim_rw reduce_member_intset_ind :
+   member{ 'num; intset{cons{'head; 'tail}} } <-->
+   "or"{ member{'num; 'head}; member{'num; intset{'tail}} }
+
+prim_rw reduce_member_intset_base :
+   member{ 'num; intset{nil} } <-->
+   "false"
+
+prim_rw reduce_member_rawintset_ind :
+   member{ 'num; rawintset[p:n, s:s]{cons{'head; 'tail}} } <-->
+   "or"{ member{'num; 'head}; member{'num; rawintset[p:n, s:s]{'tail}} }
+
+prim_rw reduce_member_rawintset_base :
+   member{ 'num; rawintset[p:n, s:s]{nil} } <-->
+   "false"
+
+(*!
+ * @begin[doc]
+ *
+ * Set constants can be rewritten into their actual values.
+ * @end[doc]
+ *)
+
+prim_rw reduce_intset_max :
+   intset_max <-->
+   intset{ cons{ interval{. -1073741824; 1073741823}; nil } }
+
+(*!
+ * @docoff
+ *)
+
+let resource reduce += [
+   << member{ 'num; interval{ 'left; 'right } } >>,
+      reduce_member_interval;
+   << member{ 'num; intset{cons{'head; 'tail}} } >>,
+      reduce_member_intset_ind;
+   << member{ 'num; intset{nil} } >>,
+      reduce_member_intset_base;
+   << member{ 'num; rawintset[p:n, s:s]{cons{'head; 'tail}} } >>,
+      reduce_member_rawintset_ind;
+   << member{ 'num; rawintset[p:n, s:s]{nil} } >>,
+      reduce_member_rawintset_base;
+   << intset_max >>,
+      reduce_intset_max
+]
 
 (**************************************************************************
  * Display forms.
  **************************************************************************)
 
 (*
+ * Booleans.
+ *)
+
+dform true_df : except_mode[src] ::
+   "true" =
+   bf["true"]
+
+dform false_df : except_mode[src] ::
+   "false" =
+   bf["false"]
+
+dform or_df : except_mode[src] ::
+   "or"{ 'bool1; 'bool2 } =
+   `"(" slot{'bool1} vee slot{'bool2} `")"
+
+dform and_df : except_mode[src] ::
+   "and"{ 'bool1; 'bool2 } =
+   `"(" slot{'bool1} wedge slot{'bool2} `")"
+
+dform not_df : except_mode[src] ::
+   "not"{ 'boolean } =
+   tneg slot{'boolean}
+
+dform ifthenelse_df : except_mode[src] ::
+   ifthenelse{ 'test; 'true_case; 'false_case } =
+   pushm[0] szone push_indent bf["if"] hspace
+      szone slot{'test} ezone popm hspace
+      push_indent bf["then"] hspace
+      szone slot{'true_case} ezone popm hspace
+      push_indent bf["else"] hspace
+      szone slot{'false_case} ezone popm
+      ezone popm
+
+(*
  * Integers.
  *)
 
-dform number_df :
+dform number_df : except_mode[src] ::
    number[i:n] =
    slot[i:n]
+
+dform numeral_df : except_mode[src] ::
+   numeral{ 'num } =
+   bf["numeral"] `"(" slot{'num} `")"
+
+dform add_df : except_mode[src] ::
+   add{ 'num1; 'num2 } =
+   `"(" slot{'num1} `"+" slot{'num2} `")"
+
+dform sub_df : except_mode[src] ::
+   sub{ 'num1; 'num2 } =
+   `"(" slot{'num1} `"-" slot{'num2} `")"
+
+dform mul_df : except_mode[src] ::
+   mul{ 'num1; 'num2 } =
+   `"(" slot{'num1} `"*" slot{'num2} `")"
+
+dform div_df : except_mode[src] ::
+   div{'num1; 'num2 } =
+   `"(" slot{'num1} `"/" slot{'num2} `")"
+
+dform rem_df : except_mode[src] ::
+   rem{ 'num1; 'num2 } =
+   `"(" slot{'num1} `"%" slot{'num2} `")"
+
+dform minus_df : except_mode[src] ::
+   minus{ 'num } =
+   `"(-" slot{'num} `")"
+
+dform int_eq_df : except_mode[src] ::
+   int_eq{ 'num1; 'num2 } =
+   `"(" slot{'num1} `"=" slot{'num2} `")"
+
+dform int_neq_df : except_mode[src] ::
+   int_neq{ 'num1; 'num2 } =
+   `"(" slot{'num1} neq slot{'num2} `")"
+
+dform int_lt_df : except_mode[src] ::
+   int_lt{ 'num1; 'num2 } =
+   `"(" slot{'num1} `"<" slot{'num2} `")"
+
+dform int_le_df : except_mode[src] ::
+   int_le{ 'num1; 'num2 } =
+   `"(" slot{'num1} le slot{'num2} `")"
+
+dform int_gt_df : except_mode[src] ::
+   int_gt{ 'num1; 'num2 } =
+   `"(" slot{'num1} `">" slot{'num2} `")"
+
+dform int_ge_df : except_mode[src] ::
+   int_ge{ 'num1; 'num2 } =
+   `"(" slot{'num1} ge slot{'num2} `")"
 
 (*
  * Lists.
@@ -169,14 +558,22 @@ dform colons_df2 :
  *)
 
 dform interval_df : except_mode[src] ::
-   interval[left:n, right:n] =
-   `"[" slot[left:n] `"," slot[right:n] `"]"
+   interval{ 'left; 'right } =
+   `"[" slot{'left} `"," slot{'right} `"]"
 
 dform intset_df : except_mode[src] ::
    intset{ 'interval_list } =
-   mfir_bf["intset":s] `" " slot{'interval_list}
+   bf["intset"] `" " slot{'interval_list}
 
 dform rawintset_df : except_mode[src] ::
    rawintset[precision:n, sign:s]{ 'interval_list } =
-   mfir_bf["intset":s] sub{slot[precision:n]} sup{slot[sign:s]} `" "
+   bf["rawintset"] sub{slot[precision:n]} sup{slot[sign:s]} `" "
       slot{'interval_list}
+
+dform member_df : except_mode[src] ::
+   member{ 'num; 'set } =
+   slot{'num} member slot{'set}
+
+dform intset_max : except_mode[src] ::
+   intset_max =
+   bf["intset_max"]

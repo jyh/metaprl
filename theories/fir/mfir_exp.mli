@@ -38,7 +38,6 @@
  *)
 
 extends Base_theory
-extends Mfir_comment
 extends Mfir_ty
 
 (**************************************************************************
@@ -53,7 +52,7 @@ declare idOp
 declare uminusIntOp
 declare notIntOp
 
-declare rawBitFieldOp[precision:n, sign:s, i1:n, i2:n]
+declare rawBitFieldOp[precision:n, sign:s]{ 'num1; 'num2 }
 
 declare uminusRawIntOp[precision:n, sign:s]
 declare notRawIntOp[precision:n, sign:s]
@@ -77,8 +76,6 @@ declare rawIntOfRawIntOp[dest_prec:n, dest_sign:s, src_prec:n, src_sign:s]
 
 declare rawIntOfPointerOp[precision:n, sign:s]
 declare pointerOfRawIntOp[precision:n, sign:s]
-
-declare pointerOfBlockOp{ 'sub_block }
 
 (*
  * Binary operators.
@@ -123,7 +120,7 @@ declare xorRawIntOp[precision:n, sign:s]
 declare maxRawIntOp[precision:n, sign:s]
 declare minRawIntOp[precision:n, sign:s]
 
-declare rawSetBitFieldOp[precision:n, sign:s, i1:n, i2:n]
+declare rawSetBitFieldOp[precision:n, sign:s]{ 'num1; 'num2 }
 
 declare eqRawIntOp[precision:n, sign:s]
 declare neqRawIntOp[precision:n, sign:s]
@@ -154,15 +151,13 @@ declare atan2Op[precision:n]
 declare eqEqOp
 declare neqEqOp
 
-declare plusPointerOp[precision:n, sign:s]{ 'sub_block }
-
 (*
  * Atoms.
  *)
 
-declare atomInt[value:n]
-declare atomEnum[bound:n, value:n]
-declare atomRawInt[precision:n, sign:s, value:n]
+declare atomInt{ 'num }
+declare atomEnum[bound:n]{ 'num }
+declare atomRawInt[precision:n, sign:s]{ 'num }
 declare atomVar{ 'var }
 declare atomTyApply{ 'atom; 'ty; 'ty_list }
 declare atomTyPack{ 'var; 'ty; 'ty_list }

@@ -1,10 +1,6 @@
-(*!
- * @begin[doc]
- * @module[Mfir_basic]
- *
- * The @code{Mfir_basic} module declares basic terms needed to
- * support the @MetaPRL representation of the FIR.
- * @end[doc]
+(*
+ * The Mfir_basic module declares basic terms needed to
+ * support the MetaPRL representation of the FIR.
  *
  * ------------------------------------------------------------------------
  *
@@ -38,15 +34,42 @@
 
 extends Base_theory
 
+open Tactic_type.Conversionals
+
 (**************************************************************************
  * Declarations.
  **************************************************************************)
+
+(*
+ * Booleans.
+ *)
+
+declare "true"
+declare "false"
+declare "or"{ 'bool1; 'bool2 }
+declare "and"{ 'bool1; 'bool2 }
+declare "not"{ 'boolean }
+declare ifthenelse{ 'test; 'true_case; 'false_case }
 
 (*
  * Integers.
  *)
 
 declare number[i:n]
+declare numeral{ 'num }
+declare add{ 'num1; 'num2 }
+declare sub{ 'num1; 'num2 }
+declare mul{ 'num1; 'num2 }
+declare div{ 'num1; 'num2 }
+declare rem{ 'num1; 'num2 }
+declare minus{ 'num }
+
+declare int_eq{ 'num1; 'num2 }
+declare int_neq{ 'num1; 'num2 }
+declare int_lt{ 'num1; 'num2 }
+declare int_le{ 'num1; 'num2 }
+declare int_gt{ 'num1; 'num2 }
+declare int_ge{ 'num1; 'num2 }
 
 (*
  * Lists.
@@ -59,6 +82,51 @@ declare cons{ 'elt; 'tail }
  * Integer sets.
  *)
 
-declare interval[left:n, right:n]
+declare interval{ 'left; 'right }
 declare intset{ 'interval_list }
 declare rawintset[precision:n, sign:s]{ 'interval_list }
+declare member{ 'num; 'set }
+declare intset_max
+
+(**************************************************************************
+ * Rewrites.
+ **************************************************************************)
+
+(*
+ * Booleans.
+ *)
+
+val reduce_and : conv
+val reduce_or : conv
+val reduce_not : conv
+val reduce_ifthenelse_true : conv
+val reduce_ifthenelse_false : conv
+
+(*
+ * Integers.
+ *)
+
+val reduce_add : conv
+val reduce_sub : conv
+val reduce_mul : conv
+val reduce_div : conv
+val reduce_rem : conv
+val reduce_minus : conv
+val reduce_numeral : conv
+
+val reduce_int_eq : conv
+val reduce_int_neq : conv
+val reduce_int_lt : conv
+val reduce_int_le : conv
+val reduce_int_gt : conv
+val reduce_int_ge : conv
+
+(*
+ * Lists.
+ *)
+
+val reduce_member_interval : conv
+val reduce_member_intset_ind : conv
+val reduce_member_intset_base : conv
+val reduce_member_rawintset_ind : conv
+val reduce_member_rawintset_base : conv

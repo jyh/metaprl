@@ -1,10 +1,6 @@
-(*!
- * @begin[doc]
- * @module[Mfir_comment]
- *
- * The @tt[Mfir_comment] module declares terms and display forms
- * for formatting comments in the FIR theory.
- * @end[doc]
+(*
+ * The Mfir_test module is used to test the theory.  Its contents may or
+ * may not be sensible.
  *
  * ------------------------------------------------------------------------
  *
@@ -36,29 +32,4 @@
  * @end[license]
  *)
 
-(*!
- * @docoff
- *)
-
-extends Base_theory
-
-(**************************************************************************
- * Declarations.
- **************************************************************************)
-
-(* Boldface text. *)
-declare mfir_bf[text:s]
-
-(**************************************************************************
- * Display forms.
- **************************************************************************)
-
-dform mfir_bf_df : except_mode[src] ::
-   mfir_bf[text:s] =
-   slot[text:s]
-
-dform mfir_bf_df : mode[tex] ::
-   mfir_bf[text:s] =
-   izone `"{\\bf " ezone
-   slot[text:s]
-   izone `"}" ezone
+extends Mfir_theory

@@ -34,6 +34,7 @@
 open Printf
 open Mp_debug
 open String_set
+open Set_sig
 
 open Refiner.Refiner.TermType
 open Refiner.Refiner.Term
@@ -278,50 +279,37 @@ let merge_term_lists =
    in
       merge_term_lists_aux []
 
-(*
- * The order on terms.
- *)
-module TermBase =
-struct
-   type set = StringSet.t
-   type elt = term
-   type data = term list
-
-   let union = StringSet.union
-   let compare set term1 term2 =
-      match compare_terms (StringSet.mem set) [] term1 term2 with
-         Equal _ ->
-            0
-       | LessThan ->
-            -1
-       | GreaterThan ->
-            1
-   let append = (@)
-   let print _ _ _ = ()
-end
-
-(*
- * The term set.
- *)
-module TermTable = Red_black_table.MakeTable (TermBase)
-
 (************************************************************************
  * IMPLEMENTATION                                                       *
  ************************************************************************)
+
+module TermTable = Red_black_table
 
 module TptpCache =
 struct
    (*
     * A cache is a term cache.
     *)
-   type t =
-      { cache_constants : StringSet.t;
-        cache_table : TermTable.t
-      }
+   type t = {
+      cache_constants : string -> bool;
+      cache_methods :
+         (term, term list, (term, term list) TermTable.table) table_methods;
+      cache_table : (term, term list) TermTable.table
+   }
 
    let create constants =
-      { cache_constants = constants;
-        cache_table = TermTable.create constants
+      let is_constant = StringSet.mem constants in
+      let compare t1 t2 =
+         match compare_terms is_constant [] t1 t2 with
+            Equal _ -> 0
+          | LessThan -> -1
+          | GreaterThan -> 1
+      in
+      let print _ _ = () in
+      let methods = TermTable.create print compare (@) in {
+         cache_constants = is_constant;
+         cache_methods = methods;
+         cache_table = methods.empty
       }
 
    (*
@@ -340,29 +328,30 @@ struct
     | [] ->
          memo
 
-   let rec subsumed constants memo t clause = function
+   let rec subsumed constants memo find_all clause = function
       term :: terms ->
          let memo =
             try
-               let goals = TermTable.find_all t term in
+               let goals = find_all term in
                   subsumed_goals constants memo clause goals
             with
                Not_found ->
                   memo
          in
-            subsumed constants memo t clause terms
+            subsumed constants memo find_all clause terms
     | [] ->
          ()
 
    (*
     * See if a goal is subsumed.
     *)
-   let subsumed { cache_constants = constants; cache_table = t } clause =
+   let subsumed t clause =
       if !debug_cache then
          eprintf "Tptp_cache.subsumed: %a%t" print_term_list clause eflush;
       let flag =
          try
-            subsumed (StringSet.mem constants) [] t clause clause;
+            let find_all = t.cache_methods.find_all t.cache_table in
+            subsumed t.cache_constants [] find_all clause clause;
             false
          with
             Subsumed ->
@@ -376,16 +365,14 @@ struct
     * Add a goal to the table, unless it is subsumed by
     * and existing entry.
     *)
-   let rec add_clause clause t = function
+   let rec add_clause clause add t = function
       term :: terms ->
-         add_clause clause (TermTable.add t term clause) terms
+         add_clause clause add (add t term clause) terms
     | [] ->
          t
 
-   let insert { cache_constants = constants; cache_table = t } clause =
-      { cache_constants = constants;
-        cache_table = add_clause clause t clause
-      }
+   let insert t clause =
+      { t with cache_table = add_clause clause t.cache_methods.add t.cache_table clause }
 end
 
 (*

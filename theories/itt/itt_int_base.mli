@@ -40,7 +40,9 @@ extends Itt_decidable
 
 open Lm_symbol
 
+open Mp_resource
 open Refiner.Refiner.Term
+open Refiner.Refiner.Refine
 
 (*
 *)
@@ -445,3 +447,13 @@ rule minus_add_Distrib :
 rule minus_minus_reduce :
    [wf] sequent { <H> >- 'a in int } -->
    sequent { <H> >- (-(-'a)) ~ 'a }
+
+(*
+ * RESOURCES USED BY arithT
+ *)
+
+resource (term * conv, conv) arith_unfold
+val process_arith_unfold_resource_rw_annotation : (prim_rewrite, term*conv) rw_annotation_processor
+
+topval arith_unfoldTopC : conv
+topval arith_unfoldC : conv

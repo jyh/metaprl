@@ -587,7 +587,7 @@ prim mul_add_Distrib :
    [wf] sequent { <H> >- 'c in int } -->
    sequent { <H> >- ('a *@ ('b +@ 'c)) ~ (('a *@ 'b) +@ ('a *@ 'c)) } = it
 
-interactive_rw mul_add_Distrib_rw :
+interactive_rw mul_add_Distrib_rw {| arith_unfold |} :
    ('a in int) -->
    ('b in int) -->
    ('c in int) -->
@@ -601,7 +601,7 @@ interactive_rw mul_add_Distrib2C :
    ('c in int) -->
    (('a *@ 'b) +@ ('a *@ 'c)) <--> ('a *@ ('b +@ 'c))
 
-interactive_rw mul_add_Distrib3C :
+interactive_rw mul_add_Distrib3C {| arith_unfold |} :
    ('a in int) -->
    ('b in int) -->
    ('c in int) -->

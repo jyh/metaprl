@@ -468,7 +468,7 @@ let add_BubbleStepC tm =
 let add_BubbleSortC = (repeatC (higherC (termC add_BubbleStepC))) thenC
                       (repeatC (higherC (termC same_productC)))
 
-interactive_rw sub_elim_rw :
+interactive_rw sub_elim_rw {| arith_unfold |} :
    ( 'a in int ) -->
    ( 'b in int ) -->
    ('a -@ 'b ) <--> ('a +@ ((-1) *@ 'b))
@@ -518,9 +518,10 @@ doc <:doc<
 
 	@end[doc]
 >>
-let normalizeC = sub_elimC thenC
+let normalizeC = arith_unfoldC thenC
+					(*sub_elimC thenC
 					  (repeatC (higherC mul_add_DistribC)) thenC
-					  (repeatC (higherC mul_add_Distrib3C)) thenC
+					  (repeatC (higherC mul_add_Distrib3C)) thenC*)
                  reduceC thenC
                  mul_normalizeC thenC
                  add_normalizeC thenC

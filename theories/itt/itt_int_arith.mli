@@ -50,11 +50,14 @@ topval normalizeC : conv
 
 topval arithT : tactic
 
-(* sometimes these parts of arithT are useful to figure out why arithT does not work
+(* sometimes these parts of arithT are useful to figure out why arithT does not work*)
+topval neqInConcl2HypT : tactic
 topval arithRelInConcl2HypT : tactic
-topval anyArithRel2geT : int -> tactic
-topval tryReduce_geT : int -> tactic
-topval sumListT : int list -> tactic
+topval negativeHyp2ConclT : int -> tactic
+topval reduceIneqT : int -> tactic
 topval findContradRelT : tactic
 topval reduceContradRelT : int -> tactic
-*)
+(**)
+(*topval anyArithRel2geT : int -> tactic
+topval tryReduce_geT : int -> tactic
+topval sumListT : int list -> tactic*)

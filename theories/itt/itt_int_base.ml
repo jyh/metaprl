@@ -67,12 +67,17 @@ extends Itt_decidable
 doc <:doc< @docoff >>
 
 open Lm_debug
+
+open Mp_resource
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
+open Refiner.Refiner.Refine
+open Refiner.Refiner.RefineError
 
 open Tactic_type
 open Tactic_type.Tacticals
 open Top_conversionals
+open Conversionals
 
 open Base_meta
 open Auto_tactic
@@ -85,6 +90,55 @@ open Itt_bool
 open Itt_squiggle
 
 let _ = show_loading "Loading Itt_int_base%t"
+
+let debug_arith_unfold =
+   create_debug (**)
+      { debug_name = "debug_arith_unfold";
+        debug_description = "display arith_unfold steps";
+        debug_value = false
+      }
+
+(*
+ * RESOURCES USED BY arithT
+ *)
+
+let identity x = x
+
+let extract_data tbl =
+   let rw e =
+      let t = env_term e in
+      let conv =
+         try
+            (* Find and apply the right tactic *)
+            if !debug_arith_unfold then
+               Printf.eprintf "Conversionals: lookup %a%t" debug_print t eflush;
+            snd (Term_match_table.lookup tbl t)
+         with
+            Not_found ->
+               raise (RefineError ("Conversionals.extract_data", StringTermError ("no reduction for", t)))
+      in
+         if !debug_arith_unfold then
+            Printf.eprintf "Conversionals: applying %a%t" debug_print t eflush;
+         conv
+   in
+      funC rw
+
+let process_arith_unfold_resource_rw_annotation = Rewrite.redex_and_conv_of_rw_annotation "arith_unfold"
+
+(*
+ * Resource.
+ *)
+let resource arith_unfold =
+   Term_match_table.table_resource_info identity extract_data
+
+let arith_unfoldTopC_env e =
+   Sequent.get_resource_arg (env_arg e) get_arith_unfold_resource
+
+let arith_unfoldTopC = funC arith_unfoldTopC_env
+
+let arith_unfoldC =
+   repeatC (higherC arith_unfoldTopC)
+
 (************************************************************************
  * TERMS                                                                *
  ************************************************************************)

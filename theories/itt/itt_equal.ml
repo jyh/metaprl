@@ -557,8 +557,12 @@ let eqcd_univT p =
 let eqcd_itT p =
    axiomEquality (hyp_count_addr p) p
 
+let eqcd_equalT p =
+   equalityEquality (hyp_count_addr p) p
+
 let eqcd_resource = Mp_resource.improve eqcd_resource (univ_term, eqcd_univT)
 let eqcd_resource = Mp_resource.improve eqcd_resource (it_term, eqcd_itT)
+let eqcd_resource = Mp_resource.improve eqcd_resource (equal_term, eqcd_equalT)
 
 let univ_equal_term = << univ[i:l] = univ[i:l] in univ[j:l] >>
 

@@ -116,6 +116,6 @@ LaTeXDocumentInstall(tex, $(DOCDIR), m-paper-fdl, m-paper-fdl, fdl-body)
 # Clean up
 #
 clean:
-    $(CLEAN) *.cph *.output theory.tex theory-body.tex theory_print.ml appendix.tex appendix-body.tex appendix_print.ml
+    $(CLEAN) *.cph *.output fdl.tex fdl-body.tex fdl_print.ml theory.tex theory-body.tex theory_print.ml appendix.tex appendix-body.tex appendix_print.ml
 
 all: theory$(LIB_SUFFIX)

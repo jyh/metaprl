@@ -57,6 +57,9 @@ val report_error : string -> term -> 'a
  * Convert between symbols and terms.
  *)
 
+val string_of_symbol : symbol -> string
+val symbol_of_string : string -> symbol
+
 val term_of_symbol : symbol -> term
 val symbol_of_term : term -> symbol
 

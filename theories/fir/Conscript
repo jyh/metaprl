@@ -8,7 +8,7 @@ Import qw( env );
 #
 my @src =
    qw(   auto option record bool int list int_set ty exp termOp_base termOp
-         connect_base );
+         connect_base connect_ty );
 
 #
 # Set up file lists and build everything.

@@ -208,6 +208,11 @@ let assertT s p =
    let v = maybe_new_vars1 p "v" in
       cut j k s v p
 
+let tryAssertT s ta tm p = 
+   let concl = Sequent.concl p in
+   if alpha_equal s concl then ta p else
+      (assertT s thenLT [ta;tm]) p
+
 (*
  * Cut in at a certain point.
  *)

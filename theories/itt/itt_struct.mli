@@ -131,6 +131,8 @@ topval nthHypT : int -> tactic
 topval thinT : int -> tactic
 topval thinAllT : int -> int -> tactic
 topval assertT : term -> tactic
+(* do not assert if already have the right conclusion *)
+topval tryAssertT : term -> tactic -> tactic -> tactic
 topval assertAtT : int -> term -> tactic
 topval dupT : tactic
 topval useWitnessT : term -> tactic

@@ -960,9 +960,9 @@ let assumT i p =
       else
          (dT 0 thenMT introT (j + 1)) p
    in
-      (assertT form
-       thenLT [thinAllT index (TermMan.num_hyps goal) thenT introT index;
-               addHiddenLabelT "main"]) p
+      (tryAssertT form
+         (thinAllT index (TermMan.num_hyps goal) thenT introT index)
+         (addHiddenLabelT "main") ) p
 
 (*
  * Now try backchaining through the assumption.

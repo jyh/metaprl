@@ -10,7 +10,6 @@ MLZFILES :=\
 
 # Library files
 NLFILES :=\
-	perv\
 	typeinf\
 	nuprl_font\
 	base_dform\

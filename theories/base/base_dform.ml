@@ -34,46 +34,46 @@ declare "\\"
 (*
  * Variables.
  *)
-mldform mode[src] :: var[@v:v] format_term buf =
+mldform var_src_df : mode[src] :: var[@v:v] format_term buf =
    format_string buf "'";
    format_string buf v
 
-mldform mode[prl] :: var[@v:v] format_term buf =
+mldform var_prl_df : mode[prl] :: var[@v:v] format_term buf =
    format_string buf v
 
-dform var[@v:v]{'x1} = var[@v:v] "[" 'x1  "]"
+dform so_var1_df : var[@v:v]{'x1} = var[@v:v] "[" 'x1  "]"
 
-dform var[@v:v]{'x1; 'x2} =
-   szone var[@v:v] "[" pushm 'x1 ";" space 'x2 popm "]" ezone
+dform so_var2_df : var[@v:v]{'x1; 'x2} =
+   szone var[@v:v] "[" pushm[0] 'x1 ";" space 'x2 popm "]" ezone
 
-dform var[@v:v]{'x1; 'x2; 'x3} =
-   szone var[@v:v] "[" pushm 'x1 ";"
+dform so_var3_df : var[@v:v]{'x1; 'x2; 'x3} =
+   szone var[@v:v] "[" pushm[0] 'x1 ";"
                        space 'x2 ";"
                        space 'x3 popm "]" ezone
 
-dform var[@v:v]{'x1; 'x2; 'x3; 'x4} =
-   szone var[@v:v] "[" pushm 'x1 ";"
+dform so_var4_df : var[@v:v]{'x1; 'x2; 'x3; 'x4} =
+   szone var[@v:v] "[" pushm[0] 'x1 ";"
                        space 'x2 ";"
                        space 'x3 ";"
                        space 'x4 popm "]" ezone
 
-dform var[@v:v]{'x1; 'x2; 'x3; 'x4; 'x5} =
-   szone var[@v:v] "[" pushm 'x1 ";"
+dform so_var5_df : var[@v:v]{'x1; 'x2; 'x3; 'x4; 'x5} =
+   szone var[@v:v] "[" pushm[0] 'x1 ";"
                        space 'x2 ";"
                        space 'x3 ";"
                        space 'x4 ";"
                        space 'x5 popm "]" ezone
 
-dform var[@v:v]{'x1; 'x2; 'x3; 'x4; 'x5; 'x6} =
-   szone var[@v:v] "[" pushm 'x1 ";"
+dform so_var6_df : var[@v:v]{'x1; 'x2; 'x3; 'x4; 'x5; 'x6} =
+   szone var[@v:v] "[" pushm[0] 'x1 ";"
                        space 'x2 ";"
                        space 'x3 ";"
                        space 'x4 ";"
                        space 'x5 ";"
                        space 'x6 popm "]" ezone
 
-dform var[@v:v]{'x1; 'x2; 'x3; 'x4; 'x5; 'x6; 'x7} =
-   szone var[@v:v] "[" pushm 'x1 ";"
+dform so_var7_df : var[@v:v]{'x1; 'x2; 'x3; 'x4; 'x5; 'x6; 'x7} =
+   szone var[@v:v] "[" pushm[0] 'x1 ";"
                        space 'x2 ";"
                        space 'x3 ";"
                        space 'x4 ";"
@@ -81,8 +81,8 @@ dform var[@v:v]{'x1; 'x2; 'x3; 'x4; 'x5; 'x6; 'x7} =
                        space 'x6 ";"
                        space 'x7 popm "]" ezone
 
-dform var[@v:v]{'x1; 'x2; 'x3; 'x4; 'x5; 'x6; 'x7; 'x8} =
-   szone var[@v:v] "[" pushm 'x1 ";"
+dform so_var8_df : var[@v:v]{'x1; 'x2; 'x3; 'x4; 'x5; 'x6; 'x7; 'x8} =
+   szone var[@v:v] "[" pushm[0] 'x1 ";"
                        space 'x2 ";"
                        space 'x3 ";"
                        space 'x4 ";"
@@ -91,8 +91,8 @@ dform var[@v:v]{'x1; 'x2; 'x3; 'x4; 'x5; 'x6; 'x7; 'x8} =
                        space 'x7 ";"
                        space 'x8 popm "]" ezone
 
-dform var[@v:v]{'x1; 'x2; 'x3; 'x4; 'x5; 'x6; 'x7; 'x8; 'x9} =
-   szone var[@v:v] "[" pushm 'x1 ";"
+dform so_var9_df : var[@v:v]{'x1; 'x2; 'x3; 'x4; 'x5; 'x6; 'x7; 'x8; 'x9} =
+   szone var[@v:v] "[" pushm[0] 'x1 ";"
                        space 'x2 ";"
                        space 'x3 ";"
                        space 'x4 ";"
@@ -102,7 +102,7 @@ dform var[@v:v]{'x1; 'x2; 'x3; 'x4; 'x5; 'x6; 'x7; 'x8; 'x9} =
                        space 'x8 ";"
                        space 'x9 popm "]" ezone
 
-mldform bvar{var[@v:v]} format_term buf =
+mldform bvar_df : bvar{var[@v:v]} format_term buf =
    format_string buf v
 
 (*
@@ -112,7 +112,7 @@ mldform bvar{var[@v:v]} format_term buf =
  *    cflag is true if the last term was a conclusion
  *    t is the term to be printed.
  *)
-mldform mode["src"] :: "sequent"{'seq} format_term buf =
+mldform sequent_src_df : mode["src"] :: "sequent"{'seq} format_term buf =
    (let rec format (i, cflag, sflag, t) =
       let sep = if sflag then "; " else "" in
 	 if is_context_term t then
@@ -153,7 +153,7 @@ mldform mode["src"] :: "sequent"{'seq} format_term buf =
       format_popm buf;
       format_ezone buf)
 
-mldform mode["prl"] :: "sequent"{'seq} format_term buf =
+mldform sequent_prl_df : mode["prl"] :: "sequent"{'seq} format_term buf =
    let rec format (i, cflag, sflag, t) =
       let lead = (string_of_int i) ^ ". " in
       let sep = if sflag then "; " else "" in
@@ -197,20 +197,23 @@ mldform mode["prl"] :: "sequent"{'seq} format_term buf =
  * COMMANDS                                                             *
  ************************************************************************)
 
-dform " " = `" "
-dform "^" = `"^"
-dform "_" = `"_"
-dform "{" = `"{"
-dform "}" = `"}"
-dform "$" = `"$"
-dform "[" = `"["
-dform "]" = `"]"
-dform ";" = `";"
-dform "\\" = \newline
+dform space_df : " " = `" "
+dform hat_df : "^" = `"^"
+dform underscore_df : "_" = `"_"
+dform left_curly_df : "{" = `"{"
+dform right_curly_df : "}" = `"}"
+dform dollar_df : "$" = `"$"
+dform left_brack_df : "[" = `"["
+dform right_brack_df : "]" = `"]"
+dform semicolor_df : ";" = `";"
+dform newline_df : "\\" = \newline
 
 (*
  *
  * $Log$
+ * Revision 1.5  1998/04/29 20:53:45  jyh
+ * Initial working display forms.
+ *
  * Revision 1.4  1998/04/28 18:30:56  jyh
  * ls() works, adding display.
  *

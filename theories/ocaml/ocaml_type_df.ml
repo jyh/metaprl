@@ -26,94 +26,97 @@ prec prec_star
 (*
  * Projection.
  *)
-dform parens :: "prec"[prec_proj] :: type_proj{'t1; 't2} =
+dform type_proj_df : parens :: "prec"[prec_proj] :: type_proj{'t1; 't2} =
    slot{'t1} "." slot{'t2}
 
 (*
  * "As" type.
  *)
-dform parens :: "prec"[prec_as] :: type_as{'t1; 't2} =
+dform type_as_df : parens :: "prec"[prec_as] :: type_as{'t1; 't2} =
    slot{'t1} space "as" space slot{'t2}
 
 (*
  * Wildcard type.
  *)
-dform type_wildcard = "_"
+dform type_wildcard_df : type_wildcard = "_"
 
 (*
  * Application.
  *)
-dform parens :: "prec"[prec_apply] :: type_apply{'t1; 't2} =
+dform type_apply_df : parens :: "prec"[prec_apply] :: type_apply{'t1; 't2} =
    slot{'t1} space slot{'t2}
 
 (*
  * Function type.
  *)
-dform parens :: "prec"[prec_arrow] :: type_fun{'t1; 't2} =
+dform type_fun_df : parens :: "prec"[prec_arrow] :: type_fun{'t1; 't2} =
    slot{'t1} space "->" space slot{'t2}
 
 (*
  * Class identifier.
  *)
-dform parens :: "prec"[prec_not] :: type_class_id{'t1} =
+dform type_class_id_df : parens :: "prec"[prec_not] :: type_class_id{'t1} =
    "#" space slot{'t1}
 
 (*
  * Identifiers.
  *)
-dform type_lid[@v:v] = slot[@v:v]
-dform type_uid[@v:v] = slot[@v:v]
+dform type_lid_df : type_lid[@v:v] = slot[@v:v]
+dform type_uid_df : type_uid[@v:v] = slot[@v:v]
 
 (*
  * Type parameter.
  *)
-dform type_param[@s:s] = `"'" slot[@s:s]
+dform type_param_df : type_param[@s:s] = `"'" slot[@s:s]
 
 (*
  * Type equivalence.
  *)
-dform parens :: "prec"[prec_equal] :: type_equal{'t1; 't2} =
+dform type_equal_df : parens :: "prec"[prec_equal] :: type_equal{'t1; 't2} =
    slot{'t1} space "==" space slot{'t2}
 
 (*
  * Record type.
  * I'm not sure what the boolean is for.
  *)
-dform type_record{'sbtl} =
-   "{" szone pushm slot{type_record; 'sbtl} popm ezone "}"
+dform type_record_df : type_record{'sbtl} =
+   "{" szone pushm[0] slot{type_record; 'sbtl} popm ezone "}"
 
-dform slot{type_record; cons{'t1; 'tl}} =
+dform type_record_cons_df1 : slot{type_record; cons{'t1; 'tl}} =
    slot{type_record; 't1; 'tl}
       
-dform slot{type_record; 't1; nil} =
+dform type_record_nil_df : slot{type_record; 't1; nil} =
    slot{'t1}
 
-dform slot{type_record; 't1; cons{'t2; 'tl}} =
+dform type_record_cons_df2 : slot{type_record; 't1; cons{'t2; 'tl}} =
    slot{'t1} ";" sbreak slot{type_record; 't2; 'tl}
          
-dform type_record_elem[@s:s, @b:s]{'t} =
+dform type_record_elem_df : type_record_elem[@s:s, @b:s]{'t} =
    slot[@s:s] space ":" space slot{'t}
 
 (*
  * Product types.
  *)
-dform parens :: "prec"[prec_star] :: type_prod{'tl} =
-   szone pushm slot{type_prod; 'tl} popm ezone
+dform type_prod_df : parens :: "prec"[prec_star] :: type_prod{'tl} =
+   szone pushm[0] slot{type_prod; 'tl} popm ezone
 
-dform slot{type_prod; nil} =
+dform type_prod_nil_df : slot{type_prod; nil} =
    `"()"
 
-dform slot{type_prod; cons{'t1; 'tl}} =
+dform type_prod_cons_df1 : slot{type_prod; cons{'t1; 'tl}} =
    slot{type_prod; 't1; 'tl}
 
-dform slot{type_prod; 't1; cons{'t2; 'tl}} =
+dform type_prod_cons_df2 : slot{type_prod; 't1; cons{'t2; 'tl}} =
    slot{'t1} space "*" space slot{type_prod; 't2; 'tl}
 
-dform slot{type_prod; 't1; nil} =
+dform type_prod_nil_df : slot{type_prod; 't1; nil} =
    slot{'t1}
 
 (*
  * $Log$
+ * Revision 1.4  1998/04/29 20:54:12  jyh
+ * Initial working display forms.
+ *
  * Revision 1.3  1998/04/29 14:49:31  jyh
  * Added ocaml_sos.
  *

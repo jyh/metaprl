@@ -3,7 +3,6 @@
  *
  *)
 
-include Perv
 include Summary
 include Sequent
 include Tacticals
@@ -14,6 +13,9 @@ include Base_dtactic
 
 (*
  * $Log$
+ * Revision 1.4  1998/04/29 20:53:46  jyh
+ * Initial working display forms.
+ *
  * Revision 1.3  1998/04/17 01:31:24  jyh
  * Editor is almost constructed.
  *

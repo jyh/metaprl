@@ -11,6 +11,7 @@ MLZFILES :=\
 
 # Library files
 NLFILES :=\
+	perv\
 	ocaml\
 	ocaml_base_df\
 	ocaml_expr_df\

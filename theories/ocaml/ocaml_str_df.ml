@@ -16,52 +16,55 @@ let _ =
 (*
  * Exception declarations name type constructors.
  *)
-dform str_exception[@name:s]{'tl} =
+dform str_exception_df : str_exception[@name:s]{'tl} =
    sig_exception[@name:s]{'tl}
 
 (*
  * External function declaration.
  *)
-dform str_external[@name:s]{'t; 'sl} =
+dform str_external_df : str_external[@name:s]{'t; 'sl} =
    sig_external[@name:s]{'t; 'sl}
 
 (*
  * Unnamed value.
  *)
-dform str_expr{'e} =
+dform str_expr_df : str_expr{'e} =
    szone push_indent "let" space "_" space "=" space slot{'e} popm ezone
 
 (*
  * Module definition.
  *)
-dform str_module[@name:s]{'me} =
+dform str_module_df : str_module[@name:s]{'me} =
    szone push_indent "module" space slot[@name] space "=" space slot{'me}
 
 (*
  * Module type definition.
  *)
-dform str_module_type[@name:s]{'mt} =
+dform str_module_type_df : str_module_type[@name:s]{'mt} =
    sig_module_type[@name:s]{'mt}
 
 (*
  * Open a module in scope.
  *)
-dform str_open{'sl} = 
+dform str_open_df : str_open{'sl} = 
    str_open{'sl}
 
 (*
  * Type definition.
  *)
-dform str_type{'ssltl} =
+dform str_type_df : str_type{'ssltl} =
    sig_type{'ssltl}
 
 (*
  * Value definition.
  *)
-dform str_let{'p; 'e} = "let"{'p; 'e}
+dform str_let_df : str_let{'p; 'e} = "let"{'p; 'e}
                           
 (*
  * $Log$
+ * Revision 1.4  1998/04/29 20:54:11  jyh
+ * Initial working display forms.
+ *
  * Revision 1.3  1998/04/29 14:49:26  jyh
  * Added ocaml_sos.
  *

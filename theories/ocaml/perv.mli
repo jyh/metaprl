@@ -13,6 +13,9 @@ declare "rewrite"{'redex; 'contractum}
 
 (*
  * $Log$
+ * Revision 1.1  1998/04/29 20:54:17  jyh
+ * Initial working display forms.
+ *
  * Revision 1.2  1998/04/23 20:04:52  jyh
  * Initial rebuilt editor.
  *

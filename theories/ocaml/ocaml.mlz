@@ -3,6 +3,8 @@
  * for ocaml terms.
  *)
 
+include Perv
+
 (************************************************************************
  * EXPRESSIONS                                                          *
  ************************************************************************)
@@ -66,9 +68,6 @@ declare list{'e1}
 declare array{'e1}
 declare stream{'e1}
 declare record{'e1}
-
-declare cons{'e1; 'e2}
-declare nil
 
 declare tuple{'e}
 
@@ -517,6 +516,9 @@ declare me_uid[@name:s]
 
 (*
  * $Log$
+ * Revision 1.3  1998/04/29 20:53:56  jyh
+ * Initial working display forms.
+ *
  * Revision 1.2  1998/02/18 18:47:03  jyh
  * Initial ocaml semantics.
  *

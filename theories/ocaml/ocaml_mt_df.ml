@@ -18,49 +18,52 @@ let _ =
 (*
  * Projection.
  *)
-dform parens :: "prec"[prec_proj] :: mt_proj{'mt1; 'mt2} =
+dform mt_proj_df: parens :: "prec"[prec_proj] :: mt_proj{'mt1; 'mt2} =
    slot{'mt1} "." slot{'mt2}
 
 (*
  * Application.
  *)
-dform parens :: "prec"[prec_apply] :: mt_apply{'mt1; 'mt2} =
+dform mt_apply_df : parens :: "prec"[prec_apply] :: mt_apply{'mt1; 'mt2} =
    slot{'mt1} space slot{'mt2}
 
 (*
  * Functor.
  *)
-dform parens :: "prec"[prec_fun] :: mt_functor[@name:s]{'mt1; 'mt2} =
+dform mt_functor_df : parens :: "prec"[prec_fun] :: mt_functor[@name:s]{'mt1; 'mt2} =
    "functor" space "(" slot[@name:s] space ":" space slot{'mt1} ")"
    space "->" slot{'mt2}
 
 (*
  * Id.
  *)
-dform mt_lid[@name:s] = slot[@name:s]
-dform mt_uid[@name:s] = slot[@name:s]
+dform mt_lid_df : mt_lid[@name:s] = slot[@name:s]
+dform mt_uid_df : mt_uid[@name:s] = slot[@name:s]
 
 (*
  * Signature.
  *)
-dform mt_sig{'sil} =
-   szone pushm push_indent "sig" sbreak
+dform mt_sig_df : mt_sig{'sil} =
+   szone pushm[0] push_indent "sig" sbreak
    slot{list_expr; 'sil}
    popm sbreak "end" popm ezone
 
 (*
  * Module type with clause.
  *)
-dform mt_with{'mt; 'wcl} =
-   szone pushm slot{'mt} slot{mt_with; 'wcl} popm ezone
+dform mt_with_df : mt_with{'mt; 'wcl} =
+   szone pushm[0] slot{'mt} slot{mt_with; 'wcl} popm ezone
 
-dform slot{mt_with; nil} = `""
+dform mt_with_nil_df : slot{mt_with; nil} = `""
 
-dform slot{mt_with; cons{'wc; 'wcl}} =
+dform mt_with_cons_df : slot{mt_with; cons{'wc; 'wcl}} =
    slot{'wc} slot{mt_with; 'wcl}
 
 (*
  * $Log$
+ * Revision 1.4  1998/04/29 20:54:06  jyh
+ * Initial working display forms.
+ *
  * Revision 1.3  1998/04/29 14:49:10  jyh
  * Added ocaml_sos.
  *

@@ -32,13 +32,16 @@ declare "rewrite"{'redex; 'contractum}
 (*
  * Pervasive display forms.
  *)
-dform "nil" = `""
+dform perv_nil_df : "nil" = `""
 
-dform "cons"{'car; 'cdr} =
+dform perv_cons_df : "cons"{'car; 'cdr} =
    slot{'car} slot{'cdr}
 
 (*
  * $Log$
+ * Revision 1.1  1998/04/29 20:54:14  jyh
+ * Initial working display forms.
+ *
  * Revision 1.4  1998/04/24 19:39:10  jyh
  * Updated debugging.
  *

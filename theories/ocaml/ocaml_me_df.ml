@@ -17,40 +17,43 @@ let _ =
 (*
  * Projection.
  *)
-dform me_proj{'me1; 'me2} = proj{'me1; 'me2}
+dform me_proj_df : me_proj{'me1; 'me2} = proj{'me1; 'me2}
 
 (*
  * Application.
  *)
-dform me_apply{'me1; 'me2} = apply{'me1; 'me2}
+dform me_apply_df : me_apply{'me1; 'me2} = apply{'me1; 'me2}
 
 (*
  * Functor.
  *)
-dform me_functor[@name:s]{'mt; 'me} = mt_functor[@name:s]{'mt; 'me}
+dform me_functor_df : me_functor[@name:s]{'mt; 'me} = mt_functor[@name:s]{'mt; 'me}
 
 (*
  * Structure.
  *)
-dform me_struct{'sil} =
-   szone pushm push_indent "struct" sbreak
+dform me_struct_df : me_struct{'sil} =
+   szone pushm[0] push_indent "struct" sbreak
    slot{list_expr; 'sil}
    popm sbreak "end" popm ezone
 
 (*
  * Type cast.
  *)
-dform me_cast{'me; 'mt} =
-   "(" szone pushm slot{'me} space ":" space slot{'mt} popm ezone ")"
+dform me_cast_df : me_cast{'me; 'mt} =
+   "(" szone pushm[0] slot{'me} space ":" space slot{'mt} popm ezone ")"
 
 (*
  * Variables.
  *)
-dform me_lid[@name:s] = slot[@name:s]
-dform me_uid[@name:s] = slot[@name:s]
+dform me_lid_df : me_lid[@name:s] = slot[@name:s]
+dform me_uid_df : me_uid[@name:s] = slot[@name:s]
 
 (*
  * $Log$
+ * Revision 1.4  1998/04/29 20:54:05  jyh
+ * Initial working display forms.
+ *
  * Revision 1.3  1998/04/29 14:49:05  jyh
  * Added ocaml_sos.
  *

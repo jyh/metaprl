@@ -26,8 +26,6 @@
  *)
 extends Top_tacticals
 
-open Lm_printf
-
 open Lm_symbol
 
 open M_standardize
@@ -39,6 +37,9 @@ open M_ra_main
 
 open Tactic_type.Tacticals
 open Tactic_type.Sequent
+
+let eprintf = Lm_printf.eprintf
+let eflush  = Lm_printf.eflush
 
 module RegAlloc = MakeRegAlloc (Frame)
 

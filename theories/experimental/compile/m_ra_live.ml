@@ -31,7 +31,6 @@ open Lm_debug
 open Lm_trace
 open Lm_symbol
 open Lm_symbol_matrix
-open Lm_pervasives
 
 open M_ra_type
 open M_ra_state

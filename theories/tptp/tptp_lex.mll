@@ -2,7 +2,6 @@
  * Lexer for TPTP files.
  *)
 {
-open Lm_pervasives
 open Lm_printf
 open Lm_debug
 

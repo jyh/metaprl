@@ -32,7 +32,6 @@
 extends M_x86_term
 extends M_ra_type
 
-open Lm_pervasives
 open Lm_format
 open Lm_symbol
 open Lm_trace

@@ -47,7 +47,6 @@ extends Itt_int_ext
 doc docoff
 
 open Lm_debug
-open Lm_pervasives
 open Lm_printf
 open Lm_num
 

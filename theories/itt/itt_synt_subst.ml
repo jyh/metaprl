@@ -315,7 +315,7 @@ interactive subst_add_vars_upto :
    sequent { <H> >- not_free{'v2;'v} } -->
    sequent { <H> >- subst{add_vars_upto{'s1;'v};'v2;'s2} ~ add_vars_upto{'s1;'v} }
 
-interactive subst_commute {| intro [] |} :
+interactive subst_commutativity {| intro [] |} :
    sequent { <H> >- 't in BTerm } -->
    sequent { <H> >- 'v1 in Vars_of{'t} } -->
    sequent { <H> >- 'v2 in Vars_of{'t} } -->

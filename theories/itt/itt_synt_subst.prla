@@ -4949,7 +4949,7 @@ B	b1531	t1531
 B	b1559	t1232
 P	p1589	String "dT (-1) thenT reduceT thenT autoT"
 O	o1589	ext_rule p1589
-P	p2118	String subst_commute
+P	p2118	String subst_commutativity
 O	o2118	rule p2118
 Vv1	v1	v1\\ H\\
 B	b2118	v1

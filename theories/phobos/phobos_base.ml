@@ -33,6 +33,7 @@ extends Shell
 extends Summary
 extends Base_meta
 
+open Term_sig
 open Refiner.Refiner.TermType
 open Refiner.Refiner.Term
 open Refiner.Refiner.RefineError

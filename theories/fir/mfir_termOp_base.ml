@@ -32,6 +32,7 @@
  * @end[license]
  *)
 
+open Term_sig
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
 open Refiner.Refiner.TermType

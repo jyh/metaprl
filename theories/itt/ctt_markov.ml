@@ -1,5 +1,5 @@
 include Itt_theory
-include Itt_int_ext
+include Itt_nat
 
 (*! @docoff *)
 
@@ -23,6 +23,7 @@ open Base_dtactic
 
 open Itt_struct
 open Itt_equal
+open Itt_nat
 
 (*
  * Show that the file is loading.
@@ -131,6 +132,17 @@ interactive markov2 'H : (*  = Markov, proved from MarkovN *)
    [wf] sequent [squash] {'H >- "type"{'A} } -->
    sequent [squash] {'H >- not{not{'A}} } -->
    sequent ['ext]   {'H >- squash{'A} }
+
+interactive markov4 {| intro_resource [SelectOption 1] |} 'H 'x : (*  = proved from Markov *)
+   [wf] sequent [squash] {'H >- "type"{'A} } -->
+   sequent [squash] {'H; x:not{'A} >- "false" } -->
+   sequent ['ext]   {'H >- squash{'A} }
+
+interactive markov2'' 'H : (*  = Markov, proved from Markov4 *)
+   [wf] sequent [squash] {'H >- "type"{'A} } -->
+   sequent [squash] {'H >- not{not{'A}} } -->
+   sequent ['ext]   {'H >- squash{'A} }
+
 
 
 

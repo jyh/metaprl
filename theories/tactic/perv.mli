@@ -33,10 +33,18 @@
 declare "nil"
 declare "cons"{'car; 'cdr}
 declare "string"[s:s]
-declare "bind"{x. 'b}
 declare "hyp"{'A; x. 'B}
 declare "concl"{'A; 'B}
 declare "rewrite"{'redex; 'contractum}
+declare "bind"{x. 'b}
+declare "bind"{x,y. 'b}
+declare "bind"{x,y,z. 'b}
+declare "bind"{x,y,z,u. 'b}
+declare "bind"{x,y,z,u,v. 'b}
+declare "bind"{x,y,z,u,v,w. 'b}
+declare "bind"{x,y,z,u,v,w,t. 'b}
+declare "bind"{x,y,z,u,v,w,t,s. 'b}
+
 
 (*
  * -*-

@@ -93,9 +93,6 @@ define unfold_ge :
 define unfold_neq_int :
    nequal{'a; 'b} <--> "assert"{bneq_int{'a; 'b}}
 
-define unfold_nat :
-   nat <--> ({x:int | 'x>=0})
-
 (************************************************************************
  * DISPLAY FORMS                                                        *
  ************************************************************************)

@@ -145,33 +145,53 @@ interactive bisectMemberEquality {| intro_resource []; eqcd_resource |} 'H :
  * for $x @in B$.
  * @end[doc]
  *)
-interactive bisectEliminationLeft 'H 'J 'y 'z :
-   sequent ['ext] { 'H; x: bisect{'A; 'B}; 'J['x]; y: 'A; z: 'y = 'x in 'A >- 'C['x] } -->
+interactive bisectElimination 'H 'J bind{z,a,b.'C['z;'a;'b]} 'u 'v :
+   sequent ['ext] { 'H; x: bisect{'A; 'B}; 'J['x]; a: 'A; u: 'a = 'x in 'A;
+                                                   b: 'B; v: 'b = 'x in 'B >- 'C['x;'a;'b] } -->
+   sequent ['ext] { 'H; x: bisect{'A; 'B}; 'J['x] >- 'C['x;'x;'x] }
+
+interactive bisectElimination0 'H 'J 'a 'b 'u 'v :
+   sequent ['ext] { 'H; x: bisect{'A; 'B}; 'J['x]; a: 'A; u: 'a = 'x in 'A;
+                                                   b: 'B; v: 'b = 'x in 'B >- 'C['x] } -->
    sequent ['ext] { 'H; x: bisect{'A; 'B}; 'J['x] >- 'C['x] }
 
-interactive bisectEliminationRight 'H 'J 'y 'z :
-   sequent ['ext] { 'H; x: bisect{'A; 'B}; 'J['x]; y: 'B; z: 'y = 'x in 'B >- 'C['x] } -->
+interactive bisectEliminationLeft 'H 'J 'a 'b 'u 'v :
+   sequent ['ext] { 'H; x: bisect{'A; 'B}; 'J['x]; a: 'A; u: 'a = 'x in 'A;
+                                                   b: 'B; v: 'b = 'x in 'B >- 'C['a] } -->
+   sequent ['ext] { 'H; x: bisect{'A; 'B}; 'J['x] >- 'C['x] }
+
+interactive bisectEliminationRight 'H 'J 'a 'b 'u 'v :
+   sequent ['ext] { 'H; x: bisect{'A; 'B}; 'J['x]; a: 'A; u: 'a = 'x in 'A;
+                                                   b: 'B; v: 'b = 'x in 'B >- 'C['b] } -->
    sequent ['ext] { 'H; x: bisect{'A; 'B}; 'J['x] >- 'C['x] }
 
 (*!
  * D tactic.
  * @docoff
  *)
+
 let elim_bisectT i p =
-   let sel = get_sel_arg p in
-   let tac =
-      if sel = 1 then
-         bisectEliminationLeft
-      else
-         bisectEliminationRight
-   in
    let j, k = Sequent.hyp_indices p i in
-   let u, v = maybe_new_vars2 p "u" "v" in
-      tac j k u v p
+   try
+      let c = get_with_arg p in
+      let u, v = maybe_new_vars2 p  "u" "v" in
+         bisectElimination j k c u v p
+   with RefineError _ ->
+      let sel = get_sel_arg p in
+      let a, b, u, v = maybe_new_vars4 p "a" "b" "u" "v" in
+         if sel = 1 then
+           bisectEliminationLeft j k a b u v p
+         else if sel = 2 then
+           bisectEliminationRight j k a b u v p
+         else
+           bisectElimination0 j k a b u v p
+
 
 let bisect_term = << bisect{'A; 'B} >>
 
 let elim_resource = Mp_resource.improve elim_resource (bisect_term, elim_bisectT)
+
+
 
 (*!
  * @begin[doc]
@@ -202,13 +222,10 @@ interactive bisectSubtypeBelow 'H :
  *)
 let intro_bisect_aboveT p =
    let j = get_sel_arg p in
-   let tac =
       if j = 1 then
-         bisectSubtypeLeft
+         bisectSubtypeLeft  (Sequent.hyp_count_addr p) p
       else
-         bisectSubtypeRight
-   in
-      tac (Sequent.hyp_count_addr p) p
+         bisectSubtypeRight  (Sequent.hyp_count_addr p) p
 
 let bisect_above_term = << subtype{bisect{'A; 'B}; 'C} >>
 

@@ -232,12 +232,12 @@ dform lt_bool_df1 : parens :: "prec"[prec_compare] :: lt_bool{'a; 'b} =
  * Useful tactic to prove _rw from ~-rules
  *)
 let sqFromRwT t =
-   (fun p -> sqSubstT (Sequent.concl p) 0 p) 
-    thenMT 
+   (fun p -> sqSubstT (Sequent.concl p) 0 p)
+    thenMT
         autoT
     thenT t thenT trivialT
 
-let testT p = 
+let testT p =
    let g =Sequent.goal p in
 (*  let (g,_):(term * term list)=Refiner.Refiner.Refine.dest_msequent mseq in
    let es : Refiner.Refiner.TermMan.Term.esequent=Refiner.Refiner.TermMan.explode_sequent g in
@@ -252,7 +252,7 @@ let testT p =
 (*      print_term_list stdout gl;*)
       failT p
    end
- 
+
 (*!
  * @begin[doc]
  * @thysection{Rules and rewrites}
@@ -263,13 +263,13 @@ let testT p =
 (*
  * Integers are canonical.
  *)
-prim int_sqequal {| intro_resource [] |} 'H :
+prim int_sqequal 'H :
    sequent [squash] { 'H >- 'a = 'b in int } -->
    sequent ['ext] { 'H >- 'a ~ 'b } = it
 
 interactive_rw int_sqequal_rw 'b :
    ('a = 'b in int) -->
-   'a <--> 'b 
+   'a <--> 'b
 
 let int_sqequalC = int_sqequal_rw
 
@@ -390,9 +390,9 @@ prim beq_int_is_true 'H :
 
 interactive_rw beq_int_is_true_rw :
    ('a = 'b in int) -->
-   beq_int{'a; 'b} <--> btrue 
+   beq_int{'a; 'b} <--> btrue
 
-let beq_int_is_trueC = beq_int_is_true_rw 
+let beq_int_is_trueC = beq_int_is_true_rw
 
 (*
  Derived from previous rewrite
@@ -606,13 +606,13 @@ interactive_rw lt_Trichot_rw :
 
 let lt_TrichotC = lt_Trichot_rw
 
-let splitIntC a b = 
-   foldC 
-      (mk_bor_term 
-         (mk_bor_term 
-            (mk_lt_bool_term a b) 
-            (mk_lt_bool_term b a)) 
-         (mk_beq_int_term a b))  
+let splitIntC a b =
+   foldC
+      (mk_bor_term
+         (mk_bor_term
+            (mk_lt_bool_term a b)
+            (mk_lt_bool_term b a))
+         (mk_beq_int_term a b))
       lt_TrichotC
 
 interactive splitInt 'H 'a 'b 'w :
@@ -789,7 +789,7 @@ interactive_rw minus_add_inverse_rw :
 
 let minus_add_inverseC = minus_add_inverse_rw
 (*
-let unfold_zeroC t = foldC (mk_add_term t (mk_minus_term t)) minus_add_inverseC 
+let unfold_zeroC t = foldC (mk_add_term t (mk_minus_term t)) minus_add_inverseC
 
 interactive minus_add_inverse2 'H :
    [wf] sequent [squash] { 'H >- 'c IN int } -->

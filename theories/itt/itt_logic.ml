@@ -239,7 +239,12 @@ interactive not_intro {| intro_resource [] |} 'H 'x :
 interactive not_elim {| elim_resource [] |} 'H 'J :
    [assertion] sequent ['ext] { 'H; x: "not"{'t}; 'J['x] >- 't } -->
    sequent ['ext] { 'H; x: "not"{'t}; 'J['x] >- 'C }
-
+(*
+interactive not_membership {| intro_resource []; squash_resource |} 'H :
+   [wf] sequent [squash] { 'H >- "type"{'t} } -->
+   [main] sequent [squash] { 'H >- not{'t} } -->
+   sequent ['ext] { 'H >- lambda{x.'f['x]} IN not{'t} }
+*)
 (*!
  * @begin[doc]
  * @thysubsection{Conjunction}
@@ -1279,6 +1284,7 @@ let trivial_resource =
         auto_prec = trivial_prec;
         auto_tac = onSomeHypT logic_trivT
       }
+
 
 (*
  * Backchaining in auto tactic.

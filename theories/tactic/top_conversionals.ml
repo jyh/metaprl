@@ -134,6 +134,7 @@ let rw = Tactic_type.Conversionals.rw
 let rwh = Tactic_type.Conversionals.rwh
 let rwc = Tactic_type.Conversionals.rwc
 let rwch = Tactic_type.Conversionals.rwch
+let rwa = Tactic_type.Conversionals.rwa
 
 (*!
  * @begin[doc]
@@ -260,6 +261,7 @@ let higherC = Tactic_type.Conversionals.higherC
 let lowerC = Tactic_type.Conversionals.lowerC
 let sweepUpC = Tactic_type.Conversionals.sweepUpC
 let sweepDnC = Tactic_type.Conversionals.sweepDnC
+let applyAllC = Tactic_type.Conversionals.applyAllC
 
 (*!
  * @begin[doc]

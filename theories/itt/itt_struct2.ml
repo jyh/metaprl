@@ -148,10 +148,10 @@ interactive hypSubstitution2 'H 'J ('t1 = 't2 in 'T) bind{y. 'A['y]} 'z :
  *)
 
 
-interactive cutMem 'H 'x 's 'S bind{y.'T['y]} :
-  [assertion] sequent[squash]{ 'H >- 's IN 'S } -->
-   [main]      sequent ['ext] { 'H; x: 'S; v: 'x='s in 'S >- 'T['x] } -->
-   sequent ['ext] { 'H >- 'T['s]}
+interactive cutMem 'H 'J 'x 's 'S bind{y.'T['y]} :
+  [assertion] sequent[squash]{ 'H; 'J >- 's IN 'S } -->
+   [main]      sequent ['ext] { 'H; x: 'S; v: 'x='s in 'S; 'J >- 'T['x] } -->
+   sequent ['ext] { 'H; 'J >- 'T['s]}
 
 (*!
  * @begin[doc]
@@ -277,6 +277,7 @@ let substHypT i t p =
  * General substition.
  *)
 
+
 let eqSubstT t i =
    if i = 0 then
       substConclT t
@@ -289,6 +290,7 @@ let substT t =
    else
       eqSubstT t
 
+
 (*
  * Derived versions.
  *)
@@ -298,14 +300,20 @@ let hypSubstT i j p =
       (substT h j thenET nthHypT i) p
 
 let revHypSubstT i j p =
-   let t, a, b = dest_equal (snd (Sequent.nth_hyp p i)) in
-   let h' = mk_equal_term t b a in
-      (substT h' j thenET (equalSymT thenT nthHypT i)) p
-
+   let trm = snd (Sequent.nth_hyp p i) in
+   if is_squiggle_term trm then
+      let a, b = dest_squiggle trm in
+      let h' = mk_squiggle_term  b a in
+         (substT h' j thenET (sqSymT thenT nthHypT i)) p
+   else
+      let t, a, b = dest_equal trm in
+      let h' = mk_equal_term t b a in
+         (substT h' j thenET (equalSymT thenT nthHypT i)) p
 
 (* cutMem *)
 
-let letT x_is_s_in_S p =
+let letAtT i x_is_s_in_S p =
+   let i, j = Sequent.hyp_split_addr p i in
    let _S, x, s = dest_equal x_is_s_in_S in
    let xname = dest_var x in
    let bind =
@@ -317,9 +325,11 @@ let letT x_is_s_in_S p =
                mk_xbind_term z (var_subst (Sequent.concl p) s z)
    in
       if is_xbind_term bind then
-           cutMem (Sequent.hyp_count_addr p) xname s _S bind p
+           cutMem i j xname s _S bind p
       else
            raise (RefineError ("letT", StringTermError ("need a \"bind\" term: ", bind)))
+
+let letT  = letAtT (-1)
 
 (* cutEq *)
 

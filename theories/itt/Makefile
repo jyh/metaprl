@@ -32,6 +32,9 @@ MPFILES :=\
 	itt_decidable\
 	itt_bool\
 	itt_ext_equal\
+	itt_pointwise\
+	itt_struct2\
+	itt_struct3\
 	itt_int_base\
 	itt_int_ext\
 	itt_int_arith\
@@ -39,7 +42,7 @@ MPFILES :=\
 	itt_int_bool\
 	itt_atom_bool\
 	itt_arith\
-	itt_struct2\
+	itt_nat\
 	itt_isect\
 	itt_disect\
 	itt_tunion\
@@ -58,6 +61,11 @@ MPFILES :=\
 	itt_theory\
 	itt_collection\
 	ctt_markov\
+	itt_record_label0\
+	itt_record_label\
+	itt_record0\
+	itt_record\
+	itt_record_exm\
 	itt_sort
 
 ifeq ($(TESTS),YES)

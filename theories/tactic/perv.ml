@@ -83,6 +83,13 @@ declare "string"[s:s]
  * @end[doc]
  *)
 declare "bind"{x. 'b}
+declare "bind"{x,y. 'b}
+declare "bind"{x,y,z. 'b}
+declare "bind"{x,y,z,u. 'b}
+declare "bind"{x,y,z,u,v. 'b}
+declare "bind"{x,y,z,u,v,w. 'b}
+declare "bind"{x,y,z,u,v,w,t. 'b}
+declare "bind"{x,y,z,u,v,w,t,s. 'b}
 
 (*
  * @begin[doc]

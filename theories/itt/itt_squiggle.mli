@@ -14,6 +14,5 @@ val dest_squiggle : term -> term * term
 val mk_squiggle_term : term -> term -> term
 
 topval sqSubstT : term -> int -> tactic
-
-topval squash_rewriteT : tactic
+topval sqSymT : tactic
 

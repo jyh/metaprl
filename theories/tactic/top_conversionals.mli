@@ -44,6 +44,7 @@ topval rw : conv -> int -> tactic
 topval rwh : conv -> int -> tactic
 topval rwc : conv -> int -> int -> tactic
 topval rwch : conv -> int -> int -> tactic
+topval rwa  :  conv list -> int -> tactic
 topval prefix_andthenC : conv -> conv -> conv
 topval prefix_orelseC : conv -> conv -> conv
 topval addrC : int list -> conv -> conv
@@ -62,6 +63,7 @@ topval lowerC : conv -> conv
 topval sweepUpC : conv -> conv
 topval sweepDnC : conv -> conv
 topval firstC : conv list -> conv
+topval applyAllC : conv list -> conv
 topval whileProgressC : conv -> conv
 topval untilFailC : conv -> conv
 topval repeatC : conv -> conv

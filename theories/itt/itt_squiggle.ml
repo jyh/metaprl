@@ -57,6 +57,7 @@
 
 include Itt_equal
 include Itt_struct
+include Itt_squash
 
 (*! @docoff *)
 include Itt_comment
@@ -151,7 +152,7 @@ interactive squiggleType {| intro_resource [] |} 'H :
  * @end[doc]
  *)
 
-prim squiggle_memberEquality {| intro_resource []; eqcd_resource |} 'H :
+prim squiggle_memberEquality {| intro_resource []; eqcd_resource; squash_resource |} 'H :
   [wf] sequent[squash] { 'H >- 't ~ 's } -->
   sequent['ext] { 'H >- it IN ('t ~ 's)} =
   it
@@ -170,13 +171,13 @@ prim squiggleElimination {|  elim_resource [ThinOption thinT] |} 'H 'J :
  *)
 
 prim squiggleSubstitution 'H ('t ~ 's) bind{x. 'A['x]} :
-  ["rewrite"] sequent[squash] { 'H >- 't ~ 's } -->
+  [equality] sequent[squash] { 'H >- 't ~ 's } -->
   [main] ('t : sequent['ext] { 'H >- 'A['s] }) -->
    sequent ['ext] { 'H >-  'A['t] } =
    't
 
 prim squiggleHypSubstitution 'H 'J ('t ~ 's) bind{x. 'A['x]}:
-   ["rewrite"] sequent [squash] { 'H; x: 'A['t]; 'J['x] >- 't ~ 's } -->
+   [equality] sequent [squash] { 'H; x: 'A['t]; 'J['x] >- 't ~ 's } -->
    [main] ('t : sequent ['ext] { 'H; x: 'A['s]; 'J['x] >- 'C['x] }) -->
    sequent ['ext] { 'H; x: 'A['t]; 'J['x] >- 'C['x] } =
    't
@@ -270,12 +271,5 @@ let sqSubstT t i =
    else
       sqSubstHypT i t
 
-prim rewrite_squashElimination 'H :
-   sequent [squash] { 'H >- 'a ~ 'b } -->
-   sequent ['ext] { 'H >- 'a ~ 'b } =
-   it
 
-let squash_rewriteT p =
-   rewrite_squashElimination (Sequent.hyp_count_addr p) p
-
-
+let sqSymT p = squiggleSym (Sequent.hyp_count_addr p) p

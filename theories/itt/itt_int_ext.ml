@@ -541,26 +541,6 @@ interactive ge_sqstable {| squash_resource; intro_resource [] |} 'H :
    sequent [squash] { 'H >- 'a >= 'b } -->
    sequent ['ext] { 'H >- it IN ('a >= 'b) }
 
-(* Natural numberas *)
-
-define unfold_nat : nat <--> ({x:int | 'x>=0})
-
-dform nat_prl_df : except_mode [src] :: nat = mathbbN
-dform nat_src_df : mode[src] :: nat = `"nat"
-
-interactive natType {| intro_resource [] |} 'H :
-   sequent ['ext] { 'H >- "type"{nat} }
-
-interactive natMemberEquality {| intro_resource [] |} 'H :
-   sequent [squash] { 'H >- 'a='b in int} -->
-   sequent [squash] { 'H >- 'a >= 0}  -->
-   sequent [squash] { 'H >- 'b >= 0}  -->
-   sequent ['ext] { 'H >- 'a='b in nat}
-
-interactive natElimination {| elim_resource [] |} 'H 'J 'v :
-   sequent ['ext] { 'H; x: int; v:'x>=0; 'J['x] >- 'C['x]}  -->
-   sequent ['ext] { 'H; x: nat; 'J['x] >- 'C['x]}
-
 (*
 Incorrect but there has to be some assoc/commut/composition property
 

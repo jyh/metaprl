@@ -40,6 +40,8 @@ open Tactic_type.Sequent
 
 topval substConclT : term -> tactic
 topval substT : term -> int -> tactic
+topval hypSubstT : int -> int -> tactic
+topval revHypSubstT : int -> int -> tactic
 
 topval letT : term -> tactic
 

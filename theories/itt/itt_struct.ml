@@ -111,6 +111,11 @@ prim thin 'H 'J :
    sequent ['ext] { 'H; x: 'A; 'J >- 'C } =
    't
 
+prim exchange 'H 'K 'L 'J:
+   ('t : sequent ['ext] { 'H; 'L; 'K; 'J >- 'C }) -->
+   sequent ['ext] { 'H; 'K; 'L; 'J >- 'C } =
+   't
+
 (*!
  * @begin[doc]
  * @thysubsection{Cut (lemma instantiation)}

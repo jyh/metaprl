@@ -11,6 +11,7 @@ open Auto_tactic
 open Itt_equal
 open Itt_struct
 open Itt_list
+open Itt_list2
 open Itt_int_base
 open Itt_int_ext
 open Itt_int_arith
@@ -29,8 +30,11 @@ let stdT i = funT (fun p ->
 	let vars2 = var_list vars1 in
 	let vars = List.filter (fun x -> not (is_number_term x)) vars2 in
 	let varlist = mk_list_of_list vars in
+	let len = mk_length_term varlist in
+	let len_wf = mk_equal_term <<nat>> len len in
 	assertT <<Z in unitringCE[i:l]>> thenMT
 	proveVarTypesT <<Z^car>> vars thenMT
+	assertT len_wf thenMT
 	standardizeT <<unitringCE[i:l]>> <<Z>> <<Z^car>> vars varlist a thenMT
 	standardizeT <<unitringCE[i:l]>> <<Z>> <<Z^car>> vars varlist b thenMT
 	dualSubst i thenMT

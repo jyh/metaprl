@@ -195,7 +195,7 @@ doc <:doc<
    @end[doc]
 >>
 prim setElimination {| elim [] |} 'H :
-   ('t : sequent ['ext] { <H>; u: 'A; .squash{'B['u]}; <J['u]> >- 'T['u] }) -->
+   ('t : sequent ['ext] { <H>; u: 'A; squash{'B['u]}; <J['u]> >- 'T['u] }) -->
    sequent ['ext] { <H>; u: { x:'A | 'B['x] }; <J['u]> >- 'T['u] } =
    't
 

@@ -292,10 +292,10 @@ prim well_founded_assum_elim {| elim [ThinOption thinT] |} 'H 'a :
 prim well_founded {| intro [] |} :
    [wf] sequent [squash] { <H> >- "type"{'A} } -->
    [wf] sequent [squash] { <H>; a1: 'A; a2: 'A >- "type"{'R['a1; 'a2]} } -->
-   [main] sequent [squash] { <H>; a1: 'A; u: 'R['a1; 'a1] >- void } -->
-   [main] sequent [squash] { <H>; a1: 'A; a2: 'A; u: 'R['a1; 'a2]; v: 'R['a2; 'a1] >- void } -->
-   [main] sequent [squash] { <H>; a1: 'A; a2: 'A; a3: 'A; u: 'R['a1; 'a2]; v: 'R['a2; 'a3] >- 'R['a1; 'a3] } -->
-   [main] sequent [squash] { <H>; a1: 'A; P: well_founded_prop{'A}; p: well_founded_assum{'A; a2, a3. 'R['a2; 'a3]; 'P} >- well_founded_apply{'P; 'a1} } -->
+   [main] sequent [squash] { <H>; a1: 'A; 'R['a1; 'a1] >- void } -->
+   [main] sequent [squash] { <H>; a1: 'A; a2: 'A; 'R['a1; 'a2]; 'R['a2; 'a1] >- void } -->
+   [main] sequent [squash] { <H>; a1: 'A; a2: 'A; a3: 'A; 'R['a1; 'a2]; 'R['a2; 'a3] >- 'R['a1; 'a3] } -->
+   [main] sequent [squash] { <H>; a1: 'A; P: well_founded_prop{'A}; well_founded_assum{'A; a2, a3. 'R['a2; 'a3]; 'P} >- well_founded_apply{'P; 'a1} } -->
    sequent ['ext] { <H> >- well_founded{'A; a, b. 'R['a; 'b]} } =
    it
 

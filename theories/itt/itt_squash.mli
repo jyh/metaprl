@@ -68,7 +68,7 @@ rule squashMemberFormation :
    sequent ['ext]   { <H> >- squash{'A} }
 
 rule squashElim 'H :
-   sequent ['ext] { <H>; .squash{'P}; <J[it]> >- 'C[it] } -->
+   sequent ['ext] { <H>; squash{'P}; <J[it]> >- 'C[it] } -->
    sequent ['ext] { <H>; u: squash{'P}; <J['u]> >- 'C['u] }
 
 rule unsquashEqual 'H :

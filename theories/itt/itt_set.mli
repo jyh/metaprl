@@ -106,7 +106,7 @@ rule setMemberEquality :
  * H, u: { x:A | B }, y: A; v: squash{B[y]}; J[y] >- T[y]
  *)
 rule setElimination 'H :
-   sequent ['ext] { <H>; u: 'A; .squash{'B['u]}; <J['u]> >- 'T['u] } -->
+   sequent ['ext] { <H>; u: 'A; squash{'B['u]}; <J['u]> >- 'T['u] } -->
    sequent ['ext] { <H>; u: { x:'A | 'B['x] }; <J['u]> >- 'T['u] }
 
 (*

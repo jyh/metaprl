@@ -152,7 +152,7 @@ rule quotientElimination2 'H 'v 'w 'z :
  * H, x: a1 = a2 in quot x, y: A // E, J[x], v: esquash(E[a, b]) >- T[x]
  *)
 rule quotient_equalityElimination 'H :
-   sequent ['ext] { <H>; x: 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]; <J['x]>; .esquash{'E['a1; 'a2]} >- 'T['x] } -->
+   sequent ['ext] { <H>; x: 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]; <J['x]>; esquash{'E['a1; 'a2]} >- 'T['x] } -->
    sequent ['ext] { <H>; x: 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]; <J['x]> >- 'T['x] }
 
 (*

@@ -106,8 +106,8 @@ doc <:doc<
 prim esquash_equal {| intro [SelectOption 0]; eqcd |} :
    [wf] sequent [squash] { <H> >- esquash{'P1} in univ[i:l] } -->
    [wf] sequent [squash] { <H> >- esquash{'P2} in univ[i:l] } -->
-   sequent [squash] { <H>; .esquash{'P1} >- esquash{'P2} } -->
-   sequent [squash] { <H>; .esquash{'P2} >- esquash{'P1} } -->
+   sequent [squash] { <H>; esquash{'P1} >- esquash{'P2} } -->
+   sequent [squash] { <H>; esquash{'P2} >- esquash{'P1} } -->
    sequent ['ext] { <H> >- esquash{'P1} = esquash{'P2} in univ[i:l] } =
    it
 

@@ -655,7 +655,7 @@ dform omega_df			: internal :: mode[prl] :: omega                     = `"\184"
 
 dform shortLeftarrow_df		: internal :: mode[html] :: shortLeftarrow            = html_uni[8656]
 dform leftarrow_df		: internal :: mode[html] :: Leftarrow                 = html_uni[8656]
-dform middlearrow_df		: internal :: mode[html] :: Middlearrow               = html_uni[8660]
+dform middlearrow_df		: internal :: mode[html] :: Middlearrow               = html_uni[9552]
 dform shortRightarrow_df	: internal :: mode[html] :: shortRightarrow           = html_uni[8658]
 dform rightarrow_df		: internal :: mode[html] :: Rightarrow                = html_uni[8658]
 dform leftrightarrow_df		: internal :: mode[html] :: Leftrightarrow            = html_uni[8660]
@@ -800,7 +800,7 @@ dform equiv_df			: internal :: mode[html] :: equiv                     = html_un
 dform vee_df			: internal :: mode[html] :: vee                       = html_uni[8744]
 dform perp_df			: internal :: mode[html] :: perp                      = html_sym["perp"]
 dform leftarrow_df		: internal :: mode[html] :: leftarrow                 = html_uni[8592]
-dform middlearrow_df		: internal :: mode[html] :: middlearrow               = html_uni[8596]
+dform middlearrow_df		: internal :: mode[html] :: middlearrow               = html_uni[9472]
 dform rightarrow_df		: internal :: mode[html] :: rightarrow                = html_uni[8594]
 dform sigma_df			: internal :: mode[html] :: Sigma                     = html_uni[931]
 dform delta_df			: internal :: mode[html] :: Delta                     = html_uni[916]

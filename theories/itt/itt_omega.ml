@@ -33,9 +33,16 @@ let debug_omega =
         debug_value = false
       }
 
-let debug_sub =
+let debug_rewrite =
    create_debug (**)
-      { debug_name = "sub";
+      { debug_name = "rewrite";
+        debug_description = "Itt_omega debug messages";
+        debug_value = false
+      }
+
+let debug_refine =
+   create_debug (**)
+      { debug_name = "refine";
         debug_description = "Itt_omega debug messages";
         debug_value = false
       }
@@ -376,15 +383,7 @@ struct
 		if Array.length f1 > Array.length f2 then
 			Array.mapi (fun i k1 -> Ring.sub k1 (get f2 i)) f1
 		else
-			let aux =
-				(fun i k2 ->
-				let k1 = get f1 i in
-				let r = Ring.sub (get f1 i) k2 in
-				if !debug_sub then
-					eprintf "sub %a %a = %a@." Ring.print k1 Ring.print k2 Ring.print r;
-				r
-				) in
-			Array.mapi aux f2
+			Array.mapi (fun i k2 -> Ring.sub (get f1 i) k2) f2
 
 	let sub_number f k =
 		f.(constvar) <- Ring.sub f.(constvar) k;
@@ -580,9 +579,6 @@ struct
 				eprintf "MakeDebugAF.sub\n%a %a = %a\n%a %a = %a@."
 				AF1.print f11 AF1.print f21 AF1.print f1
 				AF2.print f12 AF2.print f22 AF2.print f2;
-				debug_sub := true;
-				let _ = AF1.sub f11 f21 in
-				debug_sub := false;
 				raise (Invalid_argument "MakeDebugAF.sub")
 			end
 
@@ -699,7 +695,10 @@ struct
 		if compare_num a num0 >= 0 then
 			almost_mod
 		else
-			sub_num abs_b almost_mod
+			if is_zero almost_mod then
+				almost_mod
+			else
+				sub_num abs_b almost_mod
 
 	let div a b =
 		let a_rem_b = rem a b in
@@ -756,7 +755,13 @@ struct
 end
 
 module R = IntRing
+(*
 module AF=MakeDebugAF(R)(MakeArrayAF(R))(MakeAF(R))
+
+module AF=MakeAF(R)
+*)
+module AF=MakeArrayAF(R)
+
 module VI=Var2Index(R)
 open IntRing
 
@@ -769,7 +774,7 @@ end
 
 (**********************************************************
 	Factoring out GCD of coefficients
- **********************************************************)
+ **********************************************************
 interactive_rw number_factorize number[j:n] number[k:n] :
 	(number[i:n] = number[j:n] *@ number[k:n] in int) -->
 	number[i:n] <--> (number[j:n] *@ number[k:n])
@@ -812,7 +817,7 @@ let rec factorizeC n t =
 	 | _ ->
 			raise (RefineError ("factorizeC", StringError "unexpected opname"))
 
-(************************************************************)
+************************************************************)
 
 let ge_normC = (addrC [Subterm 1] normalizeC) thenC (addrC [Subterm 2] normalizeC)
 
@@ -929,6 +934,22 @@ interactive_rw factor_out2 number[l:n] 'tleft number[r:n] 'tright :
 	('left >= 0) <-->
 	(number[l:n] *@ 'tleft >= number[r:n] *@ 'tright)
 
+let factor_outC cleft tleft cright tright = funC (fun e ->
+	let t = env_term e in
+	let p = env_arg e in
+	eprintf "factor_out2: %s\n%s\n%s\n%s\n%s@."
+		(SimplePrint.short_string_of_term cleft)
+		(SimplePrint.short_string_of_term tleft)
+		(SimplePrint.short_string_of_term cright)
+		(SimplePrint.short_string_of_term tright)
+		(SimplePrint.short_string_of_term t);
+(*	debug_rewrite := true;*)
+	let t'' = apply_rewrite p (factor_out2 cleft tleft cright tright) t in
+	eprintf "result = %s@." (SimplePrint.short_string_of_term t'');
+(*	debug_rewrite := false;*)
+	factor_out2 cleft tleft cright tright
+)
+
 (*****************
 interactive_rw dark_factor_out2 number[l:n] 'tleft number[r:n] 'tright :
 	('tleft in int) -->
@@ -988,8 +1009,6 @@ let norm constr =
 	else
 		begin
 			let f' = AF.div f gcd in
-			if !debug_omega then
-				eprintf "norm: %a -> %a@." AF.print f AF.print f';
 			(Mul (tree, gcd), f')
 		end
 
@@ -1133,7 +1152,7 @@ let ge_to_ge0C t =
 	else
 		idC
 
-let normalize2C = (termC ge_to_ge0C) thenC normalizeC
+let normalize2C =	(termC ge_to_ge0C) thenC normalizeC
 
 interactive_rw ge_mulMonoPosit_rw 'c :
    (0 < 'c) -->
@@ -1142,8 +1161,7 @@ interactive_rw ge_mulMonoPosit_rw 'c :
    ('c in int) -->
    ('a >= 'b) <--> (('c *@ 'a) >= ('c *@ 'b))
 
-let scaleC n =
-	ge_mulMonoPosit_rw n
+let scaleC n = ge_mulMonoPosit_rw n
 
 let rec source2hyp info = function
  | Hyp i ->
@@ -1171,6 +1189,8 @@ let rec source2hyp info = function
 ***********************)
 
 let omegaAuxT info tree = funT (fun p ->
+	(*debug_refine := true;
+	debug_rewrite := true;*)
 	source2hyp info tree thenMT rw ge_normC (-1)
 )
 
@@ -1219,3 +1239,6 @@ let omegaCoreT = funT (fun p ->
 )
 
 let omegaT = preT thenMT omegaCoreT thenT rw normalizeC 0
+
+interactive test17 'v :
+	sequent { <H> >- number[-68124:n] >= 0 }

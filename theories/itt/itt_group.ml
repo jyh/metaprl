@@ -83,7 +83,7 @@ let _ =
  *
  * @end[doc]
  *)
-define unfold_pregroup : pregroup[i:l] <-->
+define unfold_pregroup1 : pregroup[i:l] <-->
    record["inv":t]{r. 'r^"G" -> 'r^"G"; premonoid[i:l]}
 
 define unfold_isGroup : isGroup{'g} <-->
@@ -91,18 +91,40 @@ define unfold_isGroup : isGroup{'g} <-->
 
 define unfold_group1 : group[i:l] <-->
    {g: pregroup[i:l] | isGroup{'g}}
+
+define unfold_abelg1 : abelg[i:l] <-->
+   {g: pregroup[i:l] | isGroup{'g} & isCommutative{'g}}
 (*! @docoff *)
+
+interactive_rw unfold_pregroup :
+   pregroup[i:l] <--> record["inv":t]{r. 'r^"G" -> 'r^"G"; record["e":t]{r. 'r^"G"; {"G": univ[i:l]; "*": ^"G" -> ^"G" -> ^"G"}}}
 
 interactive_rw unfold_group :
    group[i:l] <--> {self: {"G": univ[i:l]; "*": ^"G" -> ^"G" -> ^"G"; "e": ^"G"; "inv": ^"G" -> ^"G"} | (all x: ^"G". all y: ^"G". all z: ^"G". ('x ^* 'y) ^* 'z = 'x ^* ('y ^* 'z) in ^"G") & (all x: ^"G". ^"e" ^* 'x = 'x in ^"G") & (all x: ^"G". ((^"inv") 'x) ^* 'x = ^"e" in ^"G")}
 
+interactive_rw unfold_abelg :
+   abelg[i:l] <--> {self: {"G": univ[i:l]; "*": ^"G" -> ^"G" -> ^"G"; "e": ^"G"; "inv": ^"G" -> ^"G"} | ((all x: ^"G". all y: ^"G". all z: ^"G". ('x ^* 'y) ^* 'z = 'x ^* ('y ^* 'z) in ^"G") & (all x: ^"G". ^"e" ^* 'x = 'x in ^"G") & (all x: ^"G". ((^"inv") 'x) ^* 'x = ^"e" in ^"G")) & (all x: ^"G". all y: ^"G". 'x ^* 'y = 'y ^* 'x in ^"G")}
+
+let fold_pregroup1 = makeFoldC << pregroup[i:l] >> unfold_pregroup1
+let fold_pregroup = makeFoldC << pregroup[i:l] >> unfold_pregroup
+let fold_isGroup = makeFoldC << isGroup{'g} >> unfold_isGroup
+let fold_group1 = makeFoldC << group[i:l] >> unfold_group1
+let fold_group = makeFoldC << group[i:l] >> unfold_group
+let fold_abelg1 = makeFoldC << abelg[i:l] >> unfold_abelg1
+let fold_abelg = makeFoldC << abelg[i:l] >> unfold_abelg
+
 let groupDT n = rw unfold_group n thenT dT n
+let abelgDT n = rw unfold_abelg n thenT dT n
 
 let resource elim +=
-   [<<group[i:l]>>, groupDT]
+   [<<group[i:l]>>, groupDT;
+    <<abelg[i:l]>>, abelgDT
+   ]
 
 let resource intro +=
-   [<<group[i:l]>>, wrap_intro (groupDT 0)]
+   [<<group[i:l]>>, wrap_intro (groupDT 0);
+    <<abelg[i:l]>>, wrap_intro (abelgDT 0)
+   ]
 
 (************************************************************************
  * DISPLAY FORMS                                                        *
@@ -116,6 +138,9 @@ dform pregroup_df : except_mode[src] :: pregroup[i:l] =
 
 dform isGroup_df : except_mode[src] :: isGroup{'g} =
    `"isGroup(" slot{'g} `")"
+
+dform abelg_df : except_mode[src] :: abelg[i:l] =
+   `"Abelian Group[" slot[i:l] `"]"
 
 (************************************************************************
  * RULES                                                                *

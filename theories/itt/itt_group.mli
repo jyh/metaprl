@@ -67,6 +67,13 @@ declare group[i:l]
  * TACTICS                                                              *
  ************************************************************************)
 
+topval fold_pregroup1 : conv
+topval fold_pregroup : conv
+topval fold_isGroup : conv
+topval fold_group1 : conv
+topval fold_group : conv
+topval fold_abelg1 : conv
+topval fold_abelg : conv
 
 (*
  * -*-

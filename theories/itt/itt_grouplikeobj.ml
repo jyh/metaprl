@@ -95,7 +95,7 @@ define unfold_isSemigroup : isSemigroup{'g} <-->
 define unfold_semigroup1 : semigroup[i:l] <-->
    {g: groupoid[i:l] | isSemigroup{'g}}
 
-define unfold_premonoid : premonoid[i:l] <-->
+define unfold_premonoid1 : premonoid[i:l] <-->
    record["e":t]{r. 'r^"G"; groupoid[i:l]}
 
 define unfold_isMonoid : isMonoid{'g} <-->
@@ -103,28 +103,67 @@ define unfold_isMonoid : isMonoid{'g} <-->
 
 define unfold_monoid1 : monoid[i:l] <-->
    {g: premonoid[i:l] | isMonoid{'g}}
+
+define unfold_isCommutative : isCommutative{'g} <-->
+   all x: 'g^"G". all y: 'g^"G". (('g^"*") 'x 'y = ('g^"*") 'y 'x in 'g^"G")
+
+define unfold_csemigroup1 : csemigroup[i:l] <-->
+   {g: groupoid[i:l] | isSemigroup{'g} & isCommutative{'g}}
+
+define unfold_cmonoid1 : cmonoid[i:l] <-->
+   {g: premonoid[i:l] | (isMonoid{'g}) & isCommutative{'g}}
 (*! @docoff *)
 
 interactive_rw unfold_semigroup :
    semigroup[i:l] <--> {self: {"G": univ[i:l]; "*": ^"G" -> ^"G" -> ^"G"} | all x: ^"G". all y: ^"G". all z: ^"G". ('x ^* 'y) ^* 'z = 'x ^* ('y ^* 'z) in ^"G"}
 
+interactive_rw unfold_premonoid : 
+   premonoid[i:l] <--> record["e":t]{r. 'r^"G"; {"G": univ[i:l]; "*": ^"G" -> ^"G" -> ^"G"}}
+
 interactive_rw unfold_monoid :
    monoid[i:l] <--> {self: {"G": univ[i:l]; "*": ^"G" -> ^"G" -> ^"G"; "e": ^"G"} | (all x: ^"G". all y: ^"G". all z: ^"G". ('x ^* 'y) ^* 'z = 'x ^* ('y ^* 'z) in ^"G") & (all x: ^"G". (^"e" ^* 'x = 'x in ^"G" & 'x ^* ^"e" = 'x in ^"G"))}
+
+interactive_rw unfold_csemigroup :
+   csemigroup[i:l] <--> {self: {"G": univ[i:l]; "*": ^"G" -> ^"G" -> ^"G"} | (all x: ^"G". all y: ^"G". all z: ^"G". ('x ^* 'y) ^* 'z = 'x ^* ('y ^* 'z) in ^"G") & (all x: ^"G". all y: ^"G". 'x ^* 'y = 'y ^* 'x in ^"G")}
+
+interactive_rw unfold_cmonoid :
+   cmonoid[i:l] <--> {self: {"G": univ[i:l]; "*": ^"G" -> ^"G" -> ^"G"; "e": ^"G"} | ((all x: ^"G". all y: ^"G". all z: ^"G". ('x ^* 'y) ^* 'z = 'x ^* ('y ^* 'z) in ^"G") & (all x: ^"G". (^"e" ^* 'x = 'x in ^"G" & 'x ^* ^"e" = 'x in ^"G"))) & (all x: ^"G". all y: ^"G". 'x ^* 'y = 'y ^* 'x in ^"G")}
+
+let fold_groupoid = makeFoldC << groupoid[i:l] >> unfold_groupoid
+let fold_isSemigroup = makeFoldC << isSemigroup{'g} >> unfold_isSemigroup
+let fold_semigroup1 = makeFoldC << semigroup[i:l] >> unfold_semigroup1
+let fold_semigroup = makeFoldC << semigroup[i:l] >> unfold_semigroup
+let fold_premonoid1 = makeFoldC << premonoid[i:l] >> unfold_premonoid1
+let fold_premonoid = makeFoldC << premonoid[i:l] >> unfold_premonoid
+let fold_isMonoid = makeFoldC << isMonoid{'g} >> unfold_isMonoid
+let fold_monoid1 = makeFoldC << monoid[i:l] >> unfold_monoid1
+let fold_monoid = makeFoldC << monoid[i:l] >> unfold_monoid
+let fold_isCommutative = makeFoldC << isCommutative{'g} >> unfold_isCommutative
+let fold_csemigroup1 = makeFoldC << csemigroup[i:l] >> unfold_csemigroup1
+let fold_csemigroup = makeFoldC << csemigroup[i:l] >> unfold_csemigroup
+let fold_cmonoid1 = makeFoldC << cmonoid[i:l] >> unfold_cmonoid1
+let fold_cmonoid = makeFoldC << cmonoid[i:l] >> unfold_cmonoid
 
 let groupoidDT n = rw unfold_groupoid n thenT dT n
 let semigroupDT n = rw unfold_semigroup n thenT dT n
 let monoidDT n = rw unfold_monoid n thenT dT n
+let csemigroupDT n = rw unfold_csemigroup n thenT dT n
+let cmonoidDT n = rw unfold_cmonoid n thenT dT n
 
 let resource elim +=
    [<<groupoid[i:l]>>, groupoidDT;
     <<semigroup[i:l]>>, semigroupDT;
-    <<monoid[i:l]>>, monoidDT
+    <<monoid[i:l]>>, monoidDT;
+    <<csemigroup[i:l]>>, csemigroupDT;
+    <<cmonoid[i:l]>>, cmonoidDT
    ]
 
 let resource intro +=
    [<<groupoid[i:l]>>, wrap_intro (groupoidDT 0);
     <<semigroup[i:l]>>, wrap_intro (semigroupDT 0);
-    <<monoid[i:l]>>, wrap_intro (monoidDT 0)
+    <<monoid[i:l]>>, wrap_intro (monoidDT 0);
+    <<csemigroup[i:l]>>, wrap_intro (csemigroupDT 0);
+    <<cmonoid[i:l]>>, wrap_intro (cmonoidDT 0)
    ]
 
 (************************************************************************
@@ -143,11 +182,24 @@ dform monoid_df : except_mode[src] :: monoid[i:l] =
 dform premonoid_df : except_mode[src] :: premonoid[i:l] =
    `"premonoid[" slot[i:l] `"]"
 
+dform isSemigroup_df : except_mode[src] :: isSemigroup{'g} =
+   `"isSemigroup(" slot{'g} `")"
+
 dform isMonoid_df : except_mode[src] :: isMonoid{'g} =
    `"isMonoid(" slot{'g} `")"
 
-dform isSemigroup_df : except_mode[src] :: isSemigroup{'g} =
-   `"isSemigroup(" slot{'g} `")"
+dform isCommutative_df : except_mode[src] :: isCommutative{'g} =
+   `"isCommutative(" slot{'g} `")"
+
+dform csemigroup_df : except_mode[src] :: csemigroup[i:l] =
+   `"Commutative Semigroup[" slot[i:l] `"]"
+
+dform cmonoid_df : except_mode[src] :: cmonoid[i:l] =
+   `"Commutative Monoid[" slot[i:l] `"]"
+
+(************************************************************************
+ * RULES                                                                *
+ ************************************************************************)
 
 interactive groupoid_type {| intro [] |} 'H :
    sequent ['ext] { 'H >- "type"{groupoid[i:l]} }

@@ -60,15 +60,37 @@ open Base_auto_tactic
 open Itt_fun
 
 (************************************************************************
- * SYNTAX                                                              *
+ * SYNTAX                                                               *
  ************************************************************************)
 
 declare groupoid[i:l]
+declare isCommutative{'g}
 declare isSemigroup{'g}
 declare semigroup[i:l]
+declare csemigroup[i:l]
 declare premonoid[i:l]
 declare isMonoid{'g}
 declare monoid[i:l]
+declare cmonoid[i:l]
+
+(************************************************************************
+ * TACTICS                                                              *
+ ************************************************************************)
+
+topval fold_groupoid : conv
+topval fold_isSemigroup : conv
+topval fold_semigroup1 : conv
+topval fold_semigroup : conv
+topval fold_premonoid1 : conv
+topval fold_premonoid : conv
+topval fold_isMonoid : conv
+topval fold_monoid1 : conv
+topval fold_monoid : conv
+topval fold_isCommutative : conv
+topval fold_csemigroup1 : conv
+topval fold_csemigroup : conv
+topval fold_cmonoid1 : conv
+topval fold_cmonoid : conv
 
 (*
  * -*-

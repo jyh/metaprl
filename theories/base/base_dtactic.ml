@@ -186,6 +186,8 @@ let debug_dtactic =
         debug_value = false
       }
 
+let debug_term_table = load_debug "term_table"
+
 (************************************************************************
  * TYPES                                                                *
  ************************************************************************)
@@ -273,15 +275,12 @@ let intro_compact entries =
    (* Compile the most general form *)
    let compile_general name normal select = fun
       p ->
-         match
-            try Some (get_sel_arg p) with
+         let tac =
+            try assoc name (get_sel_arg p) select with
                RefineError _ ->
-                  None
-         with
-            Some sel ->
-               assoc name sel select p
-          | None ->
-               firstT normal p
+                  firstT normal
+         in
+            tac p
    in
 
    (* Merge the entries *)
@@ -336,20 +335,28 @@ let extract_intro_data data =
    let tbl = create_table data intro_compact in
    fun p ->
       let t = Sequent.concl p in
-      let tac =
          try
             (* Find and apply the right tactic *)
-            if !debug_dtactic then
-               eprintf "Base_dtactic: lookup %s%t" (SimplePrint.string_of_opname (opname_of_term t)) eflush;
-            snd (Term_match_table.lookup tbl t)
+            if !debug_dtactic then begin
+               eprintf "Base_dtactic: intro: lookup %s%t" (SimplePrint.short_string_of_term t) eflush;
+               let sv_deb_table = !debug_term_table in
+               debug_term_table:=true;
+               try
+                  let tac = snd (Term_match_table.lookup tbl t) in
+                  debug_term_table:=sv_deb_table;
+                  eprintf "Base_dtactic: intro: applying %s%t" (SimplePrint.short_string_of_term t) eflush;
+                  tac p
+               with
+                  Not_found ->
+                     debug_term_table:=sv_deb_table;
+                     eprintf "Base_dtactic: intro: not found%t" eflush;
+                     raise Not_found
+            end else
+               snd (Term_match_table.lookup tbl t) p
          with
             Not_found ->
                raise (RefineError ("extract_intro_data", StringTermError ("D tactic doesn't know about", t)))
-      in
-         if !debug_dtactic then
-            eprintf "Base_dtactic: applying intro %s%t" (SimplePrint.string_of_opname (opname_of_term t)) eflush;
 
-         tac p
 
 (*
  * Add a new tactic.

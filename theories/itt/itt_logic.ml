@@ -54,6 +54,7 @@
  * @end[doc]
  *)
 include Itt_equal
+include Itt_esquash
 include Itt_rfun
 include Itt_dfun
 include Itt_fun
@@ -141,8 +142,6 @@ let debug_auto =
  * from left-to-right.
  * @end[doc]
  *)
-define unfold_prop : "prop"[i:l] <--> "univ"[i:l]
-
 define unfold_true : "true" <--> unit
 define unfold_false : "false" <--> void
 define unfold_not : "not"{'a} <--> ('a -> void)
@@ -212,6 +211,9 @@ interactive false_type {| intro [] |} 'H :
 interactive false_elim {| elim []; squash |} 'H 'J :
    sequent ['ext] { 'H; x: "false"; 'J['x] >- 'C['x] }
 
+interactive false_esquash_elim {| elim [] |} 'H 'J :
+   sequent ['ext] { 'H; x: esquash{."false"}; 'J['x] >- 'C['x] }
+
 (*!
  * @begin[doc]
  * @thysubsection{Negation}
@@ -269,11 +271,20 @@ interactive and_type {| intro [] |} 'H :
 interactive and_intro {| intro [] |} 'H :
    [main] sequent ['ext] { 'H >- 'a1 } -->
    [main] sequent ['ext] { 'H >- 'a2 } -->
-   sequent ['ext] { 'H >- "and"{'a1; 'a2} }
+   sequent ['ext] { 'H >- 'a1 & 'a2 }
+
+interactive and_squash_intro {| intro [] |} 'H :
+   [main] sequent [squash] { 'H >- squash{'a1} } -->
+   [main] sequent [squash] { 'H >- squash{'a2} } -->
+   sequent ['ext] { 'H >- squash{('a1 & 'a2)} }
 
 interactive and_elim {| elim [] |} 'H 'J 'y 'z :
    [main] sequent ['ext] { 'H; y: 'a1; z: 'a2; 'J['y, 'z] >- 'C['y, 'z] } -->
-   sequent ['ext] { 'H; x: "and"{'a1; 'a2}; 'J['x] >- 'C['x] }
+   sequent ['ext] { 'H; x: 'a1 & 'a2; 'J['x] >- 'C['x] }
+
+interactive and_squash_elim {| elim [] |} 'H 'J 'y 'z :
+   [main] sequent ['ext] { 'H; y: squash{'a1}; z: squash{'a2}; 'J[it] >- 'C[it] } -->
+   sequent ['ext] { 'H; x: squash{('a1 & 'a2)}; 'J['x] >- 'C['x] }
 
 (*!
  * @begin[doc]
@@ -1403,6 +1414,7 @@ let logic_autoT i p =
          or is_prod_term hyp
          or is_dprod_term hyp
          or is_exists_term hyp
+         or is_and_term (dest_squash hyp)
       then
          dT i p
       else

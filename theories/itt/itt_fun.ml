@@ -200,7 +200,7 @@ interactive independentApplyEquality {| intro[]; eqcd |} 'H ('A -> 'B) :
  * @docoff
  * @end[doc]
  *)
-interactive independentFunctionSubtype 'H :
+interactive independentFunctionSubtype {| intro [] |} 'H :
    sequent [squash] { 'H >- subtype{'A2; 'A1} } -->
    sequent [squash] { 'H >- subtype{'B1; 'B2} } -->
    sequent ['ext] { 'H >- subtype{ ('A1 -> 'B1); ('A2 -> 'B2) } }

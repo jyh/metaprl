@@ -564,7 +564,15 @@ let squashT p =
    (squashAssert (hyp_count_addr p) (concl p) thenLT
       [ idT; unsquashT (-1) thenT trivialT ]) p
 
-let resource elim += (squash_term, unsquashT)
+let squashElimT i p =
+   let h,j = Sequent.hyp_indices p i in
+      squashElim h j p
+
+(* We want to see unsquashT's error message when squashElimT is useless *)
+let squash_elimT i =
+   (progressT (squashElimT i) thenT tryT (unsquashT i)) orelseT (unsquashT i)
+
+let resource elim += (squash_term, squash_elimT)
 
 let rec unsquashAllT_aux i seq hyps p =
    if i > hyps then idT p else

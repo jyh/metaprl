@@ -101,12 +101,12 @@ prim esquash_type {| intro [AutoMustComplete] |} 'H :
  * are equal if both are types, and if each one implies another.
  * @end[doc]
  *)
-prim esquash_equal {| intro []; eqcd |} 'H :
-   [wf] sequent [squash] { 'H >- esquash{'A} IN univ[i:l] } -->
-   [wf] sequent [squash] { 'H >- esquash{'B} IN univ[i:l] } -->
-   sequent [squash] { 'H; x: esquash{'A} >- esquash{'B} } -->
-   sequent [squash] { 'H; x: esquash{'B} >- esquash{'A} } -->
-   sequent ['ext] { 'H >- esquash{'A} = esquash{'B} in univ[i:l] } =
+prim esquash_equal {| intro [SelectOption 0]; eqcd |} 'H :
+   [wf] sequent [squash] { 'H >- esquash{'P1} IN univ[i:l] } -->
+   [wf] sequent [squash] { 'H >- esquash{'P2} IN univ[i:l] } -->
+   sequent [squash] { 'H; x: esquash{'P1} >- esquash{'P2} } -->
+   sequent [squash] { 'H; x: esquash{'P2} >- esquash{'P1} } -->
+   sequent ['ext] { 'H >- esquash{'P1} = esquash{'P2} in univ[i:l] } =
    it
 
 prim esquash_univ {| intro [AutoMustComplete] |} 'H :
@@ -173,10 +173,7 @@ interactive unesquash 'H 'J :
 
 (*!
  * @begin[doc]
- * The $@esquash{P}$ hypothesis can also be unhidden if
- * $P$ is an equality judgment, or $@void$, or $@unit$, or a nested
- * @hrefterm[esquash] proposition (or in general if the proof
- * can be recovered).
+ * The $@esquash{@void}$ can not be inhabited.
  * @end[doc]
  *)
 interactive esquash_void_elim {| elim [] |} 'H 'J :
@@ -195,7 +192,8 @@ interactive esquash_equal_intro {| intro [] |} 'H 'x :
  *
  * @begin[description]
  * @item{@tactic[esquashT];
- *   The @tt{esquashT} tactic applies the @hrefrule[esquash_intro] rule}
+ *   The @tt[esquashT] 0 tactic applies the @hrefrule[esquash] rule and
+ *   @tt[esquashT] @i{i} applies the @hrefrule[unesquash] rule.}
  * @end[description]
  * @docoff
  * @end[doc]

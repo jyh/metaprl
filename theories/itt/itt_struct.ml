@@ -468,6 +468,19 @@ let replaceHypT t i p =
    let univ = get_univ_arg p in
       hypReplacement j k t univ p
 
+(*
+ * Typehood from equality.
+ *)
+let equalTypeT a b p =
+   equalityTypeIsType (Sequent.hyp_count_addr p) a b p
+let memberTypeT a = equalTypeT a a ttca
+
+let equalityAssumT i p =
+   let t' = dest_type_term (Sequent.concl p) in
+   let t,a,b = dest_equal (TermMan.nth_concl (Sequent.nth_assum p i) 1) in
+      if alpha_equal t t' then
+         equalTypeT a b p else failT p
+
 (*!
  * @begin[doc]
  * @resources
@@ -478,19 +491,17 @@ let replaceHypT t i p =
  * @docoff
  * @end[doc]
  *)
-let resource auto += {
+let resource auto += [{
    auto_name = "nthHypT";
    auto_prec = trivial_prec;
    auto_tac = onSomeHypT nthHypT;
    auto_type = AutoTrivial;
-}
-
-(*
- * Typehood from equality.
- *)
-let equalTypeT a b p =
-   equalityTypeIsType (Sequent.hyp_count_addr p) a b p
-let memberTypeT a = equalTypeT a a ttca
+}; {
+   auto_name = "Itt_struct.equalityAssumT";
+   auto_prec = trivial_prec;
+   auto_tac = onSomeAssumT equalityAssumT;
+   auto_type = AutoComplete;
+}]
 
 (*
  * -*-

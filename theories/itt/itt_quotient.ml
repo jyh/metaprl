@@ -220,7 +220,7 @@ prim quotientType {| intro [] |} 'H 'u 'v 'w 'x1 'x2 :
  * the equivalence relations $E_1$ and $E_2$ are equal.
  * @end[doc]
  *)
-prim quotientEquality {| intro []; eqcd |} 'H 'x 'y 'z 'u 'v :
+prim quotientEquality {| intro []; eqcd |} 'H 'x 'y :
    [wf] sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
    [wf] sequent [squash] { 'H; x: 'A1; y: 'A1 >- 'E1['x; 'y] = 'E2['x; 'y] in univ[i:l] } -->
    [wf] sequent [squash] { 'H >- "type"{.quot x1, y1: 'A1 // 'E1['x1; 'y1]} } -->

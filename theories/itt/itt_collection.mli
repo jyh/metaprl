@@ -1,54 +1,23 @@
-include Itt_theory
-open Itt_equal
+include Itt_bool
+include Itt_fun
+include Itt_esquash
+include Itt_quotient
+include Itt_logic
 
 open Printf
 open Mp_debug
 open Refiner.Refiner
 open Refiner.Refiner.Term
-open Refiner.Refiner.TermOp
-open Refiner.Refiner.TermMan
-open Refiner.Refiner.TermSubst
-open Refiner.Refiner.RefineError
 open Mp_resource
 
 open Var
 open Tactic_type.Tacticals
 open Tactic_type.Conversionals
 
-topval reverseT : tactic
-topval cutMemberT:  term -> tactic
-topval cutMember1T :  term -> tactic
-topval useAssumptionT : int -> tactic
-topval autoRT : tactic
-topval equalRefComplT : term -> tactic
+topval colEqSymT : tactic
+topval colEqTransT : term -> tactic
 
-topval mem_col_memT : term -> tactic
-
-topval d_colT : int -> tactic
-topval cutColT : term -> tactic
-topval cutColS : term -> tactic
-
+topval fold_col : conv
+topval fold_col_member : conv
 topval fold_Col : conv
-
-topval member_ColT : tactic
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+topval fold_add : conv

@@ -28,6 +28,7 @@ MPFILES :=\
 	itt_fun\
 	itt_dprod\
 	itt_prod\
+	itt_esquash\
 	itt_logic\
 	itt_well_founded\
 	itt_decidable\
@@ -51,7 +52,6 @@ MPFILES :=\
 	itt_w\
 	itt_prec\
 	itt_srec\
-	itt_esquash\
 	itt_quotient\
 	itt_list\
 	itt_list2\

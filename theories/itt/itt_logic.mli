@@ -53,8 +53,6 @@ open Base_auto_tactic
  * TERMS                                                                *
  ************************************************************************)
 
-define unfold_prop : "prop"[i:l] <--> "univ"[i:l]
-
 define unfold_true : "true" <--> unit
 define unfold_false : "false" <--> void
 

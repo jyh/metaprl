@@ -110,9 +110,9 @@ dform isect_df : except_mode[src] :: parens :: "prec"[prec_tunion] :: tunion{'A;
  * Proof of Ui
  *)
 prim tunionFormation 'A :
-   [wf] sequent [squash] { 'H >- 'A = 'A in univ[i:l] } -->
-   ('B['x] : sequent ['ext] { 'H; x: 'A >- univ[i:l] }) -->
-   sequent ['ext] { 'H >- univ[i:l] } =
+   [wf] sequent [squash] { <H> >- 'A = 'A in univ[i:l] } -->
+   ('B['x] : sequent ['ext] { <H>; x: 'A >- univ[i:l] }) -->
+   sequent ['ext] { <H> >- univ[i:l] } =
    tunion{'A; x. 'B['x]}
 
 doc <:doc< 
@@ -125,15 +125,15 @@ doc <:doc<
    @end[doc]
 >>
 prim tunionEquality {| intro []; eqcd |} :
-   [wf] sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
-   [wf] sequent [squash] { 'H; x: 'A1 >- 'B1['x] = 'B2['x] in univ[i:l] } -->
-   sequent ['ext] { 'H >- tunion{'A1; x1. 'B1['x1]} = tunion{'A2; x2. 'B2['x2] } in univ[i:l] } =
+   [wf] sequent [squash] { <H> >- 'A1 = 'A2 in univ[i:l] } -->
+   [wf] sequent [squash] { <H>; x: 'A1 >- 'B1['x] = 'B2['x] in univ[i:l] } -->
+   sequent ['ext] { <H> >- tunion{'A1; x1. 'B1['x1]} = tunion{'A2; x2. 'B2['x2] } in univ[i:l] } =
    it
 
 prim tunionType {| intro [] |} :
-   [wf] sequent [squash] { 'H >- "type"{'A} } -->
-   [wf] sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
-   sequent ['ext] { 'H >- "type"{.Union x:'A. 'B['x] } } =
+   [wf] sequent [squash] { <H> >- "type"{'A} } -->
+   [wf] sequent [squash] { <H>; y: 'A >- "type"{'B['y]} } -->
+   sequent ['ext] { <H> >- "type"{.Union x:'A. 'B['x] } } =
    it
 
 doc <:doc< 
@@ -147,10 +147,10 @@ doc <:doc<
    @end[doc]
 >>
 prim tunionMemberEquality {| intro []; eqcd |} 'a :
-   [wf] sequent [squash] { 'H >- 'a = 'a in 'A } -->
-   [wf] sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
-   [wf] sequent [squash] { 'H >- 'x1 = 'x2 in 'B['a] } -->
-   sequent ['ext] { 'H >- 'x1 = 'x2 in Union x:'A. 'B['x]  } =
+   [wf] sequent [squash] { <H> >- 'a = 'a in 'A } -->
+   [wf] sequent [squash] { <H>; y: 'A >- "type"{'B['y]} } -->
+   [wf] sequent [squash] { <H> >- 'x1 = 'x2 in 'B['a] } -->
+   sequent ['ext] { <H> >- 'x1 = 'x2 in Union x:'A. 'B['x]  } =
    it
 
 doc <:doc< 
@@ -164,10 +164,10 @@ doc <:doc<
    @end[doc]
 >>
 prim tunionMemberFormation {| intro [] |} 'a :
-   [wf] sequent [squash] { 'H >- 'a = 'a in 'A } -->
-   [wf] sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
-   [main] ('t : sequent ['ext] { 'H >- 'B['a] }) -->
-   sequent ['ext] { 'H >- Union x:'A. 'B['x]  } =
+   [wf] sequent [squash] { <H> >- 'a = 'a in 'A } -->
+   [wf] sequent [squash] { <H>; y: 'A >- "type"{'B['y]} } -->
+   [main] ('t : sequent ['ext] { <H> >- 'B['a] }) -->
+   sequent ['ext] { <H> >- Union x:'A. 'B['x]  } =
    't
 
 doc <:doc< 
@@ -181,24 +181,24 @@ doc <:doc<
    @end[doc]
 >>
 prim tunionElimination {| elim [ThinOption thinT] |} 'H :
-   sequent [squash] { 'H; x: tunion{'A; y. 'B['y]}; 'J['x]; w: 'A; z: 'B['w] >- 't1['z] = 't2['z] in 'C['z] } -->
-   sequent ['ext] { 'H; x: tunion{'A; y. 'B['y]}; 'J['x] >- 't1['x] = 't2['x] in 'C['x] } =
+   sequent [squash] { <H>; x: tunion{'A; y. 'B['y]}; <J['x]>; w: 'A; z: 'B['w] >- 't1['z] = 't2['z] in 'C['z] } -->
+   sequent ['ext] { <H>; x: tunion{'A; y. 'B['y]}; <J['x]> >- 't1['x] = 't2['x] in 'C['x] } =
    it
 
 let thinLastT n = (thinT (-1) thenT tryT (thinT n))
 
 interactive tunionElimination_eq {| elim [ThinOption thinLastT] |} 'H :
-   sequent [squash] { 'H; x: tunion{'A; y. 'B['y]}; 'J['x]; w: 'A; z: 'B['w];
+   sequent [squash] { <H>; x: tunion{'A; y. 'B['y]}; <J['x]>; w: 'A; z: 'B['w];
                        u: 'z='x in tunion{'A; y. 'B['y]} >- squash{'C['z]} } -->
-   sequent ['ext] { 'H; x: tunion{'A; y. 'B['y]}; 'J['x] >- squash{'C['x]} }
+   sequent ['ext] { <H>; x: tunion{'A; y. 'B['y]}; <J['x]> >- squash{'C['x]} }
 
 
 interactive tunionElimination_disjoint (*{| elim [ThinOption thinLastT] |}*) 'H 'f :
-   sequent [squash] { 'H; x: tunion{'A; y. 'B['y]}; 'J['x]; w: 'A; z: 'B['w];
+   sequent [squash] { <H>; x: tunion{'A; y. 'B['y]}; <J['x]>; w: 'A; z: 'B['w];
                        u: 'z='x in tunion{'A; y. 'B['y]} >- 'f 'z = 'w in 'A } -->
-   sequent ['ext] { 'H; x: tunion{'A; y. 'B['y]}; 'J['x]; w: 'A; z: 'B['w];
+   sequent ['ext] { <H>; x: tunion{'A; y. 'B['y]}; <J['x]>; w: 'A; z: 'B['w];
                        u: 'z='x in tunion{'A; y. 'B['y]} >- 'C['z] } -->
-   sequent ['ext] { 'H; x: tunion{'A; y. 'B['y]}; 'J['x] >- 'C['x] }
+   sequent ['ext] { <H>; x: tunion{'A; y. 'B['y]}; <J['x]> >- 'C['x] }
 
 doc <:doc< @docoff >>
 

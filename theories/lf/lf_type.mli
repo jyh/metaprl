@@ -33,7 +33,7 @@
 include lf_ctx;;
 
 rule type_kind 'S 'C : ctx{'S[nil_sig]; 'C[nil_ctx]} -->
-   sequent { 'S; 'C >> type };;
+   sequent { <S>; <C> >- type };;
 
 (*
  * -*-

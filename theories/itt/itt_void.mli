@@ -54,30 +54,30 @@ declare top (* we declare it here because we need it for type inference *)
  * H >- Ui ext Void
  * by voidFormation
  *)
-rule voidFormation : sequent ['ext] { 'H >- univ[i:l] }
+rule voidFormation : sequent ['ext] { <H> >- univ[i:l] }
 
 (*
  * H >- Void = Void in Ui ext Ax
  * by voidEquality
  *)
-rule voidEquality : sequent ['ext] { 'H >- void in univ[i:l] }
+rule voidEquality : sequent ['ext] { <H> >- void in univ[i:l] }
 
 (*
  * Typehood.
  *)
-rule voidType : sequent ['ext] { 'H >- "type"{void} }
+rule voidType : sequent ['ext] { <H> >- "type"{void} }
 
 (*
  * H; i:x:Void; J >- C
  * by voidElimination i
  *)
-rule voidElimination 'H : sequent ['ext] { 'H; x: void; 'J['x] >- 'C['x] }
+rule voidElimination 'H : sequent ['ext] { <H>; x: void; <J['x]> >- 'C['x] }
 
 (*
  * Subtyping.
  *)
 rule void_subtype :
-   sequent ['ext] { 'H >- \subtype{void; 'T} }
+   sequent ['ext] { <H> >- \subtype{void; 'T} }
 
 (************************************************************************
  * TACTICS                                                              *

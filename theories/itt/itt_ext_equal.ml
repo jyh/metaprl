@@ -64,8 +64,8 @@ dform extEqual_df : ext_equal{'A; 'B} =  'A `"=" sube 'B
 
    
 interactive extEqualMember {|squash; intro[] |}: 
-   sequent[squash] {'H >- ext_equal{'A;'B}} -->
-   sequent['ext]  {'H >- (it,it) in ext_equal{'A;'B} }
+   sequent[squash] { <H> >- ext_equal{'A;'B}} -->
+   sequent['ext]  { <H> >- (it,it) in ext_equal{'A;'B} }
 
 
 let resource intro +=

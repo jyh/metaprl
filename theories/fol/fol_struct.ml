@@ -13,22 +13,22 @@ open Base_auto_tactic
  * Hypothesis.
  *)
 prim hypothesis 'H :
-   sequent ['ext] { 'H; x: 'T; 'J['x] >- 'T } = 'x
+   sequent ['ext] { <H>; x: 'T; <J['x]> >- 'T } = 'x
 
 (*
  * Thinning.
  *)
 prim thin 'H :
-   ('t : sequent ['ext] { 'H; 'J >- 'C }) -->
-   sequent ['ext] { 'H; x: 'T; 'J >- 'C } = 't
+   ('t : sequent ['ext] { <H>; <J> >- 'C }) -->
+   sequent ['ext] { <H>; x: 'T; <J> >- 'C } = 't
 
 (*
  * Cut rule.
  *)
 prim cut 'T :
-   ('a : sequent ['ext] { 'H >- 'T }) -->
-   ('b['x] : sequent ['ext] { 'H; x: 'T >- 'C }) -->
-   sequent ['ext] { 'H >- 'C } =
+   ('a : sequent ['ext] { <H> >- 'T }) -->
+   ('b['x] : sequent ['ext] { <H>; x: 'T >- 'C }) -->
+   sequent ['ext] { <H> >- 'C } =
    'b['a]
 
 (*

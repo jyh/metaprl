@@ -113,23 +113,23 @@ doc <:doc<
    @end[doc]
 >>
 interactive bunionEquality {| intro []; eqcd |} :
-   [wf] sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
-   [wf] sequent [squash] { 'H >- 'B1 = 'B2 in univ[i:l] } -->
-   sequent ['ext] { 'H >- 'A1 bunion 'B1 = 'A2  bunion 'B2 in univ[i:l] }
+   [wf] sequent [squash] { <H> >- 'A1 = 'A2 in univ[i:l] } -->
+   [wf] sequent [squash] { <H> >- 'B1 = 'B2 in univ[i:l] } -->
+   sequent ['ext] { <H> >- 'A1 bunion 'B1 = 'A2  bunion 'B2 in univ[i:l] }
 
 interactive bunionType {| intro [] |} :
-   [wf] sequent [squash] { 'H >- "type"{'A} } -->
-   [wf] sequent [squash] { 'H >- "type"{'B} } -->
-   sequent ['ext] { 'H >- "type"{.'A bunion 'B} }
+   [wf] sequent [squash] { <H> >- "type"{'A} } -->
+   [wf] sequent [squash] { <H> >- "type"{'B} } -->
+   sequent ['ext] { <H> >- "type"{.'A bunion 'B} }
 
 doc <:doc< 
    Formation.
    @docoff
 >>
 interactive bunionFormation :
-   sequent ['ext] { 'H >- univ[i:l] } -->
-   sequent ['ext] { 'H >- univ[i:l] } -->
-   sequent ['ext] { 'H >- univ[i:l] }
+   sequent ['ext] { <H> >- univ[i:l] } -->
+   sequent ['ext] { <H> >- univ[i:l] } -->
+   sequent ['ext] { <H> >- univ[i:l] }
 
 doc <:doc< 
    @begin[doc]
@@ -140,14 +140,14 @@ doc <:doc<
    @end[doc]
 >>
 interactive bunionMemberEqualityLeft {| intro [SelectOption 1]; eqcd |} :
-   [wf] sequent [squash] { 'H >- 'x = 'y in 'A } -->
-   [wf] sequent [squash] { 'H >- "type"{'B} } -->
-   sequent ['ext] { 'H >- 'x = 'y in 'A bunion 'B }
+   [wf] sequent [squash] { <H> >- 'x = 'y in 'A } -->
+   [wf] sequent [squash] { <H> >- "type"{'B} } -->
+   sequent ['ext] { <H> >- 'x = 'y in 'A bunion 'B }
 
 interactive bunionMemberEqualityRight {| intro [SelectOption 2]; eqcd |} :
-   [wf] sequent [squash] { 'H >- 'x = 'y in 'B } -->
-   [wf] sequent [squash] { 'H >- "type"{'A} } -->
-   sequent ['ext] { 'H >- 'x = 'y in 'A bunion 'B }
+   [wf] sequent [squash] { <H> >- 'x = 'y in 'B } -->
+   [wf] sequent [squash] { <H> >- "type"{'A} } -->
+   sequent ['ext] { <H> >- 'x = 'y in 'A bunion 'B }
 
 doc <:doc< 
    @begin[doc]
@@ -161,16 +161,16 @@ doc <:doc<
    @end[doc]
 >>
 interactive bunionElimination {| elim [ThinOption thinT] |} 'H :
-   [main] sequent [squash] { 'H; x: 'A bunion 'B; 'J['x]; y: 'A >- 't1['y] = 't2['y] in 'C['y] } -->
-   [main] sequent [squash] { 'H; x: 'A bunion 'B; 'J['x]; y: 'B >- 't1['y] = 't2['y] in 'C['y] } -->
-   sequent ['ext] { 'H; x: 'A bunion 'B; 'J['x] >- 't1['x] = 't2['x] in 'C['x] }
+   [main] sequent [squash] { <H>; x: 'A bunion 'B; <J['x]>; y: 'A >- 't1['y] = 't2['y] in 'C['y] } -->
+   [main] sequent [squash] { <H>; x: 'A bunion 'B; <J['x]>; y: 'B >- 't1['y] = 't2['y] in 'C['y] } -->
+   sequent ['ext] { <H>; x: 'A bunion 'B; <J['x]> >- 't1['x] = 't2['x] in 'C['x] }
 
 let thinLastT n = thinT (-1) thenT tryT (thinT n)
 
 interactive bunionElimination_eq {| elim [ThinOption thinLastT] |} 'H :
-   [main] sequent [squash] { 'H; x: 'A bunion 'B; 'J['x]; y: 'A; u:'y='x in 'A bunion 'B >- squash{'C['y]} } -->
-   [main] sequent [squash] { 'H; x: 'A bunion 'B; 'J['x]; y: 'B; u:'y='x in 'A bunion 'B >- squash{'C['y]} } -->
-   sequent ['ext] { 'H; x: 'A bunion 'B; 'J['x] >- squash{'C['x]} }
+   [main] sequent [squash] { <H>; x: 'A bunion 'B; <J['x]>; y: 'A; u:'y='x in 'A bunion 'B >- squash{'C['y]} } -->
+   [main] sequent [squash] { <H>; x: 'A bunion 'B; <J['x]>; y: 'B; u:'y='x in 'A bunion 'B >- squash{'C['y]} } -->
+   sequent ['ext] { <H>; x: 'A bunion 'B; <J['x]> >- squash{'C['x]} }
 doc <:doc< @docoff >>
 
 (*

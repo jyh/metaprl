@@ -28,9 +28,9 @@ define unfoldInd :   ind_lab{'n; 'base; l. 'up['l]} <-->
 
 
 rule decide_eq_label 'x 'y :
-   [wf] sequent[squash] {'H >- 'x in label} -->
-   [wf] sequent[squash] {'H >- 'y in label} -->
-   sequent['ext] {'H; u:'x='y in label >- 'C} -->
-   sequent['ext] {'H; u:not{.'x='y in label} >- 'C} -->
-   sequent['ext] {'H >- 'C}
+   [wf] sequent[squash] { <H> >- 'x in label} -->
+   [wf] sequent[squash] { <H> >- 'y in label} -->
+   sequent['ext] { <H>; u:'x='y in label >- 'C} -->
+   sequent['ext] { <H>; u:not{.'x='y in label} >- 'C} -->
+   sequent['ext] { <H> >- 'C}
 

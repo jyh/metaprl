@@ -45,14 +45,14 @@ declare inr{'A};;
  * H >> B wf
  *)
 rule or_intro_left 'x :
-   sequent { 'H >> 'A } -->
-   sequent { 'H >> wf{'B} } -->
-   sequent { 'H >> 'A \/ 'B };;
+   sequent { <H> >- 'A } -->
+   sequent { <H> >- wf{'B} } -->
+   sequent { <H> >- 'A \/ 'B };;
 
 rule or_intro_right 'x :
-   sequent { 'H >> 'B } -->
-   sequent { 'H >> wf{'A} } -->
-   sequent { 'H >> 'A \/ 'B };;
+   sequent { <H> >- 'B } -->
+   sequent { <H> >- wf{'A} } -->
+   sequent { <H> >- 'A \/ 'B };;
 
 (*
  * Elimination.
@@ -63,22 +63,22 @@ rule or_intro_right 'x :
  * H, x: A \/ B, y: B; J[inr y] >> T[inr y]
  *)
 rule or_elim 'H 'y :
-   sequent { 'H; x: 'A \/ 'B; y: 'A; 'J[inl{'y}] >> 'T[inl{'y}] } -->
-   sequent { 'H; x: 'A \/ 'B; y: 'B; 'J[inr{'y}] >> 'T[inr{'y}] } -->
-   sequent { 'H; x: 'A \/ 'B; 'J['x] >> 'T['x] };;
+   sequent { <H>; x: 'A \/ 'B; y: 'A; <J[inl{'y}]> >- 'T[inl{'y}] } -->
+   sequent { <H>; x: 'A \/ 'B; y: 'B; <J[inr{'y}]> >- 'T[inr{'y}] } -->
+   sequent { <H>; x: 'A \/ 'B; <J['x]> >- 'T['x] };;
 
 (*
  * Well formedness.
  *)
 rule or_wf :
-   sequent { 'H >> wf{'A} } -->
-   sequent { 'H >> wf{'B} } -->
-   sequent { 'H >> wf{'A \/ 'B} };;
+   sequent { <H> >- wf{'A} } -->
+   sequent { <H> >- wf{'B} } -->
+   sequent { <H> >- wf{'A \/ 'B} };;
 
 (*
  * Implication is restricted.
  *)
 rule or_res :
-   sequent { 'H >> restricted{'A} } -->
-   sequent { 'H >> restricted{'B} } -->
-   sequent { 'H >> restricted{'A \/ 'B} };;
+   sequent { <H> >- restricted{'A} } -->
+   sequent { <H> >- restricted{'B} } -->
+   sequent { <H> >- restricted{'A \/ 'B} };;

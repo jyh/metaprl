@@ -4039,7 +4039,7 @@ T	t1445	o4298 b977 b1445 b4 b4
 B	b1446	t1445
 T	t1446	o b1446 b4
 B	b1447	t1446
-P	p1474	String "cutT  <<sequent[squash]{'H; r:record[n:t]{'A;x.'R['x]}; 'J['r]; x:'A >- \"type\"{'R['x]}}>> thenMT substUsingEpimorphism 2 <<x:'A * 'R['x]>> <<bind{y.spread{'y;a,r.rcrd[n:t]{'a;'r}}}>>  <<bind{z.(field[n:t]{'z},'z)}>>"
+P	p1474	String "cutT  <<sequent[squash]{ <H>; r:record[n:t]{'A;x.'R['x]}; <J['r]>; x:'A >- \"type\"{'R['x]}}>> thenMT substUsingEpimorphism 2 <<x:'A * 'R['x]>> <<bind{y.spread{'y;a,r.rcrd[n:t]{'a;'r}}}>>  <<bind{z.(field[n:t]{'z},'z)}>>"
 O	o1475	ext_rule p1474
 T	t1481	o b4111 b4
 B	b1481	t1481

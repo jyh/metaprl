@@ -47,7 +47,7 @@ dform pred_df : pred = `"Pred"
  * Type judgment.
  *)
 prim pred_type 'H :
-   sequent ['ext] { 'H; x: pred; 'J['x] >- "type"{'x} } = trivial
+   sequent ['ext] { <H>; x: pred; <J['x]> >- "type"{'x} } = trivial
 
 let resource auto += {
    auto_name = "d_pred_type";

@@ -208,12 +208,12 @@ doc <:doc<
    @end[doc]
 >>
 prim quotientType {| intro [] |} :
-   [wf] sequent [squash] { 'H >- "type"{'A} } -->
-   [wf] sequent [squash] { 'H; u: 'A; v: 'A >- "type"{'E['u; 'v]} } -->
-   [wf] sequent [squash] { 'H; u: 'A >- 'E['u; 'u] } -->
-   [wf] sequent [squash] { 'H; u: 'A; v: 'A; x1: 'E['u; 'v] >- 'E['v; 'u] } -->
-   [wf] sequent [squash] { 'H; u: 'A; v: 'A; w: 'A; x1: 'E['u; 'v]; x2: 'E['v; 'w] >- 'E['u; 'w] } -->
-   sequent ['ext] { 'H >- "type"{.quot x, y: 'A // 'E['x; 'y]} } =
+   [wf] sequent [squash] { <H> >- "type"{'A} } -->
+   [wf] sequent [squash] { <H>; u: 'A; v: 'A >- "type"{'E['u; 'v]} } -->
+   [wf] sequent [squash] { <H>; u: 'A >- 'E['u; 'u] } -->
+   [wf] sequent [squash] { <H>; u: 'A; v: 'A; x1: 'E['u; 'v] >- 'E['v; 'u] } -->
+   [wf] sequent [squash] { <H>; u: 'A; v: 'A; w: 'A; x1: 'E['u; 'v]; x2: 'E['v; 'w] >- 'E['u; 'w] } -->
+   sequent ['ext] { <H> >- "type"{.quot x, y: 'A // 'E['x; 'y]} } =
    it
 
 doc <:doc< 
@@ -224,10 +224,10 @@ doc <:doc<
    @end[doc]
 >>
 prim quotientEquality {| intro []; eqcd |} :
-   [wf] sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
-   [wf] sequent [squash] { 'H; x: 'A1; y: 'A1 >- 'E1['x; 'y] = 'E2['x; 'y] in univ[i:l] } -->
-   [wf] sequent [squash] { 'H >- "type"{.quot x1, y1: 'A1 // 'E1['x1; 'y1]} } -->
-   sequent ['ext] { 'H >- quot x1, y1: 'A1 // 'E1['x1; 'y1]
+   [wf] sequent [squash] { <H> >- 'A1 = 'A2 in univ[i:l] } -->
+   [wf] sequent [squash] { <H>; x: 'A1; y: 'A1 >- 'E1['x; 'y] = 'E2['x; 'y] in univ[i:l] } -->
+   [wf] sequent [squash] { <H> >- "type"{.quot x1, y1: 'A1 // 'E1['x1; 'y1]} } -->
+   sequent ['ext] { <H> >- quot x1, y1: 'A1 // 'E1['x1; 'y1]
                    = quot x2, y2: 'A2 // 'E2['x2; 'y2]
                    in univ[i:l]
            } =
@@ -243,18 +243,18 @@ doc <:doc<
    @end[doc]
 >>
 prim quotient_memberWeakEquality {| intro [AutoMustComplete] |} :
-   [wf] sequent [squash] { 'H >- "type"{(quot x, y: 'A // 'E['x; 'y])} } -->
-   [wf] sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
-   sequent ['ext] { 'H >- 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y] } =
+   [wf] sequent [squash] { <H> >- "type"{(quot x, y: 'A // 'E['x; 'y])} } -->
+   [wf] sequent [squash] { <H> >- 'a1 = 'a2 in 'A } -->
+   sequent ['ext] { <H> >- 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y] } =
    it
 
 doc <:doc< 
    @docoff
 >>
 interactive quotient_memberFormation {| intro [] |} :
-   [wf] sequent [squash] { 'H >- "type"{(quot x, y: 'A // 'E['x; 'y])} } -->
-   [main] ('a : sequent ['ext] { 'H >- 'A }) -->
-   sequent ['ext] { 'H >- quot x, y: 'A // 'E['x; 'y] }
+   [wf] sequent [squash] { <H> >- "type"{(quot x, y: 'A // 'E['x; 'y])} } -->
+   [main] ('a : sequent ['ext] { <H> >- 'A }) -->
+   sequent ['ext] { <H> >- quot x, y: 'A // 'E['x; 'y] }
 
 doc <:doc< 
    @begin[doc]
@@ -264,10 +264,10 @@ doc <:doc<
    @end[doc]
 >>
 prim quotient_memberEquality :
-   [wf] sequent [squash] { 'H >- 'a1 in quot x, y: 'A // 'E['x; 'y] } -->
-   [wf] sequent [squash] { 'H >- 'a2 in quot x, y: 'A // 'E['x; 'y] } -->
-   sequent [squash] { 'H >- esquash{'E['a1; 'a2]} } -->
-   sequent ['ext] { 'H >- 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y] } =
+   [wf] sequent [squash] { <H> >- 'a1 in quot x, y: 'A // 'E['x; 'y] } -->
+   [wf] sequent [squash] { <H> >- 'a2 in quot x, y: 'A // 'E['x; 'y] } -->
+   sequent [squash] { <H> >- esquash{'E['a1; 'a2]} } -->
+   sequent ['ext] { <H> >- 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y] } =
    it
 
 doc <:doc< @docoff >>
@@ -298,21 +298,21 @@ doc <:doc<
    @end[doc]
 >>
 prim quotientElimination1 {| elim [ThinOption thinT] |} 'H :
-   [wf] sequent [squash] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a] >- "type"{'T['a]} } -->
-   [main] sequent [squash] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a];
+   [wf] sequent [squash] { <H>; a: quot x, y: 'A // 'E['x; 'y]; <J['a]> >- "type"{'T['a]} } -->
+   [main] sequent [squash] { <H>; a: quot x, y: 'A // 'E['x; 'y]; <J['a]>;
              v: 'A; w: 'A; z: 'E['v; 'w] >- 's['v] = 't['w] in 'T['v]
            } -->
-   sequent ['ext] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a] >- 's['a] = 't['a] in 'T['a] } =
+   sequent ['ext] { <H>; a: quot x, y: 'A // 'E['x; 'y]; <J['a]> >- 's['a] = 't['a] in 'T['a] } =
    it
 
 interactive quotientElimination1_eq 'H :
-   [wf] sequent [squash] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a] >- "type"{'T['a]} } -->
-   [main] sequent [squash] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a];
+   [wf] sequent [squash] { <H>; a: quot x, y: 'A // 'E['x; 'y]; <J['a]> >- "type"{'T['a]} } -->
+   [main] sequent [squash] { <H>; a: quot x, y: 'A // 'E['x; 'y]; <J['a]>;
              v: 'A; w: 'A; z: 'E['v; 'w];
              e1: 'v='a in quot x, y: 'A // 'E['x; 'y]; e2: 'w='a in quot x, y: 'A // 'E['x; 'y]
              >- 's['v] = 't['w] in 'T['v]
            } -->
-   sequent ['ext] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a] >- 's['a] = 't['a] in 'T['a] }
+   sequent ['ext] { <H>; a: quot x, y: 'A // 'E['x; 'y]; <J['a]> >- 's['a] = 't['a] in 'T['a] }
 
 doc <:doc< @docoff >>
 let quotientT = quotientElimination1_eq
@@ -324,8 +324,8 @@ doc <:doc<
    @end[doc]
 >>
 prim quotient_equalityElimination {| elim [ThinOption thinT] |} 'H :
-   [main] ('g['v] : sequent ['ext] { 'H; e: 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]; 'J['e]; v: esquash{'E['a1; 'a2]} >- 'T['e] }) -->
-   sequent ['ext] { 'H; e: 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]; 'J['e] >- 'T['e] } =
+   [main] ('g['v] : sequent ['ext] { <H>; e: 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]; <J['e]>; v: esquash{'E['a1; 'a2]} >- 'T['e] }) -->
+   sequent ['ext] { <H>; e: 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]; <J['e]> >- 'T['e] } =
    'g[it]
 
 doc <:doc< 
@@ -337,11 +337,11 @@ doc <:doc<
    @end[doc]
 >>
 interactive quotientSubtype :
-   ["subtype"] sequent [squash] { 'H >- \subtype{'A1; 'A2} } -->
-   [aux] sequent [squash] { 'H; a1: 'A1; a2: 'A1 (* ; 'E1['a1; 'a2] *) >- 'E2['a1; 'a2] } -->
-   [wf] sequent [squash] { 'H >- "type"{(quot x1, y1: 'A1 // 'E1['x1; 'y1])} } -->
-   [wf] sequent [squash] { 'H >- "type"{(quot x2, y2: 'A2 // 'E2['x2; 'y2])} } -->
-   sequent ['ext] { 'H >- \subtype{ (quot x1, y1: 'A1 // 'E1['x1; 'y1]); (quot x2, y2: 'A2 // 'E2['x2; 'y2]) } }
+   ["subtype"] sequent [squash] { <H> >- \subtype{'A1; 'A2} } -->
+   [aux] sequent [squash] { <H>; a1: 'A1; a2: 'A1 (* ; 'E1['a1; 'a2] *) >- 'E2['a1; 'a2] } -->
+   [wf] sequent [squash] { <H> >- "type"{(quot x1, y1: 'A1 // 'E1['x1; 'y1])} } -->
+   [wf] sequent [squash] { <H> >- "type"{(quot x2, y2: 'A2 // 'E2['x2; 'y2])} } -->
+   sequent ['ext] { <H> >- \subtype{ (quot x1, y1: 'A1 // 'E1['x1; 'y1]); (quot x2, y2: 'A2 // 'E2['x2; 'y2]) } }
 doc <:doc< @docoff >>
 
 (************************************************************************

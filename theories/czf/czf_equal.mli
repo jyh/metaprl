@@ -43,13 +43,13 @@ declare equal{'A; 'B};;
  * Perhaps there is a better way to formulate this.
  *)
 rule extensional_equal :
-   sequent { 'H >> "all"{x. "all"{y. equal{'x; 'y} => "all"{z. member{'z; 'x} => member{'z; 'y}}}} };;
+   sequent { <H> >- "all"{x. "all"{y. equal{'x; 'y} => "all"{z. member{'z; 'x} => member{'z; 'y}}}} };;
 
 (*
  * Membership is functional.
  *)
 rule mem_fun :
-   sequent { 'H >> "all"{x. "all"{y. "all"{z. (equal{'x; 'y} /\ member{'x; 'z}) => member{'y; 'z}}}} };;
+   sequent { <H> >- "all"{x. "all"{y. "all"{z. (equal{'x; 'y} /\ member{'x; 'z}) => member{'y; 'z}}}} };;
 
 (*
  * -*-

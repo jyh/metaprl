@@ -44,9 +44,9 @@ declare pair{'A; 'B};;
  * H >> B
  *)
 rule and_intro :
-   sequent { 'H >> 'A } -->
-   sequent { 'H >> 'B } -->
-   sequent { 'H >> 'A /\ 'B };;
+   sequent { <H> >- 'A } -->
+   sequent { <H> >- 'B } -->
+   sequent { <H> >- 'A /\ 'B };;
 
 (*
  * Elimination.
@@ -56,24 +56,24 @@ rule and_intro :
  * H, y: A; z: B; J[<y, z>] >> T[y, z]
  *)
 rule and_elim 'H 'y 'z :
-   sequent { 'H; y: 'A; z: 'B; 'J['y, 'z] >> 'T['y, 'z] } -->
-   sequent { 'H; x: 'A /\ 'B; 'J['x] >> 'T['x] };;
+   sequent { <H>; y: 'A; z: 'B; <J['y, 'z]> >- 'T['y, 'z] } -->
+   sequent { <H>; x: 'A /\ 'B; <J['x]> >- 'T['x] };;
 
 (*
  * Well formedness.
  *)
 rule and_wf :
-   sequent { 'H >> wf{'A} } -->
-   sequent { 'H >> wf{'B} } -->
-   sequent { 'H >> wf{'A /\ 'B} };;
+   sequent { <H> >- wf{'A} } -->
+   sequent { <H> >- wf{'B} } -->
+   sequent { <H> >- wf{'A /\ 'B} };;
 
 (*
  * Implication is restricted.
  *)
 rule and_res :
-   sequent { 'H >> restricted{'A} } -->
-   sequent { 'H >> restricted{'B} } -->
-   sequent { 'H >> restricted{'A /\ 'B} };;
+   sequent { <H> >- restricted{'A} } -->
+   sequent { <H> >- restricted{'B} } -->
+   sequent { <H> >- restricted{'A /\ 'B} };;
 
 (*
  * -*-

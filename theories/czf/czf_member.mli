@@ -36,7 +36,7 @@ declare member{'x; 'y};;
  * Membership by assumption.
  *)
 rule hyp_mem 'H :
-   sequent { 'H; x: 'A; 'J >> member{'x; 'A} };;
+   sequent { <H>; x: 'A; <J> >- member{'x; 'A} };;
 
 (*
  * -*-

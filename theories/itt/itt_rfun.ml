@@ -283,35 +283,35 @@ doc <:doc<
    @end[doc]
 >>
 prim well_founded_assum_elim {| elim [ThinOption thinT] |} 'H 'a :
-   [main] sequent [squash] { 'H; p: well_founded_assum{'A; a1, a2. 'R['a1; 'a2]; 'P}; 'J['p] >- 'a in 'A } -->
-   [main] sequent [squash] { 'H; p: well_founded_assum{'A; a1, a2. 'R['a1; 'a2]; 'P}; 'J['p]; a3: 'A; u: 'R['a3; 'a] >- well_founded_apply{'P; 'a3} } -->
-   [main] ('t['u] : sequent [squash] { 'H; p: well_founded_assum{'A; a1, a2. 'R['a1; 'a2]; 'P}; 'J['p]; u: well_founded_apply{'P; 'a} >- 'C['p] }) -->
-   sequent ['ext] { 'H; p: well_founded_assum{'A; a1, a2. 'R['a1; 'a2]; 'P}; 'J['p] >- 'C['p] } =
+   [main] sequent [squash] { <H>; p: well_founded_assum{'A; a1, a2. 'R['a1; 'a2]; 'P}; <J['p]> >- 'a in 'A } -->
+   [main] sequent [squash] { <H>; p: well_founded_assum{'A; a1, a2. 'R['a1; 'a2]; 'P}; <J['p]>; a3: 'A; u: 'R['a3; 'a] >- well_founded_apply{'P; 'a3} } -->
+   [main] ('t['u] : sequent [squash] { <H>; p: well_founded_assum{'A; a1, a2. 'R['a1; 'a2]; 'P}; <J['p]>; u: well_founded_apply{'P; 'a} >- 'C['p] }) -->
+   sequent ['ext] { <H>; p: well_founded_assum{'A; a1, a2. 'R['a1; 'a2]; 'P}; <J['p]> >- 'C['p] } =
    't[it]
 
 prim well_founded {| intro [] |} :
-   [wf] sequent [squash] { 'H >- "type"{'A} } -->
-   [wf] sequent [squash] { 'H; a1: 'A; a2: 'A >- "type"{'R['a1; 'a2]} } -->
-   [main] sequent [squash] { 'H; a1: 'A; u: 'R['a1; 'a1] >- void } -->
-   [main] sequent [squash] { 'H; a1: 'A; a2: 'A; u: 'R['a1; 'a2]; v: 'R['a2; 'a1] >- void } -->
-   [main] sequent [squash] { 'H; a1: 'A; a2: 'A; a3: 'A; u: 'R['a1; 'a2]; v: 'R['a2; 'a3] >- 'R['a1; 'a3] } -->
-   [main] sequent [squash] { 'H; a1: 'A; P: well_founded_prop{'A}; p: well_founded_assum{'A; a2, a3. 'R['a2; 'a3]; 'P} >- well_founded_apply{'P; 'a1} } -->
-   sequent ['ext] { 'H >- well_founded{'A; a, b. 'R['a; 'b]} } =
+   [wf] sequent [squash] { <H> >- "type"{'A} } -->
+   [wf] sequent [squash] { <H>; a1: 'A; a2: 'A >- "type"{'R['a1; 'a2]} } -->
+   [main] sequent [squash] { <H>; a1: 'A; u: 'R['a1; 'a1] >- void } -->
+   [main] sequent [squash] { <H>; a1: 'A; a2: 'A; u: 'R['a1; 'a2]; v: 'R['a2; 'a1] >- void } -->
+   [main] sequent [squash] { <H>; a1: 'A; a2: 'A; a3: 'A; u: 'R['a1; 'a2]; v: 'R['a2; 'a3] >- 'R['a1; 'a3] } -->
+   [main] sequent [squash] { <H>; a1: 'A; P: well_founded_prop{'A}; p: well_founded_assum{'A; a2, a3. 'R['a2; 'a3]; 'P} >- well_founded_apply{'P; 'a1} } -->
+   sequent ['ext] { <H> >- well_founded{'A; a, b. 'R['a; 'b]} } =
    it
 
 prim well_founded_apply_type {| intro [] |} 'A :
-   [wf] sequent [squash] { 'H >- 'P in well_founded_prop{'A} } -->
-   [wf] sequent [squash] { 'H >- 'A in univ[i:l] } -->
-   [wf] sequent [squash] { 'H >- 'a in 'A } -->
-   sequent ['ext] { 'H >- well_founded_apply{'P; 'a} in univ[i:l] } =
+   [wf] sequent [squash] { <H> >- 'P in well_founded_prop{'A} } -->
+   [wf] sequent [squash] { <H> >- 'A in univ[i:l] } -->
+   [wf] sequent [squash] { <H> >- 'a in 'A } -->
+   sequent ['ext] { <H> >- well_founded_apply{'P; 'a} in univ[i:l] } =
    it
 
 doc <:doc< 
    @docoff
 >>
 prim rfunctionFormation { f | a: 'A -> 'B['f; 'a] } :
-   [wf] sequent [squash] { 'H >- { f | a: 'A -> 'B['f; 'a] } = { f | a: 'A -> 'B['f; 'a] } in univ[i:l] } -->
-   sequent ['ext] { 'H >- univ[i:l] } =
+   [wf] sequent [squash] { <H> >- { f | a: 'A -> 'B['f; 'a] } = { f | a: 'A -> 'B['f; 'a] } in univ[i:l] } -->
+   sequent ['ext] { <H> >- univ[i:l] } =
    { f | a: 'A -> 'B['f; 'a] }
 
 doc <:doc< 
@@ -325,28 +325,28 @@ doc <:doc<
    @end[doc]
 >>
 prim rfunctionEquality  {| intro []; eqcd |} lambda{a. lambda{b. 'R['a; 'b]}} :
-   [wf] sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
-   [wf] sequent [squash] { 'H >- well_founded{'A1; a, b. 'R['a; 'b]} } -->
-   [wf] sequent [squash] { 'H;
+   [wf] sequent [squash] { <H> >- 'A1 = 'A2 in univ[i:l] } -->
+   [wf] sequent [squash] { <H> >- well_founded{'A1; a, b. 'R['a; 'b]} } -->
+   [wf] sequent [squash] { <H>;
              y: 'A1;
              g: { f1 | x1: { z: 'A1 | 'R['z; 'y] } -> 'B1['f1; 'x1] }
              >- 'B1['g; 'y] = 'B2['g; 'y] in univ[i:l]
            } -->
-   sequent ['ext] { 'H >- { f1 | a1:'A1 -> 'B1['f1; 'a1] }
+   sequent ['ext] { <H> >- { f1 | a1:'A1 -> 'B1['f1; 'a1] }
                    = { f2 | a2:'A2 -> 'B2['f2; 'a2] }
                    in univ[i:l]
            } =
    it
 
 prim rfunctionType  {| intro [] |} lambda{a. lambda{b. 'R['a; 'b]}} :
-   [wf] sequent [squash] { 'H >- "type"{'A} } -->
-   [wf] sequent [squash] { 'H >- well_founded{'A; a, b. 'R['a; 'b]} } -->
-   [wf] sequent [squash] { 'H;
+   [wf] sequent [squash] { <H> >- "type"{'A} } -->
+   [wf] sequent [squash] { <H> >- well_founded{'A; a, b. 'R['a; 'b]} } -->
+   [wf] sequent [squash] { <H>;
              y: 'A;
              g: { f | x: { z: 'A | 'R['z; 'y] } -> 'B['f; 'x] }
              >- "type"{'B['g; 'y]}
            } -->
-   sequent ['ext] { 'H >- "type"{. { f | a:'A -> 'B['f; 'a] } } } =
+   sequent ['ext] { <H> >- "type"{. { f | a:'A -> 'B['f; 'a] } } } =
    it
 
 doc <:doc< 
@@ -365,10 +365,10 @@ doc <:doc<
    @end[doc]
 >>
 prim rfunction_lambdaFormation {| intro [] |} lambda{a. lambda{b. 'R['a; 'b]}} :
-   [wf] sequent [squash] { 'H >- "type"{'A} } -->
-   [wf] sequent [squash] { 'H >- well_founded{'A; a, b. 'R['a; 'b]} } -->
-   ('b['g; 'y] : sequent ['ext] { 'H; y: 'A; g: { f | x: { z: 'A | 'R['z; 'y] } -> 'B['f; 'x] } >- 'B['g; 'y] }) -->
-   sequent ['ext] { 'H >- { f | x:'A -> 'B['f; 'x] } } =
+   [wf] sequent [squash] { <H> >- "type"{'A} } -->
+   [wf] sequent [squash] { <H> >- well_founded{'A; a, b. 'R['a; 'b]} } -->
+   ('b['g; 'y] : sequent ['ext] { <H>; y: 'A; g: { f | x: { z: 'A | 'R['z; 'y] } -> 'B['f; 'x] } >- 'B['g; 'y] }) -->
+   sequent ['ext] { <H> >- { f | x:'A -> 'B['f; 'x] } } =
    lambda{y. fix{g. 'b['g; 'y]}}
 
 doc <:doc< 
@@ -382,9 +382,9 @@ doc <:doc<
    @end[doc]
 >>
 prim rfunction_lambdaEquality {| intro []; eqcd |} :
-   [wf] sequent [squash] { 'H >- "type"{{ f | x: 'A -> 'B['f; 'x] }} } -->
-   [wf] sequent [squash] { 'H; y: 'A >- 'b1['y] = 'b2['y] in 'B[lambda{x1. 'b1['x1]}; 'y] } -->
-   sequent ['ext] { 'H >- lambda{x1. 'b1['x1]} = lambda{x2. 'b2['x2]} in { f | x: 'A -> 'B['f; 'x] } } =
+   [wf] sequent [squash] { <H> >- "type"{{ f | x: 'A -> 'B['f; 'x] }} } -->
+   [wf] sequent [squash] { <H>; y: 'A >- 'b1['y] = 'b2['y] in 'B[lambda{x1. 'b1['x1]}; 'y] } -->
+   sequent ['ext] { <H> >- lambda{x1. 'b1['x1]} = lambda{x2. 'b2['x2]} in { f | x: 'A -> 'B['f; 'x] } } =
    it
 
 doc <:doc< 
@@ -404,11 +404,11 @@ doc <:doc<
 prim rfunctionExtensionality
         ({ g1 | x1:'A1 -> 'B1['g1; 'x1] })
         ({ g2 | x2:'A2 -> 'B2['g2; 'x2] }) :
-   [wf] sequent [squash] { 'H >- "type"{{ g | x:'A -> 'B['g; 'x] }} } -->
-   [main] sequent [squash] { 'H; y: 'A >- 'f1 'y = 'f2 'y in 'B['f1; 'y] } -->
-   [wf] sequent [squash] { 'H >- 'f1 in { g1 | x1:'A1 -> 'B1['g1; 'x1] } } -->
-   [wf] sequent [squash] { 'H >- 'f2 in { g2 | x2:'A2 -> 'B2['g2; 'x2] } } -->
-   sequent ['ext] { 'H >- 'f1 = 'f2 in { g | x:'A -> 'B['g; 'x] } } =
+   [wf] sequent [squash] { <H> >- "type"{{ g | x:'A -> 'B['g; 'x] }} } -->
+   [main] sequent [squash] { <H>; y: 'A >- 'f1 'y = 'f2 'y in 'B['f1; 'y] } -->
+   [wf] sequent [squash] { <H> >- 'f1 in { g1 | x1:'A1 -> 'B1['g1; 'x1] } } -->
+   [wf] sequent [squash] { <H> >- 'f2 in { g2 | x2:'A2 -> 'B2['g2; 'x2] } } -->
+   sequent ['ext] { <H> >- 'f1 = 'f2 in { g | x:'A -> 'B['g; 'x] } } =
    it
 
 doc <:doc< 
@@ -421,14 +421,14 @@ doc <:doc<
    @end[doc]
 >>
 prim rfunctionElimination {| elim [] |} 'H 'a :
-   [wf] sequent [squash] { 'H; f: { g | x:'A -> 'B['g; 'x] }; 'J['f] >- 'a in 'A } -->
-   ('t['f; 'y; 'v] : sequent ['ext] { 'H;
+   [wf] sequent [squash] { <H>; f: { g | x:'A -> 'B['g; 'x] }; <J['f]> >- 'a in 'A } -->
+   ('t['f; 'y; 'v] : sequent ['ext] { <H>;
                                f: { g | x:'A -> 'B['g; 'x] };
-                               'J['f];
+                               <J['f]>;
                                y: 'B['f; 'a];
                                v: 'y = 'f 'a in 'B['f; 'a]
                                >- 'T['f] }) -->
-   sequent ['ext] { 'H; f: { g | x:'A -> 'B['g; 'x] }; 'J['f] >- 'T['f] } =
+   sequent ['ext] { <H>; f: { g | x:'A -> 'B['g; 'x] }; <J['f]> >- 'T['f] } =
    't['f; 'f 'a; it]
 
 doc <:doc< 
@@ -440,9 +440,9 @@ doc <:doc<
    @end[doc]
 >>
 prim rfunction_applyEquality {| intro[]; eqcd |} ({ f | x:'A -> 'B['f; 'x] }) :
-   [wf] sequent [squash] { 'H >- 'f1 = 'f2 in { f | x:'A -> 'B['f; 'x] } } -->
-   [wf] sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
-   sequent ['ext] { 'H >- 'f1 'a1 = 'f2 'a2 in 'B['f1; 'a1] } =
+   [wf] sequent [squash] { <H> >- 'f1 = 'f2 in { f | x:'A -> 'B['f; 'x] } } -->
+   [wf] sequent [squash] { <H> >- 'a1 = 'a2 in 'A } -->
+   sequent ['ext] { <H> >- 'f1 'a1 = 'f2 'a2 in 'B['f1; 'a1] } =
    it
 doc <:doc< @docoff >>
 
@@ -456,14 +456,14 @@ doc <:doc<
    @end[doc]
 >>
 interactive rfunction_rfunction_subtype {| intro [] |} lambda{a. lambda{b. 'R['a; 'b]}} :
-   [main] sequent [squash] { 'H >- \subtype{'A2; 'A1} } -->
-   [wf] sequent [squash] { 'H >- "type"{.{f1 | x1: 'A1 -> 'B1['f1; 'x1] }} } -->
-   [wf] sequent [squash] { 'H >- "type"{.{f2 | x2: 'A2 -> 'B2['f2; 'x2] }} } -->
-   [wf] sequent [squash] { 'H; a1: 'A1; a2: 'A1 >- "type"{'R['a1; 'a2]} } -->
-   [main] sequent [squash] { 'H; f: {f1 | x1: 'A1 -> 'B1['f1; 'x1]}; a: 'A2 >-
+   [main] sequent [squash] { <H> >- \subtype{'A2; 'A1} } -->
+   [wf] sequent [squash] { <H> >- "type"{.{f1 | x1: 'A1 -> 'B1['f1; 'x1] }} } -->
+   [wf] sequent [squash] { <H> >- "type"{.{f2 | x2: 'A2 -> 'B2['f2; 'x2] }} } -->
+   [wf] sequent [squash] { <H>; a1: 'A1; a2: 'A1 >- "type"{'R['a1; 'a2]} } -->
+   [main] sequent [squash] { <H>; f: {f1 | x1: 'A1 -> 'B1['f1; 'x1]}; a: 'A2 >-
                           \subtype{'B1['f; 'a]; 'B2['f; 'a]}
                     } -->
-   sequent ['ext] { 'H >- \subtype{.{ f1 | x1: 'A1 -> 'B1['f1; 'x1] }; .{ f2 | x2: 'A2 -> 'B2['f2; 'x2] } } }
+   sequent ['ext] { <H> >- \subtype{.{ f1 | x1: 'A1 -> 'B1['f1; 'x1] }; .{ f2 | x2: 'A2 -> 'B2['f2; 'x2] } } }
 doc <:doc< @docoff >>
 
 (************************************************************************

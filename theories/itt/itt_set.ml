@@ -125,9 +125,9 @@ dform set_df1 : {x:'A | 'B} = math_set {'x; 'A; 'B}
  * H, a: A >- Ui ext B
  *)
 prim setFormation 'A :
-   [wf] sequent [squash] { 'H >- 'A = 'A in univ[i:l] } -->
-   ('B['a] : sequent ['ext] { 'H; a: 'A >- univ[i:l] }) -->
-   sequent ['ext] { 'H >- univ[i:l] } =
+   [wf] sequent [squash] { <H> >- 'A = 'A in univ[i:l] } -->
+   ('B['a] : sequent ['ext] { <H>; a: 'A >- univ[i:l] }) -->
+   sequent ['ext] { <H> >- univ[i:l] } =
    { a: 'A | 'B['a] }
 
 doc <:doc< 
@@ -144,15 +144,15 @@ doc <:doc<
    @end[doc]
 >>
 prim setEquality {| intro []; eqcd |} :
-   [wf] sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
-   [wf] sequent [squash] { 'H; x: 'A1 >- 'B1['x] = 'B2['x] in univ[i:l] } -->
-   sequent ['ext] { 'H >- { a1:'A1 | 'B1['a1] } = { a2:'A2 | 'B2['a2] } in univ[i:l] } =
+   [wf] sequent [squash] { <H> >- 'A1 = 'A2 in univ[i:l] } -->
+   [wf] sequent [squash] { <H>; x: 'A1 >- 'B1['x] = 'B2['x] in univ[i:l] } -->
+   sequent ['ext] { <H> >- { a1:'A1 | 'B1['a1] } = { a2:'A2 | 'B2['a2] } in univ[i:l] } =
    it
 
 prim setType {| intro [] |} :
-   [wf] sequent [squash] { 'H >- "type"{'A1} } -->
-   [wf] sequent [squash] { 'H; x: 'A1 >- "type"{'B1['x]} } -->
-   sequent ['ext] { 'H >- "type"{.{ a1:'A1 | 'B1['a1] }} } =
+   [wf] sequent [squash] { <H> >- "type"{'A1} } -->
+   [wf] sequent [squash] { <H>; x: 'A1 >- "type"{'B1['x]} } -->
+   sequent ['ext] { <H> >- "type"{.{ a1:'A1 | 'B1['a1] }} } =
    it
 
 doc <:doc< 
@@ -164,10 +164,10 @@ doc <:doc<
    @end[doc]
 >>
 prim setMemberEquality {| intro []; eqcd |} :
-   [wf] sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
-   [assertion] sequent [squash] { 'H >- squash{'B['a1]} } -->
-   [wf] sequent [squash] { 'H; x: 'A >- "type"{'B['x]} } -->
-   sequent ['ext] { 'H >- 'a1 = 'a2 in { a:'A | 'B['a] } } =
+   [wf] sequent [squash] { <H> >- 'a1 = 'a2 in 'A } -->
+   [assertion] sequent [squash] { <H> >- squash{'B['a1]} } -->
+   [wf] sequent [squash] { <H>; x: 'A >- "type"{'B['x]} } -->
+   sequent ['ext] { <H> >- 'a1 = 'a2 in { a:'A | 'B['a] } } =
    it
 
 doc <:doc< 
@@ -179,10 +179,10 @@ doc <:doc<
    @end[doc]
 >>
 interactive setMemberFormation {| intro [] |} 'a :
-   [wf] sequent [squash] { 'H >- 'a = 'a in 'A } -->
-   [main] sequent [squash]   { 'H >- squash{'B['a]} } -->
-   [wf] sequent [squash] { 'H; z: 'A >- "type"{'B['z]} } -->
-   sequent ['ext]   { 'H >- { x:'A | 'B['x] } }
+   [wf] sequent [squash] { <H> >- 'a = 'a in 'A } -->
+   [main] sequent [squash]   { <H> >- squash{'B['a]} } -->
+   [wf] sequent [squash] { <H>; z: 'A >- "type"{'B['z]} } -->
+   sequent ['ext]   { <H> >- { x:'A | 'B['x] } }
 
 doc <:doc< 
    @begin[doc]
@@ -195,8 +195,8 @@ doc <:doc<
    @end[doc]
 >>
 prim setElimination {| elim [] |} 'H :
-   ('t : sequent ['ext] { 'H; u: 'A; v: squash{'B['u]}; 'J['u] >- 'T['u] }) -->
-   sequent ['ext] { 'H; u: { x:'A | 'B['x] }; 'J['u] >- 'T['u] } =
+   ('t : sequent ['ext] { <H>; u: 'A; v: squash{'B['u]}; <J['u]> >- 'T['u] }) -->
+   sequent ['ext] { <H>; u: { x:'A | 'B['x] }; <J['u]> >- 'T['u] } =
    't
 
 doc <:doc< 
@@ -209,8 +209,8 @@ doc <:doc<
    @end[doc]
 >>
 interactive set_subtype {| intro [] |} :
-   sequent [squash] { 'H >- "type"{ { a: 'A | 'B['a] } } } -->
-   sequent ['ext] { 'H >- \subtype{ { a: 'A | 'B['a] }; 'A } }
+   sequent [squash] { <H> >- "type"{ { a: 'A | 'B['a] } } } -->
+   sequent ['ext] { <H> >- \subtype{ { a: 'A | 'B['a] }; 'A } }
 
 doc <:doc< @docoff >>
 

@@ -110,8 +110,8 @@ doc <:doc<
    @end[doc]
 >>
 interactive sexists_type {| intro [] |} :
-   sequent [squash] { 'H; y: set >- "type"{'A['y]} } -->
-   sequent ['ext] { 'H >- "type"{."sexists"{x. 'A['x]} } }
+   sequent [squash] { <H>; y: set >- "type"{'A['y]} } -->
+   sequent ['ext] { <H> >- "type"{."sexists"{x. 'A['x]} } }
 
 doc <:doc< 
    @begin[doc]
@@ -122,10 +122,10 @@ doc <:doc<
    @end[doc]
 >>
 interactive sexists_intro  {| intro [] |} 'z :
-   ["wf"]   sequent ['ext] { 'H >- isset{'z} } -->
-   ["main"] sequent ['ext] { 'H >- 'A['z] } -->
-   ["wf"]   sequent ['ext] { 'H; w: set >- "type"{'A['w]} } -->
-   sequent ['ext] { 'H >- "sexists"{x. 'A['x]} }
+   ["wf"]   sequent ['ext] { <H> >- isset{'z} } -->
+   ["main"] sequent ['ext] { <H> >- 'A['z] } -->
+   ["wf"]   sequent ['ext] { <H>; w: set >- "type"{'A['w]} } -->
+   sequent ['ext] { <H> >- "sexists"{x. 'A['x]} }
 
 doc <:doc< 
    @begin[doc]
@@ -136,13 +136,13 @@ doc <:doc<
    @end[doc]
 >>
 interactive sexists_elim {| elim [] |} 'H :
-   sequent ['ext] { 'H;
+   sequent ['ext] { <H>;
                     z: set;
                     w: 'A['z];
-                    'J[pair{'z; 'w}]
+                    <J[pair{'z; 'w}]>
                     >- 'T[pair{'z; 'w}]
                   } -->
-   sequent ['ext] { 'H; x: "sexists"{y. 'A['y]}; 'J['x] >- 'T['x] }
+   sequent ['ext] { <H>; x: "sexists"{y. 'A['y]}; <J['x]> >- 'T['x] }
 doc <:doc< @docoff >>
 
 (*

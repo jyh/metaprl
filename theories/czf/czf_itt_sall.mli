@@ -57,23 +57,23 @@ topval fold_sall : conv
  * Typehood.
  *)
 rule sall_type :
-   sequent ['ext] { 'H; y: set >- "type"{'A['y]} } -->
-   sequent ['ext] { 'H >- "type"{."sall"{x. 'A['x]} } }
+   sequent ['ext] { <H>; y: set >- "type"{'A['y]} } -->
+   sequent ['ext] { <H> >- "type"{."sall"{x. 'A['x]} } }
 
 (*
  * Intro.
  *)
 rule sall_intro :
-   sequent ['ext] { 'H; a: set >- 'A['a] } -->
-   sequent ['ext] { 'H >- "sall"{x. 'A['x]} }
+   sequent ['ext] { <H>; a: set >- 'A['a] } -->
+   sequent ['ext] { <H> >- "sall"{x. 'A['x]} }
 
 (*
  * Elimination.
  *)
 rule sall_elim 'H 'z :
-   sequent [squash] { 'H; x: "sall"{y. 'A['y]}; 'J['x] >- isset{'z} } -->
-   sequent ['ext] { 'H; x: "sall"{y. 'A['y]}; 'J['x]; w: 'A['z] >- 'T['x] } -->
-   sequent ['ext] { 'H; x: "sall"{y. 'A['y]}; 'J['x] >- 'T['x] }
+   sequent [squash] { <H>; x: "sall"{y. 'A['y]}; <J['x]> >- isset{'z} } -->
+   sequent ['ext] { <H>; x: "sall"{y. 'A['y]}; <J['x]>; w: 'A['z] >- 'T['x] } -->
+   sequent ['ext] { <H>; x: "sall"{y. 'A['y]}; <J['x]> >- 'T['x] }
 
 (*
  * -*-

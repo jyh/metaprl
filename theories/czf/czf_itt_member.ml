@@ -138,37 +138,37 @@ doc <:doc<
    @end[doc]
 >>
 interactive mem_type {| intro [] |} :
-   ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
-   ["wf"] sequent [squash] { 'H >- isset{'s2} } -->
-   sequent ['ext] { 'H >- "type"{mem{'s1; 's2}} }
+   ["wf"] sequent [squash] { <H> >- isset{'s1} } -->
+   ["wf"] sequent [squash] { <H> >- isset{'s2} } -->
+   sequent ['ext] { <H> >- "type"{mem{'s1; 's2}} }
 
 interactive mem_equal {| intro [] |} :
-   ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
-   ["wf"] sequent [squash] { 'H >- isset{'s2} } -->
-   sequent ['ext] { 'H >- Itt_equal!equal{univ[1:l]; mem{'s1; 's2}; mem{'s1; 's2}} }
+   ["wf"] sequent [squash] { <H> >- isset{'s1} } -->
+   ["wf"] sequent [squash] { <H> >- isset{'s2} } -->
+   sequent ['ext] { <H> >- Itt_equal!equal{univ[1:l]; mem{'s1; 's2}; mem{'s1; 's2}} }
 
 (*
  * Introduction.
  *)
 interactive member_intro {| intro [] |} :
-   ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
-   ["wf"] sequent [squash] { 'H >- isset{'s2} } -->
-   sequent ['ext] { 'H >- mem{'s1; 's2} } -->
-   sequent ['ext] { 'H >- member{'s1; 's2} }
+   ["wf"] sequent [squash] { <H> >- isset{'s1} } -->
+   ["wf"] sequent [squash] { <H> >- isset{'s2} } -->
+   sequent ['ext] { <H> >- mem{'s1; 's2} } -->
+   sequent ['ext] { <H> >- member{'s1; 's2} }
 
 (*
  * Sets contain only sets.
  *)
 interactive elem_isset 'y :
-   sequent ['ext] { 'H >- member{'x; 'y} } -->
-   sequent ['ext] { 'H >- isset{'x} }
+   sequent ['ext] { <H> >- member{'x; 'y} } -->
+   sequent ['ext] { <H> >- isset{'x} }
 
 (*
  * Only sets have elements.
  *)
 interactive set_isset 'x :
-   sequent ['ext] { 'H >- member{'x; 'y} } -->
-   sequent ['ext] { 'H >- isset{'y} }
+   sequent ['ext] { <H> >- member{'x; 'y} } -->
+   sequent ['ext] { <H> >- isset{'y} }
 
 doc <:doc< 
    @begin[doc]
@@ -179,24 +179,24 @@ doc <:doc<
    @end[doc]
 >>
 interactive mem_fun_left 's1 :
-   ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
-   ["wf"] sequent [squash] { 'H >- isset{'s2} } -->
-   ["wf"] sequent [squash] { 'H >- isset{'s3} } -->
-   sequent ['ext] { 'H >- eq{'s1; 's2} } -->
-   sequent ['ext] { 'H >- mem{'s1; 's3} } -->
-   sequent ['ext] { 'H >- mem{'s2; 's3} }
+   ["wf"] sequent [squash] { <H> >- isset{'s1} } -->
+   ["wf"] sequent [squash] { <H> >- isset{'s2} } -->
+   ["wf"] sequent [squash] { <H> >- isset{'s3} } -->
+   sequent ['ext] { <H> >- eq{'s1; 's2} } -->
+   sequent ['ext] { <H> >- mem{'s1; 's3} } -->
+   sequent ['ext] { <H> >- mem{'s2; 's3} }
 doc <:doc< @docoff >>
 
 let memSubstLeftT = mem_fun_left
 
 doc <:doc< @doc{nil} >>
 interactive mem_fun_right 's1 :
-   ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
-   ["wf"] sequent [squash] { 'H >- isset{'s2} } -->
-   ["wf"] sequent [squash] { 'H >- isset{'s3} } -->
-   sequent ['ext] { 'H >- eq{'s1; 's2} } -->
-   sequent ['ext] { 'H >- mem{'s3; 's1} } -->
-   sequent ['ext] { 'H >- mem{'s3; 's2} }
+   ["wf"] sequent [squash] { <H> >- isset{'s1} } -->
+   ["wf"] sequent [squash] { <H> >- isset{'s2} } -->
+   ["wf"] sequent [squash] { <H> >- isset{'s3} } -->
+   sequent ['ext] { <H> >- eq{'s1; 's2} } -->
+   sequent ['ext] { <H> >- mem{'s3; 's1} } -->
+   sequent ['ext] { <H> >- mem{'s3; 's2} }
 doc <:doc< @docoff >>
 
 let memSubstRightT = mem_fun_right
@@ -208,9 +208,9 @@ doc <:doc<
    @end[doc]
 >>
 interactive member_fun {| intro [] |} :
-   sequent ['ext] { 'H >- fun_set{z. 'f1['z]} } -->
-   sequent ['ext] { 'H >- fun_set{z. 'f2['z]} } -->
-   sequent ['ext] { 'H >- fun_prop{z. mem{'f1['z]; 'f2['z]}} }
+   sequent ['ext] { <H> >- fun_set{z. 'f1['z]} } -->
+   sequent ['ext] { <H> >- fun_set{z. 'f2['z]} } -->
+   sequent ['ext] { <H> >- fun_prop{z. mem{'f1['z]; 'f2['z]}} }
 
 doc <:doc< 
    @begin[doc]
@@ -224,11 +224,11 @@ doc <:doc<
    @end[doc]
 >>
 interactive set_ext :
-   ["wf"] sequent ['ext] { 'H >- isset{'s1} } -->
-   ["wf"] sequent ['ext] { 'H >- isset{'s2} } -->
-   ["main"] sequent ['ext] { 'H; x: set; y: mem{'x; 's1} >- mem{'x; 's2} } -->
-   ["main"] sequent ['ext] { 'H; x: set; y: mem{'x; 's2} >- mem{'x; 's1} } -->
-   sequent ['ext] { 'H >- eq{'s1; 's2} }
+   ["wf"] sequent ['ext] { <H> >- isset{'s1} } -->
+   ["wf"] sequent ['ext] { <H> >- isset{'s2} } -->
+   ["main"] sequent ['ext] { <H>; x: set; y: mem{'x; 's1} >- mem{'x; 's2} } -->
+   ["main"] sequent ['ext] { <H>; x: set; y: mem{'x; 's2} >- mem{'x; 's1} } -->
+   sequent ['ext] { <H> >- eq{'s1; 's2} }
 doc <:doc< @docoff >>
 
 (************************************************************************

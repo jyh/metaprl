@@ -100,22 +100,22 @@ declare prim_record_set{'r; 'n; 'v}
  * Constants.
  *)
 rule bool_equiv :
-   sequent { 'H >- value_equiv{'S; ."bool"[@f:s]; ."bool"[@f:s]; type_bool} }
+   sequent { <H> >- value_equiv{'S; ."bool"[@f:s]; ."bool"[@f:s]; type_bool} }
 
 rule bool_value :
-   sequent { 'H >- is_value{."bool"[@f:s]} }
+   sequent { <H> >- is_value{."bool"[@f:s]} }
 
 rule char_equiv :
-   sequent { 'H >- value_equiv{'S; ."char"[@c:s]; ."char"[@c:s]; type_char} }
+   sequent { <H> >- value_equiv{'S; ."char"[@c:s]; ."char"[@c:s]; type_char} }
 
 rule char_value :
-   sequent { 'H >- is_value{."char"[@c:s]} }
+   sequent { <H> >- is_value{."char"[@c:s]} }
 
 rule int_equiv :
-   sequent { 'H >- value_equiv{'S; ."int"[@i:n]; ."int"[@i:n]; type_int} }
+   sequent { <H> >- value_equiv{'S; ."int"[@i:n]; ."int"[@i:n]; type_int} }
 
 rule int_value :
-   sequent { 'H >- is_value{'S; ."int"[@i:n]} }
+   sequent { <H> >- is_value{'S; ."int"[@i:n]} }
 
 (************************************************************************
  * CONTROL EXPRESSIONS                                                  *
@@ -127,12 +127,12 @@ rule int_value :
  * the rule can be bypassed by performing the rewrite step.
  *)
 rule cast_equiv :
-   sequent { 'H >- equiv{'S; 'e1; 'e2; 't; 'exn} } -->
-   sequent { 'H >- equiv{'S; cast{'e1; 't}; cast{'e2; 't}; 't; 'exn} }
+   sequent { <H> >- equiv{'S; 'e1; 'e2; 't; 'exn} } -->
+   sequent { <H> >- equiv{'S; cast{'e1; 't}; cast{'e2; 't}; 't; 'exn} }
 
 rule cast_value_equiv :
-   sequent { 'H >- value_equiv{'S; 'e1; 'e2; 't} } -->
-   sequent { 'H >- value_equiv{'S; cast{'e1; 't}; cast{'e2; 't}; 't} }
+   sequent { <H> >- value_equiv{'S; 'e1; 'e2; 't} } -->
+   sequent { <H> >- value_equiv{'S; cast{'e1; 't}; cast{'e2; 't}; 't} }
 
 rewrite cast_eval :
    cast{'e; 't} <--> 'e
@@ -141,16 +141,16 @@ rewrite cast_eval :
  * Conditional.
  *)
 rule ifthenelse_equiv :
-   sequent { 'H >- equiv{'S; 'e1; 'e4; 't; 'exn} } -->
-   sequent { 'H >- equiv{state{'S; 'e1}; 'e2; 'e5; 't; 'exn} } -->
-   sequent { 'H >- equiv{state{'S; 'e1}; 'e3; 'e6; 't; 'exn} } -->
-   sequent { 'H >- equiv{'S; ifthenelse{'e1; 'e2; 'e3}; ifthenelse{'e4; 'e5; 'e6}; 't; 'exn} }
+   sequent { <H> >- equiv{'S; 'e1; 'e4; 't; 'exn} } -->
+   sequent { <H> >- equiv{state{'S; 'e1}; 'e2; 'e5; 't; 'exn} } -->
+   sequent { <H> >- equiv{state{'S; 'e1}; 'e3; 'e6; 't; 'exn} } -->
+   sequent { <H> >- equiv{'S; ifthenelse{'e1; 'e2; 'e3}; ifthenelse{'e4; 'e5; 'e6}; 't; 'exn} }
 
 rule ifthenelse_value_equiv :
-   sequent { 'H >- value_equiv{'S; 'e1; 'e4; 't} } -->
-   sequent { 'H >- value_equiv{'S; 'e2; 'e5; 't} } -->
-   sequent { 'H >- value_equiv{'S; 'e3; 'e6; 't} } -->
-   sequent { 'H >- value_equiv{'S; ifthenelse{'e1; 'e2; 'e3}; ifthenelse{'e4; 'e5; 'e6}; 't} }
+   sequent { <H> >- value_equiv{'S; 'e1; 'e4; 't} } -->
+   sequent { <H> >- value_equiv{'S; 'e2; 'e5; 't} } -->
+   sequent { <H> >- value_equiv{'S; 'e3; 'e6; 't} } -->
+   sequent { <H> >- value_equiv{'S; ifthenelse{'e1; 'e2; 'e3}; ifthenelse{'e4; 'e5; 'e6}; 't} }
 
 rewrite ifthenelse_eval :
    process{'S; ifthenelse{'e1; 'e2; 'e3}} <-->
@@ -204,14 +204,14 @@ rewrite while_eval :
  *    *2. rval is a value
  *)
 rule assign_left_value_equiv 't :
-   sequent { 'H >- value_equiv{'S; 'e1; 'e3; type_ref{'t}} } -->
-   sequent { 'H >- equiv{'S; 'e2; 'e4; 't; 'exn} } -->
-   sequent { 'H >- equiv{'S; assign{'e1; 'e2}; assign{'e3; 'e4}; type_unit; 'exn} }
+   sequent { <H> >- value_equiv{'S; 'e1; 'e3; type_ref{'t}} } -->
+   sequent { <H> >- equiv{'S; 'e2; 'e4; 't; 'exn} } -->
+   sequent { <H> >- equiv{'S; assign{'e1; 'e2}; assign{'e3; 'e4}; type_unit; 'exn} }
 
 rule assign_right_value_equiv 't :
-   sequent { 'H >- equiv{'S; 'e1; 'e3; type_ref{'t}; 'exn} } -->
-   sequent { 'H >- value_equiv{'S; 'e2; 'e4; 't} } -->
-   sequent { 'H >- equiv{'S; assign{'e1; 'e2}; assign{'e3; 'e4}; type_unit; 'exn} }
+   sequent { <H> >- equiv{'S; 'e1; 'e3; type_ref{'t}; 'exn} } -->
+   sequent { <H> >- value_equiv{'S; 'e2; 'e4; 't} } -->
+   sequent { <H> >- equiv{'S; assign{'e1; 'e2}; assign{'e3; 'e4}; type_unit; 'exn} }
 
 rewrite assign_eval :
    "or"{is_value{'S; 'e1}; is_value{'S; 'e2}} -->
@@ -245,42 +245,42 @@ rewrite assign_right_raise :
  *    *3. car val, cdr arb
  *)
 rule list_nil_equiv :
-   sequent { 'H >- is_type{'t} } -->
-   sequent { 'H >- value_equiv{'S; list{nil}; list{nil}; type_list{'t}} }
+   sequent { <H> >- is_type{'t} } -->
+   sequent { <H> >- value_equiv{'S; list{nil}; list{nil}; type_list{'t}} }
 
 rule list_cons_equiv :
-   sequent { 'H >- value_equiv{'S; 'e1; 'e2; 't} } -->
-   sequent { 'H >- value_equiv{'S; list{'el1}; list{'el2}; type_list{'t}} } -->
-   sequent { 'H >- value_equiv{'S; list{cons{'e1; 'el1}}; list{cons{'e2; 'el2}}; type_list{'t}} }
+   sequent { <H> >- value_equiv{'S; 'e1; 'e2; 't} } -->
+   sequent { <H> >- value_equiv{'S; list{'el1}; list{'el2}; type_list{'t}} } -->
+   sequent { <H> >- value_equiv{'S; list{cons{'e1; 'el1}}; list{cons{'e2; 'el2}}; type_list{'t}} }
 
 rule list_hd_equiv :
-   sequent { 'H >- value_equiv{'S; 'e1; 'e2; 't} } -->
-   sequent { 'H >- equiv{'S; list{'el1}; list{'el2}; type_list{'t}; 'exn} } -->
-   sequent { 'H >- equiv{'S; list{cons{'e1; 'el1}}; list{cons{'e2; 'el2}}; type_list{'t}; 'exn} }
+   sequent { <H> >- value_equiv{'S; 'e1; 'e2; 't} } -->
+   sequent { <H> >- equiv{'S; list{'el1}; list{'el2}; type_list{'t}; 'exn} } -->
+   sequent { <H> >- equiv{'S; list{cons{'e1; 'el1}}; list{cons{'e2; 'el2}}; type_list{'t}; 'exn} }
 
 rule list_tl_equiv :
-   sequent { 'H >- equiv{'S; 'e1; 'e2; 't; 'exn} } -->
-   sequent { 'H >- value_equiv{'S; list{'el1}; list{'el2}; type_list{'t}} } -->
-   sequent { 'H >- equiv{'S; list{cons{'e1; 'el1}}; list{cons{'e2; 'el2}}; type_list{'t}; 'exn} }
+   sequent { <H> >- equiv{'S; 'e1; 'e2; 't; 'exn} } -->
+   sequent { <H> >- value_equiv{'S; list{'el1}; list{'el2}; type_list{'t}} } -->
+   sequent { <H> >- equiv{'S; list{cons{'e1; 'el1}}; list{cons{'e2; 'el2}}; type_list{'t}; 'exn} }
 
 rule nil_equiv :
-   sequent { 'H >- is_type{'t} } -->
-   sequent { 'H >- value_equiv{'S; nil; nil; type_list{'t}} }
+   sequent { <H> >- is_type{'t} } -->
+   sequent { <H> >- value_equiv{'S; nil; nil; type_list{'t}} }
 
 rule cons_equiv :
-   sequent { 'H >- value_equiv{'S; 'e1; 'e3; 't} } -->
-   sequent { 'H >- value_equiv{'S; 'e2; 'e4; type_list{'t}} } -->
-   sequent { 'H >- value_equiv{'S; cons{'e1; 'e2}; cons{'e3; 'e4}; type_list{'t}} }
+   sequent { <H> >- value_equiv{'S; 'e1; 'e3; 't} } -->
+   sequent { <H> >- value_equiv{'S; 'e2; 'e4; type_list{'t}} } -->
+   sequent { <H> >- value_equiv{'S; cons{'e1; 'e2}; cons{'e3; 'e4}; type_list{'t}} }
 
 rule cons_hd_equiv :
-   sequent { 'H >- value_equiv{'S; 'e1; 'e3; 't} } -->
-   sequent { 'H >- equiv{'S; 'e2; 'e4; type_list{'t}; 'exn} } -->
-   sequent { 'H >- equiv{'S; cons{'e1; 'e2}; cons{'e3; 'e4}; type_list{'t}; 'exn} }
+   sequent { <H> >- value_equiv{'S; 'e1; 'e3; 't} } -->
+   sequent { <H> >- equiv{'S; 'e2; 'e4; type_list{'t}; 'exn} } -->
+   sequent { <H> >- equiv{'S; cons{'e1; 'e2}; cons{'e3; 'e4}; type_list{'t}; 'exn} }
 
 rule cons_tl_equiv :
-   sequent { 'H >- equiv{'S; 'e1; 'e3; 't; 'exn} } -->
-   sequent { 'H >- value_equiv{'S; 'e2; 'e4; type_list{'t}} } -->
-   sequent { 'H >- equiv{'S; cons{'e1; 'e2}; cons{'e3; 'e4}; type_list{'t}; 'exn} }
+   sequent { <H> >- equiv{'S; 'e1; 'e3; 't; 'exn} } -->
+   sequent { <H> >- value_equiv{'S; 'e2; 'e4; type_list{'t}} } -->
+   sequent { <H> >- equiv{'S; cons{'e1; 'e2}; cons{'e3; 'e4}; type_list{'t}; 'exn} }
 
 rewrite list_cons_eval :
    "or"{is_value{'S; 'e}; is_value{'S; 'el}} -->
@@ -302,7 +302,7 @@ rewrite cons_eval :
  * Undoubtably, we will have to fix this at some point.
  *)
 rule string_equiv :
-   sequent { 'H >- equiv{'S; string[@s:s]; string[@s:s]; type_string; type_void} }
+   sequent { <H> >- equiv{'S; string[@s:s]; string[@s:s]; type_string; type_void} }
 
 rewrite string_eval :
    process{'S; string[@s:s]} <--> allocate{'S; string[@s:s]}
@@ -319,10 +319,10 @@ rewrite string_eval :
  *      + same three cases,but out-of-bounds
  *)
 rule string_subscript_value_equiv :
-   sequent { 'H >- value_equiv{'S; 'e1; 'e3; type_string} } -->
-   sequent { 'H >- value_equiv{'S; 'e2; 'e4; type_int} } -->
-   sequent { 'H >- string_bounds{'S; 'e1; 'e2} } -->
-   sequent { 'H >- value_equiv{'S; string_subscript{'e1; 'e2}; string_subscript{'e3; 'e4}; type_char} }
+   sequent { <H> >- value_equiv{'S; 'e1; 'e3; type_string} } -->
+   sequent { <H> >- value_equiv{'S; 'e2; 'e4; type_int} } -->
+   sequent { <H> >- string_bounds{'S; 'e1; 'e2} } -->
+   sequent { <H> >- value_equiv{'S; string_subscript{'e1; 'e2}; string_subscript{'e3; 'e4}; type_char} }
 
 rewrite string_subscript_eval :
    "or"{is_value{'S; 'e1}; is_value{'S; 'e2}} -->
@@ -351,11 +351,11 @@ rewrite string_subscript_right_raise :
  *     + same four cases, but out-of-bounds
  *)
 rule string_set_equiv :
-   sequent { 'H >- value_equiv{'S; 'e1; 'e4; type_string} } -->
-   sequent { 'H >- value_equiv{'S; 'e2; 'e5; type_int }} -->
-   sequent { 'H >- value_equiv{'S; 'e3; 'e6; type_char }} -->
-   sequent { 'H >- string_bounds{'S; 'e1; 'e2} } -->
-   sequent { 'H >- equiv{'S; string_set{'e1; 'e2; 'e3}; string_set{'e4; 'e5; 'e6}; type_unit; 'exn} }
+   sequent { <H> >- value_equiv{'S; 'e1; 'e4; type_string} } -->
+   sequent { <H> >- value_equiv{'S; 'e2; 'e5; type_int }} -->
+   sequent { <H> >- value_equiv{'S; 'e3; 'e6; type_char }} -->
+   sequent { <H> >- string_bounds{'S; 'e1; 'e2} } -->
+   sequent { <H> >- equiv{'S; string_set{'e1; 'e2; 'e3}; string_set{'e4; 'e5; 'e6}; type_unit; 'exn} }
 
 rewrite string_set_eval :
    two_values{is_value{'S; 'e1}; is_value{'S; 'e2}; is_value{'S; 'e3}} -->
@@ -394,9 +394,9 @@ rewrite string_set_value_raise :
  * Force all the entries to be values.
  *)
 rule array_cons_equiv :
-   sequent { 'H >- value_equiv{'S; 'e1; 'e2; 't} } -->
-   sequent { 'H >- equiv{'S; array{'el1}; array{'el2}; type_array{'t}; 'exn} } -->
-   sequent { 'H >- equiv{'S; array{cons{'e1; 'el1}}; array{cons{'e2; 'el2}}; type_array{'t}; 'exn} }
+   sequent { <H> >- value_equiv{'S; 'e1; 'e2; 't} } -->
+   sequent { <H> >- equiv{'S; array{'el1}; array{'el2}; type_array{'t}; 'exn} } -->
+   sequent { <H> >- equiv{'S; array{cons{'e1; 'el1}}; array{cons{'e2; 'el2}}; type_array{'t}; 'exn} }
 
 (*
  * The evaluation of an array performs an allocation.
@@ -416,10 +416,10 @@ rewrite array_eval :
  *      + same three cases but out-of-bounds
  *)
 rule array_subscript_equiv :
-   sequent { 'H >- value_equiv{'S; 'e1; 'e3; type_array{'t}} } -->
-   sequent { 'H >- value_equiv{'S; 'e2; 'e4; type_int} } -->
-   sequent { 'H >- array_bounds{'S; 'e1; 'e2} } -->
-   sequent { 'H >- value_equiv{'S; array_subscript{'e1; 'e2}; array_subscript{'e3; 'e4}; 't}}
+   sequent { <H> >- value_equiv{'S; 'e1; 'e3; type_array{'t}} } -->
+   sequent { <H> >- value_equiv{'S; 'e2; 'e4; type_int} } -->
+   sequent { <H> >- array_bounds{'S; 'e1; 'e2} } -->
+   sequent { <H> >- value_equiv{'S; array_subscript{'e1; 'e2}; array_subscript{'e3; 'e4}; 't}}
 
 rewrite array_subscript_eval :
    "or"{is_value{'S; 'e1}; is_value{'S; 'e2}} -->
@@ -450,10 +450,10 @@ rewrite array_subscript_subscript_raise :
  *     + same four cases, but out-of-bounds
  *)
 rule array_set_equiv 't :
-   sequent { 'H >- value_equiv{'S; 'e1; 'e4; type_array{'t}} } -->
-   sequent { 'H >- value_equiv{'S; 'e2; 'e5; type_int} } -->
-   sequent { 'H >- value_equiv{'S; 'e3; 'e6; 't} } -->
-   sequent { 'H >- equiv{'S; array_set{'e1; 'e2; 'e3}; array_set{'e4; 'e5; 'e6}; type_unit; 'exn} }
+   sequent { <H> >- value_equiv{'S; 'e1; 'e4; type_array{'t}} } -->
+   sequent { <H> >- value_equiv{'S; 'e2; 'e5; type_int} } -->
+   sequent { <H> >- value_equiv{'S; 'e3; 'e6; 't} } -->
+   sequent { <H> >- equiv{'S; array_set{'e1; 'e2; 'e3}; array_set{'e4; 'e5; 'e6}; type_unit; 'exn} }
 
 rewrite array_set_eval :
    two_values{is_value{'S; 'e1}; is_value{'S; 'e2}; is_value{'S; 'e3}} -->
@@ -489,9 +489,9 @@ rewrite array_set_value_raise :
  * Force all the entries to be values.
  *)
 rule record_equiv :
-   sequent { 'H >- value_equiv{'S; 'e1; 'e2; 't1} } -->
-   sequent { 'H >- equiv{'S; record{'el1}; record{'el2}; type_record{'tl1}; 'exn} } -->
-   sequent { 'H >- equiv{'S;
+   sequent { <H> >- value_equiv{'S; 'e1; 'e2; 't1} } -->
+   sequent { <H> >- equiv{'S; record{'el1}; record{'el2}; type_record{'tl1}; 'exn} } -->
+   sequent { <H> >- equiv{'S;
                          record{cons{cons{'n1; 'e1}; 'el1}};
                          record{cons{cons{'n1; 'e2}; 'el2}};
                          type_record{cons{'n1; 't1}; 'tl1};
@@ -509,14 +509,14 @@ rewrite record_eval :
  *    *2. record arb, label val
  *)
 rule proj_value_equiv :
-   sequent { 'H >- value_equiv{'S; 'e1; 'e2; type_record{cons{cons{'n1; 't}; nil}}} } -->
-   sequent { 'H >- name_equiv{'S; 'n1; 'n2} } -->
-   sequent { 'H >- value_equiv{'S; proj{'e1; 'n1}; proj{'e2; 'n2}; 't} }
+   sequent { <H> >- value_equiv{'S; 'e1; 'e2; type_record{cons{cons{'n1; 't}; nil}}} } -->
+   sequent { <H> >- name_equiv{'S; 'n1; 'n2} } -->
+   sequent { <H> >- value_equiv{'S; proj{'e1; 'n1}; proj{'e2; 'n2}; 't} }
 
 rule proj_equiv :
-   sequent { 'H >- equiv{'S; 'e1; 'e2; type_record{cons{cons{'n1; 't}; nil}}; 'exn} } -->
-   sequent { 'H >- name_equiv{'S; 'n1; 'n2} } -->
-   sequent { 'H >- equiv{'S; proj{'e1; 'n1}; proj{'e2; 'n2}; 't; 'exn} }
+   sequent { <H> >- equiv{'S; 'e1; 'e2; type_record{cons{cons{'n1; 't}; nil}}; 'exn} } -->
+   sequent { <H> >- name_equiv{'S; 'n1; 'n2} } -->
+   sequent { <H> >- equiv{'S; proj{'e1; 'n1}; proj{'e2; 'n2}; 't; 'exn} }
 
 rewrite proj_eval :
       process{'S; proj{'e1; 'n1}} <-->
@@ -534,29 +534,29 @@ rewrite proj_redex :
  *    *3. record val, label val, value arb
  *)
 rule record_set_value_equiv 't :
-   sequent { 'H >- value_equiv{'S; 'e1; 'e3; type_record{cons{cons{'n1; 't}; nil}}} } -->
-   sequent { 'H >- name_equiv{'S; 'n1; 'n2} } -->
-   sequent { 'H >- value_equiv{'S; 'e2; 'e4; 't} } -->
-   sequent { 'H >- value_equiv{'S;
+   sequent { <H> >- value_equiv{'S; 'e1; 'e3; type_record{cons{cons{'n1; 't}; nil}}} } -->
+   sequent { <H> >- name_equiv{'S; 'n1; 'n2} } -->
+   sequent { <H> >- value_equiv{'S; 'e2; 'e4; 't} } -->
+   sequent { <H> >- value_equiv{'S;
                                record_set{'e1; 'n1; 'e2};
                                record_set{'e3; 'n2; 'e4};
                                type_unit} }
 
 rule record_set_record_equiv 't :
-   sequent { 'H >- equiv{'S; 'e1; 'e3; type_record{cons{cons{'n1; 't}; nil}}; 'exn} } -->
-   sequent { 'H >- name_equiv{'S; 'n1; 'n2} } -->
-   sequent { 'H >- value_equiv{'S; 'e2; 'e4; 't} } -->
-   sequent { 'H >- equiv{'S;
+   sequent { <H> >- equiv{'S; 'e1; 'e3; type_record{cons{cons{'n1; 't}; nil}}; 'exn} } -->
+   sequent { <H> >- name_equiv{'S; 'n1; 'n2} } -->
+   sequent { <H> >- value_equiv{'S; 'e2; 'e4; 't} } -->
+   sequent { <H> >- equiv{'S;
                          record_set{'e1; 'n1; 'e2};
                          record_set{'e3; 'n2; 'e4};
                          type_unit;
                          'exn} }
 
 rule record_set_arg_equiv 't :
-   sequent { 'H >- value_equiv{'S; 'e1; 'e3; type_record{cons{cons{'n1; 't}; nil}}} } -->
-   sequent { 'H >- name_equiv{'S; 'n1; 'n2} } -->
-   sequent { 'H >- equiv{'S; 'e2; 'e4; 't; 'exn} } -->
-   sequent { 'H >- equiv{'S;
+   sequent { <H> >- value_equiv{'S; 'e1; 'e3; type_record{cons{cons{'n1; 't}; nil}}} } -->
+   sequent { <H> >- name_equiv{'S; 'n1; 'n2} } -->
+   sequent { <H> >- equiv{'S; 'e2; 'e4; 't; 'exn} } -->
+   sequent { <H> >- equiv{'S;
                          record_set{'e1; 'n1; 'e2};
                          record_set{'e3; 'n2; 'e4};
                          type_unit;
@@ -583,7 +583,7 @@ rewrite record_set_redex :
  * Intensional equivalence of functions.
  *)
 rule fun_equiv :
-   sequent { 'H >- value_equiv{'S; ."fun"{'pwel1}; ."fun"{'pwel2}; type_fun{'t1; 't2}} }
+   sequent { <H> >- value_equiv{'S; ."fun"{'pwel1}; ."fun"{'pwel2}; type_fun{'t1; 't2}} }
 
 (************************************************************************
  * LET                                                                  *
@@ -591,14 +591,14 @@ rule fun_equiv :
 
 (*
 rule let_equiv :
-   sequent { 'H >- equiv{'S; 'el1; 'el2; 'tl} } -->
-   sequent { 'H >- equiv{state{'S; 'el1}; 'p1; 'p2; type_fun{'tl; 't}} } -->
-   sequent { 'H >- equiv{'S; ."let"{'p1; 'e1}; ."let"{'p2; 'e2}; 't} }
+   sequent { <H> >- equiv{'S; 'el1; 'el2; 'tl} } -->
+   sequent { <H> >- equiv{state{'S; 'el1}; 'p1; 'p2; type_fun{'tl; 't}} } -->
+   sequent { <H> >- equiv{'S; ."let"{'p1; 'e1}; ."let"{'p2; 'e2}; 't} }
 
 rule let_value_equiv :
-   sequent { 'H >- value_equiv{'S; 'el1; 'el2; 'tl} } -->
-   sequent { 'H >- value_equiv{'S; 'p1; 'p2; type_fun{'tl; 't}} } -->
-   sequent { 'H >- value_equiv{'S; ."let"{'p1; 'e1}; ."let"{'p2; 'e2}; 't} }
+   sequent { <H> >- value_equiv{'S; 'el1; 'el2; 'tl} } -->
+   sequent { <H> >- value_equiv{'S; 'p1; 'p2; type_fun{'tl; 't}} } -->
+   sequent { <H> >- value_equiv{'S; ."let"{'p1; 'e1}; ."let"{'p2; 'e2}; 't} }
 
 rewrite let_eval :
    process{'S; ."let"{'p; 'e}} <-->
@@ -611,14 +611,14 @@ rewrite let_eval :
 
 (*
 rule match_equiv :
-   sequent { 'H >- equiv{'S; 'e1; 'e2; 't2; 'exn} } -->
-   sequent { 'H >- equiv{'S; 'p1; 'p2; type_fun{'t2; 't1}; 'exn} } -->
-   sequent { 'H >- equiv{'S; ."match"{'e1; 'p1}; ."match"{'e2; 'p2}; 't; 'exn} }
+   sequent { <H> >- equiv{'S; 'e1; 'e2; 't2; 'exn} } -->
+   sequent { <H> >- equiv{'S; 'p1; 'p2; type_fun{'t2; 't1}; 'exn} } -->
+   sequent { <H> >- equiv{'S; ."match"{'e1; 'p1}; ."match"{'e2; 'p2}; 't; 'exn} }
 
 rule match_value_equiv :
-   sequent { 'H >- value_equiv{'S; 'e1; 'e2; 't2} } -->
-   sequent { 'H >- value_equiv{'S; 'p1; 'p2; functional{'t2; 't1}} } -->
-   sequent { 'H >- value_equiv{'S; ."match"{'e1; 'p1}; ."match"{'e2; 'p2}; 't} }
+   sequent { <H> >- value_equiv{'S; 'e1; 'e2; 't2} } -->
+   sequent { <H> >- value_equiv{'S; 'p1; 'p2; functional{'t2; 't1}} } -->
+   sequent { <H> >- value_equiv{'S; ."match"{'e1; 'p1}; ."match"{'e2; 'p2}; 't} }
 *)
 
 (************************************************************************
@@ -629,14 +629,14 @@ rule match_value_equiv :
  * Application.
  *)
 rule apply_equiv 't1 :
-   sequent { 'H >- equiv{'S; 'f1; 'f2; type_fun{'t1; 't2}; 'exn} } -->
-   sequent { 'H >- equiv{'S; 'a1; 'a2; 't1; 'exn} } -->
-   sequent { 'H >- equiv{'S; apply{'f1; 'a1}; apply{'f2; 'a2}; 't2; 'exn}}
+   sequent { <H> >- equiv{'S; 'f1; 'f2; type_fun{'t1; 't2}; 'exn} } -->
+   sequent { <H> >- equiv{'S; 'a1; 'a2; 't1; 'exn} } -->
+   sequent { <H> >- equiv{'S; apply{'f1; 'a1}; apply{'f2; 'a2}; 't2; 'exn}}
 
 rule apply_value_equiv 't1 :
-   sequent { 'H >- value_equiv{'S; 'f1; 'f2; functional{'t1; 't2}} } -->
-   sequent { 'H >- value_equiv{'S; 'a1; 'a2; 't1} } -->
-   sequent { 'H >- value_equiv{'S; apply{'f1; 'a1}; apply{'f2; 'a2}; 't2} }
+   sequent { <H> >- value_equiv{'S; 'f1; 'f2; functional{'t1; 't2}} } -->
+   sequent { <H> >- value_equiv{'S; 'a1; 'a2; 't1} } -->
+   sequent { <H> >- value_equiv{'S; apply{'f1; 'a1}; apply{'f2; 'a2}; 't2} }
 
 rewrite apply_eval :
    process{'S; apply{'e1; 'e2}} <-->

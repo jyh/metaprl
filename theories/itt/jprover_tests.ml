@@ -124,10 +124,10 @@ interactive subst :
 (* barber *)
 
 interactive barber 'barber 'H 'barber bind{x,y.'shaves['x;'y]} :
-   sequent [squash] { 'H >- "type"{'People} } -->
-   sequent [squash] { 'H >- 'barber in 'People } -->
-   sequent [squash] { 'H; p1: 'People; p2: 'People >- "type"{'shaves['p1;'p2]} } -->
-   sequent ['ext] { 'H; x: all person:'People. "iff"{'shaves['barber;'person];."not"{'shaves['person;'person]}} >- "false" }
+   sequent [squash] { <H> >- "type"{'People} } -->
+   sequent [squash] { <H> >- 'barber in 'People } -->
+   sequent [squash] { <H>; p1: 'People; p2: 'People >- "type"{'shaves['p1;'p2]} } -->
+   sequent ['ext] { <H>; x: all person:'People. "iff"{'shaves['barber;'person];."not"{'shaves['person;'person]}} >- "false" }
 
 
 
@@ -382,15 +382,15 @@ jtest << (exst x:'T. all y:'T. ('A['x,'y] => 'A['y,'x])) >> "C" "LK";;  (* INVAL
 *)
 
 interactive agatha 'Butler 'Agatha 'Charles:
-   sequent ['ext] {'H >- "type"{'Person} } -->
-   sequent ['ext] {'H; x: 'Person >- "type"{'Lives['x]} } -->
-   sequent ['ext] {'H; x: 'Person; y:'Person >- "type"{'Hates['x; 'y]} } -->
-   sequent ['ext] {'H; x: 'Person; y:'Person >- "type"{'Richer['x; 'y]} } -->
-   sequent ['ext] {'H; x: 'Person; y:'Person >- "type"{'Killed['x; 'y]} } -->
-   sequent ['ext] {'H >- 'Butler in 'Person } -->
-   sequent ['ext] {'H >- 'Agatha in 'Person } -->
-   sequent ['ext] {'H >- 'Charles in 'Person } -->
-   sequent ['ext] { 'H >-
+   sequent ['ext] { <H> >- "type"{'Person} } -->
+   sequent ['ext] { <H>; x: 'Person >- "type"{'Lives['x]} } -->
+   sequent ['ext] { <H>; x: 'Person; y:'Person >- "type"{'Hates['x; 'y]} } -->
+   sequent ['ext] { <H>; x: 'Person; y:'Person >- "type"{'Richer['x; 'y]} } -->
+   sequent ['ext] { <H>; x: 'Person; y:'Person >- "type"{'Killed['x; 'y]} } -->
+   sequent ['ext] { <H> >- 'Butler in 'Person } -->
+   sequent ['ext] { <H> >- 'Agatha in 'Person } -->
+   sequent ['ext] { <H> >- 'Charles in 'Person } -->
+   sequent ['ext] { <H> >-
       'Lives['Butler] =>
       'Hates['Agatha; 'Agatha] =>
       'Hates['Agatha; 'Charles] =>

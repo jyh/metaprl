@@ -41,11 +41,11 @@ declare type;;
 rule nil_sig : sig{nil_sig};;
 
 rule kind_sig 'S : sig{'S[nil_sig]} -->
-    sequent { 'S >> 'K } -->
+    sequent { <S> >- 'K } -->
     sig{'S[hyp{'K; a. nil_sig}]};;
 
 rule type_sig 'S : sig{'S[nil_sig]} -->
-   sequent { 'S >> mem{'A; type} } -->
+   sequent { <S> >- mem{'A; type} } -->
    sig{'S[hyp{'A; c. nil_sig}]};;
 
 (*

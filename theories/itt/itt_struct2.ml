@@ -112,18 +112,18 @@ doc <:doc<
 >>
 
 interactive substitution2 ('t1 = 't2 in 'T) bind{x. 'C['x]} :
-   [equality] sequent [squash] { 'H >- 't1 = 't2 in 'T } -->
-   [main]  sequent ['ext] { 'H >- 'C['t2] } -->
-   [wf] sequent [squash] { 'H; x: 'T; v: 't1='x in 'T; w: 't2='x in 'T
+   [equality] sequent [squash] { <H> >- 't1 = 't2 in 'T } -->
+   [main]  sequent ['ext] { <H> >- 'C['t2] } -->
+   [wf] sequent [squash] { <H>; x: 'T; v: 't1='x in 'T; w: 't2='x in 'T
                            >- "type"{'C['x]} } -->
-   sequent ['ext] { 'H >- 'C['t1] }
+   sequent ['ext] { <H> >- 'C['t1] }
 
 interactive hypSubstitution2 'H ('t1 = 't2 in 'T) bind{y. 'A['y]} :
-   [equality] sequent [squash] { 'H; x: 'A['t1]; 'J['x] >- 't1 = 't2 in 'T } -->
-   [main] sequent ['ext] { 'H; x: 'A['t2]; 'J['x] >- 'C['x] } -->
-   [wf] sequent [squash] { 'H; x: 'A['t1]; 'J['x]; z: 'T; v: 't1='z in 'T; w: 't2='z in 'T
+   [equality] sequent [squash] { <H>; x: 'A['t1]; <J['x]> >- 't1 = 't2 in 'T } -->
+   [main] sequent ['ext] { <H>; x: 'A['t2]; <J['x]> >- 'C['x] } -->
+   [wf] sequent [squash] { <H>; x: 'A['t1]; <J['x]>; z: 'T; v: 't1='z in 'T; w: 't2='z in 'T
                            >- "type"{'A['z]} } -->
-   sequent ['ext] { 'H; x: 'A['t1]; 'J['x] >- 'C['x] }
+   sequent ['ext] { <H>; x: 'A['t1]; <J['x]> >- 'C['x] }
 
 
 
@@ -152,9 +152,9 @@ doc <:doc<
 >>
 
 interactive cutMem 's 'S bind{x.'T['x]} :
-  [assertion] sequent[squash]{ 'H >- 's in 'S } -->
-   [main]      sequent ['ext] { 'H; x: 'S; v: 'x='s in 'S >- 'T['x] } -->
-   sequent ['ext] { 'H >- 'T['s]}
+  [assertion] sequent[squash]{ <H> >- 's in 'S } -->
+   [main]      sequent ['ext] { <H>; x: 'S; v: 'x='s in 'S >- 'T['x] } -->
+   sequent ['ext] { <H> >- 'T['s]}
 
 doc <:doc< 
    @begin[doc]
@@ -172,15 +172,15 @@ doc <:doc<
 
 (*
 interactive cutEqWeak ('s_1='s_2 in 'S) bind{x.'t['x]} 'v 'u :
-   [assertion] sequent[squash]{ 'H >- 's_1='s_2 in 'S } -->
-   [main]      sequent ['ext] { 'H; x: 'S; v: 's_1='x in 'S; u: 's_2='x in 'S >- 't['x] in 'T } -->
-   sequent ['ext] { 'H >- 't['s_1] = 't['s_2] in 'T}
+   [assertion] sequent[squash]{ <H> >- 's_1='s_2 in 'S } -->
+   [main]      sequent ['ext] { <H>; x: 'S; v: 's_1='x in 'S; u: 's_2='x in 'S >- 't['x] in 'T } -->
+   sequent ['ext] { <H> >- 't['s_1] = 't['s_2] in 'T}
 *)
 
 interactive cutEq0 ('s_1='s_2 in 'S) bind{x.'t_1['x]  't_2['x]} :
-   [assertion] sequent[squash]{ 'H >- 's_1='s_2 in 'S } -->
-   [main]      sequent ['ext] { 'H; x: 'S; v: 's_1='x in 'S; u: 's_2='x in 'S >- 't_1['x] = 't_2['x] in 'T } -->
-   sequent ['ext] { 'H >- 't_1['s_1] = 't_2['s_2] in 'T}
+   [assertion] sequent[squash]{ <H> >- 's_1='s_2 in 'S } -->
+   [main]      sequent ['ext] { <H>; x: 'S; v: 's_1='x in 'S; u: 's_2='x in 'S >- 't_1['x] = 't_2['x] in 'T } -->
+   sequent ['ext] { <H> >- 't_1['s_1] = 't_2['s_2] in 'T}
 
 
 doc <:doc< 
@@ -191,11 +191,11 @@ doc <:doc<
 >>
 
 interactive substitutionInType ('t_1 = 't_2 in 'T) bind{x. 'c_1='c_2 in 'C['x]} :
-   [equality] sequent [squash] { 'H >- 't_1 = 't_2 in 'T } -->
-   [main]  sequent ['ext] { 'H >-  'c_1 = 'c_2 in 'C['t_2] } -->
-   [wf] sequent [squash] { 'H; x: 'T; v: 't_1='x in 'T; w: 't_2='x in 'T
+   [equality] sequent [squash] { <H> >- 't_1 = 't_2 in 'T } -->
+   [main]  sequent ['ext] { <H> >-  'c_1 = 'c_2 in 'C['t_2] } -->
+   [wf] sequent [squash] { <H>; x: 'T; v: 't_1='x in 'T; w: 't_2='x in 'T
                            >- "type"{'C['x]} } -->
-   sequent ['ext] { 'H >- 'c_1 = 'c_2 in 'C['t_1] }
+   sequent ['ext] { <H> >- 'c_1 = 'c_2 in 'C['t_1] }
 
 doc <:doc< 
    @begin[doc]
@@ -210,9 +210,9 @@ doc <:doc<
 >>
 
 interactive cutEq ('s_1='s_2 in 'S) bind{x.'t_1['x] = 't_2['x] in 'T['x] } :
-   [assertion] sequent[squash]{ 'H >- 's_1='s_2 in 'S } -->
-   [main]      sequent ['ext] { 'H; x: 'S; v: 's_1='x in 'S; u: 's_2='x in 'S >- 't_1['x] = 't_2['x] in 'T['x] } -->
-   sequent ['ext] { 'H >- 't_1['s_1] = 't_2['s_2] in 'T['s_1]}
+   [assertion] sequent[squash]{ <H> >- 's_1='s_2 in 'S } -->
+   [main]      sequent ['ext] { <H>; x: 'S; v: 's_1='x in 'S; u: 's_2='x in 'S >- 't_1['x] = 't_2['x] in 'T['x] } -->
+   sequent ['ext] { <H> >- 't_1['s_1] = 't_2['s_2] in 'T['s_1]}
 
 doc <:doc< 
    @begin[doc]
@@ -220,8 +220,8 @@ doc <:doc<
    @end[doc]
 >>
 interactive setMemElim {| elim [] |} 'H :
-   sequent ['ext] { 'H; v: 't in 'A; u: squash{'B['t]}; 'J[it] >- 'C[it] } -->
-   sequent ['ext] { 'H; v: 't in {x: 'A | 'B['x]}; 'J['v] >- 'C['v] }
+   sequent ['ext] { <H>; v: 't in 'A; u: squash{'B['t]}; <J[it]> >- 'C[it] } -->
+   sequent ['ext] { <H>; v: 't in {x: 'A | 'B['x]}; <J['v]> >- 'C['v] }
 
 doc <:doc< 
    @begin[doc]
@@ -247,9 +247,9 @@ doc <:doc<
 
 
 interactive cutSquash 'H 'S :
-   [assertion] sequent [squash] { 'H; 'J >- 'S } -->
-   [main]      sequent ['ext] { 'H; x: squash{'S}; 'J >- 'T } -->
-   sequent ['ext] { 'H; 'J >- 'T}
+   [assertion] sequent [squash] { <H>; <J> >- 'S } -->
+   [main]      sequent ['ext] { <H>; x: squash{'S}; <J> >- 'T } -->
+   sequent ['ext] { <H>; <J> >- 'T}
 
 doc <:doc< 
    @begin[doc]

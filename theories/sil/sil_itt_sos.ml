@@ -176,7 +176,7 @@ let resource reduce += [
 ]
 
 interactive evals_identity {| intro [] |} :
-   sequent ['ext] { 'H >- evalsto{'t1; 't1} }
+   sequent ['ext] { <H> >- evalsto{'t1; 't1} }
 
 let rwevalT i p =
    let mseq = Sequent.msequent p in
@@ -197,8 +197,8 @@ let rwevalT i p =
  * Value.
  *)
 interactive value_thm :
-   [main] sequent [squash] { 'H >- "value"{'e1; 's} } -->
-   sequent ['ext] { 'H >- Perv!"rewrite"{eval{'e1; 's}; ."val"{progof{eval{'e1; .Sil_itt_state!empty}}; 's}} }
+   [main] sequent [squash] { <H> >- "value"{'e1; 's} } -->
+   sequent ['ext] { <H> >- Perv!"rewrite"{eval{'e1; 's}; ."val"{progof{eval{'e1; .Sil_itt_state!empty}}; 's}} }
 
 let rwvalueT s2 i p =
    let mseq = Sequent.msequent p in
@@ -241,12 +241,12 @@ prim_rw eta : prog{s. eval{'v; 's}} <--> 'v
  * Squashing.
  *)
 interactive squash_evalsto :
-   sequent [squash] { 'H >- evalsto{'t1; 't2} } -->
-   sequent ['ext] { 'H >- evalsto{'t1; 't2} }
+   sequent [squash] { <H> >- evalsto{'t1; 't2} } -->
+   sequent ['ext] { <H> >- evalsto{'t1; 't2} }
 
 interactive squash_value :
-   sequent [squash] { 'H >- "value"{'e1; 's} } -->
-   sequent ['ext] { 'H >- "value"{'e1; 's} }
+   sequent [squash] { <H> >- "value"{'e1; 's} } -->
+   sequent ['ext] { <H> >- "value"{'e1; 's} }
 
 let squash_evalstoT = squash_evalsto
 let squash_valueT = squash_value
@@ -359,138 +359,138 @@ prim_rw unfold_apply : Sil_programs!apply{'e1; 'e2} <-->
  ************************************************************************)
 
 interactive exprof_value {| intro [] |} :
-   sequent ['ext] { 'H >- "value"{exprof{'e}; 's} }
+   sequent ['ext] { <H> >- "value"{exprof{'e}; 's} }
 
 interactive exprof_eval {| intro [] |} :
-   sequent ['ext] { 'H >- evalsto{eval{exprof{'e}; 's}; eval{exprof{'e}; 's}} }
+   sequent ['ext] { <H> >- evalsto{eval{exprof{'e}; 's}; eval{exprof{'e}; 's}} }
 
 (*
  * Number values.
  *)
 interactive number_value :
-   sequent ['ext] { 'H >- "value"{.Sil_programs!number[i:n]; 's} }
+   sequent ['ext] { <H> >- "value"{.Sil_programs!number[i:n]; 's} }
 
 interactive number_eval :
-   sequent ['ext] { 'H >- evalsto{eval{number[i:n]; 's}; eval{number[i:n]; 's}}}
+   sequent ['ext] { <H> >- evalsto{eval{number[i:n]; 's}; eval{number[i:n]; 's}}}
 
 interactive add_eval 's2 :
-   [main] sequent [squash] { 'H >- evalsto{eval{'e1; 's1}; eval{number[i:n]; 's2}} } -->
-   [main] sequent [squash] { 'H >- evalsto{eval{'e2; 's2}; eval{number[j:n]; 's3}} } -->
-   sequent ['ext] { 'H >- evalsto{eval{add{'e1; 'e2}; 's1}; eval{meta_sum[i:n, j:n]; 's3}} }
+   [main] sequent [squash] { <H> >- evalsto{eval{'e1; 's1}; eval{number[i:n]; 's2}} } -->
+   [main] sequent [squash] { <H> >- evalsto{eval{'e2; 's2}; eval{number[j:n]; 's3}} } -->
+   sequent ['ext] { <H> >- evalsto{eval{add{'e1; 'e2}; 's1}; eval{meta_sum[i:n, j:n]; 's3}} }
 
 interactive sub_eval 's2 :
-   [main] sequent [squash] { 'H >- evalsto{eval{'e1; 's1}; eval{number[i:n]; 's2}} } -->
-   [main] sequent [squash] { 'H >- evalsto{eval{'e2; 's2}; eval{number[j:n]; 's3}} } -->
-   sequent ['ext] { 'H >- evalsto{eval{sub{'e1; 'e2}; 's1}; eval{meta_sum[i:n, j:n]; 's3}} }
+   [main] sequent [squash] { <H> >- evalsto{eval{'e1; 's1}; eval{number[i:n]; 's2}} } -->
+   [main] sequent [squash] { <H> >- evalsto{eval{'e2; 's2}; eval{number[j:n]; 's3}} } -->
+   sequent ['ext] { <H> >- evalsto{eval{sub{'e1; 'e2}; 's1}; eval{meta_sum[i:n, j:n]; 's3}} }
 
 interactive if_eval (number[i:n]) 's2 (number[j:n]) 's3 :
-   [main] sequent [squash] { 'H >- evalsto{eval{'e1; 's1}; eval{number[i:n]; 's2}} } -->
-   [main] sequent [squash] { 'H >- evalsto{eval{'e2; 's2}; eval{number[j:n]; 's3}} } -->
-   [main] sequent [squash] { 'H; p: Sil_sos!eq_int{number[i:n]; number[j:n]} >- evalsto{eval{'e3; 's3}; eval{'v3; 's4}} } -->
-   [main] sequent [squash] { 'H; p: Sil_sos!neq_int{number[i:n]; number[j:n]} >- evalsto{eval{'e4; 's3}; eval{'v3; 's4}} } -->
-   sequent ['ext] { 'H >- evalsto{eval{."if"{'e1; 'e2; 'e3; 'e4}; 's1}; eval{'v3; 's4}} }
+   [main] sequent [squash] { <H> >- evalsto{eval{'e1; 's1}; eval{number[i:n]; 's2}} } -->
+   [main] sequent [squash] { <H> >- evalsto{eval{'e2; 's2}; eval{number[j:n]; 's3}} } -->
+   [main] sequent [squash] { <H>; p: Sil_sos!eq_int{number[i:n]; number[j:n]} >- evalsto{eval{'e3; 's3}; eval{'v3; 's4}} } -->
+   [main] sequent [squash] { <H>; p: Sil_sos!neq_int{number[i:n]; number[j:n]} >- evalsto{eval{'e4; 's3}; eval{'v3; 's4}} } -->
+   sequent ['ext] { <H> >- evalsto{eval{."if"{'e1; 'e2; 'e3; 'e4}; 's1}; eval{'v3; 's4}} }
 
 (*
  * Union values.
  *)
 interactive inl_value :
-   [main] sequent [squash] { 'H >- "value"{'e1; 's} } -->
-   sequent ['ext] { 'H >- "value"{.Sil_programs!inl{'e1}; 's} }
+   [main] sequent [squash] { <H> >- "value"{'e1; 's} } -->
+   sequent ['ext] { <H> >- "value"{.Sil_programs!inl{'e1}; 's} }
 
 interactive inr_value :
-   [main] sequent [squash] { 'H >- "value"{'e1; 's} } -->
-   sequent ['ext] { 'H >- "value"{.Sil_programs!inr{'e1}; 's} }
+   [main] sequent [squash] { <H> >- "value"{'e1; 's} } -->
+   sequent ['ext] { <H> >- "value"{.Sil_programs!inr{'e1}; 's} }
 
 interactive inl_eval :
-   [main] sequent [squash] { 'H >- evalsto{eval{'e1; 's1}; eval{'v1; 's2}} } -->
-   [main] sequent [squash] { 'H >- "value"{'v1; 's2} } -->
-   sequent ['ext] { 'H >- evalsto{eval{inl{'e1}; 's1}; eval{inl{'v1}; 's2}} }
+   [main] sequent [squash] { <H> >- evalsto{eval{'e1; 's1}; eval{'v1; 's2}} } -->
+   [main] sequent [squash] { <H> >- "value"{'v1; 's2} } -->
+   sequent ['ext] { <H> >- evalsto{eval{inl{'e1}; 's1}; eval{inl{'v1}; 's2}} }
 
 interactive inr_eval :
-   [main] sequent [squash] { 'H >- evalsto{eval{'e1; 's1}; eval{'v1; 's2}} } -->
-   [main] sequent [squash] { 'H >- "value"{'v1; 's2} } -->
-   sequent ['ext] { 'H >- evalsto{eval{inr{'e1}; 's1}; eval{inr{'v1}; 's2}} }
+   [main] sequent [squash] { <H> >- evalsto{eval{'e1; 's1}; eval{'v1; 's2}} } -->
+   [main] sequent [squash] { <H> >- "value"{'v1; 's2} } -->
+   sequent ['ext] { <H> >- evalsto{eval{inr{'e1}; 's1}; eval{inr{'v1}; 's2}} }
 
 interactive decide_left_eval 'v1 's2 :
-   [main] sequent [squash] { 'H >- evalsto{eval{'e1; 's1}; eval{inl{'v1}; 's2}} } -->
-   [main] sequent [squash] { 'H >- evalsto{eval{'e2['v1]; 's2}; eval{'v3; 's3}} } -->
-   [main] sequent [squash] { 'H >- "value"{'v1; 's2} } -->
-   sequent ['ext] { 'H >- evalsto{eval{decide{'e1; x. 'e2['x]; y. 'e3['y]}; 's1}; eval{'v3; 's3}} }
+   [main] sequent [squash] { <H> >- evalsto{eval{'e1; 's1}; eval{inl{'v1}; 's2}} } -->
+   [main] sequent [squash] { <H> >- evalsto{eval{'e2['v1]; 's2}; eval{'v3; 's3}} } -->
+   [main] sequent [squash] { <H> >- "value"{'v1; 's2} } -->
+   sequent ['ext] { <H> >- evalsto{eval{decide{'e1; x. 'e2['x]; y. 'e3['y]}; 's1}; eval{'v3; 's3}} }
 
 interactive decide_right_eval 'v1 's2 :
-   [main] sequent [squash] { 'H >- evalsto{eval{'e1; 's1}; eval{inr{'v1}; 's2}} } -->
-   [main] sequent [squash] { 'H >- evalsto{eval{'e3['v1]; 's2}; eval{'v3; 's3}} } -->
-   [main] sequent [squash] { 'H >- "value"{'v1; 's2} } -->
-   sequent ['ext] { 'H >- evalsto{eval{decide{'e1; x. 'e2['x]; y. 'e3['y]}; 's1}; eval{'v3; 's3}} }
+   [main] sequent [squash] { <H> >- evalsto{eval{'e1; 's1}; eval{inr{'v1}; 's2}} } -->
+   [main] sequent [squash] { <H> >- evalsto{eval{'e3['v1]; 's2}; eval{'v3; 's3}} } -->
+   [main] sequent [squash] { <H> >- "value"{'v1; 's2} } -->
+   sequent ['ext] { <H> >- evalsto{eval{decide{'e1; x. 'e2['x]; y. 'e3['y]}; 's1}; eval{'v3; 's3}} }
 
 (*
  * Pairs.
  *)
 interactive pair_value :
-   [main] sequent [squash] { 'H >- "value"{'e1; 's} } -->
-   [main] sequent [squash] { 'H >- "value"{'e2; 's} } -->
-   sequent ['ext] { 'H >- "value"{pair{'e1; 'e2}; 's} }
+   [main] sequent [squash] { <H> >- "value"{'e1; 's} } -->
+   [main] sequent [squash] { <H> >- "value"{'e2; 's} } -->
+   sequent ['ext] { <H> >- "value"{pair{'e1; 'e2}; 's} }
 
 interactive pair_eval 's2 :
-   [wf] sequent [squash] { 'H >- "value"{'v1; 's2} } -->
-   [wf] sequent [squash] { 'H >- "value"{'v2; 's3} } -->
-   [main] sequent [squash] { 'H >- evalsto{eval{'e1; 's1}; eval{'v1; 's2}} } -->
-   [main] sequent [squash] { 'H >- evalsto{eval{'e2; 's2}; eval{'v2; 's3}} } -->
-   sequent ['ext] { 'H >- evalsto{eval{pair{'e1; 'e2}; 's1}; eval{pair{'v1; 'v2}; 's3}} }
+   [wf] sequent [squash] { <H> >- "value"{'v1; 's2} } -->
+   [wf] sequent [squash] { <H> >- "value"{'v2; 's3} } -->
+   [main] sequent [squash] { <H> >- evalsto{eval{'e1; 's1}; eval{'v1; 's2}} } -->
+   [main] sequent [squash] { <H> >- evalsto{eval{'e2; 's2}; eval{'v2; 's3}} } -->
+   sequent ['ext] { <H> >- evalsto{eval{pair{'e1; 'e2}; 's1}; eval{pair{'v1; 'v2}; 's3}} }
 
 interactive spread_eval 'v1 'v2 's2 :
-   [wf] sequent [squash] { 'H >- "value"{'v1; 's2} } -->
-   [wf] sequent [squash] { 'H >- "value"{'v2; 's2} } -->
-   [wf] sequent [squash] { 'H >- "value"{'v3; 's3} } -->
-   [main] sequent [squash] { 'H >- evalsto{eval{'e1; 's1}; eval{pair{'v1; 'v2}; 's2}} } -->
-   [main] sequent [squash] { 'H >- evalsto{eval{'e2['v1; 'v2]; 's2}; eval{'v3; 's3}} } -->
-   sequent ['ext] { 'H >- evalsto{eval{spread{'e1; x, y. 'e2['x; 'y]}; 's1}; eval{'v3; 's3}} }
+   [wf] sequent [squash] { <H> >- "value"{'v1; 's2} } -->
+   [wf] sequent [squash] { <H> >- "value"{'v2; 's2} } -->
+   [wf] sequent [squash] { <H> >- "value"{'v3; 's3} } -->
+   [main] sequent [squash] { <H> >- evalsto{eval{'e1; 's1}; eval{pair{'v1; 'v2}; 's2}} } -->
+   [main] sequent [squash] { <H> >- evalsto{eval{'e2['v1; 'v2]; 's2}; eval{'v3; 's3}} } -->
+   sequent ['ext] { <H> >- evalsto{eval{spread{'e1; x, y. 'e2['x; 'y]}; 's1}; eval{'v3; 's3}} }
 
 (*
  * Reference cells.
  *)
 interactive pointer_value :
-   sequent ['ext] { 'H >- "value"{pointer{'l}; 's} }
+   sequent ['ext] { <H> >- "value"{pointer{'l}; 's} }
 
 interactive ref_eval 'v1 's2 :
-   [wf] sequent [squash] { 'H >- "value"{'v1; 's2} } -->
-   [main] sequent [squash] { 'H >- evalsto{eval{'e1; 's1}; eval{'v1; 's2}} } -->
-   sequent ['ext] { 'H >- evalsto{eval{ref{'e1}; 's1}; .Sil_state!alloc{'s2; 'v1; s3, l. eval{'l; 's3}}} }
+   [wf] sequent [squash] { <H> >- "value"{'v1; 's2} } -->
+   [main] sequent [squash] { <H> >- evalsto{eval{'e1; 's1}; eval{'v1; 's2}} } -->
+   sequent ['ext] { <H> >- evalsto{eval{ref{'e1}; 's1}; .Sil_state!alloc{'s2; 'v1; s3, l. eval{'l; 's3}}} }
 
 interactive deref_eval 'v1 :
-   [wf] sequent [squash] { 'H >- "value"{'v1; 's2} } -->
-   [main] sequent [squash] { 'H >- evalsto{eval{'e1; 's1}; eval{'v1; 's2}} } -->
-   sequent ['ext] { 'H >- evalsto{eval{deref{'e1}; 's1}; eval{.Sil_state!fetch{'s2; 'v1}; 's2}} }
+   [wf] sequent [squash] { <H> >- "value"{'v1; 's2} } -->
+   [main] sequent [squash] { <H> >- evalsto{eval{'e1; 's1}; eval{'v1; 's2}} } -->
+   sequent ['ext] { <H> >- evalsto{eval{deref{'e1}; 's1}; eval{.Sil_state!fetch{'s2; 'v1}; 's2}} }
 
 interactive assign_eval 's2 :
-   [wf] sequent [squash] { 'H >- "value"{'v1; 's2} } -->
-   [wf] sequent [squash] { 'H >- "value"{'v2; 's3} } -->
-   [main] sequent [squash] { 'H >- evalsto{eval{'e1; 's1}; eval{'v1; 's2}} } -->
-   [main] sequent [squash] { 'H >- evalsto{eval{'e2; 's2}; eval{'v2; 's3}} } -->
-   sequent ['ext] { 'H >- evalsto{eval{assign{'e1; 'e2}; 's1}; eval{.dot; .Sil_state!store{'s3; 'v1; 'v2}}} }
+   [wf] sequent [squash] { <H> >- "value"{'v1; 's2} } -->
+   [wf] sequent [squash] { <H> >- "value"{'v2; 's3} } -->
+   [main] sequent [squash] { <H> >- evalsto{eval{'e1; 's1}; eval{'v1; 's2}} } -->
+   [main] sequent [squash] { <H> >- evalsto{eval{'e2; 's2}; eval{'v2; 's3}} } -->
+   sequent ['ext] { <H> >- evalsto{eval{assign{'e1; 'e2}; 's1}; eval{.dot; .Sil_state!store{'s3; 'v1; 'v2}}} }
 
 interactive dot_value :
-   sequent ['ext] { 'H >- "value"{dot; 's} }
+   sequent ['ext] { <H> >- "value"{dot; 's} }
 
 interactive dot_eval :
-   sequent ['ext] { 'H >- evalsto{eval{dot; 's1}; eval{dot; 's1}} }
+   sequent ['ext] { <H> >- evalsto{eval{dot; 's1}; eval{dot; 's1}} }
 
 (*
  * Functions.
  *)
 interactive lambda_value :
-   sequent ['ext] { 'H >- "value"{lambda{v. 'e1['v]}; 's} }
+   sequent ['ext] { <H> >- "value"{lambda{v. 'e1['v]}; 's} }
 
 interactive lambda_eval :
-   sequent ['ext] { 'H >- evalsto{eval{lambda{v. 'e1['v]}; 's1}; eval{lambda{v. 'e1['v]}; 's1}} }
+   sequent ['ext] { <H> >- evalsto{eval{lambda{v. 'e1['v]}; 's1}; eval{lambda{v. 'e1['v]}; 's1}} }
 
 interactive apply_eval 'v2 's2 (lambda{v. 'e3['v]}) 's3 :
-   [wf] sequent [squash] { 'H >- "value"{'v2; 's2} } -->
-   [wf] sequent [squash] { 'H >- "value"{'v3; 's4} } -->
-   [main] sequent [squash] { 'H >- evalsto{eval{'e2; 's1}; eval{'v2; 's2}} } -->
-   [main] sequent [squash] { 'H >- evalsto{eval{'e1; 's2}; eval{lambda{v. 'e3['v]}; 's3}} } -->
-   [main] sequent [squash] { 'H >- evalsto{eval{'e3['v2]; 's3}; eval{'v3; 's4}} } -->
-   sequent ['ext] { 'H >- evalsto{eval{apply{'e1; 'e2}; 's1}; eval{'v3; 's4}} }
+   [wf] sequent [squash] { <H> >- "value"{'v2; 's2} } -->
+   [wf] sequent [squash] { <H> >- "value"{'v3; 's4} } -->
+   [main] sequent [squash] { <H> >- evalsto{eval{'e2; 's1}; eval{'v2; 's2}} } -->
+   [main] sequent [squash] { <H> >- evalsto{eval{'e1; 's2}; eval{lambda{v. 'e3['v]}; 's3}} } -->
+   [main] sequent [squash] { <H> >- evalsto{eval{'e3['v2]; 's3}; eval{'v3; 's4}} } -->
+   sequent ['ext] { <H> >- evalsto{eval{apply{'e1; 'e2}; 's1}; eval{'v3; 's4}} }
 
 (*
  * -*-

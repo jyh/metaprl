@@ -42,10 +42,10 @@ extends Fol_struct
 
 (* An example theorem *)
 interactive distrib_or :
-   [wf] sequent ['ext] { 'H >- "type"{'A} } -->
-   [wf] sequent ['ext] { 'H >- "type"{'B} } -->
-   [wf] sequent ['ext] { 'H >- "type"{'C} } -->
-   sequent ['ext] { 'H >- (('A or 'B) => 'C) => (('A => 'C) & ('B => 'C)) }
+   [wf] sequent ['ext] { <H> >- "type"{'A} } -->
+   [wf] sequent ['ext] { <H> >- "type"{'B} } -->
+   [wf] sequent ['ext] { <H> >- "type"{'C} } -->
+   sequent ['ext] { <H> >- (('A or 'B) => 'C) => (('A => 'C) & ('B => 'C)) }
 
 (* Automation *)
 open Refiner.Refiner.Term
@@ -61,22 +61,22 @@ open Fol_struct
 
 (* Refinement of implication *)
 interactive imp_and_rule 'H :
-   [wf] sequent['ext] {'H; x: ('C & 'D) => 'B; 'J >- "type"{'C}} -->
-   [wf] sequent['ext] {'H; x: ('C & 'D) => 'B; 'J >- "type"{'D}} -->
-   [main] sequent['ext] {'H; 'J; u: 'C => 'D => 'B >- 'T} -->
-   sequent['ext] {'H; x: ('C & 'D) => 'B; 'J >- 'T}
+   [wf] sequent['ext] { <H>; x: ('C & 'D) => 'B; <J> >- "type"{'C}} -->
+   [wf] sequent['ext] { <H>; x: ('C & 'D) => 'B; <J> >- "type"{'D}} -->
+   [main] sequent['ext] { <H>; <J>; u: 'C => 'D => 'B >- 'T} -->
+   sequent['ext] { <H>; x: ('C & 'D) => 'B; <J> >- 'T}
 
 interactive imp_or_rule 'H :
-   [wf] sequent['ext] {'H; x: ('C or 'D) => 'B; 'J >- "type"{'C}} -->
-   [wf] sequent['ext] {'H; x: ('C or 'D) => 'B; 'J >- "type"{'D}} -->
-   [main] sequent['ext] {'H; 'J; u: 'C => 'B; v: 'D => 'B >- 'T} -->
-   sequent['ext] {'H; x: ('C or 'D) => 'B; 'J >- 'T}
+   [wf] sequent['ext] { <H>; x: ('C or 'D) => 'B; <J> >- "type"{'C}} -->
+   [wf] sequent['ext] { <H>; x: ('C or 'D) => 'B; <J> >- "type"{'D}} -->
+   [main] sequent['ext] { <H>; <J>; u: 'C => 'B; v: 'D => 'B >- 'T} -->
+   sequent['ext] { <H>; x: ('C or 'D) => 'B; <J> >- 'T}
 
 interactive imp_imp_rule 'H :
-   [wf] sequent['ext] {'H; x: ('C => 'D) => 'B; 'J >- "type"{'C}} -->
-   [wf] sequent['ext] {'H; x: ('C => 'D) => 'B; 'J >- "type"{'D}} -->
-   [main] sequent['ext] {'H; 'J; u: 'D => 'B >- 'T} -->
-   sequent['ext] {'H; x: ('C => 'D) => 'B; 'J >- 'T}
+   [wf] sequent['ext] { <H>; x: ('C => 'D) => 'B; <J> >- "type"{'C}} -->
+   [wf] sequent['ext] { <H>; x: ('C => 'D) => 'B; <J> >- "type"{'D}} -->
+   [main] sequent['ext] { <H>; <J>; u: 'D => 'B >- 'T} -->
+   sequent['ext] { <H>; x: ('C => 'D) => 'B; <J> >- 'T}
 
 let d_and_impT = imp_and_rule
 let d_or_impT = imp_or_rule
@@ -168,10 +168,10 @@ let proveTypeT p =
 
 (* Try the example again *)
 interactive distrib_or2 :
-   [wf] sequent ['ext] { 'H >- "type"{'A} } -->
-   [wf] sequent ['ext] { 'H >- "type"{'B} } -->
-   [wf] sequent ['ext] { 'H >- "type"{'C} } -->
-   sequent ['ext] { 'H >- (('A or 'B) => 'C) => (('A => 'C) & ('B => 'C)) }
+   [wf] sequent ['ext] { <H> >- "type"{'A} } -->
+   [wf] sequent ['ext] { <H> >- "type"{'B} } -->
+   [wf] sequent ['ext] { <H> >- "type"{'C} } -->
+   sequent ['ext] { <H> >- (('A or 'B) => 'C) => (('A => 'C) & ('B => 'C)) }
 
 (*
  * -*-

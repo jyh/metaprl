@@ -146,10 +146,10 @@ doc <:doc<
    @end[doc]
 >>
 interactive hom_type {| intro [] |} :
-   sequent [squash] { 'H >- 'g1 IN label } -->
-   sequent [squash] { 'H >- 'g2 IN label } -->
-   sequent [squash] { 'H; x: set >- isset{'f['x]} } -->
-   sequent ['ext] { 'H >- "type"{hom{'g1; 'g2; x. 'f['x]}} }
+   sequent [squash] { <H> >- 'g1 IN label } -->
+   sequent [squash] { <H> >- 'g2 IN label } -->
+   sequent [squash] { <H>; x: set >- isset{'f['x]} } -->
+   sequent ['ext] { <H> >- "type"{hom{'g1; 'g2; x. 'f['x]}} }
 
 doc <:doc< 
    @begin[doc]
@@ -164,14 +164,14 @@ doc <:doc<
    @end[doc]
 >>
 interactive hom_intro {| intro [] |} :
-   sequent [squash] { 'H >- 'g1 IN label } -->
-   sequent [squash] { 'H >- 'g2 IN label } -->
-   sequent ['ext] { 'H >- group{'g1} } -->
-   sequent ['ext] { 'H >- group{'g2} } -->
-   sequent ['ext] { 'H; x: set; y: mem{'x; car{'g1}} >- member{'f['x]; car{'g2}} } -->
-   sequent ['ext] { 'H; c: set; d: set; x1: mem{'c; car{'g1}}; y1: mem{'d; car{'g1}}; u: eq{'c; 'd} >- eq{'f['c]; 'f['d]} } -->
-   sequent ['ext] { 'H; e: set; g: set; x2: mem{'e; car{'g1}}; y2: mem{'g; car{'g1}} >- eq{'f[op{'g1; 'e; 'g}]; op{'g2; 'f['e]; 'f['g]}} } -->
-   sequent ['ext] { 'H >- hom{'g1; 'g2; x. 'f['x]} }
+   sequent [squash] { <H> >- 'g1 IN label } -->
+   sequent [squash] { <H> >- 'g2 IN label } -->
+   sequent ['ext] { <H> >- group{'g1} } -->
+   sequent ['ext] { <H> >- group{'g2} } -->
+   sequent ['ext] { <H>; x: set; y: mem{'x; car{'g1}} >- member{'f['x]; car{'g2}} } -->
+   sequent ['ext] { <H>; c: set; d: set; x1: mem{'c; car{'g1}}; y1: mem{'d; car{'g1}}; u: eq{'c; 'd} >- eq{'f['c]; 'f['d]} } -->
+   sequent ['ext] { <H>; e: set; g: set; x2: mem{'e; car{'g1}}; y2: mem{'g; car{'g1}} >- eq{'f[op{'g1; 'e; 'g}]; op{'g2; 'f['e]; 'f['g]}} } -->
+   sequent ['ext] { <H> >- hom{'g1; 'g2; x. 'f['x]} }
 
 doc <:doc< 
    @begin[doc]
@@ -182,13 +182,13 @@ doc <:doc<
    @end[doc]
 >>
 interactive hom_fun {| intro [] |} :
-   sequent [squash] { 'H >- 'g1 IN label } -->
-   sequent [squash] { 'H >- 'g2 IN label } -->
-   sequent ['ext] { 'H >- group{'g1} } -->
-   sequent ['ext] { 'H >- group{'g2} } -->
-   sequent ['ext] { 'H; z: set; x1: set; y1: mem{'x1; car{'g1}} >- mem{'f['z; 'x1]; car{'g2}} } -->
-   sequent ['ext] { 'H; z: set >- fun_set{x. 'f['x; 'z]} } -->
-   sequent ['ext] { 'H >- fun_prop{z. hom{'g1; 'g2; y. 'f['z; 'y]}} }
+   sequent [squash] { <H> >- 'g1 IN label } -->
+   sequent [squash] { <H> >- 'g2 IN label } -->
+   sequent ['ext] { <H> >- group{'g1} } -->
+   sequent ['ext] { <H> >- group{'g2} } -->
+   sequent ['ext] { <H>; z: set; x1: set; y1: mem{'x1; car{'g1}} >- mem{'f['z; 'x1]; car{'g2}} } -->
+   sequent ['ext] { <H>; z: set >- fun_set{x. 'f['x; 'z]} } -->
+   sequent ['ext] { <H> >- fun_prop{z. hom{'g1; 'g2; y. 'f['z; 'y]}} }
 
 doc <:doc< 
    @begin[doc]
@@ -201,12 +201,12 @@ doc <:doc<
    @end[doc]
 >>
 interactive trivial_hom1 :
-   sequent [squash] { 'H >- 'g1 IN label } -->
-   sequent [squash] { 'H >- 'g2 IN label } -->
-   sequent ['ext] { 'H >- group{'g1} } -->
-   sequent ['ext] { 'H >- group{'g2} } -->
-   sequent ['ext] { 'H; x: set; y: mem{'x; car{'g1}} >- equal{'f['x]; id{'g2}} } -->
-   sequent ['ext] { 'H >- hom{'g1; 'g2; x. 'f['x]} }
+   sequent [squash] { <H> >- 'g1 IN label } -->
+   sequent [squash] { <H> >- 'g2 IN label } -->
+   sequent ['ext] { <H> >- group{'g1} } -->
+   sequent ['ext] { <H> >- group{'g2} } -->
+   sequent ['ext] { <H>; x: set; y: mem{'x; car{'g1}} >- equal{'f['x]; id{'g2}} } -->
+   sequent ['ext] { <H> >- hom{'g1; 'g2; x. 'f['x]} }
 
 doc <:doc< 
    @begin[doc]
@@ -229,19 +229,19 @@ doc <:doc<
    @end[doc]
   )*)
 interactive hom_abel hom{'g1; 'g2; x. 'f['x]} :
-   sequent [squash] { 'H >- 'g1 IN label } -->
-   sequent [squash] { 'H >- 'g2 IN label } -->
-   sequent ['ext] { 'H; x: set; y: mem{'x; car{'g2}} >- exst z: set. (mem{'z; car{'g1}} & eq{'x; 'f['z]}) } -->
-   sequent ['ext] { 'H >- hom{'g1; 'g2; x. 'f['x]} } -->
-   sequent ['ext] { 'H >- abel{'g1} } -->
-   sequent ['ext] { 'H >- abel{'g2} }
+   sequent [squash] { <H> >- 'g1 IN label } -->
+   sequent [squash] { <H> >- 'g2 IN label } -->
+   sequent ['ext] { <H>; x: set; y: mem{'x; car{'g2}} >- exst z: set. (mem{'z; car{'g1}} & eq{'x; 'f['z]}) } -->
+   sequent ['ext] { <H> >- hom{'g1; 'g2; x. 'f['x]} } -->
+   sequent ['ext] { <H> >- abel{'g1} } -->
+   sequent ['ext] { <H> >- abel{'g2} }
 doc <:doc< @docoff >>
 
 interactive hom_id {| intro [] |} hom{'g1; 'g2; x. 'f['x]} :
-   sequent [squash] { 'H >- 'g1 IN label } -->
-   sequent [squash] { 'H >- 'g2 IN label } -->
-   sequent ['ext] { 'H >- hom{'g1; 'g2; x. 'f['x]} } -->
-   sequent ['ext] { 'H >- eq{'f[id{'g1}]; id{'g2}} }
+   sequent [squash] { <H> >- 'g1 IN label } -->
+   sequent [squash] { <H> >- 'g2 IN label } -->
+   sequent ['ext] { <H> >- hom{'g1; 'g2; x. 'f['x]} } -->
+   sequent ['ext] { <H> >- eq{'f[id{'g1}]; id{'g2}} }
 
 doc <:doc< 
    @begin[doc]
@@ -250,19 +250,19 @@ doc <:doc<
    @end[doc]
 >>
 interactive hom_id_elim (*{| elim [] |}*) 'H :
-   sequent [squash] { 'H; u: hom{'g1; 'g2; x. 'f['x]}; 'J['u] >- 'g1 IN label } -->
-   sequent [squash] { 'H; u: hom{'g1; 'g2; x. 'f['x]}; 'J['u] >- 'g2 IN label } -->
-   sequent ['ext] { 'H; u: hom{'g1; 'g2; x. 'f['x]}; 'J['u]; v: eq{'f[id{'g1}]; id{'g2}} >- 'C['u] } -->
-   sequent ['ext] { 'H; u: hom{'g1; 'g2; x. 'f['x]}; 'J['u] >- 'C['u] }
+   sequent [squash] { <H>; u: hom{'g1; 'g2; x. 'f['x]}; <J['u]> >- 'g1 IN label } -->
+   sequent [squash] { <H>; u: hom{'g1; 'g2; x. 'f['x]}; <J['u]> >- 'g2 IN label } -->
+   sequent ['ext] { <H>; u: hom{'g1; 'g2; x. 'f['x]}; <J['u]>; v: eq{'f[id{'g1}]; id{'g2}} >- 'C['u] } -->
+   sequent ['ext] { <H>; u: hom{'g1; 'g2; x. 'f['x]}; <J['u]> >- 'C['u] }
 doc <:doc< @docoff >>
 
 interactive hom_inv {| intro [] |} 'a hom{'g1; 'g2; x. 'f['x]} :
-   sequent [squash] { 'H >- 'g1 IN label } -->
-   sequent [squash] { 'H >- 'g2 IN label } -->
-   sequent ['ext] { 'H >- hom{'g1; 'g2; x. 'f['x]} } -->
-   sequent [squash] { 'H >- isset{'a} } -->
-   sequent ['ext] { 'H >- mem{'a; car{'g1}} } -->
-   sequent ['ext] { 'H >- eq{'f[inv{'g1; 'a}]; inv{'g2; 'f['a]}} }
+   sequent [squash] { <H> >- 'g1 IN label } -->
+   sequent [squash] { <H> >- 'g2 IN label } -->
+   sequent ['ext] { <H> >- hom{'g1; 'g2; x. 'f['x]} } -->
+   sequent [squash] { <H> >- isset{'a} } -->
+   sequent ['ext] { <H> >- mem{'a; car{'g1}} } -->
+   sequent ['ext] { <H> >- eq{'f[inv{'g1; 'a}]; inv{'g2; 'f['a]}} }
 
 doc <:doc< 
    @begin[doc]
@@ -272,13 +272,13 @@ doc <:doc<
    @end[doc]
 >>
 interactive hom_inv_elim (*{| elim [] |}*) 'H 'a :
-   sequent [squash] { 'H; u: hom{'g1; 'g2; x. 'f['x]}; 'J['u] >- 'g1 IN label } -->
-   sequent [squash] { 'H; u: hom{'g1; 'g2; x. 'f['x]}; 'J['u] >- 'g2 IN label } -->
-   sequent ['ext] { 'H >- hom{'g1; 'g2; x. 'f['x]} } -->
-   sequent [squash] { 'H; u: hom{'g1; 'g2; x. 'f['x]}; 'J['u] >- isset{'a} } -->
-   sequent ['ext] { 'H; u: hom{'g1; 'g2; x. 'f['x]}; 'J['u] >- mem{'a; car{'g1}} } -->
-   sequent ['ext] { 'H; u: hom{'g1; 'g2; x. 'f['x]}; 'J['u]; v: eq{'f[inv{'g1; 'a}]; inv{'g2; 'f['a]}} >- 'C['u] } -->
-   sequent ['ext] { 'H; u: hom{'g1; 'g2; x. 'f['x]}; 'J['u] >- 'C['u] }
+   sequent [squash] { <H>; u: hom{'g1; 'g2; x. 'f['x]}; <J['u]> >- 'g1 IN label } -->
+   sequent [squash] { <H>; u: hom{'g1; 'g2; x. 'f['x]}; <J['u]> >- 'g2 IN label } -->
+   sequent ['ext] { <H> >- hom{'g1; 'g2; x. 'f['x]} } -->
+   sequent [squash] { <H>; u: hom{'g1; 'g2; x. 'f['x]}; <J['u]> >- isset{'a} } -->
+   sequent ['ext] { <H>; u: hom{'g1; 'g2; x. 'f['x]}; <J['u]> >- mem{'a; car{'g1}} } -->
+   sequent ['ext] { <H>; u: hom{'g1; 'g2; x. 'f['x]}; <J['u]>; v: eq{'f[inv{'g1; 'a}]; inv{'g2; 'f['a]}} >- 'C['u] } -->
+   sequent ['ext] { <H>; u: hom{'g1; 'g2; x. 'f['x]}; <J['u]> >- 'C['u] }
 
 doc <:doc< 
    @begin[doc]
@@ -292,17 +292,17 @@ doc <:doc<
  * If H is a subgroup of G, then f[H] is a subgroup of G'.
  *)
 interactive hom_subg1 hom{'g1; 'g2; x. 'f['x]} 'h1 'h2 :
-   sequent [squash] { 'H >- 'g1 IN label } -->
-   sequent [squash] { 'H >- 'g2 IN label } -->
-   sequent [squash] { 'H >- 'h1 IN label } -->
-   sequent [squash] { 'H >- 'h2 IN label } -->
-   sequent ['ext] { 'H >- fun_set{x. 'f['x]} } -->
-   sequent ['ext] { 'H >- hom{'g1; 'g2; x. 'f['x]} } -->
-   sequent ['ext] { 'H >- subgroup{'h1; 'g1} } -->
-   sequent ['ext] { 'H >- group{'h2} } -->
-   sequent ['ext] { 'H >- equal{car{'h2}; sep{car{'g2}; x. "dexists"{car{'h1}; y. eq{'x; 'f['y]}}}} } -->
-   sequent ['ext] { 'H; a: set; b: set; x: mem{'a; car{'h2}}; y: mem{'b; car{'h2}} >- eq{op{'h2; 'a; 'b}; op{'g2; 'a; 'b}} } -->
-   sequent ['ext] { 'H >- subgroup{'h2; 'g2} }
+   sequent [squash] { <H> >- 'g1 IN label } -->
+   sequent [squash] { <H> >- 'g2 IN label } -->
+   sequent [squash] { <H> >- 'h1 IN label } -->
+   sequent [squash] { <H> >- 'h2 IN label } -->
+   sequent ['ext] { <H> >- fun_set{x. 'f['x]} } -->
+   sequent ['ext] { <H> >- hom{'g1; 'g2; x. 'f['x]} } -->
+   sequent ['ext] { <H> >- subgroup{'h1; 'g1} } -->
+   sequent ['ext] { <H> >- group{'h2} } -->
+   sequent ['ext] { <H> >- equal{car{'h2}; sep{car{'g2}; x. "dexists"{car{'h1}; y. eq{'x; 'f['y]}}}} } -->
+   sequent ['ext] { <H>; a: set; b: set; x: mem{'a; car{'h2}}; y: mem{'b; car{'h2}} >- eq{op{'h2; 'a; 'b}; op{'g2; 'a; 'b}} } -->
+   sequent ['ext] { <H> >- subgroup{'h2; 'g2} }
 
 doc <:doc< 
    @begin[doc]
@@ -317,17 +317,17 @@ doc <:doc<
  * H is a subgroup of G.
  *)
 interactive hom_subg2 hom{'g1; 'g2; x. 'f['x]} 'h1 'h2 :
-   sequent [squash] { 'H >- 'g1 IN label } -->
-   sequent [squash] { 'H >- 'g2 IN label } -->
-   sequent [squash] { 'H >- 'h1 IN label } -->
-   sequent [squash] { 'H >- 'h2 IN label } -->
-   sequent ['ext] { 'H >- fun_set{x. 'f['x]} } -->
-   sequent ['ext] { 'H >- hom{'g1; 'g2; x. 'f['x]} } -->
-   sequent ['ext] { 'H >- subgroup{'h2; 'g2} } -->
-   sequent ['ext] { 'H >- group{'h1} } -->
-   sequent ['ext] { 'H >- equal{car{'h1}; inv_image{car{'g1}; x. 'f['x]; car{'h2}}} } -->
-   sequent ['ext] { 'H; a: set; b: set; x: mem{'a; car{'h1}}; y: mem{'b; car{'h1}} >- eq{op{'h1; 'a; 'b}; op{'g1; 'a; 'b}} } -->
-   sequent ['ext] { 'H >- subgroup{'h1; 'g1} }
+   sequent [squash] { <H> >- 'g1 IN label } -->
+   sequent [squash] { <H> >- 'g2 IN label } -->
+   sequent [squash] { <H> >- 'h1 IN label } -->
+   sequent [squash] { <H> >- 'h2 IN label } -->
+   sequent ['ext] { <H> >- fun_set{x. 'f['x]} } -->
+   sequent ['ext] { <H> >- hom{'g1; 'g2; x. 'f['x]} } -->
+   sequent ['ext] { <H> >- subgroup{'h2; 'g2} } -->
+   sequent ['ext] { <H> >- group{'h1} } -->
+   sequent ['ext] { <H> >- equal{car{'h1}; inv_image{car{'g1}; x. 'f['x]; car{'h2}}} } -->
+   sequent ['ext] { <H>; a: set; b: set; x: mem{'a; car{'h1}}; y: mem{'b; car{'h1}} >- eq{op{'h1; 'a; 'b}; op{'g1; 'a; 'b}} } -->
+   sequent ['ext] { <H> >- subgroup{'h1; 'g1} }
 
 (************************************************************************
  * TACTICS                                                              *

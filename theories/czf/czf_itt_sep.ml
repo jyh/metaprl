@@ -144,8 +144,8 @@ dform restricted_df : except_mode[src] :: parens :: "prec"[prec_quant] :: restri
  * Squash the restricted judgment.
  *)
 interactive squash_restricted :
-   sequent [squash] { 'H >- restricted{'P} } -->
-   sequent ['ext] { 'H >- restricted{'P} }
+   sequent [squash] { <H> >- restricted{'P} } -->
+   sequent ['ext] { <H> >- restricted{'P} }
 
 let squash_restrictedT = squash_restricted
 
@@ -158,14 +158,14 @@ doc <:doc<
    @end[doc]
 >>
 interactive eq_restricted {| intro [] |} :
-   ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
-   ["wf"] sequent [squash] { 'H >- isset{'s2} } -->
-   sequent ['ext] { 'H >- restricted{eq{'s1; 's2}} }
+   ["wf"] sequent [squash] { <H> >- isset{'s1} } -->
+   ["wf"] sequent [squash] { <H> >- isset{'s2} } -->
+   sequent ['ext] { <H> >- restricted{eq{'s1; 's2}} }
 
 interactive member_restricted {| intro [] |} :
-   ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
-   ["wf"] sequent [squash] { 'H >- isset{'s2} } -->
-   sequent ['ext] { 'H >- restricted{mem{'s1; 's2}} }
+   ["wf"] sequent [squash] { <H> >- isset{'s1} } -->
+   ["wf"] sequent [squash] { <H> >- isset{'s2} } -->
+   sequent ['ext] { <H> >- restricted{mem{'s1; 's2}} }
 
 doc <:doc< 
    @begin[doc]
@@ -177,10 +177,10 @@ doc <:doc<
    @end[doc]
 >>
 interactive sep_isset {| intro [] |} :
-   ["wf"] sequent [squash] { 'H >- isset{'s} } -->
-   ["wf"] sequent ['ext] { 'H >- fun_prop{z. 'P['z]} } -->
-   ["wf"] sequent [squash] { 'H; z: set >- restricted{'P['z]} } -->
-   sequent ['ext] { 'H >- isset{.sep{'s; x. 'P['x]}} }
+   ["wf"] sequent [squash] { <H> >- isset{'s} } -->
+   ["wf"] sequent ['ext] { <H> >- fun_prop{z. 'P['z]} } -->
+   ["wf"] sequent [squash] { <H>; z: set >- restricted{'P['z]} } -->
+   sequent ['ext] { <H> >- isset{.sep{'s; x. 'P['x]}} }
 
 doc <:doc< 
    @begin[doc]
@@ -192,11 +192,11 @@ doc <:doc<
    @end[doc]
 >>
 interactive sep_intro2 {| intro [] |} :
-   ["wf"]   sequent [squash] { 'H; w: set >- restricted{'P['w]} } -->
-   ["wf"]   sequent ['ext] { 'H >- fun_prop{z. 'P['z]} } -->
-   ["main"] sequent ['ext] { 'H >- member{'x; 's} } -->
-   ["main"] sequent ['ext] { 'H >- 'P['x] } -->
-   sequent ['ext] { 'H >- mem{'x; sep{'s; z. 'P['z]}} }
+   ["wf"]   sequent [squash] { <H>; w: set >- restricted{'P['w]} } -->
+   ["wf"]   sequent ['ext] { <H> >- fun_prop{z. 'P['z]} } -->
+   ["main"] sequent ['ext] { <H> >- member{'x; 's} } -->
+   ["main"] sequent ['ext] { <H> >- 'P['x] } -->
+   sequent ['ext] { <H> >- mem{'x; sep{'s; z. 'P['z]}} }
 
 doc <:doc< 
    @begin[doc]
@@ -209,12 +209,12 @@ doc <:doc<
    @end[doc]
 >>
 interactive sep_elim {| elim [] |} 'H :
-   ["wf"]   sequent [squash] { 'H; w: mem{'x; sep{'s; y. 'P['y]}}; 'J['w] >- isset{'x} } -->
-   ["wf"]   sequent [squash] { 'H; w: mem{'x; sep{'s; y. 'P['y]}}; 'J['w] >- isset{'s} } -->
-   ["wf"]   sequent [squash] { 'H; w: mem{'x; sep{'s; y. 'P['y]}}; 'J['w]; z: set >- restricted{'P['z]} } -->
-   ["wf"]   sequent ['ext] { 'H; w: mem{'x; sep{'s; y. 'P['y]}}; 'J['w] >- fun_prop{z. 'P['z]} } -->
-   ["main"] sequent ['ext] { 'H; w: mem{'x; sep{'s; y. 'P['y]}}; 'J['w]; u: mem{'x; 's}; v: 'P['x] >- 'T['w] } -->
-   sequent ['ext] { 'H; w: mem{'x; sep{'s; y. 'P['y]}}; 'J['w] >- 'T['w] }
+   ["wf"]   sequent [squash] { <H>; w: mem{'x; sep{'s; y. 'P['y]}}; <J['w]> >- isset{'x} } -->
+   ["wf"]   sequent [squash] { <H>; w: mem{'x; sep{'s; y. 'P['y]}}; <J['w]> >- isset{'s} } -->
+   ["wf"]   sequent [squash] { <H>; w: mem{'x; sep{'s; y. 'P['y]}}; <J['w]>; z: set >- restricted{'P['z]} } -->
+   ["wf"]   sequent ['ext] { <H>; w: mem{'x; sep{'s; y. 'P['y]}}; <J['w]> >- fun_prop{z. 'P['z]} } -->
+   ["main"] sequent ['ext] { <H>; w: mem{'x; sep{'s; y. 'P['y]}}; <J['w]>; u: mem{'x; 's}; v: 'P['x] >- 'T['w] } -->
+   sequent ['ext] { <H>; w: mem{'x; sep{'s; y. 'P['y]}}; <J['w]> >- 'T['w] }
 
 doc <:doc< 
    @begin[doc]
@@ -225,11 +225,11 @@ doc <:doc<
    @end[doc]
 >>
 interactive sep_fun {| intro [] |} :
-   sequent [squash] { 'H; u: set; v: set >- restricted{'P['u; 'v]} } -->
-   sequent ['ext] { 'H; u: set >- fun_prop{z. 'P['z; 'u]} } -->
-   sequent ['ext] { 'H; u: set >- fun_prop{z. 'P['u; 'z]} } -->
-   sequent ['ext] { 'H >- fun_set{z. 's['z]} } -->
-   sequent ['ext] { 'H >- fun_set{z. sep{'s['z]; x. 'P['x; 'z]}} }
+   sequent [squash] { <H>; u: set; v: set >- restricted{'P['u; 'v]} } -->
+   sequent ['ext] { <H>; u: set >- fun_prop{z. 'P['z; 'u]} } -->
+   sequent ['ext] { <H>; u: set >- fun_prop{z. 'P['u; 'z]} } -->
+   sequent ['ext] { <H> >- fun_set{z. 's['z]} } -->
+   sequent ['ext] { <H> >- fun_set{z. sep{'s['z]; x. 'P['x; 'z]}} }
 doc <:doc< @docoff >>
 
 (*

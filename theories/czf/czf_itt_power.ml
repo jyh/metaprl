@@ -109,9 +109,9 @@ doc <:doc<
    @end[doc]
 >>
 interactive power_isset1 {| intro [] |} :
-   ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
-   ["wf"] sequent [squash] { 'H >- isset{'s2} } -->
-   sequent ['ext] { 'H >- isset{power{'s1; 's2}} }
+   ["wf"] sequent [squash] { <H> >- isset{'s1} } -->
+   ["wf"] sequent [squash] { <H> >- isset{'s2} } -->
+   sequent ['ext] { <H> >- isset{power{'s1; 's2}} }
 
 doc <:doc< 
    @begin[doc]
@@ -122,14 +122,14 @@ doc <:doc<
    @end[doc]
 >>
 interactive power_thm bind{x. bind{y. 'P['x; 'y]}} 'a 'b :
-   ["wf"] sequent [squash] { 'H >- isset{'a} } -->
-   ["wf"] sequent [squash] { 'H >- isset{'b} } -->
-   ["wf"] sequent [squash] { 'H; x: set; y: set >- "type"{'P['x; 'y]} } -->
-   ["wf"] sequent ['ext] { 'H; x: set >- fun_prop{z. 'P['x; 'z]} } -->
-   ["wf"] sequent ['ext] { 'H; x: set >- fun_prop{z. 'P['z; 'x]} } -->
-   ["antecedent"] sequent ['ext] { 'H; x: set; u: mem{'x; 'a} >- dexists{'b; y. 'P['x; 'y]} } -->
-   sequent ['ext] { 'H; z: set; u: mem{'z; power{'a; 'b}}; v: rel{x, y. 'P['x; 'y]; 'a; 'z} >- 'C } -->
-   sequent ['ext] { 'H >- 'C }
+   ["wf"] sequent [squash] { <H> >- isset{'a} } -->
+   ["wf"] sequent [squash] { <H> >- isset{'b} } -->
+   ["wf"] sequent [squash] { <H>; x: set; y: set >- "type"{'P['x; 'y]} } -->
+   ["wf"] sequent ['ext] { <H>; x: set >- fun_prop{z. 'P['x; 'z]} } -->
+   ["wf"] sequent ['ext] { <H>; x: set >- fun_prop{z. 'P['z; 'x]} } -->
+   ["antecedent"] sequent ['ext] { <H>; x: set; u: mem{'x; 'a} >- dexists{'b; y. 'P['x; 'y]} } -->
+   sequent ['ext] { <H>; z: set; u: mem{'z; power{'a; 'b}}; v: rel{x, y. 'P['x; 'y]; 'a; 'z} >- 'C } -->
+   sequent ['ext] { <H> >- 'C }
 
 doc <:doc< 
    @begin[doc]

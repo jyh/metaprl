@@ -103,8 +103,8 @@ topval arithT : tactic
 
 (*
 rule test 'a 'b 'c :
-sequent [squash] { 'H >- 'a in int } -->
-sequent ['ext] { 'H; x: ('a >= ('b +@ 1));
+sequent [squash] { <H> >- 'a in int } -->
+sequent ['ext] { <H>; x: ('a >= ('b +@ 1));
                      y: (5 in int); z: (6 in int);
                      t: ('c >= ('b +@ 3));
                      u: ('b >= ('a +@ 0))

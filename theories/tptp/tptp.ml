@@ -156,113 +156,113 @@ dform apply5_df : mode[prl] :: parens :: "prec"[prec_apply] :: apply{'f; 'x1; 'x
  * t is an atom.
  *)
 interactive t_atomic {| intro [] |} :
-   sequent ['ext] { 'H >- atomic{t} }
+   sequent ['ext] { <H> >- atomic{t} }
 
 (*
  * Intro and elimination forms.
  *)
 interactive tptp2_all_type {| intro [] |} :
-   sequent [squash] { 'H; x: atom0 >- "type"{'b['x]} } -->
-   sequent ['ext] { 'H >- "type"{."all"{v. 'b['v]}} }
+   sequent [squash] { <H>; x: atom0 >- "type"{'b['x]} } -->
+   sequent ['ext] { <H> >- "type"{."all"{v. 'b['v]}} }
 
 interactive tptp2_all_intro {| intro [] |} :
-   sequent ['ext] { 'H; v: atom0 >- 'b['v] } -->
-   sequent ['ext] { 'H >- "all"{x. 'b['x]} }
+   sequent ['ext] { <H>; v: atom0 >- 'b['v] } -->
+   sequent ['ext] { <H> >- "all"{x. 'b['x]} }
 
 interactive tptp2_all_elim {| elim [] |} 'H 'z :
-   sequent [squash] { 'H; x: "all"{v. 'b['v]}; 'J['x] >- atomic{'z} } -->
-   sequent ['ext] { 'H; x: "all"{v. 'b['v]}; 'J['x]; y: 'b['z] >- 'C['x] } -->
-   sequent ['ext] { 'H; x: "all"{v. 'b['v]}; 'J['x] >- 'C['x] }
+   sequent [squash] { <H>; x: "all"{v. 'b['v]}; <J['x]> >- atomic{'z} } -->
+   sequent ['ext] { <H>; x: "all"{v. 'b['v]}; <J['x]>; y: 'b['z] >- 'C['x] } -->
+   sequent ['ext] { <H>; x: "all"{v. 'b['v]}; <J['x]> >- 'C['x] }
 
 interactive tptp2_exists_type {| intro [] |} :
-   sequent [squash] { 'H; x: atom0 >- "type"{'b['x]} } -->
-   sequent ['ext] { 'H >- "type"{."exists"{v. 'b['v]}} }
+   sequent [squash] { <H>; x: atom0 >- "type"{'b['x]} } -->
+   sequent ['ext] { <H> >- "type"{."exists"{v. 'b['v]}} }
 
 interactive tptp2_exists_intro {| intro [] |} 'z :
-   sequent [squash] { 'H >- atomic{'z} } -->
-   sequent ['ext] { 'H >- 'b['z] } -->
-   sequent [squash] { 'H; x: atom0 >- "type"{'b['x]} } -->
-   sequent ['ext] { 'H >- "exists"{v. 'b['v]} }
+   sequent [squash] { <H> >- atomic{'z} } -->
+   sequent ['ext] { <H> >- 'b['z] } -->
+   sequent [squash] { <H>; x: atom0 >- "type"{'b['x]} } -->
+   sequent ['ext] { <H> >- "exists"{v. 'b['v]} }
 
 interactive tptp2_exists_elim {| elim [] |} 'H :
-   sequent ['ext] { 'H; y: atom0; z: 'b['y]; 'J['y, 'z] >- 'C['y, 'z] } -->
-   sequent ['ext] { 'H; x: "exists"{v. 'b['v]}; 'J['x] >- 'C['x] }
+   sequent ['ext] { <H>; y: atom0; z: 'b['y]; <J['y, 'z]> >- 'C['y, 'z] } -->
+   sequent ['ext] { <H>; x: "exists"{v. 'b['v]}; <J['x]> >- 'C['x] }
 
 (*
  * Simplified rule for atomicity.
  *)
 interactive tptp_atomic_type {| intro [] |} :
-   sequent [squash] { 'H >- atomic{'x} } -->
-   sequent ['ext] { 'H >- "type"{atomic{'x}} }
+   sequent [squash] { <H> >- atomic{'x} } -->
+   sequent ['ext] { <H> >- "type"{atomic{'x}} }
 
 interactive tptp2_atomic_intro0 'H :
-   sequent ['ext] { 'H; x: atom0; 'J['x] >- atomic{'x} }
+   sequent ['ext] { <H>; x: atom0; <J['x]> >- atomic{'x} }
 
 interactive tptp2_atomic_intro1 'H :
-   sequent [squash] { 'H; f: atom1; 'J['f] >- atomic{'x1} } -->
-   sequent ['ext] { 'H; f: atom1; 'J['f] >- atomic{.'f 'x1} }
+   sequent [squash] { <H>; f: atom1; <J['f]> >- atomic{'x1} } -->
+   sequent ['ext] { <H>; f: atom1; <J['f]> >- atomic{.'f 'x1} }
 
 interactive tptp2_atomic_intro2 'H :
-   sequent [squash] { 'H; f: atom2; 'J['f] >- atomic{'x1} } -->
-   sequent [squash] { 'H; f: atom2; 'J['f] >- atomic{'x2} } -->
-   sequent ['ext] { 'H; f: atom2; 'J['f] >- atomic{.apply{'f; 'x1; 'x2}} }
+   sequent [squash] { <H>; f: atom2; <J['f]> >- atomic{'x1} } -->
+   sequent [squash] { <H>; f: atom2; <J['f]> >- atomic{'x2} } -->
+   sequent ['ext] { <H>; f: atom2; <J['f]> >- atomic{.apply{'f; 'x1; 'x2}} }
 
 interactive tptp2_atomic_intro3 'H :
-   sequent [squash] { 'H; f: atom3; 'J['f] >- atomic{'x1} } -->
-   sequent [squash] { 'H; f: atom3; 'J['f] >- atomic{'x2} } -->
-   sequent [squash] { 'H; f: atom3; 'J['f] >- atomic{'x3} } -->
-   sequent ['ext] { 'H; f: atom3; 'J['f] >- atomic{.apply{'f; 'x1; 'x2; 'x3}} }
+   sequent [squash] { <H>; f: atom3; <J['f]> >- atomic{'x1} } -->
+   sequent [squash] { <H>; f: atom3; <J['f]> >- atomic{'x2} } -->
+   sequent [squash] { <H>; f: atom3; <J['f]> >- atomic{'x3} } -->
+   sequent ['ext] { <H>; f: atom3; <J['f]> >- atomic{.apply{'f; 'x1; 'x2; 'x3}} }
 
 interactive tptp2_atomic_intro4 'H :
-   sequent [squash] { 'H; f: atom4; 'J['f] >- atomic{'x1} } -->
-   sequent [squash] { 'H; f: atom4; 'J['f] >- atomic{'x2} } -->
-   sequent [squash] { 'H; f: atom4; 'J['f] >- atomic{'x3} } -->
-   sequent [squash] { 'H; f: atom4; 'J['f] >- atomic{'x4} } -->
-   sequent ['ext] { 'H; f: atom4; 'J['f] >- atomic{.apply{'f; 'x1; 'x2; 'x3; 'x4}} }
+   sequent [squash] { <H>; f: atom4; <J['f]> >- atomic{'x1} } -->
+   sequent [squash] { <H>; f: atom4; <J['f]> >- atomic{'x2} } -->
+   sequent [squash] { <H>; f: atom4; <J['f]> >- atomic{'x3} } -->
+   sequent [squash] { <H>; f: atom4; <J['f]> >- atomic{'x4} } -->
+   sequent ['ext] { <H>; f: atom4; <J['f]> >- atomic{.apply{'f; 'x1; 'x2; 'x3; 'x4}} }
 
 interactive tptp2_atomic_intro5 'H :
-   sequent [squash] { 'H; f: atom5; 'J['f] >- atomic{'x1} } -->
-   sequent [squash] { 'H; f: atom5; 'J['f] >- atomic{'x2} } -->
-   sequent [squash] { 'H; f: atom5; 'J['f] >- atomic{'x3} } -->
-   sequent [squash] { 'H; f: atom5; 'J['f] >- atomic{'x4} } -->
-   sequent [squash] { 'H; f: atom5; 'J['f] >- atomic{'x5} } -->
-   sequent ['ext] { 'H; f: atom5; 'J['f] >- atomic{.apply{'f; 'x1; 'x2; 'x3; 'x4; 'x5}} }
+   sequent [squash] { <H>; f: atom5; <J['f]> >- atomic{'x1} } -->
+   sequent [squash] { <H>; f: atom5; <J['f]> >- atomic{'x2} } -->
+   sequent [squash] { <H>; f: atom5; <J['f]> >- atomic{'x3} } -->
+   sequent [squash] { <H>; f: atom5; <J['f]> >- atomic{'x4} } -->
+   sequent [squash] { <H>; f: atom5; <J['f]> >- atomic{'x5} } -->
+   sequent ['ext] { <H>; f: atom5; <J['f]> >- atomic{.apply{'f; 'x1; 'x2; 'x3; 'x4; 'x5}} }
 
 (*
  * Simplified rules for typing.
  *)
 interactive tptp2_type_intro0 'H :
-   sequent ['ext] { 'H; x: prop0; 'J['x] >- "type"{'x} }
+   sequent ['ext] { <H>; x: prop0; <J['x]> >- "type"{'x} }
 
 interactive tptp2_type_intro1 'H :
-   sequent [squash] { 'H; f: prop1; 'J['f] >- atomic{'x1} } -->
-   sequent ['ext] { 'H; f: prop1; 'J['f] >- "type"{.'f 'x1} }
+   sequent [squash] { <H>; f: prop1; <J['f]> >- atomic{'x1} } -->
+   sequent ['ext] { <H>; f: prop1; <J['f]> >- "type"{.'f 'x1} }
 
 interactive tptp2_type_intro2 'H :
-   sequent [squash] { 'H; f: prop2; 'J['f] >- atomic{'x1} } -->
-   sequent [squash] { 'H; f: prop2; 'J['f] >- atomic{'x2} } -->
-   sequent ['ext] { 'H; f: prop2; 'J['f] >- "type"{.apply{'f; 'x1; 'x2}} }
+   sequent [squash] { <H>; f: prop2; <J['f]> >- atomic{'x1} } -->
+   sequent [squash] { <H>; f: prop2; <J['f]> >- atomic{'x2} } -->
+   sequent ['ext] { <H>; f: prop2; <J['f]> >- "type"{.apply{'f; 'x1; 'x2}} }
 
 interactive tptp2_type_intro3 'H :
-   sequent [squash] { 'H; f: prop3; 'J['f] >- atomic{'x1} } -->
-   sequent [squash] { 'H; f: prop3; 'J['f] >- atomic{'x2} } -->
-   sequent [squash] { 'H; f: prop3; 'J['f] >- atomic{'x3} } -->
-   sequent ['ext] { 'H; f: prop3; 'J['f] >- "type"{.apply{'f; 'x1; 'x2; 'x3}} }
+   sequent [squash] { <H>; f: prop3; <J['f]> >- atomic{'x1} } -->
+   sequent [squash] { <H>; f: prop3; <J['f]> >- atomic{'x2} } -->
+   sequent [squash] { <H>; f: prop3; <J['f]> >- atomic{'x3} } -->
+   sequent ['ext] { <H>; f: prop3; <J['f]> >- "type"{.apply{'f; 'x1; 'x2; 'x3}} }
 
 interactive tptp2_type_intro4 'H :
-   sequent [squash] { 'H; f: prop4; 'J['f] >- atomic{'x1} } -->
-   sequent [squash] { 'H; f: prop4; 'J['f] >- atomic{'x2} } -->
-   sequent [squash] { 'H; f: prop4; 'J['f] >- atomic{'x3} } -->
-   sequent [squash] { 'H; f: prop4; 'J['f] >- atomic{'x4} } -->
-   sequent ['ext] { 'H; f: prop4; 'J['f] >- "type"{.apply{'f; 'x1; 'x2; 'x3; 'x4}} }
+   sequent [squash] { <H>; f: prop4; <J['f]> >- atomic{'x1} } -->
+   sequent [squash] { <H>; f: prop4; <J['f]> >- atomic{'x2} } -->
+   sequent [squash] { <H>; f: prop4; <J['f]> >- atomic{'x3} } -->
+   sequent [squash] { <H>; f: prop4; <J['f]> >- atomic{'x4} } -->
+   sequent ['ext] { <H>; f: prop4; <J['f]> >- "type"{.apply{'f; 'x1; 'x2; 'x3; 'x4}} }
 
 interactive tptp2_type_intro5 'H :
-   sequent [squash] { 'H; f: prop5; 'J['f] >- atomic{'x1} } -->
-   sequent [squash] { 'H; f: prop5; 'J['f] >- atomic{'x2} } -->
-   sequent [squash] { 'H; f: prop5; 'J['f] >- atomic{'x3} } -->
-   sequent [squash] { 'H; f: prop5; 'J['f] >- atomic{'x4} } -->
-   sequent [squash] { 'H; f: prop5; 'J['f] >- atomic{'x5} } -->
-   sequent ['ext] { 'H; f: prop5; 'J['f] >- "type"{.apply{'f; 'x1; 'x2; 'x3; 'x4; 'x5}} }
+   sequent [squash] { <H>; f: prop5; <J['f]> >- atomic{'x1} } -->
+   sequent [squash] { <H>; f: prop5; <J['f]> >- atomic{'x2} } -->
+   sequent [squash] { <H>; f: prop5; <J['f]> >- atomic{'x3} } -->
+   sequent [squash] { <H>; f: prop5; <J['f]> >- atomic{'x4} } -->
+   sequent [squash] { <H>; f: prop5; <J['f]> >- atomic{'x5} } -->
+   sequent ['ext] { <H>; f: prop5; <J['f]> >- "type"{.apply{'f; 'x1; 'x2; 'x3; 'x4; 'x5}} }
 
 (************************************************************************
  * OPERATIONS                                                           *

@@ -60,9 +60,9 @@ rewrite unfold_top : top <--> "isect"{void; x. void}
  * H, x: A >- Ui ext B[x]
  *)
 rule intersectionFormation 'A :
-   sequent [squash] { 'H >- 'A = 'A in univ[i:l] } -->
-   sequent ['ext] { 'H; x: 'A >- univ[i:l] } -->
-   sequent ['ext] { 'H >- univ[i:l] }
+   sequent [squash] { <H> >- 'A = 'A in univ[i:l] } -->
+   sequent ['ext] { <H>; x: 'A >- univ[i:l] } -->
+   sequent ['ext] { <H> >- univ[i:l] }
 
 (*
  * H >- isect x1:A1. B1[x1] = isect x2:A2. B2[x2] in Ui
@@ -71,20 +71,20 @@ rule intersectionFormation 'A :
  * H, y: A1 >- B1[y] = B2[y] in Ui
  *)
 rule intersectionEquality :
-   sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
-   sequent [squash] { 'H; y: 'A1 >- 'B1['y] = 'B2['y] in univ[i:l] } -->
-   sequent ['ext] { 'H >- Isect x1: 'A1. 'B1['x1] = Isect x2: 'A2. 'B2['x2] in univ[i:l] }
+   sequent [squash] { <H> >- 'A1 = 'A2 in univ[i:l] } -->
+   sequent [squash] { <H>; y: 'A1 >- 'B1['y] = 'B2['y] in univ[i:l] } -->
+   sequent ['ext] { <H> >- Isect x1: 'A1. 'B1['x1] = Isect x2: 'A2. 'B2['x2] in univ[i:l] }
 
 rule intersectionType :
-   sequent [squash] { 'H >- "type"{'A} } -->
-   sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
-   sequent ['ext] { 'H >- "type"{."isect"{'A; x. 'B['x]}} }
+   sequent [squash] { <H> >- "type"{'A} } -->
+   sequent [squash] { <H>; y: 'A >- "type"{'B['y]} } -->
+   sequent ['ext] { <H> >- "type"{."isect"{'A; x. 'B['x]}} }
 
 rule topUniv :
-   sequent ['ext] { 'H >- top in univ[i:l] }
+   sequent ['ext] { <H> >- top in univ[i:l] }
 
 rule topType :
-   sequent ['ext] { 'H >- "type"{top} }
+   sequent ['ext] { <H> >- "type"{top} }
 
 (*
  * H >- isect x: A. B ext b[it]
@@ -93,9 +93,9 @@ rule topType :
  * H, z: squash(A) >- B ext b[z]
 
 rule intersectionMemberFormation :
-    sequent [squash] { 'H >- "type"{'A} } -->
-    sequent ['ext] { 'H; z: squash{'A} >- 'B } -->
-    sequent ['ext] { 'H >- isect x: 'A. 'B }
+    sequent [squash] { <H> >- "type"{'A} } -->
+    sequent ['ext] { <H>; z: squash{'A} >- 'B } -->
+    sequent ['ext] { <H> >- isect x: 'A. 'B }
  *)
 
 
@@ -106,12 +106,12 @@ rule intersectionMemberFormation :
  * H, z: A >- b1 = b2 in B[z]
  *)
 rule intersectionMemberEquality :
-   sequent [squash] { 'H >- "type"{'A} } -->
-   sequent [squash] { 'H; z: 'A >- 'b1 = 'b2 in 'B['z] } -->
-   sequent ['ext] { 'H >- 'b1 = 'b2 in Isect x: 'A. 'B['x] }
+   sequent [squash] { <H> >- "type"{'A} } -->
+   sequent [squash] { <H>; z: 'A >- 'b1 = 'b2 in 'B['z] } -->
+   sequent ['ext] { <H> >- 'b1 = 'b2 in Isect x: 'A. 'B['x] }
 
 rule topMemberEquality :
-   sequent ['ext] { 'H >- 'b1 = 'b2 in top }
+   sequent ['ext] { <H> >- 'b1 = 'b2 in top }
 
 (*
  * H >- b1 = b2 in B[a]
@@ -120,9 +120,9 @@ rule topMemberEquality :
  * H >- a = a in A
  *)
 rule intersectionMemberCaseEquality (Isect x: 'A. 'B['x]) 'a :
-   sequent [squash] { 'H >- 'b1 = 'b2 in Isect x: 'A. 'B['x] } -->
-   sequent [squash] { 'H >- 'a = 'a in 'A } -->
-   sequent ['ext] { 'H >- 'b1 = 'b2 in 'B['a] }
+   sequent [squash] { <H> >- 'b1 = 'b2 in Isect x: 'A. 'B['x] } -->
+   sequent [squash] { <H> >- 'a = 'a in 'A } -->
+   sequent ['ext] { <H> >- 'b1 = 'b2 in 'B['a] }
 
 
 (*
@@ -133,13 +133,13 @@ rule intersectionMemberCaseEquality (Isect x: 'A. 'B['x]) 'a :
  * H, a: A2 >- B1[a] <= B2[a]
  *)
 rule intersectionSubtype :
-   sequent [squash] { 'H >- \subtype{'A2; 'A1} } -->
-   sequent [squash] { 'H; a: 'A2 >- \subtype{'B1['a]; 'B2['a]} } -->
-   sequent ['ext] { 'H >- \subtype{ (Isect a1:'A1. 'B1['a1]); (Isect a2:'A2. 'B2['a2]) } }
+   sequent [squash] { <H> >- \subtype{'A2; 'A1} } -->
+   sequent [squash] { <H>; a: 'A2 >- \subtype{'B1['a]; 'B2['a]} } -->
+   sequent ['ext] { <H> >- \subtype{ (Isect a1:'A1. 'B1['a1]); (Isect a2:'A2. 'B2['a2]) } }
 
 rule topSubtype :
-   sequent [squash] { 'H >- "type"{'T} } -->
-   sequent ['ext] { 'H >- \subtype{'T; top} }
+   sequent [squash] { <H> >- "type"{'T} } -->
+   sequent ['ext] { <H> >- \subtype{'T; top} }
 
 (************************************************************************
  * TACTICS                                                              *

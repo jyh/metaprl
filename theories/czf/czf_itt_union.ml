@@ -170,13 +170,13 @@ doc <:doc<
    @end[doc]
 >>
 interactive bunion_isset {| intro [] |} :
-   ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
-   ["wf"] sequent [squash] { 'H >- isset{'s2} } -->
-   sequent ['ext] { 'H >- isset{union{'s1; 's2}} }
+   ["wf"] sequent [squash] { <H> >- isset{'s1} } -->
+   ["wf"] sequent [squash] { <H> >- isset{'s2} } -->
+   sequent ['ext] { <H> >- isset{union{'s1; 's2}} }
 
 interactive union_isset {| intro [] |} :
-   ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
-   sequent ['ext] { 'H >- isset{union{'s1}} }
+   ["wf"] sequent [squash] { <H> >- isset{'s1} } -->
+   sequent ['ext] { <H> >- isset{union{'s1}} }
 
 doc <:doc< 
    @begin[doc]
@@ -188,18 +188,18 @@ doc <:doc<
    @end[doc]
 >>
 interactive bunion_member_intro_left {| intro [SelectOption 1] |} :
-   ["wf"] sequent [squash] { 'H >- isset{'x} } -->
-   ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
-   ["wf"] sequent [squash] { 'H >- isset{'s2} } -->
-   sequent ['ext] { 'H >- mem{'x; 's1} } -->
-   sequent ['ext] { 'H >- mem{'x; union{'s1; 's2}} }
+   ["wf"] sequent [squash] { <H> >- isset{'x} } -->
+   ["wf"] sequent [squash] { <H> >- isset{'s1} } -->
+   ["wf"] sequent [squash] { <H> >- isset{'s2} } -->
+   sequent ['ext] { <H> >- mem{'x; 's1} } -->
+   sequent ['ext] { <H> >- mem{'x; union{'s1; 's2}} }
 
 interactive bunion_member_intro_right {| intro [SelectOption 2] |} :
-   ["wf"] sequent [squash] { 'H >- isset{'x} } -->
-   ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
-   ["wf"] sequent [squash] { 'H >- isset{'s2} } -->
-   sequent ['ext] { 'H >- mem{'x; 's2} } -->
-   sequent ['ext] { 'H >- mem{'x; union{'s1; 's2}} }
+   ["wf"] sequent [squash] { <H> >- isset{'x} } -->
+   ["wf"] sequent [squash] { <H> >- isset{'s1} } -->
+   ["wf"] sequent [squash] { <H> >- isset{'s2} } -->
+   sequent ['ext] { <H> >- mem{'x; 's2} } -->
+   sequent ['ext] { <H> >- mem{'x; union{'s1; 's2}} }
 
 doc <:doc< 
    @begin[doc]
@@ -209,10 +209,10 @@ doc <:doc<
    @end[doc]
 >>
 interactive union_member_intro {| intro [] |} :
-   ["wf"] sequent [squash] { 'H >- isset{'x} } -->
-   ["wf"] sequent [squash] { 'H >- isset{'s} } -->
-   sequent ['ext] { 'H >- dexists{'s; y. mem{'x; 'y}} } -->
-   sequent ['ext] { 'H >- mem{'x; union{'s}} }
+   ["wf"] sequent [squash] { <H> >- isset{'x} } -->
+   ["wf"] sequent [squash] { <H> >- isset{'s} } -->
+   sequent ['ext] { <H> >- dexists{'s; y. mem{'x; 'y}} } -->
+   sequent ['ext] { <H> >- mem{'x; union{'s}} }
 
 doc <:doc< 
    @begin[doc]
@@ -225,12 +225,12 @@ doc <:doc<
    @end[doc]
 >>
 interactive bunion_member_elim {| elim [] |} 'H :
-   ["wf"] sequent [squash] { 'H; x: mem{'y; union{'s1; 's2}}; 'J['x] >- isset{'y} } -->
-   ["wf"] sequent [squash] { 'H; x: mem{'y; union{'s1; 's2}}; 'J['x] >- isset{'s1} } -->
-   ["wf"] sequent [squash] { 'H; x: mem{'y; union{'s1; 's2}}; 'J['x] >- isset{'s2} } -->
-   sequent ['ext] { 'H; x: mem{'y; union{'s1; 's2}}; 'J['x]; z: mem{'y; 's1} >- 'T['x] } -->
-   sequent ['ext] { 'H; x: mem{'y; union{'s1; 's2}}; 'J['x]; z: mem{'y; 's2} >- 'T['x] } -->
-   sequent ['ext] { 'H; x: mem{'y; union{'s1; 's2}}; 'J['x] >- 'T['x] }
+   ["wf"] sequent [squash] { <H>; x: mem{'y; union{'s1; 's2}}; <J['x]> >- isset{'y} } -->
+   ["wf"] sequent [squash] { <H>; x: mem{'y; union{'s1; 's2}}; <J['x]> >- isset{'s1} } -->
+   ["wf"] sequent [squash] { <H>; x: mem{'y; union{'s1; 's2}}; <J['x]> >- isset{'s2} } -->
+   sequent ['ext] { <H>; x: mem{'y; union{'s1; 's2}}; <J['x]>; z: mem{'y; 's1} >- 'T['x] } -->
+   sequent ['ext] { <H>; x: mem{'y; union{'s1; 's2}}; <J['x]>; z: mem{'y; 's2} >- 'T['x] } -->
+   sequent ['ext] { <H>; x: mem{'y; union{'s1; 's2}}; <J['x]> >- 'T['x] }
 
 doc <:doc< 
    @begin[doc]
@@ -240,10 +240,10 @@ doc <:doc<
    @end[doc]
 >>
 interactive union_member_elim {| elim [] |} 'H :
-   ["wf"] sequent [squash] { 'H; x: mem{'y; union{'s}}; 'J['x] >- isset{'y} } -->
-   ["wf"] sequent [squash] { 'H; x: mem{'y; union{'s}}; 'J['x] >- isset{'s} } -->
-   sequent ['ext] { 'H; x: mem{'y; union{'s}}; 'J['x]; z: set; u: mem{'z; 's}; v: mem{'y; 'z} >- 'T['x] } -->
-   sequent ['ext] { 'H; x: mem{'y; union{'s}}; 'J['x] >- 'T['x] }
+   ["wf"] sequent [squash] { <H>; x: mem{'y; union{'s}}; <J['x]> >- isset{'y} } -->
+   ["wf"] sequent [squash] { <H>; x: mem{'y; union{'s}}; <J['x]> >- isset{'s} } -->
+   sequent ['ext] { <H>; x: mem{'y; union{'s}}; <J['x]>; z: set; u: mem{'z; 's}; v: mem{'y; 'z} >- 'T['x] } -->
+   sequent ['ext] { <H>; x: mem{'y; union{'s}}; <J['x]> >- 'T['x] }
 
 doc <:doc< 
    @begin[doc]
@@ -251,13 +251,13 @@ doc <:doc<
    @end[doc]
 >>
 interactive bunion_fun {| intro [] |} :
-   sequent ['ext] { 'H >- fun_set{z. 's1['z]} } -->
-   sequent ['ext] { 'H >- fun_set{z. 's2['z]} } -->
-   sequent ['ext] { 'H >- fun_set{z. union{'s1['z]; 's2['z]}} }
+   sequent ['ext] { <H> >- fun_set{z. 's1['z]} } -->
+   sequent ['ext] { <H> >- fun_set{z. 's2['z]} } -->
+   sequent ['ext] { <H> >- fun_set{z. union{'s1['z]; 's2['z]}} }
 
 interactive union_fun {| intro [] |} :
-   sequent ['ext] { 'H >- fun_set{z. 's['z]} } -->
-   sequent ['ext] { 'H >- fun_set{z. union{'s['z]}} }
+   sequent ['ext] { <H> >- fun_set{z. 's['z]} } -->
+   sequent ['ext] { <H> >- fun_set{z. union{'s['z]}} }
 doc <:doc< @docoff >>
 
 (*

@@ -148,18 +148,18 @@ doc <:doc<
    @end[doc]
 >>
 interactive zero_isset {| intro [] |} :
-   sequent ['ext] { 'H >- isset{zero} }
+   sequent ['ext] { <H> >- isset{zero} }
 
 interactive succ_isset {| intro [] |} :
-   sequent [squash] { 'H >- isset{'i} } -->
-   sequent ['ext] { 'H >- isset{succ{'i}} }
+   sequent [squash] { <H> >- isset{'i} } -->
+   sequent ['ext] { <H> >- isset{succ{'i}} }
 
 interactive inf_isset {| intro [] |} :
-   sequent ['ext] { 'H >- isset{inf} }
+   sequent ['ext] { <H> >- isset{inf} }
 
 interactive succ_fun {| intro [] |} :
-   sequent ['ext] { 'H >- fun_set{z. 's['z]} } -->
-   sequent ['ext] { 'H >- fun_set{z. succ{'s['z]}} }
+   sequent ['ext] { <H> >- fun_set{z. 's['z]} } -->
+   sequent ['ext] { <H> >- fun_set{z. succ{'s['z]}} }
 
 doc <:doc< 
    @begin[doc]
@@ -169,12 +169,12 @@ doc <:doc<
    @end[doc]
 >>
 interactive zero_isnat {| intro [] |} :
-   sequent ['ext] { 'H >- mem{zero; inf} }
+   sequent ['ext] { <H> >- mem{zero; inf} }
 
 interactive succ_isnat {| intro [] |} :
-   ["wf"] sequent ['ext] { 'H >- isset{'i} } -->
-   sequent ['ext] { 'H >- mem{'i; inf} } -->
-   sequent ['ext] { 'H >- mem{succ{'i}; inf} }
+   ["wf"] sequent ['ext] { <H> >- isset{'i} } -->
+   sequent ['ext] { <H> >- mem{'i; inf} } -->
+   sequent ['ext] { <H> >- mem{succ{'i}; inf} }
 
 doc <:doc< 
    @begin[doc]
@@ -190,11 +190,11 @@ doc <:doc<
    @end[doc]
 >>
 interactive nat_elim bind{z. 'C['z]} 'i :
-   ["wf"] sequent ['ext] { 'H >- member{'i; inf} } -->
-   ["wf"] sequent ['ext] { 'H >- fun_prop{z. 'C['z]} } -->
-   ["base"] sequent ['ext] { 'H >- 'C[zero] } -->
-   ["step"] sequent ['ext] { 'H; j: set; u: mem{'j; inf}; v: 'C['j] >- 'C[succ{'j}] } -->
-   sequent ['ext] { 'H >- 'C['i] }
+   ["wf"] sequent ['ext] { <H> >- member{'i; inf} } -->
+   ["wf"] sequent ['ext] { <H> >- fun_prop{z. 'C['z]} } -->
+   ["base"] sequent ['ext] { <H> >- 'C[zero] } -->
+   ["step"] sequent ['ext] { <H>; j: set; u: mem{'j; inf}; v: 'C['j] >- 'C[succ{'j}] } -->
+   sequent ['ext] { <H> >- 'C['i] }
 
 doc <:doc< 
    @begin[doc]
@@ -205,14 +205,14 @@ doc <:doc<
    @end[doc]
 >>
 interactive lt_fun {| intro [] |} :
-   sequent ['ext] { 'H >- fun_set{z. 's1['z]} } -->
-   sequent ['ext] { 'H >- fun_set{z. 's2['z]} } -->
-   sequent ['ext] { 'H >- fun_prop{z. lt{'s1['z]; 's2['z]}} }
+   sequent ['ext] { <H> >- fun_set{z. 's1['z]} } -->
+   sequent ['ext] { <H> >- fun_set{z. 's2['z]} } -->
+   sequent ['ext] { <H> >- fun_prop{z. lt{'s1['z]; 's2['z]}} }
 
 interactive lt_restricted {| intro [] |} :
-   ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
-   ["wf"] sequent [squash] { 'H >- isset{'s2} } -->
-   sequent ['ext] { 'H >- restricted{lt{'s1; 's2}} }
+   ["wf"] sequent [squash] { <H> >- isset{'s1} } -->
+   ["wf"] sequent [squash] { <H> >- isset{'s2} } -->
+   sequent ['ext] { <H> >- restricted{lt{'s1; 's2}} }
 
 doc <:doc< 
    @begin[doc]
@@ -229,13 +229,13 @@ doc <:doc<
    @end[doc]
 >>
 interactive zero_member_intro {| intro [] |} :
-   ["wf"] sequent ['ext] { 'H >- isset{'i} } -->
-   ["wf"] sequent ['ext] { 'H >- mem{'i; inf} } -->
-   sequent ['ext] { 'H >- lt{zero; succ{'i}} }
+   ["wf"] sequent ['ext] { <H> >- isset{'i} } -->
+   ["wf"] sequent ['ext] { <H> >- mem{'i; inf} } -->
+   sequent ['ext] { <H> >- lt{zero; succ{'i}} }
 
 interactive zero_member_elim {| elim [] |} 'H :
-   ["wf"] sequent [squash] { 'H; x: lt{'i; zero}; 'J['x] >- mem{'i; inf} } -->
-   sequent ['ext] { 'H; x: lt{'i; zero}; 'J['x] >- 'T['x] }
+   ["wf"] sequent [squash] { <H>; x: lt{'i; zero}; <J['x]> >- mem{'i; inf} } -->
+   sequent ['ext] { <H>; x: lt{'i; zero}; <J['x]> >- 'T['x] }
 
 doc <:doc< 
    @begin[doc]
@@ -248,19 +248,19 @@ doc <:doc<
    @end[doc]
 >>
 interactive succ_member_intro1 {| intro [] |} :
-   ["wf"] sequent [squash] { 'H >- isset{'i} } -->
-   ["wf"] sequent [squash] { 'H >- isset{'j} } -->
-   ["wf"] sequent ['ext] { 'H >- mem{'i; inf} } -->
-   ["wf"] sequent ['ext] { 'H >- mem{'j; inf} } -->
-   sequent ['ext] { 'H >- lt{'i; 'j} } -->
-   sequent ['ext] { 'H >- lt{succ{'i}; succ{'j}} }
+   ["wf"] sequent [squash] { <H> >- isset{'i} } -->
+   ["wf"] sequent [squash] { <H> >- isset{'j} } -->
+   ["wf"] sequent ['ext] { <H> >- mem{'i; inf} } -->
+   ["wf"] sequent ['ext] { <H> >- mem{'j; inf} } -->
+   sequent ['ext] { <H> >- lt{'i; 'j} } -->
+   sequent ['ext] { <H> >- lt{succ{'i}; succ{'j}} }
 
 interactive succ_member_elim1 {| elim [] |} 'H :
-   ["wf"] sequent [squash] { 'H; x: lt{succ{'i}; succ{'j}}; 'J['x] >- isset{'i} } -->
-   ["wf"] sequent [squash] { 'H; x: lt{succ{'i}; succ{'j}}; 'J['x] >- isset{'j} } -->
-   ["wf"] sequent ['ext] { 'H; x: lt{succ{'i}; succ{'j}}; 'J['x] >- mem{'j; inf} } -->
-   sequent ['ext] { 'H; x: lt{succ{'i}; succ{'j}}; 'J['x]; w: lt{'i; 'j} >- 'T['x] } -->
-   sequent ['ext] { 'H; x: lt{succ{'i}; succ{'j}}; 'J['x] >- 'T['x] }
+   ["wf"] sequent [squash] { <H>; x: lt{succ{'i}; succ{'j}}; <J['x]> >- isset{'i} } -->
+   ["wf"] sequent [squash] { <H>; x: lt{succ{'i}; succ{'j}}; <J['x]> >- isset{'j} } -->
+   ["wf"] sequent ['ext] { <H>; x: lt{succ{'i}; succ{'j}}; <J['x]> >- mem{'j; inf} } -->
+   sequent ['ext] { <H>; x: lt{succ{'i}; succ{'j}}; <J['x]>; w: lt{'i; 'j} >- 'T['x] } -->
+   sequent ['ext] { <H>; x: lt{succ{'i}; succ{'j}}; <J['x]> >- 'T['x] }
 
 doc <:doc< 
    @begin[doc]

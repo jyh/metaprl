@@ -65,33 +65,33 @@ let _ =
  * Dependent function types.
  *)
 interactive set_ind_dfun_type (bind{u. 'B['u]}) :
-   sequent [squash] { 'H >- isset{'s} } -->
-   sequent [squash] { 'H; u: set >- "type"{'B['u]} } -->
-   sequent [squash] { 'H >- fun_prop{u. 'B['u]} } -->
-   sequent ['ext] { 'H >- "type"{set_ind{'s; T, f, g. x: 'T -> 'B['f 'x]}} }
+   sequent [squash] { <H> >- isset{'s} } -->
+   sequent [squash] { <H>; u: set >- "type"{'B['u]} } -->
+   sequent [squash] { <H> >- fun_prop{u. 'B['u]} } -->
+   sequent ['ext] { <H> >- "type"{set_ind{'s; T, f, g. x: 'T -> 'B['f 'x]}} }
 
 interactive set_ind_dfun_fun (bind{x. bind{y. 'B['x; 'y]}}) :
-   sequent ['ext] { 'H >- fun_set{z. 'A['z]} } -->
-   sequent [squash] { 'H; u: set; v: set >- "type"{'B['u; 'v]} } -->
-   sequent ['ext] { 'H; u: set >- fun_prop{z. 'B['u; 'z]} } -->
-   sequent ['ext] { 'H; v: set >- fun_prop{z. 'B['z; 'v]} } -->
-   sequent ['ext] { 'H >- fun_prop{z. set_ind{'A['z]; T, f, g. x: 'T -> 'B['z; 'f 'x]}} }
+   sequent ['ext] { <H> >- fun_set{z. 'A['z]} } -->
+   sequent [squash] { <H>; u: set; v: set >- "type"{'B['u; 'v]} } -->
+   sequent ['ext] { <H>; u: set >- fun_prop{z. 'B['u; 'z]} } -->
+   sequent ['ext] { <H>; v: set >- fun_prop{z. 'B['z; 'v]} } -->
+   sequent ['ext] { <H> >- fun_prop{z. set_ind{'A['z]; T, f, g. x: 'T -> 'B['z; 'f 'x]}} }
 
 (*
  * Dependent product types.
  *)
 interactive set_ind_dprod_type (bind{u. 'B['u]}) :
-   sequent [squash] { 'H >- isset{'s} } -->
-   sequent [squash] { 'H; u: set >- "type"{'B['u]} } -->
-   sequent [squash] { 'H >- fun_prop{u. 'B['u]} } -->
-   sequent ['ext] { 'H >- "type"{set_ind{'s; T, f, g. x: 'T * 'B['f 'x]}} }
+   sequent [squash] { <H> >- isset{'s} } -->
+   sequent [squash] { <H>; u: set >- "type"{'B['u]} } -->
+   sequent [squash] { <H> >- fun_prop{u. 'B['u]} } -->
+   sequent ['ext] { <H> >- "type"{set_ind{'s; T, f, g. x: 'T * 'B['f 'x]}} }
 
 interactive set_ind_dprod_fun (bind{x. bind{y. 'B['x; 'y]}}) :
-   sequent ['ext] { 'H >- fun_set{z. 'A['z]} } -->
-   sequent [squash] { 'H; u: set; v: set >- "type"{'B['u; 'v]} } -->
-   sequent ['ext] { 'H; u: set >- fun_prop{z. 'B['u; 'z]} } -->
-   sequent ['ext] { 'H; v: set >- fun_prop{z. 'B['z; 'v]} } -->
-   sequent ['ext] { 'H >- fun_prop{z. set_ind{'A['z]; T, f, g. x: 'T * 'B['z; 'f 'x]}} }
+   sequent ['ext] { <H> >- fun_set{z. 'A['z]} } -->
+   sequent [squash] { <H>; u: set; v: set >- "type"{'B['u; 'v]} } -->
+   sequent ['ext] { <H>; u: set >- fun_prop{z. 'B['u; 'z]} } -->
+   sequent ['ext] { <H>; v: set >- fun_prop{z. 'B['z; 'v]} } -->
+   sequent ['ext] { <H> >- fun_prop{z. set_ind{'A['z]; T, f, g. x: 'T * 'B['z; 'f 'x]}} }
 
 (************************************************************************
  * TACTICS                                                              *

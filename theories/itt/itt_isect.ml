@@ -148,9 +148,9 @@ dform top_df : except_mode[src] :: top =
  * H, x: A >- Ui ext B[x]
  *)
 prim intersectionFormation 'A :
-   [wf] sequent [squash] { 'H >- 'A = 'A in univ[i:l] } -->
-   ('B['x] : sequent ['ext] { 'H; x: 'A >- univ[i:l] }) -->
-   sequent ['ext] { 'H >- univ[i:l] } =
+   [wf] sequent [squash] { <H> >- 'A = 'A in univ[i:l] } -->
+   ('B['x] : sequent ['ext] { <H>; x: 'A >- univ[i:l] }) -->
+   sequent ['ext] { <H> >- univ[i:l] } =
    Isect x: 'A. 'B['x]
 
 doc <:doc< 
@@ -164,15 +164,15 @@ doc <:doc<
    @end[doc]
 >>
 prim intersectionEquality {| intro []; eqcd |} :
-   [wf] sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
-   [wf] sequent [squash] { 'H; y: 'A1 >- 'B1['y] = 'B2['y] in univ[i:l] } -->
-   sequent ['ext] { 'H >- Isect x1: 'A1. 'B1['x1] = Isect x2: 'A2. 'B2['x2] in univ[i:l] } =
+   [wf] sequent [squash] { <H> >- 'A1 = 'A2 in univ[i:l] } -->
+   [wf] sequent [squash] { <H>; y: 'A1 >- 'B1['y] = 'B2['y] in univ[i:l] } -->
+   sequent ['ext] { <H> >- Isect x1: 'A1. 'B1['x1] = Isect x2: 'A2. 'B2['x2] in univ[i:l] } =
    it
 
 prim intersectionType {| intro [] |} :
-   [wf] sequent [squash] { 'H >- "type"{'A} } -->
-   [wf] sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
-   sequent ['ext] { 'H >- "type"{."isect"{'A; x. 'B['x]}} } =
+   [wf] sequent [squash] { <H> >- "type"{'A} } -->
+   [wf] sequent [squash] { <H>; y: 'A >- "type"{'B['y]} } -->
+   sequent ['ext] { <H> >- "type"{."isect"{'A; x. 'B['x]}} } =
    it
 
 doc <:doc< 
@@ -182,10 +182,10 @@ doc <:doc<
    @end[doc]
 >>
 interactive topUniv {| intro [] |} :
-   sequent ['ext] { 'H >- top in univ[i:l] }
+   sequent ['ext] { <H> >- top in univ[i:l] }
 
 interactive topType {| intro [] |} :
-   sequent ['ext] { 'H >- "type"{top} }
+   sequent ['ext] { <H> >- "type"{top} }
 
 
 doc <:doc< 
@@ -203,13 +203,13 @@ doc <:doc<
    @end[doc]
 >>
 prim intersectionMemberEquality {| intro []; eqcd |} :
-   [wf] sequent [squash] { 'H >- "type"{'A} } -->
-   [wf] sequent [squash] { 'H; z: 'A >- 'b1 = 'b2 in 'B['z] } -->
-   sequent ['ext] { 'H >- 'b1 = 'b2 in Isect x: 'A. 'B['x] } =
+   [wf] sequent [squash] { <H> >- "type"{'A} } -->
+   [wf] sequent [squash] { <H>; z: 'A >- 'b1 = 'b2 in 'B['z] } -->
+   sequent ['ext] { <H> >- 'b1 = 'b2 in Isect x: 'A. 'B['x] } =
    it
 
 interactive topMemberEquality {| intro []; eqcd |} :
-   sequent ['ext] { 'H >- 'b1 = 'b2 in top }
+   sequent ['ext] { <H> >- 'b1 = 'b2 in top }
 
 
 doc <:doc< 
@@ -224,9 +224,9 @@ doc <:doc<
 >>
 
 interactive intersectionMemberFormation {| intro [] |} 'b :
-   [wf] sequent [squash] { 'H >- "type"{'A} } -->
-   [wf] sequent [squash] { 'H; z: 'A >- 'b in 'B['z] } -->
-   sequent ['ext] { 'H >-  Isect x: 'A. 'B['x] }
+   [wf] sequent [squash] { <H> >- "type"{'A} } -->
+   [wf] sequent [squash] { <H>; z: 'A >- 'b in 'B['z] } -->
+   sequent ['ext] { <H> >-  Isect x: 'A. 'B['x] }
 
 doc <:doc< 
    @begin[doc]
@@ -238,9 +238,9 @@ doc <:doc<
 >>
 
 interactive intersectionMemberFormation2 {| intro [] |} :
-    [wf] sequent [squash] { 'H >- "type"{'A} } -->
-    [main] sequent ['ext] { 'H; z: squash{'A} >- 'B } -->
-    sequent ['ext] { 'H >- Isect x: 'A. 'B }
+    [wf] sequent [squash] { <H> >- "type"{'A} } -->
+    [main] sequent ['ext] { <H>; z: squash{'A} >- 'B } -->
+    sequent ['ext] { <H> >- Isect x: 'A. 'B }
 
 
 doc <:doc< 
@@ -251,7 +251,7 @@ doc <:doc<
 >>
 
 interactive topMemberFormation {| intro [] |} :
-   sequent ['ext] { 'H >-  top }
+   sequent ['ext] { <H> >-  top }
 
 
 
@@ -266,17 +266,17 @@ doc <:doc<
    @end[doc]
 >>
 prim intersectionElimination {| elim [] |} 'H 'a :
-   [wf] sequent [squash] { 'H; x: Isect y: 'A. 'B['y]; 'J['x] >- 'a in 'A } -->
-   [main] ('t['x; 'z] : sequent ['ext] { 'H; x: Isect y: 'A. 'B['y]; 'J['x]; z: 'B['a] >- 'T['z] }) -->
-   sequent ['ext] { 'H; x: Isect y: 'A. 'B['y]; 'J['x] >- 'T['x] } =
+   [wf] sequent [squash] { <H>; x: Isect y: 'A. 'B['y]; <J['x]> >- 'a in 'A } -->
+   [main] ('t['x; 'z] : sequent ['ext] { <H>; x: Isect y: 'A. 'B['y]; <J['x]>; z: 'B['a] >- 'T['z] }) -->
+   sequent ['ext] { <H>; x: Isect y: 'A. 'B['y]; <J['x]> >- 'T['x] } =
    't['x; 'x]
 
 doc <:doc< @docoff >>
 
 interactive intersectionElimination_eq 'H 'a bind{x.bind{z.'T['x;'z]}}:
-   [wf] sequent [squash] { 'H; x: Isect y: 'A. 'B['y]; 'J['x] >- 'a in 'A } -->
-   [main] sequent ['ext] { 'H; x: Isect y: 'A. 'B['y]; 'J['x]; z: 'B['a]; v: 'z = 'x in 'B['a] >- 'T['x;'z] } -->
-   sequent ['ext] { 'H; x: Isect y: 'A. 'B['y]; 'J['x] >- 'T['x;'x] }
+   [wf] sequent [squash] { <H>; x: Isect y: 'A. 'B['y]; <J['x]> >- 'a in 'A } -->
+   [main] sequent ['ext] { <H>; x: Isect y: 'A. 'B['y]; <J['x]>; z: 'B['a]; v: 'z = 'x in 'B['a] >- 'T['x;'z] } -->
+   sequent ['ext] { <H>; x: Isect y: 'A. 'B['y]; <J['x]> >- 'T['x;'x] }
 
 
 let intersectionEliminationT n p =
@@ -310,9 +310,9 @@ doc <:doc<
 >>
 
 interactive intersectionElimination2 (*{| elim [] |}*) 'H :
-   [wf] sequent [squash] { 'H; x: Isect y: 'A. 'B; 'J['x] >- squash{'A} } -->
-   [main] sequent ['ext] { 'H; x: Isect y: 'A. 'B; 'J['x]; z: 'B; v: 'z = 'x in 'B >- 'T['z] } -->
-   sequent ['ext] { 'H; x: Isect y: 'A. 'B; 'J['x] >- 'T['x] }
+   [wf] sequent [squash] { <H>; x: Isect y: 'A. 'B; <J['x]> >- squash{'A} } -->
+   [main] sequent ['ext] { <H>; x: Isect y: 'A. 'B; <J['x]>; z: 'B; v: 'z = 'x in 'B >- 'T['z] } -->
+   sequent ['ext] { <H>; x: Isect y: 'A. 'B; <J['x]> >- 'T['x] }
 
 let intersectionEliminationT n p =
    let n = Sequent.get_pos_hyp_num p n in
@@ -330,26 +330,26 @@ doc <:doc<
 >>
 
 interactive intersectionMemberCaseEquality (Isect x: 'A. 'B['x]) 'a :
-   [wf] sequent [squash] { 'H >- 'b1 = 'b2 in Isect x: 'A. 'B['x] } -->
-   [wf] sequent [squash] { 'H >- 'a in 'A } -->
-   sequent ['ext] { 'H >- 'b1 = 'b2 in 'B['a] }
+   [wf] sequent [squash] { <H> >- 'b1 = 'b2 in Isect x: 'A. 'B['x] } -->
+   [wf] sequent [squash] { <H> >- 'a in 'A } -->
+   sequent ['ext] { <H> >- 'b1 = 'b2 in 'B['a] }
 
 
 doc <:doc< @doc{The elimination form of @hrefrule[intersectionMemberCaseEquality].} >>
 
 interactive intersectionEqualityElim {| elim [] |} 'H 'a :
-   [wf] sequent[squash] { 'H; u: 'b1 = 'b2 in Isect x: 'A. 'B['x]; 'J['u] >- 'a in 'A } -->
-   sequent ['ext] { 'H; u: 'b1 = 'b2 in Isect x: 'A. 'B['x]; v: 'b1 = 'b2 in 'B['a]; 'J['u] >- 'C['u] } -->
-   sequent ['ext] { 'H; u: 'b1 = 'b2 in Isect x: 'A. 'B['x]; 'J['u] >- 'C['u] }
+   [wf] sequent[squash] { <H>; u: 'b1 = 'b2 in Isect x: 'A. 'B['x]; <J['u]> >- 'a in 'A } -->
+   sequent ['ext] { <H>; u: 'b1 = 'b2 in Isect x: 'A. 'B['x]; v: 'b1 = 'b2 in 'B['a]; <J['u]> >- 'C['u] } -->
+   sequent ['ext] { <H>; u: 'b1 = 'b2 in Isect x: 'A. 'B['x]; <J['u]> >- 'C['u] }
 
 doc <:doc< @docoff >>
 
 (* We could declare intersectionMemberCaseEquality as primitive and derive intersectionElimination *)
 
 interactive intersectionEliminationFromCaseEquality 'H 'a :
-   [wf] sequent [squash] { 'H; x: Isect y: 'A. 'B['y]; 'J['x] >- 'a in 'A } -->
-   [main] sequent ['ext] { 'H; x: Isect y: 'A. 'B['y]; 'J['x]; z: 'B['a] >- 'T['z] } -->
-   sequent ['ext] { 'H; x: Isect y: 'A. 'B['y]; 'J['x] >- 'T['x] }
+   [wf] sequent [squash] { <H>; x: Isect y: 'A. 'B['y]; <J['x]> >- 'a in 'A } -->
+   [main] sequent ['ext] { <H>; x: Isect y: 'A. 'B['y]; <J['x]>; z: 'B['a] >- 'T['z] } -->
+   sequent ['ext] { <H>; x: Isect y: 'A. 'B['y]; <J['x]> >- 'T['x] }
 
 doc <:doc< 
    @begin[doc]
@@ -362,9 +362,9 @@ doc <:doc<
    @end[doc]
 >>
 prim intersectionSubtype {| intro [] |} :
-   ["subtype"] sequent [squash] { 'H >- \subtype{'A2; 'A1} } -->
-   ["subtype"] sequent [squash] { 'H; a: 'A2 >- \subtype{'B1['a]; 'B2['a]} } -->
-   sequent ['ext] { 'H >- \subtype{ (Isect a1:'A1. 'B1['a1]); (Isect a2:'A2. 'B2['a2]) } } =
+   ["subtype"] sequent [squash] { <H> >- \subtype{'A2; 'A1} } -->
+   ["subtype"] sequent [squash] { <H>; a: 'A2 >- \subtype{'B1['a]; 'B2['a]} } -->
+   sequent ['ext] { <H> >- \subtype{ (Isect a1:'A1. 'B1['a1]); (Isect a2:'A2. 'B2['a2]) } } =
    it
 
 doc <:doc< 
@@ -377,16 +377,16 @@ doc <:doc<
    @end[doc]
 >>
 interactive intersectionSubtype2 'a :
-   [wf] sequent [squash] { 'H >- 'a = 'a in 'A } -->
-   [wf] sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
-   ["subtype"] sequent [squash] { 'H >- \subtype{'B['a]; 'T} } -->
-   sequent ['ext] { 'H >- \subtype{."isect"{'A; x. 'B['x]}; 'T} }
+   [wf] sequent [squash] { <H> >- 'a = 'a in 'A } -->
+   [wf] sequent [squash] { <H>; y: 'A >- "type"{'B['y]} } -->
+   ["subtype"] sequent [squash] { <H> >- \subtype{'B['a]; 'T} } -->
+   sequent ['ext] { <H> >- \subtype{."isect"{'A; x. 'B['x]}; 'T} }
 
 interactive intersectionSubtype3 :
-   [wf] sequent [squash] { 'H >- "type"{'A} } -->
-   [wf] sequent [squash] { 'H >- "type"{'C} } -->
-   ["subtype"] sequent [squash] { 'H; x: 'A >- \subtype{'C; 'B['x]} } -->
-   sequent ['ext] { 'H >- \subtype{'C; ."isect"{'A; x. 'B['x]}} }
+   [wf] sequent [squash] { <H> >- "type"{'A} } -->
+   [wf] sequent [squash] { <H> >- "type"{'C} } -->
+   ["subtype"] sequent [squash] { <H>; x: 'A >- \subtype{'C; 'B['x]} } -->
+   sequent ['ext] { <H> >- \subtype{'C; ."isect"{'A; x. 'B['x]}} }
 
 doc <:doc< 
    @begin[doc]
@@ -395,8 +395,8 @@ doc <:doc<
    @end[doc]
 >>
 interactive topSubtype {| intro [] |} :
-   sequent [squash] { 'H >- "type"{'T} } -->
-   sequent ['ext] { 'H >- \subtype{'T; top} }
+   sequent [squash] { <H> >- "type"{'T} } -->
+   sequent ['ext] { <H> >- \subtype{'T; top} }
 doc <:doc< @docoff >>
 
 (************************************************************************

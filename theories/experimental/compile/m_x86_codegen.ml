@@ -627,8 +627,8 @@ doc <:doc<
    @end[doc]
 >>
 interactive codegen_prog :
-   sequent [m] { 'H >- compilable{ASM{'e}} } -->
-   sequent [m] { 'H >- compilable{'e} }
+   sequent [m] { <H> >- compilable{ASM{'e}} } -->
+   sequent [m] { <H> >- compilable{'e} }
 
 doc <:doc< @docoff >>
 

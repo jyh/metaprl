@@ -299,7 +299,7 @@ dform it_df2 : mode[src] :: it = `"it"
  * True always holds.
  *)
 prim trueIntro {| intro [] |} :
-   sequent ['ext] { 'H >- "true" } =
+   sequent ['ext] { <H> >- "true" } =
    it
 
 doc <:doc< ************************************************************************
@@ -313,7 +313,7 @@ doc <:doc< *********************************************************************
    @end[doc]
 >>
 prim equalityAxiom 'H :
-   sequent ['ext] { 'H; x: 'T; 'J['x] >- 'x in 'T } =
+   sequent ['ext] { <H>; x: 'T; <J['x]> >- 'x in 'T } =
    it
 
 doc <:doc< ************************************************************************
@@ -331,25 +331,25 @@ doc <:doc< *********************************************************************
  * Reflexivity.
  *)
 prim equalityRef 'y :
-   sequent ['ext] { 'H >- 'x = 'y in 'T } -->
-   sequent ['ext] { 'H >- 'x in 'T } =
+   sequent ['ext] { <H> >- 'x = 'y in 'T } -->
+   sequent ['ext] { <H> >- 'x in 'T } =
    it
 
 (*
  * Symmetry.
  *)
 prim equalitySym :
-   sequent ['ext] { 'H >- 'y = 'x in 'T } -->
-   sequent ['ext] { 'H >- 'x = 'y in 'T } =
+   sequent ['ext] { <H> >- 'y = 'x in 'T } -->
+   sequent ['ext] { <H> >- 'x = 'y in 'T } =
    it
 
 (*
  * Transitivity.
  *)
 prim equalityTrans 'z :
-   sequent ['ext] { 'H >- 'x = 'z in 'T } -->
-   sequent ['ext] { 'H >- 'z = 'y in 'T } -->
-   sequent ['ext] { 'H >- 'x = 'y in 'T } =
+   sequent ['ext] { <H> >- 'x = 'z in 'T } -->
+   sequent ['ext] { <H> >- 'z = 'y in 'T } -->
+   sequent ['ext] { <H> >- 'x = 'y in 'T } =
    it
 
 (*
@@ -360,9 +360,9 @@ prim equalityTrans 'z :
  * H >- T ext b
  *)
 prim equalityFormation 'T :
-   [main] ('a : sequent ['ext] { 'H >- 'T }) -->
-   [main] ('b : sequent ['ext] { 'H >- 'T }) -->
-   sequent ['ext] { 'H >- univ[i:l] } =
+   [main] ('a : sequent ['ext] { <H> >- 'T }) -->
+   [main] ('b : sequent ['ext] { <H> >- 'T }) -->
+   sequent ['ext] { <H> >- univ[i:l] } =
    'a = 'b in 'T
 
 doc <:doc< ************************************************************************
@@ -384,19 +384,19 @@ doc <:doc< *********************************************************************
  * H >- b1 = b2 in T1
  *)
 prim equalityEquality {| intro [] |} :
-   [wf] sequent [squash] { 'H >- 'T1 = 'T2 in univ[i:l] } -->
-   [wf] sequent [squash] { 'H >- 'a1 = 'a2 in 'T1 } -->
-   [wf] sequent [squash] { 'H >- 'b1 = 'b2 in 'T2 } -->
-   sequent ['ext] { 'H >- ('a1 = 'b1 in 'T1) = ('a2 = 'b2 in 'T2) in univ[i:l] } =
+   [wf] sequent [squash] { <H> >- 'T1 = 'T2 in univ[i:l] } -->
+   [wf] sequent [squash] { <H> >- 'a1 = 'a2 in 'T1 } -->
+   [wf] sequent [squash] { <H> >- 'b1 = 'b2 in 'T2 } -->
+   sequent ['ext] { <H> >- ('a1 = 'b1 in 'T1) = ('a2 = 'b2 in 'T2) in univ[i:l] } =
    it
 
 (*
  * Typehood.
  *)
 prim equalityType {| intro [] |} :
-   [wf] sequent [squash] { 'H >- 'a in 'T } -->
-   [wf] sequent [squash] { 'H >- 'b in 'T } -->
-   sequent ['ext] { 'H >- "type"{. 'a = 'b in 'T } } =
+   [wf] sequent [squash] { <H> >- 'a in 'T } -->
+   [wf] sequent [squash] { <H> >- 'b in 'T } -->
+   sequent ['ext] { <H> >- "type"{. 'a = 'b in 'T } } =
    it
 
 doc <:doc< ************************************************************************
@@ -415,8 +415,8 @@ doc <:doc< *********************************************************************
  * H >- a = b in T
  *)
 prim axiomMember {| intro []; eqcd |} :
-   [wf] sequent [squash] { 'H >- 'a = 'b in 'T } -->
-   sequent ['ext] { 'H >- it in ('a = 'b in 'T) } =
+   [wf] sequent [squash] { <H> >- 'a = 'b in 'T } -->
+   sequent ['ext] { <H> >- it in ('a = 'b in 'T) } =
    it
 
 (*
@@ -426,13 +426,13 @@ prim axiomMember {| intro []; eqcd |} :
  * H, x: a = b in T; J[it] >- C[it]
  *)
 prim equalityElimination {| elim [] |} 'H :
-   ('t : sequent ['ext] { 'H; x: 'a = 'b in 'T; 'J[it] >- 'C[it] }) -->
-   sequent ['ext] { 'H; x: 'a = 'b in 'T; 'J['x] >- 'C['x] } =
+   ('t : sequent ['ext] { <H>; x: 'a = 'b in 'T; <J[it]> >- 'C[it] }) -->
+   sequent ['ext] { <H>; x: 'a = 'b in 'T; <J['x]> >- 'C['x] } =
    't
 
 prim type_axiomMember {| intro []; eqcd |} :
-   sequent [squash] { 'H >- "type"{'T} } -->
-   sequent ['ext] { 'H >- it in "type"{'T} } =
+   sequent [squash] { <H> >- "type"{'T} } -->
+   sequent ['ext] { <H> >- it in "type"{'T} } =
    it
 
 doc <:doc< ************************************************************************
@@ -453,8 +453,8 @@ doc <:doc< *********************************************************************
  * H >- T
  *)
 prim typeEquality :
-   [main] sequent [squash] { 'H >- 'T } -->
-   sequent ['ext] { 'H >- "type"{'T} } =
+   [main] sequent [squash] { <H> >- 'T } -->
+   sequent ['ext] { <H> >- "type"{'T} } =
    it
 
 doc <:doc< ************************************************************************
@@ -475,8 +475,8 @@ doc <:doc< *********************************************************************
  * unfold the cumulativity.
  *)
 prim universeMember :
-   sequent ['ext] { 'H >- cumulativity[j:l, i:l] } -->
-   sequent ['ext] { 'H >- univ[j:l] in univ[i:l] } =
+   sequent ['ext] { <H> >- cumulativity[j:l, i:l] } -->
+   sequent ['ext] { <H> >- univ[j:l] in univ[i:l] } =
   it
 
 (*
@@ -487,9 +487,9 @@ prim universeMember :
  * H >- cumulativity(j, i)
  *)
 prim universeCumulativity univ[j:l] :
-   sequent [squash] { 'H >- cumulativity[j:l, i:l] } -->
-   sequent [squash] { 'H >- 'x = 'y in univ[j:l] } -->
-   sequent ['ext] { 'H >- 'x = 'y in univ[i:l] } =
+   sequent [squash] { <H> >- cumulativity[j:l, i:l] } -->
+   sequent [squash] { <H> >- 'x = 'y in univ[j:l] } -->
+   sequent ['ext] { <H> >- 'x = 'y in univ[i:l] } =
    it
 
 doc <:doc< @docoff >>
@@ -510,8 +510,8 @@ doc <:doc< *********************************************************************
    @end[doc]
 >>
 prim universeMemberType univ[i:l] :
-   [wf] sequent [squash] { 'H >- 'x in univ[i:l] } -->
-   sequent ['ext] { 'H >- "type"{'x} } =
+   [wf] sequent [squash] { <H> >- 'x in univ[i:l] } -->
+   sequent ['ext] { <H> >- "type"{'x} } =
    it
 
 (*
@@ -519,10 +519,10 @@ prim universeMemberType univ[i:l] :
  * hypothesis rule is not know yet.
  *)
 interactive universeAssumType 'H :
-   sequent ['ext] { 'H; x: univ[l:l]; 'J['x] >- "type"{'x} }
+   sequent ['ext] { <H>; x: univ[l:l]; <J['x]> >- "type"{'x} }
 
 interactive universeType {| intro [] |} :
-   sequent ['ext] { 'H >- "type"{univ[l:l]} }
+   sequent ['ext] { <H> >- "type"{univ[l:l]} }
 
 doc <:doc< @docoff >>
 let univTypeT = universeMemberType
@@ -532,8 +532,8 @@ let univTypeT = universeMemberType
  * by universeFormation
  *)
 prim universeFormation univ[j:l] :
-   sequent ['ext] { 'H >- cumulativity[j:l, i:l] } -->
-   sequent ['ext] {'H >- univ[i:l] } =
+   sequent ['ext] { <H> >- cumulativity[j:l, i:l] } -->
+   sequent ['ext] { <H> >- univ[i:l] } =
    univ[j:l]
 
 (************************************************************************

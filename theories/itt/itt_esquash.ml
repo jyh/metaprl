@@ -93,8 +93,8 @@ doc <:doc<
    @end[doc]
 >>
 prim esquash_type {| intro [AutoMustComplete] |} :
-   [wf] sequent [squash] { 'H >- "type"{'P} } -->
-   sequent ['ext] { 'H >- "type"{esquash{'P}} } =
+   [wf] sequent [squash] { <H> >- "type"{'P} } -->
+   sequent ['ext] { <H> >- "type"{esquash{'P}} } =
    it
 
 doc <:doc< 
@@ -104,16 +104,16 @@ doc <:doc<
    @end[doc]
 >>
 prim esquash_equal {| intro [SelectOption 0]; eqcd |} :
-   [wf] sequent [squash] { 'H >- esquash{'P1} in univ[i:l] } -->
-   [wf] sequent [squash] { 'H >- esquash{'P2} in univ[i:l] } -->
-   sequent [squash] { 'H; x: esquash{'P1} >- esquash{'P2} } -->
-   sequent [squash] { 'H; x: esquash{'P2} >- esquash{'P1} } -->
-   sequent ['ext] { 'H >- esquash{'P1} = esquash{'P2} in univ[i:l] } =
+   [wf] sequent [squash] { <H> >- esquash{'P1} in univ[i:l] } -->
+   [wf] sequent [squash] { <H> >- esquash{'P2} in univ[i:l] } -->
+   sequent [squash] { <H>; x: esquash{'P1} >- esquash{'P2} } -->
+   sequent [squash] { <H>; x: esquash{'P2} >- esquash{'P1} } -->
+   sequent ['ext] { <H> >- esquash{'P1} = esquash{'P2} in univ[i:l] } =
    it
 
 prim esquash_univ {| intro [AutoMustComplete] |} :
-   [wf] sequent [squash] { 'H >- 'P in univ[i:l] } -->
-   sequent ['ext] { 'H >- esquash{'P} in univ[i:l] } =
+   [wf] sequent [squash] { <H> >- 'P in univ[i:l] } -->
+   sequent ['ext] { <H> >- esquash{'P} in univ[i:l] } =
    it
 
 doc <:doc< 
@@ -128,8 +128,8 @@ doc <:doc<
    @end[doc]
 >>
 prim esquash_intro {| intro [AutoMustComplete] |} :
-   [main] sequent [squash] { 'H >- squash{'P} } -->
-   sequent ['ext] { 'H >- esquash{'P} } =
+   [main] sequent [squash] { <H> >- squash{'P} } -->
+   sequent ['ext] { <H> >- esquash{'P} } =
    it
 
 doc <:doc< 
@@ -141,8 +141,8 @@ doc <:doc<
    @end[doc]
 >>
 prim esquash_elim {| elim [] |} 'H :
-   ( 't['x] : sequent ['ext] { 'H; x: esquash{'A}; 'J[it] >- 'C[it] }) -->
-   sequent ['ext] { 'H; x: esquash{'A}; 'J['x] >- 'C['x] } =
+   ( 't['x] : sequent ['ext] { <H>; x: esquash{'A}; <J[it]> >- 'C[it] }) -->
+   sequent ['ext] { <H>; x: esquash{'A}; <J['x]> >- 'C['x] } =
    't[it]
 
 doc <:doc< 
@@ -151,8 +151,8 @@ doc <:doc<
    @end[doc]
 >>
 interactive esquash_mem {| intro []; squash |} :
-   sequent [squash] { 'H >- esquash{'A} } -->
-   sequent ['ext] { 'H >- it in esquash{'A} }
+   sequent [squash] { <H> >- esquash{'A} } -->
+   sequent ['ext] { <H> >- it in esquash{'A} }
 
 doc <:doc< 
    @begin[doc]
@@ -162,9 +162,9 @@ doc <:doc<
    @end[doc]
 >>
 prim esquash :
-   [wf] sequent [squash] { 'H >- "type"{'P} } -->
-   sequent [squash] { 'H >- esquash{'P} } -->
-   sequent ['ext] { 'H >- squash{'P} } =
+   [wf] sequent [squash] { <H> >- "type"{'P} } -->
+   sequent [squash] { <H> >- esquash{'P} } -->
+   sequent ['ext] { <H> >- squash{'P} } =
    it
 
 doc <:doc< 
@@ -173,9 +173,9 @@ doc <:doc<
    @end[doc]
 >>
 interactive unesquash 'H :
-   [wf] sequent [squash] { 'H; x: esquash{'P}; 'J[it] >- "type"{'P} } -->
-   sequent ['ext] { 'H; x: squash{'P}; 'J[it] >- 'C[it] } -->
-   sequent ['ext] { 'H; x: esquash{'P}; 'J['x] >- 'C['x] }
+   [wf] sequent [squash] { <H>; x: esquash{'P}; <J[it]> >- "type"{'P} } -->
+   sequent ['ext] { <H>; x: squash{'P}; <J[it]> >- 'C[it] } -->
+   sequent ['ext] { <H>; x: esquash{'P}; <J['x]> >- 'C['x] }
 
 doc <:doc< 
    @begin[doc]
@@ -183,14 +183,14 @@ doc <:doc<
    @end[doc]
 >>
 interactive esquash_void_elim {| elim [] |} 'H :
-   sequent ['ext] { 'H; x: esquash{void}; 'J['x] >- 'C['x] }
+   sequent ['ext] { <H>; x: esquash{void}; <J['x]> >- 'C['x] }
 
 interactive esquash_equal_intro {| intro [] |} :
-   [wf] sequent [squash] { 'H >- 'P1 in univ[i:l] } -->
-   [wf] sequent [squash] { 'H >- 'P2 in univ[i:l] } -->
-   [main] sequent [squash] { 'H; x: 'P1 >- 'P2 } -->
-   [main] sequent [squash] { 'H; x: 'P2 >- 'P1 } -->
-   sequent ['ext] { 'H >- esquash{'P1} = esquash{'P2} in univ[i:l] }
+   [wf] sequent [squash] { <H> >- 'P1 in univ[i:l] } -->
+   [wf] sequent [squash] { <H> >- 'P2 in univ[i:l] } -->
+   [main] sequent [squash] { <H>; x: 'P1 >- 'P2 } -->
+   [main] sequent [squash] { <H>; x: 'P2 >- 'P1 } -->
+   sequent ['ext] { <H> >- esquash{'P1} = esquash{'P2} in univ[i:l] }
 
 doc <:doc< 
    @begin[doc]

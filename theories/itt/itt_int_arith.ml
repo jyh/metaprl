@@ -196,10 +196,10 @@ let le2geT t p =
  nthHypT)) p
 
 interactive lt2ge :
-   [wf] sequent [squash] { 'H >- 'a in int } -->
-   [wf] sequent [squash] { 'H >- 'b in int } -->
-   sequent [squash] { 'H >- 'a < 'b } -->
-   sequent ['ext] { 'H >- 'b >= ('a +@ 1) }
+   [wf] sequent [squash] { <H> >- 'a in int } -->
+   [wf] sequent [squash] { <H> >- 'b in int } -->
+   sequent [squash] { <H> >- 'a < 'b } -->
+   sequent ['ext] { <H> >- 'b >= ('a +@ 1) }
 
 let lt2geT t p =
    let (left,right)=dest_lt t in
@@ -209,10 +209,10 @@ let lt2geT t p =
       (thenLocalAT (assertT newt) lt2ge) p
 
 interactive gt2ge :
-   [wf] sequent [squash] { 'H >- 'a in int } -->
-   [wf] sequent [squash] { 'H >- 'b in int } -->
-   sequent [squash] { 'H >- 'a > 'b } -->
-   sequent ['ext] { 'H >- 'a >= ('b +@ 1) }
+   [wf] sequent [squash] { <H> >- 'a in int } -->
+   [wf] sequent [squash] { <H> >- 'b in int } -->
+   sequent [squash] { <H> >- 'a > 'b } -->
+   sequent ['ext] { <H> >- 'a >= ('b +@ 1) }
 
 let gt2geT t p =
    let (left,right)=dest_gt t in
@@ -222,14 +222,14 @@ let gt2geT t p =
       (thenLocalAT (assertT newt) gt2ge ) p
 
 interactive eq2ge1 :
-   sequent [squash] { 'H >- 'a = 'b in int } -->
-   sequent ['ext] { 'H >- 'a >= 'b }
+   sequent [squash] { <H> >- 'a = 'b in int } -->
+   sequent ['ext] { <H> >- 'a >= 'b }
 
 let eq2ge1T = eq2ge1
 
 interactive eq2ge2 :
-   sequent [squash] { 'H >- 'a = 'b in int } -->
-   sequent ['ext] { 'H >- 'b >= 'a }
+   sequent [squash] { <H> >- 'a = 'b in int } -->
+   sequent ['ext] { <H> >- 'b >= 'a }
 
 let eq2ge2T = eq2ge2
 
@@ -240,14 +240,14 @@ let eq2geT t =
    (thenLocalAT (assertT (mk_ge_term r l)) (eq2ge2T thenT (onSomeHypT nthHypT)))
 
 interactive notle2ge :
-   [wf] sequent [squash] { 'H >- 'a in int } -->
-   [wf] sequent [squash] { 'H >- 'b in int } -->
-   [aux] sequent [squash] { 'H >- "not"{('a <= 'b)} } -->
-   sequent ['ext] { 'H >- 'a >= ('b +@ 1) }
+   [wf] sequent [squash] { <H> >- 'a in int } -->
+   [wf] sequent [squash] { <H> >- 'b in int } -->
+   [aux] sequent [squash] { <H> >- "not"{('a <= 'b)} } -->
+   sequent ['ext] { <H> >- 'a >= ('b +@ 1) }
 
 interactive nequal_elim {| elim [] |} 'H :
-   [main] sequent [squash] { 'H; 'J[it]; y: (('a >= 'b +@ 1) or ('b >= 'a +@ 1)) >- 'C[it] } -->
-   sequent ['ext] { 'H; x: nequal{'a;'b}; 'J['x] >- 'C['x] }
+   [main] sequent [squash] { <H>; <J[it]>; y: (('a >= 'b +@ 1) or ('b >= 'a +@ 1)) >- 'C[it] } -->
+   sequent ['ext] { <H>; x: nequal{'a;'b}; <J['x]> >- 'C['x] }
 
 (*
 let notle2geT t =
@@ -304,11 +304,11 @@ let geInConcl2HypT =
    thenLocalMT (rwh unfold_ge 0) leInConcl2HypT
 
 interactive eq2pair_of_ineq :
-   [wf] sequent ['ext] { 'H >- 'a in int } -->
-   [wf] sequent ['ext] { 'H >- 'b in int } -->
-   [main] sequent ['ext] { 'H >- 'a >= 'b } -->
-   [main] sequent ['ext] { 'H >- 'b >= 'a } -->
-   sequent ['ext] { 'H >- 'a = 'b in int }
+   [wf] sequent ['ext] { <H> >- 'a in int } -->
+   [wf] sequent ['ext] { <H> >- 'b in int } -->
+   [main] sequent ['ext] { <H> >- 'a >= 'b } -->
+   [main] sequent ['ext] { <H> >- 'b >= 'a } -->
+   sequent ['ext] { <H> >- 'a = 'b in int }
 
 let eqInConcl2HypT t =
 	let (t,a,b)=dest_equal t in
@@ -372,13 +372,13 @@ let negativeHyp2ConclT i p =
    	idT p
 
 interactive ge_addMono :
-   sequent [squash] { 'H >- 'a in int } -->
-   sequent [squash] { 'H >- 'b in int } -->
-   sequent [squash] { 'H >- 'c in int } -->
-   sequent [squash] { 'H >- 'd in int } -->
-   sequent [squash] { 'H >- 'a >= 'b } -->
-   sequent [squash] { 'H >- 'c >= 'd } -->
-   sequent ['ext] { 'H >- ('a +@ 'c) >= ('b +@ 'd) }
+   sequent [squash] { <H> >- 'a in int } -->
+   sequent [squash] { <H> >- 'b in int } -->
+   sequent [squash] { <H> >- 'c in int } -->
+   sequent [squash] { <H> >- 'd in int } -->
+   sequent [squash] { <H> >- 'a >= 'b } -->
+   sequent [squash] { <H> >- 'c >= 'd } -->
+   sequent ['ext] { <H> >- ('a +@ 'c) >= ('b +@ 'd) }
 
 type comparison = Less | Equal | Greater
 
@@ -944,10 +944,10 @@ let provideConstantC t =
       add_Id3C
 
 interactive ge_addMono2 'c :
-   [wf] sequent [squash] { 'H >- 'a in int } -->
-   [wf] sequent [squash] { 'H >- 'b in int } -->
-   [wf] sequent [squash] { 'H >- 'c in int } -->
-   sequent ['ext] { 'H >- ('a >= 'b) ~ (('c +@ 'a) >= ('c +@ 'b)) }
+   [wf] sequent [squash] { <H> >- 'a in int } -->
+   [wf] sequent [squash] { <H> >- 'b in int } -->
+   [wf] sequent [squash] { <H> >- 'c in int } -->
+   sequent ['ext] { <H> >- ('a >= 'b) ~ (('c +@ 'a) >= ('c +@ 'b)) }
 
 interactive_rw ge_addMono2_rw 'c :
    ( 'a in int ) -->
@@ -1064,59 +1064,59 @@ let arithT =
    (thenLocalMT findContradRelT (reduceContradRelT (-1)) ))))
 
 interactive test 'H 'a 'b 'c :
-sequent [squash] { 'H >- 'a in int } -->
-sequent [squash] { 'H >- 'b in int } -->
-sequent [squash] { 'H >- 'c in int } -->
-sequent ['ext] { 'H; x: ('a >= ('b +@ 1));
+sequent [squash] { <H> >- 'a in int } -->
+sequent [squash] { <H> >- 'b in int } -->
+sequent [squash] { <H> >- 'c in int } -->
+sequent ['ext] { <H>; x: ('a >= ('b +@ 1));
                      t: ('c >= ('b +@ 3));
                      u: ('b >= ('a +@ 0))
                 >- "assert"{bfalse} }
 
 interactive test2 'H 'a 'b 'c :
-sequent [squash] { 'H >- 'a in int } -->
-sequent [squash] { 'H >- 'b in int } -->
-sequent [squash] { 'H >- 'c in int } -->
-sequent ['ext] { 'H; x: (('b +@ 1) <= 'a);
+sequent [squash] { <H> >- 'a in int } -->
+sequent [squash] { <H> >- 'b in int } -->
+sequent [squash] { <H> >- 'c in int } -->
+sequent ['ext] { <H>; x: (('b +@ 1) <= 'a);
                      t: ('c > ('b +@ 2));
                      u: ('b >= ('a +@ 0))
                 >- "assert"{bfalse} }
 
 interactive test3 'H 'a 'b 'c :
-sequent [squash] { 'H >- 'a in int } -->
-sequent [squash] { 'H >- 'b in int } -->
-sequent [squash] { 'H >- 'c in int } -->
-sequent ['ext] { 'H; x: (('b +@ 1) <= 'a);
+sequent [squash] { <H> >- 'a in int } -->
+sequent [squash] { <H> >- 'b in int } -->
+sequent [squash] { <H> >- 'c in int } -->
+sequent ['ext] { <H>; x: (('b +@ 1) <= 'a);
                      t: ('c > ('b +@ 2))
                 >- ('b < ('a +@ 0))  }
 
 interactive test4 'H 'a 'b :
-sequent [squash] { 'H >- 'a in int } -->
-sequent [squash] { 'H >- 'b in int } -->
-sequent ['ext] { 'H; x: ('a >= 'b);
+sequent [squash] { <H> >- 'a in int } -->
+sequent [squash] { <H> >- 'b in int } -->
+sequent ['ext] { <H>; x: ('a >= 'b);
                      t: ('a < 'b)
                 >- "assert"{bfalse} }
 
 interactive test5 'H 'a 'b :
-sequent [squash] { 'H >- 'a in int } -->
-sequent [squash] { 'H >- 'b in int } -->
-sequent ['ext] { 'H; x: ('a >= 'b +@ 0);
+sequent [squash] { <H> >- 'a in int } -->
+sequent [squash] { <H> >- 'b in int } -->
+sequent ['ext] { <H>; x: ('a >= 'b +@ 0);
                      t: ('a < 'b)
                 >- "assert"{bfalse} }
 
 interactive test6 'H 'b 'c :
-sequent [squash] { 'H >- 'a in int } -->
-sequent [squash] { 'H >- 'b in int } -->
-sequent [squash] { 'H >- 'c in int } -->
-sequent ['ext] { 'H; x: (('c *@ ('b +@ ('a *@ 'c)) +@ ('b *@ 'c)) >= 'b +@ 0);
+sequent [squash] { <H> >- 'a in int } -->
+sequent [squash] { <H> >- 'b in int } -->
+sequent [squash] { <H> >- 'c in int } -->
+sequent ['ext] { <H>; x: (('c *@ ('b +@ ('a *@ 'c)) +@ ('b *@ 'c)) >= 'b +@ 0);
                      t: (((((('c *@ 'b) *@ 1) +@ (2 *@ ('a *@ ('c *@ 'c)))) +@
  (('c *@ ((-1) *@ 'a)) *@ 'c)) +@ ('b *@ 'c)) < 'b)
                 >- "assert"{bfalse} }
 
 interactive eq2ineq :
-	[wf] sequent ['ext] { 'H >- 'a in int } -->
-	[wf] sequent ['ext] { 'H >- 'b in int } -->
-   [main] sequent ['ext] { 'H >- 'a = 'b in int } -->
-	sequent ['ext] { 'H >- 'a <= 'b }
+	[wf] sequent ['ext] { <H> >- 'a in int } -->
+	[wf] sequent ['ext] { <H> >- 'b in int } -->
+   [main] sequent ['ext] { <H> >- 'a = 'b in int } -->
+	sequent ['ext] { <H> >- 'a <= 'b }
 
 interactive_rw beq2ineq_rw :
 	('a in int) -->

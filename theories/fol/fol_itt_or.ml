@@ -60,24 +60,24 @@ derived_rw reduce_decide_inr : Fol_or!decide{.Fol_or!inr{'x}; y. 'body1['y]; z. 
  ************************************************************************)
 
 derived or_type :
-   [wf] sequent ['ext] { 'H >- "type"{'A} } -->
-   [wf] sequent ['ext] { 'H >- "type"{'B} } -->
-   sequent ['ext] { 'H >- "type"{.Fol_or!"or"{'A; 'B}} }
+   [wf] sequent ['ext] { <H> >- "type"{'A} } -->
+   [wf] sequent ['ext] { <H> >- "type"{'B} } -->
+   sequent ['ext] { <H> >- "type"{.Fol_or!"or"{'A; 'B}} }
 
 derived or_intro_left :
-   [wf] sequent ['ext] { 'H >- "type"{'B} } -->
-   [main] ('a : sequent ['ext] { 'H >- 'A }) -->
-   sequent ['ext] { 'H >- Fol_or!"or"{'A; 'B} }
+   [wf] sequent ['ext] { <H> >- "type"{'B} } -->
+   [main] ('a : sequent ['ext] { <H> >- 'A }) -->
+   sequent ['ext] { <H> >- Fol_or!"or"{'A; 'B} }
 
 derived or_intro_right :
-   [wf] sequent ['ext] { 'H >- "type"{'A} } -->
-   [main] ('b : sequent ['ext] { 'H >- 'B } ) -->
-   sequent ['ext] { 'H >- Fol_or!"or"{'A; 'B} }
+   [wf] sequent ['ext] { <H> >- "type"{'A} } -->
+   [main] ('b : sequent ['ext] { <H> >- 'B } ) -->
+   sequent ['ext] { <H> >- Fol_or!"or"{'A; 'B} }
 
 derived or_elim 'H :
-   [wf] ('a['x] : sequent ['ext] { 'H; x: 'A; 'J[Fol_or!inl{'x}] >- 'C[Fol_or!inl{'x}] }) -->
-   [wf] ('b['x] : sequent ['ext] { 'H; x: 'B; 'J[Fol_or!inr{'x}] >- 'C[Fol_or!inr{'x}] }) -->
-   sequent ['ext] { 'H; x: Fol_or!"or"{'A; 'B}; 'J['x] >- 'C['x] }
+   [wf] ('a['x] : sequent ['ext] { <H>; x: 'A; <J[Fol_or!inl{'x}]> >- 'C[Fol_or!inl{'x}] }) -->
+   [wf] ('b['x] : sequent ['ext] { <H>; x: 'B; <J[Fol_or!inr{'x}]> >- 'C[Fol_or!inr{'x}] }) -->
+   sequent ['ext] { <H>; x: Fol_or!"or"{'A; 'B}; <J['x]> >- 'C['x] }
 
 (*
  * -*-

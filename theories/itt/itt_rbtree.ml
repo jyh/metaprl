@@ -220,31 +220,31 @@ doc <:doc<
 
 
 interactive color_wf {| intro[] |} :
-   sequent['ext]   { 'H >- "type"{Color} }
+   sequent['ext]   { <H> >- "type"{Color} }
 
 interactive redtype_wf {| intro[] |} :
-   sequent['ext]   { 'H >- "type"{Red} }
+   sequent['ext]   { <H> >- "type"{Red} }
 
 interactive blacktype_wf {| intro[] |} :
-   sequent['ext]   { 'H >- "type"{Black} }
+   sequent['ext]   { <H> >- "type"{Black} }
 
 interactive black_wf {| intro[] |} :
-   sequent['ext]   { 'H >- black in Color }
+   sequent['ext]   { <H> >- black in Color }
 
 interactive black_wf2 {| intro[] |} :
-   sequent['ext]   { 'H >- black in Black }
+   sequent['ext]   { <H> >- black in Black }
 
 interactive red_wf {| intro[] |} :
-   sequent['ext]   { 'H >- red in Color }
+   sequent['ext]   { <H> >- red in Color }
 
 interactive color_elim {| elim[] |} 'H:
-   sequent['ext]   { 'H; 'J[red] >- 'C[red] } -->
-   sequent['ext]   { 'H; 'J[black] >- 'C[black] } -->
-   sequent['ext]   { 'H; c:Color; 'J['c] >- 'C['c] }
+   sequent['ext]   { <H>; <J[red]> >- 'C[red] } -->
+   sequent['ext]   { <H>; <J[black]> >- 'C[black] } -->
+   sequent['ext]   { <H>; c:Color; <J['c]> >- 'C['c] }
 
 interactive black_elim {| elim[] |} 'H:
-   sequent['ext]   { 'H; 'J[black] >- 'C[black] } -->
-   sequent['ext]   { 'H; c:Black; 'J['c] >- 'C['c] }
+   sequent['ext]   { <H>; <J[black]> >- 'C[black] } -->
+   sequent['ext]   { <H>; c:Black; <J['c]> >- 'C['c] }
 
 let resource reduce += [
    <<black_or_red{black; 'black_case; 'red_case}>>, if_black;
@@ -253,7 +253,7 @@ let resource reduce += [
    soft_reduce <<cost{'color}>> cost]
 
 interactive black_subtype {| intro[] |}:
-   sequent['ext]   { 'H >- Black subtype Color }
+   sequent['ext]   { <H> >- Black subtype Color }
 
 
 (* == == *)
@@ -266,32 +266,32 @@ doc <:doc<
 >>
 
 interactive rbtree_wf {| intro[] |} :
-   sequent[squash] { 'H >- "type"{'A} } -->
-   sequent[squash] { 'H >- 'color in Color } -->
-   sequent[squash] { 'H >- 'n in nat } -->
-   sequent['ext]   { 'H >- "type"{.RBTree{'A} 'n 'color} }
+   sequent[squash] { <H> >- "type"{'A} } -->
+   sequent[squash] { <H> >- 'color in Color } -->
+   sequent[squash] { <H> >- 'n in nat } -->
+   sequent['ext]   { <H> >- "type"{.RBTree{'A} 'n 'color} }
 
 interactive btree1_wf {| intro[] |} :
-   sequent[squash] { 'H >- "type"{'A} } -->
-   sequent[squash] { 'H >- 'n in nat } -->
-   sequent['ext]   { 'H >- "type"{BTree{'A;'n}} }
+   sequent[squash] { <H> >- "type"{'A} } -->
+   sequent[squash] { <H> >- 'n in nat } -->
+   sequent['ext]   { <H> >- "type"{BTree{'A;'n}} }
 
 interactive rbtree1_wf {| intro[] |} :
-   sequent[squash] { 'H >- "type"{'A} } -->
-   sequent[squash] { 'H >- 'n in nat } -->
-   sequent['ext]   { 'H >- "type"{RBTree{'A;'n}} }
+   sequent[squash] { <H> >- "type"{'A} } -->
+   sequent[squash] { <H> >- 'n in nat } -->
+   sequent['ext]   { <H> >- "type"{RBTree{'A;'n}} }
 
 interactive btree2_wf {| intro[] |} :
-   sequent[squash] { 'H >- "type"{'A} } -->
-   sequent['ext]   { 'H >- "type"{BTree{'A}} }
+   sequent[squash] { <H> >- "type"{'A} } -->
+   sequent['ext]   { <H> >- "type"{BTree{'A}} }
 
 interactive rbtree2_wf {| intro[] |} :
-   sequent[squash] { 'H >- "type"{'A} } -->
-   sequent['ext]   { 'H >- "type"{RBTree{'A}} }
+   sequent[squash] { <H> >- "type"{'A} } -->
+   sequent['ext]   { <H> >- "type"{RBTree{'A}} }
 
 interactive rbtree_subtype {| intro[] |} :
-   sequent[squash] { 'H >- "type"{'A} } -->
-   sequent['ext]   { 'H >- RBTree{'A} subtype BinTree{'A} }
+   sequent[squash] { <H> >- "type"{'A} } -->
+   sequent['ext]   { <H> >- RBTree{'A} subtype BinTree{'A} }
 
 (* == induction == *)
 
@@ -309,9 +309,9 @@ define black_depth: black_depth{'t} <--> tree_ind{'t; 0; L,R,self. 'L +@ cost{.^
 (* == balance == *)
 (*
 interactive rbtree_wf {| intro[] |} :
-   sequent[squash] { 'H >- "type"{'A} } -->
-   sequent[squash] { 'H >- 't in RBTree{'A}} -->
-   sequent['ext]   { 'H >- black_depth{'t} <= 2*@ height{'t}+@ 1 }
+   sequent[squash] { <H> >- "type"{'A} } -->
+   sequent[squash] { <H> >- 't in RBTree{'A}} -->
+   sequent['ext]   { <H> >- black_depth{'t} <= 2*@ height{'t}+@ 1 }
 *)
 
 
@@ -336,8 +336,8 @@ doc <:doc<
 >>
 
 interactive rbtree_correctness {| intro[] |} :
-   sequent[squash] { 'H >- 'ord in order[i:l] } -->
-   sequent['ext]   { 'H >- rbtree_set{'ord} in Set[i:l]{.'ord^car} }
+   sequent[squash] { <H> >- 'ord in order[i:l] } -->
+   sequent['ext]   { <H> >- rbtree_set{'ord} in Set[i:l]{.'ord^car} }
 
 doc <:doc< 
    @begin[doc]

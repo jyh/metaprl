@@ -89,23 +89,23 @@ topval fold_assert : conv
  * H >- Ui ext Unit
  * by boolFormation
  *)
-rule boolFormation : sequent ['ext] { 'H >- univ[i:l] }
+rule boolFormation : sequent ['ext] { <H> >- univ[i:l] }
 
 (*
  * H >- Bool = Bool in Ui ext Ax
  * by boolEquality
  *)
-rule boolEquality : sequent ['ext] { 'H >- "bool" in univ[i:l] }
+rule boolEquality : sequent ['ext] { <H> >- "bool" in univ[i:l] }
 
 (*
  * H >- Bool ext btrue
  * by bool_*Formation
  *)
-rule bool_trueFormation : sequent ['ext] { 'H >- "bool" }
-rule bool_falseFormation : sequent ['ext] { 'H >- "bool" }
+rule bool_trueFormation : sequent ['ext] { <H> >- "bool" }
+rule bool_falseFormation : sequent ['ext] { <H> >- "bool" }
 
-rule btrue_member : sequent ['ext] { 'H >- btrue in "bool" }
-rule bfalse_member : sequent ['ext] { 'H >- bfalse in "bool" }
+rule btrue_member : sequent ['ext] { <H> >- btrue in "bool" }
+rule bfalse_member : sequent ['ext] { <H> >- bfalse in "bool" }
 
 (*
  * H; i:x:Unit; J >- C
@@ -113,16 +113,16 @@ rule bfalse_member : sequent ['ext] { 'H >- bfalse in "bool" }
  * H; i:x:Unit; J[it / x] >- C[it / x]
  *)
 rule boolElimination2 'H :
-   sequent['ext] { 'H; 'J[btrue] >- 'C[btrue] } -->
-   sequent['ext] { 'H; 'J[bfalse] >- 'C[bfalse] } -->
-   sequent ['ext] { 'H; x: "bool"; 'J['x] >- 'C['x] }
+   sequent['ext] { <H>; <J[btrue]> >- 'C[btrue] } -->
+   sequent['ext] { <H>; <J[bfalse]> >- 'C[bfalse] } -->
+   sequent ['ext] { <H>; x: "bool"; <J['x]> >- 'C['x] }
 
 (*
  * Squash elimination on assert.
  *)
 rule assertSquashElim :
-   sequent [squash] { 'H >- "assert"{'t} } -->
-   sequent ['ext] { 'H >- it in "assert"{'t} }
+   sequent [squash] { <H> >- "assert"{'t} } -->
+   sequent ['ext] { <H> >- it in "assert"{'t} }
 
 (************************************************************************
  * TACTICS                                                              *

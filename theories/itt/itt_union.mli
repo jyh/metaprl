@@ -78,9 +78,9 @@ prec prec_union
  * H >- Ui ext B
  *)
 rule unionFormation :
-   sequent ['ext] { 'H >- univ[i:l] } -->
-   sequent ['ext] { 'H >- univ[i:l] } -->
-   sequent ['ext] { 'H >- univ[i:l] }
+   sequent ['ext] { <H> >- univ[i:l] } -->
+   sequent ['ext] { <H> >- univ[i:l] } -->
+   sequent ['ext] { <H> >- univ[i:l] }
 
 (*
  * H >- A1 + B1 = A2 + B2 in Ui
@@ -89,18 +89,18 @@ rule unionFormation :
  * H >- B1 = B2 in Ui
  *)
 rule unionEquality :
-   sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
-   sequent [squash] { 'H >- 'B1 = 'B2 in univ[i:l] } -->
-   sequent ['ext] { 'H >- 'A1 + 'B1 = 'A2 + 'B2 in univ[i:l] }
+   sequent [squash] { <H> >- 'A1 = 'A2 in univ[i:l] } -->
+   sequent [squash] { <H> >- 'B1 = 'B2 in univ[i:l] } -->
+   sequent ['ext] { <H> >- 'A1 + 'B1 = 'A2 + 'B2 in univ[i:l] }
 
 
 (*
  * Typehood.
  *)
 rule unionType :
-   sequent [squash] { 'H >- "type"{'A} } -->
-   sequent [squash] { 'H >- "type"{'B} } -->
-   sequent ['ext] { 'H >- "type"{. 'A + 'B } }
+   sequent [squash] { <H> >- "type"{'A} } -->
+   sequent [squash] { <H> >- "type"{'B} } -->
+   sequent ['ext] { <H> >- "type"{. 'A + 'B } }
 
 (*
  * H >- A + B ext inl a
@@ -109,9 +109,9 @@ rule unionType :
  * H >- B = B in Ui
  *)
 rule inlFormation :
-   sequent ['ext] { 'H >- 'A } -->
-   sequent [squash] { 'H >- "type"{'B} } -->
-   sequent ['ext] { 'H >- 'A + 'B }
+   sequent ['ext] { <H> >- 'A } -->
+   sequent [squash] { <H> >- "type"{'B} } -->
+   sequent ['ext] { <H> >- 'A + 'B }
 
 (*
  * H >- A + B ext inl a
@@ -120,9 +120,9 @@ rule inlFormation :
  * H >- A = A in Ui
  *)
 rule inrFormation :
-   sequent ['ext] { 'H >- 'B } -->
-   sequent [squash] { 'H >- "type"{'A} } -->
-   sequent ['ext] { 'H >- 'A + 'B }
+   sequent ['ext] { <H> >- 'B } -->
+   sequent [squash] { <H> >- "type"{'A} } -->
+   sequent ['ext] { <H> >- 'A + 'B }
 
 (*
  * H >- inl a1 = inl a2 in A + B
@@ -131,9 +131,9 @@ rule inrFormation :
  * H >- B = B in Ui
  *)
 rule inlEquality :
-   sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
-   sequent [squash] { 'H >- "type"{'B} } -->
-   sequent ['ext] { 'H >- inl{'a1} = inl{'a2} in 'A + 'B }
+   sequent [squash] { <H> >- 'a1 = 'a2 in 'A } -->
+   sequent [squash] { <H> >- "type"{'B} } -->
+   sequent ['ext] { <H> >- inl{'a1} = inl{'a2} in 'A + 'B }
 
 (*
  * H >- inr b1 = inr b2 in A + B
@@ -142,9 +142,9 @@ rule inlEquality :
  * H >- A = A in Ui
  *)
 rule inrEquality :
-   sequent [squash] { 'H >- 'b1 = 'b2 in 'B } -->
-   sequent [squash] { 'H >- "type"{'A} } -->
-   sequent ['ext] { 'H >- inr{'b1} = inr{'b2} in 'A + 'B }
+   sequent [squash] { <H> >- 'b1 = 'b2 in 'B } -->
+   sequent [squash] { <H> >- "type"{'A} } -->
+   sequent ['ext] { <H> >- inr{'b1} = inr{'b2} in 'A + 'B }
 
 (*
  * H, x: A + B, J[x] >- T[x] ext decide(x; u. 'left['u]; v. 'right['v])
@@ -152,9 +152,9 @@ rule inrEquality :
  * H, x: A # B, u:A, v:B[u], J[u, v] >- T[u, v] ext t[u, v]
  *)
 rule unionElimination 'H :
-   sequent ['ext] { 'H; x: 'A + 'B; u: 'A; 'J[inl{'u}] >- 'T[inl{'u}] } -->
-   sequent ['ext] { 'H; x: 'A + 'B; v: 'B; 'J[inr{'v}] >- 'T[inr{'v}] } -->
-   sequent ['ext] { 'H; x: 'A + 'B; 'J['x] >- 'T['x] }
+   sequent ['ext] { <H>; x: 'A + 'B; u: 'A; <J[inl{'u}]> >- 'T[inl{'u}] } -->
+   sequent ['ext] { <H>; x: 'A + 'B; v: 'B; <J[inr{'v}]> >- 'T[inr{'v}] } -->
+   sequent ['ext] { <H>; x: 'A + 'B; <J['x]> >- 'T['x] }
 
 (*
  * H >- decide(e1; u1. l1[u1]; v1. r1[v1]) = decide(e2; u2. l2[u2]; v2. r2[v2]) in T[e1]
@@ -164,10 +164,10 @@ rule unionElimination 'H :
  * H, v:A, w: e1 = inr v in A + B >- r1[v] = r2[v] in T[inr v]
  *)
 rule decideEquality bind{z. 'T['z]} ('A + 'B) :
-   sequent [squash] { 'H >- 'e1 = 'e2 in 'A + 'B } -->
-   sequent [squash] { 'H; u: 'A; w: 'e1 = inl{'u} in 'A + 'B >- 'l1['u] = 'l2['u] in 'T[inl{'u}] } -->
-   sequent [squash] { 'H; v: 'B; w: 'e1 = inr{'v} in 'A + 'B >- 'r1['v] = 'r2['v] in 'T[inr{'v}] } -->
-   sequent ['ext] { 'H >- decide{'e1; u1. 'l1['u1]; v1. 'r1['v1]} =
+   sequent [squash] { <H> >- 'e1 = 'e2 in 'A + 'B } -->
+   sequent [squash] { <H>; u: 'A; w: 'e1 = inl{'u} in 'A + 'B >- 'l1['u] = 'l2['u] in 'T[inl{'u}] } -->
+   sequent [squash] { <H>; v: 'B; w: 'e1 = inr{'v} in 'A + 'B >- 'r1['v] = 'r2['v] in 'T[inr{'v}] } -->
+   sequent ['ext] { <H> >- decide{'e1; u1. 'l1['u1]; v1. 'r1['v1]} =
                    decide{'e2; u2. 'l2['u2]; v2. 'r2['v2]} in
                    'T['e1] }
 
@@ -179,9 +179,9 @@ rule decideEquality bind{z. 'T['z]} ('A + 'B) :
  * H >- B1 <= B2
  *)
 rule unionSubtype :
-   sequent [squash] { 'H >- \subtype{'A1; 'A2} } -->
-   sequent [squash] { 'H >- \subtype{'B1; 'B2} } -->
-   sequent ['ext] { 'H >- \subtype{ ('A1 + 'B1); ('A2 + 'B2) } }
+   sequent [squash] { <H> >- \subtype{'A1; 'A2} } -->
+   sequent [squash] { <H> >- \subtype{'B1; 'B2} } -->
+   sequent ['ext] { <H> >- \subtype{ ('A1 + 'B1); ('A2 + 'B2) } }
 
 (************************************************************************
  * TACTICS                                                              *

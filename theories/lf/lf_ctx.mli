@@ -38,7 +38,7 @@ declare nil_ctx;;
 rule empty_ctx : sig{'S} --> ctx{'S; nil_ctx};;
 
 rule type_ctx 'S 'C : ctx{'S[nil_sig]; 'C[nil_ctx] } -->
-    sequent { 'S; 'C >> mem{'A; type} } -->
+    sequent { <S>; <C> >- mem{'A; type} } -->
     ctx{'S[nil_sig]; 'C[hyp{'A; x. nil_ctx}]};;
 
 (*

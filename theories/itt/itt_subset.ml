@@ -174,14 +174,14 @@ doc <:doc<
 >>
 
 interactive mem_wf {| intro [] |}  :
-   sequent [squash] { 'H >- 'a in 'B } -->
-   sequent [squash] { 'H >- "type"{'A} } -->
-   sequent ['ext] { 'H >- "type"{mem{'a;'A;'B}} }
+   sequent [squash] { <H> >- 'a in 'B } -->
+   sequent [squash] { <H> >- "type"{'A} } -->
+   sequent ['ext] { <H> >- "type"{mem{'a;'A;'B}} }
 
 interactive mem_intro {| intro [] |}  :
-   [wf] sequent [squash] { 'H >- 'a in 'B } -->
-   sequent [squash] { 'H; b:'B; u: 'a='b in 'B >- 'b in 'A} -->
-   sequent ['ext] { 'H >- mem{'a;'A;'B} }
+   [wf] sequent [squash] { <H> >- 'a in 'B } -->
+   sequent [squash] { <H>; b:'B; u: 'a='b in 'B >- 'b in 'A} -->
+   sequent ['ext] { <H> >- mem{'a;'A;'B} }
 
 doc <:doc< 
    @begin[doc]
@@ -192,9 +192,9 @@ doc <:doc<
 >>
 
 interactive subset_wf {| intro [] |} :
-   sequent [squash] { 'H >- "type"{'A} } -->
-   sequent [squash] { 'H >- "type"{'B} } -->
-   sequent ['ext] { 'H >- "type"{.'A subset 'B} }
+   sequent [squash] { <H> >- "type"{'A} } -->
+   sequent [squash] { <H> >- "type"{'B} } -->
+   sequent ['ext] { <H> >- "type"{.'A subset 'B} }
 
 doc <:doc< 
    @begin[doc]
@@ -203,17 +203,17 @@ doc <:doc<
 >>
       
 interactive subset_intro {| intro [] |}  :
-   [wf] sequent [squash] { 'H >- 'A subtype 'B } -->
-   [main] sequent [squash] {'H; a: 'A; b: 'B; u: 'a = 'b in 'B >- 'b in 'A } -->
-   sequent ['ext] { 'H >- 'A subset 'B }
+   [wf] sequent [squash] { <H> >- 'A subtype 'B } -->
+   [main] sequent [squash] { <H>; a: 'A; b: 'B; u: 'a = 'b in 'B >- 'b in 'A } -->
+   sequent ['ext] { <H> >- 'A subset 'B }
 
 doc <:doc< @docoff >>
 
 (* mem, member and subset are squash stable: *)      
       
 interactive subset_sqstable {| squash |} :
-   sequent [squash] { 'H >- squash{'A subset 'B} } -->
-   sequent ['ext] { 'H >- 'A subset 'B }
+   sequent [squash] { <H> >- squash{'A subset 'B} } -->
+   sequent ['ext] { <H> >- 'A subset 'B }
 
 doc <:doc< 
    @begin[doc]
@@ -224,8 +224,8 @@ doc <:doc<
 >>
 
 interactive subset_is_subtype  :
-   [assertion] sequent [squash] { 'H >- 'A subset 'B } -->
-   sequent ['ext] { 'H >- 'A subtype 'B }
+   [assertion] sequent [squash] { <H> >- 'A subset 'B } -->
+   sequent ['ext] { <H> >- 'A subtype 'B }
 
 doc <:doc< 
    @begin[doc]
@@ -234,9 +234,9 @@ doc <:doc<
 >>
 
 interactive use_subset  'A :
-   [assertion] sequent [squash] { 'H >- 'A subset 'B } -->
-   sequent [squash] { 'H >- 'x = 'y in 'A } -->
-   sequent ['ext] { 'H >- 'x = 'y in 'B }
+   [assertion] sequent [squash] { <H> >- 'A subset 'B } -->
+   sequent [squash] { <H> >- 'x = 'y in 'A } -->
+   sequent ['ext] { <H> >- 'x = 'y in 'B }
 
 doc <:doc< 
    @begin[doc]
@@ -245,16 +245,16 @@ doc <:doc<
 >>
 
 interactive use_superset1  'B :
-   [assertion] sequent [squash] { 'H >- 'A subset 'B } -->
-   sequent [squash] { 'H >- 'x in 'A } -->
-   sequent [squash] { 'H >- 'x = 'y in 'B } -->
-   sequent ['ext] { 'H >- 'x = 'y in 'A }
+   [assertion] sequent [squash] { <H> >- 'A subset 'B } -->
+   sequent [squash] { <H> >- 'x in 'A } -->
+   sequent [squash] { <H> >- 'x = 'y in 'B } -->
+   sequent ['ext] { <H> >- 'x = 'y in 'A }
 
 interactive use_superset2  'B :
-   [assertion] sequent [squash] { 'H >- 'A subset 'B } -->
-   sequent [squash] { 'H >- 'y in 'A } -->
-   sequent [squash] { 'H >- 'x = 'y in 'B } -->
-   sequent ['ext] { 'H >- 'x = 'y in 'A }
+   [assertion] sequent [squash] { <H> >- 'A subset 'B } -->
+   sequent [squash] { <H> >- 'y in 'A } -->
+   sequent [squash] { <H> >- 'x = 'y in 'B } -->
+   sequent ['ext] { <H> >- 'x = 'y in 'A }
 
 doc <:doc< 
    @begin[doc]
@@ -262,10 +262,10 @@ doc <:doc<
    @end[doc]
 >>
 interactive use_superset 'B 'y:
-   [assertion] sequent [squash] { 'H >- 'A subset 'B } -->
-   sequent [squash] { 'H >- 'y in 'A } -->
-   sequent [squash] { 'H >- 'x = 'y in 'B } -->
-   sequent ['ext] { 'H >- 'x  in 'A }
+   [assertion] sequent [squash] { <H> >- 'A subset 'B } -->
+   sequent [squash] { <H> >- 'y in 'A } -->
+   sequent [squash] { <H> >- 'x = 'y in 'B } -->
+   sequent ['ext] { <H> >- 'x  in 'A }
 
 doc <:doc< 
    @begin[doc]
@@ -275,7 +275,7 @@ doc <:doc<
 >>
 
 interactive counterexample1 :
-   sequent ['ext] { 'H >- not{(bool subset top)} }
+   sequent ['ext] { <H> >- not{(bool subset top)} }
 
 doc <:doc< 
    @begin[doc]
@@ -285,12 +285,12 @@ doc <:doc<
 (* Note than if would have reverse functionality we could say that if A subset B Type then both A and B are types *)
       
 interactive subsetTypeRight  'B :
-   [main] sequent [squash] { 'H >- 'A subset 'B } -->
-   sequent ['ext] { 'H >- "type"{'A} }
+   [main] sequent [squash] { <H> >- 'A subset 'B } -->
+   sequent ['ext] { <H> >- "type"{'A} }
 
 interactive subsetTypeLeft  'A :
-   [main] sequent [squash] { 'H >- 'A subset 'B }  -->
-   sequent ['ext] { 'H >- "type"{'B} }
+   [main] sequent [squash] { <H> >- 'A subset 'B }  -->
+   sequent ['ext] { <H> >- "type"{'B} }
 
 doc <:doc< 
    @begin[doc]
@@ -304,9 +304,9 @@ doc <:doc<
 (* Note that we don't need this membership if we add a rule: A subset B --> x in B --> x in A Type  *)
       
 interactive member_wf {| intro [] |}  :
-   sequent [squash] { 'H >- 'a in 'B } -->
-   sequent [squash] { 'H >- "type"{'A} } -->
-   sequent ['ext] { 'H >- "type"{'a in 'A subset 'B} }
+   sequent [squash] { <H> >- 'a in 'B } -->
+   sequent [squash] { <H> >- "type"{'A} } -->
+   sequent ['ext] { <H> >- "type"{'a in 'A subset 'B} }
 
 doc <:doc< 
    @begin[doc]
@@ -316,13 +316,13 @@ doc <:doc<
 >>
       
 interactive member_intro {| intro [] |}  :
-   sequent [squash] { 'H >- 'a in 'A } -->
-   sequent [squash] { 'H >- 'A subset 'B } -->
-   sequent ['ext] { 'H >- 'a in 'A subset 'B }
+   sequent [squash] { <H> >- 'a in 'A } -->
+   sequent [squash] { <H> >- 'A subset 'B } -->
+   sequent ['ext] { <H> >- 'a in 'A subset 'B }
 
 interactive member_elim {| elim [] |} 'H :
-   sequent ['ext] { 'H; u: 'a in 'A; v: 'A subset 'B; 'J >- 'C } --> 
-   sequent ['ext] { 'H; u: 'a in 'A subset 'B; 'J >- 'C  }
+   sequent ['ext] { <H>; u: 'a in 'A; v: 'A subset 'B; <J> >- 'C } --> 
+   sequent ['ext] { <H>; u: 'a in 'A subset 'B; <J> >- 'C  }
 
 doc <:doc< 
    @begin[doc]
@@ -333,9 +333,9 @@ doc <:doc<
 >>
 
 interactive member_doesnot_depend_on_B  'H:
-   sequent [squash] { 'H >- 'A subtype 'B } -->
-   sequent [squash] { 'H >- 'A subtype '"B'" } -->
-   sequent ['ext] { 'H; u: 'a in 'A subset 'B >- 'a in 'A subset '"B'" }
+   sequent [squash] { <H> >- 'A subtype 'B } -->
+   sequent [squash] { <H> >- 'A subtype '"B'" } -->
+   sequent ['ext] { <H>; u: 'a in 'A subset 'B >- 'a in 'A subset '"B'" }
 
 doc <:doc< @docoff >>
       

@@ -36,25 +36,25 @@ extends Czf_itt_sep
  * False is a restricted formula.
  *)
 rule void_fun :
-   sequent ['ext] { 'H >- fun_prop{x ."void"} }
+   sequent ['ext] { <H> >- fun_prop{x ."void"} }
 
 (*
  * False is a restricted formula.
  *)
 rule void_res :
-   sequent ['ext] { 'H >- restricted{ ."void"} }
+   sequent ['ext] { <H> >- restricted{ ."void"} }
 
 (*
  * False is a restricted formula.
  *)
 rule false_fun :
-   sequent ['ext] { 'H >- fun_prop{x ."false"} }
+   sequent ['ext] { <H> >- fun_prop{x ."false"} }
 
 (*
  * False is a restricted formula.
  *)
 rule false_res :
-   sequent ['ext] { 'H >- restricted{ ."false"} }
+   sequent ['ext] { <H> >- restricted{ ."false"} }
 
 (*
  * -*-

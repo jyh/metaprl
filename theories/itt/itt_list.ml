@@ -207,21 +207,21 @@ doc <:doc<
    @end[doc]
 >>
 prim listType {| intro [] |} :
-   [wf] sequent [squash] { 'H >- "type"{'A} } -->
-   sequent ['ext] { 'H >- "type"{list{'A}} } =
+   [wf] sequent [squash] { <H> >- "type"{'A} } -->
+   sequent ['ext] { <H> >- "type"{list{'A}} } =
    it
 
 prim listEquality {| intro [] |} :
-   [wf] sequent [squash] { 'H >- 'A = 'B in univ[i:l] } -->
-   sequent ['ext] { 'H >- list{'A} = list{'B} in univ[i:l] } =
+   [wf] sequent [squash] { <H> >- 'A = 'B in univ[i:l] } -->
+   sequent ['ext] { <H> >- list{'A} = list{'B} in univ[i:l] } =
    it
 
 (*
  * @docoff
  *)
 interactive listFormation :
-   sequent ['ext] { 'H >- univ[i:l] } -->
-   sequent ['ext] { 'H >- univ[i:l] }
+   sequent ['ext] { <H> >- univ[i:l] } -->
+   sequent ['ext] { <H> >- univ[i:l] }
 
 doc <:doc< 
    @begin[doc]
@@ -231,13 +231,13 @@ doc <:doc<
    @end[doc]
 >>
 prim nilEquality {| intro [] |} :
-   [wf] sequent [squash] { 'H >- "type"{list{'A}} } -->
-   sequent ['ext] { 'H >- nil in list{'A} } =
+   [wf] sequent [squash] { <H> >- "type"{list{'A}} } -->
+   sequent ['ext] { <H> >- nil in list{'A} } =
    it
 
 interactive nilFormation {| intro [] |} :
-   [wf] sequent [squash] { 'H >- "type"{'A} } -->
-   sequent ['ext] { 'H >- list{'A} }
+   [wf] sequent [squash] { <H> >- "type"{'A} } -->
+   sequent ['ext] { <H> >- list{'A} }
 
 doc <:doc< 
    @begin[doc]
@@ -247,9 +247,9 @@ doc <:doc<
    @end[doc]
 >>
 prim consEquality {| intro []; eqcd |} :
-   [wf] sequent [squash] { 'H >- 'u1 = 'u2 in 'A } -->
-   [wf] sequent [squash] { 'H >- 'v1 = 'v2 in list{'A} } -->
-   sequent ['ext] { 'H >- cons{'u1; 'v1} = cons{'u2; 'v2} in list{'A} } =
+   [wf] sequent [squash] { <H> >- 'u1 = 'u2 in 'A } -->
+   [wf] sequent [squash] { <H> >- 'v1 = 'v2 in list{'A} } -->
+   sequent ['ext] { <H> >- cons{'u1; 'v1} = cons{'u2; 'v2} in list{'A} } =
    it
 
 doc <:doc< 
@@ -261,9 +261,9 @@ doc <:doc<
    H >- list(A) ext t
 >>
 interactive consFormation :
-   sequent ['ext] { 'H >- 'A } -->
-   sequent ['ext] { 'H >- list{'A} } -->
-   sequent ['ext] { 'H >- list{'A} }
+   sequent ['ext] { <H> >- 'A } -->
+   sequent ['ext] { <H> >- list{'A} } -->
+   sequent ['ext] { <H> >- list{'A} }
 
 doc <:doc< 
    @begin[doc]
@@ -276,12 +276,12 @@ doc <:doc<
    @end[doc]
 >>
 prim list_indEquality {| intro []; eqcd |} lambda{l. 'T['l]} list{'A} :
-   [wf] sequent [squash] { 'H >- 'e1 = 'e2 in list{'A} } -->
-   [wf] sequent [squash] { 'H >- 'base1 = 'base2 in 'T[nil] } -->
-   [wf] sequent [squash] { 'H; u: 'A; v: list{'A}; w: 'T['v] >-
+   [wf] sequent [squash] { <H> >- 'e1 = 'e2 in list{'A} } -->
+   [wf] sequent [squash] { <H> >- 'base1 = 'base2 in 'T[nil] } -->
+   [wf] sequent [squash] { <H>; u: 'A; v: list{'A}; w: 'T['v] >-
              'step1['u; 'v; 'w] = 'step2['u; 'v; 'w] in 'T['u::'v]
            } -->
-   sequent ['ext] { 'H >- list_ind{'e1; 'base1; u1, v1, z1. 'step1['u1; 'v1; 'z1]}
+   sequent ['ext] { <H> >- list_ind{'e1; 'base1; u1, v1, z1. 'step1['u1; 'v1; 'z1]}
                    = list_ind{'e2; 'base2; u2, v2, z2. 'step2['u2; 'v2; 'z2]}
                    in 'T['e1]
            } =
@@ -300,9 +300,9 @@ doc <:doc<
    @end[doc]
 >>
 prim listElimination {| elim [ThinOption thinT] |} 'H :
-   [main] ('base['l] : sequent ['ext] { 'H; l: list{'A}; 'J['l] >- 'C[nil] }) -->
-   [main] ('step['l; 'u; 'v; 'w] : sequent ['ext] { 'H; l: list{'A}; 'J['l]; u: 'A; v: list{'A}; w: 'C['v] >- 'C['u::'v] }) -->
-   sequent ['ext] { 'H; l: list{'A}; 'J['l] >- 'C['l] } =
+   [main] ('base['l] : sequent ['ext] { <H>; l: list{'A}; <J['l]> >- 'C[nil] }) -->
+   [main] ('step['l; 'u; 'v; 'w] : sequent ['ext] { <H>; l: list{'A}; <J['l]>; u: 'A; v: list{'A}; w: 'C['v] >- 'C['u::'v] }) -->
+   sequent ['ext] { <H>; l: list{'A}; <J['l]> >- 'C['l] } =
    list_ind{'l; 'base['l]; u, v, w. 'step['l; 'u; 'v; 'w]}
 
 doc <:doc< 
@@ -314,10 +314,10 @@ doc <:doc<
    @end[doc]
 >>
 interactive nil_neq_cons {| elim [] |} 'H :
-   sequent ['ext] { 'H; x: nil = cons{'h; 't} in list{'T}; 'J['x] >- 'C['x] }
+   sequent ['ext] { <H>; x: nil = cons{'h; 't} in list{'T}; <J['x]> >- 'C['x] }
 
 interactive cons_neq_nil {| elim [] |} 'H :
-   sequent ['ext] { 'H; x: cons{'h; 't} = nil in list{'T}; 'J['x] >- 'C['x] }
+   sequent ['ext] { <H>; x: cons{'h; 't} = nil in list{'T}; <J['x]> >- 'C['x] }
 
 (*
  * @begin[doc]
@@ -325,9 +325,9 @@ interactive cons_neq_nil {| elim [] |} 'H :
  * @end[doc]
  *)
 interactive consEqElimination {| elim [ThinOption thinT] |} 'H :
-   sequent ['ext] {'H; u: cons{'h1; 't1} = cons{'h2; 't2} in list{'A};
-                       v: 'h1 = 'h2 in 'A; w: 't1 = 't2 in list{'A};   'J['u] >- 'C['u] } -->
-   sequent ['ext] {'H; u: cons{'h1; 't1} = cons{'h2; 't2} in list{'A}; 'J['u] >- 'C['u] }
+   sequent ['ext] { <H>; u: cons{'h1; 't1} = cons{'h2; 't2} in list{'A};
+                       v: 'h1 = 'h2 in 'A; w: 't1 = 't2 in list{'A};   <J['u]> >- 'C['u] } -->
+   sequent ['ext] { <H>; u: cons{'h1; 't1} = cons{'h2; 't2} in list{'A}; <J['u]> >- 'C['u] }
 
 doc <:doc< 
    @begin[doc]
@@ -338,8 +338,8 @@ doc <:doc<
    @end[doc]
 >>
 prim nilSqequal 'T :
-   sequent [squash] { 'H >- 'u = nil in list{'T} } -->
-   sequent ['ext] { 'H >- 'u ~ nil } =
+   sequent [squash] { <H> >- 'u = nil in list{'T} } -->
+   sequent ['ext] { <H> >- 'u ~ nil } =
    it
 
 doc <:doc< 
@@ -350,8 +350,8 @@ doc <:doc<
    @end[doc]
 >>
 interactive listSubtype {| intro [] |} :
-   ["subtype"] sequent [squash] { 'H >- \subtype{'A1; 'A2} } -->
-   sequent ['ext] { 'H >- \subtype{list{'A1}; list{'A2}}}
+   ["subtype"] sequent [squash] { <H> >- \subtype{'A1; 'A2} } -->
+   sequent ['ext] { <H> >- \subtype{list{'A1}; list{'A2}}}
 doc <:doc< @docoff >>
 
 (************************************************************************

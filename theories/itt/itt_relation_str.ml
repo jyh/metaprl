@@ -182,10 +182,10 @@ doc <:doc<
 >>
 
 interactive less_wf  {| intro[] |} order[i:l] :
-   [wf] sequent [squash] { 'H >- 'ord in order[i:l] }  -->
-   [wf] sequent [squash] { 'H >- 'x in 'ord^car }  -->
-   [wf] sequent [squash] { 'H >- 'y in 'ord^car }  -->
-   sequent ['ext]   { 'H >- 'x <['ord] 'y in bool}
+   [wf] sequent [squash] { <H> >- 'ord in order[i:l] }  -->
+   [wf] sequent [squash] { <H> >- 'x in 'ord^car }  -->
+   [wf] sequent [squash] { <H> >- 'y in 'ord^car }  -->
+   sequent ['ext]   { <H> >- 'x <['ord] 'y in bool}
 
 
 define compare: compare{'self; 'a;'b; 'less_case; 'equal_case; 'greater_case} <--> if 'a ^< 'b then 'less_case else if 'b ^< 'a then 'greater_case else 'equal_case
@@ -193,13 +193,13 @@ define compare: compare{'self; 'a;'b; 'less_case; 'equal_case; 'greater_case} <-
 
 
 interactive three_cases  compare{'ord; 'x;'y; 'less_case; 'equal_case; 'greater_case}  order[i:l]  bind{t.'T['t]}:
-   [wf] sequent [squash] { 'H >- 'ord in order[i:l] }  -->
-   [wf] sequent [squash] { 'H >- 'x in 'ord^car }  -->
-   [wf] sequent [squash] { 'H >- 'y in 'ord^car }  -->
-   sequent ['ext] { 'H; u:  less{'ord;'x;'y} >- 'T['less_case] }  -->
-   sequent ['ext] { 'H; u:  less{'ord;'y;'x} >- 'T['greater_case] }  -->
-   sequent ['ext] { 'H; u:  'x = 'y in 'ord^car >- 'T['equal_case] }  -->
-   sequent ['ext]   { 'H >- 'T[compare{'ord; 'x;'y; 'less_case; 'equal_case; 'greater_case}]}
+   [wf] sequent [squash] { <H> >- 'ord in order[i:l] }  -->
+   [wf] sequent [squash] { <H> >- 'x in 'ord^car }  -->
+   [wf] sequent [squash] { <H> >- 'y in 'ord^car }  -->
+   sequent ['ext] { <H>; u:  less{'ord;'x;'y} >- 'T['less_case] }  -->
+   sequent ['ext] { <H>; u:  less{'ord;'y;'x} >- 'T['greater_case] }  -->
+   sequent ['ext] { <H>; u:  'x = 'y in 'ord^car >- 'T['equal_case] }  -->
+   sequent ['ext]   { <H> >- 'T[compare{'ord; 'x;'y; 'less_case; 'equal_case; 'greater_case}]}
 
 
 doc <:doc< @docoff >>
@@ -222,13 +222,13 @@ let decideOrder3T compare_term order_term p =
 doc <:doc< @doc { } >>
 
 interactive compare_wf {| intro [] |} order[i:l] :
-   [wf] sequent [squash] { 'H >- 'ord in order[i:l] }  -->
-   [wf] sequent [squash] { 'H >- 'x in 'ord^car }  -->
-   [wf] sequent [squash] { 'H >- 'y in 'ord^car }  -->
-   sequent [squash] { 'H; u:  less{'ord;'x;'y} >- 'less_case in 'T }  -->
-   sequent [squash] { 'H; u:  less{'ord;'y;'x} >- 'greater_case in 'T } -->
-   sequent [squash] { 'H; u: 'x = 'y in 'ord^car >- 'equal_case in 'T } -->
-   sequent ['ext]   { 'H >-  compare{'ord; 'x;'y; 'less_case; 'equal_case; 'greater_case} in 'T}
+   [wf] sequent [squash] { <H> >- 'ord in order[i:l] }  -->
+   [wf] sequent [squash] { <H> >- 'x in 'ord^car }  -->
+   [wf] sequent [squash] { <H> >- 'y in 'ord^car }  -->
+   sequent [squash] { <H>; u:  less{'ord;'x;'y} >- 'less_case in 'T }  -->
+   sequent [squash] { <H>; u:  less{'ord;'y;'x} >- 'greater_case in 'T } -->
+   sequent [squash] { <H>; u: 'x = 'y in 'ord^car >- 'equal_case in 'T } -->
+   sequent ['ext]   { <H> >-  compare{'ord; 'x;'y; 'less_case; 'equal_case; 'greater_case} in 'T}
 
 
 
@@ -246,10 +246,10 @@ doc <:doc< @begin[doc]
 >>
 
 interactive dec_equalaty  order[i:l] :
-   sequent [squash] { 'H >- 'ord in order[i:l] }  -->
-   sequent [squash] { 'H >- 'x in 'ord^car }  -->
-   sequent [squash] { 'H >- 'y in 'ord^car }  -->
-   sequent ['ext]   { 'H >-  decidable{.'x='y in 'ord^car} }
+   sequent [squash] { <H> >- 'ord in order[i:l] }  -->
+   sequent [squash] { <H> >- 'x in 'ord^car }  -->
+   sequent [squash] { <H> >- 'y in 'ord^car }  -->
+   sequent ['ext]   { <H> >-  decidable{.'x='y in 'ord^car} }
 
 
 doc <:doc< @begin[doc]

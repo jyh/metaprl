@@ -35,7 +35,7 @@
  * Hyp.
  *)
 rule hyp 'H :
-   sequent { 'H; x: 'A; 'J >> 'A };;
+   sequent { <H>; x: 'A; <J> >- 'A };;
 
 (*
  * -*-

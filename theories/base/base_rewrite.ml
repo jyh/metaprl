@@ -93,7 +93,7 @@ doc <:doc<
    @end[doc]
 >>
 prim rewriteAxiom1 :
-   sequent ['ext] { 'H >- Perv!"rewrite"{'a; 'a} } =
+   sequent ['ext] { <H> >- Perv!"rewrite"{'a; 'a} } =
    rw_just
 
 doc <:doc< 
@@ -113,8 +113,8 @@ doc <:doc<
    @end[doc]
 >>
 interactive rewriteSym :
-   sequent ['ext] { 'H >- Perv!"rewrite"{'a; 'b} } -->
-   sequent ['ext] { 'H >- Perv!"rewrite"{'b; 'a} }
+   sequent ['ext] { <H> >- Perv!"rewrite"{'a; 'b} } -->
+   sequent ['ext] { <H> >- Perv!"rewrite"{'b; 'a} }
 doc <:doc< @docoff >>
 
 (*

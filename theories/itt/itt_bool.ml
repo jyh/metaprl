@@ -251,19 +251,19 @@ doc <:doc<
    @end[doc]
 >>
 interactive boolEquality {| intro []; eqcd |} :
-   sequent ['ext] { 'H >- "bool" in univ[i:l] }
+   sequent ['ext] { <H> >- "bool" in univ[i:l] }
 
 interactive boolType {| intro [] |} :
-   sequent ['ext] { 'H >- "type"{bool} }
+   sequent ['ext] { <H> >- "type"{bool} }
 
 interactive btrue_member {| intro []; eqcd |} :
-  sequent ['ext] { 'H >- btrue in "bool" }
+  sequent ['ext] { <H> >- btrue in "bool" }
 
 interactive bfalse_member {| intro []; eqcd |} :
-   sequent ['ext] { 'H >- bfalse in "bool" }
+   sequent ['ext] { <H> >- bfalse in "bool" }
 
 interactive bool_intro {| intro [] |} :
-   sequent ['ext] { 'H >- "bool" }
+   sequent ['ext] { <H> >- "bool" }
 
 doc <:doc< 
    @begin[doc]
@@ -275,9 +275,9 @@ doc <:doc<
    @end[doc]
 >>
 interactive boolElimination2 {| elim [] |} 'H :
-   [main] sequent['ext] { 'H; 'J[btrue] >- 'C[btrue] } -->
-   [main] sequent['ext] { 'H; 'J[bfalse] >- 'C[bfalse] } -->
-   sequent ['ext] { 'H; x: "bool"; 'J['x] >- 'C['x] }
+   [main] sequent['ext] { <H>; <J[btrue]> >- 'C[btrue] } -->
+   [main] sequent['ext] { <H>; <J[bfalse]> >- 'C[bfalse] } -->
+   sequent ['ext] { <H>; x: "bool"; <J['x]> >- 'C['x] }
 
 doc <:doc< 
    @begin[doc]
@@ -289,10 +289,10 @@ doc <:doc<
    @end[doc]
 >>
 interactive ifthenelse_type2 {| intro [] |} :
-   [wf] sequent [squash] { 'H >- 'e in bool } -->
-   [wf] sequent [squash] { 'H; x: 'e = btrue in bool >- "type"{'A} } -->
-   [wf] sequent [squash] { 'H; x: 'e = bfalse in bool >- "type"{'B} } -->
-   sequent ['ext] { 'H >- "type"{ifthenelse{'e; 'A; 'B}} }
+   [wf] sequent [squash] { <H> >- 'e in bool } -->
+   [wf] sequent [squash] { <H>; x: 'e = btrue in bool >- "type"{'A} } -->
+   [wf] sequent [squash] { <H>; x: 'e = bfalse in bool >- "type"{'B} } -->
+   sequent ['ext] { <H> >- "type"{ifthenelse{'e; 'A; 'B}} }
 
 doc <:doc< 
    @begin[doc]
@@ -303,10 +303,10 @@ doc <:doc<
    @end[doc]
 >>
 interactive boolContradiction1 {| elim [] |} 'H :
-   sequent ['ext] { 'H; x: btrue = bfalse in bool; 'J['x] >- 'C['x] }
+   sequent ['ext] { <H>; x: btrue = bfalse in bool; <J['x]> >- 'C['x] }
 
 interactive boolContradiction2 {| elim [] |} 'H :
-   sequent ['ext] { 'H; x: bfalse = btrue in bool; 'J['x] >- 'C['x] }
+   sequent ['ext] { <H>; x: bfalse = btrue in bool; <J['x]> >- 'C['x] }
 
 doc <:doc< 
    @begin[doc]
@@ -319,10 +319,10 @@ doc <:doc<
    @end[doc]
 >>
 interactive ifthenelse_equality {| intro []; eqcd |} :
-   [wf] sequent [squash] { 'H >- 'e1 = 'e2 in bool } -->
-   [wf] sequent [squash] { 'H; w: 'e1 = btrue in bool >- 'x1 = 'x2 in 'T } -->
-   [wf] sequent [squash] { 'H; w: 'e1 = bfalse in bool >- 'y1 = 'y2 in 'T } -->
-   sequent ['ext] { 'H >- ifthenelse{'e1; 'x1; 'y1} = ifthenelse{'e2; 'x2; 'y2}
+   [wf] sequent [squash] { <H> >- 'e1 = 'e2 in bool } -->
+   [wf] sequent [squash] { <H>; w: 'e1 = btrue in bool >- 'x1 = 'x2 in 'T } -->
+   [wf] sequent [squash] { <H>; w: 'e1 = bfalse in bool >- 'y1 = 'y2 in 'T } -->
+   sequent ['ext] { <H> >- ifthenelse{'e1; 'x1; 'y1} = ifthenelse{'e2; 'x2; 'y2}
  in 'T }
 
 doc <:doc< 
@@ -336,8 +336,8 @@ doc <:doc<
    @end[doc]
 >>
 interactive boolSqequal :
-   sequent [squash] { 'H >- 'x = 'y in bool } -->
-   sequent ['ext] { 'H >- 'x ~ 'y }
+   sequent [squash] { <H> >- 'x = 'y in bool } -->
+   sequent ['ext] { <H> >- 'x ~ 'y }
 doc <:doc< @docoff >>
 
 let resource intro += [
@@ -352,17 +352,17 @@ let resource intro += [
  * by boolFormation
  *)
 interactive boolFormation :
-   sequent ['ext] { 'H >- univ[i:l] }
+   sequent ['ext] { <H> >- univ[i:l] }
 
 (*
  * H >- Bool ext btrue
  * by bool_*Formation
  *)
 interactive bool_trueFormation :
-   sequent ['ext] { 'H >- "bool" }
+   sequent ['ext] { <H> >- "bool" }
 
 interactive bool_falseFormation :
-   sequent ['ext] { 'H >- "bool" }
+   sequent ['ext] { <H> >- "bool" }
 
 doc <:doc< 
    @begin[doc]
@@ -373,23 +373,23 @@ doc <:doc<
    @end[doc]
 >>
 interactive bor_member {| intro [] |} :
-   [wf] sequent [squash] { 'H >- 't1 in bool } -->
-   [wf] sequent [squash] { 'H >- 't2 in bool } -->
-   sequent ['ext] { 'H >- bor{'t1; 't2} in bool }
+   [wf] sequent [squash] { <H> >- 't1 in bool } -->
+   [wf] sequent [squash] { <H> >- 't2 in bool } -->
+   sequent ['ext] { <H> >- bor{'t1; 't2} in bool }
 
 interactive band_member {| intro [] |} :
-   [wf] sequent [squash] { 'H >- 't1 in bool } -->
-   [wf] sequent [squash] { 'H >- 't2 in bool } -->
-   sequent ['ext] { 'H >- band{'t1; 't2} in bool }
+   [wf] sequent [squash] { <H> >- 't1 in bool } -->
+   [wf] sequent [squash] { <H> >- 't2 in bool } -->
+   sequent ['ext] { <H> >- band{'t1; 't2} in bool }
 
 interactive bimplies_member {| intro [] |} :
-   [wf] sequent [squash] { 'H >- 't1 in bool } -->
-   [wf] sequent [squash] { 'H >- 't2 in bool } -->
-   sequent ['ext] { 'H >- bimplies{'t1; 't2} in bool }
+   [wf] sequent [squash] { <H> >- 't1 in bool } -->
+   [wf] sequent [squash] { <H> >- 't2 in bool } -->
+   sequent ['ext] { <H> >- bimplies{'t1; 't2} in bool }
 
 interactive bnot_equal {| intro []; eqcd |} :
-   [wf] sequent [squash] { 'H >- 'a = 'b in bool } -->
-   sequent ['ext] { 'H >- bnot{'a} = bnot{'b} in bool }
+   [wf] sequent [squash] { <H> >- 'a = 'b in bool } -->
+   sequent ['ext] { <H> >- bnot{'a} = bnot{'b} in bool }
 
 doc <:doc< 
    @begin[doc]
@@ -406,14 +406,14 @@ doc <:doc<
    @end[doc]
 >>
 interactive assert_type {| intro [] |} :
-   [wf] sequent [squash] { 'H >- 't in bool } -->
-   sequent ['ext] { 'H >- "type"{."assert"{'t}} }
+   [wf] sequent [squash] { <H> >- 't in bool } -->
+   sequent ['ext] { <H> >- "type"{."assert"{'t}} }
 
 interactive assert_true {| intro [] |} :
-   sequent ['ext] { 'H >- "assert"{btrue} }
+   sequent ['ext] { <H> >- "assert"{btrue} }
 
 interactive assert_false {| elim [] |} 'H :
-   sequent ['ext] { 'H; x: "assert"{bfalse}; 'J['x] >- 'C['x] }
+   sequent ['ext] { <H>; x: "assert"{bfalse}; <J['x]> >- 'C['x] }
 
 doc <:doc< 
    @begin[doc]
@@ -426,18 +426,18 @@ doc <:doc<
    @end[doc]
 >>
 interactive bool_subst_concl bind{x. 'C['x]} 'e :
-   [wf] sequent [squash] { 'H >- 'e in bool } -->
-   [main] sequent ['ext] { 'H; y: "assert"{'e} >- 'C[btrue] } -->
-   [main] sequent ['ext] { 'H; y: "assert"{bnot{'e}} >- 'C[bfalse] } -->
-   sequent ['ext] { 'H >- 'C['e] }
+   [wf] sequent [squash] { <H> >- 'e in bool } -->
+   [main] sequent ['ext] { <H>; y: "assert"{'e} >- 'C[btrue] } -->
+   [main] sequent ['ext] { <H>; y: "assert"{bnot{'e}} >- 'C[bfalse] } -->
+   sequent ['ext] { <H> >- 'C['e] }
 
 interactive bool_subst_hyp 'H bind{x. 'A['x]} 'e :
-   [wf] sequent [squash] { 'H; x: 'A['e]; 'J['x] >- 'e in bool } -->
-   [main] sequent ['ext] { 'H; x: 'A[btrue]; 'J['x]; y: "assert"{'e} >- 'C['x] }
+   [wf] sequent [squash] { <H>; x: 'A['e]; <J['x]> >- 'e in bool } -->
+   [main] sequent ['ext] { <H>; x: 'A[btrue]; <J['x]>; y: "assert"{'e} >- 'C['x] }
  -->
-   [main] sequent ['ext] { 'H; x: 'A[bfalse]; 'J['x]; y: "assert"{bnot{'e}} >-
+   [main] sequent ['ext] { <H>; x: 'A[bfalse]; <J['x]>; y: "assert"{bnot{'e}} >-
  'C['x] } -->
-   sequent ['ext] { 'H; x: 'A['e]; 'J['x] >- 'C['x] }
+   sequent ['ext] { <H>; x: 'A['e]; <J['x]> >- 'C['x] }
 
 doc <:doc< 
    @begin[doc]
@@ -448,11 +448,11 @@ doc <:doc<
    @end[doc]
 >>
 interactive bool_ext_equality :
-   [wf] sequent [squash] { 'H >- 'x in bool } -->
-   [wf] sequent [squash] { 'H >- 'y in bool } -->
-   [main] sequent [squash] { 'H; u: "assert"{'x} >- "assert"{'y} } -->
-   [main] sequent [squash] { 'H; u: "assert"{'y} >- "assert"{'x} } -->
-   sequent ['ext] { 'H >- 'x = 'y in bool }
+   [wf] sequent [squash] { <H> >- 'x in bool } -->
+   [wf] sequent [squash] { <H> >- 'y in bool } -->
+   [main] sequent [squash] { <H>; u: "assert"{'x} >- "assert"{'y} } -->
+   [main] sequent [squash] { <H>; u: "assert"{'y} >- "assert"{'x} } -->
+   sequent ['ext] { <H> >- 'x = 'y in bool }
 
 doc <:doc< 
    @begin[doc]
@@ -463,8 +463,8 @@ doc <:doc<
    @end[doc]
 >>
 interactive assertSquashElim {| squash; intro [] |} :
-   sequent [squash] { 'H >- "assert"{'t} } -->
-   sequent ['ext] { 'H >- it in "assert"{'t} }
+   sequent [squash] { <H> >- "assert"{'t} } -->
+   sequent ['ext] { <H> >- it in "assert"{'t} }
 
 doc <:doc< 
    @begin[doc]
@@ -475,13 +475,13 @@ doc <:doc<
    @end[doc]
 >>
 interactive assert_bnot_intro {| intro [] |} :
-   [wf] sequent [squash] { 'H >- 't1 in bool } -->
-   [main] sequent [squash] { 'H; x: "assert"{'t1} >- "false" } -->
-   sequent ['ext] { 'H >- "assert"{bnot{'t1}} }
+   [wf] sequent [squash] { <H> >- 't1 in bool } -->
+   [main] sequent [squash] { <H>; x: "assert"{'t1} >- "false" } -->
+   sequent ['ext] { <H> >- "assert"{bnot{'t1}} }
 
 interactive assert_bnot_elim {| elim [] |} 'H :
-   [main] sequent [squash] { 'H; 'J[it] >- "assert"{'t} } -->
-   sequent ['ext] { 'H; x: "assert"{bnot{'t}}; 'J['x] >- 'C['x] }
+   [main] sequent [squash] { <H>; <J[it]> >- "assert"{'t} } -->
+   sequent ['ext] { <H>; x: "assert"{bnot{'t}}; <J['x]> >- 'C['x] }
 
 doc <:doc<
    @begin[doc]
@@ -492,9 +492,9 @@ doc <:doc<
    @end[doc]
 >>
 interactive assert_magic :
-   [wf] sequent [squash] { 'H >- 't in bool } -->
-   sequent [squash] { 'H; x: "assert"{bnot{'t}} >- "false" } -->
-   sequent ['ext] { 'H >- "assert"{'t} }
+   [wf] sequent [squash] { <H> >- 't in bool } -->
+   sequent [squash] { <H>; x: "assert"{bnot{'t}} >- "false" } -->
+   sequent ['ext] { <H> >- "assert"{'t} }
 
 doc <:doc< 
    @begin[doc]
@@ -502,8 +502,8 @@ doc <:doc<
    @end[doc]
 >>
 interactive assert_is_decidable {| intro [] |} :
-   [wf] sequent [squash] { 'H >- 't in bool } -->
-   sequent ['ext] { 'H >- decidable{."assert"{'t}} }
+   [wf] sequent [squash] { <H> >- 't in bool } -->
+   sequent ['ext] { <H> >- decidable{."assert"{'t}} }
 
 doc <:doc< 
    @begin[doc]
@@ -512,23 +512,23 @@ doc <:doc<
    @end[doc]
 >>
 interactive assert_bor_elim {| elim [] |} 'H :
-   [wf] sequent [squash] { 'H; x: "assert"{bor{'t1; 't2}}; 'J['x] >- 't1 in bool
+   [wf] sequent [squash] { <H>; x: "assert"{bor{'t1; 't2}}; <J['x]> >- 't1 in bool
  } -->
-   [main] sequent ['ext] { 'H; x: "assert"{'t1}; 'J[it] >- 'C[it] } -->
-   [main] sequent ['ext] { 'H; x: "assert"{'t2}; 'J[it] >- 'C[it] } -->
-   sequent ['ext] { 'H; x: "assert"{bor{'t1; 't2}}; 'J['x] >- 'C['x] }
+   [main] sequent ['ext] { <H>; x: "assert"{'t1}; <J[it]> >- 'C[it] } -->
+   [main] sequent ['ext] { <H>; x: "assert"{'t2}; <J[it]> >- 'C[it] } -->
+   sequent ['ext] { <H>; x: "assert"{bor{'t1; 't2}}; <J['x]> >- 'C['x] }
 
 interactive assert_band_elim {| elim [] |} 'H :
-   [wf] sequent [squash] { 'H; x: "assert"{band{'t1; 't2}}; 'J['x] >- 't1 IN
+   [wf] sequent [squash] { <H>; x: "assert"{band{'t1; 't2}}; <J['x]> >- 't1 IN
  bool } -->
-   [main] sequent ['ext] { 'H; y: "assert"{'t1}; z: "assert"{'t2}; 'J[it] >-
+   [main] sequent ['ext] { <H>; y: "assert"{'t1}; z: "assert"{'t2}; <J[it]> >-
  'C[it] } -->
-   sequent ['ext] { 'H; x: "assert"{band{'t1; 't2}}; 'J['x] >- 'C['x] }
+   sequent ['ext] { <H>; x: "assert"{band{'t1; 't2}}; <J['x]> >- 'C['x] }
 
 interactive assert_bimplies_elim {| elim [] |} 'H :
-   [assertion] sequent [squash] { 'H; 'J[it] >- "assert"{'t1} } -->
-   [main] sequent ['ext] { 'H; 'J[it]; y: "assert"{'t2} >- 'C[it] } -->
-   sequent ['ext] { 'H; x: "assert"{bimplies{'t1; 't2}}; 'J['x] >- 'C['x] }
+   [assertion] sequent [squash] { <H>; <J[it]> >- "assert"{'t1} } -->
+   [main] sequent ['ext] { <H>; <J[it]>; y: "assert"{'t2} >- 'C[it] } -->
+   sequent ['ext] { <H>; x: "assert"{bimplies{'t1; 't2}}; <J['x]> >- 'C['x] }
 
 doc <:doc<
    @begin[doc]
@@ -538,24 +538,24 @@ doc <:doc<
    @end[doc]
 >>
 interactive assert_bor_intro_left {| intro [SelectOption 1] |} :
-   [wf] sequent [squash] { 'H >- 't2 in bool } -->
-   [main] sequent [squash] { 'H >- "assert"{'t1} } -->
-   sequent ['ext] { 'H >- "assert"{bor{'t1; 't2}} }
+   [wf] sequent [squash] { <H> >- 't2 in bool } -->
+   [main] sequent [squash] { <H> >- "assert"{'t1} } -->
+   sequent ['ext] { <H> >- "assert"{bor{'t1; 't2}} }
 
 interactive assert_bor_intro_right {| intro [SelectOption 2] |} :
-   [wf] sequent [squash] { 'H >- 't1 in bool } -->
-   [main] sequent [squash] { 'H >- "assert"{'t2} } -->
-   sequent ['ext] { 'H >- "assert"{bor{'t1; 't2}} }
+   [wf] sequent [squash] { <H> >- 't1 in bool } -->
+   [main] sequent [squash] { <H> >- "assert"{'t2} } -->
+   sequent ['ext] { <H> >- "assert"{bor{'t1; 't2}} }
 
 interactive assert_band_intro {| intro [] |} :
-   [main] sequent [squash] { 'H >- "assert"{'t1} } -->
-   [main] sequent [squash] { 'H >- "assert"{'t2} } -->
-   sequent ['ext] { 'H >- "assert"{band{'t1; 't2}} }
+   [main] sequent [squash] { <H> >- "assert"{'t1} } -->
+   [main] sequent [squash] { <H> >- "assert"{'t2} } -->
+   sequent ['ext] { <H> >- "assert"{band{'t1; 't2}} }
 
 interactive assert_bimplies_intro {| intro [] |} :
-   [wf] sequent [squash] { 'H >- 't1 in bool } -->
-   [main] sequent [squash] { 'H; x: "assert"{'t1} >- "assert"{'t2} } -->
-   sequent ['ext] { 'H >- "assert"{bimplies{'t1; 't2}} }
+   [wf] sequent [squash] { <H> >- 't1 in bool } -->
+   [main] sequent [squash] { <H>; x: "assert"{'t1} >- "assert"{'t2} } -->
+   sequent ['ext] { <H> >- "assert"{bimplies{'t1; 't2}} }
 
 doc <:doc< @docoff >>
 
@@ -784,27 +784,27 @@ interactive_rw reduce_bnot_bnot :
 let reduce_bnot_bnotC = reduce_bnot_bnot
 
 interactive eq_bfalse2assert {| intro []; eqcd |} :
-   [wf] sequent ['ext] { 'H >- 'e1 in bool } -->
-   [main] sequent ['ext] { 'H >- "assert"{bnot{'e1}} } -->
-   sequent ['ext] { 'H >- 'e1 = bfalse in bool }
+   [wf] sequent ['ext] { <H> >- 'e1 in bool } -->
+   [main] sequent ['ext] { <H> >- "assert"{bnot{'e1}} } -->
+   sequent ['ext] { <H> >- 'e1 = bfalse in bool }
 
 let eq_bfalse2assertT = eq_bfalse2assert
 
 interactive assert2eq_bfalse :
-   [main] sequent ['ext] { 'H >- 'e1 = bfalse in bool } -->
-   sequent ['ext] { 'H >- "assert"{bnot{'e1}} }
+   [main] sequent ['ext] { <H> >- 'e1 = bfalse in bool } -->
+   sequent ['ext] { <H> >- "assert"{bnot{'e1}} }
 
 let assert2eq_bfalseT = assert2eq_bfalse
 
 interactive not_assert_intro {| intro [] |} :
-   [wf] sequent ['ext] { 'H >- 'b in bool } -->
-   [main] sequent ['ext] { 'H >- "assert"{bnot{'b}} } -->
-   sequent ['ext] { 'H >- not{"assert"{'b}} }
+   [wf] sequent ['ext] { <H> >- 'b in bool } -->
+   [main] sequent ['ext] { <H> >- "assert"{bnot{'b}} } -->
+   sequent ['ext] { <H> >- not{"assert"{'b}} }
 
 interactive not_assert_elim {| elim [] |} 'H :
-   [wf] sequent [squash] { 'H; 'J >- 'b in bool } -->
-   [main] sequent ['ext] { 'H; 'J >- y: "assert"{bnot{'b}} } -->
-   sequent ['ext] { 'H; x: not{"assert"{'b}}; 'J >- 'C }
+   [wf] sequent [squash] { <H>; <J> >- 'b in bool } -->
+   [main] sequent ['ext] { <H>; <J> >- y: "assert"{bnot{'b}} } -->
+   sequent ['ext] { <H>; x: not{"assert"{'b}}; <J> >- 'C }
 
 interactive_rw reduce_band_same :
    ( 'e in bool ) -->

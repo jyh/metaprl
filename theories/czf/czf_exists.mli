@@ -48,9 +48,9 @@ define bounded_exists_abs : "exists"{'y; x. 'P['x]} <--> "exists"{x. member{'x; 
  * functionality subgoal?
  *)
 rule bounded_exists_intro 'a :
-   sequent { 'H >> 'B['a] } -->
-   sequent { 'H >> member{'a; 'A} } -->
-   sequent { 'H >> exists x: 'A. 'B['x] };;
+   sequent { <H> >- 'B['a] } -->
+   sequent { <H> >- member{'a; 'A} } -->
+   sequent { <H> >- exists x: 'A. 'B['x] };;
 
 (*
  * Bounded elim form.
@@ -60,8 +60,8 @@ rule bounded_exists_intro 'a :
  * H, y: (exists x: A. B[x]), a: A, z: B[a], J >> T
  *)
 rule bounded_exists_elim 'H 'a 'z :
-   sequent { 'H; y: (exists x: 'A. 'B['y]); a: 'A; b: 'B['a]; 'J['a, 'b] >> 'T['a, 'b] } -->
-   sequent { 'H; y: (exists x: 'A. 'B['y]); 'J['y] >> 'T['y] };;
+   sequent { <H>; y: (exists x: 'A. 'B['y]); a: 'A; b: 'B['a]; <J['a, 'b]> >- 'T['a, 'b] } -->
+   sequent { <H>; y: (exists x: 'A. 'B['y]); <J['y]> >- 'T['y] };;
 
 (*
  * Unbounded intro form.
@@ -72,9 +72,9 @@ rule bounded_exists_elim 'H 'a 'z :
  * H >> member{z, set}
  *)
 rule exists_intro 'z :
-   sequent { 'H >> 'B['z] } -->
-   sequent { 'H >> member{'z; set} } -->
-   sequent { 'H >> "exists"{x. 'B['x]} };;
+   sequent { <H> >- 'B['z] } -->
+   sequent { <H> >- member{'z; set} } -->
+   sequent { <H> >- "exists"{x. 'B['x]} };;
 
 (*
  * Elim form.
@@ -84,28 +84,28 @@ rule exists_intro 'z :
  * H, y: (exists x. B[x]), z: set, b: 'B['z], J>> T
  *)
 rule all_elim 'H 'z 'b :
-   sequent { 'H; y: "exists"{x. 'B['x]}; z: set; b: 'B['z]; 'J[z, b] >> 'T['z, 'b] } -->
-   sequent { 'H; y: "exists"{x. 'B['x]}; 'J['y] >> 'T['y] };;
+   sequent { <H>; y: "exists"{x. 'B['x]}; z: set; b: 'B['z]; <J[z, b]> >- 'T['z, 'b] } -->
+   sequent { <H>; y: "exists"{x. 'B['x]}; <J['y]> >- 'T['y] };;
 
 (*
  * Wellformedness.
  *)
 rule bounded_exists_wf :
-   sequent { 'H >> wf{'A} } --> (* should be a different judgment? *)
-   sequent { 'H; x: set >> wf{'B['x]} } -->
-   sequent { 'H >> wf{exists x: 'A. 'B['x] } };;
+   sequent { <H> >- wf{'A} } --> (* should be a different judgment? *)
+   sequent { <H>; x: set >- wf{'B['x]} } -->
+   sequent { <H> >- wf{exists x: 'A. 'B['x] } };;
 
 rule exists_wf :
-   sequent { 'H; x: set >> wf{'B['x]} } -->
-   sequent { 'H >> wf{"exists"{x. 'B['x]}} };;
+   sequent { <H>; x: set >- wf{'B['x]} } -->
+   sequent { <H> >- wf{"exists"{x. 'B['x]}} };;
 
 (*
  * Bounded formula is restricted.
  *)
 rule bounded_exists_res :
-   sequent { 'H >> restricted{'A} } -->
-   sequent { 'H; x: set; y: restricted{x} >> restricted{'B['x]} } -->
-   sequent { 'H >> restricted{exists x: 'A. 'B['x]} };;
+   sequent { <H> >- restricted{'A} } -->
+   sequent { <H>; x: set; y: restricted{x} >- restricted{'B['x]} } -->
+   sequent { <H> >- restricted{exists x: 'A. 'B['x]} };;
 
 (*
  * -*-

@@ -88,25 +88,25 @@ let is_imp_imp_term term =
    is_implies_term term & is_implies_term (term_subterm term (make_address [0]))
 
 interactive imp_and_rule 'H :
-   sequent [squash] { 'H; x: "and"{'C; 'D} => 'B; 'J['x] >- "type"{'C} } -->
-   sequent [squash] { 'H; x: "and"{'C; 'D} => 'B; 'J['x] >- "type"{'D} } -->
-   sequent ['ext] { 'H; x: "and"{'C; 'D} => 'B; 'J['x];
+   sequent [squash] { <H>; x: "and"{'C; 'D} => 'B; <J['x]> >- "type"{'C} } -->
+   sequent [squash] { <H>; x: "and"{'C; 'D} => 'B; <J['x]> >- "type"{'D} } -->
+   sequent ['ext] { <H>; x: "and"{'C; 'D} => 'B; <J['x]>;
                      u: 'C => 'D => 'B >- 'T['x] } -->
-   sequent ['ext] { 'H; x: "and"{'C; 'D} => 'B; 'J['x] >- 'T['x] }
+   sequent ['ext] { <H>; x: "and"{'C; 'D} => 'B; <J['x]> >- 'T['x] }
 
 interactive imp_or_rule 'H :
-   sequent [squash] { 'H; x: "or"{'C; 'D} => 'B; 'J['x] >- "type"{'C} } -->
-   sequent [squash] { 'H; x: "or"{'C; 'D} => 'B; 'J['x] >- "type"{'D} } -->
-   sequent ['ext] { 'H; x: "or"{'C; 'D} => 'B; 'J['x];
+   sequent [squash] { <H>; x: "or"{'C; 'D} => 'B; <J['x]> >- "type"{'C} } -->
+   sequent [squash] { <H>; x: "or"{'C; 'D} => 'B; <J['x]> >- "type"{'D} } -->
+   sequent ['ext] { <H>; x: "or"{'C; 'D} => 'B; <J['x]>;
                      u: 'C => 'B; v: 'D => 'B >- 'T['x] } -->
-   sequent ['ext] { 'H; x: "or"{'C; 'D} => 'B; 'J['x] >- 'T['x] }
+   sequent ['ext] { <H>; x: "or"{'C; 'D} => 'B; <J['x]> >- 'T['x] }
 
 interactive imp_imp_rule 'H :
-   sequent [squash] { 'H; x: "implies"{'C; 'D} => 'B; 'J['x] >- "type"{'C} } -->
-   sequent [squash] { 'H; x: "implies"{'C; 'D} => 'B; 'J['x] >- "type"{'D} } -->
-   sequent ['ext] { 'H; x: "implies"{'C; 'D} => 'B; 'J['x];
+   sequent [squash] { <H>; x: "implies"{'C; 'D} => 'B; <J['x]> >- "type"{'C} } -->
+   sequent [squash] { <H>; x: "implies"{'C; 'D} => 'B; <J['x]> >- "type"{'D} } -->
+   sequent ['ext] { <H>; x: "implies"{'C; 'D} => 'B; <J['x]>;
                      u: 'D => 'B >- 'T['x] } -->
-   sequent ['ext] { 'H; x: "implies"{'C; 'D} => 'B; 'J['x] >- 'T['x] }
+   sequent ['ext] { <H>; x: "implies"{'C; 'D} => 'B; <J['x]> >- 'T['x] }
 
 (* Create a tactic for the X-implication-elimination. *)
 let d_and_impT i =

@@ -108,20 +108,20 @@ doc <:doc<
 
 
 interactive singleton_wf {| intro[] |}:
-   sequent[squash]  {'H >- 'a in 'A} -->
-   sequent['ext] {'H >- "type"{singleton{'a;'A}} }
+   sequent[squash]  { <H> >- 'a in 'A} -->
+   sequent['ext] { <H> >- "type"{singleton{'a;'A}} }
 
 interactive singleton_intro {| intro[] |}:
-   sequent[squash]  {'H >- 'a = 'b in 'A} -->
-   sequent['ext] {'H >- 'b in singleton{'a;'A} }
+   sequent[squash]  { <H> >- 'a = 'b in 'A} -->
+   sequent['ext] { <H> >- 'b in singleton{'a;'A} }
 
 interactive singleton_elim {| elim[] |} 'H:
-   sequent['ext] {'H; x : 'A; u: 'a='x in 'A; 'J['x] >- 'C['x] } -->
-   sequent['ext] {'H; x : singleton{'a;'A}; 'J['x] >- 'C['x] }
+   sequent['ext] { <H>; x : 'A; u: 'a='x in 'A; <J['x]> >- 'C['x] } -->
+   sequent['ext] { <H>; x : singleton{'a;'A}; <J['x]> >- 'C['x] }
 
 interactive singleton_equal {| intro[] |}:
-   sequent[squash]  {'H >- 'b  in singleton{'a;'A}} -->
-   sequent[squash]  {'H >- 'c  in singleton{'a;'A}} -->
-   sequent['ext] {'H >- 'b = 'c in singleton{'a;'A} }
+   sequent[squash]  { <H> >- 'b  in singleton{'a;'A}} -->
+   sequent[squash]  { <H> >- 'c  in singleton{'a;'A}} -->
+   sequent['ext] { <H> >- 'b = 'c in singleton{'a;'A} }
 
 doc <:doc< @docoff >> 

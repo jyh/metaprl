@@ -283,9 +283,9 @@ dform snd_df1 : except_mode[src] :: snd{'e} =
  * H, x:A >- Ui ext B
  *)
 prim productFormation 'A :
-   [wf] sequent [squash] { 'H >- 'A in univ[i:l] } -->
-   [main] ('B['x] : sequent ['ext] { 'H; x: 'A >- univ[i:l] }) -->
-   sequent ['ext] { 'H >- univ[i:l] } =
+   [wf] sequent [squash] { <H> >- 'A in univ[i:l] } -->
+   [main] ('B['x] : sequent ['ext] { <H>; x: 'A >- univ[i:l] }) -->
+   sequent ['ext] { <H> >- univ[i:l] } =
    x:'A * 'B['x]
 
 doc <:doc< 
@@ -299,18 +299,18 @@ doc <:doc<
    @end[doc]
 >>
 prim productEquality {| intro []; eqcd |} :
-   [wf] sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
-   [wf] sequent [squash] { 'H; y: 'A1 >- 'B1['y] = 'B2['y] in univ[i:l] } -->
-   sequent ['ext] { 'H >- x1:'A1 * 'B1['x1] = x2:'A2 * 'B2['x2] in univ[i:l] } =
+   [wf] sequent [squash] { <H> >- 'A1 = 'A2 in univ[i:l] } -->
+   [wf] sequent [squash] { <H>; y: 'A1 >- 'B1['y] = 'B2['y] in univ[i:l] } -->
+   sequent ['ext] { <H> >- x1:'A1 * 'B1['x1] = x2:'A2 * 'B2['x2] in univ[i:l] } =
    it
 
 (*
  * Typehood.
  *)
 prim productType {| intro [] |} :
-   [wf] sequent [squash] { 'H >- "type"{'A1} } -->
-   [wf] sequent [squash] { 'H; x: 'A1 >- "type"{'A2['x]} } -->
-   sequent ['ext] { 'H >- "type"{.y:'A1 * 'A2['y]} } =
+   [wf] sequent [squash] { <H> >- "type"{'A1} } -->
+   [wf] sequent [squash] { <H>; x: 'A1 >- "type"{'A2['x]} } -->
+   sequent ['ext] { <H> >- "type"{.y:'A1 * 'A2['y]} } =
    it
 
 doc <:doc< 
@@ -324,10 +324,10 @@ doc <:doc<
    @end[doc]
 >>
 prim pairFormation {| intro [] |} 'a :
-   [wf] sequent [squash] { 'H >- 'a in 'A } -->
-   [main] ('b : sequent ['ext] { 'H >- 'B['a] }) -->
-   [wf] sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
-   sequent ['ext] { 'H >- x:'A * 'B['x] } =
+   [wf] sequent [squash] { <H> >- 'a in 'A } -->
+   [main] ('b : sequent ['ext] { <H> >- 'B['a] }) -->
+   [wf] sequent [squash] { <H>; y: 'A >- "type"{'B['y]} } -->
+   sequent ['ext] { <H> >- x:'A * 'B['x] } =
    'a, 'b
 
 doc <:doc< 
@@ -343,10 +343,10 @@ doc <:doc<
    @end[doc]
 >>
 prim pairEquality {| intro []; eqcd |} :
-   [wf] sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
-   [wf] sequent [squash] { 'H >- 'b1 = 'b2 in 'B['a1] } -->
-   [wf] sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
-   sequent ['ext] { 'H >- ('a1, 'b1) = ('a2, 'b2) in x:'A * 'B['x] } =
+   [wf] sequent [squash] { <H> >- 'a1 = 'a2 in 'A } -->
+   [wf] sequent [squash] { <H> >- 'b1 = 'b2 in 'B['a1] } -->
+   [wf] sequent [squash] { <H>; y: 'A >- "type"{'B['y]} } -->
+   sequent ['ext] { <H> >- ('a1, 'b1) = ('a2, 'b2) in x:'A * 'B['x] } =
    it
 
 doc <:doc< 
@@ -361,8 +361,8 @@ doc <:doc<
    @end[doc]
 >>
 prim productElimination {| elim [ThinOption thinT] |} 'H :
-   [wf] ('t['u; 'v] : sequent ['ext] { 'H; z: x:'A * 'B['x]; u: 'A; v: 'B['u]; 'J['u, 'v] >- 'T['u, 'v] }) -->
-   sequent ['ext] { 'H; z: x:'A * 'B['x]; 'J['z] >- 'T['z] } =
+   [wf] ('t['u; 'v] : sequent ['ext] { <H>; z: x:'A * 'B['x]; u: 'A; v: 'B['u]; <J['u, 'v]> >- 'T['u, 'v] }) -->
+   sequent ['ext] { <H>; z: x:'A * 'B['x]; <J['z]> >- 'T['z] } =
    spread{'z; u, v. 't['u; 'v]}
 
 doc <:doc< 
@@ -397,10 +397,10 @@ doc <:doc<
    @end[doc]
 >>
 prim spreadEquality {| eqcd |} bind{z. 'T['z]} (w:'A * 'B['w]) :
-   [wf] sequent [squash] { 'H >- 'e1 = 'e2 in w:'A * 'B['w] } -->
-   [wf] sequent [squash] { 'H; u: 'A; v: 'B['u]; a: 'e1 = ('u, 'v) in w:'A * 'B['w] >-
+   [wf] sequent [squash] { <H> >- 'e1 = 'e2 in w:'A * 'B['w] } -->
+   [wf] sequent [squash] { <H>; u: 'A; v: 'B['u]; a: 'e1 = ('u, 'v) in w:'A * 'B['w] >-
              'b1['u; 'v] = 'b2['u; 'v] in 'T['u, 'v] } -->
-   sequent ['ext] { 'H >- spread{'e1; u1, v1. 'b1['u1; 'v1]} = spread{'e2; u2, v2. 'b2['u2; 'v2]} in 'T['e1] } =
+   sequent ['ext] { <H> >- spread{'e1; u1, v1. 'b1['u1; 'v1]} = spread{'e2; u2, v2. 'b2['u2; 'v2]} in 'T['e1] } =
    it
 
 doc <:doc< @docoff >>
@@ -419,9 +419,9 @@ doc <:doc<
    @end[doc]
 >>
 prim productSubtype {| intro [] |} :
-   ["subtype"] sequent [squash] { 'H >- \subtype{'A1; 'A2} } -->
-   ["subtype"] sequent [squash] { 'H; a: 'A1 >- \subtype{'B1['a]; 'B2['a]} } -->
-   sequent ['ext] { 'H >- \subtype{ (a1:'A1 * 'B1['a1]); (a2:'A2 * 'B2['a2]) } } =
+   ["subtype"] sequent [squash] { <H> >- \subtype{'A1; 'A2} } -->
+   ["subtype"] sequent [squash] { <H>; a: 'A1 >- \subtype{'B1['a]; 'B2['a]} } -->
+   sequent ['ext] { <H> >- \subtype{ (a1:'A1 * 'B1['a1]); (a2:'A2 * 'B2['a2]) } } =
    it
 doc <:doc< @docoff >>
 

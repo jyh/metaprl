@@ -116,15 +116,15 @@ doc <:doc<
 
 
 interactive node_wf {| intro[] |}:
- sequent[squash]{'H >-"type"{ 'T}} -->
- sequent['ext]  {'H >-"type"{ Node{'T}}}
+ sequent[squash]{ <H> >-"type"{ 'T}} -->
+ sequent['ext]  { <H> >-"type"{ Node{'T}}}
 
 interactive node_monotone {| intro[] |} :
- sequent[squash]{'H >-'S subtype 'T} -->
- sequent['ext]  {'H >- Node{'S} subtype Node{'T}}
+ sequent[squash]{ <H> >-'S subtype 'T} -->
+ sequent['ext]  { <H> >- Node{'S} subtype Node{'T}}
 
 interactive bintree_wf {| intro[] |} :
- sequent['ext]  {'H >-"type"{ BinTree}}
+ sequent['ext]  { <H> >-"type"{ BinTree}}
 
 
 doc <:doc< 
@@ -168,19 +168,19 @@ dform weight_df : except_mode[src] :: weight{'T} = `"weight(" 'T ")"
 
 
 interactive weight_wf {| intro[] |} :
- sequent[squash]{'H >-'t in BinTree} -->
- sequent['ext]  {'H >-weight{'t} in int}
+ sequent[squash]{ <H> >-'t in BinTree} -->
+ sequent['ext]  { <H> >-weight{'t} in int}
 
 (*
 define height : height{'t} <--> tree_ind{'t; 0; L,R,node. max{'L;'R} +@ 1}
 
 interactive height_wf {| intro[] |} :
- sequent[squash]{'H >-'t in BinTree} -->
- sequent['ext]  {'H >-height{'t} in int}
+ sequent[squash]{ <H> >-'t in BinTree} -->
+ sequent['ext]  { <H> >-height{'t} in int}
 
 interactive height_weight  {| intro[] |} : (* make two theorems *)
- sequent[squash]{'H >-'t in BinTree} -->
- sequent['ext]  {'H >-height{'t} <= weight{'t} & weight{'t}< power{2;height{'t}}}
+ sequent[squash]{ <H> >-'t in BinTree} -->
+ sequent['ext]  { <H> >-height{'t} <= weight{'t} & weight{'t}< power{2;height{'t}}}
 *)
 
 
@@ -205,7 +205,7 @@ dform simpletree_df : except_mode[src] :: simpletree = `"simpletree"
 interactive_rw example_weight : weight{simpletree} <--> 2
 
 interactive example_wf  {| intro[] |} :
- sequent['ext]  {'H >- simpletree in BinTree }
+ sequent['ext]  { <H> >- simpletree in BinTree }
 
 
 
@@ -259,48 +259,48 @@ doc <:doc<
 
 
 interactive tree_monotone2 {| intro[] |} :
- sequent[squash]{'H >-"type"{ BinTree{l,r.'S['l;'r]}} }  -->
- sequent[squash]{'H; l:BinTree{l,r.'S['l;'r]}; r:BinTree{l,r.'S['l;'r]} >-  'R['l;'r] subtype 'S['l;'r] }  -->
- sequent['ext]  {'H >- BinTree{l,r.'R['l;'r]}  subtype BinTree{l,r.'S['l;'r]}}
+ sequent[squash]{ <H> >-"type"{ BinTree{l,r.'S['l;'r]}} }  -->
+ sequent[squash]{ <H>; l:BinTree{l,r.'S['l;'r]}; r:BinTree{l,r.'S['l;'r]} >-  'R['l;'r] subtype 'S['l;'r] }  -->
+ sequent['ext]  { <H> >- BinTree{l,r.'R['l;'r]}  subtype BinTree{l,r.'S['l;'r]}}
 
 interactive tree_monotone3 {| intro[] |} :
- sequent[squash] {'H >-'R subtype 'S} -->
- sequent['ext]  {'H >-BinTree{'R}  subtype BinTree{'S}}
+ sequent[squash] { <H> >-'R subtype 'S} -->
+ sequent['ext]  { <H> >-BinTree{'R}  subtype BinTree{'S}}
 
 interactive tree_wf2 {| intro[] |}  BinTree{l,r.'S['l;'r]} :
- sequent[squash]{'H >-"type"{ BinTree{l,r.'S['l;'r]}} }  -->
- sequent[squash]{'H; l:BinTree{l,r.'S['l;'r]}; r:BinTree{l,r.'S['l;'r]} >- "subtype"{ 'R['l;'r]; 'S['l;'r]} }  -->
- sequent['ext]  {'H >-"type"{ BinTree{l,r.'R['l;'r]}}}
+ sequent[squash]{ <H> >-"type"{ BinTree{l,r.'S['l;'r]}} }  -->
+ sequent[squash]{ <H>; l:BinTree{l,r.'S['l;'r]}; r:BinTree{l,r.'S['l;'r]} >- "subtype"{ 'R['l;'r]; 'S['l;'r]} }  -->
+ sequent['ext]  { <H> >-"type"{ BinTree{l,r.'R['l;'r]}}}
 
 interactive tree_wf3 {| intro[] |} :
- sequent[squash]{'H >-"type"{ 'R}} -->
- sequent['ext]  {'H >-"type"{ BinTree{'R}}}
+ sequent[squash]{ <H> >-"type"{ 'R}} -->
+ sequent['ext]  { <H> >-"type"{ BinTree{'R}}}
 
 interactive tree_subtype {| intro[] |} :
- sequent[squash]{'H >- "type"{ BinTree{l,r.'R['l;'r]}}} -->
- sequent['ext]  {'H >- "subtype"{ BinTree{l,r.'R['l;'r]};BinTree}}
+ sequent[squash]{ <H> >- "type"{ BinTree{l,r.'R['l;'r]}}} -->
+ sequent['ext]  { <H> >- "subtype"{ BinTree{l,r.'R['l;'r]};BinTree}}
 
 interactive emptytree_wf  {| intro[] |} :
- sequent[squash]{'H >-"type"{ BinTree{l,r.'R['l;'r]}} }  -->
- sequent['ext]  {'H >-emptytree in BinTree{l,r.'R['l;'r]} }
+ sequent[squash]{ <H> >-"type"{ BinTree{l,r.'R['l;'r]}} }  -->
+ sequent['ext]  { <H> >-emptytree in BinTree{l,r.'R['l;'r]} }
 
 interactive tree_wf  {| intro[] |} :
- [wf] sequent[squash]{'H >-"type"{ BinTree{l,r.'R['l;'r]}} }  -->
- sequent[squash]{'H >-'node in Node{BinTree{l,r.'R['l;'r]}; l,r.'R['l;'r]} }  -->
- sequent['ext]  {'H >-tree{'node} in BinTree{l,r.'R['l;'r]} }
+ [wf] sequent[squash]{ <H> >-"type"{ BinTree{l,r.'R['l;'r]}} }  -->
+ sequent[squash]{ <H> >-'node in Node{BinTree{l,r.'R['l;'r]}; l,r.'R['l;'r]} }  -->
+ sequent['ext]  { <H> >-tree{'node} in BinTree{l,r.'R['l;'r]} }
 
 interactive tree4_wf  {| intro[] |} :
- [wf] sequent[squash]{'H >-"type"{ BinTree{'A;t.'P['t]}} }   -->
- sequent[squash]{'H >-'node in Node{ BinTree{'A;t.'P['t]}; l,r. {a:'A |  'P[node{'l;'r;'a}] } } }  -->
- sequent['ext]  {'H >-tree{'node} in  BinTree{'A;t.'P['t]} }
+ [wf] sequent[squash]{ <H> >-"type"{ BinTree{'A;t.'P['t]}} }   -->
+ sequent[squash]{ <H> >-'node in Node{ BinTree{'A;t.'P['t]}; l,r. {a:'A |  'P[node{'l;'r;'a}] } } }  -->
+ sequent['ext]  { <H> >-tree{'node} in  BinTree{'A;t.'P['t]} }
 
 
 
 interactive node_wf2  {| intro[] |} :
- sequent[squash]{'H >- 'l in 'T }  -->
- sequent[squash]{'H >- 'r in 'T }  -->
- sequent[squash]{'H >- 'nd in 'R['l;'r] }  -->
- sequent['ext]  {'H >-node{'l;'r;'nd} in Node{'T;l,r.'R['l;'r]} }
+ sequent[squash]{ <H> >- 'l in 'T }  -->
+ sequent[squash]{ <H> >- 'r in 'T }  -->
+ sequent[squash]{ <H> >- 'nd in 'R['l;'r] }  -->
+ sequent['ext]  { <H> >-node{'l;'r;'nd} in Node{'T;l,r.'R['l;'r]} }
 
 doc <:doc< 
    @begin[doc]
@@ -309,25 +309,25 @@ doc <:doc<
 >>
 
 interactive treeInduction {| elim [ThinOption thinT] |} 'H :
-    sequent['ext]  {'H; t: BinTree{l,r.'R['l;'r]};  'J['t] >-  'C[emptytree]} -->
-    sequent['ext]  {'H; t: BinTree{l,r.'R['l;'r]};  'J['t]; l:BinTree{l,r.'R['l;'r]}; r:BinTree{l,r.'R['l;'r]}; node:'R['l;'r]; L: 'C['l]; R: 'C['r]
+    sequent['ext]  { <H>; t: BinTree{l,r.'R['l;'r]};  <J['t]> >-  'C[emptytree]} -->
+    sequent['ext]  { <H>; t: BinTree{l,r.'R['l;'r]};  <J['t]>; l:BinTree{l,r.'R['l;'r]}; r:BinTree{l,r.'R['l;'r]}; node:'R['l;'r]; L: 'C['l]; R: 'C['r]
                        >-  'C[tree{node{'l;'r;'node}}] } -->
-    sequent['ext]  {'H; t: BinTree{l,r.'R['l;'r]};  'J['t] >-  'C['t]}
+    sequent['ext]  { <H>; t: BinTree{l,r.'R['l;'r]};  <J['t]> >-  'C['t]}
 
 
 interactive treeInduction2 {| elim [ThinOption thinT] |} 'H :
-    sequent['ext]  {'H; t: BinTree{'A; t.'P['t]};  'J['t] >-  'C[emptytree]} -->
-    sequent['ext]  {'H; t: BinTree{'A; t.'P['t]};  'J['t];
+    sequent['ext]  { <H>; t: BinTree{'A; t.'P['t]};  <J['t]> >-  'C[emptytree]} -->
+    sequent['ext]  { <H>; t: BinTree{'A; t.'P['t]};  <J['t]>;
                     l:BinTree{'A; t.'P['t]}; r:BinTree{'A; t.'P['t]}; node: 'A; u: squash{'P[node{'l;'r;'node}]}; L: 'C['l]; R: 'C['r]
                        >-  'C[tree{node{'l;'r;'node}}] } -->
-    sequent['ext]  {'H; t: BinTree{'A; t.'P['t]};  'J['t] >-  'C['t]}
+    sequent['ext]  { <H>; t: BinTree{'A; t.'P['t]};  <J['t]> >-  'C['t]}
 
 
 interactive treeInduction1 {| elim [ThinOption thinT] |} 'H :
-    sequent['ext]  {'H; t: BinTree;  'J['t] >-  'C[emptytree]} -->
-    sequent['ext]  {'H; t: BinTree;  'J['t]; l:BinTree; r:BinTree; L: 'C['l]; R: 'C['r]
+    sequent['ext]  { <H>; t: BinTree;  <J['t]> >-  'C[emptytree]} -->
+    sequent['ext]  { <H>; t: BinTree;  <J['t]>; l:BinTree; r:BinTree; L: 'C['l]; R: 'C['r]
                        >-  'C[tree{{left = 'l; right = 'r }}] } -->
-    sequent['ext]  {'H; t: BinTree;  'J['t] >-  'C['t]}
+    sequent['ext]  { <H>; t: BinTree;  <J['t]> >-  'C['t]}
 
 
 (* ==================== *)

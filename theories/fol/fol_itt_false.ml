@@ -38,10 +38,10 @@ derive Fol_false
 prim_rw unfold_false : "false" <--> void
 
 derived false_type :
-   sequent ['ext] { 'H >- "type"{."false"} }
+   sequent ['ext] { <H> >- "type"{."false"} }
 
 derived false_elim 'H :
-   sequent ['ext] { 'H; x: "false"; 'J['x] >- 'C['x] }
+   sequent ['ext] { <H>; x: "false"; <J['x]> >- 'C['x] }
 
 (*
  * -*-

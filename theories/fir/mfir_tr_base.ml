@@ -62,7 +62,7 @@ doc <:doc<
 >>
 
 prim truth_intro :
-   sequent [fir] { 'H >- "true" }
+   sequent [fir] { <H> >- "true" }
    = it
 
 
@@ -75,13 +75,13 @@ doc <:doc<
 >>
 
 prim ty_atom_list1 :
-   sequent [fir] { 'H >- has_type["atom_list"]{ nil; nil } }
+   sequent [fir] { <H> >- has_type["atom_list"]{ nil; nil } }
    = it
 
 prim ty_atom_list2 :
-   sequent [fir] { 'H >- has_type["atom"]{ 'elt; 't } } -->
-   sequent [fir] { 'H >- has_type["atom_list"]{ 'tail; 'rest } } -->
-   sequent [fir] { 'H >-
+   sequent [fir] { <H> >- has_type["atom"]{ 'elt; 't } } -->
+   sequent [fir] { <H> >- has_type["atom_list"]{ 'tail; 'rest } } -->
+   sequent [fir] { <H> >-
       has_type["atom_list"]{ cons{ 'elt; 'tail }; cons{ 't; 'rest } } }
    = it
 
@@ -94,14 +94,14 @@ doc <:doc<
 >>
 
 prim wf_ty_list1 :
-   sequent [fir] { 'H >- wf_kind{ 'k } } -->
-   sequent [fir] { 'H >- type_eq_list{ nil; nil; 'k } }
+   sequent [fir] { <H> >- wf_kind{ 'k } } -->
+   sequent [fir] { <H> >- type_eq_list{ nil; nil; 'k } }
    = it
 
 prim wf_ty_list2 :
-   sequent [fir] { 'H >- type_eq{ 'h1; 'h2; 'k } } -->
-   sequent [fir] { 'H >- type_eq_list{ 't1; 't2; 'k } } -->
-   sequent [fir] { 'H >- type_eq_list{ cons{'h1; 't1}; cons{'h2; 't2}; 'k } }
+   sequent [fir] { <H> >- type_eq{ 'h1; 'h2; 'k } } -->
+   sequent [fir] { <H> >- type_eq_list{ 't1; 't2; 'k } } -->
+   sequent [fir] { <H> >- type_eq_list{ cons{'h1; 't1}; cons{'h2; 't2}; 'k } }
    = it
 
 
@@ -116,40 +116,40 @@ doc <:doc< ************************************
 >>
 
 prim wf_small_type :
-   sequent [fir] { 'H >- wf_kind{ small_type } }
+   sequent [fir] { <H> >- wf_kind{ small_type } }
    = it
 
 prim wf_large_type :
-   sequent [fir] { 'H >- wf_kind{ large_type } }
+   sequent [fir] { <H> >- wf_kind{ large_type } }
    = it
 
 prim wf_record_type :
-   sequent [fir] { 'H >- wf_kind{ record_type } }
+   sequent [fir] { <H> >- wf_kind{ record_type } }
    = it
 
 prim wf_dtuple_type :
-   sequent [fir] { 'H >- wf_kind{ dtuple_type } }
+   sequent [fir] { <H> >- wf_kind{ dtuple_type } }
    = it
 
 prim wf_polyKind_small :
-   sequent [fir] { 'H >- int_lt{ 0; 'i } } -->
-   sequent [fir] { 'H >- wf_kind{ polyKind{ 'i; small_type } } }
+   sequent [fir] { <H> >- int_lt{ 0; 'i } } -->
+   sequent [fir] { <H> >- wf_kind{ polyKind{ 'i; small_type } } }
    = it
 
 prim wf_polyKind_large :
-   sequent [fir] { 'H >- int_lt{ 0; 'i } } -->
-   sequent [fir] { 'H >- wf_kind{ polyKind{ 'i; large_type } } }
+   sequent [fir] { <H> >- int_lt{ 0; 'i } } -->
+   sequent [fir] { <H> >- wf_kind{ polyKind{ 'i; large_type } } }
    = it
 
 prim wf_polyKind_union :
-   sequent [fir] { 'H >- "and"{ int_le{ 0; 'i };
+   sequent [fir] { <H> >- "and"{ int_le{ 0; 'i };
                                 int_le{ 0; number[j:n] } } } -->
-   sequent [fir] { 'H >- wf_kind{ polyKind{ 'i; union_type[j:n] } } }
+   sequent [fir] { <H> >- wf_kind{ polyKind{ 'i; union_type[j:n] } } }
    = it
 
 prim wf_polyKind_frame :
-   sequent [fir] { 'H >- int_le{ 0; 'i } } -->
-   sequent [fir] { 'H >- wf_kind{ polyKind{ 'i; frame_type } } }
+   sequent [fir] { <H> >- int_le{ 0; 'i } } -->
+   sequent [fir] { <H> >- wf_kind{ polyKind{ 'i; frame_type } } }
    = it
 
 
@@ -163,8 +163,8 @@ doc <:doc< ************************************
 >>
 
 prim ty_small_as_large :
-   sequent [fir] { 'H >- type_eq{ 't1; 't2; small_type } } -->
-   sequent [fir] { 'H >- type_eq{ 't1; 't2; large_type } }
+   sequent [fir] { <H> >- type_eq{ 't1; 't2; small_type } } -->
+   sequent [fir] { <H> >- type_eq{ 't1; 't2; large_type } }
    = it
 
 
@@ -177,8 +177,8 @@ doc <:doc<
 >>
 
 prim ty_polyKind_as_normal_kind :
-   sequent [fir] { 'H >- type_eq{ 't1; 't2; 'k } } -->
-   sequent [fir] { 'H >- type_eq{ 't1; 't2; polyKind{ 0; 'k } } }
+   sequent [fir] { <H> >- type_eq{ 't1; 't2; 'k } } -->
+   sequent [fir] { <H> >- type_eq{ 't1; 't2; polyKind{ 0; 'k } } }
    = it
 
 doc <:doc< 

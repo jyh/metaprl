@@ -41,13 +41,13 @@ open Tactic_type.Conversionals
 declare rw_just
 
 rule rewriteAxiom1 :
-   sequent ['ext] { 'H >- Perv!"rewrite"{'a; 'a} }
+   sequent ['ext] { <H> >- Perv!"rewrite"{'a; 'a} }
 
 rewrite rewriteAxiom2 'a 'b : (Perv!"rewrite"{'a; 'b}) --> 'a <--> 'b
 
 rule rewriteSym :
-   sequent ['ext] { 'H >- Perv!"rewrite"{'a; 'b} } -->
-   sequent ['ext] { 'H >- Perv!"rewrite"{'b; 'a} }
+   sequent ['ext] { <H> >- Perv!"rewrite"{'a; 'b} } -->
+   sequent ['ext] { <H> >- Perv!"rewrite"{'b; 'a} }
 
 topval rewriteC : term -> conv
 topval rewriteT : term -> tactic

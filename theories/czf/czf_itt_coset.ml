@@ -124,18 +124,18 @@ doc <:doc<
    @end[doc]
 >>
 interactive lcoset_isset {| intro [] |} :
-   sequent [squash] { 'H >- 'h IN label } -->
-   sequent [squash] { 'H >- 'g IN label } -->
-   sequent [squash] { 'H >- isset{'a} } -->
-(*   sequent ['ext] { 'H >- group{'g} } -->*)
-   sequent ['ext] { 'H >- isset{lcoset{'h; 'g; 'a}} }
+   sequent [squash] { <H> >- 'h IN label } -->
+   sequent [squash] { <H> >- 'g IN label } -->
+   sequent [squash] { <H> >- isset{'a} } -->
+(*   sequent ['ext] { <H> >- group{'g} } -->*)
+   sequent ['ext] { <H> >- isset{lcoset{'h; 'g; 'a}} }
 
 interactive rcoset_isset {| intro [] |} :
-   sequent [squash] { 'H >- 'h IN label } -->
-   sequent [squash] { 'H >- 'g IN label } -->
-   sequent [squash] { 'H >- isset{'a} } -->
-(*   sequent ['ext] { 'H >- group{'g} } -->*)
-   sequent ['ext] { 'H >- isset{rcoset{'h; 'g; 'a}} }
+   sequent [squash] { <H> >- 'h IN label } -->
+   sequent [squash] { <H> >- 'g IN label } -->
+   sequent [squash] { <H> >- isset{'a} } -->
+(*   sequent ['ext] { <H> >- group{'g} } -->*)
+   sequent ['ext] { <H> >- isset{rcoset{'h; 'g; 'a}} }
 
 doc <:doc< 
    @begin[doc]
@@ -150,30 +150,30 @@ doc <:doc<
    @end[doc]
 >>
 interactive lcoset_intro {| intro [] |} 'z :
-   sequent [squash] { 'H >- 'h IN label } -->
-   sequent [squash] { 'H >- 'g IN label } -->
-   sequent [squash] { 'H >- isset{'a} } -->
-   sequent [squash] { 'H >- isset{'x} } -->
-   sequent [squash] { 'H >- isset{'z} } -->
-   sequent ['ext] { 'H >- mem{'a; car{'g}} } -->
-   sequent ['ext] { 'H >- mem{'x; car{'g}} } -->
-   sequent ['ext] { 'H >- subgroup{'h; 'g} } -->
-   sequent ['ext] { 'H >- mem{'z; car{'h}} } -->
-   sequent ['ext] { 'H >- eq{'x; op{'g; 'a; 'z}} } -->
-   sequent ['ext] { 'H >- mem{'x; lcoset{'h; 'g; 'a}} }
+   sequent [squash] { <H> >- 'h IN label } -->
+   sequent [squash] { <H> >- 'g IN label } -->
+   sequent [squash] { <H> >- isset{'a} } -->
+   sequent [squash] { <H> >- isset{'x} } -->
+   sequent [squash] { <H> >- isset{'z} } -->
+   sequent ['ext] { <H> >- mem{'a; car{'g}} } -->
+   sequent ['ext] { <H> >- mem{'x; car{'g}} } -->
+   sequent ['ext] { <H> >- subgroup{'h; 'g} } -->
+   sequent ['ext] { <H> >- mem{'z; car{'h}} } -->
+   sequent ['ext] { <H> >- eq{'x; op{'g; 'a; 'z}} } -->
+   sequent ['ext] { <H> >- mem{'x; lcoset{'h; 'g; 'a}} }
 
 interactive rcoset_intro {| intro [] |} 'z :
-   sequent [squash] { 'H >- 'h IN label } -->
-   sequent [squash] { 'H >- 'g IN label } -->
-   sequent [squash] { 'H >- isset{'a} } -->
-   sequent [squash] { 'H >- isset{'x} } -->
-   sequent [squash] { 'H >- isset{'z} } -->
-   sequent ['ext] { 'H >- mem{'a; car{'g}} } -->
-   sequent ['ext] { 'H >- mem{'x; car{'g}} } -->
-   sequent ['ext] { 'H >- subgroup{'h; 'g} } -->
-   sequent ['ext] { 'H >- mem{'z; car{'h}} } -->
-   sequent ['ext] { 'H >- eq{'x; op{'g; 'z; 'a}} } -->
-   sequent ['ext] { 'H >- mem{'x; rcoset{'h; 'g; 'a}} }
+   sequent [squash] { <H> >- 'h IN label } -->
+   sequent [squash] { <H> >- 'g IN label } -->
+   sequent [squash] { <H> >- isset{'a} } -->
+   sequent [squash] { <H> >- isset{'x} } -->
+   sequent [squash] { <H> >- isset{'z} } -->
+   sequent ['ext] { <H> >- mem{'a; car{'g}} } -->
+   sequent ['ext] { <H> >- mem{'x; car{'g}} } -->
+   sequent ['ext] { <H> >- subgroup{'h; 'g} } -->
+   sequent ['ext] { <H> >- mem{'z; car{'h}} } -->
+   sequent ['ext] { <H> >- eq{'x; op{'g; 'z; 'a}} } -->
+   sequent ['ext] { <H> >- mem{'x; rcoset{'h; 'g; 'a}} }
 
 doc <:doc< 
    @begin[doc]
@@ -186,24 +186,24 @@ doc <:doc<
    @end[doc]
 >>
 interactive lcoset_elim {| elim [] |} 'H :
-   sequent [squash] { 'H; x: mem{'y; lcoset{'h; 'g; 'a}}; 'J['x] >- 'h IN label } -->
-   sequent [squash] { 'H; x: mem{'y; lcoset{'h; 'g; 'a}}; 'J['x] >- 'g IN label } -->
-   sequent [squash] { 'H; x: mem{'y; lcoset{'h; 'g; 'a}}; 'J['x] >- isset{'a} } -->
-   sequent [squash] { 'H; x: mem{'y; lcoset{'h; 'g; 'a}}; 'J['x] >- isset{'y} } -->
-   sequent ['ext] { 'H; x: mem{'y; lcoset{'h; 'g; 'a}}; 'J['x] >- mem{'a; car{'g}} } -->
-   sequent ['ext] { 'H; x: mem{'y; lcoset{'h; 'g; 'a}}; 'J['x] >- subgroup{'h; 'g} } -->
-   sequent ['ext] { 'H; x: mem{'y; lcoset{'h; 'g; 'a}}; 'J['x]; u: mem{'y; car{'g}}; z: set; v: mem{'z; car{'h}}; w: eq{'y; op{'g; 'a; 'z}} >- 'C['x] } -->
-   sequent ['ext] { 'H; x: mem{'y; lcoset{'h; 'g; 'a}}; 'J['x] >- 'C['x] }
+   sequent [squash] { <H>; x: mem{'y; lcoset{'h; 'g; 'a}}; <J['x]> >- 'h IN label } -->
+   sequent [squash] { <H>; x: mem{'y; lcoset{'h; 'g; 'a}}; <J['x]> >- 'g IN label } -->
+   sequent [squash] { <H>; x: mem{'y; lcoset{'h; 'g; 'a}}; <J['x]> >- isset{'a} } -->
+   sequent [squash] { <H>; x: mem{'y; lcoset{'h; 'g; 'a}}; <J['x]> >- isset{'y} } -->
+   sequent ['ext] { <H>; x: mem{'y; lcoset{'h; 'g; 'a}}; <J['x]> >- mem{'a; car{'g}} } -->
+   sequent ['ext] { <H>; x: mem{'y; lcoset{'h; 'g; 'a}}; <J['x]> >- subgroup{'h; 'g} } -->
+   sequent ['ext] { <H>; x: mem{'y; lcoset{'h; 'g; 'a}}; <J['x]>; u: mem{'y; car{'g}}; z: set; v: mem{'z; car{'h}}; w: eq{'y; op{'g; 'a; 'z}} >- 'C['x] } -->
+   sequent ['ext] { <H>; x: mem{'y; lcoset{'h; 'g; 'a}}; <J['x]> >- 'C['x] }
 
 interactive rcoset_elim {| elim [] |} 'H :
-   sequent [squash] { 'H; x: mem{'y; rcoset{'h; 'g; 'a}}; 'J['x] >- 'h IN label } -->
-   sequent [squash] { 'H; x: mem{'y; rcoset{'h; 'g; 'a}}; 'J['x] >- 'g IN label } -->
-   sequent [squash] { 'H; x: mem{'y; rcoset{'h; 'g; 'a}}; 'J['x] >- isset{'a} } -->
-   sequent [squash] { 'H; x: mem{'y; rcoset{'h; 'g; 'a}}; 'J['x] >- isset{'y} } -->
-   sequent ['ext] { 'H; x: mem{'y; rcoset{'h; 'g; 'a}}; 'J['x] >- mem{'a; car{'g}} } -->
-   sequent ['ext] { 'H; x: mem{'y; rcoset{'h; 'g; 'a}}; 'J['x] >- subgroup{'h; 'g} } -->
-   sequent ['ext] { 'H; x: mem{'y; rcoset{'h; 'g; 'a}}; 'J['x]; u: mem{'y; car{'g}}; z: set; v: mem{'z; car{'h}}; w: eq{'y; op{'g; 'z; 'a}} >- 'C['x] } -->
-   sequent ['ext] { 'H; x: mem{'y; rcoset{'h; 'g; 'a}}; 'J['x] >- 'C['x] }
+   sequent [squash] { <H>; x: mem{'y; rcoset{'h; 'g; 'a}}; <J['x]> >- 'h IN label } -->
+   sequent [squash] { <H>; x: mem{'y; rcoset{'h; 'g; 'a}}; <J['x]> >- 'g IN label } -->
+   sequent [squash] { <H>; x: mem{'y; rcoset{'h; 'g; 'a}}; <J['x]> >- isset{'a} } -->
+   sequent [squash] { <H>; x: mem{'y; rcoset{'h; 'g; 'a}}; <J['x]> >- isset{'y} } -->
+   sequent ['ext] { <H>; x: mem{'y; rcoset{'h; 'g; 'a}}; <J['x]> >- mem{'a; car{'g}} } -->
+   sequent ['ext] { <H>; x: mem{'y; rcoset{'h; 'g; 'a}}; <J['x]> >- subgroup{'h; 'g} } -->
+   sequent ['ext] { <H>; x: mem{'y; rcoset{'h; 'g; 'a}}; <J['x]>; u: mem{'y; car{'g}}; z: set; v: mem{'z; car{'h}}; w: eq{'y; op{'g; 'z; 'a}} >- 'C['x] } -->
+   sequent ['ext] { <H>; x: mem{'y; rcoset{'h; 'g; 'a}}; <J['x]> >- 'C['x] }
 
 doc <:doc< 
    @begin[doc]
@@ -215,20 +215,20 @@ doc <:doc<
    @end[doc]
 >>
 interactive lcoset_subset {| intro [] |} :
-   sequent [squash] { 'H >- 'h IN label } -->
-   sequent [squash] { 'H >- 'g IN label } -->
-   sequent [squash] { 'H >- isset{'a} } -->
-   sequent ['ext] { 'H >- mem{'a; car{'g}} } -->
-   sequent ['ext] { 'H >- subgroup{'h; 'g} } -->
-   sequent ['ext] { 'H >- \subset{lcoset{'h; 'g; 'a}; car{'g}} }
+   sequent [squash] { <H> >- 'h IN label } -->
+   sequent [squash] { <H> >- 'g IN label } -->
+   sequent [squash] { <H> >- isset{'a} } -->
+   sequent ['ext] { <H> >- mem{'a; car{'g}} } -->
+   sequent ['ext] { <H> >- subgroup{'h; 'g} } -->
+   sequent ['ext] { <H> >- \subset{lcoset{'h; 'g; 'a}; car{'g}} }
 
 interactive rcoset_subset {| intro [] |} :
-   sequent [squash] { 'H >- 'h IN label } -->
-   sequent [squash] { 'H >- 'g IN label } -->
-   sequent [squash] { 'H >- isset{'a} } -->
-   sequent ['ext] { 'H >- mem{'a; car{'g}} } -->
-   sequent ['ext] { 'H >- subgroup{'h; 'g} } -->
-   sequent ['ext] { 'H >- \subset{rcoset{'h; 'g; 'a}; car{'g}} }
+   sequent [squash] { <H> >- 'h IN label } -->
+   sequent [squash] { <H> >- 'g IN label } -->
+   sequent [squash] { <H> >- isset{'a} } -->
+   sequent ['ext] { <H> >- mem{'a; car{'g}} } -->
+   sequent ['ext] { <H> >- subgroup{'h; 'g} } -->
+   sequent ['ext] { <H> >- \subset{rcoset{'h; 'g; 'a}; car{'g}} }
 
 doc <:doc< @docoff >>
 (*

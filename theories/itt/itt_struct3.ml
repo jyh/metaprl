@@ -44,22 +44,22 @@ let _ =
 
 
 interactive substUsingEpimorphism 'H 'B bind{y. 'f['y]} bind{x. 'g['x]}  : (* g does not depend on J *)
-   [wf] sequent [squash] { 'H; x: 'A; 'J['x]; y: 'B >- 'f['y] in 'A } -->
-   [wf] sequent [squash] { 'H; x: 'A; 'J['x] >-  'g['x] in 'B } -->
-   [equality] sequent [squash] { 'H; x: 'A; 'J['x] >- 'f['g['x]] ~ 'x } -->
-   [main] sequent ['ext] { 'H; y: 'B; 'J['f['y]] >- 'C['f['y]] } -->
-   sequent ['ext] { 'H; x: 'A; 'J['x] >- 'C['x] }
+   [wf] sequent [squash] { <H>; x: 'A; <J['x]>; y: 'B >- 'f['y] in 'A } -->
+   [wf] sequent [squash] { <H>; x: 'A; <J['x]> >-  'g['x] in 'B } -->
+   [equality] sequent [squash] { <H>; x: 'A; <J['x]> >- 'f['g['x]] ~ 'x } -->
+   [main] sequent ['ext] { <H>; y: 'B; <J['f['y]]> >- 'C['f['y]] } -->
+   sequent ['ext] { <H>; x: 'A; <J['x]> >- 'C['x] }
 
 interactive hypReplacementStrong 'H 'B :
-   [assertion] sequent [squash] { 'H; x: 'A; 'J['x]; y: 'B >- 'y in 'A } -->
-   [assertion] sequent [squash] { 'H; x: 'A; 'J['x] >-  'x in 'B } -->
-   [main] sequent ['ext] { 'H; x: 'B; 'J['x] >- 'C['x] } -->
-   sequent ['ext] { 'H; x: 'A; 'J['x] >- 'C['x] }
+   [assertion] sequent [squash] { <H>; x: 'A; <J['x]>; y: 'B >- 'y in 'A } -->
+   [assertion] sequent [squash] { <H>; x: 'A; <J['x]> >-  'x in 'B } -->
+   [main] sequent ['ext] { <H>; x: 'B; <J['x]> >- 'C['x] } -->
+   sequent ['ext] { <H>; x: 'A; <J['x]> >- 'C['x] }
 
 interactive hypReplacementExt 'H 'B  :
-   [equality] sequent [squash] { 'H; x: 'A; 'J['x] >- ext_equal{'A;'B} } -->
-   [main]  sequent ['ext] { 'H; x: 'B; 'J['x] >- 'T['x] } -->
-   sequent ['ext] { 'H; x: 'A; 'J['x] >- 'T['x] }
+   [equality] sequent [squash] { <H>; x: 'A; <J['x]> >- ext_equal{'A;'B} } -->
+   [main]  sequent ['ext] { <H>; x: 'B; <J['x]> >- 'T['x] } -->
+   sequent ['ext] { <H>; x: 'A; <J['x]> >- 'T['x] }
 
 let changeHypT t i p =
    hypReplacementStrong i t p

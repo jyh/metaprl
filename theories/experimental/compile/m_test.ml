@@ -30,7 +30,7 @@ extends M_theory
  * Just for testing.
  *)
 interactive fib_prog :
-   sequent [m] { 'H >- compilable{
+   sequent [m] { <H> >- compilable{
       LetAtom{AtomInt[1:n]; one.
       LetAtom{AtomInt[2:n]; two.
       LetRec{R. Fields{
@@ -47,7 +47,7 @@ interactive fib_prog :
          TailCall{AtomVar{'fib}; ArgCons{AtomInt[35:n]; ArgNil}}}}}}} }
 
 interactive fib_prog2 :
-   sequent [m] { 'H >- compilable{
+   sequent [m] { <H> >- compilable{
       LetRec{R. Fields{
          FunDef{Label["fib":t]; AtomFun{i.
             LetFun{'R; Label["fib":t]; fib.
@@ -65,7 +65,7 @@ interactive fib_prog2 :
  * This is a program that should have some spills.
  *)
 interactive spill_prog :
-   sequent [m] { 'H >- compilable{
+   sequent [m] { <H> >- compilable{
       LetRec{R. Fields{
          FunDef{Label["spill":t]; AtomFun{i.
             LetAtom{AtomBinop{AddOp; AtomVar{'i}; AtomInt[1:n]}; i1.
@@ -88,7 +88,7 @@ interactive spill_prog :
 
 (*
 interactive ext_fib_prog2 :
-   sequent [m] { 'H >- compilable{.
+   sequent [m] { <H> >- compilable{.
       <:ext<
          let rec fib (i) =
             if i < 1 then

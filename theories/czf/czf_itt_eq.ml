@@ -250,25 +250,25 @@ doc <:doc<
    @end[doc]
 >>
 interactive eq_equality1 {| intro [] |} :
-   sequent [squash] { 'H >- isset{'s1} } -->
-   sequent [squash] { 'H >- isset{'s2} } -->
-   sequent ['ext] { 'H >- eq{'s1; 's2} =  eq{'s1; 's2} in univ[1:l] }
+   sequent [squash] { <H> >- isset{'s1} } -->
+   sequent [squash] { <H> >- isset{'s2} } -->
+   sequent ['ext] { <H> >- eq{'s1; 's2} =  eq{'s1; 's2} in univ[1:l] }
 
 (*
  * Membership in a universe.
  *)
 interactive eq_type {| intro [] |} :
-   sequent [squash] { 'H >- isset{'s1} } -->
-   sequent [squash] { 'H >- isset{'s2} } -->
-   sequent ['ext] { 'H >- "type"{eq{'s1; 's2}} }
+   sequent [squash] { <H> >- isset{'s1} } -->
+   sequent [squash] { <H> >- isset{'s2} } -->
+   sequent ['ext] { <H> >- "type"{eq{'s1; 's2}} }
 
 (*
  * More general equality in a universe.
  *)
 interactive eq_equality2 {| intro [] |} :
-   sequent [squash] { 'H >- 's1 = 's3 in set } -->
-   sequent [squash] { 'H >- 's2 = 's4 in set } -->
-   sequent ['ext] { 'H >-  eq{'s1; 's2}=  eq{'s3; 's4} in univ[1:l]  }
+   sequent [squash] { <H> >- 's1 = 's3 in set } -->
+   sequent [squash] { <H> >- 's2 = 's4 in set } -->
+   sequent ['ext] { <H> >-  eq{'s1; 's2}=  eq{'s3; 's4} in univ[1:l]  }
 
 doc <:doc< 
    @begin[doc]
@@ -278,26 +278,26 @@ doc <:doc<
    @end[doc]
 >>
 interactive equal_type {| intro [] |} :
-   sequent [squash] { 'H >- isset{'s1} } -->
-   sequent [squash] { 'H >- isset{'s2} } -->
-   sequent ['ext] { 'H >- "type"{.'s1='s2} }
+   sequent [squash] { <H> >- isset{'s1} } -->
+   sequent [squash] { <H> >- isset{'s2} } -->
+   sequent ['ext] { <H> >- "type"{.'s1='s2} }
 
 interactive equal_intro {| intro [] |} :
-   [wf] sequent [squash] { 'H >- isset{'s1} } -->
-   [wf] sequent [squash] { 'H >- isset{'s2} } -->
-   sequent ['ext] { 'H >- eq{'s1; 's2} } -->
-   sequent ['ext] { 'H >- 's1 = 's2 }
+   [wf] sequent [squash] { <H> >- isset{'s1} } -->
+   [wf] sequent [squash] { <H> >- isset{'s2} } -->
+   sequent ['ext] { <H> >- eq{'s1; 's2} } -->
+   sequent ['ext] { <H> >- 's1 = 's2 }
 
 (*
  * Equality is over sets.
  *)
 interactive equal_isset_left 's2 :
-   sequent ['ext] { 'H >- equal{'s1; 's2} } -->
-   sequent ['ext] { 'H >- isset{'s1} }
+   sequent ['ext] { <H> >- equal{'s1; 's2} } -->
+   sequent ['ext] { <H> >- isset{'s1} }
 
 interactive equal_isset_right 's1 :
-   sequent ['ext] { 'H >- equal{'s1; 's2} } -->
-   sequent ['ext] { 'H >- isset{'s2} }
+   sequent ['ext] { <H> >- equal{'s1; 's2} } -->
+   sequent ['ext] { <H> >- isset{'s2} }
 
 doc <:doc< 
    @begin[doc]
@@ -307,28 +307,28 @@ doc <:doc<
    @end[doc]
 >>
 interactive eq_ref {| intro [] |} :
-   sequent [squash] { 'H >- isset{'s1} } -->
-   sequent ['ext] { 'H >- eq{'s1; 's1} }
+   sequent [squash] { <H> >- isset{'s1} } -->
+   sequent ['ext] { <H> >- eq{'s1; 's1} }
 
 (*
  * Symettry.
  *)
 interactive eq_sym :
-   [wf] sequent [squash] {'H >- isset{'s1} } -->
-   [wf] sequent [squash] {'H >- isset{'s2} } -->
-   sequent ['ext] { 'H >- eq{'s2; 's1} } -->
-   sequent ['ext] { 'H >- eq{'s1; 's2} }
+   [wf] sequent [squash] { <H> >- isset{'s1} } -->
+   [wf] sequent [squash] { <H> >- isset{'s2} } -->
+   sequent ['ext] { <H> >- eq{'s2; 's1} } -->
+   sequent ['ext] { <H> >- eq{'s1; 's2} }
 
 (*
  * Transitivity.
  *)
 interactive eq_trans 's2 :
-   [wf] sequent [squash] {'H >- isset{'s1} } -->
-   [wf] sequent [squash] {'H >- isset{'s2} } -->
-   [wf] sequent [squash] {'H >- isset{'s3} } -->
-   sequent ['ext] { 'H >- eq{'s1; 's2} } -->
-   sequent ['ext] { 'H >- eq{'s2; 's3} } -->
-   sequent ['ext] { 'H >- eq{'s1; 's3} }
+   [wf] sequent [squash] { <H> >- isset{'s1} } -->
+   [wf] sequent [squash] { <H> >- isset{'s2} } -->
+   [wf] sequent [squash] { <H> >- isset{'s3} } -->
+   sequent ['ext] { <H> >- eq{'s1; 's2} } -->
+   sequent ['ext] { <H> >- eq{'s2; 's3} } -->
+   sequent ['ext] { <H> >- eq{'s1; 's3} }
 
 doc <:doc< 
    @begin[doc]
@@ -338,8 +338,8 @@ doc <:doc<
    @end[doc]
 >>
 interactive eq_isset 'H fun_set{z. 'f['z]} :
-   sequent ['ext] { 'H; z: set; 'J['z] >- fun_set{z. 'f['z]} } -->
-   sequent ['ext] { 'H; z: set; 'J['z] >- isset{'f['z]} }
+   sequent ['ext] { <H>; z: set; <J['z]> >- fun_set{z. 'f['z]} } -->
+   sequent ['ext] { <H>; z: set; <J['z]> >- isset{'f['z]} }
 
 doc <:doc< @docoff >>
 let funSetT i p =
@@ -355,14 +355,14 @@ doc <:doc<
    @end[doc]
 >>
 interactive eq_fun {| intro [] |} :
-   sequent ['ext] { 'H >- fun_set{z. 'f1['z]} } -->
-   sequent ['ext] { 'H >- fun_set{z. 'f2['z]} } -->
-   sequent ['ext] { 'H >- fun_prop{z. eq{'f1['z]; 'f2['z]}} }
+   sequent ['ext] { <H> >- fun_set{z. 'f1['z]} } -->
+   sequent ['ext] { <H> >- fun_set{z. 'f2['z]} } -->
+   sequent ['ext] { <H> >- fun_prop{z. eq{'f1['z]; 'f2['z]}} }
 
 interactive equal_fun {| intro [] |} :
-   sequent ['ext] { 'H >- fun_set{z. 'f1['z]} } -->
-   sequent ['ext] { 'H >- fun_set{z. 'f2['z]} } -->
-   sequent ['ext] { 'H >- fun_prop{z. 'f1['z] = 'f2['z]} }
+   sequent ['ext] { <H> >- fun_set{z. 'f1['z]} } -->
+   sequent ['ext] { <H> >- fun_set{z. 'f2['z]} } -->
+   sequent ['ext] { <H> >- fun_prop{z. 'f1['z] = 'f2['z]} }
 
 doc <:doc< 
    @begin[doc]
@@ -375,16 +375,16 @@ doc <:doc<
    @end[doc]
 >>
 interactive eq_hyp_subst 'H 's1 's2 (bind{v. 'P['v]}) :
-   sequent ['ext] { 'H; x: 'P['s1]; 'J['x] >- equal{'s1; 's2} } -->
-   sequent ['ext] { 'H; x: 'P['s1]; 'J['x]; z: 'P['s2] >- 'C['x] } -->
-   sequent ['ext] { 'H; x: 'P['s1]; 'J['x] >- fun_prop{z. 'P['z]} } -->
-   sequent ['ext] { 'H; x: 'P['s1]; 'J['x] >- 'C['x] }
+   sequent ['ext] { <H>; x: 'P['s1]; <J['x]> >- equal{'s1; 's2} } -->
+   sequent ['ext] { <H>; x: 'P['s1]; <J['x]>; z: 'P['s2] >- 'C['x] } -->
+   sequent ['ext] { <H>; x: 'P['s1]; <J['x]> >- fun_prop{z. 'P['z]} } -->
+   sequent ['ext] { <H>; x: 'P['s1]; <J['x]> >- 'C['x] }
 
 interactive eq_concl_subst 's1 's2 (bind{v. 'C['v]}) :
-   sequent ['ext] { 'H >- equal{'s1; 's2} } -->
-   sequent ['ext] { 'H >- 'C['s2] } -->
-   sequent ['ext] { 'H >- fun_prop{z. 'C['z]} } -->
-   sequent ['ext] { 'H >- 'C['s1] }
+   sequent ['ext] { <H> >- equal{'s1; 's2} } -->
+   sequent ['ext] { <H> >- 'C['s2] } -->
+   sequent ['ext] { <H> >- fun_prop{z. 'C['z]} } -->
+   sequent ['ext] { <H> >- 'C['s1] }
 
 doc <:doc< 
    @begin[doc]
@@ -395,12 +395,12 @@ doc <:doc<
    @end[doc]
 >>
 interactive fun_set_type {| intro [] |} :
-   sequent [squash] { 'H; z: set >- isset{'f['z]} } -->
-   sequent ['ext] { 'H >- "type"{fun_set{z. 'f['z]}} }
+   sequent [squash] { <H>; z: set >- isset{'f['z]} } -->
+   sequent ['ext] { <H> >- "type"{fun_set{z. 'f['z]}} }
 
 interactive fun_prop_type {| intro [] |} :
-   sequent [squash] { 'H; z: set >- "type"{'f['z]} } -->
-   sequent ['ext] { 'H >- "type"{fun_prop{z. 'f['z]}} }
+   sequent [squash] { <H>; z: set >- "type"{'f['z]} } -->
+   sequent ['ext] { <H> >- "type"{fun_prop{z. 'f['z]}} }
 
 doc <:doc< 
    @begin[doc]
@@ -410,15 +410,15 @@ doc <:doc<
    @end[doc]
 >>
 interactive fun_set {| intro [] |} :
-   sequent [squash] { 'H >- isset{'u} } -->
-   sequent ['ext] { 'H >- fun_set{z. 'u} }
+   sequent [squash] { <H> >- isset{'u} } -->
+   sequent ['ext] { <H> >- fun_set{z. 'u} }
 
 interactive fun_ref {| intro [] |} :
-   sequent ['ext] { 'H >- fun_set{z. 'z} }
+   sequent ['ext] { <H> >- fun_set{z. 'z} }
 
 interactive fun_prop {| intro [] |} :
-   sequent [squash] { 'H >- "type"{'P} } -->
-   sequent ['ext] { 'H >- fun_prop{z. 'P} }
+   sequent [squash] { <H> >- "type"{'P} } -->
+   sequent ['ext] { <H> >- fun_prop{z. 'P} }
 
 (************************************************************************
  * TACTICS                                                              *

@@ -45,9 +45,9 @@ define not_abs : not{'A} <--> 'A => false;;
  * H >> W wf
  *)
 rule implies_intro 'x :
-   sequent { 'H; x: 'A >> 'B } -->
-   sequent { 'H >> wf{'A} } -->
-   sequent { 'H >> 'A => 'B };;
+   sequent { <H>; x: 'A >- 'B } -->
+   sequent { <H> >- wf{'A} } -->
+   sequent { <H> >- 'A => 'B };;
 
 (*
  * Elimination.
@@ -58,25 +58,25 @@ rule implies_intro 'x :
  * H, x: A => B, J, y: B >> T
  *)
 rule implies_elim 'H 'y :
-   sequent { 'H; x: 'A => 'B; 'J >> 'A } -->
-   sequent { 'H; x: 'A => 'B; 'J; y: 'B >> 'T } -->
-   sequent { 'H; x: 'A => 'B; 'J >> 'T };;
+   sequent { <H>; x: 'A => 'B; <J> >- 'A } -->
+   sequent { <H>; x: 'A => 'B; <J>; y: 'B >- 'T } -->
+   sequent { <H>; x: 'A => 'B; <J> >- 'T };;
 
 (*
  * Well formedness.
  *)
 rule implies_wf :
-   sequent { 'H >> wf{'A} } -->
-   sequent { 'H >> wf{'B} } -->
-   sequent { 'H >> wf{'A => 'B} };;
+   sequent { <H> >- wf{'A} } -->
+   sequent { <H> >- wf{'B} } -->
+   sequent { <H> >- wf{'A => 'B} };;
 
 (*
  * Implication is restricted.
  *)
 rule implies_res :
-   sequent { 'H >> restricted{'A} } -->
-   sequent { 'H >> restricted{'B} } -->
-   sequent { 'H >> restricted{'A => 'B} };;
+   sequent { <H> >- restricted{'A} } -->
+   sequent { <H> >- restricted{'B} } -->
+   sequent { <H> >- restricted{'A => 'B} };;
 
 (*
  * -*-

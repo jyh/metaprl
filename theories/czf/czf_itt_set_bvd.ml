@@ -125,9 +125,9 @@ doc <:doc<
    @end[doc]
 >>
 interactive set_bvd_isset {| intro [] |} :
-   sequent [squash] { 'H >- isset{'s} } -->
-   sequent [squash] { 'H; x: set >- isset{'a['x]} } -->
-   sequent ['ext] { 'H >- isset{set_bvd{'s; x. 'a['x]}} }
+   sequent [squash] { <H> >- isset{'s} } -->
+   sequent [squash] { <H>; x: set >- isset{'a['x]} } -->
+   sequent ['ext] { <H> >- isset{set_bvd{'s; x. 'a['x]}} }
 
 doc <:doc< 
    @begin[doc]
@@ -140,12 +140,12 @@ doc <:doc<
    @end[doc]
 >>
 interactive set_bvd_member_intro {| intro [] |} :
-   sequent [squash] { 'H >- isset{'s} } -->
-   sequent [squash] { 'H >- isset{'y} } -->
-   sequent [squash] { 'H; x: set >- isset{'a['x]} } -->
-   sequent ['ext] { 'H >- fun_set{x. 'a['x]} } -->
-   sequent ['ext] { 'H >- dexists{'s; z. eq{'y; 'a['z]}} } -->
-   sequent ['ext] { 'H >- mem{'y; set_bvd{'s; x. 'a['x]}} }
+   sequent [squash] { <H> >- isset{'s} } -->
+   sequent [squash] { <H> >- isset{'y} } -->
+   sequent [squash] { <H>; x: set >- isset{'a['x]} } -->
+   sequent ['ext] { <H> >- fun_set{x. 'a['x]} } -->
+   sequent ['ext] { <H> >- dexists{'s; z. eq{'y; 'a['z]}} } -->
+   sequent ['ext] { <H> >- mem{'y; set_bvd{'s; x. 'a['x]}} }
 
 doc <:doc< 
    @begin[doc]
@@ -156,12 +156,12 @@ doc <:doc<
    @end[doc]
 >>
 interactive set_bvd_member_elim {| elim [] |} 'H :
-   sequent [squash] { 'H; x: mem{'y; set_bvd{'s; x. 'a['x]}}; 'J['x] >- isset{'y} } -->
-   sequent [squash] { 'H; x: mem{'y; set_bvd{'s; x. 'a['x]}}; 'J['x] >- isset{'s} } -->
-   sequent [squash] { 'H; x: mem{'y; set_bvd{'s; x. 'a['x]}}; 'J['x]; z: set >- isset{'a['z]} } -->
-   sequent ['ext] { 'H; x: mem{'y; set_bvd{'s; x. 'a['x]}}; 'J['x] >- fun_set{x. 'a['x]} } -->
-   sequent ['ext] { 'H; x: mem{'y; set_bvd{'s; x. 'a['x]}}; 'J['x]; z: set; u: mem{'z; 's}; v: eq{'y; 'a['z]} >- 'T['x] } -->
-   sequent ['ext] { 'H; x: mem{'y; set_bvd{'s; x. 'a['x]}}; 'J['x] >- 'T['x] }
+   sequent [squash] { <H>; x: mem{'y; set_bvd{'s; x. 'a['x]}}; <J['x]> >- isset{'y} } -->
+   sequent [squash] { <H>; x: mem{'y; set_bvd{'s; x. 'a['x]}}; <J['x]> >- isset{'s} } -->
+   sequent [squash] { <H>; x: mem{'y; set_bvd{'s; x. 'a['x]}}; <J['x]>; z: set >- isset{'a['z]} } -->
+   sequent ['ext] { <H>; x: mem{'y; set_bvd{'s; x. 'a['x]}}; <J['x]> >- fun_set{x. 'a['x]} } -->
+   sequent ['ext] { <H>; x: mem{'y; set_bvd{'s; x. 'a['x]}}; <J['x]>; z: set; u: mem{'z; 's}; v: eq{'y; 'a['z]} >- 'T['x] } -->
+   sequent ['ext] { <H>; x: mem{'y; set_bvd{'s; x. 'a['x]}}; <J['x]> >- 'T['x] }
 
 doc <:doc< 
    @begin[doc]
@@ -172,11 +172,11 @@ doc <:doc<
    @end[doc]
 >>
 interactive set_bvd_fun {| intro [] |} :
-   sequent ['ext] { 'H >- fun_set{z. 'A['z]} } -->
-   sequent ['ext] { 'H; z: set >- fun_set{x. 'B['z; 'x]} } -->
-   sequent ['ext] { 'H; z: set >- fun_set{x. 'B['x; 'z]} } -->
-   ["wf"] sequent [squash] { 'H; z: set; x: set >- isset{'B['z; 'x]} } -->
-   sequent ['ext] { 'H >- fun_set{z. set_bvd{'A['z]; y. 'B['z; 'y]}} }
+   sequent ['ext] { <H> >- fun_set{z. 'A['z]} } -->
+   sequent ['ext] { <H>; z: set >- fun_set{x. 'B['z; 'x]} } -->
+   sequent ['ext] { <H>; z: set >- fun_set{x. 'B['x; 'z]} } -->
+   ["wf"] sequent [squash] { <H>; z: set; x: set >- isset{'B['z; 'x]} } -->
+   sequent ['ext] { <H> >- fun_set{z. set_bvd{'A['z]; y. 'B['z; 'y]}} }
 doc <:doc< @docoff >>
 
 (*

@@ -176,12 +176,12 @@ doc <:doc<
    @end[doc]
 >>
 prim squashEquality {| intro []; eqcd |}  :
-   [wf] sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
-   sequent ['ext] { 'H >- squash{'A1} = squash{'A2} in univ[i:l] } = it
+   [wf] sequent [squash] { <H> >- 'A1 = 'A2 in univ[i:l] } -->
+   sequent ['ext] { <H> >- squash{'A1} = squash{'A2} in univ[i:l] } = it
 
 prim squashType {| intro [] |} :
-   [wf] sequent [squash] { 'H >- "type"{'A} } -->
-   sequent ['ext] { 'H >- "type"{.squash{'A}} } =
+   [wf] sequent [squash] { <H> >- "type"{'A} } -->
+   sequent ['ext] { <H> >- "type"{.squash{'A}} } =
    it
 
 doc <:doc< 
@@ -194,8 +194,8 @@ doc <:doc<
    @end[doc]
 >>
 prim squashMemberFormation {| intro [AutoMustComplete] |} :
-   sequent [squash] { 'H >- 'A } -->
-   sequent ['ext]   { 'H >- squash{'A} } =
+   sequent [squash] { <H> >- 'A } -->
+   sequent ['ext]   { <H> >- squash{'A} } =
    it
 
 doc <:doc< 
@@ -212,18 +212,18 @@ doc <:doc<
    @end[doc]
 >>
 prim unsquashEqualWeak 'H :
-   sequent [squash] { 'H; u: 'P; 'J >- 'x = 'y in 'A } -->
-   sequent ['ext] { 'H; u: squash{'P}; 'J >- 'x = 'y in 'A } =
+   sequent [squash] { <H>; u: 'P; <J> >- 'x = 'y in 'A } -->
+   sequent ['ext] { <H>; u: squash{'P}; <J> >- 'x = 'y in 'A } =
    it
 
 prim squashElim 'H :
-   ('t : sequent ['ext] { 'H; u: squash{'P}; 'J[it] >- 'C[it] }) -->
-   sequent ['ext] { 'H; u: squash{'P}; 'J['u] >- 'C['u] } =
+   ('t : sequent ['ext] { <H>; u: squash{'P}; <J[it]> >- 'C[it] }) -->
+   sequent ['ext] { <H>; u: squash{'P}; <J['u]> >- 'C['u] } =
    't
 
 prim squashFromAny 'ext :
-   sequent ['ext] { 'H >- 'T } -->
-   sequent [squash] { 'H >- 'T } =
+   sequent ['ext] { <H> >- 'T } -->
+   sequent [squash] { <H> >- 'T } =
    it
 
 doc <:doc< @docoff >>
@@ -247,13 +247,13 @@ doc <:doc<
    @end[doc]
 >>
 interactive unsquashEqual 'H :
-   sequent [squash] { 'H; u: 'P; 'J[it] >- 'x[it] = 'y[it] in 'A[it] } -->
-   sequent ['ext] { 'H; u: squash{'P}; 'J['u] >- 'x['u] = 'y['u] in 'A['u] }
+   sequent [squash] { <H>; u: 'P; <J[it]> >- 'x[it] = 'y[it] in 'A[it] } -->
+   sequent ['ext] { <H>; u: squash{'P}; <J['u]> >- 'x['u] = 'y['u] in 'A['u] }
 
 doc <:doc< @docoff >>
 interactive unsquashWWitness 'H 't:
-   sequent [squash] { 'H; u: 'P; 'J[it] >- 't in 'A[it] } -->
-   sequent ['ext] { 'H; u: squash{'P}; 'J['u] >- 'A['u] }
+   sequent [squash] { <H>; u: 'P; <J[it]> >- 't in 'A[it] } -->
+   sequent ['ext] { <H>; u: squash{'P}; <J['u]> >- 'A['u] }
 
 doc <:doc< 
    @begin[doc]
@@ -261,8 +261,8 @@ doc <:doc<
    @end[doc]
 >>
 interactive sqsqEqual :
-   sequent [squash] { 'H >- 't in 'A} -->
-   sequent ['ext] { 'H >- 't in 'A}
+   sequent [squash] { <H> >- 't in 'A} -->
+   sequent ['ext] { <H> >- 't in 'A}
 
 doc <:doc< 
    @begin[doc]
@@ -270,13 +270,13 @@ doc <:doc<
    @end[doc]
 >>
 interactive squashMemberEquality {| intro []; eqcd |} :
-   [wf] sequent [squash] { 'H >- squash{'A} } -->
-   sequent ['ext] { 'H >- it in squash{'A} }
+   [wf] sequent [squash] { <H> >- squash{'A} } -->
+   sequent ['ext] { <H> >- it in squash{'A} }
 
 doc <:doc<@docoff>>
 interactive sqsqSq :
-   sequent [squash] { 'H >- squash{'A}} -->
-   sequent ['ext] { 'H >- squash{'A}}
+   sequent [squash] { <H> >- squash{'A}} -->
+   sequent ['ext] { <H> >- squash{'A}}
 
 doc <:doc< 
    @begin[doc]
@@ -286,38 +286,38 @@ doc <:doc<
    @end[doc]
 >>
 interactive squashStable 't :
-   [main] sequent [squash] { 'H >- squash{'A} } -->
-   [wf] sequent [squash] { 'H; x: 'A >- 't in 'A } -->
-   sequent ['ext] { 'H >- 'A}
+   [main] sequent [squash] { <H> >- squash{'A} } -->
+   [wf] sequent [squash] { <H>; x: 'A >- 't in 'A } -->
+   sequent ['ext] { <H> >- 'A}
 
 interactive unsquashHypEqual 'H :
-   sequent ['ext] { 'H; u: 'x = 'y in 'A; 'J[it] >- 'C[it] } -->
-   sequent ['ext] { 'H; u: squash{('x = 'y in 'A)}; 'J['u] >- 'C['u] }
+   sequent ['ext] { <H>; u: 'x = 'y in 'A; <J[it]> >- 'C[it] } -->
+   sequent ['ext] { <H>; u: squash{('x = 'y in 'A)}; <J['u]> >- 'C['u] }
 
 interactive unsquash 'H :
-   sequent [squash] { 'H; u: 'P; 'J[it] >- squash{'T[it]} } -->
-   sequent ['ext] { 'H; u: squash{'P}; 'J['u] >- squash{'T['u]} }
+   sequent [squash] { <H>; u: 'P; <J[it]> >- squash{'T[it]} } -->
+   sequent ['ext] { <H>; u: squash{'P}; <J['u]> >- squash{'T['u]} }
 
 doc <:doc< @docoff >>
 interactive unsquashStableGoal 'H :
-   sequent [squash] { 'H; u: 'A; 'J[it] >- 'C[it] } -->
-   sequent ['ext] { 'H; u: squash{'A}; 'J['u]; x: squash{'C['u]} >- 'C['u] } -->
-   sequent ['ext] { 'H; u: squash{'A}; 'J['u] >- 'C['u]}
+   sequent [squash] { <H>; u: 'A; <J[it]> >- 'C[it] } -->
+   sequent ['ext] { <H>; u: squash{'A}; <J['u]>; x: squash{'C['u]} >- 'C['u] } -->
+   sequent ['ext] { <H>; u: squash{'A}; <J['u]> >- 'C['u]}
 
 interactive unsquashHypGoalStable 'H :
-   sequent ['ext] { 'H; u: 'A; 'J[it] >- 'C[it] } -->
-   sequent ['ext] { 'H; u: squash{'A}; 'J['u] >- 'A } -->
-   sequent ['ext] { 'H; u: squash{'A}; 'J['u] >- 'C['u]}
+   sequent ['ext] { <H>; u: 'A; <J[it]> >- 'C[it] } -->
+   sequent ['ext] { <H>; u: squash{'A}; <J['u]> >- 'A } -->
+   sequent ['ext] { <H>; u: squash{'A}; <J['u]> >- 'C['u]}
 
 interactive unsquashStable 'H 't :
-   sequent ['ext] { 'H; u: 'A; 'J[it] >- 'C[it] } -->
-   sequent [squash] { 'H; u: squash{'A}; 'J['u]; x: 'A >- 't in 'A } -->
-   sequent ['ext] { 'H; u: squash{'A}; 'J['u] >- 'C['u]}
+   sequent ['ext] { <H>; u: 'A; <J[it]> >- 'C[it] } -->
+   sequent [squash] { <H>; u: squash{'A}; <J['u]>; x: 'A >- 't in 'A } -->
+   sequent ['ext] { <H>; u: squash{'A}; <J['u]> >- 'C['u]}
 
 interactive squashAssert 'A :
-   sequent [squash] { 'H >- squash{'A} } -->
-   sequent ['ext] { 'H; x: squash{'A} >- 'C } -->
-   sequent ['ext] { 'H >- 'C }
+   sequent [squash] { <H> >- squash{'A} } -->
+   sequent ['ext] { <H>; x: squash{'A} >- 'C } -->
+   sequent ['ext] { <H> >- 'C }
 
 (*
  * H >- Ui ext squash(A)
@@ -325,8 +325,8 @@ interactive squashAssert 'A :
  * H >- Ui ext A
  *)
 interactive squashFormation :
-   sequent ['ext] { 'H >- univ[i:l] } -->
-   sequent ['ext] { 'H >- univ[i:l] }
+   sequent ['ext] { <H> >- univ[i:l] } -->
+   sequent ['ext] { <H> >- univ[i:l] }
 
 (************************************************************************
  * TYPES                                                                *

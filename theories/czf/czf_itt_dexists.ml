@@ -123,9 +123,9 @@ doc <:doc<
    @end[doc]
 >>
 interactive dexists_type {| intro [] |} :
-   ["wf"] sequent [squash] { 'H >- isset{'s} } -->
-   ["wf"] sequent [squash] { 'H; y: set >- "type"{'A['y]} } -->
-   sequent ['ext] { 'H >- "type"{."dexists"{'s; x. 'A['x]}} }
+   ["wf"] sequent [squash] { <H> >- isset{'s} } -->
+   ["wf"] sequent [squash] { <H>; y: set >- "type"{'A['y]} } -->
+   sequent ['ext] { <H> >- "type"{."dexists"{'s; x. 'A['x]}} }
 
 doc <:doc< 
    @begin[doc]
@@ -137,11 +137,11 @@ doc <:doc<
    @end[doc]
 >>
 interactive dexists_intro {| intro [] |} 'z :
-   ["wf"] sequent [squash] { 'H; w: set >- "type"{'A['w]} } -->
-   ["wf"] sequent ['ext] { 'H >- fun_prop{x. 'A['x]} } -->
-   ["main"] sequent ['ext] { 'H >- member{'z; 's} } -->
-   ["antecedent"] sequent ['ext] { 'H >- 'A['z] } -->
-   sequent ['ext] { 'H >- "dexists"{'s; x. 'A['x]} }
+   ["wf"] sequent [squash] { <H>; w: set >- "type"{'A['w]} } -->
+   ["wf"] sequent ['ext] { <H> >- fun_prop{x. 'A['x]} } -->
+   ["main"] sequent ['ext] { <H> >- member{'z; 's} } -->
+   ["antecedent"] sequent ['ext] { <H> >- 'A['z] } -->
+   sequent ['ext] { <H> >- "dexists"{'s; x. 'A['x]} }
 
 doc <:doc< 
    @begin[doc]
@@ -153,18 +153,18 @@ doc <:doc<
    @end[doc]
 >>
 interactive dexists_elim {| elim [] |} 'H :
-   ["wf"] sequent [squash] { 'H; x: "dexists"{'s; y. 'A['y]}; 'J['x] >- isset{'s} } -->
-   ["wf"] sequent [squash] { 'H; x: "dexists"{'s; y. 'A['y]}; 'J['x]; z: set >- "type"{'A['z]} } -->
-   ["wf"] sequent ['ext] { 'H; x: "dexists"{'s; y. 'A['y]}; 'J['x] >- fun_prop{z. 'A['z]} } -->
-   ["main"] sequent ['ext] { 'H;
+   ["wf"] sequent [squash] { <H>; x: "dexists"{'s; y. 'A['y]}; <J['x]> >- isset{'s} } -->
+   ["wf"] sequent [squash] { <H>; x: "dexists"{'s; y. 'A['y]}; <J['x]>; z: set >- "type"{'A['z]} } -->
+   ["wf"] sequent ['ext] { <H>; x: "dexists"{'s; y. 'A['y]}; <J['x]> >- fun_prop{z. 'A['z]} } -->
+   ["main"] sequent ['ext] { <H>;
                     x: "dexists"{'s; y. 'A['y]};
-                    'J['x];
+                    <J['x]>;
                     z: set;
                     v: mem{'z; 's};
                     w: 'A['z]
                     >- 'C['x]
                   } -->
-   sequent ['ext] { 'H; x: "dexists"{'s; y. 'A['y]}; 'J['x] >- 'C['x] }
+   sequent ['ext] { <H>; x: "dexists"{'s; y. 'A['y]}; <J['x]> >- 'C['x] }
 
 doc <:doc< 
    @begin[doc]
@@ -175,11 +175,11 @@ doc <:doc<
    @end[doc]
 >>
 interactive dexists_fun {| intro [] |} :
-   sequent ['ext] { 'H >- fun_set{z. 'A['z]} } -->
-   sequent ['ext] { 'H; z: set >- fun_prop{x. 'B['z; 'x]} } -->
-   sequent ['ext] { 'H; z: set >- fun_prop{x. 'B['x; 'z]} } -->
-   ["wf"] sequent [squash] { 'H; z: set; x: set >- "type"{'B['z; 'x]} } -->
-   sequent ['ext] { 'H >- fun_prop{z. "dexists"{'A['z]; y. 'B['z; 'y]}} }
+   sequent ['ext] { <H> >- fun_set{z. 'A['z]} } -->
+   sequent ['ext] { <H>; z: set >- fun_prop{x. 'B['z; 'x]} } -->
+   sequent ['ext] { <H>; z: set >- fun_prop{x. 'B['x; 'z]} } -->
+   ["wf"] sequent [squash] { <H>; z: set; x: set >- "type"{'B['z; 'x]} } -->
+   sequent ['ext] { <H> >- fun_prop{z. "dexists"{'A['z]; y. 'B['z; 'y]}} }
 
 doc <:doc< 
    @begin[doc]
@@ -191,9 +191,9 @@ doc <:doc<
    @end[doc]
 >>
 interactive dexists_res2 {| intro [] |} :
-   ["wf"]   sequent [squash] { 'H >- isset{'A} } -->
-   sequent [squash] { 'H; u: set >- restricted{'B['u]} } -->
-   sequent ['ext] { 'H >- restricted{."dexists"{'A; y. 'B['y]}} }
+   ["wf"]   sequent [squash] { <H> >- isset{'A} } -->
+   sequent [squash] { <H>; u: set >- restricted{'B['u]} } -->
+   sequent ['ext] { <H> >- restricted{."dexists"{'A; y. 'B['y]}} }
 doc <:doc< @docoff >>
 
 (*

@@ -107,8 +107,8 @@ doc <:doc<
    @end[doc]
 >>
 interactive sall_type {| intro [] |} :
-   sequent ['ext] { 'H; y: set >- "type"{'A['y]} } -->
-   sequent ['ext] { 'H >- "type"{."sall"{x. 'A['x]} } }
+   sequent ['ext] { <H>; y: set >- "type"{'A['y]} } -->
+   sequent ['ext] { <H> >- "type"{."sall"{x. 'A['x]} } }
 
 doc <:doc< 
    @begin[doc]
@@ -119,8 +119,8 @@ doc <:doc<
    @end[doc]
 >>
 interactive sall_intro {| intro [] |} :
-   sequent ['ext] { 'H; a: set >- 'A['a] } -->
-   sequent ['ext] { 'H >- "sall"{x. 'A['x]} }
+   sequent ['ext] { <H>; a: set >- 'A['a] } -->
+   sequent ['ext] { <H> >- "sall"{x. 'A['x]} }
 
 doc <:doc< 
    @begin[doc]
@@ -131,9 +131,9 @@ doc <:doc<
    @end[doc]
 >>
 interactive sall_elim {| elim [] |} 'H 'z :
-   ["wf"]   sequent [squash] { 'H; x: "sall"{y. 'A['y]}; 'J['x] >- isset{'z} } -->
-   ["main"] sequent ['ext] { 'H; x: "sall"{y. 'A['y]}; 'J['x]; w: 'A['z] >- 'T['x] } -->
-   sequent ['ext] { 'H; x: "sall"{y. 'A['y]}; 'J['x] >- 'T['x] }
+   ["wf"]   sequent [squash] { <H>; x: "sall"{y. 'A['y]}; <J['x]> >- isset{'z} } -->
+   ["main"] sequent ['ext] { <H>; x: "sall"{y. 'A['y]}; <J['x]>; w: 'A['z] >- 'T['x] } -->
+   sequent ['ext] { <H>; x: "sall"{y. 'A['y]}; <J['x]> >- 'T['x] }
 doc <:doc< @docoff >>
 
 (*

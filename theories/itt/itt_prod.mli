@@ -49,9 +49,9 @@ rewrite unfold_prod : ('A * 'B) <--> (x: 'A * 'B)
  * H >- Ui ext B
  *)
 rule independentProductFormation :
-   sequent ['ext] { 'H >- univ[i:l] } -->
-   sequent ['ext] { 'H >- univ[i:l] } -->
-   sequent ['ext] { 'H >- univ[i:l] }
+   sequent ['ext] { <H> >- univ[i:l] } -->
+   sequent ['ext] { <H> >- univ[i:l] } -->
+   sequent ['ext] { <H> >- univ[i:l] }
 
 (*
  * H >- A1 * B1 = A2 * B2 in Ui
@@ -60,17 +60,17 @@ rule independentProductFormation :
  * H >- B1 = B2 in Ui
  *)
 rule independentProductEquality :
-   sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
-   sequent [squash] { 'H >- 'B1 = 'B2 in univ[i:l] } -->
-   sequent ['ext] { 'H >- 'A1 * 'B1 = 'A2 * 'B2 in univ[i:l] }
+   sequent [squash] { <H> >- 'A1 = 'A2 in univ[i:l] } -->
+   sequent [squash] { <H> >- 'B1 = 'B2 in univ[i:l] } -->
+   sequent ['ext] { <H> >- 'A1 * 'B1 = 'A2 * 'B2 in univ[i:l] }
 
 (*
  * Typehood.
  *)
 rule independentProductType :
-   sequent [squash] { 'H >- "type"{'A1} } -->
-   sequent [squash] { 'H >- "type"{'A2} } -->
-   sequent ['ext] { 'H >- "type"{.'A1 * 'A2} }
+   sequent [squash] { <H> >- "type"{'A1} } -->
+   sequent [squash] { <H> >- "type"{'A2} } -->
+   sequent ['ext] { <H> >- "type"{.'A1 * 'A2} }
 
 (*
  * H >- A * B ext (a, b)
@@ -80,9 +80,9 @@ rule independentProductType :
  * H, y:A >- B[y] = B[y] in Ui
  *)
 rule independentPairFormation :
-   sequent ['ext] { 'H >- 'A } -->
-   sequent ['ext] { 'H >- 'B } -->
-   sequent ['ext] { 'H >- 'A * 'B }
+   sequent ['ext] { <H> >- 'A } -->
+   sequent ['ext] { <H> >- 'B } -->
+   sequent ['ext] { <H> >- 'A * 'B }
 
 (*
  * H, A * B, J >- T ext t
@@ -90,8 +90,8 @@ rule independentPairFormation :
  * H, A * B, u: A, v: B, J >- T ext t
  *)
 rule independentProductElimination 'H :
-   sequent ['ext] { 'H; z: 'A * 'B; u: 'A; v: 'B; 'J['u, 'v] >- 'T['u, 'v] } -->
-   sequent ['ext] { 'H; z: 'A * 'B; 'J['z] >- 'T['z] }
+   sequent ['ext] { <H>; z: 'A * 'B; u: 'A; v: 'B; <J['u, 'v]> >- 'T['u, 'v] } -->
+   sequent ['ext] { <H>; z: 'A * 'B; <J['z]> >- 'T['z] }
 
 (*
  * H >- (a1, b1) = (a2, b2) in A * B
@@ -100,9 +100,9 @@ rule independentProductElimination 'H :
  * H >- b1 = b2 in B
  *)
 rule independentPairEquality :
-   sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
-   sequent [squash] { 'H >- 'b1 = 'b2 in 'B } -->
-   sequent ['ext] { 'H >- ('a1, 'b1) = ('a2, 'b2) in 'A * 'B }
+   sequent [squash] { <H> >- 'a1 = 'a2 in 'A } -->
+   sequent [squash] { <H> >- 'b1 = 'b2 in 'B } -->
+   sequent ['ext] { <H> >- ('a1, 'b1) = ('a2, 'b2) in 'A * 'B }
 
 (*
  * H >- A1 -> B1 <= A2 -> B2
@@ -112,9 +112,9 @@ rule independentPairEquality :
  * H >- B1 <= B2
  *)
 rule independentProductSubtype :
-   sequent [squash] { 'H >- \subtype{'A1; 'A2} } -->
-   sequent [squash] { 'H >- \subtype{'B1; 'B2} } -->
-   sequent ['ext] { 'H >- \subtype{ ('A1 * 'B1); ('A2 * 'B2) } }
+   sequent [squash] { <H> >- \subtype{'A1; 'A2} } -->
+   sequent [squash] { <H> >- \subtype{'B1; 'B2} } -->
+   sequent ['ext] { <H> >- \subtype{ ('A1 * 'B1); ('A2 * 'B2) } }
 
 (*
  * -*-

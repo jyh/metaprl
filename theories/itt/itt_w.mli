@@ -81,9 +81,9 @@ prec prec_tree_ind
  * H, x:A >- Ui ext B
  *)
 rule wFormation 'A :
-   sequent [squash] { 'H >- 'A = 'A in univ[i:l] } -->
-   sequent ['ext] { 'H; x: 'A >- univ[i:l] } -->
-   sequent ['ext] { 'H >- univ[i:l] }
+   sequent [squash] { <H> >- 'A = 'A in univ[i:l] } -->
+   sequent ['ext] { <H>; x: 'A >- univ[i:l] } -->
+   sequent ['ext] { <H> >- univ[i:l] }
 
 (*
  * H >- W(x1:A1; B1) = W(x2:A2; B2) in Ui
@@ -92,17 +92,17 @@ rule wFormation 'A :
  * H, y:A1 >- B1[y] = B2[y] in Ui
  *)
 rule wEquality :
-   sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
-   sequent [squash] { 'H; y: 'A1 >- 'B1['y] = 'B2['y] in univ[i:l] } -->
-   sequent ['ext] { 'H >- w{'A1; x1. 'B1['x1]} = w{'A2; x2. 'B2['x2]} in univ[i:l] }
+   sequent [squash] { <H> >- 'A1 = 'A2 in univ[i:l] } -->
+   sequent [squash] { <H>; y: 'A1 >- 'B1['y] = 'B2['y] in univ[i:l] } -->
+   sequent ['ext] { <H> >- w{'A1; x1. 'B1['x1]} = w{'A2; x2. 'B2['x2]} in univ[i:l] }
 
 (*
  * Typehood.
  *)
 rule wType :
-   sequent [squash] { 'H >- "type"{'A1} } -->
-   sequent [squash] { 'H; x: 'A1 >- "type"{'A2['x]} } -->
-   sequent ['ext] { 'H >- "type"{.w{'A1; y.'A2['y]}} }
+   sequent [squash] { <H> >- "type"{'A1} } -->
+   sequent [squash] { <H>; x: 'A1 >- "type"{'A2['x]} } -->
+   sequent ['ext] { <H> >- "type"{.w{'A1; y.'A2['y]}} }
 
 (*
  * H >- W(x:A; B[x]) ext tree(a, f)
@@ -112,10 +112,10 @@ rule wType :
  * H, y:A >- B[y] = B[y] in Ui
  *)
 rule treeFormation 'a :
-   sequent [squash] { 'H >- 'a = 'a in 'A } -->
-   sequent ['ext] { 'H >- 'B['a] -> w{'A; x. 'B['x]} } -->
-   sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
-   sequent ['ext] { 'H >- w{'A; x. 'B['x]} }
+   sequent [squash] { <H> >- 'a = 'a in 'A } -->
+   sequent ['ext] { <H> >- 'B['a] -> w{'A; x. 'B['x]} } -->
+   sequent [squash] { <H>; y: 'A >- "type"{'B['y]} } -->
+   sequent ['ext] { <H> >- w{'A; x. 'B['x]} }
 
 (*
  * H >- tree(a1, b1) = tree(a2, b2) in W(x:A; B)
@@ -125,32 +125,32 @@ rule treeFormation 'a :
  * H, y:A >- B[y] = B[y] in Ui
  *)
 rule treeEquality :
-   sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
-   sequent [squash] { 'H >- 'b1 = 'b2 in 'B['a1] -> w{'A; x. 'B['x]} } -->
-   sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
-   sequent ['ext] { 'H >- tree{'a1; 'b1} = tree{'a2; 'b2} in w{'A; x. 'B['x]} }
+   sequent [squash] { <H> >- 'a1 = 'a2 in 'A } -->
+   sequent [squash] { <H> >- 'b1 = 'b2 in 'B['a1] -> w{'A; x. 'B['x]} } -->
+   sequent [squash] { <H>; y: 'A >- "type"{'B['y]} } -->
+   sequent ['ext] { <H> >- tree{'a1; 'b1} = tree{'a2; 'b2} in w{'A; x. 'B['x]} }
 
 (*
  * Elimination
  *)
 rule wElimination 'H :
-   sequent ['ext] { 'H;
+   sequent ['ext] { <H>;
                     z: w{'A; x. 'B['x]};
-                    'J['z];
+                    <J['z]>;
                     a: 'A;
                     f: 'B['a] -> w{'A; x. 'B['x]};
                     g: b: 'B['a] -> 'T['f 'b]
                   >- 'T[tree{'a; 'f}]
                   } -->
-   sequent ['ext] { 'H; z: w{'A; x. 'B['x]}; 'J['z] >- 'T['z] }
+   sequent ['ext] { <H>; z: w{'A; x. 'B['x]}; <J['z]> >- 'T['z] }
 
 (*
  * Equality on tree induction forms.
 rule tree_indEquality (w{'A; x. 'B['x]}) 'a 'f 'g :
-   sequent [squash] { 'H >- 'z1 = 'z2 in w{'A; x. 'B['x]} } -->
-   sequent [squash] { 'H; a: 'A; f: 'B['a] -> w{'A; x. 'B['x]}; g: a: 'A -> 'B['a] -> 'T >-
+   sequent [squash] { <H> >- 'z1 = 'z2 in w{'A; x. 'B['x]} } -->
+   sequent [squash] { <H>; a: 'A; f: 'B['a] -> w{'A; x. 'B['x]}; g: a: 'A -> 'B['a] -> 'T >-
       'body1['a; 'f; 'g] = 'body2['a; 'f; 'g] in 'T } -->
-   sequent ['ext] { 'H >- tree_ind{'z1; a1, f1, g1. 'body1['a1; 'f1; 'g1]}
+   sequent ['ext] { <H> >- tree_ind{'z1; a1, f1, g1. 'body1['a1; 'f1; 'g1]}
                           = tree_ind{'z2; a2, f2, g2. 'body2['a2; 'f2; 'g2]}
                           in 'T }
  *)

@@ -131,10 +131,10 @@ doc <:doc<
    @end[doc]
 >>
 interactive rel_type {| intro [] |} :
-   sequent [squash] { 'H; u: set; v: set >- "type"{'P['u; 'v]} } -->
-   sequent [squash] { 'H >- isset{'s1} } -->
-   sequent [squash] { 'H >- isset{'s2} } -->
-   sequent ['ext] { 'H >- "type"{rel{x, y. 'P['x; 'y]; 's1; 's2}} }
+   sequent [squash] { <H>; u: set; v: set >- "type"{'P['u; 'v]} } -->
+   sequent [squash] { <H> >- isset{'s1} } -->
+   sequent [squash] { <H> >- isset{'s2} } -->
+   sequent ['ext] { <H> >- "type"{rel{x, y. 'P['x; 'y]; 's1; 's2}} }
 doc <:doc< @docoff >>
 
 (*

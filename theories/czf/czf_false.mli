@@ -41,19 +41,19 @@ declare false;;
  * by false_elim i
  *)
 rule false_elim :
-   sequent { 'H; x: false; 'J['x] >> 'T['x] };;
+   sequent { <H>; x: false; <J['x]> >- 'T['x] };;
 
 (*
  * False is well-formed.
  *)
 rule false_wf :
-   sequent { 'H >> wf{false} };;
+   sequent { <H> >- wf{false} };;
 
 (*
  * False is a restricted formula.
  *)
 rule false_res :
-   sequent { 'H >> restricted{false} };;
+   sequent { <H> >- restricted{false} };;
 
 (*
  * -*-

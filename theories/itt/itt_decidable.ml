@@ -98,10 +98,10 @@ doc <:doc<
    @end[doc]
 >>
 interactive assert_decidable 'p :
-   [decidable] sequent ['ext]  { 'H >- decidable {'p} } -->
-   sequent ['ext] { 'H; x: 'p >- 'G } -->
-   sequent ['ext] { 'H; x: not{'p} >- 'G } -->
-   sequent ['ext] { 'H >- 'G }
+   [decidable] sequent ['ext]  { <H> >- decidable {'p} } -->
+   sequent ['ext] { <H>; x: 'p >- 'G } -->
+   sequent ['ext] { <H>; x: not{'p} >- 'G } -->
+   sequent ['ext] { <H> >- 'G }
 
 let decidable_term = <<decidable{'p}>>
 let decidable_opname = opname_of_term decidable_term
@@ -138,8 +138,8 @@ doc <:doc<
    @end[doc]
 >>
 interactive dec_false {| intro [] |} :
-   sequent ['ext] { 'H >- decidable{."false"} }
+   sequent ['ext] { <H> >- decidable{."false"} }
 
 interactive dec_true {| intro [] |} :
-   sequent ['ext] { 'H >- decidable{."true"} }
+   sequent ['ext] { <H> >- decidable{."true"} }
 doc <:doc< @docoff >>

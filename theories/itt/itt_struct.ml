@@ -107,13 +107,13 @@ doc <:doc<
    @end[doc]
 >>
 prim thin 'H :
-   ('t : sequent ['ext] { 'H; 'J >- 'C }) -->
-   sequent ['ext] { 'H; x: 'A; 'J >- 'C } =
+   ('t : sequent ['ext] { <H>; <J> >- 'C }) -->
+   sequent ['ext] { <H>; x: 'A; <J> >- 'C } =
    't
 
 prim exchange 'H 'K 'L:
-   ('t : sequent ['ext] { 'H; 'L; 'K; 'J >- 'C }) -->
-   sequent ['ext] { 'H; 'K; 'L; 'J >- 'C } =
+   ('t : sequent ['ext] { <H>; <L>; <K>; <J> >- 'C }) -->
+   sequent ['ext] { <H>; <K>; <L>; <J> >- 'C } =
    't
 
 doc <:doc< 
@@ -130,9 +130,9 @@ doc <:doc<
    @end[doc]
 >>
 prim cut 'H 'S :
-   [assertion] ('a : sequent ['ext] { 'H; 'J >- 'S }) -->
-   [main] ('f['x] : sequent ['ext] { 'H; x: 'S; 'J >- 'T }) -->
-   sequent ['ext] { 'H; 'J >- 'T } =
+   [assertion] ('a : sequent ['ext] { <H>; <J> >- 'S }) -->
+   [main] ('f['x] : sequent ['ext] { <H>; x: 'S; <J> >- 'T }) -->
+   sequent ['ext] { <H>; <J> >- 'T } =
    'f['a]
 
 doc <:doc< 
@@ -141,9 +141,9 @@ doc <:doc<
    This is usually used for performance testing.
 >>
 interactive dup :
-   sequent ['ext] { 'H >- 'T } -->
-   sequent ['ext] { 'H >- 'T } -->
-   sequent ['ext] { 'H >- 'T}
+   sequent ['ext] { <H> >- 'T } -->
+   sequent ['ext] { <H> >- 'T } -->
+   sequent ['ext] { <H> >- 'T}
 
 doc <:doc< 
    @begin[doc]
@@ -155,8 +155,8 @@ doc <:doc<
    @end[doc]
 >>
 prim introduction 't :
-   [wf] sequent [squash] { 'H >- 't in 'T } -->
-   sequent ['ext] { 'H >- 'T } =
+   [wf] sequent [squash] { <H> >- 't in 'T } -->
+   sequent ['ext] { <H> >- 'T } =
    't
 
 doc <:doc< 
@@ -174,10 +174,10 @@ doc <:doc<
  * by hypothesis
  *)
 interactive hypothesis 'H :
-   sequent ['ext] { 'H; x: 'A; 'J['x] >- 'A }
+   sequent ['ext] { <H>; x: 'A; <J['x]> >- 'A }
 
 interactive hypothesisType 'H :
-   sequent ['ext] { 'H; x: 'A; 'J['x] >- "type"{'A} }
+   sequent ['ext] { <H>; x: 'A; <J['x]> >- "type"{'A} }
 
 doc <:doc< 
    @begin[doc]
@@ -199,10 +199,10 @@ doc <:doc<
    @end[doc]
 >>
 prim substitution ('t1 = 't2 in 'T2) bind{x. 'T1['x]} :
-   [equality] sequent [squash] { 'H >- 't1 = 't2 in 'T2 } -->
-   [main] ('t : sequent ['ext] { 'H >- 'T1['t2] }) -->
-   [wf] sequent [squash] { 'H; x: 'T2 >- "type"{'T1['x]} } -->
-   sequent ['ext] { 'H >- 'T1['t1] } =
+   [equality] sequent [squash] { <H> >- 't1 = 't2 in 'T2 } -->
+   [main] ('t : sequent ['ext] { <H> >- 'T1['t2] }) -->
+   [wf] sequent [squash] { <H>; x: 'T2 >- "type"{'T1['x]} } -->
+   sequent ['ext] { <H> >- 'T1['t1] } =
    't
 
 doc <:doc< 
@@ -217,16 +217,16 @@ doc <:doc<
    @end[doc]
 >>
 prim hypReplacement 'H 'B univ[i:l] :
-   [main] ('t : sequent ['ext] { 'H; x: 'B; 'J['x] >- 'T['x] }) -->
-   [equality] sequent [squash] { 'H; x: 'A; 'J['x] >- 'A = 'B in univ[i:l] } -->
-   sequent ['ext] { 'H; x: 'A; 'J['x] >- 'T['x] } =
+   [main] ('t : sequent ['ext] { <H>; x: 'B; <J['x]> >- 'T['x] }) -->
+   [equality] sequent [squash] { <H>; x: 'A; <J['x]> >- 'A = 'B in univ[i:l] } -->
+   sequent ['ext] { <H>; x: 'A; <J['x]> >- 'T['x] } =
    't
 
 prim hypSubstitution 'H ('t1 = 't2 in 'T2) bind{y. 'A['y]} :
-   [equality] sequent [squash] { 'H; x: 'A['t1]; 'J['x] >- 't1 = 't2 in 'T2 } -->
-   [main] ('t : sequent ['ext] { 'H; x: 'A['t2]; 'J['x] >- 'T1['x] }) -->
-   [wf] sequent [squash] { 'H; x: 'A['t1]; 'J['x]; z: 'T2 >- "type"{'A['z]} } -->
-   sequent ['ext] { 'H; x: 'A['t1]; 'J['x] >- 'T1['x] } =
+   [equality] sequent [squash] { <H>; x: 'A['t1]; <J['x]> >- 't1 = 't2 in 'T2 } -->
+   [main] ('t : sequent ['ext] { <H>; x: 'A['t2]; <J['x]> >- 'T1['x] }) -->
+   [wf] sequent [squash] { <H>; x: 'A['t1]; <J['x]>; z: 'T2 >- "type"{'A['z]} } -->
+   sequent ['ext] { <H>; x: 'A['t1]; <J['x]> >- 'T1['x] } =
    't
 
 doc <:doc< ************************************************************************
@@ -237,8 +237,8 @@ doc <:doc< *********************************************************************
    @end[doc]
 >>
 interactive equalityTypeIsType 'a 'b :
-   [wf] sequent [squash] { 'H >- 'a = 'b in 'T } -->
-   sequent ['ext] { 'H >- "type"{'T} }
+   [wf] sequent [squash] { <H> >- 'a = 'b in 'T } -->
+   sequent ['ext] { <H> >- "type"{'T} }
 
 (************************************************************************
  * TACTICS                                                              *

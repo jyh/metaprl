@@ -123,7 +123,7 @@ dform token_df : except_mode[src] :: token[t:t] =
  * by atomFormation
  *)
 prim atomFormation :
-   sequent ['ext] { 'H >- univ[i:l] } =
+   sequent ['ext] { <H> >- univ[i:l] } =
    atom
 
 doc <:doc< 
@@ -135,14 +135,14 @@ doc <:doc<
    @end[doc]
 >>
 prim atomEquality {| intro []; eqcd |} :
-   sequent ['ext] { 'H >- atom = atom in univ[i:l] } =
+   sequent ['ext] { <H> >- atom = atom in univ[i:l] } =
    it
 
 (*
  * Typehood.
  *)
 prim atomType {| intro [] |} :
-   sequent ['ext] { 'H >- "type"{atom} } =
+   sequent ['ext] { <H> >- "type"{atom} } =
    it
 
 doc <:doc< 
@@ -154,7 +154,7 @@ doc <:doc<
    @end[doc]
 >>
 prim tokenFormation token[t:t] :
-   sequent ['ext] { 'H >- atom } =
+   sequent ['ext] { <H> >- atom } =
    token[t:t]
 
 doc <:doc< 
@@ -166,7 +166,7 @@ doc <:doc<
    @end[doc]
 >>
 prim tokenEquality {| intro []; eqcd |} :
-   sequent ['ext] { 'H >- token[t:t] = token[t:t] in atom } =
+   sequent ['ext] { <H> >- token[t:t] = token[t:t] in atom } =
    it
 
 doc <:doc< 
@@ -177,8 +177,8 @@ doc <:doc<
    @end[doc]
 >>
 prim atomSqequal :
-   sequent [squash] { 'H >- 'x = 'y in atom } -->
-   sequent ['ext] { 'H >- 'x ~ 'y } =
+   sequent [squash] { <H> >- 'x = 'y in atom } -->
+   sequent ['ext] { <H> >- 'x ~ 'y } =
    it
 doc <:doc< @docoff >>
 

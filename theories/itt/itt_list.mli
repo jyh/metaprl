@@ -80,8 +80,8 @@ rewrite reduce_listindCons :
  * H >- Ui ext A
  *)
 rule listFormation :
-   sequent ['ext] { 'H >- univ[i:l] } -->
-   sequent ['ext] { 'H >- univ[i:l] }
+   sequent ['ext] { <H> >- univ[i:l] } -->
+   sequent ['ext] { <H> >- univ[i:l] }
 
 (*
  * H >- list{A} Type
@@ -89,8 +89,8 @@ rule listFormation :
  * H >- A Type
  *)
 rule listType :
-   sequent [squash] { 'H >- "type"{'A} } -->
-   sequent ['ext] { 'H >- "type"{list{'A}} }
+   sequent [squash] { <H> >- "type"{'A} } -->
+   sequent ['ext] { <H> >- "type"{list{'A}} }
 
 (*
  * H >- list(A) = list(B) in Ui
@@ -99,8 +99,8 @@ rule listType :
  * H >- A = B in Ui
  *)
 rule listEquality :
-   sequent [squash] { 'H >- 'A = 'B in univ[i:l] } -->
-   sequent ['ext] { 'H >- list{'A} = list{'B} in univ[i:l] }
+   sequent [squash] { <H> >- 'A = 'B in univ[i:l] } -->
+   sequent ['ext] { <H> >- list{'A} = list{'B} in univ[i:l] }
 
 (*
  * H >- list(A) ext nil
@@ -109,8 +109,8 @@ rule listEquality :
  * H >- A = A in Ui
  *)
 rule nilFormation :
-   sequent [squash] { 'H >- "type"{'A} } -->
-   sequent ['ext] { 'H >- list{'A} }
+   sequent [squash] { <H> >- "type"{'A} } -->
+   sequent ['ext] { <H> >- list{'A} }
 
 (*
  * H >- nil = nil in list(A)
@@ -119,8 +119,8 @@ rule nilFormation :
  * H >- A = A in Ui
  *)
 rule nilEquality :
-   sequent [squash] { 'H >- "type"{list{'A}} } -->
-   sequent ['ext] { 'H >- nil in list{'A} }
+   sequent [squash] { <H> >- "type"{list{'A}} } -->
+   sequent ['ext] { <H> >- nil in list{'A} }
 
 (*
  * H >- list(A) ext cons(h; t)
@@ -130,9 +130,9 @@ rule nilEquality :
  * H >- list(A) ext t
  *)
 rule consFormation :
-   sequent ['ext] { 'H >- 'A } -->
-   sequent ['ext] { 'H >- list{'A} } -->
-   sequent ['ext] { 'H >- list{'A} }
+   sequent ['ext] { <H> >- 'A } -->
+   sequent ['ext] { <H> >- list{'A} } -->
+   sequent ['ext] { <H> >- list{'A} }
 
 (*
  * H >- u1::v1 = u2::v2 in list(A)
@@ -142,9 +142,9 @@ rule consFormation :
  * H >- v1 = v2 in list(A)
  *)
 rule consEquality :
-   sequent [squash] { 'H >- 'u1 = 'u2 in 'A } -->
-   sequent [squash] { 'H >- 'v1 = 'v2 in list{'A} } -->
-   sequent ['ext] { 'H >- cons{'u1; 'v1} = cons{'u2; 'v2} in list{'A} };;
+   sequent [squash] { <H> >- 'u1 = 'u2 in 'A } -->
+   sequent [squash] { <H> >- 'v1 = 'v2 in list{'A} } -->
+   sequent ['ext] { <H> >- cons{'u1; 'v1} = cons{'u2; 'v2} in list{'A} };;
 
 (*
  * H; l: list(A); J[l] >- C[l]
@@ -154,9 +154,9 @@ rule consEquality :
  * H; l: list(A); J[l]; u: A; v: list(A); w: C[v] >- C[u::v]
  *)
 rule listElimination 'H :
-   sequent ['ext] { 'H; l: list{'A}; 'J['l] >- 'C[nil] } -->
-   sequent ['ext] { 'H; l: list{'A}; 'J['l]; u: 'A; v: list{'A}; w: 'C['v] >- 'C['u::'v] } -->
-   sequent ['ext] { 'H; l: list{'A}; 'J['l] >- 'C['l] }
+   sequent ['ext] { <H>; l: list{'A}; <J['l]> >- 'C[nil] } -->
+   sequent ['ext] { <H>; l: list{'A}; <J['l]>; u: 'A; v: list{'A}; w: 'C['v] >- 'C['u::'v] } -->
+   sequent ['ext] { <H>; l: list{'A}; <J['l]> >- 'C['l] }
 
 (*
  * H >- rec_case(e1; base1; u1, v1, z1. step1[u1; v1]
@@ -170,12 +170,12 @@ rule listElimination 'H :
  * H, u: A; v: list(A); w: T[v] >- step1[u; v; w] = step2[u; v; w] in T[u::v]
  *)
 rule list_indEquality lambda{l. 'T['l]} list{'A} :
-   sequent [squash] { 'H >- 'e1 = 'e2 in list{'A} } -->
-   sequent [squash] { 'H >- 'base1 = 'base2 in 'T[nil] } -->
-   sequent [squash] { 'H; u: 'A; v: list{'A}; w: 'T['v] >-
+   sequent [squash] { <H> >- 'e1 = 'e2 in list{'A} } -->
+   sequent [squash] { <H> >- 'base1 = 'base2 in 'T[nil] } -->
+   sequent [squash] { <H>; u: 'A; v: list{'A}; w: 'T['v] >-
              'step1['u; 'v; 'w] = 'step2['u; 'v; 'w] in 'T['u::'v]
            } -->
-   sequent ['ext] { 'H >- list_ind{'e1; 'base1; u1, v1, z1. 'step1['u1; 'v1; 'z1]}
+   sequent ['ext] { <H> >- list_ind{'e1; 'base1; u1, v1, z1. 'step1['u1; 'v1; 'z1]}
                    = list_ind{'e2; 'base2; u2, v2, z2. 'step2['u2; 'v2; 'z2]}
                    in 'T['e1]
            }
@@ -187,15 +187,15 @@ rule list_indEquality lambda{l. 'T['l]} list{'A} :
  * H >- A1 <= A2
  *)
 rule listSubtype :
-   sequent [squash] { 'H >- \subtype{'A1; 'A2} } -->
-   sequent ['ext] { 'H >- \subtype{list{'A1}; list{'A2}}}
+   sequent [squash] { <H> >- \subtype{'A1; 'A2} } -->
+   sequent ['ext] { <H> >- \subtype{list{'A1}; list{'A2}}}
 
 (*
  * Nil is canonical.
  *)
 rule nilSqequal 'T :
-   sequent [squash] { 'H >- 'u = nil in list{'T} } -->
-   sequent ['ext] { 'H >- 'u ~ nil }
+   sequent [squash] { <H> >- 'u = nil in list{'T} } -->
+   sequent ['ext] { <H> >- 'u ~ nil }
 
 (************************************************************************
  * TACTICS                                                              *

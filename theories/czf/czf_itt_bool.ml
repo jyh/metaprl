@@ -200,535 +200,535 @@ let dest_sprop = dest_dep0_term sprop_opname
 
 (* ************************** rules ************************* *)
 interactive boolset_isset {| intro [] |} :
-   sequent ['ext] { 'H >- isset{boolset} }
+   sequent ['ext] { <H> >- isset{boolset} }
 
 interactive boolset_elim {| elim [] |} 'H :
-   [main] sequent ['ext] { 'H; x: mem{'y; boolset}; 'J['x]; w: eq{'y; strue} >- 'C['x] } -->
-   [main] sequent ['ext] { 'H; x: mem{'y; boolset}; 'J['x]; w: eq{'y; sfalse} >- 'C['x] } -->
-   sequent ['ext] { 'H; x: mem{'y; boolset}; 'J['x] >- 'C['x] }
+   [main] sequent ['ext] { <H>; x: mem{'y; boolset}; <J['x]>; w: eq{'y; strue} >- 'C['x] } -->
+   [main] sequent ['ext] { <H>; x: mem{'y; boolset}; <J['x]>; w: eq{'y; sfalse} >- 'C['x] } -->
+   sequent ['ext] { <H>; x: mem{'y; boolset}; <J['x]> >- 'C['x] }
 
 interactive sprop_type {| intro [] |} :
-   sequent [squash] { 'H >- isset{'s} } -->
-   sequent ['ext] { 'H >- "type"{sprop{'s}} }
+   sequent [squash] { <H> >- isset{'s} } -->
+   sequent ['ext] { <H> >- "type"{sprop{'s}} }
 
 interactive sprop_fun {| intro [] |} :
-   sequent ['ext] { 'H >- fun_prop{z.sprop{'z}} }
+   sequent ['ext] { <H> >- fun_prop{z.sprop{'z}} }
 
 (* ?? *)
 interactive sprop_intro 'H :
-   sequent ['ext] { 'H; x: eq{'s; strue} >- sprop{'s} }
+   sequent ['ext] { <H>; x: eq{'s; strue} >- sprop{'s} }
 
 (* ************************** strue ************************* *)
 interactive strue_isset {| intro [] |} :
-   sequent ['ext] { 'H >- isset{strue} }
+   sequent ['ext] { <H> >- isset{strue} }
 
 interactive strue_fun {| intro [] |} :
-   sequent ['ext] { 'H >- fun_set{z. strue} }
+   sequent ['ext] { <H> >- fun_set{z. strue} }
 
 interactive strue_in_boolset {| intro [] |} :
-   sequent ['ext] { 'H >- mem{strue; boolset} }
+   sequent ['ext] { <H> >- mem{strue; boolset} }
 
 interactive strue_intro {| intro [] |} :
-   sequent ['ext] { 'H >- sprop{strue} }
+   sequent ['ext] { <H> >- sprop{strue} }
 
 interactive strue_member_intro {| intro [] |} :
-   ["wf"] sequent [squash] { 'H >- isset{'s} } -->
-   sequent ['ext] { 'H >- eq{'s; empty} } -->
-   sequent ['ext] { 'H >- mem{'s; strue} }
+   ["wf"] sequent [squash] { <H> >- isset{'s} } -->
+   sequent ['ext] { <H> >- eq{'s; empty} } -->
+   sequent ['ext] { <H> >- mem{'s; strue} }
 
 interactive strue_member_elim {| elim [] |} 'H :
-   sequent ['ext] { 'H; x: mem{'y; strue}; 'J['x]; w: eq{'y; empty} >- 'T['x] } -->
-   sequent ['ext] { 'H; x: mem{'y; strue}; 'J['x] >- 'T['x] }
+   sequent ['ext] { <H>; x: mem{'y; strue}; <J['x]>; w: eq{'y; empty} >- 'T['x] } -->
+   sequent ['ext] { <H>; x: mem{'y; strue}; <J['x]> >- 'T['x] }
 
 (* ************************** sfalse ************************* *)
 interactive sfalse_isset {| intro [] |} :
-   sequent ['ext] { 'H >- isset{sfalse} }
+   sequent ['ext] { <H> >- isset{sfalse} }
 
 interactive sfalse_fun {| intro [] |} :
-   sequent ['ext] { 'H >- fun_set{z. sfalse} }
+   sequent ['ext] { <H> >- fun_set{z. sfalse} }
 
 interactive sfalse_in_boolset {| intro [] |} :
-   sequent ['ext] { 'H >- mem{sfalse; boolset} }
+   sequent ['ext] { <H> >- mem{sfalse; boolset} }
 
 interactive sfalse_elim {| elim [] |} 'H :
-   sequent ['ext] { 'H; x: sprop{sfalse}; 'J['x] >- 'C['x] }
+   sequent ['ext] { <H>; x: sprop{sfalse}; <J['x]> >- 'C['x] }
 
 interactive sfalse_member_elim {| elim [] |} 'H :
-   sequent ['ext] { 'H; x: mem{'y; sfalse}; 'J['x] >- 'T['x] }
+   sequent ['ext] { <H>; x: mem{'y; sfalse}; <J['x]> >- 'T['x] }
 
 interactive strue_neq_sfalse {| elim [] |} 'H :
-   sequent ['ext] { 'H; x: eq{strue; sfalse}; 'J['x] >- 'C['x] }
+   sequent ['ext] { <H>; x: eq{strue; sfalse}; <J['x]> >- 'C['x] }
 
 interactive sfalse_neq_strue {| elim [] |} 'H :
-   sequent ['ext] { 'H; x: eq{sfalse; strue}; 'J['x] >- 'C['x] }
+   sequent ['ext] { <H>; x: eq{sfalse; strue}; <J['x]> >- 'C['x] }
 
 (* ************************** snot ************************* *)
 interactive snot_isset {| intro [] |} :
-   sequent [squash] { 'H >- isset{'x} } -->
-   sequent ['ext] { 'H >- isset{snot{'x}} }
+   sequent [squash] { <H> >- isset{'x} } -->
+   sequent ['ext] { <H> >- isset{snot{'x}} }
 
 interactive snot_fun {| intro [] |} :
-   sequent ['ext] { 'H >- fun_set{z. 's['z]} } -->
-   sequent ['ext] { 'H >- fun_set{z. snot{'s['z]}} }
+   sequent ['ext] { <H> >- fun_set{z. 's['z]} } -->
+   sequent ['ext] { <H> >- fun_set{z. snot{'s['z]}} }
 
 interactive snot_sprop {| intro [] |} :
-   sequent ['ext] { 'H >- fun_prop{z.sprop{snot{'z}}} }
+   sequent ['ext] { <H> >- fun_prop{z.sprop{snot{'z}}} }
 
 interactive snot_strue {| intro[] |} :
-   sequent ['ext] { 'H >- eq{snot{strue}; sfalse} }
+   sequent ['ext] { <H> >- eq{snot{strue}; sfalse} }
 
 interactive snot_sfalse {| intro[] |} :
-   sequent ['ext] { 'H >- eq{snot{sfalse}; strue} }
+   sequent ['ext] { <H> >- eq{snot{sfalse}; strue} }
 
 interactive snot_in_boolset {| intro [] |} :
-   ["wf"] sequent [squash] { 'H >- isset{'x} } -->
-   sequent ['ext] { 'H >- mem{'x; boolset} } -->
-   sequent ['ext] { 'H >- mem{snot{'x}; boolset} }
+   ["wf"] sequent [squash] { <H> >- isset{'x} } -->
+   sequent ['ext] { <H> >- mem{'x; boolset} } -->
+   sequent ['ext] { <H> >- mem{snot{'x}; boolset} }
 
 (* ?? *)
 interactive boolset_contradiction {| elim [] |} 'H :
-   ["wf"] sequent [squash] { 'H; x: sprop{'a}; y: sprop{snot{'a}}; 'J >- isset{'a} } -->
-   sequent ['ext] { 'H; x: sprop{'a}; y: sprop{snot{'a}}; 'J >- 'C }
+   ["wf"] sequent [squash] { <H>; x: sprop{'a}; y: sprop{snot{'a}}; <J> >- isset{'a} } -->
+   sequent ['ext] { <H>; x: sprop{'a}; y: sprop{snot{'a}}; <J> >- 'C }
 
 interactive snot_intro {| intro [] |} :
-   ["wf"] sequent [squash] { 'H >- isset{'s} } -->
-   sequent ['ext] { 'H >- mem{'s; boolset} } -->
-   sequent ['ext] { 'H; x: sprop{'s} >- "false" } -->
-   sequent ['ext] { 'H >- sprop{snot{'s}} }
+   ["wf"] sequent [squash] { <H> >- isset{'s} } -->
+   sequent ['ext] { <H> >- mem{'s; boolset} } -->
+   sequent ['ext] { <H>; x: sprop{'s} >- "false" } -->
+   sequent ['ext] { <H> >- sprop{snot{'s}} }
 
 interactive snot_elim {| elim [] |} 'H :
-   ["wf"] sequent [squash] { 'H; x: sprop{snot{'s}}; 'J >- isset{'s} } -->
-   sequent ['ext] { 'H; x: sprop{snot{'s}}; 'J >- sprop{'s} } -->
-   sequent ['ext] { 'H; x: sprop{snot{'s}}; 'J >- 'C }
+   ["wf"] sequent [squash] { <H>; x: sprop{snot{'s}}; <J> >- isset{'s} } -->
+   sequent ['ext] { <H>; x: sprop{snot{'s}}; <J> >- sprop{'s} } -->
+   sequent ['ext] { <H>; x: sprop{snot{'s}}; <J> >- 'C }
 
 interactive snot_member_intro {| intro [] |} 'x :
-   ["wf"] sequent [squash] { 'H >- isset{'x} } -->
-   ["wf"] sequent [squash] { 'H >- isset{'s} } -->
-   sequent ['ext] { 'H >- mem{'x; sing{empty}}} -->
-   sequent ['ext] { 'H; y: mem{'x; 's} >- "false" } -->
-   sequent ['ext] { 'H >- mem{'x; snot{'s}} }
+   ["wf"] sequent [squash] { <H> >- isset{'x} } -->
+   ["wf"] sequent [squash] { <H> >- isset{'s} } -->
+   sequent ['ext] { <H> >- mem{'x; sing{empty}}} -->
+   sequent ['ext] { <H>; y: mem{'x; 's} >- "false" } -->
+   sequent ['ext] { <H> >- mem{'x; snot{'s}} }
 
 interactive snot_member_elim {| elim [] |} 'H :
-   ["wf"] sequent [squash] { 'H; x: mem{'y; snot{'s}}; 'J['x] >- isset{'y} } -->
-   ["wf"] sequent [squash] { 'H; x: mem{'y; snot{'s}}; 'J['x] >- isset{'s} } -->
-   sequent ['ext] { 'H; x: mem{'y; snot{'s}}; 'J['x]; u: mem{'y; sing{empty}}; v: "implies"{mem{'y; 's}; ."false"} >- 'T['x] } -->
-   sequent ['ext] { 'H; x: mem{'y; snot{'s}}; 'J['x] >- 'T['x] }
+   ["wf"] sequent [squash] { <H>; x: mem{'y; snot{'s}}; <J['x]> >- isset{'y} } -->
+   ["wf"] sequent [squash] { <H>; x: mem{'y; snot{'s}}; <J['x]> >- isset{'s} } -->
+   sequent ['ext] { <H>; x: mem{'y; snot{'s}}; <J['x]>; u: mem{'y; sing{empty}}; v: "implies"{mem{'y; 's}; ."false"} >- 'T['x] } -->
+   sequent ['ext] { <H>; x: mem{'y; snot{'s}}; <J['x]> >- 'T['x] }
 
 (* ************************** sor ************************* *)
 interactive sor_isset {| intro [] |} :
-   sequent [squash] { 'H >- isset{'a} } -->
-   sequent [squash] { 'H >- isset{'b} } -->
-   sequent ['ext] { 'H >- isset{sor{'a; 'b}} }
+   sequent [squash] { <H> >- isset{'a} } -->
+   sequent [squash] { <H> >- isset{'b} } -->
+   sequent ['ext] { <H> >- isset{sor{'a; 'b}} }
 
 interactive sor_fun {| intro [] |} :
-   sequent ['ext] { 'H >- fun_set{z. 's1['z]} } -->
-   sequent ['ext] { 'H >- fun_set{z. 's2['z]} } -->
-   sequent ['ext] { 'H >- fun_set{z. sor{'s1['z]; 's2['z]}} }
+   sequent ['ext] { <H> >- fun_set{z. 's1['z]} } -->
+   sequent ['ext] { <H> >- fun_set{z. 's2['z]} } -->
+   sequent ['ext] { <H> >- fun_set{z. sor{'s1['z]; 's2['z]}} }
 
 interactive sor_sprop1 {| intro [] |} :
-   sequent [squash] { 'H >- isset{'s} } -->
-   sequent ['ext] { 'H >- fun_prop{z. sprop{sor{'z; 's}}} }
+   sequent [squash] { <H> >- isset{'s} } -->
+   sequent ['ext] { <H> >- fun_prop{z. sprop{sor{'z; 's}}} }
 
 interactive sor_sprop2 {| intro [] |} :
-   sequent [squash] { 'H >- isset{'s} } -->
-   sequent ['ext] { 'H >- fun_prop{z. sprop{sor{'s; 'z}}} }
+   sequent [squash] { <H> >- isset{'s} } -->
+   sequent ['ext] { <H> >- fun_prop{z. sprop{sor{'s; 'z}}} }
 
 interactive sor_in_boolset {| intro [] |} :
-   sequent [squash] { 'H >- isset{'a} } -->
-   sequent ['ext] { 'H >- mem{'a; boolset} } -->
-   sequent [squash] { 'H >- isset{'b} } -->
-   sequent ['ext] { 'H >- mem{'b; boolset} } -->
-   sequent ['ext] { 'H >- mem{sor{'a; 'b}; boolset} }
+   sequent [squash] { <H> >- isset{'a} } -->
+   sequent ['ext] { <H> >- mem{'a; boolset} } -->
+   sequent [squash] { <H> >- isset{'b} } -->
+   sequent ['ext] { <H> >- mem{'b; boolset} } -->
+   sequent ['ext] { <H> >- mem{sor{'a; 'b}; boolset} }
 
 interactive sor_intro_left {| intro [SelectOption 1] |} :
-   ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
-   ["wf"] sequent [squash] { 'H >- isset{'s2} } -->
-   sequent ['ext] { 'H >- mem{'s2; boolset} } -->
-   sequent ['ext] { 'H >- sprop{'s1} } -->
-   sequent ['ext] { 'H >- sprop{sor{'s1; 's2}} }
+   ["wf"] sequent [squash] { <H> >- isset{'s1} } -->
+   ["wf"] sequent [squash] { <H> >- isset{'s2} } -->
+   sequent ['ext] { <H> >- mem{'s2; boolset} } -->
+   sequent ['ext] { <H> >- sprop{'s1} } -->
+   sequent ['ext] { <H> >- sprop{sor{'s1; 's2}} }
 
 interactive sor_intro_right {| intro [SelectOption 2] |} :
-   ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
-   ["wf"] sequent [squash] { 'H >- isset{'s2} } -->
-   sequent ['ext] { 'H >- mem{'s1; boolset} } -->
-   sequent ['ext] { 'H >- sprop{'s2} } -->
-   sequent ['ext] { 'H >- sprop{sor{'s1; 's2}} }
+   ["wf"] sequent [squash] { <H> >- isset{'s1} } -->
+   ["wf"] sequent [squash] { <H> >- isset{'s2} } -->
+   sequent ['ext] { <H> >- mem{'s1; boolset} } -->
+   sequent ['ext] { <H> >- sprop{'s2} } -->
+   sequent ['ext] { <H> >- sprop{sor{'s1; 's2}} }
 
 interactive sor_elim {| elim [] |} 'H :
-   ["wf"] sequent [squash] { 'H; x: sprop{sor{'s1; 's2}}; 'J['x] >- isset{'s1} } -->
-   ["wf"] sequent [squash] { 'H; x: sprop{sor{'s1; 's2}}; 'J['x] >- isset{'s2} } -->
-   sequent ['ext] { 'H; x: sprop{sor{'s1; 's2}}; 'J['x] >- mem{'s1; boolset} } -->
-   sequent ['ext] { 'H; x: sprop{sor{'s1; 's2}}; 'J['x] >- mem{'s2; boolset} } -->
-   sequent ['ext] { 'H; x: sprop{sor{'s1; 's2}}; 'J['x]; y: sprop{'s1} >- 'T['x] } -->
-   sequent ['ext] { 'H; x: sprop{sor{'s1; 's2}}; 'J['x]; z: sprop{'s2} >- 'T['x] } -->
-   sequent ['ext] { 'H; x: sprop{sor{'s1; 's2}}; 'J['x] >- 'T['x] }
+   ["wf"] sequent [squash] { <H>; x: sprop{sor{'s1; 's2}}; <J['x]> >- isset{'s1} } -->
+   ["wf"] sequent [squash] { <H>; x: sprop{sor{'s1; 's2}}; <J['x]> >- isset{'s2} } -->
+   sequent ['ext] { <H>; x: sprop{sor{'s1; 's2}}; <J['x]> >- mem{'s1; boolset} } -->
+   sequent ['ext] { <H>; x: sprop{sor{'s1; 's2}}; <J['x]> >- mem{'s2; boolset} } -->
+   sequent ['ext] { <H>; x: sprop{sor{'s1; 's2}}; <J['x]>; y: sprop{'s1} >- 'T['x] } -->
+   sequent ['ext] { <H>; x: sprop{sor{'s1; 's2}}; <J['x]>; z: sprop{'s2} >- 'T['x] } -->
+   sequent ['ext] { <H>; x: sprop{sor{'s1; 's2}}; <J['x]> >- 'T['x] }
 
 interactive sor_member_intro_left {| intro [SelectOption 1] |} :
-   ["wf"] sequent [squash] { 'H >- isset{'x} } -->
-   ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
-   ["wf"] sequent [squash] { 'H >- isset{'s2} } -->
-   sequent ['ext] { 'H >- mem{'x; 's1} } -->
-   sequent ['ext] { 'H >- mem{'x; sor{'s1; 's2}} }
+   ["wf"] sequent [squash] { <H> >- isset{'x} } -->
+   ["wf"] sequent [squash] { <H> >- isset{'s1} } -->
+   ["wf"] sequent [squash] { <H> >- isset{'s2} } -->
+   sequent ['ext] { <H> >- mem{'x; 's1} } -->
+   sequent ['ext] { <H> >- mem{'x; sor{'s1; 's2}} }
 
 interactive sor_member_intro_right {| intro [SelectOption 2] |} :
-   ["wf"] sequent [squash] { 'H >- isset{'x} } -->
-   ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
-   ["wf"] sequent [squash] { 'H >- isset{'s2} } -->
-   sequent ['ext] { 'H >- mem{'x; 's2} } -->
-   sequent ['ext] { 'H >- mem{'x; sor{'s1; 's2}} }
+   ["wf"] sequent [squash] { <H> >- isset{'x} } -->
+   ["wf"] sequent [squash] { <H> >- isset{'s1} } -->
+   ["wf"] sequent [squash] { <H> >- isset{'s2} } -->
+   sequent ['ext] { <H> >- mem{'x; 's2} } -->
+   sequent ['ext] { <H> >- mem{'x; sor{'s1; 's2}} }
 
 interactive sor_member_elim {| elim [] |} 'H :
-   ["wf"] sequent [squash] { 'H; x: mem{'y; sor{'s1; 's2}}; 'J['x] >- isset{'y} } -->
-   ["wf"] sequent [squash] { 'H; x: mem{'y; sor{'s1; 's2}}; 'J['x] >- isset{'s1} } -->
-   ["wf"] sequent [squash] { 'H; x: mem{'y; sor{'s1; 's2}}; 'J['x] >- isset{'s2} } -->
-   sequent ['ext] { 'H; x: mem{'y; sor{'s1; 's2}}; 'J['x]; z: mem{'y; 's1} >- 'T['x] } -->
-   sequent ['ext] { 'H; x: mem{'y; sor{'s1; 's2}}; 'J['x]; z: mem{'y; 's2} >- 'T['x] } -->
-   sequent ['ext] { 'H; x: mem{'y; sor{'s1; 's2}}; 'J['x] >- 'T['x] }
+   ["wf"] sequent [squash] { <H>; x: mem{'y; sor{'s1; 's2}}; <J['x]> >- isset{'y} } -->
+   ["wf"] sequent [squash] { <H>; x: mem{'y; sor{'s1; 's2}}; <J['x]> >- isset{'s1} } -->
+   ["wf"] sequent [squash] { <H>; x: mem{'y; sor{'s1; 's2}}; <J['x]> >- isset{'s2} } -->
+   sequent ['ext] { <H>; x: mem{'y; sor{'s1; 's2}}; <J['x]>; z: mem{'y; 's1} >- 'T['x] } -->
+   sequent ['ext] { <H>; x: mem{'y; sor{'s1; 's2}}; <J['x]>; z: mem{'y; 's2} >- 'T['x] } -->
+   sequent ['ext] { <H>; x: mem{'y; sor{'s1; 's2}}; <J['x]> >- 'T['x] }
 
 (* ************************** sand ************************* *)
 interactive sand_isset {| intro [] |} :
-   sequent [squash] { 'H >- isset{'a} } -->
-   sequent [squash] { 'H >- isset{'b} } -->
-   sequent ['ext] { 'H >- isset{sand{'a; 'b}} }
+   sequent [squash] { <H> >- isset{'a} } -->
+   sequent [squash] { <H> >- isset{'b} } -->
+   sequent ['ext] { <H> >- isset{sand{'a; 'b}} }
 
 interactive sand_fun {| intro [] |} :
-   sequent ['ext] { 'H >- fun_set{z. 's1['z]} } -->
-   sequent ['ext] { 'H >- fun_set{z. 's2['z]} } -->
-   sequent ['ext] { 'H >- fun_set{z. sand{'s1['z]; 's2['z]}} }
+   sequent ['ext] { <H> >- fun_set{z. 's1['z]} } -->
+   sequent ['ext] { <H> >- fun_set{z. 's2['z]} } -->
+   sequent ['ext] { <H> >- fun_set{z. sand{'s1['z]; 's2['z]}} }
 
 interactive sand_sprop1 {| intro [] |} :
-   sequent [squash] { 'H >- isset{'s} } -->
-   sequent ['ext] { 'H >- fun_prop{z. sprop{sand{'z; 's}}} }
+   sequent [squash] { <H> >- isset{'s} } -->
+   sequent ['ext] { <H> >- fun_prop{z. sprop{sand{'z; 's}}} }
 
 interactive sand_sprop2 {| intro [] |} :
-   sequent [squash] { 'H >- isset{'s} } -->
-   sequent ['ext] { 'H >- fun_prop{z. sprop{sand{'s; 'z}}} }
+   sequent [squash] { <H> >- isset{'s} } -->
+   sequent ['ext] { <H> >- fun_prop{z. sprop{sand{'s; 'z}}} }
 
 interactive sand_in_boolset {| intro [] |} :
-   sequent [squash] { 'H >- isset{'a} } -->
-   sequent ['ext] { 'H >- mem{'a; boolset} } -->
-   sequent [squash] { 'H >- isset{'b} } -->
-   sequent ['ext] { 'H >- mem{'b; boolset} } -->
-   sequent ['ext] { 'H >- mem{sand{'a; 'b}; boolset} }
+   sequent [squash] { <H> >- isset{'a} } -->
+   sequent ['ext] { <H> >- mem{'a; boolset} } -->
+   sequent [squash] { <H> >- isset{'b} } -->
+   sequent ['ext] { <H> >- mem{'b; boolset} } -->
+   sequent ['ext] { <H> >- mem{sand{'a; 'b}; boolset} }
 
 interactive sand_intro {| intro [] |} :
-   ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
-   ["wf"] sequent [squash] { 'H >- isset{'s2} } -->
-   sequent ['ext] { 'H >- sprop{'s1} } -->
-   sequent ['ext] { 'H >- sprop{'s2} } -->
-   sequent ['ext] { 'H >- sprop{sand{'s1; 's2}} }
+   ["wf"] sequent [squash] { <H> >- isset{'s1} } -->
+   ["wf"] sequent [squash] { <H> >- isset{'s2} } -->
+   sequent ['ext] { <H> >- sprop{'s1} } -->
+   sequent ['ext] { <H> >- sprop{'s2} } -->
+   sequent ['ext] { <H> >- sprop{sand{'s1; 's2}} }
 
 interactive sand_elim {| elim [] |} 'H :
-   ["wf"] sequent [squash] { 'H; x: sprop{sand{'s1; 's2}}; 'J['x] >- isset{'s1} } -->
-   ["wf"] sequent [squash] { 'H; x: sprop{sand{'s1; 's2}}; 'J['x] >- isset{'s2} } -->
-   sequent ['ext] { 'H; x: sprop{sand{'s1; 's2}}; 'J['x] >- mem{'s1; boolset} } -->
-   sequent ['ext] { 'H; x: sprop{sand{'s1; 's2}}; 'J['x] >- mem{'s2; boolset} } -->
-   sequent ['ext] { 'H; x: sprop{sand{'s1; 's2}}; 'J['x]; y: sprop{'s1}; z: sprop{'s2} >- 'T['x] } -->
-   sequent ['ext] { 'H; x: sprop{sand{'s1; 's2}}; 'J['x] >- 'T['x] }
+   ["wf"] sequent [squash] { <H>; x: sprop{sand{'s1; 's2}}; <J['x]> >- isset{'s1} } -->
+   ["wf"] sequent [squash] { <H>; x: sprop{sand{'s1; 's2}}; <J['x]> >- isset{'s2} } -->
+   sequent ['ext] { <H>; x: sprop{sand{'s1; 's2}}; <J['x]> >- mem{'s1; boolset} } -->
+   sequent ['ext] { <H>; x: sprop{sand{'s1; 's2}}; <J['x]> >- mem{'s2; boolset} } -->
+   sequent ['ext] { <H>; x: sprop{sand{'s1; 's2}}; <J['x]>; y: sprop{'s1}; z: sprop{'s2} >- 'T['x] } -->
+   sequent ['ext] { <H>; x: sprop{sand{'s1; 's2}}; <J['x]> >- 'T['x] }
 
 interactive strue_sand_strue {| intro [] |} :
-   sequent ['ext] { 'H >- sprop{sand{strue; strue}} }
+   sequent ['ext] { <H> >- sprop{sand{strue; strue}} }
 
 interactive strue_sand_sfalse {| elim [] |} 'H :
-   sequent ['ext] { 'H; x: sprop{sand{strue; sfalse}}; 'J['x] >- 'C['x] }
+   sequent ['ext] { <H>; x: sprop{sand{strue; sfalse}}; <J['x]> >- 'C['x] }
 
 interactive sfalse_sand_strue {| elim [] |} 'H :
-   sequent ['ext] { 'H; x: sprop{sand{strue; sfalse}}; 'J['x] >- 'C['x] }
+   sequent ['ext] { <H>; x: sprop{sand{strue; sfalse}}; <J['x]> >- 'C['x] }
 
 interactive sfalse_sand_sfalse {| elim [] |} 'H :
-   sequent ['ext] { 'H; x: sprop{sand{sfalse; sfalse}}; 'J['x] >- 'C['x] }
+   sequent ['ext] { <H>; x: sprop{sand{sfalse; sfalse}}; <J['x]> >- 'C['x] }
 
 interactive sand_strue_intro1 'H :
-   sequent ['ext] { 'H; s: set; x: sprop{'s} >- sprop{sand{strue; 's}} }
+   sequent ['ext] { <H>; s: set; x: sprop{'s} >- sprop{sand{strue; 's}} }
 
 interactive sand_strue_intro2 'H :
-   sequent ['ext] { 'H; s: set; x: sprop{'s} >- sprop{sand{strue; 's}} }
+   sequent ['ext] { <H>; s: set; x: sprop{'s} >- sprop{sand{strue; 's}} }
 
 interactive sand_sfalse_elim1 {| elim [] |} 'H :
-   ["wf"] sequent [squash] { 'H; x: sprop{sand{sfalse; 's}}; 'J['x] >- isset{'s} } -->
-   sequent ['ext] { 'H; x: sprop{sand{sfalse; 's}}; 'J['x] >- mem{'s; boolset} } -->
-   sequent ['ext] { 'H; x: sprop{sand{sfalse; 's}}; 'J['x] >- 'C['x] }
+   ["wf"] sequent [squash] { <H>; x: sprop{sand{sfalse; 's}}; <J['x]> >- isset{'s} } -->
+   sequent ['ext] { <H>; x: sprop{sand{sfalse; 's}}; <J['x]> >- mem{'s; boolset} } -->
+   sequent ['ext] { <H>; x: sprop{sand{sfalse; 's}}; <J['x]> >- 'C['x] }
 
 interactive sand_sfalse_elim2 {| elim [] |} 'H :
-   ["wf"] sequent [squash] { 'H; x: sprop{sand{'s; sfalse}}; 'J['x] >- isset{'s} } -->
-   sequent ['ext] { 'H; x: sprop{sand{'s; sfalse}}; 'J['x] >- mem{'s; boolset} } -->
-   sequent ['ext] { 'H; x: sprop{sand{'s; sfalse}}; 'J['x] >- 'C['x] }
+   ["wf"] sequent [squash] { <H>; x: sprop{sand{'s; sfalse}}; <J['x]> >- isset{'s} } -->
+   sequent ['ext] { <H>; x: sprop{sand{'s; sfalse}}; <J['x]> >- mem{'s; boolset} } -->
+   sequent ['ext] { <H>; x: sprop{sand{'s; sfalse}}; <J['x]> >- 'C['x] }
 
 interactive sand_member_intro {| intro [] |} :
-   ["wf"] sequent [squash] { 'H >- isset{'x} } -->
-   ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
-   ["wf"] sequent [squash] { 'H >- isset{'s2} } -->
-   sequent ['ext] { 'H >- mem{'x; 's1} } -->
-   sequent ['ext] { 'H >- mem{'x; 's2} } -->
-   sequent ['ext] { 'H >- mem{'x; sand{'s1; 's2}} }
+   ["wf"] sequent [squash] { <H> >- isset{'x} } -->
+   ["wf"] sequent [squash] { <H> >- isset{'s1} } -->
+   ["wf"] sequent [squash] { <H> >- isset{'s2} } -->
+   sequent ['ext] { <H> >- mem{'x; 's1} } -->
+   sequent ['ext] { <H> >- mem{'x; 's2} } -->
+   sequent ['ext] { <H> >- mem{'x; sand{'s1; 's2}} }
 
 interactive sand_member_elim {| elim [] |} 'H :
-   ["wf"] sequent [squash] { 'H; x: mem{'y; sand{'s1; 's2}}; 'J['x] >- isset{'y} } -->
-   ["wf"] sequent [squash] { 'H; x: mem{'y; sand{'s1; 's2}}; 'J['x] >- isset{'s1} } -->
-   ["wf"] sequent [squash] { 'H; x: mem{'y; sand{'s1; 's2}}; 'J['x] >- isset{'s2} } -->
-   sequent ['ext] { 'H; x: mem{'y; sand{'s1; 's2}}; 'J['x]; z: mem{'y; 's1} >- 'T['x] } -->
-   sequent ['ext] { 'H; x: mem{'y; sand{'s1; 's2}}; 'J['x]; z: mem{'y; 's2} >- 'T['x] } -->
-   sequent ['ext] { 'H; x: mem{'y; sand{'s1; 's2}}; 'J['x] >- 'T['x] }
+   ["wf"] sequent [squash] { <H>; x: mem{'y; sand{'s1; 's2}}; <J['x]> >- isset{'y} } -->
+   ["wf"] sequent [squash] { <H>; x: mem{'y; sand{'s1; 's2}}; <J['x]> >- isset{'s1} } -->
+   ["wf"] sequent [squash] { <H>; x: mem{'y; sand{'s1; 's2}}; <J['x]> >- isset{'s2} } -->
+   sequent ['ext] { <H>; x: mem{'y; sand{'s1; 's2}}; <J['x]>; z: mem{'y; 's1} >- 'T['x] } -->
+   sequent ['ext] { <H>; x: mem{'y; sand{'s1; 's2}}; <J['x]>; z: mem{'y; 's2} >- 'T['x] } -->
+   sequent ['ext] { <H>; x: mem{'y; sand{'s1; 's2}}; <J['x]> >- 'T['x] }
 
 (* ************************** simplies ************************* *)
 interactive simplies_isset {| intro [] |} :
-   sequent [squash] { 'H >- isset{'a} } -->
-   sequent [squash] { 'H >- isset{'b} } -->
-   sequent ['ext] { 'H >- isset{simplies{'a; 'b}} }
+   sequent [squash] { <H> >- isset{'a} } -->
+   sequent [squash] { <H> >- isset{'b} } -->
+   sequent ['ext] { <H> >- isset{simplies{'a; 'b}} }
 
 interactive simplies_fun {| intro [] |} :
-   sequent ['ext] { 'H >- fun_set{z. 's1['z]} } -->
-   sequent ['ext] { 'H >- fun_set{z. 's2['z]} } -->
-   sequent ['ext] { 'H >- fun_set{z. simplies{'s1['z]; 's2['z]}} }
+   sequent ['ext] { <H> >- fun_set{z. 's1['z]} } -->
+   sequent ['ext] { <H> >- fun_set{z. 's2['z]} } -->
+   sequent ['ext] { <H> >- fun_set{z. simplies{'s1['z]; 's2['z]}} }
 
 interactive simplies_sprop1 {| intro [] |} :
-   sequent [squash] { 'H >- isset{'s} } -->
-   sequent ['ext] { 'H >- fun_prop{z. sprop{simplies{'s; 'z}}} }
+   sequent [squash] { <H> >- isset{'s} } -->
+   sequent ['ext] { <H> >- fun_prop{z. sprop{simplies{'s; 'z}}} }
 
 interactive simplies_sprop2 {| intro [] |} :
-   sequent [squash] { 'H >- isset{'s} } -->
-   sequent ['ext] { 'H >- fun_prop{z. sprop{simplies{'z; 's}}} }
+   sequent [squash] { <H> >- isset{'s} } -->
+   sequent ['ext] { <H> >- fun_prop{z. sprop{simplies{'z; 's}}} }
 
 interactive simplies_in_boolset {| intro [] |} :
-   sequent [squash] { 'H >- isset{'a} } -->
-   sequent [squash] { 'H >- isset{'b} } -->
-   sequent ['ext] { 'H >- mem{'a; boolset} } -->
-   sequent ['ext] { 'H >- mem{'b; boolset} } -->
-   sequent ['ext] { 'H >- mem{simplies{'a; 'b}; boolset} }
+   sequent [squash] { <H> >- isset{'a} } -->
+   sequent [squash] { <H> >- isset{'b} } -->
+   sequent ['ext] { <H> >- mem{'a; boolset} } -->
+   sequent ['ext] { <H> >- mem{'b; boolset} } -->
+   sequent ['ext] { <H> >- mem{simplies{'a; 'b}; boolset} }
 
 interactive simplies_intro {| intro [] |} :
-   ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
-   ["wf"] sequent [squash] { 'H >- isset{'s2} } -->
-   sequent ['ext] { 'H >- mem{'s1; boolset} } -->
-   sequent ['ext] { 'H >- mem{'s2; boolset} } -->
-   sequent ['ext] { 'H; x: sprop{'s1} >- sprop{'s2} } -->
-   sequent ['ext] { 'H >- sprop{simplies{'s1; 's2}} }
+   ["wf"] sequent [squash] { <H> >- isset{'s1} } -->
+   ["wf"] sequent [squash] { <H> >- isset{'s2} } -->
+   sequent ['ext] { <H> >- mem{'s1; boolset} } -->
+   sequent ['ext] { <H> >- mem{'s2; boolset} } -->
+   sequent ['ext] { <H>; x: sprop{'s1} >- sprop{'s2} } -->
+   sequent ['ext] { <H> >- sprop{simplies{'s1; 's2}} }
 
 interactive simplies_elim {| elim [] |} 'H :
-   ["wf"] sequent [squash] { 'H; x: sprop{simplies{'s1; 's2}}; 'J['x] >- isset{'s1} } -->
-   ["wf"] sequent [squash] { 'H; x: sprop{simplies{'s1; 's2}}; 'J['x] >- isset{'s2} } -->
-   sequent ['ext] { 'H; x: sprop{simplies{'s1; 's2}}; 'J['x] >- mem{'s1; boolset} } -->
-   sequent ['ext] { 'H; x: sprop{simplies{'s1; 's2}}; 'J['x] >- mem{'s2; boolset} } -->
-   sequent ['ext] { 'H; x: sprop{simplies{'s1; 's2}}; 'J['x] >- sprop{'s1} } -->
-   sequent ['ext] { 'H; x: sprop{simplies{'s1; 's2}}; 'J['x]; y: sprop{'s2} >- 'C['x] } -->
-   sequent ['ext] { 'H; x: sprop{simplies{'s1; 's2}}; 'J['x] >- 'C['x] }
+   ["wf"] sequent [squash] { <H>; x: sprop{simplies{'s1; 's2}}; <J['x]> >- isset{'s1} } -->
+   ["wf"] sequent [squash] { <H>; x: sprop{simplies{'s1; 's2}}; <J['x]> >- isset{'s2} } -->
+   sequent ['ext] { <H>; x: sprop{simplies{'s1; 's2}}; <J['x]> >- mem{'s1; boolset} } -->
+   sequent ['ext] { <H>; x: sprop{simplies{'s1; 's2}}; <J['x]> >- mem{'s2; boolset} } -->
+   sequent ['ext] { <H>; x: sprop{simplies{'s1; 's2}}; <J['x]> >- sprop{'s1} } -->
+   sequent ['ext] { <H>; x: sprop{simplies{'s1; 's2}}; <J['x]>; y: sprop{'s2} >- 'C['x] } -->
+   sequent ['ext] { <H>; x: sprop{simplies{'s1; 's2}}; <J['x]> >- 'C['x] }
 
 (* ************************** siff ************************* *)
 interactive siff_isset {| intro [] |} :
-   sequent [squash] { 'H >- isset{'a} } -->
-   sequent [squash] { 'H >- isset{'b} } -->
-   sequent ['ext] { 'H >- isset{siff{'a; 'b}} }
+   sequent [squash] { <H> >- isset{'a} } -->
+   sequent [squash] { <H> >- isset{'b} } -->
+   sequent ['ext] { <H> >- isset{siff{'a; 'b}} }
 
 interactive siff_fun {| intro [] |} :
-   sequent ['ext] { 'H >- fun_set{z. 's1['z]} } -->
-   sequent ['ext] { 'H >- fun_set{z. 's2['z]} } -->
-   sequent ['ext] { 'H >- fun_set{z. siff{'s1['z]; 's2['z]}} }
+   sequent ['ext] { <H> >- fun_set{z. 's1['z]} } -->
+   sequent ['ext] { <H> >- fun_set{z. 's2['z]} } -->
+   sequent ['ext] { <H> >- fun_set{z. siff{'s1['z]; 's2['z]}} }
 
 interactive siff_sprop1 {| intro [] |} :
-   sequent [squash] { 'H >- isset{'s} } -->
-   sequent ['ext] { 'H >- fun_prop{z. sprop{siff{'z; 's}}} }
+   sequent [squash] { <H> >- isset{'s} } -->
+   sequent ['ext] { <H> >- fun_prop{z. sprop{siff{'z; 's}}} }
 
 interactive siff_sprop2 {| intro [] |} :
-   sequent [squash] { 'H >- isset{'s} } -->
-   sequent ['ext] { 'H >- fun_prop{z. sprop{siff{'s; 'z}}} }
+   sequent [squash] { <H> >- isset{'s} } -->
+   sequent ['ext] { <H> >- fun_prop{z. sprop{siff{'s; 'z}}} }
 
 interactive siff_in_boolset {| intro [] |} :
-   sequent [squash] { 'H >- isset{'a} } -->
-   sequent [squash] { 'H >- isset{'b} } -->
-   sequent ['ext] { 'H >- mem{'a; boolset} } -->
-   sequent ['ext] { 'H >- mem{'b; boolset} } -->
-   sequent ['ext] { 'H >- mem{siff{'a; 'b}; boolset} }
+   sequent [squash] { <H> >- isset{'a} } -->
+   sequent [squash] { <H> >- isset{'b} } -->
+   sequent ['ext] { <H> >- mem{'a; boolset} } -->
+   sequent ['ext] { <H> >- mem{'b; boolset} } -->
+   sequent ['ext] { <H> >- mem{siff{'a; 'b}; boolset} }
 
 interactive siff_intro {| intro [] |} :
-   ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
-   ["wf"] sequent [squash] { 'H >- isset{'s2} } -->
-   sequent ['ext] { 'H >- mem{'s1; boolset} } -->
-   sequent ['ext] { 'H >- mem{'s2; boolset} } -->
-   sequent ['ext] { 'H >- sprop{simplies{'s1; 's2}} } -->
-   sequent ['ext] { 'H >- sprop{simplies{'s2; 's1}} } -->
-   sequent ['ext] { 'H >- sprop{siff{'s1; 's2}} }
+   ["wf"] sequent [squash] { <H> >- isset{'s1} } -->
+   ["wf"] sequent [squash] { <H> >- isset{'s2} } -->
+   sequent ['ext] { <H> >- mem{'s1; boolset} } -->
+   sequent ['ext] { <H> >- mem{'s2; boolset} } -->
+   sequent ['ext] { <H> >- sprop{simplies{'s1; 's2}} } -->
+   sequent ['ext] { <H> >- sprop{simplies{'s2; 's1}} } -->
+   sequent ['ext] { <H> >- sprop{siff{'s1; 's2}} }
 
 interactive siff_elim {| elim [] |} 'H :
-   ["wf"] sequent [squash] { 'H; x: sprop{siff{'s1; 's2}}; 'J['x] >- isset{'s1} } -->
-   ["wf"] sequent [squash] { 'H; x: sprop{siff{'s1; 's2}}; 'J['x] >- isset{'s2} } -->
-   sequent ['ext] { 'H; x: sprop{siff{'s1; 's2}}; 'J['x] >- mem{'s1; boolset} } -->
-   sequent ['ext] { 'H; x: sprop{siff{'s1; 's2}}; 'J['x] >- mem{'s2; boolset} } -->
-   sequent ['ext] { 'H; x: sprop{siff{'s1; 's2}}; 'J['x]; y: sprop{simplies{'s1; 's2}}; z: sprop{simplies{'s2; 's1}} >- 'C['x] } -->
-   sequent ['ext] { 'H; x: sprop{siff{'s1; 's2}}; 'J['x] >- 'C['x] }
+   ["wf"] sequent [squash] { <H>; x: sprop{siff{'s1; 's2}}; <J['x]> >- isset{'s1} } -->
+   ["wf"] sequent [squash] { <H>; x: sprop{siff{'s1; 's2}}; <J['x]> >- isset{'s2} } -->
+   sequent ['ext] { <H>; x: sprop{siff{'s1; 's2}}; <J['x]> >- mem{'s1; boolset} } -->
+   sequent ['ext] { <H>; x: sprop{siff{'s1; 's2}}; <J['x]> >- mem{'s2; boolset} } -->
+   sequent ['ext] { <H>; x: sprop{siff{'s1; 's2}}; <J['x]>; y: sprop{simplies{'s1; 's2}}; z: sprop{simplies{'s2; 's1}} >- 'C['x] } -->
+   sequent ['ext] { <H>; x: sprop{siff{'s1; 's2}}; <J['x]> >- 'C['x] }
 
 (* ************************** scand ************************* *)
 interactive scand_isset {| intro [] |} :
-   sequent [squash] { 'H >- isset{'a} } -->
-   sequent [squash] { 'H >- isset{'b} } -->
-   sequent ['ext] { 'H >- isset{scand{'a; 'b}} }
+   sequent [squash] { <H> >- isset{'a} } -->
+   sequent [squash] { <H> >- isset{'b} } -->
+   sequent ['ext] { <H> >- isset{scand{'a; 'b}} }
 
 interactive scand_fun {| intro [] |} :
-   sequent ['ext] { 'H >- fun_set{z. 's1['z]} } -->
-   sequent ['ext] { 'H >- fun_set{z. 's2['z]} } -->
-   sequent ['ext] { 'H >- fun_set{z. scand{'s1['z]; 's2['z]}} }
+   sequent ['ext] { <H> >- fun_set{z. 's1['z]} } -->
+   sequent ['ext] { <H> >- fun_set{z. 's2['z]} } -->
+   sequent ['ext] { <H> >- fun_set{z. scand{'s1['z]; 's2['z]}} }
 
 interactive scand_sprop1 {| intro [] |} :
-   sequent [squash] { 'H >- isset{'s} } -->
-   sequent ['ext] { 'H >- fun_prop{z. sprop{scand{'z; 's}}} }
+   sequent [squash] { <H> >- isset{'s} } -->
+   sequent ['ext] { <H> >- fun_prop{z. sprop{scand{'z; 's}}} }
 
 interactive scand_sprop2 {| intro [] |} :
-   sequent [squash] { 'H >- isset{'s} } -->
-   sequent ['ext] { 'H >- fun_prop{z. sprop{scand{'s; 'z}}} }
+   sequent [squash] { <H> >- isset{'s} } -->
+   sequent ['ext] { <H> >- fun_prop{z. sprop{scand{'s; 'z}}} }
 
 interactive scand_in_boolset {| intro [] |} :
-   sequent [squash] { 'H >- isset{'a} } -->
-   sequent ['ext] { 'H >- mem{'a; boolset} } -->
-   sequent [squash] { 'H >- isset{'b} } -->
-   sequent ['ext] { 'H >- mem{'b; boolset} } -->
-   sequent ['ext] { 'H >- mem{scand{'a; 'b}; boolset} }
+   sequent [squash] { <H> >- isset{'a} } -->
+   sequent ['ext] { <H> >- mem{'a; boolset} } -->
+   sequent [squash] { <H> >- isset{'b} } -->
+   sequent ['ext] { <H> >- mem{'b; boolset} } -->
+   sequent ['ext] { <H> >- mem{scand{'a; 'b}; boolset} }
 
 interactive scand_intro {| intro [] |} :
-   ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
-   ["wf"] sequent [squash] { 'H >- isset{'s2} } -->
-   sequent ['ext] { 'H >- sprop{'s1} } -->
-   sequent ['ext] { 'H; x: sprop{'s1} >- sprop{'s2} } -->
-   sequent ['ext] { 'H >- sprop{scand{'s1; 's2}} }
+   ["wf"] sequent [squash] { <H> >- isset{'s1} } -->
+   ["wf"] sequent [squash] { <H> >- isset{'s2} } -->
+   sequent ['ext] { <H> >- sprop{'s1} } -->
+   sequent ['ext] { <H>; x: sprop{'s1} >- sprop{'s2} } -->
+   sequent ['ext] { <H> >- sprop{scand{'s1; 's2}} }
 
 interactive scand_elim {| elim [] |} 'H :
-   ["wf"] sequent [squash] { 'H; x: sprop{scand{'s1; 's2}}; 'J['x] >- isset{'s1} } -->
-   ["wf"] sequent [squash] { 'H; x: sprop{scand{'s1; 's2}}; 'J['x] >- isset{'s2} } -->
-   sequent ['ext] { 'H; x: sprop{scand{'s1; 's2}}; 'J['x] >- mem{'s1; boolset} } -->
-   sequent ['ext] { 'H; x: sprop{scand{'s1; 's2}}; 'J['x] >- mem{'s2; boolset} } -->
-   sequent ['ext] { 'H; x: sprop{scand{'s1; 's2}}; 'J['x]; y: sprop{'s1}; z: sprop{'s2} >- 'T['x] } -->
-   sequent ['ext] { 'H; x: sprop{scand{'s1; 's2}}; 'J['x] >- 'T['x] }
+   ["wf"] sequent [squash] { <H>; x: sprop{scand{'s1; 's2}}; <J['x]> >- isset{'s1} } -->
+   ["wf"] sequent [squash] { <H>; x: sprop{scand{'s1; 's2}}; <J['x]> >- isset{'s2} } -->
+   sequent ['ext] { <H>; x: sprop{scand{'s1; 's2}}; <J['x]> >- mem{'s1; boolset} } -->
+   sequent ['ext] { <H>; x: sprop{scand{'s1; 's2}}; <J['x]> >- mem{'s2; boolset} } -->
+   sequent ['ext] { <H>; x: sprop{scand{'s1; 's2}}; <J['x]>; y: sprop{'s1}; z: sprop{'s2} >- 'T['x] } -->
+   sequent ['ext] { <H>; x: sprop{scand{'s1; 's2}}; <J['x]> >- 'T['x] }
 
 interactive scand_strue {| elim [] |} 'H :
-   ["wf"] sequent [squash] { 'H; x: sprop{scand{strue; 's}}; 'J['x] >- isset{'s} } -->
-   sequent ['ext] { 'H; x: sprop{scand{strue; 's}}; 'J['x] >- mem{'s; boolset} } -->
-   sequent ['ext] { 'H; x: sprop{scand{strue; 's}}; 'J['x]; y: sprop{'s} >- 'C['x] } -->
-   sequent ['ext] { 'H; x: sprop{scand{strue; 's}}; 'J['x] >- 'C['x] }
+   ["wf"] sequent [squash] { <H>; x: sprop{scand{strue; 's}}; <J['x]> >- isset{'s} } -->
+   sequent ['ext] { <H>; x: sprop{scand{strue; 's}}; <J['x]> >- mem{'s; boolset} } -->
+   sequent ['ext] { <H>; x: sprop{scand{strue; 's}}; <J['x]>; y: sprop{'s} >- 'C['x] } -->
+   sequent ['ext] { <H>; x: sprop{scand{strue; 's}}; <J['x]> >- 'C['x] }
 
 interactive scand_sfalse1 'H 'J :
-   ["wf"] sequent [squash] { 'H; x: sprop{scand{'s1; 's2}}; 'J['x] >- isset{'s1} } -->
-   ["wf"] sequent [squash] { 'H; x: sprop{scand{'s1; 's2}}; 'J['x] >- isset{'s2} } -->
-(*   sequent ['ext] { 'H; x: sprop{scand{'s1; 's2}}; 'J['x] >- mem{'s1; boolset} } --> *)
-   sequent ['ext] { 'H; x: sprop{scand{'s1; 's2}}; 'J['x] >- mem{'s2; boolset} } -->
-   sequent ['ext] { 'H; x: sprop{scand{'s1; 's2}}; 'J['x]; y: eq{'s1; sfalse} >- 'C['x] }
+   ["wf"] sequent [squash] { <H>; x: sprop{scand{'s1; 's2}}; <J['x]> >- isset{'s1} } -->
+   ["wf"] sequent [squash] { <H>; x: sprop{scand{'s1; 's2}}; <J['x]> >- isset{'s2} } -->
+(*   sequent ['ext] { <H>; x: sprop{scand{'s1; 's2}}; <J['x]> >- mem{'s1; boolset} } --> *)
+   sequent ['ext] { <H>; x: sprop{scand{'s1; 's2}}; <J['x]> >- mem{'s2; boolset} } -->
+   sequent ['ext] { <H>; x: sprop{scand{'s1; 's2}}; <J['x]>; y: eq{'s1; sfalse} >- 'C['x] }
 
 interactive scand_sfalse2 {| elim [] |} 'H :
-   ["wf"] sequent [squash] { 'H; x: sprop{scand{sfalse; 's}}; 'J['x] >- isset{'s} } -->
-   sequent ['ext] { 'H; x: sprop{scand{sfalse; 's}}; 'J['x] >- mem{'s; boolset} } -->
-   sequent ['ext] { 'H; x: sprop{scand{sfalse; 's}}; 'J['x] >- 'C['x] }
+   ["wf"] sequent [squash] { <H>; x: sprop{scand{sfalse; 's}}; <J['x]> >- isset{'s} } -->
+   sequent ['ext] { <H>; x: sprop{scand{sfalse; 's}}; <J['x]> >- mem{'s; boolset} } -->
+   sequent ['ext] { <H>; x: sprop{scand{sfalse; 's}}; <J['x]> >- 'C['x] }
 
 (* ************************** scor ************************* *)
 interactive scor_isset {| intro [] |} :
-   sequent [squash] { 'H >- isset{'a} } -->
-   sequent [squash] { 'H >- isset{'b} } -->
-   sequent ['ext] { 'H >- isset{scor{'a; 'b}} }
+   sequent [squash] { <H> >- isset{'a} } -->
+   sequent [squash] { <H> >- isset{'b} } -->
+   sequent ['ext] { <H> >- isset{scor{'a; 'b}} }
 
 interactive scor_fun {| intro [] |} :
-   sequent ['ext] { 'H >- fun_set{z. 's1['z]} } -->
-   sequent ['ext] { 'H >- fun_set{z. 's2['z]} } -->
-   sequent ['ext] { 'H >- fun_set{z. scor{'s1['z]; 's2['z]}} }
+   sequent ['ext] { <H> >- fun_set{z. 's1['z]} } -->
+   sequent ['ext] { <H> >- fun_set{z. 's2['z]} } -->
+   sequent ['ext] { <H> >- fun_set{z. scor{'s1['z]; 's2['z]}} }
 
 interactive scor_sprop1 {| intro [] |} :
-   sequent [squash] { 'H >- isset{'s} } -->
-   sequent ['ext] { 'H >- fun_prop{z. sprop{scor{'z; 's}}} }
+   sequent [squash] { <H> >- isset{'s} } -->
+   sequent ['ext] { <H> >- fun_prop{z. sprop{scor{'z; 's}}} }
 
 interactive scor_sprop2 {| intro [] |} :
-   sequent [squash] { 'H >- isset{'s} } -->
-   sequent ['ext] { 'H >- fun_prop{z. sprop{scor{'s; 'z}}} }
+   sequent [squash] { <H> >- isset{'s} } -->
+   sequent ['ext] { <H> >- fun_prop{z. sprop{scor{'s; 'z}}} }
 
 interactive scor_in_boolset {| intro [] |} :
-   sequent [squash] { 'H >- isset{'a} } -->
-   sequent ['ext] { 'H >- mem{'a; boolset} } -->
-   sequent [squash] { 'H >- isset{'b} } -->
-   sequent ['ext] { 'H >- mem{'b; boolset} } -->
-   sequent ['ext] { 'H >- mem{scor{'a; 'b}; boolset} }
+   sequent [squash] { <H> >- isset{'a} } -->
+   sequent ['ext] { <H> >- mem{'a; boolset} } -->
+   sequent [squash] { <H> >- isset{'b} } -->
+   sequent ['ext] { <H> >- mem{'b; boolset} } -->
+   sequent ['ext] { <H> >- mem{scor{'a; 'b}; boolset} }
 
 interactive scor_intro_left {| intro [SelectOption 1] |} :
-   ["wf"] sequent [squash] { 'H >- isset{'s2} } -->
-   ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
-   sequent ['ext] { 'H >- mem{'s1; boolset} } -->
-   sequent ['ext] { 'H >- mem{'s2; boolset} } -->
-   sequent ['ext] { 'H >- sprop{'s1} } -->
-   sequent ['ext] { 'H >- sprop{scor{'s1; 's2}} }
+   ["wf"] sequent [squash] { <H> >- isset{'s2} } -->
+   ["wf"] sequent [squash] { <H> >- isset{'s1} } -->
+   sequent ['ext] { <H> >- mem{'s1; boolset} } -->
+   sequent ['ext] { <H> >- mem{'s2; boolset} } -->
+   sequent ['ext] { <H> >- sprop{'s1} } -->
+   sequent ['ext] { <H> >- sprop{scor{'s1; 's2}} }
 
 interactive scor_intro_right {| intro [SelectOption 2] |} :
-   ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
-   ["wf"] sequent [squash] { 'H >- isset{'s2} } -->
-   sequent ['ext] { 'H >- mem{'s1; boolset} } -->
-   sequent ['ext] { 'H >- sprop{snot{'s1}} } -->
-   sequent ['ext] { 'H; x: sprop{snot{'s1}} >- sprop{'s2} } -->
-   sequent ['ext] { 'H >- sprop{scor{'s1; 's2}} }
+   ["wf"] sequent [squash] { <H> >- isset{'s1} } -->
+   ["wf"] sequent [squash] { <H> >- isset{'s2} } -->
+   sequent ['ext] { <H> >- mem{'s1; boolset} } -->
+   sequent ['ext] { <H> >- sprop{snot{'s1}} } -->
+   sequent ['ext] { <H>; x: sprop{snot{'s1}} >- sprop{'s2} } -->
+   sequent ['ext] { <H> >- sprop{scor{'s1; 's2}} }
 
 interactive scor_elim {| elim [] |} 'H :
-   ["wf"] sequent [squash] { 'H; x: sprop{scor{'s1; 's2}}; 'J['x] >- isset{'s1} } -->
-   ["wf"] sequent [squash] { 'H; x: sprop{scor{'s1; 's2}}; 'J['x] >- isset{'s2} } -->
-   sequent ['ext] { 'H; x: sprop{scor{'s1; 's2}}; 'J['x] >- mem{'s1; boolset} } -->
-   sequent ['ext] { 'H; x: sprop{scor{'s1; 's2}}; 'J['x] >- mem{'s2; boolset} } -->
-   sequent ['ext] { 'H; x: sprop{scor{'s1; 's2}}; 'J['x]; y: sprop{'s1} >- 'T['x] } -->
-   sequent ['ext] { 'H; x: sprop{scor{'s1; 's2}}; 'J['x]; y: sprop{snot{'s1}}; z: sprop{'s2} >- 'T['x] } -->
-   sequent ['ext] { 'H; x: sprop{scor{'s1; 's2}}; 'J['x] >- 'T['x] }
+   ["wf"] sequent [squash] { <H>; x: sprop{scor{'s1; 's2}}; <J['x]> >- isset{'s1} } -->
+   ["wf"] sequent [squash] { <H>; x: sprop{scor{'s1; 's2}}; <J['x]> >- isset{'s2} } -->
+   sequent ['ext] { <H>; x: sprop{scor{'s1; 's2}}; <J['x]> >- mem{'s1; boolset} } -->
+   sequent ['ext] { <H>; x: sprop{scor{'s1; 's2}}; <J['x]> >- mem{'s2; boolset} } -->
+   sequent ['ext] { <H>; x: sprop{scor{'s1; 's2}}; <J['x]>; y: sprop{'s1} >- 'T['x] } -->
+   sequent ['ext] { <H>; x: sprop{scor{'s1; 's2}}; <J['x]>; y: sprop{snot{'s1}}; z: sprop{'s2} >- 'T['x] } -->
+   sequent ['ext] { <H>; x: sprop{scor{'s1; 's2}}; <J['x]> >- 'T['x] }
 
 (* ************************** sxor ************************* *)
 interactive sxor_isset {| intro [] |} :
-   sequent [squash] { 'H >- isset{'a} } -->
-   sequent [squash] { 'H >- isset{'b} } -->
-   sequent ['ext] { 'H >- isset{sxor{'a; 'b}} }
+   sequent [squash] { <H> >- isset{'a} } -->
+   sequent [squash] { <H> >- isset{'b} } -->
+   sequent ['ext] { <H> >- isset{sxor{'a; 'b}} }
 
 interactive sxor_fun {| intro [] |} :
-   sequent ['ext] { 'H >- fun_set{z. 's1['z]} } -->
-   sequent ['ext] { 'H >- fun_set{z. 's2['z]} } -->
-   sequent ['ext] { 'H >- fun_set{z. sxor{'s1['z]; 's2['z]}} }
+   sequent ['ext] { <H> >- fun_set{z. 's1['z]} } -->
+   sequent ['ext] { <H> >- fun_set{z. 's2['z]} } -->
+   sequent ['ext] { <H> >- fun_set{z. sxor{'s1['z]; 's2['z]}} }
 
 interactive sxor_sprop1 {| intro [] |} :
-   sequent [squash] { 'H >- isset{'s} } -->
-   sequent ['ext] { 'H >- fun_prop{z. sprop{sxor{'z; 's}}} }
+   sequent [squash] { <H> >- isset{'s} } -->
+   sequent ['ext] { <H> >- fun_prop{z. sprop{sxor{'z; 's}}} }
 
 interactive sxor_sprop2 {| intro [] |} :
-   sequent [squash] { 'H >- isset{'s} } -->
-   sequent ['ext] { 'H >- fun_prop{z. sprop{sxor{'s; 'z}}} }
+   sequent [squash] { <H> >- isset{'s} } -->
+   sequent ['ext] { <H> >- fun_prop{z. sprop{sxor{'s; 'z}}} }
 
 interactive sxor_in_boolset {| intro [] |} :
-   sequent [squash] { 'H >- isset{'a} } -->
-   sequent [squash] { 'H >- isset{'b} } -->
-   sequent ['ext] { 'H >- mem{'a; boolset} } -->
-   sequent ['ext] { 'H >- mem{'b; boolset} } -->
-   sequent ['ext] { 'H >- mem{sxor{'a; 'b}; boolset} }
+   sequent [squash] { <H> >- isset{'a} } -->
+   sequent [squash] { <H> >- isset{'b} } -->
+   sequent ['ext] { <H> >- mem{'a; boolset} } -->
+   sequent ['ext] { <H> >- mem{'b; boolset} } -->
+   sequent ['ext] { <H> >- mem{sxor{'a; 'b}; boolset} }
 
 interactive sxor_intro {| intro [] |} :
-   ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
-   ["wf"] sequent [squash] { 'H >- isset{'s2} } -->
-   sequent ['ext] { 'H >- mem{'s1; boolset} } -->
-   sequent ['ext] { 'H >- mem{'s2; boolset} } -->
-   sequent ['ext] { 'H; x: sprop{'s1} >- sprop{snot{'s2}} } -->
-   sequent ['ext] { 'H; x: sprop{snot{'s1}} >- sprop{'s2} } -->
-   sequent ['ext] { 'H >- sprop{sxor{'s1; 's2}} }
+   ["wf"] sequent [squash] { <H> >- isset{'s1} } -->
+   ["wf"] sequent [squash] { <H> >- isset{'s2} } -->
+   sequent ['ext] { <H> >- mem{'s1; boolset} } -->
+   sequent ['ext] { <H> >- mem{'s2; boolset} } -->
+   sequent ['ext] { <H>; x: sprop{'s1} >- sprop{snot{'s2}} } -->
+   sequent ['ext] { <H>; x: sprop{snot{'s1}} >- sprop{'s2} } -->
+   sequent ['ext] { <H> >- sprop{sxor{'s1; 's2}} }
 
 interactive sxor_elim {| elim [] |} 'H :
-   ["wf"] sequent [squash] { 'H; x: sprop{sxor{'s1; 's2}}; 'J['x] >- isset{'s1} } -->
-   ["wf"] sequent [squash] { 'H; x: sprop{sxor{'s1; 's2}}; 'J['x] >- isset{'s2} } -->
-   sequent ['ext] { 'H; x: sprop{sxor{'s1; 's2}}; 'J['x] >- mem{'s1; boolset} } -->
-   sequent ['ext] { 'H; x: sprop{sxor{'s1; 's2}}; 'J['x] >- mem{'s2; boolset} } -->
-   sequent ['ext] { 'H; x: sprop{sxor{'s1; 's2}}; 'J['x]; y: sprop{'s1}; z: sprop{snot{'s2}} >- 'T['x] } -->
-   sequent ['ext] { 'H; x: sprop{sxor{'s1; 's2}}; 'J['x]; y: sprop{snot{'s1}}; z: sprop{'s2} >- 'T['x] } -->
-   sequent ['ext] { 'H; x: sprop{sxor{'s1; 's2}}; 'J['x] >- 'T['x] }
+   ["wf"] sequent [squash] { <H>; x: sprop{sxor{'s1; 's2}}; <J['x]> >- isset{'s1} } -->
+   ["wf"] sequent [squash] { <H>; x: sprop{sxor{'s1; 's2}}; <J['x]> >- isset{'s2} } -->
+   sequent ['ext] { <H>; x: sprop{sxor{'s1; 's2}}; <J['x]> >- mem{'s1; boolset} } -->
+   sequent ['ext] { <H>; x: sprop{sxor{'s1; 's2}}; <J['x]> >- mem{'s2; boolset} } -->
+   sequent ['ext] { <H>; x: sprop{sxor{'s1; 's2}}; <J['x]>; y: sprop{'s1}; z: sprop{snot{'s2}} >- 'T['x] } -->
+   sequent ['ext] { <H>; x: sprop{sxor{'s1; 's2}}; <J['x]>; y: sprop{snot{'s1}}; z: sprop{'s2} >- 'T['x] } -->
+   sequent ['ext] { <H>; x: sprop{sxor{'s1; 's2}}; <J['x]> >- 'T['x] }
 
 interactive sxor_hyp_assoc1 'H :
-   sequent [squash] { 'H; x: sprop{sxor{'a; sxor{'b; 'c}}}; 'J >- isset{'a} } -->
-   sequent [squash] { 'H; x: sprop{sxor{'a; sxor{'b; 'c}}}; 'J >- isset{'b} } -->
-   sequent [squash] { 'H; x: sprop{sxor{'a; sxor{'b; 'c}}}; 'J >- isset{'c} } -->
-   sequent ['ext] { 'H; x: sprop{sxor{'a; sxor{'b; 'c}}}; 'J >- mem{'a; boolset} } -->
-   sequent ['ext] { 'H; x: sprop{sxor{'a; sxor{'b; 'c}}}; 'J >- mem{'b; boolset} } -->
-   sequent ['ext] { 'H; x: sprop{sxor{'a; sxor{'b; 'c}}}; 'J >- mem{'c; boolset} } -->
-   [main] sequent ['ext] { 'H; x: sprop{sxor{'a; sxor{'b; 'c}}}; 'J; u: sprop{sxor{sxor{'a; 'b}; 'c}} >- 'T } -->
-   sequent ['ext] { 'H; x: sprop{sxor{'a; sxor{'b; 'c}}}; 'J >- 'T }
+   sequent [squash] { <H>; x: sprop{sxor{'a; sxor{'b; 'c}}}; <J> >- isset{'a} } -->
+   sequent [squash] { <H>; x: sprop{sxor{'a; sxor{'b; 'c}}}; <J> >- isset{'b} } -->
+   sequent [squash] { <H>; x: sprop{sxor{'a; sxor{'b; 'c}}}; <J> >- isset{'c} } -->
+   sequent ['ext] { <H>; x: sprop{sxor{'a; sxor{'b; 'c}}}; <J> >- mem{'a; boolset} } -->
+   sequent ['ext] { <H>; x: sprop{sxor{'a; sxor{'b; 'c}}}; <J> >- mem{'b; boolset} } -->
+   sequent ['ext] { <H>; x: sprop{sxor{'a; sxor{'b; 'c}}}; <J> >- mem{'c; boolset} } -->
+   [main] sequent ['ext] { <H>; x: sprop{sxor{'a; sxor{'b; 'c}}}; <J>; u: sprop{sxor{sxor{'a; 'b}; 'c}} >- 'T } -->
+   sequent ['ext] { <H>; x: sprop{sxor{'a; sxor{'b; 'c}}}; <J> >- 'T }
 
 interactive sxor_concl_assoc1 :
-   [wf] sequent [squash] {'H >- isset{'a} } -->
-   [wf] sequent [squash] {'H >- isset{'b} } -->
-   [wf] sequent [squash] {'H >- isset{'c} } -->
-   sequent ['ext] { 'H >- mem{'a; boolset} } -->
-   sequent ['ext] { 'H >- mem{'b; boolset} } -->
-   sequent ['ext] { 'H >- mem{'c; boolset} } -->
-   sequent ['ext] { 'H >- sprop{sxor{sxor{'a; 'b}; 'c}} } -->
-   sequent ['ext] { 'H >- sprop{sxor{'a; sxor{'b; 'c}}} }
+   [wf] sequent [squash] { <H> >- isset{'a} } -->
+   [wf] sequent [squash] { <H> >- isset{'b} } -->
+   [wf] sequent [squash] { <H> >- isset{'c} } -->
+   sequent ['ext] { <H> >- mem{'a; boolset} } -->
+   sequent ['ext] { <H> >- mem{'b; boolset} } -->
+   sequent ['ext] { <H> >- mem{'c; boolset} } -->
+   sequent ['ext] { <H> >- sprop{sxor{sxor{'a; 'b}; 'c}} } -->
+   sequent ['ext] { <H> >- sprop{sxor{'a; sxor{'b; 'c}}} }
 
 let sxorHypAssoc1T = sxor_hyp_assoc1
 
@@ -741,86 +741,86 @@ let sxorAssoc1T i =
       sxorHypAssoc1T i
 
 interactive test 'H :
-   sequent [squash] { 'H >- isset{'a} } -->
-   sequent [squash] { 'H >- isset{'b} } -->
-   sequent [squash] { 'H >- isset{'c} } -->
-   sequent ['ext] { 'H >- mem{'a; boolset} } -->
-   sequent ['ext] { 'H >- mem{'b; boolset} } -->
-   sequent ['ext] { 'H >- mem{'c; boolset} } -->
-   sequent ['ext] { 'H; x: sprop{sxor{'a; sxor{'b; 'c}}} >- sprop{sor{sand{sxor{'a; 'b}; snot{'c}}; sand{snot{sxor{'a; 'b}}; 'c}}} }
+   sequent [squash] { <H> >- isset{'a} } -->
+   sequent [squash] { <H> >- isset{'b} } -->
+   sequent [squash] { <H> >- isset{'c} } -->
+   sequent ['ext] { <H> >- mem{'a; boolset} } -->
+   sequent ['ext] { <H> >- mem{'b; boolset} } -->
+   sequent ['ext] { <H> >- mem{'c; boolset} } -->
+   sequent ['ext] { <H>; x: sprop{sxor{'a; sxor{'b; 'c}}} >- sprop{sor{sand{sxor{'a; 'b}; snot{'c}}; sand{snot{sxor{'a; 'b}}; 'c}}} }
 
 interactive test2 'H :
-   sequent [squash] { 'H >- isset{'a} } -->
-   sequent [squash] { 'H >- isset{'b} } -->
-   sequent [squash] { 'H >- isset{'c} } -->
-   sequent ['ext] { 'H >- mem{'a; boolset} } -->
-   sequent ['ext] { 'H >- mem{'b; boolset} } -->
-   sequent ['ext] { 'H >- mem{'c; boolset} } -->
-   sequent ['ext] { 'H; x: sprop{sxor{sxor{'a; 'b}; 'c}} >- sprop{sor{sand{'a; snot{sxor{'b; 'c}}}; sand{snot{'a}; sxor{'b; 'c}}}} }
+   sequent [squash] { <H> >- isset{'a} } -->
+   sequent [squash] { <H> >- isset{'b} } -->
+   sequent [squash] { <H> >- isset{'c} } -->
+   sequent ['ext] { <H> >- mem{'a; boolset} } -->
+   sequent ['ext] { <H> >- mem{'b; boolset} } -->
+   sequent ['ext] { <H> >- mem{'c; boolset} } -->
+   sequent ['ext] { <H>; x: sprop{sxor{sxor{'a; 'b}; 'c}} >- sprop{sor{sand{'a; snot{sxor{'b; 'c}}}; sand{snot{'a}; sxor{'b; 'c}}}} }
 
 (* ************************** sxand ************************* *)
 interactive sxand_isset {| intro [] |} :
-   sequent [squash] { 'H >- isset{'a} } -->
-   sequent [squash] { 'H >- isset{'b} } -->
-   sequent ['ext] { 'H >- isset{sxand{'a; 'b}} }
+   sequent [squash] { <H> >- isset{'a} } -->
+   sequent [squash] { <H> >- isset{'b} } -->
+   sequent ['ext] { <H> >- isset{sxand{'a; 'b}} }
 
 interactive sxand_fun {| intro [] |} :
-   sequent ['ext] { 'H >- fun_set{z. 's1['z]} } -->
-   sequent ['ext] { 'H >- fun_set{z. 's2['z]} } -->
-   sequent ['ext] { 'H >- fun_set{z. sxand{'s1['z]; 's2['z]}} }
+   sequent ['ext] { <H> >- fun_set{z. 's1['z]} } -->
+   sequent ['ext] { <H> >- fun_set{z. 's2['z]} } -->
+   sequent ['ext] { <H> >- fun_set{z. sxand{'s1['z]; 's2['z]}} }
 
 interactive sxand_sprop1 {| intro [] |} :
-   sequent [squash] { 'H >- isset{'s} } -->
-   sequent ['ext] { 'H >- fun_prop{z. sprop{sxand{'z; 's}}} }
+   sequent [squash] { <H> >- isset{'s} } -->
+   sequent ['ext] { <H> >- fun_prop{z. sprop{sxand{'z; 's}}} }
 
 interactive sxand_sprop2 {| intro [] |} :
-   sequent [squash] { 'H >- isset{'s} } -->
-   sequent ['ext] { 'H >- fun_prop{z. sprop{sxand{'s; 'z}}} }
+   sequent [squash] { <H> >- isset{'s} } -->
+   sequent ['ext] { <H> >- fun_prop{z. sprop{sxand{'s; 'z}}} }
 
 interactive sxand_in_boolset {| intro [] |} :
-   sequent [squash] { 'H >- isset{'a} } -->
-   sequent [squash] { 'H >- isset{'b} } -->
-   sequent ['ext] { 'H >- mem{'a; boolset} } -->
-   sequent ['ext] { 'H >- mem{'b; boolset} } -->
-   sequent ['ext] { 'H >- mem{sxand{'a; 'b}; boolset} }
+   sequent [squash] { <H> >- isset{'a} } -->
+   sequent [squash] { <H> >- isset{'b} } -->
+   sequent ['ext] { <H> >- mem{'a; boolset} } -->
+   sequent ['ext] { <H> >- mem{'b; boolset} } -->
+   sequent ['ext] { <H> >- mem{sxand{'a; 'b}; boolset} }
 
 interactive sxand_intro {| intro [] |} :
-   ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
-   ["wf"] sequent [squash] { 'H >- isset{'s2} } -->
-   sequent ['ext] { 'H >- mem{'s1; boolset} } -->
-   sequent ['ext] { 'H >- mem{'s2; boolset} } -->
-   sequent ['ext] { 'H; x: sprop{'s1} >- sprop{'s2} } -->
-   sequent ['ext] { 'H; x: sprop{snot{'s1}} >- sprop{snot{'s2}} } -->
-   sequent ['ext] { 'H >- sprop{sxand{'s1; 's2}} }
+   ["wf"] sequent [squash] { <H> >- isset{'s1} } -->
+   ["wf"] sequent [squash] { <H> >- isset{'s2} } -->
+   sequent ['ext] { <H> >- mem{'s1; boolset} } -->
+   sequent ['ext] { <H> >- mem{'s2; boolset} } -->
+   sequent ['ext] { <H>; x: sprop{'s1} >- sprop{'s2} } -->
+   sequent ['ext] { <H>; x: sprop{snot{'s1}} >- sprop{snot{'s2}} } -->
+   sequent ['ext] { <H> >- sprop{sxand{'s1; 's2}} }
 
 interactive sxand_elim {| elim [] |} 'H :
-   ["wf"] sequent [squash] { 'H; x: sprop{sxand{'s1; 's2}}; 'J['x] >- isset{'s1} } -->
-   ["wf"] sequent [squash] { 'H; x: sprop{sxand{'s1; 's2}}; 'J['x] >- isset{'s2} } -->
-   sequent ['ext] { 'H; x: sprop{sxand{'s1; 's2}}; 'J['x] >- mem{'s1; boolset} } -->
-   sequent ['ext] { 'H; x: sprop{sxand{'s1; 's2}}; 'J['x] >- mem{'s2; boolset} } -->
-   sequent ['ext] { 'H; x: sprop{sxand{'s1; 's2}}; 'J['x]; y: sprop{'s1}; z: sprop{'s2} >- 'T['x] } -->
-   sequent ['ext] { 'H; x: sprop{sxand{'s1; 's2}}; 'J['x]; y: sprop{snot{'s1}}; z: sprop{snot{'s2}} >- 'T['x] } -->
-   sequent ['ext] { 'H; x: sprop{sxand{'s1; 's2}}; 'J['x] >- 'T['x] }
+   ["wf"] sequent [squash] { <H>; x: sprop{sxand{'s1; 's2}}; <J['x]> >- isset{'s1} } -->
+   ["wf"] sequent [squash] { <H>; x: sprop{sxand{'s1; 's2}}; <J['x]> >- isset{'s2} } -->
+   sequent ['ext] { <H>; x: sprop{sxand{'s1; 's2}}; <J['x]> >- mem{'s1; boolset} } -->
+   sequent ['ext] { <H>; x: sprop{sxand{'s1; 's2}}; <J['x]> >- mem{'s2; boolset} } -->
+   sequent ['ext] { <H>; x: sprop{sxand{'s1; 's2}}; <J['x]>; y: sprop{'s1}; z: sprop{'s2} >- 'T['x] } -->
+   sequent ['ext] { <H>; x: sprop{sxand{'s1; 's2}}; <J['x]>; y: sprop{snot{'s1}}; z: sprop{snot{'s2}} >- 'T['x] } -->
+   sequent ['ext] { <H>; x: sprop{sxand{'s1; 's2}}; <J['x]> >- 'T['x] }
 
 interactive sxand_hyp_assoc1 'H :
-   sequent [squash] { 'H; x: sprop{sxand{'a; sxand{'b; 'c}}}; 'J >- isset{'a} } -->
-   sequent [squash] { 'H; x: sprop{sxand{'a; sxand{'b; 'c}}}; 'J >- isset{'b} } -->
-   sequent [squash] { 'H; x: sprop{sxand{'a; sxand{'b; 'c}}}; 'J >- isset{'c} } -->
-   sequent ['ext] { 'H; x: sprop{sxand{'a; sxand{'b; 'c}}}; 'J >- mem{'a; boolset} } -->
-   sequent ['ext] { 'H; x: sprop{sxand{'a; sxand{'b; 'c}}}; 'J >- mem{'b; boolset} } -->
-   sequent ['ext] { 'H; x: sprop{sxand{'a; sxand{'b; 'c}}}; 'J >- mem{'c; boolset} } -->
-   [main] sequent ['ext] { 'H; x: sprop{sxand{'a; sxand{'b; 'c}}}; 'J; u: sprop{sxand{sxand{'a; 'b}; 'c}} >- 'T } -->
-   sequent ['ext] { 'H; x: sprop{sxand{'a; sxand{'b; 'c}}}; 'J >- 'T }
+   sequent [squash] { <H>; x: sprop{sxand{'a; sxand{'b; 'c}}}; <J> >- isset{'a} } -->
+   sequent [squash] { <H>; x: sprop{sxand{'a; sxand{'b; 'c}}}; <J> >- isset{'b} } -->
+   sequent [squash] { <H>; x: sprop{sxand{'a; sxand{'b; 'c}}}; <J> >- isset{'c} } -->
+   sequent ['ext] { <H>; x: sprop{sxand{'a; sxand{'b; 'c}}}; <J> >- mem{'a; boolset} } -->
+   sequent ['ext] { <H>; x: sprop{sxand{'a; sxand{'b; 'c}}}; <J> >- mem{'b; boolset} } -->
+   sequent ['ext] { <H>; x: sprop{sxand{'a; sxand{'b; 'c}}}; <J> >- mem{'c; boolset} } -->
+   [main] sequent ['ext] { <H>; x: sprop{sxand{'a; sxand{'b; 'c}}}; <J>; u: sprop{sxand{sxand{'a; 'b}; 'c}} >- 'T } -->
+   sequent ['ext] { <H>; x: sprop{sxand{'a; sxand{'b; 'c}}}; <J> >- 'T }
 
 interactive sxand_concl_assoc1 :
-   [wf] sequent [squash] {'H >- isset{'a} } -->
-   [wf] sequent [squash] {'H >- isset{'b} } -->
-   [wf] sequent [squash] {'H >- isset{'c} } -->
-   sequent ['ext] { 'H >- mem{'a; boolset} } -->
-   sequent ['ext] { 'H >- mem{'b; boolset} } -->
-   sequent ['ext] { 'H >- mem{'c; boolset} } -->
-   sequent ['ext] { 'H >- sprop{sxand{sxand{'a; 'b}; 'c}} } -->
-   sequent ['ext] { 'H >- sprop{sxand{'a; sxand{'b; 'c}}} }
+   [wf] sequent [squash] { <H> >- isset{'a} } -->
+   [wf] sequent [squash] { <H> >- isset{'b} } -->
+   [wf] sequent [squash] { <H> >- isset{'c} } -->
+   sequent ['ext] { <H> >- mem{'a; boolset} } -->
+   sequent ['ext] { <H> >- mem{'b; boolset} } -->
+   sequent ['ext] { <H> >- mem{'c; boolset} } -->
+   sequent ['ext] { <H> >- sprop{sxand{sxand{'a; 'b}; 'c}} } -->
+   sequent ['ext] { <H> >- sprop{sxand{'a; sxand{'b; 'c}}} }
 
 let sxandHypAssoc1T = sxand_hyp_assoc1
 let sxandConclAssoc1T = sxand_concl_assoc1
@@ -833,54 +833,54 @@ let sxandAssoc1T i =
 
 (* ************************** exercises ************************* *)
 interactive test_sxandAssocTi 'H :
-   sequent [squash] { 'H >- isset{'a} } -->
-   sequent [squash] { 'H >- isset{'b} } -->
-   sequent [squash] { 'H >- isset{'c} } -->
-   sequent ['ext] { 'H >- mem{'a; boolset} } -->
-   sequent ['ext] { 'H >- mem{'b; boolset} } -->
-   sequent ['ext] { 'H >- mem{'c; boolset} } -->
-   sequent ['ext] { 'H; x: sprop{sxand{'a; sxand{'b; 'c}}} >- sprop{sor{sand{sxand{'a; 'b}; 'c}; sand{snot{sxand{'a; 'b}}; snot{'c}}}} }
+   sequent [squash] { <H> >- isset{'a} } -->
+   sequent [squash] { <H> >- isset{'b} } -->
+   sequent [squash] { <H> >- isset{'c} } -->
+   sequent ['ext] { <H> >- mem{'a; boolset} } -->
+   sequent ['ext] { <H> >- mem{'b; boolset} } -->
+   sequent ['ext] { <H> >- mem{'c; boolset} } -->
+   sequent ['ext] { <H>; x: sprop{sxand{'a; sxand{'b; 'c}}} >- sprop{sor{sand{sxand{'a; 'b}; 'c}; sand{snot{sxand{'a; 'b}}; snot{'c}}}} }
 
 interactive test_sxandAssocT0 'H :
-   sequent [squash] { 'H >- isset{'a} } -->
-   sequent [squash] { 'H >- isset{'b} } -->
-   sequent [squash] { 'H >- isset{'c} } -->
-   sequent ['ext] { 'H >- mem{'a; boolset} } -->
-   sequent ['ext] { 'H >- mem{'b; boolset} } -->
-   sequent ['ext] { 'H >- mem{'c; boolset} } -->
-   sequent ['ext] { 'H; x: sprop{sxand{sxand{'a; 'b}; 'c}} >- sprop{sor{sand{'a; sxand{'b; 'c}}; sand{snot{'a}; snot{sxand{'b; 'c}}}}} }
+   sequent [squash] { <H> >- isset{'a} } -->
+   sequent [squash] { <H> >- isset{'b} } -->
+   sequent [squash] { <H> >- isset{'c} } -->
+   sequent ['ext] { <H> >- mem{'a; boolset} } -->
+   sequent ['ext] { <H> >- mem{'b; boolset} } -->
+   sequent ['ext] { <H> >- mem{'c; boolset} } -->
+   sequent ['ext] { <H>; x: sprop{sxand{sxand{'a; 'b}; 'c}} >- sprop{sor{sand{'a; sxand{'b; 'c}}; sand{snot{'a}; snot{sxand{'b; 'c}}}}} }
 
 interactive morgan1 'H :
-   sequent [squash] { 'H >- isset{'a} } -->
-   sequent [squash] { 'H >- isset{'b} } -->
-   sequent ['ext] { 'H >- mem{'a; boolset} } -->
-   sequent ['ext] { 'H >- mem{'b; boolset} } -->
-   sequent ['ext] { 'H; u: sprop{sor{snot{'a}; snot{'b}}} >- sprop{snot{sand{'a; 'b}}} }
+   sequent [squash] { <H> >- isset{'a} } -->
+   sequent [squash] { <H> >- isset{'b} } -->
+   sequent ['ext] { <H> >- mem{'a; boolset} } -->
+   sequent ['ext] { <H> >- mem{'b; boolset} } -->
+   sequent ['ext] { <H>; u: sprop{sor{snot{'a}; snot{'b}}} >- sprop{snot{sand{'a; 'b}}} }
 
 interactive test1 :
-   sequent [squash] { 'H >- isset{'a} } -->
-   sequent [squash] { 'H >- isset{'b} } -->
-   sequent [squash] { 'H >- isset{'c} } -->
-   sequent ['ext] { 'H >- mem{'a; boolset} } -->
-   sequent ['ext] { 'H >- mem{'b; boolset} } -->
-   sequent ['ext] { 'H >- mem{'c; boolset} } -->
-   sequent ['ext] { 'H >- sprop{siff{sor{sor{sand{'a; 'b}; sand{snot{'b}; 'c}}; sand{'a; 'c}}; sor{sand{'a; 'b}; sand{snot{'b}; 'c}}}} }
+   sequent [squash] { <H> >- isset{'a} } -->
+   sequent [squash] { <H> >- isset{'b} } -->
+   sequent [squash] { <H> >- isset{'c} } -->
+   sequent ['ext] { <H> >- mem{'a; boolset} } -->
+   sequent ['ext] { <H> >- mem{'b; boolset} } -->
+   sequent ['ext] { <H> >- mem{'c; boolset} } -->
+   sequent ['ext] { <H> >- sprop{siff{sor{sor{sand{'a; 'b}; sand{snot{'b}; 'c}}; sand{'a; 'c}}; sor{sand{'a; 'b}; sand{snot{'b}; 'c}}}} }
 
 interactive sxandAssoc :
-   sequent [squash] { 'H >- isset{'a} } -->
-   sequent [squash] { 'H >- isset{'b} } -->
-   sequent [squash] { 'H >- isset{'c} } -->
-   sequent ['ext] { 'H >- mem{'a; boolset} } -->
-   sequent ['ext] { 'H >- mem{'b; boolset} } -->
-   sequent ['ext] { 'H >- mem{'c; boolset} } -->
-   sequent ['ext] { 'H >- sprop{siff{sxand{sxand{'a; 'b}; 'c}; sxand{'a; sxand{'b; 'c}}}} }
+   sequent [squash] { <H> >- isset{'a} } -->
+   sequent [squash] { <H> >- isset{'b} } -->
+   sequent [squash] { <H> >- isset{'c} } -->
+   sequent ['ext] { <H> >- mem{'a; boolset} } -->
+   sequent ['ext] { <H> >- mem{'b; boolset} } -->
+   sequent ['ext] { <H> >- mem{'c; boolset} } -->
+   sequent ['ext] { <H> >- sprop{siff{sxand{sxand{'a; 'b}; 'c}; sxand{'a; sxand{'b; 'c}}}} }
 
 (* interactive xor_assoc :
-   sequent [squash] { 'H >- isset{'a} } -->
-   sequent [squash] { 'H >- isset{'b} } -->
-   sequent [squash] { 'H >- isset{'c} } -->
-   sequent ['ext] { 'H >- mem{'a; boolset} } -->
-   sequent ['ext] { 'H >- mem{'b; boolset} } -->
-   sequent ['ext] { 'H >- mem{'c; boolset} } -->
-   sequent ['ext] { 'H >- sprop{siff{sxor{sxor{'a; 'b}; 'c}; sxor{'a; sxor{'b; 'c}}}} }
+   sequent [squash] { <H> >- isset{'a} } -->
+   sequent [squash] { <H> >- isset{'b} } -->
+   sequent [squash] { <H> >- isset{'c} } -->
+   sequent ['ext] { <H> >- mem{'a; boolset} } -->
+   sequent ['ext] { <H> >- mem{'b; boolset} } -->
+   sequent ['ext] { <H> >- mem{'c; boolset} } -->
+   sequent ['ext] { <H> >- sprop{siff{sxor{sxor{'a; 'b}; 'c}; sxor{'a; sxor{'b; 'c}}}} }
 *)

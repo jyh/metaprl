@@ -58,37 +58,37 @@ let _ =
  * Implication is restricted.
  *)
 interactive prod_fun {| intro [] |} :
-   ["wf"] sequent [squash] { 'H; w: set >- "type"{'A['w]} } -->
-   ["wf"] sequent [squash] { 'H; w: set >- "type"{'B['w]} } -->
-   sequent ['ext] { 'H >- fun_prop{x. 'A['x]} } -->
-   sequent ['ext] { 'H >- fun_prop{x. 'B['x]} } -->
-   sequent ['ext] { 'H >- fun_prop{x. "prod"{'A['x]; 'B['x]}} }
+   ["wf"] sequent [squash] { <H>; w: set >- "type"{'A['w]} } -->
+   ["wf"] sequent [squash] { <H>; w: set >- "type"{'B['w]} } -->
+   sequent ['ext] { <H> >- fun_prop{x. 'A['x]} } -->
+   sequent ['ext] { <H> >- fun_prop{x. 'B['x]} } -->
+   sequent ['ext] { <H> >- fun_prop{x. "prod"{'A['x]; 'B['x]}} }
 
 (*
  * Implication is restricted.
  *)
 interactive prod_res1 {| intro [] |} :
-   sequent ['ext] { 'H >- restricted{. 'A} } -->
-   sequent ['ext] { 'H >- restricted{. 'B} } -->
-   sequent ['ext] { 'H >- restricted{. "prod"{'A; 'B}} }
+   sequent ['ext] { <H> >- restricted{. 'A} } -->
+   sequent ['ext] { <H> >- restricted{. 'B} } -->
+   sequent ['ext] { <H> >- restricted{. "prod"{'A; 'B}} }
 
 (*
  * Implication is restricted.
  *)
 interactive and_fun {| intro [] |} :
-   ["wf"] sequent [squash] { 'H; w: set >- "type"{'A['w]} } -->
-   ["wf"] sequent [squash] { 'H; w: set >- "type"{'B['w]} } -->
-   sequent ['ext] { 'H >- fun_prop{x. 'A['x]} } -->
-   sequent ['ext] { 'H >- fun_prop{x. 'B['x]} } -->
-   sequent ['ext] { 'H >- fun_prop{x. "and"{'A['x]; 'B['x]}} }
+   ["wf"] sequent [squash] { <H>; w: set >- "type"{'A['w]} } -->
+   ["wf"] sequent [squash] { <H>; w: set >- "type"{'B['w]} } -->
+   sequent ['ext] { <H> >- fun_prop{x. 'A['x]} } -->
+   sequent ['ext] { <H> >- fun_prop{x. 'B['x]} } -->
+   sequent ['ext] { <H> >- fun_prop{x. "and"{'A['x]; 'B['x]}} }
 
 (*
  * Implication is restricted.
  *)
 interactive and_res1 {| intro [] |} :
-   sequent ['ext] { 'H >- restricted{. 'A} } -->
-   sequent ['ext] { 'H >- restricted{. 'B} } -->
-   sequent ['ext] { 'H >- restricted{. "and"{'A; 'B}} }
+   sequent ['ext] { <H> >- restricted{. 'A} } -->
+   sequent ['ext] { <H> >- restricted{. 'B} } -->
+   sequent ['ext] { <H> >- restricted{. "and"{'A; 'B}} }
 
 (*
  * -*-

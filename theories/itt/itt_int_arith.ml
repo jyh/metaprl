@@ -194,7 +194,6 @@ let rec all_hyps_aux hyps l i =
    let j = pred i in
       match SeqHyp.get hyps j with
          Hypothesis (_, t) ->
-				eprintf "hyp %i %s%t" j (SimplePrint.short_string_of_term t) eflush;
             all_hyps_aux hyps ((j+1,t)::l) j
        | Context _ ->
             all_hyps_aux hyps l j
@@ -202,7 +201,6 @@ let rec all_hyps_aux hyps l i =
 let all_hyps arg =
    let hyps = (Sequent.explode_sequent arg).sequent_hyps in
 	let len = Term.SeqHyp.length hyps in
-		eprintf "num of hyps %i%t" len eflush;
       all_hyps_aux hyps [] len
 
 let rec append tac len pos l = function

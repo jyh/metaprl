@@ -45,69 +45,11 @@ MPFILES :=\
 	itt_theory\
 	itt_test
 
-PFILES := test
-
-CMXDEPS =\
-	$(CAMLLIB)/unix.cmxa\
-	$(OPTTHREADSLIB)\
-	$(CAMLLIB)/nums.cmxa\
-	$(CAMLP4LIB)/gramlib.cmxa\
-	$(ROOT)/lib/util.cmxa\
-	$(ROOT)/lib/refiner.cmxa\
-	$(ROOT)/lib/library.cmxa\
-	$(ROOT)/lib/trefiner_null.cmxa\
-	$(ROOT)/theories/tactic/tactics.cmxa\
-	$(ROOT)/theories/ocaml/ocaml_df.cmxa\
-	$(ROOT)/theories/base/base.cmxa\
-	itt.cmxa
-
-CMXLIBS =\
-	$(CMXDEPS)
-
-CMADEPS =\
-	$(CAMLLIB)/unix.cma\
-	$(THREADSLIB)\
-	$(CAMLLIB)/nums.cma\
-	$(ROOT)/lib/util.cma\
-	$(ROOT)/lib/refiner.cma\
-	$(ROOT)/lib/library.cma\
-	$(ROOT)/lib/trefiner_null.cma\
-	$(ROOT)/theories/tactic/tactics.cma\
-	$(ROOT)/theories/ocaml/ocaml_df.cma\
-	$(ROOT)/theories/base/base.cma\
-	$(MAIN).cma
-
-CMALIBS =\
-	$(CMADEPS)
-
-CMOBJS =\
-	$(CMALIBS)\
-	test.cmo
-
-CMXOBJS =\
-	$(CMXLIBS)\
-	test.cmx
-
-CCLIBS =\
-	-cclib -lunix\
-        -cclib -lnums\
-	-cclib $(ROOT)/lib/clib.a
-
-TEST = test
-
 # Name of main libraris
 MAIN = itt
 
 all: $(MAIN).cma
 opt: $(MAIN).cmxa
-
-$(TEST).run: $(CMOBJS)
-	$(RM) $@
-	$(OCAMLC) $(OCAMLCFLAGS) -o $@ -custom -linkall $(THREADS) $(CMOBJS) $(CCLIBS) $(LIBTHREADS)
-
-$(TEST).opt: $(CMXOBJS)
-	$(RM) $@
-	$(OCAMLOPT) $(OCAMLOPTFLAGS) -o $@ -linkall $(THREADS) $(CMXOBJS) $(CCLIBS) $(OPTTHREADS)
 
 clean::
 	$(RM) *.p4* *.pp*

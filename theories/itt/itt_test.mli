@@ -30,9 +30,11 @@
  * jyh@cs.cornell.edu
  *)
 
+open Tacticals
+
 include Itt_theory
 
-topval test : unit -> unit
+topval factT : tactic
 
 (*
  * -*-

@@ -68,28 +68,10 @@ let redexC =
            reduceDiv;
            reduceFix]
 
-let goal = mk_msequent << sequent { 'H >- fact{300} = 0 in int } >> []
+interactive fact650 'H : :
+   sequent ['ext] { 'H >- fact{650} = 0 in int }
 
-let cache = Tactic_cache.extract (cache_resource.resource_extract cache_resource)
-
-let arg =
-   Sequent.create (**)
-      (Sequent.sentinal_of_refiner "itt")      (* Sentinal *)
-      "main"            (* Label *)
-      goal              (* Goal of proof *)
-      (Sequent.make_cache (fun () -> cache))             (* Proof cache *)
-      []                (* Attributes *)
-
-let test () =
-   let subgoals, ext = Tacticals.refine (timingT (rw (repeatC (higherC redexC)) 0)) arg in
-      match subgoals with
-         [subgoal] ->
-            Simple_print.SimplePrint.print_simple_term (Sequent.goal subgoal);
-            eflush stdout
-       | [] ->
-            eprintf "No subgoals%t" eflush
-       | _ ->
-            eprintf "Too many subgoals%t" eflush
+let factT = rw (repeatC (higherC redexC)) 0
 
 (*
  * -*-

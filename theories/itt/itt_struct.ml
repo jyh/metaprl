@@ -94,20 +94,11 @@ prim hypothesis 'H 'J 'x :
  * by thin
  * H, J >- A ext t
  *)
-ml_rule thin 'H 'J : ('goal : sequent ['ext] { 'H; x: 'A; 'J >- 'C }) =
-   let thin_ext _ = function
-      [h] ->
-         h
-    | _ ->
-         raise (RefineError ("thin", StringError "extract error"))
-   in
-   let goal, assums = dest_msequent goal in
-   let x = dest_var <:con< 'x >> in
-   let tail = <:con< sequent { 'J >- 'C } >> in
-      if is_free_var x tail then
-         raise (RefineError ("thin", StringStringError ("variable is free", x)))
-      else
-         [mk_msequent <:con< sequent ['ext] { 'H; 'J >- 'C } >> assums], thin_ext
+prim thin 'H 'J : 
+   ('t : sequent ['ext] { 'H; 'J >- 'C }) -->
+   sequent ['ext] { 'H; x: 'A; 'J >- 'C } =
+   't
+
 
 (*
  * H, J >- T ext t[s]

@@ -156,26 +156,23 @@ let tab out i =
 (*
  * Print a substitution.
  *)
-let print_subst out subst =
+let print_subst out =
    let print (v, t) =
       fprintf out " %s=%a" v print_term t
    in
-      List.iter print subst
-
-let print_unify_subst out subst =
-   print_subst out (subst_of_unify_subst subst)
+      List.iter print
 
 (*
- * Build a set from a list.
+ *   Print equnlist
  *)
-let set_of_list =
-   let rec collect set = function
-      s :: tl ->
-         collect (StringSet.add s set) tl
-    | [] ->
-         set
+let print_eqnlist out =
+   let print (t1, t2) =
+      fprintf out " %a=%a" print_term t1 print_term t2
    in
-      collect StringSet.empty
+      List.iter print
+
+let print_unify_eqnlist out eqnl =
+   print_eqnlist out (eqnlist2ttlist   eqnl)
 
 (************************************************************************
  * TERM SET                                                             *
@@ -208,14 +205,14 @@ let rec first_clause_aux i len constants hyps =
          Hypothesis (v, hyp) ->
             let opname = opname_of_term hyp in
                if List.exists (Opname.eq opname) decl_opnames then
-                  first_clause_aux (i + 1) len (v :: constants) hyps
+                  first_clause_aux (i + 1) len (StringSet.add v constants) hyps
                else
                   i, constants
        | Context _ ->
             first_clause_aux (i + 1) len constants hyps
 
 let first_clause hyps =
-   first_clause_aux 0 (SeqHyp.length hyps) [] hyps
+   first_clause_aux 0 (SeqHyp.length hyps) StringSet.empty hyps
 
 (*
  * Figure out which atoms are positive,
@@ -269,7 +266,6 @@ let dest_hyps bound hyps =
                ()
       done
    in
-   let constants = set_of_list constants in
       { tptp_first_hyp = j;
         tptp_constants = constants;
         tptp_hyps = hyps';
@@ -299,7 +295,7 @@ let dest_goal t =
  * as possible.  Return the unifier, and the
  * list of terms that did not match.
  *)
-let rec unify_term_list foundp subst constants term1 = function
+let rec unify_term_list foundp eqnl constants term1 = function
    term2 :: terms2 ->
       begin
          try
@@ -308,24 +304,24 @@ let rec unify_term_list foundp subst constants term1 = function
                   print_term term1
                   print_term term2
                   print_string_list (StringSet.elements constants)
-                  print_unify_subst subst
+                  print_unify_eqnlist eqnl
                   eflush;
-            let subst = unify subst constants term1 term2 in
+            let eqnl = unify_mm_eqnl_eqnl (eqnlist_append_eqn eqnl term1 term2) constants in
                if !debug_tptp then
                   eprintf "Unification:%a%t" (**)
-                     print_unify_subst subst
+                     print_unify_eqnlist eqnl
                      eflush;
-               unify_term_list true subst constants term1 terms2
+               unify_term_list true eqnl constants term1 terms2
          with
-            RefineError _ ->
+           RefineError _ ->
                if !debug_tptp then
                   eprintf "Unification failed%t" eflush;
-               let subst, terms2 = unify_term_list foundp subst constants term1 terms2 in
-                  subst, term2 :: terms2
+               let eqnl, terms2 = unify_term_list foundp eqnl constants term1 terms2 in
+                  eqnl, term2 :: terms2
       end
  | [] ->
       if foundp then
-         subst, []
+         eqnl, []
       else
          raise (RefineError ("unify", StringError "terms do not unify"))
 
@@ -342,7 +338,7 @@ let rec unify_term_lists constants terms1 terms2 =
       term1 :: terms1 ->
          begin
             try
-               let subst, terms2 = unify_term_list false unify_empty constants term1 terms2 in
+               let subst, terms2 = unify_term_list false eqnlist_empty constants term1 terms2 in
                   try
                      let subst, terms1 = unify_term_list true subst constants term1 terms1 in
                         subst, terms1, terms2
@@ -358,8 +354,8 @@ let rec unify_term_lists constants terms1 terms2 =
          raise (RefineError ("unify", StringError "terms do not unify"))
 
 let unify_term_lists constants terms1 terms2 =
-   let subst, terms1, terms2 = unify_term_lists constants terms1 terms2 in
-      subst_of_unify_subst subst, terms1, terms2
+   let eqnl, terms1, terms2 = unify_term_lists constants terms1 terms2 in
+      (unify_mm_eqnl eqnl constants), terms1, terms2
 
 (*
  * Check that the goal and the hyp have some hope at unification.
@@ -646,7 +642,6 @@ let resolveT i p =
    let _, hyp = Sequent.nth_hyp p i in
    let { sequent_hyps = hyps; sequent_goals = goals } = Sequent.explode_sequent p in
    let j, constants = first_clause hyps in
-   let constants = set_of_list constants in
    let hyp_info = dest_hyp hyp in
    let goal_info = dest_goal (SeqGoal.get goals 0) in
    let _ =

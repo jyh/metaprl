@@ -412,25 +412,26 @@ let rfunction_extensionalityT t1 t2 p =
 let inf_rfun inf decl t =
    let f, v, a, b = dest_rfun t in
    let decl', a' = inf decl a in
-   let decl'', b' = inf (add_unify_subst v a (add_unify_subst f (mk_fun_term a void_term) decl')) b in
+   let decl'' = eqnlist_append_var_eqn f (mk_fun_term a void_term) decl' in
+   let decl''', b' = inf (eqnlist_append_var_eqn v a decl'') b in
    let le1, le2 = dest_univ a', dest_univ b' in
-      decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2 0)
+      decl''', Itt_equal.mk_univ_term (max_level_exp le1 le2 0)
 
 let typeinf_resource = Mp_resource.improve typeinf_resource (rfun_term, inf_rfun)
 
 (*
  * Type of lambda.
  *)
-let inf_lambda (f : typeinf_func) (decl : unify_subst) (t : term) =
+let inf_lambda (f : typeinf_func) (decl : eqnlist) (t : term) =
    let v, b = dest_lambda t in
-   let a = new_unify_var decl v in
-   let decl', b' = f (add_unify_subst v (mk_var_term a) decl) b in
+   let a = new_eqns_var decl v in
+   let decl', b' = f (eqnlist_append_var_eqn v (mk_var_term a) decl) b in
    let decl'', a' =
 (*
       try decl', List.assoc a decl' with
          Not_found ->
 *)
-            (add_unify_subst a void_term decl'), void_term
+            (eqnlist_append_var_eqn a void_term decl'), void_term
    in
       decl'', mk_dfun_term v a' b'
 

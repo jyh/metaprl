@@ -279,7 +279,7 @@ let dfun_extensionalityT t1 t2 p =
 let inf_dfun f decl t =
    let v, a, b = dest_dfun t in
    let decl', a' = f decl a in
-   let decl'', b' = f (add_unify_subst v a decl') b in
+   let decl'', b' = f (eqnlist_append_var_eqn v a decl') b in
    let le1, le2 = dest_univ a', dest_univ b' in
       decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2 0)
 

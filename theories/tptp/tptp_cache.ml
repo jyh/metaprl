@@ -39,8 +39,6 @@ open Refiner.Refiner.TermType
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermShape
 
-open Splay_table
-
 let debug_cache =
    create_debug (**)
       { debug_name = "cache";
@@ -305,7 +303,7 @@ end
 (*
  * The term set.
  *)
-module TermTable = Splay_table.MakeTable (TermBase)
+module TermTable = Red_black_table.MakeTable (TermBase)
 
 (************************************************************************
  * IMPLEMENTATION                                                       *

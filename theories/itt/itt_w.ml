@@ -230,7 +230,7 @@ let mk_tree_ind_term = mk_dep0_dep3_term tree_ind_opname
 let inf_w f decl t =
    let v, a, b = dest_w t in
    let decl', a' = f decl a in
-   let decl'', b' = f (add_unify_subst v a decl') b in
+   let decl'', b' = f (eqnlist_append_var_eqn v a decl') b in
    let le1, le2 = dest_univ a', dest_univ b' in
       decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2 0)
 

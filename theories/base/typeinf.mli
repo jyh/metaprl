@@ -64,7 +64,7 @@ val get_typeinf_subst_resource : string -> typeinf_subst_resource
 (*
  * This is the type of the inference algorithm.
  *)
-type typeinf_func = unify_subst -> term -> unify_subst * term
+type typeinf_func = eqnlist -> term -> eqnlist * term
 
 (*
  * Modular components also get a recursive instance of
@@ -96,7 +96,7 @@ val get_typeinf_resource : string -> typeinf_resource
  * Utilities.
  *)
 val typeinf_of_proof : tactic_arg -> typeinf_func
-val infer_type : tactic_arg -> term -> unify_subst * term
+val infer_type : tactic_arg -> term -> eqnlist * term
 val infer_type_args : tactic_arg -> term -> term list
 
 (*

@@ -363,7 +363,7 @@ let typeinf_resource = Mp_resource.improve typeinf_resource (list_term, inf_list
  * Type of nil.
  *)
 let inf_nil f decl t =
-   decl, mk_var_term (new_unify_var decl "T")
+   decl, mk_var_term (new_eqns_var decl "T")
 
 let typeinf_resource = Mp_resource.improve typeinf_resource (nil_term, inf_nil)
 
@@ -374,7 +374,7 @@ let inf_cons inf decl t =
    let hd, tl = dest_cons t in
    let decl', hd' = inf decl hd in
    let decl'', tl' = inf decl' tl in
-      unify decl'' StringSet.empty (mk_list_term hd') tl', tl'
+      unify_mm_eqnl_eqnl (eqnlist_append_eqn decl'' (mk_list_term hd') tl') StringSet.empty, tl'
 
 let typeinf_resource = Mp_resource.improve typeinf_resource (cons_term, inf_cons)
 
@@ -388,12 +388,12 @@ let inf_list_ind inf decl t =
          let decl'', base' = inf decl' base in
          let a = dest_list e' in
          let decl''', step' =
-            inf (add_unify_subst hd a (**)
-                    (add_unify_subst tl e' (**)
-                        (add_unify_subst f base' decl'')))
+            inf (eqnlist_append_var_eqn hd a (**)
+                    (eqnlist_append_var_eqn tl e' (**)
+                        (eqnlist_append_var_eqn f base' decl'')))
             step
          in
-            unify decl''' StringSet.empty base' step', base'
+            unify_mm_eqnl_eqnl (eqnlist_append_eqn decl''' base' step') StringSet.empty, base'
       else
          raise (RefineError ("typeinf", StringTermError ("can't infer type for", t)))
 

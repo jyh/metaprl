@@ -222,7 +222,7 @@ let mk_srecind_term = mk_dep0_dep2_term srecind_opname
  *)
 let inf_srec f decl t =
    let a, body = dest_srec t in
-      f (add_unify_subst a void_term decl) body
+      f (eqnlist_append_var_eqn a void_term decl) body
 
 let typeinf_resource = Mp_resource.improve typeinf_resource (srec_term, inf_srec)
 
@@ -233,7 +233,7 @@ let typeinf_resource = Mp_resource.improve typeinf_resource (srec_term, inf_srec
 let inf_srecind f decl t =
    let p, h, a, g = dest_srecind t in
    let decl', a' = f decl a in
-      f (add_unify_subst p a' (add_unify_subst h a' decl')) g
+      f (eqnlist_append_var_eqn p a' (eqnlist_append_var_eqn h a' decl')) g
 
 let typeinf_resource = Mp_resource.improve typeinf_resource (srecind_term, inf_srecind)
 

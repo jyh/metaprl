@@ -224,7 +224,7 @@ let mk_precind_term = mk_dep0_dep2_term precind_opname
 let inf_prec f decl t =
    let a, b, body, arg = dest_prec t in
    let decl', arg' = f decl arg in
-      f (add_unify_subst a void_term (add_unify_subst b arg' decl')) body
+      f (eqnlist_append_var_eqn a void_term (eqnlist_append_var_eqn b arg' decl')) body
 
 let typeinf_resource = Mp_resource.improve typeinf_resource (prec_term, inf_prec)
 
@@ -235,7 +235,7 @@ let typeinf_resource = Mp_resource.improve typeinf_resource (prec_term, inf_prec
 let inf_precind f decl t =
    let p, h, a, g = dest_precind t in
    let decl', a' = f decl a in
-      f (add_unify_subst p a' (add_unify_subst h a' decl')) g
+      f (eqnlist_append_var_eqn p a' (eqnlist_append_var_eqn h a' decl')) g
 
 let typeinf_resource = Mp_resource.improve typeinf_resource (precind_term, inf_precind)
 

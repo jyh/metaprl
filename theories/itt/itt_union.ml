@@ -323,7 +323,7 @@ let typeinf_resource = Mp_resource.improve typeinf_resource (union_term, inf_uni
 let inf_inl f decl t =
    let a = dest_inl t in
    let decl', a' = f decl a in
-      decl', mk_union_term a' (mk_var_term (new_unify_var decl' "T"))
+      decl', mk_union_term a' (mk_var_term (new_eqns_var decl' "T"))
 
 let typeinf_resource = Mp_resource.improve typeinf_resource (inl_term, inf_inl)
 
@@ -333,20 +333,20 @@ let typeinf_resource = Mp_resource.improve typeinf_resource (inl_term, inf_inl)
 let inf_inr f decl t =
    let a = dest_inr t in
    let decl', a' = f decl a in
-      decl', mk_union_term (mk_var_term (new_unify_var decl' "T")) a'
+      decl', mk_union_term (mk_var_term (new_eqns_var decl' "T")) a'
 
 let typeinf_resource = Mp_resource.improve typeinf_resource (inr_term, inf_inr)
 
 (*
  * Type of decide.
  *)
-let inf_decide (inf : typeinf_func) (decl : unify_subst) (t : term) =
+let inf_decide (inf : typeinf_func) (decl : eqnlist) (t : term) =
    let e, x, a, y, b = dest_decide t in
    let decl', e' = inf decl e in
    let l, r = dest_union e' in
-   let decl'', a' = inf (add_unify_subst x l decl') a in
-   let decl''', b' = inf (add_unify_subst y l decl'') b in
-      unify decl''' StringSet.empty a' b', a'
+   let decl'', a' = inf (eqnlist_append_var_eqn x l decl') a in
+   let decl''', b' = inf (eqnlist_append_var_eqn y l decl'') b in
+      unify_mm_eqnl_eqnl (eqnlist_append_eqn decl''' a' b') StringSet.empty, a'
 
 let typeinf_resource = Mp_resource.improve typeinf_resource (decide_term, inf_decide)
 

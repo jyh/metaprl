@@ -34,6 +34,7 @@
 
 open Printf
 open Mp_debug
+open String_set
 
 open Refiner.Refiner
 open Refiner.Refiner.TermType
@@ -74,7 +75,7 @@ resource (typeinf_subst_info, typeinf_subst_fun, typeinf_subst_data, unit) typei
 (*
  * This is the type of the inference algorithm.
  *)
-type typeinf_func = unify_subst -> term -> unify_subst * term
+type typeinf_func = eqnlist -> term -> eqnlist * term
 
 (*
  * Modular components also get a recursive instance of
@@ -197,7 +198,7 @@ let infer tbl =
    let rec aux decl t =
       if is_var_term t then
          let v = dest_var t in
-            try decl, List.assoc v (subst_of_unify_subst decl) with
+            try decl, List.assoc v (unify_mm_eqnl decl StringSet.empty) with
                Not_found ->
                   raise (RefineError ("typeinf", StringTermError ("can't infer type for", t)))
       else
@@ -247,7 +248,8 @@ let typeinf_of_proof p =
 
 let infer_type p t =
    let subst = collect_subst p in
-      (get_typeinf_arg p "typeinf") (unify_subst_of_subst subst) t
+   let eqns = List.map (fun (v,t) -> (mk_var_term v, t)) subst in
+      (get_typeinf_arg p "typeinf") (eqnlist_append_eqns eqnlist_empty eqns) t
 
 let infer_type_args p t =
    let t =

@@ -306,7 +306,7 @@ let mk_quotient_term = mk_dep0_dep2_term quotient_opname
 let inf_quotient f decl t =
    let x, y, a, e = dest_quotient t in
    let decl', a' = f decl a in
-   let decl'', e' = f (add_unify_subst x a (add_unify_subst y a decl')) e in
+   let decl'', e' = f (eqnlist_append_var_eqn x a (eqnlist_append_var_eqn y a decl')) e in
    let le1, le2 = dest_univ a', dest_univ e' in
       decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2 0)
 

@@ -57,10 +57,6 @@ doc <:doc<
    @hreftactic[squashT] and @hreftactic[unsquashT]
    make use of the @hrefresource[squash_resource].
   
-   We also create a new version of @hreftactic[nthAssumT] tactic that knows how
-   to do thinning and squashing/unsquashing. This new @tt[nthAssumT] is added
-   to @hreftactic[trivialT].
-  
    @end[doc]
   
    ----------------------------------------------------------------
@@ -504,21 +500,12 @@ let unsquashAllT = funT (fun p ->
  * AUTO TACTIC                                                          *
  ************************************************************************)
 
-let nthAssumT = argfunT (fun i p ->
-   let assum = Sequent.nth_assum p i in
-      Top_tacticals.thinMatchT thinT assum thenT nthAssumT i)
-
-let resource auto += [{
-   auto_name = "Itt_squash.nthAssumT";
-   auto_prec = d_prec;
-   auto_tac = onSomeAssumT nthAssumT;
-   auto_type = AutoTrivial;
-}; {
+let resource auto += {
    auto_name = "Itt_squash.unsquashAllT";
    auto_prec = trivial_prec;
    auto_tac = unsquashAllT;
    auto_type = AutoNormal;
-}]
+}
 
 (*
  * -*-

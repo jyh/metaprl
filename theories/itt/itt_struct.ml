@@ -288,6 +288,9 @@ doc <:doc<
       <<sequent{ <H>; <J> >- 'C}>>;
       <<sequent{ <H>; "i. x_i": 'A_i; math_cdots; "j. x_j": 'A_j; <J> >- 'C}>>}
    $$
+
+   We also create a new version of @hreftactic[nthAssumT] tactic that knows how
+   to do thinning. This new @tt[nthAssumT] is added to @hreftactic[trivialT].
   
    @docoff
    @end[doc]
@@ -309,6 +312,10 @@ let thinAllT i j = funT (fun p ->
          thinT j thenT tac (pred j)
    in
       tac j)
+
+let nthAssumT = argfunT (fun i p ->
+   let assum = Sequent.nth_assum p i in
+      Top_tacticals.thinMatchT thinT assum thenT nthAssumT i)
 
 doc <:doc< 
    @begin[doc]
@@ -447,7 +454,10 @@ let equalityAssumT = argfunT (fun i p ->
    let t' = dest_type_term (Sequent.concl p) in
    let t,a,b = dest_equal (TermMan.nth_concl (Sequent.nth_assum p i) 1) in
       if alpha_equal t t' then
-         equalTypeT a b else failT)
+         equalTypeT a b thenT nthAssumT i else failT)
+
+let autoAssumT i =
+   nthAssumT i orelseT equalityAssumT i
 
 doc <:doc< 
    @begin[doc]
@@ -465,10 +475,10 @@ let resource auto += [{
    auto_tac = onSomeHypT nthHypT;
    auto_type = AutoTrivial;
 }; {
-   auto_name = "Itt_struct.equalityAssumT";
-   auto_prec = trivial_prec;
-   auto_tac = onSomeAssumT equalityAssumT;
-   auto_type = AutoComplete;
+   auto_name = "Itt_struct.autoAssumT";
+   auto_prec = create_auto_prec [equality_prec] [];
+   auto_tac = onSomeAssumT autoAssumT;
+   auto_type = AutoTrivial;
 }]
 
 (*

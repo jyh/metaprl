@@ -1173,7 +1173,7 @@ let make_assumT i goal assum form index =
    (* Call intro form on each arg *)
    let rec introT j =
       if j > len then begin
-         Itt_squash.nthAssumT i
+         Itt_struct.nthAssumT i
       end else
          (dT 0 thenMT introT (succ j))
    in

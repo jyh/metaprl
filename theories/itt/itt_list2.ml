@@ -790,6 +790,13 @@ interactive index_mem {| intro [AutoMustComplete] |} :
     sequent { <H> >- 'l in list } -->
     sequent { <H> >- 'i in Index{'l} }
 
+interactive index_nil_elim {| elim []; squash; nth_hyp |} 'H :
+   sequent { <H>; i:Index{nil}; <J['i]> >-  'P['i] }
+
+interactive index_elim {| elim [] |} 'H :
+   sequent { <H>; i:nat; 'i<length{'l}; <J['i]> >-  'P['i] } -->
+   sequent { <H>; i:Index{'l}; <J['i]> >-  'P['i] }
+
 interactive index_is_int {| nth_hyp |} 'H :
     sequent { <H>; i:Index{'l}; <J['i]> >- 'i in int }
 
@@ -798,6 +805,11 @@ interactive nth_wf {| intro [] |} :
    [wf] sequent { <H> >- 'l in list{'T} } -->
    [wf] sequent { <H> >- 'i in Index{'l} } -->
    sequent { <H> >- nth{'l; 'i} in 'T }
+
+interactive index_rev_wf {| intro[] |} :
+   [wf] sequent { <H> >- 'l in list } -->
+   sequent { <H> >-  'i in Index{'l} } -->
+   sequent { <H> >-  length{'l} -@ ('i +@ 1) in Index{'l} }
 
 interactive replace_nth_wf {| intro [] |} :
    [wf] sequent { <H> >- "type"{'T} } -->
@@ -906,12 +918,6 @@ h::t
 *)
 
 
-interactive index_rev_wf {| intro[] |} :
-   [wf] sequent { <H> >- 'l in list } -->
-   sequent { <H> >-  'i in Index{'l} } -->
-   sequent { <H> >-  length{'l} -@ ('i +@ 1) in Index{'l} }
-
-
 
 define unfold_tail: tail{'l;'n} <--> ind{'n; nil;   k,r. cons{nth{'l;length{'l} -@ 'k}; 'r} }
 
@@ -920,6 +926,11 @@ interactive_rw tail_reduce1 {| reduce |}:
 interactive_rw tail_reduce2 {| reduce |}: ('n in nat) -->
    tail{'l;'n+@1} <-->  cons{nth{'l;length{'l} -@ ('n +@ 1)};  tail{'l;'n} }
 
+interactive tail_wf {| intro[] |}:
+   sequent { <H> >-  'l in list{'A} } -->
+   sequent { <H> >-  'n in nat } -->
+   sequent { <H> >- 'n <= length{'l} } -->
+   sequent { <H> >- tail{'l;'n} in list{'A} }
 
 interactive tail_does_not_depend_on_the_head {| intro[] |}:
    sequent { <H> >-  'l in list } -->

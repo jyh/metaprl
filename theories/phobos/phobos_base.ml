@@ -29,7 +29,7 @@
  * Author: Adam Granicz <granicz@cs.caltech.edu>
  *
  *)
-extends Mptop
+extends Shell
 extends Summary
 extends Base_meta
 

@@ -74,7 +74,7 @@ doc <:doc<
    @end[doc]
 >>
 extends Summary
-extends Mptop
+extends Shell
 extends Var
 extends Top_tacticals
 extends Top_conversionals

@@ -30,7 +30,7 @@
  *
  *)
 
-extends Mptop
+extends Shell
 extends Summary
 
 open Refiner.Refiner.TermType

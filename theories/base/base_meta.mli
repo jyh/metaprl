@@ -31,7 +31,7 @@
  *
  *)
 
-extends Mptop
+extends Shell
 extends Summary
 
 (*

@@ -48,81 +48,25 @@ open Basic_tactics
 doc "doc"{terms}
 
 
-define  Pi{'l} <--> {'bts: list{BTerm}
+define  Pi{'l} <--> list_ind{'l; unit; x,t,g. 'g * 'x}
 
 define unfold_BTerm:  BTerm{'n} <--> "prec"{BTerm,n.
                                                if 'n<0 then void
                                                else Var{'n} + op: Operator * Pi{map {lambda{i.'BTerm{'n -@ 'i}}; arity{'op} }}
                                            ; 'n}
-
-declare BTerm{'n}        (* Type of bterms with binding variable n *)
+       (* Type of bterms with binding variable n *)
 declare make_bterm{'op; 'subterms}
 declare bterm_ind{'bt; v.'var_case['v];
                        op,subterms,rec. 'op_case['op; 'subterms; 'rec] }
 
-prim_rw bterm_ind_reduce:
+interactive_rw bterm_ind_reduce:
       bterm_ind{make_bterm{'op; 'subterms};
                 v.'var_case['v];
                 op,subterms,rec. 'op_case['op; 'subterms; 'rec] } <-->
-         'op_case{'op;'subterms; 'bterm_ind{
+         'op_case['op;'subterms; 'bterm_ind{
 
 
 doc "doc"{rules}
-
-interactive
-
-prim op_univ {| intro [] |}:
-   sequent { <H> >- Operator in univ[l:l] } = it
-
-interactive op_type {| intro [] |}:
-   sequent { <H> >- Operator Type }
-
-prim bop_univ {| intro [] |}:
-   sequent { <H> >- BOperator in univ[l:l] } = it
-
-interactive bop_type {| intro [] |}:
-   sequent { <H> >- BOperator Type }
-
-
-prim bop_subtype_op {| intro [] |}:
-   sequent { <H> >- 'op in BOperator } -->
-   sequent { <H> >- 'op in Operator }
-   = it
-
-prim same_op_wf {| intro [] |} :
-   sequent { <H> >- 'op_1 in BOperator } -->
-   sequent { <H> >- 'op_2 in BOperator } -->
-   sequent { <H> >- same_op{'op_1;'op_2} in bool }
-   = it
-
-prim same_op_eq {| intro [] |} :
-   sequent { <H> >- 'op_1 in BOperator } -->
-   sequent { <H> >- 'op_2 in BOperator } -->
-   sequent { <H> >- iff{'op_1 = 'op_2 in Operator; "assert"{same_op{'op_1;'op_2}}} }
-   = it
-
-prim binding_depth_wf {| intro [] |} :
-   sequent { <H> >- 'op in BOperator } -->
-   sequent { <H> >- binding_depth{'op} in nat }
-   = it
-
-prim arity_wf {| intro [] |} :
-   sequent { <H> >- 'op in Operator } -->
-   sequent { <H> >- arity{'op} in list{nat} }
-   = it
-
-prim down_wf {| intro [] |} :
-   sequent { <H> >- 'op in BOperator } -->
-   sequent { <H> >- binding_depth{'op} > 0 } -->
-   sequent { <H> >- down{'op} in  BOperator }
-   = it
-
-prim down_red {| intro [] |} :
-   sequent { <H> >- 'op in BOperator } -->
-   sequent { <H> >- binding_depth{'op} > 0 } -->
-   sequent { <H> >- binding_depth{down{'op}} =  binding_depth{'op} -@ 1 in nat }
-   = it
-
 
 
 doc <:doc< @docoff >>

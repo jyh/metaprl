@@ -33,6 +33,7 @@
 extends Itt_list
 extends Itt_logic
 extends Itt_bool
+extends Itt_isect
 
 open Basic_tactics
 
@@ -122,6 +123,12 @@ declare rev{'l}
  * Make the list of the size 'n from the function 'f:[0..n-1]->'T
  *)
 declare mklist{'n;'f}
+
+(*
+ * I/O abstraction for list{top}
+ *)
+declare list : Nonterminal
+iform unfold_list: list <--> list{top}
 
 (************************************************************************
  * HELPERS                                                              *

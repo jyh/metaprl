@@ -324,12 +324,15 @@ let sub_resource =
    sub_resource.resource_improve
    sub_resource
    (DSubtype ([<< list{'A1} >>, << list{'A2} >>;
-               << 'A2 >>, << 'A1 >>;
-               << 'B1 >>, << 'B2 >>],
+               << 'A2 >>, << 'A1 >>],
               list_subtypeT))
 
 (*
  * $Log$
+ * Revision 1.3  1997/08/07 19:43:52  jyh
+ * Updated and added Lori's term modifications.
+ * Need to update all pattern matchings.
+ *
  * Revision 1.2  1997/08/06 16:18:33  jyh
  * This is an ocaml version with subtyping, type inference,
  * d and eqcd tactics.  It is a basic system, but not debugged.

@@ -130,7 +130,7 @@ prim functionSubtype 'H 'a :
  *
  * H; x: a1:A1 -> B1 <= a2:A2 -> B2; y: A2 <= A1; z: a:A2 -> B2[a] <= B1[a]; J[x] >- T[x]
  *)
-prim function_subtypeElimination 'H 'J 'y 'z 'a :
+prim function_subtypeElimination 'H 'J 'x 'y 'z 'a :
    ('t['x; 'y; 'z] : sequent { 'H;
              x: subtype{(a1:'A1 -> 'B1['a1]); (a2:'A2 -> 'B2['a2])};
              'J['x];
@@ -147,7 +147,7 @@ prim function_subtypeElimination 'H 'J 'y 'z 'a :
  *
  * H; x: a1:A1 -> B1 = a2:A2 -> B2 in Ui; y: A1 = A2 in Ui; z: a:A1 -> B1[a] = B2[a] in Ui; J[x] >- T[x]
  *)
-prim function_equalityElimination 'H 'J 'y 'z 'a :
+prim function_equalityElimination 'H 'J 'x 'y 'z 'a :
    ('t['x; 'y; 'z] : sequent { 'H;
              x: (a1:'A1 -> 'B1['a1]) = (a2:'A2 -> 'B2['a2]) in univ[@i:l];
              'J['x];
@@ -155,8 +155,7 @@ prim function_equalityElimination 'H 'J 'y 'z 'a :
              z: a:'A1 -> ('B1['a] = 'B2['a] in univ[@i:l])
              >- 'T['x]
            }) -->
-sequent { 'H; x: (a1:'A1 -> 'B1['a1]) = (a2:'A2 -> 'B2['a2]) in univ[@i:l]; 'J['x] >- 'T['x] } =
-
+   sequent { 'H; x: (a1:'A1 -> 'B1['a1]) = (a2:'A2 -> 'B2['a2]) in univ[@i:l]; 'J['x] >- 'T['x] } =
    't['x; it; lambda{x. it}]
 
 (************************************************************************
@@ -288,6 +287,10 @@ let sub_resource =
 
 (*
  * $Log$
+ * Revision 1.3  1997/08/07 19:43:51  jyh
+ * Updated and added Lori's term modifications.
+ * Need to update all pattern matchings.
+ *
  * Revision 1.2  1997/08/06 16:18:24  jyh
  * This is an ocaml version with subtyping, type inference,
  * d and eqcd tactics.  It is a basic system, but not debugged.

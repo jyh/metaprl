@@ -40,38 +40,149 @@ doc <:doc<
 @begin[doc]
 
 Disjoint unions, also called @emph{tagged unions} or @emph{variant
-records}, are ubiquitous in OCaml programs.  A disjoint union
-represents a set of @emph{cases} of a particular type.  For example,
-we may say that a binary tree contains nodes that are either
-@emph{interior} nodes or @emph{leaves}.  Suppose that the interior
-nodes have a label of type @code{'a}.  In OCaml, this would be
-expressed as a type definition using the @tt{type} keyword.  The type
-is recursively defined, and it contains a type parameter @code{'a} for
-the type of elements.
+records}, are an important part of the OCaml type system.  A disjoint
+union, or union for short, represents the union of several different
+types, where each of the cases is given an unique, explicit name.  The
+following syntax is used for defining a union type.
+
+@begin[center]
+@begin[tabular,l]
+@line{{@code{type} @emph{typename} =}}
+@line{{$@space$ $@space$ $@emph{Name}_1$ @code{of} $@emph{type}_1$}}
+@line{{$@space$ $|$ $@emph{Name}_2$ @code{of} $@emph{type}_2$}}
+@line{{$@space$ $@space$ $@vdots$}}
+@line{{$@space$ $|$ $@emph{Name}_n$ @code{of} $@emph{type}_n$}}
+@end[tabular]
+@end[center]
+
+The union type is defined by a set of cases separated by the vertical
+bar (@code{|}) character.  Each case $i$ has an explicit name
+$@emph{Name}_i$, called a @emph{constructor}; and it has an optional
+value of type $@emph{type}_i$.  The constructor name must be
+capitalized.  The definition @code{of} $@emph{type}_n$ is optional; if
+ommitted there is no explicit value associated with the constructor.
+
+Let's look at a simple example using unions, where we wish to define a
+numeric type that is either a value of type @code{int} or @code{float}
+or a canonical value @code{Zero}.  We might define this type as follows.
 
 @begin[iverbatim]
-# type 'a btree =
-     Node of 'a * 'a btree * 'a btree
-   | Leaf;;
-type 'a btree = | Node of 'a * 'a btree * 'a btree | Leaf
+# type number =
+     Zero
+   | Integer of int
+   | Real of float;;
+type number = Zero | Integer of int | Real of float
 @end[iverbatim]
 
-The name of the type is @tt{btree}, and the type parameterization uses
-prefix notation @code{'a btree}.  The cases are separated by a
-vertical dash (the @code{|} character).  Each case has a name and an
-optional set of values.  The name must begin with an uppercase letter.
-In this case, the type of the definition is @code{'a btree}, and the
-interior node @code{Node} has three values: a label of type @code{'a},
-a left child of type @code{'a btree}, and a right child of type
-@code{'a btree}.
+@noindent
+Values in a disjoint union are constructed by applying a constructor to
+an expression of the appropriate type.
 
-The names (like @code{Node} and @code{Leaf}) are called
-@emph{constructors}.  Constructors can be viewed as functions that
-@emph{inject} values into the disjoint union.  Thus, the @code{Node}
-constructor would be a function of type
-@code{('a * 'a btree * 'a btree) -> 'a btree}.
-For technical reasons, OCaml does not allow
-constructors with arguments to be used as values.
+@begin[iverbatim]
+# let zero = Zero;;
+val zero : number = Zero
+# let i = Integer 1;;
+val i : number = Integer 1
+# let x = Real 3.2;;
+val x : number = Real 3.2
+@end[verbatim]
+
+Patterns also use the constructor name.  For example, we can define a function
+that returns a floating-point representation of a number as follows.  In this program,
+each pattern specifies a constructor name as well as a variable for the constructors
+that have values.
+
+@begin[iverbatim]
+# let float_of_number = function
+     Zero -> 0.0
+   | Integer i -> float_of_int i
+   | Real x -> x
+@end[iverbatim]
+
+Patterns can be arbitrarily nested.  For example, the following
+function represents one way that we might perform addition of values
+in the @code{number} type.
+
+@begin[iverbatim]
+# let add n1 n2 =
+     match n1, n2 with
+        Zero, n
+      | n, Zero ->
+          n
+      | Integer i1, Integer i2 ->
+          Integer (i1 + i2)
+      | Integer i, Real x
+      | Real x, Integer i ->
+          Real (x +. float_of_int i)
+      | Real x1, Real x2 ->
+          Real (x1 +. x2);;
+val add : number -> number -> number = <fun>
+# add x i;;
+- : number = Real 4.2
+@end[iverbatim]
+
+There are a few things to note in this pattern matching.  First, we are matching
+against the pair @code{(n1, n2)} of the numbers @code{n1} and @code{n2} being added.
+The patterns are then pair patterns.  For example, the following clause specifies that
+if the first number is @code{Zero} and the second is @code{n}, or if the second number
+is @code{Zero} and the first is @code{n}, then the sum is @code{n}.
+
+@begin[iverbatim]
+        Zero, n
+      | n, Zero ->
+          n
+@end[iverbatim]
+
+The second thing to note is that we are able to collapse some of the
+cases using similar patterns.  For example, the code for adding
+@code{Integer} and @code{Real} values is the same, whether the first
+number is an @code{Integer} or @code{Real}.  In both cases, the
+variable @code{i} is bound to the @code{Integer} value, and @code{x}
+to the @code{Real} value.
+
+OCaml allows two patterns $p_1$ and $p_2$ to be combined into a choice
+pattern $p_1 | p_2$ under two conditions: both patterns must
+define the same variables; and, the variables must have the same
+types.  Otherwise, the placement of variables in $p_1$ and $p_2$ is
+unrestricted.
+
+In the remainder of this chapter we will describe the the disjoint union
+type more completely, using a running example for building balanced binary trees,
+and frequently-used data structure in functional programs.
+
+@section["union-binary-trees"]{Binary trees}
+
+Binary trees are frequently used data structure for representing
+collection of data.  A binary tree is a collection of nodes (also
+called vertices), where each node has either zero or two nodes called
+@emph{children}.  If node $n_2$ is a child of $n_1$, then $n_1$ is
+called the @emph{parent} of $n_2$.  One node, called the @emph{root},
+has no parents; all other nodes have exactly one parent.
+
+One way to represent this data structure is by defining a disjoint
+union for the type of a node and its children.  Since each node has
+either zero or two children, we need two cases.  The following
+definition defines the type for a labeled tree: the @code{'a} type
+variable represents the type of labels; the @code{Node} constructor
+represents a node with two children; and the @code{Leaf} constructor
+represents a node with no children.  Note that the type @code{'a tree}
+is defined with a type parameter @code{'a} for the type of labels.
+Note that this type definition is recursive.  The type @code{'a tree}
+is mentioned in its own definition.
+
+@begin[iverbatim]
+# type 'a tree =
+     Node of 'a * 'a tree * 'a tree
+   | Leaf;;
+type 'a tree = | Node of 'a * 'a tree * 'a tree | Leaf
+@end[iverbatim]
+
+The use of tuple types in a constructor definition (for example,
+@code{Node of 'a * 'a tree * 'a tree}) is quite common, and has an
+efficient implementation.  When applying a constructor, parentheses
+are required around the elements of the tuple.  In addition, even
+though constructors with arguments are similar to functions, they are
+not functions, and may not be used as values.
 
 @begin[iverbatim]
 # Leaf;;
@@ -83,10 +194,9 @@ The constructor Node expects 3 argument(s),
 but is here applied to 0 argument(s)
 @end[iverbatim]
 
-A value with a union type is a value having @emph{one of} the cases.
-The value can be recovered through pattern matching.  For example, a
-function that counts the number of interior nodes in a value of type
-@code{'a btree} would be defined as follows.
+Since the type definition for @code{'a tree} is recursive, many of the functions
+defined on the tree will also be recursive.  For example, the following function
+defines one way to count the number of non-leaf nodes in the tree.
 
 @begin[iverbatim]
 # let rec cardinality = function
@@ -100,9 +210,8 @@ val cardinality : 'a btree -> int = <fun>
 
 @section["unbalanced-btree"]{Unbalanced binary trees}
 
-To see how this works, lets build a simple data structure for
-unbalanced binary trees that represent sets of values of type
-@code{'a}.
+Now that we have defined the type if binary trees, lets build a simple
+data structure for representing sets of values of type @code{'a}.
 
 The empty set is just a @code{Leaf}.  To add an element to a set @tt{s}, we
 create a new @code{Node} with a @code{Leaf} as a left-child, and
@@ -126,7 +235,7 @@ val s : int btree =
         Node (11, Leaf, Node (13, Leaf, Leaf)))))
 @end[iverbatim]
 
-The membership function is defined by induction on the tree: an
+The membership function is defined recursively: an
 element $x$ is a member of a tree iff the tree is a @code{Node} and $x$
 is the label, or $x$ is in the left or right subtrees.
 
@@ -146,12 +255,13 @@ val mem : 'a -> 'a btree -> bool = <fun>
 
 One problem with the unbalanced tree is that the complexity of the
 membership operation is $O(n)$, where $n$ is cardinality of the set.
-We can improve this slightly by @emph{ordering} the nodes in the tree.
-The invariant we maintain is the following: for any interior node
-@code{Node (x, left, right)}, all the labels in the left child are
-smaller than @tt{x}, and all the labels in the right child are larger
-than @tt{x}.  To maintain this invariant, we need to modify the
-insertion function.
+
+We can can begin to address this by ordering the nodes in the tree.
+The invariant we would like to maintain is the following: for any
+interior node @code{Node (x, left, right)}, all the labels in the left
+child are smaller than @tt{x}, and all the labels in the right child
+are larger than @tt{x}.  To maintain this invariant, we need to modify
+the insertion function.
 
 @begin[iverbatim]
 # let rec insert x = function
@@ -177,7 +287,7 @@ val s : int btree =
         Node (5, Leaf, Node (7, Leaf, Leaf)), Leaf), Leaf))
 @end[iverbatim]
 
-Note that this insertion function does not build balanced trees.  If
+Note that this insertion function still does not build balanced trees.  If
 elements are inserted in order, the tree will be maximally unbalanced,
 with all the elements inserted along the right branch.
 
@@ -209,15 +319,11 @@ guarantee balancing, the complexity is still $O(n)$, worst case.
 
 @section["balanced-red-black-trees"]{Balanced red-black trees}
 
-For a more advanced example of pattern matching on unions, consider
-the implementation of balanced trees as red-black trees.  This section may
-be skipped by the reader who is already familiar with advanced pattern
-matching.
-
-We'll use a functional implementation of red-black trees due to Chris
-Okasaki @cite[Oka99].  Red-black trees add a label, either
-@code{Red} or @code{Black} to each of the interior nodes.  Several new
-invariants are maintained.
+In order to address the complexity problem, we turn to an
+implementation of balanced binary trees.  We'll use a functional
+implementation of red-black trees due to Chris Okasaki @cite[Oka99].
+Red-black trees add a label, either @code{Red} or @code{Black}, to each
+of the interior nodes.  We will establish several new invariants.
 
 @begin[enumerate]
 @item{Every leaf is colored black.}

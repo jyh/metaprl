@@ -138,7 +138,6 @@ interactive ext_test2 :
             add3 (f (x), g (x), h (x))
       >> } }
 
-
 (*
  * -*-
  * Local Variables:

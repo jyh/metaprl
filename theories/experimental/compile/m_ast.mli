@@ -99,3 +99,10 @@ doc <:doc<
    Missing: Tuples.
    @end[doc]
 >>
+
+doc <:doc< 
+   @begin[doc]
+   The parsed program is represented as an AST term.
+   @end[doc]
+>>
+declare AST{'e}

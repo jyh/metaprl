@@ -56,7 +56,7 @@ open Tactic_type.Conversionals
 
 let convertT =
    (* IR conversion *)
-   irT
+   tryT irT
 
    (* CPS conversion *)
    thenT cpsT

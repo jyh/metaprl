@@ -89,6 +89,9 @@ Terms -extend "M_ast" {
 
    // Function projection
    declare AstLetFun{'R; 'label; 'rest}
+
+   // The main AST term
+   declare AST{'e}
 }
 
 // These terms must be eliminated by the end of the
@@ -184,7 +187,10 @@ Tokens -longest {
 // Specify grammar.
 // Must supply a start symbol.
 
-Grammar -start exp {
+Grammar -start main {
+   main ::=
+      exp<'e>                       => AST{'e}
+
    exp ::=
     // Numbers
       NUM<number[i:n]>              => IntExpr[i:n]

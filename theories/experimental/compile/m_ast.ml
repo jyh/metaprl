@@ -123,6 +123,13 @@ doc <:doc<
    @end[doc]
 >>
 
+doc <:doc< 
+   @begin[doc]
+   The parsed program is represented as an AST term.
+   @end[doc]
+>>
+declare AST{'e}
+
 (************************************************************************
  * Display forms
  *)
@@ -259,3 +266,7 @@ dform ast_arg_cons_df2 : parens :: "prec"[prec_comma] :: AstArgCons{'a; 'b} =
 
 dform ast_arg_nil_df : parens :: "prec"[prec_comma] :: AstArgNil =
    `""
+
+(* AST term *)
+dform ast_df : AST{'e} =
+   bf["AST term="] slot{'e}

@@ -148,9 +148,9 @@ prim_rw ir_lambda {| ir |} :
    <-->
    LetRec{R. Fields{
       FunDef{Label["g":t]; AtomFun{v1. IR{'body['v1]; v3.
-         Return{AtomVar{'v3}}}};
+         Return{'v3}}}; (**)
       EndDef}};
-   R. LetFun{'R; Label["g":t]; g. 'e['g]}}
+   R. LetFun{'R; Label["g":t]; g. 'e[AtomVar{'g}]}}
 
 doc <:doc<
    @begin[doc]
@@ -165,10 +165,10 @@ prim_rw ir_if {| ir |} :
       EndDef}};
    R. LetFun{'R; Label["g":t]; g.
       IR{'e1; v1.
-         If{AtomRelop{EqOp; AtomVar{'v1}; AtomTrue};
-            IR{'e2; v2. TailCall{'g; AtomVar{'v2}}};
-            IR{'e3; v3. TailCall{'g; AtomVar{'v3}}}}}}}
-   
+         If{'v1;
+            IR{'e2; v2. TailCall{'g; ArgCons{'v2; ArgNil}}};
+            IR{'e3; v3. TailCall{'g; ArgCons{'v3; ArgNil}}}}}}}
+
 doc <:doc<
    @begin[doc]
    Translating recursive functions.
@@ -188,7 +188,7 @@ prim_rw ir_label {| ir |} :
 prim_rw ir_fun_def {| ir |} :
    IR{AstFunDef{'label; 'e; 'rest}}
    <-->
-   FunDef{IR{'label}; IR{'e; v. Return{AtomVar{'v}}}; IR{'rest}}
+   FunDef{IR{'label}; IR{'e; v. Return{'v}}; IR{'rest}} (**)
 
 prim_rw ir_end_def {| ir |} :
    IR{AstEndDef} <--> EndDef
@@ -258,7 +258,7 @@ doc <:doc<
 >>
 prim prog_ir :
     sequent { <H> >- compilable{IR{'e; v. Return{'v}}} } -->
-    sequent { <H> >- compilable{'e} } = it
+    sequent { <H> >- compilable{AST{'e}} } = it
 
 (*
  * Top-level conversion and tactic.

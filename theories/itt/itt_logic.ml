@@ -186,10 +186,7 @@ doc <:doc<
    there is no introduction form.
    @end[doc]
 >>
-interactive true_univ {| intro []; eqcd |} :
-   sequent { <H> >- "true" = "true" in univ[i:l] }
-
-interactive true_member {| intro [] |} :
+interactive true_univ {| intro [] |} :
    sequent { <H> >- "true" in univ[i:l] }
 
 interactive true_type {| intro [] |} :
@@ -198,10 +195,7 @@ interactive true_type {| intro [] |} :
 interactive true_intro {| intro [] |} :
    sequent { <H> >- "true" }
 
-interactive false_univ {| intro []; eqcd |} :
-   sequent { <H> >- "false" = "false" in univ[i:l] }
-
-interactive false_member {| intro [] |} :
+interactive false_univ {| intro [] |} :
    sequent { <H> >- "false" in univ[i:l] }
 
 interactive false_type {| intro [] |} :

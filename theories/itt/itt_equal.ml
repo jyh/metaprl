@@ -610,12 +610,12 @@ let infer_univ1 = Typeinf.infer_const univ1_term
 (*
  * H, x:T, J >- x = x in T
  *)
-let equalAssumT = pos_hypT equalityAxiom
+let equalAssumT = equalityAxiom
 
 (*
  * Assumed membership.
  *)
-let univAssumT = pos_hypT universeAssumType
+let univAssumT = universeAssumType
 
 (*
  * Reflexivity, Symettry, Transitivity.

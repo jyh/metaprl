@@ -542,7 +542,7 @@ let squashT p =
 
 (* We want to see unsquashT's error message when squashElim is useless *)
 let squash_elimT i =
-   (progressT (pos_hypT squashElim i) thenT tryT (unsquashT i)) orelseT (unsquashT i)
+   (progressT (squashElim i) thenT tryT (unsquashT i)) orelseT (unsquashT i)
 
 let resource elim += (squash_term, squash_elimT)
 

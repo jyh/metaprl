@@ -205,7 +205,7 @@ interactive esquash_equal_intro {| intro [] |} 'x :
  * @end[doc]
  *)
 let esquashT i =
-   if i = 0 then esquash else pos_hypT unesquash i
+   if i = 0 then esquash else unesquash i
 
 let esquashAutoT =
    autoT thenT tryT (onSomeHypT esquashT orelseT esquash) thenT autoT

@@ -289,8 +289,7 @@ let nthHypT i p =
  * @docoff
  * @end[doc]
  *)
-let thinT =
-   pos_hypT thin
+let thinT = thin
 
 let thinIfThinningT hyps p =
     (if get_thinning_arg p then

@@ -1098,42 +1098,48 @@ let auto_resource =
         auto_tac = auto_assum_progress assum_test backThruAssumT
       }
 
-
-
-
 (************ logic instance for j-prover in refiner/reflib/jall.ml  **********)
-
 
 module Itt_JLogic =
 struct
-	let is_all_term = is_all_term
-        let dest_all = dest_all
-	let is_exists_term = is_exists_term
-        let dest_exists = dest_exists
-	let is_and_term = is_and_term
-        let dest_and = dest_and
-	let is_or_term = is_or_term
-        let dest_or = dest_or
-	let is_implies_term = is_implies_term
-        let dest_implies = dest_implies
-	let is_not_term = is_not_term
-        let dest_not = dest_not
-end
+   open Jlogic_sig
 
+   let is_all_term = is_all_term
+   let dest_all = dest_all
+   let is_exists_term = is_exists_term
+   let dest_exists = dest_exists
+   let is_and_term = is_and_term
+   let dest_and = dest_and
+   let is_or_term = is_or_term
+   let dest_or = dest_or
+   let is_implies_term = is_implies_term
+   let dest_implies = dest_implies
+   let is_not_term = is_not_term
+   let dest_not = dest_not
+
+   type inference = tactic_arg -> (tactic_value * opt_inf)
+   and opt_inf =
+      Some of inference
+    | None
+
+   let empty_inf p = idT p, None
+   let append_inf inf t1 t2 = function
+      Fail -> raise (RefineError("Itt_JLogic.create_inf", StringError "failed"))
+    | _ -> raise (Invalid_argument "Itt_JLogic.create_inf")
+end
 
 module ITT_JProver = Jall.JProver(Itt_JLogic)
 
-let jtest t s c = ITT_JProver.test t s c 
+let rec filter_hyps = function
+   [] -> []
+ | Context _ :: hs -> filter_hyps hs
+ | Hypothesis (_, h) :: hs -> h :: filter_hyps hs
 
-let jseqtest t s c = ITT_JProver.seqtest t s c 
 (* input a list_term of hyps,concl *)
-
-
-let jprover (t,c) = ITT_JProver.prover (t,c)
-
-
-
-(* sequent calculus, another argumnet for proof reconstruction *)
+let jproverT p = 
+   let goal = Sequent.concl p in
+   let seq = explode_sequent goal in
+   fst ( ITT_JProver.prover (filter_hyps (SeqHyp.to_list seq.sequent_hyps)) (SeqGoal.get seq.sequent_goals 1) p)
 
 (*
  * -*-

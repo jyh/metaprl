@@ -162,27 +162,8 @@ topval squash_falseT : tactic
 
 topval genAssumT : int list -> tactic
 
-
-(************* jprover for itt_logic *************)
-
-
-(* topval jtest : term -> string -> unit *)
-
-topval jtest : term -> string -> string -> unit 
-
-(* sequent calculus, another argumnet for proof reconstruction *)
-
-topval jseqtest : term -> string -> string -> unit 
-
-(* Application to sequents: give a list_term of hyps,concl as input *)
-
-
-
-val jprover : term list * term  -> (string * term * term) list
-
-
-
-
+(* jprover for itt_logic *)
+topval jproverT : tactic
 
 (*
  * -*-

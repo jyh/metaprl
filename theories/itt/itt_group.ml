@@ -1,36 +1,36 @@
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @module[Itt_group]
-  
+
    This theory defines groups.
    @end[doc]
-  
+
    ----------------------------------------------------------------
-  
+
    @begin[license]
    This file is part of MetaPRL, a modular, higher order
    logical framework that provides a logical programming
    environment for OCaml and other languages.
-  
+
    See the file doc/index.html for information on Nuprl,
    OCaml, and more information about this system.
-  
+
    Copyright (C) 1998 Jason Hickey, Cornell University
-  
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
    as published by the Free Software Foundation; either version 2
    of the License, or (at your option) any later version.
-  
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-  
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-  
+
    Author: Xin Yu @email{xiny@cs.caltech.edu}
    @end[license]
 >>
@@ -64,11 +64,11 @@ let _ =
  * GROUP                                                                *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsection{Group}
    @modsubsection{Rewrites}
-  
+
    @end[doc]
 >>
 define unfold_pregroup1 : pregroup[i:l] <-->
@@ -97,10 +97,10 @@ let groupDT n = rw unfold_group n thenT dT n
 let resource elim +=
    [<<group[i:l]>>, groupDT]
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Well-formedness}
-  
+
    @end[doc]
 >>
 interactive pregroup_wf {| intro [] |} :
@@ -116,10 +116,10 @@ interactive isGroup_wf {| intro [] |} :
 interactive group_wf {| intro [] |} :
    sequent { <H> >- "type"{group[i:l]} }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Introduction and Elimination}
-  
+
    @end[doc]
 >>
 interactive pregroup_intro {| intro [AutoMustComplete] |} :
@@ -236,10 +236,10 @@ interactive op_eq2 {| intro [AutoMustComplete; intro_typeinf <<'G>>] |} group[i:
    sequent { <H> >- 'c in 'G^car } -->
    sequent { <H> >- 'c *['G] 'a = 'c *['G] 'b in 'G^car }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Lemmas}
-  
+
      @begin[enumerate]
      @item{$u * u = u$ implies $u$ is the identity.}
      @item{The left inverse is also the right inverse.}
@@ -273,20 +273,20 @@ interactive right_id2 {| intro [intro_typeinf <<'G>>] |} group[i:l] :
    sequent { <H> >- 'a in 'G^car } -->
    sequent { <H> >- 'a = 'a *['G] 'G^"1" in 'G^car }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Hierarchy}
-  
+
    A group is also a monoid.
    @end[doc]
 >>
 interactive group_subtype_monoid :
    sequent { <H> >- group[i:l] subtype monoid[i:l] }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Theorems}
-  
+
    The left and right cancellation laws.
    @end[doc]
 >>
@@ -306,9 +306,9 @@ interactive cancel_right {| elim [elim_typeinf <<'G>>] |} 'H group[i:l] :
    sequent { <H>; x: 'v *['G] 'u = 'w *['G] 'u in 'G^car; <J['x]> >- 'w in 'G^car } -->
    sequent { <H>; x: 'v *['G] 'u = 'w *['G] 'u in 'G^car; <J['x]> >- 'v = 'w in 'G^car }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-  
+
    Unique identity (left and right).
    @end[doc]
 >>
@@ -324,9 +324,9 @@ interactive unique_id_right group[i:l] :
    [main] sequent { <H> >- all a: 'G^car. 'a *['G] 'e2 = 'a in 'G^car } -->
    sequent { <H> >- 'e2 = 'G^"1" in 'G^car }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-  
+
    Unique inverse (left and right).
    @end[doc]
 >>
@@ -344,9 +344,9 @@ interactive unique_inv_right {| intro [intro_typeinf <<'G>>] |} group[i:l] :
    [main] sequent { <H> >- 'a *['G] 'a2 = 'G^"1" in 'G^car } -->
    sequent { <H> >- 'a2 = 'G^inv 'a in 'G^car }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-  
+
    Unique solution.
    @end[doc]
 >>
@@ -368,9 +368,9 @@ interactive unique_sol2 {| intro [AutoMustComplete; intro_typeinf <<'G>>] |} gro
    [main] sequent { <H> >- 'y *['G] 'a = 'b in 'G^car } -->
    sequent { <H> >- 'y = 'b *['G] ('G^inv 'a) in 'G^car }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-  
+
    Inverse simplification.
    @end[doc]
 >>
@@ -413,11 +413,11 @@ interactive id_commut2 {| intro [intro_typeinf <<'G>>] |} group[i:l] :
  * GROUP EQUALITY                                                       *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsection{Extensional Group Equality}
    @modsubsection{Rewrites}
-  
+
    We define two groups as extensionally equal if their operations,
    identities, and inverse operations are equal and their carriers
    are extensionally equal.
@@ -443,11 +443,11 @@ let resource elim +=
  * ABELIAN GROUP                                                        *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsection{Abelian Group}
    @modsubsection{Rewrites}
-  
+
    @end[doc]
 >>
 define unfold_abelg : abelg[i:l] <-->
@@ -461,19 +461,23 @@ let abelgDT n = rw unfold_abelg n thenT dT n
 let resource elim +=
    [<<abelg[i:l]>>, abelgDT]
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Well-formedness}
-  
+
    @end[doc]
 >>
 interactive abelg_wf {| intro [] |} :
    sequent { <H> >- "type"{abelg[i:l]} }
 
-doc <:doc< 
+interactive isCommutative_wf {| intro [intro_typeinf <<'g>>] |} group[i:l] :
+	sequent { <H> >- 'g in group[i:l] } -->
+	sequent { <H> >- isCommutative{'g} Type }
+
+doc <:doc<
    @begin[doc]
    @modsubsection{Introduction and Elimination}
-  
+
    @end[doc]
 >>
 interactive abelg_intro {| intro [] |} :
@@ -485,10 +489,10 @@ interactive abelg_elim {| elim [] |} 'H :
    sequent { <H>; G: group[i:l]; x: isCommutative{'G}; <J['G]> >- 'C['G] } -->
    sequent { <H>; G: abelg[i:l]; <J['G]> >- 'C['G] }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Hierarchy}
-  
+
    @end[doc]
 >>
 interactive abelg_subtype_group :
@@ -498,11 +502,11 @@ interactive abelg_subtype_group :
  * SUBGROUP                                                             *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsection{Subgroup}
    @modsubsection{Rewrites}
-  
+
    @end[doc]
 >>
 define unfold_subgroup : subgroup[i:l]{'S; 'G} <-->
@@ -516,10 +520,10 @@ let subgroupDT n = copyHypT n (n+1) thenT rw unfold_subgroup (n+1) thenT dT (n+1
 let resource elim +=
    [<<subgroup[i:l]{'S; 'G}>>, subgroupDT]
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Well-formedness}
-  
+
    @end[doc]
 >>
 interactive subgroup_wf {| intro [] |} :
@@ -528,10 +532,10 @@ interactive subgroup_wf {| intro [] |} :
    sequent { <H> >- 'G^"*" = 'S^"*" in 'S^car -> 'S^car -> 'S^car } -->
    sequent { <H> >- "type"{subgroup[i:l]{'S; 'G}} }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Introduction and Elimination}
-  
+
    @end[doc]
 >>
 interactive subgroup_intro {| intro [] |} :
@@ -546,10 +550,10 @@ interactive subgroup_elim {| elim [] |} 'H 'S 'G :
    sequent { <H>; x: subgroup[i:l]{'S; 'G}; <J['x]> >- 'C['x] }
 *)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Rules}
-  
+
    Subgroup is squash-stable.
    @end[doc]
 >>
@@ -562,9 +566,9 @@ interactive subgroup_ref {| intro [] |} :
    sequent { <H> >- 'G in group[i:l] } -->
    sequent { <H> >- subgroup[i:l]{'G; 'G} }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-  
+
      If $S$ is a subgroup of $G$, then
      @begin[enumerate]
      @item{$S$ is closed under the binary operation of $G$.}
@@ -603,9 +607,9 @@ interactive subgroup_inv1 {| intro [AutoMustComplete; intro_typeinf <<'G>>] |} g
    [wf] sequent { <H> >- 'a in 'S^car } -->
    sequent { <H> >- 'G^inv 'a in 'S^car }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-  
+
      A non-empty subset $S$ is a subgroup of $G$ only if
      for all $a, b @in S$, <<'a *['G] ('G^inv 'b) in 'S^car>>
    @end[doc]
@@ -614,9 +618,9 @@ interactive subgroup_thm1 group[i:l] :
    [main] sequent { <H> >- subgroup[i:l]{'S; 'G} } -->
    sequent { <H> >- all a: 'S^car. all b: 'S^car. ('a *['G] ('G^inv 'b) in 'S^car) }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-  
+
      The intersection of subgroups $S_1$ and $S_2$ of
      a group $G$ is again a subgroup of $G$.
    @end[doc]
@@ -630,11 +634,11 @@ interactive subgroup_isect :
  * COSET                                                                *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsection{Coset}
    @modsubsection{Rewrites}
-  
+
    @end[doc]
 >>
 define unfold_lcoset : lcoset{'S; 'G; 'b} <-->
@@ -647,10 +651,10 @@ doc docoff
 let fold_lcoset = makeFoldC << lcoset{'S; 'G; 'b} >> unfold_lcoset
 let fold_rcoset = makeFoldC << rcoset{'S; 'G; 'b} >> unfold_rcoset
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Well-formedness}
-  
+
    @end[doc]
 >>
 interactive lcoset_wf {| intro [] |} :
@@ -677,10 +681,10 @@ interactive rcoset_equality {| intro []; eqcd |} :
    [wf] sequent { <H>; a: 'S1^car >- 'a *['G] 'b in 'G^car } -->
    sequent { <H> >- rcoset{'S1; 'G; 'b} = rcoset{'S2; 'G; 'b} in univ[i:l] }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Introduction and Elimination}
-  
+
    @end[doc]
 >>
 interactive lcoset_intro {| intro [intro_typeinf_plusone <<'G>>] |} group[i:l] 'x :
@@ -725,10 +729,10 @@ interactive rcoset_elim {| elim [elim_typeinf <<'G>>] |} 'H group[i:l] :
    [main] sequent { <H>; u: 'G^car; v: squash{.exst a: 'S^car. 'u = 'a *['G] 'b in 'G^car}; <J['u]> >- 'C['u] } -->
    sequent { <H>; u: rcoset{'S; 'G; 'b}; <J['u]> >- 'C['u] }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Rules}
-  
+
      If $S$ is a subgroup of group $G$, both the left and right
      cosets of $s$ containing $b$ are subsets of the carrier of
      $g$.
@@ -748,11 +752,11 @@ interactive rcoset_subset {| intro [intro_typeinf <<'G>>] |} group[i:l] :
  * NORMAL SUBGROUP                                                      *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsection{Normal Subgroup}
    @modsubsection{Rewrites}
-  
+
    @end[doc]
 >>
 define unfold_normalSubg : normalSubg[i:l]{'S; 'G} <-->
@@ -761,10 +765,10 @@ doc docoff
 
 let fold_normalSubg = makeFoldC << normalSubg[i:l]{'S; 'G} >> unfold_normalSubg
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Well-formedness}
-  
+
    @end[doc]
 >>
 interactive normalSubg_wf {| intro [] |} :
@@ -775,10 +779,10 @@ interactive normalSubg_wf {| intro [] |} :
    sequent { <H>; x: 'G^car; a: 'S^car >- 'a *['G] 'x in 'G^car } -->
    sequent { <H> >- "type"{normalSubg[i:l]{'S; 'G}} }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Introduction and Elimination}
-  
+
    @end[doc]
 >>
 interactive normalSubg_intro {| intro [] |} :
@@ -790,10 +794,10 @@ interactive normalSubg_elim {| elim [] |} 'H :
    [main] sequent { <H>; x: normalSubg[i:l]{'S; 'G}; <J['x]>; y: subgroup[i:l]{'S; 'G}; z: all b: 'G^car. ext_equal{lcoset{'S; 'G; 'b}; rcoset{'S; 'G; 'b}} >- 'C['x] } -->
    sequent { <H>; x: normalSubg[i:l]{'S; 'G}; <J['x]> >- 'C['x] }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Rules}
-  
+
    All subgroups of abelian groups are normal.
    @end[doc]
 >>
@@ -806,11 +810,11 @@ interactive abel_subg_normal :
  * GROUP HOMOMORPHISM                                                   *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsection{Group Homomorphism}
    @modsubsection{Rewrites}
-  
+
    @end[doc]
 >>
 define unfold_isGroupHom : isGroupHom{'f; 'A; 'B} <-->
@@ -826,10 +830,10 @@ let fold_isGroupHom = makeFoldC << isGroupHom{'f; 'A; 'B}  >> unfold_isGroupHom
 let fold_groupHom1 = makeFoldC << groupHom{'A; 'B}  >> unfold_groupHom1
 let fold_groupHom = makeFoldC << groupHom{'A; 'B}  >> unfold_groupHom
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Well-formedness}
-  
+
    @end[doc]
 >>
 interactive isGroupHom_wf {| intro [] |} :
@@ -847,10 +851,10 @@ interactive groupHom_wf {| intro [] |} :
    sequent { <H>; x: 'B^car; y: 'B^car >- 'x *['B] 'y in 'B^car} -->
    sequent { <H> >- "type"{groupHom{'A; 'B}} }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Introduction and Elimination}
-  
+
    @end[doc]
 >>
 interactive isGroupHom_intro {| intro [] |} :
@@ -875,10 +879,10 @@ interactive groupHom_elim {| elim [elim_typeinf <<'B>>] |} 'H group[i:l] :
    [main] sequent { <H>; f: 'A^car -> 'B^car; u: all x: 'A^car. all y: 'A^car. ('f ('x *['A] 'y)) = ('f 'x) *['B] ('f 'y) in 'B^car; <J['f]> >- 'C['f] } -->
    sequent { <H>; f: groupHom{'A; 'B}; <J['f]> >- 'C['f] }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Rules}
-  
+
      For any groups $G_1$ and $G_2$, there is always at least
      one homomorphism $f@colon G_1 @rightarrow G_2$ which
      maps all elements of <<'G_1^car>> into <<'G_2^"1">>. This
@@ -890,13 +894,13 @@ interactive trivial_hom group[i:l] :
    [wf] sequent { <H> >- 'B in group[i:l] } -->
    sequent { <H> >- lambda{x. 'B^"1"} in groupHom{'A; 'B} }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    Let $f@colon A @rightarrow B$ be a group
    homomorphism of $A$ into $B$.
-  
+
    $@space @space$
-  
+
      $f$ maps the identity of $A$ into the identity of $B$.
    @end[doc]
 >>
@@ -906,9 +910,9 @@ interactive groupHom_id {| intro [AutoMustComplete; intro_typeinf <<'A>>] |} gro
    [main] sequent { <H> >- 'f in groupHom{'A; 'B} } -->
    sequent { <H> >- 'f 'A^"1" = 'B^"1" in 'B^car }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-  
+
      $f$ maps the inverse of an element $a$ in <<'A^car>> into
      the inverse of $f[a]$ in <<'B^car>>.
    @end[doc]
@@ -920,9 +924,9 @@ interactive groupHom_inv {| intro [AutoMustComplete; intro_typeinf <<'A>>] |} gr
    [wf] sequent { <H> >- 'f in groupHom{'A; 'B} } -->
    sequent { <H> >- 'f ('A^inv 'a) = 'B^inv ('f 'a) in 'B^car }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-  
+
      If $S$ is a subgroup of $A$, then the image of $S$ under
      $f$ is a subgroup of $B$.
    @end[doc]
@@ -933,9 +937,9 @@ interactive groupHom_subg1 'f 'A 'S :
    [main] sequent { <H> >- subgroup[i:l]{'S; 'A} } -->
    sequent { <H> >- subgroup[i:l]{{car={x: 'B^car | exst y: 'S^car. 'x = 'f 'y in 'B^car}; "*"='B^"*"; "1"='B^"1"; inv='B^inv}; 'B} }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-  
+
      If $T$ is a subgroup of $B$, then the inverse image of
      $T$ under $f$ is a subgroup of $A$.
    @end[doc]
@@ -953,11 +957,11 @@ doc docoff
  * GROUP KERNEL                                                         *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsection{Group Kernel}
    @modsubsection{Rewrites}
-  
+
    @end[doc]
 >>
 define unfold_groupKer : groupKer{'f; 'A; 'B} <-->
@@ -984,10 +988,10 @@ interactive_rw reduce_groupKer_inv {| reduce |} :
 interactive_rw reduce_groupKer_id {| reduce |} :
    (groupKer{'f; 'A; 'B}^"1") <--> ('A^"1")
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Introduction}
-  
+
    @end[doc]
 >>
 interactive groupKer_intro {| intro [] |} :
@@ -996,10 +1000,10 @@ interactive groupKer_intro {| intro [] |} :
    sequent { <H> >- 'f in groupHom{'A; 'B} } -->
    sequent { <H> >- groupKer{'f; 'A; 'B} in group[i:l] }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Rules}
-  
+
    The kernel of a group homomorphism from $A$ into $B$ is a subgroup
    of $A$.
    @end[doc]
@@ -1010,9 +1014,9 @@ interactive groupKer_subg {| intro [] |} :
    [wf] sequent { <H> >- 'f in groupHom{'A; 'B} } -->
    sequent { <H> >- subgroup[i:l]{groupKer{'f; 'A; 'B}; 'A} }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-  
+
    Let $f: A -> B$ be a group homomorphism with kernel $K$.
    The left coset of $K$ relative to $A$ containing $x$ is equal to the
    set whose element has the same image under $f$ as $x$. So is the right
@@ -1033,7 +1037,7 @@ interactive groupKer_rcoset {| intro [intro_typeinf <<'A>>] |} group[i:l] :
    [wf] sequent { <H> >- 'x in 'A^car } -->
    sequent { <H> >- ext_equal{rcoset{groupKer{'f; 'A; 'B}; 'A; 'x}; { y: 'A^car | 'f 'y = 'f 'x in 'B^car }} }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    The kernel of a group homomorphism $f$ from $A$ into $B$ is
    a normal subgroup of $A$.
@@ -1051,14 +1055,14 @@ doc docoff
  * GROUP EPIMORPHISM, Group MONOMORPHISM, and Group ISOMORPHISM         *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsection{Group Epimorphism, Group Monomorphism, and Group Isomorphism}
    @modsubsection{Rewrites}
    An epimorphism is a homomorphism that is onto.
    A monomorphism is a homomorphism that is one-to-one.
    An isomorphism is a homomorphism that is one-to-one and onto.
-  
+
    @end[doc]
 >>
 define unfold_isInjective : isInjective{'f; 'A; 'B} <-->
@@ -1090,10 +1094,10 @@ let fold_groupMono = makeFoldC << groupMono{'A; 'B}  >> unfold_groupMono
 let fold_groupEpi = makeFoldC << groupEpi{'A; 'B}  >> unfold_groupEpi
 let fold_groupIso = makeFoldC << groupIso{'A; 'B}  >> unfold_groupIso
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Well-formedness}
-  
+
    @end[doc]
 >>
 interactive isInjective_wf {| intro [] |} :
@@ -1134,10 +1138,10 @@ interactive groupIso_wf {| intro [] |} :
    sequent { <H>; x: 'B^car; y: 'B^car >- 'x *['B] 'y in 'B^car} -->
    sequent { <H> >- "type"{groupIso{'A; 'B}} }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Introduction and Elimination}
-  
+
    @end[doc]
 >>
 interactive isInjective_intro {| intro [AutoMustComplete] |} :
@@ -1209,10 +1213,10 @@ interactive groupIso_elim {| elim [elim_typeinf <<'B>>] |} 'H group[i:l] :
    [main] sequent { <H>; f: groupHom{'A; 'B}; u: squash{isBijective{'f; 'A^car; ' B^car}}; <J['f]> >- 'C['f] } -->
    sequent { <H>; f: groupIso{'A; 'B}; <J['f]> >- 'C['f] }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Rules}
-  
+
    $f: (<<'A -> 'B>>)$ is a group monomorphism iff the kernel of $f$ contains
    <<'A^"1">> alone.
    @end[doc]
@@ -1230,9 +1234,9 @@ interactive groupMono_ker2 group[i:l] :
    [wf] sequent { <H> >- ext_equal{.groupKer{'f; 'A; 'B}^car; {x:'A^car | 'x = 'A^"1" in 'A^car}} } -->
    sequent { <H> >- 'f in groupMono{'A; 'B} }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-  
+
    If $f: (<<'A -> 'B>>)$ is a group epimorphism, then $A$ is abelian
    implies $B$ is abelian.
    @end[doc]
@@ -1243,7 +1247,7 @@ interactive groupEpi_abel 'A 'f :
    [wf] sequent { <H> >- 'f in groupEpi{'A; 'B} } -->
    sequent { <H> >- 'B in abelg[i:l] }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    If $f: (<<'A -> 'B>>)$ is an isomorphism, then its inverse mapping is
    also an isomorphism.
@@ -1262,11 +1266,11 @@ doc docoff
 (************************************************************************
  * GROUP EXAMPLES                                                       *
  ************************************************************************)
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsection{Group Examples}
    The set of integers under addition is a group
-  
+
    @end[doc]
 >>
 interactive integer_add_group :

@@ -134,11 +134,9 @@ doc <:doc<
 >>
 
 interactive invOrtRing {| intro [] |} :
-   sequent { <H> >- 'x Type } -->
    sequent { <H> >- record_ort["inv":t]{ 'x; ring[i:l]} }
 
 interactive car0OrtRing {| intro [] |} :
-   sequent { <H> >- 'x Type } -->
 	sequent { <H> >- record_ort["car0":t]{ 'x; ring[i:l]} }
 
 interactive prefield_wf {| intro [] |} :

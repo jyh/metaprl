@@ -87,6 +87,10 @@ interactive agroupElimination {| elim [] |} 'H :
 	sequent { <H>; <J>; g: group[i:l] >- 'C[rename_mul_add{'g}] } -->
 	sequent { <H>; g: agroup[i:l]; <J> >- 'C['g] }
 
+interactive agroupEquality2 {| intro [] |} :
+   sequent { <H> >- as_additive{'G1}=as_additive{'G2} in group[i:l] } -->
+   sequent { <H> >- 'G1='G2 in agroup[i:l] }
+
 (*
  * <J[as_additive{'g}]> is not supported because it has to be specified as a rule parameter
  *
@@ -126,6 +130,10 @@ interactive aabelgWeakElimination 'H bind{x.'C['x]} :
 interactive aabelgElimination {| elim [] |} 'H :
 	sequent { <H>; <J>; g: abelg[i:l] >- 'C[rename_mul_add{'g}] } -->
 	sequent { <H>; g: aabelg[i:l]; <J> >- 'C['g] }
+
+interactive aabelgEquality2 {| intro [] |} :
+   sequent { <H> >- as_additive{'G1}=as_additive{'G2} in abelg[i:l] } -->
+   sequent { <H> >- 'G1='G2 in aabelg[i:l] }
 
 (************************************************************************
  * RING                                                                 *

@@ -1,7 +1,7 @@
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @module[Itt_subtype]
-  
+
    The @tt[Itt_subtype] module provides the definition of
    @emph{subtyping}.  Informally, a type $T_1$ is a subtype of
    a type $T_2$, <<'T_1 subtype 'T_2>>, if any two equal elements of $T_1$ are also
@@ -10,48 +10,48 @@ doc <:doc<
    two equivalence classes; one is the set of even numbers and the other
    is the set of odd numbers.  In the @Nuprl type theory, the two types
    have the same elements, but all even numbers are equal in $@int_2$ (and
-   all the odd numbers are also equal).  It follows that 
+   all the odd numbers are also equal).  It follows that
    << (<:doc<@int>>) subtype (<:doc< @int_2 >>) >>.
-  
+
    The subtype-type has trivial computational content, like equality.
    The subtype contains only the <<it>> term if it is true; it is
    empty otherwise.
    @end[doc]
-  
+
    ----------------------------------------------------------------
-  
+
    @begin[license]
-  
+
    This file is part of MetaPRL, a modular, higher order
    logical framework that provides a logical programming
    environment for OCaml and other languages.
-  
+
    See the file doc/index.html for information on Nuprl,
    OCaml, and more information about this system.
-  
+
    Copyright (C) 1998 Jason Hickey, Cornell University
-  
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
    as published by the Free Software Foundation; either version 2
    of the License, or (at your option) any later version.
-  
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-  
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-  
+
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
-  
+
    @end[license]
 >>
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @parents
    @end[doc]
@@ -90,10 +90,10 @@ let _ =
  * TERMS                                                                *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @terms
-  
+
    The @tt{subtype} term is a binary relation.
    @end[doc]
 >>
@@ -122,12 +122,12 @@ dform subtype_df2 : mode[src] :: parens :: "prec"[prec_subtype] :: ('A subtype '
  * RULES                                                                *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @rules
-  
+
    @modsubsection{Typehood and equality}
-  
+
    The << \subtype{'A; 'B} >> term is a type if both
    $A$ and $B$ are types.  The equality is @emph{intensional}:
    two subtype-types are equal if their subterms are equal.
@@ -145,7 +145,7 @@ prim subtypeType {| intro [] |} :
    sequent { <H> >- "type"{.'A subtype 'B} } =
    it
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    The intensional interpretation of typehood also means that if
    the subtype judgment <<'A subtype 'B>> is true, then both $A$
@@ -162,10 +162,10 @@ prim subtypeTypeLeft 'A :
    sequent { <H> >- "type"{'B} } =
    it
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Introduction}
-  
+
    The @tt[subtype_axiomFormation] rule gives the introduction form
    for the subtype judgment.  A type <<'A subtype 'B>> is true if $A$
    and $B$ are types, and any term $t @in A$ is also in $B$.  The
@@ -178,10 +178,10 @@ prim subtype_axiomFormation {| intro [] |} :
    sequent { <H> >- 'A subtype 'B } =
    it
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Elimination}
-  
+
    Subtype elimination has two forms.  The standard @tt[subtypeElimination]
    form corresponds to induction: the witness $x@colon <<'A subtype 'B>>$ is
    replaced with the unique proof term <<it>>.  The second rule
@@ -200,7 +200,7 @@ prim subtypeElimination2 'H 'a 'b :
    sequent { <H>; x: 'A subtype 'B; <J['x]> >- 'C['x] } =
    't[it]
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Member equality}
    The subtype-type, if true, contains only the term $@it$.
@@ -225,10 +225,10 @@ type sub_resource_info =
  | RLSubtype of sub_info_type
  | DSubtype of sub_info_type
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @resources
-  
+
    The @tt{Itt_subtype} module defines the @resource[subtype_resource], which is
    used to prove subtyping judgments.  The @tt[sub_resource_info] argument
    requires two terms <<'t_1 subtype 't_2>> that match the goal term, and
@@ -344,6 +344,11 @@ interactive by_subtype1 'H: (* Add to auto??? then remove subtype_axiomFormation
 interactive by_subtype2 'H: (* Add to AutoMustComplete ??? *)
    sequent { <H>; x:'A; <J['x]> >- 'A subtype 'B } -->
    sequent { <H>; x:'A; <J['x]> >- 'x in 'B }
+
+interactive subtypeTransitive 'C :
+   sequent { <H> >- 'A subtype 'C } -->
+   sequent { <H> >- 'C subtype 'B } -->
+   sequent { <H> >- 'A subtype 'B }
 
 (*
  * H >- Ui ext subtype(A; B)

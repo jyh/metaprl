@@ -47,9 +47,17 @@ declare as_multiplicative_group{'F}
  * TACTICS                                                              *
  ************************************************************************)
 
+topval unfold_prefield : conv
+topval unfold_isField : conv
 topval unfold_field : conv
 
+topval fold_prefield1 : conv
+topval fold_prefield : conv
+topval fold_isField1 : conv
+topval fold_isField : conv
+topval fold_field1 : conv
 topval fold_field : conv
+topval fold_as_multiplicative_group : conv
 
 (*
  * -*-

@@ -64,8 +64,11 @@ open Tactic_type.Tacticals
 open Top_conversionals
 open Dtactic
 
+open Itt_equal
 open Itt_struct
+open Itt_bool
 open Itt_int_base
+open Itt_squash
 open Itt_int_ext
 
 let _ = show_loading "Loading Itt_rat%t"
@@ -405,6 +408,46 @@ interactive beq_rat_wf {| intro [AutoMustComplete] |} :
 	sequent { <H> >- 'b in rationals } -->
 	sequent { <H> >- beq_rat{'a; 'b} in bool }
 
+interactive mul_rat_wf {| intro [] |} :
+	sequent { <H> >- 'a in rationals } -->
+	sequent { <H> >- 'b in rationals } -->
+	sequent { <H> >- mul_rat{'a;'b} in rationals }
+
+interactive add_rat_wf {| intro [] |} :
+	sequent { <H> >- 'a in rationals } -->
+	sequent { <H> >- 'b in rationals } -->
+	sequent { <H> >- add_rat{'a;'b} in rationals }
+
+interactive min_rat_wf {| intro [] |} :
+	sequent { <H> >- 'a in rationals } -->
+	sequent { <H> >- 'b in rationals } -->
+	sequent { <H> >- min_rat{'a;'b} in rationals }
+
+interactive max_rat_wf {| intro [] |} :
+	sequent { <H> >- 'a in rationals } -->
+	sequent { <H> >- 'b in rationals } -->
+	sequent { <H> >- max_rat{'a;'b} in rationals }
+
+interactive max_self1 {| intro [] |} :
+	sequent { <H> >- 'a in rationals } -->
+	sequent { <H> >- 'b in rationals } -->
+	sequent { <H> >- ge_rat{max_rat{'a;'b};'a} }
+
+interactive max_self2 {| intro [] |} :
+	sequent { <H> >- 'a in rationals } -->
+	sequent { <H> >- 'b in rationals } -->
+	sequent { <H> >- ge_rat{max_rat{'a;'b};'b} }
+
+interactive min_self1 {| intro [] |} :
+	sequent { <H> >- 'a in rationals } -->
+	sequent { <H> >- 'b in rationals } -->
+	sequent { <H> >- ge_rat{'a;min_rat{'a;'b}} }
+
+interactive min_self2 {| intro [] |} :
+	sequent { <H> >- 'a in rationals } -->
+	sequent { <H> >- 'b in rationals } -->
+	sequent { <H> >- ge_rat{'b;min_rat{'a;'b}} }
+
 interactive ratEquality {| intro [AutoMustComplete] |} :
 	[wf] sequent { <H> >- 'a in rationals } -->
 	[wf] sequent { <H> >- 'b in rationals } -->
@@ -467,7 +510,7 @@ interactive le_bool_ratUnstrictTotalOrder :
 interactive ge_bool_ratUnstrictTotalOrder :
 	sequent { <H> >- isUnstrictTotalOrder{rationals; lambda{x.lambda{y.ge_bool_rat{'x;'y}}}} }
 
-interactive geReflexive :
+interactive geReflexive {| intro [] |} :
 	[wf] sequent { <H> >- 'a in rationals } -->
 	sequent { <H> >- ge_rat{'a; 'a} }
 
@@ -478,5 +521,35 @@ interactive geTransitive 'b :
 	sequent { <H> >- ge_rat{'b; 'c} } -->
 	sequent { <H> >- ge_rat{'a; 'b} } -->
 	sequent { <H> >- ge_rat{'a; 'c} }
+
+interactive ge_minLeftIntro :
+	[wf] sequent { <H> >- 'a in rationals } -->
+	[wf] sequent { <H> >- 'b in rationals } -->
+	[wf] sequent { <H> >- 'c in rationals } -->
+	sequent { <H> >- ge_rat{'a; 'c} } -->
+	sequent { <H> >- ge_rat{'b; 'c} } -->
+	sequent { <H> >- ge_rat{min_rat{'a;'b}; 'c} }
+
+interactive ge_maxRightIntro :
+	[wf] sequent { <H> >- 'a in rationals } -->
+	[wf] sequent { <H> >- 'b in rationals } -->
+	[wf] sequent { <H> >- 'c in rationals } -->
+	sequent { <H> >- ge_rat{'a; 'b} } -->
+	sequent { <H> >- ge_rat{'a; 'c} } -->
+	sequent { <H> >- ge_rat{'a;max_rat{'b;'c}} }
+
+interactive ge_minLeftElim {| elim [] |} 'H :
+	[wf] sequent { <H> >- 'a in rationals } -->
+	[wf] sequent { <H> >- 'b in rationals } -->
+	[wf] sequent { <H> >- 'c in rationals } -->
+	sequent { <H>; ge_rat{'a; 'c}; ge_rat{'b; 'c}; <J> >- 'C } -->
+	sequent { <H>; ge_rat{min_rat{'a;'b}; 'c}; <J> >- 'C }
+
+interactive ge_maxRightElim {| elim [] |} 'H :
+	[wf] sequent { <H> >- 'a in rationals } -->
+	[wf] sequent { <H> >- 'b in rationals } -->
+	[wf] sequent { <H> >- 'c in rationals } -->
+	sequent { <H>; ge_rat{'a;'b}; ge_rat{'a;'c}; <J> >- 'C } -->
+	sequent { <H>; ge_rat{'a;max_rat{'b;'c}}; <J> >- 'C }
 
 doc <:doc< @docoff >>

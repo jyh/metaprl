@@ -143,4 +143,20 @@ rule geTransitive 'b :
 	sequent { <H> >- ge_rat{'a; 'b} } -->
 	sequent { <H> >- ge_rat{'a; 'c} }
 
+rule ge_minLeftIntro :
+	[wf] sequent { <H> >- 'a in rationals } -->
+	[wf] sequent { <H> >- 'b in rationals } -->
+	[wf] sequent { <H> >- 'c in rationals } -->
+	sequent { <H> >- ge_rat{'a; 'c} } -->
+	sequent { <H> >- ge_rat{'b; 'c} } -->
+	sequent { <H> >- ge_rat{min_rat{'a;'b}; 'c} }
+
+rule ge_maxRightIntro :
+	[wf] sequent { <H> >- 'a in rationals } -->
+	[wf] sequent { <H> >- 'b in rationals } -->
+	[wf] sequent { <H> >- 'c in rationals } -->
+	sequent { <H> >- ge_rat{'a; 'b} } -->
+	sequent { <H> >- ge_rat{'a; 'c} } -->
+	sequent { <H> >- ge_rat{'a;max_rat{'b;'c}} }
+
 doc <:doc< @docoff >>

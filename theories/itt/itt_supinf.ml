@@ -7,16 +7,30 @@ extends Itt_rat
 
 open Printf
 open Lm_debug
+open Opname
+open Term_sig
 open Refiner.Refiner.Term
+open Refiner.Refiner.TermMan
 open Refiner.Refiner.TermSubst
+open Refiner.Refiner.TermType
+open Refiner.Refiner.RefineError
 
 open Tactic_type
 open Tactic_type.Tacticals
+open Tactic_type.Conversionals
 
+open Dtactic
+
+open Top_conversionals
+
+open Itt_equal
 open Itt_struct
+open Itt_logic
 open Itt_bool
 
 open Itt_int_base
+open Itt_int_ext
+open Itt_int_arith
 open Itt_rat
 
 let _ = show_loading "Loading Itt_supinf%t"
@@ -50,6 +64,7 @@ sig
 	val inv : bfield -> bfield
 	val div : bfield -> bfield -> bfield
 	val compare : bfield -> bfield -> int
+	val isInfinite : bfield -> bool
 
 	val term_of : bfield -> term
 	val mul_term : term -> term -> term
@@ -77,6 +92,10 @@ struct
 	let fieldZero = Number (num0,num1)
 	let plusInfinity=PlusInfinity
 	let minusInfinity=MinusInfinity
+
+	let isInfinite = function
+		Number _ -> false
+	 | _ -> true
 
 	let mul a b =
 		match a with
@@ -249,7 +268,7 @@ end
 
 module type AF_Sig =
 sig
-	type vars
+	type vars=int
 	type af
 	type bfield
 
@@ -264,6 +283,7 @@ sig
    val remove: af -> vars -> af
    val split: af -> (bfield * vars * af)
    val isNumber: af -> bool
+	val isInfinite: af -> bool
 
 	val minusInfinity : af
 	val plusInfinity : af
@@ -337,11 +357,8 @@ struct
 	let minusInfinity = Table.add Table.empty constvar BField.minusInfinity
 	let plusInfinity = Table.add Table.empty constvar BField.plusInfinity
 
-	let list_of tb =
-		let lst = ref [] in
-		let aux e d = (lst:=(e,d)::!lst) in
-		Table.iter aux tb;
-		!lst
+	let isInfinite f =
+		BField.isInfinite (coef f constvar)
 
 	let term_of_monom info k v =
 		if v=constvar then
@@ -355,7 +372,14 @@ struct
 	 | (v,k)::tl -> BField.add_term (term_of_monom info k v) (term_of_aux info tl)
 
 	let rec term_of info f =
-		term_of_aux info (list_of f)
+		let l=Table.list_of f in
+		let aux = function
+			(k,[d]) -> (k,d)
+		 | (k,[]) -> raise (Invalid_argument "MakeAF.term_of - empty data list linked to a key in list_of")
+		 | (k,_) -> raise (Invalid_argument "MakeAF.term_of - more than one data item per key in list_of")
+		in
+		let aux2 (k,d) = if BField.compare d BField.fieldZero = 0 then false else true in
+		term_of_aux info (List.filter aux2 (List.map aux l))
 
 end
 
@@ -375,6 +399,8 @@ sig
 
    val decompose: saf -> af list
    val occurs: vars -> saf -> bool
+	val isInfinite: saf -> bool
+	val isAffine: saf -> bool
 
 	val term_of: (term array) -> saf -> term
 
@@ -487,6 +513,15 @@ struct
 		 | Min l -> List.exists (occurs v) l
 		 | Max l -> List.exists (occurs v) l
 
+	let isInfinite = function
+		Affine f ->
+			AF.isInfinite f
+	 | _ -> false
+
+	let isAffine = function
+		Affine _ -> true
+	 | _ -> false
+
 	let rec print f =
 		match f with
 			Affine f' -> AF.print f'
@@ -521,8 +556,8 @@ sig
    val empty: sacs
    val addConstr: sacs -> af -> sacs
 
-   val upper: sacs -> vars -> saf
-   val lower: sacs -> vars -> saf
+   val upper: (term array) -> sacs -> vars -> (saf * (saf * saf * tactic) list)
+   val lower: (term array) -> sacs -> vars -> (saf * (saf * saf * tactic) list)
 
 	val print: sacs -> unit
 end
@@ -544,43 +579,53 @@ struct
 		(*printf "{";*)
 		List.iter (fun x -> let _=AF.print x in printf ">=0\n") s (*; printf"}"*)
 
-	let rec upper' s v =
+	let rec upper' info s v =
 		match s with
-			[] -> SAF.affine AF.plusInfinity
+			[] -> SAF.affine AF.plusInfinity, []
 		 | f::tl ->
 				if BField.compare (AF.coef f v) BField.fieldZero >=0 then
-					upper' tl v
+					upper' info tl v
 				else
 					let k=BField.neg (BField.inv (AF.coef f v)) in
 					let rest=AF.remove f v in
-					SAF.min (upper' tl v) (SAF.affine (AF.scale k rest))
+					let r0,a0=upper' info tl v in
+					let r1=SAF.min r0 (SAF.affine (AF.scale k rest)) in
+					if SAF.isAffine r1 then
+						r1,(r1,SAF.affine (AF.mk_var v), addHiddenLabelT "upper")::a0
+					else
+						r1,(r1,SAF.affine (AF.mk_var v), (addHiddenLabelT "upper" thenT (tryT ge_minLeftIntro)))::a0
 
-	let upper s v =
-		let result = upper' s v in
+	let upper info s v =
+		let result,actions = upper' info s v in
 		if !debug_supinf_steps then
 			begin
 				printf "upper: "; AF.print_var v; printf "<="; SAF.print result; eflush stdout;
 			end;
-		result
+		result,actions
 
-   let rec lower' s v =
+   let rec lower' info s v =
 		match s with
-			[] -> SAF.affine AF.minusInfinity
+			[] -> SAF.affine AF.minusInfinity,[]
 		 | f::tl ->
 				if BField.compare (AF.coef f v) BField.fieldZero <=0 then
-					lower' tl v
+					lower' info tl v
 				else
 					let k=BField.neg (BField.inv (AF.coef f v)) in
 					let rest=AF.remove f v in
-					SAF.max (lower' tl v) (SAF.affine (AF.scale k rest))
+					let r0,a0=lower' info tl v in
+					let r1=SAF.max r0 (SAF.affine (AF.scale k rest)) in
+					if SAF.isAffine r1 then
+						r1,(SAF.affine (AF.mk_var v), r1, addHiddenLabelT "lower")::a0
+					else
+						r1,(SAF.affine (AF.mk_var v), r1, (addHiddenLabelT "lower" thenT (tryT ge_maxRightIntro)))::a0
 
-	let lower s v =
-		let result = lower' s v in
+	let lower info s v =
+		let result,actions = lower' info s v in
 		if !debug_supinf_steps then
 			begin
 				printf "lower: "; SAF.print result; printf"<="; AF.print_var v; eflush stdout;
 			end;
-		result
+		result,actions
 end
 
 module type CS_Sig =
@@ -607,9 +652,10 @@ let suppa' info (x:AF.vars) (f:AF.af) =
 		(printf"suppa: ";	AF.print_var x; AF.print f; eflush stdout);
 	let b = AF.coef f x in
 	let c = AF.remove f x in
+	let saf_x=SAF.affine (AF.mk_var x) in
    if compare b fieldUnit < 0 then
 		let result=AF.scale (inv (sub fieldUnit b)) c in
-		(result, [assertT (mk_ge_rat_term (AF.term_of info result) (VI.restore info x)) thenAT addHiddenLabelT "suppa case 0"])
+		(result, [SAF.affine result, saf_x, addHiddenLabelT "suppa case 0"])
 		(* assertT <<'x <= result>> thenAT
 			'x<='y <-->
 			(1-'b)*'x <= (1-'b)*'y <-->
@@ -618,10 +664,10 @@ let suppa' info (x:AF.vars) (f:AF.af) =
       if (compare b fieldUnit = 0) && (AF.isNumber c) then
 			let cmp=compare (AF.coef c AF.constvar) fieldZero in
 			if cmp<0 then
-				(AF.minusInfinity, [assertT (mk_ge_rat_term (AF.term_of info f) (VI.restore info x)) thenAT addHiddenLabelT "suppa case 100"])
+				(AF.minusInfinity, [SAF.affine f, saf_x, addHiddenLabelT "suppa case 100"])
 			else
 				if cmp=0 then
-					(f, [assertT (mk_ge_rat_term (AF.term_of info f) (VI.restore info x)) thenAT addHiddenLabelT "suppa case 1010"])
+					(f, [SAF.affine f, saf_x, addHiddenLabelT "suppa case 1010"])
 				else
 					(AF.plusInfinity, [])
 		else
@@ -658,9 +704,10 @@ let inffa' info (x:AF.vars) (f:AF.af) =
 		(printf"inffa: ";	AF.print_var x; printf" "; AF.print f; eflush stdout);
 	let b = AF.coef f x in
 	let c = AF.remove f x in
+	let saf_x=SAF.affine (AF.mk_var x) in
    if compare b fieldUnit < 0 then
 		let result=AF.scale (inv (sub fieldUnit b)) c in
-		(result, [assertT (mk_ge_rat_term (VI.restore info x) (AF.term_of info result)) thenAT addHiddenLabelT "inffa case 0"])
+		(result, [saf_x,SAF.affine result, addHiddenLabelT "inffa case 0"])
 		(* assertT <<'x >= result>> thenAT
 			'x>='y <-->
 			(1-'b)*'x >= (1-'b)*'y <-->
@@ -669,10 +716,10 @@ let inffa' info (x:AF.vars) (f:AF.af) =
       if (compare b fieldUnit = 0) && (AF.isNumber c) then
 			let cmp=compare (AF.coef c AF.constvar) fieldZero in
 			if cmp>0 then
-				(AF.plusInfinity, [assertT (mk_ge_rat_term (VI.restore info x) (AF.term_of info f)) thenAT addHiddenLabelT "inffa case 100"])
+				(AF.plusInfinity, [saf_x, SAF.affine f, addHiddenLabelT "inffa case 100"])
 			else
 				if cmp=0 then
-					(f,[assertT (mk_ge_rat_term (VI.restore info x) (AF.term_of info f)) thenAT addHiddenLabelT "inffa case 1010"])
+					(f,[saf_x, SAF.affine f, addHiddenLabelT "inffa case 1010"])
 				else
 					(AF.minusInfinity,[])
 		else
@@ -725,12 +772,12 @@ let rec supa info (c:SACS.sacs) (f:AF.af) (h:CS.t) =
 					begin
 						if !debug_supinf_trace then
 							(printf "case 1001"; eflush stdout);
-						let r0=SACS.upper c v in
-						let r0_term=SAF.term_of info r0 in
-						let v_term=VI.restore info v in
-						let a0=[assertT (mk_ge_rat_term r0_term v_term) thenAT addHiddenLabelT "supa 1001"] in
+						let r0,a0=SACS.upper info c v in
+						let saf_v=SAF.affine (AF.mk_var v) in
+						(*let a0=[r0, saf_v, addHiddenLabelT "supa 1001 a0"] in*)
 						let r1,a1=sup info c r0 (CS.add h v) in
-						let a11=[assertT (mk_ge_rat_term (SAF.term_of info r1) v_term) thenAT geTransitive r0_term] in
+						let a11=[r1, saf_v,
+									(geTransitive (SAF.term_of info r0) thenMT addHiddenLabelT "supa 1001 a11")] in
 						let r2,a2=supp info v r1 in
 						(r2,a2@(a11@(a1@a0)))
 					end
@@ -745,7 +792,7 @@ let rec supa info (c:SACS.sacs) (f:AF.af) (h:CS.t) =
          let b',a0 = sup info c (SAF.affine b) (CS.add h v) in
 			let scaled_v=SAF.affine (AF.scale r af_v) in
 			let f'=SAF.add scaled_v b' in
-			let a01=[assertT (mk_ge_rat_term (SAF.term_of info f') (AF.term_of info f)) thenAT addHiddenLabelT "supa 11"] in
+			let a01=[f', SAF.affine f, addHiddenLabelT "supa 11"] in
 			if SAF.occurs v b' then
 				let r1,a1=sup info c f' h in
 				(r1,a1@(a01@a0))
@@ -805,12 +852,11 @@ and infa info (c:SACS.sacs) (f:AF.af) (h:CS.t) =
 								begin
 									if !debug_supinf_trace then
 										(printf "case 1001"; eflush stdout);
-									let r0=SACS.lower c v in
-									let r0_term=SAF.term_of info r0 in
-									let v_term=VI.restore info v in
-									let a0=[assertT (mk_ge_rat_term v_term r0_term) thenAT addHiddenLabelT "infa 1001"] in
+									let r0,a0=SACS.lower info c v in
+									let saf_v=SAF.affine (AF.mk_var v) in
+									(*let a0=[saf_v, r0, addHiddenLabelT "infa 1001 a0"] in*)
 									let r1,a1=inf info c r0 (CS.add h v) in
-									let a11=[assertT (mk_ge_rat_term v_term (SAF.term_of info r1)) thenAT geTransitive r0_term] in
+									let a11=[saf_v, r1, (geTransitive (SAF.term_of info r0) thenMT addHiddenLabelT "infa 1001 a11")] in
 									let r2,a2=inff info v r1 in
 									(r2, a2@(a11@(a1@a0)))
 								end
@@ -842,7 +888,7 @@ and infa info (c:SACS.sacs) (f:AF.af) (h:CS.t) =
 					let b',a0 = inf info c (SAF.affine b) (CS.add h v) in
 					let scaled_v=SAF.affine (AF.scale r af_v) in
 					let f'=SAF.add scaled_v b' in
-					let a01=[assertT (mk_ge_rat_term (AF.term_of info f) (SAF.term_of info f')) thenAT addHiddenLabelT "infa 11"] in
+					let a01=[SAF.affine f, f', addHiddenLabelT "infa 11"] in
 					if SAF.occurs v b' then
 						begin
 							if !debug_supinf_trace then
@@ -913,10 +959,24 @@ let make_sacs var2index p =
 	let afs=List.map (ge2af var2index) l in
 	List.fold_left SACS.addConstr SACS.empty afs
 
-let rec runListT = function
+let assert_geT info f1 f2 =
+	assertT (mk_ge_rat_term (SAF.term_of info f1) (SAF.term_of info f2))
+(*	let f=SAF.add f1 (SAF.scale (neg fieldZero) f2) in
+	assertT (mk_ge_rat_term (SAF.term_of info f) (term_of fieldZero))
+*)
+
+let rec runListT info = function
 	[] -> idT
- | [tac] -> tac
- | hd::tl -> hd thenMT (runListT tl)
+ | [f1,f2,tac] ->
+		if SAF.isInfinite f1 || SAF.isInfinite f2 then
+			idT
+		else
+			assert_geT info f1 f2 thenAT tac
+ | (f1,f2,tac)::tl ->
+		if SAF.isInfinite f1 || SAF.isInfinite f2 then
+			runListT info tl
+		else
+			(assert_geT info f1 f2 thenAT tac) thenMT runListT info tl
 
 let testT = funT (fun p ->
 	let var2index = VI.create 13 in
@@ -934,8 +994,8 @@ let testT = funT (fun p ->
 		printf"sup=";SAF.print sup'; eflush stdout;
 		printf"inf=";SAF.print inf'; eflush stdout;
 		SAF.print inf'; printf "<="; SAF.print saf'; printf "<="; SAF.print sup'; eflush stdout;
-		runListT (List.rev (a1@a2)) thenMT
-		(assertT (mk_ge_rat_term (SAF.term_of info sup') (SAF.term_of info inf')) thenAT (addHiddenLabelT "final" thenT geTransitive (VI.restore info 1)))
+		let actions=List.rev ((sup', inf', (addHiddenLabelT "final" thenT geTransitive (VI.restore info 1)))::a1@a2) in
+		runListT info actions
 	end
 )
 
@@ -952,4 +1012,45 @@ interactive test2 'a 'b 'c :
 sequent { <H> >- 'a in rationals } -->
 sequent { <H> >- 'b in rationals } -->
 sequent { <H> >- 'c in rationals } -->
-sequent { <H>; ge_rat{'a; rat{0;1}}; ge_rat{'b; rat{0;1}}; ge_rat{rat{-1;1}; add_rat{'a; 'b}} >- "assert"{bfalse} }
+sequent { <H>; ge_rat{'a; rat{0;1}};
+					ge_rat{'b; rat{0;1}};
+					ge_rat{rat{-1;1}; add_rat{'a; 'b}}
+					>- "assert"{bfalse} }
+
+interactive test3 'a 'b 'c :
+sequent { <H> >- 'x in rationals } -->
+sequent { <H> >- 'y in rationals } -->
+sequent { <H>;
+					ge_rat{mul_rat{rat{-1;1};'x}; mul_rat{rat{-1;1};'y}};
+					ge_rat{'y; rat{0;1}};
+					ge_rat{add_rat{rat{1;1}; mul_rat{rat{-1;1};'y}};'x}
+					>- "assert"{bfalse} }
+
+interactive test4 'a 'b 'c :
+sequent { <H> >- 'a in rationals } -->
+sequent { <H> >- 'b in rationals } -->
+sequent { <H> >- 'c in rationals } -->
+sequent { <H>; ge_rat{'a; add_rat{'b;rat{3;1}}};
+					ge_rat{'a; add_rat{rat{3;1};mul_rat{rat{-1;1};'b}}};
+					ge_rat{add_rat{'b;rat{2;1}}; 'a}
+					>- "assert"{bfalse} }
+
+(*
+interactive test 'H 'a 'b 'c :
+sequent { <H> >- 'a in rationals } -->
+sequent { <H> >- 'b in rationals } -->
+sequent { <H> >- 'c in rationals } -->
+sequent { <H>; ge_rat{add_rat{rat{-1;1};add_rat{mul_rat{rat{1;1};'a};mul_rat{rat{-1;1};'b}}}; rat{0;1}};
+					ge_rat{add_rat{rat{-3;1};add_rat{mul_rat{rat{-1;1};'b};mul_rat{rat{1;1};'c}}}; rat{0;1}};
+					ge_rat{add_rat{mul_rat{rat{-1;1};'a};mul_rat{rat{1;1};'b}}; rat{0;1}}
+               >- "assert"{bfalse} }
+
+interactive test2 'H 'a 'b 'c :
+sequent { <H> >- 'a in rationals } -->
+sequent { <H> >- 'b in rationals } -->
+sequent { <H> >- 'c in rationals } -->
+sequent { <H>; ge_rat{mul_rat{rat{1;1};'a}; rat{0;1}};
+					ge_rat{mul_rat{rat{1;1};'b}; rat{0;1}};
+					ge_rat{add_rat{rat{-1;1};add_rat{mul_rat{rat{-1;1};'a};mul_rat{rat{-1;1};'b}}}; rat{0;1}}
+					>- "assert"{bfalse} }
+*)

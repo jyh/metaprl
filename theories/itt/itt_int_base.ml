@@ -67,6 +67,7 @@ open Tactic_type
 open Tactic_type.Tacticals
 open Tactic_type.Conversionals
 open Tactic_type.Sequent
+open Top_conversionals
 
 open Base_meta
 open Base_auto_tactic
@@ -89,14 +90,10 @@ let _ = show_loading "Loading Itt_int_base%t"
  *
  * The @tt{int} term is the type of integers with elements
  * $$@ldots, @number{-2}, @number{-1}, @number{0}, @number{1}, @number{2}, @ldots$$
- *
- * The @tt{ind} term is the induction combinator for building
- * loops indexed by an integer argument.
  * @end[doc]
  *)
 declare int
 declare number[n:n]
-declare ind{'i; m, z. 'down; 'base; m, z. 'up}
 
 (*!
  * @begin[doc]
@@ -113,11 +110,18 @@ declare lt_bool{'a; 'b}
 (*!
  * @begin[doc]
  * Subtraction is composition of addition and unary minus
- *
  * @end[doc]
  *)
 define unfold_sub :
    "sub"{'a ; 'b} <--> ('a +@ minus{'b})
+
+(*!
+ * @begin[doc]
+ * The @tt{ind} term is the induction combinator for building
+ * loops indexed by an integer argument.
+ * @end[doc]
+ *)
+declare ind{'i; m, z. 'down; 'base; m, z. 'up}
 
 (*!
  * @begin[doc]
@@ -229,6 +233,22 @@ dform lt_df1 : parens :: "prec"[prec_compare] :: lt{'a; 'b} =
 dform lt_bool_df1 : parens :: "prec"[prec_compare] :: lt_bool{'a; 'b} =
    slot["lt"]{'a} `" <" Nuprl_font!subb `" " slot["le"]{'b}
 
+declare display_ind{'x}
+declare display_ind_n
+
+dform display_ind_df1 : internal :: display_ind{'x} =
+   display_var["Ind":v]{nil} `"(" 'x `")"
+
+dform display_ind_df2 : internal :: display_ind_n =
+   display_ind{display_var["n":v]{nil}}
+
+dform ind_df : parens :: "prec"[prec_bor] :: except_mode[src] :: 
+   ind{'x; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]} =
+   szone pushm[3] szone display_ind{'x} space `"where" space display_ind_n space `"=" ezone hspace
+   ((display_var["n":v]{nil} < 0) => beq_int{display_ind_n; 'down[display_var["n":v]{nil}; display_ind{(display_var["n":v]{nil} +@ 1)}]}) hspace
+   (beq_int{display_var["n":v]{nil};0} => beq_int{display_ind_n; 'base}) hspace
+   ((0 < display_var["n":v]{nil}) => beq_int{display_ind_n; 'up[display_var["n":v]{nil}; display_ind{(display_var["n":v]{nil} -@ 1)}]}) popm ezone
+
 (*
  * Useful tactic to prove _rw from ~-rules
  *)
@@ -296,7 +316,7 @@ prim_rw reduce_minus_meta : ( - number[i:n]) <-->
 prim_rw reduce_sub_meta : (number[i:n] -@ number[j:n]) <-->
    meta_diff{number[i:n]; number[j:n]}
 
-prim_rw reduce_lt_meta : "lt"{number[i:n]; number[j:n]} <-->
+prim_rw reduce_lt_meta : lt_bool{number[i:n]; number[j:n]} <-->
    meta_lt{number[i:n]; number[j:n]; btrue; bfalse}
 
 prim_rw reduce_beq_int_meta : beq_int{number[i:n]; number[j:n]} <-->
@@ -323,7 +343,8 @@ let resource reduce += [
    <<number[i:n] +@ number[j:n]>>, reduce_add;
    <<minus{number[i:n]}>>, reduce_minus;
    <<number[i:n] -@ number[j:n]>>, reduce_sub;
-   <<"lt"{number[i:n]; number[j:n]}>>, reduce_lt;
+   <<lt_bool{number[i:n]; number[j:n]}>>, reduce_lt;
+   <<number[i:n] < number[j:n]>>, (unfold_lt thenC addrC [0] reduce_lt);
    <<beq_int{number[i:n]; number[j:n]}>>, reduce_eq_int;
 ]
 
@@ -406,42 +427,6 @@ interactive lt_bool_member {| intro [] |} 'H :
 
 (*! @docoff *)
 
-(*!
- * @begin[doc]
- * @thysubsection {Induction and recursion}
- * Reduction of the induction combinator @tt{ind} has three cases.
- * If the argument $x$ is $0$, the combinator reduces to the @i{base}
- * case; if it is positive, it reduces to the @i{up} case; and
- * if it is negative, it reduces to the @i{down} case.
- * The first argument in the @i{up} and @i{down} cases represents
- * the induction value, and the second argument represents the
- * ``next'' computational step.
- * @end[doc]
- *)
-
-(*
- * Reduction on induction combinator:
- * Three cases:
- *    let ind[x] = ind(x; i, j. down[i, j]; base; k, l. up[k, l]
- *    x < 0 => (ind[x] -> down[x, ind[x + 1]]
- *    x = 0 => (ind[x] -> base)
- *    x > 0 => (ind[x] -> up[x, ind[x - 1]]
- *)
-prim_rw reduce_ind_down :
-   ('x < 0) -->
-   ind{'x; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]} <-->
-    ('down['x; ind{('x +@ 1); i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]}])
-
-prim_rw reduce_ind_up :
-   (0 < 'x) -->
-   ind{'x; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]} <-->
-   ('up['x; ind{('x -@ 1); i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]}])
-
-prim_rw reduce_ind_base :
-   (ind{0; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]}) <-->
-   'base
-(*! @docoff *)
-
 (************************************************************************
  * RULES                                                                *
  ************************************************************************)
@@ -512,66 +497,6 @@ interactive eq_int_decidable {| intro [] |} 'H :
  *)
 prim numberEquality {| intro []; eqcd |} 'H :
    sequent ['ext] { 'H >- number[n:n] IN int } = it
-
-(*!
- * @begin[doc]
- * @thysubsection{Elimination}
- *
- * Induction on an integer assumption produces three cases:
- * one for the base case $0$, one for induction on negative arguments,
- * and another for induction on positive arguments.  The proof extract term
- * uses the @tt{ind} term, which performs a case analysis on its argument.
- * @end[doc]
- *)
-(*
- * Induction:
- * H, n:Z, J[n] >- C[n] ext ind(i; m, z. down[n, m, it, z]; base[n]; m, z.
-up[n, m, it, z])
- * by intElimination [m; v; z]
- *
- * H, n:Z, J[n], m:Z, v: m < 0, z: C[m + 1] >- C[m] ext down[n, m, v, z]
- * H, n:Z, J[n] >- C[0] ext base[n]
- * H, n:Z, J[n], m:Z, v: 0 < m, z: C[m - 1] >- C[m] ext up[n, m, v, z]
- *)
-prim intElimination {| elim [ThinOption thinT] |} 'H 'J 'n 'm 'v 'z :
-   ( 'down['n; 'm; 'v; 'z] : sequent ['ext] { 'H; n: int; 'J['n]; m: int; v: 'm < 0; z: 'C['m +@ 1] >- 'C['m] } ) -->
-   ( 'base['n] : sequent ['ext] { 'H; n: int; 'J['n] >- 'C[0] } ) -->
-   ( 'up['n; 'm; 'v; 'z] : sequent ['ext] { 'H; n: int; 'J['n]; m: int; v: 0 < 'm; z: 'C['m -@ 1] >- 'C['m] } ) -->
-   sequent ['ext] { 'H; n: int; 'J['n] >- 'C['n] } =
-      ind{'n; m, z. 'down['n; 'm; it; 'z]; 'base['n]; m, z. 'up['n; 'm; it; 'z]}
-
-(*
- * @begin[doc]
- * @thysubsection{Combinator equality}
- *
- * Two @tt{ind} term compute values of type $T$ if each of the three
- * cases (zero, positive, and negative) produce values of type $T$.
- * @end[doc]
- *)
-(*
- * Equality on induction combinator:
- * let a = ind(x1; i1, j1. down1[i1, j1]; base1; k1, l1. up1[k1, l1])
- * let b = ind(x2; i2, j2. down2[i2, j2]; base2; k2, l2. up2[k2, l2])
- *
- * H >- a = b in T[x1]
- * by indEquality [z. T[z]; x; y; w]
- *
- * H >- x1 = y1 in Z
- * H, x: Z, w: x < 0, y: T[x + 1] >- down1[x, y] = down2[x, y] in T[x]
- * H >- base1 = base2 in T[0]
- * H, x: Z, w: 0 < x, y: T[x - 1] >- up1[x, y] = up2[x, y] in T[x]
- *)
-prim indEquality {| intro []; eqcd |} 'H lambda{z. 'T['z]} 'x 'y 'w :
-   sequent [squash] { 'H >- 'x1 = 'x2 in int } -->
-   sequent [squash] { 'H; x: int; w: 'x < 0; y: 'T['x +@ 1] >- 'down1['x; 'y] = 'down2['x; 'y] in 'T['x] } -->
-   sequent [squash] { 'H >- 'base1 = 'base2 in 'T[0] } -->
-   sequent [squash] { 'H; x: int; w: 0 < 'x; y: 'T['x -@ 1] >- 'up1['x; 'y] = 'up2['x; 'y] in 'T['x] } -->
-   sequent ['ext] { 'H >- ind{'x1; i1, j1. 'down1['i1; 'j1]; 'base1; k1, l1. 'up1['k1; 'l1]}
-                   = ind{'x2; i2, j2. 'down2['i2; 'j2]; 'base2; k2, l2. 'up2['k2; 'l2]}
-                   in 'T['x1] } =
-   it
-(*! @docoff *)
-
 
 (*!
  * @begin[doc]
@@ -703,7 +628,115 @@ interactive_rw lt_addMono_rw 'c :
 
 let lt_addMonoC = lt_addMono_rw
 
-(*! @docoff *)
+(*!
+ * @begin[doc]
+ * @thysubsection{Elimination}
+ *
+ * Induction on an integer assumption produces three cases:
+ * one for the base case $0$, one for induction on negative arguments,
+ * and another for induction on positive arguments.  The proof extract term
+ * uses the @tt{ind} term, which performs a case analysis on its argument.
+ * @end[doc]
+ *)
+(*
+ * Induction:
+ * H, n:Z, J[n] >- C[n] ext ind(i; m, z. down[n, m, it, z]; base[n]; m, z.
+up[n, m, it, z])
+ * by intElimination [m; v; z]
+ *
+ * H, n:Z, J[n], m:Z, v: m < 0, z: C[m + 1] >- C[m] ext down[n, m, v, z]
+ * H, n:Z, J[n] >- C[0] ext base[n]
+ * H, n:Z, J[n], m:Z, v: 0 < m, z: C[m - 1] >- C[m] ext up[n, m, v, z]
+ *)
+prim intElimination {| elim [ThinOption thinT] |} 'H 'J 'm 'v 'z :
+   ( 'down['n; 'm; 'v; 'z] : sequent ['ext] { 'H; n: int; 'J['n]; m: int; v: 'm < 0; z: 'C['m +@ 1] >- 'C['m] } ) -->
+   ( 'base['n] : sequent ['ext] { 'H; n: int; 'J['n] >- 'C[0] } ) -->
+   ( 'up['n; 'm; 'v; 'z] : sequent ['ext] { 'H; n: int; 'J['n]; m: int; v: 0 < 'm; z: 'C['m -@ 1] >- 'C['m] } ) -->
+   sequent ['ext] { 'H; n: int; 'J['n] >- 'C['n] } =
+      ind{'n; m, z. 'down['n; 'm; it; 'z]; 'base['n]; m, z. 'up['n; 'm; it; 'z]}
+
+(*!
+ * @begin[doc]
+ * @thysubsection {Induction and recursion}
+ * Reduction of the induction combinator @tt{ind} has three cases.
+ * If the argument $x$ is $0$, the combinator reduces to the @i{base}
+ * case; if it is positive, it reduces to the @i{up} case; and
+ * if it is negative, it reduces to the @i{down} case.
+ * The first argument in the @i{up} and @i{down} cases represents
+ * the induction value, and the second argument represents the
+ * ``next'' computational step.
+ * @end[doc]
+ *)
+(*
+ * Reduction on induction combinator:
+ * Three cases:
+ *    let ind[x] = ind(x; i, j. down[i, j]; base; k, l. up[k, l]
+ *    x < 0 => (ind[x] -> down[x, ind[x + 1]]
+ *    x = 0 => (ind[x] -> base)
+ *    x > 0 => (ind[x] -> up[x, ind[x - 1]]
+ *)
+prim_rw reduce_ind_down :
+   ('x < 0) -->
+   ind{'x; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]} <-->
+    ('down['x; ind{('x +@ 1); i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]}])
+
+prim_rw reduce_ind_up :
+   (0 < 'x) -->
+   ind{'x; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]} <-->
+   ('up['x; ind{('x -@ 1); i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]}])
+
+prim_rw reduce_ind_base :
+   (ind{0; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]}) <-->
+   'base
+
+interactive_rw unfold_ind :
+   ('i IN int) -->
+   ind{'i; m, z. 'down['m;'z]; 'base; m, z. 'up['m;'z]} <-->
+      (if beq_int{'i; 0} then 'base else
+         if lt_bool{0;'i}
+         then 'up['i; ind{('i -@ 1); m, z. 'down['m; 'z]; 'base; m, z. 'up['m; 'z]}]
+         else 'down['i; ind{('i +@ 1); m, z. 'down['m; 'z]; 'base; m,z. 'up['m; 'z]}])
+
+interactive_rw unfold_ind_number :
+   ind{number[n:n]; m, z. 'down['m;'z]; 'base; m, z. 'up['m;'z]} <-->
+      (if beq_int{number[n:n]; 0} then 'base else
+         if lt_bool{0;number[n:n]}
+         then 'up[number[n:n]; ind{(number[n:n] -@ 1); m, z. 'down['m; 'z]; 'base; m, z. 'up['m; 'z]}]
+         else 'down[number[n:n]; ind{(number[n:n] +@ 1); m, z. 'down['m; 'z]; 'base; m,z. 'up['m; 'z]}])
+
+let reduce_ind_numberC =
+   unfold_ind_number thenC addrC [2;0] reduce_lt thenC addrC [2] reduceTopC thenC addrC [0] reduce_eq_int thenC reduceTopC
+
+(*
+ * @begin[doc]
+ * @thysubsection{Combinator equality}
+ *
+ * Two @tt{ind} term compute values of type $T$ if each of the three
+ * cases (zero, positive, and negative) produce values of type $T$.
+ * @end[doc]
+ *)
+(*
+ * Equality on induction combinator:
+ * let a = ind(x1; i1, j1. down1[i1, j1]; base1; k1, l1. up1[k1, l1])
+ * let b = ind(x2; i2, j2. down2[i2, j2]; base2; k2, l2. up2[k2, l2])
+ *
+ * H >- a = b in T[x1]
+ * by indEquality [z. T[z]; x; y; w]
+ *
+ * H >- x1 = y1 in Z
+ * H, x: Z, w: x < 0, y: T[x + 1] >- down1[x, y] = down2[x, y] in T[x]
+ * H >- base1 = base2 in T[0]
+ * H, x: Z, w: 0 < x, y: T[x - 1] >- up1[x, y] = up2[x, y] in T[x]
+ *)
+prim indEquality {| intro []; eqcd |} 'H lambda{z. 'T['z]} 'x 'y 'w :
+   sequent [squash] { 'H >- 'x1 = 'x2 in int } -->
+   sequent [squash] { 'H; x: int; w: 'x < 0; y: 'T['x +@ 1] >- 'down1['x; 'y] = 'down2['x; 'y] in 'T['x] } -->
+   sequent [squash] { 'H >- 'base1 = 'base2 in 'T[0] } -->
+   sequent [squash] { 'H; x: int; w: 0 < 'x; y: 'T['x -@ 1] >- 'up1['x; 'y] = 'up2['x; 'y] in 'T['x] } -->
+   sequent ['ext] { 'H >- ind{'x1; i1, j1. 'down1['i1; 'j1]; 'base1; k1, l1. 'up1['k1; 'l1]}
+                   = ind{'x2; i2, j2. 'down2['i2; 'j2]; 'base2; k2, l2. 'up2['k2; 'l2]}
+                   in 'T['x1] } =
+  it
 
 (*!
  * @begin[doc]
@@ -869,4 +902,5 @@ let resource reduce += [
    << ( 'a +@ (- 'a)) >>, minus_add_inverseC;
    << (-(-'a)) >>, minus_minus_reduceC;
    << ('a +@ ('b +@ 'c)) >>, add_AssocC;
+   <<ind{number[n:n]; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]}>>, reduce_ind_numberC;
 ]

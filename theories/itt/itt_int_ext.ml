@@ -165,21 +165,6 @@ dform rem_df2 : mode[src] :: parens :: "prec"[prec_mul] :: "rem"{'a; 'b} =
 dform gt_df1 : parens :: "prec"[prec_compare] :: gt{'a; 'b} =
    slot["lt"]{'a} `" > " slot["le"]{'b}
 
-(*
-Switching to define-version to provide the same behaviour as bool-relations,
-i.d. rewritability of <= in the same extent as of <
-
-prim_rw unfold_le 'H :
-   [wf] sequent [squash] { 'H >- 'a IN int } -->
-   [wf] sequent [squash] { 'H >- 'b IN int } -->
-   sequent ['ext] { 'H >- 'a <= 'b <--> ('a < 'b) \/ ('a = 'b in int) }
-
-prim_rw unfold_ge 'H :
-   [wf] sequent [squash] { 'H >- a IN int } -->
-   [wf] sequent [squash] { 'H >- b IN int } -->
-   sequent ['ext] { 'H >- 'a >= 'b <--> ('a < 'b) \/ ('a = 'b in int) }
-*)
-
 define unfold_le :
    le{'a; 'b} <--> "assert"{le_bool{'a; 'b}}
 

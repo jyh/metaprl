@@ -277,7 +277,7 @@ up[n, m, it, z])
  * H, n:Z, J[n] >- C[0] ext base[n]
  * H, n:Z, J[n], m:Z, v: 0 < m, z: C[m - 1] >- C[m] ext up[n, m, v, z]
  *)
-rule intElimination 'H 'J 'n 'm 'v 'z :
+rule intElimination 'H 'J 'm 'v 'z :
    sequent ['ext] { 'H; n: int; 'J['n]; m: int; v: 'm < 0; z: 'C['m +@ 1] >- 'C['m] } -->
    sequent ['ext] { 'H; n: int; 'J['n] >- 'C[0] } -->
    sequent ['ext] { 'H; n: int; 'J['n]; m: int; v: 0 < 'm; z: 'C['m -@ 1] >- 'C['m] } -->

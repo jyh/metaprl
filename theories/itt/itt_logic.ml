@@ -1098,6 +1098,36 @@ let auto_resource =
         auto_tac = auto_assum_progress assum_test backThruAssumT
       }
 
+
+
+
+(************ logic instance for j-prover in refiner/reflib/jall.ml  **********)
+
+
+module Itt_JLogic =
+struct
+	let is_all_term = is_all_term
+        let dest_all = dest_all
+	let is_exists_term = is_exists_term
+        let dest_exists = dest_exists
+	let is_and_term = is_and_term
+        let dest_and = dest_and
+	let is_or_term = is_or_term
+        let dest_or = dest_or
+	let is_implies_term = is_implies_term
+        let dest_implies = dest_implies
+	let is_not_term = is_not_term
+        let dest_not = dest_not
+end
+
+
+module ITT_JProver = Jall.JProver(Itt_JLogic) 
+
+let jtest = 
+ print_endline "Hallo I am";
+  ITT_JProver.test
+let jprove = ITT_JProver.prove
+
 (*
  * -*-
  * Local Variables:

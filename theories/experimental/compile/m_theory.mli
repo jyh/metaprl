@@ -25,22 +25,11 @@
  * @end[license]
  *)
 extends M_ir
-
-(*
-extends M_ast
-extends M_post_parsing
 extends M_cps
-extends M_closure
-extends M_prog
-extends M_dead
-extends M_inline
-extends X86_asm
-extends M_x86
 
 open Tactic_type.Tacticals
 
-     topval compileT : tactic
-*)
+topval compileT : tactic
 
 (*!
  * @docoff

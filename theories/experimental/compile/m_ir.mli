@@ -90,6 +90,7 @@ declare AtomTrue
 declare AtomInt[i:n]
 declare AtomBinop{'op; 'a1; 'a2}
 declare AtomFun{x. 'e['x]}
+declare AtomVar{'v}
 declare AtomFunVar{'R; 'v}
 
 (*

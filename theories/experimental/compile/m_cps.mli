@@ -34,12 +34,6 @@ open Tactic_type.Tacticals
 open Tactic_type.Conversionals
 
 (*
- * CPS transformers.
- *)
-declare CPS{'cont; 'a; v. 'e['v]}
-declare CPS{'cont; 'e}
-
-(*
  * CPS resource
  *)
 resource (term * conv, conv) cps

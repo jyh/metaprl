@@ -13,6 +13,7 @@ OCAMLDEPFLAGS := -prl
 MPFILES :=\
 	m_util\
 	m_ir\
+	m_cps\
 	m_theory\
 	m_test
 

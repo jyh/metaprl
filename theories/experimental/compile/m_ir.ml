@@ -105,6 +105,7 @@ declare AtomTrue
 declare AtomInt[i:n]
 declare AtomBinop{'op; 'a1; 'a2}
 declare AtomFun{x. 'e['x]}
+declare AtomVar{'v}
 declare AtomFunVar{'R; 'v}
 
 (*!
@@ -232,6 +233,9 @@ dform atom_false_df : AtomTrue =
 dform atom_int_df : AtomInt[i:n] =
    `"#" slot[i:n]
 
+dform atom_var_df : AtomVar{'v} =
+   Nuprl_font!downarrow slot{'v}
+
 dform atom_fun_var_df : parens :: "prec"[prec_var] :: AtomFunVar{'R; 'v} =
    slot{'R} `"." slot{'v}
 
@@ -314,7 +318,7 @@ dform end_def_df : EndDef =
    `""
 
 dform label_df : Label[s:t] =
-   slot[s:t]
+   `"\"" slot[s:t] `"\""
 
 dform let_fun_def : parens :: "prec"[prec_let] :: LetFun{'R; 'label; f. 'e} =
    xlet bf[" fun "] slot{'f} `" = " slot{'R} `"." slot{'label} `" " xin hspace slot["lt"]{'e}

@@ -1,7 +1,7 @@
 (*!
  * @begin[doc]
- *
  * @module[Top_conversionals]
+ *
  * CPS conversion for the M language.
  * @end[doc]
  *
@@ -78,9 +78,6 @@ open Tactic_type.Sequent
  * @docoff
  * @end[doc]
  *)
-(*
- * Resource.
- *)
 let resource cps =
    table_resource_info identity extract_data
 
@@ -102,16 +99,64 @@ let cpsC =
  *
  * Add an application that we will map through the program.
  * This should be eliminated by the end of CPS conversion.
+ *
+ * @begin[itemize]
+ * @item{CPSRecordVar{R} represents the application of the record $R$ to
+ *       the identify function.}
+ *
+ * @item{CPSFunVar{f} represents the application of the function $f$ to
+ *       the identity function.}
+ *
+ * @item{
+ *    @begin[verbatim]
+ *    CPS{'cont; 'a; v. 'e['v]}
+ *    @end[verbatim]
+ *    means
+ *    @begin[verbatim]
+ *    let v = apply{'cont; 'a} in 'e['v]
+ *    @end[verbatim]}
+ *
+ * @item{
+ *    @begin[verbatim]
+ *    CPS{'cont; 'e}
+ *    @end[verbatim]
+ *    is the CPS conversion of expression $e$ with continuation ${cont}$.
+ *    The interpretation is as the application ${cont}@space{}e$.}
+ *
+ * @item{
+ *    @begin[verbatim]
+ *    CPS{cont. 'fields}
+ *    @end[verbatim]
+ *    is the CPS conversion of a record body.  We think of a record
+ *    @begin[verbatim]
+ *    { f1 = e1; ...; fn = en }
+ *    @end[verbatim]
+ *    as a function from labels to expressions (on label $f_i$, the function returns $e_i$).
+ *    The CPS form is $@lambda l. @lambda c. CPS(c, {fields}(l))$.}
+ * @end[itemize]
  * @end[doc]
  *)
-declare CPS{'cont; 'a; v. 'e['v]}
-declare CPS{'cont; 'e}
+declare CPSRecordVar{'R}
+declare CPSFunVar{'f}
 
-dform cps_atom_df : CPS{'cont; 'a; v. 'e} =
-   szone pushm[1] bf["CPS["] 'cont bf[";"] " " 'a bf[";"] " " 'v `"." slot{'e} popm bf["]"] ezone
+declare CPS{'a}
+declare CPS{'cont; 'e}
+declare CPS{cont. 'fields['cont]}
+
+dform cps_record_var_df : CPSRecordVar{'R} =
+   bf["CPSrec["] slot{'R} bf["]"]
+
+dform cps_fun_var_df : CPSFunVar{'R} =
+   bf["CPSfun["] slot{'R} bf["]"]
+
+dform cps_atom_df : CPS{'a} =
+   bf["CPS["] slot{'a} bf["]"]
 
 dform cps_exp_df : CPS{'cont; 'e} =
    szone pushm[1] bf["CPS["] 'cont bf[";"] hspace 'e popm bf["]"] ezone
+
+dform cps_fields_df : CPS{cont. 'e} =
+   szone pushm[1] bf["CPS["] 'cont bf["."] hspace 'e popm bf["]"] ezone
 
 (*!
  * @begin[doc]
@@ -125,19 +170,17 @@ dform cps_exp_df : CPS{'cont; 'e} =
  * a function var.  If so, the function must be partially applied.
  * @end[doc]
  *)
-prim_rw cps_atom_int : CPS{'cont; AtomInt[i:n]; v. 'e['v]} <-->
-   'e[AtomInt[i:n]]
+prim_rw cps_atom_int : CPS{AtomInt[i:n]} <-->
+   AtomInt[i:n]
 
-prim_rw cps_atom_var : CPS{'cont; AtomVar{'v1}; v2. 'e['v2]} <-->
-   'e['v1]
+prim_rw cps_atom_var : CPS{AtomVar{'v}} <-->
+   AtomVar{'v}
 
-prim_rw cps_atom_binop : CPS{'cont; AtomBinop{'op; 'a1; 'a2}; v. 'e['v]} <-->
-   CPS{'cont; 'a1; v1.
-   CPS{'cont; 'a2; v2.
-   LetAtom{AtomBinop{'op; 'v1; 'v2}; v. 'e['v]}}}
+prim_rw cps_atom_binop : CPS{AtomBinop{'op; 'a1; 'a2}} <-->
+   AtomBinop{'op; CPS{'a1}; CPS{'a2}}
 
-prim_rw cps_atom_fun_var : CPS{'cont; AtomFunVar{'f}; g. 'e['g]} <-->
-   LetClosure{AtomFunVar{'f}; 'cont; g. 'e[AtomVar{'g}]}
+prim_rw cps_fun_var : CPS{CPSFunVar{'f}} <-->
+   AtomVar{'f}
 
 (*!
  * @begin[doc]
@@ -145,83 +188,70 @@ prim_rw cps_atom_fun_var : CPS{'cont; AtomFunVar{'f}; g. 'e['g]} <-->
  * @end[doc]
  *)
 prim_rw cps_let_atom : CPS{'cont; LetAtom{'a; v. 'e['v]}} <-->
-   CPS{'cont; 'a; v. CPS{'cont; 'e['v]}}
+   LetAtom{CPS{'a}; v. CPS{'cont; 'e['v]}}
 
 prim_rw cps_let_pair : CPS{'cont; LetPair{'a1; 'a2; v. 'e['v]}} <-->
-   CPS{'cont; 'a1; v1.
-   CPS{'cont; 'a2; v2.
-   LetPair{'v1; 'v2; v.
-   CPS{'cont; 'e['v]}}}}
+   LetPair{CPS{'a1}; CPS{'a2}; v. CPS{'cont; 'e['v]}}
 
 prim_rw cps_let_subscript : CPS{'cont; LetSubscript{'a1; 'a2; v. 'e['v]}} <-->
-   CPS{'cont; 'a1; v1.
-   CPS{'cont; 'a2; v2.
-   LetSubscript{'v1; 'v2;
-   v. CPS{'cont; 'e['v]}}}}
+   LetSubscript{CPS{'a1}; CPS{'a2}; v. CPS{'cont; 'e['v]}}
 
 prim_rw cps_if : CPS{'cont; If{'a; 'e1; 'e2}} <-->
-   CPS{'cont; 'a; v.
-   If{'v; CPS{'cont; 'e1}; CPS{'cont; 'e2}}}
+   If{CPS{'a}; CPS{'cont; 'e1}; CPS{'cont; 'e2}}
 
 prim_rw cps_let_apply : CPS{'cont; LetApply{'a1; 'a2; v. 'e['v]}} <-->
-   FunDecl{g.
-   FunDef{'g; AtomFun{v. CPS{'cont; 'e['v]}};
-   CPS{'cont; 'a1; v1.
-   CPS{'cont; 'a2; v2.
-   TailCall{'v1; 'cont; 'v2}}}}}
+   LetRec{R. FunDef{Label["g":t]; AtomFun{v. CPS{'cont; 'e['v]}};
+             EndDef};
+          R.
+          LetFun{'R; Label["g":t]; g.
+          TailCall{CPS{'a1}; 'g; CPS{'a2}}}}
+
+(*!
+ * @begin[doc]
+ * Converting functions is the hard part.
+ * @end[doc]
+ *)
+prim_rw cps_let_rec : CPS{'cont; LetRec{R1. 'fields['R1]; R2. 'e['R2]}} <-->
+   LetRec{R1. CPS{cont. CPS{'cont; 'fields[CPSRecordVar{'R1}]}};
+          R2. CPS{'cont; 'e[CPSRecordVar{'R2}]}}
+
+prim_rw cps_fun_def : CPS{cont. CPS{'cont; FunDef{'label; AtomFun{v. 'e['v]}; 'rest}}} <-->
+   FunDef{'label; AtomFun{cont. AtomFun{v. CPS{'cont; 'e['v]}}}; CPS{cont. CPS{'cont; 'rest}}}
+
+prim_rw cps_end_def : CPS{cont. CPS{'cont; EndDef}} <-->
+   EndDef
+
+prim_rw cps_let_fun : CPS{'cont; LetFun{CPSRecordVar{'R}; 'label; f. 'e['f]}} <-->
+   LetFun{'R; 'label; f. CPS{'cont; 'e[CPSFunVar{'f}]}}
 
 prim_rw cps_return : CPS{'cont; Return{'a}} <-->
-   CPS{'cont; 'a; v.
-   TailCall{'cont; 'v}}
+   TailCall{'cont; CPS{'a}}
 
-prim_rw cps_tailcall : CPS{'cont; TailCall{'a1; 'a2}} <-->
-   CPS{'cont; 'a1; v1.
-   CPS{'cont; 'a2; v2.
-   TailCall{'v1; 'v2}}}
-
-(*!
- * @begin[doc]
- * @modsubsection{CPS optimizations}
- *
- * The tailcall transformation may create an unecessary closure.
- * @end[doc]
- *)
-prim_rw cps_opt_tailcall : LetClosure{'a1; 'a2; f. TailCall{AtomVar{'f}; 'a3}} <-->
-   TailCall{'a1; 'a2; 'a3}
-
-(*!
- * @begin[doc]
- * Functions get an extra argument.
- * @end[doc]
- *)
-prim_rw cps_declare : CPS{'cont; FunDecl{f. 'e['f]}} <-->
-   FunDecl{f. CPS{'cont; 'e['f]}}
-
-prim_rw cps_define : CPS{'cont; FunDef{'f; AtomFun{x. 'e1['x]}; 'e2}} <-->
-   FunDef{'f; AtomFun{cont. AtomFun{x. CPS{AtomVar{'cont}; 'e1['x]}}}; CPS{'cont; 'e2}}
+prim_rw cps_tailcall : CPS{'cont; TailCall{CPSFunVar{'f}; 'a2}} <-->
+   TailCall{'f; 'cont; CPS{'a2}}
 (*! docoff *)
 
 (*
  * Add all these rules to the CPS resource.
  *)
 let resource cps +=
-    [<< CPS{'cont; AtomInt[i:n]; v. 'e['v]} >>, cps_atom_int;
-     << CPS{'cont; AtomVar{'v1}; v2. 'e['v2]} >>, cps_atom_var;
-     << CPS{'cont; AtomBinop{'op; 'a1; 'a2}; v. 'e['v]} >>, cps_atom_binop;
-     << CPS{'cont; AtomFunVar{'f}; g. 'e['g]} >>, cps_atom_fun_var;
+    [<< CPS{AtomInt[i:n]} >>, cps_atom_int;
+     << CPS{AtomVar{'v}} >>, cps_atom_var;
+     << CPS{AtomBinop{'op; 'a1; 'a2}} >>, cps_atom_binop;
+     << CPS{CPSFunVar{'f}} >>, cps_fun_var;
 
      << CPS{'cont; LetAtom{'a; v. 'e['v]}} >>, cps_let_atom;
      << CPS{'cont; LetPair{'a1; 'a2; v. 'e['v]}} >>, cps_let_pair;
      << CPS{'cont; LetSubscript{'a1; 'a2; v. 'e['v]}} >>, cps_let_subscript;
      << CPS{'cont; If{'a; 'e1; 'e2}} >>, cps_if;
      << CPS{'cont; LetApply{'a1; 'a2; v. 'e['v]}} >>, cps_let_apply;
+
+     << CPS{'cont; LetRec{R1. 'fields['R1]; R2. 'e['R2]}} >>, cps_let_rec;
+     << CPS{cont. CPS{'cont; FunDef{'label; AtomFun{v. 'e['v]}; 'rest}}} >>, cps_fun_def;
+     << CPS{cont. CPS{'cont; EndDef}} >>, cps_end_def;
+     << CPS{'cont; LetFun{CPSRecordVar{'R}; 'label; f. 'e['f]}} >>, cps_let_fun;
      << CPS{'cont; Return{'a}} >>, cps_return;
-     << CPS{'cont; TailCall{AtomFunVar{'f}; 'e}} >>, cps_tailcall;
-
-     << CPS{'cont; FunDecl{f. 'e['f]}} >>, cps_declare;
-     << CPS{'cont; FunDef{'f; AtomFun{x. 'e1['x]}; 'e2}} >>, cps_define;
-
-     << LetClosure{'a1; 'a2; f. TailCall{AtomVar{'f}; 'a3}} >>, cps_opt_tailcall]
+     << CPS{'cont; TailCall{CPSFunVar{'f}; 'a2}} >>, cps_tailcall]
 
 (*!
  * @begin[doc]
@@ -230,9 +260,8 @@ let resource cps +=
  *)
 interactive cps_prog :
    sequent [m] { 'H; cont: exp >-
-      compilable{FunDecl{init.
-                 FunDef{'init; AtomFun{cont. CPS{'cont; 'e}};
-                 TailCall{AtomFunVar{'init}; AtomVar{'cont}}}}} } -->
+      compilable{LetRec{R. FunDef{Label["init":t]; AtomFun{cont. CPS{'cont; 'e}}; EndDef};
+                        R. LetFun{'R; Label["init":t]; init. TailCall{'init; AtomVar{'cont}}}}} } -->
    sequent [m] { 'H >- compilable{'e} }
 
 (*

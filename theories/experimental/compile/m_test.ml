@@ -29,17 +29,17 @@ extends M_theory
 (************************************************************************
  * Just for testing.
  *)
-interactive fib_prog 'H :
-   sequent [m] { 'H; cont: exp >- compilable{
+interactive fib_prog :
+   sequent [m] { 'H >- compilable{
       LetRec{R.
          FunDef{Label["fib":t]; AtomFun{i.
             LetFun{'R; Label["fib":t]; fib.
-            If{AtomBinop{LeOp; 'i; AtomInt[1:n]};
-               Return{'i};
+            If{AtomBinop{LeOp; AtomVar{'i}; AtomInt[1:n]};
+               Return{AtomVar{'i}};
 
-               LetApply{'fib; AtomBinop{SubOp; 'i; AtomInt[1:n]}; v1.
-               LetApply{'fib; AtomBinop{SubOp; 'i; AtomInt[2:n]}; v2.
-               Return{AtomBinop{AddOp; 'v1; 'v2}}}}}}};
+               LetApply{'fib; AtomBinop{SubOp; AtomVar{'i}; AtomInt[1:n]}; v1.
+               LetApply{'fib; AtomBinop{SubOp; AtomVar{'i}; AtomInt[2:n]}; v2.
+               Return{AtomBinop{AddOp; AtomVar{'v1}; AtomVar{'v2}}}}}}}};
          EndDef};
       R. LetFun{'R; Label["fib":t]; fib.
          TailCall{'fib; AtomInt[35:n]}}}} }

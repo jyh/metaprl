@@ -25,6 +25,16 @@
  * @end[license]
  *)
 extends M_ir
+extends M_cps
+
+open M_cps
+
+open Tactic_type.Tacticals
+open Tactic_type.Conversionals
+
+let compileT =
+   (* CPS conversion *)
+   cpsT
 
 (*
 extends M_ast

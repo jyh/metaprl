@@ -11,6 +11,8 @@ open Refiner.Refiner.TermOp
 open Tactic_type.Conversionals
 open Top_conversionals
 open Dtactic
+open Itt_equal
+open Itt_struct
 open Itt_rfun
 open Itt_record
 open Itt_list
@@ -150,7 +152,16 @@ let add info t =
 let find info t =
 	List.find (alpha_equal t) info
 
-let find_index info t = Lm_list_util.find_item (alpha_equal t) info
+let rec find_item_aux f i = function
+   h::t ->
+      if f h then
+         Some i
+      else
+         find_item_aux f (i + 1) t
+ | [] ->
+      None
+
+let find_index info t = find_item_aux (alpha_equal t) 0 info
 
 (*
 let is_bin_op op f t =
@@ -221,10 +232,20 @@ let is_id_mpoly_term = is_dep0_dep0_dep0_term id_mpoly_opname
 let mk_id_mpoly_term = mk_dep0_dep0_dep0_term id_mpoly_opname
 let dest_id_mpoly = dest_dep0_dep0_dep0_term id_mpoly_opname
 
+let const_mpoly_term = << const_mpoly{'v; 'F; 'nvars} >>
+let const_mpoly_opname = opname_of_term const_mpoly_term
+let is_const_mpoly_term = is_dep0_dep0_dep0_term const_mpoly_opname
+let mk_const_mpoly_term = mk_dep0_dep0_dep0_term const_mpoly_opname
+let dest_const_mpoly = dest_dep0_dep0_dep0_term const_mpoly_opname
+
 let var2mpoly f nvars vars v =
-	let i = find_index vars v in
-	let idp = mk_id_mpoly_term f (mk_intnum_term nvars) (mk_intnum_term i) in
-	mk_eval_mpoly_term idp (mk_list_of_list vars) f
+	match find_index vars v with
+		Some i ->
+			let idp = mk_id_mpoly_term f (mk_intnum_term nvars) (mk_intnum_term (nvars-i)) in
+			mk_eval_mpoly_term idp (mk_list_of_list vars) f
+	 | None ->
+			let constp = mk_const_mpoly_term v f (mk_intnum_term nvars) in
+			mk_eval_mpoly_term constp (mk_list_of_list vars) f
 
 let rec term2mpoly_aux f nvars vars t =
 	match explode_term t with
@@ -243,17 +264,15 @@ let rec term2mpoly_aux f nvars vars t =
 			)
 	 | _ -> var2mpoly f nvars vars t
 
-let term2mpoly f t =
-	let vars = vars_of_term f t in
+let term2mpoly f vars t =
+	(*let vars = vars_of_term f t in*)
 	let nvars = List.length vars in
 	term2mpoly_aux f nvars vars t
 
-(*
-let stdT f t =
-	let t' = term2mpoly f t in
-	let eqt = mk_eq_term f t t'
-	assertT
-*)
+let stdT f vars t =
+	let t' = term2mpoly f vars t in
+	let eqt = mk_equal_term (mk_field_term f "car") t t' in
+	assertT eqt
 
 (*EXAMPLE*)
 define unfold_poly_of_list : poly_of_list{'l} <-->
@@ -387,3 +406,13 @@ interactive test9 :
 			id_mpoly{Zuce;2;2};
 			cons{2;cons{3;nil}};Zuce}
 		= 2 in int }
+
+interactive test10 :
+	sequent { <H> >- 'x in int } -->
+	sequent { <H> >- 'y in int } -->
+	sequent { <H> >- 'x Zuce^"+" 'y Zuce^"+" 1 in int }
+
+interactive test11 :
+	sequent { <H> >- 'x in int } -->
+	sequent { <H> >- 'y in int } -->
+	sequent { <H> >- 'x Zuce^"+" ('x Zuce^"*" 'y) Zuce^"+" 'y Zuce^"+" 1 in int }

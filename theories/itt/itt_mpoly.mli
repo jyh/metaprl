@@ -6,4 +6,7 @@ topval atIndC : conv -> conv
 topval atIndArgC : conv -> conv
 topval atTermC : term -> conv -> conv
 topval atTermHC : term -> conv -> conv
-topval  fold_Zuce : conv
+
+topval stdT : term -> term list -> term -> tactic
+
+topval fold_Zuce : conv

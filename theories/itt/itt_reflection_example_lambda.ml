@@ -43,6 +43,11 @@ interactive lambda_app_diffops2 {| intro[] |}:
 define iform lambdaTerm: LambdaTerm <--> Lang{lambda_term::app_term::nil}
 dform lambda_df: LambdaTerm = `"Term" sub{lambda}
 
+define iform lambdaTerm1: LambdaTerm{'n} <--> {t:LambdaTerm | bdepth{'t} = 'n in int}
+dform lambda_df: LambdaTerm{'n} = `"Term" sub{lambda} sub{slot{'n}}
+
+
+
 interactive lambda_term_induction  {| elim[] |} 'H:
    sequent { <H>; <J>; v:Var >- 'P[ 'v ] } -->
    sequent { <H>; <J>; t: LambdaTerm; s:LambdaTerm; bdepth{'t} = bdepth{'s} in nat;

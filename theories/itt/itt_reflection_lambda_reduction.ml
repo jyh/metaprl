@@ -23,7 +23,7 @@ interactive subst_LambdaTerm {| intro [] |} :
 
 define unfold_beta_redex: beta_redex{'redex;'contractum} <-->
    exst f:LambdaTerm. exst b:LambdaTerm.
-    ( bdepth{'f} >= bdepth{'b} & bdepth{'f} >= 1 =>
+    ( bdepth{'f} >= bdepth{'b} & bdepth{'f} >= 1 &
       ('redex = mk_apply{ mk_lambda{'f}; 'b} in LambdaTerm &
        'contractum = subst{'f;'b} in LambdaTerm))
 

@@ -5,8 +5,8 @@
  * @theory[Base_auto_tactic]
  *
  * The @tt{Base_auto_tactic} module defines two of the most useful
- * tactics in the @MetaPRL prover.  The @hreftactic[autoT] tactic attempts
- * to prove a goal ``automatically,'' and the @hreftactic[trivialT] tactic
+ * tactics in the @MetaPRL prover.  The @tactic[autoT] tactic attempts
+ * to prove a goal ``automatically,'' and the @tactic[trivialT] tactic
  * proves goals that are ``trivial.''  Their implementations are surprisingly
  * simple---all of the work in automatic proving is implemented in
  * descendent theories.
@@ -60,6 +60,11 @@
  * sophisticated reasoning when a goal has a trivial proof.  The @hreftactic[trivialT]
  * is added to the @hrefresource[auto_resource] with a high precedence, so ``trivial''
  * reasoning is included by default in @hreftactic[autoT].
+ *
+ * This theory also defines the @tactic[byDefT] tactic. @tt{byDefT }@i{conv}
+ * (where @i{conv} is usially an @tt{unfold_} conversional) uses @i{conv}
+ * (through @hreftactic[higherC]) on all the assumptions and on the goal and then
+ * calls @hreftactic[autoT].
  * @end[doc]
  *
  * ----------------------------------------------------------------
@@ -119,6 +124,7 @@ open Mp_resource
 open Tactic_type
 open Tactic_type.Tacticals
 open Tactic_type.Sequent
+open Top_conversionals
 open Mptop
 
 (*
@@ -515,6 +521,9 @@ let autoT p =
 
 let tryAutoT tac =
    tac thenT tryT (completeT autoT)
+
+let byDefT conv =
+   rwhAllAll (conv thenC reduceC) thenT autoT
 
 (*
  * -*-

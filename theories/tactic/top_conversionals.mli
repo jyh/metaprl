@@ -60,7 +60,7 @@ topval rwcaAll : conv list -> int -> tactic
 topval rwaAllAll : conv list -> tactic
 
 
-topval prefix_andthenC : conv -> conv -> conv
+topval prefix_thenC : conv -> conv -> conv
 topval prefix_orelseC : conv -> conv -> conv
 topval addrC : int list -> conv -> conv
 topval clauseC : int -> conv -> conv

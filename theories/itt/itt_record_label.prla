@@ -1818,7 +1818,7 @@ B	b678	t678
 P	p678	Number 1045
 O	o678	apply p678 p674
 O	o679	lid p678 p674
-P	p679	String prefix_andthenC
+P	p679	String prefix_thenC
 O	o680	lid p679
 T	t680	o680
 B	b680	t680

@@ -129,7 +129,7 @@ interactive_rw record_exchange :
    rcrd[n:t]{'a; rcrd[m:t]{'b; 'r}} <--> eq_label[n:t,m:t]{rcrd[n:t]{'a;'r};
                                                            rcrd[m:t]{'b; rcrd[n:t]{'a; 'r}}}
 
-let record_beta_rw = record_beta andthenC reduce_eq_label
+let record_beta_rw = record_beta thenC reduce_eq_label
 
 let record_beta2_rw = record_beta2
 
@@ -437,7 +437,7 @@ let record_exchangeC n =
       else
          let rec aux i =
             if i = 0 then
-               record_exchange andthenC reduce_eq_label
+               record_exchange thenC reduce_eq_label
             else
                addrC [1] (aux (i -1))
          in

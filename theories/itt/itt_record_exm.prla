@@ -2009,7 +2009,7 @@ T	t753	o602 b614 b752
 B	b753	t753
 T	t754	o601 b613 b753
 B	b754	t754
-P	p754	String "rwh  (unfold_A  andthenC record_exchangeC 0 andthenC record_exchangeC 1) 0 thenT rwh reduceC 0 thenT autoT"
+P	p754	String "rwh  (unfold_A  thenC record_exchangeC 0 thenC record_exchangeC 1) 0 thenT rwh reduceC 0 thenT autoT"
 O	o754	ext_rule p754
 NBase_trivial	Base_trivial	Base_trivial NIL
 NBase_trivial!squash	squash	squash Base_trivial

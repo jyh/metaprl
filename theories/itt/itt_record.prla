@@ -2306,7 +2306,7 @@ P	p875	String assertion
 O	o878	tactic_arg p875
 P	p1534	String "dT 2 thenT equalSymT thenT autoT"
 O	o1534	ext_rule p1534
-P	p1558	String prefix_andthenC
+P	p1558	String prefix_thenC
 O	o1559	lid p1558
 T	t1559	o1559
 B	b1559	t1559
@@ -5227,7 +5227,7 @@ T	t3643	o b3643 b4
 B	b3644	t3643
 T	t3644	o978 b3628 b3644
 B	b3645	t3644
-P	p760	String "rw (unfoldRecordOrt andthenC unfoldFunctionOrt) 3 thenT withT <<'rr>> (dT 3) thenWT autoT"
+P	p760	String "rw (unfoldRecordOrt thenC unfoldFunctionOrt) 3 thenT withT <<'rr>> (dT 3) thenWT autoT"
 O	o760	ext_rule p760
 T	t761	o1020 b707 b1682 b3620
 H	h761	w t761
@@ -7862,7 +7862,7 @@ T	t1270	o b1270 b4
 B	b1271	t1270
 T	t1271	o978 b1264 b1271
 B	b1272	t1271
-P	p1272	String "rwh (unfoldRecordOrt andthenC unfoldFunctionOrt) 6 thenT withT <<'u>> (dT 6) thenAT autoT"
+P	p1272	String "rwh (unfoldRecordOrt thenC unfoldFunctionOrt) 6 thenT withT <<'u>> (dT 6) thenAT autoT"
 O	o1272	ext_rule p1272
 T	t1272	o1020 b707 b2565 b3913
 H	h1272	w t1272
@@ -8648,7 +8648,7 @@ B	b1743	t1743
 P	p1743	Number 11378
 P	p1744	Number 11489
 O	o1744	location p1743 p1744
-P	p1745	String "rwh (unfoldRecordOrt andthenC unfoldFunctionOrt) 0 thenT autoT"
+P	p1745	String "rwh (unfoldRecordOrt thenC unfoldFunctionOrt) 0 thenT autoT"
 O	o1745	ext_rule p1745
 T	t1745	o980 b4607 b4
 B	b1745	t1745
@@ -8680,7 +8680,7 @@ B	b1759	t1758
 P	p1759	Number 11491
 P	p1760	Number 11755
 O	o1760	location p1759 p1760
-P	p1761	String "rwh (unfoldRecordOrt andthenC unfoldFunctionOrt) 0 thenT dT 0 thenWT autoT"
+P	p1761	String "rwh (unfoldRecordOrt thenC unfoldFunctionOrt) 0 thenT dT 0 thenWT autoT"
 O	o1761	ext_rule p1761
 T	t1763	o b4619 b4
 B	b1774	t1763

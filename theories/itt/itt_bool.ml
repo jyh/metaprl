@@ -695,13 +695,13 @@ let rec filter_ifthenelse t = function
  *)
 let rec reduce_ite_trueC = function
    addr :: addrs ->
-      addrC addr reduce_ifthenelse_true andthenC reduce_ite_trueC addrs
+      addrC addr reduce_ifthenelse_true thenC reduce_ite_trueC addrs
  | [] ->
       idC
 
 let rec reduce_ite_falseC = function
    addr :: addrs ->
-      addrC addr reduce_ifthenelse_false andthenC reduce_ite_falseC addrs
+      addrC addr reduce_ifthenelse_false thenC reduce_ite_falseC addrs
  | [] ->
       idC
 

@@ -1288,7 +1288,7 @@ T	t2005	o2005 b4
 B	b2005	t2005
 T	t2013	o2009 b557 b2012 b2005 b4
 B	b2013	t2013
-P	p2020	String prefix_andthenC
+P	p2020	String prefix_thenC
 O	o2021	lid p2020
 T	t2021	o2021
 B	b2021	t2021

@@ -286,22 +286,22 @@ prim_rw reduce_eq : (number[i:n] = number[j:n] in int) <-->
 (*! @docoff *)
 
 let reduce_add =
-   reduce_add andthenC reduce_meta_sum
+   reduce_add thenC reduce_meta_sum
 
 let reduce_sub =
-   reduce_sub andthenC reduce_meta_diff
+   reduce_sub thenC reduce_meta_diff
 
 let reduce_mul =
-   reduce_mul andthenC reduce_meta_prod
+   reduce_mul thenC reduce_meta_prod
 
 let reduce_div =
-   reduce_div andthenC reduce_meta_rem
+   reduce_div thenC reduce_meta_rem
 
 let reduce_lt =
-   reduce_lt andthenC reduce_meta_lt
+   reduce_lt thenC reduce_meta_lt
 
 let reduce_eq =
-   reduce_eq andthenC reduce_meta_eq
+   reduce_eq thenC reduce_meta_eq
 
 (*!
  * @begin[doc]

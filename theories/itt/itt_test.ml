@@ -68,7 +68,7 @@ let redex1C =
 let redex2C =
    reduceFact
 
-let redexC = (repeatC (higherC redex1C) andthenC (higherC redex2C))
+let redexC = (repeatC (higherC redex1C) thenC (higherC redex2C))
 
 interactive fact100 'H :
    sequent ['ext] { 'H >- fact{100} }

@@ -84,7 +84,7 @@ interactive not_eq_label  'H:
 
 
 let reduce_eq_label =  reduce_eq_label_trivial_rw orelseC
-                       (unfold_eq_label andthenC reduce_meta_eq)
+                       (unfold_eq_label thenC reduce_meta_eq)
 
 let not_eq_labelT p =
       (not_eq_label (Sequent.hyp_count_addr p) thenT rw reduce_eq_label 0 thenT tryT (dT 0)) p

@@ -1,6 +1,6 @@
 (*!
  * @begin[spelling]
- * Conversionals addr addrC allSubC andthenC conv
+ * Conversionals addr addrC allSubC thenC conv
  * cutC dprod failC firstC foldC higherC idC inl
  * inr Itt lowerC orelseC reduceC reduceDecideInl reduceSpread repeatC
  * rw rwh someSubC sweepDnC sweepUpC tryC
@@ -171,9 +171,9 @@ let failWithC = Tactic_type.Conversionals.failWithC
  * @thysection{Conversionals}
  *
  * @begin[description]
- * @item{@conv[andthenC], @conv[orelseC];
+ * @item{@conv[thenC], @conv[orelseC];
  * Conversionals can be combined in the same manner as tactics.
- * The (@tt{$c_1$ andthenC $c_2$}) conversion first applies conversion
+ * The (@tt{$c_1$ thenC $c_2$}) conversion first applies conversion
  * $c_1$, and then applies $c_2$ to the result term.  The (@tt{$c_1$ orelseC $c_2$})
  * conversion first applies $c_1$@; if $c_1$ fails (because the conversion does not
  * match the term being rewritten, or because of a call to @tt{failC}), $c_2$ is
@@ -202,7 +202,7 @@ let failWithC = Tactic_type.Conversionals.failWithC
  * @docoff
  * @end[doc]
  *)
-let prefix_andthenC = Tactic_type.Conversionals.prefix_andthenC
+let prefix_thenC = Tactic_type.Conversionals.prefix_thenC
 let prefix_orelseC = Tactic_type.Conversionals.prefix_orelseC
 let tryC = Tactic_type.Conversionals.tryC
 let firstC = Tactic_type.Conversionals.firstC

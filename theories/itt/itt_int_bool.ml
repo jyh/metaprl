@@ -96,13 +96,13 @@ prim_rw reduce_ge_int : ge_int{'i; 'j} <-->
    bor{eq_int{'i; 'j}; gt_int{'i; 'j}}
 
 let reduce_eq_int =
-   reduce_eq_int' andthenC reduce_meta_eq
+   reduce_eq_int' thenC reduce_meta_eq
 
 let reduce_lt_int =
-   reduce_lt_int' andthenC reduce_meta_lt
+   reduce_lt_int' thenC reduce_meta_lt
 
 let reduce_gt_int =
-   reduce_gt_int' andthenC reduce_meta_lt
+   reduce_gt_int' thenC reduce_meta_lt
 
 let resource reduce +=
    [<< eq_int{number[i:n]; number[j:n]} >>, reduce_eq_int;

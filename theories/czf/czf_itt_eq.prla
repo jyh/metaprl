@@ -8297,7 +8297,7 @@ B	b7929	t7929
 P	p7929	Number 5814
 P	p7930	Number 6025
 O	o7930	location p7929 p7930
-P	p7931	String "rw (addrC [0] unfold_eq andthenC reduceC) 0 thenT trivialT"
+P	p7931	String "rw (addrC [0] unfold_eq thenC reduceC) 0 thenT trivialT"
 O	o7931	ext_rule p7931
 T	t7931	o942 b851 b864
 S	s7931	t942 h

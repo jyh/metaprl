@@ -6563,7 +6563,7 @@ T	t4205	o1523 b4193 b4194
 B	b4205	t4205
 NBase_meta!meta_lt	meta_lt	meta_lt Base_meta
 O	o4206	meta_lt
-P	p4216	String prefix_andthenC
+P	p4216	String prefix_thenC
 O	o4217	lid p4216
 T	t4217	o4217
 B	b4217	t4217
@@ -7011,7 +7011,7 @@ T	t3899	o1437 b1445 b3899
 B	b3900	t3899
 T	t3900	o1437 b3900 b1438
 B	b3901	t3900
-P	p3907	String "rw (addrC [1;0;1] (add_CommutC andthenC minus_add_inverseC)) 0 thenAT (autoT thenT sqsquashT thenT trivialT)"
+P	p3907	String "rw (addrC [1;0;1] (add_CommutC thenC minus_add_inverseC)) 0 thenAT (autoT thenT sqsquashT thenT trivialT)"
 O	o3907	ext_rule p3907
 T	t3907	o1437 b1445 b2169
 B	b3908	t3907
@@ -11737,7 +11737,7 @@ T	t4214	o1649 b4208 b4213
 B	b4214	t4214
 T	t4215	o1649 b4672 b4214
 B	b4215	t4215
-P	p4215	String "rwh (unfold_lt andthenC unfold_assert) 0"
+P	p4215	String "rwh (unfold_lt thenC unfold_assert) 0"
 O	o4215	ext_rule p4215
 T	t4216	o b2743 b18
 B	b4216	t4216

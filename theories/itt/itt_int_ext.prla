@@ -5298,7 +5298,7 @@ B	b1410	t1410
 P	p1410	Number 7779
 O	o1410	apply p1410 p1403
 O	o1411	lid p1410 p1403
-P	p2076	String prefix_andthenC
+P	p2076	String prefix_thenC
 O	o2077	lid p2076
 T	t2077	o2077
 B	b2077	t2077

@@ -4935,7 +4935,7 @@ P	p2040	Number 6606
 P	p2041	Number 6670
 O	o2041	apply p2040 p2041
 O	o2042	lid p2040 p2041
-P	p2042	String prefix_andthenC
+P	p2042	String prefix_thenC
 O	o2043	lid p2042
 T	t2043	o2043
 B	b2043	t2043

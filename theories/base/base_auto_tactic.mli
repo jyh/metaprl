@@ -139,6 +139,8 @@ val auto_progress : tactic -> auto_tac
 val auto_hyp_progress : (int -> tactic_arg -> bool) -> (int -> tactic) -> auto_tac
 val auto_assum_progress : (int -> tactic_arg -> bool) -> (int -> tactic) -> auto_tac
 
+topval byDefT: conv -> tactic
+
 (*
  * -*-
  * Local Variables:

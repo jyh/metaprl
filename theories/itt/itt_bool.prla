@@ -5255,7 +5255,7 @@ P	p7415	Var tl
 O	o7415	var p7415
 T	t7415	o7415
 B	b7415	t7415
-P	p7471	String prefix_andthenC
+P	p7471	String prefix_thenC
 O	o7472	lid p7471
 T	t7472	o7472
 B	b7472	t7472

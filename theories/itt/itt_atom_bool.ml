@@ -69,7 +69,7 @@ prim_rw reduce_eq_atom' : eq_atom{token[x:t]; token[y:t]} <-->
    meta_eq{token[x:t]; token[y:t]; btrue; bfalse}
 
 let reduce_eq_atom =
-   reduce_eq_atom' andthenC reduce_meta_eq
+   reduce_eq_atom' thenC reduce_meta_eq
 
 (************************************************************************
  * RULES                                                                *

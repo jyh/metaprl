@@ -251,11 +251,11 @@ prim_rw reduce_rem : "rem"{number[i:n]; number[j:n]} <-->
 (*! @docoff *)
 
 let reduce_mul =
-   reduce_mul andthenC reduce_meta_prod
+   reduce_mul thenC reduce_meta_prod
 
 (*
 let reduce_div =
-   reduce_div andthenC reduce_meta_rem
+   reduce_div thenC reduce_meta_rem
 *)
 
 (*!

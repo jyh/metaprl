@@ -527,16 +527,16 @@ dform tt_end_df : internal :: mode[tex] :: tt_end =
    izone `"}" ezone
 
 dform sub_begin_df : internal :: mode[tex] :: sub_begin =
-   izone `"$_{" ezone
+   izone `"_{" ezone
 
 dform sub_end_df : internal :: mode[tex] :: sub_end =
-   izone `"}$" ezone
+   izone `"}" ezone
 
 dform sup_begin_df : internal :: mode[tex] :: sup_begin =
-   izone `"$^{" ezone
+   izone `"^{" ezone
 
 dform sup_end_df : internal :: mode[tex] :: sup_end =
-   izone `"}$" ezone
+   izone `"}" ezone
 
 dform small_begin_df : internal :: mode[tex] :: small_begin =
    izone `"{\\scriptsize " ezone

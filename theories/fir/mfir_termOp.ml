@@ -764,14 +764,6 @@ let is_atan2Op_term = is_num_0_dep0_term atan2Op_opname
 let mk_atan2Op_term = mk_num_0_dep0_term atan2Op_opname
 let dest_atan2Op_term = dest_num_0_dep0_term atan2Op_opname
 
-let eqEqOp_term = << eqEqOp >>
-let eqEqOp_opname = opname_of_term eqEqOp_term
-let is_eqEqOp_term = is_0_dep0_term eqEqOp_opname
-
-let neqEqOp_term = << neqEqOp >>
-let neqEqOp_opname = opname_of_term neqEqOp_term
-let is_neqEqOp_term = is_0_dep0_term neqEqOp_opname
-
 let atomInt_term = << atomInt{ 'num } >>
 let atomInt_opname = opname_of_term atomInt_term
 let is_atomInt_term = is_1_dep0_term atomInt_opname

@@ -633,12 +633,6 @@ val is_atan2Op_term : term -> bool
 val mk_atan2Op_term : Mp_num.num -> term
 val dest_atan2Op_term : term -> Mp_num.num
 
-val eqEqOp_term : term
-val is_eqEqOp_term : term -> bool
-
-val neqEqOp_term : term
-val is_neqEqOp_term : term -> bool
-
 val atomInt_term : term
 val is_atomInt_term : term -> bool
 val mk_atomInt_term : term -> term

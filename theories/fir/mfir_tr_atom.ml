@@ -298,7 +298,16 @@ prim ty_notIntOp {| intro [] |} 'H :
    sequent [mfir] { 'H >- has_type["atom"]{ atomUnop{ notIntOp; 'a}; tyInt } }
    = it
 
-(* XXX RawBitFieldOp should go here. *)
+(* NOTE: Using the Mojave compiler rule for rawBitFieldOp. *)
+
+prim ty_rawBitFieldOp {| intro [] |} 'H :
+   sequent [mfir] { 'H >- member{ 'i1; intset_max[p:n, s:s] } } -->
+   sequent [mfir] { 'H >- member{ 'i2; intset_max[p:n, s:s] } } -->
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a; tyRawInt[p:n, s:s] } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomUnop{ rawBitFieldOp[p:n, s:s]{ 'i1; 'i2 }; 'a };
+                        tyRawInt[p:n, s:s] } }
+   = it
 
 prim ty_uminusRawIntOp {| intro [] |} 'H :
    sequent [mfir] { 'H >- has_type["atom"]{ 'a; tyRawInt[p:n, s:s] } } -->
@@ -407,3 +416,437 @@ prim ty_rawIntOfRawIntOp {| intro [] |} 'H :
 (*
  * Binary operators.
  *)
+
+prim ty_andEnumOp {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a1; tyEnum[i:n] } } -->
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a2; tyEnum[i:n] } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomBinop{ andEnumOp[i:n]; 'a1; 'a2 }; tyEnum[i:n] } }
+   = it
+
+prim ty_orEnumOp {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a1; tyEnum[i:n] } } -->
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a2; tyEnum[i:n] } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomBinop{ orEnumOp[i:n]; 'a1; 'a2 }; tyEnum[i:n] } }
+   = it
+
+prim ty_xorEnumOp {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a1; tyEnum[i:n] } } -->
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a2; tyEnum[i:n] } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomBinop{ xorEnumOp[i:n]; 'a1; 'a2 }; tyEnum[i:n] } }
+   = it
+
+(* plusIntOP is an example above. *)
+
+prim ty_minusIntOp {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a1; tyInt } } -->
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a2; tyInt } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomBinop{ minusIntOp; 'a1; 'a2 }; tyInt } }
+   = it
+
+prim ty_mulIntOp {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a1; tyInt } } -->
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a2; tyInt } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomBinop{ mulIntOp; 'a1; 'a2 }; tyInt } }
+   = it
+
+prim ty_divIntOp {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a1; tyInt } } -->
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a2; tyInt } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomBinop{ divIntOp; 'a1; 'a2 }; tyInt } }
+   = it
+
+prim ty_remIntOp {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a1; tyInt } } -->
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a2; tyInt } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomBinop{ remIntOp; 'a1; 'a2 }; tyInt } }
+   = it
+
+prim ty_lslIntOp {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a1; tyInt } } -->
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a2; tyInt } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomBinop{ lslIntOp; 'a1; 'a2 }; tyInt } }
+   = it
+
+prim ty_lsrIntOp {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a1; tyInt } } -->
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a2; tyInt } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomBinop{ lsrIntOp; 'a1; 'a2 }; tyInt } }
+   = it
+
+prim ty_asrIntOp {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a1; tyInt } } -->
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a2; tyInt } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomBinop{ asrIntOp; 'a1; 'a2 }; tyInt } }
+   = it
+
+prim ty_andIntOp {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a1; tyInt } } -->
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a2; tyInt } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomBinop{ andIntOp; 'a1; 'a2 }; tyInt } }
+   = it
+
+prim ty_orIntOp {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a1; tyInt } } -->
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a2; tyInt } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomBinop{ orIntOp; 'a1; 'a2 }; tyInt } }
+   = it
+
+prim ty_xorIntOp {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a1; tyInt } } -->
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a2; tyInt } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomBinop{ xorIntOp; 'a1; 'a2 }; tyInt } }
+   = it
+
+prim ty_maxIntOp {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a1; tyInt } } -->
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a2; tyInt } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomBinop{ maxIntOp; 'a1; 'a2 }; tyInt } }
+   = it
+
+prim ty_minIntOp {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a1; tyInt } } -->
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a2; tyInt } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomBinop{ minIntOp; 'a1; 'a2 }; tyInt } }
+   = it
+
+prim ty_eqIntOp {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a1; tyInt } } -->
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a2; tyInt } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomBinop{ eqIntOp; 'a1; 'a2 }; tyEnum[2] } }
+   = it
+
+prim ty_neqIntOp {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a1; tyInt } } -->
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a2; tyInt } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomBinop{ neqIntOp; 'a1; 'a2 }; tyEnum[2] } }
+   = it
+
+prim ty_ltIntOp {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a1; tyInt } } -->
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a2; tyInt } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomBinop{ ltIntOp; 'a1; 'a2 }; tyEnum[2] } }
+   = it
+
+prim ty_leIntOp {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a1; tyInt } } -->
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a2; tyInt } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomBinop{ leIntOp; 'a1; 'a2 }; tyEnum[2] } }
+   = it
+
+prim ty_gtIntOp {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a1; tyInt } } -->
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a2; tyInt } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomBinop{ gtIntOp; 'a1; 'a2 }; tyEnum[2] } }
+   = it
+
+prim ty_geIntOp {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a1; tyInt } } -->
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a2; tyInt } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomBinop{ geIntOp; 'a1; 'a2 }; tyEnum[2] } }
+   = it
+
+prim ty_cmpIntOp {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a1; tyInt } } -->
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a2; tyInt } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomBinop{ cmpIntOp; 'a1; 'a2 }; tyInt } }
+   = it
+
+prim ty_plusRawIntOp {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a1; tyRawInt[p:n, s:s] } } -->
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a2; tyRawInt[p:n, s:s] } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomBinop{ plusRawIntOp[p:n, s:s]; 'a1; 'a2 };
+                        tyRawInt[p:n, s:s] } }
+   = it
+
+prim ty_minusRawIntOp {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a1; tyRawInt[p:n, s:s] } } -->
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a2; tyRawInt[p:n, s:s] } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomBinop{ minusRawIntOp[p:n, s:s]; 'a1; 'a2 };
+                        tyRawInt[p:n, s:s] } }
+   = it
+
+prim ty_mulRawIntOp {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a1; tyRawInt[p:n, s:s] } } -->
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a2; tyRawInt[p:n, s:s] } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomBinop{ mulRawIntOp[p:n, s:s]; 'a1; 'a2 };
+                        tyRawInt[p:n, s:s] } }
+   = it
+
+prim ty_divRawIntOp {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a1; tyRawInt[p:n, s:s] } } -->
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a2; tyRawInt[p:n, s:s] } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomBinop{ divRawIntOp[p:n, s:s]; 'a1; 'a2 };
+                        tyRawInt[p:n, s:s] } }
+   = it
+
+prim ty_remRawIntOp {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a1; tyRawInt[p:n, s:s] } } -->
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a2; tyRawInt[p:n, s:s] } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomBinop{ remRawIntOp[p:n, s:s]; 'a1; 'a2 };
+                        tyRawInt[p:n, s:s] } }
+   = it
+
+prim ty_slRawIntOp {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a1; tyRawInt[p:n, s:s] } } -->
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a2; tyRawInt[p:n, s:s] } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomBinop{ slRawIntOp[p:n, s:s]; 'a1; 'a2 };
+                        tyRawInt[p:n, s:s] } }
+   = it
+
+prim ty_srRawIntOp {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a1; tyRawInt[p:n, s:s] } } -->
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a2; tyRawInt[p:n, s:s] } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomBinop{ srRawIntOp[p:n, s:s]; 'a1; 'a2 };
+                        tyRawInt[p:n, s:s] } }
+   = it
+
+prim ty_andRawIntOp {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a1; tyRawInt[p:n, s:s] } } -->
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a2; tyRawInt[p:n, s:s] } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomBinop{ andRawIntOp[p:n, s:s]; 'a1; 'a2 };
+                        tyRawInt[p:n, s:s] } }
+   = it
+
+prim ty_orRawIntOp {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a1; tyRawInt[p:n, s:s] } } -->
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a2; tyRawInt[p:n, s:s] } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomBinop{ orRawIntOp[p:n, s:s]; 'a1; 'a2 };
+                        tyRawInt[p:n, s:s] } }
+   = it
+
+prim ty_xorRawIntOp {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a1; tyRawInt[p:n, s:s] } } -->
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a2; tyRawInt[p:n, s:s] } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomBinop{ xorRawIntOp[p:n, s:s]; 'a1; 'a2 };
+                        tyRawInt[p:n, s:s] } }
+   = it
+
+prim ty_maxRawIntOp {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a1; tyRawInt[p:n, s:s] } } -->
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a2; tyRawInt[p:n, s:s] } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomBinop{ maxRawIntOp[p:n, s:s]; 'a1; 'a2 };
+                        tyRawInt[p:n, s:s] } }
+   = it
+
+prim ty_minRawIntOp {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a1; tyRawInt[p:n, s:s] } } -->
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a2; tyRawInt[p:n, s:s] } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomBinop{ minRawIntOp[p:n, s:s]; 'a1; 'a2 };
+                        tyRawInt[p:n, s:s] } }
+   = it
+
+(* NOTE: Using the Mojave compiler rule for rawSetBitFieldOp. *)
+
+prim ty_rawSetBitFieldOp {| intro [] |} 'H :
+   sequent [mfir] { 'H >- member{ 'i1; intset_max[p:n, s:s] } } -->
+   sequent [mfir] { 'H >- member{ 'i2; intset_max[p:n, s:s] } } -->
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a1; tyRawInt[p:n, s:s] } } -->
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a2; tyRawInt[p:n, s:s] } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomBinop{ rawSetBitFieldOp[p:n, s:s]{'i1; 'i2};
+                                   'a1; 'a2};
+                        tyRawInt[p:n, s:s] } }
+   = it
+
+prim ty_eqRawIntOp {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a1; tyRawInt[p:n, s:s] } } -->
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a2; tyRawInt[p:n, s:s] } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomBinop{ eqRawIntOp[p:n, s:s]; 'a1; 'a2 };
+                        tyEnum[2] } }
+   = it
+
+prim ty_neqRawIntOp {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a1; tyRawInt[p:n, s:s] } } -->
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a2; tyRawInt[p:n, s:s] } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomBinop{ neqRawIntOp[p:n, s:s]; 'a1; 'a2 };
+                        tyEnum[2] } }
+   = it
+
+prim ty_ltRawIntOp {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a1; tyRawInt[p:n, s:s] } } -->
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a2; tyRawInt[p:n, s:s] } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomBinop{ ltRawIntOp[p:n, s:s]; 'a1; 'a2 };
+                        tyEnum[2] } }
+   = it
+
+prim ty_leRawIntOp {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a1; tyRawInt[p:n, s:s] } } -->
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a2; tyRawInt[p:n, s:s] } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomBinop{ leRawIntOp[p:n, s:s]; 'a1; 'a2 };
+                        tyEnum[2] } }
+   = it
+
+prim ty_gtRawIntOp {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a1; tyRawInt[p:n, s:s] } } -->
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a2; tyRawInt[p:n, s:s] } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomBinop{ gtRawIntOp[p:n, s:s]; 'a1; 'a2 };
+                        tyEnum[2] } }
+   = it
+
+prim ty_geRawIntOp {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a1; tyRawInt[p:n, s:s] } } -->
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a2; tyRawInt[p:n, s:s] } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomBinop{ geRawIntOp[p:n, s:s]; 'a1; 'a2 };
+                        tyEnum[2] } }
+   = it
+
+prim ty_cmpRawIntOp {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a1; tyRawInt[p:n, s:s] } } -->
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a2; tyRawInt[p:n, s:s] } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomBinop{ cmpRawIntOp[p:n, s:s]; 'a1; 'a2 };
+                        tyInt } }
+   = it
+
+prim ty_plusFloatOp {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a1; tyFloat[p:n] } } -->
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a2; tyFloat[p:n] } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomBinop{ plusFloatOp[p:n]; 'a1; 'a2 };
+                        tyFloat[p:n] } }
+   = it
+
+prim ty_minusFloatOp {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a1; tyFloat[p:n] } } -->
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a2; tyFloat[p:n] } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomBinop{ minusFloatOp[p:n]; 'a1; 'a2 };
+                        tyFloat[p:n] } }
+   = it
+
+prim ty_mulFloatOp {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a1; tyFloat[p:n] } } -->
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a2; tyFloat[p:n] } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomBinop{ mulFloatOp[p:n]; 'a1; 'a2 };
+                        tyFloat[p:n] } }
+   = it
+
+prim ty_divFloatOp {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a1; tyFloat[p:n] } } -->
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a2; tyFloat[p:n] } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomBinop{ divFloatOp[p:n]; 'a1; 'a2 };
+                        tyFloat[p:n] } }
+   = it
+
+prim ty_remFloatOp {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a1; tyFloat[p:n] } } -->
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a2; tyFloat[p:n] } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomBinop{ remFloatOp[p:n]; 'a1; 'a2 };
+                        tyFloat[p:n] } }
+   = it
+
+prim ty_maxFloatOp {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a1; tyFloat[p:n] } } -->
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a2; tyFloat[p:n] } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomBinop{ maxFloatOp[p:n]; 'a1; 'a2 };
+                        tyFloat[p:n] } }
+   = it
+
+prim ty_minFloatOp {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a1; tyFloat[p:n] } } -->
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a2; tyFloat[p:n] } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomBinop{ minFloatOp[p:n]; 'a1; 'a2 };
+                        tyFloat[p:n] } }
+   = it
+
+prim ty_eqFloatOp {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a1; tyFloat[p:n] } } -->
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a2; tyFloat[p:n] } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomBinop{ eqFloatOp[p:n]; 'a1; 'a2 }; tyEnum[2] } }
+   = it
+
+prim ty_neqFloatOp {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a1; tyFloat[p:n] } } -->
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a2; tyFloat[p:n] } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomBinop{ neqFloatOp[p:n]; 'a1; 'a2 }; tyEnum[2] } }
+   = it
+
+prim ty_ltFloatOp {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a1; tyFloat[p:n] } } -->
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a2; tyFloat[p:n] } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomBinop{ ltFloatOp[p:n]; 'a1; 'a2 }; tyEnum[2] } }
+   = it
+
+
+prim ty_leFloatOp {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a1; tyFloat[p:n] } } -->
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a2; tyFloat[p:n] } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomBinop{ leFloatOp[p:n]; 'a1; 'a2 }; tyEnum[2] } }
+   = it
+
+prim ty_gtFloatOp {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a1; tyFloat[p:n] } } -->
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a2; tyFloat[p:n] } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomBinop{ gtFloatOp[p:n]; 'a1; 'a2 }; tyEnum[2] } }
+   = it
+
+prim ty_geFloatOp {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a1; tyFloat[p:n] } } -->
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a2; tyFloat[p:n] } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomBinop{ geFloatOp[p:n]; 'a1; 'a2 }; tyEnum[2] } }
+   = it
+
+prim ty_cmpFloatOp {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a1; tyFloat[p:n] } } -->
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a2; tyFloat[p:n] } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomBinop{ cmpFloatOp[p:n]; 'a1; 'a2 }; tyInt } }
+   = it
+
+prim ty_atan2Op {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a1; tyFloat[p:n] } } -->
+   sequent [mfir] { 'H >- has_type["atom"]{ 'a2; tyFloat[p:n] } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom"]{ atomBinop{ atan2Op[p:n]; 'a1; 'a2 }; tyFloat[p:n] } }
+   = it

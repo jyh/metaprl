@@ -195,9 +195,6 @@ declare cmpFloatOp[precision:n]
 
 declare atan2Op[precision:n]
 
-declare eqEqOp
-declare neqEqOp
-
 
 (*!
  * @begin[doc]

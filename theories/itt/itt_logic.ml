@@ -952,7 +952,7 @@ let rec assoc v = function
          let t', tl = assoc v tl in
             t', (v', t) :: tl
  | [] ->
-      raise Not_found
+      mk_var_term v, []
 
 (*
  * Check for exact matches.
@@ -974,11 +974,8 @@ let check_subst subst =
 let instantiate_vars args subst =
    if !debug_auto then
       begin
-         let print_subst (v, t) =
-            eprintf "\t%s: %a%t" v SimplePrint.print_simple_term_fp t eflush
-         in
             eprintf "instantiate_vars: got subst\n";
-            List.iter print_subst subst
+            List.iter (fun (v,t) -> eprintf "\t%s: %a%t" v SimplePrint.print_simple_term_fp t eflush) subst
       end;
    let rec collect result args subst =
       match args with
@@ -988,8 +985,6 @@ let instantiate_vars args subst =
        | hd::tl ->
             match hd with
                AllTerm (v, t) ->
-                  if !debug_auto then
-                     eprintf "instantiate_vars: looking for %s%t" v eflush;
                   let t', subst' = assoc v subst in
                      collect (AllTerm (v, t') :: result) tl subst'
              | ImpliesTerm
@@ -1032,8 +1027,6 @@ let rec match_goal args form goal =
                      match_goal (IffRight :: args) right goal
          else
             raise (RefineError ("match_goal", StringError "no match"))
-    | Not_found ->
-         raise (RefineError ("match_goal", StringError "no match"))
 
 (*!
  * @begin[doc]

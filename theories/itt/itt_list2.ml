@@ -707,7 +707,7 @@ interactive rev_wf {| intro [] |} 'H :
  * A list $v$ is a subset of the list $cons{'u; 'v}$.
  * @end[doc]
  *)
-interactive subset_cons 'H :
+interactive subset_cons {| intro [AutoMustComplete] |} 'H :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H >- 'u IN 'A } -->
    [wf] sequent [squash] { 'H >- 'v IN list{'A} } -->
@@ -727,7 +727,7 @@ interactive subset_ref {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- 'l IN list{'A} } -->
    sequent ['ext] { 'H >- subset{'l; 'l; 'A} }
 
-interactive subset_trans {| intro [] |} 'H 'l2 :
+interactive subset_trans 'H 'l2 :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H >- 'l1 IN list{'A} } -->
    [wf] sequent [squash] { 'H >- 'l2 IN list{'A} } -->
@@ -748,14 +748,14 @@ interactive sameset_ref {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- 'l IN list{'A} } -->
    sequent ['ext] { 'H >- sameset{'l; 'l; 'A} }
 
-interactive sameset_sym {| intro [] |} 'H :
+interactive sameset_sym 'H :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H >- 'l1 IN list{'A} } -->
    [wf] sequent [squash] { 'H >- 'l2 IN list{'A} } -->
    sequent ['ext] { 'H >- sameset{'l1; 'l2; 'A} } -->
    sequent ['ext] { 'H >- sameset{'l2; 'l1; 'A} }
 
-interactive sameset_trans {| intro [] |} 'H 'l2 :
+interactive sameset_trans 'H 'l2 :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H >- 'l1 IN list{'A} } -->
    [wf] sequent [squash] { 'H >- 'l2 IN list{'A} } -->

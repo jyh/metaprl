@@ -217,8 +217,8 @@ dform normal_comment_white_df1 : except_mode[tex] :: comment_white =
 dform normal_comment_white_df2 : except_mode[tex] :: cons{comment_white; cons{comment_white; 't}} =
    com_hbreak slot{'t}
 
-dform normal_doc_df2 : except_mode[tex] :: "doc"{'t} =
-   `"@begin[doc]" com_hbreak 't com_hbreak `"@end[doc]"
+dform normal_doc_df2 : except_mode[tex] :: except_mode[src] :: "doc"{'t} =
+   info["@begin[doc]"] com_hbreak 't com_hbreak info["@end[doc]"]
 
 dform normal_license_df2 : except_mode[tex] :: license{'t} =
    `"@begin[license]" com_hbreak 't com_hbreak `"@end[license]"
@@ -237,8 +237,8 @@ dform misspelled_df1 : misspelled{'t} =
  *)
 declare prl_comment{'t}
 
-dform prl_comment_df1 : except_mode[tex] :: prl_comment{'t} =
-   pushm[" * "] szone `"(*" 't com_hbreak `" *)" ezone popm
+dform prl_comment_df1 : except_mode[tex] :: except_mode[src] :: prl_comment{'t} =
+   szone pushm[" * "] pushfont["bf"] `"(*" popfont 't popm pushfont["bf"] hbreak[" *)", "*)"] popfont ezone
 
 (************************************************************************
  * COMMENT ITEMS                                                        *

@@ -20,7 +20,7 @@ all: $(MAIN).cma
 opt: $(MAIN).cmxa
 
 clean::
-	$(RM) *.p4* *.pp*
+	$(RM) *.p4* *.pp* *.cph *.output
 
 # Real makefile
 include $(ROOT)/mk/rules

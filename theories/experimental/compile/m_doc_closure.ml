@@ -67,7 +67,7 @@ dform math_CloseRecBody_df : mode[tex] :: math_CloseRecBody{'e} =
    math_xin slot{'e}
    
 dform math_CloseSubscript_df : mode[tex] :: math_CloseSubscript{'a1; 'a2; 'v; 'e} =
-    math_xlet slot{'v} `"= " slot{'a1} `"[" slot{'a2} `"]" math_xin slot{'e}
+    math_xlet slot{'v} `"= " slot{'a1} `".[" slot{'a2} `"]" math_xin slot{'e}
 
 dform math_CloseFrame_df : mode[tex] :: math_CloseFrame{'frame; 'e} =
    math_bf["frame"] `"(" slot{'frame} `"," slot{'e} `")"
@@ -75,7 +75,7 @@ dform math_CloseFrame_df : mode[tex] :: math_CloseFrame{'frame; 'e} =
 declare math_frame
 
 dform math_frame_df : mode[tex] :: math_frame =
-   `"f"
+   math_it["Fr"]
    
 doc <:doc< 
 @begin[doc]
@@ -153,7 +153,7 @@ $$
 @begin[array,l]
 
 @line{@xrewrite2[arg]{@CloseFrame{@frame; @FunDef{l; @AtomFun{v; {e[@frame; v]}}; {d[@frame]}}};
-   @FunDef{l; @AtomFun{@frame; @AtomFun{v; {e[@frame; v]}}}; @CloseFrame{@frame; {d[@it{frame]}}}}}}
+   @FunDef{l; @AtomFun{@frame; @AtomFun{v; {e[@frame; v]}}}; @CloseFrame{@frame; {d[@frame]}}}}}
 
 @line{@xrewrite2[sub]{@CloseSubscript{a_1; a_2; v_1; @FunDef{l; @AtomFun{v_2; {e[v_1; v_2]}}; {d[v_1]}}};
    @begin[array,t,l]

@@ -161,7 +161,7 @@ dform close_rec_df : parens :: "prec"[prec_let] :: CloseRec{R1, frame1. 'e1; R2,
    hspace slot["lt"]{'e2} ezone
 
 dform close_subscript_df : parens :: "prec"[prec_let] :: CloseSubscript{'a1; 'a2; v. 'e} =
-   szone bf["close "] slot{'v} bf[" = "] slot{'a1} bf["["] slot{'a2} bf["] in"] hspace slot["lt"]{'e} ezone
+   szone bf["close "] slot{'v} bf[" = "] slot{'a1} bf[".["] slot{'a2} bf["] in"] hspace slot["lt"]{'e} ezone
 
 dform close_frame : parens :: "prec"[prec_fun] :: CloseFrame{frame. 'e} =
    szone pushm[3] Nuprl_font!lambda Nuprl_font!subq slot{'frame} `"." hspace slot{'e} popm ezone

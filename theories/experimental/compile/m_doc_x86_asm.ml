@@ -484,7 +484,7 @@ two-instruction sequence:
 @end[tabular]
 @end[center]
 
-Similarly, the two-operand instruction $@Inst2Reg[inst2]{o; o_r; r; e}$ may require an addition @tt{mov}
+Similarly, the two-operand instruction $@Inst2Reg[inst2]{o; o_r; r; e}$ may require an additional @tt[mov]
 from $o_r$ to $r$, and the three-operand instruction $@Inst3Reg[inst3]{o; o_r_1; o_r_2; r_1; r_2; e}$ may
 require two additional @tt{mov} instructions.}}
 

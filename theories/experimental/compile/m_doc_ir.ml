@@ -296,7 +296,8 @@ arithmetic, conditionals, tuples, functions, and function definitions,
 as shown in Figure @reffigure[ir].
 
 Function definitions deserve special mention.  Functions are defined using the $@LetRec{R; d; e}$
-term, where $d$ is a list of mutually recursive functions, and $R$ represents a recursively defined
+term, where $d$ is a list of mutually recursive functions, and variable $R$
+represents a recursively defined
 record containing these functions.  Each of the functions is labeled, and the term $@AtomFunVar{R;
 l}$ represents the function with label $l$ in record $R$.
 

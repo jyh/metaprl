@@ -84,8 +84,8 @@ The production of assembly code is primarily a straightforward translation of op
 intermediate code to operations in the assembly.  There are two main kinds of translations:
 translations from atoms to operands, and translation of expressions into instruction sequences.  We
 express these translations with the term $@ASM{e}$, which is the translation of the IR expression
-$e$ to an assembly expression; and $@ASM{a; v; e}$, which produces the assembly operand for the atom
-$a$ and substitutes it for the variable $v$ in assembly expression $e$.
+$e$ to an assembly expression; and $@ASM{a; v; e[v]}$, which produces the assembly operand for the atom
+$a$ and substitutes it for the variable $v$ in assembly expression $e[v]$.
 
 @subsubsection["asmatoms"]{Atom translation}
 

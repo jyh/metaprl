@@ -106,6 +106,7 @@ TheoryDocument(appendix, $(APPENDIX_THEORIES))
 # Format the papers and copy them
 #
 LaTeXDocumentInstall(tex, $(DOCDIR), m-paper, m-paper, theory-body)
+LaTeXDocumentInstall(tex, $(DOCDIR), m-paper-hosc, m-paper-hosc, theory-body appendix-body)
 LaTeXDocumentInstall(tex, $(DOCDIR), m-paper-tr, m-paper-tr, theory-body appendix-body)
 LaTeXDocumentInstall(tex, $(DOCDIR), m-paper-fdl, m-paper-fdl, fdl-body)
 

@@ -164,6 +164,7 @@ declare longleftarrow
 declare longrightarrow
 declare neq
 declare sim
+declare cong
 declare le
 declare ge
 declare equiv
@@ -195,11 +196,29 @@ declare subthree
 declare suba
 declare subb
 declare subc
+declare subd
 declare sube
+declare subf
+declare subg
+declare subh
+declare subi
+declare subj
+declare subk
+declare subl
+declare subm
+declare subn
+declare subo
+declare subp
 declare subq
+declare subr
+declare subs
 declare subt
+declare subu
+declare subv
+declare subw
+declare subx
+declare suby
 declare subz
-
 declare math_div
 
 (*

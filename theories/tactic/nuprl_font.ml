@@ -35,8 +35,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
- * Author: Jason Hickey
- * @email{jyh@cs.caltech.edu}
+ * Author: Jason Hickey @email{jyh@cs.caltech.edu}
+ * Modified By: Aleksey Nogin @email{nogin@cs.caltech.edu}
+ * Modified By: Alexei Kopylov @email{kopylov@cs.cornell.edu}
+ * Modified By: Xin Yu @email{xiny@cs.caltech.edu}
  *
  * @end[license]
  *)
@@ -209,6 +211,7 @@ declare longleftarrow
 declare longrightarrow
 declare neq
 declare sim
+declare cong
 declare le
 declare ge
 declare equiv
@@ -242,9 +245,28 @@ declare subthree
 declare suba
 declare subb
 declare subc
+declare subd
 declare sube
+declare subf
+declare subg
+declare subh
+declare subi
+declare subj
+declare subk
+declare subl
+declare subm
+declare subn
+declare subo
+declare subp
 declare subq
+declare subr
+declare subs
 declare subt
+declare subu
+declare subv
+declare subw
+declare subx
+declare suby
 declare subz
 
 declare math_div
@@ -770,6 +792,7 @@ dform longleftarrow_df		: internal :: mode[prl] :: longleftarrow             = `
 dform longrightarrow_df		: internal :: mode[prl] :: longrightarrow            = `"──→"
 dform neq_df			: internal :: mode[prl] :: neq                       = `"≠"
 dform sim_df			: internal :: mode[prl] :: sim                       = `"∼" (* `"~" or `"˜" *)
+dform cong_df			: internal :: mode[prl] :: cong                      = `"≅"
 dform le_df			: internal :: mode[prl] :: le                        = `"≤"
 dform ge_df			: internal :: mode[prl] :: ge                        = `"≥"
 dform equiv_df			: internal :: mode[prl] :: equiv                     = `"≡"
@@ -800,13 +823,33 @@ dform subzero_df		: internal :: mode[prl] :: subzero                   = `"₀"
 dform subone_df			: internal :: mode[prl] :: subone                    = `"₁"
 dform subtwo_df			: internal :: mode[prl] :: subtwo                    = `"₂"
 dform subthree_df		: internal :: mode[prl] :: subthree                  = `"₃"
-dform suba_df			: internal :: mode[prl] :: suba                      = `"⒜"
-dform subb_df			: internal :: mode[prl] :: subb                      = `"⒝"
-dform subc_df			: internal :: mode[prl] :: subc                      = `"⒞"
-dform sube_df			: internal :: mode[prl] :: sube                      = `"e"   (* is any symbol for sube? *)
-dform subq_df			: internal :: mode[prl] :: subq                      = `"⒬"
-dform subt_df			: internal :: mode[prl] :: subt                      = `"⒯"
-dform subz_df			: internal :: mode[prl] :: subz                      = `"⒵"
+
+dform suba_df			: internal :: mode[prl] :: suba = `"⒜"
+dform subb_df			: internal :: mode[prl] :: subb = `"⒝"
+dform subc_df			: internal :: mode[prl] :: subc = `"⒞"
+dform subd_df			: internal :: mode[prl] :: subd = `"⒟"
+dform sube_df			: internal :: mode[prl] :: sube = `"⒠"
+dform subf_df			: internal :: mode[prl] :: subf = `"⒡"
+dform subg_df			: internal :: mode[prl] :: subg = `"⒢"
+dform subh_df			: internal :: mode[prl] :: subh = `"⒣"
+dform subi_df			: internal :: mode[prl] :: subi = `"⒤"
+dform subj_df			: internal :: mode[prl] :: subj = `"⒥"
+dform subk_df			: internal :: mode[prl] :: subk = `"⒦"
+dform subl_df			: internal :: mode[prl] :: subl = `"⒧"
+dform subm_df			: internal :: mode[prl] :: subm = `"⒨"
+dform subn_df			: internal :: mode[prl] :: subn = `"⒩"
+dform subo_df			: internal :: mode[prl] :: subo = `"⒪"
+dform subp_df			: internal :: mode[prl] :: subp = `"⒫"
+dform subq_df			: internal :: mode[prl] :: subq = `"⒬"
+dform subr_df			: internal :: mode[prl] :: subr = `"⒭"
+dform subs_df			: internal :: mode[prl] :: subs = `"⒮"
+dform subt_df			: internal :: mode[prl] :: subt = `"⒯"
+dform subu_df			: internal :: mode[prl] :: subu = `"⒰"
+dform subv_df			: internal :: mode[prl] :: subv = `"⒱"
+dform subw_df			: internal :: mode[prl] :: subw = `"⒲"
+dform subx_df			: internal :: mode[prl] :: subx = `"⒳"
+dform suby_df			: internal :: mode[prl] :: suby = `"⒴"
+dform subz_df			: internal :: mode[prl] :: subz = `"⒵"
 
 dform wedge_df			: internal :: mode[html] :: wedge                     = html_uni[8743]
 dform tneg_df			: internal :: mode[html] :: tneg                      = html_sym["not"]
@@ -828,6 +871,7 @@ dform longleftarrow_df		: internal :: mode[html] :: longleftarrow             = 
 dform longrightarrow_df		: internal :: mode[html] :: longrightarrow            = html_uni[8594]
 dform neq_df			: internal :: mode[html] :: neq                       = html_uni[8800]
 dform sim_df			: internal :: mode[html] :: sim                       = html_uni[8764]
+dform cong_df			: internal :: mode[html] :: cong                      = html_uni[8773]
 dform le_df			: internal :: mode[html] :: le                        = html_uni[8804]
 dform ge_df			: internal :: mode[html] :: ge                        = html_uni[8805]
 dform equiv_df			: internal :: mode[html] :: equiv                     = html_uni[8801]
@@ -858,13 +902,33 @@ dform subzero_df		: internal :: mode[html] :: subzero                   = sub["0
 dform subone_df			: internal :: mode[html] :: subone                    = sub["1"]
 dform subtwo_df			: internal :: mode[html] :: subtwo                    = sub["2"]
 dform subthree_df		: internal :: mode[html] :: subthree                  = sub["3"]
-dform suba_df			: internal :: mode[html] :: suba                      = sub["a"]
-dform subb_df			: internal :: mode[html] :: subb                      = sub["b"]
-dform subc_df			: internal :: mode[html] :: subc                      = sub["c"]
-dform subc_df			: internal :: mode[html] :: subc                      = sub["e"]
-dform subq_df			: internal :: mode[html] :: subq                      = sub["q"]
-dform subq_df			: internal :: mode[html] :: subq                      = sub["t"]
-dform subz_df			: internal :: mode[html] :: subz                      = sub["z"]
+
+dform suba_df			: internal :: mode[html] :: suba = sub["a"]
+dform subb_df			: internal :: mode[html] :: subb = sub["b"]
+dform subc_df			: internal :: mode[html] :: subc = sub["c"]
+dform subd_df			: internal :: mode[html] :: subd = sub["d"]
+dform sube_df			: internal :: mode[html] :: sube = sub["e"]
+dform subf_df			: internal :: mode[html] :: subf = sub["f"]
+dform subg_df			: internal :: mode[html] :: subg = sub["g"]
+dform subh_df			: internal :: mode[html] :: subh = sub["h"]
+dform subi_df			: internal :: mode[html] :: subi = sub["i"]
+dform subj_df			: internal :: mode[html] :: subj = sub["j"]
+dform subk_df			: internal :: mode[html] :: subk = sub["k"]
+dform subl_df			: internal :: mode[html] :: subl = sub["l"]
+dform subm_df			: internal :: mode[html] :: subm = sub["m"]
+dform subn_df			: internal :: mode[html] :: subn = sub["n"]
+dform subo_df			: internal :: mode[html] :: subo = sub["o"]
+dform subp_df			: internal :: mode[html] :: subp = sub["p"]
+dform subq_df			: internal :: mode[html] :: subq = sub["q"]
+dform subr_df			: internal :: mode[html] :: subr = sub["r"]
+dform subs_df			: internal :: mode[html] :: subs = sub["s"]
+dform subt_df			: internal :: mode[html] :: subt = sub["t"]
+dform subu_df			: internal :: mode[html] :: subu = sub["u"]
+dform subv_df			: internal :: mode[html] :: subv = sub["v"]
+dform subw_df			: internal :: mode[html] :: subw = sub["w"]
+dform subx_df			: internal :: mode[html] :: subx = sub["x"]
+dform suby_df			: internal :: mode[html] :: suby = sub["y"]
+dform subz_df			: internal :: mode[html] :: subz = sub["z"]
 
 dform wedge_df			: internal :: mode[tex] :: wedge                     = mathmacro["wedge"]
 dform tneg_df			: internal :: mode[tex] :: tneg                      = mathmacro["neg"]
@@ -886,6 +950,7 @@ dform longleftarrow_df		: internal :: mode[tex] :: longleftarrow             = m
 dform longrightarrow_df		: internal :: mode[tex] :: longrightarrow            = mathmacro["longrightarrow"]
 dform neq_df			: internal :: mode[tex] :: neq                       = mathmacro["neq"]
 dform sim_df			: internal :: mode[tex] :: sim                       = mathmacro["sim"]
+dform cong_df			: internal :: mode[tex] :: cong                      = mathmacro["cong"]
 dform le_df			: internal :: mode[tex] :: le                        = mathmacro["le"]
 dform ge_df			: internal :: mode[tex] :: ge                        = mathmacro["ge"]
 dform equiv_df			: internal :: mode[tex] :: equiv                     = mathmacro["equiv"]
@@ -916,13 +981,33 @@ dform subzero_df		: internal :: mode[tex] :: subzero                   = izone `
 dform subone_df			: internal :: mode[tex] :: subone                    = izone `"_1" ezone
 dform subtwo_df			: internal :: mode[tex] :: subtwo                    = izone `"_2" ezone
 dform subthree_df		: internal :: mode[tex] :: subthree                  = izone `"_3" ezone
-dform suba_df			: internal :: mode[tex] :: suba                      = izone `"_a" ezone
-dform subb_df			: internal :: mode[tex] :: subb                      = izone `"_b" ezone
-dform subc_df			: internal :: mode[tex] :: subc                      = izone `"_c" ezone
-dform sube_df			: internal :: mode[tex] :: sube                      = izone `"_e" ezone
-dform subq_df			: internal :: mode[tex] :: subq                      = izone `"_q" ezone
-dform subt_df			: internal :: mode[tex] :: subt                      = izone `"_t" ezone
-dform subz_df			: internal :: mode[tex] :: subz                      = izone `"_z" ezone
+
+dform suba_df			: internal :: mode[tex] :: suba = izone `"_a" ezone
+dform subb_df			: internal :: mode[tex] :: subb = izone `"_b" ezone
+dform subc_df			: internal :: mode[tex] :: subc = izone `"_c" ezone
+dform subd_df			: internal :: mode[tex] :: subd = izone `"_d" ezone
+dform sube_df			: internal :: mode[tex] :: sube = izone `"_e" ezone
+dform subf_df			: internal :: mode[tex] :: subf = izone `"_f" ezone
+dform subg_df			: internal :: mode[tex] :: subg = izone `"_g" ezone
+dform subh_df			: internal :: mode[tex] :: subh = izone `"_h" ezone
+dform subi_df			: internal :: mode[tex] :: subi = izone `"_i" ezone
+dform subj_df			: internal :: mode[tex] :: subj = izone `"_j" ezone
+dform subk_df			: internal :: mode[tex] :: subk = izone `"_k" ezone
+dform subl_df			: internal :: mode[tex] :: subl = izone `"_l" ezone
+dform subm_df			: internal :: mode[tex] :: subm = izone `"_m" ezone
+dform subn_df			: internal :: mode[tex] :: subn = izone `"_n" ezone
+dform subo_df			: internal :: mode[tex] :: subo = izone `"_o" ezone
+dform subp_df			: internal :: mode[tex] :: subp = izone `"_p" ezone
+dform subq_df			: internal :: mode[tex] :: subq = izone `"_q" ezone
+dform subr_df			: internal :: mode[tex] :: subr = izone `"_r" ezone
+dform subs_df			: internal :: mode[tex] :: subs = izone `"_s" ezone
+dform subt_df			: internal :: mode[tex] :: subt = izone `"_t" ezone
+dform subu_df			: internal :: mode[tex] :: subu = izone `"_u" ezone
+dform subv_df			: internal :: mode[tex] :: subv = izone `"_v" ezone
+dform subw_df			: internal :: mode[tex] :: subw = izone `"_w" ezone
+dform subx_df			: internal :: mode[tex] :: subx = izone `"_x" ezone
+dform suby_df			: internal :: mode[tex] :: suby = izone `"_y" ezone
+dform subz_df			: internal :: mode[tex] :: subz = izone `"_z" ezone
 
 (*
  * Math mode.

@@ -145,7 +145,7 @@ rule rfunctionExtensionality 'H
         ({ g2 | x2:'A2 -> 'B2['g2; 'x2] })
         'y :
    sequent [squash] { 'H >- "type"{{ g | x:'A -> 'B['g; 'x] }} } -->
-   sequent [squash] { 'H; y: 'A >- 'f1 'y = 'f2 'y in 'B['f1; 'x] } -->
+   sequent [squash] { 'H; y: 'A >- 'f1 'y = 'f2 'y in 'B['f1; 'y] } -->
    sequent [squash] { 'H >- 'f1 = 'f1 in { g1 | x1:'A1 -> 'B1['g1; 'x1] } } -->
    sequent [squash] { 'H >- 'f2 = 'f2 in { g2 | x2:'A2 -> 'B2['g2; 'x2] } } -->
    sequent ['ext] { 'H >- 'f1 = 'f2 in { g | x:'A -> 'B['g; 'x] } }

@@ -391,7 +391,7 @@ prim rfunctionExtensionality 'H
         ({ g2 | x2:'A2 -> 'B2['g2; 'x2] })
         'y :
    [wf] sequent [squash] { 'H >- "type"{{ g | x:'A -> 'B['g; 'x] }} } -->
-   [main] sequent [squash] { 'H; y: 'A >- 'f1 'y = 'f2 'y in 'B['f1; 'x] } -->
+   [main] sequent [squash] { 'H; y: 'A >- 'f1 'y = 'f2 'y in 'B['f1; 'y] } -->
    [wf] sequent [squash] { 'H >- 'f1 IN { g1 | x1:'A1 -> 'B1['g1; 'x1] } } -->
    [wf] sequent [squash] { 'H >- 'f2 IN { g2 | x2:'A2 -> 'B2['g2; 'x2] } } -->
    sequent ['ext] { 'H >- 'f1 = 'f2 in { g | x:'A -> 'B['g; 'x] } } =
@@ -448,7 +448,7 @@ interactive rfunction_rfunction_subtype {| intro_resource [] |} 'H 'a 'f lambda{
    [main] sequent [squash] { 'H >- subtype{'A2; 'A1} } -->
    [wf] sequent [squash] { 'H >- "type"{.{f1 | x1: 'A1 -> 'B1['f1; 'x1] }} } -->
    [wf] sequent [squash] { 'H >- "type"{.{f2 | x2: 'A2 -> 'B2['f2; 'x2] }} } -->
-   [wf] sequent [squash] { 'H; a1: 'A1; a2: 'A1 >- "type"{'R['a; 'b]} } -->
+   [wf] sequent [squash] { 'H; a1: 'A1; a2: 'A1 >- "type"{'R['a1; 'a2]} } -->
    [main] sequent [squash] { 'H; f: {f1 | x1: 'A1 -> 'B1['f1; 'x1]}; a: 'A2 >-
                           subtype{'B1['f; 'a]; 'B2['f; 'a]}
                     } -->

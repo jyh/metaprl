@@ -17,28 +17,42 @@
 
 \begin{document}
 
-\title{Compiler Implementation in a Formal Logical Framework\titlenote{An
+\title{Compiler Implementation in a Formal Logical Framework%
+\titlenote{An
   extended version of this paper is available as Caltech technical report
   \texttt{caltechCSTR:2003.002} at
-  \href{http://resolver.caltech.edu/caltechCSTR:2003.002}{\texttt{http://caltechcstr.library.caltech.edu/}}}
-}
-
-\numberofauthors{1}
-
-\author{
-\alignauthor Jason Hickey, Aleksey Nogin, Adam Granicz, and Brian Aydemir
+  \href{http://resolver.caltech.edu/caltechCSTR:2003.002}{\texttt{http://caltechcstr.library.caltech.edu/}}}%
 \titlenote{This
   work was supported in part by the DoD Multidisciplinary
   University Research Initiative (MURI) program administered by the
   Office of Naval Research (ONR) under Grant N00014-01-1-0765, the
   Defense Advanced Research Projects Agency (DARPA), the United States
   Air Force, the Lee Center, and by NSF Grant CCR
-  0204193.}\\
-\affaddr{California Institute of Technology, M/C 256-80}\\
-\affaddr{1200 E. California Blvd.}\\
-\affaddr{Pasadena, CA 91125, USA}\\
-\email{\{jyh,nogin,granicz,emre\}@cs.caltech.edu}
+  0204193.}
 }
+
+\numberofauthors{4}
+
+\author{
+\alignauthor Jason Hickey\\
+\affaddr{Caltech, M/C 256-80}\\
+\affaddr{1200 E California Blvd}\\
+\affaddr{Pasadena, CA 91125, USA}\\
+\email{jyh@cs.caltech.edu}
+\alignauthor Aleksey Nogin\\
+\affaddr{Caltech, M/C 256-80}\\
+\affaddr{1200 E California Blvd}\\
+\affaddr{Pasadena, CA 91125, USA}\\
+\email{nogin@cs.caltech.edu}
+\alignauthor Adam Granicz\\
+\affaddr{Caltech, M/C 256-80}\\
+\affaddr{1200 E California Blvd}\\
+\affaddr{Pasadena, CA 91125, USA}\\
+\email{granicz@cs.caltech.edu}
+}
+\additionalauthors{Additional Author: Brian Aydemir, Caltech, M/C 256-80,
+1200 E California Blvd, Pasadena, CA 91125, USA,
+\texttt{emre@cs.caltech.edu}}
 \maketitle
 
 \begin{abstract}
@@ -62,6 +76,14 @@ Intel x86 assembly.  We also present a scoped formalization of x86
 assembly in which all registers are immutable.
 
 \end{abstract}
+
+\category{D.3.4}{Programming Languages}{Processors}[Translator writing
+systems and compiler generators]
+\category{D.2.4}{Soft\-ware Engineering}{Software/Program
+Verification}[Formal me\-thods]
+\terms{Reliability, Verification}
+\keywords{Formal compiler, higher-order abstract syntax, logical
+programming environment}
 
 \sloppy
 %\raggedbottom

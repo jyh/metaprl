@@ -477,7 +477,7 @@ dform rule_df : "rule"[name:s]{'params; 'stmt; 'proof; 'res} =
 dform opname_df : "opname"[name:s]{'term} =
    pushm[4] szone
    info["declare"] hspace szone slot["raw"]{'term} hspace
-   szone info["(displayed as"] hspace math{slot["none"]{'term}} info[")"] ezone
+   szone info["(displayed as"] hspace ensuremath{slot["none"]{'term}} info[")"] ezone
    ezone ezone popm
 
 dform definition_df : "definition"[name:s]{'term; 'definition; 'res} =

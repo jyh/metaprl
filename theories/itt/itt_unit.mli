@@ -38,8 +38,6 @@ extends Itt_squiggle
 
 open Refiner.Refiner.Term
 
-open Tactic_type.Tacticals
-
 declare unit
 
 (************************************************************************

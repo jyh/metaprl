@@ -38,14 +38,11 @@ open Printf
 open Lm_debug
 open Lm_symbol
 open Lm_string_set
-open Lm_thread_util
 
 open Refiner.Refiner
 open Refiner.Refiner.TermType
 open Refiner.Refiner.Term
-open Refiner.Refiner.TermMan
 open Refiner.Refiner.TermSubst
-open Refiner.Refiner.TermShape
 open Refiner.Refiner.RefineError
 
 open Unify_mm
@@ -57,9 +54,7 @@ open Dtactic
 
 open Itt_equal
 open Itt_struct
-open Itt_atom
 open Itt_logic
-open Itt_rfun
 
 open Tptp
 open Tptp_cache

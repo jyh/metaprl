@@ -42,19 +42,10 @@ extends M_ir
 extends M_util
 doc <:doc< @docoff >>
 
-open M_ir
 open M_util
 
-open Lm_debug
-open Printf
-
-open Refiner.Refiner.TermType
-open Refiner.Refiner.Term
-open Refiner.Refiner.TermSubst
 open Refiner.Refiner.RefineError
 
-open Mp_resource
-open Simple_print
 open Term_match_table
 
 open Tactic_type.Tacticals

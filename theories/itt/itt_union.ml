@@ -62,21 +62,11 @@ extends Itt_struct
 extends Itt_subtype
 doc docoff
 
-open Printf
 open Lm_symbol
 open Lm_debug
-open Lm_string_set
-open Refiner.Refiner
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
-open Refiner.Refiner.TermMan
-open Refiner.Refiner.RefineError
-open Mp_resource
 open Unify_mm
-
-open Var
-open Tactic_type.Sequent
-open Tactic_type.Tacticals
 
 open Dtactic
 open Top_conversionals
@@ -406,5 +396,3 @@ let resource sub +=
  * End:
  * -*-
  *)
-
-

@@ -74,7 +74,6 @@ doc <:doc<
    @end[doc]
 >>
 
-
 extends Itt_equal
 extends Itt_rfun
 extends Itt_set
@@ -84,21 +83,14 @@ extends Itt_subtype
 extends Itt_ext_equal
 doc <:doc< @docoff >>
 
-open Printf
 open Lm_debug
-open Refiner.Refiner
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
-open Refiner.Refiner.TermMan
-open Refiner.Refiner.TermSubst
 open Refiner.Refiner.RefineError
-open Mp_resource
 
-open Var
 open Tactic_type
 open Tactic_type.Tacticals
 
-open Auto_tactic
 open Dtactic
 
 open Perv
@@ -134,8 +126,6 @@ doc <:doc< @docoff >>
 
 dform disect_df1 : except_mode[src] :: (bisect{'A; x.'B}) =
    slot{'x} `":" slot{'A} cap slot{'B}
-
-
 
 (************************************************************************
  * RULES                                                                *
@@ -191,7 +181,6 @@ doc <:doc<
    That is $t @in @bisect{x@colon A; B[x]}$ if $t @in A$ and $t @in B[t]$.
    @end[doc]
 >>
-
 
 prim dintersectionMemberEquality {| intro []; eqcd |} :
    [wf] sequent { <H>; x:'A >- "type"{'B['x]} } -->
@@ -338,8 +327,6 @@ interactive dinter_associativity :
                        bisect{bisect{'A;a.'B['a]};ab.'C['ab;'ab]}
                   }}
 
-
-
 doc <:doc< 
    @begin[doc]
    @modsubsection{Set type as dependent intersection}
@@ -350,7 +337,6 @@ doc <:doc<
    First let us define $[A]$ as $@set{x;Top;A}$.
    @end[doc]
 >>
-
 
 doc <:doc< 
    @begin[doc]

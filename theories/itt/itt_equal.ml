@@ -51,25 +51,19 @@ extends Itt_comment
 open Printf
 open Lm_debug
 open Lm_symbol
-open Lm_string_set
-open Opname
 open Refiner.Refiner
 open Refiner.Refiner.Term
-open Refiner.Refiner.TermType
 open Refiner.Refiner.TermSubst
 open Refiner.Refiner.TermOp
 open Refiner.Refiner.TermMan
 open Refiner.Refiner.TermMeta
 open Refiner.Refiner.RefineError
-open Rformat
 open Simple_print
 open Term_stable
-open Mp_resource
 
 open Tactic_type
 open Tactic_type.Tacticals
 open Tactic_type.Conversionals
-open Mptop
 
 open Base_meta
 open Dtactic

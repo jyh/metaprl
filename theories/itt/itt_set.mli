@@ -41,8 +41,6 @@ open Lm_symbol
 
 open Refiner.Refiner.Term
 
-open Tactic_type.Tacticals
-
 declare set{'A; x. 'B['x]}
 
 (************************************************************************
@@ -122,12 +120,10 @@ rule set_subtype :
  * TACTICS                                                              *
  ************************************************************************)
 
-
 (* Primitives *)
 val is_set_term : term -> bool
 val dest_set : term -> var * term * term
 val mk_set_term : var -> term -> term -> term
-
 
 (*
  * -*-

@@ -41,8 +41,6 @@ open Lm_symbol
 
 open Refiner.Refiner.Term
 
-open Tactic_type.Tacticals
-
 (************************************************************************
  * TERMS                                                                *
  ************************************************************************)
@@ -98,7 +96,6 @@ rule intersectionMemberFormation :
     sequent { <H>; z: squash{'A} >- 'B } -->
     sequent { <H> >- isect x: 'A. 'B }
  *)
-
 
 (*
  * H >- b1 = b2 in isect x:A. B[x]

@@ -68,19 +68,14 @@ extends Czf_itt_empty
 extends Czf_itt_implies
 doc <:doc< @docoff >>
 
-open Refiner.Refiner.TermSubst
-open Refiner.Refiner.TermMan
-
 open Tactic_type
 open Tactic_type.Conversionals
 open Tactic_type.Tacticals
-open Tactic_type.Sequent
 open Var
 
 open Dtactic
 
 open Itt_int_base
-open Itt_struct
 
 (************************************************************************
  * TERMS                                                                *

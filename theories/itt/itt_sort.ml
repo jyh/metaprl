@@ -33,20 +33,16 @@
 
 extends Itt_theory
 
-open Refiner.Refiner.TermType
-open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
 open Refiner.Refiner.RefineError
 
 open Tactic_type
 open Tactic_type.Tacticals
 
-open Var
 open Typeinf
 open Dtactic
 open Top_conversionals
 
-open Itt_rfun
 open Itt_list
 
 (************************************************************************
@@ -75,7 +71,6 @@ define unfold_bounded : bounded{'u1; 'l; 'lt} <-->
 
 define unfold_sorted : sorted{'l; 'lt} <-->
    list_ind{'l; ."true"; u, v, g. "and"{bounded{'u; 'v; 'lt}; 'g}}
-
 
 (*
  * Sorting algorithm.
@@ -330,8 +325,6 @@ interactive sort_sameset {| intro [intro_typeinf << 'l >>] |} list{'A} :
    [wf] sequent { <H> >- 'lt in 'A -> 'A -> bool } -->
    [wf] sequent { <H> >- partial_order{'A; 'lt} } -->
    sequent { <H> >- sameset{sort{'l; 'lt}; 'l; 'A} }
-
-open Itt_list2
 
 (*
  * This rule can be used to demonstrate the extractor.

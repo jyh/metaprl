@@ -59,19 +59,11 @@ doc <:doc< @doc{@parents} >>
 extends Czf_itt_member
 doc docoff
 
-open Printf
 open Lm_debug
-
-open Refiner.Refiner.RefineError
-
-open Tactic_type.Sequent
-open Tactic_type.Tacticals
-open Var
 
 open Dtactic
 open Top_conversionals
 
-open Itt_rfun
 open Itt_logic
 
 let _ =

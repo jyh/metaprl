@@ -55,8 +55,6 @@ open Tactic_type.Tacticals
 open Dtactic
 open Top_conversionals
 
-open Itt_struct
-
 open Czf_itt_rel
 
 (************************************************************************

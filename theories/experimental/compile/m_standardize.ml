@@ -39,8 +39,6 @@ open Refiner.Refiner.TermSubst
 open Tactic_type.Sequent
 open Tactic_type.Tacticals
 
-open Top_tacticals
-
 (*
  * Alpha equality.
  *)

@@ -2,35 +2,19 @@ extends Itt_record_label0
 extends Itt_struct3
 extends Itt_inv_typing
 
-open Printf
 open Lm_debug
-open Refiner.Refiner
-open Refiner.Refiner.Term
-open Refiner.Refiner.TermOp
-open Refiner.Refiner.TermMan
-open Refiner.Refiner.TermSubst
-open Refiner.Refiner.RefineError
-open Mp_resource
 
-open Var
-open Tactic_type
 open Tactic_type.Tacticals
 open Dtactic
 open Top_conversionals
 
-open Itt_equal
-open Itt_subtype
 open Itt_struct
-open Itt_record_label0
-open Itt_struct3
-open Itt_inv_typing
 
 (*
  * Show that the file is loading.
  *)
 let _ =
    show_loading "Loading Itt_record0%t"
-
 
 (******************)
 (*  Definitions   *)
@@ -111,7 +95,6 @@ interactive recordTypeElimination{| elim [ThinOption thinT]  |} 'H :
    sequent{ <H>; u:"type"{record{'n;'A}}; v:"type"{'A}; <J['u]> >- 'C['u] } -->
    sequent{ <H>; u:"type"{record{'n;'A}}; <J['u]> >- 'C['u] }
 
-
 (*** Introductions ***)
 
 interactive emptyRecordIntro {| intro[] |} :
@@ -170,7 +153,6 @@ interactive_rw record_eta_rw  :
    ('r in record{'n;top} ) -->
    rcrd{'n; field{'r;'n}; 'r} <--> 'r
 
-
 interactive record_cover  {| intro[] |} :
    [wf] sequent{ <H> >- 'n in label } -->
    sequent{ <H> >- rcrd{'n; 'a; rcrd{'n; 'b; 'r}} ~  rcrd{'n; 'a; 'r} }
@@ -181,7 +163,6 @@ interactive record_exchange {| intro[] |} :
    [equality] sequent{ <H> >- not{.'n='m in label} } -->
    sequent{ <H> >- rcrd{'n; 'a; rcrd{'m; 'b; 'r}} ~  rcrd{'m; 'b; rcrd{'n; 'a; 'r}} }
 
-
 (*** Eliminations ***)
 
 interactive field_member {| intro[] |} :
@@ -189,42 +170,21 @@ interactive field_member {| intro[] |} :
    sequent{ <H> >- 'r in record{'n;'A} } -->
    sequent{ <H> >- field{'r;'n} in 'A }
 
-
-
-
 (******************)
 (*  Display Forms *)
 (******************)
 
 doc <:doc< @docoff >>
 
-
-
 dform emptyRecord_df : except_mode [src] :: record = `"{}"
 
 dform emptyRcrd_df : except_mode [src] :: rcrd = `"{}"
 
-
-
 dform field_df : except_mode [src] :: field{'r;'n} =  slot{'r} `"." slot{'n}
-
-
 
 dform rcrd_df : except_mode [src] :: rcrd{'n;'a; 'r} = `"{" slot{'n} `"=" slot{'a} `";" slot{'r} `"}"
 
-
 dform recordS_df : except_mode [src] :: record{'n;'A} = `"{" slot{'n} `":" slot{'A} `"}"
-
-
-
-
-
-
-
-
-
-
-
 
 (*
 let doubleInductionT =

@@ -50,9 +50,6 @@ doc <:doc<
    @docoff
 >>
 
-open Top_conversionals
-
-
 (**************************************************************************
  * Declarations.
  **************************************************************************)
@@ -75,7 +72,6 @@ declare "mutable"
 declare immutable
 declare mutable_ty{ 'ty; 'flag }
 
-
 doc <:doc< ************************************
    @begin[doc]
    @modsubsection{Type definitions}
@@ -87,7 +83,6 @@ doc <:doc< ************************************
 
 declare tyDefPoly{ t. 'ty['t] }
 
-
 doc <:doc< 
    @begin[doc]
   
@@ -97,7 +92,6 @@ doc <:doc<
 >>
 
 declare frameSubField{ 'ty; 'num }
-
 
 doc <:doc< 
    @begin[doc]
@@ -111,7 +105,6 @@ doc <:doc<
 
 declare tyDefUnion{ 'cases }
 
-
 doc <:doc< 
    @begin[doc]
   
@@ -122,7 +115,6 @@ doc <:doc<
 (* XXX: documentation needs to be completed. *)
 
 declare tyDefDTuple{ 'ty_var }
-
 
 doc <:doc< ************************************
    @begin[doc]
@@ -142,7 +134,6 @@ declare tyEnum[i:n]
 declare tyRawInt[precision:n, sign:s]
 declare tyFloat[precision:n]
 
-
 doc <:doc< ************************************
    @begin[doc]
    @modsubsection{Functions}
@@ -153,7 +144,6 @@ doc <:doc< ************************************
 >>
 
 declare tyFun{ 'arg_type; 'res_type }
-
 
 doc <:doc< ************************************
    @begin[doc]
@@ -168,7 +158,6 @@ doc <:doc< ************************************
 >>
 
 declare tyUnion{ 'ty_var; 'ty_list; 'intset }
-
 
 doc <:doc< 
    @begin[doc]
@@ -185,7 +174,6 @@ doc <:doc<
 
 declare tyTuple[tc:s]{ 'mtyl }
 
-
 doc <:doc< 
    @begin[doc]
   
@@ -198,7 +186,6 @@ doc <:doc<
 declare tyDTuple{ 'ty_var; 'mtyl_option }
 declare tyTag{ 'ty_var; 'mtyl }
 
-
 doc <:doc< ************************************
    @begin[doc]
    @modsubsection{Other aggregates}
@@ -209,7 +196,6 @@ doc <:doc< ************************************
 >>
 
 declare tyArray{ 'ty }
-
 
 doc <:doc< 
    @begin[doc]
@@ -223,7 +209,6 @@ doc <:doc<
 
 declare tyRawData
 
-
 doc <:doc< 
    @begin[doc]
   
@@ -235,7 +220,6 @@ doc <:doc<
 
 declare tyFrame{ 'ty_var; 'tyl }
 
-
 doc <:doc< ************************************
    @begin[doc]
    @modsubsection{Polymorphism}
@@ -245,7 +229,6 @@ doc <:doc< ************************************
 >>
 
 declare tyVar{ 'ty_var }
-
 
 doc <:doc< 
    @begin[doc]
@@ -258,7 +241,6 @@ doc <:doc<
 
 declare tyApply{ 'ty_var; 'ty_list }
 
-
 doc <:doc< 
    @begin[doc]
   
@@ -270,7 +252,6 @@ doc <:doc<
 
 declare tyExists{ t. 'ty['t] }
 declare tyAll{ t. 'ty['t] }
-
 
 doc <:doc< 
    @begin[doc]
@@ -286,7 +267,6 @@ declare tyProject[i:n]{ 'var }
 doc <:doc< 
    @docoff
 >>
-
 
 (**************************************************************************
  * Display forms.
@@ -307,7 +287,6 @@ dform immutable_df : except_mode[src] ::
 dform mutable_ty_df : except_mode[src] ::
    mutable_ty{ 'ty; 'flag } =
    `"(" slot{'ty} `"," slot{'flag} `")"
-
 
 (*
  * Type definitions.
@@ -332,7 +311,6 @@ dform tyDefUnion_df : except_mode[src] ::
 dform tyDefDTuple_df : except_mode[src] ::
    tyDefDTuple{ 'ty_var } =
    bf["def_dtuple"] `"(" slot{'ty_var} `")"
-
 
 (*
  * Numbers.
@@ -362,7 +340,6 @@ dform tyFloat_df : except_mode[src] ::
    tyFloat[precision:n] =
    mathbbR sub{slot[precision:n]}
 
-
 (*
  * Functions.
  *)
@@ -370,7 +347,6 @@ dform tyFloat_df : except_mode[src] ::
 dform tyFun_df : except_mode[src] ::
    tyFun{ 'arg_type; 'res_type } =
    `"(" slot{'arg_type} rightarrow slot{'res_type} `")"
-
 
 (*
  * Tuples.
@@ -404,7 +380,6 @@ dform tyTag_df : except_mode[src] ::
    tyTag{ 'ty_var; 'mtyl } =
    bf["tag"] `"(" slot{'ty_var} `"," slot{'mtyl} `")"
 
-
 (*
  * Other aggregates.
  *)
@@ -420,7 +395,6 @@ dform tyRawData_df : except_mode[src] ::
 dform tyFrame_df : except_mode[src] ::
    tyFrame{ 'ty_var; 'tyl } =
    bf["frame"] `"(" slot{'ty_var} `"," slot{'tyl} `")"
-
 
 (*
  * Polymorphism.

@@ -4,26 +4,9 @@ extends Itt_struct2
 extends Itt_subtype
 extends Itt_pointwise
 
-open Printf
-open Lm_debug
-open Refiner.Refiner
-open Refiner.Refiner.Term
-open Refiner.Refiner.TermOp
-open Refiner.Refiner.TermMan
-open Refiner.Refiner.TermSubst
-open Refiner.Refiner.Refine
 open Refiner.Refiner.RefineError
-open Mp_resource
 
-open Tactic_type
 open Tactic_type.Tacticals
-open Var
-open Mptop
-
-open Auto_tactic
-
-open Itt_equal
-open Itt_pointwise
 
 (************************************************************************
  * RULES                                                                *
@@ -56,5 +39,3 @@ rule hypReplacementExt 'H 'B  :
 topval changeHypT : term -> int -> tactic
 
 topval replaceHypT : term -> int -> tactic
-
-

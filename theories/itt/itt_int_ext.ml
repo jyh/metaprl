@@ -53,30 +53,16 @@ extends Itt_bool
 extends Itt_int_base
 doc docoff
 
-open Printf
 open Lm_debug
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
-open Refiner.Refiner.TermMan
-open Refiner.Refiner.TermSubst
-open Refiner.Refiner.TermType
-open Refiner.Refiner.RefineError
-open Rformat
-open Mp_resource
-
-open Var
-open Tactic_type
-open Tactic_type.Tacticals
 
 open Base_meta
 open Dtactic
-open Auto_tactic
 open Top_conversionals
 
 open Itt_equal
-open Itt_struct
 open Itt_squash
-open Itt_bool
 open Itt_int_base
 
 let _ = show_loading "Loading Itt_int_ext%t"

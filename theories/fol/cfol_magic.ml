@@ -3,8 +3,6 @@
  *)
 extends Fol_not
 
-open Tactic_type
-
 declare magic{x. 't['x]}
 
 dform magic_df : magic {x. 't} = `"magic"

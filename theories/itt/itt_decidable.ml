@@ -50,21 +50,13 @@ doc <:doc<
 extends Itt_logic
 doc <:doc< @docoff >>
 
-open Printf
 open Lm_debug
-open Term_match_table
-open Tactic_type
 open Tactic_type.Tacticals
 open Dtactic
 open Auto_tactic
 
-open Refiner.Refiner
-open Refiner.Refiner.TermType
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
-open Refiner.Refiner.TermAddr
-open Refiner.Refiner.TermMeta
-open Refiner.Refiner.RefineError
 
 let _ =
    show_loading "Loading Itt_decidable%t"

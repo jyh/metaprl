@@ -11,25 +11,6 @@ extends Itt_record
 
 doc <:doc< @docoff >>
 
-open Printf
-open Lm_debug
-open Refiner.Refiner
-open Refiner.Refiner.Term
-open Refiner.Refiner.TermOp
-open Refiner.Refiner.TermMan
-open Refiner.Refiner.TermSubst
-open Refiner.Refiner.RefineError
-open Mp_resource
-
-open Var
-open Tactic_type
-open Tactic_type.Tacticals
-open Dtactic
-open Top_conversionals
-
-open Itt_record
-
-
 (** carrier **)
 
 dform car_df : except_mode[src] :: ('g^car)
@@ -58,5 +39,3 @@ dform eq2_df : parens :: except_mode[src] :: ('a =[self{'self}] 'b)
 
 dform eq3_df : parens :: except_mode[src] :: (label["=":t] 'a 'b)
  = 'a  tt[" = "] 'b
-
-

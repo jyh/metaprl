@@ -35,10 +35,8 @@ extends Itt_logic
 open Printf
 open Lm_debug
 
-open Refiner.Refiner.TermType
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermAddr
-open Refiner.Refiner.RefineError
 
 open Tactic_type
 open Tactic_type.Conversionals
@@ -46,7 +44,6 @@ open Tactic_type.Tacticals
 
 open Auto_tactic
 open Dtactic
-open Var
 
 open Itt_logic
 open Itt_struct

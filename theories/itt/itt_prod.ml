@@ -51,17 +51,7 @@ extends Itt_dprod
 extends Itt_struct
 doc <:doc< @docoff >>
 
-open Printf
 open Lm_debug
-open Refiner.Refiner
-open Refiner.Refiner.Term
-open Refiner.Refiner.TermMan
-open Refiner.Refiner.RefineError
-open Mp_resource
-
-open Var
-open Tactic_type.Sequent
-open Tactic_type.Tacticals
 
 open Dtactic
 

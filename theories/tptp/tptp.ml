@@ -4,18 +4,13 @@
 
 extends Itt_theory
 
-open Printf
-open Lm_debug
-
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
 open Refiner.Refiner.RefineError
-open Mp_resource
 
 open Tactic_type
 open Tactic_type.Tacticals
 open Tactic_type.Conversionals
-open Var
 
 open Auto_tactic
 open Dtactic
@@ -28,7 +23,6 @@ open Itt_derive
 (************************************************************************
  * TERMS                                                                *
  ************************************************************************)
-
 
 define unfold_atom0 : atom0 <-->
                           atom

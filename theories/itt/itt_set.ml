@@ -59,24 +59,12 @@ extends Itt_subtype
 extends Itt_struct
 doc <:doc< @docoff >>
 
-open Printf
 open Lm_debug
-open Refiner.Refiner
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
-open Refiner.Refiner.TermMan
-open Refiner.Refiner.TermSubst
-open Refiner.Refiner.RefineError
-open Mp_resource
-
-open Tactic_type
-open Tactic_type.Tacticals
-open Var
 
 open Dtactic
 
-open Itt_squash
-open Itt_struct
 open Itt_equal
 open Itt_subtype
 

@@ -43,13 +43,7 @@ doc <:doc< @doc{@parents} >>
 extends Czf_itt_member
 doc <:doc< @docoff >>
 
-open Printf
 open Lm_debug
-
-open Refiner.Refiner.RefineError
-
-open Tactic_type.Sequent
-open Tactic_type.Tacticals
 
 open Dtactic
 

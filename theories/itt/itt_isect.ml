@@ -76,15 +76,11 @@ extends Itt_logic
 extends Itt_struct2
 doc <:doc< @docoff >>
 
-open Printf
 open Lm_debug
-open Refiner.Refiner
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
 open Refiner.Refiner.TermMan
-open Refiner.Refiner.TermSubst
 open Refiner.Refiner.RefineError
-open Mp_resource
 
 open Var
 open Tactic_type
@@ -183,7 +179,6 @@ interactive topUniv {| intro [] |} :
 interactive topType {| intro [] |} :
    sequent { <H> >- "type"{top} }
 
-
 doc <:doc<
    @begin[doc]
    @modsubsection{Membership}
@@ -206,7 +201,6 @@ prim intersectionMemberEquality {| intro []; eqcd |} :
 
 interactive topMemberEquality {| intro []; eqcd |} :
    sequent { <H> >- 'b1 = 'b2 in top }
-
 
 doc <:doc<
    @begin[doc]
@@ -238,7 +232,6 @@ interactive intersectionMemberFormation2 {| intro [] |} :
     [main] sequent { <H>; z: squash{'A} >- 'B } -->
     sequent { <H> >- Isect x: 'A. 'B }
 
-
 doc <:doc<
    @begin[doc]
 
@@ -248,8 +241,6 @@ doc <:doc<
 
 interactive topMemberFormation {| intro [] |} :
    sequent { <H> >-  top }
-
-
 
 doc <:doc<
    @begin[doc]
@@ -273,7 +264,6 @@ interactive intersectionElimination_eq 'H 'a bind{x.bind{z.'T['x;'z]}}:
    [wf] sequent { <H>; x: Isect y: 'A. 'B['y]; <J['x]> >- 'a in 'A } -->
    [main] sequent { <H>; x: Isect y: 'A. 'B['y]; <J['x]>; z: 'B['a]; v: 'z = 'x in 'B['a] >- 'T['x;'z] } -->
    sequent { <H>; x: Isect y: 'A. 'B['y]; <J['x]> >- 'T['x;'x] }
-
 
 let intersectionEliminationT = argfunT (fun n p ->
    let n = Sequent.get_pos_hyp_num p n in
@@ -329,7 +319,6 @@ interactive intersectionMemberCaseEquality (Isect x: 'A. 'B['x]) 'a :
    [wf] sequent { <H> >- 'b1 = 'b2 in Isect x: 'A. 'B['x] } -->
    [wf] sequent { <H> >- 'a in 'A } -->
    sequent { <H> >- 'b1 = 'b2 in 'B['a] }
-
 
 doc <:doc< @doc{The elimination form of @hrefrule[intersectionMemberCaseEquality].} >>
 

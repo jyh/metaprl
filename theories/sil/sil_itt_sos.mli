@@ -39,7 +39,6 @@ extends Sil_sos
 
 open Refiner.Refiner.TermType
 
-open Tactic_type.Tacticals
 open Tactic_type.Conversionals
 
 topval rwvalueT : term -> int -> tactic

@@ -48,27 +48,17 @@ extends Itt_isect
 extends Itt_bool
 doc <:doc< @docoff >>
 
-open Printf
-open Lm_debug
-open Refiner.Refiner
 open Refiner.Refiner.Term
-open Refiner.Refiner.TermOp
-open Refiner.Refiner.TermMan
-open Refiner.Refiner.TermSubst
 open Refiner.Refiner.RefineError
-open Mp_resource
 
-open Var
 open Tactic_type
 open Tactic_type.Tacticals
 
 open Dtactic
-
 open Perv
 
 open Itt_equal
 open Itt_struct
-
 
 (************************************************************************
  * SYNTAX                                                               *
@@ -189,7 +179,6 @@ doc <:doc<
    for $x @in B$.
    @end[doc]
 >>
-
 
 interactive bisectEliminationLeft (*{| elim [SelectOption 1] |}*) 'H :
    sequent { <H>; x: 'A isect 'B; <J['x]>; a: 'A; u: 'a = 'x in 'A; b: 'B; v: 'b = 'x in 'B >- 'C['a] } -->

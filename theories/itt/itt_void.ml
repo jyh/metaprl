@@ -50,19 +50,12 @@ extends Itt_squash
 extends Itt_subtype
 doc <:doc< @docoff >>
 
-open Printf
 open Lm_debug
-open Tactic_type.Sequent
 open Opname
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
-open Refiner.Refiner.TermMan
-open Refiner.Refiner.RefineError
-
-open Tactic_type.Tacticals
 
 open Dtactic
-open Auto_tactic
 
 open Itt_equal
 open Itt_subtype

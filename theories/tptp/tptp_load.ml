@@ -35,13 +35,11 @@ extends Tptp
 
 open Printf
 open Lm_debug
-open Lm_pervasives
 
 open Refiner.Refiner.TermType
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermMan
 
-open Itt_atom
 open Itt_logic
 
 open Tptp_type

@@ -64,11 +64,7 @@ extends Czf_itt_dexists
 extends Czf_itt_rel
 doc <:doc< @docoff >>
 
-open Printf
 open Lm_debug
-
-open Tactic_type
-open Var
 
 let _ =
    show_loading "Loading CZF_itt_axioms%t"

@@ -57,23 +57,14 @@ extends Itt_squash
 doc <:doc< @docoff >>
 extends Itt_comment
 
-open Printf
 open Lm_debug
-open Refiner.Refiner
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
-open Refiner.Refiner.TermMan
-open Refiner.Refiner.TermSubst
-open Refiner.Refiner.Refine
-open Refiner.Refiner.RefineError
-open Mp_resource
 
 open Var
-open Tactic_type.Sequent
 open Tactic_type.Tacticals
 open Tactic_type
 open Tactic_type.Tacticals
-open Mptop
 
 open Dtactic
 
@@ -86,7 +77,6 @@ open Itt_squash
  *)
 let _ =
    show_loading "Loading Itt_squiggle%t"
-
 
 (************************************************************************
  * TERMS                                                                *

@@ -36,15 +36,7 @@ extends M_ir
 extends M_x86_frame
 doc docoff
 
-open M_util
-
-open Refiner.Refiner.Term
-
-open Mp_resource
-open Term_match_table
-
 open Tactic_type.Tacticals
-open Tactic_type.Sequent
 
 open Top_conversionals
 

@@ -18,27 +18,9 @@ extends Itt_fun
 extends Itt_tsquash
 extends Itt_list
 
-open Printf
-open Lm_debug
-open Refiner.Refiner
-open Refiner.Refiner.Term
-open Refiner.Refiner.TermOp
-open Refiner.Refiner.TermMan
-open Refiner.Refiner.TermSubst
-open Refiner.Refiner.RefineError
-open Mp_resource
-
-open Var
-open Tactic_type
 open Tactic_type.Tacticals
 open Dtactic
 open Top_conversionals
-
-open Itt_struct
-open Itt_record
-open Itt_fun
-open Itt_rfun
-open Itt_list
 
 doc <:doc< 
    @begin[doc]
@@ -56,7 +38,6 @@ interactive planeType {|intro[] |} :
 
 interactive spaceType {|intro[] |} :
    sequent{ <H> >- "type"{space} }
-
 
 doc <:doc< 
    @begin[doc]
@@ -104,7 +85,6 @@ interactive aInSpace {|intro[] |} :
 interactive bInSpace {|intro[] |} :
    sequent{ <H> >- B in space }
 
-
 doc <:doc< 
    @begin[doc]
    These points are equal in <<plane>>, since they have
@@ -136,7 +116,6 @@ doc <:doc<
 
 interactive_rw cover_rw  :
    {x=3; x=2} <-->    {x=2}
-
 
 doc <:doc< 
    @begin[doc]
@@ -198,13 +177,11 @@ interactive planeElim {|elim[] |} 'H :
    sequent{ <H>; a:int; b:int; e:record; <J[point{'a;'b;'e}]> >- 'C[point{'a;'b;'e}] } -->
    sequent{ <H>; p:plane; <J['p]> >- 'C['p] }
 
-
 doc <:doc< @docoff >>
 
 interactive spaceElim {|elim[] |} 'H :
    sequent{ <H>; a:int; b:int; c:int; e:record; <J[point{'a;'b;'c;'e}]> >- 'C[point{'a;'b;'c;'e}] } -->
    sequent{ <H>; p:space; <J['p]> >- 'C['p] }
-
 
 doc <:doc< 
    @begin[doc]
@@ -255,14 +232,9 @@ define unfold_redA: redA <--> rcrd["color":t]{token["red":t]; A}
 interactive redAInCSpace {|intro[] |} :
    sequent{ <H> >- redA in cspace }
 
-
 interactive cspaceElim {|elim[] |} 'H :
    sequent{ <H>; a:int; b:int; c:int; color:atom; e:record; <J[rcrd["color":t]{'color;point{'a;'b; 'c; 'e}}]> >- 'C[rcrd["color":t]{'color;point{'a;'b; 'c; 'e}}] } -->
    sequent{ <H>; p:cspace; <J['p]> >- 'C['p] }
-
-
-
-
 
 doc <:doc< 
    @begin[doc]
@@ -271,7 +243,6 @@ doc <:doc<
   
    @end[doc]
 >>
-
 
 define unfold_semigroup1 : semigroup[G:t,mul:t,i:l] <-->
    record[G:t]{univ[i:l];m.record[mul:t]{.'m -> 'm -> 'm;mul.
@@ -287,11 +258,9 @@ define  unfold_mul_semigroup : semigroup[i:l] <-->
     all x: ^car. all y:^car .all z:^car. ('x ^* 'y) ^* 'z =  'x ^* ('y ^* 'z) in ^car
    }
 
-
 (* let unfold_semigroup = (tryC unfold_semigroup2) thenC unfold_semigroup1 *)
 
 let unfold_semigroup = unfold_mul_semigroup orelseC unfold_semigroup1
-
 
 let semigroupDT n = rw unfold_semigroup n thenT dT n
 
@@ -304,7 +273,6 @@ let resource intro +=
     <<semigroup[G:t,mul:t,i:l]>>, wrap_intro (semigroupDT 0)
    ]
 
-
 define integers : integers <-->
    {car = int;
     "+" = lambda{x.lambda{y. 'x +@ 'y}};
@@ -316,7 +284,6 @@ interactive integers_add_semigroup :
 
 interactive integers_mul_semigroup :
    sequent{ <H> >- integers in semigroup["car":t,"*":t,0:l]}
-
 
 define morphisms : morphisms{'A}  <-->
    {car = 'A -> 'A;
@@ -340,7 +307,6 @@ doc <:doc<
    @end[doc]
 >>
 
-
 define unfold_stack :
       Stack[i:l]{'A} <-->                     (* The stack of elements of A *)
         {car : univ[i:l];
@@ -351,8 +317,6 @@ define unfold_stack :
          ^pop(^empty) = inr{it} in (^car * 'A + unit)
         }
 
-
-
 define stack_as_list :
          list_stack{'A} <-->
           { car = list{'A};
@@ -361,12 +325,9 @@ define stack_as_list :
             pop = lambda{s.list_ind{'s; inr{it}; a,s,f.inl{('s,'a)}}}
          }
 
-
-
 interactive stack_as_list_wf {| intro [] |}:
    sequent{ <H> >- 'A in univ[i:l]} -->
    sequent{ <H> >- list_stack{'A} in Stack[i:l]{'A}}
-
 
 (*
  * @begin[doc]
@@ -406,7 +367,6 @@ interactive tst :
    sequent{ <H> >-  'C} -->
    sequent{ <H> >-  'C}
 
-
 dform plane:  plane = mathbbP `"lane"
 dform space:  space = mathbbS `"pace"
 dform colored_plane:  cplane = mathbbC `"olored" plane
@@ -422,12 +382,9 @@ dform point3: point{'a;'b;'c;'e} = `"point(" 'a `"," 'b `"," 'c ")"
 
 dform length: length{'p} = `"|" 'p `"|" subtwo
 
-
 dform self_mul_df  : except_mode [src] ::  (self["*":t]{'mul} 'x 'y) = `"(" 'x `"*" 'y `")"
 
 dform mul_df  : except_mode [src] ::  (field["*":t]{'r} 'x 'y) = `"(" 'x `" "  `"*" sub{'r} " " 'y `")"
-
-
 
 (*
 let unfoldAllT = rwaAll [unfold_plane;unfold_space;unfoldColoredSpace;unfoldCol;unfoldField;unfoldRecordOrt]

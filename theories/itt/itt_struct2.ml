@@ -56,27 +56,19 @@ extends Itt_set
 extends Itt_logic
 doc <:doc< @docoff >>
 
-open Printf
 open Lm_debug
 open Lm_symbol
-open Refiner.Refiner
 open Refiner.Refiner.Term
-open Refiner.Refiner.TermOp
 open Refiner.Refiner.TermMan
 open Refiner.Refiner.TermSubst
-open Refiner.Refiner.Refine
 open Refiner.Refiner.RefineError
-open Mp_resource
 
 open Tactic_type
 open Tactic_type.Tacticals
 open Top_tacticals
 open Var
-open Perv
-open Mptop
 
 open Dtactic
-open Auto_tactic
 
 open Itt_equal
 open Itt_struct
@@ -123,8 +115,6 @@ interactive hypSubstitution2 'H ('t1 = 't2 in 'T) bind{y. 'A['y]} :
                            >- "type"{'A['z]} } -->
    sequent { <H>; x: 'A['t1]; <J['x]> >- 'C['x] }
 
-
-
 doc <:doc<
    @begin[doc]
 
@@ -134,8 +124,6 @@ doc <:doc<
 
    @end[doc]
 >>
-
-
 
 doc <:doc<
    @begin[doc]
@@ -179,7 +167,6 @@ interactive cutEq0 ('s_1='s_2 in 'S) bind{x.'t_1['x]  't_2['x]} :
    [assertion] sequent{ <H> >- 's_1='s_2 in 'S } -->
    [main]      sequent { <H>; x: 'S; v: 's_1='x in 'S; u: 's_2='x in 'S >- 't_1['x] = 't_2['x] in 'T } -->
    sequent { <H> >- 't_1['s_1] = 't_2['s_2] in 'T}
-
 
 doc <:doc<
    @begin[doc]
@@ -232,7 +219,6 @@ doc <:doc<
    @end[doc]
 >>
 
-
 doc <:doc<
    @begin[doc]
 
@@ -242,7 +228,6 @@ doc <:doc<
    (see @hrefmodule[Itt_squash]).
    @end[doc]
 >>
-
 
 interactive cutSquash 'H 'S :
    [assertion] sequent { <H>; <J> >- 'S } -->
@@ -261,9 +246,6 @@ doc <:doc<
    @docoff
    @end[doc]
 >>
-
-
-
 
 (************************************************************************
  * TACTICS                                                              *

@@ -13,31 +13,11 @@ extends Itt_bool
 
 doc <:doc< @docoff >>
 
-open Printf
 open Lm_debug
 
-open Refiner.Refiner
-open Refiner.Refiner.Term
-open Refiner.Refiner.TermOp
-open Refiner.Refiner.TermSubst
-open Refiner.Refiner.TermMan
-open Refiner.Refiner.Refine
-open Refiner.Refiner.RefineError
-open Mp_resource
-open Term_stable
-
-open Tactic_type
-open Tactic_type.Tacticals
 open Tactic_type.Conversionals
-open Tactic_type.Sequent
-open Var
-open Mptop
 
 open Dtactic
-open Auto_tactic
-
-open Itt_rfun
-open Itt_logic
 
 let _ =
    show_loading "Loading Czf_itt_setdiff%t"

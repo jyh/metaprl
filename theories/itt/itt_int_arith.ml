@@ -51,20 +51,15 @@ open Printf
 open Lm_debug
 open Opname
 open Refiner.Refiner.Term
-open Refiner.Refiner.TermOp
 open Refiner.Refiner.TermMan
 open Refiner.Refiner.TermSubst
 open Refiner.Refiner.TermType
 open Refiner.Refiner.RefineError
-open Rformat
-open Mp_resource
 
-open Var
 open Tactic_type
 open Tactic_type.Tacticals
 open Tactic_type.Conversionals
 
-open Base_meta
 open Dtactic
 
 open Top_conversionals
@@ -160,7 +155,6 @@ let debug_subgoals =
 (*
  * end of thenMT_prefix part
  *)
-
 
 let get_term i p =
 (* We skip first item because it is a context *)
@@ -680,7 +674,6 @@ let inject_coefC t =
       end
 	else
    	failC
-
 
 let injectCoefC = sweepUpC (termC inject_coefC)
 *)

@@ -50,7 +50,6 @@ interactive distrib_or :
 (* Automation *)
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
-open Refiner.Refiner.RefineError
 open Tactic_type
 open Tactic_type.Tacticals
 open Tactic_type.Conversionals

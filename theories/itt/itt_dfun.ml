@@ -57,33 +57,19 @@ extends Itt_void
 extends Itt_unit
 doc <:doc< @docoff >>
 
-open Printf
 open Lm_debug
-open Refiner.Refiner
-open Refiner.Refiner.Term
-open Refiner.Refiner.TermMan
-open Refiner.Refiner.TermSubst
-open Refiner.Refiner.RefineError
-open Mp_resource
-
-open Var
-open Tactic_type
-open Tactic_type.Tacticals
-open Tactic_type.Conversionals
 
 open Dtactic
 
 open Itt_equal
 open Itt_subtype
 open Itt_rfun
-open Itt_struct
 
 (*
  * Show that the file is loading.
  *)
 let _ =
    show_loading "Loading Itt_dfun%t"
-
 
 (************************************************************************
  * REWRITES                                                             *
@@ -98,7 +84,6 @@ doc <:doc<
    @end[doc]
 >>
 prim_rw unfold_dfun : (x: 'A -> 'B['x]) <--> ({ f | x: 'A -> 'B['x] })
-
 
 (************************************************************************
  * RULES                                                                *

@@ -31,7 +31,6 @@ extends M_ast
 extends M_ir
 
 open Refiner.Refiner.Term
-open Mp_resource
 open Term_match_table
 
 open Tactic_type.Sequent

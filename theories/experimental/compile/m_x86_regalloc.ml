@@ -40,13 +40,9 @@ open M_x86_backend
 open M_x86_spill
 open M_x86_coalesce
 open M_ra_type
-open M_ra_live
 open M_ra_main
 
-open Refiner.Refiner.Term
-
 open Tactic_type.Tacticals
-open Tactic_type.Conversionals
 open Tactic_type.Sequent
 
 module RegAlloc = MakeRegAlloc (Frame)

@@ -74,22 +74,18 @@ open Refiner.Refiner.TermType
 open Refiner.Refiner.TermOp
 open Refiner.Refiner.TermMan
 open Refiner.Refiner.TermSubst
-open Refiner.Refiner.Refine
 open Refiner.Refiner.RefineError
-open Mp_resource
 open Simple_print
 
 open Tactic_type
 open Tactic_type.Tacticals
 open Tactic_type.Conversionals
-open Mptop
 open Var
 
 open Auto_tactic
 open Dtactic
 
 open Itt_squash
-open Itt_void
 open Itt_equal
 open Itt_rfun
 open Itt_dprod

@@ -35,29 +35,7 @@ extends Itt_set
 extends Itt_fun
 extends Itt_disect
 
-open Lm_debug
-open Refiner.Refiner.TermType
-open Refiner.Refiner.Term
-open Refiner.Refiner.TermOp
-open Refiner.Refiner.TermAddr
-open Refiner.Refiner.TermMan
-open Refiner.Refiner.TermSubst
-open Refiner.Refiner.Refine
-open Refiner.Refiner.RefineError
-open Mp_resource
-open Simple_print
-
-open Tactic_type
-open Tactic_type.Tacticals
-open Tactic_type.Sequent
 open Tactic_type.Conversionals
-open Mptop
-open Var
-
-open Dtactic
-open Auto_tactic
-
-open Itt_fun
 
 (************************************************************************
  * SYNTAX                                                               *

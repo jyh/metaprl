@@ -37,15 +37,12 @@ derive Fol_false
 derive Fol_true
 derive Fol_pred
 
-open Refiner.Refiner.TermSubst
-
 open Tactic_type
 open Tactic_type.Conversionals
 open Tactic_type.Tacticals
 
 open Dtactic
 
-open Itt_struct
 open Itt_equal
 
 (* Interpretation *)

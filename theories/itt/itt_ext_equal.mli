@@ -32,8 +32,6 @@
  * jyh@cs.cornell.edu
  *)
 
-open Refiner.Refiner.Term
-
 extends Itt_equal
 extends Itt_subtype
 extends Itt_logic

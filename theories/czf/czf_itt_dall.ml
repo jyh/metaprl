@@ -54,18 +54,10 @@ extends Czf_itt_set_ind
 doc docoff
 
 open Lm_debug
-open Printf
-
-open Refiner.Refiner.RefineError
-
-open Tactic_type.Tacticals
-open Tactic_type.Sequent
-open Var
 
 open Dtactic
 open Top_conversionals
 
-open Itt_logic
 open Itt_rfun
 
 let _ =

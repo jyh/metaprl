@@ -40,7 +40,6 @@ extends Itt_list2
 open Refiner.Refiner.TermType
 
 open Tactic_type.Conversionals
-open Tactic_type.Tacticals
 
 (************************************************************************
  * SYNTAX                                                               *

@@ -3,7 +3,6 @@
  *)
 extends Fol_type
 
-open Tactic_type
 open Dtactic
 
 declare "false"

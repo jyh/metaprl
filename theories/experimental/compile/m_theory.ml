@@ -45,14 +45,12 @@ open M_prog
 open M_dead
 open M_inline
 open M_reserve
-open M_standardize
 open M_x86_codegen
 open M_x86_coalesce
 open M_x86_regalloc
 open M_x86_opt
 
 open Tactic_type.Tacticals
-open Tactic_type.Conversionals
 
 let convertT =
    (* IR conversion *)

@@ -39,7 +39,6 @@ open M_util
 
 open Refiner.Refiner.TermType
 
-open Mp_resource
 open Term_match_table
 
 open Tactic_type.Conversionals

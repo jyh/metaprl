@@ -35,8 +35,6 @@ extends Base_meta
 
 open Refiner.Refiner.TermType
 open Refiner.Refiner.Term
-open Refiner.Refiner.TermMan
-open Refiner.Refiner.TermOp
 open Refiner.Refiner.RefineError
 
 (*

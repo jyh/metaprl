@@ -37,7 +37,6 @@ extends Itt_equal
 extends Itt_subtype
 
 open Refiner.Refiner.Term
-open Tactic_type.Tacticals
 
 (************************************************************************
  * TERMS                                                                *

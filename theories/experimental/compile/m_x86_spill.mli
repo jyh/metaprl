@@ -30,12 +30,8 @@ extends M_x86_backend
 open Lm_symbol
 
 open Refiner.Refiner.Term
-open Mp_resource
 
-open Tactic_type.Tacticals
 open Tactic_type.Conversionals
-
-open M_ra_type
 
 (*
  * CPS resource

@@ -39,7 +39,6 @@ extends Sil_sos
 extends Sil_itt_state
 
 open Refiner.Refiner
-open Refiner.Refiner.TermType
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
 open Refiner.Refiner.TermMan
@@ -52,8 +51,6 @@ open Tactic_type.Tacticals
 open Dtactic
 open Auto_tactic
 open Base_rewrite
-
-open Itt_equal
 
 open Sil_sos
 

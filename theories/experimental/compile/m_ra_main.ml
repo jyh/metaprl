@@ -29,8 +29,6 @@ extends M_ra_live
 
 open Format
 
-open Lm_debug
-open Lm_trace
 open Lm_flags
 open Lm_symbol
 open Lm_symbol_matrix
@@ -38,8 +36,6 @@ open Lm_symbol_matrix
 open M_ra_type
 open M_ra_live
 open M_ra_state
-
-open Refiner.Refiner.RefineError
 
 module MakeRegAlloc (Frame : FrameSig)
 : RegAllocSig
@@ -367,7 +363,6 @@ struct
        | None ->
             node
 
-
    (*
     * Node has some moves.
     *)
@@ -630,7 +625,6 @@ struct
              | NodeColored ->
                   node :: nodes) [] node.node_neighbors
 
-
    (*
     * Say if a node is move related.
     *)
@@ -839,7 +833,6 @@ struct
       let use_cost = depth_cost uses * Frame.use_cost in
          length, def_cost, use_cost
 
-
    (*
     * Recompute the cost of freezing all moves for this node.
     *)
@@ -871,7 +864,6 @@ struct
             in
                node.node_move_cost <- cost;
                cost
-
 
    (*
     * Recompute the cost of spilling a node.
@@ -917,7 +909,6 @@ struct
                      node
                else
                   new_node ra v cost NodeInitial reg_class) cenv
-
 
    (*
     * Create neighbors from adjacency matrix.
@@ -1088,7 +1079,6 @@ struct
       (node1.node_class = NodePrecolored && node2.node_class = NodePrecolored)
       || SymSymbolMatrix.query ra.ra_edges node1.node_name node2.node_name
 
-
    (*
     * Add a neighbor relationship.
     *)
@@ -1098,7 +1088,6 @@ struct
          node1.node_total_cost <- recompute_cost;
          node1.node_neighbors <- SymbolTable.add node1.node_neighbors name2 node2;
          node1.node_degree <- succ node1.node_degree
-
 
    (*
     * Add a node to a worklist.
@@ -1699,7 +1688,6 @@ struct
             RegAllocColor (set_colors ra)
 end
 
-
 let () = std_flags_help_section_text "ra.debug"
    "Debugging flags for the register allocator."
 
@@ -1711,7 +1699,6 @@ let () = std_flags_register_list_help "ra.debug"
                                     "Invoke copy_edge during coalescing for all neighbor classes.  See" ^
                                     " the warnings in RA before modifying this flag.  Warning: if this" ^
                                     " flag is false, then RA is susceptible to the symbol order bug!"]
-
 
 (*
  * -*-

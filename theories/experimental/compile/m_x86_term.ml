@@ -28,9 +28,6 @@
 extends M_ir
 extends M_x86_inst_type
 
-open Printf
-open Lm_debug
-
 open Lm_symbol
 
 open Refiner.Refiner.TermType

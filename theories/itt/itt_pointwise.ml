@@ -8,25 +8,7 @@ doc <:doc<
 extends Itt_equal
 doc <:doc< @docoff >>
 
-open Printf
 open Lm_debug
-open Refiner.Refiner
-open Refiner.Refiner.Term
-open Refiner.Refiner.TermOp
-open Refiner.Refiner.TermMan
-open Refiner.Refiner.TermSubst
-open Refiner.Refiner.Refine
-open Refiner.Refiner.RefineError
-open Mp_resource
-
-open Tactic_type
-open Tactic_type.Tacticals
-open Var
-open Mptop
-
-open Auto_tactic
-
-open Itt_equal
 
 (*
  * Show that the file is loading.

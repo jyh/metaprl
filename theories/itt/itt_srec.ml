@@ -58,22 +58,13 @@ extends Itt_void
 extends Itt_struct
 doc <:doc< @docoff >>
 
-open Printf
 open Lm_symbol
 open Lm_debug
-open Lm_string_set
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
-open Refiner.Refiner.TermSubst
-open Refiner.Refiner.RefineError
-open Mp_resource
-
-open Tactic_type.Tacticals
-open Var
 
 open Dtactic
 
-open Itt_void
 open Itt_equal
 open Itt_struct
 
@@ -296,8 +287,7 @@ let resource typeinf += (srecind_term, inf_srecind)
  *)
 
 
-
-(* There are some questions about srec. This theory is subject to be changed.
+(* XXX There are some questions about srec. This theory is subject to be changed.
    1. Is the rule srecType valid?
 
      Suppose we have B: U_n -> U_{n+1}, but not in U_n->U_n.

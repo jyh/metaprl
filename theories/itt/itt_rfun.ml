@@ -63,28 +63,16 @@ extends Itt_set
 extends Itt_struct
 doc docoff
 
-open Printf
 open Lm_symbol
 open Lm_debug
-open Lm_string_set
-open Refiner.Refiner
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
-open Refiner.Refiner.TermMan
 open Refiner.Refiner.TermSubst
-open Refiner.Refiner.RefineError
-open Mp_resource
 open Unify_mm
 
-open Var
 open Dtactic
 open Top_conversionals
 
-open Tactic_type
-open Tactic_type.Tacticals
-open Tactic_type.Sequent
-
-open Itt_void
 open Itt_equal
 open Itt_struct
 
@@ -131,7 +119,6 @@ declare well_founded_apply{'P; 'a}
 declare fix{f. 'b['f]}
 
 define unfold_let : "let"{'a;x.'b['x]} <--> (lambda{x.'b['x]} 'a)
-
 
 doc <:doc< @docoff >>
 

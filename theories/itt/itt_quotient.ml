@@ -135,17 +135,13 @@ extends Itt_struct2
 extends Itt_esquash
 doc <:doc< @docoff >>
 
-open Printf
 open Lm_debug
 open Refiner.Refiner
 open Term
 open TermOp
-open TermMan
 open TermSubst
 open RefineError
-open Mp_resource
 
-open Var
 open Tactic_type
 open Tactic_type.Tacticals
 

@@ -32,20 +32,9 @@
 
 extends Czf_itt_sep
 
-open Printf
 open Lm_debug
 
-open Refiner.Refiner.RefineError
-
-open Tactic_type.Tacticals
-open Tactic_type.Conversionals
-open Tactic_type.Sequent
-open Var
-
 open Dtactic
-
-open Itt_logic
-open Itt_rfun
 
 let _ =
    show_loading "Loading Czf_itt_or%t"

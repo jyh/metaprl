@@ -53,21 +53,13 @@ extends Itt_equal
 extends Itt_squiggle
 doc <:doc< @docoff >>
 
-open Printf
 open Lm_debug
 open Refiner.Refiner
 open Refiner.Refiner.Term
-open Refiner.Refiner.TermMan
-open Refiner.Refiner.RefineError
-open Rformat
-open Mp_resource
-
-open Tactic_type
 
 open Dtactic
 
 open Itt_equal
-open Itt_squiggle
 
 (*
  * Show that the file is loading.

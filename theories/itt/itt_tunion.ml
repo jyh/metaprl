@@ -65,15 +65,11 @@ extends Itt_set
 extends Itt_logic
 doc <:doc< @docoff >>
 
-open Refiner.Refiner.TermType
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
-open Refiner.Refiner.RefineError
-open Mp_resource
 
 open Dtactic
 open Tactic_type.Tacticals
-open Var
 
 open Itt_struct
 open Itt_equal
@@ -191,7 +187,6 @@ interactive tunionElimination_eq {| elim [ThinOption thinLastT] |} 'H :
    sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]>; w: 'A; z: 'B['w];
                        u: 'z='x in tunion{'A; y. 'B['y]} >- squash{'C['z]} } -->
    sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]> >- squash{'C['x]} }
-
 
 interactive tunionElimination_disjoint (*{| elim [ThinOption thinLastT] |}*) 'H 'f :
    sequent { <H>; x: tunion{'A; y. 'B['y]}; <J['x]>; w: 'A; z: 'B['w];

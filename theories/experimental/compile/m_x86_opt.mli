@@ -29,7 +29,6 @@ extends M_util
 
 open Refiner.Refiner.TermType
 
-open Tactic_type.Tacticals
 open Tactic_type.Conversionals
 
 (*

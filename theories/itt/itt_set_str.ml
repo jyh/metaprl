@@ -49,27 +49,7 @@ extends Itt_logic
 extends Itt_union2
 doc <:doc< @docoff >>
 
-open Refiner.Refiner.TermType
-open Refiner.Refiner.Term
-open Refiner.Refiner.TermOp
-open Refiner.Refiner.TermAddr
-open Refiner.Refiner.TermMan
-open Refiner.Refiner.TermSubst
-open Refiner.Refiner.RefineError
-open Mp_resource
-
-open Tactic_type
-open Tactic_type.Tacticals
-open Tactic_type.Conversionals
-open Var
-
 open Dtactic
-open Auto_tactic
-
-open Itt_decidable
-open Itt_record
-open Itt_logic
-open Itt_bisect
 
 doc <:doc< 
    @begin[doc]
@@ -92,11 +72,9 @@ define set_sig: Set[i:l]{'T} <-->
     all S:^car. all a:'T. all b:'T. iff{"assert"{^member (^delete 'S 'b) 'a}; ."assert"{^member 'S 'a} and not{'a='b in 'T}}
    }
 
-
 doc <:doc< @docoff >>
 
 dform set_df : except_mode[src] :: Set[i:l]{'T} = mathbbS `"et" sub{slot[i:l]} "(" 'T ")"
-
 
 interactive set_intro  {| intro[] |}:
 [wf]sequent { <H> >- "type"{'T} } -->
@@ -109,8 +87,6 @@ interactive set_intro  {| intro[] |}:
    sequent { <H> >- all S:'set^car. all a:'T. all b:'T. iff{"assert"{('set^member) (('set^insert) 'S 'b) 'a}; ."assert"{.(('set^member) 'S 'a)} or 'a='b in 'T} } -->
    sequent { <H> >- all S:'set^car. all a:'T. all b:'T. iff{"assert"{('set^member) (('set^delete) 'S 'b) 'a}; ."assert"{.(('set^member) 'S 'a)} and not{.'a='b in 'T}} } -->
    sequent { <H> >- 'set in Set[i:l]{.'T} }
-
-
 
  doc <:doc< 
    @begin[doc]
@@ -135,7 +111,6 @@ interactive set_intro  {| intro[] |}:
    @end[itemize]
    @end[doc]
 >>
-
 
 doc <:doc< 
    @begin[doc]
@@ -181,7 +156,6 @@ interactive set_as_list_correct :
    sequent { <H> >- 'A in  DecEquality[i:l] } -->
    sequent { <H> >- set_as_list{'A} in Set[i:l]{.'A^car} }
 
-
 doc <:doc< 
    @begin[doc]
    @modsubsection{Remarks}
@@ -196,14 +170,12 @@ interactive necessity_of_deicidability univ[i:l]:
    sequent { <H> >- Set[i:l]{'T} } -->
    sequent { <H> >- all a:'T. all b:'T. decidable{'a='b in 'T} }
 
-
 doc <:doc< 
    @begin[doc]
 More efficient implementation of Sets could be defined when type have an order.
 We will define such structures in  @hrefmodule[Itt_sorted_tree] and  @hrefmodule[Itt_rbtree].
    @end[doc]
 >>
-
 
 doc <:doc< 
    @begin[doc]
@@ -215,8 +187,6 @@ doc <:doc<
    @modsubsection{Definitions}
    @end[doc]
 >>
-
-
 
 define table_sig: Table[i:l]{'T; x.'M['x]} <-->
    {car : univ[i:l];
@@ -242,7 +212,6 @@ dform table_df : except_mode[src] :: Table[i:l]{'T; x.'M} = mathbbT `"able" sub{
 define table_sig: Table[i:l]{'T;'M} <--> Table[i:l]{'T; x.'M}
 
 dform table_df2 : except_mode[src] :: Table[i:l]{'T; 'M} = mathbbT `"able" sub{slot[i:l]} "(" ('T -> 'M)  ")"
-
 
  doc <:doc< 
    @begin[doc]
@@ -306,7 +275,6 @@ interactive set_as_table_correct :
    sequent { <H> >- 'Table in Table[i:l]{'T;unit} } -->
    sequent { <H> >- set_as_table{'Table} in Set[i:l]{.'T} }
 
-
 (*
 doc <:doc< 
    @begin[doc]
@@ -317,7 +285,6 @@ doc <:doc<
    Let us construct a <<Table[i:l]{'A^car; x.'S['x]}>>, where $A$ is an ordered set.
    @end[doc]
 >>
-
 
 doc <:doc< @docoff >>
 define rel_prod: rel_prod{'R_1;'R_2} <--> lambda {a. lambda {b. 'R_1 fst{'a} fst{'b} band  'R_2 snd{'a} snd{'b} }}
@@ -344,6 +311,5 @@ interactive set_as_list_correct :
    sequent { <H> >- set_as_list{'A} in Set[i:l]{.'A^car} }
 
 *)
-
 
 doc <:doc< @docoff >>

@@ -110,36 +110,22 @@ extends Itt_eta
 doc docoff
 extends Czf_itt_comment
 
-open Printf
 open Lm_debug
 
-open Refiner.Refiner
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
-open Refiner.Refiner.TermSubst
-open Refiner.Refiner.TermMan
-open Refiner.Refiner.Refine
-open Refiner.Refiner.RefineError
-open Mp_resource
-open Term_stable
 
 open Tactic_type
 open Tactic_type.Tacticals
 open Tactic_type.Sequent
 open Var
-open Mptop
 
 open Dtactic
 open Auto_tactic
 open Top_conversionals
 
-open Itt_squash
-open Itt_equal
 open Itt_rfun
-open Itt_dprod
-open Itt_union
 open Itt_struct
-open Itt_logic
 open Itt_w
 
 let _ =

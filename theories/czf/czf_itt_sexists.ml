@@ -45,19 +45,12 @@ doc <:doc< @doc{@parents} >>
 extends Czf_itt_and
 doc <:doc< @docoff >>
 
-open Printf
 open Lm_debug
 
-open Refiner.Refiner.RefineError
-
-open Tactic_type.Tacticals
 open Tactic_type.Conversionals
-open Tactic_type.Sequent
-open Var
 
 open Dtactic
 
-open Itt_logic
 open Itt_rfun
 
 let _ =

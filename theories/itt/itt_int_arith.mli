@@ -36,12 +36,7 @@ extends Itt_logic
 extends Itt_bool
 extends Itt_int_ext
 
-open Refiner.Refiner.Term
-open Tactic_type.Tacticals
 open Tactic_type.Conversionals
-
-open Top_conversionals
-open Itt_int_ext
 
 topval thenLocalMT : tactic -> tactic -> tactic
 topval thenLocalMElseT : tactic -> tactic -> tactic -> tactic

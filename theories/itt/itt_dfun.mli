@@ -36,11 +36,9 @@ extends Itt_rfun
 
 open Refiner.Refiner.Term
 
-open Tactic_type.Tacticals
 open Tactic_type.Conversionals
 
 rewrite unfold_dfun : (x: 'A -> 'B['x]) <--> ({ f | x: 'A -> 'B['x] })
-
 
 (************************************************************************
  * RULES                                                                *

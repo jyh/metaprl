@@ -51,19 +51,10 @@ doc <:doc< @doc{@parents} >>
 extends Czf_itt_eq
 doc docoff
 
-open Refiner.Refiner.Term
-open Refiner.Refiner.RefineError
-
-open Tactic_type
-open Tactic_type.Tacticals
-open Tactic_type.Sequent
-open Var
-
 open Dtactic
 open Top_conversionals
 
 open Itt_rfun
-open Itt_logic
 
 (************************************************************************
  * TERMS                                                                *

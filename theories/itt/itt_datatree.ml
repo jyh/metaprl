@@ -12,35 +12,16 @@ extends Itt_logic
 
 doc <:doc< @docoff >>
 
-open Printf
 open Lm_debug
-open Refiner.Refiner
-open Refiner.Refiner.Term
-open Refiner.Refiner.TermOp
-open Refiner.Refiner.TermMan
-open Refiner.Refiner.TermSubst
-open Refiner.Refiner.RefineError
-open Mp_resource
 
-open Var
-open Tactic_type
-open Tactic_type.Tacticals
 open Dtactic
-open Auto_tactic
 open Top_conversionals
-
-open Itt_logic
-open Itt_record
-open Itt_bintree
-
 
 (*
  * Show that the file is loading.
  *)
 let _ =
    show_loading "Loading Itt_datatree%t"
-
-
 
 doc <:doc< 
    @begin[doc]

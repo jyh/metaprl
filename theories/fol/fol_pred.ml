@@ -31,7 +31,6 @@
 
 extends Fol_type
 
-open Tactic_type
 open Tactic_type.Tacticals
 
 open Auto_tactic

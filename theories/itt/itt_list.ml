@@ -50,23 +50,10 @@ extends Itt_struct
 extends Itt_logic
 doc docoff
 
-open Printf
-open Lm_symbol
 open Lm_debug
-open Lm_string_set
-open Refiner.Refiner
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
-open Refiner.Refiner.TermSubst
-open Refiner.Refiner.RefineError
-open Mp_resource
 
-open Var
-
-open Tactic_type
-open Tactic_type.Tacticals
-
-open Typeinf
 open Dtactic
 open Top_conversionals
 

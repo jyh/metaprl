@@ -34,21 +34,9 @@ extends Czf_itt_group
 extends Czf_itt_subset
 extends Czf_itt_isect
 
-open Refiner.Refiner
-open Refiner.Refiner.Term
-open Refiner.Refiner.TermOp
-open Refiner.Refiner.TermSubst
-open Refiner.Refiner.TermMan
 open Refiner.Refiner.RefineError
 
-open Tactic_type
-open Tactic_type.Sequent
 open Tactic_type.Tacticals
-open Var
-open Mptop
-
-open Dtactic
-open Auto_tactic
 
 (************************************************************************
  * TERMS                                                                *

@@ -46,25 +46,17 @@ extends M_util
 extends M_x86_backend
 doc <:doc< @docoff >>
 
-open Printf
-open Lm_debug
-
 open Lm_symbol
 
 open Perv
 
 open M_x86_inst_type
 open M_x86_term
-open M_x86_backend
 open M_util
 
-open Refiner.Refiner.TermType
-open Refiner.Refiner.Term
 open Refiner.Refiner.TermSubst
 open Refiner.Refiner.RefineError
 
-open Mp_resource
-open Simple_print.SimplePrint
 open Term_match_table
 
 open Tactic_type.Tacticals

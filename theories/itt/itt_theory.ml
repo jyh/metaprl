@@ -100,8 +100,6 @@ open Itt_tunion
 open Itt_bisect
 open Itt_bunion
 open Itt_atom_bool
-open Itt_fset
-open Itt_esquash
 
 (*
  * Combine the precedences.

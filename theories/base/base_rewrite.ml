@@ -64,20 +64,9 @@ doc docoff
 extends Perv
 extends Ocaml_df
 
-open Lm_debug
-open Printf
-
-open Refiner.Refiner.Term
-open Refiner.Refiner.TermOp
 open Refiner.Refiner.TermMan
-open Refiner.Refiner.TermSubst
-open Refiner.Refiner.RefineError
 
-open Tactic_type
-open Tactic_type.Tacticals
 open Tactic_type.Conversionals
-
-open Var
 
 open Auto_tactic
 

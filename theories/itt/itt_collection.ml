@@ -59,24 +59,12 @@ open Itt_squash
 open Itt_tunion
 open Itt_int_base
 
-open Lm_debug
-open Refiner.Refiner
-open Refiner.Refiner.TermType
-open Refiner.Refiner.Term
 open Refiner.Refiner.RefineError
-open Mp_resource
-open Mptop
 
-open Tactic_type
 open Tactic_type.Tacticals
-open Tactic_type.Sequent
-
-open Var
-
 open Top_conversionals
 
 open Typeinf
-open Auto_tactic
 open Dtactic
 
 doc <:doc<
@@ -160,7 +148,6 @@ interactive col_equal_sym  univ[l:l] :
    sequent{ <H> >-  col_equal{'T;'A;'B} }  -->
    sequent{ <H> >-  col_equal{'T;'B;'A} }
 
-
 (*--- Col --*)
 
 define unfold_Col :  Col[l:l]{'T} <--> (quot x,y: col[l:l]{'T} // col_equal{'T;'x;'y})
@@ -219,7 +206,6 @@ interactive col_type_wf {| intro [intro_univ_arg] |} univ[l:l] :
    sequent{ <H> >- 'C in Col[l:l]{'T} } -->
    sequent{ <H> >- "type"{col_type{'C;'T}}}
 
-
 doc <:doc< @doc{@modsubsection{Basic operations}} >>
 
 (*--- singleton ---*)
@@ -240,7 +226,6 @@ interactive member_singleton_elim {| elim [] |} 'H :
    [wf] sequent{ <H>; u:col_member{singleton{'x; 'T}; 'y}; <J['u]> >- 'y in 'T } -->
    sequent{ <H>; u:'x = 'y in 'T; <J[it]> >- 'Z[it]} -->
    sequent{ <H>; u:col_member{singleton{'x; 'T}; 'y}; <J['u]> >- 'Z['u] }
-
 
 (*--- union ---*)
 
@@ -268,7 +253,6 @@ interactive member_union_elim {| elim [ThinOption thinT] |} 'H :
    [wf] sequent{ <H>; u:col_member{"union"{'X;x.'Y['x]};'y}; <J>; x:'X >- "type"{col_member{'Y['x];'y}} } -->
    sequent{ <H>; u:col_member{"union"{'X;x.'Y['x]};'y}; x:'X; v: col_member{'Y['x];'y}; <J> >- squash{'Z} } -->
    sequent{ <H>; u:col_member{"union"{'X;x.'Y['x]};'y}; <J> >- squash{'Z} }
-
 
 doc <:doc< @doc{@modsubsection{Other operations}} >>
 
@@ -525,4 +509,3 @@ dform none_df : except_mode[src] :: none = `"<>"
 
 dform add_df : except_mode[src] :: parens :: "prec"[prec_add] :: "add"{'a; 'b} =
    slot["le"]{'a} `" + " slot["lt"]{'b}
-

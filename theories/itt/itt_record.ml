@@ -18,30 +18,19 @@ extends Itt_tsquash
 
 doc <:doc< @docoff >>
 
-open Printf
 open Lm_debug
-open Refiner.Refiner
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
-open Refiner.Refiner.TermMan
-open Refiner.Refiner.TermSubst
 open Refiner.Refiner.RefineError
-open Mp_resource
 
-open Var
 open Tactic_type
 open Tactic_type.Tacticals
 open Dtactic
-open Auto_tactic
 open Top_conversionals
 
 open Itt_equal
-open Itt_subtype
 open Itt_struct
-open Itt_record_label0
 open Itt_record_label
-open Itt_struct3
-open Itt_logic
 
 (*
  * Show that the file is loading.
@@ -49,10 +38,7 @@ open Itt_logic
 let _ =
    show_loading "Loading Itt_record%t"
 
-
 doc <:doc< >>
-
-
 
 (**********************************************)
 (*                                            *)
@@ -67,7 +53,6 @@ doc <:doc< >>
 doc <:doc< @doc{@terms} >>
 
 doc <:doc< @docoff >>
-
 
 define unfoldRcrd : rcrd[t:t]{'a;'r} <--> rcrd{label[t:t];'a;'r}
 
@@ -92,7 +77,6 @@ define unfoldRecordI : record[n:t]{'A;'R} <--> record[n:t]{'A;x.'R}
 (* let foldRecordI = makeFoldC  <<record{'n;'A;'R}>> unfoldRecordI *)
 
 doc <:doc< @docoff >>
-
 
 define unfoldFunctionOrt : function_ort{x.'f['x];'R} <--> (all x:'R. ('x = 'f['x] in 'R))
 
@@ -128,7 +112,6 @@ doc <:doc<
    The following rule are derivable using the above definitions.
    @end[doc]
 >>
-
 
 (*** Typing ***)
 
@@ -180,7 +163,6 @@ let resource reduce +=
 let record_reduce = repeatC (higherC (firstC [unfoldRcrdS;record_beta1;record_beta_rw]))
 
 let record_reduceT = rwhAll record_reduce
-
 
 interactive record_eta {| intro [] |} 'A:
    sequent{ <H> >- 'r in record[n:t]{'A} } -->
@@ -314,7 +296,6 @@ let recordOrtT = funT (fun p ->
           tryT (dT 0 thenWT tryT (typeAssertT thenT nthHypT (-2)));
          ])
 
-
 (*
 let record_eqcd =
    firstT [record_eqcdS; recordEqualI; recordEqualL; recordEqualR] thenT rwh record_reduce 0
@@ -385,9 +366,7 @@ interactive recordEliminationI  'H :
    [main] sequent{ <H>; x:'A; r:'R; <J[rcrd[n:t]{'x;'r}]> >- 'C[rcrd[n:t]{'x;'r}]} -->
    sequent{ <H>; r:record[n:t]{'A;'R}; <J['r]> >- 'C['r]}
 
-
 doc <:doc< @docoff >>
-
 
 let recordS_elim = argfunT (fun n p ->
  let n = Sequent.get_pos_hyp_num p n in
@@ -505,7 +484,6 @@ let recordOrtIntroIT =
 
 let resource intro += (<<record_ort[n:t]{'a;record[m:t]{'A;'R}}>>,wrap_intro recordOrtIntroIT)
 
-
 (******************)
 (*  Tactics       *)
 (******************)
@@ -551,7 +529,6 @@ let recordOrtIntroT p =
    let x= maybe_new_vars1 p "x" in
       ((recordOrtIntroM x orelseT recordOrtIntro x) thenMT  rw reduce_eq_label 0) p
 
-
 let repeatRecordOrtIntroT = (untilFailT recordOrtIntroT) thenT tryT (recordOrtIntroST orelseT recordOrtIntro0T)
 
 let resource intro += (<<record_ort[n:t]{'a;record[m:t]{'A;'R}}>>, wrap_intro repeatRecordOrtIntroT)
@@ -570,7 +547,6 @@ let rec repeatRecordEliminationT n p =
       ((recordElimination j k
            thenMT tryT (repeatRecordEliminationT (n+1)))
           orelseT recordEliminationS n x) p
-
 
 let recordDefEliminationT n = repeatRecordEliminationT n thenAT tryT repeatRecordOrtIntroT
 
@@ -599,14 +575,11 @@ let record_exchangeC n =
          in
             aux n
 
-
-
 let t = <<'alpha>>
+
 (******************)
 (*  Display Forms *)
 (******************)
-
-
 
 declare subrecord{'A}
 declare self{'self}
@@ -624,9 +597,6 @@ dform field_df : except_mode [src] :: field[t:t]{'r} = field{'r;label[t:t]}
 dform field_self  : except_mode [src] ::  field[t:t]{self{'self}} = label[t:t]
 
 dform self_lab_df : except_mode [src] ::  self[n:t]{'x} = field[n:t]{self{'x}}
-
-
-
 
 declare "{"
 declare "}"
@@ -670,7 +640,6 @@ dform set_record_df : except_mode [src] :: subrecord{{self:{self2:'a | 'P2['self
 dform set_record_df : except_mode [src] :: subrecord{{self: record[n:t]{self2.'a['self2];'r} | 'P['self]}}
    =  subrecord{record[n:t]{self2.'a['self2];'r}} "|" 'P[self{'self2}]
 
-
 dform rcrdS_df : except_mode [src] :: rcrd[n:t]{'a}
    = "{" subrecord{rcrd[n:t]{'a}} "}"
 
@@ -692,15 +661,11 @@ dform recordL_df : except_mode [src] :: record[n:t]{'a;x.'r['x]}
 dform set_record_df : except_mode [src] ::  ({self:'a | 'P['self]})
    =  "{" subrecord{{self:'a | 'P['self]}} "}"
 
-
 dform functionOrt_df : except_mode [src] :: function_ort{x.'f['x];'R}
      =  slot{'f[math_bf{cdot}]} perp slot{'R}
 
 dform recordOrt_df : except_mode [src] :: record_ort[n:t]{'a;'R}
      =   rcrd[n:t]{'a} perp 'R
-
-
-
 
 (* TODO List:
  *  - I want to eliminate types like {x:A; R_1} isect R_2.
@@ -724,6 +689,5 @@ dform recordOrt_df : except_mode [src] :: record_ort[n:t]{'a;'R}
    e.g. <<{y:{x:{aaa:'r; bbb:'r['self]} | 'B['x]} | 'C['y]}>> is displayed as {aaa:r; bbb:r[self] | B[self] | C[y]}
    Not all cases of sets and records are implemented. Intersection and records?
 #
-
 
 *)

@@ -34,17 +34,10 @@ extends Itt_atom
 extends Itt_bool
 extends Itt_struct
 
-open Mp_resource
-
-open Tactic_type.Tacticals
 open Tactic_type.Conversionals
 
 open Base_meta
 open Dtactic
-
-open Itt_equal
-open Itt_bool
-open Itt_struct
 
 (************************************************************************
  * SYNTAX                                                               *

@@ -44,12 +44,10 @@ doc <:doc<
 extends M_ir
 doc <:doc< @docoff >>
 
-open M_ir
 open M_util
 
 open Refiner.Refiner.Term
 
-open Mp_resource
 open Term_match_table
 
 open Tactic_type.Tacticals

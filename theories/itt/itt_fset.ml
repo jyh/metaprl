@@ -42,29 +42,22 @@ extends Itt_quotient
 extends Itt_list
 extends Itt_list2
 
-open Refiner.Refiner.TermType
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
 open Refiner.Refiner.RefineError
-open Mp_resource
 open Lm_debug
 open Printf
 
 open Tactic_type
 open Tactic_type.Tacticals
-open Var
 
 open Dtactic
-open Auto_tactic
 open Typeinf
 open Top_conversionals
 
-open Itt_equal
 open Itt_bool
 open Itt_rfun
 open Itt_list
-open Itt_struct
-open Itt_logic
 open Itt_quotient
 
 (************************************************************************

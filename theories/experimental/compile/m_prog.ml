@@ -39,27 +39,14 @@ doc <:doc<
 extends M_ir
 doc <:doc< @docoff >>
 
-open M_ir
 open M_util
 
-open Lm_debug
-open Printf
-
-open Refiner.Refiner.TermType
-open Refiner.Refiner.Term
-open Refiner.Refiner.TermMan
-open Refiner.Refiner.TermAddr
 open Refiner.Refiner.RefineError
 
-open Mp_resource
 open Term_match_table
 
-open Tactic_type.Tacticals
 open Tactic_type.Conversionals
 open Tactic_type.Sequent
-
-open Var
-open Perv
 
 (************************************************************************
  * Resource.

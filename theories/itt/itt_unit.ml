@@ -52,23 +52,14 @@ extends Itt_struct
 extends Itt_squiggle
 doc <:doc< @docoff >>
 
-open Printf
 open Lm_debug
-open Tactic_type.Sequent
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
-open Refiner.Refiner.TermMan
-open Refiner.Refiner.RefineError
-open Mp_resource
-
-open Tactic_type
-open Tactic_type.Tacticals
 
 open Dtactic
 
 open Itt_equal
 open Itt_struct
-open Itt_squiggle
 open Itt_squash
 
 (*

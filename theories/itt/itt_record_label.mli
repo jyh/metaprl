@@ -2,12 +2,8 @@
 
 extends Itt_record_label0
 
-
 open Refiner.Refiner.Term
-open Tactic_type.Tacticals
-open Tactic_type.Sequent
 open Tactic_type.Conversionals
-
 
 declare label[t:t]
 
@@ -20,4 +16,3 @@ topval decideEqLabelT : term -> term -> tactic
 topval not_eq_labelT : tactic
 
 topval eq_labelIntroT : tactic
-

@@ -120,31 +120,19 @@ extends Itt_struct
 extends Itt_subtype
 doc docoff
 
-open Printf
 open Lm_symbol
 open Lm_debug
-open Lm_string_set
-open Refiner.Refiner
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
-open Refiner.Refiner.TermMan
 open Refiner.Refiner.TermSubst
-open Refiner.Refiner.RefineError
-open Mp_resource
 open Unify_mm
 
-open Var
-open Tactic_type
-open Tactic_type.Tacticals
-
-open Typeinf
 open Dtactic
 open Top_conversionals
 
 open Itt_equal
 open Itt_subtype
 open Itt_struct
-open Itt_rfun
 
 (*
  * Show that the file is loading.

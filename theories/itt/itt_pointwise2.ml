@@ -12,29 +12,11 @@ extends Itt_bunion
 extends Itt_pointwise
 doc <:doc< @docoff >>
 
-open Printf
 open Lm_debug
-open Refiner.Refiner
-open Refiner.Refiner.Term
-open Refiner.Refiner.TermOp
-open Refiner.Refiner.TermMan
-open Refiner.Refiner.TermSubst
-open Refiner.Refiner.Refine
-open Refiner.Refiner.RefineError
-open Mp_resource
-
-open Tactic_type
-open Tactic_type.Tacticals
-open Var
-open Mptop
-
-open Auto_tactic
 
 open Dtactic
 
-open Itt_equal
 open Itt_struct
-open Itt_quotient
 
 (*
  * Show that the file is loading.
@@ -55,14 +37,12 @@ doc <:doc<
  @end[doc]
 >>
 
-
 interactive quotientElimination2 {| elim [ThinOption thinT] |} 'H :
    [wf] sequent { <H>; a: quot x, y: 'A // 'E['x; 'y]; <J['a]> >- "type"{'T['a]} } -->
    [main] sequent { <H>; a: quot x, y: 'A // 'E['x; 'y];
              v: 'A; w: 'A; z: 'E['v; 'w]; <J['v]> >- 's['v] = 't['w] in 'T['v]
            } -->
    sequent { <H>; a: quot x, y: 'A // 'E['x; 'y]; <J['a]> >- 's['a] = 't['a] in 'T['a] }
-
 
 interactive tunionElimination2 {| elim [ThinOption thinT] |} 'H :
    sequent { <H>; z: tunion{'A; y. 'B['y]};  w: 'A; x: 'B['w]; <J['x]> >- squash{'C['x]}  } -->
@@ -72,6 +52,5 @@ interactive bunionElimination2 {| elim [ThinOption thinT] |} 'H :
    [main] sequent { <H>; x: 'A; <J['x]> >- squash{'C['x]} } -->
    [main] sequent { <H>; x: 'B; <J['x]> >- squash{'C['x]} } -->
    sequent { <H>; x: 'A bunion 'B; <J['x]> >- squash{'C['x]} }
-
 
 doc <:doc< @docoff >>

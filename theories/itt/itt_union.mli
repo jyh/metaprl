@@ -39,8 +39,6 @@ open Lm_symbol
 
 open Refiner.Refiner.Term
 
-open Tactic_type.Tacticals
-
 (************************************************************************
  * TERMS                                                                *
  ************************************************************************)
@@ -94,7 +92,6 @@ rule unionEquality :
    sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
    sequent { <H> >- 'B1 = 'B2 in univ[i:l] } -->
    sequent { <H> >- 'A1 + 'B1 = 'A2 + 'B2 in univ[i:l] }
-
 
 (*
  * Typehood.

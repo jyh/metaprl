@@ -9,8 +9,6 @@ extends Itt_bool
 extends Itt_logic
 extends Itt_theory
 
-open Refiner.Refiner.Term
-open Tactic_type.Tacticals
 open Tactic_type.Conversionals
 
 declare boolset

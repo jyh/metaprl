@@ -32,9 +32,6 @@ doc <:doc<
 extends M_util
 doc <:doc< @docoff >>
 
-open Refiner.Refiner.Term
-open Refiner.Refiner.TermOp
-
 doc <:doc< 
    @begin[doc]
    Operators.

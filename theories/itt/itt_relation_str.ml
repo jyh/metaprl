@@ -52,30 +52,11 @@ extends Itt_bisect
 extends Itt_comment
 doc <:doc< @docoff >>
 
-open Refiner.Refiner.TermType
-open Refiner.Refiner.Term
-open Refiner.Refiner.TermOp
-open Refiner.Refiner.TermAddr
-open Refiner.Refiner.TermMan
-open Refiner.Refiner.TermSubst
-open Refiner.Refiner.RefineError
-open Mp_resource
-
-open Tactic_type
 open Tactic_type.Tacticals
 open Var
 open Top_conversionals
 
 open Dtactic
-open Auto_tactic
-
-open Itt_decidable
-open Itt_record
-open Itt_logic
-open Itt_bisect
-
-open Itt_comment
-
 
 let dByDefT  unfold n = rw unfold n thenT dT n
 let dByRecDefT term unfold n = dByDefT unfold n thenT rwhAll (makeFoldC term unfold)
@@ -85,16 +66,11 @@ let soft_into term unfold = term, (dByDefT unfold 0)
 let softrec_elim term unfold = term, (dByRecDefT term unfold)
 let softrec_into term unfold = term, (dByRecDefT term unfold 0)
 
-
-
 let reduceByDefC unfold =   unfold thenC reduceTopC
 let reduceByRecDefC term unfold = reduceByDefC unfold thenC higherC (makeFoldC term unfold)
 
 let soft_reduce term unfold  = term, (reduceByDefC unfold)
 let softrec_reduce term unfold  = term, (reduceByRecDefC term unfold)
-
-
-
 
 doc <:doc< 
    @begin[doc]
@@ -105,9 +81,6 @@ doc <:doc<
      $$<<label["<":t]>>  : <<label["car":t]-> label["car":t] -> bool>>$$
    @end[doc]
 >>
-
-
-
 
 define order1 : order[i:l] <-->
     { car : univ[i:l];
@@ -124,11 +97,9 @@ define transitiveOrder1 :  TransitiveOrder[i:l] <--> { self : orderSig[i:l] | al
 
 define partialOrder1 : PartialOrder[i:l] <--> bisect{ IrreflexiveOrder[i:l]; TransitiveOrder[i:l]}
 
-
 dform iorder_df : except_mode[src] :: IrreflexiveOrder[i:l] = `"IrreflexiveOrder" sub{slot[i:l]}
 dform torder_df : except_mode[src] :: TransitiveOrder[i:l] = `"TransitiveOrder" sub{slot[i:l]}
 dform porder_df : except_mode[src] :: PartialOrder[i:l] = `"PartialOrder" sub{slot[i:l]}
-
 
 define order1 : order[i:l] <-->  { self : PartialOrder[i:l] | all x:^car.all y:^car. ("assert"{.'x ^< 'y} or  "assert"{.'y ^< 'x} or 'x='y in ^car) }
 *)
@@ -157,11 +128,9 @@ define decEquality : DecEquality[i:l] <-->
 
 doc <:doc< @docoff >>
 
-
 dform order_df : except_mode[src] :: order[i:l] = `"Order" sub{slot[i:l]}
 
 dform deq_df : except_mode[src] ::  DecEquality[i:l] = `"DecEquality" sub{slot[i:l]}
-
 
 let fold_less = makeFoldC <<less{'self; 'a;'b}>> less
 (*
@@ -170,7 +139,6 @@ let irreflexiveOrder = irreflexiveOrder1 thenC higherC fold_less
 let transitiveOrder = transitiveOrder1 thenC higherC fold_less
 *)
 let order = order1 thenC higherC fold_less
-
 
 let resource elim += soft_elim <<order[i:l]>> order
 
@@ -181,7 +149,6 @@ interactive less_wf  {| intro[] |} order[i:l] :
    [wf] sequent { <H> >- 'x in 'ord^car }  -->
    [wf] sequent { <H> >- 'y in 'ord^car }  -->
    sequent { <H> >- 'x <['ord] 'y in bool}
-
 
 define compare: compare{'self; 'a;'b; 'less_case; 'equal_case; 'greater_case} <--> if 'a ^< 'b then 'less_case else if 'b ^< 'a then 'greater_case else 'equal_case
 
@@ -227,7 +194,6 @@ interactive dec_equalaty  order[i:l] :
    sequent { <H> >- 'x in 'ord^car }  -->
    sequent { <H> >- 'y in 'ord^car }  -->
    sequent { <H> >-  decidable{.'x='y in 'ord^car} }
-
 
 doc <:doc< @begin[doc]
 @modsection{Example: integers}

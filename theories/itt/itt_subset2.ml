@@ -52,34 +52,9 @@ extends Itt_ext_equal
 
 doc <:doc< @docoff >>
 
-open Printf
 open Lm_debug
-open Refiner.Refiner.TermType
-open Refiner.Refiner.Term
-open Refiner.Refiner.TermOp
-open Refiner.Refiner.TermAddr
-open Refiner.Refiner.TermMan
-open Refiner.Refiner.TermSubst
-open Refiner.Refiner.Refine
-open Refiner.Refiner.RefineError
-open Mp_resource
-open Simple_print
-
-open Tactic_type
-open Tactic_type.Tacticals
-open Tactic_type.Sequent
-open Tactic_type.Conversionals
-open Mptop
-open Var
 
 open Dtactic
-open Auto_tactic
-
-open Itt_equal
-open Itt_struct
-open Itt_logic
-open Itt_subtype
-open Itt_squash
 
     
 (*
@@ -87,8 +62,6 @@ open Itt_squash
  *)
 let _ =
    show_loading "Loading Itt_subset2%t"
-
-
 
 doc <:doc< 
  @begin[doc]
@@ -98,7 +71,6 @@ doc <:doc<
   <<ext_equal{'A; {x:'B | 'P['x]}}>>.
  @end[doc]
 >>
-
 
 interactive set_subset {| intro [] |}  :
    [wf] sequent { <H> >- "type"{'A} } -->
@@ -114,7 +86,6 @@ interactive subset_iff  :
    [wf] sequent { <H> >- 'B in univ[i:l] } -->
    sequent { <H> >- iff{'A subset 'B; exst P:'B -> univ[i:l]. ext_equal{{x:'B| 'P 'x}; 'A}} }
 
-
 doc <:doc< 
  @begin[doc]
  @modsection{Lattice}
@@ -125,25 +96,19 @@ doc <:doc<
  @end[doc]
 >>
 
-
-
 interactive subset_ref {| intro [] |}  :
    [wf] sequent { <H> >- "type"{'A} } -->
    sequent { <H> >- 'A subset 'A }
-
 
 interactive subset_trans 'B:
    sequent { <H> >- 'A subset 'B } -->
    sequent { <H> >- 'B subset 'C } -->
    sequent { <H> >- 'A subset 'C }
-
  
 interactive subset_exact:
    sequent { <H> >- 'A subset 'B } -->
    sequent { <H> >- 'B subset 'A } -->
    sequent { <H> >- ext_equal{'A;'B} }
-
-
 
 doc <:doc< 
    @begin[doc]
@@ -190,7 +155,6 @@ interactive subset_bunion {| intro[] |}:
    sequent { <H> >-'A subset 'T}  -->
    sequent { <H> >-'B subset 'T}  -->
    sequent { <H> >- 'A bunion 'B subset 'T }
-
 
 doc <:doc< 
    @begin[doc]

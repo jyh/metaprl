@@ -67,19 +67,14 @@ extends Itt_prod
 extends Itt_struct
 doc <:doc< @docoff >>
 
-open Printf
 open Lm_symbol
 open Lm_debug
-open Lm_string_set
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
-open Refiner.Refiner.TermSubst
-open Mp_resource
 
 open Dtactic
 
 open Itt_equal
-open Itt_void
 open Itt_struct
 open Itt_rfun
 

@@ -35,8 +35,6 @@ extends Itt_equal
 extends Itt_dprod
 extends Itt_struct
 
-open Tactic_type.Tacticals
-
 (*
  * The independent product is defined as a dependent product.
  *)

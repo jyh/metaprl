@@ -32,9 +32,7 @@
  * jyh@cs.cornell.edu
  *)
 
-open Printf
 open Lm_debug
-open Refiner.Refiner.Term
 
 extends Itt_equal
 extends Itt_squash
@@ -45,7 +43,6 @@ open Itt_squash
 open Dtactic
 open Tactic_type.Tacticals
 open Tactic_type.Conversionals
-
 
 (*
  * Show that the file is loading.
@@ -62,17 +59,14 @@ define unfoldExtEqual : ext_equal{'A; 'B} <--> 'A subtype 'B & 'B subtype 'A
 
 dform extEqual_df : ext_equal{'A; 'B} =  'A `" =" sube `" " 'B 
 
-   
 interactive extEqualMember {|squash; intro[] |}: 
    sequent{ <H> >- ext_equal{'A;'B}} -->
    sequent{ <H> >- (it,it) in ext_equal{'A;'B} }
-
 
 let resource intro +=
    [<<ext_equal{'A; 'B}>>, wrap_intro (rw unfoldExtEqual 0 thenT dT 0);
     <<"type"{ext_equal{'A; 'B}}>>, wrap_intro (rw unfoldExtEqual 0 thenT dT 0 thenT dT 0)
    ]
-
 
 let resource elim += (<<ext_equal{'A; 'B}>>, (fun n -> rw unfoldExtEqual n thenT dT n))
                         

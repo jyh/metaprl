@@ -81,7 +81,6 @@ extends Itt_equal
 extends Itt_struct
 doc <:doc< @docoff >>
 
-open Printf
 open Lm_debug
 open Refiner.Refiner
 open TermType
@@ -92,12 +91,10 @@ open TermMan
 open TermMeta
 open RefineError
 open Term_stable
-open Mp_resource
 
 open Tactic_type
 open Tactic_type.Tacticals
 open Tactic_type.Sequent
-open Var
 
 open Dtactic
 open Auto_tactic

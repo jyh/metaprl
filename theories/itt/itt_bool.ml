@@ -58,25 +58,18 @@ doc <:doc< @docoff >>
 open Refiner.Refiner.TermType
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
-open Refiner.Refiner.TermAddr
-open Refiner.Refiner.TermMan
 open Refiner.Refiner.TermSubst
 open Refiner.Refiner.RefineError
-open Mp_resource
 
 open Tactic_type
 open Tactic_type.Tacticals
 open Var
-open Perv
 
 open Dtactic
-open Auto_tactic
 open Top_conversionals
 
 open Itt_equal
-open Itt_struct
 open Itt_squash
-open Itt_logic
 
 (************************************************************************
  * TERMS                                                                *

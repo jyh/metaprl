@@ -44,7 +44,6 @@ extends Itt_struct
 open Refiner.Refiner.Term
 
 open Tactic_type
-open Tactic_type.Sequent
 open Tactic_type.Tacticals
 open Mp_resource
 
@@ -53,7 +52,6 @@ declare squash{'A}
 (************************************************************************
  * RULES                                                                *
  ************************************************************************)
-
 
 rule squashEquality :
    sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->

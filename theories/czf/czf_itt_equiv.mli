@@ -34,37 +34,10 @@ extends Czf_itt_set
 extends Czf_itt_member
 extends Czf_itt_pair
 
-open Itt_equal
-
-open Printf
-open Lm_debug
 open Lm_symbol
-open Refiner.Refiner.TermType
-open Refiner.Refiner.Term
-open Refiner.Refiner.TermOp
-open Refiner.Refiner.TermAddr
-open Refiner.Refiner.TermMan
-open Refiner.Refiner.TermSubst
-open Refiner.Refiner.Refine
 open Refiner.Refiner.RefineError
-open Mp_resource
-open Simple_print
 
-open Tactic_type
-open Tactic_type.Tacticals
-open Tactic_type.Sequent
 open Tactic_type.Conversionals
-open Mptop
-open Var
-
-open Dtactic
-open Auto_tactic
-
-open Itt_equal
-open Itt_rfun
-open Itt_struct
-
-open Czf_itt_set
 
 (************************************************************************
  * TERMS                                                                *

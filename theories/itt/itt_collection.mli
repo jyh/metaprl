@@ -4,14 +4,8 @@ extends Itt_esquash
 extends Itt_quotient
 extends Itt_logic
 
-open Printf
-open Lm_debug
-open Refiner.Refiner
 open Refiner.Refiner.Term
-open Mp_resource
 
-open Var
-open Tactic_type.Tacticals
 open Tactic_type.Conversionals
 
 topval colEqSymT : tactic

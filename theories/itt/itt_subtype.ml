@@ -61,18 +61,12 @@ extends Itt_struct
 extends Itt_squash
 doc <:doc< @docoff >>
 
-open Printf
 open Lm_debug
-open Refiner.Refiner
 open Refiner.Refiner.Term
-open Refiner.Refiner.TermSubst
 open Refiner.Refiner.TermOp
-open Refiner.Refiner.TermMan
 open Refiner.Refiner.RefineError
 open Mp_resource
 open Term_dtable
-
-open Var
 
 open Tactic_type
 open Tactic_type.Tacticals

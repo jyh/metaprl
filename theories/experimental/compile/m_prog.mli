@@ -26,11 +26,8 @@
  *)
 extends M_ir
 
-open Mp_resource
-
 open Refiner.Refiner.Term
 
-open Tactic_type.Tacticals
 open Tactic_type.Conversionals
 
 (*

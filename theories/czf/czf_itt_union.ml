@@ -79,15 +79,7 @@ extends Czf_itt_dexists
 extends Czf_itt_subset
 doc <:doc< @docoff >>
 
-open Printf
 open Lm_debug
-
-open Refiner.Refiner.RefineError
-open Mp_resource
-
-open Tactic_type.Sequent
-open Tactic_type.Tacticals
-open Var
 
 open Dtactic
 open Top_conversionals

@@ -30,9 +30,6 @@
  * jyh@cs.cornell.edu
  *)
 
-open Refiner.Refiner.TermType
-open Refiner.Refiner.TermSubst
-
 open Tactic_type.Tacticals
 
 topval resolveT : int -> tactic

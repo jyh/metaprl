@@ -28,8 +28,6 @@ extends M_ir
 extends M_arith
 extends M_x86_asm
 
-open Base_meta
-
 open Top_conversionals
 
 (*

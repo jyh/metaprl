@@ -56,9 +56,6 @@ open Refiner.Refiner.TermType
 open Refiner.Refiner.Term
 open Refiner.Refiner.RefineError
 
-open Tactic_type.Sequent
-open Var
-
 open Dtactic
 
 open Itt_logic

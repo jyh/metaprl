@@ -35,9 +35,7 @@ extends Itt_equal
 
 open Refiner.Refiner.Term
 
-open Tactic_type.Tacticals
 open Tactic_type.Sequent
-
 
 (*
  * H; x: A; J >- A ext x

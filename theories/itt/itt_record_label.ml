@@ -1,32 +1,17 @@
 extends Itt_record_label0
 
 open Base_meta
-open Itt_int_ext
 open Itt_struct
-open Itt_struct2
 open Dtactic
 open Tactic_type.Conversionals
-open Var
-open Tactic_type
 open Tactic_type.Tacticals
-open Itt_bool
-open Itt_record_label0
 
-open Printf
-open Lm_debug
 open Refiner.Refiner
 open Refiner.Refiner.Term
-open Refiner.Refiner.TermMan
-open Refiner.Refiner.RefineError
-open Rformat
-open Mp_resource
-
-open Tactic_type
 
 open Dtactic
 open Auto_tactic
 open Itt_equal
-
 
 (******************)
 (*  Defenitions   *)
@@ -46,8 +31,6 @@ let is_label_term = TermOp.is_string_term label_opname
 let dest_label = TermOp.dest_string_term label_opname
 let mk_label_term = TermOp.mk_string_term label_opname
 
-
-
 (**** equality ****)
 
 define unfold_eq_label : eq_label[x:t,y:t]{'A;'B} <-->  meta_eq[x:t, y:t]{'A; 'B}
@@ -55,7 +38,6 @@ define unfold_eq_label : eq_label[x:t,y:t]{'A;'B} <-->  meta_eq[x:t, y:t]{'A; 'B
 (******************)
 (*   Rules        *)
 (******************)
-
 
 prim reduce_eq_label_true {| intro [] |} :
    sequent{ <H> >- label[x:t] = label[y:t]  in label} -->
@@ -66,7 +48,6 @@ prim reduce_eq_label_false {| intro [] |} :
    sequent{ <H> >- not{.label[x:t] = label[y:t]  in label}} -->
    sequent{ <H> >- eq_label[x:t,y:t]{'A;'B} ~ 'B}
       = it
-
 
 interactive_rw reduce_eq_label_true_rw :
    (label[x:t] = label[y:t]  in label) -->
@@ -119,7 +100,6 @@ let decideEqLabelT x y =
               tryT (rwhAll reduce_eq_label_true_rw thenAT nthHypT (-1));
               tryT (rwhAll reduce_eq_label_false_rw thenAT nthHypT (-1));
              ]
-
 
 (******************)
 (*  Display Forms *)

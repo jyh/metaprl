@@ -37,7 +37,6 @@ extends Itt_set
 extends Itt_decidable
 
 open Refiner.Refiner.Term
-open Tactic_type.Tacticals
 open Tactic_type.Conversionals
 
 (************************************************************************
@@ -70,7 +69,6 @@ define unfold_assert : "assert"{'t} <--> ('t = btrue in bool)
  *)
 rewrite reduce_ifthenelse_true : ifthenelse{btrue; 'e1; 'e2} <--> 'e1
 rewrite reduce_ifthenelse_false : ifthenelse{bfalse; 'e1; 'e2} <--> 'e2
-
 
 topval fold_bool : conv
 topval fold_btrue : conv

@@ -65,19 +65,12 @@ extends Itt_struct
 extends Itt_decidable
 doc <:doc< @docoff >>
 
-open Printf
 open Lm_debug
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
-open Refiner.Refiner.TermSubst
-open Refiner.Refiner.RefineError
-open Rformat
-open Mp_resource
 
-open Var
 open Tactic_type
 open Tactic_type.Tacticals
-open Tactic_type.Sequent
 open Top_conversionals
 
 open Base_meta

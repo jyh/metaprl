@@ -40,9 +40,6 @@ open Refiner.Refiner.Term
 open Refiner.Refiner.TermType
 open Refiner.Refiner.RefineError
 
-open Mp_resource
-open Term_match_table
-
 open Tactic_type.Conversionals
 
 (*

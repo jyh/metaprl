@@ -5,30 +5,7 @@ extends Itt_srec
 extends Itt_bisect
 extends Itt_struct
 
-open Printf
-open Lm_debug
-open Refiner.Refiner
-open Refiner.Refiner.Term
-open Refiner.Refiner.TermOp
-open Refiner.Refiner.TermMan
-open Refiner.Refiner.TermSubst
-open Refiner.Refiner.RefineError
-open Mp_resource
-
-open Var
-open Tactic_type
-open Tactic_type.Tacticals
-open Dtactic
 open Tactic_type.Conversionals
-open Top_conversionals
-
-open Auto_tactic
-
-open Itt_record
-open Itt_bisect
-open Itt_srec
-open Itt_union
-open Itt_struct
 
 declare Node{'T}
 

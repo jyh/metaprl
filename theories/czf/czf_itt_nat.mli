@@ -36,7 +36,6 @@ extends Czf_itt_empty
 
 open Refiner.Refiner.Term
 
-open Tactic_type.Tacticals
 open Tactic_type.Conversionals
 
 (************************************************************************

@@ -26,7 +26,6 @@
 extends Czf_itt_subset
 extends Czf_itt_rel
 
-open Refiner.Refiner.TermType
 open Tactic_type.Tacticals
 
 declare power{'s1; 's2}

@@ -35,11 +35,9 @@ open Printf
 open Lm_debug
 open Lm_symbol
 open Lm_string_set
-open Lm_set_sig
 
 open Refiner.Refiner.TermType
 open Refiner.Refiner.Term
-open Refiner.Refiner.TermShape
 
 let debug_cache =
    create_debug (**)

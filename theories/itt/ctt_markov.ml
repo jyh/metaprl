@@ -3,34 +3,15 @@ extends Itt_nat
 
 doc <:doc< @docoff >>
 
-open Printf
 open Lm_debug
-open Refiner.Refiner
-open Term
-open TermOp
-open TermMan
-open TermSubst
-open RefineError
-open Term_stable
-open Mp_resource
-
-open Tactic_type
-open Tactic_type.Tacticals
-open Tactic_type.Sequent
-open Var
 
 open Dtactic
-
-open Itt_struct
-open Itt_equal
-open Itt_nat
 
 (*
  * Show that the file is loading.
  *)
 let _ =
    show_loading "Loading Ctt_markov%t"
-
 
 interactive squash_stable1 'H 't :
    sequent { <H>; x:'T >- 't in 'T} -->
@@ -150,17 +131,14 @@ interactive markovPrinciple :
 
    (* Proof uses f =  fix{f.lambda{n.decide{('x 'n);a.('n,'a);b.'f ('n+@1)}}} *)
 
-
 interactive squash_ex4m :
    [wf] sequent { <H> >- "type"{'A} } -->
    [wf] sequent { <H> >- "type"{'B} } -->
    sequent { <H> >- (squash{'A} => squash{'B}) => squash{.'A => 'B} }
 
-
 interactive sqst_ex6 :
    [wf] sequent { <H> >- "type"{'A} } -->
    sequent { <H> >- sqst{'A} => not{not{'A}} =>'A }
-
 
 define unfold_delta: delta{'A} <--> (quot x,y:'A//"true")
 
@@ -174,6 +152,3 @@ interactive delta1 :
 interactive delta2 :
    [wf] sequent { <H> >- "type"{'A} } -->
    sequent { <H> >- (delta{'A} => squash{'A}) }
-
-
-

@@ -4,23 +4,13 @@ extends Itt_nat
 extends Itt_struct2
 extends Itt_struct3
 
-open Base_meta
-open Itt_int_ext
 open Itt_struct
-open Itt_struct3
 open Dtactic
-open Var
-open Tactic_type
-open Tactic_type.Tacticals
 open Top_conversionals
-open Itt_bool
-open Itt_struct2
-
 
 (******************)
 (*  Defenitions   *)
 (******************)
-
 
 define unfold_label : label <--> nat
 
@@ -83,8 +73,6 @@ doc docoff
 (******************)
 (*   Tactic       *)
 (******************)
-
-
 
 (******************)
 (*  Display Forms *)

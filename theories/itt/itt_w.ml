@@ -67,19 +67,8 @@ extends Itt_struct2
 extends Itt_inv_typing
 doc <:doc< @docoff >>
 
-open Opname
-open Lm_symbol
-open Refiner.Refiner
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
-open Refiner.Refiner.TermMan
-open Refiner.Refiner.TermSubst
-open Refiner.Refiner.RefineError
-open Mp_resource
-
-open Tactic_type
-open Tactic_type.Tacticals
-open Var
 
 open Dtactic
 open Top_conversionals

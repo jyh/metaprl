@@ -32,23 +32,18 @@
 
 extends Czf_itt_sep
 
-open Printf
 open Lm_debug
 
 open Refiner.Refiner.Term
-open Refiner.Refiner.TermSubst
 open Refiner.Refiner.TermMan
-open Refiner.Refiner.RefineError
 
 open Tactic_type
 open Tactic_type.Tacticals
-open Tactic_type.Sequent
 open Var
 
 open Dtactic
 
 open Itt_equal
-open Itt_struct
 open Itt_rfun
 open Itt_dprod
 

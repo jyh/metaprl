@@ -74,28 +74,9 @@ extends Czf_itt_abel_group
 extends Czf_itt_inv_image
 doc <:doc< @docoff >>
 
-open Printf
 open Lm_debug
-open Refiner.Refiner.TermType
-open Refiner.Refiner.Term
-open Refiner.Refiner.TermOp
-open Refiner.Refiner.TermAddr
-open Refiner.Refiner.TermMan
-open Refiner.Refiner.TermSubst
-open Refiner.Refiner.Refine
-open Refiner.Refiner.RefineError
-open Mp_resource
-open Simple_print
-
-open Tactic_type
-open Tactic_type.Tacticals
-open Tactic_type.Sequent
-open Tactic_type.Conversionals
-open Mptop
-open Var
 
 open Dtactic
-open Auto_tactic
 
 let _ =
    show_loading "Loading Czf_itt_hom%t"

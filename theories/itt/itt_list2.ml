@@ -48,24 +48,11 @@ extends Itt_int_ext
 extends Itt_int_arith
 doc <:doc< @docoff >>
 
-open Refiner.Refiner.TermType
-open Refiner.Refiner.Term
-open Refiner.Refiner.TermOp
-open Refiner.Refiner.RefineError
-open Mp_resource
-
-open Tactic_type
-open Tactic_type.Tacticals
-open Var
-
 open Dtactic
-open Typeinf
 open Top_conversionals
 
 open Itt_equal
-open Itt_list
 open Itt_rfun
-open Itt_dprod
 
 (************************************************************************
  * SYNTAX                                                               *

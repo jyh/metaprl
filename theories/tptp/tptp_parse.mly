@@ -3,7 +3,6 @@
  */
 
 %{
-open Refiner.Refiner.RefineError
 
 open Tptp_type
 %}

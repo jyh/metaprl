@@ -549,8 +549,6 @@ be somewhat simplified by using the @code{open} statements for the
 @code{Printf} and @code{Fset} modules.
 
 @begin[verbatim]
-open Printf
-open Fset
 
 let loop () =
    let set = ref empty in

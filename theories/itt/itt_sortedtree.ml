@@ -14,26 +14,11 @@ extends Itt_logic
 
 doc <:doc< @docoff >>
 
-open Printf
 open Lm_debug
-open Refiner.Refiner
-open Refiner.Refiner.Term
-open Refiner.Refiner.TermOp
-open Refiner.Refiner.TermMan
-open Refiner.Refiner.TermSubst
-open Refiner.Refiner.RefineError
-open Mp_resource
 
-open Var
-open Tactic_type
 open Tactic_type.Tacticals
 open Dtactic
 open Top_conversionals
-open Auto_tactic
-
-open Itt_bintree
-
-
 
 let dByDefT unfold n = rwh unfold n thenT dT n
 let dByRecDefT term unfold n = dByDefT unfold n thenT rwhAll (makeFoldC term unfold)
@@ -43,16 +28,11 @@ let soft_intro term unfold = term, wrap_intro (dByDefT unfold 0)
 let softrec_elim term unfold = term, (dByRecDefT term unfold)
 let softrec_intro term unfold = term, wrap_intro (dByRecDefT term unfold 0)
 
-
-
 let reduceByDefC unfold =   unfold thenC reduceTopC
 let reduceByRecDefC term unfold = reduceByDefC unfold thenC higherC (makeFoldC term unfold)
 
 let soft_reduce term unfold  = term, (reduceByDefC unfold)
 let softrec_reduce term unfold  = term, (reduceByRecDefC term unfold)
-
-
-
 
 (*
  * Show that the file is loading.
@@ -60,18 +40,15 @@ let softrec_reduce term unfold  = term, (reduceByRecDefC term unfold)
 let _ =
    show_loading "Loading Itt_binatatree%t"
 
-
 doc <:doc< 
    @begin[doc]
    @terms
    @end[doc]
 >>
 
-
 define dataNode: DataNode{'D;data.'N['data]} <--> record["data":t]{'D;data.'N['data]}
 
 dform dn_df : except_mode[src] ::   DataNode{'D;data.'N} = `"DataNode{" 'data ":" 'D `". " 'N `"}"
-
 
 define sortedTree: SortedTree {'O;data.'A['data]} <-->
                      BinTree{ DataNode{.'O^car; data.'A['data]} ; self.
@@ -89,7 +66,6 @@ let resource intro += [ <<tree{'nd} in SortedTree{'O; data.'A['data]}>>,  wrap_i
                        soft_intro  <<'t in DataNode{'D;data.'N['data]}>> (higherC dataNode)
                      ]
 
-
 interactive sortedtree_wf {| intro[] |} univ[i:l] :
    sequent{ <H> >- 'O in order[i:l] } -->
    sequent{ <H>; d:'O^car >- "type"{'A['d]}  } -->
@@ -100,11 +76,9 @@ interactive emptytree_is_sorted {| intro[] |} univ[i:l] :
    sequent{ <H>; d:'O^car >- "type"{'A['d]}  } -->
    sequent{ <H> >- emptytree in SortedTree{'O; d.'A['d]} }
 
-
 interactive sortedtree_subtype {| intro[] |}  univ[i:l]:
    sequent{ <H> >- 'O in order[i:l] } -->
    sequent{ <H> >- SortedTree{'O; d.'A['d]}  subtype  DataTree{.'O^car} }
-
 
 (* find an element a in the tree, return a subtree with the root a if find one, or empty tree otherwise *)
 define find: find{'a; 't; 'O} <-->
@@ -139,8 +113,6 @@ dform is_in_tree_df : except_mode[src] ::  in_tree{'a;'t; 'O} = tt["is_it_tree("
 
 let resource reduce += [softrec_reduce  <<is_in_tree{'a; 't; 'O}>> is_in_tree]
 
-
-
 interactive is_in_tree_wf {| intro[] |}  univ[i:l]:
    sequent{ <H> >- 'O in order[i:l] } -->
    sequent{ <H> >- 'a in 'O^car } -->
@@ -152,8 +124,6 @@ interactive is_in_tree_correct  univ[i:l]:
    sequent{ <H> >- 'a in 'O^car } -->
    sequent{ <H> >- 't in SortedTree{'O; d.top} } -->
    sequent{ <H> >- iff{"assert"{is_in_tree {'a; 't; 'O}};  in_tree {'a; 't; .'O^car}} }
-
-
 
 define insert: insert{'nd; 't; 'O} <-->
       tree_ind{'t;

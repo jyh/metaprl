@@ -54,10 +54,7 @@ extends Czf_itt_comment
 open Lm_symbol
 open Refiner.Refiner.Term
 
-open Tactic_type.Tacticals
 open Tactic_type.Conversionals
-
-open Auto_tactic
 
 (************************************************************************
  * TERMS                                                                *

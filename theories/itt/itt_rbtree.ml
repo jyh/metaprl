@@ -18,26 +18,13 @@ extends Itt_nat
 
 doc <:doc< @docoff >>
 
-open Printf
 open Lm_debug
-open Refiner.Refiner
-open Refiner.Refiner.Term
-open Refiner.Refiner.TermOp
-open Refiner.Refiner.TermMan
-open Refiner.Refiner.TermSubst
-open Refiner.Refiner.RefineError
-open Mp_resource
 
-open Var
-open Tactic_type
 open Tactic_type.Tacticals
 open Dtactic
 open Top_conversionals
-open Auto_tactic
 
 open Itt_bintree
-open Itt_sortedtree
-open Itt_relation_str
 
 let dByDefT  unfold n = rw unfold n thenT dT n
 let dByRecDefT term unfold n = dByDefT unfold n thenT rwhAll (makeFoldC term unfold)

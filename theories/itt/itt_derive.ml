@@ -38,12 +38,9 @@ extends Itt_logic
 open Refiner.Refiner.TermType
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermSubst
-open Refiner.Refiner.TermMan
 open Refiner.Refiner.RefineError
-open Mp_resource
 
 open Var
-open Mptop
 open Typeinf
 open Lm_symbol
 
@@ -52,7 +49,6 @@ open Tactic_type.Tacticals
 
 open Itt_rfun
 open Itt_logic
-open Itt_struct
 open Itt_equal
 
 (************************************************************************

@@ -43,37 +43,17 @@ extends Itt_bisect
 extends Itt_ext_equal
 doc docoff
 
-open Printf
 open Lm_debug
-open Refiner.Refiner.TermType
-open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
-open Refiner.Refiner.TermAddr
-open Refiner.Refiner.TermMan
-open Refiner.Refiner.TermSubst
-open Refiner.Refiner.Refine
-open Refiner.Refiner.RefineError
-open Mp_resource
-open Simple_print
 
-open Tactic_type
 open Tactic_type.Tacticals
-open Tactic_type.Sequent
-open Tactic_type.Conversionals
-open Mptop
-open Var
 
 open Dtactic
-open Auto_tactic
 open Top_conversionals
 
 open Itt_struct
-open Itt_record
 open Itt_grouplikeobj
 open Itt_squash
-open Itt_fun
-open Itt_int_ext
-open Itt_bisect
 open Itt_equal
 open Itt_subtype
 

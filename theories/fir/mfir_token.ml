@@ -50,8 +50,6 @@ doc <:doc<
 
 open Base_meta
 open Top_conversionals
-open Mfir_bool
-
 
 (**************************************************************************
  * Declarations.
@@ -67,7 +65,6 @@ doc <:doc<
 
 declare token[str:s]
 
-
 doc <:doc< 
    @begin[doc]
   
@@ -76,7 +73,6 @@ doc <:doc<
 >>
 
 declare token_eq{ 'tok1; 'tok2 }
-
 
 (**************************************************************************
  * Rewrites.

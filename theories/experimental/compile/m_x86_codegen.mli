@@ -28,9 +28,6 @@
 extends M_ir
 extends M_x86_frame
 
-open Refiner.Refiner.Term
-
-open Tactic_type.Tacticals
 open Tactic_type.Conversionals
 
 (*

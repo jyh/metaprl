@@ -80,12 +80,12 @@ rule setEquality :
  * H >- a = a in A
  * H >- B[a]
  * H, z: A >- B[z] = B[z] in Ui
- *)
 rule setMemberFormation 'a :
    sequent { <H> >- 'a = 'a in 'A } -->
    sequent { <H> >- squash{'B['a]} } -->
    sequent { <H>; z: 'A >- "type"{'B['z]} } -->
    sequent { <H> >- { x:'A | 'B['x] } }
+ *)
 
 (*
  * H >- a1 = a2 in { a:A | B }

@@ -291,19 +291,24 @@ let merge_term_lists =
  * IMPLEMENTATION                                                       *
  ************************************************************************)
 
-module TermTable = Red_black_table
+module TermCompare =
+struct
+   type t = term
+
+   let compare = Pervasives.compare
+end
+
+module TermTable = Lm_map.LmMakeList (TermCompare)
 
 module TptpCache =
 struct
    (*
     * A cache is a term cache.
     *)
-   type t = {
-      cache_constants : string -> bool;
-      cache_methods :
-         (term, term list, (term, term list) TermTable.table) table_methods;
-      cache_table : (term, term list) TermTable.table
-   }
+   type t =
+      { cache_constants : string -> bool;
+        cache_table : term list TermTable.t
+      }
 
    let create constants =
       let is_constant = StringSet.mem constants in
@@ -314,11 +319,9 @@ struct
           | GreaterThan -> 1
       in
       let print _ _ = () in
-      let methods = TermTable.create print compare (@) in {
-         cache_constants = is_constant;
-         cache_methods = methods;
-         cache_table = methods.empty
-      }
+         { cache_constants = is_constant;
+           cache_table = TermTable.empty
+         }
 
    (*
     * Check if a clause is subsumed by an existing entry.
@@ -358,9 +361,9 @@ struct
          eprintf "Tptp_cache.subsumed: %a%t" print_term_list clause eflush;
       let flag =
          try
-            let find_all = t.cache_methods.find_all t.cache_table in
-            subsumed t.cache_constants [] find_all clause clause;
-            false
+            let find_all = TermTable.find_all t.cache_table in
+               subsumed t.cache_constants [] find_all clause clause;
+               false
          with
             Subsumed ->
                true
@@ -380,7 +383,7 @@ struct
          t
 
    let insert t clause =
-      { t with cache_table = add_clause clause t.cache_methods.add t.cache_table clause }
+      { t with cache_table = add_clause clause TermTable.add t.cache_table clause }
 end
 
 (*

@@ -85,11 +85,6 @@ let debug_int_arith =
  * ARITH
  *******************************************************)
 
-let get_term i p =
-   try Sequent.nth_hyp p i with
-      RefineError _ ->
-         xnil_term
-
 let reportT = funT (fun p ->
 	if !debug_int_arith then
 		let g=Sequent.goal p in
@@ -168,7 +163,7 @@ let notle2geT t =
 *)
 
 let anyArithRel2geT = argfunT (fun i p ->
-   let t=get_term i p in
+   let t = Sequent.nth_hyp p i in
    if is_le_term t then le2geT t
    else if is_lt_term t then lt2geT t
    else if is_gt_term t then gt2geT t
@@ -253,7 +248,7 @@ let rec is_arith_rel t =
    (is_not_term t && is_arith_rel (dest_not t))
 
 let negativeHyp2ConclT = argfunT (fun i p ->
-   let t=get_term i p in
+   let t = Sequent.nth_hyp p i in
 	if is_not_term t then
       if is_arith_rel (dest_not t) then
       	(dT i) thenMT arithRelInConcl2HypT
@@ -718,23 +713,20 @@ let reduce_geLeftC = (addrC [0] (normalizeC thenC (termC provideConstantC)))
 let reduce_geRightC = (addrC [1] (normalizeC thenC (termC provideConstantC)))
 
 let reduce_geCommonConstT = argfunT (fun i p ->
-   let t=get_term i p in
+   let t = Sequent.nth_hyp p i in
    let (left,right)=dest_ge t in
-   if is_add_term left then
-      let (a,b)=dest_add left in
-      if is_number_term a then
-         (rw (ge_addMono2_rw (mk_minus_term a)) i)
-         thenMT (rw (addrC [0] normalizeC) i)
-      else
-         idT
+   let (a,b)=dest_add left in
+   if is_number_term a then
+      (rw (ge_addMono2_rw (mk_minus_term a)) i)
+      thenMT (rw (addrC [0] normalizeC) i)
    else
       idT)
 
 let tryReduce_geT = argfunT (fun i p ->
-   let t=get_term i p in
+   let t = Sequent.nth_hyp p i in
       if is_ge_term t then
          (rw reduce_geLeftC i) thenMT
-         ((reduce_geCommonConstT i) thenMT
+         (tryT (reduce_geCommonConstT i) thenMT
                      (rw reduce_geRightC i))
       else
          idT)
@@ -745,10 +737,10 @@ let sumList tl p =
    match tl with
    h::t ->
       let aux (l,r) a =
-         let tm = get_term a p in
+         let tm = Sequent.nth_hyp p a in
          let (al,ar) = dest_ge tm in
          (mk_add_term al l, mk_add_term ar r) in
-      let h_tm = get_term h p in
+      let h_tm = Sequent.nth_hyp p h in
       let (sl, sr)=List.fold_left aux (dest_ge h_tm) t in
       mk_ge_term sl sr
    | [] ->
@@ -881,9 +873,9 @@ doc <:doc<
  *)
 let arithT =
    arithRelInConcl2HypT thenMT
-   ((onAllMCumulativeHypsT negativeHyp2ConclT) thenMT
-   ((onAllMHypsT anyArithRel2geT) thenMT
-   ((onAllMHypsT tryReduce_geT) thenMT
+   ((tryOnAllMCumulativeHypsT negativeHyp2ConclT) thenMT
+   ((tryOnAllMHypsT anyArithRel2geT) thenMT
+   ((tryOnAllMHypsT tryReduce_geT) thenMT
    (findContradRelT thenMT (reduceContradRelT (-1)) ))))
 
 interactive test 'H 'a 'b 'c :

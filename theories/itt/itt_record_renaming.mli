@@ -1,6 +1,10 @@
 open Refiner.Refiner.Term
 open Tactic_type.Conversionals
 
+declare rename_mul_add{'S}
+declare rename_add_mul{'S}
+declare as_additive{'S}
+
 topval renameFieldC :  term -> conv
 topval renameFieldT :  term -> tactic
 

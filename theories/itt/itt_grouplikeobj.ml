@@ -1,38 +1,38 @@
-doc <:doc< 
+doc <:doc<
    @spelling{groupoid semigroup}
    @begin[doc]
    @module[Itt_grouplikeobj]
-  
+
    This theory defines group-like objects: groupoid, semigroup,
    and monoid.
    @end[doc]
-  
+
    ----------------------------------------------------------------
-  
+
    @begin[license]
    This file is part of MetaPRL, a modular, higher order
    logical framework that provides a logical programming
    environment for OCaml and other languages.
-  
+
    See the file doc/index.html for information on Nuprl,
    OCaml, and more information about this system.
-  
+
    Copyright (C) 1998 Jason Hickey, Cornell University
-  
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
    as published by the Free Software Foundation; either version 2
    of the License, or (at your option) any later version.
-  
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-  
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-  
+
    Author: Xin Yu @email{xiny@cs.caltech.edu}
    @end[license]
 >>
@@ -64,11 +64,11 @@ let _ =
  * GROUPOID                                                             *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsection{Groupoid}
    @modsubsection{Rewrites}
-  
+
    @end[doc]
 >>
 define unfold_groupoid : groupoid[i:l] <-->
@@ -82,19 +82,19 @@ let groupoidDT n = rw unfold_groupoid n thenT dT n
 let resource elim +=
    [<<groupoid[i:l]>>, groupoidDT]
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Well-formedness}
-  
+
    @end[doc]
 >>
 interactive groupoid_wf {| intro [] |} :
    sequent { <H> >- "type"{groupoid[i:l]} }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Introduction and Elimination}
-  
+
    @end[doc]
 >>
 interactive groupoid_intro {| intro [AutoMustComplete] |} :
@@ -110,11 +110,11 @@ interactive groupoid_intro {| intro [AutoMustComplete] |} :
  * SEMIGROUP                                                            *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsection{Semigroup}
    @modsubsection{Rewrites}
-  
+
    @end[doc]
 >>
 define unfold_isSemigroup : isSemigroup{'g} <-->
@@ -135,10 +135,10 @@ let semigroupDT n = rw unfold_semigroup n thenT dT n
 let resource elim +=
    [<<semigroup[i:l]>>, semigroupDT]
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Well-formedness}
-  
+
    @end[doc]
 >>
 
@@ -150,10 +150,10 @@ interactive isSemigroup_wf {| intro [] |} :
 interactive semigroup_wf {| intro [] |} :
    sequent { <H> >- "type"{semigroup[i:l]} }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Introduction and Elimination}
-  
+
    @end[doc]
 >>
 interactive isSemigroup_intro {| intro [AutoMustComplete] |} :
@@ -174,10 +174,10 @@ interactive semigroup_elim {| elim [] |} 'H :
    sequent { <H>; g: {car: univ[i:l]; "*": ^car -> ^car -> ^car}; u: all x: 'g^car. all y: 'g^car. all z: 'g^car. (('x *['g] 'y) *['g] 'z = 'x *['g] ('y *['g] 'z) in 'g^car); <J['g]> >- 'C['g] } -->
    sequent { <H>; g: semigroup[i:l]; <J['g]> >- 'C['g] }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Hierarchy}
-  
+
    @end[doc]
 >>
 interactive semigrp_subtype_grpoid :
@@ -187,11 +187,11 @@ interactive semigrp_subtype_grpoid :
  * MONOID                                                               *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsection{Monoid}
    @modsubsection{Rewrites}
-  
+
    @end[doc]
 >>
 define unfold_premonoid1 : premonoid[i:l] <-->
@@ -220,10 +220,10 @@ let monoidDT n = rw unfold_monoid n thenT dT n
 let resource elim +=
    [<<monoid[i:l]>>, monoidDT]
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Well-formedness}
-  
+
    @end[doc]
 >>
 interactive premonoid_wf {| intro [] |} :
@@ -238,10 +238,10 @@ interactive isMonoid_wf {| intro [] |} :
 interactive monoid_wf {| intro [] |} :
    sequent { <H> >- "type"{monoid[i:l]} }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Introduction and Elimination}
-  
+
    @end[doc]
 >>
 interactive premonoid_intro {| intro [AutoMustComplete] |} :
@@ -272,10 +272,14 @@ interactive monoid_elim {| elim [] |} 'H :
    sequent { <H>; g: {car: univ[i:l]; "*": ^car -> ^car -> ^car; "1": ^car}; u: all x: 'g^car. all y: 'g^car. all z: 'g^car. (('x *['g] 'y) *['g] 'z = 'x *['g] ('y *['g] 'z) in 'g^car); v: all x: 'g^car. ('g^"1" *['g] 'x = 'x in 'g^car & 'x *['g] 'g^"1" = 'x in 'g^car); <J['g]> >- 'C['g] } -->
    sequent { <H>; g: monoid[i:l]; <J['g]> >- 'C['g] }
 
-doc <:doc< 
+interactive monoid_car_wf {| intro [AutoMustComplete; intro_typeinf <<'G>>] |} monoid[i:l] :
+   sequent { <H> >- 'G in monoid[i:l] } -->
+   sequent { <H> >- "type"{('G^car)} }
+
+doc <:doc<
    @begin[doc]
    @modsubsection{Hierarchy}
-  
+
    @end[doc]
 >>
 interactive monoid_subtype_semigrp :
@@ -285,11 +289,11 @@ interactive monoid_subtype_semigrp :
  * BINARY OPERATION IS COMMUTATIVE                                      *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsection{Commutative Operation}
    @modsubsection{Rewrites}
-  
+
    @end[doc]
 >>
 define unfold_isCommutative : isCommutative{'g} <-->
@@ -314,10 +318,10 @@ let resource elim +=
     <<cmonoid[i:l]>>, cmonoidDT
    ]
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Well-formedness}
-  
+
    @end[doc]
 >>
 interactive isComutative_wf {| intro [] |} :
@@ -331,10 +335,10 @@ interactive csemigroup_wf {| intro [] |} :
 interactive cmonoid_wf {| intro [] |} :
    sequent { <H> >- "type"{cmonoid[i:l]} }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Introduction and Elimination}
-  
+
    @end[doc]
 >>
 interactive isCommutative_intro {| intro [] |} :
@@ -364,10 +368,10 @@ interactive cmonoid_elim {| elim [] |} 'H :
    sequent { <H>; g: monoid[i:l]; x: isCommutative{'g}; <J['g]> >- 'C['g] } -->
    sequent { <H>; g: cmonoid[i:l]; <J['g]> >- 'C['g] }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Hierarchy}
-  
+
    @end[doc]
 >>
 interactive csemigrp_subtype_semigrp :
@@ -380,11 +384,11 @@ interactive cmonoid_subtype_monoid :
  * SUBSTRUCTURE                                                         *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsection{Substructure}
    @modsubsection{Rewrites}
-  
+
    @end[doc]
 >>
 define unfold_subStructure : subStructure{'s; 'g} <-->
@@ -393,10 +397,10 @@ doc docoff
 
 let fold_subStructure = makeFoldC << subStructure{'s; 'g} >> unfold_subStructure
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Well-formedness}
-  
+
    @end[doc]
 >>
 interactive subStructure_wf {| intro [] |} :
@@ -405,10 +409,10 @@ interactive subStructure_wf {| intro [] |} :
    sequent { <H> >- 'B^"*" = 'A^"*" in 'A^car -> 'A^car -> 'A^car } -->
    sequent { <H> >- "type"{subStructure{'A; 'B}} }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Introduction and Elimination}
-  
+
    @end[doc]
 >>
 interactive subStructure_intro {| intro [] |} :
@@ -420,10 +424,10 @@ interactive subStructure_elim {| elim [] |} 'H :
    sequent { <H>; u: subStructure{'s; 'g}; x: 's^car subset 'g^car; v: 'g^"*" = 's^"*" in 's^car -> 's^car -> 's^car; <J['u]> >- 'C['u] } -->
    sequent { <H>; u: subStructure{'s; 'g}; <J['u]> >- 'C['u] }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Rules}
-  
+
    Substructure is squash-stable.
    @end[doc]
 >>

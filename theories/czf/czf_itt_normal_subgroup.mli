@@ -74,14 +74,6 @@ rewrite unfold_normal_subg : normal_subg{'s; 'g} <-->
  * TACTICS                                                              *
  ************************************************************************)
 
-(* This is the same as setExtT in Czf_itt_member.
-(*
- * There is a standared way to show that two sets are equal;
- * show that each is a subset of the other.
- *)
-topval equalSubsetT : tactic
-*)
-
 (*
  * All subgroups of abelian groups are normal.
  *)

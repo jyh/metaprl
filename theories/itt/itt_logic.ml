@@ -1105,13 +1105,18 @@ struct
    type inference = (term_subst -> tactic) list
    let empty_inf = []
    
+   let tryfind_hyp_exn = RefineError("find_hyp_exn", StringError "hypothesys not found")
+   
    let tryfind_hyp term tact i p =
       match Sequent.nth_hyp p i with
          (_,t) when alpha_equal t term -> tact i p
        | _ ->
-            raise (RefineError("find_hyp_exn - hypothesys not found", TermPairMatchError(term,Sequent.goal p)))
+            raise tryfind_hyp_exn
+
+   let find_hyp_fail _ =
+      raise (Invalid_argument "Itt_logic.Itt_JLogic.find_hyp failed")
       
-   let find_hyp term tact = onSomeHypT (tryfind_hyp term tact)
+   let find_hyp term tact = onSomeHypT (tryfind_hyp term tact) orelseT find_hyp_fail
 
    let tryappend_subst subst t tact i p =
       tact (match_terms subst t (snd (Sequent.nth_hyp p i))) p

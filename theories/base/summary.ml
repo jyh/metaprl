@@ -554,6 +554,9 @@ dform rule_box_df1 : internal :: rule_box[text:s] =
 dform rule_box_df2 : internal :: rule_box{'t} =
    newline szone info_begin `"BY [" pushm 't `"]" popm ezone info_end
 
+dform rule_box_df3 : internal :: rule_box[text:s]{'t} =
+   newline szone info_begin `"BY [" pushm 't `"]" space slot[text:s] popm ezone info_end
+
 (*
  * Subgoals are printed in simplified form.
  *)
@@ -646,7 +649,18 @@ let rule_box_opname = opname_of_term rule_box_term
 let mk_rule_box_string_term s =
    mk_string_term rule_box_opname s
 let mk_rule_box_term t =
-   mk_simple_term rule_box_opname [t]
+   mk_dep0_term rule_box_opname t
+let append_rule_box t s =
+   if is_dep0_term rule_box_opname t then 
+      let t = one_subterm t in
+      mk_string_dep0_term rule_box_opname s t
+   else if is_string_term rule_box_opname t then
+      let s' = dest_string_term rule_box_opname t in
+      let s = if s'="" then s else s' ^ " " ^ s in
+      mk_string_term rule_box_opname s
+   else let s',t = dest_string_dep0_term rule_box_opname t in
+      let s = if s'="" then s else s' ^ " " ^ s in
+      mk_string_dep0_term rule_box_opname s t
 
 let proof_term = << "proof"{'main; 'goal; 'text; 'subgoals} >>
 let proof_opname = opname_of_term proof_term

@@ -3619,10 +3619,10 @@ B	b1442	t1442
 P	p1442	Number 2795
 P	p1443	Number 2816
 O	o1443	location p1442 p1443
-P	p1444	String uni_minus
+P	p1444	String minus
 O	o1444	opname p1444
-NItt_int_base!uni_minus	uni_minus	uni_minus Itt_int_base
-O	o1445	uni_minus
+NItt_int_base!minus	minus	minus Itt_int_base
+O	o1445	minus
 T	t1445	o1445 b1438
 B	b1445	t1445
 T	t1446	o1444 b1445
@@ -7051,7 +7051,7 @@ T	t3686	o3141 b1649 b3685 b1661 b18
 B	b3686	t3686
 P	p3148	String uni_add_inverse_rw
 O	o3148	cond_rewrite p3148
-P	p3689	String "sqSubstT <<('a +@ uni_minus{'a})~0>> 0 thenMT autoT"
+P	p3689	String "sqSubstT <<('a +@ (- 'a))~0>> 0 thenMT autoT"
 O	o3689	ext_rule p3689
 T	t3149	o1681 b3142 b3028
 B	b3149	t3149
@@ -7968,7 +7968,7 @@ P	p3044	Number 4320
 O	o3044	patt_var p3043 p3044
 O	o3045	patt_done p3040 p3041
 T	t3045	o3045
-B	b3045	t3045 uni_minus_term
+B	b3045	t3045 minus_term
 T	t3046	o3044 b3045
 B	b3046	t3046
 P	p3046	Number 4323
@@ -7982,7 +7982,7 @@ T	t3052	o3051 b1550
 B	b3052	t3052
 T	t3054	o3047 b3051 b3052
 B	b3054	t3054
-P	p3054	String "\132\149\166\190\000\000\0008\000\000\000\018\000\000\0006\000\000\0002\160\160\160$\000\000\000\000\160)uni_minus\160,Itt_int_base@@\160\160@\160\160\160\004\n\160#var@\160\148!a@@@"
+P	p3054	String "\132\149\166\190\000\000\0008\000\000\000\018\000\000\0006\000\000\0002\160\160\160$\000\000\000\000\160)minus\160,Itt_int_base@@\160\160@\160\160\160\004\n\160#var@\160\148!a@@@"
 O	o3054	string p3046 p3041 p3054
 T	t3055	o3054
 B	b3055	t3055
@@ -8007,7 +8007,7 @@ P	p3068	Number 4362
 O	o3068	patt_var p3066 p3068
 O	o3069	patt_done p3064 p3065
 T	t3069	o3069
-B	b3069	t3069 uni_minus_opname
+B	b3069	t3069 minus_opname
 T	t3070	o3068 b3069
 B	b3070	t3070
 P	p3070	Number 4365
@@ -8018,7 +8018,7 @@ T	t3071	o3071 b1181
 B	b3071	t3071
 P	p3072	Number 4380
 O	o3072	lid p3072 p3065
-P	p3073	String uni_minus_term
+P	p3073	String minus_term
 O	o3073	lid p3073
 T	t3073	o3073
 B	b3073	t3073
@@ -8045,7 +8045,7 @@ P	p3084	Number 4417
 O	o3084	patt_var p3083 p3084
 O	o3085	patt_done p3080 p3081
 T	t3086	o3085
-B	b3086	t3086 is_uni_minus_term
+B	b3086	t3086 is_minus_term
 T	t3087	o3084 b3086
 B	b3087	t3087
 P	p3087	Number 4420
@@ -8060,7 +8060,7 @@ T	t3093	o3088 b3089
 B	b3093	t3093
 P	p3093	Number 4433
 O	o3093	lid p3093 p3081
-P	p3094	String uni_minus_opname
+P	p3094	String minus_opname
 O	o3094	lid p3094
 T	t3094	o3094
 B	b3094	t3094
@@ -8087,7 +8087,7 @@ P	p3144	Number 4472
 O	o3144	patt_var p3143 p3144
 O	o3145	patt_done p3139 p3142
 T	t3145	o3145
-B	b3145	t3145 mk_uni_minus_term
+B	b3145	t3145 mk_minus_term
 T	t3146	o3144 b3145
 B	b3146	t3146
 P	p3147	Number 4475
@@ -8125,7 +8125,7 @@ P	p3163	Number 4524
 O	o3163	patt_var p3162 p3163
 O	o3164	patt_done p3160 p3161
 T	t3166	o3164
-B	b3166	t3166 dest_uni_minus
+B	b3166	t3166 dest_minus
 T	t3167	o3163 b3166
 B	b3167	t3167
 P	p3167	Number 4527
@@ -8952,7 +8952,7 @@ B	b1102	t1102
 P	p1103	Number 6248
 P	p1105	Number 6361
 O	o1106	location p1103 p1105
-P	p4003	String uni_minus_df1
+P	p4003	String minus_df1
 O	o4003	dform p4003
 P	p4004	String " - "
 O	o4004	string3948 p4004
@@ -8971,7 +8971,7 @@ B	b1110	t1110
 P	p1112	Number 6363
 P	p1113	Number 6472
 O	o1113	location p1112 p1113
-P	p4011	String uni_minus_df2
+P	p4011	String minus_df2
 O	o4011	dform p4011
 O	o1114	prec_df p24
 T	t1117	o1114
@@ -9426,7 +9426,7 @@ B	b1597	t1597
 P	p1598	Number 8222
 P	p1599	Number 8316
 O	o1599	location p1598 p1599
-P	p4200	String reduce_uni_minus
+P	p4200	String reduce_minus
 O	o4200	rewrite p4200
 T	t4200	o1445 b4193
 B	b4200	t4200
@@ -9517,7 +9517,7 @@ P	p1696	Number 8691
 O	o1697	patt_var p1694 p1696
 O	o1698	patt_done p1692 p1693
 T	t1698	o1698
-B	b1698	t1698 reduce_uni_minus
+B	b1698	t1698 reduce_minus
 T	t1699	o1697 b1698
 B	b1699	t1699
 P	p1699	Number 8698
@@ -10535,7 +10535,7 @@ T	t4683	o b4671 b4682
 B	b4683	t4683
 T	t4684	o1679 b4653 b4683
 B	b4684	t4684
-P	p4684	String "sqSubstT << 0 ~ ('c +@ uni_minus{'c})>> 0"
+P	p4684	String "sqSubstT << 0 ~ ('c +@ minus{'c})>> 0"
 O	o4684	ext_rule p4684
 T	t4685	o1445 b2737
 B	b4685	t4685
@@ -11218,7 +11218,7 @@ B	b3981	t3980
 P	p3982	Number 22581
 P	p3983	Number 22725
 O	o3983	location p3982 p3983
-P	p3984	String "add_Functionality 2 <<uni_minus{'a}>> thenAT (autoT thenT squashT thenT autoT)"
+P	p3984	String "add_Functionality 2 <<- 'a>> thenAT (autoT thenT squashT thenT autoT)"
 O	o3984	ext_rule p3984
 T	t3994	o1437 b3189 b1445
 B	b3994	t3994

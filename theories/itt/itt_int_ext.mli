@@ -160,7 +160,7 @@ rule mul_Zero2 'H :
 rule mul_uni_Assoc 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    [wf] sequent [squash] { 'H >- 'b IN int } -->
-   sequent ['ext] { 'H >- ('a *@ uni_minus{ 'b }) ~ (uni_minus{ 'a } *@ 'b) }
+   sequent ['ext] { 'H >- ('a *@ (- 'b)) ~ ((- 'a) *@ 'b) }
 
 rule lt_mulNegMono 'H 'c :
    sequent [squash] { 'H >- 'c < 0 } -->

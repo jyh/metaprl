@@ -51,13 +51,13 @@ declare number[n:n]
 declare ind{'i; m, z. 'down; 'base; m, z. 'up}
 
 declare "add"{'a; 'b}
-declare uni_minus{'a}
+declare minus{'a}
 
 declare beq_int{'a; 'b}
 declare lt_bool{'a; 'b}
 
 define unfold_sub :
-   "sub"{'a ; 'b} <--> ('a +@ uni_minus{'b})
+   "sub"{'a ; 'b} <--> ('a +@ (- 'b))
 
 (*
  Prop-int-lt definition
@@ -95,7 +95,7 @@ topval int_sqequalC : term -> conv
 
 rewrite reduce_add : "add"{number[i:n]; number[j:n]} <-->
    meta_sum{number[i:n]; number[j:n]}
-rewrite reduce_uni_minus : uni_minus{number[i:n]} <-->
+rewrite reduce_minus : ( - number[i:n]) <-->
    meta_diff{number[0:n]; number[i:n]}
 (*
 rewrite reduce_sub : "sub"{number[i:n]; number[j:n]} <-->
@@ -126,7 +126,7 @@ rule add_wf 'H :
 
 rule uni_wf 'H :
    [wf] sequent [squash] { 'H >- 'a = 'a1 in int } -->
-   sequent ['ext] { 'H >- uni_minus{'a} = uni_minus{'a1} in int }
+   sequent ['ext] { 'H >- (- 'a) = (- 'a1) in int }
 
 rule lt_bool_wf 'H :
    sequent [squash] { 'H >- 'a='a1 in int } -->
@@ -261,9 +261,9 @@ rule intElimination 'H 'J 'n 'm 'v 'z :
  *)
 rule indEquality 'H lambda{z. 'T['z]} 'x 'y 'w :
    sequent [squash] { 'H >- 'x1 = 'x2 in int } -->
-   sequent [squash] { 'H; x: int; w: 'x < 0; y: 'T['x add 1] >- 'down1['x; 'y] = 'down2['x; 'y] in 'T['x] } -->
+   sequent [squash] { 'H; x: int; w: 'x < 0; y: 'T['x +@ 1] >- 'down1['x; 'y] = 'down2['x; 'y] in 'T['x] } -->
    sequent [squash] { 'H >- 'base1 = 'base2 in 'T[0] } -->
-   sequent [squash] { 'H; x: int; w: 0 < 'x; y: 'T['x sub 1] >- 'up1['x; 'y] = 'up2['x; 'y] in 'T['x] } -->
+   sequent [squash] { 'H; x: int; w: 0 < 'x; y: 'T['x -@ 1] >- 'up1['x; 'y] = 'up2['x; 'y] in 'T['x] } -->
    sequent ['ext] { 'H >- ind{'x1; i1, j1. 'down1['i1; 'j1]; 'base1; k1, l1. 'up1['k1; 'l1]}
                    = ind{'x2; i2, j2. 'down2['i2; 'j2]; 'base2; k2, l2. 'up2['k2; 'l2]}
                    in 'T['x1] }
@@ -351,7 +351,7 @@ topval add_Id2C: conv
 
 rule uni_add_inverse 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
-   sequent ['ext] { 'H >- ( 'a +@ uni_minus{ 'a } ) ~ 0 }
+   sequent ['ext] { 'H >- ( 'a +@ ( - 'a ) ) ~ 0 }
 
 topval uni_add_inverseC: conv
 (*
@@ -359,7 +359,7 @@ topval unfold_zeroC: term -> conv
 
 rule uni_add_inverse2 'H :
    [wf] sequent [squash] { 'H >- 'c IN int } -->
-   sequent ['ext] { 'H >- 0 ~ ('c +@ uni_minus{ 'c }) }
+   sequent ['ext] { 'H >- 0 ~ ('c +@ ( - 'c )) }
 *)
 (*
 rule add_Functionality 'H :
@@ -381,9 +381,8 @@ topval add_FunctionalityC : term -> term -> conv
 rule uni_add_Distrib 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    [wf] sequent [squash] { 'H >- 'b IN int } -->
-   sequent ['ext] { 'H >- uni_minus{ ('a +@ 'b) } ~
-                   ( uni_minus{ 'a } +@ uni_minus{ 'b } ) }
+   sequent ['ext] { 'H >- (- ('a +@ 'b)) ~ ( (- 'a) +@ (- 'b) ) }
 
 rule uni_uni_reduce 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
-   sequent ['ext] { 'H >- uni_minus{ uni_minus{ 'a } } ~ 'a }
+   sequent ['ext] { 'H >- (-(-'a)) ~ 'a }

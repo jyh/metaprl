@@ -297,7 +297,7 @@ interactive mul_Zero2 'H :
 interactive mul_uni_Assoc 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    [wf] sequent [squash] { 'H >- 'b IN int } -->
-   sequent ['ext] { 'H >- ('a *@ uni_minus{ 'b }) ~ (uni_minus{ 'a } *@ 'b) }
+   sequent ['ext] { 'H >- ('a *@ (- 'b)) ~ ((- 'a) *@ 'b) }
 
 interactive lt_mulNegMono 'H 'c :
    sequent [squash] { 'H >- 'c < 0 } -->
@@ -404,7 +404,7 @@ let reduce_info =
     << ('a *@ 1) >>, mul_Id2;
     << (0 *@ 'a) >>, mul_Zero;
     << ('a *@ 0) >>, mul_Zero2;
-    << ('a *@ uni_minus{ 'b }) >>, mul_uni_Assoc]
+    << ('a *@ (- 'b)) >>, mul_uni_Assoc]
 
 let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
 *)

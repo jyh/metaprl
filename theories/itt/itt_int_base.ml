@@ -1,5 +1,5 @@
 (*!
- * @spelling{int number ind add uni_minus beq_int lt_bool}
+ * @spelling{int number ind add minus beq_int lt_bool}
  *
  * @begin[doc]
  * @theory[Itt_int_base]
@@ -98,7 +98,7 @@ declare ind{'i; m, z. 'down; 'base; m, z. 'up}
  * @end[doc]
  *)
 declare "add"{'a; 'b}
-declare uni_minus{'a}
+declare minus{'a}
 
 declare beq_int{'a; 'b}
 declare lt_bool{'a; 'b}
@@ -110,7 +110,7 @@ declare lt_bool{'a; 'b}
  * @end[doc]
  *)
 define unfold_sub :
-   "sub"{'a ; 'b} <--> ('a +@ uni_minus{'b})
+   "sub"{'a ; 'b} <--> ('a +@ minus{'b})
 
 (*!
  * @begin[doc]
@@ -153,11 +153,11 @@ let is_add_term = is_dep0_dep0_term add_opname
 let mk_add_term = mk_dep0_dep0_term add_opname
 let dest_add = dest_dep0_dep0_term add_opname
 
-let uni_minus_term = <<uni_minus{'a}>>
-let uni_minus_opname = opname_of_term uni_minus_term
-let is_uni_minus_term = is_dep0_term uni_minus_opname
-let mk_uni_minus_term = mk_dep0_term uni_minus_opname
-let dest_uni_minus = dest_dep0_term uni_minus_opname
+let minus_term = <<minus{'a}>>
+let minus_opname = opname_of_term minus_term
+let is_minus_term = is_dep0_term minus_opname
+let mk_minus_term = mk_dep0_term minus_opname
+let dest_minus = dest_dep0_term minus_opname
 
 let sub_term = << 'x -@ 'y >>
 let sub_opname = opname_of_term sub_term
@@ -184,7 +184,7 @@ let mk_ind_term = mk_dep0_dep2_dep0_dep2_term ind_opname
 prec prec_compare
 prec prec_add
 prec prec_unary
-prec prec_add < prec_unary
+prec prec_unary < prec_add
 
 (*
 prec prec_mul < prec_apply
@@ -206,10 +206,10 @@ dform add_df1 : except_mode[src] :: parens :: "prec"[prec_add] :: "add"{'a; 'b} 
 dform add_df2 : mode[src] :: parens :: "prec"[prec_add] :: "add"{'a; 'b} =
    slot["le"]{'a} `" +@ " slot["lt"]{'b}
 
-dform uni_minus_df1 : except_mode[src] :: parens :: "prec"[prec_add] :: uni_minus{'a} =
+dform minus_df1 : except_mode[src] :: parens :: "prec"[prec_unary] :: (- 'a) =
    `" - " slot["le"]{'a}
-dform uni_minus_df2 : mode[src] :: parens :: "prec"[prec_unary] :: uni_minus{'a} =
-   `" -@ " slot["le"]{'a}
+dform minus_df2 : mode[src] :: parens :: "prec"[prec_unary] :: (- 'a) =
+   `" - " slot["le"]{'a}
 
 dform sub_df1 : except_mode[src] :: parens :: "prec"[prec_add] :: "sub"{'a; 'b} =
    slot["lt"]{'a} `" - " slot["le"]{'b}
@@ -272,7 +272,7 @@ prim_rw reduce_add : "add"{number[i:n]; number[j:n]} <-->
 prim_rw reduce_sub : "sub"{number[i:n]; number[j:n]} <-->
    meta_diff{number[i:n]; number[j:n]}
 *)
-prim_rw reduce_uni_minus : uni_minus{number[i:n]} <-->
+prim_rw reduce_minus : minus{number[i:n]} <-->
    meta_diff{number[0:n]; number[i:n]}
 
 prim_rw reduce_lt : "lt"{number[i:n]; number[j:n]} <-->
@@ -292,8 +292,8 @@ let reduce_add =
 let reduce_sub =
    reduce_sub andthenC reduce_meta_diff
 *)
-let reduce_uni_minus =
-   reduce_uni_minus andthenC reduce_meta_diff
+let reduce_minus =
+   reduce_minus andthenC reduce_meta_diff
 
 let reduce_lt =
    reduce_lt andthenC reduce_meta_lt
@@ -310,7 +310,7 @@ prim add_wf {| intro_resource []; eqcd_resource |} 'H :
 
 prim uni_wf {| intro_resource []; eqcd_resource |} 'H :
    [wf] sequent [squash] { 'H >- 'a = 'a1 in int } -->
-   sequent ['ext] { 'H >- uni_minus{'a} = uni_minus{'a1} in int } = it
+   sequent ['ext] { 'H >- (-'a) = (-'a1) in int } = it
 
 prim lt_bool_wf {| intro_resource []; eqcd_resource |} 'H :
    sequent [squash] { 'H >- 'a='a1 in int } -->
@@ -508,9 +508,9 @@ prim intElimination {| elim_resource [ThinOption thinT] |} 'H 'J 'n 'm 'v 'z :
  *)
 prim indEquality {| intro_resource []; eqcd_resource |} 'H lambda{z. 'T['z]} 'x 'y 'w :
    sequent [squash] { 'H >- 'x1 = 'x2 in int } -->
-   sequent [squash] { 'H; x: int; w: 'x < 0; y: 'T['x add 1] >- 'down1['x; 'y] = 'down2['x; 'y] in 'T['x] } -->
+   sequent [squash] { 'H; x: int; w: 'x < 0; y: 'T['x +@ 1] >- 'down1['x; 'y] = 'down2['x; 'y] in 'T['x] } -->
    sequent [squash] { 'H >- 'base1 = 'base2 in 'T[0] } -->
-   sequent [squash] { 'H; x: int; w: 0 < 'x; y: 'T['x sub 1] >- 'up1['x; 'y] = 'up2['x; 'y] in 'T['x] } -->
+   sequent [squash] { 'H; x: int; w: 0 < 'x; y: 'T['x -@ 1] >- 'up1['x; 'y] = 'up2['x; 'y] in 'T['x] } -->
    sequent ['ext] { 'H >- ind{'x1; i1, j1. 'down1['i1; 'j1]; 'base1; k1, l1. 'up1['k1; 'l1]}
                    = ind{'x2; i2, j2. 'down2['i2; 'j2]; 'base2; k2, l2. 'up2['k2; 'l2]}
                    in 'T['x1] } =
@@ -689,25 +689,25 @@ let add_Id2C = add_Id2_rw
 (*!
  * @begin[doc]
  *
- * @tt{uni_minus{'a}} is a inverse element for 'a in @tt{int}
+ * @tt{- 'a} is a inverse element for 'a in @tt{int}
  *
  * @end[doc]
  *)
 prim uni_add_inverse 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
-   sequent ['ext] { 'H >- ( 'a +@ uni_minus{ 'a } ) ~ 0 } = it
+   sequent ['ext] { 'H >- ( 'a +@ (- 'a ) ) ~ 0 } = it
 
 interactive_rw uni_add_inverse_rw :
    ( 'a IN int ) -->
-   ( 'a +@ uni_minus{ 'a } ) <--> 0
+   ( 'a +@ (- 'a) ) <--> 0
 
 let uni_add_inverseC = uni_add_inverse_rw
 (*
-let unfold_zeroC t = foldC (mk_add_term t (mk_uni_minus_term t)) uni_add_inverseC 
+let unfold_zeroC t = foldC (mk_add_term t (mk_minus_term t)) uni_add_inverseC 
 
 interactive uni_add_inverse2 'H :
    [wf] sequent [squash] { 'H >- 'c IN int } -->
-   sequent ['ext] { 'H >- 0 ~ ('c +@ uni_minus{ 'c }) }
+   sequent ['ext] { 'H >- 0 ~ ('c +@ (- 'c)) }
 *)
 (*
 interactive add_Functionality 'H :
@@ -736,12 +736,11 @@ let add_FunctionalityC = add_Functionality_rw
 interactive uni_add_Distrib 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    [wf] sequent [squash] { 'H >- 'b IN int } -->
-   sequent ['ext] { 'H >- uni_minus{ ('a +@ 'b) } ~
-                   ( uni_minus{ 'a } +@ uni_minus{ 'b } ) }
+   sequent ['ext] { 'H >- (-('a +@ 'b)) ~ ((-'a) +@ (-'b)) }
 
 interactive uni_uni_reduce 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
-   sequent ['ext] { 'H >- uni_minus{ uni_minus{ 'a } } ~ 'a }
+   sequent ['ext] { 'H >- (-(-'a)) ~ 'a }
 
 (*! @docoff *)
 (*
@@ -760,8 +759,8 @@ let reduce_info =
    [<< band{lt_bool{'a; 'b}; lt_bool{'b; 'a}} >>, lt_Reflex;
     << ('a +@ 0) >>, add_Id;
     << (0 +@ 'a) >>, add_Id2;
-    << ( 'a +@ uni_minus{ 'a } ) >>, uni_add_inverse;
-    << uni_minus{ uni_minus{ 'a } } >>, uni_uni_reduce;
+    << ( 'a +@ (- 'a)) >>, uni_add_inverse;
+    << (-(-'a)) >>, uni_uni_reduce;
     << ('a +@ ('b +@ 'c)) >>, add_Assoc]
 
 

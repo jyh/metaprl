@@ -162,6 +162,16 @@ declare member{ 'num; 'set }
 (*!
  * @begin[doc]
  *
+ * The term @tt[singleton] represents an integer set whose only member is the
+ * number $i$.
+ * @end[doc]
+ *)
+
+declare singleton{ 'i }
+
+(*!
+ * @begin[doc]
+ *
  * The term @tt[intset_max] is the set of all 31-bit, signed integers.
  * @end[doc]
  *)
@@ -391,6 +401,17 @@ prim_rw reduce_member_rawintset_base :
  * can be rewritten into a series of comparisons against the intervals
  * (endpoints) of $set$.  The rewrites are straightforward and we omit
  * an explicit listing of them.
+ *
+ * Singleton sets can be rewritten into actual integer sets.
+ * @end[doc]
+ *)
+
+prim_rw reduce_singleton :
+   singleton{ 'i } <-->
+   intset{ cons{ interval{ 'i; 'i }; nil } }
+
+(*!
+ * @begin[doc]
  *
  * Set constants can be rewritten into their actual values.
  * @end[doc]
@@ -654,6 +675,10 @@ dform rawintset_df3 : except_mode[src] ::
 dform member_df : except_mode[src] ::
    member{ 'num; 'set } =
    slot{'num} member slot{'set}
+
+dform singleton_df : except_mode[src] ::
+   singleton{ 'i } =
+   bf["singleton"] `"[" slot{'i} `"]"
 
 dform intset_max_df : except_mode[src] ::
    intset_max =

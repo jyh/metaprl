@@ -63,10 +63,46 @@ open Base_dtactic
  * @begin[doc]
  * @rules
  *
- * The typing rules for functions are straightforward.  The body of the
- * function must be typed as the result type of the function, assuming that
- * its binding variable has the appropriate type (or kind). Note that
- * for $<< polyFun{ x. 'f['x] } >>$ to be well-formed, $f$ must be a function.
+ * Store values of a tuple types are represented as lists of atoms.
+ * @end[doc]
+ *)
+
+prim ty_store_tuple_box {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'elt; 't } } -->
+   sequent [mfir] { 'H >-
+      has_type["store"]{ cons{ 'elt; nil };
+                         tyTuple["box"]{ cons{ 't; nil } } } }
+   = it
+
+prim ty_store_tuple_normal {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom_list"]{ 'elts; 'types } } -->
+   sequent [mfir] { 'H >- has_type["store"]{'elts; tyTuple["normal"]{'types}} }
+   = it
+
+(*!
+ * @begin[doc]
+ *
+ * Store values of array types are also represented as lists of atoms.
+ * @end[doc]
+ *)
+
+prim ty_store_array1 {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'elt; 't } } -->
+   sequent [mfir] { 'H >- has_type["store"]{ 'tail; tyArray{'t} } } -->
+   sequent [mfir] { 'H >- has_type["store"]{cons{'elt; 'tail}; tyArray{'t}} }
+   = it
+
+prim ty_store_array2 {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["store"]{ nil; tyArray{'t} } }
+   = it
+
+(*!
+ * @begin[doc]
+ *
+ * The typing rules for functions are straightforward.  Note that for
+ * $<< polyFun{ x. 'f['x] } >>$ to be well-formed, $f$ must be a function.
+ * These rules use the ``exp'' tag since in $<< lambda{ v. 'f['v] } >>$,
+ * $f$ may be an expression.
  * @end[doc]
  *)
 
@@ -96,6 +132,37 @@ prim ty_store_polyFun2 {| intro [] |} 'H 'a :
    sequent [mfir] { 'H >-
       has_type["exp"]{ polyFun{ x. lambda{ y. 'f['x; 'y] } };
                        tyAll{ t. 'ty['t] } } }
+   = it
+
+(*!
+ * @begin[doc]
+ *
+ * ...
+ * @end[doc]
+ *)
+
+(* XXX union store values should go here. *)
+
+(* gagh the next rule requires a lot of work.
+prim ty_store_union {| intro [] |} 'H :
+   sequent [mfir] { 'H >-
+      type_eq{ tyUnion{'ty_var; 'ty_list; singleton{number[i:n]}};
+               large_type } } -->
+   sequent [mfir] { 'H >-
+      has_type["store"]{ union_val[i:n]{ 'ty_var; 'atom_list };
+                         tyUnion{'ty_var; 'ty_list; singleton{number[i:n]}} }}
+   = it
+*)
+
+(*!
+ * @begin[doc]
+ *
+ * Raw data is represented abstractly as the value $<< raw_data >>$.
+ * @end[doc]
+ *)
+
+prim ty_store_raw_data {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["store"]{ raw_data; tyRawData } }
    = it
 
 (*!

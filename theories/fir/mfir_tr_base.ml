@@ -86,5 +86,24 @@ prim wf_small_type {| intro [] |} 'H :
    = it
 
 (*!
+ * @begin[doc]
+ *
+ * The next two rules are conviniences to check that the atoms in a list each
+ * have the appropriate type.
+ * @end[doc]
+ *)
+
+prim ty_atom_list1 {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom"]{ 'elt; 't } } -->
+   sequent [mfir] { 'H >- has_type["atom_list"]{ 'tail; 'rest } } -->
+   sequent [mfir] { 'H >-
+      has_type["atom_list"]{ cons{ 'elt; 'tail }; cons{ 't; 'rest } } }
+   = it
+
+prim ty_atom_list2 {| intro [] |} 'H :
+   sequent [mfir] { 'H >- has_type["atom_list"]{ nil; nil } }
+   = it
+
+(*!
  * @docoff
  *)

@@ -87,6 +87,8 @@ declare intset{ 'interval_list }
 declare rawintset[precision:n, sign:s]{ 'interval_list }
 declare member{ 'num; 'set }
 
+declare singleton{ 'i }
+
 declare intset_max
 declare enum_max
 declare rawintset_max[precision:n, sign:s]
@@ -138,6 +140,7 @@ topval reduce_member_rawintset_base : conv
  * Integer sets.
  *)
 
+topval reduce_singleton : conv
 topval reduce_intset_max : conv
 topval reduce_enum_max : conv
 topval reduce_rawintset_max_u8 : conv

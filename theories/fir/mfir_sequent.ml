@@ -250,7 +250,7 @@ dform lambda_df : except_mode[src] ::
 
 dform union_val_df : except_mode[src] ::
    union_val[i:n]{ 'ty_var; 'atom_list } =
-   slot{'ty_var} sub{slot[i:n]} slot{'atom_list}
+   slot{'ty_var} `"[" slot[i:n] `"]" slot{'atom_list}
 
 dform raw_data_df : except_mode[src] ::
    raw_data =

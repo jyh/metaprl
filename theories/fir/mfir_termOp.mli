@@ -162,6 +162,11 @@ val is_member_term : term -> bool
 val mk_member_term : term -> term -> term
 val dest_member_term : term -> term * term
 
+val singleton_term : term
+val is_singleton_term : term -> bool
+val mk_singleton_term : term -> term
+val dest_singleton_term : term -> term
+
 val intset_max_term : term
 val is_intset_max_term : term -> bool
 

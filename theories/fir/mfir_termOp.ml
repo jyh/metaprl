@@ -189,6 +189,12 @@ let is_member_term = is_2_dep0_term member_opname
 let mk_member_term = mk_2_dep0_term member_opname
 let dest_member_term = dest_2_dep0_term member_opname
 
+let singleton_term = << singleton{ 'i } >>
+let singleton_opname = opname_of_term singleton_term
+let is_singleton_term = is_1_dep0_term singleton_opname
+let mk_singleton_term = mk_1_dep0_term singleton_opname
+let dest_singleton_term = dest_1_dep0_term singleton_opname
+
 let intset_max_term = << intset_max >>
 let intset_max_opname = opname_of_term intset_max_term
 let is_intset_max_term = is_0_dep0_term intset_max_opname

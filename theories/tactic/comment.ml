@@ -568,9 +568,6 @@ dform nuprl_df1 : mode[tex] :: "Nuprl" =
 dform nuprl_df2 : except_mode[tex] :: "Nuprl" =
    it["Nuprl":s]
 
-dform nuprl_df3 : "NuPRL" =
-   "Nuprl"
-
 dform ocaml_df1 : "OCaml" =
    it["OCaml":s]
 
@@ -593,29 +590,21 @@ declare centermath[s:s]
 declare centermath{'t}
 (*! @docoff *)
 
-dform math_df1 : mode[tex] :: math[s:s] =
-   izone `"$" slot[s:s] `"$" ezone
+dform math_df1 : math[s:s] = math{slot[s:s]}
 
 dform math_df2 : mode[tex] :: math{'t} =
    izone `"$" ezone slot{'t} izone `"$" ezone
 
-dform math_df3 : except_mode[tex] :: math[s:s] =
-   `"$" it[s:s] `"$"
-
-dform math_df4 : except_mode[tex] :: math{'t} =
+dform math_df3 : except_mode[tex] :: math{'t} =
    `"$" it{'t} `"$"
 
-dform centermath_df1 : mode[tex] :: centermath[s:s] =
-   izone `"$$" slot[s:s] `"$$" ezone
+dform centermath_df1 : centermath[s:s] = centermath{slot[s:s]}
 
 dform centermath_df2 : mode[tex] :: centermath{'t} =
    izone `"$$" ezone slot{'t} izone `"$$" ezone
 
-dform centermath_df3 : except_mode[tex] :: centermath[s:s] =
-   com_hbreak `"$$" it[s:s] `"$$" com_hbreak
-
-dform centermath_df4 : except_mode[tex] :: centermath{'t} =
-   com_hbreak `"$$" it{slot{'t}} `"$$" com_hbreak
+dform centermath_df3 : except_mode[tex] :: centermath{'t} =
+   com_hbreak `"$$" it{'t} `"$$" com_hbreak
 
 (*!
  * @begin[doc]
@@ -1023,7 +1012,7 @@ declare math_int
 (*! @docoff *)
 
 dform math_Type_df1 : math_Type =
-   math_i["Type"]
+   math_tt["Type"]
 
 dform math_colon_df1 : mode[tex] :: math_colon =
    izone `"\\colon " ezone

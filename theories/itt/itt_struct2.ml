@@ -157,7 +157,7 @@ interactive cutMem 'H 'x 's 'S bind{y.'T['y]} :
  * @begin[doc]
  * The corresponding tactic is the @tt{letT} tactic.
  * This tactic takes a term $x=s @in S$ as an argument
- * and a term <<bind{x.'T['x]}>> as an optional with-argument.
+ * and a term $<<bind{x.'T['x]}>>$ as an optional with-argument.
  * If this argument is omitted then the tactic finds all occurrences of $s$
  * in the conclusion and replace them with $x$.
  *
@@ -191,7 +191,7 @@ interactive cutEq 'H ('s_1='s_2 in 'S) bind{x.'t['x]} 'x:
  *
  * The @tt{assertEqT} tactic applies this rule.
  * This tactic takes a term $s1=s2 @in S$ as an argument
- * and a term <<bind{x.'t['x]}>> as an optional with-argument.
+ * and a term $<<bind{x.'t['x]}>>$ as an optional with-argument.
  * This tactic helps us to prove an equality from a membership.
  *
  * @end[doc]

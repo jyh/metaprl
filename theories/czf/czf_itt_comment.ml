@@ -239,106 +239,96 @@ dform sand_df1 : mode[tex] :: math_sand{'s1; 's2} =
    izone `"}" ezone
 
 dform simplies_df1 : mode[tex] :: math_simplies{'s1; 's2} =
-   izone `"{" ezone
    slot{'s1}
    izone `"\\Rightarrow_s " ezone
    slot{'s2}
-   izone `"}" ezone
 
 dform siff_df1 : mode[tex] :: math_siff{'s1; 's2} =
-   izone `"{" ezone
    slot{'s1}
    izone `"\\Leftrightarrow_s " ezone
    slot{'s2}
-   izone `"}" ezone
 
 dform sall_df1 : mode[tex] :: math_sall{'x; 'A; 'B} =
-   izone `"{\\forall_s " ezone
+   izone `"\\forall_s " ezone
    slot{'x}
    izone `"\\colon " ezone
    slot{'A}
    izone `"." ezone
    slot{'B}
-   izone `"}" ezone
 
 dform sall_df2 : mode[tex] :: math_sall{'x; 'A} =
-   izone `"{\\forall_s " ezone
+   izone `"\\forall_s " ezone
    slot{'x}
    izone `"." ezone
    slot{'A}
-   izone `"}" ezone
 
 dform sexists_df1 : mode[tex] :: math_sexists{'x; 'A; 'B} =
-   izone `"{\\exists_s " ezone
+   izone `"\\exists_s " ezone
    slot{'x}
    izone `"\\colon " ezone
    slot{'A}
    izone `"." ezone
    slot{'B}
-   izone `"}" ezone
 
 dform sexists_df2 : mode[tex] :: math_sexists{'x; 'A} =
-   izone `"{\\exists_s " ezone
+   izone `"\\exists_s " ezone
    slot{'x}
    izone `"." ezone
    slot{'A}
-   izone `"}" ezone
 
 dform dall_df1 : mode[tex] :: math_dall{'x; 'A; 'B} =
-   izone `"{\\forall " ezone
+   izone `"\\forall " ezone
    slot{'x}
    izone `"\\in_s " ezone
    slot{'A}
    izone `"." ezone
    slot{'B}
-   izone `"}" ezone
 
 dform dexists_df1 : mode[tex] :: math_dexists{'x; 'A; 'B} =
-   izone `"{\\exists " ezone
+   izone `"\\exists " ezone
    slot{'x}
    izone `"\\in_s " ezone
    slot{'A}
    izone `"." ezone
    slot{'B}
-   izone `"}" ezone
 
-dform true_df : except_mode[tex] :: math_strue =
+dform true_df : except_mode[tex] :: except_mode[src] :: math_strue =
    `"True_s"
 
-dform false_df : except_mode[tex] :: math_sfalse =
+dform false_df : except_mode[tex] :: except_mode[src] :: math_sfalse =
    `"False_s"
 
-dform not_df1 : except_mode[tex] :: parens :: "prec"[prec_not] :: math_snot{'a} =
+dform not_df1 : except_mode[tex] :: except_mode[src] :: parens :: "prec"[prec_not] :: math_snot{'a} =
    Nuprl_font!tneg slot["le"]{'a}
 
-dform implies_df : except_mode[tex] :: parens :: "prec"[prec_implies] :: math_simplies{'a; 'b} =
+dform implies_df : except_mode[tex] :: except_mode[src] :: parens :: "prec"[prec_implies] :: math_simplies{'a; 'b} =
    slot["le"]{'a} " " Nuprl_font!Rightarrow " " slot["lt"]{'b}
 
-dform and_df : except_mode[tex] :: parens :: "prec"[prec_and] :: math_sand{'a; 'b} =
+dform and_df : except_mode[tex] :: except_mode[src] :: parens :: "prec"[prec_and] :: math_sand{'a; 'b} =
    slot["le"]{'a} " " Nuprl_font!wedge " " slot["lt"]{'b}
 
-dform or_df : except_mode[tex] :: parens :: "prec"[prec_or] :: math_sor{'a; 'b} =
+dform or_df : except_mode[tex] :: except_mode[src] :: parens :: "prec"[prec_or] :: math_sor{'a; 'b} =
    slot["le"]{'a} " " Nuprl_font!vee " " slot["lt"]{'b}
 
-dform iff_df : except_mode[tex] :: parens :: "prec"[prec_iff] :: math_siff{'a; 'b} =
+dform iff_df : except_mode[tex] :: except_mode[src] :: parens :: "prec"[prec_iff] :: math_siff{'a; 'b} =
    slot["le"]{'a} " " Nuprl_font!Leftrightarrow " " slot["lt"]{'b}
 
-dform all_df1 : except_mode[tex] :: parens :: "prec"[prec_quant] :: math_sall{'x; 'A; 'B} =
+dform all_df1 : except_mode[tex] :: except_mode[src] :: parens :: "prec"[prec_quant] :: math_sall{'x; 'A; 'B} =
    pushm[3] Nuprl_font!forall slot{'x} `":" slot{'A} sbreak["",". "] slot{'B} popm
 
-dform exists_df1 : except_mode[tex] :: parens :: "prec"[prec_quant] :: math_sexists{'x; 'A; 'B} =
+dform exists_df1 : except_mode[tex] :: except_mode[src] :: parens :: "prec"[prec_quant] :: math_sexists{'x; 'A; 'B} =
    pushm[3] Nuprl_font!"exists" slot{'x} `":" slot{'A} sbreak["",". "] slot{'B} popm
 
-dform all_df2 : except_mode[tex] :: parens :: "prec"[prec_quant] :: math_dall{'x; 'A; 'B} =
+dform all_df2 : except_mode[tex] :: except_mode[src] :: parens :: "prec"[prec_quant] :: math_dall{'x; 'A; 'B} =
    pushm[3] Nuprl_font!forall slot{'x} Nuprl_font!member slot{'A} sbreak["",". "] slot{'B} popm
 
-dform exists_df2 : except_mode[tex] :: parens :: "prec"[prec_quant] :: math_dexists{'x; 'A; 'B} =
+dform exists_df2 : except_mode[tex] :: except_mode[src] :: parens :: "prec"[prec_quant] :: math_dexists{'x; 'A; 'B} =
    pushm[3] Nuprl_font!"exists" slot{'x} Nuprl_font!member slot{'A} sbreak["",". "] slot{'B} popm
 
-dform all_df3 : except_mode[tex] :: parens :: "prec"[prec_quant] :: math_sall{'x; 'B} =
+dform all_df3 : except_mode[tex] :: except_mode[src] :: parens :: "prec"[prec_quant] :: math_sall{'x; 'B} =
    pushm[3] Nuprl_font!forall slot{'x} sbreak["",". "] slot{'B} popm
 
-dform exists_df3 : except_mode[tex] :: parens :: "prec"[prec_quant] :: math_sexists{'x; 'B} =
+dform exists_df3 : except_mode[tex] :: except_mode[src] :: parens :: "prec"[prec_quant] :: math_sexists{'x; 'B} =
    pushm[3] Nuprl_font!"exists" slot{'x} sbreak["",". "] slot{'B} popm
 
 (************************************************************************
@@ -350,7 +340,7 @@ declare math_empty
 dform empty_df1 : mode[tex] :: math_empty =
    izone `"{\\{\\}}" ezone
 
-dform empty_df2 : except_mode[tex] :: math_empty =
+dform empty_df2 : except_mode[tex] :: except_mode[src] :: math_empty =
    `"{}"
 
 (************************************************************************

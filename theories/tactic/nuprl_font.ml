@@ -431,13 +431,10 @@ dform small_df2 : internal :: small{'t} =
  * TEX HELPERS                                                          *
  ************************************************************************)
 
-declare mathBB[name:s]
 declare ensuremath[name:s]
 declare ensuremath{'t}
+declare mathBB[name:s]
 declare mathmacro[name:s]
-
-dform mathBB_df : internal :: mode[tex] :: mathBB[text:s] =
-   izone `"$\\mathbb " ezone slot[text:s] izone `"$" ezone
 
 dform ensuremath_df1 : internal :: mode[tex] :: ensuremath[text:s] =
    ensuremath{slot[text:s]}
@@ -448,17 +445,20 @@ dform ensuremath_df2 : internal :: mode[tex] :: ensuremath{'t} =
 dform ensuremath_cons_df : internal :: mode[tex] :: cons{ensuremath{'t1}; ensuremath{'t2}} =
    ensuremath{cons{'t1;'t2}}
 
+dform mathBB_df : internal :: mode[tex] :: mathBB[text:s] =
+   izone `"\\mathbb{" ezone slot[text:s] izone `"}" ezone
+
 dform mathmacro_df : internal :: mode[tex] :: mathmacro[text:s] =
-   izone `"$\\" slot[text:s] `"$" ezone
+   izone `"\\" slot[text:s] `" " ezone
 
 dform info_begin_df : internal :: mode[tex] :: info_begin =
-   izone `"{\\bf " ezone
+   izone `"\\mbox{\\bf " ezone
 
 dform info_end_df : internal :: mode[tex] :: info_end =
    izone `"}" ezone
 
 dform keyword_begin_df : internal :: mode[tex] :: keyword_begin =
-   izone `"{\\bf " ezone
+   izone `"\\mbox{\\bf " ezone
 
 dform keyword_end_df : internal :: mode[tex] :: keyword_end =
    izone `"}" ezone
@@ -830,20 +830,20 @@ dform delta_df			: internal :: mode[tex] :: Delta                     = mathmacr
 dform pi_df			: internal :: mode[tex] :: Pi                        = mathmacro["Pi"]
 dform times_df			: internal :: mode[tex] :: times                     = mathmacro["times"]
 dform div_df            	: internal :: mode[tex] :: "div"                     = mathmacro["div"]
-dform supplus_df		: internal :: mode[tex] :: supplus                   = ensuremath["^{+}"]
-dform supminus_df		: internal :: mode[tex] :: supminus                  = ensuremath["^{-}"]
-dform supcirc_df		: internal :: mode[tex] :: supcirc                   = ensuremath["^{\circ}"]
+dform supplus_df		: internal :: mode[tex] :: supplus                   = izone `"^{+}" ezone
+dform supminus_df		: internal :: mode[tex] :: supminus                  = izone `"^{-}" ezone
+dform supcirc_df		: internal :: mode[tex] :: supcirc                   = izone `"^{\circ}" ezone
 dform subseteq_df		: internal :: mode[tex] :: subseteq                  = mathmacro["subseteq"]
 dform supseteq_df		: internal :: mode[tex] :: supseteq                  = mathmacro["supseteq"]
-dform subzero_df		: internal :: mode[tex] :: subzero                   = ensuremath["0"]
-dform subone_df			: internal :: mode[tex] :: subone                    = ensuremath["1"]
-dform subtwo_df			: internal :: mode[tex] :: subtwo                    = ensuremath["2"]
-dform subthree_df		: internal :: mode[tex] :: subthree                  = ensuremath["3"]
-dform suba_df			: internal :: mode[tex] :: suba                      = ensuremath["a"]
-dform subb_df			: internal :: mode[tex] :: subb                      = ensuremath["b"]
-dform subc_df			: internal :: mode[tex] :: subc                      = ensuremath["c"]
-dform subq_df			: internal :: mode[tex] :: subq                      = ensuremath["q"]
-dform subz_df			: internal :: mode[tex] :: subz                      = ensuremath["z"]
+dform subzero_df		: internal :: mode[tex] :: subzero                   = izone `"_0" ezone
+dform subone_df			: internal :: mode[tex] :: subone                    = izone `"_1" ezone
+dform subtwo_df			: internal :: mode[tex] :: subtwo                    = izone `"_2" ezone
+dform subthree_df		: internal :: mode[tex] :: subthree                  = izone `"_3" ezone
+dform suba_df			: internal :: mode[tex] :: suba                      = izone `"_a" ezone
+dform subb_df			: internal :: mode[tex] :: subb                      = izone `"_b" ezone
+dform subc_df			: internal :: mode[tex] :: subc                      = izone `"_c" ezone
+dform subq_df			: internal :: mode[tex] :: subq                      = izone `"_q" ezone
+dform subz_df			: internal :: mode[tex] :: subz                      = izone `"_z" ezone
 
 (*
  * Source

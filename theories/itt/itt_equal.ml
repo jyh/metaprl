@@ -102,7 +102,7 @@ let debug_eqcd =
  * The $@cumulativity{i; j}$ term is a primitive judgment that defines level
  * @emph{inclusion} (this is a builtin judgment in @MetaPRL).
  *
- * The $@type{'t}$ term is used to define the @emph{type} judgment.  A term $T$ is a
+ * The $@type{t}$ term is used to define the @emph{type} judgment.  A term $T$ is a
  * type if $@sequent{squash; H; @type{T}}$.
  *
  * The semantic meaning of an open equality is that:
@@ -312,16 +312,20 @@ dform member_df2 : mode[src] :: parens :: "prec"[prec_equal] :: ('x IN 'T) =
    szone pushm slot{'x} space `"IN" hspace slot{'T} popm ezone
 
 dform type_df1 : except_mode[src] :: parens :: "prec"[prec_type] :: "type"{'a} =
-   slot{'a} " " `"Type"
+   math_type{'a}
 
 dform type_df2 : mode[src] :: "type"{'a} =
    `"\"type\"{" slot{'a} `"}"
 
 dform univ_df1 : except_mode[src] :: univ[i:l] =
-   mathbbU `"[" slot[i:l] `"]"
+   math_univ{slot[i:l]}
 
 dform cumulativity_df : cumulativity[i:l, j:l] =
    `"cumulativity[" slot[i:l] `";" slot[j:l] `"]"
+
+dform squash_df : except_mode[src] :: squash = cdot
+dform squash_df2 : mode[src] :: squash = `"squash"
+dform it_df1 : it = cdot
 
 (************************************************************************
  * RULES                                                                *

@@ -298,7 +298,7 @@ prim productFormation 'H 'A 'x :
  * @thysubsection{Typehood and equality}
  *
  * The type equality is intensional.  A product type
- * << x: 'A * 'B['x] >> is a type if $A$ is a type, and
+ * $<< x: 'A * 'B['x] >>$ is a type if $A$ is a type, and
  * $B[x]$ is a family of types indexed by $x @in A$.
  * @end[doc]
  *)

@@ -219,7 +219,7 @@ interactive false_squash 'H :
  * @begin[doc]
  * @thysubsection{Negation}
  *
- * The negation << "not"{'A} >> is a well-formed if
+ * The negation $<< "not"{'A} >>$ is a well-formed if
  * $A$ is a type.  The negation states that the type $A$
  * is not inhabited: any proof of $A$ is also a proof of
  * $@void$.  To prove the negation, assume $A$ and find
@@ -248,7 +248,7 @@ interactive not_elim {| elim_resource [] |} 'H 'J :
  * @begin[doc]
  * @thysubsection{Conjunction}
  *
- * The conjunction << "and"{'A; 'B} >> is well-formed if
+ * The conjunction $<< "and"{'A; 'B} >>$ is well-formed if
  * both $A$ and $B$ are types.  It is true if both $A$ and
  * $B$ are true.  The elimination form splits the assumption
  * into it two component proofs.
@@ -277,7 +277,7 @@ interactive and_elim {| elim_resource [] |} 'H 'J 'y 'z :
  * @begin[doc]
  * @thysubsection{Disjunction}
  *
- * The disjunction << "or"{'A; 'B} >> is well-formed if both
+ * The disjunction $<< "or"{'A; 'B} >>$ is well-formed if both
  * $A$ and $B$ are types.  The disjunction is true if it is
  * a type and one of $A$ or $B$ is true.  The introduction
  * rules use the @tt{SelectOption} to allow application with
@@ -318,7 +318,7 @@ interactive or_elim {| elim_resource [] |} 'H 'J 'y :
  * @begin[doc]
  * @thysubsection{Implication}
  *
- * The implication << "implies"{'A; 'B} >> is well-formed if both
+ * The implication $<< "implies"{'A; 'B} >>$ is well-formed if both
  * $A$ and $B$ are types.  The implication is true if it is a
  * type, and a proof of $B$ can be produced from a proof of
  * $A$.  The elimination rule corresponds to @emph{modus-ponens}:
@@ -350,7 +350,7 @@ interactive implies_elim {| elim_resource [ThinOption thinT] |} 'H 'J 'y :
  * @begin[doc]
  * @thysubsection{Bi-implication}
  *
- * The bi-implication << "iff"{'A; 'B} >> is a well-formed if
+ * The bi-implication $<< "iff"{'A; 'B} >>$ is well-formed if
  * both $A$ and $B$ are types.  The introduction and elimination rules
  * perform the top-level conjunctive reasoning.
  * @end[doc]
@@ -378,7 +378,7 @@ interactive iff_elim {| elim_resource [] |} 'H 'J 'y 'z :
  * @begin[doc]
  * @thysubsection{Conditional conjunction}
  *
- * The conditional conjunction << "cand"{'A; 'B} >> differs from
+ * The conditional conjunction $<< "cand"{'A; 'B} >>$ differs from
  * the conjunction only in the introduction rule.  The conjunction
  * is true if $A$ is true, and a proof of $B$ can be produced from
  * a proof of $A$.
@@ -407,7 +407,7 @@ interactive cand_elim {| elim_resource [] |} 'H 'J 'y 'z :
  * @begin[doc]
  * @thysubsection{Conditional disjunction}
  *
- * The conditional disjunction << "cor"{'A; 'B} >> differs from
+ * The conditional disjunction $<< "cor"{'A; 'B} >>$ differs from
  * the disjunction in that a proof of $B$ is needed only if
  * a proof of $A$ can't be found.  The conditional disjunction
  * is true if $A$ is true, or $B$ is true @emph{assuming} that
@@ -446,7 +446,7 @@ interactive cor_elim {| elim_resource [] |} 'H 'J 'u 'v :
  * @begin[doc]
  * @thysubsection{Universal quantification}
  *
- * The universal quantification << all x: 'A. 'B['x] >> is well-formed
+ * The universal quantification $<< all x: 'A. 'B['x] >>$ is well-formed
  * if $A$ is a type, and $B[x]$ is a type for any $x @in A$.
  * The quantification is true if it is well-formed and
  * a $B[a]$ is true for any element $a @in A$.  The elimination
@@ -479,7 +479,7 @@ interactive all_elim {| elim_resource [ThinOption thinT] |} 'H 'J 'w 'z :
  * @begin[doc]
  * @thysubsection{Existential quantification}
  *
- * The existential quantification << exst x: 'A. 'B['x] >> is well-formed
+ * The existential quantification $<< exst x: 'A. 'B['x] >>$ is well-formed
  * if $A$ is a type, and $B[x]$ is a type for any $x @in A$.  The quantification
  * is true if it is well-formed and there is a proof $a @in A$ where $B[a]$
  * is also true.  The elimination form splits the proof of $@exists{x; A; B[x]}$

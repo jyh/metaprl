@@ -81,13 +81,7 @@ open Var
 open Base_auto_tactic
 
 declare rw_just
-declare bind{v. 'C['v]}
-
-let bind_term = << bind{v. 'C['v]} >>
-let bind_opname = opname_of_term bind_term
-let is_bind_term = is_dep1_term bind_opname
-let mk_bind_term = mk_dep1_term bind_opname
-let dest_bind = dest_dep1_term bind_opname
+dform rw_just_df : except_mode[src] :: rw_just = `"rw"
 
 (*!
  * @begin[doc]
@@ -105,7 +99,7 @@ prim rewriteAxiom1 'H :
 (*!
  * @begin[doc]
  * The @Comment!rewrite[rewriteAxiom2] conditional rewrite provides a link to the primitive
- * rewriter: a proof of << Perv!"rewrite"{'a; 'b} >> shows that the terms
+ * rewriter: a proof of $<<Perv!"rewrite"{'a; 'b}>>$ shows that the terms
  * $a$ and $b$ are computationally equivalent.
  * @end[doc]
  *)

@@ -193,7 +193,7 @@ prim setMemberEquality {| intro_resource []; eqcd_resource |} 'H 'x :
  *
  * An assumption with a set type $u@colon @set{x; A; B[x]}$ asserts two facts:
  * that $u @in A$ and $B[u]$.  However, the proof of $B[u]$ is unavailable.  The
- * << squash{'B['u]} >> hypothesis states that $B[u]$ is true, but its proof is
+ * $@squash{'B['u]}$ hypothesis states that $B[u]$ is true, but its proof is
  * omitted.
  * @end[doc]
  *)

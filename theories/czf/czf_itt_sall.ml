@@ -89,15 +89,8 @@ let fold_sall = makeFoldC << "sall"{x. 'A['x]} >> unfold_sall
  * DISPLAY FORMS                                                        *
  ************************************************************************)
 
-dform sall_df : except_mode[tex] :: parens :: "prec"[prec_lambda] :: "sall"{x. 'A} =
-   pushm[0] Nuprl_font!forall slot{'x} `"." slot{'A} popm
-
-dform sall_df : mode[tex] :: parens :: "prec"[prec_lambda] :: "sall"{x. 'A} =
-   pushm[0]
-   izone `"{$\\forall_s$" ezone
-   slot{'x} `"." slot{'A}
-   izone `"}" ezone
-   popm
+dform sall_df : except_mode[src] :: parens :: "prec"[prec_lambda] :: "sall"{x. 'A} =
+   math_sall{'x; 'A}
 
 (************************************************************************
  * RULES                                                                *

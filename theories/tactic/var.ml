@@ -20,7 +20,7 @@
  * val maybe_new_vars  : string list -> string list -> string list
  * @end[verbatim]
  *
- * The function $@tt{new_var}@space v@space @i{vars}$ generates a new variable
+ * The function $@tt[new_var]@space v@space @i{vars}$ generates a new variable
  * ``similar'' to $v$, but not contained in $@i{vars}$.  In this
  * case ``similar'' means that the variable has the same name, but
  * it may have a numerical suffix to make it distinct.

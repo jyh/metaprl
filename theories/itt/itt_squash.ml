@@ -7,13 +7,13 @@
  * @theory[Itt_squash]
  *
  * The @tt{Itt_squash} module defines a @emph{squash} type.
- * <<squash{'A}>> hides computational content of $A$.
- * <<squash{'A}>> is inhabited iff and only if $A$ is inhabited.
- * In this case <<squash{'A}>> contains only one element $@it$.
- * That is <<squash{'A}>> means that $A$ is true, but we do not know its
+ * $<<squash{'A}>>$ hides computational content of $A$.
+ * $<<squash{'A}>>$ is inhabited iff and only if $A$ is inhabited.
+ * In this case $<<squash{'A}>>$ contains only one element $@it$.
+ * That is $<<squash{'A}>>$ means that $A$ is true, but we do not know its
  * computational content.
  * Consequentially,  the sequent
- * $$@sequent{@it; {H; x@colon {} squash{A}; J}; C}$$
+ * $$@sequent{@it; {H; x@colon @squash{A}; J}; C}$$
  * is true when $C$ is true (with the assumption that $A$ is true),
  * but extract of $C$ does not depend on the witness of $A$.
  * Note that $x$ in this sequent stands not for a witness for $A$,
@@ -35,7 +35,7 @@
  *
  * $$
  * @rulebox{squashT; ;
- *    @sequent{squash; H; squash{T}};
+ *    @sequent{squash; H; @squash{T}};
  *    @sequent{ext; H; T}}
  * $$
  *
@@ -60,7 +60,7 @@
  * used), but @tt{squash} sequents are also used in cases where
  * the computational content can be inferred.  Equality proofs
  * $a = b @in T$ are the canonical example: the computational content
- * of $a = b @in T$ is @emph{always} the term @it, and proofs
+ * of $a = b @in T$ is @emph{always} the term $@it$, and proofs
  * of equalities can always be squashed because the content can
  * be discovered later.
  *
@@ -161,11 +161,7 @@ let mk_squash_term = mk_dep0_term squash_opname
  * DISPLAY FORMS                                                        *
  ************************************************************************)
 
-dform squash_df : except_mode[src] :: squash{'A} = "[" 'A "]"
-
-dform sqsquash_df : except_mode[src] :: squash = cdot
-dform sqsquash_df2 : mode[src] :: squash = `"squash"
-dform it_df1 : it = cdot
+dform squash_df : except_mode[src] :: squash{'A} = math_squash{'A}
 
 (************************************************************************
  * RULES                                                                *
@@ -186,7 +182,7 @@ prim squashFormation 'H 'A :
  * @rules
  * @thysubsection{Equality and typehood}
  *
- * <<squash{'A}>> is a type if $A$ is a type.
+ * $<<squash{'A}>>$ is a type if $A$ is a type.
  * @end[doc]
  *)
 prim squashEquality {| intro_resource []; eqcd_resource |} 'H  :
@@ -202,7 +198,7 @@ prim squashType {| intro_resource [] |} 'H :
  * @begin[doc]
  * @thysubsection{Introduction}
  *
- * A squashed type <<squash{'A}>> is true if $A$ is true.
+ * A squashed type $<<squash{'A}>>$ is true if $A$ is true.
  * @end[doc]
  *)
 prim squashMemberFormation {| intro_resource [] |} 'H :

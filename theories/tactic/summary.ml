@@ -422,14 +422,6 @@ dform location_df : "location"[start:n, finish:n]{'body} =
    slot{'body}
 
 (*
- * Display a simple rewrite.
- *)
-dform rewrite_df : "rewrite"[name:s]{'redex; 'contractum; 'v; 'res} =
-   szone pushm[4]
-   'v info[" rewrite"] " " rewrite_name[name:s] `" :" hspace slot{'res} slot{'redex} " " longleftrightarrow hspace slot{'contractum}
-   popm ezone
-
-(*
  * Resource annotations
  *)
 declare res_def_list{'res}
@@ -454,39 +446,52 @@ dform resource_defs_dfs : internal :: resource_defs[start:n, finish:n, name:s]{'
    resource_defs[name:s]{'args}
 
 (*
+ * Display a simple rewrite.
+ *)
+dform rewrite_df : "rewrite"[name:s]{'redex; 'contractum; 'v; 'res} =
+   szone pushm[4]
+   ensuremath{'v} info[" rewrite"] " " rewrite_name[name:s] hspace resources{'res} keyword[":"] hspace
+   szone pushm[4]
+   ensuremath{'redex} `" " ensuremath{longleftrightarrow} hspace ensuremath{'contractum}
+   popm ezone
+   popm ezone
+
+(*
  * A conditional rewrite requires special handling of the params.
  *)
 dform context_param_df : except_mode[src] :: "context_param"[name:s] =
-   slot[name:s]
+   ensuremath[name:s]
 
 dform context_param_df2 : mode[src] :: "context_param"[name:s] =
    `"'" slot[name:s]
 
 dform var_param_df : except_mode[src] :: "var_param"[name:s] =
-   slot[name:s]
+   ensuremath[name:s]
 
 dform var_param_df2 : mode[src] :: "var_param"[name:s] =
    `"'" slot[name:s]
 
 dform term_param_df : "term_param"{'t} =
    szone pushm[4]
-   slot{'t}
+   ensuremath{'t}
    popm ezone
 
 dform cond_rewrite_df : "cond_rewrite"[name:s]{'params; 'args; 'redex; 'contractum; 'proof; 'res} =
    szone pushm[4]
-   slot{'proof} info[" rewrite"] " " rewrite_name[name:s] " " resources{'res} slot{'params} keyword[" :"] " " slot{'args}
-   hspace longrightarrow slot{'redex} longleftrightarrow slot{'contractum}
+   ensuremath{'proof} info[" rewrite"] " " rewrite_name[name:s] " " resources{'res} space_list{'params} keyword[":"] " " ensuremath{'args} " " ensuremath{longrightarrow} hspace
+   szone pushm[4]
+   ensuremath{'redex} " " ensuremath{longleftrightarrow} hspace ensuremath{'contractum}
+   popm ezone
    popm ezone
 
 dform axiom_df : "axiom"[name:s]{'stmt; 'proof; 'res} =
    szone pushm[4]
-   slot{'proof} info[" rule"] " " rule_name[name:s] `" " resources{'res} `":" hspace slot{'stmt}
+   ensuremath{'proof} info[" rule"] " " rule_name[name:s] `" " resources{'res} keyword[":"] hspace ensuremath{'stmt}
    popm ezone
 
-dform rule_df : "rule"[name:s]{'params; 'stmt; 'v; 'res} =
+dform rule_df : "rule"[name:s]{'params; 'stmt; 'proof; 'res} =
    hzone pushm[4]
-   'v info[" rule"] " " szone rule_name[name:s] hspace resources{'res} space_list{'params} `":" ezone hspace slot{'stmt}
+   ensuremath{'proof} info[" rule"] " " szone rule_name[name:s] hspace resources{'res} space_list{'params} keyword[":"] ezone hspace ensuremath{'stmt}
    ezone popm
 
 dform opname_df : "opname"[name:s]{'term} =
@@ -507,8 +512,8 @@ dform condition_df : "condition"{'term; 'cons; 'oexpr} =
 
 dform mlrewrite_df1 : "mlrewrite"[name:s]{'params; 'redex; 'contracta; 'body; 'res} =
    szone pushm[4]
-   info["mlrewrite"] " " rewrite_name[name:s] " " resources{'res} space_list{'params} `":" hspace
-   slot{'redex} keyword["="] slot{'body}
+   info["mlrewrite"] " " rewrite_name[name:s] " " resources{'res} space_list{'params} keyword[":"] hspace
+   ensuremath{'redex} keyword["="] slot{'body}
    popm ezone
 
 (*

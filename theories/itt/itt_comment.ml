@@ -41,16 +41,20 @@ declare math_equal{'T; 'a; 'b}
 declare math_member{'T; 'a}
 declare math_cumulativity{'i; 'j}
 
+prec prec_type
+prec prec_equal
+
 (************************************************
  * TeX mode.
  *)
 dform math_type_df1 : mode[tex] :: math_type{'t} =
-   izone `"{" ezone
    slot{'t}
-   izone `"\\ {\\it Type}}" ezone
+   izone `"\\,\\mathtt{" ezone
+   `"Type"
+   izone "}" ezone
 
 dform math_univ_df : mode[tex] :: math_univ{'i} =
-   izone `"{{\\mathbb U}_" ezone
+   izone `"{\\mathbb U}_{" ezone
    slot{'i}
    izone `"}" ezone
 
@@ -80,8 +84,6 @@ dform math_cumulativity_df1 : mode[tex] :: math_cumulativity{'i; 'j} =
 (************************************************
  * Normal mode.
  *)
-prec prec_type
-prec prec_equal
 
 dform equal_df : except_mode[tex] :: parens :: "prec"[prec_equal] :: math_equal{'T; 'a; 'b} =
    szone pushm slot{'a} space `"= " slot{'b} space Nuprl_font!member `" " slot{'T} popm ezone
@@ -1179,7 +1181,6 @@ dform list_ind_df1 : except_mode[tex] :: parens :: "prec"[prec_list] :: math_lis
 declare math_quot{'T; 'x; 'y; 'E}
 declare math_esquashbool{'P}
 declare math_esquash{'P}
-declare math_squash{'P}
 
 (************************************************
  * TeX
@@ -1205,11 +1206,6 @@ dform math_esquash_df1 : mode[tex] :: math_esquash{'P} =
    slot{'P}
    izone `")}" ezone
 
-dform math_squash_df1 : mode[tex] :: math_squash{'P} =
-   izone `"{{\\it squash}(" ezone
-   slot{'P}
-   izone `")}" ezone
-
 (************************************************
  * Normal mode
  *)
@@ -1225,9 +1221,6 @@ dform esquash_bool : except_mode[tex] :: math_esquashbool{'P} =
    `"esquash_bool(" slot{'P} `")"
 
 dform esquash_df : parens :: "prec"[prec_esquash] :: except_mode[tex] :: math_esquash{'P} =
-   Nuprl_font!downarrow slot{'P}
-
-dform esquash_df : parens :: "prec"[prec_esquash] :: except_mode[tex] :: math_squash{'P} =
    Nuprl_font!downarrow slot{'P}
 
 (*

@@ -310,7 +310,7 @@ let repeatForT = Tactic_type.Tacticals.repeatForT
  * branch of the disjunct.
  *
  * $$
- * @rulebox{selT; @tt{2 (dT 0)};
+ * @rulebox{selT; 2@space (@tt{dT}@space 0);
  *   @sequent{ext; {H; x@colon T_2; J}; T_1@space @i{Type}}@cr
  *   @sequent{ext; {H; x@colon T_2; J}; T_2};
  *   @sequent{ext; {H; x@colon T_2; J}; T_1 @vee T_2}}

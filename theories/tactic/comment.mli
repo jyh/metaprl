@@ -191,6 +191,7 @@ declare math_slot[tag:s]{'t}
  * Font control in math mode.
  *)
 declare math_bb{'t}
+declare math_tt[text:s]
 declare math_tt{'t}
 declare math_bf{'t}
 declare math_i{'t}

@@ -8,15 +8,15 @@
  * @theory[Itt_squiggle]
  *
  * The @tt{Itt_squiggle} module defines the squiggle equality.
- * The squiggle equality <<'t ~ 's>> holds for closed terms $t$ and $s$ iff
+ * The squiggle equality $<<'t ~ 's>>$ holds for closed terms $t$ and $s$ iff
  * $t$ can be reduced to $s$. We can expand this semantics for open terms
-   in the given context the same way as for any other type.
+ * in the given context the same way as for any other type.
  * For example one can prove that
-$$      @sequent{ext; {H; x@colon @prod{A;B}}; x  ~  @pair{@fst{x};@snd{x}}}$$
-   This is a conditional rewrite: it states that we can replace $x$ with
-   $@pair{@fst{x};@snd{x}}$ only when we know that $x$ is from a product type.
-   The rules @hrefrule[squiggleSubstitution] and @hrefrule[squiggleHypSubstitution]
-   define when such substitution would be valid.
+ * $$@sequent{ext; {H; x@colon @prod{A;B}}; x  ~  @pair{@fst{x};@snd{x}}}$$
+ * This is a conditional rewrite: it states that we can replace $x$ with
+ * $@pair{@fst{x};@snd{x}}$ only when we know that $x$ is from a product type.
+ * The rules @hrefrule[squiggleSubstitution] and @hrefrule[squiggleHypSubstitution]
+ * define when such substitution would be valid.
  * @end[doc]
  *
  * ----------------------------------------------------------------
@@ -123,8 +123,8 @@ let mk_squiggle_term = mk_dep0_dep0_term squiggle_opname
  * @begin[doc]
    @rewrites
  * @thysubsection{Typehood and equality}
-   The squiggle relation <<'t ~ 's>> is a type if and only if
-   it holds.  Two squiggle relation <<'t1 ~ 's1>> and  <<'t2 ~ 's2>>
+   The squiggle relation $<<'t ~ 's>>$ is a type if and only if
+   it holds.  Two squiggle relation $<<'t_1 ~ 's_1>>$ and $<<'t_2 ~ 's_2>>$
    are equal as types whenever they are correct types.
  * @end[doc]
 *)
@@ -164,7 +164,7 @@ prim squiggleElimination {|  elim_resource [ThinOption thinT] |} 'H 'J :
 (*!
  * @begin[doc]
  * @thysubsection{Substitution}
- * If we can prove that <<'t ~ 's>>, then we can substitute $s$ for $t$
+ * If we can prove that $<<'t ~ 's>>$, then we can substitute $s$ for $t$
  * in any place without generating any well-formedness subgoals.
  * @end[doc]
  *)
@@ -184,10 +184,10 @@ prim squiggleHypSubstitution 'H 'J ('t ~ 's) bind{x. 'A['x]}:
 (*!
  * @begin[doc]
  * The  @tt{sqSubstT} tactic takes a clause number $i$, and
- * a term <<'t ~ 's>> and applies one of two above rules.
+ * a term $<<'t ~ 's>>$ and applies one of two above rules.
  * This tactic substitutes the term $s$ for
  * @emph{all} occurrences of the term $t$ in the clause.
- * One can give a term  << bind{x. 'A['x]} >> as an optional with-argument
+ * One can give a term  $<< bind{x. 'A['x]} >>$ as an optional with-argument
  * to specify exact location of the subterm to be replaced.
  * @end[doc]
  *)

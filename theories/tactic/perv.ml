@@ -120,9 +120,6 @@ dform perv_cons_df : "cons"{'car; 'cdr} =
 dform perv_string_df : "string"[s:s] =
    `"\"" slot[s:s] `"\""
 
-dform bind_df : bind{x. 'T} =
-   `"bind(" slot{'x} `"." slot{'T} `")"
-
 (*
  * -*-
  * Local Variables:

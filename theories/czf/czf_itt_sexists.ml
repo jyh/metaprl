@@ -92,15 +92,8 @@ let fold_sexists = makeFoldC << "sexists"{x. 'A['x]} >> unfold_sexists
  * DISPLAY FORMS                                                        *
  ************************************************************************)
 
-dform sexists_df : except_mode[tex] :: parens :: "prec"[prec_lambda] :: "sexists"{x. 'A} =
-   pushm[0] Nuprl_font!"exists" slot{'x} `"." slot{'A} popm
-
-dform sexists_df : mode[tex] :: parens :: "prec"[prec_lambda] :: "sexists"{x. 'A} =
-   pushm[0]
-   izone `"{$\\exists_s$" ezone
-   slot{'x} `"." slot{'A}
-   izone `"}" ezone
-   popm
+dform sexists_df : except_mode[src] :: parens :: "prec"[prec_lambda] :: "sexists"{x. 'A} =
+   math_sexists{'x; 'A}
 
 (************************************************************************
  * RULES                                                                *

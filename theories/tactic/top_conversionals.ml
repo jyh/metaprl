@@ -25,12 +25,12 @@
  * @bf{rewrite} unfold_beta : $(@lambda x. b[x])@space a @longleftrightarrow b[a]$
  * @end[center]
  *
- * This declaration defines a conversion called @tt{unfold_beta} that can
+ * This declaration defines a conversion called @tt[unfold_beta] that can
  * be applied with the function @tt{rwh}, which searches for the outermost
  * valid applications of the rewrite.  Here is an example proof step:
  *
  * $$
- * @rulebox{rwh; @tt{unfold_beta 0};
+ * @rulebox{rwh; @tt[unfold_beta]@space 0;
  *   @sequent{ext; H; ((@lambda v. v + 1)@space 2) = 3 @in @int};
  *   @sequent{ext; H; 2 + 1 = 3 @in @int}}
  * $$
@@ -278,7 +278,7 @@ let sweepDnC = Tactic_type.Conversionals.sweepDnC
  * the beta rewrite.
  *
  * $$
- * @rulebox{rwh; (@tt{foldC} (@lambda v. v + 1)@space 2 @tt{unfold_beta}) 0;
+ * @rulebox{rwh; (@tt{foldC}@space (@lambda v. v + 1)@space 2@space @tt[unfold_beta])@space 0;
  *   @sequent{ext; H; 2 + 1 = 3 @in @int};
  *   @sequent{ext; H; ((@lambda v. v + 1)@space 2) = 3 @in @int}}
  * $$
@@ -288,7 +288,7 @@ let sweepDnC = Tactic_type.Conversionals.sweepDnC
  * rewrite obligation.
  *
  * $$
- * @rulebox{rw; (@tt{addrC} [1] (@tt{cutC} 3)) 0;
+ * @rulebox{rw; (@tt{addrC}@space{} [1]@space (@tt{cutC}@space 3))@space 0;
  *   @sequent{ext; H; 3 = 3 @in @int}@cr
  *   @sequent{ext; H; ((@lambda v. v + 1)@space 2) @longleftrightarrow 3};
  *   @sequent{ext; H; ((@lambda v. v + 1)@space 2) = 3 @in @int}}

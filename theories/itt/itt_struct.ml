@@ -177,8 +177,8 @@ interactive hypothesis 'H 'J 'x :
  *
  * There are three rules to define substitution.
  * The @tt{substitution} rule defines substitution of an arbitrary
- * subterm of the conclusion $T_11[t_1]$ with a new term $t_2$.  For the
- * substitution to be valid, the terms $t_11$ and $t_2$ must be equal
+ * subterm of the conclusion $T_1[t_1]$ with a new term $t_2$.  For the
+ * substitution to be valid, the terms $t_1$ and $t_2$ must be equal
  * in some type $T_2$, the goal $T_1[t_2]$ must be provable, and the
  * conclusion $T_1[x]$ must also be @emph{functional} for arbitrary terms
  * $x @in T_2$.  Functionality means that the proofs of $T_1[x]$ must be
@@ -186,7 +186,7 @@ interactive hypothesis 'H 'J 'x :
  * restriction.  This restriction allows the proof extract term
  * $t$ to be copied from the proof of $T_1[t_2]$.
  *
- * The << bind{x. 'T1['x]} >> argument specifies the exact location
+ * The $<< bind{x. 'T_1['x]} >>$ argument specifies the exact location
  * of the subterm to be replaced.
  * @end[doc]
  *)
@@ -318,10 +318,10 @@ let tryAssertT s ta tm p =
  * location in the hypothesis list.
  *
  * $$
- * @rulebox{assertT; i@space A;
+ * @rulebox{assertAtT; i@space A;
  *    @ldots  @i{assertion} @ldots @sequent{ext; {H; J}; A}@cr
  *       @sequent{ext; {H; x@colon A; J}; C};
- *    @sequent{ext; {H; @i{(location i)}; J}; C}}
+ *    @sequent{ext; {H; (@i{location}@space i); J}; C}}
  * $$
  *
  * @docoff
@@ -365,7 +365,7 @@ let useWitnessT t p =
  * example illustrates the use.
  *
  * $$
- * @rulebox{substT; 1 + 2 = 3 in @int;
+ * @rulebox{substT; 1 + 2 = 3 @in @int;
  *    @ldots @i{equality} @ldots @sequent{squash; H; 1 + 2 = 3 @in @int}@cr
  *    @ldots @i{main} @ldots @sequent{ext; H; 3 < 1 * 3}@cr
  *    @ldots @i{wf} @ldots @sequent{squash; {H; i@colon @int}; @type{(x < 1 * x)}};

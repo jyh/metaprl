@@ -99,6 +99,10 @@ declare df_last{'l}
  *
  * Display for mechanism would convert the variable term into a @tt{display_var}
  * term to avoid having to deal with argument lists of arbitrary length.
+ *
+ * The @tt{tex} mode display form for @tt{display_var} uses some heuristics to split
+ * the variable name into the name and the subscript part and is omited from the
+ * documentation.
  * @end[doc]
  *)
 declare var_list{'t}
@@ -109,14 +113,11 @@ dform var_prl_df : mode[prl] :: display_var[v:v]{nil} =
 dform var_src_df : mode[src] :: display_var[v:v]{nil} =
    `"'" slot[v:v]
 
-dform var_tex_df : mode[tex] :: display_var[v:v]{nil} =
-   izone `"{\\it " ezone slot[v:v] izone `"\\/}" ezone
-
 dform var_html_df : mode[html] :: display_var[v:v]{nil} =
    izone `"<font color=\"#114466\"><b>" ezone slot[v:v] izone `"</b></font>" ezone
 
 dform so_var_df : display_var[v:v]{'t} =
-   display_var[v:v]{nil} "[" pushm[0] var_list{'t} popm "]"
+   szone display_var[v:v]{nil} `"[" pushm[0] var_list{'t} popm `"]" ezone
 
 dform var_list_df1 : var_list{cons{'a;'b}} =
    'a `";" hspace var_list{'b}
@@ -125,6 +126,51 @@ dform var_list_df2 : var_list{cons{'a;nil}} =
    'a
 
 (* @docoff *)
+
+let split_digits s =
+   let rec aux i =
+      if (i=0) then 0 else
+         let i' = pred i in
+         if String_util.is_digit(s.[i']) then aux i' else i
+   in
+      let len = String.length s in
+      let i = aux len in
+      String.sub s 0 i, String.sub s i (len-i)
+
+let dvar_opname = opname_of_term <<display_var[v:v]{nil}>>
+
+ml_dform var_tex_df : mode[tex] :: display_var[v:v]{nil} format_term buf = fun
+   term ->
+      let v =
+         match (dest_op (dest_term term).term_op).op_params with
+            [p] ->
+               begin match dest_param p with
+                  Var v -> v
+                | _ -> raise (Invalid_argument "var_tex_df")
+               end
+          | _ ->
+            raise (Invalid_argument "var_tex_df")
+      in match String_util.split '_' v with
+         [] ->
+            raise (Invalid_argument "var_tex_df: string has an empty name")
+       | h::tl ->
+            let h,tl =
+               if List.for_all (String_util.for_all String_util.is_digit) tl then
+                  let hn,hd = split_digits h in
+                     if (hn <> "") && (hd <> "") then hn, hd::tl else h,tl
+               else
+                  h,tl
+            in
+               format_string buf h;
+               if (tl<>[]) then begin
+                  format_izone buf;
+                  format_string buf "_{";
+                  format_ezone buf;
+                  format_string buf (String.concat "," tl);
+                  format_izone buf;
+                  format_string buf "}";
+                  format_ezone buf
+               end
 
 let bvar_opname = opname_of_term <<bvar{'v}>>
 
@@ -157,7 +203,7 @@ ml_dform sequent_src_df : mode["src"] :: "sequent"{'ext; 'seq} format_term buf =
             format_string buf (if i = 0 then " >-" else ";");
             format_space buf;
             format_term buf NOParens (SeqGoal.get goals i);
-            format_goal goals (i + 1) len
+            format_goal goals (succ i) len
          end
    in
    let rec format_hyp hyps i len =
@@ -177,7 +223,7 @@ ml_dform sequent_src_df : mode["src"] :: "sequent"{'ext; 'seq} format_term buf =
                   format_space buf;
                   format_term buf NOParens (mk_so_var_term v values)
          in
-            format_hyp hyps (i + 1) len
+            format_hyp hyps (succ i) len
    in
    let format term =
       let { sequent_args = args;
@@ -224,7 +270,7 @@ ml_dform sequent_prl_df : mode["prl"] :: "sequent"{'ext; 'seq} format_term buf =
    in
    let rec format_hyp hyps i len =
       if i <> len then
-         let lead = (string_of_int (i + 1)) ^ ". " in
+         let lead = (string_of_int (succ i)) ^ ". " in
          let _ =
             if i = 0 then
                format_hbreak buf lead " "
@@ -242,7 +288,7 @@ ml_dform sequent_prl_df : mode["prl"] :: "sequent"{'ext; 'seq} format_term buf =
                   format_term buf NOParens a;
                   format_ezone buf
          in
-            format_hyp hyps (i + 1) len
+            format_hyp hyps (succ i) len
    in
    let rec format_goal goals i len =
       if i <> len then
@@ -252,7 +298,7 @@ ml_dform sequent_prl_df : mode["prl"] :: "sequent"{'ext; 'seq} format_term buf =
             else
                format_hbreak buf "; " "\159 ";
             format_term buf NOParens a;
-            format_goal goals (i + 1) len
+            format_goal goals (succ i) len
    in
    let format term =
       let { sequent_args = args;
@@ -291,7 +337,7 @@ ml_dform sequent_html_df : mode["html"] :: "sequent"{'ext; 'seq} format_term buf
    in
    let rec format_hyp hyps i len =
       if i <> len then
-         let lead = (string_of_int (i + 1)) ^ ". " in
+         let lead = (string_of_int (succ i)) ^ ". " in
          let _ =
             if i = 0 then
                format_hbreak buf lead " "
@@ -309,7 +355,7 @@ ml_dform sequent_html_df : mode["html"] :: "sequent"{'ext; 'seq} format_term buf
                   format_term buf NOParens a;
                   format_ezone buf
          in
-            format_hyp hyps (i + 1) len
+            format_hyp hyps (succ i) len
    in
    let rec format_goal goals i len =
       if i <> len then
@@ -319,7 +365,7 @@ ml_dform sequent_html_df : mode["html"] :: "sequent"{'ext; 'seq} format_term buf
             else
                format_hbreak buf "; " "<i>&#8866;</i> ";
             format_term buf NOParens a;
-            format_goal goals (i + 1) len
+            format_goal goals (succ i) len
    in
    let format term =
       let { sequent_args = args;
@@ -338,7 +384,7 @@ ml_dform sequent_html_df : mode["html"] :: "sequent"{'ext; 'seq} format_term buf
    in
       format
 
-ml_dform sequent_prl_df : mode["tex"] :: "sequent"{'ext; 'seq} format_term buf =
+ml_dform sequent_tex_df : mode["tex"] :: "sequent"{'ext; 'seq} format_term buf =
    let format_arg = function
       [] ->
          ()
@@ -358,7 +404,7 @@ ml_dform sequent_prl_df : mode["tex"] :: "sequent"{'ext; 'seq} format_term buf =
    in
    let rec format_hyp hyps i len =
       if i <> len then
-         let lead = (string_of_int (i + 1)) ^ ". " in
+         let lead = (string_of_int (succ i)) ^ ". " in
          let _ =
             if i = 0 then
                format_hbreak buf lead " "
@@ -376,23 +422,15 @@ ml_dform sequent_prl_df : mode["tex"] :: "sequent"{'ext; 'seq} format_term buf =
                   format_term buf NOParens a;
                   format_ezone buf
          in
-            format_hyp hyps (i + 1) len
+            format_hyp hyps (succ i) len
    in
    let rec format_goal goals i len =
       if i <> len then
          let a = SeqGoal.get goals i in
-            if i = 0 then
-               begin
-                  format_hbreak buf "" "";
-                  format_izone buf;
-                  format_string buf "$\\vdash$";
-                  format_ezone buf;
-                  format_space buf
-               end
-            else
-               format_hbreak buf "; " "$\\vdash$ ";
+            if i > 0 then
+               format_hbreak buf "; " "";
             format_term buf NOParens a;
-            format_goal goals (i + 1) len
+            format_goal goals (succ i) len
    in
    let format term =
       let { sequent_args = args;
@@ -405,7 +443,14 @@ ml_dform sequent_prl_df : mode["tex"] :: "sequent"{'ext; 'seq} format_term buf =
          format_arg (dest_xlist args);
          let hlen = SeqHyp.length hyps in
          if (hlen>0) then format_hyp hyps 0 hlen;
+         format_hspace buf;
+         format_term buf NOParens <<mathmacro["vdash"]>>;
+         format_szone buf;
+         format_pushm buf 0;
+         format_space buf;
          format_goal goals 0 (SeqGoal.length goals);
+         format_popm buf;
+         format_ezone buf;
          format_popm buf;
          format_ezone buf
    in
@@ -429,6 +474,12 @@ dform df_last_df1 : internal :: df_last{cons{'a; cons{'b; 'c}}} =
 
 dform df_last_df2 : internal :: df_last{cons{'a; nil}} =
    'a
+
+(*
+ * Perv!bind
+ *)
+dform bind_df : bind{x. 'T} =
+   tt["bind"] `"(" slot{'x} `"." slot{'T} `")"
 
 (************************************************************************
  * COMMANDS                                                             *

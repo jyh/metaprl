@@ -208,7 +208,7 @@ let esquashT i =
    if i = 0 then esquash else unesquash i
 
 let esquashAutoT =
-   autoT thenT tryT (onSomeHypT esquashT orelseT esquash) thenT autoT
+   autoT thenT tryT (onSomeHypT esquashT orelseT esquash thenT autoT)
 
 (*
  * -*-

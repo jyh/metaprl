@@ -570,7 +570,7 @@ let rec unsquashAllT_aux i seq hyps p =
    if i > hyps then idT p else
    match SeqHyp.get seq (pred i) with
       HypBinding (_, hyp) | Hypothesis hyp when is_squash_term hyp ->
-         (tryT (unsquashT i) thenT unsquashAllT_aux (succ i) seq hyps) p
+         (unsquashT i orthenT unsquashAllT_aux (succ i) seq hyps) p
     | _ ->
          unsquashAllT_aux (succ i) seq hyps p
 

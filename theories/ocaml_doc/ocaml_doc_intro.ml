@@ -56,9 +56,9 @@ feature is specific to OCaml.
 @item{{ML is a @bf{functional} language, meaning that functions are
 treated as first-class values.  Functions may be nested, functions may
 be passed as arguments to other functions, and functions can be stored
-in data-structures.  Functions are treated like their mathematical
+in data structures.  Functions are treated like their mathematical
 counterparts as much as possible.  Assignment statements that
-permanently change the value of an expression are permitted, but used
+permanently change the value of certain expressions are permitted, but used
 much less frequently than in languages like C or Java.}}
 
 @item{{
@@ -70,7 +70,7 @@ Programs that pass the type checker are @emph{safe}: they will never
 @item{{
 Related to strong typing, ML uses @bf{type inference} to infer
 types for the expressions in a program.  Even though the language is
-strongly typed, it is rare that the programmer ever has to annotate a
+strongly typed, it is rare that the programmer has to annotate a
 program with type constraints.}}
 
 @item{{
@@ -84,7 +84,7 @@ floating-point values), or else use explicit coercions to bypass the
 type system.}}
 
 @item{{
-ML implements an @bf{pattern matching} mechanism that
+ML implements a @bf{pattern matching} mechanism that
 unifies case analysis and data destructors.}}
 
 @item{{
@@ -94,26 +94,24 @@ system includes @emph{functors}, which are are functions over modules
 that can be used to produce one data structure from another.}}
 
 @item{{
-OCaml also the only widely-available ML implementation to include an
+OCaml is also the only widely-available ML implementation to include an
 @bf{object system}.  The module system and object system complement
 one another: the module system provides data abstraction, and the
 object system provides inheritance and re-use.}}
 
 @item{{
 OCaml includes a compiler that supports @bf{separate compilation}.
-This makes that the development process easier by reducing the amount
+This makes the development process easier by reducing the amount
 of code that must be recompiled when a program is modified.  OCaml
 actually includes two compilers: a @emph{byte-code} compiler that
-produces code for the portable OCaml byte-code interpreter, and an
+produces code for the portable OCaml byte-code interpreter, and a
 @emph{native-code} compiler that produces efficient code for many
 machine architectures.}}
 
 @item{{
 One other feature should be mentioned: all the languages in the ML
 family have a @bf{formal semantics}, which means that programs have a
-mathematical interpretation.  While this may not seem to be directly
-useful to a programmer, it means that the programming language
-constructs are designed to fit together, making the programming
+mathematical interpretation, making the programming
 language easier to understand and explain.}}
 
 @end[itemize]

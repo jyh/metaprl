@@ -37,6 +37,7 @@ open Refiner.Refiner.Term
 open Refiner.Refiner.TermSubst
 
 open Tactic_type.Sequent
+open Tactic_type.Tacticals
 
 open Top_tacticals
 
@@ -56,7 +57,7 @@ interactive subst 'e2 :
 doc <:doc< @docoff >>
 
 let standardizeT =
-   (fun p -> subst (standardize (concl p)) p)
+   funT (fun p -> subst (standardize (concl p)))
    thenWT alpha_equal
 
 (*
@@ -87,7 +88,7 @@ and destandardize_bterm table bterm =
       mk_bterm bvars t
 
 let destandardizeT table =
-   (fun p -> subst (destandardize_term table (concl p)) p)
+   funT (fun p -> subst (destandardize_term table (concl p)))
    thenWT alpha_equal
 
 let destandardize_debugT table =
@@ -95,18 +96,18 @@ let destandardize_debugT table =
       StringTable.fold (fun vars v1 v2 ->
             (v1, v2) :: vars) [] table
    in
-   let failT v1 v2 p =
+   let failT v1 v2 =
       eprintf "Failed on %s -> %s%t" v1 v2 eflush;
-      idT p
+      idT
    in
-   let rec debugT vars p =
+   let rec debugT vars =
       match vars with
          [] ->
-            idT p
+            idT
        | (v1, v2) :: vars ->
             let table = StringTable.add StringTable.empty v1 v2 in
                ((destandardizeT table thenT debugT vars)
-                orelseT failT v1 v2) p
+                orelseT failT v1 v2)
    in
       debugT vars
 

@@ -61,3 +61,5 @@ clean:
 
 realclean:
     $(REALCLEAN)
+
+all: theory$(LIB_SUFFIX)

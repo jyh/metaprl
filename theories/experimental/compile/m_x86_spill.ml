@@ -511,7 +511,7 @@ let classify t =
    in
       collect SymbolSet.empty SymbolSet.empty (dest_inst t)
 
-let spillT vars p =
+let spillT_aux vars p =
    (* Classify all the vars *)
    let vars1, vars2 = classify (concl p) in
    let vars1 = SymbolSet.diff vars1 vars2 in
@@ -543,7 +543,10 @@ let spillT vars p =
       else
          phase1T vars1 thenT phase2T vars2
    in
-      tac p
+      tac
+
+let spillT vars =
+   funT (spillT_aux vars)
 
 (*
  * Debug version.

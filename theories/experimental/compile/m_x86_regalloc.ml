@@ -68,7 +68,7 @@ let table_colors table =
    SymbolTable.fold (fun stable v1 v2 ->
          StringTable.add stable (Symbol.to_string v1) (Symbol.to_string v2)) StringTable.empty table
 
-let runT contT p =
+let runT_aux contT p =
    let t = concl p in
    let blocks = Frame.blocks_of_term t in
       match RegAlloc.compile blocks with
@@ -78,7 +78,7 @@ let runT contT p =
                SymbolSet.iter (fun s ->
                      eprintf "Spilling %s%t" (Symbol.to_string s) eflush) vars
             in
-               (spillT vars thenT renameT thenT contT) p
+               spillT vars thenT renameT thenT contT
        | RegAllocColor vars ->
             let vars = flatten_table vars in
             let svars = table_colors vars in
@@ -87,26 +87,30 @@ let runT contT p =
                StringTable.iter (fun v1 v2 ->
                      eprintf "Coloring %s -> %s%t" v1 v2 eflush) svars
             in
-               (coalesceT vars thenT destandardize_debugT svars) p
+               coalesceT vars thenT destandardize_debugT svars
+
+let runT = argfunT runT_aux
 
 let stepT =
    runT idT
 
-let rec allocT_aux p =
-   runT allocT_aux p
+let rec allocT_aux _ =
+   runT (funT allocT_aux)
 
 let allocT =
-   allocT_aux
+   funT allocT_aux
 
 (*
  * Print the assembly to a file.
  *)
-let printT filename p =
+let printT_aux filename p =
    let out = open_out filename in
    let buf = Format.formatter_of_out_channel out in
       pp_print_prog buf (concl p);
       close_out out;
-      idT p
+      idT
+
+let printT = argfunT printT_aux
 
 (*
  * -*-

@@ -91,11 +91,11 @@ let renameT_aux p =
       SymbolTable.fold (fun stable v1 v2 ->
             StringTable.add stable (Symbol.to_string v1) (Symbol.to_string v2)) StringTable.empty table
    in
-      destandardizeT table p
+      destandardizeT table
 
 let renameT =
    standardizeT
-   thenT renameT_aux
+   thenT funT renameT_aux
 
 (*
  * -*-

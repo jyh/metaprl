@@ -178,29 +178,29 @@ interactive zero_mpoly_wf {| intro [] |} :
 interactive add_mpoly_wf {| intro [intro_typeinf <<'R>>] |} unitringCE[i:l] :
 	sequent { <H> >- 'p in mpoly{'R; 'n} } -->
 	sequent { <H> >- 'q in mpoly{'R; 'n} } -->
-	sequent { <H> >- 'R in unitringCE[i:l] } -->
-	sequent { <H> >- 'n in nat } -->
+	[wf] sequent { <H> >- 'R in unitringCE[i:l] } -->
+	[wf] sequent { <H> >- 'n in nat } -->
 	sequent { <H> >- add_mpoly{'p; 'q} in mpoly{'R; 'n} }
 
 interactive mul_monom_wf {| intro [intro_typeinf <<'R>>] |} unitringCE[i:l] :
 	sequent { <H> >- 'm1 in monom{'R; 'n} } -->
 	sequent { <H> >- 'm2 in monom{'R; 'n} } -->
-	sequent { <H> >- 'R in unitringCE[i:l] } -->
-	sequent { <H> >- 'n in nat } -->
+	[wf] sequent { <H> >- 'R in unitringCE[i:l] } -->
+	[wf] sequent { <H> >- 'n in nat } -->
 	sequent { <H> >- mul_monom{'m1; 'm2; 'R} in monom{'R; 'n} }
 
 interactive mul_monom_mpoly_wf {| intro [intro_typeinf <<'R>>] |} unitringCE[i:l] :
 	sequent { <H> >- 'm in monom{'R; 'n} } -->
 	sequent { <H> >- 'p in mpoly{'R; 'n} } -->
-	sequent { <H> >- 'R in unitringCE[i:l] } -->
-	sequent { <H> >- 'n in nat } -->
+	[wf] sequent { <H> >- 'R in unitringCE[i:l] } -->
+	[wf] sequent { <H> >- 'n in nat } -->
 	sequent { <H> >- mul_monom_mpoly{'m; 'p; 'R} in mpoly{'R; 'n} }
 
 interactive mul_mpoly_wf {| intro [intro_typeinf <<'R>>] |} unitringCE[i:l] :
 	sequent { <H> >- 'p in mpoly{'R; 'n} } -->
 	sequent { <H> >- 'q in mpoly{'R; 'n} } -->
-	sequent { <H> >- 'R in unitringCE[i:l] } -->
-	sequent { <H> >- 'n in nat } -->
+	[wf] sequent { <H> >- 'R in unitringCE[i:l] } -->
+	[wf] sequent { <H> >- 'n in nat } -->
 	sequent { <H> >- mul_mpoly{'p; 'q; 'R} in mpoly{'R; 'n} }
 
 interactive const_mpoly_wf {| intro [] |} :
@@ -287,15 +287,15 @@ interactive mpolyTerm_wf {| intro [] |} :
 interactive addTerm_wf {| intro [] |} :
 	sequent { <H> >- 'l in mpolyTerm{'R; 'n} } -->
 	sequent { <H> >- 'r in mpolyTerm{'R; 'n} } -->
-	sequent { <H> >- 'R^car Type } -->
-	sequent { <H> >- 'n in nat } -->
+	[wf] sequent { <H> >- 'R^car Type } -->
+	[wf] sequent { <H> >- 'n in nat } -->
 	sequent { <H> >- addTerm{'l;'r} in mpolyTerm{'R; 'n} }
 
 interactive mulTerm_wf {| intro [] |} :
 	sequent { <H> >- 'l in mpolyTerm{'R; 'n} } -->
 	sequent { <H> >- 'r in mpolyTerm{'R; 'n} } -->
-	sequent { <H> >- 'R^car Type } -->
-	sequent { <H> >- 'n in nat } -->
+	[wf] sequent { <H> >- 'R^car Type } -->
+	[wf] sequent { <H> >- 'n in nat } -->
 	sequent { <H> >- mulTerm{'l;'r} in mpolyTerm{'R; 'n} }
 
 interactive constTerm_wf {| intro [] |} :
@@ -312,8 +312,8 @@ interactive varTerm_wf {| intro [] |} :
 
 interactive mpoly_ofTerm_wf {| intro [intro_typeinf <<'R>>] |} unitringCE[i:l] :
 	sequent { <H> >- 'pt in mpolyTerm{'R; 'n} } -->
-	sequent { <H> >- 'R in unitringCE[i:l] } -->
-	sequent { <H> >- 'n in nat } -->
+	[wf] sequent { <H> >- 'R in unitringCE[i:l] } -->
+	[wf] sequent { <H> >- 'n in nat } -->
 	sequent { <H> >- mpoly_ofTerm{'pt; 'R; 'n} in mpoly{'R; 'n} }
 
 interactive_rw reduce_eval_mpolyTermAdd :
@@ -413,6 +413,7 @@ let resource mpoly_eval += [
 	<<number[i:n] =@ number[j:n]>>, reduceC;
 	<<number[i:n] <@ number[j:n]>>, reduceC;
 	<<natpower{'g; 'a; 'n}>>, (reduceTopC thenC tailC);
+	<<nth{cons{'h;'t}; number[n:n]}>>, (reduceTopC thenC tailC);
 ]
 
 type var_set = term list

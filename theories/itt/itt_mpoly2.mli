@@ -48,6 +48,7 @@ topval assertEqT : term -> term -> term list -> term -> term -> tactic
 topval standardizeT : term -> term -> term -> term list -> term -> term -> tactic
 topval stdT : term -> term -> term list -> int -> tactic
 
+topval tailC : conv
 topval reduce_list_ind2Nil : conv
 topval reduce_list_ind2Cons : conv
 topval unfold_map2 : conv

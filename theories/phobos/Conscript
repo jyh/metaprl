@@ -1,0 +1,17 @@
+#
+# Import environment
+#
+Import qw( env );
+
+#
+# Set up file lists and build everything.
+#
+OCamlSources $env
+   'phobos_base.ml',
+   'phobos_theory.mlz';
+
+OCamlLibrary $env 'base',
+   'phobos_base',
+   'phobos_theory';
+
+Export qw( env );

@@ -1,18 +1,15 @@
 (*!
- * @spelling{MC MCC Mojave}
+ * @spelling{MCC Mojave}
  *
  * @begin[doc]
- * @theory{Mojave Compiler Theory}
- * @module[Mp_mc_theory]
+ * @theory{Phobos Theory}
+ * @module[Phobos_theory]
  *
- * The MC theory (all it's modules have the ``@tt[Mp_mc_]'' prefix) attempts
- * to formalize the Mojave Compiler Collection's (MCC) functional intermediate
- * representation (FIR).
+ * The Phobos theory supplies rewrites needed for Phobos in the 
+ * Mojave compiler (MCC).
  *
- * (Documentation incomplete.  I should put the theory overview here.)
+ * (Documentation incomplete.)
  *
- * The @tt[Mp_mc_theory] module itself is provided as a convenience.
- * It simply includes all the modules that make up the MC theory.
  * @end[doc]
  *
  * ----------------------------------------------------------------
@@ -25,7 +22,7 @@
  * See the file doc/index.html for information on Nuprl,
  * OCaml, and more information about this system.
  *
- * Copyright (C) 2002 Brian Emre Aydemir, Caltech
+ * Copyright (C) 2002 Adam Granicz, Caltech
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,8 +38,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
- * Author: Brian Emre Aydemir
- * @email{emre@its.caltech.edu}
+ * Author: Adam Granicz
+ * @email{granicz@cs.caltech.edu}
  * @end[license]
  *)
 
@@ -60,14 +57,6 @@ extends Itt_list
 extends Itt_list2
 extends Itt_rfun
 
-extends Phobos_theory
+extends Phobos_base
 
-(*extends Mp_mc_fir_base
-extends Mp_mc_fir_ty
-extends Mp_mc_fir_exp
-extends Mp_mc_fir_prog
-extends Mp_mc_fir_eval
-extends Mp_mc_deadcode
-extends Mp_mc_const_elim
-*)
 (*! @docoff *)

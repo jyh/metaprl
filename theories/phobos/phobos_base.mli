@@ -1,23 +1,8 @@
-(*!
- * @spelling{MC MCC Mojave}
- *
- * @begin[doc]
- * @theory{Mojave Compiler Theory}
- * @module[Mp_mc_theory]
- *
- * The MC theory (all it's modules have the ``@tt[Mp_mc_]'' prefix) attempts
- * to formalize the Mojave Compiler Collection's (MCC) functional intermediate
- * representation (FIR).
- *
- * (Documentation incomplete.  I should put the theory overview here.)
- *
- * The @tt[Mp_mc_theory] module itself is provided as a convenience.
- * It simply includes all the modules that make up the MC theory.
- * @end[doc]
+(*
+ * Miscellaneous rewrites for Phobos.
  *
  * ----------------------------------------------------------------
  *
- * @begin[license]
  * This file is part of MetaPRL, a modular, higher order
  * logical framework that provides a logical programming
  * environment for OCaml and other languages.
@@ -25,7 +10,7 @@
  * See the file doc/index.html for information on Nuprl,
  * OCaml, and more information about this system.
  *
- * Copyright (C) 2002 Brian Emre Aydemir, Caltech
+ * Copyright (C) 2002 Adam Granicz, Caltech
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,33 +26,27 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
- * Author: Brian Emre Aydemir
- * @email{emre@its.caltech.edu}
- * @end[license]
+ * Author: Adam Granicz <granicz@cs.caltech.edu>
+ *
  *)
+extends Mptop
+extends Summary
 
-(*!
- * @begin[doc]
- * @parents
- * @end[doc]
+open Refiner.Refiner.TermType
+open Refiner.Refiner.Term
+open Refiner.Refiner.TermMan
+open Refiner.Refiner.TermOp
+open Refiner.Refiner.RefineError
+
+(*
+ * Parameter operations.
  *)
-extends Base_meta
+declare param_add_string[s:s]{'term}
 
-extends Itt_atom
-extends Itt_int_base
-extends Itt_int_ext
-extends Itt_list
-extends Itt_list2
-extends Itt_rfun
-
-extends Phobos_theory
-
-(*extends Mp_mc_fir_base
-extends Mp_mc_fir_ty
-extends Mp_mc_fir_exp
-extends Mp_mc_fir_prog
-extends Mp_mc_fir_eval
-extends Mp_mc_deadcode
-extends Mp_mc_const_elim
-*)
-(*! @docoff *)
+(*
+ * -*-
+ * Local Variables:
+ * Caml-master: "mp.run"
+ * End:
+ * -*-
+ *)

@@ -4,7 +4,7 @@ doc <:doc< -*- mode: text; -*-
    @end[spelling]
   
    @begin[doc]
-   @section[m_doc_ir]{intermediate representation}
+   @section[m_doc_ir]{Intermediate representation}
    @docoff
    @end[doc]
   

@@ -413,7 +413,7 @@ dform exp_subscript_df : parens :: "prec"[prec_let] :: LetSubscript{'a1; 'a2; v.
    szone pushm[3] xlet `" " slot{'v} bf[" = "] slot{'a1} `"[" slot{'a2} `"] " xin hspace slot["lt"]{'e} popm ezone
 
 dform exp_set_subscript_df : parens :: "prec"[prec_let] :: SetSubscript{'a1; 'a2; 'a3; 'e} =
-   slot{'a1} `"[" slot{'a2} `"] <- " slot{'a3} `";" hspace slot["lt"]{'e}
+   slot{'a1} `"[" slot{'a2} `"] " leftarrow `" " slot{'a3} `";" hspace slot["lt"]{'e}
 
 (*
  * Functions and application.

@@ -1,35 +1,50 @@
-doc <:doc< 
+doc <:doc<
    @begin[spelling]
-   CPS SpillCopy SpillRegister dst vars
+   CPS SpillRegister dst vars
    @end[spelling]
-  
-   Split a live range.
-  
+
+   @begin[doc]
+   @module[M_x86_spill]
+
+   This module defines a tactic @tt[spillT] that takes as input the program
+   and a set of variables to spill (as determined by the register allocator)
+   and generates the appropriate spills, rewriting the assembly as needed.
+   The tactic splits the live ranges of all spilled registers as an
+   optimization.
+   @end[doc]
+
    ----------------------------------------------------------------
-  
+
    @begin[license]
    Copyright (C) 2003 Jason Hickey, Caltech
-  
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
    as published by the Free Software Foundation; either version 2
    of the License, or (at your option) any later version.
-  
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-  
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-  
+
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
 >>
+
+doc <:doc<
+   @begin[doc]
+   @parents
+   @end[doc]
+>>
 extends M_util
 extends M_x86_backend
+doc <:doc< @docoff >>
 
 open Printf
 open Mp_debug
@@ -60,22 +75,19 @@ open Tactic_type.Sequent
  * Reduction resource
  *)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @resources
-  
-   @bf{The @Comment!resource[spill_resource]}
-  
-   The @tt{spill} resource provides a generic method for
-   defining @emph{CPS transformation}.  The @conv[spillC] conversion
-   can be used to apply this evaluator.
-  
-   The implementation of the @tt{spill_resource} and the @tt[spillC]
-   conversion rely on tables to store the shape of redices, together with the
-   conversions for the reduction.
-  
-   @docoff
+
+   The @tt{spill} resource provides a generic method for defining a method
+   for spilling registers in a program.  The @conv[spillC] conversion can be
+   used to apply this evaluator.  The implementation of the
+   @tt{spill_resource} and the @tt[spillC] conversion rely on tables to
+   store the shape of redices, together with the conversions for the
+   reduction.
+
    @end[doc]
+   @docoff
 >>
 let resource spill =
    table_resource_info identity extract_data
@@ -89,22 +101,25 @@ let spillC =
    repeatC (higherC spillTopC)
 
 (************************************************************************
- * Spill code.
+ * Generating spills.
  *)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-   @modsubsection{Spilling}
-  
-   Spilling is done in two parts.
+   @modsection{Generating spills}
+
+   Code to spill registers is generated in two phases.
    @end[doc]
 >>
 
-doc <:doc< 
-  ***********************************************************************
+(************************************************************************
+ * Phase 1.
+ *)
+
+doc <:doc<
    @begin[doc]
-   @modsubsection{Spill phase 1}
-  
+   @modsubsection{Phase 1}
+
    When the register allocator first asks that a register be spilled,
    we make it a "potential spill," meaning that we assign it a spill
    location, but leave it in a register.  The operand changes from
@@ -162,7 +177,7 @@ prim_rw spill_set :
    Spill["set"]{Register{'dst}; spill.
    'rest[SpillRegister{'dst; 'spill}]}}
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    We define a conversion for the first phase that searches for the spill
    binding occurrences and applies the appropriate rewrites.
@@ -202,7 +217,7 @@ let phase1C vars =
    in
       funC convC
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    In the next part of phase1, find all instructions that now have a
    SpillRegister operand, and copy the operand.  This splits the live
@@ -212,7 +227,7 @@ doc <:doc<
 prim_rw spill_split bind{v. 'e['v]} :
    Spill["copy"]{SpillRegister{'v1; 'spill}; v2. 'e[SpillRegister{'v2; 'spill}]} <--> 'e[SpillRegister{'v1; 'spill}]
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    This is the conversion that splits the spill range.
    @end[doc]
@@ -323,7 +338,7 @@ let splitTopC =
 
 let splitC = sweepUpFailC splitTopC
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    Once the splits have been added, cleanup the remaining instructions
    by removing spill vars.
@@ -366,21 +381,31 @@ let phase1T vars =
    thenT rw splitC 0
    thenT rw spillC 0
 
-doc <:doc< 
-  ***********************************************************************
+(************************************************************************
+ * Phase 2.
+ *)
+
+doc <:doc<
    @begin[doc]
-   @modsubsection{Spill phase 2}
-  
-   We assume that the live range of a variable has already been split.
-   If the register allocator chooses to spill one of the variables,
-   we eliminate the register associated with that variable, forcing the
-   fetch from the spill.
+   @modsubsection{Phase 2}
+
+   In this section, we define the @tt[phase2T] tactic.  We assume that the
+   live range of a variable has already been split.  If the register
+   allocator chooses to spill one of the variables, we eliminate the
+   register associated with that variable, forcing the fetch from the spill.
+
+   The @tt[phase2T] tactic takes as input the set of spilled variables and
+   uses the following rewrite.  ML code (not listed here) is used to guide
+   the application of the rewrite.
+
    @end[doc]
 >>
 prim_rw spill_fetch :
    Spill["copy"]{SpillRegister{'v1; 'spill}; v2. 'e['v2]}
    <-->
    Spill["get"]{SpillMemory{'spill}; v2. 'e['v2]}
+
+doc <:doc< @docoff >>
 
 let phase2C vars =
    let convC inst =
@@ -408,23 +433,35 @@ let phase2C vars =
 let phase2T vars =
    rw (sweepUpFailC (phase2C vars)) 0
 
-doc <:doc< 
-  ***********************************************************************
+(**************************************************************************
+ * The spillT tactic
+ *)
+
+doc <:doc<
    @begin[doc]
-   @modsubsection{Main spill code}
-  
-   The main spill code generator gets a set of variables to spill
-   from the register allocator.  It first classifies every variable
-   in the program.
-  
-      1. A variable is a phase1 variable if it is the dst of a non-spill
-         instruction.
-      2. A variable is a phase2 variable if it is the dst of a SpillCopy
-         instruction.
-  
-   The main spiller then runs phase1 on the phase1 vars, and
-   phase2 on the phase2 vars.
+   @modsection{The @tt[spillT] tactic}
+
+   The main spill code generator, i.e., the @tt[spillT] tactic, gets a set
+   of variables to spill from the register allocator.  It first classifies
+   every variable in the program.
+
+   @begin[enumerate]
+
+   @item{
+      A variable is a @tt[phase1] variable if it is the destination of a
+      non-spill instruction.}
+
+   @item{
+      A variable is a @tt[phase2] variable if it is the destination of a
+      @tt[SpillCopy]instruction.}
+
+   @end[enumerate]
+
+   @noindent The main spiller then runs @tt[phase1T] on the @tt[phase1] vars,
+   and @tt[phase2T] on the @tt[phase2] vars.
+
    @end[doc]
+   @docoff
 >>
 
 (*
@@ -503,8 +540,6 @@ let spillT vars p =
          phase1T vars1 thenT phase2T vars2
    in
       tac p
-
-doc <:doc< @docoff >>
 
 (*
  * Debug version.

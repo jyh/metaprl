@@ -953,6 +953,8 @@ dform description_df2 : except_mode[tex] :: description{'t} =
 (*! @doc{Other macros} *)
 declare lbrace
 declare rbrace
+declare comment[who:s]{'e}
+(*! @docoff *)
 
 dform lbrace_df1 : mode[tex] :: lbrace =
    izone `"\\{" ezone
@@ -965,8 +967,6 @@ dform rbrace_df1 : mode[tex] :: rbrace =
 
 dform lbrace_df2 : except_mode[tex] :: rbrace =
    "}"
-
-declare comment[who:s]{'e}
 
 dform comment_df1 : mode[tex] :: comment[who:s]{'e} =
    izone `"\\comment{" ezone bf[who:s] `": " 'e izone `"}" ezone

@@ -471,14 +471,7 @@ interactive sqreverse_intro_simple {| intro[SelectOption 1] |}:
 
 doc <:doc<
    @begin[doc]
-   If $B$ is simple then ussual reversibility implies squiggle reversibility.
-   @end[doc]
->>
-
-
-doc <:doc<
-   @begin[doc]
-   @paragraph{Image Elimination Rule for Reverible Functions}
+   @paragraph{Image Elimination Rule for Reversible Functions}
    For squiggle reversible functions we can formulate a stronger image elimination rule:
    @end[doc]
 >>

@@ -84,7 +84,8 @@ MPFILES :=\
 	itt_group\
         itt_cyclic_group\
 	itt_quotient_group\
-        itt_example
+        itt_example\
+		itt_rat
 
 ifeq ($(TESTS),YES)
 	MPFILES:= $(MPFILES)\

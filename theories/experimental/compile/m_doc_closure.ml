@@ -113,7 +113,7 @@ simple $@beta$-reduction.
 
 $$@xrewrite[abs]{e[v]; @CloseVar{v; e[v]; v}}$$
 
-By selectively applying rule, we can quantify variables that occur free in the
+By selectively applying this rule, we can quantify variables that occur free in the
 function definitions $d$ in a term $@CloseRec{R; @frame; @it{tuple}; d; e}$.  The main closure
 operation is the addition of the abstracted variable to the frame, using the following rewrite.
 
@@ -132,7 +132,7 @@ $$
 $$
 
 Once all free variables have been added to the frame, the $@CloseRec{R; @frame; @it{tuple}; d; e}$
-rewritten to use explicit tuple allocation.
+is rewritten to use explicit tuple allocation.
 
 $$
 @xrewrite2[alloc]{@begin[array,t,l]

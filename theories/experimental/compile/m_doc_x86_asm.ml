@@ -340,7 +340,7 @@ operand version on the instruction set.  The instruction $@Inst2Reg[ADD]{v_1; v_
 abstract operation $@xlet v_3 = v_1 + v_2 @xin e$.  The variable $v_3$ is a @emph{binding} occurrence,
 and it is bound in body of the instruction $e$.  In our account of the instruction set, @em{every}
 instruction that modifies a register has a binding occurrence of the variable being modified.
-Instructions that @em{do not} modify memory use the traditional non-binding form of the instruction.
+Instructions that @em{do not} modify registers use the traditional non-binding form of the instruction.
 For example, the instruction $@Inst2Mem[ADD]{v_1; @MemReg{v_2}; e}$ performs the operation $@MemReg{v_2}
 @leftarrow @MemReg{v_2} + v_1$, where $@MemReg{v_2}$ means the value in memory at location $v_2$.
 

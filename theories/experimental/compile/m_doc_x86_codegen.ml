@@ -85,7 +85,7 @@ intermediate code to operations in the assembly.  There are two main kinds of tr
 translations from atoms to operands, and translation of expressions into instruction sequences.  We
 express these translations with the term $@ASM{e}$, which is the translation of the IR expression
 $e$ to an assembly expression; and $@ASM{a; v; e}$, which produces the assembly operand for the atom
-$a$ and substitutes it for the variable $v$ in expression $e$.
+$a$ and substitutes it for the variable $v$ in assembly expression $e$.
 
 @subsubsection["asmatoms"]{Atom translation}
 
@@ -95,7 +95,7 @@ $$
 @line{@xrewrite[false]{@ASM{@AtomFalse; v; e[v]}; e[@ImmediateNumber{1}]}}
 @line{@xrewrite[true]{@ASM{@AtomTrue; v; e[v]}; e[@ImmediateNumber{3}]}}
 @line{@xrewrite[int]{@ASM{@AtomInt[i]; v; e[v]}; e[@ImmediateNumber{i*2+1}]}}
-@line{@xrewrite[var]{@ASM{@AtomVar{v_1}; v_2; e[v_2]}; e[@Register{v}]}}
+@line{@xrewrite[var]{@ASM{@AtomVar{v_1}; v_2; e[v_2]}; e[@Register{v_1}]}}
 @line{@xrewrite[label]{@ASM{@AtomFunVar{R; l}; v; e[v]}; e[@ImmediateCLabel{R; l}]}}
 @line{@xrewrite2[add]{@ASM{@AtomBinop{+; a_1; a_2}; v; e[v]};
    {@begin[array,t,l]
@@ -146,7 +146,7 @@ $$
   {@begin[array,t,l]
    @line{@ASM{a; @it{test}}}
    @line{@Cmp[CMP]{@ImmediateNumber{0}; @it{test}}}
-   @line{@Jcc[J]{@ASM{e_1}; @ASM{e_2}}}
+   @line{@Jcc[J]{NZ; @ASM{e_1}; @ASM{e_2}}}
    @end[array]}}}
 @line{@xrewrite2[if2]{@ASM{@If{@AtomRelop{@it{op}; a_1; a_2}; e_1; e_2}};
   {@begin[array,t,l]

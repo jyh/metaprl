@@ -162,7 +162,7 @@ segments 1 and 3.
 The formalization of spill code generation can be performed in three parts.  The first part
 generates new spill locations (line 2 in the code sequence above); the second part generates
 live-range splitting code (lines 4, 7, and 10); and the third part replaces operands of the form
-$@SpillRegister{v; s}$ with $@SpillMemory{s}$ when requested by the garbage collector.
+$@SpillRegister{v; s}$ with $@SpillMemory{s}$ when requested by the register allocator.
 
 The first part requires a rewrite for each kind of instruction that contains a binding occurrence of
 a variable.  The following two rewrites are representative examples.  Note that all occurrences of

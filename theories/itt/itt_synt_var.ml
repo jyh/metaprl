@@ -43,6 +43,8 @@ doc "doc"{parents}
 extends Itt_int_base
 extends Itt_nat
 
+open Basic_tactics
+
 doc "doc"{terms}
 
 declare Var
@@ -53,6 +55,9 @@ declare right{'v}
 define unfold_depth:
    depth{'v} <--> left{'v} +@ right{'v} +@ 1
 
+define unfold_eq:
+   is_eq{'v;'u} <--> (left{'v} =@ left{'u})
+
 doc "doc"{rewrites}
 
 prim_rw left_id {| reduce |} :
@@ -60,6 +65,14 @@ prim_rw left_id {| reduce |} :
 
 prim_rw right_id {| reduce |} :
    right {var{'left; 'right}} <--> 'right
+
+interactive_rw eq_equal {| reduce |} :
+   is_eq{var{'left_1; 'right_1};var{'left_2; 'right_2}} <--> ('left_1 =@ 'left_2)
+
+interactive_rw eq_same {| reduce |} :
+   ('v in Var) -->
+   is_eq{'v;'v} <--> btrue
+
 
 doc "doc"{rules}
 

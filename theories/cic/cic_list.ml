@@ -30,7 +30,7 @@ interactive list_wf :
    sequent { <H> >- List in (Set -> Set) }
 
 interactive nil_wf :
-   sequent { <H> >- nil in dfun{Set; C.(List 'C)} }
+   sequent { <H> >- nil in (C:Set ->  (List 'C)) }
 
 interactive cons_wf :
-	sequent { <H> >- cons in dfun{Set; C.('C -> (List 'C) -> (List 'C))} }
+	sequent { <H> >- cons in (C:Set -> ('C -> (List 'C) -> (List 'C))) }

@@ -40,12 +40,15 @@ rewrite prodH_base :
 
 rewrite prodH_step :
    sequent [prodH] { <H>; x:'T >- 'S['x] } <-->
-	sequent [prodH] { <H> >- dfun{'T;x.'S['x]} }
+	sequent [prodH] { <H> >- x:'T -> 'S['x] }
 
 topval fold_prodH_base : conv
 topval fold_prodH_step : conv
 topval fold_prodH : conv
-
+(*
+topval conclAddrC : conv -> conv
+topval indHeadAddrC : conv -> conv
+*)
 (* base axioms about Ind and IndTypes *)
 (* for new types *)
 rewrite indSubstDef 'Hi :
@@ -121,9 +124,12 @@ topval fold_substStart : conv
 topval fold_substStep : conv
 topval fold_substFinal : conv
 topval fold_appStart : conv
-topval fold_appStep : conv
-topval fold_appFinal : conv
+topval fold_appStepC : conv
+topval fold_appFinalC : conv
 topval fold_substApp : conv
+topval fold_substProdStart: conv
+topval fold_substProdStep: conv
+topval fold_substProd: conv
 topval fold_subst : conv
 
 (* implementation of the second part of the Coq's Ind-Const rule *)
@@ -160,7 +166,7 @@ rule arity_of_some_sort_Type :
 
 rule arity_of_some_sort_prod bind{x.'U['x]} :
    sequent { <H>; x:'T1 >- arity_of_some_sort{'U['x]} } -->
-	sequent { <H> >- arity_of_some_sort{dfun{'T1;x.'U['x]}} }
+	sequent { <H> >- arity_of_some_sort{ (x:'T1->'U['x]) } }
 
 rule arity_of_some_sort_m_base :
    sequent { <H> >- arity_of_some_sort{'T} } -->
@@ -184,7 +190,7 @@ rule arity_of_sort_Type :
 
 rule arity_of_sort_prod bind{x.'U['x]} :
    sequent { <H>; x:'T1 >- arity_of_sort{'U['x]; 's} } -->
-	sequent { <H> >- arity_of_sort{dfun{'T1;x.'U['x]}; 's} }
+	sequent { <H> >- arity_of_sort{(x:'T1 -> 'U['x]); 's} }
 
 (* declaration of 'type of constructor' notion *)
 declare type_of_constructor{'T;'I} (* 'T is a type of constructor of 'I *)
@@ -194,7 +200,7 @@ rule type_of_constructor_app :
 
 rule type_of_constructor_prod 'T1 bind{x.'C['x]} :
    sequent { <H>; x:'T1 >- type_of_constructor{'C['x];'I} } -->
-	sequent { <H> >- type_of_constructor{ dfun{'T1;x.'C['x]}; 'I } }
+	sequent { <H> >- type_of_constructor{ (x:'T1 -> 'C['x]); 'I } }
 
 declare imbr_pos_cond_m (* { <Hc> >-( 'I >- 'x ) } *)
 (* Hc={c1:C1,...,cn:Cn}, the types constructor Ci (each of them) of 'I
@@ -217,7 +223,7 @@ rule positivity_cond_1 'H :
 rule positivity_cond_2 'H bind{x.'T['x]} bind{y,x.'U['y;'x]}:
    sequent { <H>; x:'S; <J['x]> >- strictly_pos{'x;'T['x]}} -->
 	sequent { <H>; x:'S; <J['x]>; y:'T['x] >- positivity_cond{'U['y;'x];'x} } -->
-	sequent { <H>; x:'S; <J['x]> >- positivity_cond{dfun{'T['x];y.'U['y;'x]};'x} }
+	sequent { <H>; x:'S; <J['x]> >- positivity_cond{(y:'T['x] -> 'U['y;'x]);'x} }
 
 (* declaration of multiple positivity condition *)
 declare positivity_cond_m
@@ -241,7 +247,7 @@ rule strictly_pos_2 'H :
 rule strictly_pos_3 'H 'U bind{x,y.'V['x;'y]} :
    sequent { <H>; x:'T2; <J['x]>; x1:'U >- strictly_pos{'x;'V['x1;'x]} } -->
 	sequent { <H>; x:'T2; <J['x]> >-
-	   strictly_pos{'x ; dfun{ 'U;x1.'V['x1;'x]}} }
+	   strictly_pos{'x ; (x1:'U -> 'V['x1;'x])} }
 
 (*
 rule strictly_pos_4 'H :
@@ -268,10 +274,10 @@ rule imbr_pos_cond_1 'H :
 	   imbr_pos_cond{ sequent [applH] { <T1> >- 'I<|J;H|>['x]};'I<|J;H|>['x];'x} }
 
 rule imbr_pos_cond_2 'H bind{x,y.'U['x;'y]} :
-   sequent { <H>; x:'T2; <J['x]> >- type_of_constructor{ dfun{'T['x];x1.'U['x1;'x]} ;'I} } -->
+   sequent { <H>; x:'T2; <J['x]> >- type_of_constructor{ (x1:'T['x] -> 'U['x1;'x]) ;'I} } -->
    sequent { <H>; x:'T2; <J['x]> >- strictly_pos{'x;'T['x]} } -->
 	sequent { <H>; x:'T2; <J['x]>; x1:'T['x] >- imbr_pos_cond{'U['x1;'x];'I;'x} } -->
-	sequent { <H>; x:'T2; <J['x]> >- imbr_pos_cond{dfun{'T['x];x1.'U['x1;'x]};'I;'x} }
+	sequent { <H>; x:'T2; <J['x]> >- imbr_pos_cond{(x1:'T['x] -> 'U['x1;'x]);'I;'x} }
 
 (* inductive definition of multiple imbricated positivity condition, i.e.
    of imbr_pos_cond_m *)

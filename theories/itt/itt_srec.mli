@@ -33,9 +33,9 @@
 
 open Refiner.Refiner.Term
 
-include Itt_equal
-include Itt_prec
-include Itt_subtype
+extends Itt_equal
+extends Itt_prec
+extends Itt_subtype
 
 (************************************************************************
  * TERMS                                                                *

@@ -53,10 +53,10 @@
  * @parents
  * @end[doc]
  *)
-include Itt_void
-include Itt_equal
-include Itt_squash
-include Itt_struct
+extends Itt_void
+extends Itt_equal
+extends Itt_squash
+extends Itt_struct
 (*! @docoff *)
 
 open Tactic_type

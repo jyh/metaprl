@@ -29,7 +29,7 @@
  * @end[doc]
  *)
 
-include Base_theory
+extends Base_theory
 
 (************************************************************************
  * UNIVERSES AND EQULITY

@@ -42,13 +42,13 @@
  * @parents
  * @end[doc]
  *)
-include Itt_bool
-include Itt_int_base
-include Itt_int_ext
-include Itt_list
-include Mp_mc_fir_base
-include Mp_mc_fir_ty
-include Mp_mc_fir_exp
+extends Itt_bool
+extends Itt_int_base
+extends Itt_int_ext
+extends Itt_list
+extends Mp_mc_fir_base
+extends Mp_mc_fir_ty
+extends Mp_mc_fir_exp
 (*! @docoff *)
 
 open Top_conversionals

@@ -6,17 +6,17 @@
  * @end[doc]
  *)
 
-include Itt_record
+extends Itt_record
 
 (*! @docoff *)
 
-include Itt_int_base
-include Itt_int_ext
-include Itt_atom
-include Itt_set
-include Itt_fun
-include Itt_tsquash
-include Itt_list
+extends Itt_int_base
+extends Itt_int_ext
+extends Itt_atom
+extends Itt_set
+extends Itt_fun
+extends Itt_tsquash
+extends Itt_list
 
 open Printf
 open Mp_debug

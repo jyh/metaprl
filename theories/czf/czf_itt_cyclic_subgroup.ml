@@ -44,8 +44,8 @@
  *)
 
 (*! @doc{@parents} *)
-include Czf_itt_group_power
-include Czf_itt_subgroup
+extends Czf_itt_group_power
+extends Czf_itt_subgroup
 (*! @docoff *)
 
 open Refiner.Refiner.TermType

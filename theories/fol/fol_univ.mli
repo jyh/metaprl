@@ -2,7 +2,7 @@
  * Type universes.
  *)
 
-include Fol_type
+extends Fol_type
 
 declare univ
 declare prop{'t}

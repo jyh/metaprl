@@ -44,9 +44,9 @@
  * @parents
  * @end[doc]
  *)
-include Itt_tunion
-include Itt_bool
-include Itt_struct
+extends Itt_tunion
+extends Itt_bool
+extends Itt_struct
 (*! @docoff *)
 
 open Printf

@@ -42,9 +42,9 @@
  * @parents
  * @end[doc]
  *)
-include Itt_int_base
-include Mp_mc_fir_ty
-include Mp_mc_fir_exp
+extends Itt_int_base
+extends Mp_mc_fir_ty
+extends Mp_mc_fir_exp
 (*! @docoff *)
 
 open Mp_mc_fir_eval

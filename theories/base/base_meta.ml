@@ -29,8 +29,8 @@
  * Author: Jason Hickey <jyh@cs.cornell.edu>
  *
  *)
-include Mptop
-include Summary
+extends Mptop
+extends Summary
 
 open Refiner.Refiner.TermType
 open Refiner.Refiner.Term

@@ -30,7 +30,7 @@
  * jyh@cs.cornell.edu
  *)
 
-include Lf_sig;;
+extends Lf_sig;;
 
 declare dfun{'A. x. 'K['x]};;
 declare lambda{'A; x. 'B['x]};;

@@ -2,7 +2,7 @@
  * Implication.
  *)
 
-include Fol_type
+extends Fol_type
 
 prec prec_implies
 prec prec_lambda

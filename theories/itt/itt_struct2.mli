@@ -31,7 +31,7 @@
  *
  *)
 
-include Itt_struct
+extends Itt_struct
 
 open Refiner.Refiner.Term
 

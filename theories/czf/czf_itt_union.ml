@@ -75,8 +75,8 @@
  *)
 
 (*! @doc{@parents} *)
-include Czf_itt_dexists
-include Czf_itt_subset
+extends Czf_itt_dexists
+extends Czf_itt_subset
 (*! @docoff *)
 
 open Printf

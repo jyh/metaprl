@@ -30,7 +30,7 @@
  * jyh@cs.cornell.edu
  *)
 
-include Czf_wf;;
+extends Czf_wf;;
 
 declare false;;
 

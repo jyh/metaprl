@@ -50,7 +50,7 @@
  * @parents
  * @end[doc]
  *)
-include Summary
+extends Summary
 (*! @docoff *)
 
 open MLast

@@ -32,7 +32,7 @@
 
 open Refiner.Refiner.TermType
 
-include Tptp
+extends Tptp
 
 topval tptp_load : string -> term
 

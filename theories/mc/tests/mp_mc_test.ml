@@ -32,13 +32,13 @@
  * Email:  emre@its.caltech.edu
  *)
 
-include Base_theory
-include Itt_rfun
-include Itt_atom
-include Mp_mc_theory
-include Mp_mc_inline
-include Mp_mc_inline_aux
-include Mp_mc_fir_phobos_exp
+extends Base_theory
+extends Itt_rfun
+extends Itt_atom
+extends Mp_mc_theory
+extends Mp_mc_inline
+extends Mp_mc_inline_aux
+extends Mp_mc_fir_phobos_exp
 
 open Simple_print.SimplePrint
 open Top_conversionals

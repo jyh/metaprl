@@ -1,4 +1,4 @@
-include Itt_record_label0
+extends Itt_record_label0
 
 open Base_meta
 open Itt_int_ext

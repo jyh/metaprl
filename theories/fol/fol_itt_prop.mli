@@ -30,13 +30,13 @@
  * jyh@cs.cornell.edu
  *)
 
-include Fol_itt_type
-include Fol_itt_false
-include Fol_itt_true
-include Fol_itt_and
-include Fol_itt_or
-include Fol_itt_implies
-include Fol_not
+extends Fol_itt_type
+extends Fol_itt_false
+extends Fol_itt_true
+extends Fol_itt_and
+extends Fol_itt_or
+extends Fol_itt_implies
+extends Fol_not
 
 (*
  * -*-

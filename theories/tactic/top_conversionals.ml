@@ -78,7 +78,7 @@
  * @parents
  * @end[doc]
  *)
-include Mptop
+extends Mptop
 (*! @docoff *)
 
 open Mp_debug
@@ -390,7 +390,7 @@ let cutC = Tactic_type.Conversionals.cutC
  *                @i{inl}(u) @rightarrow b[u]
  *                | @i{inr}(v) @rightarrow c[v])$
  *
- * In modules that @tt{include} these three theories, the @tt{reduceC}
+ * In modules that @tt{extends} these three theories, the @tt{reduceC}
  * conversion will recursively search for applications of these three
  * rewrites in an attempt to fully reduce the term.
  *

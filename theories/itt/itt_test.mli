@@ -33,7 +33,7 @@
 open Tactic_type.Tacticals
 open Tactic_type.Conversionals
 
-include Itt_theory
+extends Itt_theory
 
 topval redexC : conv
 topval factT : tactic

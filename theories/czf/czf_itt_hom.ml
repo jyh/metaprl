@@ -70,10 +70,10 @@
  *)
 
 (*! @doc{@parents} *)
-include Czf_itt_group
-include Czf_itt_subgroup
-include Czf_itt_abel_group
-include Czf_itt_inv_image
+extends Czf_itt_group
+extends Czf_itt_subgroup
+extends Czf_itt_abel_group
+extends Czf_itt_inv_image
 (*! @docoff *)
 
 open Printf

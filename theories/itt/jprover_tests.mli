@@ -1,1 +1,1 @@
-include Itt_logic
+extends Itt_logic

@@ -30,10 +30,10 @@
  * jyh@cs.cornell.edu
  *)
 
-include Czf_wf;;
-include Czf_set;;
-include Czf_implies;;
-include Czf_member;;
+extends Czf_wf;;
+extends Czf_set;;
+extends Czf_implies;;
+extends Czf_member;;
 
 declare "all"{x. 'P};;
 define bounded_all_abs : "all"{'y; x. 'P['x]} <--> "all"{x. member{'x; 'y} => 'P['x]};;

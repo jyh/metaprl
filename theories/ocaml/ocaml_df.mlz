@@ -30,16 +30,16 @@
  * jyh@cs.cornell.edu
  *)
 
-include Perv
-include Ocaml
-include Ocaml_base_df
-include Ocaml_expr_df
-include Ocaml_patt_df
-include Ocaml_type_df
-include Ocaml_mt_df
-include Ocaml_me_df
-include Ocaml_sig_df
-include Ocaml_str_df
+extends Perv
+extends Ocaml
+extends Ocaml_base_df
+extends Ocaml_expr_df
+extends Ocaml_patt_df
+extends Ocaml_type_df
+extends Ocaml_mt_df
+extends Ocaml_me_df
+extends Ocaml_sig_df
+extends Ocaml_str_df
 
 (*
  * -*-

@@ -31,7 +31,7 @@
  * Email:  emre@its.caltech.edu
  *)
 
-include Mp_mc_theory
+extends Mp_mc_theory
 
 open Phobos_type
 open Refiner.Refiner.Term

@@ -30,9 +30,9 @@
  * jyh@cs.cornell.edu
  *)
 
-include Itt_theory
-include Cfol_itt_base
-include Cfol_itt_and
+extends Itt_theory
+extends Cfol_itt_base
+extends Cfol_itt_and
 
 derive Fol_all
 

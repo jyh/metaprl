@@ -30,8 +30,8 @@
  * jyh@cs.cornell.edu
  *)
 
-include Itt_theory
-include Sil_types
+extends Itt_theory
+extends Sil_types
 
 (************************************************************************
  * DEFINITIONS                                                          *

@@ -30,9 +30,9 @@
  * jyh@cs.cornell.edu
  *)
 
-include Itt_list
-include Itt_logic
-include Itt_bool
+extends Itt_list
+extends Itt_logic
+extends Itt_bool
 
 open Tactic_type.Conversionals
 

@@ -2,8 +2,8 @@
  * Existential quantifier.
  *)
 
-include Fol_and
-include Fol_pred
+extends Fol_and
+extends Fol_pred
 
 declare "exists"{x. 'B['x]}
 

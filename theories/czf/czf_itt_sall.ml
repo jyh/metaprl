@@ -41,7 +41,7 @@
  *)
 
 (*! @doc{@parents} *)
-include Czf_itt_set
+extends Czf_itt_set
 (*! @docoff *)
 
 open Printf

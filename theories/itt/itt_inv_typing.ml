@@ -1,6 +1,6 @@
-include Itt_disect
-include Itt_prod
-include Itt_dfun
+extends Itt_disect
+extends Itt_prod
+extends Itt_dfun
 
 open Itt_struct
 open Printf

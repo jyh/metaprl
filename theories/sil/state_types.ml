@@ -30,7 +30,7 @@
  * jyh@cs.cornell.edu
  *)
 
-include Sil_programs
+extends Sil_programs
 
 (************************************************************************
  * SYNTAX                                                               *

@@ -2,7 +2,7 @@
  * Structural rules.
  *)
 
-include Base_theory
+extends Base_theory
 
 open Refiner.Refiner.TermType
 open Tactic_type.Tacticals

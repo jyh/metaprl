@@ -47,12 +47,12 @@
  * @parents
  * @end[doc]
  *)
-include Itt_equal
-include Itt_struct
-include Itt_union
-include Itt_set
-include Itt_logic
-include Itt_decidable
+extends Itt_equal
+extends Itt_struct
+extends Itt_union
+extends Itt_set
+extends Itt_logic
+extends Itt_decidable
 (*! @docoff *)
 
 open Refiner.Refiner.TermType

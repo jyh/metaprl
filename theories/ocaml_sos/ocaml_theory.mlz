@@ -30,24 +30,24 @@
  * jyh@cs.cornell.edu
  *)
 
-include Ocaml
-include Ocaml_base_df
-include Ocaml_expr_df
-include Ocaml_patt_df
-include Ocaml_type_df
-include Ocaml_mt_df
-include Ocaml_me_df
-include Ocaml_sig_df
-include Ocaml_str_df
-include Ocaml_logic
-include Ocaml_base_sos
-include Ocaml_expr_sos
-include Ocaml_patt_sos
-include Ocaml_type_sos
-include Ocaml_mt_sos
-include Ocaml_me_sos
-include Ocaml_sig_sos
-include Ocaml_str_sos
+extends Ocaml
+extends Ocaml_base_df
+extends Ocaml_expr_df
+extends Ocaml_patt_df
+extends Ocaml_type_df
+extends Ocaml_mt_df
+extends Ocaml_me_df
+extends Ocaml_sig_df
+extends Ocaml_str_df
+extends Ocaml_logic
+extends Ocaml_base_sos
+extends Ocaml_expr_sos
+extends Ocaml_patt_sos
+extends Ocaml_type_sos
+extends Ocaml_mt_sos
+extends Ocaml_me_sos
+extends Ocaml_sig_sos
+extends Ocaml_str_sos
 
 (*
  * -*-

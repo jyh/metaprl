@@ -44,8 +44,8 @@
  * @parents
  * @end[doc]
  *)
-include Itt_isect
-include Itt_bool
+extends Itt_isect
+extends Itt_bool
 (*! @docoff *)
 
 open Printf

@@ -30,7 +30,7 @@
  * jyh@cs.cornell.edu
  *)
 
-include Sil_syntax
+extends Sil_syntax
 
 declare sil_program{'e1; 's1}
 

@@ -30,10 +30,10 @@
  * jyh@cs.cornell.edu
  *)
 
-include Base_theory
+extends Base_theory
 
-include Sil_state
-include Sil_programs
+extends Sil_state
+extends Sil_programs
 
 (************************************************************************
  * SYNTAX                                                               *

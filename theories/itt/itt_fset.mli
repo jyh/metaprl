@@ -31,11 +31,11 @@
  *
  *)
 
-include Itt_bool
-include Itt_fun
-include Itt_quotient
-include Itt_list
-include Itt_list2
+extends Itt_bool
+extends Itt_fun
+extends Itt_quotient
+extends Itt_list
+extends Itt_list2
 
 open Refiner.Refiner.TermType
 

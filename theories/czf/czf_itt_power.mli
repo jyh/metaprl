@@ -23,8 +23,8 @@
  * jyh@cs.caltech.edu
  *)
 
-include Czf_itt_subset
-include Czf_itt_rel
+extends Czf_itt_subset
+extends Czf_itt_rel
 
 open Refiner.Refiner.TermType
 open Tactic_type.Tacticals

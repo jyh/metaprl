@@ -53,11 +53,11 @@
  * @parents
  * @end[doc]
  *)
-include Itt_squash
-include Itt_equal
-include Itt_unit
-include Itt_subtype
-include Itt_struct
+extends Itt_squash
+extends Itt_equal
+extends Itt_unit
+extends Itt_subtype
+extends Itt_struct
 (*! @docoff *)
 
 open Printf

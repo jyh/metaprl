@@ -43,36 +43,36 @@
  * @parents
  * @end[doc]
  *)
-include Base_theory
-include Itt_equal
-include Itt_void
-include Itt_bool
-include Itt_atom
-include Itt_int_base
-include Itt_int_ext
-include Itt_rfun
-include Itt_dfun
-include Itt_fun
-include Itt_well_founded
-include Itt_dprod
-include Itt_prod
-include Itt_union
-include Itt_struct
-include Itt_set
-include Itt_isect
-include Itt_tunion
-include Itt_bisect
-include Itt_disect
-include Itt_bunion
-include Itt_subtype
-include Itt_w
-include Itt_prec
-include Itt_srec
-include Itt_list
-include Itt_list2
-include Itt_esquash
-include Itt_quotient
-include Itt_decidable
+extends Base_theory
+extends Itt_equal
+extends Itt_void
+extends Itt_bool
+extends Itt_atom
+extends Itt_int_base
+extends Itt_int_ext
+extends Itt_rfun
+extends Itt_dfun
+extends Itt_fun
+extends Itt_well_founded
+extends Itt_dprod
+extends Itt_prod
+extends Itt_union
+extends Itt_struct
+extends Itt_set
+extends Itt_isect
+extends Itt_tunion
+extends Itt_bisect
+extends Itt_disect
+extends Itt_bunion
+extends Itt_subtype
+extends Itt_w
+extends Itt_prec
+extends Itt_srec
+extends Itt_list
+extends Itt_list2
+extends Itt_esquash
+extends Itt_quotient
+extends Itt_decidable
 
 (*!
  * Theories we do not want to include in the
@@ -80,11 +80,11 @@ include Itt_decidable
  *
  * @docoff
  *)
-include Itt_atom_bool
-include Itt_derive
-include Itt_prop_decide
-include Itt_fset
-include Itt_int_arith
+extends Itt_atom_bool
+extends Itt_derive
+extends Itt_prop_decide
+extends Itt_fset
+extends Itt_int_arith
 
 open Itt_equal
 open Itt_rfun

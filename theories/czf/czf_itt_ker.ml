@@ -43,9 +43,9 @@
  *)
 
 (*! @doc{@parents} *)
-include Czf_itt_hom
-include Czf_itt_coset
-include Czf_itt_normal_subgroup
+extends Czf_itt_hom
+extends Czf_itt_coset
+extends Czf_itt_normal_subgroup
 (*! @docoff *)
 
 open Printf

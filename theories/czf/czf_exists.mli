@@ -30,10 +30,10 @@
  * jyh@cs.cornell.edu
  *)
 
-include Czf_wf;;
-include Czf_set;;
-include Czf_implies;;
-include Czf_member;;
+extends Czf_wf;;
+extends Czf_set;;
+extends Czf_implies;;
+extends Czf_member;;
 
 declare "exists"{x. 'P};;
 define bounded_exists_abs : "exists"{'y; x. 'P['x]} <--> "exists"{x. member{'x; 'y} => 'P['x]};;

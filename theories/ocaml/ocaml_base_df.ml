@@ -29,8 +29,8 @@
  *
  * Author: Jason Hickey <jyh@cs.cornell.edu>
  *)
-include Nuprl_font
-include Base_dform
+extends Nuprl_font
+extends Base_dform
 
 open Mp_debug
 open Printf

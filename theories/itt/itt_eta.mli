@@ -1,4 +1,4 @@
-include Itt_dfun
+extends Itt_dfun
 
 
 open Refiner.Refiner.Term

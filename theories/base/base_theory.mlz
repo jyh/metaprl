@@ -72,30 +72,30 @@
  * @parents
  * @end[doc]
  *)
-include Summary
-include Mptop
-include Var
-include Top_tacticals
-include Top_conversionals
-include Base_trivial
-include Base_auto_tactic
-include Base_dtactic
-include Base_rewrite
+extends Summary
+extends Mptop
+extends Var
+extends Top_tacticals
+extends Top_conversionals
+extends Base_trivial
+extends Base_auto_tactic
+extends Base_dtactic
+extends Base_rewrite
 (*! @docoff *)
 
 (*
  * This are very basic theories; not included in
  * the documentation.
  *)
-include Perv
-include Nuprl_font
-include Base_dform
-include Comment
-include Ocaml_df
-include Base_trivial
-include Typeinf
-include Base_cache
-include Base_meta
+extends Perv
+extends Nuprl_font
+extends Base_dform
+extends Comment
+extends Ocaml_df
+extends Base_trivial
+extends Typeinf
+extends Base_cache
+extends Base_meta
 
 (*
  * -*-

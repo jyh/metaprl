@@ -30,9 +30,9 @@
  * Email : xiny@cs.caltech.edu
  *)
 
-include Czf_itt_group
-include Czf_itt_singleton
-include Czf_itt_union
+extends Czf_itt_group
+extends Czf_itt_singleton
+extends Czf_itt_union
 
 open Printf
 open Mp_debug

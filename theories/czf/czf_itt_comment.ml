@@ -23,7 +23,7 @@
  * jyh@cs.caltech.edu
  *)
 
-include Itt_theory
+extends Itt_theory
 
 open Itt_equal
 open Itt_rfun

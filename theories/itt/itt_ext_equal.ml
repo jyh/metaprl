@@ -36,10 +36,10 @@ open Printf
 open Mp_debug
 open Refiner.Refiner.Term
 
-include Itt_equal
-include Itt_squash
-include Itt_subtype
-include Itt_logic
+extends Itt_equal
+extends Itt_squash
+extends Itt_subtype
+extends Itt_logic
 
 open Itt_squash
 open Base_dtactic

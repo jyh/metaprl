@@ -1,10 +1,10 @@
 
-include Itt_record_label
-include Itt_record0
-include Itt_struct3
-include Itt_disect
-include Itt_logic
-include Itt_tsquash
+extends Itt_record_label
+extends Itt_record0
+extends Itt_struct3
+extends Itt_disect
+extends Itt_logic
+extends Itt_tsquash
 
 open Printf
 open Mp_debug

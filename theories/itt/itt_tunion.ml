@@ -58,11 +58,11 @@
  * @parents
  * @end[doc]
  *)
-include Itt_struct
-include Itt_struct2
-include Itt_equal
-include Itt_set
-include Itt_logic
+extends Itt_struct
+extends Itt_struct2
+extends Itt_equal
+extends Itt_set
+extends Itt_logic
 (*! @docoff *)
 
 open Refiner.Refiner.TermType

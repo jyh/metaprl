@@ -32,8 +32,8 @@
 open Tactic_type.Conversionals
 open Top_conversionals
 
-include Itt_theory
-include Itt_nat
+extends Itt_theory
+extends Itt_nat
 
 open Base_dtactic
 

@@ -1,6 +1,6 @@
-include Itt_record_label0
-include Itt_struct3
-include Itt_inv_typing
+extends Itt_record_label0
+extends Itt_struct3
+extends Itt_inv_typing
 
 open Refiner.Refiner.Term
 open Tactic_type.Tacticals

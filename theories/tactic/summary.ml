@@ -69,10 +69,10 @@
  * @end[license]
  *)
 
-include Perv
-include Nuprl_font
-include Base_dform
-include Comment
+extends Perv
+extends Nuprl_font
+extends Base_dform
+extends Comment
 
 open Printf
 open Mp_debug
@@ -124,7 +124,7 @@ declare comment{'t}
  * Each of the components in an interface or implementation
  * also has a term description.
  * The @tt[parent] term describes an
- * @bf{include} statement: the @it{path} is the pathname of the parent
+ * @bf[extends] statement: the @it{path} is the pathname of the parent
  * module; the @it{opens} is the complete list of parents (the transitive
  * closure) and the @it{resources} are the complete list of resources
  * defined or used by the module.
@@ -534,7 +534,7 @@ dform path_parent_cons_df : internal :: path{cons{."parent"[name:s]; .cons{'n1; 
    slot[name:s] keyword["."] cons{'n1; 'n2}
 
 dform parent_df : "parent"{'path; 'opens; 'resources} =
-   info["include"] " " begin_cd{'path} path{'path} end_cd
+   info["extends"] " " begin_cd{'path} path{'path} end_cd
 
 (*
  * Nested module is indented.

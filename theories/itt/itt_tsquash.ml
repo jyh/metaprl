@@ -1,6 +1,6 @@
-include Itt_isect
-include Itt_set
-include Itt_struct
+extends Itt_isect
+extends Itt_set
+extends Itt_struct
 
 open Printf
 open Mp_debug

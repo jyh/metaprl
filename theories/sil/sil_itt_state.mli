@@ -31,8 +31,8 @@
  * jyh@cs.cornell.edu
  *)
 
-include Itt_theory
-include Sil_state
+extends Itt_theory
+extends Sil_state
 
 (*
  * Equality on labels as a Boolean value.

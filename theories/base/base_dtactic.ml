@@ -148,7 +148,7 @@
  * @parents
  * @end[doc]
  *)
-include Base_auto_tactic
+extends Base_auto_tactic
 (*! @docoff *)
 
 open Printf

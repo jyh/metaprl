@@ -79,7 +79,7 @@
  * @parents
  * @end[doc]
  *)
-include Base_dform
+extends Base_dform
 
 (************************************************************************
  * STRUCTURED COMMENTS                                                  *

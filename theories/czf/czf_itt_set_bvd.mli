@@ -30,8 +30,8 @@
  * Email : xiny@cs.caltech.edu
  *)
 
-include Czf_itt_dall
-include Czf_itt_dexists
+extends Czf_itt_dall
+extends Czf_itt_dexists
 
 open Printf
 open Mp_debug

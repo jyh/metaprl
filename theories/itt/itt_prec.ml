@@ -59,12 +59,12 @@
  * @parents
  * @end[doc]
  *)
-include Itt_equal
-include Itt_subtype
-include Itt_void
-include Itt_fun
-include Itt_prod
-include Itt_struct
+extends Itt_equal
+extends Itt_subtype
+extends Itt_void
+extends Itt_fun
+extends Itt_prod
+extends Itt_struct
 (*! @docoff *)
 
 open Printf

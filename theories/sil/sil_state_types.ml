@@ -29,7 +29,7 @@
  * Author: Jason Hickey
  * jyh@cs.cornell.edu
  *)
-include Base_theory
+extends Base_theory
 
 (************************************************************************
  * SYNTAX                                                               *

@@ -30,8 +30,8 @@
  * jyh@cs.cornell.edu
  *)
 
-include Itt_theory
-include Fol_itt_type
+extends Itt_theory
+extends Fol_itt_type
 
 derive Fol_or
 

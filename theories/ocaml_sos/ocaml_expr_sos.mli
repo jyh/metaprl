@@ -41,9 +41,9 @@
  * jyh@cs.cornell.edu
  *)
 
-include Ocaml
-include Ocaml_logic
-include Ocaml_base_sos
+extends Ocaml
+extends Ocaml_logic
+extends Ocaml_base_sos
 
 (************************************************************************
  * EXCEPTIONS                                                           *

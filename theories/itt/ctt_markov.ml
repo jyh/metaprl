@@ -1,5 +1,5 @@
-include Itt_theory
-include Itt_nat
+extends Itt_theory
+extends Itt_nat
 
 (*! @docoff *)
 

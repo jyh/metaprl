@@ -1,7 +1,7 @@
 (*
  * Falsehood.
  *)
-include Fol_type
+extends Fol_type
 
 open Tactic_type
 open Base_dtactic

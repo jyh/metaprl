@@ -30,7 +30,7 @@
  * Modified by: Aleksey Nogin <nogin@cs.cornell.edu>
  *)
 
-include Base_auto_tactic
+extends Base_auto_tactic
 
 open Refiner.Refiner.Term
 open Refiner.Refiner.Refine

@@ -30,11 +30,11 @@
  * @email{ynb@mail.ru}
  *)
 
-include Itt_equal
-include Itt_rfun
-include Itt_logic
-include Itt_bool
-include Itt_int_ext
+extends Itt_equal
+extends Itt_rfun
+extends Itt_logic
+extends Itt_bool
+extends Itt_int_ext
 
 open Refiner.Refiner.Term
 open Tactic_type.Tacticals

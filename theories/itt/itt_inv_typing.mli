@@ -1,5 +1,5 @@
-include Itt_disect
-include Itt_prod
+extends Itt_disect
+extends Itt_prod
 
 open Itt_struct
 open Printf

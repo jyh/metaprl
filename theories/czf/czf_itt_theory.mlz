@@ -268,8 +268,8 @@
  * @parents
  * @end[doc]
  *)
-include Czf_itt_subset
-include Czf_itt_power
+extends Czf_itt_subset
+extends Czf_itt_power
 (*! @docoff *)
 
 (*

@@ -51,8 +51,8 @@
  * @parents
  * @end[doc]
  *)
-include Itt_equal
-include Itt_dfun
+extends Itt_equal
+extends Itt_dfun
 (*! @docoff *)
 
 open Printf

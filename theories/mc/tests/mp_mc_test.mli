@@ -32,5 +32,5 @@
  * Email:  emre@its.caltech.edu
  *)
 
-include Base_theory
-include Mp_mc_theory
+extends Base_theory
+extends Mp_mc_theory

@@ -30,8 +30,8 @@
  * jyh@cs.cornell.edu
  *)
 
-include Itt_isect
-include Itt_bool
+extends Itt_isect
+extends Itt_bool
 
 define unfold_bisect : bisect{'A; 'B} <-->
                           "isect"{bool; x. ifthenelse{'x; 'A; 'B}}

@@ -30,8 +30,8 @@
  * Modified by: Aleksey Nogin <nogin@cs.cornell.edu>
  *)
 
-include Perv
-include Nuprl_font
+extends Perv
+extends Nuprl_font
 
 (*
  * Other commands.

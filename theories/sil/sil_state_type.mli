@@ -30,7 +30,7 @@
  * jyh@cs.cornell.edu
  *)
 
-include Sil_state
+extends Sil_state
 
 open Tactic_type.Tacticals
 

@@ -30,15 +30,15 @@
  * jyh@cs.cornell.edu
  *)
 
-include Czf_wf;;
-include Czf_member;;
-include Czf_true;;
-include Czf_false;;
-include Czf_and;;
-include Czf_or;;
-include Czf_implies;;
-include Czf_all;;
-include Czf_exists;;
+extends Czf_wf;;
+extends Czf_member;;
+extends Czf_true;;
+extends Czf_false;;
+extends Czf_and;;
+extends Czf_or;;
+extends Czf_implies;;
+extends Czf_all;;
+extends Czf_exists;;
 
 (*
  * -*-

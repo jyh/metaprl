@@ -30,8 +30,8 @@
  * jyh@cs.cornell.edu
  *)
 
-include Tactic_cache
-include Summary
+extends Tactic_cache
+extends Summary
 
 open Refiner.Refiner
 

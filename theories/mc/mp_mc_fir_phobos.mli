@@ -29,7 +29,7 @@
  * Author: Adam Granicz
  * Email:  granicz@cs.caltech.edu
  *)
-include Mp_mc_theory
+extends Mp_mc_theory
 
 open Tactic_type.Conversionals
 open Phobos_type

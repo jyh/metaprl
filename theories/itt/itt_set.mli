@@ -31,11 +31,11 @@
  *
  *)
 
-include Itt_equal
-include Itt_squash
-include Itt_subtype
-include Itt_unit
-include Itt_struct
+extends Itt_equal
+extends Itt_squash
+extends Itt_subtype
+extends Itt_unit
+extends Itt_struct
 
 open Refiner.Refiner.Term
 

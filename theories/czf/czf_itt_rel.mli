@@ -30,8 +30,8 @@
  * jyh@cs.cornell.edu
  *)
 
-include Czf_itt_dall
-include Czf_itt_dexists
+extends Czf_itt_dall
+extends Czf_itt_dexists
 
 open Refiner.Refiner.TermType
 

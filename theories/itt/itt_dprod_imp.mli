@@ -30,9 +30,9 @@
  * jyh@cs.cornell.edu
  *)
 
-include Itt_rfun
-include Itt_unit
-include Itt_union
+extends Itt_rfun
+extends Itt_unit
+extends Itt_union
 
 open Refiner.Refiner.TermType
 open Tactic_type.Conversionals

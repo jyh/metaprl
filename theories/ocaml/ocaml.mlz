@@ -31,7 +31,7 @@
  * jyh@cs.cornell.edu
  *)
 
-include Perv
+extends Perv
 
 (************************************************************************
  * EXPRESSIONS                                                          *

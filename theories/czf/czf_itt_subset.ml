@@ -35,7 +35,7 @@
  *)
 
 (*! @doc{@parents} *)
-include Czf_itt_dall
+extends Czf_itt_dall
 
 open Base_dtactic
 

@@ -30,7 +30,7 @@
  * jyh@cs.cornell.edu
  *)
 
-include Itt_logic
+extends Itt_logic
 
 open Printf
 open Mp_debug

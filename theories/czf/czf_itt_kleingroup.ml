@@ -75,9 +75,9 @@
  *)
 
 (*! @doc{@parents} *)
-include Czf_itt_group
-include Czf_itt_singleton
-include Czf_itt_union
+extends Czf_itt_group
+extends Czf_itt_singleton
+extends Czf_itt_union
 (*! @docoff *)
 
 open Printf

@@ -30,7 +30,7 @@
  * jyh@cs.cornell.edu
  *)
 
-include Czf_itt_union
+extends Czf_itt_union
 
 (************************************************************************
  * TERMS                                                                *

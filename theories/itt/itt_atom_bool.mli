@@ -30,8 +30,8 @@
  * jyh@cs.cornell.edu
  *)
 
-include Itt_atom
-include Itt_bool
+extends Itt_atom
+extends Itt_bool
 
 open Tactic_type.Conversionals
 

@@ -42,8 +42,8 @@
  * @parents
  * @end[doc]
  *)
-include Mp_mc_theory
-include Mp_mc_inline_aux
+extends Mp_mc_theory
+extends Mp_mc_inline_aux
 (*! @docoff *)
 
 open Refiner.Refiner.Term

@@ -1,6 +1,6 @@
-include Itt_record
-include Itt_fun
-include Itt_int_base
+extends Itt_record
+extends Itt_fun
+extends Itt_int_base
 
 open Tactic_type.Conversionals
 open Var

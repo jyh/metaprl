@@ -61,10 +61,10 @@
  * @parents
  * @end[doc]
  *)
-include Itt_equal
-include Itt_void
-include Itt_set
-include Itt_struct
+extends Itt_equal
+extends Itt_void
+extends Itt_set
+extends Itt_struct
 (*! @docoff *)
 
 open Printf

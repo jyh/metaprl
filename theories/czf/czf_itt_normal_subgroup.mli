@@ -30,8 +30,8 @@
  * Email : xiny@cs.caltech.edu
  *)
 
-include Czf_itt_subgroup
-include Czf_itt_coset
+extends Czf_itt_subgroup
+extends Czf_itt_coset
 
 open Printf
 open Mp_debug

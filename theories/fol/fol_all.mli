@@ -2,9 +2,9 @@
  * Universal quantifier.
  *)
 
-include Fol_implies
-include Fol_struct
-include Fol_pred
+extends Fol_implies
+extends Fol_struct
+extends Fol_pred
 
 declare "all"{x. 'B['x]}
 

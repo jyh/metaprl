@@ -39,8 +39,8 @@
  *)
 
 (*! @doc{@parents} *)
-include Czf_itt_group
-include Czf_itt_hom
+extends Czf_itt_group
+extends Czf_itt_hom
 (*! @docoff *)
 
 open Printf

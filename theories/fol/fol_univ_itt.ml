@@ -30,9 +30,9 @@
  * jyh@cs.cornell.edu
  *)
 
-include Itt_theory
-include Fol_type_itt
-include Fol_univ
+extends Itt_theory
+extends Fol_type_itt
+extends Fol_univ
 
 open Refiner.Refiner.RefineError
 

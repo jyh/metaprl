@@ -42,7 +42,7 @@
  * @parents
  * @end[doc]
  *)
-include Mp_mc_fir_exp
+extends Mp_mc_fir_exp
 (*! @docoff *)
 
 open Top_conversionals

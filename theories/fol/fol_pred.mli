@@ -30,7 +30,7 @@
  * jyh@cs.cornell.edu
  *)
 
-include Fol_type
+extends Fol_type
 
 declare pred
 

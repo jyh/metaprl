@@ -2,7 +2,7 @@
  * Conjunction.
  *)
 
-include Fol_type
+extends Fol_type
 
 declare "and"{'A; 'B}
 declare "pair"{'a; 'b}

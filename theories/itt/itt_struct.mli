@@ -31,7 +31,7 @@
  *
  *)
 
-include Itt_equal
+extends Itt_equal
 
 open Refiner.Refiner.Term
 

@@ -30,10 +30,10 @@
  * jyh@cs.cornell.edu
  *)
 
-include Perv
-include Nuprl_font
-include Base_dform
-include Comment
+extends Perv
+extends Nuprl_font
+extends Base_dform
+extends Comment
 
 open Refiner.Refiner.TermType
 

@@ -31,7 +31,7 @@
  * jyh@cs.cornell.edu
  *)
 
-include Tptp
+extends Tptp
 
 open Printf
 open Mp_debug

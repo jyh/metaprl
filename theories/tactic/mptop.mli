@@ -29,7 +29,7 @@
  * Author: Jason Hickey
  * jyh@cs.cornell.edu
  *)
-include Summary
+extends Summary
 
 open Refiner.Refiner.TermType
 open Refiner.Refiner.TermAddr

@@ -31,10 +31,10 @@
  * jyh@cs.cornell.edu
  *)
 
-include Czf_member;;
-include Czf_all;;
-include Czf_implies;;
-include Czf_and;;
+extends Czf_member;;
+extends Czf_all;;
+extends Czf_implies;;
+extends Czf_and;;
 
 declare equal{'A; 'B};;
 

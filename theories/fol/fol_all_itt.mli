@@ -30,9 +30,9 @@
  * jyh@cs.cornell.edu
  *)
 
-include Itt_theory
-include Fol_univ_itt
-include Fol_all
+extends Itt_theory
+extends Fol_univ_itt
+extends Fol_all
 
 (************************************************************************
  * DEFINITIONS                                                          *

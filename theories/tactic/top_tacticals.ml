@@ -56,7 +56,7 @@
  * @parents
  * @end[doc]
  *)
-include Mptop
+extends Mptop
 
 (*!************************************************************************
  * @begin[doc]

@@ -30,8 +30,8 @@
  * jyh@cs.cornell.edu
  *)
 
-include Itt_tunion
-include Itt_bool
+extends Itt_tunion
+extends Itt_bool
 
 open Tactic_type.Conversionals
 

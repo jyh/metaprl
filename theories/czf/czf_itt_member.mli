@@ -30,7 +30,7 @@
  * jyh@cs.cornell.edu
  *)
 
-include Czf_itt_eq
+extends Czf_itt_eq
 
 open Refiner.Refiner.Term
 

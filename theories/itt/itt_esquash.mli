@@ -31,8 +31,8 @@
  * jyh@cs.cornell.edu
  *)
 
-include Itt_equal
-include Itt_squash
+extends Itt_equal
+extends Itt_squash
 
 open Tactic_type.Tacticals
 open Tactic_type.Conversionals

@@ -30,8 +30,8 @@
  * jyh@cs.cornell.edu
  *)
 
-include Czf_wf;;
-include Czf_false;;
+extends Czf_wf;;
+extends Czf_false;;
 
 declare implies{'A; 'B};;
 define not_abs : not{'A} <--> 'A => false;;

@@ -2,7 +2,7 @@
  * "True" operator.
  *)
 
-include Fol_type
+extends Fol_type
 
 declare "true"
 declare "it"

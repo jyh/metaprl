@@ -48,9 +48,9 @@
  *)
 
 (*! @doc{@parents} *)
-include Czf_itt_group
-include Czf_itt_dexists
-include Czf_itt_subgroup
+extends Czf_itt_group
+extends Czf_itt_dexists
+extends Czf_itt_subgroup
 (*! @docoff *)
 
 open Printf

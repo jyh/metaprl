@@ -29,7 +29,7 @@
  * Author: Aleksey Nogin <nogin@cs.cornell.edu>
  *)
 
-include Itt_logic
+extends Itt_logic
 
 open Tactic_type
 open Tactic_type.Tacticals

@@ -32,8 +32,8 @@
  * jyh@cs.cornell.edu
  *)
 
-include Ocaml
-include Base_theory
+extends Ocaml
+extends Base_theory
 
 (*
  * Extract term for equivalences.

@@ -2,7 +2,7 @@
  * These are the basic terms and axioms of TPTP.
  *)
 
-include Itt_theory
+extends Itt_theory
 
 open Printf
 open Mp_debug

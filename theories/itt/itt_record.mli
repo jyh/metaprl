@@ -1,8 +1,8 @@
-include Itt_record_label
-include Itt_record0
-include Itt_struct3
-include Itt_logic
-include Itt_disect
+extends Itt_record_label
+extends Itt_record0
+extends Itt_struct3
+extends Itt_logic
+extends Itt_disect
 
 open Refiner.Refiner.Term
 open Tactic_type.Tacticals

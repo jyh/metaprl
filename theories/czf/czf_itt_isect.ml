@@ -51,7 +51,7 @@
  *)
 
 (*! @doc{@parents} *)
-include Czf_itt_union
+extends Czf_itt_union
 (*! @docoff *)
 
 open Printf

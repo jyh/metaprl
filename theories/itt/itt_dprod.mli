@@ -31,9 +31,9 @@
  *
  *)
 
-include Itt_equal
-include Itt_struct
-include Itt_subtype
+extends Itt_equal
+extends Itt_struct
+extends Itt_subtype
 
 open Refiner.Refiner.Term
 

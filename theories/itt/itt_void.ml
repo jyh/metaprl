@@ -45,9 +45,9 @@
  * @parents
  * @end[doc]
  *)
-include Itt_equal
-include Itt_squash
-include Itt_subtype
+extends Itt_equal
+extends Itt_squash
+extends Itt_subtype
 (*! @docoff *)
 
 open Printf

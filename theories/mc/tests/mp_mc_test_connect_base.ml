@@ -35,7 +35,7 @@
 
 (* Open MC namespaces. *)
 
-include Base_theory
+extends Base_theory
 open Interval_set
 open Rawint
 open Rawfloat

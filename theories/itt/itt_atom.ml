@@ -49,8 +49,8 @@
  * @parents
  * @end[doc]
  *)
-include Itt_equal
-include Itt_squiggle
+extends Itt_equal
+extends Itt_squiggle
 (*! @docoff *)
 
 open Printf

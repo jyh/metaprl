@@ -31,16 +31,16 @@
  *
  *)
 
-include Itt_equal
-include Itt_rfun
-include Itt_dfun
-include Itt_fun
-include Itt_dprod
-include Itt_prod
-include Itt_union
-include Itt_void
-include Itt_unit
-include Itt_struct
+extends Itt_equal
+extends Itt_rfun
+extends Itt_dfun
+extends Itt_fun
+extends Itt_dprod
+extends Itt_prod
+extends Itt_union
+extends Itt_void
+extends Itt_unit
+extends Itt_struct
 
 open Refiner.Refiner.TermType
 

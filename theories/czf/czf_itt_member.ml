@@ -52,7 +52,7 @@
  * @parents
  * @end[doc]
  *)
-include Czf_itt_eq
+extends Czf_itt_eq
 (*! @docoff *)
 
 open Refiner.Refiner.Term

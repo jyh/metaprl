@@ -48,8 +48,8 @@
  * jyh@cs.cornell.edu
  *)
 
-include Itt_theory
-include Czf_itt_comment
+extends Itt_theory
+extends Czf_itt_comment
 
 open Refiner.Refiner.Term
 

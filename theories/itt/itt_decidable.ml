@@ -49,7 +49,7 @@
  * @parents
  * @end[doc]
  *)
-include Itt_logic
+extends Itt_logic
 (*! @docoff *)
 
 open Printf

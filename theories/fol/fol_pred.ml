@@ -29,7 +29,7 @@
  * jyh@cs.cornell.edu
  *)
 
-include Fol_type
+extends Fol_type
 
 open Tactic_type
 open Tactic_type.Tacticals

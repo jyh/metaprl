@@ -1,7 +1,7 @@
 (*
  * Classical reasoning.
  *)
-include Fol_not
+extends Fol_not
 
 open Tactic_type
 

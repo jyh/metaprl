@@ -1,8 +1,8 @@
-include Itt_squash
-include Itt_ext_equal
-include Itt_struct2
-include Itt_subtype
-include Itt_pointwise
+extends Itt_squash
+extends Itt_ext_equal
+extends Itt_struct2
+extends Itt_subtype
+extends Itt_pointwise
 
 open Printf
 open Mp_debug

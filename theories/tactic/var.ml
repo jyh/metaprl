@@ -64,7 +64,7 @@
  * @parents
  * @end[doc]
  *)
-include Summary
+extends Summary
 (*! @docoff *)
 
 open Refiner.Refiner.Term

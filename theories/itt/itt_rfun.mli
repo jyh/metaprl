@@ -31,9 +31,9 @@
  *
  *)
 
-include Itt_equal
-include Itt_set
-include Itt_void
+extends Itt_equal
+extends Itt_set
+extends Itt_void
 
 open Refiner.Refiner.Term
 

@@ -31,11 +31,11 @@
  *
  *)
 
-include Itt_rfun
-include Itt_dfun
-include Itt_fun
-include Itt_unit
-include Itt_union
+extends Itt_rfun
+extends Itt_dfun
+extends Itt_fun
+extends Itt_unit
+extends Itt_union
 
 open Mp_debug
 open Printf

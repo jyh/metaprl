@@ -30,8 +30,8 @@
  * jyh@cs.cornell.edu
  *)
 
-include Fol_theory
-include Cfol_magic
+extends Fol_theory
+extends Cfol_magic
 
 (*
  * -*-

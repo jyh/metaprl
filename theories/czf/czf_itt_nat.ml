@@ -61,11 +61,11 @@
  *)
 
 (*! @doc{@parents} *)
-include Czf_itt_member
-include Czf_itt_singleton
-include Czf_itt_union
-include Czf_itt_empty
-include Czf_itt_implies
+extends Czf_itt_member
+extends Czf_itt_singleton
+extends Czf_itt_union
+extends Czf_itt_empty
+extends Czf_itt_implies
 (*! @docoff *)
 
 open Refiner.Refiner.TermSubst

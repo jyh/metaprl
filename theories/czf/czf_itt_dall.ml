@@ -49,8 +49,8 @@
  *)
 
 (*! @doc{@parents} *)
-include Czf_itt_all
-include Czf_itt_set_ind
+extends Czf_itt_all
+extends Czf_itt_set_ind
 (*! @docoff *)
 
 open Mp_debug

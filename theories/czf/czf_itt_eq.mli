@@ -35,7 +35,7 @@
  * jyh@cs.cornell.edu
  *)
 
-include Czf_itt_set
+extends Czf_itt_set
 
 open Refiner.Refiner.TermType
 

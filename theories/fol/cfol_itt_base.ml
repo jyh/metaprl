@@ -30,7 +30,7 @@
  * jyh@cs.cornell.edu
  *)
 
-include Itt_theory
+extends Itt_theory
 
 derive Fol_type
 derive Fol_false

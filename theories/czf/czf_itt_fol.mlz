@@ -98,11 +98,11 @@
  * @end[license]
  *)
 
-include Czf_itt_false
-include Czf_itt_true
-include Czf_itt_or
-include Czf_itt_and
-include Czf_itt_implies
+extends Czf_itt_false
+extends Czf_itt_true
+extends Czf_itt_or
+extends Czf_itt_and
+extends Czf_itt_implies
 
 (*
  * -*-

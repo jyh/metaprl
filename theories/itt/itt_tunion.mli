@@ -30,8 +30,8 @@
  * jyh@cs.cornell.edu
  *)
 
-include Itt_equal
-include Itt_set
+extends Itt_equal
+extends Itt_set
 
 (************************************************************************
  * SYNTAX                                                               *

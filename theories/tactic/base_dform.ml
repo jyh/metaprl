@@ -46,8 +46,8 @@
  * @parents
  * @end[doc]
  *)
-include Perv
-include Nuprl_font
+extends Perv
+extends Nuprl_font
 (* @docoff *)
 
 open Printf

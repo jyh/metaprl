@@ -42,14 +42,14 @@
  * @parents
  * @end[doc]
  *)
-include Itt_equal
-include Itt_rfun
-include Itt_logic
-include Itt_bool
-include Itt_struct3
-include Itt_int_base
-include Itt_int_ext
-include Itt_int_arith
+extends Itt_equal
+extends Itt_rfun
+extends Itt_logic
+extends Itt_bool
+extends Itt_struct3
+extends Itt_int_base
+extends Itt_int_ext
+extends Itt_int_arith
 (*! @docoff *)
 
 open Printf

@@ -42,7 +42,7 @@
  * @parents
  * @end[doc]
  *)
-include Mp_mc_theory
+extends Mp_mc_theory
 (*! @docoff *)
 
 open Refiner.Refiner.Term

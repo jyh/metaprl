@@ -1,13 +1,13 @@
-include Czf_itt_set
-include Czf_itt_eq
-include Czf_itt_empty
-include Czf_itt_singleton
-include Czf_itt_setdiff
-include Czf_itt_union
-include Czf_itt_isect
-include Itt_bool
-include Itt_logic
-include Itt_theory
+extends Czf_itt_set
+extends Czf_itt_eq
+extends Czf_itt_empty
+extends Czf_itt_singleton
+extends Czf_itt_setdiff
+extends Czf_itt_union
+extends Czf_itt_isect
+extends Itt_bool
+extends Itt_logic
+extends Itt_theory
 
 open Refiner.Refiner.Term
 open Tactic_type.Tacticals

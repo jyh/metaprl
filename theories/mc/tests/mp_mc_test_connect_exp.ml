@@ -35,7 +35,7 @@
 
 (* Open MC namespaces. *)
 
-include Base_theory
+extends Base_theory
 open Rawint
 open Rawfloat
 open Fir

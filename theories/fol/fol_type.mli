@@ -30,7 +30,7 @@
  * jyh@cs.cornell.edu
  *)
 
-include Base_theory
+extends Base_theory
 
 declare "type"{'t}
 declare trivial

@@ -30,7 +30,7 @@
  * jyh@cs.cornell.edu
  *)
 
-include Lf_sig;;
+extends Lf_sig;;
 
 declare ctx{'S; 'C};;
 declare nil_ctx;;

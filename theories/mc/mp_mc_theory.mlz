@@ -48,20 +48,20 @@
  * @parents
  * @end[doc]
  *)
-include Base_meta
+extends Base_meta
 
-include Itt_atom
-include Itt_int_base
-include Itt_int_ext
-include Itt_list
-include Itt_list2
-include Itt_rfun
+extends Itt_atom
+extends Itt_int_base
+extends Itt_int_ext
+extends Itt_list
+extends Itt_list2
+extends Itt_rfun
 
-include Mp_mc_fir_base
-include Mp_mc_fir_ty
-include Mp_mc_fir_exp
-include Mp_mc_fir_prog
-include Mp_mc_fir_eval
-include Mp_mc_deadcode
-include Mp_mc_const_elim
+extends Mp_mc_fir_base
+extends Mp_mc_fir_ty
+extends Mp_mc_fir_exp
+extends Mp_mc_fir_prog
+extends Mp_mc_fir_eval
+extends Mp_mc_deadcode
+extends Mp_mc_const_elim
 (*! @docoff *)

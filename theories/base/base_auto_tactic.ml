@@ -93,7 +93,7 @@
  * @parents
  * @end[doc]
  *)
-include Mptop
+extends Mptop
 (*! @docoff *)
 
 open Printf

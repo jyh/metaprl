@@ -36,8 +36,8 @@
  *)
 
 (*! @doc{@parents} *)
-include Czf_itt_union
-include Czf_itt_singleton
+extends Czf_itt_union
+extends Czf_itt_singleton
 (*! @docoff *)
 
 open Base_dtactic

@@ -2,7 +2,7 @@
  * Disjunction.
  *)
 
-include Fol_type
+extends Fol_type
 
 declare "or"{'A; 'B}
 declare inl{'a}

@@ -2,7 +2,7 @@
  * "True" constant.
  *)
 
-include Fol_type
+extends Fol_type
 
 open Base_dtactic
 

@@ -1,5 +1,5 @@
 
-include Lf_dfun;;
+extends Lf_dfun;;
 
 (*
  * -*-

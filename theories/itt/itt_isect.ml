@@ -72,11 +72,11 @@
  * @parents
  * @end[doc]
  *)
-include Itt_equal
-include Itt_set
-include Itt_rfun
-include Itt_logic
-include Itt_struct2
+extends Itt_equal
+extends Itt_set
+extends Itt_rfun
+extends Itt_logic
+extends Itt_struct2
 (*! @docoff *)
 
 open Printf

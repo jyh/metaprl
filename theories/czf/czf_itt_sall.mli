@@ -30,7 +30,7 @@
  * jyh@cs.cornell.edu
  *)
 
-include Czf_itt_set
+extends Czf_itt_set
 
 open Tactic_type.Tacticals
 open Tactic_type.Conversionals

@@ -2,17 +2,17 @@
  * Constructive logic
  *)
 
-include Fol_type
-include Fol_true
-include Fol_false
-include Fol_implies
-include Fol_and
-include Fol_or
-include Fol_not
-include Fol_univ
-include Fol_all
-include Fol_exists
-include Fol_struct
+extends Fol_type
+extends Fol_true
+extends Fol_false
+extends Fol_implies
+extends Fol_and
+extends Fol_or
+extends Fol_not
+extends Fol_univ
+extends Fol_all
+extends Fol_exists
+extends Fol_struct
 
 (*
  * -*-

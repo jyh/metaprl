@@ -48,8 +48,8 @@
  *)
 
 (*! @doc{@parents} *)
-include Itt_record_label0
-include Czf_itt_dall
+extends Itt_record_label0
+extends Czf_itt_dall
 (*! @docoff *)
 
 open Printf

@@ -30,8 +30,8 @@
  * jyh@cs.cornell.edu
  *)
 
-include Sil_syntax
-include Sil_state
+extends Sil_syntax
+extends Sil_state
 
 open Tactic_type.Tacticals
 open Tactic_type.Conversionals

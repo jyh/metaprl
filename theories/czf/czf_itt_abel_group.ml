@@ -42,7 +42,7 @@
  *)
 
 (*! @doc{@parents} *)
-include Czf_itt_group
+extends Czf_itt_group
 (*! @docoff *)
 
 open Printf

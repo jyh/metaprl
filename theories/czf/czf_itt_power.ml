@@ -44,8 +44,8 @@
  *)
 
 (*! @doc{@parents} *)
-include Czf_itt_subset
-include Czf_itt_rel
+extends Czf_itt_subset
+extends Czf_itt_rel
 (*! @docoff *)
 
 open Refiner.Refiner.TermMan

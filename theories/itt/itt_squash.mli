@@ -38,8 +38,8 @@
  *    Aleksey Nogin <nogin@cs.cornell.edu>
  *)
 
-include Itt_equal
-include Itt_struct
+extends Itt_equal
+extends Itt_struct
 
 open Refiner.Refiner.Term
 

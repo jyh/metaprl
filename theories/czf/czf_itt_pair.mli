@@ -23,8 +23,8 @@
  * jyh@cs.caltech.edu
  *)
 
-include Czf_itt_union
-include Czf_itt_singleton
+extends Czf_itt_union
+extends Czf_itt_singleton
 
 (************************************************************************
  * TERMS

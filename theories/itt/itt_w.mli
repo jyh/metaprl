@@ -30,8 +30,8 @@
  * jyh@cs.cornell.edu
  *)
 
-include Itt_equal
-include Itt_rfun
+extends Itt_equal
+extends Itt_rfun
 
 open Opname
 open Refiner.Refiner.Term

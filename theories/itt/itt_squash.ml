@@ -105,8 +105,8 @@
  * @parents
  * @end[doc]
  *)
-include Itt_equal
-include Itt_struct
+extends Itt_equal
+extends Itt_struct
 (*! @docoff *)
 
 open Printf

@@ -57,11 +57,11 @@
  * @parents
  * @end[doc]
  *)
-include Base_auto_tactic
+extends Base_auto_tactic
 (*! @docoff *)
 
-include Perv
-include Ocaml_df
+extends Perv
+extends Ocaml_df
 
 open Mp_debug
 open Printf

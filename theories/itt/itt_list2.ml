@@ -45,12 +45,12 @@
  * @parents
  * @end[doc]
  *)
-include Itt_list
-include Itt_logic
-include Itt_bool
-include Itt_int_base
-include Itt_int_ext
-include Itt_int_arith
+extends Itt_list
+extends Itt_logic
+extends Itt_bool
+extends Itt_int_base
+extends Itt_int_ext
+extends Itt_int_arith
 (*! @docoff *)
 
 open Refiner.Refiner.TermType

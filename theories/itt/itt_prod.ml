@@ -46,9 +46,9 @@
  * @parents
  * @end[doc]
  *)
-include Itt_equal
-include Itt_dprod
-include Itt_struct
+extends Itt_equal
+extends Itt_dprod
+extends Itt_struct
 (*! @docoff *)
 
 open Printf

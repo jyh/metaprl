@@ -2,7 +2,7 @@
  * Structural rules.
  *)
 
-include Base_theory
+extends Base_theory
 
 open Tactic_type
 open Tactic_type.Tacticals

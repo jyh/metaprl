@@ -110,10 +110,10 @@
  * @parents
  * @end[doc]
  *)
-include Itt_theory
-include Itt_eta
+extends Itt_theory
+extends Itt_eta
 (*! @docoff *)
-include Czf_itt_comment
+extends Czf_itt_comment
 
 open Printf
 open Mp_debug

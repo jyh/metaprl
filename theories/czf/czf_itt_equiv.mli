@@ -30,9 +30,9 @@
  * Email : xiny@cs.caltech.edu
  *)
 
-include Czf_itt_set
-include Czf_itt_member
-include Czf_itt_pair
+extends Czf_itt_set
+extends Czf_itt_member
+extends Czf_itt_pair
 
 open Itt_equal
 

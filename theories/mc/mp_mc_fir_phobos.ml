@@ -41,8 +41,8 @@
  * @parents
  * @end[doc]
  *)
-include Base_meta
-include Mp_mc_theory
+extends Base_meta
+extends Mp_mc_theory
 (*! @docoff *)
 
 open Top_conversionals

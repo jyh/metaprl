@@ -30,9 +30,9 @@
  * jyh@cs.cornell.edu
  *)
 
-include Itt_theory
+extends Itt_theory
 
-include Sil_state
+extends Sil_state
 
 open Base_dtactic
 open Itt_struct

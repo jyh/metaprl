@@ -124,12 +124,12 @@
  * @parents
  * @end[doc]
  *)
-include Itt_equal
-include Itt_set
-include Itt_rfun
-include Itt_struct
-include Itt_struct2
-include Itt_esquash
+extends Itt_equal
+extends Itt_set
+extends Itt_rfun
+extends Itt_struct
+extends Itt_struct2
+extends Itt_esquash
 (*! @docoff *)
 
 open Printf

@@ -60,11 +60,11 @@
  * @parents
  * @end[doc]
  *)
-include Itt_equal
-include Itt_rfun
-include Itt_struct
-include Itt_struct2
-include Itt_inv_typing
+extends Itt_equal
+extends Itt_rfun
+extends Itt_struct
+extends Itt_struct2
+extends Itt_inv_typing
 (*! @docoff *)
 
 open Opname

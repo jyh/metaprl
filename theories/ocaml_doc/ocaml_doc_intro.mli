@@ -23,7 +23,7 @@
  * jyh@cs.caltech.edu
  *)
 
-include Base_theory
+extends Base_theory
 
 (*
  * -*-

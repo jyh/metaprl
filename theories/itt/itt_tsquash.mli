@@ -1,5 +1,5 @@
-include Itt_isect
-include Itt_set
+extends Itt_isect
+extends Itt_set
 
 define unfold_tsquash : tsquash{'A} <--> ({ x:top | 'A})
 

@@ -30,7 +30,7 @@
  * jyh@cs.cornell.edu
  *)
 
-include Mptop
+extends Mptop
 
 open Refiner.Refiner
 open Refiner.Refiner.Term

@@ -31,11 +31,11 @@
  * jyh@cs.cornell.edu
  *)
 
-include Itt_theory
+extends Itt_theory
 
-include Sil_state
-include Sil_programs
-include Sil_sos
+extends Sil_state
+extends Sil_programs
+extends Sil_sos
 
 open Refiner.Refiner.TermType
 

@@ -31,7 +31,7 @@
  * Email:  emre@its.caltech.edu
  *)
 
-include Mp_mc_fir_exp
+extends Mp_mc_fir_exp
 
 open Tactic_type.Conversionals
 

@@ -1,10 +1,10 @@
 
-include Itt_equal
-include Itt_quotient
-include Itt_struct
-include Itt_tunion
-include Itt_bunion
-include Itt_pointwise
+extends Itt_equal
+extends Itt_quotient
+extends Itt_struct
+extends Itt_tunion
+extends Itt_bunion
+extends Itt_pointwise
 (*! @docoff *)
 
 open Printf

@@ -33,7 +33,7 @@
  *)
 
 (*! @docoff *)
-include Base_theory
+extends Base_theory
 
 (*!
 @begin[doc]
@@ -128,7 +128,7 @@ module type FsetSig =
 @end[verbatim]
 
 The @tt{include} statements can be used to create a new signature that
-@emph{extends} and existing signature.  For example, suppose we would
+@emph{extends} an existing signature.  For example, suppose we would
 like to define a signature for finite sets that includes a @tt{delete}
 function to remove an element of a set.  One way to be to re-type the
 entire signature for finite sets followed by the @tt{delete}

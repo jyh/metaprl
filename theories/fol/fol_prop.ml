@@ -31,14 +31,14 @@
  *)
 
 (* Operators in the logic *)
-include Fol_type
-include Fol_false
-include Fol_true
-include Fol_and
-include Fol_or
-include Fol_implies
-include Fol_not
-include Fol_struct
+extends Fol_type
+extends Fol_false
+extends Fol_true
+extends Fol_and
+extends Fol_or
+extends Fol_implies
+extends Fol_not
+extends Fol_struct
 
 (* An example theorem *)
 interactive distrib_or 'H :

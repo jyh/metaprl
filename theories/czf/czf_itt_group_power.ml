@@ -49,8 +49,8 @@
  *)
 
 (*! @doc{@parents} *)
-include Czf_itt_group
-include Itt_int_base
+extends Czf_itt_group
+extends Itt_int_base
 (*! @docoff *)
 
 open Refiner.Refiner.TermType

@@ -30,8 +30,8 @@
  * jyh@cs.cornell.edu
  *
  *)
-include Mptop
-include Summary
+extends Mptop
+extends Summary
 
 (*
  * Meta-operations.

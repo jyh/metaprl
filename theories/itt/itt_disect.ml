@@ -75,13 +75,13 @@
  *)
 
 
-include Itt_equal
-include Itt_rfun
-include Itt_set
-include Itt_isect
-include Itt_tsquash
-include Itt_subtype
-include Itt_ext_equal
+extends Itt_equal
+extends Itt_rfun
+extends Itt_set
+extends Itt_isect
+extends Itt_tsquash
+extends Itt_subtype
+extends Itt_ext_equal
 (*! @docoff *)
 
 open Printf

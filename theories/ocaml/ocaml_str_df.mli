@@ -30,9 +30,9 @@
  * jyh@cs.cornell.edu
  *)
 
-include Ocaml
-include Ocaml_base_df
-include Ocaml_sig_df
+extends Ocaml
+extends Ocaml_base_df
+extends Ocaml_sig_df
 
 (*
  * -*-

@@ -32,11 +32,11 @@
  * @email{ynb@mail.ru}
  *)
 
-include Itt_equal
-include Itt_rfun
-include Itt_bool
-include Itt_logic
-include Itt_decidable
+extends Itt_equal
+extends Itt_rfun
+extends Itt_bool
+extends Itt_logic
+extends Itt_decidable
 
 open Refiner.Refiner.Term
 

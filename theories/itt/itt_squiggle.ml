@@ -55,12 +55,12 @@
  * @end[doc]
  *)
 
-include Itt_equal
-include Itt_struct
-include Itt_squash
+extends Itt_equal
+extends Itt_struct
+extends Itt_squash
 
 (*! @docoff *)
-include Itt_comment
+extends Itt_comment
 
 open Printf
 open Mp_debug

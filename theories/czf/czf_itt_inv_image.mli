@@ -30,7 +30,7 @@
  * Email : xiny@cs.caltech.edu
  *)
 
-include Czf_itt_sep
+extends Czf_itt_sep
 
 open Printf
 open Mp_debug

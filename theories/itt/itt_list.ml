@@ -48,10 +48,10 @@
  * @parents
  * @end[doc]
  *)
-include Itt_equal
-include Itt_rfun
-include Itt_struct
-include Itt_logic
+extends Itt_equal
+extends Itt_rfun
+extends Itt_struct
+extends Itt_logic
 (*! @docoff *)
 
 open Printf

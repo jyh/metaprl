@@ -1,8 +1,8 @@
 (* labels as natural numberas *)
 
-include Itt_nat
-include Itt_struct2
-include Itt_struct3
+extends Itt_nat
+extends Itt_struct2
+extends Itt_struct3
 
 open Base_meta
 open Itt_int_ext

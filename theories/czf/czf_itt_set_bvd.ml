@@ -47,8 +47,8 @@
  *)
 
 (*! @doc{@parents} *)
-include Czf_itt_dall
-include Czf_itt_dexists
+extends Czf_itt_dall
+extends Czf_itt_dexists
 (*! @docoff *)
 
 open Printf

@@ -45,8 +45,8 @@
  * @parents
  * @end[doc]
  *)
-include Itt_fun
-include Itt_logic
+extends Itt_fun
+extends Itt_logic
 
 open Base_dtactic
 

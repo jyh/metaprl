@@ -34,7 +34,7 @@
  *)
 
 (*! @docoff *)
-include Base_theory
+extends Base_theory
 
 (*!
 @begin[doc]

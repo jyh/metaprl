@@ -45,12 +45,12 @@
  * @end[doc]
  *)
 
-include Itt_bool
-include Itt_subtype
-include Itt_fun
-include Itt_esquash
-include Itt_quotient
-include Itt_logic
+extends Itt_bool
+extends Itt_subtype
+extends Itt_fun
+extends Itt_esquash
+extends Itt_quotient
+extends Itt_logic
 
 (*! @docoff *)
 

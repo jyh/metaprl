@@ -1,9 +1,9 @@
-include Czf_itt_set
-include Czf_itt_member
-include Czf_itt_empty
-include Czf_itt_nat
-include Czf_itt_sep
-include Itt_bool
+extends Czf_itt_set
+extends Czf_itt_member
+extends Czf_itt_empty
+extends Czf_itt_nat
+extends Czf_itt_sep
+extends Itt_bool
 
 open Refiner.Refiner.RefineError
 open Refiner.Refiner.Term

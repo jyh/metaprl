@@ -30,10 +30,10 @@
  * jyh@cs.cornell.edu
  *)
 
-include Ocaml
-include Ocaml_base_df
-include Ocaml_expr_df
-include Ocaml_mt_df
+extends Ocaml
+extends Ocaml_base_df
+extends Ocaml_expr_df
+extends Ocaml_mt_df
 
 open Mp_debug
 open Printf

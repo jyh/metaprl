@@ -31,10 +31,10 @@
  *
  *)
 
-include Itt_equal
-include Itt_set
-include Itt_isect
-include Itt_subtype
+extends Itt_equal
+extends Itt_set
+extends Itt_isect
+extends Itt_subtype
 
 open Refiner.Refiner.Term
 

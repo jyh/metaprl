@@ -6,7 +6,7 @@
  * @parents
  * @end[doc]
  *)
-include Itt_dfun
+extends Itt_dfun
 
 (*!
  * @begin[doc]

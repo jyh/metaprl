@@ -1,6 +1,6 @@
 (* Labels as natural numberas *)
 
-include Itt_record_label0
+extends Itt_record_label0
 
 
 open Refiner.Refiner.Term

@@ -44,9 +44,9 @@
  * @parents
  * @end[doc]
  *)
-include Base_theory
+extends Base_theory
 (*! @docoff *)
-include Itt_comment
+extends Itt_comment
 
 open Printf
 open Mp_debug

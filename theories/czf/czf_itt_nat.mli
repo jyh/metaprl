@@ -30,9 +30,9 @@
  * jyh@cs.cornell.edu
  *)
 
-include Czf_itt_singleton
-include Czf_itt_union
-include Czf_itt_empty
+extends Czf_itt_singleton
+extends Czf_itt_union
+extends Czf_itt_empty
 
 open Refiner.Refiner.Term
 

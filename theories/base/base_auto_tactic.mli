@@ -38,7 +38,7 @@
  * Modified by: Aleksey Nogin <nogin@cs.cornell.edu>
  *)
 
-include Mptop
+extends Mptop
 
 open Refiner.Refiner.TermType
 

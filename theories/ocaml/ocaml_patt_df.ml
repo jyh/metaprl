@@ -71,8 +71,8 @@
  * Modified by: Aleksey Nogin <nogin@cs.cornell.edu>
  *)
 
-include Ocaml
-include Ocaml_base_df
+extends Ocaml
+extends Ocaml_base_df
 
 open Mp_debug
 open Printf

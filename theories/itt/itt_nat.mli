@@ -1,4 +1,4 @@
-include Itt_int_ext
+extends Itt_int_ext
 
 open Refiner.Refiner.Term
 open Tactic_type.Tacticals

@@ -30,10 +30,10 @@
  * jyh@cs.cornell.edu
  *)
 
-include Itt_fun
-include Itt_prod
-include Itt_struct
-include Itt_logic
+extends Itt_fun
+extends Itt_prod
+extends Itt_struct
+extends Itt_logic
 
 open Refiner.Refiner.TermType
 open Refiner.Refiner.Term

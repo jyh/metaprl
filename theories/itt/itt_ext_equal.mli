@@ -34,9 +34,9 @@
 
 open Refiner.Refiner.Term
 
-include Itt_equal
-include Itt_subtype
-include Itt_logic
+extends Itt_equal
+extends Itt_subtype
+extends Itt_logic
 
 (*
  * Terms type{'T} and subtype{'A; 'B} have already been defined.

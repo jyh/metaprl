@@ -50,11 +50,11 @@
  * @parents
  * @end[doc]
  *)
-include Itt_equal
-include Itt_rfun
-include Itt_struct
-include Itt_void
-include Itt_unit
+extends Itt_equal
+extends Itt_rfun
+extends Itt_struct
+extends Itt_void
+extends Itt_unit
 (*! @docoff *)
 
 open Printf

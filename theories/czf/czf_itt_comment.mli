@@ -23,7 +23,7 @@
  * jyh@cs.caltech.edu
  *)
 
-include Itt_theory
+extends Itt_theory
 
 (************************************************************************
  * SETS

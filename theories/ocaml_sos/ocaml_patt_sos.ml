@@ -35,9 +35,9 @@
  * jyh@cs.cornell.edu
  *)
 
-include Ocaml
-include Ocaml_base_sos
-include Ocaml_expr_sos
+extends Ocaml
+extends Ocaml_base_sos
+extends Ocaml_expr_sos
 
 open Mp_debug
 open Printf

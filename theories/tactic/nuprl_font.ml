@@ -49,7 +49,7 @@ open String_util
 open Refiner.Refiner.TermOp
 open Rformat
 
-include Perv
+extends Perv
 
 (*
  * Show that the file is loading.

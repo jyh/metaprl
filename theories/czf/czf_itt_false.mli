@@ -30,7 +30,7 @@
  * jyh@cs.cornell.edu
  *)
 
-include Czf_itt_sep
+extends Czf_itt_sep
 
 (*
  * False is a restricted formula.

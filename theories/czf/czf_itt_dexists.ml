@@ -49,8 +49,8 @@
  *)
 
 (*! @doc{@parents} *)
-include Czf_itt_sep
-include Czf_itt_set_ind
+extends Czf_itt_sep
+extends Czf_itt_set_ind
 (*! @docoff *)
 
 open Printf

@@ -30,9 +30,9 @@
  * jyh@cs.cornell.edu
  *)
 
-include Itt_atom
-include Itt_bool
-include Itt_struct
+extends Itt_atom
+extends Itt_bool
+extends Itt_struct
 
 open Mp_resource
 

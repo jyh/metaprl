@@ -2,9 +2,9 @@
  * Universal quantifier.
  *)
 
-include Fol_implies
-include Fol_struct
-include Fol_pred
+extends Fol_implies
+extends Fol_struct
+extends Fol_pred
 
 open Base_dtactic
 open Fol_struct

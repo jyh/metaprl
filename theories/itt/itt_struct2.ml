@@ -51,12 +51,12 @@
  * @parents
  * @end[doc]
  *)
-include Itt_equal
-include Itt_struct
-include Itt_squiggle
-include Itt_squash
-include Itt_set
-include Itt_logic
+extends Itt_equal
+extends Itt_struct
+extends Itt_squiggle
+extends Itt_squash
+extends Itt_set
+extends Itt_logic
 (*! @docoff *)
 
 open Printf

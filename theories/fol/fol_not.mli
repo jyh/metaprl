@@ -2,8 +2,8 @@
  * Negation is defined in terms of implication.
  *)
 
-include Fol_false
-include Fol_implies
+extends Fol_false
+extends Fol_implies
 
 declare "not"{'A}
 

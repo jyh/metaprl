@@ -1,6 +1,6 @@
 (* Labels as natural numberas *)
 
-include Itt_nat
+extends Itt_nat
 
 open Refiner.Refiner.Term
 open Tactic_type.Tacticals

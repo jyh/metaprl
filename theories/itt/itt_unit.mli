@@ -34,7 +34,7 @@
  * jyh@cs.cornell.edu
  *)
 
-include Itt_squiggle
+extends Itt_squiggle
 
 open Refiner.Refiner.Term
 

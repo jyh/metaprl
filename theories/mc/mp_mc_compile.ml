@@ -32,9 +32,9 @@
  * Email:  emre@its.caltech.edu
  *)
 
-include Mp_mc_theory
-include Mp_mc_fir_phobos
-include Mp_mc_inline
+extends Mp_mc_theory
+extends Mp_mc_fir_phobos
+extends Mp_mc_inline
 
 open Symbol
 open Fir

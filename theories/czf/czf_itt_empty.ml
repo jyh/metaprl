@@ -39,7 +39,7 @@
  *)
 
 (*! @doc{@parents} *)
-include Czf_itt_member
+extends Czf_itt_member
 (*! @docoff *)
 
 open Printf

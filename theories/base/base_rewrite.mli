@@ -30,8 +30,8 @@
  * jyh@cs.cornell.edu
  *)
 
-include Perv
-include Base_auto_tactic
+extends Perv
+extends Base_auto_tactic
 
 open Refiner.Refiner.TermType
 

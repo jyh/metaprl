@@ -30,9 +30,9 @@
  * jyh@cs.cornell.edu
  *)
 
-include Sil_state
-include Sil_syntax
-include Sil_sos
+extends Sil_state
+extends Sil_syntax
+extends Sil_sos
 
 declare sil_program{'e1; 's1}
 

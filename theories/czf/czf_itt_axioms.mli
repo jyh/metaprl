@@ -32,18 +32,18 @@
 
 open Tactic_type.Tacticals
 
-include Czf_itt_true
-include Czf_itt_false
-include Czf_itt_and
-include Czf_itt_or
-include Czf_itt_implies
-include Czf_itt_all
-include Czf_itt_exists
-include Czf_itt_sall
-include Czf_itt_sexists
-include Czf_itt_dall
-include Czf_itt_dexists
-include Czf_itt_rel
+extends Czf_itt_true
+extends Czf_itt_false
+extends Czf_itt_and
+extends Czf_itt_or
+extends Czf_itt_implies
+extends Czf_itt_all
+extends Czf_itt_exists
+extends Czf_itt_sall
+extends Czf_itt_sexists
+extends Czf_itt_dall
+extends Czf_itt_dexists
+extends Czf_itt_rel
 
 topval setInduction1 : tactic
 topval setInduction : int -> tactic

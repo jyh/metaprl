@@ -371,7 +371,12 @@ let resource reduce += [
 (*!
  * @begin[doc]
  *
- * ...
+ * Computing the union of two integer sets is rather involved.
+ * The base cases are straightforward, while the ``inductive'' step
+ * amounts to a case analysis on the intervals at the beginning of
+ * each list.  The rewrites below are combined into the @tt[reduce_union]
+ * conversional, which can be used to reduce terms
+ * $<< union{ 'set1; 'set2 } >>$.
  * @end[doc]
  *)
 
@@ -412,10 +417,31 @@ prim_rw reduce_union_aux :
  * @docoff
  *)
 
-(* XXX union auto should go here *)
+(*
+ * I'm not taking the time and effort to make a truly intelligent
+ * conversional.  It's not worth it.  --emre
+ *)
+
+let reduce_union_helper =
+   reduce_union_base1 orelseC
+   reduce_union_base2 orelseC
+   reduce_union_ind
+
+let union_list = [
+   reduce_union_helper;
+   reduce_union_interval;
+   reduce_union_aux;
+   reduce_interval_lt;
+   reduce_int_min;
+   reduce_int_max;
+   reduce_int_lt;
+   reduce_ifthenelse
+]
 
 let reduce_union =
-   reduce_union_start
+   reduce_union_start thenC
+   (addrC [0; 0] (repeatC (higherC (firstC union_list)))) thenC
+   reduce_normalize
 
 let resource reduce += [
    << union{ 'set1; 'set2 } >>, reduce_union

@@ -88,6 +88,8 @@ dform nat_src_df : mode[src] :: nat = `"nat"
 dform finite_nat_df1 : except_mode [src] :: nat{'k} = mathbbN sub{'k}
 dform finite_nat_df2 : mode[src] :: nat{'k} = `"{0..(" slot{'k} `"-1)}"
 
+dform nat_plus_df : except_mode[src] :: nat_plus = mathbbN sup{slot["*"]}
+
 dform ind_df : parens :: "prec"[prec_bor] :: except_mode[src] ::
    ind{'x; 'base; k, l. 'up['k; 'l]} =
    szone pushm[3] szone display_ind{'x} space `"where" space display_ind_n space

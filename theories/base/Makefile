@@ -16,8 +16,6 @@ MLZFILES :=\
 # Library files
 MPFILES :=\
 	typeinf\
-	base_dform\
-	summary\
 	base_trivial\
 	base_auto_tactic\
 	base_dtactic\

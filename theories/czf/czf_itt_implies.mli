@@ -32,40 +32,6 @@
 
 include Czf_itt_and
 
-(************************************************************************
- * RULES                                                                *
- ************************************************************************)
-
-(*
- * Implication is restricted.
- *)
-rule fun_fun 'H 'w :
-   sequent ['ext] { 'H; w: set >- "type"{'A['w]} } -->
-   sequent ['ext] { 'H; w: set >- "type"{'B['w]} } -->
-   sequent ['ext] { 'H >- fun_prop{x. 'A['x]} } -->
-   sequent ['ext] { 'H >- fun_prop{x. 'B['x]} } -->
-   sequent ['ext] { 'H >- fun_prop{x. "fun"{'A['x]; 'B['x]}} }
-
-(*
- * Implication is restricted.
- *)
-rule implies_fun 'H 'w :
-   sequent ['ext] { 'H; w: set >- "type"{'A['w]} } -->
-   sequent ['ext] { 'H; w: set >- "type"{'B['w]} } -->
-   sequent ['ext] { 'H >- fun_prop{x. 'A['x]} } -->
-   sequent ['ext] { 'H >- fun_prop{x. 'B['x]} } -->
-   sequent ['ext] { 'H >- fun_prop{x. "implies"{'A['x]; 'B['x]}} }
-
-(*
- * Implication is restricted.
- *)
-rule iff_fun 'H 'w :
-   sequent ['ext] { 'H; w: set >- "type"{'A['w]} } -->
-   sequent ['ext] { 'H; w: set >- "type"{'B['w]} } -->
-   sequent ['ext] { 'H >- fun_prop{x. 'A['x]} } -->
-   sequent ['ext] { 'H >- fun_prop{x. 'B['x]} } -->
-   sequent ['ext] { 'H >- fun_prop{x. "iff"{'A['x]; 'B['x]}} }
-
 (*
  * -*-
  * Local Variables:

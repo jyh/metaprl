@@ -57,8 +57,8 @@ let _ =
  * Implication is restricted.
  *)
 interactive union_fun {| intro_resource [] |} 'H 'w :
-   sequent ['ext] { 'H; w: set >- "type"{'A['w]} } -->
-   sequent ['ext] { 'H; w: set >- "type"{'B['w]} } -->
+   ["wf"] sequent [squash] { 'H; w: set >- "type"{'A['w]} } -->
+   ["wf"] sequent [squash] { 'H; w: set >- "type"{'B['w]} } -->
    sequent ['ext] { 'H >- fun_prop{x. 'A['x]} } -->
    sequent ['ext] { 'H >- fun_prop{x. 'B['x]} } -->
    sequent ['ext] { 'H >- fun_prop{x. "union"{'A['x]; 'B['x]}} }
@@ -67,18 +67,16 @@ interactive union_fun {| intro_resource [] |} 'H 'w :
  * Implication is restricted.
  *)
 interactive union_res1 {| intro_resource [] |} 'H :
-   ["wf"] sequent ['ext] { 'H >- "type"{'A} } -->
-   ["wf"] sequent ['ext] { 'H >- "type"{'B} } -->
-   sequent ['ext] { 'H >- restricted{. 'A} } -->
-   sequent ['ext] { 'H >- restricted{. 'B} } -->
+   sequent [squash] { 'H >- restricted{. 'A} } -->
+   sequent [squash] { 'H >- restricted{. 'B} } -->
    sequent ['ext] { 'H >- restricted{. "union"{'A; 'B}} }
 
 (*
  * Implication is restricted.
  *)
 interactive or_fun {| intro_resource [] |} 'H 'w :
-   sequent ['ext] { 'H; w: set >- "type"{'A['w]} } -->
-   sequent ['ext] { 'H; w: set >- "type"{'B['w]} } -->
+   ["wf"] sequent [squash] { 'H; w: set >- "type"{'A['w]} } -->
+   ["wf"] sequent [squash] { 'H; w: set >- "type"{'B['w]} } -->
    sequent ['ext] { 'H >- fun_prop{x. 'A['x]} } -->
    sequent ['ext] { 'H >- fun_prop{x. 'B['x]} } -->
    sequent ['ext] { 'H >- fun_prop{x. "or"{'A['x]; 'B['x]}} }
@@ -87,10 +85,8 @@ interactive or_fun {| intro_resource [] |} 'H 'w :
  * Implication is restricted.
  *)
 interactive or_res1 {| intro_resource [] |} 'H 'w :
-   ["wf"] sequent [squash] { 'H >- "type"{'A} } -->
-   ["wf"] sequent [squash] { 'H >- "type"{'B} } -->
-   sequent ['ext] { 'H >- restricted{. 'A} } -->
-   sequent ['ext] { 'H >- restricted{. 'B} } -->
+   sequent [squash] { 'H >- restricted{. 'A} } -->
+   sequent [squash] { 'H >- restricted{. 'B} } -->
    sequent ['ext] { 'H >- restricted{. "or"{'A; 'B}} }
 
 (*

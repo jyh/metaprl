@@ -32,30 +32,6 @@
 
 include Czf_itt_sep
 
-(************************************************************************
- * RULES                                                                *
- ************************************************************************)
-
-(*
- * Implication is restricted.
- *)
-rule prod_fun 'H 'w :
-   sequent ['ext] { 'H; w: set >- "type"{'A['w]} } -->
-   sequent ['ext] { 'H; w: set >- "type"{'B['w]} } -->
-   sequent ['ext] { 'H >- fun_prop{x. 'A['x]} } -->
-   sequent ['ext] { 'H >- fun_prop{x. 'B['x]} } -->
-   sequent ['ext] { 'H >- fun_prop{x. "prod"{'A['x]; 'B['x]}} }
-
-(*
- * Implication is restricted.
- *)
-rule and_fun 'H 'w :
-   sequent ['ext] { 'H; w: set >- "type"{'A['w]} } -->
-   sequent ['ext] { 'H; w: set >- "type"{'B['w]} } -->
-   sequent ['ext] { 'H >- fun_prop{x. 'A['x]} } -->
-   sequent ['ext] { 'H >- fun_prop{x. 'B['x]} } -->
-   sequent ['ext] { 'H >- fun_prop{x. "and"{'A['x]; 'B['x]}} }
-
 (*
  * -*-
  * Local Variables:

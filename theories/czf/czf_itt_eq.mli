@@ -46,7 +46,7 @@ open Tactic_type.Tacticals
  ************************************************************************)
 
 declare eq{'s1; 's2}
-declare eq_inner{'s1; 's2}
+declare equal{'s1; 's2}
 declare fun_set{z. 'f['z]}
 declare fun_prop{z. 'P['z]}
 declare dfun_prop{u. 'A['u]; x, y. 'B['x; 'y]}
@@ -55,163 +55,39 @@ declare dfun_prop{u. 'A['u]; x, y. 'B['x; 'y]}
  * REWRITES                                                             *
  ************************************************************************)
 
-rewrite reduce_eq_inner : eq_inner{collect{'T1; x1. 'f1['x1]}; collect{'T2; x2. 'f2['x2]}} <-->
-   ((all y1 : 'T1. exst y2: 'T2. eq_inner{.'f1['y1]; .'f2['y2]})
-    & (all y2 : 'T2. exst y1: 'T1. eq_inner{.'f1['y1]; .'f2['y2]}))
-
 rewrite unfold_eq : eq{'s1; 's2} <-->
-   ((isset{'s1} & isset{'s2}) & eq_inner{'s1; 's2})
+   set_ind{'s1; T1, f1, g1.
+      set_ind{'s2; T2, f2, g2.
+         ((all y1 : 'T1. exst y2: 'T2. eq{.'f1 'y1; .'f2 'y2})
+         & (all y2 : 'T2. exst y1: 'T1. eq{.'f1 'y1; .'f2 'y2}))}}
 
 rewrite reduce_eq : eq{collect{'T1; x1. 'f1['x1]}; collect{'T2; x2. 'f2['x2]}} <-->
+   ((all y1 : 'T1. exst y2: 'T2. eq{.'f1['y1]; .'f2['y2]})
+    & (all y2 : 'T2. exst y1: 'T1. eq{.'f1['y1]; .'f2['y2]}))
+
+rewrite unfold_equal : equal{'s1; 's2} <-->
+   ((isset{'s1} & isset{'s2}) & eq{'s1; 's2})
+
+rewrite reduce_equal : equal{collect{'T1; x1. 'f1['x1]}; collect{'T2; x2. 'f2['x2]}} <-->
    ((isset{collect{'T1; x1. 'f1['x1]}} & isset{collect{'T2; x2. 'f2['x2]}})
-   & ((all y1 : 'T1. exst y2: 'T2. eq_inner{.'f1['y1]; .'f2['y2]})
-     & (all y2 : 'T2. exst y1: 'T1. eq_inner{.'f1['y1]; .'f2['y2]})))
+   & ((all y1 : 'T1. exst y2: 'T2. eq{.'f1['y1]; .'f2['y2]})
+     & (all y2 : 'T2. exst y1: 'T1. eq{.'f1['y1]; .'f2['y2]})))
 
 (*
  * A functional predicate can produce proofs for
  * all equal sets.
  *)
 rewrite unfold_fun_set : fun_set{z. 'f['z]} <-->
-    (all s1: set. all s2: set. (eq{'s1; 's2} => eq{'f['s1]; 'f['s2]}))
+    (all s1: set. all s2: set. (equal{'s1; 's2} => equal{'f['s1]; 'f['s2]}))
 
 rewrite unfold_fun_prop : fun_prop{z. 'P['z]} <-->
-    (all s1: set. all s2: set. (eq{'s1; 's2} => 'P['s1] => 'P['s2]))
+    (all s1: set. all s2: set. (equal{'s1; 's2} => 'P['s1] => 'P['s2]))
 
 rewrite unfold_dfun_prop2 : dfun_prop{'A; x. 'B['x]} <-->
   (u1: 'A -> 'B['u1] -> u2: 'A -> 'B['u2])
 
 rewrite unfold_dfun_prop : dfun_prop{u. 'A['u]; x, y. 'B['x; 'y]} <-->
-  (all s1: set. all s2: set. (eq{'s1; 's2} => (u1: 'A['s1] -> 'B['s1; 'u1] -> u2: 'A['s2] -> 'B['s2; 'u2])))
-
-(************************************************************************
- * RULES                                                                *
- ************************************************************************)
-
-(*
- * Membership in a universe.
- *)
-rule eq_inner_equality1 'H :
-   sequent [squash] { 'H >- isset{'s1} } -->
-   sequent [squash] { 'H >- isset{'s2} } -->
-   sequent ['ext] { 'H >- eq_inner{'s1; 's2} = eq_inner{'s1; 's2} in univ[1:l] }
-
-(*
- * Membership in a universe.
- *)
-rule eq_inner_type 'H :
-   sequent [squash] { 'H >- isset{'s1} } -->
-   sequent [squash] { 'H >- isset{'s2} } -->
-   sequent ['ext] { 'H >- "type"{eq_inner{'s1; 's2}} }
-
-(*
- * More general equality in a universe.
- *)
-rule eq_inner_equality2 'H :
-   sequent [squash] { 'H >- 's1 = 's3 in set } -->
-   sequent [squash] { 'H >- 's2 = 's4 in set } -->
-   sequent ['ext] { 'H >- eq_inner{'s1; 's2} = eq_inner{'s3; 's4} in univ[1:l] }
-
-(*
- * Functionality of eq_inner.
- *)
-rule eq_inner_fun 'H :
-   sequent ['ext] { 'H >- fun_set{z. 'f1['z]} } -->
-   sequent ['ext] { 'H >- fun_set{z. 'f2['z]} } -->
-   sequent ['ext] { 'H >- fun_prop{z. eq_inner{'f1['z]; 'f2['z]}} }
-
-(*
- * Equality typehood.
- *)
-rule eq_type 'H :
-   sequent [squash] { 'H >- isset{'s1} } -->
-   sequent [squash] { 'H >- isset{'s2} } -->
-   sequent [squash] { 'H >- "type"{eq{'s1; 's2}} }
-
-(*
- * Equality is over sets.
- *)
-rule eq_isset_left 'H 's2 :
-   sequent ['ext] { 'H >- eq{'s1; 's2} } -->
-   sequent ['ext] { 'H >- isset{'s1} }
-
-rule eq_isset_right 'H 's1 :
-   sequent ['ext] { 'H >- eq{'s1; 's2} } -->
-   sequent ['ext] { 'H >- isset{'s2} }
-
-(*
- * Reflexivity.
- *)
-rule eq_ref 'H :
-   sequent [squash] { 'H >- isset{'s1} } -->
-   sequent ['ext] { 'H >- eq{'s1; 's1} }
-
-(*
- * Symettry.
- *)
-rule eq_sym 'H :
-   sequent ['ext] { 'H >- eq{'s2; 's1} } -->
-   sequent ['ext] { 'H >- eq{'s1; 's2} }
-
-(*
- * Transitivity.
- *)
-rule eq_trans 'H 's2 :
-   sequent ['ext] { 'H >- eq{'s1; 's2} } -->
-   sequent ['ext] { 'H >- eq{'s2; 's3} } -->
-   sequent ['ext] { 'H >- eq{'s1; 's3} }
-
-(*
- * Finally, functionality puts them all together.
- *)
-rule eq_fun 'H :
-   sequent ['ext] { 'H >- fun_set{z. 'f1['z]} } -->
-   sequent ['ext] { 'H >- fun_set{z. 'f2['z]} } -->
-   sequent ['ext] { 'H >- fun_prop{z. eq{'f1['z]; 'f2['z]}} }
-
-(*
- * Substitution over functional expressions.
- *)
-rule eq_hyp_subst 'H 'J 's1 's2 (bind{v. 'P['v]}) 'z :
-   sequent ['ext] { 'H; x: 'P['s1]; 'J['x] >- eq{'s1; 's2} } -->
-   sequent ['ext] { 'H; x: 'P['s1]; 'J['x]; z: 'P['s2] >- 'C['x] } -->
-   sequent ['ext] { 'H; x: 'P['s1]; 'J['x] >- fun_prop{z. 'P['z]} } -->
-   sequent ['ext] { 'H; x: 'P['s1]; 'J['x] >- 'C['x] }
-
-rule eq_concl_subst 'H 's1 's2 (bind{v. 'C['v]}) 'z :
-   sequent ['ext] { 'H >- eq{'s1; 's2} } -->
-   sequent ['ext] { 'H >- 'C['s2] } -->
-   sequent ['ext] { 'H >- fun_prop{z. 'C['z]} } -->
-   sequent ['ext] { 'H >- 'C['s1] }
-
-(*
- * Typehood of fun propositions.
- *)
-rule fun_set_type 'H :
-   sequent ['ext] { 'H; z: set >- isset{'f['z]} } -->
-   sequent ['ext] { 'H >- "type"{fun_set{z. 'f['z]}} }
-
-rule fun_prop_type 'H :
-   sequent [squash] { 'H; z: set >- "type"{'f['z]} } -->
-   sequent ['ext] { 'H >- "type"{fun_prop{z. 'f['z]}} }
-
-(*
- * Unquantified sets are functional.
- *)
-rule fun_set 'H :
-   sequent ['ext] { 'H >- isset{'u} } -->
-   sequent ['ext] { 'H >- fun_set{z. 'u} }
-
-rule fun_ref 'H :
-   sequent ['ext] { 'H >- fun_set{z. 'z} }
-
-(*
- * LEMMAS:
- * Every functional type is a type.
- *)
-rule fun_set_is_set 'H (bind{z. 'P['z]}) 's :
-   sequent ['ext] { 'H >- isset{'s} } -->
-   sequent ['ext] { 'H >- fun_set{z. 'P['z]} } -->
-   sequent ['ext] { 'H >- isset{'P['s]} }
+  (all s1: set. all s2: set. (equal{'s1; 's2} => (u1: 'A['s1] -> 'B['s1; 'u1] -> u2: 'A['s2] -> 'B['s2; 'u2])))
 
 (************************************************************************
  * TACTICS                                                              *

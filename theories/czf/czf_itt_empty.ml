@@ -1,8 +1,15 @@
-(*
- * Empty set.
+(*!
+ * @begin[doc]
+ * @theory[Czf_itt_empty]
+ *
+ * The @tt{Czf_itt_empty} module defines an empty set
+ * as the set $@collect{x; @void; x}$.  Since the $@void$
+ * type is empty, the set has no elements.
+ * @end[doc]
  *
  * ----------------------------------------------------------------
  *
+ * @begin[license]
  * This file is part of MetaPRL, a modular, higher order
  * logical framework that provides a logical programming
  * environment for OCaml and other languages.
@@ -27,10 +34,13 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  * Author: Jason Hickey
- * jyh@cs.cornell.edu
+ * @email{jyh@cs.cornell.edu}
+ * @end[license]
  *)
 
+(*! @doc{@parents} *)
 include Czf_itt_member
+(*! @docoff *)
 
 open Printf
 open Mp_debug
@@ -48,13 +58,22 @@ let _ =
  * TERMS                                                                *
  ************************************************************************)
 
+(*! @doc{@terms} *)
 declare "empty"
 
 (************************************************************************
  * REWRITES                                                             *
  ************************************************************************)
 
+(*!
+ * @begin[doc]
+ * @rewrites
+ *
+ * The empty set uses the empty index type $@void$.
+ * @end[doc]
+ *)
 prim_rw unfold_empty : empty <--> collect{void; x. 'x}
+(*! @docoff *)
 
 (************************************************************************
  * DISPLAY                                                              *
@@ -67,8 +86,13 @@ dform empty_df : empty =
  * RULES                                                                *
  ************************************************************************)
 
-(*
- * Empty is a set.
+(*!
+ * @begin[doc]
+ * @rules
+ *
+ * There are only two rules for the empty set: it is
+ * a well-formed set, and it has no elements.
+ * @end[doc]
  *)
 interactive empty_isset {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- isset{empty} }
@@ -77,7 +101,8 @@ interactive empty_isset {| intro_resource [] |} 'H :
  * Nothing is in the empty set.
  *)
 interactive empty_member_elim {| elim_resource [] |} 'H 'J :
-   sequent ['ext] { 'H; x: member{'y; empty}; 'J['x] >- 'T['x] }
+   sequent ['ext] { 'H; x: mem{'y; empty}; 'J['x] >- 'T['x] }
+(*! @docoff *)
 
 (*
  * -*-

@@ -1,7 +1,27 @@
-(*
- * We need a rule for when rewrites are valid.
+(*!
+ * @spelling{rewriter rw}
+ *
+ * @begin[doc]
+ * @theory[Base_rewrite]
+ *
+ * The rewrite judgment $t_1 @longleftrightarrow t_2$ is used in rewrite
+ * derivations.  Derived rewrites are declared with the @bf{interactive_rw}
+ * form, as follows:
+ *
+ * @bf{interactive_rw} @it{name} : $t_1 @longleftrightarrow t_2$
+ *
+ * When a rewrite is declared, the @MetaPRL refiner
+ * requires a proof of the judgment $t_1 @longleftrightarrow t_2$.
+ * The judgment is not conditional, and it is not stated in a sequent
+ * calculus.
+ *
+ * The @hreftheory[Base_rewrite] module lifts the rewrite judgment to the sequent
+ * level.  It also defines rules for reflexivity and symmetry.
+ * @end[doc]
  *
  * ----------------------------------------------------------------
+ *
+ * @begin[license]
  *
  * This file is part of MetaPRL, a modular, higher order
  * logical framework that provides a logical programming
@@ -27,11 +47,21 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  * Author: Jason Hickey
- * jyh@cs.cornell.edu
+ * @email{jyh@cs.caltech.edu}
+ *
+ * @end[license]
  *)
 
-include Perv
+(*!
+ * @begin[doc]
+ * @parents
+ * @end[doc]
+ *)
 include Base_auto_tactic
+(*! @docoff *)
+
+include Perv
+include Ocaml_df
 
 open Mp_debug
 open Printf
@@ -59,15 +89,39 @@ let is_bind_term = is_dep1_term bind_opname
 let mk_bind_term = mk_dep1_term bind_opname
 let dest_bind = dest_dep1_term bind_opname
 
+(*!
+ * @begin[doc]
+ * @rules
+ *
+ * The following rule defines the rewrite reflexivity.  A term
+ * @it{a} always rewrites to itself.  The judgment is stated using the built-in
+ * primitive rewrite judgment.
+ * @end[doc]
+ *)
 prim rewriteAxiom1 'H :
    sequent ['ext] { 'H >- Perv!"rewrite"{'a; 'a} } =
    rw_just
 
+(*!
+ * @begin[doc]
+ * The @Comment!rewrite[rewriteAxiom2] conditional rewrite provides a link to the primitive
+ * rewriter: a proof of << Perv!"rewrite"{'a; 'b} >> shows that the terms
+ * $a$ and $b$ are computationally equivalent.
+ * @end[doc]
+ *)
 prim_rw rewriteAxiom2 'a 'b : (Perv!"rewrite"{'a; 'b}) --> 'a <--> 'b
 
+(*!
+ * @begin[doc]
+ * A rule for symmetry is also defined.  The rules for symmetry and
+ * transitivity and symmetry can be derived from reflexivity @hrefrule[rewriteAxiom1] and
+ * substitution @hrefrewrite[rewriteAxiom2].
+ * @end[doc]
+ *)
 interactive rewriteSym 'H :
    sequent ['ext] { 'H >- Perv!"rewrite"{'a; 'b} } -->
    sequent ['ext] { 'H >- Perv!"rewrite"{'b; 'a} }
+(*! @docoff *)
 
 (*
  * Substitution.
@@ -83,6 +137,13 @@ let rewriteT t =
 let rewriteSymT p =
    rewriteSym (Sequent.hyp_count_addr p) p
 
+(*!
+ * @begin[doc]
+ * The reflexive rule @hrefrule[rewriteAxiom1] is also added to the
+ * @hreftactic[trivialT] resource.
+ * @docoff
+ * @end[doc]
+ *)
 let d_rewrite_axiomT p =
    rewriteAxiom1 (Sequent.hyp_count_addr p) p
 

@@ -11,13 +11,11 @@ OCAMLDEPFLAGS := -prl
 
 # Library files
 MPFILES :=\
+	czf_itt_comment\
 	czf_itt_set\
 	czf_itt_eq\
 	czf_itt_member\
-	czf_itt_empty\
-	czf_itt_singleton\
 	czf_itt_sep\
-	czf_itt_union\
 	czf_itt_true\
 	czf_itt_false\
 	czf_itt_or\
@@ -25,16 +23,23 @@ MPFILES :=\
 	czf_itt_implies\
 	czf_itt_all\
 	czf_itt_exists\
+	czf_itt_fol\
 	czf_itt_set_ind\
 	czf_itt_dall\
 	czf_itt_dexists\
 	czf_itt_sall\
 	czf_itt_sexists\
 	czf_itt_rel\
-	czf_itt_pre_theory\
 	czf_itt_subset\
-	czf_itt_infinity\
-	czf_itt_axioms
+	czf_itt_empty\
+	czf_itt_singleton\
+	czf_itt_union\
+	czf_itt_isect\
+	czf_itt_pair\
+	czf_itt_nat\
+	czf_itt_power\
+	czf_itt_axioms\
+	czf_itt_theory
 
 # Name of main libraris
 MAIN = theory

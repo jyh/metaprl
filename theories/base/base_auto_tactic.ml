@@ -1,8 +1,70 @@
-(*
- * This is a simple-minded auto tactic that recursively tries
- * all the of tactics given.
+(*!
+ * @spelling{arg tac}
+ *
+ * @begin[doc]
+ * @theory[Base_auto_tactic]
+ *
+ * The @tt{Base_auto_tactic} module defines two of the most useful
+ * tactics in the @MetaPRL prover.  The @hreftactic[autoT] tactic attempts
+ * to prove a goal ``automatically,'' and the @hreftactic[trivialT] tactic
+ * proves goals that are ``trivial.''  Their implementations are surprisingly
+ * simple---all of the work in automatic proving is implemented in
+ * descendent theories.
+ *
+ * This module describes the @emph{generic} implementation of the
+ * @hreftactic[autoT] and @hreftactic[trivialT] tactics.  They are implemented as resources
+ * containing collections of tactics that are added by descendent theories.
+ * The @Comment!resource[auto_resource] builds collections of tactics specified by
+ * a data structure with the following type:
+ *
+ * @begin[center]
+ * @begin[verbatim]
+ * type auto_tac = tactic_arg -> (tactic * auto_tac) list
+ *
+ * type auto_info =
+ *    { auto_name : string;
+ *      auto_prec : auto_prec;
+ *      auto_tac : auto_tac
+ *    }
+ * @end[verbatim]
+ * @end[center]
+ *
+ * The @tt{auto_name} is the name used to describe the entry (for
+ * debugging purposes).  The @tt{auto_tac} is a function that takes
+ * the current goal (the @tt{tactic_arg}) and provides a tactic that
+ * can be applied to the goal, and a new @tt{auto_tac} that can be
+ * used on the subgoals.  The entries are divided into precedence
+ * levels; tactics with higher precedence are applied first.
+ *
+ * In most cases, the @tt{auto_tac} is a simple function that
+ * just applies a tactic repeatedly.  The following function
+ * converts a simple tactic into an @tt{auto_tac}.
+ *
+ * @begin[center]
+ * @begin[verbatim]
+ * let rec auto_wrap (tac : tactic) =
+ *    (fun p -> [tac, auto_wrap tac])
+ * @end[verbatim]
+ * @end[center]
+ *
+ * The more general form of @tt{auto_tac} (where a new tactic is
+ * computed for each goal) is used for tactics that keep track of
+ * their context.  For instance, a first-order prover may wish to keep
+ * a cache of goals that have been examined, and avoid proving the same
+ * goal multiple times.
+ *
+ * The @hreftactic[trivialT] is similar to the @hreftactic[autoT] tactic; it uses the same
+ * data structures, but it is used to classify only ``trivial'' tactics (such
+ * as proof by assumption).  The separation is made for practical purposes.
+ * At times, the @hreftactic[autoT] tactic may spend significant time performing
+ * sophisticated reasoning when a goal has a trivial proof.  The @hreftactic[trivialT]
+ * is added to the @hrefresource[auto_resource] with a high precedence, so ``trivial''
+ * reasoning is included by default in @hreftactic[autoT].
+ * @end[doc]
  *
  * ----------------------------------------------------------------
+ *
+ * @begin[license]
  *
  * This file is part of MetaPRL, a modular, higher order
  * logical framework that provides a logical programming
@@ -28,11 +90,18 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  * Author: Jason Hickey
- * jyh@cs.cornell.edu
+ * @email{jyh@cs.caltech.edu}
+ *
+ * @end[license]
  *)
 
+(*!
+ * @begin[doc]
+ * @parents
+ * @end[doc]
+ *)
 include Mptop
-include Summary
+(*! @docoff *)
 
 open Printf
 open Mp_debug

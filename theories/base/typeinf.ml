@@ -1,9 +1,20 @@
 (*
- * Before anything, we start the type inference resource.
- * This is mostly an incomplete type inference algorithm, but
- * it is used to perform basic inference.
+ * @begin[doc]
+ * @theory[Typeinf]
+ *
+ * This module implements a simple type inference algorithm based
+ * on Hindley-Milner type inference~@cite{damas84principle}.  This is
+ * a @emph{generic} resource definition that can be used to implement
+ * type inference in various logics.
+ *
+ * @docoff
+ * @end[doc]
+ *
+ * jyh: I don't know how this works, so I am at a loss to document it...
  *
  * ----------------------------------------------------------------
+ *
+ * @begin[license]
  *
  * This file is part of MetaPRL, a modular, higher order
  * logical framework that provides a logical programming
@@ -29,7 +40,9 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  * Author: Jason Hickey
- * jyh@cs.cornell.edu
+ * @email{jyh@cs.caltech.edu}
+ *
+ * @end[license]
  *)
 
 open Printf
@@ -251,12 +264,12 @@ let rec collect_consts = function
 let rec try_append_eqs eqs consts = function
    [] -> eqs, []
  | ((t1,t2)::opt_eqs) as o_eqs ->
-      begin try 
+      begin try
          let eqs', opt_eqs' =
             try_append_eqs (unify_mm_eqnl_eqnl (eqnlist_append_eqn eqs t1 t2) consts)consts opt_eqs
          in
             eqs', (if opt_eqs'==opt_eqs then o_eqs else (t1,t2)::opt_eqs')
-      with RefineError _ -> 
+      with RefineError _ ->
          try_append_eqs eqs consts opt_eqs
       end
 
@@ -270,10 +283,10 @@ let infer_type p t =
    let decls = collect_decls p in
    let consts = StringSet.union (collect_consts decls) (free_vars_set t) in
    let inf = get_typeinf_arg p "typeinf" in
-   try 
+   try
       let eqs,opt_eqs,defs,t = inf consts decls eqnlist_empty [] [] t in
       let _,_,_,t = typeinf_final consts eqs opt_eqs defs t
-      in 
+      in
          t
    with
       RefineError _ ->

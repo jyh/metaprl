@@ -32,30 +32,6 @@
 
 include Czf_itt_sep
 
-(************************************************************************
- * RULES                                                                *
- ************************************************************************)
-
-(*
- * Implication is restricted.
- *)
-rule union_fun 'H 'w :
-   sequent ['ext] { 'H; w: set >- "type"{'A['w]} } -->
-   sequent ['ext] { 'H; w: set >- "type"{'B['w]} } -->
-   sequent ['ext] { 'H >- fun_prop{x. 'A['x]} } -->
-   sequent ['ext] { 'H >- fun_prop{x. 'B['x]} } -->
-   sequent ['ext] { 'H >- fun_prop{x. "union"{'A['x]; 'B['x]}} }
-
-(*
- * Implication is restricted.
- *)
-rule or_fun 'H 'w :
-   sequent ['ext] { 'H; w: set >- "type"{'A['w]} } -->
-   sequent ['ext] { 'H; w: set >- "type"{'B['w]} } -->
-   sequent ['ext] { 'H >- fun_prop{x. 'A['x]} } -->
-   sequent ['ext] { 'H >- fun_prop{x. 'B['x]} } -->
-   sequent ['ext] { 'H >- fun_prop{x. "or"{'A['x]; 'B['x]}} }
-
 (*
  * -*-
  * Local Variables:

@@ -1,7 +1,42 @@
-(*
- * The base theory collects everything.
+(*!
+ * @begin[tex]
+ * @theory[Base_theory]
+ *
+ * The @tt{Base_theory} ``theory'' is not a theory in the strict sense.
+ * It defines only two rules (in the @hreftheory[Base_rewrite] module;
+ * Section @reftheory[Base_rewrite]).  Instead, it serves as the
+ * connection to the primitive @MetaPRL prover, and it defines
+ * several resources that are useful for defining tactics.
+ *
+ * The connection with the primitive @MetaPRL prover is defined
+ * in the modules @hreftheory[Top_tacticals] (Section @reftheory[Top_tacticals])
+ * and @hreftheory[Top_conversionals] (Section @reftheory[Top_conversionals]).
+ * The @tt{Top_tacticals} module defines the primitive tactics (such as the
+ * identity and failure tactics), and several tacticals for tactic
+ * composition (such as the @hreftactic[thenT]{} and @hreftactic[orelseT]
+ * tacticals).  The @tt{Top_conversionals} module defines @emph{conversions},
+ * which play the role of tactics for @emph{rewriting}.
+ *
+ * The base theory also defines several resources that can be used to
+ * build automated tactics.  The @hreftheory[Mptop] module (Section @reftheory[Mptop])
+ * defines a resource for adding functions to the @MetaPRL interactive
+ * top-loop.  The @hreftheory[Base_auto_tactic] module
+ * (Section @reftheory[Base_auto_tactic]) defines a resource for
+ * defining the @hreftactic[trivialT] and @hreftactic[autoT]
+ * tactics for automated reasoning.  The @hreftactic[Base_dtactic] module
+ * (Section @reftheory[Base_dtactic]) defines resources for adding
+ * introduction and elimination reasoning to the @hreftactic[dT] tactic.
+ *
+ * The @tt{Base_theory} module itself defines no new primitives; it
+ * simply bring together all the parts of the base logic into a unified
+ * module.  Descendent theories (such as the @Nuprl type theory, Section
+ * @reftheory[Itt_theory], and the first-order logic Section @reftheory[Fol])
+ * include the @hreftheory[Base_theory] directly.
+ * @end[tex]
  *
  * ----------------------------------------------------------------
+ *
+ * @begin[license]
  *
  * This file is part of MetaPRL, a modular, higher order
  * logical framework that provides a logical programming
@@ -27,24 +62,40 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  * Author: Jason Hickey
- * jyh@cs.cornell.edu
+ * @email{jyh@cs.caltech.edu}
  *
+ * @end[license]
  *)
 
-include Mptop
-include Perv
+(*!
+ * @begin[tex]
+ * @parents
+ * @end[tex]
+ *)
 include Summary
+include Mptop
+include Var
 include Top_tacticals
 include Top_conversionals
-include Base_dform
-include Nuprl_font
-include Typeinf
 include Base_trivial
-include Base_dtactic
 include Base_auto_tactic
+include Base_dtactic
+include Base_rewrite
+(*! @texoff *)
+
+(*
+ * This are very basic theories; not included in
+ * the documentation.
+ *)
+include Perv
+include Nuprl_font
+include Base_dform
+include Comment
+include Ocaml_df
+include Base_trivial
+include Typeinf
 include Base_cache
 include Base_meta
-include Base_rewrite
 
 (*
  * -*-

@@ -1,9 +1,15 @@
-(*
- * Logics that include "trivial" reasoning need a "squash" term
+(*!
+ * @begin[doc]
+ * @theory[Base_trivial]
+ *
+ * Logics that include ``trivial'' reasoning need a ``squash'' term
  * to denote proofs that contain no computational content, and an
- * "it" term to denote the proof that has the squash type.
+ * ``it'' term to denote the proof that has the squash type.
+ * @end[doc]
  *
  * ----------------------------------------------------------------
+ *
+ * @begin[license]
  *
  * This file is part of MetaPRL, a modular, higher order
  * logical framework that provides a logical programming
@@ -29,8 +35,18 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  * Author: Jason Hickey
- * jyh@cs.cornell.edu
+ * @email{jyh@cs.caltech.edu}
+ *
+ * @end[license]
  *)
+
+(*!
+ * @begin[doc]
+ * @parents
+ * @end[doc]
+ *)
+include Summary
+(*! @docoff *)
 
 declare it
 declare squash

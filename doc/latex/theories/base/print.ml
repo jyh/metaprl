@@ -1,5 +1,4 @@
 (*
- * Logic and basic predicates.
  *
  * ----------------------------------------------------------------
  *
@@ -23,19 +22,18 @@
  * jyh@cs.caltech.edu
  *)
 
-include Czf_itt_member
-include Czf_itt_true
-include Czf_itt_false
-include Czf_itt_and
-include Czf_itt_or
-include Czf_itt_implies
-include Czf_itt_all
-include Czf_itt_exists
-include Czf_itt_sall
-include Czf_itt_sexists
-include Czf_itt_dall
-include Czf_itt_dexists
-include Czf_itt_rel
+set_tex_file "../../doc/latex/theories/base/theory.tex";;
+
+print_theory "base_theory";;
+print_theory "summary";;
+print_theory "mptop";;
+print_theory "var";;
+print_theory "top_tacticals";;
+print_theory "top_conversionals";;
+print_theory "base_trivial";;
+print_theory "base_auto_tactic";;
+print_theory "base_dtactic";;
+print_theory "base_rewrite";;
 
 (*
  * -*-

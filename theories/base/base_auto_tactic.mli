@@ -39,7 +39,6 @@
  *)
 
 include Mptop
-include Summary
 
 open Refiner.Refiner.TermType
 

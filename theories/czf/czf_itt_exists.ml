@@ -71,31 +71,27 @@ let _ =
  * Implication is restricted.
  *)
 interactive dprod_fun3 {| intro_resource [] |} 'H 'u 'v 'z :
-   ["wf"]   sequent ['ext] { 'H; u: set >- "type"{'A['u]} } -->
-   ["wf"]   sequent ['ext] { 'H; u: set; z: 'A['u] >- "type"{'B['u; 'z]} } -->
-   ["main"] sequent ['ext] { 'H >- fun_prop{z. 'A['z]} } -->
-   ["main"] sequent ['ext] { 'H >- dfun_prop{z. 'A['z]; u, v. 'B['u; 'v]} } -->
+   ["wf"]   sequent [squash] { 'H; u: set >- "type"{'A['u]} } -->
+   ["wf"]   sequent [squash] { 'H; u: set; z: 'A['u] >- "type"{'B['u; 'z]} } -->
+   sequent ['ext] { 'H >- fun_prop{z. 'A['z]} } -->
+   sequent ['ext] { 'H >- dfun_prop{z. 'A['z]; u, v. 'B['u; 'v]} } -->
    sequent ['ext] { 'H >- fun_prop{z. "prod"{'A['z]; w. 'B['z; 'w]}} }
 
 interactive dprod_res {| intro_resource [] |} 'H :
-   ["wf"]   sequent ['ext] { 'H >- "type"{'A} } -->
-   ["wf"]   sequent ['ext] { 'H; z: 'A >- "type"{'B['z]} } -->
-   ["main"] sequent ['ext] { 'H >- restricted{'A} } -->
-   ["main"] sequent ['ext] { 'H >- restricted{'A; u. 'B['u]} } -->
+   sequent [squash] { 'H >- restricted{'A} } -->
+   sequent [squash] { 'H; u: 'A >- restricted{'B['u]} } -->
    sequent ['ext] { 'H >- restricted{."prod"{'A; u. 'B['u]}} }
 
 interactive exists_fun {| intro_resource [] |} 'H 'u 'v 'z :
-   ["wf"]   sequent ['ext] { 'H; u: set >- "type"{'A['u]} } -->
-   ["wf"]   sequent ['ext] { 'H; u: set; z: 'A['u] >- "type"{'B['u; 'z]} } -->
-   ["main"] sequent ['ext] { 'H >- fun_prop{z. 'A['z]} } -->
-   ["main"] sequent ['ext] { 'H >- dfun_prop{z. 'A['z]; u, v. 'B['u; 'v]} } -->
+   ["wf"]   sequent [squash] { 'H; u: set >- "type"{'A['u]} } -->
+   ["wf"]   sequent [squash] { 'H; u: set; z: 'A['u] >- "type"{'B['u; 'z]} } -->
+   sequent ['ext] { 'H >- fun_prop{z. 'A['z]} } -->
+   sequent ['ext] { 'H >- dfun_prop{z. 'A['z]; u, v. 'B['u; 'v]} } -->
    sequent ['ext] { 'H >- fun_prop{z. "exists"{'A['z]; w. 'B['z; 'w]}} }
 
 interactive exists_res {| intro_resource [] |} 'H :
-   ["wf"]   sequent ['ext] { 'H >- "type"{'A} } -->
-   ["wf"]   sequent ['ext] { 'H; z: 'A >- "type"{'B['z]} } -->
-   ["main"] sequent ['ext] { 'H >- restricted{'A} } -->
-   ["main"] sequent ['ext] { 'H >- restricted{'A; u. 'B['u]} } -->
+   sequent [squash] { 'H >- restricted{'A} } -->
+   sequent [squash] { 'H; u: 'A >- restricted{'B['u]} } -->
    sequent ['ext] { 'H >- restricted{."exists"{'A; u. 'B['u]}} }
 
 (*

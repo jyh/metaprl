@@ -1,8 +1,20 @@
-(*
- * Membership over the extensional equality.
+(*!
+ * @begin[doc]
+ * @theory[Czf_itt_member]
+ *
+ * The @tt{Czf_itt_member} module defines membership in a set.
+ * The basic definition is an existential judgment: a set $s$
+ * is an element of a set $@collect{x; T; f[x]}$ if there is
+ * some element $a@colon T$ and $@eq{s; f[a]}$.
+ *
+ * Note that equality has to be defined @emph{before} membership.
+ * We also prove the @emph{extensionality} judgment here; two sets
+ * are equal if they have the same members.
+ * @end[doc]
  *
  * ----------------------------------------------------------------
  *
+ * @begin[license]
  * This file is part of MetaPRL, a modular, higher order
  * logical framework that provides a logical programming
  * environment for OCaml and other languages.
@@ -27,10 +39,21 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  * Author: Jason Hickey
- * jyh@cs.cornell.edu
+ * @email{jyh@cs.cornell.edu}
+ * @end[license]
+ *
+ * @begin[spelling]
+ * memberOfT setExtT setOfT
+ * @end[spelling]
  *)
 
+(*!
+ * @begin[doc]
+ * @parents
+ * @end[doc]
+ *)
 include Czf_itt_eq
+(*! @docoff *)
 
 open Refiner.Refiner.Term
 open Refiner.Refiner.RefineError
@@ -49,17 +72,47 @@ open Itt_logic
  * TERMS                                                                *
  ************************************************************************)
 
+(*!
+ * @begin[doc]
+ * @terms
+ *
+ * The @tt{member} term defines the membership judgment.
+ * @end[doc]
+ *)
+declare mem{'x; 'y}
 declare member{'x; 'y}
 
 (************************************************************************
  * DEFINITIONS                                                          *
  ************************************************************************)
 
+(*!
+ * @begin[doc]
+ * @rewrites
+ *
+ * The @tt{member} judgment is defined using the @hrefterm[set_ind]
+ * induction combinator.
+ * @end[doc]
+ *)
+prim_rw unfold_mem : mem{'x; 'y} <-->
+   set_ind{'y; T, f, g. exst t: 'T. eq{'x; .'f 't}}
+
+interactive_rw reduce_mem : mem{'x; collect{'T; y. 'f['y]}} <-->
+   (exst t: 'T. eq{'x; .'f['t]})
+
+(*! @docoff *)
+let reduce_info =
+   [<< mem{'x; collect{'T; y. 'f['y]}} >>, reduce_mem]
+
+let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
+
+(*! @doc *)
 prim_rw unfold_member : member{'x; 'y} <-->
-   ((isset{'x} & isset{'y}) & set_ind{'y; T, f, g. exst t: 'T. eq{'x; .'f 't}})
+   ((isset{'x} & isset{'y}) & mem{'x; 'y})
 
 interactive_rw reduce_member : member{'x; collect{'T; y. 'f['y]}} <-->
    ((isset{'x} & isset{collect{'T; y. 'f['y]}}) & (exst t: 'T. eq{'x; .'f['t]}))
+(*! @docoff *)
 
 let reduce_info =
    [<< member{'x; collect{'T; y. 'f['y]}} >>, reduce_member]
@@ -70,20 +123,43 @@ let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_i
  * DISPLAY FORMS                                                        *
  ************************************************************************)
 
-dform member_df : mode[prl] :: parens :: "prec"[prec_apply] :: member{'x; 't} =
-   slot{'x} " " Nuprl_font!member " " slot{'t}
+dform mem_df : except_mode[src] :: parens :: "prec"[prec_apply] :: mem{'x; 't} =
+   slot{'x} " " Nuprl_font!member `"s" " " slot{'t}
+
+dform member_df : except_mode[src] :: parens :: "prec"[prec_apply] :: member{'x; 't} =
+   slot{'x} " " Nuprl_font!member `"S" " " slot{'t}
 
 (************************************************************************
  * RULES                                                                *
  ************************************************************************)
 
-(*
- * Membership judgment is also a type.
+(*!
+ * @begin[doc]
+ * @rules
+ * @thysubsection{Well-formedness}
+ *
+ * The @tt{member} judgment is well-formed if-and-only-if its arguments are
+ * sets.
+ * @end[doc]
  *)
-interactive member_type {| intro_resource [] |} 'H :
-   sequent ['ext] { 'H >- isset{'s1} } -->
-   sequent ['ext] { 'H >- isset{'s2} } -->
-   sequent ['ext] { 'H >- "type"{member{'s1; 's2}} }
+interactive mem_type {| intro_resource [] |} 'H :
+   ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
+   ["wf"] sequent [squash] { 'H >- isset{'s2} } -->
+   sequent ['ext] { 'H >- "type"{mem{'s1; 's2}} }
+
+interactive mem_equal {| intro_resource [] |} 'H :
+   ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
+   ["wf"] sequent [squash] { 'H >- isset{'s2} } -->
+   sequent ['ext] { 'H >- Itt_equal!equal{univ[1:l]; mem{'s1; 's2}; mem{'s1; 's2}} }
+
+(*
+ * Introduction.
+ *)
+interactive member_intro {| intro_resource [] |} 'H :
+   ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
+   ["wf"] sequent [squash] { 'H >- isset{'s2} } -->
+   sequent ['ext] { 'H >- mem{'s1; 's2} } -->
+   sequent ['ext] { 'H >- member{'s1; 's2} }
 
 (*
  * Sets contain only sets.
@@ -99,46 +175,86 @@ interactive set_isset 'H 'x :
    sequent ['ext] { 'H >- member{'x; 'y} } -->
    sequent ['ext] { 'H >- isset{'y} }
 
-(*
- * Functionality.
+(*!
+ * @begin[doc]
+ * @thysubsection{Functionality}
+ * The @tt{member} judgment is functional in both its arguments.
+ * The next two rules provide simple functionality judgments
+ * for the two set arguments.
+ * @end[doc]
  *)
-interactive member_fun_left 'H 's1 :
+interactive mem_fun_left 'H 's1 :
+   ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
+   ["wf"] sequent [squash] { 'H >- isset{'s2} } -->
+   ["wf"] sequent [squash] { 'H >- isset{'s3} } -->
    sequent ['ext] { 'H >- eq{'s1; 's2} } -->
-   sequent ['ext] { 'H >- member{'s1; 's3} } -->
-   sequent ['ext] { 'H >- member{'s2; 's3} }
+   sequent ['ext] { 'H >- mem{'s1; 's3} } -->
+   sequent ['ext] { 'H >- mem{'s2; 's3} }
+(*! @docoff *)
 
 let memSubstLeftT t p =
-   member_fun_left (Sequent.hyp_count_addr p) t p
+   mem_fun_left (Sequent.hyp_count_addr p) t p
 
-interactive member_fun_right 'H 's1 :
+(*! @doc *)
+interactive mem_fun_right 'H 's1 :
+   ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
+   ["wf"] sequent [squash] { 'H >- isset{'s2} } -->
+   ["wf"] sequent [squash] { 'H >- isset{'s3} } -->
    sequent ['ext] { 'H >- eq{'s1; 's2} } -->
-   sequent ['ext] { 'H >- member{'s3; 's1} } -->
-   sequent ['ext] { 'H >- member{'s3; 's2} }
+   sequent ['ext] { 'H >- mem{'s3; 's1} } -->
+   sequent ['ext] { 'H >- mem{'s3; 's2} }
+(*! @docoff *)
 
 let memSubstRightT t p =
-   member_fun_right (Sequent.hyp_count_addr p) t p
+   mem_fun_right (Sequent.hyp_count_addr p) t p
 
+(*!
+ * @begin[doc]
+ * The @tt{member_fun} rule proves the general functionality
+ * judgment.
+ * @end[doc]
+ *)
 interactive member_fun {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- fun_set{z. 'f1['z]} } -->
    sequent ['ext] { 'H >- fun_set{z. 'f2['z]} } -->
-   sequent ['ext] { 'H >- fun_prop{z. member{'f1['z]; 'f2['z]}} }
+   sequent ['ext] { 'H >- fun_prop{z. mem{'f1['z]; 'f2['z]}} }
 
-(*
- * Set extensionality.
+(*!
+ * @begin[doc]
+ * @thysubsection{Set extensionality}
+ *
+ * Two sets are equal if-and-only-if they have the same elements.
+ * The proof of this theorem is straightforward.  The two membership
+ * goals are the functions that ``choose,'' for any element of
+ * one set, an equal element in the other set.  The equality judgment
+ * can be proved with the pair of both choice functions.
+ * @end[doc]
  *)
 interactive set_ext 'H 'x 'y :
    ["wf"] sequent ['ext] { 'H >- isset{'s1} } -->
    ["wf"] sequent ['ext] { 'H >- isset{'s2} } -->
-   ["main"] sequent ['ext] { 'H; x: set; y: member{'x; 's1} >- member{'x; 's2} } -->
-   ["main"] sequent ['ext] { 'H; x: set; y: member{'x; 's2} >- member{'x; 's1} } -->
+   ["main"] sequent ['ext] { 'H; x: set; y: mem{'x; 's1} >- mem{'x; 's2} } -->
+   ["main"] sequent ['ext] { 'H; x: set; y: mem{'x; 's2} >- mem{'x; 's1} } -->
    sequent ['ext] { 'H >- eq{'s1; 's2} }
+(*! @docoff *)
 
 (************************************************************************
  * TACTICS                                                              *
  ************************************************************************)
 
-(*
- * Membership.
+(*!
+ * @begin[doc]
+ * @tactics
+ *
+ * @begin[description]
+ * @item{@tactic[memberOfT], @tactic[setOfT];
+ *   The @tt{memberOfT} applies the @hrefrule[elem_isset] rule, and
+ *   the @tt{setOfT} tactic applies the @hrefrule[set_isset] rule.
+ *   Both tactics infer the well-formedness of a set for a membership
+ *   or equality judgment.}
+ * @end[description]
+ * @docoff
+ * @end[doc]
  *)
 let memberOfT t p =
    elem_isset (hyp_count_addr p) t p
@@ -146,8 +262,18 @@ let memberOfT t p =
 let setOfT t p =
    set_isset (hyp_count_addr p) t p
 
-(*
- * Prove equality by extensionality.
+(*!
+ * @begin[doc]
+ * @begin[description]
+ * @item{@tactic[setExtT];
+ *    The @tt{setExtT} tactic refines a set-equality
+ *    goal using the rule of @emph{extensionality} @hrefrule[set_ext].
+ *    This rule is not added to the @hreftactic[dT] tactic for default
+ *    reasoning because in many cases, equality judgments can be proved
+ *    in simpler ways.}
+ * @end[description]
+ * @docoff
+ * @end[doc]
  *)
 let setExtT p =
    let u, v = maybe_new_vars2 p "u" "v" in

@@ -1,8 +1,17 @@
-(*
- * These are the axioms of CZF set theory.
+(*!
+ * @spelling{rel}
+ *
+ * @begin[doc]
+ * @theory[Czf_itt_axioms]
+ *
+ * The @tt{Czf_itt_axioms} defines the remaining axioms of
+ * the set theory as axioms.  This includes the set induction
+ * scheme, and the strong collection.
+ * @end[doc]
  *
  * ----------------------------------------------------------------
  *
+ * @begin[license]
  * This file is part of MetaPRL, a modular, higher order
  * logical framework that provides a logical programming
  * environment for OCaml and other languages.
@@ -27,9 +36,20 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  * Author: Jason Hickey
- * jyh@cs.cornell.edu
+ * @email{jyh@cs.cornell.edu}
+ * @end[license]
  *)
 
+(*!
+ * @begin[doc]
+ * @parents
+ *
+ * The @tt{Czf_itt_axiom} module includes the
+ * entire logical part of the theory, as well as the
+ * definition of the @tt{rel} (for use in the definition
+ * of the strong collection theorem).
+ * @end[doc]
+ *)
 include Czf_itt_true
 include Czf_itt_false
 include Czf_itt_and
@@ -42,6 +62,7 @@ include Czf_itt_sexists
 include Czf_itt_dall
 include Czf_itt_dexists
 include Czf_itt_rel
+(*! @docoff *)
 
 open Printf
 open Mp_debug
@@ -52,19 +73,25 @@ open Var
 let _ =
    show_loading "Loading CZF_itt_axioms%t"
 
-(*
- * Set induction.
+(*!
+ * @begin[doc]
+ * @rules
+ * @thysubsection{Set induction}
  *
- * H >- all x. P(x)
- * by set_induction
- * H; x: set; w: (all y: x. P(y)) >- P(x)
- * H >- P(x) wf
+ * The set induction rule formalizes the induction scheme.  A goal
+ * $P[z]$ can be proven for a set $z$ if it can be proven for
+ * an arbitrary set $x$, given that it holds on all the elements.
+ *
+ * The proof of induction follows directly from $W$-type
+ * induction.
+ * @end[doc]
  *)
 interactive set_induction 'H 'x 'w :
    sequent ['ext] { 'H; x: set >- "type"{'P['x]} } -->
    sequent ['ext] { 'H >- fun_prop{z. 'P['z]} } -->
    sequent ['ext] { 'H; x: set; w: dall{'x; z. 'P['z]} >- 'P['x] } -->
    sequent ['ext] { 'H >- sall{z. 'P['z]} }
+(*! @docoff *)
 
 let setInduction1 p =
    let x, w = maybe_new_vars2 p "x" "w" in
@@ -81,18 +108,21 @@ let setInduction i p =
    let j, k = Sequent.hyp_indices p i in
       set_induction2 j k x y w p
 
-(*
- * Restricted separation.
- *)
-interactive separation 'H (bind{v. 'P['v]}) 'a 'b 'w 'x :
-   sequent [squash] { 'H >- isset{'a} } -->
-   sequent [squash] { 'H; b: set >- "type"{'P['b]} } -->
-   sequent ['ext] { 'H >- restricted{b. 'P['b]} } -->
-   sequent ['ext] { 'H; b: set; w: sall{x. iff{member{'x; 'b}; .member{'x; 'a} & 'P['x]}} >- 'C } -->
-   sequent ['ext] { 'H >- 'C }
-
-(*
- * Strong collection.
+(*!
+ * @begin[doc]
+ * @thysubsection{Strong Collection}
+ *
+ * The strong collection axiom states that for every proof
+ * of a @misspelled{forall}/exists formula $@dall{x; s_1; @sexists{s_2; P[x; y]}}$,
+ * there is a set $s_3$ that contains the collection of sets that
+ * were chosen by the existential.  The reason that the collection is
+ * not defined as a set constructor is the the proof of the @misspelled{forall}/exists
+ * formula is part of the construction.  If the set $s_1$ has canonical
+ * for $s_1 = @collect{x; T; f[x]}$, the proof provides a witness
+ * that inhabits the function space $T @rightarrow @set$.  The canonical
+ * form of the proof is a @tt{lambda}-function $@lambda{x; s_x}$,
+ * which can be used to form the set collection $@collect{x; T; s_x}$.
+ * @end[doc]
  *)
 interactive collection 'H 's1 (bind{x. bind{y. 'P['x; 'y]}}) 's2 'x 'y 'w :
    sequent [squash] { 'H >- isset{'s1} } -->
@@ -101,8 +131,14 @@ interactive collection 'H 's1 (bind{x. bind{y. 'P['x; 'y]}}) 's2 'x 'y 'w :
    sequent ['ext] { 'H; s2: set; w: rel{x, y. 'P['x; 'y]; 's1; 's2} >- 'C } -->
    sequent ['ext] { 'H >- 'C }
 
-(*
- * Subset collection.
+(*!
+ * @begin[doc]
+ * @thysubsection{Subset collection}
+ *
+ * The @hreftheory[Czf_itt_power] module defines the subset collection
+ * set constructor $@power{s_1; s_2}$.  For completeness, we reprove the
+ * axiom form of the subset collection.
+ * @end[doc]
  *)
 interactive subset_collection 'H 'a 'b 'c bind{u. bind{x. bind{y. 'P['u; 'x; 'y]}}} :
    sequent ['ext] { 'H >- isset{'a} } -->
@@ -111,7 +147,7 @@ interactive subset_collection 'H 'a 'b 'c bind{u. bind{x. bind{y. 'P['u; 'x; 'y]
    sequent ['ext] { 'H; u: set; x: set >- fun_prop{y. 'P['u; 'x; 'y]} } -->
    sequent ['ext] { 'H; w: sexists{c. sall{u. dall{'a; x. dexists{'b; y. 'P['u; 'x; 'y]}} => dexists{'c; z. rel{x, y. 'P['u; 'x; 'y]; 'a; 'z}}}} >- 'C } -->
    sequent ['ext] { 'H >- 'C }
-
+(*! @docoff *)
 
 (*
  * -*-

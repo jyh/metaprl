@@ -32,28 +32,6 @@
 
 include Czf_itt_sep
 
-open Refiner.Refiner.TermType
-
-open Tactic_type.Tacticals
-
-(************************************************************************
- * RULES                                                                *
- ************************************************************************)
-
-rule dprod_fun3 'H 'u 'v 'z :
-   sequent ['ext] { 'H; u: set >- "type"{'A['u]} } -->
-   sequent ['ext] { 'H; u: set; z: 'A['u] >- "type"{'B['u; 'z]} } -->
-   sequent ['ext] { 'H >- fun_prop{z. 'A['z]} } -->
-   sequent ['ext] { 'H >- dfun_prop{z. 'A['z]; u, v. 'B['u; 'v]} } -->
-   sequent ['ext] { 'H >- fun_prop{z. "prod"{'A['z]; w. 'B['z; 'w]}} }
-
-rule exists_fun 'H 'u 'v 'z :
-   sequent ['ext] { 'H; u: set >- "type"{'A['u]} } -->
-   sequent ['ext] { 'H; u: set; z: 'A['u] >- "type"{'B['u; 'z]} } -->
-   sequent ['ext] { 'H >- fun_prop{z. 'A['z]} } -->
-   sequent ['ext] { 'H >- dfun_prop{z. 'A['z]; u, v. 'B['u; 'v]} } -->
-   sequent ['ext] { 'H >- fun_prop{z. "exists"{'A['z]; w. 'B['z; 'w]}} }
-
 (*
  * -*-
  * Local Variables:

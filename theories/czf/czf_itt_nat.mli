@@ -31,40 +31,40 @@
  *)
 
 include Czf_itt_singleton
-include Czf_itt_dall
-include Czf_itt_dexists
-include Czf_itt_sall
-include Czf_itt_sexists
+include Czf_itt_union
 include Czf_itt_empty
+
+open Refiner.Refiner.Term
+
+open Tactic_type.Tacticals
+open Tactic_type.Conversionals
 
 (************************************************************************
  * TERMS                                                                *
  ************************************************************************)
 
 declare "inf"
+declare zero
+declare succ{'i}
+declare lt{'i; 'j}
 
 (************************************************************************
  * REWRITES                                                             *
  ************************************************************************)
 
-rewrite unfold_inf : inf <--> collect{list{unit}; l. list_ind{'l; empty; h, t, g. sing{'g}}}
+rewrite unfold_zero : zero <--> empty
 
-(************************************************************************
- * RULES                                                                *
- ************************************************************************)
+rewrite unfold_succ : succ{'i} <--> union{'i; sing{'i}}
 
-(*
- * Empty is a set.
- *)
-rule inf_isset 'H :
-   sequent ['ext] { 'H >- isset{inf} }
+rewrite unfold_inf : inf <-->
+   collect{list{unit}; l. list_ind{'l; empty; h, t, g. succ{'g}}}
 
-(*
- * Nothing is in the empty set.
- *)
-rule inf_axiom 'H 'J :
-   sequent ['ext] { 'H; x: sexists{s. member{'s; inf}}; y: dall{inf; x. dexists{inf; y. member{'x; 'y}}} >- 'C } -->
-   sequent ['ext] { 'H >- 'C }
+rewrite unfold_lt : lt{'i; 'j} <--> mem{'i; 'j}
+
+topval fold_zero : conv
+topval fold_succ : conv
+
+topval natIndT : term -> tactic
 
 (*
  * -*-

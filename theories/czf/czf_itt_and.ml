@@ -57,8 +57,8 @@ let _ =
  * Implication is restricted.
  *)
 interactive prod_fun {| intro_resource [] |} 'H 'w :
-   sequent ['ext] { 'H; w: set >- "type"{'A['w]} } -->
-   sequent ['ext] { 'H; w: set >- "type"{'B['w]} } -->
+   ["wf"] sequent [squash] { 'H; w: set >- "type"{'A['w]} } -->
+   ["wf"] sequent [squash] { 'H; w: set >- "type"{'B['w]} } -->
    sequent ['ext] { 'H >- fun_prop{x. 'A['x]} } -->
    sequent ['ext] { 'H >- fun_prop{x. 'B['x]} } -->
    sequent ['ext] { 'H >- fun_prop{x. "prod"{'A['x]; 'B['x]}} }
@@ -67,8 +67,6 @@ interactive prod_fun {| intro_resource [] |} 'H 'w :
  * Implication is restricted.
  *)
 interactive prod_res1 {| intro_resource [] |} 'H :
-   ["wf"] sequent ['ext] { 'H >- "type"{'A} } -->
-   ["wf"] sequent ['ext] { 'H >- "type"{'B} } -->
    sequent ['ext] { 'H >- restricted{. 'A} } -->
    sequent ['ext] { 'H >- restricted{. 'B} } -->
    sequent ['ext] { 'H >- restricted{. "prod"{'A; 'B}} }
@@ -77,8 +75,8 @@ interactive prod_res1 {| intro_resource [] |} 'H :
  * Implication is restricted.
  *)
 interactive and_fun {| intro_resource [] |} 'H 'w :
-   sequent ['ext] { 'H; w: set >- "type"{'A['w]} } -->
-   sequent ['ext] { 'H; w: set >- "type"{'B['w]} } -->
+   ["wf"] sequent [squash] { 'H; w: set >- "type"{'A['w]} } -->
+   ["wf"] sequent [squash] { 'H; w: set >- "type"{'B['w]} } -->
    sequent ['ext] { 'H >- fun_prop{x. 'A['x]} } -->
    sequent ['ext] { 'H >- fun_prop{x. 'B['x]} } -->
    sequent ['ext] { 'H >- fun_prop{x. "and"{'A['x]; 'B['x]}} }
@@ -87,8 +85,6 @@ interactive and_fun {| intro_resource [] |} 'H 'w :
  * Implication is restricted.
  *)
 interactive and_res1 {| intro_resource [] |} 'H :
-   sequent ['ext] { 'H >- "type"{'A} } -->
-   sequent ['ext] { 'H >- "type"{'B} } -->
    sequent ['ext] { 'H >- restricted{. 'A} } -->
    sequent ['ext] { 'H >- restricted{. 'B} } -->
    sequent ['ext] { 'H >- restricted{. "and"{'A; 'B}} }

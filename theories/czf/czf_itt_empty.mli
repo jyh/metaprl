@@ -44,22 +44,6 @@ declare "empty"
 
 rewrite unfold_empty : empty <--> collect{void; x. 'x}
 
-(************************************************************************
- * RULES                                                                *
- ************************************************************************)
-
-(*
- * Empty is a set.
- *)
-rule empty_isset 'H :
-   sequent ['ext] { 'H >- isset{empty} }
-
-(*
- * Nothing is in the empty set.
- *)
-rule empty_member_elim 'H 'J :
-   sequent ['ext] { 'H; x: member{'y; empty}; 'J['x] >- 'T['x] }
-
 (*
  * -*-
  * Local Variables:

@@ -45,9 +45,6 @@ extends Itt_synt_var
 extends Itt_synt_operator
 doc docoff
 
-
-open Dtactic
-
 open Basic_tactics
 open Itt_nat
 open Itt_equal
@@ -57,7 +54,6 @@ open Itt_squash
 (************************************************************************
  * The BTerm type                                                       *
  ************************************************************************)
-
 
 declare BTerm
 declare make_bterm{'op; 'subterms}
@@ -69,9 +65,6 @@ dform bterm_df : except_mode[src] :: BTerm =
 
 dform make_bterm_df : except_mode[src] :: make_bterm{'bt; 'btl} =
    `"make_bterm(" slot{'bt} `"; " slot{'btl} `")"
-
-
-
 
 prim_rw bterm_ind_op_reduce {| reduce |}:
       bterm_ind{make_bterm{'op; 'subterms};
@@ -87,7 +80,6 @@ prim_rw bterm_ind_var_reduce {| reduce |}:
                 op,subterms,ind. 'op_case['op; 'subterms; 'ind] } <-->
          'var_case[var{'l;'r}]
 
-
 interactive_rw bterm_ind_var_reduce2 :
       ('v in Var) -->
       bterm_ind{'v;
@@ -95,9 +87,7 @@ interactive_rw bterm_ind_var_reduce2 :
                 op,subterms,ind. 'op_case['op; 'subterms; 'ind] } <-->
          'var_case['v]
 
-
 define unfold_bdepth: bdepth{'bt} <--> bterm_ind{'bt; v. depth{'v}; op,btl,ind. op_bdepth{'op}}
-
 
 define unfold_compatible_shapes: compatible_shapes{'op; 'btl} <-->
    fix{ f. lambda{ diff. lambda{ arity. lambda{ btl.
@@ -135,17 +125,22 @@ prim bterm_ind_wf {| intro [] |} bind{bt.'C['bt]}:
                                op,subterms,ind_hyp. 'op_case['op; 'subterms; 'ind_hyp] } in 'C['bt] } =
    it
 
-
-prim operatorSquiddle {| intro[] |} :
+prim operatorSquiggle {| intro[] |} :
    sequent { <H> >- 'op1 = 'op2 in BOperator } -->
    sequent { <H> >- 'btl in list{BTerm} } -->
    sequent { <H> >- compatible_shapes{'op1; 'btl} } -->
    sequent { <H> >- make_bterm{'op1; 'btl} ~ make_bterm{'op2; 'btl} } =
    it
 
-
-
 (* Derivable rules *)
+
+(* XXX: Do we need this?
+define compatible_shapes_witness ...
+
+interactive compatible_shapes_sqstable {| squash |} :
+   ... -->
+   compatible_shapes_witness ... in compatible_shapes ...
+*)
 
 interactive bterm_elim {| elim [] |} 'H :
    sequent { <H>; b: BTerm; <J['b]>; v:Var >- 'C['v] } -->
@@ -159,10 +154,8 @@ define unfold_dest_bterm:
  <--> bterm_ind{'bt; v.'var_case['v];
                      op,subterms,ind. 'op_case['op; 'subterms] }
 
-
 interactive var_subtype {| intro [] |} :
    sequent { <H> >- Var subtype BTerm }
-
 
 interactive btermSquiddle {| nth_hyp |} :
    sequent { <H> >- 'b1 = 'b2 in BTerm } -->
@@ -171,7 +164,6 @@ interactive btermSquiddle {| nth_hyp |} :
 interactive btermlistSquiddle {| nth_hyp |} :
    sequent { <H> >- 'b1 = 'b2 in list{BTerm} } -->
    sequent { <H> >- 'b1 ~ 'b2 }
-
 
 (************************************************************************
  * Var_bterm                                                            *

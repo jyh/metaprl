@@ -127,8 +127,6 @@ prim_rw bterm_same_op:
 
 prim_rw bterm_inject: inject{bterm{| <K> >- 'op<||> |}; 'n} <--> ind{'n; bterm{| >- 'op<||> |}; k,l.bterm{x.'l}}
 
-
-
 (************************************************************************
  * Make_bterm                                                           *
  ************************************************************************)
@@ -138,10 +136,4 @@ prim_rw make_bterm_base :
  ('btl in list{BTerm} ) -->
  (compatible_shapes{'op;'btl}) -->
  make_bterm{'op;'btl} <--> Base_reflection!make_bterm{'op; xlist_of_list{'btl}}
-
-
-
-
-
-
 

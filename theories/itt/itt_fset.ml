@@ -815,7 +815,7 @@ interactive fsquash_wf1 {| intro [intro_typeinf_fset <<'s>>] |} 'H 'T :
    sequent [squash] { 'H >- 's IN list{'T} } -->
    sequent ['ext] { 'H >- fsquash{'eq; 's} IN list{unit} }
 
-interactive fsub_null 'H 'T :
+interactive fsub_null {| intro [intro_typeinf <<'u>>] |} 'H 'T :
    [wf] sequent [squash] { 'H >- "type"{'T} } -->
    [wf] sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
    [wf] sequent [squash] { 'H >- 's IN list{'T} } -->
@@ -823,7 +823,7 @@ interactive fsub_null 'H 'T :
    sequent [squash] { 'H >- "assert"{bnot{fmember{'eq; 'u; 's}}} } -->
    sequent ['ext] { 'H >- 's = fsub{'eq; 's; fsingleton{'u}} in list{'T} }
 
-interactive fsquash_fsub1 'H 'T :
+interactive fsquash_fsub1 {| intro [intro_typeinf <<'u>>] |} 'H 'T :
    [wf] sequent [squash] { 'H >- "type"{'T} } -->
    [wf] sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
    [wf] sequent [squash] { 'H >- 's IN list{'T} } -->
@@ -831,7 +831,7 @@ interactive fsquash_fsub1 'H 'T :
    sequent [squash] { 'H >- "assert"{fmember{'eq; 'u; 's}} } -->
    sequent ['ext] { 'H >- fsquash{'eq; 's} = cons{it; fsquash{'eq; fsub{'eq; 's; fsingleton{'u}}}} in list{unit} }
 
-interactive fsquash_wf2 {| intro [] |} 'H 'T :
+interactive fsquash_wf2 {| intro [intro_typeinf_fset <<'s>>] |} 'H 'T :
    sequent [squash] { 'H >- "type"{'T} } -->
    sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
    sequent [squash] { 'H >- 's IN fset{'eq; 'T} } -->
@@ -1195,34 +1195,6 @@ let bexists_member_term = << fbexists{'s; x.'b['x]} IN bool >>
 let resource d += (bexists_member_term, wrap_intro d_bexists_memberT)
 
 (*
- * Well-formedness of fsquash.
- *)
-let d_fsquash_memberT p =
-   let t =
-      let concl = Sequent.concl p in
-      let _, t = dest_member concl in
-      let _, t = two_subterms t in
-         try get_univ_arg p with
-            RefineError _ ->
-               infer_type p t
-   in
-   let tac, t =
-      if is_list_term t then
-         fsquash_wf1, dest_list t
-      else if is_fset_term t then
-         let _, t = dest_fset t in
-            fsquash_wf2, t
-      else
-         raise (RefineError ("d_squash_memberT", StringTermError ("bad type inference", t)))
-   in
-      (tac (Sequent.hyp_count_addr p) t
-       thenT addHiddenLabelT "wf") p
-
-let fsquash_member_term = << fsquash{'eq; 's} IN list{unit} >>
-
-let resource d += (fsquash_member_term, wrap_intro d_fsquash_memberT)
-
-(*
  * Membership tactics for set expressions.
  *)
 let member_info =
@@ -1440,48 +1412,6 @@ let fmember_subst_elementT x p =
             infer_type p x
    in
       fmember_fun (Sequent.hyp_count_addr p) t x p
-
-(*
-let fsub_nonmemberT p =
-   let t =
-      try get_univ_arg p with
-         RefineError _ ->
-            let t = Sequent.concl p in
-            let _, s, _ = dest_equal t in
-            let t = infer_type p s in
-               if is_list_term t then
-                  dest_list t
-               else
-                  raise (RefineError ("fsub_nonmemberT", StringTermError ("type must be a list", t)))
-   in
-      (fsub_null (Sequent.hyp_count_addr p) t
-       thenLT [addHiddenLabelT "wf";
-               addHiddenLabelT "wf";
-               addHiddenLabelT "wf";
-               addHiddenLabelT "wf";
-               addHiddenLabelT "main"]) p
-
-let fsquash_memberT p =
-   let t =
-      try get_univ_arg p with
-         RefineError _ ->
-            let t = Sequent.concl p in
-            let _, s, _ = dest_equal t in
-            let _, s = two_subterms s in
-            let t = infer_type p s in
-               if is_list_term t then
-                  dest_list t
-               else
-                  raise (RefineError ("fsub_nonmemberT", StringTermError ("type must be a list", t)))
-   in
-      (fsquash_fsub1 (Sequent.hyp_count_addr p) t
-       thenLT [addHiddenLabelT "wf";
-               addHiddenLabelT "wf";
-               addHiddenLabelT "wf";
-               addHiddenLabelT "wf";
-               addHiddenLabelT "main"]) p
-
-*)
 
 let assert_2of3_type p t =
    try get_with_arg p with

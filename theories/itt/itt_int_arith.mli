@@ -49,64 +49,6 @@ topval thenLocalAT : tactic -> tactic -> tactic
 topval onAllLocalMHypsT : (int -> tactic) -> tactic
 topval onAllLocalMCumulativeHypsT : (int -> tactic) -> tactic
 
-topval bnot_lt2geC : conv
-topval ltInConcl2HypT : tactic
-
-topval le2geT : term -> tactic
-topval lt2geT : term -> tactic
-topval gt2geT : term -> tactic
-topval anyArithRel2geT : int -> tactic
-
-topval arithRelInConcl2HypT : tactic
-topval negativeHyp2ConclT : int -> tactic
-topval ct : term -> term -> int
-
-topval add_BubblePrimitiveC : conv
-topval add_BubbleStepC : term -> conv
-topval add_BubbleSortC : conv
-
-topval add_normalizeC : conv
-
-topval mul_BubblePrimitiveC : conv
-topval mul_BubbleStepC : term -> conv
-topval mul_BubbleSortC : conv
-
-topval inject_coefC : term -> conv
-topval injectCoefC : conv
-topval mul_normalizeC : conv
-topval open_parenthesesC : conv
-topval sum_same_products1C : conv
-(*
-topval sum_same_products2C : conv
-topval sum_same_products3C : conv
-topval sum_same_products4C : conv
-*)
-topval same_productC : term -> conv
 topval normalizeC : conv
 
-topval ge_addContractC : conv
-
-topval reduceContradRelT : int -> tactic
-
-topval ge_addMono2C : term -> conv
-topval reduce_geLeftC : conv
-topval reduce_geRightC : conv
-topval reduce_geCommonConstT : int -> tactic
-topval tryReduce_geT : int -> tactic
-
-topval sumListT : int list -> tactic
-topval proveSumT : tactic
-
-topval findContradRelT : tactic
-
 topval arithT : tactic
-
-(*
-rule test 'a 'b 'c :
-sequent [squash] { <H> >- 'a in int } -->
-sequent ['ext] { <H>; x: ('a >= ('b +@ 1));
-                     y: (5 in int); z: (6 in int);
-                     t: ('c >= ('b +@ 3));
-                     u: ('b >= ('a +@ 0))
-                >- 'a >= 'c }
-*)

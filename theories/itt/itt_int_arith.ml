@@ -6,9 +6,9 @@ doc <:doc<
 
 	This module defines @hrefconv[normalizeC] and @hreftactic[arithT].
 
-   @hrefconv[normalizeC] converts polynomials to canonical form.
+   @noindent @hrefconv[normalizeC] converts polynomials to the canonical form.
 
-   @hreftactic[arithT] proves simple inequalities.
+   @noindent @hreftactic[arithT] proves simple inequalities.
    @end[doc]
   
    ----------------------------------------------------------------
@@ -99,8 +99,7 @@ let debug_int_arith =
 let debug_subgoals =
    create_debug (**)
       { debug_name = "subgoals";
-        debug_description = "Report subgoals observed with may be some
- additional info";
+        debug_description = "Report subgoals observed with may be some additional info";
         debug_value = false
       }
 
@@ -124,18 +123,6 @@ let debug_subgoals =
       tac1 thenT
       ifLabelPredT pred tac2 tac3 thenT
       restoreHiddenLabelT label)
-
-(*
-   let ifMextendedT tac p =
-      let lab=Sequent.label p in
-      (if (List.mem lab main_labels) or Left(lab,5)="main_" then
-          tac
-       else
-          idT) p
-
-   let thenMextendedT tac1 tac2 =
-      prefix_thenT tac1 (ifMT tac2)
-*)
 
    let isEmptyOrMainLabel l =
       (l=emptyLabel) or (List.mem l main_labels)
@@ -644,11 +631,13 @@ and compare_lvars v1 v2 =
           else if o1>o2 then Greater
           else Equal
 
+(*
 let ct a b =
   match compare_terms a b with
     Less -> -1
   | Equal -> 0
   | Greater -> 1
+*)
 
 interactive_rw mul_BubblePrimitive_rw :
    ( 'a in int ) -->
@@ -887,13 +876,7 @@ interactive_rw sub_elim_rw :
 
 let sub_elimC = repeatC (higherC sub_elim_rw)
 
-(* Before terms sorting we have to put parentheses in the rightmost-first
-manner
- *)
-let add_normalizeC = (* (repeatC (higherC add_Assoc2C)) thenC *)
-                     add_BubbleSortC
-
-let open_parenthesesC = repeatC (higherC mul_add_DistribC)
+let add_normalizeC = add_BubbleSortC
 
 doc <:doc<
 	@begin[doc]
@@ -906,6 +889,31 @@ doc <:doc<
    term the rewrite applied to. For instance, if you have a hypothesis
    in the form of inequality or equality you can apply this rewrite to the whole
    hypothesis and it will normalize both sides of inequality (or equality).
+
+   Example: The canonical form of <<'b *@ 2 *@ ('a +@ 'c) -@ ('a *@ 'b) +@ 1>> is
+   <<1 +@ (('a *@ 'b) +@ (2 *@ ('b *@ 'c)))>>
+
+   The canonical form of a polynomial is achieved by the following steps:
+   @begin[enumerate]
+   @item{Get rid of subtraction.}
+
+   @item{Open parentheses using distributivity, move parentheses to the right
+   using associativity of addition and multiplication, make other simplifications
+   encoded in @hrefconv[reduceC].}
+
+   @item{In every monomial sort (commuting) multipliers in increasing order,
+   but pull literal integers to the left (we put coefficients first because later
+   we have to reduce similar monomials) and multiply them if there is more than one
+   literal integer in one monomial. If monomial does not have literal multipliers
+   at all, put <<1>> in front of it for uniformity.}
+
+   @item{Sort monomials in increasing order, reducing similar monomials on the fly.
+   Again integer literals should be pulled to the left
+   (i.e. considered to be the leastest terms).}
+
+   @item{Get rid of zeros and ones in the resulting term using @hrefconv[reduceC]}
+
+   @end[enumerate]
 	}
 	@end[description]
 
@@ -921,6 +929,8 @@ interactive_rw ge_addContract_rw :
    ( 'a in int ) -->
    ( 'b in int ) -->
    ('a >= ('b +@ 'a)) <--> (0 >= 'b)
+
+doc <:doc< @docoff >>
 
 let ge_addContractC = ge_addContract_rw
 
@@ -973,16 +983,6 @@ let reduce_geCommonConstT = argfunT (fun i p ->
    else
       idT)
 
-doc <:doc<
-	@begin[doc]
-
-	@begin[description]
-	@item{@tactic[tryReduce_geT];
-	}
-	@end[description]
-
-	@end[doc]
->>
 let tryReduce_geT = argfunT (fun i p ->
    let t=get_term i p in
       if is_ge_term t then
@@ -992,16 +992,6 @@ let tryReduce_geT = argfunT (fun i p ->
       else
          idT)
 
-doc <:doc<
-	@begin[doc]
-
-	@begin[description]
-	@item{@tactic[sumList];
-	}
-	@end[description]
-
-	@end[doc]
->>
 (* Generate sum of ge-relations
  *)
 let sumList tl g =
@@ -1018,46 +1008,14 @@ let sumList tl g =
       let zero = << 0 >> in
          mk_ge_term zero zero
 
-doc <:doc<
-	@begin[doc]
-
-	@begin[description]
-	@item{@tactic[proveSumT];
-	}
-	@end[description]
-
-	@end[doc]
->>
-let proveSumT = ge_addMono
-
-doc <:doc<
-	@begin[doc]
-
-	@begin[description]
-	@item{@tactic[sumListT];
-	}
-	@end[description]
-
-	@end[doc]
->>
 (* Asserts sum of ge-relations and grounds it
  *)
 let sumListT = argfunT (fun l p ->
    let s = sumList l (Sequent.goal p) in
    if !debug_int_arith then
    	eprintf "Contradictory term:%a%t" print_term s eflush;
-   thenLocalAT (assertT s) (tryT (progressT proveSumT)))
+   thenLocalAT (assertT s) (tryT (progressT ge_addMono)))
 
-doc <:doc<
-	@begin[doc]
-
-	@begin[description]
-	@item{@tt{good_term};
-	}
-	@end[description]
-
-	@end[doc]
->>
 (* Test if term has a form of a>=b+i where i is a number
  *)
 let good_term t =
@@ -1079,21 +1037,6 @@ let good_term t =
       false
      )
 
-doc <:doc<
-	@begin[doc]
-
-	@begin[description]
-	@item{@tactic[findContradRelT];
-	The @tt{findContradRelT} is responsible for finding contradictory inequality
-	that can be obtained by adding together several hypotheses of the form
-   <<'x >= 'x+'c>> where <<'x>> is an arbitrary term and <<'c>> is a constant.
-   This problem is reduced to search for positive cycle in a directed graph and
-   is performed by @hrefmodule[Arith] module. If successful, the tactic proves
-   that such inequality really follows from hypotheses using @hreftactic[sumListT].}
-	@end[description]
-
-	@end[doc]
->>
 (* Searches for contradiction among ge-relations
  *)
 let findContradRelT = funT (fun p ->
@@ -1124,45 +1067,57 @@ doc <:doc<
    inequalities that logically follows from hypotheses using associativity and
    commutativity of addition and multiplication, properties of <<0>> and <<1>>,
    reflexivity, transitivity and weak monotonicity of <<Perv!nil >= Perv!nil>>.
-   Weak monotonicy is @hrefrule[lt_addMono] rule:
+   Weak monotonicy is the @hrefrule[lt_addMono] rule:
 
    $$
-   @rulebox{@misspelled{lt_addMono}; c;
+   @rulebox{@code[lt_addMono]; c;
      <<sequent[squash]{ <H> >- 'a in int }>>@cr
      	 <<sequent[squash]{ <H> >- 'b in int }>>@cr
      	 <<sequent[squash]{ <H> >- 'c in int }>>;
      <<sequent['ext]{ <H> >- lt_bool{'a; 'b} ~ lt_bool{('a +@ 'c); ('b +@ 'c)} }>>}
    $$
 
-   with restriction to use only literal integers for <<'c>>.
+   with restriction to use only literal integers for <<'c>> (or anything that
+   can be automatically reduced to literal integer by @hrefconv[reduceC]).
+
+   @tt{arithT} supports addition, multiplication, unary minus and subtraction
+   operations. Division and remainder operations are not supported.
+   Among arithmetic relations it supports << Perv!nil = Perv!nil in int >>,
+	<< nequal { 'x ; 'y } >>,
+   << Perv!nil < Perv!nil >>, << Perv!nil > Perv!nil >>,
+   << Perv!nil <= Perv!nil >>, << Perv!nil >= Perv!nil >>. Arbitrary many negations
+   of these relations are also supported. Other logical connectives are not supported.
 
    @tt{arithT} puts together everything that was defined in this module:
 	@begin[enumerate]
 	@item{First it moves arithmetic fact from conclusion to hypotheses in negated form
-	using reasoning by contadiction using @hreftactic[arithRelInConcl2HypT]}
+	using reasoning by contadiction.}
 
 	@item{Then it converts all negative arithmetic facts in hypotheses to positive
-	ones using @hreftactic[negativeHyp2ConclT],
+	ones,
 	it actually adds new hypotheses and leaves originals
 	intact. Because there could be several nested negations this tactic should be
 	also applied to hypotheses that were just generated but this tactic.}
 
 	@item{Next it converts all positive arithmetic facts in hypotheses
-	to <<Perv!nil >= Perv!nil>>-inequalities using @hreftactic[anyArithRel2geT].}
+	to <<Perv!nil >= Perv!nil>>-inequalities.}
 
-	@item{Now every << Perv!nil >= Perv!nil >>-inequality should be normalized using
-	@hreftactic[tryReduce_geT].}
+	@item{Now every << Perv!nil >= Perv!nil >>-inequality should be normalized.}
 
-	@item{@hreftactic[findContradRelT] tries to find the contradictory inequality
+	@item{Then it tries to find the contradictory inequality
 	that logically follows from that normalized <<Perv!nil >= Perv!nil>>-inequalities
-	and proves this implication.}
+	and proves this implication.
+   This problem is reduced to search for positive cycle in a directed graph and
+   is performed by @hrefmodule[Arith] module. If successful, found inequality
+   will be derived from hypotheses.}
 
-	@item{Finally, @hreftactic[reduceContradRelT] is used to prove that found
-   inequality is really contradictory (implies false).}
+	@item{Finally, false is derived from found inequality, this completes proof by
+   contradiction scheme.}
 	@end[enumerate]}
 	@end[description]
 
 	@end[doc]
+	@docoff
 >>
 
 (* Finds and proves contradiction among ge-relations
@@ -1173,8 +1128,6 @@ let arithT =
    (thenLocalMT (onAllLocalMHypsT anyArithRel2geT)
    (thenLocalMT (onAllLocalMHypsT tryReduce_geT)
    (thenLocalMT findContradRelT (reduceContradRelT (-1)) ))))
-
-doc <:doc< @docoff >>
 
 interactive test 'H 'a 'b 'c :
 sequent [squash] { <H> >- 'a in int } -->

@@ -270,6 +270,9 @@ dform gt_bool_df1 : parens :: "prec"[prec_compare] :: gt_bool{'a; 'b} =
 dform ge_bool_df1 : parens :: "prec"[prec_compare] :: ge_bool{'a; 'b} =
    slot["lt"]{'a} `" " Nuprl_font!ge Nuprl_font!subb `" " slot["le"]{'b}
 
+dform nequal_df1 : parens :: "prec"[prec_compare] :: nequal{'a; 'b} =
+   slot["lt"]{'a} `" " Nuprl_font!neq `" " slot["le"]{'b}
+
 (************************************************************************
  * REWRITES                                                             *
  ************************************************************************)
@@ -609,6 +612,8 @@ interactive ge_wf {| intro [] |} :
 interactive ge_sqstable {| squash; intro [] |} :
    sequent [squash] { <H> >- 'a >= 'b } -->
    sequent ['ext] { <H> >- it in ('a >= 'b) }
+
+doc <:doc< @docoff >>
 
 (*
 Incorrect but there has to be some assoc/commut/composition property

@@ -911,3 +911,5 @@ let resource reduce += [
    << ('a < 'a) >>, (unfold_lt thenC (addrC [0] lt_irreflex_rw));
    <<ind{number[n:n]; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]}>>, reduce_ind_numberC;
 ]
+
+doc <:doc< @docoff >>

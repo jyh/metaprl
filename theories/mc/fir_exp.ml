@@ -2,45 +2,25 @@
  * Functional Intermediate Representation formalized in MetaPRL.
  * Brian Emre Aydemir, emre@its.caltech.edu
  *
- * Define and implement the basic expression forms for the FIR.
+ * Define and implement the basic expression forms in the FIR.
  * See fir_exp.mli for a description of the terms below.
  *
  * Todo:
- *    - any documentation that should go here and not in the .mli file
- *    - verify that everything is declared, and that we've fully
- *      defined everything related to a declaration
- *    - check the array and subscript stuff (and block by extension)
- *    - display forms may need to be tweaked/changed
- *    - letSubCheck wants a more descriptive arg titles.
- *    - reduce_match needs to have its comparison bit checked for
- *      generality sometime
- *
- * Completed (I claim... of course, this is sans typing):
- *    - idOp, unOp, binOp
- *    - letSubscript, letAlloc, allocSafe, allocArray
- *    - block (our representation of memory/arrays)
- *    - letSubCheck (why is this a no-op?)
+ *    -  Check implementations for correctness and consistancy, esp.
+ *       letSubCheck since it's a nop right now.
+ *    -  Use MetaPRL mechanisms for parenthesis and whatnot.
  *)
 
 include Base_theory
 include Itt_theory
+include Fir_ty
+include Fir_int_set
 
-open Refiner.Refiner.Term
-open Refiner.Refiner.TermOp
-open Refiner.Refiner.RefineError
 open Tactic_type.Conversionals
-open Itt_list
 
 (*************************************************************************
  * Declarations.
  *************************************************************************)
-
-(*
- * Memory is allocated in blocks.
- * Each block has a tag and some values (a list).
- *)
-
-declare block{ 'tag; 'args }
 
 (*
  * Inlined operators.
@@ -57,15 +37,6 @@ declare allocSafe{ 'tag; 'args }
 declare allocArray{ 'len; 'init }
 define unfold_copy : copy{ 'len; 'init } <-->
    ind{'len; i, j. nil; nil; i, j. cons{'init; 'j}}
-
-(*
- * Normal values.
- *)
-
-declare atomInt{ 'int }
-declare atomVar{ 'var; 'ty }
-
-declare tyInt
 
 (*
  * Expressions.
@@ -88,49 +59,29 @@ declare letSubscript{ 'block; 'index; v. 'exp['v] }
 (*declare setSubscript{ 'a1; 'a2; 'a3; 'exp }*)
 declare letSubCheck{ 'a1; 'a2; 'a3; 'exp }
 
-(*
- * Term operations.
- *)
-
-let matchCase_term = << matchCase{ 'set; 'exp } >>
-let matchCase_opname = opname_of_term matchCase_term
-let is_matchCase_term = is_dep0_dep0_term matchCase_opname
-let mk_matchCase_term = mk_dep0_dep0_term matchCase_opname
-let dest_matchCase = dest_dep0_dep0_term matchCase_opname
-
-let match_term = << "match"{ 'a; 'cases } >>
-let match_opname = opname_of_term match_term
-let is_match_term = is_dep0_dep0_term match_opname
-let mk_match_term = mk_dep0_dep0_term match_opname
-let dest_match = dest_dep0_dep0_term match_opname
-
 (*************************************************************************
  * Display forms.
  *************************************************************************)
 
-(* Blocks / memory. *)
-dform block_df : block{ 'tag; 'args } =
-   lzone `"block{" slot{'tag} `"; " slot{'args} `"}" ezone
-
 (* Identity (polymorphic). *)
-dform idOp_df : idOp = `"id"
+dform idOp_df : except_mode[src] :: idOp = `"id"
 
 (* Allocation operators. *)
-dform allocSafe_df : allocSafe{ 'tag; 'args } =
-   lzone `"AllocSafe{" slot{'tag} `"; " slot{'args} `"}" ezone
-dform allocArray_df : allocArray{ 'len; 'init } =
+dform allocSafe_df : except_mode[src] :: allocSafe{ 'tag; 'args } =
+   szone `"AllocSafe{" slot{'tag} `"; " slot{'args} `"}" ezone
+dform allocArray_df : except_mode[src] :: allocArray{ 'len; 'init } =
    lzone `"AllocArray{" slot{'len} `"; " slot{'init} `"}" ezone
-dform copy_df : copy{ 'len; 'init} =
+dform copy_df : except_mode[src] :: copy{ 'len; 'init} =
    lzone `"copy{" slot{'len} `"; " slot{'init} `"}" ezone
 
 (* Function application. *)
-dform unOp_df : unOp{ 'op; 'a1; v. 'exp } =
+dform unOp_df : except_mode[src] :: unOp{ 'op; 'a1; v. 'exp } =
    pushm[0] szone push_indent `"let " slot{'v} `" =" hspace
    lzone slot{'op} `"(" slot{'a1} `")" ezone popm hspace
    push_indent `"in" hspace
    szone slot{'exp} ezone popm
    ezone popm
-dform binOp_df : binOp{ 'op; 'a1; 'a2; v. 'exp } =
+dform binOp_df : except_mode[src] :: binOp{ 'op; 'a1; 'a2; v. 'exp } =
    pushm[0] szone push_indent `"let " slot{'v} `" =" hspace
    lzone `"(" slot{'a1} `" " slot{'op} `" " slot{'a2} `")" ezone popm hspace
    push_indent `"in" hspace
@@ -138,11 +89,11 @@ dform binOp_df : binOp{ 'op; 'a1; 'a2; v. 'exp } =
    ezone popm
 
 (* Control. *)
-dform matchCase_df : matchCase{ 'set; 'exp } =
+dform matchCase_df : except_mode[src] :: matchCase{ 'set; 'exp } =
    pushm[0] szone push_indent slot{'set} `" ->" hspace
    szone slot{'exp} ezone popm
    ezone popm
-dform match_df : "match"{'a; 'cases } =
+dform match_df : except_mode[src] :: "match"{'a; 'cases } =
    pushm[0] szone push_indent `"match" hspace
    szone slot{'a} ezone popm hspace
    push_indent `"in" hspace
@@ -150,7 +101,7 @@ dform match_df : "match"{'a; 'cases } =
    ezone popm
 
 (* Allocation *)
-dform letAlloc_df : letAlloc{ 'op; v. 'exp } =
+dform letAlloc_df : except_mode[src] :: letAlloc{ 'op; v. 'exp } =
    pushm[0] szone push_indent `"let " slot{'v} `" =" hspace
    lzone slot{'op} ezone popm hspace
    push_indent `"in" hspace
@@ -158,7 +109,8 @@ dform letAlloc_df : letAlloc{ 'op; v. 'exp } =
    ezone popm
 
 (* Subscripting. *)
-dform letSubscript_df : letSubscript{ 'block; 'index; v. 'exp } =
+dform letSubscript_df : except_mode[src] ::
+   letSubscript{ 'block; 'index; v. 'exp } =
    pushm[0] szone push_indent `"let " slot{'v} `" =" hspace
    lzone slot{'block} `"[" slot{'index} `"]" ezone popm hspace
    push_indent `"in" hspace
@@ -182,34 +134,12 @@ prim_rw reduce_allocArray :
    'exp[ block{0; copy{'len; 'init}} ]
 
 (* Control *)
-(*
-prim_rw reduce_match : "match"{'arg; cons{matchCase{'set; 'e}; 'el}} <-->
-   ifthenelse{eq_bool{'arg; 'set}; 'e; ."match"{'arg; 'el}}
-*)
-
-(*
-prim_rw reduce_match_bool : "match"{atomVar{'arg; tyBool}; cons{matchCase{'set; 'e}; 'el}} <-->
-   ifthenelse{eq_bool{'arg; 'set}; 'e; ."match"{'arg; 'el}}
-*)
-
-prim_rw reduce_match_int : "match"{atomVar{'arg; tyInt}; cons{matchCase{'set; 'e}; 'el}} <-->
-   ifthenelse{eq_int{'arg; 'set}; 'e; ."match"{'arg; 'el}}
-
-(*
-ml_rw reduce_match : ( 'goal : "match"{'a; 'cases} ) =
-   let a, cases = dest_match goal in
-      if not (is_cons_term cases) then
-         (* nothing to match; we're stuck *)
-         raise (RefineError ("reduce_match", StringError "no cases"))
-      else
-         let head, tail = dest_cons cases in
-         let set, exp = dest_matchCase head in
-            (* if the keys match, return exp, else recurse down the cases *)
-            if ( set = a ) then
-               exp
-            else
-               mk_match_term a tail
-*)
+prim_rw reduce_match_int :
+   "match"{ number[i:n]; cons{matchCase{'set; 'exp}; 'el} } <-->
+   ifthenelse{ member{number[i:n]; 'set}; 'exp; ."match"{number[i:n]; 'el} }
+prim_rw reduce_match_block :
+   "match"{ block{ 'i; 'args }; cons{matchCase{'set; 'exp}; 'el} } <-->
+   ifthenelse{ member{'i; 'set}; 'exp; ."match"{block{'i; nil}; 'el} }
 
 (* Subscripting. *)
 prim_rw reduce_letSubscript :
@@ -221,15 +151,19 @@ prim_rw reduce_letSubCheck : letSubCheck{'a1; 'a2; 'a3; 'exp} <--> 'exp
  * Automation.
  *************************************************************************)
 
-let resource reduce +=
-   [<< unOp{ idOp; 'a1; v. 'exp['v] } >>, reduce_idOp;
+let resource reduce += [
+   << unOp{ idOp; 'a1; v. 'exp['v] } >>, reduce_idOp;
 
-    << letAlloc{ allocSafe{'tag; 'args}; v. 'exp['v] } >>, reduce_allocSafe;
-    << letAlloc{ allocArray{'len; 'init}; v. 'exp['v] } >>, reduce_allocArray;
-    << copy{ 'len; 'init } >>, unfold_copy;
+   << letAlloc{ allocSafe{'tag; 'args}; v. 'exp['v] } >>, reduce_allocSafe;
+   << letAlloc{ allocArray{'len; 'init}; v. 'exp['v] } >>, reduce_allocArray;
+   << copy{ 'len; 'init } >>, unfold_copy;
 
-    (*<< "match"{ 'a; 'cases } >>, reduce_match;*)
+   << "match"{ number[i:n]; cons{matchCase{'set; 'exp}; 'el} } >>,
+      reduce_match_int;
+   << "match"{ block{ 'i; 'args }; cons{matchCase{'set; 'exp}; 'el} } >>,
+      reduce_match_block;
 
-    << letSubscript{ block{'tag; 'args}; 'index; v. 'exp['v] } >>,
-       reduce_letSubscript;
-    << letSubCheck{'a1; 'a2; 'a3; 'exp} >>, reduce_letSubCheck]
+   << letSubscript{ block{'tag; 'args}; 'index; v. 'exp['v] } >>,
+      reduce_letSubscript;
+   << letSubCheck{'a1; 'a2; 'a3; 'exp} >>, reduce_letSubCheck
+]

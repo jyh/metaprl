@@ -2,7 +2,7 @@
  * Function Intermediate Representation formalized in MetaPRL.
  * Brian Emre Aydemir, emre@its.caltech.edu
  *
- * Defines the type system for the FIR.
+ * Defines the type system in the FIR.
  *)
 
 include Base_theory
@@ -14,8 +14,19 @@ open Tactic_type.Conversionals
  * Declarations.
  *************************************************************************)
 
+(*
+ * Types.
+ *)
+
 (* Integer type. *)
 declare tyInt
+
+(*
+ * Enumeration type.
+ * Represents a set of integers from 0 to ('num - 1).
+ * 'num should be a number.
+ *)
+declare tyEnum{ 'num }
 
 (*
  *  Function type.
@@ -26,13 +37,15 @@ declare tyFun{ 'ty_list; 'ty }
 
 (*
  * Union type.
- * normalUnion and exnUnion are union types.
+ * normalUnion : all the fields are known and ordered.
+ * exnUnion : not all the fields are known, nor are they ordered.
  * unionElt :
  *    'ty is a type.
  *    'bool is a mutable flag.
  * tyUnion :
  *    'union_ty is one of normalUnion and exnUnion.
  *    'elts is a list of unionElt lists.
+ *
  * This is intended to represent something like:
  *    type t =
  *       A of t11 * t12
@@ -65,15 +78,23 @@ declare block{ 'tag; 'args }
 
 (*
  * Boolean type.
- * tyBool is the type.  ftrue and ffalse represent true and false.
- * eq_fbool is for testing equality on booleans.
+ * tyBool is the type.
+ * ftrue and ffalse represent true and false.
+ * ftrueSet and fflaseSet are int_set versions of ftrue and ffalse for
+ * use in match expressions.
+ * eq_fbool is intended to test equality on booleans within MetaPRL
+ *    and isn't intended to model the FIR.
  *)
 define unfold_tyBool : tyBool <-->
    tyUnion{ normalUnion; cons{ nil; cons{ nil; nil } } }
 define unfold_ftrue : ftrue <--> block{ 1; nil }
 define unfold_ffalse : ffalse <--> block{ 0; nil }
-define unfold_eq_fbool : eq_fbool{ block{'a1; nil}; block{'a2; nil} } <-->
-   beq_int{ 'a1; 'a2 }
+(*define unfold_eq_fbool : eq_fbool{ block{'a1; nil}; block{'a2; nil} } <-->
+   beq_int{ 'a1; 'a2 }*)
+
+(*
+ * Normal values.
+ *)
 
 (*
  * Integer atom.
@@ -84,6 +105,5 @@ declare atomInt{ 'int }
 (*
  * Variable atom.
  * 'var is the variable itself.
- * 'ty is the type of the variable.
  *)
-declare atomVar{ 'var; 'ty }
+declare atomVar{ 'var }

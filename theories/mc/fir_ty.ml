@@ -2,8 +2,12 @@
  * Functional Intermediate Representation formalized in MetaPRL.
  * Brian Emre Aydemir, emre@its.caltech.edu
  *
- * Define the type system for the FIR.
+ * Define the type system in the FIR.
  * See fir_ty.mli for a description of the terms below.
+ *
+ * Todo:
+ *    - use the MetaPRL mechanisms for parentheses instead of just
+ *      hard coding them in the display forms.
  *)
 
 include Base_theory
@@ -15,8 +19,15 @@ open Tactic_type.Conversionals
  * Declarations.
  *************************************************************************)
 
+(*
+ * Types.
+ *)
+
 (* Integer type. *)
 declare tyInt
+
+(* Enumeration type. *)
+declare tyEnum{ 'num }
 
 (* Function type. *)
 declare tyFun{ 'ty_list; 'ty }
@@ -41,67 +52,78 @@ define unfold_tyBool : tyBool <-->
    tyUnion{ normalUnion; cons{ nil; cons{ nil; nil } } }
 define unfold_ftrue : ftrue <--> block{ 1; nil }
 define unfold_ffalse : ffalse <--> block{ 0; nil }
-define unfold_eq_fbool : eq_fbool{ block{'a1; nil}; block{'a2; nil} } <-->
-   beq_int{ 'a1; 'a2 }
+
+(*
+ * Normal values.
+ *)
 
 (* Integer atom. *)
 declare atomInt{ 'int }
 
 (* Variable atom. *)
-declare atomVar{ 'var; 'ty }
+declare atomVar{ 'var }
 
 (*************************************************************************
  * Display forms.
  *************************************************************************)
 
 (* Integer type. *)
-dform tyInt_df : tyInt = `"TyInt"
+dform tyInt_df : except_mode[src] :: tyInt = `"TyInt"
+
+(* Enumeration type. *)
+dform tyEnum_df : except_mode[src] :: tyEnum{ 'num } =
+   lzone `"TyEnum(0.." slot{'num} `")" ezone
 
 (* Function type. *)
-dform tyFun_df : tyFun{ 'ty_list; 'ty } =
+dform tyFun_df : except_mode[src] :: tyFun{ 'ty_list; 'ty } =
    szone `"TyFun" slot{'ty_list} `"->" slot{'ty} ezone
 
 (* Union type. *)
-dform normalUnion_df : normalUnion = `"NormalUnion"
-dform exnUnion_df : exnUnion = `"ExnUnion"
-dform unionElt_df : unionElt{ 'ty; 'bool } =
+dform normalUnion_df : except_mode[src] :: normalUnion = `"NormalUnion"
+dform exnUnion_df : except_mode[src] :: exnUnion = `"ExnUnion"
+dform unionElt_df : except_mode[src] :: unionElt{ 'ty; 'bool } =
    lzone `"(" slot{'ty} `" * " slot{'bool} ")" ezone
-dform tyUnion_df : tyUnion{ 'union_ty; 'elts } =
+dform tyUnion_df : except_mode[src] :: tyUnion{ 'union_ty; 'elts } =
    szone `"(TyUnion of " slot{'union_ty} `" * " slot{'elts} `")" ezone
 
 (* Array type. *)
-dform tyArray_df : tyArray{ 'ty } =
+dform tyArray_df : except_mode[src] :: tyArray{ 'ty } =
    lzone `"(TyArray of " slot{'ty} `")" ezone
 
 (* Subscripting. *)
-dform tySubscript_df : tySubscript{ 't1; 't2 } =
+dform tySubscript_df : except_mode[src] :: tySubscript{ 't1; 't2 } =
    lzone `"(TySubscript of " slot{'t1} `" * " slot{'t2} `")" ezone
 
 (* Blocks / memory. *)
-dform block_df : block{ 'tag; 'args } =
+dform block_df : except_mode[src] :: block{ 'tag; 'args } =
    lzone `"block{" slot{'tag} `"; " slot{'args} `"}" ezone
 
 (* Boolean type. *)
-dform tyBool_df : tyBool = `"TyBool"
-dform ftrue_df : ftrue = `"fTrue"
-dform ffalse_df : ffalse = `"fFalse"
-dform eq_fbool_df : eq_fbool{ 'a1; 'a2 } =
-   lzone `"(" slot{'a1} `"=" slot{'a2} `")" ezone
+dform tyBool_df : except_mode[src] :: tyBool = `"TyBool"
+dform ftrue_df : except_mode[src] :: ftrue = `"fTrue"
+dform ffalse_df : except_mode[src] :: ffalse = `"fFalse"
 
 (* Integer atom. *)
-dform atomInt_df : atomInt{ 'int } =
+dform atomInt_df : except_mode[src] :: atomInt{ 'int } =
    lzone `"(AtomInt of " slot{'int} `")" ezone
 
 (* Variable atom. *)
-dform atomVar_df : atomVar{ 'var; 'ty } =
-   lzone `"(AtomVar of " slot{'var} `", " slot{'ty} `")" ezone
+dform atomVar_df : except_mode[src] :: atomVar{ 'var } =
+   lzone `"(AtomVar of " slot{'var} `")" ezone
+
+(*************************************************************************
+ * Rewrites.
+ *************************************************************************)
+
+prim_rw reduce_atomInt : atomInt{ 'num } <--> 'num
 
 (*************************************************************************
  * Automation.
  *************************************************************************)
 
-let resource reduce +=
-   [<< tyBool >>, unfold_tyBool;
-    << ftrue >>,  unfold_ftrue;
-    << ffalse >>, unfold_ffalse;
-    << eq_fbool{ block{'a1; nil}; block{'a2; nil} } >>, unfold_eq_fbool]
+let resource reduce += [
+   << tyBool >>, unfold_tyBool;
+   << ftrue >>,  unfold_ftrue;
+   << ffalse >>, unfold_ffalse;
+   << atomInt{ 'num } >>, reduce_atomInt;
+]

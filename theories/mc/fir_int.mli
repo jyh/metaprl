@@ -2,7 +2,7 @@
  * Functional Intermediate Representation formalized in MetaPRL.
  * Brian Emre Aydemir, emre@its.caltech.edu
  *
- * Define and implement operations for ML ints.
+ * Define and implement operations for ints in the FIR.
  *)
 
 include Itt_theory
@@ -12,36 +12,29 @@ open Tactic_type.Conversionals
 
 (*************************************************************************
  * Declarations.
- *
- * These are operations on integers (2's complement internal
- * representation is assumed) -
- *    Unary operators:
- *       uminus - unary negation
- *       not - bit inversion
- *    Binary operators:
- *       plus, minus, mul, div, rem - standard arithmetic operations
- *       lsl, lsr - logical shift left / right (don't preserve sign)
- *       asr - arithmetic shift right (preserve sign)
- *       and, or, xor - standard bitwise operators
- *       eq, lt, le, gt, ge - comparison ( =, <, <=, >, >= )
- *       pow - exponentiation, assuming a non-negative exponent.
- *
- * NOTE: lsl, lsr, and asr all do arithmetic shifts right now.
- *       They also assume that the shift ammount is non-negative.
- *       They also dont' take into account the storage space
- *       available for that int. These should be fixed eventually.
- *       Also, div and rem don't seem to reduce properly, as of yet.
  *************************************************************************)
 
+(* Unary and bitwise negation. *)
 declare uminusIntOp
 declare notIntOp
 
+(* Standard binary arithmetic operators. *)
 declare plusIntOp
 declare minusIntOp
 declare mulIntOp
 declare divIntOp
 declare remIntOp
 
+(*
+ * Binary bitwise operators:
+ * and, or, xor
+ * logical shifts left/right
+ * arithmetic shift right
+ *
+ * The implementation of these will be completed once ints in the FIR
+ * are properly formalized.  Until then, only lsl, lsr, and asr will
+ * be implemented, and these three will all do arithmetic shifts.
+ *)
 declare lslIntOp
 declare lsrIntOp
 declare asrIntOp
@@ -49,11 +42,13 @@ declare andIntOp
 declare orIntOp
 declare xorIntOp
 
+(* Boolean comparisons. *)
 declare eqIntOp
 declare ltIntOp
 declare leIntOp
 declare gtIntOp
 declare geIntOp
 
-declare pow{ 'base; 'exp }
-topval unfold_pow : conv
+(* Exponentiation assuming a non-negative, integral exponent. *)
+define unfold_pow : pow{ 'base; 'exp } <-->
+   ind{ 'exp; i, j. 1; 1; i, j. "mul"{'base; 'j} }

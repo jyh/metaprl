@@ -57,7 +57,7 @@ struct
    let compare = compare
 end
 
-module StringSet = Splay_set.Make (StringOrd)
+module StringSet = Fun_splay_set.Make (StringOrd)
 
 (*
  * Keep a list of the hyps in exploded form.
@@ -536,6 +536,9 @@ let resolveT i p =
 let cycle_exn = RefineError ("proveT", StringError "cycle detected")
 let fail_exn = RefineError ("proveT", StringError "failed")
 
+let refine_count = ref 0
+let fail_count = ref 0
+
 let rec prove_auxT
     { tptp_goal_cache = goal_cache;
       tptp_goal = goal_info;
@@ -568,6 +571,7 @@ let rec prove_auxT
          let rec find_hyp i =
             if i = count then
                begin
+                  incr fail_count;
                   fail_cache := TptpCache.insert !fail_cache body;
                   raise fail_exn
                end
@@ -578,6 +582,7 @@ let rec prove_auxT
                   let subst, terms1, terms2 = unify_term_lists constants body hyp_info.tptp_body in
                   let goal_info = new_goal constants subst terms1 terms2 in
                   let goal = mk_goal goal_info in
+                     incr refine_count;
                      assert_new_goal level subst i goal (nextT goal_info), i + 1
                with
                   RefineError _ ->
@@ -613,7 +618,10 @@ let loopTestT p =
    done
 
 let testT p =
+   refine_count := 0;
+   fail_count := 0;
    Utils.time_it loopTestT p;
+   eprintf "Total refinements: %d\nFailed refinements: %d%t" !refine_count !fail_count eflush;
    idT p
 
 (*

@@ -45,6 +45,7 @@ open Itt_int_ext
 
 (* topval thenIfLabelPredT : (string -> bool) -> tactic -> tactic -> tactic *)
 topval thenLocalMT : tactic -> tactic -> tactic
+topval thenLocalMElseT : tactic -> tactic -> tactic -> tactic
 topval thenLocalAT : tactic -> tactic -> tactic
 topval onAllLocalMHypsT : (int -> tactic) -> tactic
 

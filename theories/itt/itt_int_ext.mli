@@ -217,6 +217,8 @@ rule mul_uni_Assoc :
    [wf] sequent [squash] { 'H >- 'b in int } -->
    sequent ['ext] { 'H >- ('a *@ (- 'b)) ~ ((- 'a) *@ 'b) }
 
+topval mul_uni_AssocC : conv
+
 rule lt_mulNegMono 'c :
    sequent [squash] { 'H >- 'c < 0 } -->
    [wf] sequent [squash] { 'H >- 'a in int } -->

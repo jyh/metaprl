@@ -86,7 +86,7 @@ let _ = show_loading "Loading Itt_int_ext%t"
 
    let emptyLabel=""
 
-   let thenIfLabelPredT pred tac1 tac2 p =
+   let thenIfLabelPredT pred tac1 tac2 tac3 p =
       let prefer l1 l2 =
          if l2=emptyLabel then l1
          else l2 in
@@ -94,16 +94,17 @@ let _ = show_loading "Loading Itt_int_ext%t"
       let restoreHiddenLabelT l p' =
          addHiddenLabelT (prefer l (Sequent.label p')) p'
       in
-      let ifLabelPredT pred tac1 tac2 p' =
+      let ifLabelPredT pred tac1' tac2' p' =
          (let lab=Sequent.label p' in
          if pred lab then
-            tac1
+            tac1'
          else
-            tac2) p'
+            tac2'
+         ) p'
       in
       (addHiddenLabelT emptyLabel thenT
       tac1 thenT
-      ifLabelPredT pred tac2 idT thenT
+      ifLabelPredT pred tac2 tac3 thenT
       restoreHiddenLabelT label) p
 
 (*
@@ -125,10 +126,25 @@ let _ = show_loading "Loading Itt_int_ext%t"
       (l=emptyLabel) or not (List.mem l main_labels)
 
    let thenLocalMT tac1 tac2 p =
-      thenIfLabelPredT isEmptyOrMainLabel tac1 tac2 p
+      thenIfLabelPredT isEmptyOrMainLabel tac1 tac2 idT p
+
+   let thenLocalMElseT tac1 tac2 tac3 p =
+      let tac2' p'=
+            begin
+               eprintf "\npositive:\n"; flush stderr;
+               print_term stdout (Sequent.goal p');
+               tac2 p'
+            end in
+      let tac3' p'=
+            begin
+               eprintf "\nnegative:\n"; flush stderr;
+               print_term stdout (Sequent.goal p');
+               tac3 p'
+            end in
+      thenIfLabelPredT isEmptyOrMainLabel tac1 tac2' tac3' p
 
    let thenLocalAT tac1 tac2 p =
-      thenIfLabelPredT isEmptyOrAuxLabel tac1 tac2 p
+      thenIfLabelPredT isEmptyOrAuxLabel tac1 tac2 idT p
 
    let onAllLocalMHypsT tac p =
       let rec aux i =
@@ -935,6 +951,7 @@ let findContradRelT p =
          begin
             eprintf "No contradiction found";
             prerr_endline "";
+            flush stderr;
             failT p
          end
 

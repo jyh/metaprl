@@ -4,6 +4,7 @@ extends Itt_list2
 extends Itt_ring_uce
 extends Itt_w
 
+open Lm_debug
 open Lm_symbol
 open Lm_printf
 open Refiner.Refiner
@@ -26,6 +27,52 @@ open Itt_record
 open Itt_list
 open Itt_ring2
 
+let debug_mpoly_eval =
+   create_debug (**)
+      { debug_name = "debug_mpoly_eval";
+        debug_description = "display mpoly_eval steps";
+        debug_value = false
+      }
+
+(*
+ * RESOURCES USED BY standardizeT
+ *)
+let extract_data tbl =
+   let rw e =
+      let t = env_term e in
+      let conv =
+         try
+            (* Find and apply the right tactic *)
+            if !debug_mpoly_eval then
+               Lm_printf.eprintf "Conversionals: lookup %a%t" debug_print t eflush;
+            Term_match_table.lookup tbl Term_match_table.select_all t
+         with
+            Not_found ->
+               raise (RefineError ("Conversionals.extract_data", StringTermError ("no reduction for", t)))
+      in
+         if !debug_mpoly_eval then
+            Lm_printf.eprintf "Conversionals: applying %a%t" debug_print t eflush;
+         conv
+   in
+      funC rw
+
+let process_mpoly_eval_resource_rw_annotation =
+   Rewrite.redex_and_conv_of_rw_annotation "mpoly_eval"
+
+(*
+ * Resource.
+ *)
+let resource (term * conv, conv) mpoly_eval =
+   Term_match_table.table_resource_info extract_data
+
+let mpoly_evalTopC_env e =
+   Sequent.get_resource_arg (env_arg e) get_mpoly_eval_resource
+
+let mpoly_evalTopC = funC mpoly_evalTopC_env
+
+let mpoly_evalC = repeatC (lowerC mpoly_evalTopC)
+(*******************************************************************)
+
 define unfold_monom : monom{'R; 'n} <--> 'R^car * (nat{'n} -> nat)
 define unfold_mpoly : mpoly{'R; 'n} <--> list{monom{'R; 'n}}
 
@@ -42,11 +89,15 @@ prim_rw reduce_add_mpolyCons : add_mpoly{cons{'m; 'p}; 'q}<--> add_mpoly{'p; con
 
 let reduce_add_mpolyC = sweepDnC reduce_add_mpolyCons thenC higherC reduce_add_mpolyNil thenC reduceC
 
+define unfold_fun_sum : fun_sum{'f1;'f2} <--> lambda{i_sum.(('f1 'i_sum) +@ ('f2 'i_sum))}
+
+interactive_rw reduce_fun_sum : (fun_sum{'f1;'f2} 'n) <--> (('f1 'n) +@ ('f2 'n))
+
 declare mul_monom{'m1; 'm2; 'R}
 
-prim_rw reduce_mul_monom : mul_monom{('k1, 'f1); ('k2, 'f2); 'R} <--> ('k1 *['R] 'k2, lambda{i.(('f1 'i) +@ ('f2 'i))})
+prim_rw reduce_mul_monom : mul_monom{('k1, 'f1); ('k2, 'f2); 'R} <--> ('k1 *['R] 'k2, fun_sum{'f1;'f2})
 
-define unfold_const_mpoly : const_mpoly{'c} <--> cons{('c, lambda{i.0}); nil}
+define unfold_const_mpoly : const_mpoly{'c} <--> cons{('c, lambda{i_zero.0}); nil}
 define unfold_zero_mpoly : zero_mpoly <--> nil
 
 define unfold_mul_monom_mpoly :
@@ -56,7 +107,7 @@ define unfold_mul_monom_mpoly :
 define unfold_mul_mpoly : mul_mpoly{'p; 'q; 'R} <-->
 	list_ind{'p; zero_mpoly; h,t,f.add_mpoly{mul_monom_mpoly{'h; 'q; 'R}; 'f}}
 
-define unfold_id_mpoly : id_mpoly{'R; 'n} <--> cons{('R^"1", lambda{i.if 'i=@'n then 1 else 0}); nil}
+define unfold_id_mpoly : id_mpoly{'R; 'n} <--> cons{('R^"1", lambda{i_id.if 'i_id=@'n then 1 else 0}); nil}
 
 declare eval_monomAux{'m; 'vals; 'i; 'R}
 
@@ -80,14 +131,14 @@ declare cmp_lexi{'m1; 'm2; 'n; 'cmp; 'eq}
 prim_rw reduce_cmp_lexi : cmp_lexi{('k1,'f1); ('k2,'f2); 'n; 'cmp; 'eq} <-->
 	ind{'n -@ 1;
 		'cmp ('f1 ('n -@ 1)) ('f2 ('n -@ 1));
-		i,f.(if 'eq ('f1 ('n -@ 'i -@ 1)) ('f2 ('n -@ 'i -@ 1))
+		i_cmp,f.(if 'eq ('f1 ('n -@ 'i_cmp -@ 1)) ('f2 ('n -@ 'i_cmp -@ 1))
 				then 'f
-				else 'cmp ('f1 ('n -@ 'i -@ 1)) ('f2 ('n -@ 'i -@ 1)))}
+				else 'cmp ('f1 ('n -@ 'i_cmp -@ 1)) ('f2 ('n -@ 'i_cmp -@ 1)))}
 
 declare eq_monom{'m1; 'm2; 'n}
 
 prim_rw reduce_eq_monom : eq_monom{('k1, 'f1); ('k2, 'f2); 'n} <-->
-	ind{'n -@ 1; ('f1 0) =@ ('f2 0); i,f.(if ('f1 'i) =@ ('f2 'i) then 'f else bfalse)}
+	ind{'n -@ 1; ('f1 0) =@ ('f2 0); i_eq,f.(if ('f1 'i_eq) =@ ('f2 'i_eq) then 'f else bfalse)}
 
 define unfold_inject : inject{'m; 'p; 'R; 'n} <-->
 	list_ind{'p; cons{'m;nil};
@@ -98,6 +149,75 @@ define unfold_inject : inject{'m; 'p; 'R; 'n} <-->
 
 define unfold_standardize : standardize{'p; 'R; 'n} <-->
 	list_ind{'p; nil; h,t,f.inject{'h; 'f; 'R; 'n}}
+
+interactive monom_wf {| intro [] |} :
+	sequent { <H> >- 'R^car Type } -->
+	sequent { <H> >- 'n in nat } -->
+	sequent { <H> >- monom{'R; 'n} Type }
+
+interactive mpoly_wf {| intro [] |} :
+	sequent { <H> >- 'R^car Type } -->
+	sequent { <H> >- 'n in nat } -->
+	sequent { <H> >- mpoly{'R; 'n} Type }
+
+interactive nil_in_mpoly {| intro [] |} :
+	sequent { <H> >- 'R^car Type } -->
+	sequent { <H> >- 'n in nat } -->
+	sequent { <H> >- nil in mpoly{'R; 'n} }
+
+interactive cons_in_mpoly {| intro [] |} :
+	sequent { <H> >- 'm in monom{'R; 'n} } -->
+	sequent { <H> >- 'p in mpoly{'R; 'n} } -->
+	sequent { <H> >- cons{'m;'p} in mpoly{'R; 'n} }
+
+interactive zero_mpoly_wf {| intro [] |} :
+	sequent { <H> >- 'R^car Type } -->
+	sequent { <H> >- 'n in nat } -->
+	sequent { <H> >- zero_mpoly in mpoly{'R; 'n} }
+
+interactive add_mpoly_wf {| intro [intro_typeinf <<'R>>] |} unitringCE[i:l] :
+	sequent { <H> >- 'p in mpoly{'R; 'n} } -->
+	sequent { <H> >- 'q in mpoly{'R; 'n} } -->
+	sequent { <H> >- 'R in unitringCE[i:l] } -->
+	sequent { <H> >- 'n in nat } -->
+	sequent { <H> >- add_mpoly{'p; 'q} in mpoly{'R; 'n} }
+
+interactive fun_sum_wf {| intro [] |} :
+	sequent { <H> >- 'f1 in nat -> nat } -->
+	sequent { <H> >- 'f2 in nat -> nat } -->
+	sequent { <H> >- fun_sum{'f1; 'f2} in nat -> nat }
+
+interactive mul_monom_wf {| intro [intro_typeinf <<'R>>] |} unitringCE[i:l] :
+	sequent { <H> >- 'm1 in monom{'R; 'n} } -->
+	sequent { <H> >- 'm2 in monom{'R; 'n} } -->
+	sequent { <H> >- 'R in unitringCE[i:l] } -->
+	sequent { <H> >- 'n in nat } -->
+	sequent { <H> >- mul_monom{'m1; 'm2; 'R} in monom{'R; 'n} }
+
+interactive mul_monom_mpoly_wf {| intro [intro_typeinf <<'R>>] |} unitringCE[i:l] :
+	sequent { <H> >- 'm in monom{'R; 'n} } -->
+	sequent { <H> >- 'p in mpoly{'R; 'n} } -->
+	sequent { <H> >- 'R in unitringCE[i:l] } -->
+	sequent { <H> >- 'n in nat } -->
+	sequent { <H> >- mul_monom_mpoly{'m; 'p; 'R} in mpoly{'R; 'n} }
+
+interactive mul_mpoly_wf {| intro [intro_typeinf <<'R>>] |} unitringCE[i:l] :
+	sequent { <H> >- 'p in mpoly{'R; 'n} } -->
+	sequent { <H> >- 'q in mpoly{'R; 'n} } -->
+	sequent { <H> >- 'R in unitringCE[i:l] } -->
+	sequent { <H> >- 'n in nat } -->
+	sequent { <H> >- mul_mpoly{'p; 'q; 'R} in mpoly{'R; 'n} }
+
+interactive const_mpoly_wf {| intro [] |} :
+	sequent { <H> >- 'c in 'R^car } -->
+	sequent { <H> >- 'n in nat } -->
+	sequent { <H> >- const_mpoly{'c} in mpoly{'R; 'n} }
+
+interactive id_mpoly_wf {| intro [] |} :
+	sequent { <H> >- 'i in nat{'n} } -->
+	sequent { <H> >- 'R^"1" in 'R^car } -->
+	sequent { <H> >- 'n in nat } -->
+	sequent { <H> >- id_mpoly{'i; 'R} in mpoly{'R; 'n} }
 
 interactive eval_standardizeIntro unitringCE[i:l] :
 	[wf] sequent{ <H> >- 'p in mpoly{'R; length{'vals}} } -->
@@ -277,10 +397,11 @@ interactive mpoly_of_Term_wf {| intro [intro_typeinf <<'R>>] |} unitringCE[i:l] 
 let resource reduce += [
 	<<mpoly{'R; number[i:n]}>>, (unfold_mpoly thenC (addrC [0] unfold_monom));
 	<<const_mpoly{'c}>>, (unfold_const_mpoly thenC reduceC);
-	<<eval_monom{('k,'f); 'vals; 'R}>>, reduce_eval_monomC;
+	<<eval_monom{('k,'f); 'vals; 'R}>>, (reduce_eval_monomC thenC reduceC);
 	<<eval_mpoly{'p; 'vals; 'R}>>, (unfold_eval_mpoly thenC reduceC);
 	<<add_mpoly{nil; 'q}>>, (reduce_add_mpolyNil thenC reduceC);
 	<<add_mpoly{cons{'m; 'p}; 'q}>>, (reduce_add_mpolyCons thenC reduceC);
+	<<fun_sum{'f1;'f2} 'n>>, (reduce_fun_sum thenC reduceC);
 	<<mul_monom{('k1,'f1); ('k2,'f2); 'R}>>, (reduce_mul_monom thenC reduceC);
 	<<mul_monom_mpoly{'m; 'p; 'R}>>, (unfold_mul_monom_mpoly thenC reduceC);
 	<<mul_mpoly{'p; 'q; 'R}>>, (unfold_mul_mpoly thenC reduceC);
@@ -304,8 +425,14 @@ let resource reduce += [
 	<<mpoly_ofTerm{constTerm{'c}; 'R}>>, (reduce_mpoly_ofTermConst thenC reduceC);
 	<<mpoly_ofTerm{varTerm{number[i:n]}; 'R}>>, (reduce_mpoly_ofTermVar thenC reduceC);
 (**)
-	<<field[t:t]{Z}>>, ((addrC [0] unfold_Z) thenC reduceTopC);
+	<<field[t:t]{Z}>>, ((addrC [0] unfold_Z) thenC reduceC);
+	<<'a +[Z] 'b>>, ((addrC [0;0;0] unfold_Z) thenC reduceC);
+	<<'a *[Z] 'b>>, ((addrC [0;0;0] unfold_Z) thenC reduceC);
 ]
+
+type var_set = term list
+
+let empty _ = []
 
 let add info t =
 	if List.exists (alpha_equal t) info then info
@@ -322,11 +449,28 @@ let rec find_item_aux f i = function
 
 let find_index info t = find_item_aux (alpha_equal t) 0 info
 
-let mk_intnum_term i = Itt_int_base.mk_number_term (Lm_num.num_of_int i)
+let rec vars_of_term info f t =
+	match explode_term t with
+		<<'a 'b>> ->
+			(match explode_term a with
+				<<'c 'd>> ->
+					let (f',fname) = dest_field c in
+					(* if alpha_equal f f' *)
+					if fname="*" then
+						let info' = vars_of_term info f d in
+						vars_of_term info' f b
+					else if fname="+" then
+						let info' = vars_of_term info f d in
+						vars_of_term info' f b
+					else
+						add info t
+			 | _ -> add info t
+			)
+	 | _ -> add info t
 
-let rec mk_list_of_list = function
-	h::t -> mk_cons_term h (mk_list_of_list t)
- | [] -> nil_term
+let var_list info = info
+
+let mk_intnum_term i = Itt_int_base.mk_number_term (Lm_num.num_of_int i)
 
 let mpoly_term = << mpoly{'F; 'nvars} >>
 let mpoly_opname = opname_of_term mpoly_term
@@ -409,22 +553,29 @@ let rec term2mpolyTerm f vars t =
 let rec proveVarTypesT f_car = function
 	[] -> idT
  | h::t ->
-		assertT (mk_equal_term f_car h h) thenMT
-		(rw (addrC [0] reduceC) (-1)) thenMT
+		assertT (mk_equal_term f_car h h) thenAT
+		(rw (addrC [0] reduceC) 0) thenMT
 		proveVarTypesT f_car t
+
+let assertEqT f f_car vars varlist t =
+	let t' = mk_eval_mpolyTerm_term (term2mpolyTerm f vars t) varlist f in
+	let eqt = mk_equal_term f_car t t' in
+	assertT eqt
+
+let standardizeT ft f f_car vars varlist t =
+	(assertEqT f f_car vars varlist t thenAT rw reduceC 0) thenMT
+	rw (addrC [2] mpolyTerm2mpoly) (-1) thenMT
+	eval_standardizeElim (-1) ft thenMT
+	rw (addrC [2] reduceC) (-1)
 
 let stdT ft f vars i = funT (fun p ->
 	let t = if i=0 then Sequent.concl p else Sequent.nth_hyp p i in
 	let f_car = mk_field_term f "car" in
+	let varlist = mk_list_of_list vars in
 	match explode_term t with
 		<<'a='b in 'T>> ->
-			let a' = mk_eval_mpolyTerm_term (term2mpolyTerm f vars a) (mk_list_of_list vars) f in
-			let eqt = mk_equal_term f_car a a' in
 			proveVarTypesT f_car vars thenMT
-			(assertT eqt thenAT rw reduceC 0) thenMT
-			rw (addrC [2] mpolyTerm2mpoly) (-1) thenMT
-			eval_standardizeElim (-1) ft thenMT
-			rw (addrC [2] reduceC) (-1) thenMT
+			standardizeT ft f f_car vars varlist a thenMT
 			hypSubstT (-1) i
 	 | _ -> failT
 )
@@ -500,8 +651,8 @@ interactive test13 :
 
 
 interactive test14 :
-	sequent { <H> >- 'x in Z^car } -->
-	sequent { <H> >- 'y in Z^car } -->
+	sequent { <H> >- 'x in int } -->
+	sequent { <H> >- 'y in int } -->
 	sequent { <H>;
 		'x +@ ('x *@ 'y) +@ 'y +@ 1 =
 		eval_mpolyTerm{
@@ -514,8 +665,8 @@ interactive test14 :
 	>- 'x +@ ('x *@ 'y) +@ 'y +@ 1 = 1 +@ ('y +@ ('x +@ ('x *@ 'y))) in Z^car }
 
 interactive test15 :
-	sequent { <H> >- 'x in Z^car } -->
-	sequent { <H> >- 'y in Z^car } -->
+	sequent { <H> >- 'x in int } -->
+	sequent { <H> >- 'y in int } -->
 	sequent { <H> >-
 		'x +[Z] ('x *[Z] 'y) +[Z] 'y +[Z] 1
 		= 1 +@ ('y +@ ('x +@ ('x *@ 'y))) in Z^car }

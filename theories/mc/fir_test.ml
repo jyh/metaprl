@@ -24,16 +24,15 @@ dform darb_df : darb = `"darb"
 
 (* Alloc tests. *)
 interactive alloc1 'H :
+   sequent ['ext] { 'H >- ref{0} } -->
    sequent ['ext] { 'H >-
-      prog{ cons{ pair{ 0; block{ 0; cons{1; nil}} }; nil }; ref{ 0} } } -->
-   sequent ['ext] { 'H >-
-      prog{ empty; letAlloc{ allocTuple{darb; cons{1; nil}}; v. 'v } } }
+      prog{ empty; letAlloc{ allocTuple{darb; cons{1; nil}}; v.
+         value{ 'v } } } }
 interactive alloc2 'H :
+   sequent ['ext] { 'H >- ref{0} } -->
    sequent ['ext] { 'H >-
-      prog{ cons{ pair{ 0; block{0; cons{2; cons{1; nil}}} }; nil };
-         ref{ 0} } } -->
-   sequent ['ext] { 'H >-
-      prog{empty; letAlloc{allocArray{darb; cons{2; cons{1; nil}}}; v. 'v}}}
+      prog{empty; letAlloc{allocArray{darb; cons{2; cons{1; nil}}}; v.
+         value{ 'v } }}}
 
 (* Subscripting tests. *)
 interactive sub1 'H :
@@ -54,7 +53,7 @@ interactive sub2 'H :
  *************************************************************************)
 
 interactive complex1 'H :
-   sequent ['ext] { 'H >- 512 } -->
+   sequent ['ext] { 'H >- 128 } -->
    sequent ['ext] { 'H >-
       prog{ empty;
          letAlloc{ allocArray{darb; cons{1;cons{2;cons{3;nil}}}}; a1.
@@ -62,7 +61,7 @@ interactive complex1 'H :
          letAlloc{ allocTuple{darb; cons{0;cons{9;cons{0;nil}}}}; a3.
          letAlloc{ allocTuple{darb; cons{8;cons{8;cons{8;nil}}}}; a4.
          setSubscript{ 'a1; 1; 20;
-         setSubscript{ 'a2; 0; 40;
+         setSubscript{ 'a2; 0; (-40);
          setSubscript{ 'a4; 2; 80;
          letSubscript{ 'a1; 1; v1.
          letSubscript{ 'a2; 0; v2.

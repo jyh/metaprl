@@ -3,9 +3,10 @@
  * Brian Emre Aydemir, emre@its.caltech.edu
  *
  * State operations for FIR programs.
- * I'll represent the state as an association list keyed
- *    on non-negative integers.  I also assume that in this association
- *    list, the only values are blocks.
+ * The state is a pair.  The 2nd component is a list of items in the state.
+ *    The 1st component is the length of the list, and also servers
+ *    as the next reference id to allocate.  Reference id's start
+ *    at zero and increase as you go toward the _beginning_ of the list.
  *)
 
 include Base_theory
@@ -15,13 +16,8 @@ include Itt_theory
  * Declarations.
  *************************************************************************)
 
-(*
- * Replace association list elements.
- * Replace the item in the association list 'l keyed by 'key
- *    (as determined by 'eq) with 'item.  Amounts to a fancy no-op
- *    if an keyed by 'key can't be found in the list.
- *)
-declare replace_nth_assoc{ 'eq; 'key; 'l; 'item }
+(* Triple. *)
+declare triple{ 'a; 'b; 'c }
 
 (*
  * Memory is allocated in blocks.
@@ -52,40 +48,36 @@ declare ref{ 'num }
  * Empty state.
  * The program state that contains nothing.
  *)
-define unfold_empty : empty <--> nil
+declare empty
 
 (*
  * Memory allocation.
- * Allocates a location in state for 'item_list.  Evaluates to a pair
- *    which is the new state and a reference to the location used.
+ * Allocates a location in state for 'item_list.  Evalutes to a triple:
+ *    length of the state after allocation;
+ *    modified state;
+ *    a reference to the allocated location.
+ * This triple should be given to "match" to obtain useful behavior.
  *)
 declare alloc{ 'state; 'tag; 'item_list }
 
 (*
  * Assignment.
  * Stores 'item in the 'index-th location of the block at 'ref in 'state.
- *    Evaluates to a pair which is the state and it.
+ *    Returns a triple as in alloc, but the value is it, not a ref, and
+ *    the state is not modified.
  *)
 declare store{ 'state; 'ref; 'index; 'item }
 
 (*
  * Value lookup.
- * Evaulates to a pair which is the state and the value at the 'index-th
- *    location in the block at 'ref.  The value will be it if the reference
- *    or index is invalid.
+ * Evaluates to a triple as in alloc, but the state is not modified,
+ *    and the value is the value retrieved.
  *)
 declare fetch{ 'state; 'ref; 'index }
 
 (*
- * Block lookup.
- * Return the block referred to by 'ref.
- *)
-declare fetch_block{ 'state; 'ref }
-
-(*
  * Match / spread.
- * Declared here for convinience (so I claim) in working with the above.
+ * Binds the triple (x,y,z) returned by alloc, store, and fetch
+ *    to a <- pair(x,y) and b <- z.
  *)
-define unfold_match :
-   "match"{ 'i; a, b. 'exp['a; 'b] } <-->
-   spread{ 'i; a, b. 'exp['a; 'b] }
+declare "match"{ 'i; a, b. 'exp['a; 'b] }

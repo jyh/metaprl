@@ -7,7 +7,7 @@
  * Notes:
  *
  * "Worlds" are a technique that we use for incremental chaining.
- * Inferences are relative to a collection of assumtions ("hypotheses")
+ * Inferences are relative to a collection of assumptions ("hypotheses")
  * that together form a "world."  When assumptions are added
  * in the course of refinement, new worlds are created, and when
  * the user backs out of a proof, either because it failed, or
@@ -78,6 +78,9 @@
  * postponement queue if their world is backed out.
  *
  * $Log$
+ * Revision 1.2  1998/04/08 14:57:37  jyh
+ * ImpDag is in mllib.
+ *
  * Revision 1.1  1997/04/28 15:52:42  jyh
  * This is the initial checkin of Nuprl-Light.
  * I am porting the editor, so it is not included
@@ -335,7 +338,7 @@ type 'a termTable = (term_template, 'a termEntry) Hashtbl.t
 type 'a bchainTable = (term_template, 'a goalnode list) Hashtbl.t
 
 (*
-  * The extract contains:
+ * The extract contains:
  * Static lookup tables:
  *    ext_ftable: A hashtable of the rules for forward chaining.
  *       The hashtable maps terms to antecedents of rules,
@@ -495,7 +498,7 @@ let world_of_inf { inf_info = info } =
     | Hyp { hyp_world = world } -> world
 
 (*
- * World namining.
+ * World naming.
  *)
 let name_of_world = function
    Hypothesis { world_hyp = { inf_name = name } } -> name
@@ -550,7 +553,7 @@ let eq_goal
 
 (*
  * Determine if a world is a prefix of another.
- * Usefule for looking up inferences.
+ * Useful for looking up inferences.
  *)
 let is_child child parent =
    let rec aux world =

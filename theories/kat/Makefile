@@ -15,7 +15,13 @@ MPFILES :=\
 	base_select \
 	kat_terms \
 	kat_axioms \
-	kat_test \
+	kat_ax \
+	kat_std \
+	kat_bool \
+	kat_star \
+	kat_hoare \
+	kat_denest \
+	kat_MSDriver \
 
 # Name of main libraris
 MAIN = theory

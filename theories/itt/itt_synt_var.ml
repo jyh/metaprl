@@ -64,16 +64,26 @@ define unfold_eq:
 doc "doc"{rewrites}
 
 prim_rw left_id {| reduce |} :
+   'left in nat -->
+   'right in nat -->
    left {var{'left; 'right}} <--> 'left
 
 prim_rw right_id {| reduce |} :
+   'left in nat -->
+   'right in nat -->
    right {var{'left; 'right}} <--> 'right
 
-interactive_rw depth_reduce {| reduce |} :  depth{var{'l;'r}} <--> 'l +@ 'r +@ 1
+interactive_rw depth_reduce {| reduce |} :
+   'l in nat -->
+   'r in nat -->
+   depth{var{'l;'r}} <--> 'l +@ 'r +@ 1
 
 interactive_rw eq_equal {| reduce |} :
+   'left_1 in nat -->
+   'left_2 in nat -->
+   'right_1 in nat -->
+   'right_2 in nat -->
    is_eq{var{'left_1; 'right_1};var{'left_2; 'right_2}} <--> ('left_1 =@ 'left_2)
-
 
 doc "doc"{rules}
 
@@ -167,3 +177,6 @@ interactive varSquiggle {| nth_hyp |} :
    sequent { <H> >- 'b1 ~ 'b2 }
 
 doc <:doc< @docoff >>
+
+dform vars_df : Var = `"Var"
+dform var_df : var{'l; 'r} = `"var(" slot{'l} `"," slot{'r} `")"

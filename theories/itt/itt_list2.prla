@@ -16088,7 +16088,7 @@ P	p8556	Number 29899
 O	o8556	location p8555 p8556
 T	t8556	o4184 b7978 b6567
 B	b8556	t8556
-P	p8557	String "assumT 2 thenT letAtT 2 <<'s='l in list{top}>> ttca"
+P	p8557	String "assumT 2 thenT letAtT 2 <<'s='l in list>> ttca"
 O	o8557	ext_rule p8557
 T	t8557	o2703 b6565 b736
 B	b8557	t8557

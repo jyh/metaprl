@@ -1,27 +1,33 @@
 Maintainer of this theory: Brian Emre Aydemir (emre@its.caltech.edu)
-Last update to this file: 16 December 2001
+Last update to this file: 21 December 2001
 
 This file lists what I have remaining to do to complete this theory,
 and some other miscellaneous notes to myself.
 
 Todo list:
 --------------------------------------------------------------------------
--  Improve display forms: they work, but they could look nicer
-   (Mc_set is done I think).
+-  Improve display forms: they work, but they could look nicer.
+   Specifically, fix Fir_exp and Fir_eval once I understand allocation,
+   unions, etc.
 -  Make a comprehensive test file: probably a bunch of sequents with
    a .prla file to store the proofs.  Useful as a check to see if I
-   break anything.
+   break anything.  Add this .prla file to the repository.
 -  Fir_deadcode: dead function paramater and dead function elimination
    would be quite nice to have.
 -  FIR modelling: I need a better understanding / implementation (e.g.
    Fir_eval), of such things as union, allocation, type construction, etc.
+   Once I have this, I can actually update Fir_eval to be complete...
+   I can also update the appropriate docs...
 -  Fir_eval: re-export .prla sometime to solve copy_proof errors.
 -  Mc_fir_connect_exp: fill in the missing functions (declared already).
-   I may wait on the debugging stuff, as it isn't completely
-   essential at this point.
 -  Mc_fir_connect*: Debugging runs, and lots of them, need to be performed.
 -  Fir_ty: rewrites into more managable terms will probably have to
    happen sometime.
+-  Fir_exp: debugging display forms, and term operations.
+-  Silly reformatting stuff... Done so far:
+   mc_set, mc_term_op, mc_theory, fir_eval, fir_ty, fir_exp
+   mc_fir_connect_base, mc_fir_connect_ty
+-  Still need a definite way of representing entire programs.
 
 
 Notes to myself (things to do, but only if I feel so inclined):

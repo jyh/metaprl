@@ -37,6 +37,7 @@ include Itt_int_ext
 
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
+open Top_conversionals
 
 (*************************************************************************
  * Declarations.
@@ -58,10 +59,12 @@ declare is_member{ 'num; 'set }
  *************************************************************************)
 
 (* Closed intervals. *)
+
 dform interval_df : except_mode[src] :: interval{ 'left; 'right }  =
    lzone `"[" slot{'left} `"," slot{'right} `"]" ezone
 
 (* int and rawint sets. *)
+
 dform int_set_df : except_mode[src] :: int_set{ 'intervals } =
    pushm[0] szone push_indent `"int_set(" hspace
    szone slot{'intervals} ezone popm hspace
@@ -75,6 +78,7 @@ dform rawint_set_df : except_mode[src] ::
    `")" ezone popm
 
 (* Membership tests. *)
+
 dform in_interval_df : except_mode[src] :: in_interval{'num; 'interval} =
    lzone slot{'num} Nuprl_font!member slot{'interval} ezone
 dform member_df : except_mode[src] :: is_member{ 'num; 'set } =
@@ -101,6 +105,14 @@ prim_rw reduce_is_member_rawint :
    list_ind{ 'intervals;
              bfalse;
              h, t, f. bor{ in_interval{ 'num; 'h }; 'f } }
+
+let reduce_is_member =
+   repeatC (firstC [
+      reduce_in_interval;
+      reduceTopC;
+      reduce_is_member_int;
+      reduce_is_member_rawint
+   ] )
 
 (*************************************************************************
  * Term operations.

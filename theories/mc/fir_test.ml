@@ -38,6 +38,8 @@ include Mc_theory
  * Mc_set
  *************************************************************************)
 
+(* Display tests. *)
+
 prim mc_set_1 'H :
    sequent ['ext] { 'H >- interval{ (-32); 21 } }
    = it
@@ -56,6 +58,8 @@ prim mc_set_3 'H :
       cons{ interval{2;3};
       cons{ interval{12;34}; nil }}}}}
    = it
+
+(* Membership tests. *)
 
 interactive mc_set_4 'H :
    sequent ['ext] { 'H >- bfalse } -->

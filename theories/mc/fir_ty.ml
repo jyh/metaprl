@@ -40,6 +40,7 @@ open Refiner.Refiner.TermOp
  *************************************************************************)
 
 (* Integer and floating point precision. *)
+
 declare int8
 declare int16
 declare int32
@@ -49,25 +50,31 @@ declare floatDouble
 declare floatLongDouble
 
 (* Integer type. *)
+
 declare tyInt
 
 (* Enumeration type. *)
+
 declare tyEnum{ 'num }
 
 (* Native data types. *)
+
 declare tyRawInt{ 'precision; 'sign }
 declare tyFloat{ 'precision }
 
 (* Function type. *)
+
 declare tyFun{ 'ty_list; 'ty }
 
 (* Tuples. *)
+
 declare tyUnion{ 'ty_var; 'ty_list; 'int_set }
 declare tyTuple{ 'ty_list }
 declare tyArray{ 'ty }
 declare tyRawData
 
 (* Polymorphism. *)
+
 declare tyVar{ 'ty_var }
 declare tyApply{ 'ty_var; 'ty_list }
 declare tyExists{ 'ty_var_list; 'ty }
@@ -75,21 +82,22 @@ declare tyAll{ 'ty_var_list; 'ty }
 declare tyProject{ 'ty_var; 'num }
 
 (* Delayed type. *)
+
 declare tyDelayed
 
-(* Opaque type. *)
-declare tyPtrTable
-
 (* Union tags. *)
+
 declare normalUnion
 declare exnUnion
 
 (* Defining types. *)
+
 declare unionElt{ 'ty; 'bool }
 declare tyDefUnion{ 'ty_var_list; 'union_ty; 'elts }
 declare tyDefLambda{ 'ty_var_list; 'ty }
 
 (* Boolean type. *)
+
 declare val_true
 declare val_false
 
@@ -98,6 +106,7 @@ declare val_false
  *************************************************************************)
 
 (* Integer and floating point precision. *)
+
 dform int8_df : except_mode[src] :: int8 = `"Int8"
 dform int16_df : except_mode[src] :: int16 = `"Int16"
 dform int32_df : except_mode[src] :: int32 = `"Int32"
@@ -107,69 +116,94 @@ dform floatDouble_df : except_mode[src] :: floatDouble = `"Double"
 dform floatLongDouble_df : except_mode[src] :: floatLongDouble = `"LongDouble"
 
 (* Integer type. *)
+
 dform tyInt_df : except_mode[src] :: tyInt = `"TyInt"
 
 (* Enumeration type. *)
+
 dform tyEnum_df : except_mode[src] :: tyEnum{ 'num } =
    lzone `"TyEnum(" slot{'num} `")" ezone
 
 (* Native data types. *)
+
 dform tyRawInt_df : except_mode[src] :: tyRawInt{ 'precision; 'sign } =
-   lzone `"TyRawInt(" slot{'precision} `", " slot{'sign} `")" ezone
+   lzone `"TyRawInt(" slot{'precision} `"," slot{'sign} `")" ezone
 dform tyFloat_df : except_mode[src] :: tyFloat{ 'precision } =
    lzone `"TyFloat(" slot{'precision} `")" ezone
 
 (* Function type. *)
+
 dform tyFun_df : except_mode[src] :: tyFun{ 'ty_list; 'ty } =
-   szone `"TyFun" `"(" slot{'ty_list} `" -> " slot{'ty} `")" ezone
+   pushm[0] szone push_indent `"TyFun(" hspace
+   szone slot{'ty_list} `"," hspace slot{'ty} `")" ezone popm
+   ezone popm
 
 (* Tuples. *)
+
 dform tyUnion_df : except_mode[src] ::
    tyUnion{ 'ty_var; 'ty_list; 'int_set } =
-   szone `"TyUnion(" slot{'ty_var} `", " slot{'ty_list}
-   `", " slot{'int_set} `")" ezone
+   pushm[0] szone push_indent `"TyUnion(" slot{'ty_var} `"," hspace
+   szone slot{'ty_list} `"," ezone popm
+   push_indent hspace
+   szone slot{'int_set} `")" ezone popm
+   ezone popm
 dform tyTuple_df : except_mode[src] :: tyTuple{ 'ty_list } =
-   lzone `"TyTuple(" slot{'ty_list} `")" ezone
+   pushm[0] szone push_indent `"TyTuple(" hspace
+   szone slot{'ty_list} `")" ezone popm
+   ezone popm
 dform tyArray_df : except_mode[src] :: tyArray{ 'ty } =
    lzone `"TyArray(" slot{'ty} `")" ezone
 dform tyRawData : except_mode[src] :: tyRawData =
    `"TyRawData"
 
 (* Polymorphism. *)
+
 dform tyVar_df : except_mode[src] :: tyVar{ 'ty_var } =
-   `"TyVar(" slot{'ty_var} `")"
+   lzone `"TyVar(" slot{'ty_var} `")" ezone
 dform tyApply_df : except_mode[src] :: tyApply{ 'ty_var; 'ty_list } =
-   `"TyApply(" slot{'ty_var} `", " slot{'ty_list} `")"
+   pushm[0] szone push_indent `"TyApply(" slot{'ty_var} `"," hspace
+   szone slot{'ty_list} ezone popm
+   ezone popm
 dform tyExists_df : except_mode[src] :: tyExists{ 'ty_var_list; 'ty } =
-   `"TyExists(" slot{'ty_var_list} `", " slot{'ty} `")"
+   pushm[0] szone push_indent `"TyExists(" hspace
+   szone slot{'ty_var_list} `"," hspace slot{'ty} `")" ezone popm
+   ezone popm
 dform tyAll_df : except_mode[src] :: tyAll{ 'ty_var_list; 'ty } =
-   `"TyAll(" slot{'ty_var_list} `", " slot{'ty} `")"
+   pushm[0] szone push_indent `"TyAll(" hspace
+   szone slot{'ty_var_list} `"," hspace slot{'ty} `")" ezone popm
+   ezone popm
 dform tyProject_df : except_mode[src] :: tyProject{ 'ty_var; 'num } =
-   `"TyProject(" slot{'ty_var} `", " slot{'num} `")"
+   lzone `"TyProject(" slot{'ty_var} `"," slot{'num} `")" ezone
 
 (* Delayed type. *)
+
 dform tyDelayed_df : except_mode[src] :: tyDelayed = `"TyDelayed"
 
-(* Opaque type. *)
-dform tyPtrTable_df : except_mode[src] :: tyPtrTable = `"TyPtrTable"
-
 (* Union tags. *)
+
 dform normalUnion_df : except_mode[src] :: normalUnion = `"NormalUnion"
 dform exnUnion_df : except_mode[src] :: exnUnion = `"ExnUnion"
 
 (* Defining types. *)
+
 dform unionElt_df : except_mode[src] :: unionElt{ 'ty; 'bool } =
-   lzone `"(" slot{'ty} `" * " slot{'bool} ")" ezone
+   lzone `"(" slot{'ty} `"," slot{'bool} ")" ezone
 dform tyDefUnion_df : except_mode[src] ::
    tyDefUnion{ 'ty_var_list; 'union_ty; 'elts } =
-   szone `"TyDefUnion(" slot{'ty_var_list} `", " slot{'union_ty}
-   `", " slot{'elts} `")" ezone
+   pushm[0] szone push_indent `"TyDefUnion(" slot{'union_ty} `"," hspace
+   szone slot{'ty_var_list} `"," ezone popm
+   push_indent hspace
+   szone slot{'elts} `")" ezone popm
+   ezone popm
 dform tyDefLambda_df : except_mode[src] :: tyDefLambda{ 'ty_var_list; 'ty } =
-   szone `"TyDefLambda(" slot{'ty_var_list} `", " slot{'ty} `")" ezone
+   pushm[0] szone push_indent `"TyDefLambda(" hspace
+   szone slot{'ty_var_list} `"," hspace slot{'ty} `")" ezone popm
+   ezone popm
 
 (* Boolean type. *)
-dform val_true_df : except_mode[src] :: val_true = `"val_true"
-dform val_false_df : except_mode[src] :: val_false = `"val_false"
+
+dform val_true_df : except_mode[src] :: val_true = `"true"
+dform val_false_df : except_mode[src] :: val_false = `"false"
 
 (*************************************************************************
  * Term operations.
@@ -318,14 +352,6 @@ let dest_tyProject_term = dest_dep0_dep0_term tyProject_opname
 let tyDelayed_term = << tyDelayed >>
 let tyDelayed_opname = opname_of_term tyDelayed_term
 let is_tyDelayed_term = is_no_subterms_term tyDelayed_opname
-
-(*
- * Opaque type.
- *)
-
-let tyPtrTable_term = << tyPtrTable >>
-let tyPtrTable_opname = opname_of_term tyPtrTable_term
-let is_tyPtrTable_term = is_no_subterms_term tyPtrTable_opname
 
 (*
  * Union tags.

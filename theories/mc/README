@@ -76,6 +76,8 @@ This module provides terms to represent the following FIR entities:
    -  items of type union_type
    -  items of type tydef
    -  boolean values true and false (not really FIR so much as OCaml values)
+Not all these terms are necessarily reasoned about; some are present
+for the sake of completeness.
 (And I need to put more information here concerning semantics eventually.)
 
 
@@ -87,7 +89,12 @@ This module provides terms to represent the following FIR entities:
    -  items of type subop
    -  items of type atom
    -  items of type alloc_op
+   -  items of type debug_line
+   -  items of type debug_vars
+   -  items of type debug_info
    -  items of type exp
+Not all these terms are necessarily reasoned about; some are present
+for the sake of completeness.
 (And I need to put more information here concerning semantics eventually.)
 
 

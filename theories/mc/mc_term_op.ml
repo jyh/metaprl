@@ -45,6 +45,7 @@ open Refiner.Refiner.RefineError
 (*
  * Turn a binding variable into a string.
  *)
+
 let string_of_binding_var t =
    match dest_term t with
       { term_op = _; term_terms = [bt1] } ->
@@ -63,12 +64,14 @@ let string_of_binding_var t =
 (*
  * Deconstruct a term into some convinient entities.
  *)
+
 let pre_dest_term t =
    ( opname_of_term t, subterm_arities t, subterms_of_term t )
 
 (*
  * Convinience to check arity and opname at the same time.
  *)
+
 let opname_arity_check opname_requested arities_requested opname arities =
    Opname.eq opname_requested opname && arities_requested = arities
 
@@ -176,7 +179,6 @@ let dest_5_dep0_1_dep1_term opname t =
          raise (RefineError ("dest_5_dep0_1_dep1_term", StringTermError
                ("invalid term structure", t)))
 
-
 (*************************************************************************
  * 7 subterms.
  *************************************************************************)
@@ -204,4 +206,3 @@ let dest_7_dep0_term opname t =
       else
          raise (RefineError ("dest_7_dep0_term", StringTermError
                ("invalid term structure", t)))
-

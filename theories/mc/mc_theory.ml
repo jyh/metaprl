@@ -30,11 +30,6 @@
  * Email:  emre@its.caltech.edu
  *)
 
-(* for tokens *)
-include Itt_atom
-include Itt_atom_bool
-
-(* main modules *)
 include Mc_set
 include Fir_ty
 include Fir_exp

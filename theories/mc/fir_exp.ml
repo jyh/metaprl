@@ -1,7 +1,7 @@
 (*
  * Functional Intermediate Representation formalized in MetaPRL.
  *
- * Define and implement the basic expression forms in the FIR.
+ * Define the basic expression forms in the FIR.
  *
  * ----------------------------------------------------------------
  *
@@ -45,20 +45,25 @@ open Refiner.Refiner.TermOp
  *)
 
 (* Identity (polymorphic). *)
+
 declare idOp
 
 (* Naml ints. *)
+
 declare uminusIntOp
 declare notIntOp
 
 (* Bit fields. *)
+
 declare rawBitFieldOp{ 'precision; 'sign; 'num1; 'num2 }
 
 (* Native ints. *)
+
 declare uminusRawIntOp{ 'precision; 'sign }
 declare notRawIntOp{ 'precision; 'sign }
 
 (* Floats. *)
+
 declare uminusFloatOp{ 'precision }
 declare absFloatOp{ 'precision }
 declare sinOp{ 'precision }
@@ -66,19 +71,23 @@ declare cosOp{ 'precision }
 declare sqrtOp{ 'precision }
 
 (* Coerce to int. *)
+
 declare intOfFloatOp{ 'precision }
 
 (* Coerce to float. *)
+
 declare floatOfIntOp{ 'precision }
 declare floatOfFloatOp{ 'prec1; 'prec2 }
 declare floatOfRawIntOp{ 'float_prec; 'int_prec; 'int_sign }
 
 (* Coerce to rawint. *)
+
 declare rawIntOfEnumOp{ 'precision; 'sign; 'num }
 declare rawIntOfFloatOp{ 'int_prec; 'int_sign; 'float_prec }
 declare rawIntOfRawIntOp{ 'dest_prec; 'dest_sign; 'src_prec; 'src_sign }
 
 (* Integer/pointer coercions. *)
+
 declare rawIntOfPointerOp{ 'precision; 'sign }
 declare pointerOfRawIntOp{ 'precision; 'sign }
 
@@ -87,10 +96,12 @@ declare pointerOfRawIntOp{ 'precision; 'sign }
  *)
 
 (* Enums. *)
+
 declare andEnumOp{ 'num }
 declare orEnumOp{ 'num }
 
 (* Naml ints. *)
+
 declare plusIntOp
 declare minusIntOp
 declare mulIntOp
@@ -114,6 +125,7 @@ declare geIntOp
 declare cmpIntOp
 
 (* Native ints. *)
+
 declare plusRawIntOp{ 'precision; 'sign }
 declare minusRawIntOp{ 'precision; 'sign }
 declare mulRawIntOp{ 'precision; 'sign }
@@ -138,6 +150,7 @@ declare geRawIntOp{ 'precision; 'sign }
 declare cmpRawIntOp{ 'precision; 'sign }
 
 (* Floats. *)
+
 declare plusFloatOp{ 'precision }
 declare minusFloatOp{ 'precision }
 declare mulFloatOp{ 'precision }
@@ -157,12 +170,14 @@ declare cmpFloatOp{ 'precision }
 declare atan2Op{ 'precision }
 
 (* Pointer equality. *)
+
 declare eqEqOp
 declare neqEqOp
 
 (*
  * Subscript operators.
  *)
+
 declare blockPolySub
 declare blockRawIntSub{ 'precision; 'sign }
 declare blockFloatSub{ 'precision }
@@ -174,6 +189,7 @@ declare rawFunctionSub
 (*
  * Allocation operators.
  *)
+
 declare allocTuple{ 'ty; 'atom_list }
 declare allocArray{ 'ty; 'atom_list }
 declare allocUnion{ 'ty; 'ty_var; 'num; 'atom_list }
@@ -182,6 +198,7 @@ declare allocMalloc{ 'atom }
 (*
  * Normal values.
  *)
+
 declare atomInt{ 'int }
 declare atomEnum{ 'bound; 'num }
 declare atomRawInt{ 'precision; 'sign; 'num }
@@ -190,29 +207,47 @@ declare atomConst{ 'ty; 'ty_var; 'num }
 declare atomVar{ 'var }
 
 (*
+ * Debugging info.
+ *)
+
+declare debugLine{ 'string; 'int }
+declare debugVarItem{ 'var1; 'ty; 'var2 }
+declare debugVars{ 'debugVarItem_list }
+declare debugString{ 'string }
+declare debugContext{ 'debug_line; 'debug_vars }
+
+(*
  * Expressions.
  *)
 
 (* Primitive operations. *)
+
 declare letUnop{ 'op; 'ty; 'a1; v. 'exp['v] }
 declare letBinop{ 'op; 'ty; 'a1; 'a2; v. 'exp['v] }
 
 (* Function application. *)
+
 declare letExt{ 'ty; 'string; 'ty_of_str; 'atom_list; v. 'exp['v] }
 declare tailCall{ 'var; 'atom_list }
 
 (* Control. *)
+
 declare matchCase{ 'set; 'exp }
 declare "match"{ 'key; 'cases }
 
 (* Allocation. *)
+
 declare letAlloc{ 'alloc_op; v. 'exp['v] }
 
 (* Subscripting. *)
+
 declare letSubscript{ 'subop; 'ty; 'var; 'index; v. 'exp['v] }
 declare setSubscript{ 'subop; 'ty; 'var; 'index; 'new_val; v. 'exp['v] }
 declare memcpy{ 'subop; 'var1; 'atom1; 'var2; 'atom2; 'len; 'exp }
 
+(* Debugging. *)
+
+declare debugExp{ 'debug_info; 'exp }
 
 (*************************************************************************
  * Display forms.
@@ -223,95 +258,106 @@ declare memcpy{ 'subop; 'var1; 'atom1; 'var2; 'atom2; 'len; 'exp }
  *)
 
 (* Identity (polymorphic). *)
+
 dform idOp_df : except_mode[src] :: idOp = `"id"
 
 (* Naml ints. *)
+
 dform uminusIntOp_df : except_mode[src] :: uminusIntOp = `"-"
 dform notIntOp_df : except_mode[src] :: notIntOp = `"~"
 
 (* Bit fields. *)
+
 dform rawBitFieldOp_df : except_mode[src] ::
    rawBitFieldOp{ 'precision; 'sign; 'num1; 'num2 } =
-   `"RawBitFieldOp(" slot{'precision} `", " slot{'sign} `", "
-   slot{'num1} `", " slot{'num2} `")"
+   lzone `"RawBitFieldOp(" slot{'precision} `"," slot{'sign} `","
+   slot{'num1} `"," slot{'num2} `")" ezone
 
 (* Native ints. *)
+
 dform uminusRawIntOp_df : except_mode[src] ::
    uminusRawIntOp{ 'precision; 'sign } =
-   `"UminusRawIntOp(" slot{'precision} `", " slot{'sign} `")"
+   lzone `"(-," slot{'precision} `"," slot{'sign} `")" ezone
 dform notRawIntOp_df : except_mode[src] ::
    notRawIntOp{ 'precision; 'sign } =
-   `"NotRawIntOp(" slot{'precision} `", " slot{'sign} `")"
+   lzone `"(~," slot{'precision} `"," slot{'sign} `")" ezone
 
 (* Floats. *)
+
 dform uminusFloatOp_df : except_mode[src] :: uminusFloatOp{ 'precision } =
-   `"UminusFloatOp(" slot{'precision} `")"
+   lzone `"(-," slot{'precision} `")" ezone
 dform absFloatOp_df : except_mode[src] :: absFloatOp{ 'precision } =
-   `"AbsFloatOp(" slot{'precision} `")"
+   lzone `"(abs," slot{'precision} `")" ezone
 dform sinOp_df : except_mode[src] :: sinOp{ 'precision } =
-   `"sinOp(" slot{'precision} `")"
+   lzone `"(sin," slot{'precision} `")" ezone
 dform cosOp_df : except_mode[src] :: cosOp{ 'precision } =
-   `"cosOp(" slot{'precision} `")"
+   lzone `"(cos," slot{'precision} `")" ezone
 dform sqrtOp_df : except_mode[src] :: sqrtOp{ 'precision } =
-   `"sqrtOp(" slot{'precision} `")"
+   lzone `"(sqrt," slot{'precision} `")" ezone
 
 (* Coerce to int. *)
+
 dform intOfFloatOp_df : except_mode[src] :: intOfFloatOp{ 'precision } =
    `"IntOfFloatOp(" slot{'precision} `")"
 
 (* Coerce to float. *)
+
 dform floatOfIntOp_df : except_mode[src] ::
    floatOfIntOp{ 'precision } =
-   `"FloatOfIntOp(" slot{'precision} `")"
+   lzone `"FloatOfIntOp(" slot{'precision} `")" ezone
 dform floatOfFLoatOp_df : except_mode[src] ::
    floatOfFloatOp{ 'prec1; 'prec2 } =
-   `"FloatOfFloatOp(" slot{'prec1} `", " slot{'prec2} `")"
+   lzone `"FloatOfFloatOp(" slot{'prec1} `"," slot{'prec2} `")" ezone
 dform floatOfRawIntOp_df : except_mode[src] ::
    floatOfRawIntOp{ 'float_prec; 'int_prec; 'int_sign } =
-   `"FloatOfRawIntOp(" slot{'float_prec} `", " slot{'int_prec}
-   `", " slot{'int_sign} `")"
+   lzone `"FloatOfRawIntOp(" slot{'float_prec} `"," slot{'int_prec}
+   `"," slot{'int_sign} `")" ezone
 
 (* Coerce to rawint. *)
+
 dform rawIntOfEnumOp_df : except_mode[src] ::
    rawIntOfEnumOp{ 'precision; 'sign; 'num } =
-   `"RawIntOfEnumOp(" slot{'precision} `", " slot{'sign}
-   `", " slot{'num} `")"
+   lzone `"RawIntOfEnumOp(" slot{'precision} `","
+   slot{'sign} `"," slot{'num} `")" ezone
 dform rawIntOfFloatOp_df : except_mode[src] ::
    rawIntOfFloatOp{ 'int_prec; 'int_sign; 'float_prec } =
-   `"RawIntOfFloatOp(" slot{'int_prec} `", " slot{'int_sign}
-   `", " slot{'float_prec} `")"
+   lzone `"RawIntOfFloatOp(" slot{'int_prec} `"," slot{'int_sign}
+   `"," slot{'float_prec} `")" ezone
 dform rawIntOfRawIntOp_df : except_mode[src] ::
    rawIntOfRawIntOp{ 'dest_prec; 'dest_sign; 'src_prec; 'src_sign } =
-   `"RawIntOfRawIntOp(" slot{'dest_prec} `", " slot{'dest_sign}
-   `", " slot{'src_prec} `", " slot{'src_sign} `")"
+   lzone `"RawIntOfRawIntOp(" slot{'dest_prec} `"," slot{'dest_sign}
+   `"," slot{'src_prec} `"," slot{'src_sign} `")" ezone
 
 (* Integer/pointer coercions. *)
+
 dform rawIntOfPointerOp_df : except_mode[src] ::
    rawIntOfPointerOp{ 'precision; 'sign } =
-   `"RawIntOfPointerOp(" slot{'precision} `", " slot{'sign} `")"
+   lzone `"RawIntOfPointerOp(" slot{'precision} `"," slot{'sign} `")" ezone
 dform pointerOfRawIntOp_df : except_mode[src] ::
    pointerOfRawIntOp{ 'precision; 'sign } =
-   `"PointerOfRawIntOp(" slot{'precision} `", " slot{'sign} `")"
+   lzone `"PointerOfRawIntOp(" slot{'precision} `"," slot{'sign} `")" ezone
 
 (*
  * Binary operations.
  *)
 
 (* Enums. *)
+
 dform andEnumOp_df : except_mode[src] :: andEnumOp{ 'num } =
-   `"AndEnumOp(" slot{'num} `")"
+   lzone `"AndEnumOp(" slot{'num} `")" ezone
 dform orEnumOp_df : except_mode[src] :: orEnumOp{ 'num } =
-   `"OrEnumOp(" slot{'num} `")"
+   lzone `"OrEnumOp(" slot{'num} `")" ezone
 
 (* Naml ints. *)
+
 dform plusIntOp_df : except_mode[src] :: plusIntOp = `"+"
 dform minusIntOp_df : except_mode[src] :: minusIntOp = `"-"
 dform mulIntOp_df : except_mode[src] :: mulIntOp = `"*"
 dform divIntOp_df : except_mode[src] :: divIntOp = Nuprl_font!"div"
-dform remIntOp_df : except_mode[src] :: remIntOp = `"rem"
+dform remIntOp_df : except_mode[src] :: remIntOp = `"%"
 dform lslIntOp_df : except_mode[src] :: lslIntOp = `"<<"
 dform lsrIntOp_df : except_mode[src] :: lsrIntOp = `">>"
-dform asrIntOp_df : except_mode[src] :: asrIntOp = `">>"
+dform asrIntOp_df : except_mode[src] :: asrIntOp = `">>(arith)"
 dform andIntOp_df : except_mode[src] :: andIntOp = `"&"
 dform orIntOp_df  : except_mode[src] :: orIntOp  = `"|"
 dform xorIntOp_df : except_mode[src] :: xorIntOp = `"^"
@@ -327,121 +373,126 @@ dform geIntOp_df : except_mode[src] :: geIntOp = Nuprl_font!ge
 dform cmpIntOp_df : except_mode[src] :: cmpIntOp = `"cmp"
 
 (* Native ints. *)
+
 dform plusRawIntOp_df : except_mode[src] ::
    plusRawIntOp{ 'precision; 'sign } =
-   `"PlusRawIntOp(" slot{'precision} `", " slot{'sign} `")"
+   lzone `"(+," slot{'precision} `"," slot{'sign} `")" ezone
 dform minusRawIntOp_df : except_mode[src] ::
    minusRawIntOp{ 'precision; 'sign } =
-   `"MinusRawIntOp(" slot{'precision} `", " slot{'sign} `")"
+   lzone `"(-," slot{'precision} `"," slot{'sign} `")" ezone
 dform mulRawIntOp_df : except_mode[src] ::
    mulRawIntOp{ 'precision; 'sign } =
-   `"MulRawIntOp(" slot{'precision} `", " slot{'sign} `")"
+   lzone `"(*," slot{'precision} `"," slot{'sign} `")" ezone
 dform divRawIntOp_df : except_mode[src] ::
    divRawIntOp{ 'precision; 'sign } =
-   `"DivRawIntOp(" slot{'precision} `", " slot{'sign} `")"
+   lzone `"(" Nuprl_font!"div" `"," slot{'precision}
+   `"," slot{'sign} `")" ezone
 dform remRawIntOp_df : except_mode[src] ::
    remRawIntOp{ 'precision; 'sign } =
-   `"RemRawIntOp(" slot{'precision} `", " slot{'sign} `")"
+   lzone `"(%," slot{'precision} `"," slot{'sign} `")" ezone
 dform slRawIntOp_df : except_mode[src] ::
    slRawIntOp{ 'precision; 'sign } =
-   `"SlRawIntOp(" slot{'precision} `", " slot{'sign} `")"
+   lzone `"(<<," slot{'precision} `"," slot{'sign} `")" ezone
 dform srRawIntOp_df : except_mode[src] ::
    srRawIntOp{ 'precision; 'sign } =
-   `"SrRawIntOp(" slot{'precision} `", " slot{'sign} `")"
+   lzone `"(>>," slot{'precision} `"," slot{'sign} `")" ezone
 dform andRawIntOp_df : except_mode[src] ::
    andRawIntOp{ 'precision; 'sign } =
-   `"AndRawIntOp(" slot{'precision} `", " slot{'sign} `")"
+   lzone `"(&," slot{'precision} `"," slot{'sign} `")" ezone
 dform orRawIntOp_df : except_mode[src] ::
    orRawIntOp{ 'precision; 'sign } =
-   `"OrRawIntOp(" slot{'precision} `", " slot{'sign} `")"
+   lzone `"(|," slot{'precision} `"," slot{'sign} `")" ezone
 dform xorRawIntOp_df : except_mode[src] ::
    xorRawIntOp{ 'precision; 'sign } =
-   `"XorRawIntOp(" slot{'precision} `", " slot{'sign} `")"
+   lzone `"(^," slot{'precision} `"," slot{'sign} `")" ezone
 dform maxRawIntOp_df : except_mode[src] ::
    maxRawIntOp{ 'precision; 'sign } =
-   `"MaxRawIntOp(" slot{'precision} `", " slot{'sign} `")"
+   lzone `"(max," slot{'precision} `"," slot{'sign} `")" ezone
 dform minRawIntOp_df : except_mode[src] ::
    minRawIntOp{ 'precision; 'sign } =
-   `"MinRawIntOp(" slot{'precision} `", " slot{'sign} `")"
+   lzone `"(min," slot{'precision} `"," slot{'sign} `")" ezone
 
 dform rawSetBitFieldOp_df : except_mode[src] ::
    rawSetBitFieldOp{ 'precision; 'sign; 'num1; 'num2 } =
-   `"RawSetBitFieldOp(" slot{'precision} `", " slot{'sign}
-   `", " slot{'num1} `", " slot{'num2} `")"
+   lzone `"RawSetBitFieldOp(" slot{'precision} `", " slot{'sign}
+   `", " slot{'num1} `", " slot{'num2} `")" ezone
 
 dform eqRawIntOp_df : except_mode[src] ::
    eqRawIntOp{ 'precision; 'sign } =
-   `"EqRawIntOp(" slot{'precision} `", " slot{'sign} `")"
+   lzone `"(=," slot{'precision} `"," slot{'sign} `")" ezone
 dform neqRawIntOp_df : except_mode[src] ::
    neqRawIntOp{ 'precision; 'sign } =
-   `"NeqRawIntOp(" slot{'precision} `", " slot{'sign} `")"
+   lzone `"(!=," slot{'precision} `"," slot{'sign} `")" ezone
 dform ltRawIntOp_df : except_mode[src] ::
    ltRawIntOp{ 'precision; 'sign } =
-   `"LtRawIntOp(" slot{'precision} `", " slot{'sign} `")"
+   lzone `"(<," slot{'precision} `"," slot{'sign} `")" ezone
 dform leRawIntOp_df : except_mode[src] ::
    leRawIntOp{ 'precision; 'sign } =
-   `"LeRawIntOp(" slot{'precision} `", " slot{'sign} `")"
+   lzone `"(" Nuprl_font!le `"," slot{'precision} `"," slot{'sign} `")" ezone
 dform gtRawIntOp_df : except_mode[src] ::
    gtRawIntOp{ 'precision; 'sign } =
-   `"GtRawIntOp(" slot{'precision} `", " slot{'sign} `")"
+   lzone `"(>," slot{'precision} `"," slot{'sign} `")" ezone
 dform geRawIntOp_df : except_mode[src] ::
    geRawIntOp{ 'precision; 'sign } =
-   `"GeRawIntOp(" slot{'precision} `", " slot{'sign} `")"
+   lzone `"(" Nuprl_font!ge `"," slot{'precision} `"," slot{'sign} `")" ezone
 dform cmpRawIntOp_df : except_mode[src] ::
    cmpRawIntOp{ 'precision; 'sign } =
-   `"CmpRawIntOp(" slot{'precision} `", " slot{'sign} `")"
+   lzone `"(cmp," slot{'precision} `"," slot{'sign} `")" ezone
 
 (* Floats. *)
+
 dform plusFloatOp_df : except_mode[src] :: plusFloatOp{ 'precision } =
-   `"PlusFloatOp(" slot{'precision} `")"
+   lzone `"(+," slot{'precision} `")" ezone
 dform minusFloatOp_df : except_mode[src] :: minusFloatOp{ 'precision } =
-   `"MinusFloatOp(" slot{'precision} `")"
+   lzone `"(-," slot{'precision} `")" ezone
 dform mulFloatOp_df : except_mode[src] :: mulFloatOp{ 'precision } =
-   `"MulFloatOp(" slot{'precision} `")"
+   lzone `"(*," slot{'precision} `")" ezone
 dform divFloatOp_df : except_mode[src] :: divFloatOp{ 'precision } =
-   `"DivFloatOp(" slot{'precision} `")"
+   lzone `"(" Nuprl_font!"div" `"," slot{'precision} `")" ezone
 dform remFloatOp_df : except_mode[src] :: remFloatOp{ 'precision } =
-   `"RemFloatOp(" slot{'precision} `")"
+   lzone `"(%," slot{'precision} `")" ezone
 dform maxFloatOp_df : except_mode[src] :: maxFloatOp{ 'precision } =
-   `"MaxFloatOp(" slot{'precision} `")"
+   lzone `"(max," slot{'precision} `")" ezone
 dform minFloatOp_df : except_mode[src] :: minFloatOp{ 'precision } =
-   `"MinFloatOp(" slot{'precision} `")"
+   lzone `"(min," slot{'precision} `")" ezone
 
 dform eqFloatOp_df : except_mode[src] :: eqFloatOp{ 'precision } =
-   `"EqFloatOp(" slot{'precision} `")"
+   lzone `"(=," slot{'precision} `")" ezone
 dform neqFloatOp_df : except_mode[src] :: neqFloatOp{ 'precision } =
-   `"NeqFloatOp(" slot{'precision} `")"
+   lzone `"(!=," slot{'precision} `")" ezone
 dform ltFloatOp_df : except_mode[src] :: ltFloatOp{ 'precision } =
-   `"LtFloatOp(" slot{'precision} `")"
+   lzone `"(<," slot{'precision} `")" ezone
 dform leFloatOp_df : except_mode[src] :: leFloatOp{ 'precision } =
-   `"LeFloatOp(" slot{'precision} `")"
+   lzone `"(" Nuprl_font!le `"," slot{'precision} `")" ezone
 dform gtFloatOp_df : except_mode[src] :: gtFloatOp{ 'precision } =
-   `"GtFloatOp(" slot{'precision} `")"
+   lzone `"(>," slot{'precision} `")" ezone
 dform geFloatOp_df : except_mode[src] :: geFloatOp{ 'precision } =
-   `"GeFloatOp(" slot{'precision} `")"
+   lzone `"(" Nuprl_font!ge `"," slot{'precision} `")" ezone
 dform cmpFloatOp_df : except_mode[src] :: cmpFloatOp{ 'precision } =
-   `"CmpFloatOp(" slot{'precision} `")"
+   lzone `"(cmp," slot{'precision} `")" ezone
 
 dform atan2Op_df : except_mode[src] :: atan2Op{ 'precision } =
-   `"atan2Op(" slot{'precision} `")"
+   lzone `"(atan2Op," slot{'precision} `")" ezone
 
 (* Pointer equality. *)
+
 dform eqEqOp_df : except_mode[src] :: eqEqOp = `"EqEqOp"
 dform neqEqOp_df : except_mode[src] :: neqEqOp = `"NeqEqOp"
 
 (*
  * Subscript operators.
  *)
+
 dform blockPolySub_df : except_mode[src] :: blockPolySub =
    `"BlockPolySub"
 dform blockRawIntSub_df : except_mode[src] :: blockRawIntSub{ 'p; 's } =
-   `"BlockRawIntSub(" slot{'p} `", " slot{'s} `")"
+   lzone `"BlockRawIntSub(" slot{'p} `"," slot{'s} `")" ezone
 dform blockFloatSub_df : except_mode[src] :: blockFloatSub{ 'precision } =
-   `"BlockFloatSub(" slot{'precision} `")"
+   lzone `"BlockFloatSub(" slot{'precision} `")" ezone
 dform rawRawIntSub_df : except_mode[src] :: rawRawIntSub{ 'p; 's } =
-   `"RawRawIntSub(" slot{'p} `", " slot{'s} `")"
+   lzone `"RawRawIntSub(" slot{'p} `"," slot{'s} `")" ezone
 dform rawFloatSub_df : except_mode[src] :: rawFloatSub{ 'precision } =
-   `"RawFloatSub(" slot{'precision} `")"
+   lzone `"RawFloatSub(" slot{'precision} `")" ezone
 dform rawDataSub_df : except_mode[src] :: rawDataSub =
    `"RawDataSub"
 dform rawFunctionSub : except_mode[src] :: rawFunctionSub =
@@ -450,24 +501,33 @@ dform rawFunctionSub : except_mode[src] :: rawFunctionSub =
 (*
  * Allocation operators.
  *)
+
 dform allocTuple_df : except_mode[src] :: allocTuple{ 'ty; 'atom_list } =
-   szone `"AllocTuple(" slot{'ty} `", " slot{'atom_list} `")" ezone
+   pushm[0] szone push_indent `"AllocTuple(" slot{'ty} `"," hspace
+   szone slot{'atom_list} ezone popm
+   ezone popm
 dform allocArray_df : except_mode[src] :: allocArray{ 'ty; 'atom_list } =
-   szone `"AllocArray(" slot{'ty} `", " slot{'atom_list} `")" ezone
+   pushm[0] szone push_indent `"AllocArray(" slot{'ty} `"," hspace
+   szone slot{'atom_list} ezone popm
+   ezone popm
 dform allocUnion_df : except_mode[src] ::
    allocUnion{ 'ty; 'ty_var; 'num; 'atom_list } =
-   szone `"AllocUnion(" slot{'ty} `", " slot{'ty_var} `", "
-   slot{'num} `", " slot{'atom_list } `")" ezone
+   pushm[0] szone push_indent `"AllocUnion(" hspace
+   szone slot{'ty} `"," slot{'ty_var} `"," slot{'num} `"," ezone popm
+   push_indent hspace
+   szone slot{'atom_list} ezone popm
+   ezone popm
 dform allocMalloc_df : except_mode[src] :: allocMalloc{ 'atom } =
-   `"AllocMalloc(" slot{'atom} `")"
+   lzone `"AllocMalloc(" slot{'atom} `")" ezone
 
 (*
  * Normal values.
  *)
+
 dform atomInt_df : except_mode[src] :: atomInt{ 'int } =
    lzone `"AtomInt(" slot{'int} `")" ezone
 dform atomEnum_df : except_mode[src] :: atomEnum{ 'bound; 'num } =
-   lzone `"AtomEnum(" slot{'bound} `", " slot{'num} `")" ezone
+   lzone `"AtomEnum(" slot{'bound} `"," slot{'num} `")" ezone
 dform atomRawInt_df : except_mode[src] ::
    atomRawInt{ 'precision; 'sign; 'num } =
    lzone `"AtomRawInt(" slot{'precision} `", "
@@ -481,48 +541,73 @@ dform atomVar_df : except_mode[src] :: atomVar{ 'var } =
    szone `"AtomVar(" slot{'var} `")" ezone
 
 (*
+ * Debugging info.
+ *)
+
+dform debugLine_df : except_mode[src] :: debugLine{ 'string; 'int } =
+   lzone `"DebugLine(" slot{'string} `"," slot{'int} `")" ezone
+dform debugVarItem_df : except_mode[src] :: debugVarItem{ 'var1; 'ty; 'var2 } =
+   lzone `"(" slot{'var1} `"," slot{'ty} `"," slot{'var2} `")" ezone
+dform debugVars_df : except_mode[src] :: debugVars{ 'debugVarItem_list } =
+   pushm[0] szone push_indent `"DebugVars(" hspace
+   szone slot{'debugVarItem_list} `")" ezone popm
+   ezone popm
+dform debugString_df : except_mode[src] :: debugString{ 'string } =
+   lzone `"DebugString(" slot{'string} `")" ezone
+dform debugContext : except_mode[src] ::
+   debugContext{ 'debug_line; 'debug_vars } =
+   pushm[0] szone push_indent `"DebugContext(" hspace
+   szone slot{'debug_line} `"," ezone popm
+   push_indent hspace
+   szone slot{'debug_vars} `")" ezone popm
+   ezone popm
+
+(*
  * Expressions.
  *)
 
 (* Primitive operations. *)
+
 dform letUnop_df : except_mode[src] ::
    letUnop{ 'op; 'ty; 'a1; v. 'exp } =
    pushm[0] szone push_indent `"let " slot{'v} `":" slot{'ty} `" =" hspace
-   lzone slot{'op} `"(" slot{'a1} `")" ezone popm hspace
-   push_indent `"in" hspace
-   szone slot{'exp} ezone popm
+   lzone slot{'op} `"(" slot{'a1} `") in" ezone popm hspace
+   szone slot{'exp} ezone
    ezone popm
 dform letBinop_df : except_mode[src] ::
    letBinop{ 'op; 'ty; 'a1; 'a2; v. 'exp } =
    pushm[0] szone push_indent `"let " slot{'v} `":" slot{'ty} `" =" hspace
-   lzone `"(" slot{'a1} `" " slot{'op} `" " slot{'a2} `")" ezone popm hspace
-   push_indent `"in" hspace
-   szone slot{'exp} ezone popm
+   lzone `"(" slot{'a1} `" " slot{'op} `" " slot{'a2} `") in" ezone popm hspace
+   szone slot{'exp} ezone
    ezone popm
 
 (* Function application. *)
+
 dform letExt_df : except_mode[src] ::
    letExt{ 'ty; 'string; 'ty_of_str; 'atom_list; v. 'exp } =
    pushm[0] szone push_indent `"let " slot{'v} `":" slot{'ty} `" =" hspace
-   szone slot{'string} `":" slot{'ty_of_str}
+   szone slot{'string} `":" slot{'ty_of_str} hspace
    `"(" slot{'atom_list} `")" ezone popm
    ezone popm
 dform tailCall_df : except_mode[src] :: tailCall{ 'var; 'atom_list } =
-   szone `"TailCall(" slot{'var} `", " slot{'atom_list} `")" ezone
+   pushm[0] szone push_indent `"TailCall(" slot{'var} `"," hspace
+   szone slot{'atom_list} `")" ezone popm
+   ezone popm
 
 (* Control. *)
+
 dform matchCase_df : except_mode[src] :: matchCase{ 'set; 'exp } =
    pushm[0] szone push_indent slot{'set} `" ->" hspace
    szone slot{'exp} ezone popm
    ezone popm
 dform match_df : except_mode[src] :: "match"{ 'key; 'cases } =
    pushm[0] szone push_indent `"match" hspace
-   szone slot{'key} ezone popm hspace
-   push_indent `"in" hspace
-   szone slot{'cases} ezone popm
+   szone slot{'key} `"in" ezone popm hspace
+   szone slot{'cases} ezone
    ezone popm
 
 (* Allocation. *)
+
 dform letAlloc_df : except_mode[src] ::
    letAlloc{ 'alloc_op; v. 'exp } =
    pushm[0] szone push_indent `"let " slot{'v} `" =" hspace
@@ -532,6 +617,7 @@ dform letAlloc_df : except_mode[src] ::
    ezone popm
 
 (* Subscripting. *)
+
 dform letSubscript_df : except_mode[src] ::
    letSubscript{ 'subop; 'ty; 'ref; 'index; v. 'exp } =
    pushm[0] szone push_indent `"let " slot{'v} `":" slot{'ty} `" =" hspace
@@ -552,6 +638,14 @@ dform memcpy_df : except_mode[src] ::
    slot{'var2} `"[" slot{'atom2} `"], " slot{'len} `")" hspace
    `"with subop " slot{'subop} hspace
    slot{'exp} ezone
+
+(* Debugging. *)
+
+dform debugExp_dform : except_mode[src] :: debugExp{ 'debug_info; 'exp } =
+   pushm[0] szone push_indent `"DebugExp:" hspace
+   szone slot{'debug_info} ezone popm
+   szone slot{'exp} ezone
+   ezone popm
 
 (*************************************************************************
  * Term operations.
@@ -1129,6 +1223,40 @@ let is_atomVar_term = is_dep0_term atomVar_opname
 let mk_atomVar_term = mk_dep0_term atomVar_opname
 let dest_atomVar_term = dest_dep0_term atomVar_opname
 
+(*****************
+ * Debugging info.
+ *****************)
+
+let debugLine_term = << debugLine{ 'string; 'int } >>
+let debugLine_opname = opname_of_term debugLine_term
+let is_debugLine_term = is_dep0_dep0_term debugLine_opname
+let mk_debugLine_term = mk_dep0_dep0_term debugLine_opname
+let dest_debugLine_term = dest_dep0_dep0_term debugLine_opname
+
+let debugVarItem_term = << debugVarItem{ 'var1; 'ty; 'var2 } >>
+let debugVarItem_opname = opname_of_term debugVarItem_term
+let is_debugVarItem_term = is_dep0_dep0_dep0_term debugVarItem_opname
+let mk_debugVarItem_term = mk_dep0_dep0_dep0_term debugVarItem_opname
+let dest_debugVarItem_term = dest_dep0_dep0_dep0_term debugVarItem_opname
+
+let debugVars_term = << debugVars{ 'debugVarItem_list } >>
+let debugVars_opname = opname_of_term debugVars_term
+let is_debugVars_term = is_dep0_term debugVars_opname
+let mk_debugVars_term = mk_dep0_term debugVars_opname
+let dest_debugVars_term = dest_dep0_term debugVars_opname
+
+let debugString_term = << debugString{ 'string } >>
+let debugString_opname = opname_of_term debugString_term
+let is_debugString_term = is_dep0_term debugString_opname
+let mk_debugString_term = mk_dep0_term debugString_opname
+let dest_debugString_term = dest_dep0_term debugString_opname
+
+let debugContext_term = << debugContext{ 'debug_line; 'debug_vars } >>
+let debugContext_opname = opname_of_term debugContext_term
+let is_debugContext_term = is_dep0_dep0_term debugContext_opname
+let mk_debugContext_term = mk_dep0_dep0_term debugContext_opname
+let dest_debugContext_term = dest_dep0_dep0_term debugContext_opname
+
 (**************
  * Expressions.
  **************)
@@ -1196,3 +1324,9 @@ let memcpy_opname = opname_of_term memcpy_term
 let is_memcpy_term = is_7_dep0_term memcpy_opname
 let mk_memcpy_term = mk_7_dep0_term memcpy_opname
 let dest_memcpy_term = dest_7_dep0_term memcpy_opname
+
+let debugExp_term = << debugExp{ 'debug_info; 'exp } >>
+let debugExp_opname = opname_of_term debugExp_term
+let is_debugExp_term = is_dep0_dep0_term debugExp_opname
+let mk_debugExp_term = mk_dep0_dep0_term debugExp_opname
+let dest_debugExp_term = dest_dep0_dep0_term debugExp_opname

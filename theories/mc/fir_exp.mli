@@ -1,7 +1,7 @@
 (*
  * Functional Intermediate Representation formalized in MetaPRL.
  *
- * Define and implement the basic expression forms in the FIR.
+ * Define the basic expression forms in the FIR.
  *
  * ----------------------------------------------------------------
  *
@@ -43,20 +43,25 @@ open Refiner.Refiner.Term
  *)
 
 (* Identity (polymorphic). *)
+
 declare idOp
 
 (* Naml ints. *)
+
 declare uminusIntOp
 declare notIntOp
 
 (* Bit fields. *)
+
 declare rawBitFieldOp{ 'precision; 'sign; 'num1; 'num2 }
 
 (* Native ints. *)
+
 declare uminusRawIntOp{ 'precision; 'sign }
 declare notRawIntOp{ 'precision; 'sign }
 
 (* Floats. *)
+
 declare uminusFloatOp{ 'precision }
 declare absFloatOp{ 'precision }
 declare sinOp{ 'precision }
@@ -64,19 +69,23 @@ declare cosOp{ 'precision }
 declare sqrtOp{ 'precision }
 
 (* Coerce to int. *)
+
 declare intOfFloatOp{ 'precision }
 
 (* Coerce to float. *)
+
 declare floatOfIntOp{ 'precision }
 declare floatOfFloatOp{ 'prec1; 'prec2 }
 declare floatOfRawIntOp{ 'float_prec; 'int_prec; 'int_sign }
 
 (* Coerce to rawint. *)
+
 declare rawIntOfEnumOp{ 'precision; 'sign; 'num }
 declare rawIntOfFloatOp{ 'int_prec; 'int_sign; 'float_prec }
 declare rawIntOfRawIntOp{ 'dest_prec; 'dest_sign; 'src_prec; 'src_sign }
 
 (* Integer/pointer coercions. *)
+
 declare rawIntOfPointerOp{ 'precision; 'sign }
 declare pointerOfRawIntOp{ 'precision; 'sign }
 
@@ -85,10 +94,12 @@ declare pointerOfRawIntOp{ 'precision; 'sign }
  *)
 
 (* Enums. *)
+
 declare andEnumOp{ 'num }
 declare orEnumOp{ 'num }
 
 (* Naml ints. *)
+
 declare plusIntOp
 declare minusIntOp
 declare mulIntOp
@@ -112,6 +123,7 @@ declare geIntOp
 declare cmpIntOp
 
 (* Native ints. *)
+
 declare plusRawIntOp{ 'precision; 'sign }
 declare minusRawIntOp{ 'precision; 'sign }
 declare mulRawIntOp{ 'precision; 'sign }
@@ -136,6 +148,7 @@ declare geRawIntOp{ 'precision; 'sign }
 declare cmpRawIntOp{ 'precision; 'sign }
 
 (* Floats. *)
+
 declare plusFloatOp{ 'precision }
 declare minusFloatOp{ 'precision }
 declare mulFloatOp{ 'precision }
@@ -155,12 +168,14 @@ declare cmpFloatOp{ 'precision }
 declare atan2Op{ 'precision }
 
 (* Pointer equality. *)
+
 declare eqEqOp
 declare neqEqOp
 
 (*
  * Subscript operators.
  *)
+
 declare blockPolySub
 declare blockRawIntSub{ 'precision; 'sign }
 declare blockFloatSub{ 'precision }
@@ -172,6 +187,7 @@ declare rawFunctionSub
 (*
  * Allocation operators.
  *)
+
 declare allocTuple{ 'ty; 'atom_list }
 declare allocArray{ 'ty; 'atom_list }
 declare allocUnion{ 'ty; 'ty_var; 'num; 'atom_list }
@@ -180,6 +196,7 @@ declare allocMalloc{ 'atom }
 (*
  * Normal values.
  *)
+
 declare atomInt{ 'int }
 declare atomEnum{ 'bound; 'num }
 declare atomRawInt{ 'precision; 'sign; 'num }
@@ -188,14 +205,26 @@ declare atomConst{ 'ty; 'ty_var; 'num }
 declare atomVar{ 'var }
 
 (*
+ * Debugging info.
+ *)
+
+declare debugLine{ 'string; 'int }
+declare debugVarItem{ 'var1; 'ty; 'var2 }
+declare debugVars{ 'debugVarItem_list }
+declare debugString{ 'string }
+declare debugContext{ 'debug_line; 'debug_vars }
+
+(*
  * Expressions.
  *)
 
 (* Primitive operations. *)
+
 declare letUnop{ 'op; 'ty; 'a1; v. 'exp['v] }
 declare letBinop{ 'op; 'ty; 'a1; 'a2; v. 'exp['v] }
 
 (* Function application. *)
+
 declare letExt{ 'ty; 'string; 'ty_of_str; 'atom_list; v. 'exp['v] }
 declare tailCall{ 'var; 'atom_list }
 
@@ -205,19 +234,26 @@ declare tailCall{ 'var; 'atom_list }
  * A match statement has a 'key (a number/int or block), and a list
  * of matchCases.
  *)
+
 declare matchCase{ 'set; 'exp }
 declare "match"{ 'key; 'cases }
 
 (* Allocation. *)
+
 declare letAlloc{ 'alloc_op; v. 'exp['v] }
 
 (*
  * Subscripting.
  * In setSubscript, we bind the updated value to v in 'exp.
  *)
+
 declare letSubscript{ 'subop; 'ty; 'var; 'index; v. 'exp['v] }
 declare setSubscript{ 'subop; 'ty; 'var; 'index; 'new_val; v. 'exp['v] }
 declare memcpy{ 'subop; 'var1; 'atom1; 'var2; 'atom2; 'len; 'exp }
+
+(* Debugging. *)
+
+declare debugExp{ 'debug_info; 'exp }
 
 (*************************************************************************
  * Term operations.
@@ -700,6 +736,35 @@ val is_atomVar_term : term -> bool
 val mk_atomVar_term : term -> term
 val dest_atomVar_term : term -> term
 
+(*****************
+ * Debugging info.
+ *****************)
+
+val debugLine_term : term
+val is_debugLine_term : term -> bool
+val mk_debugLine_term : term -> term -> term
+val dest_debugLine_term : term -> term * term
+
+val debugVarItem_term : term
+val is_debugVarItem_term : term -> bool
+val mk_debugVarItem_term : term -> term -> term -> term
+val dest_debugVarItem_term : term -> term * term * term
+
+val debugVars_term : term
+val is_debugVars_term : term -> bool
+val mk_debugVars_term : term -> term
+val dest_debugVars_term : term -> term
+
+val debugString_term : term
+val is_debugString_term : term -> bool
+val mk_debugString_term : term -> term
+val dest_debugString_term : term -> term
+
+val debugContext_term : term
+val is_debugContext_term : term -> bool
+val mk_debugContext_term : term -> term -> term
+val dest_debugContext_term : term -> term * term
+
 (**************
  * Expressions.
  **************)
@@ -757,3 +822,8 @@ val is_memcpy_term : term -> bool
 val mk_memcpy_term :
    term -> term -> term -> term -> term -> term -> term -> term
 val dest_memcpy_term : term -> term * term * term * term * term * term * term
+
+val debugExp_term : term
+val is_debugExp_term : term -> bool
+val mk_debugExp_term : term -> term -> term
+val dest_debugExp_term : term -> term * term

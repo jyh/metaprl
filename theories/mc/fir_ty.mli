@@ -43,6 +43,7 @@ open Refiner.Refiner.Term
  * The floating point precision terms are here for completeness.
  *    It'll be a while before we do any work with floating point numbers.
  *)
+
 declare int8
 declare int16
 declare int32
@@ -52,12 +53,14 @@ declare floatDouble
 declare floatLongDouble
 
 (* Integer type. *)
+
 declare tyInt
 
 (*
  * Enumeration type.
  * Represents a set of integers from 0 to ('num - 1).
  *)
+
 declare tyEnum{ 'num }
 
 (*
@@ -66,6 +69,7 @@ declare tyEnum{ 'num }
  * 'sign should be val_true or val_false if this is, respectively,
  *    a signed or unsigned integral type.
  *)
+
 declare tyRawInt{ 'precision; 'sign }
 declare tyFloat{ 'precision }
 
@@ -74,6 +78,7 @@ declare tyFloat{ 'precision }
  * 'ty_list is a list of the types of the function's arguments.
  * 'ty is the type of the return value of the function.
  *)
+
 declare tyFun{ 'ty_list; 'ty }
 
 (*
@@ -81,12 +86,14 @@ declare tyFun{ 'ty_list; 'ty }
  * 'ty_list in tyTuple is a list of the types in the tuple.
  * 'ty in tyArray is the type of the elements in the array.
  *)
+
 declare tyUnion{ 'ty_var; 'ty_list; 'int_set }
 declare tyTuple{ 'ty_list }
 declare tyArray{ 'ty }
 declare tyRawData
 
 (* Polymorphism. *)
+
 declare tyVar{ 'ty_var }
 declare tyApply{ 'ty_var; 'ty_list }
 declare tyExists{ 'ty_var_list; 'ty }
@@ -97,23 +104,20 @@ declare tyProject{ 'ty_var; 'num }
  * Delayed type.
  * Type should be inferred later.
  *)
-declare tyDelayed
 
-(*
- * Opaque type.
- * Used for rollbacks.
- *)
-declare tyPtrTable
+declare tyDelayed
 
 (*
  * Union tags.
  * normalUnion : all the fields are known and ordered.
  * exnUnion : not all the fields are known, nor are they ordered.
  *)
+
 declare normalUnion
 declare exnUnion
 
 (* Defining types. *)
+
 declare unionElt{ 'ty; 'bool }
 declare tyDefUnion{ 'ty_var_list; 'union_ty; 'elts }
 declare tyDefLambda{ 'ty_var_list; 'ty }
@@ -250,13 +254,6 @@ val dest_tyProject_term : term -> term * term
 
 val tyDelayed_term : term
 val is_tyDelayed_term : term -> bool
-
-(*
- * Opaque type.
- *)
-
-val tyPtrTable_term : term
-val is_tyPtrTable_term : term -> bool
 
 (*
  * Union tags.

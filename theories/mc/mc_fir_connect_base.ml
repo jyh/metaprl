@@ -44,6 +44,7 @@ open Fir
 open Mp_num
 open Refiner.Refiner.Term
 open Refiner.Refiner.RefineError
+open Itt_atom
 open Itt_int_base
 open Itt_list
 open Mc_set
@@ -131,6 +132,22 @@ let bool_of_term t =
    else
       raise (RefineError ("term_of_bool", StringTermError
             ("not a bool", t)))
+
+(*************************************************************************
+ * Convert to and from string values.
+ *************************************************************************)
+
+(* Construct/deconstruct token terms, essentially. *)
+
+let term_of_string str =
+   mk_token_term str
+
+let string_of_term t =
+   if is_token_term t then
+      dest_token t
+   else
+      raise (RefineError ("string_of_term", StringTermError
+            ("not a string (token term)", t)))
 
 (*************************************************************************
  * Convert to and from int_precision, int_signed, and float_precision.

@@ -46,6 +46,7 @@ open Tactic_type.Conversionals
  * Closed intervals.
  * 'left and 'right should be "sensible" left and right bounds.
  *)
+
 declare interval{ 'left; 'right }
 
 (*
@@ -53,14 +54,16 @@ declare interval{ 'left; 'right }
  * They're both comprised of a list (e.g. << cons{...} >>) of intervals.
  * The rawint_set also has to keep track of precision and signing.
  *)
+
 declare int_set{ 'intervals }
 declare rawint_set{ 'precision; 'sign; 'intervals }
 
 (*
  * Membership tests.
- * These evaluate to btrue or bfalse.
+ * These evaluate to btrue or bfalse (see rewrites below).
  * is_member reduces for both int_set and rawint_set.
  *)
+
 declare in_interval{ 'num; 'interval }
 declare is_member{ 'num; 'set }
 
@@ -71,6 +74,7 @@ declare is_member{ 'num; 'set }
 topval reduce_in_interval : conv
 topval reduce_is_member_int : conv
 topval reduce_is_member_rawint: conv
+topval reduce_is_member : conv
 
 (*************************************************************************
  * Term operations.

@@ -85,6 +85,7 @@ declare binop_exp{ 'op; 'ty; 'a1; 'a2 }
  *************************************************************************)
 
 (* Modular arithmetic for integers. *)
+
 dform naml_prec_df : except_mode[src] :: naml_prec =
    `"naml_prec"
 dform pow_df : except_mode[src] :: pow{ 'base; 'exp } =
@@ -101,12 +102,14 @@ dform _mod_arith_unsigned_df : except_mode[src] ::
    `"mod_arith_unsigned(" slot{'precision} `", " slot{'num} `")"
 
 (* Boolean type *)
+
 dform true_set_df : except_mode[src] :: true_set = `"true_set"
 dform false_set_df : except_mode[src] :: false_set = `"false_set"
 dform atomEnum_eq_df : except_mode[src] :: atomEnum_eq{ 'a; 'b } =
    `"AtomEnum_Eq(" slot{'a} `", " slot{'b} `")"
 
 (* Functions. *)
+
 dform lambda_df1 : except_mode[src] :: lambda{ x. 'f } =
    `"(" Nuprl_font!lambda slot{'x} `"." slot{'f} `")"
 dform lambda_df0 : except_mode[src] :: lambda{ 'f } =
@@ -119,6 +122,7 @@ dform fix_df : except_mode[src] :: fix{ f. 'b } =
    ezone popm
 
 (* Expressions. *)
+
 dform unop_exp_df : except_mode[src] :: unop_exp{ 'op; 'ty; 'a1 } =
    slot{'op} `"(" slot{'a1} `"):" slot{'ty}
 dform binop_exp_df : except_mode[src] :: binop_exp{ 'op; 'ty; 'a1; 'a2 } =
@@ -213,6 +217,7 @@ prim_rw reduce_tyVar : tyVar{ 'ty_var } <--> 'ty_var
  **************)
 
 (* Identity (polymorphic). *)
+
 prim_rw reduce_idOp : unop_exp{ idOp; 'ty; 'a1 } <--> 'a1
 
 (*
@@ -222,12 +227,14 @@ prim_rw reduce_idOp : unop_exp{ idOp; 'ty; 'a1 } <--> 'a1
  *    but I don't see a compelling reason to do this as it
  *    just complicates evaluation.
  *)
+
 prim_rw reduce_atomInt : atomInt{ 'num } <--> 'num
 prim_rw reduce_atomEnum : atomEnum{ 'bound; 'num } <--> 'num
 prim_rw reduce_atomRawInt : atomRawInt{ 'p; 's; 'num } <--> 'num
 prim_rw reduce_atomVar : atomVar{ 'var } <--> 'var
 
 (* Primitive operations. *)
+
 prim_rw reduce_letUnop :
    letUnop{ 'op; 'ty; 'a1; v. 'exp['v] } <-->
    'exp[ unop_exp{ 'op; 'ty; 'a1 } ]
@@ -241,11 +248,13 @@ prim_rw reduce_letBinop :
  * has a side-effect that we don't need to worry about here.
  * If that's not true... uh-oh.
  *)
+
 prim_rw reduce_letExt :
    letExt{ 'ty; 'string; 'ty_of_str; 'atom_list; v. 'exp['v] } <-->
    'exp[it]
 
 (* Allocation. *)
+
 prim_rw reduce_allocTuple :
    letAlloc{ allocTuple{ 'ty; 'atom_list }; v. 'exp['v] } <-->
    'exp['atom_list]
@@ -257,6 +266,7 @@ prim_rw reduce_allocArray :
  * Subscripting.
  * For evaluation purposes, 'subop is completely ignored.
  *)
+
 prim_rw reduce_letSubscript :
    letSubscript{ 'subop; 'ty; 'var; 'index; v. 'exp['v] } <-->
    'exp[ nth{ 'var; 'index } ]
@@ -269,6 +279,7 @@ prim_rw reduce_setSubscript :
  ****************)
 
 (* Unary and bitwise negation. *)
+
 prim_rw reduce_uminusIntOp :
    unop_exp{ uminusIntOp; tyInt; 'a1 } <-->
    "minus"{'a1}
@@ -277,6 +288,7 @@ prim_rw reduce_uminusIntOp :
  * Standard binary arithmetic operators.
  * We rely on base_meta and friends to stop div and rem by zero.
  *)
+
 prim_rw reduce_plusIntOp :
    binop_exp{ plusIntOp; tyInt; 'a1; 'a2 } <-->
    atomInt{ mod_arith{ naml_prec; val_true; ('a1 +@ 'a2) } }
@@ -294,6 +306,7 @@ prim_rw reduce_remIntOp :
    atomInt{ mod_arith{ naml_prec; val_true; ('a1 %@ 'a2) } }
 
 (* Max / min. *)
+
 prim_rw reduce_maxIntOp :
    binop_exp{ maxIntOp; tyInt; 'a1; 'a2 } <-->
    atomInt{ ifthenelse{ lt_bool{'a1; 'a2}; 'a2; 'a1 } }
@@ -302,6 +315,7 @@ prim_rw reduce_minIntOp :
    atomInt{ ifthenelse{ lt_bool{'a1; 'a2}; 'a1; 'a2 } }
 
 (* Boolean comparisons. *)
+
 prim_rw reduce_eqIntOp :
    binop_exp{ eqIntOp; tyEnum{ 2 }; 'a1; 'a2 } <-->
    ifthenelse{ beq_int{ 'a1; 'a2 }; val_true; val_false }
@@ -343,6 +357,7 @@ prim_rw reduce_cmpIntOp :
  * Standard binary arithmetic operators.
  * I rely on base_meta and friends to stop div and rem by zero.
  *)
+
 prim_rw reduce_plusRawIntOp :
    binop_exp{ plusRawIntOp{'p; 's}; tyRawInt{'p; 's}; 'a1; 'a2 } <-->
    atomRawInt{ 'p; 's; mod_arith{ 'p; 's; ('a1 +@ 'a2) } }
@@ -360,6 +375,7 @@ prim_rw reduce_remRawIntOp :
    atomRawInt{ 'p; 's; mod_arith{ 'p; 's; ('a1 %@ 'a2) } }
 
 (* Max / min. *)
+
 prim_rw reduce_maxRawIntOp :
    binop_exp{ maxRawIntOp{'p; 's}; tyRawInt{'p; 's}; 'a1; 'a2 } <-->
    atomRawInt{ 'p; 's; ifthenelse{ lt_bool{'a1; 'a2}; 'a2; 'a1 } }
@@ -368,6 +384,7 @@ prim_rw reduce_minRawIntOp :
    atomRawInt{ 'p; 's; ifthenelse{ lt_bool{'a1; 'a2}; 'a1; 'a2 } }
 
 (* Boolean comparisons. *)
+
 prim_rw reduce_eqRawIntOp :
    binop_exp{ eqRawIntOp{'p; 's}; tyEnum{ 2 }; 'a1; 'a2 } <-->
    ifthenelse{ beq_int{ 'a1; 'a2 }; val_true; val_false }

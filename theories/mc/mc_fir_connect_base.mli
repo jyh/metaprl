@@ -45,9 +45,10 @@ open Refiner.Refiner.Term
 (*
  * Convert between symbols and variable terms and strings.
  * A variable term is << 'a >> (for example).
- * string <--> symbol conversions here go through a lookup table.
+ * string <--> symbol conversions here go through a lookup table,
+ *    as do var term <--> symbol conversions.
  * clear_symbol_table should be called every time conversion of a
- *    new program begins.
+ *    new program begins, in order to avoid problems with old table entries.
  *)
 
 val clear_symbol_table : unit -> unit
@@ -80,6 +81,13 @@ val rawfloat_of_number_term : float_precision -> term -> rawfloat
 
 val term_of_bool : bool -> term
 val bool_of_term : term -> bool
+
+(*
+ * Convert to and from string values.
+ *)
+
+val term_of_string : string -> term
+val string_of_term : term -> string
 
 (*
  * Convert to and from int_precision, int_signed, and float_precision.

@@ -40,10 +40,14 @@ open Refiner.Refiner.Term
 
 (*
  * Convert to and from var.
+ * String conversions use the symbol table in Mc_fir_connect_base.
  *)
 
 val term_of_var : var -> term
 val var_of_term : term -> var
+
+val string_of_var : var -> string
+val var_of_string : string -> var
 
 (*
  * Convert to and from unop.
@@ -84,7 +88,6 @@ val alloc_op_of_term : term -> alloc_op
  * Convert debugging info to and from terms.
  *)
 
-(*
 val term_of_debug_line : debug_line -> term
 val debug_line_of_term : term -> debug_line
 
@@ -93,13 +96,10 @@ val debug_vars_of_term : term -> debug_vars
 
 val term_of_debug_info : debug_info -> term
 val debug_info_of_term : term -> debug_info
-*)
 
 (*
  * Convert to and from exp.
  *)
 
-(*
 val term_of_exp : exp -> term
 val exp_of_term : term -> exp
-*)

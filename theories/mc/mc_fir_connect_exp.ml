@@ -53,6 +53,10 @@ let term_of_var = var_term_of_symbol
 
 let var_of_term = symbol_of_var_term
 
+let string_of_var = string_of_symbol
+
+let var_of_string = symbol_of_string
+
 (*************************************************************************
  * Convert to and from unop.
  *************************************************************************)
@@ -598,65 +602,238 @@ let alloc_op_of_term t =
  *************************************************************************)
 
 (*
-let term_of_debug_line line =
+ * Helper functions.
+ *)
+
+let term_of_debug_var (v1, t, v2) =
+   mk_debugVarItem_term (term_of_var v1) (term_of_ty t) (term_of_var v2)
+
+let debug_var_of_term t =
+   if is_debugVarItem_term t then
+      let v1, t, v2 = dest_debugVarItem_term t in
+         (var_of_term v1), (ty_of_term t), (var_of_term v2)
+   else
+      raise (RefineError ("debug_var_of_term", StringTermError
+            ("not a debug_var item", t)))
+
+(*
+ * Actual functions.
+ *)
+
+let term_of_debug_line (str, i) =
+   mk_debugLine_term (term_of_string str) (number_term_of_int i)
 
 let debug_line_of_term t =
+   if is_debugLine_term t then
+      let str, i = dest_debugLine_term t in
+         (string_of_term str), (int_of_number_term i)
+   else
+      raise (RefineError ("debug_line_of_term", StringTermError
+            ("not a debug_line", t)))
 
 let term_of_debug_vars vars =
+   term_of_list term_of_debug_var vars
 
 let debug_vars_of_term t =
+   list_of_term debug_var_of_term t
 
 let term_of_debug_info info =
+   match info with
+      DebugString str ->
+         mk_debugString_term  (term_of_string str)
+    | DebugContext (line, vars) ->
+         mk_debugContext_term (term_of_debug_line line)
+                              (term_of_debug_vars vars)
 
 let debug_info_of_term t =
-*)
+   if is_debugString_term t then
+      DebugString (string_of_term (dest_debugString_term t))
+   else if is_debugContext_term t then
+      let line, vars = dest_debugContext_term t in
+         DebugContext (debug_line_of_term line)
+                      (debug_vars_of_term vars)
+   else
+      raise (RefineError ("debug_info_of_term", StringTermError
+            ("not a debug_info", t)))
 
 (*************************************************************************
  * Convert to and from exp.
  *************************************************************************)
 
 (*
+ * Helper functions.
+ *)
+
+let rec term_of_case (set, expr) =
+   mk_matchCase_term (term_of_set set) (term_of_exp expr)
+
+and case_of_term t =
+   if is_matchCase_term t then
+      let set, expr = dest_matchCase_term t in
+         (set_of_term set), (exp_of_term expr)
+   else
+      raise (RefineError ("case of term", StringTermError
+            ("not a match case (set * exp)", t)))
+
+(*
  * The expressions below are terrible with respect to variable
  * names.  The code itself is straight forward though.  If you want
  * to understand what the variables represent, I would suggest
  * reading the provided documentation concerning the FIR and
- * its term representation.
+ * its term representation.  Better names will come when I get
+ * a better understanding of the FIR.
  *)
 
-(*
-let term_of_exp e =
+and term_of_exp e =
    match e with
 
       (* Primitive operations. *)
       LetUnop (v, t, op, a1, expr) ->
-         mk_letUnop_term
-    | LetBinop (v t, op, a1, a2, expr) ->
-         mk_letBinop_term
+         mk_letUnop_term      (term_of_unop op)
+                              (term_of_ty t)
+                              (term_of_atom a1)
+                              (string_of_var v)
+                              (term_of_exp expr)
+    | LetBinop (v, t, op, a1, a2, expr) ->
+         mk_letBinop_term     (term_of_binop op)
+                              (term_of_ty t)
+                              (term_of_atom a1)
+                              (term_of_atom a2)
+                              (string_of_var v)
+                              (term_of_exp expr)
 
-(*
       (* Function application. *)
-    | LetExt (v, t, str, t, al, expr) ->
+    | LetExt (v, t1, str, t2, al, expr) ->
+         mk_letExt_term       (term_of_ty t1)
+                              (term_of_string str)
+                              (term_of_ty t2)
+                              (term_of_list term_of_atom al)
+                              (string_of_var v)
+                              (term_of_exp expr)
     | TailCall (v, al) ->
+         mk_tailCall_term     (term_of_var v)
+                              (term_of_list term_of_atom al)
 
       (* Control. *)
     | Match (a, cases) ->
+         mk_match_term        (term_of_atom a)
+                              (term_of_list term_of_case cases)
 
       (* Allocation. *)
     | LetAlloc (v, op, expr) ->
+         mk_letAlloc_term     (string_of_var v)
+                              (term_of_alloc_op op)
+                              (term_of_exp expr)
 
       (* Subscripting. *)
-    | LetSubscript (op, v, t, v2, a, expr) ->
-    | SetSubscript (op, v, a1, t, a2, expr) ->
-    | Memcpy
+    | LetSubscript (sop, v, t, v2, a, expr) ->
+         mk_letSubscript_term (term_of_subop sop)
+                              (term_of_ty t)
+                              (term_of_var v2)
+                              (term_of_atom a)
+                              (string_of_var v)
+                              (term_of_exp expr)
+    | SetSubscript (sop, v, a1, t, a2, expr) ->
+         mk_setSubscript_term (term_of_subop sop)
+                              (term_of_ty t)
+                              (term_of_var v)
+                              (term_of_atom a1)
+                              (term_of_atom a2)
+                              (string_of_var v)
+                              (term_of_exp expr)
+    | Memcpy (sop, v1, a1, v2, a2, a3, expr) ->
+         mk_memcpy_term       (term_of_subop sop)
+                              (term_of_var v1)
+                              (term_of_atom a1)
+                              (term_of_var v2)
+                              (term_of_atom a2)
+                              (term_of_atom a3)
+                              (term_of_exp expr)
 
       (* Debugging. *)
     | Debug (info, expr) ->
-*)
+         mk_debugExp_term     (term_of_debug_info info)
+                              (term_of_exp expr)
 
-let exp_of_term t =
+and exp_of_term t =
+
+   (* Primitive operations. *)
    if is_letUnop_term t then
+      let op, t, a1, v, expr = dest_letUnop_term t in
+         LetUnop        (var_of_string v)
+                        (ty_of_term t)
+                        (unop_of_term op)
+                        (atom_of_term a1)
+                        (exp_of_term expr)
    else if is_letBinop_term t then
+      let op, t, a1, a2, v, expr = dest_letBinop_term t in
+         LetBinop       (var_of_string v)
+                        (ty_of_term t)
+                        (binop_of_term op)
+                        (atom_of_term a1)
+                        (atom_of_term a2)
+                        (exp_of_term expr)
+
+   (* Function application. *)
+   else if is_letExt_term t then
+      let t1, str, t2, al, v, expr = dest_letExt_term t in
+         LetExt         (var_of_string v)
+                        (ty_of_term t1)
+                        (string_of_term str)
+                        (ty_of_term t2)
+                        (list_of_term atom_of_term al)
+                        (exp_of_term expr)
+   else if is_tailCall_term t then
+      let v, al = dest_tailCall_term t in
+         TailCall       (var_of_term v)
+                        (list_of_term atom_of_term al)
+
+   (* Control. *)
+   else if is_match_term t then
+      let a, cases = dest_match_term t in
+         Match          (atom_of_term a)
+                        (list_of_term case_of_term cases)
+
+   (* Allocation. *)
+   else if is_letAlloc_term t then
+      let v, op, expr = dest_letAlloc_term t in
+         LetAlloc       (var_of_string v)
+                        (alloc_op_of_term op)
+                        (exp_of_term expr)
+
+   (* Subscripting. *)
+   else if is_letSubscript_term t then
+      let sop, t, v2, a, v, expr = dest_letSubscript_term t in
+         LetSubscript   (subop_of_term sop)
+                        (var_of_string v)
+                        (ty_of_term t)
+                        (var_of_term v2)
+                        (atom_of_term a)
+                        (exp_of_term expr)
+   else if is_setSubscript_term t then
+      let sop, t, v, a1, a2, v', expr = dest_setSubscript_term t in
+         SetSubscript   (subop_of_term sop)
+                        (var_of_term v)
+                        (atom_of_term a1)
+                        (ty_of_term t)
+                        (atom_of_term a2)
+                        (exp_of_term expr)
+   else if is_memcpy_term t then
+      let sop, v1, a1, v2, a2, a3, expr = dest_memcpy_term t in
+         Memcpy         (subop_of_term sop)
+                        (var_of_term v1)
+                        (atom_of_term a1)
+                        (var_of_term v2)
+                        (atom_of_term a2)
+                        (atom_of_term a3)
+                        (exp_of_term expr)
+
+   (* Debugging. *)
+   else if is_debugExp_term t then
+      let info, expr = dest_debugExp_term t in
+         Debug          (debug_info_of_term info)
+                        (exp_of_term expr)
+
    else
       raise (RefineError ("exp_of_term", StringTermError
             ("not an exp",  t)))
-*)

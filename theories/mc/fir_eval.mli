@@ -48,15 +48,18 @@ open Tactic_type.Conversionals
  *)
 
 (* Precision of naml integers. *)
+
 declare naml_prec
 
 (* Computes base ^ exp where base and exp are integers, with exp non-neg. *)
+
 declare pow{ 'base; 'exp }
 
 (*
  * Converts num to an appropriate value for an integer of precision bytes,
  * signed or unsigned.
  *)
+
 declare mod_arith{ 'precision; 'sign; 'num }
 declare mod_arith_signed{ 'precision; 'num }
 declare mod_arith_unsigned{ 'precision; 'num }
@@ -67,6 +70,7 @@ declare mod_arith_unsigned{ 'precision; 'num }
  * I also put a test for atomEnum here since they are used to
  *    represent val_true and val_false.
  *)
+
 declare true_set
 declare false_set
 declare atomEnum_eq{ 'a; 'b }
@@ -82,7 +86,7 @@ declare fix{ f. 'b['f] }
 
 (*
  * Expressions.
-*)
+ *)
 
 declare unop_exp{ 'op; 'ty; 'a1 }
 declare binop_exp{ 'op; 'ty; 'a1; 'a2 }

@@ -1,3 +1,9 @@
+(*!
+ * @begin[doc]
+ * @module[Itt_pointwise]
+ * @parents
+ * @end[doc]
+ *)
 
 extends Itt_equal
 (*! @docoff *)
@@ -25,17 +31,18 @@ open Itt_equal
 (*
  * Show that the file is loading.
  *)
-let _ =
-   show_loading "Loading Itt_pointwise%t"
-
-(* debug_string DebugLoad "Loading itt_struct..." *)
+let _ = show_loading "Loading Itt_pointwise%t"
 
 (************************************************************************
  * RULES                                                                *
  ************************************************************************)
 
-(* The following two rules are valid only for pointwise functionality.
- * They both contradict to Let rule.
+(*!
+ * @begin[doc]
+ * @rules
+ * The following two rules are valid only for pointwise functionality.
+ * They both contradict to @hrefrule[Let] rule.
+ * @end[doc]
  *)
 
 prim hypSubstPointwise 'H 'J_1 'J_2  't1  bind{y. 'A['y]} :
@@ -49,3 +56,5 @@ prim contextSubstPointwise 'H 'J_1 'J 'J_2 't1  :
    [main] ('c : sequent ['ext] { 'H; t:'T; 'J_1['t];  'J['t1]; 'J_2['t] >- 'C['t] }) -->
    sequent ['ext] { 'H; t:'T; 'J_1['t];  'J['t]; 'J_2['t] >- 'C['t] } =
    'c
+
+(*! @docoff *)

@@ -214,6 +214,12 @@ rule mul_add_Distrib :
 
 topval mul_add_DistribC: conv
 
+rewrite mul_add_Distrib2C :
+   ('a in int) -->
+   ('b in int) -->
+   ('c in int) -->
+   (('a *@ 'b) +@ ('a *@ 'c)) <--> ('a *@ ('b +@ 'c))
+
 rule mul_Id :
    [wf] sequent { <H> >- 'a in int } -->
    sequent { <H> >- (1 *@ 'a) ~ 'a }

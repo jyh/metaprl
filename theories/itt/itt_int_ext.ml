@@ -446,6 +446,12 @@ interactive_rw mul_add_Distrib_rw :
 
 let mul_add_DistribC = mul_add_Distrib_rw
 
+interactive_rw mul_add_Distrib2C :
+   ('a in int) -->
+   ('b in int) -->
+   ('c in int) -->
+   (('a *@ 'b) +@ ('a *@ 'c)) <--> ('a *@ ('b +@ 'c))
+
 prim mul_Id :
    [wf] sequent { <H> >- 'a in int } -->
    sequent { <H> >- (1 *@ 'a) ~ 'a } = it
@@ -495,6 +501,18 @@ interactive_rw mul_Zero2_rw :
    ('a *@ 0) <--> 0
 
 let mul_Zero2C = mul_Zero2_rw
+
+interactive_rw mul_Zero3C 'a :
+   ('a in int) -->
+   0 <--> (0 *@ 'a)
+
+let resource reduce +=
+   [<< (('a *@ 'b) *@ 'c) >>, mul_Assoc2_rw;
+    << ('a *@ ('b +@ 'c)) >>, ((addrC [1] reduceC) thenC (tryC mul_add_Distrib_rw));
+    << (1 *@ 'a) >>, mul_Id_rw;
+    << ('a *@ 1) >>, mul_Id2_rw;
+    << (0 *@ 'a) >>, mul_Zero_rw;
+    << ('a *@ 0) >>, mul_Zero2_rw]
 
 interactive lt_mulPositMonoEq 'c :
    sequent { <H> >- 0 < 'c } -->
@@ -712,10 +730,4 @@ rewrite rem_Assoc :
 *)
 
 let resource reduce +=
-   [<< (('a *@ 'b) *@ 'c) >>, mul_Assoc2_rw;
-    << ('a *@ ('b +@ 'c)) >>, mul_add_Distrib_rw;
-    << (1 *@ 'a) >>, mul_Id_rw;
-    << ('a *@ 1) >>, mul_Id2_rw;
-    << (0 *@ 'a) >>, mul_Zero_rw;
-    << ('a *@ 0) >>, mul_Zero2_rw;
-    << ('a *@ (- 'b)) >>, mul_uni_Assoc_rw]
+   [<< ('a *@ (- 'b)) >>, mul_uni_Assoc_rw]

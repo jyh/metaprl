@@ -3,8 +3,8 @@ OCAMLINCLUDES =\
 	-I ../../tactic\
 	-I ../../ocaml\
 	-I ../../base\
-	-I $(ROOT)/lm_libmojave/naml/stdlib\
-	-I $(ROOT)/lm_libmojave/util
+	-I $(LIBMOJAVE)/naml/stdlib\
+	-I $(LIBMOJAVE)/util
 
 MLZFILES =\
 	ra_type\

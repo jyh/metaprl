@@ -168,11 +168,13 @@ doc <:doc<
    would use a record.  For example, suppose we define two mutually
    recursive functions $f$ and $g$:
 
+   @begin[verbatim]
    let r2 = fix{r1. record{
                      field["f"]{lambda{x. (r1.g)(x)}};
                      field["g"]{lambda{x. (r1.f)(x)}}}}
    in
       r2.f(1)
+   @end[verbatim]
    @end[doc]
 >>
 declare LetRec{R1. 'e1['R1]; R2. 'e2['R2]}

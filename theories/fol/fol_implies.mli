@@ -8,7 +8,7 @@ prec prec_implies
 prec prec_lambda
 prec prec_apply
 
-declare implies
+declare implies{'A; 'B}
 declare lambda{x. 'b['x]}
 declare apply{'f; 'a}
 

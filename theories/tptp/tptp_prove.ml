@@ -13,21 +13,21 @@
  * OCaml, and more information about this system.
  *
  * Copyright (C) 1998 Jason Hickey, Cornell University
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- * 
+ *
  * Author: Jason Hickey
  * jyh@cs.cornell.edu
  *)
@@ -761,9 +761,11 @@ let rec loopTestT i p =
       proveT 100 p
    else
       begin
+(*
          eprintf "Marshaling%t" eflush;
          Marshal.to_string proveT [Marshal.Closures];
          eprintf "Marshaled%t" eflush;
+ *)
          (dupT thenLT [loopTestT (pred i); proveT 100]) p
       end
 
@@ -773,7 +775,7 @@ let testT p =
    let finalize () =
       eprintf "Refine count: %d Fail count: %d%t" !refine_count !fail_count eflush
    in
-      (finalT finalize thenT timingT (loopTestT 200)) p
+      (finalT finalize thenT timingT (loopTestT 100)) p
 
 (*
  * -*-

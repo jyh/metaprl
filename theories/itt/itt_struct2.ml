@@ -311,6 +311,11 @@ let letT x_is_s_in_S = funT (fun p ->
    let bind = get_bind_from_arg_or_concl_subst p s in
       cutMem s  _S bind thenMT nameHypT (-2) (string_of_symbol xname) thenMT thinIfThinningT [-1])
 
+let genT s_in_S = funT (fun p ->
+   let _S, _, s = dest_equal s_in_S in
+   let bind = get_bind_from_arg_or_concl_subst p s in
+      cutMem s  _S bind thenMT thinIfThinningT [-1])
+
 (* cutEq *)
 
 let assertEqT = argfunT (fun eq p ->

@@ -43,6 +43,7 @@ topval hypSubstT : int -> int -> tactic
 topval revHypSubstT : int -> int -> tactic
 
 topval letT : term -> tactic
+topval genT : term -> tactic
 
 topval assertEqT  : term -> tactic
 

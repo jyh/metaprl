@@ -97,10 +97,13 @@ declare bterm{x.'bt['x]}
 prim_rw bterm_reduce: bterm{x.bterm{| <K> >- 't['x] |}} <-->  bterm{| x:term; <K> >- 't['x] |}
 
 
-prim bterm_op :
+prim bterm_op {| intro[AutoMustComplete] |} :
   sequent { <H> >- if_quoted_op{'op<||>;"true"} } -->
   sequent { <H> >- 'op<||> in BOperator }
   = it
+
+let resource intro +=
+ (<<bterm{| <J> >- 'op<||> |} in BOperator>>,wrap_intro (bterm_op thenT rw reduce_if_quoted_op 0 thenT trivialT) )
 
 prim_rw bterm_op_bdepth1 : op_bdepth{ bterm{| >- 'op |}} <--> 0
 prim_rw bterm_op_bdepth2 : op_bdepth{ bterm{| x:term; <H> >- 'op |}} <--> op_bdepth{ bterm{| <H> >- 'op |} } +@ 1

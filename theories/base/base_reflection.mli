@@ -39,3 +39,4 @@ topval reduce_make_bterm : conv
 topval reduce_if_same_op : conv
 topval reduce_if_simple_bterm : conv
 topval reduce_subst : conv
+topval reduce_if_quoted_op : conv

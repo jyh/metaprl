@@ -29,7 +29,7 @@ interactive_rw depth_of_app {| reduce |}: op_bdepth{app_term} <--> 0
 interactive_rw depth_of_lam {| reduce |}: op_bdepth{lambda_term} <--> 0
 
 
-define mk_app: mk_app <--> lambda {p. spread{'p; t1,t2. make_bterm{app_term; 't1::'t2::nil}}}
+define mk_app: mk_app <--> lambda {p. spread{'p; t1,t2. make_bterm{inject{app_term;bdepth{'t1}}; 't1::'t2::nil}}}
 
 interactive_rw mk_app2 {| reduce |}: mk_app ('f,'a) <-->  make_bterm{app_term; 'f::'a::nil}
 

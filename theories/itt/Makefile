@@ -50,6 +50,7 @@ MPFILES :=\
 	itt_tunion\
 	itt_bisect\
 	itt_bunion\
+	itt_inv_typing\
 	itt_w\
 	itt_prec\
 	itt_srec\
@@ -62,7 +63,6 @@ MPFILES :=\
 	itt_fset\
 	itt_pointwise2\
 	itt_theory\
-	itt_inv_typing\
 	itt_collection\
 	ctt_markov\
 	itt_record_label0\

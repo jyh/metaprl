@@ -65,12 +65,6 @@ rewrite reduce_tree_ind :
    <--> 'body['a1; 'f1; lambda{a. tree_ind{.'f1 'a; a2, f2, g2. 'body['a2; 'f2; 'g2]}}]
 
 (*
- * Trees allow eta-reduction.
- *)
-rewrite reduce_tree_eta :
-   tree{'a; lambda{x. 'f 'x}} <--> tree{'a; 'f}
-
-(*
  * Precedence of display form.
  *)
 prec prec_w
@@ -137,18 +131,15 @@ rule treeEquality 'H 'y :
    sequent ['ext] { 'H >- tree{'a1; 'b1} = tree{'a2; 'b2} in w{'A; x. 'B['x]} }
 
 (*
- * H, x:W(y:A; B[y]), J[x] >- T[x] ext spread(x; u, v. t[u, v])
- * by wElimination u v
- * H, x:W(y:A; B[y]), u:A, v:B[u] -> W(y:A; B[y]), J[tree(u, v)] >- T[tree(u, v)] ext t[u, v]
+ * Elimination
  *)
-rule wElimination 'H 'J 'z 'a 'f 'g 'b 'v :
+rule wElimination 'H 'J 'z 'a 'f 'g 'b :
    sequent ['ext] { 'H;
                     z: w{'A; x. 'B['x]};
                     'J['z];
                     a: 'A;
                     f: 'B['a] -> w{'A; x. 'B['x]};
-                    g: b: 'B['a] -> 'T['f 'b];
-                    v: 'z = tree{'a; 'f} in w{'A; x. 'B['x]}
+                    g: b: 'B['a] -> 'T['f 'b]
                   >- 'T[tree{'a; 'f}]
                   } -->
    sequent ['ext] { 'H; z: w{'A; x. 'B['x]}; 'J['z] >- 'T['z] }

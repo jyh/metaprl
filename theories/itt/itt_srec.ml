@@ -108,7 +108,7 @@ dform srec_df : except_mode[src] :: srec{T. 'B} =
 dform srecind_df : except_mode[src] :: srecind{'a; p, h. 'g} =
    szone pushm[3]
    `"srecind(" slot{'a} `";" hspace
-   slot{'p} `"," slot{'p} `"." hspace
+   slot{'p} `"," slot{'h} `"." hspace
    slot{'g}
    popm ezone
 

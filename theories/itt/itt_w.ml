@@ -63,6 +63,8 @@
 include Itt_equal
 include Itt_rfun
 include Itt_struct
+include Itt_struct2
+include Itt_inv_typing
 (*! @docoff *)
 
 open Opname
@@ -132,20 +134,10 @@ prim_rw reduce_tree_ind :
    tree_ind{tree{'a1; 'f1}; a2, f2, g2. 'body['a2; 'f2; 'g2]}
    <--> 'body['a1; 'f1; lambda{a. tree_ind{.'f1 'a; a2, f2, g2. 'body['a2; 'f2; 'g2]}}]
 
-(*!
- * @begin[doc]
- * Trees admit eta-reduction on the function argument---the guarantee is that
- * the function argument will only be used by application, not by
- * any other intensional analysis.
- * @end[doc]
- *)
-prim_rw reduce_tree_eta :
-   tree{'a; lambda{x. 'f 'x}} <--> tree{'a; 'f}
 (*! @docoff *)
 
 let resource reduce +=
-   [<< tree_ind{tree{'a1; 'f1}; a2, f2, g2. 'body['a2; 'f2; 'g2]} >>, reduce_tree_ind;
-    << tree{'a; lambda{x. 'f 'x}} >>, reduce_tree_eta]
+   (<< tree_ind{tree{'a1; 'f1}; a2, f2, g2. 'body['a2; 'f2; 'g2]} >>, reduce_tree_ind)
 
 (************************************************************************
  * DISPLAY                                                              *
@@ -241,15 +233,14 @@ prim treeEquality {| intro []; eqcd |} 'H 'y :
  * the induction hypothesis holds on all children given by $f$.
  * @end[doc]
  *)
-prim wElimination {| elim [ThinOption thinT] |} 'H 'J 'z 'a 'f 'g 'b 'v :
+prim wElimination {| elim [ThinOption thinT] |} 'H 'J 'z 'a 'f 'g 'b :
    [main] ('t['z; 'a; 'f; 'g] :
    sequent ['ext] { 'H;
                     z: w{'A; x. 'B['x]};
                     'J['z];
                     a: 'A;
                     f: 'B['a] -> w{'A; x. 'B['x]};
-                    g: b: 'B['a] -> 'T['f 'b];
-                    v: 'z = tree{'a; 'f} in w{'A; x. 'B['x]}
+                    g: b: 'B['a] -> 'T['f 'b]
                   >- 'T[tree{'a; 'f}]
                   }) -->
    sequent ['ext] { 'H; z: w{'A; x. 'B['x]}; 'J['z] >- 'T['z] } =
@@ -265,14 +256,28 @@ prim wElimination {| elim [ThinOption thinT] |} 'H 'J 'z 'a 'f 'g 'b 'v :
  * for each of the children.
  * @end[doc]
  *)
+interactive tree_indEquality {| intro []; eqcd |} 'H (w{'A; x. 'B['x]}) bind{z.'T['z]} :
+   [wf] sequent [squash] { 'H >- 'z1 = 'z2 in w{'A; x. 'B['x]} } -->
+   [wf] sequent [squash] { 'H;
+                           a: 'A;
+                           f: 'B['a] -> w{'A; x. 'B['x]};
+                           g: b: 'B['a] -> 'T['f 'b]
+                         >- 'body1['a; 'f; 'g] = 'body2['a; 'f; 'g] in 'T[tree{'a;'f}] } -->
+   sequent ['ext] { 'H >- tree_ind{'z1; a, f, g. 'body1['a; 'f; 'g]}
+                          = tree_ind{'z2; a2, f2, g2. 'body2['a2; 'f2; 'g2]}
+                          in 'T['z1] }
+(*
+
 prim tree_indEquality {| intro []; eqcd |} 'H (w{'A; x. 'B['x]}) :
    [wf] sequent [squash] { 'H >- 'z1 = 'z2 in w{'A; x. 'B['x]} } -->
-   [wf] sequent [squash] { 'H; a1: 'A; f1: 'B['a1] -> w{'A; x. 'B['x]}; g1: x: 'A -> 'B['x] -> 'T >-
+   [wf] sequent [squash] { 'H; a1: 'A; f1: 'B['a1] -> w{'A; x. 'B['x]}; g1: x: 'B['a1] -> 'T >-
       'body1['a1; 'f1; 'g1] = 'body2['a1; 'f1; 'g1] in 'T } -->
    sequent ['ext] { 'H >- tree_ind{'z1; a1, f1, g1. 'body1['a1; 'f1; 'g1]}
                           = tree_ind{'z2; a2, f2, g2. 'body2['a2; 'f2; 'g2]}
                           in 'T } =
    it
+*)
+
 (*! @docoff *)
 
 (************************************************************************

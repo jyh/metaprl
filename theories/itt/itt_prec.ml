@@ -136,7 +136,7 @@ dform prec_df : except_mode[src] :: "prec"{T, x. 'B; 'a} =
 dform precind_df : except_mode[src] :: precind{'a; p, h. 'g} =
    szone pushm[3]
    `"precind(" slot{'a} `";" hspace
-   slot{'p} `"," slot{'p} `"." hspace
+   slot{'p} `"," slot{'h} `"." hspace
    slot{'g}
    popm ezone
 

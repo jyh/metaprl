@@ -1,5 +1,6 @@
 include Itt_disect
 include Itt_prod
+include Itt_dfun
 
 open Itt_struct
 open Printf
@@ -30,5 +31,11 @@ prim independentProductTypeElimination {| elim [ThinOption thinT] |} 'H 'J 'v 'w
    ('t['u;'v;'w] :
    sequent ['ext] { 'H; u:"type"{.'A * 'B}; v:"type"{'A}; w:"type"{'B}; 'J['u] >- 'C['u] }) -->
    sequent ['ext] { 'H; u:"type"{.'A * 'B}; 'J['u] >- 'C['u] } =
+   't['u;it;it]
+
+prim functionTypeElimination {| elim [ThinOption thinT] |} 'H 'J 'v 'w:
+   ('t['u;'v; 'w] :
+   sequent ['ext] { 'H; u:"type"{. 'A -> 'B }; v:"type"{'A}; w:('A -> "type"{'B}); 'J['u] >- 'C['u] }) -->
+   sequent ['ext] { 'H; u:"type"{. 'A -> 'B }; 'J['u] >- 'C['u] } =
    't['u;it;it]
 

@@ -79,20 +79,19 @@ doc <:doc<
    @end[doc]
 >>
 
-define unfold_carButElement : carButElement{'r;'zero} <-->
-	{e:'r^car|nequal{'r^car;'e;'zero}}
-
 define unfold_prefield1 : prefield[i:l] <-->
-   record["inv":t]{r. 'r^"car-0" -> 'r^"car-0" ; record["car-0":t]{r.carButElement{'r;'r^"0"};ring[i:l]}}
+   record["inv":t]{r. 'r^car0 -> 'r^car0 ; record["car0":t]{univ[i:l];ring[i:l]}}
 
 define unfold_isField1 : isField{'F} <-->
-	all a: carButElement{'F;'F^"0"}. ('F^inv 'a) *['F] 'a = 'F^"1" in 'F^car
+	all a: 'F^car0. (('a in 'F^car) & ('a <> 'F^"0")) &
+	all b: 'F^car. (('b <> 'F^"0") => ('b in 'F^car0)) &
+	all c: 'F^car0. ('F^inv 'c) *['F] 'c = 'F^"1" in 'F^car
 
 define unfold_field1 : field[i:l] <-->
    { F: prefield[i:l] | isField{'F} }
 
 define unfold_as_multiplicative_group : as_multiplicative_group{'F} <-->
-	rename["car":t,"car-0":t]{'F}
+	rename["car":t,"car0":t]{'F}
 
 doc docoff
 
@@ -141,11 +140,11 @@ interactive prefield_inv_wf {| intro [intro_typeinf <<'F>>] |} prefield[i:l] :
    sequent { <H> >- 'a *['F] 'b in 'F^car }
 
 interactive prefield_intro {| intro [] |} :
-   sequent { <H> >- 'F in record["inv":t]{r. carButElement{'r;'r^"0"} -> carButElement{'r;'r^"0"}; ring[i:l]} } -->
+   sequent { <H> >- 'F in record["inv":t]{r.'r^car0 -> 'r^car0; ring[i:l]} } -->
    sequent { <H> >- 'F in prefield[i:l] }
 
 interactive prering_elim {| elim [] |} 'H :
-   sequent { <H>; F: record["inv":t]{r. carButElement{'r;'r^"0"} -> carButElement{'r;'r^"0"}; ring[i:l]}; <J['F]> >- 'C['F] } -->
+   sequent { <H>; F: record["inv":t]{r.'r^car0 -> 'r^car0; ring[i:l]}; <J['F]> >- 'C['F] } -->
    sequent { <H>; F: prefield[i:l]; <J['F]> >- 'C['F] }
 
 interactive isField_wf {| intro [intro_typeinf <<'F>>] |} prefield[i:l] :
@@ -168,7 +167,7 @@ doc <:doc<
    @begin[doc]
    @modsubsection{Hierarchy}
 
-   A field is a ring and group wrt to multiplicative operations over car-0.
+   A field is a ring and group wrt to multiplicative operations over car0.
    @end[doc]
 >>
 interactive field_subtype_ring :

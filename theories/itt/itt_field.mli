@@ -38,7 +38,6 @@ open Tactic_type.Conversionals
  * SYNTAX                                                               *
  ************************************************************************)
 
-declare carButElement{'r;'zero}
 declare prefield[i:l]
 declare isField{'F}
 declare field[i:l]

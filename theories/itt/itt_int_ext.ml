@@ -193,6 +193,8 @@ define unfold_neq_int :
 
 doc <:doc< @docoff >>
 
+let fold_ge = makeFoldC << ge{'a; 'b} >> unfold_ge
+
 let reduce_lt_prop = unfold_lt thenC (addrC [0] reduce_lt)
 let reduce_gt_prop = unfold_gt thenC reduce_lt_prop
 let reduce_le_prop = (unfold_le thenC

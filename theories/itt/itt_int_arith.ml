@@ -95,54 +95,21 @@ let reportT = funT (fun p ->
 	idT
 	)
 
-let le2geT = argfunT (fun t p ->
-   let (left,right)=dest_le t in
-   let newt=mk_ge_term right left in
-   (assertT newt) thenAT ((rwh unfold_ge 0) thenMT (onSomeHypT nthHypT)))
+interactive lt2ge 'H :
+   [wf] sequent { <H>; x: 'a < 'b; <J['x]> >- 'a in int } -->
+   [wf] sequent { <H>; x: 'a < 'b; <J['x]> >- 'b in int } -->
+   [main] sequent { <H>; x: 'a < 'b; <J['x]>; 'b >= ('a +@ 1) >- 'C['x] } -->
+   sequent { <H>; x: 'a < 'b; <J['x]> >- 'C['x] }
 
-interactive lt2ge :
-   [wf] sequent { <H> >- 'a in int } -->
-   [wf] sequent { <H> >- 'b in int } -->
-   sequent { <H> >- 'a < 'b } -->
-   sequent { <H> >- 'b >= ('a +@ 1) }
+interactive gt2ge 'H :
+   [wf] sequent { <H>; x: 'a > 'b; <J['x]> >- 'a in int } -->
+   [wf] sequent { <H>; x: 'a > 'b; <J['x]> >- 'b in int } -->
+   [main] sequent { <H>; x: 'a > 'b; <J['x]>; 'a >= ('b +@ 1) >- 'C['x] } -->
+   sequent { <H>; x: 'a > 'b; <J['x]> >- 'C['x] }
 
-let lt2geT = argfunT (fun t p ->
-   let (left,right)=dest_lt t in
-   let newt=mk_ge_term right
-                      (mk_add_term left
-                                  (mk_number_term (Lm_num.num_of_int 1))) in
-      (assertT newt) thenAT lt2ge)
-
-interactive gt2ge :
-   [wf] sequent { <H> >- 'a in int } -->
-   [wf] sequent { <H> >- 'b in int } -->
-   sequent { <H> >- 'a > 'b } -->
-   sequent { <H> >- 'a >= ('b +@ 1) }
-
-let gt2geT = argfunT (fun t p ->
-   let (left,right)=dest_gt t in
-   let newt=mk_ge_term left
-                      (mk_add_term right
-                                  (mk_number_term (Lm_num.num_of_int 1))) in
-      (assertT newt) thenAT gt2ge)
-
-interactive eq2ge1 :
-   sequent { <H> >- 'a = 'b in int } -->
-   sequent { <H> >- 'a >= 'b }
-
-let eq2ge1T = eq2ge1
-
-interactive eq2ge2 :
-   sequent { <H> >- 'a = 'b in int } -->
-   sequent { <H> >- 'b >= 'a }
-
-let eq2ge2T = eq2ge2
-
-let eq2geT t =
-   let (_,l,r)=dest_equal t in
-   ((assertT (mk_ge_term l r)) thenAT (eq2ge1T thenT (onSomeHypT nthHypT)))
-   thenMT
-   ((assertT (mk_ge_term r l)) thenAT (eq2ge2T thenT (onSomeHypT nthHypT)))
+interactive eq2ge 'H :
+   sequent { <H>; x: 'a = 'b in int; <J['x]>; 'a >= 'b; 'b >= 'a >- 'C['x] } -->
+   sequent { <H>; x: 'a = 'b in int; <J['x]> >- 'C['x] }
 
 interactive notle2ge :
    [wf] sequent { <H> >- 'a in int } -->
@@ -159,16 +126,16 @@ interactive nequal_elim {| elim [] |} 'H :
 (*
 let notle2geT t =
    let (l,r)=dest_le t in
-   let newt = mk_ge_term l (mk_add_term r (Lm_num.num_of_int 1)) in
+   let newt = mk_ge_term l (mk_add_term r <<1>>) in
 *)
 
 let anyArithRel2geT = argfunT (fun i p ->
    let t = Sequent.nth_hyp p i in
-   if is_le_term t then le2geT t
-   else if is_lt_term t then lt2geT t
-   else if is_gt_term t then gt2geT t
+   if is_le_term t then rw fold_ge i
+   else if is_lt_term t then lt2ge i
+   else if is_gt_term t then gt2ge i
    else match explode_term t with
-      << 'l = 'r in 'tt >> when alpha_equal tt <<int>> && not (alpha_equal l r) -> eq2geT t
+      << 'l = 'r in 'tt >> when alpha_equal tt <<int>> && not (alpha_equal l r) -> eq2ge i
     | _ -> idT
    ) (*if is_not_term t then
       let t1=dest_not t in

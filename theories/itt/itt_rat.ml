@@ -79,9 +79,6 @@ doc <:doc<
    @begin[doc]
    @terms
 
-   The @tt[int] term is the type of integers with elements
-   $$@ldots, @number{-2}, @number{-1}, @number{0}, @number{1}, @number{2},
- @ldots$$
    @end[doc]
 >>
 
@@ -98,8 +95,12 @@ declare lt_bool_rat{'a;'b}
 declare le_bool_rat{'a;'b}
 declare beq_rat{'a;'b}
 
+define unfold_rat : rat{'a;'b} <--> ('a,'b)
+
+let fold_rat = makeFoldC <<rat{'a;'b}>> unfold_rat
+
 define unfold_rat_of_int :
-   rat_of_int{'a} <--> ('a, 1)
+   rat_of_int{'a} <--> rat{'a; 1}
 
 doc <:doc<
    @begin[doc]
@@ -108,31 +109,41 @@ doc <:doc<
    @end[doc]
 >>
 
-prim_rw reduce_add_rat : add_rat{('a,'b); ('c,'d)} <--> ((('a *@ 'd) +@ ('c *@ 'b)), ('b *@ 'd))
-prim_rw reduce_mul_rat : mul_rat{('a,'b); ('c,'d)} <--> (('a *@ 'c), ('b *@ 'd))
-prim_rw reduce_neg_rat : neg_rat{('a,'b)} <--> (minus{'a},'b)
-prim_rw reduce_lt_bool_rat : lt_bool_rat{('a,'b);('c,'d)} <--> lt_bool{('a *@ 'd);('c *@ 'b)}
-prim_rw reduce_le_bool_rat : le_bool_rat{('a,'b);('c,'d)} <--> le_bool{('a *@ 'd);('c *@ 'b)}
+prim_rw reduce_add_rat : add_rat{rat{'a;'b}; rat{'c;'d}} <--> rat{('a *@ 'd) +@ ('c *@ 'b); ('b *@ 'd)}
+prim_rw reduce_mul_rat : mul_rat{rat{'a;'b}; rat{'c;'d}} <--> rat{('a *@ 'c); ('b *@ 'd)}
+prim_rw reduce_neg_rat : neg_rat{rat{'a;'b}} <--> rat{minus{'a};'b}
+prim_rw reduce_lt_bool_rat : lt_bool_rat{rat{'a;'b};rat{'c;'d}} <--> lt_bool{('a *@ 'd);('c *@ 'b)}
+prim_rw reduce_le_bool_rat : le_bool_rat{rat{'a;'b};rat{'c;'d}} <--> le_bool{('a *@ 'd);('c *@ 'b)}
 
 prim_rw reduce_beq_rat :
    beq_rat{ ('a,'b) ; ('c,'d) } <--> beq_int{ ('a *@ 'd) ; ('c *@ 'b) }
 
+let reduce_beq_rat2 = (addrC [0] unfold_rat) thenC (addrC [1] unfold_rat) thenC reduce_beq_rat
+
 let resource reduce += [
-   << add_rat{('a,'b); ('c,'d)} >>, reduce_add_rat;
-   << mul_rat{('a,'b); ('c,'d)} >>, reduce_mul_rat;
-   << neg_rat{('a,'b)} >>, reduce_neg_rat;
-   << lt_bool_rat{('a,'b); ('c,'d)} >>, reduce_lt_bool_rat;
+   << add_rat{('a,'b); 'x} >>, addrC [0] fold_rat;
+   << add_rat{'x; ('a,'b)} >>, addrC [1] fold_rat;
+   << mul_rat{('a,'b); 'x} >>, addrC [0] fold_rat;
+   << mul_rat{'x; ('a,'b)} >>, addrC [1] fold_rat;
+   << lt_bool_rat{('a,'b); 'x} >>, addrC [0] fold_rat;
+   << lt_bool_rat{'x; ('a,'b)} >>, addrC [1] fold_rat;
+   << add_rat{rat{'a;'b}; rat{'c;'d}} >>, reduce_add_rat;
+   << mul_rat{rat{'a;'b}; rat{'c;'d}} >>, reduce_mul_rat;
+   << neg_rat{rat{'a;'b}} >>, reduce_neg_rat;
+   << neg_rat{('a,'b)} >>, (addrC [0] fold_rat thenC reduce_neg_rat);
+   << lt_bool_rat{rat{'a;'b}; rat{'c;'d}} >>, reduce_lt_bool_rat;
    << beq_rat{('a,'b); ('c,'d)} >>, reduce_beq_rat;
+   << beq_rat{rat{'a;'b}; rat{'c;'d}} >>, reduce_beq_rat2;
 ]
 
 define unfold_rationals : rationals <-->
 	quot x,y: (int * posnat) // "assert"{beq_rat{'x;'y}}
 
 define unfold_fieldQ : fieldQ <-->
-	{car=rationals; "*"=lambda{x.lambda{y.mul_rat{'x;'y}}}; "1"=(1,1);
-	 "+"=lambda{x.lambda{y.add_rat{'x;'y}}}; "0"=(0,1); "neg"=lambda{x.(neg_rat{'x})};
-	 car0={a: rationals | 'a <> (0,1) in rationals};
-	 inv=lambda{x.(snd{'x},fst{'x})}
+	{car=rationals; "*"=lambda{x.lambda{y.mul_rat{'x;'y}}}; "1"=rat{1;1};
+	 "+"=lambda{x.lambda{y.add_rat{'x;'y}}}; "0"=rat{0;1}; "neg"=lambda{x.(neg_rat{'x})};
+	 car0={a: rationals | 'a <> rat{0;1} in rationals};
+	 inv=lambda{x.rat{snd{'x};fst{'x}}}
 	}
 
 let fold_rationals = makeFoldC <<rationals>> unfold_rationals
@@ -170,13 +181,13 @@ interactive rationalsElimination1Eq{| elim [ThinOption thinT] |} 'H :
    [main] sequent { <H>; a: quot x,y: (int * posnat) // "assert"{beq_rat{'x;'y}}; <J['a]>;
              u1: int; v1: int; w1:'v1>0;
 				 u2: int; v2: int; w2:'v2>0;
-				 z: 'u1 *@ 'v2 = 'u2 *@ 'v1 in int >- 's[('u1,'v1)] = 't[('u2,'v2)] in 'T[('u1,'v1)]
+				 z: 'u1 *@ 'v2 = 'u2 *@ 'v1 in int >- 's[rat{'u1;'v1}] = 't[rat{'u2;'v2}] in 'T[rat{'u1;'v1}]
            } -->
    sequent { <H>; a: rationals; <J['a]> >- 's['a] = 't['a] in 'T['a] }
 
 interactive rationalsElimination {| elim [ThinOption thinT] |} 'H :
    [wf] sequent { <H>; a: rationals; <J['a]> >- "type"{'C['a]} } -->
-   [main] sequent { <H>; a: quot x,y: (int * posnat) // "assert"{beq_rat{'x;'y}}; x: int; y: int; 'y>0; <J['a]> >- squash{'C[('x,'y)]} } -->
+   [main] sequent { <H>; a: quot x,y: (int * posnat) // "assert"{beq_rat{'x;'y}}; x: int; y: int; 'y>0; <J['a]> >- squash{'C[rat{'x;'y}]} } -->
    sequent { <H>; a: rationals; <J['a]> >- squash{'C['a]} }
 
 let resource intro += [
@@ -204,19 +215,19 @@ interactive lt_bool_rat_wf1 {| intro [] |} :
 	sequent { <H> >- 'b in int } -->
 	sequent { <H> >- 'c in int } -->
 	sequent { <H> >- 'd in int } -->
-	sequent { <H> >- lt_bool_rat{('a,'b); ('c,'d)} in bool }
+	sequent { <H> >- lt_bool_rat{rat{'a;'b}; rat{'c;'d}} in bool }
 
 interactive lt_bool_rat_wf2 {| intro [AutoMustComplete] |} :
 	sequent { <H> >- 'a in rationals } -->
 	sequent { <H> >- 'b in int } -->
 	sequent { <H> >- 'c in int } -->
-	sequent { <H> >- lt_bool_rat{'a; ('b,'c)} in bool }
+	sequent { <H> >- lt_bool_rat{'a; rat{'b;'c}} in bool }
 
 interactive lt_bool_rat_wf3 {| intro [AutoMustComplete] |} :
 	sequent { <H> >- 'a in int } -->
 	sequent { <H> >- 'b in int } -->
 	sequent { <H> >- 'c in rationals } -->
-	sequent { <H> >- lt_bool_rat{('a,'b); 'c} in bool }
+	sequent { <H> >- lt_bool_rat{rat{'a;'b}; 'c} in bool }
 
 interactive lt_bool_rat_wf {| intro [AutoMustComplete] |} :
 	sequent { <H> >- 'a in rationals } -->
@@ -228,19 +239,19 @@ interactive le_bool_rat_wf1 {| intro [] |} :
 	sequent { <H> >- 'b in int } -->
 	sequent { <H> >- 'c in int } -->
 	sequent { <H> >- 'd in int } -->
-	sequent { <H> >- le_bool_rat{('a,'b); ('c,'d)} in bool }
+	sequent { <H> >- le_bool_rat{rat{'a;'b}; rat{'c;'d}} in bool }
 
 interactive le_bool_rat_wf2 {| intro [AutoMustComplete] |} :
 	sequent { <H> >- 'a in rationals } -->
 	sequent { <H> >- 'b in int } -->
 	sequent { <H> >- 'c in int } -->
-	sequent { <H> >- le_bool_rat{'a; ('b,'c)} in bool }
+	sequent { <H> >- le_bool_rat{'a; rat{'b;'c}} in bool }
 
 interactive le_bool_rat_wf3 {| intro [AutoMustComplete] |} :
 	sequent { <H> >- 'a in int } -->
 	sequent { <H> >- 'b in int } -->
 	sequent { <H> >- 'c in rationals } -->
-	sequent { <H> >- le_bool_rat{('a,'b); 'c} in bool }
+	sequent { <H> >- le_bool_rat{rat{'a;'b}; 'c} in bool }
 
 interactive le_bool_rat_wf {| intro [AutoMustComplete] |} :
 	sequent { <H> >- 'a in rationals } -->
@@ -252,19 +263,19 @@ interactive beq_rat_wf1 {| intro [] |} :
 	sequent { <H> >- 'b in int } -->
 	sequent { <H> >- 'c in int } -->
 	sequent { <H> >- 'd in int } -->
-	sequent { <H> >- beq_rat{('a,'b); ('c,'d)} in bool }
+	sequent { <H> >- beq_rat{rat{'a;'b}; rat{'c;'d}} in bool }
 
 interactive beq_rat_wf2 {| intro [AutoMustComplete] |} :
 	sequent { <H> >- 'a in rationals } -->
 	sequent { <H> >- 'b in int } -->
 	sequent { <H> >- 'c in int } -->
-	sequent { <H> >- beq_rat{'a; ('b,'c)} in bool }
+	sequent { <H> >- beq_rat{'a; rat{'b;'c}} in bool }
 
 interactive beq_rat_wf3 {| intro [AutoMustComplete] |} :
 	sequent { <H> >- 'a in int } -->
 	sequent { <H> >- 'b in int } -->
 	sequent { <H> >- 'c in rationals } -->
-	sequent { <H> >- beq_rat{('a,'b); 'c} in bool }
+	sequent { <H> >- beq_rat{rat{'a;'b}; 'c} in bool }
 
 interactive beq_rat_wf {| intro [AutoMustComplete] |} :
 	sequent { <H> >- 'a in rationals } -->
@@ -280,7 +291,7 @@ interactive ratEquality {| intro [AutoMustComplete] |} :
 interactive ratMembership {| intro [] |} :
 	[wf] sequent { <H> >- 'a in int } -->
 	[wf] sequent { <H> >- 'b in posnat } -->
-	sequent { <H> >- ('a,'b) in rationals }
+	sequent { <H> >- rat{'a;'b} in rationals }
 
 interactive rat_of_intEquality {| intro [] |} :
 	sequent { <H> >- 'a = 'b in int } -->

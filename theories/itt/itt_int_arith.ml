@@ -1,6 +1,4 @@
 doc <:doc<
-   @spelling{arithT tactic implementation}
-
    @begin[doc]
    @module[Itt_int_arith]
 
@@ -47,7 +45,7 @@ extends Itt_rfun
 extends Itt_logic
 extends Itt_bool
 extends Itt_int_ext
-doc <:doc< @docoff >>
+doc docoff
 
 open Printf
 open Mp_debug
@@ -883,7 +881,7 @@ doc <:doc<
 
 	@begin[description]
 	@item{@conv[normalizeC];
-   The @tt{normalizeC} converts polynomials to canonical form (normalizes),
+   The @tt[normalizeC] converts polynomials to canonical form (normalizes),
    it is supposed to work not only when applied precisely
    on a polynomial but also when the polynomial is just a subterm of the
    term the rewrite applied to. For instance, if you have a hypothesis
@@ -909,7 +907,7 @@ doc <:doc<
 
    @item{Sort monomials in increasing order, reducing similar monomials on the fly.
    Again integer literals should be pulled to the left
-   (i.e. considered to be the leastest terms).}
+   (i.e. considered to be the least terms).}
 
    @item{Get rid of zeros and ones in the resulting term using @hrefconv[reduceC]}
 
@@ -919,7 +917,7 @@ doc <:doc<
 
 	@end[doc]
 >>
-let normalizeC = (repeatC (higherC sub_elimC)) thenC
+let normalizeC = sub_elimC thenC
                  reduceC thenC
                  mul_normalizeC thenC
                  add_normalizeC thenC
@@ -1063,14 +1061,14 @@ doc <:doc<
 
 	@begin[description]
 	@item{@tactic[arithT];
-   The @tt{arithT} proves simple inequalities. More precisely it can prove
+   The @tt[arithT] proves simple inequalities. More precisely it can prove
    inequalities that logically follows from hypotheses using associativity and
    commutativity of addition and multiplication, properties of <<0>> and <<1>>,
    reflexivity, transitivity and weak monotonicity of <<Perv!nil >= Perv!nil>>.
-   Weak monotonicy is the @hrefrule[lt_addMono] rule:
+   Weak monotonicity is the @hrefrule[lt_addMono] rule:
 
    $$
-   @rulebox{@code[lt_addMono]; c;
+   @rulebox{lt@_addMono; c;
      <<sequent[squash]{ <H> >- 'a in int }>>@cr
      	 <<sequent[squash]{ <H> >- 'b in int }>>@cr
      	 <<sequent[squash]{ <H> >- 'c in int }>>;
@@ -1080,18 +1078,18 @@ doc <:doc<
    with restriction to use only literal integers for <<'c>> (or anything that
    can be automatically reduced to literal integer by @hrefconv[reduceC]).
 
-   @tt{arithT} supports addition, multiplication, unary minus and subtraction
+   @tt[arithT] supports addition, multiplication, unary minus and subtraction
    operations. Division and remainder operations are not supported.
-   Among arithmetic relations it supports << Perv!nil = Perv!nil in int >>,
-	<< nequal { 'x ; 'y } >>,
+   Among arithmetic relations it supports are << cdot = cdot in int >>,
+	<< nequal {.Perv!nil ; .Perv!nil } >>,
    << Perv!nil < Perv!nil >>, << Perv!nil > Perv!nil >>,
-   << Perv!nil <= Perv!nil >>, << Perv!nil >= Perv!nil >>. Arbitrary many negations
+   << Perv!nil <= Perv!nil >>, and << Perv!nil >= Perv!nil >>. Arbitrary many negations
    of these relations are also supported. Other logical connectives are not supported.
 
-   @tt{arithT} puts together everything that was defined in this module:
+   @tt[arithT] puts together everything that was defined in this module:
 	@begin[enumerate]
 	@item{First it moves arithmetic fact from conclusion to hypotheses in negated form
-	using reasoning by contadiction.}
+	using reasoning by contradiction.}
 
 	@item{Then it converts all negative arithmetic facts in hypotheses to positive
 	ones,

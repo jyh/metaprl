@@ -60,11 +60,15 @@ open Base_auto_tactic
  * TERMS                                                                *
  ************************************************************************)
 
+declare cycg{'g}
 declare cycgroup{'g; 'a}
 
 (************************************************************************
  * DEFINITIONS                                                          *
  ************************************************************************)
+
+rewrite unfold_cycg : cycg{'g} <-->
+   (group{'g} & (exst a: set. (mem{'a; car{'g}} & all x: set. (mem{'x; car{'g}} => (exst n: int. eq{'x; power{'g; 'a; 'n}})))))
 
 rewrite unfold_cycgroup : cycgroup{'g; 'a} <-->
    (group{'g} & mem{'a; car{'g}} & equal{car{'g}; sep{car{'g}; x. (exst n: int. eq{'x; power{'g; 'a; 'n}})}})
@@ -78,7 +82,7 @@ topval fold_cycgroup : conv
 (*
  * Every cyclic group is abelian.
  *)
-topval cycgroupAbelT: term -> tactic
+topval cycgAbelT: tactic
 
 (*
  * -*-

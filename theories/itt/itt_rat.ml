@@ -153,6 +153,9 @@ define unfold_neg_rat : neg_rat{'x} <-->
 define unfold_inv_rat : inv_rat{'x} <-->
 	spread{'x; x1,x2.rat{'x2; 'x1}}
 
+define unfold_sub_rat : sub_rat{'x; 'y} <-->
+	add_rat{'x; neg_rat{'y}}
+
 (*******************************)
 (* CHECK !!!                   *)
 declare lt_bool_rat{'a;'b}
@@ -285,6 +288,7 @@ let resource reduce +=[
 	<<add_rat{ratn{'a; 'b}; ratn{'c; 'd}}>>, ((addrC [0] unfold_ratn) thenC (addrC [1] unfold_ratn) thenC unfold_add_rat);
 	<<inv_rat{ratn{'a; 'b}}>>, ((addrC [0] unfold_ratn) thenC unfold_inv_rat);
 	<<neg_rat{ratn{'a; 'b}}>>, ((addrC [0] unfold_ratn) thenC unfold_neg_rat);
+	<<sub_rat{ratn{'a; 'b}; ratn{'b; 'c}}>>, unfold_sub_rat;
 
 	<<lt_bool_rat{ratn{'a;'b};ratn{'c;'d}}>>, reduce_lt_bool_rat;
 	<<gt_bool_rat{ratn{'a;'b};ratn{'c;'d}}>>, unfold_gt_bool_rat;
@@ -337,6 +341,10 @@ dform add_rat_df1 : except_mode[src] :: parens :: "prec"[prec_add] :: add_rat{'a
 dform mul_rat_df1 : except_mode[src] :: parens :: "prec"[prec_mul] :: mul_rat{'a; 'b}
  =
    slot["le"]{'a} `" *" Nuprl_font!subq `" " slot["lt"]{'b}
+
+dform sub_rat_df1 : except_mode[src] :: parens :: "prec"[prec_add] :: sub_rat{'a; 'b}
+ =
+   slot["lt"]{'a} `" -" Nuprl_font!subq `" " slot["le"]{'b}
 
 dform rationals_prl_df : except_mode [src] :: rationals = `"rationals"
 
@@ -440,6 +448,11 @@ interactive inv_rat_wf {| intro [] |} :
 	sequent { <H> >- neq_rat{'a; rat{0;1}} } -->
 	sequent { <H> >- inv_rat{'a} in rationals }
 
+interactive sub_rat_wf {| intro [] |} :
+	sequent { <H> >- 'a in rationals } -->
+	sequent { <H> >- 'b in rationals } -->
+	sequent { <H> >- sub_rat{'a; 'b} in rationals }
+
 interactive_rw reduce_multiplier_rw :
 	('k in int0) -->
 	('a in int) -->
@@ -496,8 +509,16 @@ interactive_rw reduce_inv_rat {| reduce |} :
 interactive_rw reduce_neg_rat {| reduce |} :
 	('a in int) -->
 	('b in int0) -->
-	inv_rat{rat{'a; 'b}} <-->
+	neg_rat{rat{'a; 'b}} <-->
 	rat{- 'a; 'b}
+
+interactive_rw reduce_sub_rat {| reduce |} :
+	('a in int) -->
+	('b in int0) -->
+	('c in int) -->
+	('d in int0) -->
+	sub_rat{rat{'a; 'b}; rat{'c; 'd}} <-->
+	rat{('a *@ 'd) -@ ('b *@ 'c); 'b *@ 'd}
 
 interactive add_rat_Commut :
    [wf] sequent { <H> >- 'a in rationals } -->
@@ -556,11 +577,11 @@ interactive_rw add_rat_Id2_rw {| reduce; arith_unfold |} :
    add_rat{rat{0; 1}; 'a} <--> 'a
 
 let add_rat_Id2C = add_rat_Id2_rw
-(*
+
 let resource reduce += [
-	<<'a -@ rat{0; 1}>>, (unfold_sub thenC (addrC [1] reduce_minus));
+	<<sub_rat{'a; rat{0; 1}}>>, (unfold_sub_rat thenC (addrC [1] reduce_sub_rat));
 ]
-*)
+
 interactive_rw add_rat_Id3_rw :
    ( 'a in rationals ) -->
    'a <--> add_rat{rat{0; 1}; 'a}
@@ -687,19 +708,13 @@ interactive_rw mul_rat_Zero3C 'a :
    ('a in rationals) -->
    rat{0; 1} <--> mul_rat{rat{0; 1}; 'a}
 
-(*
-interactive_rw negative_rat1_2uniC :
+interactive_rw negative1_2uni_ratC :
 	('a in rationals) -->
-	mul_rat{(-1); 'a} <--> neg_rat{'a}
+	mul_rat{ratn{-1; 1}; 'a} <--> neg_rat{'a}
 
-interactive_rw uni2negative_rat1C :
+interactive_rw uni2negative1_ratC {| arith_unfold |} :
 	('a in rationals) -->
-	(- 'a) <--> ((-1) *@ 'a)
-
-let resource arith_unfold +=[
-	<<- 'a>>, (uni2negative_rat1C thenC (addrC [0] reduce_minus));
-]
-*)
+	neg_rat{'a} <--> mul_rat{rat{-1; 1}; 'a}
 
 let debug_int2rat =
    create_debug (**)

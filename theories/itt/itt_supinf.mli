@@ -53,9 +53,21 @@ extends Itt_quotient
 extends Itt_int_arith*)
 doc <:doc< @docoff >>
 
+open Basic_tactics
 open Tactic_type.Tactic
 
 topval testT : tactic
+
+topval ge2leftMinT : int -> int -> tactic
+topval ge2rightMaxT : int -> int -> tactic
+topval ge2transitiveT : int -> int -> tactic
+topval ge_addMono2T : int -> int -> tactic
+topval extract2leftC : term -> conv
+topval extract2rightC : term -> conv
+topval ge_normC : conv
+topval test2T : tactic
+
+topval ge_int2ratT : int -> tactic
 topval preT : tactic
 
 doc <:doc< @docoff >>

@@ -74,6 +74,9 @@ define unfold_neg_rat : neg_rat{'x} <-->
 define unfold_inv_rat : inv_rat{'x} <-->
 	spread{'x; x1,x2.rat{'x2; 'x1}}
 
+define unfold_sub_rat : sub_rat{'x; 'y} <-->
+	add_rat{'x; neg_rat{'y}}
+
 declare beq_rat{'a;'b}
 declare bneq_rat{'a;'b}
 declare neq_rat{'a;'b}

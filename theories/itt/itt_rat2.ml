@@ -8,24 +8,29 @@ open Itt_rat
 module TO = TermOrder (Refiner.Refiner)
 open TO
 
+interactive_rw sub_rat_elim_rw {| arith_unfold |} :
+   ( 'a in rationals ) -->
+   ( 'b in rationals ) -->
+   sub_rat{'a; 'b} <--> add_rat{'a; mul_rat{rat{-1; 1}; 'b}}
+
 interactive_rw sum_same_products_rat1_rw :
    ('a in rationals) -->
    add_rat{mul_rat{rat{number[i:n]; number[j:n]}; 'a}; mul_rat{rat{number[k:n]; number[l:n]}; 'a}} <-->
    mul_rat{add_rat{rat{number[i:n]; number[j:n]}; rat{number[k:n]; number[l:n]}}; 'a}
 
-let sum_same_products_rat1C = sum_same_products_rat1_rw thenC (addrC [0] reduce_add_rat)
+let sum_same_products_rat1C = sum_same_products_rat1_rw thenC reduceC
 
 interactive_rw sum_same_products_rat2_rw :
    ('a in rationals) -->
    add_rat{mul_rat{rat{number[i:n]; number[j:n]}; 'a}; 'a} <--> mul_rat{add_rat{rat{number[i:n]; number[j:n]}; rat{1; 1}}; 'a}
 
-let sum_same_products_rat2C = sum_same_products_rat2_rw thenC (addrC [0] reduce_add_rat)
+let sum_same_products_rat2C = sum_same_products_rat2_rw thenC reduceC
 
 interactive_rw sum_same_products_rat3_rw :
    ('a in rationals) -->
    add_rat{'a; mul_rat{rat{number[i:n]; number[j:n]}; 'a}} <--> mul_rat{add_rat{rat{number[i:n]; number[j:n]}; rat{1; 1}}; 'a}
 
-let sum_same_products_rat3C = sum_same_products_rat3_rw thenC (addrC [0] reduce_add_rat)
+let sum_same_products_rat3C = sum_same_products_rat3_rw thenC reduceC
 
 interactive_rw sum_same_products_rat4_rw :
    ('a in rationals) -->

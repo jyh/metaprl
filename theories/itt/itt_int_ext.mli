@@ -100,6 +100,12 @@ define unfold_max: max{'i;'j} <--> if 'i<@ 'j then 'j else 'i
 
 define unfold_min: min{'i;'j} <--> if 'i<@ 'j then 'i else 'j
 
+define unfold_abs : abs{'a} <--> ind{'a;x,y.(-'a);0;x,y.'a}
+(*if 'a <@ 0 then -'a else 'a*)
+
+define unfold_sign : sign{'a} <--> ind{'a;x,y.(-1);0;x,y.1}
+(*if 'a <@ 0 then number[(-1):n] else if 0 <@ 'a then 1 else 0*)
+
 (************************************************************************
  * DISPLAY FORMS                                                        *
  ************************************************************************)

@@ -50,6 +50,7 @@ extends Itt_logic
 extends Itt_struct
 extends Itt_decidable
 extends Itt_quotient
+extends Itt_nequal
 extends Itt_int_arith
 extends Itt_field
 extends Itt_order
@@ -68,6 +69,7 @@ open Itt_struct
 open Itt_bool
 open Itt_int_base
 open Itt_squash
+open Itt_int_ext
 
 let _ = show_loading "Loading Itt_rat%t"
 
@@ -91,6 +93,7 @@ define unfold_int0 :
 declare add_rat{'a;'b}
 declare mul_rat{'a;'b}
 declare neg_rat{'a}
+declare inv_rat{'a}
 declare lt_bool_rat{'a;'b}
 declare le_bool_rat{'a;'b}
 declare beq_rat{'a;'b}
@@ -115,10 +118,22 @@ prim_rw reduce_neg_rat : neg_rat{rat{'a;'b}} <--> rat{minus{'a};'b}
 prim_rw reduce_lt_bool_rat : lt_bool_rat{rat{'a;'b};rat{'c;'d}} <--> lt_bool{('a *@ 'd);('c *@ 'b)}
 prim_rw reduce_le_bool_rat : le_bool_rat{rat{'a;'b};rat{'c;'d}} <--> le_bool{('a *@ 'd);('c *@ 'b)}
 
+prim_rw reduce_inv_rat :
+	('a in posnat) -->
+	inv_rat{rat{'a;'b}} <--> rat{ (sign{'a} *@ 'b) ; abs{'a}}
+
 prim_rw reduce_beq_rat :
    beq_rat{ ('a,'b) ; ('c,'d) } <--> beq_int{ ('a *@ 'd) ; ('c *@ 'b) }
 
 let reduce_beq_rat2 = (addrC [0] unfold_rat) thenC (addrC [1] unfold_rat) thenC reduce_beq_rat
+
+define unfold_ge_bool_rat : ge_bool_rat{'a;'b} <--> le_bool_rat{'b;'a}
+
+define unfold_ge_rat : ge_rat{'a;'b} <--> "assert"{ge_bool_rat{'a;'b}}
+
+let reduce_le_bool_rat2 = reduce_le_bool_rat thenC (addrC [0] reduce_mul) thenC (addrC [1] reduce_mul) thenC unfold_le_bool
+let reduce_ge_bool_rat = unfold_ge_bool_rat thenC reduce_le_bool_rat2
+let reduce_ge_rat = unfold_ge_rat thenC (addrC [0] unfold_ge_bool_rat)
 
 let resource reduce += [
    << add_rat{('a,'b); 'x} >>, addrC [0] fold_rat;
@@ -134,7 +149,23 @@ let resource reduce += [
    << lt_bool_rat{rat{'a;'b}; rat{'c;'d}} >>, reduce_lt_bool_rat;
    << beq_rat{('a,'b); ('c,'d)} >>, reduce_beq_rat;
    << beq_rat{rat{'a;'b}; rat{'c;'d}} >>, reduce_beq_rat2;
+
+	<<"assert"{le_bool_rat{rat{number[i:n]; number[j:n]}; rat{number[k:n]; number[l:n]}}}>>, addrC [0] reduce_le_bool_rat2;
+	<<"assert"{ge_bool_rat{rat{number[i:n]; number[j:n]}; rat{number[k:n]; number[l:n]}}}>>, addrC [0] reduce_ge_bool_rat;
+	<<ge_rat{rat{number[i:n]; number[j:n]}; rat{number[k:n]; number[l:n]}}>>, reduce_ge_rat;
 ]
+
+let resource elim += [
+	<<"assert"{le_bool_rat{rat{number[i:n]; number[j:n]}; rat{number[k:n]; number[l:n]}}}>>, rw (addrC [0] reduce_le_bool_rat2);
+	<<"assert"{ge_bool_rat{rat{number[i:n]; number[j:n]}; rat{number[k:n]; number[l:n]}}}>>, rw (addrC [0] reduce_ge_bool_rat);
+	<<ge_rat{rat{number[i:n]; number[j:n]}; rat{number[k:n]; number[l:n]}}>>, rw reduce_ge_rat;
+	]
+
+let resource intro += [
+	<<"assert"{le_bool_rat{rat{number[i:n]; number[j:n]}; rat{number[k:n]; number[l:n]}}}>>, wrap_intro (rw (addrC [0] reduce_le_bool_rat2) 0);
+	<<"assert"{ge_bool_rat{rat{number[i:n]; number[j:n]}; rat{number[k:n]; number[l:n]}}}>>, wrap_intro (rw (addrC [0] reduce_ge_bool_rat) 0);
+	<<ge_rat{rat{number[i:n]; number[j:n]}; rat{number[k:n]; number[l:n]}}>>, wrap_intro (rw reduce_ge_rat 0);
+	]
 
 define unfold_rationals : rationals <-->
 	quot x,y: (int * posnat) // "assert"{beq_rat{'x;'y}}
@@ -146,21 +177,124 @@ define unfold_fieldQ : fieldQ <-->
 	 inv=lambda{x.rat{snd{'x};fst{'x}}}
 	}
 
+define unfold_max_rat : max_rat{'a;'b} <-->
+	(max{lambda{x.lambda{y.le_bool_rat{'x;'y}}}} 'a 'b)
+
+define unfold_min_rat : min_rat{'a;'b} <-->
+	(min{lambda{x.lambda{y.le_bool_rat{'x;'y}}}} 'a 'b)
+
 let fold_rationals = makeFoldC <<rationals>> unfold_rationals
 
 let fold_fieldQ = makeFoldC <<fieldQ>> unfold_fieldQ
 
 doc <:doc< @docoff >>
 
+(************************************************************************
+ * DISPLAY FORMS                                                        *
+ ************************************************************************)
+dform rat_df1 : except_mode[src] :: rat{'a; 'b}
+ =
+   `"(" slot{'a} `"/" slot{'b} `")"
+
+dform zero_rat_df1 : except_mode[src] :: rat{0;'a}
+ =
+   `"0" Nuprl_font!subq
+
+dform unit_rat_df1 : except_mode[src] :: rat{'a;'a}
+ =
+   `"1" Nuprl_font!subq
+
+dform int_rat_df1 : except_mode[src] :: rat{'a;1}
+ =
+   slot{'a} Nuprl_font!subq
+
+dform add_rat_df1 : except_mode[src] :: parens :: "prec"[prec_add] :: add_rat{'a; 'b}
+ =
+   slot["le"]{'a} `" +" Nuprl_font!subq `" " slot["lt"]{'b}
+
+dform mul_rat_df1 : except_mode[src] :: parens :: "prec"[prec_add] :: mul_rat{'a; 'b}
+ =
+   slot["le"]{'a} `" *" Nuprl_font!subq `" " slot["lt"]{'b}
+
+dform ge_rat_df1 : parens :: "prec"[prec_compare] :: ge_rat{'a; 'b} =
+   slot["lt"]{'a} `" >=" Nuprl_font!subq `" " slot["le"]{'b}
+
+dform rationals_prl_df : except_mode [src] :: rationals = `"rationals"
+
+(*
+dform q_prl_df : except_mode [src] :: Q = mathbbQ
+dform q_src_df : mode[src] :: Q = `"Q"
+*)
+
 let rationals_term = << rationals >>
 let rationals_opname = opname_of_term rationals_term
 let is_rationals_term = is_no_subterms_term rationals_opname
+
+let rat_term = << rat{'x;'y} >>
+let rat_opname = opname_of_term rat_term
+let is_rat_term = is_dep0_dep0_term rat_opname
+let mk_rat_term = mk_dep0_dep0_term rat_opname
+let dest_rat = dest_dep0_dep0_term rat_opname
 
 let beq_rat_term = << beq_rat{'x; 'y} >>
 let beq_rat_opname = opname_of_term beq_rat_term
 let is_beq_rat_term = is_dep0_dep0_term beq_rat_opname
 let mk_beq_rat_term = mk_dep0_dep0_term beq_rat_opname
 let dest_beq_rat = dest_dep0_dep0_term beq_rat_opname
+
+let mul_rat_term = << mul_rat{'x; 'y} >>
+let mul_rat_opname = opname_of_term mul_rat_term
+let is_mul_rat_term = is_dep0_dep0_term mul_rat_opname
+let mk_mul_rat_term = mk_dep0_dep0_term mul_rat_opname
+let dest_mul_rat = dest_dep0_dep0_term mul_rat_opname
+
+let add_rat_term = << add_rat{'x; 'y} >>
+let add_rat_opname = opname_of_term add_rat_term
+let is_add_rat_term = is_dep0_dep0_term add_rat_opname
+let mk_add_rat_term = mk_dep0_dep0_term add_rat_opname
+let dest_add_rat = dest_dep0_dep0_term add_rat_opname
+
+let neg_rat_term = << neg_rat{'x} >>
+let neg_rat_opname = opname_of_term neg_rat_term
+let is_neg_rat_term = is_dep0_term neg_rat_opname
+let mk_neg_rat_term = mk_dep0_term neg_rat_opname
+let dest_neg_rat = dest_dep0_term neg_rat_opname
+
+let inv_rat_term = << inv_rat{'x} >>
+let inv_rat_opname = opname_of_term inv_rat_term
+let is_inv_rat_term = is_dep0_term inv_rat_opname
+let mk_inv_rat_term = mk_dep0_term inv_rat_opname
+let dest_inv_rat = dest_dep0_term inv_rat_opname
+
+let le_bool_rat_term = << le_bool_rat{'x; 'y} >>
+let le_bool_rat_opname = opname_of_term le_bool_rat_term
+let is_le_bool_rat_term = is_dep0_dep0_term le_bool_rat_opname
+let mk_le_bool_rat_term = mk_dep0_dep0_term le_bool_rat_opname
+let dest_le_bool_rat = dest_dep0_dep0_term le_bool_rat_opname
+
+let ge_bool_rat_term = << ge_bool_rat{'x; 'y} >>
+let ge_bool_rat_opname = opname_of_term ge_bool_rat_term
+let is_ge_bool_rat_term = is_dep0_dep0_term ge_bool_rat_opname
+let mk_ge_bool_rat_term = mk_dep0_dep0_term ge_bool_rat_opname
+let dest_ge_bool_rat = dest_dep0_dep0_term ge_bool_rat_opname
+
+let ge_rat_term = << ge_rat{'x; 'y} >>
+let ge_rat_opname = opname_of_term ge_rat_term
+let is_ge_rat_term = is_dep0_dep0_term ge_rat_opname
+let mk_ge_rat_term = mk_dep0_dep0_term ge_rat_opname
+let dest_ge_rat = dest_dep0_dep0_term ge_rat_opname
+
+let max_rat_term = << max_rat{'x; 'y} >>
+let max_rat_opname = opname_of_term max_rat_term
+let is_max_rat_term = is_dep0_dep0_term max_rat_opname
+let mk_max_rat_term = mk_dep0_dep0_term max_rat_opname
+let dest_max_rat = dest_dep0_dep0_term max_rat_opname
+
+let min_rat_term = << min_rat{'x; 'y} >>
+let min_rat_opname = opname_of_term min_rat_term
+let is_min_rat_term = is_dep0_dep0_term min_rat_opname
+let mk_min_rat_term = mk_dep0_dep0_term min_rat_opname
+let dest_min_rat = dest_dep0_dep0_term min_rat_opname
 
 let posnatDT n = rw unfold_posnat n thenT dT n thenT dT (n+1)
 
@@ -193,14 +327,6 @@ interactive rationalsElimination {| elim [ThinOption thinT] |} 'H :
 let resource intro += [
 	<<'x='y in rationals>>, wrap_intro (rwh unfold_rationals 0);
 	]
-
-(************************************************************************
- * DISPLAY FORMS                                                        *
- ************************************************************************)
-(*
-dform q_prl_df : except_mode [src] :: Q = mathbbQ
-dform q_src_df : mode[src] :: Q = `"Q"
-*)
 
 interactive posnatEquality {| intro [] |} :
 	sequent { <H> >- 'a = 'b in int } -->
@@ -337,5 +463,23 @@ interactive q_is_field {| intro [] |} :
 
 interactive lt_bool_ratStrictTotalOrder :
 	sequent { <H> >- isStrictTotalOrder{rationals; lambda{x.lambda{y.lt_bool_rat{'x;'y}}}} }
+
+interactive le_bool_ratUnstrictTotalOrder :
+	sequent { <H> >- isUnstrictTotalOrder{rationals; lambda{x.lambda{y.le_bool_rat{'x;'y}}}} }
+
+interactive ge_bool_ratUnstrictTotalOrder :
+	sequent { <H> >- isUnstrictTotalOrder{rationals; lambda{x.lambda{y.ge_bool_rat{'x;'y}}}} }
+
+interactive geReflexive :
+	[wf] sequent { <H> >- 'a in rationals } -->
+	sequent { <H> >- ge_rat{'a; 'a} }
+
+interactive geTransitive 'b :
+	[wf] sequent { <H> >- 'a in rationals } -->
+	[wf] sequent { <H> >- 'b in rationals } -->
+	[wf] sequent { <H> >- 'c in rationals } -->
+	sequent { <H> >- ge_rat{'b; 'c} } -->
+	sequent { <H> >- ge_rat{'a; 'b} } -->
+	sequent { <H> >- ge_rat{'a; 'c} }
 
 doc <:doc< @docoff >>

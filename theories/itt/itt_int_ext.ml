@@ -193,19 +193,52 @@ define unfold_neq_int :
 
 doc <:doc< @docoff >>
 
+let reduce_lt_prop = unfold_lt thenC (addrC [0] reduce_lt)
+let reduce_gt_prop = unfold_gt thenC reduce_lt_prop
+let reduce_le_prop = (unfold_le thenC
+                     (addrC [0] (unfold_le_bool thenC
+                     (addrC [0] reduce_lt))))
+let reduce_ge_prop = unfold_ge thenC reduce_le_prop
+let reduce_neq_prop = unfold_neq_int thenC
+                      (addrC [0] (unfold_bneq_int thenC
+							 (addrC [0] reduce_eq_int)))
+
 let resource reduce += [
-   <<number[i:n] <= number[j:n]>>, (unfold_le thenC
-                                   (addrC [0] (unfold_le_bool thenC
-                                   (addrC [0] reduce_lt))));
-   <<nequal{number[i:n]; number[j:n]}>>, (unfold_neq_int thenC
-                                         (addrC [0] (unfold_bneq_int thenC
-					 (addrC [0] reduce_eq_int))));
+	<<number[i:n] > number[j:n]>>, reduce_gt_prop;
+	<<number[i:n] <= number[j:n]>>, reduce_le_prop;
+	<<number[i:n] < number[j:n]>>, reduce_lt_prop;
+	<<number[i:n] >= number[j:n]>>, reduce_ge_prop;
+   <<nequal{number[i:n]; number[j:n]}>>, reduce_neq_prop;
 (*
    << le{'a; 'b} >>, unfold_le;
    << nequal{'a; 'b} >>, unfold_neq_int;
 *)
    << le{'a;'a}>>, (unfold_le thenC (addrC [0] (unfold_le_bool thenC (addrC [0] lt_IrreflexC))));
 ]
+
+let resource elim += [
+	<<number[i:n] > number[j:n]>>, rw reduce_gt_prop;
+	<<number[i:n] <= number[j:n]>>, rw reduce_le_prop;
+	<<number[i:n] >= number[j:n]>>, rw reduce_ge_prop;
+	<<number[i:n] < number[j:n]>>, rw reduce_lt_prop;
+   <<nequal{number[i:n]; number[j:n]}>>, rw reduce_neq_prop;
+	<<"assert"{lt_bool{number[i:n]; number[j:n]}}>>, rw (addrC [0] reduce_lt);
+	<<"assert"{le_bool{number[i:n]; number[j:n]}}>>, rw (addrC [0] unfold_le_bool);
+	<<"assert"{gt_bool{number[i:n]; number[j:n]}}>>, rw (addrC [0] (unfold_gt_bool thenC reduce_lt));
+	<<"assert"{ge_bool{number[i:n]; number[j:n]}}>>, rw (addrC [0] unfold_ge_bool);
+	]
+
+let resource intro += [
+	<<number[i:n] > number[j:n]>>, wrap_intro (rw reduce_gt_prop 0);
+	<<number[i:n] <= number[j:n]>>, wrap_intro (rw reduce_le_prop 0);
+	<<number[i:n] >= number[j:n]>>, wrap_intro (rw reduce_ge_prop 0);
+	<<number[i:n] < number[j:n]>>, wrap_intro (rw reduce_lt_prop 0);
+   <<nequal{number[i:n]; number[j:n]}>>, wrap_intro (rw reduce_neq_prop 0);
+	<<"assert"{lt_bool{number[i:n]; number[j:n]}}>>, wrap_intro (rw (addrC [0] reduce_lt) 0);
+	<<"assert"{le_bool{number[i:n]; number[j:n]}}>>, wrap_intro (rw (addrC [0] unfold_le_bool) 0);
+	<<"assert"{gt_bool{number[i:n]; number[j:n]}}>>, wrap_intro (rw (addrC [0] (unfold_gt_bool thenC reduce_lt)) 0);
+	<<"assert"{ge_bool{number[i:n]; number[j:n]}}>>, wrap_intro (rw (addrC [0] unfold_ge_bool) 0);
+	]
 
 let le_term = << 'x <= 'y >>
 let le_opname = opname_of_term le_term
@@ -274,6 +307,11 @@ dform max_df : except_mode [src] :: max{'i; 'j} = `"max" `"(" 'i `"; " 'j ")"
 
 dform min_df : except_mode [src] :: min{'i; 'j} = `"min" `"(" 'i `"; " 'j ")"
 
+define unfold_abs : abs{'a} <--> ind{'a;x,y.(-'a);0;x,y.'a}
+(*if 'a <@ 0 then -'a else 'a*)
+
+define unfold_sign : sign{'a} <--> ind{'a;x,y.(-1);0;x,y.1}
+(*if 'a <@ 0 then number[(-1):n] else if 0 <@ 'a then 1 else 0*)
 
 doc <:doc<
    @begin[doc]
@@ -356,16 +394,6 @@ interactive ge_wf {| intro [] |} :
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->
    sequent { <H> >- "type"{ge{'a; 'b}} }
-
-interactive max_wf {| intro [] |} :
-   [wf] sequent { <H> >- 'a in int } -->
-   [wf] sequent { <H> >- 'b in int } -->
-   sequent { <H> >- max{'a; 'b} in int }
-
-interactive min_wf {| intro [] |} :
-   [wf] sequent { <H> >- 'a in int } -->
-   [wf] sequent { <H> >- 'b in int } -->
-   sequent { <H> >- min{'a; 'b} in int }
 
 interactive le_refl {| intro [] |} :
    [wf] sequent { <H> >- 'a in int } -->

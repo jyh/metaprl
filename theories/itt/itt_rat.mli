@@ -50,6 +50,9 @@ extends Itt_logic
 extends Itt_struct
 extends Itt_decidable
 extends Itt_quotient
+extends Itt_nequal
+extends Itt_field
+extends Itt_order
 extends Itt_int_arith
 doc <:doc< @docoff >>
 
@@ -57,8 +60,87 @@ open Refiner.Refiner.TermOp
 
 open Tactic_type.Sequent
 
+declare add_rat{'a;'b}
+declare mul_rat{'a;'b}
+declare neg_rat{'a}
+declare inv_rat{'a}
+declare lt_bool_rat{'a;'b}
+declare le_bool_rat{'a;'b}
+declare beq_rat{'a;'b}
+
+define unfold_posnat : posnat <--> ({x:int | 'x>0})
+define unfold_int0 : int0 <--> ({x:int | 'x<>0})
+define unfold_rat : rat{'a;'b} <--> ('a,'b)
+define unfold_rat_of_int : rat_of_int{'a} <--> rat{'a; 1}
+define unfold_ge_bool_rat : ge_bool_rat{'a;'b} <--> le_bool_rat{'b;'a}
+define unfold_ge_rat : ge_rat{'a;'b} <--> "assert"{ge_bool_rat{'a;'b}}
+
+define unfold_rationals : rationals <-->
+	quot x,y: (int * posnat) // "assert"{beq_rat{'x;'y}}
+
+define unfold_fieldQ : fieldQ <-->
+	{car=rationals; "*"=lambda{x.lambda{y.mul_rat{'x;'y}}}; "1"=rat{1;1};
+	 "+"=lambda{x.lambda{y.add_rat{'x;'y}}}; "0"=rat{0;1}; "neg"=lambda{x.(neg_rat{'x})};
+	 car0={a: rationals | 'a <> rat{0;1} in rationals};
+	 inv=lambda{x.rat{snd{'x};fst{'x}}}
+	}
+
+define unfold_max_rat : max_rat{'a;'b} <-->
+	(max{lambda{x.lambda{y.le_bool_rat{'x;'y}}}} 'a 'b)
+
+define unfold_min_rat : min_rat{'a;'b} <-->
+	(min{lambda{x.lambda{y.le_bool_rat{'x;'y}}}} 'a 'b)
+
 topval fold_rat : conv
 topval reduce_beq_rat2 : conv
 topval fold_rationals : conv
+
+val is_rat_term : term -> bool
+val mk_rat_term : term -> term -> term
+val dest_rat : term -> (term * term)
+
+val is_add_rat_term : term -> bool
+val mk_add_rat_term : term -> term -> term
+val dest_add_rat : term -> (term * term)
+
+val is_mul_rat_term : term -> bool
+val mk_mul_rat_term : term -> term -> term
+val dest_mul_rat : term -> (term * term)
+
+val is_neg_rat_term : term -> bool
+val mk_neg_rat_term : term -> term
+val dest_neg_rat : term -> term
+
+val is_inv_rat_term : term -> bool
+val mk_inv_rat_term : term -> term
+val dest_inv_rat : term -> term
+
+val is_le_bool_rat_term : term -> bool
+val mk_le_bool_rat_term : term -> term -> term
+val dest_le_bool_rat : term -> (term * term)
+
+val is_ge_bool_rat_term : term -> bool
+val mk_ge_bool_rat_term : term -> term -> term
+val dest_ge_bool_rat : term -> (term * term)
+
+val is_ge_rat_term : term -> bool
+val mk_ge_rat_term : term -> term -> term
+val dest_ge_rat : term -> (term * term)
+
+val is_max_rat_term : term -> bool
+val mk_max_rat_term : term -> term -> term
+val dest_max_rat : term -> (term * term)
+
+val is_min_rat_term : term -> bool
+val mk_min_rat_term : term -> term -> term
+val dest_min_rat : term -> (term * term)
+
+rule geTransitive 'b :
+	[wf] sequent { <H> >- 'a in rationals } -->
+	[wf] sequent { <H> >- 'b in rationals } -->
+	[wf] sequent { <H> >- 'c in rationals } -->
+	sequent { <H> >- ge_rat{'b; 'c} } -->
+	sequent { <H> >- ge_rat{'a; 'b} } -->
+	sequent { <H> >- ge_rat{'a; 'c} }
 
 doc <:doc< @docoff >>

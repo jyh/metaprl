@@ -85,6 +85,12 @@ define unfold_unstrict2eq : unstrict2eq{'rel} <-->
 define unfold_inverse_order : inverse_order{'rel} <-->
 	lambda{a. lambda{b. 'rel 'b 'a}}
 
+define unfold_max : max{'rel} <-->
+	lambda{a.lambda{b.ifthenelse{'rel 'a 'b; 'b; 'a}}}
+
+define unfold_min : min{'rel} <-->
+	lambda{a.lambda{b.ifthenelse{'rel 'a 'b; 'a; 'b}}}
+
 (************************************************************************
  * TACTICS                                                              *
  ************************************************************************)

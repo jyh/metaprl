@@ -299,7 +299,7 @@ let inf_set f decl t =
    let decl', ty' = f decl ty in
    let decl'', prop' = f (add_unify_subst v ty decl') prop in
    let le1, le2 = dest_univ ty', dest_univ prop' in
-      decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2)
+      decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2 0)
 
 let typeinf_resource = Mp_resource.improve typeinf_resource (set_term, inf_set)
 

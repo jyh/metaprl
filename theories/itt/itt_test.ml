@@ -60,16 +60,14 @@ dform fact_df : parens :: "prec"[prec_apply] :: fact{'i} =
    `"fact" " " slot{'i}
 
 let redex1C =
-   firstC [reduceBeta;
-           reduceEQInt;
-           reduceBoolTrue;
-           reduceBoolFalse;
-           reduceIfthenelseTrue;
-           reduceIfthenelseFalse;
-           reduceAdd;
-           reduceSub;
-           reduceMul;
-           reduceDiv]
+   firstC [reduce_beta;
+           reduce_eq_int;
+           reduce_ifthenelse_true;
+           reduce_ifthenelse_false;
+           reduce_add;
+           reduce_sub;
+           reduce_mul;
+           reduce_div]
 
 let redex2C =
    reduceFact

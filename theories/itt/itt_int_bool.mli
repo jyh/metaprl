@@ -34,6 +34,8 @@ include Itt_bool
 include Itt_int
 include Itt_logic
 
+open Conversionals
+
 (************************************************************************
  * TERMS                                                                *
  ************************************************************************)
@@ -51,11 +53,11 @@ declare ge_int{'i; 'j}
  * REWRITES                                                             *
  ************************************************************************)
 
-rewrite reduceEQInt : eq_int{natural_number[@i:n]; natural_number[@j:n]} <--> bool_flag[@i = @j]
-rewrite reduceLTInt : lt_int{natural_number[@i:n]; natural_number[@j:n]} <--> bool_flag[@i < @j]
-rewrite reduceGTInt : gt_int{natural_number[@i:n]; natural_number[@j:n]} <--> bool_flag[@j < @i]
-rewrite reduceLEInt : le_int{'i; 'j} <--> bor{eq_int{'i; 'j}; lt_int{'i; 'j}}
-rewrite reduceGEInt : ge_int{'i; 'j} <--> bor{eq_int{'i; 'j}; gt_int{'i; 'j}}
+topval reduce_eq_int : conv
+topval reduce_lt_int : conv
+topval reduce_gt_int : conv
+topval reduce_le_int : conv
+topval reduce_ge_int : conv
 
 (*
  * -*-

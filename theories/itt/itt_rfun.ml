@@ -114,12 +114,12 @@ dform fix_df1 : mode[prl] :: fix{f. 'b} =
 (*
  * apply(lambda(v. b[v]); a) -> b[a]
  *)
-prim_rw reduceBeta : (lambda{v. 'b['v]} 'a) <--> 'b['a]
-prim_rw reduceFix : fix{f. 'b['f]} <--> 'b[fix{f. 'b['f]}]
+prim_rw reduce_beta : (lambda{v. 'b['v]} 'a) <--> 'b['a]
+prim_rw reduce_fix : fix{f. 'b['f]} <--> 'b[fix{f. 'b['f]}]
 
 let reduce_info =
-   [<< (lambda{v. 'b['v]} 'a) >>, reduceBeta;
-    << fix{f. 'b['f]} >>, reduceFix]
+   [<< (lambda{v. 'b['v]} 'a) >>, reduce_beta;
+    << fix{f. 'b['f]} >>, reduce_fix]
 
 let reduce_resource = add_reduce_info reduce_resource reduce_info
 
@@ -366,7 +366,7 @@ let inf_rfun inf decl t =
    let decl', a' = inf decl a in
    let decl'', b' = inf (add_unify_subst v a (add_unify_subst f (mk_fun_term a void_term) decl')) b in
    let le1, le2 = dest_univ a', dest_univ b' in
-      decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2)
+      decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2 0)
 
 let typeinf_resource = Mp_resource.improve typeinf_resource (rfun_term, inf_rfun)
 

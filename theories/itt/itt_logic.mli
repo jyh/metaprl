@@ -53,37 +53,34 @@ open Base_auto_tactic
  * TERMS                                                                *
  ************************************************************************)
 
-define unfoldProp : "prop"[@i:l] <--> "univ"[@i:l]
+define unfold_prop : "prop"[@i:l] <--> "univ"[@i:l]
 
-define unfoldTrue : "true" <--> unit
-define unfoldFalse : "false" <--> void
+define unfold_true : "true" <--> unit
+define unfold_false : "false" <--> void
 
-define unfoldNot : "not"{'a} <--> 'a -> void
+define unfold_not : "not"{'a} <--> 'a -> void
 
-define unfoldAnd : "and"{'a; 'b} <--> 'a * 'b
-define unfoldOr : "or"{'a; 'b} <--> 'a + 'b
-define unfoldImplies : "implies"{'a; 'b} <--> 'a -> 'b
-define unfoldIff : "iff"{'a; 'b} <--> (('a -> 'b) & ('b -> 'a))
-define unfoldCand : "cand"{'a; 'b} <--> "and"{'a; 'b}
-define unfoldCor : "cor"{'a; 'b} <--> "or"{'a; ."cand"{."not"{'a}; 'b}}
+define unfold_and : "and"{'a; 'b} <--> 'a * 'b
+define unfold_or : "or"{'a; 'b} <--> 'a + 'b
+define unfold_implies : "implies"{'a; 'b} <--> 'a -> 'b
+define unfold_iff : "iff"{'a; 'b} <--> (('a -> 'b) & ('b -> 'a))
+define unfold_cand : "cand"{'a; 'b} <--> "and"{'a; 'b}
+define unfold_cor : "cor"{'a; 'b} <--> "or"{'a; ."cand"{."not"{'a}; 'b}}
 
-define unfoldAll : "all"{'A; x. 'B['x]} <--> x: 'A -> 'B['x]
-define unfoldExists : "exists"{'A; x. 'B['x]} <--> x: 'A * 'B['x]
+define unfold_all : "all"{'A; x. 'B['x]} <--> x: 'A -> 'B['x]
+define unfold_exists : "exists"{'A; x. 'B['x]} <--> x: 'A * 'B['x]
 
-rewrite reducePropTrue : "prop"["true":t] <--> "true"
-rewrite reducePropFalse : "prop"["false":t] <--> "false"
-
-topval foldTrue : conv
-topval foldFalse : conv
-topval foldNot : conv
-topval foldImplies : conv
-topval foldIff : conv
-topval foldAnd : conv
-topval foldOr : conv
-topval foldCand : conv
-topval foldCor : conv
-topval foldAll : conv
-topval foldExists : conv
+topval fold_true : conv
+topval fold_false : conv
+topval fold_not : conv
+topval fold_implies : conv
+topval fold_iff : conv
+topval fold_and : conv
+topval fold_or : conv
+topval fold_cand : conv
+topval fold_cor : conv
+topval fold_all : conv
+topval fold_exists : conv
 
 (************************************************************************
  * DISPLAY FORMS							*

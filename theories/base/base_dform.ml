@@ -136,8 +136,9 @@ dform so_var9_df : var[@v:v]{'x1; 'x2; 'x3; 'x4; 'x5; 'x6; 'x7; 'x8; 'x9} =
                        space 'x8 ";"
                        space 'x9 popm "]" ezone
 
-ml_dform bvar_df : bvar{var[@v:v]} format_term buf =
-   format_string buf v
+ml_dform bvar_df : bvar{var[@v:v]} format_term buf = fun
+   term ->
+      format_string buf v
 
 (*
  * Rewriting.
@@ -184,19 +185,22 @@ ml_dform sequent_src_df : mode["src"] :: "sequent"{'ext; 'seq} format_term buf =
          in
             format_hyp hyps (i + 1) len
    in
-   let { sequent_args = args;
-         sequent_hyps = hyps;
-         sequent_goals = goals
-       } = explode_sequent term
+   let format term =
+      let { sequent_args = args;
+            sequent_hyps = hyps;
+            sequent_goals = goals
+          } = explode_sequent term
+      in
+         format_szone buf;
+         format_pushm buf 0;
+         format_string buf "sequent {";
+         format_hyp hyps 0 (SeqHyp.length hyps);
+         format_goal goals 0 (SeqGoal.length goals);
+         format_string buf " }";
+         format_popm buf;
+         format_ezone buf
    in
-      format_szone buf;
-      format_pushm buf 0;
-      format_string buf "sequent {";
-      format_hyp hyps 0 (SeqHyp.length hyps);
-      format_goal goals 0 (SeqGoal.length goals);
-      format_string buf " }";
-      format_popm buf;
-      format_ezone buf
+      format
 
 ml_dform sequent_prl_df : mode["prl"] :: "sequent"{'ext; 'seq} format_term buf =
    let format_arg = function
@@ -249,18 +253,21 @@ ml_dform sequent_prl_df : mode["prl"] :: "sequent"{'ext; 'seq} format_term buf =
             format_term buf NOParens a;
             format_goal goals (i + 1) len
    in
-   let { sequent_args = args;
-         sequent_hyps = hyps;
-         sequent_goals = goals
-       } = explode_sequent term
+   let format term =
+      let { sequent_args = args;
+            sequent_hyps = hyps;
+            sequent_goals = goals
+          } = explode_sequent term
+      in
+         format_szone buf;
+         format_pushm buf 0;
+         format_arg (dest_xlist args);
+         format_hyp hyps 0 (SeqHyp.length hyps);
+         format_goal goals 0 (SeqGoal.length goals);
+         format_popm buf;
+         format_ezone buf
    in
-      format_szone buf;
-      format_pushm buf 0;
-      format_arg (dest_xlist args);
-      format_hyp hyps 0 (SeqHyp.length hyps);
-      format_goal goals 0 (SeqGoal.length goals);
-      format_popm buf;
-      format_ezone buf
+      format
 
 (************************************************************************
  * COMMANDS                                                             *

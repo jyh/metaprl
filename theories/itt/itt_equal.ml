@@ -54,6 +54,7 @@ open Conversionals
 open Sequent
 open Mptop
 
+open Base_meta
 open Base_auto_tactic
 
 (*
@@ -79,6 +80,8 @@ declare univ[@i:l]
 declare equal{'T; 'a; 'b}
 declare member{'T; 'x}
 declare it
+declare "true"
+declare "false"
 declare cumulativity[@i:l, @j:l]
 
 (************************************************************************
@@ -86,6 +89,12 @@ declare cumulativity[@i:l, @j:l]
  ************************************************************************)
 
 prim_rw unfold_member : member{'T; 'x} <--> ('x = 'x in 'T)
+
+prim_rw reduce_cumulativity' : cumulativity[@i:l, @j:l] <-->
+   meta_lt{univ[@i:l]; univ[@j:l]; ."true"; ."false"}
+
+let reduce_cumulativity =
+   reduce_cumulativity' andthenC reduce_meta_lt
 
 let fold_member = makeFoldC << member{'T; 'x} >> unfold_member
 
@@ -116,6 +125,13 @@ dform squash_df : mode[prl] :: squash =
 (************************************************************************
  * RULES                                                                *
  ************************************************************************)
+
+(*
+ * True always holds.
+ *)
+prim trueIntro 'H : :
+   sequent ['ext] { 'H >- "true" } =
+   it
 
 (*
  * Typehood is equality.
@@ -263,7 +279,8 @@ let dest_level_param t =
          { op_params = [param] } ->
             begin
                match dest_param param with
-                  Level s -> s
+                  MLevel s ->
+                     s
                 | _ ->
                      raise (RefineError ("dest_level_param", TermMatchError (t, "param type")))
             end
@@ -271,19 +288,6 @@ let dest_level_param t =
             raise (RefineError ("dest_level_param", TermMatchError (t, "no params")))
        | _ ->
             raise (RefineError ("dest_level_param", TermMatchError (t, "too many params")))
-
-(* Cumulativity over universes *)
-ml_rule cumulativity 'H :
-   sequent ['ext] { 'H >- cumulativity[@j:l, @i:l] } ==
-   let i = dest_level_param <:con< univ[@i:l] >> in
-   let j = dest_level_param <:con< univ[@j:l] >> in
-      if level_cumulativity j i then
-         []
-      else
-         raise (RefineError ("cumulativity", StringError "failed"))
-
- | fun _ extracts ->
-      << it >>, extracts
 
 (*
  * H >- Uj = Uj in Ui
@@ -339,6 +343,16 @@ prim squashFromAny 'H 'ext :
 (*
  * Primitives.
  *)
+let true_term = << "true" >>
+let true_opname = opname_of_term true_term
+let is_true_term = is_no_subterms_term true_opname
+
+let false_term = << "false" >>
+let false_opname = opname_of_term false_term
+let is_false_term = is_no_subterms_term false_opname
+
+let cumulativity_term = << cumulativity[@i:l, @j:l] >>
+
 let equal_term = << 'a = 'b in 'c >>
 let equal_opname = opname_of_term equal_term
 let is_equal_term = is_dep0_dep0_dep0_term equal_opname
@@ -522,13 +536,20 @@ let d_resource = Mp_resource.improve d_resource (univ_type_term, d_univ_typeT)
  * EQCD tactic.
  *)
 let eqcd_univT p =
-   universeEquality (hyp_count_addr p) p
+   let i = hyp_count_addr p in
+      (universeEquality i
+       thenT rw reduce_cumulativity 0
+       thenT trueIntro i) p
 
 let eqcd_itT p =
    axiomEquality (hyp_count_addr p) p
 
 let eqcd_resource = Mp_resource.improve eqcd_resource (univ_term, eqcd_univT)
 let eqcd_resource = Mp_resource.improve eqcd_resource (it_term, eqcd_itT)
+
+let univ_equal_term = << univ[@i:l] = univ[@i:l] in univ[@j:l] >>
+
+let d_resource = Mp_resource.improve d_resource (univ_equal_term, d_wrap_eqcd eqcd_univT)
 
 let d_it_equalT p =
    (axiomEquality (Sequent.hyp_count_addr p)

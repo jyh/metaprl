@@ -20,6 +20,7 @@ MPFILES :=\
 	base_dtactic\
 	base_cache\
 	base_rewrite\
+	base_meta\
 	base_theory
 
 # Name of main libraris

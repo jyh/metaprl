@@ -106,8 +106,8 @@ prim srecEquality 'H 'T 'S1 'S2 'z :
    sequent ['ext] { 'H >- srec{T1. 'B1['T1]} = srec{T2. 'B2['T2]} in univ[@i:l] } =
    it
 
-prim srecType 'H 'S1 'S2 'z :
-   sequent [squash] { 'H; S1: univ[i:l]; S2: univ[i:l]; z: subtype{'S1; 'S2} >- subtype{'B['S1]; 'B['S2]} } -->
+prim srecType 'H 'S1 'S2 'z univ[@i:l] :
+   sequent [squash] { 'H; S1: univ[i:l]; S2: univ[@i:l]; z: subtype{'S1; 'S2} >- subtype{'B['S1]; 'B['S2]} } -->
    sequent ['ext] { 'H >- "type"{srec{T. 'B['T]}} } =
    it
 
@@ -233,7 +233,8 @@ let d_resource = Mp_resource.improve d_resource (srec_term, d_srecT)
 let d_srec_typeT i p =
    if i = 0 then
       let v1, v2, z = maybe_new_vars3 p "u" "v" "z" in
-         srecType (Sequent.hyp_count_addr p) v1 v2 z p
+      let univ = get_univ_arg p in
+         srecType (Sequent.hyp_count_addr p) v1 v2 z univ p
    else
       raise (RefineError ("d_srec_typeT", StringError "no elimination form"))
 

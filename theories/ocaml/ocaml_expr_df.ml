@@ -430,7 +430,7 @@ ml_dform term_df : "apply"[@start1:n, @finish1:n]{
                         ."uid"[@start3:n, @finish3:n]{."uid"["Ml_term":s]};
                         ."lid"[@start4:n, @finish4:n]{."lid"["term_of_string":s]}};
                      .Ocaml!"string"[@start5:n, @finish5:n, @s:s]} format_term buf =
-   format_term buf Dform.LEParens (Ml_term.term_of_string s)
+   fun goal -> format_term buf Dform.LEParens (Ml_term.term_of_string s)
 
 (*
  * -*-

@@ -103,34 +103,31 @@ declare "cor"{'a; 'b}
 declare "all"{'A; x. 'B['x]}
 declare "exists"{'A; x. 'B['x]}
 
-prim_rw unfoldProp : "prop"[@i:l] <--> "univ"[@i:l]
+prim_rw unfold_prop : "prop"[@i:l] <--> "univ"[@i:l]
 
-prim_rw unfoldTrue : "true" <--> unit
-prim_rw unfoldFalse : "false" <--> void
-prim_rw unfoldNot : not{'a} <--> 'a -> void
-prim_rw unfoldImplies : 'a => 'b <--> 'a -> 'b
-prim_rw unfoldIff : "iff"{'a; 'b} <--> (('a -> 'b) & ('b -> 'a))
-prim_rw unfoldAnd : 'a & 'b <--> 'a * 'b
-prim_rw unfoldOr : 'a or 'b <--> 'a + 'b
-prim_rw unfoldCand : "cand"{'a; 'b} <--> 'a & 'b
-prim_rw unfoldCor : "cor"{'a; 'b} <--> "or"{'a; ."cand"{."not"{'a}; 'b}}
-prim_rw unfoldAll : all x: 'A. 'B['x] <--> x:'A -> 'B['x]
-prim_rw unfoldExists : exst x: 'A. 'B['x] <--> x:'A * 'B['x]
+prim_rw unfold_true : "true" <--> unit
+prim_rw unfold_false : "false" <--> void
+prim_rw unfold_not : not{'a} <--> 'a -> void
+prim_rw unfold_implies : 'a => 'b <--> 'a -> 'b
+prim_rw unfold_iff : "iff"{'a; 'b} <--> (('a -> 'b) & ('b -> 'a))
+prim_rw unfold_and : 'a & 'b <--> 'a * 'b
+prim_rw unfold_or : 'a or 'b <--> 'a + 'b
+prim_rw unfold_cand : "cand"{'a; 'b} <--> 'a & 'b
+prim_rw unfold_cor : "cor"{'a; 'b} <--> "or"{'a; ."cand"{."not"{'a}; 'b}}
+prim_rw unfold_all : all x: 'A. 'B['x] <--> x:'A -> 'B['x]
+prim_rw unfold_exists : exst x: 'A. 'B['x] <--> x:'A * 'B['x]
 
-prim_rw reducePropTrue : "prop"["true":t] <--> "true"
-prim_rw reducePropFalse : "prop"["false":t] <--> "false"
-
-let foldTrue    = makeFoldC << "true" >> unfoldTrue
-let foldFalse   = makeFoldC << "false" >> unfoldFalse
-let foldNot     = makeFoldC << not{'a} >> unfoldNot
-let foldImplies = makeFoldC << 'a => 'b >> unfoldImplies
-let foldIff     = makeFoldC << "iff"{'a; 'b} >> unfoldIff
-let foldAnd     = makeFoldC << 'a & 'b >> unfoldAnd
-let foldOr      = makeFoldC << 'a or 'b >> unfoldOr
-let foldCand    = makeFoldC << "cand"{'a; 'b} >> unfoldCand
-let foldCor     = makeFoldC << "cor"{'a; 'b} >> unfoldCor
-let foldAll     = makeFoldC << all x: 'A. 'B['x] >> unfoldAll
-let foldExists  = makeFoldC << exst x: 'A. 'B['x] >> unfoldExists
+let fold_true    = makeFoldC << "true" >> unfold_true
+let fold_false   = makeFoldC << "false" >> unfold_false
+let fold_not     = makeFoldC << not{'a} >> unfold_not
+let fold_implies = makeFoldC << 'a => 'b >> unfold_implies
+let fold_iff     = makeFoldC << "iff"{'a; 'b} >> unfold_iff
+let fold_and     = makeFoldC << 'a & 'b >> unfold_and
+let fold_or      = makeFoldC << 'a or 'b >> unfold_or
+let fold_cand    = makeFoldC << "cand"{'a; 'b} >> unfold_cand
+let fold_cor     = makeFoldC << "cor"{'a; 'b} >> unfold_cor
+let fold_all     = makeFoldC << all x: 'A. 'B['x] >> unfold_all
+let fold_exists  = makeFoldC << exst x: 'A. 'B['x] >> unfold_exists
 
 (************************************************************************
  * RULES                                                                *
@@ -924,7 +921,7 @@ let inf_d dest f decl t =
    let decl', a' = f decl a in
    let decl'', b' = f (add_unify_subst v a decl') b in
    let le1, le2 = dest_univ a', dest_univ b' in
-      decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2)
+      decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2 0)
 
 let typeinf_resource = Mp_resource.improve typeinf_resource (all_term, inf_d dest_all)
 let typeinf_resource = Mp_resource.improve typeinf_resource (exists_term, inf_d dest_exists)
@@ -937,7 +934,7 @@ let inf_nd dest f decl t =
    let decl', a' = f decl a in
    let decl'', b' = f decl' b in
    let le1, le2 = dest_univ a', dest_univ b' in
-      decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2)
+      decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2 0)
 
 let typeinf_resource = Mp_resource.improve typeinf_resource (or_term, inf_nd dest_or)
 let typeinf_resource = Mp_resource.improve typeinf_resource (and_term, inf_nd dest_and)
@@ -1365,7 +1362,7 @@ let assum_test i p =
    let assum = List.nth assums (i - 1) in
    let goal' = TermMan.nth_concl assum 1 in
       try let _ = match_terms [] goal' goal in
-         true 
+         true
       with RefineError _ ->
          false
 

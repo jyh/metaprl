@@ -356,7 +356,7 @@ let inf_dfun f decl t =
    let decl', a' = f decl a in
    let decl'', b' = f (add_unify_subst v a decl') b in
    let le1, le2 = dest_univ a', dest_univ b' in
-      decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2)
+      decl'', Itt_equal.mk_univ_term (max_level_exp le1 le2 0)
 
 let typeinf_resource = Mp_resource.improve typeinf_resource (dfun_term, inf_dfun)
 

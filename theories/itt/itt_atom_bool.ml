@@ -36,8 +36,12 @@ include Itt_bool
 open Mp_resource
 
 open Tacticals
+open Conversionals
+
+open Base_meta
 
 open Itt_equal
+open Itt_bool
 
 (************************************************************************
  * SYNTAX                                                               *
@@ -58,7 +62,11 @@ dform eq_atom_df : mode[prl] :: parens :: "prec"[prec_eq_atom] :: eq_atom{'x; 'y
  * REWRITE                                                              *
  ************************************************************************)
 
-prim_rw reduce_eq_atom : eq_atom{token[@x:t]; token[@y:t]} <--> bool_flag[@x = @y]
+prim_rw reduce_eq_atom' : eq_atom{token[@x:t]; token[@y:t]} <-->
+   meta_eq{token[@x:t]; token[@y:t]; btrue; bfalse}
+
+let reduce_eq_atom =
+   reduce_eq_atom' andthenC reduce_meta_eq
 
 (************************************************************************
  * RULES                                                                *

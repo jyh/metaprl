@@ -69,11 +69,6 @@ declare "assert"{'t}
 declare ifthenelse{'e1; 'e2; 'e3}
 
 (*
- * This term is used to reduce param actions.
- *)
-declare "bool_flag"[@n:t]
-
-(*
  * Definition of bool.
  *)
 prim_rw unfold_bool : bool <--> (unit + unit)
@@ -81,16 +76,10 @@ prim_rw unfold_btrue : btrue <--> inl{it}
 prim_rw unfold_bfalse : bfalse <--> inr{it}
 
 (*
- * Param actions.
- *)
-prim_rw reduceBoolTrue : "bool_flag"["true":t] <--> "btrue"
-prim_rw reduceBoolFalse : "bool_flag"["false":t] <--> "bfalse"
-
-(*
  * Ifthenelse primrws.
  *)
-prim_rw reduceIfthenelseTrue : ifthenelse{btrue; 'e1; 'e2} <--> 'e1
-prim_rw reduceIfthenelseFalse : ifthenelse{bfalse; 'e1; 'e2} <--> 'e2
+prim_rw reduce_ifthenelse_true : ifthenelse{btrue; 'e1; 'e2} <--> 'e1
+prim_rw reduce_ifthenelse_false : ifthenelse{bfalse; 'e1; 'e2} <--> 'e2
 prim_rw unfold_bor : bor{'a; 'b} <--> ifthenelse{'a; btrue; 'b}
 prim_rw unfold_band : band{'a; 'b} <--> ifthenelse{'a; 'b; bfalse}
 prim_rw unfold_bimplies : bimplies{'a; 'b} <--> ifthenelse{'a; 'b; btrue}
@@ -393,8 +382,8 @@ interactive_rw reduce_bimplies_true : bimplies{btrue; 'e1} <--> 'e1
 interactive_rw reduce_bimplies_false : bimplies{bfalse; 'e1} <--> btrue
 
 let reduce_info =
-   [<< ifthenelse{btrue; 'e1; 'e2} >>, reduceIfthenelseTrue;
-    << ifthenelse{bfalse; 'e1; 'e2} >>, reduceIfthenelseFalse;
+   [<< ifthenelse{btrue; 'e1; 'e2} >>, reduce_ifthenelse_true;
+    << ifthenelse{bfalse; 'e1; 'e2} >>, reduce_ifthenelse_false;
     << bnot{btrue} >>, reduce_bnot_true;
     << bnot{bfalse} >>, reduce_bnot_false;
     << bor{btrue; 'e1} >>, reduce_bor_true;
@@ -402,9 +391,7 @@ let reduce_info =
     << band{btrue; 'e1} >>, reduce_band_true;
     << band{bfalse; 'e1} >>, reduce_band_false;
     << bimplies{btrue; 'e1} >>, reduce_bimplies_true;
-    << bimplies{bfalse; 'e1} >>, reduce_bimplies_false;
-    << bool_flag["true":t] >>, reduceBoolTrue;
-    << bool_flag["false":t] >>, reduceBoolFalse]
+    << bimplies{bfalse; 'e1} >>, reduce_bimplies_false]
 
 let reduce_resource = add_reduce_info reduce_resource reduce_info
 
@@ -809,13 +796,13 @@ let rec filter_ifthenelse t = function
  *)
 let rec reduce_ite_trueC = function
    addr :: addrs ->
-      addrC addr reduceIfthenelseTrue andthenC reduce_ite_trueC addrs
+      addrC addr reduce_ifthenelse_true andthenC reduce_ite_trueC addrs
  | [] ->
       idC
 
 let rec reduce_ite_falseC = function
    addr :: addrs ->
-      addrC addr reduceIfthenelseFalse andthenC reduce_ite_falseC addrs
+      addrC addr reduce_ifthenelse_false andthenC reduce_ite_falseC addrs
  | [] ->
       idC
 

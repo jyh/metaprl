@@ -46,7 +46,7 @@ open Tacticals
  ************************************************************************)
 
 declare int
-declare natural_number[@n:n]
+declare number[@n:n]
 declare ind{'i; m, z. 'down; 'base; m, z. 'up}
 
 val int_term : term
@@ -78,18 +78,25 @@ prec prec_mul
  * REWRITES                                                             *
  ************************************************************************)
 
-rewrite unfoldLE  : le{'a; 'b} <--> ('a < 'b or 'a = 'b in int)
-rewrite unfoldGT  : gt{'a; 'b} <--> 'b < 'a
-rewrite unfoldGE  : ge{'a; 'b} <--> ('b < 'a or 'a = 'b in int)
+rewrite unfold_le  : le{'a; 'b} <--> ('a < 'b or 'a = 'b in int)
+rewrite unfold_gt  : gt{'a; 'b} <--> 'b < 'a
+rewrite unfold_ge  : ge{'a; 'b} <--> ('b < 'a or 'a = 'b in int)
 
-rewrite reduceAdd : "add"{natural_number[@i:n]; natural_number[@j:n]} <--> natural_number[@i + @j]
-rewrite reduceSub : "sub"{natural_number[@i:n]; natural_number[@j:n]} <--> natural_number[@i - @j]
-rewrite reduceMul : "mul"{natural_number[@i:n]; natural_number[@j:n]} <--> natural_number[@i * @j]
-rewrite reduceDiv : "div"{natural_number[@i:n]; natural_number[@j:n]} <--> natural_number[@i / @j]
-rewrite reduceRem : "rem"{natural_number[@i:n]; natural_number[@j:n]} <--> natural_number[@i % @j]
+rewrite reduce_add : "add"{number[@i:n]; number[@j:n]} <-->
+   meta_sum{number[@i:n]; number[@j:n]}
+rewrite reduce_sub : "sub"{number[@i:n]; number[@j:n]} <-->
+   meta_diff{number[@i:n]; number[@j:n]}
+rewrite reduce_mul : "mul"{number[@i:n]; number[@j:n]} <-->
+   meta_prod{number[@i:n]; number[@j:n]}
+rewrite reduce_div : "div"{number[@i:n]; number[@j:n]} <-->
+   meta_quot{number[@i:n]; number[@j:n]}
+rewrite reduce_rem : "rem"{number[@i:n]; number[@j:n]} <-->
+   meta_rem{number[@i:n]; number[@j:n]}
 
-rewrite reduceLT : "lt"{natural_number[@i:n]; natural_number[@j:n]} <--> "prop"[@i < @j]
-rewrite reduceEQ : (natural_number[@i:n] = natural_number[@j:n] in int) <--> "prop"[@i = @j]
+rewrite reduce_lt : "lt"{number[@i:n]; number[@j:n]} <-->
+   meta_lt{number[@i:n]; number[@j:n]}
+rewrite reduce_eq : (number[@i:n] = number[@j:n] in int) <-->
+   meta_eq{number[@i:n]; number[@j:n]}
 
 (************************************************************************
  * RULES                                                                *
@@ -103,19 +110,21 @@ rewrite reduceEQ : (natural_number[@i:n] = natural_number[@j:n] in int) <--> "pr
  *    x = 0 => (ind[x] -> base)
  *    x > 0 => (ind[x] -> up[x, ind[x - 1]]
  *)
-rewrite indReduceDown :
+rewrite reduce_ind_down :
    'x < 0 -->
    ((ind{'x; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]}) <-->
     'down['x; ind{('x +@ 1); i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]}])
 
-rewrite indReduceUp :
+rewrite reduce_ind_up :
    ('x > 0) -->
    (ind{'x; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]} <-->
     'up['x; ind{('x -@ 1); i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]}])
 
-rewrite indReduceBase :
+rewrite reduce_ind_base :
    (ind{0; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]}) <-->
    'base
+
+ml_rw reduce_ind : ind{'x; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]}
 
 (************************************************************************
  * RULES                                                                *
@@ -142,13 +151,13 @@ rule intEquality 'H : sequent ['ext] { 'H >- int = int in univ[@i:l] }
  * H >- Z ext n
  * by numberFormation n
  *)
-rule numberFormation 'H natural_number[@n:n] : sequent ['ext] { 'H >- int }
+rule numberFormation 'H number[@n:n] : sequent ['ext] { 'H >- int }
 
 (*
  * H >- i = i in int
  * by numberEquality
  *)
-rule numberEquality 'H : sequent ['ext] { 'H >- natural_number[@n:n] = natural_number[@n:n] in int }
+rule numberEquality 'H : sequent ['ext] { 'H >- number[@n:n] = number[@n:n] in int }
 
 (*
  * Induction:
@@ -286,10 +295,10 @@ val is_rem_term : term -> bool
 val mk_rem_term : term -> term -> term
 val dest_rem : term -> term * term
 
-val natural_number_term : term
-val is_natural_number_term : term -> bool
-val dest_natural_number : term -> Mp_num.num
-val mk_natural_number_term : Mp_num.num -> term
+val number_term : term
+val is_number_term : term -> bool
+val dest_number : term -> Mp_num.num
+val mk_number_term : Mp_num.num -> term
 
 val ind_term : term
 val is_ind_term : term -> bool

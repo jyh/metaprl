@@ -117,7 +117,6 @@ topval eq_alphaRefT : tactic
 topval eq_alphaSymT : tactic
 topval eq_alphaTransT : term -> tactic
 
-topval testT : tactic
 topval dupRT : tactic -> int -> tactic
 
 (*

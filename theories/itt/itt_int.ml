@@ -42,6 +42,7 @@ open Printf
 open Mp_debug
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
+open Refiner.Refiner.TermSubst
 open Refiner.Refiner.RefineError
 open Rformat
 open Mp_resource
@@ -50,6 +51,9 @@ open Var
 open Sequent
 open Tacticals
 open Conversionals
+
+open Base_meta
+
 open Itt_equal
 
 (*
@@ -66,7 +70,7 @@ let _ =
  ************************************************************************)
 
 declare int
-declare natural_number[@n:n]
+declare number[@n:n]
 declare ind{'i; m, z. 'down; 'base; m, z. 'up}
 
 declare "add"{'a; 'b}
@@ -78,6 +82,76 @@ declare lt{'a; 'b}
 declare le{'a; 'b}
 declare ge{'a; 'b}
 declare gt{'a; 'b}
+
+let int_term = << int >>
+let int_opname = opname_of_term int_term
+let is_int_term = is_no_subterms_term int_opname
+
+let lt_term = << 'x < 'y >>
+let lt_opname = opname_of_term lt_term
+let is_lt_term = is_dep0_dep0_term lt_opname
+let mk_lt_term = mk_dep0_dep0_term lt_opname
+let dest_lt = dest_dep0_dep0_term lt_opname
+
+let le_term = << 'x <= 'y >>
+let le_opname = opname_of_term le_term
+let is_le_term = is_dep0_dep0_term le_opname
+let mk_le_term = mk_dep0_dep0_term le_opname
+let dest_le = dest_dep0_dep0_term le_opname
+
+let ge_term = << 'x >= 'y >>
+let ge_opname = opname_of_term ge_term
+let is_ge_term = is_dep0_dep0_term ge_opname
+let mk_ge_term = mk_dep0_dep0_term ge_opname
+let dest_ge = dest_dep0_dep0_term ge_opname
+
+let gt_term = << 'x > 'y >>
+let gt_opname = opname_of_term gt_term
+let is_gt_term = is_dep0_dep0_term gt_opname
+let mk_gt_term = mk_dep0_dep0_term gt_opname
+let dest_gt = dest_dep0_dep0_term gt_opname
+
+let add_term = << 'x +@ 'y >>
+let add_opname = opname_of_term add_term
+let is_add_term = is_dep0_dep0_term add_opname
+let mk_add_term = mk_dep0_dep0_term add_opname
+let dest_add = dest_dep0_dep0_term add_opname
+
+let sub_term = << 'x -@ 'y >>
+let sub_opname = opname_of_term sub_term
+let is_sub_term = is_dep0_dep0_term sub_opname
+let mk_sub_term = mk_dep0_dep0_term sub_opname
+let dest_sub = dest_dep0_dep0_term sub_opname
+
+let mul_term = << 'x *@ 'y >>
+let mul_opname = opname_of_term mul_term
+let is_mul_term = is_dep0_dep0_term mul_opname
+let mk_mul_term = mk_dep0_dep0_term mul_opname
+let dest_mul = dest_dep0_dep0_term mul_opname
+
+let div_term = << 'x /@ 'y >>
+let div_opname = opname_of_term div_term
+let is_div_term = is_dep0_dep0_term div_opname
+let mk_div_term = mk_dep0_dep0_term div_opname
+let dest_div = dest_dep0_dep0_term div_opname
+
+let rem_term = << "rem"{'x; 'y} >>
+let rem_opname = opname_of_term rem_term
+let is_rem_term = is_dep0_dep0_term rem_opname
+let mk_rem_term = mk_dep0_dep0_term rem_opname
+let dest_rem = dest_dep0_dep0_term rem_opname
+
+let number_term = << number[@n:n] >>
+let number_opname = opname_of_term number_term
+let is_number_term = is_number_term number_opname
+let dest_number = dest_number_term number_opname
+let mk_number_term = mk_number_term number_opname
+
+let ind_term = << ind{'x; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]} >>
+let ind_opname = opname_of_term ind_term
+let is_ind_term = is_dep0_dep2_dep0_dep2_term ind_opname
+let dest_ind = dest_dep0_dep2_dep0_dep2_term ind_opname
+let mk_ind_term = mk_dep0_dep2_dep0_dep2_term ind_opname
 
 (************************************************************************
  * DISPLAY FORMS                                                        *
@@ -95,7 +169,7 @@ prec prec_compare < prec_add
 
 dform int_prl_df1 : mode[prl] :: int = mathbbZ
 
-dform natural_number_df : natural_number[@n:n] =
+dform number_df : number[@n:n] =
    slot[@n:s]
 
 dform add_df1 :  mode[prl] :: parens :: "prec"[prec_add] :: "add"{'a; 'b} =
@@ -143,18 +217,43 @@ dform gt_df1 : parens :: "prec"[prec_compare] :: gt{'a; 'b} =
  * REWRITES                                                             *
  ************************************************************************)
 
-prim_rw unfoldLE : le{'a; 'b} <--> ('a < 'b or 'a = 'b in int)
-prim_rw unfoldGT : gt{'a; 'b} <--> 'b < 'a
-prim_rw unfoldGE : ge{'a; 'b} <--> ('b < 'a or 'a = 'b in int)
+prim_rw unfold_le : le{'a; 'b} <--> ('a < 'b or 'a = 'b in int)
+prim_rw unfold_gt : gt{'a; 'b} <--> 'b < 'a
+prim_rw unfold_ge : ge{'a; 'b} <--> ('b < 'a or 'a = 'b in int)
 
-prim_rw reduceAdd : "add"{natural_number[@i:n]; natural_number[@j:n]} <--> natural_number[@i + @j]
-prim_rw reduceSub : "sub"{natural_number[@i:n]; natural_number[@j:n]} <--> natural_number[@i - @j]
-prim_rw reduceMul : "mul"{natural_number[@i:n]; natural_number[@j:n]} <--> natural_number[@i * @j]
-prim_rw reduceDiv : "div"{natural_number[@i:n]; natural_number[@j:n]} <--> natural_number[@i / @j]
-prim_rw reduceRem : "rem"{natural_number[@i:n]; natural_number[@j:n]} <--> natural_number[@i % @j]
+prim_rw reduce_add : "add"{number[@i:n]; number[@j:n]} <-->
+   meta_sum{number[@i:n]; number[@j:n]}
+prim_rw reduce_sub : "sub"{number[@i:n]; number[@j:n]} <-->
+   meta_diff{number[@i:n]; number[@j:n]}
+prim_rw reduce_mul : "mul"{number[@i:n]; number[@j:n]} <-->
+   meta_prod{number[@i:n]; number[@j:n]}
+prim_rw reduce_div : "div"{number[@i:n]; number[@j:n]} <-->
+   meta_quot{number[@i:n]; number[@j:n]}
+prim_rw reduce_rem : "rem"{number[@i:n]; number[@j:n]} <-->
+   meta_rem{number[@i:n]; number[@j:n]}
 
-prim_rw reduceLT : "lt"{natural_number[@i:n]; natural_number[@j:n]} <--> "prop"[@i < @j]
-prim_rw reduceEQ : (natural_number[@i:n] = natural_number[@j:n] in int) <--> "prop"[@i = @j]
+prim_rw reduce_lt : "lt"{number[@i:n]; number[@j:n]} <-->
+   meta_lt{number[@i:n]; number[@j:n]}
+prim_rw reduce_eq : (number[@i:n] = number[@j:n] in int) <-->
+   meta_eq{number[@i:n]; number[@j:n]}
+
+let reduce_add =
+   reduce_add andthenC reduce_meta_sum
+
+let reduce_sub =
+   reduce_sub andthenC reduce_meta_diff
+
+let reduce_mul =
+   reduce_mul andthenC reduce_meta_prod
+
+let reduce_div =
+   reduce_div andthenC reduce_meta_rem
+
+let reduce_lt =
+   reduce_lt andthenC reduce_meta_lt
+
+let reduce_eq =
+   reduce_eq andthenC reduce_meta_eq
 
 (*
  * Reduction on induction combinator:
@@ -164,52 +263,54 @@ prim_rw reduceEQ : (natural_number[@i:n] = natural_number[@j:n] in int) <--> "pr
  *    x = 0 => (ind[x] -> base)
  *    x > 0 => (ind[x] -> up[x, ind[x - 1]]
  *)
-prim_rw indReduceDown :
+prim_rw reduce_ind_down :
    'x < 0 -->
    ((ind{'x; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]}) <-->
     'down['x; ind{('x +@ 1); i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]}])
 
-prim_rw indReduceUp :
+prim_rw reduce_ind_up :
    ('x > 0) -->
    (ind{'x; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]} <-->
     'up['x; ind{('x -@ 1); i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]}])
 
-prim_rw indReduceBase :
+prim_rw reduce_ind_base :
    (ind{0; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]}) <-->
    'base
 
+ml_rw reduce_ind : ind{'x; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]} ==
+   fun goal ->
+      let x, i, j, down, base, k, l, up = dest_ind goal in
+      let x' = dest_number x in
+      let code = Mp_num.compare_num x' (Mp_num.Int 0) in
+      let t =
+         if code < 0 then
+            let x'' = mk_number_term (Mp_num.succ_num x') in
+            let goal = mk_ind_term x'' i j down base k l up in
+               subst down [x; goal] [k; l]
+         else if code > 0 then
+            let x'' = mk_number_term (Mp_num.pred_num x') in
+            let goal = mk_ind_term x'' i j down base k l up in
+               subst up [x; goal] [k; l]
+         else
+            base
+      in
+         t, []
+ | fun _ extracts ->
+      match extracts with
+         h :: t ->
+            h, t
+       | [] ->
+            raise (RefineError ("reduce_ind", StringError "bogus extract terms"))
+
 let reduce_info =
-   [<< "add"{natural_number[@i:n]; natural_number[@j:n]} >>, reduceAdd;
-    << "sub"{natural_number[@i:n]; natural_number[@j:n]} >>, reduceSub;
-    << "mul"{natural_number[@i:n]; natural_number[@j:n]} >>, reduceMul;
-    << "div"{natural_number[@i:n]; natural_number[@j:n]} >>, reduceDiv;
-    << "rem"{natural_number[@i:n]; natural_number[@j:n]} >>, reduceRem]
+   [<< "add"{number[@i:n]; number[@j:n]} >>, reduce_add;
+    << "sub"{number[@i:n]; number[@j:n]} >>, reduce_sub;
+    << "mul"{number[@i:n]; number[@j:n]} >>, reduce_mul;
+    << "div"{number[@i:n]; number[@j:n]} >>, reduce_div;
+    << "rem"{number[@i:n]; number[@j:n]} >>, reduce_rem;
+    << ind{'x; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]} >>, reduce_ind]
 
 let reduce_resource = add_reduce_info reduce_resource reduce_info
-
-(************************************************************************
- * RULES                                                                *
- ************************************************************************)
-
-(*
- * Reduction on induction combinator:
- * Three cases:
- *    let ind[x] = ind(x; i, j. down[i, j]; base; k, l. up[k, l]
- *    x < 0 => (ind[x] -> down[x, ind[x + 1]]
- *    x = 0 => (ind[x] -> base)
- *    x > 0 => (ind[x] -> up[x, ind[x - 1]]
- *)
-(*
-thm_rw indReduce ind('x; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]) =
-   let n = dest_natural_number x in
-      if n > 0 then
-         << 'down['x; 'redex] >>
-      else if n < 0 then
-         << 'up['x; 'redex] >>
-      else
-         << 'base >>
-   mlend
-*)
 
 (************************************************************************
  * INTEGER RULES                                                        *
@@ -236,13 +337,13 @@ prim intEquality 'H : : sequent ['ext] { 'H >- int = int in univ[@i:l] } = it
  * H >- Z ext n
  * by numberFormation n
  *)
-prim numberFormation 'H natural_number[@n:n] : : sequent ['ext] { 'H >- int } = natural_number[@n:n]
+prim numberFormation 'H number[@n:n] : : sequent ['ext] { 'H >- int } = number[@n:n]
 
 (*
  * H >- i = i in int
  * by numberEquality
  *)
-prim numberEquality 'H : : sequent ['ext] { 'H >- natural_number[@n:n] = natural_number[@n:n] in int } = it
+prim numberEquality 'H : : sequent ['ext] { 'H >- number[@n:n] = number[@n:n] in int } = it
 
 (*
  * Induction:
@@ -341,80 +442,6 @@ prim int_sqequal 'H :
    it
 
 (************************************************************************
- * TACTICS                                                              *
- ************************************************************************)
-
-let int_term = << int >>
-let int_opname = opname_of_term int_term
-let is_int_term = is_no_subterms_term int_opname
-
-let lt_term = << 'x < 'y >>
-let lt_opname = opname_of_term lt_term
-let is_lt_term = is_dep0_dep0_term lt_opname
-let mk_lt_term = mk_dep0_dep0_term lt_opname
-let dest_lt = dest_dep0_dep0_term lt_opname
-
-let le_term = << 'x <= 'y >>
-let le_opname = opname_of_term le_term
-let is_le_term = is_dep0_dep0_term le_opname
-let mk_le_term = mk_dep0_dep0_term le_opname
-let dest_le = dest_dep0_dep0_term le_opname
-
-let ge_term = << 'x >= 'y >>
-let ge_opname = opname_of_term ge_term
-let is_ge_term = is_dep0_dep0_term ge_opname
-let mk_ge_term = mk_dep0_dep0_term ge_opname
-let dest_ge = dest_dep0_dep0_term ge_opname
-
-let gt_term = << 'x > 'y >>
-let gt_opname = opname_of_term gt_term
-let is_gt_term = is_dep0_dep0_term gt_opname
-let mk_gt_term = mk_dep0_dep0_term gt_opname
-let dest_gt = dest_dep0_dep0_term gt_opname
-
-let add_term = << 'x +@ 'y >>
-let add_opname = opname_of_term add_term
-let is_add_term = is_dep0_dep0_term add_opname
-let mk_add_term = mk_dep0_dep0_term add_opname
-let dest_add = dest_dep0_dep0_term add_opname
-
-let sub_term = << 'x -@ 'y >>
-let sub_opname = opname_of_term sub_term
-let is_sub_term = is_dep0_dep0_term sub_opname
-let mk_sub_term = mk_dep0_dep0_term sub_opname
-let dest_sub = dest_dep0_dep0_term sub_opname
-
-let mul_term = << 'x *@ 'y >>
-let mul_opname = opname_of_term mul_term
-let is_mul_term = is_dep0_dep0_term mul_opname
-let mk_mul_term = mk_dep0_dep0_term mul_opname
-let dest_mul = dest_dep0_dep0_term mul_opname
-
-let div_term = << 'x /@ 'y >>
-let div_opname = opname_of_term div_term
-let is_div_term = is_dep0_dep0_term div_opname
-let mk_div_term = mk_dep0_dep0_term div_opname
-let dest_div = dest_dep0_dep0_term div_opname
-
-let rem_term = << "rem"{'x; 'y} >>
-let rem_opname = opname_of_term rem_term
-let is_rem_term = is_dep0_dep0_term rem_opname
-let mk_rem_term = mk_dep0_dep0_term rem_opname
-let dest_rem = dest_dep0_dep0_term rem_opname
-
-let natural_number_term = << natural_number[@n:n] >>
-let natural_number_opname = opname_of_term natural_number_term
-let is_natural_number_term = is_number_term natural_number_opname
-let dest_natural_number = dest_number_term natural_number_opname
-let mk_natural_number_term = mk_number_term natural_number_opname
-
-let ind_term = << ind{'i; m, z. 'down; 'base; m, z. 'up} >>
-let ind_opname = opname_of_term ind_term
-let is_ind_term = is_dep0_dep2_dep0_dep2_term ind_opname
-let dest_ind = dest_dep0_dep2_dep0_dep2_term ind_opname
-let mk_ind_term = mk_dep0_dep2_dep0_dep2_term ind_opname
-
-(************************************************************************
  * D TACTIC                                                             *
  ************************************************************************)
 
@@ -462,7 +489,7 @@ let eqcd_intT p = intEquality (hyp_count_addr p) p
 let eqcd_numberT p = numberEquality (hyp_count_addr p) p
 
 let eqcd_resource = Mp_resource.improve eqcd_resource (int_term, eqcd_intT)
-let eqcd_resource = Mp_resource.improve eqcd_resource (natural_number_term, eqcd_numberT)
+let eqcd_resource = Mp_resource.improve eqcd_resource (number_term, eqcd_numberT)
 
 (************************************************************************
  * TYPE INFERENCE                                                       *
@@ -476,11 +503,11 @@ let inf_int _ decl _ = decl, univ1_term
 let typeinf_resource = Mp_resource.improve typeinf_resource (int_term, inf_int)
 
 (*
- * Type of natural_number.
+ * Type of number.
  *)
-let inf_natural_number _ decl _ = decl, int_term
+let inf_number _ decl _ = decl, int_term
 
-let typeinf_resource = Mp_resource.improve typeinf_resource (natural_number_term, inf_natural_number)
+let typeinf_resource = Mp_resource.improve typeinf_resource (number_term, inf_number)
 
 (*
  * Type of ind.

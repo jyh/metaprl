@@ -320,8 +320,8 @@ let find_expr table t =
  * This is just multiplication, addition, subtraction.
  *)
 let rec parse_expr table t =
-   if is_natural_number_term t then
-      Number (dest_natural_number t)
+   if is_number_term t then
+      Number (dest_number t)
    else if is_mul_term t then
       let left, right = dest_mul t in
          Prod (parse_expr table left, parse_expr table right)

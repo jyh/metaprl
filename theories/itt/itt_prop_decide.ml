@@ -185,7 +185,7 @@ and internalPropDecideT count p =
 
 (* Convert all "not X" terms to "X => False" *)
 let notToImpliesFalseC =
-   sweepUpC (unfoldNot andthenC foldImplies andthenC (addrC [1] foldFalse))
+   sweepUpC (unfold_not andthenC fold_implies andthenC (addrC [1] fold_false))
 
 (*
  * Toplevel tactic:

@@ -33,11 +33,13 @@
 include Itt_atom
 include Itt_bool
 
+open Conversionals
+
 prec prec_eq_atom
 
 declare eq_atom{'x; 'y}
 
-rewrite reduce_eq_atom : eq_atom{token[@x:t]; token[@y:t]} <--> bool_flag[@x = @y]
+topval reduce_eq_atom : conv
 
 (*
  * -*-

@@ -69,18 +69,10 @@ rewrite unfold_btrue : btrue <--> inl{it}
 rewrite unfold_bfalse : bfalse <--> inr{it}
 
 (*
- * This term is used to reduce param actions.
- *)
-declare "bool_flag"[@n:t]
-
-rewrite reduceBoolTrue : "bool_flag"["true":t] <--> "btrue"
-rewrite reduceBoolFalse : "bool_flag"["false":t] <--> "bfalse"
-
-(*
  * Reduction.
  *)
-rewrite reduceIfthenelseTrue : ifthenelse{btrue; 'e1; 'e2} <--> 'e1
-rewrite reduceIfthenelseFalse : ifthenelse{bfalse; 'e1; 'e2} <--> 'e2
+rewrite reduce_ifthenelse_true : ifthenelse{btrue; 'e1; 'e2} <--> 'e1
+rewrite reduce_ifthenelse_false : ifthenelse{bfalse; 'e1; 'e2} <--> 'e2
 rewrite unfold_bor : bor{'a; 'b} <--> ifthenelse{'a; btrue; 'b}
 rewrite unfold_band : band{'a; 'b} <--> ifthenelse{'a; 'b; bfalse}
 rewrite unfold_bimplies : bimplies{'a; 'b} <--> ifthenelse{'a; 'b; btrue}

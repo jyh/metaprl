@@ -1,5 +1,5 @@
 (*
- * Display all the elements in a particular theory.
+ * Basic arithmetic operations.
  *
  * ----------------------------------------------------------------
  *
@@ -28,19 +28,38 @@
  *
  * Author: Jason Hickey
  * jyh@cs.cornell.edu
+ *
  *)
 
-include Itt_theory
+(*
+ * Meta-operations.
+ *)
+declare meta_sum{'a; 'b}
+declare meta_diff{'a; 'b}
+declare meta_prod{'a; 'b}
+declare meta_quot{'a; 'b}
+declare meta_rem{'a; 'b}
 
-ml_rw test_rw : add{number[@i:n]; number[@j:n]}
+declare meta_eq{'a; 'b; 'tt; 'ff}
+declare meta_le{'a; 'b; 'tt; 'ff}
+declare meta_lt{'a; 'b; 'tt; 'ff}
 
-ml_rule cumulativity 'H :
-   sequent ['ext] { 'H >- cumulativity[@j:l, @i:l] }
+(*
+ * sum{op1[@i1:n]; op2[@i2:n]} --> op1[@i1 + @i2]
+ *)
+ml_rw reduce_meta_sum : meta_sum{'a; 'b}
+ml_rw reduce_meta_diff : meta_diff{'a; 'b}
+ml_rw reduce_meta_prod : meta_prod{'a; 'b}
+ml_rw reduce_meta_quot : meta_quot{'a; 'b}
+ml_rw reduce_meta_rem  : meta_rem{'a; 'b}
+ml_rw reduce_meta_eq : meta_eq{'a; 'b; 'tt; 'ff}
+ml_rw reduce_meta_lt : meta_lt{'a; 'b; 'tt; 'ff}
+ml_rw reduce_meta_le : meta_le{'a; 'b; 'tt; 'ff}
 
 (*
  * -*-
  * Local Variables:
- * Caml-master: "editor.top"
+ * Caml-master: "mp.run"
  * End:
  * -*-
  *)

@@ -42,6 +42,7 @@ include Base_dtactic
 include Base_auto_tactic
 include Base_cache
 include Base_rewrite
+include Base_meta
 
 (*
  * -*-

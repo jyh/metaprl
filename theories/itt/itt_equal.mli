@@ -53,6 +53,8 @@ declare univ[@i:l]
 declare equal{'T; 'a; 'b}
 declare member{'T; 'x}
 declare it
+declare "true"
+declare "false"
 declare cumulativity[@i:l, @j:l]
 
 (************************************************************************
@@ -61,6 +63,7 @@ declare cumulativity[@i:l, @j:l]
 
 rewrite unfold_member : member{'T; 'x} <--> ('x = 'x in 'T)
 
+topval reduce_cumulativity : conv
 topval fold_member : conv
 
 (************************************************************************
@@ -73,6 +76,12 @@ prec prec_equal
 (************************************************************************
  * RULES                                                                *
  ************************************************************************)
+
+(*
+ * True always holds.
+ *)
+rule trueIntro 'H :
+   sequent ['ext] { 'H >- "true" }
 
 (*
  * Typehood is equality.
@@ -185,8 +194,6 @@ rule type_squashElimination 'H :
  * H >- Uj = Uj in Ui
  * by universeEquality (side (j < i))
  *)
-(* ml_rule cumulativity 'H : sequent ['ext] { 'H >- cumulativity[@j:l, @i:l] } *)
-
 rule universeEquality 'H :
    sequent ['ext] { 'H >- cumulativity[@j:l, @i:l] } -->
    sequent ['ext] { 'H >- univ[@j:l] = univ[@j:l] in univ[@i:l] }
@@ -243,6 +250,12 @@ topval eqcdT : tactic
 (************************************************************************
  * PRIMITIVES AND TACTICS                                               *
  ************************************************************************)
+
+val true_term : term
+val is_true_term : term -> bool
+
+val false_term : term
+val is_false_term : term -> bool
 
 val equal_term : term
 val is_equal_term : term -> bool

@@ -71,7 +71,7 @@ doc <:doc<
      extends base theories that define generic proof automation.
    @end[doc]
 >>
-extends Shell
+extends Shell_theory
 extends Top_tacticals
 extends Top_conversionals
 doc <:doc< @docoff >>

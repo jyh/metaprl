@@ -24,7 +24,7 @@
  * @email{jyh@cs.caltech.edu}
  * @end[license]
  *)
-extends Shell
+extends Shell_theory
 extends M_ir
 
 open Lm_symbol

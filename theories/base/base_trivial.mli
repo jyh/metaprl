@@ -32,7 +32,7 @@
  * jyh@cs.cornell.edu
  *)
 extends Summary
-extends Shell
+extends Shell_theory
 
 declare it
 declare trivial

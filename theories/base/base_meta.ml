@@ -30,7 +30,7 @@
  * Modified By: Aleksey Nogin <nogin@cs.cornell.edu>
  *)
 
-extends Shell
+extends Shell_theory
 extends Summary
 extends Ocaml_df
 

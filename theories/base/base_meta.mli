@@ -31,7 +31,7 @@
  *
  *)
 
-extends Shell
+extends Shell_theory
 extends Summary
 
 (*

@@ -14791,7 +14791,7 @@ T	t5833	o1219 b5817 b2266
 B	b5833	t5833 a
 T	t5834	o4471 b5833
 B	b5834	t5834
-P	p5853	String "assertT << (all a: 'A^car. all b: 'A^car. ((('a *['A] 'A^inv 'b) in groupKer{'f_1; 'A; 'B}^car subset 'A^car) => 'f_1 'a = 'f_1 'b in 'B^car)) >> thenT rwhAllAll reduceC"
+P	p5853	String "assertT << (all a: 'A^car. all b: 'A^car. ((('a *['A] 'A^inv 'b) in groupKer{'f_1; 'A; 'B}^car subset 'A^car) => 'f_1 'a = 'f_1 'b in 'B^car)) >> thenT reduceT"
 O	o5853	ext_rule p5853
 H	h11489	f_1 t11453
 T	t11489	o1219 b5817 b11455
@@ -15177,7 +15177,7 @@ T	t11661	o b11661 b14
 B	b11662	t11661
 T	t11662	o5886 b1280 b11597 b11662 b14
 B	b11663	t11662
-P	p5986	String "assertT << \"type\"{(quotGroup{groupKer{'f_1; 'A; 'B}; 'A})^car} >> thenAT autoT thenT dT 0 ttca thenT repeatForT 2 (dT 0) thenT rwhAllAll reduceC ttca"
+P	p5986	String "assertT << \"type\"{(quotGroup{groupKer{'f_1; 'A; 'B}; 'A})^car} >> thenAT autoT thenT dT 0 ttca thenT repeatForT 2 (dT 0) thenT reduceT ttca"
 O	o5986	ext_rule p5986
 T	t11663	o1219 b10533 b1222
 B	b11664	t11663

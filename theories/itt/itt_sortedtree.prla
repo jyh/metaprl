@@ -1562,7 +1562,7 @@ B	b474	t369
 T	t474	o1333 b474
 NSummary!ext_goal	ext_goal	ext_goal Summary
 O	o1347	ext_goal
-P	p1349	String "dT 4 thenT rwhAll reduceC"
+P	p1349	String "dT 4 thenT reduceT"
 O	o1349	ext_rule p1349
 T	t549	o1236 b346 b1174 b326
 B	b550	t549
@@ -5205,7 +5205,7 @@ B	b2993	t2993
 H	h5383	data t327
 T	t5384	o1889 b962 b5327
 B	b5384	t5384
-P	p3043	String "byDefsT [sortedTree] thenT addHiddenLabelT \"main\" thenT rwhAll reduceC"
+P	p3043	String "byDefsT [sortedTree] thenT addHiddenLabelT \"main\" thenT reduceT"
 O	o3043	ext_rule p3043
 T	t5411	o1400 b1174 b5327
 B	b5411	t5411

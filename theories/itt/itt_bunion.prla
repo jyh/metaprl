@@ -4306,7 +4306,7 @@ O	o1542	rule p1542
 NItt_squash	Itt_squash	Itt_squash NIL
 NItt_squash!squash	squash1548	squash Itt_squash
 O	o1548	squash1548
-P	p1675	String "dT 4 thenT rwhAll reduceC thenT rwhAll fold_bunion thenT autoT"
+P	p1675	String "dT 4 thenT reduceT thenT rwhAll fold_bunion thenT autoT"
 O	o1675	ext_rule p1675
 NSummary!ext_goal	ext_goal	ext_goal Summary
 O	o2067	ext_goal

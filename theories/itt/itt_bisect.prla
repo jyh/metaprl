@@ -4244,7 +4244,7 @@ T	t740	o740
 B	b740	t740
 P	p892	String "rwhAllAll unfold_bisect"
 O	o893	ext_rule p892
-P	p237	String "doNotThinT (withTermsT [<<btrue>>; <<bind{a.'C['x;'a;'x]}>>] (dT 2)) thenAT autoT thenT rwhAll reduceC"
+P	p237	String "doNotThinT (withTermsT [<<btrue>>; <<bind{a.'C['x;'a;'x]}>>] (dT 2)) thenAT autoT thenT reduceT"
 O	o237	ext_rule p237
 P	p238	String thin
 O	o238	arg_named p238
@@ -4553,7 +4553,7 @@ T	t3379	o b3379 b4
 B	b3380	t3379
 T	t3380	o546 b3356 b3380
 B	b3381	t3380
-P	p254	String "doNotThinT (withTermsT [<<bfalse>>; <<bind{b.'C['x;'a;'b]}>>] (dT 2)) thenAT autoT thenT rwhAll reduceC"
+P	p254	String "doNotThinT (withTermsT [<<bfalse>>; <<bind{b.'C['x;'a;'b]}>>] (dT 2)) thenAT autoT thenT reduceT"
 O	o254	ext_rule p254
 S	s3381	tbrarg\\ h3119 h3359 h3315 h3316 h3323 h3318 h3324\\ C
 B	b3382	s3381

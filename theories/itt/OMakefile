@@ -23,6 +23,7 @@ MPFILES =\
    itt_prod\
    itt_esquash\
    itt_logic\
+   itt_nequal\
    itt_well_founded\
    itt_decidable\
    itt_bool\
@@ -111,7 +112,6 @@ PRINT_THEORIES =\
     itt_dprod\
     itt_prod\
     itt_logic\
-    itt_nequal\
     itt_decidable\
     itt_bool\
     itt_int_base\

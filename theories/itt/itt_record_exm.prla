@@ -6927,7 +6927,7 @@ T	t5359	o5349 b5350 b5359
 B	b5360	t5359
 P	p5365	String stack_as_list_wf
 O	o5365	rule p5365
-P	p5367	String "byDefT stack_as_list thenT byDefT unfold_stack thenT rwhAll reduceC thenT autoT thenT tryT (completeT (univTypeT <<univ[i:l]>> thenT autoT))"
+P	p5367	String "byDefT stack_as_list thenT byDefT unfold_stack thenT reduceT thenT autoT thenT tryT (completeT (univTypeT <<univ[i:l]>> thenT autoT))"
 O	o5367	ext_rule p5367
 T	t5372	o5355 b948 b5332 b5355
 B	b5372	t5372
@@ -7293,7 +7293,7 @@ S	s3895	tbrarg\\ h1063\\ t6123
 B	b3895	s3895
 T	t3895	o644 b3895
 B	b3896	t3895
-P	p6124	String "byDefsT [integers; unfold_semigroup] thenT rwhAllAll reduceC ttca"
+P	p6124	String "byDefsT [integers; unfold_semigroup] thenT reduceT ttca"
 O	o6124	ext_rule p6124
 T	t3896	o653 b3895 b4
 B	b3897	t3896
@@ -8838,7 +8838,7 @@ H	h6579	bnd t3682
 T	t6580	o4576 b5170
 B	b6580	t6580
 T	t6581	o721 b6570 b6580 b6580
-P	p6590	String "byDefsT [morphisms; unfold_semigroup] thenT rwhAllAll reduceC ttca"
+P	p6590	String "byDefsT [morphisms; unfold_semigroup] thenT reduceT ttca"
 O	o6590	ext_rule p6590
 T	t4806	o721 b3682 b5170 b4781
 H	h4806	t4806

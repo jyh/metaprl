@@ -1627,7 +1627,7 @@ P	p1505	String "assertT <<\"type\"{record[n:t]{'A;x.'R['x]}}>> thenAT (typeAsser
 O	o1505	ext_rule p1505
 P	p1516	String "withT <<'x>> (dT 5) thenT autoT"
 O	o1516	ext_rule p1516
-P	p1520	String "dT (-1) thenT addHiddenLabelT \"main\" thenT rwhAll reduceC thenT dT 0 thenT rwhAll reduceC"
+P	p1520	String "dT (-1) thenT addHiddenLabelT \"main\" thenT reduceT thenT dT 0 thenT reduceT"
 O	o1520	ext_rule p1520
 P	p1576	String "recordMemberOrt thenT autoT"
 O	o1576	ext_rule p1576
@@ -1738,7 +1738,7 @@ P	p4959	String recordL_elim
 O	o4959	lid p4959
 T	t4959	o4959
 B	b4959	t4959
-P	p2388	String "rwaAllAll [unfoldRecordOrt;unfoldRecordR] thenT dT 0 thenMT dT 2 thenT rwhAll reduceC thenT autoT"
+P	p2388	String "rwaAllAll [unfoldRecordOrt;unfoldRecordR] thenT dT 0 thenMT dT 2 thenT reduceT thenT autoT"
 O	o2388	ext_rule p2388
 NOcaml!patt_fix_arg	patt_fix_arg	patt_fix_arg Ocaml
 NOcaml!ifthenelse	ifthenelse	ifthenelse Ocaml
@@ -6220,7 +6220,7 @@ T	t3149	o965 b3149
 B	b3150	t3149
 T	t3150	o964 b3147 b3150
 B	b3151	t3150
-P	p38	String "substUsingEpimorphism 2 <<'A * record>> <<bind{y.spread{'y;a,r.rcrd[n:t]{'a;'r}}}>> <<bind{z.(field[n:t]{'z},'z)}>> thenT autoT thenT rwhAll reduceC thenT autoT"
+P	p38	String "substUsingEpimorphism 2 <<'A * record>> <<bind{y.spread{'y;a,r.rcrd[n:t]{'a;'r}}}>> <<bind{z.(field[n:t]{'z},'z)}>> thenT autoT thenT reduceT thenT autoT"
 O	o38	ext_rule p38
 T	t3151	o b3144 b4
 B	b3152	t3151
@@ -6666,7 +6666,7 @@ T	t3588	o b3568 b3588
 B	b3589	t3588
 T	t3589	o978 b3563 b3589
 B	b3599	t3589
-P	p43	String "dT (-1) thenT rwhAll reduceC thenT dT 0 ttca"
+P	p43	String "dT (-1) thenT reduceT thenT dT 0 ttca"
 O	o43	ext_rule p43
 VA	A3599	A\\ H\\ t2564
 H	h3599	v A3599
@@ -6985,7 +6985,7 @@ T	t4197	o b4197 b4
 B	b4198	t4197
 T	t4198	o1358 b977 b4136 b4198 b4
 B	b4205	t4198
-P	p175	String "dT 2 thenT rwhAll reduceC thenT autoT"
+P	p175	String "dT 2 thenT reduceT thenT autoT"
 O	o175	ext_rule p175
 T	t4205	o978 b3585 b4
 B	b4206	t4205

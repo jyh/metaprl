@@ -164,31 +164,31 @@ dform apply5_df : mode[prl] :: parens :: "prec"[prec_apply] :: apply{'f; 'x1; 'x
 (*
  * Intro and elimination forms.
  *)
-interactive tptp_all_type 'H 'x :
-   sequent [squash] { 'H; x: atom >- "type"{'b['x]} } -->
+interactive tptp2_all_type 'H 'x :
+   sequent [squash] { 'H; x: atom0 >- "type"{'b['x]} } -->
    sequent ['ext] { 'H >- "type"{."all"{v. 'b['v]}} }
 
-interactive tptp_all_intro 'H 'v :
-   sequent ['ext] { 'H; v: atom >- 'b['v] } -->
+interactive tptp2_all_intro 'H 'v :
+   sequent ['ext] { 'H; v: atom0 >- 'b['v] } -->
    sequent ['ext] { 'H >- "all"{x. 'b['x]} }
 
-interactive tptp_all_elim 'H 'J 'z 'y :
+interactive tptp2_all_elim 'H 'J 'z 'y :
    sequent [squash] { 'H; x: "all"{v. 'b['v]}; 'J['x] >- atomic{'z} } -->
    sequent ['ext] { 'H; x: "all"{v. 'b['v]}; 'J['x]; y: 'b['z] >- 'C['x] } -->
    sequent ['ext] { 'H; x: "all"{v. 'b['v]}; 'J['x] >- 'C['x] }
 
-interactive tptp_exists_type 'H 'x :
-   sequent [squash] { 'H; x: atom >- "type"{'b['x]} } -->
+interactive tptp2_exists_type 'H 'x :
+   sequent [squash] { 'H; x: atom0 >- "type"{'b['x]} } -->
    sequent ['ext] { 'H >- "type"{."exists"{v. 'b['v]}} }
 
-interactive tptp_exists_intro 'H 'x 'z :
+interactive tptp2_exists_intro 'H 'x 'z :
    sequent [squash] { 'H >- atomic{'z} } -->
    sequent ['ext] { 'H >- 'b['z] } -->
-   sequent [squash] { 'H; x: atom >- "type"{'b['x]} } -->
+   sequent [squash] { 'H; x: atom0 >- "type"{'b['x]} } -->
    sequent ['ext] { 'H >- "exists"{v. 'b['v]} }
 
-interactive tptp_exists_elim 'H 'J 'y 'z :
-   sequent ['ext] { 'H; y: atom; z: 'b['y]; 'J['y, 'z] >- 'C['y, 'z] } -->
+interactive tptp2_exists_elim 'H 'J 'y 'z :
+   sequent ['ext] { 'H; y: atom0; z: 'b['y]; 'J['y, 'z] >- 'C['y, 'z] } -->
    sequent ['ext] { 'H; x: "exists"{v. 'b['v]}; 'J['x] >- 'C['x] }
 
 (*
@@ -400,12 +400,12 @@ let dest_atomic = dest_dep0_term atomic_opname
 let d_allT i p =
    if i = 0 then
       let v = maybe_new_vars1 p (var_of_all (Sequent.concl p)) in
-         tptp_all_intro (Sequent.hyp_count_addr p) v p
+         tptp2_all_intro (Sequent.hyp_count_addr p) v p
    else
       let t = get_with_arg p in
       let v = maybe_new_vars1 p "v" in
       let j, k = Sequent.hyp_indices p i in
-         (tptp_all_elim j k t v
+         (tptp2_all_elim j k t v
           thenLT [addHiddenLabelT "wf";
                   addHiddenLabelT "main"]) p
 
@@ -414,7 +414,7 @@ let d_resource = d_resource.resource_improve d_resource (all_term, d_allT)
 let d_all_typeT i p =
    if i = 0 then
       let v = maybe_new_vars1 p "v" in
-         tptp_all_type (Sequent.hyp_count_addr p) v p
+         tptp2_all_type (Sequent.hyp_count_addr p) v p
    else
       raise (RefineError ("d_all_typeT", StringError "no elimination form"))
 
@@ -429,7 +429,7 @@ let d_existsT i p =
    if i = 0 then
       let t = get_with_arg p in
       let v = maybe_new_vars1 p (var_of_exists (Sequent.concl p)) in
-         (tptp_exists_intro (Sequent.hyp_count_addr p) v t
+         (tptp2_exists_intro (Sequent.hyp_count_addr p) v t
           thenLT [addHiddenLabelT "wf";
                   addHiddenLabelT "main";
                   addHiddenLabelT "wf"]) p
@@ -437,14 +437,14 @@ let d_existsT i p =
       let _, hyp = Sequent.nth_hyp p i in
       let u, v = maybe_new_vars2 p (var_of_exists hyp) "v" in
       let j, k = Sequent.hyp_indices p i in
-         tptp_exists_elim j k u v p
+         tptp2_exists_elim j k u v p
 
 let d_resource = d_resource.resource_improve d_resource (exists_term, d_existsT)
 
 let d_exists_typeT i p =
    if i = 0 then
       let v = maybe_new_vars1 p "v" in
-         tptp_exists_type (Sequent.hyp_count_addr p) v p
+         tptp2_exists_type (Sequent.hyp_count_addr p) v p
    else
       raise (RefineError ("d_exists_typeT", StringError "no elimination form"))
 

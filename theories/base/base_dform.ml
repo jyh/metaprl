@@ -193,7 +193,10 @@ mldform sequent_prl_df : mode["prl"] :: "sequent"{'ext; 'seq} format_term buf =
       if i <> len then
          let lead = (string_of_int (i + 1)) ^ ". " in
          let _ =
-            format_break buf lead "; ";
+            if i = 0 then
+               format_break buf lead ""
+            else
+               format_break buf lead "; ";
             match SeqHyp.get hyps i with
                Context (v, values) ->
                   (* This is a context hypothesis *)
@@ -212,7 +215,7 @@ mldform sequent_prl_df : mode["prl"] :: "sequent"{'ext; 'seq} format_term buf =
       if i <> len then
          let a = SeqGoal.get goals i in
             if i = 0 then
-               format_break buf "\159 " "\159 "
+               format_break buf "\159 " " \159 "
             else
                format_break buf "; " "\159 ";
             format_term buf NOParens a;

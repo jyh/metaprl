@@ -146,13 +146,12 @@ let compile_clause funs preds vars
       clause_expr = exprs
     } =
    let funs, preds, vars, subst, exprs = compile_exprs name true funs preds vars [] exprs in
-   let term = mk_or_term exprs in
    let term =
       let bvars = List.map snd subst in
          if ctype = Axiom then
-            mk_all_term bvars term
+            mk_all_term bvars (mk_or_term exprs)
          else
-            mk_exists_term bvars term
+            mk_exists_term bvars (mk_and_term exprs)
    in
       funs, preds, vars, term
 

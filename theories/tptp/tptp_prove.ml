@@ -109,6 +109,15 @@ let tab out i =
    done
 
 (*
+ * Print a substitution.
+ *)
+let print_subst out subst =
+   let print (v, t) =
+      fprintf out " %s=%a" v print_term t
+   in
+      List.iter print subst
+
+(*
  * Build a set from a list.
  *)
 let set_of_list =
@@ -251,10 +260,23 @@ let rec unify_term_list foundp subst constants term1 = function
    term2 :: terms2 ->
       begin
          try
+            if !debug_tptp then
+               eprintf "Unifying terms:\n\tTerm1: %a\n\tTerm2: %a\n\tConstants: %a\n\tSubst: %a%t" (**)
+                  print_term term1
+                  print_term term2
+                  print_string_list (StringSet.elements constants)
+                  print_subst subst
+                  eflush;
             let subst = unify subst constants term1 term2 in
+               if !debug_tptp then
+                  eprintf "Unification:%t%a%t" (**)
+                     eflush print_subst subst
+                     eflush;
                unify_term_list true subst constants term1 terms2
          with
             RefineError _ ->
+               if !debug_tptp then
+                  eprintf "Unification failed%t" eflush;
                let subst, terms2 = unify_term_list foundp subst constants term1 terms2 in
                   subst, term2 :: terms2
       end
@@ -335,13 +357,17 @@ let new_goal constants subst terms1 terms2 =
    let vars = StringSet.not_mem_filt constants (free_vars_terms body) in
    let vars' = new_vars 1 [] vars in
    let varst = List.map mk_var_term vars' in
+   let subst' = List.combine vars varst in
    let body = List.map (fun t -> TermSubst.subst t varst vars) body in
    let positive, negative = split_atoms body in
+   let info =
       { tptp_vars = vars';
         tptp_body = body;
         tptp_positive = positive;
         tptp_negative = negative
       }
+   in
+      subst @ subst', info
 
 let mk_goal { tptp_vars = vars; tptp_body = body } =
    if body = [] then
@@ -516,9 +542,15 @@ let resolveT i p =
    let constants = set_of_list constants in
    let hyp_info = dest_hyp hyp in
    let goal_info = dest_goal (SeqGoal.get goals 0) in
+   let _ =
+      if !debug_tptp then
+         eprintf "Starting unification: constants %a%t" print_string_list (StringSet.elements constants) eflush
+   in
    let subst, terms1, terms2 = unify_term_lists constants goal_info.tptp_body hyp_info.tptp_body in
-   let new_info = new_goal constants subst terms1 terms2 in
+   let subst, new_info = new_goal constants subst terms1 terms2 in
    let goal = mk_goal new_info in
+      if !debug_tptp then
+         eprintf "New goal %a%t" print_term goal eflush;
       assert_new_goal 0 subst i goal idT p
 
 (************************************************************************
@@ -572,7 +604,7 @@ let rec prove_auxT
                   let hyp_info = hyps.(i - 1) in
                   (* let _ = check_unify hyp_info goal_info in *)
                   let subst, terms1, terms2 = unify_term_lists constants body hyp_info.tptp_body in
-                  let goal_info = new_goal constants subst terms1 terms2 in
+                  let subst, goal_info = new_goal constants subst terms1 terms2 in
                   let goal = mk_goal goal_info in
                      incr refine_count;
                      assert_new_goal level subst i goal (nextT goal_info), i + 1

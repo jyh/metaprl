@@ -53,6 +53,7 @@ sig
 
    val ringUnit : ring
    val ringZero : ring
+	val abs : ring -> ring
    val mul : ring -> ring -> ring
 	val div : ring -> ring -> ring
 	val rem : ring -> ring -> ring
@@ -691,6 +692,8 @@ struct
 
 	let isPositive n = (compare_num n num0 > 0)
 
+	let abs = abs_num
+
    let mul a b = mult_num a b
 
    let add a b = add_num a b
@@ -764,14 +767,52 @@ struct
    let ge_term = mk_ge_term
 end
 
+module Constraints
+	(Ring: RingSig)
+	(AF: AF_Sig with type ring = Ring.ring) =
+struct
+	module HashedAF =
+	struct
+		type t = Ring.ring array
+
+		let equal = (=)
+
+		let hash = Hashtbl.hash
+	end
+
+	module Hash = Hashtbl.Make(HashedAF)
+
+	let create dim size = (dim, Hash.create size)
+
+	let get_key dim f =
+		Array.init (pred dim) (fun i -> AF.coef f (succ i))
+
+	let add info f =
+		let (dim,table) = info in
+		let key = get_key dim f in
+		try
+			let old = Hash.find table key in
+			let old_const = AF.coef old AF.constvar in
+			if Ring.compare old_const (AF.coef f AF.constvar) > 0 then
+				Hash.replace table key f
+			else
+				()
+		with
+			Not_found ->
+				Hash.add table key f
+
+	let get (table,dim) f = Hash.find table (get_key dim f)
+
+end
+
 module R = IntRing
 (*
 module AF=MakeDebugAF(R)(MakeArrayAF(R))(MakeAF(R))
-
-module AF=MakeAF(R)
 *)
+module AF=MakeAF(R)
+(*
 module AF=MakeArrayAF(R)
-
+*)
 module VI=Var2Index(R)
 open IntRing
 
@@ -841,7 +882,7 @@ let rec make_sacs_aux p i l = function
 				)
 		 | Context _ -> make_sacs_aux p i' l tl
 
-type contraints = Constraints of (int * AF.af) list | Contradiction of (int * AF.af)
+type constraints = Constraints of (int * AF.af) list | Contradiction of (int * AF.af)
 
 let is_neg_number f =
 	if AF.isNumber f then
@@ -887,22 +928,6 @@ interactive_rw factor_out2 number[l:n] 'tleft number[r:n] 'tright :
 	('left >= 0) <-->
 	(number[l:n] *@ 'tleft >= number[r:n] *@ 'tright)
 
-let factor_outC cleft tleft cright tright = funC (fun e ->
-	let t = env_term e in
-	let p = env_arg e in
-	eprintf "factor_out2: %s\n%s\n%s\n%s\n%s@."
-		(SimplePrint.short_string_of_term cleft)
-		(SimplePrint.short_string_of_term tleft)
-		(SimplePrint.short_string_of_term cright)
-		(SimplePrint.short_string_of_term tright)
-		(SimplePrint.short_string_of_term t);
-(*	debug_rewrite := true;*)
-	let t'' = apply_rewrite p (factor_out2 cleft tleft cright tright) t in
-	eprintf "result = %s@." (SimplePrint.short_string_of_term t'');
-(*	debug_rewrite := false;*)
-	factor_out2 cleft tleft cright tright
-)
-
 let rec rev_flatten = function
    h :: t ->
       List.rev_append h (rev_flatten t)
@@ -912,32 +937,6 @@ let rec rev_flatten = function
 let all_pairs l1 l2 =
 	let pairs_lists = List.rev_map (fun x -> List.rev_map (fun y -> (y,x)) l1) l2 in
 	rev_flatten pairs_lists
-
-let rec find_or_map_pairs_aux fixpoint fixpoint2 conv test l1 l2 rest accum item = function
-	hd::tl ->
-		begin
-			let hd' = conv item hd in
-			if test hd' then
-				hd'
-			else
-				find_or_map_pairs_aux fixpoint fixpoint2 conv test l1 l2 rest (hd'::accum) item tl
-		end
- | [] ->
-		begin
-			match l1 with
-				hd::tl ->
-					find_or_map_pairs_aux fixpoint fixpoint2 conv test tl l2 rest accum hd l2
-			 | [] ->
-					begin
-						try fixpoint (List.rev_append rest accum) with
-							Not_found -> fixpoint2 accum
-					end
-		end
-
-let find_or_map_pairs fixpoint fixpoint2 conv test l1 l2 rest accum =
-	match l1 with
-		[] -> fixpoint rest
-	 | hd::tl -> find_or_map_pairs_aux fixpoint fixpoint2 conv test l1 l2 rest accum hd tl
 
 type omegaTree =
 	Solve of (AF.vars * ring * omegaTree * AF.af * ring * omegaTree * AF.af)
@@ -963,18 +962,48 @@ let omega_aux v ((c1,t1,l),(c2,t2,u)) =
 	let s = (Solve (v,c1,t1,l,c2,t2,u),	AF.sub (AF.scale c1 u) (AF.scale c2 l)) in
 	norm s
 
+let rec compute_metric pool (tree,f) =
+	Array.iteri (fun v m -> pool.(v) <- add m (abs (AF.coef f (succ v)))) pool
+
+let rec min_index_aux pool result current =
+	if current = Array.length pool then
+		result
+	else
+		let current_val = pool.(current) in
+		if (compare pool.(result) current_val > 0) && (isPositive current_val) then
+			min_index_aux pool current (succ current)
+		else
+			min_index_aux pool result (succ current)
+
+let rec min_index pool current =
+	if current = Array.length pool then
+		0
+	else
+		if compare pool.(current) ringZero > 0 then
+			min_index_aux pool current (succ current)
+		else
+			min_index pool (succ current)
+
+let pick_var info pool constrs =
+	Array.fill pool 0 (Array.length pool) ringZero;
+	List.iter (compute_metric pool) constrs;
+	let result = min_index pool 0 in
+	if compare pool.(result) ringZero > 0 then
+		succ result
+	else
+		raise (RefineError ("omegaT", StringError "failed to find a contradiction - no variables left"))
+
+(*
 let rec pick_var info = function
 	[] ->
-		if !debug_omega then
-			eprintf "pick_var: No variables left@.";
-		raise Not_found
-		(*raise (RefineError ("omegaT", StringError "failed to find a contradiction - no variables left"))*)
+		raise (RefineError ("omegaT", StringError "failed to find a contradiction - no variables left"))
  | (tree,f)::tl ->
 		let c,v = AF.any_var f in
 		if v=AF.constvar then
 			pick_var info tl
 		else
 			v
+*)
 
 let rec get_bounds v l u rest = function
 	[] -> (l,u,rest)
@@ -990,6 +1019,7 @@ let rec get_bounds v l u rest = function
 			else
 				get_bounds v l u (original::rest) tl
 
+
 let rec print_constrs info = function
 	[] ->
 		eprintf "@."
@@ -1002,10 +1032,57 @@ let print_constrs info l =
 	eprintf "%i constraints@." (List.length l)
 *)
 
-let rec omega info constrs =
+let var_bounds (old_upper, old_lower) f v =
+	let c = AF.coef f (succ v) in
+	if compare c num0 < 0 then
+		(true, old_lower)
+	else
+		if compare c num0 > 0 then
+			(old_upper, true)
+		else
+			(old_upper, old_lower)
+
+let xor a b =
+	if a then
+		not b
+	else
+		b
+
+let rec collect_unbound_vars pool acc i =
+	if i=(Array.length pool) then
+		acc
+	else
+		let upper,lower = pool.(i) in
+		let i' = succ i in
+		if xor upper lower then
+			collect_unbound_vars pool (i'::acc) i'
+		else
+			collect_unbound_vars pool acc i'
+
+let rec no_unbound_vars f = function
+	hd::tl ->
+		let c = AF.coef f hd in
+		if compare c num0 <> 0 then
+			begin
+				if !debug_omega then
+					eprintf "Unbound v%i in %a@." hd AF.print f;
+				false
+			end
+		else
+			no_unbound_vars f tl
+ | [] ->	true
+
+let remove_unbound_vars pool constrs =
+	Array.fill pool 0 (Array.length pool) (false,false);
+	List.iter (fun (tree,f) -> Array.iteri (fun v bounds -> pool.(v) <- var_bounds bounds f v) pool) constrs;
+	let unbound_vars = collect_unbound_vars pool [] 0 in
+	List.filter (fun (tree,f) -> no_unbound_vars f unbound_vars) constrs
+
+let rec omega info pool pool2 constrs =
 	if !debug_omega then
 		print_constrs info constrs;
-	let v = pick_var info constrs in
+	let constrs = remove_unbound_vars pool constrs in
+	let v = pick_var info pool2 constrs in
 	if !debug_omega then
 		eprintf "picked %a@." AF.print_var v;
 	let l, u, rest = get_bounds v [] [] [] constrs in
@@ -1020,7 +1097,7 @@ let rec omega info constrs =
 	with Not_found ->
 		if !debug_omega then
 			eprintf "no contradiction found, calling omega@.";
-		omega info (List.rev_append rest new_constrs)
+		omega info pool pool2 (List.rev_append rest new_constrs)
 
 interactive_rw ge_to_ge0 :
 	('a in int) -->
@@ -1086,8 +1163,6 @@ match src with
 )
 
 let omegaAuxT info tree = funT (fun p ->
-	(*debug_refine := true;
-	debug_rewrite := true;*)
 	source2hyp info tree thenMT rw ge_normC (-1)
 )
 
@@ -1097,12 +1172,16 @@ let omegaCoreT = funT (fun p ->
    let info=VI.invert var2index in
    match s with
    	Constraints constrs ->
-			let n = succ (VI.length var2index) in
+			let n0 = VI.length var2index in
+			let n = succ n0 in
 			let constrs = List.map (fun (i,f) -> norm (Hyp i, AF.grow n f)) constrs in
-			let tree, f = omega info constrs in
+			let pool = Array.make n0 (false,false) in
+			let pool2 = Array.make n0 ringZero in
+			let tree, f = omega info pool pool2 constrs in
 			if !debug_omega then
 				eprintf "Solved, reconstructing the proof@.";
-			(match tree with
+			(
+			match tree with
 			 | Hyp i ->
 					omegaAuxT info tree
 			 | Mul _ | MulAndWeaken _ ->

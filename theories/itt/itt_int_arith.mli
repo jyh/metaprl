@@ -36,8 +36,21 @@ extends Itt_logic
 extends Itt_bool
 extends Itt_int_ext
 
+open Tactic_type
 open Tactic_type.Conversionals
 
+open Mp_resource
+open Refiner.Refiner.Term
+open Dtactic
+(*
+resource (term * (int -> tactic), int -> tactic) ge_elim
+resource (term * (string * int option * tactic), tactic) ge_intro
+
+val process_ge_elim_resource_annotation :
+   (Tactic.pre_tactic * elim_option list, term * (int -> tactic)) annotation_processor
+val process_ge_intro_resource_annotation :
+   (Tactic.pre_tactic * intro_option list, term * (string * int option * tactic)) annotation_processor
+*)
 (* Parts of normalizeC, use for debugging
 topval sub_elimC : conv
 topval mul_normalizeC : conv
@@ -46,18 +59,23 @@ topval injectCoefC : conv
 topval mul_BubbleSortC : conv
 topval mul_BubbleStep2C : conv
 *)
+topval sum_same_products1C : conv
+topval sum_same_products2C : conv
+topval sum_same_products3C : conv
+topval sum_same_products4C : conv
 topval normalizeC : conv
 
 topval arithT : tactic
 
-(* sometimes these parts of arithT are useful to figure out why arithT does not work*)
+(* sometimes these parts of arithT are useful to figure out why arithT does not work
 topval neqInConcl2HypT : tactic
 topval arithRelInConcl2HypT : tactic
 topval negativeHyp2ConclT : int -> tactic
 topval reduceIneqT : int -> tactic
 topval findContradRelT : tactic
 topval reduceContradRelT : int -> tactic
-(**)
-(*topval anyArithRel2geT : int -> tactic
-topval tryReduce_geT : int -> tactic
-topval sumListT : int list -> tactic*)
+*)
+(*topval conv2geT : int -> tactic
+topval all2geT : tactic
+*)
+topval genT : term list -> int -> int -> int -> int -> int -> tactic

@@ -737,7 +737,7 @@ doc <:doc<
 let arithT =
    arithRelInConcl2HypT thenMT
    ((tryOnAllMCumulativeHypsT negativeHyp2ConclT) thenMT
-(*   ((tryOnAllMHypsT reduceIneqT) thenMT *)
+(*   ((tryOnAllMHypsT reduceIneqT) thenMT*)
    (findContradRelT thenMT (reduceContradRelT (-1)) ))
 
 interactive test 'a 'b 'c :
@@ -830,6 +830,65 @@ interactive test10 :
 sequent { <H> >- 'a in int } -->
 sequent { <H> >- 'b in int } -->
 sequent { <H>; 'a <> 'b >- 'a <> 'b }
+
+let rec gen_term nvars vars intrange maxdepth =
+	let choice=Random.int 2 in
+	if maxdepth>0 && choice=0 then
+		mk_add_term (gen_term nvars vars intrange (maxdepth-1)) (gen_term nvars vars intrange (maxdepth-1))
+	else if maxdepth>0 && choice=1 then
+		mk_mul_term (gen_term nvars vars intrange (maxdepth-1)) (gen_term nvars vars intrange (maxdepth-1))
+	else
+		let choice=Random.int 1 in
+		if choice=0 then
+			let i=Random.int (nvars-1) in
+			vars.(i)
+		else
+			mk_number_term (num_of_int (Random.int intrange))
+
+let gen_ineq nvars intrange =
+	(Random.int (nvars-1), Random.int (nvars-1), Random.int intrange)
+
+let rec gen nvars intrange left =
+	if left=0 then []
+	else (gen_ineq nvars intrange)::(gen nvars intrange (left-1))
+
+let triple2term vars (v1,v2,n) =
+	mk_ge_term vars.(v1) (mk_add_term vars.(v2) (mk_number_term (num_of_int n)))
+
+let rec assertListT vars = function
+	[triple] -> assertT (triple2term vars triple)
+ | hd::tl -> assertT (triple2term vars hd) thenMT (assertListT vars tl)
+ | _ -> failT
+
+let genT vl seed nvars nineq intrange maxdepth =
+	Random.init seed;
+	let vars=Array.of_list vl in
+(*	let vars=Array.init nvars (fun i -> mk_var_term (Lm_symbol.make "v" i)) in*)
+	let terms=Array.init nvars (fun i -> gen_term nvars vars intrange maxdepth) in
+	let l=gen nvars intrange nineq in
+	assertListT terms l
+
+interactive testn (*'v 'v1 'v2 'v3 'v4 'v5 'v6 'v7 'v8 'v9*) :
+(*	sequent { <H> >- 'v in int } -->
+	sequent { <H> >- 'v1 in int } -->
+	sequent { <H> >- 'v2 in int } -->
+	sequent { <H> >- 'v3 in int } -->
+	sequent { <H> >- 'v4 in int } -->
+	sequent { <H> >- 'v5 in int } -->
+	sequent { <H> >- 'v6 in int } -->
+	sequent { <H> >- 'v7 in int } -->
+	sequent { <H> >- 'v8 in int } -->
+	sequent { <H> >- 'v9 in int } -->*)
+	sequent {'v  in int;
+				'v1 in int;
+				'v2 in int;
+				'v3 in int;
+				'v4 in int;
+				'v5 in int;
+				'v6 in int;
+				'v7 in int;
+				'v8 in int;
+				'v9 in int >- "assert"{bfalse} }
 
 interactive eq2ineq :
 	[wf] sequent { <H> >- 'a in int } -->

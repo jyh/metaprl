@@ -77,6 +77,7 @@ open Itt_logic
 open Itt_int_ext
 open Itt_subtype
 open Itt_subset
+open Itt_squash
 
 let _ =
    show_loading "Loading Itt_grouplikeobj%t"
@@ -109,7 +110,7 @@ let resource elim +=
  *
  * @end[doc]
  *)
-interactive groupoid_type {| intro [] |} :
+interactive groupoid_wf {| intro [] |} :
    sequent ['ext] { 'H >- "type"{groupoid[i:l]} }
 
 (*!
@@ -126,6 +127,7 @@ interactive groupoid_intro {| intro [AutoMustComplete] |} :
    sequent ['ext] { 'H; g: {car: univ[i:l]; "*": ^car -> ^car -> ^car}; 'J['g] >- 'C['g] } -->
    sequent ['ext] { 'H; g: groupoid[i:l]; 'J['g] >- 'C['g] }
 *)
+
 (************************************************************************
  * SEMIGROUP                                                            *
  ************************************************************************)
@@ -166,7 +168,7 @@ interactive isSemigroup_wf {| intro [intro_typeinf <<'x>>] |} groupoid[i:l] :
    sequent [squash] { 'H >- 'x in groupoid[i:l] } -->
    sequent ['ext] {'H >- "type"{isSemigroup{'x}} }
 
-interactive semigroup_type {| intro [] |} :
+interactive semigroup_wf {| intro [] |} :
    sequent ['ext] { 'H >- "type"{semigroup[i:l]} }
 
 (*!
@@ -230,6 +232,7 @@ let unfold_monoid = unfold_monoid1 thenC addrC [0] unfold_premonoid thenC addrC 
 
 let fold_premonoid1 = makeFoldC << premonoid[i:l] >> unfold_premonoid1
 let fold_premonoid = makeFoldC << premonoid[i:l] >> unfold_premonoid
+let fold_isMonoid1 = makeFoldC << isMonoid{'g} >> unfold_isMonoid1
 let fold_isMonoid = makeFoldC << isMonoid{'g} >> unfold_isMonoid
 let fold_monoid1 = makeFoldC << monoid[i:l] >> unfold_monoid1
 let fold_monoid = makeFoldC << monoid[i:l] >> unfold_monoid
@@ -245,14 +248,14 @@ let resource elim +=
  *
  * @end[doc]
  *)
-interactive premonoid_type {| intro [] |} :
+interactive premonoid_wf {| intro [] |} :
    sequent ['ext] { 'H >- "type"{premonoid[i:l]} }
 
 interactive isMonoid_wf {| intro [intro_typeinf <<'x>>] |} premonoid[i:l] :
    sequent [squash] { 'H >- 'x in premonoid[i:l] } -->
    sequent ['ext] {'H >- "type"{isMonoid{'x}} }
 
-interactive monoid_type {| intro [] |} :
+interactive monoid_wf {| intro [] |} :
    sequent ['ext] { 'H >- "type"{monoid[i:l]} }
 
 (*!
@@ -342,10 +345,10 @@ interactive isComutative_wf {| intro [intro_typeinf <<'g>>] |} groupoid[i:l] :
    sequent [squash] { 'H >- 'g in groupoid[i:l] } -->
    sequent ['ext] {'H >- "type"{isCommutative{'g}} }
 
-interactive csemigroup_type {| intro [] |} :
+interactive csemigroup_wf {| intro [] |} :
    sequent ['ext] { 'H >- "type"{csemigroup[i:l]} }
 
-interactive cmonoid_type {| intro [] |} :
+interactive cmonoid_wf {| intro [] |} :
    sequent ['ext] { 'H >- "type"{cmonoid[i:l]} }
 
 (*!
@@ -406,13 +409,10 @@ interactive cmonoid_is_monoid :
  *
  * @end[doc]
  *)
-define unfold_subStructure1 : subStructure{'s; 'g} <-->
+define unfold_subStructure : subStructure{'s; 'g} <-->
    ('s^car subset 'g^car) & ('s^"*" = 'g^"*" in 's^car -> 's^car -> 's^car)
 (*! @docoff *)
 
-let unfold_subStructure = unfold_subStructure1
-
-let fold_subStructure1 = makeFoldC << subStructure{'s; 'g} >> unfold_subStructure1
 let fold_subStructure = makeFoldC << subStructure{'s; 'g} >> unfold_subStructure
 (*!
  * @begin[doc]
@@ -433,7 +433,7 @@ interactive subStructure_elim {| elim [] |} 'H :
  * @begin[doc]
  * @modsubsection{Rules}
  *
- * Substructure is squash stable.
+ * Substructure is squash-stable.
  * @end[doc]
  *)
 interactive subStructure_squashStable :

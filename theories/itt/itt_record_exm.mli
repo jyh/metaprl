@@ -11,3 +11,5 @@ open Itt_fun
 topval fold_point : conv
 topval unfold_point : conv
 topval unfold_semigroup : conv
+
+topval eval_a_module : conv

@@ -32,6 +32,7 @@ open Tactic_type
 open Tactic_type.Tacticals
 open Base_dtactic
 open Tactic_type.Conversionals
+open Top_conversionals
 
 open Itt_struct
 open Itt_record
@@ -325,6 +326,40 @@ interactive semigroupAssos4 'H semigroup[i:l] :
 
 
 
+(*
+ * @begin[doc]
+ * Using records, one can define a module with mutually recursive functions.
+ * E.g. let us define the module with two functions:
+ *   foo x = if x>0 then fee (x-1) else 0
+ * and
+ *   fee x = if x>0 then foo (x-1) else 1
+ * @end[doc]
+ *)
+
+define unfold_a_module : a_module <-->
+   fix{self.
+          rcrd["foo":t]{lambda{x.ifthenelse{gt_bool{'x;0};.field["fee":t]{'self} ('x -@ 1);0}};
+          rcrd["fee":t]{lambda{x.ifthenelse{gt_bool{'x;0};.field["foo":t]{'self} ('x -@ 1);1}}}}}
+
+let fold_a_module =
+   makeFoldC <<a_module>> unfold_a_module;;
+
+let eval_a_module =
+   unfold_a_module thenC reduceTopC thenC higherC fold_a_module;;
+
+interactive_rw foo_eval :
+   (field["foo":t]{a_module} 'x) <--> ifthenelse{gt_bool{'x;0};.field["fee":t]{a_module} ('x -@ 1);0}
+
+interactive_rw fee_eval :
+   (field["fee":t]{a_module} 'x) <--> ifthenelse{gt_bool{'x;0};.field["foo":t]{a_module} ('x -@ 1);1}
+
+let resource reduce +=
+   [<< field["foo":t]{a_module} 'x  >>, foo_eval;
+    << field["fee":t]{a_module} 'x  >>, fee_eval]
+
+
+interactive_rw example_of_evaluation :
+  (field["foo":t]{a_module} 5) <--> 1
 
 (*! @docoff *)
 

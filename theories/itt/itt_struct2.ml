@@ -141,8 +141,8 @@ interactive hypSubstitution2 'H 'J ('t1 = 't2 in 'T) bind{y. 'A['y]} 'z 'v 'w:
  * @modsubsection{Cut rules}
  *
  * There are three advanced versions of the @hrefrule[cut] rule.
- * The @tt{cutMem} states that if $s @in S$,
- * and $T[x]$ is true with whenever $x$ from $S$ and $x=s @in S$,
+ * The @tt[cutMem] states that if $s @in S$,
+ * and $T[x]$ is true for any $x$ from $S$ such that $x=s @in S$,
  * then $T[s]$ is certainly true.
  *
  * @end[doc]

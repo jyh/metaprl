@@ -30,6 +30,7 @@
  * jyh@cs.cornell.edu
  *
  *)
+
 extends Mptop
 extends Summary
 
@@ -54,21 +55,6 @@ declare meta_lt[a:s,b:s]{'tt; 'ff}
 declare meta_lt[a:t,b:t]{'tt; 'ff}
 declare meta_lt[a:l,b:l]{'tt; 'ff}
 
-declare meta_le[a:n,b:n]{'tt; 'ff}
-declare meta_le[a:s,b:s]{'tt; 'ff}
-declare meta_le[a:t,b:t]{'tt; 'ff}
-declare meta_le[a:l,b:l]{'tt; 'ff}
-
-declare meta_gt[a:n,b:n]{'tt; 'ff}
-declare meta_gt[a:s,b:s]{'tt; 'ff}
-declare meta_gt[a:t,b:t]{'tt; 'ff}
-declare meta_gt[a:l,b:l]{'tt; 'ff}
-
-declare meta_ge[a:n,b:n]{'tt; 'ff}
-declare meta_ge[a:s,b:s]{'tt; 'ff}
-declare meta_ge[a:t,b:t]{'tt; 'ff}
-declare meta_ge[a:l,b:l]{'tt; 'ff}
-
 (*
  * sum{op1[@i1:n]; op2[@i2:n]} --> op1[@i1 + @i2]
  *)
@@ -88,21 +74,6 @@ ml_rw reduce_meta_lt_num : meta_lt[a:n, b:n]{'tt; 'ff}
 ml_rw reduce_meta_lt_str : meta_lt[a:s, b:s]{'tt; 'ff}
 ml_rw reduce_meta_lt_tok : meta_lt[a:t, b:t]{'tt; 'ff}
 ml_rw reduce_meta_lt_lev : meta_lt[a:l, b:l]{'tt; 'ff}
-
-ml_rw reduce_meta_le_num : meta_le[a:n, b:n]{'tt; 'ff}
-ml_rw reduce_meta_le_str : meta_le[a:s, b:s]{'tt; 'ff}
-ml_rw reduce_meta_le_tok : meta_le[a:t, b:t]{'tt; 'ff}
-ml_rw reduce_meta_le_lev : meta_le[a:l, b:l]{'tt; 'ff}
-
-ml_rw reduce_meta_gt_num : meta_gt[a:n, b:n]{'tt; 'ff}
-ml_rw reduce_meta_gt_str : meta_gt[a:s, b:s]{'tt; 'ff}
-ml_rw reduce_meta_gt_tok : meta_gt[a:t, b:t]{'tt; 'ff}
-ml_rw reduce_meta_gt_lev : meta_gt[a:l, b:l]{'tt; 'ff}
-
-ml_rw reduce_meta_ge_num : meta_ge[a:n, b:n]{'tt; 'ff}
-ml_rw reduce_meta_ge_str : meta_ge[a:s, b:s]{'tt; 'ff}
-ml_rw reduce_meta_ge_tok : meta_ge[a:t, b:t]{'tt; 'ff}
-ml_rw reduce_meta_ge_lev : meta_ge[a:l, b:l]{'tt; 'ff}
 
 (*
  * -*-

@@ -3,14 +3,6 @@ extends Kat_terms
 open Top_conversionals
 open Base_select
 open Dtactic
-open Tactic_type.Conversionals
-open Refiner.Refiner.TermMan
-open Refiner.Refiner.TermOp
-open Refiner.Refiner.Term
-
-open Term_stable
-
-
 
 
 prim_rw prod_assotiative {|reduce |}: (('x * 'y) * 'z) <--> ('x * ('y * 'z))
@@ -54,16 +46,6 @@ dform ge_df : ('x >= 'y) = 'x " " ge " " 'y
 
 
 
-interactive transitivity 'y:
-  sequent{ <H> >- 'x <= 'y } -->
-  sequent{ <H> >- 'y <= 'z } -->
-  sequent{ <H> >- 'x <= 'z }
-
-
-
-
-
-
 prim neg_wf {| intro[] |}:
    sequent { <H> >- 'b in bool} -->
    sequent { <H> >- - 'b in bool} = it
@@ -98,6 +80,21 @@ prim_rw double_neg {|reduce |}:
 
 
 
+(* Theorems: *)
+
+interactive transitivity 'y:
+  sequent{ <H> >- 'x <= 'y } -->
+  sequent{ <H> >- 'y <= 'z } -->
+  sequent{ <H> >- 'x <= 'z }
+
+interactive asymmetry:
+   sequent { <H> >- 'x <= 'y } -->
+   sequent { <H> >- 'y <= 'x } -->
+   sequent { <H> >- 'x ~ 'y }
+
+
+
+
 define ifthenelse: ifthenelse{'b;'e1;'e2} <--> ('b * 'e1  + (- 'b) * 'e2)
 
 dform ifthenelse_df : parens :: ifthenelse{'e1; 'e2; 'e3} =
@@ -106,8 +103,9 @@ dform ifthenelse_df : parens :: ifthenelse{'e1; 'e2; 'e3} =
    pushm[3] `"else" hspace szone{'e3} popm popm ezone
 
 
-interactive_rw if_1 {| reduce |} :  (if 1 then 'e1 else 'e2 ) <--> 'e1
-interactive_rw if_0 {| reduce |} :  (if 0 then 'e1 else 'e2 ) <--> 'e2
+interactive_rw reduce_ifthenelse_true {| reduce |} : (if 1 then 'e1 else 'e2) <--> 'e1
+
+interactive_rw reduce_ifthenelse_false {| reduce |} : (if 0 then 'e1 else 'e2) <--> 'e2
 
 
 

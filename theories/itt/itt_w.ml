@@ -123,8 +123,8 @@ declare tree_ind{'z; a, f, g. 'body['a; 'f; 'g]}
  * @begin[doc]
  * @rewrites
  *
- * The induction combinator takes are $W$-node
- * as its first argument, and a body that expect three arguments $a_2$,
+ * The induction combinator takes a $W$-node
+ * as its first argument, and a body that expects three arguments $a_2$,
  * $f_2$, and $g_2$.  The $a_2$ argument is the label of the current node,
  * the $f_2$ argument is the function that computes the children, and
  * $g_2$ is the value that is returned by a recursive call.

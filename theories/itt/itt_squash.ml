@@ -207,7 +207,7 @@ prim squashMemberFormation {| intro [AutoMustComplete] |} 'H :
  *
  * The first rule, @tt{unsquashEqual}, allows equalities to
  * be unsquashed (because the proof can always be inferred).
- * The second rule, @tt{squashElim} show that $@it$ is the only element
+ * The second rule, @tt{squashElim} shows that $@it$ is the only element
  * of a non-empty squashed type.
  * The third rule, @tt{squashFromAny} allowed to infer a squashed
  * sequent form from any sequent form, effectively allowing us to

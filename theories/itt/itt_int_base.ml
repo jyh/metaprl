@@ -473,7 +473,7 @@ prim numberFormation {| intro [] |} 'H number[n:n] :
 (*!
  * @begin[doc]
  * @modsubsection{Decidability}
- * The following rule establish decidability of integer relations and
+ * The following rules establish decidability of integer relations and
  * improve the @hreftactic[decideT] tactic.
  * @end[doc]
  *)
@@ -715,7 +715,7 @@ let reduce_ind_numberC =
  * @modsubsection{Combinator equality}
  *
  * Two @tt{ind} term compute values of type $T$ if each of the three
- * cases (zero, positive, and negative) produce values of type $T$.
+ * cases (zero, positive, and negative) produces values of type $T$.
  * @end[doc]
  *)
 (*

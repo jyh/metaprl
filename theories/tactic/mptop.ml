@@ -6,8 +6,8 @@
  *
  * The @tt{Mptop} module defines a simplified OCaml top-loop
  * that is used by the @MetaPRL editor to evaluate user input.
- * The evaluator handle only a few basic types (for example, for
- * strings, numbers, terms, and tactics), and it handle function
+ * The evaluator handles only a few basic types (for example, for
+ * strings, numbers, terms, and tactics), and it handles function
  * application.  It does not implement more sophisticated OCaml
  * expressions such as function definition and pattern matching.
  * @end[doc]

@@ -71,7 +71,7 @@ interactive oInSpace {|intro[] |} 'H :
 
 (*!
  * @begin[doc]
- * $<<O>>$ is also can be considered as an element of the type $<<plane>>$:
+ * $<<O>>$ also can be considered as an element of the type $<<plane>>$:
  * @end[doc]
  *)
 

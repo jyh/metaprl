@@ -211,7 +211,7 @@ let failWithC = Tactic_type.Conversionals.failWithC
  *
  * @item{@conv[whileProgressC];
  * The (@tt{repeatC} $c$) conversion applies conversion $c$ repeatedly
- * while it makes a progress. If it $c$ fails then  @tt{whileProgressC} also fails.}
+ * while it makes a progress. If $c$ fails then  @tt{whileProgressC} also fails.}
  *
  * @item{@conv[repeatC];
  * The (@tt{repeatC} $c$) conversion applies conversion $c$ repeatedly
@@ -234,7 +234,7 @@ let repeatForC = Tactic_type.Conversionals.repeatForC
  * @begin[doc]
  * @modsection{Addressing and search}
  *
- * Generally, the terms to be rewritten to not occur at the outermost
+ * Generally, the terms to be rewritten do not occur at the outermost
  * level of a clause.  The following conversionals recursively search
  * through the subterms of a clause for applicable rewrites.
  *

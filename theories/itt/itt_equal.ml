@@ -442,8 +442,8 @@ prim type_axiomMember {| intro []; eqcd |} 'H :
  * @modsubsection{Truth implies typehood}
  *
  * For any sequent judgment $@sequent{ext; H; T}$ the term $T$ must be a
- * a type.  The following rule allows us to infer well-formedness of a
- * type from it provability.  Note that this rule is useless for types $T$
+ * type.  The following rule allows us to infer well-formedness of a
+ * type from its provability.  Note that this rule is useless for types $T$
  * that are not true.
  * @end[doc]
  *)

@@ -7,7 +7,7 @@
  * The @tt{Itt_dfun} module is @emph{derived} from the
  * @hrefmodule[Itt_rfun] module.  The type $@fun{x; A; B[x]}$ is
  * equivalent to the type $@rfun{f; x; A; B[x]}$, where $f$ is
- * not bound in $B[x]$.  The @emph{well-founded} restriction in
+ * not bound in $B[x]$.  The @emph{well-founded} restriction
  * for the very-dependent function type is always trivially satisfied
  * (since the range type $B[x]$ never invokes $f$).
  * The @tt{Itt_dfun} module derives the dependent-function
@@ -145,7 +145,7 @@ interactive functionType {| intro [] |} 'H 'x :
  * @modsubsection{Introduction}
  *
  * The propositional interpretation of the dependent-function
- * is the universal quantification @hrefterm[all], $@all{a; A; B[x]}$.  The
+ * is the universal quantification @hrefterm[all], $@all{a; A; B[a]}$.  The
  * universal quantification is true, if it is a type,
  * and $B[a]$ is true for any $a @in A$.
  * @end[doc]

@@ -18,7 +18,7 @@
  * in the @hrefmodule[Itt_isect] theory.
  * The latter type refers to the intersection of a family of types.
  *
- * In some sence the dependent intersection is similar to
+ * In some sense the dependent intersection is similar to
  * the dependent product type $@prod{x;A;B[x]}$
  * (when $@isect{x;A;B[x]}$ is similar to the function space
  * $@fun{x; A; B[x]}$).
@@ -232,7 +232,7 @@ prim disectElimination {| elim [] |} 'H 'J  bind{a,b,HACK.'T['a;'b;'HACK]}:
 (*!
  * @begin[doc]
  * As a corollary of elimination rule we have that if
- * two terms are equal in dependent the intersection, they are also
+ * two terms are equal in dependent intersection, they are also
  * equal in both cases of the intersection.
  * The @tactic[disectCaseEqualityT] applies this rule
  * @end[doc]

@@ -872,7 +872,7 @@ let genUnivCDT =
  * @begin[doc]
  * @begin[description]
  * @item{@tactic[instHypT];
- *  {   The @tt{instHypT} tactic performs or instantiation
+ *  {   The @tt{instHypT} tactic performs instantiation
  *      of a hypothesis.  The hypothesis must be a universal quantification
  *      or an implication.
  *

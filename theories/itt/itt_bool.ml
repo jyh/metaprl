@@ -259,7 +259,7 @@ interactive bfalse_member {| intro []; eqcd |} 'H :
  *
  * The elimination rule performs a case analysis on a Boolean
  * assumption.  There are two cases: one where the assumption is
- * true, and the another where it is false.
+ * true, and another where it is false.
  * @end[doc]
  *)
 interactive boolElimination2 {| elim [] |} 'H 'J 'x :
@@ -522,7 +522,7 @@ interactive assert_bimplies_elim {| elim [] |} 'H 'J :
 
 (*!
  * @begin[doc]
- * Finally, we the following rules define
+ * Finally, the following rules define
  * introduction reasoning on the Boolean propositional
  * connectives.
  * @end[doc]

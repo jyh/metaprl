@@ -81,7 +81,7 @@ let _ =
 (*!
  * @begin[doc]
  * @rewrites
- * The @tt{unfold_dprod} rewrite unfold the non-dependent
+ * The @tt{unfold_prod} rewrite unfolds the non-dependent
  * product to a dependent-product with a @emph{new} variable
  * $x$.
  * @end[doc]

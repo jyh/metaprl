@@ -160,7 +160,7 @@ prim setType {| intro [] |} 'H 'x :
  * @modsubsection{Introduction}
  *
  * A set type $@set{x; A; B[x]}$ is true if there is an element $a @in A$
- * where $B[x]$ is true.
+ * where $B[a]$ is true.
  * @end[doc]
  *)
 prim setMemberFormation {| intro [] |} 'H 'a 'z :

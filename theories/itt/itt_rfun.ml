@@ -22,7 +22,7 @@
  * any element $x @in A$.  In addition, the domain $A$ must be
  * well-founded with a partial order on $A$, and the type $B[f, x]$
  * must be well-formed if $f$ is restricted to arguments smaller
- * the $x$.
+ * than $x$.
  * @end[doc]
  *
  * ----------------------------------------------------------------
@@ -260,7 +260,7 @@ let resource reduce +=
  * all elements of $a$ by induction on the relation $R[a_1, a_2]$.
  *
  * The reason this definition is so convoluted is that the definition of
- * well-foundness must be give @emph{before} defining functions and application.
+ * well-foundness must be given @emph{before} defining functions and application.
  * The @hrefmodule[Itt_well_founded] module provides simplified definitions
  * of well-foundness.
  * @end[doc]
@@ -376,7 +376,7 @@ prim rfunction_lambdaEquality {| intro []; eqcd |} 'H 'y :
  *
  * The function space is one of the few types in the @Nuprl type
  * theory with an @emph{extensional} equality.  Normally, equality is
- * intensional --- it depends on the syntactic structure of the the
+ * intensional --- it depends on the syntactic structure of the
  * terms in the type.  The function space allows equality of functions
  * $f_1$ and $f_2$ if their @emph{application} provides equal values on
  * equal arguments.  The functions and the function type must all be

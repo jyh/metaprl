@@ -232,7 +232,7 @@ interactive intersectionMemberFormation {| intro [] |} 'H 'z 'b :
  * @begin[doc]
  * In one special case when $B$ does not depend on $x$  we can derive
  * simpler rule:
- * $@isect{x; A; B}$ is inhabited if we can proof $B$ with the
+ * $@isect{x; A; B}$ is inhabited if we can prove $B$ with the
  * @emph{squashed} hypothesis $A$ (see @hrefterm[squash]).
  * @end[doc]
  *)

@@ -173,8 +173,8 @@ prim tunionMemberFormation {| intro [] |} 'H 'y 'a :
  * @begin[doc]
  * @modsubsection{Elimination}
  *
- * The elimination form is weak.  The desired rule would be that if,
- * If $x@colon @tunion{y; A; B[y]}$, then $x @in B[a]$ for some
+ * The elimination form is weak.  The desired rule would be that if
+ * $x@colon @tunion{y; A; B[y]}$, then $x @in B[a]$ for some
  * $a @in A$.  This rule is allowed, but only for equality goals,
  * where the computational content of the proof can be omitted.
  * @end[doc]

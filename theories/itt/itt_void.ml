@@ -102,7 +102,7 @@ dform void_df1 : except_mode[src] :: void = `"Void"
  *
  * @modsubsection{Equality and typehood}
  *
- * The $@void$ type is a member of very universe, and it
+ * The $@void$ type is a member of every universe, and it
  * is a type.
  * @end[doc]
  *

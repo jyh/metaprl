@@ -163,7 +163,7 @@ let nthAssumT = Tactic_type.Tacticals.nthAssumT
  * The @tt{seqT} is the universal form of the @tt{firstT} tactical.
  * The (@tt{seqT $[@i{tac}_1; @ldots; @i{tac}_n]$}) tactic is equivalent to
  * (@tt{$@i{tac}_1$ thenT $@cdots$ thenT $@i{tac}_n$}).  The @tt{seqOnSameConclT}
- * tactic is the same as @tt{seqT} except that is selects only those subgoals
+ * tactic is the same as @tt{seqT} except that it selects only those subgoals
  * that have the same conclusion as the current goal.}
  * @end[description]
  *
@@ -243,7 +243,7 @@ let completeT = Tactic_type.Tacticals.completeT
  * @begin[doc]
  * @begin[description]
  * @item{@tactic[progressT];
- * The (@tt{progressT} $@i{tac}$) tactic applies it argument and fails
+ * The (@tt{progressT} $@i{tac}$) tactic applies its argument and fails
  * if either 1) $@i{tac}$ fails, or $@i{tac}$ failed to make ``progress''
  * by generating subgoals that differ from the current goal.}
  * @end[description]
@@ -363,14 +363,11 @@ let doNotThinT = thinningT false
  *
  * @item{@tactic[onAllClausesT], @tactic[onAllHypsT];
  * The (@tt{onAllClausesT} @i{tac}) applies the argument tactic to all the clauses,
- * including all the hypothesis and the conclusion.  The @tt{onHypsT} applies the
+ * including all the hypothesis and the conclusion.  The @tt{onAllHypsT} applies the
  * argument only to the hypotheses.}
  *
  * @item{@tactic[onAllAssumT];
- * The (@tt{onAllAssumT} @i{tac}) applies the argument tactic to all the assumptions.
-  ,
- * including all the hypothesis and the conclusion.  The @tt{onHypsT} applies the
- * argument only to the hypotheses.}
+ * The (@tt{onAllAssumT} @i{tac}) applies the argument tactic to all the assumptions.}
  *
  * @item{@tactic[onSomeHypT];
  * The (@tt{onSomeHypT} @i{tac}) applies the argument tactic to the
@@ -437,7 +434,7 @@ let onVarT = Tactic_type.Tacticals.onVarT
  * The (infix) @tt{thenMT}, @tt{thenET}, and @tt{thenWT} are like the
  * @tt{thenT} tactical, except that they apply their second argument
  * only to the goals labeled ``main'', ``equality'', or ``wf'' respectively.
- * @tt{thenAT} applies its second argument only to the goal that @emph{not}
+ * @tt{thenAT} applies its second argument only to the goal @emph{not}
  * labeled ``main''.}
  *
  * @item{@tactic[whileProgressMT], @tactic[untilFailMT], @tactic[repeatMT], @tactic[repeatMForT];

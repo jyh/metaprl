@@ -715,7 +715,7 @@ dform centermath_df3 : except_mode[tex] :: centermath{'t} =
 (*!
  * @begin[doc]
  * The @code{@code} form produces literal text.
- * The literal text is enclosed in in curly brackets.
+ * The literal text is enclosed in curly brackets.
  * @end[doc]
  *)
 declare code[text:s]
@@ -793,7 +793,7 @@ dform center_df3 : except_mode[tex] :: except_mode[html] :: center{'t} =
  * @end[quote]
  * @end[verbatim]
  *
- * Each line of the text in the @tt{center} block is centered.
+ * Each line of the text in the @tt{quote} block is centered.
  * @end[doc]
  *)
 declare quote{'t}

@@ -240,7 +240,7 @@ dform ge_bool_df1 : parens :: "prec"[prec_compare] :: ge_bool{'a; 'b} =
  * @rewrites
  *
  * The binary arithmetic operators are defined using the
- * the @emph{meta} arithmetic operators that are @MetaPRL
+ * @emph{meta} arithmetic operators that are @MetaPRL
  * builtin operations.
  * @end[doc]
  *)

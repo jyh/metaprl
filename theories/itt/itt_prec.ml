@@ -19,7 +19,7 @@
  *
  * The @i{nil} element is $@inl{@it}$, and the @i{cons}
  * operation is the right injection contains a pair of an integer $k$ that
- * is larger that the parameter and a list increasing integers
+ * is larger than the parameter and a list increasing integers
  * larger than $k$.
  * @end[doc]
  *

@@ -81,11 +81,6 @@ topval reduceTopC : conv
 topval reduceC : conv
 
 (*
- * Get a resource for the toploop.
- *)
-val add_reduce_info : reduce_resource -> (term * conv) list -> reduce_resource
-
-(*
  * -*-
  * Local Variables:
  * Caml-master: "refiner"

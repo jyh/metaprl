@@ -269,11 +269,9 @@ interactive_rw reduce_fmember_nil : fmember{'eq; 'x; nil} <--> bfalse
 interactive_rw reduce_fmember_cons : fmember{'eq; 'x; cons{'h; 't}} <-->
    bor{.fcompare{'eq; 'x; 'h}; fmember{'eq; 'x; 't}}
 
-let reduce_info =
+let resource reduce +=
    [<< fmember{'eq; 'x; nil} >>, reduce_fmember_nil;
     << fmember{'eq; 'x; cons{'h; 't}} >>, reduce_fmember_cons]
-
-let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
 
 (*
  * Singleton.
@@ -281,10 +279,8 @@ let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_i
 interactive_rw reduce_fmember_fsingleton : fmember{'eq; 'x; fsingleton{'y}} <-->
    bor{fcompare{'eq; 'x; 'y}; bfalse}
 
-let reduce_info =
-   [<< fmember{'eq; 'x; fsingleton{'y}} >>, reduce_fmember_fsingleton]
-
-let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
+let resource reduce +=
+   << fmember{'eq; 'x; fsingleton{'y}} >>, reduce_fmember_fsingleton
 
 (*
  * Subset.
@@ -295,11 +291,9 @@ interactive_rw reduce_fsubseteq_cons :
    fsubseteq{'eq; cons{'h; 't}; 's} <-->
    band{fmember{'eq; 'h; 's}; fsubseteq{'eq; 't; 's}}
 
-let reduce_info =
+let resource reduce +=
    [<< fsubseteq{'eq; nil; 'l} >>, reduce_fsubseteq_nil;
     << fsubseteq{'eq; cons{'h; 't}; 'l} >>, reduce_fsubseteq_cons]
-
-let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
 
 (*
  * Union.
@@ -310,11 +304,9 @@ interactive_rw reduce_funion_nil :
 interactive_rw reduce_funion_cons :
    funion{'eq; cons{'h; 't}; 's} <--> cons{'h; funion{'eq; 't; 's}}
 
-let reduce_info =
+let resource reduce +=
    [<< funion{'eq; nil; 's} >>, reduce_funion_nil;
     << funion{'eq; cons{'h; 't}; 's} >>, reduce_funion_cons]
-
-let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
 
 (*
  * Intersection.
@@ -326,11 +318,9 @@ interactive_rw reduce_fisect_cons :
    fisect{'eq; cons{'h; 't}; 's} <-->
       ifthenelse{fmember{'eq; 'h; 's}; cons{'h; fisect{'eq; 't; 's}}; fisect{'eq; 't; 's}}
 
-let reduce_info =
+let resource reduce +=
    [<< fisect{'eq; nil; 's} >>, reduce_fisect_nil;
     << fisect{'eq; cons{'h; 't}; 's} >>, reduce_fisect_cons]
-
-let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
 
 (*
  * Set subtraction.
@@ -342,11 +332,9 @@ interactive_rw reduce_fsub_cons :
    fsub{'eq; cons{'h; 't}; 's} <-->
       ifthenelse{fmember{'eq; 'h; 's}; fsub{'eq; 't; 's}; cons{'h; fsub{'eq; 't; 's}}}
 
-let reduce_info =
+let resource reduce +=
    [<< fsub{'eq; nil; 's} >>, reduce_fsub_nil;
     << fsub{'eq; cons{'h; 't}; 's} >>, reduce_fsub_cons]
-
-let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
 
 (*
  * Membership squashing.
@@ -358,11 +346,9 @@ interactive_rw reduce_fsquash_cons1 :
    fsquash{'eq; cons{'h; 't}} <-->
       ifthenelse{fmember{'eq; 'h; 't}; fsquash{'eq; 't}; cons{it; fsquash{'eq; 't}}}
 
-let reduce_info =
+let resource reduce +=
    [<< fsquash{'eq; nil} >>, reduce_fsquash_nil1;
     << fsquash{'eq; cons{'h; 't}} >>, reduce_fsquash_cons1]
-
-let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
 
 (*
  * Universal quantification.
@@ -374,11 +360,9 @@ interactive_rw reduce_fball_cons :
    fball{cons{'h; 't}; x. 'b['x]} <-->
       band{'b['h]; fball{'t; x. 'b['x]}}
 
-let reduce_info =
+let resource reduce +=
    [<< fball{nil; x. 'b['x]} >>, reduce_fball_nil;
     << fball{cons{'h; 't}; x. 'b['x]} >>, reduce_fball_cons]
-
-let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
 
 (*
  * Existential quantification.
@@ -390,11 +374,9 @@ interactive_rw reduce_fbexists_cons :
    fbexists{cons{'h; 't}; x. 'b['x]} <-->
       bor{'b['h]; fbexists{'t; x. 'b['x]}}
 
-let reduce_info =
+let resource reduce +=
    [<< fbexists{nil; x. 'b['x]} >>, reduce_fbexists_nil;
     << fbexists{cons{'h; 't}; x. 'b['x]} >>, reduce_fbexists_cons]
-
-let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
 
 (************************************************************************
  * RULES                                                                *
@@ -1105,7 +1087,7 @@ let fcompare_wfT p =
 
 let fcompare_member_term = << fcompare{'eq; 'x; 'y} IN bool >>
 
-let d_resource = Mp_resource.improve d_resource (fcompare_member_term, wrap_intro fcompare_wfT)
+let resource d += (fcompare_member_term, wrap_intro fcompare_wfT)
 
 (*
  * Membership tactics for Boolean expressions.
@@ -1182,7 +1164,7 @@ let d_ball_memberT p =
 
 let ball_member_term = << fball{'s; x.'b['x]} IN bool >>
 
-let d_resource = Mp_resource.improve d_resource (ball_member_term, wrap_intro d_ball_memberT)
+let resource d += (ball_member_term, wrap_intro d_ball_memberT)
 
 let d_bexists_memberT p =
    let t = Sequent.concl p in
@@ -1200,7 +1182,7 @@ let d_bexists_memberT p =
 
 let bexists_member_term = << fbexists{'s; x.'b['x]} IN bool >>
 
-let d_resource = Mp_resource.improve d_resource (bexists_member_term, wrap_intro d_bexists_memberT)
+let resource d += (bexists_member_term, wrap_intro d_bexists_memberT)
 
 (*
  * Well-formedness of fsquash.
@@ -1228,7 +1210,7 @@ let d_fsquash_memberT p =
 
 let fsquash_member_term = << fsquash{'eq; 's} IN list{unit} >>
 
-let d_resource = Mp_resource.improve d_resource (fsquash_member_term, wrap_intro d_fsquash_memberT)
+let resource d += (fsquash_member_term, wrap_intro d_fsquash_memberT)
 
 (*
  * Membership tactics for set expressions.
@@ -1660,7 +1642,7 @@ let d_fset_typeT p =
 
 let fset_type_term = << "type"{fset{'eq; 'T}} >>
 
-let d_resource = Mp_resource.improve d_resource (fset_type_term, wrap_intro d_fset_typeT)
+let resource d += (fset_type_term, wrap_intro d_fset_typeT)
 
 (************************************************************************
  * TYPE INFERENCE                                                       *
@@ -1676,10 +1658,7 @@ let infer_fequalp subst (so, t) =
       else
          subst
 
-let typeinf_subst_resource =
-   Mp_resource.improve (**)
-      typeinf_subst_resource
-      (fequalp_term, infer_fequalp)
+let resource typeinf_subst += (fequalp_term, infer_fequalp)
 
 (*
  * Type of pair.
@@ -1719,7 +1698,7 @@ let inf_fsingleton f decl t =
    let decl, t = f decl t in
       decl, mk_list_term t
 
-let typeinf_info =
+let resource typeinf +=
    [<< funion{'eq; 's1; 's2} >>, inf_funion;
     << fisect{'eq; 's1; 's2} >>, inf_fisect;
     << fsub{'eq; 's1; 's2} >>, inf_fsub;
@@ -1729,15 +1708,6 @@ let typeinf_info =
     << fequal{'eq; 's1; 's2} >>, inf_fequal;
     << fcompare{'eq; 'x1; 'x2} >>, inf_fcompare;
     << fsingleton{'x} >>, inf_fsingleton]
-
-let typeinf_resource =
-   let rec add_resource tr = function
-      (term, inf) :: tl ->
-         add_resource (Mp_resource.improve tr (term, inf)) tl
-    | [] ->
-         tr
-   in
-      add_resource typeinf_resource typeinf_info
 
 let testT = assertT << all s: list{'T}. ("assert"{fmember{'eq; 'a; 's}} => "assert"{'b['a]} => "assert"{fbexists{'s; x.'b['x]}}) >> thenLT [dT 0 thenWT autoT thenLT [dT 2 thenLT [rw reduceC 0 thenT dT 0 thenWT autoT thenLT [dT 3]; univCDT thenWT autoT thenLT [backThruAssumT 5 thenT autoT thenLT [fcompareRefT thenT autoT]; rw reduceC 0 thenLT [rw reduceC 6 thenT dT 6 thenWT autoT thenLT [selT 1 (dT 0) thenWT autoT thenLT [withTermT "eq" << 'eq >> autoT thenLT [backThruAssumT 5 thenT autoT thenLT [fcompareRefT thenT autoT]]; assumT 5 thenWT autoT thenLT [instHypT [<< 'a >>; << 'u >>] 8 thenWT autoT thenLT [dT 9 thenAT trivialT thenLT [revHypSubstT 10 0 thenLT [trivialT; autoT]]]]]; selT 2 (dT 0) thenWT autoT thenLT [backThruAssumT 5 thenT autoT thenLT [fcompareRefT thenT autoT]; autoT]]]]]]; withT << 's >> (dT 2) thenWT autoT thenLT [dT 3 thenLT [rwh unfold_assert 0 thenT squash_equalT thenT rwh fold_assert 0 thenLT [autoT]; dT 4 thenLT [rwh unfold_assert 0 thenT squash_equalT thenT rwh fold_assert 0 thenLT [autoT]; trivialT]]]]
 

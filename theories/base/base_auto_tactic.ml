@@ -491,12 +491,11 @@ let trivial_prec = create_auto_prec [] []
 (*
  * Some trivial tactics.
  *)
-let trivial_resource =
-   Mp_resource.improve trivial_resource (**)
-      { auto_name = "nthAssumT";
-        auto_prec = trivial_prec;
-        auto_tac = onSomeAssumT nthAssumT
-      }
+let resource trivial += {
+   auto_name = "nthAssumT";
+   auto_prec = trivial_prec;
+   auto_tac = onSomeAssumT nthAssumT
+}
 
 let get_trivial_resource modname =
    Mp_resource.find trivial_resource modname
@@ -504,12 +503,11 @@ let get_trivial_resource modname =
 (*
  * Auto tactic includes trivialT.
  *)
-let auto_resource =
-   Mp_resource.improve auto_resource (**)
-      { auto_name = "trivial";
-        auto_prec = trivial_prec;
-        auto_tac = auto_wrap trivialT
-      }
+let resource auto += {
+   auto_name = "trivial";
+   auto_prec = trivial_prec;
+   auto_tac = auto_wrap trivialT
+}
 
 let get_auto_resource modname =
    Mp_resource.find auto_resource modname

@@ -80,40 +80,31 @@ let fold_two = makeFoldC << two >> unfold_two
 let fold_left = makeFoldC << left >> unfold_left
 let fold_right = makeFoldC << right >> unfold_right
 
-let reduce_info =
+let resource reduce +=
    [<< choose{left; 'a; 'b} >>, reduce_choose_left;
     << choose{right; 'a; 'b} >>, reduce_choose_right]
 
-let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
-
 interactive_rw reduce_spread : spread{.('a, 'b); c, d. 'e['c; 'd]} <--> 'e['a; 'b]
 
-let reduce_info =
-   [<< spread{.('a, 'b); c, d. 'e['c; 'd]} >>, reduce_spread]
-
-let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
+let resource reduce += << spread{.('a, 'b); c, d. 'e['c; 'd]} >>, reduce_spread
 
 interactive_rw reduce_fst : fst{pair{'a; 'b}} <--> 'a
 interactive_rw reduce_snd : snd{pair{'a; 'b}} <--> 'b
 
-let reduce_info =
+let resource reduce +=
    [<< fst{.('a, 'b)} >>, reduce_fst;
     << snd{.('a, 'b)} >>, reduce_snd]
-
-let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
 
 interactive_rw reduce_two_order1 : two_order{left; left} <--> void
 interactive_rw reduce_two_order2 : two_order{left; right} <--> unit
 interactive_rw reduce_two_order3 : two_order{right; left} <--> void
 interactive_rw reduce_two_order4 : two_order{right; right} <--> void
 
-let reduce_info =
+let resource reduce +=
    [<< two_order{left; left} >>, reduce_two_order1;
     << two_order{left; right} >>, reduce_two_order2;
     << two_order{right; left} >>, reduce_two_order3;
     << two_order{right; right} >>, reduce_two_order4]
-
-let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
 
 (************************************************************************
  * DISPLAY                                                              *

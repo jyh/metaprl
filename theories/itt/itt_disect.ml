@@ -312,8 +312,7 @@ let mk_disect_term = mk_dep0_dep1_term disect_opname
  * TYPE INFERENCE                                                       *
  ************************************************************************)
 
-let typeinf_resource =
-   Mp_resource.improve typeinf_resource (disect_term, infer_univ_dep0_dep1 dest_disect)
+let resource typeinf += (disect_term, infer_univ_dep0_dep1 dest_disect)
 
 (************************************************************************
  * SUBTYPING                                                            *
@@ -327,9 +326,7 @@ let disect_subtypeT p =
       (dintersectionSubtype (Sequent.hyp_count_addr p) a
        thenT addHiddenLabelT "subtype") p
 
-let sub_resource =
-   Mp_resource.improve
-   sub_resource
+let resource sub +=
    (DSubtype ([<< disect{'A1; a1.'B1['a1]} >>, << disect{'A2; a2.'B2['a2]} >>;
                << 'A1 >>, << 'A2 >>;
                << 'B1['a1] >>, << 'B2['a1] >>],

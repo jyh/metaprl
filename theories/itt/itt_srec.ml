@@ -269,7 +269,7 @@ let inf_srec inf consts decls eqs opt_eqs defs t =
    let a, body = dest_srec t in
       inf (StringSet.add a consts) ((a,univ1_term)::decls) eqs opt_eqs defs body
 
-let typeinf_resource = Mp_resource.improve typeinf_resource (srec_term, inf_srec)
+let resource typeinf += (srec_term, inf_srec)
 
 (*
  * Type of srecind.
@@ -279,7 +279,7 @@ let inf_srecind f decl t =
    let decl', a' = f decl a in
       f (eqnlist_append_var_eqn p a' (eqnlist_append_var_eqn h a' decl')) g
 
-let typeinf_resource = Mp_resource.improve typeinf_resource (srecind_term, inf_srecind)
+let resource typeinf += (srecind_term, inf_srecind)
 *)
 
 (*

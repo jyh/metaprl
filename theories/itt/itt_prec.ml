@@ -292,7 +292,7 @@ let inf_prec inf consts decls eqs opt_eqs defs t =
       inf consts ((b,arg')::(a,mk_fun_term arg' univ1_term)::decls)
           eqs' opt_eqs' defs' body
 
-let typeinf_resource = Mp_resource.improve typeinf_resource (prec_term, inf_prec)
+let resource typeinf += (prec_term, inf_prec)
 
 (*
  * Type of precind.
@@ -302,7 +302,7 @@ let inf_precind f decl t =
    let decl', a' = f decl a in
       f (eqnlist_append_var_eqn p a' (eqnlist_append_var_eqn h a' decl')) g
 
-let typeinf_resource = Mp_resource.improve typeinf_resource (precind_term, inf_precind)
+let resource typeinf += (precind_term, inf_precind)
  *)
 
 (*

@@ -133,18 +133,14 @@ let record_beta_rw = record_beta andthenC reduce_eq_label
 
 let record_beta2_rw = record_beta2
 
-let reduce_info =
+let resource reduce +=
    [<< field[n:t]{rcrd[m:t]{'a; 'r}} >>, record_beta_rw;
     << field[n:t]{rcrd[n:t]{'a; 'r}} >>, record_beta1;
     << rcrd[n:t]{'a} >>, unfoldRcrdS]
 
-let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
-
 let record_reduce = repeatC (higherC (firstC [unfoldRcrdS;record_beta1;record_beta_rw]))
 
 let record_reduceT = rwhAll record_reduce
-
-
 
 (*** Introductions ***)
 
@@ -322,15 +318,12 @@ let record_eqcd p =
 let record_repeat_eqcd =
    rwh unfoldRcrdS 0 thenT record_eqcd thenT untilFailT record_eqcd
 
-let intro_resource =
-   Mp_resource.improve intro_resource (<<'r='s in record[m:t]{'A}>>,record_repeat_eqcd)
-let intro_resource =
-   Mp_resource.improve intro_resource (<<'r='s in record[m:t]{'A;'R}>>,record_repeat_eqcd)
-let intro_resource =
-   Mp_resource.improve intro_resource (<<'r='s in record[m:t]{'A;a.'R['a]}>>,record_repeat_eqcd)
-let intro_resource =
-   Mp_resource.improve intro_resource (<<'r='s in record[m:t]{self.'A['self];'R}>>,record_repeat_eqcd)
-
+let resource intro += [
+   (<<'r='s in record[m:t]{'A}>>,record_repeat_eqcd);
+   (<<'r='s in record[m:t]{'A;'R}>>,record_repeat_eqcd);
+   (<<'r='s in record[m:t]{'A;a.'R['a]}>>,record_repeat_eqcd);
+   (<<'r='s in record[m:t]{self.'A['self];'R}>>,record_repeat_eqcd)
+]
 
 (*
 let elim0 rule p n =
@@ -369,8 +362,7 @@ let recordOrtIntroST p =
         thenT tryT (completeT (dT 0))
       ) p
 
-let intro_resource =
-   Mp_resource.improve intro_resource (<<record_ort[n:t]{'a;record[m:t]{'A}}>>,recordOrtIntroST)
+let resource intro += (<<record_ort[n:t]{'a;record[m:t]{'A}}>>,recordOrtIntroST)
 
 let recordOrtIntroT p =
    let m, _ = Sequent.hyp_indices p (-1) in
@@ -381,8 +373,7 @@ let recordOrtIntroT p =
 
 let repeatRecordOrtIntroT = (untilFailT recordOrtIntroT) thenT tryT (recordOrtIntroST orelseT recordOrtIntro0T)
 
-let intro_resource =
-   Mp_resource.improve intro_resource (<<record_ort[n:t]{'a;record[m:t]{'A;'R}}>>,repeatRecordOrtIntroT)
+let resource intro += (<<record_ort[n:t]{'a;record[m:t]{'A;'R}}>>,repeatRecordOrtIntroT)
 
 *)
 (*** Elimination ***)
@@ -424,7 +415,7 @@ let recordEliminationT n p =
    with
          RefineError _ -> recordDefEliminationT n p
 
-let elim_resource = Mp_resource.improve elim_resource (<<record[n:t]{'A;'R}>>, recordEliminationT)
+let resource elim += (<<record[n:t]{'A;'R}>>, recordEliminationT)
 *)
 (*** Reductions ***)
 

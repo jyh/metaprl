@@ -620,25 +620,15 @@ let rec dForT i =
       dT 0 thenMT dForT (pred i)
 
 (*
- * Combined adding.
- *)
-let rec add_intro_info rsrc = function
-   h :: t ->
-      add_intro_info (improve rsrc h) t
- | [] ->
-      rsrc
-
-(*
  * By default, dT 0 should always make progress.
  *)
 let d_prec = create_auto_prec [trivial_prec] []
 
-let auto_resource =
-   Mp_resource.improve auto_resource (**)
-      { auto_name = "dT";
-        auto_prec = d_prec;
-        auto_tac = auto_wrap (dT 0)
-      }
+let resource auto += {
+   auto_name = "dT";
+   auto_prec = d_prec;
+   auto_tac = auto_wrap (dT 0)
+}
 
 let univ_arg_fun p _ = [get_univ_arg p]
 let elim_univ_arg = ElimArgsOption (univ_arg_fun, None)

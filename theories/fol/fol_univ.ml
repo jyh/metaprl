@@ -28,12 +28,11 @@ let nthUnivT i p =
    let j, k = Sequent.hyp_indices p i in
       univ_type j k p
 
-let trivial_resource =
-   Mp_resource.improve trivial_resource (**)
-      { auto_name = "nthUnivT";
-        auto_prec = trivial_prec;
-        auto_tac = onSomeHypT nthUnivT
-      }
+let resource trivial += {
+   auto_name = "nthUnivT";
+   auto_prec = trivial_prec;
+   auto_tac = onSomeHypT nthUnivT
+}
 
 (*
  * -*-

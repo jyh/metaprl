@@ -157,11 +157,9 @@ dform decide_df : except_mode[src] :: decide{'x; y. 'a; z. 'b} =
  * REDUCTIONS                                                           *
  ************************************************************************)
 
-let reduce_info =
+let resource reduce +=
    [<< decide{inl{'x}; y. 'a['y]; z. 'b['z]} >>, reduceDecideInl;
     << decide{inr{'x}; y. 'a['y]; z. 'b['z]} >>, reduceDecideInr]
-
-let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
 
 (************************************************************************
  * RULES                                                                *
@@ -350,8 +348,7 @@ let mk_decide_term = mk_dep0_dep1_dep1_term decide_opname
  * TYPE INFERENCE                                                       *
  ************************************************************************)
 
-let typeinf_resource =
-   Mp_resource.improve typeinf_resource (union_term, infer_univ_dep0_dep0 dest_union)
+let resource typeinf += (union_term, infer_univ_dep0_dep0 dest_union)
 
 (*
  * Type of inl.
@@ -362,7 +359,7 @@ let inf_inl inf consts decls eqs opt_eqs defs t =
    let b = Typeinf.vnewname consts defs' "T-r" in
        eqs', opt_eqs', ((b,<<void>>)::defs') , mk_union_term a' (mk_var_term b)
 
-let typeinf_resource = Mp_resource.improve typeinf_resource (inl_term, inf_inl)
+let resource typeinf += (inl_term, inf_inl)
 
 (*
  * Type of inr.
@@ -373,7 +370,7 @@ let inf_inr inf consts decls eqs opt_eqs defs t =
    let b = Typeinf.vnewname consts defs' "T-l" in
        eqs', opt_eqs', ((b,<<void>>)::defs') , mk_union_term (mk_var_term b) a'
 
-let typeinf_resource = Mp_resource.improve typeinf_resource (inr_term, inf_inr)
+let resource typeinf += (inr_term, inf_inr)
 
 (*
  * Type of decide.
@@ -395,7 +392,7 @@ let inf_decide inf consts decls eqs opt_eqs defs t =
       inf consts ((y, r')::decls) eqs'' opt_eqs'' defs'' b
    in eqs''', ((a',b')::opt_eqs'''), defs''', a'
 
-let typeinf_resource = Mp_resource.improve typeinf_resource (decide_term, inf_decide)
+let resource typeinf += (decide_term, inf_decide)
 
 (************************************************************************
  * SUBTYPING                                                            *
@@ -408,9 +405,7 @@ let union_subtypeT p =
    (unionSubtype (hyp_count_addr p)
     thenT addHiddenLabelT "subtype") p
 
-let sub_resource =
-   Mp_resource.improve
-   sub_resource
+let resource sub +=
    (DSubtype ([<< 'A1 + 'B1 >>, << 'A2 + 'B2 >>;
                << 'A1 >>, << 'A2 >>;
                << 'B1 >>, << 'B2 >>],

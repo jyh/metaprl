@@ -141,12 +141,11 @@ let rewriteSymT p =
 let d_rewrite_axiomT p =
    rewriteAxiom1 (Sequent.hyp_count_addr p) p
 
-let trivial_resource =
-   Mp_resource.improve trivial_resource (**)
-      { auto_name = "triv_equalT";
-        auto_prec = trivial_prec;
-        auto_tac = d_rewrite_axiomT
-      }
+let resource trivial += {
+   auto_name = "triv_equalT";
+   auto_prec = trivial_prec;
+   auto_tac = d_rewrite_axiomT
+}
 
 (*
  * -*-

@@ -136,11 +136,9 @@ prim_rw reduce_listindCons :
  * REDUCTIONS                                                           *
  ************************************************************************)
 
-let reduce_info =
+let resource reduce +=
    [<< list_ind{nil; 'e1; h, t, g. 'e2['h; 't; 'g]} >>, reduce_listindNil;
     << list_ind{cons{'h1; 't1}; 'e1; h2, t2, g2. 'e2['h2; 't2; 'g2]} >>, reduce_listindCons]
-
-let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
 
 (************************************************************************
  * DISPLAY FORMS                                                        *
@@ -377,8 +375,7 @@ let mk_list_ind_term = mk_dep0_dep0_dep3_term list_ind_opname
 (*
  * Type of list.
  *)
-let typeinf_resource =
-   Mp_resource.improve typeinf_resource (list_term, Typeinf.infer_map dest_list)
+let resource typeinf += (list_term, Typeinf.infer_map dest_list)
 
 (*
  * Type of nil.
@@ -387,7 +384,7 @@ let inf_nil _ consts _ eqs opt_eqs defs _ =
    let t = Typeinf.vnewname consts defs "T" in
    eqs, opt_eqs, ((t, <<void>>)::defs), mk_list_term (mk_var_term t)
 
-let typeinf_resource = Mp_resource.improve typeinf_resource (nil_term, inf_nil)
+let resource typeinf += (nil_term, inf_nil)
 
 (*
  * Type of cons.
@@ -400,7 +397,7 @@ let inf_cons inf consts decls eqs opt_eqs defs t =
    let tt = mk_var_term t in
       eqs'', ((mk_list_term tt,tl')::(tt,hd')::opt_eqs''), ((t,<<void>>)::defs''), hd'
 
-let typeinf_resource = Mp_resource.improve typeinf_resource (cons_term, inf_cons)
+let resource typeinf += (cons_term, inf_cons)
 
 (*
  * Type of list_ind.
@@ -412,7 +409,7 @@ let inf_list_ind inf consts decls eqs opt_eqs defs t =
       inf consts decls eqs'
           ((mk_list_term (mk_var_term t),e)::opt_eqs') ((t,<<void>>)::defs') base
 
-let typeinf_resource = Mp_resource.improve typeinf_resource (list_ind_term, inf_list_ind)
+let resource typeinf += (list_ind_term, inf_list_ind)
 
 (************************************************************************
  * SUBTYPING                                                            *
@@ -425,9 +422,7 @@ let list_subtypeT p =
    (listSubtype (Sequent.hyp_count_addr p)
     thenT addHiddenLabelT "subtype") p
 
-let sub_resource =
-   Mp_resource.improve
-   sub_resource
+let resource sub +=
    (DSubtype ([<< list{'A1} >>, << list{'A2} >>;
                << 'A2 >>, << 'A1 >>],
               list_subtypeT))

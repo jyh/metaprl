@@ -304,8 +304,7 @@ let dfun_extensionalityT t1 t2 p =
  * TYPE INFERENCE                                                       *
  ************************************************************************)
 
-let typeinf_resource =
-   Mp_resource.improve typeinf_resource (dfun_term, infer_univ_dep0_dep1 dest_dfun)
+let resource typeinf += (dfun_term, infer_univ_dep0_dep1 dest_dfun)
 
 (************************************************************************
  * SUBTYPING                                                            *
@@ -319,9 +318,7 @@ let dfun_subtypeT p =
       (functionSubtype (Sequent.hyp_count_addr p) a
        thenT addHiddenLabelT "subtype") p
 
-let sub_resource =
-   Mp_resource.improve
-   sub_resource
+let resource sub +=
    (DSubtype ([<< a1:'A1 -> 'B1['a1] >>, << a2:'A2 -> 'B2['a2] >>;
                << 'A2 >>, << 'A1 >>;
                << 'B1['a1] >>, << 'B2['a1] >>],

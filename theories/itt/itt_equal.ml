@@ -537,8 +537,8 @@ let eqcd_univT p =
       (universeMember i
        thenT tryT (rw reduce_cumulativity 0 thenT trueIntro i)) p
 
-let eqcd_resource = Mp_resource.improve eqcd_resource (univ_term, eqcd_univT)
-let intro_resource = Mp_resource.improve intro_resource (univ_member_term, eqcd_univT)
+let resource eqcd += (univ_term, eqcd_univT)
+let resource intro += (univ_member_term, eqcd_univT)
 
 (*!************************************************************************
  * @begin[doc]
@@ -601,10 +601,7 @@ let infer_equal subst (so, t) =
       else
          subst
 
-let typeinf_subst_resource =
-   Mp_resource.improve (**)
-      typeinf_subst_resource
-      (equal_term, infer_equal)
+let resource typeinf_subst += (equal_term, infer_equal)
 
 (*
  * Type of a universe is incremented by one.
@@ -613,7 +610,7 @@ let inf_univ _ _ _ eqs opt_eqs defs t =
    let le = dest_univ t in
       eqs, opt_eqs, defs, mk_univ_term (incr_level_exp le)
 
-let typeinf_resource = Mp_resource.improve typeinf_resource (univ_term, inf_univ)
+let resource typeinf += (univ_term, inf_univ)
 
 (*
  * Type of an equality is the type of the equality type.
@@ -621,8 +618,7 @@ let typeinf_resource = Mp_resource.improve typeinf_resource (univ_term, inf_univ
 let equal_type t =
    let ty, _, _ = dest_equal t in ty
 
-let typeinf_resource =
-   Mp_resource.improve typeinf_resource (equal_term, Typeinf.infer_map equal_type)
+let resource typeinf += (equal_term, Typeinf.infer_map equal_type)
 
 (*
  * Helper functions for universe type inference
@@ -712,12 +708,11 @@ let cumulativityT u p =
 let typeAssertT p =
    typeEquality (Sequent.hyp_count_addr p) p
 
-let trivial_resource =
-   Mp_resource.improve trivial_resource (**)
-      { auto_name = "triv_equalT";
-        auto_prec = trivial_prec;
-        auto_tac = onSomeHypT triv_equalT
-      }
+let resource trivial += {
+   auto_name = "triv_equalT";
+   auto_prec = trivial_prec;
+   auto_tac = onSomeHypT triv_equalT
+}
 
 (*
  * -*-

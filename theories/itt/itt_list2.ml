@@ -440,7 +440,7 @@ let fold_rev = makeFoldC << rev{'l} >> unfold_rev
  * REDUCTION                                                            *
  ************************************************************************)
 
-let reduce_info =
+let resource reduce +=
    [<< is_nil{nil} >>, reduce_is_nil_nil;
     << is_nil{cons{'h; 't}} >>, reduce_is_nil_cons;
     << append{cons{'h; 't}; 'l} >>, reduce_append_cons;
@@ -464,8 +464,6 @@ let reduce_info =
     << rev{nil} >>, reduce_rev_nil;
     << rev{cons{'u;'v}} >> , reduce_rev_cons ]
 
-let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
-
 (* We need a proper implementation of rewrites in order to do this.
 
 interactive_rw append_nil 'A :
@@ -473,7 +471,7 @@ interactive_rw append_nil 'A :
    [wf] sequent [squash] { 'H >- 'l IN list{'A} } -->
    sequent ['ext] { 'H>- append{'l;nil} <--> 'l }
 
-let reduce_resource = Top_conversionals.add_reduce_info reduce_resource [ <<append{'a; nil}>>, append_nil ]
+let resource reduce += <<append{'a; nil}>>, append_nil
 
 interactive_rw rev_append :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
@@ -481,7 +479,7 @@ interactive_rw rev_append :
    [wf] sequent [squash] { 'H >- 'b IN list{'A} } -->
    sequent ['ext] { 'H>- rev{append{'a;'b}} <--> append{rev{'b};rev{'a}} }
 
-let reduce_resource = Top_conversionals.add_reduce_info reduce_resource [ <<rev{append{'a;'b}}>>, rev_append ]
+let resource reduce += <<rev{append{'a;'b}}>>, rev_append
 
 interactive_rw rev2 :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->

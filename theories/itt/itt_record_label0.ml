@@ -81,11 +81,9 @@ interactive_rw reduce_ind_base :
    'base
 
 (*! @docoff *)
-let reduce_info =
+let resource reduce +=
    [<< ind_lab{next{'x}; 'base; l. 'up['l]} >>, reduce_ind_up;
     << ind_lab{zero; 'base; l. 'up['l]} >>, reduce_ind_base]
-
-let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
 
 (**** equality ****)
 

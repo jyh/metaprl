@@ -208,9 +208,8 @@ let atomSqequalT p =
  * TYPE INFERENCE                                                       *
  ************************************************************************)
 
-let typeinf_resource = Mp_resource.improve typeinf_resource (atom_term, infer_univ1)
-let typeinf_resource =
-   Mp_resource.improve typeinf_resource (token_term, Typeinf.infer_const atom_term)
+let resource typeinf += (atom_term, infer_univ1)
+let resource typeinf += (token_term, Typeinf.infer_const atom_term)
 
 (*
  * -*-

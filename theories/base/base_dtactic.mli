@@ -65,11 +65,6 @@ resource (term * (int -> tactic), int -> tactic, elim_data, Tactic.pre_tactic * 
 resource (term * tactic, tactic, intro_data, Tactic.pre_tactic * intro_option list) intro_resource
 
 (*
- * Easy adding.
- *)
-val add_intro_info : intro_resource -> (term * tactic) list -> intro_resource
-
-(*
  * The inherited d tactic.
  *)
 val d_prec : auto_prec

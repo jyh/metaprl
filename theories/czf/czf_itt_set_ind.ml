@@ -111,7 +111,7 @@ let d_set_ind_dfun_typeT p =
 
 let set_ind_dfun_type_term = << "type"{set_ind{'s; T, f, g. x: 'T -> 'B['f; 'x]}} >>
 
-let intro_resource = Mp_resource.improve intro_resource (set_ind_dfun_type_term, d_set_ind_dfun_typeT)
+let resource intro += (set_ind_dfun_type_term, d_set_ind_dfun_typeT)
 
 (*
  * Functionality.
@@ -128,7 +128,7 @@ let d_set_ind_dfun_funT p =
 
 let set_ind_dfun_fun_term = << fun_prop{z. set_ind{'A['z]; T, f, g. x: 'T -> 'B['z; 'T; 'f; 'g; 'x]}} >>
 
-let intro_resource = Mp_resource.improve intro_resource (set_ind_dfun_fun_term, d_set_ind_dfun_funT)
+let resource intro += (set_ind_dfun_fun_term, d_set_ind_dfun_funT)
 
 (*
  * Typehood.
@@ -145,7 +145,7 @@ let d_set_ind_dprod_typeT p =
 
 let set_ind_dprod_type_term = << "type"{set_ind{'s; T, f, g. x: 'T * 'B['f; 'x]}} >>
 
-let intro_resource = Mp_resource.improve intro_resource (set_ind_dprod_type_term, d_set_ind_dprod_typeT)
+let resource intro += (set_ind_dprod_type_term, d_set_ind_dprod_typeT)
 
 (*
  * Functionality.
@@ -162,7 +162,7 @@ let d_set_ind_dprod_funT p =
 
 let set_ind_dprod_fun_term = << fun_prop{z. set_ind{'A['z]; T, f, g. x: 'T * 'B['z; 'T; 'f; 'g; 'x]}} >>
 
-let intro_resource = Mp_resource.improve intro_resource (set_ind_dprod_fun_term, d_set_ind_dprod_funT)
+let resource intro += (set_ind_dprod_fun_term, d_set_ind_dprod_funT)
 
 (*
  * -*-

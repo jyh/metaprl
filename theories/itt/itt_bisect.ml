@@ -189,7 +189,7 @@ let elim_bisectT i p =
 
 let bisect_term = << bisect{'A; 'B} >>
 
-let elim_resource = Mp_resource.improve elim_resource (bisect_term, elim_bisectT)
+let resource elim += (bisect_term, elim_bisectT)
 
 
 
@@ -229,14 +229,14 @@ let intro_bisect_aboveT p =
 
 let bisect_above_term = << subtype{bisect{'A; 'B}; 'C} >>
 
-let intro_resource = Mp_resource.improve intro_resource (bisect_above_term, intro_bisect_aboveT)
+let resource intro += (bisect_above_term, intro_bisect_aboveT)
 
 let intro_bisect_belowT p =
    bisectSubtypeBelow (Sequent.hyp_count_addr p) p
 
 let bisect_below_term = << subtype{'C; bisect{'A; 'B}} >>
 
-let intro_resource = Mp_resource.improve intro_resource (bisect_below_term, intro_bisect_belowT)
+let resource intro += (bisect_below_term, intro_bisect_belowT)
 
 (*
  * -*-

@@ -101,10 +101,7 @@ interactive_rw reduce_mem : mem{'x; collect{'T; y. 'f['y]}} <-->
    (exst t: 'T. eq{'x; .'f['t]})
 
 (*! @docoff *)
-let reduce_info =
-   [<< mem{'x; collect{'T; y. 'f['y]}} >>, reduce_mem]
-
-let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
+let resource reduce += << mem{'x; collect{'T; y. 'f['y]}} >>, reduce_mem
 
 (*! @doc{nil} *)
 prim_rw unfold_member : member{'x; 'y} <-->
@@ -114,10 +111,7 @@ interactive_rw reduce_member : member{'x; collect{'T; y. 'f['y]}} <-->
    ((isset{'x} & isset{collect{'T; y. 'f['y]}}) & (exst t: 'T. eq{'x; .'f['t]}))
 (*! @docoff *)
 
-let reduce_info =
-   [<< member{'x; collect{'T; y. 'f['y]}} >>, reduce_member]
-
-let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
+let resource reduce += << member{'x; collect{'T; y. 'f['y]}} >>, reduce_member
 
 (************************************************************************
  * DISPLAY FORMS                                                        *

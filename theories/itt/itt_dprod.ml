@@ -221,10 +221,7 @@ let mk_spread_term = mk_dep0_dep2_term spread_opname
 prim_rw reduceSpread : spread{'u, 'v; a, b. 'c['a; 'b]} <--> 'c['u; 'v]
 
 (*! @docoff *)
-let reduce_info =
-   [<< spread{pair{'u; 'v}; x, y. 'b['x; 'y]} >>, reduceSpread]
-
-let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
+let resource reduce += << spread{pair{'u; 'v}; x, y. 'b['x; 'y]} >>, reduceSpread
 
 (*!
  * @begin[doc]
@@ -238,11 +235,9 @@ interactive_rw reduceFst : fst{pair{'a; 'b}} <--> 'a
 interactive_rw reduceSnd : snd{pair{'a; 'b}} <--> 'b
 (*! @docoff *)
 
-let reduce_info =
+let resource reduce +=
    [<< fst{pair{'u; 'v}} >>, reduceFst;
     << snd{pair{'u; 'v}} >>, reduceSnd]
-
-let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
 
 (************************************************************************
  * DISPLAY FORMS                                                        *
@@ -411,7 +406,7 @@ prim spreadEquality {| eqcd_resource |} 'H bind{z. 'T['z]} (w:'A * 'B['w]) 'u 'v
 (*! @docoff *)
 let spread_equal_term = << spread{'e1; u1, v1. 'b1['u1; 'v1]} = spread{'e2; u2, v2. 'b2['u2; 'v2]} in 'T >>
 
-let intro_resource = Mp_resource.improve intro_resource (spread_equal_term, d_spread_equalT spreadEquality)
+let resource intro += (spread_equal_term, d_spread_equalT spreadEquality)
 
 (*!
  * @begin[doc]
@@ -433,8 +428,7 @@ prim productSubtype {| intro_resource [] |} 'H 'a :
  * TYPE INFERENCE                                                       *
  ************************************************************************)
 
-let typeinf_resource =
-   Mp_resource.improve typeinf_resource (dprod_term, infer_univ_dep0_dep1 dest_dprod)
+let resource typeinf += (dprod_term, infer_univ_dep0_dep1 dest_dprod)
 
 (*
  * Type of pair.
@@ -445,7 +439,7 @@ let inf_pair inf consts decls eqs opt_eqs defs t =
    let eqs'', opt_eqs'', defs'', b' = inf consts decls eqs' opt_eqs' defs' b in
       eqs'', opt_eqs'', defs'', mk_prod_term a' b'
 
-let typeinf_resource = Mp_resource.improve typeinf_resource (pair_term, inf_pair)
+let resource typeinf += (pair_term, inf_pair)
 
 (*
  * Type of spread.
@@ -468,7 +462,7 @@ let inf_spread inf consts decls eqs opt_eqs defs t =
              (eqnlist_append_eqn eqs' a' (mk_prod_term at bt)) opt_eqs''
              ((av,<<top>>)::(bv,<<top>>)::defs') b
 
-let typeinf_resource = Mp_resource.improve typeinf_resource (spread_term, inf_spread)
+let resource typeinf += (spread_term, inf_spread)
 
 (************************************************************************
  * SUBTYPING                                                            *
@@ -482,9 +476,7 @@ let dprod_subtypeT p =
       (productSubtype (Sequent.hyp_count_addr p) a
        thenT addHiddenLabelT "subtype") p
 
-let sub_resource =
-   Mp_resource.improve
-   sub_resource
+let resource sub +=
    (DSubtype ([<< a1:'A1 * 'B1['a1] >>, << a2:'A2 * 'B2['a2] >>;
                << 'A1 >>, << 'A2 >>;
                << 'B1['a1] >>, << 'B2['a1] >>],

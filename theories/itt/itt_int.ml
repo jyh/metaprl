@@ -345,15 +345,13 @@ ml_rw reduce_ind : ('goal : ind{number[x:n]; i, j. 'down['i; 'j]; 'base; k, l. '
          base
 
 
-let reduce_info =
+let resource reduce +=
    [<< "add"{number[i:n]; number[j:n]} >>, reduce_add;
     << "sub"{number[i:n]; number[j:n]} >>, reduce_sub;
     << "mul"{number[i:n]; number[j:n]} >>, reduce_mul;
     << "div"{number[i:n]; number[j:n]} >>, reduce_div;
     << "rem"{number[i:n]; number[j:n]} >>, reduce_rem;
     << ind{number[x:n]; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]} >>, reduce_ind]
-
-let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
 
 (************************************************************************
  * INTEGER RULES                                                        *
@@ -637,13 +635,12 @@ let decideT t p =
 (*
  * Type of int.
  *)
-let typeinf_resource = Mp_resource.improve typeinf_resource (int_term, infer_univ1)
+let resource typeinf += (int_term, infer_univ1)
 
 (*
  * Type of number.
  *)
-let typeinf_resource =
-   Mp_resource.improve typeinf_resource (number_term, Typeinf.infer_const int_term)
+let resource typeinf += (number_term, Typeinf.infer_const int_term)
 
 (*
  * Type of ind.
@@ -653,7 +650,7 @@ let inf_ind inf consts decls eqs opt_eqs defs t =
    let eqs', opt_eqs', defs', i' = inf consts decls eqs opt_eqs defs i in
    inf consts decls eqs' ((i', int_term)::opt_eqs') defs' base
 
-let typeinf_resource = Mp_resource.improve typeinf_resource (ind_term, inf_ind)
+let resource typeinf += (ind_term, inf_ind)
 
 (*
  * -*-

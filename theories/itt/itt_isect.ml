@@ -357,8 +357,7 @@ let mk_isect_term = mk_dep0_dep1_term isect_opname
  * TYPE INFERENCE                                                       *
  ************************************************************************)
 
-let typeinf_resource =
-   Mp_resource.improve typeinf_resource (isect_term, infer_univ_dep0_dep1 dest_isect)
+let resource typeinf += (isect_term, infer_univ_dep0_dep1 dest_isect)
 
 (************************************************************************
  * SUBTYPING                                                            *
@@ -372,9 +371,7 @@ let isect_subtypeT p =
       (intersectionSubtype (Sequent.hyp_count_addr p) a
        thenT addHiddenLabelT "subtype") p
 
-let sub_resource =
-   Mp_resource.improve
-   sub_resource
+let resource sub +=
    (DSubtype ([<< isect a1:'A1. 'B1['a1] >>, << isect a2:'A2. 'B2['a2] >>;
                << 'A2 >>, << 'A1 >>;
                << 'B1['a1] >>, << 'B2['a1] >>],

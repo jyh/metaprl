@@ -246,7 +246,7 @@ let d_apply_equalT p =
 
 let apply_equal_term = << 'f1 'a1 = 'f2 'a2 in 'T >>
 
-let intro_resource = Mp_resource.improve intro_resource (apply_equal_term, d_apply_equalT)
+let resource intro += (apply_equal_term, d_apply_equalT)
 
 (*
  * Typehood of application depends on the ability to infer a type.
@@ -275,7 +275,7 @@ let d_apply_typeT p =
 
 let apply_type_term = << "type"{. 'f 'a} >>
 
-let intro_resource = Mp_resource.improve intro_resource (apply_type_term, d_apply_typeT)
+let resource intro += (apply_type_term, d_apply_typeT)
 
 (*
  * D a hyp.
@@ -292,14 +292,13 @@ let d_hyp_fun i p =
          RefineError _ ->
             independentFunctionElimination i j f y p
 
-let elim_resource = Mp_resource.improve elim_resource (fun_term, d_hyp_fun)
+let resource elim += (fun_term, d_hyp_fun)
 
 (************************************************************************
  * TYPE INFERENCE                                                       *
  ************************************************************************)
 
-let typeinf_resource =
-   Mp_resource.improve typeinf_resource (fun_term, infer_univ_dep0_dep0 dest_fun)
+let resource typeinf += (fun_term, infer_univ_dep0_dep0 dest_fun)
 
 (************************************************************************
  * SUBTYPING                                                            *
@@ -311,9 +310,7 @@ let typeinf_resource =
 let fun_subtypeT p =
    independentFunctionSubtype (Sequent.hyp_count_addr p) p
 
-let sub_resource =
-   Mp_resource.improve
-   sub_resource
+let resource sub +=
    (DSubtype ([<< 'A1 -> 'B1 >>, << 'A2 -> 'B2 >>;
                << 'A2 >>, << 'A1 >>;
                << 'B1 >>, << 'B2 >>],

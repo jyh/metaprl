@@ -178,8 +178,7 @@ interactive independentProductSubtype {| intro_resource [] |} 'H :
  * TYPE INFERENCE                                                       *
  ************************************************************************)
 
-let typeinf_resource =
-   Mp_resource.improve typeinf_resource (prod_term, infer_univ_dep0_dep0 dest_prod)
+let resource typeinf += (prod_term, infer_univ_dep0_dep0 dest_prod)
 
 (************************************************************************
  * SUBTYPING                                                            *
@@ -192,9 +191,7 @@ let prod_subtypeT p =
    (independentProductSubtype (hyp_count_addr p)
     thenT addHiddenLabelT "subtype") p
 
-let sub_resource =
-   Mp_resource.improve
-   sub_resource
+let resource sub +=
    (DSubtype ([<< 'A1 * 'B1 >>, << 'A2 * 'B2 >>;
                << 'A1 >>, << 'A2 >>;
                << 'B1 >>, << 'B2 >>],

@@ -97,10 +97,8 @@ interactive_rw reduce_dexists : "dexists"{collect{'T; x. 'f['x]}; y. 'A['y]} <--
    (t: 'T * 'A['f['t]])
 (*! @docoff *)
 
-let reduce_info =
-   [<< "dexists"{collect{'T; x. 'f['x]}; y. 'A['y]} >>, reduce_dexists]
-
-let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
+let resource reduce +=
+   << "dexists"{collect{'T; x. 'f['x]}; y. 'A['y]} >>, reduce_dexists
 
 (************************************************************************
  * DISPLAY FORMS                                                        *

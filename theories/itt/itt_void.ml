@@ -158,16 +158,13 @@ interactive void_subtype 'H :
 let void_sub p =
    void_subtype (hyp_count_addr p) p
 
-let sub_resource =
-   Mp_resource.improve
-   sub_resource
-   (RLSubtype ([void_term, << 'a >>], void_sub))
+let resource sub += (RLSubtype ([void_term, << 'a >>], void_sub))
 
 (************************************************************************
  * TYPE INFERENCE                                                       *
  ************************************************************************)
 
-let typeinf_resource = Mp_resource.improve typeinf_resource (void_term, infer_univ1)
+let resource typeinf += (void_term, infer_univ1)
 
 (*
  * -*-

@@ -84,10 +84,8 @@ interactive_rw reduce_scoll : power{collect{'T1; x1. 'f1['x1]}; collect{'T2; x2.
     collect{.'T1 -> 'T2; x. collect{'T1; y. 'f2['x 'y]}}
 (*! @docoff *)
 
-let reduce_info =
-   [<< power{collect{'t1; x1. 'f1['x1]}; collect{'t2; x2. 'f2['x2]}} >>, reduce_scoll]
-
-let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
+let resource reduce +=
+   << power{collect{'t1; x1. 'f1['x1]}; collect{'t2; x2. 'f2['x2]}} >>, reduce_scoll
 
 (************************************************************************
  * DISPLAY FORMS                                                        *

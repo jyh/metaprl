@@ -130,10 +130,8 @@ interactive_rw reduce_bunion : union{collect{'t1; x1. 'f1['x1]};
 
 let fold_bunion = makeFoldC << union{'s1; 's2} >> unfold_bunion
 
-let reduce_info =
-   [<< union{collect{'t1; x1. 'f1['x1]}; collect{'t2; x2. 'f2['x2]}} >>, reduce_bunion]
-
-let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
+let resource reduce +=
+   << union{collect{'t1; x1. 'f1['x1]}; collect{'t2; x2. 'f2['x2]}} >>, reduce_bunion
 
 (*!
  * @begin[doc]

@@ -143,11 +143,9 @@ prim_rw reduce_tree_eta :
    tree{'a; lambda{x. 'f 'x}} <--> tree{'a; 'f}
 (*! @docoff *)
 
-let reduce_info =
+let resource reduce +=
    [<< tree_ind{tree{'a1; 'f1}; a2, f2, g2. 'body['a2; 'f2; 'g2]} >>, reduce_tree_ind;
     << tree{'a; lambda{x. 'f 'x}} >>, reduce_tree_eta]
-
-let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
 
 (************************************************************************
  * DISPLAY                                                              *
@@ -306,8 +304,7 @@ let mk_tree_ind_term = mk_dep0_dep3_term tree_ind_opname
 (*
  * Type of w
  *)
-let typeinf_resource =
-   Mp_resource.improve typeinf_resource (w_term, infer_univ_dep0_dep1 dest_w)
+let resource typeinf += (w_term, infer_univ_dep0_dep1 dest_w)
 
 (*
  * Type of pair.
@@ -320,7 +317,7 @@ let inf_tree inf consts decls eqs opt_eqs defs t =
    let v = Typeinf.vnewname consts defs'' "v" in
       eqs'', opt_eqs'', defs'', mk_w_term v a' b'
 
-let typeinf_resource = Mp_resource.improve typeinf_resource (tree_term, inf_tree)
+let resource typeinf += (tree_term, inf_tree)
 
 (*
  * Type of tree_ind.
@@ -333,7 +330,7 @@ let inf_tree_ind inf decl t =
       else
          raise (RefineError ("typeinf", StringTermError ("can't infer type for", t)))
 
-let typeinf_resource = Mp_resource.improve typeinf_resource (tree_ind_term, inf_tree_ind)
+let resource typeinf += (tree_ind_term, inf_tree_ind)
  *)
 
 (*

@@ -104,14 +104,12 @@ let reduce_lt_int =
 let reduce_gt_int =
    reduce_gt_int' andthenC reduce_meta_lt
 
-let reduce_info =
+let resource reduce +=
    [<< eq_int{number[i:n]; number[j:n]} >>, reduce_eq_int;
     << lt_int{number[i:n]; number[j:n]} >>, reduce_lt_int;
     << gt_int{number[i:n]; number[j:n]} >>, reduce_gt_int;
     << le_int{'i; 'j} >>, reduce_le_int;
     << ge_int{'i; 'j} >>, reduce_ge_int]
-
-let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
 
 (************************************************************************
  * RULES                                                                *

@@ -213,10 +213,8 @@ let fold_isset      = makeFoldC << isset{'t} >> unfold_isset
 let fold_collect    = makeFoldC << collect{'T; x. 'a['x]} >> unfold_collect
 let fold_set_ind    = makeFoldC << set_ind{'s; a, f, g. 'b['a; 'f; 'g]} >> unfold_set_ind
 
-let reduce_info =
-   [<< set_ind{collect{'T; x. 'a['x]}; a, f, g. 'b['a; 'f; 'g]} >>, reduce_set_ind]
-
-let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
+let resource reduce +=
+   << set_ind{collect{'T; x. 'a['x]}; a, f, g. 'b['a; 'f; 'g]} >>, reduce_set_ind
 
 (************************************************************************
  * DISPLAY FORMS                                                        *
@@ -391,7 +389,7 @@ let d_isset_typeT p =
 
 let isset_type_term = << "type"{isset{'s1}} >>
 
-let intro_resource = Mp_resource.improve intro_resource (isset_type_term, d_isset_typeT)
+let resource intro += (isset_type_term, d_isset_typeT)
 
 (*
  * Equal sets.
@@ -435,12 +433,11 @@ let splitT t i p =
 (*
  * Add set assumptions to trivial tactic.
  *)
-let trivial_resource =
-   Mp_resource.improve trivial_resource (**)
-      { auto_name = "setAssumT";
-        auto_prec = trivial_prec;
-        auto_tac = onSomeHypT setAssumT
-      }
+let resource trivial += {
+   auto_name = "setAssumT";
+   auto_prec = trivial_prec;
+   auto_tac = onSomeHypT setAssumT
+}
 
 (*
  * -*-

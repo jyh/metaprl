@@ -430,12 +430,6 @@ let reduce_resource =
 let get_resource modname =
    Mp_resource.find reduce_resource modname
 
-let rec add_reduce_info rr = function
-   (t, conv) :: tl ->
-      add_reduce_info (Mp_resource.improve rr (t, conv)) tl
- | [] ->
-      rr
-
 let reduceTopC_env e =
    get_conv (env_arg e) "reduce"
 

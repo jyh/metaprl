@@ -110,10 +110,7 @@ interactive_rw reduce_sep : sep{collect{'T; x. 'f['x]}; z. 'P['z]} <-->
    collect{. "prod"{'T; t. 'P['f['t]]}; w. 'f[fst{'w}]}
 (*! @docoff *)
 
-let reduce_info =
-   [<< sep{collect{'T; x. 'f['x]}; z. 'P['z]} >>, reduce_sep]
-
-let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
+let resource reduce += << sep{collect{'T; x. 'f['x]}; z. 'P['z]} >>, reduce_sep
 
 (*!
  * @begin[doc]

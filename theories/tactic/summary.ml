@@ -171,10 +171,14 @@ declare "rule"[name:s]{'params; 'stmt; 'proof; 'res}
  * @it{extract} is the type of values provided by the resource, @it{data} is the internal
  * type used to represent the resource data, and @it{improve} is the type of arguments that
  * are required to make additions to the resource.
+ *
+ * Resources are improved with the @tt[improve] term which has the name of a resource
+ * to improve and the expression to improve the resource with.
  * @end[doc]
  *)
 declare "resource"[name:s]{'extract; 'improve; 'data; 'arg}
 declare "resource_defs"[name:s]{'res}
+declare "improve"[name:s]{'expr}
 (*! @docoff *)
 declare "resource_defs"[start:n, finish:n, name:s]{'res}
 
@@ -600,6 +604,9 @@ dform resource_df : "resource"[name]{'extract; 'improve; 'data; 'arg} =
                 'arg keyword[")"]
                 popm
    ezone
+
+dform improve_df : "improve"[name]{'exr} =
+   szone info["improves"] " " info ["resource"] " " resource_name[name:s] ezone
 
 dform infix_df : "infix"[name:s] =
    info["infix"] " " slot[name:s]

@@ -144,11 +144,9 @@ interactive_rw reduce_ifthenelse_true : ifthenelse{btrue; 'e1; 'e2} <--> 'e1
 interactive_rw reduce_ifthenelse_false : ifthenelse{bfalse; 'e1; 'e2} <--> 'e2
 (*! @docoff *)
 
-let reduce_info =
+let resource reduce +=
    [<< ifthenelse{btrue; 'e1; 'e2} >>, reduce_ifthenelse_true;
     << ifthenelse{bfalse; 'e1; 'e2} >>, reduce_ifthenelse_false]
-
-let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
 
 (************************************************************************
  * REDUCTIONS                                                           *
@@ -172,7 +170,7 @@ interactive_rw reduce_bimplies_true : bimplies{btrue; 'e1} <--> 'e1
 interactive_rw reduce_bimplies_false : bimplies{bfalse; 'e1} <--> btrue
 (*! @docoff *)
 
-let reduce_info =
+let resource reduce +=
    [<< bnot{btrue} >>, reduce_bnot_true;
     << bnot{bfalse} >>, reduce_bnot_false;
     << bor{btrue; 'e1} >>, reduce_bor_true;
@@ -181,8 +179,6 @@ let reduce_info =
     << band{bfalse; 'e1} >>, reduce_band_false;
     << bimplies{btrue; 'e1} >>, reduce_bimplies_true;
     << bimplies{bfalse; 'e1} >>, reduce_bimplies_false]
-
-let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
 
 (************************************************************************
  * DISPLAY FORMS                                                        *
@@ -341,10 +337,10 @@ let bool_sqequal_term2 = << 'e ~ bfalse >>
 let bool_sqequal_term3 = << btrue ~ 'e >>
 let bool_sqequal_term4 = << bfalse ~ 'e >>
 
-let intro_resource = Mp_resource.improve intro_resource (bool_sqequal_term1, d_bool_sqequalT)
-let intro_resource = Mp_resource.improve intro_resource (bool_sqequal_term2, d_bool_sqequalT)
-let intro_resource = Mp_resource.improve intro_resource (bool_sqequal_term3, d_bool_sqequalT)
-let intro_resource = Mp_resource.improve intro_resource (bool_sqequal_term4, d_bool_sqequalT)
+let resource intro += (bool_sqequal_term1, d_bool_sqequalT)
+let resource intro += (bool_sqequal_term2, d_bool_sqequalT)
+let resource intro += (bool_sqequal_term3, d_bool_sqequalT)
+let resource intro += (bool_sqequal_term4, d_bool_sqequalT)
 
 (*
  * H >- Ui ext Unit
@@ -758,15 +754,15 @@ let splitITE i p =
 (*
  * Type of Bool
  *)
-let typeinf_resource = Mp_resource.improve typeinf_resource (bool_term, infer_univ1)
+let resource typeinf += (bool_term, infer_univ1)
 
 (*
  * Type of bool constants
  *)
 let inf_b = Typeinf.infer_const bool_term
 
-let typeinf_resource = Mp_resource.improve typeinf_resource (btrue_term, inf_b)
-let typeinf_resource = Mp_resource.improve typeinf_resource (bfalse_term, inf_b)
+let resource typeinf += (btrue_term, inf_b)
+let resource typeinf += (bfalse_term, inf_b)
 
 (*
  * -*-

@@ -93,12 +93,11 @@ let unsquashT i = unsquash_with_typeT i orelseT unsquash_with_equalT i
 let univTypeComplT  = completeT ((function p -> univTypeT (get_univ_arg p) p) thenT autoT)
 
 
-let auto_resource =
-   Mp_resource.improve auto_resource (**)
-      { auto_name = "univTypeT";
-        auto_prec = logic_prec;
-        auto_tac = auto_wrap univTypeComplT
-      }
+let resource auto += {
+   auto_name = "univTypeT";
+   auto_prec = logic_prec;
+   auto_tac = auto_wrap univTypeComplT
+}
 
 let memberTypeT a = equalTypeT a a thenT tryT (completeT autoT)
 
@@ -300,9 +299,7 @@ prim_rw unfold_col_member : col_member{'T;'C;'x} <-->
 interactive_rw reduce_member : col_member{'T;('I,'phi);'x} <-->
      (exst i:'I . ('phi 'i = 'x in 'T))
 
-let reduce_info =
-   [<<   col_member{'T;('I,'phi);'x} >>, reduce_member]
-let reduce_resource = add_reduce_info reduce_resource reduce_info
+let resource reduce += << col_member{'T;('I,'phi);'x} >>, reduce_member
 
 (*      [М] H џ T С ”[l] ЭЭЮ
  *      [М] H џ x С T ЭЭЮ
@@ -534,9 +531,7 @@ interactive_rw reduce_union : union{('I,'phi); x.('J['x],'psi['x])} <-->
       lambda{ij. 'psi['phi fst{'ij}] snd{'ij}}
    ))
 
-let reduce_info =
-   [<<  union{('I,'phi); x.('J['x],'psi['x])} >>, reduce_union]
-let reduce_resource = add_reduce_info reduce_resource reduce_info
+let resource reduce += << union{('I,'phi); x.('J['x],'psi['x])} >>, reduce_union
 
 (*        [М] H џ T Type ЭЭЮ
  *        [М] H џ S Type ЭЭЮ
@@ -650,10 +645,7 @@ interactive_rw reduce_filter : col_filter{('I,'phi); x.'P['x]} <-->
             ((i:'I * 'P['phi 'i],
               lambda{j. 'phi fst{'j}}))
 
-let reduce_info =
-   [<<    col_filter{('I,'phi); x.'P['x]}  >>, reduce_filter]
-let reduce_resource = add_reduce_info reduce_resource reduce_info
-
+let resource reduce += << col_filter{('I,'phi); x.'P['x]}  >>, reduce_filter
 
 (*      [М] H џ T Type ЭЭЮ
  *      [М] H; x: T џ P[x] С ”[l] ЭЭЮ
@@ -712,9 +704,7 @@ interactive_rw reduce_map : map{('I,'phi); x.'f['x]} <-->
             (('I,
               lambda{i. 'f['phi 'i]}))
 
-let reduce_info =
-   [<<    map{('I,'phi); x.'f['x]}  >>, reduce_map]
-let reduce_resource = add_reduce_info reduce_resource reduce_info
+let resource reduce += << map{('I,'phi); x.'f['x]} >>, reduce_map
 
 (*       [М] H џ T Type ЭЭЮ
  *       [М] H џ S Type ЭЭЮ

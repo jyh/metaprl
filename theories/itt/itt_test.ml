@@ -50,10 +50,7 @@ open Itt_int_bool
 declare fact{'i}
 prim_rw reduceFact : fact{'i} <--> ifthenelse{eq_int{'i; 0}; 1; .'i *@ fact{.'i -@ 1}}
 
-let reduce_info =
-   [<< fact{'i} >>, reduceFact]
-
-let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
+let resource reduce += << fact{'i} >>, reduceFact
 
 dform fact_df : except_mode[src] :: parens :: "prec"[prec_apply] :: fact{'i} =
    `"fact" " " slot{'i}

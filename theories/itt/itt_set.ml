@@ -223,8 +223,7 @@ prim set_subtype {| intro_resource [] |} 'H :
  * TYPE INFERENCE                                                       *
  ************************************************************************)
 
-let typeinf_resource =
-   Mp_resource.improve typeinf_resource (set_term,  infer_univ_dep0_dep1 dest_set)
+let resource typeinf += (set_term,  infer_univ_dep0_dep1 dest_set)
 
 (************************************************************************
  * SUBTYPING                                                            *
@@ -233,10 +232,7 @@ let typeinf_resource =
 let set_subtypeT p =
    set_subtype (Sequent.hyp_count_addr p) p
 
-let sub_resource =
-   Mp_resource.improve
-   sub_resource
-   (LRSubtype ([<< { a: 'A | 'B['a] } >>, << 'A >>], set_subtypeT))
+let resource sub += (LRSubtype ([<< { a: 'A | 'B['a] } >>, << 'A >>], set_subtypeT))
 
 (*
  * -*-

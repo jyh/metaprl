@@ -178,12 +178,9 @@ interactive_rw point_beta1_rw : field["x":t]{point{'a;'b;'e}} <--> 'a
 
 interactive_rw point_beta2_rw : field["y":t]{point{'a;'b;'e}} <--> 'b
 
-
-let reduce_info =
+let resource reduce +=
    [<< field["x":t]{point{'a;'b;'e}}  >>, point_beta1_rw;
     << field["y":t]{point{'a;'b;'e}}  >>, point_beta2_rw]
-
-let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
 
 interactive point_eta 'H :
    sequent[squash]{'H >- 'p IN plane } -->
@@ -226,11 +223,7 @@ define unfold_length: length{'p} <--> (field["x":t]{'p}*@field["x":t]{'p} +@ fie
 
 interactive_rw reduce_length: length{point{'a;'b;'e}} <--> ('a *@ 'a +@ 'b *@ 'b)
 
-let reduce_info =
-   [<< length{point{'a;'b;'e}}  >>, reduce_length]
-
-let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
-
+let resource reduce += << length{point{'a;'b;'e}}  >>, reduce_length
 
 (*!
  * @begin[doc]

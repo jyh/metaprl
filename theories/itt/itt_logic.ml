@@ -701,28 +701,21 @@ let mk_not_term = mk_dep0_term not_opname
 (*
  * Type of true, false.
  *)
-let typeinf_resource = Mp_resource.improve typeinf_resource (true_term, infer_univ1)
-let typeinf_resource = Mp_resource.improve typeinf_resource (false_term, infer_univ1)
+let resource typeinf += (true_term, infer_univ1)
+let resource typeinf += (false_term, infer_univ1)
 
 (*
  * Type of quantifiers.
  *)
-let typeinf_resource =
-   Mp_resource.improve typeinf_resource (all_term, infer_univ_dep0_dep1 dest_all)
-let typeinf_resource =
-   Mp_resource.improve typeinf_resource (exists_term, infer_univ_dep0_dep1 dest_exists)
+let resource typeinf += (all_term, infer_univ_dep0_dep1 dest_all)
+let resource typeinf += (exists_term, infer_univ_dep0_dep1 dest_exists)
 
-let typeinf_resource =
-   Mp_resource.improve typeinf_resource (or_term, infer_univ_dep0_dep0 dest_or)
-let typeinf_resource =
-   Mp_resource.improve typeinf_resource (and_term, infer_univ_dep0_dep0 dest_and)
-let typeinf_resource =
-   Mp_resource.improve typeinf_resource (implies_term, infer_univ_dep0_dep0 dest_implies)
-let typeinf_resource =
-   Mp_resource.improve typeinf_resource (iff_term, infer_univ_dep0_dep0 dest_iff)
+let resource typeinf += (or_term, infer_univ_dep0_dep0 dest_or)
+let resource typeinf += (and_term, infer_univ_dep0_dep0 dest_and)
+let resource typeinf += (implies_term, infer_univ_dep0_dep0 dest_implies)
+let resource typeinf += (iff_term, infer_univ_dep0_dep0 dest_iff)
 
-let typeinf_resource =
-   Mp_resource.improve typeinf_resource (not_term, Typeinf.infer_map dest_not)
+let resource typeinf += (not_term, Typeinf.infer_map dest_not)
 
 (************************************************************************
  * AUTOMATION                                                           *
@@ -1278,12 +1271,11 @@ let logic_trivT i p =
       else
          raise (RefineError ("logic_trivT", StringTermError ("nothing known about", hyp)))
 
-let trivial_resource =
-   Mp_resource.improve trivial_resource (**)
-      { auto_name = "logic_trivT";
-        auto_prec = trivial_prec;
-        auto_tac = onSomeHypT logic_trivT
-      }
+let resource trivial += {
+   auto_name = "logic_trivT";
+   auto_prec = trivial_prec;
+   auto_tac = onSomeHypT logic_trivT
+}
 
 
 (*
@@ -1304,19 +1296,17 @@ let logic_prec = create_auto_prec [trivial_prec] []
 let back_hyp_prec = create_auto_prec [logic_prec] []
 let back_assum_prec = create_auto_prec [back_hyp_prec] []
 
-let auto_resource =
-   Mp_resource.improve auto_resource (**)
-      { auto_name = "logic_autoT";
-        auto_prec = logic_prec;
-        auto_tac = auto_wrap (onSomeHypT logic_autoT)
-      }
+let resource auto += {
+   auto_name = "logic_autoT";
+   auto_prec = logic_prec;
+   auto_tac = auto_wrap (onSomeHypT logic_autoT)
+}
 
-let auto_resource =
-   Mp_resource.improve auto_resource (**)
-      { auto_name = "backThruHypT";
-        auto_prec = back_hyp_prec;
-        auto_tac = auto_hyp_progress (fun _ _ -> true) backThruHypT
-      }
+let resource auto += {
+   auto_name = "backThruHypT";
+   auto_prec = back_hyp_prec;
+   auto_tac = auto_hyp_progress (fun _ _ -> true) backThruHypT
+}
 
 (*
  * Quick test on assumptions.
@@ -1331,12 +1321,11 @@ let assum_test i p =
       with RefineError _ ->
          false
 
-let auto_resource =
-   Mp_resource.improve auto_resource (**)
-      { auto_name = "backThruSomeAssumT";
-        auto_prec = back_assum_prec;
-        auto_tac = auto_assum_progress assum_test backThruAssumT
-      }
+let resource auto += {
+   auto_name = "backThruSomeAssumT";
+   auto_prec = back_assum_prec;
+   auto_tac = auto_assum_progress assum_test backThruAssumT
+}
 
 (************ logic instance for j-prover in refiner/reflib/jall.ml  **********)
 

@@ -372,14 +372,13 @@ let d_hyp_subtypeT i p =
          RefineError _ ->
             subtypeElimination j k p
 
-let elim_resource = Mp_resource.improve elim_resource (subtype_term, d_hyp_subtypeT)
+let resource elim += (subtype_term, d_hyp_subtypeT)
 
 (************************************************************************
  * TYPE INFERENCE                                                       *
  ************************************************************************)
 
-let typeinf_resource =
-   Mp_resource.improve typeinf_resource (subtype_term, infer_univ_dep0_dep0 dest_subtype)
+let resource typeinf += (subtype_term, infer_univ_dep0_dep0 dest_subtype)
 
 (************************************************************************
  * SQUASH                                                               *

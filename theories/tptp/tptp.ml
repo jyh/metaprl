@@ -443,7 +443,7 @@ let atomicT i p =
 let intro_atomicT p =
    onSomeHypT atomicT p
 
-let intro_resource = Mp_resource.improve intro_resource (atomic_term, intro_atomicT)
+let resource intro += (atomic_term, intro_atomicT)
 
 let type_intro_rules =
    [|tptp2_type_intro0;
@@ -496,12 +496,11 @@ let auto_tac =
            onSomeHypT atomicT;
            onSomeHypT typeT]
 
-let auto_resource =
-   Mp_resource.improve auto_resource (**)
-      { auto_name = "tptp_autoT";
-        auto_prec = logic_prec;
-        auto_tac = auto_wrap auto_tac
-      }
+let resource auto += {
+   auto_name = "tptp_autoT";
+   auto_prec = logic_prec;
+   auto_tac = auto_wrap auto_tac
+}
 
 (*
  * -*-

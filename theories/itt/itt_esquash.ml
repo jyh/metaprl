@@ -203,7 +203,7 @@ let d_esquash_elim i p =
       else
          esquash_esquash_elim j k p
 
-let elim_resource = Mp_resource.improve elim_resource (<< esquash{'P} >>, d_esquash_elim)
+let resource elim += (<< esquash{'P} >>, d_esquash_elim)
 
 (*!
  * @begin[doc]

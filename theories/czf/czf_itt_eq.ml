@@ -176,10 +176,8 @@ interactive_rw reduce_eq : eq{collect{'T1; x1. 'f1['x1]}; collect{'T2; x2. 'f2['
     & (all y2 : 'T2. exst y1: 'T1. eq{.'f1['y1]; .'f2['y2]}))
 (*! @docoff *)
 
-let reduce_info =
-   [<< eq{collect{'T1; x1. 'f1['x1]}; collect{'T2; x2. 'f2['x2]}} >>, reduce_eq]
-
-let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
+let resource reduce +=
+   << eq{collect{'T1; x1. 'f1['x1]}; collect{'T2; x2. 'f2['x2]}} >>, reduce_eq
 
 (*!
  * @begin[doc]
@@ -196,10 +194,8 @@ interactive_rw reduce_equal : equal{collect{'T1; x1. 'f1['x1]}; collect{'T2; x2.
      & (all y2 : 'T2. exst y1: 'T1. eq{.'f1['y1]; .'f2['y2]})))
 (*! @docoff *)
 
-let reduce_info =
-   [<< equal{collect{'T1; x1. 'f1['x1]}; collect{'T2; x2. 'f2['x2]}} >>, reduce_equal]
-
-let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
+let resource reduce +=
+   << equal{collect{'T1; x1. 'f1['x1]}; collect{'T2; x2. 'f2['x2]}} >>, reduce_equal
 
 (*!
  * @begin[doc]
@@ -509,19 +505,17 @@ let eqSetRightT t p =
 (*
  * Always reasonable to try reflexivity.
  *)
-let auto_resource =
-   Mp_resource.improve auto_resource (**)
-      { auto_name = "eqSetRefT";
-        auto_prec = trivial_prec;
-        auto_tac = auto_wrap eqSetRefT
-      }
+let resource auto += {
+   auto_name = "eqSetRefT";
+   auto_prec = trivial_prec;
+   auto_tac = auto_wrap eqSetRefT
+}
 
-let auto_resource =
-   Mp_resource.improve auto_resource (**)
-      { auto_name = "funSetRefT";
-        auto_prec = trivial_prec;
-        auto_tac = auto_wrap funSetRefT
-      }
+let resource auto += {
+   auto_name = "funSetRefT";
+   auto_prec = trivial_prec;
+   auto_tac = auto_wrap funSetRefT
+}
 
 (*
  * -*-

@@ -182,13 +182,12 @@ prim unitSqequal 'H :
 (*
  * Type of unit.
  *)
-let typeinf_resource = Mp_resource.improve typeinf_resource (unit_term, infer_univ1)
+let resource typeinf += (unit_term, infer_univ1)
 
 (*
  * Type of a unit object is unit.
  *)
-let typeinf_resource =
-   Mp_resource.improve typeinf_resource (it_term, Typeinf.infer_const unit_term)
+let resource typeinf += (it_term, Typeinf.infer_const unit_term)
 
 (*
  * -*-

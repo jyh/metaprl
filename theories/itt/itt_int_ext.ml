@@ -556,7 +556,7 @@ rewrite rem_Assoc 'H :
 *)
 
 (*
-let reduce_info =
+let resource reduce +=
    [<< ('a *@ ('b *@ 'c)) >>, mul_Assoc;
     << ('a *@ ('b +@ 'c)) >>, mul_add_Distrib;
     << (1 *@ 'a) >>, mul_Id;
@@ -564,7 +564,5 @@ let reduce_info =
     << (0 *@ 'a) >>, mul_Zero;
     << ('a *@ 0) >>, mul_Zero2;
     << ('a *@ (- 'b)) >>, mul_uni_Assoc]
-
-let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
 *)
 

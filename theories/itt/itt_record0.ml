@@ -58,11 +58,9 @@ interactive_rw stepRecord_rw  :
    record{.next{'n};'A} <--> (top * record{'n;'A})
 
 (*! @docoff *)
-let reduce_info =
+let resource reduce +=
    [<< record{zero;'A} >>, baseRecord;
     << record{next{'n};'A} >>,stepRecord_rw]
-
-let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
 (*! *)
 
 (*** Dependent Record Type ***)
@@ -93,18 +91,15 @@ interactive_rw stepRcrd_rw  :
 define unfoldRcrdS : rcrd{'n;'a} <--> rcrd{'n; 'a; rcrd}
 
 (*! @docoff *)
-let reduce_info =
+let resource reduce +=
    [<< rcrd{zero;'a; 'r} >>, baseRcrd;
     << rcrd{next{'n};'a; 'r} >>, stepRcrd_rw;
     << rcrd{'n;'a} >>, unfoldRcrdS
    ]
 
-let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
-
-let intro_resource =
-   Mp_resource.improve intro_resource (<<rcrd{'n;'a} = 'r in 'R>>, (rwh unfoldRcrdS 0 thenT dT 0))
-let intro_resource =
-   Mp_resource.improve intro_resource (<<'r = rcrd{'n;'a} in 'R>>, (rwh unfoldRcrdS 0 thenT dT 0))
+let resource intro +=
+   [ (<<rcrd{'n;'a} = 'r in 'R>>, (rwh unfoldRcrdS 0 thenT dT 0));
+     (<<'r = rcrd{'n;'a} in 'R>>, (rwh unfoldRcrdS 0 thenT dT 0)) ]
 (*! *)
 
 
@@ -123,11 +118,9 @@ interactive_rw stepField_rw  :
    field{'r;next{'n}} <--> (field{snd{'r};'n})
 
 (*! @docoff *)
-let reduce_info =
+let resource reduce +=
    [<< field{'A;zero} >>, baseField;
     << field{'r;next{'n}} >>, stepField_rw]
-
-let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
 (*! *)
 
 (*** RecordOrt ***)
@@ -295,7 +288,7 @@ let recordEliminationT n p =
    with
          RefineError _ -> recordElimination j k p
 
-let elim_resource = Mp_resource.improve elim_resource (<<record{'n;'A;'R}>>, recordEliminationT)
+let resource elim += (<<record{'n;'A;'R}>>, recordEliminationT)
 *)
 (*** Orthogonality ***)
 

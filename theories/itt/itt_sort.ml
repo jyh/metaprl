@@ -162,7 +162,7 @@ interactive_rw reduce_sort_nil : sort{nil; 'lt} <--> nil
 interactive_rw reduce_sort_cons : sort{cons{'u; 'v}; 'lt} <-->
    insert{'u; sort{'v; 'lt}; 'lt}
 
-let reduce_info =
+let resource reduce +=
    [<< bounded{'u; nil; 'lt} >>, reduce_bounded_nil;
     << bounded{'u1; cons{'u2; 'v}; 'lt} >>, reduce_bounded_cons;
     << sorted{nil; 'lt} >>, reduce_sorted_nil;
@@ -171,8 +171,6 @@ let reduce_info =
     << insert{'u1; cons{'u2; 'v}; 'lt} >>, reduce_insert_cons;
     << sort{nil; 'lt} >>, reduce_sort_nil;
     << sort{cons{'u; 'v}; 'lt} >>, reduce_sort_cons]
-
-let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
 
 (************************************************************************
  * WELL-FORMEDNESS

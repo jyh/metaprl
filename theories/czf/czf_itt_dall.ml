@@ -97,10 +97,7 @@ interactive_rw reduce_dall : "dall"{collect{'T; x. 'f['x]}; y. 'A['y]} <-->
    (t: 'T -> 'A['f['t]])
 (*! @docoff *)
 
-let reduce_info =
-   [<< "dall"{collect{'T; x. 'f['x]}; y. 'A['y]} >>, reduce_dall]
-
-let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
+let resource reduce += << "dall"{collect{'T; x. 'f['x]}; y. 'A['y]} >>, reduce_dall
 
 (************************************************************************
  * DISPLAY FORMS                                                        *

@@ -240,11 +240,9 @@ prim_rw reduce_beta : (lambda{v. 'b['v]} 'a) <--> 'b['a]
 prim_rw reduce_fix : fix{f. 'b['f]} <--> 'b[fix{f. 'b['f]}]
 (*! @docoff *)
 
-let reduce_info =
+let resource reduce +=
    [<< (lambda{v. 'b['v]} 'a) >>, reduce_beta;
     << fix{f. 'b['f]} >>, reduce_fix]
-
-let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
 
 (************************************************************************
  * RULES                                                                *
@@ -480,7 +478,7 @@ let inf_rfun inf consts decls eqs opt_eqs defs t =
    infer_univ_dep0_dep1
       (fun _ -> v,a,b) inf (StringSet.add f consts) ((f,t)::decls) eqs opt_eqs defs t
 
-let typeinf_resource = Mp_resource.improve typeinf_resource (rfun_term, inf_rfun)
+let resource typeinf += (rfun_term, inf_rfun)
 
 (*
  * Type of lambda.
@@ -495,7 +493,7 @@ let inf_lambda inf consts decls eqs opt_eqs defs t =
    in
       eqs', opt_eqs', defs', mk_dfun_term v a' b'
 
-let typeinf_resource = Mp_resource.improve typeinf_resource (lambda_term, inf_lambda)
+let resource typeinf += (lambda_term, inf_lambda)
 
 (*
  * Type of apply.
@@ -520,7 +518,7 @@ let inf_apply inf consts decls eqs opt_eqs defs t =
          (eqnlist_append_eqn eqs'' f' (mk_fun_term at bt)),((a',at)::opt_eqs'''),
          ((av, <<top>>)::(bv,<<void>>)::defs''), bt
 
-let typeinf_resource = Mp_resource.improve typeinf_resource (apply_term, inf_apply)
+let resource typeinf += (apply_term, inf_apply)
 
 (*
  * -*-

@@ -309,12 +309,11 @@ let nthAssumT i p =
    in
       (tac (Sequent.hyp_count p) thenT nthAssumT i) p
 
-let trivial_resource =
-   Mp_resource.improve trivial_resource {
-      auto_name = "nthAssumT";
-      auto_prec = create_auto_prec [trivial_prec] [];
-      auto_tac = onSomeAssumT nthAssumT
-   }
+let resource trivial += {
+   auto_name = "nthAssumT";
+   auto_prec = create_auto_prec [trivial_prec] [];
+   auto_tac = onSomeAssumT nthAssumT
+}
 
 let thinAllT i j p =
    let rec tac j =
@@ -492,12 +491,11 @@ let replaceHypT t i p =
  * @docoff
  * @end[doc]
  *)
-let trivial_resource =
-   Mp_resource.improve trivial_resource (**)
-      { auto_name = "nthHypT";
-        auto_prec = trivial_prec;
-        auto_tac = onSomeHypT nthHypT
-      }
+let resource trivial += {
+   auto_name = "nthHypT";
+   auto_prec = trivial_prec;
+   auto_tac = onSomeHypT nthHypT
+}
 
 (*
  * Typehood from equality.

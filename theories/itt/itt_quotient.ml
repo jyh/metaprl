@@ -380,8 +380,7 @@ let dest_quotient_inf t =
    let x, y, a, e = dest_quotient t in
    x, a, subst1 e y (mk_var_term x)
 
-let typeinf_resource =
-   Mp_resource.improve typeinf_resource (quotient_term, infer_univ_dep0_dep1 dest_quotient_inf)
+let resource typeinf += (quotient_term, infer_univ_dep0_dep1 dest_quotient_inf)
 
 (************************************************************************
  * SUBTYPING                                                            *
@@ -401,9 +400,7 @@ let quotient_subtypeT p =
 
      | _ -> failT) p
 
-let sub_resource =
-   Mp_resource.improve
-   sub_resource
+let resource sub +=
    (DSubtype ([<< quot x1, y1: 'A1 // 'E1['x1; 'y1] >>, << quot x2, y2: 'A2 // 'E2['x2; 'y2] >>;
                << 'A1 >>, << 'A2 >>],
               quotient_subtypeT))

@@ -837,23 +837,19 @@ interactive minus_minus_reduce 'H :
 (*
  * Type of int.
  *)
-let typeinf_resource = Mp_resource.improve typeinf_resource (<<int>>, infer_univ1)
+let resource typeinf += (<<int>>, infer_univ1)
 
 (*
  * Type of number.
  *)
-let typeinf_resource =
-   Mp_resource.improve typeinf_resource (<<number[n:n]>>, Typeinf.infer_const <<int>>)
+let resource typeinf += (<<number[n:n]>>, Typeinf.infer_const <<int>>)
 
 (*
-let reduce_info =
+let resource reduce +=
    [<< band{lt_bool{'a; 'b}; lt_bool{'b; 'a}} >>, lt_ReflexC;
     << ('a +@ 0) >>, add_IdC;
     << (0 +@ 'a) >>, add_Id2C;
     << ( 'a +@ (- 'a)) >>, minus_add_inverseC;
     << (-(-'a)) >>, minus_minus_reduceC;
     << ('a +@ ('b +@ 'c)) >>, add_AssocC]
-
-
-let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
 *)

@@ -229,8 +229,7 @@ prim squashFromAny 'H 'ext :
  * TYPE INFERENCE                                                       *
  ************************************************************************)
 
-let typeinf_resource =
-   Mp_resource.improve typeinf_resource (squash_term,  Typeinf.infer_map dest_squash)
+let resource typeinf += (squash_term,  Typeinf.infer_map dest_squash)
 
 (************************************************************************
  * THEOREMS                                                             *
@@ -545,31 +544,25 @@ let unsquashHypEqualT i p =
    let h, j = Sequent.hyp_indices p i in
    unsquashHypEqual h j p
 
-let squash_resource =
-   Mp_resource.improve squash_resource (SqUnsquash(equal_term, unsquashHypEqualT))
+let resource squash += (SqUnsquash(equal_term, unsquashHypEqualT))
 
-let squash_resource =
-   Mp_resource.improve squash_resource (SqStable(equal_term, <<it>>, dT 0))
+let resource squash += (SqStable(equal_term, <<it>>, dT 0))
 
 let unsquashEqualT i p =
    let h, j = Sequent.hyp_indices p i in
    unsquashEqual h j p
 
-let squash_resource =
-   Mp_resource.improve squash_resource (SqUnsquashGoal(equal_term, unsquashEqualT))
+let resource squash += (SqUnsquashGoal(equal_term, unsquashEqualT))
 
 let unsquashSquashT i p =
    let h, j = Sequent.hyp_indices p i in
    unsquash h j p
 
-let squash_resource =
-   Mp_resource.improve squash_resource (SqStable(squash_term, <<it>>, dT 0))
+let resource squash += (SqStable(squash_term, <<it>>, dT 0))
 
-let squash_resource =
-    Mp_resource.improve squash_resource (SqUnsquashGoal(squash_term, unsquashSquashT))
+let resource squash += (SqUnsquashGoal(squash_term, unsquashSquashT))
 
-let squash_resource =
-   Mp_resource.improve squash_resource (SqStable(type_term, <<it>>, dT 0))
+let resource squash += (SqStable(type_term, <<it>>, dT 0))
 
 (************************************************************************
  * TACTICS                                                              *
@@ -623,8 +616,7 @@ let squashT p =
    (squashAssert (hyp_count_addr p) (concl p) thenLT
       [ idT; unsquashT (-1) thenT trivialT ]) p
 
-let elim_resource =
-   Mp_resource.improve elim_resource (squash_term, unsquashT)
+let resource elim += (squash_term, unsquashT)
 
 let rec unsquashAllT_aux i seq hyps p =
    if i > hyps then idT p else
@@ -665,12 +657,11 @@ let auto_none p = []
 let allSquashT_auto p =
    [allSquashT, AutoTac auto_none]
 
-let auto_resource =
-   Mp_resource.improve auto_resource (**)
-      { auto_name = "Itt_squash.allSquashT";
-        auto_prec = trivial_prec;
-        auto_tac = AutoTac allSquashT_auto
-      }
+let resource auto += {
+   auto_name = "Itt_squash.allSquashT";
+   auto_prec = trivial_prec;
+   auto_tac = AutoTac allSquashT_auto
+}
 
 (*
  * -*-

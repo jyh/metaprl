@@ -522,7 +522,7 @@ let search_ifthenelse goal =
    let rec search addrs vars addr goal =
       if is_ifthenelse_term goal then
          let t, _, _ = dest_ifthenelse goal in
-            if is_free_var_list vars [t] then
+            if is_some_var_free_list vars [t] then
                search_term addrs vars addr goal
             else
                search_term ((addr, t) :: addrs) vars addr goal

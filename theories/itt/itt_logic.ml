@@ -670,7 +670,7 @@ let moveToConclVarsT vars p =
    let rec tac indices goal =
       match indices with
          (i, v, hyp) :: tl ->
-            if is_free_var v goal then
+            if is_var_free v goal then
                let goal' = mk_all_term v hyp goal in
                   assertT goal'
                   thenLT [thinT i thenT tac tl goal';
@@ -953,7 +953,7 @@ let assumT i p =
       else
          let v, hyp = TermMan.nth_hyp assum j in
          let goal = collect (j + 1) in
-            if is_free_var v goal then
+            if is_var_free v goal then
                mk_all_term v hyp goal
             else
                mk_implies_term hyp goal

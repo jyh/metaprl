@@ -123,9 +123,15 @@ interactive natMemberEquality {| intro [AutoMustComplete] |} :
 interactive natMemberZero {| intro [] |} :
    sequent { <H> >- 0 in nat}
 
-interactive nat_is_int (*{| intro[AutoMustComplete] |}*) :
+interactive nat_is_int :
    sequent { <H> >- 'a='b in nat} -->
    sequent { <H> >- 'a='b in int}
+
+interactive nat_is_int2 'H :
+   sequent { <H>; a: nat; <J['a]> >- 'a in int }
+
+let resource intro += 
+   ( <<'a in int>>, ( "nat_is_int2", None, onSomeHypT nat_is_int2 ))
 
 interactive nat_is_subtype_of_int  {| intro[] |} :
    sequent { <H> >- nat subtype int }
@@ -201,19 +207,11 @@ interactive min_nat_wf {| intro [] |} :
  * Some applications
  *)
 
-interactive nat_is_int0 {| intro[AutoMustComplete] |} :
-   sequent { <H> >- 'a='b in nat} -->
-   sequent { <H> >- 'a='b in int}
-
 interactive int_div_rem {| intro [] |} :
    sequent { <H> >- 'm in int } -->
    sequent { <H> >- 'k in int } -->
    sequent { <H> >- 'k > 0 } -->
    sequent { <H> >- exst q: int. exst r: nat. (('m = 'k *@ 'q +@ 'r in int) & 'r < 'k) }
-
-interactive nat_is_int1 (*{| intro[AutoMustComplete] |}*) :
-   sequent { <H> >- 'a='b in nat} -->
-   sequent { <H> >- 'a='b in int}
 
 (*
  * If there is a positive number x such that P[x], then there is

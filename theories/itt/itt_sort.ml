@@ -295,7 +295,7 @@ interactive insert_mem {| intro [] |} 'H :
    [wf] sequent ['ext] { 'H >- partial_order{'A; 'lt} } -->
    sequent ['ext] { 'H >- mem{'u; insert{'u; 'l; 'lt}; 'A} }
 
-interactive insert_subset {| intro [] |} 'H :
+interactive insert_subset {| intro [AutoMustComplete] |} 'H :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H >- 'u IN 'A } -->
    [wf] sequent [squash] { 'H >- 'v IN list{'A} } -->

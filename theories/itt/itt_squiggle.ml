@@ -65,7 +65,6 @@ open Refiner.Refiner.TermOp
 open Var
 open Tactic_type.Tacticals
 open Tactic_type
-open Tactic_type.Sequent
 open Tactic_type.Conversionals
 open Base_rewrite
 

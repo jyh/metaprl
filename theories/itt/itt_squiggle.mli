@@ -2,7 +2,6 @@ extends Itt_equal
 extends Itt_struct
 
 open Refiner.Refiner.Term
-open Tactic_type.Tacticals
 open Tactic_type.Conversionals
 
 val is_squiggle_term : term -> bool

@@ -16,7 +16,6 @@ extends Itt_algebra_df
 
 open Refiner.Refiner.TermMan
 open Tactic_type.Tacticals
-open Dtactic
 open Auto_tactic
 open Top_conversionals
 open Itt_record_label

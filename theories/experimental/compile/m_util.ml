@@ -38,7 +38,6 @@ open Printf
 
 open Term_sig
 open Refiner.Refiner.Term
-open Refiner.Refiner.TermType
 open Refiner.Refiner.RefineError
 
 open Tactic_type.Conversionals

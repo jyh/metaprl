@@ -40,22 +40,12 @@ extends Itt_unitring
 doc docoff
 
 open Lm_debug
-open Refiner.Refiner.TermOp
 open Tactic_type.Tacticals
 open Dtactic
 open Top_conversionals
 
-open Itt_struct
-open Itt_fun
-open Itt_record
-open Itt_group
 open Itt_grouplikeobj
-open Itt_ring2
 open Itt_unitring
-open Itt_squash
-open Itt_equal
-open Itt_subtype
-open Itt_record_label
 
 let _ =
    show_loading "Loading Itt_intdomain%t"

@@ -42,7 +42,6 @@ doc docoff
 extends Itt_singleton
 
 open Lm_debug
-open Refiner.Refiner.TermOp
 open Tactic_type.Tacticals
 open Dtactic
 open Top_conversionals

@@ -53,8 +53,6 @@ extends Itt_quotient
 extends Itt_int_arith*)
 doc <:doc< @docoff >>
 
-open Refiner.Refiner.TermOp
-
 open Tactic_type.Sequent
 
 topval testT : tactic

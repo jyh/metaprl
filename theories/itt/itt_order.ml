@@ -46,21 +46,12 @@ extends Itt_bool
 doc docoff
 
 open Lm_debug
-open Refiner.Refiner.TermOp
 
 open Tactic_type.Tacticals
 
 open Dtactic
 open Top_conversionals
 
-open Itt_struct
-open Itt_bisect
-open Itt_grouplikeobj
-open Itt_group
-open Itt_squash
-open Itt_equal
-open Itt_subtype
-open Itt_record_renaming
 open Itt_rfun
 
 let _ =

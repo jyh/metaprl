@@ -12,15 +12,9 @@ open Tactic_type.Tacticals
 open Refiner.Refiner
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermMan
-open Refiner.Refiner.TermSubst
-open Refiner.Refiner.TermType
 open Refiner.Refiner.RefineError
 open Tactic_type
-open Tactic_type.Sequent
 open Tactic_type.Tacticals
-open Var
-
-open Auto_tactic
 
 open Dtactic
 open Auto_tactic

@@ -54,13 +54,11 @@ doc <:doc< @docoff >>
 
 open Tactic_type.Tacticals
 open Tactic_type
-open Var
 open Top_conversionals
 open Itt_struct
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
 open Refiner.Refiner.TermMan
-open Refiner.Refiner.TermSubst
 open Refiner.Refiner.RefineError
 open Typeinf
 

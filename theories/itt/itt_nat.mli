@@ -1,7 +1,6 @@
 extends Itt_int_ext
 
 open Refiner.Refiner.Term
-open Tactic_type.Tacticals
 open Tactic_type.Conversionals
 
 define unfold_nat :

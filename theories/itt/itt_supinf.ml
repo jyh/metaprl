@@ -7,30 +7,16 @@ extends Itt_rat
 
 open Printf
 open Lm_debug
-open Opname
-open Term_sig
 open Refiner.Refiner.Term
-open Refiner.Refiner.TermMan
 open Refiner.Refiner.TermSubst
-open Refiner.Refiner.TermType
-open Refiner.Refiner.RefineError
 
 open Tactic_type
 open Tactic_type.Tacticals
-open Tactic_type.Conversionals
 
-open Dtactic
-
-open Top_conversionals
-
-open Itt_equal
 open Itt_struct
-open Itt_logic
 open Itt_bool
 
 open Itt_int_base
-open Itt_int_ext
-open Itt_int_arith
 open Itt_rat
 
 let _ = show_loading "Loading Itt_supinf%t"

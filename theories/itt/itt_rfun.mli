@@ -39,7 +39,6 @@ open Lm_symbol
 
 open Refiner.Refiner.Term
 
-open Tactic_type.Tacticals
 open Tactic_type.Conversionals
 
 (************************************************************************

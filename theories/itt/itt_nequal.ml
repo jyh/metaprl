@@ -47,24 +47,10 @@ doc <:doc< *********************************************************************
 extends Itt_equal
 extends Itt_logic
 
-open Printf
 open Lm_debug
-open Lm_symbol
-open Refiner.Refiner
-open Refiner.Refiner.Term
-open Refiner.Refiner.TermSubst
-open Refiner.Refiner.TermOp
-open Refiner.Refiner.TermMan
-open Refiner.Refiner.TermMeta
-open Refiner.Refiner.RefineError
-open Simple_print
-open Term_stable
 
-open Tactic_type
 open Tactic_type.Tacticals
-open Tactic_type.Conversionals
 
-open Base_meta
 open Dtactic
 open Auto_tactic
 

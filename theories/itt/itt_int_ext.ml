@@ -537,6 +537,10 @@ interactive ge_wf {| intro_resource [] |} 'H :
    [wf] sequent [squash] { 'H >- 'b IN int } -->
    sequent ['ext] { 'H >- "type"{ge{'a; 'b}} }
 
+interactive ge_sqstable {| squash_resource; intro_resource [] |} 'H :
+   sequent [squash] { 'H >- 'a >= 'b } -->
+   sequent ['ext] { 'H >- it IN ('a >= 'b) }
+
 (* Natural numberas *)
 
 define unfold_nat : nat <--> ({x:int | 'x>=0})
@@ -556,16 +560,6 @@ interactive natMemberEquality {| intro_resource [] |} 'H :
 interactive natElimination {| elim_resource [] |} 'H 'J 'v :
    sequent ['ext] { 'H; x: int; v:'x>=0; 'J['x] >- 'C['x]}  -->
    sequent ['ext] { 'H; x: nat; 'J['x] >- 'C['x]}
-(*
-interactive natInduction {| elim_resource [] |}  'H 'J 'n   'z    :
-   sequent ['ext] { 'H; 'J >- 'C[0] } -->
-   sequent ['ext] { 'H; 'J; n: nat;  z: 'C['n] >- 'C['n +@ 1]} -->
-   sequent ['ext] { 'H; n: nat; 'J >- 'C['n] }
-*)
-interactive natInduction  'H 'J 'n 'm 'v 'z 'u:
-   sequent ['ext] { 'H; n: int; u: 'n>=0; 'J['n] >- 'C[0] } -->
-   sequent ['ext] { 'H; n: int; u: 'n>=0; 'J['n]; m: int; v: 0 < 'm; z: 'C['m -@ 1] >- 'C['m] } -->
-   sequent ['ext] { 'H; n: nat; 'J['n] >- 'C['n] }
 
 (*
 Incorrect but there has to be some assoc/commut/composition property

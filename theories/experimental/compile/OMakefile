@@ -1,64 +1,105 @@
 OCAMLINCLUDES +=\
-	-I .\
-	-I ../../base\
-	-I $(ROOT)/libmojave/stdlib\
-	-I $(ROOT)/libmojave/util\
-	$(SUPPORT_INCLUDE)
+        -I .\
+        -I ../../base\
+        -I $(ROOT)/libmojave/stdlib\
+        -I $(ROOT)/libmojave/util\
+        $(SUPPORT_INCLUDE)
 
 MLZFILES =\
-	ra_type\
-	x86_inst_type
+        m_ra_type\
+        m_x86_inst_type\
 
 # Library files
 MPFILES =\
-	m_doc_comment\
-	m_doc_intro\
-	m_doc_ir\
-	m_doc_parsing\
-	m_doc_cps\
-	m_doc_closure\
-	m_doc_opt\
-	m_doc_x86_asm\
-	m_doc_x86_codegen\
-	m_doc_x86_regalloc\
-	m_doc_x86_opt\
-	m_doc_summary\
-	m_doc_proposal\
-	m_util\
-	m_arith\
-	m_ast\
-	m_ir\
-	m_ir_ast\
-	m_cps\
-	m_closure\
-	m_prog\
-	m_dead\
-	m_inline\
-	m_reserve\
-	m_standardize\
-	m_x86_asm\
-	m_x86_inst_type\
-	m_x86_term\
-	m_x86_frame\
-	m_x86_codegen\
-	m_ra_state\
-	m_ra_type\
-	m_ra_live\
-	m_ra_main\
-	m_x86_backend\
-	m_x86_coalesce\
-	m_x86_spill\
-	m_x86_opt\
-	m_x86_regalloc\
-	m_theory\
-	m_test
+        m_doc_comment\
+        m_doc_intro\
+        m_doc_ir\
+        m_doc_parsing\
+        m_doc_cps\
+        m_doc_closure\
+        m_doc_opt\
+        m_doc_x86_asm\
+        m_doc_x86_codegen\
+        m_doc_x86_regalloc\
+        m_doc_x86_opt\
+        m_doc_summary\
+        m_doc_proposal\
+        m_util\
+        m_arith\
+        m_ast\
+        m_ir\
+        m_ir_ast\
+        m_cps\
+        m_closure\
+        m_prog\
+        m_dead\
+        m_inline\
+        m_reserve\
+        m_standardize\
+        m_x86_asm\
+        m_x86_inst_type\
+        m_x86_term\
+        m_x86_frame\
+        m_x86_codegen\
+        m_ra_state\
+        m_ra_type\
+        m_ra_live\
+        m_ra_main\
+        m_x86_backend\
+        m_x86_coalesce\
+        m_x86_spill\
+        m_x86_opt\
+        m_x86_regalloc\
+        m_theory\
+        m_test
 
 Theory($(MPFILES))
 
-MLZFILES =\
-   m_ra_type\
-   m_x86_inst_type\
+#
+# Generate the document
+#
 
+PRINT_THEORIES =\
+    m_doc_intro\
+    m_doc_parsing\
+    m_doc_ir\
+    m_doc_cps\
+    m_doc_closure\
+    m_doc_opt\
+    m_doc_x86_asm\
+    m_doc_x86_codegen\
+    m_doc_x86_regalloc\
+    m_doc_x86_opt\
+    m_doc_summary
+
+APPENDIX_THEORIES =\
+    m_ir\
+    m_cps\
+    m_closure\
+    m_prog\
+    m_dead\
+    m_inline\
+    m_reserve\
+    m_x86_asm\
+    m_x86_codegen\
+    m_x86_opt\
+    m_x86_spill
+
+#
+# Generate the local files
+#
+TheoryDocument(theory, $(PRINT_THEORIES))
+TheoryDocument(appendix, $(APPENDIX_THEORIES))
+
+#
+# Format the papers and copy them
+#
+LaTeXDocumentInstall(tex, $(DOCDIR), m-paper, m-paper, theory-body)
+LaTeXDocumentInstall(tex, $(DOCDIR), m-paper-tr, m-paper-tr, theory-body appendix-body)
+
+#
+# Clean up
+#
 clean:
     $(CLEAN) *.cph *.output
 

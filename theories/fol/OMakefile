@@ -39,12 +39,12 @@ Theory($(MPFILES))
 PRINT_THEORIES =\
     fol_theory
 
-TheoryDocument(fol, $(PRINT_THEORIES))
+TheoryDocumentInstall(fol, $(PRINT_THEORIES))
 
 #
 # Clean up
 #
 clean:
-    $(CLEAN) fol.tex fol-body.tex
+    $(CLEAN) fol.tex fol-body.tex fol.pdf fol.ps fol_print.ml
 
 all: theory$(LIB_SUFFIX)

@@ -57,12 +57,12 @@ PRINT_THEORIES =\
     mfir_tr_store\
     mfir_tr_exp
 
-TheoryDocument(fir, $(PRINT_THEORIES))
+TheoryDocumentInstall(fir, $(PRINT_THEORIES))
 
 #
 # Generic commands
 #
 clean:
-    $(CLEAN) fir.tex fir-body.tex
+    $(CLEAN) fir.tex fir-body.tex fir.ps fir.pdf fir_print.ml
 
 all: theory$(LIB_SUFFIX)

@@ -28,12 +28,12 @@ PRINT_THEORIES =\
     $(SUPPORT)/display/comment\
     $(SUPPORT)/shell/mptop
 
-TheoryDocument(base, $(PRINT_THEORIES))
+TheoryDocumentInstall(base, $(PRINT_THEORIES))
 
 #
 # Clean up
 #
 clean:
-    $(CLEAN) base.tex base-body.tex
+    $(CLEAN) base.tex base-body.tex base.pdf base.ps base_print.ml
 
 all: theory$(LIB_SUFFIX)

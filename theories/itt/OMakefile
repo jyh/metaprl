@@ -148,12 +148,12 @@ PRINT_THEORIES =\
     itt_pointwise\
     itt_pointwise2
 
-TheoryDocument(itt, $(PRINT_THEORIES))
+TheoryDocumentInstall(itt, $(PRINT_THEORIES))
 
 #
 # Clean up
 #
 clean:
-    $(CLEAN) itt.tex itt-body.tex
+    $(CLEAN) itt.tex itt-body.tex itt.pdf itt.ps itt_print.ml
 
 all: theory$(LIB_SUFFIX)

@@ -46,11 +46,15 @@ MPFILES :=\
 	czf_itt_bool\
 	czf_itt_equiv\
 	czf_itt_group\
+	czf_itt_group_bvd\
 	czf_itt_abel_group\
 	czf_itt_subgroup\
+	czf_itt_coset\
+	czf_itt_normal_subgroup\
 	czf_itt_cyclic_subgroup\
 	czf_itt_cyclic_group\
-	czf_itt_hom
+	czf_itt_hom\
+	czf_itt_iso
 
 MLZFILES :=\
 	czf_itt_fol\

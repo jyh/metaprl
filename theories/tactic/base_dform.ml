@@ -298,10 +298,12 @@ ml_dform sequent_prl_df : mode["prl"] :: "sequent"{'ext; 'seq} format_term buf =
    let rec format_goal goals i len =
       if i <> len then
          let a = SeqGoal.get goals i in
-            if i = 0 then
-               format_hbreak buf "\159 " " \159 "
-            else
-               format_hbreak buf "; " "\159 ";
+            if i = 0 then begin
+               format_hbreak buf "" " ";
+               format_term buf NOParens <<Nuprl_font!vdash>>;
+               format_space buf;
+            end else
+               format_hbreak buf "; " "";
             format_term buf NOParens a;
             format_goal goals (succ i) len
    in

@@ -146,7 +146,7 @@ interactive hypSubstitution2 'H 'J ('t1 = 't2 in 'T) bind{y. 'A['y]} 'z :
  *)
 
 
-interactive cutMem 'H ('s IN 'S) bind{x.'T['x]} :
+interactive cutMem 'H 'x 's 'S bind{y.'T['y]} :
   [assertion] sequent[squash]{ 'H >- 's IN 'S } -->
    [main]      sequent ['ext] { 'H; x: 'S; v: 'x='s in 'S >- 'T['x] } -->
    sequent ['ext] { 'H >- 'T['s]}
@@ -154,7 +154,7 @@ interactive cutMem 'H ('s IN 'S) bind{x.'T['x]} :
 (*!
  * @begin[doc]
  * The corresponding tactic is the @tt{letT} tactic.
- * This tactic takes a term $s @in S$ as an argument
+ * This tactic takes a term $x=ss @in S$ as an argument
  * and a term <<bind{x.'T['x]}>> as an optional with-argument.
  * If this argument is omitted then the tactic finds all occurrences of $s$
  * in the conclusion and replace them with $x$.
@@ -295,19 +295,19 @@ let revHypSubstT i j p =
 
 (* cutMem *)
 
-let letT s_in_S p =
-   let v = maybe_new_vars1 p "v" in
-   let _, s, _ = dest_equal s_in_S in
+let letT x_is_s_in_S p =
+   let _S, x, s = dest_equal x_is_s_in_S in
+   let xname = dest_var x in
    let bind =
       try
          get_with_arg p
       with
          RefineError _ ->
-            let x = get_opt_var_arg "z" p in
-               mk_bind_term x (var_subst (Sequent.concl p) s x)
+            let z = get_opt_var_arg "z" p in
+               mk_bind_term z (var_subst (Sequent.concl p) s z)
    in
       if is_bind_term bind then
-           cutMem (Sequent.hyp_count_addr p) s_in_S bind p
+           cutMem (Sequent.hyp_count_addr p) xname s _S bind p
       else
            raise (RefineError ("letT", StringTermError ("need a \"bind\" term: ", bind)))
 

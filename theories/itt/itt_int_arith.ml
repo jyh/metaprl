@@ -137,21 +137,15 @@ let debug_subgoals =
 
    let thenLocalMElseT tac1 tac2 tac3 p =
       let tac2' p'=
-            if !debug_subgoals then begin
-               eprintf "\npositive:\n"; flush stderr;
-               print_term stdout (Sequent.goal p');
-               tac2 p'
-            end else
-               tac2 p'
-            in
+            if !debug_subgoals then
+               eprintf "\nPositive:\n%a%t" print_term (Sequent.goal p') eflush;
+            tac2 p'
+      in
       let tac3' p'=
-            if !debug_subgoals then begin
-               eprintf "\nnegative:\n"; flush stderr;
-               print_term stdout (Sequent.goal p');
-               tac3 p'
-            end else
-               tac3 p'
-            in
+            if !debug_subgoals then
+               eprintf "\nNegative:\n%a%t" print_term (Sequent.goal p') eflush;
+            tac3 p'
+      in
       thenIfLabelPredT isEmptyOrMainLabel tac1 tac2' tac3' p
 
    let thenLocalAT tac1 tac2 p =
@@ -960,10 +954,12 @@ let findContradRelT p =
          end
       | Arith.TG.Disconnected,_ ->
          begin
-            eprintf "No contradiction found";
+(*            eprintf "No contradiction found";
             prerr_endline "";
             flush stderr;
             failT p
+*)
+            raise (RefineError("arithT", StringError "Proof by contradiction - No contradiction found"))
          end
 
 (* Finds and proves contradiction among ge-relations

@@ -159,8 +159,8 @@ prim inrEquality 'H :
  * H, x: A # B, u:A, v:B[u], J[u, v] >- T[u, v] ext t[u, v]
  *)
 prim unionElimination 'H 'J 'x 'u 'v :
-   ('left['u] : sequent ['ext] { 'H; x: 'A + 'B; u: 'A; 'J[inl('u)] >- 'T[inl('u)] }) -->
-   ('right['u] : sequent ['ext] { 'H; x: 'A + 'B; v: 'B; 'J[inr('v)] >- 'T[inr('v)] }) -->
+   ('left['u] : sequent ['ext] { 'H; x: 'A + 'B; u: 'A; 'J[inl{'u}] >- 'T[inl{'u}] }) -->
+   ('right['u] : sequent ['ext] { 'H; x: 'A + 'B; v: 'B; 'J[inr{'v}] >- 'T[inr{'v}] }) -->
    sequent ['ext] { 'H; x: 'A + 'B; 'J['x] >- 'T['x] } =
    decide{'x; u. 'left['u]; v. 'right['v]}
 
@@ -252,8 +252,8 @@ let d_concl_union p =
  *)
 let d_hyp_union i p =
    let count = hyp_count p in
-   let i, j = hyp_indices p i in
    let z, _ = Sequent.nth_hyp p i in
+   let i, j = hyp_indices p i in
       (match maybe_new_vars [z; z] (declared_vars p) with
           [u; v] ->
              unionElimination i j z u v
@@ -391,6 +391,10 @@ let sub_resource =
 
 (*
  * $Log$
+ * Revision 1.12  1998/06/22 19:46:29  jyh
+ * Rewriting in contexts.  This required a change in addressing,
+ * and the body of the context is the _last_ subterm, not the first.
+ *
  * Revision 1.11  1998/06/16 16:26:13  jyh
  * Added itt_test.
  *

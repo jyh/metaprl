@@ -57,25 +57,25 @@ primrw reduceSpread : spread{'u, 'v; a, b. 'c['a; 'b]} <--> 'c['u; 'v]
  * DISPLAY FORMS                                                        *
  ************************************************************************)
 
-prec prod
-prec spread
+prec prec_prod
+prec prec_spread
 
-dform prod_src_df : parens :: "prec"[prod] :: mode[src] :: prod{'A; 'B} =
+dform prod_src_df : parens :: "prec"[prec_prod] :: mode[src] :: prod{'A; 'B} =
    slot{'A} `" * " slot{'B}
 
-dform prod_prl_df : parens :: "prec"[prod] :: mode[prl] :: prod{'A; 'B} =
+dform prod_prl_df : parens :: "prec"[prec_prod] :: mode[prl] :: prod{'A; 'B} =
    slot{'A} times " " slot{'B}
 
-dform prod_src_df2 : parens :: "prec"[prod] :: mode[src] :: prod{'A; x. 'B['x]} =
+dform prod_src_df2 : parens :: "prec"[prec_prod] :: mode[src] :: prod{'A; x. 'B['x]} =
    slot{'x} `":" slot{'A} `" * " slot{'B}
 
-dform prod_prl_df2 :  parens :: "prec"[prod] :: mode[prl] :: prod{'A; x. 'B['x]} =
+dform prod_prl_df2 :  parens :: "prec"[prec_prod] :: mode[prl] :: prod{'A; x. 'B['x]} =
    slot{'x} `":" slot{'A} times " " slot{'B}
 
 dform pair_prl_df1 : mode[prl] :: pair{'a; 'b} =
    `"<" slot{'a}`"," slot{'b} `">"
 
-dform spread_prl_df1 : parens :: "prec"[spread] :: mode[prl] :: spread{'e; u, v. 'b['u; 'v]} =
+dform spread_prl_df1 : parens :: "prec"[prec_spread] :: mode[prl] :: spread{'e; u, v. 'b['u; 'v]} =
    `"let " pair{'u; 'v} `" = " slot{'e} `" in " slot{'b['u; 'v]}
 
 (************************************************************************
@@ -351,6 +351,10 @@ let sub_resource =
 
 (*
  * $Log$
+ * Revision 1.11  1998/06/22 19:46:13  jyh
+ * Rewriting in contexts.  This required a change in addressing,
+ * and the body of the context is the _last_ subterm, not the first.
+ *
  * Revision 1.10  1998/06/15 22:33:13  jyh
  * Added CZF.
  *

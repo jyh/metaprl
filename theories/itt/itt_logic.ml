@@ -69,6 +69,11 @@ prec prec_and
 prec prec_or
 prec prec_quant
 
+prec prec_implies < prec_and
+prec prec_implies < prec_or
+prec prec_or < prec_and
+prec prec_quant < prec_implies
+
 dform true_df1 : mode[src] :: "true" = `"True"
 
 dform false_df1 : mode[src] :: "false" = `"False"
@@ -235,6 +240,10 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (not_t
 
 (*
  * $Log$
+ * Revision 1.10  1998/06/22 19:46:20  jyh
+ * Rewriting in contexts.  This required a change in addressing,
+ * and the body of the context is the _last_ subterm, not the first.
+ *
  * Revision 1.9  1998/06/15 22:33:26  jyh
  * Added CZF.
  *

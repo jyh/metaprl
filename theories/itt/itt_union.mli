@@ -116,8 +116,8 @@ axiom inrEquality 'H :
  * H, x: A # B, u:A, v:B[u], J[u, v] >- T[u, v] ext t[u, v]
  *)
 axiom unionElimination 'H 'J 'x 'u 'v :
-   sequent ['ext] { 'H; x: 'A + 'B; u: 'A; 'J[inl('u)] >- 'T[inl('u)] } -->
-   sequent ['ext] { 'H; x: 'A + 'B; v: 'B; 'J[inr('v)] >- 'T[inr('v)] } -->
+   sequent ['ext] { 'H; x: 'A + 'B; u: 'A; 'J[inl{'u}] >- 'T[inl{'u}] } -->
+   sequent ['ext] { 'H; x: 'A + 'B; v: 'B; 'J[inr{'v}] >- 'T[inr{'v}] } -->
    sequent ['ext] { 'H; x: 'A + 'B; 'J['x] >- 'T['x] }
 
 (*
@@ -179,6 +179,10 @@ val mk_decide_term : term -> string -> term -> string -> term -> term
 
 (*
  * $Log$
+ * Revision 1.8  1998/06/22 19:46:30  jyh
+ * Rewriting in contexts.  This required a change in addressing,
+ * and the body of the context is the _last_ subterm, not the first.
+ *
  * Revision 1.7  1998/06/16 16:26:15  jyh
  * Added itt_test.
  *

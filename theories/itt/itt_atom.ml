@@ -37,8 +37,8 @@ declare token[@t:t]
  ************************************************************************)
 
 dform atom_df : mode[prl] :: atom = `"Atom"
-mldform token_df : mode[prl] :: token[@t:t] print_term buf =
-   format_quoted_string buf t
+dform token_df : mode[prl] :: token[@t:t] =
+   slot[@t:s]
 
 (************************************************************************
  * RULES                                                                *
@@ -127,6 +127,10 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (token
 
 (*
  * $Log$
+ * Revision 1.7  1998/06/22 19:46:12  jyh
+ * Rewriting in contexts.  This required a change in addressing,
+ * and the body of the context is the _last_ subterm, not the first.
+ *
  * Revision 1.6  1998/06/01 13:55:45  jyh
  * Proving twice one is two.
  *

@@ -5,10 +5,6 @@ ROOT := ../..
 INCLUDE := -I . -I ../tactic -I ../ocaml -I ../base -I $(ROOT)/lib
 OCAMLDEPFLAGS := -prl
 
-# Common files
-MLZFILES :=\
-	itt_theory
-
 # Library files
 NLFILES :=\
 	itt_squash\

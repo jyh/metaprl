@@ -23,6 +23,12 @@ declare list{'a}
 declare list_ind{'e; 'base; h, t, f. 'step['h; 't; 'f]}
 
 (************************************************************************
+ * DISPLAY                                                              *
+ ************************************************************************)
+
+prec prec_cons
+
+(************************************************************************
  * REWRITES                                                             *
  ************************************************************************)
 
@@ -172,6 +178,10 @@ val mk_list_ind_term : term -> term -> string -> string -> string -> term -> ter
 
 (*
  * $Log$
+ * Revision 1.7  1998/06/22 19:46:18  jyh
+ * Rewriting in contexts.  This required a change in addressing,
+ * and the body of the context is the _last_ subterm, not the first.
+ *
  * Revision 1.6  1998/06/15 22:33:25  jyh
  * Added CZF.
  *

@@ -44,10 +44,12 @@ declare "quot"{'A; x, y. 'E['x; 'y]}
  * DISPLAY FORMS                                                        *
  ************************************************************************)
 
-dform quot_df1 : mode[prl] :: "quot"{'A; x, y. 'E['x; 'y]} =
+prec prec_quot
+
+dform quot_df1 : mode[prl] :: parens :: "prec"[prec_quot] :: "quot"{'A; x, y. 'E['x; 'y]} =
    slot{'x} `"," slot{'y} `":" slot{'A} `"//" slot{'E['x; 'y]}
 
-dform quot_df2 : mode[src] :: "quot"{'A; x, y. 'E['x; 'y]} =
+dform quot_df2 : mode[src] :: parens :: "prec"[prec_quot] :: "quot"{'A; x, y. 'E['x; 'y]} =
    `"quot " slot{'x} `", " slot{'y} `":" slot{'A} `"//" slot{'E['x; 'y]}
 
 (************************************************************************
@@ -304,6 +306,10 @@ let sub_resource =
 
 (*
  * $Log$
+ * Revision 1.10  1998/06/22 19:46:21  jyh
+ * Rewriting in contexts.  This required a change in addressing,
+ * and the body of the context is the _last_ subterm, not the first.
+ *
  * Revision 1.9  1998/06/12 13:47:35  jyh
  * D tactic works, added itt_bool.
  *

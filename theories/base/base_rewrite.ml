@@ -2,16 +2,14 @@
  * We need a rule for when rewrites are valid.
  *)
 
-include Perv
+include Rewrite_type
 include Base_dtactic
 
-open Resource
 open Refiner.Refiner.Refine
+open Resource
 
-declare rewrite_just
-
-prim rewriteDone 'H : : sequent { 'H >- "rewrite"{'x; 'x} } =
-   rewrite_just
+open Tactic_type
+open Rewrite_type
 
 (*
  * Template for the term.
@@ -23,7 +21,7 @@ let rewrite_term = << "rewrite"{'a; 'b} >>
  *)
 let d_rewriteT i p =
    if i = 0 then
-      rewriteDone (Sequent.hyp_count p) p
+      rewriteSequentAxiom (Sequent.hyp_count p) p
    else
       raise (RefineError ("d_rewriteT", StringError "can't decompose a rewrite hyp"))
 
@@ -31,6 +29,10 @@ let d_resource = d_resource.resource_improve d_resource (rewrite_term, d_rewrite
 
 (*
  * $Log$
+ * Revision 1.3  1998/06/22 19:46:02  jyh
+ * Rewriting in contexts.  This required a change in addressing,
+ * and the body of the context is the _last_ subterm, not the first.
+ *
  * Revision 1.2  1998/06/12 13:47:15  jyh
  * D tactic works, added itt_bool.
  *

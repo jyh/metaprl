@@ -167,6 +167,24 @@ mldform sequent_src_df : mode["src"] :: "sequent"{'ext; 'seq} format_term buf =
       format_ezone buf)
 
 mldform sequent_prl_df : mode["prl"] :: "sequent"{'ext; 'seq} format_term buf =
+   let format_arg = function
+      [] ->
+         ()
+    | args ->
+         format_string buf "[";
+         let rec format = function
+            arg::t ->
+               format_term buf NOParens arg;
+               if t <> [] then
+                  format_string buf "; ";
+               format t
+          | [] ->
+               ()
+         in
+            format args;
+            format_string buf "]";
+            format_space buf
+   in
    let rec format (i, cflag, sflag, t) =
       let lead = (string_of_int i) ^ ". " in
       let sep = if sflag then "; " else "" in
@@ -202,6 +220,7 @@ mldform sequent_prl_df : mode["prl"] :: "sequent"{'ext; 'seq} format_term buf =
    in
       format_szone buf;
       format_pushm buf 0;
+      format_arg (dest_xlist ext);
       format (1, false, false, seq);
       format_popm buf;
       format_ezone buf
@@ -224,6 +243,10 @@ dform newline_df : "\\" = \newline
 (*
  *
  * $Log$
+ * Revision 1.11  1998/06/22 19:46:01  jyh
+ * Rewriting in contexts.  This required a change in addressing,
+ * and the body of the context is the _last_ subterm, not the first.
+ *
  * Revision 1.10  1998/06/15 22:32:36  jyh
  * Added CZF.
  *

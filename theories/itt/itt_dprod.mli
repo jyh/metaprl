@@ -25,8 +25,8 @@ declare spread{'e; u, v. 'b['u; 'v]}
  * DISPLAY FORMS                                                        *
  ************************************************************************)
 
-prec prod
-prec spread
+prec prec_prod
+prec prec_spread
 
 (************************************************************************
  * REWRITES                                                             *
@@ -154,6 +154,10 @@ val mk_spread_term : string -> string -> term -> term -> term
 
 (*
  * $Log$
+ * Revision 1.6  1998/06/22 19:46:14  jyh
+ * Rewriting in contexts.  This required a change in addressing,
+ * and the body of the context is the _last_ subterm, not the first.
+ *
  * Revision 1.5  1998/06/15 22:33:16  jyh
  * Added CZF.
  *

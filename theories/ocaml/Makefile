@@ -2,7 +2,7 @@
 # Don't need any libraries.
 #
 ROOT := ../..
-INCLUDE := -I . -I $(ROOT)/lib
+INCLUDE := -I . -I ../tactic -I $(ROOT)/lib
 OCAMLDEPFLAGS := -prl
 PRLCFLAGS := -v
 
@@ -13,7 +13,6 @@ MLZFILES :=\
 
 # Library files
 NLFILES :=\
-	perv\
 	ocaml\
 	ocaml_base_df\
 	ocaml_expr_df\

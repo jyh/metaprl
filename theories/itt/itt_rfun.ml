@@ -59,6 +59,7 @@ prec prec_apply
 prec prec_lambda
 prec prec_lambda < prec_apply
 prec prec_fun < prec_apply
+prec prec_fun < prec_lambda
 
 dform fun_df1 : parens :: "prec"[prec_fun] :: "fun"{'A; 'B} =
    slot{'A} rightarrow " " slot{'B}
@@ -388,6 +389,10 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (apply
 
 (*
  * $Log$
+ * Revision 1.12  1998/06/22 19:46:23  jyh
+ * Rewriting in contexts.  This required a change in addressing,
+ * and the body of the context is the _last_ subterm, not the first.
+ *
  * Revision 1.11  1998/06/15 22:33:31  jyh
  * Added CZF.
  *

@@ -24,6 +24,13 @@ declare equal{'T; 'a; 'b}
 declare it
 
 (************************************************************************
+ * DISPLAY                                                              *
+ ************************************************************************)
+
+prec prec_type
+prec prec_equal
+
+(************************************************************************
  * RULES                                                                *
  ************************************************************************)
 
@@ -108,6 +115,13 @@ axiom universeFormation 'H univ[@j:l] :
    cumulativity{univ[@j:l]; univ[@i:l]} -->
    sequent ['ext] {'H >- univ[@i:l] }
 
+(*
+ * Squash from any.
+ *)
+axiom squashFromAny 'H 'ext :
+   sequent ['ext] { 'H >- 'T } -->
+   sequent [squash] { 'H >- 'T }
+
 (************************************************************************
  * EQCD TACTIC                                                          *
  ************************************************************************)
@@ -148,8 +162,14 @@ val eqcd_univT : tactic
 val eqcd_itT : tactic
 val squash_equalT : tactic
 
+val unsquashT : term -> tactic
+
 (*
  * $Log$
+ * Revision 1.7  1998/06/22 19:46:16  jyh
+ * Rewriting in contexts.  This required a change in addressing,
+ * and the body of the context is the _last_ subterm, not the first.
+ *
  * Revision 1.6  1998/06/01 13:55:51  jyh
  * Proving twice one is two.
  *

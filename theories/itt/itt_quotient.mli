@@ -20,6 +20,12 @@ open Tactic_type
 declare "quot"{'A; x, y. 'E['x; 'y]}
 
 (************************************************************************
+ * DISPLAY                                                              *
+ ************************************************************************)
+
+prec prec_quot
+
+(************************************************************************
  * RULES                                                                *
  ************************************************************************)
 
@@ -177,6 +183,10 @@ val mk_quotient_term : string -> string -> term -> term -> term
 
 (*
  * $Log$
+ * Revision 1.6  1998/06/22 19:46:22  jyh
+ * Rewriting in contexts.  This required a change in addressing,
+ * and the body of the context is the _last_ subterm, not the first.
+ *
  * Revision 1.5  1998/06/01 13:56:10  jyh
  * Proving twice one is two.
  *

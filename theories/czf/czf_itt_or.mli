@@ -10,7 +10,7 @@ declare inr{'A}
 
 rewrite unfold_or : "or"{'A; 'B} <--> union{'A; 'B}
 rewrite unfold_inl : inl{'a} <--> Itt_union!inl{'a}
-rewrite unfold_inr : inl{'a} <--> Itt_union!inr{'a}
+rewrite unfold_inr : inr{'a} <--> Itt_union!inr{'a}
 
 (*
  * Intro.
@@ -61,6 +61,10 @@ axiom or_res 'H :
 
 (*
  * $Log$
+ * Revision 1.2  1998/06/22 19:46:07  jyh
+ * Rewriting in contexts.  This required a change in addressing,
+ * and the body of the context is the _last_ subterm, not the first.
+ *
  * Revision 1.1  1998/06/16 16:26:03  jyh
  * Added itt_test.
  *

@@ -7,14 +7,15 @@ OCAMLDEPFLAGS := -prl_init
 
 # Library files
 NLFILES :=\
+	perv\
 	tactic_cache\
 	tactic_type\
 	sequent\
 	tacticals\
-	rewrite_type\
-	conversionals\
 	var\
-	options
+	options\
+	rewrite_type\
+	conversionals
 
 # Name of main libraries
 MAIN = tactics

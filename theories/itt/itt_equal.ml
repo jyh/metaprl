@@ -50,11 +50,15 @@ declare it
  * DISPLAY FORMS                                                        *
  ************************************************************************)
 
-dform equal_df1 : equal{'T; 'a; 'b} =
+prec prec_type
+prec prec_equal
+
+dform equal_df1 : parens :: "prec"[prec_equal] :: equal{'T; 'a; 'b} =
    szone pushm slot{'a} space `"= " slot{'b} space `"in " slot{'T} popm ezone
 dform it_df1 : mode[prl] :: it = cdot
 
-dform type_prl_df1 : mode[prl] :: "type" = `"Type"
+dform type_prl_df1 : parens :: "prec"[prec_type] :: mode[prl] :: "type"{'a} =
+   slot{'a} " " `"Type"
 
 mldform term_df2 : mode[prl] :: univ[@i:l] term_print buf =
    format_char buf '\134';
@@ -180,6 +184,14 @@ prim universeFormation 'H univ[@j:l] :
    cumulativity{univ[@j:l]; univ[@i:l]} :
    sequent ['ext] {'H >- univ[@i:l] } =
    univ[@j:l]
+
+(*
+ * Squash from any.
+ *)
+prim squashFromAny 'H 'ext :
+   sequent ['ext] { 'H >- 'T } -->
+   sequent [squash] { 'H >- 'T } =
+   it
 
 (************************************************************************
  * PRIMITIVES                                                           *
@@ -342,8 +354,15 @@ let squash_equalT p =
 
 let squash_resource = squash_resource.resource_improve squash_resource (equal_term, squash_equalT)
 
+let unsquashT v p =
+   squashFromAny (Sequent.hyp_count p) v p
+
 (*
  * $Log$
+ * Revision 1.13  1998/06/22 19:46:15  jyh
+ * Rewriting in contexts.  This required a change in addressing,
+ * and the body of the context is the _last_ subterm, not the first.
+ *
  * Revision 1.12  1998/06/15 22:33:17  jyh
  * Added CZF.
  *

@@ -42,6 +42,8 @@ let debug_tactic =
         debug_value = false
       }
 
+let debug_refine = load_debug "refine"
+
 (*
  * Many tactics wish to examine their argument, so
  * the real type of tactic includes an argument.
@@ -749,9 +751,23 @@ let term_of_extract refiner ext args =
 
 (*
  * Assumption tactic from the refiner.
+ * Assumptions are numbered from 1, but
+ * refiner numbers them from 0.
  *)
-let nthAssumT i =
-   tactic_of_refine_tactic (Refine.nth_hyp i)
+let nthAssumT i p =
+   let i = i - 1 in
+      if !debug_refine then
+         begin
+            let { ref_goal = { mseq_hyps = hyps; mseq_goal = goal } } = p in
+               eprintf "Tactic_type.nthAssumT:\nHyp: %d%t" i eflush;
+               List.iter (fun hyp ->
+                     Simple_print.prerr_simple_term hyp;
+                     eflush stderr) hyps;
+               eprintf "\nGoal: ";
+               Simple_print.prerr_simple_term goal;
+               eflush stderr
+         end;
+      tactic_of_refine_tactic (Refine.nth_hyp i) p
 
 (*
  * Identity doesn't do anything.
@@ -930,6 +946,10 @@ let timingT tac arg =
 
 (*
  * $Log$
+ * Revision 1.8  1998/06/22 19:46:45  jyh
+ * Rewriting in contexts.  This required a change in addressing,
+ * and the body of the context is the _last_ subterm, not the first.
+ *
  * Revision 1.7  1998/06/16 16:26:23  jyh
  * Added itt_test.
  *

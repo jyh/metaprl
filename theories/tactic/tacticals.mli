@@ -11,6 +11,7 @@ open Tactic_type
 val idT : tactic
 val failT : tactic
 val failWithT : string -> tactic
+val nthAssumT : int -> tactic
 
 (* Print timing information *)
 val timingT : tactic -> tactic
@@ -144,6 +145,10 @@ val get_thinning_arg : tactic_arg -> bool
 
 (*
  * $Log$
+ * Revision 1.7  1998/06/22 19:46:48  jyh
+ * Rewriting in contexts.  This required a change in addressing,
+ * and the body of the context is the _last_ subterm, not the first.
+ *
  * Revision 1.6  1998/06/15 22:33:50  jyh
  * Added CZF.
  *

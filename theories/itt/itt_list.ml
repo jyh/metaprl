@@ -59,8 +59,10 @@ primrw reduce_listindCons :
  * DISPLAY FORMS                                                        *
  ************************************************************************)
 
+prec prec_cons
+
 dform nil_df1 : nil = "[" "]"
-dform cons_df1 : cons{'a; 'b} = slot{'a} `"::" slot{'b}
+dform cons_df1 : parens :: "prec"[prec_cons] :: cons{'a; 'b} = slot{'a} `"::" slot{'b}
 
 dform list_df1 : mode[prl] :: list{'a} = slot{'a} `"List"
 dform list_ind_df1 : mode[prl] :: list_ind{'e; 'base; h, t, f. 'step['h; 't; 'f]} =
@@ -343,6 +345,10 @@ let sub_resource =
 
 (*
  * $Log$
+ * Revision 1.12  1998/06/22 19:46:17  jyh
+ * Rewriting in contexts.  This required a change in addressing,
+ * and the body of the context is the _last_ subterm, not the first.
+ *
  * Revision 1.11  1998/06/15 22:33:23  jyh
  * Added CZF.
  *

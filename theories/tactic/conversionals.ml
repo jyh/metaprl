@@ -48,6 +48,8 @@ let prefix_andthenC = Rewrite_type.prefix_andthenC
 let prefix_orelseC = Rewrite_type.prefix_orelseC
 let addrC = Rewrite_type.addrC
 let idC = Rewrite_type.idC
+let foldC = Rewrite_type.foldC
+let cutC = Rewrite_type.cutC
 
 (************************************************************************
  * SEARCH                                                               *
@@ -67,6 +69,18 @@ let failWithC err env =
  *)
 let tryC rw =
    rw orelseC idC
+
+(*
+ * BUG:
+ * We override subterm_count for the next functions
+ * because we don't want to go into special context
+ * subterm.
+ *)
+let subterm_count t =
+   if opname_of_term t == context_opname then
+      subterm_count t - 1
+   else
+      subterm_count t
 
 (*
  * First subterm that works.
@@ -152,6 +166,10 @@ let rec repeatForC i conv env =
 
 (*
  * $Log$
+ * Revision 1.6  1998/06/22 19:46:40  jyh
+ * Rewriting in contexts.  This required a change in addressing,
+ * and the body of the context is the _last_ subterm, not the first.
+ *
  * Revision 1.5  1998/06/15 22:33:43  jyh
  * Added CZF.
  *

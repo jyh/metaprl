@@ -42,7 +42,10 @@ declare subtype{'A; 'B}
  * DISPLAY FORMS                                                        *
  ************************************************************************)
 
-dform subtype_df1 : mode[prl] :: subtype{'A; 'B} = slot{'A} subseteq slot{'B}
+prec prec_subtype
+
+dform subtype_df1 : mode[prl] :: parens :: "prec"[prec_subtype] :: subtype{'A; 'B} =
+   slot{'A} subseteq slot{'B}
 
 (************************************************************************
  * RULES                                                                *
@@ -315,6 +318,10 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (subty
 
 (*
  * $Log$
+ * Revision 1.11  1998/06/22 19:46:25  jyh
+ * Rewriting in contexts.  This required a change in addressing,
+ * and the body of the context is the _last_ subterm, not the first.
+ *
  * Revision 1.10  1998/06/12 13:47:41  jyh
  * D tactic works, added itt_bool.
  *

@@ -27,14 +27,14 @@ declare inr{'A}
 
 primrw unfold_or : "or"{'A; 'B} <--> union{'A; 'B}
 primrw unfold_inl : inl{'a} <--> Itt_union!inl{'a}
-primrw unfold_inr : inl{'a} <--> Itt_union!inr{'a}
+primrw unfold_inr : inr{'a} <--> Itt_union!inr{'a}
 
 (************************************************************************
  * DISPLAY FORMS                                                        *
  ************************************************************************)
 
-dform or_df : parens :: "prec"[prec_or] :: "or"{'A; 'B} =
-   slot{'A} " " `"\\/" " " slot{'B}
+dform or_df : mode[prl] :: parens :: "prec"[prec_or] :: "or"{'A; 'B} =
+   slot{'A} " " vee " " slot{'B}
 
 dform inl_df : parens :: "prec"[prec_apply] :: inl{'a} =
    `"inl" " " slot{'a}
@@ -128,11 +128,13 @@ let d_resource = d_resource.resource_improve d_resource (or_term, d_orT)
 (*
  * Well-formedness.
  *)
+external pair : 'a * 'b -> 'a * 'b = "%identity"
+
 let d_wf_orT i p =
    if i = 0 then
       or_wf (hyp_count p) p
    else
-      raise (RefineError ("d_wf_orT", (StringTermError ("no elim form", wf_or_term))))
+      raise (RefineError (pair ("d_wf_orT", (StringTermError ("no elim form", wf_or_term)))))
 
 let d_resource = d_resource.resource_improve d_resource (wf_or_term, d_wf_orT)
 
@@ -143,12 +145,16 @@ let d_res_orT i p =
    if i = 0 then
       or_res (hyp_count p) p
    else
-      raise (RefineError ("d_res_orT", (StringTermError ("no elim form", res_or_term))))
+      raise (RefineError (pair ("d_res_orT", (StringTermError ("no elim form", res_or_term)))))
 
 let d_resource = d_resource.resource_improve d_resource (res_or_term, d_res_orT)
 
 (*
  * $Log$
+ * Revision 1.2  1998/06/22 19:46:06  jyh
+ * Rewriting in contexts.  This required a change in addressing,
+ * and the body of the context is the _last_ subterm, not the first.
+ *
  * Revision 1.1  1998/06/16 16:26:01  jyh
  * Added itt_test.
  *

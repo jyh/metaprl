@@ -170,7 +170,7 @@ let thinT i p =
 let assertT s p =
    let count = hyp_count p in
    let v = get_opt_var_arg "%x" p in
-      (cut (count - 1) 0 s v
+      (cut count 0 s v
        thenLT [addHiddenLabelT "assertion"; idT]) p
 
 (*
@@ -272,6 +272,10 @@ let revHypSubstT i p =
 
 (*
  * $Log$
+ * Revision 1.10  1998/06/22 19:46:24  jyh
+ * Rewriting in contexts.  This required a change in addressing,
+ * and the body of the context is the _last_ subterm, not the first.
+ *
  * Revision 1.9  1998/06/12 13:47:40  jyh
  * D tactic works, added itt_bool.
  *

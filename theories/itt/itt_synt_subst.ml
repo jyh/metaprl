@@ -55,6 +55,16 @@ doc <:doc< @doc{@terms} >>
  *)
 define unfold_new_var: new_var{'bt} <--> var{bdepth{'bt};0}
 
+interactive_rw new_var_reduce1 {| reduce |} :
+      new_var{make_bterm{'op;'subterms}} <--> var{op_bdepth{'op};0}
+
+interactive_rw new_var_reduce2 {| reduce |} :
+      new_var{var{'l;'r}} <--> var{'l +@ 'r +@ 1; 0}
+
+interactive_rw new_var_var_reduce :
+      ('u in Var) -->
+      new_var{'u} <--> var{left{'u}+@right{'u}+@1; 0}
+
 interactive_rw new_var_bdepth {| reduce |} :
    ('bt in BTerm)  -->
    depth{new_var{'bt}} <--> bdepth{'bt} +@ 1
@@ -111,6 +121,18 @@ interactive add_var_wf {| intro [] |} :
  *)
 define unfold_add_new_var:
    add_var{'bt} <--> add_var{'bt; new_var{'bt}}
+
+interactive_rw add_new_var_reduce1 {| reduce |} :
+      add_var{make_bterm{'op;'subterms}} <--> make_bterm{bind{'op}; map{x.add_var{'x; var{op_bdepth{'op}; 0}}; 'subterms}}
+
+interactive_rw add_new_var_reduce2 {| reduce |} :
+      ('l in nat) -->
+      ('r in nat) -->
+      add_var{var{'l;'r}} <--> var{'l;'r+@1}
+
+interactive_rw add_new_var_var_reduce :
+      ('u in Var) -->
+      add_var{'u} <--> var{left{'u};right{'u}+@1}
 
 interactive_rw add_new_var_bdepth {| reduce |} :
    ('bt in BTerm)  -->
@@ -190,8 +212,13 @@ define unfold_not_free: not_free{'v;'t} <-->
                     op,subterms. all_list{'subterms; t.'not_free 't} }
          }} 't
 
+let fold_not_free = makeFoldC << not_free{'v;'t} >> unfold_not_free
+
 interactive_rw not_free_reduce1 {| reduce |} :
-      not_free{'v;make_bterm{'op;'subterms}} <--> all_list{'subterms; t.not_free{'v;'t}}
+      not_free{'v; make_bterm{'op;'subterms}} <--> all_list{'subterms; t.not_free{'v;'t}}
+
+interactive_rw not_free_reduce2 {| reduce |} :
+      not_free{'v; var{'l;'r}} <--> "assert"{bnot{is_eq{'v; var{'l;'r}}}}
 
 interactive_rw not_free_var_reduce :
       ('u in Var) -->

@@ -949,6 +949,11 @@ doc <:doc<
    Rules for quantifiers are the following:
    @end[doc]
 >>
+interactive all_list_wf  {| intro[] |} :
+   sequent { <H> >- 'l in list  } -->
+   sequent { <H>; i:Index{'l}  >- 'P[nth{'l;'i}] Type } -->
+   sequent { <H> >- all_list{'l;  x. 'P['x]} Type }
+
 interactive all_list_intro_nil  {| intro[] |} :
    sequent { <H> >- all_list{nil;  x. 'P['x]} }
 

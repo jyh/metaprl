@@ -80,10 +80,6 @@ FDL_THEORIES =\
     m_doc_cps\
     m_doc_closure\
     m_doc_opt\
-    m_doc_x86_asm\
-    m_doc_x86_codegen\
-    m_doc_x86_regalloc\
-    m_doc_x86_opt\
     m_doc_summary_fdl
 
 APPENDIX_THEORIES =\

@@ -5,7 +5,7 @@ doc <:doc< -*- mode: text; -*-
    @end[spelling]
 
    @begin[doc]
-   @chapter[m_doc_compiler_fdl]{Compiler Algorithms in the FDL}
+   @chapter[m_doc_compiler_fdl]{Logical frameworks and the FDL}
    @section[m_doc_intro_fdl]{Introduction}
    @docoff
    @end[doc]
@@ -37,7 +37,81 @@ extends M_doc_comment
 
 doc <:doc<
 @begin[doc]
+
+A @emph{logical framework} is a system that allows the definition and
+use of @emph{multiple} logics, supporting derivation in any of the
+logics that are defined.  We take the term logic in its general
+meaning.  A logic may characterize a very large domain, like
+arithmetic, or it may characterize a smaller domain, like compilation,
+abstract algebra, graph theory, or any other computational,
+algorithmic domain.  The @MetaPRL logical programming environment is
+an augmented logical framework that supporting reductions and
+relations between logics, as well as the embedding of one domain
+within another.  @MetaPRL is a modular system, organizing and
+collecting knowledge in a hierarchy that corresponds closely to
+standard practice in software engineering.
+
+The FDL is an ideal companion in this enterprise, because it captures,
+stores, and indexes the knowledge from these domains.  This allows a
+programmer to search for knowledge and algorithms from any of the
+contributions to the library.  The FDL and @MetaPRL provide an
+instance of a system that cooperates to proved the programmer with a
+rich source of algorithmic knowledge, as well as a state-of-the-art
+means to organize and incorporate that knowledge into software
+systems.
+
+In this chapter, we describe the development of a new class of
+algorithms using the @MetaPRL/FDL system.  Our goal has two parts: 1)
+to contribute new algorithmic content to the FDL, and 2) demonstrate
+how the logical framework is used to organize and develop the
+knowledge during the software development process.  We organize this
+as a case study for the development of several important, fundamental
+algorithms that are widely used in the programming language and
+compiler community.  We develop this case study as far as an
+implementation of a complete compiler that uses the algorithms that we
+develop.
+
+The text for this chapter is generated from source code of this
+project.  That is, this document is part of the formal content that is
+stored and generated as part of the FDL.  By doing so, we connect the
+documentation directly to the source that provides the algorithmic
+knowledge in the FDL.
+
+@subsection[fdl_motivation]{Compilers and programming languages}
       
+One of the areas that has plagued the programming language community
+is the problem of compiler validation.  The task of designing and
+implementing a compiler can be difficult even for a small language.
+There are many phases in the translation from source to machine code,
+and an error in any one of these phases can alter the semantics of the
+generated program.
+
+There are two main reasons to validate the compiler.  First, if there
+is an error in the compiler, then there is no assurance that the
+properties specified by the programmer are valid at runtime.  Second,
+if the compiler is validated, it becomes possible to certify mobile
+code.  That is, source-level proofs provided by the programmer can be
+translated automatically to runtime proofs that accompany the code and
+can be validated by the recipient.
+
+In initial work (with a Caltech undergraduate) @cite[AGH02], we
+explored the feasibility of using a formal system to reason about the
+internal compiler representations for a program.  More recently
+@cite[HNGA03], we developed an alternative approach, based on the use
+of higher-order abstract syntax @cite["NH02,PE88"] and term rewriting
+to construct an entire compiler in MetaPRL.  All program
+transformations, from parsing to code generation, are cleanly isolated
+and specified as term rewrites.
+
+There are many advantages to using a formal system.  The most
+important is that the correctness of the compiler is dependent only on
+the rewriting rules that provide the formal part of the translation.
+The vast majority of compiler code does not have to be trusted.  In
+our current work, the correctness of the compiler depends on less than
+1% of its code.  In addition, we find that in many cases it is
+@emph{easier} to implement the compiler because the logical framework
+provides a great deal of automation.
+
 Compilers make use of many fundamental algorithms used to transform
 and analyze programs.  For example, CPS (continuation-passing style)
 transformation is a widely-used algorithm that transforms the control
@@ -59,31 +133,24 @@ Java, C, C#, etc.  By defining them as part of the FDL, we provide a
 freely-available formal implementation that serves as a common
 reference for the many applications that use these algorithms.
 
-To demonstrate the process, we discuss the construction of a compiler using
-formalized forms of these algorithms as part of the FDL.  Our approach
-is based on the use of higher-order abstract syntax @cite["NH02,PE88"]
-and term rewriting in a general-purpose logical framework that uses
-the FDL.  All program transformations, from parsing to code
-generation, are cleanly isolated and specified as term rewrites.  In
-our system, term rewrites specify an equivalence between two code
-fragments that is valid in any context.  Rewrites are bidirectional
-and neither imply nor presuppose any particular order of application.
-Rewrite application is guided by programs in the meta-language of the
-logical framework.
+Our approach is based on the use of higher-order abstract syntax
+@cite["NH02,PE88"] and term rewriting in a general-purpose logical
+framework that uses the FDL.  All program transformations, from
+parsing to code generation, are cleanly isolated and specified as term
+rewrites.  In our system, term rewrites specify an equivalence between
+two code fragments that is valid in any context.  Rewrites are
+bidirectional and neither imply nor presuppose any particular order of
+application.  Rewrite application is guided by programs in the
+meta-language of the logical framework.
 
-There are many advantages to using higher-order abstract syntax and
-formal rewrites.  Program scoping and substitution are managed
-implicitly by the logical framework; it is not possible to specify a
-program transformation that modifies the program scope.  Perhaps most
-importantly, the correctness of the compiler is dependent only on the
-rewriting rules.  Programs that guide the application of rewrites do
-not have to be trusted because they are required to use rewrites for
-all program transformations.  If the rules can be validated against a
-program semantics, and if the compiler produces a program, that
-program will be correct relative to those semantics.  The role of the
-guidance programs is to ensure that rewrites are applied in the
-appropriate order so that the output of the compiler contains only
-assembly.
+The correctness of the compiler is dependent only on the rewriting
+rules.  Programs that guide the application of rewrites do not have to
+be trusted because they are required to use rewrites for all program
+transformations.  If the rules can be validated against a program
+semantics, and if the compiler produces a program, that program will
+be correct relative to those semantics.  The role of the guidance
+programs is to ensure that rewrites are applied in the appropriate
+order so that the output of the compiler contains only assembly.
 
 The collection of rewrites needed to implement a compiler is small
 (hundreds of lines of formal mathematics) compared to the entire code
@@ -93,54 +160,19 @@ former set is clearly easier.  Even if the rewrite rules are not
 validated, it becomes easier to assign accountability to individual
 rules.
 
-The use of a logical framework has another major advantage that we
+The use of a @MetaPRL and the FDL has another major advantage that we
 explore in this paper: in many cases it is @emph{easier} to implement
 the compiler, for several reasons.  The terminology of rewrites
 corresponds closely to mathematical descriptions frequently used in
-the literature, decreasing time from concept to implementation.  The
-logical framework provides a great deal of automation, including
-efficient substitution and automatic $@alpha$-renaming of variables to
-avoid capture, as well as a large selection of rewrite strategies to
-guide the application of program transformations.  The compilation
-task is phrased as a theorem-proving problem, and the logical
-framework provides a means to examine and debug the effects of the
-compilation process interactively.  The facilities for automation and
-examination establish an environment where it is easy to experiment
-with new program transformations and extensions to the compiler.
+the literature, decreasing time from concept to implementation.
 
-In fairness, formal compilation also has potential disadvantages.  The
-use of higher-order abstract syntax, in which variables in the
-programming language are represented as variables in the logical
-language, means that variables cannot be manipulated directly in the
-formal system; operations that modify the program scope, such as
-capturing substitution, are difficult if not impossible to express
-formally.  In addition, global program transformations, in which
-several parts of a program are modified simultaneously, can sometimes
-be difficult to express with term rewriting.
-
-The most significant impact of using a formal system is that program
-representations must permit a substitution semantics.  Put another
-way, the logical framework requires the development of
-@emph{functional} intermediate representations, where heap locations
-may be mutable, but variables are not.  This potentially has a major
-effect on the formalization of imperative languages, including
-assembly language, where registers are no longer mutable.  This
-seeming contradiction can be resolved, as we show in the second half
-of this paper, but it does require a departure from the majority of
-the literature on compilation methods.
-
-In this chapter, we explore these problems and show that formal compiler
-development is feasible, perhaps easy.  We do not specifically address
-the problem of compiler verification in this paper; our main objective
-is to develop the models and methods needed during the compilation
-process.  The format of this paper is organized around a case study,
-where we develop a compiler that generates Intel x86 machine code for
-an ML-like language using the @MetaPRL logical framework
+In this chapter, we explore these problems and show that formal
+compiler development is feasible, perhaps easy using the @MetaPRL/FDL
+system.  This chapter is organized around a case study, where we
+develop a compiler that generates Intel x86 machine code for an
+ML-like language using the @MetaPRL logical framework
 @cite["HNC+03,Hic01,MPHome"].  The compiler is fully implemented and
 online as part of the Mojave research project @cite[MojaveHome].
-This document is generated from the program sources (@MetaPRL provides
-a form of literate programming), and the complete source code is
-available online at @url["http://metaprl.org/"].
 
 @subsection[organization]{Organization}
 

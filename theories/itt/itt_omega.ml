@@ -434,9 +434,15 @@ interactive_rw dark_factor_out2 number[l:n] 'tleft number[r:n] 'tright :
 	('left >= (number[l:n] -@ 1) *@ (number[r:n] -@ 1)) <-->
 	(number[l:n] *@ 'tleft >= number[r:n] *@ 'tright +@ (number[l:n] -@ 1) *@ (number[r:n] -@ 1))
 
+let rec rev_flatten = function
+   h :: t ->
+      List.rev_append h (rev_flatten t)
+ | [] ->
+      []
+
 let all_pairs l1 l2 =
-	let pairs_lists = List.map (fun x -> List.map (fun y -> (y,x)) l1) l2 in
-	List.flatten pairs_lists
+	let pairs_lists = List.rev_map (fun x -> List.rev_map (fun y -> (y,x)) l1) l2 in
+	rev_flatten pairs_lists
 
 type omegaTree =
 	Solve of AF.vars * ring * omegaTree * AF.af * ring * omegaTree * AF.af
@@ -482,12 +488,17 @@ let rec get_bounds v l u = function
 			else
 				get_bounds v l u tl
 
+(*
 let rec print_constrs info = function
 	[] ->
 		eprintf "@."
  | (tree, f)::tl ->
 		eprintf "%a@." AF.print f;
 		print_constrs info tl
+*)
+
+let print_constrs info l =
+	eprintf "%i constraints@." (List.length l)
 
 let rec omega info constrs =
 	if !debug_omega then
@@ -497,7 +508,9 @@ let rec omega info constrs =
 		eprintf "picked %a@." AF.print_var v;
 	let l, u = get_bounds v [] [] constrs in
 	let pairs = all_pairs l u in
-	let new_constrs = List.map (omega_aux v) pairs in
+	if !debug_omega then
+		eprintf "generated %i pairs@." (List.length pairs);
+	let new_constrs = List.rev_map (omega_aux v) pairs in
 	try
 		List.find (fun (tree, f) -> is_neg_number f) new_constrs
 	with Not_found ->
@@ -510,7 +523,9 @@ and dark_omega info v pairs =
 	if List.for_all identical_to_real_shadow pairs then
 		raise Not_found
 	else
-		let new_constrs = List.map (dark_omega_aux v) pairs in
+		if !debug_omega then
+			eprintf "dark shadow for %a@." AF.print_var v;
+		let new_constrs = List.rev_map (dark_omega_aux v) pairs in
 		try
 			List.find (fun (tree, f) -> is_neg_number f) new_constrs
 		with Not_found ->
@@ -560,6 +575,8 @@ let omegaCoreT = funT (fun p ->
    match s with
    	Constraints constrs ->
 			let tree, f = omega info (List.map (fun (i,f) -> (Hyp i, f)) constrs) in
+			if !debug_omega then
+				eprintf "Solved, reconstructing the proof@.";
 			(match tree with
 			 | Hyp i ->
 					omegaAuxT info tree

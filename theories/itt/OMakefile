@@ -83,6 +83,7 @@ MPFILES =\
    itt_ring\
    itt_field\
    itt_ring2\
+   itt_unitring\
    itt_field2\
    itt_order\
    itt_rat\
@@ -154,6 +155,7 @@ PRINT_THEORIES =\
     itt_cyclic_group\
     itt_quotient_group\
     itt_ring2\
+    itt_unitring\
     itt_field2\
     itt_collection\
     itt_pointwise\

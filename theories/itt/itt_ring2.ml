@@ -473,7 +473,7 @@ define unfold_ZeroRing : ZeroRing <-->
 doc docoff
 
 dform zeroRing_df1 : except_mode[src] :: ZeroRing =
-   `"ZeroRing"
+   `"{0}"
 
 doc <:doc< @doc{ } >>
 interactive zero_ring {| intro [] |}:

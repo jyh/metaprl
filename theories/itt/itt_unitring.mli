@@ -1,5 +1,5 @@
 (*
- * Rings.
+ * Unit rings.
  *
  * ----------------------------------------------------------------
  *
@@ -30,8 +30,7 @@
  * Email : xiny@cs.caltech.edu
  *)
 
-extends Itt_group
-extends Itt_record_renaming
+extends Itt_ring2
 
 open Tactic_type.Conversionals
 
@@ -39,52 +38,23 @@ open Tactic_type.Conversionals
  * SYNTAX                                                               *
  ************************************************************************)
 
-declare isRDistrib{'r}
-declare isLDistrib{'r}
-declare isDistrib{'r}
-
-declare prering[i:l]
-declare isRing{'G}
-declare ring[i:l]
-
-declare Z
-declare Zeven
-
-(************************************************************************
- * DISPLAY FORMS                                                        *
- ************************************************************************)
-
-prec prec_add
-prec prec_neg
+declare preunitring[i:l]
+declare isUnitRing{'G}
+declare unitring[i:l]
 
 (************************************************************************
  * TACTICS                                                              *
  ************************************************************************)
 
-topval unfold_isRDistrib : conv
-topval unfold_isLDistrib : conv
-topval unfold_isDistrib : conv
-topval fold_isRDistrib : conv
-topval fold_isLDistrib : conv
-topval fold_isDistrib : conv
+topval unfold_preunitring : conv
+topval unfold_isUnitRing : conv
+topval unfold_unitring : conv
 
-topval unfold_prering : conv
-topval unfold_isRing : conv
-topval unfold_ring : conv
-
-topval fold_prering : conv
-topval fold_isRing1 : conv
-topval fold_isRing : conv
-topval fold_ring1 : conv
-topval fold_ring : conv
-
-topval unfold_Z : conv
-topval unfold_Zeven : conv
-topval fold_Z : conv
-topval fold_Zeven : conv
-
-topval unfold_subring : conv
-topval fold_subring : conv
+topval fold_preunitring : conv
+topval fold_isUnitRing1 : conv
+topval fold_isUnitRing : conv
+topval fold_unitring1 : conv
+topval fold_unitring : conv
 
 (*
  * -*-

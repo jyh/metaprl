@@ -382,7 +382,10 @@ and mk_expr base expr =
             not_supported loc "assignment"
        | (<:expr< $chr:c$ >>) ->
             not_supported loc "char"
+(*
        | (<:expr< ( $e$ :> $t$ ) >>) ->
+*)
+       | MLast.ExCoe (_, e, t) ->
             not_supported loc "class coercion"
        | (<:expr< $flo:s$ >>) ->
             not_supported loc "float"
@@ -398,17 +401,31 @@ and mk_expr base expr =
             not_supported loc "let"
        | (<:expr< $lid:s$ >>) ->
             mk_var_expr base loc s
+       | MLast.ExLmd _ ->
+            not_supported loc "local module"
        | (<:expr< match $e$ with [ $list:pwel$ ] >>) ->
             not_supported loc "match"
+(*
        | (<:expr< new $e$ >>) ->
+*)
+       | MLast.ExNew _ ->
             not_supported loc "new"
+(*
        | (<:expr< {< $list:sel$ >} >>) ->
+*)
+       | MLast.ExOvr _ ->
             not_supported loc "stream"
+(*
        | (<:expr< { $list:eel$ } >>) ->
+*)
+       | MLast.ExRec _ ->
             not_supported loc "record"
        | (<:expr< do $list:el$ return $e$ >>) ->
             not_supported loc "do"
+(*
        | (<:expr< $e$ # $i$ >>) ->
+*)
+       | MLast.ExSnd _ ->
             not_supported loc "class projection"
        | (<:expr< $e1$ .[ $e2$ ] >>) ->
             not_supported loc "string subscript"
@@ -441,6 +458,8 @@ and mk_patt base patt =
             not_supported loc "wild pattern"
        | (<:patt< $p1$ $p2$ >>) ->
             not_supported loc "pattern application"
+       | (<:patt< [| $list: pl$ |] >>) ->
+            not_supported loc "array patterns"
        | (<:patt< $chr:c$ >>) ->
             not_supported loc "pattern char"
        | (<:patt< $int:s$ >>) ->
@@ -477,7 +496,10 @@ and mk_type base t =
             not_supported loc "type application"
        | (<:ctyp< $t1$ -> $t2$ >>) ->
             not_supported loc "type function"
+(*
        | (<:ctyp< # $i$ >>) ->
+*)
+       | MLast.TyCls _ ->
             not_supported loc "type method"
        | (<:ctyp< $lid:s$ >>) ->
             not_supported loc "type var"
@@ -499,7 +521,11 @@ and mk_type base t =
 and mk_sig_item base si =
    let loc = loc_of_sig_item si in
       match si with
+(*
          (<:sig_item< class $list:ctl$ >>) ->
+*)
+         MLast.SgCls _
+       | MLast.SgClt _ ->
             not_supported loc "sig class"
        | (<:sig_item< declare $list:sil$ end >>) ->
             mk_sig_item base (List_util.last sil)
@@ -523,7 +549,11 @@ and mk_sig_item base si =
 and mk_str_item base si =
    let loc = loc_of_str_item si in
       match si with
+(*
          (<:str_item< class $list:cdl$ >>) ->
+*)
+         MLast.StCls _
+       | MLast.StClt _ ->
             not_supported loc "str class"
        | (<:str_item< declare $list:stl$ end >>) ->
             mk_str_item base (List_util.last stl)
@@ -583,54 +613,6 @@ and mk_module_expr base me =
             not_supported loc "module expr type"
        | (<:module_expr< $uid:i$ >>) ->
             not_supported loc "module expr id"
-
-and mk_class_type base
-  { ctLoc = loc;
-    ctNam = s;
-    ctPrm = sl;
-    ctArg = tl;
-    ctTyc = so;
-    ctFld = ctfl;
-    ctVir = b1;
-    ctCls = b2 } =
-  not_supported loc "class type"
-
-and mk_ctf base = function
-   CtCtr (loc, s, t) ->
-      not_supported loc "class type CtCtr"
- | CtInh (loc, t) ->
-      not_supported loc "class type CtInh"
- | CtMth (loc, s, b, t) ->
-      not_supported loc "class type CtMth"
- | CtVal (loc, s, b1, b2, ot) ->
-      not_supported loc "class type CtVal"
- | CtVir (loc, s, b, t) ->
-      not_supported loc "class type CtVir"
-
-and mk_class base
-  { cdLoc = loc;
-    cdNam = s;
-    cdPrm = sl1;
-    cdArg = pl1;
-    cdSlf = so1;
-    cdTyc = so2;
-    cdFld = cfl;
-    cdVir = b1;
-    cdCls = b2 } =
-   not_supported loc "class"
-
-and mk_cf base cf =
-   match cf with
-      CfCtr (loc, s, t) ->
-         not_supported loc "class field CfCtr"
-    | CfInh (loc, t, e, so) ->
-         not_supported loc "class field CfInh"
-    | CfMth (loc, s, b, e) ->
-         not_supported loc "Class field CfMth"
-    | CfVal (loc, s, b1, b2, eo) ->
-         not_supported loc "Class field CfVal"
-    | CfVir (loc, s, b, t) ->
-         not_supported loc "Class field CfVir"
 
 (************************************************************************
  * RESOURCES                                                            *

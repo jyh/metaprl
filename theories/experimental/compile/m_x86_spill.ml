@@ -120,12 +120,12 @@ doc <:doc<
    @begin[doc]
    @modsubsection{Phase 1}
 
-   When the register allocator first asks that a register be spilled,
-   we make it a "potential spill," meaning that we assign it a spill
-   location, but leave it in a register.  The operand changes from
-   Register{'v} to SpillRegister{'v; 'spill} where 'spill is the new
-   spill location.  The following rules add the spill after a binding
-   occurrence.
+   When the register allocator first asks that a register be spilled, we
+   make it a ``potential spill,'' meaning that we assign it a spill
+   location, but leave it in a register.  The operand changes from <<
+   Register{'v} >> to << SpillRegister{'v; 'spill} >> where << 'spill >> is
+   the new spill location.  The following rules add the spill after a
+   binding occurrence.
    @end[doc]
 >>
 prim_rw spill_mov :
@@ -179,9 +179,11 @@ prim_rw spill_set :
 
 doc <:doc<
    @begin[doc]
-   We define a conversion for the first phase that searches for the spill
-   binding occurrences and applies the appropriate rewrites.
+   We define a conversion (implemented in @OCaml, and not shown here) for
+   the first phase that searches for the spill binding occurrences and
+   applies the appropriate rewrites.
    @end[doc]
+   @docoff
 >>
 let phase1C vars =
    let convC inst =
@@ -219,9 +221,10 @@ let phase1C vars =
 
 doc <:doc<
    @begin[doc]
-   In the next part of phase1, find all instructions that now have a
-   SpillRegister operand, and copy the operand.  This splits the live
-   range, but keeps the spill location.
+   In the next part of @tt[phase1], we find all instructions that now have a
+   << SpillRegister{'v; 'spill} >> operand, and copy the operand.  This
+   splits the live range, but keeps the spill location.  Note that we use
+   this rewrite in reverse (i.e., rewrite the contractum into the redex).
    @end[doc]
 >>
 prim_rw spill_split bind{v. 'e['v]} :
@@ -229,7 +232,8 @@ prim_rw spill_split bind{v. 'e['v]} :
 
 doc <:doc<
    @begin[doc]
-   This is the conversion that splits the spill range.
+   We define a conversion (implemented in @OCaml, and not shown here) to
+   actually split the live range.
    @end[doc]
 >>
 let rec splitC_aux vars =
@@ -340,8 +344,8 @@ let splitC = sweepUpFailC splitTopC
 
 doc <:doc<
    @begin[doc]
-   Once the splits have been added, cleanup the remaining instructions
-   by removing spill vars.
+   Once the splits have been added, we cleanup the remaining instructions
+   by removing spill variables.
    @end[doc]
 >>
 prim_rw register_spill_register :
@@ -395,7 +399,7 @@ doc <:doc<
    register associated with that variable, forcing the fetch from the spill.
 
    The @tt[phase2T] tactic takes as input the set of spilled variables and
-   uses the following rewrite.  ML code (not listed here) is used to guide
+   uses the following rewrite.  @OCaml code (not listed here) is used to guide
    the application of the rewrite.
 
    @end[doc]

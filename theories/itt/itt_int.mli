@@ -122,7 +122,7 @@ rewrite reduce_ind_base :
    (ind{0; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]}) <-->
    'base
 
-ml_rw reduce_ind : ind{'x; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]}
+ml_rw reduce_ind : ind{number[x:n]; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]}
 
 (************************************************************************
  * RULES                                                                *

@@ -1,0 +1,14 @@
+THEORYNAME = hol
+THEORYDESCR = Higher Order Logic
+
+OCAMLINCLUDES[] +=
+	$(SUPPORT_DIRS)
+	../base
+
+# Library files
+MPFILES =\
+	hol_core
+
+Theory($(MPFILES))
+
+all: theory$(LIB_SUFFIX)

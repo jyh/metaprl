@@ -1355,7 +1355,7 @@ let source2hypT info s = funT (fun p ->
 	seqOnMT taclist thenMT rw normalizeC (-1)
 )
 
-let testT =
+let coreT =
    funT (fun p ->
          let var2index = VI.create 13 in
          let constrs=make_sacs var2index p in
@@ -1401,7 +1401,7 @@ let testT =
             end
    )
 
-let test2T =
+let core2T =
    funT (fun p ->
          let var2index = VI.create 13 in
          let constrs=make_sacs var2index p in
@@ -1463,13 +1463,45 @@ let ge_int2ratT = argfunT (fun i p ->
 	else
 		idT
 )
+(*
+let term2term_number p t =
+	let es={sequent_args=t; sequent_hyps=(SeqHyp.of_list []); sequent_goals=(SeqGoal.of_list [t])} in
+	let s=mk_sequent_term es in
+	let s'=Top_conversionals.apply_rewrite p normalizeC s in
+	let t'=SeqGoal.get (TermMan.explode_sequent s').sequent_goals 0 in
+	begin
+		if !debug_int_arith then
+			eprintf "t2t_n: %a -> %a%t" print_term t print_term t' eflush;
+		if is_add_term t' then
+			let a,b=dest_add t' in
+			if is_number_term a then
+				(b,dest_number a)
+			else
+				(t',num0)
+		else
+			if is_number_term t' then
+				(mk_number_term num0, dest_number t')
+			else
+				(t',num0)
+	end
 
+let findContradRelT = funT ( fun p ->
+	let l = all2ge p in
+	let l' = List.map (four2inequality p) l in
+)
+
+type HypPosition = Unused | Original of int | Normed of int
+
+let empty_hyps _ = (0, Array.create 13 Unused)
+*)
 let preT = funT (fun p ->
    arithRelInConcl2HypT thenMT
    ((tryOnAllMCumulativeHypsT negativeHyp2ConclT) thenMT
 	all2geT thenMT
 	tryOnAllMHypsT ge_int2ratT)
 )
+
+let supinfT = preT thenMT core2T
 
 interactive test 'a 'b 'c :
 sequent { <H> >- 'a in rationals } -->

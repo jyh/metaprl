@@ -43,6 +43,8 @@ open Tactic_type.Conversionals
 open Top_conversionals
 open Itt_int_ext
 
+topval eq2geT : term -> tactic
+
 topval add_BubblePrimitiveC : conv
 topval add_BubbleStepC : term -> conv
 topval add_BubbleSortC : conv

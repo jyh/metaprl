@@ -83,8 +83,7 @@ let _ =
 
 doc <:doc< 
    @begin[doc]
-   @modsection{Quotient Group}
-   @modsubsection{Rewrites}
+   @modsection{Rewrites}
 
    The quotient group of $A$ in $B$, or the Factor Group of $B$ relative to $A$.
    @end[doc]
@@ -128,8 +127,9 @@ interactive quotG_equiv_type2 {| intro [intro_typeinf <<'B>>] |} group[i:l] :
 
 doc <:doc< 
    @begin[doc]
-   @modsubsection{Introduction}
-  
+   @modsection{Rules}
+
+   Introduction
    @end[doc]
 >>
 interactive quotGroup_intro {| intro [] |} :
@@ -138,7 +138,6 @@ interactive quotGroup_intro {| intro [] |} :
 
 doc <:doc< 
    @begin[doc]
-   @modsubsection{Rules}
 
    If <<normalSubg[i:l]{'A; 'B}>> and $B$ is abelian, then <<quotGroup{'A; 'B}>> is abelian.
    @end[doc]

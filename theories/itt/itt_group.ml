@@ -416,7 +416,7 @@ let groupExtEqualDT n = rw unfold_groupExtEqual n thenT dT n
 
 let resource intro +=
    [<<groupExtEqual{'A; 'B}>>, wrap_intro (rw unfold_groupExtEqual 0 thenT dT 0);
-    <<"type"{groupExtEqual{'A; 'B}}>>, wrap_intro (rw unfold_groupExtEqual 0 thenT dT 0 thenT dT 0)
+    <<"type"{groupExtEqual{'A; 'B}}>>, wrap_intro (rw unfold_groupExtEqual 0 thenT dT 0)
    ]
 
 let resource elim +=
@@ -1285,6 +1285,9 @@ dform inv_df1 : except_mode[src] :: except_mode[prl] :: parens :: "prec"[prec_in
 
 dform inv_df2 : mode[prl] :: parens :: "prec"[prec_inv] :: ('G^inv 'a) =
    slot{'G} `".inv " slot{'a}
+
+dform groupExtEqual_df1 : except_mode[src] :: groupExtEqual{'A; 'B} =
+   `"(" 'A `" =" sube `" " 'B `")" sub["group":s]
 
 dform abelg_df1 : except_mode[src] :: except_mode[prl] :: abelg[i:l] =
    `"Abelian_group" sub{slot[i:l]}

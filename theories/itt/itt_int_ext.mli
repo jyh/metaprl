@@ -94,6 +94,9 @@ define unfold_ge :
 define unfold_neq_int :
    nequal{'a; 'b} <--> "assert"{bneq_int{'a; 'b}}
 
+define unfold_int_seg :
+   int_seg{'i; 'j} <--> {x:int | 'x >= 'i & 'x < 'j}
+
 (************************************************************************
  * DISPLAY FORMS                                                        *
  ************************************************************************)
@@ -282,3 +285,5 @@ rule div_Assoc :
    [wf] sequent { <H> >- 'b in int } -->
    [wf] sequent { <H> >- 'c in int } -->
    sequent { <H> >- (('a /@ 'b) /@ 'c) ~ ('a /@ ('b *@ 'c)) }
+
+topval fold_int_seg : conv

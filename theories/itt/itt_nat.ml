@@ -79,6 +79,9 @@ open Itt_bool
 doc <:doc< @doc{@terms} >>
 
 define unfold_nat : nat <--> ({x:int | 'x>=0})
+define unfold_finite_nat : nat{'k} <--> int_seg{0; 'k}
+
+let fold_finite_nat = makeFoldC << nat{'k} >> unfold_finite_nat
 
 (******************
  *  Display Forms *
@@ -92,6 +95,8 @@ doc <:doc< @docoff >>
 
 dform nat_prl_df : except_mode [src] :: nat = mathbbN
 dform nat_src_df : mode[src] :: nat = `"nat"
+dform finite_nat_df1 : except_mode [src] :: nat{'k} = mathbbN sub{'k}
+dform finite_nat_df2 : mode[src] :: nat{'k} = `"{0..(" slot{'k} `"-1)}"
 
 dform ind_df : parens :: "prec"[prec_bor] :: except_mode[src] ::
    ind{'x; 'base; k, l. 'up['k; 'l]} =
@@ -152,6 +157,19 @@ interactive well_ordering_principle bind{i.'P['i]} 'i :
    sequent{ <H> >-
       all n:nat. ("not"{'P['n]} or "not"{.all n2:nat. ('P['n2] => 'n < 'n2)})} -->
    sequent{ <H> >- "not"{'P['i]}}
+
+interactive finiteNatType {| intro [] |} :
+   sequent { <H> >- 'k in int} -->
+   sequent { <H> >- "type"{nat{'k}} }
+
+interactive finiteNatMemberEquality {| intro [] |} :
+   sequent { <H> >- 'a = 'b in int_seg{0; 'k} } -->
+   sequent { <H> >- 'a = 'b in nat{'k} }
+
+interactive finiteNatElimination {| elim [] |} 'H :
+   sequent { <H>; x: nat{'k}; <J['x]> >- 'k in int } -->
+   sequent { <H>; x: int; v:'x >= 0; w: 'x < 'k; <J['x]> >- 'C['x] }  -->
+   sequent { <H>; x: nat{'k}; <J['x]> >- 'C['x] }
 
 doc <:doc< @docoff >>
 

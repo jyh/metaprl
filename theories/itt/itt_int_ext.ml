@@ -273,6 +273,20 @@ dform ge_bool_df1 : parens :: "prec"[prec_compare] :: ge_bool{'a; 'b} =
 dform nequal_df1 : parens :: "prec"[prec_compare] :: nequal{'a; 'b} =
    slot["lt"]{'a} `" " Nuprl_font!neq `" " slot["le"]{'b}
 
+doc <:doc< @doc{Integer segmentation} >>
+
+define unfold_int_seg : int_seg{'i; 'j} <--> {x:int | 'x >= 'i & 'x < 'j}
+
+doc <:doc< @docoff >>
+
+dform intSeg_df1 : except_mode [src] :: except_mode [prl] :: int_seg{'i; 'j} =
+   `"{" slot{'i} `".." slot{'j} sup["-":s] `"}"
+
+dform intSeg_df1 : mode [prl] :: int_seg{'i; 'j} =
+   `"{" slot{'i} `"..(" slot{'j} `"-1)}"
+
+let fold_int_seg = makeFoldC << int_seg{'i; 'j} >> unfold_int_seg
+
 (************************************************************************
  * REWRITES                                                             *
  ************************************************************************)
@@ -612,6 +626,30 @@ interactive ge_wf {| intro [] |} :
 interactive ge_sqstable {| squash; intro [] |} :
    sequent { <H> >- 'a >= 'b } -->
    sequent { <H> >- it in ('a >= 'b) }
+
+doc <:doc< 
+   @begin[doc]
+   @modsection{Integer segmentation properties}
+   @end[doc]
+>>
+interactive intSegType {| intro [] |} :
+   sequent { <H> >- 'i in int} -->
+   sequent { <H> >- 'j in int} -->
+   sequent { <H> >- "type"{int_seg{'i; 'j}} }
+
+interactive intSegMemberEquality {| intro [] |} :
+   sequent { <H> >- 'i in int} -->
+   sequent { <H> >- 'j in int} -->
+   sequent { <H> >- 'a = 'b in int} -->
+   sequent { <H> >- 'a >= 'i}  -->
+   sequent { <H> >- 'a < 'j}  -->
+   sequent { <H> >- 'a = 'b in int_seg{'i; 'j} }
+
+interactive intSegElimination {| elim [] |} 'H :
+   sequent { <H>; x: int_seg{'i; 'j}; <J['x]> >- 'i in int } -->
+   sequent { <H>; x: int_seg{'i; 'j}; <J['x]> >- 'j in int } -->
+   sequent { <H>; x: int; v:'x >= 'i; w: 'x < 'j; <J['x]> >- 'C['x] }  -->
+   sequent { <H>; x: int_seg{'i; 'j}; <J['x]> >- 'C['x] }
 
 doc <:doc< @docoff >>
 

@@ -179,7 +179,8 @@ prim wf_tyUnion 'H 'J :
    sequent [mfir] { 'H;
                     tv: ty_def{ polyKind[i:n]{union_type[j:n]}; 'd };
                     'J['tv] >-
-      subset{ 'set1; intset{ interval{ 0; (number[j:n] -@ 1) } } } } -->
+      subset{ 'set1;
+              intset[31, "signed"]{ interval{0; (number[j:n] -@ 1)} } } } -->
 
    (* Then the two tyUnion's are equal. *)
    sequent [mfir] { 'H;

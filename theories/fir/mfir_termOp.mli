@@ -157,18 +157,18 @@ val dest_interval_term : term -> term * term
 
 val intset_term : term
 val is_intset_term : term -> bool
-val mk_intset_term : term -> term
-val dest_intset_term : term -> term
-
-val rawintset_term : term
-val is_rawintset_term : term -> bool
-val mk_rawintset_term : Mp_num.num -> string -> term -> term
-val dest_rawintset_term : term -> Mp_num.num * string * term
+val mk_intset_term : Mp_num.num -> string -> term -> term
+val dest_intset_term : term -> Mp_num.num * string * term
 
 val member_term : term
 val is_member_term : term -> bool
 val mk_member_term : term -> term -> term
 val dest_member_term : term -> term * term
+
+val interval_lt_term : term
+val is_interval_lt_term : term -> bool
+val mk_interval_lt_term : term -> term -> term
+val dest_interval_lt_term : term -> term * term
 
 val subset_term : term
 val is_subset_term : term -> bool
@@ -182,19 +182,16 @@ val dest_set_eq_term : term -> term * term
 
 val singleton_term : term
 val is_singleton_term : term -> bool
-val mk_singleton_term : term -> term
-val dest_singleton_term : term -> term
+val mk_singleton_term : Mp_num.num -> string -> term -> term
+val dest_singleton_term : term -> Mp_num.num * string * term
 
 val intset_max_term : term
 val is_intset_max_term : term -> bool
+val mk_intset_max_term : Mp_num.num -> string -> term
+val dest_intset_max_term : term -> Mp_num.num * string
 
 val enum_max_term : term
 val is_enum_max_term : term -> bool
-
-val rawintset_max_term : term
-val is_rawintset_max_term : term -> bool
-val mk_rawintset_max_term : Mp_num.num -> string -> term
-val dest_rawintset_max_term : term -> Mp_num.num * string
 
 val tyInt_term : term
 val is_tyInt_term : term -> bool

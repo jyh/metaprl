@@ -75,7 +75,7 @@ open Mfir_auto
  *)
 
 prim ty_atomInt {| intro [] |} 'H :
-   sequent [mfir] { 'H >- member{ 'i; intset_max } } -->
+   sequent [mfir] { 'H >- member{ 'i; intset_max[31, "signed"] } } -->
    sequent [mfir] { 'H >- has_type["atom"]{ atomInt{'i}; tyInt } }
    = it
 
@@ -107,7 +107,7 @@ prim ty_atomRawInt 'H :
    sequent [mfir] { 'H >- type_eq{ tyRawInt[p:n, sign:s];
                                    tyRawInt[p:n, sign:s];
                                    polyKind[0]{large_type} } } -->
-   sequent [mfir] { 'H >- member{ 'i; rawintset_max[p:n, sign:s] } } -->
+   sequent [mfir] { 'H >- member{ 'i; intset_max[p:n, sign:s] } } -->
    sequent [mfir] { 'H >-
       has_type["atom"]{ atomRawInt[p:n, sign:s]{'i}; tyRawInt[p:n, sign:s] } }
    = it

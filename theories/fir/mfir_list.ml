@@ -44,8 +44,9 @@
 extends Mfir_bool
 extends Mfir_int
 
-open Base_meta
 open Top_conversionals
+open Mfir_bool
+open Mfir_int
 
 
 (**************************************************************************
@@ -79,7 +80,6 @@ declare length{ 'l }
  * @begin[doc]
  *
  * The term @tt[nth_elt] returns the $n$th element of a list @tt[l].
- * Indexing starts at zero.
  * @end[doc]
  *)
 
@@ -107,17 +107,25 @@ prim_rw reduce_length_ind :
    length{ cons{ 'h; 't } } <-->
    ( 1 +@ length{ 't } )
 
-prim_rw reduce_nth_elt :
-   nth_elt{ 'n; cons{ 'h; 't } } <-->
-   ifthenelse{ int_eq{ 'n; 0 }; 'h; nth_elt{ ('n -@ 1); 't } }
+prim_rw reduce_nth_elt_aux :
+   nth_elt{ number[i:n]; cons{ 'h; 't } } <-->
+   ifthenelse{ int_eq{number[i:n]; 0}; 'h; nth_elt{(number[i:n] -@ 1); 't} }
 
 (*!
  * @docoff
  *)
 
+let reduce_length =
+   reduce_length_base orelseC reduce_length_ind
+
+let reduce_nth_elt =
+   reduce_nth_elt_aux thenC
+   (addrC [0] reduce_int_eq) thenC
+   reduce_ifthenelse thenC
+   (tryC (addrC [0] reduce_sub))
+
 let resource reduce += [
-   << length{ nil } >>, reduce_length_base;
-   << length{ cons{ 'h; 't } } >>, reduce_length_ind;
+   << length{ 'l } >>, reduce_length;
    << nth_elt{ 'n; cons{ 'h; 't } } >>, reduce_nth_elt
 ]
 

@@ -47,7 +47,6 @@ extends Base_theory
  * @docoff
  *)
 
-open Base_meta
 open Top_conversionals
 
 
@@ -108,6 +107,13 @@ prim_rw reduce_ifthenelse_false :
    'f
 
 (*!
+ * @docoff
+ *)
+
+let reduce_ifthenelse =
+   reduce_ifthenelse_true orelseC reduce_ifthenelse_false
+
+(*!
  * @begin[doc]
  *
  * The logical connectives are treated classically.
@@ -134,10 +140,8 @@ let resource reduce += [
    << "and"{ 'bool1; 'bool2 } >>, reduce_and;
    << "or"{ 'bool1; 'bool2 } >>, reduce_or;
    << "not"{ 'b } >>, reduce_not;
-   << ifthenelse{ "true"; 'true_case; 'false_case } >>,
-      reduce_ifthenelse_true;
-   << ifthenelse{ "false"; 'true_case; 'false_case } >>,
-      reduce_ifthenelse_false
+   << ifthenelse{ 'boolean; 'true_case; 'false_case } >>,
+      reduce_ifthenelse
 ]
 
 

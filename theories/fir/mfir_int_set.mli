@@ -47,26 +47,24 @@ open Tactic_type.Conversionals
  *)
 
 declare interval{ 'left; 'right }
-declare intset{ 'interval_list }
-declare rawintset[precision:n, sign:s]{ 'interval_list }
+declare intset[precision:n, sign:s]{ 'interval_list }
 
 (*
  * Set operations.
  *)
 
 declare member{ 'num; 's }
+declare interval_lt{ 'interval1; 'interval2 }
 declare subset{ 'smaller_set; 'larger_set }
 declare set_eq{ 'set1; 'set2 }
-
-declare singleton{ 'i }
+declare singleton[precision:n, sign:s]{ 'i }
 
 (*
  * Constants.
  *)
 
-declare intset_max
+declare intset_max[precision:n, sign:s]
 declare enum_max
-declare rawintset_max[precision:n, sign:s]
 
 
 (**************************************************************************
@@ -77,14 +75,9 @@ declare rawintset_max[precision:n, sign:s]
  * Set operations.
  *)
 
-topval reduce_member_interval : conv
-topval reduce_member_intset_ind : conv
-topval reduce_member_intset_base : conv
-topval reduce_member_rawintset_ind : conv
-topval reduce_member_rawintset_base : conv
-
-topval reduce_subset_base : conv
-topval reduce_subset_ind : conv
+topval reduce_member : conv
+topval reduce_interval_lt : conv
+topval reduce_subset : conv
 topval reduce_set_eq : conv
 topval reduce_singleton : conv
 
@@ -94,11 +87,3 @@ topval reduce_singleton : conv
 
 topval reduce_intset_max : conv
 topval reduce_enum_max : conv
-topval reduce_rawintset_max_u8 : conv
-topval reduce_rawintset_max_s8 : conv
-topval reduce_rawintset_max_u16 : conv
-topval reduce_rawintset_max_s16 : conv
-topval reduce_rawintset_max_u32 : conv
-topval reduce_rawintset_max_s32 : conv
-topval reduce_rawintset_max_u64 : conv
-topval reduce_rawintset_max_s64 : conv

@@ -180,23 +180,23 @@ let is_interval_term = is_2_dep0_term interval_opname
 let mk_interval_term = mk_2_dep0_term interval_opname
 let dest_interval_term = dest_2_dep0_term interval_opname
 
-let intset_term = << intset{ 'interval_list } >>
+let intset_term = << intset[precision:n, sign:s]{ 'interval_list } >>
 let intset_opname = opname_of_term intset_term
-let is_intset_term = is_1_dep0_term intset_opname
-let mk_intset_term = mk_1_dep0_term intset_opname
-let dest_intset_term = dest_1_dep0_term intset_opname
-
-let rawintset_term = << rawintset[precision:n, sign:s]{ 'interval_list } >>
-let rawintset_opname = opname_of_term rawintset_term
-let is_rawintset_term = is_num_str_1_dep0_term rawintset_opname
-let mk_rawintset_term = mk_num_str_1_dep0_term rawintset_opname
-let dest_rawintset_term = dest_num_str_1_dep0_term rawintset_opname
+let is_intset_term = is_num_str_1_dep0_term intset_opname
+let mk_intset_term = mk_num_str_1_dep0_term intset_opname
+let dest_intset_term = dest_num_str_1_dep0_term intset_opname
 
 let member_term = << member{ 'num; 's } >>
 let member_opname = opname_of_term member_term
 let is_member_term = is_2_dep0_term member_opname
 let mk_member_term = mk_2_dep0_term member_opname
 let dest_member_term = dest_2_dep0_term member_opname
+
+let interval_lt_term = << interval_lt{ 'interval1; 'interval2 } >>
+let interval_lt_opname = opname_of_term interval_lt_term
+let is_interval_lt_term = is_2_dep0_term interval_lt_opname
+let mk_interval_lt_term = mk_2_dep0_term interval_lt_opname
+let dest_interval_lt_term = dest_2_dep0_term interval_lt_opname
 
 let subset_term = << subset{ 'smaller_set; 'larger_set } >>
 let subset_opname = opname_of_term subset_term
@@ -210,25 +210,21 @@ let is_set_eq_term = is_2_dep0_term set_eq_opname
 let mk_set_eq_term = mk_2_dep0_term set_eq_opname
 let dest_set_eq_term = dest_2_dep0_term set_eq_opname
 
-let singleton_term = << singleton{ 'i } >>
+let singleton_term = << singleton[precision:n, sign:s]{ 'i } >>
 let singleton_opname = opname_of_term singleton_term
-let is_singleton_term = is_1_dep0_term singleton_opname
-let mk_singleton_term = mk_1_dep0_term singleton_opname
-let dest_singleton_term = dest_1_dep0_term singleton_opname
+let is_singleton_term = is_num_str_1_dep0_term singleton_opname
+let mk_singleton_term = mk_num_str_1_dep0_term singleton_opname
+let dest_singleton_term = dest_num_str_1_dep0_term singleton_opname
 
-let intset_max_term = << intset_max >>
+let intset_max_term = << intset_max[precision:n, sign:s] >>
 let intset_max_opname = opname_of_term intset_max_term
-let is_intset_max_term = is_0_dep0_term intset_max_opname
+let is_intset_max_term = is_num_str_0_dep0_term intset_max_opname
+let mk_intset_max_term = mk_num_str_0_dep0_term intset_max_opname
+let dest_intset_max_term = dest_num_str_0_dep0_term intset_max_opname
 
 let enum_max_term = << enum_max >>
 let enum_max_opname = opname_of_term enum_max_term
 let is_enum_max_term = is_0_dep0_term enum_max_opname
-
-let rawintset_max_term = << rawintset_max[precision:n, sign:s] >>
-let rawintset_max_opname = opname_of_term rawintset_max_term
-let is_rawintset_max_term = is_num_str_0_dep0_term rawintset_max_opname
-let mk_rawintset_max_term = mk_num_str_0_dep0_term rawintset_max_opname
-let dest_rawintset_max_term = dest_num_str_0_dep0_term rawintset_max_opname
 
 let tyInt_term = << tyInt >>
 let tyInt_opname = opname_of_term tyInt_term

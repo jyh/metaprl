@@ -69,5 +69,4 @@ declare ifthenelse{ 'test; 'true_case; 'false_case }
 topval reduce_and : conv
 topval reduce_or : conv
 topval reduce_not : conv
-topval reduce_ifthenelse_true : conv
-topval reduce_ifthenelse_false : conv
+topval reduce_ifthenelse : conv

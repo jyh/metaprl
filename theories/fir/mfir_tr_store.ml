@@ -132,8 +132,8 @@ prim ty_store_polyFun {| intro [] |} 'H 'a :
  * @modsubsection{Union values}
  *
  * A value $<< union_val[i:n]{ 'tv; 'atom_list } >>$ belongs to a union type
- * $<< tyUnion{'tv; 'tyl; singleton{number[i:n]}} >>$ if
- * $<< tyUnion{'tv; 'tyl; singleton{number[i:n]}} >>$ is a
+ * $<< tyUnion{'tv; 'tyl; singleton[31, "signed"]{number[i:n]}} >>$ if
+ * $<< tyUnion{'tv; 'tyl; singleton[31, "signed"]{number[i:n]}} >>$ is a
  * well-formed type, and if the atoms belong to the tuple space given by the
  * $i$th case of $tv$.
  * @end[doc]
@@ -144,8 +144,8 @@ prim ty_store_union 'H 'J :
    sequent [mfir] { 'H;
                     tv: ty_def{ polyKind[j:n]{'k}; tyDefPoly{t. 'ty['t]} };
                     'J['tv] >-
-      type_eq{ tyUnion{'tv; 'tyl; singleton{number[i:n]}};
-               tyUnion{'tv; 'tyl; singleton{number[i:n]}};
+      type_eq{ tyUnion{'tv; 'tyl; singleton[31, "signed"]{number[i:n]}};
+               tyUnion{'tv; 'tyl; singleton[31, "signed"]{number[i:n]}};
                polyKind[0]{small_type} } } -->
 
    (* check that the atoms have the right types. *)
@@ -162,11 +162,10 @@ prim ty_store_union 'H 'J :
                     tv: ty_def{ polyKind[j:n]{'k}; tyDefPoly{t. 'ty['t]} };
                     'J['tv] >-
       has_type["store"]{ union_val[i:n]{ 'tv; 'atoms };
-                         tyUnion{ 'tv;
-                                  'tyl;
-                                  intset{ cons{ interval{number[i:n];
-                                                         number[i:n]};
-                                                nil } } } } }
+                         tyUnion{ 'tv; 'tyl;
+                           intset[31, "signed"]{ cons{ interval{number[i:n];
+                                                                number[i:n]};
+                                                       nil } } } } }
    = it
 
 (*!

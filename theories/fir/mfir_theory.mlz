@@ -63,8 +63,8 @@ extends Base_theory
 
 extends Mfir_bool
 extends Mfir_int
-extends Mfir_int_set
 extends Mfir_list
+extends Mfir_int_set
 extends Mfir_ty
 extends Mfir_exp
 extends Mfir_util

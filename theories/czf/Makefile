@@ -40,6 +40,8 @@ MPFILES :=\
 	czf_itt_power\
 	czf_itt_axioms\
 	czf_itt_theory\
+	czf_itt_set_bvd\
+	czf_itt_inv_image\
 	czf_itt_setdiff\
 	czf_itt_bool\
 	czf_itt_equiv\
@@ -47,7 +49,8 @@ MPFILES :=\
 	czf_itt_abel_group\
 	czf_itt_subgroup\
 	czf_itt_cyclic_subgroup\
-	czf_itt_cyclic_group
+	czf_itt_cyclic_group\
+	czf_itt_hom
 
 MLZFILES :=\
 	czf_itt_fol\

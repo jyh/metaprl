@@ -359,6 +359,12 @@ let reduce_lt =
 let reduce_eq_int =
    reduce_beq_int_meta thenC reduce_meta_eq_num
 
+let resource arith_unfold += [
+   <<number[i:n] +@ number[j:n]>>, reduce_add;
+   <<minus{number[i:n]}>>, reduce_minus;
+   <<number[i:n] -@ number[j:n]>>, reduce_sub;
+]
+
 let resource reduce += [
    <<number[i:n] +@ number[j:n]>>, reduce_add;
    <<minus{number[i:n]}>>, reduce_minus;

@@ -193,6 +193,7 @@ rule ge_addMono :
    sequent { <H> >- 'c >= 'd } -->
    sequent { <H> >- ('a +@ 'c) >= ('b +@ 'd) }
 
+topval ge_to_leftC : conv
 topval lt_bool2le_boolC: conv
 topval le_bool2lt_boolC: conv
 

@@ -488,6 +488,14 @@ interactive_rw sub_elim_rw {| arith_unfold |} :
    ( 'b in int ) -->
    ('a -@ 'b ) <--> ('a +@ ((-1) *@ 'b))
 
+let compare_terms a b =
+	if is_number_term a then
+		if is_number_term b then Equal
+		else Less
+	else
+		if is_number_term b then Greater
+		else compare_terms a b
+
 let addSwap1C t =
 	match explode_term t with
 		<<'a +@ 'b>> when (compare_terms (stripCoef b) (stripCoef a))=Less -> add_CommutC
@@ -519,17 +527,17 @@ let mulSwap2C t =
 let resource arith_unfold +=[
 	<<'a *@ 'b>>, termC mulSwap1C;
 	<<'a *@ ('b *@ 'c)>>, termC mulSwap2C;
-	<<number[i:n] *@ 'a>>, failC;
+	(*<<number[i:n] *@ 'a>>, failC;*)
 	<<'a *@ number[i:n]>>, mul_CommutC;
-	<<number[i:n] *@ ('b *@ 'c)>>, failC;
+	(*<<number[i:n] *@ ('b *@ 'c)>>, failC;*)
 	<<'b *@ (number[i:n] *@ 'c)>>, mul_BubblePrimitiveC;
 	<<number[i:n] *@ (number[j:n] *@ 'c)>>, (mul_AssocC thenC (addrC [0] reduce_mul));
 
 	<<'a +@ 'b>>, termC addSwap1C;
 	<<'a +@ ('b +@ 'c)>>, termC addSwap2C;
-	<<number[i:n] +@ 'a>>, failC;
+	(*<<number[i:n] +@ 'a>>, failC;*)
 	<<'a +@ number[i:n]>>, add_CommutC;
-	<<number[i:n] +@ ('b +@ 'c)>>, failC;
+	(*<<number[i:n] +@ ('b +@ 'c)>>, failC;*)
 	<<'a +@ (number[i:n] +@ 'c)>>, add_BubblePrimitiveC;
 	<<number[i:n] +@ (number[j:n] +@ 'c)>>, (add_AssocC thenC (addrC [0] reduce_add));
 

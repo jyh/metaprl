@@ -344,6 +344,10 @@ let reduce_div =
 let reduce_rem =
    reduce_rem_meta thenC (addrC [0] reduce_meta_rem) thenC reduce_numeral
 
+let resource arith_unfold += [
+   <<number[i:n] *@ number[j:n]>>, reduce_mul;
+]
+
 let resource reduce += [
    <<number[i:n] *@ number[j:n]>>, reduce_mul;
    <<number[i:n] /@ number[j:n]>>, reduce_div;
@@ -439,6 +443,13 @@ interactive ge_addMono :
    sequent { <H> >- 'a >= 'b } -->
    sequent { <H> >- 'c >= 'd } -->
    sequent { <H> >- ('a +@ 'c) >= ('b +@ 'd) }
+
+interactive_rw ge_to_left_rw :
+	('a in int) -->
+	('b in int) -->
+	('a >= 'b) <--> ('a -@ 'b >= 0)
+
+let ge_to_leftC = ge_to_left_rw
 
 interactive_rw lt_bool2le_bool_rw :
 	('a in int) -->

@@ -258,9 +258,7 @@ interactive independentFunctionFormation :
  *)
 let d_apply_equalT = funT (fun p ->
    let _, app, app' = dest_equal (Sequent.concl p) in
-   if
-      ((Sequent.get_bool_arg p "d_auto") = (Some true)) &&
-      (not (alpha_equal app app'))
+   if (in_auto p) && (not (alpha_equal app app'))
    then raise generic_refiner_exn;
    let f, _ = dest_apply app in
    let f_type =

@@ -395,7 +395,7 @@ doc docoff
 
 let resource intro +=
    << univ[i:l] in univ[j:l] >>,
-   ("universeMember", None, false, (universeMember thenT tryT (rw reduce_cumulativity 0 thenT trueIntro)))
+   (wrap_intro (universeMember thenT tryT (rw reduce_cumulativity 0 thenT trueIntro)))
 
 doc <:doc< ************************************************************************
    @begin[doc]

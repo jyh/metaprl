@@ -261,14 +261,13 @@ doc <:doc< @docoff >>
 let quotientIntroT = funT (fun p ->
    let _, a1, a2 = dest_equal (Sequent.concl p) in
    if alpha_equal a1 a2 then begin
-      if (Sequent.get_bool_arg p "d_auto") = (Some true) then
-         raise generic_refiner_exn;
+      if (in_auto p) then raise generic_refiner_exn;
       quotient_memberWeakEquality
    end else
       quotient_memberEquality)
 
 let resource intro +=
-   (<<'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]>>, ("quotientIntroT", None, false, quotientIntroT))
+   (<<'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]>>, wrap_intro quotientIntroT)
 
 doc <:doc<
    @begin[doc]

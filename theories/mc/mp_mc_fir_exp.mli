@@ -96,6 +96,10 @@ declare rawIntOfRawIntOp{ 'dest_int_precision; 'dest_int_signed;
 declare rawIntOfPointerOp{ 'int_precision; 'int_signed }
 declare pointerOfRawIntOp{ 'int_precision; 'int_signed }
 
+(* Pointer operations. *)
+
+declare rawIntOfLabelOp{ 'int_precision; 'int_signed }
+
 (*
  * Binary operations.
  *)
@@ -218,6 +222,12 @@ declare rawIntIndex{ 'int_precision; 'int_signed }
 declare subop{ 'sub_block; 'sub_value; 'sub_index; 'sub_script }
 
 (*
+ * Fields (frame labels).
+ *)
+
+declare frameLabel{ 'label1; 'label2; 'label3 }
+
+(*
  * Normal values.
  *)
 
@@ -226,6 +236,7 @@ declare atomInt{ 'int }
 declare atomEnum{ 'int1; 'int2 }
 declare atomRawInt{ 'int_precision; 'int_signed; 'num }
 declare atomFloat{ 'float_precision; 'num }
+declare atomLabel{ 'frame_label }
 declare atomConst{ 'ty; 'ty_var; 'int }
 declare atomVar{ 'var }
 
@@ -238,6 +249,7 @@ declare allocUnion{ 'ty; 'ty_var; 'int; 'atom_list }
 declare allocArray{ 'ty; 'atom_list }
 declare allocVArray{ 'ty; 'sub_index; 'atom1; 'atom2 }
 declare allocMalloc{ 'ty; 'atom }
+declare allocFrame{ 'var }
 
 (*
  * Tail calls / operations.
@@ -297,12 +309,12 @@ declare letBinop{ 'ty; 'binop; 'atom1; 'atom2; var. 'exp['var] }
 (* Function application. *)
 
 declare letExt{ 'ty1; 'string; 'ty2; 'atom_list; var. 'exp['var] }
-declare tailCall{ 'var; 'atom_list }
-declare specialCall{ 'tailop }
+declare tailCall{ 'label; 'var; 'atom_list }
+declare specialCall{ 'label; 'tailop }
 
 (* Control. *)
 
-declare matchCase{ 'set; 'exp }
+declare matchCase{ 'label; 'set; 'exp }
 declare matchExp{ 'atom; 'matchCase_list }
 declare typeCase{ 'atom1; 'atom2; 'var1; 'var2; 'exp1; 'exp2 }
 
@@ -319,7 +331,7 @@ declare memcpy{ 'subop; 'label; 'var1; 'atom1; 'var2; 'atom2; 'atom3; 'exp }
 
 (* Assertions. *)
 
-declare call{ 'var; 'atom_option_list; 'exp }
+declare call{ 'label; 'var; 'atom_option_list; 'exp }
 declare assertExp{ 'label; 'pred; 'exp }
 
 (* Debugging. *)
@@ -456,6 +468,11 @@ val pointerOfRawIntOp_term : term
 val is_pointerOfRawIntOp_term : term -> bool
 val mk_pointerOfRawIntOp_term : term -> term -> term
 val dest_pointerOfRawIntOp_term : term -> term * term
+
+val rawIntOfLabelOp_term : term
+val is_rawIntOfLabelOp_term : term -> bool
+val mk_rawIntOfLabelOp_term : term -> term -> term
+val dest_rawIntOfLabelOp_term : term -> term * term
 
 (*
  * Binary operations.
@@ -804,6 +821,15 @@ val mk_subop_term : term -> term -> term -> term -> term
 val dest_subop_term : term -> term * term * term * term
 
 (*
+ * Fields (frame labels).
+ *)
+
+val frameLabel_term : term
+val is_frameLabel_term : term -> bool
+val mk_frameLabel_term : term -> term -> term -> term
+val dest_frameLabel_term : term -> term * term * term
+
+(*
  * Normal values.
  *)
 
@@ -831,6 +857,11 @@ val atomFloat_term : term
 val is_atomFloat_term : term -> bool
 val mk_atomFloat_term : term -> term -> term
 val dest_atomFloat_term : term -> term * term
+
+val atomLabel_term : term
+val is_atomLabel_term : term -> bool
+val mk_atomLabel_term : term -> term
+val dest_atomLabel_term : term -> term
 
 val atomConst_term : term
 val is_atomConst_term : term -> bool
@@ -870,6 +901,11 @@ val allocMalloc_term : term
 val is_allocMalloc_term : term -> bool
 val mk_allocMalloc_term : term -> term -> term
 val dest_allocMalloc_term : term -> term * term
+
+val allocFrame_term : term
+val is_allocFrame_term : term -> bool
+val mk_allocFrame_term : term -> term
+val dest_allocFrame_term : term -> term
 
 (*
  * Tail calls / operations.
@@ -1000,20 +1036,20 @@ val dest_letExt_term : term -> term * term * term * term * string * term
 
 val tailCall_term : term
 val is_tailCall_term : term -> bool
-val mk_tailCall_term : term -> term -> term
-val dest_tailCall_term : term -> term * term
+val mk_tailCall_term : term -> term -> term -> term
+val dest_tailCall_term : term -> term * term * term
 
 val specialCall_term : term
 val is_specialCall_term : term -> bool
-val mk_specialCall_term : term -> term
-val dest_specialCall_term : term -> term
+val mk_specialCall_term : term -> term -> term
+val dest_specialCall_term : term -> term * term
 
 (* Control. *)
 
 val matchCase_term : term
 val is_matchCase_term : term -> bool
-val mk_matchCase_term : term -> term -> term
-val dest_matchCase_term : term -> term * term
+val mk_matchCase_term : term -> term -> term -> term
+val dest_matchCase_term : term -> term * term * term
 
 val matchExp_term : term
 val is_matchExp_term : term -> bool
@@ -1068,8 +1104,8 @@ val dest_memcpy_term :
 
 val call_term : term
 val is_call_term : term -> bool
-val mk_call_term : term -> term -> term -> term
-val dest_call_term : term -> term * term * term
+val mk_call_term : term -> term -> term -> term -> term
+val dest_call_term : term -> term * term * term * term
 
 val assertExp_term : term
 val is_assertExp_term : term -> bool

@@ -109,7 +109,7 @@ let run_tests () =
    ty_test (TyArray (TyEnum 2)) "TyArray (TyEnum 2)";
    ty_test TyRawData "TyRawData";
    ty_test (TyPointer var2 TyInt) "TyPointer var2 TyInt";
-   ty_test (TyFrame var1 TyInt) "TyFrame var1 TyInt";
+   ty_test (TyFrame var1) "TyFrame var1";
 
    (* Polymorphism. *)
    ty_test (TyVar var2) "TyVar var2";
@@ -121,8 +121,8 @@ let run_tests () =
    (* Object-oriented. *)
    ty_test (TyCase TyInt) "TyCase TyInt";
    ty_test (TyObject var1 TyInt) "TyObject var1 yInt";
-   ty_test (TyOption (TyFrame var2 TyInt))
-           "TyOption (TyFrame var2 TyInt)";
+   ty_test (TyOption (TyFrame var2))
+           "TyOption (TyFrame var2)";
 
    (* Delayed type. *)
    ty_test TyDelayed "TyDelayed";

@@ -133,6 +133,16 @@ let subop_test subop str =
       else
          print_fail ()
 
+let frame_label_test label str =
+   printf "--> Test: %s\n" str;
+   let t = term_of_frame_label label in
+   let t' = frame_label_of_term t in
+      print_simple_term t;
+      if t' = label then
+         print_pass ()
+      else
+         print_fail ()
+
 let atom_test atom str =
    printf "--> Test: %s\n" str;
    let t = term_of_atom atom in
@@ -276,6 +286,7 @@ let run_tests () =
              "RawIntOfRawIntOp Int32 true Int64 false";
    unop_test (RawIntOfPointerOp Int16 false) "RawIntOfPointerOp Int16 false";
    unop_test (PointerOfRawIntOp Int32 true) "PointerOfRawIntOp Int32 true";
+   unop_test (RawIntOfLabelOp Int64 false) "RawIntOfLabelOp Int64 false";
 
    (* Binary operations. *)
    binop_test (AndEnumOp 3) "AndEnumOp 3";
@@ -359,6 +370,10 @@ let run_tests () =
               sub_index = ByteIndex; sub_script = IntIndex } in
    subop_test op "{ BlockSub; PolySub; ByteIndex; IntIndex }";
 
+   (* Fields (frame labels). *)
+   let flbl = (var1, var2, var3) in
+   frame_label_test flbl "(var1, var2, var3";
+
    (* Normal values. *)
    atom_test (AtomNil TyInt) "AtomNil TyInt";
    atom_test (AtomInt 2) "AtomInt 2";
@@ -367,6 +382,7 @@ let run_tests () =
              "AtomRawInt (Rawint.of_string Int8 true \"23\")";
    atom_test (AtomFloat (Rawfloat.of_string Single "2.3"))
              "AtomFloat (Rawfloat.of_string Single \"2.3\")";
+   atom_test (AtomLabel var1 var2 var3) "AtomLabel var1 var2 var3";
    atom_test (AtomConst TyInt var1 3) "AtomConst TyInt var1 3";
    atom_test (AtomVar var1) "AtomVar var1";
 
@@ -381,6 +397,7 @@ let run_tests () =
                  "AllocVArray TyInt ByteIndex (AtomInt 2) (AtomInt 3)";
    alloc_op_test (AllocMalloc TyInt (AtomEnum 5 2))
                  "AllocMalloc TyInt (AtomEnum 5 2)";
+   alloc_op_test (AllocFrame var1) "AllocFrame var1";
 
    (* Tail calls / operations. *)
    tailop_test (TailSysMigrate 2 (AtomInt 2) (AtomInt 3) var2 [])
@@ -415,35 +432,35 @@ let run_tests () =
                    "DebugContext (\"Hi!\", 3) []";
 
    (* Expressions. *)
-   exp_test (LetUnop var1 TyInt UMinusIntOp (AtomInt 2) (TailCall var1 []))
-            "LetUnop var1 TyInt UMinusIntOp (AtomInt 2) (TailCall var1 [])";
-   exp_test (LetBinop var2 TyInt PlusIntOp (AtomInt 2) (AtomInt 3) (TailCall var1 []))
-            "LetBinop var2 TyInt PlusIntOp (AtomInt 2) (AtomInt 3) (TailCall var1 [])";
-   exp_test (LetExt var1 TyInt "Hi!" TyInt [] (TailCall var1 []))
-            "LetExt var1 TyInt \"Hi!\" TyInt [] (TailCall var1 [])";
-   exp_test (TailCall var1 [AtomInt 3]) "TailCall var1 [AtomInt 3]";
-   exp_test (SpecialCall (TailAtomicRollback (AtomInt 3)))
-            "SpecialCall (TailAtomicRollback (AtomInt 3))";
-   exp_test (Match (AtomInt 3) [IntSet set1, TailCall var1[]])
-            "Match (AtomInt 3) [IntSet set1, TailCall var1[]]";
-   exp_test (TypeCase (AtomInt 1) (AtomInt 2) var1 var2 (TailCall var1 []) (TailCall var1[]))
-            "TypeCase (AtomInt 1) (AtomInt 2) var1 var2 (TailCall var1 []) (TailCall var1[])";
-   exp_test (LetAlloc var1 (AllocMalloc TyInt (AtomInt 3)) (TailCall var2 []))
-            "LetAlloc var1 (AllocMalloc TyInt (AtomInt 3)) (TailCall var2 [])";
-   exp_test (LetSubscript op var1 TyInt var2 (AtomInt 2) (TailCall var3 []))
-            "LetSubscript \"op\" var1 TyInt var2 (AtomInt 2) (TailCall var3 [])";
-   exp_test (SetSubscript op var1 var2 (AtomInt 2) TyInt (AtomInt 3) (TailCall var3 []))
-            "SetSubscript \"op\" var1 var2 (AtomInt 2) TyInt (AtomInt 3) (TailCall var3 [])";
-   exp_test (SetGlobal PolySub var1 var2 TyInt (AtomInt 3) (TailCall var3 []))
-            "SetGlobal PolySub var1 var2 TyInt (AtomInt 3) (TailCall var3 [])";
-   exp_test (Memcpy op var1 var2 (AtomInt 3) var2 (AtomInt 4) (AtomInt 60) (TailCall var3 []))
-            "Memcpy \"op\" var1 var2 (AtomInt 3) var2 (AtomInt 4) (AtomInt 60) (TailCall var3 [])";
-   exp_test (Call var1 [None; Some (AtomInt 3)] (TailCall var3 []))
-            "Call var1 [None; Some (AtomInt 3)] (TailCall var3 [])";
-   exp_test (Assert var1 (PredNop var2 IsMutable) (TailCall var3 []))
-            "Assert var1 (PredNop var2 IsMutable) (TailCall var3 [])";
-   exp_test (Debug (DebugContext line []) (TailCall var3 []))
-            "Debug (DebugContext \"line\" []) (TailCall var3 [])";
+   exp_test (LetUnop var1 TyInt UMinusIntOp (AtomInt 2) (TailCall var2 var1 []))
+            "LetUnop var1 TyInt UMinusIntOp (AtomInt 2) (TailCall var2 var1 [])";
+   exp_test (LetBinop var2 TyInt PlusIntOp (AtomInt 2) (AtomInt 3) (TailCall var2 var1 []))
+            "LetBinop var2 TyInt PlusIntOp (AtomInt 2) (AtomInt 3) (TailCall var2 var1 [])";
+   exp_test (LetExt var1 TyInt "Hi!" TyInt [] (TailCall var2 var1 []))
+            "LetExt var1 TyInt \"Hi!\" TyInt [] (TailCall var2 var1 [])";
+   exp_test (TailCall var2 var1 [AtomInt 3]) "TailCall var2 var1 [AtomInt 3]";
+   exp_test (SpecialCall var1 (TailAtomicRollback (AtomInt 3)))
+            "SpecialCall var1 (TailAtomicRollback (AtomInt 3))";
+   exp_test (Match (AtomInt 3) [var1, IntSet set1, TailCall var2 var1 []])
+            "Match (AtomInt 3) [var1, IntSet set1, TailCall var2 var1 []]";
+   exp_test (TypeCase (AtomInt 1) (AtomInt 2) var1 var2 (TailCall var2 var1 []) (TailCall var2 var1 []))
+            "TypeCase (AtomInt 1) (AtomInt 2) var1 var2 (TailCall var2 var1 []) (TailCall var2 var1 [])";
+   exp_test (LetAlloc var1 (AllocMalloc TyInt (AtomInt 3)) (TailCall var1 var2 []))
+            "LetAlloc var1 (AllocMalloc TyInt (AtomInt 3)) (TailCall var1 var2 [])";
+   exp_test (LetSubscript op var1 TyInt var2 (AtomInt 2) (TailCall var1 var3 []))
+            "LetSubscript \"op\" var1 TyInt var2 (AtomInt 2) (TailCall var1 var3 [])";
+   exp_test (SetSubscript op var1 var2 (AtomInt 2) TyInt (AtomInt 3) (TailCall var1 var3 []))
+            "SetSubscript \"op\" var1 var2 (AtomInt 2) TyInt (AtomInt 3) (TailCall var1 var3 [])";
+   exp_test (SetGlobal PolySub var1 var2 TyInt (AtomInt 3) (TailCall var1 var3 []))
+            "SetGlobal PolySub var1 var2 TyInt (AtomInt 3) (TailCall var1 var3 [])";
+   exp_test (Memcpy op var1 var2 (AtomInt 3) var2 (AtomInt 4) (AtomInt 60) (TailCall var1 var3 []))
+            "Memcpy \"op\" var1 var2 (AtomInt 3) var2 (AtomInt 4) (AtomInt 60) (TailCall var1 var3 [])";
+   exp_test (Call var2 var1 [None; Some (AtomInt 3)] (TailCall var1 var3 []))
+            "Call var2 var1 [None; Some (AtomInt 3)] (TailCall var1 var3 [])";
+   exp_test (Assert var1 (PredNop var2 IsMutable) (TailCall var1 var3 []))
+            "Assert var1 (PredNop var2 IsMutable) (TailCall var1 var3 [])";
+   exp_test (Debug (DebugContext line []) (TailCall var1 var3 []))
+            "Debug (DebugContext \"line\" []) (TailCall var1 var3 [])";
 
    (* Done. *)
    !fail_count

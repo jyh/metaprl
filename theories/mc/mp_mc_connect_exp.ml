@@ -121,6 +121,11 @@ let term_of_unop op =
          mk_pointerOfRawIntOp_term  (term_of_int_precision p)
                                     (term_of_int_signed s)
 
+      (* Pointer operations. *)
+    | RawIntOfLabelOp (p, s) ->
+         mk_rawIntOfLabelOp_term    (term_of_int_precision p)
+                                    (term_of_int_signed s)
+
 let unop_of_term t =
 
    (* Identity (polymorhpic). *)
@@ -208,6 +213,12 @@ let unop_of_term t =
    else if is_pointerOfRawIntOp_term t then
       let p, s = dest_pointerOfRawIntOp_term t in
          PointerOfRawIntOp (int_precision_of_term p)
+                           (int_signed_of_term s)
+
+   (* Pointer operations. *)
+   else if is_rawIntOfLabelOp_term t then
+      let p, s = dest_rawIntOfLabelOp_term t in
+         RawIntOfLabelOp   (int_precision_of_term p)
                            (int_signed_of_term s)
 
    else
@@ -579,6 +590,26 @@ let subop_of_term t =
             ("not a subop", t)))
 
 (*
+ * Convert to and from frame_label.
+ *)
+
+let term_of_frame_label (lbl1, lbl2, lbl3) =
+   mk_frameLabel_term   (term_of_label lbl1)
+                        (term_of_label lbl2)
+                        (term_of_label lbl3)
+
+let frame_label_of_term t =
+   if is_frameLabel_term t then
+      let lbl1, lbl2, lbl3 = dest_frameLabel_term t in
+         (label_of_term lbl1),
+         (label_of_term lbl2),
+         (label_of_term lbl3)
+
+   else
+      raise (RefineError ("frame_label_of_term", StringTermError
+            ("not a frame_label", t)))
+
+(*
  * Convert to and from atom.
  *)
 
@@ -597,6 +628,8 @@ let term_of_atom a =
     | AtomFloat f ->
          mk_atomFloat_term    (term_of_float_precision (Rawfloat.precision f))
                               (number_term_of_rawfloat f)
+    | AtomLabel flbl ->
+         mk_atomLabel_term    (term_of_frame_label flbl)
     | AtomConst (t, tv, i) ->
          mk_atomConst_term    (term_of_ty t)
                               (term_of_ty_var tv)
@@ -620,6 +653,8 @@ let atom_of_term t =
    else if is_atomFloat_term t then
       let p, f = dest_atomFloat_term t in
          AtomFloat (rawfloat_of_number_term (float_precision_of_term p) f)
+   else if is_atomLabel_term t then
+      AtomLabel (frame_label_of_term (dest_atomLabel_term t))
    else if is_atomConst_term t then
       let t, tv, i = dest_atomConst_term t in
          AtomConst (ty_of_term t) (ty_var_of_term tv) (int_of_number_term i)
@@ -656,6 +691,8 @@ let term_of_alloc_op op =
     | AllocMalloc (t, a) ->
          mk_allocMalloc_term  (term_of_ty t)
                               (term_of_atom a)
+    | AllocFrame v ->
+         mk_allocFrame_term   (term_of_var v)
 
 let alloc_op_of_term t =
    if is_allocTuple_term t then
@@ -683,6 +720,8 @@ let alloc_op_of_term t =
       let t, a = dest_allocMalloc_term t in
          AllocMalloc (ty_of_term t)
                      (atom_of_term a)
+   else if is_allocFrame_term t then
+      AllocFrame (var_of_term (dest_allocFrame_term t))
 
    else
       raise (RefineError ("term_of_alloc_op", StringTermError
@@ -886,13 +925,13 @@ let debug_info_of_term t =
 
 (* Helper functions. *)
 
-let rec term_of_case (set, expr) =
-   mk_matchCase_term (term_of_set set) (term_of_exp expr)
+let rec term_of_case (lbl, set, expr) =
+   mk_matchCase_term (term_of_label lbl) (term_of_set set) (term_of_exp expr)
 
 and case_of_term t =
    if is_matchCase_term t then
-      let set, expr = dest_matchCase_term t in
-         (set_of_term set), (exp_of_term expr)
+      let lbl, set, expr = dest_matchCase_term t in
+         (label_of_term lbl), (set_of_term set), (exp_of_term expr)
    else
       raise (RefineError ("case of term", StringTermError
             ("not a match case (set * exp)", t)))
@@ -925,11 +964,13 @@ and term_of_exp e =
                                  (term_of_list term_of_atom al)
                                  (string_of_var v)
                                  (term_of_exp expr)
-    | TailCall (v, al) ->
-         mk_tailCall_term        (term_of_var v)
+    | TailCall (lbl, v, al) ->
+         mk_tailCall_term        (term_of_label lbl)
+                                 (term_of_var v)
                                  (term_of_list term_of_atom al)
-    | SpecialCall op ->
-         mk_specialCall_term     (term_of_tailop op)
+    | SpecialCall (lbl, op) ->
+         mk_specialCall_term     (term_of_label lbl)
+                                 (term_of_tailop op)
 
       (* Control. *)
     | Match (a, cases) ->
@@ -983,8 +1024,9 @@ and term_of_exp e =
                                  (term_of_exp expr)
 
       (* Assertions. *)
-    | Call (v, aol, expr) ->
-         mk_call_term         (term_of_var v)
+    | Call (lbl, v, aol, expr) ->
+         mk_call_term         (term_of_label lbl)
+                              (term_of_var v)
                               (term_of_list (term_of_option term_of_atom) aol)
                               (term_of_exp expr)
     | Assert (lbl, p, expr) ->
@@ -1026,11 +1068,14 @@ and exp_of_term t =
                            (list_of_term atom_of_term al)
                            (exp_of_term expr)
    else if is_tailCall_term t then
-      let v, al = dest_tailCall_term t in
-         TailCall          (var_of_term v)
+      let lbl, v, al = dest_tailCall_term t in
+         TailCall          (label_of_term lbl)
+                           (var_of_term v)
                            (list_of_term atom_of_term al)
    else if is_specialCall_term t then
-         SpecialCall       (tailop_of_term (dest_specialCall_term t))
+      let lbl, tailop = dest_specialCall_term t in
+         SpecialCall       (label_of_term lbl)
+                           (tailop_of_term tailop)
 
    (* Control. *)
    else if is_matchExp_term t then
@@ -1092,8 +1137,9 @@ and exp_of_term t =
 
    (* Assertions. *)
    else if is_call_term t then
-      let v, aol, expr = dest_call_term t in
-         Call              (var_of_term v)
+      let lbl, v, aol, expr = dest_call_term t in
+         Call              (label_of_term lbl)
+                           (var_of_term v)
                            (list_of_term (option_of_term atom_of_term) aol)
                            (exp_of_term expr)
    else if is_assertExp_term t then

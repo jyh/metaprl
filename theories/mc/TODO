@@ -28,6 +28,7 @@ Todo list:
    prove deadcode.)
 -  fundef (Mp_mc_fir_exp) is a hack.  I need to come up with a term
    representation for entire programs that is "convinient".
+-  Fir.frame (would fall under types) is not represented at all.
 
 Notes to myself:
 --------------------------------------------------------------------------
@@ -38,7 +39,8 @@ Scratch space (random thoughts to myself):
 -  Checklist for when I need to add/remove/change a term:
    1) .mli file: term declaration, term operation function signatures
    2) .ml file: term declaration, display form, term operation functions,
-   3) connect: change cases appropriately
+   3) connect: change cases appropriately (2 directions to check)
+      this could also involve defining new functions.
    4) test: change cases appropriately
    5) eval: change evaluation as needed
 -  Checklist for when files are added/removed:

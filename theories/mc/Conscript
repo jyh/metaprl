@@ -20,8 +20,7 @@ $env = $env->clone(
 my @src_no_mc =
    qw( term_op fir_base fir_ty fir_exp fir_eval deadcode );
 my @src_mc =
-   qw( term_op fir_base fir_ty fir_exp fir_eval deadcode );
-#   qw( term_op fir_base fir_ty fir_exp fir_eval deadcode connect_base connect_ty connect_exp compile );
+   qw( term_op fir_base fir_ty fir_exp fir_eval deadcode connect_base connect_ty connect_exp compile );
 
 # TEMP: Will be included once the MC branches merge back...
 #       connect_base connect_ty connect_exp compile );

@@ -63,7 +63,7 @@ declare tyTuple{ 'tuple_class; 'ty_list }
 declare tyArray{ 'ty }
 declare tyRawData
 declare tyPointer{ 'var; 'ty }
-declare tyFrame{ 'label; 'ty }
+declare tyFrame{ 'label }
 
 (* Polymorphism. *)
 
@@ -135,8 +135,8 @@ dform tyPointer_df : except_mode[src] ::
    tyPointer{ 'var; 'ty } =
    `"TyPointer(" slot{'var} `"," slot{'ty} `")"
 dform tyFrame_df : except_mode[src] ::
-   tyFrame{ 'label; 'ty } =
-   `"TyFrame(" slot{'label} `"," slot{'ty} `")"
+   tyFrame{ 'label } =
+   `"TyFrame(" slot{'label} `")"
 
 (* Polymorphism. *)
 
@@ -253,11 +253,11 @@ let is_tyPointer_term = is_dep0_dep0_term tyPointer_opname
 let mk_tyPointer_term = mk_dep0_dep0_term tyPointer_opname
 let dest_tyPointer_term = dest_dep0_dep0_term tyPointer_opname
 
-let tyFrame_term = << tyFrame{ 'label; 'ty } >>
+let tyFrame_term = << tyFrame{ 'label } >>
 let tyFrame_opname = opname_of_term tyFrame_term
-let is_tyFrame_term = is_dep0_dep0_term tyFrame_opname
-let mk_tyFrame_term = mk_dep0_dep0_term tyFrame_opname
-let dest_tyFrame_term = dest_dep0_dep0_term tyFrame_opname
+let is_tyFrame_term = is_dep0_term tyFrame_opname
+let mk_tyFrame_term = mk_dep0_term tyFrame_opname
+let dest_tyFrame_term = dest_dep0_term tyFrame_opname
 
 (* Polymorphism. *)
 

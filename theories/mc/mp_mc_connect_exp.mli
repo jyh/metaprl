@@ -74,6 +74,13 @@ val term_of_subop : subop -> term
 val subop_of_term : term -> subop
 
 (*
+ * Convert to and from frame_label.
+ *)
+
+val term_of_frame_label : frame_label -> term
+val frame_label_of_term : term -> frame_label
+
+(*
  * Convert to and from atom.
  *)
 

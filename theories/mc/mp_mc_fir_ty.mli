@@ -62,7 +62,7 @@ declare tyTuple{ 'tuple_class; 'ty_list }
 declare tyArray{ 'ty }
 declare tyRawData
 declare tyPointer{ 'var; 'ty }
-declare tyFrame{ 'label; 'ty }
+declare tyFrame{ 'label }
 
 (* Polymorphism. *)
 
@@ -148,8 +148,8 @@ val dest_tyPointer_term : term -> term * term
 
 val tyFrame_term : term
 val is_tyFrame_term : term -> bool
-val mk_tyFrame_term : term -> term -> term
-val dest_tyFrame_term : term -> term * term
+val mk_tyFrame_term : term -> term
+val dest_tyFrame_term : term -> term
 
 (* Polymorphism *)
 

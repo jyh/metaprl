@@ -98,6 +98,10 @@ declare rawIntOfRawIntOp{ 'dest_int_precision; 'dest_int_signed;
 declare rawIntOfPointerOp{ 'int_precision; 'int_signed }
 declare pointerOfRawIntOp{ 'int_precision; 'int_signed }
 
+(* Pointer operations. *)
+
+declare rawIntOfLabelOp{ 'int_precision; 'int_signed }
+
 (*
  * Binary operations.
  *)
@@ -220,6 +224,12 @@ declare rawIntIndex{ 'int_precision; 'int_signed }
 declare subop{ 'sub_block; 'sub_value; 'sub_index; 'sub_script }
 
 (*
+ * Fields (frame labels).
+ *)
+
+declare frameLabel{ 'label1; 'label2; 'label3 }
+
+(*
  * Normal values.
  *)
 
@@ -228,6 +238,7 @@ declare atomInt{ 'int }
 declare atomEnum{ 'int1; 'int2 }
 declare atomRawInt{ 'int_precision; 'int_signed; 'num }
 declare atomFloat{ 'float_precision; 'num }
+declare atomLabel{ 'frame_label }
 declare atomConst{ 'ty; 'ty_var; 'int }
 declare atomVar{ 'var }
 
@@ -240,6 +251,7 @@ declare allocUnion{ 'ty; 'ty_var; 'int; 'atom_list }
 declare allocArray{ 'ty; 'atom_list }
 declare allocVArray{ 'ty; 'sub_index; 'atom1; 'atom2 }
 declare allocMalloc{ 'ty; 'atom }
+declare allocFrame{ 'var }
 
 (*
  * Tail calls / operations.
@@ -299,12 +311,12 @@ declare letBinop{ 'ty; 'binop; 'atom1; 'atom2; var. 'exp['var] }
 (* Function application. *)
 
 declare letExt{ 'ty1; 'string; 'ty2; 'atom_list; var. 'exp['var] }
-declare tailCall{ 'var; 'atom_list }
-declare specialCall{ 'tailop }
+declare tailCall{ 'label; 'var; 'atom_list }
+declare specialCall{ 'label; 'tailop }
 
 (* Control. *)
 
-declare matchCase{ 'set; 'exp }
+declare matchCase{ 'label; 'set; 'exp }
 declare matchExp{ 'atom; 'matchCase_list }
 declare typeCase{ 'atom1; 'atom2; 'var1; 'var2; 'exp1; 'exp2 }
 
@@ -321,7 +333,7 @@ declare memcpy{ 'subop; 'label; 'var1; 'atom1; 'var2; 'atom2; 'atom3; 'exp }
 
 (* Assertions. *)
 
-declare call{ 'var; 'atom_option_list; 'exp }
+declare call{ 'label; 'var; 'atom_option_list; 'exp }
 declare assertExp{ 'label; 'pred; 'exp }
 
 (* Debugging. *)
@@ -437,6 +449,12 @@ dform rawIntOfPointerOp_df : except_mode[src] ::
 dform pointerOfRawIntOp_df : except_mode[src] ::
    pointerOfRawIntOp{ 'int_precision; 'int_signed } =
    `"PointerOfRawIntOp(" slot{'int_precision} `"," slot{'int_signed} `")"
+
+(* Pointer operations. *)
+
+dform rawIntOfLabelOp_df : except_mode[src] ::
+   rawIntOfLabelOp{ 'int_precision; 'int_signed } =
+   `"RawIntOfLabelOp(" slot{'int_precision} `"," slot{'int_signed} `")"
 
 (*
  * Binary operations.
@@ -713,6 +731,15 @@ dform subop_df : except_mode[src] ::
    slot{'sub_index} `"," slot{'sub_script} `")"
 
 (*
+ * Fields (frame labels).
+ *)
+
+dform frameLabel_df : except_mode[src] ::
+   frameLabel{ 'label1; 'label2; 'label3 } =
+   `"FrameLabel(" slot{'label1} `"," slot{'label2} `","
+   slot{'label3} `")"
+
+(*
  * Normal values.
  *)
 
@@ -732,6 +759,9 @@ dform atomRawInt_df : except_mode[src] ::
 dform atomFloat_df : except_mode[src] ::
    atomFloat{ 'float_precision; 'num } =
    `"AtomFloat(" slot{'float_precision} `", " slot{'num} `")"
+dform atomLabel_df : except_mode[src] ::
+   atomLabel{ 'frame_label } =
+   `"AtomLabel(" slot{'frame_label} `")"
 dform atomConst_df : except_mode[src] ::
    atomConst{ 'ty; 'ty_var; 'int } =
    `"AtomConst(" slot{'ty} `", " slot{'ty_var} `", " slot{'int} `")"
@@ -759,6 +789,9 @@ dform allocVArray_df : except_mode[src] ::
 dform allocMalloc_df : except_mode[src] ::
    allocMalloc{ 'ty; 'atom } =
    `"AllocMalloc(" slot{'ty} `"," slot{'atom} `")"
+dform allocFrame_df : except_mode[src] ::
+   allocFrame{ 'var } =
+   `"AllocFrame(" slot{'var} `")"
 
 (*
  * Tail calls / operations.
@@ -872,17 +905,17 @@ dform letExt_df : except_mode[src] ::
    `"LetExt(" slot{'ty1} `"," slot{'string} `"," slot{'ty2} `","
    slot{'atom_list} `"," slot{'var} `". " slot{'exp} `")"
 dform tailCall_df : except_mode[src] ::
-   tailCall{ 'var; 'atom_list } =
-   `"TailCall(" slot{'var} `"," slot{'atom_list} `")"
+   tailCall{ 'label; 'var; 'atom_list } =
+   `"TailCall(" slot{'label} `"," slot{'var} `"," slot{'atom_list} `")"
 dform specialCall_df : except_mode[src] ::
-   specialCall{ 'tailop } =
-   `"SpeciaCall(" slot{'tailop} `")"
+   specialCall{ 'label; 'tailop } =
+   `"SpeciaCall(" slot{'label} `"," slot{'tailop} `")"
 
 (* Control. *)
 
 dform matchCase_df : except_mode[src] ::
-   matchCase{ 'set; 'exp } =
-   `"MatchCase(" slot{'set} `"," slot{'exp} `")"
+   matchCase{ 'label; 'set; 'exp } =
+   `"MatchCase(" slot{'label} `"," slot{'set} `"," slot{'exp} `")"
 dform matchExp_df : except_mode[src] ::
    matchExp{ 'atom; 'matchCase_list } =
    `"MatchExp(" slot{'atom} `"," slot{'matchCase_list} `")"
@@ -920,8 +953,9 @@ dform memcpy_df : except_mode[src] ::
 (* Assertions. *)
 
 dform call_df : except_mode[src] ::
-   call{ 'var; 'atom_option_list; 'exp } =
-   `"Call(" slot{'var} `"," slot{'atom_option_list} `"," slot{'exp} `")"
+   call{ 'label; 'var; 'atom_option_list; 'exp } =
+   `"Call(" slot{'label} `","
+   slot{'var} `"," slot{'atom_option_list} `"," slot{'exp} `")"
 dform assertExp_df : except_mode[src] ::
    assertExp{ 'label; 'pred; 'exp } =
    `"AssertExp(" slot{'label} `"," slot{'pred} `"," slot{'exp} `")"
@@ -1093,6 +1127,12 @@ let pointerOfRawIntOp_opname = opname_of_term pointerOfRawIntOp_term
 let is_pointerOfRawIntOp_term = is_dep0_dep0_term pointerOfRawIntOp_opname
 let mk_pointerOfRawIntOp_term = mk_dep0_dep0_term pointerOfRawIntOp_opname
 let dest_pointerOfRawIntOp_term = dest_dep0_dep0_term pointerOfRawIntOp_opname
+
+let rawIntOfLabelOp_term = << rawIntOfLabelOp{ 'int_precision; 'int_signed } >>
+let rawIntOfLabelOp_opname = opname_of_term rawIntOfLabelOp_term
+let is_rawIntOfLabelOp_term = is_dep0_dep0_term rawIntOfLabelOp_opname
+let mk_rawIntOfLabelOp_term = mk_dep0_dep0_term rawIntOfLabelOp_opname
+let dest_rawIntOfLabelOp_term = dest_dep0_dep0_term rawIntOfLabelOp_opname
 
 (*
  * Binary operations.
@@ -1512,6 +1552,16 @@ let mk_subop_term = mk_4_dep0_term subop_opname
 let dest_subop_term = dest_4_dep0_term subop_opname
 
 (*
+ * Fields (frame labels).
+ *)
+
+let frameLabel_term = << frameLabel{ 'label1; 'label2; 'label3 } >>
+let frameLabel_opname = opname_of_term frameLabel_term
+let is_frameLabel_term = is_dep0_dep0_dep0_term frameLabel_opname
+let mk_frameLabel_term = mk_dep0_dep0_dep0_term frameLabel_opname
+let dest_frameLabel_term = dest_dep0_dep0_dep0_term frameLabel_opname
+
+(*
  * Normal values.
  *)
 
@@ -1544,6 +1594,12 @@ let atomFloat_opname = opname_of_term atomFloat_term
 let is_atomFloat_term = is_dep0_dep0_term atomFloat_opname
 let mk_atomFloat_term = mk_dep0_dep0_term atomFloat_opname
 let dest_atomFloat_term = dest_dep0_dep0_term atomFloat_opname
+
+let atomLabel_term = << atomLabel{ 'frame_label } >>
+let atomLabel_opname = opname_of_term atomLabel_term
+let is_atomLabel_term = is_dep0_term atomLabel_opname
+let mk_atomLabel_term = mk_dep0_term atomLabel_opname
+let dest_atomLabel_term = dest_dep0_term atomLabel_opname
 
 let atomConst_term = << atomConst{ 'ty; 'ty_var; 'int } >>
 let atomConst_opname = opname_of_term atomConst_term
@@ -1590,6 +1646,12 @@ let allocMalloc_opname = opname_of_term allocMalloc_term
 let is_allocMalloc_term = is_dep0_dep0_term allocMalloc_opname
 let mk_allocMalloc_term = mk_dep0_dep0_term allocMalloc_opname
 let dest_allocMalloc_term = dest_dep0_dep0_term allocMalloc_opname
+
+let allocFrame_term = << allocFrame{ 'var } >>
+let allocFrame_opname = opname_of_term allocFrame_term
+let is_allocFrame_term = is_dep0_term allocFrame_opname
+let mk_allocFrame_term = mk_dep0_term allocFrame_opname
+let dest_allocFrame_term = dest_dep0_term allocFrame_opname
 
 (*
  * Tail calls / operations.
@@ -1744,25 +1806,25 @@ let is_letExt_term = is_4_dep0_1_dep1_term letExt_opname
 let mk_letExt_term = mk_4_dep0_1_dep1_term letExt_opname
 let dest_letExt_term = dest_4_dep0_1_dep1_term letExt_opname
 
-let tailCall_term = << tailCall{ 'var; 'atom_list } >>
+let tailCall_term = << tailCall{ 'label; 'var; 'atom_list } >>
 let tailCall_opname = opname_of_term tailCall_term
-let is_tailCall_term = is_dep0_dep0_term tailCall_opname
-let mk_tailCall_term = mk_dep0_dep0_term tailCall_opname
-let dest_tailCall_term = dest_dep0_dep0_term tailCall_opname
+let is_tailCall_term = is_dep0_dep0_dep0_term tailCall_opname
+let mk_tailCall_term = mk_dep0_dep0_dep0_term tailCall_opname
+let dest_tailCall_term = dest_dep0_dep0_dep0_term tailCall_opname
 
-let specialCall_term = << specialCall{ 'tailop } >>
+let specialCall_term = << specialCall{ 'label; 'tailop } >>
 let specialCall_opname = opname_of_term specialCall_term
-let is_specialCall_term = is_dep0_term specialCall_opname
-let mk_specialCall_term = mk_dep0_term specialCall_opname
-let dest_specialCall_term = dest_dep0_term specialCall_opname
+let is_specialCall_term = is_dep0_dep0_term specialCall_opname
+let mk_specialCall_term = mk_dep0_dep0_term specialCall_opname
+let dest_specialCall_term = dest_dep0_dep0_term specialCall_opname
 
 (* Control. *)
 
-let matchCase_term = << matchCase{ 'set; 'exp } >>
+let matchCase_term = << matchCase{ 'label; 'set; 'exp } >>
 let matchCase_opname = opname_of_term matchCase_term
-let is_matchCase_term = is_dep0_dep0_term matchCase_opname
-let mk_matchCase_term = mk_dep0_dep0_term matchCase_opname
-let dest_matchCase_term = dest_dep0_dep0_term matchCase_opname
+let is_matchCase_term = is_dep0_dep0_dep0_term matchCase_opname
+let mk_matchCase_term = mk_dep0_dep0_dep0_term matchCase_opname
+let dest_matchCase_term = dest_dep0_dep0_dep0_term matchCase_opname
 
 let matchExp_term = << matchExp{ 'atom; 'matchCase_list } >>
 let matchExp_opname = opname_of_term matchExp_term
@@ -1817,11 +1879,11 @@ let dest_memcpy_term = dest_8_dep0_term memcpy_opname
 
 (* Assertions. *)
 
-let call_term = << call{ 'var; 'atom_option_list; 'exp } >>
+let call_term = << call{ 'label; 'var; 'atom_option_list; 'exp } >>
 let call_opname = opname_of_term call_term
-let is_call_term = is_dep0_dep0_dep0_term call_opname
-let mk_call_term = mk_dep0_dep0_dep0_term call_opname
-let dest_call_term = dest_dep0_dep0_dep0_term call_opname
+let is_call_term = is_4_dep0_term call_opname
+let mk_call_term = mk_4_dep0_term call_opname
+let dest_call_term = dest_4_dep0_term call_opname
 
 let assertExp_term = << assertExp{ 'label; 'pred; 'exp } >>
 let assertExp_opname = opname_of_term assertExp_term

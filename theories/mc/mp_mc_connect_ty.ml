@@ -77,9 +77,9 @@ let rec term_of_ty t =
     | TyRawData ->
          tyRawData_term
     | TyPointer (v, t) ->
-         mk_tyPointer_term (term_of_var v)      (term_of_ty t)
-    | TyFrame (lbl, t) ->
-         mk_tyFrame_term   (term_of_label lbl)  (term_of_ty t)
+         mk_tyPointer_term (term_of_var v) (term_of_ty t)
+    | TyFrame lbl ->
+         mk_tyFrame_term   (term_of_label lbl)
 
       (* Polymorphism. *)
     | TyVar tv ->
@@ -146,8 +146,7 @@ let rec ty_of_term t =
       let v, t = dest_tyPointer_term t in
          TyPointer (var_of_term v) (ty_of_term t)
    else if is_tyFrame_term t then
-      let lbl, t = dest_tyFrame_term t in
-         TyFrame (label_of_term lbl) (ty_of_term t)
+      TyFrame (label_of_term (dest_tyFrame_term t))
 
    (* Polymorphism. *)
    else if is_tyVar_term t then

@@ -211,7 +211,7 @@ struct
     *)
    let registers =
       Array.mapi (fun i vars ->
-            Lm_list_util.subtract_list vars Frame.registers_special.(i)) Frame.registers
+            SymbolSet.subtract_list (SymbolSet.of_list vars) Frame.registers_special.(i)) Frame.registers
 
    (*
     * Add all the special registers to a list so we can
@@ -231,7 +231,7 @@ struct
     *
     * Number of colors assigned to registers.
     *)
-   let max_colors = Array.map List.length registers
+   let max_colors = Array.map SymbolSet.cardinal registers
 
    (*
     * All the registers that are precolored.
@@ -1449,7 +1449,7 @@ struct
                          (match u with
                              { node_class = NodeColored; node_color = Some color }
                            | { node_class = NodePrecolored; node_color = Some color }
-                             when List.mem color colors ->
+                             when SymbolSet.mem colors color ->
                                 color
                            | _ ->
                                 search moves)
@@ -1457,7 +1457,7 @@ struct
                  | MoveConstrained ->
                       search moves)
           | [] ->
-               List.hd colors
+               SymbolSet.choose colors
       in
       let color = search node.node_moves in
          node.node_color <- Some color
@@ -1482,7 +1482,7 @@ struct
                                      (string_of_symbol (var_of_node ra w'))
                                      (string_of_symbol color)
                                end;
-                            Lm_list_util.remove color colors
+                            SymbolSet.remove colors color
                        | None ->
                             raise (Invalid_argument "assign_colors"))
                 | _ ->
@@ -1500,7 +1500,7 @@ struct
                SymbolTable.fold (fun colors _ node ->
                      remove_color colors node) colors node.node_neighbors
             in
-               if colors = [] then
+               if SymbolSet.is_empty colors then
                   begin
                      if !debug_regalloc >= 1 then
                         eprintf "Spilled %s@." (string_of_symbol (var_of_node ra node));

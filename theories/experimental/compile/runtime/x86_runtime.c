@@ -173,6 +173,7 @@ static char *alloc_string(char *s)
 int main(int argc, char **argv)
 {
     void *exitp;
+	 int ret;
 
     /* Print GC messages */
     trace_gc = getenv("TRACE_GC") != 0;
@@ -194,7 +195,9 @@ int main(int argc, char **argv)
     exitp = alloc_closure(__exit);
 
     /* Now execute the program */
-    return __main(0, exitp);
+    ret = __main(0, exitp);
+	 printf("Return value: %i\n", ret >> 1);
+	 exit(0);
 }
 
 /************************************************************************

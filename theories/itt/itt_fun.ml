@@ -104,6 +104,7 @@ prim_rw unfold_fun : ('A -> 'B) <--> (x: 'A -> 'B)
 
 (*!
  * @begin[doc]
+ * @rules
  * @thysubsection{Typehood and equality}
  *
  * The non-dependent function has an intensional type equality.

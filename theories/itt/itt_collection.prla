@@ -1459,7 +1459,8 @@ T	t671	o670
 B	b671	t671
 T	t672	o b671 b4
 NItt_set	Itt_set	Itt_set NIL
-NItt_set!hide	hide	hide Itt_set
+NItt_hide	Itt_hide	Itt_hide NIL
+NItt_hide!hide	hide	hide Itt_hide
 O	o672	hide
 B	b672	t666
 T	t673	o672 b672

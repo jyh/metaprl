@@ -2993,7 +2993,8 @@ B	b2369	t2369
 T	t1077	o512 b1065 b2369
 B	b1078	t1077
 NItt_set	Itt_set	Itt_set NIL
-NItt_set!hide	hide	hide Itt_set
+NItt_hide	Itt_hide	Itt_hide NIL
+NItt_hide!hide	hide	hide Itt_hide
 O	o1924	hide
 P	p2008	Var P2
 O	o2008	var p2008

@@ -1,7 +1,4 @@
 (*!
- * @begin[spelling]
- * unhiding unhidden unhideEqual unhideGoalEqual
- * @end[spelling]
  *
  * @begin[doc]
  * @theory[Itt_set]
@@ -13,9 +10,9 @@
  * of $x @in T$ where the proposition $P[x]$ is true.
  *
  * The set type is a ``squash'' type: the type is similar to the
- * dependent product $x@colon A @times P[x]$ (Section @reftheory[Itt_dprod]),
+ * dependent product $x@colon T @times P[x]$ (Section @reftheory[Itt_dprod]),
  * but the proof $P[x]$ is omitted (squashed).  The set type $@set{x; T; P[x]}$
- * is always a subtype of $A$.
+ * is always a subtype of $T$.
  * @end[doc]
  *
  * ----------------------------------------------------------------
@@ -61,6 +58,7 @@ include Itt_equal
 include Itt_unit
 include Itt_subtype
 include Itt_struct
+include Itt_hide
 (*! @docoff *)
 
 open Printf
@@ -98,13 +96,10 @@ let _ =
  * @begin[doc]
  * @terms
  *
- * The @tt{set} term defines the set type.  The @tt{hide} term is
- * used to represent sequent hypotheses $B[x]$ that have been squashed by
- * the set type (see the elimination form @hrefrule[setElimination]).
+ * The @tt{set} term defines the set type.
  * @end[doc]
  *)
 declare set{'A; x. 'B['x]}
-declare hide{'A}
 (*! @docoff *)
 
 let set_term = << { a: 'A | 'B['a] } >>
@@ -113,20 +108,12 @@ let is_set_term = is_dep0_dep1_term set_opname
 let dest_set = dest_dep0_dep1_term set_opname
 let mk_set_term = mk_dep0_dep1_term set_opname
 
-let hide_term = << hide{'a} >>
-let hide_opname = opname_of_term hide_term
-let is_hide_term = is_dep0_term hide_opname
-let dest_hide = dest_dep0_term hide_opname
-let mk_hide_term = mk_dep0_term hide_opname
-
 (************************************************************************
  * DISPLAY FORMS                                                        *
  ************************************************************************)
 
 dform set_df1 : {x:'A | 'B} =
    pushm[3] `"{ " bvar{'x} `":" slot{'A} `" | " slot{'B} `"}" popm
-
-dform hide_df1 : except_mode[src] :: hide{'A} = "[" 'A "]"
 
 (************************************************************************
  * RULES                                                                *
@@ -162,7 +149,8 @@ prim setFormation 'H 'a 'A :
 prim setEquality {| intro_resource []; eqcd_resource |} 'H 'x :
    [wf] sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
    [wf] sequent [squash] { 'H; x: 'A1 >- 'B1['x] = 'B2['x] in univ[i:l] } -->
-   sequent ['ext] { 'H >- { a1:'A1 | 'B1['a1] } = { a2:'A2 | 'B2['a2] } in univ[i:l] } = it
+   sequent ['ext] { 'H >- { a1:'A1 | 'B1['a1] } = { a2:'A2 | 'B2['a2] } in univ[i:l] } =
+   it
 
 prim setType {| intro_resource [] |} 'H 'x :
    [wf] sequent [squash] { 'H >- "type"{'A1} } -->
@@ -180,7 +168,7 @@ prim setType {| intro_resource [] |} 'H 'x :
  *)
 prim setMemberFormation {| intro_resource [] |} 'H 'a 'z :
    [wf] sequent [squash] { 'H >- 'a = 'a in 'A } -->
-   [main] sequent ['ext]   { 'H >- 'B['a] } -->
+   [main] sequent [squash]   { 'H >- 'B['a] } -->
    [wf] sequent [squash] { 'H; z: 'A >- "type"{'B['z]} } -->
    sequent ['ext]   { 'H >- { x:'A | 'B['x] } } =
    'a
@@ -230,51 +218,8 @@ prim set_subtype {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- subtype{ { a: 'A | 'B['a] }; 'A } } =
    it
 
-(*!
- * @begin[doc]
- * @thysubsection{Unhiding}
- *
- * The next two rules allow special cases for hidden hypotheses to be
- * unhidden.  The first rule, @tt{unhideEqual}, allows equalities to
- * be unhidden (because the proof can always be inferred), and the
- * @tt{unhideGoalEqual} rule allows hypotheses to be unhidden if an equality
- * is being proved (for the same reason).
- * @end[doc]
- *)
-prim unhideEqual 'H 'J 'u :
-   ('t['u] : sequent ['ext] { 'H; u: 'x = 'y in 'A; 'J[it] >- 'C[it] }) -->
-   sequent ['ext] { 'H; u: hide{('x = 'y in 'A)}; 'J['u] >- 'C['u] } =
-   't[it]
+(*! @docoff *)
 
-prim unhideGoalEqual 'H 'J 'u :
-   sequent [squash] { 'H; u: 'P; 'J[it] >- 'x[it] = 'y[it] in 'T[it] } -->
-   sequent ['ext] { 'H; u: hide{'P}; 'J['u] >- 'x['u] = 'y['u] in 'T['u] } =
-   it
-
-(************************************************************************
- * TACTICS                                                              *
- ************************************************************************)
-
-(*!
- * @begin[doc]
- * @docoff
- * @comment{Squash a goal}
- * @end[doc]
- *)
-let squashT p =
-   if is_squash_goal p then
-      idT p
-   else
-      Sequent.get_tactic_arg p "squash" p
-
-let unhideT i p =
-   let u, t = Sequent.nth_hyp p i in
-   let t = dest_hide t in
-   let j, k = Sequent.hyp_indices p i in
-      if is_equal_term t then
-         unhideEqual j k u p
-      else (* if is_equal_term (Sequent.concl p) then *)
-         unhideGoalEqual j k u p
 
 (************************************************************************
  * TYPE INFERENCE                                                       *

@@ -19,6 +19,7 @@ MPFILES :=\
 	itt_void\
 	itt_unit\
 	itt_atom\
+	itt_hide\
 	itt_set\
 	itt_union\
 	itt_rfun\

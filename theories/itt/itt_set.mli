@@ -35,13 +35,13 @@ include Itt_equal
 include Itt_subtype
 include Itt_unit
 include Itt_struct
+include Itt_hide
 
 open Refiner.Refiner.Term
 
 open Tactic_type.Tacticals
 
 declare set{'A; x. 'B['x]}
-declare hide{'A}
 
 (************************************************************************
  * RULES                                                                *
@@ -81,7 +81,7 @@ rule setEquality 'H 'x :
  *)
 rule setMemberFormation 'H 'a 'z :
    sequent [squash] { 'H >- 'a = 'a in 'A } -->
-   sequent ['ext]   { 'H >- 'B['a] } -->
+   sequent [squash]   { 'H >- 'B['a] } -->
    sequent [squash] { 'H; z: 'A >- "type"{'B['z]} } -->
    sequent ['ext]   { 'H >- { x:'A | 'B['x] } }
 
@@ -120,18 +120,12 @@ rule set_subtype 'H :
  * TACTICS                                                              *
  ************************************************************************)
 
-(* Hiding and unhiding *)
-topval squashT : tactic
-topval unhideT : int -> tactic
 
 (* Primitives *)
 val is_set_term : term -> bool
 val dest_set : term -> string * term * term
 val mk_set_term : string -> term -> term -> term
 
-val is_hide_term : term -> bool
-val dest_hide : term -> term
-val mk_hide_term : term -> term
 
 (*
  * -*-

@@ -1583,7 +1583,8 @@ B	b905	t904
 H	h907	x t515
 H	h394	w t511
 NItt_set	Itt_set	Itt_set NIL
-NItt_set!hide	hide	hide Itt_set
+NItt_hide	Itt_hide	Itt_hide NIL
+NItt_hide!hide	hide	hide Itt_hide
 O	o907	hide
 T	t907	o907 b511
 P	p908	Var w

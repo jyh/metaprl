@@ -152,8 +152,11 @@ topval reduce_atomVar_atomConst : conv
  * Unary operations.
  *)
 
+topval reduce_idOp_atomInt : conv
+topval reduce_idOp_atomEnum : conv
+topval reduce_idOp_atomRawInt : conv
+topval reduce_idOp_atomFloat : conv
 topval reduce_idOp_atomVar : conv
-topval reduce_idOp_general : conv
 
 (*
  * Binary operations.

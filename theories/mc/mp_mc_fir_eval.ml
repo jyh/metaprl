@@ -287,7 +287,9 @@ prim_rw reduce_member_rawint_set_empty :
  *)
 
 (* We reduce atomVar wrappers that are no longer needed and
- * in fact lead to malformed FIR terms. *)
+ * in fact constitute malformed FIR terms. We should never get
+ * atomVar{ atomVar{ 'v } }, so there's no rewrite for this case.
+ * The others occur when we substitute for bound variables. *)
 
 prim_rw reduce_atomVar_atomNil :
    atomVar{ atomNil{ 'ty } } <-->
@@ -325,13 +327,29 @@ prim_rw reduce_atomVar_atomConst :
  * Unary operations.
  *)
 
+(* Note: I should have cases for each atom, so that I don't rely
+ * on the order in which rewrites are applied. *)
+
+prim_rw reduce_idOp_atomInt :
+   letUnop{ tyInt; idOp; atomInt{ 'num }; var. 'exp['var] } <-->
+   'exp[ atomInt{ 'num } ]
+
+prim_rw reduce_idOp_atomEnum :
+   letUnop{ tyEnum{'bound}; idOp; atomEnum{'bound; 'value}; v. 'exp['v] } <-->
+   'exp[ atomEnum{'bound; 'value} ]
+
+prim_rw reduce_idOp_atomRawInt :
+   letUnop{ tyRawInt{'p; 's}; idOp; atomRawInt{'p; 's; 'n}; v. 'exp['v] } <-->
+   'exp[ atomRawInt{'p; 's; 'n} ]
+
+prim_rw reduce_idOp_atomFloat :
+   letUnop{ tyFloat{'p}; idOp; atomFloat{'p; 'num}; var. 'exp['var] } <-->
+   'exp[ atomFloat{ 'p; 'num } ]
+
+(* Remove the atomVar wrapper since 'exp should already have that. *)
 prim_rw reduce_idOp_atomVar :
    letUnop{ 'ty; idOp; atomVar{ 'symbol }; var. 'exp['var] } <-->
    'exp[ 'symbol ]
-
-prim_rw reduce_idOp_general :
-   letUnop{ 'ty; idOp; 'atom; var. 'exp['var] } <-->
-   'exp[ 'atom ]
 
 (*
  * Binary operations.
@@ -422,8 +440,11 @@ let firExpEvalC =
       reduce_atomVar_atomSizeof;
       reduce_atomVar_atomConst;
 
+      reduce_idOp_atomInt;
+      reduce_idOp_atomEnum;
+      reduce_idOp_atomRawInt;
+      reduce_idOp_atomFloat;
       reduce_idOp_atomVar;
-      reduce_idOp_general;
 
       reduce_plusIntOp;
       reduce_minusIntOp;

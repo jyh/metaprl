@@ -64,7 +64,7 @@ let apply_rw_top =
  * Get a conversion that applies all iforms.
  *)
 let iforms_conversion iforms =
-   applyIFormsC iforms
+   applyIFormsAndBaseC iforms
 
 let apply_conversion iformsC term =
    apply_rw_top iformsC term
@@ -74,7 +74,7 @@ let apply_conversion iformsC term =
  *)
 let fix_point_iforms_and_base iforms term =
    Printf.eprintf "fix_p... with %i forms\n%t" (List.length iforms) flush;
-   apply_rw_top (applyIFormsAndBaseC iforms) term
+   apply_rw_top (iforms_conversion iforms) term
 
 (*
  * Apply general reductions and all specified iform sets.

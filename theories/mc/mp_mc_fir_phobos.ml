@@ -68,7 +68,14 @@ let applyIFormsAndBaseC iform_rewrites =
 
       ) iform_rewrites
    in
-      (repeatC (higherC (firstC (reduceTopC :: patterns))))
+   match patterns with
+      [] ->
+         idC
+    | _ ->
+      (sweepDnC (repeatC (firstC (reduceTopC :: patterns))))
+(*
+      (repeatC (higherC (applyAllC (reduceTopC :: patterns))))
+*)
 
 let applyIFormsC iform_rewrites =
    let patterns = List.map
@@ -89,7 +96,10 @@ let applyIFormsC iform_rewrites =
       [] ->
          idC
     | _ ->
-         (repeatC (higherC (applyAllC (patterns))))
+         (sweepDnC (repeatC (firstC (patterns))))
+(*
+      (repeatC (higherC (applyAllC (patterns))))
+*)
 
 let applyMetaBaseC =
    (repeatC (higherC (applyAllC [

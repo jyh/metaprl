@@ -7,6 +7,7 @@ open Printf
 open Nl_debug
 open String_set
 
+open Refiner.Refiner.TermType
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermShape
 
@@ -83,16 +84,33 @@ let rec compare_terms constantp subst term1 term2 =
    else if is_var_term term2 then
       GreaterThan
    else
-      let shape1 = shape_of_term term1 in
-      let shape2 = shape_of_term term2 in
-         match compare shape1 shape2 with
+      let trm1 = dest_term term1 in
+      let trm2 = dest_term term2 in
+         match compare trm1.term_op trm2.term_op with
             0 ->
-               compare_term_lists constantp subst (subterms_of_term term1) (subterms_of_term term2)
+               compare_bterm_lists constantp subst trm1.term_terms trm2.term_terms
           | ord ->
                if ord > 0 then
                   GreaterThan
                else
                   LessThan
+
+and compare_bterm_lists constantp subst terms1 terms2 =
+   match terms1, terms2 with
+      term1 :: terms1, term2 :: terms2 ->
+         begin
+            match compare_terms constantp subst (dest_bterm term1).bterm (dest_bterm term2).bterm with
+               Equal subst ->
+                  compare_bterm_lists constantp subst terms1 terms2
+             | ord ->
+                  ord
+         end
+    | [], [] ->
+         Equal subst
+    | [], _ ->
+         LessThan
+    | _, [] ->
+         GreaterThan
 
 and compare_term_lists constantp subst terms1 terms2 =
    match terms1, terms2 with

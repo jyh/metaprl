@@ -668,6 +668,7 @@ doc <:doc<
 >>
 let normalizeC = sub_elimC thenC
                  reduceC thenC
+					  (repeatC (higherC mul_add_DistribC)) thenC
                  mul_normalizeC thenC
                  add_normalizeC thenC
                  reduceC

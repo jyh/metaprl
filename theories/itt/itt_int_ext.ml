@@ -506,9 +506,18 @@ interactive_rw mul_Zero3C 'a :
    ('a in int) -->
    0 <--> (0 *@ 'a)
 
+interactive_rw uni2negative1C :
+	('a in int) -->
+	((-1) *@ 'a) <--> (- 'a)
+
+interactive_rw negative1_2uniC :
+	('a in int) -->
+	(- 'a) <--> ((-1) *@ 'a)
+
 let resource reduce +=
    [<< (('a *@ 'b) *@ 'c) >>, mul_Assoc2_rw;
-    << ('a *@ ('b +@ 'c)) >>, ((addrC [1] reduceC) thenC (tryC mul_add_Distrib_rw));
+(*    << ('a *@ ('b +@ 'c)) >>, ((addrC [1] reduceC) thenC (tryC mul_add_Distrib_rw));
+ *)
     << (1 *@ 'a) >>, mul_Id_rw;
     << ('a *@ 1) >>, mul_Id2_rw;
     << (0 *@ 'a) >>, mul_Zero_rw;

@@ -1,6 +1,7 @@
 open Refiner.Refiner.Term
 open Tactic_type.Conversionals
 
+declare rename[a:t, b:t]{'r}
 declare rename_mul_add{'S}
 declare rename_add_mul{'S}
 declare as_additive{'S}

@@ -95,7 +95,7 @@ interactive agroup_add_wf {| intro [intro_typeinf <<'R>>] |} agroup[i:l] :
 
 prim aabelgEquality {| intro [] |} :
    sequent { <H> >- 'G1='G2 in abelg[i:l] } -->
-   sequent { <H> >- rename_mul_add{'G1}=rename_mul_add{'G2} in abelg[i:l] } = it
+   sequent { <H> >- rename_mul_add{'G1}=rename_mul_add{'G2} in aabelg[i:l] } = it
 
 prim additiveEqualityInAbelG {| intro [] |} :
    sequent { <H> >- 'G1='G2 in aabelg[i:l] } -->
@@ -216,6 +216,13 @@ interactive ring_as_additive_subtype_abelg :
    sequent { <H> >- as_additive{ring[i:l]} subtype abelg[i:l] }
 doc docoff
 
+define unfold_int_ring : int_ring <-->
+	{car=int; "*"=lambda{x.lambda{y.('x *@ 'y)}}; "1"=1;
+	 "+"=lambda{x.lambda{y.('x +@ 'y)}}; "0"=0; "neg"=lambda{x.(- 'x)}}
+
+interactive int_ring_is_ring :
+	sequent { <H> >- int_ring in ring[i:l] }
+
 dform ring_df1 : except_mode[src] :: except_mode[prl] :: ring[i:l] =
    mathbbR `"ing" sub{slot[i:l]}
 
@@ -227,6 +234,9 @@ dform prering_df1 : except_mode[src] :: except_mode[prl] :: prering[i:l] =
 
 dform prering_df2 : mode[prl] :: prering[i:l] =
    `"prering[" slot[i:l] `"]"
+
+dform int_ring_df1 : except_mode[src] :: int_ring =
+   mathbbZ `" ring"
 
 (*
  * -*-

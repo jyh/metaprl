@@ -171,6 +171,15 @@ let debug_subgoals =
       in
          aux (Sequent.hyp_count p) p
 
+   let onAllLocalMCumulativeHypsT tac p =
+      let rec aux i p =
+         if i <= (Sequent.hyp_count p) then
+            (thenLocalMT (tac i) (aux (succ i))) p
+         else
+            idT p
+      in
+         aux 2 p
+
 (*
  * end of thenMT_prefix part
  *)
@@ -326,6 +335,41 @@ let arithRelInConcl2HypT p =
    else if is_neq_int_term t then neqInConcl2HypT p
    else if is_not_term t then dT 0 p
    else idT p
+
+let arith_rels=[
+	opname_of_term << 'x<'y >>;
+	opname_of_term << 'x>'y >>;
+	opname_of_term << 'x<='y >>;
+	opname_of_term << 'x>='y >>]
+
+let rec is_arith_rel t =
+	let op=opname_of_term t in
+   (List.mem op arith_rels) or
+   (if is_equal_term t then
+   	let (t',_,_)=dest_equal t in
+      alpha_equal t' <<int>>
+    else
+    	false) or
+   (if is_not_term t then
+   	let t'=dest_not t in
+      is_arith_rel t'
+    else
+    	false)
+
+let negativeHyp2ConclT i p =
+   let t=Sequent.nth_hyp p i in
+	if is_not_term t then
+   	let t'=dest_not t in
+      if is_arith_rel t' then
+      	(thenLocalMT (dT i) arithRelInConcl2HypT) p
+		else
+      	idT p
+	else if is_neq_int_term t then
+   	thenLocalMT (rw (unfold_neq_int thenC (addrC [0] unfold_bneq_int)) i)
+      (thenLocalMT (dT i)
+      (thenLocalMT eq_2beq_int arithRelInConcl2HypT)) p
+   else
+   	idT p
 
 interactive ge_addMono :
    sequent [squash] { 'H >- 'a in int } -->
@@ -1014,9 +1058,10 @@ let findContradRelT p =
  *)
 let arithT =
    thenLocalMT arithRelInConcl2HypT
+   (thenLocalMT (onAllLocalMCumulativeHypsT negativeHyp2ConclT)
    (thenLocalMT (onAllLocalMHypsT anyArithRel2geT)
    (thenLocalMT (onAllLocalMHypsT tryReduce_geT)
-   (thenLocalMT findContradRelT (reduceContradRelT (-1)))))
+   (thenLocalMT findContradRelT (reduceContradRelT (-1)) ))))
 
 interactive test 'H 'a 'b 'c :
 sequent [squash] { 'H >- 'a in int } -->

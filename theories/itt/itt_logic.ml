@@ -1,4 +1,4 @@
-doc <:doc< 
+doc <:doc<
    @begin[spelling]
    bi SelectOption assumT backThruAssumT backThruHypT dT genAssumT
    genUnivCDT instHypT moveToConclT
@@ -240,7 +240,7 @@ interactive not_intro {| intro [] |} :
    sequent ['ext] { 'H >- "not"{'t} }
 
 interactive not_elim {| elim [ThinOption thinT] |} 'H :
-   [assertion] sequent ['ext] { 'H; x: "not"{'t}; 'J['x] >- 't } -->
+   [main] sequent ['ext] { 'H; x: "not"{'t}; 'J['x] >- 't } -->
    sequent ['ext] { 'H; x: "not"{'t}; 'J['x] >- 'C }
 (*
 interactive not_membership {| intro []; squash |} :

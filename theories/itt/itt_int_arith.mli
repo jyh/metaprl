@@ -47,6 +47,7 @@ topval thenLocalMT : tactic -> tactic -> tactic
 topval thenLocalMElseT : tactic -> tactic -> tactic -> tactic
 topval thenLocalAT : tactic -> tactic -> tactic
 topval onAllLocalMHypsT : (int -> tactic) -> tactic
+topval onAllLocalMCumulativeHypsT : (int -> tactic) -> tactic
 
 topval bnot_lt2geC : conv
 topval ltInConcl2HypT : tactic
@@ -57,7 +58,7 @@ topval gt2geT : term -> tactic
 topval anyArithRel2geT : int -> tactic
 
 topval arithRelInConcl2HypT : tactic
-
+topval negativeHyp2ConclT : int -> tactic
 topval ct : term -> term -> int
 
 topval add_BubblePrimitiveC : conv

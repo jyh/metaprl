@@ -197,6 +197,11 @@ declare m
 
 dform m_df : m = bf["m"]
 
+let tprog = <:ext<
+            let t = 1+2 in
+               t>>
+
+
 (************************************************************************
  * Just for testing.
  *)
@@ -208,6 +213,7 @@ interactive test_prog 'H :
                            LetSubscript{'v4; AtomInt[0:n]; v5.
                            Return{'v5}}}; f.
                        TailCall{'f; AtomInt[17:n]}}}}}
+
 
 (*!
  * @docoff

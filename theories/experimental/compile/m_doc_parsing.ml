@@ -54,27 +54,35 @@ term syntax) to express program transformations in rewrite rules and
 we can specify test programs in source notation.
 
 @begin[figure,syntax]
-$$
+$
+@begin[array,rclcl]
+@line{@it{op} {::=}   {+ @pipe - @pipe * @pipe / @pipe = @pipe <> @pipe < @pipe @le @pipe > @pipe
+@ge }
+{@space} @hbox{Binary operators}}
+@line{{}{}{}{}{}}
+@end[array]
+$
+
+$
 @begin[array,rcll]
-@line{@it{op} {::=}   {+ @pipe - @pipe * @pipe /} @hbox{Binary operators}}
-@line{{}      {@pipe} {= @pipe <> @pipe < @pipe @le @pipe > @pipe @ge} {}}
-@line{{} {} {} {}}
 @line{@it{e} {::=} {@AtomTrue @pipe @AtomFalse} @hbox{@it{Booleans}}}
 @line{{} {@pipe} @AtomInt[i] @hbox{@it{Integers}}}
 @line{{} {@pipe} v @hbox{@it{Variables}}}
-@line{{} {@pipe} {e @space @it{op} @space e} @hbox{@it{Binary expressions}}}
-@line{{} {@pipe} @AtomFun{v; e} @hbox{@it{Anonymous functions}}}
-@line{{} {@pipe} @If{e; e; e} @hbox{@it{Conditionals}}}
-@line{{} {@pipe} {e.[e]} @hbox{@it{Subscripting}}}
-@line{{} {@pipe} {e.[e] @leftarrow e} @hbox{@it{Assignment}}}
+@line{{} {@pipe} {e @space @it{op} @space e @space} @hbox{@it{Binary expressions}}}
+@line{{} {@pipe} @AtomFun{v; e} @hbox{@it{Anonymous functions @space}}}
 @line{{} {@pipe} {e; e} @hbox{@it{Sequencing}}}
-@line{{} {@pipe} {e(e_1, @ldots, e_n)} @hbox{@it{Application}}}
-@line{{} {@pipe} @LetAtom{e; v; e} @hbox{@it{Let definitions}}}
-@line{{} {@pipe} {@xlet @xrec f_1 (v_1, @ldots, v_n) = e} @hbox{@it{Recursive functions}}}
-@line{{} {} @ldots {}}
-@line{{} {} {@xand f_n (v_1, @ldots, v_n) = e}}
+@line{{} {@pipe} {e.[e]} @hbox{@it{Subscripting}}}
 @end[array]
-$$
+@begin[array,rll]
+@line{{@pipe} {e.[e] @leftarrow e} @hbox{@it{Assignment}}}
+@line{{@pipe} @If{e; e; e} @hbox{@it{Conditionals}}}
+@line{{@pipe} {e(e_1, @ldots, e_n)} @hbox{@it{Application}}}
+@line{{@pipe} @LetAtom{e; v; e} @hbox{@it{Let definitions}}}
+@line{{@pipe} {@xlet @xrec f_1 (v_1, @ldots, v_n) = e} {}}
+@line{{} @vdots @hbox{@it{Recursive functions}}}
+@line{{} {@xand f_n (v_1, @ldots, v_n) = e}}
+@end[array]
+$
 @caption{Program syntax}
 @end[figure]
 
@@ -111,10 +119,8 @@ instance, the production for the let-expression is defined with the
 following production and semantic action.
 
 $$
-@begin[array,l]
-   @line{@tt{exp ::= LET @space ID@left["<"] v @right[">"] @space EQ @space exp@left["<"] e @right[">"] @space IN @space exp@left["<"] rest @right[">"]}}
-   @line{{@longleftrightarrow @LetAtom{e; v; rest}}}
-@end[array]
+   @tt{exp ::= LET @space ID@left["<"] v @right[">"] @space EQ @space exp@left["<"] e
+   @right[">"] @space IN @space exp@left["<"] rest @right[">"]} @longleftrightarrow @LetAtom{e; v; rest}
 $$
 
 Phobos constructs an LALR(1) parser from these specifications that

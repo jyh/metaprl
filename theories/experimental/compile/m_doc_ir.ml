@@ -1,6 +1,6 @@
 doc <:doc< -*- mode: text; -*-
    @begin[spelling]
-   ML binop relop op AST compilable
+   ML bop rop op AST compilable
    @end[spelling]
   
    @begin[doc]
@@ -257,19 +257,20 @@ expressions are explicitly named.
 @begin[figure,ir]
 $$
 @begin[array,rcll]
-@line{@it{binop} {::=} {@AddOp @pipe @SubOp @pipe @MulOp @pipe @DivOp} @hbox{@it{Binary arithmetic}}}
-@line{@it{relop} {::=} {@EqOp @pipe @NeqOp @pipe @LeOp @pipe @LtOp @pipe @GeOp @pipe @GtOp} @hbox{@it{Binary relations}}}
+@line{@it{bop} {::=} {@AddOp @pipe @SubOp @pipe @MulOp @pipe @DivOp} @hbox{@it{Binary arithmetic}}}
+@line{@it{rop} {::=} {@LeOp @pipe @LtOp @pipe @GeOp} @hbox{@it{Binary relations}}}
+@line{{}         {@pipe} {@GtOp @pipe @EqOp @pipe @NeqOp} {}}
 @line{{l}        {::=} {@it{string}} @hbox{@it{Function label}}}
 
 @line{{}{}{}{}}
 @line{{a} {::=}     {@AtomTrue @pipe @AtomFalse}          @hbox{@it{Boolean values}}}
 @line{{}  {@pipe}   @AtomInt[i]                           @hbox{@it{Integers}}}
 @line{{}  {@pipe}   @AtomVar{v}                           @hbox{@it{Variables}}}
-@line{{}  {@pipe}   @AtomBinop{@it{binop}; a_1; a_2}      @hbox{@it{Binary arithmetic}}}
-@line{{}  {@pipe}   @AtomRelop{@it{relop}; a_1; a_2}      @hbox{@it{Binary relations}}}
+@line{{}  {@pipe}   @AtomBinop{@it{bop}; a_1; a_2}        @hbox{@it{Binary arithmetic}}}
+@line{{}  {@pipe}   @AtomRelop{@it{rop}; a_1; a_2}        @hbox{@it{Binary relations}}}
 @line{{}  {@pipe}   @AtomFunVar{R; l}                     @hbox{@it{Function labels}}}
-
-@line{{}{}{}{}}
+@end[array]
+@begin[array,rcll]
 @line{{e} {::=}   @LetAtom{a; v; e}                        @hbox{@it{Variable definition}}}
 @line{{}  {@pipe} @If{a; e_1; e_2}                         @hbox{@it{Conditional}}}
 @line{{}  {@pipe} @LetTuple{i; {a_1, @ldots, a_n}; v; e}   @hbox{@it{Tuple allocation}}}
@@ -341,16 +342,10 @@ $$
 @begin[array,l]
 @line{@xrewrite[int]{@IR{i; v; e[v]}; e[@AtomInt[i]]}}
 @line{@xrewrite[var]{@IR{v_1; v_2; e[v_2]}; e[@AtomVar{v_1}]}}
-@line{@xrewrite2[add]{@IR{{e_1 + e_2}; v; e[v]};
+@line{@xrewrite[add]{@IR{{e_1 + e_2}; v; e[v]};
 		        @IR{e_1; v_1; @IR{e_2; v_2; e[@AtomBinop{+; v_1; v_2}]}}}}
 @line{@xrewrite2[set]{@IR{e_1.[e_2] @leftarrow e_3; v; e_4[v]};
-    @begin[array,t,l]
-    @line{@IR{e_1; v_1}}
-    @line{@IR{e_2; v_2}}
-    @line{@IR{e_3; v_3}}
-    @line{@SetSubscript{v_1; v_2; v_3}}
-    @line{{e_4[@AtomFalse]}}
-    @end[array]}}
+    @IR{e_1; v_1; @IR{e_2; v_2; @IR{e_3; v_3; @SetSubscript{v_1; v_2; v_3; e_4[@AtomFalse]}}}}}}
 @end[array]
 $$
 
@@ -362,8 +357,8 @@ $$
 @xrewrite2[if]{@IR{@If{e_1; e_2; e_3}; v; e_4[v]};
     @begin[array,t,l]
     @line{@LetRec{R; @FunDef{g; @AtomFun{v; e_4[v]}; @EndDef}}}
-    @line{@IR{e_1; v_1}}
-    @line{@If{v_1; @IR{e_2; v_2; (@TailCall{@AtomFunVar{R; g}; v_2})}; @IR{e_3; v_3; (@TailCall{@AtomFunVar{R; g}; v_3})}}}
+    @line{@IR{e_1; v_1;@If{v_1; @IR{e_2; v_2; (@TailCall{@AtomFunVar{R; g}; v_2})}; @IR{e_3; v_3;
+    (@TailCall{@AtomFunVar{R; g}; v_3})}}}}
     @end[array]}
 $$
 
@@ -378,17 +373,14 @@ and the $@AtomFun{v; e[v]}$ term is used for anonymous functions.
 
 $$
 @begin[array,l]
-@line{@xrewrite2[letrec]{@IR{@LetRec{R; d; e_1}; v; e_2[v]};
+@line{@xrewrite[letrec]{@IR{@LetRec{R; d; e_1}; v; e_2[v]};
     @LetRec{R; @IR{d}; @IR{e_1; v; e_2[v]}}}}
-@line{@xrewrite2[fun]{@IR{@FunDef{l; e; d}}; @FunDef{l; @IR{e; v; @Return{v}}; @IR{d}}}}
-@line{@xrewrite2[param]{@IR{@AtomParam{v_1; e_1[v_1]}; v_2; e_2[v_2]};
+@line{@xrewrite[fun]{@IR{@FunDef{l; e; d}}; @FunDef{l; @IR{e; v; @Return{v}}; @IR{d}}}}
+@line{@xrewrite[param]{@IR{@AtomParam{v_1; e_1[v_1]}; v_2; e_2[v_2]};
    @AtomFun{v_1; (@IR{e_1[v_1]; v_2; e_2[v_2]})}}}
 @line{@xrewrite2[abs]{@IR{@AtomFun{v_1; e_1[v_1]}; v_2; e_2[v_2]};
-   @begin[array,t,l]
-   @line{@LetRec{R}}
-   @line{@LetRecDef{@FunDef{g; @AtomFun{v_1; @IR{e_1[v_1]; v_3; @Return{v_3}}}; @EndDef}}}
-   @line{@LetRecBody{{e_2[@AtomFunVar{R; g}]}}}
-   @end[array]}}
+   @LetRec{R;@FunDef{g; @AtomFun{v_1; @IR{e_1[v_1]; v_3; @Return{v_3}}};
+   @EndDef};{e_2[@AtomFunVar{R; g}]}}}}
 @end[array]
 $$
 

@@ -359,7 +359,8 @@ $$
 @line{@it{o}  {::=}   {o_m @pipe o_r}                                               @hbox{General operands}}
 @line{{}      {@pipe} @ImmediateNumber{i}                                           @hbox{Constant number}}
 @line{{}      {@pipe} @ImmediateCLabel{v; l}                                        @hbox{Label}}
-@line{{} {} {} {}}
+@end[array]
+@begin[array,rcll]
 @line{@it{cc} {::=}   {= {@pipe} <> {@pipe} < {@pipe} > {@pipe} {@le} {@pipe} @ge}  @hbox{Condition codes}}
 @line{@it{inst1} {::=}   {@it{INC} @pipe @it{DEC} @pipe @cdots}                     @hbox{1-operand opcodes}}
 @line{@it{inst2} {::=}   {@it{ADD} @pipe @it{SUB} @pipe @it{AND} @pipe @cdots}      @hbox{2-operand opcodes}}

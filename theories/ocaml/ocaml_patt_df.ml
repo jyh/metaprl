@@ -254,13 +254,19 @@ dform patt_list_end_df2 : slot{patt_format; patt_list_end[@start:n, @finish:n]{'
  * Tuple pattern.
  *)
 dform patt_tuple_df1 : slot{patt_format; patt_tuple{'p1}; 'p2} =
-   slot{patt_format; 'p1; 'p2}
+   slot{patt_format; 'p1; cons{nil; 'p2}}
 
-dform patt_tuple_arg_df1 : slot{patt_format; patt_tuple_arg{'p1}; cons{'p2; 'p3}} =
-   slot{patt_tuple; 'p1; 'p2; 'p3}
+dform patt_tuple_arg_df1 : slot{patt_format; patt_tuple_arg{'p1}; cons{'p2; cons{'p3; 'p4}}} =
+   slot{patt_format; 'p1; cons{cons{'p2; 'p3}; 'p4}}
 
 dform patt_tuple_end_df1 : slot{patt_format; patt_tuple_end{'p1}; cons{'p2; cons{'p3; 'p4}}} =
-   slot{patt_format; 'p1; cons{rcons{'p2; 'p3}; 'p4}}
+   slot{patt_tuple; 'p1; cons{'p2; nil}; 'p3; 'p4}
+
+dform patt_tuple_rev_df1 : slot{patt_tuple; 'p1; 'p2; nil; 'p3} =
+   slot{patt_format; 'p1; cons{tuple{'p2}; 'p3}}
+
+dform patt_tuple_rev_df2 : slot{patt_tuple; 'p1; 'p2; cons{'p3; 'p4}; 'p5} =
+   slot{patt_tuple; 'p1; cons{'p3; 'p2}; 'p4; 'p5}
    
 dform patt_tuple_df2 : slot{patt_format; patt_tuple[@start:n, @finish:n]{'p1}; 'p2} =
    slot{patt_format; patt_tuple{'p1}; 'p2}
@@ -321,6 +327,32 @@ dform patt_in_df2 : slot{patt_format; patt_in[@start:n, @finish:n]{'e1}; 'e2} =
    slot{patt_format; patt_in{'e1}; 'e2}
 
 (*
+ * "Fix" forms.
+ *)
+dform patt_fix_and_df1 : slot{patt_format; patt_fix_and{'p1}; 'p2} =
+   slot{patt_format; 'p1; 'p2}
+
+dform patt_fix_and_df2 : slot{patt_format; patt_fix_and[@start:n, @finish:n]{'p1}; 'p2} =
+   slot{patt_format; patt_fix_and{'p1}; 'p2}
+
+dform patt_fix_arg_df1 : slot{patt_format; patt_fix_arg{'e1; 'p1}; cons{'p2; 'p3}} =
+   szone pushm[0] slot{'p2} `" " "=" hspace szone slot {'e1} ezone popm ezone
+   slot{patt_format; 'p1; cons{patt_fix_arg; 'p3}}
+
+dform patt_fix_arg_df2 : slot{patt_format; patt_fix_arg{'e1; 'p1}; cons{patt_fix_arg; cons{'p2; 'p3}}} =
+   newline szone `"and " pushm[0] slot{'p2} `" " "=" hspace szone slot {'e1} ezone popm ezone
+   slot{patt_format; 'p1; cons{patt_fix_arg; 'p3}}
+
+dform patt_fix_arg_df3 : slot{patt_format; patt_fix_arg[@start:n, @finish:n]{'e1; 'p1}; 'p2} =
+   slot{patt_format; patt_fix_arg{'e1; 'p1}; 'p2}
+
+dform patt_done_df3 : slot{patt_format; patt_done; cons{patt_fix_arg; nil}} =
+   `""
+
+dform patt_in_df3 : slot{patt_format; patt_in{'e1}; cons{patt_fix_arg; nil}} =
+   newline "_in" `" " hspace slot{'e1}
+
+(*
  * "Match" forms.
  *)
 dform patt_ifelse_df1 : slot{patt_format; patt_ifelse{'pwe; 'pwel}; nil} =
@@ -357,6 +389,9 @@ dform patt_body_df3 : slot{patt_format; patt_body[@start:n, @finish:n]{'e}; 'pwe
 
 (*
  * $Log$
+ * Revision 1.6  1998/05/04 23:46:18  jyh
+ * Most display forms now work.
+ *
  * Revision 1.5  1998/05/04 13:01:35  jyh
  * Ocaml display without let rec.
  *

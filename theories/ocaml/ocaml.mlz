@@ -270,6 +270,8 @@ declare patt_and{'p}
 declare patt_in{'e}
 declare patt_done
 declare patt_match{'e1; 'e2}
+declare patt_fix_and{'p}
+declare patt_fix_arg{'e1; 'e2}
 
 (*
  * "Match" forms.
@@ -540,6 +542,9 @@ declare me_uid[@name:s]
 
 (*
  * $Log$
+ * Revision 1.6  1998/05/04 23:46:15  jyh
+ * Most display forms now work.
+ *
  * Revision 1.5  1998/05/04 13:01:25  jyh
  * Ocaml display without let rec.
  *

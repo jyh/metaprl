@@ -112,7 +112,19 @@ dform and_let_df2 : and_let{nil} =
    `""
 
 (*
+ * Fix definition.
+ *)
+dform str_fix_df1 : str_fix{'p} =
+   szone pushm[0] "_letrec" `" " slot{patt_format; 'p; nil} popm ezone
+
+dform str_fix_df2 : str_fix[@start:n, @finish:n]{'p} =
+   str_fix{'p}
+
+(*
  * $Log$
+ * Revision 1.8  1998/05/04 23:46:19  jyh
+ * Most display forms now work.
+ *
  * Revision 1.7  1998/05/04 13:01:38  jyh
  * Ocaml display without let rec.
  *

@@ -388,14 +388,17 @@ dform let_df1 : parens :: "prec"[prec_let] :: "let"{'p; 'e} =
 dform let_df2 : "let"[@start:n, @finish:n]{'p; 'e} =
    "let"{'p; 'e}
 
-dform fix_df1 : parens :: "prec"[prec_let] :: "fix"{x. 'p} =
+dform fix_df1 : parens :: "prec"[prec_let] :: "fix"{'p} =
    szone pushm[0] "_letrec" hspace slot{patt_format; 'p; nil}
 
-dform fix_df2 : "fix"[@start:n, @finish:n]{x. 'p} =
-   "fix"{x. 'p}
+dform fix_df2 : "fix"[@start:n, @finish:n]{'p} =
+   "fix"{'p}
 
 (*
  * $Log$
+ * Revision 1.8  1998/05/04 23:46:16  jyh
+ * Most display forms now work.
+ *
  * Revision 1.7  1998/05/04 13:01:29  jyh
  * Ocaml display without let rec.
  *

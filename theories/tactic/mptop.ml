@@ -246,7 +246,7 @@ and mk_proj_expr base loc expr =
    let rec collect names expr =
       match expr with
          (<:expr< $uid: name$ . $e2$ >>) ->
-           collect (name :: names) e2
+            collect (name :: names) e2
        | (<:expr< $lid: v$ >>) ->
             lookup names v
        | _ ->

@@ -57,15 +57,52 @@ define unfold_add_var:
    add_var{'bt;'v} <-->
       fix{add.lambda{bt.
          dest_bterm{'bt;
-                    u. if left{'v}<=@ left{'u} then var{left{'u}+@1;right{'u}} else var{left{'u};right{'u}+@1};
-                    op,subterms. make_bterm{'op;map{x.'add 'x; 'subterms}} }
+                    u. if left{'v} <=@ left{'u}
+                        then var{left{'u}+@1;right{'u}}
+                        else var{left{'u};right{'u}+@1};
+                    op,subterms. make_bterm{bind{'op}; map{x.'add 'x; 'subterms}} }
          }} 'bt
+
+interactive_rw add_var_reduce1 {| reduce |} :
+      add_var{make_bterm{'op;'subterms}; 'v} <--> make_bterm{'op; map{x.add_var{'x;'v}; 'subterms}}
+
+interactive_rw add_var_var_reduce :
+      ('u in Var) -->
+      add_var{'u; 'v} <--> if left{'v} <=@ left{'u}
+                                  then var{left{'u}+@1;right{'u}}
+                                  else var{left{'u};right{'u}+@1}
+
+interactive_rw add_var_reduce2 {| reduce |} :
+      add_var{var{'l;'r}; 'v} <--> if left{'v} <=@ 'l
+                                      then var{'l+@1;'r}
+                                      else var{'l;'r+@1}
+
+
+interactive_rw add_var_bdepth {| reduce |} :
+   ('bt in BTerm)  -->
+   ('v in Var)  -->
+   bdepth{add_var{'bt;'v}} <--> bdepth{'bt} +@ 1
+
+interactive add_var_wf {| intro [] |} :
+   sequent { <H> >- 'bt in BTerm } -->
+   sequent { <H> >- 'v in Var } -->
+   sequent { <H> >- add_var{'bt;'v} in BTerm }
+
+
 
 (*
  *  add_var( <H>.s ) = <H>,x.s
  *)
 define unfold_add_var1:
    add_var{'bt} <--> add_var{'bt; var{bdepth{'bt};0}}
+
+interactive_rw add_var1_bdepth {| reduce |} :
+   ('bt in BTerm)  -->
+   bdepth{add_var{'bt}} <--> bdepth{'bt} +@ 1
+
+interactive add_var1_wf {| intro [] |} :
+   sequent { <H> >- 'bt in BTerm } -->
+   sequent { <H> >- add_var{'bt} in BTerm }
 
 (*
  *  add_vars_upto( <H>.s; <H>,<J>.t ) = <H>,<J>.s

@@ -70,6 +70,9 @@ define unfold_unbind :
 define unfold_bind :
    bind{'op; 'n} <--> inject{'op; op_bdepth{'op} +@ 'n }
 
+define unfold_bind1 :
+   bind{'op} <--> inject{'op; op_bdepth{'op} +@ 1 }
+
 define unfold_op :
    Operator <--> quot o1, o2 : BOperator // "assert"{is_same_op{'o1; 'o2}}
 
@@ -162,6 +165,10 @@ interactive_rw bind_red {| reduce |} :
    'op in BOperator -->
    'n in nat -->
    op_bdepth{bind{'op; 'n}} <--> op_bdepth{'op} +@ 'n
+
+interactive_rw bind1_red {| reduce |} :
+   'op in BOperator -->
+   op_bdepth{bind{'op}} <--> op_bdepth{'op} +@ 1
 
 interactive unbind_wf {| intro [] |} :
    sequent { <H> >- 'op in BOperator } -->

@@ -48,6 +48,26 @@ prim_rw reduce_number : number{meta_num[i:n]} <--> number[i:n]
 
 doc <:doc< @docoff >>
 
+prec prec_add
+prec prec_mul
+
+prec prec_add < prec_mul
+
+dform df_number : number[i:n] =
+   slot[i:n]
+
+dform df_add : parens :: "prec"[prec_add] :: add{'e1; 'e2} =
+   slot["lt"]{'e1} " " `"+ " slot["le"]{'e2}
+
+dform df_sub : parens :: "prec"[prec_add] :: sub{'e1; 'e2} =
+   slot["lt"]{'e1} " " `"- " slot["le"]{'e2}
+
+dform df_mul : parens :: "prec"[prec_mul] :: mul{'e1; 'e2} =
+   slot["lt"]{'e1} " " `"* " slot["le"]{'e2}
+
+dform df_div : parens :: "prec"[prec_mul] :: div{'e1; 'e2} =
+   slot["lt"]{'e1} " " `"/ " slot["le"]{'e2}
+
 let resource reduce +=
     [<< add{number[i1:n]; number[i2:n]} >>, (reduce_add thenC addrC[0] reduce_meta_sum  thenC reduce_number);
      << sub{number[i1:n]; number[i2:n]} >>, (reduce_sub thenC addrC[0] reduce_meta_diff thenC reduce_number);

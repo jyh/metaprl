@@ -70,6 +70,7 @@ open Base_auto_tactic
 
 open Itt_struct
 open Itt_record
+open Itt_grouplikeobj
 open Itt_fun
 open Itt_int_ext
 open Itt_bisect
@@ -78,116 +79,64 @@ let _ =
    show_loading "Loading Itt_group%t"
 
 (************************************************************************
- * SYNTAX                                                               *
+ * GROUP                                                                *
  ************************************************************************)
 
 (*!
  * @begin[doc]
- * @terms
+ * @modsection{Group}
+ * @modsubsection{Rewrites}
  *
  * @end[doc]
  *)
 define unfold_pregroup1 : pregroup[i:l] <-->
    record["inv":t]{r. 'r^car -> 'r^car; premonoid[i:l]}
 
-define unfold_isGroup : isGroup{'g} <-->
+define unfold_isGroup1 : isGroup{'g} <-->
    isSemigroup{'g} & all x: 'g^car. 'g^"1" *['g] 'x = 'x in 'g^car & all x: 'g^car. ('g^inv 'x) *['g] 'x = 'g^"1" in 'g^car
 
 define unfold_group1 : group[i:l] <-->
    {g: pregroup[i:l] | isGroup{'g}}
-
-define unfold_abelg : abelg[i:l] <-->
-   {g: group[i:l] | isCommutative{'g}}
-
-define unfold_lcoset : lcoset{'s; 'g; 'b} <-->
-   {x: 'g^car | exst a: 's^car. 'x = 'b *['g] 'a in 'g^car}
-
-define unfold_rcoset : rcoset{'s; 'g; 'b} <-->
-   {x: 'g^car | exst a: 's^car. 'x = 'a *['g] 'b in 'g^car}
-
-define unfold_normalSubg : normalSubg[i:l]{'s; 'g} <-->
-   subStructure{'s; 'g} & all x: 'g^car. lcoset{'s; 'g; 'x} = rcoset{'s; 'g; 'x} in univ[i:l]
-
-define unfold_groupHom : groupHom{'A; 'B} <-->
-   { f: 'A^car -> 'B^car | all x: 'A^car. all y: 'A^car. ('f ('x *['A] 'y)) = ('f 'x) *['B] ('f 'y) in 'B^car }
 (*! @docoff *)
 
-interactive_rw unfold_pregroup :
-   pregroup[i:l] <--> {car: univ[i:l]; "*": ^car -> ^car -> ^car; "1": ^car; inv: ^car -> ^car}
-
-interactive_rw unfold_group :
-   group[i:l] <--> {car: univ[i:l]; "*": ^car -> ^car -> ^car; "1": ^car; inv: ^car -> ^car; (all x: ^car. all y: ^car. all z: ^car. ('x ^* 'y) ^* 'z = 'x ^* ('y ^* 'z) in ^car) & (all x: ^car. ^"1" ^* 'x = 'x in ^car) & (all x: ^car. ((^inv) 'x) ^* 'x = ^"1" in ^car)}
+let unfold_pregroup = unfold_pregroup1 thenC addrC [1] unfold_premonoid
+let unfold_isGroup = unfold_isGroup1 thenC addrC [0] unfold_isSemigroup
+let unfold_group = unfold_group1 thenC addrC [0] unfold_pregroup thenC addrC [1] unfold_isGroup
 
 let fold_pregroup1 = makeFoldC << pregroup[i:l] >> unfold_pregroup1
 let fold_pregroup = makeFoldC << pregroup[i:l] >> unfold_pregroup
+let fold_isGroup1 = makeFoldC << isGroup{'g} >> unfold_isGroup1
 let fold_isGroup = makeFoldC << isGroup{'g} >> unfold_isGroup
 let fold_group1 = makeFoldC << group[i:l] >> unfold_group1
 let fold_group = makeFoldC << group[i:l] >> unfold_group
-let fold_abelg = makeFoldC << abelg[i:l] >> unfold_abelg
-let fold_lcoset = makeFoldC << lcoset{'s; 'g; 'b} >> unfold_lcoset
-let fold_rcoset = makeFoldC << rcoset{'s; 'g; 'b} >> unfold_rcoset
-let fold_normalSubg = makeFoldC << normalSubg[i:l]{'s; 'g} >> unfold_normalSubg
-let fold_groupHom = makeFoldC <<groupHom{'A; 'B}  >> unfold_groupHom
 
 let groupDT n = rw unfold_group n thenT dT n
-let abelgDT n = rw unfold_abelg n thenT dT n
 
 let resource elim +=
-   [<<group[i:l]>>, groupDT;
-    <<abelg[i:l]>>, abelgDT
-   ]
-
-(************************************************************************
- * DISPLAY FORMS                                                        *
- ************************************************************************)
-
-prec prec_inv
-prec prec_mul < prec_inv
-
-dform group_df : except_mode[src] :: group[i:l] =
-   math_group{slot[i:l]}
-
-dform pregroup_df : except_mode[src] :: pregroup[i:l] =
-   math_pregroup{slot[i:l]}
-
-dform isGroup_df : except_mode[src] :: isGroup{'g} =
-   `"isGroup(" slot{'g} `")"
-
-dform inv_df1 : except_mode[src] :: parens :: "prec"[prec_inv] :: ('g^inv 'a) =
-   math_inv{'g; 'a}
-
-dform abelg_df : except_mode[src] :: abelg[i:l] =
-   math_abelg{slot[i:l]}
-
-dform lcoset_df : except_mode[src] :: lcoset{'h; 'g; 'a} =
-   math_lcoset{'h; 'g; 'a}
-
-dform rcoset_df : except_mode[src] :: rcoset{'h; 'g; 'a} =
-   math_rcoset{'h; 'g; 'a}
-
-dform normalSubg_df : except_mode[src] :: normalSubg[i:l]{'s; 'g} =
-   math_normalSubg{slot[i:l]; 's; 'g}
-
-dform groupHom_df : except_mode[src] :: groupHom{'A; 'B} =
-   math_groupHom{'A; 'B}
-
-(************************************************************************
- * RULES                                                                *
- ************************************************************************)
+   [<<group[i:l]>>, groupDT]
 
 (*!
  * @begin[doc]
- * @rules
  * @modsubsection{Well-formedness}
  *
  * @end[doc]
  *)
-interactive pregroup_type {| intro [] |} :
+interactive pregroup_wf {| intro [] |} :
    sequent ['ext] { 'H >- "type"{pregroup[i:l]} }
 
-interactive group_type {| intro [] |} :
+interactive isGroup_wf {| intro [intro_typeinf <<'g>>] |} pregroup[i:l] :
+   sequent [squash] { 'H >- 'g in pregroup[i:l] } -->
+   sequent ['ext] {'H >- "type"{isGroup{'g}} }
+
+interactive group_wf {| intro [] |} :
    sequent ['ext] { 'H >- "type"{group[i:l]} }
 
+(*!
+ * @begin[doc]
+ * @modsubsection{Introduction and Elimination}
+ *
+ * @end[doc]
+ *)
 interactive pregroup_intro {| intro [AutoMustComplete] |} :
    sequent [squash] { 'H >- 'g in {car: univ[i:l]; "*": ^car -> ^car -> ^car; "1": ^car; inv: ^car -> ^car} } -->
    sequent ['ext] { 'H >- 'g in pregroup[i:l] }
@@ -195,10 +144,6 @@ interactive pregroup_intro {| intro [AutoMustComplete] |} :
 interactive pregroup_elim {| elim [] |} 'H :
    sequent ['ext] { 'H; g: {car: univ[i:l]; "*": ^car -> ^car -> ^car; "1": ^car; inv: ^car -> ^car}; 'J['g] >- 'C['g] } -->
    sequent ['ext] { 'H; g: pregroup[i:l]; 'J['g] >- 'C['g] }
-
-interactive isGroup_wf {| intro [intro_typeinf <<'g>>] |} pregroup[i:l] :
-   sequent [squash] { 'H >- 'g in pregroup[i:l] } -->
-   sequent ['ext] {'H >- "type"{isGroup{'g}} }
 
 interactive isGroup_intro {| intro [AutoMustComplete] |} :
    [wf] sequent [squash] { 'H >- "type"{.'g^car} } -->
@@ -267,7 +212,6 @@ interactive group_left_inv {| intro [intro_typeinf <<'g>>] |} group[i:l] :
    sequent [squash] {'H >- 'g in group[i:l] } -->
    sequent [squash] {'H >- 'a in 'g^car } -->
    sequent ['ext] {'H >- ('g^inv 'a) *['g] 'a = 'g^"1" in 'g^car }
-(*! @docoff *)
 
 interactive op_eq1 {| intro [AutoMustComplete; intro_typeinf <<'g>>] |} group[i:l] :
    sequent [squash] {'H >- 'g in group[i:l] } -->
@@ -283,14 +227,13 @@ interactive op_eq2 {| intro [AutoMustComplete; intro_typeinf <<'g>>] |} group[i:
 
 (*!
  * @begin[doc]
- * @rules
  * @modsubsection{Lemmas}
  *
- * @begin[enumerate]
- * @item{$u * u = u$ implies $u$ is the identity.}
- * @item{The left inverse is also the right inverse.}
- * @item{The left identity is also the right identity.}
- * @end[enumerate]
+ *   @begin[enumerate]
+ *   @item{$u * u = u$ implies $u$ is the identity.}
+ *   @item{The left inverse is also the right inverse.}
+ *   @item{The left identity is also the right identity.}
+ *   @end[enumerate]
  * @end[doc]
  *)
 interactive id_judge {| elim [elim_typeinf <<'g>>] |} 'H group[i:l] :
@@ -310,7 +253,7 @@ interactive right_id {| intro [intro_typeinf <<'g>>] |} group[i:l] :
 
 (*!
  * @begin[doc]
- * @modsubsection{Theorems}
+ * @modsubsection{Hierarchy}
  *
  * A group is also a monoid.
  * @end[doc]
@@ -321,6 +264,7 @@ interactive group_is_monoid :
 
 (*!
  * @begin[doc]
+ * @modsubsection{Theorems}
  *
  * The left and right cancellation laws.
  * @end[doc]
@@ -434,17 +378,45 @@ interactive id_commut2 {| intro [intro_typeinf <<'g>>] |} group[i:l] :
    sequent [squash] {'H >- 'a in 'g^car } -->
    sequent ['ext] {'H >- 'a *['g] 'g^"1" = 'g^"1" *['g] 'a in 'g^car }
 
+(************************************************************************
+ * ABELIAN GROUP                                                        *
+ ************************************************************************)
+
 (*!
  * @begin[doc]
- * @modsubsection{Abelian group}
+ * @modsection{Abelian group}
+ * @modsubsection{Rewrites}
  *
  * @end[doc]
  *)
-interactive abelg_type {| intro [] |} :
+define unfold_abelg : abelg[i:l] <-->
+   {g: group[i:l] | isCommutative{'g}}
+(*! @docoff *)
+
+let fold_abelg = makeFoldC << abelg[i:l] >> unfold_abelg
+
+let abelgDT n = rw unfold_abelg n thenT dT n
+
+let resource elim +=
+   [<<abelg[i:l]>>, abelgDT]
+
+(*!
+ * @begin[doc]
+ * @modsubsection{Well-formedness}
+ *
+ * @end[doc]
+ *)
+interactive abelg_wf {| intro [] |} :
    sequent ['ext] { 'H >- "type"{abelg[i:l]} }
 
+(*!
+ * @begin[doc]
+ * @modsubsection{Introduction and Elimination}
+ *
+ * @end[doc]
+ *)
 interactive abelg_intro {| intro [] |} :
-   [wf] sequent ['ext] { 'H >- 'g in group[i:l] } -->
+   [wf] sequent [squash] { 'H >- 'g in group[i:l] } -->
    [main] sequent ['ext] { 'H >- isCommutative{'g} } -->
    sequent ['ext] { 'H >- 'g in abelg[i:l] }
 
@@ -452,25 +424,107 @@ interactive abelg_elim {| elim [] |} 'H :
    sequent ['ext] { 'H; g: group[i:l]; x: isCommutative{'g}; 'J['g] >- 'C['g] } -->
    sequent ['ext] { 'H; g: abelg[i:l]; 'J['g] >- 'C['g] }
 
+(*!
+ * @begin[doc]
+ * @modsubsection{Hierarchy}
+ *
+ * @end[doc]
+ *)
 interactive abelg_is_group :
    sequent [squash] { 'H >- 'g in abelg[i:l] } -->
    sequent ['ext] { 'H >- 'g in group[i:l] }
+
+(*!
+ * @begin[doc]
+ * @modsubsection{Rules}
+ *
+ * @end[doc]
+ *)
+
+(************************************************************************
+ * SUBGROUP                                                             *
+ ************************************************************************)
+
+(*!
+ * @begin[doc]
+ * @modsection{Subgroup}
+ * @modsubsection{Rewrites}
+ *
+ * @end[doc]
+ *)
+define unfold_subgroup1 : subgroup[i:l]{'S; 'G} <-->
+   ((('S in group[i:l]) & ('G in group[i:l])) & subStructure{'S; 'G})
+(*! @docoff *)
+
+let unfold_subgroup = unfold_subgroup1 thenC addrC [1] unfold_subStructure
+
+let fold_subgroup1 = makeFoldC << subgroup[i:l]{'S; 'G} >> unfold_subgroup1
+let fold_subgroup = makeFoldC << subgroup[i:l]{'S; 'G} >> unfold_subgroup
+
+let subgroupDT n = rw unfold_subgroup n thenT dT n
+
+let resource elim +=
+   [<<subgroup[i:l]{'S; 'G}>>, subgroupDT]
+
+(*!
+ * @begin[doc]
+ * @modsubsection{Well-formedness}
+ *
+ * @end[doc]
+ *)
+(*interactive subgroup_wf {| intro [] |} :
+   [wf] sequent [squash] { 'H >- 'S in group[i:l] } -->
+   [wf] sequent [squash] { 'H >- 'G in group[i:l] } -->
+   sequent ['ext] { 'H >- "type"{subgroup[i:l]{'S; 'G}} }
+*)
+
+(*!
+ * @begin[doc]
+ * @modsubsection{Introduction and Elimination}
+ *
+ * @end[doc]
+ *)
+interactive subgroup_intro {| intro [] |} :
+   [wf] sequent [squash] { 'H >- 'S in group[i:l] } -->
+   [wf] sequent [squash] { 'H >- 'G in group[i:l] } -->
+   [main] sequent ['ext] { 'H >- subStructure{'S; 'G} } -->
+   sequent ['ext] { 'H >- subgroup[i:l]{'S; 'G} }
+
+interactive subgroup_elim {| elim [] |} 'H 'S 'G :
+(*   [wf] sequent [squash] { 'H; x: subgroup[i:l]{'S; 'G}; 'J['x] >- 'S in group[i:l] } -->
+   [wf] sequent [squash] { 'H; x: subgroup[i:l]{'S; 'G}; 'J['x] >- 'G in group[i:l] } -->
+   [main] sequent ['ext] { 'H; x: subgroup[i:l]{'S; 'G}; y: 'S^car subtype 'G^car; z: all a: 'S^car. all b: 'S^car. (('a = 'b in 'G^car) => ('a = 'b in 'G^car)); u: {b: 'G^car | exst a: 'S^car. 'b = 'a in 'G^car} subtype 'S^car; v: 'S^"*" = 'G^"*" in 'S^car -> 'S^car -> 'S^car; 'J['x] >- 'C['x] } -->
+*)
+(*   [main] sequent ['ext] { 'H; S: group[i:l]; G: group[i:l]; x: subStructure{'S; 'G}; y: 'S^car subtype 'G^car; z: all a: 'S^car. all b: 'S^car. (('a = 'b in 'G^car) => ('a = 'b in 'G^car)); u: {b: 'G^car | exst a: 'S^car. 'b = 'a in 'G^car} subtype 'S^car; v: 'S^"*" = 'G^"*" in 'S^car -> 'S^car -> 'S^car; 'J['x] >- 'C['x] } -->*)
+   [main] sequent ['ext] { 'H; S: group[i:l]; G: group[i:l]; y: 'S^car subtype 'G^car; z: all a: 'S^car. all b: 'S^car. (('a = 'b in 'G^car) => ('a = 'b in 'G^car)); u: {b: 'G^car | exst a: 'S^car. 'b = 'a in 'G^car} subtype 'S^car; v: 'S^"*" = 'G^"*" in 'S^car -> 'S^car -> 'S^car; 'J['S, 'G] >- 'C['S, 'G] } -->
+   sequent ['ext] { 'H; x: subgroup[i:l]{'S; 'G}; 'J['x] >- 'C['x] }
+
+(*!
+ * @begin[doc]
+ * @modsubsection{Rules}
+ *
+ * Subgroup is squash-stable.
+ * @end[doc]
+ *)
+interactive subgroup_squashStable :
+(*   [wf] sequent [squash] { 'H >- "type"{.'s^car} } -->*)
+   [wf] sequent [squash] { 'H >- squash{subgroup[i:l]{'S; 'G}} } -->
+   sequent ['ext] { 'H >- subgroup[i:l]{'S; 'G} }
 (*! @docoff *)
 
 interactive subgroup_ref {| intro [intro_typeinf <<'g>>] |} group[i:l] :
    sequent [squash] {'H >- 'g in group[i:l] } -->
-   sequent ['ext] {'H >- subStructure{'g; 'g} }
+   sequent ['ext] {'H >- subgroup[i:l]{'g; 'g} }
 
 (*!
  * @begin[doc]
- * @modsubsection{Subgroup}
  *
- * If $s$ is a subgroup of $g$, then
- * @begin[enumerate]
- * @item{$s$ is closed under the binary operation of $g$.}
- * @item{the identity of $s$ is the identity of $g$.}
- * @item{the inverse of $a @in @car{s}$ is also the inverse of $a$ in $g$.}
- * @end[enumerate]
+ *   If $s$ is a subgroup of $g$, then
+ *   @begin[enumerate]
+ *   @item{$s$ is closed under the binary operation of $g$.}
+ *   @item{the identity of $s$ is the identity of $g$.}
+ *   @item{the inverse of $a @in @car{s}$ is also the inverse of $a$ in $g$.}
+ *   @end[enumerate]
  * @end[doc]
  *)
 interactive subgroup_op {| intro [intro_typeinf <<'g>>] |} group[i:l] :
@@ -480,6 +534,13 @@ interactive subgroup_op {| intro [intro_typeinf <<'g>>] |} group[i:l] :
    [wf] sequent [squash] {'H >- 'a in 's^car } -->
    [wf] sequent [squash] {'H >- 'b in 's^car } -->
    sequent ['ext] { 'H >- 'a *['g] 'b in 's^car }
+
+(* interactive subgroup_op1 {| intro [intro_typeinf <<'g>>] |} group[i:l] :
+   [main] sequent ['ext] { 'H >- subgroup[i:l]{'s; 'g} } -->
+   [wf] sequent [squash] {'H >- 'a in 's^car } -->
+   [wf] sequent [squash] {'H >- 'b in 's^car } -->
+   sequent ['ext] { 'H >- 'a *['g] 'b in 's^car }
+*)
 
 interactive subgroup_id {| intro [intro_typeinf <<'g>>] |} group[i:l] :
    [wf] sequent [squash] {'H >- 's in group[i:l] } -->
@@ -497,8 +558,8 @@ interactive subgroup_inv {| intro [intro_typeinf <<'g>>] |} group[i:l] :
 (*!
  * @begin[doc]
  *
- * A non-empty subset $S$ is a subgroup of $G$ only if
- * for all $a, b @in H$, $@mul{g; a; @inv{g; b}} @in @car{h}$
+ *   A non-empty subset $S$ is a subgroup of $G$ only if
+ *   for all $a, b @in H$, $@mul{g; a; @inv{g; b}} @in @car{h}$
  * @end[doc]
  *)
 interactive subgroup_thm1 group[i:l] :
@@ -510,8 +571,8 @@ interactive subgroup_thm1 group[i:l] :
 (*!
  * @begin[doc]
  *
- * The intersection group of subgroups $s_1$ and $s_2$ of
- * a group $g$ is again a subgroup of $g$.
+ *   The intersection group of subgroups $s_1$ and $s_2$ of
+ *   a group $g$ is again a subgroup of $g$.
  * @end[doc]
  *)
 interactive subgroup_isect group[i:l] :
@@ -523,9 +584,30 @@ interactive subgroup_isect group[i:l] :
    sequent ['ext] { 'H >- (            {car=bisect{.'s1^car;.'s2^car}; "*"='g^"*"; "1"='g^"1"; inv='g^inv} in group[i:l]) &
                           subStructure{{car=bisect{.'s1^car;.'s2^car}; "*"='g^"*"; "1"='g^"1"; inv='g^inv}; 'g} }
 
+(************************************************************************
+ * COSET                                                                *
+ ************************************************************************)
+
 (*!
  * @begin[doc]
- * @modsubsection{Coset}
+ * @modsection{Coset}
+ * @modsubsection{Rewrites}
+ *
+ * @end[doc]
+ *)
+define unfold_lcoset : lcoset{'s; 'g; 'b} <-->
+   {x: 'g^car | exst a: 's^car. 'x = 'b *['g] 'a in 'g^car}
+
+define unfold_rcoset : rcoset{'s; 'g; 'b} <-->
+   {x: 'g^car | exst a: 's^car. 'x = 'a *['g] 'b in 'g^car}
+(*! @docoff *)
+
+let fold_lcoset = makeFoldC << lcoset{'s; 'g; 'b} >> unfold_lcoset
+let fold_rcoset = makeFoldC << rcoset{'s; 'g; 'b} >> unfold_rcoset
+
+(*!
+ * @begin[doc]
+ * @modsubsection{Well-formedness}
  *
  * @end[doc]
  *)
@@ -541,6 +623,12 @@ interactive rcoset_wf {| intro [] |} :
    [wf] sequent [squash] { 'H; a: 's^car >- 'a *['g] 'b in 'g^car } -->
    sequent ['ext] { 'H >- "type"{rcoset{'s; 'g; 'b}} }
 
+(*!
+ * @begin[doc]
+ * @modsubsection{Introduction and Elimination}
+ *
+ * @end[doc]
+ *)
 interactive lcoset_intro {| intro [intro_typeinf <<'g>>] |} group[i:l] 'x :
    [wf] sequent [squash] {'H >- 's in group[i:l] } -->
    [wf] sequent [squash] {'H >- 'g in group[i:l] } -->
@@ -597,10 +685,11 @@ interactive rcoset_elim {| elim [elim_typeinf <<'g>>] |} 'H group[i:l] :
 
 (*!
  * @begin[doc]
+ * @modsubsection{Rules}
  *
- * If $s$ is a subgroup of group $g$, both the left and right
- * cosets of $s$ containing $b$ are subsets of the carrier of
- * $g$.
+ *   If $s$ is a subgroup of group $g$, both the left and right
+ *   cosets of $s$ containing $b$ are subsets of the carrier of
+ *   $g$.
  * @end[doc]
  *)
 interactive lcoset_subset {| intro [intro_typeinf <<'g>>] |} group[i:l] :
@@ -617,9 +706,26 @@ interactive rcoset_subset {| intro [intro_typeinf <<'g>>] |} group[i:l] :
    [wf] sequent [squash] {'H >- 'b in 'g^car } -->
    sequent ['ext] { 'H >- \subset{rcoset{'s; 'g; 'b}; .'g^car} }
 
+(************************************************************************
+ * NORMAL SUBGROUP                                                      *
+ ************************************************************************)
+
 (*!
  * @begin[doc]
- * @modsubsection{Normal subgroup}
+ * @modsection{Normal subgroup}
+ * @modsubsection{Rewrites}
+ *
+ * @end[doc]
+ *)
+define unfold_normalSubg : normalSubg[i:l]{'s; 'g} <-->
+   subStructure{'s; 'g} & all x: 'g^car. lcoset{'s; 'g; 'x} = rcoset{'s; 'g; 'x} in univ[i:l]
+(*! @docoff *)
+
+let fold_normalSubg = makeFoldC << normalSubg[i:l]{'s; 'g} >> unfold_normalSubg
+
+(*!
+ * @begin[doc]
+ * @modsubsection{Well-formedness}
  *
  * @end[doc]
  *)
@@ -631,6 +737,12 @@ interactive normalSubg_wf {| intro [] |} :
    sequent ['ext] { 'H >- "type"{normalSubg[i:l]{'s; 'g}} }
 *)
 
+(*!
+ * @begin[doc]
+ * @modsubsection{Introduction and Elimination}
+ *
+ * @end[doc]
+ *)
 interactive normalSubg_intro {| intro [] |} :
    [wf] sequent [squash] {'H >- 's in group[i:l] } -->
    [wf] sequent [squash] {'H >- 'g in group[i:l] } -->
@@ -648,6 +760,7 @@ interactive normalSubg_elim {| elim [] |} 'H 'y 'b :
 
 (*!
  * @begin[doc]
+ * @modsubsection{Rules}
  *
  * All subgroups of abelian groups are normal.
  * @end[doc]
@@ -659,10 +772,26 @@ interactive abel_subg_normal :
    [main] sequent ['ext] { 'H >- subStructure{'s; 'g} } -->
    sequent ['ext] { 'H >- normalSubg[i:l]{'s; 'g} }
 
+(************************************************************************
+ * GROUP HOMOMORPHISM                                                   *
+ ************************************************************************)
+
 (*!
  * @begin[doc]
- * @rules
- * @modsubsection{Group Homomorphism}
+ * @modsection{Group homomorphism}
+ * @modsubsection{Rewrites}
+ *
+ * @end[doc]
+ *)
+define unfold_groupHom : groupHom{'A; 'B} <-->
+   { f: 'A^car -> 'B^car | all x: 'A^car. all y: 'A^car. ('f ('x *['A] 'y)) = ('f 'x) *['B] ('f 'y) in 'B^car }
+(*! @docoff *)
+
+let fold_groupHom = makeFoldC <<groupHom{'A; 'B}  >> unfold_groupHom
+
+(*!
+ * @begin[doc]
+ * @modsubsection{Well-formedness}
  *
  * @end[doc]
  *)
@@ -671,6 +800,12 @@ interactive groupHom_type {| intro [intro_typeinf <<'A>>] |} group[i:l] :
    [wf] sequent [squash] {'H >- 'B in group[i:l] } -->
     sequent ['ext] { 'H >- "type"{groupHom{'A; 'B}} }
 
+(*!
+ * @begin[doc]
+ * @modsubsection{Introduction and Elimination}
+ *
+ * @end[doc]
+ *)
 interactive groupHom_intro {| intro [intro_typeinf <<'A>>] |} group[i:l] :
    [wf] sequent [squash] {'H >- 'A in group[i:l] } -->
    [wf] sequent [squash] {'H >- 'B in group[i:l] } -->
@@ -686,11 +821,12 @@ interactive groupHom_elim {| elim [elim_typeinf <<'B>>] |} 'H group[i:l] :
 
 (*!
  * @begin[doc]
+ * @modsubsection{Rules}
  *
- * For any groups $G_1$ and $G_2$, there is always at least
- * one homomorphism $f@colon G_1 @rightarrow G_2$ which
- * maps all elements of $@car{G_1}$ into $@id{G_2}$. This
- * is called the Trivial Homomorphism.
+ *   For any groups $G_1$ and $G_2$, there is always at least
+ *   one homomorphism $f@colon G_1 @rightarrow G_2$ which
+ *   maps all elements of $@car{G_1}$ into $@id{G_2}$. This
+ *   is called the Trivial Homomorphism.
  * @end[doc]
  *)
 interactive trivial_hom {| intro [AutoMustComplete; intro_typeinf <<'A>>] |} group[i:l] :
@@ -785,7 +921,42 @@ interactive groupHom_subg2 group[i:l] 'f 'B 'T :
    [main] sequent ['ext] { 'H >- 'S^car = {x: 'A^car | 'f 'x in 'T^car} in univ[i:l] } -->
    [main] sequent ['ext] { 'H >- 'S^"*" = 'A^"*" in 'S^car -> 'S^car -> 'S^car } -->
    sequent ['ext] { 'H >- subStructure{'S; 'A} }
+
 (*! @docoff *)
+
+(************************************************************************
+ * DISPLAY FORMS                                                        *
+ ************************************************************************)
+
+prec prec_inv
+prec prec_mul < prec_inv
+
+dform group_df : except_mode[src] :: group[i:l] =
+   math_group{slot[i:l]}
+
+dform pregroup_df : except_mode[src] :: pregroup[i:l] =
+   math_pregroup{slot[i:l]}
+
+dform isGroup_df : except_mode[src] :: isGroup{'g} =
+   `"isGroup(" slot{'g} `")"
+
+dform inv_df1 : except_mode[src] :: parens :: "prec"[prec_inv] :: ('g^inv 'a) =
+   math_inv{'g; 'a}
+
+dform abelg_df : except_mode[src] :: abelg[i:l] =
+   math_abelg{slot[i:l]}
+
+dform lcoset_df : except_mode[src] :: lcoset{'h; 'g; 'a} =
+   math_lcoset{'h; 'g; 'a}
+
+dform rcoset_df : except_mode[src] :: rcoset{'h; 'g; 'a} =
+   math_rcoset{'h; 'g; 'a}
+
+dform normalSubg_df : except_mode[src] :: normalSubg[i:l]{'s; 'g} =
+   math_normalSubg{slot[i:l]; 's; 'g}
+
+dform groupHom_df : except_mode[src] :: groupHom{'A; 'B} =
+   math_groupHom{'A; 'B}
 
 (*
  * -*-

@@ -63,6 +63,7 @@ declare pregroup[i:l]
 declare isGroup{'g}
 declare group[i:l]
 declare abelg[i:l]
+declare subgroup[i:l]{'S; 'G}
 declare lcoset{'s; 'g; 'b}
 declare rcoset{'s; 'g; 'b}
 declare normalSubg[i:l]{'s; 'g}
@@ -78,12 +79,20 @@ prec prec_inv
  * TACTICS                                                              *
  ************************************************************************)
 
+topval unfold_pregroup : conv
+topval unfold_isGroup : conv
+topval unfold_group : conv
+topval unfold_subgroup : conv
+
 topval fold_pregroup1 : conv
 topval fold_pregroup : conv
+topval fold_isGroup1 : conv
 topval fold_isGroup : conv
 topval fold_group1 : conv
 topval fold_group : conv
 topval fold_abelg : conv
+topval fold_subgroup1 : conv
+topval fold_subgroup : conv
 topval fold_lcoset : conv
 topval fold_rcoset : conv
 topval fold_normalSubg : conv

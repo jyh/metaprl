@@ -339,9 +339,9 @@ let unsquash_tactic tbl = argfunT (fun i p ->
     | _, (SqUnsquashGoal tac :: _) ->
          unsquashHypGoalStable i thenLT [idT; tac i thenT trivialT]
     | (SqUnsquash tac :: _), _ ->
-         unsquashStableGoal i thenLT [idT; tac (-1) thenT nthHypT (-1)]
+         unsquashStableGoal i thenLT [idT; tac (-1) thenT hypothesis (-1)]
     | _, (SqStableGoal tac :: _) ->
-         unsquashStableGoal i thenLT [idT; tac thenT nthHypT (-1)]
+         unsquashStableGoal i thenLT [idT; tac thenT hypothesis (-1)]
     | [], [] ->
          raise (RefineError ("squash", StringTermError ("squash tactic doesn't know about ", mk_xlist_term [hyp;<<slot[" |- "]>>;conc]))))
 

@@ -262,13 +262,11 @@ topval typeAssertT : tactic
 (*
  * Turn an eqcd tactic into a d tactic.
  *)
-topval equalAssumT : int -> tactic
 topval equalRefT : term -> tactic
 topval equalSymT : tactic
 topval equalTransT : term -> tactic
 
 topval univTypeT : term -> tactic
-topval univAssumT : int -> tactic
 topval cumulativityT : term -> tactic
 
 (*

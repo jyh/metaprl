@@ -291,18 +291,18 @@ let substT t =
  *)
 
 let hypSubstT i j = funT (fun p ->
-   substT (Sequent.nth_hyp p i) j thenET nthHypT i)
+   substT (Sequent.nth_hyp p i) j thenET hypothesis i)
 
 let revHypSubstT i j = funT (fun p ->
    let trm = Sequent.nth_hyp p i in
    if is_squiggle_term trm then
       let a, b = dest_squiggle trm in
       let h' = mk_squiggle_term  b a in
-         substT h' j thenET (sqSymT thenT nthHypT i)
+         substT h' j thenET (sqSymT thenT hypothesis i)
    else
       let t, a, b = dest_equal trm in
       let h' = mk_equal_term t b a in
-         substT h' j thenET (equalSymT thenT nthHypT i))
+         substT h' j thenET (equalSymT thenT hypothesis i))
 
 (* cutMem *)
 

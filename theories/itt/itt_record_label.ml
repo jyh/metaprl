@@ -68,7 +68,7 @@ let eq_label_elimT = argfunT (fun n p ->
    let t = Sequent.nth_hyp p n in
    match explode_term t with
          <<'x='y in 'label>> ->   tryT (progressT (rwAll (sweepDnC (reduce_eq_label_true_rw x y orelseC reduce_eq_label_true_rw y x))) thenAT autoT)
-                                  thenT sqSubstT <:con<"rewrite"{$x$ ; $y$}>> 0 thenAT  (Itt_record_label0.label_sqequal thenT nthHypT n) |
+                                  thenT sqSubstT <:con<"rewrite"{$x$ ; $y$}>> 0 thenAT  (Itt_record_label0.label_sqequal thenT hypothesis n) |
           _ -> failT
 )
 

@@ -806,13 +806,13 @@ let moveToConclT = argfunT (fun i p ->
                   assertT goal'
                   thenLT [thinT i thenT tac tl goal';
                           all_elim (len + 1) (mk_var_term v) (**)
-                             thenLT [equalAssumT i; nthHypT (-1)]]
+                             thenLT [equalityAxiom i; hypothesis (-1)]]
 
             else
                let goal' = mk_implies_term hyp goal in
                   assertT goal'
                   thenLT [thinT i thenT tac tl goal';
-                          (implies_elim (len + 1)) thenLT [nthHypT i; nthHypT (-1)]]
+                          (implies_elim (len + 1)) thenLT [hypothesis i; hypothesis (-1)]]
        | [] ->
             idT
    in
@@ -1063,7 +1063,7 @@ let backThruHypT = argfunT (fun i p ->
    let rec tac info i firstp = funT (fun p ->
       match info with
           [] ->
-             nthHypT i
+             hypothesis i
         | hd :: args ->
              if !debug_auto then
                 eprintf "\tbackThruHyp step%t" eflush;
@@ -1225,7 +1225,7 @@ let genAssumT = argfunT (fun indices p ->
    in
    let rec make_gen_term t = function
       [] ->
-         t, nthHypT (-1), idT
+         t, hypothesis (-1), idT
     | i :: indices ->
          let t, tac1, tac2 = make_gen_term t indices in
          let t' = TermMan.nth_concl (Sequent.nth_assum p i) 1 in
@@ -1331,7 +1331,7 @@ struct
 
    let append_inf inf hyp inst_term r =
       match r, inf with
-         Ax,  _ -> (fun subst assums -> find_hyp (apply_subst subst hyp) assums nthHypT ) :: inf
+         Ax,  _ -> (fun subst assums -> find_hyp (apply_subst subst hyp) assums hypothesis ) :: inf
        | Andl,t::ts -> (fun subst assums -> (find_hyp (apply_subst subst hyp) assums (thenTi and_elim (t subst assums)))) :: ts
        | Negl,t::ts -> (fun subst assums -> (find_hyp (apply_subst subst hyp) assums (thenTi not_elim (t subst assums)))) :: ts
        | Orl, t1::t2::ts ->

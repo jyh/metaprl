@@ -1,6 +1,6 @@
 doc <:doc<
    @begin[spelling]
-   assertT hypReplacement hypSubstitution nthHypT onSomeHypT
+   assertT hypReplacement hypSubstitution onSomeHypT
    ponens substT substition thinAllT thinT thinned
    thinning thins useWitnessT wf struct assertAtT
    @end[spelling]
@@ -159,8 +159,7 @@ doc <:doc<
    @modsubsection{Axiom}
 
    The @tt{hypothesis} rule defines proof by assumption: if $A$ is
-   assumed, then it is true.  The proof extract term is the program
-   denoted by the assumption $x@colon A$.
+   assumed, then it is true.
    @end[doc]
 >>
 
@@ -246,6 +245,9 @@ doc <:doc< *********************************************************************
    Equality in any term $T$ means that $T$ is a type.
    @end[doc]
 >>
+interactive equalityTypeIsTypeHyp {| nth_hyp |} 'H :
+   sequent { <H>; x: 'a = 'b in 'T; <J['x]> >- "type"{'T} }
+
 interactive equalityTypeIsType 'a 'b :
    [wf] sequent { <H> >- 'a = 'b in 'T } -->
    sequent { <H> >- "type"{'T} }
@@ -342,7 +344,7 @@ let assertAtT i s =
       cut i s
 
 let copyHypT i j = funT (fun p ->
-   assertAtT j (Sequent.nth_hyp p i) thenLT [nthHypT i; idT])
+   assertAtT j (Sequent.nth_hyp p i) thenAT hypothesis i)
 
 let dupT = dup
 
@@ -412,12 +414,12 @@ let substT t i =
  * Derived versions.
  *)
 let hypSubstT i j = funT (fun p ->
-   substT (Sequent.nth_hyp p i) j thenET nthHypT i)
+   substT (Sequent.nth_hyp p i) j thenET hypothesis i)
 
 let revHypSubstT i j = funT (fun p ->
    let t, a, b = dest_equal (Sequent.nth_hyp p i) in
    let h' = mk_equal_term t b a in
-      substT h' j thenET (equalSymT thenT nthHypT i))
+      substT h' j thenET (equalSymT thenT hypothesis i))
 
 (*
  * Replace the entire hypothesis.
@@ -447,7 +449,7 @@ doc <:doc<
    @begin[doc]
    @resources
 
-   The (@tt{onSomeHypT nthHypT}) tactic is added to the @hreftactic[trivialT]
+   The (@tt{onSomeAssumT equalityAssumT}) tactic is added to the @hreftactic[trivialT]
    resource.
 
    @docoff

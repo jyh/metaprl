@@ -306,7 +306,7 @@ let recordOrtT = funT (fun p ->
    in
       rrule thenLT
          [idT;
-          tryT (dT 0 thenWT tryT (typeAssertT thenT nthHypT (-2)));
+          tryT (dT 0 thenWT tryT (nthHypT (-2)));
          ])
 
 (*
@@ -392,7 +392,7 @@ let recordL_elim = argfunT (fun n p ->
     (recordEliminationL1 n orelseT recordEliminationL n)
     thenT
        ifLabT "ort"
-                (tryT (dT 0 thenWT tryT (typeAssertT thenT nthHypT (-2))))
+                (tryT (dT 0 thenWT tryT (nthHypT (-2))))
        (*else*) (record_reduceT thenMT tryT (dT n)))
 
 let recordR_elim = argfunT (fun n p ->
@@ -400,7 +400,7 @@ let recordR_elim = argfunT (fun n p ->
     (recordEliminationR1 n orelseT recordEliminationR n)
     thenT
        ifLabT "ort"
-                (tryT (dT 0 thenWT tryT (typeAssertT thenT nthHypT (-1))))
+                (tryT (dT 0 thenWT tryT (nthHypT (-1))))
        (*else*) (record_reduceT thenMT tryT (dT (n+1))))
 
 let recordI_elim = argfunT (fun n p ->
@@ -408,7 +408,7 @@ let recordI_elim = argfunT (fun n p ->
     (recordEliminationI1 n orelseT recordEliminationI n)
     thenT
        ifLabT "ort"
-                (tryT (dT 0 thenWT tryT (typeAssertT thenT nthHypT (-1))))
+                (tryT (dT 0 thenWT tryT (nthHypT (-1))))
        (*else*) (record_reduceT thenMT tryT (dT (n+1))))
 
 let resource elim += [
@@ -461,8 +461,8 @@ interactive recordOrtIntroL :
 let recordOrtIntroLT =
    recordOrtIntroL thenLT
       [idT;
-       tryT (dT 0 thenWT tryT (typeAssertT thenT nthHypT (-2)));
-       rwh record_reduce 0 thenT tryT recordOrtIntroST thenWT tryT (dT 0 thenT typeAssertT thenT nthHypT (-1));
+       tryT (dT 0 thenWT tryT (nthHypT (-2)));
+       rwh record_reduce 0 thenT tryT recordOrtIntroST thenWT tryT (dT 0 thenT nthHypT (-1));
       ]
 
 let resource intro += (<<record_ort[n:t]{'a;record[m:t]{self.'A['self];'R}}>>,wrap_intro recordOrtIntroLT)
@@ -476,8 +476,8 @@ interactive recordOrtIntroR :
 let recordOrtIntroRT =
    recordOrtIntroR thenLT
       [idT;
-       tryT (dT 0 thenWT tryT (typeAssertT thenT nthHypT (-1)));
-       tryT recordOrtIntroST thenWT tryT (dT 0 thenT typeAssertT thenT nthHypT (-2));
+       tryT (dT 0 thenWT tryT (nthHypT (-1)));
+       tryT recordOrtIntroST thenWT tryT (dT 0 thenT nthHypT (-2));
       ]
 
 let resource intro += (<<record_ort[n:t]{'a;record[m:t]{'A;x.'R['x]}}>>,wrap_intro recordOrtIntroRT)
@@ -491,8 +491,8 @@ interactive recordOrtIntroI :
 let recordOrtIntroIT =
    recordOrtIntroI thenLT
       [idT;
-       tryT (dT 0 thenWT tryT (typeAssertT thenT nthHypT (-1)));
-       tryT recordOrtIntroST thenWT tryT (dT 0 thenT typeAssertT thenT nthHypT (-2));
+       tryT (dT 0 thenWT tryT (nthHypT (-1)));
+       tryT recordOrtIntroST thenWT tryT (dT 0 thenT nthHypT (-2));
       ]
 
 let resource intro += (<<record_ort[n:t]{'a;record[m:t]{'A;'R}}>>,wrap_intro recordOrtIntroIT)
@@ -545,7 +545,7 @@ let recordOrtIntroST p =
    let x= maybe_new_vars1 p "x" in
       ( (recordOrtIntroSM x orelseT recordOrtIntroS x)
         thenMT  rw reduce_eq_label 0
-        thenWT tryT (typeAssertT thenT trivialT)
+        thenWT tryT trivialT
         thenT tryT (completeT (dT 0))
       ) p
 

@@ -1,10 +1,10 @@
 (*
- * Sets of intervals.
+ * Operations on 31-bit integers.
  *
  * ----------------------------------------------------------------
  *
  * @begin[license]
- * Copyright (C) 2002 Jason Hickey, Caltech
+ * Copyright (C) 2003 Jason Hickey, Caltech
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,20 +26,42 @@
  *)
 extends M_prec
 
-(*
- * An interval has two bounds, and a set is just
- * a list of intervals.
- *)
-declare closed{'i}
-declare "open"{'i}
-declare interval{'lower; 'upper}
+open Refiner.Refiner.TermType
 
 (*
- * The intervals are in a list.
+ * For now, use a numeric representation.
  *)
-declare IntSet
-declare RawIntSet
-declare interval_set{'kind; 'intervals}
+declare int[value:n]
+
+(*
+ * Term conversions.
+ *)
+val dest_int : term -> int
+val make_int : int -> term
+
+(*
+ * Arithmetic.
+ *)
+declare int_uminus{'i}
+declare int_lnot{'i}
+declare int_bitfield[off:n, len:n]{'i}
+
+declare int_plus{'i1; 'i2}
+declare int_minus{'i1; 'i2}
+declare int_mul{'i1; 'i2}
+declare int_div{'i1; 'i2}
+declare int_rem{'i1; 'i2}
+declare int_max{'i1; 'i2}
+declare int_min{'i1; 'i2}
+
+declare int_sl{'i1; 'i2}
+declare int_sr{'i1; 'i2}
+declare int_and{'i1; 'i2}
+declare int_or{'i1; 'i2}
+declare int_xor{'i1; 'i2}
+
+declare int_if_eq{'i1; 'i2; 'e1; 'e2}
+declare int_if_lt{'i1; 'i2; 'e1; 'e2}
 
 (*!
  * @docoff

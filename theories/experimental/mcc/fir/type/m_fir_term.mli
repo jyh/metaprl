@@ -1,5 +1,5 @@
 (*
- * Integers with various precisions.
+ * Instruction destruction and creation.
  *
  * ----------------------------------------------------------------
  *
@@ -24,21 +24,45 @@
  * @email{jyh@cs.caltech.edu}
  * @end[license]
  *)
-extends M_prec
+extends M_fir
+
+open Refiner.Refiner.TermType
+
+open Fir
 
 (*
- * For now, use the string representation.
+ * Term forms.
  *)
-declare rawfloat[precision:n, value:s]
+type term_ty   = term poly_ty
+type term_atom = (term, term) poly_atom
+type term_exp  = (term, term, term) poly_exp
+
+(* No delayed substitutions *)
+type exp       = (ty, atom, exp) poly_exp
 
 (*
- * For display purposes.
+ * Main destructors.
  *)
-declare precision[p:n]
+val dest_type : term -> ty
+val dest_atom : term -> atom
+val dest_exp  : term -> exp
 
-(*!
- * @docoff
- *
+val dest_type_term : term -> term_ty
+val dest_atom_term : term -> term_atom
+val dest_exp_term  : term -> term_exp
+
+(*
+ * Make constructors.
+ *)
+val make_type      : ty -> term
+val make_atom      : atom -> term
+val make_exp       : exp -> term
+
+val make_type_term : term_ty -> term
+val make_atom_term : term_atom -> term
+val make_exp_term  : term_exp -> term
+
+(*
  * -*-
  * Local Variables:
  * Caml-master: "compile"

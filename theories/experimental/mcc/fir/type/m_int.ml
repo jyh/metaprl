@@ -124,28 +124,45 @@ dform int_if_lt_df : parens :: "prec"[prec_if] :: int_if_lt{'i1; 'i2; 'e1; 'e2} 
    hspace slot{'e2}
    popm popm ezone
 
-(*
- * Conversion to terms.
+(************************************************************************
+ * Term conversions.
  *)
-let int_term = << int[0:n] >>
-let int_opname = opname_of_term int_term
 
-let mk_int_term i =
-   mk_number_term int_opname (Mp_num.num_of_int i)
+let term_int = << int[value:n] >>
+let opname_int = opname_of_term term_int
 
-let dest_int_term t =
-   Mp_num.int_of_num (dest_number_term int_opname t)
+let dest_int t =
+   let { term_op = op; term_terms = bterms } = dest_term t in
+   let { op_name = op; op_params = params } = dest_op op in
+   let params = List.map dest_param params in
+   let bterms = List.map dest_bterm bterms in
+      match params, bterms with
+         [Number i], []
+         when Opname.eq op opname_int ->
+            Mp_num.int_of_num i
+
+       | _ ->
+            raise (RefineError ("dest_int", StringTermError ("not an int", t)))
+
+let make_int i =
+   let params = [make_param (Number (Mp_num.num_of_int i))] in
+   let op = mk_op opname_int params in
+      mk_term op []
+
+(************************************************************************
+ * Arithmetic.
+ *)
 
 (*
  * Arithmetic operations.
  *)
 let unary_arith op goal =
    let i = one_subterm goal in
-      mk_int_term (op (dest_int_term i))
+      make_int (op (dest_int i))
 
 let binary_arith op goal =
    let i1, i2 = two_subterms goal in
-      mk_int_term (op (dest_int_term i1) (dest_int_term i2))
+      make_int (op (dest_int i1) (dest_int i2))
 
 let check_zero op a b =
    if b = 0 then

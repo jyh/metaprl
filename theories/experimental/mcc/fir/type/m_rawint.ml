@@ -144,76 +144,92 @@ dform rawint_if_lt_df : parens :: "prec"[prec_if] :: rawint_if_lt{'i1; 'i2; 'e1;
    hspace slot{'e2}
    popm popm ezone
 
-(*
- * Conversion to terms.
+(************************************************************************
+ * Rawint<->term conversions.
  *)
-let rawint_term = << rawint[32:n, "true":t, "0":s] >>
-let rawint_opname = opname_of_term rawint_term
 
-let mk_rawint_term i =
-   let p =
-      match Lm_rawint.precision i with
-         Lm_rawint.Int8 -> 8
+(*
+ * Precisions.
+ *)
+let rawint_precision_of_num p =
+   match Mp_num.int_of_num p with
+      8  -> Lm_rawint.Int8
+    | 16 -> Lm_rawint.Int16
+    | 32 -> Lm_rawint.Int32
+    | 64 -> Lm_rawint.Int64
+    | i -> raise (RefineError ("dest_rawint_precision", StringIntError ("bad precision", i)))
+
+let boolean_of_string s =
+   match s with
+      "true" -> true
+    | "false" -> false
+    | s -> raise (RefineError ("boolean_of_string", StringStringError ("not a Boolean", s)))
+
+(*
+ * Make a precision.
+ *)
+let num_of_rawint_precision p =
+   let i =
+      match p with
+         Lm_rawint.Int8  -> 8
        | Lm_rawint.Int16 -> 16
        | Lm_rawint.Int32 -> 32
        | Lm_rawint.Int64 -> 64
    in
-   let s = Lm_rawint.signed i in
-   let v = Lm_rawint.to_string i in
-   let params = [Number (Mp_num.num_of_int p); Token (if s then "true" else "false"); String v] in
-   let params = List.map make_param params in
-   let op = mk_op rawint_opname params in
-      mk_term op []
+      Mp_num.num_of_int i
 
-let dest_rawint_term t =
-   let { term_op = op;
-         term_terms = terms
-       } = dest_term t
-   in
-   let _ =
-      if terms <> [] then
-         raise (RefineError ("dest_rawint_term", StringTermError ("not a rawint", t)))
-   in
-   let { op_name = opname;
-         op_params = params
-       } = dest_op op
-   in
-   let _ =
-      if not (Opname.eq opname rawint_opname) then
-         raise (RefineError ("dest_rawint_term", StringTermError ("not a rawint", t)))
-   in
-      match List.map dest_param params with
-         [Number p; Token s; String v] ->
-            let p =
-               match Mp_num.int_of_num p with
-                  8  -> Lm_rawint.Int8
-                | 16 -> Lm_rawint.Int16
-                | 32 -> Lm_rawint.Int32
-                | 64 -> Lm_rawint.Int64
-                | _ ->
-                     raise (RefineError ("dest_rawint_term", StringTermError ("not a rawint", t)))
-            in
-            let s =
-               match s with
-                  "true" -> true
-                | "false" -> false
-                | _ ->
-                     raise (RefineError ("dest_rawint_term", StringTermError ("not a rawint", t)))
-            in
+let string_of_boolean b =
+   if b then
+      "true"
+   else
+      "false"
+
+(*
+ * Conversion to terms.
+ *)
+let term_rawint = << rawint[32:n, "true":t, "0":s] >>
+let opname_rawint = opname_of_term term_rawint
+
+let dest_rawint t =
+   let { term_op = op; term_terms = bterms } = dest_term t in
+   let { op_name = op; op_params = params } = dest_op op in
+   let params = List.map dest_param params in
+   let bterms = List.map dest_bterm bterms in
+      match params, bterms with
+         [Number p; Token s; String v], []
+         when Opname.eq op opname_rawint ->
+            let p = rawint_precision_of_num p in
+            let s = boolean_of_string s in
                Lm_rawint.of_string p s v
        | _ ->
-            raise (RefineError ("dest_rawint_term", StringTermError ("not a rawint", t)))
+            raise (RefineError ("dest_rawint", StringTermError ("not a rawint", t)))
+
+let make_rawint i =
+   let p = num_of_rawint_precision (Lm_rawint.precision i) in
+   let s = string_of_boolean (Lm_rawint.signed i) in
+   let v = Lm_rawint.to_string i in
+   let params =
+      [make_param (Number  p);
+       make_param (Token s);
+       make_param (String v)]
+   in
+   let op = mk_op opname_rawint params in
+      mk_term op []
+
+(************************************************************************
+ * Arithmetic.
+ *)
 
 (*
  * Arithmetic operations.
  *)
 let unary_arith op goal =
    let i = one_subterm goal in
-      mk_rawint_term (op (dest_rawint_term i))
+      make_rawint (op (dest_rawint i))
 
 let binary_arith op goal =
    let i1, i2 = two_subterms goal in
-      mk_rawint_term (op (dest_rawint_term i1) (dest_rawint_term i2))
+      make_rawint (op (dest_rawint i1) (dest_rawint i2))
 
 let check_zero op a b =
    if Lm_rawint.is_zero b then
@@ -240,10 +256,10 @@ ml_rw reduce_rawint_bitfield : ('goal : rawint_bitfield[off:n, len:n]{'i}) =
    let bterms = List.map dest_bterm bterms in
       match params, bterms with
          [Number off; Number len], [{ bvars = []; bterm = t }] ->
-            let i = dest_rawint_term t in
+            let i = dest_rawint t in
             let off = Mp_num.int_of_num off in
             let len = Mp_num.int_of_num len in
-               mk_rawint_term (Lm_rawint.field i off len)
+               make_rawint (Lm_rawint.field i off len)
        | _ ->
             raise (RefineError ("reduce_rawint_bitfield", StringTermError ("illegal operation", goal)))
 

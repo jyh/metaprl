@@ -1,6 +1,5 @@
 (*
- * Interval sets for integers, rawints, and floats.
- * For us, and interval-set is a list of intervals.
+ * Sets of intervals.
  *
  * ----------------------------------------------------------------
  *
@@ -26,65 +25,36 @@
  * @end[license]
  *)
 extends M_prec
+extends M_int
+extends M_rawint
+
+open Refiner.Refiner.TermType
+
+open Fir
+open Fir_set
 
 (*
  * An interval has two bounds, and a set is just
  * a list of intervals.
  *)
-declare closed{'i}
-declare "open"{'i}
+declare Closed{'i}
+declare Open{'i}
 declare interval{'lower; 'upper}
 
 (*
  * The intervals are in a list.
  *)
-declare IntSet
-declare RawIntSet
-declare interval_set{'kind; 'intervals}
+declare IntSet{'intervals}
+declare RawIntSet[precision:n, signed:t]{'intervals}
 
 (*
- * Display.
+ * Term conversions.
  *)
-declare left{'i}
-declare right{'i}
+val dest_set : term -> set
+val make_set : set -> term
 
-dform left_closed_df : left{closed{'i}} =
-   `"[" slot{'i}
-
-dform left_open_df : left{."open"{'i}} =
-   `"(" slot{'i}
-
-dform right_closed_df : right{closed{'i}} =
-   slot{'i} `"]"
-
-dform right_open_df : right{."open"{'i}} =
-   slot{'i} `")"
-
-dform interval_df : interval{'lower; 'upper} =
-   left{'lower} `".." right{'upper}
-
-(*
- * Interval sets.
- *)
-declare interval_list{'intervals}
-
-dform int_set_df : IntSet =
-   bf["IntSet"]
-
-dform raw_int_set_df : RawIntSet =
-   bf["RawIntSet"]
-
-dform interval_set_df : interval_set{'kind; 'intervals} =
-   szone pushm[0] pushm[3] slot{'kind} `"{ " interval_list{'intervals} popm hspace `"}" popm ezone
-
-dform interval_list_cons_df1 : interval_list{cons{'a; cons{'b; 'c}}} =
-   slot{'a} `"," hspace interval_list{cons{'b; 'c}}
-
-dform interval_list_cons_df2 : interval_list{cons{'a; nil}} =
-   slot{'a}
-
-dform interval_list_nil_df : interval_list{nil} =
-   `""
+val dest_int_set : term -> IntSet.t
+val make_int_set : IntSet.t -> term
 
 (*!
  * @docoff

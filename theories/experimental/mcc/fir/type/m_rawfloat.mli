@@ -26,42 +26,47 @@
  *)
 extends M_prec
 
+open Refiner.Refiner.TermType
+
+open Lm_rawfloat
+
 (*
  * For now, use the string representation.
  *)
-declare rawint[precision:n, signed:t, value:s]
-
-(*
- * Arithmetic.
- *)
-declare rawint_uminus{'i}
-declare rawint_lnot{'i}
-declare rawint_bitfield[off:n, len:n]{'i}
-
-declare rawint_of_rawint[p:n, s:t]{'i}
-declare rawint_of_int[p:n, s:t]{'i}
-
-declare rawint_plus{'i1; 'i2}
-declare rawint_minus{'i1; 'i2}
-declare rawint_mul{'i1; 'i2}
-declare rawint_div{'i1; 'i2}
-declare rawint_rem{'i1; 'i2}
-declare rawint_max{'i1; 'i2}
-declare rawint_min{'i1; 'i2}
-
-declare rawint_sl{'i1; 'i2}
-declare rawint_sr{'i1; 'i2}
-declare rawint_and{'i1; 'i2}
-declare rawint_or{'i1; 'i2}
-declare rawint_xor{'i1; 'i2}
-
-declare rawint_if_eq{'i1; 'i2; 'e1; 'e2}
-declare rawint_if_lt{'i1; 'i2; 'e1; 'e2}
+declare rawfloat[precision:n, value:s]
 
 (*
  * For display purposes.
  *)
-declare precision[p:n, s:t]
+declare precision[p:n]
+
+(*
+ * Arithmetic.
+ *)
+declare rawfloat_uminus{'i}
+
+declare rawfloat_of_rawfloat[p:n]{'i}
+declare rawfloat_of_int[p:n]{'i}
+
+declare rawfloat_plus{'i1; 'i2}
+declare rawfloat_minus{'i1; 'i2}
+declare rawfloat_mul{'i1; 'i2}
+declare rawfloat_div{'i1; 'i2}
+declare rawfloat_rem{'i1; 'i2}
+declare rawfloat_max{'i1; 'i2}
+declare rawfloat_min{'i1; 'i2}
+
+declare rawfloat_if_eq{'i1; 'i2; 'e1; 'e2}
+declare rawfloat_if_lt{'i1; 'i2; 'e1; 'e2}
+
+(*
+ * Term conversions.
+ *)
+val rawfloat_precision_of_num : Mp_num.num -> float_precision
+val dest_rawfloat : term -> rawfloat
+
+val num_of_rawfloat_precision : float_precision -> Mp_num.num
+val make_rawfloat : rawfloat -> term
 
 (*!
  * @docoff

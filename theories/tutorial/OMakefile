@@ -35,6 +35,3 @@ Theory($(MPFILES))
 #
 clean:
     $(CLEAN)
-
-realclean:
-    $(REALCLEAN)

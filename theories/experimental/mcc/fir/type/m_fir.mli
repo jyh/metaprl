@@ -30,6 +30,12 @@ extends M_rawfloat
 extends M_set
 
 (*
+ * Options.
+ *)
+declare None
+declare Some{'t}
+
+(*
  * Types of tuples:
  *
  *    NormalTuple
@@ -273,7 +279,7 @@ declare TyAll{v. 'ty['v]}
 declare TyProject[i:n]{'v}
 declare TyDelayed
 
-declare TyMutable[m:t]{'ty}
+declare TyMutable{'ty; 'mutable_flag}
 
 (*
  * A frame has a list of fields, each of which has a list of subfields.
@@ -849,12 +855,12 @@ declare ArgRawFloat[p:n]
  *)
 declare ImportGlobal
 declare ImportFun[b:t]{'import_arg_list}
-declare Import{'name; 'ty; 'info}
+declare Import[name:s]{'ty; 'info}
 
 (*
  * For exports, we just keep the name and type.
  *)
-declare Export{'name; 'ty}
+declare Export[name:s]{'ty}
 
 (*!
  * @docoff

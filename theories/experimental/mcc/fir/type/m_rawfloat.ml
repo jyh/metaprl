@@ -112,66 +112,76 @@ dform rawfloat_if_lt_df : parens :: "prec"[prec_if] :: rawfloat_if_lt{'i1; 'i2; 
    hspace slot{'e2}
    popm popm ezone
 
-(*
- * Conversion to terms.
+(************************************************************************
+ * Term conversions.
  *)
-let rawfloat_term = << rawfloat[64:n, "0":s] >>
-let rawfloat_opname = opname_of_term rawfloat_term
 
-let mk_rawfloat_term i =
-   let p =
-      match Lm_rawfloat.precision i with
+(*
+ * Precisions.
+ *)
+let rawfloat_precision_of_num p =
+   match Mp_num.int_of_num p with
+      32 -> Lm_rawfloat.Single
+    | 64 -> Lm_rawfloat.Double
+    | 80 -> Lm_rawfloat.LongDouble
+    | i -> raise (RefineError ("dest_rawfloat_precision", StringIntError ("bad precision", i)))
+
+(*
+ * Make a precision.
+ *)
+let num_of_rawfloat_precision p =
+   let i =
+      match p with
          Lm_rawfloat.Single -> 32
        | Lm_rawfloat.Double -> 64
        | Lm_rawfloat.LongDouble -> 80
    in
-   let v = Lm_rawfloat.to_string i in
-   let params = [Number (Mp_num.num_of_int p); String v] in
-   let params = List.map make_param params in
-   let op = mk_op rawfloat_opname params in
-      mk_term op []
+      Mp_num.num_of_int i
 
-let dest_rawfloat_term t =
-   let { term_op = op;
-         term_terms = terms
-       } = dest_term t
-   in
-   let _ =
-      if terms <> [] then
-         raise (RefineError ("dest_rawfloat_term", StringTermError ("not a rawfloat", t)))
-   in
-   let { op_name = opname;
-         op_params = params
-       } = dest_op op
-   in
-   let _ =
-      if not (Opname.eq opname rawfloat_opname) then
-         raise (RefineError ("dest_rawfloat_term", StringTermError ("not a rawfloat", t)))
-   in
-      match List.map dest_param params with
-         [Number p; String v] ->
-            let p =
-               match Mp_num.int_of_num p with
-                  32 -> Lm_rawfloat.Single
-                | 64 -> Lm_rawfloat.Double
-                | 80 -> Lm_rawfloat.LongDouble
-                | _ ->
-                     raise (RefineError ("dest_rawfloat_term", StringTermError ("not a rawfloat", t)))
-            in
+(*
+ * Conversion to terms.
+ *)
+let term_rawfloat = << rawfloat[64:n, "0":s] >>
+let opname_rawfloat = opname_of_term term_rawfloat
+
+let dest_rawfloat t =
+   let { term_op = op; term_terms = bterms } = dest_term t in
+   let { op_name = op; op_params = params } = dest_op op in
+   let params = List.map dest_param params in
+   let bterms = List.map dest_bterm bterms in
+      match params, bterms with
+         [Number p; String v], []
+         when Opname.eq op opname_rawfloat ->
+            let p = rawfloat_precision_of_num p in
                Lm_rawfloat.of_string p v
        | _ ->
-            raise (RefineError ("dest_rawfloat_term", StringTermError ("not a rawfloat", t)))
+            raise (RefineError ("dest_rawfloat", StringTermError ("not a rawfloat", t)))
+
+
+let make_rawfloat i =
+   let p = num_of_rawfloat_precision (Lm_rawfloat.precision i) in
+   let v = Lm_rawfloat.to_string i in
+   let params =
+      [make_param (Number  p);
+       make_param (String v)]
+   in
+   let op = mk_op opname_rawfloat params in
+      mk_term op []
+
+(************************************************************************
+ * Arithmetic.
+ *)
 
 (*
  * Arithmetic operations.
  *)
 let unary_arith op goal =
    let i = one_subterm goal in
-      mk_rawfloat_term (op (dest_rawfloat_term i))
+      make_rawfloat (op (dest_rawfloat i))
 
 let binary_arith op goal =
    let i1, i2 = two_subterms goal in
-      mk_rawfloat_term (op (dest_rawfloat_term i1) (dest_rawfloat_term i2))
+      make_rawfloat (op (dest_rawfloat i1) (dest_rawfloat i2))
 
 let check_zero op a b =
    if Lm_rawfloat.is_zero b then

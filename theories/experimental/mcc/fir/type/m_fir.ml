@@ -32,6 +32,20 @@ extends M_set
 open M_prec
 
 (*
+ * Options.
+ *)
+declare None
+declare Some{'t}
+
+doc docoff
+
+dform none_df : None =
+   `"None"
+
+dform some_df : Some{'t} =
+   `"Some(" slot{'t} `")"
+
+(*
  * Types of tuples:
  *
  *    NormalTuple
@@ -370,7 +384,7 @@ declare TyAll{v. 'ty['v]}
 declare TyProject[i:n]{'v}
 declare TyDelayed
 
-declare TyMutable[m:t]{'ty}
+declare TyMutable{'ty; 'mutable_flag}
 
 doc docoff
 
@@ -431,11 +445,8 @@ dform ty_project_df : TyProject[i:n]{'v} =
 dform ty_delayed_df : TyDelayed =
    bf["<delayed>"]
 
-dform ty_mutable_df1 : TyMutable["true":t]{'ty} =
-   bf["mutable "] slot{'ty}
-
-dform ty_mutable_df2 : TyMutable["false":t]{'ty} =
-   bf["immutable "] slot{'ty}
+dform ty_mutable_df : TyMutable{'ty; 'mutable_flag} =
+   slot{'mutable_flag} `" " slot{'ty}
 
 (*
  * A frame has a list of fields, each of which has a list of subfields.
@@ -1637,7 +1648,7 @@ dform arg_raw_float_df : ArgRawFloat[p:n] =
  *)
 declare ImportGlobal
 declare ImportFun[b:t]{'import_arg_list}
-declare Import{'name; 'ty; 'info}
+declare Import[name:s]{'ty; 'info}
 
 doc docoff
 
@@ -1647,18 +1658,18 @@ dform import_global_df : ImportGlobal =
 dform import_fun_df : ImportFun[b:t]{'import_arg_list} =
    bf["import-fun["] slot[b:t] bf["]("] display_list[","]{'import_arg_list} bf[")"]
 
-dform import_df : Import{'name; 'ty; 'info} =
-   bf["import "] slot{'name} bf[" : "] slot{'ty} bf[" ="] hspace slot{'info}
+dform import_df : Import[name:s]{'ty; 'info} =
+   bf["import "] slot[name:s] bf[" : "] slot{'ty} bf[" ="] hspace slot{'info}
 
 (*
  * For exports, we just keep the name and type.
  *)
-declare Export{'name; 'ty}
+declare Export[name:s]{'ty}
 
 doc docoff
 
-dform export_df : Export{'name; 'ty} =
-   bf["export "] slot{'name} bf[" : "] slot{'ty}
+dform export_df : Export[name:s]{'ty} =
+   bf["export "] slot[name:s] bf[" : "] slot{'ty}
 
 (*
  * This is all the info for a program.

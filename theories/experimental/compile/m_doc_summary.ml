@@ -86,16 +86,12 @@ errors are not caught at compile time, but typically cause memory faults in the 
 
 This work is far from complete.  The current example serves as a proof of concept, but it remains to
 be seen what issues will arise when the formal compilation methodology is applied to more complex
-programming languages.  For future work, we intend to approach the problem of developing and
-validating formal compilers in three steps.  The first step is the development of typed intermediate
-languages.  These languages admit a broader class of rewrite transformations that are conditioned on
-well-typed programs, and the typed language serves as a launching point for compiler validation.
-The second step is to develop a semantics of the intermediate language and validate the rewrite
-rules for a small source language similar to the one presented here.  It is not clear whether the
-same properties should be applied to the assembly language---whether the assembly language should be
-typed, and whether it is feasible to develop a simple formal model of the target architecture that
-will allow the code generation and register allocations phases to be verified.  The final step is to
-extend the source language to one resembling a modern general-purpose language.
+programming languages. We are currently working on the ...
+
+... compare with CPS...
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+Unfinished
 
 @section["related-work"]{Related work}
 

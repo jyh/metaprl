@@ -128,7 +128,7 @@ online as part of the Mojave research project @cite[MojaveHome].
 This document is generated from the program sources (@MetaPRL provides
 a form of literate programming), and the complete source code is
 available online at @url["http://metaprl.org/"] as well as in the
-technical report.
+Caltech Technical Report caltechCSTR:2003.002.
 
 @subsection[organization]{Organization}
 
@@ -154,6 +154,7 @@ The high-level outline of the paper is as follows.
 @line{$@bullet$ {Section  @refsection[m_doc_x86_asm]}  {Intel x86 assembly code generation}}
 @line{$@bullet$ {Section  @refsection[m_doc_summary]}  {Summary and future work}}
 @line{$@bullet$ {Section  @refsection["related-work"]} {Related work}}
+@line{$@bullet$ {Appendix} {Example source code}}
 @end[tabular]
 @end[center]
 

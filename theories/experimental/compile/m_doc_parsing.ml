@@ -39,13 +39,12 @@ extends M_doc_ir
 doc <:doc<
 @begin[doc]
 
-The syntax of the language of our compiler is shown in Figure
-@reffigure[syntax]. In order to use the formal system for program transformation,
-source-level programs expressed as sequences of characters must first
-be translated into a term representation for use in the @MetaPRL
-framework. Fortunately @MetaPRL includes the Phobos @cite["GH02"] extensible lexer and parser.
-A Phobos language specification resembles a typical parser definition in YACC @cite[Joh75], except that
-semantic actions for productions use term rewriting.
+The abstract syntax of the language of our compiler is shown in Figure @reffigure[syntax]. In order
+to use the formal system for program transformation, the concrete syntax of the source-level
+programs must first be translated into a term representation for use in the @MetaPRL framework. We
+achieve that by using the Phobos @cite["GH02"] extensible lexer and parser, which is a part of the
+framework.  A Phobos language specification resembles a typical parser definition in YACC
+@cite[Joh75], except that semantic actions for productions use the @MetaPRL term rewriting engine.
 
 @begin[figure,syntax]
 $$

@@ -95,25 +95,30 @@ APPENDIX_THEORIES =\
     m_x86_opt\
     m_x86_spill
 
+HOSC_THEORIES=\
+   m_ir\
+   m_cps\
+
 #
 # Generate the local files
 #
 TheoryDocument(fdl, $(FDL_THEORIES))
 TheoryDocument(theory, $(PRINT_THEORIES))
 TheoryDocument(appendix, $(APPENDIX_THEORIES))
+TheoryDocument(hosc, $(HOSC_THEORIES))
 
 #
 # Format the papers and copy them
 #
 LaTeXDocumentInstall(tex, $(DOCDIR), m-paper, m-paper, theory-body)
-LaTeXDocumentInstall(tex, $(DOCDIR), m-paper-hosc, m-paper-hosc, theory-body appendix-body)
+LaTeXDocumentInstall(tex, $(DOCDIR), m-paper-hosc, m-paper-hosc, theory-body hosc-body)
 LaTeXDocumentInstall(tex, $(DOCDIR), m-paper-tr, m-paper-tr, theory-body appendix-body)
 LaTeXDocumentInstall(tex, $(DOCDIR), m-paper-fdl, m-paper-fdl, fdl-body)
 
 #
 # Clean up
 #
-TEXFILES = fdl theory appendix
+TEXFILES = fdl theory appendix hosc
 GENERATED_FILES =\
 	$(addsuffix .tex,      $(TEXFILES))\
 	$(addsuffix -body.tex, $(TEXFILES))\

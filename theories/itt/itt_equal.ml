@@ -101,7 +101,7 @@ doc <:doc<
    points, with no order.
   
    The $@type{t}$ term is used to define the @emph{type} judgment.  A term $T$ is a
-   type if <<sequent{ <H> >- "type"{'T}}>>.
+   type if <<sequent{ <H> >- 'T Type}>>.
   
    The semantic meaning of an open equality is that:
    @begin[enumerate]
@@ -160,7 +160,7 @@ let is_member_term t =
 let complete_unless_member =
    CondMustComplete (fun p -> not (is_member_term (Sequent.concl p)))
 
-let type_term = << "type"{'t} >>
+let type_term = << 't Type >>
 let type_opname = opname_of_term type_term
 let is_type_term = is_dep0_term type_opname
 let mk_type_term = mk_dep0_term type_opname
@@ -287,11 +287,11 @@ dform member_df : except_mode[src] :: parens :: "prec"[prec_equal] :: ('x in 'T)
 dform member_df2 : mode[src] :: parens :: "prec"[prec_equal] :: ('x in 'T) =
    szone pushm slot{'x} space `"in" hspace slot{'T} popm ezone
 
-dform type_df1 : except_mode[src] :: parens :: "prec"[prec_type] :: "type"{'a} =
+dform type_df1 : except_mode[src] :: parens :: "prec"[prec_type] :: ('a Type) =
    math_type{'a}
 
-dform type_df2 : mode[src] :: "type"{'a} =
-   `"\"type\"{" slot{'a} `"}"
+dform type_df2 : mode[src] :: ('a Type) =
+   slot{'a} `" Type"
 
 dform univ_df1 : except_mode[src] :: univ[i:l] =
    math_univ{slot[i:l]}
@@ -407,7 +407,7 @@ prim equalityEquality {| intro [] |} :
 prim equalityType {| intro [] |} :
    [wf] sequent { <H> >- 'a in 'T } -->
    [wf] sequent { <H> >- 'b in 'T } -->
-   sequent { <H> >- "type"{. 'a = 'b in 'T } } =
+   sequent { <H> >- ('a = 'b in 'T) Type } =
    it
 
 doc <:doc< ************************************************************************
@@ -442,8 +442,8 @@ prim equalityElimination {| elim [] |} 'H :
    't
 
 prim type_axiomMember {| intro []; eqcd |} :
-   sequent { <H> >- "type"{'T} } -->
-   sequent { <H> >- it in "type"{'T} } =
+   sequent { <H> >- 'T Type } -->
+   sequent { <H> >- it in ('T Type) } =
    it
 
 doc <:doc< ************************************************************************
@@ -465,7 +465,7 @@ doc <:doc< *********************************************************************
  *)
 prim typeEquality :
    [main] sequent { <H> >- 'T } -->
-   sequent { <H> >- "type"{'T} } =
+   sequent { <H> >- 'T Type } =
    it
 
 doc <:doc< ************************************************************************
@@ -522,7 +522,7 @@ doc <:doc< *********************************************************************
 >>
 prim universeMemberType univ[i:l] :
    [wf] sequent { <H> >- 'x in univ[i:l] } -->
-   sequent { <H> >- "type"{'x} } =
+   sequent { <H> >- 'x Type } =
    it
 
 (*
@@ -530,10 +530,10 @@ prim universeMemberType univ[i:l] :
  * hypothesis rule is not know yet.
  *)
 interactive universeAssumType 'H :
-   sequent { <H>; x: univ[l:l]; <J['x]> >- "type"{'x} }
+   sequent { <H>; x: univ[l:l]; <J['x]> >- 'x Type }
 
 interactive universeType {| intro [] |} :
-   sequent { <H> >- "type"{univ[l:l]} }
+   sequent { <H> >- univ[l:l] Type }
 
 doc <:doc< @docoff >>
 let univTypeT = universeMemberType

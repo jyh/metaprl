@@ -94,6 +94,7 @@ define unfold_posnat :
 
 declare rationals
 declare rat{'a;'b}
+declare beq_rat{'a;'b}
 
 define unfold_rat_of_int :
    rat_of_int{'a} <--> rat{'a ; 1}
@@ -110,8 +111,8 @@ rewrite reduce_mul_rat : (rat{'a;'b} *@ rat{'c;'d}) <--> rat{('a *@ 'c); ('b *@ 
 rewrite reduce_minus_rat : minus{rat{'a;'b}} <--> rat{minus{'a};'b}
 rewrite reduce_lt_bool_rat : lt_bool{rat{'a;'b};rat{'c;'d}} <--> lt_bool{('a *@ 'd);('c *@ 'b)}
 
-define unfold_beq_rat :
-   beq_rat{rat{'a;'b};rat{'c;'d}} <--> beq_int{('a *@ 'd);('c *@ 'b)}
+rewrite unfold_beq_rat :
+   beq_rat{ rat{ 'a ; 'b } ; rat{ 'c ; 'd } } <--> beq_int{ ('a *@ 'd) ; ('c *@ 'b) }
 
 doc <:doc< @docoff >>
 

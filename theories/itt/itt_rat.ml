@@ -95,6 +95,7 @@ define unfold_posnat :
 
 declare rationals
 declare rat{'a;'b}
+declare beq_rat{'a;'b}
 
 define unfold_rat_of_int :
    rat_of_int{'a} <--> rat{'a ; 1}
@@ -111,8 +112,11 @@ prim_rw reduce_mul_rat : (rat{'a;'b} *@ rat{'c;'d}) <--> rat{('a *@ 'c); ('b *@ 
 prim_rw reduce_minus_rat : minus{rat{'a;'b}} <--> rat{minus{'a};'b}
 prim_rw reduce_lt_bool_rat : lt_bool{rat{'a;'b};rat{'c;'d}} <--> lt_bool{('a *@ 'd);('c *@ 'b)}
 
-define unfold_beq_rat :
-   beq_rat{rat{'a;'b};rat{'c;'d}} <--> beq_int{('a *@ 'd);('c *@ 'b)}
+(*define unfold_beq_rat :
+   beq_rat{ rat{ 'a ; 'b } ; rat{ 'c ; 'd } } <--> beq_int{ ('a *@ 'd) ; ('c *@ 'b) }
+*)
+prim_rw unfold_beq_rat :
+   beq_rat{ rat{ 'a ; 'b } ; rat{ 'c ; 'd } } <--> beq_int{ ('a *@ 'd) ; ('c *@ 'b) }
 
 doc <:doc< @docoff >>
 
@@ -126,7 +130,7 @@ let is_beq_rat_term = is_dep0_dep0_term beq_rat_opname
 let mk_beq_rat_term = mk_dep0_dep0_term beq_rat_opname
 let dest_beq_rat = dest_dep0_dep0_term beq_rat_opname
 
-let rat_term = << rat{'a;'b} >>
+let rat_term = << rat{ 'a ; 'b } >>
 let rat_opname = opname_of_term rat_term
 let is_rat_term = is_dep0_dep0_term rat_opname
 let mk_rat_term = mk_dep0_dep0_term rat_opname

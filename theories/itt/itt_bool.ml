@@ -55,6 +55,7 @@ doc <:doc< @docoff >>
 
 open Basic_tactics
 
+open Itt_struct
 open Itt_equal
 open Itt_squash
 
@@ -724,6 +725,11 @@ let eq_bfalse2assertT = eq_bfalse2assert
 interactive assert2eq_bfalse :
    [main] sequent { <H> >- 'e1 = bfalse in bool } -->
    sequent { <H> >- "assert"{bnot{'e1}} }
+
+interactive not_bnot_elim {| elim [ThinOption thinT] |} 'H :
+   sequent { <H>; x: "not"{"assert"{bnot{'b}}}; <J['x]> >- 'b in bool } -->
+   sequent { <H>; x: "not"{"assert"{bnot{'b}}}; "assert"{'b}; <J['x]> >- 'C['x] } -->
+   sequent { <H>; x: "not"{"assert"{bnot{'b}}}; <J['x]> >- 'C['x] }
 
 let assert2eq_bfalseT = assert2eq_bfalse
 

@@ -137,10 +137,10 @@ let resource intro +=
 
 prim_rw bterm_op_bdepth1 {| reduce |} : op_bdepth{ bterm{| >- 'op |}} <--> 0
 prim_rw bterm_op_bdepth2 {| reduce |} : op_bdepth{ bterm{| x:term >- 'op |}} <--> 1
-prim_rw bterm_op_bdepth3 'H : op_bdepth{ bterm{| <H>; <J<||> > >- 'op |}} <--> op_bdepth{ bterm{| <H> >- it[@] |} } +@ op_bdepth{ bterm{| <J> >- it[@] |} }
+prim_rw bterm_op_bdepth3 'H : op_bdepth{ bterm{| <H>; <J<||> > >- 'op<|H;J|> |}} <--> op_bdepth{ bterm{| <H> >- it[@] |} } +@ op_bdepth{ bterm{| <J> >- it[@] |} }
 
-interactive_rw bterm_op_bdepth4 {| reduce |} : op_bdepth{ bterm{| x:term; <H> >- 'op |}} <--> 1 +@ op_bdepth{ bterm{| <H> >- 'op |} }
-interactive_rw bterm_op_bdepth5 {| reduce |} : op_bdepth{ bterm{| <H>; x:term >- 'op |}} <--> op_bdepth{ bterm{| <H> >- 'op |} } +@ 1
+interactive_rw bterm_op_bdepth4 {| reduce |} : op_bdepth{ bterm{| x:term; <H> >- 'op<|H|>['x] |}} <--> 1 +@ op_bdepth{ bterm{| <H> >- it[@] |} }
+interactive_rw bterm_op_bdepth5 {| reduce |} : op_bdepth{ bterm{| <H>; x:term >- 'op<|H|>['x] |}} <--> op_bdepth{ bterm{| <H> >- it[@] |} } +@ 1
 
 prim_rw bterm_shape :
     if_quoted_op{'op<||>;"true"} -->
@@ -170,18 +170,11 @@ doc <:doc< @begin[doc]
    to <<var{length{Gamma}; length{Delta}}>>.
 @end[doc] >>
 
-prim_rw bterm_var_1 :
+prim_rw bterm_var 'H :
+  bterm{| <H>; x : term; <J<||> > >- 'x |} <--> var{ op_bdepth{bterm{| <H> >- it[@] |}}; op_bdepth{bterm{| <J> >- it[@] |}} }
+
+interactive_rw bterm_var_1 :
   bterm{| x : term >- 'x |} <--> var{0;0}
-
-prim bterm_var_right :
-  sequent{ <H> >- bterm{| <K> >- 'x |} ~ var{'l;'r} } -->
-  sequent{ <H> >- bterm{| <K>; y:term >- 'x |} ~ var{'l;'r +@ 1} }
-  = it
-
-prim bterm_var_left :
-  sequent{ <H> >- bterm{| <K> >- 'x |} ~ var{'l;'r} } -->
-  sequent{ <H> >- bterm{| y:term; <K> >- 'x |} ~ var{'l +@ 1;'r} }
-  = it
 
 (************************************************************************
  * Make_bterm                                                           *

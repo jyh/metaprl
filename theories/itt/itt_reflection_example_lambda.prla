@@ -1921,8 +1921,6 @@ O	o459	ext_rule p459
 T	t460	o283 b373 b1017
 T	t464	o1069 b304
 B	b464	t464
-T	t465	o1044 b304
-B	b465	t465
 P	p1949	Number 1962
 P	p1950	Number 1969
 O	o1950	resource_defs p1949 p1950 p80
@@ -2583,8 +2581,6 @@ T	t921	o400 b920 b4
 B	b921	t921
 T	t922	o281 b333 b919
 B	b922	t922
-T	t5	o865 b922 b4
-B	b5	t5
 T	t923	o280 b922 b4
 B	b923	t923
 H	h923	x t332
@@ -2609,10 +2605,10 @@ T	t933	o b932 b4
 B	b933	t933
 T	t934	o b926 b933
 B	b934	t934
-T	t6	o b5 b934
-B	b6	t6
-T	t8	o552 b921 b6
-B	b8	t8
+T	t3	o b923 b934
+B	b3	t3
+T	t39	o552 b921 b3
+B	b39	t39
 T	t937	o552 b923 b4
 B	b937	t937
 T	t938	o25 b551 b937 b4 b4
@@ -2643,72 +2639,68 @@ T	t948	o281 b948 b919
 B	b949	t948
 T	t949	o280 b949 b4
 B	b950	t949
-T	t950	o376 b465 b430
-B	b951	t950
-T	t951	o386 b430 b951
-B	b952	t951
-T	t952	o302 b372 b464 b952
-S	s952	t282\\ h h923 h402\\ t952
-B	b953	s952
-T	t953	o281 b953 b919
-B	b954	t953
-T	t954	o280 b954 b4
-B	b955	t954
-T	t955	o b955 b4
-B	b956	t955
-T	t956	o b950 b956
-B	b957	t956
-T	t957	o552 b932 b957
-B	b958	t957
+NBase_trivial	Base_trivial	Base_trivial NIL
+NBase_trivial!it	it	it Base_trivial
+O	o46	it p239
+T	t58	o46
+S	s58	t912\\ h299\\ t58
+B	b58	s58
+T	t60	o1044 b58
+B	b60	t60
+T	t61	o386 b60 b369
+B	b61	t61
+T	t62	o376 b61 b430
+B	b62	t62
+T	t64	o386 b430 b62
+B	b64	t64
+T	t65	o302 b372 b464 b64
+S	s65	t282\\ h h923 h402\\ t65
+B	b65	s65
+T	t66	o281 b65 b919
+B	b66	t66
+T	t67	o280 b66 b4
+B	b67	t67
+T	t68	o b67 b4
+B	b68	t68
+T	t74	o b950 b68
+B	b74	t74
+T	t75	o552 b932 b74
+B	b75	t75
 P	p958	String "int_sqequal thenT dT 3 thenT byDefT reduceC  thenT rwh unfold_nat 3 thenT dT 3 thenT autoT thenT arithT ttca"
 O	o958	ext_rule p958
 T	t958	o552 b950 b4
 B	b959	t958
 T	t959	o958 b551 b959 b4 b4
 B	b960	t959
-P	p960	String "rwh (addrC [2;1] make_bterm_eval) 0 thenT byDefT reduceC"
-O	o960	ext_rule p960
-T	t960	o302 b372 b465 b952
-S	s960	t282\\ h h923 h402\\ t960
-B	b961	s960
-T	t961	o281 b961 b919
-B	b962	t961
-T	t962	o280 b962 b4
-B	b963	t962
-T	t963	o b963 b4
-B	b964	t963
-T	t964	o552 b955 b964
-B	b965	t964
-P	p966	String "byDefT normalizeC"
-O	o966	ext_rule p966
-T	t966	o552 b963 b4
-B	b966	t966
-T	t967	o966 b551 b966 b4 b4
-B	b967	t967
-T	t968	o b967 b4
-B	b968	t968
-T	t969	o960 b551 b965 b968 b4
-B	b969	t969
-T	t970	o b969 b4
-B	b970	t970
-T	t971	o b960 b970
-B	b971	t971
-T	t972	o459 b551 b958 b971 b4
-B	b972	t972
-T	t973	o b972 b4
-B	b977	t973
-T	t977	o b947 b977
-B	b982	t977
-T	t982	o b938 b982
-B	b983	t982
-T	t9	o5 b551 b8 b983 b4
-B	b9	t9
-T	t40	o278 b9
-B	b40	t40
-T	t41	o910 b4 b915 b40 b1954
-B	b41	t41
-T	t44	o13 b41
-B	b44	t44
+P	p75	String "rwh (addrC [2;1] make_bterm_eval) 0 thenT byDefsT [normalizeC; reduceC]"
+O	o75	ext_rule p75
+T	t77	o552 b67 b4
+B	b77	t77
+T	t80	o75 b551 b77 b4 b4
+B	b80	t80
+T	t91	o b80 b4
+B	b91	t91
+T	t93	o b960 b91
+B	b93	t93
+T	t96	o459 b551 b75 b93 b4
+B	b96	t96
+T	t97	o b96 b4
+B	b97	t97
+T	t98	o b947 b97
+B	b98	t98
+T	t99	o b938 b98
+B	b99	t99
+T	t100	o5 b551 b39 b99 b4
+B	b100	t100
+T	t101	o278 b100
+B	b101	t101
+T	t103	o910 b4 b915 b101 b1954
+B	b103	t103
+T	t105	o13 b103
+B	b105	t105
+P	p110	Number 2236
+P	p111	Number 2502
+O	o111	location p110 p111
 P	p55	String app_intro
 O	o55	rule p55
 P	p12	String add_var_lambdaterm
@@ -3227,8 +3219,11 @@ T	t1444	o b1443 b4
 B	b1444	t1444
 T	t1445	o55 b4 b689 b1439 b1444
 B	b1445	t1445
-T	t1447	o269 b1445
-B	b1447	t1447
+T	t111	o111 b1445
+B	b111	t111
+P	p119	Number 2504
+P	p120	Number 2932
+O	o120	location p119 p120
 P	p1447	String app_intro2
 O	o1447	rule p1447
 Vt	t1449	t\\ K\\
@@ -3494,8 +3489,8 @@ T	t1845	o b1844 b4
 B	b1845	t1845
 T	t1846	o1447 b4 b1697 b1840 b1845
 B	b1846	t1846
-T	t1847	o269 b1846
-B	b1847	t1847
+T	t120	o120 b1846
+B	b120	t120
 P	p1847	Number 2935
 P	p1848	Number 3100
 O	o1848	location p1847 p1848
@@ -3785,52 +3780,52 @@ T	t1957	o b1854 b1956
 B	b1957	t1957
 T	t1961	o b1848 b1957
 B	b1961	t1961
-T	t1972	o b1847 b1961
-B	b1972	t1972
-T	t1984	o b1447 b1972
-B	b1984	t1984
-T	t1991	o b44 b1984
-B	b1991	t1991
-T	t1992	o b400 b1991
-B	b1992	t1992
-T	t1993	o b907 b1992
-B	b1993	t1993
-T	t1994	o b1483 b1993
-B	b1994	t1994
-T	t1995	o b2 b1994
-B	b1995	t1995
-T	t1996	o b1470 b1995
-B	b1996	t1996
-T	t1997	o b421 b1996
-B	b1997	t1997
-T	t1998	o b1370 b1997
-B	b1998	t1998
-T	t1999	o b1192 b1998
-B	b1999	t1999
-T	t2000	o b1157 b1999
-B	b2000	t2000
-T	t2001	o b1130 b2000
-B	b2001	t2001
-T	t2012	o b1120 b2001
-B	b2013	t2012
-T	t2013	o b1113 b2013
-B	b2014	t2013
-T	t2014	o b1081 b2014
-B	b2015	t2014
-T	t2015	o b1061 b2015
-B	b2016	t2015
-T	t2016	o b1060 b2016
-B	b2017	t2016
-T	t2017	o b1053 b2017
-B	b2018	t2017
-T	t2018	o b1051 b2018
-B	b2019	t2018
-T	t2019	o b1050 b2019
-B	b2020	t2019
-T	t2020	o b1043 b2020
-B	b2021	t2020
-T	t2021	o b1038 b2021
-B	b2022	t2021
-T	t2022	o b514 b2022
-B	b2023	t2022
-T	t2023	o b33 b2023
+T	t121	o b120 b1961
+B	b121	t121
+T	t122	o b111 b121
+B	b122	t122
+T	t123	o b105 b122
+B	b123	t123
+T	t124	o b400 b123
+B	b124	t124
+T	t125	o b907 b124
+B	b125	t125
+T	t127	o b1483 b125
+B	b127	t127
+T	t137	o b2 b127
+B	b137	t137
+T	t140	o b1470 b137
+B	b140	t140
+T	t145	o b421 b140
+B	b145	t145
+T	t146	o b1370 b145
+B	b146	t146
+T	t174	o b1192 b146
+B	b174	t174
+T	t188	o b1157 b174
+B	b188	t188
+T	t189	o b1130 b188
+B	b189	t189
+T	t190	o b1120 b189
+B	b190	t190
+T	t191	o b1113 b190
+B	b191	t191
+T	t197	o b1081 b191
+B	b197	t197
+T	t198	o b1061 b197
+B	b198	t198
+T	t200	o b1060 b198
+B	b200	t200
+T	t201	o b1053 b200
+B	b201	t201
+T	t202	o b1051 b201
+B	b202	t202
+T	t203	o b1050 b202
+B	b203	t203
+T	t205	o b1043 b203
+B	b205	t205
+T	t206	o b1038 b205
+B	b206	t206
+T	t210	o b514 b206
+B	b210	t210
+T	t211	o b33 b210

@@ -1127,6 +1127,49 @@ interactive sameset_trans 'l2 :
    sequent { <H> >- sameset{'l1; 'l2; 'A} } -->
    sequent { <H> >- sameset{'l2; 'l3; 'A} } -->
    sequent { <H> >- sameset{'l1; 'l3; 'A} }
+
+
+
+
+
+doc <:doc<
+y   @begin[doc]
+    The <<find{'l; 'a; x,y.'eq['x;'y]}>> returns an index of an element in the list $l$ equal to the element $a$ according to equality $eq$.
+    It returns the length of the list otherwise.
+   @end[doc]
+>>
+
+define unfold_find: find{'l; 'a; x,y.'eq['x;'y]} <--> list_ind{'l; 0; hd,tl,r. if 'eq['hd;'a] then length{'l} -@ length{'tl} else 'r+@ 1}
+
+interactive find_wf  {| intro [intro_typeinf <<'l>>] |}  list{'T} :
+   sequent  { <H> >- 'l in list{'T} } -->
+   sequent  { <H> >- 'a in 'T } -->
+   sequent  { <H>; x:'T; y:'T >- 'eq['x;'y] in bool } -->
+   sequent  { <H> >- find{'l; 'a; x,y.'eq['x;'y]} in nat }
+
+interactive find_when_found_wf  {| intro [intro_typeinf <<'l>>] |}  list{'T} :
+   sequent  { <H> >- 'l in list{'T} } -->
+   sequent  { <H> >- 'a in 'T } -->
+   sequent  { <H> >- mem{'a;'l;'T} } -->
+   sequent  { <H>; x:'T; y:'T >- 'eq['x;'y] in bool } -->
+   sequent  { <H> >- "assert"{'eq['a;'a]} } -->
+   sequent  { <H> >- find{'l; 'a; x,y.'eq['x;'y]} in Index{'l} }
+
+interactive find_correct_when_found  <<find{'l; 'a; x,y.'eq['x;'y]}>>  list{'T}:
+   sequent  { <H> >- 'l in list{'T} } -->
+   sequent  { <H> >- 'a in 'T } -->
+   sequent  { <H>; x:'T; y:'T >- 'eq['x;'y] in bool } -->
+   sequent  { <H> >- find{'l; 'a; x,y.'eq['x;'y]} in Index{'l} } -->
+   sequent  { <H> >- "assert"{'eq[nth{'l;find{'l; 'a; x,y.'eq['x;'y]}};'a]} }
+
+interactive find_when_not_found_wf  {| intro [intro_typeinf <<'l>>] |}  list{'T} :
+   sequent  { <H> >- 'l in list{'T} } -->
+   sequent  { <H> >- 'a in 'T } -->
+   sequent  { <H>; x:'T; y:'T >- 'eq['x;'y] in bool } -->
+   sequent  { <H> >- all_list{'l; x.not{"assert"{'eq['x;'a]}}} } -->
+   sequent  { <H> >- find{'l; 'a; x,y.'eq['x;'y]} = length{'l} in int }
+
+
 doc <:doc< @docoff >>
 
 (************************************************************************

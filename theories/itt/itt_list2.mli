@@ -124,6 +124,7 @@ declare rev{'l}
  *)
 declare mklist{'n;'f}
 
+declare find{'l; 'a; x,y.'eq['x;'y]}
 (*
  * I/O abstraction for list{top}
  *)

@@ -38,6 +38,7 @@ MPFILES :=\
 	itt_int_bool\
 	itt_atom_bool\
 	itt_arith\
+	itt_struct2\
 	itt_isect\
 	itt_disect\
 	itt_tunion\
@@ -53,7 +54,6 @@ MPFILES :=\
 	itt_derive\
 	itt_prop_decide\
 	itt_fset\
-	itt_struct2\
 	itt_theory\
 	itt_collection\
 	itt_sort

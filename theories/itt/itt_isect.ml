@@ -73,6 +73,7 @@ include Itt_equal
 include Itt_set
 include Itt_rfun
 include Itt_logic
+include Itt_struct2
 (*! @docoff *)
 
 open Printf
@@ -179,33 +180,6 @@ interactive topUniv {| intro_resource [] |} 'H :
 interactive topType {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- "type"{top} }
 
-(*
- * With the current semantics of hide{A} (see esquash), this rule is invalid
- *
- * H >- isect x: A. B[x] ext b[it]
- * by intersectionMemberFormation z
- * H >- A = A in type
- * H, z: hide(A) >- B[z] ext b[z]
- *
- * prim intersectionMemberFormation {| intro_resource [] |} 'H 'z :
- *   [wf] sequent [squash] { 'H >- "type"{'A} } -->
- *   [main] ('b['z] : sequent ['ext] { 'H; z: hide{'A} >- 'B['z] }) -->
- *   sequent ['ext] { 'H >- isect x: 'A. 'B['x] } =
- *   'b[it]
- *)
-
-(*
- * H >- isect x: A. B ext b[it]
- * by intersectionMemberFormation z
- * H >- A = A in type
- * H, z: hide(A) >- B ext b[z]
- *)
-
-prim intersectionMemberFormation {| intro_resource [] |} 'H 'z :
-    [wf] sequent [squash] { 'H >- "type"{'A} } -->
-    [main] ('b['z] : sequent ['ext] { 'H; z: hide{'A} >- 'B }) -->
-    sequent ['ext] { 'H >- isect x: 'A. 'B } =
-    'b[it]
 
 (*!
  * @begin[doc]
@@ -230,19 +204,49 @@ prim intersectionMemberEquality {| intro_resource []; eqcd_resource |} 'H 'z :
 interactive topMemberEquality {| intro_resource []; eqcd_resource |} 'H :
    sequent ['ext] { 'H >- 'b1 = 'b2 in top }
 
+
 (*!
  * @begin[doc]
- * The case equality works in the opposite direction: if
- * two terms are equal in the intersection, they are also
- * equal in each of the case of the intersection.
+ * @thysubsection{Introduction}
+ *
+ * In general the only one way to introduce intersection is
+ * to show @emph{explicitly} its witness.
+ * The following introduction rule is @emph{derived} from the
+ * @hrefrule[intersectionMemberEquality].
  * @end[doc]
  *)
 
-prim intersectionMemberCaseEquality 'H (isect x: 'A. 'B['x]) 'a :
-   [wf] sequent [squash] { 'H >- 'b1 = 'b2 in isect x: 'A. 'B['x] } -->
-   [wf] sequent [squash] { 'H >- 'a = 'a in 'A } -->
-   sequent ['ext] { 'H >- 'b1 = 'b2 in 'B['a] } =
-   it
+interactive intersectionMemberFormation {| intro_resource [] |} 'H 'z 'b :
+   [wf] sequent [squash] { 'H >- "type"{'A} } -->
+   [wf] sequent [squash] { 'H; z: 'A >- 'b IN 'B['z] } -->
+   sequent ['ext] { 'H >-  isect x: 'A. 'B['x] }
+
+(*!
+ * @begin[doc]
+ * In one special case when $B$ does not depend on $x$  we can derive
+ * simpler rule:
+ * $@isect{x; A; B}$ is inhabited if we can proof $B$ with the
+ * @emph{hidden} hypothesis $A$ (see @hrefterm[hide]).
+ * @end[doc]
+ *)
+
+interactive intersectionMemberFormation2 {| intro_resource [] |} 'H 'z :
+    [wf] sequent [squash] { 'H >- "type"{'A} } -->
+    [main] sequent ['ext] { 'H; z: hide{'A} >- 'B } -->
+    sequent ['ext] { 'H >- isect x: 'A. 'B }
+
+
+(*!
+ * @begin[doc]
+ *
+ * Of course $@top$ is inhabited.
+ * @end[doc]
+ *)
+
+interactive topMemberFormation {| intro_resource [] |} 'H:
+   sequent ['ext] { 'H >-  top }
+
+
 
 (*!
  * @begin[doc]
@@ -255,10 +259,38 @@ prim intersectionMemberCaseEquality 'H (isect x: 'A. 'B['x]) 'a :
  * @end[doc]
  *)
 prim intersectionElimination {| elim_resource [] |} 'H 'J 'a 'x 'z 'v :
-   [wf] sequent [squash] { 'H; x: isect y: 'A. 'B['y]; 'J['x] >- 'a = 'a in 'A } -->
+   [wf] sequent [squash] { 'H; x: isect y: 'A. 'B['y]; 'J['x] >- 'a IN 'A } -->
    [main] ('t['x; 'z; 'v] : sequent ['ext] { 'H; x: isect y: 'A. 'B['y]; 'J['x]; z: 'B['a]; v: 'z = 'x in 'B['a] >- 'T['x] }) -->
    sequent ['ext] { 'H; x: isect y: 'A. 'B['y]; 'J['x] >- 'T['x] } =
    't['x; 'x; it]
+
+(*!
+ * @begin[doc]
+ * We can derive a simpler elimination rule for the case when $B$ does not contain $x$.
+ * @end[doc]
+ *)
+
+interactive intersectionElimination2 (*{| elim_resource [] |}*) 'H 'J 'x 'z 'v :
+   [wf] sequent [squash] { 'H; x: isect y: 'A. 'B; 'J['x] >- 'A } -->
+   [main] sequent ['ext] { 'H; x: isect y: 'A. 'B; 'J['x]; z: 'B; v: 'z = 'x in 'B >- 'T['x] } -->
+   sequent ['ext] { 'H; x: isect y: 'A. 'B; 'J['x] >- 'T['x] }
+
+
+(*!
+ * @begin[doc]
+ * As a corollary of elimination rule we have that if
+ * two terms are equal in the intersection, they are also
+ * equal in each of the case of the intersection.
+ * The @tactic[intersectionMemberCaseEqualityT] applies this rule
+ * @end[doc]
+ *)
+
+interactive intersectionMemberCaseEquality 'H (isect x: 'A. 'B['x]) 'a :
+   [wf] sequent [squash] { 'H >- 'b1 = 'b2 in isect x: 'A. 'B['x] } -->
+   [wf] sequent [squash] { 'H >- 'a IN 'A } -->
+   sequent ['ext] { 'H >- 'b1 = 'b2 in 'B['a] }
+
+
 
 (*!
  * @begin[doc]

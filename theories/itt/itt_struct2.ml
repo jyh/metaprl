@@ -297,40 +297,42 @@ let revHypSubstT i j p =
 
 let letT s_in_S p =
    let v = maybe_new_vars1 p "v" in
-   let s, _, _ = dest_equal s_in_S in
+   let _, s, _ = dest_equal s_in_S in
    let bind =
       try
-         let t1 = get_with_arg p in
-            if is_bind_term t1 then
-               t1
-            else
-               raise (RefineError ("letT", StringTermError ("need a \"bind\" term: ", t1)))
+         get_with_arg p
       with
          RefineError _ ->
             let x = get_opt_var_arg "z" p in
                mk_bind_term x (var_subst (Sequent.concl p) s x)
    in
-      cutMem (Sequent.hyp_count_addr p) s_in_S bind p
+      if is_bind_term bind then
+           cutMem (Sequent.hyp_count_addr p) s_in_S bind p
+      else
+           raise (RefineError ("letT", StringTermError ("need a \"bind\" term: ", bind)))
 
 (* cutEq *)
 
 let assertEqT eq p =
    let v = maybe_new_vars1 p "v" in
-   let s1, _, _ = dest_equal eq in
+   let _, s1, _ = dest_equal eq in
    let bind =
       try
-         let t1 = get_with_arg p in
-            if is_bind_term t1 then
-               t1
-            else
-               raise (RefineError ("assertEqT", StringTermError ("need a \"bind\" term: ", t1)))
+         get_with_arg p
       with
          RefineError _ ->
             let x = get_opt_var_arg "z" p in
-            let t, _, _ = dest_equal (Sequent.concl p) in
-               mk_bind_term x (var_subst (t) s1 x)
+            let _, t,  _ = dest_equal (Sequent.concl p) in
+               mk_bind_term x (var_subst t s1 x)
    in
-      cutEq  (Sequent.hyp_count_addr p) eq bind v p
+      if is_bind_term bind then
+         (try
+            cutEq  (Sequent.hyp_count_addr p) eq bind v p
+          with
+                 RefineError _ ->
+                    raise (RefineError ("assertEqT", StringTermError (" \"bind\" term: ", bind))))
+      else
+         raise (RefineError ("assertEqT", StringTermError ("need a \"bind\" term: ", bind)))
 
 (* cutHide *)
 

@@ -35,6 +35,7 @@ include Itt_equal
 include Itt_set
 include Itt_rfun
 include Itt_logic
+include Itt_struct2
 
 open Refiner.Refiner.Term
 
@@ -90,11 +91,12 @@ rule topType 'H :
  * by intersectionMemberFormation z
  * H >- A = A in type
  * H, z: hide(A) >- B ext b[z]
- *)
+
 rule intersectionMemberFormation 'H 'z :
     sequent [squash] { 'H >- "type"{'A} } -->
     sequent ['ext] { 'H; z: hide{'A} >- 'B } -->
     sequent ['ext] { 'H >- isect x: 'A. 'B }
+ *)
 
 
 (*

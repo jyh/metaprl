@@ -37,7 +37,6 @@ include Fir_eval
 
 open Fir_eval
 open Top_conversionals
-open Tactic_type.Conversionals
 
 (*************************************************************************
  * Rewrites.
@@ -77,10 +76,14 @@ let firConstElimT i =
       reduce_int16;
       reduce_int32;
       reduce_int64;
+      reduce_pow_2_7;
       reduce_pow_2_8;
+      reduce_pow_2_15;
       reduce_pow_2_16;
+      reduce_pow_2_30;
       reduce_pow_2_31;
       reduce_pow_2_32;
+      reduce_pow_2_63;
       reduce_pow_2_64;
       reduce_pow;
       reduce_mod_arith;
@@ -89,7 +92,7 @@ let firConstElimT i =
 
       reduce_val_true;
       reduce_val_false;
-      reduce_atomEnum_eq;
+      reduce_atomEnum_eq_atom;
 
       reduce_beta;
 

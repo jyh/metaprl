@@ -107,8 +107,6 @@ dform _mod_arith_unsigned_df : except_mode[src] ::
 (* Boolean type *)
 dform true_set_df : except_mode[src] :: true_set = `"true_set"
 dform false_set_df : except_mode[src] :: false_set = `"false_set"
-dform val_true_df : except_mode[src] :: val_true = `"val_true"
-dform val_false_df : except_mode[src] :: val_false = `"val_false"
 dform atomEnum_eq_df : except_mode[src] :: atomEnum_eq{ 'a; 'b } =
    `"AtomEnum_Eq(" slot{'a} `", " slot{'b} `")"
 
@@ -151,14 +149,22 @@ prim_rw reduce_int64 : int64 <--> 64
 prim_rw reduce_pow :
    pow{ 'base; 'exp } <-->
    ind{ 'exp; i, j. 1; 1; i, j. ('base *@ 'j) }
+interactive_rw reduce_pow_2_7 :
+   pow{ 2; 7 } <--> 128
 interactive_rw reduce_pow_2_8 :
    pow{ 2; 8 } <--> 256
+interactive_rw reduce_pow_2_15 :
+   pow{ 2; 15 } <--> 32768
 interactive_rw reduce_pow_2_16 :
    pow{ 2; 16 } <--> 65536
+interactive_rw reduce_pow_2_30 :
+   pow{ 2; 30 } <--> 1073741824
 interactive_rw reduce_pow_2_31 :
    pow{ 2; 31 } <--> 2147483648
 interactive_rw reduce_pow_2_32 :
    pow{ 2; 32 } <--> 4294967296
+interactive_rw reduce_pow_2_63 :
+   pow{ 2; 63 } <-->  9223372036854775808
 interactive_rw reduce_pow_2_64 :
    pow{ 2; 64 } <--> 18446744073709551616
 
@@ -187,9 +193,13 @@ prim_rw reduce_true_set : true_set <--> int_set{ 1; 1 }
 prim_rw reduce_false_set : false_set <--> int_set{ 0; 0 }
 prim_rw reduce_val_true : val_true <--> atomEnum{ 2; 1 }
 prim_rw reduce_val_false : val_false <--> atomEnum{ 2; 0 }
-prim_rw reduce_atomEnum_eq :
+prim_rw reduce_atomEnum_eq_atom :
    atomEnum_eq{ atomEnum{'a; 'b}; atomEnum{'c; 'd} } <-->
    band{ beq_int{'a; 'c}; beq_int{'b; 'd} }
+prim_rw reduce_atomEnum_eq_num :
+   atomEnum_eq{ 'a; 'b } <-->
+   beq_int{ 'a; 'b }
+
 
 (*
  * Functions.
@@ -415,10 +425,15 @@ let firEvalT i =
       reduce_int32;
       reduce_int64;
 
+
+      reduce_pow_2_7;
       reduce_pow_2_8;
+      reduce_pow_2_15;
       reduce_pow_2_16;
+      reduce_pow_2_30;
       reduce_pow_2_31;
       reduce_pow_2_32;
+      reduce_pow_2_63;
       reduce_pow_2_64;
       reduce_pow;
 
@@ -430,7 +445,8 @@ let firEvalT i =
       reduce_false_set;
       reduce_val_true;
       reduce_val_false;
-      reduce_atomEnum_eq;
+      reduce_atomEnum_eq_atom;
+      reduce_atomEnum_eq_num;
 
       reduce_beta;
       reduce_apply_nil;

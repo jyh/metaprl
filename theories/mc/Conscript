@@ -2,7 +2,7 @@ Import qw( env );
 
 $env = $env->clone(
    INCPATH  => [@{$env->{INCPATH}}, "../tactic", "../ocaml", "../base",
-                "../itt"]
+                "../itt", "../../mc"]
 );
 
 OCamlSources $env
@@ -13,6 +13,7 @@ OCamlSources $env
    'fir_eval.ml',
    'fir_deadcode.ml',
    'fir_const_elim.ml',
+   'fir_marshal.ml',
    'mc_theory.ml',
    'fir_test.ml';
 
@@ -24,6 +25,7 @@ OCamlLibrary $env 'base',
    'fir_eval',
    'fir_deadcode',
    'fir_const_elim',
+   'fir_marshal',
    'mc_theory',
    'fir_test';
 

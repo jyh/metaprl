@@ -32,6 +32,9 @@
 
 include Base_theory
 
+open Refiner.Refiner.Term
+open Refiner.Refiner.TermOp
+
 (*************************************************************************
  * Declarations.
  *************************************************************************)
@@ -85,6 +88,10 @@ declare exnUnion
 declare unionElt{ 'ty; 'bool }
 declare tyDefUnion{ 'ty_var_list; 'union_ty; 'elts }
 declare tyDefLambda{ 'ty_var_list; 'ty }
+
+(* Boolean type. *)
+declare val_true
+declare val_false
 
 (*************************************************************************
  * Display forms.
@@ -159,3 +166,209 @@ dform tyDefUnion_df : except_mode[src] ::
    `", " slot{'elts} `")" ezone
 dform tyDefLambda_df : except_mode[src] :: tyDefLambda{ 'ty_var_list; 'ty } =
    szone `"TyDefLambda(" slot{'ty_var_list} `", " slot{'ty} `")" ezone
+
+(* Boolean type. *)
+dform val_true_df : except_mode[src] :: val_true = `"val_true"
+dform val_false_df : except_mode[src] :: val_false = `"val_false"
+
+(*************************************************************************
+ * Term operations.
+ *************************************************************************)
+
+(*
+ * Precisions.
+ *)
+
+let int8_term = << int8 >>
+let int8_opname = opname_of_term int8_term
+let is_int8_term = is_no_subterms_term int8_opname
+
+let int16_term = << int16 >>
+let int16_opname = opname_of_term int16_term
+let is_int16_term = is_no_subterms_term int16_opname
+
+let int32_term = << int32 >>
+let int32_opname = opname_of_term int32_term
+let is_int32_term = is_no_subterms_term int32_opname
+
+let int64_term = << int64 >>
+let int64_opname = opname_of_term int64_term
+let is_int64_term = is_no_subterms_term int64_opname
+
+let floatSingle_term = << floatSingle >>
+let floatSingle_opname = opname_of_term floatSingle_term
+let is_floatSingle_term = is_no_subterms_term floatSingle_opname
+
+let floatDouble_term = << floatDouble >>
+let floatDouble_opname = opname_of_term floatDouble_term
+let is_floatDouble_term = is_no_subterms_term floatDouble_opname
+
+let floatLongDouble_term = << floatLongDouble >>
+let floatLongDouble_opname = opname_of_term floatLongDouble_term
+let is_floatLongDouble_term = is_no_subterms_term floatLongDouble_opname
+
+(*
+ * Integer type.
+ *)
+
+let tyInt_term = << tyInt >>
+let tyInt_opname = opname_of_term tyInt_term
+let is_tyInt_term = is_no_subterms_term tyInt_opname
+
+(*
+ * Enumeration type.
+ *)
+
+let tyEnum_term = << tyEnum{ 'num } >>
+let tyEnum_opname = opname_of_term tyEnum_term
+let is_tyEnum_term = is_dep0_term tyEnum_opname
+let mk_tyEnum_term = mk_dep0_term tyEnum_opname
+let dest_tyEnum_term = dest_dep0_term tyEnum_opname
+
+(*
+ * Native data types.
+ *)
+
+let tyRawInt_term = << tyRawInt{ 'precision; 'sign } >>
+let tyRawInt_opname = opname_of_term tyRawInt_term
+let is_tyRawInt_term = is_dep0_dep0_term tyRawInt_opname
+let mk_tyRawInt_term = mk_dep0_dep0_term tyRawInt_opname
+let dest_tyRawInt_term = dest_dep0_dep0_term tyRawInt_opname
+
+let tyFloat_term = << tyFloat{ 'precision } >>
+let tyFloat_opname = opname_of_term tyFloat_term
+let is_tyFloat_term = is_dep0_term tyFloat_opname
+let mk_tyFloat_term = mk_dep0_term tyFloat_opname
+let dest_tyFloat_term = dest_dep0_term tyFloat_opname
+
+(*
+ * Function type.
+ *)
+
+let tyFun_term = << tyFun{ 'ty_list; 'ty } >>
+let tyFun_opname = opname_of_term tyFun_term
+let is_tyFun_term = is_dep0_dep0_term tyFun_opname
+let mk_tyFun_term = mk_dep0_dep0_term tyFun_opname
+let dest_tyFun_term = dest_dep0_dep0_term tyFun_opname
+
+(*
+ * Tuples.
+ *)
+
+let tyUnion_term = << tyUnion{ 'ty_var; 'ty_list; 'int_set } >>
+let tyUnion_opname = opname_of_term tyUnion_term
+let is_tyUnion_term = is_dep0_dep0_dep0_term tyUnion_opname
+let mk_tyUnion_term = mk_dep0_dep0_dep0_term tyUnion_opname
+let dest_tyUnion_term = dest_dep0_dep0_dep0_term tyUnion_opname
+
+let tyTuple_term = << tyTuple{ 'ty_list } >>
+let tyTuple_opname = opname_of_term tyTuple_term
+let is_tyTuple_term = is_dep0_term tyTuple_opname
+let mk_tyTuple_term = mk_dep0_term tyTuple_opname
+let dest_tyTuple_term = dest_dep0_term tyTuple_opname
+
+let tyArray_term = << tyArray{ 'ty } >>
+let tyArray_opname = opname_of_term tyArray_term
+let is_tyArray_term = is_dep0_term tyArray_opname
+let mk_tyArray_term = mk_dep0_term tyArray_opname
+let dest_tyArray_term = dest_dep0_term tyArray_opname
+
+let tyRawData_term = << tyRawData >>
+let tyRawData_opname = opname_of_term tyRawData_term
+let is_tyRawData_term = is_no_subterms_term tyRawData_opname
+
+(*
+ * Polymorphism.
+ *)
+
+let tyVar_term = << tyVar{ 'ty_var } >>
+let tyVar_opname = opname_of_term tyVar_term
+let is_tyVar_term = is_dep0_term tyVar_opname
+let mk_tyVar_term = mk_dep0_term tyVar_opname
+let dest_tyVar_term = dest_dep0_term tyVar_opname
+
+let tyApply_term = << tyApply{ 'ty_var; 'ty_list } >>
+let tyApply_opname = opname_of_term tyApply_term
+let is_tyApply_term = is_dep0_dep0_term tyApply_opname
+let mk_tyApply_term = mk_dep0_dep0_term tyApply_opname
+let dest_tyApply_term = dest_dep0_dep0_term tyApply_opname
+
+let tyExists_term = << tyExists{ 'ty_var_list; 'ty } >>
+let tyExists_opname = opname_of_term tyExists_term
+let is_tyExists_term = is_dep0_dep0_term tyExists_opname
+let mk_tyExists_term = mk_dep0_dep0_term tyExists_opname
+let dest_tyExists_term = dest_dep0_dep0_term tyExists_opname
+
+let tyAll_term = << tyAll{ 'ty_var_list; 'ty } >>
+let tyAll_opname = opname_of_term tyAll_term
+let is_tyAll_term = is_dep0_dep0_term tyAll_opname
+let mk_tyAll_term = mk_dep0_dep0_term tyAll_opname
+let dest_tyAll_term = dest_dep0_dep0_term tyAll_opname
+
+let tyProject_term = << tyProject{ 'tyVar; 'num } >>
+let tyProject_opname = opname_of_term tyProject_term
+let is_tyProject_term = is_dep0_dep0_term tyProject_opname
+let mk_tyProject_term = mk_dep0_dep0_term tyProject_opname
+let dest_tyProject_term = dest_dep0_dep0_term tyProject_opname
+
+(*
+ * Delayed type.
+ *)
+
+let tyDelayed_term = << tyDelayed >>
+let tyDelayed_opname = opname_of_term tyDelayed_term
+let is_tyDelayed_term = is_no_subterms_term tyDelayed_opname
+
+(*
+ * Opaque type.
+ *)
+
+let tyPtrTable_term = << tyPtrTable >>
+let tyPtrTable_opname = opname_of_term tyPtrTable_term
+let is_tyPtrTable_term = is_no_subterms_term tyPtrTable_opname
+
+(*
+ * Union tags.
+ *)
+
+let normalUnion_term = << normalUnion >>
+let normalUnion_opname = opname_of_term normalUnion_term
+let is_normalUnion_term = is_no_subterms_term normalUnion_opname
+
+let exnUnion_term = << exnUnion >>
+let exnUnion_opname = opname_of_term exnUnion_term
+let is_exnUnion_term = is_no_subterms_term exnUnion_opname
+
+(*
+ * Defining types.
+ *)
+
+let unionElt_term = << unionElt{ 'ty; 'bool } >>
+let unionElt_opname = opname_of_term unionElt_term
+let is_unionElt_term = is_dep0_dep0_term unionElt_opname
+let mk_unionElt_term = mk_dep0_dep0_term unionElt_opname
+let dest_unionElt_term = dest_dep0_dep0_term unionElt_opname
+
+let tyDefUnion_term = << tyDefUnion{ 'ty_var_list; 'union_ty; 'elts } >>
+let tyDefUnion_opname = opname_of_term tyDefUnion_term
+let is_tyDefUnion_term = is_dep0_dep0_dep0_term tyDefUnion_opname
+let mk_tyDefUnion_term = mk_dep0_dep0_dep0_term tyDefUnion_opname
+let dest_tyDefUnion_term = dest_dep0_dep0_dep0_term tyDefUnion_opname
+
+let tyDefLambda_term = << tyDefLambda{ 'ty_var_list; 'ty } >>
+let tyDefLambda_opname = opname_of_term tyDefLambda_term
+let is_tyDefLambda_term = is_dep0_dep0_term tyDefLambda_opname
+let mk_tyDefLambda_term = mk_dep0_dep0_term tyDefLambda_opname
+let dest_tyDefLambda_term = dest_dep0_dep0_term tyDefLambda_opname
+
+(*
+ * Boolean type.
+ *)
+
+let val_true_term = << val_true >>
+let val_true_opname = opname_of_term val_true_term
+let is_val_true_term = is_no_subterms_term val_true_opname
+
+let val_false_term = << val_false >>
+let val_false_opname = opname_of_term val_false_term
+let is_val_false_term = is_no_subterms_term val_false_opname

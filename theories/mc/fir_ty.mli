@@ -32,6 +32,8 @@
 
 include Base_theory
 
+open Refiner.Refiner.Term
+
 (*************************************************************************
  * Declarations.
  *************************************************************************)
@@ -115,3 +117,182 @@ declare exnUnion
 declare unionElt{ 'ty; 'bool }
 declare tyDefUnion{ 'ty_var_list; 'union_ty; 'elts }
 declare tyDefLambda{ 'ty_var_list; 'ty }
+
+(*
+ * Boolean type.
+ *)
+
+declare val_true
+declare val_false
+
+(*************************************************************************
+ * Term operations.
+ *************************************************************************)
+
+(*
+ * Precisions.
+ *)
+
+val int8_term : term
+val is_int8_term : term -> bool
+
+val int16_term : term
+val is_int16_term : term -> bool
+
+val int32_term : term
+val is_int32_term : term -> bool
+
+val int64_term : term
+val is_int64_term : term -> bool
+
+val floatSingle_term : term
+val is_floatSingle_term : term -> bool
+
+val floatDouble_term : term
+val is_floatDouble_term : term -> bool
+
+val floatLongDouble_term : term
+val is_floatLongDouble_term : term -> bool
+
+(*
+ * Integer type.
+ *)
+
+val tyInt_term : term
+val is_tyInt_term : term -> bool
+
+(*
+ * Enumeration type.
+ *)
+
+val tyEnum_term : term
+val is_tyEnum_term : term -> bool
+val mk_tyEnum_term : term -> term
+val dest_tyEnum_term : term -> term
+
+(*
+ * Native data types.
+ *)
+
+val tyRawInt_term : term
+val is_tyRawInt_term : term -> bool
+val mk_tyRawInt_term : term -> term -> term
+val dest_tyRawInt_term : term -> term * term
+
+val tyFloat_term : term
+val is_tyFloat_term : term -> bool
+val mk_tyFloat_term : term -> term
+val dest_tyFloat_term : term -> term
+
+(*
+ * Function type.
+ *)
+
+val tyFun_term : term
+val is_tyFun_term : term -> bool
+val mk_tyFun_term : term -> term -> term
+val dest_tyFun_term : term -> term * term
+
+(*
+ * Tuples.
+ *)
+
+val tyUnion_term : term
+val is_tyUnion_term : term -> bool
+val mk_tyUnion_term : term -> term -> term -> term
+val dest_tyUnion_term : term -> term * term * term
+
+val tyTuple_term : term
+val is_tyTuple_term : term -> bool
+val mk_tyTuple_term : term -> term
+val dest_tyTuple_term : term -> term
+
+val tyArray_term : term
+val is_tyArray_term : term -> bool
+val mk_tyArray_term : term -> term
+val dest_tyArray_term : term -> term
+
+val tyRawData_term : term
+val is_tyRawData_term : term -> bool
+
+(*
+ * Polymorphism.
+ *)
+
+val tyVar_term : term
+val is_tyVar_term : term -> bool
+val mk_tyVar_term : term -> term
+val dest_tyVar_term : term -> term
+
+val tyApply_term : term
+val is_tyApply_term : term -> bool
+val mk_tyApply_term : term -> term -> term
+val dest_tyApply_term : term -> term * term
+
+val tyExists_term : term
+val is_tyExists_term : term -> bool
+val mk_tyExists_term : term -> term -> term
+val dest_tyExists_term : term -> term * term
+
+val tyAll_term : term
+val is_tyAll_term : term -> bool
+val mk_tyAll_term : term -> term -> term
+val dest_tyAll_term : term -> term * term
+
+val tyProject_term : term
+val is_tyProject_term : term -> bool
+val mk_tyProject_term : term -> term -> term
+val dest_tyProject_term : term -> term * term
+
+(*
+ * Delayed type.
+ *)
+
+val tyDelayed_term : term
+val is_tyDelayed_term : term -> bool
+
+(*
+ * Opaque type.
+ *)
+
+val tyPtrTable_term : term
+val is_tyPtrTable_term : term -> bool
+
+(*
+ * Union tags.
+ *)
+
+val normalUnion_term : term
+val is_normalUnion_term : term -> bool
+
+val exnUnion_term : term
+val is_exnUnion_term : term -> bool
+
+(*
+ * Defining types.
+ *)
+
+val unionElt_term : term
+val is_unionElt_term : term -> bool
+val mk_unionElt_term : term -> term -> term
+val dest_unionElt_term : term -> term * term
+
+val tyDefUnion_term : term
+val is_tyDefUnion_term : term -> bool
+val mk_tyDefUnion_term : term -> term -> term -> term
+val dest_tyDefUnion_term : term -> term * term * term
+
+val tyDefLambda_term : term
+val is_tyDefLambda_term : term -> bool
+val mk_tyDefLambda_term : term -> term -> term
+val dest_tyDefLambda_term : term -> term * term
+
+(*
+ * Boolean type.
+ *)
+
+val val_true_term : term
+val is_val_true_term : term -> bool
+
+val val_false_term : term
+val is_val_false_term : term -> bool

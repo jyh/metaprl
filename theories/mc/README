@@ -1,3 +1,12 @@
+Note as of 7 November 2001:
+
+I have some sort of constant elimination things defined.
+At this point, I need to get marshalling working, which means
+getting the two build trees to compile together.  And I
+should probable have some good test cases or something.
+
+--------------------------------------------------------------------------
+
 Note as of 21 October 2001:
 
 Fir_deadcode: need to get dead function paramter and dead function

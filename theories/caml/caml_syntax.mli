@@ -102,7 +102,7 @@ declare sig_external{'t; 'sl}
 declare sig_module{'mt}
 declare sig_module_type{'mt}
 declare sig_open{'path}
-declare sig_type{'ssltl}
+declare sig_type{'tdl}
 declare sig_value{'t}
 
 (*
@@ -115,7 +115,7 @@ declare str_external{'t; 'sl}
 declare str_module{'me}
 declare str_module_type{'mt}
 declare str_open{'sl}
-declare str_type{'ssltl}
+declare str_type{'tdl}
 declare str_let{'pel}
 declare str_letrec{'pel}
 

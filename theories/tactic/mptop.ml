@@ -544,7 +544,7 @@ and mk_sig_item base si =
             not_supported loc "sig module type"
        | (<:sig_item< open $sl$ >>) ->
             not_supported loc "sig open"
-       | (<:sig_item< type $list:ssltl$ >>) ->
+       | (<:sig_item< type $list:tdl$ >>) ->
             not_supported loc "sig type"
        | (<:sig_item< value $s$ : $t$ >>) ->
             not_supported loc "sig value"
@@ -572,7 +572,7 @@ and mk_str_item base si =
             not_supported loc "str module type"
        | (<:str_item< open $sl$ >>) ->
             not_supported loc "str module open"
-       | (<:str_item< type $list:ssltl$ >>) ->
+       | (<:str_item< type $list:tdl$ >>) ->
             not_supported loc "str type"
        | (<:str_item< value $rec:b$ $list:pel$ >>) ->
             not_supported loc "str let"

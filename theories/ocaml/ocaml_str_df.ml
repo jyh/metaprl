@@ -97,11 +97,11 @@ dform str_open_df2 : internal :: str_open[start:n, finish:n]{'sl} =
 (*
  * Type definition.
  *)
-dform str_type_df1 : internal :: str_type{'ssltl} =
-   sig_type{'ssltl}
+dform str_type_df1 : internal :: str_type{'tdl} =
+   sig_type{'tdl}
 
-dform str_type_df2 : internal :: str_type[start:n, finish:n]{'ssltl} =
-   str_type{'ssltl}
+dform str_type_df2 : internal :: str_type[start:n, finish:n]{'tdl} =
+   str_type{'tdl}
 
 (*
  * Value definition.

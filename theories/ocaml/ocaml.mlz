@@ -432,9 +432,9 @@ declare sig_module_type[name:s]{'mt}
 declare sig_open{'sl}
 
 (*
- * Type definition.
+ * Type declaration.
  *)
-declare sig_type{'ssltl}
+declare sig_type{'tdl}
 
 (*
  * Value declaration.
@@ -476,9 +476,9 @@ declare str_module_type[name:s]{'mt}
 declare str_open{'sl}
 
 (*
- * Type definition.
+ * Type definition
  *)
-declare str_type{'ssltl}
+declare str_type{'tdl}
 
 (*
  * Value definition.
@@ -487,9 +487,14 @@ declare str_let{'p; 'e}
 declare str_fix{'p}
 
 (*
- * Pairing.
+ * Type declaration.
  *)
-declare sslt{'s; 'sl; 't}
+declare tdl{'s; 'sl; 't; 'tc}
+
+(*
+ * Type constraint in type declaration
+ *)
+declare tc{'t1; 't2}
 
 (************************************************************************
  * MODULE TYPE                                                          *

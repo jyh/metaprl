@@ -106,25 +106,38 @@ dform sig_open_df2 : internal :: sig_open[start:n, finish:n]{'sl} =
  * Type definition.
  *)
 declare type_arg
+declare type_constraint
 
-dform sig_type_df1 : sig_type{cons{'sslt; 'ssltl}} =
-   szone pushm[0] "_type" `" " slot{'sslt} slot{sig_type; 'ssltl} popm ezone
+dform sig_type_df1 : sig_type{cons{'tdl; 'tdl}} =
+   szone pushm[0] "_type" `" " slot{'tdl} slot{sig_type; 'tdl} popm ezone
 
-dform sig_type_df2 : internal :: slot{sig_type; cons{'sslt; 'ssltl}} =
-   newline "_and" `" " slot{'sslt}
-   slot{sig_type; 'ssltl}
+dform sig_type_df2 : internal :: slot{sig_type; cons{'tdl; 'tdl}} =
+   newline "_and" `" " slot{'tdl}
+   slot{sig_type; 'tdl}
 
-dform sig_type_df3 : internal :: sig_type[start:n, finish:n]{'ssltl} =
-   sig_type{'ssltl}
+dform sig_type_df3 : internal :: sig_type[start:n, finish:n]{'tdl} =
+   sig_type{'tdl}
 
 dform sig_type_df3 : internal :: slot{sig_type; nil} =
    `""
 
-dform sslt_df1 : sslt{.Ocaml!"string"[name:s]; nil; 't} =
+dform tdl_df1 : tdl{.Ocaml!"string"[name:s]; nil; 't; nil} =
    slot[name:s] `" =" hspace slot{'t}
 
-dform sslt_df2 : sslt{.Ocaml!"string"[name:s]; 'sl; 't} =
+dform tdl_df2 : tdl{.Ocaml!"string"[name:s]; 'sl; 't; nil} =
    "(" slot{type_arg; 'sl} ")" `" " slot[name:s] `" =" hspace slot{'t}
+
+dform tdl_df3 : tdl{.Ocaml!"string"[name:s]; nil; 't; 'tc} =
+   slot[name:s] `" =" hspace slot{'t} hspace slot{type_constraint; 'tc}
+
+dform tdl_df4 : tdl{.Ocaml!"string"[name:s]; 'sl; 't; 'tc} =
+   "(" slot{type_arg; 'sl} ")" `" " slot[name:s] `" =" hspace slot{'t} hspace slot{type_constraint; 'tc}
+
+dform tc_df1 : internal :: slot{type_constraint; cons{ tc{'t1;'t2}; nil}} =
+   `"constraint' " slot{'t1} `" = " slot{'t2}
+
+dform tc_df1 : internal :: slot{type_constraint; cons{ tc{'t1;'t2}; 'tc}} =
+   `"constraint' " slot{'t1} `" = " slot{'t2} hspace slot{type_constraint; 'tc}
 
 dform type_arg_cons_df1 : internal :: slot{type_arg; cons{.Ocaml!"string"[name:s]; nil}} =
    "'" slot[name]

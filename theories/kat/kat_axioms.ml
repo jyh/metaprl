@@ -1,7 +1,6 @@
 extends Kat_terms
 
 open Top_conversionals
-open Base_select
 open Dtactic
 
 
@@ -35,30 +34,8 @@ let resource associative +=
      <<'a + 'b>>, (plus_assotiative, rev_plus_assotiative)]
 
 
-(* Less and greater *)
-
-define le : le{'x;'y} <--> ('x + 'y) ~ 'y
-
-define ge : ge{'x;'y} <--> le{'y;'x}
-
-dform le_df : ('x <= 'y) = 'x " " le " " 'y
-dform ge_df : ('x >= 'y) = 'x " " ge " " 'y
 
 
-
-prim neg_wf {| intro[] |}:
-   sequent { <H> >- 'b in bool} -->
-   sequent { <H> >- - 'b in bool} = it
-
-prim and_wf {| intro[] |}:
-   sequent { <H> >- 'b in bool} -->
-   sequent { <H> >- 'c in bool} -->
-   sequent { <H> >- 'b * 'c in bool} = it
-
-prim or_wf {| intro[] |}:
-   sequent { <H> >- 'b in bool} -->
-   sequent { <H> >- 'c in bool} -->
-   sequent { <H> >- 'b + 'c in bool} = it
 
 prim_rw and_commutative:
       ('x in bool) -->

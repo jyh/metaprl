@@ -21,3 +21,7 @@ declare star{'x}    (*   'x^*  *)
 declare bool
 
 declare kleene
+
+declare le{'x; 'y}
+
+declare ge{'x; 'y}

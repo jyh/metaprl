@@ -3,6 +3,8 @@ extends Support_algebra
 extends Base_select
 extends Itt_struct2
 
+open Dtactic
+
 (************************************************************************
  * TERMS                                                                *
  ************************************************************************)
@@ -21,6 +23,14 @@ declare star{'x}    (*   'x^*  *)
 declare bool
 
 declare kleene
+
+(* Less and greater *)
+
+define le : le{'x;'y} <--> ('x + 'y) ~ 'y
+
+define ge : ge{'x;'y} <--> le{'y;'x}
+
+
 
 (************************************************************************
  * DISPLAY FORMS                                                        *
@@ -52,6 +62,64 @@ dform star_df : parens :: "prec"[prec_star] :: star{'a} =
 dform bool_df : bool = mathbbB
 
 dform kleene_df : kleene = mathbbK
+
+dform le_df : ('x <= 'y) = 'x " " le " " 'y
+
+dform ge_df : ('x >= 'y) = 'x " " ge " " 'y
+
+
+(************************************************************************
+ * WELL FORMEDNESS                                                      *
+ ************************************************************************)
+
+
+prim times_wf {| intro[] |}:
+   sequent { <H> >- 'x in kleene} -->
+   sequent { <H> >- 'y in kleene} -->
+   sequent { <H> >- 'x * 'y in kleene} = it
+
+prim plus_wf {| intro[] |}:
+   sequent { <H> >- 'x in kleene} -->
+   sequent { <H> >- 'y in kleene} -->
+   sequent { <H> >- 'x + 'y in kleene} = it
+
+prim star_wf {| intro[] |}:
+   sequent { <H> >- 'x in kleene} -->
+   sequent { <H> >- star{'x} in kleene} = it
+
+prim neg_wf {| intro[] |}:
+   sequent { <H> >- 'b in bool} -->
+   sequent { <H> >- - 'b in bool} = it
+
+prim and_wf {| intro[] |}:
+   sequent { <H> >- 'b in bool} -->
+   sequent { <H> >- 'c in bool} -->
+   sequent { <H> >- 'b * 'c in bool} = it
+
+prim or_wf {| intro[] |}:
+   sequent { <H> >- 'b in bool} -->
+   sequent { <H> >- 'c in bool} -->
+   sequent { <H> >- 'b + 'c in bool} = it
+
+prim false_wf {| intro[] |}:
+   sequent { <H> >- 0 in bool} = it
+
+prim true_wf {| intro[] |}:
+   sequent { <H> >- 1 in bool} = it
+
+prim bool_subtype_of_kleene {| intro[AutoMustComplete] |}:
+   sequent { <H> >- 'b in bool} -->
+   sequent { <H> >- 'b in kleene} = it
+
+interactive zero_wf {| intro[] |}:
+   sequent { <H> >- 0 in kleene}
+
+interactive one_wf {| intro[] |}:
+   sequent { <H> >- 1 in kleene}
+
+
+
+
 
 
 

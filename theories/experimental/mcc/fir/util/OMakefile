@@ -25,3 +25,5 @@ clean:
 
 realclean:
     $(REALCLEAN)
+
+local: theory$(LIB_SUFFIX)

@@ -59,6 +59,9 @@ rewrite indSubstDef 'Hi :
 				   (sequent [IndTypes] { <Hi>; x:'T<|Hp|>; <Ji<|Hp|> > >-
 				      sequent [IndConstrs] { <Hc['x]> >- 'x}})}] })})}
 
+topval indFoldDefC : int -> term -> conv -> conv
+topval indFoldHDefC : int -> term -> conv -> conv
+
 (* for constructors (names, types) *)
 rewrite indSubstConstr 'Hc :
    sequent [IndParams] { <Hp> >-
@@ -70,6 +73,9 @@ rewrite indSubstConstr 'Hc :
 				't[ sequent [IndParams] { <Hp> >-
 				   sequent [IndTypes] { <Hi> >-
 				      sequent [IndConstrs] { <Hc>; c:'C<|Hi; Hp|>; < Jc<|Hi; Hp|> > >- 'c}}}]}}}
+
+topval indFoldConstrC : int -> term -> conv -> conv
+topval indFoldHConstrC : int -> term -> conv -> conv
 
 (* carry out ground terms from the Ind *)
 rewrite indCarryOut :

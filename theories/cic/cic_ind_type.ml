@@ -11,6 +11,7 @@ open Term_sig
 
 open Tactic_type.Conversionals
 open Top_conversionals
+open Var
 
 prim collapse_base :
 	sequent { <H> >- 'C } -->
@@ -164,6 +165,25 @@ interactive_rw indFoldDef 'Hi bind{x.'t['x]} :
 	   (sequent [IndTypes] { <Hi>; x:'T<|Hp|>; <Ji<|Hp|> > >-
 		   (sequent [IndConstrs] { <Hc['x]> >- 't['x]})})}
 
+let seq_concl seq =
+   match SeqGoal.to_list (explode_sequent seq).sequent_goals with
+      [ t ] ->
+			t
+      | _ ->
+         raise (Invalid_argument (sprintf "Cic_ind_type.seq_concl: only one goal is supported"))
+
+let ind_head seq =
+	seq_concl (seq_concl (seq_concl seq))
+
+let indFoldDefAuxC n def unfold seq =
+	let target = ind_head seq in
+	let _ = eprintf "target:%a%t" print_term target eflush in
+   let bind = var_subst_to_bind target def in
+	let _ = eprintf "bind:%a%t" print_term bind eflush in
+	unfold thenC (indFoldDef n bind)
+
+let indFoldDefC n def unfold = termC (indFoldDefAuxC n def unfold)
+let indFoldHDefC n def unfold = indFoldDefC n def (higherC unfold)
 
 (* for constructors (names, types) *)
 prim_rw indSubstConstr 'Hc :
@@ -188,6 +208,15 @@ interactive_rw indFoldConstr 'Hc bind{x.'t['x]} :
 	   sequent [IndTypes] { <Hi> >-
 		   sequent [IndConstrs] { <Hc>; c:'C<|Hi;Hp|>; < Jc<|Hi;Hp|> > >- 't['c]}}}
 
+let indFoldConstrAuxC n constr unfold seq =
+	let target = ind_head seq in
+	let _ = eprintf "target:%a%t" print_term target eflush in
+   let bind = var_subst_to_bind target constr in
+	let _ = eprintf "bind:%a%t" print_term bind eflush in
+	unfold thenC (indFoldConstr n bind)
+
+let indFoldConstrC n constr unfold = termC (indFoldConstrAuxC n constr unfold)
+let indFoldHConstrC n constr unfold = indFoldConstrC n constr (higherC unfold)
 
 (* carry out ground terms from the Ind *)
 prim_rw indCarryOut :

@@ -950,113 +950,63 @@ T	t191	o b191 b4
 B	b192	t191
 T	t192	o243 b179 b192
 B	b193	t192
-P	p347	String "rwh unfold_nil 0"
-O	o347	ext_rule p347
-T	t193	o237 b176 b156
-S	s193	t163\\ h164 h167\\ t193
-S	s194	t161\\ h161\\ s193
-S	s195	t158\\ h\\ s194
-S	s196	t220\\ h220\\ s195
-B	b199	s196
-T	t199	o245 b199 b4
-B	b200	t199
-T	t200	o244 b200 b4
-B	b206	t200
-T	t206	o b206 b4
-B	b207	t206
-T	t207	o243 b191 b207
-B	b217	t207
-P	p219	String "rwh (indFoldConstr 1 <<bind{x. ('x in dfun{Set; c.(List 'c)})}>>) 0"
-O	o223	ext_rule p219
+P	p4	String "rw (indFoldHConstrC 1 <<nil>> unfold_nil) 0"
+O	o9	ext_rule p4
 B	b224	t174
-P	p224	Var c
-O	o225	var p224
-T	t228	o225
-B	b228	t228
-T	t229	o183 b155 b228
-B	b229	t229 c
-T	t234	o283 b237 b229
-B	b235	t234
-T	t235	o237 b224 b235
-S	s235	t163\\ h164 h167\\ t235
-S	s236	t161\\ h161\\ s235
-S	s237	t158\\ h\\ s236
-S	s239	t220\\ h220\\ s237
-B	b241	s239
-T	t241	o245 b241 b4
-B	b243	t241
-T	t243	o244 b243 b4
-B	b244	t243
-T	t244	o b244 b4
-B	b304	t244
-T	t305	o243 b206 b304
-B	b305	t305
-T	t306	o183 b168 b228
-B	b342	t306 c
-T	t342	o283 b237 b342
-B	b369	t342
-T	t369	o237 b224 b369
-S	s369	t163\\ h164 h167\\ t369
-S	s371	t161\\ h161\\ s369
-S	s372	t158\\ h\\ s371
-S	s374	t220\\ h220\\ s372
-B	b397	s374
-T	t397	o245 b397 b4
-B	b398	t397
-T	t398	o244 b398 b4
-B	b399	t398
-T	t399	o b399 b4
-B	b400	t399
-T	t400	o243 b244 b400
-B	b401	t400
-P	p401	String "rwh (indFoldDef 1 <<bind{x. ('nil in dfun{Set;c.('x 'c)})}>>) 0"
-O	o401	ext_rule p401
-T	t401	o183 b166 b228
-B	b402	t401 c
-T	t402	o283 b237 b402
-B	b403	t402
-T	t403	o237 b224 b403
-S	s403	t163\\ h164 h167\\ t403
-S	s404	t161\\ h161\\ s403
-S	s405	t158\\ h\\ s404
-S	s406	t220\\ h220\\ s405
-B	b406	s406
-T	t406	o245 b406 b4
-B	b407	t406
-T	t407	o244 b407 b4
-B	b408	t407
-T	t408	o b408 b4
-B	b409	t408
-T	t409	o243 b399 b409
-B	b410	t409
-T	t410	o295 b408
-B	b411	t410
-T	t411	o b411 b4
-B	b412	t411
-T	t412	o401 b242 b410 b412 b4
-B	b413	t412
-T	t413	o b413 b4
-B	b414	t413
-T	t414	o241 b242 b401 b414 b4
-B	b415	t414
-T	t415	o b415 b4
-B	b416	t415
-T	t416	o223 b242 b305 b416 b4
-B	b417	t416
-T	t417	o b417 b4
-B	b418	t417
-T	t418	o347 b242 b217 b418 b4
-B	b419	t418
-T	t419	o b419 b4
-B	b420	t419
-T	t420	o175 b242 b193 b420 b4
-B	b421	t420
-T	t421	o240 b421
-B	b422	t421
-T	t422	o342 b4 b172 b422 b4
-B	b423	t422
-T	t423	o139 b423
-B	b424	t423
+T	t21	o237 b224 b156
+S	s21	t163\\ h164 h167\\ t21
+S	s22	t161\\ h161\\ s21
+S	s23	t158\\ h\\ s22
+S	s24	t220\\ h220\\ s23
+B	b25	s24
+T	t25	o245 b25 b4
+B	b30	t25
+T	t30	o244 b30 b4
+B	b31	t30
+T	t31	o b31 b4
+B	b34	t31
+T	t34	o243 b191 b34
+B	b35	t34
+P	p40	String "rw (indFoldHDefC 1 <<List>> unfold_List) 0"
+O	o40	ext_rule p40
+T	t48	o183 b166 b153
+B	b48	t48 C
+T	t49	o283 b237 b48
+B	b49	t49
+T	t51	o237 b224 b49
+S	s51	t163\\ h164 h167\\ t51
+S	s52	t161\\ h161\\ s51
+S	s53	t158\\ h\\ s52
+S	s54	t220\\ h220\\ s53
+B	b56	s54
+T	t56	o245 b56 b4
+B	b57	t56
+T	t57	o244 b57 b4
+B	b111	t57
+T	t111	o b111 b4
+B	b114	t111
+T	t114	o243 b31 b114
+B	b115	t114
+T	t115	o295 b111
+B	b116	t115
+T	t116	o b116 b4
+B	b126	t116
+T	t126	o40 b242 b115 b126 b4
+B	b129	t126
+T	t129	o b129 b4
+B	b133	t129
+T	t133	o9 b242 b35 b133 b4
+B	b134	t133
+T	t134	o b134 b4
+B	b137	t134
+T	t137	o175 b242 b193 b137 b4
+B	b158	t137
+T	t172	o240 b158
+B	b174	t172
+T	t179	o342 b4 b172 b174 b4
+B	b180	t179
+T	t180	o139 b180
+B	b183	t180
 P	p424	Number 1077
 P	p425	Number 1170
 O	o425	location p424 p425
@@ -1097,24 +1047,24 @@ T	t438	o b438 b4
 B	b439	t438
 T	t439	o b436 b439
 B	b440	t439
-T	t440	o b424 b440
-B	b441	t440
-T	t441	o b125 b441
-B	b442	t441
-T	t442	o b110 b442
-B	b443	t442
-T	t443	o b94 b443
-B	b444	t443
-T	t444	o b78 b444
-B	b445	t444
-T	t445	o b43 b445
-B	b446	t445
-T	t446	o b29 b446
-B	b447	t446
-T	t447	o b21 b447
-B	b448	t447
-T	t448	o b178 b448
-B	b449	t448
-T	t449	o b170 b449
-B	b450	t449
-T	t450	o b152 b450
+T	t183	o b183 b440
+B	b184	t183
+T	t185	o b125 b184
+B	b185	t185
+T	t186	o b110 b185
+B	b188	t186
+T	t188	o b94 b188
+B	b189	t188
+T	t189	o b78 b189
+B	b190	t189
+T	t198	o b43 b190
+B	b198	t198
+T	t205	o b29 b198
+B	b205	t205
+T	t215	o b21 b205
+B	b215	t215
+T	t216	o b178 b215
+B	b216	t216
+T	t217	o b170 b216
+B	b218	t217
+T	t218	o b152 b218

@@ -36,8 +36,6 @@ declare let_in{'t;x.'u['x]} (* declaration of the let-in expressions -
 declare apply{'t;'u} (* declaration of "term 't applied to term 'u" *)
 declare subst{'u;'x;'t} (* declaration of substitution of a term 't to all
                             free occurrences of a variable 'x in a term 'u *)
-declare bind{x.'T['x]}
-declare bind{x,y.'T['x;'y]}
 
 (*****************************************************
  * DISPLAY FORMS                                     *

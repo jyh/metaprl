@@ -1279,7 +1279,22 @@ match src with
 let omegaAuxT info hyp_pos tree =
 	source2hyp info hyp_pos tree thenMT rw ge_normC (-1)
 
-let omegaCoreT info hyp_pos tree f =
+let rec eval_hyp_pos_aux hyp_length hyp_pos count = function
+	hyp::tail ->
+		let count' = count + hyp_length.(hyp) in
+		hyp_pos.(hyp) <- count';
+		if !debug_omega then
+			eprintf "hyp_pos.(%i)=%i@." hyp count';
+		eval_hyp_pos_aux hyp_length hyp_pos count' tail
+ | [] -> ()
+
+let eval_hyp_pos n hyp_length used_hyps =
+	let hyp_pos = Array.create (Array.length hyp_length) 0 in
+	eval_hyp_pos_aux hyp_length hyp_pos n used_hyps;
+	hyp_pos
+
+let omegaCoreT info hyp_num hyp_length used_hyps tree f = funT (fun p ->
+	let hyp_pos = eval_hyp_pos hyp_num hyp_length used_hyps in
 	let h,m,mw,s = tree_stats 0 0 0 0 tree in
 	if !debug_omega then
 		eprintf "Solved (%i hyps, %i muls, %i mul&weaken, %i eliminations), reconstructing the proof@." h m mw s;
@@ -1298,6 +1313,7 @@ let omegaCoreT info hyp_pos tree f =
 					(mk_sub_term (mk_mul_term c1t (AF.term_of info u)) (mk_mul_term c2t (AF.term_of info l)))
 					(mk_number_term num0))
 			thenLT [omegaAuxT info hyp_pos tree; rw ge_normC (-1)]
+)
 
 let rec all_hyps_aux hyps l i =
    if i = 0 then l else
@@ -1373,6 +1389,20 @@ let rec map_leaves f = function
 		Node (List.map (fun (data,tree) -> data, map_leaves f tree) edges)
  | Leaf data ->
 		Leaf (f data)
+
+let rec smart_map_leaves f used_hyps = function
+	Node (first::rest) ->
+		let data, subtree = first in
+		let i,_,_,_,_ = List.hd data in
+		let subtree' = smart_map_leaves f used_hyps subtree in
+		if used_hyps.(i) then
+			Node ((data, subtree')::(List.map (fun (data,tree) -> data, smart_map_leaves f used_hyps tree) rest))
+		else
+			subtree'
+ | Leaf data ->
+		Leaf (f data)
+ | Node [] ->
+		raise (Invalid_argument "smart_map_leaves: empty set of edges")
 
 let rec leaves2list = function
 	Node edges ->
@@ -1500,6 +1530,19 @@ let prefix_thenMLT =
    in
      fun (tac:tactic) (tacl:tactic list) -> tac thenFLT (combine1 tacl)
 
+let rec applyTreeT prefixT mainT used_hyps = function
+	Node (first::rest) ->
+		let data, subtree = first in
+		let i,_,_,_,_ = List.hd data in
+		let used_hyps' = i::used_hyps in
+		prefix_thenMLT
+			(prefixT i)
+			((applyTreeT prefixT mainT used_hyps' subtree)::(List.map (fun (data,tree) -> applyTreeT prefixT mainT used_hyps' tree) rest))
+ | Leaf data ->
+		mainT (List.rev used_hyps) data
+ | Node [] ->
+		raise (Invalid_argument "applyTreeT: empty set of edges")
+
 let total = ref 0.
 
 let omegaPrepT = funT (fun p ->
@@ -1515,9 +1558,9 @@ let omegaPrepT = funT (fun p ->
 	let n0 = VI.length var2index in
 	let pool = Array.make n0 (false,false) in
 	let pool2 = Array.make n0 ringZero in
-	let all_solutions = map_leaves (omegaSim n0 pool pool2 used_hyps hyp_length) option_constrs in
-	let pruned_solutions = prune_tree used_hyps all_solutions in
-	let solutions_list = leaves2list pruned_solutions in
+	let pruned_solutions = smart_map_leaves (omegaSim n0 pool pool2 used_hyps hyp_length) used_hyps option_constrs in
+	(*let pruned_solutions = prune_tree used_hyps all_solutions in*)
+	(*let solutions_list = leaves2list pruned_solutions in*)
 	let used_hyps = foldi (fun i v acc -> if v then i::acc else acc) used_hyps [] in
 	if !debug_omega then
 		begin
@@ -1525,18 +1568,18 @@ let omegaPrepT = funT (fun p ->
 			List.iter (eprintf "%i ") used_hyps;
 			eprintf "@.";
 		end;
-	let count = ref hyp_num in
+	(*let count = ref hyp_num in
 	for i=hyp_num-1 downto 0  do
 		count := !count + hyp_length.(i);
 		if !debug_omega then
 			eprintf "hyp_length.(%i)=%i@." i !count;
 		hyp_length.(i) <- !count
-	done;
+	done;*)
 	let info = VI.invert var2index in
-	let tacs = List.map (fun (tree,f) -> omegaCoreT info hyp_length tree f) solutions_list in
+	(*let tacs = List.map (fun (tree,f) -> omegaCoreT info hyp_length tree f) solutions_list in*)
 	total := !total +. (Unix.time() -. start);
-	if !debug_omega then
-		eprintf "actual number of cases is %i@." (List.length tacs);
+	(*if !debug_omega then
+		eprintf "actual number of cases is %i@." (List.length tacs);*)
 	(*eprintf "Total time spent in omegaPrepT is %f@." !total;*)
 	(*if List.length used_hyps = 1 then
 		(* If hypothesis contains contradiction
@@ -1547,9 +1590,16 @@ let omegaPrepT = funT (fun p ->
 			(onMHypsT used_hyps ge_elimT)
 			tacs
 	else*)
+	(*
 		prefix_thenMLT
 			(onMHypsT used_hyps (rw relNormC) thenMT onMHypsT used_hyps ge_elimT)
 			tacs
+	*)
+	let aux used_hyps (tree, f) =
+		omegaCoreT info hyp_num hyp_length used_hyps tree f
+	in
+	onMHypsT used_hyps (rw relNormC) thenMT
+	applyTreeT ge_elimT aux [] pruned_solutions
 )
 
 let omegaT =

@@ -1,5 +1,5 @@
 (*
- * Integers with various precisions.
+ * Operations on 31-bit integers.
  *
  * ----------------------------------------------------------------
  *
@@ -27,36 +27,33 @@
 extends M_prec
 
 (*
- * For now, use the string representation.
+ * For now, use a numeric representation.
  *)
-declare rawint[precision:n, signed:t, value:s]
+declare int[value:n]
 
 (*
  * Arithmetic.
  *)
-declare rawint_uminus{'i}
-declare rawint_lnot{'i}
-declare rawint_bitfield[off:n, len:n]{'i}
+declare int_uminus{'i}
+declare int_lnot{'i}
+declare int_bitfield[off:n, len:n]{'i}
 
-declare rawint_of_rawint[p:n, s:t]{'i}
-declare rawint_of_int[p:n, s:t]{'i}
+declare int_plus{'i1; 'i2}
+declare int_minus{'i1; 'i2}
+declare int_mul{'i1; 'i2}
+declare int_div{'i1; 'i2}
+declare int_rem{'i1; 'i2}
+declare int_max{'i1; 'i2}
+declare int_min{'i1; 'i2}
 
-declare rawint_plus{'i1; 'i2}
-declare rawint_minus{'i1; 'i2}
-declare rawint_mul{'i1; 'i2}
-declare rawint_div{'i1; 'i2}
-declare rawint_rem{'i1; 'i2}
-declare rawint_max{'i1; 'i2}
-declare rawint_min{'i1; 'i2}
+declare int_sl{'i1; 'i2}
+declare int_sr{'i1; 'i2}
+declare int_and{'i1; 'i2}
+declare int_or{'i1; 'i2}
+declare int_xor{'i1; 'i2}
 
-declare rawint_sl{'i1; 'i2}
-declare rawint_sr{'i1; 'i2}
-declare rawint_and{'i1; 'i2}
-declare rawint_or{'i1; 'i2}
-declare rawint_xor{'i1; 'i2}
-
-declare rawint_if_eq{'i1; 'i2; 'e1; 'e2}
-declare rawint_if_lt{'i1; 'i2; 'e1; 'e2}
+declare int_if_eq{'i1; 'i2; 'e1; 'e2}
+declare int_if_lt{'i1; 'i2; 'e1; 'e2}
 
 (*!
  * @docoff

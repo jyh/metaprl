@@ -9,7 +9,10 @@ OCAMLINCLUDES =\
 
 # Library files
 MPFILES =\
-	m_rawint
+	m_prec\
+	m_int\
+	m_rawint\
+	m_rawfloat
 
 Theory($(MPFILES))
 

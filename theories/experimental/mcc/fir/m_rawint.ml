@@ -24,12 +24,14 @@
  * @email{jyh@cs.caltech.edu}
  * @end[license]
  *)
-extends Base_theory
+extends M_prec
 
 open Refiner.Refiner.TermType
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
 open Refiner.Refiner.RefineError
+
+open M_prec
 
 (*
  * For now, use the string representation.
@@ -62,26 +64,6 @@ declare rawint_xor{'i1; 'i2}
 
 declare rawint_if_eq{'i1; 'i2; 'e1; 'e2}
 declare rawint_if_lt{'i1; 'i2; 'e1; 'e2}
-
-(*
- * Precedences.
- *)
-prec prec_if
-prec prec_shift
-prec prec_and
-prec prec_add
-prec prec_mul
-prec prec_uminus
-prec prec_coerce
-prec prec_apply
-
-prec prec_shift > prec_if
-prec prec_and > prec_shift
-prec prec_add > prec_and
-prec prec_mul > prec_add
-prec prec_uminus > prec_mul
-prec prec_coerce > prec_uminus
-prec prec_apply > prec_coerce
 
 (*
  * Display.

@@ -124,6 +124,9 @@ topval fcompareRefT : tactic
 topval fcompareSymT : tactic
 topval fcompareTransT : term -> tactic
 
+topval testT : tactic
+topval dupRT : tactic -> int -> tactic
+
 (*
  * -*-
  * Local Variables:

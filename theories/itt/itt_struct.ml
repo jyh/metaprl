@@ -97,6 +97,11 @@ prim cut 'H 'J 'S 'x :
    sequent ['ext] { 'H; 'J >- 'T } =
    't['s]
 
+interactive dup 'H :
+   ('s : sequent ['ext] { 'H >- 'T }) -->
+   sequent ['ext] { 'H >- 'T } -->
+   sequent ['ext] { 'H >- 'T}
+
 (*
  * H >- T
  * by introduction t
@@ -208,6 +213,9 @@ let assertAtT i s p =
    let v = get_opt_var_arg "v" p in
       (cut i j s v
        thenLT [addHiddenLabelT "assertion"; idT]) p
+
+let dupT p =
+   dup (Sequent.hyp_count_addr p) p
 
 (*
  * Explicit extract.

@@ -53,12 +53,15 @@ open Conversionals
 open Var
 
 open Base_dtactic
+open Base_auto_tactic
 open Typeinf
 
 open Itt_equal
 open Itt_bool
 open Itt_rfun
 open Itt_list
+open Itt_struct
+open Itt_logic
 
 (************************************************************************
  * SYNTAX                                                               *
@@ -1682,6 +1685,14 @@ let typeinf_resource =
          tr
    in
       add_resource typeinf_resource typeinf_info
+
+let testT = assertT << all s: list{'T}. ("assert"{fmember{'eq; 'a; 's}} => "assert"{'b['a]} => "assert"{fbexists{'s; x.'b['x]}}) >> thenLT [dT 0 thenWT autoT thenLT [dT 2 thenLT [rw reduceC 0 thenT dT 0 thenWT autoT thenLT [dT 3]; univCDT thenWT autoT thenLT [rwh unfold_member 0 thenT backThruAssumT 5 thenT autoT thenLT [fcompareRefT thenT autoT]; rw reduceC 0 thenLT [rw reduceC 6 thenT dT 6 thenWT autoT thenLT [selT 1 (dT 0) thenWT autoT thenLT [withTermT "eq" << 'eq >> autoT thenLT [rwh unfold_member 0 thenT backThruAssumT 5 thenT autoT thenLT [fcompareRefT thenT autoT]]; assumT 5 thenWT autoT thenLT [instHypT [<< 'a >>; << 'u >>] 8 thenWT autoT thenLT [dT 9 thenAT trivialT thenLT [revHypSubstT 10 0 thenLT [trivialT; autoT]]]]]; selT 2 (dT 0) thenWT autoT thenLT [rwh unfold_member 0 thenT backThruAssumT 5 thenT autoT thenLT [fcompareRefT thenT autoT]; autoT]]]]]]; withT << 's >> (dT 2) thenWT autoT thenLT [dT 3 thenLT [rwh unfold_assert 0 thenT squash_equalT thenT rwh fold_assert 0 thenLT [autoT]; dT 4 thenLT [rwh unfold_assert 0 thenT squash_equalT thenT rwh fold_assert 0 thenLT [autoT]; trivialT]]]]
+
+let rec dupRT tac i p =
+   if i = 0 then
+      tac p
+   else
+      (dupT thenLT [tac; dupRT tac (pred i)]) p
 
 (*
  * -*-

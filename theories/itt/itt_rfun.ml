@@ -125,6 +125,9 @@ define unfold_let : "let"{'a;x.'b['x]} <--> (lambda{x.'b['x]} 'a)
 
 doc <:doc< @docoff >>
 
+let fold_ycomb = makeFoldC << ycomb >> unfold_ycomb
+let fold_fix = makeFoldC << fix{f. 'b['f]} >> unfold_fix
+
 (*
  * Primitives.
  *)
@@ -203,6 +206,8 @@ dform apply_df : parens :: "prec"[prec_apply] :: apply{'f; 'a} =
 
 dform lambda_df : parens :: except_mode [src] :: "prec"[prec_lambda] :: lambda{x. 'b} =
    Nuprl_font!lambda slot{'x} `"." slot{'b}
+
+dform ycomb_df : except_mode[src] :: ycomb = Nuprl_font!mathbbY
 
 dform fix_df : except_mode[src] :: fix{f. 'b} =
    `"fix" `"(" slot{'f} `"." slot{'b} `")"

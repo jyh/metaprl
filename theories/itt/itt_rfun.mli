@@ -40,6 +40,7 @@ open Lm_symbol
 open Refiner.Refiner.Term
 
 open Tactic_type.Tacticals
+open Tactic_type.Conversionals
 
 (************************************************************************
  * TERMS                                                                *
@@ -60,6 +61,9 @@ declare ycomb
 declare fix{f. 'b['f]}
 
 define unfold_let : "let"{'a;x.'b['x]} <--> (lambda{x.'b['x]} 'a)
+
+topval fold_fix : conv
+topval fold_ycomb : conv
 
 (************************************************************************
  * DISPLAY FORMS                                                        *

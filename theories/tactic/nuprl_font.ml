@@ -105,6 +105,7 @@ declare tt[name:s]
 declare tt{'t}
 declare tt_begin
 declare tt_end
+declare url[url:s]
 declare sub[name:s]
 declare sub{'t}
 declare sub_begin
@@ -396,6 +397,15 @@ dform tt_df1 : internal :: tt[text:s] =
 
 dform tt_df2 : internal :: tt{'t} =
    tt_begin 't tt_end
+
+dform url_df1 : internal :: mode[html] :: url[url:s] =
+   izone `"<a href=\"" slot[url:s] `"\"><tt>" ezone slot[url:s] izone `"</tt></a>" ezone
+
+dform url_df2 : internal :: mode[tex] :: url[url:s] =
+   izone `"\\url{" ezone slot[url:s] izone `"}" ezone
+
+dform url_df3 : internal :: mode[prl] :: mode [src] :: url[url:s] =
+   `"@url[" slot[url:s] `"]"
 
 dform sub_begin_df : internal :: mode[html] :: sub_begin =
    izone `"<sub>" ezone

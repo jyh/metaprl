@@ -1,4 +1,8 @@
 (*!
+ * @begin[spelling]
+ * CPS prog
+ * @end[spelling]
+ *
  * @begin[doc]
  * @module[M_prog]
  *
@@ -140,6 +144,8 @@ prim_rw letrec_letrec :
    LetRec{R1. LetRec{R2. 'fields['R2]; R3. 'e1['R1; 'R3]}; R4. 'e2['R4]} <-->
    LetRec{R2. 'fields['R2]; R3. LetRec{R1. 'e1['R1; 'R3]; R4. 'e2['R4]}}
 
+(* @docoff *)
+
 (*
  * Add all these rules to the prog resource.
  *)
@@ -161,9 +167,7 @@ let resource prog +=
 let progT =
    rw progC 0
 
-(*!
- * @docoff
- *
+(*
  * -*-
  * Local Variables:
  * Caml-master: "compile"

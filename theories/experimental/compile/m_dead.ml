@@ -2,7 +2,7 @@
  * @begin[doc]
  * @module[Dead]
  *
- * This simple form of deadcode elimination is really easy.
+ * This simple form of dead-code elimination is really easy.
  * For any let-definition, let v = a in e, remove the
  * let-definition if v is not free in e.
  * @end[doc]
@@ -104,6 +104,8 @@ prim_rw dead_let_subscript :
 prim_rw dead_let_closure :
    LetClosure{'a1; 'a2; f. 'e} <--> 'e
 
+(* @docoff *)
+
 (*
  * Add all these rules to the dead resource.
  *)
@@ -119,9 +121,7 @@ let resource dead +=
 let deadT =
    onAllHypsT (fun i -> tryT (rw deadC i)) thenT rw deadC 0
 
-(*!
- * @docoff
- *
+(*
  * -*-
  * Local Variables:
  * Caml-master: "compile"

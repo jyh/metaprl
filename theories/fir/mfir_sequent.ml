@@ -88,7 +88,7 @@ declare large_type
  * @begin[doc]
  *
  * Union definitions (@hrefterm[tyDefUnion]) belong to the @tt[union_type]
- * kind, where the parameter $i$ indiciates the number of cases in the union.
+ * kind, where the parameter $i$ indicates the number of cases in the union.
  * @end[doc]
  *)
 

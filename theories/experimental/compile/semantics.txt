@@ -1,0 +1,43 @@
+This is a rough outline of the semantics that is supposed to make all the prim
+rules and rewrites valid.
+
+Author: Aleksey Nogin <nogin@cs.caltech.edu>
+
+----
+
+M_ir:
+
+LetApply{'f; 'a; v. 'e['v]} = evaluate f, then evaluate a, then evaluate f(a), then e[f(a)]
+Fields{'f} = f
+FunDef{'label; 'exp; 'rest} = lambda name. if name=label then exp else rest(name)
+EndDef = lambda name.raise error
+Return{'a} = a
+TailCall{'f;'a} = f(a)
+
+----
+
+M_cps:
+
+CPSRecordVar{'R} = lambda name. R.name(lambda x.x)
+CPSFunVar{'f} = f(lambda x.x)
+CPS{'a} = a
+CPS{'cont; 'e} = cont(e)  (with cont evaluated _after_ e is evaluated)
+CPS{cont. 'fields['cont]} = lambda name. lambda cont.(fields[cont] name)
+
+cont(e[f(id,a)]) (order: (f, a, f(id,a), e[f(a)], cont, cont(e[f(a)]) ) -->
+let rec g v = cont(e[v]) in f(g,a) (order f, a, f(g,a))
+
+----
+
+M_closure:
+
+CloseRec{r,f. ef[r;x]; r,f. e[r;f]; 'i; 'tup} =
+   if i = length(tuple) then
+      let f = tup in
+      let rec r = lambda name.lambda f.(ef[r;x](name)) in 
+         e[r;f]
+   else raise error
+
+CloseRecVar{'r;'f} = lambda name. f(name)(f)
+
+CloseVar{v.'e['v]; 'a} = e(a)  (order of evaluation: e, then call-by-name!)

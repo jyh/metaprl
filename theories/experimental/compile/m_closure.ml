@@ -1,4 +1,9 @@
 (*!
+ * @begin[spelling]
+ * CloseFrame CloseRec CloseRecVar CloseSubscript CloseVar LetAtom LetRec
+ * LetSubscript args rec var vars
+ * @end[spelling]
+ *
  * @begin[doc]
  * @module[M_closure]
  *
@@ -198,9 +203,9 @@ prim_rw add_frame : LetRec{R1. 'fields['R1]; R2. 'e['R2]} <-->
  * That is, suppose we have a recursive definition:
  *
  * close rec R, frame.
- *    fun f1 = e1
+ *    fun f_1 = e_1
  *    ...
- *    fun fn = en
+ *    fun f_n = e_n
  * in ...
  *
  * and suppose that one of the function bodies $e_i$ has a free variable $v$.
@@ -213,17 +218,17 @@ prim_rw add_frame : LetRec{R1. 'fields['R1]; R2. 'e['R2]} <-->
  *
  * close var v = a in
  * close rec R, frame.
- *    fun f1 = e1
+ *    fun f_1 = e_1
  *    ...
- *    fun fn = en
+ *    fun f_n = e_n
  * R, frame (length = i)(args) in
  * ...
  *
  * close rec R, frame.
  *    let v = frame[i] in
- *    fun f1 = e1
+ *    fun f_1 = e_1
  *    ...
- *    fun fn = en
+ *    fun f_n = e_n
  * R, frame (length = i + 1)(v :: args) in
  * ...
  * @end[doc]
@@ -334,6 +339,14 @@ prim_rw close_let_subscript :
    LetSubscript{'a1; 'a2; v1. AtomFun{v2. 'e['v1; 'v2]}} <-->
    AtomFun{v2. LetSubscript{'a1; 'a2; v1. 'e['v1; 'v2]}}
 
+prim_rw close_initialize_1 :
+   LetClosure{'a1; 'a2; v. Initialize{'e['v]}} <-->
+   Initialize{LetClosure{'a1; 'a2; v. 'e['v]}}
+
+prim_rw close_initialize_2 :
+   LetTuple{'length; 'tuple; v. Initialize{'e['v]}} <-->
+   Initialize{LetTuple{'length; 'tuple; v. 'e['v]}}
+
 (*
  * Actually build the closure.
  *)
@@ -344,12 +357,12 @@ prim_rw close_let_fun :
 (*
  * Optimize closures just before tailcalls.
  *)
-prim_rw close_tailcall_2 :
-   LetClosure{'f; 'frame; g. TailCall{'g; 'a1; 'a2}} <-->
-   TailCall{'f; 'frame; 'a1; 'a2}
+prim_rw close_tailcall :
+   LetClosure{'f; 'frame; g. TailCall{AtomVar{'g}; 'args}} <-->
+   TailCall{'f; ArgCons{'frame; 'args}}
 
 (*
- * Add all these rules to the CPS resource.
+ * Add all these rules to the closure resource.
  *)
 let resource closure +=
     [<< CloseSubscript{'a1; 'a2; v. Fields{'fields['v]}} >>, close_fields;
@@ -360,7 +373,9 @@ let resource closure +=
      << CloseFrame{frame. EndDef} >>, close_frame_enddef;
      << LetFun{CloseRecVar{'R; 'frame}; 'label; v. 'e['v]} >>, close_let_fun;
      << LetSubscript{'a1; 'a2; v1. AtomFun{v2. 'e['v1; 'v2]}} >>, close_let_subscript;
-     << LetClosure{'f; 'frame; g. TailCall{'g; 'a1; 'a2}} >>, close_tailcall_2]
+     << LetClosure{'a1; 'a2; v. Initialize{'e['v]}} >>, close_initialize_1;
+     << LetTuple{'length; 'tuple; v. Initialize{'e['v]}} >>, close_initialize_2;
+     << LetClosure{'f; 'frame; g. TailCall{AtomVar{'g}; 'args}} >>, close_tailcall]
 
 (*!
  * @docoff
@@ -385,9 +400,7 @@ let closeT =
    thenT uncloseT
    thenT pushT
 
-(*!
- * @docoff
- *
+(*
  * -*-
  * Local Variables:
  * Caml-master: "compile"

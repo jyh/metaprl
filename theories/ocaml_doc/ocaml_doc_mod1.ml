@@ -68,7 +68,7 @@ program file acts as an abstract module, called a @emph{compilation
 unit} in the OCaml terminology.  A signature for the file can
 be defined in a @code{.mli} file with the same name.  If there is no
 @code{.mli} file, the default signature includes all type and
-functions defined in the @code{.ml} file.
+functions defined in the @code[".ml"] file.
 
 @end[doc]
 *)
@@ -179,7 +179,7 @@ implementation and inaccessible to other program modules.
 
 @section[implementations]{Implementations}
 
-The module implementation is defined in a @code{.ml} file with the
+The module implementation is defined in a @code[".ml"] file with the
 same base name as the signature file.  The implementation contains parts
 that correspond to each of the parts in the signature.
 
@@ -290,7 +290,7 @@ This will be a simple program with an input loop where we can type in
 a string.  If the string is not in the set, it is added;
 otherwise, the loop will print out a message that the string is
 already added.  To implement this program, we need to add another
-file; we'll call it @tt{test.ml}.
+file; we'll call it @code["test.ml"].
 
 The @tt{Test} compilation unit has no externally visible types or
 methods.  By default, the @code{test.mli} file should be empty.  The
@@ -345,7 +345,7 @@ top level expression.  Another way to accomplish this is by adding the
 @section[compiling]{Compiling the program}
 
 Once the files for the program are defined, the next step is to
-compile them using @tt{ocamlc}.  The usage of @tt{ocamlc} is much like
+compile them using @tt[ocamlc].  The usage of @tt[ocamlc] is much like
 @tt{cc}.  Normally, the files are compiled separately and linked into
 an executable.  Signatures must be compiled first, followed by the
 implementations.
@@ -371,7 +371,7 @@ If this step is successful, the compiler produces the files
 @code{fset.cmo} and @code{test.cmo}.
 
 The modules can now be linked into a complete program using the
-@tt{ocamlc} linker.  The command is as follows.
+@tt[ocamlc] linker.  The command is as follows.
 
 @begin[verbatim]
 % ocamlc -o test fset.cmo test.cmo
@@ -412,13 +412,13 @@ function.  When an OCaml program is evaluated, all the statements in
 the files in the program are evaluated in the order specified on the
 link line.  Program files contain type and method definitions.  They
 can also contain arbitrary expressions to be evaluated.  The @tt{let
-_ = loop ()} statement in the @code{test.ml} file is an example: it
+_ = loop ()} statement in the @code["test.ml"] file is an example: it
 evaluates the @code{loop} function.  Informally, this is the main
 loop; it is the last expression to be executed in the program.
 
 @subsection[common_errors]{Some common errors}
 
-When a @code{.ml} file is compiled, the compiler compares the
+When a @code[".ml"] file is compiled, the compiler compares the
 implementation with the signature in the @code{.cmi} file.  If a
 definition does not match the signature, the compiler will print an
 error and refuse to compile the file.
@@ -785,11 +785,10 @@ You may wish to explore the other features of the debugger.  Further
 documentation can be found in the OCaml reference manual.
 
 @end[doc]
+@docoff
 *)
 
-(*!
- * @docoff
- *
+(*
  * -*-
  * Local Variables:
  * Caml-master: "compile"

@@ -1,7 +1,7 @@
 (*! -*- Mode: text -*-
  *
  * @begin[spelling]
- * btree iff log mem rebalancing
+ * btree iff log Okasaki ll deprecated rebalancing
  * @end[spelling]
  *
  * @begin[doc]
@@ -302,7 +302,7 @@ not need rebalancing.
 Since the longest path from the root is at most twice as long as the
 shortest path, the depth of the tree is $O(log@space n)$.  The
 @tt{balance} function takes constant time.  This means that the
-@tt{insert} and @tt{mem} functions both take time $O(log@space n)$.
+@tt{insert} and @tt[mem] functions both take time $O(log@space n)$.
 
 @begin[verbatim]
 # let empty = Leaf;;

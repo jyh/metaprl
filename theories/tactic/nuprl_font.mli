@@ -70,6 +70,7 @@ declare tt[name:s]
 declare tt{'t}
 declare tt_begin
 declare tt_end
+declare url[url:s]
 declare sub{'t}
 declare sub[name:s]
 declare sub_begin

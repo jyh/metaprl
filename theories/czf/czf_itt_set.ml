@@ -1,7 +1,4 @@
 (*!
- * @begin[spelling]
- * assum isset
- * @end[spelling]
  * @begin[doc]
  * @module[Czf_itt_set]
  *
@@ -166,7 +163,7 @@ let debug_czf_set =
  * @terms
  *
  * The @tt{set} term defines the type of sets; the @tt{collect}
- * terms are the individual sets.  The @tt{isset} term is the
+ * terms are the individual sets.  The @tt[isset] term is the
  * well-formedness judgment for the $@set$ type.  The @tt[set_ind] term
  * is the induction combinator for computation over sets.  The
  * @i{s} argument represents the set; @i{T} is it's index type,
@@ -245,8 +242,8 @@ dform set_ind_df : parens :: "prec"[prec_tree_ind] :: set_ind{'z; a, f, g. 'body
  * @modsubsection{Typehood and equality}
  *
  * The @hrefterm[set] term is a type in the @Nuprl type theory.
- * The @tt{equal_set} and @tt{isset_assum} rules define the
- * @tt{isset} well-formedness judgment.  The @tt{isset_assum}
+ * The @tt{equal_set} and @tt[isset_assum] rules define the
+ * @tt[isset] well-formedness judgment.  The @tt[isset_assum]
  * is added to the @hreftactic[trivialT] tactic for use as
  * default reasoning.
  * @end[doc]

@@ -24,7 +24,10 @@
  * @email{jyh@cs.caltech.edu}
  * @end[license]
  *)
-extends X86_term
+extends M_util
+extends M_x86_backend
+
+open Lm_symbol
 
 open Refiner.Refiner.Term
 open Mp_resource
@@ -32,21 +35,25 @@ open Mp_resource
 open Tactic_type.Tacticals
 open Tactic_type.Conversionals
 
+open M_ra_type
+
 (*
  * CPS resource
  *)
 resource (term * conv, conv) spill
 
 (*
- * For debugging.
+ * Debugging functions.
  *)
-topval spillC : conv
-topval splitC : string -> conv
+topval splitC  : conv
+topval spillC  : conv
+
+topval spillST : string -> tactic
 
 (*
  * This is the actual spill function.
  *)
-topval spillT : string list -> tactic
+val spillT : SymbolSet.t -> tactic
 
 (*!
  * @docoff

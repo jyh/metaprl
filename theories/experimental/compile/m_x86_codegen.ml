@@ -1,4 +1,8 @@
 (*!
+ * @begin[spelling]
+ * compilable
+ * @end[spelling]
+ *
  * @begin[doc]
  * @module[M_x86]
  *
@@ -58,7 +62,34 @@ open Top_conversionals
  *)
 declare ASM{'e}
 declare ASM{'a; v. 'e['v]}
+declare ASM{'args1; 'args2; v. 'e['v]}
 declare ASM{'R; 'e}
+
+dform asm_df1 : ASM{'e} =
+   szone pushm[0] pushm[3]
+   bf["assemble"]
+   hspace
+   slot{'e}
+   popm hspace bf["end"]
+   popm ezone
+
+dform asm_df2 : ASM{'a; v. 'e} =
+   bf["let "] slot{'v} bf[" = assemble("] slot{'a} bf[") in"] hspace slot{'e}
+
+dform asm_df3 : ASM{'args1; 'args2; v. 'e} =
+   szone pushm[0] pushm[3] bf["assemble args"]
+   hspace bf["dst = "] slot{'args1}
+   hspace bf["src = "] slot{'args2}
+   popm hspace bf["in"]
+   popm ezone hspace slot{'e}
+
+dform asm_df4 : ASM{'R; 'e} =
+   szone pushm[0] pushm[3]
+   bf["assemble ["] slot{'R} bf["]"]
+   hspace
+   slot{'e}
+   popm hspace bf["end"]
+   popm ezone
 
 (*
  * Helper term to store fields into a tuple.
@@ -76,19 +107,21 @@ prim_rw unfold_store_tuple :
    store_tuple{'v; 'tuple; 'rest}
    <-->
    Comment["unfold_store_tuple"]{
-   Let{Register{'v}; p. store_tuple{'p; number[0:n]; 'tuple; 'rest}}}
+   Mov{Register{'v}; p.
+   store_tuple{'p; number[0:n]; 'tuple; 'rest}}}
 
 prim_rw unfold_store_tuple_cons :
    store_tuple{'v; 'off; AllocTupleCons{'a; 'tl}; 'rest}
    <-->
+   Comment["unfold_store_tuple_cons"]{
    ASM{'a; v1.
-   Inst2["mov"]{MemRegOff{'v; 'off}; 'v1;
-   store_tuple{'v; add{'off; word_size}; 'tl; 'rest}}}
+   Inst2["mov"]{'v1; MemRegOff{'v; 'off};
+   store_tuple{'v; add{'off; word_size}; 'tl; 'rest}}}}
 
 prim_rw unfold_store_tuple_nil :
    store_tuple{'v; 'off; AllocTupleNil; 'rest}
    <-->
-      'rest
+   'rest
 
 (*
  * We also need to reverse the order of the atoms in the tuple.
@@ -117,6 +150,83 @@ prim_rw reduce_reverse_tuple_nil :
    <-->
    'dst
 
+(************************************************************************
+ * Arguments.
+ *)
+
+(*
+ * Reverse the order of arguments.
+ *)
+declare reverse_args{'args}
+declare reverse_args{'args1; 'args2}
+
+dform reverse_args_df1 : reverse_args{'args} =
+   bf["reverse_args["] slot{'args} bf["]"]
+
+dform reverse_args_df2 : reverse_args{'dst; 'src} =
+   bf["reverse_args["] slot{'dst} bf[" <- "] slot{'src} bf["]"]
+
+prim_rw unfold_reverse_args :
+   reverse_args{'args}
+   <-->
+   reverse_args{AsmArgNil; 'args}
+
+prim_rw reduce_reverse_args_cons :
+   reverse_args{'args; AsmArgCons{'a; 'rest}}
+   <-->
+   reverse_args{AsmArgCons{'a; 'args}; 'rest}
+
+prim_rw reduce_reverse_args_nil :
+   reverse_args{'args; AsmArgNil}
+   <-->
+   'args
+
+(*
+ * Copy the arguments into registers.
+ *)
+declare copy_args{'args; v. 'e['v]}
+declare copy_args{'args1; 'args2; v. 'e['v]}
+
+dform copy_args_df1 : copy_args{'args; v. 'e} =
+   bf["let "] slot{'v} bf[" = copy_args["] slot{'args} bf["] in"] hspace slot{'e}
+
+dform copy_args_df2 : copy_args{'dst; 'src; v. 'e} =
+   bf["let "] slot{'v} bf[" = copy_args("] slot{'dst} bf["<-"] slot{'src} bf[") in"] hspace slot{'e}
+
+prim_rw unfold_copy_args :
+   copy_args{'args; v. 'e['v]}
+   <-->
+   copy_args{AsmArgNil; 'args; v. 'e['v]}
+
+prim_rw reduce_copy_args_cons :
+   copy_args{'dst; AsmArgCons{'a; 'rest}; v. 'e['v]}
+   <-->
+   Mov{'a; arg.
+   copy_args{AsmArgCons{Register{'arg}; 'dst}; 'rest; v. 'e['v]}}
+
+prim_rw reduce_copy_args_nil :
+   copy_args{'dst; AsmArgNil; v. 'e['v]}
+   <-->
+   'e[reverse_args{'dst}]
+
+(*
+ * Assemble args.
+ *)
+prim_rw asm_arg_cons :
+   ASM{ArgCons{'a; 'rest}; 'args; v. 'e['v]}
+   <-->
+   ASM{'a; arg.
+   ASM{'rest; AsmArgCons{'arg; 'args}; v. 'e['v]}}
+
+prim_rw asm_arg_nil :
+   ASM{ArgNil; 'args; v. 'e['v]}
+   <-->
+   'e[reverse_args{'args}]
+
+(************************************************************************
+ * Atoms
+ *)
+
 (*!
  * @begin[doc]
  * @modsubsection{Code generation}
@@ -125,17 +235,17 @@ prim_rw reduce_reverse_tuple_nil :
 prim_rw asm_atom_false :
    ASM{AtomFalse; v. 'e['v]}
    <-->
-   'e[ImmediateNumber[0:n]]
+   'e[ImmediateNumber[1:n]]
 
 prim_rw asm_atom_true :
    ASM{AtomTrue; v. 'e['v]}
    <-->
-  'e[ImmediateNumber[1:n]]
+  'e[ImmediateNumber[3:n]]
 
 prim_rw asm_atom_int :
    ASM{AtomInt[i:n]; v. 'e['v]}
    <-->
-   'e[ImmediateNumber[i:n]]
+   'e[ImmediateNumber{add{mul{number[i:n]; number[2:n]}; number[1:n]}}]
 
 prim_rw asm_atom_var :
    ASM{AtomVar{'v1}; v2. 'e['v2]}
@@ -158,217 +268,196 @@ prim_rw asm_atom_binop_add :
    Comment["asm_atom_binop_add"]{
    ASM{'a1; v1.
    ASM{'a2; v2.
-   Let{'v1; x.
-   Inst2["add"]{Register{'x}; 'v2;
-   'e[Register{'x}]}}}}}
+   Inst2["add"]{'v2; 'v1; sum_tmp.
+   Inst1["dec"]{Register{'sum_tmp}; sum.
+   'e[Register{'sum}]}}}}}
 
 prim_rw asm_atom_binop_sub :
    ASM{AtomBinop{SubOp; 'a1; 'a2}; v. 'e['v]}
    <-->
+   Comment["asm_atom_binop_sub"]{
    ASM{'a1; v1.
    ASM{'a2; v2.
-   Let{'v1; v.
-   Inst2["sub"]{Register{'v}; 'v2;
-   'e[Register{'v}]}}}}
+   Inst2["sub"]{'v2; 'v1; diff_tmp.
+   Inst1["inc"]{Register{'diff_tmp}; diff.
+   'e[Register{'diff}]}}}}}
 
 prim_rw asm_atom_binop_mul :
    ASM{AtomBinop{MulOp; 'a1; 'a2}; v. 'e['v]}
    <-->
+   Comment["asm_atom_binop_mul"]{
    ASM{'a1; v1.
    ASM{'a2; v2.
-   Let{'v1; v.
-   Inst2["imul"]{Register{'v}; 'v2;
-   'e[Register{'v}]}}}}
+   Shift["sar"]{ImmediateNumber[1:n]; 'v1; v1_int.
+   Shift["sar"]{ImmediateNumber[1:n]; 'v2; v2_int.
+   Inst2["imul"]{Register{'v1_int}; Register{'v2_int}; prod_tmp1.
+   Shift["shl"]{ImmediateNumber[1:n]; Register{'prod_tmp1}; prod_tmp2.
+   Inst2["or"]{ImmediateNumber[1:n]; Register{'prod_tmp2}; prod.
+   'e[Register{'prod}]}}}}}}}}
 
 prim_rw asm_atom_binop_div :
-   ASM{AtomBinop{MulOp; 'a1; 'a2}; v. 'e['v]}
+   ASM{AtomBinop{DivOp; 'a1; 'a2}; v. 'e['v]}
    <-->
+   Comment["asm_atom_binop_div"]{
    ASM{'a1; v1.
    ASM{'a2; v2.
-   Let["edx":t]{ImmediateNumber[0:n]; edx.
-   Let["eax":t]{'v1; eax.
-   Instm["div"]{Register{'edx}; Register{'eax}; 'v2;
-   Let{Register{'eax}; v.
-   'e['v]}}}}}}
+   Shift["sar"]{ImmediateNumber[1:n]; 'v1; v1_tmp.
+   Shift["sar"]{ImmediateNumber[1:n]; 'v2; v2_tmp.
+   Mov{ImmediateNumber[0:n]; v3_tmp.
+   Inst3["div"]{Register{'v2_tmp}; Register{'v1_tmp}; Register{'v3_tmp}; quot_tmp1, rem_tmp.
+   Shift["shl"]{ImmediateNumber[1:n]; Register{'quot_tmp1}; quot_tmp2.
+   Inst2["or"]{ImmediateNumber[1:n]; Register{'quot_tmp2}; quot1.
+   'e[Register{'quot1}]}}}}}}}}}
 
-(*
- * We should probably change the representation
- * of the instructions so we can fold the following
- * size rewrites together.
+prim_rw asm_eq  : ASM{EqOp}  <--> CC["z"]
+prim_rw asm_neq : ASM{NeqOp} <--> CC["nz"]
+prim_rw asm_lt  : ASM{LtOp}  <--> CC["l"]
+prim_rw asm_le  : ASM{LeOp}  <--> CC["le"]
+prim_rw asm_gt  : ASM{GtOp}  <--> CC["g"]
+prim_rw asm_ge  : ASM{GeOp}  <--> CC["ge"]
+
+prim_rw asm_atom_relop :
+   ASM{AtomRelop{'op; 'a1; 'a2}; v. 'e['v]}
+   <-->
+   Comment["asm_atom_relop"]{
+   ASM{'a1; v1.
+   ASM{'a2; v2.
+   Cmp["cmp"]{'v1; 'v2;
+   Mov{ImmediateNumber[0:n]; eqsrc.
+   Set["set"]{ASM{'op}; Register{'eqsrc}; eqdst.
+   'e[Register{'eqdst}]}}}}}}
+
+(************************************************************************
+ * Instructions.
  *)
-prim_rw asm_atom_binop_eq :
-   ASM{AtomBinop{EqOp; 'a1; 'a2}; v. 'e['v]}
+prim_rw asm_reserve_1 :
+   ASM{Reserve[reswords:n]{'params; 'e}}
    <-->
-   ASM{'a1; v1.
-   ASM{'a2; v2.
-   Let{ImmediateNumber[0:n]; v.
-   Cmp["cmp"]{'v1; 'v2;
-   Set["set"]{CC["z"]; Register{'v};
-   'e[Register{'v}]}}}}}
+   Mov{ContextRegister["limit":t]; limit.
+   Inst2["sub"]{ContextRegister["next":t]; Register{'limit}; bytes.
+   Cmp["cmp"]{ImmediateNumber{mul{number[reswords:n]; word_size}}; Register{'bytes};
+   Jcc["j"]{CC["b"];
+      ASM{'params; AsmArgNil; v.
+      AsmReserve[reswords:n]{'v}};
+   ASM{'e}}}}}
 
-prim_rw asm_atom_binop_neq :
-   ASM{AtomBinop{NeqOp; 'a1; 'a2}; v. 'e['v]}
+prim_rw asm_reserve_2 :
+   ASM{Reserve[words:n]{'e}}
    <-->
-   ASM{'a1; v1.
-   ASM{'a2; v2.
-   Let{ImmediateNumber[0:n]; v.
-   Cmp["cmp"]{'v1; 'v2;
-   Set["set"]{CC["nz"]; Register{'v};
-   'e[Register{'v}]}}}}}
-
-prim_rw asm_atom_binop_lt :
-   ASM{AtomBinop{LtOp; 'a1; 'a2}; v. 'e['v]}
-   <-->
-   ASM{'a1; v1.
-   ASM{'a2; v2.
-   Let{ImmediateNumber[0:n]; v.
-   Cmp["cmp"]{'v1; 'v2;
-   Set["set"]{CC["lt"]; Register{'v};
-   'e[Register{'v}]}}}}}
-
-prim_rw asm_atom_binop_le :
-   ASM{AtomBinop{LeOp; 'a1; 'a2}; v. 'e['v]}
-   <-->
-   ASM{'a1; v1.
-   ASM{'a2; v2.
-   Let{ImmediateNumber[0:n]; v.
-   Cmp["cmp"]{'v1; 'v2;
-   Set["set"]{CC["le"]; Register{'v};
-   'e[Register{'v}]}}}}}
-
-prim_rw asm_atom_binop_gt :
-   ASM{AtomBinop{GtOp; 'a1; 'a2}; v. 'e['v]}
-   <-->
-   ASM{'a1; v1.
-   ASM{'a2; v2.
-   Let{ImmediateNumber[0:n]; v.
-   Cmp["cmp"]{'v1; 'v2;
-   Set["set"]{CC["gt"]; Register{'v};
-   'e[Register{'v}]}}}}}
-
-prim_rw asm_atom_binop_ge :
-   ASM{AtomBinop{GeOp; 'a1; 'a2}; v. 'e['v]}
-   <-->
-   ASM{'a1; v1.
-   ASM{'a2; v2.
-   Let{ImmediateNumber[0:n]; v.
-   Cmp["cmp"]{'v1; 'v2;
-   Set["set"]{CC["ge"]; Register{'v};
-   'e[Register{'v}]}}}}}
+   ASM{'e}
 
 prim_rw asm_let_atom :
    ASM{LetAtom{'a; v. 'e['v]}}
    <-->
    Comment["asm_let_atom"]{
-   ASM{'a; v.
-   ASM{'e['v]}}}
-
-prim_rw asm_tailcall_1 :
-   ASM{TailCall{'f; 'a1}}
-   <-->
-   Comment["asm_tailcall_1"]{
-   ASM{'f;  v0.
-   ASM{'a1; v1.
-   Jmp["jmp"]{'v0; 'v1}}}}
-
-prim_rw asm_tailcall_2 :
-   ASM{TailCall{'f; 'a1; 'a2}}
-   <-->
-   Comment["asm_tailcall_2"]{
-   ASM{'f;  v0.
-   ASM{'a1; v1.
-   ASM{'a2; v2.
-   Jmp["jmp"]{'v0; 'v1; 'v2}}}}}
-
-prim_rw asm_tailcall_3 :
-   ASM{TailCall{'f; 'a1; 'a2; 'a3}}
-   <-->
-   Comment["asm_tailcall_3"]{
-   ASM{'f;  v0.
-   ASM{'a1; v1.
-   ASM{'a2; v2.
-   ASM{'a3; v3.
-   Jmp["jmp"]{'v0; 'v1; 'v2; 'v3}}}}}}
+   ASM{'a; v1.
+   Mov{'v1; v.
+   ASM{'e['v]}}}}
 
 prim_rw asm_if_1 :
-   ASM{If{'a; TailCall{'f; 'a1}; 'e}}
+   ASM{If{'a; 'e1; 'e2}}
    <-->
    Comment["asm_if_1"]{
    ASM{'a;  test.
-   ASM{'f;  v0.
-   ASM{'a1; v1.
-   Cmp["cmp"]{'test; ImmediateNumber[0:n];
-   Jcc["jcc"]{CC["z"]; 'v0; 'v1;
-   ASM{'e}}}}}}}
+   Cmp["cmp"]{ImmediateNumber[0:n]; 'test;
+   Jcc["j"]{CC["z"]; ASM{'e2}; ASM{'e1}}}}}
 
 prim_rw asm_if_2 :
-   ASM{If{'a; TailCall{'f; 'a1; 'a2}; 'e}}
+   ASM{If{AtomRelop{'op; 'a1; 'a2}; 'e1; 'e2}}
    <-->
    Comment["asm_if_2"]{
-   ASM{'a;  test.
-   ASM{'f;  v0.
    ASM{'a1; v1.
    ASM{'a2; v2.
-   Cmp["cmp"]{'test; ImmediateNumber[0:n];
-   Jcc["jcc"]{CC["z"]; 'v0; 'v1; 'v2;
-   ASM{'e}}}}}}}}
+   Cmp["cmp"]{'v2; 'v1;
+   Jcc["j"]{ASM{'op}; ASM{'e1}; ASM{'e2}}}}}}
 
-prim_rw asm_if_3 :
-   ASM{If{'a; TailCall{'f; 'a1; 'a2; 'a3}; 'e}}
-   <-->
-   Comment["asm_if_3"]{
-   ASM{'a;  test.
-   ASM{'f;  v0.
-   ASM{'a1; v1.
-   ASM{'a2; v2.
-   ASM{'a3; v3.
-   Cmp["cmp"]{'test; ImmediateNumber[0:n];
-   Jcc["jcc"]{CC["z"]; 'v0; 'v1; 'v2; 'v3;
-   ASM{'e}}}}}}}}}
-
-prim_rw asm_alloc_tuple :
-   ASM{LetTuple{Length[i:n]; 'tuple; v. 'e['v]}}
-   <-->
-   Comment["asm_alloc_tuple"]{
-   Let{next; v.
-   Inst2["sub"]{next; ImmediateNumber{mul{add{number[i:n]; number[1:n]}; word_size}};
-   Inst2["mov"]{MemReg{'v}; header[i:n];
-   Inst2["add"]{Register{'v}; ImmediateNumber{word_size};
-   store_tuple{'v; reverse_tuple{'tuple};
-   ASM{'e['v]}}}}}}}
-
-prim_rw asm_let_subscript :
+prim_rw asm_let_subscript_1 :
    ASM{LetSubscript{'a1; 'a2; v. 'e['v]}}
    <-->
    Comment["asm_let_subscript"]{
    ASM{'a1; v1.
    ASM{'a2; v2.
-   Let{MemRegRegOffMul{'v1; 'v2; number[0:n]; word_size}; v.
+   Mov{'v1; tuple.
+   Mov{'v2; index_tmp.
+   Shift["sar"]{ImmediateNumber[1:n]; Register{'index_tmp}; index.
+   Mov{MemRegRegOffMul{'v1; 'index; number[0:n]; word_size}; v.
+   ASM{'e['v]}}}}}}}}
+
+prim_rw asm_let_subscript_2 :
+   ASM{LetSubscript{'a1; AtomInt[i:n]; v. 'e['v]}}
+   <-->
+   Comment["asm_let_subscript"]{
+   ASM{'a1; v1.
+   Mov{'v1; tuple.
+   Mov{MemRegOff{'tuple; mul{number[i:n]; word_size}}; v.
    ASM{'e['v]}}}}}
 
-prim_rw asm_set_subscript :
+prim_rw asm_set_subscript_1 :
    ASM{SetSubscript{'a1; 'a2; 'a3; 'e}}
    <-->
    Comment["asm_set_subscript"]{
    ASM{'a1; v1.
    ASM{'a2; v2.
+   Mov{'v1; tuple.
+   Mov{'v2; index_tmp.
+   Shift["sar"]{ImmediateNumber[1:n]; Register{'index_tmp}; index.
    ASM{'a3; v3.
-   Inst2["mov"]{MemRegRegOffMul{'v1; 'v2; number[0:n]; word_size}; 'v3;
+   Inst2["mov"]{'v3; MemRegRegOffMul{'v1; 'index; number[0:n]; word_size};
+   ASM{'e}}}}}}}}}
+
+prim_rw asm_set_subscript_2 :
+   ASM{SetSubscript{'a1; AtomInt[i:n]; 'a3; 'e}}
+   <-->
+   Comment["asm_set_subscript"]{
+   ASM{'a1; v1.
+   Mov{'v1; tuple.
+   ASM{'a3; v3.
+   Inst2["mov"]{'v3; MemRegOff{'v1; mul{number[i:n]; word_size}};
    ASM{'e}}}}}}
+
+prim_rw asm_alloc_tuple :
+   ASM{LetTuple{Length[i:n]; 'tuple; v. 'e['v]}}
+   <-->
+   Comment["asm_alloc_tuple"]{
+   Mov{ContextRegister["next":t]; v.
+   Inst2["add"]{ImmediateNumber{mul{add{number[i:n]; number[1:n]}; word_size}}; ContextRegister["next":t];
+   Inst2["mov"]{header[i:n]; MemReg{'v};
+   Inst2["add"]{ImmediateNumber{word_size}; Register{'v}; p.
+   store_tuple{'p; reverse_tuple{'tuple};
+   ASM{'e['p]}}}}}}}
 
 prim_rw asm_let_closure :
    ASM{LetClosure{'a1; 'a2; v. 'e['v]}}
    <-->
    Comment["asm_let_closure"]{
-   Let{next; v.
-   Inst2["sub"]{next; ImmediateNumber{mul{number[3:n]; word_size}};
-   Inst2["mov"]{MemReg{'v}; header[2:n];
+   Mov{ContextRegister["next":t]; v.
+   Inst2["add"]{ImmediateNumber{mul{number[3:n]; word_size}}; ContextRegister["next":t];
+   Inst2["mov"]{ header[2:n]; MemReg{'v};
    ASM{'a1; v1.
    ASM{'a2; v2.
-   Inst2["mov"]{MemRegOff{'v; word_size}; 'v1;
-   Inst2["mov"]{MemRegOff{'v; mul{number[2:n]; word_size}}; 'v2;
-   Inst2["add"]{Register{'v}; ImmediateNumber{word_size};
-   ASM{'e['v]}}}}}}}}}}
+   Inst2["mov"]{'v1; MemRegOff{'v; word_size};
+   Inst2["mov"]{'v2; MemRegOff{'v; mul{number[2:n]; word_size}};
+   Inst2["add"]{ImmediateNumber{word_size}; Register{'v}; p.
+   ASM{'e['p]}}}}}}}}}}
+
+prim_rw asm_tailcall_direct :
+   ASM{TailCall{AtomFunVar{'R; Label[label:t]}; 'args}}
+   <-->
+   Comment["asm_tailcall_direct"]{
+   ASM{'args; AsmArgNil; args1.
+   copy_args{'args1; args2.
+   Jmp["jmp"]{ImmediateLabel[label:t]{'R}; 'args2}}}}
+
+prim_rw asm_tailcall_indirect :
+   ASM{TailCall{'a; 'args}}
+   <-->
+   Comment["asm_tailcall"]{
+   ASM{'a;  closure_tmp.
+   ASM{'args; AsmArgNil; args1.
+   Mov{'closure_tmp; closure.
+   Mov{MemRegOff[4:n]{'closure}; env.
+   copy_args{'args1; args2.
+   Jmp["jmp"]{MemReg{'closure}; AsmArgCons{Register{'env}; 'args2}}}}}}}}
 
 prim_rw asm_letrec :
    ASM{LetRec{R1. 'fields['R1]; R2. 'e['R2]}}
@@ -390,6 +479,11 @@ prim_rw asm_end_def :
    ASM{'R; EndDef}
    <-->
    LabelEnd
+
+prim_rw asm_initialize :
+   ASM{Initialize{'e}}
+   <-->
+   Init{ASM{'e}}
 
 (*
  * Cleanup.  It is debatiable whether we should have cleanup here...
@@ -415,6 +509,46 @@ prim_rw mem_reg_off_cleanup_1 :
    MemReg{'r}
 
 (*
+ * Illegal operands.
+ *)
+declare invert_cc{'cc}
+
+prim_rw invert_cc_z :
+   invert_cc{CC["z"]}
+   <-->
+   CC["z"]
+
+prim_rw invert_cc_nz :
+   invert_cc{CC["nz"]}
+   <-->
+   CC["nz"]
+
+prim_rw invert_cc_lt :
+   invert_cc{CC["l"]}
+   <-->
+   CC["ge"]
+
+prim_rw invert_cc_le :
+   invert_cc{CC["le"]}
+   <-->
+   CC["g"]
+
+prim_rw invert_cc_gt :
+   invert_cc{CC["g"]}
+   <-->
+   CC["le"]
+
+prim_rw invert_cc_ge :
+   invert_cc{CC["ge"]}
+   <-->
+   CC["l"]
+
+prim_rw cmp_cleanup :
+   Cmp[cmp_opcode:s]{'src1; ImmediateNumber[i:n]; Jcc[jcc_opcode:s]{'cc; 'rest1; 'rest2}}
+   <-->
+   Cmp[cmp_opcode:s]{ImmediateNumber[i:n]; 'src1; Jcc[jcc_opcode:s]{invert_cc{'cc}; 'rest1; 'rest2}}
+
+(*
  * Add all these rules to the CPS resource.
  *)
 let resource reduce +=
@@ -428,22 +562,27 @@ let resource reduce +=
      << ASM{AtomBinop{SubOp; 'a1; 'a2}; v. 'e['v]} >>, asm_atom_binop_sub;
      << ASM{AtomBinop{MulOp; 'a1; 'a2}; v. 'e['v]} >>, asm_atom_binop_mul;
      << ASM{AtomBinop{DivOp; 'a1; 'a2}; v. 'e['v]} >>, asm_atom_binop_div;
-     << ASM{AtomBinop{EqOp; 'a1; 'a2}; v. 'e['v]} >>,  asm_atom_binop_eq;
-     << ASM{AtomBinop{NeqOp; 'a1; 'a2}; v. 'e['v]} >>, asm_atom_binop_neq;
-     << ASM{AtomBinop{LtOp; 'a1; 'a2}; v. 'e['v]} >>,  asm_atom_binop_lt;
-     << ASM{AtomBinop{LeOp; 'a1; 'a2}; v. 'e['v]} >>,  asm_atom_binop_le;
-     << ASM{AtomBinop{GtOp; 'a1; 'a2}; v. 'e['v]} >>,  asm_atom_binop_gt;
-     << ASM{AtomBinop{GeOp; 'a1; 'a2}; v. 'e['v]} >>,  asm_atom_binop_ge;
+     << ASM{EqOp} >>, asm_eq;
+     << ASM{NeqOp} >>, asm_neq;
+     << ASM{LtOp} >>, asm_lt;
+     << ASM{LeOp} >>, asm_le;
+     << ASM{GtOp} >>, asm_gt;
+     << ASM{GeOp} >>, asm_ge;
+     << ASM{AtomRelop{'op; 'a1; 'a2}; v. 'e['v]} >>,  asm_atom_relop;
+     << ASM{Reserve[words:n]{'params; 'e}} >>, asm_reserve_1;
+     << ASM{Reserve[words:n]{'e}} >>, asm_reserve_2;
      << ASM{LetAtom{'a; v. 'e['v]}} >>, asm_let_atom;
-     << ASM{TailCall{'f; 'a1}} >>, asm_tailcall_1;
-     << ASM{TailCall{'f; 'a1; 'a2}} >>, asm_tailcall_2;
-     << ASM{TailCall{'f; 'a1; 'a2; 'a3}} >>, asm_tailcall_3;
-     << ASM{If{'a; TailCall{'f; 'a1}; 'e}} >>, asm_if_1;
-     << ASM{If{'a; TailCall{'f; 'a1; 'a2}; 'e}} >>, asm_if_2;
-     << ASM{If{'a; TailCall{'f; 'a1; 'a2; 'a3}; 'e}} >>, asm_if_3;
+     << ASM{ArgCons{'a; 'rest}; 'args; v1. 'e['v1]} >>, asm_arg_cons;
+     << ASM{ArgNil; 'args; v. 'e['v]} >>, asm_arg_nil;
+     << ASM{TailCall{AtomFunVar{'R; Label[label:t]}; 'args}} >>, asm_tailcall_direct;
+     << ASM{TailCall{'f; 'args}} >>, asm_tailcall_indirect;
+     << ASM{If{'a; 'e1; 'e2}} >>, asm_if_1;
+     << ASM{If{AtomRelop{'op; 'a1; 'a2}; 'e1; 'e2}} >>, asm_if_2;
      << ASM{LetTuple{Length[i:n]; 'tuple; v. 'e['v]}} >>, asm_alloc_tuple;
-     << ASM{LetSubscript{'a1; 'a2; v. 'e['v]}} >>, asm_let_subscript;
-     << ASM{SetSubscript{'a1; 'a2; 'a3; 'e}} >>, asm_set_subscript;
+     << ASM{LetSubscript{'a1; 'a2; v. 'e['v]}} >>, asm_let_subscript_1;
+     << ASM{LetSubscript{'a1; AtomInt[i:n]; v. 'e['v]}} >>, asm_let_subscript_2;
+     << ASM{SetSubscript{'a1; 'a2; 'a3; 'e}} >>, asm_set_subscript_1;
+     << ASM{SetSubscript{'a1; AtomInt[i:n]; 'a3; 'e}} >>, asm_set_subscript_2;
      << ASM{LetClosure{'a1; 'a2; v. 'e['v]}} >>, asm_let_closure;
      << ASM{LetRec{R1. 'fields['R1]; R2. 'e['R2]}} >>, asm_letrec;
      << ASM{'R; Fields{'fields}} >>, asm_fields;
@@ -458,7 +597,21 @@ let resource reduce +=
      << store_tuple{'v; 'off; AllocTupleNil; 'rest} >>, unfold_store_tuple_nil;
      << reverse_tuple{'tuple} >>, unfold_reverse_tuple;
      << reverse_tuple{'dst; AllocTupleCons{'a; 'rest}} >>, reduce_reverse_tuple_cons;
-     << reverse_tuple{'dst; AllocTupleNil} >>, reduce_reverse_tuple_nil]
+     << reverse_tuple{'dst; AllocTupleNil} >>, reduce_reverse_tuple_nil;
+     << reverse_args{'tuple} >>, unfold_reverse_args;
+     << reverse_args{'dst; AsmArgCons{'a; 'rest}} >>, reduce_reverse_args_cons;
+     << reverse_args{'dst; AsmArgNil} >>, reduce_reverse_args_nil;
+     << copy_args{'args; v. 'e['v]} >>, unfold_copy_args;
+     << copy_args{'dst; AsmArgCons{'a; 'rest}; v. 'e['v]} >>, reduce_copy_args_cons;
+     << copy_args{'dst; AsmArgNil; v. 'e['v]} >>, reduce_copy_args_nil;
+     << ASM{Initialize{'e}} >>, asm_initialize;
+     << invert_cc{CC["z"]} >>, invert_cc_z;
+     << invert_cc{CC["nz"]} >>, invert_cc_nz;
+     << invert_cc{CC["l"]} >>, invert_cc_lt;
+     << invert_cc{CC["le"]} >>, invert_cc_le;
+     << invert_cc{CC["g"]} >>, invert_cc_gt;
+     << invert_cc{CC["ge"]} >>, invert_cc_ge;
+     << Cmp[cmp_opcode:s]{'src1; ImmediateNumber[i:n]; Jcc[jcc_opcode:s]{'cc; 'rest1; 'rest2}} >>, cmp_cleanup]
 
 (*
  * Register type.
@@ -474,29 +627,10 @@ dform register_df : register =
  * @end[doc]
  *)
 interactive codegen_prog :
-   sequent [m] { 'H;
-                 eax : register;
-                 ebx : register;
-                 ecx : register;
-                 edx : register;
-                 esi : register;
-                 edi : register;
-                 esp : register;
-                 ebp : register;
-                 next : register
-                 >-
-                 compilable{MapOperands{AssignRegisters{RegisterCons["eax":t]{Register{'eax};
-                                            RegisterCons["ebx":t]{Register{'ebx};
-                                            RegisterCons["ecx":t]{Register{'ecx};
-                                            RegisterCons["edx":t]{Register{'edx};
-                                            RegisterCons["esi":t]{Register{'esi};
-                                            RegisterCons["edi":t]{Register{'edi};
-                                            RegisterCons["esp":t]{Register{'esp};
-                                            RegisterCons["ebp":t]{Register{'ebp};
-                                            RegisterCons["next":t]{SpillRegister{'next};
-                                            RegisterNil}}}}}}}}}};
-                                         ASM{'e}}} } -->
+   sequent [m] { 'H >- compilable{ASM{'e}} } -->
    sequent [m] { 'H >- compilable{'e} }
+
+(*! @docoff *)
 
 (*
  * Assembler.
@@ -504,9 +638,7 @@ interactive codegen_prog :
 let codegenT =
    codegen_prog thenT rw reduceC 0
 
-(*!
- * @docoff
- *
+(*
  * -*-
  * Local Variables:
  * Caml-master: "compile"

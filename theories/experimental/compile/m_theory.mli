@@ -30,13 +30,16 @@ extends M_closure
 extends M_prog
 extends M_dead
 extends M_inline
+extends M_reserve
 extends M_x86_codegen
-extends M_standardize
-extends M_x86_spill
+extends M_x86_coalesce
+extends M_x86_regalloc
+extends M_x86_opt
 
 open Tactic_type.Tacticals
 
 topval convertT : tactic
+topval codeT    : tactic
 topval compileT : tactic
 
 (*!

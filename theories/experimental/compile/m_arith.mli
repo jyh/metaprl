@@ -32,6 +32,7 @@ declare add{'i1; 'i2}
 declare sub{'i1; 'i2}
 declare mul{'i1; 'i2}
 declare div{'i1; 'i2}
+declare max{'i1; 'i2}
 
 (*!
  * @docoff

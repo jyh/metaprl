@@ -174,11 +174,10 @@ corresponding branches were modified.  If neither branch is modified,
 the @code{Not_found} exception is raised.
 
 @end[doc]
+@docoff
 *)
 
-(*!
- * @docoff
- *
+(*
  * -*-
  * Local Variables:
  * Caml-master: "compile"

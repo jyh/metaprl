@@ -147,7 +147,7 @@ interactive set_intro  {| intro[] |}:
  * quotiented over all permutations:
    $$<< fset{'eq; 'T} >> = << (quot x, y : list{'T} // "assert"{fequal{'eq; 'x; 'y}}) >>$$
 
-  where $T$ is an arbitrary type and $eq$ is an equivalence relation on this type.
+  where $T$ is an arbitrary type and $<<'eq>>$ is an equivalence relation on this type.
   Theory @hrefmodule[Itt_fset] also defines some basic operations on this type.
    Here we combine these operations in one data structure.
 
@@ -259,7 +259,8 @@ dform table_df2 : except_mode[src] :: Table[i:l]{'T; 'M} = mathbbT `"able" sub{s
     @item{ <<label["insert":t] 'F 'a 'b>> defines the value of the function at the point $a$ to be $b$.
    In other words: inserts a pair $<<'a,'b>>$ in table $F$.}
 
-    @item{<<label["delete":t] 'F 'a>> undefines function at the point $a$. In other words it deletes a pair $<<'a,'y>>$
+    @item{<<label["delete":t] 'F 'a>> makes the function undefined at the point $a$.
+    In other words it deletes a pair $<<'a,'y>>$
     from table $F$.}
  * @end[itemize]
 

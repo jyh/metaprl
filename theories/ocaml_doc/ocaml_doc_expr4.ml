@@ -476,11 +476,10 @@ val array_mem : 'a -> 'a array -> bool = <fun>
 @end[verbatim]
 
 @end[doc]
+@docoff
 *)
 
-(*!
- * @docoff
- *
+(*
  * -*-
  * Local Variables:
  * Caml-master: "compile"

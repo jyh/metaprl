@@ -151,6 +151,7 @@ declare refrewrite[name:s]
 declare reftactic[name:s]
 declare refconv[name:s]
 declare refrule[name:s]
+declare reffigure[name:s]
 
 (*
  * TeX structuring.
@@ -195,6 +196,8 @@ declare code[text:s]
 declare verbatim[text:s]
 declare email[text:s]
 declare center{'t}
+declare figure[label:s]{'t}
+declare caption{'caption}
 declare quote{'t}
 declare quotation{'t}
 declare footnote{'t}
@@ -203,6 +206,13 @@ declare itemize{'t}
 declare description{'t}
 declare item{'t}
 declare item{'label; 'body}
+
+(*
+ * Other macros.
+ *)
+declare lbrace
+declare rbrace
+declare comment[who:s]{'e}
 
 (************************************************************************
  * MATH MODE                                                            *
@@ -221,15 +231,22 @@ declare math_slot[tag:s]{'t}
 (*
  * Font control in math mode.
  *)
+declare math_hbox{'t}
+declare math_mbox{'t}
+
 declare math_bb{'t}
 declare math_tt[text:s]
 declare math_tt{'t}
 declare math_bf{'t}
+declare math_bf[text:s]
 declare math_i{'t}
 declare math_i[text:s]
+declare math_it{'t}
+declare math_it[text:s]
 declare math_emph{'t}
 declare math_mathop{'t}
 declare math_mathrel[text:s]
+declare math_mathrel{'t}
 
 (*
  * Math symbols.
@@ -245,6 +262,8 @@ declare math_leftrightarrow
 declare math_Leftrightarrow
 declare math_longleftrightarrow
 
+declare math_le
+declare math_ge
 declare math_wedge
 declare math_vee
 declare math_phi
@@ -267,8 +286,24 @@ declare math_neg
 declare math_neq
 declare math_forall
 declare math_exists
+declare math_alpha
+declare math_beta
 declare math_lambda
+declare math_epsilon
+declare math_Gamma
+declare math_vdash
 declare math_int
+declare math_lbrace
+declare math_rbrace
+declare math_quad
+declare math_qquad
+declare math_bullet
+declare math_left[s]
+declare math_right[s]
+
+declare math_vec{'e}
+declare math_underbrace{'e}
+declare math_underbrace{'e1; 'e2}
 
 (*
  * Sub/superscripts.
@@ -290,17 +325,24 @@ declare math_superscript{'t1; 't2}
  * ...
  * @end[array]
  *)
+declare tabular[placement,tags]{'t}
 declare tabular[tags]{'t}
 declare line{'t}
 declare cr
 declare hline
+declare arraystretch{'e}
+declare multicolumn[cols,align]{'t}
 
+declare math_array[placement,tags]{'t}
+declare math_tabular[placement,tags]{'t}
 declare math_array[tags]{'t}
 declare math_tabular[tags]{'t}
 declare math_line{'t}
 declare math_item{'t}
 declare math_cr
 declare math_hline
+declare math_arraystretch{'e}
+declare math_multicolumn[cols,align]{'t}
 
 (*
  * These macros are used to declare rules,

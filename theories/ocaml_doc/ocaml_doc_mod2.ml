@@ -396,7 +396,7 @@ module MakeFset : functor(Elt : EltSig) -> FsetSig
 @subsection[using_functor]{Using a functor}
 
 To @emph{use} the module produced by the functor, we need to
-@emph{apply} it to a specific module implementating the
+@emph{apply} it to a specific module implementation the
 @tt{EltSig} signature.  Let's define a comparison function for a
 finite set of integers.  The comparison function is straightforward.
 
@@ -531,11 +531,10 @@ val s : IntSet.t = <abstr>
 @end[verbatim]
 
 @end[doc]
+@docoff
 *)
 
-(*!
- * @docoff
- *
+(*
  * -*-
  * Local Variables:
  * Caml-master: "compile"

@@ -69,8 +69,8 @@ prim truth_intro :
 (*!
  * @begin[doc]
  *
- * The next two rules are conviniences to check that the atoms in a list each
- * have the approriate type (given by a list of types).
+ * The next two rules are convenient for making sure that the atoms in a list each
+ * have the appropriate type (given by a list of types).
  * @end[doc]
  *)
 

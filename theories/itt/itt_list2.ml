@@ -1,6 +1,4 @@
 (*!
- * @spelling{assoc iff nth rev}
- *
  * @begin[doc]
  * @module[Itt_list2]
  *
@@ -81,7 +79,7 @@ open Itt_dprod
  * @terms
  *
  * The @tt{is_nil} term defines a Boolean value that is true
- * iff the argument list $l$ is empty.
+ * @emph{iff} the argument list $l$ is empty.
  * @end[doc]
  *)
 define unfold_is_nil :
@@ -91,7 +89,7 @@ define unfold_is_nil :
  * @begin[doc]
  * @terms
  *
- * The @tt{mem} term defines list membership.
+ * The @tt[mem] term defines list membership.
  * @end[doc]
  *)
 define unfold_mem :
@@ -150,9 +148,9 @@ define unfold_ball2 :
 (*!
  * @begin[doc]
  * @noindent
- * The @tt{assoc} term defines an associative lookup on
+ * The @tt[assoc] term defines an associative lookup on
  * the list $l$.  The list $l$ should be a list of pairs.
- * The @tt{assoc} term searches for the element $x$ as
+ * The @tt[assoc] term searches for the element $x$ as
  * the first element of one of the pairs.  On the first
  * occurrence of a pair $(x, y)$, the value $b[y]$ is returned.
  * The $z$ term is returned if a pair is not found.
@@ -167,7 +165,7 @@ define unfold_assoc :
 (*!
  * @begin[doc]
  * @noindent
- * The @tt{rev_assoc} term also performs an associative search,
+ * The @tt[rev_assoc] term also performs an associative search,
  * but it keys on the second element of each pair.
  * @end[doc]
  *)
@@ -204,7 +202,7 @@ define unfold_fold_left :
 (*!
  * @begin[doc]
  * @noindent
- * The @tt{nth} term returns element $i$ of list $l$.
+ * The @tt[nth] term returns element $i$ of list $l$.
  * The argument $i$ must be within the bounds of the list.
  * @end[doc]
  *)
@@ -215,7 +213,7 @@ define unfold_nth :
 (*!
  * @begin[doc]
  * @noindent
- * The @tt{replace_nth} term replace element $i$ of list $l$
+ * The @tt[replace_nth] term replace element $i$ of list $l$
  * with the term $v$.
  * @end[doc]
  *)
@@ -236,7 +234,7 @@ define unfold_length :
 (*!
  * @begin[doc]
  * @noindent
- * The @tt{rev} function returns a list with the same elements as
+ * The @tt[rev] function returns a list with the same elements as
  * list $l$, but in reverse order.
  * @end[doc]
  *)

@@ -1,7 +1,7 @@
 (*! -*- Mode: text -*-
  *
  * @begin[spelling]
- * Obfuscated Ok expr incr rec toplevel
+ * Obfuscated Ok expr
  * @end[spelling]
  *
  * @begin[doc]
@@ -39,7 +39,7 @@ extends Base_theory
  * @begin[doc]
 
 So far, we have only considered simple expressions not involving
-variables.  In ML, variables are @emph{names} for values.  In a purely
+variables. In ML, variables are @emph{names} for values.  In a purely
 functional setting, it is not possible to tell the difference between
 a variable and the value it stands for.
 
@@ -136,12 +136,12 @@ val incr : int -> int = <fun>
 Note the type @code{int -> int} for the function.  The @code{->} is
 for a @emph{function type}.  The type before the arrow is the type of
 the function's argument, and the type after the arrow is the type of
-the result.  The @tt{incr} function takes an integer argument, and
+the result.  The @tt[incr] function takes an integer argument, and
 returns an integer.
 
 The syntax for function application (function call) is concatenation:
 the function is followed by its arguments.  The precedence of function
-aplication is higher than most operators.  Parentheses are needed for
+application is higher than most operators.  Parentheses are needed for
 arguments that are not simple expressions.
 
 @begin[verbatim]
@@ -236,10 +236,10 @@ val i : int = 7
 - : val = 8
 @end[verbatim]
 
-In the @tt{addi} function, the value of @tt{i} is defined by the
+In the @tt[addi] function, the value of @tt{i} is defined by the
 previous definition of @tt{i} as 5.  The second definition of @tt{i}
-has no effect on the definition for @tt{addi}, and the application of
-@tt{addi} to the argument 3 results in $3 + 5 = 8$.
+has no effect on the definition for @tt[addi], and the application of
+@tt[addi] to the argument 3 results in $3 + 5 = 8$.
 
 @subsection[ocaml_doc_recursive_functions]{Recursive functions}
 
@@ -259,7 +259,7 @@ val power : int -> float -> float = <fun>
 - : float = 32
 @end[verbatim]
 
-Note the use of the @tt{rec} modifier after the @tt{let} keyword.
+Note the use of the @tt[rec] modifier after the @tt{let} keyword.
 Normally, the function is @bf{not} defined in its own body.  The
 following definition is very different.
 
@@ -337,7 +337,7 @@ val f' : float -> float = <fun>
 @end[verbatim]
 
 As we would expect, the derivative of $x^3$ is approximately $3x^2$.
-To get the second derivative, we apply the @tt{deriv} function to
+To get the second derivative, we apply the @tt[deriv] function to
 @code{f'}.
 
 @begin[verbatim]
@@ -410,11 +410,11 @@ val ** : float -> int -> float = <fun>
 - : float = 100000
 @end[verbatim]
 
- * @end[doc]
- *)
+@end[doc]
+@docoff
+*)
 
-(*!
- * @docoff
+(*
  * -*-
  * Local Variables:
  * Caml-master: "compile"

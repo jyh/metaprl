@@ -11,7 +11,7 @@
  * @cite["fir-tr1"].
  *
  * The FIR theory differs from the Mojave Compiler theory in its
- * approach to modelling the FIR.  Here, FIR programs are represented
+ * approach to modeling the FIR.  Here, FIR programs are represented
  * using sequents, and the results of @cite["fir-tr1"] have
  * been used as a basis for developing the @MetaPRL formalization.
  *

@@ -103,7 +103,7 @@ prim ty_store_array2 :
  * @modsubsection{Functions}
  *
  * The typing rules for functions are straightforward.  These rules use the
- * ``exp'' tag since in $<< polyFun{ x. 'f['x] } >>$ and
+ * ``@tt[exp]'' tag since in $<< polyFun{ x. 'f['x] } >>$ and
  * $<< lambda{ x. 'f['x] } >>$, $f$ may be an expression.
  * @end[doc]
  *)

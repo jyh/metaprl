@@ -98,7 +98,7 @@ declare field_mem[tag:s]{ 'record }
  * @begin[doc]
  * @rewrites
  *
- * Reducing a field operation is straighforward.
+ * Reducing a field operation is straightforward.
  * @end[doc]
  *)
 

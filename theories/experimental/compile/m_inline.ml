@@ -1,4 +1,8 @@
 (*!
+ * @begin[spelling]
+ * inlining
+ * @end[spelling]
+ *
  * @begin[doc]
  * @module[Inline]
  *
@@ -55,12 +59,10 @@ declare MetaInt{'e}
 
 prim_rw meta_int_elim : MetaInt{meta_num[i:n]} <--> AtomInt[i:n]
 
-(************************************************************************
- * Rewrites.
- *)
+(*! @doc{@rewrites} *)
 
-(*
- * Simple constant folding.
+(*!
+ * @doc{Simple constant folding.}
  *)
 prim_rw reduce_add :
    AtomBinop{AddOp; AtomInt[i:n]; AtomInt[j:n]} <--> MetaInt{meta_sum[i:n, j:n]}
@@ -74,17 +76,37 @@ prim_rw reduce_mul :
 prim_rw reduce_div :
    AtomBinop{DivOp; AtomInt[i:n]; AtomInt[j:n]} <--> MetaInt{meta_quot[i:n, j:n]}
 
-(*
- * Constant inlining.
+(*!
+ * @doc{Constant inlining.}
  *)
+prim_rw reduce_let_atom_true :
+   LetAtom{AtomTrue; v. 'e['v]} <--> 'e[AtomTrue]
+
+prim_rw reduce_let_atom_false :
+   LetAtom{AtomFalse; v. 'e['v]} <--> 'e[AtomFalse]
+
 prim_rw reduce_let_atom_int :
    LetAtom{AtomInt[i:n]; v. 'e['v]} <--> 'e[AtomInt[i:n]]
 
 prim_rw reduce_let_atom_var :
    LetAtom{AtomVar{'v1}; v2. 'e['v2]} <--> 'e['v1]
 
+prim_rw reduce_if_true :
+   If{AtomTrue; 'e1; 'e2} <--> 'e1
+
+prim_rw reduce_if_false :
+   If{AtomFalse; 'e1; 'e2} <--> 'e2
+
+prim_rw unfold_atom_var_true :
+   AtomVar{AtomTrue} <--> AtomTrue
+
+prim_rw unfold_atom_var_false :
+   AtomVar{AtomFalse} <--> AtomFalse
+
 prim_rw unfold_atom_var_int :
    AtomVar{AtomInt[i:n]} <--> AtomInt[i:n]
+
+(*! @docoff *)
 
 (*
  * Add all these rules to the reduce resource.
@@ -97,9 +119,15 @@ let resource reduce +=
      << AtomBinop{MulOp; AtomInt[i:n]; AtomInt[j:n]} >>, (reduce_mul thenC addrC [0] reduce_meta_prod);
      << AtomBinop{DivOp; AtomInt[i:n]; AtomInt[j:n]} >>, (reduce_div thenC addrC [0] reduce_meta_quot);
 
+     << LetAtom{AtomTrue; v. 'e['v]} >>, reduce_let_atom_true;
+     << LetAtom{AtomFalse; v. 'e['v]} >>, reduce_let_atom_false;
      << LetAtom{AtomInt[i:n]; v. 'e['v]} >>, reduce_let_atom_int;
      << LetAtom{AtomVar{'v1}; v2. 'e['v2]} >>, reduce_let_atom_var;
+     << If{AtomTrue; 'e1; 'e2} >>, reduce_if_true;
+     << If{AtomFalse; 'e1; 'e2} >>, reduce_if_false;
 
+     << AtomVar{AtomTrue} >>, unfold_atom_var_true;
+     << AtomVar{AtomFalse} >>, unfold_atom_var_false;
      << AtomVar{AtomInt[i:n]} >>, unfold_atom_var_int]
 
 (*
@@ -108,9 +136,7 @@ let resource reduce +=
 let inlineT =
    onAllHypsT (fun i -> tryT (rw reduceC i)) thenT rw reduceC 0
 
-(*!
- * @docoff
- *
+(*
  * -*-
  * Local Variables:
  * Caml-master: "compile"

@@ -173,16 +173,10 @@ dform subset_df1 : mode[src] :: parens :: "prec"[prec_subtype] :: ('A subset 'B)
  * @end[doc] 
  *)
 
-(*! @docoff      
-  
- * mem *
-*)
-
 interactive mem_wf {| intro [] |}  :
    sequent [squash] { 'H >- 'a in 'B } -->
    sequent [squash] { 'H >- "type"{'A} } -->
    sequent ['ext] { 'H >- "type"{mem{'a;'A;'B}} }
-
 
 interactive mem_intro {| intro [] |}  :
    [wf] sequent [squash] { 'H >- 'a in 'B } -->
@@ -213,8 +207,6 @@ interactive subset_intro {| intro [] |}  :
    [main] sequent [squash] {'H; a: 'A; b: 'B; u: 'a = 'b in 'B >- 'b in 'A } -->
    sequent ['ext] { 'H >- 'A subset 'B }
 
-
-
 (*! @docoff *)
 
 (* mem, member and subset are squash stable: *)      
@@ -223,10 +215,6 @@ interactive subset_sqstable (* {| squash |} *) :
    sequent [squash] { 'H >- squash{'A subset 'B} } -->
    sequent ['ext] { 'H >- 'A subset 'B }
 
-
-
-      
-      
 (*!
  * @begin[doc]
  * @modsubsection{Elimination Rules}
@@ -234,7 +222,6 @@ interactive subset_sqstable (* {| squash |} *) :
    By definition if $<<'A subset 'B>>$ then  $<<'A subtype 'B>>$. (The opposite is not true --- see @hrefrule[counterexample1] below).
  * @end[doc]
 *)
-
 
 interactive subset_is_subtype  :
    [assertion] sequent [squash] { 'H >- 'A subset 'B } -->
@@ -245,8 +232,6 @@ interactive subset_is_subtype  :
    As a corollary we have that if two element are equal in a subset then they are equal in a superset.
  * @end[doc]
 *)
-
-
 
 interactive use_subset  'A :
    [assertion] sequent [squash] { 'H >- 'A subset 'B } -->

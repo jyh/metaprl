@@ -26,9 +26,14 @@
  *)
 extends M_ir
 
+open Lm_string_util
+
 open Tactic_type.Tacticals
 
 topval standardizeT : tactic
+
+val destandardizeT : string StringTable.t -> tactic
+val destandardize_debugT : string StringTable.t -> tactic
 
 (*!
  * @docoff

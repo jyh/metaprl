@@ -1,10 +1,9 @@
 (*!
- *
  * @begin[doc]
  * @module[Itt_relation_str]
  *
- * The @tt[Itt_relation_str] module defines algebraic structures such
-  as ordered sets, PERs, types with decidable equality and so on.
+ * The @tt[Itt_relation_str] module defines algebraic structures such as
+ * ordered sets, @misspelled{PERs}, types with decidable equality and so on.
  * @end[doc]
  *
  * ----------------------------------------------------------------
@@ -146,7 +145,7 @@ dform less_df : parens :: except_mode[src] :: less{'self; 'a;'b}
  * @begin[doc]
  * @modsection{Decidable Equality}
    @modsubsection{Definition}
-   @tt[DecEquality] is a type (@tt[car]) with an equality decider:
+   @tt[DecEquality] is a type (@tt[car]) with an equality solver:
   $$<<label["=":t]>> : <<label[car:t]-> label[car:t] -> bool>>$$
  * @end[doc]
  *)

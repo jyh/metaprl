@@ -1,8 +1,8 @@
 (*! -*- Mode: text -*-
  *
  * @begin[spelling]
- * adhoc cons deconstructed destructed doesn fst int
- * ll namespace obfuscation snd
+ * hoc cons deconstructed destructed doesn
+ * ll namespace obfuscation
  * @end[spelling]
  *
  * @begin[doc]
@@ -75,8 +75,8 @@ quote (@code{'}).  A type variable represents an @emph{arbitrary}
 type.  The typing @code{identity : 'a -> 'a} says that the
 @tt{identity} function takes an argument of some arbitrary type
 @code{'a} and returns a value of the same type @code{'a}.  If the
-@tt{identity} function is applied to an @tt{int}, then it returns an
-@tt{int}; if it is applied to a @tt{string}, then it returns a
+@tt{identity} function is applied to an @tt[int], then it returns an
+@tt[int]; if it is applied to a @tt{string}, then it returns a
 @tt{string}.  The @tt{identity} function can even be applied to
 function arguments.
 
@@ -117,7 +117,7 @@ preceded by an underscore.  These type variables specify that the
 @code{identity'} function takes an argument of @emph{some} type, and
 returns a value of the same type.  This is a form of delayed
 polymorphism.  When we apply the @tt{identity'} function to a number,
-the type @code{'_a} is assigned to be @code{int}; the @tt{identity'}
+the type @code{'_a} is assigned to be @code[int]; the @tt{identity'}
 function can no longer be applied to a string.
 
 This behavior is due to the @emph{value restriction}: for an
@@ -255,7 +255,7 @@ val x : int = 1
 val y : string = "Hello"
 @end[verbatim]
 
-The built-in functions @tt{fst} and @tt{snd} return the components of
+The built-in functions @tt[fst] and @tt[snd] return the components of
 a pair, defined as follows.
 
 @begin[verbatim]
@@ -270,9 +270,9 @@ val snd : 'a * 'b -> 'b = <fun>
 @end[verbatim]
 
 Tuple patterns in a function argument must be enclosed in parentheses.
-Note that these functions are polymorphic.  The @tt{fst} and @tt{snd}
+Note that these functions are polymorphic.  The @tt[fst] and @tt[snd]
 functions can be applied to a pair of any type @code{'a * 'b};
-@tt{fst} returns a value of type @code{'a}, and @tt{snd} returns a
+@tt[fst] returns a value of type @code{'a}, and @tt[snd] returns a
 value of type @code{'b}.
 
 There are no similar built-in functions for tuples with more than two

@@ -1,8 +1,8 @@
 (*! -*- Mode: text -*-
  *
  * @begin[spelling]
- * API CS LCF ML Monolithic Scalability Vino rec scalability
- * stance filesystems ll gcd managable updatable
+ * API CS Caml LCF ML Milner Monolithic Scalability Vino rec scalability
+ * stance filesystems ll gcd updatable coercions destructors vs
  * @end[spelling]
  *
  * @begin[doc]
@@ -40,7 +40,7 @@ extends Base_theory
 @begin[doc]
 
 This document is an introduction to ML programming, specifically for
-the Objective Caml (@emph{OCaml}) programming language from INRIA
+the Objective Caml (@emph{OCaml}) programming language from @misspelled{INRIA}
 @cite["Ler02,RV97"].  OCaml is a dialect of the ML
 (@emph{Meta-Language}) family of languages, which derive from the
 Classic ML language designed by Robin Milner in 1975 for the LCF
@@ -79,7 +79,7 @@ to write programs that work for values of any type.  For example, it
 is straightforward to define data structures like lists, stacks, and
 trees that can contain elements of any type.  In a language like C or
 Java, the programmer would either have to write different
-implementations for each type (say, lists of integers vs. lists of
+implementations for each type (say, lists of integers @emph{vs}. lists of
 floating-point values), or else use explicit coercions to bypass the
 type system.}}
 
@@ -189,15 +189,15 @@ appropriate.
 
 This document was originally used for a course in compiler
 construction at Caltech.  The course material, including exercises, is
-available at @tt{http://www.cs.caltech.edu/courses/cs134/cs134b}.
+available at @url["http://www.cs.caltech.edu/courses/cs134/cs134b"].
 
 The OCaml reference manual @cite["Ler02"] is available on the
-OCaml home page @tt{http://www.ocaml.org/}.
+OCaml home page @url["http://www.ocaml.org/"].
 
 The author can be reached at @email{jyh@cs.caltech.edu}.
 
- * @end[doc]
- *)
+@end[doc]
+*)
 
 (*!
  * @docoff

@@ -37,22 +37,25 @@ declare add{'i1; 'i2}
 declare sub{'i1; 'i2}
 declare mul{'i1; 'i2}
 declare div{'i1; 'i2}
+declare max{'i1; 'i2}
 
 prim_rw reduce_add : add{number[i1:n]; number[i2:n]} <--> number{meta_sum[i1:n, i2:n]}
 prim_rw reduce_sub : sub{number[i1:n]; number[i2:n]} <--> number{meta_diff[i1:n, i2:n]}
 prim_rw reduce_mul : mul{number[i1:n]; number[i2:n]} <--> number{meta_prod[i1:n, i2:n]}
 prim_rw reduce_div : div{number[i1:n]; number[i2:n]} <--> number{meta_quot[i1:n, i2:n]}
+prim_rw reduce_max : max{number[i1:n]; number[i2:n]} <--> meta_lt[i1:n, i2:n]{number[i2:n]; number[i1:n]}
 prim_rw reduce_number : number{meta_num[i:n]} <--> number[i:n]
+
+(*! @docoff *)
 
 let resource reduce +=
     [<< add{number[i1:n]; number[i2:n]} >>, (reduce_add thenC addrC[0] reduce_meta_sum  thenC reduce_number);
      << sub{number[i1:n]; number[i2:n]} >>, (reduce_sub thenC addrC[0] reduce_meta_diff thenC reduce_number);
      << mul{number[i1:n]; number[i2:n]} >>, (reduce_mul thenC addrC[0] reduce_meta_prod thenC reduce_number);
-     << div{number[i1:n]; number[i2:n]} >>, (reduce_div thenC addrC[0] reduce_meta_quot thenC reduce_number)]
+     << div{number[i1:n]; number[i2:n]} >>, (reduce_div thenC addrC[0] reduce_meta_quot thenC reduce_number);
+     << max{number[i1:n]; number[i2:n]} >>, (reduce_max thenC reduce_meta_lt_num)]
 
-(*!
- * @docoff
- *
+(*
  * -*-
  * Local Variables:
  * Caml-master: "compile"

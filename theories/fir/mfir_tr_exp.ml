@@ -589,7 +589,7 @@ prim ty_setSubscript_rawdata :
 
 (*!************************************
  * @begin[doc]
- * @modsubsection{Globals}
+ * @modsubsection{Global Values}
  *
  * The expression $<< letGlobal{ 'ty1; 'label; v. 'exp['v] } >>$ is used to
  * read a global value, and the expression

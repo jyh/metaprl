@@ -30,17 +30,23 @@ extends M_closure
 extends M_prog
 extends M_dead
 extends M_inline
+extends M_reserve
 extends M_x86_codegen
-extends M_standardize
-extends M_x86_spill
+extends M_x86_coalesce
+extends M_x86_regalloc
+extends M_x86_opt
 
 open M_cps
 open M_closure
 open M_prog
 open M_dead
 open M_inline
-open M_x86_codegen
+open M_reserve
 open M_standardize
+open M_x86_codegen
+open M_x86_coalesce
+open M_x86_regalloc
+open M_x86_opt
 
 open Tactic_type.Tacticals
 open Tactic_type.Conversionals
@@ -64,18 +70,34 @@ let convertT =
    (* Another round of dead code elimination *)
    thenT deadT
 
-let compileT =
+   (* Add reserve instructions *)
+   thenT reserveT
+
+let codeT =
    convertT
 
    (* Generate assembly *)
    thenT codegenT
 
-   (* Standardize the program *)
-   thenT standardizeT
+   (* Optimize it *)
+   thenT opt_before_raT
 
-(*!
- * @docoff
- *
+   (* Standardize it *)
+   thenT renameT
+
+let compileT =
+   codeT
+
+   (* Register allocation *)
+   thenT allocT
+
+   (* Optimize again *)
+   thenT opt_after_raT
+
+   (* Save the assembly to a file *)
+   thenT printT "asm.s"
+
+(*
  * -*-
  * Local Variables:
  * Caml-master: "compile"

@@ -238,7 +238,7 @@ fprintf stdout "Number = %d, String = %s\n" i s
 @end[verbatim]
 
 The strange typing of this function is because OCaml checks the type
-of the format string and the arguments.  For example, Ocaml analyzes
+of the format string and the arguments.  For example, OCaml analyzes
 the format string to tell that the following @code{fprintf} function
 should take a @tt{float}, @tt{int}, and @tt{string} argument.
 
@@ -358,11 +358,10 @@ val bprintf: Buffer.t -> ('a, Buffer.t, unit) format -> 'a
 @end[verbatim]
 
 @end[doc]
+@docoff
 *)
 
-(*!
- * @docoff
- *
+(*
  * -*-
  * Local Variables:
  * Caml-master: "compile"

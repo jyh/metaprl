@@ -26,7 +26,7 @@
  *)
 extends M_ir
 extends M_arith
-extends M_x86_util
+extends M_x86_asm
 
 (*
  * We need more general operands during code construction.
@@ -45,27 +45,6 @@ declare word_size
  *)
 declare header[i:n]
 declare header{'i}
-
-(*
- * Registers.
- *)
-declare eax
-declare ebx
-declare ecx
-declare edx
-declare esi
-declare edi
-declare esp
-declare ebp
-
-declare next
-
-(*
- * Name resolution.
- *)
-declare AssignRegisters{'registers}
-declare RegisterCons[label:t]{'reg; 'rest}
-declare RegisterNil
 
 (*!
  * @docoff

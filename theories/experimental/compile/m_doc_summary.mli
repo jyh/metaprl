@@ -1,5 +1,5 @@
 (*
- * Utilities for x86 instructions.
+ * Explains CPS conversion.
  *
  * ----------------------------------------------------------------
  *
@@ -24,13 +24,7 @@
  * @email{jyh@cs.caltech.edu}
  * @end[license]
  *)
-extends X86_asm
-
-(*
- * Map over all operands in the program.
- *)
-declare MapOperands{'arg; 'code}
-declare MapOperand{'arg; 'operand}
+extends M_doc_comment
 
 (*!
  * @docoff

@@ -875,11 +875,10 @@ val p4 : colored_point = <obj>
 @end[verbatim]
 
 @end[doc]
+@docoff
 *)
 
-(*!
- * @docoff
- *
+(*
  * -*-
  * Local Variables:
  * Caml-master: "compile"

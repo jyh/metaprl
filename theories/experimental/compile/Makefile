@@ -6,11 +6,32 @@ ROOT := ../../..
 
 include $(ROOT)/mk/preface
 
-INCLUDE := -I . -I ../../tactic -I ../../ocaml -I ../../base
+INCLUDE :=\
+	-I .\
+	-I ../../tactic\
+	-I ../../ocaml\
+	-I ../../base\
+
 OCAMLDEPFLAGS := -prl
+
+MLZFILES :=\
+	ra_type\
+	x86_inst_type
 
 # Library files
 MPFILES :=\
+	m_doc_comment\
+	m_doc_intro\
+	m_doc_ir\
+	m_doc_parsing\
+	m_doc_cps\
+	m_doc_closure\
+	m_doc_opt\
+	m_doc_x86_asm\
+	m_doc_x86_codegen\
+	m_doc_x86_regalloc\
+	m_doc_x86_opt\
+	m_doc_summary\
 	m_util\
 	m_arith\
 	m_ir\
@@ -19,15 +40,36 @@ MPFILES :=\
 	m_prog\
 	m_dead\
 	m_inline\
-	m_standardize\
-	x86_asm\
-	x86_term\
-	m_x86_util\
+	m_reserve\
+	m_x86_asm\
 	m_x86_frame\
 	m_x86_codegen\
+	m_ra_state\
+	m_x86_opt\
+
+#
+# Register allocation uses lm_libmojave
+#
+ifneq ($(LIBMOJAVE),undefined)
+INCLUDE := $(INCLUDE)\
+	-I $(LIBMOJAVE)/naml/stdlib\
+	-I $(LIBMOJAVE)/lm_libmojave/util
+
+MPFILES :=\
+	m_standardize\
+	m_x86_inst_type\
+	m_x86_term\
+	m_ra_type\
+	m_ra_live\
+	m_ra_main\
+	m_x86_backend\
+	m_x86_coalesce\
 	m_x86_spill\
+	m_x86_regalloc\
 	m_theory\
 	m_test
+
+endif
 
 # Name of main libraries
 MAIN = theory

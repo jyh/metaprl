@@ -86,9 +86,7 @@ let process_resource_annotation name cvars vars args params mterm conv =
     | _ ->
          raise (RefineError ("M_cps.improve_resource_arg", StringError "not a simple rewrite"))
 
-(*!
- * @docoff
- *
+(*
  * -*-
  * Local Variables:
  * Caml-master: "compile"

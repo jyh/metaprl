@@ -1,0 +1,157 @@
+(*
+ * ML representation of instructions.
+ *
+ * ----------------------------------------------------------------
+ *
+ * @begin[license]
+ * Copyright (C) 2003 Jason Hickey, Caltech
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *
+ * Author: Jason Hickey
+ * @email{jyh@cs.caltech.edu}
+ * @end[license]
+ * @docoff
+ *)
+extends M_x86_asm
+
+open Refiner.Refiner.TermType
+
+open Lm_symbol
+
+type var = symbol
+type label = symbol
+type reg = symbol
+
+type spill_opcode =
+   SpillGet
+ | SpillSet
+ | SpillCopy
+
+type inst1_opcode =
+   NEG
+ | NOT
+ | INC
+ | DEC
+
+type inst2_opcode =
+   MOV
+ | ADD
+ | LEA
+ | SUB
+ | IMUL
+ | AND
+ | OR
+ | XOR
+
+type inst3_opcode =
+   MUL
+ | DIV
+
+type shift_opcode =
+   SAR
+ | SHL
+ | SHR
+
+type set_opcode =
+   SET
+
+type cmp_opcode =
+   CMP
+ | TEST
+
+type jmp_opcode =
+   JMP
+
+type jcc_opcode =
+   JCC
+
+type cc =
+   EQ
+ | NEQ
+ | LT
+ | LE
+ | GT
+ | GE
+ | ULT
+ | ULE
+ | UGT
+ | UGE
+
+type spill_reg =
+   SpillRegRegister of reg
+ | SpillRegSpill of reg * label
+
+type 'sreg poly_operand =
+   ImmediateNumber of int32
+ | ImmediateLabel of label * label
+ | ImmediateCLabel of label * label
+ | Register of 'sreg
+ | SpillMemory of label
+ | SpillRegister of reg * label
+ | ContextRegister of symbol
+ | MemReg of 'sreg
+ | MemRegOff of 'sreg * int32
+ | MemRegRegOffMul of 'sreg * 'sreg * int32 * int32
+
+type operand = reg poly_operand
+type spill_operand = spill_reg poly_operand
+
+type ('sreg, 'rest) poly_inst =
+   Mov      of 'sreg poly_operand * reg * 'rest
+ | IMov     of 'sreg * reg * 'rest
+ | Spill    of spill_opcode * 'sreg poly_operand * symbol * 'rest
+ | Inst1Mem of inst1_opcode * 'sreg poly_operand * 'rest
+ | Inst1Reg of inst1_opcode * 'sreg * reg * 'rest
+ | Inst2Mem of inst2_opcode * 'sreg poly_operand * 'sreg poly_operand * 'rest
+ | Inst2Reg of inst2_opcode * 'sreg poly_operand * 'sreg * reg * 'rest
+ | Inst3Reg of inst3_opcode * 'sreg poly_operand * 'sreg * 'sreg * reg * reg * 'rest
+ | ShiftMem of shift_opcode * 'sreg poly_operand * 'sreg poly_operand * 'rest
+ | ShiftReg of shift_opcode * 'sreg poly_operand * 'sreg * reg * 'rest
+ | Cmp      of cmp_opcode * 'sreg poly_operand * 'sreg poly_operand * 'rest
+ | SetMem   of set_opcode * cc * 'sreg poly_operand * 'rest
+ | SetReg   of set_opcode * cc * 'sreg * reg * 'rest
+ | Jmp      of jmp_opcode * 'sreg poly_operand * 'sreg list
+ | Jcc      of jcc_opcode * cc * 'rest * 'rest
+ | Reserve  of int32 * 'sreg list
+ | Comment  of string * 'rest
+ | LabelFun   of var * 'rest
+
+ | Compilable of 'rest
+ | Init       of 'rest
+ | LabelAsm   of var * var
+ | LabelRec   of var * 'rest * var * 'rest
+ | LabelDef   of 'rest * 'rest * 'rest
+ | LabelEnd
+
+type term_inst = (reg, term) poly_inst
+type spill_inst = (spill_reg, term) poly_inst
+
+(*
+ * We would really like to say
+ *
+ *    type inst = inst poly_inst
+ *
+ * but the type system refuses.
+ *)
+type inst = Inst of (reg, inst) poly_inst
+
+(*
+ * -*-
+ * Local Variables:
+ * Caml-master: "compile"
+ * End:
+ * -*-
+ *)

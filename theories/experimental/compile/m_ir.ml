@@ -1,4 +1,8 @@
 (*!
+ * @begin[spelling]
+ * AtomFun AtomFunVar CPS EndDef FunDef LetApply LetClosure exp
+ * @end[spelling]
+ *
  * @begin[doc]
  * This file defines the intermediate language for
  * the @emph{M} language.
@@ -93,8 +97,7 @@ declare GtOp
  * @modsubsection{Atoms}
  *
  * Atoms are values: integers, variables, binary operations
- * on atoms, and functions.  For now, variable are represented
- * as variables; we don't need separate atoms.
+ * on atoms, and functions.
  *
  * AtomFun is a lambda-abstraction, and AtomFunVar is the projection
  * of a function from a recursive function definition (defined below).
@@ -104,6 +107,7 @@ declare AtomFalse
 declare AtomTrue
 declare AtomInt[i:n]
 declare AtomBinop{'op; 'a1; 'a2}
+declare AtomRelop{'op; 'a1; 'a2}
 declare AtomFun{x. 'e['x]}
 declare AtomVar{'v}
 declare AtomFunVar{'R; 'v}
@@ -116,10 +120,11 @@ declare AtomFunVar{'R; 'v}
  * @end[doc]
  *)
 declare LetAtom{'a; v. 'e['v]}
-declare TailCall{'f; 'a}
-declare TailCall{'f; 'a1; 'a2}
-declare TailCall{'f; 'a1; 'a2; 'a3}
 declare If{'a; 'e1; 'e2}
+
+declare ArgNil
+declare ArgCons{'a; 'rest}
+declare TailCall{'f; 'args}
 
 declare Length[i:n]
 declare AllocTupleNil
@@ -127,6 +132,16 @@ declare AllocTupleCons{'a; 'rest}
 declare LetTuple{'length; 'tuple; v. 'e['v]}
 declare LetSubscript{'a1; 'a2; v. 'e['v]}
 declare SetSubscript{'a1; 'a2; 'a3; 'e}
+
+(*!
+ * @begin[doc]
+ * Reserve statements are inserted later in each function header.
+ * @end[doc]
+ *)
+declare Reserve[words:n]{'e}
+declare Reserve[words:n]{'args; 'e}
+declare ReserveCons{'a; 'rest}
+declare ReserveNil
 
 (*!
  * @begin[doc]
@@ -163,7 +178,7 @@ declare LetRec{R1. 'e1['R1]; R2. 'e2['R2]}
 (*!
  * @begin[doc]
  * Records have a set of tagged fields.
- * We require that allthe fields be functions.
+ * We require that all the fields be functions.
  *
  * The record construction is recursive.  The Label term is used for
  * field tags; the FunDef defines a new field in the record; and the
@@ -184,6 +199,10 @@ declare EndDef
  *)
 declare LetFun{'R; 'label; f. 'e['f]}
 
+(*! @doc{Include a term representing initialization code.} *)
+
+declare Initialize{'e}
+
 (*!
  * @begin[doc]
  * @modsubsection{Program sequent representation}
@@ -192,12 +211,14 @@ declare LetFun{'R; 'label; f. 'e['f]}
  *    declarations, definitions >- exp
  *
  * For now the language is untyped, so each declaration
- * has the form v:exp.  A definition is an equality judegment.
+ * has the form v:exp.  A definition is an equality judgment.
  * @end[doc]
  *)
 declare exp
 declare def{'v; 'e}
 declare compilable{'e}
+
+(*! @docoff *)
 
 (************************************************************************
  * Display forms
@@ -213,6 +234,7 @@ prec prec_rel
 prec prec_if
 prec prec_fun
 prec prec_let
+prec prec_comma
 prec prec_compilable
 
 prec prec_mul < prec_var
@@ -221,11 +243,14 @@ prec prec_rel < prec_add
 prec prec_let < prec_rel
 prec prec_if < prec_let
 prec prec_fun < prec_if
-prec prec_compilable < prec_let
+prec prec_comma < prec_fun
+prec prec_compilable < prec_comma
 
-(* Some convenient keywords *)
+(*! @doc{Some convenient keywords} *)
 declare xlet
 declare xin
+(*! @docoff *)
+
 dform xlet_df : xlet = bf["let"]
 dform xin_df : xin = bf["in"]
 
@@ -257,22 +282,22 @@ dform atom_binop_mul_df : parens :: "prec"[prec_mul] :: AtomBinop{MulOp; 'e1; 'e
 dform atom_binop_div_df : parens :: "prec"[prec_mul] :: AtomBinop{DivOp; 'e1; 'e2} =
    slot["lt"]{'e1} " " `"/ " slot["le"]{'e2}
 
-dform atom_binop_lt_df : parens :: "prec"[prec_rel] :: AtomBinop{LtOp; 'e1; 'e2} =
+dform atom_binop_lt_df : parens :: "prec"[prec_rel] :: AtomRelop{LtOp; 'e1; 'e2} =
    slot["lt"]{'e1} " " `"< " slot["le"]{'e2}
 
-dform atom_binop_le_df : parens :: "prec"[prec_rel] :: AtomBinop{LeOp; 'e1; 'e2} =
+dform atom_binop_le_df : parens :: "prec"[prec_rel] :: AtomRelop{LeOp; 'e1; 'e2} =
    slot["lt"]{'e1} " " Nuprl_font!le `" " slot["le"]{'e2}
 
-dform atom_binop_gt_df : parens :: "prec"[prec_rel] :: AtomBinop{GtOp; 'e1; 'e2} =
+dform atom_binop_gt_df : parens :: "prec"[prec_rel] :: AtomRelop{GtOp; 'e1; 'e2} =
    slot["lt"]{'e1} " " `"> " slot["le"]{'e2}
 
-dform atom_binop_ge_df : parens :: "prec"[prec_rel] :: AtomBinop{GeOp; 'e1; 'e2} =
+dform atom_binop_ge_df : parens :: "prec"[prec_rel] :: AtomRelop{GeOp; 'e1; 'e2} =
    slot["lt"]{'e1} " " Nuprl_font!ge `" " slot["le"]{'e2}
 
-dform atom_binop_eq_df : parens :: "prec"[prec_rel] :: AtomBinop{EqOp; 'e1; 'e2} =
+dform atom_binop_eq_df : parens :: "prec"[prec_rel] :: AtomRelop{EqOp; 'e1; 'e2} =
    slot["lt"]{'e1} " " `"= " slot["le"]{'e2}
 
-dform atom_binop_neq_df : parens :: "prec"[prec_rel] :: AtomBinop{NeqOp; 'e1; 'e2} =
+dform atom_binop_neq_df : parens :: "prec"[prec_rel] :: AtomRelop{NeqOp; 'e1; 'e2} =
    slot["lt"]{'e1} " " Nuprl_font!neq `" " slot["le"]{'e2}
 
 dform atom_fun_df : parens :: "prec"[prec_fun] :: AtomFun{x. 'e} =
@@ -282,14 +307,17 @@ dform atom_fun_df : parens :: "prec"[prec_fun] :: AtomFun{x. 'e} =
 dform exp_let_atom_df : parens :: "prec"[prec_let] :: LetAtom{'a; v. 'e} =
    xlet `" " slot{'v} bf[" = "] slot{'a} `" " xin hspace slot["lt"]{'e}
 
-dform exp_tailcall2_df : parens :: "prec"[prec_let] :: TailCall{'f; 'a} =
-   bf["tailcall "] slot{'f} `"(" slot{'a} `")"
+dform exp_tailcall_df : parens :: "prec"[prec_let] :: TailCall{'f; 'args} =
+   bf["tailcall "] slot{'f} `" " slot{'args}
 
-dform exp_tailcall3_df : parens :: "prec"[prec_let] :: TailCall{'f; 'a1; 'a2} =
-   bf["tailcall "] slot{'f} `"(" slot{'a1} `", " slot{'a2} `")"
+dform arg_cons_df1 : parens :: "prec"[prec_comma] :: ArgCons{'a1; ArgCons{'a2; 'rest}} =
+   slot{'a1} `", " slot["lt"]{ArgCons{'a2; 'rest}}
 
-dform exp_tailcall4_df : parens :: "prec"[prec_let] :: TailCall{'f; 'a1; 'a2; 'a3} =
-   bf["tailcall "] slot{'f} `"(" slot{'a1} `", " slot{'a2} `", " slot{'a3} `")"
+dform arg_cons_df2 : parens :: "prec"[prec_comma] :: ArgCons{'a; ArgNil} =
+   slot{'a}
+
+dform arg_nil_df : parens :: "prec"[prec_comma] :: ArgNil =
+   `""
 
 dform exp_if_df : parens :: "prec"[prec_if] :: except_mode[tex] :: If{'a; 'e1; 'e2} =
    szone pushm[0] pushm[3] bf["if"] `" " slot{'a} `" " bf["then"] hspace
@@ -297,11 +325,39 @@ dform exp_if_df : parens :: "prec"[prec_if] :: except_mode[tex] :: If{'a; 'e1; '
    pushm[3] bf["else"] hspace slot{'e2} popm popm ezone
 
 (*
- * Subscripting.
+ * Reserve.
+ *)
+dform reserve_df1 : parens :: "prec"[prec_let] :: Reserve[words:n]{'e} =
+   bf["reserve "] slot[words:n] bf[" words in"] hspace slot["lt"]{'e}
+
+dform reserve_df2 : parens :: "prec"[prec_let] :: Reserve[words:n]{'args; 'e} =
+   bf["reserve "] slot[words:n] bf[" words args "] slot{'args} bf[" in"] hspace slot["lt"]{'e}
+
+dform reserve_cons_df1 : parens :: "prec"[prec_comma] :: ReserveCons{'a1; ReserveCons{'a2; 'rest}} =
+   slot{'a1} `", " slot["lt"]{ReserveCons{'a2; 'rest}}
+
+dform reserve_cons_df2 : parens :: "prec"[prec_comma] :: ReserveCons{'a; ArgNil} =
+   slot{'a}
+
+dform reserve_nil_df : parens :: "prec"[prec_comma] :: ReserveNil =
+   `""
+
+(*! @doc{Sequent tag for the M language.} *)
+
+declare m
+
+dform m_df : m = bf["m"]
+
+(*!
+ * @begin[doc]
+ * @modsubsection{Subscripting.}
  * Tuples are listed in reverse order.
+ * @end[doc]
  *)
 declare alloc_tuple{'l1; 'l2}
 declare alloc_tuple{'l}
+
+(*! @docoff *)
 
 dform length_df : Length[i:n] =
    slot[i:n]
@@ -331,7 +387,7 @@ dform alloc_tuple_cons_cons_df : alloc_tuple{cons{'a1; cons{'a2; 'l}}} =
  * Actual tuple operations.
  *)
 dform exp_let_tuple_df : parens :: "prec"[prec_let] :: LetTuple{'length; 'tuple; v. 'e} =
-   xlet `" " slot{'v} bf[" =[length ="] slot{'length} bf["] "] slot{'tuple} `" " xin hspace slot["lt"]{'e}
+   xlet `" " slot{'v} bf[" =[length = "] slot{'length} bf["] "] slot{'tuple} `" " xin hspace slot["lt"]{'e}
 
 dform exp_subscript_df : parens :: "prec"[prec_let] :: LetSubscript{'a1; 'a2; v. 'e} =
    xlet `" " slot{'v} bf[" = "] slot{'a1} `"[" slot{'a2} `"] " xin hspace slot["lt"]{'e}
@@ -373,6 +429,12 @@ dform let_fun_def : parens :: "prec"[prec_let] :: LetFun{'R; 'label; f. 'e} =
    xlet bf[" fun "] slot{'f} `" = " slot{'R} `"." slot{'label} `" " xin hspace slot["lt"]{'e}
 
 (*
+ * Initialization code.
+ *)
+dform initialize_df : parens :: "prec"[prec_let] :: Initialize{'e} =
+   szone pushm[0] pushm[3] bf["initialization"] hspace slot{'e} popm hspace bf["end"] popm ezone
+
+(*
  * Declarations and definitions.
  *)
 dform exp_df : exp = bf["exp"]
@@ -382,13 +444,6 @@ dform def_df : def{'v; 'e} =
 
 dform compilable_df : "prec"[prec_compilable] :: compilable{'e} =
    szone pushm[0] pushm[3] bf["compilable"] hspace slot{'e} popm hspace bf["end"] popm ezone
-
-(*
- * Sequent tag for the M language.
- *)
-declare m
-
-dform m_df : m = bf["m"]
 
 (************************************************************************
  * ML Helpers
@@ -406,9 +461,7 @@ let dest_letrec_term = dest_dep1_dep1_term letrec_opname
 let mk_letrec_term   = mk_dep1_dep1_term letrec_opname
 
 
-(*!
- * @docoff
- *
+(*
  * -*-
  * Local Variables:
  * Caml-master: "compile"

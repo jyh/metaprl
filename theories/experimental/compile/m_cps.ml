@@ -1,6 +1,10 @@
 (*!
+ * @begin[spelling]
+ * CPS CPSFunVar CPSRecordVar EMRE compilable cont cps nop var
+ * @end[spelling]
+ *
  * @begin[doc]
- * @module[Top_conversionals]
+ * @module[M_cps]
  *
  * CPS conversion for the M language.
  * @end[doc]
@@ -102,7 +106,7 @@ let cpsC =
  *
  * @begin[itemize]
  * @item{CPSRecordVar{R} represents the application of the record $R$ to
- *       the identify function.}
+ *       the identity function.}
  *
  * @item{CPSFunVar{f} represents the application of the function $f$ to
  *       the identity function.}
@@ -135,6 +139,10 @@ let cpsC =
  *    The CPS form is $@lambda l. @lambda c. CPS(c, {fields}(l))$.}
  * @end[itemize]
  * @end[doc]
+ *
+ * EMRE BUG: The CPS term in the third item in the list above is never
+ * actually declared.  The meaning is made clear in the rewrites below,
+ * though.
  *)
 declare CPSRecordVar{'R}
 declare CPSFunVar{'f}
@@ -170,6 +178,12 @@ dform cps_fields_df : CPS{cont. 'e} =
  * a function var.  If so, the function must be partially applied.
  * @end[doc]
  *)
+prim_rw cps_atom_true : CPS{AtomTrue} <-->
+   AtomTrue
+
+prim_rw cps_atom_false : CPS{AtomFalse} <-->
+   AtomFalse
+
 prim_rw cps_atom_int : CPS{AtomInt[i:n]} <-->
    AtomInt[i:n]
 
@@ -179,6 +193,10 @@ prim_rw cps_atom_var : CPS{AtomVar{'v}} <-->
 prim_rw cps_atom_binop : CPS{AtomBinop{'op; 'a1; 'a2}} <-->
    AtomBinop{'op; CPS{'a1}; CPS{'a2}}
 
+prim_rw cps_atom_relop : CPS{AtomRelop{'op; 'a1; 'a2}} <-->
+   AtomRelop{'op; CPS{'a1}; CPS{'a2}}
+
+(* EMRE: so this rule expands (f (lambda x. x)) to f? *)
 prim_rw cps_fun_var : CPS{CPSFunVar{'f}} <-->
    AtomVar{'f}
 
@@ -187,6 +205,12 @@ prim_rw cps_alloc_tuple_nil : CPS{AllocTupleNil} <-->
 
 prim_rw cps_alloc_tuple_cons : CPS{AllocTupleCons{'a; 'rest}} <-->
    AllocTupleCons{CPS{'a}; CPS{'rest}}
+
+prim_rw cps_arg_cons : CPS{ArgCons{'a; 'rest}} <-->
+   ArgCons{CPS{'a}; CPS{'rest}}
+
+prim_rw cps_arg_nil : CPS{ArgNil} <-->
+   ArgNil
 
 prim_rw cps_length : CPS{Length[i:n]} <-->
    Length[i:n]
@@ -208,12 +232,23 @@ prim_rw cps_let_subscript : CPS{'cont; LetSubscript{'a1; 'a2; v. 'e['v]}} <-->
 prim_rw cps_if : CPS{'cont; If{'a; 'e1; 'e2}} <-->
    If{CPS{'a}; CPS{'cont; 'e1}; CPS{'cont; 'e2}}
 
-prim_rw cps_let_apply : CPS{'cont; LetApply{'a1; 'a2; v. 'e['v]}} <-->
+(*
+ * JYH BUG: please examine this.
+ * I'm not sure I have it right.
+ *
+ * EMRE: I will believe this if
+ *    (AtomVar{'f} (lambda x.x))
+ * is equivalent to
+ *    CPSFunVar{'f}
+ *)
+prim_rw cps_let_apply :
+   CPS{'cont; LetApply{CPSFunVar{'f}; 'a2; v. 'e['v]}}
+   <-->
    LetRec{R. FunDef{Label["g":t]; AtomFun{v. CPS{'cont; 'e['v]}};
              EndDef};
           R.
           LetFun{'R; Label["g":t]; g.
-          CPS{'cont; TailCall{'a1; AtomVar{'g}; 'a2}}}}
+          TailCall{AtomVar{'f}; ArgCons{AtomVar{'g}; ArgCons{CPS{'a2}; ArgNil}}}}}
 
 (*!
  * @begin[doc]
@@ -233,39 +268,44 @@ prim_rw cps_fun_def : CPS{cont. CPS{'cont; FunDef{'label; AtomFun{v. 'e['v]}; 'r
 prim_rw cps_end_def : CPS{cont. CPS{'cont; EndDef}} <-->
    EndDef
 
+prim_rw cps_initialize : CPS{'cont; Initialize{'e}} <-->
+   Initialize{CPS{'cont; 'e}}
+
 prim_rw cps_let_fun : CPS{'cont; LetFun{CPSRecordVar{'R}; 'label; f. 'e['f]}} <-->
    LetFun{'R; 'label; f. CPS{'cont; 'e[CPSFunVar{'f}]}}
 
 prim_rw cps_return : CPS{'cont; Return{'a}} <-->
-   TailCall{AtomVar{'cont}; CPS{'a}}
+   TailCall{AtomVar{'cont}; ArgCons{CPS{'a}; ArgNil}}
 
-prim_rw cps_tailcall_1 : CPS{'cont; TailCall{CPSFunVar{'f}; 'a2}} <-->
-   TailCall{AtomVar{'f}; AtomVar{'cont}; CPS{'a2}}
-
-prim_rw cps_tailcall_2 : CPS{'cont; TailCall{CPSFunVar{'f}; 'a2; 'a3}} <-->
-   TailCall{AtomVar{'f}; AtomVar{'cont}; CPS{'a2}; CPS{'a3}}
+prim_rw cps_tailcall : CPS{'cont; TailCall{CPSFunVar{'f}; 'args}} <-->
+   TailCall{AtomVar{'f}; ArgCons{AtomVar{'cont}; CPS{'args}}}
 
 prim_rw cps_fun_var_cleanup :
    AtomVar{CPSFunVar{'f}} <--> CPSFunVar{'f}
-(*! docoff *)
+(*! @docoff *)
 
 (*
  * Add all these rules to the CPS resource.
  *)
 let resource cps +=
-    [<< CPS{AtomInt[i:n]} >>, cps_atom_int;
+    [<< CPS{AtomTrue} >>, cps_atom_true;
+     << CPS{AtomFalse} >>, cps_atom_false;
+     << CPS{AtomInt[i:n]} >>, cps_atom_int;
      << CPS{AtomVar{'v}} >>, cps_atom_var;
      << CPS{AtomBinop{'op; 'a1; 'a2}} >>, cps_atom_binop;
+     << CPS{AtomRelop{'op; 'a1; 'a2}} >>, cps_atom_relop;
      << CPS{CPSFunVar{'f}} >>, cps_fun_var;
 
      << CPS{'cont; LetAtom{'a; v. 'e['v]}} >>, cps_let_atom;
      << CPS{'cont; If{'a; 'e1; 'e2}} >>, cps_if;
-     << CPS{'cont; LetApply{'a1; 'a2; v. 'e['v]}} >>, cps_let_apply;
+     << CPS{'cont; LetApply{CPSFunVar{'f}; 'a2; v. 'e['v]}} >>, cps_let_apply;
 
      << CPS{AllocTupleNil} >>, cps_alloc_tuple_nil;
      << CPS{AllocTupleCons{'a; 'rest}} >>, cps_alloc_tuple_cons;
+     << CPS{ArgCons{'a; 'rest}} >>, cps_arg_cons;
+     << CPS{ArgNil} >>, cps_arg_nil;
      << CPS{Length[i:n]} >>, cps_length;
-     << CPS{'cont; LetTuple{'length; 'tuple; v. 'e['v]}} >>, cps_let_subscript;
+     << CPS{'cont; LetTuple{'length; 'tuple; v. 'e['v]}} >>, cps_let_tuple;
      << CPS{'cont; LetSubscript{'a1; 'a2; v. 'e['v]}} >>, cps_let_subscript;
 
      << CPS{'cont; LetRec{R1. 'fields['R1]; R2. 'e['R2]}} >>, cps_let_rec;
@@ -274,9 +314,9 @@ let resource cps +=
      << CPS{cont. CPS{'cont; EndDef}} >>, cps_end_def;
      << CPS{'cont; LetFun{CPSRecordVar{'R}; 'label; f. 'e['f]}} >>, cps_let_fun;
      << CPS{'cont; Return{'a}} >>, cps_return;
-     << CPS{'cont; TailCall{CPSFunVar{'f}; 'a2}} >>, cps_tailcall_1;
-     << CPS{'cont; TailCall{CPSFunVar{'f}; 'a2; 'a3}} >>, cps_tailcall_2;
-     << AtomVar{CPSFunVar{'f}} >>, cps_fun_var_cleanup]
+     << CPS{'cont; TailCall{CPSFunVar{'f}; 'args}} >>, cps_tailcall;
+     << AtomVar{CPSFunVar{'f}} >>, cps_fun_var_cleanup;
+     << CPS{'cont; Initialize{'e}} >>, cps_initialize]
 
 (*!
  * @begin[doc]
@@ -285,9 +325,11 @@ let resource cps +=
  *)
 interactive cps_prog :
    sequent [m] { 'H; cont: exp >-
-      compilable{LetRec{R. FunDef{Label["init":t]; AtomFun{cont. CPS{'cont; 'e}}; EndDef};
-                        R. LetFun{'R; Label["init":t]; init. TailCall{AtomVar{'init}; AtomVar{'cont}}}}} } -->
+      compilable{LetRec{R. FunDef{Label[".init":t]; AtomFun{cont. CPS{'cont; 'e}}; EndDef};
+                        R. LetFun{'R; Label[".init":t]; init. Initialize{TailCall{AtomVar{'init}; ArgCons{AtomVar{'cont}; ArgNil}}}}}} } -->
    sequent [m] { 'H >- compilable{'e} }
+
+(*! @docoff *)
 
 (*
  * Toplevel CPS conversion tactic.
@@ -295,9 +337,7 @@ interactive cps_prog :
 let cpsT =
    cps_prog thenT rw cpsC 0
 
-(*!
- * @docoff
- *
+(*
  * -*-
  * Local Variables:
  * Caml-master: "compile"

@@ -25,59 +25,60 @@
  * @end[license]
  *)
 extends M_ir
-extends X86_asm
+extends M_x86_inst_type
 
 open Refiner.Refiner.Term
 
-type operand =
-   ImmediateNumber of int32
- | ImmediateLabel of string * term
- | ImmediateCLabel of string * term
- | Register of string
- | SpillRegister of string
- | MemReg of string
- | MemRegOff of int32 * string
- | MemRegRegOffMul of int32 * int32 * string * string
-
-type inst =
-   Compilable of term
- | Let      of term * string * term
- | LetReg   of string * term * string * term
- | LetSpill of string * term * string * term
- | Inst1    of string * term * term
- | Inst2    of string * term * term * term
- | Instm    of string * term * term * term * term
- | Shift    of string * term * term * term
- | Cmp      of string * term * term * term
- | Set      of string * term * term * term
- | Jmp      of string * term * term list
- | Jcc      of string * term * term list * term
- | Comment  of string * term
- | LabelAsm of string * term
- | LabelRec of string * term * string * term
- | LabelDef of term * term * term
- | LabelEnd
- | LabelFun of string * term
+open M_x86_inst_type
 
 (*
- * Term operations.
+ * Main destructors.
  *)
-val dest_inst_term : term -> inst
+val dest_inst : term -> inst
+val dest_inst_term : term -> term_inst
+val dest_inst_spill : term -> spill_inst
 val dest_operand_term : term -> operand
 
-val mk_register_term : string -> term
+(*
+ * Make constructors.
+ *)
+val mk_inst : inst -> term
+val mk_inst_term : term_inst -> term
+val mk_inst_spill : spill_inst -> term
 
-val mk_let_term : string -> term -> term -> term
+val mk_operand_term : operand -> term
+
+(*
+ * Other destructors.
+ *)
+val is_init_label_asm  : ('a, 'b) poly_inst -> bool
+val label_of_asm_label : label -> label -> label
+val label_of_label_asm : ('a, 'b) poly_inst -> label
+
+(*
+ * Strings for opcodes.
+ *)
+val mk_cc           : cc -> string
+val invert_cc       : cc -> cc
+
+val mk_inst1_opcode : inst1_opcode -> string
+val mk_inst2_opcode : inst2_opcode -> string
+val mk_inst3_opcode : inst3_opcode -> string
+val mk_shift_opcode : shift_opcode -> string
+val mk_set_opcode   : set_opcode   -> string
+val mk_cmp_opcode   : cmp_opcode   -> string
+val mk_jmp_opcode   : jmp_opcode   -> string
+val mk_jcc_opcode   : jcc_opcode   -> string
 
 (*
  * Get operands in arbitrary order.
  *)
-val operands_of_inst : inst -> term list
+val operands_of_inst : (reg, 'a) poly_inst -> operand list
 
 (*
  * Addr of the next instruction.
  *)
-val next_inst : inst -> int * term
+val next_inst : term_inst -> int * term
 
 (*!
  * @docoff

@@ -7,6 +7,19 @@ The language is called "M".  The AST is (to be) defined in
 m_ast.ml, and the IR is in m_ir.ml.
 
 Comments should be directed to:
-	Jason Hickey	jyh@metaprl.org
-	Aleksey Nogin	nogin@metaprl.org
-	Adam Granicz	granicz@metaprl.org
+      Jason Hickey      jyh@metaprl.org
+      Aleksey Nogin     nogin@metaprl.org
+      Adam Granicz      granicz@metaprl.org
+
+(**************************************************************************)
+Sun Mar 23 15:01:20 PST 2003
+
+A question from Brian Aydemir (emre@cs.caltech.edu):
+
+(1) What is the evaluation order for the M language IR: eager or lazy?  This
+    affects at least dead-code elimination.  A rewrite such as
+
+         LetAtom{'a; v. 'e} <--> 'e
+
+    will change the program's semantics under eager evaluation (suppose the
+    atom contained a division by zero).

@@ -48,7 +48,9 @@ declare ImmediateNumber[i:n]
 declare ImmediateLabel[label:t]{'R}
 declare ImmediateCLabel[label:t]{'R}
 declare Register{'v}
-declare SpillRegister{'v}
+declare SpillMemory{'label}
+declare SpillRegister{'v; 'label}
+declare ContextRegister[label:t]
 declare MemReg{'r}
 declare MemRegOff[i:n]{'r}
 declare MemRegRegOffMul[off:n, mul:n]{'r1; 'r2}
@@ -73,66 +75,67 @@ declare CC["ae"]
  * @begin[doc]
  * @modsubsection{Instructions}
  *
- * There are several classes of instructions.
+ * We want the assembly to have "semi-functional" property,
+ * meaning that registers are immutable.  The register allocator
+ * will coalesce registers, creating implicit assignments
+ * in the process.
  *
- * let defines a new registers
- * Inst2[opname]: this is a normal two-operand instruction
+ * This presents an interesting problem for the x86, since it
+ * uses the two-operand instruction form.  To get around this,
+ * we define a normal two-operand instruction set for _memory_
+ * operands.  Then we define a three-operand set for register
+ * destination operands.  Again, the allocator is responsible
+ * for making sure the dst and the first src register are the
+ * same.
+ *
+ * Further, for simplicity, we categorize instructions into
+ * several kinds.
+ *
+ * Mov defines a new register from an arbitrary operand
  * Inst1[opname]: a normal one-operand instruction
- * Instm[opname]: a MUL/DIV instruction
- * Shift[opname]: a shift instruction; if the second operand is
- *   not a constant, it must be register %cl
+ * Inst2[opname]: this is a normal two-operand instruction
+ * Inst3[opname]: a MUL/DIV instruction
+ * Shift[opname]: a shift instruction
  * Cmp[opname]: a comparison; both operands are sources
  * Set[opname]: the set/cc instruction
  * @end[doc]
  *)
-declare Let{'src; dst. 'rest['dst]}
-declare Let[reg:t]{'src; dst. 'rest['dst]}
-declare Inst1["neg"]{'dst; 'rest}
-declare Inst1["not"]{'dst; 'rest}
-declare Inst2["mov"]{'dst; 'src; 'rest}
-declare Inst2["add"]{'dst; 'src; 'rest}
-declare Inst2["lea"]{'dst; 'src; 'rest}
-declare Inst2["sub"]{'dst; 'src; 'rest}
-declare Inst2["imul"]{'dst; 'src; 'rest}
-
-declare LetSpill["set"]{'src; dst. 'rest['dst]}
-declare LetSpill["get"]{'src; dst. 'rest['dst]}
-
-(*!
- * @begin[doc]
- * The @emph{MUL} and @emph{DIV} instructions require that
- * the destination operands be @emph{eax} and @emph{edx},
- * repectively.
- * @end[doc]
- *)
-declare Instm["mul"]{'dst1; 'dst2; 'src; 'rest}
-declare Instm["div"]{'dst1; 'dst2; 'src; 'rest}
-
-declare Inst2["and"]{'dst; 'src; 'rest}
-declare Inst2["or"]{'dst; 'src; 'rest}
-declare Inst2["xor"]{'dst; 'src; 'rest}
-declare Shift["sar"]{'dst; 'src; 'rest}
-declare Shift["shl"]{'dst; 'src; 'rest}
-declare Shift["shr"]{'dst; 'src; 'rest}
-
-declare Cmp["test"]{'src1; 'src2; 'rest}
-declare Cmp["cmp"]{'src1; 'src2; 'rest}
-declare Set["set"]{'cc; 'dst; 'rest}
+declare Mov{'src; dst. 'rest['dst]}
+declare Spill[opcode:s]{'src; dst. 'rest['dst]}
+declare Inst1[opcode:s]{'dst; 'rest}
+declare Inst1[opcode:s]{'src; dst. 'rest['dst]}
+declare Inst2[opcode:s]{'src; 'dst; 'rest}
+declare Inst2[opcode:s]{'src1; 'src2; dst. 'rest['dst]}
+declare Inst3[opcode:s]{'src1; 'src2; 'src3; dst2, dst3. 'rest['dst2; 'dst3]}
+declare Shift[opcode:s]{'src; 'dst; 'rest}
+declare Shift[opcode:s]{'src1; 'src2; dst. 'rest['dst]}
+declare Cmp[opcode:s]{'src1; 'src2; 'rest}
+declare Set[opcode:s]{'cc; 'dst; 'rest['dst]}
+declare Set[opcode:s]{'cc; 'src; dst. 'rest['dst]}
 
 (*
  * Various forms of tailcalls.
  *)
-declare Jmp["jmp"]{'label; 'arg1}
-declare Jmp["jmp"]{'label; 'arg1; 'arg2}
-declare Jmp["jmp"]{'label; 'arg1; 'arg2; 'arg3}
-declare Jcc["jcc"]{'cc; 'label; 'arg1; 'rest}
-declare Jcc["jcc"]{'cc; 'label; 'arg1; 'arg2; 'rest}
-declare Jcc["jcc"]{'cc; 'label; 'arg1; 'arg2; 'arg3; 'rest}
+declare AsmArgNil
+declare AsmArgCons{'a; 'rest}
+declare Jmp[opcode:s]{'label; 'args}
+
+(*
+ * For conditional jumps, pretend that it is a real
+ * conditional.  The printer will have to insert a label.
+ *)
+declare Jcc[opcode:s]{'cc; 'rest1; 'rest2}
+
+(*
+ * Reserve some words.
+ *)
+declare AsmReserve[words:n]{'params}
 
 (*
  * Also add a comment instruction.
  *)
 declare Comment[comment:s]{'rest}
+declare Init{'rest}
 
 (*!
  * @begin[doc]

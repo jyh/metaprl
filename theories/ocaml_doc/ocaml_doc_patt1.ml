@@ -312,11 +312,11 @@ val is_unit : unit -> bool = <fun>
 - : bool = true
 @end[verbatim]
 
- * @end[doc]
- *)
+@end[doc]
+@docoff
+*)
 
-(*!
- * @docoff
+(*
  * -*-
  * Local Variables:
  * Caml-master: "compile"

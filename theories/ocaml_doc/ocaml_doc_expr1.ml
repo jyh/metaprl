@@ -2,7 +2,7 @@
  *
  * @begin[spelling]
  * asl asr bool cc chr cmo cmx coercions gdb int lor lsl lsr ml
- * doesn ll untyped mod
+ * doesn ll untyped mod ocamlc
  * @end[spelling]
  *
  * @begin[doc]
@@ -44,7 +44,7 @@ Many functional programming implementations include a significant
 runtime that defines a standard library and a garbage collector.  They
 also often include a toploop that can be used to interact with the
 system.  OCaml provides a compiler, a runtime, and a toploop.  By
-default, the toploop is called @tt{ocaml}.  The toploop prints a
+default, the toploop is called @tt[ocaml].  The toploop prints a
 prompt (@code{#}), reads an input expression, evaluates it, and prints
 the result .  Expressions in the toploop must be terminated by a
 double-semicolon @code{;;}.  My machine name is @code{kenai}.
@@ -116,7 +116,7 @@ binary representations of the numbers.
 
 @item{$i$ @target[ocaml_doc_expr_lor]{@tt{lor}} $j$: bitwise-or.}
 
-@item{$i$ @target[ocaml_doc_expr_lor]{@tt{lxor}} $j$: bitwise exclusive-or.}
+@item{$i$ @target[ocaml_doc_expr_lor]{@tt[lxor]} $j$: bitwise exclusive-or.}
 
 @end[itemize]
 
@@ -174,9 +174,9 @@ There are functions for converting between characters and integers.
 The function @target[char_code]{@tt{Char.code}} returns the integer
 corresponding to a character, and @target[chr]{@tt{Char.chr}} returns
 the character with the given ASCII code.  The
-@target[lowercase]{@tt{Char.lowercase}} and
-@target[uppercase]{@tt{Char.uppercase}} functions give the equivalent
-lower or uppercase characters.
+@target[lowercase]{@tt["Char.lowercase"]} and
+@target[uppercase]{@tt["Char.uppercase"]} functions give the equivalent
+lower- or upper-case characters.
 
 @subsection[ocaml_doc_expr_string]{@tt{string}: character strings}
 
@@ -254,8 +254,8 @@ $e_2$}.
 @section[ocaml_compiling]{Compiling your code}
 
 If you wish to compile your code, you should place it in a file with
-the @tt{.ml} suffix.  There are two compilers: @tt{ocamlc} compiles to
-byte-code, and @tt{ocamlopt} compiles to native machine code.  The
+the @tt{.ml} suffix.  There are two compilers: @tt[ocamlc] compiles to
+byte-code, and @tt[ocamlopt] compiles to native machine code.  The
 native code is roughly three times faster, but compile time is 
 longer.  The usage is similar to @tt{cc}.  The double-semicolon
 terminators are not necessary in the source files; you may omit them
@@ -263,12 +263,12 @@ if the source text is unambiguous.
 
 @begin[itemize]
 @item{To compile a single file, use @tt{ocamlc -g -c @emph{file}.ml}.
-This will produce a file @tt{@emph{file}.cmo}.  The @tt{ocamlopt}
+This will produce a file @tt{@emph{file}.cmo}.  The @tt[ocamlopt]
 programs produces a file @tt{@emph{file}.cmx}.  The @code{-g} option
 includes debugging information in the output file.}
 
 @item{To link together several files into a single executable, use
-@tt{ocamlc} to link the @tt{.cmo} files.  Normally, you would also
+@tt[ocamlc] to link the @tt{.cmo} files.  Normally, you would also
 specify the @tt{-o @emph{program_file}} option to specify the output
 file (the default is @tt{a.out}).  for example, if you have to program
 files @tt{x.cmo} and @tt{y.cmo}, the command would be:
@@ -282,7 +282,7 @@ files @tt{x.cmo} and @tt{y.cmo}, the command would be:
 @end[center]}
 @end[itemize]
 
-There is also a debugger @tt{ocamldebug} that you can use to debug
+There is also a debugger @tt[ocamldebug] that you can use to debug
 your programs.  The usage is a lot like @tt{gdb}, with one major
 exception: execution can go backwards.  The @tt{back} command will
 go back one instruction.
@@ -388,10 +388,10 @@ pairs.  Comments may be nested, and the comment is treated
 as white space.
 
  * @end[doc]
+ * @docoff
  *)
 
-(*!
- * @docoff
+(*
  * -*-
  * Local Variables:
  * Caml-master: "compile"

@@ -1,6 +1,6 @@
 (*
  * This file defines the intermediate language for
- * the "MC" language.
+ * the M language.
  *
  * Here is the abstract syntax:
  *
@@ -65,6 +65,7 @@ prec prec_rel
 prec prec_if
 prec prec_fun
 prec prec_let
+prec prec_comma
 prec prec_compilable
 
 (*
@@ -90,6 +91,7 @@ declare AtomFalse
 declare AtomTrue
 declare AtomInt[i:n]
 declare AtomBinop{'op; 'a1; 'a2}
+declare AtomRelop{'op; 'a1; 'a2}
 declare AtomFun{x. 'e['x]}
 declare AtomVar{'v}
 declare AtomFunVar{'R; 'v}
@@ -98,10 +100,11 @@ declare AtomFunVar{'R; 'v}
  * Expressions.
  *)
 declare LetAtom{'a; v. 'e['v]}
-declare TailCall{'f; 'a}
-declare TailCall{'f; 'a1; 'a2}
-declare TailCall{'f; 'a1; 'a2; 'a3}
 declare If{'a; 'e1; 'e2}
+
+declare ArgNil
+declare ArgCons{'a; 'rest}
+declare TailCall{'f; 'args}
 
 declare Length[i:n]
 declare AllocTupleNil
@@ -109,6 +112,11 @@ declare AllocTupleCons{'a; 'rest}
 declare LetTuple{'length; 'tuple; v. 'e['v]}
 declare LetSubscript{'a1; 'a2; v. 'e['v]}
 declare SetSubscript{'a1; 'a2; 'a3; 'e}
+
+declare Reserve[words:n]{'e}
+declare Reserve[words:n]{'args; 'e}
+declare ReserveCons{'a; 'rest}
+declare ReserveNil
 
 declare LetApply{'f; 'a; v. 'e['v]}
 declare LetClosure{'a1; 'a2; f. 'e['f]}
@@ -125,6 +133,11 @@ declare EndDef
 declare LetFun{'R; 'label; f. 'e['f]}
 
 (*
+ * Include a term representing initialization code.
+ *)
+declare Initialize{'e}
+
+(*
  * Programs are represented as sequents:
  *    declarations, definitions >- exp
  *
@@ -136,7 +149,7 @@ declare def{'v; 'e}
 declare compilable{'e}
 
 (*
- * Sequent tag for m programs.
+ * Sequent tag for M programs.
  *)
 declare m
 

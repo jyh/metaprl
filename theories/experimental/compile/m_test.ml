@@ -36,7 +36,7 @@ interactive fib_prog :
       LetRec{R. Fields{
          FunDef{Label["fib":t]; AtomFun{i.
             LetFun{'R; Label["fib":t]; fib.
-            If{AtomBinop{LeOp; AtomVar{'i}; AtomInt[1:n]};
+            If{AtomRelop{LeOp; AtomVar{'i}; AtomInt[1:n]};
                Return{AtomVar{'i}};
 
                LetApply{AtomVar{'fib}; AtomBinop{SubOp; AtomVar{'i}; AtomVar{'one}}; v1.
@@ -44,11 +44,64 @@ interactive fib_prog :
                Return{AtomBinop{AddOp; AtomVar{'v1}; AtomVar{'v2}}}}}}}};
          EndDef}};
       R. LetFun{'R; Label["fib":t]; fib.
-         TailCall{AtomVar{'fib}; AtomInt[35:n]}}}}}} }
+         TailCall{AtomVar{'fib}; ArgCons{AtomInt[35:n]; ArgNil}}}}}}} }
 
-(*!
- * @docoff
- *
+interactive fib_prog2 :
+   sequent [m] { 'H >- compilable{
+      LetRec{R. Fields{
+         FunDef{Label["fib":t]; AtomFun{i.
+            LetFun{'R; Label["fib":t]; fib.
+            If{AtomRelop{LeOp; AtomVar{'i}; AtomInt[1:n]};
+               Return{AtomVar{'i}};
+
+               LetApply{AtomVar{'fib}; AtomBinop{SubOp; AtomVar{'i}; AtomInt[1:n]}; v1.
+               LetApply{AtomVar{'fib}; AtomBinop{SubOp; AtomVar{'i}; AtomInt[2:n]}; v2.
+               Return{AtomBinop{AddOp; AtomVar{'v1}; AtomVar{'v2}}}}}}}};
+         EndDef}};
+      R. LetFun{'R; Label["fib":t]; fib.
+         TailCall{AtomVar{'fib}; ArgCons{AtomInt[25:n]; ArgNil}}}}} }
+
+(*
+ * This is a program that should have some spills.
+ *)
+interactive spill_prog :
+   sequent [m] { 'H >- compilable{
+      LetRec{R. Fields{
+         FunDef{Label["spill":t]; AtomFun{i.
+            LetAtom{AtomBinop{AddOp; AtomVar{'i}; AtomInt[1:n]}; i1.
+            LetAtom{AtomBinop{AddOp; AtomVar{'i}; AtomInt[2:n]}; i2.
+            LetAtom{AtomBinop{AddOp; AtomVar{'i}; AtomInt[3:n]}; i3.
+            LetAtom{AtomBinop{AddOp; AtomVar{'i}; AtomInt[4:n]}; i4.
+            LetAtom{AtomBinop{AddOp; AtomVar{'i}; AtomInt[5:n]}; i5.
+            LetAtom{AtomBinop{AddOp; AtomVar{'i}; AtomInt[6:n]}; i6.
+            LetAtom{AtomBinop{AddOp; AtomVar{'i}; AtomInt[7:n]}; i7.
+            Return{AtomBinop{AddOp; AtomVar{'i1};
+                   AtomBinop{AddOp; AtomVar{'i2};
+                   AtomBinop{AddOp; AtomVar{'i3};
+                   AtomBinop{AddOp; AtomVar{'i4};
+                   AtomBinop{AddOp; AtomVar{'i5};
+                   AtomBinop{AddOp; AtomVar{'i6}; AtomVar{'i7}}}}}}}}}}}}}}}};
+         EndDef}};
+      R. LetFun{'R; Label["spill":t]; spill.
+         TailCall{AtomVar{'spill}; ArgCons{AtomInt[25:n]; ArgNil}}}}} }
+
+
+(*
+interactive ext_fib_prog2 :
+   sequent [m] { 'H >- compilable{.
+      <:ext<
+         let rec fib (i) =
+            if i < 1 then
+               i
+            else
+               let v1 = fib (i - 1) in
+               let v2 = fib (i - 2) in
+                  v1 + v2
+         in
+            fib (25) >>} }
+*)
+
+(*
  * -*-
  * Local Variables:
  * Caml-master: "compile"

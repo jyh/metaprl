@@ -412,11 +412,11 @@ interactive mul_int0 {| intro [] |} :
 	sequent { <H> >- ('x *@ 'y) in int0 }
 
 interactive is_normed_type {| intro [] |} :
-	[wf] sequent { <H> >- 'a in int0 } -->
-	[wf] sequent { <H> >- 'b in int0 } -->
+	[wf] sequent { <H> >- 'a in int } -->
+	[wf] sequent { <H> >- 'b in int } -->
 	sequent { <H> >- is_normed{'a; 'b} Type }
 
-interactive denominator_int0 {| intro [AutoMustComplete] |} 'x :
+interactive denominator_int0 'x :
 	[wf] sequent { <H> >- 'x in int } -->
 	[wf] sequent { <H> >- 'y in int } -->
 	sequent { <H> >- is_normed{'x; 'y} } -->

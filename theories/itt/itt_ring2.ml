@@ -83,14 +83,14 @@ define unfold_isDistrib1 : isDistrib{'r} <-->
    isRDistrib{'r} & isLDistrib{'r}
 
 define unfold_isRing1 : isRing{'r} <-->
-   isSemigroup{'r} & isGroup{as_additive{'r}} & isCommutative{as_additive{'r}} & isDistrib{'r}
+   isSemigroup{'r} & isAbelg{as_additive{'r}} & isDistrib{'r}
 
 define unfold_ring1 : ring[i:l] <-->
    {R: prering[i:l] | isRing{'R}}
 doc docoff
 
 let unfold_isDistrib = unfold_isDistrib1 thenC addrC [1] unfold_isLDistrib thenC addrC [0] unfold_isRDistrib
-let unfold_isRing = unfold_isRing1 thenC addrC [0] unfold_isSemigroup thenC addrC [1; 0] unfold_isGroup thenC addrC [1; 1; 0] unfold_isCommutative(* thenC reduceC*) thenC addrC [1; 1; 1] unfold_isDistrib
+let unfold_isRing = unfold_isRing1 thenC addrC [0] unfold_isSemigroup thenC addrC [1; 0] unfold_isAbelg (* thenC reduceC*) thenC addrC [1; 1] unfold_isDistrib
 let unfold_ring = unfold_ring1 thenC addrC [0] unfold_prering thenC addrC [1] unfold_isRing
 
 let fold_isRDistrib = makeFoldC << isRDistrib{'r} >> unfold_isRDistrib
@@ -212,17 +212,24 @@ interactive addG_isCommut_intro {| intro [AutoMustComplete] |} :
    [main] sequent { <H>; x: 'R^car; y: 'R^car >- 'x +['R] 'y = 'y +['R] 'x in 'R^car} -->
    sequent { <H> >- isCommutative{as_additive{'R}} }
 
+interactive addG_isAbelg_intro {| intro [AutoMustComplete] |} :
+   [wf] sequent { <H> >- 'R^car Type } -->
+   [main] sequent { <H>; x: 'R^car; y: 'R^car; z: 'R^car >- ('x +['R] 'y) +['R] 'z = 'x +['R] ('y +['R] 'z) in 'R^car } -->
+   [main] sequent { <H>; x: 'R^car >- 'R^"0" +['R] 'x = 'x in 'R^car } -->
+   [main] sequent { <H>; x: 'R^car >- ('R^neg 'x) +['R] 'x = 'R^"0" in 'R^car } -->
+   [main] sequent { <H>; x: 'R^car; y: 'R^car >- 'x +['R] 'y = 'y +['R] 'x in 'R^car} -->
+   sequent { <H> >- isAbelg{as_additive{'R}} }
+
 doc <:doc< >>
 interactive isRing_intro {| intro [AutoMustComplete] |} :
    [wf] sequent { <H> >- 'R^car Type } -->
    [main] sequent { <H> >- isSemigroup{'R} } -->
-   [main] sequent { <H> >- isGroup{as_additive{'R}} } -->
-   [main] sequent { <H> >- isCommutative{as_additive{'R}} } -->
+   [main] sequent { <H> >- isAbelg{as_additive{'R}} } -->
    [main] sequent { <H> >- isDistrib{'R} } -->
    sequent { <H> >- isRing{'R} }
 
 interactive isRing_elim1 {| elim [] |} 'H :
-   sequent { <H>; u: isRing{'R}; u1: isSemigroup{'R}; u2: isGroup{as_additive{'R}}; u3: isCommutative{as_additive{'R}}; u4: isDistrib{'R}; <J['u]> >- 'C['u] } -->
+   sequent { <H>; u: isRing{'R}; u1: isSemigroup{'R}; u2: isAbelg{as_additive{'R}}; u3: isDistrib{'R}; <J['u]> >- 'C['u] } -->
    sequent { <H>; u: isRing{'R}; <J['u]> >- 'C['u] }
 
 interactive isRing_elim {| elim [] |} 'H :
@@ -341,6 +348,12 @@ interactive ring_left_neg2 {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} 
    sequent { <H> >- 'R in ring[i:l] } -->
    sequent { <H> >- 'a in 'R^car } -->
    sequent { <H> >- 'R^"0" = ('R^neg 'a) +['R] 'a in 'R^car }
+
+interactive ring_add_commut {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} ring[i:l] :
+   sequent { <H> >- 'R in ring[i:l] } -->
+   sequent { <H> >- 'a in 'R^car } -->
+   sequent { <H> >- 'b in 'R^car } -->
+   sequent { <H> >- 'a +['R] 'b = 'b +['R] 'a in 'R^car }
 
 interactive ring_right_distib {| intro [AutoMustComplete; intro_typeinf <<'R>>] |} ring[i:l] :
    sequent { <H> >- 'R in ring[i:l] } -->
@@ -519,6 +532,23 @@ interactive mul_addid2 {| intro [intro_typeinf <<'R>>] |} ring[i:l] :
    sequent { <H> >- 'a in 'R^car } -->
    sequent { <H> >- 'R^"0" *['R] 'a = 'R^"0" in 'R^car }
 
+interactive mul_neg1 {| intro [intro_typeinf <<'R>>] |} ring[i:l] :
+   sequent { <H> >- 'R in ring[i:l] } -->
+   sequent { <H> >- 'a in 'R^car } -->
+   sequent { <H> >- 'b in 'R^car } -->
+   sequent { <H> >- 'a *['R] ('R^neg 'b) = 'R^neg ('a *['R] 'b) in 'R^car }
+
+interactive mul_neg2 {| intro [intro_typeinf <<'R>>] |} ring[i:l] :
+   sequent { <H> >- 'R in ring[i:l] } -->
+   sequent { <H> >- 'a in 'R^car } -->
+   sequent { <H> >- 'b in 'R^car } -->
+   sequent { <H> >- ('R^neg 'a) *['R] 'b = 'R^neg ('a *['R] 'b) in 'R^car }
+
+interactive neg_mul_neg {| intro [intro_typeinf <<'R>>] |} ring[i:l] :
+   sequent { <H> >- 'R in ring[i:l] } -->
+   sequent { <H> >- 'a in 'R^car } -->
+   sequent { <H> >- 'b in 'R^car } -->
+   sequent { <H> >- ('R^neg 'a) *['R] ('R^neg 'b) = 'a *['R] 'b in 'R^car }
 
 
 
@@ -631,6 +661,7 @@ interactive subring_even_int {| intro [] |} :
    sequent { <H> >- subring[i:l]{Zeven; Z} }
 doc docoff
 *)
+
 (************************************************************************
  * DISPLAY FORMS                                                        *
  ************************************************************************)

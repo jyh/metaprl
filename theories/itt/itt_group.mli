@@ -43,6 +43,7 @@ declare isGroup{'G}
 declare group[i:l]
 declare groupExtEqual{'A; 'B}
 declare abelg[i:l]
+declare isAbelg{'G}
 declare subgroup[i:l]{'S; 'G}
 declare lcoset{'S; 'G; 'b}
 declare rcoset{'S; 'G; 'b}
@@ -72,6 +73,7 @@ topval unfold_isGroup : conv
 topval unfold_group : conv
 topval unfold_groupExtEqual : conv
 topval unfold_abelg : conv
+topval unfold_isAbelg : conv
 topval unfold_subgroup : conv
 topval unfold_lcoset : conv
 topval unfold_rcoset : conv
@@ -94,6 +96,8 @@ topval fold_group1 : conv
 topval fold_group : conv
 topval fold_groupExtEqual : conv
 topval fold_abelg : conv
+topval fold_isAbelg1 : conv
+topval fold_isAbelg : conv
 topval fold_subgroup : conv
 topval fold_lcoset : conv
 topval fold_rcoset : conv

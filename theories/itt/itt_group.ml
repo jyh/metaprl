@@ -394,6 +394,17 @@ interactive inv_simplify2 {| intro [intro_typeinf <<'G>>] |} group[i:l] :
    sequent { <H> >- 'b in 'G^car } -->
    sequent { <H> >- ('G^inv 'b) *['G] ('G^inv 'a) = 'G^inv ('a *['G] 'b) in 'G^car }
 
+(* Inverse of inverse. *)
+interactive inv_inv1 {| intro [intro_typeinf <<'G>>] |} group[i:l] :
+   sequent { <H> >- 'G in group[i:l] } -->
+   sequent { <H> >- 'a in 'G^car } -->
+   sequent { <H> >- 'a = 'G^inv ('G^inv 'a) in 'G^car }
+
+interactive inv_inv2 {| intro [intro_typeinf <<'G>>] |} group[i:l] :
+   sequent { <H> >- 'G in group[i:l] } -->
+   sequent { <H> >- 'a in 'G^car } -->
+   sequent { <H> >- 'G^inv ('G^inv 'a) = 'a in 'G^car }
+
 (* Inverse of id *)
 interactive inv_of_id {| intro [intro_typeinf <<'G>>] |} group[i:l] :
    sequent { <H> >- 'G in group[i:l] } -->
@@ -458,9 +469,16 @@ doc <:doc<
 >>
 define unfold_abelg : abelg[i:l] <-->
    {G: group[i:l] | isCommutative{'G}}
+
+define unfold_isAbelg1 : isAbelg{'G} <-->
+   isGroup{'G} & isCommutative{'G}
 doc docoff
 
+let unfold_isAbelg = unfold_isAbelg1 thenC addrC [0] unfold_isGroup thenC addrC [1] unfold_isCommutative
+
 let fold_abelg = makeFoldC << abelg[i:l] >> unfold_abelg
+let fold_isAbelg1 = makeFoldC << isAbelg{'G} >> unfold_isAbelg1
+let fold_isAbelg = makeFoldC << isAbelg{'G} >> unfold_isAbelg
 
 let abelgDT n = rw unfold_abelg n thenT dT n
 
@@ -476,9 +494,9 @@ doc <:doc<
 interactive abelg_wf {| intro [] |} :
    sequent { <H> >- "type"{abelg[i:l]} }
 
-interactive isCommutative_wf {| intro [intro_typeinf <<'g>>] |} group[i:l] :
-	sequent { <H> >- 'g in group[i:l] } -->
-	sequent { <H> >- isCommutative{'g} Type }
+interactive isAbelg_wf {| intro [intro_typeinf <<'g>>] |} group[i:l] :
+   sequent { <H> >- 'g in group[i:l] } -->
+   sequent { <H> >- isAbelg{'g} Type }
 
 doc <:doc<
    @begin[doc]
@@ -491,9 +509,18 @@ interactive abelg_intro {| intro [] |} :
    [main] sequent { <H> >- isCommutative{'G} } -->
    sequent { <H> >- 'G in abelg[i:l] }
 
+interactive isAbelg_intro {| intro [] |} :
+   [main] sequent { <H> >- isGroup{'G} } -->
+   [main] sequent { <H> >- isCommutative{'G} } -->
+   sequent { <H> >- isAbelg{'G} }
+
 interactive abelg_elim {| elim [] |} 'H :
    sequent { <H>; G: group[i:l]; x: isCommutative{'G}; <J['G]> >- 'C['G] } -->
    sequent { <H>; G: abelg[i:l]; <J['G]> >- 'C['G] }
+
+interactive isAbelg_elim {| elim [] |} 'H :
+   sequent { <H>; u: isGroup{'G}; v: isCommutative{'G}; <J['u, 'v]> >- 'C['u, 'v] } -->
+   sequent { <H>; x: isAbelg{'G}; <J['x]> >- 'C['x] }
 
 doc <:doc<
    @begin[doc]
@@ -503,6 +530,16 @@ doc <:doc<
 >>
 interactive abelg_subtype_group :
    sequent { <H> >- abelg[i:l] subtype group[i:l] }
+doc docoff
+
+interactive abelg_isAbelg abelg[i:l]:
+   [wf] sequent { <H> >- 'G in abelg[i:l] } -->
+   sequent { <H> >- isAbelg{'G} }
+
+interactive isAbelg_abelg :
+   [wf] sequent { <H> >- 'G in pregroup[i:l] } -->
+   [main] sequent { <H> >- isAbelg{'G} } -->
+   sequent { <H> >- 'G in abelg[i:l] }
 
 (************************************************************************
  * SUBGROUP                                                             *
@@ -1320,6 +1357,9 @@ dform abelg_df1 : except_mode[src] :: except_mode[prl] :: abelg[i:l] =
 
 dform abelg_df2 : mode[prl] :: abelg[i:l] =
    `"Abelian_group[" slot[i:l] `"]"
+
+dform isAbelg_df : except_mode[src] :: isAbelg{'g} =
+   `"isAbelg(" slot{'g} `")"
 
 dform subgroup_df1 : except_mode[src] :: except_mode[prl] :: parens :: "prec"[prec_subtype] :: subgroup[i:l]{'S; 'G} =
    slot{'S} `" " subseteq izone `"_{" ezone `"group" izone `"_{" ezone slot[i:l] izone `"}}" ezone `" " slot{'G}

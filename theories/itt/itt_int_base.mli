@@ -294,32 +294,6 @@ rule intElimination 'H :
    sequent { <H>; n: int; <J['n]> >- 'C['n] }
 
 (*
- * Equality on induction combinator:
- * let a = ind(x1; i1, j1. down1[i1, j1]; base1; k1, l1. up1[k1, l1])
- * let b = ind(x2; i2, j2. down2[i2, j2]; base2; k2, l2. up2[k2, l2])
- *
- * H >- a = b in T[x1]
- * by indEquality \z. T[z]
- *
- * H >- x1 = y1 in Z
- * H, x: Z, w: x < 0, y: T[x + 1] >- down1[x, y] = down2[x, y] in T[x]
- * H >- base1 = base2 in T[0]
- * H, x: Z, w: 0 < x, y: T[x - 1] >- up1[x, y] = up2[x, y] in T[x]
- *)
-rule indEquality lambda{z. 'T['z]} :
-   sequent { <H> >- 'x1 = 'x2 in int } -->
-   sequent { <H>; x: int; w: 'x < 0; y: 'T['x +@ 1] >- 'down1['x; 'y] =
- 'down2['x; 'y] in 'T['x] } -->
-   sequent { <H> >- 'base1 = 'base2 in 'T[0] } -->
-   sequent { <H>; x: int; w: 0 < 'x; y: 'T['x -@ 1] >- 'up1['x; 'y] =
- 'up2['x; 'y] in 'T['x] } -->
-   sequent { <H> >- ind{'x1; i1, j1. 'down1['i1; 'j1]; 'base1; k1, l1.
- 'up1['k1; 'l1]}
-                   = ind{'x2; i2, j2. 'down2['i2; 'j2]; 'base2; k2, l2.
- 'up2['k2; 'l2]}
-                   in 'T['x1] }
-
-(*
  Definition of basic operations (and relations) on int
  *)
 
@@ -399,15 +373,13 @@ rule lt_Discret :
 
 topval lt_DiscretC: conv
 
-rule lt_addMono 'c:
+rule lt_addMono :
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->
    [wf] sequent { <H> >- 'c in int } -->
-   sequent { <H> >- lt_bool{'a; 'b} ~ lt_bool{('a +@ 'c); ('b +@ 'c)} }
+   sequent { <H> >- lt_bool{('a +@ 'c); ('b +@ 'c)} ~ lt_bool{'a; 'b} }
 
 topval lt_addMonoC: term -> conv
-
-topval lt_addAddC : term -> conv
 
 rule add_Commut :
    [wf] sequent { <H> >- 'a in int } -->

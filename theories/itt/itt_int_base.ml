@@ -62,6 +62,7 @@ extends Itt_rfun
 extends Itt_bool
 extends Itt_logic
 extends Itt_struct
+extends Itt_struct2
 extends Itt_decidable
 doc <:doc< @docoff >>
 
@@ -709,41 +710,6 @@ let reduce_ind_numberC =
    unfold_ind_number thenC addrC [2;0] reduce_lt thenC addrC [2] reduceTopC
  thenC addrC [0] reduce_eq_int thenC reduceTopC
 
-(*
- * @begin[doc]
- * @modsubsection{Combinator equality}
- *
- * Two @tt[ind] term compute values of type $T$ if each of the three
- * cases (zero, positive, and negative) produces values of type $T$.
- * @end[doc]
- *)
-(*
- * Equality on induction combinator:
- * let a = ind(x1; i1, j1. down1[i1, j1]; base1; k1, l1. up1[k1, l1])
- * let b = ind(x2; i2, j2. down2[i2, j2]; base2; k2, l2. up2[k2, l2])
- *
- * H >- a = b in T[x1]
- * by indEquality \z. T[z]
- *
- * H >- x1 = y1 in Z
- * H, x: Z, w: x < 0, y: T[x + 1] >- down1[x, y] = down2[x, y] in T[x]
- * H >- base1 = base2 in T[0]
- * H, x: Z, w: 0 < x, y: T[x - 1] >- up1[x, y] = up2[x, y] in T[x]
- *)
-prim indEquality {| intro [complete_unless_member]; eqcd |} bind{z. 'T['z]} :
-   sequent { <H> >- 'x1 = 'x2 in int } -->
-   sequent { <H>; x: int; w: 'x < 0; y: 'T['x +@ 1] >- 'down1['x; 'y] =
- 'down2['x; 'y] in 'T['x] } -->
-   sequent { <H> >- 'base1 = 'base2 in 'T[0] } -->
-   sequent { <H>; x: int; w: 0 < 'x; y: 'T['x -@ 1] >- 'up1['x; 'y] =
- 'up2['x; 'y] in 'T['x] } -->
-   sequent { <H> >- ind{'x1; i1, j1. 'down1['i1; 'j1]; 'base1; k1, l1.
- 'up1['k1; 'l1]}
-                   = ind{'x2; i2, j2. 'down2['i2; 'j2]; 'base2; k2, l2.
- 'up2['k2; 'l2]}
-                   in 'T['x1] } =
-  it
-
 doc <:doc<
    @begin[doc]
    @modsubsection{Addition properties}
@@ -828,22 +794,41 @@ doc <:doc<
 
    @end[doc]
 >>
-prim lt_addMono 'c :
+prim lt_addMono :
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->
    [wf] sequent { <H> >- 'c in int } -->
-   sequent { <H> >- lt_bool{'a; 'b} ~ lt_bool{('a +@ 'c); ('b +@ 'c)} } =
+   sequent { <H> >- lt_bool{('a +@ 'c); ('b +@ 'c)} ~ lt_bool{'a; 'b} } =
  it
 
-interactive_rw lt_addMono_rw 'c :
+interactive_rw lt_bool_addMono_rw {| reduce |} :
    ( 'a in int ) -->
    ( 'b in int ) -->
    ( 'c in int ) -->
-   lt_bool{'a; 'b} <--> lt_bool{('a +@ 'c); ('b +@ 'c)}
+   lt_bool{('a +@ 'c); ('b +@ 'c)} <--> lt_bool{'a; 'b}
 
-let lt_addMonoC = lt_addMono_rw
+interactive_rw lt_addMono_rw1 {| reduce |} :
+   ( 'a in int ) -->
+   ( 'b in int ) -->
+   ( 'c in int ) -->
+   (('a +@ 'c) < ('b +@ 'c)) <--> ('a < 'b)
 
-let lt_addAddC t = foldC <<lt_bool{'a; 'b}>> (lt_addMonoC t)
+interactive_rw lt_addMono_rw2 {| reduce |} :
+   ( 'a in int ) -->
+   ( 'b in int ) -->
+   ( 'c in int ) -->
+   (('a +@ 'b) < ('a +@ 'c)) <--> ('b < 'c)
+
+interactive_rw lt_addMono_rw 'c:
+   ( 'a in int ) -->
+   ( 'b in int ) -->
+   ( 'c in int ) -->
+   ('a < 'b) <--> (('a +@ 'c) < ('b +@ 'c))
+
+interactive_rw lt_const {| reduce |} :
+   ( 'a in int ) -->
+   ( 'b in int ) -->
+   ( 'a < ('a +@ 'b) ) <--> ( 0 < 'b)
 
 interactive lt_add_lt :
    [main] sequent { <H> >- 'a < 'b} -->
@@ -854,6 +839,9 @@ interactive lt_add_lt :
    [wf] sequent { <H> >- 'd in int } -->
    sequent { <H> >- ('a +@ 'c) < ('b +@ 'd) }
 
+doc docoff
+
+let lt_addMonoC = lt_addMono_rw
 let lt_add_ltT = lt_add_lt
 
 doc <:doc<
@@ -917,6 +905,42 @@ interactive_rw minus_plus_rw {| reduce |} :
    ('a in int) -->
    ('b in int) -->
    (('a -@ 'b) +@ 'b) <--> 'a
+
+(*
+ * @begin[doc]
+ * @modsubsection{Combinator equality}
+ *
+ * Two @tt[ind] term compute values of type $T$ if each of the three
+ * cases (zero, positive, and negative) produces values of type $T$.
+ * @end[doc]
+ *)
+(*
+ * Equality on induction combinator:
+ * let a = ind(x1; i1, j1. down1[i1, j1]; base1; k1, l1. up1[k1, l1])
+ * let b = ind(x2; i2, j2. down2[i2, j2]; base2; k2, l2. up2[k2, l2])
+ *
+ * H >- a = b in T[x1]
+ * by indEquality \z. T[z]
+ *
+ * H >- x1 = y1 in Z
+ * H, x: Z, w: x < 0, y: T[x + 1] >- down1[x, y] = down2[x, y] in T[x]
+ * H >- base1 = base2 in T[0]
+ * H, x: Z, w: 0 < x, y: T[x - 1] >- up1[x, y] = up2[x, y] in T[x]
+ *)
+interactive indEquality {| intro [complete_unless_member]; eqcd |} bind{z. 'T['z]} :
+   sequent { <H> >- 'x1 = 'x2 in int } -->
+   sequent { <H>; x: int; 'x < 0; 'x1 < 'x +@ 1; y: 'T['x +@ 1] >- 'down1['x; 'y] =
+ 'down2['x; 'y] in 'T['x] } -->
+   sequent { <H> >- 'base1 = 'base2 in 'T[0] } -->
+   sequent { <H>; x: int; 0 < 'x; 'x < 'x1 +@ 1; y: 'T['x -@ 1] >- 'up1['x; 'y] =
+ 'up2['x; 'y] in 'T['x] } -->
+   sequent { <H> >- ind{'x1; i1, j1. 'down1['i1; 'j1]; 'base1; k1, l1.
+ 'up1['k1; 'l1]}
+                   = ind{'x2; i2, j2. 'down2['i2; 'j2]; 'base2; k2, l2.
+ 'up2['k2; 'l2]}
+                   in 'T['x1] }
+
+doc docoff
 
 (***********************************************************
  * TYPE INFERENCE

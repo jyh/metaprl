@@ -71,10 +71,10 @@ dform utrue_df : utrue{'t} = `"utrue(" slot{'t} `")"
  * RULES                                                                *
  ************************************************************************)
 
-interactive univ_type 'H 'J : :
+interactive univ_type 'H 'J :
    sequent ['ext] { 'H; x: univ; 'J['x] >- "type"{prop{'x}} }
 
-interactive univ_type2 'H : :
+interactive univ_type2 'H :
    sequent ['ext] { 'H >- Itt_equal!"type"{univ} }
 
 interactive ufalse_univ 'H :

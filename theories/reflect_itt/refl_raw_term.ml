@@ -184,27 +184,27 @@ prim operator_type {| intro [] |} 'H :
    it
 
 prim eq_op_wf {| intro [] |} 'H :
-   [wf] sequent [squash] { 'H >- member{operator_type; 'op1} } -->
-   [wf] sequent [squash] { 'H >- member{operator_type; 'op2} } -->
-   sequent ['ext] { 'H >- member{bool; eq_op{'op1; 'op2}} } =
+   [wf] sequent [squash] { 'H >- 'op1 IN operator_type } -->
+   [wf] sequent [squash] { 'H >- 'op2 IN operator_type } -->
+   sequent ['ext] { 'H >- eq_op{'op1; 'op2} IN bool } =
    it
 
 prim eq_op_ref 'H :
-   [wf] sequent [squash] { 'H >- member{operator_type; 'op} } -->
+   [wf] sequent [squash] { 'H >- 'op IN operator_type } -->
    sequent ['ext] { 'H >- "assert"{eq_op{'op; 'op}} } =
    it
 
 prim eq_op_sym  'H :
-   [wf] sequent [squash] { 'H >- member{operator_type; 'op1} } -->
-   [wf] sequent [squash] { 'H >- member{operator_type; 'op2} } -->
+   [wf] sequent [squash] { 'H >- 'op1 IN operator_type } -->
+   [wf] sequent [squash] { 'H >- 'op2 IN operator_type } -->
    [wf] sequent [squash] { 'H >- "assert"{eq_op{'op2; 'op1}} } -->
    sequent [squash] { 'H >- "assert"{eq_op{'op1; 'op2}} } =
    it
 
 prim eq_op_trans 'H 'op2 :
-   sequent [squash] { 'H >- member{operator_type; 'op1} } -->
-   sequent [squash] { 'H >- member{operator_type; 'op2} } -->
-   sequent [squash] { 'H >- member{operator_type; 'op3} } -->
+   sequent [squash] { 'H >- 'op1 IN operator_type } -->
+   sequent [squash] { 'H >- 'op2 IN operator_type } -->
+   sequent [squash] { 'H >- 'op3 IN operator_type } -->
    sequent [squash] { 'H >- "assert"{eq_op{'op1; 'op2}} } -->
    sequent [squash] { 'H >- "assert"{eq_op{'op2; 'op3}} } -->
    sequent [squash] { 'H >- "assert"{eq_op{'op1; 'op3}} } =
@@ -231,19 +231,19 @@ interactive raw_term_type2 {| intro [] |} 'H :
    sequent ['ext] { 'H >- "type"{raw_term_type} }
 
 interactive bvar_wf {| intro [] |} 'H :
-   [wf] sequent [squash] { 'H >- member{var_type; 'v} } -->
-   [wf] sequent [squash] { 'H >- member{list{raw_term_type}; 'tl} } -->
-   sequent ['ext] { 'H >- member{raw_term_type; bvar{'v; 'tl}} }
+   [wf] sequent [squash] { 'H >- 'v IN var_type } -->
+   [wf] sequent [squash] { 'H >- 'tl IN list{raw_term_type} } -->
+   sequent ['ext] { 'H >- bvar{'v; 'tl} IN raw_term_type }
 
 interactive bterm_wf {| intro [] |} 'H :
-   [wf] sequent [squash] { 'H >- member{list{var_type}; 'vl} } -->
-   [wf] sequent [squash] { 'H >- member{'T; 't} } -->
-   sequent ['ext] { 'H >- member{raw_bterm_type{'T}; bterm{'vl; 't}} }
+   [wf] sequent [squash] { 'H >- 'vl IN list{var_type} } -->
+   [wf] sequent [squash] { 'H >- 't IN 'T } -->
+   sequent ['ext] { 'H >- bterm{'vl; 't} IN raw_bterm_type{'T} }
 
 interactive term_wf {| intro [] |} 'H :
-   [wf] sequent [squash] { 'H >- member{operator_type; 'op} } -->
-   [wf] sequent [squash] { 'H >- member{list{raw_bterm_type{raw_term_type}}; 'bterms} } -->
-   sequent ['ext] { 'H >- member{raw_term_type; term{'op; 'bterms}} }
+   [wf] sequent [squash] { 'H >- 'op IN operator_type } -->
+   [wf] sequent [squash] { 'H >- 'bterms IN list{raw_bterm_type{raw_term_type}} } -->
+   sequent ['ext] { 'H >- term{'op; 'bterms} IN raw_term_type }
 
 interactive term_elim1 {| elim [ThinOption thinT] |} 'H 'J 'T 'y 'z 'w 'v 'op 'bterms 'terms :
    [main] sequent ['ext] { 'H; x: raw_term_type; 'J['x];
@@ -264,8 +264,8 @@ interactive term_elim1 {| elim [ThinOption thinT] |} 'H 'J 'T 'y 'z 'w 'v 'op 'b
 
 interactive bterm_term_wf {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- "type"{'T} } -->
-   [wf] sequent [squash] { 'H >- member{raw_bterm_type{'T}; 't} } -->
-   sequent ['ext] { 'H >- member{'T; bterm_term{'t}} }
+   [wf] sequent [squash] { 'H >- 't IN raw_bterm_type{'T} } -->
+   sequent ['ext] { 'H >- bterm_term{'t} IN 'T }
 
 (************************************************************************
  * TACTICS                                                              *

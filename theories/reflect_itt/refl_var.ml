@@ -65,7 +65,7 @@ dform vnil_df : mode[prl] :: vnil =
    `""
 
 dform var_df : mode[prl] :: var[t:t] =
-   slot[t:s]
+   slot[t:t]
 
 dform ivar_df : mode[prl] :: ivar{'i; 'v} =
    slot{'v} slot{'i}
@@ -199,25 +199,25 @@ interactive var_type_elim {| elim [ThinOption thinT] |} 'H 'J 'i 't 'v 'w :
  * Typehood.
  *)
 interactive vnil_wf {| intro [] |}  'H :
-   sequent ['ext] { 'H >- member{var_type; vnil} }
+   sequent ['ext] { 'H >- vnil IN var_type }
 
 interactive var_wf {| intro [] |} 'H :
-   sequent ['ext] { 'H >- member{var_type; var[t:t]} }
+   sequent ['ext] { 'H >- var[t:t] IN var_type }
 
 interactive ivar_wf {| intro [] |} 'H :
-   [wf] sequent [squash] { 'H >- member{var_type; 'v} } -->
-   [wf] sequent [squash] { 'H >- member{int; 'i} } -->
-   sequent ['ext] { 'H >- member{var_type; ivar{'i; 'v}} }
+   [wf] sequent [squash] { 'H >- 'v IN var_type } -->
+   [wf] sequent [squash] { 'H >- 'i IN int } -->
+   sequent ['ext] { 'H >- ivar{'i; 'v} IN var_type }
 
 interactive tvar_wf {| intro [] |} 'H :
-   [wf] sequent [squash] { 'H >- member{var_type; 'v} } -->
-   [wf] sequent [squash] { 'H >- member{atom; 't} } -->
-   sequent ['ext] { 'H >- member{var_type; tvar{'t; 'v}} }
+   [wf] sequent [squash] { 'H >- 'v IN var_type } -->
+   [wf] sequent [squash] { 'H >- 't IN atom } -->
+   sequent ['ext] { 'H >- tvar{'t; 'v} IN var_type }
 
 interactive eq_var_wf {| intro [] |} 'H :
-   [wf] sequent [squash] { 'H >- member{var_type; 'x} } -->
-   [wf] sequent [squash] { 'H >- member{var_type; 'y} } -->
-   sequent ['ext] { 'H >- member{bool; eq_var{'x; 'y}} }
+   [wf] sequent [squash] { 'H >- 'x IN var_type } -->
+   [wf] sequent [squash] { 'H >- 'y IN var_type } -->
+   sequent ['ext] { 'H >- eq_var{'x; 'y} IN bool }
 
 (*
  * Sqiggle equality.
@@ -234,8 +234,8 @@ interactive eq_var_assert_intro {| intro [] |} 'H :
    sequent ['ext] { 'H >- "assert"{eq_var{'v1; 'v2}} }
 
 interactive eq_var_assert_elim2 {| elim [] |} 'H 'J :
-   [wf] sequent [squash] { 'H; x: "assert"{eq_var{'v1; 'v2}}; 'J['x] >- member{var_type; 'v1} } -->
-   [wf] sequent [squash] { 'H; x: "assert"{eq_var{'v1; 'v2}}; 'J['x] >- member{var_type; 'v2} } -->
+   [wf] sequent [squash] { 'H; x: "assert"{eq_var{'v1; 'v2}}; 'J['x] >- 'v1 IN var_type } -->
+   [wf] sequent [squash] { 'H; x: "assert"{eq_var{'v1; 'v2}}; 'J['x] >- 'v2 IN var_type } -->
    [main] sequent ['ext] { 'H; x: 'v1 = 'v2 in var_type; 'J[it] >- 'C[it] } -->
    sequent ['ext] { 'H; x: "assert"{eq_var{'v1; 'v2}}; 'J['x] >- 'C['x] }
 

@@ -103,7 +103,7 @@ dform eq_alpha_bterm_df : mode[prl] :: parens :: "prec"[prec_equal] :: eq_alpha_
  * Variable maps.
  *)
 declare search{'a; 'b}
-declare arrows{'a; 'b}
+declare arrows{'a}
 
 (* Application *)
 dform vmap_type_df : mode[prl] :: vmap_type =
@@ -464,69 +464,69 @@ interactive vmap_elim {| elim [ThinOption thinT] |} 'H 'J 'v1 'v2 'g 'w :
    sequent ['ext] { 'H; f: vmap_type; 'J['f] >- 'C['f] }
 
 interactive vmap_compare_wf {| intro [] |} 'H :
-   [wf] sequent [squash] { 'H >- member{vmap_type; 'vm} } -->
-   [wf] sequent [squash] { 'H >- member{var_type; 'v1} } -->
-   [wf] sequent [squash] { 'H >- member{var_type; 'v2} } -->
-   sequent ['ext] { 'H >- member{bool; vmap_compare{'v1; 'v2; 'vm}} }
+   [wf] sequent [squash] { 'H >- 'vm IN vmap_type } -->
+   [wf] sequent [squash] { 'H >- 'v1 IN var_type } -->
+   [wf] sequent [squash] { 'H >- 'v2 IN var_type } -->
+   sequent ['ext] { 'H >- vmap_compare{'v1; 'v2; 'vm} IN bool }
 
 interactive vmap_nil_wf2 {| intro [] |} 'H :
-   sequent ['ext] { 'H >- member{.vmap_type; vmap_nil} }
+   sequent ['ext] { 'H >- vmap_nil IN vmap_type }
 
 interactive vmap_cons_wf2 {| intro [] |} 'H :
-   [wf] sequent [squash] { 'H >- member{var_type; 'v1} } -->
-   [wf] sequent [squash] { 'H >- member{var_type; 'v2} } -->
-   [wf] sequent [squash] { 'H >- member{.vmap_type; 'vm} } -->
-   sequent ['ext] { 'H >- member{.vmap_type; vmap_cons{'v1; 'v2; 'vm}} }
+   [wf] sequent [squash] { 'H >- 'v1 IN var_type } -->
+   [wf] sequent [squash] { 'H >- 'v2 IN var_type } -->
+   [wf] sequent [squash] { 'H >- 'vm IN vmap_type } -->
+   sequent ['ext] { 'H >- vmap_cons{'v1; 'v2; 'vm} IN vmap_type }
 
 interactive vmap_compose_wf2 {| intro [] |} 'H 'f :
-   [wf] sequent [squash] { 'H >- member{list{var_type}; 'vl1} } -->
-   [wf] sequent [squash] { 'H >- member{list{var_type}; 'vl2} } -->
-   [wf] sequent [squash] { 'H >- member{.vmap_type; 'vm} } -->
-   [wf] sequent [squash] { 'H; f: vmap_type >- member{bool; 'b['f]} } -->
-   sequent ['ext] { 'H >- member{bool; vmap_compose{'vl1; 'vl2; 'vm; g. 'b['g]}} }
+   [wf] sequent [squash] { 'H >- 'vl1 IN list{var_type} } -->
+   [wf] sequent [squash] { 'H >- 'vl2 IN list{var_type} } -->
+   [wf] sequent [squash] { 'H >- 'vm IN vmap_type } -->
+   [wf] sequent [squash] { 'H; f: vmap_type >- 'b['f] IN bool } -->
+   sequent ['ext] { 'H >- vmap_compose{'vl1; 'vl2; 'vm; g. 'b['g]} IN bool }
 
 interactive vmap_invert_wf2 {| intro [] |} 'H :
-   [wf] sequent [squash] { 'H >- member{vmap_type; 'f} } -->
-   sequent ['ext] { 'H >- member{vmap_type; vmap_invert{'f}} }
+   [wf] sequent [squash] { 'H >- 'f IN vmap_type } -->
+   sequent ['ext] { 'H >- vmap_invert{'f} IN vmap_type }
 
 interactive vmap_id_wf {| intro [] |} 'H :
-   [wf] sequent [squash] { 'H >- member{vmap_type; 'f} } -->
-   sequent ['ext] { 'H >- member{bool; vmap_id{'f}} }
+   [wf] sequent [squash] { 'H >- 'f IN vmap_type } -->
+   sequent ['ext] { 'H >- vmap_id{'f} IN bool }
 
 interactive vmap_length_wf {| intro [] |} 'H :
-   [wf] sequent [squash] { 'H >- member{vmap_type; 'f} } -->
-   [wf] sequent [squash] { 'H >- member{vmap_type; 'g} } -->
-   sequent ['ext] { 'H >- member{bool; vmap_length{'f; 'g}} }
+   [wf] sequent [squash] { 'H >- 'f IN vmap_type } -->
+   [wf] sequent [squash] { 'H >- 'g IN vmap_type } -->
+   sequent ['ext] { 'H >- vmap_length{'f; 'g} IN bool }
 
 interactive vmap_join_wf {| intro [] |} 'H :
-   [wf] sequent [squash] { 'H >- member{vmap_type; 'f} } -->
-   [wf] sequent [squash] { 'H >- member{vmap_type; 'g} } -->
-   sequent ['ext] { 'H >- member{vmap_type; vmap_join{'f; 'g}} }
+   [wf] sequent [squash] { 'H >- 'f IN vmap_type } -->
+   [wf] sequent [squash] { 'H >- 'g IN vmap_type } -->
+   sequent ['ext] { 'H >- vmap_join{'f; 'g} IN vmap_type }
 
 interactive vmap_fst_wf {| intro [] |} 'H :
-   [wf] sequent [squash] { 'H >- member{vmap_type; 'f} } -->
-   sequent ['ext] { 'H >- member{list{var_type}; vmap_fst{'f}} }
+   [wf] sequent [squash] { 'H >- 'f IN vmap_type } -->
+   sequent ['ext] { 'H >- vmap_fst{'f} IN list{var_type} }
 
 interactive vmap_snd_wf {| intro [] |} 'H :
-   [wf] sequent [squash] { 'H >- member{vmap_type; 'f} } -->
-   sequent ['ext] { 'H >- member{list{var_type}; vmap_snd{'f}} }
+   [wf] sequent [squash] { 'H >- 'f IN vmap_type } -->
+   sequent ['ext] { 'H >- vmap_snd{'f} IN list{var_type} }
 
 (*
  * Properties about the variable comparison.
  *)
 interactive vmap_compare_sym 'H :
-   sequent [squash] { 'H >- member{vmap_type; 'f} } -->
-   sequent [squash] { 'H >- member{var_type; 'v1} } -->
-   sequent [squash] { 'H >- member{var_type; 'v2} } -->
+   sequent [squash] { 'H >- 'f IN vmap_type } -->
+   sequent [squash] { 'H >- 'v1 IN var_type } -->
+   sequent [squash] { 'H >- 'v2 IN var_type } -->
    sequent [squash] { 'H >- "assert"{vmap_compare{'v2; 'v1; vmap_invert{'f}}} } -->
    sequent ['ext] { 'H >- "assert"{vmap_compare{'v1; 'v2; 'f}} }
 
 interactive vmap_compare_trans 'H 'g 'v2 :
-   sequent [squash] { 'H >- member{vmap_type; 'f} } -->
-   sequent [squash] { 'H >- member{vmap_type; 'g} } -->
-   sequent [squash] { 'H >- member{var_type; 'v1} } -->
-   sequent [squash] { 'H >- member{var_type; 'v2} } -->
-   sequent [squash] { 'H >- member{var_type; 'v3} } -->
+   sequent [squash] { 'H >- 'f IN vmap_type } -->
+   sequent [squash] { 'H >- 'g IN vmap_type } -->
+   sequent [squash] { 'H >- 'v1 IN var_type } -->
+   sequent [squash] { 'H >- 'v2 IN var_type } -->
+   sequent [squash] { 'H >- 'v3 IN var_type } -->
    sequent [squash] { 'H >- "assert"{vmap_id{'g}} } -->
    sequent [squash] { 'H >- "assert"{vmap_length{'f; 'g}} } -->
    sequent [squash] { 'H >- "assert"{vmap_compare{'v1; 'v2; vmap_join{'f; 'g}}} } -->
@@ -537,38 +537,38 @@ interactive vmap_compare_trans 'H 'g 'v2 :
  * Alpha equality on terms.
  *)
 interactive eq_alpha_term_wf {| intro [SelectOption 1] |} 'H :
-   [wf] sequent [squash] { 'H >- member{.vmap_type; 'f} } -->
-   [wf] sequent [squash] { 'H >- member{.raw_term_type; 't1} } -->
-   [wf] sequent [squash] { 'H >- member{.raw_term_type; 't2} } -->
-   sequent ['ext] { 'H >- member{bool; eq_alpha_term{'f; 't1; 't2}} }
+   [wf] sequent [squash] { 'H >- 'f IN vmap_type } -->
+   [wf] sequent [squash] { 'H >- 't1 IN raw_term_type } -->
+   [wf] sequent [squash] { 'H >- 't2 IN raw_term_type } -->
+   sequent ['ext] { 'H >- eq_alpha_term{'f; 't1; 't2} IN bool }
 
 interactive eq_alpha_bterm_wf2 {| intro [SelectOption 2] |} 'H 'T1 'T2 :
    [wf] sequent [squash] { 'H >- subtype{'T1; raw_term_type} } -->
    [wf] sequent [squash] { 'H >- subtype{'T2; raw_term_type} } -->
-   [wf] sequent [squash] { 'H >- member{vmap_type; 'f} } -->
-   [wf] sequent [squash] { 'H >- member{raw_bterm_type{'T1}; 't1} } -->
-   [wf] sequent [squash] { 'H >- member{raw_bterm_type{'T2}; 't2} } -->
-   sequent ['ext] { 'H >- member{bool; eq_alpha_bterm{'f; 't1; 't2}} }
+   [wf] sequent [squash] { 'H >- 'f IN vmap_type } -->
+   [wf] sequent [squash] { 'H >- 't1 IN raw_bterm_type{'T1} } -->
+   [wf] sequent [squash] { 'H >- 't2 IN raw_bterm_type{'T2} } -->
+   sequent ['ext] { 'H >- eq_alpha_bterm{'f; 't1; 't2} IN bool }
 
 interactive eq_alpha_term_ref 'H 'v :
-   [wf] sequent [squash] { 'H >- member{.vmap_type; 'f} } -->
+   [wf] sequent [squash] { 'H >- 'f IN vmap_type } -->
    [main] sequent [squash] { 'H; v: var_type >- "assert"{vmap_compare{'v; 'v; 'f}} } -->
-   [wf] sequent [squash] { 'H >- member{.raw_term_type; 't} } -->
+   [wf] sequent [squash] { 'H >- 't IN raw_term_type } -->
    sequent ['ext] { 'H >- "assert"{eq_alpha_term{'f; 't; 't}} }
 
 interactive eq_alpha_term_sym 'H :
-   [wf] sequent [squash] { 'H >- member{vmap_type; 'f} } -->
-   [wf] sequent [squash] { 'H >- member{raw_term_type; 't1} } -->
-   [wf] sequent [squash] { 'H >- member{raw_term_type; 't2} } -->
+   [wf] sequent [squash] { 'H >- 'f IN vmap_type } -->
+   [wf] sequent [squash] { 'H >- 't1 IN raw_term_type } -->
+   [wf] sequent [squash] { 'H >- 't2 IN raw_term_type } -->
    [main] sequent [squash] { 'H >- "assert"{eq_alpha_term{vmap_invert{'f}; 't2; 't1}} } -->
    sequent ['ext] { 'H >- "assert"{eq_alpha_term{'f; 't1; 't2}} }
 
 interactive eq_alpha_term_trans 'H 'g 't2 :
-   [wf] sequent [squash] { 'H >- member{vmap_type; 'f} } -->
-   [wf] sequent [squash] { 'H >- member{vmap_type; 'g} } -->
-   [wf] sequent [squash] { 'H >- member{raw_term_type; 't1} } -->
-   [wf] sequent [squash] { 'H >- member{raw_term_type; 't2} } -->
-   [wf] sequent [squash] { 'H >- member{raw_term_type; 't3} } -->
+   [wf] sequent [squash] { 'H >- 'f IN vmap_type } -->
+   [wf] sequent [squash] { 'H >- 'g IN vmap_type } -->
+   [wf] sequent [squash] { 'H >- 't1 IN raw_term_type } -->
+   [wf] sequent [squash] { 'H >- 't2 IN raw_term_type } -->
+   [wf] sequent [squash] { 'H >- 't3 IN raw_term_type } -->
    [main] sequent [squash] { 'H >- "assert"{vmap_id{'g}} } -->
    [main] sequent [squash] { 'H >- "assert"{vmap_length{'f; 'g}} } -->
    [main] sequent [squash] { 'H >- "assert"{eq_alpha_term{vmap_join{'f; 'g}; 't1; 't2}} } -->
@@ -579,24 +579,24 @@ interactive eq_alpha_term_trans 'H 'g 't2 :
  * Unconditional alpha-equality.
  *)
 interactive eq_alpha_wf {| intro [] |} 'H :
-   [wf] sequent [squash] { 'H >- member{.raw_term_type; 't1} } -->
-   [wf] sequent [squash] { 'H >- member{.raw_term_type; 't2} } -->
-   sequent ['ext] { 'H >- member{bool; eq_alpha{'t1; 't2}} }
+   [wf] sequent [squash] { 'H >- 't1 IN raw_term_type } -->
+   [wf] sequent [squash] { 'H >- 't2 IN raw_term_type } -->
+   sequent ['ext] { 'H >- eq_alpha{'t1; 't2} IN bool }
 
 interactive eq_alpha_ref 'H :
-   [wf] sequent [squash] { 'H >- member{.raw_term_type; 't} } -->
+   [wf] sequent [squash] { 'H >- 't IN raw_term_type } -->
    sequent ['ext] { 'H >- "assert"{eq_alpha{'t; 't}} }
 
 interactive eq_alpha_sym 'H :
-   [wf] sequent [squash] { 'H >- member{raw_term_type; 't1} } -->
-   [wf] sequent [squash] { 'H >- member{raw_term_type; 't2} } -->
+   [wf] sequent [squash] { 'H >- 't1 IN raw_term_type } -->
+   [wf] sequent [squash] { 'H >- 't2 IN raw_term_type } -->
    [main] sequent [squash] { 'H >- "assert"{eq_alpha{'t2; 't1}} } -->
    sequent ['ext] { 'H >- "assert"{eq_alpha{'t1; 't2}} }
 
 interactive eq_alpha_trans 'H 't2 :
-   [wf] sequent [squash] { 'H >- member{raw_term_type; 't1} } -->
-   [wf] sequent [squash] { 'H >- member{raw_term_type; 't2} } -->
-   [wf] sequent [squash] { 'H >- member{raw_term_type; 't3} } -->
+   [wf] sequent [squash] { 'H >- 't1 IN raw_term_type } -->
+   [wf] sequent [squash] { 'H >- 't2 IN raw_term_type } -->
+   [wf] sequent [squash] { 'H >- 't3 IN raw_term_type } -->
    [main] sequent [squash] { 'H >- "assert"{eq_alpha{'t1; 't2}} } -->
    [main] sequent [squash] { 'H >- "assert"{eq_alpha{'t2; 't3}} } -->
    sequent ['ext] { 'H >- "assert"{eq_alpha{'t1; 't3}} }
@@ -612,8 +612,8 @@ interactive term_type_type {| intro [] |} 'H :
  *)
 (*
 interactive term_depth_wf1 'H :
-   sequent [squash] { 'H >- member{raw_term_type; 't} } -->
-   sequent ['ext] { 'H >- member{int; term_depth{'t}} }
+   sequent [squash] { 'H >- 't IN raw_term_type } -->
+   sequent ['ext] { 'H >- term_depth{'t} IN int }
 *)
 
 (*
@@ -622,26 +622,26 @@ interactive term_depth_wf1 'H :
 (*
 interactive eq_alpha_bterm_ref2 'H 'T 'v :
    sequent [squash] { 'H >- subtype{'T; term_type} } -->
-   sequent [squash] { 'H >- member{.vmap_type; 'f} } -->
+   sequent [squash] { 'H >- 'f IN vmap_type } -->
    sequent [squash] { 'H; v: var_type >- "assert"{vmap_compare{'v; 'v; 'f}} } -->
-   sequent [squash] { 'H >- member{.raw_bterm_type{'T}; 't} } -->
+   sequent [squash] { 'H >- 't IN raw_bterm_type{'T} } -->
    sequent ['ext] { 'H >- "assert"{eq_alpha_bterm{'f; 't; 't}} }
 
 interactive eq_alpha_bterm_sym2 'H 'T :
    sequent [squash] { 'H >- subtype{'T; term_type} } -->
-   sequent [squash] { 'H >- member{vmap_type; 'f} } -->
-   sequent [squash] { 'H >- member{raw_bterm_type{'T}; 't1} } -->
-   sequent [squash] { 'H >- member{raw_bterm_type{'T}; 't2} } -->
+   sequent [squash] { 'H >- 'f IN vmap_type } -->
+   sequent [squash] { 'H >- 't1 IN raw_bterm_type{'T} } -->
+   sequent [squash] { 'H >- 't2 IN raw_bterm_type{'T} } -->
    sequent [squash] { 'H >- "assert"{eq_alpha_bterm{vmap_invert{'f}; 't2; 't1}} } -->
    sequent ['ext] { 'H >- "assert"{eq_alpha_bterm{'f; 't1; 't2}} }
 
 interactive eq_alpha_bterm_trans2 'H 'T 'g 't2 :
    sequent [squash] { 'H >- subtype{'T; term_type} } -->
-   sequent [squash] { 'H >- member{vmap_type; 'f} } -->
-   sequent [squash] { 'H >- member{vmap_type; 'g} } -->
-   sequent [squash] { 'H >- member{raw_bterm_type{'T}; 't1} } -->
-   sequent [squash] { 'H >- member{raw_bterm_type{'T}; 't2} } -->
-   sequent [squash] { 'H >- member{raw_bterm_type{'T}; 't3} } -->
+   sequent [squash] { 'H >- 'f IN vmap_type } -->
+   sequent [squash] { 'H >- 'g IN vmap_type } -->
+   sequent [squash] { 'H >- 't1 IN raw_bterm_type{'T} } -->
+   sequent [squash] { 'H >- 't2 IN raw_bterm_type{'T} } -->
+   sequent [squash] { 'H >- 't3 IN raw_bterm_type{'T} } -->
    sequent [squash] { 'H >- "assert"{vmap_id{'g}} } -->
    sequent [squash] { 'H >- "assert"{vmap_length{'f; 'g}} } -->
    sequent [squash] { 'H >- "assert"{eq_alpha_bterm{vmap_join{'f; 'g}; 't1; 't2}} } -->

@@ -92,26 +92,26 @@ let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_i
  * Well-formedness.
  *)
 interactive free_vars_wf1 {| intro [] |} 'H :
-   [wf] sequent [squash] { 'H >- member{raw_term_type; 't} } -->
-   sequent ['ext] { 'H >- member{var_set; free_vars{'t}} }
+   [wf] sequent [squash] { 'H >- 't IN raw_term_type } -->
+   sequent ['ext] { 'H >- free_vars{'t} IN var_set }
 
 (*
  * Functionality.
  *)
 interactive free_vars_fun1 {| intro [] |} 'H 't1 'f 'v1 :
-   [wf] sequent [squash] { 'H >- member{raw_term_type; 't1} } -->
-   [wf] sequent [squash] { 'H >- member{raw_term_type; 't2} } -->
-   [wf] sequent [squash] { 'H >- member{vmap_type; 'f} } -->
+   [wf] sequent [squash] { 'H >- 't1 IN raw_term_type } -->
+   [wf] sequent [squash] { 'H >- 't2 IN raw_term_type } -->
+   [wf] sequent [squash] { 'H >- 'f IN vmap_type } -->
    [main] sequent [squash] { 'H >- "assert"{eq_alpha_term{'f; 't1; 't2}} } -->
-   [wf] sequent [squash] { 'H >- member{var_type; 'v1} } -->
-   [wf] sequent [squash] { 'H >- member{var_type; 'v2} } -->
+   [wf] sequent [squash] { 'H >- 'v1 IN var_type } -->
+   [wf] sequent [squash] { 'H >- 'v2 IN var_type } -->
    [main] sequent [squash] { 'H >- "assert"{vmember{'v1; free_vars{'t1}}} } -->
    [main] sequent [squash] { 'H >- "assert"{vmap_compare{'v1; 'v2; 'f}} } -->
    sequent ['ext] { 'H >- "assert"{vmember{'v2; free_vars{'t2}}} }
 
 interactive free_vars_wf2 {| intro [] |} 'H :
-   [wf] sequent [squash] { 'H >- member{term_type; 't} } -->
-   sequent ['ext] { 'H >- member{var_set; free_vars{'t}} }
+   [wf] sequent [squash] { 'H >- 't IN term_type } -->
+   sequent ['ext] { 'H >- free_vars{'t} IN var_set }
 
 (************************************************************************
  * TACTICS                                                              *

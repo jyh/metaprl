@@ -11,27 +11,25 @@
  * OCaml, and more information about this system.
  *
  * Copyright (C) 1998 Jason Hickey, Cornell University
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- * 
+ *
  * Author: Jason Hickey
  * jyh@cs.cornell.edu
  *
  *)
-
-include Tacticals
 
 include Itt_equal
 include Itt_dfun
@@ -45,8 +43,8 @@ open Refiner.Refiner.TermSubst
 open Refiner.Refiner.RefineError
 open Mp_resource
 
-open Sequent
-open Tacticals
+open Tactic_type
+open Tactic_type.Tacticals
 open Var
 
 open Typeinf
@@ -96,18 +94,18 @@ prim independentFunctionFormation 'H :
  * H >- A1 = A2 in Ui
  * H >- B1 = B2 in Ui
  *)
-prim independentFunctionEquality 'H :
-   sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
-   sequent [squash] { 'H >- 'B1 = 'B2 in univ[i:l] } -->
+prim independentFunctionEquality {| intro_resource []; eqcd_resource |} 'H :
+   [wf] sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
+   [wf] sequent [squash] { 'H >- 'B1 = 'B2 in univ[i:l] } -->
    sequent ['ext] { 'H >- ('A1 -> 'B1) = ('A2 -> 'B2) in univ[i:l] } =
    it
 
 (*
  * Typehood.
  *)
-prim independentFunctionType 'H 'x :
-   sequent [squash] { 'H >- "type"{'A1} } -->
-   sequent [squash] { 'H; x: 'A1 >- "type"{'B1} } -->
+prim independentFunctionType {| intro_resource [] |} 'H 'x :
+   [wf] sequent [squash] { 'H >- "type"{'A1} } -->
+   [wf] sequent [squash] { 'H; x: 'A1 >- "type"{'B1} } -->
    sequent ['ext] { 'H >- "type"{. 'A1 -> 'B1 } } =
    it
 
@@ -118,9 +116,9 @@ prim independentFunctionType 'H 'x :
  * H >- A = A in Ui
  * H, z: A >- B[z] ext b[z]
  *)
-prim independentLambdaFormation 'H 'z :
-   sequent [squash] { 'H >- "type"{'A} } -->
-   ('b['z] : sequent ['ext] { 'H; z: 'A >- 'B }) -->
+prim independentLambdaFormation {| intro_resource [] |} 'H 'z :
+   [wf] sequent [squash] { 'H >- "type"{'A} } -->
+   [main] ('b['z] : sequent ['ext] { 'H; z: 'A >- 'B }) -->
    sequent ['ext] { 'H >- 'A -> 'B } =
    lambda{z. 'b['z]}
 
@@ -131,9 +129,9 @@ prim independentLambdaFormation 'H 'z :
  * H >- A = A in Ui
  * H, x: A >- b1[x] = b2[x] in B[x]
  *)
-prim independentLambdaEquality 'H 'x :
-   sequent [squash] { 'H >- "type"{'A} } -->
-   sequent [squash] { 'H; x: 'A >- 'b1['x] = 'b2['x] in 'B } -->
+prim independentLambdaEquality {| intro_resource []; eqcd_resource |} 'H 'x :
+   [wf] sequent [squash] { 'H >- "type"{'A} } -->
+   [wf] sequent [squash] { 'H; x: 'A >- 'b1['x] = 'b2['x] in 'B } -->
    sequent ['ext] { 'H >- lambda{a1. 'b1['a1]} = lambda{a2. 'b2['a2]} in 'A -> 'B } =
    it
 
@@ -145,8 +143,8 @@ prim independentLambdaEquality 'H 'x :
  * H, f: A -> B, J[x], y: B >- T[x]             ext t[f, y]
  *)
 prim independentFunctionElimination 'H 'J 'f 'y :
-   ('a : sequent ['ext] { 'H; f: 'A -> 'B; 'J['f] >- 'A }) -->
-   ('t['f; 'y] : sequent ['ext] { 'H; f: 'A -> 'B; 'J['f]; y: 'B >- 'T['f] }) -->
+   [assertion] ('a : sequent ['ext] { 'H; f: 'A -> 'B; 'J['f] >- 'A }) -->
+   [main] ('t['f; 'y] : sequent ['ext] { 'H; f: 'A -> 'B; 'J['f]; y: 'B >- 'T['f] }) -->
    sequent ['ext] { 'H; f: 'A -> 'B; 'J['f] >- 'T['f] } =
    't['f; 'f 'a]
 
@@ -154,8 +152,8 @@ prim independentFunctionElimination 'H 'J 'f 'y :
  * Explicit function elimination.
  *)
 prim independentFunctionElimination2 'H 'J 'f 'y 'z 'a :
-   sequent ['ext] { 'H; f: 'A -> 'B; 'J['f] >- 'a = 'a in 'A } -->
-   ('t['y; 'z] : sequent ['ext] { 'H; f: 'A -> 'B; 'J['f]; y: 'B; z: 'y = ('f 'a) in 'B >- 'T['f] }) -->
+   [wf] sequent ['ext] { 'H; f: 'A -> 'B; 'J['f] >- 'a = 'a in 'A } -->
+   [main] ('t['y; 'z] : sequent ['ext] { 'H; f: 'A -> 'B; 'J['f]; y: 'B; z: 'y = ('f 'a) in 'B >- 'T['f] }) -->
    sequent ['ext] { 'H; f: 'A -> 'B; 'J['f] >- 'T['f] } =
    't['f 'a; it]
 
@@ -167,8 +165,8 @@ prim independentFunctionElimination2 'H 'J 'f 'y 'z 'a :
  * H >- a1 = a2 in A
  *)
 prim independentApplyEquality 'H ('A -> 'B) :
-   sequent [squash] { 'H >- 'f1 = 'f2 in 'A -> 'B } -->
-   sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
+   [wf] sequent [squash] { 'H >- 'f1 = 'f2 in 'A -> 'B } -->
+   [wf] sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
    sequent ['ext] { 'H >- ('f1 'a1) = ('f2 'a2) in 'B } =
    it
 
@@ -190,144 +188,59 @@ prim independentFunctionSubtype 'H :
  ************************************************************************)
 
 (*
- * D the conclusion.
- *)
-let d_concl_fun p =
-   let count = hyp_count_addr p in
-   let z = get_opt_var_arg "z" p in
-      (independentLambdaFormation count z
-       thenLT [addHiddenLabelT "wf";
-               addHiddenLabelT "main"]) p
-
-(*
  * D a hyp.
  * We take the argument.
  *)
 let d_hyp_fun i p =
    let f, _ = Sequent.nth_hyp p i in
-   let i, j = hyp_indices p i in
+   let i, j = Sequent.hyp_indices p i in
    let y, z = maybe_new_vars2 p "y" "z" in
       try
          let a = get_with_arg p in
-            (independentFunctionElimination2 i j f y z a
-             thenLT [addHiddenLabelT "wf";
-                     addHiddenLabelT "main"]) p
+            independentFunctionElimination2 i j f y z a p
       with
          RefineError _ ->
-            (independentFunctionElimination i j f y
-             thenLT [addHiddenLabelT "antecedent";
-                     addHiddenLabelT "main"]) p
+            independentFunctionElimination i j f y p
 
-(*
- * Join them.
- *)
-let d_funT i =
-   if i = 0 then
-      d_concl_fun
-   else
-      d_hyp_fun i
-
-let d_resource = Mp_resource.improve d_resource (fun_term, d_funT)
-
-(*
- * Typehood.
- *)
-let d_fun_typeT i p =
-   if i = 0 then
-      let x = maybe_new_vars1 p "x" in
-         independentFunctionType (hyp_count_addr p) x p
-   else
-      let _, t = Sequent.nth_hyp p i in
-         raise (RefineError ("d_fun_typeT", StringTermError ("no elimination form", t)))
-
-let fun_type_term = << "type"{. 'A -> 'B } >>
-
-let d_resource = Mp_resource.improve d_resource (fun_type_term, d_fun_typeT)
-
-(************************************************************************
- * EQCD TACTIC                                                          *
- ************************************************************************)
-
-(*
- * EQCD.
- *)
-let eqcd_funT p =
-   let count = hyp_count_addr p in
-      (independentFunctionEquality count
-       thenT addHiddenLabelT "wf") p
-
-let eqcd_resource = Mp_resource.improve eqcd_resource (fun_term, eqcd_funT)
-
-let fun_equal_term = << ('A1 -> 'A2) = ('B1 -> 'B2) in univ[i:l] >>
-
-let d_resource = Mp_resource.improve d_resource (fun_equal_term, d_wrap_eqcd eqcd_funT)
-
-(*
- * Apply equality.
- *)
-let eqcd_applyT p =
-   let t =
-      try get_with_arg p with
-         RefineError _ ->
-            let eq_type, app, _ = dest_equal (Sequent.concl p) in
-            let f, a = dest_apply app in
-               try snd (infer_type p f) with
-                  RefineError _ ->
-                     let _, arg_type = infer_type p a in
-                        mk_fun_term arg_type eq_type
-   in
-   let i = hyp_count_addr p in
-      if is_fun_term t then
-         independentApplyEquality i t p
-      else if is_dfun_term t then
-         applyEquality i t p
-      else
-         raise (RefineError ("eqcd_applyT", StringTermError ("argument should be a function type", t)))
-
-let apply_equal_term = << ('f1 'a1) = ('f2 'a2) in 'T >>
-
-let d_resource = Mp_resource.improve d_resource (apply_equal_term, d_wrap_eqcd eqcd_applyT)
+let elim_resource = Mp_resource.improve elim_resource (fun_term, d_hyp_fun)
 
 (*
  * Typehood of application depends on the ability to infer a type.
  *)
-let d_apply_typeT i p =
-   if i = 0 then
-      let app = dest_type_term (Sequent.concl p) in
-      let f, _ = dest_apply app in
-      let f_type =
-         try get_with_arg p with
-            RefineError _ ->
-               snd (infer_type p f)
-      in
-      let univ =
-         if is_dfun_term f_type then
-            let _, _, univ = dest_dfun f_type in
-               univ
-         else if is_fun_term f_type then
-            snd (dest_fun f_type)
-         else
-            raise (RefineError ("d_apply_typeT", StringTermError ("inferred type is not a function type", f_type)))
-      in
-         if is_univ_term univ then
-            (univTypeT univ thenT withT f_type eqcd_applyT) p
-         else
-            raise (RefineError ("d_apply_typeT", StringTermError ("inferred type is not a univ", univ)))
-   else
-      raise (RefineError ("d_apply_typeT", StringError "no elimination form"))
+let d_apply_typeT p =
+   let app = dest_type_term (Sequent.concl p) in
+   let f, _ = dest_apply app in
+   let f_type =
+      try get_with_arg p with
+         RefineError _ ->
+            snd (infer_type p f)
+   in
+   let univ =
+      if is_dfun_term f_type then
+         let _, _, univ = dest_dfun f_type in
+            univ
+      else if is_fun_term f_type then
+         snd (dest_fun f_type)
+      else
+         raise (RefineError ("d_apply_typeT", StringTermError ("inferred type is not a function type", f_type)))
+   in
+      if is_univ_term univ then
+         (univTypeT univ thenT withT f_type eqcdT) p
+      else
+         raise (RefineError ("d_apply_typeT", StringTermError ("inferred type is not a univ", univ)))
 
 let apply_type_term = << "type"{. 'f 'a} >>
 
-let d_resource = Mp_resource.improve d_resource (apply_type_term, d_apply_typeT)
+let intro_resource = Mp_resource.improve intro_resource (apply_type_term, d_apply_typeT)
 
 (*
  * Lambda equality.
  *)
 let eqcd_lambdaT p =
-   let t, l, _ = dest_equal (concl p) in
+   let t, l, _ = dest_equal (Sequent.concl p) in
    let v, _ = dest_lambda l in
    let x = get_opt_var_arg v p in
-   let count = hyp_count_addr p in
+   let count = Sequent.hyp_count_addr p in
    let tac =
       if is_fun_term t then
          independentLambdaEquality count x
@@ -342,11 +255,11 @@ let eqcd_resource = Mp_resource.improve eqcd_resource (lambda_term, eqcd_lambdaT
 
 let lambda_equal_term = << lambda{x1. 'b1['x1]} = lambda{x2. 'b2['x2]} in x3: 'A -> 'B['x3] >>
 
-let d_resource = Mp_resource.improve d_resource (lambda_equal_term, d_wrap_eqcd eqcd_lambdaT)
+let intro_resource = Mp_resource.improve intro_resource (lambda_equal_term, eqcd_lambdaT)
 
 let lambda_equal_term = << lambda{x1. 'b1['x1]} = lambda{x2. 'b2['x2]} in 'A -> 'B >>
 
-let d_resource = Mp_resource.improve d_resource (lambda_equal_term, d_wrap_eqcd eqcd_lambdaT)
+let intro_resource = Mp_resource.improve intro_resource (lambda_equal_term, eqcd_lambdaT)
 
 (************************************************************************
  * TYPE INFERENCE                                                       *
@@ -372,8 +285,7 @@ let typeinf_resource = Mp_resource.improve typeinf_resource (fun_term, inf_fun)
  * Subtyping of two function types.
  *)
 let fun_subtypeT p =
-   (independentFunctionSubtype (hyp_count_addr p)
-    thenT addHiddenLabelT "subtype") p
+   independentFunctionSubtype (Sequent.hyp_count_addr p) p
 
 let sub_resource =
    Mp_resource.improve

@@ -32,16 +32,15 @@
  *
  *)
 
-include Tacticals
-
 include Base_theory
 
 include Itt_squash
 
 open Refiner.Refiner.TermType
 open Refiner.Refiner.Term
-open Tacticals
-open Conversionals
+open Tactic_type
+open Tactic_type.Tacticals
+open Tactic_type.Conversionals
 open Base_theory
 
 (************************************************************************
@@ -186,6 +185,10 @@ rule equality_squashElimination 'H :
    sequent [squash] { 'H >- 'a = 'b in 'T } -->
    sequent ['ext] { 'H >- 'a = 'b in 'T }
 
+rule member_squashElimination 'H :
+   sequent [squash] { 'H >- member{'T; 'a} } -->
+   sequent ['ext] { 'H >- member{'T; 'a} }
+
 rule type_squashElimination 'H :
    sequent [squash] { 'H >- "type"{'T} } -->
    sequent ['ext] { 'H >- "type"{'T} }
@@ -197,6 +200,18 @@ rule type_squashElimination 'H :
 rule universeEquality 'H :
    sequent ['ext] { 'H >- cumulativity[j:l, i:l] } -->
    sequent ['ext] { 'H >- univ[j:l] = univ[j:l] in univ[i:l] }
+
+(*
+ * H >- x = x in Ui
+ * by universeCumulativity
+ *
+ * H >- x = x in Uj
+ * H >- cumulativity(j, i)
+ *)
+rule universeCumulativity 'H univ[j:l] :
+   sequent [squash] { 'H >- cumulativity[j:l, i:l] } -->
+   sequent [squash] { 'H >- 'x = 'y in univ[j:l] } -->
+   sequent ['ext] { 'H >- 'x = 'y in univ[i:l] }
 
 (*
  * Universe is a type.
@@ -238,7 +253,7 @@ rule squashFromAny 'H 'ext :
 
 type eqcd_data
 
-resource (term * tactic, tactic, eqcd_data, meta_term * tactic) eqcd_resource
+resource (term * tactic, tactic, eqcd_data, Tactic.pre_tactic) eqcd_resource
 
 (*
  * Access to resources from toploop.
@@ -283,9 +298,6 @@ val is_squash_term : term -> bool
 
 val it_term : term
 
-val d_equalT : int -> tactic
-val eqcd_univT : tactic
-val eqcd_itT : tactic
 topval squash_equalT : tactic
 topval squash_memberT : tactic
 topval squash_typeT : tactic
@@ -298,10 +310,6 @@ topval typeAssertT : tactic
 (*
  * Turn an eqcd tactic into a d tactic.
  *)
-val d_wrap_eqcd : tactic -> int -> tactic
-val wrap_intro : tactic -> int -> tactic
-val wrap_elim : (int -> tactic) -> int -> tactic
-
 topval memberAssumT : int -> tactic
 
 topval unsquashT : term -> tactic

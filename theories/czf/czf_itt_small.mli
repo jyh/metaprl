@@ -33,8 +33,8 @@
 
 include Itt_theory
 
-open Tacticals
-open Conversionals
+open Tactic_type.Tacticals
+open Tactic_type.Conversionals
 
 (************************************************************************
  * TERMS                                                                *

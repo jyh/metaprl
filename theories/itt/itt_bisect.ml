@@ -44,7 +44,8 @@ open Refiner.Refiner.RefineError
 open Mp_resource
 
 open Var
-open Tacticals
+open Tactic_type
+open Tactic_type.Tacticals
 
 open Itt_equal
 
@@ -77,14 +78,14 @@ prim_rw unfold_bisect : bisect{'A; 'B} <-->
 (*
  * Typehood.
  *)
-interactive bisectEquality 'H :
-   sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
-   sequent [squash] { 'H >- 'B1 = 'B2 in univ[i:l] } -->
+interactive bisectEquality {| intro_resource []; eqcd_resource |} 'H :
+   [wf] sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
+   [wf] sequent [squash] { 'H >- 'B1 = 'B2 in univ[i:l] } -->
    sequent ['ext] { 'H >- bisect{'A1; 'B1} = bisect{'A2; 'B2} in univ[i:l] }
 
-interactive bisectType 'H :
-   sequent [squash] { 'H >- "type"{'A} } -->
-   sequent [squash] { 'H >- "type"{'B} } -->
+interactive bisectType {| intro_resource [] |} 'H :
+   [wf] sequent [squash] { 'H >- "type"{'A} } -->
+   [wf] sequent [squash] { 'H >- "type"{'B} } -->
    sequent ['ext] { 'H >- "type"{bisect{'A; 'B}} }
 
 (*
@@ -98,9 +99,9 @@ interactive bisectFormation 'H :
 (*
  * Membership.
  *)
-interactive bisectMemberEquality 'H :
-   sequent [squash] { 'H >- 'x = 'y in 'A } -->
-   sequent [squash] { 'H >- 'x = 'y in 'B } -->
+interactive bisectMemberEquality {| intro_resource []; eqcd_resource |} 'H :
+   [wf] sequent [squash] { 'H >- 'x = 'y in 'A } -->
+   [wf] sequent [squash] { 'H >- 'x = 'y in 'B } -->
    sequent ['ext] { 'H >- 'x = 'y in bisect{'A; 'B} }
 
 (*
@@ -139,91 +140,45 @@ interactive bisectSubtypeBelow 'H :
 (*
  * D tactic.
  *)
-let d_bisectT i p =
-   if i = 0 then
-      raise (RefineError ("d_bisect", StringError "no introduction rule"))
-   else
-      let sel = get_sel_arg p in
-      let tac =
-         if sel = 1 then
-            bisectEliminationLeft
-         else
-            bisectEliminationRight
-      in
-      let j, k = Sequent.hyp_indices p i in
-      let u, v = maybe_new_vars2 p "u" "v" in
-         tac j k u v p
+let elim_bisectT i p =
+   let sel = get_sel_arg p in
+   let tac =
+      if sel = 1 then
+         bisectEliminationLeft
+      else
+         bisectEliminationRight
+   in
+   let j, k = Sequent.hyp_indices p i in
+   let u, v = maybe_new_vars2 p "u" "v" in
+      tac j k u v p
 
 let bisect_term = << bisect{'A; 'B} >>
 
-let d_resource = Mp_resource.improve d_resource (bisect_term, d_bisectT)
-
-let d_bisect_typeT i p =
-   if i = 0 then
-      (bisectType (Sequent.hyp_count_addr p)
-       thenT addHiddenLabelT "wf") p
-   else
-      raise (RefineError ("d_bisect_type", StringError "no elimination form"))
-
-let bisect_type_term = << "type"{bisect{'A; 'B}} >>
-
-let d_resource = Mp_resource.improve d_resource (bisect_type_term, d_bisect_typeT)
-
-(*
- * EQCD.
- *)
-let eqcd_bisectT p =
-   (bisectEquality (Sequent.hyp_count_addr p)
-    thenT addHiddenLabelT "wf") p
-
-let eqcd_resource = Mp_resource.improve eqcd_resource (bisect_term, eqcd_bisectT)
-
-let bisect_equal_term = << bisect{'A1; 'B1} = bisect{'A2; 'B2} in univ[i:l] >>
-
-let d_resource = Mp_resource.improve d_resource (bisect_equal_term, d_wrap_eqcd eqcd_bisectT)
-
-let d_bisect_memberT i p =
-   if i = 0 then
-      (bisectMemberEquality (Sequent.hyp_count_addr p)
-       thenT addHiddenLabelT "wf") p
-   else
-      raise (RefineError ("d_bisect_memberT", StringError "no elimination form"))
-
-let bisect_member_term = << 'x = 'y in bisect{'A; 'B} >>
-
-let d_resource = Mp_resource.improve d_resource (bisect_member_term, d_bisect_memberT)
+let elim_resource = Mp_resource.improve elim_resource (bisect_term, elim_bisectT)
 
 (*
  * Subtyping.
  *)
-let d_bisect_aboveT i p =
-   if i = 0 then
-      let j = get_sel_arg p in
-      let tac =
-         if j = 1 then
-            bisectSubtypeLeft
-         else
-            bisectSubtypeRight
-      in
-         (tac (Sequent.hyp_count_addr p)
-          thenLT [addHiddenLabelT "wf";
-                  idT]) p
-   else
-      raise (RefineError ("d_bisect_aboveT", StringError "no elimination form"))
+let intro_bisect_aboveT p =
+   let j = get_sel_arg p in
+   let tac =
+      if j = 1 then
+         bisectSubtypeLeft
+      else
+         bisectSubtypeRight
+   in
+      tac (Sequent.hyp_count_addr p) p
 
 let bisect_above_term = << subtype{bisect{'A; 'B}; 'C} >>
 
-let d_resource = Mp_resource.improve d_resource (bisect_above_term, d_bisect_aboveT)
+let intro_resource = Mp_resource.improve intro_resource (bisect_above_term, intro_bisect_aboveT)
 
-let d_bisect_belowT i p =
-   if i = 0 then
-      bisectSubtypeBelow (Sequent.hyp_count_addr p) p
-   else
-      raise (RefineError ("d_bisect_belowT", StringError "no elimination form"))
+let intro_bisect_belowT p =
+   bisectSubtypeBelow (Sequent.hyp_count_addr p) p
 
 let bisect_below_term = << subtype{'C; bisect{'A; 'B}} >>
 
-let d_resource = Mp_resource.improve d_resource (bisect_below_term, d_bisect_belowT)
+let intro_resource = Mp_resource.improve intro_resource (bisect_below_term, intro_bisect_belowT)
 
 (*
  * -*-

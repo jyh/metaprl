@@ -44,8 +44,8 @@ open Refiner.Refiner.Refine
 open Refiner.Refiner.RefineError
 open Mp_resource
 
-open Sequent
-open Tacticals
+open Tactic_type
+open Tactic_type.Tacticals
 open Var
 open Mptop
 
@@ -62,28 +62,53 @@ let _ =
 
 (* debug_string DebugLoad "Loading itt_struct..." *)
 
+(************************************************************************
+ * TERMS                                                                *
+ ************************************************************************)
+
 (*
  * This is just syntax for a binding term.
  * It has no semantic meaning in the type theory.
  *)
 declare bind{x. 'T['x]}
 
+let bind_term = << bind{x. 'T['x]} >>
+let bind_opname = opname_of_term bind_term
+let is_bind_term = is_dep1_term bind_opname
+let dest_bind = dest_dep1_term bind_opname
+let mk_bind_term = mk_dep1_term bind_opname
+
+(************************************************************************
+ * RULES                                                                *
+ ************************************************************************)
+
 (*
  * H; x: A; J >- A ext x
  * by hypothesis
  *)
-prim hypothesis 'H 'J 'x : :
-   sequent ['ext] { 'H; x: 'A; 'J['x] >- 'A } = 'x
+prim hypothesis 'H 'J 'x :
+   sequent ['ext] { 'H; x: 'A; 'J['x] >- 'A } =
+   'x
 
 (*
  * H, x: A, J >- A ext t
  * by thin
  * H, J >- A ext t
  *)
-prim thin 'H 'J :
-   ('t : sequent ['ext] { 'H; 'J >- 'C }) -->
-   sequent ['ext] { 'H; x: 'A; 'J >- 'C } =
-   't
+ml_rule thin 'H 'J : ('goal : sequent ['ext] { 'H; x: 'A; 'J >- 'C }) =
+   let thin_ext _ = function
+      [h] ->
+         h
+    | _ ->
+         raise (RefineError ("thin", StringError "extract error"))
+   in
+   let goal, assums = dest_msequent goal in
+   let x = dest_var <:con< 'x >> in
+   let tail = <:con< sequent { 'J >- 'C } >> in
+      if is_free_var x tail then
+         raise (RefineError ("thin", StringStringError ("variable is free", x)))
+      else
+         [mk_msequent <:con< sequent ['ext] { 'H; 'J >- 'C } >> assums], thin_ext
 
 (*
  * H, J >- T ext t[s]
@@ -91,14 +116,34 @@ prim thin 'H 'J :
  * H, J >- S ext s
  * H, x: S, J >- T ext t[x]
  *)
-prim cut 'H 'J 'S 'x :
-   ('s : sequent ['ext] { 'H; 'J >- 'S }) -->
-   ('t['x] : sequent ['ext] { 'H; x: 'S; 'J >- 'T }) -->
-   sequent ['ext] { 'H; 'J >- 'T } =
-   't['s]
+ml_rule cut 'H 'J 'S 'x : ('goal : sequent ['ext] { 'H; 'J >- 'T }) =
+   let cut_ext (bvars, _) extracts =
+      match bvars, extracts with
+         [|x|], [s; t] ->
+            subst t [s] [x]
+       | _ ->
+          raise (RefineError ("cut", StringError "bogus extract"))
+   in
+   let goal, assums = dest_msequent goal in
+   let x = dest_var <:con< 'x >> in
+   let tail = <:con< sequent { 'J >- 'T } >> in
+      if is_free_var x tail then
+         raise (RefineError ("cut", StringStringError ("variable causes capture", x)))
+      else
+         let s = <:con< 'S >> in
+         let fv = free_vars s in
+         let dv = TermMan.declared_vars tail in
+            if List_util.intersects fv dv then
+               raise (RefineError ("cut", StringTermError ("assertion would be captured", s)))
+            else
+               [mk_msequent (mk_xstring_dep0_term "assertion" <:con< sequent ['ext] { 'H; 'J >- 'S } >>) assums;
+                mk_msequent (mk_xstring_dep0_term "main" <:con< sequent ['ext] { 'H; x: 'S; 'J >- 'T } >>) assums], cut_ext
 
+(*
+ * This is usually used for performance testing.
+ *)
 interactive dup 'H :
-   ('s : sequent ['ext] { 'H >- 'T }) -->
+   sequent ['ext] { 'H >- 'T } -->
    sequent ['ext] { 'H >- 'T } -->
    sequent ['ext] { 'H >- 'T}
 
@@ -108,7 +153,7 @@ interactive dup 'H :
  * H >- t = t in T
  *)
 prim introduction 'H 't :
-   sequent [squash] { 'H >- 't = 't in 'T } -->
+   [wf] sequent [squash] { 'H >- 't = 't in 'T } -->
    sequent ['ext] { 'H >- 'T } =
    't
 
@@ -120,9 +165,9 @@ prim introduction 'H 't :
  * H, x: T2 >- T1[x] = T1[x] in type
  *)
 prim substitution 'H ('t1 = 't2 in 'T2) bind{x. 'T1['x]} :
-   sequent [squash] { 'H >- 't1 = 't2 in 'T2 } -->
-   ('t : sequent ['ext] { 'H >- 'T1['t2] }) -->
-   sequent [squash] { 'H; x: 'T2 >- "type"{'T1['x]} } -->
+   [equality] sequent [squash] { 'H >- 't1 = 't2 in 'T2 } -->
+   [main] ('t : sequent ['ext] { 'H >- 'T1['t2] }) -->
+   [wf] sequent [squash] { 'H; x: 'T2 >- "type"{'T1['x]} } -->
    sequent ['ext] { 'H >- 'T1['t1] } =
    't
 
@@ -133,8 +178,8 @@ prim substitution 'H ('t1 = 't2 in 'T2) bind{x. 'T1['x]} :
  * H, x: A, J >- A = B in type
  *)
 prim hypReplacement 'H 'J 'B univ[i:l] :
-   ('t : sequent ['ext] { 'H; x: 'B; 'J['x] >- 'T['x] }) -->
-   sequent [squash] { 'H; x: 'A; 'J['x] >- 'A = 'B in univ[i:l] } -->
+   [main] ('t : sequent ['ext] { 'H; x: 'B; 'J['x] >- 'T['x] }) -->
+   [equality] sequent [squash] { 'H; x: 'A; 'J['x] >- 'A = 'B in univ[i:l] } -->
    sequent ['ext] { 'H; x: 'A; 'J['x] >- 'T['x] } =
    't
 
@@ -145,22 +190,11 @@ prim hypReplacement 'H 'J 'B univ[i:l] :
  * H; x: A[t2]; J[x] >> T1[x]
  * H, x: A[t1]; J[x]; z: T2 >> A[z] in type
  *)
-prim hypSubstitution 'H 'J ('t1 = 't2 in 'T2) bind{y. 'A['y]} 'z :
-   sequent [squash] { 'H; x: 'A['t1]; 'J['x] >- 't1 = 't2 in 'T2 } -->
-   ( 't : sequent ['ext] { 'H; x: 'A['t2]; 'J['x] >- 'T1['x] } ) -->
-   sequent [squash] { 'H; x: 'A['t1]; 'J['x]; z: 'T2 >- "type"{'A['z]} } -->
-   sequent ['ext] { 'H; x: 'A['t1]; 'J['x] >- 'T1['x] } =
-   't
-
-(************************************************************************
- * PRIMITIVES                                                           *
- ************************************************************************)
-
-let bind_term = << bind{x. 'T['x]} >>
-let bind_opname = opname_of_term bind_term
-let is_bind_term = is_dep1_term bind_opname
-let dest_bind = dest_dep1_term bind_opname
-let mk_bind_term = mk_dep1_term bind_opname
+interactive hypSubstitution 'H 'J ('t1 = 't2 in 'T2) bind{y. 'A['y]} 'z :
+   [equality] sequent [squash] { 'H; x: 'A['t1]; 'J['x] >- 't1 = 't2 in 'T2 } -->
+   [main] sequent ['ext] { 'H; x: 'A['t2]; 'J['x] >- 'T1['x] } -->
+   [wf] sequent [squash] { 'H; x: 'A['t1]; 'J['x]; z: 'T2 >- "type"{'A['z]} } -->
+   sequent ['ext] { 'H; x: 'A['t1]; 'J['x] >- 'T1['x] }
 
 (************************************************************************
  * TACTICS                                                              *
@@ -170,8 +204,8 @@ let mk_bind_term = mk_dep1_term bind_opname
  * Prove by hypothesis.
  *)
 let nthHypT i p =
-   let x, h = nth_hyp p i in
-   let i, j = hyp_indices p i in
+   let x, h = Sequent.nth_hyp p i in
+   let i, j = Sequent.hyp_indices p i in
       hypothesis i j x p
 
 (*
@@ -180,19 +214,15 @@ let nthHypT i p =
  * (although the rule is still valid otherwise).
  *)
 let thinT i p =
-   let x, _ = nth_hyp p i in
-      if is_free_seq_var i x p then
-         raise (RefineError ("thinT", StringStringError ("free variable: ", x)))
-      else
-         let i, j = hyp_indices p i in
-            thin i j p
+   let i, j = Sequent.hyp_indices p i in
+      thin i j p
 
 let thinAllT i j p =
    let rec tac j =
       if j < i then
          idT
       else
-         thinT j thenT tac (j - 1)
+         thinT j thenT tac (pred j)
    in
       tac j p
 
@@ -200,19 +230,17 @@ let thinAllT i j p =
  * Cut rule.
  *)
 let assertT s p =
-   let j, k = hyp_split_addr p (hyp_count p) in
+   let j, k = Sequent.hyp_split_addr p (Sequent.hyp_count p) in
    let v = get_opt_var_arg "v" p in
-      (cut j k s v
-       thenLT [addHiddenLabelT "assertion"; idT]) p
+      cut j k s (mk_var_term v) p
 
 (*
  * Cut in at a certain point.
  *)
 let assertAtT i s p =
-   let i, j = hyp_split_addr p i in
+   let i, j = Sequent.hyp_split_addr p i in
    let v = get_opt_var_arg "v" p in
-      (cut i j s v
-       thenLT [addHiddenLabelT "assertion"; idT]) p
+      cut i j s (mk_var_term v) p
 
 let dupT p =
    dup (Sequent.hyp_count_addr p) p
@@ -221,8 +249,7 @@ let dupT p =
  * Explicit extract.
  *)
 let useWitnessT t p =
-   let count = hyp_count_addr p in
-      introduction count t p
+   introduction (Sequent.hyp_count_addr p) t p
 
 (*
  * Substitution.
@@ -240,12 +267,9 @@ let substConclT t p =
       with
          RefineError _ ->
             let x = get_opt_var_arg "z" p in
-               mk_bind_term x (var_subst (concl p) a x)
+               mk_bind_term x (var_subst (Sequent.concl p) a x)
    in
-      (substitution (hyp_count_addr p) t bind
-       thenLT [addHiddenLabelT "equality";
-               addHiddenLabelT "main";
-               addHiddenLabelT "aux"]) p
+      substitution (Sequent.hyp_count_addr p) t bind p
 
 (*
  * Hyp substitution requires a replacement.
@@ -265,11 +289,8 @@ let substHypT i t p =
          RefineError _ ->
             mk_bind_term z (var_subst t1 a z)
    in
-   let i, j = hyp_indices p i in
-      (hypSubstitution i j t bind z
-       thenLT [addHiddenLabelT "equality";
-               addHiddenLabelT "main";
-               addHiddenLabelT "aux"]) p
+   let i, j = Sequent.hyp_indices p i in
+      hypSubstitution i j t bind z p
 
 (*
  * General substition.
@@ -296,7 +317,7 @@ let revHypSubstT i j p =
  * Replace the entire hypothesis.
  *)
 let replaceHypT t i p =
-   let j, k = hyp_indices p i in
+   let j, k = Sequent.hyp_indices p i in
    let univ = get_univ_arg p in
       hypReplacement j k t univ p
 

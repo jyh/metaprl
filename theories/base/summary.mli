@@ -11,21 +11,21 @@
  * OCaml, and more information about this system.
  *
  * Copyright (C) 1998 Jason Hickey, Cornell University
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- * 
+ *
  * Author: Jason Hickey
  * jyh@cs.cornell.edu
  *)
@@ -34,6 +34,8 @@ include Perv
 include Nuprl_font
 include Base_dform
 include Ocaml_df
+
+open Refiner.Refiner.TermType
 
 declare "interface"{'intf}
 declare "implementation"{'impl}
@@ -46,6 +48,7 @@ declare "rule"[name:s]{'params; 'stmt; 'proof}
 declare "opname"[name:s]{'term}
 declare "mlterm"{'term; 'cons; 'oexpr}
 declare "condition"{'term; 'cons; 'oexpr}
+declare "mlrewrite"[name:s]{'params; 'redex; 'contracta; 'body; 'resources}
 declare "parent"{'path; 'opens; 'resources}
 declare "module"[name:s]{'info}
 declare "dform"{'modes; 'redex; 'def}
@@ -81,29 +84,79 @@ declare "context_param"[name:s]
 declare "var_param"[name:s]
 declare "term_param"{'t}
 
+(* Arguments *)
+declare "int_arg"[i:n]
+declare "term_arg"{'t}
+declare "type_arg"{'t}
+declare "bool_arg"[s:t]
+declare "string_arg"[s:s]
+declare "subst_arg"{'t}
+declare "term_list_arg"{'t}
+declare "arglist"{'t}
+
 (* Proofs *)
-declare "interactive"{'t}
+declare "href"[command:s]{'t}
 
 declare "status_bad"
 declare "status_partial"
 declare "status_asserted"
 declare "status_complete"
 
-declare "proof_step"{'goal; 'subgoals; 'ast; 'text}
-declare "proof_node"{'proof}
+declare "goal_status"{'sl}
+declare "goal_label"[s:s]
+declare "goal_list"{'goals}
+declare "goal"{'status; 'label; 'assums; 'goal}
+declare "subgoals"{'subgoals; 'extras}
+declare "rule_box"[text:s]
+declare "proof"{'main; 'goal; 'text; 'subgoals}
 
-declare "proof_child_goal"{'goal}
-declare "proof_child_proof"{'proof}
+(* Packages *)
+declare "package"[name:s]
+declare "packages"{'pl}
 
-declare "proof_aterm"{'goal; 'label; 'args}
+(************************************************************************
+ * ML ACCESS                                                            *
+ ************************************************************************)
 
-declare "proof_var_args"{'args}
-declare "proof_term_args"{'args}
-declare "proof_type_arg"{'arg}
-declare "proof_int_args"{'args}
-declare "proof_thin"
-declare "proof_dont_thin"
-declare "proof_subst_arg"{'args}
+(*
+ * Interface and implementation files.
+ *)
+val mk_interface_term : term list -> term
+val mk_implementation_term : term list -> term
+
+val mk_package_term : string -> term
+val mk_packages_term : term list -> term
+
+(*
+ * Proofs.
+ *)
+val mk_href_term : string -> term -> term
+
+val status_bad_term : term
+val status_partial_term : term
+val status_asserted_term : term
+val status_complete_term : term
+
+val mk_status_term : term list -> term
+
+val mk_int_arg_term : int -> term
+val mk_term_arg_term : term -> term
+val mk_type_arg_term : term -> term
+val mk_bool_arg_term : bool -> term
+val mk_string_arg_term : string -> term
+val mk_subst_arg_term : term -> term
+val mk_term_list_arg_term : term list -> term
+val mk_arglist_term : term list -> term
+
+val mk_goal_label_term : string -> term
+val mk_goal_term : term -> term -> term list -> term -> term
+val mk_labeled_goal_term : term -> term -> term
+val mk_goal_list_term : term list -> term
+val mk_subgoals_term : term list -> term list -> term
+val mk_rule_box_string_term : string -> term
+val mk_rule_box_term : term -> term
+val mk_proof_term : term -> term -> term -> term -> term
+val dest_proof : term -> term * term * term * term
 
 (*
  * -*-

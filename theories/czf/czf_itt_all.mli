@@ -34,7 +34,7 @@ include Czf_itt_sep
 
 open Refiner.Refiner.TermType
 
-open Tacticals
+open Tactic_type.Tacticals
 
 (************************************************************************
  * RULES                                                                *

@@ -42,8 +42,8 @@ open Refiner.Refiner.TermSubst
 open Refiner.Refiner.RefineError
 open Mp_resource
 
-open Tacticals
-open Sequent
+open Tactic_type
+open Tactic_type.Tacticals
 open Var
 
 open Itt_equal
@@ -120,18 +120,18 @@ prim wFormation 'H 'A 'x :
  * H >- A1 = A2 in Ui
  * H, y:A1 >- B1[y] = B2[y] in Ui
  *)
-prim wEquality 'H 'y :
-   sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
-   sequent [squash] { 'H; y: 'A1 >- 'B1['y] = 'B2['y] in univ[i:l] } -->
+prim wEquality {| intro_resource []; eqcd_resource |} 'H 'y :
+   [wf] sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
+   [wf] sequent [squash] { 'H; y: 'A1 >- 'B1['y] = 'B2['y] in univ[i:l] } -->
    sequent ['ext] { 'H >- w{'A1; x1. 'B1['x1]} = w{'A2; x2. 'B2['x2]} in univ[i:l] } =
    it
 
 (*
  * Typehood.
  *)
-prim wType 'H 'x :
-   sequent [squash] { 'H >- "type"{'A1} } -->
-   sequent [squash] { 'H; x: 'A1 >- "type"{'A2['x]} } -->
+prim wType {| intro_resource [] |} 'H 'x :
+   [wf] sequent [squash] { 'H >- "type"{'A1} } -->
+   [wf] sequent [squash] { 'H; x: 'A1 >- "type"{'A2['x]} } -->
    sequent ['ext] { 'H >- "type"{.w{'A1; y.'A2['y]}} } =
    it
 
@@ -142,10 +142,10 @@ prim wType 'H 'x :
  * H >- B[a] -> W(x:A; B[x]) ext f
  * H, y:A >- B[y] = B[y] in Ui
  *)
-prim treeFormation 'H 'a 'y :
-   sequent [squash] { 'H >- 'a = 'a in 'A } -->
-   ('f : sequent ['ext] { 'H >- 'B['a] -> w{'A; x. 'B['x]} }) -->
-   sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
+prim treeFormation {| intro_resource [] |} 'H 'a 'y :
+   [wf] sequent [squash] { 'H >- 'a = 'a in 'A } -->
+   [main] ('f : sequent ['ext] { 'H >- 'B['a] -> w{'A; x. 'B['x]} }) -->
+   [wf] sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
    sequent ['ext] { 'H >- w{'A; x. 'B['x]} } =
    tree{'a; 'f}
 
@@ -156,10 +156,10 @@ prim treeFormation 'H 'a 'y :
  * H >- b1 = b2 in B[a1] -> W(x:A; B)
  * H, y:A >- B[y] = B[y] in Ui
  *)
-prim treeEquality 'H 'y :
-   sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
-   sequent [squash] { 'H >- 'b1 = 'b2 in 'B['a1] -> w{'A; x. 'B['x]} } -->
-   sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
+prim treeEquality {| intro_resource []; eqcd_resource |} 'H 'y :
+   [wf] sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
+   [wf] sequent [squash] { 'H >- 'b1 = 'b2 in 'B['a1] -> w{'A; x. 'B['x]} } -->
+   [wf] sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
    sequent ['ext] { 'H >- tree{'a1; 'b1} = tree{'a2; 'b2} in w{'A; x. 'B['x]} } =
    it
 
@@ -168,8 +168,8 @@ prim treeEquality 'H 'y :
  * by wElimination u v
  * H, x:W(y:A; B[y]), u:A, v:B[u] -> W(y:A; B[y]), J[tree(u, v)] >- T[tree(u, v)] ext t[u, v]
  *)
-prim wElimination 'H 'J 'z 'a 'f 'g 'b 'v :
-   ('t['z; 'a; 'f; 'g] :
+prim wElimination {| elim_resource [] |} 'H 'J 'z 'a 'f 'g 'b 'v :
+   [main] ('t['z; 'a; 'f; 'g] :
    sequent ['ext] { 'H;
                     z: w{'A; x. 'B['x]};
                     'J['z];
@@ -185,9 +185,9 @@ prim wElimination 'H 'J 'z 'a 'f 'g 'b 'v :
 (*
  * Equality on tree induction forms.
  *)
-prim tree_indEquality 'H (w{'A; x. 'B['x]}) 'a 'f 'g :
-   sequent [squash] { 'H >- 'z1 = 'z2 in w{'A; x. 'B['x]} } -->
-   sequent [squash] { 'H; a: 'A; f: 'B['a] -> w{'A; x. 'B['x]}; g: a: 'A -> 'B['a] -> 'T >-
+prim tree_indEquality {| intro_resource []; eqcd_resource |} 'H (w{'A; x. 'B['x]}) 'a 'f 'g :
+   [wf] sequent [squash] { 'H >- 'z1 = 'z2 in w{'A; x. 'B['x]} } -->
+   [wf] sequent [squash] { 'H; a: 'A; f: 'B['a] -> w{'A; x. 'B['x]}; g: a: 'A -> 'B['a] -> 'T >-
       'body1['a; 'f; 'g] = 'body2['a; 'f; 'g] in 'T } -->
    sequent ['ext] { 'H >- tree_ind{'z1; a1, f1, g1. 'body1['a1; 'f1; 'g1]}
                           = tree_ind{'z2; a2, f2, g2. 'body2['a2; 'f2; 'g2]}
@@ -215,121 +215,6 @@ let tree_ind_opname = opname_of_term tree_ind_term
 let is_tree_ind_term = is_dep0_dep3_term tree_ind_opname
 let dest_tree_ind = dest_dep0_dep3_term tree_ind_opname
 let mk_tree_ind_term = mk_dep0_dep3_term tree_ind_opname
-
-(************************************************************************
- * D TACTIC                                                             *
- ************************************************************************)
-
-(*
- * D the conclusion.
- *)
-let d_concl_w p =
-   let t =
-      try get_with_arg p with
-         Not_found ->
-            raise (RefineError ("d_concl_w", StringError "requires an argument"))
-   in
-   let count = hyp_count_addr p in
-   let y = get_opt_var_arg "y" p in
-      (treeFormation count t y
-       thenLT [addHiddenLabelT "wf";
-               idT;
-               addHiddenLabelT "wf"]) p
-
-(*
- * D a hyp.
- * We take the argument.
- *)
-let d_hyp_w i p =
-   let z, _ = Sequent.nth_hyp p i in
-   let i, j = hyp_indices p i in
-   let a, f, g, b, v = maybe_new_vars5 p "a" "f" "g" "b" "v" in
-      wElimination i j z a f g b v p
-
-(*
- * Join them.
- *)
-let d_wT i p =
-   if i = 0 then
-      d_concl_w p
-   else
-      d_hyp_w i p
-
-let d_resource = Mp_resource.improve d_resource (w_term, d_wT)
-
-(*
- * Typehood.
- *)
-let d_w_typeT i p =
-   if i = 0 then
-      let concl = Sequent.concl p in
-      let v, _, _ = dest_w (one_subterm concl) in
-      let v = maybe_new_vars1 p v in
-         wType (hyp_count_addr p) v p
-   else
-      raise (RefineError ("d_w_typeT", StringError "no elimination form"))
-
-let type_w_term = << "type"{.w{'A1; x. 'A2['x]}} >>
-
-let d_resource = Mp_resource.improve d_resource (type_w_term, d_w_typeT)
-
-(************************************************************************
- * EQCD TACTIC                                                          *
- ************************************************************************)
-
-(*
- * EQCD w.
- *)
-let eqcd_wT p =
-   let _, l, _ = dest_equal (concl p) in
-   let v, _, _ = dest_w l in
-   let x = get_opt_var_arg v p in
-   let count = hyp_count_addr p in
-      (wEquality count x thenT addHiddenLabelT "wf") p
-
-let eqcd_resource = Mp_resource.improve eqcd_resource (w_term, eqcd_wT)
-
-let w_equal_term = << w{'A1; x1. 'B1['x1]} = w{'A2; x2. 'B2['x2]} in univ[i:l] >>
-
-let d_resource = Mp_resource.improve d_resource (w_equal_term, d_wrap_eqcd eqcd_wT)
-
-(*
- * EQCD pair.
- *)
-let eqcd_treeT p =
-   let l, _, _ = dest_equal (concl p) in
-   let v, _, _ = dest_w l in
-   let x = get_opt_var_arg v p in
-   let count = hyp_count_addr p in
-      (treeEquality count x thenT addHiddenLabelT "wf") p
-
-let eqcd_resource = Mp_resource.improve eqcd_resource (tree_term, eqcd_treeT)
-
-let tree_equal_term = << tree{'a1; 'b1} = tree{'a2; 'b2} in w{'A; x. 'B['x]} >>
-
-let d_resource = Mp_resource.improve d_resource (tree_equal_term, d_wrap_eqcd eqcd_treeT)
-
-(*
- * EQCD spread.
- *)
-let eqcd_tree_indT p =
-   let _, l, _ = dest_equal (concl p) in
-   let a, f, g, _, _ = dest_tree_ind l in
-   let a, f, g = maybe_new_vars3 p a f g in
-   let w =
-      try get_type_arg p "type" with
-         Not_found ->
-            raise (RefineError ("eqcd_tree_indT", StringError "requires a type argument"))
-   in
-      tree_indEquality (hyp_count_addr p) w a f g p
-
-let eqcd_resource = Mp_resource.improve eqcd_resource (tree_ind_term, eqcd_tree_indT)
-
-let tree_ind_equal_term = << tree_ind{'z1; a1, f1, g1. 'body1['a1; 'f1; 'g1]}
-                           = tree_ind{'z2; a2, f2, g2. 'body2['a2; 'f2; 'g2]}
-                           in 'T >>
-
-let d_resource = Mp_resource.improve d_resource (tree_ind_equal_term, d_wrap_eqcd eqcd_tree_indT)
 
 (************************************************************************
  * TYPE INFERENCE                                                       *

@@ -37,7 +37,6 @@ open Printf
 open Mp_debug
 open Mp_ctype
 
-open Sequent
 open Tactic_type
 
 (*
@@ -92,6 +91,33 @@ let maybe_new_vars vars vars' =
     | [] -> l'
    in
       aux vars' [] vars
+
+let maybe_new_vars_array =
+   let rec search_simple bound_vars vars i length =
+      if i = length then
+         vars
+      else
+         let v = vars.(i) in
+            if List.mem v bound_vars then
+               let vars = Array.copy vars in
+                  vars.(i) <- new_var v bound_vars;
+                  search_found bound_vars vars (succ i) length
+            else
+               search_simple (v :: bound_vars) vars (succ i) length
+   and search_found bound_vars vars i length =
+      if i = length then
+         vars
+      else
+         let v = vars.(i) in
+            if List.mem v bound_vars then
+               let v = new_var v bound_vars in
+                  vars.(i) <- v;
+                  search_found (v :: bound_vars) vars (succ i) length
+            else
+               search_found (v :: bound_vars) vars (succ i) length
+   in
+      (fun p vars ->
+            search_simple (Sequent.declared_vars p) vars 0 (Array.length vars))
 
 let maybe_new_vars1 p v1 =
    let vars = Sequent.declared_vars p in
@@ -213,9 +239,9 @@ let maybe_new_vars9 p v1 v2 v3 v4 v5 v6 v7 v8 v9 =
  * Optional vars.
  *)
 let get_opt_var_arg v p =
-   try dest_var (get_term_arg p "var") with
+   try dest_var (Sequent.get_term_arg p "var") with
       RefineError _ ->
-         maybe_new_var v (declared_vars p)
+         maybe_new_var v (Sequent.declared_vars p)
 
 (*
  * -*-

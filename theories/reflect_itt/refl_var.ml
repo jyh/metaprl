@@ -34,8 +34,9 @@ include Itt_theory
 
 open Mp_resource
 
-open Tacticals
-open Conversionals
+open Tactic_type
+open Tactic_type.Tacticals
+open Tactic_type.Conversionals
 open Var
 
 open Base_dtactic
@@ -172,7 +173,7 @@ let reduce_info =
     << eq_var{ivar{'i1; 'v1}; tvar{'t2; 'v2}} >>, reduce_eq_var_ivar3;
     << eq_var{ivar{'i1; 'v1}; ivar{'i2; 'v2}} >>, reduce_eq_var_ivar4]
 
-let reduce_resource = add_reduce_info reduce_resource reduce_info
+let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
 
 (************************************************************************
  * RULES                                                                *
@@ -181,60 +182,60 @@ let reduce_resource = add_reduce_info reduce_resource reduce_info
 (*
  * Var is a type.
  *)
-interactive var_type_type 'H : :
+interactive var_type_type {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- "type"{var_type} }
 
 (*
  * Induction.
  *)
-interactive var_type_elim 'H 'J 'i 't 'v 'w :
-   sequent ['ext] { 'H; x: var_type; 'J['x] >- 'C[vnil] } -->
-   sequent ['ext] { 'H; x: var_type; 'J['x]; i: int; v: var_type; w: 'C['v] >- 'C[ivar{'i; 'v}] } -->
-   sequent ['ext] { 'H; x: var_type; 'J['x]; t: atom; v: var_type; w: 'C['v] >- 'C[tvar{'t; 'v}] } -->
+interactive var_type_elim {| elim_resource [] |} 'H 'J 'i 't 'v 'w :
+   [main] sequent ['ext] { 'H; x: var_type; 'J['x] >- 'C[vnil] } -->
+   [main] sequent ['ext] { 'H; x: var_type; 'J['x]; i: int; v: var_type; w: 'C['v] >- 'C[ivar{'i; 'v}] } -->
+   [main] sequent ['ext] { 'H; x: var_type; 'J['x]; t: atom; v: var_type; w: 'C['v] >- 'C[tvar{'t; 'v}] } -->
    sequent ['ext] { 'H; x: var_type; 'J['x] >- 'C['x] }
 
 (*
  * Typehood.
  *)
-interactive vnil_wf 'H : :
+interactive vnil_wf {| intro_resource [] |}  'H :
    sequent ['ext] { 'H >- member{var_type; vnil} }
 
-interactive var_wf 'H : :
+interactive var_wf {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- member{var_type; var[t:t]} }
 
-interactive ivar_wf 'H :
-   sequent [squash] { 'H >- member{var_type; 'v} } -->
-   sequent [squash] { 'H >- member{int; 'i} } -->
+interactive ivar_wf {| intro_resource [] |} 'H :
+   [wf] sequent [squash] { 'H >- member{var_type; 'v} } -->
+   [wf] sequent [squash] { 'H >- member{int; 'i} } -->
    sequent ['ext] { 'H >- member{var_type; ivar{'i; 'v}} }
 
-interactive tvar_wf 'H :
-   sequent [squash] { 'H >- member{var_type; 'v} } -->
-   sequent [squash] { 'H >- member{atom; 't} } -->
+interactive tvar_wf {| intro_resource [] |} 'H :
+   [wf] sequent [squash] { 'H >- member{var_type; 'v} } -->
+   [wf] sequent [squash] { 'H >- member{atom; 't} } -->
    sequent ['ext] { 'H >- member{var_type; tvar{'t; 'v}} }
 
-interactive eq_var_wf 'H :
-   sequent [squash] { 'H >- member{var_type; 'x} } -->
-   sequent [squash] { 'H >- member{var_type; 'y} } -->
+interactive eq_var_wf {| intro_resource [] |} 'H :
+   [wf] sequent [squash] { 'H >- member{var_type; 'x} } -->
+   [wf] sequent [squash] { 'H >- member{var_type; 'y} } -->
    sequent ['ext] { 'H >- member{bool; eq_var{'x; 'y}} }
 
 (*
  * Sqiggle equality.
  *)
-interactive var_sqequal 'H :
-   sequent [squash] { 'H >- 'x = 'y in var_type } -->
+interactive var_sqequal {| intro_resource [] |} 'H :
+   [wf] sequent [squash] { 'H >- 'x = 'y in var_type } -->
    sequent ['ext] { 'H >- Perv!"rewrite"{'x; 'y} }
 
 (*
  * Translate to equality.
  *)
-interactive eq_var_assert_intro 'H :
-   sequent [squash] { 'H >- 'v1 = 'v2 in var_type } -->
+interactive eq_var_assert_intro {| intro_resource [] |} 'H :
+   [wf] sequent [squash] { 'H >- 'v1 = 'v2 in var_type } -->
    sequent ['ext] { 'H >- "assert"{eq_var{'v1; 'v2}} }
 
-interactive eq_var_assert_elim2 'H 'J :
-   sequent [squash] { 'H; x: "assert"{eq_var{'v1; 'v2}}; 'J['x] >- member{var_type; 'v1} } -->
-   sequent [squash] { 'H; x: "assert"{eq_var{'v1; 'v2}}; 'J['x] >- member{var_type; 'v2} } -->
-   sequent ['ext] { 'H; x: 'v1 = 'v2 in var_type; 'J[it] >- 'C[it] } -->
+interactive eq_var_assert_elim2 {| elim_resource [ThinOption] |} 'H 'J :
+   [wf] sequent [squash] { 'H; x: "assert"{eq_var{'v1; 'v2}}; 'J['x] >- member{var_type; 'v1} } -->
+   [wf] sequent [squash] { 'H; x: "assert"{eq_var{'v1; 'v2}}; 'J['x] >- member{var_type; 'v2} } -->
+   [main] sequent ['ext] { 'H; x: 'v1 = 'v2 in var_type; 'J[it] >- 'C[it] } -->
    sequent ['ext] { 'H; x: "assert"{eq_var{'v1; 'v2}}; 'J['x] >- 'C['x] }
 
 (************************************************************************
@@ -242,65 +243,10 @@ interactive eq_var_assert_elim2 'H 'J :
  ************************************************************************)
 
 (*
- * Typehood.
- *)
-let d_var_type_typeT p =
-   var_type_type (Sequent.hyp_count_addr p) p
-
-let var_type_type_term = << "type"{var_type} >>
-
-(*
- * Well-formedness.
- *)
-let d_resource = Mp_resource.improve d_resource (var_type_type_term, wrap_intro d_var_type_typeT)
-
-let d_info =
-   [<< member{var_type; vnil} >>, vnil_wf;
-    << member{var_type; var[t:t]} >>, var_wf;
-    << member{var_type; ivar{'i; 'v}} >>, ivar_wf;
-    << member{var_type; tvar{'t; 'v}} >>, tvar_wf;
-    << member{bool; eq_var{'v1;'v2}} >>, eq_var_wf]
-
-let d_resource =
-   let wrap (t, tac) =
-      t, wrap_intro (fun p -> tac (Sequent.hyp_count_addr p) p)
-   in
-      add_d_info d_resource (List.map wrap d_info)
-
-(*
- * Induction.
- *)
-let d_var_typeT i p =
-   let j, k = Sequent.hyp_indices p i in
-   let i, t, v, w = maybe_new_vars4 p "i" "t" "v" "w" in
-      (var_type_elim j k i t v w
-       thenLT [addHiddenLabelT "base case";
-               addHiddenLabelT "induction step";
-               addHiddenLabelT "induction step"]) p
-
-let var_type_term = << var_type >>
-
-let d_resource = Mp_resource.improve d_resource (var_type_term, d_var_typeT)
-
-(*
  * Squiggle equality.
  *)
 let varSqequalT p =
    var_sqequal (Sequent.hyp_count_addr p) p
-
-(*
- * Equality.
- *)
-let d_eq_var_assertT i p =
-   if i = 0 then
-      eq_var_assert_intro (Sequent.hyp_count_addr p) p
-   else
-      let j, k = Sequent.hyp_indices p i in
-         eq_var_assert_elim2 j k p
-
-let eq_var_assert_term = << "assert"{eq_var{'v1; 'v2}} >>
-
-let d_resource = Mp_resource.improve d_resource (eq_var_assert_term, d_eq_var_assertT)
 
 (*
  * -*-

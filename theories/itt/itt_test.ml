@@ -39,8 +39,8 @@ open Refiner.Refiner.Refine
 
 open Mp_resource
 
-open Tacticals
-open Conversionals
+open Tactic_type.Tacticals
+open Tactic_type.Conversionals
 
 open Itt_rfun
 open Itt_bool
@@ -54,7 +54,7 @@ prim_rw reduceFact : fact{'i} <--> ifthenelse{eq_int{'i; 0}; 1; .'i *@ fact{.'i 
 let reduce_info =
    [<< fact{'i} >>, reduceFact]
 
-let reduce_resource = add_reduce_info reduce_resource reduce_info
+let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
 
 dform fact_df : parens :: "prec"[prec_apply] :: fact{'i} =
    `"fact" " " slot{'i}
@@ -74,16 +74,16 @@ let redex2C =
 
 let redexC = (repeatC (higherC redex1C) andthenC (higherC redex2C))
 
-interactive fact100 'H : :
+interactive fact100 'H :
    sequent ['ext] { 'H >- fact{100} }
 
-interactive fact250 'H : :
+interactive fact250 'H :
    sequent ['ext] { 'H >- fact{250} }
 
-interactive fact400 'H : :
+interactive fact400 'H :
    sequent ['ext] { 'H >- fact{400} }
 
-interactive fact650 'H : :
+interactive fact650 'H :
    sequent ['ext] { 'H >- fact{650} }
 
 let factT = rw (repeatC redexC) 0

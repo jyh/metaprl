@@ -35,8 +35,6 @@
  * jyh@cs.cornell.edu
  *)
 
-include Tacticals
-include Sequent
 include Base_theory
 
 open Printf
@@ -47,8 +45,9 @@ open Refiner.Refiner.RefineError
 open Term_stable
 open Mp_resource
 
-open Tacticals
-open Sequent
+open Tactic_type
+open Tactic_type.Tacticals
+open Tactic_type.Sequent
 
 (*
  * Show that the file is loading.
@@ -61,7 +60,6 @@ let _ =
  * TERMS                                                                *
  ************************************************************************)
 
-declare ext
 declare squash
 
 (************************************************************************

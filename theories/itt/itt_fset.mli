@@ -39,8 +39,8 @@ include Itt_list2
 
 open Refiner.Refiner.TermType
 
-open Conversionals
-open Tacticals
+open Tactic_type.Conversionals
+open Tactic_type.Tacticals
 
 (************************************************************************
  * SYNTAX                                                               *
@@ -115,6 +115,7 @@ topval fold_foflist : conv
  * TACTICS                                                              *
  ************************************************************************)
 
+(*
 topval d_fsubseteq_consT : tactic
 topval fmember_subst_elementT : term -> tactic
 topval fsub_nonmemberT : tactic
@@ -126,6 +127,7 @@ topval fcompareTransT : term -> tactic
 
 topval testT : tactic
 topval dupRT : tactic -> int -> tactic
+*)
 
 (*
  * -*-

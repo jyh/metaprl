@@ -34,23 +34,31 @@ include Base_auto_tactic
 
 open Refiner.Refiner.Term
 open Refiner.Refiner.Refine
-open Tacticals
+
+open Tactic_type
+open Tactic_type.Tacticals
 
 open Base_auto_tactic
 
 (*
  * This are the types.
  *)
-type d_data
+type elim_data
+type intro_data
 
-resource (term * (int -> tactic), int -> tactic, d_data, meta_term * tactic) d_resource
+type intro_option =
+   SelectOption of int        (* Select among multiple introduction rules *)
+
+type elim_option =
+   ThinOption                 (* Normally thin the eliminated hyp, unless overridden *)
+
+resource (term * (int -> tactic), int -> tactic, elim_data, Tactic.pre_tactic * elim_option list) elim_resource
+resource (term * tactic, tactic, intro_data, Tactic.pre_tactic * intro_option list) intro_resource
 
 (*
- * Get a resource for the toploop.
+ * Easy adding.
  *)
-val get_resource : string -> d_resource
-
-val add_d_info : d_resource -> (term * (int -> tactic)) list -> d_resource
+val add_intro_info : intro_resource -> (term * tactic) list -> intro_resource
 
 (*
  * The inherited d tactic.

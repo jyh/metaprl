@@ -33,12 +33,11 @@
  *
  *)
 
-include Tacticals
 include Itt_equal
 include Itt_subtype
 
 open Refiner.Refiner.Term
-open Tacticals
+open Tactic_type.Tacticals
 
 (************************************************************************
  * TERMS                                                                *
@@ -89,9 +88,6 @@ rule void_subtype 'H :
 (************************************************************************
  * TACTICS                                                              *
  ************************************************************************)
-
-val d_voidT : int -> tactic
-val eqcd_voidT : tactic
 
 val void_term : term
 val is_void_term : term -> bool

@@ -8,7 +8,10 @@ open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
 
 open Mp_resource
-open Tacticals
+
+open Tactic_type
+open Tactic_type.Tacticals
+
 open Base_auto_tactic
 
 (************************************************************************
@@ -29,7 +32,7 @@ dform prop_df : prop{'t} = downarrow slot{'t}
  * RULES                                                                *
  ************************************************************************)
 
-prim univ_type 'H 'J : :
+prim univ_type 'H 'J :
    sequent ['ext] { 'H; x: univ; 'J['x] >- "type"{prop{'x}} } =
    trivial
 

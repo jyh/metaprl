@@ -30,8 +30,8 @@
  * jyh@cs.cornell.edu
  *)
 
-open Tacticals
-open Conversionals
+open Tactic_type.Tacticals
+open Tactic_type.Conversionals
 
 include Itt_theory
 

@@ -32,7 +32,7 @@
 
 include Czf_itt_set
 
-open Conversionals
+open Tactic_type.Conversionals
 
 (************************************************************************
  * TERMS                                                                *

@@ -40,8 +40,8 @@ open Refiner.Refiner.TermOp
 open Refiner.Refiner.RefineError
 open Mp_resource
 
-open Tacticals
-open Conversionals
+open Tactic_type.Tacticals
+open Tactic_type.Conversionals
 open Var
 
 open Typeinf
@@ -231,69 +231,69 @@ interactive_rw reduce_fold_left_cons :
 (*
  * Is_nil.
  *)
-interactive is_nil_wf 'H 'T :
-   sequent [squash] { 'H >- member{list{'T}; 'l} } -->
+interactive is_nil_wf {| intro_resource [] |} 'H 'T :
+   [wf] sequent [squash] { 'H >- member{list{'T}; 'l} } -->
    sequent ['ext] { 'H >- member{bool; is_nil{'l}} }
 
 (*
  * Append.
  *)
-interactive append_wf2 'H :
-   sequent [squash] { 'H >- member{list{'T}; 'l1} } -->
-   sequent [squash] { 'H >- member{list{'T}; 'l2} } -->
+interactive append_wf2 {| intro_resource [] |} 'H :
+   [wf] sequent [squash] { 'H >- member{list{'T}; 'l1} } -->
+   [wf] sequent [squash] { 'H >- member{list{'T}; 'l2} } -->
    sequent ['ext] { 'H >- member{list{'T}; append{'l1; 'l2}} }
 
 (*
  * Ball2.
  *)
-interactive ball2_wf2 'H 'T1 'T2 'u 'v :
-   sequent [squash] { 'H >- "type"{'T1} } -->
-   sequent [squash] { 'H >- "type"{'T2} } -->
-   sequent [squash] { 'H >- member{list{'T1}; 'l1} } -->
-   sequent [squash] { 'H >- member{list{'T2}; 'l2} } -->
-   sequent [squash] { 'H; u: 'T1; v: 'T2 >- member{bool; 'b['u; 'v]} } -->
+interactive ball2_wf2 {| intro_resource [] |} 'H 'T1 'T2 'u 'v :
+   [wf] sequent [squash] { 'H >- "type"{'T1} } -->
+   [wf] sequent [squash] { 'H >- "type"{'T2} } -->
+   [wf] sequent [squash] { 'H >- member{list{'T1}; 'l1} } -->
+   [wf] sequent [squash] { 'H >- member{list{'T2}; 'l2} } -->
+   [wf] sequent [squash] { 'H; u: 'T1; v: 'T2 >- member{bool; 'b['u; 'v]} } -->
    sequent ['ext] { 'H >- member{bool; ball2{'l1; 'l2; x, y. 'b['x; 'y]}} }
 
 (*
  * assoc2.
  *)
-interactive assoc_wf 'H 'z 'T1 'T2 :
-   sequent [squash] { 'H >- "type"{'T2} } -->
-   sequent [squash] { 'H >- member{.'T1 -> 'T1 -> bool; 'eq} } -->
-   sequent [squash] { 'H >- member{'T1; 'x} } -->
-   sequent [squash] { 'H >- member{list{.'T1 * 'T2}; 'l} } -->
-   sequent [squash] { 'H; z: 'T2 >- member{'T; 'b['z]} } -->
-   sequent [squash] { 'H >- member{'T; 'z} } -->
+interactive assoc_wf {| intro_resource [] |} 'H 'z 'T1 'T2 :
+   [wf] sequent [squash] { 'H >- "type"{'T2} } -->
+   [wf] sequent [squash] { 'H >- member{.'T1 -> 'T1 -> bool; 'eq} } -->
+   [wf] sequent [squash] { 'H >- member{'T1; 'x} } -->
+   [wf] sequent [squash] { 'H >- member{list{.'T1 * 'T2}; 'l} } -->
+   [wf] sequent [squash] { 'H; z: 'T2 >- member{'T; 'b['z]} } -->
+   [wf] sequent [squash] { 'H >- member{'T; 'z} } -->
    sequent ['ext] { 'H >- member{'T; assoc{'eq; 'x; 'l; v. 'b['v]; 'z}} }
 
-interactive rev_assoc_wf 'H 'z 'T1 'T2 :
-   sequent [squash] { 'H >- "type"{'T1} } -->
-   sequent [squash] { 'H >- member{.'T2 -> 'T2 -> bool; 'eq} } -->
-   sequent [squash] { 'H >- member{'T2; 'x} } -->
-   sequent [squash] { 'H >- member{list{.'T1 * 'T2}; 'l} } -->
-   sequent [squash] { 'H; z: 'T1 >- member{'T; 'b['z]} } -->
-   sequent [squash] { 'H >- member{'T; 'z} } -->
+interactive rev_assoc_wf {| intro_resource [] |} 'H 'z 'T1 'T2 :
+   [wf] sequent [squash] { 'H >- "type"{'T1} } -->
+   [wf] sequent [squash] { 'H >- member{.'T2 -> 'T2 -> bool; 'eq} } -->
+   [wf] sequent [squash] { 'H >- member{'T2; 'x} } -->
+   [wf] sequent [squash] { 'H >- member{list{.'T1 * 'T2}; 'l} } -->
+   [wf] sequent [squash] { 'H; z: 'T1 >- member{'T; 'b['z]} } -->
+   [wf] sequent [squash] { 'H >- member{'T; 'z} } -->
    sequent ['ext] { 'H >- member{'T; rev_assoc{'eq; 'x; 'l; v. 'b['v]; 'z}} }
 
 (*
  * map.
  *)
-interactive map_wf 'H 'T1 :
-   sequent [squash] { 'H >- "type"{'T1} } -->
-   sequent [squash] { 'H >- "type"{'T2} } -->
-   sequent [squash] { 'H >- member{.'T1 -> 'T2; 'f} } -->
-   sequent [squash] { 'H >- member{.list{'T1}; 'l} } -->
+interactive map_wf {| intro_resource [] |} 'H 'T1 :
+   [wf] sequent [squash] { 'H >- "type"{'T1} } -->
+   [wf] sequent [squash] { 'H >- "type"{'T2} } -->
+   [wf] sequent [squash] { 'H >- member{.'T1 -> 'T2; 'f} } -->
+   [wf] sequent [squash] { 'H >- member{.list{'T1}; 'l} } -->
    sequent ['ext] { 'H >- member{list{'T2}; map{'f; 'l}} }
 
 (*
  * Fold_left.
  *)
-interactive fold_left_wf 'H 'T1 'T2 :
-   sequent [squash] { 'H >- "type"{'T1} } -->
-   sequent [squash] { 'H >- "type"{'T2} } -->
-   sequent [squash] { 'H >- member{.'T1 -> 'T2 -> 'T2; 'f} } -->
-   sequent [squash] { 'H >- member{'T2; 'v} } -->
-   sequent [squash] { 'H >- member{list{'T1}; 'l} } -->
+interactive fold_left_wf {| intro_resource [] |} 'H 'T1 'T2 :
+   [wf] sequent [squash] { 'H >- "type"{'T1} } -->
+   [wf] sequent [squash] { 'H >- "type"{'T2} } -->
+   [wf] sequent [squash] { 'H >- member{.'T1 -> 'T2 -> 'T2; 'f} } -->
+   [wf] sequent [squash] { 'H >- member{'T2; 'v} } -->
+   [wf] sequent [squash] { 'H >- member{list{'T1}; 'l} } -->
    sequent ['ext] { 'H >- member{'T2; fold_left{'f; 'v; 'l}} }
 
 (************************************************************************
@@ -318,7 +318,7 @@ let reduce_info =
     << fold_left{'f; 'v; nil} >>, reduce_fold_left_nil;
     << fold_left{'f; 'v; cons{'h; 't}} >>, reduce_fold_left_cons]
 
-let reduce_resource = add_reduce_info reduce_resource reduce_info
+let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
 
 (************************************************************************
  * TACTICS                                                              *
@@ -329,111 +329,6 @@ let ball2_opname = opname_of_term ball2_term
 let is_ball2_term = is_dep0_dep0_dep2_term ball2_opname
 let mk_ball2_term = mk_dep0_dep0_dep2_term ball2_opname
 let dest_ball2 = dest_dep0_dep0_dep2_term ball2_opname
-
-(*
- * is_nil.
- *)
-let d_is_nil_wfT p =
-   let t =
-      try get_univ_arg p with
-         RefineError _ ->
-            let t = Sequent.concl p in
-            let _, t = dest_member t in
-            let t = one_subterm t in
-            let _, t = infer_type p t in
-               t
-   in
-   let t = dest_list t in
-      (is_nil_wf (Sequent.hyp_count_addr p) t
-       thenT addHiddenLabelT "wf") p
-
-let is_nil_wf_term = << member{bool; is_nil{'l}} >>
-
-let d_resource = Mp_resource.improve d_resource (is_nil_wf_term, wrap_intro d_is_nil_wfT)
-
-(*
- * Append.
- *)
-let d_append_memberT p =
-   append_wf2 (Sequent.hyp_count_addr p) p
-
-let append_member_term = << member{list{'T}; append{'l1; 'l2}} >>
-
-let d_resource = Mp_resource.improve d_resource (append_member_term, wrap_intro d_append_memberT)
-
-(*
- * ball2.
- *)
-let d_ball2_wfT p =
-   let concl = Sequent.concl p in
-   let _, t = dest_member concl in
-   let t1, t2, u, v, _ = dest_ball2 t in
-   let t1, t2 =
-      try
-         let t = get_univ_arg p in
-            t, t
-      with
-         RefineError _ ->
-               try
-                  let _, t1 = infer_type p t1 in
-                  let t1 = dest_list t1 in
-                     try
-                        let _, t2 = infer_type p t2 in
-                        let t2 = dest_list t2 in
-                           t1, t2
-                     with
-                        RefineError _ ->
-                           t1, t1
-               with
-                  RefineError _ ->
-                     let _, t2 = infer_type p t2 in
-                     let t2 = dest_list t2 in
-                        t2, t2
-   in
-   let u, v = maybe_new_vars2 p u v in
-      (ball2_wf2 (Sequent.hyp_count_addr p) t1 t2 u v
-       thenT addHiddenLabelT "wf") p
-
-let ball2_member_term = << member{bool; ball2{'l1; 'l2; x, y. 'b['x; 'y]}} >>
-
-let d_resource = Mp_resource.improve d_resource (ball2_member_term, wrap_intro d_ball2_wfT)
-
-(*
- * Assoc.
- *)
-let d_assoc_wfT assoc_wf p =
-   let t = Sequent.concl p in
-   let _, t = dest_member t in
-   let v, t =
-      match dest_term t with
-         { term_terms = [_; _; l; bt; _]} ->
-            begin
-               let { bterm = l } = dest_bterm l in
-                  match dest_bterm bt with
-                     { bvars = [v] } ->
-                        v, l
-                   | _ ->
-                        raise (RefineError ("d_assoc_wfT", StringTermError ("not an assoc", t)))
-            end
-       | _ ->
-            raise (RefineError ("d_assoc_wfT", StringTermError ("not an assoc", t)))
-   in
-   let t =
-      try get_univ_arg p with
-         RefineError _ ->
-            let _, t = infer_type p t in
-               t
-   in
-   let v = maybe_new_vars1 p v in
-   let t1, t2 = dest_prod t in
-      (assoc_wf (Sequent.hyp_count_addr p) v t1 t2
-       thenT addHiddenLabelT "wf") p
-
-let assoc_wf_term = << member{'T; assoc{'eq; 'x; 'l; v. 'b['v]; 'z}} >>
-let rev_assoc_wf_term = << member{'T; rev_assoc{'eq; 'x; 'l; v. 'b['v]; 'z}} >>
-
-let d_resource = Mp_resource.improve d_resource (assoc_wf_term, wrap_intro (d_assoc_wfT assoc_wf))
-let d_resource = Mp_resource.improve d_resource (rev_assoc_wf_term, wrap_intro (d_assoc_wfT rev_assoc_wf))
 
 (*
  * -*-

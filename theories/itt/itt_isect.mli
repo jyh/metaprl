@@ -31,8 +31,6 @@
  *
  *)
 
-include Tacticals
-
 include Itt_equal
 include Itt_set
 include Itt_rfun
@@ -40,7 +38,7 @@ include Itt_logic
 
 open Refiner.Refiner.Term
 
-open Tacticals
+open Tactic_type.Tacticals
 
 (************************************************************************
  * TERMS                                                                *
@@ -138,9 +136,6 @@ rule intersectionSubtype 'H 'a :
 (************************************************************************
  * TACTICS                                                              *
  ************************************************************************)
-
-val d_isectT : int -> tactic
-val eqcd_isectT : tactic
 
 val is_isect_term : term -> bool
 val dest_isect : term -> string * term * term

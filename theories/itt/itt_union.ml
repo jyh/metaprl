@@ -31,8 +31,6 @@
  *
  *)
 
-include Tacticals
-
 include Itt_equal
 include Itt_struct
 include Itt_rfun
@@ -49,9 +47,9 @@ open Refiner.Refiner.RefineError
 open Mp_resource
 
 open Var
-open Sequent
-open Tacticals
-open Conversionals
+open Tactic_type.Sequent
+open Tactic_type.Tacticals
+open Tactic_type.Conversionals
 open Typeinf
 
 open Base_dtactic
@@ -117,7 +115,7 @@ let reduce_info =
    [<< decide{inl{'x}; y. 'a['y]; z. 'b['z]} >>, reduceDecideInl;
     << decide{inr{'x}; y. 'a['y]; z. 'b['z]} >>, reduceDecideInr]
 
-let reduce_resource = add_reduce_info reduce_resource reduce_info
+let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
 
 (************************************************************************
  * RULES                                                                *
@@ -141,18 +139,18 @@ prim unionFormation 'H :
  * H >- A1 = A2 in Ui
  * H >- B1 = B2 in Ui
  *)
-prim unionEquality 'H :
-   sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
-   sequent [squash] { 'H >- 'B1 = 'B2 in univ[i:l] } -->
+prim unionEquality {| intro_resource []; eqcd_resource |} 'H :
+   [wf] sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
+   [wf] sequent [squash] { 'H >- 'B1 = 'B2 in univ[i:l] } -->
    sequent ['ext] { 'H >- 'A1 + 'B1 = 'A2 + 'B2 in univ[i:l] } =
    it
 
 (*
  * Typehood.
  *)
-prim unionType 'H :
-   sequent [squash] { 'H >- "type"{'A} } -->
-   sequent [squash] { 'H >- "type"{'B} } -->
+prim unionType {| intro_resource [] |} 'H :
+   [wf] sequent [squash] { 'H >- "type"{'A} } -->
+   [wf] sequent [squash] { 'H >- "type"{'B} } -->
    sequent ['ext] { 'H >- "type"{. 'A + 'B } } =
    it
 
@@ -162,9 +160,9 @@ prim unionType 'H :
  * H >- A
  * H >- B = B in Ui
  *)
-prim inlFormation 'H :
-   ('a : sequent ['ext] { 'H >- 'A }) -->
-   sequent [squash] { 'H >- "type"{'B} } -->
+prim inlFormation {| intro_resource [SelectOption 1] |} 'H :
+   [main] ('a : sequent ['ext] { 'H >- 'A }) -->
+   [wf] sequent [squash] { 'H >- "type"{'B} } -->
    sequent ['ext] { 'H >- 'A + 'B } =
    inl{'a}
 
@@ -174,9 +172,9 @@ prim inlFormation 'H :
  * H >- B
  * H >- A = A in Ui
  *)
-prim inrFormation 'H :
-   ('b : sequent ['ext] { 'H >- 'B }) -->
-   sequent [squash] { 'H >- "type"{'A} } -->
+prim inrFormation {| intro_resource [SelectOption 2] |} 'H :
+   [main] ('b : sequent ['ext] { 'H >- 'B }) -->
+   [wf] sequent [squash] { 'H >- "type"{'A} } -->
    sequent ['ext] { 'H >- 'A + 'B } =
    inr{'b}
 
@@ -186,9 +184,9 @@ prim inrFormation 'H :
  * H >- a1 = a2 in A
  * H >- B = B in Ui
  *)
-prim inlEquality 'H :
-   sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
-   sequent [squash] { 'H >- "type"{'B} } -->
+prim inlEquality {| intro_resource []; eqcd_resource |} 'H :
+   [wf] sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
+   [wf] sequent [squash] { 'H >- "type"{'B} } -->
    sequent ['ext] { 'H >- inl{'a1} = inl{'a2} in 'A + 'B } =
    it
 
@@ -198,9 +196,9 @@ prim inlEquality 'H :
  * H >- b1 = b2 in B
  * H >- A = A in Ui
  *)
-prim inrEquality 'H :
-   sequent [squash] { 'H >- 'b1 = 'b2 in 'B } -->
-   sequent [squash] { 'H >- "type"{'A} } -->
+prim inrEquality {| intro_resource []; eqcd_resource |} 'H :
+   [wf] sequent [squash] { 'H >- 'b1 = 'b2 in 'B } -->
+   [wf] sequent [squash] { 'H >- "type"{'A} } -->
    sequent ['ext] { 'H >- inr{'b1} = inr{'b2} in 'A + 'B } =
    it
 
@@ -209,9 +207,9 @@ prim inrEquality 'H :
  * by unionElimination x u v
  * H, x: A # B, u:A, v:B[u], J[u, v] >- T[u, v] ext t[u, v]
  *)
-prim unionElimination 'H 'J 'x 'u 'v :
-   ('left['u] : sequent ['ext] { 'H; x: 'A + 'B; u: 'A; 'J[inl{'u}] >- 'T[inl{'u}] }) -->
-   ('right['u] : sequent ['ext] { 'H; x: 'A + 'B; v: 'B; 'J[inr{'v}] >- 'T[inr{'v}] }) -->
+prim unionElimination {| elim_resource [] |} 'H 'J 'x 'u 'v :
+   [left] ('left['u] : sequent ['ext] { 'H; x: 'A + 'B; u: 'A; 'J[inl{'u}] >- 'T[inl{'u}] }) -->
+   [right] ('right['u] : sequent ['ext] { 'H; x: 'A + 'B; v: 'B; 'J[inr{'v}] >- 'T[inr{'v}] }) -->
    sequent ['ext] { 'H; x: 'A + 'B; 'J['x] >- 'T['x] } =
    decide{'x; u. 'left['u]; v. 'right['v]}
 
@@ -222,10 +220,10 @@ prim unionElimination 'H 'J 'x 'u 'v :
  * H, u:A, w: e1 = inl u in A + B >- l1[u] = l2[u] in T[inl{u}]
  * H, v:A, w: e1 = inr v in A + B >- r1[v] = r2[v] in T[inr{v}]
  *)
-prim decideEquality 'H lambda{z. 'T['z]} ('A + 'B) 'u 'v 'w :
-   sequent [squash] { 'H >- 'e1 = 'e2 in 'A + 'B } -->
-   sequent [squash] { 'H; u: 'A; w: 'e1 = inl{'u} in 'A + 'B >- 'l1['u] = 'l2['u] in 'T[inl{'u}] } -->
-   sequent [squash] { 'H; v: 'B; w: 'e1 = inr{'v} in 'A + 'B >- 'r1['v] = 'r2['v] in 'T[inr{'v}] } -->
+prim decideEquality {| intro_resource []; eqcd_resource |} 'H lambda{z. 'T['z]} ('A + 'B) 'u 'v 'w :
+   [wf] sequent [squash] { 'H >- 'e1 = 'e2 in 'A + 'B } -->
+   [wf] sequent [squash] { 'H; u: 'A; w: 'e1 = inl{'u} in 'A + 'B >- 'l1['u] = 'l2['u] in 'T[inl{'u}] } -->
+   [wf] sequent [squash] { 'H; v: 'B; w: 'e1 = inr{'v} in 'A + 'B >- 'r1['v] = 'r2['v] in 'T[inr{'v}] } -->
    sequent ['ext] { 'H >- decide{'e1; u1. 'l1['u1]; v1. 'r1['v1]} =
                    decide{'e2; u2. 'l2['u2]; v2. 'r2['v2]} in
                    'T['e1] } =
@@ -238,7 +236,7 @@ prim decideEquality 'H lambda{z. 'T['z]} ('A + 'B) 'u 'v 'w :
  * H >- A1 <= A2
  * H >- B1 <= B2
  *)
-prim unionSubtype 'H :
+prim unionSubtype {| intro_resource [] |} 'H :
    sequent [squash] { 'H >- subtype{'A1; 'A2} } -->
    sequent [squash] { 'H >- subtype{'B1; 'B2} } -->
    sequent ['ext] { 'H >- subtype{ ('A1 + 'B1); ('A2 + 'B2) } } =
@@ -247,10 +245,10 @@ prim unionSubtype 'H :
 (*
  * Interactive.
  *)
-interactive union_contradiction1 'H 'J : :
+interactive union_contradiction1 {| elim_resource [] |} 'H 'J :
    sequent ['ext] { 'H; x: inl{'y} = inr{'z} in 'T; 'J['x] >- 'C['x] }
 
-interactive union_contradiction2 'H 'J : :
+interactive union_contradiction2 {| elim_resource [] |} 'H 'J :
    sequent ['ext] { 'H; x: inr{'y} = inl{'z} in 'T; 'J['x] >- 'C['x] }
 
 (************************************************************************
@@ -280,137 +278,6 @@ let decide_opname = opname_of_term decide_term
 let is_decide_term = is_dep0_dep1_dep1_term decide_opname
 let dest_decide = dest_dep0_dep1_dep1_term decide_opname
 let mk_decide_term = mk_dep0_dep1_dep1_term decide_opname
-
-(************************************************************************
- * D TACTIC                                                             *
- ************************************************************************)
-
-(*
- * D the conclusion.
- *)
-let d_concl_union p =
-   let count = hyp_count_addr p in
-   let flag =
-      try get_sel_arg p with
-         Not_found ->
-            raise (RefineError ("d_concl_union", StringError "requires a flag"))
-   in
-   let tac =
-      match flag with
-         1 ->
-            inlFormation
-       | 2 ->
-            inrFormation
-       | _ ->
-            raise (RefineError ("d_concl_union", StringError "select either 1 or 2"))
-   in
-      (tac count thenLT [idT; addHiddenLabelT "wf"]) p
-
-(*
- * D a hyp.
- * We take the argument.
- *)
-let d_hyp_union i p =
-   let count = hyp_count_addr p in
-   let z, _ = Sequent.nth_hyp p i in
-   let j, k = hyp_indices p i in
-   let u, v = maybe_new_vars2 p z z in
-      (unionElimination j k z u v thenT thinT i) p
-
-(*
- * Join them.
- *)
-let d_unionT i =
-   if i = 0 then
-      d_concl_union
-   else
-      d_hyp_union i
-
-let d_resource = Mp_resource.improve d_resource (union_term, d_unionT)
-
-(*
- * Typehood.
- *)
-let d_union_typeT i p =
-   if i = 0 then
-      unionType (hyp_count_addr p) p
-   else
-      raise (RefineError ("d_union_typeT", StringError "no elimination form"))
-
-let union_type_term = << "type"{. 'A + 'B } >>
-
-let d_resource = Mp_resource.improve d_resource (union_type_term, d_union_typeT)
-
-(*
- * Contradiction.
- *)
-let d_contradiction1 i p =
-   let j, k = Sequent.hyp_indices p i in
-      union_contradiction1 j k p
-
-let d_contradiction2 i p =
-   let j, k = Sequent.hyp_indices p i in
-      union_contradiction2 j k p
-
-let d_info =
-   [<< inl{'x} = inr{'y} in 'T >>, wrap_elim d_contradiction1;
-    << inr{'x} = inl{'y} in 'T >>, wrap_elim d_contradiction2]
-
-let d_resource = add_d_info d_resource d_info
-
-(************************************************************************
- * EQCD TACTIC                                                          *
- ************************************************************************)
-
-(*
- * EQCD union.
- *)
-let eqcd_unionT p =
-   let count = hyp_count_addr p in
-      (unionEquality count
-       thenT addHiddenLabelT "wf") p
-
-let eqcd_resource = Mp_resource.improve eqcd_resource (union_term, eqcd_unionT)
-
-let union_equal_term = << ('a1 + 'a2) = ('b1 + 'b2) in univ[i:l] >>
-
-let d_resource = Mp_resource.improve d_resource (union_equal_term, d_wrap_eqcd eqcd_unionT)
-
-(*
- * EQCD inl.
- *)
-let eqcd_inlT p =
-   let count = hyp_count_addr p in
-      (inlEquality count
-       thenT addHiddenLabelT "wf") p
-
-let eqcd_resource = Mp_resource.improve eqcd_resource (inl_term, eqcd_inlT)
-
-let inl_equal_term = << inl{'x1} = inl{'x2} in ('a1 + 'a2) >>
-
-let d_resource = Mp_resource.improve d_resource (inl_equal_term, d_wrap_eqcd eqcd_inlT)
-
-(*
- * EQCD inr.
- *)
-let eqcd_inrT p =
-   let count = hyp_count_addr p in
-      (inrEquality count
-       thenT addHiddenLabelT "wf") p
-
-let eqcd_resource = Mp_resource.improve eqcd_resource (inr_term, eqcd_inrT)
-
-let inr_equal_term = << inr{'x1} = inr{'x2} in ('a1 + 'a2) >>
-
-let d_resource = Mp_resource.improve d_resource (inr_equal_term, d_wrap_eqcd eqcd_inrT)
-
-(*
- * EQCD decide.
- *)
-let eqcd_decideT p =
-   raise (RefineError ("eqcd_decideT", StringError "not implemented"))
-
-let eqcd_resource = Mp_resource.improve eqcd_resource (decide_term, eqcd_decideT)
 
 (************************************************************************
  * TYPE INFERENCE                                                       *

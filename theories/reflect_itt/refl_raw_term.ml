@@ -9,8 +9,9 @@ include Refl_var
 open Refiner.Refiner.RefineError
 open Mp_resource
 
-open Tacticals
-open Conversionals
+open Tactic_type
+open Tactic_type.Tacticals
+open Tactic_type.Conversionals
 open Var
 
 open Itt_equal
@@ -166,7 +167,7 @@ let reduce_info =
     << bterm_term{bterm{'sl; 't}} >>, reduce_bterm_term;
     << match_bterm{bterm{'sl; 't}; u, v. 'body['u; 'v]} >>, reduce_match_bterm]
 
-let reduce_resource = add_reduce_info reduce_resource reduce_info
+let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
 
 (************************************************************************
  * RULES                                                                *
@@ -175,25 +176,25 @@ let reduce_resource = add_reduce_info reduce_resource reduce_info
 (*
  * Operators.
  *)
-prim operator_type 'H : :
+prim operator_type {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- "type"{operator_type} } =
    it
 
-prim eq_op_wf 'H :
-   sequent [squash] { 'H >- member{operator_type; 'op1} } -->
-   sequent [squash] { 'H >- member{operator_type; 'op2} } -->
+prim eq_op_wf {| intro_resource [] |} 'H :
+   [wf] sequent [squash] { 'H >- member{operator_type; 'op1} } -->
+   [wf] sequent [squash] { 'H >- member{operator_type; 'op2} } -->
    sequent ['ext] { 'H >- member{bool; eq_op{'op1; 'op2}} } =
    it
 
 prim eq_op_ref 'H :
-   sequent [squash] { 'H >- member{operator_type; 'op} } -->
+   [wf] sequent [squash] { 'H >- member{operator_type; 'op} } -->
    sequent ['ext] { 'H >- "assert"{eq_op{'op; 'op}} } =
    it
 
-prim eq_op_sym 'H :
-   sequent [squash] { 'H >- member{operator_type; 'op1} } -->
-   sequent [squash] { 'H >- member{operator_type; 'op2} } -->
-   sequent [squash] { 'H >- "assert"{eq_op{'op2; 'op1}} } -->
+prim eq_op_sym  'H :
+   [wf] sequent [squash] { 'H >- member{operator_type; 'op1} } -->
+   [wf] sequent [squash] { 'H >- member{operator_type; 'op2} } -->
+   [wf] sequent [squash] { 'H >- "assert"{eq_op{'op2; 'op1}} } -->
    sequent [squash] { 'H >- "assert"{eq_op{'op1; 'op2}} } =
    it
 
@@ -209,47 +210,47 @@ prim eq_op_trans 'H 'op2 :
 (*
  * Bterms.
  *)
-interactive raw_bterm_type 'H :
-   sequent [squash] { 'H >- "type"{'T} } -->
+interactive raw_bterm_type {| intro_resource [] |} 'H :
+   [wf] sequent [squash] { 'H >- "type"{'T} } -->
    sequent ['ext] { 'H >- "type"{raw_bterm_type{'T}} }
 
 (*
  * Bvars.
  *)
-interactive bvar_type 'H :
-   sequent [squash] { 'H >- "type"{'T} } -->
+interactive bvar_type {| intro_resource [] |} 'H :
+   [wf] sequent [squash] { 'H >- "type"{'T} } -->
    sequent ['ext] { 'H >- "type"{bvar_type{'T}} }
 
 (*
  * Terms.
  *)
-interactive raw_term_type2 'H : :
+interactive raw_term_type2 {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- "type"{raw_term_type} }
 
-interactive bvar_wf 'H :
-   sequent [squash] { 'H >- member{var_type; 'v} } -->
-   sequent [squash] { 'H >- member{list{raw_term_type}; 'tl} } -->
+interactive bvar_wf {| intro_resource [] |} 'H :
+   [wf] sequent [squash] { 'H >- member{var_type; 'v} } -->
+   [wf] sequent [squash] { 'H >- member{list{raw_term_type}; 'tl} } -->
    sequent ['ext] { 'H >- member{raw_term_type; bvar{'v; 'tl}} }
 
-interactive bterm_wf 'H :
-   sequent [squash] { 'H >- member{list{var_type}; 'vl} } -->
-   sequent [squash] { 'H >- member{'T; 't} } -->
+interactive bterm_wf {| intro_resource [] |} 'H :
+   [wf] sequent [squash] { 'H >- member{list{var_type}; 'vl} } -->
+   [wf] sequent [squash] { 'H >- member{'T; 't} } -->
    sequent ['ext] { 'H >- member{raw_bterm_type{'T}; bterm{'vl; 't}} }
 
-interactive term_wf 'H :
-   sequent [squash] { 'H >- member{operator_type; 'op} } -->
-   sequent [squash] { 'H >- member{list{raw_bterm_type{raw_term_type}}; 'bterms} } -->
+interactive term_wf {| intro_resource [] |} 'H :
+   [wf] sequent [squash] { 'H >- member{operator_type; 'op} } -->
+   [wf] sequent [squash] { 'H >- member{list{raw_bterm_type{raw_term_type}}; 'bterms} } -->
    sequent ['ext] { 'H >- member{raw_term_type; term{'op; 'bterms}} }
 
-interactive term_elim1 'H 'J 'T 'y 'z 'w 'v 'op 'bterms 'terms :
-   sequent ['ext] { 'H; x: raw_term_type; 'J['x];
+interactive term_elim1 {| elim_resource [] |} 'H 'J 'T 'y 'z 'w 'v 'op 'bterms 'terms :
+   [main] sequent ['ext] { 'H; x: raw_term_type; 'J['x];
       T: univ[1:l];
       y: subtype{'T; raw_term_type};
       z: (w: 'T -> 'C['w]);
       op: operator_type;
       bterms : list{raw_bterm_type{'T}}
       >- 'C[term{'op; 'bterms}] } -->
-   sequent ['ext] { 'H; x: raw_term_type; 'J['x];
+   [main] sequent ['ext] { 'H; x: raw_term_type; 'J['x];
       T: univ[1:l];
       y: subtype{'T; raw_term_type};
       z: (w: 'T -> 'C['w]);
@@ -258,124 +259,23 @@ interactive term_elim1 'H 'J 'T 'y 'z 'w 'v 'op 'bterms 'terms :
       >- 'C[bvar{'v; 'terms}] } -->
    sequent ['ext] { 'H; x: raw_term_type; 'J['x] >- 'C['x] }
 
-interactive bterm_term_wf 'H :
-   sequent [squash] { 'H >- "type"{'T} } -->
-   sequent [squash] { 'H >- member{raw_bterm_type{'T}; 't} } -->
+interactive bterm_term_wf {| intro_resource [] |} 'H :
+   [wf] sequent [squash] { 'H >- "type"{'T} } -->
+   [wf] sequent [squash] { 'H >- member{raw_bterm_type{'T}; 't} } -->
    sequent ['ext] { 'H >- member{'T; bterm_term{'t}} }
 
 (************************************************************************
  * TACTICS                                                              *
  ************************************************************************)
 
-let wrap_type tac i p =
-   if i = 0 then
-      tac p
-   else
-      raise (RefineError ("wrap_type", StringError "no elimination form"))
-
-let d_operator_typeT p =
-   operator_type (Sequent.hyp_count_addr p) p
-
-let operator_type_term = << "type"{operator_type} >>
-
-let d_resource = Mp_resource.improve d_resource (operator_type_term, wrap_type d_operator_typeT)
-
-let d_raw_bterm_type_typeT p =
-   raw_bterm_type (Sequent.hyp_count_addr p) p
-
-let raw_bterm_type_type_term = << "type"{raw_bterm_type{'T}} >>
-
-let d_resource = Mp_resource.improve d_resource (raw_bterm_type_type_term, wrap_type d_raw_bterm_type_typeT)
-
-let d_bvar_type_typeT p =
-   bvar_type (Sequent.hyp_count_addr p) p
-
-let bvar_type_type_term = << "type"{bvar_type{'T}} >>
-
-let d_resource = Mp_resource.improve d_resource (bvar_type_type_term, wrap_type d_bvar_type_typeT)
-
-let d_raw_term_type_typeT p =
-   raw_term_type2 (Sequent.hyp_count_addr p) p
-
-let raw_term_type_type_term = << "type"{raw_term_type} >>
-
-let d_resource = Mp_resource.improve d_resource (raw_term_type_type_term, wrap_type d_raw_term_type_typeT)
-
-let d_bvar_wfT p =
-   (bvar_wf (Sequent.hyp_count_addr p)
-    thenT addHiddenLabelT "wf") p
-
-let bvar_member_term = << member{raw_term_type; bvar{'v; 'tl}} >>
-
-let d_resource = Mp_resource.improve d_resource (bvar_member_term, wrap_intro d_bvar_wfT)
-
-let d_bterm_wfT p =
-   (bterm_wf (Sequent.hyp_count_addr p)
-    thenT addHiddenLabelT "wf") p
-
-let bterm_member_term = << member{raw_term_type; bterm{'sl; 't}} >>
-
-let d_resource = Mp_resource.improve d_resource (bterm_member_term, wrap_intro d_bterm_wfT)
-
-let d_term_wfT p =
-   (term_wf (Sequent.hyp_count_addr p)
-    thenT addHiddenLabelT "wf") p
-
-let term_member_term = << member{raw_term_type; term{'op; 'tl}} >>
-
-let d_resource = Mp_resource.improve d_resource (term_member_term, wrap_intro d_term_wfT)
-
-let d_raw_term_typeT i p =
-   if i = 0 then
-      raise (RefineError ("d_termT", StringError "no introduction form"))
-   else
-      let j, k = Sequent.hyp_indices p i in
-      let t, y, z, w, v, op, bterms, terms = maybe_new_vars8 p "T" "y" "z" "u" "v" "op" "bterms" "terms" in
-         term_elim1 j k t y z w v op bterms terms p
-
-let raw_term_type_term = << raw_term_type >>
-
-let d_resource = Mp_resource.improve d_resource (raw_term_type_term, d_raw_term_typeT)
-
-(*
- * Bterm operations.
- *)
-let d_bterm_term_wfT p =
-   (bterm_term_wf (Sequent.hyp_count_addr p)
-    thenT addHiddenLabelT "wf") p
-
-let bterm_term_type_term = << member{'T; bterm_term{'t}} >>
-
-let d_resource = Mp_resource.improve d_resource (bterm_term_type_term, wrap_intro d_bterm_term_wfT)
-
-(*
- * Operator equality.
- *)
-let d_eq_op_wfT p =
-   (eq_op_wf (Sequent.hyp_count_addr p)
-    thenT addHiddenLabelT "wf") p
-
-let eq_op_wf_term = << member{bool; eq_op{'op1; 'op2}} >>
-
-let d_resource = Mp_resource.improve d_resource (eq_op_wf_term, wrap_intro d_eq_op_wfT)
-
 let eq_opRefT p =
-   (eq_op_ref (Sequent.hyp_count_addr p)
-    thenT addHiddenLabelT "wf") p
+   eq_op_ref (Sequent.hyp_count_addr p) p
 
 let eq_opSymT p =
-   (eq_op_sym (Sequent.hyp_count_addr p)
-    thenLT [addHiddenLabelT "wf";
-            addHiddenLabelT "wf";
-            addHiddenLabelT "main"]) p
+   eq_op_sym (Sequent.hyp_count_addr p) p
 
 let eq_opTransT t p =
-   (eq_op_trans (Sequent.hyp_count_addr p) t
-    thenLT [addHiddenLabelT "wf";
-            addHiddenLabelT "wf";
-            addHiddenLabelT "wf";
-            addHiddenLabelT "main";
-            addHiddenLabelT "main"]) p
+   eq_op_trans (Sequent.hyp_count_addr p) t p
 
 (*
  * -*-

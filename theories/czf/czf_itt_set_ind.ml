@@ -40,7 +40,7 @@ open Refiner.Refiner.TermSubst
 open Refiner.Refiner.RefineError
 open Mp_resource
 
-open Sequent
+open Tactic_type.Sequent
 open Var
 
 open Itt_equal

@@ -47,7 +47,8 @@ open Refiner.Refiner.TermSubst
 open Refiner.Refiner.TermShape
 open Refiner.Refiner.RefineError
 
-open Tacticals
+open Tactic_type
+open Tactic_type.Tacticals
 
 open Base_dtactic
 

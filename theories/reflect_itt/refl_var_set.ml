@@ -34,8 +34,9 @@ include Refl_var
 
 open Refiner.Refiner.RefineError
 
-open Tacticals
-open Conversionals
+open Tactic_type
+open Tactic_type.Tacticals
+open Tactic_type.Conversionals
 open Var
 
 open Base_dtactic
@@ -138,279 +139,165 @@ let fold_voflist = makeFoldC << voflist{'sl} >> unfold_voflist
  * RULES                                                                *
  ************************************************************************)
 
-interactive vequal_fequalp 'H : :
+interactive vequal_fequalp {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- fequalp{vequal; var_type} }
 
-interactive var_set_wf 'H : :
+interactive var_set_wf {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- "type"{var_set} }
 
 (*
  * MEmbership.
  *)
-interactive vmember_wf 'H :
-   sequent [squash] { 'H >- member{var_type; 'v} } -->
-   sequent [squash] { 'H >- member{var_set; 's} } -->
+interactive vmember_wf {| intro_resource [] |} 'H :
+   [wf] sequent [squash] { 'H >- member{var_type; 'v} } -->
+   [wf] sequent [squash] { 'H >- member{var_set; 's} } -->
    sequent ['ext] { 'H >- member{bool; vmember{'v; 's}} }
 
 (*
  * Empty.
  *)
-interactive vempty_wf 'H : :
+interactive vempty_wf {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- member{var_set; vempty} }
 
-interactive vempty_member_elim 'H 'J : :
+interactive vempty_member_elim {| elim_resource [] |} 'H 'J :
    sequent ['ext] { 'H; x: "assert"{vmember{'v; vempty}}; 'J['x] >- 'C['x] }
 
 (*
  * Singleton.
  *)
-interactive vsingleton_wf 'H :
+interactive vsingleton_wf {| intro_resource [] |} 'H :
    sequent [squash] { 'H >- member{var_type; 'v} } -->
    sequent ['ext] { 'H >- member{var_set; vsingleton{'v}} }
 
-interactive vsingleton_member_intro 'H :
-   sequent [squash] { 'H >- 'v1 = 'v2 in var_type } -->
+interactive vsingleton_member_intro {| intro_resource [] |} 'H :
+   [wf] sequent [squash] { 'H >- 'v1 = 'v2 in var_type } -->
    sequent ['ext] { 'H >- "assert"{vmember{'v1; vsingleton{'v2}}} }
 
-interactive vsingleton_member_elim 'H 'J :
-   sequent [squash] { 'H; x: "assert"{vmember{'v1; vsingleton{'v2}}}; 'J['x] >- member{var_type; 'v1} } -->
-   sequent [squash] { 'H; x: "assert"{vmember{'v1; vsingleton{'v2}}}; 'J['x] >- member{var_type; 'v2} } -->
-   sequent ['ext] { 'H; x: 'v1 = 'v2 in var_type; 'J[it] >- 'C[it] } -->
+interactive vsingleton_member_elim {| elim_resource [ThinOption] |} 'H 'J :
+   [wf] sequent [squash] { 'H; x: "assert"{vmember{'v1; vsingleton{'v2}}}; 'J['x] >- member{var_type; 'v1} } -->
+   [wf] sequent [squash] { 'H; x: "assert"{vmember{'v1; vsingleton{'v2}}}; 'J['x] >- member{var_type; 'v2} } -->
+   [main] sequent ['ext] { 'H; x: 'v1 = 'v2 in var_type; 'J[it] >- 'C[it] } -->
    sequent ['ext] { 'H; x: "assert"{vmember{'v1; vsingleton{'v2}}}; 'J['x] >- 'C['x] }
 
 (*
  * Union.
  *)
-interactive vunion_wf 'H :
-   sequent [squash] { 'H >- member{var_set; 's1} } -->
-   sequent [squash] { 'H >- member{var_set; 's2} } -->
+interactive vunion_wf {| intro_resource [] |} 'H :
+   [wf] sequent [squash] { 'H >- member{var_set; 's1} } -->
+   [wf] sequent [squash] { 'H >- member{var_set; 's2} } -->
    sequent ['ext] { 'H >- member{var_set; vunion{'s1; 's2}} }
 
-interactive vunion_member_intro_left 'H :
-   sequent [squash] { 'H >- member{var_type; 'v} } -->
-   sequent [squash] { 'H >- member{var_set; 's1} } -->
-   sequent [squash] { 'H >- member{var_set; 's2} } -->
-   sequent [squash] { 'H >- "assert"{vmember{'v; 's1}} } -->
+interactive vunion_member_intro_left {| intro_resource [SelectOption 1] |} 'H :
+   [wf] sequent [squash] { 'H >- member{var_type; 'v} } -->
+   [wf] sequent [squash] { 'H >- member{var_set; 's1} } -->
+   [wf] sequent [squash] { 'H >- member{var_set; 's2} } -->
+   [main] sequent [squash] { 'H >- "assert"{vmember{'v; 's1}} } -->
    sequent ['ext] { 'H >- "assert"{vmember{'v; vunion{'s1; 's2}}} }
 
-interactive vunion_member_intro_right 'H :
-   sequent [squash] { 'H >- member{var_type; 'v} } -->
-   sequent [squash] { 'H >- member{var_set; 's1} } -->
-   sequent [squash] { 'H >- member{var_set; 's2} } -->
-   sequent [squash] { 'H >- "assert"{vmember{'v; 's2}} } -->
+interactive vunion_member_intro_right {| intro_resource [SelectOption 2] |} 'H :
+   [wf] sequent [squash] { 'H >- member{var_type; 'v} } -->
+   [wf] sequent [squash] { 'H >- member{var_set; 's1} } -->
+   [wf] sequent [squash] { 'H >- member{var_set; 's2} } -->
+   [main] sequent [squash] { 'H >- "assert"{vmember{'v; 's2}} } -->
    sequent ['ext] { 'H >- "assert"{vmember{'v; vunion{'s1; 's2}}} }
 
-interactive vunion_member_elim 'H 'J :
-   sequent [squash] { 'H; x: "assert"{vmember{'v; vunion{'s1; 's2}}}; 'J['x] >- member{var_type; 'v} } -->
-   sequent [squash] { 'H; x: "assert"{vmember{'v; vunion{'s1; 's2}}}; 'J['x] >- member{var_set; 's1} } -->
-   sequent [squash] { 'H; x: "assert"{vmember{'v; vunion{'s1; 's2}}}; 'J['x] >- member{var_set; 's2} } -->
-   sequent ['ext] { 'H; x: "assert"{vmember{'v; 's1}}; 'J[it] >- 'C[it] } -->
-   sequent ['ext] { 'H; x: "assert"{vmember{'v; 's2}}; 'J[it] >- 'C[it] } -->
+interactive vunion_member_elim {| elim_resource [] |} 'H 'J :
+   [wf] sequent [squash] { 'H; x: "assert"{vmember{'v; vunion{'s1; 's2}}}; 'J['x] >- member{var_type; 'v} } -->
+   [wf] sequent [squash] { 'H; x: "assert"{vmember{'v; vunion{'s1; 's2}}}; 'J['x] >- member{var_set; 's1} } -->
+   [wf] sequent [squash] { 'H; x: "assert"{vmember{'v; vunion{'s1; 's2}}}; 'J['x] >- member{var_set; 's2} } -->
+   [main] sequent ['ext] { 'H; x: "assert"{vmember{'v; 's1}}; 'J[it] >- 'C[it] } -->
+   [main] sequent ['ext] { 'H; x: "assert"{vmember{'v; 's2}}; 'J[it] >- 'C[it] } -->
    sequent ['ext] { 'H; x: "assert"{vmember{'v; vunion{'s1; 's2}}}; 'J['x] >- 'C['x] }
 
 (*
  * Intersection.
  *)
-interactive visect_wf 'H :
-   sequent [squash] { 'H >- member{var_set; 's1} } -->
-   sequent [squash] { 'H >- member{var_set; 's2} } -->
+interactive visect_wf {| intro_resource [] |} 'H :
+   [wf] sequent [squash] { 'H >- member{var_set; 's1} } -->
+   [wf] sequent [squash] { 'H >- member{var_set; 's2} } -->
    sequent ['ext] { 'H >- member{var_set; visect{'s1; 's2}} }
 
-interactive visect_member_intro3 'H :
-   sequent [squash] { 'H >- member{var_type; 'x} } -->
-   sequent [squash] { 'H >- member{var_set; 's1} } -->
-   sequent [squash] { 'H >- member{var_set; 's2} } -->
-   sequent [squash] { 'H >- "assert"{vmember{'x; 's1}} } -->
-   sequent [squash] { 'H >- "assert"{vmember{'x; 's2}} } -->
+interactive visect_member_intro3 {| intro_resource [] |} 'H :
+   [wf] sequent [squash] { 'H >- member{var_type; 'x} } -->
+   [wf] sequent [squash] { 'H >- member{var_set; 's1} } -->
+   [wf] sequent [squash] { 'H >- member{var_set; 's2} } -->
+   [main] sequent [squash] { 'H >- "assert"{vmember{'x; 's1}} } -->
+   [main] sequent [squash] { 'H >- "assert"{vmember{'x; 's2}} } -->
    sequent ['ext] { 'H >- "assert"{vmember{'x; visect{'s1; 's2}}} }
 
-interactive visect_member_elim3 'H 'J 'u 'v :
-   sequent [squash] { 'H; z: "assert"{vmember{'x; visect{'s1; 's2}}}; 'J['z] >- member{var_type; 'x} } -->
-   sequent [squash] { 'H; z: "assert"{vmember{'x; visect{'s1; 's2}}}; 'J['z] >- member{var_set; 's1} } -->
-   sequent [squash] { 'H; z: "assert"{vmember{'x; visect{'s1; 's2}}}; 'J['z] >- member{var_set; 's2} } -->
-   sequent ['ext] { 'H; u: "assert"{vmember{'x; 's1}}; v: "assert"{vmember{'x; 's2}}; 'J[it] >- 'C[it] } -->
+interactive visect_member_elim3 {| elim_resource [] |} 'H 'J 'u 'v :
+   [wf] sequent [squash] { 'H; z: "assert"{vmember{'x; visect{'s1; 's2}}}; 'J['z] >- member{var_type; 'x} } -->
+   [wf] sequent [squash] { 'H; z: "assert"{vmember{'x; visect{'s1; 's2}}}; 'J['z] >- member{var_set; 's1} } -->
+   [wf] sequent [squash] { 'H; z: "assert"{vmember{'x; visect{'s1; 's2}}}; 'J['z] >- member{var_set; 's2} } -->
+   [main] sequent ['ext] { 'H; u: "assert"{vmember{'x; 's1}}; v: "assert"{vmember{'x; 's2}}; 'J[it] >- 'C[it] } -->
    sequent ['ext] { 'H; z: "assert"{vmember{'x; visect{'s1; 's2}}}; 'J['z] >- 'C['z] }
 
 (*
  * Subtraction.
  *)
-interactive vsub_wf 'H :
-   sequent [squash] { 'H >- member{var_set; 's1} } -->
-   sequent [squash] { 'H >- member{var_set; 's2} } -->
+interactive vsub_wf {| intro_resource [] |} 'H :
+   [wf] sequent [squash] { 'H >- member{var_set; 's1} } -->
+   [wf] sequent [squash] { 'H >- member{var_set; 's2} } -->
    sequent ['ext] { 'H >- member{var_set; vsub{'s1; 's2}} }
 
-interactive vsub_member_intro3 'H :
-   sequent [squash] { 'H >- member{var_type; 'x} } -->
-   sequent [squash] { 'H >- member{var_set; 's1} } -->
-   sequent [squash] { 'H >- member{var_set; 's2} } -->
-   sequent [squash] { 'H >- "assert"{vmember{'x; 's1}} } -->
-   sequent [squash] { 'H >- "assert"{bnot{vmember{'x; 's2}}} } -->
+interactive vsub_member_intro3 {| intro_resource [] |} 'H :
+   [wf] sequent [squash] { 'H >- member{var_type; 'x} } -->
+   [wf] sequent [squash] { 'H >- member{var_set; 's1} } -->
+   [wf] sequent [squash] { 'H >- member{var_set; 's2} } -->
+   [main] sequent [squash] { 'H >- "assert"{vmember{'x; 's1}} } -->
+   [main] sequent [squash] { 'H >- "assert"{bnot{vmember{'x; 's2}}} } -->
    sequent ['ext] { 'H >- "assert"{vmember{'x; vsub{'s1; 's2}}} }
 
-interactive vsub_member_elim3 'H 'J 'u 'v :
-   sequent [squash] { 'H; z: "assert"{vmember{'x; vsub{'s1; 's2}}}; 'J['z] >- member{var_type; 'x} } -->
-   sequent [squash] { 'H; z: "assert"{vmember{'x; vsub{'s1; 's2}}}; 'J['z] >- member{var_set; 's1} } -->
-   sequent [squash] { 'H; z: "assert"{vmember{'x; vsub{'s1; 's2}}}; 'J['z] >- member{var_set; 's2} } -->
-   sequent ['ext] { 'H; u: "assert"{vmember{'x; 's1}}; v: "assert"{bnot{vmember{'x; 's2}}}; 'J[it] >- 'C[it] } -->
+interactive vsub_member_elim3 {| elim_resource [] |} 'H 'J 'u 'v :
+   [wf] sequent [squash] { 'H; z: "assert"{vmember{'x; vsub{'s1; 's2}}}; 'J['z] >- member{var_type; 'x} } -->
+   [wf] sequent [squash] { 'H; z: "assert"{vmember{'x; vsub{'s1; 's2}}}; 'J['z] >- member{var_set; 's1} } -->
+   [wf] sequent [squash] { 'H; z: "assert"{vmember{'x; vsub{'s1; 's2}}}; 'J['z] >- member{var_set; 's2} } -->
+   [main] sequent ['ext] { 'H; u: "assert"{vmember{'x; 's1}}; v: "assert"{bnot{vmember{'x; 's2}}}; 'J[it] >- 'C[it] } -->
    sequent ['ext] { 'H; z: "assert"{vmember{'x; vsub{'s1; 's2}}}; 'J['z] >- 'C['z] }
 
 (*
  * Of a list.
  *)
-interactive voflist_wf 'H :
-   sequent [squash] { 'H >- member{list{var_type}; 'l} } -->
+interactive voflist_wf {| intro_resource [] |} 'H :
+   [wf] sequent [squash] { 'H >- member{list{var_type}; 'l} } -->
    sequent ['ext] { 'H >- member{var_set; voflist{'l}} }
 
-interactive voflist_member_intro_left 'H :
-   sequent [squash] { 'H >- member{list{var_type}; 't} } -->
-   sequent [squash] { 'H >- 'v1 = 'v2 in var_type } -->
+interactive voflist_member_intro_left {| intro_resource [SelectOption 1] |} 'H :
+   [wf] sequent [squash] { 'H >- member{list{var_type}; 't} } -->
+   [main] sequent [squash] { 'H >- 'v1 = 'v2 in var_type } -->
    sequent ['ext] { 'H >- "assert"{vmember{'v1; voflist{cons{'v2; 't}}}} }
 
-interactive voflist_member_intro_right 'H :
-   sequent [squash] { 'H >- member{var_type; 'v1} } -->
-   sequent [squash] { 'H >- member{var_type; 'v2} } -->
-   sequent [squash] { 'H >- member{list{var_type}; 't} } -->
-   sequent [squash] { 'H >- "assert"{vmember{'v1; 't}} } -->
+interactive voflist_member_intro_right {| intro_resource [SelectOption 2] |} 'H :
+   [wf] sequent [squash] { 'H >- member{var_type; 'v1} } -->
+   [wf] sequent [squash] { 'H >- member{var_type; 'v2} } -->
+   [wf] sequent [squash] { 'H >- member{list{var_type}; 't} } -->
+   [main] sequent [squash] { 'H >- "assert"{vmember{'v1; 't}} } -->
    sequent ['ext] { 'H >- "assert"{vmember{'v1; voflist{cons{'v2; 't}}}} }
 
-interactive voflist_member_elim_nil 'H 'J : :
+interactive voflist_member_elim_nil {| elim_resource [] |}  'H 'J :
    sequent ['ext] { 'H; x: "assert"{vmember{'v; voflist{nil}}}; 'J['x] >- 'C['x] }
 
-interactive voflist_member_elim_cons2 'H 'J :
-   sequent [squash] { 'H; x: "assert"{vmember{'v1; voflist{cons{'v2; 't}}}}; 'J['x] >- member{var_type; 'v1} } -->
-   sequent [squash] { 'H; x: "assert"{vmember{'v1; voflist{cons{'v2; 't}}}}; 'J['x] >- member{var_type; 'v2} } -->
-   sequent [squash] { 'H; x: "assert"{vmember{'v1; voflist{cons{'v2; 't}}}}; 'J['x] >- member{list{var_type}; 't} } -->
-   sequent ['ext] { 'H; x: 'v1 = 'v2 in var_type; 'J[it] >- 'C[it] } -->
-   sequent ['ext] { 'H; x: "assert"{vmember{'v1; voflist{'t}}}; 'J[it] >- 'C[it] } -->
+interactive voflist_member_elim_cons2 {| elim_resource [ThinOption] |} 'H 'J :
+   [wf] sequent [squash] { 'H; x: "assert"{vmember{'v1; voflist{cons{'v2; 't}}}}; 'J['x] >- member{var_type; 'v1} } -->
+   [wf] sequent [squash] { 'H; x: "assert"{vmember{'v1; voflist{cons{'v2; 't}}}}; 'J['x] >- member{var_type; 'v2} } -->
+   [wf] sequent [squash] { 'H; x: "assert"{vmember{'v1; voflist{cons{'v2; 't}}}}; 'J['x] >- member{list{var_type}; 't} } -->
+   [main] sequent ['ext] { 'H; x: 'v1 = 'v2 in var_type; 'J[it] >- 'C[it] } -->
+   [main] sequent ['ext] { 'H; x: "assert"{vmember{'v1; voflist{'t}}}; 'J[it] >- 'C[it] } -->
    sequent ['ext] { 'H; x: "assert"{vmember{'v1; voflist{cons{'v2; 't}}}}; 'J['x] >- 'C['x] }
 
 (*
  * Extensionality.
  *)
-interactive var_set_equal 'H 'v 'w :
-   sequent [squash] { 'H >- member{var_set; 's1} } -->
-   sequent [squash] { 'H >- member{var_set; 's2} } -->
-   sequent [squash] { 'H; v: var_type; w: "assert"{vmember{'v; 's2}} >- "assert"{vmember{'v; 's1}} } -->
-   sequent [squash] { 'H; v: var_type; w: "assert"{vmember{'v; 's1}} >- "assert"{vmember{'v; 's2}} } -->
+interactive var_set_equal {| intro_resource [] |} 'H 'v 'w :
+   [wf] sequent [squash] { 'H >- member{var_set; 's1} } -->
+   [wf] sequent [squash] { 'H >- member{var_set; 's2} } -->
+   [main] sequent [squash] { 'H; v: var_type; w: "assert"{vmember{'v; 's2}} >- "assert"{vmember{'v; 's1}} } -->
+   [main] sequent [squash] { 'H; v: var_type; w: "assert"{vmember{'v; 's1}} >- "assert"{vmember{'v; 's2}} } -->
    sequent ['ext] { 'H >- 's1 = 's2 in var_set }
 
 (************************************************************************
  * TACTICS                                                              *
  ************************************************************************)
-
-let wrap_wf tac i p =
-   wrap_intro (tac (Sequent.hyp_count_addr p)
-               thenT addHiddenLabelT "wf") i p
-
-let d_vunion_memberT i p =
-   if i = 0 then
-      let tac =
-         if get_sel_arg p = 1 then
-            vunion_member_intro_left
-         else
-            vunion_member_intro_right
-      in
-         (tac (Sequent.hyp_count_addr p)
-          thenLT [addHiddenLabelT "wf";
-                  addHiddenLabelT "wf";
-                  addHiddenLabelT "wf";
-                  addHiddenLabelT "main"]) p
-   else
-      let j, k = Sequent.hyp_indices p i in
-         (vunion_member_elim j k
-          thenLT [addHiddenLabelT "wf";
-                  addHiddenLabelT "wf";
-                  addHiddenLabelT "wf";
-                  addHiddenLabelT "main";
-                  addHiddenLabelT "main"]) p
-
-let d_visect_memberT i p =
-   if i = 0 then
-      (visect_member_intro3 (Sequent.hyp_count_addr p)
-       thenLT [addHiddenLabelT "wf";
-               addHiddenLabelT "wf";
-               addHiddenLabelT "wf";
-               addHiddenLabelT "main";
-               addHiddenLabelT "main"]) p
-   else
-      let j, k = Sequent.hyp_indices p i in
-      let u, v = maybe_new_vars2 p "u" "v" in
-         (visect_member_elim3 j k u v
-          thenLT [addHiddenLabelT "wf";
-                  addHiddenLabelT "wf";
-                  addHiddenLabelT "wf";
-                  addHiddenLabelT "main"]) p
-
-let d_vsub_memberT i p =
-   if i = 0 then
-      (vsub_member_intro3 (Sequent.hyp_count_addr p)
-       thenLT [addHiddenLabelT "wf";
-               addHiddenLabelT "wf";
-               addHiddenLabelT "wf";
-               addHiddenLabelT "main";
-               addHiddenLabelT "main"]) p
-   else
-      let j, k = Sequent.hyp_indices p i in
-      let u, v = maybe_new_vars2 p "u" "v" in
-         (vsub_member_elim3 j k u v
-          thenLT [addHiddenLabelT "wf";
-                  addHiddenLabelT "wf";
-                  addHiddenLabelT "wf";
-                  addHiddenLabelT "main"]) p
-
-let d_voflist_member_nilT i p =
-   if i = 0 then
-      raise (RefineError ("d_voflist_member_nilT", StringError "no introduction rule"))
-   else
-      let j, k = Sequent.hyp_indices p i in
-         voflist_member_elim_nil j k p
-
-let d_voflist_member_consT i p =
-   if i = 0 then
-         if get_sel_arg p = 1 then
-            (voflist_member_intro_left (Sequent.hyp_count_addr p)
-             thenLT [addHiddenLabelT "wf";
-                     addHiddenLabelT "main"]) p
-         else
-            (voflist_member_intro_right (Sequent.hyp_count_addr p)
-             thenLT [addHiddenLabelT "wf";
-                     addHiddenLabelT "wf";
-                     addHiddenLabelT "wf";
-                     addHiddenLabelT "main"]) p
-   else
-      let j, k = Sequent.hyp_indices p i in
-         (voflist_member_elim_cons2 j k
-          thenLT [addHiddenLabelT "wf";
-                  addHiddenLabelT "wf";
-                  addHiddenLabelT "wf";
-                  addHiddenLabelT "main";
-                  addHiddenLabelT "main"]) p
-
-let d_var_set_equalT p =
-   let v, w = maybe_new_vars2 p "v" "w" in
-      (var_set_equal (Sequent.hyp_count_addr p) v w
-       thenLT [addHiddenLabelT "wf";
-               addHiddenLabelT "wf";
-               addHiddenLabelT "main";
-               addHiddenLabelT "main"]) p
-
-let d_info =
-   [<< "type"{var_set} >>, wrap_wf var_set_wf;
-    << member{bool; vmember{'v; 's}} >>, wrap_wf vmember_wf;
-    << member{var_set; vempty} >>, wrap_wf vempty_wf;
-    << member{var_set; vsingleton{'v}} >>, wrap_wf vsingleton_wf;
-    << member{var_set; vunion{'s1; 's2}} >>, wrap_wf vunion_wf;
-    << member{var_set; visect{'s1; 's2}} >>, wrap_wf visect_wf;
-    << member{var_set; vsub{'s1; 's2}} >>, wrap_wf vsub_wf;
-    << member{var_set; voflist{'l}} >>, wrap_wf voflist_wf;
-    << "assert"{vmember{'v; vunion{'s1; 's2}}} >>, d_vunion_memberT;
-    << "assert"{vmember{'v; visect{'s1; 's2}}} >>, d_visect_memberT;
-    << "assert"{vmember{'v; vsub{'s1; 's2}}} >>, d_vsub_memberT;
-    << "assert"{vmember{'v; voflist{nil}}} >>, d_voflist_member_nilT;
-    << "assert"{vmember{'v; voflist{cons{'h; 't}}}} >>, d_voflist_member_consT;
-    << 's1 = 's2 in var_set >>, wrap_intro d_var_set_equalT]
-
-let d_resource = add_d_info d_resource d_info
 
 (*
  * Equality.

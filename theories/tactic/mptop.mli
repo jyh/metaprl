@@ -32,8 +32,8 @@
 
 open Refiner.Refiner.TermType
 
-open Tactic_type
-open Rewrite_type
+open Tactic_type.Tacticals
+open Tactic_type.Conversionals
 
 (*
  * These are the values that we recognize.

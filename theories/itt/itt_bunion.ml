@@ -44,8 +44,10 @@ open Refiner.Refiner.RefineError
 open Mp_resource
 
 open Var
-open Tacticals
-open Conversionals
+open Tactic_type.Tacticals
+open Tactic_type.Conversionals
+
+open Base_dtactic
 
 open Itt_equal
 
@@ -80,14 +82,14 @@ let fold_bunion = makeFoldC << bunion{'A; 'B} >> unfold_bunion
 (*
  * Typehood.
  *)
-interactive bunionEquality 'H :
-   sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
-   sequent [squash] { 'H >- 'B1 = 'B2 in univ[i:l] } -->
+interactive bunionEquality {| intro_resource []; eqcd_resource |} 'H :
+   [wf] sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
+   [wf] sequent [squash] { 'H >- 'B1 = 'B2 in univ[i:l] } -->
    sequent ['ext] { 'H >- bunion{'A1; 'B1} = bunion{'A2; 'B2} in univ[i:l] }
 
-interactive bunionType 'H :
-   sequent [squash] { 'H >- "type"{'A} } -->
-   sequent [squash] { 'H >- "type"{'B} } -->
+interactive bunionType {| intro_resource [] |} 'H :
+   [wf] sequent [squash] { 'H >- "type"{'A} } -->
+   [wf] sequent [squash] { 'H >- "type"{'B} } -->
    sequent ['ext] { 'H >- "type"{bunion{'A; 'B}} }
 
 (*
@@ -101,80 +103,23 @@ interactive bunionFormation 'H :
 (*
  * Membership.
  *)
-interactive bunionMemberEqualityLeft 'H :
-   sequent [squash] { 'H >- 'x = 'y in 'A } -->
-   sequent [squash] { 'H >- "type"{'B} } -->
+interactive bunionMemberEqualityLeft {| intro_resource [SelectOption 1]; eqcd_resource |} 'H :
+   [wf] sequent [squash] { 'H >- 'x = 'y in 'A } -->
+   [wf] sequent [squash] { 'H >- "type"{'B} } -->
    sequent ['ext] { 'H >- 'x = 'y in bunion{'A; 'B} }
 
-interactive bunionMemberEqualityRight 'H :
-   sequent [squash] { 'H >- 'x = 'y in 'B } -->
-   sequent [squash] { 'H >- "type"{'A} } -->
+interactive bunionMemberEqualityRight {| intro_resource [SelectOption 2]; eqcd_resource |} 'H :
+   [wf] sequent [squash] { 'H >- 'x = 'y in 'B } -->
+   [wf] sequent [squash] { 'H >- "type"{'A} } -->
    sequent ['ext] { 'H >- 'x = 'y in bunion{'A; 'B} }
 
 (*
  * Elimination.
  *)
-interactive bunionElimination 'H 'J 'y 'z :
-   sequent ['ext] { 'H; x: bunion{'A; 'B}; 'J['x]; y: 'A; z: 'y = 'x in bunion{'A; 'B} >- 'C['x] } -->
-   sequent ['ext] { 'H; x: bunion{'A; 'B}; 'J['x]; y: 'B; z: 'y = 'x in bunion{'A; 'B} >- 'C['x] } -->
+interactive bunionElimination {| elim_resource [] |} 'H 'J 'y 'z :
+   [main] sequent ['ext] { 'H; x: bunion{'A; 'B}; 'J['x]; y: 'A; z: 'y = 'x in bunion{'A; 'B} >- 'C['x] } -->
+   [main] sequent ['ext] { 'H; x: bunion{'A; 'B}; 'J['x]; y: 'B; z: 'y = 'x in bunion{'A; 'B} >- 'C['x] } -->
    sequent ['ext] { 'H; x: bunion{'A; 'B}; 'J['x] >- 'C['x] }
-
-(************************************************************************
- * TACTICS                                                              *
- ************************************************************************)
-
-(*
- * D tactic.
- *)
-let d_bunionT i p =
-   if i = 0 then
-      raise (RefineError ("d_bunion", StringError "no introduction rule"))
-   else
-      let j, k = Sequent.hyp_indices p i in
-      let u, v = maybe_new_vars2 p "u" "v" in
-         bunionElimination j k u v p
-
-let bunion_term = << bunion{'A; 'B} >>
-
-let d_resource = Mp_resource.improve d_resource (bunion_term, d_bunionT)
-
-let d_bunion_typeT i p =
-   if i = 0 then
-      (bunionType (Sequent.hyp_count_addr p)
-       thenT addHiddenLabelT "wf") p
-   else
-      raise (RefineError ("d_bunion_type", StringError "no elimination form"))
-
-(*
- * EQCD.
- *)
-let eqcd_bunionT p =
-   (bunionEquality (Sequent.hyp_count_addr p)
-    thenT addHiddenLabelT "wf") p
-
-let eqcd_resource = Mp_resource.improve eqcd_resource (bunion_term, eqcd_bunionT)
-
-let bunion_equal_term = << bunion{'A1; 'B1} = bunion{'A2; 'B2} in univ[i:l] >>
-
-let d_resource = Mp_resource.improve d_resource (bunion_equal_term, d_wrap_eqcd eqcd_bunionT)
-
-let d_bunion_memberT i p =
-   if i = 0 then
-      let sel = get_sel_arg p in
-      let tac =
-         if sel = 1 then
-            bunionMemberEqualityLeft
-         else
-            bunionMemberEqualityRight
-      in
-         (tac (Sequent.hyp_count_addr p)
-          thenT addHiddenLabelT "wf") p
-   else
-      raise (RefineError ("d_bunion_memberT", StringError "no elimination form"))
-
-let bunion_member_term = << 'x = 'y in bunion{'A; 'B} >>
-
-let d_resource = Mp_resource.improve d_resource (bunion_member_term, d_bunion_memberT)
 
 (*
  * -*-

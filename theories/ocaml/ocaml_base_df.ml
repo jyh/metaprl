@@ -12,24 +12,25 @@
  * OCaml, and more information about this system.
  *
  * Copyright (C) 1998 Jason Hickey, Cornell University
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- * 
+ *
  * Author: Jason Hickey
  * jyh@cs.cornell.edu
  *)
+include Nuprl_font
 
 open Mp_debug
 open Printf
@@ -133,79 +134,79 @@ declare patt_format
 (*
  * Operators.
  *)
-dform left_brack_df	: "["		= pushfont["bold"] `"[" popfont
-dform right_brack_df	: "]"		= pushfont["bold"] `"]" popfont
-dform left_array_df	: "[|"		= pushfont["bold"] `"[|" popfont
-dform right_array_df	: "|]"		= pushfont["bold"] `"|]" popfont
-dform left_stream_df	: "[<"		= pushfont["bold"] `"[<" popfont
-dform right_stream_df	: ">]"		= pushfont["bold"] `">]" popfont
-dform left_curly_df	: "{"		= pushfont["bold"] `"{" popfont
-dform right_curly_df	: "}"		= pushfont["bold"] `"}" popfont
-dform left_paren_df	: "("		= pushfont["bold"] `"(" popfont
-dform right_paren_df	: ")"		= pushfont["bold"] `")" popfont
+dform left_brack_df	: internal :: "["		= keyword["["]
+dform right_brack_df	: internal :: "]"		= keyword["]"]
+dform left_array_df	: internal :: "[|"		= keyword["[|"]
+dform right_array_df	: internal :: "|]"		= keyword["|]"]
+dform left_stream_df	: internal :: "[<"		= keyword["[<"]
+dform right_stream_df	: internal :: ">]"		= keyword[">]"]
+dform left_curly_df	: internal :: "{"		= keyword["{"]
+dform right_curly_df	: internal :: "}"		= keyword["}"]
+dform left_paren_df	: internal :: "("		= keyword["("]
+dform right_paren_df	: internal :: ")"		= keyword[")"]
 
-dform plus_df		: "+"		= pushfont["bold"] `"+" popfont
-dform minus_df		: "-"		= pushfont["bold"] `"-" popfont
-dform star_df		: "*"		= pushfont["bold"] `"*" popfont
-dform slash_df		: "/"		= pushfont["bold"] `"/" popfont
-dform mod_df_df    	: "mod"		= pushfont["bold"] `"mod" popfont
+dform plus_df		: internal :: "+"		= keyword["+"]
+dform minus_df		: internal :: "-"		= keyword["-"]
+dform star_df		: internal :: "*"		= keyword["*"]
+dform slash_df		: internal :: "/"		= keyword["/"]
+dform mod_df_df    	: internal :: "mod"		= keyword["mod"]
 
-dform and_df		: "&"		= pushfont["bold"] `"&" popfont
-dform or_df		: "or"		= pushfont["bold"] `"or" popfont
-dform eq_df		: "="		= pushfont["bold"] `"=" popfont
-dform eqeq_df		: "=="		= pushfont["bold"] `"==" popfont
-dform colon_colon_df	: "::"		= pushfont["bold"] `"::" popfont
-dform colon_eq_df	: ":="		= pushfont["bold"] `":=" popfont
-dform dot_df		: "."		= pushfont["bold"] `"." popfont
-dform array_sub_df	: ".("		= pushfont["bold"] `".(" popfont
-dform string_sub_df	: ".["		= pushfont["bold"] `".[" popfont
-dform coerce_df         : ":>"		= pushfont["bold"] `":>" popfont
-dform semicolon_df	: ";"		= pushfont["bold"] `";" popfont
-dform arrow_df		: "->"		= pushfont["bold"] `"->" popfont
-dform pipe_df		: "|"		= pushfont["bold"] `"|" popfont
-dform neq_df    	: "<>"		= pushfont["bold"] `"<>" popfont
-dform colon_df          : ":"		= pushfont["bold"] `":" popfont
-dform underscore_df	: "_"		= pushfont["bold"] `"_" popfont
-dform hash_df		: "#"		= pushfont["bold"] `"#" popfont
-dform quote_df		: "'"		= pushfont["bold"] `"'" popfont
-dform backslash_df	: "\""		= pushfont["bold"] `"\"" popfont
+dform and_df		: internal :: "&"		= keyword["&"]
+dform or_df		: internal :: "or"		= keyword["or"]
+dform eq_df		: internal :: "="		= keyword["="]
+dform eqeq_df		: internal :: "=="		= keyword["=="]
+dform colon_colon_df	: internal :: "::"		= keyword["::"]
+dform colon_eq_df	: internal :: ":="		= keyword[":="]
+dform dot_df		: internal :: "."		= keyword["."]
+dform array_sub_df	: internal :: ".("		= keyword[".("]
+dform string_sub_df	: internal :: ".["		= keyword[".["]
+dform coerce_df         : internal :: ":>"		= keyword[":>"]
+dform semicolon_df	: internal :: ";"		= keyword[";"]
+dform arrow_df		: internal :: "->"		= keyword["->"]
+dform pipe_df		: internal :: "|"		= keyword["|"]
+dform neq_df    	: internal :: "<>"		= keyword["<>"]
+dform colon_df          : internal :: ":"		= keyword[":"]
+dform underscore_df	: internal :: "_"		= keyword["_"]
+dform hash_df		: internal :: "#"		= keyword["#"]
+dform quote_df		: internal :: "'"		= keyword["'"]
+dform backslash_df	: internal :: "\""		= keyword["\""]
 
-dform if_df		: "_if"		= pushfont["bold"] `"if" popfont
-dform then_df		: "_then"	= pushfont["bold"] `"then" popfont
-dform else_df		: "_else"	= pushfont["bold"] `"else" popfont
+dform if_df		: internal :: "_if"		= keyword["if"]
+dform then_df		: internal :: "_then"           = keyword["then"]
+dform else_df		: internal :: "_else"           = keyword["else"]
 
-dform for_df		: "_for"	= pushfont["bold"] `"for" popfont
-dform while_df		: "_while"	= pushfont["bold"] `"while" popfont
-dform to_df		: "_to"		= pushfont["bold"] `"to" popfont
-dform downto_df		: "_downto"	= pushfont["bold"] `"downto" popfont
-dform do_df		: "_do"		= pushfont["bold"] `"do" popfont
-dform done_df		: "_done"	= pushfont["bold"] `"done" popfont
+dform for_df		: internal :: "_for"            = keyword["for"]
+dform while_df		: internal :: "_while"          = keyword["while"]
+dform to_df		: internal :: "_to"		= keyword["to"]
+dform downto_df		: internal :: "_downto"         = keyword["downto"]
+dform do_df		: internal :: "_do"		= keyword["do"]
+dform done_df		: internal :: "_done"           = keyword["done"]
 
-dform new_df		: "_new"	= pushfont["bold"] `"new" popfont
-dform fun_df		: "_fun"	= pushfont["bold"] `"fun" popfont
-dform match_df		: "_match"	= pushfont["bold"] `"match" popfont
-dform try_df		: "_try"	= pushfont["bold"] `"try" popfont
-dform type_df		: "_type"	= pushfont["bold"] `"type" popfont
-dform exception_df	: "_exception"	= pushfont["bold"] `"exception" popfont
-dform let_df		: "_let"	= pushfont["bold"] `"let" popfont
-dform letrec_df		: "_letrec"	= pushfont["bold"] `"let rec" popfont
-dform in_df		: "_in"		= pushfont["bold"] `"in" popfont
-dform and_df		: "_and"	= pushfont["bold"] `"and" popfont
-dform with_df		: "_with"	= pushfont["bold"] `"with" popfont
-dform val_df		: "_val"	= pushfont["bold"] `"val" popfont
-dform as_df		: "_as"		= pushfont["bold"] `"as" popfont
-dform external_df	: "_external"	= pushfont["bold"] `"of" popfont
-dform of_df		: "_of"		= pushfont["bold"] `"external" popfont
+dform new_df		: internal :: "_new"            = keyword["new"]
+dform fun_df		: internal :: "_fun"            = keyword["fun"]
+dform match_df		: internal :: "_match"          = keyword["match"]
+dform try_df		: internal :: "_try"            = keyword["try"]
+dform type_df		: internal :: "_type"           = keyword["type"]
+dform exception_df	: internal :: "_exception"	= keyword["exception"]
+dform let_df		: internal :: "_let"            = keyword["let"]
+dform letrec_df		: internal :: "_letrec"         = keyword["let rec"]
+dform in_df		: internal :: "_in"		= keyword["in"]
+dform and_df		: internal :: "_and"            = keyword["and"]
+dform with_df		: internal :: "_with"           = keyword["with"]
+dform val_df		: internal :: "_val"            = keyword["val"]
+dform as_df		: internal :: "_as"		= keyword["as"]
+dform external_df	: internal :: "_external"	= keyword["of"]
+dform of_df		: internal :: "_of"		= keyword["external"]
 
-dform module_df		: "_module"	= pushfont["bold"] `"module" popfont
-dform moduletype_df	: "_moduletype"	= pushfont["bold"] `"module type" popfont
-dform open_df		: "_open"	= pushfont["bold"] `"open" popfont
-dform sig_df		: "_sig"	= pushfont["bold"] `"sig" popfont
-dform struct_df		: "_struct"	= pushfont["bold"] `"struct" popfont
-dform functor_df	: "_functor"	= pushfont["bold"] `"functor" popfont
-dform end_df		: "_end"	= pushfont["bold"] `"end" popfont
+dform module_df		: internal :: "_module"         = keyword["module"]
+dform moduletype_df	: internal :: "_moduletype"	= keyword["module type"]
+dform open_df		: internal :: "_open"           = keyword["open"]
+dform sig_df		: internal :: "_sig"            = keyword["sig"]
+dform struct_df		: internal :: "_struct"         = keyword["struct"]
+dform functor_df	: internal :: "_functor"	= keyword["functor"]
+dform end_df		: internal :: "_end"            = keyword["end"]
 
-dform push_ident_df     : push_indent   = pushm[3]
+dform push_ident_df     : internal :: push_indent       = pushm[3]
 
 (*
  * -*-

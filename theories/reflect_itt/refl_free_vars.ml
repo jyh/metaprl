@@ -34,7 +34,7 @@
 include Refl_term
 include Refl_var_set
 
-open Conversionals
+open Tactic_type.Conversionals
 
 (************************************************************************
  * SYNTAX                                                               *
@@ -82,7 +82,7 @@ let reduce_info =
    [<< free_vars{bvar{'v; 'tl}} >>, reduce_free_vars_bvar;
     << free_vars{term{'op; 'bterms}} >>, reduce_free_vars_term]
 
-let reduce_resource = add_reduce_info reduce_resource reduce_info
+let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
 
 (************************************************************************
  * RULES                                                                *
@@ -91,26 +91,26 @@ let reduce_resource = add_reduce_info reduce_resource reduce_info
 (*
  * Well-formedness.
  *)
-interactive free_vars_wf1 'H :
-   sequent [squash] { 'H >- member{raw_term_type; 't} } -->
+interactive free_vars_wf1 {| intro_resource [] |} 'H :
+   [wf] sequent [squash] { 'H >- member{raw_term_type; 't} } -->
    sequent ['ext] { 'H >- member{var_set; free_vars{'t}} }
 
 (*
  * Functionality.
  *)
-interactive free_vars_fun1 'H 't1 'f 'v1 :
-   sequent [squash] { 'H >- member{raw_term_type; 't1} } -->
-   sequent [squash] { 'H >- member{raw_term_type; 't2} } -->
-   sequent [squash] { 'H >- member{vmap_type; 'f} } -->
-   sequent [squash] { 'H >- "assert"{eq_alpha_term{'f; 't1; 't2}} } -->
-   sequent [squash] { 'H >- member{var_type; 'v1} } -->
-   sequent [squash] { 'H >- member{var_type; 'v2} } -->
-   sequent [squash] { 'H >- "assert"{vmember{'v1; free_vars{'t1}}} } -->
-   sequent [squash] { 'H >- "assert"{vmap_compare{'v1; 'v2; 'f}} } -->
+interactive free_vars_fun1 {| intro_resource [] |} 'H 't1 'f 'v1 :
+   [wf] sequent [squash] { 'H >- member{raw_term_type; 't1} } -->
+   [wf] sequent [squash] { 'H >- member{raw_term_type; 't2} } -->
+   [wf] sequent [squash] { 'H >- member{vmap_type; 'f} } -->
+   [main] sequent [squash] { 'H >- "assert"{eq_alpha_term{'f; 't1; 't2}} } -->
+   [wf] sequent [squash] { 'H >- member{var_type; 'v1} } -->
+   [wf] sequent [squash] { 'H >- member{var_type; 'v2} } -->
+   [main] sequent [squash] { 'H >- "assert"{vmember{'v1; free_vars{'t1}}} } -->
+   [main] sequent [squash] { 'H >- "assert"{vmap_compare{'v1; 'v2; 'f}} } -->
    sequent ['ext] { 'H >- "assert"{vmember{'v2; free_vars{'t2}}} }
 
-interactive free_vars_wf2 'H :
-   sequent [squash] { 'H >- member{term_type; 't} } -->
+interactive free_vars_wf2 {| intro_resource [] |} 'H :
+   [wf] sequent [squash] { 'H >- member{term_type; 't} } -->
    sequent ['ext] { 'H >- member{var_set; free_vars{'t}} }
 
 (************************************************************************

@@ -7,6 +7,8 @@ include Fol_type
 open Mp_resource
 open Refiner.Refiner.RefineError
 
+open Base_dtactic
+
 (************************************************************************
  * TERMS                                                                *
  ************************************************************************)
@@ -41,47 +43,20 @@ prim_rw reduce_spread : spread{pair{'x; 'y}; a, b. 'body['a; 'b]} <--> 'body['x;
  * RULES                                                                *
  ************************************************************************)
 
-prim and_type 'H :
-   sequent ['ext] { 'H >- "type"{'A} } -->
-   sequent ['ext] { 'H >- "type"{'B} } -->
+prim and_type {| intro_resource [] |} 'H :
+   [wf] sequent ['ext] { 'H >- "type"{'A} } -->
+   [wf] sequent ['ext] { 'H >- "type"{'B} } -->
    sequent ['ext] { 'H >- "type"{.'A & 'B} } = trivial
 
-prim and_intro 'H :
-   ('a : sequent ['ext] { 'H >- 'A }) -->
-   ('b : sequent ['ext] { 'H >- 'B }) -->
+prim and_intro {| intro_resource [] |} 'H :
+   [main] ('a : sequent ['ext] { 'H >- 'A }) -->
+   [main] ('b : sequent ['ext] { 'H >- 'B }) -->
    sequent ['ext] { 'H >- 'A & 'B } = pair{'a; 'b}
 
-prim and_elim 'H 'J 'x 'y 'z :
-   ('body['y; 'z] : sequent ['ext] { 'H; y: 'A; z: 'B; 'J['y, 'z] >- 'C['y, 'z] }) -->
+prim and_elim {| elim_resource [ThinOption] |} 'H 'J 'x 'y 'z :
+   [main] ('body['y; 'z] : sequent ['ext] { 'H; y: 'A; z: 'B; 'J['y, 'z] >- 'C['y, 'z] }) -->
    sequent ['ext] { 'H; x: 'A & 'B; 'J['x] >- 'C['x] } =
    spread{'x; y, z. 'body['y; 'z]}
-
-(************************************************************************
- * AUTOMATION                                                           *
- ************************************************************************)
-
-let d_and_type i p =
-   if i = 0 then
-      and_type (Sequent.hyp_count_addr p) p
-   else
-      raise (RefineError ("d_and_type", StringError "no elimination form"))
-
-let and_type_term = << "type"{.'A & 'B} >>
-
-let d_resource = Mp_resource.improve d_resource (and_type_term, d_and_type)
-
-let d_and i p =
-   if i = 0 then
-      and_intro (Sequent.hyp_count_addr p) p
-   else
-      let y, z = Var.maybe_new_vars2 p "u" "v" in
-      let x, _ = Sequent.nth_hyp p i in
-      let j, k = Sequent.hyp_indices p i in
-         and_elim j k x y z p
-
-let and_term = << 'A & 'B >>
-
-let d_resource = Mp_resource.improve d_resource (and_term, d_and)
 
 (*
  * -*-

@@ -36,7 +36,7 @@ include Czf_itt_dexists
 open Refiner.Refiner.RefineError
 open Mp_resource
 
-open Sequent
+open Tactic_type.Sequent
 open Var
 
 (************************************************************************

@@ -5,7 +5,7 @@
 include Base_theory
 
 open Refiner.Refiner.TermType
-open Tacticals
+open Tactic_type.Tacticals
 
 val nthHypT : int -> tactic
 val thinT : int -> tactic

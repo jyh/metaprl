@@ -33,7 +33,7 @@
 include Itt_atom
 include Itt_bool
 
-open Conversionals
+open Tactic_type.Conversionals
 
 prec prec_eq_atom
 

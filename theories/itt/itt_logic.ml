@@ -55,9 +55,9 @@ open Refiner.Refiner.RefineError
 open Mp_resource
 open Simple_print
 
-open Tacticals
-open Conversionals
-open Sequent
+open Tactic_type
+open Tactic_type.Tacticals
+open Tactic_type.Conversionals
 open Mptop
 open Var
 
@@ -107,15 +107,15 @@ prim_rw unfold_prop : "prop"[i:l] <--> "univ"[i:l]
 
 prim_rw unfold_true : "true" <--> unit
 prim_rw unfold_false : "false" <--> void
-prim_rw unfold_not : not{'a} <--> 'a -> void
-prim_rw unfold_implies : 'a => 'b <--> 'a -> 'b
+prim_rw unfold_not : "not"{'a} <--> ('a -> void)
+prim_rw unfold_implies : ('a => 'b) <--> ('a -> 'b)
 prim_rw unfold_iff : "iff"{'a; 'b} <--> (('a -> 'b) & ('b -> 'a))
-prim_rw unfold_and : 'a & 'b <--> 'a * 'b
-prim_rw unfold_or : 'a or 'b <--> 'a + 'b
-prim_rw unfold_cand : "cand"{'a; 'b} <--> 'a & 'b
+prim_rw unfold_and : ('a & 'b) <--> ('a * 'b)
+prim_rw unfold_or : ('a or 'b) <--> ('a + 'b)
+prim_rw unfold_cand : "cand"{'a; 'b} <--> ('a & 'b)
 prim_rw unfold_cor : "cor"{'a; 'b} <--> "or"{'a; ."cand"{."not"{'a}; 'b}}
-prim_rw unfold_all : all x: 'A. 'B['x] <--> x:'A -> 'B['x]
-prim_rw unfold_exists : exst x: 'A. 'B['x] <--> x:'A * 'B['x]
+prim_rw unfold_all : (all x: 'A. 'B['x]) <--> (x:'A -> 'B['x])
+prim_rw unfold_exists : (exst x: 'A. 'B['x]) <--> (x:'A * 'B['x])
 
 let fold_true    = makeFoldC << "true" >> unfold_true
 let fold_false   = makeFoldC << "false" >> unfold_false
@@ -136,22 +136,22 @@ let fold_exists  = makeFoldC << exst x: 'A. 'B['x] >> unfold_exists
 (*
  * True and false.
  *)
-interactive true_univ 'H : :
+interactive true_univ {| intro_resource []; eqcd_resource |} 'H :
    sequent ['ext] { 'H >- "true" = "true" in univ[i:l] }
 
-interactive true_type 'H : :
+interactive true_type {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- "type"{."true"} }
 
-interactive true_intro 'H : :
+interactive true_intro {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- "true" }
 
-interactive false_univ 'H : :
+interactive false_univ {| intro_resource []; eqcd_resource |} 'H :
    sequent ['ext] { 'H >- "false" = "false" in univ[i:l] }
 
-interactive false_type 'H : :
+interactive false_type {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- "type"{."false"} }
 
-interactive false_elim 'H 'J : :
+interactive false_elim {| elim_resource [] |} 'H 'J :
    sequent ['ext] { 'H; x: "false"; 'J['x] >- 'C['x] }
 
 interactive false_squash 'H :
@@ -161,213 +161,213 @@ interactive false_squash 'H :
 (*
  * Negation.
  *)
-interactive not_univ 'H :
-   sequent [squash] { 'H >- 't1 = 't2 in univ[i:l] } -->
+interactive not_univ {| intro_resource []; eqcd_resource |} 'H :
+   [wf] sequent [squash] { 'H >- 't1 = 't2 in univ[i:l] } -->
    sequent ['ext] { 'H >- "not"{'t1} = "not"{'t2} in univ[i:l] }
 
-interactive not_type 'H :
-   sequent [squash] { 'H >- "type"{'t} } -->
+interactive not_type {| intro_resource [] |} 'H :
+   [wf] sequent [squash] { 'H >- "type"{'t} } -->
    sequent ['ext] { 'H >- "type"{."not"{'t}} }
 
-interactive not_intro 'H 'x :
-   sequent [squash] { 'H >- "type"{'t} } -->
-   sequent ['ext] { 'H; x: 't >- "false" } -->
+interactive not_intro {| intro_resource [] |} 'H 'x :
+   [wf] sequent [squash] { 'H >- "type"{'t} } -->
+   [main] sequent ['ext] { 'H; x: 't >- "false" } -->
    sequent ['ext] { 'H >- "not"{'t} }
 
-interactive not_elim 'H 'J :
-   sequent ['ext] { 'H; x: "not"{'t}; 'J['x] >- 't } -->
+interactive not_elim {| elim_resource [ThinOption] |} 'H 'J :
+   [assertion] sequent ['ext] { 'H; x: "not"{'t}; 'J['x] >- 't } -->
    sequent ['ext] { 'H; x: "not"{'t}; 'J['x] >- 'C }
 
 (*
  * Conjunction.
  *)
-interactive and_univ 'H :
-   sequent [squash] { 'H >- 'a1 = 'b1 in univ[i:l] } -->
-   sequent [squash] { 'H >- 'a2 = 'b2 in univ[i:l] } -->
+interactive and_univ {| intro_resource []; eqcd_resource |} 'H :
+   [wf] sequent [squash] { 'H >- 'a1 = 'b1 in univ[i:l] } -->
+   [wf] sequent [squash] { 'H >- 'a2 = 'b2 in univ[i:l] } -->
    sequent ['ext] { 'H >- "and"{'a1; 'a2} = "and"{'b1; 'b2} in univ[i:l] }
 
-interactive and_type 'H :
-   sequent [squash] { 'H >- "type"{'a1} } -->
-   sequent [squash] { 'H >- "type"{'a2} } -->
+interactive and_type {| intro_resource [] |} 'H :
+   [wf] sequent [squash] { 'H >- "type"{'a1} } -->
+   [wf] sequent [squash] { 'H >- "type"{'a2} } -->
    sequent ['ext] { 'H >- "type"{."and"{'a1; 'a2}} }
 
-interactive and_intro 'H :
-   sequent ['ext] { 'H >- 'a1 } -->
-   sequent ['ext] { 'H >- 'a2 } -->
+interactive and_intro {| intro_resource [] |} 'H :
+   [wf] sequent ['ext] { 'H >- 'a1 } -->
+   [wf] sequent ['ext] { 'H >- 'a2 } -->
    sequent ['ext] { 'H >- "and"{'a1; 'a2} }
 
-interactive and_elim 'H 'J 'y 'z :
-   sequent ['ext] { 'H; y: 'a1; z: 'a2; 'J['y, 'z] >- 'C['y, 'z] } -->
+interactive and_elim {| elim_resource [ThinOption] |} 'H 'J 'y 'z :
+   [main] sequent ['ext] { 'H; y: 'a1; z: 'a2; 'J['y, 'z] >- 'C['y, 'z] } -->
    sequent ['ext] { 'H; x: "and"{'a1; 'a2}; 'J['x] >- 'C['x] }
 
 (*
  * Disjunction.
  *)
-interactive or_univ 'H :
-   sequent [squash] { 'H >- 'a1 = 'b1 in univ[i:l] } -->
-   sequent [squash] { 'H >- 'a2 = 'b2 in univ[i:l] } -->
+interactive or_univ {| intro_resource []; eqcd_resource |} 'H :
+   [wf] sequent [squash] { 'H >- 'a1 = 'b1 in univ[i:l] } -->
+   [wf] sequent [squash] { 'H >- 'a2 = 'b2 in univ[i:l] } -->
    sequent ['ext] { 'H >- "or"{'a1; 'a2} = "or"{'b1; 'b2} in univ[i:l] }
 
-interactive or_type 'H :
-   sequent [squash] { 'H >- "type"{'a1} } -->
-   sequent [squash] { 'H >- "type"{'a2} } -->
+interactive or_type {| intro_resource [] |} 'H :
+   [wf] sequent [squash] { 'H >- "type"{'a1} } -->
+   [wf] sequent [squash] { 'H >- "type"{'a2} } -->
    sequent ['ext] { 'H >- "type"{."or"{'a1; 'a2}} }
 
-interactive or_intro_left 'H :
-   sequent [squash] { 'H >- "type"{.'a2} } -->
-   sequent ['ext] { 'H >- 'a1 } -->
+interactive or_intro_left {| intro_resource [SelectOption 1] |} 'H :
+   [wf] sequent [squash] { 'H >- "type"{.'a2} } -->
+   [main] sequent ['ext] { 'H >- 'a1 } -->
    sequent ['ext] { 'H >- "or"{'a1; 'a2} }
 
-interactive or_intro_right 'H :
-   sequent [squash] { 'H >- "type"{.'a1} } -->
-   sequent ['ext] { 'H >- 'a2 } -->
+interactive or_intro_right {| intro_resource [SelectOption 2] |} 'H :
+   [wf] sequent [squash] { 'H >- "type"{.'a1} } -->
+   [main] sequent ['ext] { 'H >- 'a2 } -->
    sequent ['ext] { 'H >- "or"{'a1; 'a2} }
 
-interactive or_elim 'H 'J 'y :
-   sequent ['ext] { 'H; y: 'a1; 'J[inl{'y}] >- 'C[inl{'y}] } -->
-   sequent ['ext] { 'H; y: 'a2; 'J[inr{'y}] >- 'C[inr{'y}] } -->
+interactive or_elim {| elim_resource [ThinOption] |} 'H 'J 'y :
+   [main] sequent ['ext] { 'H; y: 'a1; 'J[inl{'y}] >- 'C[inl{'y}] } -->
+   [main] sequent ['ext] { 'H; y: 'a2; 'J[inr{'y}] >- 'C[inr{'y}] } -->
    sequent ['ext] { 'H; x: "or"{'a1; 'a2}; 'J['x] >- 'C['x] }
 
 (*
  * Implication.
  *)
-interactive implies_univ 'H :
-   sequent [squash] { 'H >- 'a1 = 'b1 in univ[i:l] } -->
-   sequent [squash] { 'H >- 'a2 = 'b2 in univ[i:l] } -->
+interactive implies_univ {| intro_resource []; eqcd_resource |} 'H :
+   [wf] sequent [squash] { 'H >- 'a1 = 'b1 in univ[i:l] } -->
+   [wf] sequent [squash] { 'H >- 'a2 = 'b2 in univ[i:l] } -->
    sequent ['ext] { 'H >- "implies"{'a1; 'a2} = "implies"{'b1; 'b2} in univ[i:l] }
 
-interactive implies_type 'H :
-   sequent [squash] { 'H >- "type"{'a1} } -->
-   sequent [squash] { 'H >- "type"{'a2} } -->
+interactive implies_type {| intro_resource [] |} 'H :
+   [wf] sequent [squash] { 'H >- "type"{'a1} } -->
+   [wf] sequent [squash] { 'H >- "type"{'a2} } -->
    sequent ['ext] { 'H >- "type"{."implies"{'a1; 'a2}} }
 
-interactive implies_intro 'H 'x :
-   sequent [squash] { 'H >- "type"{'a1} } -->
-   sequent ['ext] { 'H; x: 'a1 >- 'a2 } -->
+interactive implies_intro {| intro_resource [] |} 'H 'x :
+   [wf] sequent [squash] { 'H >- "type"{'a1} } -->
+   [main] sequent ['ext] { 'H; x: 'a1 >- 'a2 } -->
    sequent ['ext] { 'H >- "implies"{'a1; 'a2} }
 
-interactive implies_elim 'H 'J 'y :
-   sequent ['ext] { 'H; x: "implies"{'a1; 'a2}; 'J['x] >- 'a1 } -->
-   sequent ['ext] { 'H; x: "implies"{'a1; 'a2}; 'J['x]; y: 'a2 >- 'C['x] } -->
+interactive implies_elim {| elim_resource [] |} 'H 'J 'y :
+   [assertion] sequent ['ext] { 'H; x: "implies"{'a1; 'a2}; 'J['x] >- 'a1 } -->
+   [main] sequent ['ext] { 'H; x: "implies"{'a1; 'a2}; 'J['x]; y: 'a2 >- 'C['x] } -->
    sequent ['ext] { 'H; x: "implies"{'a1; 'a2}; 'J['x] >- 'C['x] }
 
 (*
  * Bi-implication.
  *)
-interactive iff_univ 'H :
-   sequent [squash] { 'H >- 'a1 = 'b1 in univ[i:l] } -->
-   sequent [squash] { 'H >- 'a2 = 'b2 in univ[i:l] } -->
+interactive iff_univ {| intro_resource []; eqcd_resource |} 'H :
+   [wf] sequent [squash] { 'H >- 'a1 = 'b1 in univ[i:l] } -->
+   [wf] sequent [squash] { 'H >- 'a2 = 'b2 in univ[i:l] } -->
    sequent ['ext] { 'H >- "iff"{'a1; 'a2} = "iff"{'b1; 'b2} in univ[i:l] }
 
-interactive iff_type 'H :
-   sequent [squash] { 'H >- "type"{'a1} } -->
-   sequent [squash] { 'H >- "type"{'a2} } -->
+interactive iff_type {| intro_resource [] |} 'H :
+   [wf] sequent [squash] { 'H >- "type"{'a1} } -->
+   [wf] sequent [squash] { 'H >- "type"{'a2} } -->
    sequent ['ext] { 'H >- "type"{."iff"{'a1; 'a2}} }
 
-interactive iff_intro 'H :
-   sequent ['ext] { 'H >- 'a1 => 'a2 } -->
-   sequent ['ext] { 'H >- 'a2 => 'a1 } -->
+interactive iff_intro {| intro_resource [] |} 'H :
+   [wf] sequent ['ext] { 'H >- 'a1 => 'a2 } -->
+   [wf] sequent ['ext] { 'H >- 'a2 => 'a1 } -->
    sequent ['ext] { 'H >- "iff"{'a1; 'a2} }
 
-interactive iff_elim 'H 'J 'y 'z :
+interactive iff_elim {| elim_resource [ThinOption] |} 'H 'J 'y 'z :
    sequent ['ext] { 'H; y: "implies"{'a1; 'a2}; z: "implies"{'a2; 'a1}; 'J['y, 'z] >- 'C['y, 'z] } -->
    sequent ['ext] { 'H; x: "iff"{'a1; 'a2}; 'J['x] >- 'C['x] }
 
 (*
  * Conjunction.
  *)
-interactive cand_univ 'H 'x :
-   sequent [squash] { 'H >- 'a1 = 'b1 in univ[i:l] } -->
-   sequent [squash] { 'H; x: 'a1 >- 'a2 = 'b2 in univ[i:l] } -->
+interactive cand_univ {| intro_resource []; eqcd_resource |} 'H 'x :
+   [wf] sequent [squash] { 'H >- 'a1 = 'b1 in univ[i:l] } -->
+   [wf] sequent [squash] { 'H; x: 'a1 >- 'a2 = 'b2 in univ[i:l] } -->
    sequent ['ext] { 'H >- "cand"{'a1; 'a2} = "cand"{'b1; 'b2} in univ[i:l] }
 
-interactive cand_type 'H 'x :
-   sequent [squash] { 'H >- "type"{'a1} } -->
-   sequent [squash] { 'H; x: 'a1 >- "type"{'a2} } -->
+interactive cand_type {| intro_resource [] |} 'H 'x :
+   [wf] sequent [squash] { 'H >- "type"{'a1} } -->
+   [wf] sequent [squash] { 'H; x: 'a1 >- "type"{'a2} } -->
    sequent ['ext] { 'H >- "type"{."cand"{'a1; 'a2}} }
 
-interactive cand_intro 'H 'x :
-   sequent ['ext] { 'H >- 'a1 } -->
-   sequent ['ext] { 'H; x: 'a1 >- 'a2 } -->
+interactive cand_intro {| intro_resource [] |} 'H 'x :
+   [main] sequent ['ext] { 'H >- 'a1 } -->
+   [main] sequent ['ext] { 'H; x: 'a1 >- 'a2 } -->
    sequent ['ext] { 'H >- "cand"{'a1; 'a2} }
 
-interactive cand_elim 'H 'J 'y 'z :
-   sequent ['ext] { 'H; y: 'a1; z: 'a2; 'J['y, 'z] >- 'C['y, 'z] } -->
+interactive cand_elim {| elim_resource [ThinOption] |} 'H 'J 'y 'z :
+   [main] sequent ['ext] { 'H; y: 'a1; z: 'a2; 'J['y, 'z] >- 'C['y, 'z] } -->
    sequent ['ext] { 'H; x: "cand"{'a1; 'a2}; 'J['x] >- 'C['x] }
 
 (*
  * Disjunction.
  *)
-interactive cor_univ 'H 'x :
-   sequent [squash] { 'H >- 'a1 = 'b1 in univ[i:l] } -->
-   sequent [squash] { 'H; x: "not"{'a1} >- 'a2 = 'b2 in univ[i:l] } -->
+interactive cor_univ {| intro_resource []; eqcd_resource |} 'H 'x :
+   [wf] sequent [squash] { 'H >- 'a1 = 'b1 in univ[i:l] } -->
+   [wf] sequent [squash] { 'H; x: "not"{'a1} >- 'a2 = 'b2 in univ[i:l] } -->
    sequent ['ext] { 'H >- "cor"{'a1; 'a2} = "cor"{'b1; 'b2} in univ[i:l] }
 
-interactive cor_type 'H 'x :
-   sequent [squash] { 'H >- "type"{'a1} } -->
-   sequent [squash] { 'H; x: "not"{'a1} >- "type"{'a2} } -->
+interactive cor_type {| intro_resource [] |} 'H 'x :
+   [wf] sequent [squash] { 'H >- "type"{'a1} } -->
+   [wf] sequent [squash] { 'H; x: "not"{'a1} >- "type"{'a2} } -->
    sequent ['ext] { 'H >- "type"{."cor"{'a1; 'a2}} }
 
-interactive cor_intro_left 'H 'x :
-   sequent [squash] { 'H; x: "not"{'a1} >- "type"{.'a2} } -->
-   sequent ['ext] { 'H >- 'a1 } -->
+interactive cor_intro_left {| intro_resource [SelectOption 1] |} 'H 'x :
+   [wf] sequent [squash] { 'H; x: "not"{'a1} >- "type"{.'a2} } -->
+   [main] sequent ['ext] { 'H >- 'a1 } -->
    sequent ['ext] { 'H >- "cor"{'a1; 'a2} }
 
-interactive cor_intro_right 'H 'x :
-   sequent [squash] { 'H >- "type"{.'a1} } -->
-   sequent ['ext] { 'H >- "not"{'a1} } -->
-   sequent ['ext] { 'H; x: "not"{'a1} >- 'a2 } -->
+interactive cor_intro_right {| intro_resource [SelectOption 2] |} 'H 'x :
+   [wf] sequent [squash] { 'H >- "type"{.'a1} } -->
+   [main] sequent ['ext] { 'H >- "not"{'a1} } -->
+   [main] sequent ['ext] { 'H; x: "not"{'a1} >- 'a2 } -->
    sequent ['ext] { 'H >- "cor"{'a1; 'a2} }
 
-interactive cor_elim 'H 'J 'u 'v :
-   sequent ['ext] { 'H; u: 'a1; 'J[inl{'u}] >- 'C[inl{'u}] } -->
-   sequent ['ext] { 'H; u: "not"{'a1}; v: 'a2; 'J[inr{'u, 'v}] >- 'C[inr{'u, 'v}] } -->
+interactive cor_elim {| elim_resource [ThinOption] |} 'H 'J 'u 'v :
+   [main] sequent ['ext] { 'H; u: 'a1; 'J[inl{'u}] >- 'C[inl{'u}] } -->
+   [main] sequent ['ext] { 'H; u: "not"{'a1}; v: 'a2; 'J[inr{'u, 'v}] >- 'C[inr{'u, 'v}] } -->
    sequent ['ext] { 'H; x: "cor"{'a1; 'a2}; 'J['x] >- 'C['x] }
 
 (*
  * All elimination performs a thinning
  *)
-interactive all_univ 'H 'x :
-   sequent [squash] { 'H >- 't1 = 't2 in univ[i:l] } -->
-   sequent [squash] { 'H; x : 't1 >- 'b1['x] = 'b2['x] in univ[i:l] } -->
+interactive all_univ {| intro_resource []; eqcd_resource |} 'H 'x :
+   [wf] sequent [squash] { 'H >- 't1 = 't2 in univ[i:l] } -->
+   [wf] sequent [squash] { 'H; x : 't1 >- 'b1['x] = 'b2['x] in univ[i:l] } -->
    sequent ['ext] { 'H >- "all"{'t1; x1. 'b1['x1]} = "all"{'t2; x2. 'b2['x2]} in univ[i:l] }
 
-interactive all_type 'H 'x :
-   sequent [squash] { 'H >- "type"{'t} } -->
-   sequent [squash] { 'H; x: 't >- "type"{'b['x]} } -->
+interactive all_type {| intro_resource [] |} 'H 'x :
+   [wf] sequent [squash] { 'H >- "type"{'t} } -->
+   [wf] sequent [squash] { 'H; x: 't >- "type"{'b['x]} } -->
    sequent ['ext] { 'H >- "type"{."all"{'t; v. 'b['v]}} }
 
-interactive all_intro 'H 'x :
-   sequent [squash] { 'H >- "type"{'t} } -->
-   sequent ['ext] { 'H; x: 't >- 'b['x] } -->
+interactive all_intro {| intro_resource [] |} 'H 'x :
+   [wf] sequent [squash] { 'H >- "type"{'t} } -->
+   [main] sequent ['ext] { 'H; x: 't >- 'b['x] } -->
    sequent ['ext] { 'H >- "all"{'t; v. 'b['v]} }
 
-interactive all_elim 'H 'J 'w 'z :
-   sequent [squash] { 'H; x: all a: 'A. 'B['a]; 'J['x] >- member{'A; 'z} } -->
-   sequent ['ext] { 'H; x: all a: 'A. 'B['a]; 'J['x]; w: 'B['z] >- 'C['x] } -->
+interactive all_elim {| elim_resource [] |} 'H 'J 'w 'z :
+   [wf] sequent [squash] { 'H; x: all a: 'A. 'B['a]; 'J['x] >- member{'A; 'z} } -->
+   [main] sequent ['ext] { 'H; x: all a: 'A. 'B['a]; 'J['x]; w: 'B['z] >- 'C['x] } -->
    sequent ['ext] { 'H; x: all a: 'A. 'B['a]; 'J['x] >- 'C['x] }
 
 (*
  * Existential.
  *)
-interactive exists_univ 'H 'x :
-   sequent [squash] { 'H >- 't1 = 't2 in univ[i:l] } -->
-   sequent [squash] { 'H; x : 't1 >- 'b1['x] = 'b2['x] in univ[i:l] } -->
+interactive exists_univ {| intro_resource []; eqcd_resource |} 'H 'x :
+   [wf] sequent [squash] { 'H >- 't1 = 't2 in univ[i:l] } -->
+   [wf] sequent [squash] { 'H; x : 't1 >- 'b1['x] = 'b2['x] in univ[i:l] } -->
    sequent ['ext] { 'H >- "exists"{'t1; x1. 'b1['x1]} = "exists"{'t2; x2. 'b2['x2]} in univ[i:l] }
 
-interactive exists_type 'H 'x :
-   sequent [squash] { 'H >- "type"{'t} } -->
-   sequent [squash] { 'H; x: 't >- "type"{'b['x]} } -->
+interactive exists_type {| intro_resource [] |} 'H 'x :
+   [wf] sequent [squash] { 'H >- "type"{'t} } -->
+   [wf] sequent [squash] { 'H; x: 't >- "type"{'b['x]} } -->
    sequent ['ext] { 'H >- "type"{."exists"{'t; v. 'b['v]}} }
 
-interactive exists_intro 'H 'z 'x :
-   sequent [squash] { 'H >- member{'t; 'z} } -->
-   sequent ['ext] { 'H >- 'b['z] } -->
-   sequent [squash] { 'H; x: 't >- "type"{'b['x]} } -->
+interactive exists_intro {| intro_resource [] |} 'H 'z 'x :
+   [wf] sequent [squash] { 'H >- member{'t; 'z} } -->
+   [main] sequent ['ext] { 'H >- 'b['z] } -->
+   [wf] sequent [squash] { 'H; x: 't >- "type"{'b['x]} } -->
    sequent ['ext] { 'H >- "exists"{'t; v. 'b['v]} }
 
-interactive exists_elim 'H 'J 'y 'z :
-   sequent ['ext] { 'H; y: 'a; z: 'b['y]; 'J['y, 'z] >- 'C['y, 'z] } -->
+interactive exists_elim {| elim_resource [ThinOption] |} 'H 'J 'y 'z :
+   [main] sequent ['ext] { 'H; y: 'a; z: 'b['y]; 'J['y, 'z] >- 'C['y, 'z] } -->
    sequent ['ext] { 'H; x: exst v: 'a. 'b['v]; 'J['x] >- 'C['x] }
 
 (************************************************************************
@@ -519,382 +519,6 @@ let is_not_term = is_dep0_term not_opname
 let dest_not = dest_dep0_term not_opname
 let mk_not_term = mk_dep0_term not_opname
 
-(************************************************************************
- * D and EQCD TACTICS                                                   *
- ************************************************************************)
-
-(*
- * "True" tactics.
- *)
-let d_trueT i p =
-   if i = 0 then
-      true_intro (hyp_count_addr p) p
-   else
-      raise (RefineError ("d_trueT", StringError "no elimination form (unfold it if you want to elim)"))
-
-let d_resource = Mp_resource.improve d_resource (true_term, d_trueT)
-
-let eqcd_trueT p =
-   true_univ (hyp_count_addr p) p
-
-let eqcd_resource = Mp_resource.improve eqcd_resource (true_term, eqcd_trueT)
-
-let true_equal_term = << "true" = "true" in univ[i:l] >>
-
-let d_resource = Mp_resource.improve d_resource (true_equal_term, d_wrap_eqcd eqcd_trueT)
-
-let d_true_typeT i p =
-   if i = 0 then
-      true_type (hyp_count_addr p) p
-   else
-      raise (RefineError ("d_true_typeT", StringError "no elimination form"))
-
-let true_type_term = << "type"{."true"} >>
-
-let d_resource = Mp_resource.improve d_resource (true_type_term, d_true_typeT)
-
-(*
- * "False" tactics.
- *)
-let d_falseT i p =
-   if i = 0 then
-      raise (RefineError ("d_falseT", StringError "no rule to prove false"))
-   else
-      let j, k = hyp_indices p i in
-         false_elim j k p
-
-let d_resource = Mp_resource.improve d_resource (false_term, d_falseT)
-
-let eqcd_falseT p =
-   false_univ (hyp_count_addr p) p
-
-let eqcd_resource = Mp_resource.improve eqcd_resource (false_term, eqcd_falseT)
-
-let false_equal_term = << "false" = "false" in univ[i:l] >>
-
-let d_resource = Mp_resource.improve d_resource (false_equal_term, d_wrap_eqcd eqcd_falseT)
-
-let d_false_typeT i p =
-   if i = 0 then
-      false_type (hyp_count_addr p) p
-   else
-      raise (RefineError ("d_false_typeT", StringError "no elimination form"))
-
-let false_type_term = << "type"{."false"} >>
-
-let d_resource = Mp_resource.improve d_resource (false_type_term, d_false_typeT)
-
-(*
- * Tactics for conjunction.
- *)
-let d_notT i p =
-   if i = 0 then
-      let v = maybe_new_vars1 p "v" in
-         (not_intro (hyp_count_addr p) v
-          thenLT [addHiddenLabelT "wf";
-                  addHiddenLabelT "main"]) p
-   else
-      let j, k = hyp_indices p i in
-         not_elim j k p
-
-let d_resource = Mp_resource.improve d_resource (not_term, d_notT)
-
-let eqcd_notT p =
-   not_univ (hyp_count_addr p) p
-
-let eqcd_resource = Mp_resource.improve eqcd_resource (not_term, eqcd_notT)
-
-let not_equal_term = << "not"{'t1} = "not"{'t2} in univ[i:l] >>
-
-let d_resource = Mp_resource.improve d_resource (not_equal_term, d_wrap_eqcd eqcd_notT)
-
-let d_not_typeT i p =
-   if i = 0 then
-      (not_type (hyp_count_addr p) thenT addHiddenLabelT "wf") p
-   else
-      raise (RefineError ("d_not_typeT", StringError "no elimination form"))
-
-let not_type_term = << "type"{."not"{'t1}} >>
-
-let d_resource = Mp_resource.improve d_resource (not_type_term, d_not_typeT)
-
-(*
- * Tactics for conjunction.
- *)
-let d_andT i p =
-   if i = 0 then
-      and_intro (hyp_count_addr p) p
-   else
-      let u, v = maybe_new_vars2 p "u" "v" in
-      let j, k = hyp_indices p i in
-         and_elim j k u v p
-
-let d_resource = Mp_resource.improve d_resource (and_term, d_andT)
-
-let eqcd_andT p =
-   and_univ (hyp_count_addr p) p
-
-let eqcd_resource = Mp_resource.improve eqcd_resource (and_term, eqcd_andT)
-
-let and_equal_term = << "and"{'t1; 't2} = "and"{'t3; 't4} in univ[i:l] >>
-
-let d_resource = Mp_resource.improve d_resource (and_equal_term, d_wrap_eqcd eqcd_andT)
-
-let d_and_typeT i p =
-   if i = 0 then
-      (and_type (hyp_count_addr p) thenT addHiddenLabelT "wf") p
-   else
-      raise (RefineError ("d_and_typeT", StringError "no elimination form"))
-
-let and_type_term = << "type"{."and"{'t1; 't2}} >>
-
-let d_resource = Mp_resource.improve d_resource (and_type_term, d_and_typeT)
-
-(*
- * Tactics for disjunction.
- *)
-let d_orT i p =
-   if i = 0 then
-      let arg = get_sel_arg p in
-      let tac =
-         if arg = 1 then
-            or_intro_left
-         else
-            or_intro_right
-      in
-         (tac (hyp_count_addr p)
-          thenLT [addHiddenLabelT "wf";
-                  addHiddenLabelT "main"]) p
-   else
-      let v, _ = nth_hyp p i in
-      let j, k = hyp_indices p i in
-         or_elim j k v p
-
-let d_resource = Mp_resource.improve d_resource (or_term, d_orT)
-
-let eqcd_orT p =
-   or_univ (hyp_count_addr p) p
-
-let eqcd_resource = Mp_resource.improve eqcd_resource (or_term, eqcd_orT)
-
-let or_equal_term = << "or"{'t1; 't2} = "or"{'t3; 't4} in univ[i:l] >>
-
-let d_resource = Mp_resource.improve d_resource (or_equal_term, d_wrap_eqcd eqcd_orT)
-
-let d_or_typeT i p =
-   if i = 0 then
-      (or_type (hyp_count_addr p) thenT addHiddenLabelT "wf") p
-   else
-      raise (RefineError ("d_or_typeT", StringError "no elimination form"))
-
-let or_type_term = << "type"{."or"{'t1; 't2}} >>
-
-let d_resource = Mp_resource.improve d_resource (or_type_term, d_or_typeT)
-
-(*
- * Tactics for conditional conjunction.
- *)
-let d_candT i p =
-   if i = 0 then
-      let u = maybe_new_vars1 p "u" in
-         cand_intro (hyp_count_addr p) u p
-   else
-      let u, v = maybe_new_vars2 p "u" "v" in
-      let j, k = hyp_indices p i in
-         cand_elim j k u v p
-
-let d_resource = Mp_resource.improve d_resource (cand_term, d_candT)
-
-let eqcd_candT p =
-   let u = maybe_new_vars1 p "u" in
-      cand_univ (hyp_count_addr p) u p
-
-let eqcd_resource = Mp_resource.improve eqcd_resource (cand_term, eqcd_candT)
-
-let cand_equal_term = << "cand"{'t1; 't2} = "cand"{'t3; 't4} in univ[i:l] >>
-
-let d_resource = Mp_resource.improve d_resource (cand_equal_term, d_wrap_eqcd eqcd_candT)
-
-let d_cand_typeT i p =
-   if i = 0 then
-      let u = maybe_new_vars1 p "u" in
-         (cand_type (hyp_count_addr p) u thenT addHiddenLabelT "wf") p
-   else
-      raise (RefineError ("d_cand_typeT", StringError "no elimination form"))
-
-let cand_type_term = << "type"{."cand"{'t1; 't2}} >>
-
-let d_resource = Mp_resource.improve d_resource (cand_type_term, d_cand_typeT)
-
-(*
- * Tactics for implication.
- *)
-let d_impliesT i p =
-      let v = maybe_new_vars1 p "v" in
-   if i = 0 then
-         (implies_intro (hyp_count_addr p) v
-          thenLT [addHiddenLabelT "wf";
-                  addHiddenLabelT "main"]) p
-   else
-      let j, k = hyp_indices p i in
-         (implies_elim j k v
-          thenLT [addHiddenLabelT "antecedent";
-                  addHiddenLabelT "main"]) p
-
-let d_resource = Mp_resource.improve d_resource (implies_term, d_impliesT)
-
-let eqcd_impliesT p =
-   implies_univ (hyp_count_addr p) p
-
-let eqcd_resource = Mp_resource.improve eqcd_resource (implies_term, eqcd_impliesT)
-
-let implies_equal_term = << "implies"{'t1; 't2} = "implies"{'t3; 't4} in univ[i:l] >>
-
-let d_resource = Mp_resource.improve d_resource (implies_equal_term, d_wrap_eqcd eqcd_impliesT)
-
-let d_implies_typeT i p =
-   if i = 0 then
-      (implies_type (hyp_count_addr p) thenT addHiddenLabelT "wf") p
-   else
-      raise (RefineError ("d_implies_typeT", StringError "no elimination form"))
-
-let implies_type_term = << "type"{."implies"{'t1; 't2}} >>
-
-let d_resource = Mp_resource.improve d_resource (implies_type_term, d_implies_typeT)
-
-(*
- * Tactics for bi-implication.
- *)
-let d_iffT i p =
-   if i = 0 then
-      iff_intro (hyp_count_addr p) p
-   else
-      let u, v = maybe_new_vars2 p "u" "v" in
-      let j, k = hyp_indices p i in
-         iff_elim j k u v p
-
-let d_resource = Mp_resource.improve d_resource (iff_term, d_iffT)
-
-let eqcd_iffT p =
-   iff_univ (hyp_count_addr p) p
-
-let eqcd_resource = Mp_resource.improve eqcd_resource (iff_term, eqcd_iffT)
-
-let iff_equal_term = << "iff"{'t1; 't2} = "iff"{'t3; 't4} in univ[i:l] >>
-
-let d_resource = Mp_resource.improve d_resource (iff_equal_term, d_wrap_eqcd eqcd_iffT)
-
-let d_iff_typeT i p =
-   if i = 0 then
-      (iff_type (hyp_count_addr p) thenT addHiddenLabelT "wf") p
-   else
-      raise (RefineError ("d_iff_typeT", StringError "no elimination form"))
-
-let iff_type_term = << "type"{."iff"{'t1; 't2}} >>
-
-let d_resource = Mp_resource.improve d_resource (iff_type_term, d_iff_typeT)
-
-(*
- * Special elimination case for all.
- *)
-let d_allT i p =
-   if i = 0 then
-      let goal = Sequent.concl p in
-      let v, _, _ = dest_all goal in
-      let v = maybe_new_vars1 p v in
-         (all_intro (hyp_count_addr p) v
-          thenLT [addHiddenLabelT "wf";
-                  addHiddenLabelT "main"]) p
-   else
-      let z = get_with_arg p in
-      let j, k = hyp_indices p i in
-      let v = Var.maybe_new_vars1 p "v" in
-         (all_elim j k v z
-          thenLT [addHiddenLabelT "wf";
-                  addHiddenLabelT "main"]) p
-
-let all_term = << all a: 'A. 'B['a] >>
-
-let d_resource = Mp_resource.improve d_resource (all_term, d_allT)
-
-let eqcd_allT p =
-   let goal = Sequent.concl p in
-   let _, t, _ = dest_equal goal in
-   let v, _, _ = dest_all t in
-   let v = maybe_new_vars1 p v in
-      (all_univ (hyp_count_addr p) v thenT addHiddenLabelT "wf") p
-
-let eqcd_resource = Mp_resource.improve eqcd_resource (all_term, eqcd_allT)
-
-let all_equal_term = << (all x1: 't1. 'b1['x1]) = (all x2: 't2. 'b2['t2]) in univ[i:l] >>
-
-let d_resource = Mp_resource.improve d_resource (all_equal_term, d_wrap_eqcd eqcd_allT)
-
-let d_all_typeT i p =
-   if i = 0 then
-      let goal = Sequent.concl p in
-      let t = dest_type_term goal in
-      let v, _, _ = dest_all t in
-      let v = maybe_new_vars1 p v in
-         (all_type (hyp_count_addr p) v thenT addHiddenLabelT "wf") p
-   else
-      raise (RefineError ("d_all_typeT", StringError "no elimination form"))
-
-let all_type_term = << "type"{."all"{'t1; x. 't2['x]}} >>
-
-let d_resource = Mp_resource.improve d_resource (all_type_term, d_all_typeT)
-
-(*
- * Existential.
- *)
-let d_existsT i p =
-   if i = 0 then
-      let goal = Sequent.concl p in
-      let v, _, _ = dest_exists goal in
-      let v = maybe_new_vars1 p "v" in
-      let z = get_with_arg p in
-         (exists_intro (hyp_count_addr p) z v
-          thenLT [addHiddenLabelT "wf";
-                  addHiddenLabelT "main";
-                  addHiddenLabelT "wf"]) p
-   else
-      let _, hyp = nth_hyp p i in
-      let v, _, _ = dest_exists hyp in
-      let u, v = maybe_new_vars2 p v v in
-      let j, k = hyp_indices p i in
-         exists_elim j k u v p
-
-let exists_term = << exst a: 'A. 'B['a] >>
-
-let d_resource = Mp_resource.improve d_resource (exists_term, d_existsT)
-
-let eqcd_existsT p =
-   let goal = Sequent.concl p in
-   let _, t, _ = dest_equal goal in
-   let v, _, _ = dest_exists t in
-   let v = maybe_new_vars1 p v in
-      (exists_univ (hyp_count_addr p) v thenT addHiddenLabelT "wf") p
-
-let eqcd_resource = Mp_resource.improve eqcd_resource (exists_term, eqcd_existsT)
-
-let exists_equal_term = << (exst x1: 't1. 'b1['x1]) = (exst x2: 't2. 'b2['t2]) in univ[i:l] >>
-
-let d_resource = Mp_resource.improve d_resource (exists_equal_term, d_wrap_eqcd eqcd_existsT)
-
-let d_exists_typeT i p =
-   if i = 0 then
-      let goal = Sequent.concl p in
-      let t = dest_type_term goal in
-      let v, _, _ = dest_exists t in
-      let v = maybe_new_vars1 p v in
-         (exists_type (hyp_count_addr p) v thenT addHiddenLabelT "wf") p
-   else
-      raise (RefineError ("d_exists_typeT", StringError "no elimination form"))
-
-let exists_type_term = << "type"{."exists"{'t1; x. 't2['x]}} >>
-
-let d_resource = Mp_resource.improve d_resource (exists_type_term, d_exists_typeT)
-
 (*
  * Squash elimination.
  *)
@@ -968,7 +592,7 @@ let rec intersects vars fv =
             intersects tl fv
 
 let moveToConclVarsT vars p =
-   let { sequent_hyps = hyps } = explode_sequent p in
+   let { sequent_hyps = hyps } = Sequent.explode_sequent p in
    let len = SeqHyp.length hyps in
    let rec collect i vars indices =
       if i > len then
@@ -1004,36 +628,42 @@ let moveToConclVarsT vars p =
       tac (collect 1 vars []) (Sequent.concl p) p
 
 let moveToConclT i p =
-   let v, _ = nth_hyp p i in
+   let v, _ = Sequent.nth_hyp p i in
       moveToConclVarsT [v] p
 
 (*
  * Decompose universal formulas.
  *)
-let rec univCDT p =
-   let concl = Sequent.concl p in
-      if is_all_term concl
-         or is_dfun_term concl
-         or is_implies_term concl
-         or is_fun_term concl
-      then
-         (dT 0 thenMT univCDT) p
-      else
-         idT p
+let univCDT =
+   let rec tac p =
+      let concl = Sequent.concl p in
+         if is_all_term concl
+            or is_dfun_term concl
+            or is_implies_term concl
+            or is_fun_term concl
+         then
+            (dT 0 thenMT tac) p
+         else
+            idT p
+   in
+      tac
 
-let rec genUnivCDT p =
-   let concl = Sequent.concl p in
-      if is_all_term concl
-         or is_dfun_term concl
-         or is_implies_term concl
-         or is_fun_term concl
-         or is_and_term concl
-         or is_prod_term concl
-         or is_iff_term concl
-      then
-         (dT 0 thenMT genUnivCDT) p
-      else
-         idT p
+let genUnivCDT =
+   let rec tac p =
+      let concl = Sequent.concl p in
+         if is_all_term concl
+            or is_dfun_term concl
+            or is_implies_term concl
+            or is_fun_term concl
+            or is_and_term concl
+            or is_prod_term concl
+            or is_iff_term concl
+         then
+            (dT 0 thenMT tac) p
+         else
+            idT p
+   in
+      tac
 
 (*
  * Instantiate a hyp with some arguments.
@@ -1044,10 +674,10 @@ let instHypT args i =
          [] ->
             idT p
        | arg :: args' ->
-            let _, hyp = nth_hyp p i in
+            let _, hyp = Sequent.nth_hyp p i in
             let tailT args =
                if firstp then
-                  inst ((hyp_count p) + 1) false args
+                  inst ((Sequent.hyp_count p) + 1) false args
                else
                   thinT i thenT inst i false args
             in
@@ -1197,7 +827,7 @@ let backThruHypT i p =
                 eprintf "\tbackThruHyp step%t" eflush;
              let tailT =
                 if firstp then
-                   [idT; tac args ((hyp_count p) + 1) false]
+                   [idT; tac args ((Sequent.hyp_count p) + 1) false]
                 else
                    [thinT i; thinT i thenT tac args i false]
              in
@@ -1211,7 +841,7 @@ let backThruHypT i p =
                  | AllTerm (v, t) ->
                       withT t (dT i) thenLT tailT) p
    in
-   let _, hyp = nth_hyp p i in
+   let _, hyp = Sequent.nth_hyp p i in
    let goal = Sequent.concl p in
    let info = match_goal [] hyp goal in
       if !debug_auto then
@@ -1297,7 +927,7 @@ let assumT i p =
  * Now try backchaining through the assumption.
  *)
 let backThruAssumT i p =
-   let j = hyp_count p + 1 in
+   let j = Sequent.hyp_count p + 1 in
       (assumT i thenMT (backThruHypT j thenT thinT j)) p
 
 (************************************************************************
@@ -1308,7 +938,7 @@ let backThruAssumT i p =
  * In auto tactic, Ok to decompose product hyps.
  *)
 let logic_trivT i p =
-   let _, hyp = nth_hyp p i in
+   let _, hyp = Sequent.nth_hyp p i in
       if is_void_term hyp or is_false_term hyp then
          dT i p
       else
@@ -1325,7 +955,7 @@ let trivial_resource =
  * Backchaining in auto tactic.
  *)
 let logic_autoT i p =
-   let _, hyp = nth_hyp p i in
+   let _, hyp = Sequent.nth_hyp p i in
       if is_and_term hyp
          or is_prod_term hyp
          or is_dprod_term hyp

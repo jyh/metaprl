@@ -11,21 +11,21 @@
  * OCaml, and more information about this system.
  *
  * Copyright (C) 1998 Jason Hickey, Cornell University
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- * 
+ *
  * Author: Jason Hickey
  * jyh@cs.cornell.edu
  *
@@ -86,10 +86,10 @@ prim_rw reducePrecind : precind{'a; p, h. 'g['p; 'h]} <-->
  * H; P1: A -> Ui; P2: A -> Ui; z: x:A -> y: P1 x -> (y in P2 x); x:A; y: B1[P1; x]
  *   >- y = y in B2[P2; x]
  *)
-prim precEquality 'H 'A 'x 'y 'z 'T 'P1 'P2 :
-   sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
-   sequent [squash] { 'H; x: 'A; T: 'A -> univ[i:l] >- 'B1['T; 'x] = 'B2['T; 'x] in univ[i:l] } -->
-   sequent [squash] { 'H;
+prim precEquality {| intro_resource []; eqcd_resource |} 'H 'A 'x 'y 'z 'T 'P1 'P2 :
+   [wf] sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
+   [wf] sequent [squash] { 'H; x: 'A; T: 'A -> univ[i:l] >- 'B1['T; 'x] = 'B2['T; 'x] in univ[i:l] } -->
+   [wf] sequent [squash] { 'H;
              P1: 'A -> univ[i:l];
              P2: 'A -> univ[i:l];
              z: x:'A -> subtype{('P1 'x); ('P2 'x)};
@@ -110,9 +110,9 @@ prim precEquality 'H 'A 'x 'y 'z 'T 'P1 'P2 :
  * H >- B[lambda(a. prec(T, x. B[T; x])); a] ext t
  * H >- prec(T, x. B[T; x]; a) = prec(T, x. B[T; x]; a) in type
  *)
-prim precMemberFormation 'H :
-   ('t : sequent ['ext] { 'H >- 'B[lambda{z. "prec"{T, x. 'B['T; 'x]; 'z}}; 'a] }) -->
-   sequent [squash] { 'H >- "type"{("prec"{T, x. 'B['T; 'x]; 'a})} } -->
+prim precMemberFormation {| intro_resource [] |} 'H :
+   [main] ('t : sequent ['ext] { 'H >- 'B[lambda{z. "prec"{T, x. 'B['T; 'x]; 'z}}; 'a] }) -->
+   [wf] sequent [squash] { 'H >- "type"{("prec"{T, x. 'B['T; 'x]; 'a})} } -->
    sequent ['ext] { 'H >- "prec"{T, x. 'B['T; 'x]; 'a} } =
    't
 
@@ -123,9 +123,9 @@ prim precMemberFormation 'H :
  * H >- prec(T, x. B[T; x]. a) = prec(T, x. B[T; x]. a) in type
  * H >- a1 = a2 in B[lambda(a. prec(T, x. B[T; x]); a); a]
  *)
-prim precMemberEquality 'H 'z :
-   sequent [squash] { 'H >- "type"{("prec"{T, x. 'B['T; 'x]; 'a})} } -->
-   sequent [squash] { 'H >- 'a1 = 'a2 in 'B[lambda{z. "prec"{T, x. 'B['T; 'x]; 'z}}; 'a] } -->
+prim precMemberEquality {| intro_resource []; eqcd_resource |} 'H 'z :
+   [wf] sequent [squash] { 'H >- "type"{("prec"{T, x. 'B['T; 'x]; 'a})} } -->
+   [wf] sequent [squash] { 'H >- 'a1 = 'a2 in 'B[lambda{z. "prec"{T, x. 'B['T; 'x]; 'z}}; 'a] } -->
    sequent ['ext] { 'H >- 'a1 = 'a2 in "prec"{T, x. 'B['T; 'x]; 'a} } =
    it
 
@@ -140,9 +140,9 @@ prim precMemberEquality 'H 'z :
  *   p: a: A * B[Z, a]
  * >- T[p] ext g[r, u, h, p]
  *)
-prim precElimination 'H 'J lambda{z. 'G['z]} 'a 'A 'Z 'r 'p 'u 'h univ[i:l] :
-   sequent [squash] { 'H; r: "prec"{T, x. 'B['T; 'x]; 'a}; 'J['r] >- 'a = 'a in 'A } -->
-   ('g['r; 'u; 'p; 'h] : sequent ['ext] { 'H; r: "prec"{T, x. 'B['T; 'x]; 'a}; 'J['r];
+prim precElimination {| elim_resource [] |} 'H 'J lambda{z. 'G['z]} 'a 'A 'Z 'r 'p 'u 'h univ[i:l] :
+   [wf] sequent [squash] { 'H; r: "prec"{T, x. 'B['T; 'x]; 'a}; 'J['r] >- 'a = 'a in 'A } -->
+   [main] ('g['r; 'u; 'p; 'h] : sequent ['ext] { 'H; r: "prec"{T, x. 'B['T; 'x]; 'a}; 'J['r];
       Z: 'A -> univ[i:l];
       u: subtype{(a: 'A * 'Z 'a); (a: 'A * "prec"{T, x. 'B['T; 'x]; 'a})};
       h: p: (a: 'A * 'Z 'a) -> 'G['p];
@@ -161,7 +161,7 @@ prim precElimination 'H 'J lambda{z. 'G['z]} 'a 'A 'Z 'r 'p 'u 'h univ[i:l] :
  *   u: r = y in B[lambda(a. prec(T, x. B[T; x]); a); a]
  *   >- T[y]
  *)
-prim precUnrollElimination 'H 'J 'z 'y 'u :
+prim precUnrollElimination {| elim_resource [] |} 'H 'J 'z 'y 'u :
    ('g['z; 'y; 'u] : sequent ['ext] { 'H; r: "prec"{T, x. 'B['T; 'x]; 'a}; 'J['r];
              y: 'B[lambda{z. "prec"{T, x. 'B['T; 'x]; 'z}}; 'a];
              u: 'r = 'y in 'B[lambda{z. "prec"{T, x. 'B['T; 'x]; 'z}}; 'a]
@@ -181,9 +181,9 @@ prim precUnrollElimination 'H 'J 'z 'y 'u :
  *   z: a: A * B[Z; a]
  *   >- t1[h; z] = t2[h; z] in S[z]
  *)
-prim precindEquality 'H lambda{x. 'S['x]} (a:'A * "prec"{T, y. 'B['T; 'y]; 'a}) 'Z 'u 'h 'z univ[i:l] :
-   sequent [squash] { 'H >- 'r1 = 'r2 in a: 'A * "prec"{T, y. 'B['T; 'y]; 'a} } -->
-   sequent [squash] { 'H; Z: 'A -> univ[i:l];
+prim precindEquality {| intro_resource []; eqcd_resource |} 'H lambda{x. 'S['x]} (a:'A * "prec"{T, y. 'B['T; 'y]; 'a}) 'Z 'u 'h 'z univ[i:l] :
+   [wf] sequent [squash] { 'H >- 'r1 = 'r2 in a: 'A * "prec"{T, y. 'B['T; 'y]; 'a} } -->
+   [wf] sequent [squash] { 'H; Z: 'A -> univ[i:l];
              u: subtype{(a: 'A * 'Z 'a); (a: 'A * "prec"{T, x. 'B['T; 'x]; 'a})};
              h: z: (a: 'A * 'Z 'a) -> 'S['z];
              z: a: 'A * 'B['Z; 'a]

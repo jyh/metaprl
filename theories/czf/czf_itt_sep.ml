@@ -38,9 +38,9 @@ open Mp_debug
 open Refiner.Refiner.RefineError
 open Mp_resource
 
-open Sequent
-open Conversionals
-open Tacticals
+open Tactic_type.Sequent
+open Tactic_type.Conversionals
+open Tactic_type.Tacticals
 open Var
 
 open Itt_rfun

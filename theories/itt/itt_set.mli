@@ -38,11 +38,7 @@ include Itt_struct
 
 open Refiner.Refiner.Term
 
-open Tacticals
-
-(************************************************************************
- * TERMS                                                                *
- ************************************************************************)
+open Tactic_type.Tacticals
 
 declare set{'A; x. 'B['x]}
 declare hide{'A}
@@ -125,7 +121,7 @@ rule set_subtype 'H :
  ************************************************************************)
 
 (* Hiding and unhiding *)
-val squashT : tactic
+topval squashT : tactic
 
 (* Primitives *)
 val is_set_term : term -> bool

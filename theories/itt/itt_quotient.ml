@@ -31,8 +31,6 @@
  *
  *)
 
-include Tacticals
-
 include Itt_equal
 include Itt_set
 include Itt_rfun
@@ -48,8 +46,8 @@ open Refiner.Refiner.RefineError
 open Mp_resource
 
 open Var
-open Sequent
-open Tacticals
+open Tactic_type.Sequent
+open Tactic_type.Tacticals
 
 open Itt_equal
 open Itt_subtype
@@ -96,11 +94,11 @@ dform quot_df2 : mode[src] :: parens :: "prec"[prec_quot] :: "quot"{'A; x, y. 'E
  * H, x: A, y: A, z: A, u: E[x, y], v: E[y, z] >- E[x, z]
  *)
 prim quotientFormation 'H (quot x, y: 'A // 'E['x; 'y]) 'z 'u 'v :
-   sequent [squash] { 'H >- 'A = 'A in univ[i:l] } -->
-   sequent [squash] { 'H; x: 'A; y: 'A >- 'E['x; 'y] = 'E['x; 'y] in univ[i:l] } -->
-   sequent [squash] { 'H; x: 'A >- 'E['x; 'x] } -->
-   sequent [squash] { 'H; x: 'A; y: 'A; u: 'E['x; 'y] >- 'E['y; 'x] } -->
-   sequent [squash] { 'H; x: 'A; y: 'A; z: 'A; u: 'E['x; 'y]; v: 'E['y; 'z] >- 'E['x; 'z] } -->
+   [wf] sequent [squash] { 'H >- 'A = 'A in univ[i:l] } -->
+   [wf] sequent [squash] { 'H; x: 'A; y: 'A >- 'E['x; 'y] = 'E['x; 'y] in univ[i:l] } -->
+   [wf] sequent [squash] { 'H; x: 'A >- 'E['x; 'x] } -->
+   [wf] sequent [squash] { 'H; x: 'A; y: 'A; u: 'E['x; 'y] >- 'E['y; 'x] } -->
+   [wf] sequent [squash] { 'H; x: 'A; y: 'A; z: 'A; u: 'E['x; 'y]; v: 'E['y; 'z] >- 'E['x; 'z] } -->
    sequent ['ext] { 'H >- univ[i:l] } =
    quot x, y: 'A // 'E['x; 'y]
 
@@ -114,12 +112,12 @@ prim quotientFormation 'H (quot x, y: 'A // 'E['x; 'y]) 'z 'u 'v :
  * H, x: A1, y: A1, u: E1[x, y] >- E1[y, x]
  * H, x: A1, y: A1, z: A1, u: E1[x, y], v: E1[y, z] >- E1[x, z]
  *)
-prim quotientWeakEquality 'H 'x 'y 'z 'u 'v :
-   sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
-   sequent [squash] { 'H; x: 'A1; y: 'A1 >- 'E1['x; 'y] = 'E2['x; 'y] in univ[i:l] } -->
-   sequent [squash] { 'H; x: 'A1 >- 'E1['x; 'x] } -->
-   sequent [squash] { 'H; x: 'A1; y: 'A1; u: 'E1['x; 'y] >- 'E1['y; 'x] } -->
-   sequent [squash] { 'H; x: 'A1; y: 'A1; z: 'A1; u: 'E1['x; 'y]; v: 'E1['y; 'z] >- 'E1['x; 'z] } -->
+prim quotientWeakEquality {| intro_resource []; eqcd_resource |} 'H 'x 'y 'z 'u 'v :
+   [wf] sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
+   [wf] sequent [squash] { 'H; x: 'A1; y: 'A1 >- 'E1['x; 'y] = 'E2['x; 'y] in univ[i:l] } -->
+   [wf] sequent [squash] { 'H; x: 'A1 >- 'E1['x; 'x] } -->
+   [wf] sequent [squash] { 'H; x: 'A1; y: 'A1; u: 'E1['x; 'y] >- 'E1['y; 'x] } -->
+   [wf] sequent [squash] { 'H; x: 'A1; y: 'A1; z: 'A1; u: 'E1['x; 'y]; v: 'E1['y; 'z] >- 'E1['x; 'z] } -->
    sequent ['ext] { 'H >- quot x1, y1: 'A1 // 'E1['x1; 'y1]
                    = quot x2, y2: 'A2 // 'E2['x2; 'y2]
                    in univ[i:l]
@@ -136,24 +134,24 @@ prim quotientWeakEquality 'H 'x 'y 'z 'u 'v :
  * H; v: A1 = A2 in Ui; r: A1; s: A1 >- E1[r, s] -> E2[r, s]
  * H; v: A1 = A2 in Ui; r: A1; s: A1 >- E2[r, s] -> E1[r, s]
  *)
-prim quotientEquality 'H 'r 's 'v :
-   sequent [squash] { 'H >- quot x1, y1: 'A1 // 'E1['x1; 'y1] = quot x1, y1: 'A1 // 'E1['x1; 'y1] in univ[i:l] } -->
-   sequent [squash] { 'H >- quot x2, y2: 'A2 // 'E2['x2; 'y2] = quot x2, y2: 'A2 // 'E2['x2; 'y2] in univ[i:l] } -->
-   sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
-   sequent [squash] { 'H; v: 'A1 = 'A2 in univ[i:l]; r: 'A1; s: 'A1 >- 'E1['r; 's] -> 'E2['r; 's] } -->
-   sequent [squash] { 'H; v: 'A1 = 'A2 in univ[i:l]; r: 'A1; s: 'A1 >- 'E2['r; 's] -> 'E1['r; 's] } -->
+prim quotientEquality {| intro_resource []; eqcd_resource |} 'H 'r 's 'v :
+   [wf] sequent [squash] { 'H >- quot x1, y1: 'A1 // 'E1['x1; 'y1] = quot x1, y1: 'A1 // 'E1['x1; 'y1] in univ[i:l] } -->
+   [wf] sequent [squash] { 'H >- quot x2, y2: 'A2 // 'E2['x2; 'y2] = quot x2, y2: 'A2 // 'E2['x2; 'y2] in univ[i:l] } -->
+   [wf] sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
+   [wf] sequent [squash] { 'H; v: 'A1 = 'A2 in univ[i:l]; r: 'A1; s: 'A1 >- 'E1['r; 's] -> 'E2['r; 's] } -->
+   [wf] sequent [squash] { 'H; v: 'A1 = 'A2 in univ[i:l]; r: 'A1; s: 'A1 >- 'E2['r; 's] -> 'E1['r; 's] } -->
    sequent ['ext] { 'H >- quot x1, y1: 'A1 // 'E1['x1; 'y1] = quot x2, y2: 'A2 // 'E2['x2; 'y2] in univ[i:l] } =
    it
 
 (*
  * Typehood.
  *)
-prim quotientType 'H 'u 'v 'w 'x1 'x2 :
-   sequent [squash] { 'H >- "type"{'A} } -->
-   sequent [squash] { 'H; u: 'A; v: 'A >- "type"{'E['u; 'v]} } -->
-   sequent [squash] { 'H; u: 'A >- 'E['u; 'u] } -->
-   sequent [squash] { 'H; u: 'A; v: 'A; x1: 'E['u; 'v] >- 'E['v; 'u] } -->
-   sequent [squash] { 'H; u: 'A; v: 'A; w: 'A; x1: 'E['u; 'v]; x2: 'E['v; 'w] >- 'E['u; 'w] } -->
+prim quotientType {| intro_resource [] |} 'H 'u 'v 'w 'x1 'x2 :
+   [wf] sequent [squash] { 'H >- "type"{'A} } -->
+   [wf] sequent [squash] { 'H; u: 'A; v: 'A >- "type"{'E['u; 'v]} } -->
+   [wf] sequent [squash] { 'H; u: 'A >- 'E['u; 'u] } -->
+   [wf] sequent [squash] { 'H; u: 'A; v: 'A; x1: 'E['u; 'v] >- 'E['v; 'u] } -->
+   [wf] sequent [squash] { 'H; u: 'A; v: 'A; w: 'A; x1: 'E['u; 'v]; x2: 'E['v; 'w] >- 'E['u; 'w] } -->
    sequent ['ext] { 'H >- "type"{.quot x, y: 'A // 'E['x; 'y]} } =
    it
 
@@ -164,9 +162,9 @@ prim quotientType 'H 'u 'v 'w 'x1 'x2 :
  * H >- quot x, y: A // E = quot x, y: A // E in Ui
  * H >- A ext a
  *)
-prim quotient_memberFormation 'H :
-   sequent [squash] { 'H >- "type"{(quot x, y: 'A // 'E['x; 'y])} } -->
-   ('a : sequent ['ext] { 'H >- 'A }) -->
+prim quotient_memberFormation {| intro_resource [] |} 'H :
+   [wf] sequent [squash] { 'H >- "type"{(quot x, y: 'A // 'E['x; 'y])} } -->
+   [main] ('a : sequent ['ext] { 'H >- 'A }) -->
    sequent ['ext] { 'H >- quot x, y: 'A // 'E['x; 'y] } =
    'a
 
@@ -177,9 +175,9 @@ prim quotient_memberFormation 'H :
  * H >- quot x, y: A // E = quot x, y: A // E in Ui
  * H >- x1 = a2 in A
  *)
-prim quotient_memberWeakEquality 'H :
-   sequent [squash] { 'H >- "type"{(quot x, y: 'A // 'E['x; 'y])} } -->
-   sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
+prim quotient_memberWeakEquality {| intro_resource [] |} 'H :
+   [wf] sequent [squash] { 'H >- "type"{(quot x, y: 'A // 'E['x; 'y])} } -->
+   [wf] sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
    sequent ['ext] { 'H >- 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y] } =
    it
 
@@ -192,20 +190,20 @@ prim quotient_memberWeakEquality 'H :
  * H >- a2 = a2 in A
  * H >- E[a1; a2]
  *)
-prim quotient_memberEquality 'H :
-   sequent [squash] { 'H >- "type"{(quot x, y: 'A // 'E['x; 'y])} } -->
-   sequent [squash] { 'H >- member{'A; 'a1} } -->
-   sequent [squash] { 'H >- member{'A; 'a2} } -->
-   sequent [squash] { 'H >- 'E['a1; 'a2] } -->
+prim quotient_memberEquality {| intro_resource []; eqcd_resource |} 'H :
+   [wf] sequent [squash] { 'H >- "type"{(quot x, y: 'A // 'E['x; 'y])} } -->
+   [wf] sequent [squash] { 'H >- member{'A; 'a1} } -->
+   [wf] sequent [squash] { 'H >- member{'A; 'a2} } -->
+   [wf] sequent [squash] { 'H >- 'E['a1; 'a2] } -->
    sequent ['ext] { 'H >- 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y] } =
    it
 
 (*
  * Membership.
  *)
-prim quotientMember 'H :
-   sequent [squash] { 'H >- "type"{(quot x, y: 'A // 'E['x; 'y])} } -->
-   sequent [squash] { 'H >- member{'A; 'l} } -->
+prim quotientMember {| intro_resource [] |}  'H :
+   [wf] sequent [squash] { 'H >- "type"{(quot x, y: 'A // 'E['x; 'y])} } -->
+   [wf] sequent [squash] { 'H >- member{'A; 'l} } -->
    sequent ['ext] { 'H >- member{(quot x, y: 'A // 'E['x; 'y]); 'l} } =
    it
 
@@ -216,17 +214,17 @@ prim quotientMember 'H :
  * H, a: quot x, y: A // E, J[x] >- T[a] = T[a] in Ui
  * H, a: quot x, y: A // E, J[x], v: A, w: A, z: E[v, w] >- s[v] = t[w] in T[v]
  *)
-prim quotientElimination1 'H 'J 'v 'w 'z :
-   sequent [squash] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a] >- "type"{'T['a]} } -->
-   sequent [squash] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a];
+prim quotientElimination1 {| elim_resource [] |} 'H 'J 'v 'w 'z :
+   [wf] sequent [squash] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a] >- "type"{'T['a]} } -->
+   [main] sequent [squash] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a];
              v: 'A; w: 'A; z: 'E['v; 'w] >- 's['v] = 't['w] in 'T['v]
            } -->
    sequent ['ext] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a] >- 's['a] = 't['a] in 'T['a] } =
    it
 
-prim quotientElimination2 'H 'J 'v 'w 'z :
-   sequent [squash] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a] >- "type"{'T['a]} } -->
-   sequent [squash] { 'H; a: quot x, y: 'A // 'E['x; 'y];
+prim quotientElimination2 {| elim_resource [] |} 'H 'J 'v 'w 'z :
+   [wf] sequent [squash] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a] >- "type"{'T['a]} } -->
+   [main] sequent [squash] { 'H; a: quot x, y: 'A // 'E['x; 'y];
              v: 'A; w: 'A; z: 'E['v; 'w]; 'J['v] >- 's['v] = 't['w] in 'T['v]
            } -->
    sequent ['ext] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a] >- 's['a] = 't['a] in 'T['a] } =
@@ -238,17 +236,17 @@ prim quotientElimination2 'H 'J 'v 'w 'z :
  *
  * H, x: a1 = a2 in quot x, y: A // E, J[x], v: hide(E[a, b]) >- T[x]
  *)
-prim quotient_equalityElimination 'H 'J 'v :
-   ('g['v] : sequent ['ext] { 'H; x: 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]; 'J['x]; v: hide('E['a1; 'a2]) >- 'T['x] }) -->
+prim quotient_equalityElimination {| elim_resource [] |} 'H 'J 'v :
+   [main] ('g['v] : sequent ['ext] { 'H; x: 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]; 'J['x]; v: hide('E['a1; 'a2]) >- 'T['x] }) -->
    sequent ['ext] { 'H; x: 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]; 'J['x] >- 'T['x] } =
    'g[it]
 
 (*
  * Elimination under membership.
  *)
-prim quotient_memberElimination 'H 'J 'v 'w 'z :
-   sequent [squash] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a] >- "type"{'T['a]} } -->
-   sequent [squash] { 'H; a: quot x, y: 'A // 'E['x; 'y];
+prim quotient_memberElimination {| elim_resource [] |} 'H 'J 'v 'w 'z :
+   [wf] sequent [squash] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a] >- "type"{'T['a]} } -->
+   [main] sequent [squash] { 'H; a: quot x, y: 'A // 'E['x; 'y];
              v: 'A; w: 'A; z: 'E['v; 'w]; 'J['v] >- 's['v] = 's['w] in 'T['v]
            } -->
    sequent ['ext] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a] >- member{'T['a]; 's['a]} } =
@@ -280,103 +278,6 @@ let quotient_opname = opname_of_term quotient_term
 let is_quotient_term = is_dep0_dep2_term quotient_opname
 let dest_quotient = dest_dep0_dep2_term quotient_opname
 let mk_quotient_term = mk_dep0_dep2_term quotient_opname
-
-(*
- * D the conclusion.
- *)
-let d_concl_quotient p =
-   let count = hyp_count_addr p in
-      quotient_memberFormation count p
-
-(*
- * D a hyp.
- * We take the argument.
- *)
-let d_hyp_quotient i p =
-   let concl = Sequent.concl p in
-   let j, k = hyp_indices p i in
-   let tac =
-      if is_equal_term concl then
-         if get_alt_arg p then
-            quotientElimination1
-         else
-            quotientElimination2
-      else
-         quotient_memberElimination
-   in
-   let v, w, z = maybe_new_vars3 p "v" "w" "z" in
-      (tac j k v w z
-       thenLT [addHiddenLabelT "wf";
-               addHiddenLabelT "equality"]) p
-
-(*
- * Join them.
- *)
-let d_quotientT i =
-   if i = 0 then
-      d_concl_quotient
-   else
-      d_hyp_quotient i
-
-let d_resource = Mp_resource.improve d_resource (quotient_term, d_quotientT)
-
-(*
- * EQCD.
- *)
-let eqcd_quotientT p =
-   let count = hyp_count_addr p in
-   let tac =
-      if get_alt_arg p then
-         let r, s, t = maybe_new_vars3 p "r" "s" "t" in
-         quotientEquality count r s t
-      else
-         let x, y, z, u, v = maybe_new_vars5 p "x" "y" "z" "u" "v" in
-         quotientWeakEquality count x y z u v
-   in (tac thenT addHiddenLabelT "wf") p
-
-let eqcd_resource = Mp_resource.improve eqcd_resource (quotient_term, eqcd_quotientT)
-
-let quotient_equal_term = << (quot x1, y1: 'A1 // 'E1['x; 'y]) = (quot x2, y2: 'A2 // 'E2['x1; 'x2]) in univ[i:l] >>
-
-let d_resource = Mp_resource.improve d_resource (quotient_equal_term, d_wrap_eqcd eqcd_quotientT)
-
-(*
- * Typehood.
- *)
-let d_quotient_typeT i p =
-   if i = 0 then
-      let u, v, w, x1, x2 = maybe_new_vars5 p "u" "v" "w" "x" "y" in
-         (quotientType (hyp_count_addr p) u v w x1 x2
-          thenLT [addHiddenLabelT "wf";
-                  addHiddenLabelT "wf";
-                  addHiddenLabelT "antecedent";
-                  addHiddenLabelT "antecedent";
-                  addHiddenLabelT "antecedent"]) p
-   else
-      raise (RefineError ("d_quotient_typeT", StringError "no elimination form"))
-
-let quotient_type_term = << "type"{.quot x, y: 'A // 'E['x; 'y]} >>
-
-let d_resource = Mp_resource.improve d_resource (quotient_type_term, d_quotient_typeT)
-
-(*
- * Membership in a quotient type.
- *)
-let eqcd_quotient_equalT p =
-   (quotient_memberEquality (hyp_count_addr p)
-    thenT addHiddenLabelT "wf") p
-
-let eqcd_quotient_memberT p =
-   (quotientMember (hyp_count_addr p)
-    thenT addHiddenLabelT "wf") p
-
-let quotient_member_equal_term = << 'x = 'y in quot u, v: 'A // 'E['u; 'v] >>
-
-let quotient_member_term = << member{(quot u, v: 'A // 'E['u; 'v]); 'x} >>
-
-let d_resource = Mp_resource.improve d_resource (quotient_member_equal_term, d_wrap_eqcd eqcd_quotient_equalT)
-
-let d_resource = Mp_resource.improve d_resource (quotient_member_term, d_wrap_eqcd eqcd_quotient_memberT)
 
 (************************************************************************
  * TYPE INFERENCE                                                       *

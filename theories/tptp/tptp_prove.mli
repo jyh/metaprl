@@ -33,7 +33,7 @@
 open Refiner.Refiner.TermType
 open Refiner.Refiner.TermSubst
 
-open Tacticals
+open Tactic_type.Tacticals
 
 topval resolveT : int -> tactic
 

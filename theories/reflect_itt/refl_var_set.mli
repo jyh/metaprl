@@ -32,8 +32,8 @@
 
 include Refl_var
 
-open Tacticals
-open Conversionals
+open Tactic_type.Tacticals
+open Tactic_type.Conversionals
 
 (************************************************************************
  * SYNTAX                                                               *

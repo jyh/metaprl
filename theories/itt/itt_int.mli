@@ -31,15 +31,13 @@
  *
  *)
 
-include Tacticals
-
 include Itt_equal
 include Itt_rfun
 include Itt_logic
 
 open Refiner.Refiner.Term
 
-open Tacticals
+open Tactic_type.Tacticals
 
 (************************************************************************
  * TERMS                                                                *
@@ -79,7 +77,7 @@ prec prec_mul
  ************************************************************************)
 
 rewrite unfold_le  : le{'a; 'b} <--> ('a < 'b or 'a = 'b in int)
-rewrite unfold_gt  : gt{'a; 'b} <--> 'b < 'a
+rewrite unfold_gt  : gt{'a; 'b} <--> ('b < 'a)
 rewrite unfold_ge  : ge{'a; 'b} <--> ('b < 'a or 'a = 'b in int)
 
 rewrite reduce_add : "add"{number[i:n]; number[j:n]} <-->
@@ -111,14 +109,14 @@ rewrite reduce_eq : (number[i:n] = number[j:n] in int) <-->
  *    x > 0 => (ind[x] -> up[x, ind[x - 1]]
  *)
 rewrite reduce_ind_down :
-   'x < 0 -->
-   ((ind{'x; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]}) <-->
-    'down['x; ind{('x +@ 1); i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]}])
+   ('x < 0) -->
+   ind{'x; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]} <-->
+    ('down['x; ind{('x +@ 1); i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]}])
 
 rewrite reduce_ind_up :
    ('x > 0) -->
-   (ind{'x; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]} <-->
-    'up['x; ind{('x -@ 1); i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]}])
+   ind{'x; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]} <-->
+   ('up['x; ind{('x -@ 1); i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]}])
 
 rewrite reduce_ind_base :
    (ind{0; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]}) <-->

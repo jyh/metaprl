@@ -31,14 +31,12 @@
  *
  *)
 
-include Tacticals
-
 include Itt_equal
 include Itt_rfun
 
 open Refiner.Refiner.Term
 
-open Tacticals
+open Tactic_type.Tacticals
 
 (************************************************************************
  * TERMS                                                                *
@@ -202,9 +200,6 @@ rule nilSqequal 'H 'T :
 (************************************************************************
  * TACTICS                                                              *
  ************************************************************************)
-
-val d_listT : int -> tactic
-val eqcd_listT : tactic
 
 val list_term : term
 val is_list_term : term -> bool

@@ -32,13 +32,12 @@
  * jyh@cs.cornell.edu
  *)
 
-include Tacticals
-
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermSubst
 
-open Sequent
-open Tacticals
+open Tactic_type
+open Tactic_type.Sequent
+open Tactic_type.Tacticals
 
 (*
  * This resource is used to analyze the sequent to gather type info.

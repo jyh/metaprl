@@ -494,12 +494,10 @@ let justify proof table =
  *
  * This is the large decision procedure.
  *)
-ml_rule arith : 't ==
+ml_rule arith : 't =
    let seq, table = sequent_of_term <:con< 't >> in
    let proof = search seq in
       justify proof table
- | fun _ _ ->
-      raise (RefineError ("arith", StringError "not implemented"))
 
 (*
  * -*-

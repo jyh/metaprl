@@ -35,8 +35,8 @@ include Itt_equal
 
 open Refiner.Refiner.Term
 
-open Tacticals
-open Sequent
+open Tactic_type.Tacticals
+open Tactic_type.Sequent
 
 (*
  * This is just syntax for a binding term.
@@ -51,6 +51,7 @@ declare bind{x. 'T['x]}
 rule hypothesis 'H 'J 'x :
    sequent ['ext] { 'H; x: 'A; 'J['x] >- 'A }
 
+(*
 (*
  * H, x: A, J >- A ext t
  * by thin
@@ -70,6 +71,7 @@ rule cut 'H 'J 'S 'x :
    sequent ['ext] { 'H; 'J >- 'S } -->
    sequent ['ext] { 'H; x: 'S; 'J >- 'T } -->
    sequent ['ext] { 'H; 'J >- 'T }
+*)
 
 (*
  * H >- T

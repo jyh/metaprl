@@ -34,8 +34,8 @@ include Czf_itt_eq
 
 open Refiner.Refiner.Term
 
-open Tacticals
-open Conversionals
+open Tactic_type.Tacticals
+open Tactic_type.Conversionals
 
 (************************************************************************
  * TERMS                                                                *

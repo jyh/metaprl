@@ -5,7 +5,10 @@
 include Fol_type
 
 open Mp_resource
-open Tacticals
+
+open Tactic_type
+open Tactic_type.Tacticals
+
 open Base_auto_tactic
 
 declare univ
@@ -14,7 +17,7 @@ declare prop{'t}
 dform univ_df : univ = `"Univ"
 dform prop_df : prop{'t} = downarrow slot{'t}
 
-prim univ_type 'H 'J : :
+prim univ_type {| intro_resource [] |} 'H 'J :
    sequent ['ext] { 'H; x: univ; 'J['x] >- "type"{prop{'x}} } =
    trivial
 

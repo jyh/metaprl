@@ -31,8 +31,6 @@
  *
  *)
 
-include Tacticals
-
 include Itt_equal
 include Itt_rfun
 include Itt_bool
@@ -48,9 +46,9 @@ open Rformat
 open Mp_resource
 
 open Var
-open Sequent
-open Tacticals
-open Conversionals
+open Tactic_type
+open Tactic_type.Tacticals
+open Tactic_type.Conversionals
 
 open Base_meta
 
@@ -218,7 +216,7 @@ dform gt_df1 : parens :: "prec"[prec_compare] :: gt{'a; 'b} =
  ************************************************************************)
 
 prim_rw unfold_le : le{'a; 'b} <--> ('a < 'b or 'a = 'b in int)
-prim_rw unfold_gt : gt{'a; 'b} <--> 'b < 'a
+prim_rw unfold_gt : gt{'a; 'b} <--> ('b < 'a)
 prim_rw unfold_ge : ge{'a; 'b} <--> ('b < 'a or 'a = 'b in int)
 
 prim_rw reduce_add : "add"{number[i:n]; number[j:n]} <-->
@@ -264,43 +262,34 @@ let reduce_eq =
  *    x > 0 => (ind[x] -> up[x, ind[x - 1]]
  *)
 prim_rw reduce_ind_down :
-   'x < 0 -->
-   ((ind{'x; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]}) <-->
-    'down['x; ind{('x +@ 1); i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]}])
+   ('x < 0) -->
+   ind{'x; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]} <-->
+   ('down['x; ind{('x +@ 1); i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]}])
 
 prim_rw reduce_ind_up :
    ('x > 0) -->
-   (ind{'x; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]} <-->
-    'up['x; ind{('x -@ 1); i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]}])
+   ind{'x; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]} <-->
+   ('up['x; ind{('x -@ 1); i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]}])
 
 prim_rw reduce_ind_base :
    (ind{0; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]}) <-->
    'base
 
-ml_rw reduce_ind : ind{'x; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]} ==
-   fun goal ->
-      let x, i, j, down, base, k, l, up = dest_ind goal in
-      let x' = dest_number x in
-      let code = Mp_num.compare_num x' (Mp_num.Int 0) in
-      let t =
-         if code < 0 then
-            let x'' = mk_number_term (Mp_num.succ_num x') in
-            let goal = mk_ind_term x'' i j down base k l up in
-               subst down [x; goal] [k; l]
-         else if code > 0 then
-            let x'' = mk_number_term (Mp_num.pred_num x') in
-            let goal = mk_ind_term x'' i j down base k l up in
-               subst up [x; goal] [k; l]
-         else
-            base
-      in
-         t, []
- | fun _ extracts ->
-      match extracts with
-         h :: t ->
-            h, t
-       | [] ->
-            raise (RefineError ("reduce_ind", StringError "bogus extract terms"))
+ml_rw reduce_ind : ('goal : ind{'x; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]}) =
+   let x, i, j, down, base, k, l, up = dest_ind goal in
+   let x' = dest_number x in
+   let code = Mp_num.compare_num x' (Mp_num.Int 0) in
+      if code < 0 then
+         let x'' = mk_number_term (Mp_num.succ_num x') in
+         let goal = mk_ind_term x'' i j down base k l up in
+            subst down [x; goal] [k; l]
+      else if code > 0 then
+         let x'' = mk_number_term (Mp_num.pred_num x') in
+         let goal = mk_ind_term x'' i j down base k l up in
+            subst up [x; goal] [k; l]
+      else
+         base
+
 
 let reduce_info =
    [<< "add"{number[i:n]; number[j:n]} >>, reduce_add;
@@ -310,7 +299,7 @@ let reduce_info =
     << "rem"{number[i:n]; number[j:n]} >>, reduce_rem;
     << ind{'x; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]} >>, reduce_ind]
 
-let reduce_resource = add_reduce_info reduce_resource reduce_info
+let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
 
 (************************************************************************
  * INTEGER RULES                                                        *
@@ -320,30 +309,39 @@ let reduce_resource = add_reduce_info reduce_resource reduce_info
  * H >- Ui ext Z
  * by intFormation
  *)
-prim intFormation 'H : : sequent ['ext] { 'H >- univ[i:l] } = int
+prim intFormation 'H :
+   sequent ['ext] { 'H >- univ[i:l] } = int
 
 (*
  * H >- int Type
  *)
-prim intType 'H : : sequent ['ext] { 'H >- "type"{int} } = it
+prim intType {| intro_resource [] |} 'H :
+   sequent ['ext] { 'H >- "type"{int} } =
+   it
 
 (*
  * H >- Z = Z in Ui ext Ax
  * by intEquality
  *)
-prim intEquality 'H : : sequent ['ext] { 'H >- int = int in univ[i:l] } = it
+prim intEquality {| intro_resource []; eqcd_resource |} 'H :
+   sequent ['ext] { 'H >- int = int in univ[i:l] } =
+   it
 
 (*
  * H >- Z ext n
  * by numberFormation n
  *)
-prim numberFormation 'H number[n:n] : : sequent ['ext] { 'H >- int } = number[n:n]
+prim numberFormation 'H number[n:n] :
+   sequent ['ext] { 'H >- int } =
+   number[n:n]
 
 (*
  * H >- i = i in int
  * by numberEquality
  *)
-prim numberEquality 'H : : sequent ['ext] { 'H >- number[n:n] = number[n:n] in int } = it
+prim numberEquality {| intro_resource []; eqcd_resource |} 'H :
+   sequent ['ext] { 'H >- number[n:n] = number[n:n] in int } =
+   it
 
 (*
  * Induction:
@@ -354,10 +352,10 @@ prim numberEquality 'H : : sequent ['ext] { 'H >- number[n:n] = number[n:n] in i
  * H, n:Z, J[n] >- C[0] ext base[n]
  * H, n:Z, J[n], m:Z, v: 0 < m, z: C[m - 1] >- C[m] ext up[n, m, v, z]
  *)
-prim intElimination 'H 'J 'n 'm 'v 'z :
-   ('down['n; 'm; 'v; 'z] : sequent ['ext] { 'H; n: int; 'J['n]; m: int; v: 'm < 0; z: 'C['m add 1] >- 'C['m] }) -->
-   ('base['n] : sequent ['ext] { 'H; n: int; 'J['n] >- 'C[0] }) -->
-   ('up['n; 'm; 'v; 'z] : sequent ['ext] { 'H; n: int; 'J['n]; m: int; v: 0 < 'm; z: 'C['m sub 1] >- 'C['m] }) -->
+prim intElimination {| elim_resource [] |} 'H 'J 'n 'm 'v 'z :
+   [main] ('down['n; 'm; 'v; 'z] : sequent ['ext] { 'H; n: int; 'J['n]; m: int; v: 'm < 0; z: 'C['m add 1] >- 'C['m] }) -->
+   [main] ('base['n] : sequent ['ext] { 'H; n: int; 'J['n] >- 'C[0] }) -->
+   [main] ('up['n; 'm; 'v; 'z] : sequent ['ext] { 'H; n: int; 'J['n]; m: int; v: 0 < 'm; z: 'C['m sub 1] >- 'C['m] }) -->
    sequent ['ext] { 'H; n: int; 'J['n] >- 'C['n] } =
    ind{'n; m, z. 'down['n; 'm; it; 'z]; 'base['n]; m, z. 'up['n; 'm; it; 'z]}
 
@@ -374,11 +372,11 @@ prim intElimination 'H 'J 'n 'm 'v 'z :
  * H >- base1 = base2 in T[0]
  * H, x: Z, w: 0 < x, y: T[x - 1] >- up1[x, y] = up2[x, y] in T[x]
  *)
-prim indEquality 'H lambda{z. 'T['z]} 'x 'y 'w :
-   sequent [squash] { 'H >- 'x1 = 'x2 in int } -->
-   sequent [squash] { 'H; x: int; w: 'x < 0; y: 'T['x add 1] >- 'down1['x; 'y] = 'down2['x; 'y] in 'T['x] } -->
-   sequent [squash] { 'H >- 'base1 = 'base2 in 'T[0] } -->
-   sequent [squash] { 'H; x: int; w: 'x > 0; y: 'T['x sub 1] >- 'up1['x; 'y] = 'up2['x; 'y] in 'T['x] } -->
+prim indEquality {| intro_resource []; eqcd_resource |} 'H lambda{z. 'T['z]} 'x 'y 'w :
+   [wf] sequent [squash] { 'H >- 'x1 = 'x2 in int } -->
+   [wf] sequent [squash] { 'H; x: int; w: 'x < 0; y: 'T['x add 1] >- 'down1['x; 'y] = 'down2['x; 'y] in 'T['x] } -->
+   [wf] sequent [squash] { 'H >- 'base1 = 'base2 in 'T[0] } -->
+   [wf] sequent [squash] { 'H; x: int; w: 'x > 0; y: 'T['x sub 1] >- 'up1['x; 'y] = 'up2['x; 'y] in 'T['x] } -->
    sequent ['ext] { 'H >- ind{'x1; i1, j1. 'down1['i1; 'j1]; 'base1; k1, l1. 'up1['k1; 'l1]}
                    = ind{'x2; i2, j2. 'down2['i2; 'j2]; 'base2; k2, l2. 'up2['k2; 'l2]}
                    in 'T['x1] } =
@@ -405,9 +403,9 @@ prim less_thanFormation 'H :
  * H >- i1 = j1 in int
  * H >- i2 = j2 in int
  *)
-prim less_thanEquality 'H :
-   sequent [squash] { 'H >- 'i1 = 'j1 in int } -->
-   sequent [squash] { 'H >- 'i2 = 'j2 in int } -->
+prim less_thanEquality {| intro_resource []; eqcd_resource |} 'H :
+   [wf] sequent [squash] { 'H >- 'i1 = 'j1 in int } -->
+   [wf] sequent [squash] { 'H >- 'i2 = 'j2 in int } -->
    sequent ['ext] { 'H >- 'i1 < 'j1 = 'i2 < 'j2 in univ[i:l] } =
    it
 
@@ -417,8 +415,8 @@ prim less_thanEquality 'H :
  *
  * H >- a < b
  *)
-prim less_than_memberEquality 'H :
-   sequent [squash] { 'H >- 'a < 'b } -->
+prim less_than_memberEquality {| intro_resource []; eqcd_resource |} 'H :
+   [wf] sequent [squash] { 'H >- 'a < 'b } -->
    sequent ['ext] { 'H >- it = it in ('a < 'b) } =
    it
 
@@ -428,7 +426,7 @@ prim less_than_memberEquality 'H :
  *
  * H, x: a < b; J[it] >- C[it]
  *)
-prim less_thanElimination 'H 'J :
+prim less_thanElimination {| elim_resource [] |} 'H 'J :
    ('t : sequent ['ext] { 'H; x: 'a < 'b; 'J[it] >- 'C[it] }) -->
    sequent ['ext] { 'H; x: 'a < 'b; 'J['x] >- 'C['x] } =
    't
@@ -450,46 +448,11 @@ prim int_sqequal 'H :
  *)
 let zero = << 0 >>
 
-let d_intT i p =
-   if i = 0 then
-      numberFormation (hyp_count_addr p) zero p
-   else
-      let n, _ = Sequent.nth_hyp p i in
-      let j, k = hyp_indices p i in
-      let m, v, z = maybe_new_vars3 p "m" "v" "z" in
-         intElimination j k n m v z p
-
-let d_resource = Mp_resource.improve d_resource (int_term, d_intT)
-
-let d_int_typeT i p =
-   if i = 0 then
-      intType (hyp_count_addr p) p
-   else
-      raise (RefineError ("d_int_type", StringError "no elimination form"))
-
-let int_type_term = << "type"{int} >>
-
-let d_resource = Mp_resource.improve d_resource (int_type_term, d_int_typeT)
-
 (*
  * Squiggle.
  *)
 let intSqequalT p =
    int_sqequal (Sequent.hyp_count_addr p) p
-
-(************************************************************************
- * EQCD TACTIC                                                          *
- ************************************************************************)
-
-(*
- * EqCD int.
- *)
-let eqcd_intT p = intEquality (hyp_count_addr p) p
-
-let eqcd_numberT p = numberEquality (hyp_count_addr p) p
-
-let eqcd_resource = Mp_resource.improve eqcd_resource (int_term, eqcd_intT)
-let eqcd_resource = Mp_resource.improve eqcd_resource (number_term, eqcd_numberT)
 
 (************************************************************************
  * TYPE INFERENCE                                                       *

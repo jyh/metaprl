@@ -35,8 +35,8 @@ include Refl_raw_term
 
 open Refiner.Refiner.TermType
 
-open Tacticals
-open Conversionals
+open Tactic_type.Tacticals
+open Tactic_type.Conversionals
 
 (************************************************************************
  * SYNTAX                                                               *
@@ -116,8 +116,6 @@ topval vmapTransT : term -> term -> tactic
 topval eq_alphaRefT : tactic
 topval eq_alphaSymT : tactic
 topval eq_alphaTransT : term -> tactic
-
-topval dupRT : tactic -> int -> tactic
 
 (*
  * -*-

@@ -4,7 +4,7 @@
 
 include Fol_not
 
-open Tacticals
+open Tactic_type.Tacticals
 
 declare magic{x. 't['x]}
 

@@ -32,8 +32,8 @@
 
 include Itt_theory
 
-open Conversionals
-open Tacticals
+open Tactic_type.Conversionals
+open Tactic_type.Tacticals
 
 declare vnil
 declare var[t:t]

@@ -36,7 +36,7 @@ include Itt_struct
 include Itt_logic
 
 open Refiner.Refiner.TermType
-open Tacticals
+open Tactic_type.Tacticals
 
 (************************************************************************
  * RULES                                                                *

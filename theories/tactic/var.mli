@@ -30,13 +30,14 @@
  * jyh@cs.cornell.edu
  *)
 
-open Sequent
+open Tactic_type.Sequent
 
 (* Generate a new var different from any in the list *)
 val new_var         : string -> string list -> string
 val maybe_new_var   : string -> string list -> string
 val maybe_new_vars  : string list -> string list -> string list
 
+val maybe_new_vars_array : tactic_arg -> string array -> string array
 val maybe_new_vars1 : tactic_arg -> string -> string
 val maybe_new_vars2 : tactic_arg -> string -> string -> string * string
 val maybe_new_vars3 : tactic_arg -> string -> string -> string -> string * string * string

@@ -48,8 +48,9 @@ open Refiner.Refiner.TermOp
 open Refiner.Refiner.RefineError
 open Mp_resource
 
-open Tacticals
-open Conversionals
+open Tactic_type
+open Tactic_type.Tacticals
+open Tactic_type.Conversionals
 open Var
 
 open Base_dtactic
@@ -225,10 +226,10 @@ prim_rw unfold_fbexists : fbexists{'s; x. 'b['x]} <-->
    list_ind{'s; bfalse; x, t, g. bor{'b['x]; 'g}}
 
 prim_rw unfold_fall : fall{'eq; 'T; 's; x. 'b['x]} <-->
-   all x: { y: 'T | "assert"{fmember{'eq; 'y; 's}} }. 'b['x]
+   (all x: { y: 'T | "assert"{fmember{'eq; 'y; 's}} }. 'b['x])
 
 prim_rw unfold_fexists : fexists{'eq; 'T; 's; x. 'b['x]} <-->
-   exst x: { y: 'T | "assert"{fmember{'eq; 'y; 's}} }. 'b['x]
+   (exst x: { y: 'T | "assert"{fmember{'eq; 'y; 's}} }. 'b['x])
 
 prim_rw unfold_feset : feset{'eq; 'T} <--> (quot x, y: 'T // "assert"{fcompare{'eq; 'x; 'y}})
 
@@ -597,7 +598,7 @@ interactive fempty_wf1 'H :
    sequent [squash] { 'H >- "type"{'T} } -->
    sequent ['ext] { 'H >- member{list{'T}; fempty} }
 
-interactive fempty_member_elim 'H 'J : :
+interactive fempty_member_elim 'H 'J :
    sequent ['ext] { 'H; x: "assert"{fmember{'eq; 'y; fempty}}; 'J['x] >- 'C['x] }
 
 interactive fempty_wf2 'H :
@@ -829,7 +830,7 @@ interactive foflist_member_intro_right 'H 'T :
    sequent [squash] { 'H >- "assert"{fmember{'eq; 'x; 't}} } -->
    sequent ['ext] { 'H >- "assert"{fmember{'eq; 'x; foflist{cons{'y; 't}}}} }
 
-interactive foflist_member_elim_nil 'H 'J : :
+interactive foflist_member_elim_nil 'H 'J :
    sequent ['ext] { 'H; z: "assert"{fmember{'eq; 'x; foflist{nil}}}; 'J['z] >- 'C['z] }
 
 interactive foflist_member_elim_cons3 'H 'J 'T :
@@ -959,7 +960,7 @@ let reduce_info =
     << fbexists{nil; x. 'b['x]} >>, reduce_fbexists_nil;
     << fbexists{cons{'h; 't}; x. 'b['x]} >>, reduce_fbexists_cons]
 
-let reduce_resource = add_reduce_info reduce_resource reduce_info
+let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
 
 (************************************************************************
  * TACTICS                                                              *
@@ -1007,6 +1008,7 @@ let is_fset_term = is_dep0_dep0_term fset_opname
 
 let mk_fset_term = mk_dep0_dep0_term fset_opname
 
+(*
 let get_clause p i =
    if i = 0 then
       Sequent.concl p
@@ -1693,6 +1695,7 @@ let rec dupRT tac i p =
       tac p
    else
       (dupT thenLT [tac; dupRT tac (pred i)]) p
+*)
 
 (*
  * -*-

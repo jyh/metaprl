@@ -32,8 +32,6 @@
  * jyh@cs.cornell.edu
  *)
 
-include Tacticals
-
 open Printf
 open Mp_debug
 
@@ -44,11 +42,12 @@ open Refiner.Refiner.TermMan
 open Refiner.Refiner.TermSubst
 open Refiner.Refiner.Refine
 open Refiner.Refiner.RefineError
-open Term_table
+open Term_match_table
 open Mp_resource
 
-open Tacticals
-open Sequent
+open Tactic_type
+open Tactic_type.Tacticals
+open Tactic_type.Sequent
 
 (*
  * Show that the file is loading.
@@ -68,7 +67,7 @@ let _ =
  *)
 type typeinf_subst_fun = term_subst -> (string option * term) -> term_subst
 type typeinf_subst_info = term * typeinf_subst_fun
-type typeinf_subst_data = typeinf_subst_fun term_table
+type typeinf_subst_data = (typeinf_subst_fun, typeinf_subst_fun) term_table
 
 resource (typeinf_subst_info, typeinf_subst_fun, typeinf_subst_data, unit) typeinf_subst_resource
 
@@ -91,7 +90,7 @@ type typeinf_resource_info = term * typeinf_comp
 (*
  * Internal type.
  *)
-type typeinf_data = typeinf_comp term_table
+type typeinf_data = (typeinf_comp, typeinf_comp) term_table
 
 (*
  * The resource itself.
@@ -105,9 +104,11 @@ resource (typeinf_resource_info, typeinf_func, typeinf_data, unit) typeinf_resou
 (*
  * Infer the type of a term from the table.
  *)
-let collect (tbl : typeinf_subst_fun term_table) subst (so, t) =
+let identity x = x
+
+let collect (tbl : (typeinf_subst_fun, typeinf_subst_fun) term_table) subst (so, t) =
    let _, _, inf =
-      try lookup "Typeinf.collect" tbl t with
+      try lookup "Typeinf.collect" tbl identity t with
          Not_found ->
             raise (RefineError ("Typeinf.collect", StringTermError ("can't collect type for", t)))
    in
@@ -201,7 +202,7 @@ let infer tbl =
                   raise (RefineError ("typeinf", StringTermError ("can't infer type for", t)))
       else
          let _, _, inf =
-            try lookup "Typeinf.infer" tbl t with
+            try lookup "Typeinf.infer" tbl identity t with
                Not_found ->
                   raise (RefineError ("typeinf", StringTermError ("can't infer type for", t)))
          in

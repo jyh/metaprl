@@ -35,10 +35,11 @@ include Itt_int
 include Itt_logic
 
 open Mp_resource
-open Tacticals
-open Conversionals
+open Tactic_type.Tacticals
+open Tactic_type.Conversionals
 
 open Base_meta
+open Base_dtactic
 
 open Itt_equal
 open Itt_logic
@@ -107,56 +108,27 @@ let reduce_info =
     << le_int{'i; 'j} >>, reduce_le_int;
     << ge_int{'i; 'j} >>, reduce_ge_int]
 
-let reduce_resource = add_reduce_info reduce_resource reduce_info
+let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
 
 (************************************************************************
  * RULES                                                                *
  ************************************************************************)
 
-prim eq_int_wf 'H :
-   sequent [squash] { 'H >- member{int; 'i} } -->
-   sequent [squash] { 'H >- member{int; 'j} } -->
+prim eq_int_wf {| intro_resource [] |} 'H :
+   [wf] sequent [squash] { 'H >- member{int; 'i} } -->
+   [wf] sequent [squash] { 'H >- member{int; 'j} } -->
    sequent ['ext] { 'H >- member{bool; eq_int{'i; 'j}} } =
    it
 
-prim eq_int_assert_intro 'H :
-   sequent [squash] { 'H >- 'x = 'y in int } -->
+prim eq_int_assert_intro {| intro_resource [] |} 'H :
+   [wf] sequent [squash] { 'H >- 'x = 'y in int } -->
    sequent ['ext] { 'H >- "assert"{eq_int{'x; 'y}} } =
    it
 
-prim eq_int_assert_elim 'H 'J :
+prim eq_int_assert_elim {| elim_resource [ThinOption] |} 'H 'J :
    sequent ['ext] { 'H; x: 'a = 'b in int; 'J[it] >- 'C[it] } -->
    sequent ['ext] { 'H; x: "assert"{eq_int{'a; 'b}}; 'J['x] >- 'C['x] } =
    it
-
-(************************************************************************
- * TACTICS                                                              *
- ************************************************************************)
-
-(*
- * Typehood.
- *)
-let d_eq_int_wfT p =
-   (eq_int_wf (Sequent.hyp_count_addr p)
-    thenT addHiddenLabelT "wf") p
-
-let eq_int_wf_term = << member{bool; eq_int{'i; 'j}} >>
-
-let d_resource = Mp_resource.improve d_resource (eq_int_wf_term, wrap_intro d_eq_int_wfT)
-
-(*
- * Equality.
- *)
-let d_eq_int_assertT i p =
-   if i = 0 then
-      eq_int_assert_intro (Sequent.hyp_count_addr p) p
-   else
-      let j, k = Sequent.hyp_indices p i in
-         eq_int_assert_elim j k p
-
-let eq_int_assert_term = << "assert"{eq_int{'v1; 'v2}} >>
-
-let d_resource = Mp_resource.improve d_resource (eq_int_assert_term, d_eq_int_assertT)
 
 (*
  * -*-

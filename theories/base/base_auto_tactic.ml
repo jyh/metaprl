@@ -32,6 +32,7 @@
  *)
 
 include Mptop
+include Summary
 
 open Printf
 open Mp_debug
@@ -46,8 +47,9 @@ open Refiner.Refiner.Refine
 open Refiner.Refiner.RefineError
 open Mp_resource
 
-open Tacticals
-open Sequent
+open Tactic_type
+open Tactic_type.Tacticals
+open Tactic_type.Sequent
 open Mptop
 
 (*
@@ -95,8 +97,8 @@ type 'a auto_data =
  | Label of 'a auto_data
  | Join of 'a auto_data * 'a auto_data
 
-resource (tactic auto_info, tactic, tactic auto_data, string * auto_prec * meta_term * tactic) trivial_resource
-resource (auto_tac auto_info, tactic, auto_tac auto_data, string * auto_prec * meta_term * tactic) auto_resource
+resource (tactic auto_info, tactic, tactic auto_data, Tactic.pre_tactic * auto_prec) trivial_resource
+resource (auto_tac auto_info, tactic, auto_tac auto_data, Tactic.pre_tactic * auto_prec) auto_resource
 
 (************************************************************************
  * IMPLEMENTATION                                                       *
@@ -259,11 +261,25 @@ let improve_resource data info =
       eprintf "Base_auto_tactic.improve_resource: adding %s%t" info.auto_name eflush;
    Tactic (info, data)
 
-let improve_triv_resource_arg data (name, tprec, _, tac) =
+let make_auto_tactic name context_args var_args term_args pre_tactic =
+   match context_args, term_args with
+      [| _ |], [] ->
+         (fun p ->
+               let vars = Var.maybe_new_vars_array p var_args in
+               let addr = Sequent.hyp_count_addr p in
+                  Tactic_type.Tactic.tactic_of_rule pre_tactic ([| addr |], vars) [] p)
+    | _, [] ->
+         raise (Invalid_argument (sprintf "Base_auto_tactic.improve: %s: only introduction rules are allowed" name))
+    | _ ->
+         raise (Invalid_argument (sprintf "Base_auto_tactic.improve: %s: term arguments are not allowed in auto tactics" name))
+
+let improve_triv_resource_arg data name context_args var_args term_args _ _ (pre_tactic, tprec) =
+   let tac = make_auto_tactic name context_args var_args term_args pre_tactic in
    let info = { auto_name = name; auto_prec = tprec; auto_tac = tac } in
       Tactic (info, data)
 
-let improve_auto_resource_arg data (name, tprec, _, tac) =
+let improve_auto_resource_arg data name context_args var_args term_args _ _ (pre_tactic, tprec) =
+   let tac = make_auto_tactic name context_args var_args term_args pre_tactic in
    let info = { auto_name = name; auto_prec = tprec; auto_tac = auto_wrap tac } in
       Tactic (info, data)
 

@@ -35,10 +35,11 @@ include Itt_bool
 
 open Mp_resource
 
-open Tacticals
-open Conversionals
+open Tactic_type.Tacticals
+open Tactic_type.Conversionals
 
 open Base_meta
+open Base_dtactic
 
 open Itt_equal
 open Itt_bool
@@ -72,50 +73,21 @@ let reduce_eq_atom =
  * RULES                                                                *
  ************************************************************************)
 
-prim eq_atom_wf 'H :
-   sequent [squash] { 'H >- member{atom; 'x} } -->
-   sequent [squash] { 'H >- member{atom; 'y} } -->
+prim eq_atom_wf {| intro_resource [] |} 'H :
+   [wf] sequent [squash] { 'H >- member{atom; 'x} } -->
+   [wf] sequent [squash] { 'H >- member{atom; 'y} } -->
    sequent ['ext] { 'H >- member{bool; eq_atom{'x; 'y}} } =
    it
 
-prim eq_atom_assert_intro 'H :
-   sequent [squash] { 'H >- 'x = 'y in atom } -->
+prim eq_atom_assert_intro {| intro_resource [] |} 'H :
+   [wf] sequent [squash] { 'H >- 'x = 'y in atom } -->
    sequent ['ext] { 'H >- "assert"{eq_atom{'x; 'y}} } =
    it
 
-prim eq_atom_assert_elim 'H 'J :
-   sequent ['ext] { 'H; x: 'a = 'b in atom; 'J[it] >- 'C[it] } -->
+prim eq_atom_assert_elim {| elim_resource [ThinOption] |} 'H 'J :
+   [main] sequent ['ext] { 'H; x: 'a = 'b in atom; 'J[it] >- 'C[it] } -->
    sequent ['ext] { 'H; x: "assert"{eq_atom{'a; 'b}}; 'J['x] >- 'C['x] } =
    it
-
-(************************************************************************
- * TACTICS                                                              *
- ************************************************************************)
-
-(*
- * Well-formedness.
- *)
-let d_atom_wfT p =
-   (eq_atom_wf (Sequent.hyp_count_addr p)
-    thenT addHiddenLabelT "wf") p
-
-let atom_wf_term = << member{bool; eq_atom{'x; 'y}} >>
-
-let d_resource = Mp_resource.improve d_resource (atom_wf_term, wrap_intro d_atom_wfT)
-
-(*
- * Equality.
- *)
-let d_eq_atom_assertT i p =
-   if i = 0 then
-      eq_atom_assert_intro (Sequent.hyp_count_addr p) p
-   else
-      let j, k = Sequent.hyp_indices p i in
-         eq_atom_assert_elim j k p
-
-let eq_atom_assert_term = << "assert"{eq_atom{'v1; 'v2}} >>
-
-let d_resource = Mp_resource.improve d_resource (eq_atom_assert_term, d_eq_atom_assertT)
 
 (*
  * -*-

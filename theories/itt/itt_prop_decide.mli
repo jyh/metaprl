@@ -32,7 +32,7 @@
 
 include Itt_logic
 
-open Tacticals
+open Tactic_type.Tacticals
 
 topval propDecideT : tactic
 

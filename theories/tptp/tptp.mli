@@ -11,21 +11,21 @@
  * OCaml, and more information about this system.
  *
  * Copyright (C) 1998 Jason Hickey, Cornell University
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- * 
+ *
  * Author: Jason Hickey
  * jyh@cs.cornell.edu
  *)
@@ -34,8 +34,8 @@ include Itt_theory
 
 open Refiner.Refiner.TermType
 
-open Conversionals
-open Tacticals
+open Tactic_type.Conversionals
+open Tactic_type.Tacticals
 
 (************************************************************************
  * TERMS                                                                *
@@ -67,28 +67,28 @@ rewrite unfold_exists : "exists"{v. 'b['v]} <--> Itt_logic!"exists"{atom; v. 'b[
 rewrite unfold_atom0 : atom0 <-->
                           atom
 rewrite unfold_atom1 : atom1 <-->
-                          atom -> atom
+                          (atom -> atom)
 rewrite unfold_atom2 : atom2 <-->
-                          atom -> atom -> atom
+                          (atom -> atom -> atom)
 rewrite unfold_atom3 : atom3 <-->
-                          atom -> atom -> atom -> atom
+                          (atom -> atom -> atom -> atom)
 rewrite unfold_atom4 : atom4 <-->
-                          atom -> atom -> atom -> atom -> atom
+                          (atom -> atom -> atom -> atom -> atom)
 rewrite unfold_atom5 : atom5 <-->
-                          atom -> atom -> atom -> atom -> atom -> atom
+                          (atom -> atom -> atom -> atom -> atom -> atom)
 
 rewrite unfold_prop0 : prop0 <-->
                           univ[1:l]
 rewrite unfold_prop1 : prop1 <-->
-                          atom -> univ[1:l]
+                          (atom -> univ[1:l])
 rewrite unfold_prop2 : prop2 <-->
-                          atom -> atom -> univ[1:l]
+                          (atom -> atom -> univ[1:l])
 rewrite unfold_prop3 : prop3 <-->
-                          atom -> atom -> atom -> univ[1:l]
+                          (atom -> atom -> atom -> univ[1:l])
 rewrite unfold_prop4 : prop4 <-->
-                          atom -> atom -> atom -> atom -> univ[1:l]
+                          (atom -> atom -> atom -> atom -> univ[1:l])
 rewrite unfold_prop5 : prop5 <-->
-                          atom -> atom -> atom -> atom -> atom -> univ[1:l]
+                          (atom -> atom -> atom -> atom -> atom -> univ[1:l])
 
 rewrite unfold_apply2 : "apply"{'f1; 'x1; 'x2} <--> ('f1 'x1 'x2)
 rewrite unfold_apply3 : "apply"{'f1; 'x1; 'x2; 'x3} <--> ('f1 'x1 'x2 'x3)

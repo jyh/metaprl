@@ -34,7 +34,7 @@ include Itt_list
 include Itt_logic
 include Itt_bool
 
-open Conversionals
+open Tactic_type.Conversionals
 
 (************************************************************************
  * SYNTAX                                                               *

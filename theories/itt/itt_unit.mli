@@ -34,17 +34,11 @@
  * jyh@cs.cornell.edu
  *)
 
-include Tacticals
-
 include Itt_equal
 
 open Refiner.Refiner.Term
 
-open Tacticals
-
-(************************************************************************
- * TERMS                                                                *
- ************************************************************************)
+open Tactic_type.Tacticals
 
 declare unit
 
@@ -108,10 +102,8 @@ rule unit_squashElimination 'H :
  * TACTICS                                                              *
  ************************************************************************)
 
-val d_unitT : int -> tactic
-val eqcd_unitT : tactic
-val eqcd_itT : tactic
 val unit_term : term
+val is_unit_term : term -> bool
 
 (*
  * -*-

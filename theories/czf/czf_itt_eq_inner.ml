@@ -45,8 +45,8 @@ open Refiner.Refiner.TermSubst
 open Refiner.Refiner.RefineError
 open Mp_resource
 
-open Sequent
-open Tacticals
+open Tactic_type.Sequent
+open Tactic_type.Tacticals
 open Var
 
 open Base_auto_tactic

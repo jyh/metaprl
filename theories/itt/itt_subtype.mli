@@ -35,8 +35,8 @@ include Itt_equal
 
 open Refiner.Refiner.Term
 
-open Sequent
-open Tacticals
+open Tactic_type.Sequent
+open Tactic_type.Tacticals
 
 (************************************************************************
  * TERMS                                                                *
@@ -185,9 +185,6 @@ topval subtypeT : tactic
 (************************************************************************
  * TACTICS                                                              *
  ************************************************************************)
-
-topval d_subtypeT : int -> tactic
-topval eqcd_subtype : tactic
 
 val is_subtype_term : term -> bool
 val dest_subtype : term -> term * term

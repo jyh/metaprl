@@ -31,20 +31,17 @@
  *
  *)
 
-include Tacticals
-
 include Itt_equal
 include Itt_set
 
 open Refiner.Refiner.Term
 
-open Tacticals
+open Tactic_type.Tacticals
 
 (************************************************************************
  * TERMS                                                                *
  ************************************************************************)
 
-(* declare "fun"{'A; 'B} *)
 declare "fun"{'A; x. 'B['x]}
 declare rfun{'A; f, x. 'B['f; 'x]}
 
@@ -182,9 +179,6 @@ rule rfunction_applyEquality 'H ({ f | x:'A -> 'B['f; 'x] }) :
  * TACTICS                                                              *
  ************************************************************************)
 
-val d_rfunT : int -> tactic
-val eqcd_rfunT : tactic
-
 val rfun_term : term
 val is_rfun_term : term -> bool
 val dest_rfun : term -> string * string * term * term
@@ -219,6 +213,29 @@ val apply_term : term
 val is_apply_term : term -> bool
 val dest_apply : term -> term * term
 val mk_apply_term : term -> term -> term
+
+(************************************************************************
+ * DISPLAY FORMS                                                        *
+ ************************************************************************)
+
+prec prec_fun
+prec prec_apply
+prec prec_lambda
+
+(************************************************************************
+ * REWRITES                                                             *
+ ************************************************************************)
+
+rewrite reduce_beta : (lambda{v. 'b['v]} 'a) <--> 'b['a]
+rewrite reduce_fix : fix{f. 'b['f]} <--> 'b[fix{f. 'b['f]}]
+
+(************************************************************************
+ * TACTICS                                                              *
+ ************************************************************************)
+
+topval eqcd_rfunction_lambdaT : tactic
+topval eqcd_rfunction_applyT : term -> tactic
+topval rfunction_extensionalityT : term -> term -> tactic
 
 (*
  * -*-

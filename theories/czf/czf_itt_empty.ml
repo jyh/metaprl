@@ -37,9 +37,9 @@ open Mp_debug
 
 open Refiner.Refiner.RefineError
 
-open Sequent
+open Tactic_type.Sequent
 open Mp_resource
-open Tacticals
+open Tactic_type.Tacticals
 
 let _ =
    if !debug_load then

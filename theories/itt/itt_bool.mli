@@ -35,8 +35,8 @@ include Itt_logic
 include Itt_struct
 
 open Refiner.Refiner.Term
-open Tacticals
-open Conversionals
+open Tactic_type.Tacticals
+open Tactic_type.Conversionals
 
 (************************************************************************
  * TERMS                                                                *
@@ -143,10 +143,6 @@ val is_assert_term : term -> bool
 val mk_assert_term : term -> term
 val dest_assert : term -> term
 
-val d_boolT : int -> tactic
-val eqcd_boolT : tactic
-val eqcd_btrueT : tactic
-val eqcd_bfalseT : tactic
 val bool_term : term
 val btrue_term : term
 val bfalse_term : term

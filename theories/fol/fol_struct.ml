@@ -7,12 +7,14 @@ include Base_theory
 open Refiner.Refiner.RefineError
 open Base_auto_tactic
 open Mp_resource
-open Tacticals
+
+open Tactic_type
+open Tactic_type.Tacticals
 
 (*
  * Hypothesis.
  *)
-prim hypothesis 'H 'J 'x : :
+prim hypothesis 'H 'J 'x :
    sequent ['ext] { 'H; x: 'T; 'J['x] >- 'T } = 'x
 
 (*

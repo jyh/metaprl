@@ -8,8 +8,8 @@ include Refl_var
 
 open Refiner.Refiner.TermType
 
-open Conversionals
-open Tacticals
+open Tactic_type.Conversionals
+open Tactic_type.Tacticals
 
 (************************************************************************
  * SYNTAX                                                               *

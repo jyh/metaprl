@@ -6,7 +6,10 @@ include Fol_type
 
 open Mp_resource
 open Refiner.Refiner.RefineError
-open Tacticals
+
+open Tactic_type.Tacticals
+
+open Base_dtactic
 
 (************************************************************************
  * TERMS                                                                *
@@ -54,59 +57,29 @@ prim_rw reduce_decide_inr : decide{inr{'x}; y. 'body1['y]; z. 'body2['z]} <--> '
  * RULES                                                                *
  ************************************************************************)
 
-prim or_type 'H :
-   sequent ['ext] { 'H >- "type"{'A} } -->
-   sequent ['ext] { 'H >- "type"{'B} } -->
+prim or_type {| intro_resource [] |} 'H :
+   [wf] sequent ['ext] { 'H >- "type"{'A} } -->
+   [wf] sequent ['ext] { 'H >- "type"{'B} } -->
    sequent ['ext] { 'H >- "type"{."or"{'A; 'B}} } =
    trivial
 
-prim or_intro_left 'H :
-   sequent ['ext] { 'H >- "type"{'B} } -->
-   ('a : sequent ['ext] { 'H >- 'A }) -->
+prim or_intro_left {| intro_resource [SelectOption 1] |} 'H :
+   [wf] sequent ['ext] { 'H >- "type"{'B} } -->
+   [main] ('a : sequent ['ext] { 'H >- 'A }) -->
    sequent ['ext] { 'H >- "or"{'A; 'B} } =
    inl{'a}
 
-prim or_intro_right 'H :
-   sequent ['ext] { 'H >- "type"{'A} } -->
-   ('b : sequent ['ext] { 'H >- 'B } ) -->
+prim or_intro_right {| intro_resource [SelectOption 2] |} 'H :
+   [wf] sequent ['ext] { 'H >- "type"{'A} } -->
+   [main] ('b : sequent ['ext] { 'H >- 'B } ) -->
    sequent ['ext] { 'H >- "or"{'A; 'B} } =
    inr{'b}
 
-prim or_elim 'H 'J 'x :
-   ('a['x] : sequent ['ext] { 'H; x: 'A; 'J[inl{'x}] >- 'C[inl{'x}] }) -->
-   ('b['x] : sequent ['ext] { 'H; x: 'B; 'J[inr{'x}] >- 'C[inr{'x}] }) -->
+prim or_elim {| elim_resource [ThinOption] |} 'H 'J 'x :
+   [wf] ('a['x] : sequent ['ext] { 'H; x: 'A; 'J[inl{'x}] >- 'C[inl{'x}] }) -->
+   [wf] ('b['x] : sequent ['ext] { 'H; x: 'B; 'J[inr{'x}] >- 'C[inr{'x}] }) -->
    sequent ['ext] { 'H; x: 'A or 'B; 'J['x] >- 'C['x] } =
    decide{'x; x. 'a['x]; x. 'b['x]}
-
-(************************************************************************
- * AUTOMATION                                                           *
- ************************************************************************)
-
-let d_or_type i p =
-   if i = 0 then
-      or_type (Sequent.hyp_count_addr p) p
-   else
-      raise (RefineError ("d_or_type", StringError "no elimination form"))
-
-let or_type_term = << "type"{."or"{'A; 'B}} >>
-
-let d_resource = Mp_resource.improve d_resource (or_type_term, d_or_type)
-
-let d_or i p =
-   if i = 0 then
-      let sel = get_sel_arg p in
-         (if sel = 1 then
-             or_intro_left
-          else
-             or_intro_right) (Sequent.hyp_count_addr p) p
-   else
-      let j, k = Sequent.hyp_indices p i in
-      let x, _ = Sequent.nth_hyp p i in
-         or_elim j k x p
-
-let or_term = << "or"{'A; 'B} >>
-
-let d_resource = Mp_resource.improve d_resource (or_term, d_or)
 
 (*
  * -*-

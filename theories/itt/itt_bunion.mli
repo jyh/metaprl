@@ -33,7 +33,7 @@
 include Itt_tunion
 include Itt_bool
 
-open Conversionals
+open Tactic_type.Conversionals
 
 declare bunion{'A; 'B}
 

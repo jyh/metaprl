@@ -30,6 +30,8 @@
  * jyh@cs.cornell.edu
  *
  *)
+include Mptop
+include Summary
 
 open Refiner.Refiner.TermType
 open Refiner.Refiner.Term
@@ -72,36 +74,25 @@ let arith op goal =
        | _ ->
             raise (RefineError ("Base_int.arith", StringTermError ("ill-formed operation", goal)))
    in
-      t, []
-
-let meta_ext _ = function
-   ext :: extracts ->
-      ext, extracts
- | [] ->
-      raise (RefineError ("Base_meta.meta_ext", StringError "no extracts"))
+      t
 
 (*
  * sum{op1[@i1:n]; op2[@i2:n]} --> op1[@i1 + @i2]
  *)
-ml_rw reduce_meta_sum : meta_sum{'a; 'b} ==
-   arith Mp_num.add_num
- | meta_ext
+ml_rw reduce_meta_sum : ('goal : meta_sum{'a; 'b}) =
+   arith Mp_num.add_num goal
 
-ml_rw reduce_meta_diff : meta_diff{'a; 'b} ==
-   arith Mp_num.sub_num
- | meta_ext
+ml_rw reduce_meta_diff : ('goal : meta_diff{'a; 'b}) =
+   arith Mp_num.sub_num goal
 
-ml_rw reduce_meta_prod : meta_prod{'a; 'b} ==
-   arith Mp_num.mult_num
- | meta_ext
+ml_rw reduce_meta_prod : ('goal : meta_prod{'a; 'b}) =
+   arith Mp_num.mult_num goal
 
-ml_rw reduce_meta_quot : meta_quot{'a; 'b} ==
-   arith Mp_num.div_num
- | meta_ext
+ml_rw reduce_meta_quot : ('goal : meta_quot{'a; 'b}) =
+   arith Mp_num.div_num goal
 
-ml_rw reduce_meta_rem  : meta_rem{'a; 'b} ==
-   arith Mp_num.rem_num
- | meta_ext
+ml_rw reduce_meta_rem  : ('goal : meta_rem{'a; 'b}) =
+   arith Mp_num.rem_num goal
 
 (*
  * eq{op1[@t:t]; op2[p1]; op3[p2]} --> op1["true":t] if p1 = p2
@@ -130,13 +121,12 @@ let eq goal =
                 | _ ->
                      raise (RefineError ("meta_eq", StringTermError ("ill-formed operation", goal)))
             in
-               (if flag then true_term else false_term), []
+               if flag then true_term else false_term
        | _ ->
             raise (RefineError ("Base_int.eq", StringTermError ("ill-formed operation", goal)))
 
-ml_rw reduce_meta_eq : meta_eq{'a; 'b; 'tt; 'ff} ==
-   eq
- | meta_ext
+ml_rw reduce_meta_eq : ('goal : meta_eq{'a; 'b; 'tt; 'ff}) =
+   eq goal
 
 let lt goal =
    let a, b, true_term, false_term = four_subterms goal in
@@ -161,13 +151,12 @@ let lt goal =
                 | _ ->
                      raise (RefineError ("meta_lt", StringTermError ("ill-formed operation", goal)))
             in
-               (if flag then true_term else false_term), []
+               if flag then true_term else false_term
        | _ ->
             raise (RefineError ("Base_int.lt", StringTermError ("ill-formed operation", goal)))
 
-ml_rw reduce_meta_lt : meta_lt{'a; 'b; 'tt; 'ff} ==
-   lt
- | meta_ext
+ml_rw reduce_meta_lt : ('goal : meta_lt{'a; 'b; 'tt; 'ff}) =
+   lt goal
 
 let le goal =
    let a, b, true_term, false_term = four_subterms goal in
@@ -192,13 +181,12 @@ let le goal =
                 | _ ->
                      raise (RefineError ("meta_le", StringTermError ("ill-formed operation", goal)))
             in
-               (if flag then true_term else false_term), []
+               if flag then true_term else false_term
        | _ ->
             raise (RefineError ("Base_int.le", StringTermError ("ill-formed operation", goal)))
 
-ml_rw reduce_meta_le : meta_le{'a; 'b; 'tt; 'ff} ==
-   le
- | meta_ext
+ml_rw reduce_meta_le : ('goal : meta_le{'a; 'b; 'tt; 'ff}) =
+   le goal
 
 (*
  * -*-

@@ -31,15 +31,13 @@
  *
  *)
 
-include Tacticals
-
 include Itt_equal
 include Itt_set
 include Itt_rfun
 
 open Refiner.Refiner.Term
 
-open Tacticals
+open Tactic_type.Tacticals
 
 (************************************************************************
  * TERMS                                                                *
@@ -215,9 +213,6 @@ rule quotientSubtype 'H 'a1 'a2 :
 (************************************************************************
  * TACTICS                                                              *
  ************************************************************************)
-
-val d_quotientT : int -> tactic
-val eqcd_quotientT : tactic
 
 val is_quotient_term : term -> bool
 val dest_quotient : term -> string * string * term * term

@@ -33,20 +33,19 @@
  *
  *)
 
-include Tacticals
 include Itt_equal
 include Itt_subtype
 
 open Printf
 open Mp_debug
-open Sequent
+open Tactic_type.Sequent
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
 open Refiner.Refiner.TermMan
 open Refiner.Refiner.RefineError
 open Mp_resource
 
-open Tacticals
+open Tactic_type.Tacticals
 
 open Base_auto_tactic
 
@@ -71,6 +70,10 @@ let _ =
 
 declare void
 
+let void_term = << void >>
+let void_opname = opname_of_term void_term
+let is_void_term = is_no_subterms_term void_opname
+
 (************************************************************************
  * DISPLAY FORMS                                                        *
  ************************************************************************)
@@ -85,83 +88,47 @@ dform void_df1 : mode[prl] :: void = `"Void"
  * H >- Ui ext Void
  * by voidFormation
  *)
-prim voidFormation 'H : : sequent ['ext] { 'H >- univ[i:l] } = void
+prim voidFormation 'H :
+   sequent ['ext] { 'H >- univ[i:l] } =
+   void
 
 (*
  * H >- Void = Void in Ui ext Ax
  * by voidEquality
  *)
-prim voidEquality 'H : : sequent ['ext] { 'H >- void = void in univ[i:l] } = it
+prim voidEquality {| intro_resource []; eqcd_resource |} 'H :
+   sequent ['ext] { 'H >- void = void in univ[i:l] } =
+   it
 
 (*
  * Typehood.
  *)
-prim voidType 'H : : sequent ['ext] { 'H >- "type"{void} } = it
+prim voidType {| intro_resource [] |} 'H :
+   sequent ['ext] { 'H >- "type"{void} } =
+   it
 
 (*
  * H, i:x:Void, J >- C
  * by voidElimination i
  *)
-prim voidElimination 'H 'J : : sequent ['ext] { 'H; x: void; 'J['x] >- 'C['x] } = it
+prim voidElimination {| elim_resource [] |} 'H 'J :
+   sequent ['ext] { 'H; x: void; 'J['x] >- 'C['x] } =
+   it
 
 (*
  * Squash stability.
  *)
-prim void_squashElimination 'H : sequent [squash] { 'H >- void } :
-   sequent ['ext] { 'H >- void } = it
+prim void_squashElimination 'H :
+   sequent [squash] { 'H >- void } -->
+   sequent ['ext] { 'H >- void } =
+   it
 
 (*
  * Subtyping.
  *)
-prim void_subtype 'H : :
+prim void_subtype 'H :
    sequent ['ext] { 'H >- subtype{void; 'T} } =
    it
-
-(************************************************************************
- * TACTICS                                                              *
- ************************************************************************)
-
-(*
- * Standard term.
- *)
-let void_term = << void >>
-let void_opname = opname_of_term void_term
-let is_void_term = is_no_subterms_term void_opname
-
-(*
- * D
- *)
-let d_voidT i p =
-   if i = 0 then
-      raise (RefineError ("d_voidT", StringError "can't prove void"))
-   else
-      let t = goal p in
-      let i, j = hyp_indices p i in
-         voidElimination i j p
-
-let d_resource = Mp_resource.improve d_resource (void_term, d_voidT)
-
-let d_void_typeT i p =
-   if i = 0 then
-      voidType (hyp_count_addr p) p
-   else
-      raise (RefineError ("d_void_typeT", StringError "no elimination form"))
-
-let void_type_term = << "type"{void} >>
-
-let d_resource = Mp_resource.improve d_resource (void_type_term, d_void_typeT)
-
-(*
- * EqCD.
- *)
-let eqcd_voidT p =
-   voidEquality (hyp_count_addr p) p
-
-let eqcd_resource = Mp_resource.improve eqcd_resource (void_term, eqcd_voidT)
-
-let equal_void_term = << void = void in univ[i:l] >>
-
-let d_resource = Mp_resource.improve d_resource (equal_void_term, d_wrap_eqcd eqcd_voidT)
 
 (************************************************************************
  * SQUASH STABILITY                                                     *

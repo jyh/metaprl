@@ -31,8 +31,6 @@
  *
  *)
 
-include Tacticals
-
 include Itt_equal
 include Itt_dprod
 include Itt_struct
@@ -46,8 +44,8 @@ open Refiner.Refiner.RefineError
 open Mp_resource
 
 open Var
-open Sequent
-open Tacticals
+open Tactic_type.Sequent
+open Tactic_type.Tacticals
 
 open Itt_equal
 open Itt_subtype
@@ -86,18 +84,18 @@ prim independentProductFormation 'H :
  * H >- A1 = A2 in Ui
  * H >- B1 = B2 in Ui
  *)
-prim independentProductEquality 'H :
-   sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
-   sequent [squash] { 'H >- 'B1 = 'B2 in univ[i:l] } -->
+prim independentProductEquality {| intro_resource []; eqcd_resource |} 'H :
+   [wf] sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
+   [wf] sequent [squash] { 'H >- 'B1 = 'B2 in univ[i:l] } -->
    sequent ['ext] { 'H >- 'A1 * 'B1 = 'A2 * 'B2 in univ[i:l] } =
    it
 
 (*
  * Typehood.
  *)
-prim independentProductType 'H :
-   sequent [squash] { 'H >- "type"{'A1} } -->
-   sequent [squash] { 'H >- "type"{'A2} } -->
+prim independentProductType {| intro_resource [] |} 'H :
+   [wf] sequent [squash] { 'H >- "type"{'A1} } -->
+   [wf] sequent [squash] { 'H >- "type"{'A2} } -->
    sequent ['ext] { 'H >- "type"{.'A1 * 'A2} } =
    it
 
@@ -108,9 +106,9 @@ prim independentProductType 'H :
  * H >- B[a] ext b
  * H, y:A >- B[y] = B[y] in Ui
  *)
-prim independentPairFormation 'H :
-   ('a : sequent ['ext] { 'H >- 'A }) -->
-   ('b : sequent ['ext] { 'H >- 'B }) -->
+prim independentPairFormation {| intro_resource [] |} 'H :
+   [wf] ('a : sequent ['ext] { 'H >- 'A }) -->
+   [wf] ('b : sequent ['ext] { 'H >- 'B }) -->
    sequent ['ext] { 'H >- 'A * 'B } =
    'a, 'b
 
@@ -119,7 +117,7 @@ prim independentPairFormation 'H :
  * by independentProductElimination
  * H, A * B, u: A, v: B, J >- T ext t
  *)
-prim independentProductElimination 'H 'J 'z 'u 'v :
+prim independentProductElimination {| elim_resource [] |} 'H 'J 'z 'u 'v :
    ('t['u; 'v] : sequent ['ext] { 'H; z: 'A * 'B; u: 'A; v: 'B; 'J['u, 'v] >- 'T['u, 'v] }) -->
    sequent ['ext] { 'H; z: 'A * 'B; 'J['z] >- 'T['z] } =
    't[fst{'z}; snd{'z}]
@@ -130,9 +128,9 @@ prim independentProductElimination 'H 'J 'z 'u 'v :
  * H >- a1 = a2 in A
  * H >- b1 = b2 in B
  *)
-prim independentPairEquality 'H :
-   sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
-   sequent [squash] { 'H >- 'b1 = 'b2 in 'B } -->
+prim independentPairEquality {| intro_resource []; eqcd_resource |} 'H :
+   [wf] sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
+   [wf] sequent [squash] { 'H >- 'b1 = 'b2 in 'B } -->
    sequent ['ext] { 'H >- ('a1, 'b1) = ('a2, 'b2) in 'A * 'B } =
    it
 
@@ -143,86 +141,11 @@ prim independentPairEquality 'H :
  * H >- A2 <= A1
  * H >- B1 <= B2
  *)
-prim independentProductSubtype 'H :
+prim independentProductSubtype {| intro_resource [] |} 'H :
    sequent [squash] { 'H >- subtype{'A1; 'A2} } -->
    sequent [squash] { 'H >- subtype{'B1; 'B2} } -->
    sequent ['ext] { 'H >- subtype{ ('A1 * 'B1); ('A2 * 'B2) } } =
    it
-
-(************************************************************************
- * TACTICS                                                              *
- ************************************************************************)
-
-(*
- * D the conclusion.
- *)
-let d_concl_prod p =
-   let count = hyp_count_addr p in
-      independentPairFormation count p
-
-(*
- * D a hyp.
- * We take the argument.
- *)
-let d_hyp_prod i p =
-   let z, _ = Sequent.nth_hyp p i in
-   let j, k = hyp_indices p i in
-   let u, v = maybe_new_vars2 p "u" "v" in
-   let tac = independentProductElimination j k z u v in
-      if get_thinning_arg p then
-         (tac thenT thinT i) p
-      else
-         tac p
-
-(*
- * Join them.
- *)
-let d_prodT i =
-   if i = 0 then
-      d_concl_prod
-   else
-      d_hyp_prod i
-
-let d_resource = Mp_resource.improve d_resource (prod_term, d_prodT)
-
-(*
- * Typehood.
- *)
-let d_prod_typeT i p =
-   if i = 0 then
-      independentProductType (Sequent.hyp_count_addr p) p
-   else
-      raise (RefineError ("d_prod_typeT", StringError "no elimination form"))
-
-let prod_type_term = << "type"{.'A1 * 'A2} >>
-
-let d_resource = Mp_resource.improve d_resource (prod_type_term, d_prod_typeT)
-
-(*
- * EQCD.
- *)
-let eqcd_prodT p =
-   let count = hyp_count_addr p in
-      (independentProductEquality count
-       thenT addHiddenLabelT "wf") p
-
-let eqcd_resource = Mp_resource.improve eqcd_resource (prod_term, eqcd_prodT)
-
-let prod_equal_term = << ('a1 * 'a2) = ('b1 * 'b2) in univ[i:l] >>
-
-let d_resource = Mp_resource.improve d_resource (prod_equal_term, d_wrap_eqcd eqcd_prodT)
-
-(*
- * EQCD pair.
- *)
-let eqcd_pairT p =
-   independentPairEquality (hyp_count_addr p) p
-
-let eqcd_resource = Mp_resource.improve eqcd_resource (pair_term, eqcd_pairT)
-
-let pair_equal_term = << ('a1, 'b1) = ('a2, 'b2) in ('A1 * 'B1) >>
-
-let d_resource = Mp_resource.improve d_resource (pair_equal_term, d_wrap_eqcd eqcd_pairT)
 
 (************************************************************************
  * TYPE INFERENCE                                                       *

@@ -6,20 +6,18 @@ ROOT := ../..
 
 include $(ROOT)/mk/preface
 
-INCLUDE = -I . -I $(ROOT)/lib -I $(CAMLP4LIB)
+INCLUDE = -I . -I ../boot -I $(ROOT)/lib -I $(CAMLP4LIB)
 OCAMLDEPFLAGS := -prl_init
 
 # Library files
 MPFILES :=\
-	perv\
 	tactic_cache\
-	tactic_type\
-	sequent\
 	var\
-	rewrite_type\
 	mptop\
-	tacticals\
-	conversionals
+	perv\
+	top_tacticals\
+	top_conversionals\
+	nuprl_font
 
 # Name of main libraries
 MAIN = tactics

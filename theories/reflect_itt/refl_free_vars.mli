@@ -34,7 +34,7 @@
 include Refl_term
 include Refl_var_set
 
-open Conversionals
+open Tactic_type.Conversionals
 
 declare free_vars{'t}
 

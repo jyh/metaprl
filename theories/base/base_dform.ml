@@ -38,6 +38,7 @@ open Mp_debug
 
 open Refiner.Refiner
 open Refiner.Refiner.Term
+open Refiner.Refiner.TermOp
 open Refiner.Refiner.TermType
 open Refiner.Refiner.TermMan
 open Refiner.Refiner.RefineError
@@ -67,6 +68,12 @@ declare ";"
 declare "\\"
 
 (*
+ * Length of a list.
+ *)
+declare df_length{'l}
+declare df_last{'l}
+
+(*
  * Variables.
  *)
 dform var_src_df : mode[src] :: var[v:v] =
@@ -74,6 +81,9 @@ dform var_src_df : mode[src] :: var[v:v] =
 
 dform var_prl_df : mode[prl] :: var[v:v] =
    slot[v:s]
+
+dform var_html_df : mode[html] :: var[v:v] =
+   izone `"<font color=\"#114466\"><b>" ezone slot[v:s] izone `"</b></font>" ezone
 
 dform so_var1_df : var[v:v]{'x1} = var[v:v] "[" 'x1  "]"
 
@@ -156,7 +166,7 @@ dform rewrite_df : mode["prl"] :: "rewrite"{'redex; 'contractum} =
  *    cflag is true if the last term was a conclusion
  *    t is the term to be printed.
  *)
-ml_dform sequent_src_df : mode["src"] :: "sequent"{'ext; 'seq} format_term buf =
+ml_dform sequent_src_df : "sequent"{'ext; 'seq} format_term buf =
    let rec format_goal goals i len =
       if i <> len then
          begin
@@ -269,20 +279,102 @@ ml_dform sequent_prl_df : mode["prl"] :: "sequent"{'ext; 'seq} format_term buf =
    in
       format
 
+ml_dform sequent_html_df : mode["html"] :: "sequent"{'ext; 'seq} format_term buf =
+   let format_arg = function
+      [] ->
+         ()
+    | args ->
+         format_string buf "[";
+         let rec format = function
+            arg::t ->
+               format_term buf NOParens arg;
+               if t <> [] then
+                  format_string buf "; ";
+               format t
+          | [] ->
+               ()
+         in
+            format args;
+            format_string buf "]";
+            format_space buf
+   in
+   let rec format_hyp hyps i len =
+      if i <> len then
+         let lead = (string_of_int (i + 1)) ^ ". " in
+         let _ =
+            if i = 0 then
+               format_break buf lead ""
+            else
+               format_break buf lead "; ";
+            match SeqHyp.get hyps i with
+               Context (v, values) ->
+                  (* This is a context hypothesis *)
+                  format_term buf NOParens (mk_so_var_term v values)
+             | Hypothesis (v, a) ->
+                  format_szone buf;
+                  format_string buf v;
+                  format_string buf ":";
+                  format_space buf;
+                  format_term buf NOParens a;
+                  format_ezone buf
+         in
+            format_hyp hyps (i + 1) len
+   in
+   let rec format_goal goals i len =
+      if i <> len then
+         let a = SeqGoal.get goals i in
+            if i = 0 then
+               format_break buf "<i>&#8866;</i> " " <i>&#8866;</i> "
+            else
+               format_break buf "; " "<i>&#8866;</i> ";
+            format_term buf NOParens a;
+            format_goal goals (i + 1) len
+   in
+   let format term =
+      let { sequent_args = args;
+            sequent_hyps = hyps;
+            sequent_goals = goals
+          } = explode_sequent term
+      in
+         format_szone buf;
+         format_pushm buf 0;
+         format_arg (dest_xlist args);
+         format_hyp hyps 0 (SeqHyp.length hyps);
+         format_goal goals 0 (SeqGoal.length goals);
+         format_popm buf;
+         format_ezone buf
+   in
+      format
+
+(*
+ * This is a convenient way to print a number.
+ *)
+ml_dform df_length_df : internal :: df_length{'l} format_term buf = fun term ->
+      format_int buf (List.length (dest_xlist (one_subterm term)))
+
+(*
+ * Get the last item in a list.
+ *)
+dform df_last_df1 : internal :: df_last{cons{'a; cons{'b; 'c}}} =
+   df_last{cons{'b; 'c}}
+
+dform df_last_df2 : internal :: df_last{cons{'a; nil}} =
+   'a
+
 (************************************************************************
  * COMMANDS                                                             *
  ************************************************************************)
 
-dform space_df : " " = space
-dform hat_df : "^" = `"^"
-dform underscore_df : "_" = `"_"
-dform left_curly_df : "{" = `"{"
-dform right_curly_df : "}" = `"}"
-dform dollar_df : "$" = `"$"
-dform left_brack_df : "[" = `"["
-dform right_brack_df : "]" = `"]"
-dform semicolor_df : ";" = `";"
-dform newline_df : "\\" = \newline
+dform space_df : internal :: " " = `" "
+dform hat_df : internal :: "^" = `"^"
+dform underscore_df : internal :: "_" = `"_"
+dform left_curly_df : internal :: "{" = `"{"
+dform right_curly_df : internal :: "}" = `"}"
+dform dollar_df : internal :: "$" = `"$"
+dform left_brack_df : internal :: "[" = `"["
+dform right_brack_df : internal :: "]" = `"]"
+dform semicolor_df : internal :: ";" = `";"
+dform newline_df : internal :: "\\" = \newline
 
 (*
  * -*-

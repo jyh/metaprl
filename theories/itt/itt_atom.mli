@@ -38,11 +38,7 @@ include Itt_equal
 
 open Refiner.Refiner.Term
 
-open Tacticals
-
-(************************************************************************
- * TERMS                                                                *
- ************************************************************************)
+open Tactic_type.Tacticals
 
 declare atom
 declare token[t:t]

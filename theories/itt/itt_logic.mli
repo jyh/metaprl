@@ -44,8 +44,8 @@ include Itt_struct
 
 open Refiner.Refiner.TermType
 
-open Tacticals
-open Conversionals
+open Tactic_type.Tacticals
+open Tactic_type.Conversionals
 
 open Base_auto_tactic
 

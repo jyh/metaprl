@@ -36,8 +36,8 @@ open Refiner.Refiner.TermType
 open Refiner.Refiner.RefineError
 open Mp_resource
 
-open Tactic_type
-open Rewrite_type
+open Tactic_type.Tacticals
+open Tactic_type.Conversionals
 
 (************************************************************************
  * TYPES                                                                *

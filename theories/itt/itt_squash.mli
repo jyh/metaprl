@@ -35,20 +35,17 @@
  * jyh@cs.cornell.edu
  *)
 
-include Tacticals
 include Base_theory
 
 open Refiner.Refiner.Term
 
-open Sequent
-open Tacticals
+open Tactic_type.Sequent
+open Tactic_type.Tacticals
 
 (*
  * Squash property.
- * ext: extract required
  * squash: extract not needed
  *)
-declare ext
 declare squash
 
 (*

@@ -31,17 +31,17 @@
  *
  *)
 
+include Mptop
+include Perv
 include Summary
-include Sequent
-include Tacticals
-include Conversionals
+include Top_tacticals
+include Top_conversionals
 include Base_dform
 include Nuprl_font
 include Typeinf
 include Base_dtactic
 include Base_auto_tactic
 include Base_cache
-include Base_rewrite
 include Base_meta
 
 (*

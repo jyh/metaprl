@@ -38,7 +38,7 @@ open Refiner.Refiner.RefineError
 
 open Mp_resource
 
-open Tacticals
+open Tactic_type.Tacticals
 
 (************************************************************************
  * SYNTAX                                                               *

@@ -3,7 +3,7 @@
 #
 DIR := theories/base
 ROOT := ../..
-INCLUDE := -I . -I ../tactic -I ../ocaml -I $(ROOT)/lib
+INCLUDE := -I . -I ../boot -I ../tactic -I ../ocaml -I $(ROOT)/lib
 OCAMLDEPFLAGS := -prl
 
 # Common files
@@ -13,13 +13,11 @@ MLZFILES :=\
 # Library files
 MPFILES :=\
 	typeinf\
-	nuprl_font\
 	base_dform\
 	summary\
 	base_auto_tactic\
 	base_dtactic\
 	base_cache\
-	base_rewrite\
 	base_meta\
 	base_theory
 

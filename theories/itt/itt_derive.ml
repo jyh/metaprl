@@ -11,21 +11,21 @@
  * OCaml, and more information about this system.
  *
  * Copyright (C) 1998 Jason Hickey, Cornell University
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- * 
+ *
  * Author: Jason Hickey
  * jyh@cs.cornell.edu
  *)
@@ -41,12 +41,12 @@ open Refiner.Refiner.TermSubst
 open Refiner.Refiner.RefineError
 open Mp_resource
 
-open Tacticals
-open Sequent
 open Var
 open Mptop
-
 open Typeinf
+
+open Tactic_type
+open Tactic_type.Tacticals
 
 open Itt_rfun
 open Itt_logic
@@ -63,11 +63,11 @@ open Itt_equal
  * and the argument is an index.
  *)
 interactive applyIntro 'H (x: 'A -> 'B['x]) (bind{y. 'C['y]}) 'f 'a :
-   sequent [squash] { 'H >- 'a = 'a in 'A } -->
-   sequent [squash] { 'H >- 'f = 'f in (x: 'A -> 'B['x]) } -->
-   sequent [squash] { 'H >- "type"{'B['a]} } -->
-   sequent [squash] { 'H; y: 'B['a] >- "type"{'C['y]} } -->
-   sequent ['ext] { 'H; y: 'B['a] >- 'C['y] } -->
+   [wf] sequent [squash] { 'H >- 'a = 'a in 'A } -->
+   [wf] sequent [squash] { 'H >- 'f = 'f in (x: 'A -> 'B['x]) } -->
+   [wf] sequent [squash] { 'H >- "type"{'B['a]} } -->
+   [wf] sequent [squash] { 'H; y: 'B['a] >- "type"{'C['y]} } -->
+   [main] sequent ['ext] { 'H; y: 'B['a] >- 'C['y] } -->
    sequent ['ext] { 'H >- 'C['f 'a] }
 
 (*
@@ -76,11 +76,11 @@ interactive applyIntro 'H (x: 'A -> 'B['x]) (bind{y. 'C['y]}) 'f 'a :
  * and the argument is an index.
  *)
 interactive independentApplyIntro 'H ('A -> 'B) (bind{y. 'C['y]}) 'f 'a :
-   sequent [squash] { 'H >- 'a = 'a in 'A } -->
-   sequent [squash] { 'H >- 'f = 'f in ('A -> 'B) } -->
-   sequent [squash] { 'H; y: 'B >- "type"{'C['y]} } -->
-   sequent [squash] { 'H >- "type"{'B} } -->
-   sequent ['ext] { 'H; y: 'B >- 'C['y] } -->
+   [wf] sequent [squash] { 'H >- 'a = 'a in 'A } -->
+   [wf] sequent [squash] { 'H >- 'f = 'f in ('A -> 'B) } -->
+   [wf] sequent [squash] { 'H; y: 'B >- "type"{'C['y]} } -->
+   [wf] sequent [squash] { 'H >- "type"{'B} } -->
+   [main] sequent ['ext] { 'H; y: 'B >- 'C['y] } -->
    sequent ['ext] { 'H >- 'C['f 'a] }
 
 (************************************************************************
@@ -114,12 +114,7 @@ let applyT app i p =
       in
       let v = maybe_new_vars1 p "v" in
       let bind = mk_bind_term v (var_subst (Sequent.concl p) app v) in
-         (tac (hyp_count_addr p) goal_type bind f a
-          thenLT [addHiddenLabelT "wf";
-                  addHiddenLabelT "wf";
-                  addHiddenLabelT "wf";
-                  addHiddenLabelT "wf";
-                  addHiddenLabelT "main"]) p
+         tac (Sequent.hyp_count_addr p) goal_type bind f a p
    else
       raise (RefineError ("d_applyT", StringError "no elimination form"))
 

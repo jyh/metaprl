@@ -59,10 +59,10 @@ open Refiner.Refiner.RefineError
 open Mp_resource
 open Term_stable
 
-open Tacticals
-open Tacticals
-open Conversionals
-open Sequent
+open Tactic_type.Tacticals
+open Tactic_type.Tacticals
+open Tactic_type.Conversionals
+open Tactic_type.Sequent
 open Var
 
 open Base_dtactic

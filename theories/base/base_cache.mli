@@ -31,12 +31,12 @@
  *)
 
 include Tactic_cache
-include Tacticals
+include Summary
 
 open Refiner.Refiner
 
 open Tactic_cache
-open Tacticals
+open Tactic_type.Tacticals
 
 type cache_rule =
    Forward of tactic frule

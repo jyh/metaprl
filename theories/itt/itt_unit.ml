@@ -31,21 +31,22 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  * Author: Jason Hickey
- * jyh@cs.cornell.edu
+ * jyhcs.cornell.edu
  *)
 
-include Tacticals
 include Itt_equal
 
 open Printf
 open Mp_debug
-open Sequent
+open Tactic_type.Sequent
 open Refiner.Refiner.Term
+open Refiner.Refiner.TermOp
 open Refiner.Refiner.TermMan
 open Refiner.Refiner.RefineError
 open Mp_resource
 
-open Tacticals
+open Tactic_type
+open Tactic_type.Tacticals
 open Itt_equal
 
 (*
@@ -66,6 +67,13 @@ let _ =
 
 declare unit
 
+(*
+ * Standard term.
+ *)
+let unit_term = << unit >>
+let unit_opname = opname_of_term unit_term
+let is_unit_term = is_no_subterms_term unit_opname
+
 (************************************************************************
  * DISPLAY FORMS                                                        *
  ************************************************************************)
@@ -80,37 +88,47 @@ dform unit_df1 : mode[prl] :: unit = `"Unit"
  * H >- Ui ext Unit
  * by unitFormation
  *)
-prim unitFormation 'H : : sequent ['ext] { 'H >- univ[i:l] } = unit
+prim unitFormation 'H :
+   sequent ['ext] { 'H >- univ[i:l] } =
+   unit
 
 (*
  * H >- Unit = Unit in Ui ext Ax
  * by unitEquality
  *)
-prim unitEquality 'H : : sequent ['ext] { 'H >- unit = unit in univ[i:l] } = it
+prim unitEquality {| intro_resource []; eqcd_resource |} 'H :
+   sequent ['ext] { 'H >- unit = unit in univ[i:l] } =
+   it
 
 (*
  * Is a type.
  *)
-prim unitType 'H : : sequent ['ext] { 'H >- "type"{unit} } = it
+prim unitType {| intro_resource [] |} 'H :
+   sequent ['ext] { 'H >- "type"{unit} } =
+   it
 
 (*
  * H >- Ui ext Unit
  * by unitFormation
  *)
-prim unit_memberFormation 'H : : sequent ['ext] { 'H >- unit } = it
+prim unit_memberFormation {| intro_resource [] |} 'H :
+   sequent ['ext] { 'H >- unit } =
+   it
 
 (*
  * H >- Unit = Unit in Ui ext Ax
  * by unitEquality
  *)
-prim unit_memberEquality 'H : : sequent ['ext] { 'H >- it = it in unit } = it
+prim unit_memberEquality {| intro_resource []; eqcd_resource |} 'H :
+   sequent ['ext] { 'H >- it = it in unit } =
+   it
 
 (*
  * H; i:x:Unit; J >- C
  * by unitElimination i
  * H; i:x:Unit; J[it / x] >- C[it / x]
  *)
-prim unitElimination 'H 'J :
+prim unitElimination {| elim_resource [] |} 'H 'J :
    ('t : sequent['ext] { 'H; x: unit; 'J[it] >- 'C[it] }) -->
    sequent ['ext] { 'H; x: unit; 'J['x] >- 'C['x] } =
    't
@@ -135,64 +153,14 @@ interactive unitSqequal 'H :
  ************************************************************************)
 
 (*
- * Standard term.
- *)
-let unit_term = << unit >>
-
-(*
- * D
- *)
-let d_unitT i p =
-   if i = 0 then
-      unit_memberFormation (hyp_count_addr p) p
-   else
-      let i, j = hyp_indices p i in
-         unitElimination i j p
-
-let d_resource = Mp_resource.improve d_resource (unit_term, d_unitT)
-
-let d_unit_typeT i p =
-   if i = 0 then
-      unitType (hyp_count_addr p) p
-   else
-      raise (RefineError ("d_unit_typeT", StringError "no elimination form"))
-
-let unit_type_term = << "type"{unit} >>
-
-let d_resource = Mp_resource.improve d_resource (unit_type_term, d_unit_typeT)
-
-(*
  * Squiggle reasoning.
  *)
-let d_unit_sqequalT i p =
-   if i = 0 then
-      unitSqequal (Sequent.hyp_count_addr p) p
-   else
-      raise (RefineError ("d_unit_sqequal", StringError "no elimination form"))
+let intro_unit_sqequalT p =
+   unitSqequal (Sequent.hyp_count_addr p) p
 
 let unit_rewrite_term = << "rewrite"{'e1; it} >>
 
-let d_resource = Mp_resource.improve d_resource (unit_rewrite_term, d_unit_sqequalT)
-
-(*
- * EqCD.
- *)
-let eqcd_unitT p =
-   unitEquality (hyp_count_addr p) p
-
-let eqcd_itT p =
-   unit_memberEquality (hyp_count_addr p) p
-
-let eqcd_resource = Mp_resource.improve eqcd_resource (unit_term, eqcd_unitT)
-let eqcd_resource = Mp_resource.improve eqcd_resource (it_term, eqcd_itT)
-
-let equal_unit_term = << unit = unit in univ[i:l] >>
-
-let d_resource = Mp_resource.improve d_resource (equal_unit_term, d_wrap_eqcd eqcd_unitT)
-
-let equal_it_term = << it = it in unit >>
-
-let d_resource = Mp_resource.improve d_resource (equal_it_term, d_wrap_eqcd eqcd_itT)
+let intro_resource = Mp_resource.improve intro_resource (unit_rewrite_term, intro_unit_sqequalT)
 
 (************************************************************************
  * SQUASH STABILITY                                                     *

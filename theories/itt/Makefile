@@ -3,7 +3,7 @@
 #
 DIR := theories/itt
 ROOT := ../..
-INCLUDE := -I . -I ../tactic -I ../ocaml -I ../base -I $(ROOT)/lib
+INCLUDE := -I . -I ../boot -I ../tactic -I ../ocaml -I ../base -I $(ROOT)/lib
 OCAMLDEPFLAGS := -prl
 
 # Library files
@@ -43,7 +43,7 @@ MPFILES :=\
 	itt_prop_decide\
 	itt_fset\
 	itt_theory\
-	collection\
+	itt_collection\
 	itt_test
 
 # Name of main libraris

@@ -34,7 +34,7 @@ include Itt_bool
 include Itt_int
 include Itt_logic
 
-open Conversionals
+open Tactic_type.Conversionals
 
 (************************************************************************
  * TERMS                                                                *

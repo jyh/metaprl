@@ -31,8 +31,6 @@
  *
  *)
 
-include Tacticals
-
 include Itt_equal
 include Itt_rfun
 include Itt_struct
@@ -48,9 +46,9 @@ open Refiner.Refiner.RefineError
 open Mp_resource
 
 open Var
-open Tacticals
-open Conversionals
-open Sequent
+open Tactic_type.Tacticals
+open Tactic_type.Conversionals
+open Tactic_type.Sequent
 
 open Itt_equal
 open Itt_subtype
@@ -134,8 +132,8 @@ dform snd_df1 : mode[prl] :: snd{'e} =
  * H, x:A >- Ui ext B
  *)
 prim productFormation 'H 'A 'x :
-   sequent [squash] { 'H >- 'A = 'A in univ[i:l] } -->
-   ('B['x] : sequent ['ext] { 'H; x: 'A >- univ[i:l] }) -->
+   [wf] sequent [squash] { 'H >- 'A = 'A in univ[i:l] } -->
+   [main] ('B['x] : sequent ['ext] { 'H; x: 'A >- univ[i:l] }) -->
    sequent ['ext] { 'H >- univ[i:l] } =
    x:'A * 'B['x]
 
@@ -145,18 +143,18 @@ prim productFormation 'H 'A 'x :
  * H >- A1 = A2 in Ui
  * H, y:A1 >- B1[y] = B2[y] in Ui
  *)
-prim productEquality 'H 'y :
-   sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
-   sequent [squash] { 'H; y: 'A1 >- 'B1['y] = 'B2['y] in univ[i:l] } -->
+prim productEquality {| intro_resource []; eqcd_resource |} 'H 'y :
+   [wf] sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
+   [wf] sequent [squash] { 'H; y: 'A1 >- 'B1['y] = 'B2['y] in univ[i:l] } -->
    sequent ['ext] { 'H >- x1:'A1 * 'B1['x1] = x2:'A2 * 'B2['x2] in univ[i:l] } =
    it
 
 (*
  * Typehood.
  *)
-prim productType 'H 'x :
-   sequent [squash] { 'H >- "type"{'A1} } -->
-   sequent [squash] { 'H; x: 'A1 >- "type"{'A2['x]} } -->
+prim productType {| intro_resource [] |} 'H 'x :
+   [wf] sequent [squash] { 'H >- "type"{'A1} } -->
+   [wf] sequent [squash] { 'H; x: 'A1 >- "type"{'A2['x]} } -->
    sequent ['ext] { 'H >- "type"{.y:'A1 * 'A2['y]} } =
    it
 
@@ -167,10 +165,10 @@ prim productType 'H 'x :
  * H >- B[a] ext b
  * H, y:A >- B[y] = B[y] in Ui
  *)
-prim pairFormation 'H 'a 'y :
-   sequent [squash] { 'H >- 'a = 'a in 'A } -->
-   ('b : sequent ['ext] { 'H >- 'B['a] }) -->
-   sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
+prim pairFormation {| intro_resource [] |} 'H 'a 'y :
+   [wf] sequent [squash] { 'H >- 'a = 'a in 'A } -->
+   [main] ('b : sequent ['ext] { 'H >- 'B['a] }) -->
+   [wf] sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
    sequent ['ext] { 'H >- x:'A * 'B['x] } =
    'a, 'b
 
@@ -181,10 +179,10 @@ prim pairFormation 'H 'a 'y :
  * H >- b1 = b2 in B[a1]
  * H, y:A >- B[y] = B[y] in Ui
  *)
-prim pairEquality 'H 'y :
-   sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
-   sequent [squash] { 'H >- 'b1 = 'b2 in 'B['a1] } -->
-   sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
+prim pairEquality {| intro_resource []; eqcd_resource |} 'H 'y :
+   [wf] sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
+   [wf] sequent [squash] { 'H >- 'b1 = 'b2 in 'B['a1] } -->
+   [wf] sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
    sequent ['ext] { 'H >- ('a1, 'b1) = ('a2, 'b2) in x:'A * 'B['x] } =
    it
 
@@ -193,8 +191,8 @@ prim pairEquality 'H 'y :
  * by productElimination u v
  * H, x:A * B, u:A, v:B[u], J[u, v] >- T[u, v] ext t[u, v]
  *)
-prim productElimination 'H 'J 'z 'u 'v :
-   ('t['u; 'v] : sequent ['ext] { 'H; z: x:'A * 'B['x]; u: 'A; v: 'B['u]; 'J['u, 'v] >- 'T['u, 'v] }) -->
+prim productElimination {| elim_resource [] |} 'H 'J 'z 'u 'v :
+   [wf] ('t['u; 'v] : sequent ['ext] { 'H; z: x:'A * 'B['x]; u: 'A; v: 'B['u]; 'J['u, 'v] >- 'T['u, 'v] }) -->
    sequent ['ext] { 'H; z: x:'A * 'B['x]; 'J['z] >- 'T['z] } =
    spread{'z; u, v. 't['u; 'v]}
 
@@ -204,9 +202,9 @@ prim productElimination 'H 'J 'z 'u 'v :
  * H >- e1 = e2 in w:A * B
  * H, u:A, v: B[u], a: e1 = (u, v) in w:A * B >- b1[u; v] = b2[u; v] in T[u, v]
  *)
-prim spreadEquality 'H lambda{z. 'T['z]} (w:'A * 'B['w]) 'u 'v 'a :
-   sequent [squash] { 'H >- 'e1 = 'e2 in w:'A * 'B['w] } -->
-   sequent [squash] { 'H; u: 'A; v: 'B['u]; a: 'e1 = ('u, 'v) in w:'A * 'B['w] >-
+prim spreadEquality {| intro_resource []; eqcd_resource |} 'H lambda{z. 'T['z]} (w:'A * 'B['w]) 'u 'v 'a :
+   [wf] sequent [squash] { 'H >- 'e1 = 'e2 in w:'A * 'B['w] } -->
+   [wf] sequent [squash] { 'H; u: 'A; v: 'B['u]; a: 'e1 = ('u, 'v) in w:'A * 'B['w] >-
              'b1['u; 'v] = 'b2['u; 'v] in 'T['u, 'v] } -->
    sequent ['ext] { 'H >- spread{'e1; u1, v1. 'b1['u1; 'v1]} = spread{'e2; u2, v2. 'b2['u2; 'v2]} in 'T['e1] } =
    it
@@ -218,7 +216,7 @@ prim spreadEquality 'H lambda{z. 'T['z]} (w:'A * 'B['w]) 'u 'v 'a :
  * H >- A1 <= A2
  * H, a: A1 >- B1[a] <= B2[a]
  *)
-prim productSubtype 'H 'a :
+prim productSubtype {| intro_resource [] |} 'H 'a :
    sequent [squash] { 'H >- subtype{'A1; 'A2} } -->
    sequent [squash] { 'H; a: 'A1 >- subtype{'B1['a]; 'B2['a]} } -->
    sequent ['ext] { 'H >- subtype{ (a1:'A1 * 'B1['a1]); (a2:'A2 * 'B2['a2]) } } =
@@ -233,7 +231,7 @@ let reduce_info =
     << fst{pair{'u; 'v}} >>, reduceFst;
     << snd{pair{'u; 'v}} >>, reduceSnd]
 
-let reduce_resource = add_reduce_info reduce_resource reduce_info
+let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
 
 (************************************************************************
  * PRIMITIVES                                                           *
@@ -262,114 +260,6 @@ let spread_opname = opname_of_term spread_term
 let is_spread_term = is_dep0_dep2_term spread_opname
 let dest_spread = dest_dep0_dep2_term spread_opname
 let mk_spread_term = mk_dep0_dep2_term spread_opname
-
-(************************************************************************
- * D TACTIC                                                             *
- ************************************************************************)
-
-(*
- * D the conclusion.
- *)
-let d_concl_dprod p =
-   let t =
-      try get_with_arg p with
-         Not_found -> raise (RefineError ("d_concl_dprod", StringError "requires an argument"))
-   in
-   let count = hyp_count_addr p in
-   let y = get_opt_var_arg "y" p in
-      (pairFormation count t y
-       thenLT [addHiddenLabelT "wf";
-               addHiddenLabelT "main";
-               addHiddenLabelT "wf"]) p
-
-(*
- * D a hyp.
- * We take the argument.
- *)
-let d_hyp_dprod i p =
-   let z, _ = Sequent.nth_hyp p i in
-   let i', j = hyp_indices p i in
-   let u, v = maybe_new_vars2 p "u" "v" in
-   let tac = productElimination i' j z u v in
-      if get_thinning_arg p then
-         (tac thenT thinT i) p
-      else
-         tac p
-
-(*
- * Join them.
- *)
-let d_dprodT i =
-   if i = 0 then
-      d_concl_dprod
-   else
-      d_hyp_dprod i
-
-let d_resource = Mp_resource.improve d_resource (dprod_term, d_dprodT)
-
-(*
- * Typehood.
- *)
-let d_dprod_typeT i p =
-   if i = 0 then
-      let concl = Sequent.concl p in
-      let v, _, _ = dest_dprod (one_subterm concl) in
-      let v = maybe_new_vars1 p v in
-         productType (hyp_count_addr p) v p
-   else
-      raise (RefineError ("d_prod_typeT", StringError "no elimination form"))
-
-let type_dprod_term = << "type"{.x:'A1 * 'A2['x]} >>
-
-let d_resource = Mp_resource.improve d_resource (type_dprod_term, d_dprod_typeT)
-
-(************************************************************************
- * EQCD TACTIC                                                          *
- ************************************************************************)
-
-(*
- * EQCD dprod.
- *)
-let eqcd_dprodT p =
-   let _, l, _ = dest_equal (concl p) in
-   let v, _, _ = dest_dprod l in
-   let x = get_opt_var_arg v p in
-   let count = hyp_count_addr p in
-      (productEquality count x
-       thenT addHiddenLabelT "wf") p
-
-let eqcd_resource = Mp_resource.improve eqcd_resource (dprod_term, eqcd_dprodT)
-
-let dprod_equal_term = << (x1 : 'A1 * 'B1['x1]) = (x2 : 'A2 * 'B2['x2]) in univ[i:l] >>
-
-let d_resource = Mp_resource.improve d_resource (dprod_equal_term, d_wrap_eqcd eqcd_dprodT)
-
-(*
- * EQCD pair.
- *)
-let eqcd_pairT p =
-   let l, _, _ = dest_equal (concl p) in
-   let v, _, _ = dest_dprod l in
-   let x = get_opt_var_arg v p in
-   let count = hyp_count_addr p in
-      (pairEquality count x
-       thenT addHiddenLabelT "wf") p
-
-let eqcd_resource = Mp_resource.improve eqcd_resource (pair_term, eqcd_pairT)
-
-let dpair_equal_term = << ('a1, 'b1) = ('a2, 'b2) in (x1 : 'A1 * 'B1['x1]) >>
-
-let d_resource = Mp_resource.improve d_resource (dpair_equal_term, d_wrap_eqcd eqcd_pairT)
-
-(*
- * EQCD spread.
- *)
-let eqcd_spreadT p =
-   let _, l, _ = dest_equal (concl p) in
-   let u, v, _, _ = dest_spread l in
-      raise (RefineError ("eqcd_spreadT", StringError "not implemented"))
-
-let eqcd_resource = Mp_resource.improve eqcd_resource (spread_term, eqcd_spreadT)
 
 (************************************************************************
  * TYPE INFERENCE                                                       *

@@ -125,6 +125,105 @@ define unfold_lt :
    lt{'a; 'b} <--> "assert"{lt_bool{'a; 'b}}
 (*! @docoff *)
 
+let int_term = << int >>
+let int_opname = opname_of_term int_term
+let is_int_term = is_no_subterms_term int_opname
+
+let beq_int_term = << beq_int{'x; 'y} >>
+let beq_int_opname = opname_of_term beq_int_term
+let is_beq_int_term = is_dep0_dep0_term beq_int_opname
+let mk_beq_int_term = mk_dep0_dep0_term beq_int_opname
+let dest_beq_int = dest_dep0_dep0_term beq_int_opname
+
+let lt_term = << 'x < 'y >>
+let lt_opname = opname_of_term lt_term
+let is_lt_term = is_dep0_dep0_term lt_opname
+let mk_lt_term = mk_dep0_dep0_term lt_opname
+let dest_lt = dest_dep0_dep0_term lt_opname
+
+let lt_bool_term = << lt_bool{'x; 'y} >>
+let lt_bool_opname = opname_of_term lt_bool_term
+let is_lt_bool_term = is_dep0_dep0_term lt_bool_opname
+let mk_lt_bool_term = mk_dep0_dep0_term lt_bool_opname
+let dest_lt_bool = dest_dep0_dep0_term lt_bool_opname
+
+let add_term = << 'x +@ 'y >>
+let add_opname = opname_of_term add_term
+let is_add_term = is_dep0_dep0_term add_opname
+let mk_add_term = mk_dep0_dep0_term add_opname
+let dest_add = dest_dep0_dep0_term add_opname
+
+let uni_minus_term = <<uni_minus{'a}>>
+let uni_minus_opname = opname_of_term uni_minus_term
+let is_uni_minus_term = is_dep0_term uni_minus_opname
+let mk_uni_minus_term = mk_dep0_term uni_minus_opname
+let dest_uni_minus = dest_dep0_term uni_minus_opname
+
+let sub_term = << 'x -@ 'y >>
+let sub_opname = opname_of_term sub_term
+let is_sub_term = is_dep0_dep0_term sub_opname
+let mk_sub_term = mk_dep0_dep0_term sub_opname
+let dest_sub = dest_dep0_dep0_term sub_opname
+
+let number_term = << number[n:n] >>
+let number_opname = opname_of_term number_term
+let is_number_term = is_number_term number_opname
+let dest_number = dest_number_term number_opname
+let mk_number_term = mk_number_term number_opname
+
+let ind_term = << ind{'x; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]} >>
+let ind_opname = opname_of_term ind_term
+let is_ind_term = is_dep0_dep2_dep0_dep2_term ind_opname
+let dest_ind = dest_dep0_dep2_dep0_dep2_term ind_opname
+let mk_ind_term = mk_dep0_dep2_dep0_dep2_term ind_opname
+
+(************************************************************************
+ * DISPLAY FORMS                                                        *
+ ************************************************************************)
+
+prec prec_compare
+prec prec_add
+
+(*
+prec prec_mul < prec_apply
+prec prec_add < prec_mul
+prec prec_compare < prec_add
+*)
+
+dform int_prl_df : except_mode [src] :: int = mathbbZ
+dform int_src_df : mode[src] :: int = `"int"
+
+dform number_df : number[n:n] =
+   slot[n:s]
+
+dform beq_int_df1 : parens :: "prec"[prec_compare] :: beq_int{'a; 'b} =
+   slot["lt"]{'a} `" =" Nuprl_font!subb `" " slot["le"]{'b}
+
+dform add_df1 : except_mode[src] :: parens :: "prec"[prec_add] :: "add"{'a; 'b} =
+   slot["le"]{'a} `" + " slot["lt"]{'b}
+dform add_df2 : mode[src] :: parens :: "prec"[prec_add] :: "add"{'a; 'b} =
+   slot["le"]{'a} `" +@ " slot["lt"]{'b}
+
+dform uni_minus_df1 : except_mode[src] :: parens :: "prec"[prec_add] :: uni_minus{'a} =
+   `" - " slot["le"]{'a}
+dform uni_minus_df2 : mode[src] :: parens :: "prec"[prec_add] :: uni_minus{'a} =
+   `" -@ " slot["le"]{'a}
+
+dform sub_df1 : except_mode[src] :: parens :: "prec"[prec_add] :: "sub"{'a; 'b} =
+   slot["lt"]{'a} `" - " slot["le"]{'b}
+dform sub_df2 : mode[src] :: parens :: "prec"[prec_add] :: "sub"{'a; 'b} =
+   slot["lt"]{'a} `" -@ " slot["le"]{'b}
+
+dform lt_df1 : parens :: "prec"[prec_compare] :: lt{'a; 'b} =
+   slot["lt"]{'a} `" < " slot["le"]{'b}
+
+dform lt_bool_df1 : parens :: "prec"[prec_compare] :: lt_bool{'a; 'b} =
+   slot["lt"]{'a} `" <" Nuprl_font!subb `" " slot["le"]{'b}
+
+(*
+ * Useful tactic to prove _rw from ~-rules
+ *)
+
 let finishSq2ExT i =
    unsquashT <<'ext>> thenT nthAssumT i
 
@@ -150,6 +249,57 @@ interactive_rw int_sqequal_rw 'b :
    'a <--> 'b 
 
 let int_sqequalC = int_sqequal_rw
+
+(************************************************************************
+ * REWRITES                                                             *
+ ************************************************************************)
+
+(*!
+ * @begin[doc]
+ * @rewrites
+ *
+ * The binary arithmetic operators are defined using the
+ * the @emph{meta} arithmetic operators that are @MetaPRL
+ * builtin operations.
+ * @end[doc]
+ *)
+prim_rw reduce_add : "add"{number[i:n]; number[j:n]} <-->
+   meta_sum{number[i:n]; number[j:n]}
+
+(*
+prim_rw reduce_sub : "sub"{number[i:n]; number[j:n]} <-->
+   meta_diff{number[i:n]; number[j:n]}
+*)
+prim_rw reduce_uni_minus : uni_minus{number[i:n]} <-->
+   meta_diff{number[0:n]; number[i:n]}
+
+prim_rw reduce_lt : "lt"{number[i:n]; number[j:n]} <-->
+   meta_lt{number[i:n]; number[j:n]}
+
+(*
+prim_rw reduce_eq : (number[i:n] = number[j:n] in int) <-->
+   meta_eq{number[i:n]; number[j:n]}
+*)
+
+(*! @docoff *)
+
+let reduce_add =
+   reduce_add andthenC reduce_meta_sum
+
+(*
+let reduce_sub =
+   reduce_sub andthenC reduce_meta_diff
+*)
+let reduce_uni_minus =
+   reduce_uni_minus andthenC reduce_meta_diff
+
+let reduce_lt =
+   reduce_lt andthenC reduce_meta_lt
+
+(*
+let reduce_eq =
+   reduce_eq andthenC reduce_meta_eq
+*)
 
 prim add_wf {| intro_resource []; eqcd_resource |} 'H :
    [wf] sequent [squash] { 'H >- 'a = 'a1 in int } -->
@@ -189,6 +339,14 @@ prim beq_int2prop 'H :
    [wf] sequent [squash] { 'H >- 'b IN int } -->
    sequent ['ext] { 'H >- 'a = 'b in int } = it
 
+(* Derived from previous *)
+interactive eq_int_assert_elim {| elim_resource [ThinOption thinT] |} 'H 'J 'y:
+   [main]sequent['ext]{ 'H; x:"assert"{beq_int{'a;'b}}; 'J[it];
+                            y: 'a = 'b in int >- 'C[it]} -->
+   [wf]sequent['ext]{ 'H; x:"assert"{beq_int{'a;'b}}; 'J[it] >- 'a IN int} -->
+   [wf]sequent['ext]{ 'H; x:"assert"{beq_int{'a;'b}}; 'J[it] >- 'b IN int} -->
+   sequent['ext]{ 'H; x:"assert"{beq_int{'a;'b}}; 'J['x] >- 'C['x]}
+
 prim beq_int_is_true 'H :
    sequent [squash] { 'H >- 'a = 'b in int } -->
    sequent ['ext] { 'H >- beq_int{'a; 'b} ~ btrue } = it
@@ -198,21 +356,6 @@ interactive_rw beq_int_is_true_rw :
    beq_int{'a; 'b} <--> btrue 
 
 let beq_int_is_trueC = beq_int_is_true_rw 
-
-(* Derived from previous *)
-(*
-interactive eq_int_assert_elim {| elim_resource [ThinOption thinT] |} 'H 'J :
-   [main] sequent ['ext] { 'H; x: 'a = 'b in int; 'J >- 'C } -->
-   sequent ['ext] { 'H; y: 'a IN int; z: 'b IN int; 
-                        t: "assert"{beq_int{'a; 'b}}; 'J 
-                  >- 'C }
-*)
-interactive eq_int_assert_elim {| elim_resource [ThinOption thinT] |} 'H 'J 'y:
-   [main]sequent['ext]{ 'H; x:"assert"{beq_int{'a;'b}}; 'J['x];
-                            y: 'a = 'b in int >- 'C['x]} -->
-   [wf]sequent['ext]{ 'H; x:"assert"{beq_int{'a;'b}}; 'J['x] >- 'a IN int} -->
-   [wf]sequent['ext]{ 'H; x:"assert"{beq_int{'a;'b}}; 'J['x] >- 'b IN int} -->
-   sequent['ext]{ 'H; x:"assert"{beq_int{'a;'b}}; 'J['x] >- 'C['x]}
 
 (*
  Derived from previous rewrite
@@ -533,10 +676,20 @@ interactive_rw add_Id2_rw :
 
 let add_Id2C = add_Id2_rw
 
+(*
 interactive add_Functionality 'H :
-   [main] sequent ['ext] { 'H >- 'a = 'b in int } -->
+   [main] sequent ['ext] { 'H >- 'a ~ 'b } -->
+   [wf] sequent ['ext] { 'H >- 'a IN int } -->
+   [wf] sequent ['ext] { 'H >- 'b IN int } -->
    [wf] sequent ['ext] { 'H >- 'c IN int } -->
-   sequent ['ext] { 'H >- ('a +@ 'c) = ('b +@ 'c) in int }
+   sequent ['ext] { 'H >- ('a +@ 'c) ~ ('b +@ 'c) }
+*)
+interactive add_Functionality 'H 'c :
+   [main] sequent ['ext] { 'H >- ('a +@ 'c) ~ ('b +@ 'c) } -->
+   [wf] sequent ['ext] { 'H >- 'a IN int } -->
+   [wf] sequent ['ext] { 'H >- 'b IN int } -->
+   [wf] sequent ['ext] { 'H >- 'c IN int } -->
+   sequent ['ext] { 'H >- 'a ~ 'b }
 
 (*!
  * @begin[doc]
@@ -554,6 +707,12 @@ interactive_rw uni_add_inverse_rw :
    ( 'a +@ uni_minus{ 'a } ) <--> 0
 
 let uni_add_inverseC = uni_add_inverse_rw
+
+let unfold_zeroC t = foldC (mk_add_term t (mk_uni_minus_term t)) uni_add_inverseC 
+
+interactive uni_add_inverse2 'H :
+   [wf] sequent [squash] { 'H >- 'c IN int } -->
+   sequent ['ext] { 'H >- 0 ~ ('c +@ uni_minus{ 'c }) }
 
 interactive uni_add_Distrib 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->

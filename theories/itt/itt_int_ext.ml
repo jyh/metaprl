@@ -114,6 +114,76 @@ define unfold_bneq_int :
 define unfold_gt :
    gt{'a; 'b} <--> ('b < 'a)
 
+let le_term = << 'x <= 'y >>
+let le_opname = opname_of_term le_term
+let is_le_term = is_dep0_dep0_term le_opname
+let mk_le_term = mk_dep0_dep0_term le_opname
+let dest_le = dest_dep0_dep0_term le_opname
+
+let ge_term = << 'x >= 'y >>
+let ge_opname = opname_of_term ge_term
+let is_ge_term = is_dep0_dep0_term ge_opname
+let mk_ge_term = mk_dep0_dep0_term ge_opname
+let dest_ge = dest_dep0_dep0_term ge_opname
+
+let gt_term = << 'x > 'y >>
+let gt_opname = opname_of_term gt_term
+let is_gt_term = is_dep0_dep0_term gt_opname
+let mk_gt_term = mk_dep0_dep0_term gt_opname
+let dest_gt = dest_dep0_dep0_term gt_opname
+
+let mul_term = << 'x *@ 'y >>
+let mul_opname = opname_of_term mul_term
+let is_mul_term = is_dep0_dep0_term mul_opname
+let mk_mul_term = mk_dep0_dep0_term mul_opname
+let dest_mul = dest_dep0_dep0_term mul_opname
+
+let div_term = << 'x /@ 'y >>
+let div_opname = opname_of_term div_term
+let is_div_term = is_dep0_dep0_term div_opname
+let mk_div_term = mk_dep0_dep0_term div_opname
+let dest_div = dest_dep0_dep0_term div_opname
+
+let rem_term = << "rem"{'x; 'y} >>
+let rem_opname = opname_of_term rem_term
+let is_rem_term = is_dep0_dep0_term rem_opname
+let mk_rem_term = mk_dep0_dep0_term rem_opname
+let dest_rem = dest_dep0_dep0_term rem_opname
+
+(************************************************************************
+ * DISPLAY FORMS                                                        *
+ ************************************************************************)
+
+prec prec_mul
+
+dform le_df1 : except_mode[src] :: parens :: "prec"[prec_compare] :: le{'a; 'b} =
+   slot["lt"]{'a} Nuprl_font!le slot["le"]{'b}
+dform le_df2 : mode[src] :: parens :: "prec"[prec_compare] :: le{'a; 'b} =
+   slot["lt"]{'a} `" <= " slot["le"]{'b}
+
+dform ge_df1 : except_mode[src] :: parens :: "prec"[prec_compare] :: ge{'a; 'b} =
+   slot["lt"]{'a} Nuprl_font!ge slot["le"]{'b}
+dform ge_df2 : mode[src] :: parens :: "prec"[prec_compare] :: ge{'a; 'b} =
+   slot["lt"]{'a} `" >= " slot["le"]{'b}
+
+dform gt_df1 : parens :: "prec"[prec_compare] :: gt{'a; 'b} =
+   slot["lt"]{'a} `" > " slot["le"]{'b}
+
+dform mul_df1 : except_mode[src] :: parens :: "prec"[prec_mul] :: "mul"{'a; 'b} =
+   slot["lt"]{'a} `" * " slot["le"]{'b}
+dform mul_df2 : mode[src] :: parens :: "prec"[prec_mul] :: "mul"{'a; 'b} =
+   slot["lt"]{'a} `" *@ " slot["le"]{'b}
+
+dform div_df1 : except_mode[src] :: parens :: "prec"[prec_mul] :: "div"{'a; 'b} =
+   slot["lt"]{'a} Nuprl_font!"div" slot["le"]{'b}
+dform div_df2 : mode[src] :: parens :: "prec"[prec_mul] :: "div"{'a; 'b} =
+   slot["lt"]{'a} `" /@ " slot["le"]{'b}
+
+dform rem_df1 : except_mode[src] :: parens :: "prec"[prec_mul] :: "rem"{'a; 'b} =
+   slot["lt"]{'a} `" % " slot["le"]{'b}
+dform rem_df2 : mode[src] :: parens :: "prec"[prec_mul] :: "rem"{'a; 'b} =
+   slot["lt"]{'a} `" %@ " slot["le"]{'b}
+
 (*
 Switching to define-version to provide the same behaviour as bool-relations,
 i.d. rewritability of <= in the same extent as of <
@@ -139,6 +209,40 @@ define unfold_neq_int :
    nequal{'a; 'b} <--> "assert"{bneq_int{'a; 'b}}
 
 (*! @docoff *)
+
+(************************************************************************
+ * REWRITES                                                             *
+ ************************************************************************)
+
+(*!
+ * @begin[doc]
+ * @rewrites
+ *
+ * The binary arithmetic operators are defined using the
+ * the @emph{meta} arithmetic operators that are @MetaPRL
+ * builtin operations.
+ * @end[doc]
+ *)
+
+prim_rw reduce_mul : "mul"{number[i:n]; number[j:n]} <-->
+   meta_prod{number[i:n]; number[j:n]}
+
+(*
+prim_rw reduce_div : "div"{number[i:n]; number[j:n]} <-->
+   meta_quot{number[i:n]; number[j:n]}
+prim_rw reduce_rem : "rem"{number[i:n]; number[j:n]} <-->
+   meta_rem{number[i:n]; number[j:n]}
+*)
+
+(*! @docoff *)
+
+let reduce_mul =
+   reduce_mul andthenC reduce_meta_prod
+
+(*
+let reduce_div =
+   reduce_div andthenC reduce_meta_rem
+*)
 
 (*!
  * @begin[doc]

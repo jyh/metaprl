@@ -93,6 +93,25 @@ define unfold_ge :
 define unfold_neq_int :
    nequal{'a; 'b} <--> "assert"{bneq_int{'a; 'b}}
 
+(************************************************************************
+ * DISPLAY FORMS                                                        *
+ ************************************************************************)
+
+prec prec_mul
+
+(************************************************************************
+ * REWRITES                                                             *
+ ************************************************************************)
+
+rewrite reduce_mul : "mul"{number[i:n]; number[j:n]} <-->
+   meta_prod{number[i:n]; number[j:n]}
+(*
+rewrite reduce_div : "div"{number[i:n]; number[j:n]} <-->
+   meta_quot{number[i:n]; number[j:n]}
+rewrite reduce_rem : "rem"{number[i:n]; number[j:n]} <-->
+   meta_rem{number[i:n]; number[j:n]}
+*)
+
 rule mul_wf 'H :
    [wf] sequent [squash] { 'H >- 'a = 'a1 in int } -->
    [wf] sequent [squash] { 'H >- 'b = 'b1 in int } -->

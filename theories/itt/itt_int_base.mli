@@ -65,6 +65,13 @@ define unfold_sub :
 define unfold_lt :
    lt{'a; 'b} <--> "assert"{lt_bool{'a; 'b}}
 
+(************************************************************************
+ * DISPLAY FORMS                                                        *
+ ************************************************************************)
+
+prec prec_compare
+prec prec_add
+
 (*
  * Useful tactic to prove _rw from ~-rules
  *)
@@ -81,6 +88,36 @@ rule int_sqequal 'H :
    sequent ['ext] { 'H >- 'a ~ 'b }
 
 topval int_sqequalC : term -> conv
+
+(************************************************************************
+ * REWRITES                                                             *
+ ************************************************************************)
+
+rewrite reduce_add : "add"{number[i:n]; number[j:n]} <-->
+   meta_sum{number[i:n]; number[j:n]}
+rewrite reduce_uni_minus : uni_minus{number[i:n]} <-->
+   meta_diff{number[0:n]; number[i:n]}
+(*
+rewrite reduce_sub : "sub"{number[i:n]; number[j:n]} <-->
+   meta_diff{number[i:n]; number[j:n]}
+*)
+
+(*
+rewrite reduce_mul : "mul"{number[i:n]; number[j:n]} <-->
+   meta_prod{number[i:n]; number[j:n]}
+rewrite reduce_div : "div"{number[i:n]; number[j:n]} <-->
+   meta_quot{number[i:n]; number[j:n]}
+rewrite reduce_rem : "rem"{number[i:n]; number[j:n]} <-->
+   meta_rem{number[i:n]; number[j:n]}
+*)
+
+rewrite reduce_lt : "lt"{number[i:n]; number[j:n]} <-->
+   meta_lt{number[i:n]; number[j:n]}
+
+(*
+rewrite reduce_eq : (number[i:n] = number[j:n] in int) <-->
+   meta_eq{number[i:n]; number[j:n]}
+*)
 
 rule add_wf 'H :
    [wf] sequent [squash] { 'H >- 'a = 'a1 in int } -->
@@ -113,26 +150,19 @@ rule beq_int2prop 'H :
    [wf] sequent [squash] { 'H >- 'b IN int } -->
    sequent ['ext] { 'H >- 'a = 'b in int }
 
+(* Derived from previous *)
+rule eq_int_assert_elim 'H 'J 'y :
+   [main]sequent['ext]{ 'H; x:"assert"{beq_int{'a;'b}}; 'J[it];
+                            y: 'a = 'b in int >- 'C[it]} -->
+   [wf]sequent['ext]{ 'H; x:"assert"{beq_int{'a;'b}}; 'J[it] >- 'a IN int} -->
+   [wf]sequent['ext]{ 'H; x:"assert"{beq_int{'a;'b}}; 'J[it] >- 'b IN int} -->
+   sequent['ext]{ 'H; x:"assert"{beq_int{'a;'b}}; 'J['x] >- 'C['x]}
+
 rule beq_int_is_true 'H :
    sequent [squash] { 'H >- 'a = 'b in int } -->
    sequent ['ext] { 'H >- beq_int{'a; 'b} ~ btrue }
 
 topval beq_int_is_trueC: conv
-
-(* Derived from previous *)
-(*
-rule eq_int_assert_elim 'H 'J :
-   [main] sequent ['ext] { 'H; x: 'a = 'b in int; 'J >- 'C } -->
-   sequent ['ext] { 'H; y: 'a IN int; z: 'b IN int; 
-                        t: "assert"{beq_int{'a; 'b}}; 'J 
-                  >- 'C }
-*)
-rule eq_int_assert_elim 'H 'J 'y :
-   [main]sequent['ext]{ 'H; x:"assert"{beq_int{'a;'b}}; 'J['x];
-                            y: 'a = 'b in int >- 'C['x]} -->
-   [wf]sequent['ext]{ 'H; x:"assert"{beq_int{'a;'b}}; 'J['x] >- 'a IN int} -->
-   [wf]sequent['ext]{ 'H; x:"assert"{beq_int{'a;'b}}; 'J['x] >- 'b IN int} -->
-   sequent['ext]{ 'H; x:"assert"{beq_int{'a;'b}}; 'J['x] >- 'C['x]}
 
 (*
  Derived from previous rewrite
@@ -318,16 +348,31 @@ rule add_Id2 'H :
 
 topval add_Id2C: conv
 
+(*
 rule add_Functionality 'H :
-   [main] sequent ['ext] { 'H >- 'a = 'b in int } -->
+   [main] sequent ['ext] { 'H >- 'a ~ 'b } -->
+   [wf] sequent ['ext] { 'H >- 'a IN int } -->
+   [wf] sequent ['ext] { 'H >- 'b IN int } -->
    [wf] sequent ['ext] { 'H >- 'c IN int } -->
-   sequent ['ext] { 'H >- ('a +@ 'c) = ('b +@ 'c) in int }
+   sequent ['ext] { 'H >- ('a +@ 'c) ~ ('b +@ 'c) }
+*)
+rule add_Functionality 'H 'c :
+   [main] sequent ['ext] { 'H >- ('a +@ 'c) ~ ('b +@ 'c) } -->
+   [wf] sequent ['ext] { 'H >- 'a IN int } -->
+   [wf] sequent ['ext] { 'H >- 'b IN int } -->
+   [wf] sequent ['ext] { 'H >- 'c IN int } -->
+   sequent ['ext] { 'H >- 'a ~ 'b }
 
 rule uni_add_inverse 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    sequent ['ext] { 'H >- ( 'a +@ uni_minus{ 'a } ) ~ 0 }
 
 topval uni_add_inverseC: conv
+topval unfold_zeroC: term -> conv
+
+rule uni_add_inverse2 'H :
+   [wf] sequent [squash] { 'H >- 'c IN int } -->
+   sequent ['ext] { 'H >- 0 ~ ('c +@ uni_minus{ 'c }) }
 
 rule uni_add_Distrib 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->

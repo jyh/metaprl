@@ -11,21 +11,21 @@
  * OCaml, and more information about this system.
  *
  * Copyright (C) 1998 Jason Hickey, Cornell University
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- * 
+ *
  * Author: Jason Hickey
  * jyh@cs.cornell.edu
  *
@@ -120,9 +120,9 @@ prim independentPairFormation 'H :
  * H, A * B, u: A, v: B, J >- T ext t
  *)
 prim independentProductElimination 'H 'J 'z 'u 'v :
-   ('t : sequent ['ext] { 'H; z: 'A * 'B; u: 'A; v: 'B; 'J['u, 'v] >- 'T['u, 'v] }) -->
+   ('t['u; 'v] : sequent ['ext] { 'H; z: 'A * 'B; u: 'A; v: 'B; 'J['u, 'v] >- 'T['u, 'v] }) -->
    sequent ['ext] { 'H; z: 'A * 'B; 'J['z] >- 'T['z] } =
-   't
+   't[fst{'z}; snd{'z}]
 
 (*
  * H >- (a1, b1) = (a2, b2) in A * B
@@ -166,13 +166,10 @@ let d_concl_prod p =
  *)
 let d_hyp_prod i p =
    let z, _ = Sequent.nth_hyp p i in
-   let i', j = hyp_indices p i in
+   let j, k = hyp_indices p i in
    let u, v = maybe_new_vars2 p "u" "v" in
-   let tac = independentProductElimination i' j z u v in
-      if get_thinning_arg p then
-         (tac thenT thinT i) p
-      else
-         tac p
+   let tac = independentProductElimination j k z u v in
+      tac p
 
 (*
  * Join them.
@@ -211,6 +208,18 @@ let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (prod_term, eqc
 let prod_equal_term = << ('a1 * 'a2) = ('b1 * 'b2) in univ[@i:l] >>
 
 let d_resource = d_resource.resource_improve d_resource (prod_equal_term, d_wrap_eqcd eqcd_prodT)
+
+(*
+ * EQCD pair.
+ *)
+let eqcd_pairT p =
+   independentPairEquality (hyp_count_addr p) p
+
+let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (pair_term, eqcd_pairT)
+
+let pair_equal_term = << ('a1, 'b1) = ('a2, 'b2) in ('A1 * 'B1) >>
+
+let d_resource = d_resource.resource_improve d_resource (pair_equal_term, d_wrap_eqcd eqcd_pairT)
 
 (************************************************************************
  * TYPE INFERENCE                                                       *

@@ -11,21 +11,21 @@
  * OCaml, and more information about this system.
  *
  * Copyright (C) 1998 Jason Hickey, Cornell University
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- * 
+ *
  * Author: Jason Hickey
  * jyh@cs.cornell.edu
  *
@@ -218,6 +218,11 @@ rwthm indReduce ind('x; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]) =
  * by intFormation
  *)
 prim intFormation 'H : : sequent ['ext] { 'H >- univ[@i:l] } = int
+
+(*
+ * H >- int Type
+ *)
+prim intType 'H : : sequent ['ext] { 'H >- "type"{int} } = it
 
 (*
  * H >- Z = Z in Ui ext Ax
@@ -418,6 +423,16 @@ let d_intT i p =
          intElimination j k n m v z p
 
 let d_resource = d_resource.resource_improve d_resource (int_term, d_intT)
+
+let d_int_typeT i p =
+   if i = 0 then
+      intType (hyp_count_addr p) p
+   else
+      raise (RefineError ("d_int_type", StringError "no elimination form"))
+
+let int_type_term = << "type"{int} >>
+
+let d_resource = d_resource.resource_improve d_resource (int_type_term, d_int_typeT)
 
 (************************************************************************
  * EQCD TACTIC                                                          *

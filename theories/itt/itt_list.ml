@@ -11,21 +11,21 @@
  * OCaml, and more information about this system.
  *
  * Copyright (C) 1998 Jason Hickey, Cornell University
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- * 
+ *
  * Author: Jason Hickey
  * jyh@cs.cornell.edu
  *
@@ -90,17 +90,53 @@ primrw reduce_listindCons :
  ************************************************************************)
 
 prec prec_cons
+prec prec_list
 
-dform nil_df1 : nil = "[" "]"
-dform cons_df1 : parens :: "prec"[prec_cons] :: cons{'a; 'b} = slot{'a} `"::" slot{'b}
+declare search{'a; 'b}
+declare semicolons{'a; 'b}
+declare colons{'a; 'b}
 
-dform list_df1 : mode[prl] :: list{'a} = slot{'a} `"List"
-dform list_ind_df1 : mode[prl] :: list_ind{'e; 'base; h, t, f. 'step['h; 't; 'f]} =
-   pushm[1] pushm[3]
-   `"case " slot{'e} `" of" space
-      nil `" -> " slot{'base} space popm
-   `"|" pushm[0]
-      slot{'h} `"::" slot{'t} `"." slot{'f} `"->" slot{'step['h; 't; 'f]} popm popm
+(* Empty list *)
+dform nil_df : nil = `"[]"
+
+(* Search for nil entry *)
+dform cons_df : cons{'a; 'b} =
+   search{cons{'a; nil}; 'b}
+
+(* Keep searching down the list *)
+dform search_df1 : search{'a; cons{'b; 'c}} =
+   search{cons{'b; 'a}; 'c}
+
+(* Found a nil terminator: use bracket notation *)
+dform search_df2 : search{'a; nil} =
+   `"[" semicolons{'a} `"]"
+
+(* No nil terminator, so use :: notation *)
+dform search_df3 : search{'a; 'b} =
+   colons{'a} `"::" slot{'b}
+
+(* Reverse entries and separate with ; *)
+dform semicolons_df1 : semicolons{cons{'a; nil}} =
+   slot{'a}
+
+dform semicolons_df2 : semicolons{cons{'a; 'b}} =
+   semicolons{'b} `";" slot{'a}
+
+(* Reverse entries and separate with :: *)
+dform colons_df1 : colons{cons{'a; nil}} =
+   slot{'a}
+
+dform colons_df2 : colons{cons{'a; 'b}} =
+   colons{'b} `"::" slot{'a}
+
+dform list_df1 : mode[prl] :: parens :: "prec"[prec_list] :: list{'a} =
+   slot{'a} `" List"
+
+dform list_ind_df1 : mode[prl] :: parens :: "prec"[prec_list] :: list_ind{'e; 'base; h, t, f. 'step} =
+   szone pushm[1] pushm[3]
+   `"match " slot{'e} `" with" hspace
+   `"  [] ->" hspace slot{'base} popm hspace
+   `"| " pushm[0] slot{'h} `"::" slot{'t} `"." slot{'f} `" ->" hspace slot{'step} popm popm ezone
 
 (************************************************************************
  * RULES                                                                *
@@ -116,6 +152,16 @@ prim listFormation 'H :
    ('A : sequent ['ext] { 'H >- univ[@i:l] }) -->
    sequent ['ext] { 'H >- univ[@i:l] } =
    'A
+
+(*
+ * H >- list{A} Type
+ * by listType
+ * H >- A Type
+ *)
+prim listType 'H :
+   sequent [squash] { 'H >- "type"{'A} } -->
+   sequent ['ext] { 'H >- "type"{list{'A}} } =
+   it
 
 (*
  * H >- list(A) = list(B) in Ui
@@ -269,6 +315,16 @@ let d_listT i =
       d_hyp_list i
 
 let d_resource = d_resource.resource_improve d_resource (list_term, d_listT)
+
+let d_list_typeT i p =
+   if i = 0 then
+      listType (hyp_count_addr p) p
+   else
+      raise (RefineError ("d_list_typeT", StringError "no elimination form"))
+
+let list_type_term = << "type"{list{'A}} >>
+
+let d_resource = d_resource.resource_improve d_resource (list_type_term, d_list_typeT)
 
 (************************************************************************
  * EQCD TACTICS                                                         *

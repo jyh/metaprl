@@ -12,21 +12,21 @@
  * OCaml, and more information about this system.
  *
  * Copyright (C) 1998 Jason Hickey, Cornell University
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- * 
+ *
  * Author: Jason Hickey
  * jyh@cs.cornell.edu
  *)
@@ -112,14 +112,6 @@ prim rewriteConclCut 'H 'T1 :
    sequent ['ext] { 'H >- "rewrite"{'T1; 'T2} } -->
    sequent ['ext] { 'H >- 'T2 } =
    't
-
-(*
-prim rewriteContextCut 'H 'J (lambda{v. 'T['v]}) :
-   ('t : "sequent"{'ext; ."context"[H:v]{'T["concl"{'C; ."concl"}]}}) -->
-   "sequent"{'ext; ."context"[H:v]{."concl"{."rewrite"{.'T[rewrite_just]; ."context"[J:v]{rewrite_just}}; concl}}} -->
-   "sequent"{'ext; ."context"[H:v]{."context"[J:v]{."concl"{'C; ."concl"}}}} =
-   't
-*)
 
 (************************************************************************
  * IMPLEMENTATION                                                       *
@@ -374,26 +366,46 @@ let rwSeqAxiomT p =
 let rec apply i rel addr conv p =
    match conv with
       Rewrite rw ->
+         if !debug_rewrite then
+            eprintf "Rewrite_type.apply: Rewrite%t" eflush;
          Tactic_type.tactic_of_rewrite (rwaddr addr rw) p
     | CondRewrite crw ->
+         if !debug_rewrite then
+            eprintf "Rewrite_type.apply: CondRewrite%t" eflush;
          Tactic_type.tactic_of_cond_rewrite (crwaddr addr crw) p
     | Compose clist ->
+         if !debug_rewrite then
+            eprintf "Rewrite_type.apply: Compose%t" eflush;
          composeT i rel addr (Flist.tree_of_list clist) p
     | Choose clist ->
+         if !debug_rewrite then
+            eprintf "Rewrite_type.apply: Choose%t" eflush;
          chooseT i rel addr (Flist.tree_of_list clist) p
     | Address (addr', conv) ->
          let rel = compose_address rel addr' in
          let addr = compose_address addr addr' in
+            if !debug_rewrite then
+               eprintf "Rewrite_type.apply: Address %s%t" (string_of_address addr') eflush;
             apply i rel addr conv p
     | Identity ->
+         if !debug_rewrite then
+            eprintf "Rewrite_type.apply: Identity%t" eflush;
          idT p
     | Fun f ->
+         if !debug_rewrite then
+            eprintf "Rewrite_type.apply: Fun%t" eflush;
          apply i rel addr (f (p, addr)) p
     | Higher conv ->
+         if !debug_rewrite then
+            eprintf "Rewrite_type.apply: Higher%t" eflush;
          apply i rel addr (higherLC conv) p
     | Fold (t, conv) ->
+         if !debug_rewrite then
+            eprintf "Rewrite_type.apply: Fold%t" eflush;
          (cutT i rel t thenLT [idT; solveCutT i rel conv]) p
     | Cut t ->
+         if !debug_rewrite then
+            eprintf "Rewrite_type.apply: Cut%t" eflush;
          cutT i rel t p
 
 and composeT i rel addr tree p =
@@ -426,6 +438,7 @@ and solveCutT i rel conv p =
  * Apply the rewrite.
  *)
 let rw conv i p =
+   eprintf "Rewrite start%t" eflush;
    let addr = Sequent.clause_addr p i in
    let x = apply i (make_address []) addr conv p in
       if !debug_rewrite then

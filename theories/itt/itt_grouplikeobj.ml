@@ -200,9 +200,8 @@ doc <:doc<
   
    @end[doc]
 >>
-interactive semigrp_is_grpoid :
-   sequent { <H> >- 'h in semigroup[i:l] } -->
-   sequent { <H> >- 'h in groupoid[i:l] }
+interactive semigrp_subtype_grpoid :
+   sequent { <H> >- semigroup[i:l] subtype groupoid[i:l] }
 
 (************************************************************************
  * MONOID                                                               *
@@ -299,9 +298,8 @@ doc <:doc<
   
    @end[doc]
 >>
-interactive monoid_is_semigrp :
-   sequent { <H> >- 'g in monoid[i:l] } -->
-   sequent { <H> >- 'g in semigroup[i:l] }
+interactive monoid_subtype_semigrp :
+   sequent { <H> >- monoid[i:l] subtype semigroup[i:l] }
 
 (************************************************************************
  * BINARY OPERATION IS COMMUTATIVE                                      *
@@ -392,13 +390,11 @@ doc <:doc<
   
    @end[doc]
 >>
-interactive csemigrp_is_semigrp :
-   sequent { <H> >- 'h in csemigroup[i:l] } -->
-   sequent { <H> >- 'h in semigroup[i:l] }
+interactive csemigrp_subtype_semigrp :
+   sequent { <H> >- csemigroup[i:l] subtype semigroup[i:l] }
 
-interactive cmonoid_is_monoid :
-   sequent { <H> >- 'g in cmonoid[i:l] } -->
-   sequent { <H> >- 'g in monoid[i:l] }
+interactive cmonoid_subtype_monoid :
+   sequent { <H> >- cmonoid[i:l] subtype monoid[i:l] }
 
 (************************************************************************
  * SUBSTRUCTURE                                                         *

@@ -217,15 +217,32 @@ interactive group_assoc {| intro [AutoMustComplete; intro_typeinf <<'G>>] |} gro
    sequent { <H> >- 'c in 'G^car } -->
    sequent { <H> >- ('a *['G] 'b) *['G] 'c = 'a *['G] ('b *['G] 'c) in 'G^car }
 
+interactive group_assoc2 {| intro [AutoMustComplete; intro_typeinf <<'G>>] |} group[i:l] :
+   sequent { <H> >- 'G in group[i:l] } -->
+   sequent { <H> >- 'a in 'G^car } -->
+   sequent { <H> >- 'b in 'G^car } -->
+   sequent { <H> >- 'c in 'G^car } -->
+   sequent { <H> >- 'a *['G] ('b *['G] 'c) = ('a *['G] 'b) *['G] 'c in 'G^car }
+
 interactive group_left_id {| intro [AutoMustComplete; intro_typeinf <<'G>>] |} group[i:l] :
    sequent { <H> >- 'G in group[i:l] } -->
    sequent { <H> >- 'a in 'G^car } -->
    sequent { <H> >- 'G^"1" *['G] 'a = 'a in 'G^car }
 
+interactive group_left_id2 {| intro [AutoMustComplete; intro_typeinf <<'G>>] |} group[i:l] :
+   sequent { <H> >- 'G in group[i:l] } -->
+   sequent { <H> >- 'a in 'G^car } -->
+   sequent { <H> >- 'a = 'G^"1" *['G] 'a in 'G^car }
+
 interactive group_left_inv {| intro [AutoMustComplete; intro_typeinf <<'G>>] |} group[i:l] :
    sequent { <H> >- 'G in group[i:l] } -->
    sequent { <H> >- 'a in 'G^car } -->
    sequent { <H> >- ('G^inv 'a) *['G] 'a = 'G^"1" in 'G^car }
+
+interactive group_left_inv2 {| intro [AutoMustComplete; intro_typeinf <<'G>>] |} group[i:l] :
+   sequent { <H> >- 'G in group[i:l] } -->
+   sequent { <H> >- 'a in 'G^car } -->
+   sequent { <H> >- 'G^"1" = ('G^inv 'a) *['G] 'a in 'G^car }
 
 interactive op_eq1 {| intro [AutoMustComplete; intro_typeinf <<'G>>] |} group[i:l] :
    sequent { <H> >- 'G in group[i:l] } -->
@@ -264,6 +281,17 @@ interactive right_id {| intro [intro_typeinf <<'G>>] |} group[i:l] :
    sequent { <H> >- 'G in group[i:l] } -->
    sequent { <H> >- 'a in 'G^car } -->
    sequent { <H> >- 'a *['G] 'G^"1" = 'a in 'G^car }
+doc docoff
+
+interactive right_inv2 {| intro [intro_typeinf <<'G>>] |} group[i:l] :
+   sequent { <H> >- 'G in group[i:l] } -->
+   sequent { <H> >- 'a in 'G^car } -->
+   sequent { <H> >- 'G^"1" = 'a *['G] ('G^inv 'a) in 'G^car }
+
+interactive right_id2 {| intro [intro_typeinf <<'G>>] |} group[i:l] :
+   sequent { <H> >- 'G in group[i:l] } -->
+   sequent { <H> >- 'a in 'G^car } -->
+   sequent { <H> >- 'a = 'a *['G] 'G^"1" in 'G^car }
 
 doc <:doc< 
    @begin[doc]
@@ -272,9 +300,8 @@ doc <:doc<
    A group is also a monoid.
    @end[doc]
 >>
-interactive group_is_monoid :
-   sequent { <H> >- 'G in group[i:l] } -->
-   sequent { <H> >- 'G in monoid[i:l] }
+interactive group_subtype_monoid :
+   sequent { <H> >- group[i:l] subtype monoid[i:l] }
 
 doc <:doc< 
    @begin[doc]
@@ -375,10 +402,20 @@ interactive inv_simplify {| intro [intro_typeinf <<'G>>] |} group[i:l] :
    sequent { <H> >- 'G^inv ('a *['G] 'b)  = ('G^inv 'b) *['G] ('G^inv 'a) in 'G^car }
 doc docoff
 
+interactive inv_simplify2 {| intro [intro_typeinf <<'G>>] |} group[i:l] :
+   sequent { <H> >- 'G in group[i:l] } -->
+   sequent { <H> >- 'a in 'G^car } -->
+   sequent { <H> >- 'b in 'G^car } -->
+   sequent { <H> >- ('G^inv 'b) *['G] ('G^inv 'a) = 'G^inv ('a *['G] 'b) in 'G^car }
+
 (* Inverse of id *)
 interactive inv_of_id {| intro [intro_typeinf <<'G>>] |} group[i:l] :
    sequent { <H> >- 'G in group[i:l] } -->
    sequent { <H> >- 'G^inv 'G^"1" = 'G^"1" in 'G^car }
+
+interactive inv_of_id2 {| intro [intro_typeinf <<'G>>] |} group[i:l] :
+   sequent { <H> >- 'G in group[i:l] } -->
+   sequent { <H> >- 'G^"1" = 'G^inv 'G^"1" in 'G^car }
 
 (* e * a = a * e *)
 interactive id_commut1 {| intro [intro_typeinf <<'G>>] |} group[i:l] :
@@ -474,9 +511,8 @@ doc <:doc<
   
    @end[doc]
 >>
-interactive abelg_is_group :
-   sequent { <H> >- 'G in abelg[i:l] } -->
-   sequent { <H> >- 'G in group[i:l] }
+interactive abelg_subtype_group :
+   sequent { <H> >- abelg[i:l] subtype group[i:l] }
 
 (************************************************************************
  * SUBGROUP                                                             *

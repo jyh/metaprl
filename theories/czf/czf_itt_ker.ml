@@ -1,10 +1,8 @@
 (*!
- * @spelling{ker}
- *
  * @begin[doc]
  * @theory[Czf_itt_ker]
  *
- * The @tt{Czf_itt_ker} module defines the kernel proposition
+ * The @tt[Czf_itt_ker] module defines the kernel proposition
  * $@ker{x; h; g1; g2; f[x]}$, in which $f$ is a homomorphism of
  * $g1$ into $g2$, i.e., $@hom{x; g1; g2; f}$, and $h$ is a
  * group formed by the elements of $g1$ that are mapped into
@@ -89,7 +87,7 @@ declare ker{'h; 'g1; 'g2; x. 'f['x]}
 (*!
  * @begin[doc]
  * @rewrites
- * The @tt{ker} judgment requires that $@hom{x; g1; g2; f[x]}$
+ * The @tt[ker] judgment requires that $@hom{x; g1; g2; f[x]}$
  * and $h$ be a group which has the same binary operation as
  * $g1$ and the elements of whose carrier are all mapped into
  * the identity of $g2$.
@@ -282,9 +280,9 @@ interactive ker_normalSubg (*{| elim [] |}*) 'H 'J :
  *
  * @begin[description]
  * @item{@tactic[kerSubgT], @tactic[kerLcosetT], @tactic[kerRcosetT], @tactic[kerNormalSubgT];
- *    The four @tt{ker} tactics apply the theorems for the
- *    @hrefterm[ker] judgment. The @tt{kerSubgT} applies the
- *    @hrefrule[ker_subgroup_elim] rule, the @tt{kerLcosetT}
+ *    The four @tt[ker] tactics apply the theorems for the
+ *    @hrefterm[ker] judgment. The @tt[kerSubgT] applies the
+ *    @hrefrule[ker_subgroup_elim] rule, the @tt[kerLcosetT]
  *    tactic applies the @hrefrule[ker_lcoset2] rule, the
  *    @tt[kerRcosetT] tactic applies the @hrefrule[ker_rcoset2]
  *    rule, and the @tt[kerNormalSubgT] tactic applies the

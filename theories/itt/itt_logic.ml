@@ -295,8 +295,8 @@ interactive and_squash_elim {| elim [] |} 'H 'J 'y 'z :
  * a type and one of $A$ or $B$ is true.  The introduction
  * rules use the @tt{SelectOption} to allow application with
  * the @hreftactic[selT] tactical.  The @tt{selT 1 (dT 0)} tactic applies
- * the @misspelled{@tt{or_intro_left}} rule, and @tt{selT 2 (dT 0)} applies the
- * @misspelled{@tt{or_intro_right}} rule.  The elimination rule performs
+ * the @hrefrule[or_intro_left] rule, and @tt{selT 2 (dT 0)} applies the
+ * @hrefrule[or_intro_right] rule.  The elimination rule performs
  * a case analysis on the disjunctive assumption, producing
  * a case for the left proof of $A$, and another for the
  * right proof of $B$.

@@ -405,7 +405,7 @@ let resource elim += [
 
 
 (*** Orthogonality ***)
-(*! @thysubsection{Ortogonality} *)
+(*! @thysubsection{Orthogonality} *)
 
 interactive functionOrtDinter {| intro[] |} 'H 'b :
    [wf] sequent[squash]{'H >- "type"{disect{'A;a.'B['a]}} } -->

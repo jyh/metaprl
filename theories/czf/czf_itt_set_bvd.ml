@@ -1,5 +1,5 @@
 (*!
- * @spelling{set_bvd}
+ * @spelling{set_bvd Xin}
  *
  * @begin[doc]
  * @theory[Czf_itt_set_bvd]
@@ -135,7 +135,7 @@ interactive set_bvd_isset {| intro [] |} 'H :
  *
  * A set $y$ is a member of $@setbvd{x; s; a[x]}$
  * if the set builder is well-formed; if $a[x]$ is
- * functionalon any set argument $x$; and if
+ * functional on any set argument $x$; and if
  * $@dexists{z; s; @eq{y; a[z]}}$.
  * @end[doc]
  *)

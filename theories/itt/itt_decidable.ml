@@ -114,7 +114,7 @@ let dest_decidable_term = dest_dep0_term decidable_opname
  * @tactics
  *
  * The @tactic[decideT] tactic applies the @hrefrule[assert_decidable]
- * on a specific proposition $P$, then tries to eiminate the first subgoal.
+ * on a specific proposition $P$, then tries to eliminate the first subgoal.
  *
  * $$
  * @rulebox{decideT; P;

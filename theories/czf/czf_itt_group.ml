@@ -1,5 +1,5 @@
 (*!
- * @spelling{group car op id inv}
+ * @spelling{groupCancelLeftT groupCancelRightT uniqueInvLeftT uniqueInvRightT}
  *
  * @begin[doc]
  * @theory[Czf_itt_group]
@@ -121,7 +121,7 @@ dform inv_df : parens :: except_mode[src] :: inv{'g; 'a} =
  *
  * @thysubsection{Well-formedness}
  *
- * The @tt{group}, @tt{car}, @tt{op}, @tt{inv}, and @tt{id}
+ * The @tt[group], @tt[car], @tt[op], @tt[inv], and @tt[id]
  * are well-formed if the group argument is a label and the
  * set argument is a set (if there is any).
  * @end[doc]
@@ -153,10 +153,10 @@ interactive inv_isset {| intro[] |} 'H :
  * @begin[doc]
  * @thysubsection{Binary operation}
  *
- * The @tt{op} is a @emph{binary operation} on @tt{car}, which means:
+ * Every @tt[op] is a @emph{binary operation} on @tt[car], which means:
  * first, if $a$ and $b$ are in $@car{g}$, then $@op{g; a; b}$
  * is @emph{again} in $@car{g}$; second, it assigns each ordered
- * pair exactly one element, i.e., @tt{op} is functional in its
+ * pair exactly one element, i.e., @tt[op] is functional in its
  * set arguments.
  * @end[doc]
  *)
@@ -179,7 +179,7 @@ interactive op_fun {| intro[] |} 'H :
  * @begin[doc]
  * @thysubsection{Associativity}
  *
- * The @tt{op} is associative.
+ * Every @tt[op] is associative.
  * @end[doc]
  *)
 interactive op_assoc1 {| intro[] |} 'H :
@@ -217,7 +217,7 @@ interactive id_eq1 {| intro[] |} 'H :
  * @begin[doc]
  * @thysubsection{Inverse}
  *
- * The @tt{inv} is a @emph{unary operation} on @tt{car} such that
+ * Every @tt[inv] is a @emph{unary operation} on @tt[car] such that
  * $@eq{@op{g; @inv{g; s}; s}; @id{g}}$ for any $a @in @car{g}$.
  * @end[doc]
  *)

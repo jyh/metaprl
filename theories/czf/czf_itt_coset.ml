@@ -1,10 +1,8 @@
 (*!
- * @spelling{lcoset rcoset}
- *
  * @begin[doc]
  * @theory[Czf_itt_coset]
  *
- * The @tt{Czf_itt_coset} module defines the @emph{left coset}
+ * The @tt[Czf_itt_coset] module defines the @emph{left coset}
  * and the @emph{right coset}. If $h$ is a subgroup of $g$ and
  * $@mem{a; @car{g}}$, then the left coset containing $a$ is
  * ${a * x | x @in @car{h}}$ and the right coset containing $a$
@@ -92,7 +90,7 @@ declare rcoset{'h; 'g; 'a}
  * @begin[doc]
  * @rewrites
  *
- * The @tt{lcoset} and @tt{rcoset} terms are defined by separation.
+ * The @hrefterm[lcoset] and @hrefterm[rcoset] terms are defined by separation.
  * @end[doc]
  *)
 prim_rw unfold_lcoset : lcoset{'h; 'g; 'a} <-->
@@ -148,7 +146,7 @@ interactive rcoset_isset {| intro [] |} 'H :
  * $@mem{x; @car{g}}$, $@subgroup{h; g}$, and there
  * exists a set $y$ such that $y$ is a member of
  * $@car{h}$ and $x$ is equal to $@op{g; a; y}$
- * in $@car{g}$. The case for @tt{rcoset} is similar.
+ * in $@car{g}$. The case for @tt[rcoset] is similar.
  * @end[doc]
  *)
 interactive lcoset_intro {| intro [] |} 'H 'z :
@@ -184,7 +182,7 @@ interactive rcoset_intro {| intro [] |} 'H 'z :
  * The elimination form for the left coset
  * $@mem{y; @lcoset{h; g; a}}$ implies $@mem{y; @car{g}}$ and
  * also produces a witness $@mem{z; @car{h}}$ for which
- * $@eq{y; @op{g; a; z}}$. The case for @tt{rcoset} is similar.
+ * $@eq{y; @op{g; a; z}}$. The case for @tt[rcoset] is similar.
  * @end[doc]
  *)
 interactive lcoset_elim {| elim [] |} 'H 'J :

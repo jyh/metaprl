@@ -29,9 +29,9 @@
  *
  * Dependent intersection is used to represent @emph{dependent} records.
  * For example the record
- * $@record{{@tt{x}@colon A;@tt{y}@colon B[@tt{x}]}}$
+ * $@record{{@tt[x]@colon A;@tt[y]@colon B[@tt[x]]}}$
  * can be defined as
- * $@bisect{x@colon @record{@tt{x}@colon A};@record{B[x.@tt{x}]}}$
+ * $@bisect{x@colon @record{@tt[x]@colon A};@record{B[x.@tt[x]]}}$
  *
  * Sets also can be defined as dependent intersection
  * $@set{x;A;P[x]} = @bisect{x@colon A;squash(P[x])}$
@@ -251,7 +251,7 @@ let disectCaseEqualityT t p =
    let tac = disectMemberCaseEquality2 i t orelseT disectMemberCaseEquality1 i t in
       tac p
 
-(*! docoff *)
+(*! @docoff *)
 (* disectElimination_eq is derived from disectMemberCaseEquality1/2
    (with the help of dintersectionTypeElimination).
    Therefore we can state disectMemberCaseEquality1/2 as primitive.

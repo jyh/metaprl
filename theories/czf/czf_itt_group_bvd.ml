@@ -9,7 +9,7 @@
  * shares the same operation, but has a different carrier which must
  * be a subset of the underlying set of $g_2$. The same operation
  * requires that $a *_1 b$ is equal to $a *_2 b$ for any $a$ and $b$
- * in $g_1$. Examples of use of @tt{groupbvd} are subgroups, kernels,
+ * in $g_1$. Examples of use of @tt[group_bvd] are subgroups, kernels,
  * cyclic subgroups, etc.
  * @end[doc]
  *

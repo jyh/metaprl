@@ -244,10 +244,10 @@ dform prl_comment_df1 : except_mode[tex] :: prl_comment{'t} =
  * COMMENT ITEMS                                                        *
  ************************************************************************)
 
-(*
+(*!
  * @begin[doc]
  * @terms
- * The @theory[name:s] term produces a section header for a theory.
+ * The @code{@theory[name:s]} term produces a section header for a theory.
  * @end[doc]
  *)
 declare "theory"[name:s]{'t}
@@ -266,9 +266,9 @@ dform theory_df2 : except_mode[tex] :: "theory"[name:s]{'t} =
 dform theory_df2 : except_mode[tex] :: "theory"[name:s] =
    com_hbreak bf[name:s] com_hbreak com_hbreak
 
-(*
+(*!
  * @begin[doc]
- * The @thysection{'t} term produces a section header.
+ * The @code{@thysection} term produces a section header.
  * @end[doc]
  *)
 declare thysection{'t}
@@ -280,9 +280,9 @@ dform thysection_df1 : mode[tex] :: thysection{'t} =
 dform thysection_df2 : except_mode[tex] :: thysection{'t} =
    com_hbreak bf_begin 't bf_end com_hbreak com_hbreak
 
-(*
+(*!
  * @begin[doc]
- * The @thysubsection{'t} term prduces a subsection header.
+ * The @code{@thysubsection} term produces a subsection header.
  * @end[doc]
  *)
 declare thysubsection{'t}
@@ -843,7 +843,6 @@ dform math_slot_df1 : math_slot[tag:s]{'t} =
  *)
 declare math_mathop{'t}
 declare math_mathop[text:s]
-declare math_mathrel{'t}
 declare math_mathrel[text:s]
 declare math_bb{'t}
 declare math_bb[text:s]
@@ -868,14 +867,8 @@ dform math_mathop_df2 : except_mode[tex] :: math_mathop{'t} =
 dform math_mathop_df2 : except_mode[tex] :: math_mathop[text:s] =
    bf[text:s]
 
-dform math_mathrel_df1 : mode[tex] :: math_mathrel{'t} =
-   izone `"\\mathrel{\\bf " ezone slot{'t} izone `"}" ezone
-
 dform math_mathrel_df1 : mode[tex] :: math_mathrel[text:s] =
    izone `"\\mathrel{\\bf " ezone slot[text:s] izone `"}" ezone
-
-dform math_mathrel_df2 : except_mode[tex] :: math_mathrel{'t} =
-   bf{'t}
 
 dform math_mathrel_df2 : except_mode[tex] :: math_mathrel[text:s] =
    bf[text:s]

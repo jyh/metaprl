@@ -198,7 +198,7 @@ declare math_i{'t}
 declare math_i[text:s]
 declare math_emph{'t}
 declare math_mathop{'t}
-declare math_mathrel{'t}
+declare math_mathrel[text:s]
 
 (*
  * Math symbols.

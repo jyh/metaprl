@@ -271,7 +271,7 @@ prim intersectionElimination {| elim [] |} 'H 'J 'a 'z :
    sequent ['ext] { 'H; x: isect y: 'A. 'B['y]; 'J['x] >- 'T['x] } =
    't['x; 'x]
 
-(*! docoff *)
+(*! @docoff *)
 
 interactive intersectionElimination_eq 'H 'J 'v 'a bind{x,HACK.bind{z.'T['x;'z;'HACK]}}:
 (* HACK: see bug 4.11 *)

@@ -1,14 +1,16 @@
 (*!
+ * @spelling{MC MCC Mojave}
+ *
  * @begin[doc]
  * @theory[Mp_mc_theory]
  *
- * The MC theory (all it's modules have the ``Mp_mc_'' prefix) attempts
+ * The MC theory (all it's modules have the ``@tt[Mp_mc_]'' prefix) attempts
  * to formalize the Mojave Compiler Collection's (MCC) functional intermediate
  * representation (FIR).
  *
  * (Documentation incomplete.  I should put the theory overview here.)
  *
- * The @tt{Mp_mc_theory} module itself is provided as a convinience.
+ * The @tt[Mp_mc_theory] module itself is provided as a convenience.
  * It simply includes all the modules that make up the MC theory.
  * @end[doc]
  *

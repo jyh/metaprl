@@ -27,7 +27,7 @@
  * @tt{pair} term used in the definition is unordered, which makes sense
  * since an equivalence relation is symmetric. Second, it is given as an
  * assumption that $@equiv{s; r; a; a}$ is true, which corresponds the
- * reflexitivity of an equivalence relation.
+ * reflexivity of an equivalence relation.
  *
  * The $@equiv{s; r}$ judgment decides whether $r$ is an equivalence 
  * relation on $s$ by judging whether all the three properties are

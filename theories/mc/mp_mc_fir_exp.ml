@@ -2,7 +2,7 @@
  * @begin[doc]
  * @theory[Mp_mc_fir_exp]
  *
- * The @tt{Mp_mc_fir_exp} module defines terms to represent
+ * The @tt[Mp_mc_fir_exp] module defines terms to represent
  * FIR expressions.
  * @end[doc]
  *
@@ -59,7 +59,7 @@ open Mp_mc_base
  * @thysubsection{Unary operations}
  *
  * These are the unary operations in the FIR.  They are used in
- * @hrefterm[letUnop] as the @tt{unop} subterm.  Each of these
+ * @hrefterm[letUnop] as the @tt[unop] subterm.  Each of these
  * operators encodes enough information about the type
  * of its operand, and in some case, the type of the resulting value.
  * (For some operators, this type information is implicit and does not
@@ -67,7 +67,7 @@ open Mp_mc_base
  * operand is the same as the type of its resulting value.
  * The notable exceptions are the conversion operators.
  *
- * @tt{idOp} is a polymorphic identity operator.  It leaves
+ * @tt[idOp] is a polymorphic identity operator.  It leaves
  * its operand unchanged.
  * @end[doc]
  *)
@@ -77,7 +77,7 @@ declare idOp
 (*!
  * @begin[doc]
  *
- * @tt{uminusIntOp} is unary arithmetic negation and @tt{notIntOp}
+ * @tt[uminusIntOp] is unary arithmetic negation and @tt[notIntOp]
  * is bitwise negation.  They operate of values of type @hrefterm[tyInt].
  * @end[doc]
  *)
@@ -97,7 +97,7 @@ declare rawBitFieldOp{ 'int_precision; 'int_signed; 'int1; 'int2 }
 (*!
  * @begin[doc]
  *
- * @tt{uminusRawIntOp} and @tt{notRawIntOp} are analogous to
+ * @tt[uminusRawIntOp] and @tt[notRawIntOp] are analogous to
  * @hrefterm[uminusIntOp] and @hrefterm[notIntOp], except they
  * operate on values of type @hrefterm[tyRawInt].
  * @end[doc]
@@ -124,7 +124,7 @@ declare sqrtOp{ 'float_precision }
 (*!
  * @begin[doc]
  *
- * @tt{intOfFloatOp} specifies the conversion of a value of type
+ * @tt[intOfFloatOp] specifies the conversion of a value of type
  * @hrefterm[tyFloat] to a value of type @hrefterm[tyInt]. Note
  * that the precision of the resulting float value needs to be specified.
  * @end[doc]
@@ -185,7 +185,7 @@ declare pointerOfBlockOp{ 'sub_block }
  * @thysubsection{Binary operations}
  *
  * These are the binary operations in the FIR.  They are used in
- * @hrefterm[letBinop] as the @tt{binop} subterm.  Each of these
+ * @hrefterm[letBinop] as the @tt[binop] subterm.  Each of these
  * operators encodes enough information about the type
  * of its operands, and in some case, the type of the resulting value.
  * (For some operators, this type information is implicit and does not
@@ -203,12 +203,12 @@ declare xorEnumOp{ 'int }
 (*!
  * @begin[doc]
  *
- * The following set of @tt{IntOp}s operate on values of type
+ * The following set of @tt[IntOp]s operate on values of type
  * @hrefterm[tyInt].  They encode basic arithmetic and boolean
  * comparison operations.  In order, the arithmetic operations are:
- * addition, subtraction, multiplication, division, remainder (mod),
+ * addition, subtraction, multiplication, division, remainder (@misspelled{mod}),
  * logical shift left, logical shift right, arithmetic shift right,
- * bitwise and, bitwise or, bitwise xor, max (returns the greater
+ * bitwise and, bitwise or, bitwise @misspelled{xor}, max (returns the greater
  * of its operands), min (returns the lesser of its operands).
  * (Documentation incomplete.)
  * @end[doc]
@@ -239,7 +239,7 @@ declare cmpIntOp
 (*!
  * @begin[doc]
  *
- * The following set of @tt{RawIntOp}s operate on values of type
+ * The following set of @tt[RawIntOp]s operate on values of type
  * @hrefterm[tyRawInt]. They encode basic arithmetic and boolean
  * comparison operations.
  * (Documentation incomplete.)
@@ -271,7 +271,7 @@ declare cmpRawIntOp{ 'int_precision; 'int_signed }
 (*!
  * @begin[doc]
  *
- * The following set of @tt{FloatOp}s operate on values of type
+ * The following set of @tt[FloatOp]s operate on values of type
  * @hrefterm[tyFloat]. They encode basic arithmetic and boolean
  * comparison operations.
  * (Documentation incomplete.)

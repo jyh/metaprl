@@ -12,9 +12,9 @@
  * elimination reasoning.  The @hreftheory[Base_dtactic] defines a @emph{generic}
  * resource that can be used to add introduction and elimination reasoning.
  * In addition, it add resource @emph{annotations} that can be used in rule
- * definitions to add them automatically to the @tt{d} resource.
+ * definitions to add them automatically to the @tt[dT] resources.
  *
- * The @tt{d} resource is implemented as two resources.  The @resource[intro_resource]
+ * The @tt[dT] tactic uses two resources.  The @resource[intro_resource]
  * is used to collect introduction rules; and the @resource[elim_resource]
  * is used to collect elimination rules.  The components of both resources
  * take a term that describes the shape of the goals to which they apply,
@@ -55,7 +55,7 @@
  * @end[verbatim]
  * @end[center]
  *
- * The @tt{SelectOption} is used for rules that require a selection argument.
+ * The @tt[SelectOption] is used for rules that require a selection argument.
  * For instance, the disjunction introduction rule has two forms for the left
  * and right-hand forms.
  *
@@ -78,7 +78,7 @@
  * These options require @hreftactic[selT] arguments: the left rule is applied with
  * @tt{selT 1 (dT 0)} and the right rule is applied with @tt{selT 2 (dT 0)}.
  *
- * The @tt{IntroArgsOption} is used to @emph{infer} arguments to the rule.
+ * The @tt[IntroArgsOption] is used to @emph{infer} arguments to the rule.
  * The function argument takes the current goal and a subterm, and it provides
  * an argument list that can be used in the rule application.  The @code{term option}
  * entry describes the subterm to be used for the second function argument.
@@ -99,14 +99,14 @@
  * @end[verbatim]
  * @end[center]
  *
- * The @tt{ElimArgsOption} provides arguments in the same way as the
- * @tt{IntroArgsOption}.  The @tt{ThinOption} is an argument that provides an
+ * The @tt[ElimArgsOption] provides arguments in the same way as the
+ * @tt[IntroArgsOption].  The @tt[ThinOption] is an argument that provides an
  * optional tactic to ``thin'' the hypothesis after application of the
  * elimination rule.
  *
  * The @hreftactic[dT] resources are implemented as tables that store
  * the term descriptions and tactics for ``decomposition''
- * reasoning.  The @tt{dT} tactic select the most appropriate
+ * reasoning.  The @hreftactic[dT] tactic select the most appropriate
  * rule for a given goal and applies it.  The @tt{(dT 0)} tactic
  * is added to the @hrefresource[auto_resource] by default.
  * @end[doc]

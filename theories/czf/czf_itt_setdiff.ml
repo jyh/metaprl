@@ -1,9 +1,17 @@
+(*!
+ * @begin[doc]
+ * @theory[Czf_itt_setdiff]
+ * @parents
+ * @end[doc]
+ *)
 extends Czf_itt_set
 extends Czf_itt_member
 extends Czf_itt_empty
 extends Czf_itt_nat
 extends Czf_itt_sep
 extends Itt_bool
+
+(*! @docoff *)
 
 open Printf
 open Mp_debug
@@ -34,14 +42,14 @@ open Itt_logic
 let _ =
    show_loading "Loading Czf_itt_setdiff%t"
 
-
+(*! @doc{@terms} *)
 declare setdiff{'s1; 's2}
 
 (*!
  * @begin[doc]
  * @rewrites
  *
- * The setdiff is defined using restricted separation.
+ * @tt[setdiff] is defined using restricted separation.
  * @end[doc]
  *)
 prim_rw unfold_setdiff : setdiff{'s1; 's2} <-->
@@ -54,7 +62,7 @@ let fold_setdiff = makeFoldC << setdiff{'s1; 's2} >> unfold_setdiff
 
 prec prec_setdiff
 
-dform setdiff_df : parens :: "prec"[prec_setdiff] :: setdiff{'s1; 's2} =
+dform setdiff_df : except_mode[src] :: parens :: "prec"[prec_setdiff] :: setdiff{'s1; 's2} =
    slot{'s1} `" - " slot{'s2}
 
 (*!
@@ -62,7 +70,7 @@ dform setdiff_df : parens :: "prec"[prec_setdiff] :: setdiff{'s1; 's2} =
  * @rules
  * @thysubsection{Well-formedness}
  *
- * The setdiff well-formed if their arguments are both sets.
+ * A @tt[setdiff] is well-formed if its arguments are both sets.
  * @end[doc]
  *)
 interactive setdiff_isset {| intro [] |} 'H :
@@ -74,7 +82,7 @@ interactive setdiff_isset {| intro [] |} 'H :
  * @begin[doc]
  * @thysubsection{Introduction}
  *
- * A set $x$ is in the difference set $setdiff{s1; s2}$ if $x$ is a
+ * A set $x$ is in the difference set @setdiff{s1; s2} if $x$ is a
  * member of $s_1$ and $x$ is not a member of $s_2$.
  * @end[doc]
  *)
@@ -90,7 +98,7 @@ interactive setdiff_intro {| intro [] |} 'H 'x :
  * @begin[doc]
  * @thysubsection{Elimination}
  *
- * The elimination form of $setdiff{s_1; s_2}$ produces a proof that
+ * The elimination form of @setdiff{s_1; s_2} produces a proof that
  * $@mem{x; s_2}$ is wrong for which $@mem{x; s_1}$.
  * @end[doc]
  *)
@@ -105,7 +113,7 @@ interactive setdiff_elim {| elim [] |} 'H 'J :
  * @begin[doc]
  * @thysubsection{Functionality}
  *
- * The setdiff type is functional in both set arguments.
+ * A @tt[setdiff] type is functional in both set arguments.
  * @end[doc]
  *)
 interactive setdiff_fun {| intro [] |} 'H :

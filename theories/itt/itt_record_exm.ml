@@ -243,7 +243,7 @@ interactive length_A {|intro[] |} 'H :
 
 (*!
  * @begin[doc]
- * Now, using the @tt{reduce_length} and @tt{planeElim} rule, we can prove that
+ * Now, using the @tt{reduce_length} and @hrefrule[planeElim] rule, we can prove that
  * @end[doc]
  *)
 

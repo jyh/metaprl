@@ -1,13 +1,13 @@
 (*!
  * @begin[spelling]
- * Conversionals addr addrC allSubC thenC conv
+ * Conversionals addr addrC allSubC thenC conv convs
  * cutC dprod failC firstC foldC higherC idC inl
  * inr Itt lowerC orelseC reduceC reduceDecideInl reduceSpread repeatC
  * rw rwc rwAll rwcAll rwAllAll
  * rwa rwca rwaAll rwcaAll rwaAllAll
- * rwh rwch rwhAll rwchAll rwhAllAl
+ * rwh rwch rwhAll rwchAll rwhAllAll
  * someSubC sweepDnC sweepUpC tryC
- * whileProgressC  untilFailC
+ * whileProgressC  untilFailC applyAllC
  * @end[spelling]
  *
  * @begin[doc]
@@ -133,7 +133,7 @@ let debug_reduce =
  * @item{@conv[rwc];
  * Conversions may be applied also to assumptions.
  * The (@tt{rwc} @it{conv} $a$ $c$) @emph{tactic} applies the
- * conversion @it{conv} to the $c$-th clause in the $a$-th assumtion.}
+ * conversion @it{conv} to the $c$-th clause in the $a$-th assumption.}
  *
  * @item{@conv[rwAll] @conv[rwcAll] @conv[rwAllAll];
  * The (@tt{rwAll} @it{conv}) @emph{tactic} applies the
@@ -296,7 +296,7 @@ let repeatForC = Tactic_type.Conversionals.repeatForC
  * @item{@conv[rwa], @conv[rwca], @conv[rwaAll], @conv[rwcaAll], @conv[rwaAllAll];
  * The @tt{rwa},  @tt{rwca}, @tt{rwaAll}, @tt{rwcaAll},
  * @tt{rwaAllAll} functions takes a list of conversions and
- * apply the @tt{applyAllC} conversion. For example, the tactic (@tt{rwh $convs$ $i$})
+ * apply the @tt{applyAllC} conversion. For example, the tactic (@tt{rwa $convs$ $i$})
  * is equivalent to (@tt{rw (applyAllC $convs$) $i$}).}
  *
  * @end[description]

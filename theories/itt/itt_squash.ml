@@ -1,8 +1,9 @@
 (*!
  * @begin[spelling]
- * squashT unhiding unsquashed unsquashEqual unsquashGoalEqual SelectOption
+ * squashT unsquashed unsquashEqual unsquashGoalEqual SelectOption
  * autoT squashElim squashFormation squashFromAny squashStable unsquashEqualWeak
- * SqStable SqUnsquash SqUnsquashGoal tac
+ * SqStable SqUnsquash SqUnsquashGoal tac AutoMustComplete sqsquashT unsquashT
+ * unsquash unsquashing
  * @end[spelling]
  *
  * @begin[doc]
@@ -252,7 +253,7 @@ interactive unsquashEqual 'H 'J :
    sequent [squash] { 'H; u: 'P; 'J[it] >- 'x[it] = 'y[it] in 'A[it] } -->
    sequent ['ext] { 'H; u: squash{'P}; 'J['u] >- 'x['u] = 'y['u] in 'A['u] }
 
-(*! docoff *)
+(*! @docoff *)
 interactive unsquashWWitness 'H 'J 't:
    sequent [squash] { 'H; u: 'P; 'J[it] >- 't IN 'A[it] } -->
    sequent ['ext] { 'H; u: squash{'P}; 'J['u] >- 'A['u] }

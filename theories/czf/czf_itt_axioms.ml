@@ -4,7 +4,7 @@
  * @begin[doc]
  * @theory[Czf_itt_axioms]
  *
- * The @tt{Czf_itt_axioms} defines the remaining axioms of
+ * The @tt[Czf_itt_axioms] defines the remaining axioms of
  * the set theory as axioms.  This includes the set induction
  * scheme, and the strong collection.
  * @end[doc]
@@ -44,9 +44,9 @@
  * @begin[doc]
  * @parents
  *
- * The @tt{Czf_itt_axiom} module includes the
+ * The @tt[Czf_itt_axiom] module includes the
  * entire logical part of the theory, as well as the
- * definition of the @tt{rel} (for use in the definition
+ * definition of the @hrefterm[rel] (for use in the definition
  * of the strong collection theorem).
  * @end[doc]
  *)
@@ -120,7 +120,7 @@ let setInduction i p =
  * formula is part of the construction.  If the set $s_1$ has canonical
  * for $s_1 = @collect{x; T; f[x]}$, the proof provides a witness
  * that inhabits the function space $T @rightarrow @set$.  The canonical
- * form of the proof is a @tt{lambda}-function $@lambda{x; s_x}$,
+ * form of the proof is a @tt[lambda]-function $@lambda{x; s_x}$,
  * which can be used to form the set collection $@collect{x; T; s_x}$.
  * @end[doc]
  *)

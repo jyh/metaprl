@@ -1,5 +1,5 @@
 (*!
- * @spelling{gt_bool le_bool ge_bool gt le ge nequal mul div rem}
+ * @spelling{gt_bool le_bool ge_bool gt le ge nequal}
  *
  * @begin[doc]
  * @theory[Itt_int_ext]

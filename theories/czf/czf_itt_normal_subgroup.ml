@@ -1,5 +1,5 @@
 (*!
- * @spelling{normal_subg abelNormalSubgT}
+ * @spelling{abelNormalSubgT}
  *
  * @begin[doc]
  * @theory[Czf_itt_normal_subgroup]
@@ -109,7 +109,7 @@ dform normal_subg_df : except_mode[src] :: normal_subg{'s; 'g} =
  * @rules
  * @thysubsection{Typehood}
  *
- * The @tt{normalsubg} judgment is well-formed if its
+ * The @tt[normal_subg] judgment is well-formed if its
  * arguments are labels.
  * @end[doc]
  *)

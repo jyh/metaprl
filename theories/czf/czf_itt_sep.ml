@@ -4,7 +4,7 @@
  * @begin[doc]
  * @theory[Czf_itt_sep]
  *
- * The @tt{Czf_itt_sep} module defines @emph{restricted separation}.
+ * The @tt[Czf_itt_sep] module defines @emph{restricted separation}.
  * Separation is defined as a set constructor $@sep{x; s; P[x]}$.
  * The term $s$ must be a set, and $P[x]$ must be a functional,
  * restricted proposition.  The elements of the separation are the

@@ -1,5 +1,5 @@
 (*!
- * @spelling{bool esquash esquashT unhidden}
+ * @spelling{bool esquash esquashT unhidden squashes}
  *
  * @begin[doc]
  * @theory[Itt_esquash]
@@ -8,7 +8,7 @@
  * allows us to ``squash'' (omit) the computational content
  * of a proposition. But in many cases in addition to squashing
  * the computational context we want to be able to squash the
- * intentional term structure as well.
+ * intensional term structure as well.
  *
  * The @tt{Itt_esquash} module defines a generic squash term
  * $@esquash{P}$.  The elements of the type are the trivial terms
@@ -72,7 +72,7 @@ open Itt_squash
  * @begin[doc]
  * @terms
  *
- * The @tt{esquash} operator @i{extentionally squashes} a proposition.
+ * The @tt{esquash} operator @i{extensionally squashes} a proposition.
  * @end[doc]
  *)
 declare esquash{'P}
@@ -145,7 +145,7 @@ prim esquash_elim {| elim [] |} 'H 'J :
 
 (*!
  * @begin[doc]
- * It can also be formulated as an intorduction rule.
+ * It can also be formulated as an introduction rule.
  * @end[doc]
  *)
 interactive esquash_mem {| intro [] |} 'H :

@@ -1,10 +1,10 @@
 (*!
- * @spelling{klein4 k0 k1 k2 k3}
+ * @spelling{klein}
  *
  * @begin[doc]
  * @theory[Czf_itt_kleingroup]
  *
- * The @tt{Czf_itt_kleingroup} module defines the klein 4-group, which
+ * The @tt[Czf_itt_kleingroup] module defines the klein 4-group, which
  * contains 4 elements $e$, $a$, $b$, $c$, and whose group table is:
  *
  * $$
@@ -182,7 +182,7 @@ dform k3_df : except_mode[src] :: k3 =
  * @rules
  * @thysubsection{Well-formedness}
  *
- * The @tt{klein4} is a label and @tt{k0}, @tt{k1}, @tt{k2}, @tt{k3}
+ * The @tt[klein4] is a label and @tt[k0], @tt[k1], @tt[k2], @tt[k3]
  * are all sets. These are axioms.
  * @end[doc]
  *)
@@ -256,7 +256,7 @@ interactive car_klein0_elim {| elim [] |} 'H 'J :
  * @begin[doc]
  * @thysubsection{Verification of the group axioms}
  *
- * The @tt{op} for @tt{klein4} is functional and is a mapping.
+ * The @tt[op] for @tt[klein4] is functional and is a mapping.
  * @end[doc]
  *)
 interactive klein4_op_fun {| intro[] |} 'H :
@@ -295,7 +295,7 @@ interactive klein4_op_eq2 {| intro[] |} 'H :
 (*!
  * @begin[doc]
  *
- * The @tt{op} for @tt{klein4} is associative.
+ * The @tt[op] for @tt[klein4] is associative.
  * @end[doc]
  *)
 interactive klein4_op_assoc1 {| intro[] |} 'H :

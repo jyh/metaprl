@@ -345,7 +345,7 @@ it evaluates the first branch.  Otherwise, it evaluates the second branch.
 In general, the compiler doesn't try to figure out the value of the
 test during type checking.  Instead, it requires that both branches of
 the conditional have the same type (so that value will have the same
-type no matter how the test turns out).  Since the expressions @tt{1}
+type no matter how the test turns out).  Since the expressions @tt[1]
 and @tt{1.3} have different types, the type checker generates an
 error.
 
@@ -362,7 +362,7 @@ File "y.ml", line 2, characters 3-4:
 This expression has type int but is here used with type unit
 @end[verbatim]
 
-In this case, the expression @tt{1} is flagged as a type error,
+In this case, the expression @tt[1] is flagged as a type error,
 because it does not have the same type as the omitted @tt{else}
 branch.
 

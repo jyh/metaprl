@@ -2,7 +2,7 @@
  * @begin[doc]
  * @theory[Mp_mc_const_elim]
  *
- * The @tt{Mp_mc_const_elim} module provides rewrites to perform
+ * The @tt[Mp_mc_const_elim] module provides rewrites to perform
  * constant elimination (folding) in FIR programs.
  * @end[doc]
  *

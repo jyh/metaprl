@@ -109,7 +109,7 @@ declare tree{'a; 'f}
 
 (*!
  * @begin[doc]
- * The @tt{tree_ind} term is the induction combinator, which
+ * The @tt[tree_ind] term is the induction combinator, which
  * provides computation over trees.
  * @end[doc]
  *)

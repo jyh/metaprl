@@ -6,7 +6,7 @@
  *
  * The @tt{Czf_itt_cyclic_group} module defines cyclic groups.
  * A group $g$ is @emph{cyclic} if there exists $a @in @car{g}$
- * such that for every $x @in @car{g}$ there is an interger $n$
+ * such that for every $x @in @car{g}$ there is an integer $n$
  * such that $@eq{x; a^n}$.
  * @end[doc]
  *

@@ -167,7 +167,7 @@ let debug_czf_set =
  *
  * The @tt{set} term defines the type of sets; the @tt{collect}
  * terms are the individual sets.  The @tt{isset} term is the
- * well-formedness judgment for the $@set$ type.  The @tt{set_ind} term
+ * well-formedness judgment for the $@set$ type.  The @tt[set_ind] term
  * is the induction combinator for computation over sets.  The
  * @i{s} argument represents the set; @i{T} is it's index type,
  * @i{f} is it's function value, and @i{g} is used to perform
@@ -199,7 +199,7 @@ prim_rw unfold_set_ind : set_ind{'s; x, f, g. 'b['x; 'f; 'g]} <-->
 
 (*!
  * @begin[doc]
- * The @tt{set_ind} term performs a pattern match;
+ * The @hrefterm[set_ind] term performs a pattern match;
  * the normal reduction sequence can be derived from the
  * computational behavior of the @hrefterm[tree_ind] term.
  * @end[doc]

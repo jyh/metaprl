@@ -2,7 +2,7 @@
  * @begin[doc]
  * @theory[Mp_mc_fir_ty]
  *
- * The @tt{Mp_mc_fir_ty} module defines terms to represent FIR types.
+ * The @tt[Mp_mc_fir_ty] module defines terms to represent FIR types.
  * @end[doc]
  *
  * ----------------------------------------------------------------
@@ -55,9 +55,9 @@ open Refiner.Refiner.TermOp
  * @begin[doc]
  * @terms
  *
- * @tt{tyInt} and @tt{tyEnum} are basic integer types.  @tt{tyInt}
- * is a 31-bit, signed integer type analogous to the @tt{int} type
- * in a language such as @OCaml.  A value of type @tt{tyEnum@{n-1@}}
+ * @tt[tyInt] and @tt[tyEnum] are basic integer types.  @tt[tyInt]
+ * is a 31-bit, signed integer type analogous to the @tt[int] type
+ * in a language such as @OCaml.  A value of type @misspelled{@tt{tyEnum@{n-1@}}}
  * can take on integral values from 0 to $n$.
  * @end[doc]
  *)
@@ -68,7 +68,7 @@ declare tyEnum{ 'int }
 (*!
  * @begin[doc]
  *
- * @tt{tyRawInt} and @tt{tyFloat} represent raw data types.  Their
+ * @tt[tyRawInt] and @tt[tyFloat] represent raw data types.  Their
  * subterms specify the precision and signed nature of the type
  * (see @hreftheory[Mp_mc_fir_base]).  These correspond to
  * the integer and floating point types in a language such as C.
@@ -81,7 +81,7 @@ declare tyFloat{ 'float_precision }
 (*!
  * @begin[doc]
  *
- * @tt{tyFun} is a function type.  The first subterm is a list
+ * @tt[tyFun] is a function type.  The first subterm is a list
  * (see @hreftheory[Itt_list]) of types indicating the types of
  * the arguments to the function. The second subterm is the type
  * of the return value of the function.  Note that FIR
@@ -133,7 +133,7 @@ declare tyObject{ 'ty_var; 'ty }
 (*!
  * @begin[doc]
  *
- * @tt{tyDelayed} represents a ``delayed'' type, in other words
+ * @tt[tyDelayed] represents a ``delayed'' type, in other words
  * a type that has not yet been determined by type inference.
  * @end[doc]
  *)
@@ -144,7 +144,7 @@ declare tyDelayed
  * @begin[doc]
  *
  * The FIR also has support for defining new types.  The remaining
- * terms of this module represent the toplevel constructions for
+ * terms of this module represent the top-level constructions for
  * defining new types.
  * (Documentation incomplete.)
  * @end[doc]

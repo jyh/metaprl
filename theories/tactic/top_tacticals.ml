@@ -4,7 +4,7 @@
  * firstT idT ifLabT keepingLabelT nthAssumT onAllClausesT onClauseT
  * onClausesT onConclT onHypT onHypsT onSomeHypT onVarT orelseT progressT
  * removeHiddenLabelT repeatForT repeatMT repeatT whileProgressT untilFailT
- * whileProgressMT untilFailMT selT
+ * whileProgressMT untilFailMT selT onAllAssumT
  * seqOnSameConclT seqT tactical thenAT thenET thenMT thenT thenWT timingT
  * tryT withBoolT withIntT withT withTypeT
  *

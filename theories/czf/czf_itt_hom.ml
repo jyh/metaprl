@@ -1,10 +1,8 @@
 (*!
- * @spelling{hom}
- *
  * @begin[doc]
  * @theory[Czf_itt_hom]
  *
- * The @tt{Czf_itt_hom} module defines the @emph{homomorphism}.
+ * The @tt[Czf_itt_hom] module defines the @emph{homomorphism}.
  * A homomorphism is a mapping $f$ from one group $g_1$ into another
  * group $g_2$, which satisfies for any $a$ and $b$ in $@car{g_1}$,
  * $$f(a *_1 b) = f(a) *_2 f(b)$$
@@ -117,7 +115,7 @@ declare hom{'g1; 'g2; x. 'f['x]}
 (*!
  * @begin[doc]
  * @rewrites
- * The @tt{hom} judgment requires that $g_1$ and $g_2$ be
+ * The @tt[hom] judgment requires that $g_1$ and $g_2$ be
  * groups, $f$ be a mapping from $@car{g_1}$ into $@car{g_2}$,
  * and for any $a$ and $b$ in $@car{g_1}$, $f$ map
  * $@op{g_{1}; a; b}$ into $@op{g_{2}; f[a]; f[b]}$.
@@ -143,7 +141,7 @@ dform hom_df : parens :: except_mode[src] :: hom{'g1; 'g2; x. 'f} =
  * @rules
  * @thysubsection{Well-formedness}
  *
- * The @tt{hom} is well-formed if $g1$ and $g2$ are labels,
+ * The @tt[hom] is well-formed if $g1$ and $g2$ are labels,
  * and $f[x]$ is a set for any set argument $x$.
  * @end[doc]
  *)
@@ -179,7 +177,7 @@ interactive hom_intro {| intro [] |} 'H :
  * @begin[doc]
  * @thysubsection{Functionality}
  *
- * The @tt{hom} judgment is functional in the function
+ * The @tt[hom] judgment is functional in the function
  * argument.
  * @end[doc]
  *)
@@ -341,8 +339,8 @@ interactive hom_subg2 'H hom{'g1; 'g2; x. 'f['x]} 'h1 'h2 :
  *
  * @begin[description]
  * @item{@tactic[homIdT], @tactic[homInvT];
- *    The @tt{homIdT} applies the @hrefrule[hom_id_elim] rule, and
- *    the @tt{homInvT} tactic applies the @hrefrule[hom_inv_elim]
+ *    The @tt[homIdT] applies the @hrefrule[hom_id_elim] rule, and
+ *    the @tt[homInvT] tactic applies the @hrefrule[hom_inv_elim]
  *    rule. They infer the mapping relations of the identity and
  *    inverse between two groups under a homomorphism.}
  * @end[description]

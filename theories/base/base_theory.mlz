@@ -2,7 +2,7 @@
  * @begin[doc]
  * @theory[Base_theory]
  *
- * The @tt{Base_theory} ``theory'' is not a theory in the strict sense.
+ * The @tt[Base_theory] ``theory'' is not a theory in the strict sense.
  * It defines only two rules (in the @hreftheory[Base_rewrite] module;
  * Section @reftheory[Base_rewrite]).  Instead, it serves as the
  * connection to the primitive @MetaPRL prover, and it defines
@@ -11,10 +11,10 @@
  * The connection with the primitive @MetaPRL prover is defined
  * in the modules @hreftheory[Top_tacticals] (Section @reftheory[Top_tacticals])
  * and @hreftheory[Top_conversionals] (Section @reftheory[Top_conversionals]).
- * The @tt{Top_tacticals} module defines the primitive tactics (such as the
+ * The @hreftheory[Top_tacticals] module defines the primitive tactics (such as the
  * identity and failure tactics), and several tacticals for tactic
  * composition (such as the @hreftactic[thenT]{} and @hreftactic[orelseT]
- * tacticals).  The @tt{Top_conversionals} module defines @emph{conversions},
+ * tacticals).  The @hreftheory[Top_conversionals] module defines @emph{conversions},
  * which play the role of tactics for @emph{rewriting}.
  *
  * The base theory also defines several resources that can be used to
@@ -27,7 +27,7 @@
  * (Section @reftheory[Base_dtactic]) defines resources for adding
  * introduction and elimination reasoning to the @hreftactic[dT] tactic.
  *
- * The @tt{Base_theory} module itself defines no new primitives; it
+ * The @tt[Base_theory] module itself defines no new primitives; it
  * simply bring together all the parts of the base logic into a unified
  * module.  Descendent theories (such as the @Nuprl type theory, Section
  * @reftheory[Itt_theory], and the first-order logic Section @reftheory[Fol_theory])

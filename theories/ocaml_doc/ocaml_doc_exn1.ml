@@ -142,7 +142,7 @@ type 'a btree = | Node of 'a btree * 'a * 'a btree | Leaf
 
 Suppose we wish to build a @tt{replace} function that replaces a value
 in the set.  The expression @code{replace x y s} should replace value
-@tt{x} with @tt{y} in tree @tt{s}, or raise the exception
+@tt[x] with @tt[y] in tree @tt[s], or raise the exception
 @code{Not_found} if the value does not exist.
 
 @begin[verbatim]

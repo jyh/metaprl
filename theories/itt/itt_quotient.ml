@@ -1,5 +1,5 @@
 (*!
- * @spelling{quot mod rem}
+ * @spelling{quot}
  *
  * @begin[doc]
  * @theory[Itt_quotient]
@@ -14,9 +14,9 @@
  *
  * One use of the quotient type is to quotient a type in a similar
  * manner as in set-theory.  For example, the following type defines
- * the integers @emph{mod} 2.
+ * the integers @mod 2.
  *
- * $$@int_2 @equiv @quot{@int; i; j; i @mathrel{rem} 2 = j @mathrel{rem} 2}$$
+ * $$@int_2 @equiv @quot{@int; i; j; i @mathrel[rem] 2 = j @mathrel[rem] 2}$$
  *
  * The even integers are equal in $@int_2$, and so are the odd integers.
  * Unlike set theory, the elements of the quotient type are not

@@ -1,5 +1,5 @@
 (*!
- * @spelling{gt_bool le_bool ge_bool gt le ge nequal mul div rem}
+ * @spelling{gt_bool le_bool ge_bool gt le ge nequal}
  *
  * @begin[doc]
  * @theory[Itt_int_ext]
@@ -82,7 +82,7 @@ let _ = show_loading "Loading Itt_int_ext%t"
 (*!
  * @begin[doc]
  * @terms
- * Multiplicative operations on int
+ * Multiplicative operations on $@int$
  * @end[doc]
  *)
 declare "mul"{'a; 'b}

@@ -139,7 +139,7 @@ prim setFormation 'H 'a 'A :
  * and $B[x]$ is a type for any $x @in A$.  Equality of the set
  * type is @emph{intensional}.  Two set types are equal only if their
  * parts are equal. Note that it is possible to define
- * an @emph{extensional} version of a set type usinf the @emph{intensional} one
+ * an @emph{extensional} version of a set type using the @emph{intensional} one
  * by applying the @hrefterm[esquash] operator to the set predicate.
  * @end[doc]
  *)

@@ -2,9 +2,9 @@
  * @begin[doc]
  * @theory[Mp_mc_fir_base]
  *
- * The @tt{Mp_mc_fir_base} module defines terms to represent basic FIR
+ * The @tt[Mp_mc_fir_base] module defines terms to represent basic FIR
  * terms and supporting @OCaml values.
- * @end[doc].
+ * @end[doc]
  *
  * ----------------------------------------------------------------
  *
@@ -57,9 +57,9 @@ open Mp_mc_base
  * @begin[doc]
  * @terms
  *
- * @tt{noneOpt} and @tt{someOpt} represent @OCaml option
+ * @tt[noneOpt] and @tt[someOpt] represent @OCaml option
  * values, in other words, values of the type @tt{'a option}.
- * @tt{Some v} is represented as @tt{someOpt@{v@}}.
+ * @tt{Some v} is represented as @misspelled{@tt{someOpt@{v@}}}.
  * @end[doc]
  *)
 
@@ -69,8 +69,8 @@ declare someOpt{ 'a }
 (*!
  * @begin[doc]
  *
- * @tt{val_true} and @tt{val_false} represent the @OCaml
- * boolean constants @tt{true} and @tt{false}.  Within the FIR,
+ * @tt[val_true] and @tt[val_false] represent the @OCaml
+ * boolean constants @tt[true] and @tt[false].  Within the FIR,
  * true and false are actually represented as
  * @hrefterm[atomEnum]s (see @hreftheory[Mp_mc_fir_eval]).
  * @end[doc]
@@ -83,11 +83,11 @@ declare val_false
  *
  * The FIR has support for integer and floating point types of
  * various precisions (see @hrefterm[tyRawInt] and @hrefterm[tyFloat]
- * in @hreftheory[Mp_mc_fir_ty]).  The following seven terms specifiy
+ * in @hreftheory[Mp_mc_fir_ty]).  The following seven terms specify
  * 8-bit, 16-bit, 32-bit, and 64-bit integer precision as well as
  * single precision (4 byte), double precision (8 byte), and
  * long double (10 byte) precision floats.  By convention,
- * subterms called @tt{int_precision} and @tt{float_precision}
+ * subterms called @tt[int_precision] and @tt[float_precision]
  * refer to one of these terms.
  * @end[doc]
  *)
@@ -105,7 +105,7 @@ declare floatLongDouble
  *
  * @hrefterm[tyRawInt] also requires information about whether
  * the integer type is signed or unsigned, which is what the following
- * two terms specify.  By convention, subterms called @tt{int_signed}
+ * two terms specify.  By convention, subterms called @tt[int_signed]
  * refer to one of these terms.
  * @end[doc]
  *)
@@ -117,11 +117,11 @@ declare unsignedInt
  * @begin[doc]
  *
  * The FIR has support for basic integer (@hrefterm[tyInt])
- * and raw-intger (@hrefterm[tyRawInt]) sets.  @tt{int_set} and
- * @tt{rawint_set} encode sets as a list (see @hreftheory[Itt_list])
- * of closed @tt{interval}s.  Each @tt{interval} has subterms for
+ * and raw-integer (@hrefterm[tyRawInt]) sets.  @tt[int_set] and
+ * @tt[rawint_set] encode sets as a list (see @hreftheory[Itt_list])
+ * of closed @tt[interval]s.  Each @tt[interval] has subterms for
  * the left and right bounds, which should be @hrefterm[number]s.
- * @tt{rawint_set}s also require subterms to encode the precision
+ * @tt[rawint_set]s also require subterms to encode the precision
  * and signing of the @hrefterm[tyRawInt]s.  It is assumed that each
  * bound in the list has the same precision and signing.
  * @end[doc]

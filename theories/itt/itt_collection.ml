@@ -1,7 +1,7 @@
 (*!
  * @begin[doc]
  * @theory[Itt_collection]
- * The @tt{Itt_cillection} module formalized the type of indexed collections.
+ * The @tt{Itt_collection} module formalized the type of indexed collections.
  * See @cite[Nog02a] for more information.
  * @end[doc] 
  *

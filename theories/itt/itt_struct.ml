@@ -2,7 +2,7 @@
  * @begin[spelling]
  * assertT hypReplacement hypSubstitution nthHypT onSomeHypT
  * ponens substT substition thinAllT thinT thinned
- * thinning thins useWitnessT wf struct
+ * thinning thins useWitnessT wf struct assertAtT
  * @end[spelling]
  *
  * @begin[doc]

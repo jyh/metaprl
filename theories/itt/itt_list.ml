@@ -93,7 +93,7 @@ let _ =
  * @begin[doc]
  * @terms
  *
- * The @tt{nil} term is the empty list, the @tt{cons} term
+ * The @tt[nil] term is the empty list, the @tt[cons] term
  * adds an element $a$ to list $b$.
  * @end[doc]
  *)
@@ -102,7 +102,7 @@ declare cons{'a; 'b}
 
 (*!
  * @begin[doc]
- * The @tt{list} term defines the list type.  The @tt{list_ind}
+ * The @tt[list] term defines the list type.  The @tt[list_ind]
  * term defines the induction combinator.
  * @end[doc]
  *)
@@ -117,7 +117,7 @@ declare list_ind{'e; 'base; h, t, f. 'step['h; 't; 'f]}
  * @begin[doc]
  * @rewrites
  *
- * The @tt{list_ind} term computes values on lists.
+ * The @hrefterm[list_ind] term computes values on lists.
  * The combinator has two bodies; the @i{base} term
  * defines the value on empty lists, and the $@i{step}[h, t, f]$
  * term defines values on $@cons{h; t}$, where $f$ represents

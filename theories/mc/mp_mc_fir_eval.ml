@@ -2,7 +2,7 @@
  * @begin[doc]
  * @theory[Mp_mc_fir_eval]
  *
- * The @tt{Mp_mc_fir_eval} module defines the operational semantics
+ * The @tt[Mp_mc_fir_eval] module defines the operational semantics
  * of the FIR.
  * @end[doc]
  *

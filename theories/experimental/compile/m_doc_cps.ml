@@ -66,7 +66,7 @@ main objective in CPS conversion is to pass the result of the computation to a c
 function.
 
 There are different ways of formalizing the CPS conversion (see Section @refsection[m_doc_summary]
-for a discussion]). In this compiler we used the following inference rule, which states that a program $e$
+for a discussion). In this compiler we used the following inference rule, which states that a program $e$
 is compilable if for all functions $@cont$, the program $@CPS{@cont; e}$ is compilable.
 $$
 @begin[array,c]

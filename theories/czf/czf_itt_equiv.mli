@@ -1,3 +1,35 @@
+(*
+ * Equivalence relation.
+ *
+ * ----------------------------------------------------------------
+ *
+ * This file is part of MetaPRL, a modular, higher order
+ * logical framework that provides a logical programming
+ * environment for OCaml and other languages.
+ *
+ * See the file doc/index.html for information on Nuprl,
+ * OCaml, and more information about this system.
+ *
+ * Copyright (C) 2002 Xin Yu, Caltech
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *
+ * Author: Xin Yu
+ * Email : xiny@cs.caltech.edu
+ *)
+
 include Czf_itt_set
 include Czf_itt_member
 include Czf_itt_pair
@@ -41,7 +73,10 @@ declare equiv{'s; 'r; 'a; 'b}
 declare equiv{'s; 'r}
 declare equiv_fun_set{'s; 'r; z. 'f['z]}
 declare equiv_fun_prop{'s; 'r; z. 'P['z]}
-(*declare equiv_dfun_prop{u. 'A['u]; x, y. 'B['x; 'y]}*)
+
+(************************************************************************
+ * DEFINITIONS                                                          *
+ ************************************************************************)
 
 rewrite unfold_equiv : equiv{'s; 'r; 'a; 'b} <-->
    (((isset{'s} & isset{'r} & isset{'a} & isset{'b}) & mem{'a; 's} & mem{'b; 's}) & mem{pair{'a; 'b}; 'r})
@@ -52,9 +87,7 @@ rewrite unfold_equiv_fun_set : equiv_fun_set{'s; 'r; z. 'f['z]} <-->
 rewrite unfold_equiv_fun_prop : equiv_fun_prop{'s; 'r; z. 'P['z]} <-->
     (all a: set. all b: set. (equiv{'s; 'r} => equiv{'s; 'r; 'a; 'b} => 'P['a] => 'P['b]))
 
-(*rewrite unfold_equiv_dfun_prop : equiv_dfun_prop{u. 'A['u]; x, y. 'B['x; 'y]} <-->
-   (all s: set. all r: set. all a: set. all b: set. (equiv{'s; 'r; 'a; 'b} => (u1: 'A['a] -> 'B['a; 'u1] -> u2: 'A['b] -> 'B['b; 'u2])))
-*)
+topval fold_equiv : conv
 
 (************************************************************************
  * TACTICS                                                              *
@@ -71,8 +104,6 @@ val dest_equiv_fun_set : term -> term * term * string * term
 val is_equiv_fun_prop_term : term -> bool
 val mk_equiv_fun_prop_term : term -> term -> string -> term -> term
 val dest_equiv_fun_prop : term -> term * term * string * term
-
-topval fold_equiv : conv
 
 (*
  * Functionality.
@@ -93,3 +124,11 @@ topval equivSym1T : int -> tactic
  * Substitution.
  *)
 topval equivSubstT : term -> int -> tactic
+
+(*
+ * -*-
+ * Local Variables:
+ * Caml-master: "editor.run"
+ * End:
+ * -*-
+ *)

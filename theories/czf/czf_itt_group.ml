@@ -1,9 +1,58 @@
+(*!
+ * @spelling{group car eqG op id inv}
+ *
+ * @begin[doc]
+ * @theory[Czf_itt_group]
+ *
+ * The @tt{Czf_itt_group} module defines groups. Each group
+ * is assigned a label, such as $g$, and defined as $@group{g}$.
+ * The carrier set, operation, equivalence relation, identity,
+ * and inverse of the group are defined as $@car{g}$, $@op{g; a; b}$,
+ * $@eqG{g}$, $@id{g}$, and $@inv{g; a}$ respectively. Axioms
+ * are used to describe a  group, such as the axioms about the
+ * closure property, the axiom about associativity, the axioms
+ * about the identity and inverse. The properties of groups can
+ * be proved from these axioms.
+ * @end[doc]
+ * ----------------------------------------------------------------
+ *
+ * @begin[license]
+ * This file is part of MetaPRL, a modular, higher order
+ * logical framework that provides a logical programming
+ * environment for OCaml and other languages.
+ *
+ * See the file doc/index.html for information on Nuprl,
+ * OCaml, and more information about this system.
+ *
+ * Copyright (C) 2002 Xin Yu, Caltech
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *
+ * Author: Xin Yu
+ * @email{xiny@cs.caltech.edu}
+ * @end[license]
+ *)
+
+(*! @doc{@parents} *)
 include Itt_record_label0
 include Czf_itt_member
 include Czf_itt_eq
 include Czf_itt_dall
 include Czf_itt_and
 include Czf_itt_equiv
+(*! @docoff *)
 
 open Printf
 open Mp_debug
@@ -28,12 +77,25 @@ open Var
 open Base_dtactic
 open Base_auto_tactic
 
+let _ =
+   show_loading "Loading Czf_itt_group%t"
+
+(************************************************************************
+ * TERMS                                                                *
+ ************************************************************************)
+
+(*! @doc{@terms} *)
 declare group{'g}
 declare car{'g}         (* The "carrier" set for the group *)
 declare eqG{'g}         (* The equivalence relation for the group *)
 declare op{'g; 'a; 'b}
 declare id{'g}
 declare inv{'g; 'a}
+(*! @docoff *)
+
+(************************************************************************
+ * DISPLAY FORMS                                                        *
+ ************************************************************************)
 
 dform group_df : except_mode[src] :: group{'g} =
    slot{'g} `" group"
@@ -53,8 +115,24 @@ dform op_df : parens :: except_mode[src] :: op{'g; 'a; 'b} =
 dform inv_df : parens :: except_mode[src] :: inv{'g; 'a} =
    `"inv(" slot{'g} `"; " slot{'a} `")"
 
-(*
- * axioms
+(************************************************************************
+ * RULES                                                                *
+ ************************************************************************)
+
+(*!
+ * @begin[doc]
+ * @rules
+ *
+ * The @tt{group} is defined by a set of axioms.
+ * @end[doc]
+ *)
+(*!
+ * @begin[doc]
+ * @thysubsection{Well-formedness}
+ *
+ * The @tt{group}, @tt{car}, @tt{eqG}, @tt{op}, @tt{inv}, and @tt{id}
+ * are well-formed if the group argument is a label.
+ * @end[doc]
  *)
 interactive group_type {| intro [] |} 'H :
    sequent [squash] { 'H >- 'g IN label } -->
@@ -68,17 +146,44 @@ interactive eqG_wf1 {| intro[] |} 'H :
    sequent [squash] { 'H >- 'g IN label } -->
    sequent ['ext] { 'H >- isset{eqG{'g}} }
 
-interactive eqG_wf2 {| intro[] |} 'H :
-   sequent [squash] { 'H >- 'g IN label } -->
-   sequent ['ext] { 'H >- group{'g} } -->
-   sequent ['ext] { 'H >- equiv{car{'g}; eqG{'g}} }
-
 interactive op_wf {| intro[] |} 'H :
    sequent [squash] { 'H >- 'g IN label } -->
    sequent [squash] { 'H >- isset{'s1} } -->
    sequent [squash] { 'H >- isset{'s2} } -->
    sequent ['ext] { 'H >- isset{op{'g; 's1; 's2}} }
 
+interactive id_wf1 {| intro [] |} 'H :
+   sequent [squash] { 'H >- 'g IN label } -->
+   sequent ['ext] { 'H >- isset{id{'g}} }
+
+interactive inv_wf1 {| intro[] |} 'H :
+   sequent [squash] { 'H >- isset{'s1} } -->
+   sequent [squash] { 'H >- 'g IN label } -->
+   sequent ['ext] { 'H >- isset{inv{'g; 's1}} }
+
+(*!
+ * @begin[doc]
+ * @thysubsection{Equivalence Relation}
+ *
+ * The $@eqG{g}$ is an equivalence relation on $@car{g}$ if
+ * @tt{eqG} is well-formed and $@group{g}$.
+ * @end[doc]
+ *)
+interactive eqG_wf2 {| intro[] |} 'H :
+   sequent [squash] { 'H >- 'g IN label } -->
+   sequent ['ext] { 'H >- group{'g} } -->
+   sequent ['ext] { 'H >- equiv{car{'g}; eqG{'g}} }
+
+(*!
+ * @begin[doc]
+ * @thysubsection{Binary operation}
+ *
+ * The @tt{op} is a binary operation on @tt{car}, which means:
+ * first, if $a$ and $b$ are in $@car{g}$, then $@op{g; a; b}$
+ * is @emph{again in} $@car{g}$; second, it assigns each ordered
+ * pair exactly one element, i.e., @tt{op} is functional.
+ * @end[doc]
+ *)
 interactive op_closure {| intro[] |} 'H :
    sequent [squash] { 'H >- isset{'s1} } -->
    sequent [squash] { 'H >- isset{'s2} } -->
@@ -136,6 +241,13 @@ interactive op_eq_fun2 {| intro[] |} 'H :
    sequent ['ext] { 'H >- group{'g} } -->
    sequent ['ext] { 'H >- fun_set{z. op{'g; 's; 'z}} }
 
+(*!
+ * @begin[doc]
+ * @thysubsection{Associativity}
+ *
+ * The @tt{op} is associative.
+ * @end[doc]
+ *)
 interactive op_assoc1 {| intro[] |} 'H :
    sequent [squash] { 'H >- isset{'s1} } -->
    sequent [squash] { 'H >- isset{'s2} } -->
@@ -158,10 +270,15 @@ interactive op_assoc2 {| intro[] |} 'H :
    sequent ['ext] { 'H >- mem{'s3; car{'g}} } -->
    sequent ['ext] { 'H >- equiv{car{'g}; eqG{'g}; op{'g; 's1; op{'g; 's2; 's3}}; op{'g; op{'g; 's1; 's2}; 's3}} }
 
-interactive id_wf1 {| intro [] |} 'H :
-   sequent [squash] { 'H >- 'g IN label } -->
-   sequent ['ext] { 'H >- isset{id{'g}} }
-
+(*!
+ * @begin[doc]
+ * @thysubsection{Identity}
+ *
+ * Each group $g$ has an identity $@id{g}$ such that
+ * for any $s @in @car{g}$,
+ * $@equiv{@car{g}; @eqG{g}; @op{g; @id{g}; s}; s}$.
+ * @end[doc]
+ *)
 interactive id_wf2 {| intro[] |} 'H :
    sequent [squash] { 'H >- 'g IN label } -->
    sequent ['ext] { 'H >- group{'g} } -->
@@ -174,11 +291,15 @@ interactive id_eq1 {| intro[] |} 'H :
    sequent ['ext] { 'H >- mem{'s; car{'g}} } -->
    sequent ['ext] { 'H >- equiv{car{'g}; eqG{'g}; op{'g; id{'g}; 's}; 's} }
 
-interactive inv_wf1 {| intro[] |} 'H :
-   sequent [squash] { 'H >- isset{'s1} } -->
-   sequent [squash] { 'H >- 'g IN label } -->
-   sequent ['ext] { 'H >- isset{inv{'g; 's1}} }
-
+(*!
+ * @begin[doc]
+ * @thysubsection{Inverse}
+ *
+ * The @tt{inv} is a unary operation on @tt{car} such that
+ * for each $a @in @car{g}$,
+ * $@equiv{@car{g}; @eqG{g}; @op{g; @inv{g; s}; s}; @id{g}}$.
+ * @end[doc]
+ *)
 interactive inv_wf2 {| intro[] |} 'H :
    sequent [squash] { 'H >- isset{'s1} } -->
    sequent [squash] { 'H >- 'g IN label } -->
@@ -203,8 +324,17 @@ interactive inv_id1 {| intro[] |} 'H :
    sequent ['ext] { 'H >- mem{'s1; car{'g}} } -->
    sequent ['ext] { 'H >- equiv{car{'g}; eqG{'g}; op{'g; inv{'g; 's1}; 's1}; id{'g}} }
 
-(*
- * lemmas
+(*!
+ * @begin[doc]
+ * @thysubsection{Lemmas}
+ *
+ * If $@group{g}$, then
+ * @begin[enumerate]
+ * @item{if $s$ is a member of $@car{g}$ and $@equiv{@car{g}; @eqG{g}; @op{g; s; s}; s}$, then $@equiv{@car{g}; @eqG{g}; s; @id{g}}$.}
+ * @item{the left inverse is also the right inverse.}
+ * @item{the left identity is also the right identity.}
+ * @end[enumerate]
+ * @end[doc]
  *)
 interactive id_judge_elim {| elim [] |} 'H 'J :
    sequent [squash] { 'H; x: equiv{car{'g}; eqG{'g}; op{'g; 's; 's}; 's}; 'J['x] >- isset{'s} } -->
@@ -226,10 +356,8 @@ interactive id_eq2 {| intro[] |} 'H :
    sequent ['ext] { 'H >- group{'g} } -->
    sequent ['ext] { 'H >- mem{'s; car{'g}} } -->
    sequent ['ext] { 'H >- equiv{car{'g}; eqG{'g}; op{'g; 's; id{'g}}; 's} }
+(*! @docoff *)
 
-(*
- * theorems
- *)
 interactive equiv_op_fun1 {| intro[] |} 'H :
    sequent [squash] { 'H >- isset{'a} } -->
    sequent [squash] { 'H >- isset{'b} } -->
@@ -248,6 +376,15 @@ interactive equiv_op_fun2 {| intro[] |} 'H :
    sequent ['ext] { 'H >- mem{'b; car{'g}} } -->
    sequent ['ext] { 'H >- equiv_fun_prop{car{'g}; eqG{'g}; z. equiv{car{'g}; eqG{'g}; op{'g; 'a; 'z}; op{'g; 'b; 'z}}} }
 
+(*!
+ * @begin[doc]
+ * @thysubsection{Theorems}
+ *
+ * $@space @space$
+ *
+ * The left and right cancellation laws.
+ * @end[doc]
+ *)
 (* Cancellation: a * b = a * c => b = c *)
 interactive cancel1 (*{| elim [] |}*) 'H 'J :
    sequent [squash] { 'H; x: equiv{car{'g}; eqG{'g}; op{'g; 's1; 's2}; op{'g; 's1; 's3}}; 'J['x] >- isset{'s1} } -->
@@ -271,6 +408,7 @@ interactive cancel2 (*{| elim [] |}*) 'H 'J :
    sequent ['ext] { 'H; x: equiv{car{'g}; eqG{'g}; op{'g; 's1; 's3}; op{'g; 's2; 's3}}; 'J['x] >- mem{'s2; car{'g}} } -->
    sequent ['ext] { 'H; x: equiv{car{'g}; eqG{'g}; op{'g; 's1; 's3}; op{'g; 's2; 's3}}; 'J['x] >- mem{'s3; car{'g}} } -->
    sequent ['ext] { 'H; x: equiv{car{'g}; eqG{'g}; op{'g; 's1; 's3}; op{'g; 's2; 's3}}; 'J['x] >- equiv{car{'g}; eqG{'g}; 's1; 's2} }
+(*! @docoff *)
 
 let groupCancelLeftT i p =
    let j, k = Sequent.hyp_indices p i in
@@ -280,7 +418,12 @@ let groupCancelRightT i p =
    let j, k = Sequent.hyp_indices p i in
       cancel2 j k p
 
-(* Unique Id *)
+(*!
+ * @begin[doc]
+ *
+ * Unique identity (left and right).
+ * @end[doc]
+ *)
 interactive unique_id1 'H :
    sequent [squash] { 'H >- isset{'e2} } -->
    sequent [squash] { 'H >- 'g IN label } -->
@@ -297,6 +440,12 @@ interactive unique_id2 'H :
    sequent ['ext] { 'H >- "dall"{car{'g}; s. equiv{car{'g}; eqG{'g}; op{'g; 's; 'e2}; 's}} } -->
    sequent ['ext] { 'H >- equiv{car{'g}; eqG{'g}; 'e2; id{'g}} }
 
+(*!
+ * @begin[doc]
+ *
+ * Unique inverse (left and right).
+ * @end[doc]
+ *)
 interactive unique_inv1 {| intro [] |} 'H :
    sequent [squash] { 'H >- isset{'s} } -->
    sequent [squash] { 'H >- isset{'s2} } -->
@@ -336,6 +485,7 @@ interactive unique_inv_elim2 (*{| elim [] |}*) 'H 'J :
    sequent ['ext] { 'H; x: equiv{car{'g}; eqG{'g}; op{'g; 's; 's2}; id{'g}}; 'J['x] >- mem{'s2; car{'g}} } -->
    sequent ['ext] { 'H; x: equiv{car{'g}; eqG{'g}; op{'g; 's; 's2}; id{'g}}; 'J['x]; y: equiv{car{'g}; eqG{'g}; 's2; inv{'g; 's}} >- 'C['x] } -->
    sequent ['ext] { 'H; x: equiv{car{'g}; eqG{'g}; op{'g; 's; 's2}; id{'g}}; 'J['x] >- 'C['x] }
+(*! @docoff *)
 
 let uniqueInvLeftT i p =
    let j, k = Sequent.hyp_indices p i in
@@ -345,6 +495,12 @@ let uniqueInvRightT i p =
    let j, k = Sequent.hyp_indices p i in
       unique_inv_elim2 j k p
 
+(*!
+ * @begin[doc]
+ *
+ * Unique solution.
+ * @end[doc]
+ *)
 (* Unique solution for a * x = b : x = a' * b *)
 interactive unique_sol1 {| intro [] |} 'H :
    sequent [squash] { 'H >- isset{'a} } -->
@@ -371,6 +527,12 @@ interactive unique_sol2 {| intro [] |} 'H :
    sequent ['ext] { 'H >- equiv{car{'g}; eqG{'g}; op{'g; 'y; 'a}; 'b} } -->
    sequent ['ext] { 'H >- equiv{car{'g}; eqG{'g}; 'y; op{'g; 'b; inv{'g; 'a}}} }
 
+(*!
+ * @begin[doc]
+ *
+ * Inverse simplification. 
+ * @end[doc]
+ *)
 (* (a * b)' = b' * a'  *)
 interactive inv_simplify {| intro [] |} 'H :
    sequent [squash] { 'H >- isset{'a} } -->
@@ -380,6 +542,7 @@ interactive inv_simplify {| intro [] |} 'H :
    sequent ['ext] { 'H >- mem{'a; car{'g}} } -->
    sequent ['ext] { 'H >- mem{'b; car{'g}} } -->
    sequent ['ext] { 'H >- equiv{car{'g}; eqG{'g}; inv{'g; op{'g; 'a; 'b}}; op{'g; inv{'g; 'b}; inv{'g; 'a}}} }
+(*! @docoff *)
 
 (* Inverse of id *)
 interactive inv_of_id {| intro [] |} 'H :
@@ -402,3 +565,50 @@ interactive id_commut2 {| intro [] |} 'H :
    sequent ['ext] { 'H >- group{'g} } -->
    sequent ['ext] { 'H >- mem{'a; car{'g}} } -->
    sequent ['ext] { 'H >- equiv{car{'g}; eqG{'g}; op{'g; 'a; id{'g}}; op{'g; id{'g}; 'a}} }
+
+(************************************************************************
+ * TACTICS                                                              *
+ ************************************************************************)
+
+(*!
+ * @begin[doc]
+ * @tactics
+ *
+ * @begin[description]
+ * @item{@tactic[groupCancelLeftT], groupCancelRightT], @tactic[uniqueInvLeftT], @tactic[uniqueInvRightT];
+ *    The @tt{groupCancelLeftT} tactic applies the @hrefrule[cancel1]
+ *    rule, which infers that $a$ and $b$ are equivalent from the fact
+ *    that $c * a$ is equivalent to $c * b$.
+ *    The @tt{groupCancelRightT} tactic applies the @hrefrule[cancel2]
+ *    rule, which infers that $a$ and $b$ are equivalent from the fact
+ *    that $a * c$ is equivalent to $b * c$.
+ *    The @tt{uniqueInvLeftT} and @tt{uniqueInvRightT} tactics apply
+ *    the @hrefrule[unique_inv_elim1] and @hrefrule[unique_inv_elim2] rules
+ *    and prove $x$ is the inverse of $y$ from the fact that $y * x$ or
+ *    $x * y$ is the identity.}
+ * @end[description]
+ * @docoff
+ * @end[doc]
+ *)
+let groupCancelLeftT i p =
+   let j, k = Sequent.hyp_indices p i in
+      cancel1 j k p
+
+let groupCancelRightT i p =
+   let j, k = Sequent.hyp_indices p i in
+      cancel2 j k p
+
+let uniqueInvLeftT i p =
+   let j, k = Sequent.hyp_indices p i in
+      unique_inv_elim1 j k p
+
+let uniqueInvRightT i p =
+   let j, k = Sequent.hyp_indices p i in
+      unique_inv_elim2 j k p
+(*
+ * -*-
+ * Local Variables:
+ * Caml-master: "editor.run"
+ * End:
+ * -*-
+ *)

@@ -1,39 +1,41 @@
-doc <:doc< 
+doc <:doc<
    @begin[spelling]
-   inlining
+   inlined inlining
    @end[spelling]
-  
+
    @begin[doc]
-   @module[Inline]
-  
-   Constant-folding and function inlining.
+   @module[M_inline]
+
+   This module implements a simple form of constant folding and
+   constant inlining.  We do not inline functions due to our somewhat
+   cumbersome choice of representation for function definitions.
    @end[doc]
-  
+
    ----------------------------------------------------------------
-  
+
    @begin[license]
    Copyright (C) 2003 Jason Hickey, Caltech
-  
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
    as published by the Free Software Foundation; either version 2
    of the License, or (at your option) any later version.
-  
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-  
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-  
+
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
 >>
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @parents
    @end[doc]
@@ -48,21 +50,32 @@ open Tactic_type.Conversionals
 
 open Top_conversionals
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-   We use the @MetaPRL builtin meta-arithmetic.
-   Arithmetic is performed using meta-terms, and we need a
-   way to convert back to a number.
+   @modsection{Meta-arithmetic}
+
+   We use the @MetaPRL built-in meta-arithmetic to fold constants.
+   Arithmetic is performed using meta-terms, so we need a
+   way to convert back to a number (i.e., atom).
    @end[doc]
 >>
 declare MetaInt{'e}
 
 prim_rw meta_int_elim : MetaInt{meta_num[i:n]} <--> AtomInt[i:n]
 
-doc <:doc< @doc{@rewrites} >>
+doc <:doc<
+   @begin[doc]
+   @rewrites
 
-doc <:doc< 
-   @doc{Simple constant folding.}
+   Each of the rewrites below is added to the @tt{reduce_resource}.
+   We group them into ones to perform constant folding and ones to
+   inline constants.
+
+   @modsubsection{Constant folding}
+
+   Constant folding is straightforward given the meta-arithmetic
+   provided by @MetaPRL.
+   @end[doc]
 >>
 prim_rw reduce_add :
    AtomBinop{AddOp; AtomInt[i:n]; AtomInt[j:n]} <--> MetaInt{meta_sum[i:n, j:n]}
@@ -73,11 +86,21 @@ prim_rw reduce_sub :
 prim_rw reduce_mul :
    AtomBinop{MulOp; AtomInt[i:n]; AtomInt[j:n]} <--> MetaInt{meta_prod[i:n, j:n]}
 
+(*
+ * BUG: Inlining will fail if j = 0 here, I think.
+ * We could end up with extraneous MetaInt terms in the program.
+ *    --emre
+ *)
 prim_rw reduce_div :
    AtomBinop{DivOp; AtomInt[i:n]; AtomInt[j:n]} <--> MetaInt{meta_quot[i:n, j:n]}
 
-doc <:doc< 
-   @doc{Constant inlining.}
+doc <:doc<
+   @begin[doc]
+   @modsubsection{Constant inlining}
+
+   Constant inlining is also straightforward.  We can inline the branches
+   of conditional expressions if we know the guards at compile time.
+   @end[doc]
 >>
 prim_rw reduce_let_atom_true :
    LetAtom{AtomTrue; v. 'e['v]} <--> 'e[AtomTrue]
@@ -97,6 +120,13 @@ prim_rw reduce_if_true :
 prim_rw reduce_if_false :
    If{AtomFalse; 'e1; 'e2} <--> 'e2
 
+doc <:doc<
+   @begin[doc]
+   We need these last three rewrites to ensure that the final program
+   produced is well-formed.  Variables whose values have been inlined
+   are rewritten to their value.
+   @end[doc]
+>>
 prim_rw unfold_atom_var_true :
    AtomVar{AtomTrue} <--> AtomTrue
 

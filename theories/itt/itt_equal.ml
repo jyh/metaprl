@@ -634,6 +634,25 @@ let memberAssumT i p =
       memberAxiom j k p
 
 (*
+ * Assumed membership.
+ *)
+let univAssumT i p =
+   let j, k = Sequent.hyp_indices p i in
+      universeAssumType j k p
+
+(*
+ * Automation.
+ *
+ * let triv_equalT i p =
+ *    (equalAssumT i
+ *    orelseT memberAssumT i
+ *    orelseT univAssumT i) p
+ *)
+let triv_equalT i p =
+   let i, j = Sequent.hyp_indices p i in
+   (equalityAxiom i j orelseT memberAxiom i j orelseT universeAssumType i j) p
+
+(*
  * Reflexivity.
  *)
 let equalRefT t p =
@@ -658,13 +677,6 @@ let equalTypeT a b p =
    equalityTypeIsType (Sequent.hyp_count_addr p) a b p
 
 (*
- * Assumed membership.
- *)
-let univAssumT i p =
-   let j, k = Sequent.hyp_indices p i in
-      universeAssumType j k p
-
-(*
  * Universe cumulativity.
  *)
 let cumulativityT u p =
@@ -677,14 +689,6 @@ let cumulativityT u p =
  *)
 let typeAssertT p =
    typeEquality (Sequent.hyp_count_addr p) p
-
-(*
- * Automation.
- *)
-let triv_equalT i p =
-   (equalAssumT i
-   orelseT memberAssumT i
-   orelseT univAssumT i) p
 
 let trivial_resource =
    Mp_resource.improve trivial_resource (**)

@@ -36,14 +36,9 @@ extends Itt_logic
 extends Itt_bool
 extends Itt_int_ext
 
-open Tactic_type
 open Tactic_type.Conversionals
 
-open Mp_resource
-open Refiner.Refiner.Term
 open Refiner.Refiner.Rewrite
-open Dtactic
-open Term_match_table
 
 type ge_elim_type = int -> tactic_arg -> (term list * (int -> tactic))
 type ge_intro_type = tactic_arg -> (term list * tactic)

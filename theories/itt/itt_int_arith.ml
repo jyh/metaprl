@@ -57,23 +57,16 @@ open Refiner.Refiner.TermMan
 open Refiner.Refiner.TermSubst
 open Refiner.Refiner.TermType
 open Refiner.Refiner.TermMeta
-open Refiner.Refiner.TermAddr
-open Refiner.Refiner.RefineError
-open Refiner.Refiner.Rewrite
 open Term_order
-open Mp_resource
 open Simple_print
 open Term_match_table
 
 open Tactic_type
-open Tactic_type.Tactic
 open Tactic_type.Tacticals
 open Tactic_type.Conversionals
 
-open Auto_tactic
 open Dtactic
 
-open Top_tacticals
 open Top_conversionals
 
 open Itt_equal

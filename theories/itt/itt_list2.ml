@@ -67,6 +67,7 @@ declare fold_left{'f; 'v; 'l}
 declare nth{'l; 'i}
 declare replace_nth{'l; 'i; 'v}
 declare length{'l}
+declare rev{'l}
 
 (************************************************************************
  * DISPLAY                                                              *
@@ -269,6 +270,15 @@ interactive_rw reduce_replace_nth_cons :
    replace_nth{cons{'u; 'v}; 'i; 't} <-->
       ifthenelse{eq_int{'i; 0}; cons{'t; 'v}; cons{'u; replace_nth{'v; .'i -@ 1; 't}}}
 
+prim_rw unfold_rev : rev{'l} <-->
+   list_ind{'l; nil; u, v, g. append{'g; cons{'u; nil} }}
+
+let fold_rev = makeFoldC << rev{'l} >> unfold_rev
+
+interactive_rw reduce_rev_nil : rev{nil} <--> nil
+
+interactive_rw reduce_rev_cons : rev{cons{'u;'v}} <--> append{rev{'v};cons{'u;nil}}
+
 (************************************************************************
  * REDUCTION                                                            *
  ************************************************************************)
@@ -293,9 +303,35 @@ let reduce_info =
     << length{nil} >>, reduce_length_nil;
     << length{cons{'u; 'v}} >>, reduce_length_cons;
     << nth{cons{'u; 'v}; 'i} >>, reduce_nth_cons;
-    << replace_nth{cons{'u; 'v}; 'i; 't} >>, reduce_replace_nth_cons]
+    << replace_nth{cons{'u; 'v}; 'i; 't} >>, reduce_replace_nth_cons;
+    << rev{nil} >>, reduce_rev_nil;
+    << rev{cons{'u;'v}} >> , reduce_rev_cons ]
 
 let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
+
+(* We need a proper implementation of rewrites in order to do this.
+
+interactive_rw append_nil :
+   sequent [squash] { 'H >- "type"{'A} } -->
+   sequent [squash] { 'H >- 'l IN list{'A} } -->
+   sequent ['ext] { 'H>- append{'l;nil} <--> 'l }
+
+let reduce_resource = Top_conversionals.add_reduce_info reduce_resource [ <<append{'a; nil}>>, append_nil ]
+
+interactive_rw rev_append :
+   sequent [squash] { 'H >- "type"{'A} } -->
+   sequent [squash] { 'H >- 'a IN list{'A} } -->
+   sequent [squash] { 'H >- 'b IN list{'A} } -->
+   sequent ['ext] { 'H>- rev{append{'a;'b}} <--> append{rev{'b};rev{'a}} }
+
+let reduce_resource = Top_conversionals.add_reduce_info reduce_resource [ <<rev{append{'a;'b}}>>, rev_append ]
+
+interactive_rw rev2 :
+   sequent [squash] { 'H >- "type"{'A} } -->
+   sequent [squash] { 'H >- 'l IN list{'A} } -->
+   sequent ['ext] { 'H>- rev{rev{'l}} <--> 'l }
+
+*)
 
 (************************************************************************
  * RULES                                                                *
@@ -391,6 +427,14 @@ interactive replace_nth_wf {| intro_resource [] |} 'H :
    [wf] sequent [squash] { 'H >- lt{'i; length{'l}} } -->
    [wf] sequent [squash] { 'H >- 't IN 'T } -->
    sequent ['ext] { 'H >- replace_nth{'l; 'i; 't} IN list{'T} }
+
+(*
+ * Reverse.
+ *)
+interactive rev_wf {| intro_resource [] |} 'H :
+   [wf] sequent [squash] { 'H >- "type"{'A} } -->
+   [wf] sequent [squash] { 'H >- 'l IN list{'A} } -->
+   sequent ['ext] { 'H >- rev{'l} IN list{'A} }
 
 (************************************************************************
  * TACTICS                                                              *

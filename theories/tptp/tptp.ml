@@ -29,64 +29,43 @@ open Itt_derive
  * TERMS                                                                *
  ************************************************************************)
 
-(* All and exists are always bound over atom *)
-declare "all"{v. 'b['v]}
-declare "exists"{v. 'b['v]}
-declare atomic{'b}
-declare "t"
 
-declare "atom0"
-declare "atom1"
-declare "atom2"
-declare "atom3"
-declare "atom4"
-declare "atom5"
-declare "prop0"
-declare "prop1"
-declare "prop2"
-declare "prop3"
-declare "prop4"
-declare "prop5"
-declare "apply"{'f1; 'x1; 'x2}
-declare "apply"{'f1; 'x1; 'x2; 'x3}
-declare "apply"{'f1; 'x1; 'x2; 'x3; 'x4}
-declare "apply"{'f1; 'x1; 'x2; 'x3; 'x4; 'x5}
-
-prim_rw unfold_atomic : "atomic"{'x} <--> ('x = 'x in atom)
-prim_rw unfold_all : "all"{v. 'b['v]} <--> Itt_logic!"all"{atom; v. 'b['v]}
-prim_rw unfold_exists : "exists"{v. 'b['v]} <--> Itt_logic!"exists"{atom; v. 'b['v]}
-prim_rw unfold_t : "t" <--> token["default-token":t]
-
-prim_rw unfold_atom0 : atom0 <-->
+define unfold_atom0 : atom0 <-->
                           atom
-prim_rw unfold_atom1 : atom1 <-->
-                          (atom -> atom)
-prim_rw unfold_atom2 : atom2 <-->
-                          (atom -> atom -> atom)
-prim_rw unfold_atom3 : atom3 <-->
-                          (atom -> atom -> atom -> atom)
-prim_rw unfold_atom4 : atom4 <-->
-                          (atom -> atom -> atom -> atom -> atom)
-prim_rw unfold_atom5 : atom5 <-->
-                          (atom -> atom -> atom -> atom -> atom -> atom)
+define unfold_atom1 : atom1 <-->
+                          (atom0 -> atom0)
+define unfold_atom2 : atom2 <-->
+                          (atom0 -> atom0 -> atom0)
+define unfold_atom3 : atom3 <-->
+                          (atom0 -> atom0 -> atom0 -> atom0)
+define unfold_atom4 : atom4 <-->
+                          (atom0 -> atom0 -> atom0 -> atom0 -> atom0)
+define unfold_atom5 : atom5 <-->
+                          (atom0 -> atom0 -> atom0 -> atom0 -> atom0 -> atom0)
 
-prim_rw unfold_prop0 : prop0 <-->
+define unfold_prop0 : prop0 <-->
                           univ[1:l]
-prim_rw unfold_prop1 : prop1 <-->
-                          (atom -> univ[1:l])
-prim_rw unfold_prop2 : prop2 <-->
-                          (atom -> atom -> univ[1:l])
-prim_rw unfold_prop3 : prop3 <-->
-                          (atom -> atom -> atom -> univ[1:l])
-prim_rw unfold_prop4 : prop4 <-->
-                          (atom -> atom -> atom -> atom -> univ[1:l])
-prim_rw unfold_prop5 : prop5 <-->
-                          (atom -> atom -> atom -> atom -> atom -> univ[1:l])
+define unfold_prop1 : prop1 <-->
+                          (atom0 -> univ[1:l])
+define unfold_prop2 : prop2 <-->
+                          (atom0 -> atom0 -> univ[1:l])
+define unfold_prop3 : prop3 <-->
+                          (atom0 -> atom0 -> atom0 -> univ[1:l])
+define unfold_prop4 : prop4 <-->
+                          (atom0 -> atom0 -> atom0 -> atom0 -> univ[1:l])
+define unfold_prop5 : prop5 <-->
+                          (atom0 -> atom0 -> atom0 -> atom0 -> atom0 -> univ[1:l])
 
-prim_rw unfold_apply2 : "apply"{'f1; 'x1; 'x2} <--> ('f1 'x1 'x2)
-prim_rw unfold_apply3 : "apply"{'f1; 'x1; 'x2; 'x3} <--> ('f1 'x1 'x2 'x3)
-prim_rw unfold_apply4 : "apply"{'f1; 'x1; 'x2; 'x3; 'x4} <--> ('f1 'x1 'x2 'x3 'x4)
-prim_rw unfold_apply5 : "apply"{'f1; 'x1; 'x2; 'x3; 'x4; 'x5} <--> ('f1 'x1 'x2 'x3 'x4 'x5)
+define unfold_apply2 : "apply"{'f1; 'x1; 'x2} <--> ('f1 'x1 'x2)
+define unfold_apply3 : "apply"{'f1; 'x1; 'x2; 'x3} <--> ('f1 'x1 'x2 'x3)
+define unfold_apply4 : "apply"{'f1; 'x1; 'x2; 'x3; 'x4} <--> ('f1 'x1 'x2 'x3 'x4)
+define unfold_apply5 : "apply"{'f1; 'x1; 'x2; 'x3; 'x4; 'x5} <--> ('f1 'x1 'x2 'x3 'x4 'x5)
+
+(* All and exists are always bound over atom0 *)
+define unfold_atomic : "atomic"{'x} <--> ('x in atom0)
+define unfold_all : "all"{v. 'b['v]} <--> Itt_logic!"all"{atom0; v. 'b['v]}
+define unfold_exists : "exists"{v. 'b['v]} <--> Itt_logic!"exists"{atom0; v. 'b['v]}
+define unfold_t : "t" <--> token["default-token":t]
 
 let fold_atomic = makeFoldC << atomic{'x} >> unfold_atomic
 let fold_all    = makeFoldC << "all"{v. 'b['v]} >> unfold_all
@@ -478,10 +457,10 @@ let tptp_foldC =
            fold_prop2;
            fold_prop3;
            fold_prop4;
-           fold_prop5]
+           fold_prop5;
+           unfold_atomic]
 
-let tptp_foldT =
-   tryOnAllHypsT (rwh tptp_foldC)
+let tptp_foldT = rwhAllAll tptp_foldC
 
 let tptp_autoT =
    repeatT (firstT [progressT autoT;

@@ -2127,7 +2127,7 @@ T	t2121	o662 b2999 b2121
 B	b2122	t2121
 T	t2122	o662 b2997 b2122
 B	b2123	t2122
-P	p2124	String "byDefT unfold_col_member thenT byDefT unfold_col"
+P	p2124	String "byDefsT [unfold_col_member; unfold_col]"
 O	o2124	ext_rule p2124
 T	t2124	o1265 b2120 b3006
 B	b2124	t2124
@@ -3387,7 +3387,7 @@ T	t2887	o b2887 b4
 B	b2888	t2887
 T	t2888	o1263 b2870 b2888
 B	b2890	t2888
-P	p2890	String "selT 0 (byDefT unfold_col_member) thenT byDefT fold_col_member thenT byDefT unfold_col_equal"
+P	p2890	String "selT 0 (byDefT unfold_col_member) thenT byDefsT [fold_col_member; unfold_col_equal]"
 O	o2890	ext_rule p2890
 S	s2890	t665 h h2874
 G	s2890	t2119

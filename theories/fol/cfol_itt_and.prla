@@ -1406,7 +1406,7 @@ T	t1367	o b1367 b4
 B	b1368	t1367
 T	t1368	o519 b576 b1368
 B	b1369	t1368
-P	p1369	String "byDefT unfold_and thenT byDefT unfold_true thenT byDefT unfold_false"
+P	p1369	String "byDefsT [unfold_and; unfold_true; unfold_false]"
 O	o1369	ext_rule p1369
 P	p640	String sel
 O	o640	arg_named p640

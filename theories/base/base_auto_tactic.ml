@@ -52,7 +52,8 @@
  * This theory also defines the @tactic[byDefT] tactic. @tt{byDefT }@i{conv}
  * (where @i{conv} is usially an @tt{unfold_} conversional) uses @i{conv}
  * (through @hrefconv[higherC]) on all the assumptions and on the goal and then
- * calls @hreftactic[autoT].
+ * calls @hreftactic[autoT]. The @tactic[byDefsT] tactic that takes a @tt{conv list}
+ * is defined similarly.
  * @end[doc]
  *
  * ----------------------------------------------------------------
@@ -290,8 +291,9 @@ let tcaT = tryT (completeT strongAutoT)
 let tryAutoT tac =
    tac thenT tcaT
 
-let byDefT conv =
-   rwhAllAll (conv thenC reduceC) thenT autoT
+let make_defT conv = rwhAllAll (conv thenC reduceC)
+let byDefT conv = make_defT conv thenT autoT
+let byDefsT convs = seqT (List.map make_defT convs) thenT autoT
 
 (*
  * Trivial is in auto tactic.

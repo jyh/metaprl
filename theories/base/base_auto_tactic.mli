@@ -105,6 +105,7 @@ topval autoT : tactic (* weakAutoT thenT tcaT *)
 topval tryAutoT : tactic -> tactic
 
 topval byDefT: conv -> tactic
+topval byDefsT: conv list -> tactic
 
 (*
  * -*-

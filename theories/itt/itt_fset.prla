@@ -31458,7 +31458,7 @@ T	t3424	o1378 b3424 b4
 B	b3425	t3424
 T	t3425	o3097 b1376 b3425 b4 b4
 B	b3433	t3425
-P	p3434	String "byDefT unfold_all thenT byDefT unfold_implies"
+P	p3434	String "byDefsT [unfold_all; unfold_implies]"
 O	o3434	ext_rule p3434
 T	t3434	o1379 b3086 b4 b2999
 B	b3434	t3434

@@ -50,7 +50,7 @@ doc "doc"{terms}
 declare BOperator
 declare op_bdepth{'op}
 declare arity{'op}
-declare same_op{'op_1;'op_2} (* Do not consider  op_bdepth *)
+declare is_same_op{'op_1;'op_2} (* Do not consider  op_bdepth *)
 declare inject{'op; 'n} (* Op * Nat -> BOp *)
 
 define unfold_unbind :
@@ -60,7 +60,7 @@ define unfold_bind :
    bind{'op; 'n} <--> inject{'op; op_bdepth{'op} +@ 'n }
 
 define unfold_op :
-   Operator <--> quot o1, o2 : BOperator // "assert"{same_op{'o1; 'o2}}
+   Operator <--> quot o1, o2 : BOperator // "assert"{is_same_op{'o1; 'o2}}
 
 doc "doc"{rewrites}
 
@@ -77,30 +77,30 @@ prim bop_univ {| intro [] |}:
 interactive bop_type {| intro [] |}:
    sequent { <H> >- BOperator Type }
 
-prim same_op_wf {| intro [] |} :
+prim is_same_op_wf {| intro [] |} :
    sequent { <H> >- 'op_1 in BOperator } -->
    sequent { <H> >- 'op_2 in BOperator } -->
-   sequent { <H> >- same_op{'op_1;'op_2} in bool }
+   sequent { <H> >- is_same_op{'op_1;'op_2} in bool }
    = it
 
-prim same_op_ref {| intro [] |} :
+prim is_same_op_ref {| intro [] |} :
    [wf] sequent { <H> >- 'op in BOperator } -->
-   sequent { <H> >- "assert"{same_op{'op;'op}} }
+   sequent { <H> >- "assert"{is_same_op{'op;'op}} }
    = it
 
-prim same_op_sym :
+prim is_same_op_sym :
    [wf] sequent { <H> >- 'op1 in BOperator } -->
    [wf] sequent { <H> >- 'op2 in BOperator } -->
-   sequent { <H> >- "assert"{same_op{'op1;'op2}} } -->
-   sequent { <H> >- "assert"{same_op{'op2;'op1}} } = it
+   sequent { <H> >- "assert"{is_same_op{'op1;'op2}} } -->
+   sequent { <H> >- "assert"{is_same_op{'op2;'op1}} } = it
 
-prim same_op_trans 'op2 :
+prim is_same_op_trans 'op2 :
    [wf] sequent { <H> >- 'op1 in BOperator } -->
    [wf] sequent { <H> >- 'op2 in BOperator } -->
    [wf] sequent { <H> >- 'op3 in BOperator } -->
-   sequent { <H> >- "assert"{same_op{'op1;'op2}} } -->
-   sequent { <H> >- "assert"{same_op{'op2;'op3}} } -->
-   sequent { <H> >- "assert"{same_op{'op1;'op3}} } = it
+   sequent { <H> >- "assert"{is_same_op{'op1;'op2}} } -->
+   sequent { <H> >- "assert"{is_same_op{'op2;'op3}} } -->
+   sequent { <H> >- "assert"{is_same_op{'op1;'op3}} } = it
 
 interactive op_univ {| intro [] |}:
    sequent { <H> >- Operator in univ[l:l] }

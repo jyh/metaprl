@@ -46,3 +46,4 @@ declare var{'left; 'right}
 declare left{'v}
 declare right{'v}
 declare depth{'v}
+declare is_eq{'v;'u}

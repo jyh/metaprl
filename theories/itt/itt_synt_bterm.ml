@@ -171,3 +171,208 @@ interactive btermSquiddle {| nth_hyp |} :
 interactive btermlistSquiddle {| nth_hyp |} :
    sequent { <H> >- 'b1 = 'b2 in list{BTerm} } -->
    sequent { <H> >- 'b1 ~ 'b2 }
+
+
+(************************************************************************
+ * Var_bterm                                                            *
+ ************************************************************************)
+
+define unfold_is_var_bterm: is_var_bterm{'bt} <--> dest_bterm{'bt; v.btrue; op,btl. bfalse}
+define unfold_var_bterm: var_bterm{'bt} <--> "assert"{is_var_bterm{'bt}}
+
+dform is_var_bterm_df : except_mode[src] :: is_var_bterm{'bt} =
+   `"is_var_bterm(" slot{'bt} `")"
+dform var_bterm_df : except_mode[src] :: var_bterm{'bt} =
+   `"var_bterm(" slot{'bt} `")"
+
+let fold_var_bterm = makeFoldC << var_bterm{'bt} >> unfold_var_bterm
+
+interactive_rw is_var_reduce1 {| reduce |}: is_var_bterm{var{'l;'r}} <--> btrue
+interactive_rw is_var_reduce2 {| reduce |}: is_var_bterm{make_bterm{'op;'btl}} <--> bfalse
+interactive_rw var_reduce1 {| reduce |}: var_bterm{var{'l;'r}} <--> "true"
+interactive_rw var_reduce2 {| reduce |}: var_bterm{make_bterm{'op;'btl}} <--> "false"
+
+
+interactive is_var_bterm_wf {| intro [] |} :
+   sequent { <H> >- 'bt in BTerm } -->
+   sequent { <H> >- is_var_bterm{'bt} in bool }
+
+interactive_rw varbterm_is_varbterm :
+   (var_bterm{ 'bt}) -->
+   is_var_bterm{'bt} <--> btrue
+
+interactive_rw notvarbterm_is_not_varbterm :
+   ('bt in BTerm ) -->
+   (not{var_bterm{ 'bt}} ) -->
+   is_var_bterm{'bt} <--> bfalse
+
+interactive var_bterm_wf {| intro [] |} :
+   sequent { <H> >- 'bt in BTerm } -->
+   sequent { <H> >- var_bterm{'bt} Type }
+
+interactive var_bterm_univ {| intro [] |} :
+   [wf] sequent { <H> >- 'bt in BTerm } -->
+   sequent { <H> >- var_bterm{'bt} in univ[i:l] }
+
+interactive var_bterm_decidable {| intro [] |} :
+   [wf] sequent { <H> >- 'bt in BTerm } -->
+   sequent { <H> >- decidable{var_bterm{'bt}} }
+
+interactive var_intro :
+   sequent { <H> >- 'b1 = 'b2 in BTerm } -->
+   sequent { <H> >- var_bterm{'b1} } -->
+   sequent { <H> >- 'b1 = 'b2 in Var }
+
+interactive var_elim 'H :
+   sequent { <H>; u: BTerm; v: var_bterm{'u}; <J['u]> >- 'T['u] } -->
+   sequent { <H>; u: Var; <J['u]> >- 'T['u] }
+
+interactive_rw var_is_var:
+   ('v in Var) -->
+   is_var_bterm{'v} <--> btrue
+
+(************************************************************************
+ * OpBTerm                                                              *
+ ************************************************************************)
+
+define unfold_opbterm:
+   OpBTerm <--> { bt: BTerm |  not{ var_bterm{'bt} } }
+
+dform opbterm_df : except_mode[src] :: OpBTerm =
+   `"OpBTerm"
+
+interactive opbterm_univ {| intro [] |} :
+   sequent { <H> >- OpBTerm in univ[i:l] }
+
+interactive opbterm_wf {| intro [] |} :
+   sequent { <H> >- OpBTerm Type }
+
+interactive opbterm_subtype {| intro [] |} :
+   sequent { <H> >- OpBTerm subtype BTerm }
+
+interactive opbterm_intro {| intro [] |} :
+   sequent { <H> >- 'b1 = 'b2 in BTerm } -->
+   sequent { <H>; var_bterm{'b1} >- "false" } -->
+   sequent { <H> >- 'b1 = 'b2 in OpBTerm }
+
+interactive opbterm_elim {| elim [] |} 'H :
+   sequent { <H>; u: BTerm; v: not{ var_bterm{'u} }; <J['u]> >- 'T['u] } -->
+   sequent { <H>; u: OpBTerm; <J['u]> >- 'T['u] }
+
+interactive_rw opbterm_is_not_var:
+   ('v in OpBTerm) -->
+   is_var_bterm{'v} <--> bfalse
+
+interactive var_or_opbterm_concl bind{x. 'C['x]} 'b :
+   [wf] sequent { <H> >- 'b in BTerm } -->
+   [main] sequent { <H>; b: Var >- 'C['b] } -->
+   [main] sequent { <H>; b: OpBTerm >- 'C['b] } -->
+   sequent { <H> >- 'C['b] }
+
+interactive var_or_opbterm_hyp 'H bind{x. 'A['x]} 'b :
+   [wf] sequent { <H>; x: 'A['b]; <J['x]> >- 'b in BTerm } -->
+   [main] sequent { <H>; x: 'A['b]; <J['x]>; 'b in Var >- 'C['x] } -->
+   [main] sequent { <H>; x: 'A['b]; <J['x]>; 'b in OpBTerm >- 'C['x] } -->
+   sequent { <H>; x: 'A['b]; <J['x]> >- 'C['x] }
+
+(************************************************************************
+ * Subterms                                                             *
+ ************************************************************************)
+
+define unfold_subterms:
+   subterms{'t} <--> dest_bterm{'t; v.nil; op,subterms.'subterms}
+
+dform subterms_df : except_mode[src] :: subterms{'bt} =
+   `"subterms(" slot{'bt} `")"
+
+interactive_rw subterms_reduce1 {| reduce |}:  subterms{var{'l;'r}} <--> nil
+interactive_rw subterms_reduce2 {| reduce |}:  subterms{make_bterm{'op;'btl}} <--> 'btl
+
+interactive subterms_wf {| intro [] |} :
+   sequent { <H> >- 'bt in BTerm } -->
+   sequent { <H> >- subterms{'bt} in list{BTerm} }
+
+interactive_rw subterms_var :
+      ('bt in Var) -->
+      subterms{'bt} <--> nil
+
+
+(************************************************************************
+ * TYPE INFERENCE                                                       *
+ ************************************************************************)
+
+(*
+ * Type of bterm and subterms of bterms.
+ *)
+let resource typeinf += (<< BTerm >>, infer_univ1)
+let resource typeinf += (<< subterms{'bt} >>, infer_const << list{BTerm} >>)
+
+
+(************************************************************************
+ * Same_op                                                              *
+ ************************************************************************)
+
+define unfold_is_same_op: is_same_op{'b1; 'b2} <-->
+   dest_bterm{'b1;
+               v1. dest_bterm{'b2; v2. is_eq{'v1;'v2}; op2,btl2.bfalse};
+               op1,btl1. dest_bterm{'b2; v2. bfalse; op2,btl2. Itt_synt_operator!is_same_op{'op1;'op2}} }
+
+define unfold_same_op: same_op{'b1; 'b2} <--> "assert"{is_same_op{'b1; 'b2}}
+
+dform is_sameop_df : except_mode[src] :: is_same_op{'b1; 'b2} =
+   `"is_same_op(" slot{'b1} `"; " slot{'b2} `")"
+dform sameop_df : except_mode[src] :: same_op{'b1; 'b2} =
+   `"same_op(" slot{'b1} `"; " slot{'b2} `")"
+
+
+interactive is_same_op_wf {| intro [] |} :
+   sequent { <H> >- 'b1 in BTerm } -->
+   sequent { <H> >- 'b2 in BTerm } -->
+   sequent { <H> >- is_same_op{'b1; 'b2} in bool }
+
+interactive_rw sameop_is_sameop :
+   (same_op{'b1; 'b2}) -->
+   is_same_op{'b1; 'b2} <--> btrue
+
+interactive_rw notsameop_is_not_sameop :
+   ('b1 in BTerm ) -->
+   ('b2 in BTerm ) -->
+   (not{same_op{'b1; 'b2}} ) -->
+   is_same_op{'b1; 'b2} <--> bfalse
+
+interactive same_op_wf {| intro [] |} :
+   sequent { <H> >- 'b1 in BTerm } -->
+   sequent { <H> >- 'b2 in BTerm } -->
+   sequent { <H> >- same_op{'b1; 'b2} Type }
+
+interactive same_op_decidable {| intro [] |} :
+   [wf] sequent { <H> >- 'b1 in BTerm } -->
+   [wf] sequent { <H> >- 'b2 in BTerm } -->
+   sequent { <H> >- decidable{same_op{'b1; 'b2}} }
+
+
+interactive same_op_id {| intro [] |} :
+   sequent { <H> >- 'b in BTerm } -->
+   sequent { <H> >- same_op{'b; 'b} }
+
+interactive same_op_id2 {| intro [AutoMustComplete] |} :
+   sequent { <H> >- 'b1 = 'b2 in BTerm } -->
+   sequent { <H> >- same_op{'b1; 'b2} }
+
+interactive same_op_sym :
+   sequent { <H> >- 'b1 in BTerm } -->
+   sequent { <H> >- 'b2 in BTerm } -->
+   sequent { <H> >- same_op{'b1; 'b2} } -->
+   sequent { <H> >- same_op{'b2; 'b1} }
+
+interactive same_op_trans 'b2:
+   sequent { <H> >- 'b1 in BTerm } -->
+   sequent { <H> >- 'b2 in BTerm } -->
+   sequent { <H> >- 'b3 in BTerm } -->
+   sequent { <H> >- same_op{'b1; 'b2} } -->
+   sequent { <H> >- same_op{'b2; 'b3} } -->
+   sequent { <H> >- same_op{'b1; 'b3} }
+
+let sameOpSymT = same_op_sym
+let sameOpTransT = same_op_trans
+

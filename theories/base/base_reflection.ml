@@ -106,6 +106,14 @@ let dest_bterm_sequent_and_rename term vars =
  *            if_bterm{bterm{<H>; <Jn> >- 'tn}; 'tt}...}}
  *)
 
+declare if_quoted_op{'op; 'tt}
+
+ml_rw reduce_if_quoted_op : ('goal :  if_quoted_op{ bterm{| <H> >- 't |}; 'tt }) =
+   let bt, tt = two_subterms goal in
+   let hyps, t = dest_bterm_sequent bt in
+   let t' = unquote_term t in
+      tt
+
 declare if_bterm{'bt; 'tt}
 
 prim_rw reduce_ifbterm1 'H :

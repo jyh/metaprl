@@ -25,7 +25,7 @@ all: $(MAIN).cma
 opt: $(MAIN).cmxa
 
 clean::
-	del -f *.p4* *.pp* tptp_lex.ml
+	$(RM) *.p4* *.pp* tptp_lex.ml
 
 # Real makefile
 include $(ROOT)/mk/config

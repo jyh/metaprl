@@ -92,11 +92,11 @@ all: $(MAIN).cma
 opt: $(MAIN).cmxa
 
 $(TEST).run: $(CMOBJS)
-	rm -f $@
+	$(RM) $@
 	$(OCAMLCP) -o $@ -custom $(CMOBJS) $(CCLIBS)
 
 $(TEST).opt: $(CMXOBJS)
-	rm -f $@
+	$(RM) $@
 	$(OCAMLOPT) $(PROFILE) -o $@ $(CMXOBJS) $(CCLIBS)
 
 clean::

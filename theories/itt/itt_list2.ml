@@ -675,7 +675,6 @@ interactive replace_nth_wf {| intro [] |} :
  * Reverse.
  *)
 interactive rev_wf {| intro [] |} :
-   [wf] sequent { <H> >- "type"{'A} } -->
    [wf] sequent { <H> >- 'l in list{'A} } -->
    sequent { <H> >- rev{'l} in list{'A} }
 doc <:doc< @docoff >>

@@ -58,7 +58,9 @@ let mpoly_evalTopC_env e =
 
 let mpoly_evalTopC = funC mpoly_evalTopC_env
 
-let mpoly_evalC = repeatC (higherC mpoly_evalTopC)
+let mpoly_evalC =
+   funC (fun e -> repeatC (higherC (mpoly_evalTopC_env e)))
+
 (*let mpoly_evalC = repeatC (lowerC mpoly_evalTopC)*)
 (*slow:
  *let mpoly_evalC = repeatC (lowerC reduceTopC)

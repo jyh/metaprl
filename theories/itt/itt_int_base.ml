@@ -123,7 +123,8 @@ let arith_unfoldTopC_env e =
 
 let arith_unfoldTopC = funC arith_unfoldTopC_env
 
-let arith_unfoldC = repeatC (lowerC arith_unfoldTopC)
+let arith_unfoldC =
+   funC (fun e -> repeatC (lowerC (arith_unfoldTopC_env e)))
 
 (************************************************************************
  * TERMS                                                                *

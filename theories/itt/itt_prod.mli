@@ -12,6 +12,11 @@ include Itt_struct
 open Tacticals
 
 (*
+ * The independent product is defined as a dependent product.
+ *)
+rewrite unfoldProd : ('A * 'B) <--> (x: 'A * 'B)
+
+(*
  * H >- Ui ext A * B
  * by independentProductFormation
  * H >- Ui ext A

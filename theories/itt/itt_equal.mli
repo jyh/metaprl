@@ -225,6 +225,11 @@ topval squash_equalT : tactic
 topval squash_typeT : tactic
 
 (*
+ * Typehood from truth.
+ *)
+topval typeAssertT : tactic
+
+(*
  * Turn an eqcd tactic into a d tactic.
  *)
 val d_wrap_eqcd : tactic -> int -> tactic

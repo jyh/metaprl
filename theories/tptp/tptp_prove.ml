@@ -523,49 +523,49 @@ let failT gvars terms1 p =
    add_failure gvars terms1;
    raise (RefineError ("findResolventT", StringError "no resolvent found"))
 
-let rec prove_auxT { tptp_set = set;
-                     tptp_level = level;
-                     tptp_constants = constants;
-                     tptp_first_hyp = first_hyp;
-                     tptp_hyps = hyps
-    } = function
-   p ->
-      let goal = Sequent.concl p in
-         if !debug_tptp then
-            eprintf "proveT: %a%t" debug_print goal eflush;
-         if alpha_equal goal true_term then
-            dT 0 p
-         else
-            let gvars, terms1 = dest_goal (Sequent.concl p) in
-               check_cycle set gvars terms1;
-               check_failure gvars terms1;
-               let nextT =
-                  prove_auxT (**)
-                     { tptp_set = TermSet.add (gvars, terms1) set;
-                       tptp_level = level + 1;
-                       tptp_constants = constants;
-                       tptp_first_hyp = first_hyp;
-                       tptp_hyps = hyps
-                     }
-               in
-               let count = Sequent.hyp_count p in
-               let rec onSomeHypT l i =
-                  if i = count then
-                     List.rev (failT gvars terms1 :: l)
-                  else
-                     let l =
-                        try
-                           let hvars, terms2 = hyps.(i - 1) in
-                           let subst, terms1, terms2 = unify_term_lists constants terms1 terms2 in
-                           let goal = mk_new_goal varcount subst constants terms1 terms2 in
-                              (assert_new_goal level subst i goal nextT) :: l
-                        with
-                           RefineError _ ->
-                              l
-                     in
-                        onSomeHypT l (i + 1)
-               in
-                  firstT (onSomeHypT [] first_hyp) p
+let rec prove_auxT
+    { tptp_set = set;
+      tptp_level = level;
+      tptp_constants = constants;
+      tptp_first_hyp = first_hyp;
+      tptp_hyps = hyps
+    } p =
+   let goal = Sequent.concl p in
+      if !debug_tptp then
+         eprintf "proveT: %a%t" debug_print goal eflush;
+      if alpha_equal goal true_term then
+         dT 0 p
+      else
+         let gvars, terms1 = dest_goal (Sequent.concl p) in
+            check_cycle set gvars terms1;
+            check_failure gvars terms1;
+            let nextT =
+               prove_auxT (**)
+                  { tptp_set = TermSet.add (gvars, terms1) set;
+                    tptp_level = level + 1;
+                    tptp_constants = constants;
+                    tptp_first_hyp = first_hyp;
+                    tptp_hyps = hyps
+                  }
+            in
+            let count = Sequent.hyp_count p in
+            let rec onSomeHypT l i =
+               if i = count then
+                  List.rev (failT gvars terms1 :: l)
+               else
+                  let l =
+                     try
+                        let hvars, terms2 = hyps.(i - 1) in
+                        let subst, terms1, terms2 = unify_term_lists constants terms1 terms2 in
+                        let goal = mk_new_goal varcount subst constants terms1 terms2 in
+                           (assert_new_goal level subst i goal nextT) :: l
+                     with
+                        RefineError _ ->
+                           l
+                  in
+                     onSomeHypT l (i + 1)
+            in
+               firstT (onSomeHypT [] first_hyp) p
 
 let proveT p =
    let hyps = (Sequent.explode_sequent p).sequent_hyps in

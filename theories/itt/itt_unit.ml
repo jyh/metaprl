@@ -108,19 +108,17 @@ let unit_term = << unit >>
  * D
  *)
 let d_unitT i p =
-   let t = goal p in
-   let count = num_hyps t in
-      (if i = 0 then
-          unit_memberFormation count
-       else
-          let i, j = hyp_indices p i in
-             unitElimination i j) p
+   if i = 0 then
+      unit_memberFormation (hyp_count_addr p) p
+   else
+      let i, j = hyp_indices p i in
+         unitElimination i j p
 
 let d_resource = d_resource.resource_improve d_resource (unit_term, d_unitT)
 
 let d_unit_typeT i p =
    if i = 0 then
-      unitType (hyp_count p) p
+      unitType (hyp_count_addr p) p
    else
       raise (RefineError ("d_unit_typeT", StringError "no elimination form"))
 
@@ -132,12 +130,10 @@ let d_resource = d_resource.resource_improve d_resource (unit_type_term, d_unit_
  * EqCD.
  *)
 let eqcd_unitT p =
-   let count = num_hyps (goal p) in
-      unitEquality count p
+   unitEquality (hyp_count_addr p) p
 
 let eqcd_itT p =
-   let count = num_hyps (goal p) in
-      unit_memberEquality count p
+   unit_memberEquality (hyp_count_addr p) p
 
 let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (unit_term, eqcd_unitT)
 let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (it_term, eqcd_itT)
@@ -155,7 +151,7 @@ let d_resource = d_resource.resource_improve d_resource (equal_unit_term, d_wrap
  * Unit is squash stable.
  *)
 let squash_unit p =
-   unit_squashElimination (hyp_count p) p
+   unit_squashElimination (hyp_count_addr p) p
 
 let squash_resource = squash_resource.resource_improve squash_resource (unit_term, squash_unit)
 

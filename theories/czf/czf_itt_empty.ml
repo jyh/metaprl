@@ -75,7 +75,7 @@ let d_resource = d_resource.resource_improve d_resource (empty_member_term, d_em
  *)
 let d_empty_setT i p =
    if i = 0 then
-      empty_isset (hyp_count p) p
+      empty_isset (hyp_count_addr p) p
    else
       raise (RefineError ("d_empty_setT", StringError "no elimination form"))
 

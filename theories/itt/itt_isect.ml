@@ -156,13 +156,10 @@ let d_concl_isect p =
  *)
 let d_hyp_isect i p =
    let a = get_with_arg p in
-   let i, j = hyp_indices p i in
    let x, _ = Sequent.nth_hyp p i in
-      (match maybe_new_vars ["y"; "v"] (declared_vars p) with
-          [y; v] ->
-             intersectionElimination i j a x y v
-        | _ ->
-             failT) p
+   let j, k = hyp_indices p i in
+   let y, v = maybe_new_vars2 p "y" "v" in
+      intersectionElimination j k a x y v p
 
 (*
  * Join them.
@@ -179,7 +176,7 @@ let d_resource = d_resource.resource_improve d_resource (isect_term, d_isectT)
  * EQCD.
  *)
 let eqcd_isectT p =
-   let count = hyp_count p in
+   let count = hyp_count_addr p in
    let v = get_opt_var_arg "y" p in
       (intersectionEquality count v
        thenT addHiddenLabelT "wf") p
@@ -211,7 +208,7 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (isect
  *)
 let isect_subtypeT p =
    let a = get_opt_var_arg "x" p in
-      (intersectionSubtype (hyp_count p) a
+      (intersectionSubtype (hyp_count_addr p) a
        thenT addHiddenLabelT "subtype") p
 
 let sub_resource =

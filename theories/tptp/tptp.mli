@@ -128,6 +128,11 @@ val var_of_exists : term -> string
  * TACTICS                                                              *
  ************************************************************************)
 
+(*
+ * This is for proving intro rules.
+ *)
+val tptp_autoT : tactic
+
 val atomicT : int -> tactic
 val typeT : int -> tactic
 

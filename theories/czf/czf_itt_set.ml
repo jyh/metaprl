@@ -236,7 +236,7 @@ let dest_set_ind = dest_dep0_dep3_term set_ind_opname
 let d_collect_issetT i p =
    if i = 0 then
       let s = maybe_new_vars1 p "s" in
-         isset_collect (hyp_count p) s p
+         isset_collect (hyp_count_addr p) s p
    else
       raise (RefineError ("d_collect_issetT", StringError "no elimination form"))
 
@@ -256,7 +256,7 @@ let d_resource = d_resource.resource_improve d_resource (isset_collect_term, d_c
  *)
 let d_set_typeT i p =
    if i = 0 then
-      set_type (Sequent.hyp_count p) p
+      set_type (Sequent.hyp_count_addr p) p
    else
       raise (RefineError ("d_set_typeT", StringError "no elimination rule"))
 
@@ -320,7 +320,7 @@ let d_resource = d_resource.resource_improve d_resource (isset_type_term, d_isse
 let d_set_ind_equalT i p =
    if i = 0 then
    let t, f, g, t2 = maybe_new_vars4 p "T" "f" "g" "T2" in
-      (set_ind_equality (hyp_count p) t f g t2
+      (set_ind_equality (hyp_count_addr p) t f g t2
        thenLT [addHiddenLabelT "wf";
                addHiddenLabelT "main"]) p
    else
@@ -336,7 +336,7 @@ let d_resource = d_resource.resource_improve d_resource (set_ind_equal_term, d_s
  * Equal sets.
  *)
 let eqSetT p =
-   equal_set (hyp_count p) p
+   equal_set (hyp_count_addr p) p
 
 (*
  * Assumption.
@@ -353,7 +353,7 @@ let splitT t i p =
       if i = 0 then
          let goal = var_subst (Sequent.concl p) t v_z in
          let bind = mk_bind_term v_z goal in
-            (set_split_concl (hyp_count p) t bind v_T v_f v_z
+            (set_split_concl (hyp_count_addr p) t bind v_T v_f v_z
              thenLT [addHiddenLabelT "wf";
                      addHiddenLabelT "wf";
                      addHiddenLabelT "main"]) p

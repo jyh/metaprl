@@ -238,7 +238,7 @@ let mk_decide_term = mk_dep0_dep1_dep1_term decide_opname
  * D the conclusion.
  *)
 let d_concl_union p =
-   let count = hyp_count p in
+   let count = hyp_count_addr p in
    let flag =
       try get_sel_arg p with
          Not_found ->
@@ -260,7 +260,7 @@ let d_concl_union p =
  * We take the argument.
  *)
 let d_hyp_union i p =
-   let count = hyp_count p in
+   let count = hyp_count_addr p in
    let z, _ = Sequent.nth_hyp p i in
    let j, k = hyp_indices p i in
    let u, v = maybe_new_vars2 p z z in
@@ -282,7 +282,7 @@ let d_resource = d_resource.resource_improve d_resource (union_term, d_unionT)
  *)
 let d_union_typeT i p =
    if i = 0 then
-      unionType (hyp_count p) p
+      unionType (hyp_count_addr p) p
    else
       raise (RefineError ("d_union_typeT", StringError "no elimination form"))
 
@@ -298,7 +298,7 @@ let d_resource = d_resource.resource_improve d_resource (union_type_term, d_unio
  * EQCD union.
  *)
 let eqcd_unionT p =
-   let count = hyp_count p in
+   let count = hyp_count_addr p in
       (unionEquality count
        thenT addHiddenLabelT "wf") p
 
@@ -312,7 +312,7 @@ let d_resource = d_resource.resource_improve d_resource (union_equal_term, d_wra
  * EQCD inl.
  *)
 let eqcd_inlT p =
-   let count = hyp_count p in
+   let count = hyp_count_addr p in
       (inlEquality count
        thenT addHiddenLabelT "wf") p
 
@@ -326,7 +326,7 @@ let d_resource = d_resource.resource_improve d_resource (inl_equal_term, d_wrap_
  * EQCD inr.
  *)
 let eqcd_inrT p =
-   let count = hyp_count p in
+   let count = hyp_count_addr p in
       (inrEquality count
        thenT addHiddenLabelT "wf") p
 
@@ -401,7 +401,7 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (decid
  * Subtyping of two union types.
  *)
 let union_subtypeT p =
-   (unionSubtype (hyp_count p)
+   (unionSubtype (hyp_count_addr p)
     thenT addHiddenLabelT "subtype") p
 
 let sub_resource =

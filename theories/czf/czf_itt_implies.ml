@@ -96,7 +96,7 @@ interactive iff_res 'H 'w :
 let d_fun_funT i p =
    if i = 0 then
       let z = maybe_new_vars1 p "z" in
-         fun_fun (hyp_count p) z p
+         fun_fun (hyp_count_addr p) z p
    else
       raise (RefineError ("d_fun_funT", StringError "no elimination fimpliesm"))
 
@@ -110,7 +110,7 @@ let d_resource = d_resource.resource_improve d_resource (fun_fun_term, d_fun_fun
 let d_fun_resT i p =
    if i = 0 then
       let z = maybe_new_vars1 p "z" in
-         fun_res (hyp_count p) z p
+         fun_res (hyp_count_addr p) z p
    else
       raise (RefineError ("d_fun_resT", StringError "no elimination fimpliesm"))
 
@@ -124,7 +124,7 @@ let d_resource = d_resource.resource_improve d_resource (fun_res_term, d_fun_res
 let d_implies_funT i p =
    if i = 0 then
       let z = maybe_new_vars1 p "z" in
-         implies_fun (hyp_count p) z p
+         implies_fun (hyp_count_addr p) z p
    else
       raise (RefineError ("d_implies_funT", StringError "no elimination fimpliesm"))
 
@@ -138,7 +138,7 @@ let d_resource = d_resource.resource_improve d_resource (implies_fun_term, d_imp
 let d_implies_resT i p =
    if i = 0 then
       let z = maybe_new_vars1 p "z" in
-         implies_res (hyp_count p) z p
+         implies_res (hyp_count_addr p) z p
    else
       raise (RefineError ("d_implies_resT", StringError "no elimination fimpliesm"))
 
@@ -152,7 +152,7 @@ let d_resource = d_resource.resource_improve d_resource (implies_res_term, d_imp
 let d_iff_funT i p =
    if i = 0 then
       let z = maybe_new_vars1 p "z" in
-         iff_fun (hyp_count p) z p
+         iff_fun (hyp_count_addr p) z p
    else
       raise (RefineError ("d_iff_funT", StringError "no elimination fiffm"))
 
@@ -166,7 +166,7 @@ let d_resource = d_resource.resource_improve d_resource (iff_fun_term, d_iff_fun
 let d_iff_resT i p =
    if i = 0 then
       let z = maybe_new_vars1 p "z" in
-         iff_res (hyp_count p) z p
+         iff_res (hyp_count_addr p) z p
    else
       raise (RefineError ("d_iff_resT", StringError "no elimination fiffm"))
 

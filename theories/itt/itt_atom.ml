@@ -93,7 +93,7 @@ let bogus_token = << token["token":t] >>
 
 let d_atomT i p =
    if i = 0 then
-      tokenFormation (num_hyps (goal p)) bogus_token p
+      tokenFormation (hyp_count_addr p) bogus_token p
    else
       raise (RefineError ("d_atomT", StringError "no elimination form"))
 
@@ -103,11 +103,10 @@ let d_resource = d_resource.resource_improve d_resource (atom_term, d_atomT)
  * EqCD.
  *)
 let eqcd_atomT p =
-   let count = num_hyps (goal p) in
-      atomEquality count p
+   atomEquality (hyp_count_addr p) p
 
 let eqcd_tokenT p =
-   let count = hyp_count p in
+   let count = hyp_count_addr p in
       tokenEquality count p
 
 let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (atom_term, eqcd_atomT)
@@ -122,7 +121,7 @@ let d_resource = d_resource.resource_improve d_resource (atom_equal_term, d_wrap
 
 let d_atom_typeT i p =
    if i = 0 then
-      atomType (hyp_count p) p
+      atomType (hyp_count_addr p) p
    else
       raise (RefineError ("d_atom_typeT", StringError "no elimination form"))
 

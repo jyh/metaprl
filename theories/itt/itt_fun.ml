@@ -165,7 +165,7 @@ prim independentFunctionSubtype 'H :
  * D the conclusion.
  *)
 let d_concl_fun p =
-   let count = hyp_count p in
+   let count = hyp_count_addr p in
    let z = get_opt_var_arg "z" p in
       (independentLambdaFormation count z
        thenLT [addHiddenLabelT "wf";
@@ -207,7 +207,7 @@ let d_resource = d_resource.resource_improve d_resource (fun_term, d_funT)
 let d_fun_typeT i p =
    if i = 0 then
       let x = maybe_new_vars1 p "x" in
-         independentFunctionType (hyp_count p) x p
+         independentFunctionType (hyp_count_addr p) x p
    else
       let _, t = Sequent.nth_hyp p i in
          raise (RefineError ("d_fun_typeT", StringTermError ("no elimination form", t)))
@@ -224,7 +224,7 @@ let d_resource = d_resource.resource_improve d_resource (fun_type_term, d_fun_ty
  * EQCD.
  *)
 let eqcd_funT p =
-   let count = hyp_count p in
+   let count = hyp_count_addr p in
       (independentFunctionEquality count
        thenT addHiddenLabelT "wf") p
 
@@ -248,7 +248,7 @@ let eqcd_applyT p =
                      let _, arg_type = infer_type p a in
                         mk_fun_term arg_type eq_type
    in
-   let i = hyp_count p in
+   let i = hyp_count_addr p in
       if is_fun_term t then
          independentApplyEquality i t p
       else if is_dfun_term t then
@@ -299,7 +299,7 @@ let eqcd_lambdaT p =
    let t, l, _ = dest_equal (concl p) in
    let v, _ = dest_lambda l in
    let x = get_opt_var_arg v p in
-   let count = hyp_count p in
+   let count = hyp_count_addr p in
    let tac =
       if is_fun_term t then
          independentLambdaEquality count x
@@ -344,7 +344,7 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (fun_t
  * Subtyping of two function types.
  *)
 let fun_subtypeT p =
-   (independentFunctionSubtype (hyp_count p)
+   (independentFunctionSubtype (hyp_count_addr p)
     thenT addHiddenLabelT "subtype") p
 
 let sub_resource =

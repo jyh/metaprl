@@ -93,7 +93,7 @@ interactive union_member_elim3 'H 'J 'z :
  *)
 let d_union_setT i p =
    if i = 0 then
-      union_isset (hyp_count p) p
+      union_isset (hyp_count_addr p) p
    else
       raise (RefineError ("d_union_issetT", StringError "no elimination form"))
 
@@ -114,7 +114,7 @@ let d_unionT i p =
             else
                union_member_intro_right
          in
-            rule (hyp_count p) p
+            rule (hyp_count_addr p) p
       with
          RefineError _ ->
             raise (RefineError ("d_unionT", StringError "d_unionT requires a selT argument"))

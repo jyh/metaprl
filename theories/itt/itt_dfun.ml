@@ -201,7 +201,7 @@ prim function_equalityElimination 'H 'J 'x 'y 'z 'a :
  * D the conclusion.
  *)
 let d_concl_dfun p =
-   let count = hyp_count p in
+   let count = hyp_count_addr p in
    let t = concl p in
    let z, _, _ = dest_dfun t in
    let z' = get_opt_var_arg z p in
@@ -219,16 +219,12 @@ let d_hyp_dfun i p =
          Not_found ->
             raise (RefineError ("d_hyp_dfun", StringError "requires an argument"))
    in
-   let count = hyp_count p in
    let f, _ = Sequent.nth_hyp p i in
    let i, j = hyp_indices p i in
-      (match maybe_new_vars ["y"; "v"] (declared_vars p) with
-          [y; v] ->
-             functionElimination i j f a y v
-             thenLT [addHiddenLabelT "wf";
-                     addHiddenLabelT "main"]
-        | _ ->
-             failT) p
+   let y, v = maybe_new_vars2 p "y" "v" in
+       (functionElimination i j f a y v
+        thenLT [addHiddenLabelT "wf";
+                addHiddenLabelT "main"]) p
 
 (*
  * Join them.
@@ -247,7 +243,7 @@ let d_resource = d_resource.resource_improve d_resource (dfun_term, d_dfunT)
 let d_dfun_typeT i p =
    if i = 0 then
       let x = maybe_new_vars1 p "x" in
-         functionType (hyp_count p) x p
+         functionType (hyp_count_addr p) x p
    else
       let _, t = Sequent.nth_hyp p i in
          raise (RefineError ("d_dfun_typeT", StringTermError ("no elimination form", t)))
@@ -267,7 +263,7 @@ let eqcd_dfunT p =
    let _, x, _ = dest_equal (concl p) in
    let v, _, _ = dest_dfun x in
    let x = get_opt_var_arg v p in
-   let count = hyp_count p in
+   let count = hyp_count_addr p in
       (functionEquality count x
        thenT addHiddenLabelT "wf") p
 
@@ -286,7 +282,7 @@ let eqcd_lambdaT p =
    let _, l, _ = dest_equal (concl p) in
    let v, _ = dest_lambda l in
    let x = get_opt_var_arg v p in
-   let count = hyp_count p in
+   let count = hyp_count_addr p in
       (lambdaEquality count x
        thenT addHiddenLabelT "wf") p
 
@@ -308,7 +304,7 @@ let eqcd_applyT p =
          RefineError _ ->
             raise (RefineError ("eqcd_applyT", StringError "need an argument"))
    in
-   let count = hyp_count p in
+   let count = hyp_count_addr p in
       (applyEquality count t
        thenT addHiddenLabelT "wf") p
 
@@ -344,7 +340,7 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (dfun_
  *)
 let dfun_subtypeT p =
    let a = get_opt_var_arg "x" p in
-      (functionSubtype (hyp_count p) a
+      (functionSubtype (hyp_count_addr p) a
        thenT addHiddenLabelT "subtype") p
 
 let sub_resource =

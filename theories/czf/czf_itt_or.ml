@@ -76,7 +76,7 @@ interactive or_res 'H 'w :
 let d_union_funT i p =
    if i = 0 then
       let z = maybe_new_vars1 p "z" in
-         union_fun (hyp_count p) z p
+         union_fun (hyp_count_addr p) z p
    else
       raise (RefineError ("d_union_funT", StringError "no elimination form"))
 
@@ -90,7 +90,7 @@ let d_resource = d_resource.resource_improve d_resource (union_fun_term, d_union
 let d_union_resT i p =
    if i = 0 then
       let z = maybe_new_vars1 p "z" in
-         union_res (hyp_count p) z p
+         union_res (hyp_count_addr p) z p
    else
       raise (RefineError ("d_union_resT", StringError "no elimination form"))
 
@@ -104,7 +104,7 @@ let d_resource = d_resource.resource_improve d_resource (union_res_term, d_union
 let d_or_funT i p =
    if i = 0 then
       let z = maybe_new_vars1 p "z" in
-         or_fun (hyp_count p) z p
+         or_fun (hyp_count_addr p) z p
    else
       raise (RefineError ("d_or_funT", StringError "no elimination form"))
 
@@ -118,7 +118,7 @@ let d_resource = d_resource.resource_improve d_resource (or_fun_term, d_or_funT)
 let d_or_resT i p =
    if i = 0 then
       let z = maybe_new_vars1 p "z" in
-         or_res (hyp_count p) z p
+         or_res (hyp_count_addr p) z p
    else
       raise (RefineError ("d_or_resT", StringError "no elimination form"))
 

@@ -125,7 +125,7 @@ interactive sep_fun 'H 'u 'v :
 let d_sep_setT i p =
    if i = 0 then
       let z = maybe_new_vars1 p "z" in
-         sep_isset (hyp_count p) z p
+         sep_isset (hyp_count_addr p) z p
    else
       raise (RefineError ("d_sep_isset", StringError "no elimination form"))
 
@@ -138,7 +138,7 @@ let d_resource = d_resource.resource_improve d_resource (sep_isset_term, d_sep_s
  *)
 let d_sep_memberT i p =
    if i = 0 then
-      (sep_intro2 (hyp_count p)
+      (sep_intro2 (hyp_count_addr p)
        thenLT [addHiddenLabelT "wf";
                addHiddenLabelT "wf";
                addHiddenLabelT "main";

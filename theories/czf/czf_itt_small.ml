@@ -135,14 +135,14 @@ let dest_small_type =
  * Something is in a type if it is small.
  *)
 let smallTypeT p =
-   small_type_type (hyp_count p) p
+   small_type_type (hyp_count_addr p) p
 
 (*
  * Small is a type.
  *)
 let d_small_typeT i p =
    if i = 0 then
-      small_type (hyp_count p) p
+      small_type (hyp_count_addr p) p
    else
       raise (RefineError ("d_small_typeT", StringTermError ("no elimination rule", small_type_term)))
 
@@ -155,7 +155,7 @@ let d_resource = d_resource.resource_improve d_resource (small_type_term, d_smal
  *)
 let d_void_small_typeT i p =
    if i = 0 then
-      void_small (hyp_count p) p
+      void_small (hyp_count_addr p) p
    else
       raise (RefineError ("d_void_small_typeT", StringError "no elimination form"))
 
@@ -165,7 +165,7 @@ let d_resource = d_resource.resource_improve d_resource (void_small_type_term, d
 
 let d_unit_small_typeT i p =
    if i = 0 then
-      unit_small (hyp_count p) p
+      unit_small (hyp_count_addr p) p
    else
       raise (RefineError ("d_unit_small_typeT", StringError "no elimination form"))
 
@@ -175,7 +175,7 @@ let d_resource = d_resource.resource_improve d_resource (unit_small_type_term, d
 
 let d_int_small_typeT i p =
    if i = 0 then
-      int_small (hyp_count p) p
+      int_small (hyp_count_addr p) p
    else
       raise (RefineError ("d_int_small_typeT", StringError "no elimination form"))
 
@@ -186,7 +186,7 @@ let d_resource = d_resource.resource_improve d_resource (int_small_type_term, d_
 let d_dfun_small_typeT i p =
    if i = 0 then
       let v = maybe_new_vars1 p "v" in
-         dfun_small (hyp_count p) v p
+         dfun_small (hyp_count_addr p) v p
    else
       raise (RefineError ("d_dfun_small_typeT", StringError "no elimination form"))
 
@@ -196,7 +196,7 @@ let d_resource = d_resource.resource_improve d_resource (dfun_small_type_term, d
 
 let d_fun_small_typeT i p =
    if i = 0 then
-      fun_small (hyp_count p) p
+      fun_small (hyp_count_addr p) p
    else
       raise (RefineError ("d_fun_small_typeT", StringError "no elimination form"))
 
@@ -207,7 +207,7 @@ let d_resource = d_resource.resource_improve d_resource (fun_small_type_term, d_
 let d_dprod_small_typeT i p =
    if i = 0 then
       let v = maybe_new_vars1 p "v" in
-         dprod_small (hyp_count p) v p
+         dprod_small (hyp_count_addr p) v p
    else
       raise (RefineError ("d_dprod_small_typeT", StringError "no elimination form"))
 
@@ -217,7 +217,7 @@ let d_resource = d_resource.resource_improve d_resource (dprod_small_type_term, 
 
 let d_prod_small_typeT i p =
    if i = 0 then
-      prod_small (hyp_count p) p
+      prod_small (hyp_count_addr p) p
    else
       raise (RefineError ("d_prod_small_typeT", StringError "no elimination form"))
 
@@ -227,7 +227,7 @@ let d_resource = d_resource.resource_improve d_resource (prod_small_type_term, d
 
 let d_union_small_typeT i p =
    if i = 0 then
-      union_small (hyp_count p) p
+      union_small (hyp_count_addr p) p
    else
       raise (RefineError ("d_union_small_typeT", StringError "no elimination form"))
 
@@ -237,7 +237,7 @@ let d_resource = d_resource.resource_improve d_resource (union_small_type_term, 
 
 let d_equal_small_typeT i p =
    if i = 0 then
-      equal_small (hyp_count p) p
+      equal_small (hyp_count_addr p) p
    else
       raise (RefineError ("d_equal_small_typeT", StringError "no elimination form"))
 

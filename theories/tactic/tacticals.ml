@@ -525,7 +525,7 @@ let onAllHypsT tac p =
       else
          idT
    in
-      aux ((Sequent.hyp_count p) - 1) p
+      aux (Sequent.hyp_count p) p
 
 (*
  * Include conclusion.
@@ -554,7 +554,7 @@ let onAllMHypsT tac p =
       else
          idT
    in
-      aux ((Sequent.hyp_count p) - 1) p
+      aux (Sequent.hyp_count p) p
 
 let onAllMClausesT tac =
    onAllMHypsT tac thenMT onConclT tac
@@ -577,7 +577,7 @@ let onSomeHypT tac p =
       else
          idT
    in
-      aux ((Sequent.hyp_count p) - 1) p
+      aux (Sequent.hyp_count p) p
 
 (*
  * Variable name addressing.

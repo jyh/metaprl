@@ -248,7 +248,7 @@ let mk_fun_prop_term = mk_dep1_term fun_prop_opname
  *)
 let d_fun_set_typeT i p =
    if i = 0 then
-      fun_set_type (hyp_count p) p
+      fun_set_type (hyp_count_addr p) p
    else
       raise (RefineError ("d_fun_set_typeT", StringError "no elimination form"))
 
@@ -258,7 +258,7 @@ let d_resource = d_resource.resource_improve d_resource (fun_set_type_term, d_fu
 
 let d_fun_prop_typeT i p =
    if i = 0 then
-      fun_prop_type (hyp_count p) p
+      fun_prop_type (hyp_count_addr p) p
    else
       raise (RefineError ("d_fun_prop_typeT", StringError "no elimination form"))
 
@@ -272,7 +272,7 @@ let d_resource = d_resource.resource_improve d_resource (fun_prop_type_term, d_f
 let eqcd_eq_innerT p =
    let goal = Sequent.concl p in
    let _, eq1, eq2 = dest_equal goal in
-   let j = hyp_count p in
+   let j = hyp_count_addr p in
       if alpha_equal eq1 eq2 then
          eq_inner_equality1 j p
       else
@@ -291,7 +291,7 @@ let d_resource = d_resource.resource_improve d_resource (eq_inner_equal_term, d_
  *)
 let d_eq_inner_typeT i p =
    if i = 0 then
-      eq_inner_type (hyp_count p) p
+      eq_inner_type (hyp_count_addr p) p
    else
       raise (RefineError ("d_eq_inner_typeT", StringError "no elimination form"))
 
@@ -304,7 +304,7 @@ let d_resource = d_resource.resource_improve d_resource (eq_inner_type_term, d_e
  *)
 let d_eq_inner_funT i p =
    if i = 0 then
-      eq_inner_fun (hyp_count p) p
+      eq_inner_fun (hyp_count_addr p) p
    else
       raise (RefineError ("d_eq_inner_funT", StringError "no elimination form"))
 
@@ -317,7 +317,7 @@ let d_resource = d_resource.resource_improve d_resource (eq_inner_fun_term, d_eq
  *)
 let d_eq_typeT i p =
    if i = 0 then
-      eq_type (hyp_count p) p
+      eq_type (hyp_count_addr p) p
    else
       raise (RefineError ("d_eq_typeT", StringError "no elimination form"))
 
@@ -330,7 +330,7 @@ let d_resource = d_resource.resource_improve d_resource (eq_type_term, d_eq_type
  *)
 let d_eq_funT i p =
    if i = 0 then
-      eq_fun (hyp_count p) p
+      eq_fun (hyp_count_addr p) p
    else
       raise (RefineError ("d_eq_funT", StringError "no elimination form"))
 
@@ -359,7 +359,7 @@ let d_fun_setT i p =
          else
             fun_set
       in
-         tac (hyp_count p) p
+         tac (hyp_count_addr p) p
    else
       raise (RefineError ("d_fun_setT", StringError "no elimination form"))
 
@@ -374,7 +374,7 @@ let d_fun_propT i p =
          if is_free_var v t then
             raise (RefineError ("d_fun_propT", StringStringError ("variable is free", v)))
          else
-            fun_prop (hyp_count p) p
+            fun_prop (hyp_count_addr p) p
    else
       raise (RefineError ("d_fun_propT", StringError "no elimination form"))
 
@@ -390,7 +390,7 @@ let setConclSubstT t p =
    let goal = Sequent.concl p in
    let z = maybe_new_vars1 p "v" in
    let bind = mk_bind_term z (var_subst goal s1 z) in
-      (eq_concl_subst (hyp_count p) s1 s2 bind z
+      (eq_concl_subst (hyp_count_addr p) s1 s2 bind z
        thenLT [addHiddenLabelT "eq";
                addHiddenLabelT "main";
                addHiddenLabelT "wf"]) p
@@ -416,22 +416,22 @@ let setSubstT t i =
  * Equality relations.
  *)
 let eqSetRefT p =
-   eq_ref (hyp_count p) p
+   eq_ref (hyp_count_addr p) p
 
 let eqSetSymT p =
-   eq_sym (hyp_count p) p
+   eq_sym (hyp_count_addr p) p
 
 let eqSetTransT t p =
-   eq_trans (hyp_count p) t p
+   eq_trans (hyp_count_addr p) t p
 
 (*
  * Sethood.
  *)
 let eqSetLeftT t p =
-   eq_isset_left (hyp_count p) t p
+   eq_isset_left (hyp_count_addr p) t p
 
 let eqSetRightT t p =
-   eq_isset_right (hyp_count p) t p
+   eq_isset_right (hyp_count_addr p) t p
 
 (*
  * Always reasonable to try reflexivity.

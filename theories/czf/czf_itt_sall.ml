@@ -79,7 +79,7 @@ interactive sall_elim 'H 'J 'x 'z 'w :
 let d_sallT i p =
    if i = 0 then
       let v = maybe_new_vars1 p "v" in
-         sall_intro (hyp_count p) v p
+         sall_intro (hyp_count_addr p) v p
    else
       let x, _ = nth_hyp p i in
       let w = Var.maybe_new_vars1 p "u" in
@@ -99,7 +99,7 @@ let d_resource = d_resource.resource_improve d_resource (sall_term, d_sallT)
 let d_sall_typeT i p =
    if i = 0 then
       let v = maybe_new_vars1 p "v" in
-         sall_type (hyp_count p) v p
+         sall_type (hyp_count_addr p) v p
    else
       raise (RefineError ("d_sall_typeT", StringError "no elim form"))
 

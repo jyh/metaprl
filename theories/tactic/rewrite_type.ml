@@ -298,7 +298,7 @@ let cutT i addr t p =
       let t2 = Sequent.concl p in
       let j = Sequent.hyp_count p in
       let t1 = replace_subterm t2 addr t in
-      let i = Sequent.hyp_count p in
+      let i = Sequent.hyp_count_addr p in
          rewriteConclCut i t1 p
    else
       let goal = Sequent.goal p in
@@ -336,7 +336,7 @@ let rwAxiomT =
  * Apply sequent axiom rule.
  *)
 let rwSeqAxiomT p =
-   rewriteSequentAxiom (Sequent.hyp_count p) p
+   rewriteSequentAxiom (Sequent.hyp_count_addr p) p
 
 (*
  * root: address of the clause

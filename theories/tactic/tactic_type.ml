@@ -173,7 +173,7 @@ let goal { ref_goal = goal } =
    fst (dest_msequent goal)
 
 let nth_hyp { ref_goal = goal } i =
-   TermMan.nth_hyp (fst (dest_msequent goal)) (i - 1)
+   TermMan.nth_hyp (fst (dest_msequent goal)) i
 
 let nth_concl { ref_goal = goal } i =
    TermMan.nth_concl (fst (dest_msequent goal)) i
@@ -461,7 +461,7 @@ let tactic_of_rule rule (addrs, names) params arg =
       if !debug_tactic then
          eprintf "Collecting addresses%t" eflush
    in
-   let rule = rule (nth_clause_addrs (fst (dest_msequent goal)) addrs, names) params in
+   let rule = rule (addrs, names) params in
    let _ =
       if !debug_tactic then
          eprintf "Starting refinement%t" eflush

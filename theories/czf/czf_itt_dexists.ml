@@ -105,7 +105,7 @@ let d_dexistsT i p =
    if i = 0 then
       let z = get_with_arg p in
       let w = maybe_new_vars1 p "v" in
-         (dexists_intro (hyp_count p) z w
+         (dexists_intro (hyp_count_addr p) z w
           thenLT [addHiddenLabelT "wf";
                   addHiddenLabelT "wf";
                   addHiddenLabelT "main";
@@ -129,7 +129,7 @@ let d_resource = d_resource.resource_improve d_resource (dexists_term, d_dexists
 let d_dexists_typeT i p =
    if i = 0 then
       let v = maybe_new_vars1 p "v" in
-         (dexists_type (hyp_count p) v thenT addHiddenLabelT "wf") p
+         (dexists_type (hyp_count_addr p) v thenT addHiddenLabelT "wf") p
    else
       raise (RefineError ("d_desists_typeT", StringError "no elimination form"))
 
@@ -143,7 +143,7 @@ let d_resource = d_resource.resource_improve d_resource (dexists_type_term, d_de
 let d_dexists_resT i p =
    if i = 0 then
       let u, v = maybe_new_vars2 p "u" "v" in
-         (dexists_res (hyp_count p) u v
+         (dexists_res (hyp_count_addr p) u v
           thenLT [addHiddenLabelT "wf";
                   addHiddenLabelT "wf";
                   addHiddenLabelT "main"]) p

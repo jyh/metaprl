@@ -118,7 +118,7 @@ val term_of_extract : Refine.refiner -> extract -> term list -> term
  * These functions are required by the Filter_prog module.
  *)
 val compile_rule : refiner -> prim_tactic -> pre_tactic
-val tactic_of_rule : pre_tactic -> int array * string array -> term list -> tactic
+val tactic_of_rule : pre_tactic -> address array * string array -> term list -> tactic
 
 (*
  * Also convert rewrites.

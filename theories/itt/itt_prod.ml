@@ -36,6 +36,11 @@ let _ =
 (* debug_string DebugLoad "Loading itt_prod..." *)
 
 (*
+ * The independent product is defined as a dependent product.
+ *)
+primrw unfoldProd : ('A * 'B) <--> (x: 'A * 'B)
+
+(*
  * H >- Ui ext A * B
  * by independentProductFormation
  * H >- Ui ext A
@@ -124,7 +129,7 @@ prim independentProductSubtype 'H :
  * D the conclusion.
  *)
 let d_concl_prod p =
-   let count = hyp_count p in
+   let count = hyp_count_addr p in
       independentPairFormation count p
 
 (*
@@ -157,7 +162,7 @@ let d_resource = d_resource.resource_improve d_resource (prod_term, d_prodT)
  *)
 let d_prod_typeT i p =
    if i = 0 then
-      independentProductType (Sequent.hyp_count p) p
+      independentProductType (Sequent.hyp_count_addr p) p
    else
       raise (RefineError ("d_prod_typeT", StringError "no elimination form"))
 
@@ -169,7 +174,7 @@ let d_resource = d_resource.resource_improve d_resource (prod_type_term, d_prod_
  * EQCD.
  *)
 let eqcd_prodT p =
-   let count = hyp_count p in
+   let count = hyp_count_addr p in
       (independentProductEquality count
        thenT addHiddenLabelT "wf") p
 
@@ -203,7 +208,7 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (prod_
  * Subtyping of two product types.
  *)
 let prod_subtypeT p =
-   (independentProductSubtype (hyp_count p)
+   (independentProductSubtype (hyp_count_addr p)
     thenT addHiddenLabelT "subtype") p
 
 let sub_resource =

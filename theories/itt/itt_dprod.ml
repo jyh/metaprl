@@ -235,7 +235,7 @@ let d_concl_dprod p =
       try get_with_arg p with
          Not_found -> raise (RefineError ("d_concl_dprod", StringError "requires an argument"))
    in
-   let count = hyp_count p in
+   let count = hyp_count_addr p in
    let y = get_opt_var_arg "y" p in
       (pairFormation count t y
        thenLT [addHiddenLabelT "wf";
@@ -275,7 +275,7 @@ let d_dprod_typeT i p =
       let concl = Sequent.concl p in
       let v, _, _ = dest_dprod (one_subterm concl) in
       let v = maybe_new_vars1 p v in
-         productType (hyp_count p) v p
+         productType (hyp_count_addr p) v p
    else
       raise (RefineError ("d_prod_typeT", StringError "no elimination form"))
 
@@ -294,7 +294,7 @@ let eqcd_dprodT p =
    let _, l, _ = dest_equal (concl p) in
    let v, _, _ = dest_dprod l in
    let x = get_opt_var_arg v p in
-   let count = hyp_count p in
+   let count = hyp_count_addr p in
       (productEquality count x
        thenT addHiddenLabelT "wf") p
 
@@ -311,7 +311,7 @@ let eqcd_pairT p =
    let l, _, _ = dest_equal (concl p) in
    let v, _, _ = dest_dprod l in
    let x = get_opt_var_arg v p in
-   let count = hyp_count p in
+   let count = hyp_count_addr p in
       (pairEquality count x
        thenT addHiddenLabelT "wf") p
 
@@ -384,7 +384,7 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (sprea
  *)
 let dprod_subtypeT p =
    let a = get_opt_var_arg "x" p in
-      (productSubtype (hyp_count p) a
+      (productSubtype (hyp_count_addr p) a
        thenT addHiddenLabelT "subtype") p
 
 let sub_resource =

@@ -203,7 +203,7 @@ let dest_is_pre_set = dest_dep0_term is_pre_set_opname
 let d_collect_is_pre_setT i p =
    if i = 0 then
       let s = maybe_new_vars1 p "s" in
-         is_pre_set_collect (hyp_count p) s p
+         is_pre_set_collect (hyp_count_addr p) s p
    else
       raise (RefineError ("d_collect_is_pre_setT", StringError "no elimination form"))
 
@@ -219,7 +219,7 @@ let d_resource = d_resource.resource_improve d_resource (is_pre_set_collect_term
  *)
 let d_pre_set_typeT i p =
    if i = 0 then
-      pre_set_type (Sequent.hyp_count p) p
+      pre_set_type (Sequent.hyp_count_addr p) p
    else
       raise (RefineError ("d_pre_set_typeT", StringError "no elimination rule"))
 
@@ -235,7 +235,7 @@ let d_pre_setT i p =
       raise (RefineError ("d_pre_setT", StringError "no introduction rule"))
    else
       let thin =
-         if i = hyp_count p then
+         if i = hyp_count_addr p then
             thinT i
          else
             idT
@@ -281,7 +281,7 @@ let d_resource = d_resource.resource_improve d_resource (is_pre_set_type_term, d
  * Equal sets.
  *)
 let eqPreSetT p =
-   equal_pre_set (hyp_count p) p
+   equal_pre_set (hyp_count_addr p) p
 
 (*
  * Assumption.
@@ -299,7 +299,7 @@ let splitT t i p =
       if i = 0 then
          let goal = var_subst (Sequent.concl p) t v_z in
          let bind = mk_bind_term v_z goal in
-            (set_split_concl (hyp_count p) t bind v_T v_f v_z
+            (set_split_concl (hyp_count_addr p) t bind v_T v_f v_z
              thenLT [addHiddenLabelT "wf";
                      addHiddenLabelT "wf";
                      addHiddenLabelT "main"]) p

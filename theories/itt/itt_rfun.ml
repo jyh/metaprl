@@ -268,15 +268,12 @@ let d_concl_rfun p =
          Not_found -> raise (RefineError ("d_concl_rfun", StringError "need a well-order term"))
    in
    let t = goal p in
-   let count = hyp_count p in
-      (match maybe_new_vars ["g"; "y"; "z"] (declared_vars p) with
-          [g; y; z] ->
-             rfunction_lambdaFormation count wf g y z
-             thenLT [addHiddenLabelT "wf";
-                     addHiddenLabelT "aux";
-                     idT]
-        | _ ->
-             raise (RefineError ("d_concl_rfun", StringError "not function type"))) p
+   let count = hyp_count_addr p in
+   let g, y, z = maybe_new_vars3 p "g" "y" "z" in
+       (rfunction_lambdaFormation count wf g y z
+        thenLT [addHiddenLabelT "wf";
+                addHiddenLabelT "aux";
+                idT]) p
 
 (*
  * D a hyp.
@@ -284,14 +281,11 @@ let d_concl_rfun p =
  *)
 let d_hyp_rfun i p =
    let a = get_with_arg p in
-   let i, j = hyp_indices p i in
    let f, _ = Sequent.nth_hyp p i in
-      (match maybe_new_vars ["y"; "v"] (declared_vars p) with
-          [y; v] ->
-             rfunctionElimination i j f a y v
-             thenLT [addHiddenLabelT "wf"; idT]
-        | _ ->
-             failT) p
+   let j, k = hyp_indices p i in
+   let y, v = maybe_new_vars2 p "y" "v" in
+       (rfunctionElimination j k f a y v
+        thenLT [addHiddenLabelT "wf"; idT]) p
 
 (*
  * Join them.
@@ -319,13 +313,10 @@ let eqcd_rfunT p =
          Not_found -> raise (RefineError ("eqcd_rfun", StringError "need a well-order term"))
    in
    let t = goal p in
-   let count = hyp_count p in
-      (match maybe_new_vars ["g"; "y"; "z"] (declared_vars p) with
-          [g; y; z] ->
-             rfunctionEquality count wf g y z
-             thenT addHiddenLabelT "wf"
-        | _ ->
-             failT) p
+   let count = hyp_count_addr p in
+   let g, y, z = maybe_new_vars3 p "g" "y" "z" in
+       (rfunctionEquality count wf g y z
+        thenT addHiddenLabelT "wf") p
 
 let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (rfun_term, eqcd_rfunT)
 

@@ -107,7 +107,7 @@ interactive eq_inner_trans 'H 's2 :
 let eqcd_eq_innerT p =
    let goal = Sequent.concl p in
    let _, eq1, eq2 = dest_equal goal in
-   let j = hyp_count p in
+   let j = hyp_count_addr p in
       if alpha_equal eq1 eq2 then
          eq_inner_equality1 j p
       else
@@ -126,7 +126,7 @@ let d_resource = d_resource.resource_improve d_resource (eq_inner_equal_term, d_
  *)
 let d_eq_inner_typeT i p =
    if i = 0 then
-      eq_inner_type (hyp_count p) p
+      eq_inner_type (hyp_count_addr p) p
    else
       raise (RefineError ("d_eq_inner_typeT", StringError "no elimination form"))
 
@@ -138,13 +138,13 @@ let d_resource = d_resource.resource_improve d_resource (eq_inner_type_term, d_e
  * Equality relations.
  *)
 let eqInnerRefT p =
-   eq_inner_ref (hyp_count p) p
+   eq_inner_ref (hyp_count_addr p) p
 
 let eqInnerSymT p =
-   eq_inner_sym (hyp_count p) p
+   eq_inner_sym (hyp_count_addr p) p
 
 let eqInnerTransT t p =
-   eq_inner_trans (hyp_count p) t p
+   eq_inner_trans (hyp_count_addr p) t p
 
 (*
  * Always reasonable to try reflexivity.

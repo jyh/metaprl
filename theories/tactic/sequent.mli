@@ -34,7 +34,9 @@ val tactic_arg_alpha_equal : tactic_arg -> tactic_arg -> bool
 val clause_addr : tactic_arg -> int -> address
 val get_decl_number : tactic_arg -> string -> int
 val hyp_count : tactic_arg -> int
-val hyp_indices : tactic_arg -> int -> int * int
+val hyp_count_addr : tactic_arg -> address
+val hyp_split_addr : tactic_arg -> int -> address * address
+val hyp_indices : tactic_arg -> int -> address * address
 val get_pos_hyp_num : tactic_arg -> int -> int
 
 (*

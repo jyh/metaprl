@@ -44,7 +44,7 @@ let goal = Tactic_type.goal
 let msequent = Tactic_type.msequent
 
 let concl arg =
-   Tactic_type.nth_concl arg 0
+   Tactic_type.nth_concl arg 1
 
 let cache = Tactic_type.cache
 
@@ -58,12 +58,31 @@ let attributes = Tactic_type.attributes
 let hyp_count arg =
    TermMan.num_hyps (goal arg)
 
+let hyp_count_addr arg =
+   let goal = goal arg in
+      TermMan.hyp_range_addr goal (TermMan.num_hyps goal)
+
+let hyp_split_addr arg i =
+   let goal = goal arg in
+   let count = TermMan.num_hyps goal in
+   let j, k =
+      if i < 0 then
+         count + i + 1, (-1) - i
+      else
+         i, count - i
+   in
+      TermMan.hyp_range_addr goal j, TermMan.hyp_range_addr goal k
+
 let hyp_indices arg i =
-   let count = hyp_count arg in
+   let goal = goal arg in
+   let count = TermMan.num_hyps goal in
+   let j, k =
       if i < 0 then
          count + i, (-1) - i
       else
          i - 1, count - i
+   in
+      TermMan.hyp_range_addr goal j, TermMan.hyp_range_addr goal k
 
 let get_pos_hyp_num arg i =
    if i < 0 then

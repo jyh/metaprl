@@ -50,7 +50,7 @@ interactive rel_type 'H 'u 'v :
 let d_rel_typeT i p =
    if i = 0 then
       let u, v = maybe_new_vars2 p "u" "v" in
-         rel_type (hyp_count p) u v p
+         rel_type (hyp_count_addr p) u v p
    else
       raise (RefineError ("d_rel_typeT", StringError "no elimination form"))
 

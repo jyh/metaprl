@@ -54,7 +54,7 @@ interactive false_res 'H : :
  *)
 let d_void_funT i p =
    if i = 0 then
-      void_fun (hyp_count p) p
+      void_fun (hyp_count_addr p) p
    else
       raise (RefineError ("d_void_funT", StringError "no elimination form"))
 
@@ -67,7 +67,7 @@ let d_resource = d_resource.resource_improve d_resource (void_fun_term, d_void_f
  *)
 let d_void_resT i p =
    if i = 0 then
-      void_res (hyp_count p) p
+      void_res (hyp_count_addr p) p
    else
       raise (RefineError ("d_void_resT", StringError "no elimination form"))
 
@@ -80,7 +80,7 @@ let d_resource = d_resource.resource_improve d_resource (void_res_term, d_void_r
  *)
 let d_false_funT i p =
    if i = 0 then
-      false_fun (hyp_count p) p
+      false_fun (hyp_count_addr p) p
    else
       raise (RefineError ("d_false_funT", StringError "no elimination form"))
 
@@ -93,7 +93,7 @@ let d_resource = d_resource.resource_improve d_resource (false_fun_term, d_false
  *)
 let d_false_resT i p =
    if i = 0 then
-      false_res (hyp_count p) p
+      false_res (hyp_count_addr p) p
    else
       raise (RefineError ("d_false_resT", StringError "no elimination form"))
 

@@ -223,18 +223,15 @@ let mk_list_ind_term = mk_dep0_dep0_dep3_term list_ind_opname
  ************************************************************************)
 
 let d_concl_list p =
-   nilFormation (hyp_count p) p
+   nilFormation (hyp_count_addr p) p
 
 let d_hyp_list i p =
-   let i, j = hyp_indices p i in
    let n, _ = Sequent.nth_hyp p i in
-      (match maybe_new_vars ["w"; "u"; "v"] (declared_vars p) with
-          [w; u; v] ->
-             listElimination i j n w u v
-             thenLT [addHiddenLabelT "base case";
-                     addHiddenLabelT "induction step"]
-        | _ ->
-             failT) p
+   let j, k = hyp_indices p i in
+   let w, u, v = maybe_new_vars3 p "w" "u" "v" in
+      (listElimination j k n w u v
+       thenLT [addHiddenLabelT "base case";
+               addHiddenLabelT "induction step"]) p
 
 let d_listT i =
    if i = 0 then
@@ -251,21 +248,21 @@ let d_resource = d_resource.resource_improve d_resource (list_term, d_listT)
 (*
  * EqCD list.
  *)
-let eqcd_listT p = listEquality (hyp_count p) p
+let eqcd_listT p = listEquality (hyp_count_addr p) p
 
 let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (list_term, eqcd_listT)
 
 (*
  * EqCD nil.
  *)
-let eqcd_nilT p = nilEquality (hyp_count p) p
+let eqcd_nilT p = nilEquality (hyp_count_addr p) p
 
 let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (nil_term, eqcd_nilT)
 
 (*
  * EqCD nil.
  *)
-let eqcd_consT p = consEquality (hyp_count p) p
+let eqcd_consT p = consEquality (hyp_count_addr p) p
 
 let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (cons_term, eqcd_consT)
 
@@ -333,7 +330,7 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (list_
  * Subtyping of two list types.
  *)
 let list_subtypeT p =
-   (listSubtype (hyp_count p)
+   (listSubtype (hyp_count_addr p)
     thenT addHiddenLabelT "subtype") p
 
 let sub_resource =

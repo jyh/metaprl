@@ -167,9 +167,9 @@ let thinAllT i j p =
  * Cut rule.
  *)
 let assertT s p =
-   let count = hyp_count p in
+   let j, k = hyp_split_addr p (hyp_count p) in
    let v = get_opt_var_arg "v" p in
-      (cut count 0 s v
+      (cut j k s v
        thenLT [addHiddenLabelT "assertion"; idT]) p
 
 (*
@@ -185,7 +185,7 @@ let assertAtT i s p =
  * Explicit extract.
  *)
 let useWitnessT t p =
-   let count = hyp_count p in
+   let count = hyp_count_addr p in
       introduction count t p
 
 (*
@@ -206,7 +206,7 @@ let substConclT t p =
             let x = get_opt_var_arg "z" p in
                mk_bind_term x (var_subst (concl p) a x)
    in
-      (substitution (hyp_count p) t bind
+      (substitution (hyp_count_addr p) t bind
        thenLT [addHiddenLabelT "equality";
                addHiddenLabelT "main";
                addHiddenLabelT "aux"]) p

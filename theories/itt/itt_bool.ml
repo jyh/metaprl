@@ -132,13 +132,12 @@ let bfalse_term = << bfalse >>
  * D
  *)
 let d_boolT i p =
-   let count = Sequent.hyp_count p in
-      (if i = 0 then
-          bool_trueFormation count
-       else
-          let i, j = Sequent.hyp_indices p i in
-          let v, _ = Sequent.nth_hyp p i in
-             boolElimination i j v) p
+   if i = 0 then
+       bool_trueFormation (Sequent.hyp_count_addr p) p
+    else
+       let j, k = Sequent.hyp_indices p i in
+       let v, _ = Sequent.nth_hyp p i in
+          boolElimination j k v p
 
 let d_resource = d_resource.resource_improve d_resource (bool_term, d_boolT)
 
@@ -146,15 +145,15 @@ let d_resource = d_resource.resource_improve d_resource (bool_term, d_boolT)
  * EqCD.
  *)
 let eqcd_boolT p =
-   let count = Sequent.hyp_count p in
+   let count = Sequent.hyp_count_addr p in
       boolEquality count p
 
 let eqcd_btrueT p =
-   let count = Sequent.hyp_count p in
+   let count = Sequent.hyp_count_addr p in
       bool_trueEquality count p
 
 let eqcd_bfalseT p =
-   let count = Sequent.hyp_count p in
+   let count = Sequent.hyp_count_addr p in
       bool_falseEquality count p
 
 let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (bool_term, eqcd_boolT)

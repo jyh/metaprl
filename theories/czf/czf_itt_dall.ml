@@ -96,7 +96,7 @@ interactive dall_res2 'H 'w 'x :
 let d_dallT i p =
    if i = 0 then
       let v, w = maybe_new_vars2 p "v" "w" in
-         (dall_intro (hyp_count p) v w
+         (dall_intro (hyp_count_addr p) v w
           thenLT [addHiddenLabelT "wf";
                   addHiddenLabelT "wf";
                   addHiddenLabelT "main"]) p
@@ -121,7 +121,7 @@ let d_resource = d_resource.resource_improve d_resource (dall_term, d_dallT)
 let d_dall_typeT i p =
    if i = 0 then
       let v = maybe_new_vars1 p "v" in
-         (dall_type (hyp_count p) v thenT addHiddenLabelT "wf") p
+         (dall_type (hyp_count_addr p) v thenT addHiddenLabelT "wf") p
    else
       raise (RefineError ("d_dall_typeT", StringError "no elimination form"))
 
@@ -135,7 +135,7 @@ let d_resource = d_resource.resource_improve d_resource (dall_type_term, d_dall_
 let d_dall_resT i p =
    if i = 0 then
       let w, v = maybe_new_vars2 p "u" "v" in
-         (dall_res2 (hyp_count p) w v
+         (dall_res2 (hyp_count_addr p) w v
           thenLT [addHiddenLabelT "wf";
                   addHiddenLabelT "wf";
                   addHiddenLabelT "main"]) p

@@ -36,6 +36,8 @@ define unfoldAnd : "and"{'a; 'b} <--> 'a * 'b
 define unfoldOr : "or"{'a; 'b} <--> 'a + 'b
 define unfoldImplies : "implies"{'a; 'b} <--> 'a -> 'b
 define unfoldIff : "iff"{'a; 'b} <--> (('a -> 'b) & ('b -> 'a))
+define unfoldCand : "cand"{'a; 'b} <--> "and"{'a; 'b}
+define unfoldCor : "cor"{'a; 'b} <--> "or"{'a; ."cand"{."not"{'a}; 'b}}
 
 define unfoldAll : "all"{'A; x. 'B['x]} <--> x: 'A -> 'B['x]
 define unfoldExists : "exists"{'A; x. 'B['x]} <--> x: 'A * 'B['x]
@@ -50,6 +52,8 @@ topval foldImplies : conv
 topval foldIff : conv
 topval foldAnd : conv
 topval foldOr : conv
+topval foldCand : conv
+topval foldCor : conv
 topval foldAll : conv
 topval foldExists : conv
 
@@ -88,6 +92,14 @@ val mk_or_term : term -> term -> term
 val is_and_term : term -> bool
 val dest_and : term -> term * term
 val mk_and_term : term -> term -> term
+
+val is_cor_term : term -> bool
+val dest_cor : term -> term * term
+val mk_cor_term : term -> term -> term
+
+val is_cand_term : term -> bool
+val dest_cand : term -> term * term
+val mk_cand_term : term -> term -> term
 
 val is_implies_term : term -> bool
 val dest_implies : term -> term * term

@@ -90,7 +90,7 @@ let labels =
 let d_dprod_funT i p =
    if i = 0 then
       let u, v, z = maybe_new_vars3 p "u" "v" "z" in
-         (dprod_fun3 (hyp_count p) u v z thenLT labels) p
+         (dprod_fun3 (hyp_count_addr p) u v z thenLT labels) p
    else
       raise (RefineError ("d_dprod_funT", StringError "no elimination fandm"))
 
@@ -104,7 +104,7 @@ let d_resource = d_resource.resource_improve d_resource (dprod_fun_term, d_dprod
 let d_dprod_resT i p =
    if i = 0 then
       let u, v, z = maybe_new_vars3 p "u" "v" "z" in
-         (dprod_res3 (hyp_count p) u v z thenLT labels) p
+         (dprod_res3 (hyp_count_addr p) u v z thenLT labels) p
    else
       raise (RefineError ("d_dprod_resT", StringError "no elimination fandm"))
 
@@ -118,7 +118,7 @@ let d_resource = d_resource.resource_improve d_resource (dprod_res_term, d_dprod
 let d_exists_funT i p =
    if i = 0 then
       let u, v, z = maybe_new_vars3 p "u" "v" "z" in
-         (exists_fun (hyp_count p) u v z thenLT labels) p
+         (exists_fun (hyp_count_addr p) u v z thenLT labels) p
    else
       raise (RefineError ("d_exists_funT", StringError "no elimination fandm"))
 
@@ -132,7 +132,7 @@ let d_resource = d_resource.resource_improve d_resource (exists_fun_term, d_exis
 let d_exists_resT i p =
    if i = 0 then
       let u, v, z = maybe_new_vars3 p "u" "v" "z" in
-         (exists_res (hyp_count p) u v z thenLT labels) p
+         (exists_res (hyp_count_addr p) u v z thenLT labels) p
    else
       raise (RefineError ("d_exists_resT", StringError "no elimination fandm"))
 

@@ -86,7 +86,7 @@ let applyT app i p =
       in
       let v = maybe_new_vars1 p "v" in
       let bind = mk_bind_term v (var_subst (Sequent.concl p) app v) in
-         (tac (hyp_count p) goal_type bind f a
+         (tac (hyp_count_addr p) goal_type bind f a
           thenLT [addHiddenLabelT "wf";
                   addHiddenLabelT "wf";
                   addHiddenLabelT "wf";

@@ -54,7 +54,7 @@ interactive true_res 'H : :
  *)
 let d_true_funT i p =
    if i = 0 then
-      true_fun (hyp_count p) p
+      true_fun (hyp_count_addr p) p
    else
       raise (RefineError ("d_true_funT", StringError "no elimination form"))
 
@@ -67,7 +67,7 @@ let d_resource = d_resource.resource_improve d_resource (true_fun_term, d_true_f
  *)
 let d_true_resT i p =
    if i = 0 then
-      true_res (hyp_count p) p
+      true_res (hyp_count_addr p) p
    else
       raise (RefineError ("d_true_resT", StringError "no elimination form"))
 
@@ -80,7 +80,7 @@ let d_resource = d_resource.resource_improve d_resource (true_res_term, d_true_r
  *)
 let d_unit_funT i p =
    if i = 0 then
-      unit_fun (hyp_count p) p
+      unit_fun (hyp_count_addr p) p
    else
       raise (RefineError ("d_unit_funT", StringError "no elimination form"))
 
@@ -93,7 +93,7 @@ let d_resource = d_resource.resource_improve d_resource (unit_fun_term, d_unit_f
  *)
 let d_unit_resT i p =
    if i = 0 then
-      unit_res (hyp_count p) p
+      unit_res (hyp_count_addr p) p
    else
       raise (RefineError ("d_unit_resT", StringError "no elimination form"))
 

@@ -162,15 +162,12 @@ let d_set i p =
                raise (RefineError ("d_set", StringError "requires an argument"))
       in
       let v = get_opt_var_arg "z" p in
-         setMemberFormation (Sequent.hyp_count p) t v p
+         setMemberFormation (Sequent.hyp_count_addr p) t v p
    else
-      let i, j = Sequent.hyp_indices p i in
       let n, _ = Sequent.nth_hyp p i in
-         match maybe_new_vars ["y"; "v"] (Sequent.declared_vars p) with
-            [u; y; v] ->
-               setElimination i j u y v p
-          | _ ->
-               failwith "d_set: match"
+      let j, k = Sequent.hyp_indices p i in
+      let u, y, v = maybe_new_vars3 p "u" "y" "v" in
+         setElimination j k u y v p
 
 let d_resource = d_resource.resource_improve d_resource (set_term, d_set)
 let d = d_resource.resource_extract d_resource
@@ -179,7 +176,7 @@ let d = d_resource.resource_extract d_resource
  * EqCD.
  *)
 let eqcd_set p =
-   let count = Sequent.hyp_count p in
+   let count = Sequent.hyp_count_addr p in
    let v = get_opt_var_arg "x" p in
       setEquality count v p
 
@@ -215,7 +212,6 @@ let squashT p =
  * Unhide a hidden hypothesis.
  *)
 let unhideT i p =
-   let i, j = Sequent.hyp_indices p i in
    let s = dest_hide (snd (Sequent.nth_hyp p i)) in
       (assertAtT (i + 1) s
        thenLT [squashT thenMT nthHypT i;
@@ -248,22 +244,22 @@ let d_set_concl p =
             raise (RefineError ("d_set", StringError "requires an argument"))
    in
    let v = get_opt_var_arg "z" p in
-      setMemberFormation (Sequent.hyp_count p) t v p
+      setMemberFormation (Sequent.hyp_count_addr p) t v p
 
 let d_set_hyp i p =
-   let i, j = Sequent.hyp_indices p i in
    let n, _ = Sequent.nth_hyp p i in
+   let j, k = Sequent.hyp_indices p i in
    let d_squashed p =
       (match maybe_new_vars ["y"; "v"] (Sequent.declared_vars p) with
           [y; v] ->
-             setElimination i j n y v
+             setElimination j k n y v
         | _ ->
              failT) p
    in
    let d_hidden p =
       (match maybe_new_vars ["y"; "v"] (Sequent.declared_vars p) with
           [y; v] ->
-             setElimination2 i j n y v
+             setElimination2 j k n y v
         | _ ->
              failT) p
    in
@@ -287,7 +283,7 @@ let d_resource = d_resource.resource_improve d_resource (set_term, d_setT)
  * EqCD.
  *)
 let eqcd_setT p =
-   let count = Sequent.hyp_count p in
+   let count = Sequent.hyp_count_addr p in
    let v = get_opt_var_arg "x" p in
       setEquality count v p
 
@@ -314,7 +310,7 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (set_t
  ************************************************************************)
 
 let set_subtypeT p =
-   (set_subtype (Sequent.hyp_count p)
+   (set_subtype (Sequent.hyp_count_addr p)
     thenT addHiddenLabelT "wf") p
 
 let sub_resource =

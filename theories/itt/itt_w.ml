@@ -199,7 +199,7 @@ let d_concl_w p =
          Not_found ->
             raise (RefineError ("d_concl_w", StringError "requires an argument"))
    in
-   let count = hyp_count p in
+   let count = hyp_count_addr p in
    let y = get_opt_var_arg "y" p in
       (treeFormation count t y
        thenLT [addHiddenLabelT "wf";
@@ -235,7 +235,7 @@ let d_w_typeT i p =
       let concl = Sequent.concl p in
       let v, _, _ = dest_w (one_subterm concl) in
       let v = maybe_new_vars1 p v in
-         wType (hyp_count p) v p
+         wType (hyp_count_addr p) v p
    else
       raise (RefineError ("d_w_typeT", StringError "no elimination form"))
 
@@ -254,7 +254,7 @@ let eqcd_wT p =
    let _, l, _ = dest_equal (concl p) in
    let v, _, _ = dest_w l in
    let x = get_opt_var_arg v p in
-   let count = hyp_count p in
+   let count = hyp_count_addr p in
       (wEquality count x thenT addHiddenLabelT "wf") p
 
 let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (w_term, eqcd_wT)
@@ -270,7 +270,7 @@ let eqcd_treeT p =
    let l, _, _ = dest_equal (concl p) in
    let v, _, _ = dest_w l in
    let x = get_opt_var_arg v p in
-   let count = hyp_count p in
+   let count = hyp_count_addr p in
       (treeEquality count x thenT addHiddenLabelT "wf") p
 
 let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (tree_term, eqcd_treeT)
@@ -291,7 +291,7 @@ let eqcd_tree_indT p =
          Not_found ->
             raise (RefineError ("eqcd_tree_indT", StringError "requires a type argument"))
    in
-      tree_indEquality (hyp_count p) w a f g p
+      tree_indEquality (hyp_count_addr p) w a f g p
 
 let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (tree_ind_term, eqcd_tree_indT)
 

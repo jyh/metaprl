@@ -21,6 +21,7 @@ open Base_auto_tactic
 open Itt_equal
 open Itt_rfun
 open Itt_logic
+open Itt_derive
 
 (************************************************************************
  * TERMS                                                                *
@@ -402,7 +403,7 @@ let dest_atomic = dest_dep0_term atomic_opname
 let d_allT i p =
    if i = 0 then
       let v = maybe_new_vars1 p (var_of_all (Sequent.concl p)) in
-         tptp_all_intro (Sequent.hyp_count p) v p
+         tptp_all_intro (Sequent.hyp_count_addr p) v p
    else
       let t = get_with_arg p in
       let v = maybe_new_vars1 p "v" in
@@ -416,7 +417,7 @@ let d_resource = d_resource.resource_improve d_resource (all_term, d_allT)
 let d_all_typeT i p =
    if i = 0 then
       let v = maybe_new_vars1 p "v" in
-         tptp_all_type (Sequent.hyp_count p) v p
+         tptp_all_type (Sequent.hyp_count_addr p) v p
    else
       raise (RefineError ("d_all_typeT", StringError "no elimination form"))
 
@@ -431,7 +432,7 @@ let d_existsT i p =
    if i = 0 then
       let t = get_with_arg p in
       let v = maybe_new_vars1 p (var_of_exists (Sequent.concl p)) in
-         (tptp_exists_intro (Sequent.hyp_count p) v t
+         (tptp_exists_intro (Sequent.hyp_count_addr p) v t
           thenLT [addHiddenLabelT "wf";
                   addHiddenLabelT "main";
                   addHiddenLabelT "wf"]) p
@@ -446,7 +447,7 @@ let d_resource = d_resource.resource_improve d_resource (exists_term, d_existsT)
 let d_exists_typeT i p =
    if i = 0 then
       let v = maybe_new_vars1 p "v" in
-         tptp_exists_type (Sequent.hyp_count p) v p
+         tptp_exists_type (Sequent.hyp_count_addr p) v p
    else
       raise (RefineError ("d_exists_typeT", StringError "no elimination form"))
 
@@ -456,7 +457,7 @@ let d_resource = d_resource.resource_improve d_resource (exists_type_term, d_exi
 
 let d_atomic_typeT i p =
    if i = 0 then
-      tptp_atomic_type (Sequent.hyp_count p) p
+      tptp_atomic_type (Sequent.hyp_count_addr p) p
    else
       raise (RefineError ("d_atomic_typeT", StringError "no elimination form"))
 
@@ -510,6 +511,31 @@ let typeT i p =
           thenT addHiddenLabelT "wf") p
       else
          raise (RefineError ("typeT", StringIntError ("no rule for arity", arity)))
+
+(*
+ * Custom tactic for proving tptp2_*_intro goals.
+ *)
+let tptp_foldC =
+   firstC [fold_atom0;
+           fold_atom1;
+           fold_atom2;
+           fold_atom3;
+           fold_atom4;
+           fold_atom5;
+           fold_prop0;
+           fold_prop1;
+           fold_prop2;
+           fold_prop3;
+           fold_prop4;
+           fold_prop5]
+
+let tptp_foldT =
+   tryOnAllHypsT (rwh tptp_foldC)
+
+let tptp_autoT =
+   repeatT (firstT [progressT autoT;
+                    autoApplyT 0;
+                    tptp_foldT])
 
 (*
  * Automation.

@@ -404,9 +404,8 @@ let d_equalT i p =
    if i = 0 then
       eqcdT p
    else
-      let t = goal p in
-      let count = num_hyps t in
-         equalityElimination (i - 1) (count - i - 1) p
+      let j, k = hyp_indices p i in
+         equalityElimination j k p
 
 let d_resource = d_resource.resource_improve d_resource (equal_term, d_equalT)
 
@@ -415,7 +414,7 @@ let d_resource = d_resource.resource_improve d_resource (equal_term, d_equalT)
  *)
 let d_equal_typeT i p =
    if i = 0 then
-      let len = hyp_count p in
+      let len = hyp_count_addr p in
          (equalityType2 len orelseT equalityType len) p
    else
       raise (RefineError ("d_equal_typeT", StringError "no elimination form"))
@@ -438,7 +437,7 @@ let d_wrap_eqcd eqcdT i p =
  *)
 let d_univ_typeT i p =
    if i = 0 then
-      universeType (hyp_count p) p
+      universeType (hyp_count_addr p) p
    else
       raise (RefineError ("d_univ_typeT", StringError "no elimination form"))
 
@@ -454,10 +453,10 @@ let d_resource = d_resource.resource_improve d_resource (univ_type_term, d_univ_
  * EQCD tactic.
  *)
 let eqcd_univT p =
-   universeEquality (hyp_count p) p
+   universeEquality (hyp_count_addr p) p
 
 let eqcd_itT p =
-   axiomEquality (hyp_count p) p
+   axiomEquality (hyp_count_addr p) p
 
 let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (univ_term, eqcd_univT)
 let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (it_term, eqcd_itT)
@@ -492,17 +491,17 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (equal
  * Equality is squash stable.
  *)
 let squash_equalT p =
-   equality_squashElimination (hyp_count p) p
+   equality_squashElimination (hyp_count_addr p) p
 
 let squash_resource = squash_resource.resource_improve squash_resource (equal_term, squash_equalT)
 
 let squash_typeT p =
-   type_squashElimination (hyp_count p) p
+   type_squashElimination (hyp_count_addr p) p
 
 let squash_resource = squash_resource.resource_improve squash_resource (type_term, squash_typeT)
 
 let unsquashT v p =
-   squashFromAny (Sequent.hyp_count p) v p
+   squashFromAny (Sequent.hyp_count_addr p) v p
 
 (************************************************************************
  * OTHER TACTICS                                                        *
@@ -519,25 +518,25 @@ let equalAssumT i p =
  * Reflexivity.
  *)
 let equalRefT t p =
-   equalityRef (hyp_count p) t p
+   equalityRef (hyp_count_addr p) t p
 
 (*
  * Symettry.
  *)
 let equalSymT p =
-   equalitySym (hyp_count p) p
+   equalitySym (hyp_count_addr p) p
 
 (*
  * Transitivity.
  *)
 let equalTransT t p =
-   equalityTrans (hyp_count p) t p
+   equalityTrans (hyp_count_addr p) t p
 
 (*
  * Membership in a type.
  *)
 let univTypeT t p =
-   universeMemberType (hyp_count p) t p
+   universeMemberType (hyp_count_addr p) t p
 
 (*
  * Assumed membership.
@@ -545,6 +544,12 @@ let univTypeT t p =
 let univAssumT i p =
    let j, k = hyp_indices p i in
       universeAssumType j k p
+
+(*
+ * Typehood from truth.
+ *)
+let typeAssertT p =
+   typeEquality (hyp_count_addr p) p
 
 (*
  * Automation.

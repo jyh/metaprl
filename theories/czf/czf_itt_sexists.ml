@@ -86,7 +86,7 @@ let d_sexistsT i p =
    if i = 0 then
       let z = get_with_arg p in
       let w = maybe_new_vars1 p "v" in
-         (sexists_intro (hyp_count p) z w
+         (sexists_intro (hyp_count_addr p) z w
           thenLT [addHiddenLabelT "wf";
                   addHiddenLabelT "main";
                   addHiddenLabelT "wf"]) p
@@ -106,7 +106,7 @@ let d_resource = d_resource.resource_improve d_resource (sexists_term, d_sexists
 let d_exists_typeT i p =
    if i = 0 then
       let v = maybe_new_vars1 p "v" in
-         sexists_type (hyp_count p) v p
+         sexists_type (hyp_count_addr p) v p
    else
       raise (RefineError ("d_exists_typeT", StringError "no elim form"))
 

@@ -76,7 +76,7 @@ interactive and_res 'H 'w :
 let d_prod_funT i p =
    if i = 0 then
       let z = maybe_new_vars1 p "z" in
-         prod_fun (hyp_count p) z p
+         prod_fun (hyp_count_addr p) z p
    else
       raise (RefineError ("d_prod_funT", StringError "no elimination fandm"))
 
@@ -90,7 +90,7 @@ let d_resource = d_resource.resource_improve d_resource (prod_fun_term, d_prod_f
 let d_prod_resT i p =
    if i = 0 then
       let z = maybe_new_vars1 p "z" in
-         prod_res (hyp_count p) z p
+         prod_res (hyp_count_addr p) z p
    else
       raise (RefineError ("d_prod_resT", StringError "no elimination fandm"))
 
@@ -104,7 +104,7 @@ let d_resource = d_resource.resource_improve d_resource (prod_res_term, d_prod_r
 let d_and_funT i p =
    if i = 0 then
       let z = maybe_new_vars1 p "z" in
-         and_fun (hyp_count p) z p
+         and_fun (hyp_count_addr p) z p
    else
       raise (RefineError ("d_and_funT", StringError "no elimination fandm"))
 
@@ -118,7 +118,7 @@ let d_resource = d_resource.resource_improve d_resource (and_fun_term, d_and_fun
 let d_and_resT i p =
    if i = 0 then
       let z = maybe_new_vars1 p "z" in
-         and_res (hyp_count p) z p
+         and_res (hyp_count_addr p) z p
    else
       raise (RefineError ("d_and_resT", StringError "no elimination fandm"))
 

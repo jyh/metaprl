@@ -232,7 +232,7 @@ let mk_quotient_term = mk_dep0_dep2_term quotient_opname
  * D the conclusion.
  *)
 let d_concl_quotient p =
-   let count = hyp_count p in
+   let count = hyp_count_addr p in
       quotient_memberFormation count p
 
 (*
@@ -262,7 +262,7 @@ let d_resource = d_resource.resource_improve d_resource (quotient_term, d_quotie
  * EQCD.
  *)
 let eqcd_quotientT p =
-   let count = hyp_count p in
+   let count = hyp_count_addr p in
       (match maybe_new_vars ["r"; "s"; "t"] (declared_vars p) with
           [r; s; t] ->
              quotientEquality count r s t
@@ -281,7 +281,7 @@ let d_resource = d_resource.resource_improve d_resource (quotient_equal_term, d_
 let d_quotient_typeT i p =
    if i = 0 then
       let u, v, w, x1, x2 = maybe_new_vars5 p "u" "v" "w" "x" "y" in
-         (quotientType (hyp_count p) u v w x1 x2
+         (quotientType (hyp_count_addr p) u v w x1 x2
           thenLT [addHiddenLabelT "wf";
                   addHiddenLabelT "wf";
                   addHiddenLabelT "antecedent";
@@ -299,7 +299,7 @@ let d_resource = d_resource.resource_improve d_resource (quotient_type_term, d_q
  *)
 let d_quotient_equal_memberT i p =
    if i = 0 then
-      quotient_memberEquality (hyp_count p) p
+      quotient_memberEquality (hyp_count_addr p) p
    else
       raise (RefineError ("d_quotient_equalT", StringError "no elimination form"))
 
@@ -333,7 +333,7 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (quoti
 let quotient_subtypeT p =
    (match maybe_new_vars ["x"; "y"] (declared_vars p) with
        [x; y] ->
-          (quotientSubtype (hyp_count p) x y
+          (quotientSubtype (hyp_count_addr p) x y
            thenLT [addHiddenLabelT "subtype";
                    addHiddenLabelT "aux";
                    addHiddenLabelT "wf";

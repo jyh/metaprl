@@ -21,7 +21,7 @@ let rewrite_term = << "rewrite"{'a; 'b} >>
  *)
 let d_rewriteT i p =
    if i = 0 then
-      rewriteSequentAxiom (Sequent.hyp_count p) p
+      rewriteSequentAxiom (Sequent.hyp_count_addr p) p
    else
       raise (RefineError ("d_rewriteT", StringError "can't decompose a rewrite hyp"))
 

@@ -283,7 +283,7 @@ let subtypeT p =
  * D the conclusion.
  *)
 let d_concl_subtype p =
-   let count = hyp_count p in
+   let count = hyp_count_addr p in
    let x = maybe_new_var "x" (declared_vars p) in
       (subtype_axiomFormation count x
        thenLT [addHiddenLabelT "wf";
@@ -312,7 +312,7 @@ let d_resource = d_resource.resource_improve d_resource (subtype_term, d_subtype
  * EQCD.
  *)
 let eqcd_subtype p =
-   let count = hyp_count p in
+   let count = hyp_count_addr p in
       (subtypeEquality count
        thenT addHiddenLabelT "wf") p
 

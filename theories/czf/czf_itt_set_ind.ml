@@ -85,7 +85,7 @@ let d_set_ind_dfun_typeT i p =
       let apply = mk_apply_term (mk_var_term f) (mk_var_term v) in
       let z = maybe_new_var "z" (free_vars b @ declared_vars p) in
       let goal' = mk_bind_term z (var_subst b apply z) in
-         set_ind_dfun_type (hyp_count p) goal' p
+         set_ind_dfun_type (hyp_count_addr p) goal' p
    else
       raise (RefineError ("d_set_ind_dfun_type", StringError "no elimination form"))
 
@@ -105,7 +105,7 @@ let d_set_ind_dfun_funT i p =
       let apply = mk_apply_term (mk_var_term f) (mk_var_term v) in
       let y, u, v = maybe_new_vars3 p "y" "u" "v" in
       let goal' = mk_bind_term x (mk_bind_term y (var_subst b apply y)) in
-         set_ind_dfun_fun (hyp_count p) goal' u v p
+         set_ind_dfun_fun (hyp_count_addr p) goal' u v p
    else
       raise (RefineError ("d_set_ind_dfun_funT", StringError "no elimination form"))
 
@@ -125,7 +125,7 @@ let d_set_ind_dprod_typeT i p =
       let apply = mk_apply_term (mk_var_term f) (mk_var_term v) in
       let z = maybe_new_vars1 p "z" in
       let goal' = mk_bind_term z (var_subst b apply z) in
-         set_ind_dprod_type (hyp_count p) goal' p
+         set_ind_dprod_type (hyp_count_addr p) goal' p
    else
       raise (RefineError ("d_set_ind_dprod_type", StringError "no elimination form"))
 
@@ -145,7 +145,7 @@ let d_set_ind_dprod_funT i p =
       let apply = mk_apply_term (mk_var_term f) (mk_var_term v) in
       let y, u, v = maybe_new_vars3 p "y" "u" "v" in
       let goal' = mk_bind_term x (mk_bind_term y (var_subst b apply y)) in
-         set_ind_dprod_fun (hyp_count p) goal' u v p
+         set_ind_dprod_fun (hyp_count_addr p) goal' u v p
    else
       raise (RefineError ("d_set_ind_dprod_funT", StringError "no elimination form"))
 

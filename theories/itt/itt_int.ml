@@ -382,15 +382,12 @@ let zero = << 0 >>
 
 let d_intT i p =
    if i = 0 then
-      numberFormation (hyp_count p) zero p
+      numberFormation (hyp_count_addr p) zero p
    else
-      let i, j = hyp_indices p i in
       let n, _ = Sequent.nth_hyp p i in
-         match maybe_new_vars ["m"; "v"; "z"] (Sequent.declared_vars p) with
-            [m; v; z] ->
-               intElimination i j n m v z p
-          | _ ->
-               failwith "d_int: match"
+      let j, k = hyp_indices p i in
+      let m, v, z = maybe_new_vars3 p "m" "v" "z" in
+         intElimination j k n m v z p
 
 let d_resource = d_resource.resource_improve d_resource (int_term, d_intT)
 
@@ -401,9 +398,9 @@ let d_resource = d_resource.resource_improve d_resource (int_term, d_intT)
 (*
  * EqCD int.
  *)
-let eqcd_intT p = intEquality (hyp_count p) p
+let eqcd_intT p = intEquality (hyp_count_addr p) p
 
-let eqcd_numberT p = numberEquality (hyp_count p) p
+let eqcd_numberT p = numberEquality (hyp_count_addr p) p
 
 let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (int_term, eqcd_intT)
 let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (natural_number_term, eqcd_numberT)

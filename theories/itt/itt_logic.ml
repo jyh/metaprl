@@ -70,6 +70,8 @@ declare "iff"{'a; 'b}
 declare "implies"{'a; 'b}
 declare "and"{'a; 'b}
 declare "or"{'a; 'b}
+declare "cand"{'a; 'b}
+declare "cor"{'a; 'b}
 declare "all"{'A; x. 'B['x]}
 declare "exists"{'A; x. 'B['x]}
 
@@ -82,6 +84,8 @@ primrw unfoldImplies : 'a => 'b <--> 'a -> 'b
 primrw unfoldIff : "iff"{'a; 'b} <--> (('a -> 'b) & ('b -> 'a))
 primrw unfoldAnd : 'a & 'b <--> 'a * 'b
 primrw unfoldOr : 'a or 'b <--> 'a + 'b
+primrw unfoldCand : "cand"{'a; 'b} <--> 'a & 'b
+primrw unfoldCor : "cor"{'a; 'b} <--> "or"{'a; ."cand"{."not"{'a}; 'b}}
 primrw unfoldAll : all x: 'A. 'B['x] <--> x:'A -> 'B['x]
 primrw unfoldExists : exst x: 'A. 'B['x] <--> x:'A * 'B['x]
 
@@ -95,6 +99,8 @@ let foldImplies = makeFoldC << 'a => 'b >> unfoldImplies
 let foldIff     = makeFoldC << "iff"{'a; 'b} >> unfoldIff
 let foldAnd     = makeFoldC << 'a & 'b >> unfoldAnd
 let foldOr      = makeFoldC << 'a or 'b >> unfoldOr
+let foldCand    = makeFoldC << "cand"{'a; 'b} >> unfoldCand
+let foldCor     = makeFoldC << "cor"{'a; 'b} >> unfoldCor
 let foldAll     = makeFoldC << all x: 'A. 'B['x] >> unfoldAll
 let foldExists  = makeFoldC << exst x: 'A. 'B['x] >> unfoldExists
 
@@ -237,6 +243,57 @@ interactive iff_intro 'H :
 interactive iff_elim 'H 'J 'y 'z :
    sequent ['ext] { 'H; y: "implies"{'a1; 'a2}; z: "implies"{'a2; 'a1}; 'J['y, 'z] >- 'C['y, 'z] } -->
    sequent ['ext] { 'H; x: "iff"{'a1; 'a2}; 'J['x] >- 'C['x] }
+
+(*
+ * Conjunction.
+ *)
+interactive cand_univ 'H 'x :
+   sequent [squash] { 'H >- 'a1 = 'b1 in univ[@i:l] } -->
+   sequent [squash] { 'H; x: 'a1 >- 'a2 = 'b2 in univ[@i:l] } -->
+   sequent ['ext] { 'H >- "cand"{'a1; 'a2} = "cand"{'b1; 'b2} in univ[@i:l] }
+
+interactive cand_type 'H 'x :
+   sequent [squash] { 'H >- "type"{'a1} } -->
+   sequent [squash] { 'H; x: 'a1 >- "type"{'a2} } -->
+   sequent ['ext] { 'H >- "type"{."cand"{'a1; 'a2}} }
+
+interactive cand_intro 'H 'x :
+   sequent ['ext] { 'H >- 'a1 } -->
+   sequent ['ext] { 'H; x: 'a1 >- 'a2 } -->
+   sequent ['ext] { 'H >- "cand"{'a1; 'a2} }
+
+interactive cand_elim 'H 'J 'y 'z :
+   sequent ['ext] { 'H; y: 'a1; z: 'a2; 'J['y, 'z] >- 'C['y, 'z] } -->
+   sequent ['ext] { 'H; x: "cand"{'a1; 'a2}; 'J['x] >- 'C['x] }
+
+(*
+ * Disjunction.
+ *)
+interactive cor_univ 'H 'x :
+   sequent [squash] { 'H >- 'a1 = 'b1 in univ[@i:l] } -->
+   sequent [squash] { 'H; x: "not"{'a1} >- 'a2 = 'b2 in univ[@i:l] } -->
+   sequent ['ext] { 'H >- "cor"{'a1; 'a2} = "cor"{'b1; 'b2} in univ[@i:l] }
+
+interactive cor_type 'H 'x :
+   sequent [squash] { 'H >- "type"{'a1} } -->
+   sequent [squash] { 'H; x: "not"{'a1} >- "type"{'a2} } -->
+   sequent ['ext] { 'H >- "type"{."cor"{'a1; 'a2}} }
+
+interactive cor_intro_left 'H 'x :
+   sequent [squash] { 'H; x: "not"{'a1} >- "type"{.'a2} } -->
+   sequent ['ext] { 'H >- 'a1 } -->
+   sequent ['ext] { 'H >- "cor"{'a1; 'a2} }
+
+interactive cor_intro_right 'H 'x :
+   sequent [squash] { 'H >- "type"{.'a1} } -->
+   sequent ['ext] { 'H >- "not"{'a1} } -->
+   sequent ['ext] { 'H; x: "not"{'a1} >- 'a2 } -->
+   sequent ['ext] { 'H >- "cor"{'a1; 'a2} }
+
+interactive cor_elim 'H 'J 'u 'v :
+   sequent ['ext] { 'H; u: 'a1; 'J[inl{'u}] >- 'C[inl{'u}] } -->
+   sequent ['ext] { 'H; u: "not"{'a1}; v: 'a2; 'J[inr{'u, 'v}] >- 'C[inr{'u, 'v}] } -->
+   sequent ['ext] { 'H; x: "cor"{'a1; 'a2}; 'J['x] >- 'C['x] }
 
 (*
  * All elimination performs a thinning
@@ -399,6 +456,18 @@ let is_and_term = is_dep0_dep0_term and_opname
 let dest_and = dest_dep0_dep0_term and_opname
 let mk_and_term = mk_dep0_dep0_term and_opname
 
+let cor_term = << "cor"{'A; 'B} >>
+let cor_opname = opname_of_term cor_term
+let is_cor_term = is_dep0_dep0_term cor_opname
+let dest_cor = dest_dep0_dep0_term cor_opname
+let mk_cor_term = mk_dep0_dep0_term cor_opname
+
+let cand_term = << "cand"{'A; 'B} >>
+let cand_opname = opname_of_term cand_term
+let is_cand_term = is_dep0_dep0_term cand_opname
+let dest_cand = dest_dep0_dep0_term cand_opname
+let mk_cand_term = mk_dep0_dep0_term cand_opname
+
 let implies_term = << 'A => 'B >>
 let implies_opname = opname_of_term implies_term
 let is_implies_term = is_dep0_dep0_term implies_opname
@@ -426,14 +495,14 @@ let mk_not_term = mk_dep0_term not_opname
  *)
 let d_trueT i p =
    if i = 0 then
-      true_intro (hyp_count p) p
+      true_intro (hyp_count_addr p) p
    else
       raise (RefineError ("d_trueT", StringError "no elimination form (unfold it if you want to elim)"))
 
 let d_resource = d_resource.resource_improve d_resource (true_term, d_trueT)
 
 let eqcd_trueT p =
-   true_univ (hyp_count p) p
+   true_univ (hyp_count_addr p) p
 
 let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (true_term, eqcd_trueT)
 
@@ -443,7 +512,7 @@ let d_resource = d_resource.resource_improve d_resource (true_equal_term, d_wrap
 
 let d_true_typeT i p =
    if i = 0 then
-      true_type (hyp_count p) p
+      true_type (hyp_count_addr p) p
    else
       raise (RefineError ("d_true_typeT", StringError "no elimination form"))
 
@@ -464,7 +533,7 @@ let d_falseT i p =
 let d_resource = d_resource.resource_improve d_resource (false_term, d_falseT)
 
 let eqcd_falseT p =
-   false_univ (hyp_count p) p
+   false_univ (hyp_count_addr p) p
 
 let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (false_term, eqcd_falseT)
 
@@ -474,7 +543,7 @@ let d_resource = d_resource.resource_improve d_resource (false_equal_term, d_wra
 
 let d_false_typeT i p =
    if i = 0 then
-      false_type (hyp_count p) p
+      false_type (hyp_count_addr p) p
    else
       raise (RefineError ("d_false_typeT", StringError "no elimination form"))
 
@@ -488,7 +557,7 @@ let d_resource = d_resource.resource_improve d_resource (false_type_term, d_fals
 let d_notT i p =
    if i = 0 then
       let v = maybe_new_vars1 p "v" in
-         (not_intro (hyp_count p) v
+         (not_intro (hyp_count_addr p) v
           thenLT [addHiddenLabelT "wf";
                   addHiddenLabelT "main"]) p
    else
@@ -498,7 +567,7 @@ let d_notT i p =
 let d_resource = d_resource.resource_improve d_resource (not_term, d_notT)
 
 let eqcd_notT p =
-   not_univ (hyp_count p) p
+   not_univ (hyp_count_addr p) p
 
 let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (not_term, eqcd_notT)
 
@@ -508,7 +577,7 @@ let d_resource = d_resource.resource_improve d_resource (not_equal_term, d_wrap_
 
 let d_not_typeT i p =
    if i = 0 then
-      (not_type (hyp_count p) thenT addHiddenLabelT "wf") p
+      (not_type (hyp_count_addr p) thenT addHiddenLabelT "wf") p
    else
       raise (RefineError ("d_not_typeT", StringError "no elimination form"))
 
@@ -521,7 +590,7 @@ let d_resource = d_resource.resource_improve d_resource (not_type_term, d_not_ty
  *)
 let d_andT i p =
    if i = 0 then
-      and_intro (hyp_count p) p
+      and_intro (hyp_count_addr p) p
    else
       let u, v = maybe_new_vars2 p "u" "v" in
       let j, k = hyp_indices p i in
@@ -530,7 +599,7 @@ let d_andT i p =
 let d_resource = d_resource.resource_improve d_resource (and_term, d_andT)
 
 let eqcd_andT p =
-   and_univ (hyp_count p) p
+   and_univ (hyp_count_addr p) p
 
 let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (and_term, eqcd_andT)
 
@@ -540,7 +609,7 @@ let d_resource = d_resource.resource_improve d_resource (and_equal_term, d_wrap_
 
 let d_and_typeT i p =
    if i = 0 then
-      (and_type (hyp_count p) thenT addHiddenLabelT "wf") p
+      (and_type (hyp_count_addr p) thenT addHiddenLabelT "wf") p
    else
       raise (RefineError ("d_and_typeT", StringError "no elimination form"))
 
@@ -560,7 +629,7 @@ let d_orT i p =
          else
             or_intro_right
       in
-         (tac (hyp_count p)
+         (tac (hyp_count_addr p)
           thenLT [addHiddenLabelT "wf";
                   addHiddenLabelT "main"]) p
    else
@@ -571,7 +640,7 @@ let d_orT i p =
 let d_resource = d_resource.resource_improve d_resource (or_term, d_orT)
 
 let eqcd_orT p =
-   or_univ (hyp_count p) p
+   or_univ (hyp_count_addr p) p
 
 let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (or_term, eqcd_orT)
 
@@ -581,20 +650,56 @@ let d_resource = d_resource.resource_improve d_resource (or_equal_term, d_wrap_e
 
 let d_or_typeT i p =
    if i = 0 then
-      (or_type (hyp_count p) thenT addHiddenLabelT "wf") p
+      (or_type (hyp_count_addr p) thenT addHiddenLabelT "wf") p
    else
       raise (RefineError ("d_or_typeT", StringError "no elimination form"))
 
 let or_type_term = << "type"{."or"{'t1; 't2}} >>
 
 let d_resource = d_resource.resource_improve d_resource (or_type_term, d_or_typeT)
+
+(*
+ * Tactics for conditional conjunction.
+ *)
+let d_candT i p =
+   if i = 0 then
+      let u = maybe_new_vars1 p "u" in
+         cand_intro (hyp_count_addr p) u p
+   else
+      let u, v = maybe_new_vars2 p "u" "v" in
+      let j, k = hyp_indices p i in
+         cand_elim j k u v p
+
+let d_resource = d_resource.resource_improve d_resource (cand_term, d_candT)
+
+let eqcd_candT p =
+   let u = maybe_new_vars1 p "u" in
+      cand_univ (hyp_count_addr p) u p
+
+let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (cand_term, eqcd_candT)
+
+let cand_equal_term = << "cand"{'t1; 't2} = "cand"{'t3; 't4} in univ[@i:l] >>
+
+let d_resource = d_resource.resource_improve d_resource (cand_equal_term, d_wrap_eqcd eqcd_candT)
+
+let d_cand_typeT i p =
+   if i = 0 then
+      let u = maybe_new_vars1 p "u" in
+         (cand_type (hyp_count_addr p) u thenT addHiddenLabelT "wf") p
+   else
+      raise (RefineError ("d_cand_typeT", StringError "no elimination form"))
+
+let cand_type_term = << "type"{."cand"{'t1; 't2}} >>
+
+let d_resource = d_resource.resource_improve d_resource (cand_type_term, d_cand_typeT)
+
 (*
  * Tactics for implication.
  *)
 let d_impliesT i p =
       let v = maybe_new_vars1 p "v" in
    if i = 0 then
-         (implies_intro (hyp_count p) v
+         (implies_intro (hyp_count_addr p) v
           thenLT [addHiddenLabelT "wf";
                   addHiddenLabelT "main"]) p
    else
@@ -606,7 +711,7 @@ let d_impliesT i p =
 let d_resource = d_resource.resource_improve d_resource (implies_term, d_impliesT)
 
 let eqcd_impliesT p =
-   implies_univ (hyp_count p) p
+   implies_univ (hyp_count_addr p) p
 
 let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (implies_term, eqcd_impliesT)
 
@@ -616,7 +721,7 @@ let d_resource = d_resource.resource_improve d_resource (implies_equal_term, d_w
 
 let d_implies_typeT i p =
    if i = 0 then
-      (implies_type (hyp_count p) thenT addHiddenLabelT "wf") p
+      (implies_type (hyp_count_addr p) thenT addHiddenLabelT "wf") p
    else
       raise (RefineError ("d_implies_typeT", StringError "no elimination form"))
 
@@ -629,7 +734,7 @@ let d_resource = d_resource.resource_improve d_resource (implies_type_term, d_im
  *)
 let d_iffT i p =
    if i = 0 then
-      iff_intro (hyp_count p) p
+      iff_intro (hyp_count_addr p) p
    else
       let u, v = maybe_new_vars2 p "u" "v" in
       let j, k = hyp_indices p i in
@@ -638,7 +743,7 @@ let d_iffT i p =
 let d_resource = d_resource.resource_improve d_resource (iff_term, d_iffT)
 
 let eqcd_iffT p =
-   iff_univ (hyp_count p) p
+   iff_univ (hyp_count_addr p) p
 
 let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (iff_term, eqcd_iffT)
 
@@ -648,7 +753,7 @@ let d_resource = d_resource.resource_improve d_resource (iff_equal_term, d_wrap_
 
 let d_iff_typeT i p =
    if i = 0 then
-      (iff_type (hyp_count p) thenT addHiddenLabelT "wf") p
+      (iff_type (hyp_count_addr p) thenT addHiddenLabelT "wf") p
    else
       raise (RefineError ("d_iff_typeT", StringError "no elimination form"))
 
@@ -664,7 +769,7 @@ let d_allT i p =
       let goal = Sequent.concl p in
       let v, _, _ = dest_all goal in
       let v = maybe_new_vars1 p "v" in
-         all_intro (hyp_count p) v p
+         all_intro (hyp_count_addr p) v p
    else
       let z = get_with_arg p in
       let j, k = hyp_indices p i in
@@ -682,7 +787,7 @@ let eqcd_allT p =
    let _, t, _ = dest_equal goal in
    let v, _, _ = dest_all t in
    let v = maybe_new_vars1 p v in
-      (all_univ (hyp_count p) v thenT addHiddenLabelT "wf") p
+      (all_univ (hyp_count_addr p) v thenT addHiddenLabelT "wf") p
 
 let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (all_term, eqcd_allT)
 
@@ -696,7 +801,7 @@ let d_all_typeT i p =
       let t = dest_type_term goal in
       let v, _, _ = dest_all t in
       let v = maybe_new_vars1 p v in
-         (all_type (hyp_count p) v thenT addHiddenLabelT "wf") p
+         (all_type (hyp_count_addr p) v thenT addHiddenLabelT "wf") p
    else
       raise (RefineError ("d_all_typeT", StringError "no elimination form"))
 
@@ -713,7 +818,7 @@ let d_existsT i p =
       let v, _, _ = dest_exists goal in
       let v = maybe_new_vars1 p "v" in
       let z = get_with_arg p in
-         (exists_intro (hyp_count p) z v
+         (exists_intro (hyp_count_addr p) z v
           thenLT [addHiddenLabelT "wf";
                   addHiddenLabelT "main";
                   addHiddenLabelT "wf"]) p
@@ -733,7 +838,7 @@ let eqcd_existsT p =
    let _, t, _ = dest_equal goal in
    let v, _, _ = dest_exists t in
    let v = maybe_new_vars1 p v in
-      (exists_univ (hyp_count p) v thenT addHiddenLabelT "wf") p
+      (exists_univ (hyp_count_addr p) v thenT addHiddenLabelT "wf") p
 
 let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (exists_term, eqcd_existsT)
 
@@ -747,7 +852,7 @@ let d_exists_typeT i p =
       let t = dest_type_term goal in
       let v, _, _ = dest_exists t in
       let v = maybe_new_vars1 p v in
-         (exists_type (hyp_count p) v thenT addHiddenLabelT "wf") p
+         (exists_type (hyp_count_addr p) v thenT addHiddenLabelT "wf") p
    else
       raise (RefineError ("d_exists_typeT", StringError "no elimination form"))
 
@@ -1101,15 +1206,19 @@ let assumT i p =
             Hypothesis _ ->
                last_match last_con (hyp_index + 1) hyps
           | Context _ ->
-               last_match hyp_index (hyp_index + 1) hyps
+               last_match (hyp_index + 1) (hyp_index + 1) hyps
    in
    let { sequent_hyps = hyps } = TermMan.explode_sequent assum in
    let index = last_match 1 1 hyps in
+   let _ =
+      if !debug_auto then
+         eprintf "Last_match: %d%t" index eflush
+   in
 
    (* Construct the assumption as a universal formula *)
    let rec collect j =
-      if j = len then
-         TermMan.nth_concl assum 0
+      if j > len then
+         TermMan.nth_concl assum 1
       else
          let v, hyp = TermMan.nth_hyp assum j in
          let goal = collect (j + 1) in
@@ -1121,12 +1230,12 @@ let assumT i p =
    let form = collect index in
    let _ =
       if !debug_auto then
-         eprintf "Found assumption: %a%t" SimplePrint.print_simple_term_fp form eflush
+         eprintf "Found assumption: %a%t" debug_print form eflush
    in
 
    (* Call intro form on each arg *)
    let rec introT j p =
-      if j = len then
+      if j > len then
          let goal, assums = dest_msequent (Sequent.msequent p) in
          let assum = List.nth assums (i - 1) in
             if is_squash_sequent goal then
@@ -1140,7 +1249,7 @@ let assumT i p =
          (dT 0 thenMT introT (j + 1)) p
    in
       (assertT form
-       thenLT [thinAllT (index + 1) (TermMan.num_hyps goal) thenT introT index;
+       thenLT [thinAllT index (TermMan.num_hyps goal) thenT introT index;
                addHiddenLabelT "main"]) p
 
 (*
@@ -1208,9 +1317,9 @@ let auto_resource =
  *)
 let assum_test i p =
    let goal, assums = dest_msequent (Sequent.msequent p) in
-   let goal = TermMan.nth_concl goal 0 in
+   let goal = TermMan.nth_concl goal 1 in
    let assum = List.nth assums (i - 1) in
-   let goal' = TermMan.nth_concl assum 0 in
+   let goal' = TermMan.nth_concl assum 1 in
       try match_terms [] goal' goal; true with
          RefineError _ ->
             false

@@ -102,7 +102,7 @@ interactive set_ext 'H 'x 'y :
  *)
 let d_member_typeT i p =
    if i = 0 then
-      member_type (Sequent.hyp_count p) p
+      member_type (Sequent.hyp_count_addr p) p
    else
       raise (RefineError ("d_member_typeT", StringError "no elimination rule"))
 
@@ -115,7 +115,7 @@ let d_resource = d_resource.resource_improve d_resource (member_type_term, d_mem
  *)
 let d_member_funT i p =
    if i = 0 then
-      member_fun (hyp_count p) p
+      member_fun (hyp_count_addr p) p
    else
       raise (RefineError ("d_member_funT", StringError "no elimination form"))
 
@@ -127,17 +127,17 @@ let d_resource = d_resource.resource_improve d_resource (member_fun_term, d_memb
  * Membership.
  *)
 let memberOfT t p =
-   elem_isset (hyp_count p) t p
+   elem_isset (hyp_count_addr p) t p
 
 let setOfT t p =
-   set_isset (hyp_count p) t p
+   set_isset (hyp_count_addr p) t p
 
 (*
  * Prove equality by extensionality.
  *)
 let setExtT p =
    let u, v = maybe_new_vars2 p "u" "v" in
-      (set_ext (hyp_count p) u v
+      (set_ext (hyp_count_addr p) u v
        thenLT [addHiddenLabelT "wf";
                addHiddenLabelT "wf";
                addHiddenLabelT "main";

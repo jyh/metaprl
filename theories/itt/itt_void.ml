@@ -116,7 +116,7 @@ let dT = d_resource.resource_extract d_resource
 
 let d_void_typeT i p =
    if i = 0 then
-      voidType (hyp_count p) p
+      voidType (hyp_count_addr p) p
    else
       raise (RefineError ("d_void_typeT", StringError "no elimination form"))
 
@@ -128,8 +128,7 @@ let d_resource = d_resource.resource_improve d_resource (void_type_term, d_void_
  * EqCD.
  *)
 let eqcd_voidT p =
-   let count = num_hyps (goal p) in
-      voidEquality count p
+   voidEquality (hyp_count_addr p) p
 
 let eqcd_resource = eqcd_resource.resource_improve eqcd_resource (void_term, eqcd_voidT)
 let eqcdT = eqcd_resource.resource_extract eqcd_resource
@@ -146,7 +145,7 @@ let d_resource = d_resource.resource_improve d_resource (equal_void_term, d_wrap
  * Void is squash stable.
  *)
 let squash_void p =
-   void_squashElimination (hyp_count p) p
+   void_squashElimination (hyp_count_addr p) p
 
 let squash_resource = squash_resource.resource_improve squash_resource (void_term, squash_void)
 
@@ -155,7 +154,7 @@ let squash_resource = squash_resource.resource_improve squash_resource (void_ter
  ************************************************************************)
 
 let void_sub p =
-   void_subtype (hyp_count p) p
+   void_subtype (hyp_count_addr p) p
 
 let sub_resource =
    sub_resource.resource_improve

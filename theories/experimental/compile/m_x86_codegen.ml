@@ -1,31 +1,31 @@
-doc <:doc< 
+doc <:doc<
    @spelling{compilable}
-  
+
    @begin[doc]
    @module[M_x86_codegen]
    This module implements the translation of IR terms to
    x86 assembly.
    @end[doc]
-  
+
    ----------------------------------------------------------------
-  
+
    @begin[license]
    Copyright (C) 2003 Jason Hickey, Caltech
-  
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
    as published by the Free Software Foundation; either version 2
    of the License, or (at your option) any later version.
-  
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-  
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-  
+
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
@@ -40,7 +40,7 @@ open Tactic_type.Tacticals
 
 open Top_conversionals
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsection{Terms}
 
@@ -247,7 +247,7 @@ prim_rw asm_arg_nil {| reduce |} :
  * Atoms
  *)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsection{Code generation}
    In our runtime, integers are shifted to the left and use the upper
@@ -270,7 +270,7 @@ prim_rw asm_atom_true {| reduce |} :
    <-->
   'e[ImmediateNumber[3:n]]
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    Integers are adjusted for our runtime representation.
    @end[doc]
@@ -280,7 +280,7 @@ prim_rw asm_atom_int {| reduce |} :
    <-->
    'e[ImmediateNumber{add{mul{number[i:n]; number[2:n]}; number[1:n]}}]
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    Variables are translated to registers.
    @end[doc]
@@ -290,7 +290,7 @@ prim_rw asm_atom_var {| reduce |} :
    <-->
    'e[Register{'v1}]
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    Function labels become labels.
    @end[doc]
@@ -300,7 +300,7 @@ prim_rw asm_atom_fun_var {| reduce |} :
    <-->
    'e[ImmediateCLabel[label:t]{'R}]
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    Functions are assembled.
    @end[doc]
@@ -310,7 +310,7 @@ prim_rw asm_atom_fun {| reduce |} :
    <-->
    LabelFun{v. ASM{'e['v]}}
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    Binary operators are translated to a sequence of assembly
    instructions that implement that operation.
@@ -339,7 +339,7 @@ prim_rw asm_atom_binop_sub {| reduce |} :
    Inst1["inc"]{Register{'diff_tmp}; diff.
    'e[Register{'diff}]}}}}}
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    In multiplication and division we first obtain the
    standard integer representation, perform the appropriate
@@ -373,7 +373,7 @@ prim_rw asm_atom_binop_div {| reduce |} :
    Inst2["or"]{ImmediateNumber[1:n]; Register{'quot_tmp2}; quot1.
    'e[Register{'quot1}]}}}}}}}}}
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    Assembling IR relational operators is a mapping to the appropriate
    condition codes. The operations themselves become assembly comparisons.
@@ -528,8 +528,8 @@ prim_rw asm_set_subscript_2 {| reduce |} :
 
 doc <:doc<
    @begin[doc]
-   Allocating a tuple involves obtaining a block from the store by 
-   advancing the @bf[next] pointer by the size of the tuple 
+   Allocating a tuple involves obtaining a block from the store by
+   advancing the @bf[next] pointer by the size of the tuple
    (plus its header), creating the header for the
    new block, and storing the tuple elements in that block.
    @end[doc]
@@ -700,12 +700,12 @@ doc docoff
 dform register_df : register =
    bf["register"]
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    The program is compilable if the assembly is compilable.
    @end[doc]
 >>
-interactive codegen_prog :
+prim codegen_prog :
    sequent { <H> >- compilable{ASM{'e}} } -->
    sequent { <H> >- compilable{'e} }
 

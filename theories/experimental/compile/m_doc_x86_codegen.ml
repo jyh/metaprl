@@ -2,31 +2,31 @@ doc <:doc< -*- mode: text; -*-
    @begin[spelling]
    env gc op tmp args vargs NZ
    @end[spelling]
-  
+
    @begin[doc]
    @subsection[m_doc_x86_codegen]{Assembly code generation}
    @docoff
    @end[doc]
-  
+
    ----------------------------------------------------------------
-  
+
    @begin[license]
    Copyright (C) 2003 Jason Hickey, Caltech
-  
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
    as published by the Free Software Foundation; either version 2
    of the License, or (at your option) any later version.
-  
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-  
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-  
+
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
@@ -76,7 +76,7 @@ dform math_CopyArgs_df2 : mode[tex] :: math_CopyArgs{'src; 'dst; 'v; 'e} =
 dform math_ReverseArgs_df1 : mode[tex] :: math_ReverseArgs{'e} =
    bf["reverse"] `"(" slot{'e} `")"
 
-doc <:doc< 
+doc <:doc<
 
 @begin[doc]
 
@@ -91,7 +91,7 @@ $a$ and substitutes it for the variable $v$ in assembly expression $e[v]$.
 
 The translation of atoms is primarily a translation of the IR names for values and the assembly
 names for operands.  A representative set of atom translations is shown in Figure
-@reffigure[asmatomtrans] above.  Since the language is untyped, we use a 31-bit representation of
+@reffigure[asmatomtrans].  Since the language is untyped, we use a 31-bit representation of
 integers, where the least-significant-bit is always set to 1.  Since pointers are always
 word-aligned, this allows the garbage collector to differentiate between integers and pointers.  The
 division operation is the most complicated translation: first the operands $a_1$ and $a_2$ are
@@ -134,7 +134,7 @@ $$
 @subsubsection["asmexps"]{Expression translation}
 
 Expressions translate to sequences of assembly instructions.  A representative set of translations
-in shown in Figure @reffigure[asmexptrans] above.  The translation of $@LetAtom{a; v; e[v]}$ is the
+in shown in Figure @reffigure[asmexptrans].  The translation of $@LetAtom{a; v; e[v]}$ is the
 simplest case, the atom $a$ is translated into an operand $v'$, which is copied to a variable $v$
 (since the expression $e[v]$ assumes $v$ is a variable), and the rest of the code $e[v]$ is
 translated.  Conditionals translate into comparisons followed by a conditional branch.
@@ -180,7 +180,7 @@ $$
 @caption{Translation of expressions to x86 assembly}
 @end[figure]
 
-The memory operations shown in Figure @reffigure[asmmemtrans] on the next page are among the most complicated
+The memory operations shown in Figure @reffigure[asmmemtrans] are among the most complicated
 translations.  For the runtime, we use a contiguous heap and a copying garbage collector.
 The representation of all memory blocks in the heap includes a header word containing the number of
 bytes in the block (the number of bytes is always a multiple of the word size), following by one
@@ -233,7 +233,7 @@ number of words in the block as indicated in the header word, and a bounds-check
 if the index is out-of-bounds (denoted with the instruction $@Jcc[J]{@it{AE}; @it{bounds.error}}$).
 When a block of memory is allocated in the @misspelled{@tt{alloc}} and @misspelled{@tt{closure}}
 rules, the first step reserves storage with the $@Reserve{i}$ term, and then the data is allocated
-and initialized.  Figure @reffigure[asmhelp] on the next page shows the implementation of some of
+and initialized.  Figure @reffigure[asmhelp] shows the implementation of some of
 the helper terms:
 the $@Reserve{i}$ expression determines whether sufficient storage is present for an allocation of
 $i$ bytes, and calls the garbage collector otherwise; the $@StoreTuple{p; i; @it{args}; e}$ term

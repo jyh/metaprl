@@ -273,7 +273,7 @@ doc <:doc<
    The program is compilable if the CPS version is compilable.
    @end[doc]
 >>
-interactive cps_prog :
+prim cps_prog :
    sequent { <H>; cont: exp >-
       compilable{LetRec{R. FunDef{Label[".init":t]; AtomFun{cont. CPS{'cont; 'e}}; EndDef};
                         R. LetFun{'R; Label[".init":t]; init. Initialize{TailCall{AtomVar{'init}; ArgCons{AtomVar{'cont}; ArgNil}}}}}} } -->

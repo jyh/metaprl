@@ -44,10 +44,10 @@ open Tactic_type.Tacticals
  *)
 declare equal{'e1; 'e2}
 
-interactive alpha_equal :
+prim alpha_equal :
    sequent { <H> >- equal{'e; 'e} }
 
-interactive subst 'e2 :
+prim subst 'e2 :
    sequent { <H> >- 'e2 } -->
    ["wf"] sequent { <H> >- equal{'e1; 'e2} } -->
    sequent { <H> >- 'e1 }

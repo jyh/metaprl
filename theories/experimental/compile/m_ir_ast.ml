@@ -345,7 +345,7 @@ doc <:doc<
 >>
 prim prog_ir :
     sequent { <H> >- compilable{IR{'e; v. Return{'v}}} } -->
-    sequent { <H> >- compilable{AST{'e}} } = it
+    sequent { <H> >- compilable{AST{'e}} }
 
 (*
  * Top-level conversion and tactic.

@@ -3,38 +3,38 @@ doc <:doc< -*- mode: text; -*-
    CPS ML Mojave untrusted compilable Necula Liang HOAS
    Morrisett
    @end[spelling]
-  
+
    @begin[doc]
    @section[m_doc_intro]{Introduction}
    @docoff
    @end[doc]
-  
+
    ----------------------------------------------------------------
-  
+
    @begin[license]
    Copyright (C) 2003 Jason Hickey, Caltech
-  
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
    as published by the Free Software Foundation; either version 2
    of the License, or (at your option) any later version.
-  
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-  
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-  
+
    Author: Jason Hickey @email{jyh@cs.caltech.edu}
-   Modified By: 
+   Modified By:
    @end[license]
 >>
 extends M_doc_comment
 
-doc <:doc< 
+doc <:doc<
 @begin[doc]
 
 The task of designing and implementing a compiler can be difficult
@@ -149,7 +149,7 @@ The high-level outline of the paper is as follows.
 
 @begin[center]
 @begin[tabular,lll]
-@line{$@bullet$ {Section  @refsection[m_doc_parsing]}  {Parsing}}
+@line{$@bullet$ {Section  @refsection[m_doc_parsing]}  {Language}}
 @line{$@bullet$ {Section  @refsection[m_doc_ir]}       {Intermediate representation (IR)}}
 @line{$@bullet$ {Section  @refsection[m_doc_x86_asm]}  {Intel x86 assembly code generation}}
 @line{$@bullet$ {Section  @refsection[m_doc_summary]}  {Summary and future work}}

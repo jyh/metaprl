@@ -367,6 +367,10 @@ doc docoff
 
 dform m_df : sequent_arg = subm
 
+declare default_extract
+
+dform default_extract_df : sequent { <H> >- default_extract } = `""
+
 doc <:doc<
    @begin[doc]
    @modsubsection{Subscripting.}

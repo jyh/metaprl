@@ -155,6 +155,7 @@ declare compilable{'e}
  * Sequent tag for M programs.
  *)
 declare sequent_arg
+declare default_extract
 
 (*
  * Term constructors.

@@ -66,6 +66,7 @@ open Itt_struct
 open Itt_squash
 open Itt_int_base
 open Itt_int_ext
+open Itt_int_arith
 
 (* For display *)
 declare cdot
@@ -787,6 +788,11 @@ let rat_of_int_ratnC = rat_of_int_ratn
 interactive ratn_number_wf {| intro [] |} :
 	sequent { <H> >- 'a in int } -->
 	sequent { <H> >- ratn{'a; 1} in rationals }
+
+let resource int2rat += [
+	<<'a -@ 'b>>, sub_elim_rw;
+	<<- 'a>>, (uni2negative1C thenC (addrC [Subterm 1] reduce_minus));
+]
 
 interactive_rw rat_of_int_add {| int2rat |} :
 	('a in int) -->

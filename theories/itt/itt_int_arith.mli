@@ -76,6 +76,11 @@ topval sum_same_products3C : conv
 topval sum_same_products4C : conv
 *)
 
+rewrite sub_elim_rw :
+   ( 'a in int ) -->
+   ( 'b in int ) -->
+   ('a -@ 'b ) <--> ('a +@ ((-1) *@ 'b))
+
 rewrite ge_addMono2_rw 'c :
    ( 'a in int ) -->
    ( 'b in int ) -->

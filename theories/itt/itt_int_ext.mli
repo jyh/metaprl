@@ -266,6 +266,10 @@ rule mul_Zero :
    [wf] sequent { <H> >- 'a in int } -->
    sequent { <H> >- (0 *@ 'a) ~ 0 }
 
+rewrite uni2negative1C :
+	('a in int) -->
+	(- 'a) <--> ((-1) *@ 'a)
+
 rule lt_mulPositMonoEq 'c :
    sequent { <H> >- 0 < 'c } -->
    [wf] sequent { <H> >- 'a in int } -->

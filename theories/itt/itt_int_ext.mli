@@ -182,26 +182,12 @@ rule mul_Id :
    sequent ['ext] { <H> >- (1 *@ 'a) ~ 'a }
 
 topval mul_IdC: conv
-
-rule mul_Id2 :
-   [wf] sequent [squash] { <H> >- 'a in int } -->
-   sequent ['ext] { <H> >- ('a *@ 1) ~ 'a }
-
 topval mul_Id2C: conv
-
-rule mul_Id3 :
-   [wf] sequent [squash] { <H> >- 'a in int } -->
-   sequent ['ext] { <H> >- 'a ~ (1 *@ 'a) }
-
 topval mul_Id3C: conv
 
 rule mul_Zero :
    [wf] sequent [squash] { <H> >- 'a in int } -->
    sequent ['ext] { <H> >- (0 *@ 'a) ~ 0 }
-
-rule mul_Zero2 :
-   [wf] sequent [squash] { <H> >- 'a in int } -->
-   sequent ['ext] { <H> >- ('a *@ 0) ~ 0 }
 
 rule lt_mulPositMonoEq 'c :
    sequent [squash] { <H> >- 0 < 'c } -->

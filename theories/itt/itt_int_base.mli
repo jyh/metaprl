@@ -88,8 +88,6 @@ prec prec_add
 
 topval sqFromRwT : tactic -> tactic
 
-topval testT : tactic
-
 (*
  * Integers are canonical.
  *)
@@ -361,15 +359,6 @@ rule splitInt 'a 'b :
 
 topval splitIntT : term -> term -> tactic
 
-(*
-Switching to rewrite to provide the uniform of int-properties
-
-rule lt_Transit 'b :
-   sequent [squash] { <H> >- 'a < 'b } -->
-   sequent [squash] { <H> >- 'b < 'c } -->
-   sequent ['ext] { <H> >- 'a < 'c }
-*)
-
 rule lt_Transit 'b :
    [main] sequent [squash] {
    	<H> >- band{lt_bool{'a; 'b};lt_bool{'b; 'c}} = btrue in bool } -->
@@ -450,21 +439,7 @@ rule minus_add_inverse :
    sequent ['ext] { <H> >- ( 'a +@ ( - 'a ) ) ~ 0 }
 
 topval minus_add_inverseC: conv
-(*
-topval unfold_zeroC: term -> conv
 
-rule minus_add_inverse2 :
-   [wf] sequent [squash] { <H> >- 'c in int } -->
-   sequent ['ext] { <H> >- 0 ~ ('c +@ ( - 'c )) }
-*)
-(*
-rule add_Functionality :
-   [main] sequent ['ext] { <H> >- 'a ~ 'b } -->
-   [wf] sequent ['ext] { <H> >- 'a in int } -->
-   [wf] sequent ['ext] { <H> >- 'b in int } -->
-   [wf] sequent ['ext] { <H> >- 'c in int } -->
-   sequent ['ext] { <H> >- ('a +@ 'c) ~ ('b +@ 'c) }
-*)
 rule add_Functionality 'c :
    [main] sequent ['ext] { <H> >- ('a +@ 'c) ~ ('b +@ 'c) } -->
    [wf] sequent ['ext] { <H> >- 'a in int } -->

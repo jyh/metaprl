@@ -96,7 +96,7 @@ declare int
 declare number[n:n]
 declare number{'a}
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    The basic arithmetic operators are defined with
    the following terms. Basic predicates are boolean.
@@ -108,7 +108,7 @@ declare minus{'a}
 declare beq_int{'a; 'b}
 declare lt_bool{'a; 'b}
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    Subtraction is composition of addition and unary minus
    @end[doc]
@@ -116,7 +116,17 @@ doc <:doc<
 define unfold_sub :
    "sub"{'a ; 'b} <--> ('a +@ minus{'b})
 
-doc <:doc< 
+doc <:doc<
+   @begin[doc]
+   Derived propositional relation:
+
+   @end[doc]
+>>
+
+define unfold_lt :
+   lt{'a; 'b} <--> "assert"{lt_bool{'a; 'b}}
+
+doc <:doc<
    @begin[doc]
    The @tt{ind} term is the induction combinator for building
    loops indexed by an integer argument.
@@ -124,17 +134,6 @@ doc <:doc<
 >>
 declare ind{'i; m, z. 'down; 'base; m, z. 'up}
 
-doc <:doc< 
-   @begin[doc]
-   Derived typed relations
-  
-   @end[doc]
->>
-(*
- Prop-int-lt definition
- *)
-define unfold_lt :
-   lt{'a; 'b} <--> "assert"{lt_bool{'a; 'b}}
 doc <:doc< @docoff >>
 
 let int_term = << int >>
@@ -198,12 +197,6 @@ prec prec_add
 prec prec_unary
 prec prec_unary < prec_add
 
-(*
-prec prec_mul < prec_apply
-prec prec_add < prec_mul
-prec prec_compare < prec_add
-*)
-
 dform int_prl_df : except_mode [src] :: int = mathbbZ
 dform int_src_df : mode[src] :: int = `"int"
 
@@ -262,63 +255,12 @@ dform ind_df : parens :: "prec"[prec_bor] :: except_mode[src] ::
  'up[display_var["n":v]{nil}; display_ind{(display_var["n":v]{nil} -@ 1)}]})
  popm ezone
 
-(*
- * Useful tactic to prove _rw from ~-rules
- *)
-let sqFromRwT t =
-   (fun p -> sqSubstT (Sequent.concl p) 0 p)
-    thenMT
-        autoT
-    thenT t thenT trivialT
-
-let testT p =
-   let g =Sequent.goal p in
-(*  let (g,_):(term * term list)=Refiner.Refiner.Refine.dest_msequent mseq in
-   let es :
- Refiner.Refiner.TermMan.Term.esequent=Refiner.Refiner.TermMan.explode_sequent g
- in
-   let (args,hyps,goals)=es in
-   let gl = SEQ_SET.to_list goals in*)
-   let h2=Refiner.Refiner.TermMan.nth_hyp g 2 in
-   let s2=Refiner.Refiner.TermMan.nth_binding g 2 in
-   begin
-      print_term stdout g;
-      printf "\nHL%sHL\n" s2;
-      print_term stdout h2;
-      print_term stdout (Refiner.Refiner.TermMan.nth_concl g 1);
-(*      print_term_list stdout gl;*)
-      failT p
-   end
-
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsection{Rules and rewrites}
-   @modsubsection{Typehood and well-formedness of arithmetic operators}
-  
-   @end[doc]
->>
-(*
- * Integers are canonical.
- *)
-prim int_sqequal :
-   sequent [squash] { <H> >- 'a = 'b in int } -->
-   sequent ['ext] { <H> >- 'a ~ 'b } = it
+   @modsubsection{Operations and relations on literals}
 
-interactive_rw int_sqequal_rw 'b :
-   ('a = 'b in int) -->
-   'a <--> 'b
-
-let int_sqequalC = int_sqequal_rw
-
-(************************************************************************
- * REWRITES                                                             *
- ************************************************************************)
-
-doc <:doc< 
-   @begin[doc]
-   @rewrites
-  
-   The binary arithmetic operators are defined using the
+   The binary arithmetic operators on literal integers are defined using the
    the @emph{meta} arithmetic operators that are @MetaPRL
    builtin operations.
    @end[doc]
@@ -340,7 +282,7 @@ prim_rw reduce_lt_meta : lt_bool{number[i:n]; number[j:n]} <-->
 prim_rw reduce_beq_int_meta : beq_int{number[i:n]; number[j:n]} <-->
    meta_eq[i:n, j:n]{btrue; bfalse}
 
-doc docoff
+doc <:doc< @docoff >>
 
 let reduce_add =
    reduce_add_meta thenC (addrC [0] reduce_meta_sum) thenC reduce_numeral
@@ -365,6 +307,73 @@ let resource reduce += [
    <<number[i:n] < number[j:n]>>, (unfold_lt thenC addrC [0] reduce_lt);
    <<beq_int{number[i:n]; number[j:n]}>>, reduce_eq_int;
 ]
+
+(*
+ * Useful tactic to prove _rw from ~-rules
+ *)
+let sqFromRwT t =
+   (fun p -> sqSubstT (Sequent.concl p) 0 p)
+    thenMT
+        autoT
+    thenT t thenT trivialT
+
+doc <:doc<
+   @begin[doc]
+   @modsubsection{Integers are canonical}
+   @end[doc]
+>>
+
+prim int_sqequal :
+   sequent [squash] { <H> >- 'a = 'b in int } -->
+   sequent ['ext] { <H> >- 'a ~ 'b } = it
+
+interactive_rw int_sqequal_rw 'b :
+   ('a = 'b in int) -->
+   'a <--> 'b
+
+let int_sqequalC = int_sqequal_rw
+
+doc <:doc<
+   @begin[doc]
+   @modsubsection{Typehood and well-formedness of @tt{int} and @tt{number}}
+
+   The $@int$ type inhabits every universe, and it
+   is a type.
+   @end[doc]
+>>
+(*
+ * H >- Z = Z in Ui ext Ax
+ * by intEquality
+ *)
+prim intEquality {| intro []; eqcd |} :
+   sequent ['ext] { <H> >- int in univ[i:l] } = it
+
+(*
+ * H >- int Type
+ *)
+interactive intType {| intro [] |} :
+   sequent ['ext] { <H> >- "type"{int} }
+
+(*
+ * H >- Ui ext Z
+ * by intFormation
+ *)
+interactive intFormation :
+   sequent ['ext] { <H> >- univ[i:l] }
+
+(*
+ * H >- Z ext n
+ * by numberFormation n
+ *)
+prim numberFormation {| intro [] |} number[n:n] :
+   sequent ['ext] { <H> >- int } = number[n:n]
+
+doc <:doc<
+   @begin[doc]
+   @modsubsection{Well-formedness of operations and relations}
+
+   @end[doc]
+>>
 
 prim add_wf {| intro []; eqcd |} :
    [wf] sequent [squash] { <H> >- 'a = 'a1 in int } -->
@@ -400,10 +409,10 @@ interactive lt_wf {| intro [] |} :
    [wf] sequent [squash] { <H> >- 'b in int } -->
    sequent ['ext] { <H> >- "type"{lt{'a; 'b}} }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-   @modsubsection{@tt{beq_int} and @tt{= in int} correspondence}
-  
+   @modsubsection{Correspondence between <<beq_int{'a;'b}>> and <<'a='b in int>> }
+
    @end[doc]
 >>
 prim beq_int2prop :
@@ -443,49 +452,7 @@ interactive lt_bool_member {| intro [] |} :
   [wf] sequent [squash] { <H> >- 'b in int } --> *)
   sequent ['ext] { <H> >- "assert"{lt_bool{'a; 'b}} }
 
-doc <:doc< @docoff >>
-
-(************************************************************************
- * RULES                                                                *
- ************************************************************************)
-
-doc <:doc< 
-   @begin[doc]
-   @modsubsection{Typehood and well-formedness of @tt{int} and @tt{number}}
-  
-   The $@int$ type inhabits every universe, and it
-   is a type.
-   @end[doc]
->>
-(*
- * H >- Z = Z in Ui ext Ax
- * by intEquality
- *)
-prim intEquality {| intro []; eqcd |} :
-   sequent ['ext] { <H> >- int in univ[i:l] } = it
-
-(*
- * H >- int Type
- *)
-interactive intType {| intro [] |} :
-   sequent ['ext] { <H> >- "type"{int} }
-doc <:doc< @docoff >>
-
-(*
- * H >- Ui ext Z
- * by intFormation
- *)
-interactive intFormation :
-   sequent ['ext] { <H> >- univ[i:l] }
-
-(*
- * H >- Z ext n
- * by numberFormation n
- *)
-prim numberFormation {| intro [] |} number[n:n] :
-   sequent ['ext] { <H> >- int } = number[n:n]
-
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Decidability}
    The following rules establish decidability of integer relations and
@@ -502,10 +469,10 @@ interactive eq_int_decidable {| intro [] |} :
    [wf] sequent[squash] { <H> >- 'b in int } -->
    sequent['ext] { <H> >- decidable{('a = 'b in int)} }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Membership}
-  
+
    The $@int$ type contains the @hrefterm[number] terms.
    @end[doc]
 >>
@@ -516,17 +483,14 @@ doc <:doc<
 prim numberEquality {| intro []; eqcd |} :
    sequent ['ext] { <H> >- number[n:n] in int } = it
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Order relation properties}
-  
-   @tt{lt_bool} defines reflexive, decidable, transitive and
+
+   <<lt_bool{'a;'b}>> defines irreflexive, asymmetrical, transitive and
    discrete order on @tt{int}
    @end[doc]
 >>
-(*
- Definition of basic operations (and relations) on int
- *)
 
 prim lt_Reflex :
    [wf] sequent [squash] { <H> >- 'a in int } -->
@@ -587,6 +551,15 @@ interactive splitInt 'a 'b :
    [main] sequent ['ext] { <H>; w: ('b < 'a) >- 'C } -->
    sequent ['ext] { <H> >- 'C }
 
+doc <:doc<
+   @begin[description]
+   @item{@tactic[splitIntT];
+    { The @tt{splitIntT a b} tactic uses @tt{splitInt} rule to split
+      reasoning into three cases - when <<'a>> is less then, equal to or
+      greater then <<'b>>.}}
+   @end[description]
+>>
+
 let splitIntT = splitInt
 
 prim lt_Transit 'b :
@@ -630,32 +603,10 @@ interactive_rw lt_Discret_rw :
 
 let lt_DiscretC = lt_Discret_rw
 
-doc <:doc< 
-   @begin[doc]
-  
-   Monotonicity:
-  
-   @end[doc]
->>
-prim lt_addMono 'c :
-   [wf] sequent [squash] { <H> >- 'a in int } -->
-   [wf] sequent [squash] { <H> >- 'b in int } -->
-   [wf] sequent [squash] { <H> >- 'c in int } -->
-   sequent ['ext] { <H> >- lt_bool{'a; 'b} ~ lt_bool{('a +@ 'c); ('b +@ 'c)} } =
- it
-
-interactive_rw lt_addMono_rw 'c :
-   ( 'a in int ) -->
-   ( 'b in int ) -->
-   ( 'c in int ) -->
-   lt_bool{'a; 'b} <--> lt_bool{('a +@ 'c); ('b +@ 'c)}
-
-let lt_addMonoC = lt_addMono_rw
-
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Elimination}
-  
+
    Induction on an integer assumption produces three cases:
    one for the base case $0$, one for induction on negative arguments,
    and another for induction on positive arguments.  The proof extract term
@@ -677,13 +628,13 @@ prim intElimination {| elim [ThinOption thinT] |} 'H :
       sequent ['ext] { <H>; n: int; <J['n]>; m: int; v: 'm < 0; z: 'C['m +@ 1]
  >- 'C['m] } ) -->
    ( 'base['n] : sequent ['ext] { <H>; n: int; <J['n]> >- 'C[0] } ) -->
-   ( 'up['n; 'm; 'v; 'z] : 
+   ( 'up['n; 'm; 'v; 'z] :
       sequent ['ext] { <H>; n: int; <J['n]>; m: int; v: 0 < 'm; z: 'C['m -@ 1]
  >- 'C['m] } ) -->
    sequent ['ext] { <H>; n: int; <J['n]> >- 'C['n] } =
       ind{'n; m, z. 'down['n; 'm; it; 'z]; 'base['n]; m, z. 'up['n; 'm; it; 'z]}
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection {Induction and recursion}
    Reduction of the induction combinator @tt{ind} has three cases.
@@ -778,9 +729,9 @@ prim indEquality {| intro []; eqcd |} lambda{z. 'T['z]} :
 doc <:doc< 
    @begin[doc]
    @modsubsection{Addition properties}
-  
+
    @tt{add} is commutative and associative.
-  
+
    @end[doc]
 >>
 prim add_Commut :
@@ -794,17 +745,6 @@ interactive_rw add_Commut_rw :
    ('a +@ 'b) <--> ('b +@ 'a)
 
 let add_CommutC = add_Commut_rw
-
-interactive lt_add_lt :
-   [main] sequent [squash] { <H> >- 'a < 'b} -->
-   [main] sequent [squash] { <H> >- 'c < 'd} -->
-   [wf] sequent [squash] { <H> >- 'a in int } -->
-   [wf] sequent [squash] { <H> >- 'b in int } -->
-   [wf] sequent [squash] { <H> >- 'c in int } -->
-   [wf] sequent [squash] { <H> >- 'd in int } -->
-   sequent ['ext] { <H> >- ('a +@ 'c) < ('b +@ 'd) }
-
-let lt_add_ltT = lt_add_lt
 
 prim add_Assoc :
    [wf] sequent [squash] { <H> >- 'a in int } -->
@@ -828,11 +768,11 @@ interactive_rw add_Assoc2_rw {| reduce |} :
 
 let add_Assoc2C = add_Assoc2_rw
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-  
+
    0 is neutral element for @tt{add} in @tt{int}
-  
+
    @end[doc]
 >>
 prim add_Id :
@@ -866,7 +806,40 @@ let add_Id4C = add_Id4_rw
 doc <:doc<
    @begin[doc]
 
-   @tt{- 'a} is a inverse element for 'a in @tt{int}
+   Monotonicity:
+
+   @end[doc]
+>>
+prim lt_addMono 'c :
+   [wf] sequent [squash] { <H> >- 'a in int } -->
+   [wf] sequent [squash] { <H> >- 'b in int } -->
+   [wf] sequent [squash] { <H> >- 'c in int } -->
+   sequent ['ext] { <H> >- lt_bool{'a; 'b} ~ lt_bool{('a +@ 'c); ('b +@ 'c)} } =
+ it
+
+interactive_rw lt_addMono_rw 'c :
+   ( 'a in int ) -->
+   ( 'b in int ) -->
+   ( 'c in int ) -->
+   lt_bool{'a; 'b} <--> lt_bool{('a +@ 'c); ('b +@ 'c)}
+
+let lt_addMonoC = lt_addMono_rw
+
+interactive lt_add_lt :
+   [main] sequent [squash] { <H> >- 'a < 'b} -->
+   [main] sequent [squash] { <H> >- 'c < 'd} -->
+   [wf] sequent [squash] { <H> >- 'a in int } -->
+   [wf] sequent [squash] { <H> >- 'b in int } -->
+   [wf] sequent [squash] { <H> >- 'c in int } -->
+   [wf] sequent [squash] { <H> >- 'd in int } -->
+   sequent ['ext] { <H> >- ('a +@ 'c) < ('b +@ 'd) }
+
+let lt_add_ltT = lt_add_lt
+
+doc <:doc<
+   @begin[doc]
+
+   <<- 'a>> is an inverse element for <<'a>> in <<int>>
 
    @end[doc]
 >>
@@ -879,21 +852,7 @@ interactive_rw minus_add_inverse_rw {| reduce |} :
    ( 'a +@ (- 'a) ) <--> 0
 
 let minus_add_inverseC = minus_add_inverse_rw
-(*
-let unfold_zeroC t = foldC (mk_add_term t (mk_minus_term t)) minus_add_inverseC
 
-interactive minus_add_inverse2 :
-   [wf] sequent [squash] { <H> >- 'c in int } -->
-   sequent ['ext] { <H> >- 0 ~ ('c +@ (- 'c)) }
-*)
-(*
-interactive add_Functionality :
-   [main] sequent ['ext] { <H> >- 'a ~ 'b } -->
-   [wf] sequent ['ext] { <H> >- 'a in int } -->
-   [wf] sequent ['ext] { <H> >- 'b in int } -->
-   [wf] sequent ['ext] { <H> >- 'c in int } -->
-   sequent ['ext] { <H> >- ('a +@ 'c) ~ ('b +@ 'c) }
-*)
 interactive add_Functionality 'c :
    [main] sequent ['ext] { <H> >- ('a +@ 'c) ~ ('b +@ 'c) } -->
    [wf] sequent ['ext] { <H> >- 'a in int } -->
@@ -938,8 +897,6 @@ interactive_rw minus_plus_rw {| reduce |} :
    ('a in int) -->
    ('b in int) -->
    (('a -@ 'b) +@ 'b) <--> 'a
-
-doc docoff
 
 (***********************************************************
  * TYPE INFERENCE

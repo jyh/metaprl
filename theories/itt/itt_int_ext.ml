@@ -1,10 +1,17 @@
 doc <:doc<
    @spelling{gt_bool le_bool ge_bool gt le ge nequal}
-  
+
    @begin[doc]
    @module[Itt_int_ext]
-  
-   Some more about integers
+
+   Here we define multiplicative operations on integers
+   (<<Perv!nil *@ Perv!nil>>, <<Perv!nil /@ Perv!nil>>,
+   <<Perv!nil %@ Perv!nil>>)
+   and the rest of traditional inequalities both in propositional
+   (<<Perv!nil > Perv!nil>>, <<Perv!nil <= Perv!nil>>, <<Perv!nil >= Perv!nil>>,
+   <<nequal{(Perv!nil) ; (Perv!nil)}>>) and boolean
+   (<<gt_bool{(Perv!nil) ; (Perv!nil)}>>, <<le_bool{(Perv!nil) ; (Perv!nil)}>>,
+   <<ge_bool{(Perv!nil) ; (Perv!nil)}>>, <<bneq_int{(Perv!nil) ; (Perv!nil)}>>) forms.
    @end[doc]
   
    ----------------------------------------------------------------
@@ -16,7 +23,7 @@ doc <:doc<
   
    See the file doc/index.html for information on Nuprl,
    OCaml, and more information about this system.
-  
+
    Copyright (C) 1998 Jason Hickey, Cornell University
   
    This program is free software; you can redistribute it and/or
@@ -76,10 +83,10 @@ let _ = show_loading "Loading Itt_int_ext%t"
 (************************************************************************
  * TERMS                                                                *
  ************************************************************************)
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @terms
-   Multiplicative operations on $@int$
+   Multiplicative operations on <<int>>
    @end[doc]
 >>
 declare "mul"{'a; 'b}
@@ -90,7 +97,7 @@ declare "rem"{'a; 'b}
  Definitions of >b <=b >=b
  *)
 
-doc <:doc< @doc{More order relation operations} >>
+doc <:doc< @doc{More boolean inequalities} >>
 
 define unfold_gt_bool {| reduce |} :
    gt_bool{'a; 'b} <--> lt_bool{'b; 'a}
@@ -122,26 +129,6 @@ let resource reduce += [
    << le_bool{'a;'a}>>, (unfold_le_bool thenC (addrC [0] lt_IrreflexC));
    << ge_bool{'a;'a}>>, (unfold_ge_bool thenC (addrC [0] lt_IrreflexC));
 ]
-
-interactive gt_bool_wf {| intro []; eqcd |} :
-   [wf] sequent { <H> >- 'a1='a2 in int } -->
-   [wf] sequent { <H> >- 'b1='b2 in int } -->
-   sequent { <H> >- gt_bool{'a1; 'b1}=gt_bool{'a2; 'b2} in bool }
-
-interactive le_bool_wf {| intro []; eqcd |} :
-   [wf] sequent { <H> >- 'a1='a2 in int } -->
-   [wf] sequent { <H> >- 'b1='b2 in int } -->
-   sequent { <H> >- le_bool{'a1; 'b1}=le_bool{'a2; 'b2} in bool }
-
-interactive ge_bool_wf {| intro []; eqcd |} :
-   [wf] sequent { <H> >- 'a1='a2 in int } -->
-   [wf] sequent { <H> >- 'b1='b2 in int } -->
-   sequent { <H> >- ge_bool{'a1; 'b1}=ge_bool{'a2; 'b2} in bool }
-
-interactive bneq_int_wf {| intro []; eqcd |} :
-   [wf] sequent { <H> >- 'a1='a2 in int } -->
-   [wf] sequent { <H> >- 'b1='b2 in int } -->
-   sequent { <H> >- bneq_int{'a1; 'b1}=bneq_int{'a2; 'b2} in bool }
 
 (*
  Prop-int-relations definitions
@@ -201,7 +188,13 @@ dform rem_df2 : mode[src] :: parens :: "prec"[prec_mul] :: "rem"{'a; 'b} =
 dform gt_df1 : parens :: "prec"[prec_compare] :: gt{'a; 'b} =
    slot["lt"]{'a} `" > " slot["le"]{'b}
 
-doc <:doc< @doc{More order relation propositions} >>
+doc <:doc<
+	@begin[doc]
+   More propositional inequalities.
+   As it was said in @hrefmodule[Itt_int_base], we define propositional ineqialities
+   via correspondent boolean ineqialities.
+	@end[doc]
+>>
 
 define unfold_le :
    le{'a; 'b} <--> "assert"{le_bool{'a; 'b}}
@@ -287,16 +280,13 @@ dform intSeg_df1 : mode [prl] :: int_seg{'i; 'j} =
 
 let fold_int_seg = makeFoldC << int_seg{'i; 'j} >> unfold_int_seg
 
-(************************************************************************
- * REWRITES                                                             *
- ************************************************************************)
-
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-   @rewrites
-  
-   The binary arithmetic operators are defined using the
-   @emph{meta} arithmetic operators that are @MetaPRL
+   @modsection{Rules and rewrites}
+   @modsubsection{Operations on literals}
+
+   The binary arithmetic operators on literal integers are defined using the
+   the @emph{meta} arithmetic operators that are @MetaPRL
    builtin operations.
    @end[doc]
 >>
@@ -325,11 +315,58 @@ let resource reduce += [
    <<"rem"{number[i:n]; number[j:n]}>>, reduce_rem;
 ]
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-   @modsection{Well-formedness and algebraic properties of @tt[mul]}
+   @modsubsection{Well-formedness of inequalities}
+
    @end[doc]
 >>
+
+interactive gt_bool_wf {| intro []; eqcd |} :
+   [wf] sequent { <H> >- 'a1='a2 in int } -->
+   [wf] sequent { <H> >- 'b1='b2 in int } -->
+   sequent { <H> >- gt_bool{'a1; 'b1}=gt_bool{'a2; 'b2} in bool }
+
+interactive le_bool_wf {| intro []; eqcd |} :
+   [wf] sequent { <H> >- 'a1='a2 in int } -->
+   [wf] sequent { <H> >- 'b1='b2 in int } -->
+   sequent { <H> >- le_bool{'a1; 'b1}=le_bool{'a2; 'b2} in bool }
+
+interactive ge_bool_wf {| intro []; eqcd |} :
+   [wf] sequent { <H> >- 'a1='a2 in int } -->
+   [wf] sequent { <H> >- 'b1='b2 in int } -->
+   sequent { <H> >- ge_bool{'a1; 'b1}=ge_bool{'a2; 'b2} in bool }
+
+interactive bneq_int_wf {| intro []; eqcd |} :
+   [wf] sequent { <H> >- 'a1='a2 in int } -->
+   [wf] sequent { <H> >- 'b1='b2 in int } -->
+   sequent { <H> >- bneq_int{'a1; 'b1}=bneq_int{'a2; 'b2} in bool }
+
+interactive gt_wf {| intro [] |} :
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   sequent { <H> >- "type"{gt{'a; 'b}} }
+
+interactive le_wf {| intro [] |} :
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   sequent { <H> >- "type"{le{'a; 'b}} }
+
+interactive ge_wf {| intro [] |} :
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   sequent { <H> >- "type"{ge{'a; 'b}} }
+
+interactive ge_sqstable {| squash; intro [] |} :
+   sequent { <H> >- 'a >= 'b } -->
+   sequent { <H> >- it in ('a >= 'b) }
+
+doc <:doc<
+   @begin[doc]
+   @modsection{Well-formedness and algebraic properties of <<(Perv!nil) *@ (Perv!nil)>>}
+   @end[doc]
+>>
+
 prim mul_wf {| intro []; eqcd |} :
    [wf] sequent { <H> >- 'a = 'a1 in int } -->
    [wf] sequent { <H> >- 'b = 'b1 in int } -->
@@ -485,9 +522,9 @@ interactive_rw lt_mulNegMono_rw 'c :
 
 let lt_mulNegMonoC = lt_mulNegMono_rw
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-   @modsection{@tt[rem] definition and well-formedness}
+   @modsection{Definition and well-formedness of <<Perv!nil %@ Perv!nil>>}
    @end[doc]
 >>
 prim rem_baseReduce :
@@ -528,9 +565,9 @@ interactive rem_wf {| intro []; eqcd |} :
    [wf] sequent { <H> >- 'b in int } -->
    sequent { <H> >- ('a %@ 'b) in int }
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-   @modsection{@tt[div] definition and properties}
+   @modsection{Definition and properties of <<Perv!nil /@ Perv!nil>>}
    @end[doc]
 >>
 prim div_baseReduce :
@@ -608,26 +645,7 @@ interactive_rw div_Assoc_rw :
 
 let div_AssocC = div_Assoc_rw
 
-interactive gt_wf {| intro [] |} :
-   [wf] sequent { <H> >- 'a in int } -->
-   [wf] sequent { <H> >- 'b in int } -->
-   sequent { <H> >- "type"{gt{'a; 'b}} }
-
-interactive le_wf {| intro [] |} :
-   [wf] sequent { <H> >- 'a in int } -->
-   [wf] sequent { <H> >- 'b in int } -->
-   sequent { <H> >- "type"{le{'a; 'b}} }
-
-interactive ge_wf {| intro [] |} :
-   [wf] sequent { <H> >- 'a in int } -->
-   [wf] sequent { <H> >- 'b in int } -->
-   sequent { <H> >- "type"{ge{'a; 'b}} }
-
-interactive ge_sqstable {| squash; intro [] |} :
-   sequent { <H> >- 'a >= 'b } -->
-   sequent { <H> >- it in ('a >= 'b) }
-
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsection{Integer segmentation properties}
    @end[doc]

@@ -3,7 +3,21 @@ doc <:doc<
    @module[Itt_int_base]
 
    The integers are formalized as a @emph{primitive}
-   type in the @Nuprl type theory.
+   type in the @Nuprl type theory. This module defines additive fragment
+   (<<Perv!nil +@ Perv!nil>>, <<Perv!nil -@ Perv!nil>>, <<- cdot>>)
+   with linear order both in propositional (<<Perv!nil < Perv!nil>>)
+   and boolean (<<lt_bool{(Perv!nil) ; (Perv!nil)}>>) forms.
+	It was decided that because inequalities on integers are decidable, it would
+   be better to define boolean inequalities as primitive ones and
+   propositional as derived (via <<"assert"{cdot}>>) from the correspondent
+   boolean ineqialities.
+
+   The theory of integers continues in @hrefmodule[Itt_int_ext] where multiplicative
+   operations and other inequality relations are added.
+   @hrefmodule[Itt_int_arith] adds @hrefconv[normalizeC], that is capable of
+   converting polynomials to their canonical forms, and @hreftactic[arithT], that
+   is capable of proving simple integer inequalities.
+
    @end[doc]
 
    ----------------------------------------------------------------

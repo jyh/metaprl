@@ -1080,7 +1080,7 @@ doc <:doc<
 
    @tt[arithT] supports addition, multiplication, unary minus and subtraction
    operations. Division and remainder operations are not supported.
-   Among arithmetic relations it supports are << cdot = cdot in int >>,
+   Among arithmetic relations it supports are << cdot = (cdot) in int >>,
 	<< nequal {.Perv!nil ; .Perv!nil } >>,
    << Perv!nil < Perv!nil >>, << Perv!nil > Perv!nil >>,
    << Perv!nil <= Perv!nil >>, and << Perv!nil >= Perv!nil >>. Arbitrary many negations

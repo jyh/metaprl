@@ -143,10 +143,14 @@ prim esquash_elim {| elim [] |} 'H 'J :
    sequent ['ext] { 'H; x: esquash{'A}; 'J['x] >- 'C['x] } =
    't[it]
 
-prim esquash_mem {| intro [] |} 'H :
+(*!
+ * @begin[doc]
+ * It can also be formulated as an intorduction rule.
+ * @end[doc]
+ *)
+interactive esquash_mem {| intro [] |} 'H :
    sequent [squash] { 'H >- esquash{'A} } -->
-   sequent ['ext] { 'H >- it IN esquash{'A} } =
-   it
+   sequent ['ext] { 'H >- it IN esquash{'A} }
 
 (*!
  * @begin[doc]

@@ -35,7 +35,7 @@ open Refiner.Refiner.RefineError
 
 open Printf
 open Mp_debug
-open Ctype
+open Mp_ctype
 
 open Sequent
 open Tactic_type

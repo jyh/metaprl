@@ -244,6 +244,8 @@ val withTacticT : string -> tactic -> tactic -> tactic
 val timingT : tactic -> tactic
 val finalT : (unit -> unit) -> tactic
 
+val test_marshal : unit -> unit
+
 (*
  * -*-
  * Local Variables:

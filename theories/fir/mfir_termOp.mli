@@ -142,6 +142,11 @@ val is_cons_term : term -> bool
 val mk_cons_term : term -> term -> term
 val dest_cons_term : term -> term * term
 
+val length_term : term
+val is_length_term : term -> bool
+val mk_length_term : term -> term
+val dest_length_term : term -> term
+
 val interval_term : term
 val is_interval_term : term -> bool
 val mk_interval_term : term -> term -> term

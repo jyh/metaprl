@@ -165,6 +165,12 @@ let is_cons_term = is_2_dep0_term cons_opname
 let mk_cons_term = mk_2_dep0_term cons_opname
 let dest_cons_term = dest_2_dep0_term cons_opname
 
+let length_term = << length{ 'l } >>
+let length_opname = opname_of_term length_term
+let is_length_term = is_1_dep0_term length_opname
+let mk_length_term = mk_1_dep0_term length_opname
+let dest_length_term = dest_1_dep0_term length_opname
+
 let interval_term = << interval{ 'left; 'right } >>
 let interval_opname = opname_of_term interval_term
 let is_interval_term = is_2_dep0_term interval_opname

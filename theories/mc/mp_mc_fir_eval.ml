@@ -399,6 +399,12 @@ prim_rw reduce_eqRawIntOp :
              atomRawInt{'p;'s;'a1}; atomRawInt{'p;'s;'a2}; v. 'exp['v] } <-->
    'exp[ ifthenelse{ beq_int{'a1;'a2}; fir_true; fir_false } ]
 
+(* Pointers. *)
+
+prim_rw reduce_eqEqOp :
+   letBinop{ tyEnum{2}; eqEqOp; atomInt{'a1}; atomInt{'a2}; v. 'exp['v] } <-->
+   'exp[ ifthenelse{ beq_int{'a1;'a2}; fir_true; fir_false } ]
+
 (*
  * Control.
  *)
@@ -482,6 +488,8 @@ let firExpEvalC =
       reduce_minusRawIntOp;
       reduce_mulRawIntOp;
       reduce_eqRawIntOp;
+
+      reduce_eqEqOp;
 
       reduce_matchExp_atomEnum;
       reduce_matchExp_atomInt;

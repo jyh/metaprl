@@ -172,6 +172,8 @@ topval reduce_minusRawIntOp : conv
 topval reduce_mulRawIntOp : conv
 topval reduce_eqRawIntOp : conv
 
+topval reduce_eqEqOp : conv
+
 topval reduce_matchExp_atomEnum : conv
 topval reduce_matchExp_atomInt : conv
 topval reduce_matchExp_number : conv

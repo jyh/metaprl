@@ -1136,8 +1136,8 @@ let norm constr =
 let omega_aux v ((c1,t1,l),(c2,t2,u)) =
 	let s = (Solve (v,c1,t1,l,c2,t2,u),	AF.sub_scaled (AF.scale c1 u) c2 l) in
 	norm s
-(*
-let rec compute_metric pool (tree,f) =
+
+let rec compute_metric pool key (tree,f) =
 	Array.iteri (fun v m -> pool.(v) <- add m (abs (AF.coef f (succ v)))) pool
 
 let rec min_index_aux pool result current =
@@ -1159,16 +1159,16 @@ let rec min_index pool current =
 		else
 			min_index pool (succ current)
 
-let pick_var info pool constrs =
+let pick_var pool constrs =
 	Array.fill pool 0 (Array.length pool) ringZero;
-	List.iter (compute_metric pool) constrs;
+	C.iter (compute_metric pool) constrs;
 	let result = min_index pool 0 in
 	if compare pool.(result) ringZero > 0 then
 		succ result
 	else
 		raise (RefineError ("omegaT", StringError "failed to find a contradiction - no variables left"))
-*)
 
+(*
 let pick_var_aux key (tree,f) =
 	let v = AF.any_var f in
 	v<>AF.constvar
@@ -1181,6 +1181,7 @@ let pick_var pool constrs =
 	with
 		Not_found ->
 			raise (RefineError ("omegaT", StringError "failed to find a contradiction - no variables left"))
+*)
 
 let rec get_bounds_aux v key constr (l,u,rest) =
 	let tree, f = constr in
@@ -1298,7 +1299,25 @@ let ge_to_ge0C t =
 
 let normalize2C =	(termC ge_to_ge0C) thenC relNormC
 
-let endT i =
+let totaltime = ref 0.
+let starttime = ref 0.
+
+let startT = argfunT (fun i p ->
+	starttime := Unix.time ();
+	if !debug_omega then
+		begin
+			eprintf "start %i@." i;
+			let i' = mk_number_term (Lm_num.num_of_int i) in
+			let t = mk_equal_term <<int>> i' i' in
+			assertT t
+		end
+	else
+		idT
+)
+
+let endT = argfunT (fun i p ->
+	totaltime := Unix.time() -. !starttime;
+	(*eprintf "endT: total time spent is %f@." !totaltime;*)
 	if !debug_omega then
 		begin
 			eprintf "end %i@." i;
@@ -1308,6 +1327,7 @@ let endT i =
 		end
 	else
 		idT
+)
 
 let rec tree_stats h m mw s = function
 	Hyp _ -> ((succ h), m, mw, s)
@@ -1531,7 +1551,7 @@ let rec sim_make_sacs_aux p var2index l = function
 		)
 
 let sim_make_sacs p var2index constrs =
-	let afs = sim_make_sacs_aux p var2index [] constrs in
+	let afs = sim_make_sacs_aux p var2index [] (*REV*)(*List.rev*) (constrs)(*REV*) in
 	try
  		let item = List.find (fun (i,f) -> is_neg_number f) afs in
  		[item]
@@ -1625,7 +1645,7 @@ let omegaPrepT = funT (fun p ->
 		end;
 	let info = VI.invert var2index in
 	total := !total +. (Unix.time() -. start);
-	eprintf "Total time spent in omegaPrepT is %f@." !total;
+	(*eprintf "Total time spent in omegaPrepT is %f@." !total;*)
 	let aux used_hyps (tree, f) =
 		omegaCoreT info hyp_num hyp_length used_hyps tree f
 	in
@@ -1634,8 +1654,8 @@ let omegaPrepT = funT (fun p ->
 )
 
 let omegaT =
-	arithRelInConcl2HypT thenMT
-	omegaPrepT (*thenMT endT 2*) thenT rw relNormC 0
+	startT 2 thenMT arithRelInConcl2HypT thenMT
+	omegaPrepT thenMT endT 2 thenT rw relNormC 0
 
 let getTimeT = funT (fun p ->
 	eprintf "spent %f seconds in omegaPrepT@." !total;

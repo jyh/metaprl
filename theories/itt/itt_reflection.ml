@@ -109,12 +109,12 @@ interactive bterm_memberEquality2 {| intro [AutoMustComplete] |} :
    sequent { <H> >- 'x<||> = 'y<||> in BTerm }
 *)
 
-prim btermSquiddle {| nth_hyp |} :
+prim btermSquiggle {| nth_hyp |} :
    sequent { <H> >- 'b1 = 'b2 in BTerm } -->
    sequent { <H> >- 'b1 ~ 'b2 } =
    it
 
-interactive btermlistSquiddle {| nth_hyp |} :
+interactive btermlistSquiggle {| nth_hyp |} :
    sequent { <H> >- 'b1 = 'b2 in list{BTerm} } -->
    sequent { <H> >- 'b1 ~ 'b2 }
 

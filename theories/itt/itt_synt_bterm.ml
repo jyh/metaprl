@@ -153,11 +153,11 @@ define unfold_dest_bterm:
 interactive var_subtype {| intro [] |} :
    sequent { <H> >- Var subtype BTerm }
 
-interactive btermSquiddle {| nth_hyp |} :
+interactive btermSquiggle {| nth_hyp |} :
    sequent { <H> >- 'b1 = 'b2 in BTerm } -->
    sequent { <H> >- 'b1 ~ 'b2 }
 
-interactive btermlistSquiddle {| nth_hyp |} :
+interactive btermlistSquiggle {| nth_hyp |} :
    sequent { <H> >- 'b1 = 'b2 in list{BTerm} } -->
    sequent { <H> >- 'b1 ~ 'b2 }
 
@@ -179,7 +179,6 @@ interactive_rw is_var_reduce1 {| reduce |}: is_var_bterm{var{'l;'r}} <--> btrue
 interactive_rw is_var_reduce2 {| reduce |}: is_var_bterm{make_bterm{'op;'btl}} <--> bfalse
 interactive_rw var_reduce1 {| reduce |}: var_bterm{var{'l;'r}} <--> "true"
 interactive_rw var_reduce2 {| reduce |}: var_bterm{make_bterm{'op;'btl}} <--> "false"
-
 
 interactive is_var_bterm_wf {| intro [] |} :
    sequent { <H> >- 'bt in BTerm } -->

@@ -3084,7 +3084,7 @@ T	t1211	o1181 b1210
 B	b1211	t1211
 P	p1211	Number -1
 O	o1211	location p1211 p1211
-P	p1212	String leftSquiddle
+P	p1212	String leftSquiggle
 O	o1212	rule p1212
 T	t1212	o922 b830 b1074 b1077
 S	s1212	t901\\ h\\ t1212
@@ -3133,7 +3133,7 @@ T	t1230	o1212 b19 b1218 b1224 b1229
 B	b1230	t1230
 T	t1231	o1211 b1230
 B	b1231	t1231
-P	p1231	String rightSquiddle
+P	p1231	String rightSquiggle
 O	o1231	rule p1231
 T	t1232	o848 b1074
 B	b1232	t1232
@@ -3176,7 +3176,7 @@ B	b1248	t1248
 P	p1248	Number 3848
 P	p1249	Number 3962
 O	o1249	location p1248 p1249
-P	p1250	String varSquiddle
+P	p1250	String varSquiggle
 O	o1250	rule p1250
 Vb1	b1	b1\\ H\\
 B	b1250	b1

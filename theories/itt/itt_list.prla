@@ -4556,7 +4556,7 @@ B	b1178	t1177
 P	p1178	Number 4885
 P	p1179	Number 5049
 O	o1179	location p1178 p1179
-P	p1180	String consSquiddleEq
+P	p1180	String consSquiggleEq
 O	o1180	rule p1180
 Vh1	h1	h1\\ H\\
 B	b2571	h1

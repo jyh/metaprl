@@ -2780,7 +2780,7 @@ B	b1200	t1200
 P	p10	Number 3088
 P	p132	Number 3207
 O	o137	location p10 p132
-P	p9	String btermSquiddle
+P	p9	String btermSquiggle
 O	o134	rule p9
 NBase_reflection!term	term	term Base_reflection
 P	p1588	Quote
@@ -3335,7 +3335,7 @@ B	b848	t845
 P	p848	Number 3209
 P	p852	Number 3337
 O	o852	location p848 p852
-P	p605	String btermlistSquiddle
+P	p605	String btermlistSquiggle
 O	o605	rule p605
 T	t796	o1006 b1225 b1432 b1435
 S	s796	t938\\ h\\ t796

@@ -123,18 +123,16 @@ interactive right_bound {| intro [] |} :
    sequent { <H> >- 'v in Var } -->
    sequent { <H> >- right{'v} < depth{'v} }
 
-
-interactive leftSquiddle {| intro [] |} :
+interactive leftSquiggle {| intro [] |} :
    sequent { <H> >- 'v1 = 'v2 in Var } -->
    sequent { <H> >- left{'v1} ~ left{'v2} }
 
-interactive rightSquiddle {| intro [] |} :
+interactive rightSquiggle {| intro [] |} :
    sequent { <H> >- 'v1 = 'v2 in Var } -->
    sequent { <H> >- right{'v1} ~ right{'v2} }
 
-interactive varSquiddle {| nth_hyp |} :
+interactive varSquiggle {| nth_hyp |} :
    sequent { <H> >- 'b1 = 'b2 in Var } -->
    sequent { <H> >- 'b1 ~ 'b2 }
-
 
 doc <:doc< @docoff >>

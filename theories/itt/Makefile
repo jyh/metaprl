@@ -53,6 +53,7 @@ MPFILES :=\
 	itt_derive\
 	itt_prop_decide\
 	itt_fset\
+	itt_struct2\
 	itt_theory\
 	itt_collection\
 	itt_sort

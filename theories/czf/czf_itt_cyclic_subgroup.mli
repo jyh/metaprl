@@ -26,15 +26,16 @@ open Base_dtactic
 open Base_auto_tactic
 
 declare power{'g; 'z; 'n}
-declare cyclic_subgroup{'g; 'a}
+declare cyc_subg{'g; 's; 'a}
 
 rewrite unfold_power : power{'g; 'z; 'n} <-->
    ind{'n; i, j. op{'g; inv{'g; 'z}; power{'g; 'z; ('n +@ 1)}}; id{'g}; k, l. op{'g; 'z; power{'g; 'z; ('n -@ 1)}}}
 
-rewrite unfold_cyclic_subgroup : cyclic_subgroup{'g; 'a} <-->
-   collect{int; x. power{'g; 'a; 'x}}
+rewrite unfold_cyc_subg : cyc_subg{'g; 's; 'a} <-->
+   (group{'g} & group{'s} & equal{car{'s}; collect{int; x. power{'g; 'a; 'x}}} & (all a: set. all b:set. (mem{'a; car{'s}} => mem{'b; car{'s}} => equal{op{'s; 'a; 'b}; op{'g; 'a; 'b}})))
 
 prec prec_power
 
 topval fold_power : conv
-topval fold_cyclic_subgroup : conv
+topval fold_cyc_subg : conv
+topval cycsubgSubgroupT: term -> tactic

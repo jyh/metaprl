@@ -197,6 +197,66 @@ interactive independentFunctionFormation 'H :
  ************************************************************************)
 
 (*
+ * Application equality depends on our infering a type.
+ *)
+let d_apply_equalT p =
+   let _, app, _ = dest_equal (Sequent.concl p) in
+   let f, _ = dest_apply app in
+   let f_type =
+      try get_with_arg p with
+         RefineError _ ->
+            snd (infer_type p f)
+   in
+      (withT f_type (dT 0)) p
+
+let apply_equal_term = << 'f1 'a1 = 'f2 'a2 in 'T >>
+
+let intro_resource = Mp_resource.improve intro_resource (apply_equal_term, d_apply_equalT)
+
+let d_apply_memberT p =
+   let _, app = dest_member (Sequent.concl p) in
+   let f, _ = dest_apply app in
+   let f_type =
+      try get_with_arg p with
+         RefineError _ ->
+            snd (infer_type p f)
+   in
+      (withT f_type (dT 0)) p
+
+let apply_member_term = << member{'T; .'f1 'a1} >>
+
+let intro_resource = Mp_resource.improve intro_resource (apply_member_term, d_apply_memberT)
+
+(*
+ * Typehood of application depends on the ability to infer a type.
+ *)
+let d_apply_typeT p =
+   let app = dest_type_term (Sequent.concl p) in
+   let f, _ = dest_apply app in
+   let f_type =
+      try get_with_arg p with
+         RefineError _ ->
+            snd (infer_type p f)
+   in
+   let univ =
+      if is_dfun_term f_type then
+         let _, _, univ = dest_dfun f_type in
+            univ
+      else if is_fun_term f_type then
+         snd (dest_fun f_type)
+      else
+         raise (RefineError ("d_apply_typeT", StringTermError ("inferred type is not a function type", f_type)))
+   in
+      if is_univ_term univ then
+         (univTypeT univ thenT withT f_type eqcdT) p
+      else
+         raise (RefineError ("d_apply_typeT", StringTermError ("inferred type is not a univ", univ)))
+
+let apply_type_term = << "type"{. 'f 'a} >>
+
+let intro_resource = Mp_resource.improve intro_resource (apply_type_term, d_apply_typeT)
+
+(*
  * D a hyp.
  * We take the argument.
  *)

@@ -213,6 +213,13 @@ prim well_founded {| intro_resource [] |} 'H 'a1 'a2 'a3 'u 'v 'p 'P :
    sequent ['ext] { 'H >- well_founded{'A; a, b. 'R['a; 'b]} } =
    it
 
+prim well_founded_apply_type {| intro_resource [] |} 'H 'A :
+   [wf] sequent [squash] { 'H >- member{well_founded_prop{'A}; 'P} } -->
+   [wf] sequent [squash] { 'H >- member{univ[i:l]; 'A} } -->
+   [wf] sequent [squash] { 'H >- member{'A; 'a} } -->
+   sequent ['ext] { 'H >- member{univ[i:l]; well_founded_apply{'P; 'a}} } =
+   it
+
 (*
  * H >- Ui ext { f | a:A -> B }
  * by rfunctionFormation { f | a: A -> B }
@@ -369,11 +376,10 @@ interactive rfunction_applyMember {| intro_resource [] |} 'H ({ f | x:'A -> 'B['
  *)
 interactive rfunction_rfunction_subtype {| intro_resource [] |} 'H 'a 'f lambda{a. lambda{b. 'R['a; 'b]}} :
    [main] sequent [squash] { 'H >- subtype{'A2; 'A1} } -->
-   [wf] sequent [squash] { 'H >- well_founded{'A1; a, b. 'R['a; 'b]} } -->
-   [wf] sequent [squash] { 'H >- well_founded{'A2; a, b. 'R['a; 'b]} } -->
+   [wf] sequent [squash] { 'H >- "type"{.{f1 | x1: 'A1 -> 'B1['f1; 'x1] }} } -->
+   [wf] sequent [squash] { 'H >- "type"{.{f2 | x2: 'A2 -> 'B2['f2; 'x2] }} } -->
    [wf] sequent [squash] { 'H; a1: 'A1; a2: 'A1 >- "type"{'R['a; 'b]} } -->
-   [main] sequent [squash] { 'H; a: 'A1;
-                          f: { f1 | x1: { z: 'A1 | 'R['z; 'a] } -> 'B1['f1; 'x1] } >-
+   [main] sequent [squash] { 'H; f: {f1 | x1: 'A1 -> 'B1['f1; 'x1]}; a: 'A2 >-
                           subtype{'B1['f; 'a]; 'B2['f; 'a]}
                     } -->
    sequent ['ext] { 'H >- subtype{.{ f1 | x1: 'A1 -> 'B1['f1; 'x1] }; .{ f2 | x2: 'A2 -> 'B2['f2; 'x2] } } }
@@ -381,66 +387,6 @@ interactive rfunction_rfunction_subtype {| intro_resource [] |} 'H 'a 'f lambda{
 (************************************************************************
  * D TACTIC                                                             *
  ************************************************************************)
-
-(*
- * Application equality depends on our infering a type.
- *)
-let d_apply_equalT p =
-   let _, app, _ = dest_equal (Sequent.concl p) in
-   let f, _ = dest_apply app in
-   let f_type =
-      try get_with_arg p with
-         RefineError _ ->
-            snd (infer_type p f)
-   in
-      (withT f_type (dT 0)) p
-
-let apply_equal_term = << 'f1 'a1 = 'f2 'a2 in 'T >>
-
-let intro_resource = Mp_resource.improve intro_resource (apply_equal_term, d_apply_equalT)
-
-let d_apply_memberT p =
-   let _, app = dest_member (Sequent.concl p) in
-   let f, _ = dest_apply app in
-   let f_type =
-      try get_with_arg p with
-         RefineError _ ->
-            snd (infer_type p f)
-   in
-      (withT f_type (dT 0)) p
-
-let apply_member_term = << member{'T; .'f1 'a1} >>
-
-let intro_resource = Mp_resource.improve intro_resource (apply_member_term, d_apply_memberT)
-
-(*
- * Typehood of application depends on the ability to infer a type.
- *)
-let d_apply_typeT p =
-   let app = dest_type_term (Sequent.concl p) in
-   let f, _ = dest_apply app in
-   let f_type =
-      try get_with_arg p with
-         RefineError _ ->
-            snd (infer_type p f)
-   in
-   let univ =
-      if is_dfun_term f_type then
-         let _, _, univ = dest_dfun f_type in
-            univ
-      else if is_fun_term f_type then
-         snd (dest_fun f_type)
-      else
-         raise (RefineError ("d_apply_typeT", StringTermError ("inferred type is not a function type", f_type)))
-   in
-      if is_univ_term univ then
-         (univTypeT univ thenT withT f_type eqcdT) p
-      else
-         raise (RefineError ("d_apply_typeT", StringTermError ("inferred type is not a univ", univ)))
-
-let apply_type_term = << "type"{. 'f 'a} >>
-
-let intro_resource = Mp_resource.improve intro_resource (apply_type_term, d_apply_typeT)
 
 (*
  * We handle extensionality explicitly.

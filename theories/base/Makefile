@@ -3,7 +3,7 @@
 #
 DIR := theories/base
 ROOT := ../..
-INCLUDE := -I . -I ../boot -I ../tactic -I ../ocaml
+INCLUDE := -I . -I ../tactic -I ../ocaml -I $(ROOT)/lib
 OCAMLDEPFLAGS := -prl
 
 # Common files
@@ -15,6 +15,7 @@ MPFILES :=\
 	typeinf\
 	base_dform\
 	summary\
+	base_trivial\
 	base_auto_tactic\
 	base_dtactic\
 	base_cache\
@@ -23,7 +24,7 @@ MPFILES :=\
 	base_theory
 
 # Name of main libraris
-MAIN = base
+MAIN = theory
 
 all: $(MAIN).cma
 opt: $(MAIN).cmxa

@@ -45,6 +45,9 @@ open Tactic_type.Tacticals
  ************************************************************************)
 
 declare "isect"{'A; x. 'B['x]}
+declare top
+
+rewrite unfold_top : top <--> "isect"{void; x. void}
 
 (************************************************************************
  * RULES                                                                *
@@ -77,6 +80,12 @@ rule intersectionType 'H 'y :
    sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
    sequent ['ext] { 'H >- "type"{."isect"{'A; x. 'B['x]}} }
 
+rule topUniv 'H :
+   sequent ['ext] { 'H >- member{univ[i:l]; top} }
+
+rule topType 'H :
+   sequent ['ext] { 'H >- "type"{top} }
+
 (*
  * H >- isect x: A. B[x] ext b[it]
  * by intersectionMemberFormation z
@@ -98,6 +107,9 @@ rule intersectionMemberEquality 'H 'z :
    sequent [squash] { 'H >- "type"{'A} } -->
    sequent [squash] { 'H; z: 'A >- 'b1 = 'b2 in 'B['z] } -->
    sequent ['ext] { 'H >- 'b1 = 'b2 in isect x: 'A. 'B['x] }
+
+rule topMemberEquality 'H :
+   sequent ['ext] { 'H >- 'b1 = 'b2 in top }
 
 (*
  * H >- b1 = b2 in B[a]
@@ -132,6 +144,10 @@ rule intersectionSubtype 'H 'a :
    sequent [squash] { 'H >- subtype{'A2; 'A1} } -->
    sequent [squash] { 'H; a: 'A1 >- subtype{'B1['a]; 'B2['a]} } -->
    sequent ['ext] { 'H >- subtype{ (isect a1:'A1. 'B1['a1]); (isect a2:'A2. 'B2['a2]) } }
+
+rule topSubtype 'H :
+   sequent [squash] { 'H >- "type"{'T} } -->
+   sequent ['ext] { 'H >- subtype{'T; top} }
 
 (************************************************************************
  * TACTICS                                                              *

@@ -76,9 +76,9 @@ prec prec_mul
  * REWRITES                                                             *
  ************************************************************************)
 
-rewrite unfold_le  : le{'a; 'b} <--> ('a < 'b or 'a = 'b in int)
+rewrite unfold_le  : le{'a; 'b} <--> (('a < 'b) or ('a = 'b in int))
 rewrite unfold_gt  : gt{'a; 'b} <--> ('b < 'a)
-rewrite unfold_ge  : ge{'a; 'b} <--> ('b < 'a or 'a = 'b in int)
+rewrite unfold_ge  : ge{'a; 'b} <--> (('b < 'a) or ('a = 'b in int))
 
 rewrite reduce_add : "add"{number[i:n]; number[j:n]} <-->
    meta_sum{number[i:n]; number[j:n]}
@@ -167,9 +167,9 @@ rule numberEquality 'H : sequent ['ext] { 'H >- number[n:n] = number[n:n] in int
  * H, n:Z, J[n], m:Z, v: 0 < m, z: C[m - 1] >- C[m] ext up[n, m, v, z]
  *)
 rule intElimination 'H 'J 'n 'm 'v 'z :
-   sequent ['ext] { 'H; n: int; 'J['n]; m: int; v: 'm < 0; z: 'C['m add 1] >- 'C['m] } -->
+   sequent ['ext] { 'H; n: int; 'J['n]; m: int; v: 'm < 0; z: 'C['m +@ 1] >- 'C['m] } -->
    sequent ['ext] { 'H; n: int; 'J['n] >- 'C[0] } -->
-   sequent ['ext] { 'H; n: int; 'J['n]; m: int; v: 0 < 'm; z: 'C['m sub 1] >- 'C['m] } -->
+   sequent ['ext] { 'H; n: int; 'J['n]; m: int; v: 0 < 'm; z: 'C['m -@ 1] >- 'C['m] } -->
    sequent ['ext] { 'H; n: int; 'J['n] >- 'C['n] }
 
 (*
@@ -244,6 +244,7 @@ rule less_thanElimination 'H 'J :
  ************************************************************************)
 
 topval intSqequalT : tactic
+topval decideT : term -> tactic
 
 val int_term : term
 val is_int_term : term -> bool

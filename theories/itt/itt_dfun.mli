@@ -157,6 +157,7 @@ rule functionSubtype 'H 'a :
    sequent ['prop] { 'H >- subtype{ (a1:'A1 -> 'B1['a1]); (a2:'A2 -> 'B2['a2]) } }
 
 (*
+(*
  * H; x: a1:A1 -> B1 <= a2:A2 -> B2; J[x] >- T[x]
  * by function_subtypeElimination i
  *
@@ -171,6 +172,7 @@ rule function_subtypeElimination 'H 'J 'x 'y 'z 'a :
              >- 'T['x]
            } -->
    sequent { 'H; x: subtype{(a1:'A1 -> 'B1['a1]); (a2:'A2 -> 'B2['a2])}; 'J['x] >- 'T['x] }
+*)
 
 (*
  * JYH: this rule assumes an intentional type theory, and the rule doesn't belong

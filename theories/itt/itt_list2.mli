@@ -71,6 +71,21 @@ declare map{'f; 'l}
  *)
 declare fold_left{'f; 'v; 'l}
 
+(*
+ * Length of the list.
+ *)
+declare length{'l}
+
+(*
+ * Get the nth element.
+ *)
+declare nth{'l; 'i}
+
+(*
+ * Replace the nth element.
+ *)
+declare replace_nth{'l; 'i; 'v}
+
 (************************************************************************
  * DISPLAY                                                              *
  ************************************************************************)
@@ -90,6 +105,9 @@ topval unfold_assoc : conv
 topval unfold_rev_assoc : conv
 topval unfold_map : conv
 topval unfold_fold_left : conv
+topval unfold_nth : conv
+topval unfold_replace_nth : conv
+topval unfold_length : conv
 
 topval fold_is_nil : conv
 topval fold_append : conv
@@ -98,6 +116,9 @@ topval fold_assoc : conv
 topval fold_rev_assoc : conv
 topval fold_map : conv
 topval fold_fold_left : conv
+topval fold_nth : conv
+topval fold_replace_nth : conv
+topval fold_length : conv
 
 (*
  * -*-

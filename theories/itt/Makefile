@@ -3,7 +3,7 @@
 #
 DIR := theories/itt
 ROOT := ../..
-INCLUDE := -I . -I ../boot -I ../tactic -I ../ocaml -I ../base
+INCLUDE := -I . -I ../tactic -I ../ocaml -I ../base
 OCAMLDEPFLAGS := -prl
 
 # Library files
@@ -24,6 +24,7 @@ MPFILES :=\
 	itt_dprod_imp\
 	itt_prod\
 	itt_logic\
+	itt_well_founded\
 	itt_decidable\
 	itt_bool\
 	itt_ext_equal\
@@ -49,7 +50,7 @@ MPFILES :=\
 	itt_test
 
 # Name of main libraris
-MAIN = itt
+MAIN = theory
 
 all: $(MAIN).cma
 opt: $(MAIN).cmxa

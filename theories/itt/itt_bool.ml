@@ -34,6 +34,7 @@ include Itt_equal
 include Itt_struct
 include Itt_union
 include Itt_set
+include Itt_logic
 
 open Refiner.Refiner.TermType
 open Refiner.Refiner.Term
@@ -81,8 +82,7 @@ prim_rw unfold_bfalse : bfalse <--> inr{it}
 (*
  * Ifthenelse primrws.
  *)
-prim_rw reduce_ifthenelse_true : ifthenelse{btrue; 'e1; 'e2} <--> 'e1
-prim_rw reduce_ifthenelse_false : ifthenelse{bfalse; 'e1; 'e2} <--> 'e2
+prim_rw unfold_ifthenelse : ifthenelse{'b; 'e1; 'e2} <--> decide{'b; x. 'e1; y. 'e2}
 prim_rw unfold_bor : bor{'a; 'b} <--> ifthenelse{'a; btrue; 'b}
 prim_rw unfold_band : band{'a; 'b} <--> ifthenelse{'a; 'b; bfalse}
 prim_rw unfold_bimplies : bimplies{'a; 'b} <--> ifthenelse{'a; 'b; btrue}
@@ -97,6 +97,15 @@ let fold_band = makeFoldC << band{'a; 'b} >> unfold_band
 let fold_bimplies = makeFoldC << bimplies{'a; 'b} >> unfold_bimplies
 let fold_bnot = makeFoldC << bnot{'a} >> unfold_bnot
 let fold_assert = makeFoldC << "assert"{'t} >> unfold_assert
+
+interactive_rw reduce_ifthenelse_true : ifthenelse{btrue; 'e1; 'e2} <--> 'e1
+interactive_rw reduce_ifthenelse_false : ifthenelse{bfalse; 'e1; 'e2} <--> 'e2
+
+let reduce_info =
+   [<< ifthenelse{btrue; 'e1; 'e2} >>, reduce_ifthenelse_true;
+    << ifthenelse{bfalse; 'e1; 'e2} >>, reduce_ifthenelse_false]
+
+let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
 
 (************************************************************************
  * DISPLAY FORMS                                                        *
@@ -140,10 +149,10 @@ dform bnot_df : mode[prl] :: parens :: "prec"[prec_bnot] :: bnot{'a} =
    tneg subb slot{'a}
 
 dform ifthenelse_df : mode[prl] :: parens :: "prec"[prec_bor] :: ifthenelse{'e1; 'e2; 'e3} =
-   pushm[0] szone push_indent `"if" `" " slot{'e1} `" " `"then" hspace
+   szone pushm[0] push_indent `"if" `" " slot{'e1} `" " `"then" hspace
    szone slot{'e2} ezone popm hspace
    push_indent `"else" hspace
-   szone slot{'e3} ezone popm popm
+   szone slot{'e3} ezone popm popm ezone
 
 dform assert_df : mode[prl] :: parens :: "prec"[prec_assert] :: "assert"{'t} =
    downarrow slot{'t}
@@ -195,7 +204,7 @@ interactive boolElimination2 {| elim_resource [] |} 'H 'J 'x :
  * Typing rules for ifthenelse.
  *)
 interactive ifthenelse_type2 {| intro_resource [] |} 'H 'x :
-   [wf] sequent [squash] { 'H >- 'e = 'e in bool } -->
+   [wf] sequent [squash] { 'H >- member{bool; 'e} } -->
    [wf] sequent [squash] { 'H; x: 'e = btrue in bool >- "type"{'A} } -->
    [wf] sequent [squash] { 'H; x: 'e = bfalse in bool >- "type"{'B} } -->
    sequent ['ext] { 'H >- "type"{ifthenelse{'e; 'A; 'B}} }
@@ -400,9 +409,7 @@ interactive_rw reduce_bimplies_true : bimplies{btrue; 'e1} <--> 'e1
 interactive_rw reduce_bimplies_false : bimplies{bfalse; 'e1} <--> btrue
 
 let reduce_info =
-   [<< ifthenelse{btrue; 'e1; 'e2} >>, reduce_ifthenelse_true;
-    << ifthenelse{bfalse; 'e1; 'e2} >>, reduce_ifthenelse_false;
-    << bnot{btrue} >>, reduce_bnot_true;
+   [<< bnot{btrue} >>, reduce_bnot_true;
     << bnot{bfalse} >>, reduce_bnot_false;
     << bor{btrue; 'e1} >>, reduce_bor_true;
     << bor{bfalse; 'e1} >>, reduce_bor_false;
@@ -410,8 +417,6 @@ let reduce_info =
     << band{bfalse; 'e1} >>, reduce_band_false;
     << bimplies{btrue; 'e1} >>, reduce_bimplies_true;
     << bimplies{bfalse; 'e1} >>, reduce_bimplies_false]
-
-let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
 
 (************************************************************************
  * TACTICS                                                              *

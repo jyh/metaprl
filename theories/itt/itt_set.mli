@@ -106,8 +106,8 @@ rule setMemberEquality 'H 'x :
  * H, u: { x:A | B }, y: A; v: hide{B[y]}; J[y] >- T[y]
  *)
 rule setElimination 'H 'J 'u 'v :
-   sequent [it; 'prop] { 'H; u: 'A; v: hide{'B['u]}; 'J['u] >- 'T['u] } -->
-   sequent [it; 'prop] { 'H; u: { x:'A | 'B['x] }; 'J['u] >- 'T['u] }
+   sequent ['ext] { 'H; u: 'A; v: hide{'B['u]}; 'J['u] >- 'T['u] } -->
+   sequent ['ext] { 'H; u: { x:'A | 'B['x] }; 'J['u] >- 'T['u] }
 
 (*
  * Subtyping.

@@ -24,7 +24,7 @@ MPFILES :=\
 	fol_theory
 
 # Name of main libraris
-MAIN = fol
+MAIN = theory
 
 all: $(MAIN).cma
 opt: $(MAIN).cmxa

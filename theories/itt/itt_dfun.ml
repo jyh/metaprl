@@ -193,6 +193,8 @@ interactive applyMember {| intro_resource [] |} 'H (x:'A -> 'B['x]) :
    sequent [squash] { 'H >- member{'A; 'a1} } -->
    sequent ['ext] { 'H >- member{'B['a1]; .'f1 'a1} }
 
+
+
 (*
  * H >- a1:A1 -> B1 <= a2:A2 -> B2
  * by functionSubtype
@@ -206,20 +208,22 @@ interactive functionSubtype {| intro_resource [] |} 'H 'a :
    sequent ['prop] { 'H >- subtype{ (a1:'A1 -> 'B1['a1]); (a2:'A2 -> 'B2['a2]) } }
 
 (*
+(*
  * H; x: a1:A1 -> B1 <= a2:A2 -> B2; J[x] >- T[x]
  * by function_subtypeElimination i
  *
  * H; x: a1:A1 -> B1 <= a2:A2 -> B2; y: A2 <= A1; z: a:A2 -> B2[a] <= B1[a]; J[x] >- T[x]
  *)
 interactive function_subtypeElimination {| elim_resource [] |} 'H 'J 'x 'y 'z 'a :
-   ('t['x; 'y; 'z] : sequent { 'H;
+   ('t['x; 'y; 'z] : sequent ['ext] { 'H;
              x: subtype{(a1:'A1 -> 'B1['a1]); (a2:'A2 -> 'B2['a2])};
              'J['x];
              y: subtype{'A2; 'A1};
              z: a:'A2 -> subtype{'B1['a]; 'B2['a]}
              >- 'T['x]
            }) -->
-   sequent { 'H; x: subtype{(a1:'A1 -> 'B1['a1]); (a2:'A2 -> 'B2['a2])}; 'J['x] >- 'T['x] }
+   sequent ['ext] { 'H; x: subtype{(a1:'A1 -> 'B1['a1]); (a2:'A2 -> 'B2['a2])}; 'J['x] >- 'T['x] }
+*)
 
 (*
  * H; x: a1:A1 -> B1 = a2:A2 -> B2 in Ui; J[x] >- T[x]

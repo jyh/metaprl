@@ -105,6 +105,9 @@ prim unitEquality {| intro_resource []; eqcd_resource |} 'H :
    sequent ['ext] { 'H >- unit = unit in univ[i:l] } =
    it
 
+interactive unitMember {| intro_resource [] |} 'H :
+   sequent ['ext] { 'H >- member{univ[i:l]; unit} }
+
 (*
  * Is a type.
  *)

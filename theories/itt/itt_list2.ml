@@ -33,6 +33,8 @@
 include Itt_list
 include Itt_logic
 include Itt_bool
+include Itt_int
+include Itt_int_bool
 
 open Refiner.Refiner.TermType
 open Refiner.Refiner.Term
@@ -62,6 +64,9 @@ declare assoc{'eq; 'x; 'l; y. 'b['y]; 'z}
 declare rev_assoc{'eq; 'x; 'l; y. 'b['y]; 'z}
 declare map{'f; 'l}
 declare fold_left{'f; 'v; 'l}
+declare nth{'l; 'i}
+declare replace_nth{'l; 'i; 'v}
+declare length{'l}
 
 (************************************************************************
  * DISPLAY                                                              *
@@ -107,6 +112,15 @@ dform map_df : mode[prl] :: parens :: "prec"[prec_apply] :: map{'f; 'l} =
 
 dform fold_left_df : mode[prl] :: fold_left{'f; 'v; 'l} =
    `"fold_left(" slot{'f} `", " slot{'v} `", " slot{'l} `")"
+
+dform length_df : length{'l} =
+   `"length(" slot{'l} `")"
+
+dform nth_df : nth{'l; 'i} =
+   `"nth(" slot{'l} `", " slot{'i} `")"
+
+dform replace_nth_df : replace_nth{'l; 'i; 'v} =
+   szone `"replace_nth(" pushm[0] slot{'l} `"," hspace slot{'i} `"," hspace slot{'v} `")" popm ezone
 
 (************************************************************************
  * REWRITES                                                             *
@@ -224,6 +238,65 @@ interactive_rw reduce_fold_left_cons :
    fold_left{'f; 'v; cons{'h; 't}} <-->
    fold_left{'f; .'f 'h 'v; 't}
 
+(*
+ * Nth element.
+ *)
+prim_rw unfold_length :
+   length{'l} <--> list_ind{'l; 0; u, v, g. 'g +@ 1}
+
+let fold_length = makeFoldC << length{'l} >> unfold_length
+
+interactive_rw reduce_length_nil : length{nil} <--> 0
+
+interactive_rw reduce_length_cons : length{cons{'u; 'v}} <--> (length{'v} +@ 1)
+
+prim_rw unfold_nth :
+   nth{'l; 'i} <-->
+      (list_ind{'l; it; u, v, g. lambda{j. ifthenelse{eq_int{'j; 0}; 'u; .'g ('j -@ 1)}}} 'i)
+
+let fold_nth = makeFoldC << nth{'l; 'i} >> unfold_nth
+
+interactive_rw reduce_nth_cons :
+   nth{cons{'u; 'v}; 'i} <--> ifthenelse{eq_int{'i; 0}; 'u; nth{'v; .'i -@ 1}}
+
+prim_rw unfold_replace_nth :
+   replace_nth{'l; 'i; 't} <-->
+      (list_ind{'l; nil; u, v, g. lambda{j. ifthenelse{eq_int{'j; 0}; cons{'t; 'v}; cons{'u; .'g ('j -@ 1)}}}} 'i)
+
+let fold_replace_nth = makeFoldC << replace_nth{'l; 'i; 't} >> unfold_replace_nth
+
+interactive_rw reduce_replace_nth_cons :
+   replace_nth{cons{'u; 'v}; 'i; 't} <-->
+      ifthenelse{eq_int{'i; 0}; cons{'t; 'v}; cons{'u; replace_nth{'v; .'i -@ 1; 't}}}
+
+(************************************************************************
+ * REDUCTION                                                            *
+ ************************************************************************)
+
+let reduce_info =
+   [<< is_nil{nil} >>, reduce_is_nil_nil;
+    << is_nil{cons{'h; 't}} >>, reduce_is_nil_cons;
+    << append{cons{'h; 't}; 'l} >>, reduce_append_cons;
+    << append{nil; 'l} >>, reduce_append_nil;
+    << ball2{nil; nil; x, y. 'b['x; 'y]} >>, reduce_ball2_nil_nil;
+    << ball2{nil; cons{'h; 't}; x, y. 'b['x; 'y]} >>, reduce_ball2_nil_cons;
+    << ball2{cons{'h; 't}; nil; x, y. 'b['x; 'y]} >>, reduce_ball2_cons_nil;
+    << ball2{cons{'h1; 't1}; cons{'h2; 't2}; x, y. 'b['x; 'y]} >>, reduce_ball2_cons_cons;
+    << assoc{'eq; 'x; nil; v. 'b['v]; 'z} >>, reduce_assoc_nil;
+    << assoc{'eq; 'x; cons{pair{'u; 'v}; 'l}; y. 'b['y]; 'z} >>, reduce_assoc_cons;
+    << rev_assoc{'eq; 'x; nil; v. 'b['v]; 'z} >>, reduce_rev_assoc_nil;
+    << rev_assoc{'eq; 'x; cons{pair{'u; 'v}; 'l}; y. 'b['y]; 'z} >>, reduce_rev_assoc_cons;
+    << map{'f; nil} >>, reduce_map_nil;
+    << map{'f; cons{'h; 't}} >>, reduce_map_cons;
+    << fold_left{'f; 'v; nil} >>, reduce_fold_left_nil;
+    << fold_left{'f; 'v; cons{'h; 't}} >>, reduce_fold_left_cons;
+    << length{nil} >>, reduce_length_nil;
+    << length{cons{'u; 'v}} >>, reduce_length_cons;
+    << nth{cons{'u; 'v}; 'i} >>, reduce_nth_cons;
+    << replace_nth{cons{'u; 'v}; 'i; 't} >>, reduce_replace_nth_cons]
+
+let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
+
 (************************************************************************
  * RULES                                                                *
  ************************************************************************)
@@ -296,29 +369,28 @@ interactive fold_left_wf {| intro_resource [] |} 'H 'T1 'T2 :
    [wf] sequent [squash] { 'H >- member{list{'T1}; 'l} } -->
    sequent ['ext] { 'H >- member{'T2; fold_left{'f; 'v; 'l}} }
 
-(************************************************************************
- * REDUCTION                                                            *
- ************************************************************************)
+(*
+ * Length.
+ *)
+interactive length_wf {| intro_resource [] |} 'H 'T1 :
+   [wf] sequent [squash] { 'H >- "type"{'T1} } -->
+   [wf] sequent [squash] { 'H >- member{list{'T1}; 'l} } -->
+   sequent ['ext] { 'H >- member{int; length{'l}} }
 
-let reduce_info =
-   [<< is_nil{nil} >>, reduce_is_nil_nil;
-    << is_nil{cons{'h; 't}} >>, reduce_is_nil_cons;
-    << append{cons{'h; 't}; 'l} >>, reduce_append_cons;
-    << append{nil; 'l} >>, reduce_append_nil;
-    << ball2{nil; nil; x, y. 'b['x; 'y]} >>, reduce_ball2_nil_nil;
-    << ball2{nil; cons{'h; 't}; x, y. 'b['x; 'y]} >>, reduce_ball2_nil_cons;
-    << ball2{cons{'h; 't}; nil; x, y. 'b['x; 'y]} >>, reduce_ball2_cons_nil;
-    << ball2{cons{'h1; 't1}; cons{'h2; 't2}; x, y. 'b['x; 'y]} >>, reduce_ball2_cons_cons;
-    << assoc{'eq; 'x; nil; v. 'b['v]; 'z} >>, reduce_assoc_nil;
-    << assoc{'eq; 'x; cons{pair{'u; 'v}; 'l}; y. 'b['y]; 'z} >>, reduce_assoc_cons;
-    << rev_assoc{'eq; 'x; nil; v. 'b['v]; 'z} >>, reduce_rev_assoc_nil;
-    << rev_assoc{'eq; 'x; cons{pair{'u; 'v}; 'l}; y. 'b['y]; 'z} >>, reduce_rev_assoc_cons;
-    << map{'f; nil} >>, reduce_map_nil;
-    << map{'f; cons{'h; 't}} >>, reduce_map_cons;
-    << fold_left{'f; 'v; nil} >>, reduce_fold_left_nil;
-    << fold_left{'f; 'v; cons{'h; 't}} >>, reduce_fold_left_cons]
+interactive nth_wf {| intro_resource [] |} 'H :
+   [wf] sequent [squash] { 'H >- "type"{'T} } -->
+   [wf] sequent [squash] { 'H >- member{list{'T}; 'l} } -->
+   [wf] sequent [squash] { 'H >- ge{'i; 0} } -->
+   [wf] sequent [squash] { 'H >- lt{'i; length{'l}} } -->
+   sequent ['ext] { 'H >- member{'T; nth{'l; 'i}} }
 
-let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
+interactive replace_nth_wf {| intro_resource [] |} 'H :
+   [wf] sequent [squash] { 'H >- "type"{'T} } -->
+   [wf] sequent [squash] { 'H >- member{list{'T}; 'l} } -->
+   [wf] sequent [squash] { 'H >- ge{'i; 0} } -->
+   [wf] sequent [squash] { 'H >- lt{'i; length{'l}} } -->
+   [wf] sequent [squash] { 'H >- member{'T; 't} } -->
+   sequent ['ext] { 'H >- member{list{'T}; replace_nth{'l; 'i; 't}} }
 
 (************************************************************************
  * TACTICS                                                              *

@@ -79,7 +79,6 @@ declare "type"{'a}
 declare univ[i:l]
 declare equal{'T; 'a; 'b}
 declare member{'T; 'x}
-declare it
 declare "true"
 declare "false"
 declare cumulativity[i:l, j:l]
@@ -364,8 +363,8 @@ interactive equalityUnivMember {| intro_resource [] |} 'H :
  * Typehood.
  *)
 prim equalityType {| intro_resource [] |} 'H :
-   [wf] sequent [squash] { 'H >- 'a = 'a in 'T } -->
-   [wf] sequent [squash] { 'H >- 'b = 'b in 'T } -->
+   [wf] sequent [squash] { 'H >- member{'T; 'a} } -->
+   [wf] sequent [squash] { 'H >- member{'T; 'b} } -->
    sequent ['ext] { 'H >- "type"{. 'a = 'b in 'T } } =
    it
 
@@ -445,6 +444,11 @@ prim type_squashElimination 'H :
    sequent ['ext] { 'H >- "type"{'T} } =
    it
 
+prim rewrite_squashElimination 'H :
+   sequent [squash] { 'H >- Perv!"rewrite"{'a; 'b} } -->
+   sequent ['ext] { 'H >- Perv!"rewrite"{'a; 'b} } =
+   it
+
 (*
  * H >- Uj = Uj in Ui
  * by universeEquality (side (j < i))
@@ -500,7 +504,7 @@ prim universeType {| intro_resource [] |} 'H :
  * Anything in a universe is a type.
  *)
 prim universeMemberType 'H univ[i:l] :
-   [wf] sequent [squash] { 'H >- 'x = 'x in univ[i:l] } -->
+   [wf] sequent [squash] { 'H >- member{univ[i:l]; 'x} } -->
    sequent ['ext] { 'H >- "type"{'x} } =
    it
 
@@ -509,9 +513,11 @@ let univTypeT t p =
 
 (*
  * Derived form for known membership.
+ * hypothesis rule is not know yet.
  *)
-interactive universeAssumType 'H 'J :
-   sequent ['ext] { 'H; x: univ[l:l]; 'J['x] >- "type"{'x} }
+prim universeAssumType 'H 'J :
+   sequent ['ext] { 'H; x: univ[l:l]; 'J['x] >- "type"{'x} } =
+   it
 
 (*
  * H >- Ui ext Uj
@@ -597,6 +603,9 @@ let squash_equalT p =
 
 let squash_memberT p =
    member_squashElimination (Sequent.hyp_count_addr p) p
+
+let squash_rewriteT p =
+   rewrite_squashElimination (Sequent.hyp_count_addr p) p
 
 let squash_resource = Mp_resource.improve squash_resource (equal_term, squash_equalT)
 

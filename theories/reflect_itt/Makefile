@@ -15,7 +15,7 @@ MPFILES :=\
 	refl_free_vars
 
 # Name of main libraris
-MAIN = reflect_itt
+MAIN = theory
 
 all: $(MAIN).cma
 opt: $(MAIN).cmxa

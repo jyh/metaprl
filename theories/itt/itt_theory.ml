@@ -43,6 +43,7 @@ include Itt_arith
 include Itt_rfun
 include Itt_dfun
 include Itt_fun
+include Itt_well_founded
 include Itt_dprod
 include Itt_prod
 include Itt_union

@@ -39,6 +39,7 @@ include Top_conversionals
 include Base_dform
 include Nuprl_font
 include Typeinf
+include Base_trivial
 include Base_dtactic
 include Base_auto_tactic
 include Base_cache

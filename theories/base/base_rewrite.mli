@@ -33,6 +33,8 @@
 include Perv
 include Base_auto_tactic
 
+open Refiner.Refiner.TermType
+
 open Tactic_type.Tacticals
 
 declare rw_just
@@ -41,6 +43,7 @@ rule rewriteAxiom 'H :
    sequent ['ext] { 'H >- Perv!"rewrite"{'a; 'a} }
 
 topval d_rewrite_axiomT : tactic
+topval rewriteT : term -> tactic
 
 (*
  * -*-

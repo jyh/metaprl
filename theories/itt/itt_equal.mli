@@ -51,7 +51,6 @@ declare "type"{'a}
 declare univ[i:l]
 declare equal{'T; 'a; 'b}
 declare member{'T; 'x}
-declare it
 declare "true"
 declare "false"
 declare cumulativity[i:l, j:l]
@@ -140,8 +139,8 @@ rule equalityEquality 'H :
  * Typehood.
  *)
 rule equalityType 'H :
-   sequent [squash] { 'H >- 'a = 'a in 'T } -->
-   sequent [squash] { 'H >- 'b = 'b in 'T } -->
+   sequent [squash] { 'H >- member{'T; 'a} } -->
+   sequent [squash] { 'H >- member{'T; 'b} } -->
    sequent ['ext] { 'H >- "type"{. 'a = 'b in 'T } }
 
 rule equalityTypeIsType 'H 'a 'b :
@@ -223,7 +222,7 @@ rule universeType 'H :
  * Anything in a universe is a type.
  *)
 rule universeMemberType 'H univ[i:l] :
-   sequent [squash] { 'H >- 'x = 'x in univ[i:l] } -->
+   sequent [squash] { 'H >- member{univ[i:l]; 'x} } -->
    sequent ['ext] { 'H >- "type"{'x} }
 
 (*
@@ -301,6 +300,7 @@ val it_term : term
 topval squash_equalT : tactic
 topval squash_memberT : tactic
 topval squash_typeT : tactic
+topval squash_rewriteT : tactic
 
 (*
  * Typehood from truth.

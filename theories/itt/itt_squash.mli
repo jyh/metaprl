@@ -43,12 +43,6 @@ open Tactic_type.Sequent
 open Tactic_type.Tacticals
 
 (*
- * Squash property.
- * squash: extract not needed
- *)
-declare squash
-
-(*
  * Internal type.
  *)
 type squash_data

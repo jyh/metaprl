@@ -173,11 +173,12 @@ prim hypReplacement 'H 'J 'B univ[i:l] :
  * H; x: A[t2]; J[x] >> T1[x]
  * H, x: A[t1]; J[x]; z: T2 >> A[z] in type
  *)
-interactive hypSubstitution 'H 'J ('t1 = 't2 in 'T2) bind{y. 'A['y]} 'z :
+prim hypSubstitution 'H 'J ('t1 = 't2 in 'T2) bind{y. 'A['y]} 'z :
    [equality] sequent [squash] { 'H; x: 'A['t1]; 'J['x] >- 't1 = 't2 in 'T2 } -->
-   [main] sequent ['ext] { 'H; x: 'A['t2]; 'J['x] >- 'T1['x] } -->
+   [main] ('t : sequent ['ext] { 'H; x: 'A['t2]; 'J['x] >- 'T1['x] }) -->
    [wf] sequent [squash] { 'H; x: 'A['t1]; 'J['x]; z: 'T2 >- "type"{'A['z]} } -->
-   sequent ['ext] { 'H; x: 'A['t1]; 'J['x] >- 'T1['x] }
+   sequent ['ext] { 'H; x: 'A['t1]; 'J['x] >- 'T1['x] } =
+   't
 
 (************************************************************************
  * TACTICS                                                              *
@@ -214,7 +215,7 @@ let thinAllT i j p =
  *)
 let assertT s p =
    let j, k = Sequent.hyp_split_addr p (Sequent.hyp_count p) in
-   let v = get_opt_var_arg "v" p in
+   let v = maybe_new_vars1 p "v" in
       cut j k s v p
 
 (*

@@ -26,7 +26,7 @@ MPFILES :=\
 	ocaml_df
 
 # Name of main libraris
-MAIN = ocaml_df
+MAIN = theory
 
 all: $(MAIN).cma
 opt: $(MAIN).cmxa

@@ -139,6 +139,9 @@ let fold_exists  = makeFoldC << exst x: 'A. 'B['x] >> unfold_exists
 interactive true_univ {| intro_resource []; eqcd_resource |} 'H :
    sequent ['ext] { 'H >- "true" = "true" in univ[i:l] }
 
+interactive true_member {| intro_resource [] |} 'H :
+   sequent ['ext] { 'H >- member{univ[i:l]; ."true"} }
+
 interactive true_type {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- "type"{."true"} }
 
@@ -147,6 +150,9 @@ interactive true_intro {| intro_resource [] |} 'H :
 
 interactive false_univ {| intro_resource []; eqcd_resource |} 'H :
    sequent ['ext] { 'H >- "false" = "false" in univ[i:l] }
+
+interactive false_member {| intro_resource [] |} 'H :
+   sequent ['ext] { 'H >- "member"{univ[i:l]; ."false"} }
 
 interactive false_type {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- "type"{."false"} }
@@ -164,6 +170,10 @@ interactive false_squash 'H :
 interactive not_univ {| intro_resource []; eqcd_resource |} 'H :
    [wf] sequent [squash] { 'H >- 't1 = 't2 in univ[i:l] } -->
    sequent ['ext] { 'H >- "not"{'t1} = "not"{'t2} in univ[i:l] }
+
+interactive not_member {| intro_resource [] |} 'H :
+   [wf] sequent [squash] { 'H >- member{univ[i:l]; 't} } -->
+   sequent ['ext] { 'H >- member{univ[i:l]; ."not"{'t}} }
 
 interactive not_type {| intro_resource [] |} 'H :
    [wf] sequent [squash] { 'H >- "type"{'t} } -->
@@ -186,6 +196,11 @@ interactive and_univ {| intro_resource []; eqcd_resource |} 'H :
    [wf] sequent [squash] { 'H >- 'a2 = 'b2 in univ[i:l] } -->
    sequent ['ext] { 'H >- "and"{'a1; 'a2} = "and"{'b1; 'b2} in univ[i:l] }
 
+interactive and_member {| intro_resource [] |} 'H :
+   [wf] sequent [squash] { 'H >- member{univ[i:l]; 'a1} } -->
+   [wf] sequent [squash] { 'H >- member{univ[i:l]; 'a2} } -->
+   sequent ['ext] { 'H >- member{univ[i:l]; ."and"{'a1; 'a2}} }
+
 interactive and_type {| intro_resource [] |} 'H :
    [wf] sequent [squash] { 'H >- "type"{'a1} } -->
    [wf] sequent [squash] { 'H >- "type"{'a2} } -->
@@ -207,6 +222,11 @@ interactive or_univ {| intro_resource []; eqcd_resource |} 'H :
    [wf] sequent [squash] { 'H >- 'a1 = 'b1 in univ[i:l] } -->
    [wf] sequent [squash] { 'H >- 'a2 = 'b2 in univ[i:l] } -->
    sequent ['ext] { 'H >- "or"{'a1; 'a2} = "or"{'b1; 'b2} in univ[i:l] }
+
+interactive or_member {| intro_resource [] |} 'H :
+   [wf] sequent [squash] { 'H >- member{univ[i:l]; 'a1} } -->
+   [wf] sequent [squash] { 'H >- member{univ[i:l]; 'a2} } -->
+   sequent ['ext] { 'H >- member{univ[i:l]; ."or"{'a1; 'a2}} }
 
 interactive or_type {| intro_resource [] |} 'H :
    [wf] sequent [squash] { 'H >- "type"{'a1} } -->
@@ -236,6 +256,11 @@ interactive implies_univ {| intro_resource []; eqcd_resource |} 'H :
    [wf] sequent [squash] { 'H >- 'a2 = 'b2 in univ[i:l] } -->
    sequent ['ext] { 'H >- "implies"{'a1; 'a2} = "implies"{'b1; 'b2} in univ[i:l] }
 
+interactive implies_member {| intro_resource [] |} 'H :
+   [wf] sequent [squash] { 'H >- member{univ[i:l]; 'a1} } -->
+   [wf] sequent [squash] { 'H >- member{univ[i:l]; 'a2} } -->
+   sequent ['ext] { 'H >- member{univ[i:l]; ."implies"{'a1; 'a2}} }
+
 interactive implies_type {| intro_resource [] |} 'H :
    [wf] sequent [squash] { 'H >- "type"{'a1} } -->
    [wf] sequent [squash] { 'H >- "type"{'a2} } -->
@@ -259,6 +284,11 @@ interactive iff_univ {| intro_resource []; eqcd_resource |} 'H :
    [wf] sequent [squash] { 'H >- 'a2 = 'b2 in univ[i:l] } -->
    sequent ['ext] { 'H >- "iff"{'a1; 'a2} = "iff"{'b1; 'b2} in univ[i:l] }
 
+interactive iff_member {| intro_resource [] |} 'H :
+   [wf] sequent [squash] { 'H >- member{univ[i:l]; 'a1} } -->
+   [wf] sequent [squash] { 'H >- member{univ[i:l]; 'a2} } -->
+   sequent ['ext] { 'H >- member{univ[i:l]; ."iff"{'a1; 'a2}} }
+
 interactive iff_type {| intro_resource [] |} 'H :
    [wf] sequent [squash] { 'H >- "type"{'a1} } -->
    [wf] sequent [squash] { 'H >- "type"{'a2} } -->
@@ -281,6 +311,11 @@ interactive cand_univ {| intro_resource []; eqcd_resource |} 'H 'x :
    [wf] sequent [squash] { 'H; x: 'a1 >- 'a2 = 'b2 in univ[i:l] } -->
    sequent ['ext] { 'H >- "cand"{'a1; 'a2} = "cand"{'b1; 'b2} in univ[i:l] }
 
+interactive cand_member {| intro_resource [] |} 'H 'x :
+   [wf] sequent [squash] { 'H >- member{univ[i:l]; 'a1} } -->
+   [wf] sequent [squash] { 'H; x: 'a1 >- member{univ[i:l]; 'a2} } -->
+   sequent ['ext] { 'H >- member{univ[i:l]; ."cand"{'a1; 'a2}} }
+
 interactive cand_type {| intro_resource [] |} 'H 'x :
    [wf] sequent [squash] { 'H >- "type"{'a1} } -->
    [wf] sequent [squash] { 'H; x: 'a1 >- "type"{'a2} } -->
@@ -302,6 +337,11 @@ interactive cor_univ {| intro_resource []; eqcd_resource |} 'H 'x :
    [wf] sequent [squash] { 'H >- 'a1 = 'b1 in univ[i:l] } -->
    [wf] sequent [squash] { 'H; x: "not"{'a1} >- 'a2 = 'b2 in univ[i:l] } -->
    sequent ['ext] { 'H >- "cor"{'a1; 'a2} = "cor"{'b1; 'b2} in univ[i:l] }
+
+interactive cor_member {| intro_resource [] |} 'H 'x :
+   [wf] sequent [squash] { 'H >- member{univ[i:l]; 'a1} } -->
+   [wf] sequent [squash] { 'H; x: "not"{'a1} >- member{univ[i:l]; 'a2} } -->
+   sequent ['ext] { 'H >- member{univ[i:l]; ."cor"{'a1; 'a2}} }
 
 interactive cor_type {| intro_resource [] |} 'H 'x :
    [wf] sequent [squash] { 'H >- "type"{'a1} } -->
@@ -332,6 +372,11 @@ interactive all_univ {| intro_resource []; eqcd_resource |} 'H 'x :
    [wf] sequent [squash] { 'H; x : 't1 >- 'b1['x] = 'b2['x] in univ[i:l] } -->
    sequent ['ext] { 'H >- "all"{'t1; x1. 'b1['x1]} = "all"{'t2; x2. 'b2['x2]} in univ[i:l] }
 
+interactive all_member {| intro_resource [] |} 'H 'x :
+   [wf] sequent [squash] { 'H >- member{univ[i:l]; 't} } -->
+   [wf] sequent [squash] { 'H; x: 't >- member{univ[i:l]; 'b['x]} } -->
+   sequent ['ext] { 'H >- member{univ[i:l]; ."all"{'t; v. 'b['v]}} }
+
 interactive all_type {| intro_resource [] |} 'H 'x :
    [wf] sequent [squash] { 'H >- "type"{'t} } -->
    [wf] sequent [squash] { 'H; x: 't >- "type"{'b['x]} } -->
@@ -354,6 +399,11 @@ interactive exists_univ {| intro_resource []; eqcd_resource |} 'H 'x :
    [wf] sequent [squash] { 'H >- 't1 = 't2 in univ[i:l] } -->
    [wf] sequent [squash] { 'H; x : 't1 >- 'b1['x] = 'b2['x] in univ[i:l] } -->
    sequent ['ext] { 'H >- "exists"{'t1; x1. 'b1['x1]} = "exists"{'t2; x2. 'b2['x2]} in univ[i:l] }
+
+interactive exists_member {| intro_resource [] |} 'H 'x :
+   [wf] sequent [squash] { 'H >- member{univ[i:l]; 't} } -->
+   [wf] sequent [squash] { 'H; x: 't >- member{univ[i:l]; 'b['x]} } -->
+   sequent ['ext] { 'H >- member{univ[i:l]; ."exists"{'t; v. 'b['v]}} }
 
 interactive exists_type {| intro_resource [] |} 'H 'x :
    [wf] sequent [squash] { 'H >- "type"{'t} } -->
@@ -427,9 +477,6 @@ dform implies_df2 : mode[prl] :: parens :: "prec"[prec_implies] :: implies{'a; '
 dform iff_df2 : mode[prl] :: parens :: "prec"[prec_iff] :: iff{'a; 'b} =
    slot["le"]{'a} " " Nuprl_font!Leftrightarrow " " slot["lt"]{'b}
 
-dform and_df1 : mode[prl] :: parens :: "prec"[prec_and] :: "and"{'a; 'b} =
-   slot["le"]{'a} " " Nuprl_font!wedge " " slot["lt"]{'b}
-
 (*
  * Disjunction.
  *)
@@ -443,6 +490,20 @@ dform or_df3 : or_df{."or"{'a; 'b}} =
 
 dform or_df4 : or_df{'a} =
    hspace Nuprl_font!vee " " slot{'a}
+
+(*
+ * Disjunction.
+ *)
+declare and_df{'a}
+
+dform and_df2 : parens :: "prec"[prec_and] :: "and"{'a; 'b} =
+   szone pushm[0] slot["le"]{'a} and_df{'b} popm ezone
+
+dform and_df3 : and_df{."and"{'a; 'b}} =
+   hspace Nuprl_font!wedge " " slot["le"]{'a} and_df{'b}
+
+dform and_df4 : and_df{'a} =
+   hspace Nuprl_font!wedge " " slot{'a}
 
 (*
  * Quantifiers.
@@ -690,7 +751,7 @@ let instHypT args i =
                else
                   raise (RefineError ("instHypT", StringTermError ("hyp is not quantified", hyp)))
    in
-      inst i true args
+      thinningT false (inst i true args)
 
 (*
  * This type is used to collect the arguments to instantiate.
@@ -849,7 +910,7 @@ let backThruHypT i p =
             eprintf "backThruHyp %d%t" i eflush;
             eprint_info info
          end;
-      tac info i true p
+      thinningT false (tac info i true) p
 
 (*
  * We can also backchain through assumptions by pulling them

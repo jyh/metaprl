@@ -180,6 +180,10 @@ prim listEquality {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- list{'A} = list{'B} in univ[i:l] } =
    it
 
+interactive listMember {| intro_resource [] |} 'H :
+   [wf] sequent [squash] { 'H >- member{univ[i:l]; 'A} } -->
+   sequent ['ext] { 'H >- member{univ[i:l]; list{'A}} }
+
 (*
  * H >- list(A) ext nil
  * by nilFormation
@@ -201,6 +205,10 @@ prim nilEquality {| intro_resource [] |} 'H :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    sequent ['ext] { 'H >- nil = nil in list{'A} } =
    it
+
+interactive nilMember {| intro_resource [] |} 'H :
+   [wf] sequent [squash] { 'H >- "type"{'A} } -->
+   sequent ['ext] { 'H >- member{list{'A}; nil} }
 
 (*
  * H >- list(A) ext cons(h; t)
@@ -227,6 +235,11 @@ prim consEquality {| intro_resource []; eqcd_resource |} 'H :
    [wf] sequent [squash] { 'H >- 'v1 = 'v2 in list{'A} } -->
    sequent ['ext] { 'H >- cons{'u1; 'v1} = cons{'u2; 'v2} in list{'A} } =
    it
+
+interactive consMember {| intro_resource [] |} 'H :
+   [wf] sequent [squash] { 'H >- member{'A; 'u1} } -->
+   [wf] sequent [squash] { 'H >- member{list{'A}; 'v1} } -->
+   sequent ['ext] { 'H >- member{list{'A}; cons{'u1; 'v1}} }
 
 (*
  * H; l: list(A); J[l] >- C[l]
@@ -264,6 +277,14 @@ prim list_indEquality {| intro_resource []; eqcd_resource |} 'H lambda{l. 'T['l]
            } =
    it
 
+interactive list_indMember {| intro_resource [] |} 'H lambda{l. 'T['l]} list{'A} 'u 'v 'w :
+   [wf] sequent [squash] { 'H >- member{list{'A}; 'e1} } -->
+   [wf] sequent [squash] { 'H >- member{'T[nil]; 'base1} } -->
+   [wf] sequent [squash] { 'H; u: 'A; v: list{'A}; w: 'T['v] >-
+             member{'T['u::'v]; 'step1['u; 'v; 'w]}
+           } -->
+   sequent ['ext] { 'H >- member{'T['e1]; list_ind{'e1; 'base1; u1, v1, z1. 'step1['u1; 'v1; 'z1]}} }
+
 (*
  * Nil is canonical.
  *)
@@ -290,18 +311,6 @@ interactive nil_neq_cons {| elim_resource [] |} 'H 'J :
 
 interactive cons_neq_nil {| elim_resource [] |} 'H 'J :
    sequent ['ext] { 'H; x: cons{'h; 't} = nil in list{'T}; 'J['x] >- 'C['x] }
-
-(*
- * Membership.
- *)
-interactive nil_member {| intro_resource [] |} 'H :
-   [wf] sequent [squash] { 'H >- "type"{'T} } -->
-   sequent ['ext] { 'H >- member{list{'T}; nil} }
-
-interactive cons_member {| intro_resource [] |} 'H :
-   [wf] sequent [squash] { 'H >- member{'T; 'h} } -->
-   [wf] sequent [squash] { 'H >- member{list{'T}; 't} } -->
-   sequent ['ext] { 'H >- member{list{'T}; cons{'h; 't}} }
 
 (************************************************************************
  * PRIMITIVES                                                           *

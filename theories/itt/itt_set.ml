@@ -175,8 +175,8 @@ interactive setMemberMember {| intro_resource [] |} 'H 'x :
  * H, u: { x:A | B }, y: A; v: hide(B[y]); J[y] >> T[y]
  *)
 prim setElimination {| elim_resource [] |} 'H 'J 'u 'v :
-   ('t : sequent [it; 'prop] { 'H; u: 'A; v: hide{'B['u]}; 'J['u] >- 'T['u] }) -->
-   sequent [it; 'prop] { 'H; u: { x:'A | 'B['x] }; 'J['u] >- 'T['u] } =
+   ('t : sequent ['ext] { 'H; u: 'A; v: hide{'B['u]}; 'J['u] >- 'T['u] }) -->
+   sequent ['ext] { 'H; u: { x:'A | 'B['x] }; 'J['u] >- 'T['u] } =
    't
 
 (*
@@ -191,7 +191,7 @@ prim set_subtype {| intro_resource [] |} 'H :
  * Equalities can be unhidden.
  *)
 prim unhideEqual 'H 'J 'u :
-   ('t['u] : sequent [squash] { 'H; u: 'x = 'y in 'A; 'J['u] >- 'C['u] }) -->
+   ('t['u] : sequent ['ext] { 'H; u: 'x = 'y in 'A; 'J['u] >- 'C['u] }) -->
    sequent ['ext] { 'H; u: hide{('x = 'y in 'A)}; 'J['u] >- 'C['u] } =
    't[it]
 

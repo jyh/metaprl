@@ -6,7 +6,7 @@ ROOT := ../..
 
 include $(ROOT)/mk/preface
 
-INCLUDE = -I . -I ../boot -I $(CAMLP4LIB)
+INCLUDE = -I . -I $(ROOT)/lib -I $(CAMLP4LIB)
 OCAMLDEPFLAGS := -prl_init
 
 # Library files
@@ -20,7 +20,7 @@ MPFILES :=\
 	nuprl_font
 
 # Name of main libraries
-MAIN = tactics
+MAIN = theory
 
 all: $(MAIN).cma
 opt: $(MAIN).cmxa

@@ -136,7 +136,7 @@ dform snd_df1 : mode[prl] :: snd{'e} =
  * H, x:A >- Ui ext B
  *)
 prim productFormation 'H 'A 'x :
-   [wf] sequent [squash] { 'H >- 'A = 'A in univ[i:l] } -->
+   [wf] sequent [squash] { 'H >- member{univ[i:l]; 'A} } -->
    [main] ('B['x] : sequent ['ext] { 'H; x: 'A >- univ[i:l] }) -->
    sequent ['ext] { 'H >- univ[i:l] } =
    x:'A * 'B['x]
@@ -175,7 +175,7 @@ prim productType {| intro_resource [] |} 'H 'x :
  * H, y:A >- B[y] = B[y] in Ui
  *)
 prim pairFormation {| intro_resource [] |} 'H 'a 'y :
-   [wf] sequent [squash] { 'H >- 'a = 'a in 'A } -->
+   [wf] sequent [squash] { 'H >- member{'A; 'a} } -->
    [main] ('b : sequent ['ext] { 'H >- 'B['a] }) -->
    [wf] sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
    sequent ['ext] { 'H >- x:'A * 'B['x] } =

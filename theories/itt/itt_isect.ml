@@ -65,6 +65,9 @@ let _ =
  ************************************************************************)
 
 declare "isect"{'A; x. 'B['x]}
+declare top
+
+prim_rw unfold_top : top <--> "isect"{void; x. void}
 
 (************************************************************************
  * DISPLAY FORMS                                                        *
@@ -74,6 +77,9 @@ dform isect_df1 : mode[prl] :: (isect x: 'A. 'B) =
    cap slot{'x} `":" slot{'A} `"." slot{'B}
 dform isect_df2 : mode[src] :: (isect x: 'A. 'B) =
    `"isect " slot{'x} `":" slot{'A} `"." slot{'B}
+
+dform top_df : top =
+   `"Top"
 
 (************************************************************************
  * RULES                                                                *
@@ -103,11 +109,22 @@ prim intersectionEquality {| intro_resource []; eqcd_resource |} 'H 'y :
    sequent ['ext] { 'H >- isect x1: 'A1. 'B1['x1] = isect x2: 'A2. 'B2['x2] in univ[i:l] } =
    it
 
+interactive intersectionMember {| intro_resource [] |} 'H 'y :
+   [wf] sequent [squash] { 'H >- member{univ[i:l]; 'A1} } -->
+   [wf] sequent [squash] { 'H; y: 'A1 >- member{univ[i:l]; 'B1['y]} } -->
+   sequent ['ext] { 'H >- member{univ[i:l]; .isect x1: 'A1. 'B1['x1]} }
+
 prim intersectionType {| intro_resource [] |} 'H 'y :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
    sequent ['ext] { 'H >- "type"{."isect"{'A; x. 'B['x]}} } =
    it
+
+interactive topUniv {| intro_resource [] |} 'H :
+   sequent ['ext] { 'H >- member{univ[i:l]; top} }
+
+interactive topType {| intro_resource [] |} 'H :
+   sequent ['ext] { 'H >- "type"{top} }
 
 (*
  * H >- isect x: A. B[x] ext b[it]
@@ -132,6 +149,18 @@ prim intersectionMemberEquality {| intro_resource []; eqcd_resource |} 'H 'z :
    [wf] sequent [squash] { 'H; z: 'A >- 'b1 = 'b2 in 'B['z] } -->
    sequent ['ext] { 'H >- 'b1 = 'b2 in isect x: 'A. 'B['x] } =
    it
+
+prim intersectionMemberMember {| intro_resource [] |} 'H 'z :
+   [wf] sequent [squash] { 'H >- "type"{'A} } -->
+   [wf] sequent [squash] { 'H; z: 'A >- member{'B['z]; 'b1} } -->
+   sequent ['ext] { 'H >- member{.isect x: 'A. 'B['x]; 'b1} } =
+   it
+
+interactive topMemberEquality {| intro_resource []; eqcd_resource |} 'H :
+   sequent ['ext] { 'H >- 'b1 = 'b2 in top }
+
+interactive topMemberMember {| intro_resource [] |} 'H :
+   sequent ['ext] { 'H >- member{top; 'b1} }
 
 (*
  * H >- b1 = b2 in B[a]
@@ -181,6 +210,10 @@ interactive intersectionSubtype3 'H 'x :
    sequent [squash] { 'H >- "type"{'C} } -->
    sequent [squash] { 'H; x: 'A >- subtype{'C; 'B['x]} } -->
    sequent ['ext] { 'H >- subtype{'C; ."isect"{'A; x. 'B['x]}} }
+
+interactive topSubtype {| intro_resource [] |} 'H :
+   sequent [squash] { 'H >- "type"{'T} } -->
+   sequent ['ext] { 'H >- subtype{'T; top} }
 
 (************************************************************************
  * TACTICS                                                              *

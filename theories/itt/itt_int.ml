@@ -218,9 +218,9 @@ dform gt_df1 : parens :: "prec"[prec_compare] :: gt{'a; 'b} =
  * REWRITES                                                             *
  ************************************************************************)
 
-prim_rw unfold_le : le{'a; 'b} <--> ('a < 'b or 'a = 'b in int)
+prim_rw unfold_le : le{'a; 'b} <--> (('a < 'b) or ('a = 'b in int))
 prim_rw unfold_gt : gt{'a; 'b} <--> ('b < 'a)
-prim_rw unfold_ge : ge{'a; 'b} <--> ('b < 'a or 'a = 'b in int)
+prim_rw unfold_ge : ge{'a; 'b} <--> (('b < 'a) or ('a = 'b in int))
 
 prim_rw reduce_add : "add"{number[i:n]; number[j:n]} <-->
    meta_sum{number[i:n]; number[j:n]}
@@ -330,6 +330,9 @@ prim intEquality {| intro_resource []; eqcd_resource |} 'H :
    sequent ['ext] { 'H >- int = int in univ[i:l] } =
    it
 
+interactive intMember {| intro_resource [] |} 'H :
+   sequent ['ext] { 'H >- member{univ[i:l]; int} }
+
 (*
  * H >- Z ext n
  * by numberFormation n
@@ -346,6 +349,9 @@ prim numberEquality {| intro_resource []; eqcd_resource |} 'H :
    sequent ['ext] { 'H >- number[n:n] = number[n:n] in int } =
    it
 
+interactive numberMember {| intro_resource [] |} 'H :
+   sequent ['ext] { 'H >- member{int; number[n:n]} }
+
 (*
  * Induction:
  * H, n:Z, J[n] >- C[n] ext ind(n; m, z. down[n, m, it, z]; base[n]; m, z. up[n, m, it, z])
@@ -356,9 +362,9 @@ prim numberEquality {| intro_resource []; eqcd_resource |} 'H :
  * H, n:Z, J[n], m:Z, v: 0 < m, z: C[m - 1] >- C[m] ext up[n, m, v, z]
  *)
 prim intElimination {| elim_resource [ThinOption thinT] |} 'H 'J 'n 'm 'v 'z :
-   [main] ('down['n; 'm; 'v; 'z] : sequent ['ext] { 'H; n: int; 'J['n]; m: int; v: 'm < 0; z: 'C['m add 1] >- 'C['m] }) -->
+   [main] ('down['n; 'm; 'v; 'z] : sequent ['ext] { 'H; n: int; 'J['n]; m: int; v: 'm < 0; z: 'C['m +@ 1] >- 'C['m] }) -->
    [main] ('base['n] : sequent ['ext] { 'H; n: int; 'J['n] >- 'C[0] }) -->
-   [main] ('up['n; 'm; 'v; 'z] : sequent ['ext] { 'H; n: int; 'J['n]; m: int; v: 0 < 'm; z: 'C['m sub 1] >- 'C['m] }) -->
+   [main] ('up['n; 'm; 'v; 'z] : sequent ['ext] { 'H; n: int; 'J['n]; m: int; v: 0 < 'm; z: 'C['m -@ 1] >- 'C['m] }) -->
    sequent ['ext] { 'H; n: int; 'J['n] >- 'C['n] } =
    ind{'n; m, z. 'down['n; 'm; it; 'z]; 'base['n]; m, z. 'up['n; 'm; it; 'z]}
 
@@ -442,6 +448,102 @@ prim int_sqequal 'H :
    sequent ['ext] { 'H >- Perv!"rewrite"{'i; 'j} } =
    it
 
+(*
+ * Derive the wf rules.
+ *)
+interactive add_wf {| intro_resource [] |} 'H :
+   sequent [squash] { 'H >- member{int; 'i} } -->
+   sequent [squash] { 'H >- member{int; 'j} } -->
+   sequent ['ext] { 'H >- member{int; add{'i; 'j}} }
+
+interactive sub_wf {| intro_resource [] |} 'H :
+   sequent [squash] { 'H >- member{int; 'i} } -->
+   sequent [squash] { 'H >- member{int; 'j} } -->
+   sequent ['ext] { 'H >- member{int; sub{'i; 'j}} }
+
+interactive mul_wf {| intro_resource [] |} 'H :
+   sequent [squash] { 'H >- member{int; 'i} } -->
+   sequent [squash] { 'H >- member{int; 'j} } -->
+   sequent ['ext] { 'H >- member{int; mul{'i; 'j}} }
+
+interactive div_wf {| intro_resource [] |} 'H :
+   sequent [squash] { 'H >- member{int; 'i} } -->
+   sequent [squash] { 'H >- member{int; 'j} } -->
+   sequent [squash] { 'H >- not{.'j = 0 in int} } -->
+   sequent ['ext] { 'H >- member{int; ."div"{'i; 'j}} }
+
+interactive rem_wf {| intro_resource [] |} 'H :
+   sequent [squash] { 'H >- member{int; 'i} } -->
+   sequent [squash] { 'H >- member{int; 'j} } -->
+   sequent [squash] { 'H >- not{.'j = 0 in int} } -->
+   sequent ['ext] { 'H >- member{int; ."rem"{'i; 'j}} }
+
+interactive lt_type {| intro_resource [] |} 'H :
+   sequent [squash] { 'H >- member{int; 'i} } -->
+   sequent [squash] { 'H >- member{int; 'j} } -->
+   sequent ['ext] { 'H >- "type"{lt{'i; 'j}} }
+
+interactive gt_type {| intro_resource [] |} 'H :
+   sequent [squash] { 'H >- member{int; 'i} } -->
+   sequent [squash] { 'H >- member{int; 'j} } -->
+   sequent ['ext] { 'H >- "type"{gt{'i; 'j}} }
+
+interactive le_type {| intro_resource [] |} 'H :
+   sequent [squash] { 'H >- member{int; 'i} } -->
+   sequent [squash] { 'H >- member{int; 'j} } -->
+   sequent ['ext] { 'H >- "type"{le{'i; 'j}} }
+
+interactive ge_type {| intro_resource [] |} 'H :
+   sequent [squash] { 'H >- member{int; 'i} } -->
+   sequent [squash] { 'H >- member{int; 'j} } -->
+   sequent ['ext] { 'H >- "type"{ge{'i; 'j}} }
+
+interactive lt_member {| intro_resource [] |} 'H :
+   sequent [squash] { 'H >- member{int; 'i} } -->
+   sequent [squash] { 'H >- member{int; 'j} } -->
+   sequent ['ext] { 'H >- member{univ[i:l]; lt{'i; 'j}} }
+
+interactive gt_member {| intro_resource [] |} 'H :
+   sequent [squash] { 'H >- member{int; 'i} } -->
+   sequent [squash] { 'H >- member{int; 'j} } -->
+   sequent ['ext] { 'H >- member{univ[i:l]; gt{'i; 'j}} }
+
+interactive le_member {| intro_resource [] |} 'H :
+   sequent [squash] { 'H >- member{int; 'i} } -->
+   sequent [squash] { 'H >- member{int; 'j} } -->
+   sequent ['ext] { 'H >- member{univ[i:l]; le{'i; 'j}} }
+
+interactive ge_member {| intro_resource [] |} 'H :
+   sequent [squash] { 'H >- member{int; 'i} } -->
+   sequent [squash] { 'H >- member{int; 'j} } -->
+   sequent ['ext] { 'H >- member{univ[i:l]; ge{'i; 'j}} }
+
+interactive lt_reverse {| elim_resource [] |} 'H 'J 'y :
+   sequent ['ext] { 'H; x: ('i < 'j); 'J['x]; y: "not"{.'j < 'i} >- 'C['x] } -->
+   sequent ['ext] { 'H; x: ('i < 'j); 'J['x] >- 'C['x] }
+
+interactive lt_add {| intro_resource [] |} 'H :
+   sequent [squash] { 'H >- 'i < 'j } -->
+   sequent ['ext] { 'H >- ('i +@ 'k) < ('j +@ 'k) }
+
+interactive lt_sub {| intro_resource [] |} 'H :
+   sequent [squash] { 'H >- 'i < 'j } -->
+   sequent ['ext] { 'H >- ('i -@ 'k) < ('j -@ 'k) }
+
+interactive decide_lt 'H 'i 'j 'w :
+   [wf] sequent [squash] { 'H >- member{int; 'i} } -->
+   [wf] sequent [squash] { 'H >- member{int; 'j} } -->
+   [main] sequent ['ext] { 'H; w: 'i < 'j >- 'C } -->
+   [main] sequent ['ext] { 'H; w: "not"{.'i < 'j} >- 'C } -->
+   sequent ['ext] { 'H >- 'C }
+
+interactive decide_eq 'H 'i 'j 'w :
+   [wf] sequent [squash] { 'H >- member{int; 'i} } -->
+   [wf] sequent [squash] { 'H >- member{int; 'j} } -->
+   [main] sequent ['ext] { 'H; w: 'i = 'j in int >- 'C } -->
+   [main] sequent ['ext] { 'H; w: "not"{.'i = 'j in int} >- 'C } -->
+   sequent ['ext] { 'H >- 'C }
+
 (************************************************************************
  * D TACTIC                                                             *
  ************************************************************************)
@@ -456,6 +558,23 @@ let zero = << 0 >>
  *)
 let intSqequalT p =
    int_sqequal (Sequent.hyp_count_addr p) p
+
+(*
+ * Decision.
+ *)
+let decideT t p =
+      let w = maybe_new_vars1 p "w" in
+   if is_lt_term t then
+      let t1, t2 = dest_lt t in
+         decide_lt (Sequent.hyp_count_addr p) t1 t2 w p
+   else if is_equal_term t then
+      let typ, t1, t2 = dest_equal t in
+         if is_int_term typ then
+            decide_eq (Sequent.hyp_count_addr p) t1 t2 w p
+         else
+            raise (RefineError ("decideT", StringTermError ("type is not int", typ)))
+   else
+      raise (RefineError ("decideT", StringTermError ("can't decide", t)))
 
 (************************************************************************
  * TYPE INFERENCE                                                       *

@@ -29,7 +29,7 @@ MPFILES :=\
 	czf_itt_axioms
 
 # Name of main libraris
-MAIN = czf
+MAIN = theory
 
 all: $(MAIN).cma
 opt: $(MAIN).cmxa

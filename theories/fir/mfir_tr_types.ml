@@ -224,7 +224,7 @@ prim wf_tyTuple_box {| intro [] |} 'H :
 prim wf_tyTuple_normal {| intro [] |} 'H :
    sequent [mfir] { 'H >- type_eq_list{ 'tyl1;
                                         'tyl2;
-                                        polyKind[0]{large_type} } } -->
+                                        polyKind[0]{small_type} } } -->
    sequent [mfir] { 'H >- type_eq{ tyTuple["normal"]{ 'tyl1 };
                                    tyTuple["normal"]{ 'tyl2 };
                                    polyKind[0]{small_type} } }

@@ -1133,7 +1133,11 @@ O	o438	var p437
 T	t438	o438
 B	b438	t438
 T	t439	o435 b436 b437 b438
-S	s	t435 h
+NBase_rewrite	Base_rw	Base_rewrite NIL
+NBase_rewrite!sequent_arg	brwsqarg	sequent_arg Base_rw
+O	obrarg	brwsqarg
+T	tbrarg	obrarg
+S	s	tbrarg h
 G	s	t439
 B	b439	s
 T	t440	o433 b439
@@ -1150,7 +1154,7 @@ B	b444	t444
 T	t445	o416 b438
 B	b445	t445
 T	t446	o435 b436 b444 b445
-S	s446	t443 h
+S	s446	tbrarg h
 G	s446	t446
 B	b446	s446
 T	t447	o433 b446
@@ -1220,13 +1224,13 @@ O	o470	rule p470
 NItt_equal!type	type	type Itt_equal
 O	o471	type
 T	t471	o471 b417
-S	s471	t435 h
+S	s471	tbrarg h
 G	s471	t471
 B	b471	s471
 T	t472	o433 b471
 B	b472	t472
 T	t473	o471 b418
-S	s473	t443 h
+S	s473	tbrarg h
 G	s473	t473
 B	b473	s473
 T	t474	o433 b473
@@ -1271,7 +1275,7 @@ NItt_squash	Itt_squash	Itt_squash NIL
 NItt_squash!squash	squash490	squash Itt_squash
 O	o491	squash490
 T	t491	o491 b417
-S	s491	t435 h
+S	s491	tbrarg h
 G	s491	t491
 B	b491	s491
 T	t492	o433 b491
@@ -1285,7 +1289,7 @@ O	o493	var p493
 T	t494	o493
 B	b494	t494
 T	t495	o435 b418 b493 b494
-S	s495	t443 h
+S	s495	tbrarg h
 G	s495	t495
 B	b495	s495
 T	t496	o433 b495
@@ -1301,7 +1305,7 @@ B	b499	t499
 T	t500	o452 b499 b4 b455
 B	b500	t500
 H	h500	v t491
-S	s500	t443 h h500
+S	s500	tbrarg h h500
 G	s500	t495
 B	b501	s500
 T	t501	o453 b501 b498
@@ -1317,18 +1321,18 @@ B	b506	t505
 O	o506	tactic_arg p431
 H	h506	v t417
 H	h507	x_1 t422
-S	s507	t435 h h506 h507
+S	s507	tbrarg h h506 h507
 G	s507	t471
 B	b507	s507
 T	t507	o453 b507 b498
 B	b508	t507
 T	t508	o435 b424 b493 b494
-S	s508	t435 h h506
+S	s508	tbrarg h h506
 G	s508	t508
 B	b509	s508
 T	t509	o453 b509 b498
 B	b510	t509
-S	s510	t443 h h500
+S	s510	tbrarg h h500
 G	s510	t508
 B	b511	s510
 T	t511	o453 b511 b498
@@ -1387,7 +1391,7 @@ P	p535	Number 1009
 O	o535	location p534 p535
 P	p536	String tsquashMemberFormation
 O	o536	rule p536
-S	s536	t443 h
+S	s536	tbrarg h
 G	s536	t418
 B	b536	s536
 T	t536	o433 b536
@@ -1453,13 +1457,13 @@ P	p559	Var C
 O	o559	var p559
 B	b559	t558
 T	t559	o559 b559
-S	s559	t443 h h557 h558 h559
+S	s559	tbrarg h h557 h558 h559
 G	s559	t559
 B	b560	s559
 T	t560	o433 b560
 B	b561	t560
 H	h561	u t418
-S	s561	t443 h h561 h559
+S	s561	tbrarg h h561 h559
 G	s561	t559
 B	b562	s561
 T	t562	o433 b562

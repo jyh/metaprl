@@ -18,7 +18,7 @@ dform univ_df : univ = `"Univ"
 dform prop_df : prop{'t} = downarrow slot{'t}
 
 prim univ_type {| intro [] |} 'H :
-   sequent ['ext] { <H>; x: univ; <J['x]> >- "type"{prop{'x}} } =
+   sequent { <H>; x: univ; <J['x]> >- "type"{prop{'x}} } =
    trivial
 
 (*

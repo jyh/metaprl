@@ -1032,7 +1032,11 @@ NItt_equal!equal	equal	equal Itt_equal
 O	o481	equal
 B	b481	t478
 T	t482	o481 b481 b479 b462
-S	s	t477 h h478 h479 h480 h481
+NBase_rewrite	Base_rw	Base_rewrite NIL
+NBase_rewrite!sequent_arg	brwsqarg	sequent_arg Base_rw
+O	obrarg	brwsqarg
+T	tbrarg	obrarg
+S	s	tbrarg h h478 h479 h480 h481
 G	s	t482
 B	b482	s
 T	t483	o475 b482
@@ -1053,14 +1057,14 @@ P	p486	Var C
 O	o487	var p486
 B	b487	t481
 T	t487	o487 b487 b479
-S	s487	t477 h h478 h479 h486 h481
+S	s487	tbrarg h h478 h479 h486 h481
 G	s487	t487
 B	b488	s487
 T	t488	o475 b488
 B	b489	t488
 T	t489	o486 b489
 B	b490	t489
-S	s490	t477 h h478 h479 h480 h481
+S	s490	tbrarg h h478 h479 h480 h481
 G	s490	t487
 B	b491	s490
 T	t491	o475 b491
@@ -1098,7 +1102,7 @@ T	t505	o b458 b504
 B	b505	t505
 C	h505	J t479
 C	h506	J_2 t479
-S	s506	t477 h h478 h479 h505 h506
+S	s506	tbrarg h h478 h479 h505 h506
 G	s506	t482
 B	b506	s506
 T	t506	o475 b506
@@ -1107,14 +1111,14 @@ T	t507	o474 b507
 B	b508	t507
 C	h508	J t462
 T	t508	o487 b479
-S	s508	t477 h h478 h479 h508 h506
+S	s508	tbrarg h h478 h479 h508 h506
 G	s508	t508
 B	b509	s508
 T	t509	o475 b509
 B	b510	t509
 T	t510	o486 b510
 B	b511	t510
-S	s511	t477 h h478 h479 h505 h506
+S	s511	tbrarg h h478 h479 h505 h506
 G	s511	t508
 B	b512	s511
 T	t512	o475 b512

@@ -137,8 +137,8 @@ doc <:doc<
    @docoff
 >>
 prim srecFormation :
-   ('B['T] : sequent ['ext] { <H>; T: univ[i:l] >- univ[i:l] }) -->
-   sequent ['ext] { <H> >- univ[i:l] } =
+   ('B['T] : sequent { <H>; T: univ[i:l] >- univ[i:l] }) -->
+   sequent { <H> >- univ[i:l] } =
    srec{T. 'B['T]}
 
 doc <:doc< 
@@ -151,23 +151,23 @@ doc <:doc<
    @end[doc]
 >>
 prim srecEquality {| intro []; eqcd |} :
-   [wf] sequent [squash] { <H>; T: univ[i:l] >- 'B1['T] = 'B2['T] in univ[i:l] } -->
-   [wf] sequent [squash] { <H>; S1: univ[i:l]; S2: univ[i:l]; z: \subtype{'S1; 'S2} >- \subtype{'B1['S1]; 'B1['S2]} } -->
-   sequent ['ext] { <H> >- srec{T1. 'B1['T1]} = srec{T2. 'B2['T2]} in univ[i:l] } =
+   [wf] sequent { <H>; T: univ[i:l] >- 'B1['T] = 'B2['T] in univ[i:l] } -->
+   [wf] sequent { <H>; S1: univ[i:l]; S2: univ[i:l]; z: \subtype{'S1; 'S2} >- \subtype{'B1['S1]; 'B1['S2]} } -->
+   sequent { <H> >- srec{T1. 'B1['T1]} = srec{T2. 'B2['T2]} in univ[i:l] } =
    it
 
 prim srecType {| intro [] |} univ[i:l] :
-   [wf] sequent [squash] { <H>; S1: univ[i:l]; S2: univ[i:l]; z: \subtype{'S1; 'S2} >- \subtype{'B['S1]; 'B['S2]} } -->
-   sequent ['ext] { <H> >- "type"{srec{T. 'B['T]}} } =
+   [wf] sequent { <H>; S1: univ[i:l]; S2: univ[i:l]; z: \subtype{'S1; 'S2} >- \subtype{'B['S1]; 'B['S2]} } -->
+   sequent { <H> >- "type"{srec{T. 'B['T]}} } =
    it
 
 doc <:doc< 
    @docoff
 >>
 prim srec_memberFormation {| intro [] |} :
-   [wf] ('g : sequent ['ext] { <H> >- 'B[srec{T. 'B['T]}] }) -->
-   [wf] sequent [squash] { <H> >- "type"{(srec{T. 'B['T]})} } -->
-   sequent ['ext] { <H> >- srec{T. 'B['T]} } =
+   [wf] ('g : sequent { <H> >- 'B[srec{T. 'B['T]}] }) -->
+   [wf] sequent { <H> >- "type"{(srec{T. 'B['T]})} } -->
+   sequent { <H> >- srec{T. 'B['T]} } =
    'g
 
 doc <:doc< 
@@ -180,9 +180,9 @@ doc <:doc<
 >>
 
 prim srec_memberEquality {| intro [] |} :
-   sequent [squash] { <H> >- 'x1 = 'x2 in 'B[srec{T. 'B['T]}] } -->
-   [wf] sequent [squash] { <H> >- "type"{(srec{T. 'B['T]})} } -->
-   sequent ['ext] { <H> >- 'x1 = 'x2 in srec{T. 'B['T]} } =
+   sequent { <H> >- 'x1 = 'x2 in 'B[srec{T. 'B['T]}] } -->
+   [wf] sequent { <H> >- "type"{(srec{T. 'B['T]})} } -->
+   sequent { <H> >- 'x1 = 'x2 in srec{T. 'B['T]} } =
    it
 
 doc <:doc< 
@@ -197,7 +197,7 @@ doc <:doc<
 >>
 
 prim srecElimination {| elim [ThinOption thinT] |} 'H univ[i:l] :
-   [main] ('g['x; 'T1; 'u; 'w; 'z] : sequent ['ext] { 
+   [main] ('g['x; 'T1; 'u; 'w; 'z] : sequent { 
              <H>;
              x: srec{T. 'B['T]};
              <J['x]>;
@@ -207,7 +207,7 @@ prim srecElimination {| elim [ThinOption thinT] |} 'H univ[i:l] :
              z: 'B['T1]
            >- 'C['z]
            }) -->
-   sequent ['ext] { <H>; x: srec{T. 'B['T]}; <J['x]> >- 'C['x] } =
+   sequent { <H>; x: srec{T. 'B['T]}; <J['x]> >- 'C['x] } =
    srecind{'x; p, h. 'g['x; srec{T. 'B['T]}; it; 'p; 'h]}
 
 doc <:doc< 
@@ -218,8 +218,8 @@ doc <:doc<
 >>
 
 prim srecUnrollElimination (* {| elim [ThinOption thinT] |} *) 'H :
-   [main] ('g['x; 'y; 'u] : sequent ['ext] { <H>; x: srec{T. 'B['T]}; <J['x]>; y: 'B[srec{T. 'B['T]}]; u: 'x = 'y in 'B[srec{T. 'B['T]}] >- 'C['y] }) -->
-   sequent ['ext] { <H>; x: srec{T. 'B['T]}; <J['x]> >- 'C['x] } =
+   [main] ('g['x; 'y; 'u] : sequent { <H>; x: srec{T. 'B['T]}; <J['x]>; y: 'B[srec{T. 'B['T]}]; u: 'x = 'y in 'B[srec{T. 'B['T]}] >- 'C['y] }) -->
+   sequent { <H>; x: srec{T. 'B['T]}; <J['x]> >- 'C['x] } =
    'g['x; 'x; it]
 
 doc <:doc< 
@@ -233,13 +233,13 @@ doc <:doc<
    @end[doc]
 >>
 prim srecindEquality {| intro []; eqcd |} lambda{x. 'S['x]} srec{T. 'B['T]} univ[i:l] :
-   [wf] sequent [squash] { <H> >- 'r1 = 'r2 in srec{T. 'B['T]} } -->
-   [wf] sequent [squash] { <H>; r: srec{T. 'B['T]} >- "type"{'S['r]} } -->
-   [wf] sequent [squash] { <H>; T1: univ[i:l]; z: \subtype{'T1; srec{T. 'B['T]}};
+   [wf] sequent { <H> >- 'r1 = 'r2 in srec{T. 'B['T]} } -->
+   [wf] sequent { <H>; r: srec{T. 'B['T]} >- "type"{'S['r]} } -->
+   [wf] sequent { <H>; T1: univ[i:l]; z: \subtype{'T1; srec{T. 'B['T]}};
                v: w: 'T1 -> 'S['w]; w: 'B['T1]
            >- 't1['v; 'w] = 't2['v; 'w] in 'S['w]
            } -->
-   sequent ['ext] { <H> >- srecind{'r1; h1, z1. 't1['h1; 'z1]}
+   sequent { <H> >- srecind{'r1; h1, z1. 't1['h1; 'z1]}
                    = srecind{'r2; h2, z2. 't2['h2; 'z2]}
                    in 'S['r1]
            } =

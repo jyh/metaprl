@@ -61,9 +61,9 @@ rewrite unfold_fun : ('A -> 'B) <--> (x: 'A -> 'B)
  * H >- Ui ext B
  *)
 rule independentFunctionFormation :
-   sequent ['ext] { <H> >- univ[i:l] } -->
-   sequent ['ext] { <H> >- univ[i:l] } -->
-   sequent ['ext] { <H> >- univ[i:l] }
+   sequent { <H> >- univ[i:l] } -->
+   sequent { <H> >- univ[i:l] } -->
+   sequent { <H> >- univ[i:l] }
 
 (*
  * H >- (A1 -> B1) = (A2 -> B2) in Ui
@@ -73,17 +73,17 @@ rule independentFunctionFormation :
  * H >- B1 = B2 in Ui
  *)
 rule independentFunctionEquality :
-   sequent [squash] { <H> >- 'A1 = 'A2 in univ[i:l] } -->
-   sequent [squash] { <H> >- 'B1 = 'B2 in univ[i:l] } -->
-   sequent ['ext] { <H> >- ('A1 -> 'B1) = ('A2 -> 'B2) in univ[i:l] }
+   sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
+   sequent { <H> >- 'B1 = 'B2 in univ[i:l] } -->
+   sequent { <H> >- ('A1 -> 'B1) = ('A2 -> 'B2) in univ[i:l] }
 
 (*
  * Typehood.
  *)
 rule independentFunctionType :
-   sequent [squash] { <H> >- "type"{'A1} } -->
-   sequent [squash] { <H>; x: 'A1 >- "type"{'B1} } -->
-   sequent ['ext] { <H> >- "type"{. 'A1 -> 'B1 } }
+   sequent { <H> >- "type"{'A1} } -->
+   sequent { <H>; x: 'A1 >- "type"{'B1} } -->
+   sequent { <H> >- "type"{. 'A1 -> 'B1 } }
 
 (*
  * H >- a:A -> B[a] ext lambda(z. b[z])
@@ -93,9 +93,9 @@ rule independentFunctionType :
  * H, z: A >- B[z] ext b[z]
  *)
 rule independentLambdaFormation :
-   sequent [squash] { <H> >- "type"{'A} } -->
-   sequent ['ext] { <H>; z: 'A >- 'B } -->
-   sequent ['ext] { <H> >- 'A -> 'B }
+   sequent { <H> >- "type"{'A} } -->
+   sequent { <H>; z: 'A >- 'B } -->
+   sequent { <H> >- 'A -> 'B }
 
 (*
  * H >- lambda(a1. b1[a1]) = lambda(a2. b2[a2]) in a:A -> B
@@ -105,9 +105,9 @@ rule independentLambdaFormation :
  * H, x: A >- b1[x] = b2[x] in B[x]
  *)
 rule independentLambdaEquality :
-   sequent [squash] { <H> >- "type"{'A} } -->
-   sequent [squash] { <H>; x: 'A >- 'b1['x] = 'b2['x] in 'B } -->
-   sequent ['ext] { <H> >- lambda{a1. 'b1['a1]} = lambda{a2. 'b2['a2]} in 'A -> 'B }
+   sequent { <H> >- "type"{'A} } -->
+   sequent { <H>; x: 'A >- 'b1['x] = 'b2['x] in 'B } -->
+   sequent { <H> >- lambda{a1. 'b1['a1]} = lambda{a2. 'b2['a2]} in 'A -> 'B }
 
 (*
  * H, f: A -> B, J[x] >- T[x]                   ext t[f, f a]
@@ -117,17 +117,17 @@ rule independentLambdaEquality :
  * H, f: A -> B, J[x], y: B >- T[x]             ext t[f, y]
  *)
 rule independentFunctionElimination 'H :
-   sequent ['ext] { <H>; f: 'A -> 'B; <J['f]> >- 'A } -->
-   sequent ['ext] { <H>; f: 'A -> 'B; <J['f]>; y: 'B >- 'T['f] } -->
-   sequent ['ext] { <H>; f: 'A -> 'B; <J['f]> >- 'T['f] }
+   sequent { <H>; f: 'A -> 'B; <J['f]> >- 'A } -->
+   sequent { <H>; f: 'A -> 'B; <J['f]>; y: 'B >- 'T['f] } -->
+   sequent { <H>; f: 'A -> 'B; <J['f]> >- 'T['f] }
 
 (*
  * Explicit function elimination.
  *)
 rule independentFunctionElimination2 'H 'a :
-   sequent [squash] { <H>; f: 'A -> 'B; <J['f]> >- 'a in 'A } -->
-   sequent ['ext] { <H>; f: 'A -> 'B; <J['f]>; y: 'B; z: 'y = ('f 'a) in 'B >- 'T['f] } -->
-   sequent ['ext] { <H>; f: 'A -> 'B; <J['f]> >- 'T['f] }
+   sequent { <H>; f: 'A -> 'B; <J['f]> >- 'a in 'A } -->
+   sequent { <H>; f: 'A -> 'B; <J['f]>; y: 'B; z: 'y = ('f 'a) in 'B >- 'T['f] } -->
+   sequent { <H>; f: 'A -> 'B; <J['f]> >- 'T['f] }
 
 (*
  * H >- (f1 a1) = (f2 a2) in B[a1]
@@ -137,9 +137,9 @@ rule independentFunctionElimination2 'H 'a :
  * H >- a1 = a2 in A
  *)
 rule independentApplyEquality ('A -> 'B) :
-   sequent [squash] { <H> >- 'f1 = 'f2 in 'A -> 'B } -->
-   sequent [squash] { <H> >- 'a1 = 'a2 in 'A } -->
-   sequent ['ext] { <H> >- ('f1 'a1) = ('f2 'a2) in 'B }
+   sequent { <H> >- 'f1 = 'f2 in 'A -> 'B } -->
+   sequent { <H> >- 'a1 = 'a2 in 'A } -->
+   sequent { <H> >- ('f1 'a1) = ('f2 'a2) in 'B }
 
 (*
  * H >- A1 -> B1 <= A2 -> B2
@@ -149,9 +149,9 @@ rule independentApplyEquality ('A -> 'B) :
  * H >- B1 <= B2
  *)
 rule independentFunctionSubtype :
-   sequent [squash] { <H> >- \subtype{'A2; 'A1} } -->
-   sequent [squash] { <H> >- \subtype{'B1; 'B2} } -->
-   sequent ['ext] { <H> >- \subtype{ ('A1 -> 'B1); ('A2 -> 'B2) } }
+   sequent { <H> >- \subtype{'A2; 'A1} } -->
+   sequent { <H> >- \subtype{'B1; 'B2} } -->
+   sequent { <H> >- \subtype{ ('A1 -> 'B1); ('A2 -> 'B2) } }
 
 topval fnExtensionalityT : term -> term -> tactic
 topval fnExtenT : term -> tactic

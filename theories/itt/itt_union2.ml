@@ -27,9 +27,9 @@ let resource reduce +=
 
 
 interactive inl_wf {| intro[] |}:
-   sequent [squash] { <H> >- 't in top+top } -->
-   sequent ['ext] { <H> >- is_inl{'t} in bool }
+   sequent { <H> >- 't in top+top } -->
+   sequent { <H> >- is_inl{'t} in bool }
 
 interactive inr_wf {| intro[] |}:
-   sequent [squash] { <H> >- 't in top+top } -->
-   sequent ['ext] { <H> >- is_inr{'t} in bool }
+   sequent { <H> >- 't in top+top } -->
+   sequent { <H> >- is_inr{'t} in bool }

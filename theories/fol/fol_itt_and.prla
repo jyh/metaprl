@@ -1380,7 +1380,11 @@ NFol_type	Fol_type	Fol_type NIL
 NFol_type!type	type	type Fol_type
 O	o637	type
 T	t637	o637 b485
-S	s637	t595 h
+NBase_rewrite	Base_rw	Base_rewrite NIL
+NBase_rewrite!sequent_arg	brwsqarg	sequent_arg Base_rw
+O	obrarg	brwsqarg
+T	tbrarg	obrarg
+S	s637	tbrarg h
 G	s637	t637
 B	b637	s637
 T	t638	o636 b637
@@ -1388,7 +1392,7 @@ B	b638	t638
 T	t639	o635 b638
 B	b639	t639
 T	t640	o637 b486
-S	s640	t595 h
+S	s640	tbrarg h
 G	s640	t640
 B	b640	s640
 T	t641	o636 b640
@@ -1396,7 +1400,7 @@ B	b641	t641
 T	t642	o635 b641
 B	b642	t642
 T	t643	o637 b487
-S	s643	t595 h
+S	s643	tbrarg h
 G	s643	t643
 B	b643	s643
 T	t644	o636 b643
@@ -1422,24 +1426,24 @@ O	o651	squash
 T	t651	o651
 B	b651	t651
 T	t652	o b651 b4
-S	s900	t652 h
+S	s900	tbrarg h
 G	s900	t596
 B	b901	s900
 T	t901	o593 b901 b4
 B	b902	t901
 T	t902	o592 b902 b4 b598
 B	b903	t902
-S	s903	t652 h
+S	s903	tbrarg h
 G	s903	t600
 B	b904	s903
 T	t904	o593 b904 b4
 B	b905	t904
-S	s905	t652 h
+S	s905	tbrarg h
 G	s905	t604
 B	b906	s905
 T	t906	o593 b906 b4
 B	b907	t906
-S	s907	t652 h
+S	s907	tbrarg h
 G	s907	t607
 B	b908	s907
 T	t908	o593 b908 b4
@@ -1478,19 +1482,19 @@ NItt_equal	Itt_equal	Itt_equal NIL
 NItt_equal!type	type652	type Itt_equal
 O	o652	type652
 T	t653	o652 b485
-S	s653	t652 h
+S	s653	tbrarg h
 G	s653	t653
 B	b653	s653
 T	t654	o593 b653 b648
 B	b654	t654
 T	t655	o652 b488
-S	s655	t595 h
+S	s655	tbrarg h
 G	s655	t655
 B	b655	s655
 T	t656	o593 b655 b648
 B	b656	t656
 T	t657	o637 b488
-S	s657	t595 h
+S	s657	tbrarg h
 G	s657	t657
 B	b657	s657
 T	t658	o593 b657 b648
@@ -1508,7 +1512,7 @@ B	b663	t663
 T	t664	o650 b654 b4 b663
 B	b664	t664
 T	t665	o652 b486
-S	s665	t652 h
+S	s665	tbrarg h
 G	s665	t665
 B	b665	s665
 T	t666	o593 b665 b648
@@ -1521,7 +1525,7 @@ T	t669	o b664 b668
 B	b669	t669
 T	t670	o591 b650 b669
 B	b670	t670
-P	p670	String "rwh fold_type 0 thenT unsqsquashT << 'ext >> thenT trivialT"
+P	p670	String "rwh fold_type 0 ttca"
 O	o670	ext_rule p670
 T	t671	o591 b664 b4
 B	b671	t671
@@ -1550,21 +1554,21 @@ O	o681	rule p681
 NSummary!meta_function	meta_function	meta_function Summary
 O	o682	meta_function
 O	o683	meta_labeled p591
-S	s683	t595 h
+S	s683	tbrarg h
 G	s683	t485
 B	b683	s683
 T	t683	o636 b683
 B	b684	t683
 T	t684	o683 b684
 B	b685	t684
-S	s685	t595 h
+S	s685	tbrarg h
 G	s685	t486
 B	b686	s685
 T	t686	o636 b686
 B	b687	t686
 T	t687	o683 b687
 B	b688	t687
-S	s688	t595 h
+S	s688	tbrarg h
 G	s688	t487
 B	b689	s688
 T	t689	o636 b689
@@ -1639,7 +1643,7 @@ P	p716	Var C
 O	o716	var p716
 B	b716	t715
 T	t716	o716 b716
-S	s716	t595 h h714 h715 h716
+S	s716	tbrarg h h714 h715 h716
 G	s716	t716
 B	b717	s716
 T	t717	o636 b717
@@ -1649,7 +1653,7 @@ B	b719	t718
 H	h719	x t487
 C	h720	J t504
 T	t720	o716 b504
-S	s720	t595 h h719 h720
+S	s720	tbrarg h h719 h720
 G	s720	t720
 B	b720	s720
 T	t721	o636 b720
@@ -1678,18 +1682,18 @@ T	t728	o497 b726 b727
 C	h728	J t728
 B	b728	t728
 T	t729	o716 b728
-S	s729	t595 h h725 h726 h728
+S	s729	tbrarg h h725 h726 h728
 G	s729	t729
 B	b729	s729
 T	t730	o593 b729 b723
 B	b730	t730
 H	h730	x t488
-S	s730	t595 h h730 h725 h726 h728
+S	s730	tbrarg h h730 h725 h726 h728
 G	s730	t729
 B	b731	s730
 T	t731	o593 b731 b723
 B	b732	t731
-S	s732	t595 h h730 h720
+S	s732	tbrarg h h730 h720
 G	s732	t720
 B	b733	s732
 T	t733	o593 b733 b723

@@ -68,9 +68,9 @@ doc <:doc<
    @end[doc]
 >>
 interactive subset_type {| intro [] |} :
-   ["wf"] sequent [squash] { <H> >- isset{'s1} } -->
-   ["wf"] sequent [squash] { <H> >- isset{'s2} } -->
-   sequent ['ext] { <H> >- "type"{.'s1  subset 's2} }
+   ["wf"] sequent { <H> >- isset{'s1} } -->
+   ["wf"] sequent { <H> >- isset{'s2} } -->
+   sequent { <H> >- "type"{.'s1  subset 's2} }
 
 doc <:doc< 
    @begin[doc]
@@ -81,10 +81,10 @@ doc <:doc<
    @end[doc]
 >>
 interactive subset_intro {| intro [] |} :
-   ["wf"] sequent [squash] { <H> >- isset{'s1} } -->
-   ["wf"] sequent [squash] { <H> >- isset{'s2} } -->
-   ["main"] sequent ['ext] { <H>; x: set; y: mem{'x; 's1} >- mem{'x; 's2} } -->
-   sequent ['ext] { <H> >- 's1  subset 's2 }
+   ["wf"] sequent { <H> >- isset{'s1} } -->
+   ["wf"] sequent { <H> >- isset{'s2} } -->
+   ["main"] sequent { <H>; x: set; y: mem{'x; 's1} >- mem{'x; 's2} } -->
+   sequent { <H> >- 's1  subset 's2 }
 
 doc <:doc< 
    @begin[doc]
@@ -96,12 +96,12 @@ doc <:doc<
    @end[doc]
 >>
 interactive subset_elim {| elim [] |} 'H 's :
-   ["wf"] sequent [squash] { <H>; x: 's1 subset 's2; <J['x]> >- isset{'s} } -->
-   ["wf"] sequent [squash] { <H>; x: 's1 subset 's2; <J['x]> >- isset{'s1} } -->
-   ["wf"] sequent [squash] { <H>; x: 's1 subset 's2; <J['x]> >- isset{'s2} } -->
-   ["antecedent"] sequent ['ext] { <H>; x: 's1 subset 's2; <J['x]> >- mem{'s; 's1} } -->
-   ["main"] sequent ['ext] { <H>; x: 's1 subset 's2; <J['x]>; z: mem{'s; 's2} >- 'C['x] } -->
-   sequent ['ext] { <H>; x: 's1  subset 's2; <J['x]> >- 'C['x] }
+   ["wf"] sequent { <H>; x: 's1 subset 's2; <J['x]> >- isset{'s} } -->
+   ["wf"] sequent { <H>; x: 's1 subset 's2; <J['x]> >- isset{'s1} } -->
+   ["wf"] sequent { <H>; x: 's1 subset 's2; <J['x]> >- isset{'s2} } -->
+   ["antecedent"] sequent { <H>; x: 's1 subset 's2; <J['x]> >- mem{'s; 's1} } -->
+   ["main"] sequent { <H>; x: 's1 subset 's2; <J['x]>; z: mem{'s; 's2} >- 'C['x] } -->
+   sequent { <H>; x: 's1  subset 's2; <J['x]> >- 'C['x] }
 
 doc <:doc< 
    @begin[doc]
@@ -112,14 +112,14 @@ doc <:doc<
    @end[doc]
 >>
 interactive subset_res {| intro [] |} :
-   ["wf"] sequent [squash] { <H> >- isset{'s1} } -->
-   ["wf"] sequent [squash] { <H> >- isset{'s2} } -->
-   sequent ['ext] { <H> >- restricted{.'s1  subset 's2} }
+   ["wf"] sequent { <H> >- isset{'s1} } -->
+   ["wf"] sequent { <H> >- isset{'s2} } -->
+   sequent { <H> >- restricted{.'s1  subset 's2} }
 
 interactive subset_fun {| intro [] |} :
-   sequent ['ext] { <H> >- fun_set{z. 's1['z]} } -->
-   sequent ['ext] { <H> >- fun_set{z. 's2['z]} } -->
-   sequent ['ext] { <H> >- fun_prop{z. 's1['z]  subset 's2['z]} }
+   sequent { <H> >- fun_set{z. 's1['z]} } -->
+   sequent { <H> >- fun_set{z. 's2['z]} } -->
+   sequent { <H> >- fun_prop{z. 's1['z]  subset 's2['z]} }
 doc <:doc< @docoff >>
 
 (*

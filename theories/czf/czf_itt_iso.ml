@@ -113,10 +113,10 @@ doc <:doc<
    @end[doc]
 >>
 interactive iso_type {| intro [] |} :
-   sequent [squash] { <H> >- 'g1 IN label } -->
-   sequent [squash] { <H> >- 'g2 IN label } -->
-   sequent [squash] { <H>; x: set >- isset{'f['x]} } -->
-   sequent ['ext] { <H> >- "type"{iso{'g1; 'g2; x. 'f['x]}} }
+   sequent { <H> >- 'g1 IN label } -->
+   sequent { <H> >- 'g2 IN label } -->
+   sequent { <H>; x: set >- isset{'f['x]} } -->
+   sequent { <H> >- "type"{iso{'g1; 'g2; x. 'f['x]}} }
 
 doc <:doc< 
    @begin[doc]
@@ -127,13 +127,13 @@ doc <:doc<
    @end[doc]
 >>
 interactive iso_fun {| intro [] |} :
-   sequent [squash] { <H> >- 'g1 IN label } -->
-   sequent [squash] { <H> >- 'g2 IN label } -->
-   sequent ['ext] { <H> >- group{'g1} } -->
-   sequent ['ext] { <H> >- group{'g2} } -->
-   sequent ['ext] { <H>; z: set; x1: set; y1: mem{'x1; car{'g1}} >- mem{'f['z; 'x1]; car{'g2}} } -->
-   sequent ['ext] { <H>; z: set >- fun_set{x. 'f['x; 'z]} } -->
-   sequent ['ext] { <H> >- fun_prop{z. iso{'g1; 'g2; y. 'f['z; 'y]}} }
+   sequent { <H> >- 'g1 IN label } -->
+   sequent { <H> >- 'g2 IN label } -->
+   sequent { <H> >- group{'g1} } -->
+   sequent { <H> >- group{'g2} } -->
+   sequent { <H>; z: set; x1: set; y1: mem{'x1; car{'g1}} >- mem{'f['z; 'x1]; car{'g2}} } -->
+   sequent { <H>; z: set >- fun_set{x. 'f['x; 'z]} } -->
+   sequent { <H> >- fun_prop{z. iso{'g1; 'g2; y. 'f['z; 'y]}} }
 
 doc <:doc< @docoff >>
 (*

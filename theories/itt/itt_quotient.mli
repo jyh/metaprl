@@ -67,10 +67,10 @@ prec prec_quot
  * H, x: A1, y: A1, z: A1, u: E1[x, y], v: E1[y, z] >- E1[x, z]
  *)
 rule quotientEquality :
-   sequent [squash] { <H> >- 'A1 = 'A2 in univ[i:l] } -->
-   sequent [squash] { <H>; x: 'A1; y: 'A1 >- 'E1['x; 'y] = 'E2['x; 'y] in univ[i:l] } -->
-   sequent [squash] { <H> >- "type"{.quot x1, y1: 'A1 // 'E1['x1; 'y1]} } -->
-   sequent ['ext] { <H> >- quot x1, y1: 'A1 // 'E1['x1; 'y1]
+   sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
+   sequent { <H>; x: 'A1; y: 'A1 >- 'E1['x; 'y] = 'E2['x; 'y] in univ[i:l] } -->
+   sequent { <H> >- "type"{.quot x1, y1: 'A1 // 'E1['x1; 'y1]} } -->
+   sequent { <H> >- quot x1, y1: 'A1 // 'E1['x1; 'y1]
                    = quot x2, y2: 'A2 // 'E2['x2; 'y2]
                    in univ[i:l]
            }
@@ -79,12 +79,12 @@ rule quotientEquality :
  * Typehood.
  *)
 rule quotientType :
-   sequent [squash] { <H> >- "type"{'A} } -->
-   sequent [squash] { <H>; u: 'A; v: 'A >- "type"{'E['u; 'v]} } -->
-   sequent [squash] { <H>; u: 'A >- 'E['u; 'u] } -->
-   sequent [squash] { <H>; u: 'A; v: 'A; 'E['u; 'v] >- 'E['v; 'u] } -->
-   sequent [squash] { <H>; u: 'A; v: 'A; w: 'A; 'E['u; 'v]; 'E['v; 'w] >- 'E['u; 'w] } -->
-   sequent ['ext] { <H> >- "type"{.quot x, y: 'A // 'E['x; 'y]} }
+   sequent { <H> >- "type"{'A} } -->
+   sequent { <H>; u: 'A; v: 'A >- "type"{'E['u; 'v]} } -->
+   sequent { <H>; u: 'A >- 'E['u; 'u] } -->
+   sequent { <H>; u: 'A; v: 'A; 'E['u; 'v] >- 'E['v; 'u] } -->
+   sequent { <H>; u: 'A; v: 'A; w: 'A; 'E['u; 'v]; 'E['v; 'w] >- 'E['u; 'w] } -->
+   sequent { <H> >- "type"{.quot x, y: 'A // 'E['x; 'y]} }
 
 (*
  * H >- quot x, y: A // E ext a
@@ -94,9 +94,9 @@ rule quotientType :
  * H >- A ext a
  *)
 rule quotient_memberFormation :
-   sequent [squash] { <H> >- "type"{(quot x, y: 'A // 'E['x; 'y])} } -->
-   sequent ['ext] { <H> >- 'A } -->
-   sequent ['ext] { <H> >- quot x, y: 'A // 'E['x; 'y] }
+   sequent { <H> >- "type"{(quot x, y: 'A // 'E['x; 'y])} } -->
+   sequent { <H> >- 'A } -->
+   sequent { <H> >- quot x, y: 'A // 'E['x; 'y] }
 
 (*
  * H >- a1 = a2 in quot x, y: A // E
@@ -106,9 +106,9 @@ rule quotient_memberFormation :
  * H >- x1 = a2 in A
  *)
 rule quotient_memberWeakEquality :
-   sequent [squash] { <H> >- "type"{(quot x, y: 'A // 'E['x; 'y])} } -->
-   sequent [squash] { <H> >- 'a1 = 'a2 in 'A } -->
-   sequent ['ext] { <H> >- 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y] }
+   sequent { <H> >- "type"{(quot x, y: 'A // 'E['x; 'y])} } -->
+   sequent { <H> >- 'a1 = 'a2 in 'A } -->
+   sequent { <H> >- 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y] }
 
 (*
  * H >- a1 = a2 in quot x, y: A // E
@@ -119,10 +119,10 @@ rule quotient_memberWeakEquality :
  * H >- [[ E[a1; a2] ]]
  *)
 rule quotient_memberEquality :
-   sequent [squash] { <H> >- 'a1 in quot x, y: 'A // 'E['x; 'y] } -->
-   sequent [squash] { <H> >- 'a2 in quot x, y: 'A // 'E['x; 'y] } -->
-   sequent [squash] { <H> >- esquash{'E['a1; 'a2]} } -->
-   sequent ['ext] { <H> >- 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y] }
+   sequent { <H> >- 'a1 in quot x, y: 'A // 'E['x; 'y] } -->
+   sequent { <H> >- 'a2 in quot x, y: 'A // 'E['x; 'y] } -->
+   sequent { <H> >- esquash{'E['a1; 'a2]} } -->
+   sequent { <H> >- 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y] }
 
 (*
  * H, a: quot x, y: A // E, J[a] >- s[a] = t[a] in T[a]
@@ -132,18 +132,18 @@ rule quotient_memberEquality :
  * H, a: quot x, y: A // E, J[a], v: A, w: A, z: E[v, w] >- s[v] = t[w] in T[v]
  *)
 rule quotientElimination1 'H :
-   sequent [squash] { <H>; a: quot x, y: 'A // 'E['x; 'y]; <J['a]> >- "type"{'T['a]} } -->
-   sequent [squash] { <H>; a: quot x, y: 'A // 'E['x; 'y]; <J['a]>;
+   sequent { <H>; a: quot x, y: 'A // 'E['x; 'y]; <J['a]> >- "type"{'T['a]} } -->
+   sequent { <H>; a: quot x, y: 'A // 'E['x; 'y]; <J['a]>;
              v: 'A; w: 'A; 'E['v; 'w] >- 's['v] = 't['w] in 'T['v]
            } -->
-   sequent ['ext] { <H>; a: quot x, y: 'A // 'E['x; 'y]; <J['a]> >- 's['a] = 't['a] in 'T['a] }
+   sequent { <H>; a: quot x, y: 'A // 'E['x; 'y]; <J['a]> >- 's['a] = 't['a] in 'T['a] }
 (*
 rule quotientElimination2 'H 'v 'w 'z :
-   sequent [squash] { <H>; a: quot x, y: 'A // 'E['x; 'y]; <J['a]> >- "type"{'T['a]} } -->
-   sequent [squash] { <H>; a: quot x, y: 'A // 'E['x; 'y];
+   sequent { <H>; a: quot x, y: 'A // 'E['x; 'y]; <J['a]> >- "type"{'T['a]} } -->
+   sequent { <H>; a: quot x, y: 'A // 'E['x; 'y];
              v: 'A; w: 'A; z: 'E['v; 'w]; <J['v]> >- 's['v] = 't['w] in 'T['v]
            } -->
-   sequent ['ext] { <H>; a: quot x, y: 'A // 'E['x; 'y]; <J['a]> >- 's['a] = 't['a] in 'T['a] }
+   sequent { <H>; a: quot x, y: 'A // 'E['x; 'y]; <J['a]> >- 's['a] = 't['a] in 'T['a] }
 *)
 (*
  * H, x: a1 = a2 in quot x, y: A // E, J[x] >- T[x]
@@ -152,8 +152,8 @@ rule quotientElimination2 'H 'v 'w 'z :
  * H, x: a1 = a2 in quot x, y: A // E, J[x], v: esquash(E[a, b]) >- T[x]
  *)
 rule quotient_equalityElimination 'H :
-   sequent ['ext] { <H>; x: 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]; <J['x]>; esquash{'E['a1; 'a2]} >- 'T['x] } -->
-   sequent ['ext] { <H>; x: 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]; <J['x]> >- 'T['x] }
+   sequent { <H>; x: 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]; <J['x]>; esquash{'E['a1; 'a2]} >- 'T['x] } -->
+   sequent { <H>; x: 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]; <J['x]> >- 'T['x] }
 
 (*
  * H >- quot x1, y1: A1 // E1[x1; y1] <= quot x2, y2: A2 // E2[x2; y2]
@@ -165,11 +165,11 @@ rule quotient_equalityElimination 'H :
  * H >- quot x2, y2: A2 // E2[x2; y2] in type
  *)
 rule quotientSubtype :
-   sequent [squash] { <H> >- \subtype{'A1; 'A2} } -->
-   sequent [squash] { <H>; a1: 'A1; a2: 'A1 (* ; 'E1['a1; 'a2] *) >- 'E2['a1; 'a2] } -->
-   sequent [squash] { <H> >- "type"{(quot x1, y1: 'A1 // 'E1['x1; 'y1])} } -->
-   sequent [squash] { <H> >- "type"{(quot x2, y2: 'A2 // 'E2['x2; 'y2])} } -->
-   sequent ['ext] { <H> >- \subtype{ (quot x1, y1: 'A1 // 'E1['x1; 'y1]); (quot x2, y2: 'A2 // 'E2['x2; 'y2]) } };;
+   sequent { <H> >- \subtype{'A1; 'A2} } -->
+   sequent { <H>; a1: 'A1; a2: 'A1 (* ; 'E1['a1; 'a2] *) >- 'E2['a1; 'a2] } -->
+   sequent { <H> >- "type"{(quot x1, y1: 'A1 // 'E1['x1; 'y1])} } -->
+   sequent { <H> >- "type"{(quot x2, y2: 'A2 // 'E2['x2; 'y2])} } -->
+   sequent { <H> >- \subtype{ (quot x1, y1: 'A1 // 'E1['x1; 'y1]); (quot x2, y2: 'A2 // 'E2['x2; 'y2]) } };;
 
 (************************************************************************
  * TACTICS                                                              *

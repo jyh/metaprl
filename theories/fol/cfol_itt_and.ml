@@ -43,26 +43,26 @@ prim_rw unfold_pair : "pair"{'a; 'b} <--> Base_trivial!it
 
 (* Lemmas *)
 interactive and_univ {| intro [] |} :
-   [wf] sequent ['ext] { <H> >- "type"{'A} } -->
-   [wf] sequent ['ext] { <H> >- "type"{'B} } -->
-   sequent ['ext] { <H> >- "and"{'A; 'B} IN univ[1:l] }
+   [wf] sequent { <H> >- "type"{'A} } -->
+   [wf] sequent { <H> >- "type"{'B} } -->
+   sequent { <H> >- "and"{'A; 'B} IN univ[1:l] }
 
 (* Derived rules *)
 derived and_type :
-   [wf] sequent ['ext] { <H> >- "type"{'A} } -->
-   [wf] sequent ['ext] { <H> >- "type"{'B} } -->
-   sequent ['ext] { <H> >- "type"{.'A & 'B} }
+   [wf] sequent { <H> >- "type"{'A} } -->
+   [wf] sequent { <H> >- "type"{'B} } -->
+   sequent { <H> >- "type"{.'A & 'B} }
 
 derived and_intro :
-   [main] sequent ['ext] { <H> >- 'A } -->
-   [main] sequent ['ext] { <H> >- 'B } -->
-   sequent ['ext] { <H> >- 'A & 'B }
+   [main] sequent { <H> >- 'A } -->
+   [main] sequent { <H> >- 'B } -->
+   sequent { <H> >- 'A & 'B }
 
 derived and_elim 'H :
-   [wf] sequent ['ext] { <H>; x: 'A & 'B; <J['x]> >- "type"{'A} } -->
-   [wf] sequent ['ext] { <H>; x: 'A & 'B; <J['x]> >- "type"{'B} } -->
-   [main] sequent ['ext] { <H>; y: 'A; z: 'B; <J['y, 'z]> >- 'C['y, 'z] } -->
-   sequent ['ext] { <H>; x: 'A & 'B; <J['x]> >- 'C['x] }
+   [wf] sequent { <H>; x: 'A & 'B; <J['x]> >- "type"{'A} } -->
+   [wf] sequent { <H>; x: 'A & 'B; <J['x]> >- "type"{'B} } -->
+   [main] sequent { <H>; y: 'A; z: 'B; <J['y, 'z]> >- 'C['y, 'z] } -->
+   sequent { <H>; x: 'A & 'B; <J['x]> >- 'C['x] }
 
 (*
  * -*-

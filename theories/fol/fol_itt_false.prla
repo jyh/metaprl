@@ -1047,7 +1047,11 @@ NFol_type	Fol_type	Fol_type NIL
 NFol_type!type	type	type Fol_type
 O	o484	type
 T	t485	o484 b474
-S	s	t484 h
+NBase_rewrite	Base_rw	Base_rewrite NIL
+NBase_rewrite!sequent_arg	brwsqarg	sequent_arg Base_rw
+O	obrarg	brwsqarg
+T	tbrarg	obrarg
+S	s	tbrarg h
 G	s	t485
 B	b485	s
 T	t486	o482 b485
@@ -1080,13 +1084,13 @@ NItt_equal	Itt_equal	Itt_equal NIL
 NItt_equal!type	type493	type Itt_equal
 O	o493	type493
 T	t494	o493 b475
-S	s494	t484 h
+S	s494	tbrarg h
 G	s494	t494
 B	b494	s494
 T	t495	o491 b494 b4
 B	b495	t495
 T	t496	o484 b475
-S	s496	t484 h
+S	s496	tbrarg h
 G	s496	t496
 B	b496	s496
 T	t497	o491 b496 b4
@@ -1141,7 +1145,7 @@ P	p521	Var C
 O	o521	var p521
 B	b521	t521
 T	t522	o521 b521
-S	s522	t484 h h520 h521
+S	s522	tbrarg h h520 h521
 G	s522	t522
 B	b522	s522
 T	t523	o482 b522

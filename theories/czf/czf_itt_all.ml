@@ -66,28 +66,28 @@ let _ =
  * Implication is restricted.
  *)
 interactive dfun_fun3 {| intro [] |} :
-   ["wf"]   sequent [squash] { <H>; u: set >- "type"{'A['u]} } -->
-   ["wf"]   sequent [squash] { <H>; u: set; z: 'A['u] >- "type"{'B['u; 'z]} } -->
-   sequent ['ext] { <H> >- fun_prop{z. 'A['z]} } -->
-   sequent ['ext] { <H> >- dfun_prop{z. 'A['z]; u, v. 'B['u; 'v]} } -->
-   sequent ['ext] { <H> >- fun_prop{z. "fun"{'A['z]; w. 'B['z; 'w]}} }
+   ["wf"]   sequent { <H>; u: set >- "type"{'A['u]} } -->
+   ["wf"]   sequent { <H>; u: set; z: 'A['u] >- "type"{'B['u; 'z]} } -->
+   sequent { <H> >- fun_prop{z. 'A['z]} } -->
+   sequent { <H> >- dfun_prop{z. 'A['z]; u, v. 'B['u; 'v]} } -->
+   sequent { <H> >- fun_prop{z. "fun"{'A['z]; w. 'B['z; 'w]}} }
 
 interactive dfun_res1 {| intro [] |} :
-   sequent [squash] { <H> >- restricted{'A} } -->
-   sequent [squash] { <H>; u: 'A >- restricted{'B['u]} } -->
-   sequent ['ext] { <H> >- restricted{."fun"{'A; w. 'B['w]}} }
+   sequent { <H> >- restricted{'A} } -->
+   sequent { <H>; u: 'A >- restricted{'B['u]} } -->
+   sequent { <H> >- restricted{."fun"{'A; w. 'B['w]}} }
 
 interactive all_fun {| intro [] |} :
-   ["wf"]   sequent [squash] { <H>; u: set >- "type"{'A['u]} } -->
-   ["wf"]   sequent [squash] { <H>; u: set; z: 'A['u] >- "type"{'B['u; 'z]} } -->
-   sequent ['ext] { <H> >- fun_prop{z. 'A['z]} } -->
-   sequent ['ext] { <H> >- dfun_prop{z. 'A['z]; u, v. 'B['u; 'v]} } -->
-   sequent ['ext] { <H> >- fun_prop{z. "all"{'A['z]; w. 'B['z; 'w]}} }
+   ["wf"]   sequent { <H>; u: set >- "type"{'A['u]} } -->
+   ["wf"]   sequent { <H>; u: set; z: 'A['u] >- "type"{'B['u; 'z]} } -->
+   sequent { <H> >- fun_prop{z. 'A['z]} } -->
+   sequent { <H> >- dfun_prop{z. 'A['z]; u, v. 'B['u; 'v]} } -->
+   sequent { <H> >- fun_prop{z. "all"{'A['z]; w. 'B['z; 'w]}} }
 
 interactive all_res {| intro [] |} :
-   sequent [squash] { <H> >- restricted{'A} } -->
-   sequent [squash] { <H>; u: 'A >- restricted{'B['u]} } -->
-   sequent ['ext] { <H> >- restricted{."all"{'A; w. 'B['w]}} }
+   sequent { <H> >- restricted{'A} } -->
+   sequent { <H>; u: 'A >- restricted{'B['u]} } -->
+   sequent { <H> >- restricted{."all"{'A; w. 'B['w]}} }
 
 (*
  * -*-

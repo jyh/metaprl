@@ -841,13 +841,17 @@ B	b621	t621
 T	t622	o545 b621
 B	b622	t622
 T	t623	o620 b622
-S	s	t620 h h620
+NBase_rewrite	Base_rw	Base_rewrite NIL
+NBase_rewrite!sequent_arg	brwsqarg	sequent_arg Base_rw
+O	obrarg	brwsqarg
+T	tbrarg	obrarg
+S	s	tbrarg h h620
 G	s	t623
 B	b623	s
 T	t624	o618 b623
 B	b624	t624
 T	t625	o620 b548
-S	s625	t620 h
+S	s625	tbrarg h
 G	s625	t625
 B	b625	s625
 T	t626	o618 b625
@@ -907,12 +911,12 @@ O	o645	var p645
 T	t646	o645
 B	b646	t646
 T	t647	o545 b646
-S	s647	t620 h h645
+S	s647	tbrarg h h645
 G	s647	t647
 B	b647	s647
 T	t648	o618 b647
 B	b648	t648
-S	s648	t620 h
+S	s648	tbrarg h
 G	s648	t548
 B	b649	s648
 T	t649	o618 b649
@@ -1572,7 +1576,7 @@ C	h676	J t546
 NCzf_itt_set!isset	isset	isset Czf_itt_set
 O	o676	isset
 T	t676	o676 b665
-S	s676	t674 h h675 h676
+S	s676	tbrarg h h675 h676
 G	s676	t676
 B	b676	s676
 T	t677	o618 b676
@@ -1585,14 +1589,14 @@ H	h679	w t679
 P	p679	Var T
 O	o679	var p679
 T	t680	o679 b546
-S	s680	t620 h h675 h676 h679
+S	s680	tbrarg h h675 h676 h679
 G	s680	t680
 B	b680	s680
 T	t681	o618 b680
 B	b681	t681
 T	t682	o678 b681
 B	b682	t682
-S	s682	t620 h h675 h676
+S	s682	tbrarg h h675 h676
 G	s682	t680
 B	b683	s682
 T	t683	o618 b683
@@ -1614,7 +1618,7 @@ B	b690	t689
 NItt_equal!equal	equal	equal Itt_equal
 O	o690	equal
 T	t690	o690 b554 b665 b665
-S	s690	t674 h h675 h676
+S	s690	tbrarg h h675 h676
 G	s690	t690
 B	b691	s690
 T	t691	o632 b691 b688
@@ -1622,12 +1626,12 @@ B	b692	t691
 O	o692	tactic_arg p672
 T	t692	o553 b554 b674
 H	h692	x t692
-S	s692	t674 h h692 h676
+S	s692	tbrarg h h692 h676
 G	s692	t690
 B	b693	s692
 T	t693	o632 b693 b688
 B	b694	t693
-S	s694	t620 h h692 h676
+S	s694	tbrarg h h692 h676
 G	s694	t680
 B	b695	s694
 T	t695	o632 b695 b688
@@ -3852,7 +3856,7 @@ T	t706	o631 b692 b4 b705
 B	b706	t706
 T	t707	o632 b680 b688
 B	b707	t707
-S	s707	t620 h h692 h676 h679
+S	s707	tbrarg h h692 h676 h679
 G	s707	t680
 B	b708	s707
 T	t708	o632 b708 b688

@@ -58,37 +58,37 @@ let _ =
  * Implication is restricted.
  *)
 interactive union_fun {| intro [] |} :
-   ["wf"] sequent [squash] { <H>; w: set >- "type"{'A['w]} } -->
-   ["wf"] sequent [squash] { <H>; w: set >- "type"{'B['w]} } -->
-   sequent ['ext] { <H> >- fun_prop{x. 'A['x]} } -->
-   sequent ['ext] { <H> >- fun_prop{x. 'B['x]} } -->
-   sequent ['ext] { <H> >- fun_prop{x. "union"{'A['x]; 'B['x]}} }
+   ["wf"] sequent { <H>; w: set >- "type"{'A['w]} } -->
+   ["wf"] sequent { <H>; w: set >- "type"{'B['w]} } -->
+   sequent { <H> >- fun_prop{x. 'A['x]} } -->
+   sequent { <H> >- fun_prop{x. 'B['x]} } -->
+   sequent { <H> >- fun_prop{x. "union"{'A['x]; 'B['x]}} }
 
 (*
  * Implication is restricted.
  *)
 interactive union_res1 {| intro [] |} :
-   sequent [squash] { <H> >- restricted{. 'A} } -->
-   sequent [squash] { <H> >- restricted{. 'B} } -->
-   sequent ['ext] { <H> >- restricted{. "union"{'A; 'B}} }
+   sequent { <H> >- restricted{. 'A} } -->
+   sequent { <H> >- restricted{. 'B} } -->
+   sequent { <H> >- restricted{. "union"{'A; 'B}} }
 
 (*
  * Implication is restricted.
  *)
 interactive or_fun {| intro [] |} :
-   ["wf"] sequent [squash] { <H>; w: set >- "type"{'A['w]} } -->
-   ["wf"] sequent [squash] { <H>; w: set >- "type"{'B['w]} } -->
-   sequent ['ext] { <H> >- fun_prop{x. 'A['x]} } -->
-   sequent ['ext] { <H> >- fun_prop{x. 'B['x]} } -->
-   sequent ['ext] { <H> >- fun_prop{x. "or"{'A['x]; 'B['x]}} }
+   ["wf"] sequent { <H>; w: set >- "type"{'A['w]} } -->
+   ["wf"] sequent { <H>; w: set >- "type"{'B['w]} } -->
+   sequent { <H> >- fun_prop{x. 'A['x]} } -->
+   sequent { <H> >- fun_prop{x. 'B['x]} } -->
+   sequent { <H> >- fun_prop{x. "or"{'A['x]; 'B['x]}} }
 
 (*
  * Implication is restricted.
  *)
 interactive or_res1 {| intro [] |} :
-   sequent [squash] { <H> >- restricted{. 'A} } -->
-   sequent [squash] { <H> >- restricted{. 'B} } -->
-   sequent ['ext] { <H> >- restricted{. "or"{'A; 'B}} }
+   sequent { <H> >- restricted{. 'A} } -->
+   sequent { <H> >- restricted{. 'B} } -->
+   sequent { <H> >- restricted{. "or"{'A; 'B}} }
 
 (*
  * -*-

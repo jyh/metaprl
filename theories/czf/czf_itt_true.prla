@@ -1168,7 +1168,11 @@ O	o528	unit
 T	t528	o528
 B	b528	t528 z
 T	t529	o527 b528
-S	s	t527 h
+NBase_rewrite	Base_rw	Base_rewrite NIL
+NBase_rewrite!sequent_arg	brwsqarg	sequent_arg Base_rw
+O	obrarg	brwsqarg
+T	tbrarg	obrarg
+S	s	tbrarg h
 G	s	t529
 B	b529	s
 T	t530	o525 b529
@@ -1232,7 +1236,7 @@ NCzf_itt_sep!restricted	restricted	restricted Czf_itt_sep
 O	o544	restricted
 B	b544	t528
 T	t544	o544 b544
-S	s544	t527 h
+S	s544	tbrarg h
 G	s544	t544
 B	b545	s544
 T	t545	o525 b545
@@ -1276,7 +1280,7 @@ O	o567	true
 T	t567	o567
 B	b567	t567 x
 T	t568	o527 b567
-S	s568	t527 h
+S	s568	tbrarg h
 G	s568	t568
 B	b568	s568
 T	t569	o525 b568
@@ -1316,7 +1320,7 @@ P	p578	String true_res
 O	o578	rule p578
 B	b578	t567
 T	t578	o544 b578
-S	s578	t527 h
+S	s578	tbrarg h
 G	s578	t578
 B	b579	s578
 T	t579	o525 b579

@@ -117,41 +117,41 @@ interactive_rw reduce_ind_base {| reduce |} :
 doc <:doc< @doc{@rules} >>
 
 interactive natType {| intro [] |} :
-   sequent ['ext] { <H> >- "type"{nat} }
+   sequent { <H> >- "type"{nat} }
 
 interactive natMemberEquality {| intro [] |} :
-   sequent [squash] { <H> >- 'a='b in int} -->
-   sequent [squash] { <H> >- 'a >= 0}  -->
-   sequent ['ext] { <H> >- 'a='b in nat}
+   sequent { <H> >- 'a='b in int} -->
+   sequent { <H> >- 'a >= 0}  -->
+   sequent { <H> >- 'a='b in nat}
 
 interactive natMemberZero {| intro [] |} :
-   sequent ['ext] { <H> >- 0 in nat}
+   sequent { <H> >- 0 in nat}
 
 interactive nat_is_int {| intro[AutoMustComplete] |} :
-   sequent [squash] { <H> >- 'a='b in nat} -->
-   sequent [squash] { <H> >- 'a='b in int}
+   sequent { <H> >- 'a='b in nat} -->
+   sequent { <H> >- 'a='b in int}
 
 interactive natElimination  'H :
-   sequent ['ext] { <H>; x: int; v:'x>=0; <J['x]> >- 'C['x]}  -->
-   sequent ['ext] { <H>; x: nat; <J['x]> >- 'C['x]}
+   sequent { <H>; x: int; v:'x>=0; <J['x]> >- 'C['x]}  -->
+   sequent { <H>; x: nat; <J['x]> >- 'C['x]}
 
 interactive natInduction {| elim [] |} 'H  :
-   sequent ['ext] { <H>; n: nat; <J['n]> >- 'C[0] }  -->
-   sequent ['ext] { <H>; n: nat; <J['n]>; m: nat;  z: 'C['m] >- 'C['m +@ 1] }  -->
-   sequent ['ext] { <H>; n: nat; <J['n]> >- 'C['n] }
+   sequent { <H>; n: nat; <J['n]> >- 'C[0] }  -->
+   sequent { <H>; n: nat; <J['n]>; m: nat;  z: 'C['m] >- 'C['m +@ 1] }  -->
+   sequent { <H>; n: nat; <J['n]> >- 'C['n] }
 
 interactive natBackInduction 'n bind{x.'C['x]}  :
-   [wf] sequent [squash]{ <H> >- 'n in nat }  -->
-   sequent ['ext] { <H> >- 'C['n] }  -->
-   sequent ['ext] { <H>; m: nat;  z: 'C['m +@ 1] >- 'C['m] }  -->
-   sequent ['ext] { <H>  >- 'C[0] }
+   [wf] sequent { <H> >- 'n in nat }  -->
+   sequent { <H> >- 'C['n] }  -->
+   sequent { <H>; m: nat;  z: 'C['m +@ 1] >- 'C['m] }  -->
+   sequent { <H>  >- 'C[0] }
 
 interactive well_ordering_principle bind{i.'P['i]} 'i :
-   [wf] sequent [squash] { <H>; n: nat >- "type"{'P['n]} } -->
-   [wf] sequent [squash] { <H> >- 'i in nat } -->
-   sequent['ext] { <H> >-
+   [wf] sequent { <H>; n: nat >- "type"{'P['n]} } -->
+   [wf] sequent { <H> >- 'i in nat } -->
+   sequent{ <H> >-
       all n:nat. ("not"{'P['n]} or "not"{.all n2:nat. ('P['n2] => 'n < 'n2)})} -->
-   sequent['ext] { <H> >- "not"{'P['i]}}
+   sequent{ <H> >- "not"{'P['i]}}
 
 doc <:doc< @docoff >>
 
@@ -163,10 +163,10 @@ let natBackInductionT =
  *)
 
 interactive int_div_rem {| intro [] |} :
-   sequent [squash] { <H> >- 'm in int } -->
-   sequent [squash] { <H> >- 'k in int } -->
-   sequent ['ext] { <H> >- 'k > 0 } -->
-   sequent ['ext] { <H> >- exst q: int. exst r: nat. (('m = 'k *@ 'q +@ 'r in int) & 'r < 'k) }
+   sequent { <H> >- 'm in int } -->
+   sequent { <H> >- 'k in int } -->
+   sequent { <H> >- 'k > 0 } -->
+   sequent { <H> >- exst q: int. exst r: nat. (('m = 'k *@ 'q +@ 'r in int) & 'r < 'k) }
 
 (*
  * If there is a positive number x such that P[x], then there is
@@ -174,23 +174,23 @@ interactive int_div_rem {| intro [] |} :
  * is well-formed and decidable for any integer y.
  *)
 interactive positive_rule1 {| intro [] |} :
-   [wf] sequent [squash] { <H>; a: int >- "type"{'P['a]} } -->
-   [wf] sequent [squash] { <H> >- 'n in int } -->
-   [wf] sequent ['ext] { <H> >- 'n > 0 } -->
-   [decidable] sequent ['ext] { <H>; a: int >- decidable{'P['a]} } -->
-   sequent ['ext] { <H> >- (all b: int. ('b > 0 & 'b <= 'n => not{'P['b]})) or (exst u: int. ('u > 0 & 'u <= 'n & 'P['u] & all b: int. (('b > 0 & 'P['b]) => 'b >= 'u))) }
+   [wf] sequent { <H>; a: int >- "type"{'P['a]} } -->
+   [wf] sequent { <H> >- 'n in int } -->
+   [wf] sequent { <H> >- 'n > 0 } -->
+   [decidable] sequent { <H>; a: int >- decidable{'P['a]} } -->
+   sequent { <H> >- (all b: int. ('b > 0 & 'b <= 'n => not{'P['b]})) or (exst u: int. ('u > 0 & 'u <= 'n & 'P['u] & all b: int. (('b > 0 & 'P['b]) => 'b >= 'u))) }
 
 let positiveRule1T = positive_rule1
 
 interactive smallest_positive {| intro [] |} :
-   [wf] sequent [squash] { <H>; a: int >- "type"{'P['a]} } -->
-   [decidable] sequent ['ext] { <H>; a: int >- decidable{'P['a]} } -->
-   [main] sequent ['ext] { <H> >- exst a: int. ('a > 0 & 'P['a]) } -->
-   sequent ['ext] { <H> >- exst u: int. ('u > 0 & 'P['u] & all b: int. (('b > 0 & 'P['b]) => 'b >= 'u)) }
+   [wf] sequent { <H>; a: int >- "type"{'P['a]} } -->
+   [decidable] sequent { <H>; a: int >- decidable{'P['a]} } -->
+   [main] sequent { <H> >- exst a: int. ('a > 0 & 'P['a]) } -->
+   sequent { <H> >- exst u: int. ('u > 0 & 'P['u] & all b: int. (('b > 0 & 'P['b]) => 'b >= 'u)) }
 
 let positiveRule2T = smallest_positive
 
 (*interactive smallest_positive_elim {| elim [] |} 'H :
-   sequent ['ext] { <H>; x: exst a: int. ('a > 0 & 'P['a]); <J['x]>; y: exst u: int. ('u > 0 & 'P['u] & all b: int. (('b > 0 & 'P['b]) => 'b < 'u)) >- 'C['x] } -->
-   sequent ['ext] { <H>; x: exst a: int. ('a > 0 & 'P['a]); <J['x]> >- 'C['x] }
+   sequent { <H>; x: exst a: int. ('a > 0 & 'P['a]); <J['x]>; y: exst u: int. ('u > 0 & 'P['u] & all b: int. (('b > 0 & 'P['b]) => 'b < 'u)) >- 'C['x] } -->
+   sequent { <H>; x: exst a: int. ('a > 0 & 'P['a]); <J['x]> >- 'C['x] }
 *)

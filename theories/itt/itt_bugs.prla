@@ -1306,7 +1306,11 @@ O	o480	number p
 T	t480	o480
 B	b480	t480
 T	t481	o478 b479 b480
-S	s	t478 h
+NBase_rewrite	Base_rw	Base_rewrite NIL
+NBase_rewrite!sequent_arg	brwsqarg	sequent_arg Base_rw
+O	obrarg	brwsqarg
+T	tbrarg	obrarg
+S	s	tbrarg h
 G	s	t481
 B	b481	s
 T	t482	o476 b481
@@ -1349,7 +1353,7 @@ O	o492	eq_label p491 p492
 T	t492	o492 b480 b479
 B	b492	t492
 T	t493	o478 b480 b492
-S	s493	t491 h
+S	s493	tbrarg h
 G	s493	t493
 B	b493	s493
 T	t494	o487 b493 b4
@@ -1359,7 +1363,7 @@ B	b495	t495
 T	t496	o489 b494 b4 b495
 B	b496	t496
 T	t497	o478 b479 b492
-S	s497	t478 h
+S	s497	tbrarg h
 G	s497	t497
 B	b497	s497
 T	t498	o487 b497 b4
@@ -1383,7 +1387,7 @@ B	b504	t504
 T	t505	o405 b503 b504 b480 b479
 B	b505	t505
 T	t506	o478 b480 b505
-S	s506	t491 h
+S	s506	tbrarg h
 G	s506	t506
 B	b506	s506
 T	t507	o487 b506 b4
@@ -1399,7 +1403,7 @@ B	b511	t511
 P	p511	String "substT <<label[\"y\":t] ~ label[\"x\":t]>> 0"
 O	o511	ext_rule p511
 T	t512	o478 b504 b503
-S	s512	t491 h
+S	s512	tbrarg h
 G	s512	t512
 B	b512	s512
 T	t513	o487 b512 b4
@@ -1411,7 +1415,7 @@ B	b515	t515
 T	t516	o405 b503 b503 b480 b479
 B	b516	t516
 T	t517	o478 b480 b516
-S	s517	t491 h
+S	s517	tbrarg h
 G	s517	t517
 B	b517	s517
 T	t518	o487 b517 b4
@@ -1427,7 +1431,7 @@ B	b522	t522
 P	p522	String "rwh unfold_label 0"
 O	o522	ext_rule p522
 T	t523	o478 b392 b392
-S	s523	t491 h
+S	s523	tbrarg h
 G	s523	t523
 B	b523	s523
 T	t524	o487 b523 b4
@@ -1453,7 +1457,7 @@ B	b532	t532
 P	p532	String "rwh reduceC 0"
 O	o532	ext_rule p532
 T	t533	o478 b480 b480
-S	s533	t491 h
+S	s533	tbrarg h
 G	s533	t533
 B	b533	s533
 T	t534	o487 b533 b4
@@ -1485,7 +1489,7 @@ B	b546	t546
 T	t547	o502 b484 b511 b546 b4
 B	b547	t547
 T	t548	o478 b479 b479
-S	s548	t478 h
+S	s548	tbrarg h
 G	s548	t548
 B	b548	s548
 T	t549	o487 b548 b4

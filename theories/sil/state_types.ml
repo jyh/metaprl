@@ -59,10 +59,10 @@ declare nequal_val{'A; 'e1; 'v1}
  * Well-formedness of programs.
  *)
 prim program_type :
-   [wf] sequent [squash] { <H> >- "type"{'A} } -->
-   [wf] sequent [squash] { <H> >- "type"{'S1} } -->
-   [wf] sequent [squash] { <H> >- "type"{'S2} } -->
-   sequent ['ext] { <H> >- "type"{program{'A; 'S1; 'S2}} }
+   [wf] sequent { <H> >- "type"{'A} } -->
+   [wf] sequent { <H> >- "type"{'S1} } -->
+   [wf] sequent { <H> >- "type"{'S2} } -->
+   sequent { <H> >- "type"{program{'A; 'S1; 'S2}} }
 
 (*
  * Value judgment.
@@ -73,111 +73,111 @@ prim_rw unfold_is_val : is_val{'A; 'e; 'S} <--> member{program{'A; 'S; 'S}; 'e}
  * Numbers.
  *)
 prim int_program_type :
-   [wf] sequent [squash] { <H> >- "type"{'S1} } -->
-   [wf] sequent [squash] { <H> >- "type"{'S2} } -->
-   sequent ['ext] { <H> >- "type"{program{int_type; 'S1; 'S2}} }
+   [wf] sequent { <H> >- "type"{'S1} } -->
+   [wf] sequent { <H> >- "type"{'S2} } -->
+   sequent { <H> >- "type"{program{int_type; 'S1; 'S2}} }
 
 prim number_program :
-   [wf] sequent [squash] { <H> >- "type"{'S1} } -->
-   sequent ['ext] { <H> >- member{program{int_type; 'S1; 'S1}; number[i:n]} }
+   [wf] sequent { <H> >- "type"{'S1} } -->
+   sequent { <H> >- member{program{int_type; 'S1; 'S1}; number[i:n]} }
 
 prim add_program :
-   [main] sequent [squash] { <H> >- member{program{int_type; 'S1; 'S2}; 'e1} } -->
-   [main] sequent [squash] { <H> >- member{program{int_type; 'S2; 'S3}; 'e2} } -->
-   sequent ['ext] { <H> >- member{program{int_type; 'S1; 'S3}; add{'e1; 's2}} }
+   [main] sequent { <H> >- member{program{int_type; 'S1; 'S2}; 'e1} } -->
+   [main] sequent { <H> >- member{program{int_type; 'S2; 'S3}; 'e2} } -->
+   sequent { <H> >- member{program{int_type; 'S1; 'S3}; add{'e1; 's2}} }
 
 prim sub_program :
-   [main] sequent [squash] { <H> >- member{program{int_type; 'S1; 'S2}; 'e1} } -->
-   [main] sequent [squash] { <H> >- member{program{int_type; 'S2; 'S3}; 'e2} } -->
-   sequent ['ext] { <H> >- member{program{int_type; 'S1; 'S3}; sub{'e1; 's2}} }
+   [main] sequent { <H> >- member{program{int_type; 'S1; 'S2}; 'e1} } -->
+   [main] sequent { <H> >- member{program{int_type; 'S2; 'S3}; 'e2} } -->
+   sequent { <H> >- member{program{int_type; 'S1; 'S3}; sub{'e1; 's2}} }
 
 prim if_program 'u :
-   [main] sequent [squash] { <H> >- member{program{int_type; 'S1; 'S2}; 'e1} } -->
-   [main] sequent [squash] { <H> >- member{program{int_type; 'S2; 'S3}; 'e2} } -->
-   [main] sequent [squash] { <H>; u: equal_int{'S1; 'S2; 'S3; 'e1; 'e2} >- member{'C; 'e3} } -->
-   [main] sequent [squash] { <H>; u: nequal_int{'S1; 'S2; 'S3; 'e1; 'e2} >- member{'C; 'e4} } -->
-   sequent ['ext] { <H> >- member{'C; "if"{'e1; 'e2; 'e3; 'e4}} }
+   [main] sequent { <H> >- member{program{int_type; 'S1; 'S2}; 'e1} } -->
+   [main] sequent { <H> >- member{program{int_type; 'S2; 'S3}; 'e2} } -->
+   [main] sequent { <H>; u: equal_int{'S1; 'S2; 'S3; 'e1; 'e2} >- member{'C; 'e3} } -->
+   [main] sequent { <H>; u: nequal_int{'S1; 'S2; 'S3; 'e1; 'e2} >- member{'C; 'e4} } -->
+   sequent { <H> >- member{'C; "if"{'e1; 'e2; 'e3; 'e4}} }
 
 (*
  * Union types.
  *)
 prim union_type_type :
-   sequent [squash] { <H> >- "type"{'A} } -->
-   sequent [squash] { <H> >- "type"{'B} } -->
-   sequent ['ext] { <H> >- "type"{union{'A; 'B}} }
+   sequent { <H> >- "type"{'A} } -->
+   sequent { <H> >- "type"{'B} } -->
+   sequent { <H> >- "type"{union{'A; 'B}} }
 
 prim inl_member :
-   [wf] sequent [squash] { <H> >- "type"{'B} } -->
-   [main] sequent [squash] { <H> >- member{'A; 'e1} } -->
-   sequent ['ext] { <H> >- member{union{'A; 'B}; inl{'e1}} }
+   [wf] sequent { <H> >- "type"{'B} } -->
+   [main] sequent { <H> >- member{'A; 'e1} } -->
+   sequent { <H> >- member{union{'A; 'B}; inl{'e1}} }
 
 prim inr_member :
-   [wf] sequent [squash] { <H> >- "type"{'A} } -->
-   [main] sequent [squash] { <H> >- member{'B; 'e1} } -->
-   sequent ['ext] { <H> >- member{union{'A; 'B}; inr{'e1}} }
+   [wf] sequent { <H> >- "type"{'A} } -->
+   [main] sequent { <H> >- member{'B; 'e1} } -->
+   sequent { <H> >- member{union{'A; 'B}; inr{'e1}} }
 
 prim decide_member :
-   [wf] sequent [squash] { <H> >- member{union{'A; 'B}; 'e1} } -->
-   [wf] sequent [squash] { <H>; x: 'A; w: equal{union{'A; 'B}; 'e1; inl{'x}} >- member{'C[inl{'x}]; 'e2['x]} } -->
-   [wf] sequent [squash] { <H>; y: 'B; w: equal{union{'A; 'B}; 'e1; inr{'y}} >- member{'C[inr{'y}]; 'e2['y]} } -->
-   sequent ['ext] { <H> >- member{'C['e1]; decide{'e1; x, 'e2['x]; y. 'e3['y]}} }
+   [wf] sequent { <H> >- member{union{'A; 'B}; 'e1} } -->
+   [wf] sequent { <H>; x: 'A; w: equal{union{'A; 'B}; 'e1; inl{'x}} >- member{'C[inl{'x}]; 'e2['x]} } -->
+   [wf] sequent { <H>; y: 'B; w: equal{union{'A; 'B}; 'e1; inr{'y}} >- member{'C[inr{'y}]; 'e2['y]} } -->
+   sequent { <H> >- member{'C['e1]; decide{'e1; x, 'e2['x]; y. 'e3['y]}} }
 
 (*
  * Tuples.
  *)
 prim prod_type :
-   [wf] sequent [squash] { <H> >- "type"{'A} } -->
-   [wf] sequent [squash] { <H>; v:'A >- "type"{'B['v]} } -->
-   sequent ['ext] { <H> >- "type"{prod{'A; v. 'B['v]}} }
+   [wf] sequent { <H> >- "type"{'A} } -->
+   [wf] sequent { <H>; v:'A >- "type"{'B['v]} } -->
+   sequent { <H> >- "type"{prod{'A; v. 'B['v]}} }
 
 prim pair_program :
-   [wf] sequent [squash] { <H> >- member{'A; 'e1} } -->
-   [wf] sequent [squash] { <H>; v: 'A >- "type"{'B['v]} } -->
-   [wf] sequent [squash] { <H>; v: 'A; w: equal{'A; 'e1; 'v} >- member{'B['v]; 'e2['v]} } -->
-   sequent ['ext] { <H> >- member{prod{'A; v. 'B['v]}; pair{'e1; 'e2}} }
+   [wf] sequent { <H> >- member{'A; 'e1} } -->
+   [wf] sequent { <H>; v: 'A >- "type"{'B['v]} } -->
+   [wf] sequent { <H>; v: 'A; w: equal{'A; 'e1; 'v} >- member{'B['v]; 'e2['v]} } -->
+   sequent { <H> >- member{prod{'A; v. 'B['v]}; pair{'e1; 'e2}} }
 
 prim spread_program :
-   [wf] sequent [squash] { <H> >- member{prod{'A; v. 'B['v]}; 'e1} } -->
-   [wf] sequent [squash] { <H>; x: 'A; y: 'B['x]; w: equal{prod{'A; v. 'B['v]}; 'e1; pair{'x; 'y}} >- member{'C[pair{'x; 'y}]; 'e2['x; 'y]} } -->
-   sequent ['ext] { <H> >- member{'C['e1]; spread{'e1; x, y. 'e2['x; 'y]}} }
+   [wf] sequent { <H> >- member{prod{'A; v. 'B['v]}; 'e1} } -->
+   [wf] sequent { <H>; x: 'A; y: 'B['x]; w: equal{prod{'A; v. 'B['v]}; 'e1; pair{'x; 'y}} >- member{'C[pair{'x; 'y}]; 'e2['x; 'y]} } -->
+   sequent { <H> >- member{'C['e1]; spread{'e1; x, y. 'e2['x; 'y]}} }
 
 (*
  * References.
  *)
 prim ref_type :
-   [wf] sequent [squash] { <H> >- "type"{'A} } -->
-   sequent ['ext] { <H> >- "type"{ref_type{'A}} }
+   [wf] sequent { <H> >- "type"{'A} } -->
+   sequent { <H> >- "type"{ref_type{'A}} }
 
 prim ref_member :
-   [wf] sequent [squash] { <H> >- member{'A; 'e1} } -->
-   sequent ['ext] { <H> >- member{ref_type{'A}; ref{'e1}} }
+   [wf] sequent { <H> >- member{'A; 'e1} } -->
+   sequent { <H> >- member{ref_type{'A}; ref{'e1}} }
 
 prim deref_member :
-   [wf] sequent [squash] { <H> >- member{ref_type{'A}; 'e1} } -->
-   sequent ['ext] { <H> >- member{'A; deref{'e1}} }
+   [wf] sequent { <H> >- member{ref_type{'A}; 'e1} } -->
+   sequent { <H> >- member{'A; deref{'e1}} }
 
 prim assign_member :
-   [wf] sequent [squash] { <H> >- member{program{ref_type{'A}; 'S1; 'S2}; 'e1} } -->
-   [wf] sequent [squash] { <H> >- member{program{'B; 'S2; 'S3}; 'e2} } -->
-   sequent ['ext] { <H> >- member{program{dot_type; 'S1; store_type{'S3; 'l; 'B}}; assign{'e1; 'e2}} }
+   [wf] sequent { <H> >- member{program{ref_type{'A}; 'S1; 'S2}; 'e1} } -->
+   [wf] sequent { <H> >- member{program{'B; 'S2; 'S3}; 'e2} } -->
+   sequent { <H> >- member{program{dot_type; 'S1; store_type{'S3; 'l; 'B}}; assign{'e1; 'e2}} }
 
 (*
  * Functions.
  *)
 prim fun_type :
-   [wf] sequent [squash] { <H> >- "type"{'A} } -->
-   [wf] sequent [squash] { <H>; v: 'A >- "type"{'B['v]} } -->
-   sequent ['ext] { <H> >- "type"{fun{'A; v. 'B['v]}} }
+   [wf] sequent { <H> >- "type"{'A} } -->
+   [wf] sequent { <H>; v: 'A >- "type"{'B['v]} } -->
+   sequent { <H> >- "type"{fun{'A; v. 'B['v]}} }
 
 prim lambda_member :
-   [wf] sequent [squash] { <H> >- "type"{'A} } -->
-   [wf] sequent [squash] { <H>; v: 'A >- member{'B['v]; 'e['v]} } -->
-   sequent ['ext] { <H> >- member{fun{'A; u. 'B['u]}; lambda{v. 'e['v]}} }
+   [wf] sequent { <H> >- "type"{'A} } -->
+   [wf] sequent { <H>; v: 'A >- member{'B['v]; 'e['v]} } -->
+   sequent { <H> >- member{fun{'A; u. 'B['u]}; lambda{v. 'e['v]}} }
 
 prim apply_member :
-   [wf] sequent [squash] { <H> >- member{."fun"{'A; u. 'B['u]}; 'e1} } -->
-   [wf] sequent [squash] { <H> >- member{'A; 'e2} } -->
-   sequent ['ext] { <H> >- member{'B['e2]; apply{'e1; 'e2}} }
+   [wf] sequent { <H> >- member{."fun"{'A; u. 'B['u]}; 'e1} } -->
+   [wf] sequent { <H> >- member{'A; 'e2} } -->
+   sequent { <H> >- member{'B['e2]; apply{'e1; 'e2}} }
 (*
  * -*-
  * Local Variables:

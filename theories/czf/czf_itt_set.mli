@@ -106,34 +106,34 @@ topval fold_set_ind : conv
  * A set is a type in ITT.
  *)
 rule set_type :
-   sequent ['ext] { <H> >- "type"{set} }
+   sequent { <H> >- "type"{set} }
 
 (*
  * Equality from sethood.
  *)
 rule equal_set :
-   sequent ['ext] { <H> >- isset{'s} } -->
-   sequent ['ext] { <H> >- 's = 's in set }
+   sequent { <H> >- isset{'s} } -->
+   sequent { <H> >- 's = 's in set }
 
 (*
  * By assumption.
  *)
 rule isset_assum 'H :
-   sequent ['ext] { <H>; x: set; <J['x]> >- isset{'x} }
+   sequent { <H>; x: set; <J['x]> >- isset{'x} }
 
 (*
  * This is how a set is constructed.
  *)
 rule isset_collect :
-   sequent [squash] { <H> >- 'T = 'T in univ[1:l] } -->
-   sequent [squash] { <H>; y: 'T >- isset{'a['y]} } -->
-   sequent ['ext] { <H> >- isset{collect{'T; x. 'a['x]}} }
+   sequent { <H> >- 'T = 'T in univ[1:l] } -->
+   sequent { <H>; y: 'T >- isset{'a['y]} } -->
+   sequent { <H> >- isset{collect{'T; x. 'a['x]}} }
 
 (*
  * Induction.
  *)
 rule set_elim 'H :
-   sequent ['ext] { <H>;
+   sequent { <H>;
                     a: set;
                     <J['a]>;
                     T: univ[1:l];
@@ -142,37 +142,37 @@ rule set_elim 'H :
                     z: isset{collect{'T; x. 'f 'x}}
                   >- 'C[collect{'T; x. 'f 'x}]
                   } -->
-                     sequent ['ext] { <H>; a: set; <J['a]> >- 'C['a] }
+                     sequent { <H>; a: set; <J['a]> >- 'C['a] }
 
 (*
  * These are related forms to expand a set into its
  * collect representation.
  *)
 rule set_split_hyp 'H 's (bind{v. 'A['v]}) :
-   sequent [squash] { <H>; x: 'A['s]; <J['x]> >- isset{'s} } -->
-   sequent [squash] { <H>; x: 'A['s]; <J['x]>; z: set >- "type"{'A['z]} } -->
-   sequent ['ext] { <H>;
+   sequent { <H>; x: 'A['s]; <J['x]> >- isset{'s} } -->
+   sequent { <H>; x: 'A['s]; <J['x]>; z: set >- "type"{'A['z]} } -->
+   sequent { <H>;
                     x: 'A['s];
                     <J['x]>;
                     T: univ[1:l];
                     f: 'T -> set;
                     z: 'A[collect{'T; y. 'f 'y}]
                     >- 'C['z] } -->
-   sequent ['ext] { <H>; x: 'A['s]; <J['x]> >- 'C['x] }
+   sequent { <H>; x: 'A['s]; <J['x]> >- 'C['x] }
 
 rule set_split_concl 's (bind{v. 'C['v]}) :
-   sequent [squash] { <H> >- isset{'s} } -->
-   sequent [squash] { <H>; z: set >- "type"{'C['z]} } -->
-   sequent ['ext] { <H>; T: univ[1:l]; f: 'T -> set >- 'C[collect{'T; y. 'f 'y}] } -->
-   sequent ['ext] { <H> >- 'C['s] }
+   sequent { <H> >- isset{'s} } -->
+   sequent { <H>; z: set >- "type"{'C['z]} } -->
+   sequent { <H>; T: univ[1:l]; f: 'T -> set >- 'C[collect{'T; y. 'f 'y}] } -->
+   sequent { <H> >- 'C['s] }
 
 (*
  * Equality on tree induction forms.
 rule set_ind_equality2 'a 'f 'g 'x :
-   sequent [squash] { <H> >- 'z1 = 'z2 in set } -->
-   sequent [squash] { <H>; a: univ[1:l]; f: 'a -> set; g: x: univ[1:l] -> 'x -> 'T >-
+   sequent { <H> >- 'z1 = 'z2 in set } -->
+   sequent { <H>; a: univ[1:l]; f: 'a -> set; g: x: univ[1:l] -> 'x -> 'T >-
       'body1['a; 'f; 'g] = 'body2['a; 'f; 'g] in 'T } -->
-   sequent ['ext] { <H> >- set_ind{'z1; a1, f1, g1. 'body1['a1; 'f1; 'g1]}
+   sequent { <H> >- set_ind{'z1; a1, f1, g1. 'body1['a1; 'f1; 'g1]}
                           = set_ind{'z2; a2, f2, g2. 'body2['a2; 'f2; 'g2]}
                           in 'T }
  *)

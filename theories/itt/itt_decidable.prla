@@ -513,7 +513,11 @@ C	h	H
 NPerv!rewrite	rewrite538	rewrite Perv
 O	o538	rewrite538
 T	t539	o538 b524 b506
-S	s	t538 h
+NBase_rewrite	Base_rw	Base_rewrite NIL
+NBase_rewrite!sequent_arg	brwsqarg	sequent_arg Base_rw
+O	obrarg	brwsqarg
+T	tbrarg	obrarg
+S	s	tbrarg h
 G	s	t539
 B	b539	s
 T	t540	o536 b539 b4
@@ -547,7 +551,7 @@ NSummary!meta_labeled	meta_labeled	meta_labeled Summary
 O	o567	meta_labeled p503
 NSummary!meta_theorem	meta_theorem	meta_theorem Summary
 O	o568	meta_theorem
-S	s568	t538 h
+S	s568	tbrarg h
 G	s568	t506
 B	b568	s568
 T	t568	o568 b568
@@ -558,18 +562,18 @@ H	h570	x t505
 P	p570	Var G
 O	o570	var p570
 T	t570	o570
-S	s570	t538 h h570
+S	s570	tbrarg h h570
 G	s570	t570
 B	b571	s570
 T	t571	o568 b571
 B	b572	t571
 H	h572	x t523
-S	s572	t538 h h572
+S	s572	tbrarg h h572
 G	s572	t570
 B	b573	s572
 T	t573	o568 b573
 B	b574	t573
-S	s574	t538 h
+S	s574	tbrarg h
 G	s574	t570
 B	b575	s574
 T	t575	o568 b575
@@ -601,7 +605,7 @@ B	b590	t590
 T	t591	o588 b589 b4 b590
 B	b591	t591
 H	h591	v t506
-S	s591	t538 h h591
+S	s591	tbrarg h h591
 G	s591	t570
 B	b592	s591
 T	t592	o536 b592 b586
@@ -732,7 +736,7 @@ O	o1731	false
 T	t1731	o1731
 B	b1731	t1731
 T	t1732	o504 b1731
-S	s1732	t538 h
+S	s1732	tbrarg h
 G	s1732	t1732
 B	b1732	s1732
 T	t1733	o568 b1732
@@ -4095,7 +4099,7 @@ O	o1810	true
 T	t1810	o1810
 B	b1810	t1810
 T	t1811	o504 b1810
-S	s1811	t538 h
+S	s1811	tbrarg h
 G	s1811	t1811
 B	b1811	s1811
 T	t1812	o568 b1811

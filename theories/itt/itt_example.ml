@@ -39,10 +39,10 @@ open Dtactic
 open Itt_bool
 
 interactive curry :
-   sequent ['ext] { <H> >- "type"{'A} } -->
-   sequent ['ext] { <H> >- "type"{'B} } -->
-   sequent ['ext] { <H> >- "type"{'C} } -->
-   sequent ['ext] { <H> >- ('A => 'B => 'C) => ('A & 'B => 'C) }
+   sequent { <H> >- "type"{'A} } -->
+   sequent { <H> >- "type"{'B} } -->
+   sequent { <H> >- "type"{'C} } -->
+   sequent { <H> >- ('A => 'B => 'C) => ('A & 'B => 'C) }
 
 (*
  * Microwave oven example.
@@ -164,106 +164,106 @@ let reduce_next = (higherC unfold_next thenC higherC unfold_state_val thenC redu
  * Axiomatize the oven.
  *)
 interactive oven_type {| intro [] |} :
-   sequent ['ext] { <H> >- "type"{oven} }
+   sequent { <H> >- "type"{oven} }
 
 interactive on_intro {| intro [] |}:
-   sequent ['ext] { <H> >- on in oven }
+   sequent { <H> >- on in oven }
 
 interactive open_intro {| intro [] |}:
-   sequent ['ext] { <H> >- "open" in oven }
+   sequent { <H> >- "open" in oven }
 
 interactive oven_elim {| elim [] |} 'H :
-   sequent ['ext] { <H>; <J[on]> >- 'C[on] } -->
-   sequent ['ext] { <H>; <J["open"]> >- 'C["open"] } -->
-   sequent ['ext] { <H>; x: oven; <J['x]> >- 'C['x] }
+   sequent { <H>; <J[on]> >- 'C[on] } -->
+   sequent { <H>; <J["open"]> >- 'C["open"] } -->
+   sequent { <H>; x: oven; <J['x]> >- 'C['x] }
 
 (*
  * Axiomatize the action.
  *)
 interactive action_type {| intro [] |}:
-   sequent ['ext] { <H> >- "type"{action} }
+   sequent { <H> >- "type"{action} }
 
 interactive button_intro {| intro [] |}:
-   sequent ['ext] { <H> >- button in action }
+   sequent { <H> >- button in action }
 
 interactive door_intro {| intro [] |}:
-   sequent ['ext] { <H> >- door in action }
+   sequent { <H> >- door in action }
 
 interactive action_elim {| elim [] |} 'H :
-   sequent ['ext] { <H>; <J[button]> >- 'C[button] } -->
-   sequent ['ext] { <H>; <J[door]> >- 'C[door] } -->
-   sequent ['ext] { <H>; x: action; <J['x]> >- 'C['x] }
+   sequent { <H>; <J[button]> >- 'C[button] } -->
+   sequent { <H>; <J[door]> >- 'C[door] } -->
+   sequent { <H>; x: action; <J['x]> >- 'C['x] }
 
 (*
  * Boolean predicates.
  *)
 interactive eq_oven_intro {| intro [] |} :
-   sequent ['ext] { <H> >- 'o1 in oven } -->
-   sequent ['ext] { <H> >- 'o2 in oven } -->
-   sequent ['ext] { <H> >- eq_oven{'o1; 'o2} in bool }
+   sequent { <H> >- 'o1 in oven } -->
+   sequent { <H> >- 'o2 in oven } -->
+   sequent { <H> >- eq_oven{'o1; 'o2} in bool }
 
 interactive eq_action_intro {| intro [] |} :
-   sequent ['ext] { <H> >- 'a1 in action } -->
-   sequent ['ext] { <H> >- 'a2 in action } -->
-   sequent ['ext] { <H> >- eq_action{'a1; 'a2} in bool }
+   sequent { <H> >- 'a1 in action } -->
+   sequent { <H> >- 'a2 in action } -->
+   sequent { <H> >- eq_action{'a1; 'a2} in bool }
 
 interactive state_val_intro {| intro [] |} :
-   sequent ['ext] { <H> >- 's in state } -->
-   sequent ['ext] { <H> >- 'o in oven } -->
-   sequent ['ext] { <H> >- state_val{'s; 'o} in bool }
+   sequent { <H> >- 's in state } -->
+   sequent { <H> >- 'o in oven } -->
+   sequent { <H> >- state_val{'s; 'o} in bool }
 
 interactive exec_val_intro {| intro [] |} :
-   sequent ['ext] { <H> >- 'e in exec } -->
-   sequent ['ext] { <H> >- 'i in nat } -->
-   sequent ['ext] { <H> >- exec_val{'e; 'i} in state }
+   sequent { <H> >- 'e in exec } -->
+   sequent { <H> >- 'i in nat } -->
+   sequent { <H> >- exec_val{'e; 'i} in state }
 
 interactive eq_state_intro {| intro [] |} :
-   sequent ['ext] { <H> >- 's1 in state } -->
-   sequent ['ext] { <H> >- 's2 in state } -->
-   sequent ['ext] { <H> >- "type"{eq_state{'s1; 's2}} }
+   sequent { <H> >- 's1 in state } -->
+   sequent { <H> >- 's2 in state } -->
+   sequent { <H> >- "type"{eq_state{'s1; 's2}} }
 
 interactive eq_state_elim {| elim [] |} 'H :
-   ["wf"] sequent ['ext] { <H>; x: eq_state{'s1; 's2}; <J['x]> >- 's1 in state } -->
-   ["wf"] sequent ['ext] { <H>; x: eq_state{'s1; 's2}; <J['x]> >- 's2 in state } -->
-   ["main"] sequent ['ext] { <H>; x: eq_state{'s1; 's2}; <J['x]>;
+   ["wf"] sequent { <H>; x: eq_state{'s1; 's2}; <J['x]> >- 's1 in state } -->
+   ["wf"] sequent { <H>; x: eq_state{'s1; 's2}; <J['x]> >- 's2 in state } -->
+   ["main"] sequent { <H>; x: eq_state{'s1; 's2}; <J['x]>;
       a: "assert"{state_val{'s1; on}}; b: "assert"{state_val{'s1; ."open"}};
       c: "assert"{state_val{'s2; on}}; d: "assert"{state_val{'s2; ."open"}} >- 'C['x] } -->
-   ["main"] sequent ['ext] { <H>; x: eq_state{'s1; 's2}; <J['x]>;
+   ["main"] sequent { <H>; x: eq_state{'s1; 's2}; <J['x]>;
       a: "assert"{bnot{state_val{'s1; on}}}; b: "assert"{state_val{'s1; ."open"}};
       c: "assert"{bnot{state_val{'s2; on}}}; d: "assert"{state_val{'s2; ."open"}} >- 'C['x] } -->
-   ["main"] sequent ['ext] { <H>; x: eq_state{'s1; 's2}; <J['x]>;
+   ["main"] sequent { <H>; x: eq_state{'s1; 's2}; <J['x]>;
       a: "assert"{state_val{'s1; on}}; b: "assert"{bnot{state_val{'s1; ."open"}}};
       c: "assert"{state_val{'s2; on}}; d: "assert"{bnot{state_val{'s2; ."open"}}} >- 'C['x] } -->
-   ["main"] sequent ['ext] { <H>; x: eq_state{'s1; 's2}; <J['x]>;
+   ["main"] sequent { <H>; x: eq_state{'s1; 's2}; <J['x]>;
       a: "assert"{bnot{state_val{'s1; on}}}; b: "assert"{bnot{state_val{'s1; ."open"}}};
       c: "assert"{bnot{state_val{'s2; on}}}; d: "assert"{bnot{state_val{'s2; ."open"}}} >- 'C['x] } -->
-   sequent ['ext] { <H>; x: eq_state{'s1; 's2}; <J['x]> >- 'C['x] }
+   sequent { <H>; x: eq_state{'s1; 's2}; <J['x]> >- 'C['x] }
 
 (*
  * Next wf.
  *)
 interactive next_wf {| intro [] |} :
-   sequent ['ext] { <H> >- 's in state } -->
-   sequent ['ext] { <H> >- 'a in action } -->
-   sequent ['ext] { <H> >- next{'s; 'a} in state }
+   sequent { <H> >- 's in state } -->
+   sequent { <H> >- 'a in action } -->
+   sequent { <H> >- next{'s; 'a} in state }
 
 (*
  * Itt_nat is incomplete, so let's add some thms.
  *)
 interactive nat_sum_wf {| intro [] |} :
-   sequent ['ext] { <H> >- 'i in nat } -->
-   sequent ['ext] { <H> >- 'j in nat } -->
-   sequent ['ext] { <H> >- ('i +@ 'j) in nat }
+   sequent { <H> >- 'i in nat } -->
+   sequent { <H> >- 'j in nat } -->
+   sequent { <H> >- ('i +@ 'j) in nat }
 
 interactive one_ge_zero_wf {| intro [] |} :
-   sequent ['ext] { <H> >- 1 >= 0 }
+   sequent { <H> >- 1 >= 0 }
 
 (*
  * Is_exec wf.
  *)
 interactive is_exec_wf {| intro [] |} :
-   sequent ['ext] { <H> >- 'e in exec } -->
-   sequent ['ext] { <H> >- "type"{is_exec{'e}} }
+   sequent { <H> >- 'e in exec } -->
+   sequent { <H> >- "type"{is_exec{'e}} }
 
 (*
  * Some nice simplifications for next.
@@ -274,9 +274,9 @@ interactive_rw next_on : state_val{next{'s; button}; on} <--> 's
  * Main theorem.
  *)
 interactive safety :
-   sequent ['ext] { <H> >- 'e in exec } -->
-   sequent ['ext] { <H> >- is_exec{'e} } -->
-   sequent ['ext] { <H> >- all i: nat. "assert"{bnot{band{state_val{exec_val{'e; 'i}; ."open"}; state_val{exec_val{'e; 'i}; on}}}} }
+   sequent { <H> >- 'e in exec } -->
+   sequent { <H> >- is_exec{'e} } -->
+   sequent { <H> >- all i: nat. "assert"{bnot{band{state_val{exec_val{'e; 'i}; ."open"}; state_val{exec_val{'e; 'i}; on}}}} }
 
 (*
  * -*-

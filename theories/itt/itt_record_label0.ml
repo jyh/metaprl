@@ -45,38 +45,38 @@ interactive_rw reduce_ind_base {| reduce |} :
 (******************)
 
 interactive labelType {| intro [] |} :
-   sequent ['ext] { <H> >- "type"{label} }
+   sequent { <H> >- "type"{label} }
 
 interactive zeroMember {| intro [] |} :
-   sequent ['ext] { <H> >- zero in label}
+   sequent { <H> >- zero in label}
 
 interactive nextMember {| intro [] |} :
-   sequent [squash] { <H> >- 'x='y in label} -->
-   sequent ['ext] { <H> >- next{'x} = next{'y} in label}
+   sequent { <H> >- 'x='y in label} -->
+   sequent { <H> >- next{'x} = next{'y} in label}
 
 interactive labelInduction {| elim [ThinOption thinT] |} 'H :
-   sequent ['ext] { <H>; n: label; <J['n]> >- 'C[zero] }  -->
-   sequent ['ext] { <H>; n: label; <J['n]>; m: label;  z: 'C['m] >- 'C[next{'m}] }  -->
-   sequent ['ext] { <H>; n: label; <J['n]> >- 'C['n] }
+   sequent { <H>; n: label; <J['n]> >- 'C[zero] }  -->
+   sequent { <H>; n: label; <J['n]>; m: label;  z: 'C['m] >- 'C[next{'m}] }  -->
+   sequent { <H>; n: label; <J['n]> >- 'C['n] }
 
 interactive labelBackInduction 'n bind{x.'C['x]} :
-   sequent [squash]{ <H> >- 'n in label }  -->
-   sequent ['ext] { <H> >- 'C['n] }  -->
-   sequent ['ext] { <H>; m: label;  z: 'C[next{'m}] >- 'C['m] }  -->
-   sequent ['ext] { <H>  >- 'C[zero] }
+   sequent { <H> >- 'n in label }  -->
+   sequent { <H> >- 'C['n] }  -->
+   sequent { <H>; m: label;  z: 'C[next{'m}] >- 'C['m] }  -->
+   sequent { <H>  >- 'C[zero] }
 
 (**** equality ****)
 
 interactive label_sqequal :
-   sequent[squash] { <H> >-'n = 'm  in label} -->
-   sequent['ext] { <H> >- 'n ~ 'm}
+   sequent{ <H> >-'n = 'm  in label} -->
+   sequent{ <H> >- 'n ~ 'm}
 
 interactive decide_eq_label 'x 'y :
-   [wf] sequent[squash] { <H> >- 'x in label} -->
-   [wf] sequent[squash] { <H> >- 'y in label} -->
-   [main] sequent['ext] { <H>; u:'x='y in label >- 'C} -->
-   [main] sequent['ext] { <H>; u:not{.'x='y in label} >- 'C} -->
-   sequent['ext] { <H> >- 'C}
+   [wf] sequent{ <H> >- 'x in label} -->
+   [wf] sequent{ <H> >- 'y in label} -->
+   [main] sequent{ <H>; u:'x='y in label >- 'C} -->
+   [main] sequent{ <H>; u:not{.'x='y in label} >- 'C} -->
+   sequent{ <H> >- 'C}
 
 doc docoff
 

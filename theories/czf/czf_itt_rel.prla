@@ -747,7 +747,11 @@ B	b553	t553
 T	t554	o513 b552 b553
 B	b554	t554
 T	t555	o551 b554
-S	s	t549 h h550 h551
+NBase_rewrite	Base_rw	Base_rewrite NIL
+NBase_rewrite!sequent_arg	brwsqarg	sequent_arg Base_rw
+O	obrarg	brwsqarg
+T	tbrarg	obrarg
+S	s	tbrarg h h550 h551
 G	s	t555
 B	b555	s
 T	t556	o547 b555
@@ -755,13 +759,13 @@ B	b556	t556
 NCzf_itt_set!isset	isset	isset Czf_itt_set
 O	o556	isset
 T	t557	o556 b517
-S	s557	t549 h
+S	s557	tbrarg h
 G	s557	t557
 B	b557	s557
 T	t558	o547 b557
 B	b558	t558
 T	t559	o556 b518
-S	s559	t549 h
+S	s559	tbrarg h
 G	s559	t559
 B	b559	s559
 T	t560	o547 b559
@@ -775,7 +779,7 @@ B	b562	t529 x y
 T	t563	o512 b562 b517 b518
 B	b563	t563
 T	t564	o551 b563
-S	s564	t562 h
+S	s564	tbrarg h
 G	s564	t564
 B	b564	s564
 T	t565	o547 b564
@@ -4076,7 +4080,7 @@ O	o1663	slot
 T	t1663	o1663 b514
 B	b1663	t1663
 NBase_dform	Base_dform	Base_dform NIL
-"NBase_dform! "	" "	" " Base_dform
+"NBase_dform!	"	" " " " Base_dform
 O	o1664	" "
 T	t1664	o1664
 B	b1664	t1664

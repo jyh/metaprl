@@ -109,14 +109,14 @@ doc <:doc<
    @end[doc]
 >>
 interactive partial_order_type {| intro [] |} :
-   [wf] sequent [squash] { <H> >- "type"{'A} } -->
-   [wf] sequent [squash] { <H>; a: 'A; b: 'A >- "type"{'R['a; 'b]} } -->
-   sequent ['ext] { <H> >- "type"{partial_order{'A; x, y. 'R['x; 'y]}} }
+   [wf] sequent { <H> >- "type"{'A} } -->
+   [wf] sequent { <H>; a: 'A; b: 'A >- "type"{'R['a; 'b]} } -->
+   sequent { <H> >- "type"{partial_order{'A; x, y. 'R['x; 'y]}} }
 
 interactive well_founded_type {| intro [] |} :
-   [wf] sequent [squash] { <H> >- "type"{'A} } -->
-   [wf] sequent [squash] { <H>; a: 'A; b: 'A >- "type"{'R['a; 'b]} } -->
-   sequent ['ext] { <H> >- "type"{well_founded[i:l]{'A; x, y. 'R['x; 'y]}} }
+   [wf] sequent { <H> >- "type"{'A} } -->
+   [wf] sequent { <H>; a: 'A; b: 'A >- "type"{'R['a; 'b]} } -->
+   sequent { <H> >- "type"{well_founded[i:l]{'A; x, y. 'R['x; 'y]}} }
 
 doc <:doc< 
    @begin[doc]
@@ -130,10 +130,10 @@ doc <:doc<
    @end[doc]
 >>
 interactive well_founded_reduction univ[i:l] :
-   [wf] sequent [squash] { <H> >- 'A in univ[i:l] } -->
-   [wf] sequent [squash] { <H>; a: 'A; b: 'A >- 'R['a; 'b] in univ[i:l] } -->
-   [main] sequent ['ext] { <H> >- well_founded[i:l]{'A; x, y. 'R['x; 'y]} } -->
-   sequent ['ext] { <H> >- Itt_rfun!well_founded{'A; x, y. 'R['x; 'y]} }
+   [wf] sequent { <H> >- 'A in univ[i:l] } -->
+   [wf] sequent { <H>; a: 'A; b: 'A >- 'R['a; 'b] in univ[i:l] } -->
+   [main] sequent { <H> >- well_founded[i:l]{'A; x, y. 'R['x; 'y]} } -->
+   sequent { <H> >- Itt_rfun!well_founded{'A; x, y. 'R['x; 'y]} }
 
 doc <:doc< @docoff >>
 

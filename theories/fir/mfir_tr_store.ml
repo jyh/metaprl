@@ -64,18 +64,18 @@ doc <:doc<
 >>
 
 prim ty_store_tuple_normal :
-   sequent [fir] { <H> >- has_type["atom_list"]{ 'elts; 'types } } -->
-   sequent [fir] { <H> >- has_type["store"]{'elts; tyTuple["normal"]{'types}} }
+   sequent { <H> >- has_type["atom_list"]{ 'elts; 'types } } -->
+   sequent { <H> >- has_type["store"]{'elts; tyTuple["normal"]{'types}} }
    = it
 
 prim ty_store_tuple_raw :
-   sequent [fir] { <H> >- has_type["atom_list"]{ 'elts; 'types } } -->
-   sequent [fir] { <H> >- has_type["store"]{'elts; tyTuple["raw"]{'types}} }
+   sequent { <H> >- has_type["atom_list"]{ 'elts; 'types } } -->
+   sequent { <H> >- has_type["store"]{'elts; tyTuple["raw"]{'types}} }
    = it
 
 prim ty_store_tuple_box :
-   sequent [fir] { <H> >- has_type["atom"]{ 'elt; 't } } -->
-   sequent [fir] { <H> >-
+   sequent { <H> >- has_type["atom"]{ 'elt; 't } } -->
+   sequent { <H> >-
       has_type["store"]{ ('elt :: nil); tyTuple["box"]{ ('t :: nil) } } }
    = it
 
@@ -88,13 +88,13 @@ doc <:doc<
 >>
 
 prim ty_store_array1 :
-   sequent [fir] { <H> >- has_type["store"]{ nil; tyArray{'t} } }
+   sequent { <H> >- has_type["store"]{ nil; tyArray{'t} } }
    = it
 
 prim ty_store_array2 :
-   sequent [fir] { <H> >- has_type["atom"]{ 'elt; 't } } -->
-   sequent [fir] { <H> >- has_type["store"]{ 'tail; tyArray{'t} } } -->
-   sequent [fir] { <H> >- has_type["store"]{cons{'elt; 'tail}; tyArray{'t}} }
+   sequent { <H> >- has_type["atom"]{ 'elt; 't } } -->
+   sequent { <H> >- has_type["store"]{ 'tail; tyArray{'t} } } -->
+   sequent { <H> >- has_type["store"]{cons{'elt; 'tail}; tyArray{'t}} }
    = it
 
 
@@ -109,17 +109,17 @@ doc <:doc< ************************************
 >>
 
 prim ty_store_lambda :
-   sequent [fir] { <H> >- type_eq{ 'u; 'u; large_type } } -->
-   sequent [fir] { <H>; v: variable; a: var_def{ 'v; 'u; no_def } >-
+   sequent { <H> >- type_eq{ 'u; 'u; large_type } } -->
+   sequent { <H>; v: variable; a: var_def{ 'v; 'u; no_def } >-
       has_type["exp"]{ 'f['v]; 't } } -->
-   sequent [fir] { <H> >-
+   sequent { <H> >-
       has_type["exp"]{ lambda{ x. 'f['x] }; tyFun{ 'u; 't } } }
    = it
 
 prim ty_store_polyFun :
-   sequent [fir] { <H>; tv: "type"; a: ty_def{ 'tv; small_type; no_def } >-
+   sequent { <H>; tv: "type"; a: ty_def{ 'tv; small_type; no_def } >-
       has_type["exp"]{ 'f['tv]; 'ty['tv] } } -->
-   sequent [fir] { <H> >-
+   sequent { <H> >-
       has_type["exp"]{ polyFun{ x. 'f['x] }; tyAll{ t. 'ty['t] } } }
    = it
 
@@ -136,7 +136,7 @@ doc <:doc< ************************************
 
 prim ty_store_union 'H :
    (* well-formedness of the union type. *)
-   sequent [fir] { <H>; a: ty_def{ 'tv; polyKind{'j; 'k}; 'tyd }; <J> >-
+   sequent { <H>; a: ty_def{ 'tv; polyKind{'j; 'k}; 'tyd }; <J> >-
       type_eq{ tyUnion{'tv; 'tyl; intset[31, "signed"]{
                   (interval{number[i:n]; number[i:n]} :: nil) }};
                tyUnion{'tv; 'tyl; intset[31, "signed"]{
@@ -144,13 +144,13 @@ prim ty_store_union 'H :
                small_type } } -->
 
    (* check that the atoms have the right types. *)
-   sequent [fir] { <H>; a: ty_def{ 'tv; polyKind{'j; 'k}; 'tyd }; <J> >-
+   sequent { <H>; a: ty_def{ 'tv; polyKind{'j; 'k}; 'tyd }; <J> >-
       has_type["union_atoms"]{
          'atoms;
           nth_elt{number[i:n]; apply_types{ 'tyd; 'tyl }}}} -->
 
    (* then the union value is well-typed. *)
-   sequent [fir] { <H>; a: ty_def{ 'tv; polyKind{'j; 'k}; 'tyd }; <J> >-
+   sequent { <H>; a: ty_def{ 'tv; polyKind{'j; 'k}; 'tyd }; <J> >-
       has_type["store"]{
          union_val[i:n]{ 'tv; 'atoms };
          tyUnion{ 'tv; 'tyl; intset[31, "signed"]{
@@ -167,13 +167,13 @@ doc <:doc<
 >>
 
 prim ty_store_union_atoms1 :
-   sequent [fir] { <H> >- has_type["union_atoms"]{ nil; nil } }
+   sequent { <H> >- has_type["union_atoms"]{ nil; nil } }
    = it
 
 prim ty_store_union_atoms2 :
-   sequent [fir] { <H> >- has_type["atom"]{ 'elt; 'ty } } -->
-   sequent [fir] { <H> >- has_type["union_atoms"]{ 'tail; 'rest } } -->
-   sequent [fir] { <H> >-
+   sequent { <H> >- has_type["atom"]{ 'elt; 'ty } } -->
+   sequent { <H> >- has_type["union_atoms"]{ 'tail; 'rest } } -->
+   sequent { <H> >-
       has_type["union_atoms"]{ cons{ 'elt; 'tail };
                                cons{ mutable_ty{'ty; 'flag}; 'rest } } }
    = it
@@ -188,7 +188,7 @@ doc <:doc< ************************************
 >>
 
 prim ty_store_raw_data :
-   sequent [fir] { <H> >- has_type["store"]{ raw_data; tyRawData } }
+   sequent { <H> >- has_type["store"]{ raw_data; tyRawData } }
    = it
 
 doc <:doc< 

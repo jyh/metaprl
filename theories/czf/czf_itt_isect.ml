@@ -120,13 +120,13 @@ doc <:doc<
    @end[doc]
 >>
 interactive bisect_isset {| intro [] |} :
-   ["wf"] sequent [squash] { <H> >- isset{'s1} } -->
-   ["wf"] sequent [squash] { <H> >- isset{'s2} } -->
-   sequent ['ext] { <H> >- isset{."isect"{'s1; 's2}} }
+   ["wf"] sequent { <H> >- isset{'s1} } -->
+   ["wf"] sequent { <H> >- isset{'s2} } -->
+   sequent { <H> >- isset{."isect"{'s1; 's2}} }
 
 interactive isect_isset {| intro [] |} :
-   ["wf"] sequent [squash] { <H> >- isset{'s1} } -->
-   sequent ['ext] { <H> >- isset{."isect"{'s1}} }
+   ["wf"] sequent { <H> >- isset{'s1} } -->
+   sequent { <H> >- isset{."isect"{'s1}} }
 
 doc <:doc< 
    @begin[doc]
@@ -137,12 +137,12 @@ doc <:doc<
    @end[doc]
 >>
 interactive bisect_member_intro {| intro [] |} :
-   ["wf"] sequent [squash] { <H> >- isset{'x} } -->
-   ["wf"] sequent [squash] { <H> >- isset{'s1} } -->
-   ["wf"] sequent [squash] { <H> >- isset{'s2} } -->
-   sequent ['ext] { <H> >- mem{'x; 's1} } -->
-   sequent ['ext] { <H> >- mem{'x; 's2} } -->
-   sequent ['ext] { <H> >- mem{'x; ."isect"{'s1; 's2}} }
+   ["wf"] sequent { <H> >- isset{'x} } -->
+   ["wf"] sequent { <H> >- isset{'s1} } -->
+   ["wf"] sequent { <H> >- isset{'s2} } -->
+   sequent { <H> >- mem{'x; 's1} } -->
+   sequent { <H> >- mem{'x; 's2} } -->
+   sequent { <H> >- mem{'x; ."isect"{'s1; 's2}} }
 
 doc <:doc< 
    @begin[doc]
@@ -151,11 +151,11 @@ doc <:doc<
    @end[doc]
 >>
 interactive isect_member_intro {| intro [] |} :
-   ["wf"] sequent [squash] { <H> >- isset{'x} } -->
-   ["wf"] sequent [squash] { <H> >- isset{'s} } -->
-   sequent ['ext] { <H> >- mem{'x; union{'s}} } -->
-   sequent ['ext] { <H>; y: set; w: mem{'y; 's} >- mem{'x; 'y} } -->
-   sequent ['ext] { <H> >- mem{'x; ."isect"{'s}} }
+   ["wf"] sequent { <H> >- isset{'x} } -->
+   ["wf"] sequent { <H> >- isset{'s} } -->
+   sequent { <H> >- mem{'x; union{'s}} } -->
+   sequent { <H>; y: set; w: mem{'y; 's} >- mem{'x; 'y} } -->
+   sequent { <H> >- mem{'x; ."isect"{'s}} }
 
 doc <:doc< 
    @begin[doc]
@@ -166,12 +166,12 @@ doc <:doc<
    @end[doc]
 >>
 interactive bisect_member_elim {| elim [] |} 'H :
-   ["wf"] sequent [squash] { <H>; x: mem{'y; ."isect"{'s1; 's2}}; <J['x]> >- isset{'y} } -->
-   ["wf"] sequent [squash] { <H>; x: mem{'y; ."isect"{'s1; 's2}}; <J['x]> >- isset{'s1} } -->
-   ["wf"] sequent [squash] { <H>; x: mem{'y; ."isect"{'s1; 's2}}; <J['x]> >- isset{'s2} } -->
-   sequent ['ext] { <H>; x: mem{'y; ."isect"{'s1; 's2}}; <J['x]>; z: mem{'y; 's1} >- 'T['x] } -->
-   sequent ['ext] { <H>; x: mem{'y; ."isect"{'s1; 's2}}; <J['x]>; z: mem{'y; 's2} >- 'T['x] } -->
-   sequent ['ext] { <H>; x: mem{'y; ."isect"{'s1; 's2}}; <J['x]> >- 'T['x] }
+   ["wf"] sequent { <H>; x: mem{'y; ."isect"{'s1; 's2}}; <J['x]> >- isset{'y} } -->
+   ["wf"] sequent { <H>; x: mem{'y; ."isect"{'s1; 's2}}; <J['x]> >- isset{'s1} } -->
+   ["wf"] sequent { <H>; x: mem{'y; ."isect"{'s1; 's2}}; <J['x]> >- isset{'s2} } -->
+   sequent { <H>; x: mem{'y; ."isect"{'s1; 's2}}; <J['x]>; z: mem{'y; 's1} >- 'T['x] } -->
+   sequent { <H>; x: mem{'y; ."isect"{'s1; 's2}}; <J['x]>; z: mem{'y; 's2} >- 'T['x] } -->
+   sequent { <H>; x: mem{'y; ."isect"{'s1; 's2}}; <J['x]> >- 'T['x] }
 
 doc <:doc< 
    @begin[doc]
@@ -180,12 +180,12 @@ doc <:doc<
    @end[doc]
 >>
 interactive isect_member_elim {| elim [] |} 'H 'z :
-   ["wf"] sequent [squash] { <H>; x: mem{'y; ."isect"{'s}}; <J['x]> >- isset{'z} } -->
-   ["wf"] sequent [squash] { <H>; x: mem{'y; ."isect"{'s}}; <J['x]> >- isset{'y} } -->
-   ["wf"] sequent [squash] { <H>; x: mem{'y; ."isect"{'s}}; <J['x]> >- isset{'s} } -->
-   sequent ['ext] { <H>; x: mem{'y; ."isect"{'s}}; <J['x]> >- mem{'z; 's} } -->
-   sequent ['ext] { <H>; x: mem{'y; ."isect"{'s}}; <J['x]>; w: mem{'y; 'z} >- 'T['x] } -->
-   sequent ['ext] { <H>; x: mem{'y; ."isect"{'s}}; <J['x]> >- 'T['x] }
+   ["wf"] sequent { <H>; x: mem{'y; ."isect"{'s}}; <J['x]> >- isset{'z} } -->
+   ["wf"] sequent { <H>; x: mem{'y; ."isect"{'s}}; <J['x]> >- isset{'y} } -->
+   ["wf"] sequent { <H>; x: mem{'y; ."isect"{'s}}; <J['x]> >- isset{'s} } -->
+   sequent { <H>; x: mem{'y; ."isect"{'s}}; <J['x]> >- mem{'z; 's} } -->
+   sequent { <H>; x: mem{'y; ."isect"{'s}}; <J['x]>; w: mem{'y; 'z} >- 'T['x] } -->
+   sequent { <H>; x: mem{'y; ."isect"{'s}}; <J['x]> >- 'T['x] }
 
 doc <:doc< 
    @begin[doc]
@@ -193,13 +193,13 @@ doc <:doc<
    @end[doc]
 >>
 interactive bisect_fun {| intro [] |} :
-   sequent ['ext] { <H> >- fun_set{z. 's1['z]} } -->
-   sequent ['ext] { <H> >- fun_set{z. 's2['z]} } -->
-   sequent ['ext] { <H> >- fun_set{z. "isect"{'s1['z]; 's2['z]}} }
+   sequent { <H> >- fun_set{z. 's1['z]} } -->
+   sequent { <H> >- fun_set{z. 's2['z]} } -->
+   sequent { <H> >- fun_set{z. "isect"{'s1['z]; 's2['z]}} }
 
 interactive isect_fun {| intro [] |} :
-   sequent ['ext] { <H> >- fun_set{z. 's['z]} } -->
-   sequent ['ext] { <H> >- fun_set{z. "isect"{'s['z]}} }
+   sequent { <H> >- fun_set{z. 's['z]} } -->
+   sequent { <H> >- fun_set{z. "isect"{'s['z]}} }
 doc <:doc< @docoff >>
 
 (*

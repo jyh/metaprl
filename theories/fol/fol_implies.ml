@@ -46,19 +46,19 @@ prim_rw beta : (lambda{x. 'b['x]} 'a) <--> 'b['a]
  ************************************************************************)
 
 prim implies_type {| intro [] |} :
-   [wf] sequent ['ext] { <H> >- "type"{'A} } -->
-   [wf] sequent ['ext] { <H> >- "type"{'B} } -->
-   sequent ['ext] { <H> >- "type"{implies{'A; 'B}} } = trivial
+   [wf] sequent { <H> >- "type"{'A} } -->
+   [wf] sequent { <H> >- "type"{'B} } -->
+   sequent { <H> >- "type"{implies{'A; 'B}} } = trivial
 
 prim implies_intro {| intro [] |} :
-   [wf] sequent ['ext] { <H> >- "type"{'A} } -->
-   [main] ('b['x] : sequent ['ext] { <H>; x: 'A >- 'B }) -->
-   sequent ['ext] { <H> >- 'A => 'B } = lambda{x. 'b['x]}
+   [wf] sequent { <H> >- "type"{'A} } -->
+   [main] ('b['x] : sequent { <H>; x: 'A >- 'B }) -->
+   sequent { <H> >- 'A => 'B } = lambda{x. 'b['x]}
 
 prim implies_elim {| elim [] |} 'H :
-   [assertion] ('a : sequent ['ext] { <H>; f: 'A => 'B; <J['f]> >- 'A }) -->
-   [main] ('t['f; 'b] : sequent ['ext] { <H>; f: 'A => 'B; <J['f]>; b: 'B >- 'C['f] }) -->
-   sequent ['ext] { <H>; f: 'A => 'B; <J['f]> >- 'C['f] } = 't['f; 'f 'a]
+   [assertion] ('a : sequent { <H>; f: 'A => 'B; <J['f]> >- 'A }) -->
+   [main] ('t['f; 'b] : sequent { <H>; f: 'A => 'B; <J['f]>; b: 'B >- 'C['f] }) -->
+   sequent { <H>; f: 'A => 'B; <J['f]> >- 'C['f] } = 't['f; 'f 'a]
 
 (*
  * -*-

@@ -43,19 +43,19 @@ prim_rw unfold_all : "all"{x. 'b['x]} <--> ('b["true"] & 'b["false"])
 
 (* Derived rules *)
 derived all_type :
-   [wf] sequent ['ext] { <H>; x: pred >- "type"{'B['x]} } -->
-   sequent ['ext] { <H> >- "type"{."all"{y. 'B['y]}} }
+   [wf] sequent { <H>; x: pred >- "type"{'B['x]} } -->
+   sequent { <H> >- "type"{."all"{y. 'B['y]}} }
 
 derived all_intro :
-   [main] ('b['x] : sequent ['ext] { <H>; x: pred >- 'B['x] }) -->
-   [wf] sequent ['ext] { <H>; x: pred >- "type"{'B['x]} } -->
-   sequent ['ext] { <H> >- "all"{y. 'B['y]} }
+   [main] ('b['x] : sequent { <H>; x: pred >- 'B['x] }) -->
+   [wf] sequent { <H>; x: pred >- "type"{'B['x]} } -->
+   sequent { <H> >- "all"{y. 'B['y]} }
 
 derived all_elim 'H 'a :
-   [wf] sequent ['ext] { <H>; x: "all"{y. 'B['y]}; <J['x]> >- "type"{'a} } -->
-   [wf] sequent ['ext] { <H>; x: "all"{y. 'B['y]}; <J['x]>; z: pred >- "type"{'B['z]} } -->
-   [main] ('b['x; 'z] : sequent ['ext] { <H>; x: "all"{y. 'B['y]}; <J['x]>; z: 'B['a] >- 'C['x] }) -->
-   sequent ['ext] { <H>; x: "all"{y. 'B['y]}; <J['x]> >- 'C['x] }
+   [wf] sequent { <H>; x: "all"{y. 'B['y]}; <J['x]> >- "type"{'a} } -->
+   [wf] sequent { <H>; x: "all"{y. 'B['y]}; <J['x]>; z: pred >- "type"{'B['z]} } -->
+   [main] ('b['x; 'z] : sequent { <H>; x: "all"{y. 'B['y]}; <J['x]>; z: 'B['a] >- 'C['x] }) -->
+   sequent { <H>; x: "all"{y. 'B['y]}; <J['x]> >- 'C['x] }
 
 (*
  * -*-

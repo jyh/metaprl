@@ -87,19 +87,19 @@ doc <:doc<
    @end[doc]
 >>
 interactive set_induction :
-   sequent ['ext] { <H>; x: set >- "type"{'P['x]} } -->
-   sequent ['ext] { <H> >- fun_prop{z. 'P['z]} } -->
-   sequent ['ext] { <H>; x: set; w: dall{'x; z. 'P['z]} >- 'P['x] } -->
-   sequent ['ext] { <H> >- sall{z. 'P['z]} }
+   sequent { <H>; x: set >- "type"{'P['x]} } -->
+   sequent { <H> >- fun_prop{z. 'P['z]} } -->
+   sequent { <H>; x: set; w: dall{'x; z. 'P['z]} >- 'P['x] } -->
+   sequent { <H> >- sall{z. 'P['z]} }
 doc <:doc< @docoff >>
 
 let setInduction1 = set_induction
 
 interactive set_induction2 'H :
-   sequent ['ext] { <H>; x: set; <J['x]>; y: set >- "type"{'C['y]} } -->
-   sequent ['ext] { <H>; x: set; <J['x]> >- fun_prop{y. 'C['y]} } -->
-   sequent ['ext] { <H>; x: set; <J['x]>; y: set; z: dall{'y; w. 'C['w]} >- 'C['y] }-->
-   sequent ['ext] { <H>; x: set; <J['x]> >- 'C['x] }
+   sequent { <H>; x: set; <J['x]>; y: set >- "type"{'C['y]} } -->
+   sequent { <H>; x: set; <J['x]> >- fun_prop{y. 'C['y]} } -->
+   sequent { <H>; x: set; <J['x]>; y: set; z: dall{'y; w. 'C['w]} >- 'C['y] }-->
+   sequent { <H>; x: set; <J['x]> >- 'C['x] }
 
 let setInduction = set_induction2
 
@@ -120,11 +120,11 @@ doc <:doc<
    @end[doc]
 >>
 interactive collection 's1 (bind{x. bind{y. 'P['x; 'y]}}) :
-   sequent [squash] { <H> >- isset{'s1} } -->
-   sequent [squash] { <H>; x: set; y: set >- "type"{'P['x; 'y]} } -->
-   sequent ['ext] { <H> >- dall{'s1; x. sexists{y. 'P['x; 'y]}} } -->
-   sequent ['ext] { <H>; s2: set; w: rel{x, y. 'P['x; 'y]; 's1; 's2} >- 'C } -->
-   sequent ['ext] { <H> >- 'C }
+   sequent { <H> >- isset{'s1} } -->
+   sequent { <H>; x: set; y: set >- "type"{'P['x; 'y]} } -->
+   sequent { <H> >- dall{'s1; x. sexists{y. 'P['x; 'y]}} } -->
+   sequent { <H>; s2: set; w: rel{x, y. 'P['x; 'y]; 's1; 's2} >- 'C } -->
+   sequent { <H> >- 'C }
 
 doc <:doc< 
    @begin[doc]
@@ -136,12 +136,12 @@ doc <:doc<
    @end[doc]
 >>
 interactive subset_collection 'a 'b bind{u. bind{x. bind{y. 'P['u; 'x; 'y]}}} :
-   sequent ['ext] { <H> >- isset{'a} } -->
-   sequent ['ext] { <H> >- isset{'b} } -->
-   sequent [squash] { <H>; u: set; x: set; y: set >- "type"{'P['u; 'x; 'y]} } -->
-   sequent ['ext] { <H>; u: set; x: set >- fun_prop{y. 'P['u; 'x; 'y]} } -->
-   sequent ['ext] { <H>; w: sexists{c. sall{u. dall{'a; x. dexists{'b; y. 'P['u; 'x; 'y]}} => dexists{'c; z. rel{x, y. 'P['u; 'x; 'y]; 'a; 'z}}}} >- 'C } -->
-   sequent ['ext] { <H> >- 'C }
+   sequent { <H> >- isset{'a} } -->
+   sequent { <H> >- isset{'b} } -->
+   sequent { <H>; u: set; x: set; y: set >- "type"{'P['u; 'x; 'y]} } -->
+   sequent { <H>; u: set; x: set >- fun_prop{y. 'P['u; 'x; 'y]} } -->
+   sequent { <H>; w: sexists{c. sall{u. dall{'a; x. dexists{'b; y. 'P['u; 'x; 'y]}} => dexists{'c; z. rel{x, y. 'P['u; 'x; 'y]; 'a; 'z}}}} >- 'C } -->
+   sequent { <H> >- 'C }
 doc <:doc< @docoff >>
 
 (*

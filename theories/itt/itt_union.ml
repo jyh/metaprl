@@ -160,9 +160,9 @@ dform decide_df : except_mode[src] :: decide{'x; y. 'a; z. 'b} =
  * H >- Ui ext B
  *)
 prim unionFormation :
-   ('A : sequent ['ext] { <H> >- univ[i:l] }) -->
-   ('B : sequent ['ext] { <H> >- univ[i:l] }) -->
-   sequent ['ext] { <H> >- univ[i:l] } =
+   ('A : sequent { <H> >- univ[i:l] }) -->
+   ('B : sequent { <H> >- univ[i:l] }) -->
+   sequent { <H> >- univ[i:l] } =
    'A + 'B
 
 doc <:doc< 
@@ -175,18 +175,18 @@ doc <:doc<
    @end[doc]
 >>
 prim unionEquality {| intro []; eqcd |} :
-   [wf] sequent [squash] { <H> >- 'A1 = 'A2 in univ[i:l] } -->
-   [wf] sequent [squash] { <H> >- 'B1 = 'B2 in univ[i:l] } -->
-   sequent ['ext] { <H> >- 'A1 + 'B1 = 'A2 + 'B2 in univ[i:l] } =
+   [wf] sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
+   [wf] sequent { <H> >- 'B1 = 'B2 in univ[i:l] } -->
+   sequent { <H> >- 'A1 + 'B1 = 'A2 + 'B2 in univ[i:l] } =
    it
 
 (*
  * Typehood.
  *)
 prim unionType {| intro [] |} :
-   [wf] sequent [squash] { <H> >- "type"{'A} } -->
-   [wf] sequent [squash] { <H> >- "type"{'B} } -->
-   sequent ['ext] { <H> >- "type"{. 'A + 'B } } =
+   [wf] sequent { <H> >- "type"{'A} } -->
+   [wf] sequent { <H> >- "type"{'B} } -->
+   sequent { <H> >- "type"{. 'A + 'B } } =
    it
 
 doc <:doc< 
@@ -202,9 +202,9 @@ doc <:doc<
    @end[doc]
 >>
 prim inlFormation {| intro [SelectOption 1] |} :
-   [main] ('a : sequent ['ext] { <H> >- 'A }) -->
-   [wf] sequent [squash] { <H> >- "type"{'B} } -->
-   sequent ['ext] { <H> >- 'A + 'B } =
+   [main] ('a : sequent { <H> >- 'A }) -->
+   [wf] sequent { <H> >- "type"{'B} } -->
+   sequent { <H> >- 'A + 'B } =
    inl{'a}
 
 (*
@@ -214,9 +214,9 @@ prim inlFormation {| intro [SelectOption 1] |} :
  * H >- A = A in Ui
  *)
 prim inrFormation {| intro [SelectOption 2] |} :
-   [main] ('b : sequent ['ext] { <H> >- 'B }) -->
-   [wf] sequent [squash] { <H> >- "type"{'A} } -->
-   sequent ['ext] { <H> >- 'A + 'B } =
+   [main] ('b : sequent { <H> >- 'B }) -->
+   [wf] sequent { <H> >- "type"{'A} } -->
+   sequent { <H> >- 'A + 'B } =
    inr{'b}
 
 doc <:doc< 
@@ -229,9 +229,9 @@ doc <:doc<
    @end[doc]
 >>
 prim inlEquality {| intro []; eqcd |} :
-   [wf] sequent [squash] { <H> >- 'a1 = 'a2 in 'A } -->
-   [wf] sequent [squash] { <H> >- "type"{'B} } -->
-   sequent ['ext] { <H> >- inl{'a1} = inl{'a2} in 'A + 'B } =
+   [wf] sequent { <H> >- 'a1 = 'a2 in 'A } -->
+   [wf] sequent { <H> >- "type"{'B} } -->
+   sequent { <H> >- inl{'a1} = inl{'a2} in 'A + 'B } =
    it
 
 (*
@@ -241,9 +241,9 @@ prim inlEquality {| intro []; eqcd |} :
  * H >- A = A in Ui
  *)
 prim inrEquality {| intro []; eqcd |} :
-   [wf] sequent [squash] { <H> >- 'b1 = 'b2 in 'B } -->
-   [wf] sequent [squash] { <H> >- "type"{'A} } -->
-   sequent ['ext] { <H> >- inr{'b1} = inr{'b2} in 'A + 'B } =
+   [wf] sequent { <H> >- 'b1 = 'b2 in 'B } -->
+   [wf] sequent { <H> >- "type"{'A} } -->
+   sequent { <H> >- inr{'b1} = inr{'b2} in 'A + 'B } =
    it
 
 doc <:doc< 
@@ -258,9 +258,9 @@ doc <:doc<
    @end[doc]
 >>
 prim unionElimination {| elim [ThinOption thinT] |} 'H :
-   [left] ('left['u] : sequent ['ext] { <H>; 'A + 'B; u: 'A; <J[inl{'u}]> >- 'T[inl{'u}] }) -->
-   [right] ('right['u] : sequent ['ext] { <H>; 'A + 'B; v: 'B; <J[inr{'v}]> >- 'T[inr{'v}] }) -->
-   sequent ['ext] { <H>; x: 'A + 'B; <J['x]> >- 'T['x] } =
+   [left] ('left['u] : sequent { <H>; 'A + 'B; u: 'A; <J[inl{'u}]> >- 'T[inl{'u}] }) -->
+   [right] ('right['u] : sequent { <H>; 'A + 'B; v: 'B; <J[inr{'v}]> >- 'T[inr{'v}] }) -->
+   sequent { <H>; x: 'A + 'B; <J['x]> >- 'T['x] } =
    decide{'x; u. 'left['u]; v. 'right['v]}
 
 doc <:doc< 
@@ -272,10 +272,10 @@ doc <:doc<
    @end[doc]
 >>
 prim decideEquality {| intro []; eqcd |} bind{z. 'T['z]} ('A + 'B) :
-   [wf] sequent [squash] { <H> >- 'e1 = 'e2 in 'A + 'B } -->
-   [wf] sequent [squash] { <H>; u: 'A; 'e1 = inl{'u} in 'A + 'B >- 'l1['u] = 'l2['u] in 'T[inl{'u}] } -->
-   [wf] sequent [squash] { <H>; v: 'B; 'e1 = inr{'v} in 'A + 'B >- 'r1['v] = 'r2['v] in 'T[inr{'v}] } -->
-   sequent ['ext] { <H> >- decide{'e1; u1. 'l1['u1]; v1. 'r1['v1]} =
+   [wf] sequent { <H> >- 'e1 = 'e2 in 'A + 'B } -->
+   [wf] sequent { <H>; u: 'A; 'e1 = inl{'u} in 'A + 'B >- 'l1['u] = 'l2['u] in 'T[inl{'u}] } -->
+   [wf] sequent { <H>; v: 'B; 'e1 = inr{'v} in 'A + 'B >- 'r1['v] = 'r2['v] in 'T[inr{'v}] } -->
+   sequent { <H> >- decide{'e1; u1. 'l1['u1]; v1. 'r1['v1]} =
                    decide{'e2; u2. 'l2['u2]; v2. 'r2['v2]} in
                    'T['e1] } =
    it
@@ -289,9 +289,9 @@ doc <:doc<
    @end[doc]
 >>
 prim unionSubtype {| intro [] |} :
-   ["subtype"] sequent [squash] { <H> >- 'A1 subtype 'A2 } -->
-   ["subtype"] sequent [squash] { <H> >- 'B1 subtype 'B2 } -->
-   sequent ['ext] { <H> >- 'A1 + 'B1 subtype 'A2 + 'B2  } =
+   ["subtype"] sequent { <H> >- 'A1 subtype 'A2 } -->
+   ["subtype"] sequent { <H> >- 'B1 subtype 'B2 } -->
+   sequent { <H> >- 'A1 + 'B1 subtype 'A2 + 'B2  } =
    it
 doc <:doc< @docoff >>
 
@@ -299,10 +299,10 @@ doc <:doc< @docoff >>
  * Interactive.
  *)
 interactive unionContradiction1 {| elim [] |} 'H :
-   sequent ['ext] { <H>; x: inl{'y} = inr{'z} in 'A+'B; <J['x]> >- 'C['x] }
+   sequent { <H>; x: inl{'y} = inr{'z} in 'A+'B; <J['x]> >- 'C['x] }
 
 interactive unionContradiction2 {| elim [] |} 'H :
-   sequent ['ext] { <H>; x: inr{'y} = inl{'z} in 'A+'B; <J['x]> >- 'C['x] }
+   sequent { <H>; x: inr{'y} = inl{'z} in 'A+'B; <J['x]> >- 'C['x] }
 
 (************************************************************************
  * PRIMITIVES                                                           *

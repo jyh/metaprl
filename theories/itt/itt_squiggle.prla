@@ -669,7 +669,11 @@ O	o576	var p575
 T	t576	o576
 B	b576	t576
 T	t577	o574 b575 b576
-S	s	t574 h
+NBase_rewrite	Base_rw	Base_rewrite NIL
+NBase_rewrite!sequent_arg	brwsqarg	sequent_arg Base_rw
+O	obrarg	brwsqarg
+T	tbrarg	obrarg
+S	s	tbrarg h
 G	s	t577
 B	b577	s
 T	t578	o572 b577
@@ -685,7 +689,7 @@ O	o580	var p580
 T	t581	o580
 B	b581	t581
 T	t582	o574 b580 b581
-S	s582	t574 h
+S	s582	tbrarg h
 G	s582	t582
 B	b582	s582
 T	t583	o572 b582
@@ -708,7 +712,7 @@ B	b587	t587
 B	b588	t577
 B	b589	t582
 T	t589	o586 b587 b588 b589
-S	s589	t586 h
+S	s589	tbrarg h
 G	s589	t589
 B	b590	s589
 T	t590	o572 b590
@@ -1027,14 +1031,14 @@ T	t614	o b613 b4
 B	b614	t614
 T	t615	o b569 b614
 B	b615	t615
-S	s615	t574 h
+S	s615	tbrarg h
 G	s615	t612
 B	b616	s615
 T	t616	o572 b616
 B	b617	t616
 T	t617	o571 b617
 B	b618	t617
-S	s618	t586 h
+S	s618	tbrarg h
 G	s618	t587
 B	b619	s618
 T	t619	o572 b619
@@ -1080,7 +1084,7 @@ O	o636	rule p636
 NItt_equal!type	type	type Itt_equal
 O	o637	type
 T	t637	o637 b612
-S	s637	t586 h
+S	s637	tbrarg h
 G	s637	t637
 B	b637	s637
 T	t638	o572 b637
@@ -1102,7 +1106,7 @@ B	b644	t644
 P	p653	String squiggle_memberEquality
 O	o653	rule p653
 T	t653	o586 b612 b594 b594
-S	s653	t586 h
+S	s653	tbrarg h
 G	s653	t653
 B	b653	s653
 T	t654	o572 b653
@@ -1126,7 +1130,7 @@ C	h670	J t594
 P	p670	Var C
 O	o670	var p670
 T	t670	o670 b594
-S	s670	t586 h h669 h670
+S	s670	tbrarg h h669 h670
 G	s670	t670
 B	b670	s670
 T	t671	o572 b670
@@ -1137,7 +1141,7 @@ T	t672	o671
 C	h672	J t672
 B	b672	t672
 T	t673	o670 b672
-S	s673	t586 h h669 h672
+S	s673	tbrarg h h669 h672
 G	s673	t673
 B	b673	s673
 T	t674	o572 b673
@@ -3247,21 +3251,21 @@ T	t723	o b569 b722
 B	b723	t723
 T	t724	o717 b610
 H	h724	x t724
-S	s724	t574 h h724 h672
+S	s724	tbrarg h h724 h672
 G	s724	t612
 B	b724	s724
 T	t725	o572 b724
 B	b725	t725
 T	t727	o717 b611
 H	h727	x t727
-S	s727	t586 h h727 h672
+S	s727	tbrarg h h727 h672
 G	s727	t673
 B	b727	s727
 T	t728	o572 b727
 B	b728	t728
 T	t729	o705 b728
 B	b729	t729
-S	s729	t586 h h724 h672
+S	s729	tbrarg h h724 h672
 G	s729	t673
 B	b730	s729
 T	t730	o572 b730
@@ -3271,7 +3275,7 @@ B	b732	t731
 P	p737	String squiggleRef
 O	o737	rule p737
 T	t737	o574 b610 b610
-S	s737	t586 h
+S	s737	tbrarg h
 G	s737	t737
 B	b737	s737
 T	t738	o572 b737
@@ -3279,12 +3283,12 @@ B	b738	t738
 P	p746	String squiggleSym
 O	o746	rule p746
 T	t746	o574 b611 b610
-S	s746	t574 h
+S	s746	tbrarg h
 G	s746	t746
 B	b746	s746
 T	t747	o572 b746
 B	b747	t747
-S	s747	t586 h
+S	s747	tbrarg h
 G	s747	t612
 B	b748	s747
 T	t748	o572 b748
@@ -3320,13 +3324,13 @@ B	b762	t762
 T	t763	o b569 b762
 B	b763	t763
 T	t764	o574 b610 b760
-S	s764	t574 h
+S	s764	tbrarg h
 G	s764	t764
 B	b764	s764
 T	t765	o572 b764
 B	b765	t765
 T	t766	o574 b760 b611
-S	s766	t574 h
+S	s766	tbrarg h
 G	s766	t766
 B	b766	s766
 T	t767	o572 b766
@@ -3345,7 +3349,7 @@ T	t772	o626 b748 b771
 B	b772	t772
 T	t773	o625 b772 b4 b628
 B	b773	t773
-S	s773	t586 h
+S	s773	tbrarg h
 G	s773	t766
 B	b774	s773
 T	t774	o626 b774 b771
@@ -4725,14 +4729,14 @@ B	b2661	t2661
 O	o2662	meta_labeled p256
 T	t2662	o2662 b617
 B	b2662	t2662
-S	s2662	t586 h
+S	s2662	tbrarg h
 G	s2662	t727
 B	b2663	s2662
 T	t2663	o572 b2663
 B	b2664	t2663
 T	t2664	o705 b2664
 B	b2665	t2664
-S	s2665	t586 h
+S	s2665	tbrarg h
 G	s2665	t724
 B	b2666	s2665
 T	t2666	o572 b2666

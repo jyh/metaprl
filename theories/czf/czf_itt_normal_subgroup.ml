@@ -114,9 +114,9 @@ doc <:doc<
    @end[doc]
 >>
 interactive normalSubg_wf {| intro [] |} :
-   sequent [squash] { <H> >- 's IN label } -->
-   sequent [squash] { <H> >- 'g IN label } -->
-   sequent ['ext] { <H> >- "type"{normal_subg{'s; 'g}} }
+   sequent { <H> >- 's IN label } -->
+   sequent { <H> >- 'g IN label } -->
+   sequent { <H> >- "type"{normal_subg{'s; 'g}} }
 
 doc <:doc< 
    @begin[doc]
@@ -128,11 +128,11 @@ doc <:doc<
    @end[doc]
 >>
 interactive normalSubg_intro {| intro [] |} :
-   sequent [squash] { <H> >- 's IN label } -->
-   sequent [squash] { <H> >- 'g IN label } -->
-   sequent ['ext] { <H> >- subgroup{'s; 'g} } -->
-   sequent ['ext] { <H>; a: set; x: mem{'a; car{'g}} >- equal{lcoset{'s; 'g; 'a}; rcoset{'s; 'g; 'a}} } -->
-   sequent ['ext] { <H> >- normal_subg{'s; 'g} }
+   sequent { <H> >- 's IN label } -->
+   sequent { <H> >- 'g IN label } -->
+   sequent { <H> >- subgroup{'s; 'g} } -->
+   sequent { <H>; a: set; x: mem{'a; car{'g}} >- equal{lcoset{'s; 'g; 'a}; rcoset{'s; 'g; 'a}} } -->
+   sequent { <H> >- normal_subg{'s; 'g} }
 
 doc <:doc< 
    @begin[doc]
@@ -142,11 +142,11 @@ doc <:doc<
    @end[doc]
 >>
 interactive abel_subg_normal 'H 's :
-   sequent [squash] { <H>; x: abel{'g}; <J['x]> >- 's IN label } -->
-   sequent [squash] { <H>; x: abel{'g}; <J['x]> >- 'g IN label } -->
-   sequent ['ext] { <H>; x: abel{'g}; <J['x]> >- subgroup{'s; 'g} } -->
-   sequent ['ext] { <H>; x: abel{'g}; <J['x]>; y: normal_subg{'s; 'g} >- 'C['x] } -->
-   sequent ['ext] { <H>; x: abel{'g}; <J['x]> >- 'C['x] }
+   sequent { <H>; x: abel{'g}; <J['x]> >- 's IN label } -->
+   sequent { <H>; x: abel{'g}; <J['x]> >- 'g IN label } -->
+   sequent { <H>; x: abel{'g}; <J['x]> >- subgroup{'s; 'g} } -->
+   sequent { <H>; x: abel{'g}; <J['x]>; y: normal_subg{'s; 'g} >- 'C['x] } -->
+   sequent { <H>; x: abel{'g}; <J['x]> >- 'C['x] }
 
 doc <:doc< @docoff >>
 let abelNormalSubgT t i = abel_subg_normal i t

@@ -2849,7 +2849,11 @@ NItt_equal!univ	univ	univ Itt_equal
 P	p841	MLevel 0 i 0
 O	o841	univ p841
 T	t842	o841
-S	s	t841 h
+NBase_rewrite	Base_rw	Base_rewrite NIL
+NBase_rewrite!sequent_arg	brwsqarg	sequent_arg Base_rw
+O	obrarg	brwsqarg
+T	tbrarg	obrarg
+S	s	tbrarg h
 G	s	t842
 B	b842	s
 T	t843	o839 b842
@@ -2993,7 +2997,7 @@ NItt_equal!equal	equal	equal Itt_equal
 O	o857	equal
 B	b857	t842
 T	t857	o857 b857 b768 b768
-S	s857	t841 h
+S	s857	tbrarg h
 G	s857	t857
 B	b858	s857
 T	t858	o839 b858
@@ -3042,7 +3046,7 @@ O	o874	rule p874
 NItt_equal!type	type	type Itt_equal
 O	o875	type
 T	t875	o875 b768
-S	s875	t841 h
+S	s875	tbrarg h
 G	s875	t875
 B	b875	s875
 T	t876	o839 b875
@@ -3174,7 +3178,7 @@ P	p897	Var C
 O	o897	var p897
 B	b897	t897
 T	t898	o897 b897
-S	s898	t841 h h896 h897
+S	s898	tbrarg h h896 h897
 G	s898	t898
 B	b898	s898
 T	t899	o839 b898
@@ -3347,7 +3351,7 @@ O	o936	var p935
 T	t936	o936
 B	b936	t936
 T	t937	o935 b768 b936
-S	s937	t841 h
+S	s937	tbrarg h
 G	s937	t937
 B	b937	s937
 T	t938	o839 b937
@@ -3453,7 +3457,7 @@ O	o818	location p817 p818
 T	t945	o942 b943 b6 b944
 B	b945	t945
 T	t946	o857 b936 b897 b897
-S	s946	t919 h h896
+S	s946	tbrarg h h896
 G	s946	t946
 B	b946	s946
 T	t947	o943 b946 b6

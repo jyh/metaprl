@@ -96,10 +96,10 @@ doc <:doc<
    @end[doc]
 >>
 interactive assert_decidable 'p :
-   [decidable] sequent ['ext]  { <H> >- decidable {'p} } -->
-   sequent ['ext] { <H>; x: 'p >- 'G } -->
-   sequent ['ext] { <H>; x: not{'p} >- 'G } -->
-   sequent ['ext] { <H> >- 'G }
+   [decidable] sequent { <H> >- decidable {'p} } -->
+   sequent { <H>; x: 'p >- 'G } -->
+   sequent { <H>; x: not{'p} >- 'G } -->
+   sequent { <H> >- 'G }
 
 let decidable_term = <<decidable{'p}>>
 let decidable_opname = opname_of_term decidable_term
@@ -116,10 +116,10 @@ doc <:doc<
   
    $$
    @rulebox{@misspelled{decideT}; P;
-     <<sequent[squash]{ <H> >- decidable{'P}}>>@cr
-       <<sequent['ext]{ <H>; x: 'P >- 'C}>>@cr
-       <<sequent['ext]{ <H>; x: not{'P} >- 'C}>>;
-     <<sequent['ext]{ <H> >- 'C}>>}
+     <<sequent{ <H> >- decidable{'P}}>>@cr
+       <<sequent{ <H>; x: 'P >- 'C}>>@cr
+       <<sequent{ <H>; x: not{'P} >- 'C}>>;
+     <<sequent{ <H> >- 'C}>>}
    $$
   
    @docoff
@@ -136,8 +136,8 @@ doc <:doc<
    @end[doc]
 >>
 interactive dec_false {| intro [] |} :
-   sequent ['ext] { <H> >- decidable{."false"} }
+   sequent { <H> >- decidable{."false"} }
 
 interactive dec_true {| intro [] |} :
-   sequent ['ext] { <H> >- decidable{."true"} }
+   sequent { <H> >- decidable{."true"} }
 doc <:doc< @docoff >>

@@ -99,16 +99,16 @@ dform set_df : except_mode[src] :: Set[i:l]{'T} = mathbbS `"et" sub{slot[i:l]} "
 
 
 interactive set_intro  {| intro[] |}:
-[wf]sequent [squash] { <H> >- "type"{'T} } -->
-   sequent [squash] { <H> >- 'set in {car: univ[i:l]} } -->
-   sequent [squash] { <H> >- 'set in {empty : 'set^car} }-->
-   sequent [squash] { <H> >- 'set in {member : 'set^car -> 'T -> bool} } -->
-   sequent [squash] { <H> >- 'set in {insert : 'set^car -> 'T -> 'set^car} }-->
-   sequent [squash] { <H> >- 'set in {delete : 'set^car -> 'T -> 'set^car} } -->
-   sequent [squash] { <H> >- all a:'T. not{"assert"{.('set^member) ('set^empty) 'a}} } -->
-   sequent [squash] { <H> >- all S:'set^car. all a:'T. all b:'T. iff{"assert"{('set^member) (('set^insert) 'S 'b) 'a}; ."assert"{.(('set^member) 'S 'a)} or 'a='b in 'T} } -->
-   sequent [squash] { <H> >- all S:'set^car. all a:'T. all b:'T. iff{"assert"{('set^member) (('set^delete) 'S 'b) 'a}; ."assert"{.(('set^member) 'S 'a)} and not{.'a='b in 'T}} } -->
-   sequent ['ext] { <H> >- 'set in Set[i:l]{.'T} }
+[wf]sequent { <H> >- "type"{'T} } -->
+   sequent { <H> >- 'set in {car: univ[i:l]} } -->
+   sequent { <H> >- 'set in {empty : 'set^car} }-->
+   sequent { <H> >- 'set in {member : 'set^car -> 'T -> bool} } -->
+   sequent { <H> >- 'set in {insert : 'set^car -> 'T -> 'set^car} }-->
+   sequent { <H> >- 'set in {delete : 'set^car -> 'T -> 'set^car} } -->
+   sequent { <H> >- all a:'T. not{"assert"{.('set^member) ('set^empty) 'a}} } -->
+   sequent { <H> >- all S:'set^car. all a:'T. all b:'T. iff{"assert"{('set^member) (('set^insert) 'S 'b) 'a}; ."assert"{.(('set^member) 'S 'a)} or 'a='b in 'T} } -->
+   sequent { <H> >- all S:'set^car. all a:'T. all b:'T. iff{"assert"{('set^member) (('set^delete) 'S 'b) 'a}; ."assert"{.(('set^member) 'S 'a)} and not{.'a='b in 'T}} } -->
+   sequent { <H> >- 'set in Set[i:l]{.'T} }
 
 
 
@@ -178,8 +178,8 @@ doc <:doc<
    @doc{Theorem:}
 >>
 interactive set_as_list_correct :
-   sequent [squash] { <H> >- 'A in  DecEquality[i:l] } -->
-   sequent ['ext] { <H> >- set_as_list{'A} in Set[i:l]{.'A^car} }
+   sequent { <H> >- 'A in  DecEquality[i:l] } -->
+   sequent { <H> >- set_as_list{'A} in Set[i:l]{.'A^car} }
 
 
 doc <:doc< 
@@ -192,9 +192,9 @@ doc <:doc<
 >>
 
 interactive necessity_of_deicidability univ[i:l]:
-   [wf] sequent [squash] { <H> >- "type"{'T} } -->
-   sequent ['ext] { <H> >- Set[i:l]{'T} } -->
-   sequent ['ext] { <H> >- all a:'T. all b:'T. decidable{'a='b in 'T} }
+   [wf] sequent { <H> >- "type"{'T} } -->
+   sequent { <H> >- Set[i:l]{'T} } -->
+   sequent { <H> >- all a:'T. all b:'T. decidable{'a='b in 'T} }
 
 
 doc <:doc< 
@@ -302,9 +302,9 @@ define set_as_table: set_as_table{'Table} <-->
    }
 
 interactive set_as_table_correct :
-   sequent [squash] { <H> >- "type"{'T} } -->
-   sequent [squash] { <H> >- 'Table in Table[i:l]{'T;unit} } -->
-   sequent ['ext] { <H> >- set_as_table{'Table} in Set[i:l]{.'T} }
+   sequent { <H> >- "type"{'T} } -->
+   sequent { <H> >- 'Table in Table[i:l]{'T;unit} } -->
+   sequent { <H> >- set_as_table{'Table} in Set[i:l]{.'T} }
 
 
 (*
@@ -340,8 +340,8 @@ doc <:doc<
    @doc{Theorem:}
 >>
 interactive set_as_list_correct :
-   sequent [squash] { <H> >- 'A in  DecEquality[i:l] } -->
-   sequent ['ext] { <H> >- set_as_list{'A} in Set[i:l]{.'A^car} }
+   sequent { <H> >- 'A in  DecEquality[i:l] } -->
+   sequent { <H> >- set_as_list{'A} in Set[i:l]{.'A^car} }
 
 *)
 

@@ -64,12 +64,12 @@ open Itt_equal
  * and the argument is an index.
  *)
 interactive applyIntro (x: 'A -> 'B['x]) (bind{y. 'C['y]}) 'f 'a :
-   [wf] sequent [squash] { <H> >- 'a in 'A } -->
-   [wf] sequent [squash] { <H> >- 'f in (x: 'A -> 'B['x]) } -->
-   [wf] sequent [squash] { <H> >- "type"{'B['a]} } -->
-   [wf] sequent [squash] { <H>; y: 'B['a] >- "type"{'C['y]} } -->
-   [main] sequent ['ext] { <H>; y: 'B['a] >- 'C['y] } -->
-   sequent ['ext] { <H> >- 'C['f 'a] }
+   [wf] sequent { <H> >- 'a in 'A } -->
+   [wf] sequent { <H> >- 'f in (x: 'A -> 'B['x]) } -->
+   [wf] sequent { <H> >- "type"{'B['a]} } -->
+   [wf] sequent { <H>; y: 'B['a] >- "type"{'C['y]} } -->
+   [main] sequent { <H>; y: 'B['a] >- 'C['y] } -->
+   sequent { <H> >- 'C['f 'a] }
 
 (*
  * To prove an application,
@@ -77,12 +77,12 @@ interactive applyIntro (x: 'A -> 'B['x]) (bind{y. 'C['y]}) 'f 'a :
  * and the argument is an index.
  *)
 interactive independentApplyIntro ('A -> 'B) (bind{y. 'C['y]}) 'f 'a :
-   [wf] sequent [squash] { <H> >- 'a in 'A } -->
-   [wf] sequent [squash] { <H> >- 'f in ('A -> 'B) } -->
-   [wf] sequent [squash] { <H>; y: 'B >- "type"{'C['y]} } -->
-   [wf] sequent [squash] { <H> >- "type"{'B} } -->
-   [main] sequent ['ext] { <H>; y: 'B >- 'C['y] } -->
-   sequent ['ext] { <H> >- 'C['f 'a] }
+   [wf] sequent { <H> >- 'a in 'A } -->
+   [wf] sequent { <H> >- 'f in ('A -> 'B) } -->
+   [wf] sequent { <H>; y: 'B >- "type"{'C['y]} } -->
+   [wf] sequent { <H> >- "type"{'B} } -->
+   [main] sequent { <H>; y: 'B >- 'C['y] } -->
+   sequent { <H> >- 'C['f 'a] }
 
 (************************************************************************
  * TACTICS                                                              *

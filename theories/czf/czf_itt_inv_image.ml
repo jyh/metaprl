@@ -118,10 +118,10 @@ doc <:doc<
    @end[doc]
 >>
 interactive inv_image_isset {| intro [] |} :
-   sequent [squash] { <H> >- isset{'s} } -->
-   sequent [squash] { <H> >- isset{'t} } -->
-   sequent ['ext] { <H> >- fun_set{z. 'a['z]} } -->
-   sequent ['ext] { <H> >- isset{inv_image{'s; x. 'a['x]; 't}} }
+   sequent { <H> >- isset{'s} } -->
+   sequent { <H> >- isset{'t} } -->
+   sequent { <H> >- fun_set{z. 'a['z]} } -->
+   sequent { <H> >- isset{inv_image{'s; x. 'a['x]; 't}} }
 
 doc <:doc< 
    @begin[doc]
@@ -133,13 +133,13 @@ doc <:doc<
    @end[doc]
 >>
 interactive inv_image_intro {| intro [] |} :
-   sequent [squash] { <H> >- isset{'y} } -->
-   sequent [squash] { <H> >- isset{'s} } -->
-   sequent [squash] { <H> >- isset{'t} } -->
-   sequent ['ext] { <H> >- fun_set{x. 'a['x]} } -->
-   sequent ['ext] { <H> >- mem{'y; 's} } -->
-   sequent ['ext] { <H> >- mem{'a['y]; 't} } -->
-   sequent ['ext] { <H> >- mem{'y; inv_image{'s; x. 'a['x]; 't}} }
+   sequent { <H> >- isset{'y} } -->
+   sequent { <H> >- isset{'s} } -->
+   sequent { <H> >- isset{'t} } -->
+   sequent { <H> >- fun_set{x. 'a['x]} } -->
+   sequent { <H> >- mem{'y; 's} } -->
+   sequent { <H> >- mem{'a['y]; 't} } -->
+   sequent { <H> >- mem{'y; inv_image{'s; x. 'a['x]; 't}} }
 
 doc <:doc< 
    @begin[doc]
@@ -150,12 +150,12 @@ doc <:doc<
    @end[doc]
 >>
 interactive inv_image_elim {| elim [] |} 'H :
-   sequent [squash] { <H>; x: mem{'y; inv_image{'s; x. 'a['x]; 't}}; <J['x]> >- isset{'y} } -->
-   sequent [squash] { <H>; x: mem{'y; inv_image{'s; x. 'a['x]; 't}}; <J['x]> >- isset{'s} } -->
-   sequent [squash] { <H>; x: mem{'y; inv_image{'s; x. 'a['x]; 't}}; <J['x]> >- isset{'t} } -->
-   sequent ['ext] { <H>; x: mem{'y; inv_image{'s; x. 'a['x]; 't}}; <J['x]> >- fun_set{x. 'a['x]} } -->
-   sequent ['ext] { <H>; x: mem{'y; inv_image{'s; x. 'a['x]; 't}}; <J['x]>; v: mem{'y; 's}; w: mem{'a['y]; 't} >- 'C['x] } -->
-   sequent ['ext] { <H>; x: mem{'y; inv_image{'s; x. 'a['x]; 't}}; <J['x]> >- 'C['x] }
+   sequent { <H>; x: mem{'y; inv_image{'s; x. 'a['x]; 't}}; <J['x]> >- isset{'y} } -->
+   sequent { <H>; x: mem{'y; inv_image{'s; x. 'a['x]; 't}}; <J['x]> >- isset{'s} } -->
+   sequent { <H>; x: mem{'y; inv_image{'s; x. 'a['x]; 't}}; <J['x]> >- isset{'t} } -->
+   sequent { <H>; x: mem{'y; inv_image{'s; x. 'a['x]; 't}}; <J['x]> >- fun_set{x. 'a['x]} } -->
+   sequent { <H>; x: mem{'y; inv_image{'s; x. 'a['x]; 't}}; <J['x]>; v: mem{'y; 's}; w: mem{'a['y]; 't} >- 'C['x] } -->
+   sequent { <H>; x: mem{'y; inv_image{'s; x. 'a['x]; 't}}; <J['x]> >- 'C['x] }
 doc <:doc< @docoff >>
 
 (*

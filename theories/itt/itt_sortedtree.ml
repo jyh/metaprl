@@ -91,19 +91,19 @@ let resource intro += [ <<tree{'nd} in SortedTree{'O; data.'A['data]}>>,  wrap_i
 
 
 interactive sortedtree_wf {| intro[] |} univ[i:l] :
-   sequent[squash] { <H> >- 'O in order[i:l] } -->
-   sequent[squash] { <H>; d:'O^car >- "type"{'A['d]}  } -->
-   sequent['ext]   { <H> >- "type"{SortedTree{'O; d.'A['d]}} }
+   sequent{ <H> >- 'O in order[i:l] } -->
+   sequent{ <H>; d:'O^car >- "type"{'A['d]}  } -->
+   sequent{ <H> >- "type"{SortedTree{'O; d.'A['d]}} }
 
 interactive emptytree_is_sorted {| intro[] |} univ[i:l] :
-   sequent[squash] { <H> >- 'O in order[i:l] } -->
-   sequent[squash] { <H>; d:'O^car >- "type"{'A['d]}  } -->
-   sequent['ext]   { <H> >- emptytree in SortedTree{'O; d.'A['d]} }
+   sequent{ <H> >- 'O in order[i:l] } -->
+   sequent{ <H>; d:'O^car >- "type"{'A['d]}  } -->
+   sequent{ <H> >- emptytree in SortedTree{'O; d.'A['d]} }
 
 
 interactive sortedtree_subtype {| intro[] |}  univ[i:l]:
-   sequent[squash] { <H> >- 'O in order[i:l] } -->
-   sequent['ext]   { <H> >- SortedTree{'O; d.'A['d]}  subtype  DataTree{.'O^car} }
+   sequent{ <H> >- 'O in order[i:l] } -->
+   sequent{ <H> >- SortedTree{'O; d.'A['d]}  subtype  DataTree{.'O^car} }
 
 
 (* find an element a in the tree, return a subtree with the root a if find one, or empty tree otherwise *)
@@ -116,11 +116,11 @@ define find: find{'a; 't; 'O} <-->
                                 (*if a>data *) 'R}}
 
 interactive find_wf {| intro[] |}  univ[i:l]:
-   sequent[squash] { <H> >- 'O in order[i:l] } -->
-   sequent[squash] { <H> >- 'a in 'O^car } -->
-   sequent[squash] { <H> >- 't in SortedTree{'O; d.'A['d]} } -->
-   sequent[squash] { <H>; d:'O^car >- "type"{'A['d]}  } -->
-   sequent['ext]   { <H> >- find{'a; 't; 'O} in  SortedTree{'O; d.'A['d]} }
+   sequent{ <H> >- 'O in order[i:l] } -->
+   sequent{ <H> >- 'a in 'O^car } -->
+   sequent{ <H> >- 't in SortedTree{'O; d.'A['d]} } -->
+   sequent{ <H>; d:'O^car >- "type"{'A['d]}  } -->
+   sequent{ <H> >- find{'a; 't; 'O} in  SortedTree{'O; d.'A['d]} }
 
 (* interactive find_correct  univ[i:l]: ????*)
 
@@ -142,16 +142,16 @@ let resource reduce += [softrec_reduce  <<is_in_tree{'a; 't; 'O}>> is_in_tree]
 
 
 interactive is_in_tree_wf {| intro[] |}  univ[i:l]:
-   sequent[squash] { <H> >- 'O in order[i:l] } -->
-   sequent[squash] { <H> >- 'a in 'O^car } -->
-   sequent[squash] { <H> >- 't in SortedTree{'O; d.top} }  -->
-   sequent['ext]   { <H> >- is_in_tree {'a; 't; 'O} in bool }
+   sequent{ <H> >- 'O in order[i:l] } -->
+   sequent{ <H> >- 'a in 'O^car } -->
+   sequent{ <H> >- 't in SortedTree{'O; d.top} }  -->
+   sequent{ <H> >- is_in_tree {'a; 't; 'O} in bool }
 
 interactive is_in_tree_correct  univ[i:l]:
-   sequent[squash] { <H> >- 'O in order[i:l] } -->
-   sequent[squash] { <H> >- 'a in 'O^car } -->
-   sequent[squash] { <H> >- 't in SortedTree{'O; d.top} } -->
-   sequent['ext]   { <H> >- iff{"assert"{is_in_tree {'a; 't; 'O}};  in_tree {'a; 't; .'O^car}} }
+   sequent{ <H> >- 'O in order[i:l] } -->
+   sequent{ <H> >- 'a in 'O^car } -->
+   sequent{ <H> >- 't in SortedTree{'O; d.top} } -->
+   sequent{ <H> >- iff{"assert"{is_in_tree {'a; 't; 'O}};  in_tree {'a; 't; .'O^car}} }
 
 
 
@@ -168,10 +168,10 @@ dform is_in_tree_df : except_mode[src] ::  insert{'a;'t; 'O} = tt["insert("]  'a
 let resource reduce += [softrec_reduce  <<insert{'a; 't; 'O}>> insert]
 
 interactive insert_wf {| intro[] |}  univ[i:l]:
-   sequent[squash] { <H> >- 'O in order[i:l] } -->
-   sequent[squash] { <H>; d:'O^car >- "type"{'A['d]}  } -->
-   sequent[squash] { <H> >- 'nd in  DataNode{.'O^car;data.'A['data]}  } -->
-   sequent[squash] { <H> >- 't in SortedTree{'O; d.'A['d]} } -->
-   sequent['ext]   { <H> >- insert{'nd;'t;'O} in SortedTree{'O; d.'A['d]}  }
+   sequent{ <H> >- 'O in order[i:l] } -->
+   sequent{ <H>; d:'O^car >- "type"{'A['d]}  } -->
+   sequent{ <H> >- 'nd in  DataNode{.'O^car;data.'A['data]}  } -->
+   sequent{ <H> >- 't in SortedTree{'O; d.'A['d]} } -->
+   sequent{ <H> >- insert{'nd;'t;'O} in SortedTree{'O; d.'A['d]}  }
 
 doc <:doc< @docoff >>

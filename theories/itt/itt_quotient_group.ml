@@ -96,12 +96,12 @@ doc docoff
 let fold_quotGroup = makeFoldC << quotGroup{'A; 'B} >> unfold_quotGroup
 
 interactive quotG_equiv_type {| intro [intro_typeinf <<'B>>] |} group[i:l] :
-   [wf] sequent [squash] { <H> >- subgroup[i:l]{'A; 'B} } -->
-   sequent ['ext] { <H> >- "type"{quot x, y: 'B^car // ('x *['B] ('B^inv 'y) in 'A^car subset 'B^car)} }
+   [wf] sequent { <H> >- subgroup[i:l]{'A; 'B} } -->
+   sequent { <H> >- "type"{quot x, y: 'B^car // ('x *['B] ('B^inv 'y) in 'A^car subset 'B^car)} }
 
 interactive quotG_equiv_type2 {| intro [intro_typeinf <<'B>>] |} group[i:l] :
-   [wf] sequent [squash] { <H> >- subgroup[i:l]{'A; 'B} } -->
-   sequent ['ext] { <H> >- "type"{(quotGroup{'A; 'B}^car)} }
+   [wf] sequent { <H> >- subgroup[i:l]{'A; 'B} } -->
+   sequent { <H> >- "type"{(quotGroup{'A; 'B}^car)} }
 
 doc <:doc< 
    @begin[doc]
@@ -110,8 +110,8 @@ doc <:doc<
    @end[doc]
 >>
 interactive quotGroup_intro {| intro [] |} :
-   sequent ['ext] { <H> >- normalSubg[i:l]{'A; 'B} } -->
-   sequent ['ext] { <H> >- quotGroup{'A; 'B} in group[i:l] }
+   sequent { <H> >- normalSubg[i:l]{'A; 'B} } -->
+   sequent { <H> >- quotGroup{'A; 'B} in group[i:l] }
 
 doc <:doc< 
    @begin[doc]
@@ -121,9 +121,9 @@ doc <:doc<
    @end[doc]
 >>
 interactive quotGroup_abel {| intro [AutoMustComplete] |} :
-   sequent ['ext] { <H> >- normalSubg[i:l]{'A; 'B} } -->
-   sequent ['ext] { <H> >- isCommutative{'B} } -->
-   sequent ['ext] { <H> >- quotGroup{'A; 'B} in abelg[i:l] }
+   sequent { <H> >- normalSubg[i:l]{'A; 'B} } -->
+   sequent { <H> >- isCommutative{'B} } -->
+   sequent { <H> >- quotGroup{'A; 'B} in abelg[i:l] }
 
 doc <:doc< 
    @begin[doc]
@@ -132,16 +132,16 @@ doc <:doc<
    @end[doc]
 >>
 interactive quotGroup_hom {| intro [AutoMustComplete; intro_typeinf <<'B>>] |} group[i:l] :
-   sequent ['ext] { <H> >- normalSubg[i:l]{'A; 'B} } -->
-   sequent ['ext] { <H> >- lambda{a. 'a} in groupHom{'B; quotGroup{'A; 'B}} }
+   sequent { <H> >- normalSubg[i:l]{'A; 'B} } -->
+   sequent { <H> >- lambda{a. 'a} in groupHom{'B; quotGroup{'A; 'B}} }
 
 interactive quotGroup_epi {| intro [AutoMustComplete; intro_typeinf <<'B>>] |} group[i:l] :
-   sequent ['ext] { <H> >- normalSubg[i:l]{'A; 'B} } -->
-   sequent ['ext] { <H> >- lambda{a. 'a} in groupEpi{'B; quotGroup{'A; 'B}} }
+   sequent { <H> >- normalSubg[i:l]{'A; 'B} } -->
+   sequent { <H> >- lambda{a. 'a} in groupEpi{'B; quotGroup{'A; 'B}} }
 
 interactive quotGroup_ker {| intro [AutoMustComplete; intro_typeinf <<'B>>] |} group[i:l] :
-   sequent ['ext] { <H> >- normalSubg[i:l]{'A; 'B} } -->
-   sequent ['ext] { <H> >- groupKer{lambda{a. 'a}; 'B; quotGroup{'A; 'B}} = 'A in group[i:l] }
+   sequent { <H> >- normalSubg[i:l]{'A; 'B} } -->
+   sequent { <H> >- groupKer{lambda{a. 'a}; 'B; quotGroup{'A; 'B}} = 'A in group[i:l] }
 
 doc docoff
 

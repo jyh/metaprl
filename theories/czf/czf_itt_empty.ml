@@ -96,13 +96,13 @@ doc <:doc<
    @end[doc]
 >>
 interactive empty_isset {| intro [] |} :
-   sequent ['ext] { <H> >- isset{empty} }
+   sequent { <H> >- isset{empty} }
 
 (*
  * Nothing is in the empty set.
  *)
 interactive empty_member_elim {| elim [] |} 'H :
-   sequent ['ext] { <H>; x: mem{'y; empty}; <J['x]> >- 'T['x] }
+   sequent { <H>; x: mem{'y; empty}; <J['x]> >- 'T['x] }
 doc <:doc< @docoff >>
 
 (*

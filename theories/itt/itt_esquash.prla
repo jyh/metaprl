@@ -338,7 +338,11 @@ C	h	H
 NItt_equal!type	type	type Itt_equal
 O	o516	type
 T	t517	o516 b404
-S	s	t516 h
+NBase_rewrite	Base_rw	Base_rewrite NIL
+NBase_rewrite!sequent_arg	brwsqarg	sequent_arg Base_rw
+O	obrarg	brwsqarg
+T	tbrarg	obrarg
+S	s	tbrarg h
 G	s	t517
 B	b517	s
 T	t518	o514 b517
@@ -375,7 +379,7 @@ O	o677	univ p676
 T	t677	o677
 B	b677	t677
 T	t678	o444 b677 b404 b404
-S	s678	t516 h
+S	s678	tbrarg h
 G	s678	t678
 B	b678	s678
 T	t679	o514 b678
@@ -389,7 +393,7 @@ B	b705	t704
 P	p1017	String esquash_type
 O	o1017	rule p1017
 T	t1017	o516 b410
-S	s1017	t521 h
+S	s1017	tbrarg h
 G	s1017	t1017
 B	b1017	s1017
 T	t1018	o514 b1017
@@ -399,7 +403,7 @@ B	b1019	t1019
 P	p1244	String esquash_univ
 O	o1244	rule p1244
 T	t1244	o444 b677 b410 b410
-S	s1244	t521 h
+S	s1244	tbrarg h
 G	s1244	t1244
 B	b1244	s1244
 T	t1245	o514 b1244
@@ -550,7 +554,7 @@ B	b385	t385
 P	p1679	String esquash_intro
 O	o1679	rule p1679
 O	o1680	meta_labeled p527
-S	s1682	t521 h
+S	s1682	tbrarg h
 G	s1682	t410
 B	b1683	s1682
 T	t1683	o514 b1683
@@ -592,7 +596,7 @@ T	t2252	o2251 b705
 B	b2579	t2384
 T	t2579	o410 b2579
 H	h2579	x t2579
-S	s2579	t521 h h2579 h1906
+S	s2579	tbrarg h h2579 h1906
 G	s2579	t2252
 B	b2580	s2579
 T	t2580	o514 b2580
@@ -1358,7 +1362,7 @@ B	b2603	t2603
 T	t2604	o b2603 b4
 B	b2604	t2604
 T	t2606	o444 b677 b1905 b1905
-S	s2606	t516 h
+S	s2606	tbrarg h
 G	s2606	t2606
 B	b2606	s2606
 T	t2607	o514 b2606
@@ -1366,7 +1370,7 @@ B	b2607	t2607
 T	t2609	o2008
 B	b2609	t2609
 T	t2610	o444 b677 b2609 b2609
-S	s2610	t516 h
+S	s2610	tbrarg h
 G	s2610	t2610
 B	b2610	s2610
 T	t2611	o514 b2610
@@ -1375,7 +1379,7 @@ B	b2619	t1905
 T	t2619	o410 b2609
 B	b2620	t2619
 T	t2620	o444 b677 b2619 b2620
-S	s2620	t521 h
+S	s2620	tbrarg h
 G	s2620	t2620
 B	b2621	s2620
 T	t2621	o514 b2621
@@ -3139,7 +3143,7 @@ B	b4627	t4627
 P	p4630	String esquash_equal
 O	o4630	rule p4630
 T	t242	o444 b677 b2619 b2619
-S	s242	t516 h
+S	s242	tbrarg h
 G	s242	t242
 B	b242	s242
 T	t243	o514 b242
@@ -3147,7 +3151,7 @@ B	b243	t243
 T	t244	o513 b243
 B	b244	t244
 T	t245	o444 b677 b2620 b2620
-S	s245	t516 h
+S	s245	tbrarg h
 G	s245	t245
 B	b245	s245
 T	t246	o514 b245
@@ -3166,7 +3170,7 @@ O	o322	uid p322
 T	t330	o322
 B	b330	t330
 T	t4676	o1924 b404
-S	s4676	t516 h
+S	s4676	tbrarg h
 G	s4676	t4676
 B	b4676	s4676
 T	t4677	o514 b4676
@@ -3235,7 +3239,7 @@ P	p4731	Var t
 O	o4732	var p4731
 T	t4732	o4732 b705
 B	b4732	t4732
-S	s4734	t521 h h4640 h1906
+S	s4734	tbrarg h h4640 h1906
 G	s4734	t2252
 B	b4735	s4734
 T	t4735	o514 b4735
@@ -3246,13 +3250,13 @@ T	t4738	o449 b4738
 B	b4739	t4738
 P	p4748	String esquash_mem
 O	o4748	rule p4748
-S	s4748	t516 h
+S	s4748	tbrarg h
 G	s4748	t4632
 B	b4748	s4748
 T	t4748	o514 b4748
 B	b4749	t4748
 T	t4749	o444 b4632 b1898 b1898
-S	s4749	t521 h
+S	s4749	tbrarg h
 G	s4749	t4749
 B	b4750	s4749
 T	t4750	o514 b4750
@@ -3806,12 +3810,12 @@ B	b4814	t4814
 T	t4815	o b109 b4814
 B	b4815	t4815
 O	o4827	rule p409
-S	s4827	t516 h
+S	s4827	tbrarg h
 G	s4827	t410
 B	b4827	s4827
 T	t4827	o514 b4827
 B	b4828	t4827
-S	s4828	t521 h
+S	s4828	tbrarg h
 G	s4828	t4676
 B	b4829	s4828
 T	t4829	o514 b4829
@@ -3885,7 +3889,7 @@ T	t4862	o10 b4861
 B	b4862	t4862
 P	p4863	String unesquash
 O	o4863	rule p4863
-S	s4867	t521 h h2594 h1906
+S	s4867	tbrarg h h2594 h1906
 G	s4867	t2252
 B	b4868	s4867
 T	t4868	o514 b4868
@@ -3947,14 +3951,14 @@ T	t492	o529 b4750 b491
 B	b492	t492
 T	t585	o528 b492 b4 b531
 B	b585	t585
-S	s587	t516 h
+S	s587	tbrarg h
 G	s587	t4749
 B	b590	s587
 T	t590	o529 b590 b491
 B	b591	t590
 B	b592	t4749
 T	t592	o1924 b592
-S	s592	t516 h
+S	s592	tbrarg h
 G	s592	t592
 B	b593	s592
 T	t593	o529 b593 b491
@@ -4538,13 +4542,13 @@ P	p1285	Number 3054
 P	p1286	Number 3444
 O	o1286	location p1285 p1286
 H	h1286	t1905
-S	s1286	t516 h h1286
+S	s1286	tbrarg h h1286
 G	s1286	t2619
 B	b1286	s1286
 T	t1286	o514 b1286
 B	b1289	t1286
 H	h1289	t2619
-S	s1289	t516 h h1289
+S	s1289	tbrarg h h1289
 G	s1289	t1905
 B	b1290	s1289
 T	t1290	o514 b1290
@@ -4723,7 +4727,7 @@ P	p1430	Number 4213
 P	p1431	Number 4395
 O	o1431	location p1430 p1431
 H	h1431	t4632
-S	s1431	t521 h h1431 h1898
+S	s1431	tbrarg h h1431 h1898
 G	s1431	t2559
 B	b1431	s1431
 T	t1431	o514 b1431
@@ -4805,7 +4809,7 @@ B	b1470	t1470
 P	p1470	Number 4487
 P	p1471	Number 4627
 O	o1471	location p1470 p1471
-S	s1471	t516 h h1431
+S	s1471	tbrarg h h1431
 G	s1471	t4749
 B	b1471	s1471
 T	t1471	o529 b1471 b491
@@ -4820,7 +4824,7 @@ P	p1475	String "nameHypT (-1) \"x\" thenT assertT <<'x IN esquash{'A}>> ttca"
 O	o1475	ext_rule p1475
 T	t1475	o444 b4632 b705 b705
 H	h1475	t1475
-S	s1475	t516 h h4640 h1475
+S	s1475	tbrarg h h4640 h1475
 G	s1475	t4749
 B	b1476	s1475
 T	t1476	o529 b1476 b491
@@ -4918,7 +4922,7 @@ P	p1517	Number 5067
 P	p1518	Number 5288
 O	o1518	location p1517 p1518
 H	h1518	t410
-S	s1518	t516 h h1518 h1898
+S	s1518	tbrarg h h1518 h1898
 G	s1518	t517
 B	b1518	s1518
 T	t1518	o514 b1518
@@ -4926,7 +4930,7 @@ B	b1519	t1518
 T	t1519	o513 b1519
 B	b1521	t1519
 H	h1521	t4676
-S	s1521	t521 h h1521 h1898
+S	s1521	tbrarg h h1521 h1898
 G	s1521	t2559
 B	b1522	s1521
 T	t1522	o514 b1522
@@ -4943,7 +4947,7 @@ T	t1528	o529 b4868 b1528
 B	b1529	t1528
 T	t1529	o528 b1529 b4 b531
 B	b1530	t1529
-S	s1530	t521 h h1518 h1898
+S	s1530	tbrarg h h1518 h1898
 G	s1530	t2559
 B	b1531	s1530
 T	t1531	o529 b1531 b1528
@@ -4999,7 +5003,7 @@ P	p1556	Number 5484
 P	p1557	Number 5822
 O	o1557	location p1556 p1557
 H	h1557	t1897
-S	s1557	t516 h h1557
+S	s1557	tbrarg h h1557
 G	s1557	t2609
 B	b1557	s1557
 T	t1557	o514 b1557
@@ -5007,7 +5011,7 @@ B	b1558	t1557
 T	t1558	o1680 b1558
 B	b1559	t1558
 H	h1559	t2609
-S	s1559	t516 h h1559
+S	s1559	tbrarg h h1559
 G	s1559	t1897
 B	b1560	s1559
 T	t1560	o514 b1560

@@ -187,31 +187,31 @@ doc <:doc<
    @end[doc]
 >>
 interactive true_univ {| intro []; eqcd |} :
-   sequent ['ext] { <H> >- "true" = "true" in univ[i:l] }
+   sequent { <H> >- "true" = "true" in univ[i:l] }
 
 interactive true_member {| intro [] |} :
-   sequent ['ext] { <H> >- "true" in univ[i:l] }
+   sequent { <H> >- "true" in univ[i:l] }
 
 interactive true_type {| intro [] |} :
-   sequent ['ext] { <H> >- "type"{."true"} }
+   sequent { <H> >- "type"{."true"} }
 
 interactive true_intro {| intro [] |} :
-   sequent ['ext] { <H> >- "true" }
+   sequent { <H> >- "true" }
 
 interactive false_univ {| intro []; eqcd |} :
-   sequent ['ext] { <H> >- "false" = "false" in univ[i:l] }
+   sequent { <H> >- "false" = "false" in univ[i:l] }
 
 interactive false_member {| intro [] |} :
-   sequent ['ext] { <H> >- "false" in univ[i:l] }
+   sequent { <H> >- "false" in univ[i:l] }
 
 interactive false_type {| intro [] |} :
-   sequent ['ext] { <H> >- "type"{."false"} }
+   sequent { <H> >- "type"{."false"} }
 
 interactive false_elim {| elim []; squash |} 'H :
-   sequent ['ext] { <H>; x: "false"; <J['x]> >- 'C['x] }
+   sequent { <H>; x: "false"; <J['x]> >- 'C['x] }
 
 interactive false_esquash_elim {| elim [] |} 'H :
-   sequent ['ext] { <H>; x: esquash{."false"}; <J['x]> >- 'C['x] }
+   sequent { <H>; x: esquash{."false"}; <J['x]> >- 'C['x] }
 
 doc <:doc< 
    @begin[doc]
@@ -226,26 +226,26 @@ doc <:doc<
    @end[doc]
 >>
 interactive not_univ {| intro []; eqcd |} :
-   [wf] sequent [squash] { <H> >- 't1 = 't2 in univ[i:l] } -->
-   sequent ['ext] { <H> >- "not"{'t1} = "not"{'t2} in univ[i:l] }
+   [wf] sequent { <H> >- 't1 = 't2 in univ[i:l] } -->
+   sequent { <H> >- "not"{'t1} = "not"{'t2} in univ[i:l] }
 
 interactive not_type {| intro [] |} :
-   [wf] sequent [squash] { <H> >- "type"{'t} } -->
-   sequent ['ext] { <H> >- "type"{."not"{'t}} }
+   [wf] sequent { <H> >- "type"{'t} } -->
+   sequent { <H> >- "type"{."not"{'t}} }
 
 interactive not_intro {| intro [] |} :
-   [wf] sequent [squash] { <H> >- "type"{'t} } -->
-   [main] sequent [squash] { <H>; x: 't >- "false" } -->
-   sequent ['ext] { <H> >- "not"{'t} }
+   [wf] sequent { <H> >- "type"{'t} } -->
+   [main] sequent { <H>; x: 't >- "false" } -->
+   sequent { <H> >- "not"{'t} }
 
 interactive not_elim {| elim [ThinOption thinT] |} 'H :
-   [main] sequent ['ext] { <H>; x: "not"{'t}; <J['x]> >- 't } -->
-   sequent ['ext] { <H>; x: "not"{'t}; <J['x]> >- 'C }
+   [main] sequent { <H>; x: "not"{'t}; <J['x]> >- 't } -->
+   sequent { <H>; x: "not"{'t}; <J['x]> >- 'C }
 (*
 interactive not_membership {| intro []; squash |} :
-   [wf] sequent [squash] { <H> >- "type"{'t} } -->
-   [main] sequent [squash] { <H> >- not{'t} } -->
-   sequent ['ext] { <H> >- lambda{x.'f['x]} in not{'t} }
+   [wf] sequent { <H> >- "type"{'t} } -->
+   [main] sequent { <H> >- not{'t} } -->
+   sequent { <H> >- lambda{x.'f['x]} in not{'t} }
 *)
 doc <:doc< 
    @begin[doc]
@@ -258,32 +258,32 @@ doc <:doc<
    @end[doc]
 >>
 interactive and_univ {| intro []; eqcd |} :
-   [wf] sequent [squash] { <H> >- 'a1 = 'b1 in univ[i:l] } -->
-   [wf] sequent [squash] { <H> >- 'a2 = 'b2 in univ[i:l] } -->
-   sequent ['ext] { <H> >- "and"{'a1; 'a2} = "and"{'b1; 'b2} in univ[i:l] }
+   [wf] sequent { <H> >- 'a1 = 'b1 in univ[i:l] } -->
+   [wf] sequent { <H> >- 'a2 = 'b2 in univ[i:l] } -->
+   sequent { <H> >- "and"{'a1; 'a2} = "and"{'b1; 'b2} in univ[i:l] }
 
 interactive and_type {| intro [] |} :
-   [wf] sequent [squash] { <H> >- "type"{'a1} } -->
-   [wf] sequent [squash] { <H> >- "type"{'a2} } -->
-   sequent ['ext] { <H> >- "type"{."and"{'a1; 'a2}} }
+   [wf] sequent { <H> >- "type"{'a1} } -->
+   [wf] sequent { <H> >- "type"{'a2} } -->
+   sequent { <H> >- "type"{."and"{'a1; 'a2}} }
 
 interactive and_intro {| intro [] |} :
-   [main] sequent ['ext] { <H> >- 'a1 } -->
-   [main] sequent ['ext] { <H> >- 'a2 } -->
-   sequent ['ext] { <H> >- 'a1 & 'a2 }
+   [main] sequent { <H> >- 'a1 } -->
+   [main] sequent { <H> >- 'a2 } -->
+   sequent { <H> >- 'a1 & 'a2 }
 
 interactive and_squash_intro {| intro [] |} :
-   [main] sequent [squash] { <H> >- squash{'a1} } -->
-   [main] sequent [squash] { <H> >- squash{'a2} } -->
-   sequent ['ext] { <H> >- squash{('a1 & 'a2)} }
+   [main] sequent { <H> >- squash{'a1} } -->
+   [main] sequent { <H> >- squash{'a2} } -->
+   sequent { <H> >- squash{('a1 & 'a2)} }
 
 interactive and_elim {| elim [] |} 'H :
-   [main] sequent ['ext] { <H>; y: 'a1; z: 'a2; <J['y, 'z]> >- 'C['y, 'z] } -->
-   sequent ['ext] { <H>; x: 'a1 & 'a2; <J['x]> >- 'C['x] }
+   [main] sequent { <H>; y: 'a1; z: 'a2; <J['y, 'z]> >- 'C['y, 'z] } -->
+   sequent { <H>; x: 'a1 & 'a2; <J['x]> >- 'C['x] }
 
 interactive and_squash_elim {| elim [] |} 'H :
-   [main] sequent ['ext] { <H>; y: squash{'a1}; z: squash{'a2}; <J[it]> >- 'C[it] } -->
-   sequent ['ext] { <H>; x: squash{('a1 & 'a2)}; <J['x]> >- 'C['x] }
+   [main] sequent { <H>; y: squash{'a1}; z: squash{'a2}; <J[it]> >- 'C[it] } -->
+   sequent { <H>; x: squash{('a1 & 'a2)}; <J['x]> >- 'C['x] }
 
 doc <:doc< 
    @begin[doc]
@@ -302,29 +302,29 @@ doc <:doc<
    @end[doc]
 >>
 interactive or_univ {| intro []; eqcd |} :
-   [wf] sequent [squash] { <H> >- 'a1 = 'b1 in univ[i:l] } -->
-   [wf] sequent [squash] { <H> >- 'a2 = 'b2 in univ[i:l] } -->
-   sequent ['ext] { <H> >- "or"{'a1; 'a2} = "or"{'b1; 'b2} in univ[i:l] }
+   [wf] sequent { <H> >- 'a1 = 'b1 in univ[i:l] } -->
+   [wf] sequent { <H> >- 'a2 = 'b2 in univ[i:l] } -->
+   sequent { <H> >- "or"{'a1; 'a2} = "or"{'b1; 'b2} in univ[i:l] }
 
 interactive or_type {| intro [] |} :
-   [wf] sequent [squash] { <H> >- "type"{'a1} } -->
-   [wf] sequent [squash] { <H> >- "type"{'a2} } -->
-   sequent ['ext] { <H> >- "type"{."or"{'a1; 'a2}} }
+   [wf] sequent { <H> >- "type"{'a1} } -->
+   [wf] sequent { <H> >- "type"{'a2} } -->
+   sequent { <H> >- "type"{."or"{'a1; 'a2}} }
 
 interactive or_intro_left {| intro [SelectOption 1] |} :
-   [wf] sequent [squash] { <H> >- "type"{.'a2} } -->
-   [main] sequent ['ext] { <H> >- 'a1 } -->
-   sequent ['ext] { <H> >- "or"{'a1; 'a2} }
+   [wf] sequent { <H> >- "type"{.'a2} } -->
+   [main] sequent { <H> >- 'a1 } -->
+   sequent { <H> >- "or"{'a1; 'a2} }
 
 interactive or_intro_right {| intro [SelectOption 2] |} :
-   [wf] sequent [squash] { <H> >- "type"{.'a1} } -->
-   [main] sequent ['ext] { <H> >- 'a2 } -->
-   sequent ['ext] { <H> >- "or"{'a1; 'a2} }
+   [wf] sequent { <H> >- "type"{.'a1} } -->
+   [main] sequent { <H> >- 'a2 } -->
+   sequent { <H> >- "or"{'a1; 'a2} }
 
 interactive or_elim {| elim [] |} 'H :
-   [main] sequent ['ext] { <H>; y: 'a1; <J[inl{'y}]> >- 'C[inl{'y}] } -->
-   [main] sequent ['ext] { <H>; y: 'a2; <J[inr{'y}]> >- 'C[inr{'y}] } -->
-   sequent ['ext] { <H>; x: "or"{'a1; 'a2}; <J['x]> >- 'C['x] }
+   [main] sequent { <H>; y: 'a1; <J[inl{'y}]> >- 'C[inl{'y}] } -->
+   [main] sequent { <H>; y: 'a2; <J[inr{'y}]> >- 'C[inr{'y}] } -->
+   sequent { <H>; x: "or"{'a1; 'a2}; <J['x]> >- 'C['x] }
 
 doc <:doc< 
    @begin[doc]
@@ -339,24 +339,24 @@ doc <:doc<
    @end[doc]
 >>
 interactive implies_univ {| intro []; eqcd |} :
-   [wf] sequent [squash] { <H> >- 'a1 = 'b1 in univ[i:l] } -->
-   [wf] sequent [squash] { <H> >- 'a2 = 'b2 in univ[i:l] } -->
-   sequent ['ext] { <H> >- "implies"{'a1; 'a2} = "implies"{'b1; 'b2} in univ[i:l] }
+   [wf] sequent { <H> >- 'a1 = 'b1 in univ[i:l] } -->
+   [wf] sequent { <H> >- 'a2 = 'b2 in univ[i:l] } -->
+   sequent { <H> >- "implies"{'a1; 'a2} = "implies"{'b1; 'b2} in univ[i:l] }
 
 interactive implies_type {| intro [] |} :
-   [wf] sequent [squash] { <H> >- "type"{'a1} } -->
-   [wf] sequent [squash] { <H> >- "type"{'a2} } -->
-   sequent ['ext] { <H> >- "type"{."implies"{'a1; 'a2}} }
+   [wf] sequent { <H> >- "type"{'a1} } -->
+   [wf] sequent { <H> >- "type"{'a2} } -->
+   sequent { <H> >- "type"{."implies"{'a1; 'a2}} }
 
 interactive implies_intro {| intro [] |} :
-   [wf] sequent [squash] { <H> >- "type"{'a1} } -->
-   [main] sequent ['ext] { <H>; x: 'a1 >- 'a2 } -->
-   sequent ['ext] { <H> >- "implies"{'a1; 'a2} }
+   [wf] sequent { <H> >- "type"{'a1} } -->
+   [main] sequent { <H>; x: 'a1 >- 'a2 } -->
+   sequent { <H> >- "implies"{'a1; 'a2} }
 
 interactive implies_elim {| elim [ThinOption thinT] |} 'H :
-   [assertion] sequent ['ext] { <H>; x: "implies"{'a1; 'a2}; <J['x]> >- 'a1 } -->
-   [main] sequent ['ext] { <H>; x: "implies"{'a1; 'a2}; <J['x]>; y: 'a2 >- 'C['x] } -->
-   sequent ['ext] { <H>; x: "implies"{'a1; 'a2}; <J['x]> >- 'C['x] }
+   [assertion] sequent { <H>; x: "implies"{'a1; 'a2}; <J['x]> >- 'a1 } -->
+   [main] sequent { <H>; x: "implies"{'a1; 'a2}; <J['x]>; y: 'a2 >- 'C['x] } -->
+   sequent { <H>; x: "implies"{'a1; 'a2}; <J['x]> >- 'C['x] }
 
 doc <:doc< 
    @begin[doc]
@@ -368,23 +368,23 @@ doc <:doc<
    @end[doc]
 >>
 interactive iff_univ {| intro []; eqcd |} :
-   [wf] sequent [squash] { <H> >- 'a1 = 'b1 in univ[i:l] } -->
-   [wf] sequent [squash] { <H> >- 'a2 = 'b2 in univ[i:l] } -->
-   sequent ['ext] { <H> >- "iff"{'a1; 'a2} = "iff"{'b1; 'b2} in univ[i:l] }
+   [wf] sequent { <H> >- 'a1 = 'b1 in univ[i:l] } -->
+   [wf] sequent { <H> >- 'a2 = 'b2 in univ[i:l] } -->
+   sequent { <H> >- "iff"{'a1; 'a2} = "iff"{'b1; 'b2} in univ[i:l] }
 
 interactive iff_type {| intro [] |} :
-   [wf] sequent [squash] { <H> >- "type"{'a1} } -->
-   [wf] sequent [squash] { <H> >- "type"{'a2} } -->
-   sequent ['ext] { <H> >- "type"{."iff"{'a1; 'a2}} }
+   [wf] sequent { <H> >- "type"{'a1} } -->
+   [wf] sequent { <H> >- "type"{'a2} } -->
+   sequent { <H> >- "type"{."iff"{'a1; 'a2}} }
 
 interactive iff_intro {| intro [] |} :
-   [wf] sequent ['ext] { <H> >- 'a1 => 'a2 } -->
-   [wf] sequent ['ext] { <H> >- 'a2 => 'a1 } -->
-   sequent ['ext] { <H> >- "iff"{'a1; 'a2} }
+   [wf] sequent { <H> >- 'a1 => 'a2 } -->
+   [wf] sequent { <H> >- 'a2 => 'a1 } -->
+   sequent { <H> >- "iff"{'a1; 'a2} }
 
 interactive iff_elim {| elim [] |} 'H :
-   sequent ['ext] { <H>; y: "implies"{'a1; 'a2}; z: "implies"{'a2; 'a1}; <J['y, 'z]> >- 'C['y, 'z] } -->
-   sequent ['ext] { <H>; x: "iff"{'a1; 'a2}; <J['x]> >- 'C['x] }
+   sequent { <H>; y: "implies"{'a1; 'a2}; z: "implies"{'a2; 'a1}; <J['y, 'z]> >- 'C['y, 'z] } -->
+   sequent { <H>; x: "iff"{'a1; 'a2}; <J['x]> >- 'C['x] }
 
 doc <:doc< 
    @begin[doc]
@@ -397,23 +397,23 @@ doc <:doc<
    @end[doc]
 >>
 interactive cand_univ {| intro []; eqcd |} :
-   [wf] sequent [squash] { <H> >- 'a1 = 'b1 in univ[i:l] } -->
-   [wf] sequent [squash] { <H>; x: 'a1 >- 'a2 = 'b2 in univ[i:l] } -->
-   sequent ['ext] { <H> >- "cand"{'a1; 'a2} = "cand"{'b1; 'b2} in univ[i:l] }
+   [wf] sequent { <H> >- 'a1 = 'b1 in univ[i:l] } -->
+   [wf] sequent { <H>; x: 'a1 >- 'a2 = 'b2 in univ[i:l] } -->
+   sequent { <H> >- "cand"{'a1; 'a2} = "cand"{'b1; 'b2} in univ[i:l] }
 
 interactive cand_type {| intro [] |} :
-   [wf] sequent [squash] { <H> >- "type"{'a1} } -->
-   [wf] sequent [squash] { <H>; x: 'a1 >- "type"{'a2} } -->
-   sequent ['ext] { <H> >- "type"{."cand"{'a1; 'a2}} }
+   [wf] sequent { <H> >- "type"{'a1} } -->
+   [wf] sequent { <H>; x: 'a1 >- "type"{'a2} } -->
+   sequent { <H> >- "type"{."cand"{'a1; 'a2}} }
 
 interactive cand_intro {| intro [] |} :
-   [main] sequent ['ext] { <H> >- 'a1 } -->
-   [main] sequent ['ext] { <H>; x: 'a1 >- 'a2 } -->
-   sequent ['ext] { <H> >- "cand"{'a1; 'a2} }
+   [main] sequent { <H> >- 'a1 } -->
+   [main] sequent { <H>; x: 'a1 >- 'a2 } -->
+   sequent { <H> >- "cand"{'a1; 'a2} }
 
 interactive cand_elim {| elim [] |} 'H :
-   [main] sequent ['ext] { <H>; y: 'a1; z: 'a2; <J['y, 'z]> >- 'C['y, 'z] } -->
-   sequent ['ext] { <H>; x: "cand"{'a1; 'a2}; <J['x]> >- 'C['x] }
+   [main] sequent { <H>; y: 'a1; z: 'a2; <J['y, 'z]> >- 'C['y, 'z] } -->
+   sequent { <H>; x: "cand"{'a1; 'a2}; <J['x]> >- 'C['x] }
 
 doc <:doc< 
    @begin[doc]
@@ -429,30 +429,30 @@ doc <:doc<
    @end[doc]
 >>
 interactive cor_univ {| intro []; eqcd |} :
-   [wf] sequent [squash] { <H> >- 'a1 = 'b1 in univ[i:l] } -->
-   [wf] sequent [squash] { <H>; x: "not"{'a1} >- 'a2 = 'b2 in univ[i:l] } -->
-   sequent ['ext] { <H> >- "cor"{'a1; 'a2} = "cor"{'b1; 'b2} in univ[i:l] }
+   [wf] sequent { <H> >- 'a1 = 'b1 in univ[i:l] } -->
+   [wf] sequent { <H>; x: "not"{'a1} >- 'a2 = 'b2 in univ[i:l] } -->
+   sequent { <H> >- "cor"{'a1; 'a2} = "cor"{'b1; 'b2} in univ[i:l] }
 
 interactive cor_type {| intro [] |} :
-   [wf] sequent [squash] { <H> >- "type"{'a1} } -->
-   [wf] sequent [squash] { <H>; x: "not"{'a1} >- "type"{'a2} } -->
-   sequent ['ext] { <H> >- "type"{."cor"{'a1; 'a2}} }
+   [wf] sequent { <H> >- "type"{'a1} } -->
+   [wf] sequent { <H>; x: "not"{'a1} >- "type"{'a2} } -->
+   sequent { <H> >- "type"{."cor"{'a1; 'a2}} }
 
 interactive cor_intro_left {| intro [SelectOption 1] |} :
-   [wf] sequent [squash] { <H>; x: "not"{'a1} >- "type"{'a2} } -->
-   [main] sequent ['ext] { <H> >- 'a1 } -->
-   sequent ['ext] { <H> >- "cor"{'a1; 'a2} }
+   [wf] sequent { <H>; x: "not"{'a1} >- "type"{'a2} } -->
+   [main] sequent { <H> >- 'a1 } -->
+   sequent { <H> >- "cor"{'a1; 'a2} }
 
 interactive cor_intro_right {| intro [SelectOption 2] |} :
-   [wf] sequent [squash] { <H> >- "type"{.'a1} } -->
-   [main] sequent ['ext] { <H> >- "not"{'a1} } -->
-   [main] sequent ['ext] { <H>; x: "not"{'a1} >- 'a2 } -->
-   sequent ['ext] { <H> >- "cor"{'a1; 'a2} }
+   [wf] sequent { <H> >- "type"{.'a1} } -->
+   [main] sequent { <H> >- "not"{'a1} } -->
+   [main] sequent { <H>; x: "not"{'a1} >- 'a2 } -->
+   sequent { <H> >- "cor"{'a1; 'a2} }
 
 interactive cor_elim {| elim [] |} 'H :
-   [main] sequent ['ext] { <H>; u: 'a1; <J[inl{'u}]> >- 'C[inl{'u}] } -->
-   [main] sequent ['ext] { <H>; u: "not"{'a1}; v: 'a2; <J[inr{'u, 'v}]> >- 'C[inr{'u, 'v}] } -->
-   sequent ['ext] { <H>; x: "cor"{'a1; 'a2}; <J['x]> >- 'C['x] }
+   [main] sequent { <H>; u: 'a1; <J[inl{'u}]> >- 'C[inl{'u}] } -->
+   [main] sequent { <H>; u: "not"{'a1}; v: 'a2; <J[inr{'u, 'v}]> >- 'C[inr{'u, 'v}] } -->
+   sequent { <H>; x: "cor"{'a1; 'a2}; <J['x]> >- 'C['x] }
 
 doc <:doc< 
    @begin[doc]
@@ -468,24 +468,24 @@ doc <:doc<
    @end[doc]
 >>
 interactive all_univ {| intro []; eqcd |} :
-   [wf] sequent [squash] { <H> >- 't1 = 't2 in univ[i:l] } -->
-   [wf] sequent [squash] { <H>; x : 't1 >- 'b1['x] = 'b2['x] in univ[i:l] } -->
-   sequent ['ext] { <H> >- "all"{'t1; x1. 'b1['x1]} = "all"{'t2; x2. 'b2['x2]} in univ[i:l] }
+   [wf] sequent { <H> >- 't1 = 't2 in univ[i:l] } -->
+   [wf] sequent { <H>; x : 't1 >- 'b1['x] = 'b2['x] in univ[i:l] } -->
+   sequent { <H> >- "all"{'t1; x1. 'b1['x1]} = "all"{'t2; x2. 'b2['x2]} in univ[i:l] }
 
 interactive all_type {| intro [] |} :
-   [wf] sequent [squash] { <H> >- "type"{'t} } -->
-   [wf] sequent [squash] { <H>; v: 't >- "type"{'b['v]} } -->
-   sequent ['ext] { <H> >- "type"{."all"{'t; v. 'b['v]}} }
+   [wf] sequent { <H> >- "type"{'t} } -->
+   [wf] sequent { <H>; v: 't >- "type"{'b['v]} } -->
+   sequent { <H> >- "type"{."all"{'t; v. 'b['v]}} }
 
 interactive all_intro {| intro [] |} :
-   [wf] sequent [squash] { <H> >- "type"{'t} } -->
-   [main] sequent ['ext] { <H>; v: 't >- 'b['v] } -->
-   sequent ['ext] { <H> >- "all"{'t; v. 'b['v]} }
+   [wf] sequent { <H> >- "type"{'t} } -->
+   [main] sequent { <H>; v: 't >- 'b['v] } -->
+   sequent { <H> >- "all"{'t; v. 'b['v]} }
 
 interactive all_elim {| elim [ThinOption thinT] |} 'H 'z :
-   [wf] sequent [squash] { <H>; x: all a: 'A. 'B['a]; <J['x]> >- 'z in 'A } -->
-   [main] sequent ['ext] { <H>; x: all a: 'A. 'B['a]; <J['x]>; w: 'B['z] >- 'C['x] } -->
-   sequent ['ext] { <H>; x: all a: 'A. 'B['a]; <J['x]> >- 'C['x] }
+   [wf] sequent { <H>; x: all a: 'A. 'B['a]; <J['x]> >- 'z in 'A } -->
+   [main] sequent { <H>; x: all a: 'A. 'B['a]; <J['x]>; w: 'B['z] >- 'C['x] } -->
+   sequent { <H>; x: all a: 'A. 'B['a]; <J['x]> >- 'C['x] }
 
 doc <:doc< 
    @begin[doc]
@@ -499,24 +499,24 @@ doc <:doc<
    @end[doc]
 >>
 interactive exists_univ {| intro []; eqcd |} :
-   [wf] sequent [squash] { <H> >- 't1 = 't2 in univ[i:l] } -->
-   [wf] sequent [squash] { <H>; x : 't1 >- 'b1['x] = 'b2['x] in univ[i:l] } -->
-   sequent ['ext] { <H> >- "exists"{'t1; x1. 'b1['x1]} = "exists"{'t2; x2. 'b2['x2]} in univ[i:l] }
+   [wf] sequent { <H> >- 't1 = 't2 in univ[i:l] } -->
+   [wf] sequent { <H>; x : 't1 >- 'b1['x] = 'b2['x] in univ[i:l] } -->
+   sequent { <H> >- "exists"{'t1; x1. 'b1['x1]} = "exists"{'t2; x2. 'b2['x2]} in univ[i:l] }
 
 interactive exists_type {| intro [] |} :
-   [wf] sequent [squash] { <H> >- "type"{'t} } -->
-   [wf] sequent [squash] { <H>; v: 't >- "type"{'b['v]} } -->
-   sequent ['ext] { <H> >- "type"{."exists"{'t; v. 'b['v]}} }
+   [wf] sequent { <H> >- "type"{'t} } -->
+   [wf] sequent { <H>; v: 't >- "type"{'b['v]} } -->
+   sequent { <H> >- "type"{."exists"{'t; v. 'b['v]}} }
 
 interactive exists_intro {| intro [] |} 'z :
-   [wf] sequent [squash] { <H> >- 'z in 't } -->
-   [main] sequent ['ext] { <H> >- 'b['z] } -->
-   [wf] sequent [squash] { <H>; v: 't >- "type"{'b['v]} } -->
-   sequent ['ext] { <H> >- "exists"{'t; v. 'b['v]} }
+   [wf] sequent { <H> >- 'z in 't } -->
+   [main] sequent { <H> >- 'b['z] } -->
+   [wf] sequent { <H>; v: 't >- "type"{'b['v]} } -->
+   sequent { <H> >- "exists"{'t; v. 'b['v]} }
 
 interactive exists_elim {| elim [] |} 'H :
-   [main] sequent ['ext] { <H>; y: 'a; z: 'b['y]; <J['y, 'z]> >- 'C['y, 'z] } -->
-   sequent ['ext] { <H>; x: exst v: 'a. 'b['v]; <J['x]> >- 'C['x] }
+   [main] sequent { <H>; y: 'a; z: 'b['y]; <J['y, 'z]> >- 'C['y, 'z] } -->
+   sequent { <H>; x: exst v: 'a. 'b['v]; <J['x]> >- 'C['x] }
 doc <:doc< @docoff >>
 
 (************************************************************************
@@ -753,8 +753,8 @@ doc <:doc<
   
       $$
       @rulebox{moveToConclT; i;
-      <<sequent['ext]{ <H>; <J> >- all x:'T_1. 'T_2}>>;
-      <<sequent['ext]{ <H>; "i. x": 'T_1; <J> >- 'T_2}>>.}
+      <<sequent{ <H>; <J> >- all x:'T_1. 'T_2}>>;
+      <<sequent{ <H>; "i. x": 'T_1; <J> >- 'T_2}>>.}
       $$
   
       The argument $i$ is the index of the hypothesis.  In some
@@ -764,8 +764,8 @@ doc <:doc<
   
       $$
       @rulebox{moveToConclT; i;
-      <<sequent['ext]{ <H>; j: <:doc<@int>> >- all i:(<:doc<@int>>).(<:doc< (i < j) @Rightarrow T_2[i]>>)}>>;
-      <<sequent['ext]{ <H>; i:<:doc<@int>>; j: <:doc<@int>>; <:doc<i < j>> >- 'T_2['i]}>>}
+      <<sequent{ <H>; j: <:doc<@int>> >- all i:(<:doc<@int>>).(<:doc< (i < j) @Rightarrow T_2[i]>>)}>>;
+      <<sequent{ <H>; i:<:doc<@int>>; j: <:doc<@int>>; <:doc<i < j>> >- 'T_2['i]}>>}
       $$
    }}
    @end[description]
@@ -835,11 +835,11 @@ doc <:doc<
   
         $$
         @rulebox{univCDT; @space;
-         <<sequent['ext]{ <H>; x_1: 'T_1; math_cdots; x_n: 'T_n >- <:doc<T_{n + 1}>>}>>@cr
-         <<sequent[squash]{ <H>; x_1: 'T_1; math_cdots; (<:doc<x_{n - 1}@colon T_{n - 1}>>) >- "type"{'T_n}}>>@cr
+         <<sequent{ <H>; x_1: 'T_1; math_cdots; x_n: 'T_n >- <:doc<T_{n + 1}>>}>>@cr
+         <<sequent{ <H>; x_1: 'T_1; math_cdots; (<:doc<x_{n - 1}@colon T_{n - 1}>>) >- "type"{'T_n}}>>@cr
          @vdots@cr
-         <<sequent[squash]{ <H> >- "type"{'T_1}}>>;
-         <<sequent['ext]{ <H> >- all x_1:'T_1.(<:doc< @ldots @all{x_n; T_n; T_{n + 1}}>>)}>>}
+         <<sequent{ <H> >- "type"{'T_1}}>>;
+         <<sequent{ <H> >- all x_1:'T_1.(<:doc< @ldots @all{x_n; T_n; T_{n + 1}}>>)}>>}
         $$}}
    @end[description]
    @docoff
@@ -886,14 +886,14 @@ doc <:doc<
   
         $$
         @rulebox{instHypT; t_1@space @cdots  t_n;
-         <<sequent['ext]{ <H>; y: all x_1: 'T_1.(<:doc< @ldots T_{n + 1}[x_1, @ldots, x_n]>>); <J['y]>;
+         <<sequent{ <H>; y: all x_1: 'T_1.(<:doc< @ldots T_{n + 1}[x_1, @ldots, x_n]>>); <J['y]>;
                         z: <:doc<T_{n + 1}[t_1, @ldots, t_n]>> >- 'C}>>@cr
-         <<sequent[squash]{ <H>; y: all x_1: 'T_1.(<:doc< @ldots T_{n + 1}[x_1, @ldots, x_n]>>); <J['y]> >-
+         <<sequent{ <H>; y: all x_1: 'T_1.(<:doc< @ldots T_{n + 1}[x_1, @ldots, x_n]>>); <J['y]> >-
                           't_1 in 'T_1}>>@cr
          @vdots@cr
-         <<sequent[squash]{ <H>; y: all x_1: 'T_1.(<:doc<@ldots . T_{n + 1}[x_1, @ldots, x_n]>>); <J['y]> >-
+         <<sequent{ <H>; y: all x_1: 'T_1.(<:doc<@ldots . T_{n + 1}[x_1, @ldots, x_n]>>); <J['y]> >-
                           't_n in 'T_n}>>;
-         <<sequent['ext]{ <H>; y : all x_1: 'T_1.(<:doc<@ldots . T_{n + 1}[x_1, @ldots, x_n]>>); <J['y]> >- 'C}>>}
+         <<sequent{ <H>; y : all x_1: 'T_1.(<:doc<@ldots . T_{n + 1}[x_1, @ldots, x_n]>>); <J['y]> >- 'C}>>}
         $$}}
    @end[description]
    @docoff
@@ -1047,12 +1047,12 @@ doc <:doc<
   
         $$
         @rulebox{backThruHypT; i;
-         <<sequent[squash]{ <H>; y: all x_1:'T_1.(<:doc<@ldots . T_{n + 1}[x_1, @ldots, x_n]>>); <J['y]> >-
+         <<sequent{ <H>; y: all x_1:'T_1.(<:doc<@ldots . T_{n + 1}[x_1, @ldots, x_n]>>); <J['y]> >-
                            't_1 in 'T_1}>>@cr
          @vdots@cr
-         <<sequent[squash]{ <H>; y: all x_1:'T_1.(<:doc<@ldots . T_{n + 1}[x_1, @ldots, x_n]>>); <J['y]> >-
+         <<sequent{ <H>; y: all x_1:'T_1.(<:doc<@ldots . T_{n + 1}[x_1, @ldots, x_n]>>); <J['y]> >-
                            't_n in 'T_n}>>;
-         <<sequent['ext]{ <H>; y: all x_1:'T_1.(<:doc<@ldots . T_{n + 1}[x_1, @ldots, x_n]>>); <J['y]> >-
+         <<sequent{ <H>; y: all x_1:'T_1.(<:doc<@ldots . T_{n + 1}[x_1, @ldots, x_n]>>); <J['y]> >-
                         (<:doc<T_{n + 1}[t_1, @ldots, t_n]>>)}>>}
         $$
   
@@ -1106,24 +1106,24 @@ doc <:doc<
   
         $$
         @rulebox{assumT; i;
-         <<sequent['ext]{ <H>; math_ldots >- 'T_1}>>@cr
+         <<sequent{ <H>; math_ldots >- 'T_1}>>@cr
          @vdots@cr
-         <<sequent['ext]{ <H>; x_1: 'A_1; math_cdots; x_n: 'A_n >- 'T_i}>>@cr
+         <<sequent{ <H>; x_1: 'A_1; math_cdots; x_n: 'A_n >- 'T_i}>>@cr
          @vdots@cr
-         <<sequent['ext]{ <H>; math_ldots >- 'T_m}>>@cr
+         <<sequent{ <H>; math_ldots >- 'T_m}>>@cr
          @hline
-         <<sequent['ext]{ <H>; <J>; w: all x_1: 'A_1.(<:doc<@ldots. @all{x_n; A_n; T_i}>>) >- 'C}>>@cr
-         <<sequent[squash]{ <H>; <J> >- "type"{'A_1}}>>@cr
+         <<sequent{ <H>; <J>; w: all x_1: 'A_1.(<:doc<@ldots. @all{x_n; A_n; T_i}>>) >- 'C}>>@cr
+         <<sequent{ <H>; <J> >- "type"{'A_1}}>>@cr
          @vdots@cr
-         <<sequent[squash]{ <H>; <J> >- "type"{'A_n}}>>;
+         <<sequent{ <H>; <J> >- "type"{'A_n}}>>;
   
-         <<sequent['ext]{ <H>; math_ldots >- 'T_1}>>@cr
+         <<sequent{ <H>; math_ldots >- 'T_1}>>@cr
          @vdots@cr
-         <<sequent['ext]{ <H>; x_1: 'A_1; math_cdots; x_n: 'A_n >- 'T_i}>>@cr
+         <<sequent{ <H>; x_1: 'A_1; math_cdots; x_n: 'A_n >- 'T_i}>>@cr
          @vdots@cr
-         <<sequent['ext]{ <H>; math_ldots >- 'T_m}>>@cr
+         <<sequent{ <H>; math_ldots >- 'T_m}>>@cr
          @hline
-         <<sequent['ext]{ <H>; <J> >- 'C}>>}
+         <<sequent{ <H>; <J> >- 'C}>>}
         $$}}
    @end[description]
    @docoff
@@ -1215,21 +1215,21 @@ doc <:doc<
   
      $$
      @rulebox{genAssumT; i;
-      <<sequent['ext]{ <H>; math_ldots >- 'T_1}>>@cr
+      <<sequent{ <H>; math_ldots >- 'T_1}>>@cr
       @vdots@cr
-      <<sequent['ext]{ <H> >- 't in 'T_i}>>@cr
+      <<sequent{ <H> >- 't in 'T_i}>>@cr
       @vdots@cr
-      <<sequent['ext]{ <H>; math_ldots >- 'T_n}>>@cr
+      <<sequent{ <H>; math_ldots >- 'T_n}>>@cr
       @hline
-      <<sequent['ext]{ <H> >- all x:'T_i.'C}>>;
+      <<sequent{ <H> >- all x:'T_i.'C}>>;
   
-      <<sequent['ext]{ <H>; math_ldots >- 'T_1}>>@cr
+      <<sequent{ <H>; math_ldots >- 'T_1}>>@cr
       @vdots@cr
-      <<sequent['ext]{ <H> >- 't in 'T_i}>>@cr
+      <<sequent{ <H> >- 't in 'T_i}>>@cr
       @vdots@cr
-      <<sequent['ext]{ <H>; math_ldots >- 'T_n}>>@cr
+      <<sequent{ <H>; math_ldots >- 'T_n}>>@cr
       @hline
-      <<sequent['ext]{ <H> >- 'C}>>}
+      <<sequent{ <H> >- 'C}>>}
      $$}}
    @end[description]
    @docoff

@@ -71,28 +71,28 @@ let _ =
  * Implication is restricted.
  *)
 interactive dprod_fun3 {| intro [] |} :
-   ["wf"]   sequent [squash] { <H>; u: set >- "type"{'A['u]} } -->
-   ["wf"]   sequent [squash] { <H>; u: set; z: 'A['u] >- "type"{'B['u; 'z]} } -->
-   sequent ['ext] { <H> >- fun_prop{z. 'A['z]} } -->
-   sequent ['ext] { <H> >- dfun_prop{z. 'A['z]; u, v. 'B['u; 'v]} } -->
-   sequent ['ext] { <H> >- fun_prop{z. "prod"{'A['z]; w. 'B['z; 'w]}} }
+   ["wf"]   sequent { <H>; u: set >- "type"{'A['u]} } -->
+   ["wf"]   sequent { <H>; u: set; z: 'A['u] >- "type"{'B['u; 'z]} } -->
+   sequent { <H> >- fun_prop{z. 'A['z]} } -->
+   sequent { <H> >- dfun_prop{z. 'A['z]; u, v. 'B['u; 'v]} } -->
+   sequent { <H> >- fun_prop{z. "prod"{'A['z]; w. 'B['z; 'w]}} }
 
 interactive dprod_res {| intro [] |} :
-   sequent [squash] { <H> >- restricted{'A} } -->
-   sequent [squash] { <H>; u: 'A >- restricted{'B['u]} } -->
-   sequent ['ext] { <H> >- restricted{."prod"{'A; u. 'B['u]}} }
+   sequent { <H> >- restricted{'A} } -->
+   sequent { <H>; u: 'A >- restricted{'B['u]} } -->
+   sequent { <H> >- restricted{."prod"{'A; u. 'B['u]}} }
 
 interactive exists_fun {| intro [] |} :
-   ["wf"]   sequent [squash] { <H>; u: set >- "type"{'A['u]} } -->
-   ["wf"]   sequent [squash] { <H>; u: set; z: 'A['u] >- "type"{'B['u; 'z]} } -->
-   sequent ['ext] { <H> >- fun_prop{z. 'A['z]} } -->
-   sequent ['ext] { <H> >- dfun_prop{z. 'A['z]; u, v. 'B['u; 'v]} } -->
-   sequent ['ext] { <H> >- fun_prop{z. "exists"{'A['z]; w. 'B['z; 'w]}} }
+   ["wf"]   sequent { <H>; u: set >- "type"{'A['u]} } -->
+   ["wf"]   sequent { <H>; u: set; z: 'A['u] >- "type"{'B['u; 'z]} } -->
+   sequent { <H> >- fun_prop{z. 'A['z]} } -->
+   sequent { <H> >- dfun_prop{z. 'A['z]; u, v. 'B['u; 'v]} } -->
+   sequent { <H> >- fun_prop{z. "exists"{'A['z]; w. 'B['z; 'w]}} }
 
 interactive exists_res {| intro [] |} :
-   sequent [squash] { <H> >- restricted{'A} } -->
-   sequent [squash] { <H>; u: 'A >- restricted{'B['u]} } -->
-   sequent ['ext] { <H> >- restricted{."exists"{'A; u. 'B['u]}} }
+   sequent { <H> >- restricted{'A} } -->
+   sequent { <H>; u: 'A >- restricted{'B['u]} } -->
+   sequent { <H> >- restricted{."exists"{'A; u. 'B['u]}} }
 
 (*
  * -*-

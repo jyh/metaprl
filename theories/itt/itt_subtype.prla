@@ -508,7 +508,11 @@ NItt_equal!univ	univ	univ Itt_equal
 P	p579	MLevel 0 i 0
 O	o579	univ p579
 T	t580	o579
-S	s	t579 h
+NBase_rewrite	Base_rw	Base_rewrite NIL
+NBase_rewrite!sequent_arg	brwsqarg	sequent_arg Base_rw
+O	obrarg	brwsqarg
+T	tbrarg	obrarg
+S	s	tbrarg h
 G	s	t580
 B	b580	s
 T	t581	o577 b580
@@ -546,7 +550,7 @@ O	o594	var p593
 T	t594	o594
 B	b594	t594
 T	t595	o592 b592 b593 b594
-S	s595	t592 h
+S	s595	tbrarg h
 G	s595	t595
 B	b595	s595
 T	t596	o577 b595
@@ -562,7 +566,7 @@ O	o598	var p598
 T	t599	o598
 B	b599	t599
 T	t600	o592 b592 b598 b599
-S	s600	t592 h
+S	s600	tbrarg h
 G	s600	t600
 B	b600	s600
 T	t601	o577 b600
@@ -574,7 +578,7 @@ B	b603	t603
 T	t604	o470 b594 b599
 B	b604	t604
 T	t605	o592 b592 b603 b604
-S	s605	t579 h
+S	s605	tbrarg h
 G	s605	t605
 B	b605	s605
 T	t606	o577 b605
@@ -594,7 +598,7 @@ O	o614	rule p614
 NItt_equal!type	type	type Itt_equal
 O	o615	type
 T	t615	o615 b471
-S	s615	t592 h
+S	s615	tbrarg h
 G	s615	t615
 B	b615	s615
 T	t616	o577 b615
@@ -602,7 +606,7 @@ B	b616	t616
 T	t617	o590 b616
 B	b617	t617
 T	t618	o615 b472
-S	s618	t592 h
+S	s618	tbrarg h
 G	s618	t618
 B	b618	s618
 T	t619	o577 b618
@@ -610,7 +614,7 @@ B	b619	t619
 T	t620	o590 b619
 B	b620	t620
 T	t621	o615 b473
-S	s621	t579 h
+S	s621	tbrarg h
 G	s621	t621
 B	b621	s621
 T	t622	o577 b621
@@ -629,14 +633,14 @@ T	t630	o b629 b4
 B	b630	t630
 P	p631	String main
 O	o631	meta_labeled p631
-S	s631	t592 h
+S	s631	tbrarg h
 G	s631	t473
 B	b632	s631
 T	t632	o577 b632
 B	b633	t632
 T	t633	o631 b633
 B	b634	t633
-S	s634	t579 h
+S	s634	tbrarg h
 G	s634	t618
 B	b635	s634
 T	t635	o577 b635
@@ -649,7 +653,7 @@ T	t641	o629 b472
 B	b641	t641
 T	t642	o b641 b4
 B	b642	t642
-S	s643	t579 h
+S	s643	tbrarg h
 G	s643	t615
 B	b644	s643
 T	t644	o577 b644
@@ -670,7 +674,7 @@ P	p653	Var x
 O	o653	var p653
 T	t654	o653
 B	b654	t654
-S	s657	t579 h
+S	s657	tbrarg h
 G	s657	t473
 B	b658	s657
 T	t658	o577 b658
@@ -678,7 +682,7 @@ B	b659	t658
 P	p665	String subtype_axiomEquality
 O	o665	rule p665
 T	t665	o592 b473 b609 b609
-S	s665	t579 h
+S	s665	tbrarg h
 G	s665	t665
 B	b665	s665
 T	t666	o577 b665
@@ -698,7 +702,7 @@ O	o676	var p676
 T	t676	o676 b609
 C	h677	J t654
 T	t678	o676 b654
-S	s678	t579 h h675 h677
+S	s678	tbrarg h h675 h677
 G	s678	t678
 B	b678	s678
 T	t679	o577 b678
@@ -4918,7 +4922,7 @@ P	p491	Number 5898
 P	p495	Number 6102
 O	o495	location p491 p495
 T	t3147	o592 b472 b654 b654
-S	s3147	t592 h h653
+S	s3147	tbrarg h h653
 G	s3147	t3147
 B	b3147	s3147
 T	t3148	o577 b3147
@@ -5413,7 +5417,7 @@ P	p639	Number 6867
 P	p640	Number 7066
 O	o640	location p639 p640
 H	h640	t473
-S	s640	t579 h h640 h676
+S	s640	tbrarg h h640 h676
 G	s640	t676
 B	b648	s640
 T	t648	o577 b648
@@ -5717,7 +5721,7 @@ B	b3	t3
 T	t709	o b575 b3
 B	b709	t709
 T	t114	o592 b471 b686 b1753
-S	s114	t592 h h675 h677
+S	s114	tbrarg h h675 h677
 G	s114	t114
 B	b114	s114
 T	t116	o577 b114
@@ -5726,7 +5730,7 @@ T	t117	o590 b116
 B	b117	t117
 T	t62	o592 b472 b686 b1753
 H	h709	t62
-S	s709	t579 h h675 h677 h709
+S	s709	tbrarg h h675 h677 h709
 G	s709	t678
 B	b713	s709
 T	t713	o577 b713
@@ -7585,7 +7589,7 @@ O	o4206	meta_labeled p4206
 T	t4206	o4206 b633
 B	b4206	t4206
 T	t4207	o592 b471 b1206 b1209
-S	s4207	t592 h
+S	s4207	tbrarg h
 G	s4207	t4207
 B	b4207	s4207
 T	t4208	o577 b4207
@@ -7593,7 +7597,7 @@ B	b4208	t4208
 T	t3762	o631 b4208
 B	b3762	t3762
 T	t4210	o592 b472 b1206 b1209
-S	s4210	t579 h
+S	s4210	tbrarg h
 G	s4210	t4210
 B	b4210	s4210
 T	t4211	o577 b4210
@@ -7613,7 +7617,7 @@ T	t1335	o1210 b4210 b1334
 B	b1335	t1335
 T	t1336	o1207 b1335 b4 b1231
 B	b1336	t1336
-S	s4059	t579 h h640
+S	s4059	tbrarg h h640
 G	s4059	t4210
 B	b4059	s4059
 T	t4059	o1210 b4059 b1334
@@ -7647,14 +7651,14 @@ P	p4071	Number 10877
 O	o4071	location p4070 p4071
 P	p4215	String use_subtype2
 O	o4215	rule p4215
-S	s4215	t579 h
+S	s4215	tbrarg h
 G	s4215	t471
 B	b4216	s4215
 T	t4216	o577 b4216
 B	b4217	t4216
 T	t1355	o631 b4217
 B	b1355	t1355
-S	s4217	t579 h
+S	s4217	tbrarg h
 G	s4217	t472
 B	b4218	s4217
 T	t4218	o577 b4218
@@ -7674,7 +7678,7 @@ B	b4224	t4223
 T	t4224	o1207 b4224 b4 b1231
 B	b4225	t4224
 H	h4071	t471
-S	s4071	t579 h h4071
+S	s4071	tbrarg h h4071
 G	s4071	t472
 B	b4071	s4071
 T	t4071	o1210 b4071 b4223
@@ -7836,12 +7840,12 @@ B	b4129	t4129
 P	p4129	String by_subtype1
 O	o4129	rule p4129
 C	h4129	J
-S	s4129	t592 h h4071 h4129
+S	s4129	tbrarg h h4071 h4129
 G	s4129	t473
 B	b4130	s4129
 T	t4130	o577 b4130
 B	b4131	t4130
-S	s4131	t579 h h653 h4129
+S	s4131	tbrarg h h653 h4129
 G	s4131	t3147
 B	b4132	s4131
 T	t4132	o577 b4132
@@ -7866,12 +7870,12 @@ T	t4140	o1944 b4140
 B	b4141	t4140
 P	p4141	String by_subtype2
 O	o4141	rule p4141
-S	s4141	t592 h h653 h677
+S	s4141	tbrarg h h653 h677
 G	s4141	t473
 B	b4142	s4141
 T	t4142	o577 b4142
 B	b4143	t4142
-S	s4143	t579 h h653 h677
+S	s4143	tbrarg h h653 h677
 G	s4143	t3147
 B	b4144	s4143
 T	t4144	o577 b4144

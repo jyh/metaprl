@@ -58,55 +58,55 @@ let _ =
  * Implication is restricted.
  *)
 interactive fun_fun {| intro [] |} :
-   ["wf"] sequent [squash] { <H>; w: set >- "type"{'A['w]} } -->
-   ["wf"] sequent [squash] { <H>; w: set >- "type"{'B['w]} } -->
-   sequent ['ext] { <H> >- fun_prop{x. 'A['x]} } -->
-   sequent ['ext] { <H> >- fun_prop{x. 'B['x]} } -->
-   sequent ['ext] { <H> >- fun_prop{x. "fun"{'A['x]; 'B['x]}} }
+   ["wf"] sequent { <H>; w: set >- "type"{'A['w]} } -->
+   ["wf"] sequent { <H>; w: set >- "type"{'B['w]} } -->
+   sequent { <H> >- fun_prop{x. 'A['x]} } -->
+   sequent { <H> >- fun_prop{x. 'B['x]} } -->
+   sequent { <H> >- fun_prop{x. "fun"{'A['x]; 'B['x]}} }
 
 (*
  * Implication is restricted.
  *)
 interactive fun_res1 {| intro [] |} :
-   sequent ['ext] { <H> >- restricted{. 'A} } -->
-   sequent ['ext] { <H> >- restricted{. 'B} } -->
-   sequent ['ext] { <H> >- restricted{. "fun"{'A; 'B}} }
+   sequent { <H> >- restricted{. 'A} } -->
+   sequent { <H> >- restricted{. 'B} } -->
+   sequent { <H> >- restricted{. "fun"{'A; 'B}} }
 
 (*
  * Implication is restricted.
  *)
 interactive implies_fun {| intro [] |} :
-   ["wf"] sequent [squash] { <H>; w: set >- "type"{'A['w]} } -->
-   ["wf"] sequent [squash] { <H>; w: set >- "type"{'B['w]} } -->
-   sequent ['ext] { <H> >- fun_prop{x. 'A['x]} } -->
-   sequent ['ext] { <H> >- fun_prop{x. 'B['x]} } -->
-   sequent ['ext] { <H> >- fun_prop{x. "implies"{'A['x]; 'B['x]}} }
+   ["wf"] sequent { <H>; w: set >- "type"{'A['w]} } -->
+   ["wf"] sequent { <H>; w: set >- "type"{'B['w]} } -->
+   sequent { <H> >- fun_prop{x. 'A['x]} } -->
+   sequent { <H> >- fun_prop{x. 'B['x]} } -->
+   sequent { <H> >- fun_prop{x. "implies"{'A['x]; 'B['x]}} }
 
 (*
  * Implication is restricted.
  *)
 interactive implies_res1 {| intro [] |} :
-   sequent ['ext] { <H> >- restricted{. 'A} } -->
-   sequent ['ext] { <H> >- restricted{. 'B} } -->
-   sequent ['ext] { <H> >- restricted{. "implies"{'A; 'B}} }
+   sequent { <H> >- restricted{. 'A} } -->
+   sequent { <H> >- restricted{. 'B} } -->
+   sequent { <H> >- restricted{. "implies"{'A; 'B}} }
 
 (*
  * Implication is restricted.
  *)
 interactive iff_fun {| intro [] |} :
-   ["wf"] sequent [squash] { <H>; w: set >- "type"{'A['w]} } -->
-   ["wf"] sequent [squash] { <H>; w: set >- "type"{'B['w]} } -->
-   sequent ['ext] { <H> >- fun_prop{x. 'A['x]} } -->
-   sequent ['ext] { <H> >- fun_prop{x. 'B['x]} } -->
-   sequent ['ext] { <H> >- fun_prop{x. "iff"{'A['x]; 'B['x]}} }
+   ["wf"] sequent { <H>; w: set >- "type"{'A['w]} } -->
+   ["wf"] sequent { <H>; w: set >- "type"{'B['w]} } -->
+   sequent { <H> >- fun_prop{x. 'A['x]} } -->
+   sequent { <H> >- fun_prop{x. 'B['x]} } -->
+   sequent { <H> >- fun_prop{x. "iff"{'A['x]; 'B['x]}} }
 
 (*
  * Implication is restricted.
  *)
 interactive iff_res1 {| intro [] |} :
-   sequent ['ext] { <H> >- restricted{. 'A} } -->
-   sequent ['ext] { <H> >- restricted{. 'B} } -->
-   sequent ['ext] { <H> >- restricted{. "iff"{'A; 'B}} }
+   sequent { <H> >- restricted{. 'A} } -->
+   sequent { <H> >- restricted{. 'B} } -->
+   sequent { <H> >- restricted{. "iff"{'A; 'B}} }
 
 (*
  * -*-

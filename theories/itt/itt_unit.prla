@@ -2508,7 +2508,11 @@ O	o1283	univ p1282
 T	t1283	o1283
 B	b1283	t1283
 T	t1284	o1282 b1283 b1147 b1147
-S	s	t1282 h
+NBase_rewrite	Base_rw	Base_rewrite NIL
+NBase_rewrite!sequent_arg	brwsqarg	sequent_arg Base_rw
+O	obrarg	brwsqarg
+T	tbrarg	obrarg
+S	s	tbrarg h
 G	s	t1284
 B	b1284	s
 T	t1285	o1280 b1284
@@ -2529,7 +2533,7 @@ T	t1290	o1290
 B	b1290	t1290
 P	p1300	String unitFormation
 O	o1300	rule p1300
-S	s1300	t1282 h
+S	s1300	tbrarg h
 G	s1300	t1283
 B	b1300	s1300
 T	t1300	o1280 b1300
@@ -2571,7 +2575,7 @@ O	o1315	rule p1315
 NItt_equal!type	type	type Itt_equal
 O	o1316	type
 T	t1316	o1316 b1147
-S	s1316	t1282 h
+S	s1316	tbrarg h
 G	s1316	t1316
 B	b1316	s1316
 T	t1317	o1280 b1316
@@ -2662,7 +2666,7 @@ P	p1899	Number 3715
 P	p1365	String unit_memberEquality
 O	o1365	rule p1365
 T	t1365	o1282 b1147 b1286 b1286
-S	s1365	t1282 h
+S	s1365	tbrarg h
 G	s1365	t1365
 B	b1365	s1365
 T	t1366	o1280 b1365
@@ -2757,7 +2761,7 @@ T	t1416	o2 b1415
 B	b1416	t1416
 P	p1419	String unit_memberFormation
 O	o1419	rule p1419
-S	s1419	t1282 h
+S	s1419	tbrarg h
 G	s1419	t1147
 B	b1419	s1419
 T	t1419	o1280 b1419
@@ -2936,7 +2940,7 @@ C	h1502	J t1286
 P	p1502	Var C
 O	o1502	var p1502
 T	t1502	o1502 b1286
-S	s1502	t1282 h h1501 h1502
+S	s1502	tbrarg h h1501 h1502
 G	s1502	t1502
 B	b1502	s1502
 T	t1503	o1280 b1502
@@ -2947,7 +2951,7 @@ T	t1504	o1503
 C	h1504	J t1504
 B	b1504	t1504
 T	t1505	o1502 b1504
-S	s1505	t1282 h h1501 h1504
+S	s1505	tbrarg h h1501 h1504
 G	s1505	t1505
 B	b1505	s1505
 T	t1506	o1280 b1505
@@ -3008,7 +3012,7 @@ O	o1692	var p1692
 T	t1692	o1692
 B	b1692	t1692
 T	t1693	o1282 b1147 b1504 b1692
-S	s1693	t1610 h
+S	s1693	tbrarg h
 G	s1693	t1693
 B	b1693	s1693
 T	t1694	o1280 b1693
@@ -3016,7 +3020,7 @@ B	b1694	t1694
 NPerv!rewrite	rewrite	rewrite Perv
 O	o1694	rewrite
 T	t1695	o1694 b1504 b1692
-S	s1695	t1282 h
+S	s1695	tbrarg h
 G	s1695	t1695
 B	b1695	s1695
 T	t1696	o1280 b1695

@@ -84,9 +84,9 @@ doc <:doc<
    @end[doc]
 >>
 interactive pair_isset {| intro [] |} :
-   ["wf"] sequent [squash] { <H> >- isset{'s1} } -->
-   ["wf"] sequent [squash] { <H> >- isset{'s2} } -->
-   sequent ['ext] { <H> >- isset{pair{'s1; 's2}} }
+   ["wf"] sequent { <H> >- isset{'s1} } -->
+   ["wf"] sequent { <H> >- isset{'s2} } -->
+   sequent { <H> >- isset{pair{'s1; 's2}} }
 
 doc <:doc< 
    @begin[doc]
@@ -97,18 +97,18 @@ doc <:doc<
    @end[doc]
 >>
 interactive pair_member_intro_left {| intro [SelectOption 1] |} :
-   ["wf"] sequent [squash] { <H> >- isset{'x} } -->
-   ["wf"] sequent [squash] { <H> >- isset{'s1} } -->
-   ["wf"] sequent [squash] { <H> >- isset{'s2} } -->
-   sequent ['ext] { <H> >- eq{'x; 's1} } -->
-   sequent ['ext] { <H> >- mem{'x; pair{'s1; 's2}} }
+   ["wf"] sequent { <H> >- isset{'x} } -->
+   ["wf"] sequent { <H> >- isset{'s1} } -->
+   ["wf"] sequent { <H> >- isset{'s2} } -->
+   sequent { <H> >- eq{'x; 's1} } -->
+   sequent { <H> >- mem{'x; pair{'s1; 's2}} }
 
 interactive pair_member_intro_right {| intro [SelectOption 2] |} :
-   ["wf"] sequent [squash] { <H> >- isset{'x} } -->
-   ["wf"] sequent [squash] { <H> >- isset{'s1} } -->
-   ["wf"] sequent [squash] { <H> >- isset{'s2} } -->
-   sequent ['ext] { <H> >- eq{'x; 's2} } -->
-   sequent ['ext] { <H> >- mem{'x; pair{'s1; 's2}} }
+   ["wf"] sequent { <H> >- isset{'x} } -->
+   ["wf"] sequent { <H> >- isset{'s1} } -->
+   ["wf"] sequent { <H> >- isset{'s2} } -->
+   sequent { <H> >- eq{'x; 's2} } -->
+   sequent { <H> >- mem{'x; pair{'s1; 's2}} }
 
 doc <:doc< 
    @begin[doc]
@@ -119,12 +119,12 @@ doc <:doc<
    @end[doc]
 >>
 interactive pair_member_elim {| elim [] |} 'H :
-   ["wf"] sequent [squash] { <H>; x: mem{'y; pair{'s1; 's2}}; <J['x]> >- isset{'y} } -->
-   ["wf"] sequent [squash] { <H>; x: mem{'y; pair{'s1; 's2}}; <J['x]> >- isset{'s1} } -->
-   ["wf"] sequent [squash] { <H>; x: mem{'y; pair{'s1; 's2}}; <J['x]> >- isset{'s2} } -->
-   sequent ['ext] { <H>; x: mem{'y; pair{'s1; 's2}}; <J['x]>; z: eq{'y; 's1} >- 'T['x] } -->
-   sequent ['ext] { <H>; x: mem{'y; pair{'s1; 's2}}; <J['x]>; z: eq{'y; 's2} >- 'T['x] } -->
-   sequent ['ext] { <H>; x: mem{'y; pair{'s1; 's2}}; <J['x]> >- 'T['x] }
+   ["wf"] sequent { <H>; x: mem{'y; pair{'s1; 's2}}; <J['x]> >- isset{'y} } -->
+   ["wf"] sequent { <H>; x: mem{'y; pair{'s1; 's2}}; <J['x]> >- isset{'s1} } -->
+   ["wf"] sequent { <H>; x: mem{'y; pair{'s1; 's2}}; <J['x]> >- isset{'s2} } -->
+   sequent { <H>; x: mem{'y; pair{'s1; 's2}}; <J['x]>; z: eq{'y; 's1} >- 'T['x] } -->
+   sequent { <H>; x: mem{'y; pair{'s1; 's2}}; <J['x]>; z: eq{'y; 's2} >- 'T['x] } -->
+   sequent { <H>; x: mem{'y; pair{'s1; 's2}}; <J['x]> >- 'T['x] }
 
 doc <:doc< 
    @begin[doc]
@@ -134,9 +134,9 @@ doc <:doc<
    @end[doc]
 >>
 interactive pair_fun {| intro [] |} :
-   sequent ['ext] { <H> >- fun_set{z. 's1['z]} } -->
-   sequent ['ext] { <H> >- fun_set{z. 's2['z]} } -->
-   sequent ['ext] { <H> >- fun_set{z. pair{'s1['z]; 's2['z]}} }
+   sequent { <H> >- fun_set{z. 's1['z]} } -->
+   sequent { <H> >- fun_set{z. 's2['z]} } -->
+   sequent { <H> >- fun_set{z. pair{'s1['z]; 's2['z]}} }
 doc <:doc< @docoff >>
 
 (*

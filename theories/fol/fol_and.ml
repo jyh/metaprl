@@ -41,20 +41,20 @@ prim_rw reduce_spread : spread{pair{'x; 'y}; a, b. 'body['a; 'b]} <--> 'body['x;
  ************************************************************************)
 
 prim and_type {| intro [] |} :
-   [wf] sequent ['ext] { <H> >- "type"{'A} } -->
-   [wf] sequent ['ext] { <H> >- "type"{'B} } -->
-   sequent ['ext] { <H> >- "type"{.'A & 'B} } = trivial
+   [wf] sequent { <H> >- "type"{'A} } -->
+   [wf] sequent { <H> >- "type"{'B} } -->
+   sequent { <H> >- "type"{.'A & 'B} } = trivial
 
 prim and_intro {| intro [] |} :
-   [main] ('a : sequent ['ext] { <H> >- 'A }) -->
-   [main] ('b : sequent ['ext] { <H> >- 'B }) -->
-   sequent ['ext] { <H> >- 'A & 'B } = pair{'a; 'b}
+   [main] ('a : sequent { <H> >- 'A }) -->
+   [main] ('b : sequent { <H> >- 'B }) -->
+   sequent { <H> >- 'A & 'B } = pair{'a; 'b}
 
 prim and_elim {| elim [] |} 'H :
-   [wf] sequent ['ext] { <H>; x: 'A & 'B; <J['x]> >- "type"{'A} } -->
-   [wf] sequent ['ext] { <H>; x: 'A & 'B; <J['x]> >- "type"{'B} } -->
-   [main] ('body['y; 'z] : sequent ['ext] { <H>; y: 'A; z: 'B; <J['y, 'z]> >- 'C['y, 'z] }) -->
-   sequent ['ext] { <H>; x: 'A & 'B; <J['x]> >- 'C['x] } =
+   [wf] sequent { <H>; x: 'A & 'B; <J['x]> >- "type"{'A} } -->
+   [wf] sequent { <H>; x: 'A & 'B; <J['x]> >- "type"{'B} } -->
+   [main] ('body['y; 'z] : sequent { <H>; y: 'A; z: 'B; <J['y, 'z]> >- 'C['y, 'z] }) -->
+   sequent { <H>; x: 'A & 'B; <J['x]> >- 'C['x] } =
    spread{'x; y, z. 'body['y; 'z]}
 
 (*

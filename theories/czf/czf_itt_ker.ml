@@ -119,11 +119,11 @@ doc <:doc<
    @end[doc]
 >>
 interactive ker_type {| intro [] |} :
-   sequent [squash] { <H> >- 'g1 IN label } -->
-   sequent [squash] { <H> >- 'g2 IN label } -->
-   sequent [squash] { <H> >- 'h IN label } -->
-   sequent ['ext] { <H> >- fun_set{x. 'f['x]} } -->
-   sequent ['ext] { <H> >- "type"{ker{'h; 'g1; 'g2; x. 'f['x]}} }
+   sequent { <H> >- 'g1 IN label } -->
+   sequent { <H> >- 'g2 IN label } -->
+   sequent { <H> >- 'h IN label } -->
+   sequent { <H> >- fun_set{x. 'f['x]} } -->
+   sequent { <H> >- "type"{ker{'h; 'g1; 'g2; x. 'f['x]}} }
 
 doc <:doc< 
    @begin[doc]
@@ -135,14 +135,14 @@ doc <:doc<
    @end[doc]
 >>
 interactive ker_intro {| intro [] |} :
-   sequent [squash] { <H> >- 'g1 IN label } -->
-   sequent [squash] { <H> >- 'g2 IN label } -->
-   sequent [squash] { <H> >- 'h IN label } -->
-   sequent ['ext] { <H> >- hom{'g1; 'g2; x. 'f['x]} } -->
-   sequent ['ext] { <H> >- group{'h} } -->
-   sequent ['ext] { <H> >- equal{car{'h}; sep{car{'g1}; x. eq{'f['x]; id{'g2}}}} } -->
-   sequent ['ext] { <H>; a: set; b: set; x: mem{'a; car{'h}}; y: mem{'b; car{'h}} >- eq{op{'h; 'a; 'b}; op{'g1; 'a; 'b}} } -->
-   sequent ['ext] { <H> >- ker{'h; 'g1; 'g2; x. 'f['x]} }
+   sequent { <H> >- 'g1 IN label } -->
+   sequent { <H> >- 'g2 IN label } -->
+   sequent { <H> >- 'h IN label } -->
+   sequent { <H> >- hom{'g1; 'g2; x. 'f['x]} } -->
+   sequent { <H> >- group{'h} } -->
+   sequent { <H> >- equal{car{'h}; sep{car{'g1}; x. eq{'f['x]; id{'g2}}}} } -->
+   sequent { <H>; a: set; b: set; x: mem{'a; car{'h}}; y: mem{'b; car{'h}} >- eq{op{'h; 'a; 'b}; op{'g1; 'a; 'b}} } -->
+   sequent { <H> >- ker{'h; 'g1; 'g2; x. 'f['x]} }
 doc <:doc< @docoff >>
 
 (*
@@ -150,23 +150,23 @@ doc <:doc< @docoff >>
  * element in the kernel of f is equal to the identity of G'.
  *)
 interactive ker_mem_id {| elim [] |} 'H 'y :
-   sequent [squash] { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- isset{'y} } -->
-   sequent [squash] { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- 'g1 IN label } -->
-   sequent [squash] { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- 'g2 IN label } -->
-   sequent [squash] { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- 'h IN label } -->
-   sequent ['ext] { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- fun_set{x. 'f['x]} } -->
-   sequent ['ext] { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- mem{'y; car{'h}} } -->
-   sequent ['ext] { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]>; v: mem{'y; car{'g1}}; w: eq{'f['y]; id{'g2}} >- 'C['u] } -->
-   sequent ['ext] { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- 'C['u] }
+   sequent { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- isset{'y} } -->
+   sequent { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- 'g1 IN label } -->
+   sequent { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- 'g2 IN label } -->
+   sequent { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- 'h IN label } -->
+   sequent { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- fun_set{x. 'f['x]} } -->
+   sequent { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- mem{'y; car{'h}} } -->
+   sequent { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]>; v: mem{'y; car{'g1}}; w: eq{'f['y]; id{'g2}} >- 'C['u] } -->
+   sequent { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- 'C['u] }
 doc <:doc< @docoff >>
 
 interactive ker_subgroup hom{'g1; 'g2; x. 'f['x]} 'h :
-   sequent [squash] { <H> >- 'g1 IN label } -->
-   sequent [squash] { <H> >- 'g2 IN label } -->
-   sequent [squash] { <H> >- 'h IN label } -->
-   sequent ['ext] { <H> >- ker{'h; 'g1; 'g2; x. 'f['x]} } -->
-   sequent ['ext] { <H> >- fun_set{x. 'f['x]} } -->
-   sequent ['ext] { <H> >- subgroup{'h; 'g1} }
+   sequent { <H> >- 'g1 IN label } -->
+   sequent { <H> >- 'g2 IN label } -->
+   sequent { <H> >- 'h IN label } -->
+   sequent { <H> >- ker{'h; 'g1; 'g2; x. 'f['x]} } -->
+   sequent { <H> >- fun_set{x. 'f['x]} } -->
+   sequent { <H> >- subgroup{'h; 'g1} }
 
 doc <:doc< 
    @begin[doc]
@@ -177,33 +177,33 @@ doc <:doc<
    @end[doc]
 >>
 interactive ker_subgroup_elim (*{| elim [] |}*) 'H :
-   sequent [squash] { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- 'g1 IN label } -->
-   sequent [squash] { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- 'g2 IN label } -->
-   sequent [squash] { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- 'h IN label } -->
-   sequent ['ext] { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- fun_set{x. 'f['x]} } -->
-   sequent ['ext] { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]>; v: subgroup{'h; 'g1} >- 'C['u] } -->
-   sequent ['ext] { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- 'C['u] }
+   sequent { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- 'g1 IN label } -->
+   sequent { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- 'g2 IN label } -->
+   sequent { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- 'h IN label } -->
+   sequent { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- fun_set{x. 'f['x]} } -->
+   sequent { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]>; v: subgroup{'h; 'g1} >- 'C['u] } -->
+   sequent { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- 'C['u] }
 doc <:doc< @docoff >>
 
 interactive ker_lcoset_i {| intro [] |} 'g2 :
-   sequent [squash] { <H> >- 'g1 IN label } -->
-   sequent [squash] { <H> >- 'g2 IN label } -->
-   sequent [squash] { <H> >- 'h IN label } -->
-   sequent [squash] { <H> >- isset{'a} } -->
-   sequent ['ext] { <H> >- mem{'a; car{'g1}} } -->
-   sequent ['ext] { <H> >- fun_set{x. 'f['x]} } -->
-   sequent ['ext] { <H> >- ker{'h; 'g1; 'g2; x. 'f['x]} } -->
-   sequent ['ext] { <H> >- equal{sep{car{'g1}; x. eq{'f['x]; 'f['a]}}; lcoset{'h; 'g1; 'a}} }
+   sequent { <H> >- 'g1 IN label } -->
+   sequent { <H> >- 'g2 IN label } -->
+   sequent { <H> >- 'h IN label } -->
+   sequent { <H> >- isset{'a} } -->
+   sequent { <H> >- mem{'a; car{'g1}} } -->
+   sequent { <H> >- fun_set{x. 'f['x]} } -->
+   sequent { <H> >- ker{'h; 'g1; 'g2; x. 'f['x]} } -->
+   sequent { <H> >- equal{sep{car{'g1}; x. eq{'f['x]; 'f['a]}}; lcoset{'h; 'g1; 'a}} }
 
 interactive ker_rcoset_i {| intro [] |} 'g2 :
-   sequent [squash] { <H> >- 'g1 IN label } -->
-   sequent [squash] { <H> >- 'g2 IN label } -->
-   sequent [squash] { <H> >- 'h IN label } -->
-   sequent [squash] { <H> >- isset{'a} } -->
-   sequent ['ext] { <H> >- mem{'a; car{'g1}} } -->
-   sequent ['ext] { <H> >- fun_set{x. 'f['x]} } -->
-   sequent ['ext] { <H> >- ker{'h; 'g1; 'g2; x. 'f['x]} } -->
-   sequent ['ext] { <H> >- equal{sep{car{'g1}; x. eq{'f['x]; 'f['a]}}; rcoset{'h; 'g1; 'a}} }
+   sequent { <H> >- 'g1 IN label } -->
+   sequent { <H> >- 'g2 IN label } -->
+   sequent { <H> >- 'h IN label } -->
+   sequent { <H> >- isset{'a} } -->
+   sequent { <H> >- mem{'a; car{'g1}} } -->
+   sequent { <H> >- fun_set{x. 'f['x]} } -->
+   sequent { <H> >- ker{'h; 'g1; 'g2; x. 'f['x]} } -->
+   sequent { <H> >- equal{sep{car{'g1}; x. eq{'f['x]; 'f['a]}}; rcoset{'h; 'g1; 'a}} }
 
 doc <:doc< 
    @begin[doc]
@@ -213,24 +213,24 @@ doc <:doc<
    @end[doc]
 >>
 interactive ker_lcoset_e (*{| elim [] |}*) 'H 'g2 'a :
-   sequent [squash] { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- 'g1 IN label } -->
-   sequent [squash] { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- 'g2 IN label } -->
-   sequent [squash] { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- 'h IN label } -->
-   sequent [squash] { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- isset{'a} } -->
-   sequent ['ext] { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- mem{'a; car{'g1}} } -->
-   sequent ['ext] { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- fun_set{x. 'f['x]} } -->
-   sequent ['ext] { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]>; v: equal{sep{car{'g1}; x. eq{'f['x]; 'f['a]}}; lcoset{'h; 'g1; 'a}} >- 'C['u] } -->
-   sequent ['ext] { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- 'C['u] }
+   sequent { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- 'g1 IN label } -->
+   sequent { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- 'g2 IN label } -->
+   sequent { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- 'h IN label } -->
+   sequent { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- isset{'a} } -->
+   sequent { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- mem{'a; car{'g1}} } -->
+   sequent { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- fun_set{x. 'f['x]} } -->
+   sequent { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]>; v: equal{sep{car{'g1}; x. eq{'f['x]; 'f['a]}}; lcoset{'h; 'g1; 'a}} >- 'C['u] } -->
+   sequent { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- 'C['u] }
 
 interactive ker_rcoset_e (*{| elim [] |}*) 'H 'g2 'a :
-   sequent [squash] { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- 'g1 IN label } -->
-   sequent [squash] { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- 'g2 IN label } -->
-   sequent [squash] { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- 'h IN label } -->
-   sequent [squash] { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- isset{'a} } -->
-   sequent ['ext] { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- mem{'a; car{'g1}} } -->
-   sequent ['ext] { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- fun_set{x. 'f['x]} } -->
-   sequent ['ext] { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]>; v: equal{sep{car{'g1}; x. eq{'f['x]; 'f['a]}}; rcoset{'h; 'g1; 'a}} >- 'C['u] } -->
-   sequent ['ext] { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- 'C['u] }
+   sequent { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- 'g1 IN label } -->
+   sequent { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- 'g2 IN label } -->
+   sequent { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- 'h IN label } -->
+   sequent { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- isset{'a} } -->
+   sequent { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- mem{'a; car{'g1}} } -->
+   sequent { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- fun_set{x. 'f['x]} } -->
+   sequent { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]>; v: equal{sep{car{'g1}; x. eq{'f['x]; 'f['a]}}; rcoset{'h; 'g1; 'a}} >- 'C['u] } -->
+   sequent { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- 'C['u] }
 
 doc <:doc< 
    @begin[doc]
@@ -240,20 +240,20 @@ doc <:doc<
    @end[doc]
 >>
 interactive ker_mono1 (*{| elim [] |}*) 'H :
-   sequent [squash] { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- 'g1 IN label } -->
-   sequent [squash] { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- 'g2 IN label } -->
-   sequent [squash] { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- 'h IN label } -->
-   sequent ['ext] { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- fun_set{x. 'f['x]} } -->
-   sequent ['ext] { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- equal{car{'h}; sep{car{'g1}; x. eq{'x; id{'g1}}}} } -->
-   sequent ['ext] { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- all c: set.all d: set. (mem{'c; car{'g1}} => mem{'d; car{'g1}} => eq{'f['c]; 'f['d]} => eq{'c; 'd}) }
+   sequent { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- 'g1 IN label } -->
+   sequent { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- 'g2 IN label } -->
+   sequent { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- 'h IN label } -->
+   sequent { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- fun_set{x. 'f['x]} } -->
+   sequent { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- equal{car{'h}; sep{car{'g1}; x. eq{'x; id{'g1}}}} } -->
+   sequent { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- all c: set.all d: set. (mem{'c; car{'g1}} => mem{'d; car{'g1}} => eq{'f['c]; 'f['d]} => eq{'c; 'd}) }
 
 interactive ker_mono2 (*{| elim [] |}*) 'H :
-   sequent [squash] { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- 'g1 IN label } -->
-   sequent [squash] { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- 'g2 IN label } -->
-   sequent [squash] { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- 'h IN label } -->
-   sequent ['ext] { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- fun_set{x. 'f['x]} } -->
-   sequent ['ext] { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]>; c: set; d: set; v: mem{'c; car{'g1}}; w: mem{'d; car{'g1}}; z: eq{'f['c]; 'f['d]} >- eq{'c; 'd} } -->
-   sequent ['ext] { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- equal{car{'h}; sep{car{'g1}; x. eq{'x; id{'g1}}}} }
+   sequent { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- 'g1 IN label } -->
+   sequent { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- 'g2 IN label } -->
+   sequent { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- 'h IN label } -->
+   sequent { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- fun_set{x. 'f['x]} } -->
+   sequent { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]>; c: set; d: set; v: mem{'c; car{'g1}}; w: mem{'d; car{'g1}}; z: eq{'f['c]; 'f['d]} >- eq{'c; 'd} } -->
+   sequent { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- equal{car{'h}; sep{car{'g1}; x. eq{'x; id{'g1}}}} }
 
 doc <:doc< 
    @begin[doc]
@@ -262,12 +262,12 @@ doc <:doc<
    @end[doc]
 >>
 interactive ker_normalSubg (*{| elim [] |}*) 'H :
-   sequent [squash] { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- 'g1 IN label } -->
-   sequent [squash] { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- 'g2 IN label } -->
-   sequent [squash] { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- 'h IN label } -->
-   sequent ['ext] { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- fun_set{x. 'f['x]} } -->
-   sequent ['ext] { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]>; v: normal_subg{'h; 'g1} >- 'C['u] } -->
-   sequent ['ext] { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- 'C['u] }
+   sequent { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- 'g1 IN label } -->
+   sequent { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- 'g2 IN label } -->
+   sequent { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- 'h IN label } -->
+   sequent { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- fun_set{x. 'f['x]} } -->
+   sequent { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]>; v: normal_subg{'h; 'g1} >- 'C['u] } -->
+   sequent { <H>; u: ker{'h; 'g1; 'g2; x. 'f['x]}; <J['u]> >- 'C['u] }
 doc <:doc< @docoff >>
 
 (************************************************************************

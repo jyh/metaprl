@@ -1,6 +1,6 @@
 doc <:doc< 
    @begin[spelling]
-   squashT sqsquashT tac th unsquashed unsquash unsquashing unsquashT
+   squashT tac th unsquashed unsquash unsquashing unsquashT
    @end[spelling]
   
    @begin[doc]
@@ -13,7 +13,7 @@ doc <:doc<
    That is <<squash{'A}>> means that $A$ is true, but we do not know its
    computational content.
    Consequentially,  the sequent
-   $$<<sequent['ext]{ <H>; x: 'A; <J> >- 'C}>>$$
+   $$<<sequent{ <H>; x: 'A; <J> >- 'C}>>$$
    is true when $C$ is true (with the assumption that $A$ is true),
    but extract of $C$ does not depend on the witness of $A$.
    Note that $x$ in this sequent stands not for a witness for $A$,
@@ -28,11 +28,11 @@ doc <:doc<
    the meta-theory @tt[squash] operator that works on sequents.
    Namely, sequents in the @MetaPRL implementation of the
    @Nuprl type theory have two forms: one is the generic
-   form $<<sequent['ext]{ <H> >- 'T}>>$, where @i{ext} is a variable.  The variable
+   form $<<sequent{ <H> >- 'T}>>$, where @i{ext} is a variable.  The variable
    specifies that the subproof extract may be needed for the computational content
    of the proof.
   
-   The other form is $<<sequent[squash]{ <H> >- 'T}>>$, where @hrefterm[squash] is a
+   The other form is $<<sequent{ <H> >- 'T}>>$, where @hrefterm[squash] is a
    term defined in the @hrefmodule[Base_trivial]{} module.
    The @tt[squash] term specifies that the extract of the proof of this
    subgoal is @em{not} needed for the computational content of the whole proof.
@@ -54,7 +54,7 @@ doc <:doc<
    can be used to recover computational content from a @tt[squash] proof.
    Additions to the resource are done through resource annotations, see the
    @hrefresource[squash_resource] section for more information. Tactics
-   @hreftactic[squashT], @hreftactic[unsquashT] and @hreftactic[sqsquashT]
+   @hreftactic[squashT] and @hreftactic[unsquashT]
    make use of the @hrefresource[squash_resource].
   
    We also create a new version of @hreftactic[nthAssumT] tactic that knows how
@@ -176,12 +176,12 @@ doc <:doc<
    @end[doc]
 >>
 prim squashEquality {| intro []; eqcd |}  :
-   [wf] sequent [squash] { <H> >- 'A1 = 'A2 in univ[i:l] } -->
-   sequent ['ext] { <H> >- squash{'A1} = squash{'A2} in univ[i:l] } = it
+   [wf] sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
+   sequent { <H> >- squash{'A1} = squash{'A2} in univ[i:l] } = it
 
 prim squashType {| intro [] |} :
-   [wf] sequent [squash] { <H> >- "type"{'A} } -->
-   sequent ['ext] { <H> >- "type"{.squash{'A}} } =
+   [wf] sequent { <H> >- "type"{'A} } -->
+   sequent { <H> >- "type"{.squash{'A}} } =
    it
 
 doc <:doc< 
@@ -194,8 +194,8 @@ doc <:doc<
    @end[doc]
 >>
 prim squashMemberFormation {| intro [AutoMustComplete] |} :
-   sequent [squash] { <H> >- 'A } -->
-   sequent ['ext]   { <H> >- squash{'A} } =
+   sequent { <H> >- 'A } -->
+   sequent { <H> >- squash{'A} } =
    it
 
 doc <:doc< 
@@ -206,27 +206,19 @@ doc <:doc<
    be unsquashed (because the proof can always be inferred).
    The second rule, @tt[squashElim] shows that $@it$ is the only element
    of a non-empty squashed type.
-   The third rule, @tt[squashFromAny] allows inferring a squashed
-   sequent form from any sequent form, effectively allowing us to
-   "forget" a meta-witness (extract) if we do not need it.
    @end[doc]
 >>
 prim unsquashEqualWeak 'H :
-   sequent [squash] { <H>; 'P; <J> >- 'x = 'y in 'A } -->
-   sequent ['ext] { <H>; squash{'P}; <J> >- 'x = 'y in 'A } =
+   sequent { <H>; 'P; <J> >- 'x = 'y in 'A } -->
+   sequent { <H>; squash{'P}; <J> >- 'x = 'y in 'A } =
    it
 
 prim squashElim 'H :
-   ('t : sequent ['ext] { <H>; squash{'P}; <J[it]> >- 'C[it] }) -->
-   sequent ['ext] { <H>; u: squash{'P}; <J['u]> >- 'C['u] } =
+   ('t : sequent { <H>; squash{'P}; <J[it]> >- 'C[it] }) -->
+   sequent { <H>; u: squash{'P}; <J['u]> >- 'C['u] } =
    't
 
-prim squashFromAny 'ext :
-   sequent ['ext] { <H> >- 'T } -->
-   sequent [squash] { <H> >- 'T } =
-   it
-
-doc <:doc< @docoff >>
+doc docoff
 
 (************************************************************************
  * TYPE INFERENCE                                                       *
@@ -247,22 +239,13 @@ doc <:doc<
    @end[doc]
 >>
 interactive unsquashEqual 'H :
-   sequent [squash] { <H>; 'P; <J[it]> >- 'x[it] = 'y[it] in 'A[it] } -->
-   sequent ['ext] { <H>; u: squash{'P}; <J['u]> >- 'x['u] = 'y['u] in 'A['u] }
+   sequent { <H>; 'P; <J[it]> >- 'x[it] = 'y[it] in 'A[it] } -->
+   sequent { <H>; u: squash{'P}; <J['u]> >- 'x['u] = 'y['u] in 'A['u] }
 
 doc <:doc< @docoff >>
 interactive unsquashWWitness 'H 't:
-   sequent [squash] { <H>; 'P; <J[it]> >- 't in 'A[it] } -->
-   sequent ['ext] { <H>; u: squash{'P}; <J['u]> >- 'A['u] }
-
-doc <:doc< 
-   @begin[doc]
-   Next, we prove that equality witness can always be recovered on meta-level.
-   @end[doc]
->>
-interactive sqsqEqual :
-   sequent [squash] { <H> >- 't in 'A} -->
-   sequent ['ext] { <H> >- 't in 'A}
+   sequent { <H>; 'P; <J[it]> >- 't in 'A[it] } -->
+   sequent { <H>; u: squash{'P}; <J['u]> >- 'A['u] }
 
 doc <:doc< 
    @begin[doc]
@@ -270,13 +253,8 @@ doc <:doc<
    @end[doc]
 >>
 interactive squashMemberEquality {| intro []; eqcd |} :
-   [wf] sequent [squash] { <H> >- squash{'A} } -->
-   sequent ['ext] { <H> >- it in squash{'A} }
-
-doc <:doc<@docoff>>
-interactive sqsqSq :
-   sequent [squash] { <H> >- squash{'A}} -->
-   sequent ['ext] { <H> >- squash{'A}}
+   [wf] sequent { <H> >- squash{'A} } -->
+   sequent { <H> >- it in squash{'A} }
 
 doc <:doc< 
    @begin[doc]
@@ -286,38 +264,38 @@ doc <:doc<
    @end[doc]
 >>
 interactive squashStable 't :
-   [main] sequent [squash] { <H> >- squash{'A} } -->
-   [wf] sequent [squash] { <H>; 'A >- 't in 'A } -->
-   sequent ['ext] { <H> >- 'A}
+   [main] sequent { <H> >- squash{'A} } -->
+   [wf] sequent { <H>; 'A >- 't in 'A } -->
+   sequent { <H> >- 'A}
 
 interactive unsquashHypEqual 'H :
-   sequent ['ext] { <H>; 'x = 'y in 'A; <J[it]> >- 'C[it] } -->
-   sequent ['ext] { <H>; u: squash{('x = 'y in 'A)}; <J['u]> >- 'C['u] }
+   sequent { <H>; 'x = 'y in 'A; <J[it]> >- 'C[it] } -->
+   sequent { <H>; u: squash{('x = 'y in 'A)}; <J['u]> >- 'C['u] }
 
 interactive unsquash 'H :
-   sequent [squash] { <H>; 'P; <J[it]> >- squash{'T[it]} } -->
-   sequent ['ext] { <H>; u: squash{'P}; <J['u]> >- squash{'T['u]} }
+   sequent { <H>; 'P; <J[it]> >- squash{'T[it]} } -->
+   sequent { <H>; u: squash{'P}; <J['u]> >- squash{'T['u]} }
 
 doc <:doc< @docoff >>
 interactive unsquashStableGoal 'H :
-   sequent [squash] { <H>; 'A; <J[it]> >- 'C[it] } -->
-   sequent ['ext] { <H>; u: squash{'A}; <J['u]>; squash{'C['u]} >- 'C['u] } -->
-   sequent ['ext] { <H>; u: squash{'A}; <J['u]> >- 'C['u]}
+   sequent { <H>; 'A; <J[it]> >- 'C[it] } -->
+   sequent { <H>; u: squash{'A}; <J['u]>; squash{'C['u]} >- 'C['u] } -->
+   sequent { <H>; u: squash{'A}; <J['u]> >- 'C['u]}
 
 interactive unsquashHypGoalStable 'H :
-   sequent ['ext] { <H>; 'A; <J[it]> >- 'C[it] } -->
-   sequent ['ext] { <H>; u: squash{'A}; <J['u]> >- 'A } -->
-   sequent ['ext] { <H>; u: squash{'A}; <J['u]> >- 'C['u]}
+   sequent { <H>; 'A; <J[it]> >- 'C[it] } -->
+   sequent { <H>; u: squash{'A}; <J['u]> >- 'A } -->
+   sequent { <H>; u: squash{'A}; <J['u]> >- 'C['u]}
 
 interactive unsquashStable 'H 't :
-   sequent ['ext] { <H>; 'A; <J[it]> >- 'C[it] } -->
-   sequent [squash] { <H>; u: squash{'A}; <J['u]>; 'A >- 't in 'A } -->
-   sequent ['ext] { <H>; u: squash{'A}; <J['u]> >- 'C['u]}
+   sequent { <H>; 'A; <J[it]> >- 'C[it] } -->
+   sequent { <H>; u: squash{'A}; <J['u]>; 'A >- 't in 'A } -->
+   sequent { <H>; u: squash{'A}; <J['u]> >- 'C['u]}
 
 interactive squashAssert 'A :
-   sequent [squash] { <H> >- squash{'A} } -->
-   sequent ['ext] { <H>; squash{'A} >- 'C } -->
-   sequent ['ext] { <H> >- 'C }
+   sequent { <H> >- squash{'A} } -->
+   sequent { <H>; squash{'A} >- 'C } -->
+   sequent { <H> >- 'C }
 
 (*
  * H >- Ui ext squash(A)
@@ -325,8 +303,8 @@ interactive squashAssert 'A :
  * H >- Ui ext A
  *)
 interactive squashFormation :
-   sequent ['ext] { <H> >- univ[i:l] } -->
-   sequent ['ext] { <H> >- univ[i:l] }
+   sequent { <H> >- univ[i:l] } -->
+   sequent { <H> >- univ[i:l] }
 
 (************************************************************************
  * TYPES                                                                *
@@ -349,9 +327,9 @@ doc <:doc<
    The only way to improve the @tt{squash_resource} outside of the
    @tt{Itt_squash} theory is to use @it{resource annotations}. Currently, the
    following kinds of rules are recognized by the @tt{squash_resource} annotations:
-   $<<sequent[squash]{ <H> >- squash{'A}}>>@space<<longrightarrow>>@space<<sequent['ext]{ <H> >- 'A}>>$,
-   $<<sequent[squash]{ <H> >- 'A}>>@space<<longrightarrow>>@space<<sequent['ext]{ <H> >- 't in 'A}>>$,
-   <<sequent['ext]{ <H> >- 't in 'A}>> and <<sequent['ext]{ <H>; x: 'A; <J['x]> >- 'C['x]}>>
+   $<<sequent{ <H> >- squash{'A}}>>@space<<longrightarrow>>@space<<sequent{ <H> >- 'A}>>$,
+   $<<sequent{ <H> >- 'A}>>@space<<longrightarrow>>@space<<sequent{ <H> >- 't in 'A}>>$,
+   <<sequent{ <H> >- 't in 'A}>> and <<sequent{ <H>; x: 'A; <J['x]> >- 'C['x]}>>
    (e.g $A$ is a falsity), although it is possible
    to add support for other kinds of rules if necessary.
   
@@ -365,35 +343,6 @@ type squash_inf =
  | SqStableGoal of tactic
 
 type squash_info = term * squash_inf
-
-(************************************************************************
- * Sequent Squash PRIMITIVES                                            *
- ************************************************************************)
-
-let sqsquash_term = << squash >>
-let sqsquash_opname = opname_of_term sqsquash_term
-
-(*
- * Is a goal squashed?
- *)
-let is_squash_sequent goal =
-   let args = args_of_sequent goal in
-      match dest_xlist args with
-         [flag] ->
-            Opname.eq (opname_of_term flag) sqsquash_opname
-       | _ ->
-            false
-
-let get_squash_arg goal =
-   let args = args_of_sequent goal in
-      match dest_xlist args with
-         [flag] ->
-            flag
-       | _ ->
-            raise (RefineError ("get_squash_arg", StringError "no argument"))
-
-let is_squash_goal p =
-   is_squash_sequent (goal p)
 
 (************************************************************************
  * IMPLEMENTATION                                                       *
@@ -426,8 +375,6 @@ let unsquash_tactic tbl = argfunT (fun i p ->
 
 let process_squash_resource_annotation name contexts args _ stmt tac =
    let assums, goal = unzip_mfunction stmt in
-   if is_squash_sequent goal then
-      raise (Invalid_argument "squash_stable resource annotation: conclusion sequent should not be squashed");
    let egoal = TermMan.explode_sequent goal in
    let concl = SeqGoal.get egoal.sequent_goals 0 in
    match contexts, args, assums, (SeqHyp.to_list egoal.sequent_hyps) with
@@ -439,8 +386,6 @@ let process_squash_resource_annotation name contexts args _ stmt tac =
          is_squash_term aconcl &&
          alpha_equal (dest_squash aconcl) concl
       ->
-         if not (is_squash_sequent assum) then
-            raise (Invalid_argument "squash_stable resource annotation: assumption sequent should be squashed");
          concl, SqStableGoal(Tactic_type.Tactic.tactic_of_rule tac [||] [])
       (* H |- T --> H |- a in T *)
     | [||], [], [_, _, assum], [Context(h,[])] when
@@ -451,8 +396,6 @@ let process_squash_resource_annotation name contexts args _ stmt tac =
          SeqHyp.get eassum.sequent_hyps 0 = Context(h,[]) &&
          alpha_equal (SeqGoal.get eassum.sequent_goals 0) t
       ->
-         if not (is_squash_sequent assum) then
-            raise (Invalid_argument "squash_stable resource annotation: assumption sequent should be squashed");
          let t,a,_ = dest_equal concl in
             t, SqStable(a, Tactic_type.Tactic.tactic_of_rule tac [||] [])
       (* H |- a in T *)
@@ -510,8 +453,8 @@ doc <:doc<
    to perform the following inference:
    $$
    @rulebox{squashT; ;
-      <<sequent[squash]{ <H> >- squash{'T}}>>;
-      <<sequent['ext]{ <H> >- 'T}>>}
+      <<sequent{ <H> >- squash{'T}}>>;
+      <<sequent{ <H> >- 'T}>>}
    $$
    Term $T$ must be @emph{squash-stable} and known to @hrefresource[squash_resource]
    in order for @tt[squashT] to work.
@@ -520,25 +463,14 @@ doc <:doc<
    to perform the following inference:
    $$
    @rulebox{unsquashT;i;
-      <<sequent[squash]{ <H>; x: 'A; <J[it]> >- 'C[it]}>>;
-      <<sequent['ext]{ <H>; x: squash{'A}; <J['x]> >- 'C['x]}>>}
+      <<sequent{ <H>; x: 'A; <J[it]> >- 'C[it]}>>;
+      <<sequent{ <H>; x: squash{'A}; <J['x]> >- 'C['x]}>>}
    $$
    Either $A$ or $C[x]$ must be @emph{squash-stable} and known
    to @hrefresource[squash_resource] in order for @tt[unsquashT] to work.
   
-   The @tactic[sqsquashT] tactic uses @hrefresource[squash_resource]
-   to perform the following inference:
-   $$
-   @rulebox{sqsquashT; ;
-      <<sequent[squash]{ <H> >- 'T}>>;
-      <<sequent['ext]{ <H> >- 'T}>>}
-   $$
-   Term $T$ must be @emph{squash-stable} and known to @hrefresource[squash_resource]
-   in order for @tt[sqsquashT] to work.
-  
-   Both @tt[unsquashT] and @tt[sqsquashT] are added to @hrefresource[auto_resource],
-   so all necessary squashing-unsquashing will be performed by @hreftactic[autoT]
-   whenever possible.
+   The @tt[unsquashT] tactic is added to @hrefresource[auto_resource],
+   so @hreftactic[autoT] will unsquash the hypotheses whenever possible.
    @docoff
    @comment{Squash a goal}
    @end[doc]
@@ -568,36 +500,13 @@ let rec unsquashAllT_aux i seq hyps =
 let unsquashAllT = funT (fun p ->
    unsquashAllT_aux 1 (explode_sequent p).sequent_hyps (hyp_count p))
 
-let sqsquashT = funT (fun p ->
-   if is_squash_goal p then
-      raise (RefineError("sqsquashT", StringError("goal sequent already squashed")))
-   else
-      if is_squash_term (concl p) then
-         sqsqSq
-      else
-         squashT thenT squashMemberFormation)
-
-let unsqsquashT = squashFromAny
-
 (************************************************************************
  * AUTO TACTIC                                                          *
  ************************************************************************)
 
-let nthAssumArg = argfunT (fun assum p ->
-   match is_squash_goal p, is_squash_sequent assum with
-      false, true ->
-         sqsquashT
-    | true, false ->
-         unsqsquashT (get_squash_arg assum)
-    | _ ->
-         idT)
-
 let nthAssumT = argfunT (fun i p ->
    let assum = Sequent.nth_assum p i in
-      Top_tacticals.thinMatchT thinT assum thenT nthAssumArg assum thenT nthAssumT i)
-
-let allSquashT =
-   unsquashAllT thenT tryT sqsquashT
+      Top_tacticals.thinMatchT thinT assum thenT nthAssumT i)
 
 let resource auto += [{
    auto_name = "Itt_squash.nthAssumT";
@@ -605,9 +514,9 @@ let resource auto += [{
    auto_tac = onSomeAssumT nthAssumT;
    auto_type = AutoTrivial;
 }; {
-   auto_name = "Itt_squash.allSquashT";
+   auto_name = "Itt_squash.unsquashAllT";
    auto_prec = trivial_prec;
-   auto_tac = allSquashT;
+   auto_tac = unsquashAllT;
    auto_type = AutoNormal;
 }]
 

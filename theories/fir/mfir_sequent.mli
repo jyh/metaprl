@@ -42,7 +42,7 @@ extends Base_theory
  * Sequent tags.
  *)
 
-declare fir
+declare sequent_arg
 declare it
 
 

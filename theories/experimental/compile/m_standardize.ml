@@ -47,12 +47,12 @@ open Top_tacticals
 declare equal{'e1; 'e2}
 
 interactive alpha_equal :
-   sequent [m] { <H> >- equal{'e; 'e} }
+   sequent { <H> >- equal{'e; 'e} }
 
 interactive subst 'e2 :
-   sequent [m] { <H> >- 'e2 } -->
-   ["wf"] sequent [m] { <H> >- equal{'e1; 'e2} } -->
-   sequent [m] { <H> >- 'e1 }
+   sequent { <H> >- 'e2 } -->
+   ["wf"] sequent { <H> >- equal{'e1; 'e2} } -->
+   sequent { <H> >- 'e1 }
 
 doc <:doc< @docoff >>
 

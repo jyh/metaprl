@@ -40,17 +40,17 @@ open Refiner.Refiner.RefineError
  * Intersection bounded by a type.
  *)
 interactive bisect_bound_above :
-   sequent [squash] { <H> >- subtype{'T1; 'T3} } -->
-   sequent [squash] { <H> >- subtype{'T2; 'T3} } -->
-   sequent ['ext] { <H> >- subtype{bisect{'T1; 'T2}; 'T3} }
+   sequent { <H> >- subtype{'T1; 'T3} } -->
+   sequent { <H> >- subtype{'T2; 'T3} } -->
+   sequent { <H> >- subtype{bisect{'T1; 'T2}; 'T3} }
 
 (*
  * Intersection bounded below.
  *)
 interactive bisect_bound_below :
-   sequent [squash] { <H> >- subtype{'T3; 'T1} } -->
-   sequent [squash] { <H> >- subtype{'T3; 'T2} } -->
-   sequent ['ext] { <H> >- subtype{'T3; bisect{'T1; 'T2}} }
+   sequent { <H> >- subtype{'T3; 'T1} } -->
+   sequent { <H> >- subtype{'T3; 'T2} } -->
+   sequent { <H> >- subtype{'T3; bisect{'T1; 'T2}} }
 
 (*
  * Apply to Void and Unit types.

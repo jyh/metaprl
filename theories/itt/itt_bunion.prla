@@ -578,7 +578,11 @@ O	o556	var p555
 T	t556	o556
 B	b556	t556
 T	t557	o553 b554 b555 b556
-S	s	t553 h
+NBase_rewrite	Base_rw	Base_rewrite NIL
+NBase_rewrite!sequent_arg	brwsqarg	sequent_arg Base_rw
+O	obrarg	brwsqarg
+T	tbrarg	obrarg
+S	s	tbrarg h
 G	s	t557
 B	b557	s
 T	t558	o551 b557
@@ -594,7 +598,7 @@ O	o560	var p560
 T	t561	o560
 B	b561	t561
 T	t562	o553 b554 b560 b561
-S	s562	t553 h
+S	s562	tbrarg h
 G	s562	t562
 B	b562	s562
 T	t563	o551 b562
@@ -611,7 +615,7 @@ B	b567	t567
 T	t568	o481 b556 b561
 B	b568	t568
 T	t569	o553 b554 b567 b568
-S	s569	t566 h
+S	s569	tbrarg h
 G	s569	t569
 B	b569	s569
 T	t570	o551 b569
@@ -657,7 +661,7 @@ B	b584	t584 x
 T	t585	o510 b511 b584
 B	b585	t585
 T	t586	o553 b554 b583 b585
-S	s586	t566 h
+S	s586	tbrarg h
 G	s586	t586
 B	b586	s586
 T	t587	o577 b586 b578
@@ -689,7 +693,7 @@ O	o662	rule p662
 NItt_equal!type	type	type Itt_equal
 O	o663	type
 T	t663	o663 b482
-S	s663	t553 h
+S	s663	tbrarg h
 G	s663	t663
 B	b663	s663
 T	t664	o551 b663
@@ -697,7 +701,7 @@ B	b664	t664
 T	t665	o550 b664
 B	b665	t665
 T	t666	o663 b483
-S	s666	t553 h
+S	s666	tbrarg h
 G	s666	t666
 B	b666	s666
 T	t667	o551 b666
@@ -705,7 +709,7 @@ B	b667	t667
 T	t668	o550 b667
 B	b668	t668
 T	t669	o663 b484
-S	s669	t566 h
+S	s669	tbrarg h
 G	s669	t669
 B	b669	s669
 T	t670	o551 b669
@@ -723,7 +727,7 @@ B	b675	t675
 T	t676	o576 b675 b4 b580
 B	b676	t676
 T	t677	o663 b515
-S	s677	t566 h
+S	s677	tbrarg h
 G	s677	t677
 B	b677	s677
 T	t678	o577 b677 b674
@@ -738,7 +742,7 @@ T	t682	o575 b676 b681
 B	b682	t682
 P	p700	String bunionFormation
 O	o700	rule p700
-S	s700	t566 h
+S	s700	tbrarg h
 G	s700	t554
 B	b700	s700
 T	t700	o551 b700
@@ -772,7 +776,7 @@ O	o730	var p730
 T	t730	o730
 B	b730	t730
 T	t731	o553 b482 b513 b730
-S	s731	t553 h
+S	s731	tbrarg h
 G	s731	t731
 B	b731	s731
 T	t732	o551 b731
@@ -780,7 +784,7 @@ B	b732	t732
 T	t733	o550 b732
 B	b733	t733
 T	t734	o553 b484 b513 b730
-S	s734	t566 h
+S	s734	tbrarg h
 G	s734	t734
 B	b734	s734
 T	t735	o551 b734
@@ -796,7 +800,7 @@ B	b739	t739
 T	t740	o576 b739 b4 b580
 B	b740	t740
 T	t741	o553 b515 b513 b730
-S	s741	t566 h
+S	s741	tbrarg h
 G	s741	t741
 B	b741	s741
 T	t742	o577 b741 b738
@@ -832,7 +836,7 @@ T	t753	o753
 B	b753	t753
 T	t754	o553 b511 b753 b607
 H	h754	x_1 t754
-S	s754	t553 h h752 h754
+S	s754	tbrarg h h752 h754
 G	s754	t663
 B	b754	s754
 T	t755	o577 b754 b738
@@ -840,7 +844,7 @@ B	b755	t755
 T	t756	o512 b753 b482 b483
 B	b756	t756
 T	t757	o663 b756
-S	s757	t553 h h752
+S	s757	tbrarg h h752
 G	s757	t757
 B	b757	s757
 T	t758	o577 b757 b738
@@ -848,7 +852,7 @@ B	b758	t758
 T	t763	o512 b607 b482 b483
 B	b763	t763
 T	t764	o553 b763 b513 b730
-S	s764	t553 h
+S	s764	tbrarg h
 G	s764	t764
 B	b764	s764
 T	t765	o577 b764 b738
@@ -860,7 +864,7 @@ B	b790	t790
 P	p819	String bunionMemberEqualityRight
 O	o819	rule p819
 T	t819	o553 b483 b513 b730
-S	s819	t553 h
+S	s819	tbrarg h
 G	s819	t819
 B	b819	s819
 T	t820	o551 b819
@@ -901,7 +905,7 @@ T	t836	o b835 b4
 B	b836	t836
 T	t838	o553 b511 b753 b614
 H	h838	x_1 t838
-S	s838	t553 h h752 h838
+S	s838	tbrarg h h752 h838
 G	s838	t666
 B	b838	s838
 T	t839	o577 b838 b825
@@ -909,7 +913,7 @@ B	b839	t839
 T	t840	o577 b757 b825
 B	b840	t840
 T	t845	o553 b790 b513 b730
-S	s845	t553 h
+S	s845	tbrarg h
 G	s845	t845
 B	b845	s845
 T	t846	o577 b845 b825
@@ -950,7 +954,7 @@ O	o265	var p265
 T	t266	o265 b730
 B	b266	t266
 T	t267	o553 b264 b265 b266
-S	s267	t553 h h891 h892 h893
+S	s267	tbrarg h h891 h892 h893
 G	s267	t267
 B	b267	s267
 T	t268	o551 b267
@@ -959,7 +963,7 @@ T	t271	o891 b268
 B	b271	t271
 T	t894	o894 b513
 H	h896	y t483
-S	s271	t553 h h891 h892 h896
+S	s271	tbrarg h h891 h892 h896
 G	s271	t267
 B	b272	s271
 T	t272	o551 b272
@@ -972,7 +976,7 @@ B	b296	t292
 T	t296	o265 b513
 B	b335	t296
 T	t335	o553 b292 b296 b335
-S	s335	t566 h h891 h892
+S	s335	tbrarg h h891 h892
 G	s335	t335
 B	b337	s335
 T	t337	o551 b337
@@ -1010,12 +1014,12 @@ B	b403	t402
 T	t403	o265 b910
 B	b411	t403
 T	t411	o553 b402 b403 b411
-S	s411	t553 h h907 h892 h394 h909
+S	s411	tbrarg h h907 h892 h394 h909
 G	s411	t411
 B	b412	s411
 T	t412	o577 b412 b385
 B	b420	t412
-S	s420	t566 h h907 h892
+S	s420	tbrarg h h907 h892
 G	s420	t335
 B	b421	s420
 T	t421	o577 b421 b385
@@ -4055,7 +4059,7 @@ T	t159	o b133 b144
 B	b159	t159
 T	t170	o575 b830 b159
 B	b170	t170
-S	s170	t553 h h752 h838
+S	s170	tbrarg h h752 h838
 G	s170	t819
 B	b174	s170
 T	t174	o577 b174 b825
@@ -4526,18 +4530,18 @@ NItt_squash	Itt_squash	Itt_squash NIL
 NItt_squash!squash	squash1548	squash Itt_squash
 O	o1548	squash1548
 T	t1549	o1548 b264
-S	s1549	t553 h h891 h892 h893 h1548
+S	s1549	tbrarg h h891 h892 h893 h1548
 G	s1549	t1549
 B	b1549	s1549
 T	t1556	o551 b1549
 B	b1556	t1556
-S	s1556	t553 h h891 h892 h896 h1548
+S	s1556	tbrarg h h891 h892 h896 h1548
 G	s1556	t1549
 B	b1569	s1556
 T	t1569	o551 b1569
 B	b1576	t1569
 T	t1576	o1548 b292
-S	s1576	t566 h h891 h892
+S	s1576	tbrarg h h891 h892
 G	s1576	t1576
 B	b1577	s1576
 T	t1577	o551 b1577
@@ -4553,12 +4557,12 @@ B	b1626	t1622
 T	t1626	o553 b515 b910 b513
 H	h1626	u t1626
 T	t1630	o1548 b402
-S	s1630	t553 h h907 h892 h394 h909 h1626
+S	s1630	tbrarg h h907 h892 h394 h909 h1626
 G	s1630	t1630
 B	b1630	s1630
 T	t1634	o577 b1630 b1618
 B	b1634	t1634
-S	s1634	t566 h h907 h892
+S	s1634	tbrarg h h907 h892
 G	s1634	t1576
 B	b1638	s1634
 T	t1638	o577 b1638 b1618
@@ -4585,10 +4589,10 @@ T	t1724	o b1724 b4
 B	b1726	t1724
 P	p1729	String "dT 4 thenT rwhAll reduceC"
 O	o1729	ext_rule p1729
-S	s1729	t553 h h907 h892 h893 h1548
+S	s1729	tbrarg h h907 h892 h893 h1548
 G	s1729	t1549
 B	b1732	s1729
-S	s1732	t553 h h907 h892 h896 h1548
+S	s1732	tbrarg h h907 h892 h896 h1548
 G	s1732	t1549
 B	b1733	s1732
 T	t1733	o b1733 b4
@@ -4656,13 +4660,13 @@ B	b1906	t1905
 T	t1906	o576 b1739 b4 b1906
 B	b1907	t1906
 H	h1907	z t482
-S	s1907	t553 h h907 h892 h1907 h1626
+S	s1907	tbrarg h h907 h892 h1907 h1626
 G	s1907	t1630
 B	b1908	s1907
 T	t1908	o577 b1908 b1737
 B	b1909	t1908
 H	h1909	z t763
-S	s1909	t553 h h907 h892 h1909 h1626
+S	s1909	tbrarg h h907 h892 h1909 h1626
 G	s1909	t1630
 B	b1910	s1909
 T	t1910	o577 b1910 b1737
@@ -4676,13 +4680,13 @@ B	b1926	t1925
 T	t1926	o576 b1909 b4 b1926
 B	b2045	t1926
 H	h2045	z t483
-S	s2045	t553 h h907 h892 h2045 h1626
+S	s2045	tbrarg h h907 h892 h2045 h1626
 G	s2045	t1630
 B	b2046	s2045
 T	t2046	o577 b2046 b1737
 B	b2047	t2046
 H	h2047	z t790
-S	s2047	t553 h h907 h892 h2047 h1626
+S	s2047	tbrarg h h907 h892 h2047 h1626
 G	s2047	t1630
 B	b2048	s2047
 T	t2048	o577 b2048 b1737

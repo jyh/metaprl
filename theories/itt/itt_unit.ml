@@ -114,7 +114,7 @@ doc <:doc<
    @end[doc]
 >>
 prim unitEquality {| intro []; eqcd |} :
-   sequent ['ext] { <H> >- unit in univ[i:l] } =
+   sequent { <H> >- unit in univ[i:l] } =
    it
 
 (*
@@ -122,13 +122,13 @@ prim unitEquality {| intro []; eqcd |} :
  * by unitFormation
  *)
 interactive unitFormation :
-   sequent ['ext] { <H> >- univ[i:l] }
+   sequent { <H> >- univ[i:l] }
 
 (*
  * Is a type.
  *)
 prim unitType {| intro [] |} :
-   sequent ['ext] { <H> >- "type"{unit} } =
+   sequent { <H> >- "type"{unit} } =
    it
 
 doc <:doc< 
@@ -138,7 +138,7 @@ doc <:doc<
    @end[doc]
 >>
 prim unit_memberEquality {| intro []; eqcd; squash |} :
-   sequent ['ext] { <H> >- it in unit } =
+   sequent { <H> >- it in unit } =
    it
 
 doc <:doc< 
@@ -150,7 +150,7 @@ doc <:doc<
    @end[doc]
 >>
 interactive unit_memberFormation {| intro [] |} :
-   sequent ['ext] { <H> >- unit }
+   sequent { <H> >- unit }
 
 doc <:doc< 
    @begin[doc]
@@ -160,8 +160,8 @@ doc <:doc<
    @end[doc]
 >>
 prim unitElimination {| elim [ThinOption thinT] |} 'H :
-   ('t : sequent['ext] { <H>; unit; <J[it]> >- 'C[it] }) -->
-   sequent ['ext] { <H>; x: unit; <J['x]> >- 'C['x] } =
+   ('t : sequent{ <H>; unit; <J[it]> >- 'C[it] }) -->
+   sequent { <H>; x: unit; <J['x]> >- 'C['x] } =
    't
 
 doc <:doc< 
@@ -171,8 +171,8 @@ doc <:doc<
    @end[doc]
 >>
 prim unitSqequal :
-   sequent [squash] { <H> >- 'x = 'y in unit } -->
-   sequent ['ext] { <H> >- 'x ~ 'y } = it
+   sequent { <H> >- 'x = 'y in unit } -->
+   sequent { <H> >- 'x ~ 'y } = it
 doc <:doc< @docoff >>
 
 (************************************************************************

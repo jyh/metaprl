@@ -1201,7 +1201,11 @@ B	b707	t707
 T	t708	o541 b707
 B	b708	t708
 T	t715	o550 b551 b707 b707
-S	s715	t550 h
+NBase_rewrite	Base_rw	Base_rewrite NIL
+NBase_rewrite!sequent_arg	brwsqarg	sequent_arg Base_rw
+O	obrarg	brwsqarg
+T	tbrarg	obrarg
+S	s715	tbrarg h
 G	s715	t715
 B	b715	s715
 T	t716	o548 b715
@@ -1220,13 +1224,13 @@ O	o1184	label p1181
 T	t1185	o1184
 B	b1185	t1185
 T	t1189	o550 b551 b1184 b1185
-S	s1189	t764 h
+S	s1189	tbrarg h
 G	s1189	t1189
 B	b1189	s1189
 T	t1190	o548 b1189
 B	b1190	t1190
 T	t1191	o766 b1181 b662
-S	s1191	t550 h
+S	s1191	tbrarg h
 G	s1191	t1191
 B	b1191	s1191
 T	t1192	o548 b1191
@@ -1235,13 +1239,13 @@ T	t1193	o762 b1190 b1192
 B	b1193	t1193
 B	b1201	t1189
 T	t1201	o779 b1201
-S	s1201	t764 h
+S	s1201	tbrarg h
 G	s1201	t1201
 B	b1202	s1201
 T	t1202	o548 b1202
 B	b1203	t1202
 T	t1203	o766 b1181 b663
-S	s1203	t550 h
+S	s1203	tbrarg h
 G	s1203	t1203
 B	b1204	s1203
 T	t1204	o548 b1204
@@ -1266,7 +1270,7 @@ P	p1218	String main
 O	o1219	tactic_arg p1218
 NSummary!msequent	msequent	msequent Summary
 O	o1220	msequent
-S	s1220	t764 h
+S	s1220	tbrarg h
 G	s1220	t1191
 B	b1220	s1220
 T	t1220	o b1189 b4
@@ -1290,7 +1294,7 @@ B	b1228	t1227
 B	b1230	t1201
 T	t1230	o b1230 b4
 B	b1231	t1230
-S	s1231	t764 h
+S	s1231	tbrarg h
 G	s1231	t1203
 B	b1232	s1231
 T	t1232	o b1202 b4
@@ -1313,7 +1317,7 @@ O	o1242	eq_label p1180 p1180
 T	t1242	o1242 b662 b663
 B	b1242	t1242
 T	t1243	o766 b1242 b662
-S	s1243	t764 h
+S	s1243	tbrarg h
 G	s1243	t1243
 B	b1243	s1243
 T	t1244	o1220 b1243 b4
@@ -1908,17 +1912,17 @@ P	p586	Number 1979
 O	o587	location p586 p192
 P	p1289	String eq_label_false
 O	o1289	rule p1289
-S	s1289	t550 h
+S	s1289	tbrarg h
 G	s1289	t1201
 B	b1289	s1289
 T	t1289	o548 b1289
 B	b1290	t1289
-S	s1290	t550 h
+S	s1290	tbrarg h
 G	s1290	t663
 B	b1291	s1290
 T	t1291	o548 b1291
 B	b1292	t1291
-S	s1292	t550 h
+S	s1292	tbrarg h
 G	s1292	t1181
 B	b1293	s1292
 T	t1293	o548 b1293
@@ -1938,12 +1942,12 @@ B	b1299	t1298
 T	t1299	o1219 b1299 b4 b1223
 B	b1300	t1299
 H	h587	t1189
-S	s	t550 h h587
+S	s	tbrarg h h587
 G	s	t662
 B	b589	s
 T	t589	o1220 b589 b1298
 B	b602	t589
-S	s602	t550 h h587
+S	s602	tbrarg h h587
 G	s602	t1181
 B	b603	s602
 T	t603	o1220 b603 b1298
@@ -1989,12 +1993,12 @@ P	p651	Number 2269
 O	o653	location p649 p651
 P	p1321	String eq_label_true
 O	o1322	rule p1321
-S	s1322	t550 h
+S	s1322	tbrarg h
 G	s1322	t662
 B	b1322	s1322
 T	t1322	o548 b1322
 B	b1323	t1322
-S	s1323	t550 h
+S	s1323	tbrarg h
 G	s1323	t1242
 B	b1324	s1323
 T	t1324	o548 b1324
@@ -2137,7 +2141,7 @@ B	b788	t788
 P	p788	Number 2583
 O	o792	location p772 p788
 T	t1403	o1181 b804 b805
-S	s1403	t764 h
+S	s1403	tbrarg h
 G	s1403	t1403
 B	b1403	s1403
 T	t1404	o548 b1403
@@ -2153,12 +2157,12 @@ B	b1407	t1407
 T	t1408	o1219 b1407 b4 b1223
 B	b1408	t1408
 H	h792	t1403
-S	s792	t764 h h587 h792
+S	s792	tbrarg h h587 h792
 G	s792	t804
 B	b793	s792
 T	t795	o1220 b793 b1406
 B	b796	t795
-S	s796	t764 h h587
+S	s796	tbrarg h h587
 G	s796	t804
 B	b797	s796
 T	t797	o1220 b797 b1406
@@ -2195,12 +2199,12 @@ NItt_squash	Itt_squash	Itt_squash NIL
 NItt_squash!squash	squash1412	squash Itt_squash
 O	o1412	squash1412
 T	t1412	o1412 b804
-S	s845	t764 h h587
+S	s845	tbrarg h h587
 G	s845	t1412
 B	b848	s845
 T	t848	o1220 b848 b1406
 B	b849	t848
-S	s849	t550 h h587
+S	s849	tbrarg h h587
 G	s849	t804
 B	b850	s849
 T	t850	o1220 b850 b1406

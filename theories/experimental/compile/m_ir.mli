@@ -151,7 +151,7 @@ declare compilable{'e}
 (*
  * Sequent tag for M programs.
  *)
-declare m
+declare sequent_arg
 
 (*
  * Term constructors.

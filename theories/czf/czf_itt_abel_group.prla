@@ -3415,7 +3415,11 @@ O	o1363	label
 T	t1363	o1363
 B	b1363	t1363
 T	t1364	o1362 b1363 b1221 b1221
-S	s	t1362 h
+NBase_rewrite	Base_rw	Base_rewrite NIL
+NBase_rewrite!sequent_arg	brwsqarg	sequent_arg Base_rw
+O	obrarg	brwsqarg
+T	tbrarg	obrarg
+S	s	tbrarg h
 G	s	t1364
 B	b1364	s
 T	t1365	o1360 b1364
@@ -3428,7 +3432,7 @@ T	t1367	o b1366 b8
 NItt_equal!type	type	type Itt_equal
 O	o1367	type
 T	t1368	o1367 b1222
-S	s1368	t1367 h
+S	s1368	tbrarg h
 G	s1368	t1368
 B	b1368	s1368
 T	t1369	o1360 b1368
@@ -3628,7 +3632,7 @@ P	p1451	Number 3726
 O	o1451	location p1451 p975
 P	p1452	String abel_intro
 O	o1452	rule p1452
-S	s1452	t1367 h
+S	s1452	tbrarg h
 G	s1452	t1269
 B	b1452	s1452
 T	t1452	o1360 b1452
@@ -3637,12 +3641,12 @@ H	h1453	a t1271
 H	h1454	b t1271
 H	h1455	x t1276
 H	h1456	y t1278
-S	s1456	t1367 h h1453 h1454 h1455 h1456
+S	s1456	tbrarg h h1453 h1454 h1455 h1456
 G	s1456	t1281
 B	b1456	s1456
 T	t1456	o1360 b1456
 B	b1457	t1456
-S	s1457	t1367 h
+S	s1457	tbrarg h
 G	s1457	t1222
 B	b1458	s1457
 T	t1458	o1360 b1458

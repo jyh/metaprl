@@ -430,7 +430,11 @@ NItt_equal!univ	univ	univ Itt_equal
 P	p503	MLevel 0 i 0
 O	o503	univ p503
 T	t504	o503
-S	s	t503 h
+NBase_rewrite	Base_rw	Base_rewrite NIL
+NBase_rewrite!sequent_arg	brwsqarg	sequent_arg Base_rw
+O	obrarg	brwsqarg
+T	tbrarg	obrarg
+S	s	tbrarg h
 G	s	t504
 B	b504	s
 T	t505	o501 b504
@@ -464,7 +468,7 @@ O	o518	var p517
 T	t518	o518
 B	b518	t518
 T	t519	o516 b516 b517 b518
-S	s519	t516 h
+S	s519	tbrarg h
 G	s519	t519
 B	b519	s519
 T	t520	o501 b519
@@ -480,7 +484,7 @@ O	o522	var p522
 T	t523	o522
 B	b523	t523
 T	t524	o516 b516 b522 b523
-S	s524	t516 h
+S	s524	tbrarg h
 G	s524	t524
 B	b524	s524
 T	t525	o501 b524
@@ -492,7 +496,7 @@ B	b527	t527
 T	t528	o488 b518 b523
 B	b528	t528
 T	t529	o516 b516 b527 b528
-S	s529	t503 h
+S	s529	tbrarg h
 G	s529	t529
 B	b529	s529
 T	t530	o501 b529
@@ -506,7 +510,7 @@ O	o538	rule p538
 NItt_equal!type	type	type Itt_equal
 O	o539	type
 T	t539	o539 b517
-S	s539	t516 h
+S	s539	tbrarg h
 G	s539	t539
 B	b539	s539
 T	t540	o501 b539
@@ -514,7 +518,7 @@ B	b540	t540
 T	t541	o514 b540
 B	b541	t541
 T	t542	o539 b518
-S	s542	t516 h
+S	s542	tbrarg h
 G	s542	t542
 B	b542	s542
 T	t543	o501 b542
@@ -524,7 +528,7 @@ B	b544	t544
 T	t545	o488 b517 b518
 B	b545	t545
 T	t546	o539 b545
-S	s546	t503 h
+S	s546	tbrarg h
 G	s546	t546
 B	b546	s546
 T	t547	o501 b546
@@ -539,7 +543,7 @@ P	p554	Var a
 O	o554	var p554
 T	t554	o554
 B	b554	t554
-S	s554	t503 h
+S	s554	tbrarg h
 G	s554	t489
 B	b555	s554
 T	t555	o501 b555
@@ -550,14 +554,14 @@ P	p557	Var b
 O	o557	var p557
 T	t557	o557
 B	b558	t557
-S	s558	t503 h
+S	s558	tbrarg h
 G	s558	t490
 B	b559	s558
 T	t559	o501 b559
 B	b560	t559
 T	t560	o514 b560
 B	b561	t560
-S	s561	t503 h
+S	s561	tbrarg h
 G	s561	t491
 B	b562	s561
 T	t562	o501 b562
@@ -610,7 +614,7 @@ T	t588	o588
 C	h588	J t588
 B	b589	t588
 T	t589	o586 b589
-S	s589	t503 h h583 h588
+S	s589	tbrarg h h583 h588
 G	s589	t589
 B	b590	s589
 T	t590	o501 b590
@@ -626,7 +630,7 @@ O	o602	var p602
 T	t602	o602
 B	b602	t602
 T	t603	o516 b489 b601 b602
-S	s603	t516 h
+S	s603	tbrarg h
 G	s603	t603
 B	b603	s603
 T	t604	o501 b603
@@ -642,7 +646,7 @@ O	o606	var p606
 T	t607	o606
 B	b607	t607
 T	t608	o516 b490 b606 b607
-S	s608	t516 h
+S	s608	tbrarg h
 G	s608	t608
 B	b608	s608
 T	t609	o501 b608
@@ -654,7 +658,7 @@ B	b611	t611
 T	t612	o565 b602 b607
 B	b612	t612
 T	t613	o516 b491 b611 b612
-S	s613	t503 h
+S	s613	tbrarg h
 G	s613	t613
 B	b613	s613
 T	t614	o501 b613
@@ -669,19 +673,19 @@ NItt_subtype	Itt_subtype	Itt_subtype NIL
 NItt_subtype!subtype	subtype	subtype Itt_subtype
 O	o621	subtype
 T	t621	o621 b517 b518
-S	s621	t516 h
+S	s621	tbrarg h
 G	s621	t621
 B	b621	s621
 T	t622	o501 b621
 B	b622	t622
 T	t623	o621 b522 b523
-S	s623	t516 h
+S	s623	tbrarg h
 G	s623	t623
 B	b623	s623
 T	t624	o501 b623
 B	b624	t624
 T	t625	o621 b527 b528
-S	s625	t503 h
+S	s625	tbrarg h
 G	s625	t625
 B	b625	s625
 T	t626	o501 b625
@@ -3380,7 +3384,7 @@ B	b1224	t1224
 T	t1225	o806 b621 b1222
 B	b1225	t1225
 T	t1226	o621 b866 b870
-S	s1226	t503 h
+S	s1226	tbrarg h
 G	s1226	t1226
 B	b1226	s1226
 T	t1227	o806 b1226 b1222
@@ -3470,7 +3474,7 @@ P	p709	Number 3032
 P	p710	Number 3209
 O	o710	location p709 p710
 H	h710	t504
-S	s710	t503 h h710
+S	s710	tbrarg h h710
 G	s710	t504
 B	b731	s710
 T	t731	o806 b731 b1023
@@ -3487,7 +3491,7 @@ T	t764	o2 b733
 B	b766	t764
 T	t766	o1025 b732 b4 b766
 B	b774	t766
-S	s774	t503 h h710 h710
+S	s774	tbrarg h h710 h710
 G	s774	t504
 B	b775	s774
 T	t775	o806 b775 b1023
@@ -3687,7 +3691,7 @@ O	o929	location p928 p929
 T	t929	o b499 b577
 B	b929	t929
 H	h929	t491
-S	s929	t503 h h929 h584 h585 h586
+S	s929	tbrarg h h929 h584 h585 h586
 G	s929	t586
 B	b930	s929
 T	t930	o501 b930
@@ -3700,7 +3704,7 @@ T	t936	o806 b590 b936
 B	b937	t936
 T	t937	o805 b937 b4 b838
 B	b938	t937
-S	s938	t503 h h929 h583 h588
+S	s938	tbrarg h h929 h583 h588
 G	s938	t589
 B	b969	s938
 T	t969	o806 b969 b936
@@ -3716,12 +3720,12 @@ B	b1546	t1545
 T	t1546	o806 b930 b936
 B	b1558	t1546
 H	h1558	t492
-S	s1558	t503 h h929 h1558 h584 h585 h586
+S	s1558	tbrarg h h929 h1558 h584 h585 h586
 G	s1558	t586
 B	b1559	s1558
 T	t1559	o806 b1559 b936
 B	b1595	t1559
-S	s1595	t503 h h929 h1095 h588
+S	s1595	tbrarg h h929 h1095 h588
 G	s1595	t589
 B	b1596	s1595
 T	t1596	o806 b1596 b936
@@ -3742,12 +3746,12 @@ T	t1603	o b1603 b4
 B	b1604	t1603
 T	t1604	o802 b1161 b1604
 B	b1605	t1604
-S	s1605	t503 h h929 h584 h1091 h1093
+S	s1605	tbrarg h h929 h584 h1091 h1093
 G	s1605	t1094
 B	b1606	s1605
 T	t1606	o806 b1606 b936
 B	b1607	t1606
-S	s1607	t503 h h929 h1558 h584 h1091 h1093
+S	s1607	tbrarg h h929 h1558 h584 h1091 h1093
 G	s1607	t1094
 B	b1608	s1607
 T	t1608	o806 b1608 b936
@@ -4182,7 +4186,7 @@ O	o1673	location p1672 p1673
 P	p1674	String "assertT << 'A >> ttca"
 O	o1674	ext_rule p1674
 H	h1674	t489
-S	s1674	t503 h h1674
+S	s1674	tbrarg h h1674
 G	s1674	t491
 B	b1674	s1674
 T	t1674	o806 b1674 b1185
@@ -4196,7 +4200,7 @@ B	b1678	t1677
 P	p1679	String "assertT << 'B >> ttca"
 O	o1679	ext_rule p1679
 H	h1679	t490
-S	s1679	t503 h h1674 h1679
+S	s1679	tbrarg h h1674 h1679
 G	s1679	t491
 B	b1679	s1679
 T	t1679	o806 b1679 b1185
@@ -4329,7 +4333,7 @@ O	o1831	tactic_arg p850
 T	t1885	o1831 b1225 b4 b1230
 B	b1885	t1885
 H	h1885	t517
-S	s1885	t516 h h1885
+S	s1885	tbrarg h h1885
 G	s1885	t623
 B	b1886	s1885
 T	t1886	o806 b1886 b1222

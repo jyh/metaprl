@@ -56,18 +56,18 @@ derived_rw reduce_spread : spread{pair{'x; 'y}; a, b. 'body['a; 'b]} <--> 'body[
  ************************************************************************)
 
 derived and_type :
-   [wf] sequent ['ext] { <H> >- "type"{'A} } -->
-   [wf] sequent ['ext] { <H> >- "type"{'B} } -->
-   sequent ['ext] { <H> >- "type"{.Fol_and!"and"{'A; 'B}} }
+   [wf] sequent { <H> >- "type"{'A} } -->
+   [wf] sequent { <H> >- "type"{'B} } -->
+   sequent { <H> >- "type"{.Fol_and!"and"{'A; 'B}} }
 
 derived and_intro :
-   [main] ('a : sequent ['ext] { <H> >- 'A }) -->
-   [main] ('b : sequent ['ext] { <H> >- 'B }) -->
-   sequent ['ext] { <H> >- Fol_and!"and"{'A; 'B} }
+   [main] ('a : sequent { <H> >- 'A }) -->
+   [main] ('b : sequent { <H> >- 'B }) -->
+   sequent { <H> >- Fol_and!"and"{'A; 'B} }
 
 derived and_elim 'H :
-   [main] ('body['y; 'z] : sequent ['ext] { <H>; y: 'A; z: 'B; <J[Fol_and!pair{'y; 'z}]> >- 'C[Fol_and!pair{'y; 'z}] }) -->
-   sequent ['ext] { <H>; x: Fol_and!"and"{'A; 'B}; <J['x]> >- 'C['x] }
+   [main] ('body['y; 'z] : sequent { <H>; y: 'A; z: 'B; <J[Fol_and!pair{'y; 'z}]> >- 'C[Fol_and!pair{'y; 'z}] }) -->
+   sequent { <H>; x: Fol_and!"and"{'A; 'B}; <J['x]> >- 'C['x] }
 
 (*
  * -*-

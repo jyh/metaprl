@@ -33,7 +33,6 @@
  *)
 
 declare it
-declare squash
 
 (*
  * -*-

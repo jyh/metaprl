@@ -77,35 +77,35 @@ prec prec_equal
  * True always holds.
  *)
 rule trueIntro :
-   sequent ['ext] { <H> >- "true" }
+   sequent { <H> >- "true" }
 
 (*
  * Typehood is equality.
  *)
 rule equalityAxiom 'H :
-   sequent ['ext] { <H>; x: 'T; <J['x]> >- 'x in 'T }
+   sequent { <H>; x: 'T; <J['x]> >- 'x in 'T }
 
 (*
  * Reflexivity.
  *)
 rule equalityRef 'y :
-   sequent ['ext] { <H> >- 'x = 'y in 'T } -->
-   sequent ['ext] { <H> >- 'x in 'T }
+   sequent { <H> >- 'x = 'y in 'T } -->
+   sequent { <H> >- 'x in 'T }
 
 (*
  * Symettry.
  *)
 rule equalitySym :
-   sequent ['ext] { <H> >- 'y = 'x in 'T } -->
-   sequent ['ext] { <H> >- 'x = 'y in 'T }
+   sequent { <H> >- 'y = 'x in 'T } -->
+   sequent { <H> >- 'x = 'y in 'T }
 
 (*
  * Transitivity.
  *)
 rule equalityTrans 'z :
-   sequent ['ext] { <H> >- 'x = 'z in 'T } -->
-   sequent ['ext] { <H> >- 'z = 'y in 'T } -->
-   sequent ['ext] { <H> >- 'x = 'y in 'T }
+   sequent { <H> >- 'x = 'z in 'T } -->
+   sequent { <H> >- 'z = 'y in 'T } -->
+   sequent { <H> >- 'x = 'y in 'T }
 
 (*
  * H >- type ext a = b in T
@@ -115,9 +115,9 @@ rule equalityTrans 'z :
  * H >- T ext b
  *)
 rule equalityFormation 'T :
-   sequent ['ext] { <H> >- 'T } -->
-   sequent ['ext] { <H> >- 'T } -->
-   sequent ['ext] { <H> >- univ[i:l] }
+   sequent { <H> >- 'T } -->
+   sequent { <H> >- 'T } -->
+   sequent { <H> >- univ[i:l] }
 
 (*
  * H >- (a1 = b1 in T1) = (a2 = b2 in T2) in Ui
@@ -128,18 +128,18 @@ rule equalityFormation 'T :
  * H >- b1 = b2 in T1
  *)
 rule equalityEquality :
-   sequent [squash] { <H> >- 'T1 = 'T2 in univ[i:l] } -->
-   sequent [squash] { <H> >- 'a1 = 'a2 in 'T1 } -->
-   sequent [squash] { <H> >- 'b1 = 'b2 in 'T2 } -->
-   sequent ['ext] { <H> >- ('a1 = 'b1 in 'T1) = ('a2 = 'b2 in 'T2) in univ[i:l] }
+   sequent { <H> >- 'T1 = 'T2 in univ[i:l] } -->
+   sequent { <H> >- 'a1 = 'a2 in 'T1 } -->
+   sequent { <H> >- 'b1 = 'b2 in 'T2 } -->
+   sequent { <H> >- ('a1 = 'b1 in 'T1) = ('a2 = 'b2 in 'T2) in univ[i:l] }
 
 (*
  * Typehood.
  *)
 rule equalityType :
-   sequent [squash] { <H> >- 'a in 'T } -->
-   sequent [squash] { <H> >- 'b in 'T } -->
-   sequent ['ext] { <H> >- "type"{. 'a = 'b in 'T } }
+   sequent { <H> >- 'a in 'T } -->
+   sequent { <H> >- 'b in 'T } -->
+   sequent { <H> >- "type"{. 'a = 'b in 'T } }
 
 (*
  * H >- it in (a = b in T)
@@ -148,12 +148,12 @@ rule equalityType :
  * H >- a = b in T
  *)
 rule axiomMember :
-   sequent [squash] { <H> >- 'a = 'b in 'T } -->
-   sequent ['ext] { <H> >- it in ('a = 'b in 'T) }
+   sequent { <H> >- 'a = 'b in 'T } -->
+   sequent { <H> >- it in ('a = 'b in 'T) }
 
 rule type_axiomMember :
-   sequent [squash] { <H> >- "type"{'T} } -->
-   sequent ['ext] { <H> >- it in "type"{'T} }
+   sequent { <H> >- "type"{'T} } -->
+   sequent { <H> >- it in "type"{'T} }
 
 (*
  * H, x: a = b in T, J[x] >- C[x]
@@ -162,8 +162,8 @@ rule type_axiomMember :
  * H, x: a = b in T; J[it] >- C[it]
  *)
 rule equalityElimination 'H :
-   sequent ['ext] { <H>; 'a = 'b in 'T; <J[it]> >- 'C[it] } -->
-   sequent ['ext] { <H>; x: 'a = 'b in 'T; <J['x]> >- 'C['x] }
+   sequent { <H>; 'a = 'b in 'T; <J[it]> >- 'C[it] } -->
+   sequent { <H>; x: 'a = 'b in 'T; <J['x]> >- 'C['x] }
 
 (*
  * H >- T = T in type
@@ -172,16 +172,16 @@ rule equalityElimination 'H :
  * H >- T
  *)
 rule typeEquality :
-   sequent [squash] { <H> >- 'T } -->
-   sequent ['ext] { <H> >- "type"{'T} }
+   sequent { <H> >- 'T } -->
+   sequent { <H> >- "type"{'T} }
 
 (*
  * H >- Uj in Ui
  * by universeMember (side (j < i))
  *)
 rule universeMember :
-   sequent ['ext] { <H> >- cumulativity[j:l, i:l] } -->
-   sequent ['ext] { <H> >- univ[j:l] in univ[i:l] }
+   sequent { <H> >- cumulativity[j:l, i:l] } -->
+   sequent { <H> >- univ[j:l] in univ[i:l] }
 
 (*
  * H >- x = x in Ui
@@ -191,36 +191,36 @@ rule universeMember :
  * H >- cumulativity(j, i)
  *)
 rule universeCumulativity univ[j:l] :
-   sequent [squash] { <H> >- cumulativity[j:l, i:l] } -->
-   sequent [squash] { <H> >- 'x = 'y in univ[j:l] } -->
-   sequent ['ext] { <H> >- 'x = 'y in univ[i:l] }
+   sequent { <H> >- cumulativity[j:l, i:l] } -->
+   sequent { <H> >- 'x = 'y in univ[j:l] } -->
+   sequent { <H> >- 'x = 'y in univ[i:l] }
 
 (*
  * Universe is a type.
  *)
 rule universeType :
-   sequent ['ext] { <H> >- "type"{univ[l:l]} }
+   sequent { <H> >- "type"{univ[l:l]} }
 
 (*
  * Anything in a universe is a type.
  *)
 rule universeMemberType univ[i:l] :
-   sequent [squash] { <H> >- 'x in univ[i:l] } -->
-   sequent ['ext] { <H> >- "type"{'x} }
+   sequent { <H> >- 'x in univ[i:l] } -->
+   sequent { <H> >- "type"{'x} }
 
 (*
  * Derived form for known membership.
  *)
 rule universeAssumType 'H :
-   sequent ['ext] { <H>; x: univ[l:l]; <J['x]> >- "type"{'x} }
+   sequent { <H>; x: univ[l:l]; <J['x]> >- "type"{'x} }
 
 (*
  * H >- Ui ext Uj
  * by universeFormation level{$j:l}
  *)
 rule universeFormation univ[j:l] :
-   sequent ['ext] { <H> >- cumulativity[j:l, i:l] } -->
-   sequent ['ext] { <H> >- univ[i:l] }
+   sequent { <H> >- cumulativity[j:l, i:l] } -->
+   sequent { <H> >- univ[i:l] }
 
 (************************************************************************
  * EQCD TACTIC                                                          *

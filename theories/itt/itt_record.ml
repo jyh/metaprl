@@ -133,27 +133,27 @@ doc <:doc<
 (*** Typing ***)
 
 interactive recordTypeS {| intro [] |} :
-   sequent[squash]{ <H> >- "type"{'A} } -->
-   sequent['ext]  { <H> >- "type"{record[n:t]{'A}} }
+   sequent{ <H> >- "type"{'A} } -->
+   sequent{ <H> >- "type"{record[n:t]{'A}} }
 
 interactive field_member {| intro[AutoMustComplete] |} :
-   sequent[squash]{ <H> >- 'r in record[n:t]{'A} } -->
-   sequent['ext]  { <H> >- field[n:t]{'r} in 'A }
+   sequent{ <H> >- 'r in record[n:t]{'A} } -->
+   sequent{ <H> >- field[n:t]{'r} in 'A }
 
 interactive recordTypeL {| intro [] |} :
-   sequent[squash]{ <H> >- "type"{'R} } -->
-   sequent[squash]{ <H>; self:'R >- "type"{'A['self]} } -->
-   sequent['ext]  { <H> >- "type"{record[n:t]{self.'A['self];'R}} }
+   sequent{ <H> >- "type"{'R} } -->
+   sequent{ <H>; self:'R >- "type"{'A['self]} } -->
+   sequent{ <H> >- "type"{record[n:t]{self.'A['self];'R}} }
 
 interactive recordTypeR {| intro [] |} :
-   sequent[squash]{ <H> >- "type"{'A} } -->
-   sequent[squash]{ <H>; x:'A >- "type"{'R['x]} } -->
-   sequent['ext]  { <H> >- "type"{record[n:t]{'A;x.'R['x]}} }
+   sequent{ <H> >- "type"{'A} } -->
+   sequent{ <H>; x:'A >- "type"{'R['x]} } -->
+   sequent{ <H> >- "type"{record[n:t]{'A;x.'R['x]}} }
 
 interactive recordTypeI {| intro [] |} :
-   sequent[squash]{ <H> >- "type"{'A} } -->
-   sequent[squash]{ <H> >- "type"{'R} } -->
-   sequent['ext]  { <H> >- "type"{record[n:t]{'A;'R}} }
+   sequent{ <H> >- "type"{'A} } -->
+   sequent{ <H> >- "type"{'R} } -->
+   sequent{ <H> >- "type"{record[n:t]{'A;'R}} }
 
 (*** Reductions ***)
 
@@ -183,8 +183,8 @@ let record_reduceT = rwhAll record_reduce
 
 
 interactive record_eta {| intro [] |} 'A:
-   sequent[squash]{ <H> >- 'r in record[n:t]{'A} } -->
-   sequent['ext]  { <H> >- rcrd[n:t]{field[n:t]{'r}; 'r} ~ 'r }
+   sequent{ <H> >- 'r in record[n:t]{'A} } -->
+   sequent{ <H> >- rcrd[n:t]{field[n:t]{'r}; 'r} ~ 'r }
 
 interactive_rw record_eta_rw  :
    ('r in record[n:t]{top} ) -->
@@ -198,42 +198,42 @@ interactive_rw record_exchange :
 doc <:doc< @doc{@modsubsection{Introduction}} >>
 
 interactive recordEqualS1 :
-   [equality] sequent[squash]{ <H> >- not{.label[n:t]=label[m:t] in label} } -->
-   [main] sequent[squash]{ <H> >- 'r1='r2 in record[m:t]{'A} } -->
-   sequent['ext]  { <H> >- rcrd[n:t]{'a;'r1}='r2 in record[m:t]{'A} }
+   [equality] sequent{ <H> >- not{.label[n:t]=label[m:t] in label} } -->
+   [main] sequent{ <H> >- 'r1='r2 in record[m:t]{'A} } -->
+   sequent{ <H> >- rcrd[n:t]{'a;'r1}='r2 in record[m:t]{'A} }
 
 interactive recordEqualS2 :
-   [equality] sequent[squash]{ <H> >- not{.label[n:t]=label[m:t] in label} } -->
-   [main] sequent[squash]{ <H> >- 'r1='r2 in record[m:t]{'A} } -->
-   sequent['ext]  { <H> >- 'r1=rcrd[n:t]{'a;'r2} in record[m:t]{'A} }
+   [equality] sequent{ <H> >- not{.label[n:t]=label[m:t] in label} } -->
+   [main] sequent{ <H> >- 'r1='r2 in record[m:t]{'A} } -->
+   sequent{ <H> >- 'r1=rcrd[n:t]{'a;'r2} in record[m:t]{'A} }
 
 interactive recordEqualS3 :
-   [equality] sequent[squash]{ <H> >- not{.label[n:t]=label[m:t] in label} } -->
-   [main] sequent[squash]{ <H> >- 'r1='r2 in record[m:t]{'A} } -->
-   sequent['ext]  { <H> >- rcrd[n:t]{'a1;'r1}=rcrd[n:t]{'a2;'r2} in record[m:t]{'A} }
+   [equality] sequent{ <H> >- not{.label[n:t]=label[m:t] in label} } -->
+   [main] sequent{ <H> >- 'r1='r2 in record[m:t]{'A} } -->
+   sequent{ <H> >- rcrd[n:t]{'a1;'r1}=rcrd[n:t]{'a2;'r2} in record[m:t]{'A} }
 
 interactive recordEqualS4 :
-   [equality] sequent[squash]{ <H> >- not{.label[n:t]=label[m:t] in label} } -->
-   [main] sequent[squash]{ <H> >- 'r1=rcrd[m:t]{'a2;'r2} in record[m:t]{'A} } -->
-   sequent['ext]  { <H> >- rcrd[n:t]{'a1;'r1}=rcrd[m:t]{'a2;'r2} in record[m:t]{'A} }
+   [equality] sequent{ <H> >- not{.label[n:t]=label[m:t] in label} } -->
+   [main] sequent{ <H> >- 'r1=rcrd[m:t]{'a2;'r2} in record[m:t]{'A} } -->
+   sequent{ <H> >- rcrd[n:t]{'a1;'r1}=rcrd[m:t]{'a2;'r2} in record[m:t]{'A} }
 
 interactive recordEqualS5 :
-   [main] sequent[squash]{ <H> >- 'a1='a2 in 'A } -->
-   sequent['ext]  { <H> >- rcrd[m:t]{'a1;'r1}=rcrd[m:t]{'a2;'r2} in record[m:t]{'A} }
+   [main] sequent{ <H> >- 'a1='a2 in 'A } -->
+   sequent{ <H> >- rcrd[m:t]{'a1;'r1}=rcrd[m:t]{'a2;'r2} in record[m:t]{'A} }
 (*
 interactive recordEqualS :
-   [main] sequent[squash]{ <H> >-
+   [main] sequent{ <H> >-
                           eq_label[n1:t,m:t]{
                             eq_label[n2:t,m:t]{
                                ('a1 ='a2 in 'A);                                  (* x1 = y = x2 *)
                                (rcrd[n1:t]{'a1;'r1} = 'r2 in record[m:t]{'A})};   (* x1 = y <> x2 *)
                                ('r1 = rcrd[n2:t]{'a2;'r2}  in record[m:t]{'A})}    (* x1 <> y  *)
                   } -->
-   sequent['ext]  { <H> >- rcrd[n1:t]{'a1;'r1} = rcrd[n2:t]{'a2;'r2} in record[m:t]{'A} }
+   sequent{ <H> >- rcrd[n1:t]{'a1;'r1} = rcrd[n2:t]{'a2;'r2} in record[m:t]{'A} }
 
 interactive recordMemberS {| intro[] |} :
-   [main] sequent[squash]{ <H> >- eq_label[n:t,m:t]{('a in 'A); ('r in record[m:t]{'A})} } -->
-   sequent['ext]  { <H> >- rcrd[n:t]{'a;'r} in record[m:t]{'A} }
+   [main] sequent{ <H> >- eq_label[n:t,m:t]{('a in 'A); ('r in record[m:t]{'A})} } -->
+   sequent{ <H> >- rcrd[n:t]{'a;'r} in record[m:t]{'A} }
 *)
 
 let record_eqcdST =
@@ -257,50 +257,50 @@ let rec record_eqcdS addr  =
 *)
 
 interactive recordTypeEliminationS {| elim [ThinOption thinT] |} 'H :
-   [main] sequent ['ext] { <H>; u:"type"{record[n:t]{'A}}; v:"type"{'A}; <J['u]> >- 'C['u] } -->
-   sequent ['ext] { <H>; u:"type"{record[n:t]{'A}}; <J['u]> >- 'C['u] }
+   [main] sequent { <H>; u:"type"{record[n:t]{'A}}; v:"type"{'A}; <J['u]> >- 'C['u] } -->
+   sequent { <H>; u:"type"{record[n:t]{'A}}; <J['u]> >- 'C['u] }
 
 interactive recordTypeEliminationL {| elim [ThinOption thinT] |} 'H 'r :
-   [main] sequent ['ext] { <H>; u:"type"{record[n:t]{self.'A['self];'R}}; <J['u]> >- 'r in 'R } -->
-   [main] sequent ['ext] { <H>; u:"type"{record[n:t]{self.'A['self];'R}}; v:"type"{'A['r]}; <J['u]> >- 'C['u] } -->
-   sequent ['ext] { <H>; u:"type"{record[n:t]{self.'A['self];'R}}; <J['u]> >- 'C['u] }
+   [main] sequent { <H>; u:"type"{record[n:t]{self.'A['self];'R}}; <J['u]> >- 'r in 'R } -->
+   [main] sequent { <H>; u:"type"{record[n:t]{self.'A['self];'R}}; v:"type"{'A['r]}; <J['u]> >- 'C['u] } -->
+   sequent { <H>; u:"type"{record[n:t]{self.'A['self];'R}}; <J['u]> >- 'C['u] }
 
 interactive recordTypeEliminationR {| elim [ThinOption thinT] |} 'H 'a :
-   [main] sequent ['ext] { <H>; u:"type"{record[n:t]{'A;x.'R['x]}}; <J['u]> >- 'a in 'A } -->
-   [main] sequent ['ext] { <H>; u:"type"{record[n:t]{'A;x.'R['x]}}; v:"type"{'R['a]}; <J['u]> >- 'C['u] } -->
-   sequent ['ext] { <H>; u:"type"{record[n:t]{'A;x.'R['x]}}; <J['u]> >- 'C['u] }
+   [main] sequent { <H>; u:"type"{record[n:t]{'A;x.'R['x]}}; <J['u]> >- 'a in 'A } -->
+   [main] sequent { <H>; u:"type"{record[n:t]{'A;x.'R['x]}}; v:"type"{'R['a]}; <J['u]> >- 'C['u] } -->
+   sequent { <H>; u:"type"{record[n:t]{'A;x.'R['x]}}; <J['u]> >- 'C['u] }
 
 interactive recordEqualL {| intro[] |} :
-   [wf] sequent[squash]{ <H> >- "type"{record[n:t]{self.'A['self];'R}} } -->
-   [main] sequent[squash]{ <H> >- 'r = 's in 'R } -->
-   [main] sequent[squash]{ <H> >- 'r = 's in record[n:t]{'A['r]} } -->
-   sequent['ext]  { <H> >- 'r = 's in record[n:t]{self.'A['self];'R} }
+   [wf] sequent{ <H> >- "type"{record[n:t]{self.'A['self];'R}} } -->
+   [main] sequent{ <H> >- 'r = 's in 'R } -->
+   [main] sequent{ <H> >- 'r = 's in record[n:t]{'A['r]} } -->
+   sequent{ <H> >- 'r = 's in record[n:t]{self.'A['self];'R} }
 
 interactive recordEqualR  {| intro[] |} :
-   [wf] sequent[squash]{ <H> >- "type"{record[n:t]{'A;x.'R['x]}} } -->
-   [main] sequent[squash]{ <H> >- 'r = 's in record[n:t]{'A} } -->
-   [main] sequent[squash]{ <H> >- 'r = 's in 'R[field[n:t]{'r}] } -->
-   sequent['ext]  { <H> >- 'r = 's in record[n:t]{'A;x.'R['x]} }
+   [wf] sequent{ <H> >- "type"{record[n:t]{'A;x.'R['x]}} } -->
+   [main] sequent{ <H> >- 'r = 's in record[n:t]{'A} } -->
+   [main] sequent{ <H> >- 'r = 's in 'R[field[n:t]{'r}] } -->
+   sequent{ <H> >- 'r = 's in record[n:t]{'A;x.'R['x]} }
 
 interactive recordEqualI {| intro[] |} :
-   [main] sequent[squash]{ <H> >- 'r = 's in record[n:t]{'A} } -->
-   [main] sequent[squash]{ <H> >- 'r = 's in 'R } -->
-   sequent['ext]  { <H> >- 'r = 's in record[n:t]{'A;'R} }
+   [main] sequent{ <H> >- 'r = 's in record[n:t]{'A} } -->
+   [main] sequent{ <H> >- 'r = 's in 'R } -->
+   sequent{ <H> >- 'r = 's in record[n:t]{'A;'R} }
 
 interactive recordMemberOrt (* {| intro[AutoMustComplete] |} *) :
-   [main] sequent[squash]{ <H> >- 'r in 'R } -->
-   [ort] sequent[squash]{ <H>; u:'R >- record_ort[n:t]{'a;'R} } -->
-   sequent['ext]  { <H> >- rcrd[n:t]{'a;'r} in 'R }
+   [main] sequent{ <H> >- 'r in 'R } -->
+   [ort] sequent{ <H>; u:'R >- record_ort[n:t]{'a;'R} } -->
+   sequent{ <H> >- rcrd[n:t]{'a;'r} in 'R }
 
 interactive recordEqualOrt1 :
-   [main] sequent[squash]{ <H> >- 'r1 = 'r2 in 'R } -->
-   [ort] sequent[squash]{ <H>; r:'R >- record_ort[n:t]{'a;'R} } -->
-   sequent['ext]  { <H> >- rcrd[n:t]{'a;'r1} = 'r2 in 'R }
+   [main] sequent{ <H> >- 'r1 = 'r2 in 'R } -->
+   [ort] sequent{ <H>; r:'R >- record_ort[n:t]{'a;'R} } -->
+   sequent{ <H> >- rcrd[n:t]{'a;'r1} = 'r2 in 'R }
 
 interactive recordEqualOrt2 :
-   [main] sequent[squash]{ <H> >- 'r1 = 'r2 in 'R } -->
-   [ort] sequent[squash]{ <H>; r:'R >- record_ort[n:t]{'a;'R} } -->
-   sequent['ext]  { <H> >- 'r1 = rcrd[n:t]{'a;'r2}  in 'R }
+   [main] sequent{ <H> >- 'r1 = 'r2 in 'R } -->
+   [ort] sequent{ <H>; r:'R >- record_ort[n:t]{'a;'R} } -->
+   sequent{ <H> >- 'r1 = rcrd[n:t]{'a;'r2}  in 'R }
 
 let recordOrtT = funT (fun p ->
    let rrule =
@@ -336,54 +336,54 @@ doc <:doc< @doc{@modsubsection{Elimination}} >>
 (* Single Records *)
 
 interactive recordEliminationS {| elim[] |} 'H :
-   [main] sequent['ext]  { <H>; x:'A; dum:record; <J[rcrd[n:t]{'x;'dum}]> >- 'C[rcrd[n:t]{'x;'dum}]} -->
-   sequent['ext]  { <H>; r:record[n:t]{'A}; <J['r]> >- 'C['r]}
+   [main] sequent{ <H>; x:'A; dum:record; <J[rcrd[n:t]{'x;'dum}]> >- 'C[rcrd[n:t]{'x;'dum}]} -->
+   sequent{ <H>; r:record[n:t]{'A}; <J['r]> >- 'C['r]}
 
 (* Left-associated Records *)
 
 interactive recordEliminationL2 {| elim[] |} 'H bind{rr,x.'C['rr;'x]} :
-   [main] sequent['ext]  { <H>; r:record[n:t]{self.'A['self];'R}; <J['r]>; rr:'R; x:'A['rr] >- 'C['rr;'x]} -->
-   sequent['ext]  { <H>; r:record[n:t]{self.'A['self];'R}; <J['r]> >- 'C['r; field[n:t]{'r}]}
+   [main] sequent{ <H>; r:record[n:t]{self.'A['self];'R}; <J['r]>; rr:'R; x:'A['rr] >- 'C['rr;'x]} -->
+   sequent{ <H>; r:record[n:t]{self.'A['self];'R}; <J['r]> >- 'C['r; field[n:t]{'r}]}
 
 interactive recordEliminationL1  'H :
-   [main] sequent['ext]  { <H>; r:'R; x:'A['r]; <J>  >- 'C[rcrd[n:t]{'x;'r}]} -->
-   sequent['ext]  { <H>; r:record[n:t]{self.'A['self];'R}; <J> >- 'C['r]}
+   [main] sequent{ <H>; r:'R; x:'A['r]; <J>  >- 'C[rcrd[n:t]{'x;'r}]} -->
+   sequent{ <H>; r:record[n:t]{self.'A['self];'R}; <J> >- 'C['r]}
 
 interactive recordEliminationL 'H :
-   [ort] sequent[squash]{ <H>; r:record[n:t]{self.'A['self];'R}; <J['r]>; rr:'R; x:'A['rr]
+   [ort] sequent{ <H>; r:record[n:t]{self.'A['self];'R}; <J['r]>; rr:'R; x:'A['rr]
                                                                 >- record_ort[n:t]{'x;'R} } -->
-   [main] sequent['ext]  { <H>; r:'R; x:'A['r]; <J[rcrd[n:t]{'x;'r}]> >- 'C[rcrd[n:t]{'x;'r}]} -->
-   sequent['ext]  { <H>; r:record[n:t]{self.'A['self];'R}; <J['r]> >- 'C['r]}
+   [main] sequent{ <H>; r:'R; x:'A['r]; <J[rcrd[n:t]{'x;'r}]> >- 'C[rcrd[n:t]{'x;'r}]} -->
+   sequent{ <H>; r:record[n:t]{self.'A['self];'R}; <J['r]> >- 'C['r]}
 
 (* Right-assotiated Records *)
 
 interactive recordEliminationR2 {| elim[] |} 'H bind{rr,z.'C['rr;'z]}:
-   [main] sequent['ext]  { <H>; r:record[n:t]{'A;x.'R['x]}; <J['r]>; x:'A; rr:'R['x] >- 'C['rr;'x]} -->
-   sequent['ext]  { <H>; r:record[n:t]{'A;x.'R['x]}; <J['r]> >- 'C['r; field[n:t]{'r}]}
+   [main] sequent{ <H>; r:record[n:t]{'A;x.'R['x]}; <J['r]>; x:'A; rr:'R['x] >- 'C['rr;'x]} -->
+   sequent{ <H>; r:record[n:t]{'A;x.'R['x]}; <J['r]> >- 'C['r; field[n:t]{'r}]}
 
 interactive recordEliminationR1 'H :
-   [main] sequent['ext]  { <H>; x:'A; r:'R['x]; <J>  >- 'C[rcrd[n:t]{'x;'r}]} -->
-   sequent['ext]  { <H>; r:record[n:t]{'A;x.'R['x]}; <J> >- 'C['r]}
+   [main] sequent{ <H>; x:'A; r:'R['x]; <J>  >- 'C[rcrd[n:t]{'x;'r}]} -->
+   sequent{ <H>; r:record[n:t]{'A;x.'R['x]}; <J> >- 'C['r]}
 
 interactive recordEliminationR 'H :
-   [ort] sequent[squash]{ <H>; r:record[n:t]{'A;x.'R['x]}; <J['r]>; x:'A; 'R['x] >- record_ort[n:t]{'x;'R['x]} } -->
-   [main] sequent['ext]  { <H>; x:'A; r:'R['x]; <J[rcrd[n:t]{'x;'r}]> >- 'C[rcrd[n:t]{'x;'r}]} -->
-   sequent['ext]  { <H>; r:record[n:t]{'A;x.'R['x]}; <J['r]> >- 'C['r]}
+   [ort] sequent{ <H>; r:record[n:t]{'A;x.'R['x]}; <J['r]>; x:'A; 'R['x] >- record_ort[n:t]{'x;'R['x]} } -->
+   [main] sequent{ <H>; x:'A; r:'R['x]; <J[rcrd[n:t]{'x;'r}]> >- 'C[rcrd[n:t]{'x;'r}]} -->
+   sequent{ <H>; r:record[n:t]{'A;x.'R['x]}; <J['r]> >- 'C['r]}
 
 (* Independent Records *)
 
 interactive recordEliminationI2  'H :
-   [main] sequent['ext]  { <H>; r:record[n:t]{'A;'R}; <J['r]>; x:'A; rr:'R >- 'C['rr]} -->
-   sequent['ext]  { <H>; r:record[n:t]{'A;'R}; <J['r]> >- 'C['r]}
+   [main] sequent{ <H>; r:record[n:t]{'A;'R}; <J['r]>; x:'A; rr:'R >- 'C['rr]} -->
+   sequent{ <H>; r:record[n:t]{'A;'R}; <J['r]> >- 'C['r]}
 
 interactive recordEliminationI1  'H :
-   [main] sequent['ext]  { <H>; x:'A; r:'R; <J>  >- 'C[rcrd[n:t]{'x;'r}]} -->
-   sequent['ext]  { <H>; r:record[n:t]{'A;'R}; <J> >- 'C['r]}
+   [main] sequent{ <H>; x:'A; r:'R; <J>  >- 'C[rcrd[n:t]{'x;'r}]} -->
+   sequent{ <H>; r:record[n:t]{'A;'R}; <J> >- 'C['r]}
 
 interactive recordEliminationI  'H :
-   [ort] sequent[squash]{ <H>; r:record[n:t]{'A;'R}; <J['r]>; x:'A; rr:'R >- record_ort[n:t]{'x;'R} } -->
-   [main] sequent['ext]  { <H>; x:'A; r:'R; <J[rcrd[n:t]{'x;'r}]> >- 'C[rcrd[n:t]{'x;'r}]} -->
-   sequent['ext]  { <H>; r:record[n:t]{'A;'R}; <J['r]> >- 'C['r]}
+   [ort] sequent{ <H>; r:record[n:t]{'A;'R}; <J['r]>; x:'A; rr:'R >- record_ort[n:t]{'x;'R} } -->
+   [main] sequent{ <H>; x:'A; r:'R; <J[rcrd[n:t]{'x;'r}]> >- 'C[rcrd[n:t]{'x;'r}]} -->
+   sequent{ <H>; r:record[n:t]{'A;'R}; <J['r]> >- 'C['r]}
 
 
 doc <:doc< @docoff >>
@@ -430,30 +430,30 @@ let resource elim += [
 doc <:doc< @doc{@modsubsection{Orthogonality}} >>
 
 interactive functionOrtDinter {| intro[] |} :
-   [wf] sequent[squash]{ <H> >- "type"{bisect{'A;a.'B['a]}} } -->
-   [main] sequent[squash]{ <H>; a:'A; b:'B['a] >- function_ort{x.'f['x];'A} } -->
-   [main] sequent[squash]{ <H>; a:'A; b:'B['a] >- function_ort{x.'f['x];'B['a]} } -->
-   sequent['ext]  { <H> >-  function_ort{x.'f['x]; bisect{'A;a.'B['a]}} }
+   [wf] sequent{ <H> >- "type"{bisect{'A;a.'B['a]}} } -->
+   [main] sequent{ <H>; a:'A; b:'B['a] >- function_ort{x.'f['x];'A} } -->
+   [main] sequent{ <H>; a:'A; b:'B['a] >- function_ort{x.'f['x];'B['a]} } -->
+   sequent{ <H> >-  function_ort{x.'f['x]; bisect{'A;a.'B['a]}} }
 
 interactive recordOrtIntro0 {| intro[] |} :
-   sequent['ext]  { <H>  >- record_ort[n:t]{'a;record} }
+   sequent{ <H>  >- record_ort[n:t]{'a;record} }
 
 interactive recordOrtIntroT {| intro[] |} :
-   sequent['ext]  { <H>  >- record_ort[n:t]{'a;top} }
+   sequent{ <H>  >- record_ort[n:t]{'a;top} }
 
 interactive recordOrtIntroTop {| intro[] |} :
-   [wf] sequent[squash]  { <H>  >- "type"{tsquash{'A}} } -->
-   sequent['ext]  { <H>  >- record_ort[n:t]{'a;tsquash{'A}} }
+   [wf] sequent{ <H>  >- "type"{tsquash{'A}} } -->
+   sequent{ <H>  >- record_ort[n:t]{'a;tsquash{'A}} }
 
 interactive recordOrtIntroS1 :
-   [wf] sequent[squash]{ <H> >- "type"{record[m:t]{'A}} } -->
-   [main] sequent[squash]{ <H> >- not{. label[n:t]=label[m:t] in label} } -->
-   sequent['ext]  { <H> >- record_ort[n:t]{'a;record[m:t]{'A}} }
+   [wf] sequent{ <H> >- "type"{record[m:t]{'A}} } -->
+   [main] sequent{ <H> >- not{. label[n:t]=label[m:t] in label} } -->
+   sequent{ <H> >- record_ort[n:t]{'a;record[m:t]{'A}} }
 
 interactive recordOrtIntroS2 :
-   [wf] sequent[squash]{ <H> >- "type"{record[n:t]{'A}} } -->
-   [main] sequent[squash]{ <H>; x:'A >- 'x='a in 'A } -->
-   sequent['ext]  { <H> >- record_ort[n:t]{'a;record[n:t]{'A}} }
+   [wf] sequent{ <H> >- "type"{record[n:t]{'A}} } -->
+   [main] sequent{ <H>; x:'A >- 'x='a in 'A } -->
+   sequent{ <H> >- record_ort[n:t]{'a;record[n:t]{'A}} }
 
 let recordOrtIntroST =
    recordOrtIntroS2 orelseT recordOrtIntroS1
@@ -461,10 +461,10 @@ let recordOrtIntroST =
 let resource intro += (<<record_ort[n:t]{'a;record[m:t]{'A}}>>,wrap_intro recordOrtIntroST)
 
 interactive recordOrtIntroL :
-   [wf] sequent[squash]{ <H> >- "type"{record[m:t]{self.'A['self];'R}} } -->
-   [main] sequent[squash]  { <H>; r:'R; x:'A['r] >- record_ort[n:t]{'a;'R}}  -->
-   [main] sequent[squash]  { <H>; r:'R; x:'A['r] >- record_ort[n:t]{'a;record[m:t]{'A['r]}}}  -->
-   sequent['ext]  { <H> >- record_ort[n:t]{'a;record[m:t]{self.'A['self];'R}} }
+   [wf] sequent{ <H> >- "type"{record[m:t]{self.'A['self];'R}} } -->
+   [main] sequent{ <H>; r:'R; x:'A['r] >- record_ort[n:t]{'a;'R}}  -->
+   [main] sequent{ <H>; r:'R; x:'A['r] >- record_ort[n:t]{'a;record[m:t]{'A['r]}}}  -->
+   sequent{ <H> >- record_ort[n:t]{'a;record[m:t]{self.'A['self];'R}} }
 
 let recordOrtIntroLT =
    recordOrtIntroL thenLT
@@ -476,10 +476,10 @@ let recordOrtIntroLT =
 let resource intro += (<<record_ort[n:t]{'a;record[m:t]{self.'A['self];'R}}>>,wrap_intro recordOrtIntroLT)
 
 interactive recordOrtIntroR :
-   [wf] sequent[squash]{ <H> >- "type"{record[m:t]{'A;x.'R['x]}} } -->
-   [main] sequent[squash]  { <H>; x:'A; r:'R['x] >- record_ort[n:t]{'a;'R['x]} } -->
-   [main] sequent[squash]  { <H>; x:'A; r:'R['x] >- record_ort[n:t]{'a;record[m:t]{'A}}}  -->
-   sequent['ext]  { <H> >- record_ort[n:t]{'a;record[m:t]{'A;x.'R['x]}} }
+   [wf] sequent{ <H> >- "type"{record[m:t]{'A;x.'R['x]}} } -->
+   [main] sequent{ <H>; x:'A; r:'R['x] >- record_ort[n:t]{'a;'R['x]} } -->
+   [main] sequent{ <H>; x:'A; r:'R['x] >- record_ort[n:t]{'a;record[m:t]{'A}}}  -->
+   sequent{ <H> >- record_ort[n:t]{'a;record[m:t]{'A;x.'R['x]}} }
 
 let recordOrtIntroRT =
    recordOrtIntroR thenLT
@@ -491,10 +491,10 @@ let recordOrtIntroRT =
 let resource intro += (<<record_ort[n:t]{'a;record[m:t]{'A;x.'R['x]}}>>,wrap_intro recordOrtIntroRT)
 
 interactive recordOrtIntroI :
-   [wf] sequent[squash]{ <H> >- "type"{record[m:t]{'A;'R}} } -->
-   [main] sequent[squash]  { <H>; x:'A; r:'R >- record_ort[n:t]{'a;'R} } -->
-   [main] sequent[squash]  { <H>; x:'A; r:'R >- record_ort[n:t]{'a;record[m:t]{'A}}} -->
-   sequent['ext]  { <H> >- record_ort[n:t]{'a;record[m:t]{'A;'R}} }
+   [wf] sequent{ <H> >- "type"{record[m:t]{'A;'R}} } -->
+   [main] sequent{ <H>; x:'A; r:'R >- record_ort[n:t]{'a;'R} } -->
+   [main] sequent{ <H>; x:'A; r:'R >- record_ort[n:t]{'a;record[m:t]{'A}}} -->
+   sequent{ <H> >- record_ort[n:t]{'a;record[m:t]{'A;'R}} }
 
 let recordOrtIntroIT =
    recordOrtIntroI thenLT

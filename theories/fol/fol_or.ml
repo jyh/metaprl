@@ -53,27 +53,27 @@ prim_rw reduce_decide_inr : decide{inr{'x}; y. 'body1['y]; z. 'body2['z]} <--> '
  ************************************************************************)
 
 prim or_type {| intro [] |} :
-   [wf] sequent ['ext] { <H> >- "type"{'A} } -->
-   [wf] sequent ['ext] { <H> >- "type"{'B} } -->
-   sequent ['ext] { <H> >- "type"{."or"{'A; 'B}} } =
+   [wf] sequent { <H> >- "type"{'A} } -->
+   [wf] sequent { <H> >- "type"{'B} } -->
+   sequent { <H> >- "type"{."or"{'A; 'B}} } =
    trivial
 
 prim or_intro_left {| intro [SelectOption 1] |} :
-   [wf] sequent ['ext] { <H> >- "type"{'B} } -->
-   [main] ('a : sequent ['ext] { <H> >- 'A }) -->
-   sequent ['ext] { <H> >- "or"{'A; 'B} } =
+   [wf] sequent { <H> >- "type"{'B} } -->
+   [main] ('a : sequent { <H> >- 'A }) -->
+   sequent { <H> >- "or"{'A; 'B} } =
    inl{'a}
 
 prim or_intro_right {| intro [SelectOption 2] |} :
-   [wf] sequent ['ext] { <H> >- "type"{'A} } -->
-   [main] ('b : sequent ['ext] { <H> >- 'B } ) -->
-   sequent ['ext] { <H> >- "or"{'A; 'B} } =
+   [wf] sequent { <H> >- "type"{'A} } -->
+   [main] ('b : sequent { <H> >- 'B } ) -->
+   sequent { <H> >- "or"{'A; 'B} } =
    inr{'b}
 
 prim or_elim {| elim [] |} 'H :
-   [wf] ('a['x] : sequent ['ext] { <H>; x: 'A; <J[inl{'x}]> >- 'C[inl{'x}] }) -->
-   [wf] ('b['x] : sequent ['ext] { <H>; x: 'B; <J[inr{'x}]> >- 'C[inr{'x}] }) -->
-   sequent ['ext] { <H>; x: 'A or 'B; <J['x]> >- 'C['x] } =
+   [wf] ('a['x] : sequent { <H>; x: 'A; <J[inl{'x}]> >- 'C[inl{'x}] }) -->
+   [wf] ('b['x] : sequent { <H>; x: 'B; <J[inr{'x}]> >- 'C[inr{'x}] }) -->
+   sequent { <H>; x: 'A or 'B; <J['x]> >- 'C['x] } =
    decide{'x; x. 'a['x]; x. 'b['x]}
 
 (*

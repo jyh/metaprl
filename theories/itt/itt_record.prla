@@ -1165,7 +1165,11 @@ NItt_equal	Itt_equal	Itt_equal NIL
 NItt_equal!type	type	type Itt_equal
 O	o967	type
 T	t968	o967 b696
-S	s	t967 h
+NBase_rewrite	Base_rw	Base_rewrite NIL
+NBase_rewrite!sequent_arg	brwsqarg	sequent_arg Base_rw
+O	obrarg	brwsqarg
+T	tbrarg	obrarg
+S	s	tbrarg h
 G	s	t968
 B	b968	s
 T	t969	o965 b968
@@ -1197,7 +1201,7 @@ T	t982	o981
 B	b982	t982
 NSummary!resource_defs	resource_defs	resource_defs Summary
 T	t994	o967 b707
-S	s994	t967 h
+S	s994	tbrarg h
 G	s994	t994
 B	b994	s994
 T	t995	o965 b994
@@ -1266,7 +1270,7 @@ O	o1410	var p1410
 T	t1410	o1410
 B	b1410	t1410
 T	t1413	o1020 b707 b718 b1410
-S	s1413	t967 h
+S	s1413	tbrarg h
 G	s1413	t1413
 B	b1413	s1413
 T	t1414	o965 b1413
@@ -1276,7 +1280,7 @@ O	o1420	var p1419
 T	t1420	o1420
 B	b1420	t1420
 T	t1440	o1020 b707 b718 b718
-S	s1440	t967 h
+S	s1440	tbrarg h
 G	s1440	t1440
 B	b1440	s1440
 T	t1441	o965 b1440
@@ -1370,7 +1374,7 @@ B	b1545	t1542
 P	p1568	String recordTypeS
 O	o1569	rule p1568
 T	t1578	o967 b1405
-S	s1578	t971 h
+S	s1578	tbrarg h
 G	s1578	t1578
 B	b1578	s1578
 T	t1579	o965 b1578
@@ -1392,13 +1396,13 @@ B	b1612	t1612
 P	p1626	String field_member
 O	o1626	rule p1626
 T	t1626	o1020 b1405 b718 b718
-S	s1626	t967 h
+S	s1626	tbrarg h
 G	s1626	t1626
 B	b1626	s1626
 T	t1627	o965 b1626
 B	b1627	t1627
 T	t1628	o1020 b696 b1406 b1406
-S	s1628	t971 h
+S	s1628	tbrarg h
 G	s1628	t1628
 B	b1628	s1628
 T	t1629	o965 b1628
@@ -1423,13 +1427,13 @@ P	p1695	String recordTypeL
 O	o1695	rule p1695
 H	h1695	self t707
 T	t1698	o967 b1390
-S	s1698	t967 h h1695
+S	s1698	tbrarg h h1695
 G	s1698	t1698
 B	b1700	s1698
 T	t1700	o965 b1700
 B	b1701	t1700
 T	t1701	o967 b1337
-S	s1701	t971 h
+S	s1701	tbrarg h
 G	s1701	t1701
 B	b1702	s1701
 T	t1702	o965 b1702
@@ -1459,7 +1463,7 @@ O	o1758	rule p1757
 T	t1760	o707 b1641
 B	b1761	t1760
 T	t1761	o967 b1761
-S	s1761	t967 h h1639
+S	s1761	tbrarg h h1639
 G	s1761	t1761
 B	b1762	s1761
 T	t1762	o965 b1762
@@ -1468,7 +1472,7 @@ B	b1764	t1760 x
 T	t1764	o1246 b696 b1764
 B	b1765	t1764
 T	t1765	o967 b1765
-S	s1765	t971 h
+S	s1765	tbrarg h
 G	s1765	t1765
 B	b1766	s1765
 T	t1766	o965 b1766
@@ -1496,7 +1500,7 @@ B	b1777	t1776
 P	p1792	String recordTypeI
 O	o1793	rule p1792
 T	t1793	o967 b1469
-S	s1793	t971 h
+S	s1793	tbrarg h
 G	s1793	t1793
 B	b1793	s1793
 T	t1794	o965 b1793
@@ -1524,10 +1528,10 @@ T	t1816	o1816 b717 b718
 B	b1816	t1816
 T	t1817	o1405 b1816
 B	b1817	t1817
-P	p1817	String "rwaAll [unfoldRcrd; unfoldField] thenT  autoT"
+P	p1817	String "rwaAll [unfoldRcrd; unfoldField] thenT autoT"
 O	o1817	ext_rule p1817
 T	t1818	o1474 b1817 b717
-S	s1818	t967 h
+S	s1818	tbrarg h
 G	s1818	t1818
 B	b1818	s1818
 T	t1819	o980 b1818 b4
@@ -1578,7 +1582,7 @@ T	t1903	o1474 b1839 b1406
 T	t1950	o1816 b1406 b718
 B	b1950	t1950
 T	t1951	o1474 b1950 b718
-S	s1951	t971 h
+S	s1951	tbrarg h
 G	s1951	t1951
 B	b1951	s1951
 T	t1952	o965 b1951
@@ -1605,10 +1609,10 @@ T	t1974	o b1973 b4
 B	b1974	t1974
 P	p1974	String "withT <<top>> autoT"
 O	o1974	ext_rule p1974
-S	s1974	t967 h
+S	s1974	tbrarg h
 G	s1974	t1951
 B	b1975	s1974
-S	s1975	t967 h
+S	s1975	tbrarg h
 G	s1975	t1973
 B	b1976	s1975
 T	t1976	o b1976 b4
@@ -1634,7 +1638,7 @@ B	b1987	t1987
 T	t1988	o1845 b1816 b1987
 B	b1988	t1988
 T	t1989	o1474 b1986 b1988
-S	s1989	t967 h
+S	s1989	tbrarg h
 G	s1989	t1989
 B	b1989	s1989
 T	t1990	o980 b1989 b4
@@ -1677,7 +1681,7 @@ B	b2191	t2191
 P	p2200	String recordEqualS1
 O	o2200	rule p2200
 O	o2201	meta_labeled p1482
-S	s2201	t967 h
+S	s2201	tbrarg h
 G	s2201	t1835
 B	b2201	s2201
 T	t2201	o965 b2201
@@ -1688,7 +1692,7 @@ O	o2203	record p1832
 T	t2203	o2203 b696
 B	b2204	t2203
 T	t2204	o1020 b2204 b1025 b1027
-S	s2204	t967 h
+S	s2204	tbrarg h
 G	s2204	t2204
 B	b2206	s2204
 T	t2206	o965 b2206
@@ -1696,7 +1700,7 @@ B	b2207	t2206
 T	t2207	o1816 b717 b1025
 B	b2208	t2207
 T	t2208	o1020 b2204 b2208 b1027
-S	s2208	t971 h
+S	s2208	tbrarg h
 G	s2208	t2208
 B	b2210	s2208
 T	t2210	o965 b2210
@@ -1706,7 +1710,7 @@ O	o2218	rule p2218
 T	t2218	o1816 b717 b1027
 B	b2218	t2218
 T	t2219	o1020 b2204 b1025 b2218
-S	s2219	t971 h
+S	s2219	tbrarg h
 G	s2219	t2219
 B	b2219	s2219
 T	t2220	o965 b2219
@@ -1737,7 +1741,7 @@ P	p1642	Var C
 O	o1642	var p1642
 B	b2565	t2564
 T	t2565	o1642 b2565
-S	s2570	t971 h h2563 h2565
+S	s2570	tbrarg h h2563 h2565
 G	s2570	t2565
 B	b2571	s2570
 T	t2571	o965 b2571
@@ -1759,7 +1763,7 @@ B	b2606	t2606
 T	t2607	o b2606 b2559
 B	b2607	t2607
 H	h2609	u t1701
-S	s2609	t971 h h2609 h2565
+S	s2609	tbrarg h h2609 h2565
 G	s2609	t1440
 B	b2610	s2609
 T	t2610	o965 b2610
@@ -1767,7 +1771,7 @@ B	b2611	t2610
 T	t2611	o696 b718
 B	b2612	t2611
 T	t2612	o967 b2612
-S	s2615	t971 h h2609 h2565
+S	s2615	tbrarg h h2609 h2565
 G	s2615	t2565
 B	b2616	s2615
 T	t2616	o965 b2616
@@ -1776,10 +1780,10 @@ P	p2632	String "rwh unfoldRecordL 2 thenT rwch unfoldRecordL 1 2 thenT rwch unfo
 O	o2632	ext_rule p2632
 T	t2643	o967 b1395
 H	h2643	u t2643
-S	s2643	t971 h h2643 h2565
+S	s2643	tbrarg h h2643 h2565
 G	s2643	t2565
 B	b2644	s2643
-S	s2644	t971 h h2643 h2565
+S	s2644	tbrarg h h2643 h2565
 G	s2644	t1440
 B	b2650	s2644
 P	p2671	String "withT <<'r>> (dT 2) thenAT autoT"
@@ -1808,14 +1812,14 @@ B	b2707	t2707
 T	t2708	o b2707 b2559
 B	b2708	t2708
 H	h2710	u t1765
-S	s2710	t971 h h2710 h2565
+S	s2710	tbrarg h h2710 h2565
 G	s2710	t1257
 B	b2711	s2710
 T	t2711	o965 b2711
 B	b2712	t2711
 B	b2713	t1401
 T	t2713	o967 b2713
-S	s2715	t971 h h2710 h2565
+S	s2715	tbrarg h h2710 h2565
 G	s2715	t2565
 B	b2716	s2715
 T	t2716	o965 b2716
@@ -1824,10 +1828,10 @@ P	p2719	String "rwh unfoldRecordR 2 thenT rwch unfoldRecordR 1 2 thenT rwch unfo
 O	o2719	ext_rule p2719
 T	t2723	o967 b1451
 H	h2723	u t2723
-S	s2723	t971 h h2723 h2565
+S	s2723	tbrarg h h2723 h2565
 G	s2723	t2565
 B	b2724	s2723
-S	s2724	t971 h h2723 h2565
+S	s2724	tbrarg h h2723 h2565
 G	s2724	t1257
 B	b2725	s2724
 P	p2740	String "withT <<rcrd[n:t]{'a;rcrd}>> (dT 2)"
@@ -1835,7 +1839,7 @@ O	o2740	ext_rule p2740
 T	t2740	o1816 b717 b728
 B	b2741	t2740
 T	t2741	o1020 b1405 b2741 b2741
-S	s2741	t967 h h2723 h2565
+S	s2741	tbrarg h h2723 h2565
 G	s2741	t2741
 B	b2742	s2741
 T	t2743	o b2741 b4
@@ -1879,7 +1883,7 @@ B	b1696	t1640
 T	t1707	o b963 b1637
 B	b1707	t1707
 O	o1708	meta_labeled p1085
-S	s3016	t967 h
+S	s3016	tbrarg h
 G	s3016	t1701
 B	b3027	s3016
 T	t3027	o965 b3027
@@ -1887,13 +1891,13 @@ B	b3028	t3027
 T	t3028	o1708 b3028
 B	b3031	t3028
 T	t3031	o1020 b2672 b718 b1410
-S	s3031	t967 h
+S	s3031	tbrarg h
 G	s3031	t3031
 B	b3032	s3031
 T	t3032	o965 b3032
 B	b3033	t3032
 T	t3033	o1020 b1337 b718 b1410
-S	s3033	t971 h
+S	s3033	tbrarg h
 G	s3033	t3033
 B	b3034	s3033
 T	t3034	o965 b3034
@@ -1910,14 +1914,14 @@ T	t3074	o980 b3034 b3073
 B	b3074	t3074
 T	t3075	o979 b3074 b4 b982
 B	b3075	t3075
-S	s3082	t967 h
+S	s3082	tbrarg h
 G	s3082	t3033
 B	b3083	s3082
 T	t3083	o980 b3083 b3073
 B	b3084	t3083
 B	b3085	t3033
 T	t3085	o1087 b3085
-S	s3085	t967 h
+S	s3085	tbrarg h
 G	s3085	t3085
 B	b3086	s3085
 T	t3086	o980 b3086 b3073
@@ -1933,7 +1937,7 @@ T	t3130	o967 b3130
 T	t3153	o1020 b1395 b718 b1410
 P	p3462	String recordEqualR
 O	o3462	rule p3462
-S	s3462	t967 h
+S	s3462	tbrarg h
 G	s3462	t1765
 B	b3462	s3462
 T	t3462	o965 b3462
@@ -1941,20 +1945,20 @@ B	b3463	t3462
 T	t3463	o1708 b3463
 B	b3464	t3463
 T	t3464	o1020 b1405 b718 b1410
-S	s3464	t967 h
+S	s3464	tbrarg h
 G	s3464	t3464
 B	b3465	s3464
 T	t3465	o965 b3465
 B	b3466	t3465
 B	b3467	t1407
 T	t3467	o1020 b3467 b718 b1410
-S	s3467	t967 h
+S	s3467	tbrarg h
 G	s3467	t3467
 B	b3468	s3467
 T	t3468	o965 b3468
 B	b3469	t3468
 T	t3469	o1020 b1765 b718 b1410
-S	s3469	t971 h
+S	s3469	tbrarg h
 G	s3469	t3469
 B	b3470	s3469
 T	t3470	o965 b3470
@@ -1971,19 +1975,19 @@ T	t3478	o979 b3478 b4 b982
 B	b3479	t3478
 H	h3479	r t1405
 T	t3481	o1020 b1451 b718 b1410
-S	s3481	t967 h
+S	s3481	tbrarg h
 G	s3481	t3481
 B	b3482	s3481
 T	t3482	o980 b3482 b3477
 B	b3483	t3482
 B	b3484	t3481
 T	t3484	o1087 b3484
-S	s3484	t967 h
+S	s3484	tbrarg h
 G	s3484	t3484
 B	b3485	s3484
 T	t3485	o980 b3485 b3477
 B	b3486	t3485
-S	s3486	t971 h
+S	s3486	tbrarg h
 G	s3486	t3481
 B	b3487	s3486
 T	t3487	o980 b3487 b3477
@@ -2001,12 +2005,12 @@ B	b3493	t3492
 P	p3552	String recordEqualI
 O	o3552	rule p3552
 T	t3552	o1020 b1469 b718 b1410
-S	s3552	t971 h
+S	s3552	tbrarg h
 G	s3552	t3552
 B	b3552	s3552
 T	t3553	o965 b3552
 B	b3553	t3553
-P	p3555	String "rwh unfoldRecordI 0 thenT  rwh unfoldRecordR 0 thenT  autoT"
+P	p3555	String "rwh unfoldRecordI 0 thenT rwh unfoldRecordR 0 thenT autoT"
 O	o3555	ext_rule p3555
 T	t3556	o b1413 b4
 B	b3556	t3556
@@ -2017,7 +2021,7 @@ B	b3558	t3558
 T	t3559	o979 b3558 b4 b982
 B	b3559	t3559
 T	t3570	o1020 b1486 b718 b1410
-S	s3570	t971 h
+S	s3570	tbrarg h
 G	s3570	t3570
 B	b3571	s3570
 T	t3571	o980 b3571 b3557
@@ -2033,14 +2037,14 @@ O	o3584	ext_rule p3584
 P	p3587	String "equalTypeT <<'r>> <<'s>> thenT autoT"
 O	o3587	ext_rule p3587
 H	h3587	a t696
-S	s3589	t967 h
+S	s3589	tbrarg h
 G	s3589	t3570
 B	b3590	s3589
 T	t3590	o980 b3590 b3557
 B	b3591	t3590
 B	b3592	t3570
 T	t3592	o1087 b3592
-S	s3592	t967 h
+S	s3592	tbrarg h
 G	s3592	t3592
 B	b3593	s3592
 T	t3593	o980 b3593 b3557
@@ -2064,7 +2068,7 @@ B	b759	t759
 O	o3609	record_ort p1245
 T	t3609	o3609 b717 b707
 T	t3612	o1020 b707 b1816 b1816
-S	s3612	t971 h
+S	s3612	tbrarg h
 G	s3612	t3612
 B	b3612	s3612
 T	t3613	o965 b3612
@@ -2072,18 +2076,18 @@ B	b3613	t3613
 T	t3620	o1816 b717 b1682
 B	b3620	t3620
 T	t3621	o1020 b707 b3620 b3620
-S	s3621	t971 h h1662
+S	s3621	tbrarg h h1662
 G	s3621	t3621
 B	b3621	s3621
 T	t3623	o1020 b707 b1682 b718
-P	p3630	String "sqsquashT thenT assertT <<record_ort[n:t]{'a;'R}>> thenAT autoT"
+P	p3630	String "assertT <<record_ort[n:t]{'a;'R}>> thenAT autoT"
 O	o3630	ext_rule p3630
-S	s3632	t967 h h1662
+S	s3632	tbrarg h h1662
 G	s3632	t3621
 B	b3633	s3632
 B	b3635	t3621
 T	t3635	o1087 b3635
-S	s3635	t967 h h1662
+S	s3635	tbrarg h h1662
 G	s3635	t3635
 B	b3636	s3635
 P	p760	String "rw (unfoldRecordOrt thenC unfoldFunctionOrt) 3 thenT withT <<'rr>> (dT 3) thenWT autoT"
@@ -2105,13 +2109,13 @@ O	o780	ext_rule p780
 P	p794	String recordEqualOrt1
 O	o794	rule p794
 T	t794	o1020 b707 b1025 b1027
-S	s794	t967 h
+S	s794	tbrarg h
 G	s794	t794
 B	b794	s794
 T	t795	o965 b794
 B	b795	t795
 T	t796	o1020 b707 b2208 b1027
-S	s796	t971 h
+S	s796	tbrarg h
 G	s796	t796
 B	b796	s796
 T	t797	o965 b796
@@ -2119,7 +2123,7 @@ B	b797	t797
 P	p803	String recordEqualOrt2
 O	o804	rule p803
 T	t810	o1020 b707 b1025 b2218
-S	s810	t971 h
+S	s810	tbrarg h
 G	s810	t810
 B	b810	s810
 T	t811	o965 b810
@@ -2128,15 +2132,15 @@ T	t3655	o1816 b1641 b718
 C	h3655	J t3655
 B	b3655	t3655
 T	t3656	o1642 b3655
-S	s3656	t971 h h1639 h1640 h3655
+S	s3656	tbrarg h h1639 h1640 h3655
 G	s3656	t3656
 B	b3656	s3656
-S	s3657	t971 h h3479 h1645
+S	s3657	tbrarg h h3479 h1645
 G	s3657	t1645
 B	b3658	s3657
 T	t3658	o965 b3658
 B	b3659	t3658
-P	p3660	String "substUsingEpimorphism 2 <<'A * record>> <<bind{y.spread{'y;a,r.rcrd[n:t]{'a;'r}}}>>  <<bind{z.(field[n:t]{'z},'z)}>> thenT autoT thenT onAllClausesT (rwh reduceC) thenT autoT"
+P	p3660	String "substUsingEpimorphism 2 <<'A * record>> <<bind{y.spread{'y;a,r.rcrd[n:t]{'a;'r}}}>> <<bind{z.(field[n:t]{'z},'z)}>> thenT autoT thenT onAllClausesT (rwh reduceC) thenT autoT"
 O	o3660	ext_rule p3660
 T	t3660	o b3656 b4
 B	b3661	t3660
@@ -2153,7 +2157,7 @@ B	b3664	t3664
 T	t3665	o1816 b2565 b3664
 B	b3665	t3665
 T	t3666	o1020 b1405 b3665 b3665
-S	s3666	t967 h h3479 h1645 h3663 h3664
+S	s3666	tbrarg h h3479 h1645 h3663 h3664
 G	s3666	t3666
 B	b3666	s3666
 T	t3667	o980 b3666 b3661
@@ -2178,7 +2182,7 @@ T	t3677	o3667 b3677 b3669
 B	b3678	t3677
 T	t3680	o1 b3663
 B	b3681	t3680
-S	s3690	t967 h h3479 h1645
+S	s3690	tbrarg h h3479 h1645
 G	s3690	t1951
 B	b3691	s3690
 T	t3692	o3668 b1406 b718
@@ -2186,7 +2190,7 @@ B	b3693	t3692
 T	t3693	o3667 b3693 b3669
 B	b3694	t3693
 T	t3694	o1474 b3694 b718
-S	s3694	t967 h h3479 h1645
+S	s3694	tbrarg h h3479 h1645
 G	s3694	t3694
 B	b3695	s3694
 P	p3702	String "rwa [unfoldRcrd;unfoldRecordS] 0"
@@ -2196,19 +2200,19 @@ B	b3703	t3702
 T	t3703	o722 b1830 b2565 b3664
 B	b3704	t3703
 T	t3704	o1020 b3703 b3704 b3704
-S	s3704	t967 h h3479 h1645 h3663 h3664
+S	s3704	tbrarg h h3479 h1645 h3663 h3664
 G	s3704	t3704
 B	b3705	s3704
 T	t3705	o980 b3705 b3661
 B	b3706	t3705
 T	t3706	o1020 b3703 b3704 b3665
-S	s3706	t967 h h3479 h1645 h3663 h3664
+S	s3706	tbrarg h h3479 h1645 h3663 h3664
 G	s3706	t3706
 B	b3707	s3706
 T	t3707	o980 b3707 b3661
 B	b3708	t3707
 T	t3708	o1020 b3703 b3665 b3665
-S	s3708	t967 h h3479 h1645 h3663 h3664
+S	s3708	tbrarg h h3479 h1645 h3663 h3664
 G	s3708	t3708
 B	b3709	s3708
 T	t3709	o980 b3709 b3661
@@ -2232,13 +2236,13 @@ B	b3741	t3741
 H	h3743	r t1336
 T	t3744	o696 b1682
 H	h3744	x t3744
-S	s3744	t971 h h3743 h1645 h1662 h3744
+S	s3744	tbrarg h h3743 h1645 h1662 h3744
 G	s3744	t3738
 B	b3744	s3744
 T	t3745	o965 b3744
 B	b3745	t3745
 T	t3746	o1642 b718 b1406
-S	s3746	t971 h h3743 h1645
+S	s3746	tbrarg h h3743 h1645
 G	s3746	t3746
 B	b3746	s3746
 T	t3747	o965 b3746
@@ -2258,12 +2262,12 @@ H	h3753	r1 t3753
 T	t3754	o1405 b1025
 B	b3754	t3754
 T	t3755	o1642 b1027 b3754
-S	s3755	t971 h h3751 h1645 h3752 h3753
+S	s3755	tbrarg h h3751 h1645 h3752 h3753
 G	s3755	t3755
 B	b3755	s3755
 T	t3756	o980 b3755 b3749
 B	b3756	t3756
-S	s3756	t971 h h3751 h1645
+S	s3756	tbrarg h h3751 h1645
 G	s3756	t3746
 B	b3757	s3756
 T	t3757	o980 b3757 b3749
@@ -2297,12 +2301,12 @@ P	p3798	String recordEliminationL1
 O	o3798	rule p3798
 H	h3798	x t2611
 C	h3799	J
-S	s3799	t971 h h1664 h3798 h3799
+S	s3799	tbrarg h h1664 h3798 h3799
 G	s3799	t3656
 B	b3799	s3799
 T	t3799	o965 b3799
 B	b3800	t3799
-S	s3800	t971 h h3743 h3799
+S	s3800	tbrarg h h3743 h3799
 G	s3800	t1645
 B	b3801	s3800
 T	t3801	o965 b3801
@@ -2316,7 +2320,7 @@ B	b3805	t3804
 T	t3805	o979 b3805 b4 b982
 B	b3806	t3805
 T	t3806	o1474 b718 b1950
-S	s3806	t967 h h3743 h3799
+S	s3806	tbrarg h h3743 h3799
 G	s3806	t3806
 B	b3807	s3806
 T	t3807	o980 b3807 b3804
@@ -2326,7 +2330,7 @@ B	b3809	t3808
 T	t3809	o1482 b3808 b4 b3809
 B	b3810	t3809
 T	t3810	o1642 b1950
-S	s3810	t971 h h3743 h3799
+S	s3810	tbrarg h h3743 h3799
 G	s3810	t3810
 B	b3811	s3810
 T	t3811	o980 b3811 b3804
@@ -2342,12 +2346,12 @@ B	b3816	t3815
 P	p3816	String "sqSymT thenT withT <<'A['r]>> autoT"
 O	o3816	ext_rule p3816
 T	t3816	o1020 b2672 b718 b718
-S	s3816	t967 h h3743 h3799
+S	s3816	tbrarg h h3743 h3799
 G	s3816	t3816
 B	b3817	s3816
 T	t3817	o980 b3817 b3804
 B	b3818	t3817
-S	s3818	t967 h h3743 h3799
+S	s3818	tbrarg h h3743 h3799
 G	s3818	t1951
 B	b3819	s3818
 T	t3819	o980 b3819 b3804
@@ -2392,7 +2396,7 @@ T	t3844	o1 b3844
 B	b3845	t3844
 P	p3848	String "thinT 2"
 O	o3848	ext_rule p3848
-S	s3848	t971 h h3799 h1662 h3744
+S	s3848	tbrarg h h3799 h1662 h3744
 G	s3848	t3835
 B	b3849	s3848
 T	t3849	o980 b3849 b3804
@@ -2408,21 +2412,21 @@ B	b1825	t1825
 P	p3867	String recordEliminationL
 O	o3867	rule p3867
 T	t3870	o3609 b1641 b707
-S	s3870	t967 h h3743 h1645 h1662 h3744
+S	s3870	tbrarg h h3743 h1645 h1662 h3744
 G	s3870	t3870
 B	b3871	s3870
 T	t3871	o965 b3871
 B	b3872	t3871
 T	t3872	o1441 b3872
 B	b3873	t3872
-S	s3873	t971 h h1664 h3798 h3655
+S	s3873	tbrarg h h1664 h3798 h3655
 G	s3873	t3656
 B	b3874	s3873
 T	t3874	o965 b3874
 B	b3875	t3874
 T	t3875	o1664 b3875
 B	b3876	t3875
-S	s3876	t971 h h3743 h1645
+S	s3876	tbrarg h h3743 h1645
 G	s3876	t1645
 B	b3877	s3876
 T	t3877	o965 b3877
@@ -2431,7 +2435,7 @@ T	t3878	o964 b3876 b3878
 B	b3879	t3878
 T	t3879	o964 b3873 b3879
 B	b3880	t3879
-P	p3881	String "substUsingEpimorphism 2 <<r:'R * 'A['r]>> <<bind{y.spread{'y;r,a.rcrd[n:t]{'a;'r}}}>>  <<bind{z.('z,field[n:t]{'z})}>>"
+P	p3881	String "substUsingEpimorphism 2 <<r:'R * 'A['r]>> <<bind{y.spread{'y;r,a.rcrd[n:t]{'a;'r}}}>> <<bind{z.('z,field[n:t]{'z})}>>"
 O	o3881	ext_rule p3881
 T	t3881	o b3874 b4
 B	b3882	t3881
@@ -2444,25 +2448,25 @@ B	b3888	t1816 r a
 T	t3888	o3667 b3677 b3888
 B	b3889	t3888
 T	t3889	o1020 b1337 b3889 b3889
-S	s3889	t967 h h3743 h1645 h3887
+S	s3889	tbrarg h h3743 h1645 h3887
 G	s3889	t3889
 B	b3890	s3889
 B	b3894	t3887
 T	t3894	o3668 b718 b1406
 B	b3895	t3894
 T	t3895	o1020 b3894 b3895 b3895
-S	s3895	t967 h h3743 h1645
+S	s3895	tbrarg h h3743 h1645
 G	s3895	t3895
 B	b3896	s3895
 T	t3898	o3667 b3895 b3888
 B	b3899	t3898
 T	t3899	o1474 b3899 b718
-S	s3899	t967 h h3743 h1645
+S	s3899	tbrarg h h3743 h1645
 G	s3899	t3899
 B	b3900	s3899
 C	h3902	J t3888
 T	t3902	o1642 b3889
-S	s3902	t971 h h3887 h3902
+S	s3902	tbrarg h h3887 h3902
 G	s3902	t3902
 B	b3903	s3902
 T	t3910	o696 b2565
@@ -2470,11 +2474,11 @@ H	h3910	v t3910
 T	t3912	o1816 b3664 b2565
 B	b3913	t3912
 T	t3913	o1020 b1337 b3913 b3913
-S	s3913	t967 h h3743 h1645 h1441 h3910
+S	s3913	tbrarg h h3743 h1645 h1441 h3910
 G	s3913	t3913
 B	b3914	s3913
 T	t3932	o1020 b707 b3913 b3913
-S	s3932	t967 h h3743 h1645 h1441 h3910
+S	s3932	tbrarg h h3743 h1645 h1441 h3910
 G	s3932	t3932
 B	b3933	s3932
 T	t3935	o696 b3913
@@ -2482,7 +2486,7 @@ B	b3936	t3935
 T	t3936	o1246 b3936
 B	b3937	t3936
 T	t3937	o1020 b3937 b3913 b3913
-S	s3937	t967 h h3743 h1645 h1441 h3910
+S	s3937	tbrarg h h3743 h1645 h1441 h3910
 G	s3937	t3937
 B	b3938	s3937
 P	p3944	String "onHypsT [5;4] thinT thenT autoT"
@@ -2508,12 +2512,12 @@ T	t3988	o b3987 b4
 B	b3988	t3988
 H	h3990	r t1764
 H	h3991	rr t1760
-S	s3991	t971 h h3990 h1645 h1639 h3991
+S	s3991	tbrarg h h3990 h1645 h1639 h3991
 G	s3991	t3738
 B	b3991	s3991
 T	t3991	o965 b3991
 B	b3992	t3991
-S	s3992	t971 h h3990 h1645
+S	s3992	tbrarg h h3990 h1645
 G	s3992	t3746
 B	b3993	s3992
 T	t3993	o965 b3993
@@ -2528,7 +2532,7 @@ H	h3998	r t1451
 H	h3999	r1 t1405
 T	t3999	o707 b3754
 H	h4000	r2 t3999
-S	s4001	t971 h h3998 h1645
+S	s4001	tbrarg h h3998 h1645
 G	s4001	t3746
 B	b4002	s4001
 T	t4002	o980 b4002 b3996
@@ -2541,12 +2545,12 @@ H	h4015	r2 t1760
 P	p4045	String recordEliminationR1
 O	o4045	rule p4045
 H	h4046	r t1760
-S	s4046	t971 h h1639 h4046 h3799
+S	s4046	tbrarg h h1639 h4046 h3799
 G	s4046	t3656
 B	b4047	s4046
 T	t4047	o965 b4047
 B	b4048	t4047
-S	s4048	t971 h h3990 h3799
+S	s4048	tbrarg h h3990 h3799
 G	s4048	t1645
 B	b4049	s4048
 T	t4049	o965 b4049
@@ -2557,7 +2561,7 @@ T	t4052	o980 b4049 b4052
 B	b4053	t4052
 T	t4053	o979 b4053 b4 b982
 B	b4054	t4053
-S	s4054	t967 h h3990 h3799
+S	s4054	tbrarg h h3990 h3799
 G	s4054	t3806
 B	b4055	s4054
 T	t4055	o980 b4055 b4052
@@ -2566,7 +2570,7 @@ T	t4056	o1 b4054
 B	b4057	t4056
 T	t4057	o1482 b4056 b4 b4057
 B	b4058	t4057
-S	s4058	t971 h h3990 h3799
+S	s4058	tbrarg h h3990 h3799
 G	s4058	t3810
 B	b4059	s4058
 T	t4059	o980 b4059 b4052
@@ -2581,12 +2585,12 @@ T	t4063	o978 b4054 b4063
 B	b4064	t4063
 P	p4064	String "sqSymT thenT withT <<'A>> autoT"
 O	o4064	ext_rule p4064
-S	s4064	t967 h h3990 h3799
+S	s4064	tbrarg h h3990 h3799
 G	s4064	t1626
 B	b4065	s4064
 T	t4065	o980 b4065 b4052
 B	b4066	t4065
-S	s4066	t967 h h3990 h3799
+S	s4066	tbrarg h h3990 h3799
 G	s4066	t1951
 B	b4067	s4066
 T	t4067	o980 b4067 b4052
@@ -2613,25 +2617,25 @@ T	t4084	o979 b4060 b3843 b4057
 B	b4085	t4084
 T	t4085	o1 b4085
 B	b4086	t4085
-S	s4089	t971 h h3799 h1639 h3991
+S	s4089	tbrarg h h3799 h1639 h3991
 G	s4089	t3835
 B	b4090	s4089
 T	t4090	o980 b4090 b4052
 B	b4091	t4090
 P	p4109	String recordEliminationR
 O	o4109	rule p4109
-S	s4110	t967 h h3990 h1645 h1639
+S	s4110	tbrarg h h3990 h1645 h1639
 G	s4110	t1761
 B	b4111	s4110
 T	t4113	o3609 b1641 b1761
-S	s4116	t971 h h1639 h4046 h3655
+S	s4116	tbrarg h h1639 h4046 h3655
 G	s4116	t3656
 B	b4117	s4116
 T	t4117	o965 b4117
 B	b4118	t4117
 T	t4118	o1664 b4118
 B	b4119	t4118
-S	s4119	t971 h h3990 h1645
+S	s4119	tbrarg h h3990 h1645
 G	s4119	t1645
 B	b4120	s4119
 T	t4120	o965 b4120
@@ -2643,29 +2647,29 @@ B	b4125	t4124
 T	t4129	o3674 b696 b1764
 H	h4129	y t4129
 T	t4130	o1020 b1765 b3678 b3678
-S	s4130	t967 h h3990 h1645 h4129
+S	s4130	tbrarg h h3990 h1645 h4129
 G	s4130	t4130
 B	b4130	s4130
 B	b4134	t4129
 T	t4134	o1020 b4134 b3693 b3693
-S	s4134	t967 h h3990 h1645
+S	s4134	tbrarg h h3990 h1645
 G	s4134	t4134
 B	b4135	s4134
-S	s4137	t967 h h3990 h1645
+S	s4137	tbrarg h h3990 h1645
 G	s4137	t3694
 B	b4138	s4137
 C	h4140	J t3677
 T	t4140	o1642 b3678
-S	s4140	t971 h h4129 h4140
+S	s4140	tbrarg h h4129 h4140
 G	s4140	t4140
 B	b4141	s4140
 T	t4148	o707 b2565
 H	h4148	v t4148
 T	t4150	o1020 b1765 b3665 b3665
-S	s4150	t967 h h3990 h1645 h3663 h4148
+S	s4150	tbrarg h h3990 h1645 h3663 h4148
 G	s4150	t4150
 B	b4151	s4150
-S	s4168	t967 h h3990 h1645 h3663 h4148
+S	s4168	tbrarg h h3990 h1645 h3663 h4148
 G	s4168	t3666
 B	b4169	s4168
 T	t4171	o1405 b3665
@@ -2673,7 +2677,7 @@ B	b4172	t4171
 T	t4172	o707 b4172
 B	b4173	t4172
 T	t4173	o1020 b4173 b3665 b3665
-S	s4173	t967 h h3990 h1645 h3663 h4148
+S	s4173	tbrarg h h3990 h1645 h3663 h4148
 G	s4173	t4173
 B	b4174	s4173
 B	b4196	t4148
@@ -2699,12 +2703,12 @@ H	h4243	y t696
 T	t4243	o707 b3677
 B	b4244	t4243
 T	t4244	o967 b4244
-P	p4261	String "rwh reduceC 0 thenT withT <<'A>>  autoT"
+P	p4261	String "rwh reduceC 0 thenT withT <<'A>> autoT"
 O	o4261	ext_rule p4261
-S	s4261	t967 h h3990 h1645
+S	s4261	tbrarg h h3990 h1645
 G	s4261	t1626
 B	b4262	s4261
-S	s4263	t967 h h3990 h1645
+S	s4263	tbrarg h h3990 h1645
 G	s4263	t1951
 B	b4264	s4263
 P	p4271	String "letT <<'rr='r in record[n:t]{'A; x. 'R['x]}>> thenAT autoT"
@@ -2712,24 +2716,24 @@ O	o4271	ext_rule p4271
 H	h4271	rr t1764
 T	t4271	o1020 b1765 b1682 b718
 T	t4272	o1020 b1405 b1682 b1682
-S	s4277	t967 h h3990 h1645 h4271
+S	s4277	tbrarg h h3990 h1645 h4271
 G	s4277	t4272
 B	b4278	s4277
 P	p4283	String "recordEliminationR1 4 thenT autoT"
 O	o4283	ext_rule p4283
-P	p4298	String "dT 2 thenT onAllClausesT (rwh reduceC)  thenT  autoT"
+P	p4298	String "dT 2 thenT onAllClausesT (rwh reduceC) thenT autoT"
 O	o4298	ext_rule p4298
 P	p4310	String recordEliminationI
 O	o4310	rule p4310
 H	h4310	r t1469
-S	s4312	t971 h h1639 h1664 h3655
+S	s4312	tbrarg h h1639 h1664 h3655
 G	s4312	t3656
 B	b4313	s4312
 T	t4313	o965 b4313
 B	b4314	t4313
 T	t4314	o1664 b4314
 B	b4315	t4314
-S	s4315	t971 h h4310 h1645
+S	s4315	tbrarg h h4310 h1645
 G	s4315	t1645
 B	b4316	s4315
 T	t4316	o965 b4316
@@ -2740,17 +2744,17 @@ T	t4319	o b4313 b4
 B	b4320	t4319
 P	p4347	String recordEliminationI1
 O	o4347	rule p4347
-S	s4347	t971 h h1639 h1664 h3799
+S	s4347	tbrarg h h1639 h1664 h3799
 G	s4347	t3656
 B	b4347	s4347
 T	t4347	o965 b4347
 B	b4348	t4347
-S	s4348	t971 h h4310 h3799
+S	s4348	tbrarg h h4310 h3799
 G	s4348	t1645
 B	b4349	s4348
 T	t4349	o965 b4349
 B	b4350	t4349
-P	p4351	String "rw unfoldRecordI 2 thenT recordEliminationR1 2  thenT autoT"
+P	p4351	String "rw unfoldRecordI 2 thenT recordEliminationR1 2 thenT autoT"
 O	o4351	ext_rule p4351
 T	t4351	o b4347 b4
 B	b4352	t4351
@@ -2783,7 +2787,7 @@ B	b4389	t4389 a
 T	t4390	o1364 b696 b4389
 B	b4390	t4390
 T	t4391	o967 b4390
-S	s4391	t967 h
+S	s4391	tbrarg h
 G	s4391	t4391
 B	b4391	s4391
 T	t4392	o965 b4391
@@ -2795,7 +2799,7 @@ T	t4394	o1493 b1494 b696
 B	b4397	t4389
 T	t4397	o1493 b1494 b4397
 T	t4400	o1493 b1494 b4390
-S	s4400	t971 h
+S	s4400	tbrarg h
 G	s4400	t4400
 B	b4401	s4400
 T	t4401	o965 b4401
@@ -2805,30 +2809,30 @@ O	o4405	ext_rule p4405
 H	h4410	x t4390
 T	t4410	o967 b4397
 T	t4412	o1020 b4390 b1641 b1512
-S	s4412	t967 h h4410
+S	s4412	tbrarg h h4410
 G	s4412	t4412
 B	b4413	s4412
 B	b4415	t4412
 T	t4415	o1087 b4415
-S	s4415	t967 h h4410
+S	s4415	tbrarg h h4410
 G	s4415	t4415
 B	b4416	s4415
-S	s4417	t971 h h4410
+S	s4417	tbrarg h h4410
 G	s4417	t4412
 B	b4418	s4417
 B	b4420	t4412 x
 T	t4420	o1512 b4390 b4420
-S	s4420	t971 h
+S	s4420	tbrarg h
 G	s4420	t4420
 B	b4421	s4420
 T	t4432	o1020 b696 b1641 b1512
-S	s4432	t967 h h4410
+S	s4432	tbrarg h h4410
 G	s4432	t4432
 B	b4433	s4432
 T	t4435	o4388 b1641
 B	b4436	t4435
 T	t4436	o1020 b4436 b1641 b1512
-S	s4436	t967 h h4410
+S	s4436	tbrarg h h4410
 G	s4436	t4436
 B	b4437	s4436
 P	p4443	String "assumT 1 thenT withT <<'a>> (dT (-1)) thenT autoT"
@@ -2844,13 +2848,13 @@ T	t4498	o1020 b4397 b1616 b4498
 P	p4511	String "assertT <<function_ort{x.'f['x];'B['a]} >> thenAT autoT"
 O	o4511	ext_rule p4511
 T	t4607	o3609 b717 b1696
-S	s4607	t971 h
+S	s4607	tbrarg h
 G	s4607	t4607
 B	b4607	s4607
 T	t4608	o965 b4607
 B	b4608	t4608
 T	t4616	o967 b2204
-S	s4616	t967 h
+S	s4616	tbrarg h
 G	s4616	t4616
 B	b4616	s4616
 T	t4617	o965 b4616
@@ -2858,7 +2862,7 @@ B	b4617	t4617
 T	t4618	o1708 b4617
 B	b4618	t4618
 T	t4622	o3609 b717 b2204
-S	s4622	t971 h
+S	s4622	tbrarg h
 G	s4622	t4622
 B	b4622	s4622
 T	t4623	o965 b4622
@@ -2868,7 +2872,7 @@ O	o4629	rule p4629
 T	t4629	o2203 b1336 b707
 B	b4629	t4629
 T	t4630	o967 b4629
-S	s4630	t967 h
+S	s4630	tbrarg h
 G	s4630	t4630
 B	b4630	s4630
 T	t4631	o965 b4630
@@ -2877,7 +2881,7 @@ T	t4632	o1708 b4631
 B	b4632	t4632
 B	b4634	t3609
 T	t4637	o3609 b717 b4629
-S	s4637	t971 h
+S	s4637	tbrarg h
 G	s4637	t4637
 B	b4638	s4637
 T	t4638	o965 b4638
@@ -2887,7 +2891,7 @@ O	o4645	rule p4645
 T	t4645	o2203 b696 b1764
 B	b4645	t4645
 T	t4646	o967 b4645
-S	s4646	t967 h
+S	s4646	tbrarg h
 G	s4646	t4646
 B	b4646	s4646
 T	t4647	o965 b4646
@@ -2896,7 +2900,7 @@ T	t4648	o1708 b4647
 B	b4648	t4648
 T	t4649	o3609 b717 b1761
 T	t4653	o3609 b717 b4645
-S	s4653	t971 h
+S	s4653	tbrarg h
 G	s4653	t4653
 B	b4653	s4653
 T	t4654	o965 b4653
@@ -2906,7 +2910,7 @@ O	o4660	rule p4660
 T	t4660	o2203 b696 b707
 B	b4660	t4660
 T	t4661	o967 b4660
-S	s4661	t967 h
+S	s4661	tbrarg h
 G	s4661	t4661
 B	b4661	s4661
 T	t4662	o965 b4661
@@ -2914,7 +2918,7 @@ B	b4662	t4662
 T	t4663	o1708 b4662
 B	b4663	t4663
 T	t4667	o3609 b717 b4660
-S	s4667	t971 h
+S	s4667	tbrarg h
 G	s4667	t4667
 B	b4667	s4667
 T	t4668	o965 b4667
@@ -2934,10 +2938,10 @@ T	t453	o b453 b4
 B	b454	t453
 P	p454	String "rwa [unfoldRcrd;unfoldField] 0 thenT autoT"
 O	o454	ext_rule p454
-S	s454	t967 h
+S	s454	tbrarg h
 G	s454	t1903
 B	b455	s454
-S	s455	t967 h
+S	s455	tbrarg h
 G	s455	t1893
 B	b462	s455
 T	t462	o b462 b4
@@ -2960,7 +2964,7 @@ B	b501	t501
 P	p505	String "decideEqLabelT <<label[m:t]>> <<label[n:t]>> thenT rwaAll [unfoldRcrd;unfoldField] thenT autoT"
 O	o506	ext_rule p505
 T	t506	o1474 b1839 b501
-S	s506	t967 h
+S	s506	tbrarg h
 G	s506	t506
 B	b506	s506
 T	t509	o980 b506 b4
@@ -3022,7 +3026,7 @@ B	b924	t924
 T	t925	o1816 b1022 b1027
 B	b925	t925
 T	t926	o1020 b2204 b924 b925
-S	s926	t971 h
+S	s926	tbrarg h
 G	s926	t926
 B	b926	s926
 T	t927	o965 b926
@@ -3046,7 +3050,7 @@ O	o940	rule p940
 T	t940	o1836 b1022 b1027
 B	b940	t940
 T	t941	o1020 b2204 b1025 b940
-S	s941	t967 h
+S	s941	tbrarg h
 G	s941	t941
 B	b941	s941
 T	t942	o965 b941
@@ -3054,7 +3058,7 @@ B	b942	t942
 T	t943	o1664 b942
 B	b943	t943
 T	t944	o1020 b2204 b924 b940
-S	s944	t971 h
+S	s944	tbrarg h
 G	s944	t944
 B	b944	s944
 T	t945	o965 b944
@@ -3079,7 +3083,7 @@ T	t957	o975 b956
 B	b957	t957
 P	p964	String recordEqualS5
 O	o968	rule p964
-S	s968	t967 h
+S	s968	tbrarg h
 G	s968	t1023
 B	b971	s968
 T	t972	o965 b971
@@ -3089,7 +3093,7 @@ B	b974	t974
 T	t975	o1836 b1021 b1025
 B	b975	t975
 T	t978	o1020 b2204 b975 b940
-S	s978	t971 h
+S	s978	tbrarg h
 G	s978	t978
 B	b978	s978
 T	t979	o965 b978
@@ -3887,15 +3891,15 @@ O	o1472	ext_rule p1472
 NItt_logic!implies	implies	implies Itt_logic
 O	o1533	implies
 T	t1539	o1533 b707 b4634
-S	s1539	t967 h
+S	s1539	tbrarg h
 G	s1539	t1539
 B	b1540	s1539
-S	s1549	t967 h
+S	s1549	tbrarg h
 G	s1549	t796
 B	b1569	s1549
 B	b1571	t796
 T	t1571	o1087 b1571
-S	s1571	t967 h
+S	s1571	tbrarg h
 G	s1571	t1571
 B	b1572	s1571
 P	p1672	String "equalTypeT <<'r1>> <<'r2>> thenT autoT"
@@ -3949,7 +3953,7 @@ B	b1234	t1233
 P	p1241	String "typeAssertT thenT autoT"
 O	o1241	ext_rule p1241
 T	t1251	o1020 b3936 b3664 b3664
-S	s1251	t967 h h3743 h1645 h1441 h3910
+S	s1251	tbrarg h h3743 h1645 h1441 h3910
 G	s1251	t1251
 B	b1251	s1251
 T	t1252	o980 b1251 b3883
@@ -3959,7 +3963,7 @@ B	b1253	t1251
 T	t1253	o1020 b3937 b2565 b2565
 B	b1254	t1253
 T	t1254	o1252 b1253 b1254
-S	s1254	t967 h h3743 h1645 h1441 h3910
+S	s1254	tbrarg h h3743 h1645 h1441 h3910
 G	s1254	t1254
 B	b1255	s1254
 T	t1255	o980 b1255 b3883
@@ -4008,14 +4012,14 @@ T	t1334	o b1334 b4
 B	b1335	t1334
 P	p1352	String "withT <<'y>> (dT 7) thenT autoT"
 O	o1352	ext_rule p1352
-P	p1358	String "rwh reduceC 0 thenT withT <<top>>  autoT"
+P	p1358	String "rwh reduceC 0 thenT withT <<top>> autoT"
 O	o1358	ext_rule p1358
-S	s1358	t967 h h3743 h1645
+S	s1358	tbrarg h h3743 h1645
 G	s1358	t1973
 B	b1359	s1358
 T	t1359	o980 b1359 b3883
 B	b1360	t1359
-S	s1360	t967 h h3743 h1645
+S	s1360	tbrarg h h3743 h1645
 G	s1360	t1951
 B	b1361	s1360
 T	t1361	o980 b1361 b3883
@@ -4039,7 +4043,7 @@ T	t1445	o4298 b977 b1445 b4 b4
 B	b1446	t1445
 T	t1446	o b1446 b4
 B	b1447	t1446
-P	p1474	String "cutT  <<sequent[squash]{ <H>; r:record[n:t]{'A;x.'R['x]}; <J['r]>; x:'A >- \"type\"{'R['x]}}>> thenMT substUsingEpimorphism 2 <<x:'A * 'R['x]>> <<bind{y.spread{'y;a,r.rcrd[n:t]{'a;'r}}}>>  <<bind{z.(field[n:t]{'z},'z)}>>"
+P	p1474	String "cutT <<sequent{ <H>; r:record[n:t]{'A;x.'R['x]}; <J['r]>; x:'A >- \"type\"{'R['x]}}>> thenMT substUsingEpimorphism 2 <<x:'A * 'R['x]>> <<bind{y.spread{'y;a,r.rcrd[n:t]{'a;'r}}}>> <<bind{z.(field[n:t]{'z},'z)}>>"
 O	o1475	ext_rule p1474
 T	t1481	o b4111 b4
 B	b1481	t1481
@@ -4051,7 +4055,7 @@ P	p1516	String "withT <<'x>> (dT 5) thenT autoT"
 O	o1516	ext_rule p1516
 P	p1520	String "dT (-1) thenT addHiddenLabelT \"main\" thenT rwhAll reduceC thenT dT 0 thenT rwhAll reduceC"
 O	o1520	ext_rule p1520
-S	s1562	t967 h h3990 h1645 h3663 h4148
+S	s1562	tbrarg h h3990 h1645 h3663 h4148
 G	s1562	t4208
 B	b1563	s1562
 P	p1576	String "recordMemberOrt thenT autoT"
@@ -4065,7 +4069,7 @@ B	b3967	t3967
 T	t3968	o964 b3967 b4050
 B	b3968	t3968
 H	h1713	r t414
-S	s1713	t971 h h1713 h1645
+S	s1713	tbrarg h h1713 h1645
 G	s1713	t1645
 B	b1713	s1713
 T	t4141	o1664 b4348
@@ -4119,13 +4123,13 @@ T	t1749	o975 b1748
 B	b1749	t1749
 P	p1814	String "dT 2"
 O	o1814	ext_rule p1814
-S	s1679	t967 h
+S	s1679	tbrarg h
 G	s1679	t707
 B	b1685	s1679
 P	p1738	String "useWitnessT <<'r1>>"
 O	o1738	ext_rule p1738
 T	t1738	o1020 b707 b1025 b1025
-S	s1738	t967 h
+S	s1738	tbrarg h
 G	s1738	t1738
 B	b1739	s1738
 P	p1750	String "equalRefT <<'r2>> thenT autoT"
@@ -4146,7 +4150,7 @@ T	t1841	o1020 b707 b1025 b2208
 P	p2004	String "equalTransT <<'r1>>"
 O	o2004	ext_rule p2004
 T	t2004	o1020 b707 b2208 b1025
-P	p2158	String "equalSymT thenT selT 1  recordOrtT thenMT equalSymT thenT autoT"
+P	p2158	String "equalSymT thenT selT 1 recordOrtT thenMT equalSymT thenT autoT"
 O	o2158	ext_rule p2158
 P	p2320	String prefix_thenLT
 O	o2321	lid p2320
@@ -4279,7 +4283,7 @@ T	t2867	o979 b3758 b2864 b3765
 B	b2883	t2867
 T	t2883	o1 b2883
 B	b2884	t2883
-P	p2906	String "rwch unfoldRecordL 1 2 thenT  autoT"
+P	p2906	String "rwch unfoldRecordL 1 2 thenT autoT"
 O	o2906	ext_rule p2906
 P	p2987	String "rwh unfoldRecordL 2 thenT withT <<bind{a,b.'b IN record[n:t]{'A['a]}}>> (dT 2) thenT autoT"
 O	o2987	ext_rule p2987
@@ -4287,7 +4291,7 @@ T	t2988	o2987 b977 b3831 b4 b4
 B	b2988	t2988
 T	t2989	o b2988 b4
 B	b2989	t2989
-S	s3037	t967 h h3743 h1645 h1372
+S	s3037	tbrarg h h3743 h1645 h1372
 G	s3037	t1373
 B	b3038	s3037
 T	t3038	o980 b3038 b3883
@@ -4314,7 +4318,7 @@ T	t3077	o979 b4003 b3069 b4010
 B	b3078	t3077
 T	t3078	o1 b3078
 B	b3087	t3078
-P	p3096	String "rwch unfoldRecordR 1 2 thenT  autoT"
+P	p3096	String "rwch unfoldRecordR 1 2 thenT autoT"
 O	o3096	ext_rule p3096
 P	p3137	String "rwh unfoldRecordR 2 thenT withT <<bind{a,b.'a IN record[n:t]{'A}}>> (dT 2) thenT autoT"
 O	o3137	ext_rule p3137
@@ -4373,7 +4377,7 @@ P	p4649	String "rwh unfoldFunctionOrt 4 thenT withT <<'a>> (dT 4) thenT autoT"
 O	o4651	ext_rule p4649
 P	p4658	String "withT <<bind{a,b.'b='f['b] in 'B['a]}>> (dT 2)"
 O	o4658	ext_rule p4658
-S	s4658	t967 h h3587 h4393
+S	s4658	tbrarg h h3587 h4393
 G	s4658	t4498
 B	b4665	s4658
 B	b4669	t4498 a b
@@ -4398,7 +4402,7 @@ O	o5689	tsquash
 T	t5689	o5689 b696
 B	b5689	t5689
 T	t5690	o967 b5689
-S	s5690	t967 h
+S	s5690	tbrarg h
 G	s5690	t5690
 B	b5690	s5690
 T	t5691	o965 b5690
@@ -4406,7 +4410,7 @@ B	b5691	t5691
 T	t5692	o1708 b5691
 B	b5692	t5692
 T	t5693	o3609 b717 b5689
-S	s5693	t971 h
+S	s5693	tbrarg h
 G	s5693	t5693
 B	b5693	s5693
 T	t5694	o965 b5693
@@ -4425,13 +4429,13 @@ T	t5699	o1087 b696
 T	t5707	o1020 b5689 b718 b1816
 B	b5708	t5707 r
 T	t5708	o1512 b5689 b5708
-S	s5708	t971 h
+S	s5708	tbrarg h
 G	s5708	t5708
 B	b5709	s5708
 T	t5709	o980 b5709 b5696
 B	b5710	t5709
 T	t5710	o1493 b1782 b5689
-S	s5710	t971 h
+S	s5710	tbrarg h
 G	s5710	t5710
 B	b5711	s5710
 T	t5711	o980 b5711 b5696
@@ -4472,7 +4476,7 @@ P	p3344	Number 14954
 P	p3346	Number 14987
 P	p5753	String recordOrtIntroS2
 O	o5753	rule p5753
-S	s5753	t967 h
+S	s5753	tbrarg h
 G	s5753	t1578
 B	b5753	s5753
 T	t5753	o965 b5753
@@ -4480,7 +4484,7 @@ B	b5754	t5753
 T	t5754	o1708 b5754
 B	b5755	t5754
 T	t5755	o1020 b696 b1641 b717
-S	s5755	t967 h h1639
+S	s5755	tbrarg h h1639
 G	s5755	t5755
 B	b5756	s5755
 T	t5756	o965 b5756
@@ -4488,7 +4492,7 @@ B	b5757	t5756
 T	t5757	o1664 b5757
 B	b5758	t5757
 T	t5758	o3609 b717 b1405
-S	s5758	t971 h
+S	s5758	tbrarg h
 G	s5758	t5758
 B	b5759	s5758
 T	t5759	o965 b5759
@@ -4512,7 +4516,7 @@ B	b5767	t5766
 T	t5767	o1020 b1405 b718 b1816
 B	b5768	t5767 r
 T	t5768	o1512 b1405 b5768
-S	s5768	t971 h
+S	s5768	tbrarg h
 G	s5768	t5768
 B	b5769	s5768
 T	t5769	o980 b5769 b5764
@@ -5441,22 +5445,22 @@ P	p3461	Number 3986
 P	p3463	Number 4145
 O	o3463	location p3461 p3463
 H	h3463	t1850
-S	s3463	t967 h h3463
+S	s3463	tbrarg h h3463
 G	s3463	t1854
 B	b3550	s3463
 T	t3550	o980 b3550 b4
 B	b3551	t3550
-S	s3551	t967 h h3463
+S	s3551	tbrarg h h3463
 G	s3551	t1860
 B	b3583	s3551
 T	t3583	o980 b3583 b4
 B	b3584	t3583
-S	s3584	t967 h h3463
+S	s3584	tbrarg h h3463
 G	s3584	t1862
 B	b3603	s3584
 T	t3603	o980 b3603 b4
 B	b3604	t3603
-S	s3604	t967 h h3463
+S	s3604	tbrarg h h3463
 G	s3604	t506
 B	b3606	s3604
 T	t3606	o980 b3606 b4
@@ -5843,27 +5847,27 @@ P	p4213	Number 4812
 P	p4215	Number 5014
 O	o4215	location p4213 p4215
 H	h4215	t1834
-S	s4215	t967 h h4215
+S	s4215	tbrarg h h4215
 G	s4215	t841
 B	b4215	s4215
 T	t4215	o980 b4215 b4
 B	b4216	t4215
-S	s4216	t967 h h4215
+S	s4216	tbrarg h h4215
 G	s4216	t844
 B	b4217	s4216
 T	t4217	o980 b4217 b4
 B	b4218	t4217
-S	s4218	t967 h h4215
+S	s4218	tbrarg h h4215
 G	s4218	t847
 B	b4219	s4218
 T	t4219	o980 b4219 b4
 B	b4220	t4219
-S	s4220	t967 h h4215
+S	s4220	tbrarg h h4215
 G	s4220	t849
 B	b4221	s4220
 T	t4221	o980 b4221 b4
 B	b4222	t4221
-S	s4222	t967 h h4215
+S	s4222	tbrarg h h4215
 G	s4222	t1989
 B	b4224	s4222
 T	t4225	o980 b4224 b4
@@ -6149,7 +6153,7 @@ O	o4560	location p4559 p4560
 T	t4560	o b963 b2559
 B	b4560	t4560
 H	h4560	t968
-S	s4560	t971 h h2563 h4560 h2565
+S	s4560	tbrarg h h2563 h4560 h2565
 G	s4560	t2565
 B	b4561	s4560
 T	t4561	o965 b4561
@@ -6213,7 +6217,7 @@ O	o4589	location p4588 p4589
 T	t4599	o b963 b2607
 B	b4599	t4599
 H	h4599	t2612
-S	s4599	t971 h h2609 h4599 h2565
+S	s4599	tbrarg h h2609 h4599 h2565
 G	s4599	t2565
 B	b4711	s4599
 T	t4711	o965 b4711
@@ -6232,7 +6236,7 @@ T	t4723	o980 b2616 b4723
 B	b4724	t4723
 T	t4724	o979 b4724 b4 b982
 B	b4725	t4724
-S	s4725	t971 h h2643 h4599 h2565
+S	s4725	tbrarg h h2643 h4599 h2565
 G	s4725	t2565
 B	b4726	s4725
 T	t4726	o b4726 b4
@@ -6264,7 +6268,7 @@ B	b4745	t4743
 T	t4745	o978 b4725 b4745
 B	b4746	t4745
 H	h4746	t2672
-S	s4746	t971 h h2643 h4746 h2565
+S	s4746	tbrarg h h2643 h4746 h2565
 G	s4746	t2565
 B	b4747	s4746
 T	t4747	o980 b4747 b4728
@@ -6336,7 +6340,7 @@ O	o4780	location p4779 p4780
 T	t4780	o b963 b2708
 B	b4780	t4780
 H	h4780	t2713
-S	s4780	t971 h h2710 h4780 h2565
+S	s4780	tbrarg h h2710 h4780 h2565
 G	s4780	t2565
 B	b4781	s4780
 T	t4781	o965 b4781
@@ -6355,7 +6359,7 @@ T	t4787	o980 b2716 b4787
 B	b4788	t4787
 T	t4788	o979 b4788 b4 b982
 B	b4791	t4788
-S	s4791	t971 h h2723 h4780 h2565
+S	s4791	tbrarg h h2723 h4780 h2565
 G	s4791	t2565
 B	b4792	s4791
 T	t4792	o b4792 b4
@@ -6395,7 +6399,7 @@ B	b4816	t4815
 T	t4816	o1085 b4814 b4 b4816
 B	b4818	t4816
 H	h4818	t2754
-S	s4818	t971 h h2723 h4818 h2565
+S	s4818	tbrarg h h2723 h4818 h2565
 G	s4818	t2565
 B	b4819	s4818
 T	t4819	o980 b4819 b4796
@@ -6469,7 +6473,7 @@ P	p4859	Number 8710
 P	p4860	Number 9015
 O	o4860	location p4859 p4860
 H	h4860	t1701
-S	s4860	t967 h h4860
+S	s4860	tbrarg h h4860
 G	s4860	t3033
 B	b4860	s4860
 T	t4860	o980 b4860 b3073
@@ -6484,12 +6488,12 @@ T	t4864	o b4864 b4
 B	b4865	t4864
 T	t4865	o978 b3075 b4865
 B	b4866	t4865
-S	s4866	t967 h h4860 h1695
+S	s4866	tbrarg h h4860 h1695
 G	s4866	t1698
 B	b4867	s4866
 T	t4867	o980 b4867 b3073
 B	b4868	t4867
-S	s4868	t967 h h4860 h1695
+S	s4868	tbrarg h h4860 h1695
 G	s4868	t3130
 B	b4869	s4868
 T	t4869	o980 b4869 b3073
@@ -6505,7 +6509,7 @@ T	t4872	o4870 b4871
 B	b4872	t4872
 T	t4876	o b4872 b4
 B	b4876	t4876
-S	s4876	t967 h h4860
+S	s4876	tbrarg h h4860
 G	s4876	t3153
 B	b4877	s4876
 T	t4877	o980 b4877 b3073
@@ -6572,7 +6576,7 @@ B	b4908	t4908
 T	t4911	o707 b4908
 B	b4911	t4911
 T	t4912	o967 b4911
-S	s4912	t967 h h4905
+S	s4912	tbrarg h h4905
 G	s4912	t4912
 B	b4912	s4912
 T	t4913	o980 b4912 b3477
@@ -6593,19 +6597,19 @@ B	b4929	t4911 r_1
 T	t4929	o1364 b1405 b4929
 B	b4930	t4929
 T	t4930	o1020 b4930 b718 b1410
-S	s4930	t967 h
+S	s4930	tbrarg h
 G	s4930	t4930
 B	b4931	s4930
 T	t4931	o980 b4931 b3477
 B	b4932	t4931
 B	b4933	t4930
 T	t4933	o1087 b4933
-S	s4933	t967 h
+S	s4933	tbrarg h
 G	s4933	t4933
 B	b4934	s4933
 T	t4934	o980 b4934 b3477
 B	b4935	t4934
-S	s4935	t971 h
+S	s4935	tbrarg h
 G	s4935	t4930
 B	b4936	s4935
 T	t4936	o980 b4936 b3477
@@ -6657,7 +6661,7 @@ O	o4965	location p4964 p4965
 T	t4965	o978 b3559 b4
 B	b4965	t4965
 H	h4965	t1405
-S	s4965	t967 h h4965
+S	s4965	tbrarg h h4965
 G	s4965	t994
 B	b4966	s4965
 T	t4966	o980 b4966 b3557
@@ -6666,19 +6670,19 @@ B	b4968	t707 r_1
 T	t4968	o1364 b1405 b4968
 B	b4969	t4968
 T	t4969	o1020 b4969 b718 b1410
-S	s4969	t967 h
+S	s4969	tbrarg h
 G	s4969	t4969
 B	b4970	s4969
 T	t4970	o980 b4970 b3557
 B	b4973	t4970
 B	b4975	t4969
 T	t4975	o1087 b4975
-S	s4975	t967 h
+S	s4975	tbrarg h
 G	s4975	t4975
 B	b4976	s4975
 T	t4976	o980 b4976 b3557
 B	b4977	t4976
-S	s4977	t971 h
+S	s4977	tbrarg h
 G	s4977	t4969
 B	b4978	s4977
 T	t4978	o980 b4978 b3557
@@ -6702,7 +6706,7 @@ B	b4987	t4986
 T	t4987	o3584 b977 b4987 b4 b4
 B	b4988	t4987
 H	h4988	t696
-S	s4988	t967 h h4988
+S	s4988	tbrarg h h4988
 G	s4988	t994
 B	b4989	s4988
 T	t4989	o980 b4989 b3557
@@ -6742,7 +6746,7 @@ P	p5020	Number 9541
 P	p5022	Number 9771
 O	o5023	location p5020 p5022
 H	h5023	t707
-S	s5023	t967 h h5023
+S	s5023	tbrarg h h5023
 G	s5023	t3609
 B	b5024	s5023
 T	t5024	o965 b5024
@@ -6764,7 +6768,7 @@ B	b5035	t5034
 T	t5035	o980 b3621 b5033
 B	b5036	t5035
 H	h5036	t3623
-S	s5036	t971 h h1662 h5036
+S	s5036	tbrarg h h1662 h5036
 G	s5036	t3621
 B	b5037	s5036
 T	t5037	o980 b5037 b5033
@@ -6782,7 +6786,7 @@ B	b5043	t5042
 T	t5043	o978 b5035 b5043
 B	b5047	t5043
 H	h5047	t3609
-S	s5047	t967 h h1662 h5047
+S	s5047	tbrarg h h1662 h5047
 G	s5047	t3621
 B	b5051	s5047
 T	t5051	o980 b5051 b5033
@@ -6808,7 +6812,7 @@ B	b5066	t5065
 T	t5066	o978 b5042 b5066
 B	b5067	t5066
 H	h5067	t761
-S	s5067	t967 h h1662 h5067
+S	s5067	tbrarg h h1662 h5067
 G	s5067	t3621
 B	b5068	s5067
 T	t5068	o980 b5068 b5033
@@ -6819,13 +6823,13 @@ T	t5070	o1020 b707 b4907 b5070
 B	b5072	t5070 r_1
 T	t5072	o1512 b707 b5072
 H	h5072	t5072
-S	s5072	t967 h h1662 h5072 h5067
+S	s5072	tbrarg h h1662 h5072 h5067
 G	s5072	t3621
 B	b5073	s5072
 T	t5073	o980 b5073 b5033
 B	b5075	t5073
 H	h5075	t764
-S	s5075	t967 h h1662 h5075
+S	s5075	tbrarg h h1662 h5075
 G	s5075	t3621
 B	b5076	s5075
 T	t5076	o980 b5076 b5033
@@ -6846,7 +6850,7 @@ T	t5083	o b5083 b4
 B	b5084	t5083
 T	t5084	o978 b5065 b5084
 B	b5085	t5084
-S	s5085	t967 h h1662 h5072
+S	s5085	tbrarg h h1662 h5072
 G	s5085	t3621
 B	b5087	s5085
 T	t5087	o980 b5087 b5033
@@ -6929,7 +6933,7 @@ B	b5146	t5146
 T	t5147	o1085 b5124 b4 b5146
 B	b5147	t5147
 H	h5147	t1539
-S	s5147	t967 h h5147
+S	s5147	tbrarg h h5147
 G	s5147	t796
 B	b5148	s5147
 T	t5148	o980 b5148 b5120
@@ -6948,7 +6952,7 @@ T	t5186	o1672 b977 b5186 b4 b4
 B	b5193	t5186
 T	t5193	o980 b1685 b5120
 B	b5207	t5193
-S	s5207	t967 h h5147
+S	s5207	tbrarg h h5147
 G	s5207	t707
 B	b5220	s5207
 T	t5220	o980 b5220 b5120
@@ -6961,12 +6965,12 @@ T	t5235	o1 b5235
 B	b5241	t5235
 T	t5241	o878 b5207 b4 b5241
 B	b5247	t5241
-S	s5247	t967 h h5047
+S	s5247	tbrarg h h5047
 G	s5247	t796
 B	b5253	s5247
 T	t5253	o980 b5253 b5120
 B	b5254	t5253
-S	s5254	t967 h h5147 h5047
+S	s5254	tbrarg h h5147 h5047
 G	s5254	t796
 B	b5256	s5254
 T	t5256	o980 b5256 b5120
@@ -7001,18 +7005,18 @@ T	t5272	o b5272 b4
 B	b5273	t5272
 T	t5273	o1738 b977 b5270 b5273 b4
 B	b5274	t5273
-S	s5274	t967 h h5075
+S	s5274	tbrarg h h5075
 G	s5274	t1738
 B	b5275	s5274
 T	t5275	o980 b5275 b5120
 B	b5278	t5275
-S	s5278	t967 h h5075
+S	s5278	tbrarg h h5075
 G	s5278	t796
 B	b5279	s5278
 T	t5279	o980 b5279 b5120
 B	b5280	t5279
 H	h5280	t1782
-S	s5280	t967 h h5280
+S	s5280	tbrarg h h5280
 G	s5280	t796
 B	b5281	s5280
 T	t5281	o980 b5281 b5120
@@ -7034,12 +7038,12 @@ B	b5291	t5290
 T	t5291	o1085 b5266 b4 b5291
 B	b5292	t5291
 H	h5292	t1841
-S	s5292	t967 h h5292
+S	s5292	tbrarg h h5292
 G	s5292	t796
 B	b5293	s5292
 T	t5293	o980 b5293 b5120
 B	b5294	t5293
-S	s5294	t967 h h5075 h5292
+S	s5294	tbrarg h h5075 h5292
 G	s5294	t796
 B	b5295	s5294
 T	t5295	o980 b5295 b5120
@@ -7090,7 +7094,7 @@ T	t5321	o1 b5321
 B	b5322	t5321
 T	t5322	o979 b5294 b4 b5322
 B	b5324	t5322
-S	s5324	t967 h h5292
+S	s5324	tbrarg h h5292
 G	s5324	t2004
 B	b5325	s5324
 T	t5325	o980 b5325 b5120
@@ -7099,7 +7103,7 @@ T	t5326	o1 b5324
 B	b5327	t5326
 T	t5327	o979 b5326 b4 b5327
 B	b5328	t5327
-S	s5328	t967 h h5292
+S	s5328	tbrarg h h5292
 G	s5328	t794
 B	b5329	s5328
 T	t5329	o980 b5329 b5120
@@ -7560,7 +7564,7 @@ T	t5917	o1816 b1641 b5916
 C	h5917	J t5917
 B	b5917	t5917
 T	t5918	o1642 b5917
-S	s5918	t971 h h1639 h5915 h5917
+S	s5918	tbrarg h h1639 h5915 h5917
 G	s5918	t5918
 B	b5918	s5918
 T	t5919	o965 b5918
@@ -7595,7 +7599,7 @@ B	b5934	t5069 a r_1
 T	t5934	o3667 b3693 b5934
 B	b5935	t5934
 T	t5935	o1474 b5935 b718
-S	s5935	t967 h h3479 h1645
+S	s5935	tbrarg h h3479 h1645
 G	s5935	t5935
 B	b5936	s5935
 T	t5936	o980 b5936 b5922
@@ -7615,19 +7619,19 @@ B	b5943	t5942
 T	t5943	o3667 b3668 b5934
 B	b5944	t5943
 T	t5944	o1020 b1405 b3665 b5944
-S	s5944	t967 h h3479 h1645 h3663 h3664
+S	s5944	tbrarg h h3479 h1645 h3663 h3664
 G	s5944	t5944
 B	b5945	s5944
 T	t5945	o980 b5945 b3661
 B	b5946	t5945
 T	t5946	o1020 b1405 b5944 b5944
-S	s5946	t967 h h3479 h1645 h3663 h3664
+S	s5946	tbrarg h h3479 h1645 h3663 h3664
 G	s5946	t5946
 B	b5947	s5946
 T	t5947	o980 b5947 b3661
 B	b5948	t5947
 H	h5948	t3674
-S	s5948	t967 h h3479 h1645 h5948 h3663 h3664
+S	s5948	tbrarg h h3479 h1645 h5948 h3663 h3664
 G	s5948	t5946
 B	b5949	s5948
 T	t5949	o980 b5949 b3661
@@ -7635,7 +7639,7 @@ B	b5950	t5949
 T	t5950	o3667 b3677 b5934
 B	b5951	t5950
 T	t5951	o1020 b1405 b5951 b5951
-S	s5951	t967 h h3479 h1645 h3674
+S	s5951	tbrarg h h3479 h1645 h3674
 G	s5951	t5951
 B	b5952	s5951
 T	t5952	o980 b5952 b3661
@@ -7711,13 +7715,13 @@ O	o5985	location p5984 p5985
 T	t5985	o b963 b3741
 B	b5985	t5985
 H	h5985	t2856
-S	s5985	t971 h h3751 h1645 h3752 h3753 h5985
+S	s5985	tbrarg h h3751 h1645 h3752 h3753 h5985
 G	s5985	t3755
 B	b5986	s5985
 T	t5986	o980 b5986 b3749
 B	b5987	t5986
 H	h5987	t2864
-S	s5987	t971 h h3751 h1645 h3752 h5987 h3753 h5985
+S	s5987	tbrarg h h3751 h1645 h3752 h5987 h3753 h5985
 G	s5987	t3755
 B	b5988	s5987
 T	t5988	o980 b5988 b3749
@@ -7737,7 +7741,7 @@ B	b5995	t5994
 T	t5995	o978 b3751 b5995
 B	b5996	t5995
 H	h5996	t1640
-S	s5996	t971 h h3751 h1645 h3752 h3770 h5996
+S	s5996	tbrarg h h3751 h1645 h3752 h3770 h5996
 G	s5996	t3771
 B	b5997	s5996
 T	t5997	o980 b5997 b3749
@@ -7745,7 +7749,7 @@ B	b5998	t5997
 T	t5998	o1405 b5917
 B	b5999	t5998
 T	t5999	o1642 b1027 b5999
-S	s5999	t971 h h3751 h1645 h3752 h3770 h5915
+S	s5999	tbrarg h h3751 h1645 h3752 h3770 h5915
 G	s5999	t5999
 B	b6000	s5999
 T	t6000	o980 b6000 b3749
@@ -7809,7 +7813,7 @@ B	b6026	t6026
 T	t6027	o3816 b977 b6026 b2989 b4
 B	b6027	t6027
 H	h6027	t1336
-S	s6027	t971 h h6027 h3799 h1662 h3744
+S	s6027	tbrarg h h6027 h3799 h1662 h3744
 G	s6027	t3835
 B	b6028	s6027
 T	t6028	o980 b6028 b3804
@@ -7867,7 +7871,7 @@ B	b6051	t5069 r_1 a
 T	t6052	o3667 b3677 b6051
 B	b6052	t6052
 T	t6053	o1020 b1337 b6052 b6052
-S	s6053	t967 h h3743 h1645 h6051
+S	s6053	tbrarg h h3743 h1645 h6051
 G	s6053	t6053
 B	b6053	s6053
 T	t6054	o980 b6053 b3883
@@ -7877,19 +7881,19 @@ B	b6055	t6055
 T	t6056	o3667 b3668 b6051
 B	b6056	t6056
 T	t6057	o1020 b1337 b3913 b6056
-S	s6057	t967 h h3743 h1645 h1441 h3910
+S	s6057	tbrarg h h3743 h1645 h1441 h3910
 G	s6057	t6057
 B	b6057	s6057
 T	t6058	o980 b6057 b3883
 B	b6058	t6058
 T	t6059	o1020 b1337 b6056 b6056
-S	s6059	t967 h h3743 h1645 h1441 h3910
+S	s6059	tbrarg h h3743 h1645 h1441 h3910
 G	s6059	t6059
 B	b6059	s6059
 T	t6060	o980 b6059 b3883
 B	b6060	t6060
 H	h6060	t6051
-S	s6060	t967 h h3743 h1645 h6060 h1441 h3910
+S	s6060	tbrarg h h3743 h1645 h6060 h1441 h3910
 G	s6060	t6059
 B	b6062	s6060
 T	t6062	o980 b6062 b3883
@@ -7965,7 +7969,7 @@ B	b6096	t6095
 T	t6096	o1085 b1252 b4 b6096
 B	b6097	t6096
 H	h6097	t3950
-S	s6097	t967 h h3743 h1645 h1441 h3910 h6097
+S	s6097	tbrarg h h3743 h1645 h1441 h3910 h6097
 G	s6097	t1251
 B	b6099	s6097
 T	t6099	o980 b6099 b3883
@@ -7981,7 +7985,7 @@ B	b6104	t6103
 P	p6104	String "rwh (unfoldRecordOrt thenC unfoldFunctionOrt) 6 thenT withT <<'u>> (dT 6) ttca"
 O	o6104	ext_rule p6104
 H	h6104	t1272
-S	s6104	t967 h h3743 h1645 h1441 h3910 h6104
+S	s6104	tbrarg h h3743 h1645 h1441 h3910 h6104
 G	s6104	t1251
 B	b6105	s6104
 T	t6105	o980 b6105 b3883
@@ -7992,13 +7996,13 @@ T	t6107	o1020 b707 b4907 b6107
 B	b6108	t6107 r_1
 T	t6108	o1512 b707 b6108
 H	h6108	t6108
-S	s6108	t967 h h3743 h1645 h1441 h3910 h6108 h6104
+S	s6108	tbrarg h h3743 h1645 h1441 h3910 h6108 h6104
 G	s6108	t1251
 B	b6109	s6108
 T	t6109	o980 b6109 b3883
 B	b6110	t6109
 H	h6110	t1275
-S	s6110	t967 h h3743 h1645 h1441 h3910 h6110
+S	s6110	tbrarg h h3743 h1645 h1441 h3910 h6110
 G	s6110	t1251
 B	b6111	s6110
 T	t6111	o980 b6111 b3883
@@ -8019,7 +8023,7 @@ T	t6118	o b6118 b4
 B	b6119	t6118
 T	t6119	o978 b6102 b6119
 B	b6120	t6119
-S	s6120	t967 h h3743 h1645 h1441 h3910 h6108
+S	s6120	tbrarg h h3743 h1645 h1441 h3910 h6108
 G	s6120	t1251
 B	b6121	s6120
 T	t6121	o980 b6121 b3883
@@ -8040,7 +8044,7 @@ T	t6128	o1001 b6127
 B	b6129	t6128
 T	t6129	o b6129 b4
 B	b6130	t6129
-S	s6130	t967 h h3743 h1645 h1441 h3910 h6104 h1291
+S	s6130	tbrarg h h3743 h1645 h1441 h3910 h6104 h1291
 G	s6130	t1295
 B	b6131	s6130
 T	t6131	o980 b6131 b3883
@@ -8049,7 +8053,7 @@ T	t6132	o1 b6127
 B	b6133	t6132
 T	t6133	o1085 b6132 b4 b6133
 B	b6134	t6133
-S	s6134	t967 h h3743 h1645 h1441 h3910 h6104 h1291 h4860
+S	s6134	tbrarg h h3743 h1645 h1441 h3910 h6104 h1291 h4860
 G	s6134	t1295
 B	b6135	s6134
 T	t6135	o980 b6135 b3883
@@ -8091,7 +8095,7 @@ B	b6153	t6152
 T	t6153	o b6083 b6153
 B	b6154	t6153
 H	h6154	t3910
-S	s6154	t967 h h3743 h1645 h1441 h6154
+S	s6154	tbrarg h h3743 h1645 h1441 h6154
 G	s6154	t1701
 B	b6155	s6154
 T	t6155	o980 b6155 b3883
@@ -8108,7 +8112,7 @@ T	t6160	o6050 b977 b6078 b6154 b6160
 B	b6161	t6160
 B	b6162	t6051
 T	t6162	o1020 b6162 b3895 b3895
-S	s6162	t967 h h3743 h1645
+S	s6162	tbrarg h h3743 h1645
 G	s6162	t6162
 B	b6163	s6162
 T	t6163	o980 b6163 b3883
@@ -8117,7 +8121,7 @@ T	t6164	o1085 b6164 b4 b1198
 B	b6165	t6164
 H	h6165	r_1 t707
 H	h6166	t6050
-S	s6166	t967 h h3743 h1645 h6165 h6166 h1322
+S	s6166	tbrarg h h3743 h1645 h6165 h6166 h1322
 G	s6166	t1323
 B	b6166	s6166
 T	t6166	o980 b6166 b3883
@@ -8126,7 +8130,7 @@ H	h6167	x t6050
 T	t6167	o3668 b4907 b1641
 B	b6168	t6167
 T	t6168	o1020 b1326 b6168 b6168
-S	s6168	t967 h h3743 h1645 h6165 h6167
+S	s6168	tbrarg h h3743 h1645 h6165 h6167
 G	s6168	t6168
 B	b6169	s6168
 T	t6169	o980 b6169 b3883
@@ -8145,7 +8149,7 @@ T	t6175	o b6175 b4
 B	b6176	t6175
 T	t6176	o978 b6165 b6176
 B	b6177	t6176
-S	s6177	t967 h h3743 h1645 h6165 h6166 h1322 h4860
+S	s6177	tbrarg h h3743 h1645 h6165 h6166 h1322 h4860
 G	s6177	t1323
 B	b6178	s6177
 T	t6178	o980 b6178 b3883
@@ -8173,7 +8177,7 @@ B	b6189	t6188
 T	t6189	o3667 b3895 b6051
 B	b6190	t6189
 T	t6190	o1474 b6190 b718
-S	s6190	t967 h h3743 h1645
+S	s6190	tbrarg h h3743 h1645
 G	s6190	t6190
 B	b6191	s6190
 T	t6191	o980 b6191 b3883
@@ -8201,7 +8205,7 @@ B	b6202	t6201
 T	t6202	o1482 b1360 b4 b6202
 B	b6203	t6202
 H	h6203	t1372
-S	s6203	t967 h h3743 h1645 h1372 h6203
+S	s6203	tbrarg h h3743 h1645 h1372 h6203
 G	s6203	t1373
 B	b6204	s6203
 T	t6204	o980 b6204 b3883
@@ -8250,19 +8254,19 @@ O	o6229	location p6228 p6229
 T	t6229	o b963 b3988
 B	b6229	t6229
 H	h6229	r t4929
-S	s6229	t971 h h6229 h1645 h3999 h4000
+S	s6229	tbrarg h h6229 h1645 h3999 h4000
 G	s6229	t3755
 B	b6230	s6229
 T	t6230	o980 b6230 b3996
 B	b6231	t6230
 H	h6231	t3058
-S	s6231	t971 h h6229 h1645 h3999 h4000 h6231
+S	s6231	tbrarg h h6229 h1645 h3999 h4000 h6231
 G	s6231	t3755
 B	b6232	s6231
 T	t6232	o980 b6232 b3996
 B	b6233	t6232
 H	h6233	t3069
-S	s6233	t971 h h6229 h1645 h3999 h6233 h4000 h6231
+S	s6233	tbrarg h h6229 h1645 h3999 h6233 h4000 h6231
 G	s6233	t3755
 B	b6234	s6233
 T	t6234	o980 b6234 b3996
@@ -8281,19 +8285,19 @@ T	t6240	o b6240 b4
 B	b6241	t6240
 T	t6241	o978 b3998 b6241
 B	b6242	t6241
-S	s6242	t971 h h6229 h1645 h1639 h5996 h4015
+S	s6242	tbrarg h h6229 h1645 h1639 h5996 h4015
 G	s6242	t3771
 B	b6243	s6242
 T	t6243	o980 b6243 b3996
 B	b6244	t6243
-S	s6244	t971 h h6229 h1645 h1639 h5915 h4015
+S	s6244	tbrarg h h6229 h1645 h1639 h5915 h4015
 G	s6244	t5999
 B	b6245	s6244
 T	t6245	o980 b6245 b3996
 B	b6246	t6245
 T	t6246	o707 b5999
 H	h6246	r2 t6246
-S	s6246	t971 h h6229 h1645 h1639 h5915 h6246
+S	s6246	tbrarg h h6229 h1645 h1639 h5915 h6246
 G	s6246	t5999
 B	b6247	s6246
 T	t6247	o980 b6247 b3996
@@ -8363,7 +8367,7 @@ B	b6277	t6277
 T	t6278	o4064 b977 b6277 b3138 b4
 B	b6278	t6278
 H	h6278	t1764
-S	s6278	t971 h h6278 h3799 h1639 h3991
+S	s6278	tbrarg h h6278 h3799 h1639 h3991
 G	s6278	t3835
 B	b6279	s6278
 T	t6279	o980 b6279 b4052
@@ -8412,7 +8416,7 @@ O	o6300	location p6299 p6300
 T	t6300	o b963 b1658
 B	b6300	t6300
 H	h6300	t1760
-S	s6300	t967 h h3990 h1645 h1639 h6300
+S	s6300	tbrarg h h3990 h1645 h1639 h6300
 G	s6300	t4113
 B	b6301	s6300
 T	t6301	o965 b6301
@@ -8470,7 +8474,7 @@ B	b6327	t6326
 T	t6327	o978 b6307 b6327
 B	b6328	t6327
 H	h6328	t1765
-S	s6328	t967 h h3990 h1645 h1639 h6328
+S	s6328	tbrarg h h3990 h1645 h1639 h6328
 G	s6328	t1761
 B	b6329	s6328
 T	t6329	o980 b6329 b6305
@@ -8489,7 +8493,7 @@ T	t6335	o1246 b696 b6335
 B	b6336	t6335
 T	t6336	o967 b6336
 H	h6336	t6336
-S	s6336	t967 h h3990 h1645 h1639 h6336
+S	s6336	tbrarg h h3990 h1645 h1639 h6336
 G	s6336	t1761
 B	b6337	s6336
 T	t6337	o980 b6337 b6305
@@ -8505,7 +8509,7 @@ B	b6342	t6341
 T	t6342	o1505 b977 b6334 b6342 b4
 B	b6343	t6342
 T	t6343	o1020 b1765 b5951 b5951
-S	s6343	t967 h h3990 h1645 h4129
+S	s6343	tbrarg h h3990 h1645 h4129
 G	s6343	t6343
 B	b6344	s6343
 T	t6344	o980 b6344 b6311
@@ -8513,7 +8517,7 @@ B	b6345	t6344
 T	t6345	o1085 b6345 b4 b6315
 B	b6346	t6345
 H	h6346	t4148
-S	s6346	t967 h h3990 h1645 h3663 h6346
+S	s6346	tbrarg h h3990 h1645 h3663 h6346
 G	s6346	t1765
 B	b6347	s6346
 T	t6347	o980 b6347 b6311
@@ -8521,19 +8525,19 @@ B	b6348	t6347
 T	t6348	o980 b4151 b6311
 B	b6349	t6348
 T	t6349	o1020 b1765 b3665 b5944
-S	s6349	t967 h h3990 h1645 h3663 h4148
+S	s6349	tbrarg h h3990 h1645 h3663 h4148
 G	s6349	t6349
 B	b6350	s6349
 T	t6350	o980 b6350 b6311
 B	b6351	t6350
 T	t6351	o1020 b1765 b5944 b5944
-S	s6351	t967 h h3990 h1645 h3663 h4148
+S	s6351	tbrarg h h3990 h1645 h3663 h4148
 G	s6351	t6351
 B	b6352	s6351
 T	t6352	o980 b6352 b6311
 B	b6353	t6352
 H	h6353	t4129
-S	s6353	t967 h h3990 h1645 h6353 h3663 h4148
+S	s6353	tbrarg h h3990 h1645 h6353 h3663 h4148
 G	s6353	t6351
 B	b6354	s6353
 T	t6354	o980 b6354 b6311
@@ -8600,7 +8604,7 @@ T	t6385	o b6379 b6385
 B	b6386	t6385
 T	t6386	o1520 b977 b6376 b6386 b4
 B	b6387	t6386
-S	s6387	t967 h h3990 h1645 h1639 h6300
+S	s6387	tbrarg h h3990 h1645 h1639 h6300
 G	s6387	t4224
 B	b6388	s6387
 T	t6388	o980 b6388 b6311
@@ -8609,7 +8613,7 @@ H	h6389	r_1 t1760
 T	t6389	o3668 b1641 b4907
 B	b6390	t6389
 T	t6390	o1020 b4134 b6390 b6390
-S	s6390	t967 h h3990 h1645 h1639 h6389
+S	s6390	tbrarg h h3990 h1645 h1639 h6389
 G	s6390	t6390
 B	b6391	s6390
 T	t6391	o980 b6391 b6311
@@ -8625,14 +8629,14 @@ B	b6396	t6395
 T	t6396	o1085 b6389 b4 b6396
 B	b6397	t6396
 T	t6397	o1020 b1761 b4907 b4907
-S	s6397	t967 h h3990 h1645 h1639 h6389
+S	s6397	tbrarg h h3990 h1645 h1639 h6389
 G	s6397	t6397
 B	b6398	s6397
 T	t6398	o980 b6398 b6311
 B	b6399	t6398
 T	t6399	o1085 b6399 b4 b6396
 B	b6400	t6399
-S	s6400	t967 h h3990 h1645 h1639 h6300 h4243
+S	s6400	tbrarg h h3990 h1645 h1639 h6300 h4243
 G	s6400	t4244
 B	b6401	s6400
 T	t6401	o980 b6401 b6311
@@ -8650,7 +8654,7 @@ B	b6407	t6406
 T	t6407	o3674 b696 b6335
 B	b6408	t6407
 T	t6408	o1020 b6408 b6390 b6390
-S	s6408	t967 h h3990 h1645 h1639 h6389
+S	s6408	tbrarg h h3990 h1645 h1639 h6389
 G	s6408	t6408
 B	b6409	s6408
 T	t6409	o980 b6409 b6311
@@ -8685,7 +8689,7 @@ T	t6423	o b6415 b6423
 B	b6424	t6423
 T	t6424	o4224 b977 b6407 b6424 b4
 B	b6425	t6424
-S	s6425	t967 h h3990 h1645
+S	s6425	tbrarg h h3990 h1645
 G	s6425	t5935
 B	b6426	s6425
 T	t6426	o980 b6426 b6311
@@ -8717,7 +8721,7 @@ B	b6439	t6438
 T	t6439	o980 b4278 b6311
 B	b6440	t6439
 H	h6440	t4271
-S	s6440	t967 h h3990 h1645 h4271 h6440
+S	s6440	tbrarg h h3990 h1645 h4271 h6440
 G	s6440	t4272
 B	b6441	s6440
 T	t6441	o980 b6441 b6311
@@ -8776,7 +8780,7 @@ T	t6467	o6300 b6467
 B	b6468	t6467
 P	p6468	Number 13148
 O	o6468	location p6468 p5013
-S	s6468	t971 h h4310 h1645 h4988 h1662
+S	s6468	tbrarg h h4310 h1645 h4988 h1662
 G	s6468	t1690
 B	b6469	s6468
 T	t6469	o965 b6469
@@ -8791,7 +8795,7 @@ T	t6473	o980 b4316 b6473
 B	b6474	t6473
 T	t6474	o979 b6474 b4 b982
 B	b6475	t6474
-S	s6475	t971 h h1713 h1645 h4988 h1662
+S	s6475	tbrarg h h1713 h1645 h4988 h1662
 G	s6475	t1690
 B	b6476	s6475
 T	t6476	o b6476 b4
@@ -8867,7 +8871,7 @@ B	b6510	t6509
 P	p6510	Number 13521
 P	p6511	Number 13821
 O	o6511	location p6510 p6511
-S	s6511	t967 h h4310 h1645 h1639 h5023
+S	s6511	tbrarg h h4310 h1645 h1639 h5023
 G	s6511	t3870
 B	b6511	s6511
 T	t6511	o965 b6511
@@ -10408,14 +10412,14 @@ P	p7159	Number 15386
 P	p7160	Number 15734
 O	o7160	location p7159 p7160
 H	h7160	t4389
-S	s7160	t967 h h3587 h7160
+S	s7160	tbrarg h h3587 h7160
 G	s7160	t4394
 B	b7160	s7160
 T	t7160	o965 b7160
 B	b7161	t7160
 T	t7161	o1664 b7161
 B	b7162	t7161
-S	s7162	t967 h h3587 h7160
+S	s7162	tbrarg h h3587 h7160
 G	s7162	t4397
 B	b7163	s7162
 T	t7163	o965 b7163
@@ -10439,7 +10443,7 @@ B	b7172	t7171
 T	t7172	o979 b7172 b4 b982
 B	b7173	t7172
 H	h7173	t4390
-S	s7173	t967 h h7173 h3587
+S	s7173	tbrarg h h7173 h3587
 G	s7173	t4410
 B	b7174	s7173
 T	t7174	o980 b7174 b7171
@@ -10492,24 +10496,24 @@ T	t7197	o978 b7189 b4
 B	b7198	t7197
 T	t7198	o4443 b977 b7198 b4 b4
 B	b7199	t7198
-S	s7199	t967 h h3587 h7160
+S	s7199	tbrarg h h3587 h7160
 G	s7199	t4472
 B	b7200	s7199
 T	t7200	o980 b7200 b7171
 B	b7201	t7200
-S	s7201	t967 h h7173 h3587 h7160
+S	s7201	tbrarg h h7173 h3587 h7160
 G	s7201	t4472
 B	b7202	s7201
 T	t7202	o980 b7202 b7171
 B	b7203	t7202
 H	h7203	t4611
-S	s7203	t967 h h4410 h3587 h4393 h7203
+S	s7203	tbrarg h h4410 h3587 h4393 h7203
 G	s7203	t4472
 B	b7204	s7203
 T	t7204	o980 b7204 b7171
 B	b7205	t7204
 H	h7205	t4613
-S	s7205	t967 h h4410 h3587 h7205 h4393 h7203
+S	s7205	tbrarg h h4410 h3587 h7205 h4393 h7203
 G	s7205	t4472
 B	b7206	s7205
 T	t7206	o980 b7206 b7171
@@ -10537,7 +10541,7 @@ B	b7217	t7216
 T	t7217	o978 b7191 b7217
 B	b7218	t7217
 H	h7218	t4394
-S	s7218	t967 h h3587 h7160 h7218
+S	s7218	tbrarg h h3587 h7160 h7218
 G	s7218	t4472
 B	b7219	s7218
 T	t7219	o980 b7219 b7171
@@ -10564,17 +10568,17 @@ T	t7229	o4601 b977 b7218 b7229 b4
 B	b7230	t7229
 T	t7230	o980 b4665 b7171
 B	b7231	t7230
-S	s7231	t967 h h7173 h3587 h4393
+S	s7231	tbrarg h h7173 h3587 h4393
 G	s7231	t4498
 B	b7232	s7231
 T	t7232	o980 b7232 b7171
 B	b7233	t7232
-S	s7233	t967 h h4410 h3587 h4393 h7203
+S	s7233	tbrarg h h4410 h3587 h4393 h7203
 G	s7233	t4498
 B	b7234	s7233
 T	t7234	o980 b7234 b7171
 B	b7235	t7234
-S	s7235	t967 h h4410 h3587 h7205 h4393 h7203
+S	s7235	tbrarg h h4410 h3587 h7205 h4393 h7203
 G	s7235	t4498
 B	b7236	s7235
 T	t7236	o980 b7236 b7171
@@ -10602,7 +10606,7 @@ B	b7247	t7246
 T	t7247	o978 b7193 b7247
 B	b7248	t7247
 H	h7248	t4397
-S	s7248	t967 h h3587 h4393 h7248
+S	s7248	tbrarg h h3587 h4393 h7248
 G	s7248	t4498
 B	b7249	s7248
 T	t7249	o980 b7249 b7171
@@ -10680,7 +10684,7 @@ O	o7282	location p7281 p7282
 P	p7283	String recordOrtIntroT
 O	o7283	rule p7283
 T	t7283	o3609 b717 b976
-S	s7283	t971 h
+S	s7283	tbrarg h
 G	s7283	t7283
 B	b7283	s7283
 T	t7284	o965 b7283
@@ -10710,25 +10714,25 @@ P	p7292	Number 15935
 P	p7293	Number 16099
 O	o7293	location p7292 p7293
 H	h7293	t5689
-S	s7293	t967 h h7293
+S	s7293	tbrarg h h7293
 G	s7293	t5699
 B	b7293	s7293
 T	t7293	o980 b7293 b5696
 B	b7294	t7293
 H	h7294	r t5689
-S	s7294	t967 h h7294
+S	s7294	tbrarg h h7294
 G	s7294	t5707
 B	b7295	s7294
 T	t7295	o980 b7295 b5696
 B	b7296	t7295
 B	b7297	t5707
 T	t7297	o1087 b7297
-S	s7297	t967 h h7294
+S	s7297	tbrarg h h7294
 G	s7297	t7297
 B	b7298	s7297
 T	t7298	o980 b7298 b5696
 B	b7299	t7298
-S	s7299	t971 h h7294
+S	s7299	tbrarg h h7294
 G	s7299	t5707
 B	b7300	s7299
 T	t7300	o980 b7300 b5696
@@ -10791,7 +10795,7 @@ T	t7326	o7325 b7325
 B	b7326	t7326
 P	p7326	Number 16332
 O	o7326	location p7326 p4514
-S	s7326	t971 h h3479
+S	s7326	tbrarg h h3479
 G	s7326	t5767
 B	b7327	s7326
 T	t7327	o980 b7327 b5764
@@ -10807,7 +10811,7 @@ B	b7332	t7331
 T	t7332	o1816 b717 b5917
 B	b7333	t7332
 T	t7333	o1020 b1405 b5917 b7333
-S	s7333	t971 h h1639 h5915
+S	s7333	tbrarg h h1639 h5915
 G	s7333	t7333
 B	b7334	s7333
 T	t7334	o980 b7334 b5764
@@ -11023,14 +11027,14 @@ P	p7425	Number 16776
 P	p7426	Number 17139
 O	o7426	location p7425 p7426
 H	h7426	t2611
-S	s7426	t967 h h1664 h7426
+S	s7426	tbrarg h h1664 h7426
 G	s7426	t3609
 B	b7426	s7426
 T	t7426	o965 b7426
 B	b7427	t7426
 T	t7427	o1664 b7427
 B	b7428	t7427
-S	s7428	t967 h h1664 h7426
+S	s7428	tbrarg h h1664 h7426
 G	s7428	t2260
 B	b7429	s7428
 T	t7429	o965 b7429
@@ -11455,14 +11459,14 @@ B	b7596	t7596
 P	p7596	Number 17583
 P	p7597	Number 17932
 O	o7597	location p7596 p7597
-S	s7597	t967 h h1639 h6300
+S	s7597	tbrarg h h1639 h6300
 G	s7597	t4649
 B	b7597	s7597
 T	t7597	o965 b7597
 B	b7598	t7597
 T	t7598	o1664 b7598
 B	b7599	t7598
-S	s7599	t967 h h1639 h6300
+S	s7599	tbrarg h h1639 h6300
 G	s7599	t4622
 B	b7600	s7599
 T	t7600	o965 b7600
@@ -11827,14 +11831,14 @@ B	b7743	t7743
 P	p7743	Number 18336
 P	p7744	Number 18663
 O	o7744	location p7743 p7744
-S	s7744	t967 h h4988 h5023
+S	s7744	tbrarg h h4988 h5023
 G	s7744	t3609
 B	b7744	s7744
 T	t7744	o965 b7744
 B	b7745	t7744
 T	t7745	o1664 b7745
 B	b7746	t7745
-S	s7746	t967 h h4988 h5023
+S	s7746	tbrarg h h4988 h5023
 G	s7746	t4622
 B	b7747	s7746
 T	t7747	o965 b7747

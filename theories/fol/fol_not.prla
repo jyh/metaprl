@@ -725,7 +725,11 @@ NFol_type	Fol_type	Fol_type NIL
 NFol_type!type	type	type Fol_type
 O	o327	type
 T	t328	o327 b292
-S	s	t327 h
+NBase_rewrite	Base_rw	Base_rewrite NIL
+NBase_rewrite!sequent_arg	brwsqarg	sequent_arg Base_rw
+O	obrarg	brwsqarg
+T	tbrarg	obrarg
+S	s	tbrarg h
 G	s	t328
 B	b328	s
 T	t329	o325 b328
@@ -733,7 +737,7 @@ B	b329	t329
 T	t330	o324 b329
 B	b330	t330
 T	t331	o327 b293
-S	s331	t327 h
+S	s331	tbrarg h
 G	s331	t331
 B	b331	s331
 T	t332	o325 b331
@@ -811,14 +815,14 @@ T	t351	o b322 b350
 B	b351	t351
 O	o351	meta_labeled p336
 H	h351	x t292
-S	s351	t327 h h351
+S	s351	tbrarg h h351
 G	s351	t315
 B	b352	s351
 T	t352	o325 b352
 B	b353	t352
 T	t353	o351 b353
 B	b354	t353
-S	s354	t327 h
+S	s354	tbrarg h
 G	s354	t293
 B	b355	s354
 T	t355	o325 b355
@@ -876,7 +880,7 @@ P	p372	Var x
 O	o372	var p372
 T	t373	o372
 C	h373	J t373
-S	s373	t327 h h372 h373
+S	s373	tbrarg h h372 h373
 G	s373	t292
 B	b373	s373
 T	t374	o325 b373
@@ -887,7 +891,7 @@ P	p375	Var C
 O	o375	var p375
 B	b376	t373
 T	t376	o375 b376
-S	s376	t327 h h372 h373
+S	s376	tbrarg h h372 h373
 G	s376	t376
 B	b377	s376
 T	t377	o325 b377
@@ -905,12 +909,12 @@ B	b382	t381
 P	p382	String assertion
 O	o382	tactic_arg p382
 H	h382	x t316
-S	s382	t327 h h382 h373
+S	s382	tbrarg h h382 h373
 G	s382	t292
 B	b383	s382
 T	t383	o338 b383 b380
 B	b384	t383
-S	s384	t327 h h382 h373
+S	s384	tbrarg h h382 h373
 G	s384	t376
 B	b385	s384
 T	t385	o338 b385 b380
@@ -924,7 +928,7 @@ B	b389	t388
 T	t389	o382 b384 b4 b389
 B	b390	t389
 H	h390	b t315
-S	s390	t327 h h382 h373 h390
+S	s390	tbrarg h h382 h373 h390
 G	s390	t376
 B	b391	s390
 T	t391	o338 b391 b380

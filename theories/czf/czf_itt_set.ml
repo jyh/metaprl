@@ -246,20 +246,20 @@ doc <:doc<
    @end[doc]
 >>
 interactive set_type {| intro [] |} :
-   sequent ['ext] { <H> >- "type"{set} }
+   sequent { <H> >- "type"{set} }
 
 (*
  * Equality from sethood.
  *)
 interactive equal_set :
-   sequent ['ext] { <H> >- isset{'s} } -->
-   sequent ['ext] { <H> >- 's = 's in set }
+   sequent { <H> >- isset{'s} } -->
+   sequent { <H> >- 's = 's in set }
 
 (*
  * By assumption.
  *)
 interactive isset_assum 'H :
-   sequent ['ext] { <H>; x: set; <J['x]> >- isset{'x} }
+   sequent { <H>; x: set; <J['x]> >- isset{'x} }
 
 doc <:doc< 
    @begin[doc]
@@ -269,22 +269,22 @@ doc <:doc<
    @end[doc]
 >>
 interactive isset_collect {| intro [] |} :
-   sequent [squash] { <H> >- 'T = 'T in univ[1:l] } -->
-   sequent [squash] { <H>; y: 'T >- isset{'a['y]} } -->
-   sequent ['ext] { <H> >- isset{collect{'T; x. 'a['x]}} }
+   sequent { <H> >- 'T = 'T in univ[1:l] } -->
+   sequent { <H>; y: 'T >- isset{'a['y]} } -->
+   sequent { <H> >- isset{collect{'T; x. 'a['x]}} }
 
 interactive isset_collect2 {| intro [] |} :
-   sequent [squash] { <H> >- 'T = 'T in univ[1:l] } -->
-   sequent [squash] { <H>; y: 'T >- isset{'a['y]} } -->
-   sequent ['ext] { <H> >- collect{'T; x. 'a['x]} IN set }
+   sequent { <H> >- 'T = 'T in univ[1:l] } -->
+   sequent { <H>; y: 'T >- isset{'a['y]} } -->
+   sequent { <H> >- collect{'T; x. 'a['x]} IN set }
 
 doc <:doc< 
    @docoff
    This is how a set is constructed.
 >>
 interactive isset_apply {| intro [] |} :
-   sequent [squash] { <H> >- ('f 'a) IN set } -->
-   sequent ['ext] { <H> >- isset{.'f 'a} }
+   sequent { <H> >- ('f 'a) IN set } -->
+   sequent { <H> >- isset{.'f 'a} }
 
 doc <:doc< 
    @begin[doc]
@@ -300,7 +300,7 @@ doc <:doc<
    @end[doc]
 >>
 interactive set_elim {| elim [ThinOption thinT] |} 'H :
-   sequent ['ext] { <H>;
+   sequent { <H>;
                     a: set;
                     <J['a]>;
                     T: univ[1:l];
@@ -309,7 +309,7 @@ interactive set_elim {| elim [ThinOption thinT] |} 'H :
                     z: isset{collect{'T; x. 'f 'x}}
                   >- 'C[collect{'T; x. 'f 'x}]
                   } -->
-                     sequent ['ext] { <H>; a: set; <J['a]> >- 'C['a] }
+                     sequent { <H>; a: set; <J['a]> >- 'C['a] }
 
 doc <:doc< 
    @docoff
@@ -317,22 +317,22 @@ doc <:doc<
    an @tt{collect} argument.  These rules are never used.
 >>
 interactive set_split_hyp 'H 's (bind{v. 'A['v]}) :
-   sequent [squash] { <H>; x: 'A['s]; <J['x]> >- isset{'s} } -->
-   sequent [squash] { <H>; x: 'A['s]; <J['x]>; z: set >- "type"{'A['z]} } -->
-   sequent ['ext] { <H>;
+   sequent { <H>; x: 'A['s]; <J['x]> >- isset{'s} } -->
+   sequent { <H>; x: 'A['s]; <J['x]>; z: set >- "type"{'A['z]} } -->
+   sequent { <H>;
                     x: 'A['s];
                     <J['x]>;
                     T: univ[1:l];
                     f: 'T -> set;
                     z: 'A[collect{'T; y. 'f 'y}]
                     >- 'C['z] } -->
-   sequent ['ext] { <H>; x: 'A['s]; <J['x]> >- 'C['x] }
+   sequent { <H>; x: 'A['s]; <J['x]> >- 'C['x] }
 
 interactive set_split_concl 's (bind{v. 'C['v]}) :
-   sequent [squash] { <H> >- isset{'s} } -->
-   sequent [squash] { <H>; z: set >- "type"{'C['z]} } -->
-   sequent ['ext] { <H>; T: univ[1:l]; f: 'T -> set >- 'C[collect{'T; y. 'f 'y}] } -->
-   sequent ['ext] { <H> >- 'C['s] }
+   sequent { <H> >- isset{'s} } -->
+   sequent { <H>; z: set >- "type"{'C['z]} } -->
+   sequent { <H>; T: univ[1:l]; f: 'T -> set >- 'C[collect{'T; y. 'f 'y}] } -->
+   sequent { <H> >- 'C['s] }
 
 doc <:doc< 
    @begin[doc]
@@ -345,10 +345,10 @@ doc <:doc<
    @end[doc]
 >>
 interactive set_ind_equality2 {| intro [] |} :
-   ["wf"]   sequent [squash] { <H> >- 'z1 = 'z2 in set } -->
-   ["main"] sequent [squash] { <H>; a1: univ[1:l]; f1: 'a1 -> set; g1: x: 'a1 -> 'T >-
+   ["wf"]   sequent { <H> >- 'z1 = 'z2 in set } -->
+   ["main"] sequent { <H>; a1: univ[1:l]; f1: 'a1 -> set; g1: x: 'a1 -> 'T >-
       'body1['a1; 'f1; 'g1] = 'body2['a1; 'f1; 'g1] in 'T } -->
-   sequent ['ext] { <H> >- set_ind{'z1; a1, f1, g1. 'body1['a1; 'f1; 'g1]}
+   sequent { <H> >- set_ind{'z1; a1, f1, g1. 'body1['a1; 'f1; 'g1]}
                           = set_ind{'z2; a2, f2, g2. 'body2['a2; 'f2; 'g2]}
                           in 'T }
 doc <:doc< @docoff >>

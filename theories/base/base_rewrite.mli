@@ -26,8 +26,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
- * Author: Jason Hickey
- * jyh@cs.cornell.edu
+ * Author: Jason Hickey <jyh@cs.cornell.edu>
+ * Modified By: Aleksey Nogin <nogin@cs.caltech.edu>
  *)
 
 extends Perv
@@ -38,16 +38,16 @@ open Refiner.Refiner.TermType
 open Tactic_type.Tacticals
 open Tactic_type.Conversionals
 
-declare rw_just
+declare sequent_arg
 
 rule rewriteAxiom1 :
-   sequent ['ext] { <H> >- Perv!"rewrite"{'a; 'a} }
+   sequent { <H> >- Perv!"rewrite"{'a; 'a} }
 
 rewrite rewriteAxiom2 'a 'b : (Perv!"rewrite"{'a; 'b}) --> 'a <--> 'b
 
 rule rewriteSym :
-   sequent ['ext] { <H> >- Perv!"rewrite"{'a; 'b} } -->
-   sequent ['ext] { <H> >- Perv!"rewrite"{'b; 'a} }
+   sequent { <H> >- Perv!"rewrite"{'a; 'b} } -->
+   sequent { <H> >- Perv!"rewrite"{'b; 'a} }
 
 topval rewriteC : term -> conv
 topval rewriteT : term -> tactic

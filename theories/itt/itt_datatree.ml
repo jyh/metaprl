@@ -54,12 +54,12 @@ dform dt_df : except_mode[src] :: DataTree{'A} = `"DataTree(" 'A ")"
 
 
 interactive datatree_wf {| intro[] |} :
- sequent[squash]{ <H> >-"type"{ 'A}} -->
- sequent['ext]  { <H> >-"type"{ DataTree{'A}}}
+ sequent{ <H> >-"type"{ 'A}} -->
+ sequent{ <H> >-"type"{ DataTree{'A}}}
 
 interactive datatree_subtype {| intro[] |} :
- sequent[squash]{ <H> >-"type"{ 'A}} -->
- sequent['ext]  { <H> >-"subtype"{ DataTree{'A};BinTree}}
+ sequent{ <H> >-"type"{ 'A}} -->
+ sequent{ <H> >-"subtype"{ DataTree{'A};BinTree}}
 
 
 doc <:doc< 
@@ -85,15 +85,15 @@ interactive_rw in_tree_step {| reduce |} :
 (* in_tree is a proposition *)
 
 interactive in_tree_wf {| intro[] |} :
- sequent[squash]{ <H> >- 'a in  'A} -->
- sequent[squash]{ <H> >- 't in DataTree{'A} } -->
- sequent['ext]  { <H> >- "type"{in_tree{'a;'t; 'A}} }
+ sequent{ <H> >- 'a in  'A} -->
+ sequent{ <H> >- 't in DataTree{'A} } -->
+ sequent{ <H> >- "type"{in_tree{'a;'t; 'A}} }
 
 interactive in_tree_univ {| intro[] |} :
- sequent[squash]{ <H> >- 'A in  univ[i:l]} -->
- sequent[squash]{ <H> >- 'a in  'A} -->
- sequent[squash]{ <H> >- 't in DataTree{'A} } -->
- sequent['ext]  { <H> >- in_tree{'a;'t; 'A} in univ[i:l] }
+ sequent{ <H> >- 'A in  univ[i:l]} -->
+ sequent{ <H> >- 'a in  'A} -->
+ sequent{ <H> >- 't in DataTree{'A} } -->
+ sequent{ <H> >- in_tree{'a;'t; 'A} in univ[i:l] }
 
 
 doc <:doc< 
@@ -110,19 +110,19 @@ dform dt_df : except_mode[src] ::  set_from_tree{'t;'A} = `"|" 't `"|" sub{'A}
 
 
 interactive set_from_tree_wf {| intro[] |} :
- sequent[squash]{ <H> >- "type"{'A}} -->
- sequent[squash]{ <H> >- 't in DataTree{'A} } -->
- sequent['ext]  { <H> >- "type"{set_from_tree{'t;'A}} }
+ sequent{ <H> >- "type"{'A}} -->
+ sequent{ <H> >- 't in DataTree{'A} } -->
+ sequent{ <H> >- "type"{set_from_tree{'t;'A}} }
 
 interactive set_from_tree_univ {| intro[] |} :
- sequent[squash]{ <H> >- 'A in univ[i:l]} -->
- sequent[squash]{ <H> >- 't in DataTree{'A} } -->
- sequent['ext]  { <H> >- set_from_tree{'t;'A} in univ[i:l]}
+ sequent{ <H> >- 'A in univ[i:l]} -->
+ sequent{ <H> >- 't in DataTree{'A} } -->
+ sequent{ <H> >- set_from_tree{'t;'A} in univ[i:l]}
 
 interactive set_from_tree_subtype {| intro[] |} :
- sequent[squash]{ <H> >- "type"{'A}} -->
- sequent[squash]{ <H> >- 't in DataTree{'A} } -->
- sequent['ext]  { <H> >- "subtype"{set_from_tree{'t;'A}; 'A} }
+ sequent{ <H> >- "type"{'A}} -->
+ sequent{ <H> >- 't in DataTree{'A} } -->
+ sequent{ <H> >- "subtype"{set_from_tree{'t;'A}; 'A} }
 
 
 (* ==================== *)
@@ -136,10 +136,10 @@ doc <:doc<
 
 
 interactive example_wf2 {| intro[] |} :
- sequent['ext]  { <H> >- simpletree in DataTree{int} }
+ sequent{ <H> >- simpletree in DataTree{int} }
 
 
 interactive example_19 {| intro[] |} :
- sequent['ext]  { <H> >- in_tree{19; simpletree; int} }
+ sequent{ <H> >- in_tree{19; simpletree; int} }
 
 doc <:doc< @docoff >>

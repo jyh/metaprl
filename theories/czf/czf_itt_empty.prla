@@ -678,7 +678,11 @@ C	h	H
 NCzf_itt_set!isset	isset	isset Czf_itt_set
 O	o545	isset
 T	t546	o545 b521
-S	s	t545 h
+NBase_rewrite	Base_rw	Base_rewrite NIL
+NBase_rewrite!sequent_arg	brwsqarg	sequent_arg Base_rw
+O	obrarg	brwsqarg
+T	tbrarg	obrarg
+S	s	tbrarg h
 G	s	t546
 B	b546	s
 T	t547	o543 b546
@@ -3181,7 +3185,7 @@ NCzf_itt_member!mem	mem	mem Czf_itt_member
 O	o1346	mem
 T	t1346	o1346 b565 b521
 H	h1346	x t1346
-S	s1346	t545 h h1346 h567
+S	s1346	tbrarg h h1346 h567
 G	s1346	t567
 B	b1346	s1346
 T	t1347	o543 b1346

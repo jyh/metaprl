@@ -166,9 +166,9 @@ dform tree_ind_df : except_mode[src] :: parens :: "prec"[prec_tree_ind] :: tree_
  * H, x:A >- Ui ext B
  *)
 prim wFormation 'A :
-   sequent [squash] { <H> >- 'A = 'A in univ[i:l] } -->
-   ('B['x] : sequent ['ext] { <H>; x: 'A >- univ[i:l] }) -->
-   sequent ['ext] { <H> >- univ[i:l] } =
+   sequent { <H> >- 'A = 'A in univ[i:l] } -->
+   ('B['x] : sequent { <H>; x: 'A >- univ[i:l] }) -->
+   sequent { <H> >- univ[i:l] } =
    w{'A; x. 'B['x]}
 
 doc <:doc< 
@@ -181,28 +181,28 @@ doc <:doc<
    @end[doc]
 >>
 prim wEquality {| intro []; eqcd |} :
-   [wf] sequent [squash] { <H> >- 'A1 = 'A2 in univ[i:l] } -->
-   [wf] sequent [squash] { <H>; y: 'A1 >- 'B1['y] = 'B2['y] in univ[i:l] } -->
-   sequent ['ext] { <H> >- w{'A1; x1. 'B1['x1]} = w{'A2; x2. 'B2['x2]} in univ[i:l] } =
+   [wf] sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
+   [wf] sequent { <H>; y: 'A1 >- 'B1['y] = 'B2['y] in univ[i:l] } -->
+   sequent { <H> >- w{'A1; x1. 'B1['x1]} = w{'A2; x2. 'B2['x2]} in univ[i:l] } =
    it
 
 (*
  * Typehood.
  *)
 prim wType {| intro [] |} :
-   [wf] sequent [squash] { <H> >- "type"{'A1} } -->
-   [wf] sequent [squash] { <H>; x: 'A1 >- "type"{'A2['x]} } -->
-   sequent ['ext] { <H> >- "type"{.w{'A1; y.'A2['y]}} } =
+   [wf] sequent { <H> >- "type"{'A1} } -->
+   [wf] sequent { <H>; x: 'A1 >- "type"{'A2['x]} } -->
+   sequent { <H> >- "type"{.w{'A1; y.'A2['y]}} } =
    it
 
 doc <:doc< 
    @docoff
 >>
 prim treeFormation {| intro [] |} 'a :
-   [wf] sequent [squash] { <H> >- 'a = 'a in 'A } -->
-   [main] ('f : sequent ['ext] { <H> >- 'B['a] -> w{'A; x. 'B['x]} }) -->
-   [wf] sequent [squash] { <H>; y: 'A >- "type"{'B['y]} } -->
-   sequent ['ext] { <H> >- w{'A; x. 'B['x]} } =
+   [wf] sequent { <H> >- 'a = 'a in 'A } -->
+   [main] ('f : sequent { <H> >- 'B['a] -> w{'A; x. 'B['x]} }) -->
+   [wf] sequent { <H>; y: 'A >- "type"{'B['y]} } -->
+   sequent { <H> >- w{'A; x. 'B['x]} } =
    tree{'a; 'f}
 
 doc <:doc< 
@@ -215,10 +215,10 @@ doc <:doc<
    @end[doc]
 >>
 prim treeEquality {| intro []; eqcd |} :
-   [wf] sequent [squash] { <H> >- 'a1 = 'a2 in 'A } -->
-   [wf] sequent [squash] { <H> >- 'b1 = 'b2 in 'B['a1] -> w{'A; x. 'B['x]} } -->
-   [wf] sequent [squash] { <H>; y: 'A >- "type"{'B['y]} } -->
-   sequent ['ext] { <H> >- tree{'a1; 'b1} = tree{'a2; 'b2} in w{'A; x. 'B['x]} } =
+   [wf] sequent { <H> >- 'a1 = 'a2 in 'A } -->
+   [wf] sequent { <H> >- 'b1 = 'b2 in 'B['a1] -> w{'A; x. 'B['x]} } -->
+   [wf] sequent { <H>; y: 'A >- "type"{'B['y]} } -->
+   sequent { <H> >- tree{'a1; 'b1} = tree{'a2; 'b2} in w{'A; x. 'B['x]} } =
    it
 
 doc <:doc< 
@@ -233,7 +233,7 @@ doc <:doc<
 >>
 prim wElimination {| elim [ThinOption thinT] |} 'H :
    [main] ('t['z; 'a; 'f; 'g] :
-   sequent ['ext] { <H>;
+   sequent { <H>;
                     z: w{'A; x. 'B['x]};
                     <J['z]>;
                     a: 'A;
@@ -241,7 +241,7 @@ prim wElimination {| elim [ThinOption thinT] |} 'H :
                     g: b: 'B['a] -> 'T['f 'b]
                   >- 'T[tree{'a; 'f}]
                   }) -->
-   sequent ['ext] { <H>; z: w{'A; x. 'B['x]}; <J['z]> >- 'T['z] } =
+   sequent { <H>; z: w{'A; x. 'B['x]}; <J['z]> >- 'T['z] } =
       tree_ind{'z; a, f, g. 't['z; 'a; 'f; 'g]}
 
 doc <:doc< 
@@ -255,13 +255,13 @@ doc <:doc<
    @end[doc]
 >>
 interactive tree_indEquality {| intro []; eqcd |} (w{'A; x. 'B['x]}) bind{z.'T['z]} :
-   [wf] sequent [squash] { <H> >- 'z1 = 'z2 in w{'A; x. 'B['x]} } -->
-   [wf] sequent [squash] { <H>;
+   [wf] sequent { <H> >- 'z1 = 'z2 in w{'A; x. 'B['x]} } -->
+   [wf] sequent { <H>;
                            a: 'A;
                            f: 'B['a] -> w{'A; x. 'B['x]};
                            g: b: 'B['a] -> 'T['f 'b]
                          >- 'body1['a; 'f; 'g] = 'body2['a; 'f; 'g] in 'T[tree{'a;'f}] } -->
-   sequent ['ext] { <H> >- tree_ind{'z1; a, f, g. 'body1['a; 'f; 'g]}
+   sequent { <H> >- tree_ind{'z1; a, f, g. 'body1['a; 'f; 'g]}
                           = tree_ind{'z2; a2, f2, g2. 'body2['a2; 'f2; 'g2]}
                           in 'T['z1] }
 

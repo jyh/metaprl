@@ -128,13 +128,13 @@ doc <:doc<
    @end[doc]
 >>
 interactive cycg_wf {| intro [] |} :
-   sequent [squash] { <H> >- 'g IN label } -->
-   sequent ['ext] { <H> >- "type"{cycg{'g}} }
+   sequent { <H> >- 'g IN label } -->
+   sequent { <H> >- "type"{cycg{'g}} }
 
 interactive cycgroup_wf {| intro [] |} :
-   sequent [squash] { <H> >- 'g IN label } -->
-   sequent [squash] { <H> >- isset{'a} } -->
-   sequent ['ext] { <H> >- "type"{cycgroup{'g; 'a}} }
+   sequent { <H> >- 'g IN label } -->
+   sequent { <H> >- isset{'a} } -->
+   sequent { <H> >- "type"{cycgroup{'g; 'a}} }
 
 doc <:doc< 
    @begin[doc]
@@ -144,9 +144,9 @@ doc <:doc<
    @end[doc]
 >>
 interactive cycgroup_fun {| intro [] |} :
-   sequent [squash] { <H> >- 'g IN label } -->
-   sequent ['ext] { <H> >- group{'g} } -->
-   sequent ['ext] { <H> >- fun_prop{z. cycgroup{'g; 'z}} }
+   sequent { <H> >- 'g IN label } -->
+   sequent { <H> >- group{'g} } -->
+   sequent { <H> >- fun_prop{z. cycgroup{'g; 'z}} }
 doc <:doc< @docoff >>
 
 doc <:doc< 
@@ -163,20 +163,20 @@ doc <:doc<
    @end[doc]
 >>
 interactive cycg_intro {| intro [] |} 'a :
-   sequent [squash] { <H> >- 'g IN label } -->
-   sequent ['ext] { <H> >- group{'g} } -->
-   sequent [squash] { <H> >- isset{'a} } -->
-   sequent ['ext] { <H> >- mem{'a; car{'g}} } -->
-   sequent ['ext] { <H>; x: set; u: mem{'x; car{'g}} >- exst n: int. eq{'x; power{'g; 'a; 'n}} } -->
-   sequent ['ext] { <H> >- cycg{'g} }
+   sequent { <H> >- 'g IN label } -->
+   sequent { <H> >- group{'g} } -->
+   sequent { <H> >- isset{'a} } -->
+   sequent { <H> >- mem{'a; car{'g}} } -->
+   sequent { <H>; x: set; u: mem{'x; car{'g}} >- exst n: int. eq{'x; power{'g; 'a; 'n}} } -->
+   sequent { <H> >- cycg{'g} }
 
 interactive cycgroup_intro {| intro [] |} :
-   sequent [squash] { <H> >- 'g IN label } -->
-   sequent ['ext] { <H> >- group{'g} } -->
-   sequent [squash] { <H> >- isset{'a} } -->
-   sequent ['ext] { <H> >- mem{'a; car{'g}} } -->
-   sequent ['ext] { <H> >- equal{car{'g}; sep{car{'g}; x. (exst n: int. eq{'x; power{'g; 'a; 'n}})}} } -->
-   sequent ['ext] { <H> >- cycgroup{'g; 'a} }
+   sequent { <H> >- 'g IN label } -->
+   sequent { <H> >- group{'g} } -->
+   sequent { <H> >- isset{'a} } -->
+   sequent { <H> >- mem{'a; car{'g}} } -->
+   sequent { <H> >- equal{car{'g}; sep{car{'g}; x. (exst n: int. eq{'x; power{'g; 'a; 'n}})}} } -->
+   sequent { <H> >- cycgroup{'g; 'a} }
 
 doc <:doc< 
    @begin[doc]
@@ -186,16 +186,16 @@ doc <:doc<
    @end[doc]
 >>
 interactive cycg1 :
-   sequent [squash] { <H> >- 'g IN label } -->
-   sequent ['ext] { <H> >- group{'g} } -->
-   sequent ['ext] { <H> >- cycg{'g} } -->
-   sequent ['ext] { <H> >- "dexists"{car{'g}; a. cycgroup{'g; 'a}} }
+   sequent { <H> >- 'g IN label } -->
+   sequent { <H> >- group{'g} } -->
+   sequent { <H> >- cycg{'g} } -->
+   sequent { <H> >- "dexists"{car{'g}; a. cycgroup{'g; 'a}} }
 
 interactive cycg2 :
-   sequent [squash] { <H> >- 'g IN label } -->
-   sequent ['ext] { <H> >- group{'g} } -->
-   sequent ['ext] { <H> >- "dexists"{car{'g}; a. cycgroup{'g; 'a}} } -->
-   sequent ['ext] { <H> >- cycg{'g} }
+   sequent { <H> >- 'g IN label } -->
+   sequent { <H> >- group{'g} } -->
+   sequent { <H> >- "dexists"{car{'g}; a. cycgroup{'g; 'a}} } -->
+   sequent { <H> >- cycg{'g} }
 
 doc <:doc< 
    @begin[doc]
@@ -205,10 +205,10 @@ doc <:doc<
    @end[doc]
 >>
 interactive cycg_abel :
-   sequent [squash] { <H> >- 'g IN label } -->
-   sequent ['ext] { <H> >- group{'g} } -->
-   sequent ['ext] { <H> >- cycg{'g} } -->
-   sequent ['ext] { <H> >- abel{'g} }
+   sequent { <H> >- 'g IN label } -->
+   sequent { <H> >- group{'g} } -->
+   sequent { <H> >- cycg{'g} } -->
+   sequent { <H> >- abel{'g} }
 
 doc <:doc< @docoff >>
 (************************************************************************

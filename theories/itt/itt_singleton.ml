@@ -109,26 +109,26 @@ doc <:doc<
 >>
 
 interactive singletonEquality {| intro []; eqcd |} :
-   [wf] sequent [squash] { <H> >- 'A1 = 'A2 in univ[i:l] } -->
-   [wf] sequent [squash] { <H> >- 'a1 = 'a2 in 'A1 } -->
-   [wf] sequent [squash] { <H>; x: 'A1 >- 'x in 'A2 } -->
-   sequent ['ext] { <H> >- singleton{'a1; 'A1} = singleton{ 'a2; 'A2 } in univ[i:l] }
+   [wf] sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
+   [wf] sequent { <H> >- 'a1 = 'a2 in 'A1 } -->
+   [wf] sequent { <H>; x: 'A1 >- 'x in 'A2 } -->
+   sequent { <H> >- singleton{'a1; 'A1} = singleton{ 'a2; 'A2 } in univ[i:l] }
 
 interactive singleton_wf {| intro[] |}:
-   sequent[squash]  { <H> >- 'a in 'A} -->
-   sequent['ext] { <H> >- "type"{singleton{'a;'A}} }
+   sequent{ <H> >- 'a in 'A} -->
+   sequent{ <H> >- "type"{singleton{'a;'A}} }
 
 interactive singleton_intro {| intro[] |}:
-   sequent[squash]  { <H> >- 'a = 'b in 'A} -->
-   sequent['ext] { <H> >- 'b in singleton{'a;'A} }
+   sequent{ <H> >- 'a = 'b in 'A} -->
+   sequent{ <H> >- 'b in singleton{'a;'A} }
 
 interactive singleton_elim {| elim[] |} 'H:
-   sequent['ext] { <H>; x : 'A; u: 'a='x in 'A; <J['x]> >- 'C['x] } -->
-   sequent['ext] { <H>; x : singleton{'a;'A}; <J['x]> >- 'C['x] }
+   sequent{ <H>; x : 'A; u: 'a='x in 'A; <J['x]> >- 'C['x] } -->
+   sequent{ <H>; x : singleton{'a;'A}; <J['x]> >- 'C['x] }
 
 interactive singleton_equal {| intro[] |}:
-   sequent[squash]  { <H> >- 'b  in singleton{'a;'A}} -->
-   sequent[squash]  { <H> >- 'c  in singleton{'a;'A}} -->
-   sequent['ext] { <H> >- 'b = 'c in singleton{'a;'A} }
+   sequent{ <H> >- 'b  in singleton{'a;'A}} -->
+   sequent{ <H> >- 'c  in singleton{'a;'A}} -->
+   sequent{ <H> >- 'b = 'c in singleton{'a;'A} }
 
 doc <:doc< @docoff >> 

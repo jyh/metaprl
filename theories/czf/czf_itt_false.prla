@@ -874,7 +874,11 @@ O	o528	void
 T	t528	o528
 B	b528	t528 x
 T	t529	o527 b528
-S	s	t527 h
+NBase_rewrite	Base_rw	Base_rewrite NIL
+NBase_rewrite!sequent_arg	brwsqarg	sequent_arg Base_rw
+O	obrarg	brwsqarg
+T	tbrarg	obrarg
+S	s	tbrarg h
 G	s	t529
 B	b529	s
 T	t530	o525 b529
@@ -1236,7 +1240,7 @@ NCzf_itt_sep!restricted	restricted	restricted Czf_itt_sep
 O	o545	restricted
 B	b545	t528
 T	t545	o545 b545
-S	s545	t527 h
+S	s545	tbrarg h
 G	s545	t545
 B	b546	s545
 T	t546	o525 b546
@@ -1280,7 +1284,7 @@ O	o568	false
 T	t568	o568
 B	b568	t568 x
 T	t569	o527 b568
-S	s569	t527 h
+S	s569	tbrarg h
 G	s569	t569
 B	b569	s569
 T	t570	o525 b569
@@ -1319,7 +1323,7 @@ P	p578	String false_res
 O	o578	rule p578
 B	b578	t568
 T	t578	o545 b578
-S	s578	t527 h
+S	s578	tbrarg h
 G	s578	t578
 B	b579	s578
 T	t579	o525 b579

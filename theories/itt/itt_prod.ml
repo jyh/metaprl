@@ -98,17 +98,17 @@ doc <:doc<
    @end[doc]
 >>
 interactive independentProductEquality {| intro []; eqcd |} :
-   [wf] sequent [squash] { <H> >- 'A1 = 'A2 in univ[i:l] } -->
-   [wf] sequent [squash] { <H> >- 'B1 = 'B2 in univ[i:l] } -->
-   sequent ['ext] { <H> >- 'A1 * 'B1 = 'A2 * 'B2 in univ[i:l] }
+   [wf] sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
+   [wf] sequent { <H> >- 'B1 = 'B2 in univ[i:l] } -->
+   sequent { <H> >- 'A1 * 'B1 = 'A2 * 'B2 in univ[i:l] }
 
 (*
  * Typehood.
  *)
 interactive independentProductType {| intro [] |} :
-   [wf] sequent [squash] { <H> >- "type"{'A1} } -->
-   [wf] sequent [squash] { <H> >- "type"{'A2} } -->
-   sequent ['ext] { <H> >- "type"{.'A1 * 'A2} }
+   [wf] sequent { <H> >- "type"{'A1} } -->
+   [wf] sequent { <H> >- "type"{'A2} } -->
+   sequent { <H> >- "type"{.'A1 * 'A2} }
 
 (*
  * H >- Ui ext A * B
@@ -117,9 +117,9 @@ interactive independentProductType {| intro [] |} :
  * H >- Ui ext B
  *)
 interactive independentProductFormation :
-   ('A : sequent ['ext] { <H> >- univ[i:l] }) -->
-   ('B : sequent ['ext] { <H> >- univ[i:l] }) -->
-   sequent ['ext] { <H> >- univ[i:l] }
+   ('A : sequent { <H> >- univ[i:l] }) -->
+   ('B : sequent { <H> >- univ[i:l] }) -->
+   sequent { <H> >- univ[i:l] }
 
 doc <:doc< 
    @begin[doc]
@@ -130,8 +130,8 @@ doc <:doc<
    @end[doc]
 >>
 interactive independentProductElimination {| elim [ThinOption thinT] |} 'H :
-   ('t['u; 'v] : sequent ['ext] { <H>; z: 'A * 'B; u: 'A; v: 'B; <J['u, 'v]> >- 'T['u, 'v] }) -->
-   sequent ['ext] { <H>; z: 'A * 'B; <J['z]> >- 'T['z] }
+   ('t['u; 'v] : sequent { <H>; z: 'A * 'B; u: 'A; v: 'B; <J['u, 'v]> >- 'T['u, 'v] }) -->
+   sequent { <H>; z: 'A * 'B; <J['z]> >- 'T['z] }
 
 doc <:doc< 
    @begin[doc]
@@ -142,9 +142,9 @@ doc <:doc<
    @end[doc]
 >>
 interactive independentPairEquality {| intro []; eqcd |} :
-   [wf] sequent [squash] { <H> >- 'a1 = 'a2 in 'A } -->
-   [wf] sequent [squash] { <H> >- 'b1 = 'b2 in 'B } -->
-   sequent ['ext] { <H> >- ('a1, 'b1) = ('a2, 'b2) in 'A * 'B }
+   [wf] sequent { <H> >- 'a1 = 'a2 in 'A } -->
+   [wf] sequent { <H> >- 'b1 = 'b2 in 'B } -->
+   sequent { <H> >- ('a1, 'b1) = ('a2, 'b2) in 'A * 'B }
 
 doc <:doc< 
    @begin[doc]
@@ -157,9 +157,9 @@ doc <:doc<
    @end[doc]
 >>
 interactive independentPairFormation {| intro [] |} :
-   [wf] ('a : sequent ['ext] { <H> >- 'A }) -->
-   [wf] ('b : sequent ['ext] { <H> >- 'B }) -->
-   sequent ['ext] { <H> >- 'A * 'B }
+   [wf] ('a : sequent { <H> >- 'A }) -->
+   [wf] ('b : sequent { <H> >- 'B }) -->
+   sequent { <H> >- 'A * 'B }
 
 doc <:doc< 
    @begin[doc]
@@ -169,9 +169,9 @@ doc <:doc<
    @end[doc]
 >>
 interactive independentProductSubtype {| intro [] |} :
-   ["subtype"] sequent [squash] { <H> >- \subtype{'A1; 'A2} } -->
-   ["subtype"] sequent [squash] { <H> >- \subtype{'B1; 'B2} } -->
-   sequent ['ext] { <H> >- \subtype{ ('A1 * 'B1); ('A2 * 'B2) } }
+   ["subtype"] sequent { <H> >- \subtype{'A1; 'A2} } -->
+   ["subtype"] sequent { <H> >- \subtype{'B1; 'B2} } -->
+   sequent { <H> >- \subtype{ ('A1 * 'B1); ('A2 * 'B2) } }
 doc <:doc< @docoff >>
 
 (************************************************************************

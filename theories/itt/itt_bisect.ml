@@ -109,23 +109,23 @@ doc <:doc<
    @end[doc]
 >>
 interactive bisectEquality {| intro []; eqcd |} :
-   [wf] sequent [squash] { <H> >- 'A1 = 'A2 in univ[i:l] } -->
-   [wf] sequent [squash] { <H> >- 'B1 = 'B2 in univ[i:l] } -->
-   sequent ['ext] { <H> >- bisect{'A1; 'B1} = bisect{'A2; 'B2} in univ[i:l] }
+   [wf] sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
+   [wf] sequent { <H> >- 'B1 = 'B2 in univ[i:l] } -->
+   sequent { <H> >- bisect{'A1; 'B1} = bisect{'A2; 'B2} in univ[i:l] }
 
 interactive bisectType {| intro [] |} :
-   [wf] sequent [squash] { <H> >- "type"{'A} } -->
-   [wf] sequent [squash] { <H> >- "type"{'B} } -->
-   sequent ['ext] { <H> >- "type"{bisect{'A; 'B}} }
+   [wf] sequent { <H> >- "type"{'A} } -->
+   [wf] sequent { <H> >- "type"{'B} } -->
+   sequent { <H> >- "type"{bisect{'A; 'B}} }
 
 doc <:doc< 
    Formation.
    @docoff
 >>
 interactive bisectFormation :
-   sequent ['ext] { <H> >- univ[i:l] } -->
-   sequent ['ext] { <H> >- univ[i:l] } -->
-   sequent ['ext] { <H> >- univ[i:l] }
+   sequent { <H> >- univ[i:l] } -->
+   sequent { <H> >- univ[i:l] } -->
+   sequent { <H> >- univ[i:l] }
 
 doc <:doc< 
    @begin[doc]
@@ -138,9 +138,9 @@ doc <:doc<
    @end[doc]
 >>
 interactive bisectMemberEquality {| intro []; eqcd |} :
-   [wf] sequent [squash] { <H> >- 'x = 'y in 'A } -->
-   [wf] sequent [squash] { <H> >- 'x = 'y in 'B } -->
-   sequent ['ext] { <H> >- 'x = 'y in 'A isect 'B }
+   [wf] sequent { <H> >- 'x = 'y in 'A } -->
+   [wf] sequent { <H> >- 'x = 'y in 'B } -->
+   sequent { <H> >- 'x = 'y in 'A isect 'B }
 
 doc <:doc< 
    @begin[doc]
@@ -153,9 +153,9 @@ doc <:doc<
 doc <:doc< @docoff >>
 
 interactive bisectElimination_eq 'H bind{x.bind{a,b.'C['x;'a;'b]}} :
-   sequent ['ext] { <H>; x: 'A isect 'B; <J['x]>; a: 'A; u: 'a = 'x in 'A;
+   sequent { <H>; x: 'A isect 'B; <J['x]>; a: 'A; u: 'a = 'x in 'A;
                                                    b: 'B; v: 'b = 'x in 'B >- 'C['x;'a;'b] } -->
-   sequent ['ext] { <H>; x: 'A isect 'B; <J['x]> >- 'C['x;'x;'x] }
+   sequent { <H>; x: 'A isect 'B; <J['x]> >- 'C['x;'x;'x] }
 
 let bisectEliminationT = argfunT (fun n p ->
    let n = Sequent.get_pos_hyp_num p n in
@@ -178,8 +178,8 @@ let resource elim += (<<'A isect 'B>>,bisectEliminationT)
 doc <:doc< >>
 
 interactive bisectElimination 'H bind{a,b.'C['a;'b]} :
-   sequent ['ext] { <H>; x: 'A isect 'B; <J['x]>; a: 'A; b: 'B >- 'C['a;'b] } -->
-   sequent ['ext] { <H>; x: 'A isect 'B; <J['x]> >- 'C['x;'x] }
+   sequent { <H>; x: 'A isect 'B; <J['x]>; a: 'A; b: 'B >- 'C['a;'b] } -->
+   sequent { <H>; x: 'A isect 'B; <J['x]> >- 'C['x;'x] }
 
 doc <:doc< 
    @begin[doc]
@@ -192,12 +192,12 @@ doc <:doc<
 
 
 interactive bisectEliminationLeft (*{| elim [SelectOption 1] |}*) 'H :
-   sequent ['ext] { <H>; x: 'A isect 'B; <J['x]>; a: 'A; u: 'a = 'x in 'A; b: 'B; v: 'b = 'x in 'B >- 'C['a] } -->
-   sequent ['ext] { <H>; x: 'A isect 'B; <J['x]> >- 'C['x] }
+   sequent { <H>; x: 'A isect 'B; <J['x]>; a: 'A; u: 'a = 'x in 'A; b: 'B; v: 'b = 'x in 'B >- 'C['a] } -->
+   sequent { <H>; x: 'A isect 'B; <J['x]> >- 'C['x] }
 
 interactive bisectEliminationRight (*{| elim [SelectOption 2] |}*) 'H :
-   sequent ['ext] { <H>; x: 'A isect 'B; <J['x]>; a: 'A; u: 'a = 'x in 'A; b: 'B; v: 'b = 'x in 'B >- 'C['b] } -->
-   sequent ['ext] { <H>; x: 'A isect 'B; <J['x]> >- 'C['x] }
+   sequent { <H>; x: 'A isect 'B; <J['x]>; a: 'A; u: 'a = 'x in 'A; b: 'B; v: 'b = 'x in 'B >- 'C['b] } -->
+   sequent { <H>; x: 'A isect 'B; <J['x]> >- 'C['x] }
 
 let bisectEliminationT = argfunT (fun n p ->
    let n = Sequent.get_pos_hyp_num p n in
@@ -216,8 +216,8 @@ let resource elim += (<<'A isect 'B>>,bisectEliminationT)
 doc <:doc< @doc{Equality elimination.} >>
 
 interactive bisectEqualityElim {| elim [ThinOption thinT] |} 'H :
-   sequent['ext] { <H>; x: 't1 = 't2 in 'A isect 'B; u : 't1 = 't2 in 'A; v : 't1 = 't2 in 'B; <J['x]> >- 'C['x] } -->
-   sequent['ext] { <H>; x: 't1 = 't2 in 'A isect 'B; <J['x]> >- 'C['x] }
+   sequent{ <H>; x: 't1 = 't2 in 'A isect 'B; u : 't1 = 't2 in 'A; v : 't1 = 't2 in 'B; <J['x]> >- 'C['x] } -->
+   sequent{ <H>; x: 't1 = 't2 in 'A isect 'B; <J['x]> >- 'C['x] }
 
 doc <:doc< 
    @begin[doc]
@@ -228,19 +228,19 @@ doc <:doc<
    @end[doc]
 >>
 interactive bisectSubtypeLeft {| intro [SelectOption 1] |} :
-   sequent [squash] { <H> >- "type"{'B} } -->
-   sequent [squash] { <H> >- 'A  subtype 'C } -->
-   sequent ['ext] { <H> >- 'A isect 'B  subtype 'C}
+   sequent { <H> >- "type"{'B} } -->
+   sequent { <H> >- 'A  subtype 'C } -->
+   sequent { <H> >- 'A isect 'B  subtype 'C}
 
 interactive bisectSubtypeRight {| intro [SelectOption 2] |} :
-   sequent [squash] { <H> >- "type"{'A} } -->
-   sequent [squash] { <H> >- 'B  subtype 'C } -->
-   sequent ['ext] { <H> >- 'A isect 'B  subtype  'C }
+   sequent { <H> >- "type"{'A} } -->
+   sequent { <H> >- 'B  subtype 'C } -->
+   sequent { <H> >- 'A isect 'B  subtype  'C }
 
 interactive bisectSubtypeBelow {| intro [] |}:
-   sequent [squash] { <H> >- 'C  subtype 'A } -->
-   sequent [squash] { <H> >- 'C  subtype 'B } -->
-   sequent ['ext] { <H> >- 'C  subtype   'A isect 'B}
+   sequent { <H> >- 'C  subtype 'A } -->
+   sequent { <H> >- 'C  subtype 'B } -->
+   sequent { <H> >- 'C  subtype   'A isect 'B}
 doc <:doc< @docoff >>
 
 (*

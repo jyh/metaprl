@@ -46,8 +46,8 @@ doc <:doc<
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
   
-   Author: Jason Hickey
-   @email{jyh@cs.caltech.edu}
+   Author: Jason Hickey @email{jyh@cs.caltech.edu}
+   Modified By: Aleksey Nogin @email{nogin@cs.caltech.edu}
   
    @end[license]
 >>
@@ -58,7 +58,8 @@ doc <:doc<
    @end[doc]
 >>
 extends Auto_tactic
-doc <:doc< @docoff >>
+extends Base_trivial
+doc docoff
 
 extends Perv
 extends Ocaml_df
@@ -80,21 +81,33 @@ open Var
 
 open Auto_tactic
 
-declare rw_just
-dform rw_just_df : except_mode[src] :: rw_just = `"rw"
+(* 
+ * XXX HACK: Currently Base_rewrite covers both conditional and unconditional rewrites.
+ * Ideally, it should have empty hypothesis lists and only cover the unconditional rewrites.
+ * while the conditional rewrites would be internal to specific theories.
+ *)
+
+doc <:doc<
+   @begin[doc]
+   @terms
+   
+   This theory uses its own semantics of sequents: a @tt[Base_rewrite] sequent
+   of a form <<sequent { <H> >- Perv!"rewrite"{'a; 'b} }>> means that <<'a>> and <<'b>>
+   are interchangeble in context <<df_context_var["H"]>>.
+   @end[doc]
+>>
+declare sequent_arg
 
 doc <:doc< 
    @begin[doc]
    @rules
   
    The following rule defines the rewrite reflexivity.  A term
-   @it{a} always rewrites to itself.  The judgment is stated using the built-in
-   primitive rewrite judgment.
+   @it{a} always rewrites to itself. 
    @end[doc]
 >>
 prim rewriteAxiom1 :
-   sequent ['ext] { <H> >- Perv!"rewrite"{'a; 'a} } =
-   rw_just
+   sequent { <H> >- Perv!"rewrite"{'a; 'a} } = it
 
 doc <:doc< 
    @begin[doc]
@@ -113,8 +126,8 @@ doc <:doc<
    @end[doc]
 >>
 interactive rewriteSym :
-   sequent ['ext] { <H> >- Perv!"rewrite"{'a; 'b} } -->
-   sequent ['ext] { <H> >- Perv!"rewrite"{'b; 'a} }
+   sequent { <H> >- Perv!"rewrite"{'a; 'b} } -->
+   sequent { <H> >- Perv!"rewrite"{'b; 'a} }
 doc <:doc< @docoff >>
 
 (*
@@ -144,6 +157,8 @@ let resource auto += {
    auto_tac = rewriteAxiom1;
    auto_type = AutoTrivial;
 }
+
+dform sequent_arg_df : sequent_arg = `"" (* sub["BR"] *)
 
 (*
  * -*-

@@ -50,37 +50,37 @@ declare unit
  * Squiggle equality.
  *)
 rule unitSqequal :
-   sequent [squash] { <H> >- 'x = 'y in unit } -->
-   sequent ['ext] { <H> >- 'x ~ 'y }
+   sequent { <H> >- 'x = 'y in unit } -->
+   sequent { <H> >- 'x ~ 'y }
 
 (*
  * H >- Ui ext Unit
  * by unitFormation
  *)
-rule unitFormation : sequent ['ext] { <H> >- univ[i:l] }
+rule unitFormation : sequent { <H> >- univ[i:l] }
 
 (*
  * H >- Unit = Unit in Ui ext Ax
  * by unitEquality
  *)
-rule unitEquality : sequent ['ext] { <H> >- unit in univ[i:l] }
+rule unitEquality : sequent { <H> >- unit in univ[i:l] }
 
 (*
  * Is a type.
  *)
-rule unitType : sequent ['ext] { <H> >- "type"{unit} }
+rule unitType : sequent { <H> >- "type"{unit} }
 
 (*
  * H >- Ui ext Unit
  * by unitFormation
  *)
-rule unit_memberFormation : sequent ['ext] { <H> >- unit }
+rule unit_memberFormation : sequent { <H> >- unit }
 
 (*
  * H >- Unit = Unit in Ui ext Ax
  * by unitEquality
  *)
-rule unit_memberEquality : sequent ['ext] { <H> >- it in unit }
+rule unit_memberEquality : sequent { <H> >- it in unit }
 
 (*
  * H; i:x:Unit; J >- C
@@ -88,8 +88,8 @@ rule unit_memberEquality : sequent ['ext] { <H> >- it in unit }
  * H; i:x:Unit; J[it / x] >- C[it / x]
  *)
 rule unitElimination 'H :
-   sequent['ext] { <H>; unit; <J[it]> >- 'C[it] } -->
-   sequent ['ext] { <H>; x: unit; <J['x]> >- 'C['x] }
+   sequent{ <H>; unit; <J[it]> >- 'C[it] } -->
+   sequent { <H>; x: unit; <J['x]> >- 'C['x] }
 
 (************************************************************************
  * TACTICS                                                              *

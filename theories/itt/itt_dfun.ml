@@ -116,8 +116,8 @@ doc <:doc<
    @end[doc]
 >>
 interactive void_well_founded {| intro [] |} :
-   [wf] sequent [squash] { <H> >- "type"{'A} } -->
-   sequent ['ext] { <H> >- well_founded{'A; a1, a2. void} }
+   [wf] sequent { <H> >- "type"{'A} } -->
+   sequent { <H> >- well_founded{'A; a1, a2. void} }
 
 (*
  * @begin[doc]
@@ -128,17 +128,17 @@ interactive void_well_founded {| intro [] |} :
  * @end[doc]
  *)
 interactive functionEquality {| intro []; eqcd |} :
-   [wf] sequent [squash] { <H> >- 'A1 = 'A2 in univ[i:l] } -->
-   [wf] sequent [squash] { <H>; x: 'A1 >- 'B1['x] = 'B2['x] in univ[i:l] } -->
-   sequent ['ext] { <H> >- (a1:'A1 -> 'B1['a1]) = (a2:'A2 -> 'B2['a2]) in univ[i:l] }
+   [wf] sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
+   [wf] sequent { <H>; x: 'A1 >- 'B1['x] = 'B2['x] in univ[i:l] } -->
+   sequent { <H> >- (a1:'A1 -> 'B1['a1]) = (a2:'A2 -> 'B2['a2]) in univ[i:l] }
 
 (*
  * Typehood.
  *)
 interactive functionType {| intro [] |} :
-   [wf] sequent [squash] { <H> >- "type"{'A1} } -->
-   [wf] sequent [squash] { <H>; x: 'A1 >- "type"{'B1['x]} } -->
-   sequent ['ext] { <H> >- "type"{. a1:'A1 -> 'B1['a1] } }
+   [wf] sequent { <H> >- "type"{'A1} } -->
+   [wf] sequent { <H>; x: 'A1 >- "type"{'B1['x]} } -->
+   sequent { <H> >- "type"{. a1:'A1 -> 'B1['a1] } }
 
 doc <:doc< 
    @begin[doc]
@@ -151,9 +151,9 @@ doc <:doc<
    @end[doc]
 >>
 interactive lambdaFormation {| intro [] |} :
-   [wf] sequent [squash] { <H> >- "type"{'A} } -->
-   [main] ('b['z] : sequent ['ext] { <H>; z: 'A >- 'B['z] }) -->
-   sequent ['ext] { <H> >- a:'A -> 'B['a] }
+   [wf] sequent { <H> >- "type"{'A} } -->
+   [main] ('b['z] : sequent { <H>; z: 'A >- 'B['z] }) -->
+   sequent { <H> >- a:'A -> 'B['a] }
 
 doc <:doc< 
    @begin[doc]
@@ -163,9 +163,9 @@ doc <:doc<
    @end[doc]
 >>
 interactive lambdaEquality {| intro [] |} :
-   [wf] sequent [squash] { <H> >- "type"{'A} } -->
-   [wf] sequent [squash] { <H>; x: 'A >- 'b1['x] = 'b2['x] in 'B['x] } -->
-   sequent ['ext] { <H> >- lambda{a1. 'b1['a1]} = lambda{a2. 'b2['a2]} in a:'A -> 'B['a] }
+   [wf] sequent { <H> >- "type"{'A} } -->
+   [wf] sequent { <H>; x: 'A >- 'b1['x] = 'b2['x] in 'B['x] } -->
+   sequent { <H> >- lambda{a1. 'b1['a1]} = lambda{a2. 'b2['a2]} in a:'A -> 'B['a] }
 
 doc <:doc< 
    @begin[doc]
@@ -177,11 +177,11 @@ doc <:doc<
    @end[doc]
 >>
 interactive functionExtensionality (y:'C -> 'D['y]) (z:'E -> 'F['z]) :
-   [main] sequent [squash] { <H>; u: 'A >- ('f 'u) = ('g 'u) in 'B['u] } -->
-   [wf] sequent [squash] { <H> >- "type"{'A} } -->
-   [wf] sequent [squash] { <H> >- 'f in y:'C -> 'D['y] } -->
-   [wf] sequent [squash] { <H> >- 'g in z:'E -> 'F['z] } -->
-   sequent ['ext] { <H> >- 'f = 'g in x:'A -> 'B['x] }
+   [main] sequent { <H>; u: 'A >- ('f 'u) = ('g 'u) in 'B['u] } -->
+   [wf] sequent { <H> >- "type"{'A} } -->
+   [wf] sequent { <H> >- 'f in y:'C -> 'D['y] } -->
+   [wf] sequent { <H> >- 'g in z:'E -> 'F['z] } -->
+   sequent { <H> >- 'f = 'g in x:'A -> 'B['x] }
 
 doc <:doc< 
    @begin[doc]
@@ -193,9 +193,9 @@ doc <:doc<
    @end[doc]
 >>
 interactive functionElimination {| elim [] |} 'H 'a :
-   [wf] sequent [squash] { <H>; f: x:'A -> 'B['x]; <J['f]> >- 'a in 'A } -->
-   ('t['f; 'y; 'v] : sequent ['ext] { <H>; f: x:'A -> 'B['x]; <J['f]>; y: 'B['a]; v: 'y = ('f 'a) in 'B['a] >- 'T['f] }) -->
-   sequent ['ext] { <H>; f: x:'A -> 'B['x]; <J['f]> >- 'T['f] }
+   [wf] sequent { <H>; f: x:'A -> 'B['x]; <J['f]> >- 'a in 'A } -->
+   ('t['f; 'y; 'v] : sequent { <H>; f: x:'A -> 'B['x]; <J['f]>; y: 'B['a]; v: 'y = ('f 'a) in 'B['a] >- 'T['f] }) -->
+   sequent { <H>; f: x:'A -> 'B['x]; <J['f]> >- 'T['f] }
 
 doc <:doc< 
    @begin[doc]
@@ -206,9 +206,9 @@ doc <:doc<
    @end[doc]
 >>
 interactive applyEquality {| intro[AutoMustComplete]; eqcd |} (x:'A -> 'B['x]) :
-   sequent [squash] { <H> >- 'f1 = 'f2 in x:'A -> 'B['x] } -->
-   sequent [squash] { <H> >- 'a1 = 'a2 in 'A } -->
-   sequent ['ext] { <H> >- ('f1 'a1) = ('f2 'a2) in 'B['a1] }
+   sequent { <H> >- 'f1 = 'f2 in x:'A -> 'B['x] } -->
+   sequent { <H> >- 'a1 = 'a2 in 'A } -->
+   sequent { <H> >- ('f1 'a1) = ('f2 'a2) in 'B['a1] }
 
 doc <:doc< 
    @begin[doc]
@@ -221,9 +221,9 @@ doc <:doc<
    @end[doc]
 >>
 interactive functionSubtype {| intro [] |} :
-   ["subtype"] sequent [squash] { <H> >- 'A2 subtype 'A1 } -->
-   ["subtype"] sequent [squash] { <H>; a: 'A1 >- 'B1['a] subtype 'B2['a] } -->
-   sequent ['prop] { <H> >- a1:'A1 -> 'B1['a1]  subtype  a2:'A2 -> 'B2['a2] }
+   ["subtype"] sequent { <H> >- 'A2 subtype 'A1 } -->
+   ["subtype"] sequent { <H>; a: 'A1 >- 'B1['a] subtype 'B2['a] } -->
+   sequent { <H> >- a1:'A1 -> 'B1['a1]  subtype  a2:'A2 -> 'B2['a2] }
 doc <:doc< @docoff >>
 
 (*
@@ -234,14 +234,14 @@ doc <:doc< @docoff >>
  * H; x: a1:A1 -> B1 <= a2:A2 -> B2; y: A2 <= A1; z: a:A2 -> B2[a] <= B1[a]; J[x] >- T[x]
  *)
 interactive function_subtypeElimination {| elim [] |} 'H 'x 'y 'z 'a :
-   ('t['x; 'y; 'z] : sequent ['ext] { <H>;
+   ('t['x; 'y; 'z] : sequent { <H>;
              x: \subtype{(a1:'A1 -> 'B1['a1]); (a2:'A2 -> 'B2['a2])};
              <J['x]>;
              y: \subtype{'A2; 'A1};
              z: a:'A2 -> \subtype{'B1['a]; 'B2['a]}
              >- 'T['x]
            }) -->
-   sequent ['ext] { <H>; x: \subtype{(a1:'A1 -> 'B1['a1]); (a2:'A2 -> 'B2['a2])}; <J['x]> >- 'T['x] }
+   sequent { <H>; x: \subtype{(a1:'A1 -> 'B1['a1]); (a2:'A2 -> 'B2['a2])}; <J['x]> >- 'T['x] }
 *)
 
 (*
@@ -268,9 +268,9 @@ interactive function_equalityElimination {| elim [ThinOption thinT] |} 'H 'x 'y 
  * H, a: A >- Ui ext B
  *)
 interactive functionFormation 'A :
-   [wf] sequent [squash] { <H> >- 'A in univ[i:l] } -->
-   ('B['a] : sequent ['ext] { <H>; a: 'A >- univ[i:l] }) -->
-   sequent ['ext] { <H> >- univ[i:l] }
+   [wf] sequent { <H> >- 'A in univ[i:l] } -->
+   ('B['a] : sequent { <H>; a: 'A >- univ[i:l] }) -->
+   sequent { <H> >- univ[i:l] }
 
 (************************************************************************
  * EXTENSIOANLITY                                                       *

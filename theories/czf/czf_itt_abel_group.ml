@@ -114,8 +114,8 @@ doc <:doc<
    @end[doc]
 >>
 interactive abel_type {| intro [] |} :
-   sequent [squash] { <H> >- 'g IN label } -->
-   sequent ['ext] { <H> >- "type"{abel{'g}} }
+   sequent { <H> >- 'g IN label } -->
+   sequent { <H> >- "type"{abel{'g}} }
 
 doc <:doc< 
    @begin[doc]
@@ -126,10 +126,10 @@ doc <:doc<
    @end[doc]
 >>
 interactive abel_intro {| intro[] |} :
-   sequent [squash] { <H> >- 'g IN label } -->
-   sequent ['ext] { <H> >- group{'g} } -->
-   sequent ['ext] { <H>; a: set; b: set; x: mem{'a; car{'g}}; y: mem{'b; car{'g}} >- eq{op{'g; 'a; 'b}; op{'g; 'b; 'a}} } -->
-   sequent ['ext] { <H> >- abel{'g} }
+   sequent { <H> >- 'g IN label } -->
+   sequent { <H> >- group{'g} } -->
+   sequent { <H>; a: set; b: set; x: mem{'a; car{'g}}; y: mem{'b; car{'g}} >- eq{op{'g; 'a; 'b}; op{'g; 'b; 'a}} } -->
+   sequent { <H> >- abel{'g} }
 doc <:doc< @docoff >>
 
 (*

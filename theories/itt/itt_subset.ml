@@ -174,19 +174,19 @@ doc <:doc<
 >>
 
 interactive mem_univ {| intro []; eqcd |}  :
-   sequent [squash] { <H> >- singleton{'a1; 'B1} = singleton{'a2; 'B2} in univ[i:l] } -->
-   sequent [squash] { <H> >- 'A1 = 'A2 in univ[i:l] } -->
-   sequent ['ext] { <H> >- mem{'a1;'A1;'B1} = mem{'a2; 'A2; 'B2} in univ[i:l]}
+   sequent { <H> >- singleton{'a1; 'B1} = singleton{'a2; 'B2} in univ[i:l] } -->
+   sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
+   sequent { <H> >- mem{'a1;'A1;'B1} = mem{'a2; 'A2; 'B2} in univ[i:l]}
 
 interactive mem_wf {| intro [] |}  :
-   sequent [squash] { <H> >- 'a in 'B } -->
-   sequent [squash] { <H> >- "type"{'A} } -->
-   sequent ['ext] { <H> >- "type"{mem{'a;'A;'B}} }
+   sequent { <H> >- 'a in 'B } -->
+   sequent { <H> >- "type"{'A} } -->
+   sequent { <H> >- "type"{mem{'a;'A;'B}} }
 
 interactive mem_intro {| intro [] |}  :
-   [wf] sequent [squash] { <H> >- 'a in 'B } -->
-   sequent [squash] { <H>; b:'B; u: 'a='b in 'B >- 'b in 'A} -->
-   sequent ['ext] { <H> >- mem{'a;'A;'B} }
+   [wf] sequent { <H> >- 'a in 'B } -->
+   sequent { <H>; b:'B; u: 'a='b in 'B >- 'b in 'A} -->
+   sequent { <H> >- mem{'a;'A;'B} }
 
 doc <:doc< 
    @begin[doc]
@@ -199,16 +199,16 @@ doc <:doc<
 >>
 
 interactive subset_univ {| intro []; eqcd |} :
-   sequent [squash] { <H> >- 'A1 = 'A2 in univ[i:l] } -->
-   sequent [squash] { <H> >- 'B1 = 'B2 in univ[i:l] } -->
-   sequent [squash] { <H>; x: 'A1 >- 'x in 'B1 } -->
-   sequent [squash] { <H>; x: 'B1 >- 'x in 'B2 } -->
-   sequent ['ext] { <H> >- ('A1 subset 'B1) = ('A2 subset 'B2) in univ[i:l] }
+   sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
+   sequent { <H> >- 'B1 = 'B2 in univ[i:l] } -->
+   sequent { <H>; x: 'A1 >- 'x in 'B1 } -->
+   sequent { <H>; x: 'B1 >- 'x in 'B2 } -->
+   sequent { <H> >- ('A1 subset 'B1) = ('A2 subset 'B2) in univ[i:l] }
 
 interactive subset_wf {| intro [] |} :
-   sequent [squash] { <H> >- "type"{'A} } -->
-   sequent [squash] { <H> >- "type"{'B} } -->
-   sequent ['ext] { <H> >- "type"{.'A subset 'B} }
+   sequent { <H> >- "type"{'A} } -->
+   sequent { <H> >- "type"{'B} } -->
+   sequent { <H> >- "type"{.'A subset 'B} }
 
 doc <:doc< 
    @begin[doc]
@@ -217,17 +217,17 @@ doc <:doc<
 >>
       
 interactive subset_intro {| intro [] |}  :
-   [wf] sequent [squash] { <H> >- 'A subtype 'B } -->
-   [main] sequent [squash] { <H>; a: 'A; b: 'B; u: 'a = 'b in 'B >- 'b in 'A } -->
-   sequent ['ext] { <H> >- 'A subset 'B }
+   [wf] sequent { <H> >- 'A subtype 'B } -->
+   [main] sequent { <H>; a: 'A; b: 'B; u: 'a = 'b in 'B >- 'b in 'A } -->
+   sequent { <H> >- 'A subset 'B }
 
 doc docoff
 
 (* mem, member and subset are squash stable: *)      
       
 interactive subset_sqstable {| squash |} :
-   sequent [squash] { <H> >- squash{'A subset 'B} } -->
-   sequent ['ext] { <H> >- 'A subset 'B }
+   sequent { <H> >- squash{'A subset 'B} } -->
+   sequent { <H> >- 'A subset 'B }
 
 doc <:doc< 
    @begin[doc]
@@ -238,8 +238,8 @@ doc <:doc<
 >>
 
 interactive subset_is_subtype  :
-   [assertion] sequent [squash] { <H> >- 'A subset 'B } -->
-   sequent ['ext] { <H> >- 'A subtype 'B }
+   [assertion] sequent { <H> >- 'A subset 'B } -->
+   sequent { <H> >- 'A subtype 'B }
 
 doc <:doc< 
    @begin[doc]
@@ -248,9 +248,9 @@ doc <:doc<
 >>
 
 interactive use_subset  'A :
-   [assertion] sequent [squash] { <H> >- 'A subset 'B } -->
-   sequent [squash] { <H> >- 'x = 'y in 'A } -->
-   sequent ['ext] { <H> >- 'x = 'y in 'B }
+   [assertion] sequent { <H> >- 'A subset 'B } -->
+   sequent { <H> >- 'x = 'y in 'A } -->
+   sequent { <H> >- 'x = 'y in 'B }
 
 doc <:doc< 
    @begin[doc]
@@ -259,16 +259,16 @@ doc <:doc<
 >>
 
 interactive use_superset1  'B :
-   [assertion] sequent [squash] { <H> >- 'A subset 'B } -->
-   sequent [squash] { <H> >- 'x in 'A } -->
-   sequent [squash] { <H> >- 'x = 'y in 'B } -->
-   sequent ['ext] { <H> >- 'x = 'y in 'A }
+   [assertion] sequent { <H> >- 'A subset 'B } -->
+   sequent { <H> >- 'x in 'A } -->
+   sequent { <H> >- 'x = 'y in 'B } -->
+   sequent { <H> >- 'x = 'y in 'A }
 
 interactive use_superset2  'B :
-   [assertion] sequent [squash] { <H> >- 'A subset 'B } -->
-   sequent [squash] { <H> >- 'y in 'A } -->
-   sequent [squash] { <H> >- 'x = 'y in 'B } -->
-   sequent ['ext] { <H> >- 'x = 'y in 'A }
+   [assertion] sequent { <H> >- 'A subset 'B } -->
+   sequent { <H> >- 'y in 'A } -->
+   sequent { <H> >- 'x = 'y in 'B } -->
+   sequent { <H> >- 'x = 'y in 'A }
 
 doc <:doc< 
    @begin[doc]
@@ -276,10 +276,10 @@ doc <:doc<
    @end[doc]
 >>
 interactive use_superset 'B 'y:
-   [assertion] sequent [squash] { <H> >- 'A subset 'B } -->
-   sequent [squash] { <H> >- 'y in 'A } -->
-   sequent [squash] { <H> >- 'x = 'y in 'B } -->
-   sequent ['ext] { <H> >- 'x  in 'A }
+   [assertion] sequent { <H> >- 'A subset 'B } -->
+   sequent { <H> >- 'y in 'A } -->
+   sequent { <H> >- 'x = 'y in 'B } -->
+   sequent { <H> >- 'x  in 'A }
 
 doc <:doc< 
    @begin[doc]
@@ -289,7 +289,7 @@ doc <:doc<
 >>
 
 interactive counterexample1 :
-   sequent ['ext] { <H> >- not{(bool subset top)} }
+   sequent { <H> >- not{(bool subset top)} }
 
 doc <:doc< 
    @begin[doc]
@@ -299,12 +299,12 @@ doc <:doc<
 (* Note than if would have reverse functionality we could say that if A subset B Type then both A and B are types *)
       
 interactive subsetTypeRight  'B :
-   [main] sequent [squash] { <H> >- 'A subset 'B } -->
-   sequent ['ext] { <H> >- "type"{'A} }
+   [main] sequent { <H> >- 'A subset 'B } -->
+   sequent { <H> >- "type"{'A} }
 
 interactive subsetTypeLeft  'A :
-   [main] sequent [squash] { <H> >- 'A subset 'B }  -->
-   sequent ['ext] { <H> >- "type"{'B} }
+   [main] sequent { <H> >- 'A subset 'B }  -->
+   sequent { <H> >- "type"{'B} }
 
 doc <:doc< 
    @begin[doc]
@@ -318,18 +318,18 @@ doc <:doc<
 (* Note that we don't need this membership if we add a rule: A subset B --> x in B --> x in A Type  *)
       
 interactive member_univ {| intro []; eqcd |} :
-   sequent [squash] { <H> >- 'A1 = 'A2 in univ[i:l] } -->
-   sequent [squash] { <H> >- 'B1 = 'B2 in univ[i:l] } -->
-   sequent [squash] { <H> >- 'a1 = 'a2 in 'B1 } -->
-   sequent [squash] { <H> >- 'a1 = 'a2 in 'B2 } -->
-   sequent [squash] { <H>; x: 'A1 >- 'x in 'B1 } -->
-   sequent [squash] { <H>; x: 'B1 >- 'x in 'B2 } -->
-   sequent ['ext] { <H> >- ('a1 in 'A1 subset 'B1) = ('a2 in 'A2 subset 'B2) in univ[i:l] }
+   sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
+   sequent { <H> >- 'B1 = 'B2 in univ[i:l] } -->
+   sequent { <H> >- 'a1 = 'a2 in 'B1 } -->
+   sequent { <H> >- 'a1 = 'a2 in 'B2 } -->
+   sequent { <H>; x: 'A1 >- 'x in 'B1 } -->
+   sequent { <H>; x: 'B1 >- 'x in 'B2 } -->
+   sequent { <H> >- ('a1 in 'A1 subset 'B1) = ('a2 in 'A2 subset 'B2) in univ[i:l] }
 
 interactive member_wf {| intro [] |}  :
-   sequent [squash] { <H> >- 'a in 'B } -->
-   sequent [squash] { <H> >- "type"{'A} } -->
-   sequent ['ext] { <H> >- "type"{'a in 'A subset 'B} }
+   sequent { <H> >- 'a in 'B } -->
+   sequent { <H> >- "type"{'A} } -->
+   sequent { <H> >- "type"{'a in 'A subset 'B} }
 
 doc <:doc< 
    @begin[doc]
@@ -339,13 +339,13 @@ doc <:doc<
 >>
       
 interactive member_intro {| intro [] |}  :
-   sequent [squash] { <H> >- 'a in 'A } -->
-   sequent [squash] { <H> >- 'A subset 'B } -->
-   sequent ['ext] { <H> >- 'a in 'A subset 'B }
+   sequent { <H> >- 'a in 'A } -->
+   sequent { <H> >- 'A subset 'B } -->
+   sequent { <H> >- 'a in 'A subset 'B }
 
 interactive member_elim {| elim [] |} 'H :
-   sequent ['ext] { <H>; u: 'a in 'A; v: 'A subset 'B; <J> >- 'C } --> 
-   sequent ['ext] { <H>; u: 'a in 'A subset 'B; <J> >- 'C  }
+   sequent { <H>; u: 'a in 'A; v: 'A subset 'B; <J> >- 'C } --> 
+   sequent { <H>; u: 'a in 'A subset 'B; <J> >- 'C  }
 
 doc <:doc< 
    @begin[doc]
@@ -356,9 +356,9 @@ doc <:doc<
 >>
 
 interactive member_doesnot_depend_on_B  'H:
-   sequent [squash] { <H> >- 'A subtype 'B } -->
-   sequent [squash] { <H> >- 'A subtype '"B'" } -->
-   sequent ['ext] { <H>; u: 'a in 'A subset 'B >- 'a in 'A subset '"B'" }
+   sequent { <H> >- 'A subtype 'B } -->
+   sequent { <H> >- 'A subtype '"B'" } -->
+   sequent { <H>; u: 'a in 'A subset 'B >- 'a in 'A subset '"B'" }
 
 doc docoff
       

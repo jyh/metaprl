@@ -279,10 +279,10 @@ doc <:doc<
    @end[doc]
 >>
 interactive cps_prog :
-   sequent [m] { <H>; cont: exp >-
+   sequent { <H>; cont: exp >-
       compilable{LetRec{R. FunDef{Label[".init":t]; AtomFun{cont. CPS{'cont; 'e}}; EndDef};
                         R. LetFun{'R; Label[".init":t]; init. Initialize{TailCall{AtomVar{'init}; ArgCons{AtomVar{'cont}; ArgNil}}}}}} } -->
-   sequent [m] { <H> >- compilable{'e} }
+   sequent { <H> >- compilable{'e} }
 
 doc <:doc< @docoff >>
 

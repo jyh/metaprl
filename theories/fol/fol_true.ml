@@ -12,10 +12,10 @@ declare "it"
 dform true_df : "true" = `"True"
 
 prim true_type {| intro [] |} :
-   sequent ['ext] { <H> >- "type"{."true"} } = trivial
+   sequent { <H> >- "type"{."true"} } = trivial
 
 prim true_intro {| intro [] |} :
-   sequent ['ext] { <H> >- "true" } = it
+   sequent { <H> >- "true" } = it
 
 (*
  * -*-

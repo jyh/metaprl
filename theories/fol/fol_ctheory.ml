@@ -29,10 +29,10 @@ prec prec_all < prec_implies
 prec prec_exists < prec_implies
 
 interactive or_choice :
-   sequent ['ext] { <H> >- "type"{'A} } -->
-   sequent ['ext] { <H> >- "type"{'B} } -->
-   sequent ['ext] { <H> >- "type"{'C} } -->
-   sequent ['ext] { <H> >- (('A or 'B) => 'C) => 'A => 'C }
+   sequent { <H> >- "type"{'A} } -->
+   sequent { <H> >- "type"{'B} } -->
+   sequent { <H> >- "type"{'C} } -->
+   sequent { <H> >- (('A or 'B) => 'C) => 'A => 'C }
 
 (*
  * -*-

@@ -71,64 +71,64 @@ val mk_subset_term : term -> term -> term
  ************************************************************************)
 
 rule subset_wf :
-   sequent [squash] { <H> >- "type"{'A} } -->
-   sequent [squash] { <H> >- "type"{'B} } -->
-   sequent ['ext] { <H> >- "type"{.'A subset 'B} }
+   sequent { <H> >- "type"{'A} } -->
+   sequent { <H> >- "type"{'B} } -->
+   sequent { <H> >- "type"{.'A subset 'B} }
 
 rule subset_intro  :
-   [wf] sequent [squash] { <H> >- 'A subtype 'B } -->
-   [main] sequent [squash] { <H>; a: 'A; b: 'B; u: 'a = 'b in 'B >- 'b in 'A } -->
-   sequent ['ext] { <H> >- 'A subset 'B }
+   [wf] sequent { <H> >- 'A subtype 'B } -->
+   [main] sequent { <H>; a: 'A; b: 'B; u: 'a = 'b in 'B >- 'b in 'A } -->
+   sequent { <H> >- 'A subset 'B }
 
 rule subset_sqstable  :
-   sequent [squash] { <H> >- squash{'A subset 'B} } -->
-   sequent ['ext] { <H> >- 'A subset 'B }
+   sequent { <H> >- squash{'A subset 'B} } -->
+   sequent { <H> >- 'A subset 'B }
 
 rule subset_is_subtype  :
-   sequent [squash] { <H> >- 'A subset 'B } -->
-   sequent ['ext] { <H> >- 'A subtype 'B }
+   sequent { <H> >- 'A subset 'B } -->
+   sequent { <H> >- 'A subtype 'B }
 
 rule use_subset  'A :
-   sequent [squash] { <H> >- 'A subset 'B } -->
-   sequent [squash] { <H> >- 'x = 'y in 'A } -->
-   sequent ['ext] { <H> >- 'x = 'y in 'B }
+   sequent { <H> >- 'A subset 'B } -->
+   sequent { <H> >- 'x = 'y in 'A } -->
+   sequent { <H> >- 'x = 'y in 'B }
 
 rule use_superset1  'B :
-   sequent [squash] { <H> >- 'A subset 'B } -->
-   sequent [squash] { <H> >- 'x in 'A } -->
-   sequent [squash] { <H> >- 'x = 'y in 'B } -->
-   sequent ['ext] { <H> >- 'x = 'y in 'A }
+   sequent { <H> >- 'A subset 'B } -->
+   sequent { <H> >- 'x in 'A } -->
+   sequent { <H> >- 'x = 'y in 'B } -->
+   sequent { <H> >- 'x = 'y in 'A }
 
 rule use_superset2  'B :
-   sequent [squash] { <H> >- 'A subset 'B } -->
-   sequent [squash] { <H> >- 'y in 'A } -->
-   sequent [squash] { <H> >- 'x = 'y in 'B } -->
-   sequent ['ext] { <H> >- 'x = 'y in 'A }
+   sequent { <H> >- 'A subset 'B } -->
+   sequent { <H> >- 'y in 'A } -->
+   sequent { <H> >- 'x = 'y in 'B } -->
+   sequent { <H> >- 'x = 'y in 'A }
 
 rule use_superset 'B 'y:
-   sequent [squash] { <H> >- 'A subset 'B } -->
-   sequent [squash] { <H> >- 'y in 'A } -->
-   sequent [squash] { <H> >- 'x = 'y in 'B } -->
-   sequent ['ext] { <H> >- 'x  in 'A }
+   sequent { <H> >- 'A subset 'B } -->
+   sequent { <H> >- 'y in 'A } -->
+   sequent { <H> >- 'x = 'y in 'B } -->
+   sequent { <H> >- 'x  in 'A }
 
 rule subsetTypeRight  'B :
-   sequent [squash] { <H> >- 'A subset 'B } -->
-   sequent ['ext] { <H> >- "type"{'A} }
+   sequent { <H> >- 'A subset 'B } -->
+   sequent { <H> >- "type"{'A} }
 
 rule subsetTypeLeft  'A :
-   sequent [squash] { <H> >- 'A subset 'B }  -->
-   sequent ['ext] { <H> >- "type"{'B} }
+   sequent { <H> >- 'A subset 'B }  -->
+   sequent { <H> >- "type"{'B} }
 
 rule member_wf :
-   sequent [squash] { <H> >- 'a in 'B } -->
-   sequent [squash] { <H> >- "type"{'A} } -->
-   sequent ['ext] { <H> >- "type"{'a in 'A subset 'B} }
+   sequent { <H> >- 'a in 'B } -->
+   sequent { <H> >- "type"{'A} } -->
+   sequent { <H> >- "type"{'a in 'A subset 'B} }
 
 rule member_intro :
-   sequent [squash] { <H> >- 'a in 'A } -->
-   sequent [squash] { <H> >- 'A subset 'B } -->
-   sequent ['ext] { <H> >- 'a in 'A subset 'B }
+   sequent { <H> >- 'a in 'A } -->
+   sequent { <H> >- 'A subset 'B } -->
+   sequent { <H> >- 'a in 'A subset 'B }
       
 rule member_elim 'H :
-   sequent ['ext] { <H>; u: 'a in 'A; v: 'A subset 'B; <J> >- 'C } --> 
-   sequent ['ext] { <H>; u: 'a in 'A subset 'B; <J> >- 'C  }
+   sequent { <H>; u: 'a in 'A; v: 'A subset 'B; <J> >- 'C } --> 
+   sequent { <H>; u: 'a in 'A subset 'B; <J> >- 'C  }

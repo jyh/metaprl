@@ -1795,7 +1795,11 @@ C	h	H
 NPerv!rewrite	rewrite698	rewrite Perv
 O	o698	rewrite698
 T	t699	o698 b691 b690
-S	s	t698 h
+NBase_rewrite	Base_rw	Base_rewrite NIL
+NBase_rewrite!sequent_arg	brwsqarg	sequent_arg Base_rw
+O	obrarg	brwsqarg
+T	tbrarg	obrarg
+S	s	tbrarg h
 G	s	t699
 B	b699	s
 T	t700	o696 b699 b17
@@ -1829,10 +1833,10 @@ T	t711	o663 b680 b690 b669
 B	b711	t711
 T	t712	o666 b710 b711 b654
 B	b712	t712
-P	p712	String "byDefT indtree thenT byDefT      tree thenT rw (addrC [0] unfold_srecind) 0 thenT rwh reduceC 0 thenT autoT"
+P	p712	String "byDefT indtree thenT byDefT tree thenT rw (addrC [0] unfold_srecind) 0 thenT rwh reduceC 0 thenT autoT"
 O	o712	ext_rule p712
 T	t713	o698 b709 b712
-S	s713	t698 h
+S	s713	tbrarg h
 G	s713	t713
 B	b713	s713
 T	t714	o696 b713 b17
@@ -1969,7 +1973,7 @@ O	o761	string726 p761
 T	t762	o761
 B	b762	t762
 NBase_dform	Base_dform	Base_dform NIL
-"NBase_dform! "	" "	" " Base_dform
+"NBase_dform!	"	" " " " Base_dform
 O	o762	" "
 T	t763	o762
 B	b763	t763
@@ -2232,7 +2236,7 @@ NItt_equal	Itt_equal	Itt_equal NIL
 NItt_equal!type	type	type Itt_equal
 O	o870	type
 T	t870	o870 b613
-S	s870	t698 h
+S	s870	tbrarg h
 G	s870	t870
 B	b870	s870
 T	t871	o869 b870
@@ -2243,7 +2247,7 @@ T	t872	o871
 B	b872	t872
 T	t873	o b872 b17
 T	t874	o870 b614
-S	s874	t873 h
+S	s874	tbrarg h
 G	s874	t874
 B	b874	s874
 T	t875	o869 b874
@@ -2281,7 +2285,7 @@ O	o887	var p886
 T	t887	o887
 B	b887	t887
 T	t888	o886 b887 b613
-S	s888	t698 h
+S	s888	tbrarg h
 G	s888	t888
 B	b888	s888
 T	t889	o869 b888
@@ -2289,7 +2293,7 @@ B	b889	t889
 T	t890	o612 b887
 B	b890	t890
 T	t891	o886 b890 b614
-S	s891	t873 h
+S	s891	tbrarg h
 G	s891	t891
 B	b891	s891
 T	t892	o869 b891
@@ -2319,7 +2323,7 @@ O	o901	location p900 p901
 P	p902	String bintree_wf
 O	o902	rule p902
 T	t902	o870 b625
-S	s902	t873 h
+S	s902	tbrarg h
 G	s902	t902
 B	b902	s902
 T	t903	o869 b902
@@ -2665,7 +2669,7 @@ O	o1043	rule p1043
 NItt_equal!equal	equal	equal Itt_equal
 O	o1044	equal
 T	t1044	o1044 b625 b675 b675
-S	s1044	t698 h
+S	s1044	tbrarg h
 G	s1044	t1044
 B	b1044	s1044
 T	t1045	o869 b1044
@@ -2675,7 +2679,7 @@ O	o1045	int
 T	t1046	o1045
 B	b1046	t1046
 T	t1047	o1044 b1046 b1025 b1025
-S	s1047	t873 h
+S	s1047	tbrarg h
 G	s1047	t1047
 B	b1047	s1047
 T	t1048	o869 b1047
@@ -2810,7 +2814,7 @@ B	b1101	t1101
 P	p1102	String "byDefT weight thenT byDefT example thenT repeatT (rwh reduceC 0) thenT autoT"
 O	o1102	ext_rule p1102
 T	t1102	o698 b1100 b1101
-S	s1102	t698 h
+S	s1102	tbrarg h
 G	s1102	t1102
 B	b1102	s1102
 T	t1103	o696 b1102 b17
@@ -2833,7 +2837,7 @@ O	o1110	location p1109 p1110
 P	p1111	String example_wf
 O	o1111	rule p1111
 T	t1111	o1044 b625 b1074 b1074
-S	s1111	t873 h
+S	s1111	tbrarg h
 G	s1111	t1111
 B	b1111	s1111
 T	t1112	o869 b1111
@@ -3539,7 +3543,7 @@ B	b1392	t1392 l r
 T	t1393	o625 b1392
 B	b1393	t1393
 T	t1394	o870 b1393
-S	s1394	t698 h
+S	s1394	tbrarg h
 G	s1394	t1394
 B	b1394	s1394
 T	t1395	o869 b1394
@@ -3549,13 +3553,13 @@ H	h1396	r t1393
 B	b1396	t1205
 B	b1397	t1392
 T	t1397	o886 b1396 b1397
-S	s1397	t698 h h1395 h1396
+S	s1397	tbrarg h h1395 h1396
 G	s1397	t1397
 B	b1398	s1397
 T	t1398	o869 b1398
 B	b1399	t1398
 T	t1399	o886 b1244 b1393
-S	s1399	t873 h
+S	s1399	tbrarg h
 G	s1399	t1399
 B	b1400	s1399
 T	t1400	o869 b1400
@@ -3587,7 +3591,7 @@ O	o1411	location p1410 p1411
 P	p1412	String tree_monotone3
 O	o1412	rule p1412
 T	t1412	o886 b668 b887
-S	s1412	t698 h
+S	s1412	tbrarg h
 G	s1412	t1412
 B	b1412	s1412
 T	t1413	o869 b1412
@@ -3595,7 +3599,7 @@ B	b1413	t1413
 T	t1414	o625 b887
 B	b1414	t1414
 T	t1415	o886 b1251 b1414
-S	s1415	t873 h
+S	s1415	tbrarg h
 G	s1415	t1415
 B	b1415	s1415
 T	t1416	o869 b1415
@@ -3631,7 +3635,7 @@ B	b1427	t1427
 T	t1428	o b1427 b17
 B	b1428	t1428
 T	t1429	o870 b1244
-S	s1429	t873 h
+S	s1429	tbrarg h
 G	s1429	t1429
 B	b1429	s1429
 T	t1430	o869 b1429
@@ -3663,13 +3667,13 @@ O	o1440	location p1439 p1440
 P	p1441	String tree_wf3
 O	o1441	rule p1441
 T	t1441	o870 b668
-S	s1441	t698 h
+S	s1441	tbrarg h
 G	s1441	t1441
 B	b1441	s1441
 T	t1442	o869 b1441
 B	b1442	t1442
 T	t1443	o870 b1251
-S	s1443	t873 h
+S	s1443	tbrarg h
 G	s1443	t1443
 B	b1443	s1443
 T	t1444	o869 b1443
@@ -3698,13 +3702,13 @@ P	p1453	Number 7721
 O	o1453	location p1452 p1453
 P	p1454	String tree_subtype
 O	o1454	rule p1454
-S	s1454	t698 h
+S	s1454	tbrarg h
 G	s1454	t1429
 B	b1454	s1454
 T	t1454	o869 b1454
 B	b1455	t1454
 T	t1455	o886 b1244 b625
-S	s1455	t873 h
+S	s1455	tbrarg h
 G	s1455	t1455
 B	b1456	s1455
 T	t1456	o869 b1456
@@ -3734,7 +3738,7 @@ O	o1466	location p1465 p1466
 P	p1467	String emptytree_wf
 O	o1467	rule p1467
 T	t1467	o1044 b1244 b643 b643
-S	s1467	t873 h
+S	s1467	tbrarg h
 G	s1467	t1467
 B	b1467	s1467
 T	t1468	o869 b1467
@@ -3771,13 +3775,13 @@ B	b1479	t1479
 T	t1480	o612 b1244 b1205
 B	b1480	t1480
 T	t1481	o1044 b1480 b654 b654
-S	s1481	t698 h
+S	s1481	tbrarg h
 G	s1481	t1481
 B	b1481	s1481
 T	t1482	o869 b1481
 B	b1482	t1482
 T	t1483	o1044 b1244 b655 b655
-S	s1483	t873 h
+S	s1483	tbrarg h
 G	s1483	t1483
 B	b1483	s1483
 T	t1484	o869 b1483
@@ -3796,7 +3800,7 @@ T	t1489	o696 b1483 b1488
 B	b1489	t1489
 T	t1490	o695 b1489 b17 b701
 B	b1490	t1490
-S	s1490	t698 h
+S	s1490	tbrarg h
 G	s1490	t1483
 B	b1491	s1490
 T	t1491	o696 b1491 b1488
@@ -3806,7 +3810,7 @@ NItt_squash!squash	squash1492	squash Itt_squash
 O	o1492	squash1492
 B	b1493	t1483
 T	t1493	o1492 b1493
-S	s1493	t698 h
+S	s1493	tbrarg h
 G	s1493	t1493
 B	b1494	s1493
 T	t1494	o696 b1494 b1488
@@ -3856,7 +3860,7 @@ O	o1513	location p1512 p1513
 P	p1514	String tree4_wf
 O	o1514	rule p1514
 T	t1514	o870 b1259
-S	s1514	t698 h
+S	s1514	tbrarg h
 G	s1514	t1514
 B	b1514	s1514
 T	t1515	o869 b1514
@@ -3866,13 +3870,13 @@ B	b1516	t1516
 T	t1517	o612 b1259 b1266
 B	b1517	t1517
 T	t1518	o1044 b1517 b654 b654
-S	s1518	t698 h
+S	s1518	tbrarg h
 G	s1518	t1518
 B	b1518	s1518
 T	t1519	o869 b1518
 B	b1519	t1519
 T	t1520	o1044 b1259 b655 b655
-S	s1520	t873 h
+S	s1520	tbrarg h
 G	s1520	t1520
 B	b1520	s1520
 T	t1521	o869 b1520
@@ -3904,25 +3908,25 @@ O	o1531	location p1530 p1531
 P	p1532	String node_wf2
 O	o1532	rule p1532
 T	t1532	o1044 b613 b1142 b1142
-S	s1532	t698 h
+S	s1532	tbrarg h
 G	s1532	t1532
 B	b1532	s1532
 T	t1533	o869 b1532
 B	b1533	t1533
 T	t1534	o1044 b613 b1143 b1143
-S	s1534	t698 h
+S	s1534	tbrarg h
 G	s1534	t1534
 B	b1534	s1534
 T	t1535	o869 b1534
 B	b1535	t1535
 T	t1536	o1044 b1396 b1144 b1144
-S	s1536	t698 h
+S	s1536	tbrarg h
 G	s1536	t1536
 B	b1536	s1536
 T	t1537	o869 b1536
 B	b1537	t1537
 T	t1538	o1044 b1206 b1145 b1145
-S	s1538	t873 h
+S	s1538	tbrarg h
 G	s1538	t1538
 B	b1538	s1538
 T	t1539	o869 b1538
@@ -4002,7 +4006,7 @@ C	h1569	J t675
 P	p1569	Var C
 O	o1569	var p1569
 T	t1569	o1569 b643
-S	s1569	t873 h h1568 h1569
+S	s1569	tbrarg h h1568 h1569
 G	s1569	t1569
 B	b1569	s1569
 T	t1570	o869 b1569
@@ -4019,13 +4023,13 @@ B	b1574	t1574
 T	t1575	o653 b1574
 B	b1575	t1575
 T	t1576	o1569 b1575
-S	s1576	t873 h h1568 h1569 h1570 h1571 h1572 h1573 h1574
+S	s1576	tbrarg h h1568 h1569 h1570 h1571 h1572 h1573 h1574
 G	s1576	t1576
 B	b1576	s1576
 T	t1577	o869 b1576
 B	b1577	t1577
 T	t1578	o1569 b675
-S	s1578	t873 h h1568 h1569
+S	s1578	tbrarg h h1568 h1569
 G	s1578	t1578
 B	b1578	s1578
 T	t1579	o869 b1578
@@ -4045,13 +4049,13 @@ B	b1584	t1584
 T	t1585	o695 b1584 b17 b701
 B	b1585	t1585
 H	h1585	t t1248
-S	s1585	t873 h h1585 h1569
+S	s1585	tbrarg h h1585 h1569
 G	s1585	t1578
 B	b1586	s1585
-S	s1586	t873 h h1585 h1569
+S	s1586	tbrarg h h1585 h1569
 G	s1586	t1569
 B	b1587	s1586
-S	s1587	t873 h h1585 h1569 h1570 h1571 h1572 h1573 h1574
+S	s1587	tbrarg h h1585 h1569 h1570 h1571 h1572 h1573 h1574
 G	s1587	t1576
 B	b1588	s1587
 T	t1588	o b1588 b17
@@ -4096,7 +4100,7 @@ B	b1605	t1604
 T	t1605	o1044 b1604 b675 b1605
 H	h1605	u t1605
 T	t1606	o1569 b1605
-S	s1606	t873 h h1585 h1569 h1603 h1605
+S	s1606	tbrarg h h1585 h1569 h1603 h1605
 G	s1606	t1606
 B	b1606	s1606
 T	t1607	o696 b1606 b1590
@@ -4162,7 +4166,7 @@ O	o1628	var p1628
 T	t1629	o1628
 B	b1629	t1629
 T	t1630	o1569 b1629
-S	s1630	t873 h h1585 h1569 h1621 h1623 h1626 h1628
+S	s1630	tbrarg h h1585 h1569 h1621 h1623 h1626 h1628
 G	s1630	t1630
 B	b1630	s1630
 T	t1631	o696 b1630 b1590
@@ -4238,7 +4242,7 @@ O	o1660	location p1659 p1660
 P	p1661	String treeInduction2
 O	o1661	rule p1661
 H	h1661	t t1259
-S	s1661	t873 h h1661 h1569
+S	s1661	tbrarg h h1661 h1569
 G	s1661	t1569
 B	b1661	s1661
 T	t1661	o869 b1661
@@ -4250,12 +4254,12 @@ T	t1664	o1258 b1574
 B	b1664	t1664
 T	t1665	o1492 b1664
 H	h1665	u t1665
-S	s1665	t873 h h1661 h1569 h1662 h1663 h1664 h1665 h1573 h1574
+S	s1665	tbrarg h h1661 h1569 h1662 h1663 h1664 h1665 h1573 h1574
 G	s1665	t1576
 B	b1665	s1665
 T	t1666	o869 b1665
 B	b1666	t1666
-S	s1666	t873 h h1661 h1569
+S	s1666	tbrarg h h1661 h1569
 G	s1666	t1578
 B	b1667	s1666
 T	t1667	o869 b1667
@@ -4323,7 +4327,7 @@ O	o1693	location p1692 p1693
 P	p1694	String treeInduction1
 O	o1694	rule p1694
 H	h1694	t t625
-S	s1694	t873 h h1694 h1569
+S	s1694	tbrarg h h1694 h1569
 G	s1694	t1569
 B	b1694	s1694
 T	t1694	o869 b1694
@@ -4337,12 +4341,12 @@ B	b1697	t1697
 T	t1698	o653 b1697
 B	b1698	t1698
 T	t1699	o1569 b1698
-S	s1699	t873 h h1694 h1569 h1695 h1696 h1573 h1574
+S	s1699	tbrarg h h1694 h1569 h1695 h1696 h1573 h1574
 G	s1699	t1699
 B	b1699	s1699
 T	t1700	o869 b1699
 B	b1700	t1700
-S	s1700	t873 h h1694 h1569
+S	s1700	tbrarg h h1694 h1569
 G	s1700	t1578
 B	b1701	s1700
 T	t1701	o869 b1701

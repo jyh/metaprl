@@ -359,11 +359,11 @@ dform reserve_nil_df : parens :: "prec"[prec_comma] :: ReserveNil =
 
 doc <:doc< @doc{Sequent tag for the M language.} >>
 
-declare m
+declare sequent_arg
 
 doc docoff
 
-dform m_df : m = bf["m"]
+dform m_df : sequent_arg = subm
 
 doc <:doc<
    @begin[doc]

@@ -59,12 +59,12 @@ doc <:doc<
    @terms
    @modsubsection{Sequent tags}
   
-   The term @tt[fir] is used to tag FIR theory sequents.  The term @tt[it] is
+   The term @tt[sequent_arg] is used to tag FIR theory sequents.  The term @tt[it] is
    a trivial term that has no meaning.
    @end[doc]
 >>
 
-declare fir
+declare sequent_arg
 declare it
 
 
@@ -240,9 +240,8 @@ doc <:doc<
  * Sequent tags.
  *)
 
-dform mfir_df : except_mode[src] ::
-   fir =
-   it["fir"]
+dform mfir_df : except_mode[src] :: sequent_arg =
+   sub{it["fir"]}
 
 dform it_df1 : except_mode[src] :: except_mode[tex] ::
    it =

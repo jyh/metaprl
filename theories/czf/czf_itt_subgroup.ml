@@ -115,9 +115,9 @@ doc <:doc<
    @end[doc]
 >>
 interactive subgroup_wf {| intro [] |} :
-   sequent [squash] { <H> >- 's IN label } -->
-   sequent [squash] { <H> >- 'g IN label } -->
-   sequent ['ext] { <H> >- "type"{subgroup{'s; 'g}} }
+   sequent { <H> >- 's IN label } -->
+   sequent { <H> >- 'g IN label } -->
+   sequent { <H> >- "type"{subgroup{'s; 'g}} }
 
 doc <:doc< 
    @begin[doc]
@@ -129,13 +129,13 @@ doc <:doc<
    @end[doc]
 >>
 interactive subgroup_intro {| intro [] |} :
-   sequent [squash] { <H> >- 's IN label } -->
-   sequent [squash] { <H> >- 'g IN label } -->
-   sequent ['ext] { <H> >- group{'s} } -->
-   sequent ['ext] { <H> >- group{'g} } -->
-   sequent ['ext] { <H> >- \subset{car{'s}; car{'g}} } -->
-   sequent ['ext] { <H>; a: set; b: set; x: mem{'a; car{'s}}; y: mem{'b; car{'s}} >- eq{op{'s; 'a; 'b}; op{'g; 'a; 'b}} } -->
-   sequent ['ext] { <H> >- subgroup{'s; 'g} }
+   sequent { <H> >- 's IN label } -->
+   sequent { <H> >- 'g IN label } -->
+   sequent { <H> >- group{'s} } -->
+   sequent { <H> >- group{'g} } -->
+   sequent { <H> >- \subset{car{'s}; car{'g}} } -->
+   sequent { <H>; a: set; b: set; x: mem{'a; car{'s}}; y: mem{'b; car{'s}} >- eq{op{'s; 'a; 'b}; op{'g; 'a; 'b}} } -->
+   sequent { <H> >- subgroup{'s; 'g} }
 
 doc <:doc< 
    @begin[doc]
@@ -150,42 +150,42 @@ doc <:doc<
    @end[doc]
 >>
 interactive subgroup_op {| intro [] |} :
-   sequent [squash] { <H> >- 's IN label } -->
-   sequent [squash] { <H> >- 'g IN label } -->
-   sequent [squash] { <H> >- isset{'a} } -->
-   sequent [squash] { <H> >- isset{'b} } -->
-   sequent ['ext] { <H> >- mem{'a; car{'s}} } -->
-   sequent ['ext] { <H> >- mem{'b; car{'s}} } -->
-   sequent ['ext] { <H> >- subgroup{'s; 'g} } -->
-   sequent ['ext] { <H> >- mem{op{'g; 'a; 'b}; car{'s}} }
+   sequent { <H> >- 's IN label } -->
+   sequent { <H> >- 'g IN label } -->
+   sequent { <H> >- isset{'a} } -->
+   sequent { <H> >- isset{'b} } -->
+   sequent { <H> >- mem{'a; car{'s}} } -->
+   sequent { <H> >- mem{'b; car{'s}} } -->
+   sequent { <H> >- subgroup{'s; 'g} } -->
+   sequent { <H> >- mem{op{'g; 'a; 'b}; car{'s}} }
 
 interactive subgroup_id1 {| intro [] |} :
-   sequent [squash] { <H> >- 's IN label } -->
-   sequent [squash] { <H> >- 'g IN label } -->
-   sequent ['ext] { <H> >- subgroup{'s; 'g} } -->
-   sequent ['ext] { <H> >- eq{id{'s}; id{'g}} }
+   sequent { <H> >- 's IN label } -->
+   sequent { <H> >- 'g IN label } -->
+   sequent { <H> >- subgroup{'s; 'g} } -->
+   sequent { <H> >- eq{id{'s}; id{'g}} }
 
 interactive subgroup_id2 {| intro [] |} :
-   sequent [squash] { <H> >- 's IN label } -->
-   sequent [squash] { <H> >- 'g IN label } -->
-   sequent ['ext] { <H> >- subgroup{'s; 'g} } -->
-   sequent ['ext] { <H> >- mem{id{'g}; car{'s}} }
+   sequent { <H> >- 's IN label } -->
+   sequent { <H> >- 'g IN label } -->
+   sequent { <H> >- subgroup{'s; 'g} } -->
+   sequent { <H> >- mem{id{'g}; car{'s}} }
 
 interactive subgroup_inv1 {| intro [] |} :
-   sequent [squash] { <H> >- 's IN label } -->
-   sequent [squash] { <H> >- 'g IN label } -->
-   sequent [squash] { <H> >- isset{'a} } -->
-   sequent ['ext] { <H> >- mem{'a; car{'s}} } -->
-   sequent ['ext] { <H> >- subgroup{'s; 'g} } -->
-   sequent ['ext] { <H> >- eq{inv{'s; 'a}; inv{'g; 'a}} }
+   sequent { <H> >- 's IN label } -->
+   sequent { <H> >- 'g IN label } -->
+   sequent { <H> >- isset{'a} } -->
+   sequent { <H> >- mem{'a; car{'s}} } -->
+   sequent { <H> >- subgroup{'s; 'g} } -->
+   sequent { <H> >- eq{inv{'s; 'a}; inv{'g; 'a}} }
 
 interactive subgroup_inv2 {| intro [] |} :
-   sequent [squash] { <H> >- 's IN label } -->
-   sequent [squash] { <H> >- 'g IN label } -->
-   sequent [squash] { <H> >- isset{'a} } -->
-   sequent ['ext] { <H> >- mem{'a; car{'s}} } -->
-   sequent ['ext] { <H> >- subgroup{'s; 'g} } -->
-   sequent ['ext] { <H> >- mem{inv{'g; 'a}; car{'s}} }
+   sequent { <H> >- 's IN label } -->
+   sequent { <H> >- 'g IN label } -->
+   sequent { <H> >- isset{'a} } -->
+   sequent { <H> >- mem{'a; car{'s}} } -->
+   sequent { <H> >- subgroup{'s; 'g} } -->
+   sequent { <H> >- mem{inv{'g; 'a}; car{'s}} }
 
 doc <:doc< 
    @begin[doc]
@@ -196,16 +196,16 @@ doc <:doc<
    @end[doc]
 >>
 interactive subgroup_isect 'h1 'h2 :
-   sequent [squash] { <H> >- 'g IN label } -->
-   sequent [squash] { <H> >- 'h1 IN label } -->
-   sequent [squash] { <H> >- 'h2 IN label } -->
-   sequent [squash] { <H> >- 'h IN label } -->
-   sequent ['ext] { <H> >- subgroup{'h1; 'g} } -->
-   sequent ['ext] { <H> >- subgroup{'h2; 'g} } -->
-   sequent ['ext] { <H> >- group{'h} } -->
-   sequent ['ext] { <H> >- equal{car{'h}; ."isect"{car{'h1}; car{'h2}}} } -->
-   sequent ['ext] { <H>; a: set; b: set; x: mem{'a; car{'h}}; y: mem{'b; car{'h}} >- eq{op{'h; 'a; 'b}; op{'h1; 'a; 'b}} } -->
-   sequent ['ext] { <H> >- subgroup{'h; 'g} }
+   sequent { <H> >- 'g IN label } -->
+   sequent { <H> >- 'h1 IN label } -->
+   sequent { <H> >- 'h2 IN label } -->
+   sequent { <H> >- 'h IN label } -->
+   sequent { <H> >- subgroup{'h1; 'g} } -->
+   sequent { <H> >- subgroup{'h2; 'g} } -->
+   sequent { <H> >- group{'h} } -->
+   sequent { <H> >- equal{car{'h}; ."isect"{car{'h1}; car{'h2}}} } -->
+   sequent { <H>; a: set; b: set; x: mem{'a; car{'h}}; y: mem{'b; car{'h}} >- eq{op{'h; 'a; 'b}; op{'h1; 'a; 'b}} } -->
+   sequent { <H> >- subgroup{'h; 'g} }
 
 doc <:doc< @docoff >>
 (************************************************************************

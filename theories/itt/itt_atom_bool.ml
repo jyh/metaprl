@@ -78,19 +78,19 @@ let resource reduce += << eq_atom{token[x:t]; token[y:t]} >>, reduce_eq_atom
  ************************************************************************)
 
 prim eq_atom_wf {| intro [] |} :
-   [wf] sequent [squash] { <H> >- 'x in atom } -->
-   [wf] sequent [squash] { <H> >- 'y in atom } -->
-   sequent ['ext] { <H> >- eq_atom{'x; 'y} in bool } =
+   [wf] sequent { <H> >- 'x in atom } -->
+   [wf] sequent { <H> >- 'y in atom } -->
+   sequent { <H> >- eq_atom{'x; 'y} in bool } =
    it
 
 prim eq_atom_assert_intro {| intro [] |} :
-   [wf] sequent [squash] { <H> >- 'x = 'y in atom } -->
-   sequent ['ext] { <H> >- "assert"{eq_atom{'x; 'y}} } =
+   [wf] sequent { <H> >- 'x = 'y in atom } -->
+   sequent { <H> >- "assert"{eq_atom{'x; 'y}} } =
    it
 
 prim eq_atom_assert_elim {| elim [] |} 'H :
-   [main] sequent ['ext] { <H>; x: 'a = 'b in atom; <J[it]> >- 'C[it] } -->
-   sequent ['ext] { <H>; x: "assert"{eq_atom{'a; 'b}}; <J['x]> >- 'C['x] } =
+   [main] sequent { <H>; x: 'a = 'b in atom; <J[it]> >- 'C[it] } -->
+   sequent { <H>; x: "assert"{eq_atom{'a; 'b}}; <J['x]> >- 'C['x] } =
    it
 
 (*

@@ -1064,7 +1064,11 @@ T	t408	o408
 B	b408	t408
 T	t409	o b408 b5
 C	h	H
-S	s	t409 h
+NBase_rewrite	Base_rw	Base_rewrite NIL
+NBase_rewrite!sequent_arg	brwsqarg	sequent_arg Base_rw
+O	obrarg	brwsqarg
+T	tbrarg	obrarg
+S	s	tbrarg h
 G	s	t395
 B	b409	s
 T	t410	o407 b409
@@ -1086,7 +1090,7 @@ B	b414	t414
 T	t415	o413 b414 b414
 B	b415	t415
 T	t416	o412 b395 b415 b415
-S	s416	t412 h
+S	s416	tbrarg h
 G	s416	t416
 B	b416	s416
 T	t417	o407 b416
@@ -1096,7 +1100,7 @@ B	b418	t418
 NSummary!interactive	interactive	interactive Summary
 O	o418	interactive
 NSummary!ext_rule	ext_rule	ext_rule Summary
-P	p418	String "sqsquashT thenT assertT <<ext_equal{'A; 'B}>> thenAT autoT"
+P	p418	String "assertT <<ext_equal{'A; 'B}>> thenAT autoT"
 O	o419	ext_rule p418
 NSummary!status_incomplete	status_incomplete	status_incomplete Summary
 O	o420	status_incomplete
@@ -1120,14 +1124,14 @@ B	b425	t425
 T	t426	o422 b424 b5 b425
 B	b426	t426
 H	h426	v t395
-S	s426	t409 h h426
+S	s426	tbrarg h h426
 G	s426	t416
 B	b427	s426
 T	t427	o423 b427 b423
 B	b428	t427
 P	p428	String wf
 O	o428	tactic_arg p428
-S	s428	t409 h
+S	s428	tbrarg h
 G	s428	t416
 B	b429	s428
 T	t429	o423 b429 b423
@@ -1137,7 +1141,7 @@ NItt_squash!squash	squash430	squash Itt_squash
 O	o430	squash430
 B	b431	t416
 T	t431	o430 b431
-S	s431	t409 h
+S	s431	tbrarg h
 G	s431	t431
 B	b432	s431
 T	t432	o423 b432 b423
@@ -1166,18 +1170,18 @@ O	o442	prod
 T	t442	o442 b398 b399
 B	b442	t442
 T	t443	o412 b442 b415 b415
-S	s443	t409 h h441
+S	s443	tbrarg h h441
 G	s443	t443
 B	b443	s443
 T	t444	o423 b443 b423
 B	b444	t444
 T	t445	o412 b400 b415 b415
-S	s445	t409 h h441
+S	s445	tbrarg h h441
 G	s445	t445
 B	b445	s445
 T	t446	o423 b445 b423
 B	b446	t446
-S	s446	t409 h h441
+S	s446	tbrarg h h441
 G	s446	t416
 B	b447	s446
 T	t447	o423 b447 b423
@@ -1217,27 +1221,27 @@ B	b463	t462
 P	p463	String "dT 0"
 O	o463	ext_rule p463
 T	t463	o412 b398 b414 b414
-S	s463	t409 h
+S	s463	tbrarg h
 G	s463	t463
 B	b464	s463
-S	s464	t409 h
+S	s464	tbrarg h
 G	s464	t442
 B	b465	s464
 T	t465	o b465 b5
 B	b466	t465
 T	t466	o423 b464 b466
 B	b467	t466
-S	s467	t412 h
+S	s467	tbrarg h
 G	s467	t443
 B	b468	s467
 T	t468	o423 b468 b466
 B	b469	t468
-S	s469	t412 h
+S	s469	tbrarg h
 G	s469	t445
 B	b470	s469
 T	t470	o423 b470 b466
 B	b471	t470
-S	s471	t409 h
+S	s471	tbrarg h
 G	s471	t400
 B	b472	s471
 T	t472	o b472 b5
@@ -1280,7 +1284,7 @@ T	t490	o28 b490
 B	b491	t490
 T	t491	o428 b467 b5 b491
 B	b492	t491
-S	s492	t409 h
+S	s492	tbrarg h
 G	s492	t398
 B	b493	s492
 T	t493	o423 b493 b466

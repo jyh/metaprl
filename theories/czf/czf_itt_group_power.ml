@@ -125,10 +125,10 @@ doc <:doc<
    @end[doc]
 >>
 interactive power_wf {| intro [] |} :
-   sequent [squash] { <H> >- 'g IN label } -->
-   sequent [squash] { <H> >- isset{'z} } -->
-   sequent [squash] { <H> >- 'n IN int } -->
-   sequent ['ext] { <H> >- isset{power{'g; 'z; 'n}} }
+   sequent { <H> >- 'g IN label } -->
+   sequent { <H> >- isset{'z} } -->
+   sequent { <H> >- 'n IN int } -->
+   sequent { <H> >- isset{power{'g; 'z; 'n}} }
 
 doc <:doc< 
    @begin[doc]
@@ -139,12 +139,12 @@ doc <:doc<
    @end[doc]
 >>
 interactive power_mem {| intro [] |} :
-   sequent [squash] { <H> >- 'g IN label } -->
-   sequent ['ext] { <H> >- group{'g} } -->
-   sequent [squash] { <H> >- 'n IN int } -->
-   sequent [squash] { <H> >- isset{'z} } -->
-   sequent ['ext] { <H> >- mem{'z; car{'g}} } -->
-   sequent ['ext] { <H> >- mem{power{'g; 'z; 'n}; car{'g}} }
+   sequent { <H> >- 'g IN label } -->
+   sequent { <H> >- group{'g} } -->
+   sequent { <H> >- 'n IN int } -->
+   sequent { <H> >- isset{'z} } -->
+   sequent { <H> >- mem{'z; car{'g}} } -->
+   sequent { <H> >- mem{power{'g; 'z; 'n}; car{'g}} }
 
 doc <:doc< 
    @begin[doc]
@@ -154,31 +154,31 @@ doc <:doc<
    @end[doc]
 >>
 interactive power_fun {| intro [] |} :
-   sequent [squash] { <H> >- 'g IN label } -->
-   sequent ['ext] { <H> >- group{'g} } -->
-   sequent [squash] { <H> >- 'n IN int } -->
-   sequent ['ext] { <H> >- fun_set{z. 'f['z]} } -->
-   sequent ['ext] { <H>; z: set >- mem{'f['z]; car{'g}} } -->
-   sequent ['ext] { <H> >- fun_set{z. power{'g; 'f['z]; 'n}} }
+   sequent { <H> >- 'g IN label } -->
+   sequent { <H> >- group{'g} } -->
+   sequent { <H> >- 'n IN int } -->
+   sequent { <H> >- fun_set{z. 'f['z]} } -->
+   sequent { <H>; z: set >- mem{'f['z]; car{'g}} } -->
+   sequent { <H> >- fun_set{z. power{'g; 'f['z]; 'n}} }
 doc <:doc< @docoff >>
 
 (* x ^ (n + 1) * x ^ (-1) = x ^ n *)
 interactive power_less {| intro [] |} :
-   sequent [squash] { <H> >- 'g IN label } -->
-   sequent ['ext] { <H> >- group{'g} } -->
-   sequent [squash] { <H> >- 'n IN int } -->
-   sequent [squash] { <H> >- isset{'x} } -->
-   sequent ['ext] { <H> >- mem{'x; car{'g}} } -->
-   sequent ['ext] { <H> >- eq{op{'g; power{'g; 'x; ('n +@ 1)}; inv{'g; 'x}}; power{'g; 'x; 'n}} }
+   sequent { <H> >- 'g IN label } -->
+   sequent { <H> >- group{'g} } -->
+   sequent { <H> >- 'n IN int } -->
+   sequent { <H> >- isset{'x} } -->
+   sequent { <H> >- mem{'x; car{'g}} } -->
+   sequent { <H> >- eq{op{'g; power{'g; 'x; ('n +@ 1)}; inv{'g; 'x}}; power{'g; 'x; 'n}} }
 
 (* x ^ n * x = x ^ (n + 1) *)
 interactive power_more {| intro [] |} :
-   sequent [squash] { <H> >- 'g IN label } -->
-   sequent ['ext] { <H> >- group{'g} } -->
-   sequent [squash] { <H> >- 'n IN int } -->
-   sequent [squash] { <H> >- isset{'x} } -->
-   sequent ['ext] { <H> >- mem{'x; car{'g}} } -->
-   sequent ['ext] { <H> >- eq{op{'g; power{'g; 'x; 'n}; 'x}; power{'g; 'x; ('n +@ 1)}} }
+   sequent { <H> >- 'g IN label } -->
+   sequent { <H> >- group{'g} } -->
+   sequent { <H> >- 'n IN int } -->
+   sequent { <H> >- isset{'x} } -->
+   sequent { <H> >- mem{'x; car{'g}} } -->
+   sequent { <H> >- eq{op{'g; power{'g; 'x; 'n}; 'x}; power{'g; 'x; ('n +@ 1)}} }
 
 doc <:doc< 
    @begin[doc]
@@ -188,13 +188,13 @@ doc <:doc<
    @end[doc]
 >>
 interactive power_reduce1 {| intro [] |} :
-   sequent [squash] { <H> >- 'g IN label } -->
-   sequent ['ext] { <H> >- group{'g} } -->
-   sequent [squash] { <H> >- 'm IN int } -->
-   sequent [squash] { <H> >- 'n IN int } -->
-   sequent [squash] { <H> >- isset{'x} } -->
-   sequent ['ext] { <H> >- mem{'x; car{'g}} } -->
-   sequent ['ext] { <H> >- eq{op{'g; power{'g; 'x; 'm}; power{'g; 'x; 'n}}; power{'g; 'x; ('m +@ 'n)}} }
+   sequent { <H> >- 'g IN label } -->
+   sequent { <H> >- group{'g} } -->
+   sequent { <H> >- 'm IN int } -->
+   sequent { <H> >- 'n IN int } -->
+   sequent { <H> >- isset{'x} } -->
+   sequent { <H> >- mem{'x; car{'g}} } -->
+   sequent { <H> >- eq{op{'g; power{'g; 'x; 'm}; power{'g; 'x; 'n}}; power{'g; 'x; ('m +@ 'n)}} }
 
 doc <:doc< @docoff >>
 (*

@@ -672,7 +672,11 @@ NCzf_itt_set	Czf_itt_set	Czf_itt_set NIL
 NCzf_itt_set!isset	isset	isset Czf_itt_set
 O	o550	isset
 T	t551	o550 b507
-S	s	t550 h
+NBase_rewrite	Base_rw	Base_rewrite NIL
+NBase_rewrite!sequent_arg	brwsqarg	sequent_arg Base_rw
+O	obrarg	brwsqarg
+T	tbrarg	obrarg
+S	s	tbrarg h
 G	s	t551
 B	b551	s
 T	t552	o548 b551
@@ -680,7 +684,7 @@ B	b552	t552
 T	t553	o547 b552
 B	b553	t553
 T	t554	o550 b508
-S	s554	t550 h
+S	s554	tbrarg h
 G	s554	t554
 B	b554	s554
 T	t555	o548 b554
@@ -696,7 +700,7 @@ NItt_equal	Itt_equal	Itt_equal NIL
 NItt_equal!type	type	type Itt_equal
 O	o558	type
 T	t559	o558 b509
-S	s559	t558 h
+S	s559	tbrarg h
 G	s559	t559
 B	b559	s559
 T	t560	o548 b559
@@ -761,7 +765,7 @@ NCzf_itt_set!set	set	set Czf_itt_set
 O	o582	set
 T	t582	o582
 H	h582	x t582
-S	s585	t558 h
+S	s585	tbrarg h
 G	s585	t509
 B	b586	s585
 T	t586	o548 b586
@@ -794,7 +798,7 @@ T	t610	o b545 b609
 B	b610	t610
 H	h610	x t509
 C	h611	J t516
-S	s611	t550 h h610 h611
+S	s611	tbrarg h h610 h611
 G	s611	t554
 B	b611	s611
 T	t611	o548 b611
@@ -806,7 +810,7 @@ O	o613	meta_labeled p613
 P	p616	Var C
 O	o616	var p616
 T	t617	o616 b516
-S	s619	t558 h h610 h611
+S	s619	tbrarg h h610 h611
 G	s619	t617
 B	b620	s619
 T	t620	o548 b620
@@ -814,7 +818,7 @@ B	b621	t620
 P	p624	String "assertT << 's1 subset 's2 >> thenAT trivialT"
 O	o624	ext_rule p624
 H	h629	v t509
-S	s629	t558 h h610 h611 h629
+S	s629	tbrarg h h610 h611 h629
 G	s629	t617
 B	b630	s629
 P	p635	String "rwh unfold_subset 4"
@@ -830,7 +834,7 @@ O	o646	fun_prop
 NSummary!arg_named	arg_named	arg_named Summary
 P	p650	String with
 T	t667	o550 b604
-S	s667	t550 h h610 h611
+S	s667	tbrarg h h610 h611
 G	s667	t667
 B	b668	s667
 P	p777	String subset_res
@@ -839,7 +843,7 @@ NCzf_itt_sep	Czf_itt_sep	Czf_itt_sep NIL
 NCzf_itt_sep!restricted	restricted	restricted Czf_itt_sep
 O	o778	restricted
 T	t778	o778 b509
-S	s778	t558 h
+S	s778	tbrarg h
 G	s778	t778
 B	b778	s778
 T	t779	o548 b778
@@ -3208,7 +3212,7 @@ P	p797	Number 2559
 O	o797	location p796 p797
 T	t1594	o1448 b516 b507
 H	h1594	y t1594
-S	s1594	t558 h h582 h1594
+S	s1594	tbrarg h h582 h1594
 G	s1594	t1448
 B	b1594	s1594
 T	t1595	o548 b1594
@@ -3392,7 +3396,7 @@ T	t1674	o548 b668
 B	b1674	t1674
 T	t1675	o547 b1674
 B	b1675	t1675
-S	s1675	t550 h h610 h611
+S	s1675	tbrarg h h610 h611
 G	s1675	t551
 B	b1676	s1675
 T	t1676	o548 b1676
@@ -3400,7 +3404,7 @@ B	b1677	t1676
 T	t1677	o547 b1677
 B	b1678	t1677
 T	t1678	o1448 b604 b507
-S	s1678	t558 h h610 h611
+S	s1678	tbrarg h h610 h611
 G	s1678	t1678
 B	b1679	s1678
 T	t1679	o548 b1679
@@ -3409,7 +3413,7 @@ T	t1680	o613 b1680
 B	b1681	t1680
 T	t1681	o1448 b604 b508
 H	h1681	z t1681
-S	s1681	t558 h h610 h611 h1681
+S	s1681	tbrarg h h610 h611 h1681
 G	s1681	t617
 B	b1682	s1681
 T	t1682	o548 b1682
@@ -3451,7 +3455,7 @@ B	b1700	t1699
 T	t1700	o565 b1696 b1700
 B	b1701	t1700
 H	h1701	v t1449
-S	s1701	t558 h h610 h611 h1701
+S	s1701	tbrarg h h610 h611 h1701
 G	s1701	t617
 B	b1702	s1701
 T	t1702	o567 b1702 b1694
@@ -3642,7 +3646,7 @@ B	b1809	t1809
 T	t1810	o507 b1809
 B	b1810	t1810 z
 T	t1811	o643 b1810
-S	s1811	t558 h
+S	s1811	tbrarg h
 G	s1811	t1811
 B	b1811	s1811
 T	t1812	o548 b1811
@@ -3650,7 +3654,7 @@ B	b1812	t1812
 T	t1813	o508 b1809
 B	b1813	t1813 z
 T	t1814	o643 b1813
-S	s1814	t558 h
+S	s1814	tbrarg h
 G	s1814	t1814
 B	b1814	s1814
 T	t1815	o548 b1814
@@ -3660,7 +3664,7 @@ B	b1817	t1813
 T	t1817	o506 b1816 b1817
 B	b1818	t1817 z
 T	t1818	o646 b1818
-S	s1818	t558 h
+S	s1818	tbrarg h
 G	s1818	t1818
 B	b1819	s1818
 T	t1819	o548 b1819
@@ -3681,7 +3685,7 @@ H	h1826	z t582
 T	t1828	o1448 b516 b1817
 B	b1829	t1828 x
 T	t1829	o646 b1829
-S	s1829	t558 h h1826
+S	s1829	tbrarg h h1826
 G	s1829	t1829
 B	b1830	s1829
 T	t1830	o567 b1830 b1824
@@ -3689,7 +3693,7 @@ B	b1831	t1830
 T	t1831	o514 b1816 b1829
 B	b1832	t1831 z
 T	t1832	o646 b1832
-S	s1832	t558 h
+S	s1832	tbrarg h
 G	s1832	t1832
 B	b1833	s1832
 T	t1833	o567 b1833 b1824
@@ -3701,14 +3705,14 @@ B	b1836	t1835
 T	t1836	o2 b1836
 B	b1837	t1836
 T	t1840	o550 b1817
-S	s832	t550 h h1826
+S	s832	tbrarg h h1826
 G	s832	t1840
 B	b832	s832
 T	t832	o567 b832 b1824
 B	b833	t832
 B	b1843	t1813 x
 T	t1843	o643 b1843
-S	s1843	t558 h h1826
+S	s1843	tbrarg h h1826
 G	s1843	t1843
 B	b1844	s1843
 T	t1844	o567 b1844 b1824
@@ -3737,14 +3741,14 @@ T	t842	o2 b841
 B	b842	t842
 T	t843	o566 b833 b4 b842
 B	b843	t843
-S	s1848	t550 h h1826 h582
+S	s1848	tbrarg h h1826 h582
 G	s1848	t1840
 B	b1849	s1848
 T	t1849	o567 b1849 b1824
 B	b1850	t1849
 B	b1851	t1828
 T	t1851	o558 b1851
-S	s1851	t550 h h1826 h582
+S	s1851	tbrarg h h1826 h582
 G	s1851	t1851
 B	b1852	s1851
 T	t1852	o567 b1852 b1824

@@ -1510,7 +1510,7 @@ B	b548	t539
 T	t548	o543 b548
 B	b549	t548
 NBase_dform	Base_dform	Base_dform NIL
-"NBase_dform! "	" "	" " Base_dform
+"NBase_dform!	"	" " " " Base_dform
 O	o549	" "
 T	t549	o549
 B	b550	t549
@@ -1563,13 +1563,17 @@ NCzf_itt_set	Czf_itt_set	Czf_itt_set NIL
 NCzf_itt_set!isset	isset	isset Czf_itt_set
 O	o577	isset
 T	t578	o577 b525
-S	s	t577 h
+NBase_rewrite	Base_rw	Base_rewrite NIL
+NBase_rewrite!sequent_arg	brwsqarg	sequent_arg Base_rw
+O	obrarg	brwsqarg
+T	tbrarg	obrarg
+S	s	tbrarg h
 G	s	t578
 B	b578	s
 T	t579	o575 b578
 B	b579	t579
 T	t580	o577 b529
-S	s580	t577 h
+S	s580	tbrarg h
 G	s580	t580
 B	b580	s580
 T	t581	o575 b580
@@ -1584,7 +1588,7 @@ T	t585	o584
 B	b585	t585
 T	t586	o b585 b4
 T	t587	o577 b530
-S	s587	t586 h
+S	s587	tbrarg h
 G	s587	t587
 B	b587	s587
 T	t588	o575 b587
@@ -1600,7 +1604,7 @@ O	o604	var p604
 T	t604	o604
 B	b604	t604
 T	t605	o577 b604
-S	s605	t577 h
+S	s605	tbrarg h
 G	s605	t605
 B	b605	s605
 T	t606	o575 b605
@@ -1609,7 +1613,7 @@ NCzf_itt_eq	Czf_itt_eq	Czf_itt_eq NIL
 NCzf_itt_eq!fun_set	fun_set	fun_set Czf_itt_eq
 O	o606	fun_set
 T	t607	o606 b528
-S	s607	t586 h
+S	s607	tbrarg h
 G	s607	t607
 B	b607	s607
 T	t608	o575 b607
@@ -1693,7 +1697,7 @@ O	o749	parent_none
 T	t750	o749
 B	b750	t750
 T	t609	o608 b604 b525
-S	s609	t586 h
+S	s609	tbrarg h
 G	s609	t609
 B	b609	s609
 T	t610	o575 b609
@@ -1701,13 +1705,13 @@ B	b610	t610
 T	t611	o526 b604
 B	b611	t611
 T	t612	o608 b611 b529
-S	s612	t586 h
+S	s612	tbrarg h
 G	s612	t612
 B	b612	s612
 T	t613	o575 b612
 B	b613	t613
 T	t614	o608 b604 b530
-S	s614	t586 h
+S	s614	tbrarg h
 G	s614	t614
 B	b614	s614
 T	t615	o575 b614
@@ -1734,17 +1738,17 @@ T	t634	o b573 b633
 B	b634	t634
 H	h634	x t614
 C	h635	J t527
-S	s635	t577 h h634 h635
+S	s635	tbrarg h h634 h635
 G	s635	t605
 B	b635	s635
 T	t635	o575 b635
 B	b636	t635
-S	s636	t577 h h634 h635
+S	s636	tbrarg h h634 h635
 G	s636	t578
 B	b637	s636
 T	t637	o575 b637
 B	b638	t637
-S	s638	t577 h h634 h635
+S	s638	tbrarg h h634 h635
 G	s638	t580
 B	b639	s638
 T	t639	o575 b639
@@ -1757,7 +1761,7 @@ B	b641	t640
 T	t641	o526 b641
 B	b586	t641 z
 T	t592	o606 b586
-S	s592	t586 h
+S	s592	tbrarg h
 G	s592	t592
 B	b592	s592
 T	t603	o575 b592
@@ -1782,7 +1786,7 @@ P	p703	String wf
 O	o714	tactic_arg p703
 B	b642	t641
 T	t642	o577 b642
-S	s714	t577 h h640
+S	s714	tbrarg h h640
 G	s714	t642
 B	b727	s714
 T	t727	o746 b727 b694
@@ -1792,7 +1796,7 @@ O	o747	restricted
 T	t755	o608 b642 b529
 B	b755	t755
 T	t774	o747 b755
-S	s774	t577 h h640
+S	s774	tbrarg h h640
 G	s774	t774
 B	b774	s774
 T	t826	o746 b774 b694
@@ -3931,7 +3935,7 @@ B	b828	t828
 T	t829	o b828 b4
 B	b829	t829
 T	t830	o577 b483
-S	s830	t586 h
+S	s830	tbrarg h
 G	s830	t830
 B	b830	s830
 T	t831	o746 b830 b694
@@ -4284,7 +4288,7 @@ B	b577	t575
 P	p577	Number 4874
 P	p578	Number 5515
 O	o579	location p577 p578
-S	s644	t586 h h634 h635
+S	s644	tbrarg h h634 h635
 G	s644	t607
 B	b645	s644
 T	t645	o575 b645
@@ -4294,12 +4298,12 @@ H	h648	w t612
 P	p648	Var C
 O	o648	var p648
 T	t648	o648 b527
-S	s322	t586 h h634 h635 h322 h648
+S	s322	tbrarg h h634 h635 h322 h648
 G	s322	t648
 B	b327	s322
 T	t327	o575 b327
 B	b331	t327
-S	s650	t586 h h634 h635
+S	s650	tbrarg h h634 h635
 G	s650	t648
 B	b651	s650
 T	t651	o575 b651

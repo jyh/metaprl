@@ -101,19 +101,19 @@ doc <:doc<
    Note that $x$ must be a variable that is not bound by any hypothesis
    in $H$.  The rule is even more stringent: $x$ may not occur free
    in $J$ or $C$ (note that the goal is @emph{not} phrased as
-   <<sequent['ext]{ <H>; x: 'A; <J['x]> >- 'C}>>).
+   <<sequent{ <H>; x: 'A; <J['x]> >- 'C}>>).
   
    The proof extract term $t$ is unchanged.
    @end[doc]
 >>
 prim thin 'H :
-   ('t : sequent ['ext] { <H>; <J> >- 'C }) -->
-   sequent ['ext] { <H>; 'A; <J> >- 'C } =
+   ('t : sequent { <H>; <J> >- 'C }) -->
+   sequent { <H>; 'A; <J> >- 'C } =
    't
 
 prim exchange 'H 'K 'L:
-   ('t : sequent ['ext] { <H>; <L>; <K>; <J> >- 'C }) -->
-   sequent ['ext] { <H>; <K>; <L>; <J> >- 'C } =
+   ('t : sequent { <H>; <L>; <K>; <J> >- 'C }) -->
+   sequent { <H>; <K>; <L>; <J> >- 'C } =
    't
 
 doc <:doc< 
@@ -130,9 +130,9 @@ doc <:doc<
    @end[doc]
 >>
 prim cut 'H 'S :
-   [assertion] ('a : sequent ['ext] { <H>; <J> >- 'S }) -->
-   [main] ('f['x] : sequent ['ext] { <H>; 'S; <J> >- 'T }) -->
-   sequent ['ext] { <H>; <J> >- 'T } =
+   [assertion] ('a : sequent { <H>; <J> >- 'S }) -->
+   [main] ('f['x] : sequent { <H>; 'S; <J> >- 'T }) -->
+   sequent { <H>; <J> >- 'T } =
    'f['a]
 
 doc <:doc< 
@@ -141,9 +141,9 @@ doc <:doc<
    This is usually used for performance testing.
 >>
 interactive dup :
-   sequent ['ext] { <H> >- 'T } -->
-   sequent ['ext] { <H> >- 'T } -->
-   sequent ['ext] { <H> >- 'T}
+   sequent { <H> >- 'T } -->
+   sequent { <H> >- 'T } -->
+   sequent { <H> >- 'T}
 
 doc <:doc< 
    @begin[doc]
@@ -155,8 +155,8 @@ doc <:doc<
    @end[doc]
 >>
 prim introduction 't :
-   [wf] sequent [squash] { <H> >- 't in 'T } -->
-   sequent ['ext] { <H> >- 'T } =
+   [wf] sequent { <H> >- 't in 'T } -->
+   sequent { <H> >- 'T } =
    't
 
 doc <:doc< 
@@ -174,10 +174,10 @@ doc <:doc<
  * by hypothesis
  *)
 interactive hypothesis 'H :
-   sequent ['ext] { <H>; x: 'A; <J['x]> >- 'A }
+   sequent { <H>; x: 'A; <J['x]> >- 'A }
 
 interactive hypothesisType 'H :
-   sequent ['ext] { <H>; x: 'A; <J['x]> >- "type"{'A} }
+   sequent { <H>; x: 'A; <J['x]> >- "type"{'A} }
 
 doc <:doc< 
    @begin[doc]
@@ -199,10 +199,10 @@ doc <:doc<
    @end[doc]
 >>
 prim substitution ('t1 = 't2 in 'T2) bind{x. 'T1['x]} :
-   [equality] sequent [squash] { <H> >- 't1 = 't2 in 'T2 } -->
-   [main] ('t : sequent ['ext] { <H> >- 'T1['t2] }) -->
-   [wf] sequent [squash] { <H>; x: 'T2 >- "type"{'T1['x]} } -->
-   sequent ['ext] { <H> >- 'T1['t1] } =
+   [equality] sequent { <H> >- 't1 = 't2 in 'T2 } -->
+   [main] ('t : sequent { <H> >- 'T1['t2] }) -->
+   [wf] sequent { <H>; x: 'T2 >- "type"{'T1['x]} } -->
+   sequent { <H> >- 'T1['t1] } =
    't
 
 doc <:doc< 
@@ -217,16 +217,16 @@ doc <:doc<
    @end[doc]
 >>
 prim hypReplacement 'H 'B univ[i:l] :
-   [main] ('t : sequent ['ext] { <H>; x: 'B; <J['x]> >- 'T['x] }) -->
-   [equality] sequent [squash] { <H>; x: 'A; <J['x]> >- 'A = 'B in univ[i:l] } -->
-   sequent ['ext] { <H>; x: 'A; <J['x]> >- 'T['x] } =
+   [main] ('t : sequent { <H>; x: 'B; <J['x]> >- 'T['x] }) -->
+   [equality] sequent { <H>; x: 'A; <J['x]> >- 'A = 'B in univ[i:l] } -->
+   sequent { <H>; x: 'A; <J['x]> >- 'T['x] } =
    't
 
 prim hypSubstitution 'H ('t1 = 't2 in 'T2) bind{y. 'A['y]} :
-   [equality] sequent [squash] { <H>; x: 'A['t1]; <J['x]> >- 't1 = 't2 in 'T2 } -->
-   [main] ('t : sequent ['ext] { <H>; x: 'A['t2]; <J['x]> >- 'T1['x] }) -->
-   [wf] sequent [squash] { <H>; x: 'A['t1]; <J['x]>; z: 'T2 >- "type"{'A['z]} } -->
-   sequent ['ext] { <H>; x: 'A['t1]; <J['x]> >- 'T1['x] } =
+   [equality] sequent { <H>; x: 'A['t1]; <J['x]> >- 't1 = 't2 in 'T2 } -->
+   [main] ('t : sequent { <H>; x: 'A['t2]; <J['x]> >- 'T1['x] }) -->
+   [wf] sequent { <H>; x: 'A['t1]; <J['x]>; z: 'T2 >- "type"{'A['z]} } -->
+   sequent { <H>; x: 'A['t1]; <J['x]> >- 'T1['x] } =
    't
 
 doc <:doc< ************************************************************************
@@ -237,8 +237,8 @@ doc <:doc< *********************************************************************
    @end[doc]
 >>
 interactive equalityTypeIsType 'a 'b :
-   [wf] sequent [squash] { <H> >- 'a = 'b in 'T } -->
-   sequent ['ext] { <H> >- "type"{'T} }
+   [wf] sequent { <H> >- 'a = 'b in 'T } -->
+   sequent { <H> >- "type"{'T} }
 
 (************************************************************************
  * TACTICS                                                              *
@@ -255,7 +255,7 @@ doc <:doc<
    $$
    @rulebox{nthHypT; i;
       @cdot;
-      <<sequent['ext]{ <H>; "i. x": 'A; <J> >- 'A}>>}
+      <<sequent{ <H>; "i. x": 'A; <J> >- 'A}>>}
    $$
   
    @docoff
@@ -272,8 +272,8 @@ doc <:doc<
   
    $$
    @rulebox{thinT; i;
-     <<sequent['ext]{ <H>; <J> >- 'C}>>;
-     <<sequent['ext]{ <H>; "i. x": 'A; <J> >- 'C}>>}
+     <<sequent{ <H>; <J> >- 'C}>>;
+     <<sequent{ <H>; "i. x": 'A; <J> >- 'C}>>}
    $$
   
    @noindent
@@ -281,8 +281,8 @@ doc <:doc<
   
    $$
    @rulebox{thinAllT; i@ j;
-      <<sequent['ext]{ <H>; <J> >- 'C}>>;
-      <<sequent['ext]{ <H>; "i. x_i": 'A_i; math_cdots; "j. x_j": 'A_j; <J> >- 'C}>>}
+      <<sequent{ <H>; <J> >- 'C}>>;
+      <<sequent{ <H>; "i. x_i": 'A_i; math_cdots; "j. x_j": 'A_j; <J> >- 'C}>>}
    $$
   
    @docoff
@@ -313,9 +313,9 @@ doc <:doc<
   
    $$
    @rulebox{assertT; A;
-     @ldots @i{assertion} @ldots <<sequent['ext]{ <H> >- 'A}>>@cr
-       <<sequent['ext]{ <H>; x: 'A >- 'C}>>;
-     <<sequent['ext]{ <H> >- 'C}>>}
+     @ldots @i{assertion} @ldots <<sequent{ <H> >- 'A}>>@cr
+       <<sequent{ <H>; x: 'A >- 'C}>>;
+     <<sequent{ <H> >- 'C}>>}
    $$
   
    @docoff
@@ -335,9 +335,9 @@ doc <:doc<
   
    $$
    @rulebox{assertAtT; i@space A;
-      @ldots  @i{assertion} @ldots <<sequent['ext]{ <H>; <J> >- 'A}>>@cr
-         <<sequent['ext]{ <H>; x: 'A; <J> >- 'C}>>;
-      <<sequent['ext]{ <H>; (<:doc<(@i{location}@space i)>>) ; <J> >- 'C}>>}
+      @ldots  @i{assertion} @ldots <<sequent{ <H>; <J> >- 'A}>>@cr
+         <<sequent{ <H>; x: 'A; <J> >- 'C}>>;
+      <<sequent{ <H>; (<:doc<(@i{location}@space i)>>) ; <J> >- 'C}>>}
    $$
   
    @docoff
@@ -361,8 +361,8 @@ doc <:doc<
   
    $$
    @rulebox{useWitnessT; t;
-     <<sequent[squash]{ <H> >- 't in 'T}>>;
-     <<sequent['ext]{ <H> >- 'T}>>}
+     <<sequent{ <H> >- 't in 'T}>>;
+     <<sequent{ <H> >- 'T}>>}
    $$
   
    @docoff
@@ -382,10 +382,10 @@ doc <:doc<
   
    $$
    @rulebox{substT; 1 + 2 = 3 @in @int;
-      @ldots @i{equality} @ldots <<sequent[squash]{ <H> >- <:doc<1 + 2 = 3 @in @int>>}>>@cr
-      @ldots @i{main} @ldots <<sequent['ext]{ <H> >- <:doc<3 < 1 * 3>>}>>@cr
-      @ldots @i{wf} @ldots <<sequent[squash]{ <H>; i: (<:doc<@int>>) >- "type"{.<:doc<(x < 1 * x)>>}}>>;
-      <<sequent['ext]{ <H> >- <:doc< (1 + 2) < 1 * (1 + 2)>>}>>}
+      @ldots @i{equality} @ldots <<sequent{ <H> >- <:doc<1 + 2 = 3 @in @int>>}>>@cr
+      @ldots @i{main} @ldots <<sequent{ <H> >- <:doc<3 < 1 * 3>>}>>@cr
+      @ldots @i{wf} @ldots <<sequent{ <H>; i: (<:doc<@int>>) >- "type"{.<:doc<(x < 1 * x)>>}}>>;
+      <<sequent{ <H> >- <:doc< (1 + 2) < 1 * (1 + 2)>>}>>}
    $$
   
    @docoff

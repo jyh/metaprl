@@ -183,79 +183,79 @@ prim_rw unfold_alloc_decl : alloc_decl{'decl; 'l; 'v} <-->
  * Labels are in their type.
  *)
 interactive label_type_member {| intro [] |} :
-   sequent ['ext] { <H> >- member{univ[i:l]; label_type} }
+   sequent { <H> >- member{univ[i:l]; label_type} }
 
 interactive label_type_type {| intro [] |} :
-   sequent ['ext] { <H> >- "type"{label_type} }
+   sequent { <H> >- "type"{label_type} }
 
 interactive first_member {| intro [] |} :
-   sequent ['ext] { <H> >- member{label_type; first} }
+   sequent { <H> >- member{label_type; first} }
 
 interactive next_member {| intro [] |} :
-   [wf] sequent [squash] { <H> >- member{label_type; 'l} } -->
-   sequent ['ext] { <H> >- member{label_type; next{'l}} }
+   [wf] sequent { <H> >- member{label_type; 'l} } -->
+   sequent { <H> >- member{label_type; next{'l}} }
 
 interactive label_elim {| elim [ThinOption thinT] |} 'H :
-   [main] sequent ['ext] { <H>; l: label_type; <J['l]> >- 'C[first] } -->
-   [main] sequent ['ext] { <H>; l: label_type; <J['l]>; v: label_type; w: 'C['v] >- 'C[next{'v}] } -->
-   sequent ['ext] { <H>; l: label_type; <J['l]> >- 'C['l] }
+   [main] sequent { <H>; l: label_type; <J['l]> >- 'C[first] } -->
+   [main] sequent { <H>; l: label_type; <J['l]>; v: label_type; w: 'C['v] >- 'C[next{'v}] } -->
+   sequent { <H>; l: label_type; <J['l]> >- 'C['l] }
 
 interactive eq_label_member {| intro [] |} :
-   [wf] sequent [squash] { <H> >- member{label_type; 'l1} } -->
-   [wf] sequent [squash] { <H> >- member{label_type; 'l2} } -->
-   sequent ['ext] { <H> >- member{bool; eq_label{'l1; 'l2}} }
+   [wf] sequent { <H> >- member{label_type; 'l1} } -->
+   [wf] sequent { <H> >- member{label_type; 'l2} } -->
+   sequent { <H> >- member{bool; eq_label{'l1; 'l2}} }
 
 interactive label_eq_member {| intro [] |} :
-   [wf] sequent [squash] { <H> >- member{label_type; 'l1} } -->
-   [wf] sequent [squash] { <H> >- member{label_type; 'l2} } -->
-   [wf] sequent [squash] { <H>; v: "assert"{eq_label{'l1; 'l2}} >- member{'T; 'e1} } -->
-   [wf] sequent [squash] { <H>; v: "assert"{bnot{eq_label{'l1; 'l2}}} >- member{'T; 'e2} } -->
-   sequent ['ext] { <H> >- member{'T; if_eq_label{'l1; 'l2; 'e1; 'e2}} }
+   [wf] sequent { <H> >- member{label_type; 'l1} } -->
+   [wf] sequent { <H> >- member{label_type; 'l2} } -->
+   [wf] sequent { <H>; v: "assert"{eq_label{'l1; 'l2}} >- member{'T; 'e1} } -->
+   [wf] sequent { <H>; v: "assert"{bnot{eq_label{'l1; 'l2}}} >- member{'T; 'e2} } -->
+   sequent { <H> >- member{'T; if_eq_label{'l1; 'l2; 'e1; 'e2}} }
 
 (*
  * Orderings.
  *)
 interactive order_type_member {| intro [] |} :
-   sequent ['ext] { <H> >- member{univ[i:l]; order_type} }
+   sequent { <H> >- member{univ[i:l]; order_type} }
 
 interactive order_type_type {| intro [] |} :
-   sequent ['ext] { <H> >- "type"{order_type} }
+   sequent { <H> >- "type"{order_type} }
 
 interactive order_apply_member {| intro [] |} :
-   [wf] sequent [squash] { <H> >- member{order_type; 'order} } -->
-   [wf] sequent [squash] { <H> >- member{label_type; 'l1} } -->
-   [wf] sequent [squash] { <H> >- member{label_type; 'l2} } -->
-   sequent ['ext] { <H> >- member{univ[i:l]; order_apply{'order; 'l1; 'l2}} }
+   [wf] sequent { <H> >- member{order_type; 'order} } -->
+   [wf] sequent { <H> >- member{label_type; 'l1} } -->
+   [wf] sequent { <H> >- member{label_type; 'l2} } -->
+   sequent { <H> >- member{univ[i:l]; order_apply{'order; 'l1; 'l2}} }
 
 interactive order_apply_type {| intro [] |} :
-   [wf] sequent [squash] { <H> >- member{order_type; 'order} } -->
-   [wf] sequent [squash] { <H> >- member{label_type; 'l1} } -->
-   [wf] sequent [squash] { <H> >- member{label_type; 'l2} } -->
-   sequent ['ext] { <H> >- "type"{order_apply{'order; 'l1; 'l2}} }
+   [wf] sequent { <H> >- member{order_type; 'order} } -->
+   [wf] sequent { <H> >- member{label_type; 'l1} } -->
+   [wf] sequent { <H> >- member{label_type; 'l2} } -->
+   sequent { <H> >- "type"{order_apply{'order; 'l1; 'l2}} }
 
 (*
  * Discrete order is well-formed, and well-founded.
  *)
 interactive discrete_order_wf {| intro [] |} :
-   sequent ['ext] { <H> >- member{order_type; discrete_order} }
+   sequent { <H> >- member{order_type; discrete_order} }
 
 interactive discrete_order_well_founded {| intro [] |} :
-   sequent ['ext] { <H> >- well_founded{label_type; l1, l2. discrete_order 'l1 'l2} }
+   sequent { <H> >- well_founded{label_type; l1, l2. discrete_order 'l1 'l2} }
 
 (*
  * Next order is well-formed and well-founded.
  *)
 interactive next_order_wf {| intro [] |} :
-   [wf] sequent [squash] { <H> >- member{order_type; 'order} } -->
-   [wf] sequent [squash] { <H> >- member{label_type; 'l} } -->
-   sequent ['ext] { <H> >- member{order_type; next_order{'order; 'l}} }
+   [wf] sequent { <H> >- member{order_type; 'order} } -->
+   [wf] sequent { <H> >- member{label_type; 'l} } -->
+   sequent { <H> >- member{order_type; next_order{'order; 'l}} }
 
 interactive next_order_anti_ref {| intro [] |} 'a :
-   [wf] sequent [squash] { <H> >- member{order_type; 'order} } -->
-   [wf] sequent [squash] { <H>; a: label_type >- not{order_apply{'order; 'a; 'a}} } -->
-   [wf] sequent [squash] { <H> >- member{label_type; 'l1} } -->
-   [wf] sequent [squash] { <H> >- member{label_type; 'l2} } -->
-   sequent ['ext] { <H> >- not{order_apply{next{'order; 'l1}; 'l2; 'l2}} }
+   [wf] sequent { <H> >- member{order_type; 'order} } -->
+   [wf] sequent { <H>; a: label_type >- not{order_apply{'order; 'a; 'a}} } -->
+   [wf] sequent { <H> >- member{label_type; 'l1} } -->
+   [wf] sequent { <H> >- member{label_type; 'l2} } -->
+   sequent { <H> >- not{order_apply{next{'order; 'l1}; 'l2; 'l2}} }
 
 (*
  * -*-

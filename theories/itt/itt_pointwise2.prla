@@ -942,7 +942,11 @@ B	b503	t502
 T	t503	o503 b503
 B	b504	t503
 T	t504	o502 b504
-S	s	t495 h h501 h502
+NBase_rewrite	Base_rw	Base_rewrite NIL
+NBase_rewrite!sequent_arg	brwsqarg	sequent_arg Base_rw
+O	obrarg	brwsqarg
+T	tbrarg	obrarg
+S	s	tbrarg h h501 h502
 G	s	t504
 B	b505	s
 T	t505	o493 b505
@@ -986,7 +990,7 @@ B	b519	t519
 T	t520	o513 b503
 B	b520	t520
 T	t521	o511 b504 b519 b520
-S	s521	t518 h h501 h502
+S	s521	tbrarg h h501 h502
 G	s521	t521
 B	b521	s521
 T	t522	o493 b521
@@ -1620,7 +1624,7 @@ T	t857	o b482 b489
 B	b857	t857
 H	h857	t501
 H	h858	t510
-S	s858	t495 h h857 h507 h508 h858 h511
+S	s858	tbrarg h h857 h507 h508 h858 h511
 G	s858	t514
 B	b858	s858
 T	t858	o493 b858
@@ -1662,7 +1666,7 @@ B	b873	t873
 T	t874	o513 b868
 B	b874	t874
 T	t875	o511 b872 b873 b874
-S	s875	t495 h h501 h502 h866 h867 h869 h870 h871
+S	s875	tbrarg h h501 h502 h866 h867 h869 h870 h871
 G	s875	t875
 B	b875	s875
 T	t876	o529 b875 b864
@@ -1678,12 +1682,12 @@ B	b880	t880
 P	p880	String "exchange 3 2 6 thenT contextSubstPointwise 2 6 2 <<'e2>> ttca"
 O	o880	ext_rule p880
 T	t881	o511 b534 b503 b867
-S	s881	t495 h h501 h866 h867 h869 h870 h871 h502
+S	s881	tbrarg h h501 h866 h867 h869 h870 h871 h502
 G	s881	t881
 B	b881	s881
 T	t882	o529 b881 b864
 B	b882	t882
-S	s882	t495 h h501 h866 h867 h869 h870 h871 h502
+S	s882	tbrarg h h501 h866 h867 h869 h870 h871 h502
 G	s882	t875
 B	b883	s882
 T	t883	o529 b883 b864
@@ -1780,13 +1784,13 @@ O	o588	var p587
 T	t588	o588 b498
 B	b588	t588
 T	t589	o587 b588
-S	s913	t495 h h913 h508 h586 h587
+S	s913	tbrarg h h913 h508 h586 h587
 G	s913	t589
 B	b914	s913
 T	t914	o493 b914
 B	b915	t914
 H	h590	x t585
-S	s590	t518 h h590 h587
+S	s590	tbrarg h h590 h587
 G	s590	t589
 B	b591	s590
 T	t591	o493 b591
@@ -1812,7 +1816,7 @@ H	h919	t598
 T	t599	o588 b598
 B	b599	t599
 T	t600	o587 b599
-S	s919	t495 h h590 h587 h508 h596 h919
+S	s919	tbrarg h h590 h587 h508 h596 h919
 G	s919	t600
 B	b920	s919
 T	t920	o529 b920 b917
@@ -1830,12 +1834,12 @@ B	b926	t925
 P	p926	String "exchange 3 2 4 thenT contextSubstPointwise 2 4 2 <<'z>> ttca"
 O	o926	ext_rule p926
 T	t606	o511 b597 b498 b598
-S	s926	t495 h h590 h508 h596 h919 h587
+S	s926	tbrarg h h590 h508 h596 h919 h587
 G	s926	t606
 B	b927	s926
 T	t927	o529 b927 b917
 B	b928	t927
-S	s928	t495 h h590 h508 h596 h919 h587
+S	s928	tbrarg h h590 h508 h596 h919 h587
 G	s928	t600
 B	b929	s928
 T	t929	o529 b929 b917
@@ -1911,7 +1915,7 @@ O	o640	rule p640
 T	t959	o b482 b4
 B	b959	t959
 H	h642	x t496
-S	s642	t495 h h642 h587
+S	s642	tbrarg h h642 h587
 G	s642	t589
 B	b643	s642
 T	t643	o493 b643
@@ -1920,7 +1924,7 @@ T	t353	o507 b644
 B	b353	t353
 T	t644	o584
 H	h644	x t644
-S	s644	t495 h h644 h587
+S	s644	tbrarg h h644 h587
 G	s644	t589
 B	b645	s644
 T	t645	o493 b645
@@ -1933,7 +1937,7 @@ O	o646	bunion
 B	b647	t644
 T	t647	o646 b496 b647
 H	h647	x t647
-S	s647	t518 h h647 h587
+S	s647	tbrarg h h647 h587
 G	s647	t589
 B	b648	s647
 T	t648	o493 b648

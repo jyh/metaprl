@@ -893,7 +893,11 @@ B	b569	t569
 T	t570	o561 b569
 B	b570	t570 x
 T	t571	o568 b570
-S	s571	t559 h
+NBase_rewrite	Base_rw	Base_rewrite NIL
+NBase_rewrite!sequent_arg	brwsqarg	sequent_arg Base_rw
+O	obrarg	brwsqarg
+T	tbrarg	obrarg
+S	s571	tbrarg h
 G	s571	t571
 B	b571	s571
 T	t572	o557 b571
@@ -901,7 +905,7 @@ B	b572	t572
 T	t573	o565 b569
 B	b573	t573 x
 T	t574	o568 b573
-S	s574	t559 h
+S	s574	tbrarg h
 G	s574	t574
 B	b574	s574
 T	t575	o557 b574
@@ -914,7 +918,7 @@ B	b577	t573
 T	t577	o575 b576 b577
 B	b578	t577 x
 T	t578	o568 b578
-S	s578	t559 h
+S	s578	tbrarg h
 G	s578	t578
 B	b579	s578
 T	t579	o557 b579
@@ -1288,7 +1292,7 @@ T	t742	o739 b736
 T	t744	o575 b732 b736
 B	b744	t744
 T	t745	o739 b744
-S	s745	t559 h
+S	s745	tbrarg h
 G	s745	t745
 B	b745	s745
 T	t746	o557 b745
@@ -1307,7 +1311,7 @@ O	o895	or
 T	t895	o895 b576 b577
 B	b895	t895 x
 T	t896	o568 b895
-S	s896	t559 h
+S	s896	tbrarg h
 G	s896	t896
 B	b896	s896
 T	t897	o557 b896
@@ -1334,14 +1338,14 @@ O	o913	squash
 T	t914	o913
 B	b914	t914
 T	t915	o b914 b4
-S	s8	t915 h h560
+S	s8	tbrarg h h560
 G	s8	t564
 B	b138	s8
 T	t138	o557 b138
 B	b139	t138
 T	t139	o732 b139
 B	b140	t139
-S	s140	t915 h h560
+S	s140	tbrarg h h560
 G	s140	t567
 B	b141	s140
 T	t141	o557 b141
@@ -1364,19 +1368,19 @@ NCzf_itt_eq!equal	equal	equal Czf_itt_eq
 O	o149	equal
 T	t149	o149 b569 b597
 H	h149	x_2 t149
-S	s149	t559 h h595 h596 h149 h599
+S	s149	tbrarg h h595 h596 h149 h599
 G	s149	t601
 B	b150	s149
 T	t150	o589 b150 b147
 B	b151	t150
-S	s151	t559 h h595 h596 h149
+S	s151	tbrarg h h595 h596 h149
 G	s151	t604
 B	b152	s151
 T	t152	o589 b152 b147
 B	b153	t152
 B	b154	t149
 T	t154	o602 b154 b608
-S	s154	t559 h h595 h596
+S	s154	tbrarg h h595 h596
 G	s154	t154
 B	b155	s154
 T	t155	o589 b155 b147
@@ -1386,7 +1390,7 @@ B	b157	t156
 T	t157	o602 b157 b617
 B	b158	t157 s2
 T	t158	o610 b611 b158
-S	s158	t559 h h595
+S	s158	tbrarg h h595
 G	s158	t158
 B	b159	s158
 T	t159	o589 b159 b147
@@ -1398,7 +1402,7 @@ B	b162	t161 s2
 T	t162	o610 b611 b162
 B	b163	t162 s1
 T	t163	o610 b611 b163
-S	s163	t559 h
+S	s163	tbrarg h
 G	s163	t163
 B	b164	s163
 T	t164	o589 b164 b147
@@ -1423,12 +1427,12 @@ T	t173	o2 b173
 B	b174	t173
 T	t174	o588 b151 b4 b174
 B	b175	t174
-S	s177	t559 h h595 h596 h149 h643
+S	s177	tbrarg h h595 h596 h149 h643
 G	s177	t601
 B	b178	s177
 T	t178	o589 b178 b147
 B	b179	t178
-S	s179	t559 h h595 h596 h149 h599 h643
+S	s179	tbrarg h h595 h596 h149 h599 h643
 G	s179	t601
 B	b180	s179
 T	t180	o589 b180 b147
@@ -1441,12 +1445,12 @@ T	t183	o2 b183
 B	b184	t183
 T	t184	o643 b179 b4 b184
 B	b185	t184
-S	s185	t559 h h595 h596 h149 h650
+S	s185	tbrarg h h595 h596 h149 h650
 G	s185	t601
 B	b186	s185
 T	t186	o589 b186 b147
 B	b187	t186
-S	s187	t559 h h595 h596 h149 h599 h650
+S	s187	tbrarg h h595 h596 h149 h599 h650
 G	s187	t601
 B	b188	s187
 T	t188	o589 b188 b147
@@ -1463,7 +1467,7 @@ T	t193	o b185 b193
 B	b194	t193
 T	t194	o587 b175 b194
 B	b195	t194
-S	s195	t559 h h595 h596 h149 h643
+S	s195	tbrarg h h595 h596 h149 h643
 G	s195	t599
 B	b196	s195
 T	t196	o589 b196 b147
@@ -1478,7 +1482,7 @@ T	t200	o b200 b4
 B	b201	t200
 T	t201	o587 b185 b201
 B	b202	t201
-S	s202	t559 h h595 h596 h149 h643 h670
+S	s202	tbrarg h h595 h596 h149 h643 h670
 G	s202	t599
 B	b203	s202
 T	t203	o589 b203 b147
@@ -1497,7 +1501,7 @@ T	t214	o610 b611 b214
 B	b215	t214 s1
 T	t215	o610 b611 b215
 H	h215	v t215
-S	s215	t559 h h595 h596 h149 h643 h215
+S	s215	tbrarg h h595 h596 h149 h643 h215
 G	s215	t599
 B	b219	s215
 T	t219	o589 b219 b147
@@ -1526,7 +1530,7 @@ T	t235	o b235 b4
 B	b363	t235
 T	t363	o660 b586 b202 b363 b4
 B	b366	t363
-S	s366	t559 h h595 h596 h149 h650
+S	s366	tbrarg h h595 h596 h149 h650
 G	s366	t600
 B	b367	s366
 T	t367	o589 b367 b147
@@ -1547,12 +1551,12 @@ T	t390	o610 b611 b390
 B	b394	t390 s1
 T	t394	o610 b611 b394
 H	h394	v_1 t394
-S	s394	t559 h h595 h596 h149 h650 h394
+S	s394	tbrarg h h595 h596 h149 h650 h394
 G	s394	t600
 B	b396	s394
 T	t396	o589 b396 b147
 B	b397	t396
-S	s397	t559 h h595 h596 h149 h650 h708
+S	s397	tbrarg h h595 h596 h149 h650 h708
 G	s397	t600
 B	b398	s397
 T	t398	o589 b398 b147
@@ -1589,12 +1593,12 @@ T	t420	o642 b586 b195 b420 b4
 B	b421	t420
 T	t421	o b421 b4
 B	b422	t421
-S	s451	t915 h
+S	s451	tbrarg h
 G	s451	t740
 B	b451	s451
 T	t451	o557 b451
 B	b452	t451
-S	s452	t915 h
+S	s452	tbrarg h
 G	s452	t742
 B	b453	s452
 T	t453	o557 b453
@@ -1613,7 +1617,7 @@ T	t458	o589 b745 b458
 B	b459	t458
 T	t459	o588 b459 b4 b594
 B	b460	t459
-S	s460	t915 h
+S	s460	tbrarg h
 G	s460	t745
 B	b461	s460
 T	t461	o589 b461 b458
@@ -1628,12 +1632,12 @@ T	t534	o587 b460 b534
 B	b542	t534
 P	p544	String "assumT 1 thenT assumT 2"
 O	o549	ext_rule p544
-S	s549	t915 h h756 h757
+S	s549	tbrarg h h756 h757
 G	s549	t745
 B	b552	s549
 T	t552	o589 b552 b458
 B	b559	t552
-S	s559	t915 h h756
+S	s559	tbrarg h h756
 G	s559	t745
 B	b560	s559
 T	t584	o589 b560 b458
@@ -1659,17 +1663,17 @@ H	h908	v t908
 T	t910	o908 b768 b736 b736
 H	h910	v_1 t910
 T	t933	o908 b768 b744 b744
-S	s934	t915 h h908 h910
+S	s934	tbrarg h h908 h910
 G	s934	t933
 B	b1046	s934
 T	t1046	o589 b1046 b458
 B	b1047	t1046
-S	s1047	t915 h h908 h910
+S	s1047	tbrarg h h908 h910
 G	s1047	t745
 B	b1051	s1047
 T	t1051	o589 b1051 b458
 B	b1052	t1051
-S	s1052	t915 h h908 h757
+S	s1052	tbrarg h h908 h757
 G	s1052	t745
 B	b1053	s1052
 T	t1053	o589 b1053 b458
@@ -1693,7 +1697,7 @@ B	b1062	t1061
 T	t920	o895 b732 b736
 B	b921	t920
 T	t921	o739 b921
-S	s921	t559 h
+S	s921	tbrarg h
 G	s921	t921
 B	b922	s921
 T	t922	o557 b922
@@ -1868,12 +1872,12 @@ H	h846	s1 t560
 H	h847	s2 t560
 H	h848	x t160
 H	h849	x_1 t624
-S	s	t559 h h846 h847 h848 h849
+S	s	tbrarg h h846 h847 h848 h849
 G	s	t615
 B	b849	s
 T	t849	o589 b849 b147
 B	b850	t849
-S	s850	t559 h h846 h847 h848
+S	s850	tbrarg h h846 h847 h848
 G	s850	t625
 B	b851	s850
 T	t851	o589 b851 b147
@@ -1889,12 +1893,12 @@ T	t854	o852 b853
 B	b854	t854
 T	t855	o b854 b4
 B	b855	t855
-S	s855	t559 h h846 h847
+S	s855	tbrarg h h846 h847
 G	s855	t161
 B	b856	s855
 T	t856	o589 b856 b147
 B	b857	t856
-S	s857	t559 h h846
+S	s857	tbrarg h h846
 G	s857	t162
 B	b858	s857
 T	t858	o589 b858 b147

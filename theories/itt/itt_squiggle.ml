@@ -12,7 +12,7 @@ doc <:doc<
    $t$ can be reduced to $s$. We can expand this semantics for open terms
    in the given context the same way as for any other type.
    For example one can prove that
-   $$<<sequent['ext]{ <H>; x: <:doc<@prod{A;B}>> >- 'x ~ (<:doc<@pair{@fst{x};@snd{x}}>>)}>>$$
+   $$<<sequent{ <H>; x: <:doc<@prod{A;B}>> >- 'x ~ (<:doc<@pair{@fst{x};@snd{x}}>>)}>>$$
    This is a conditional rewrite: it states that we can replace $x$ with
    $@pair{@fst{x};@snd{x}}$ only when we know that $x$ is from a product type.
    The rules @hrefrule[squiggleSubstitution] and @hrefrule[squiggleHypSubstitution]
@@ -131,19 +131,19 @@ doc <:doc<
    @end[doc]
 >>
 prim squiggleEquality {| intro []; eqcd |} :
-  [wf] sequent[squash] { <H> >- 't1 ~ 's1 } -->
-  [wf] sequent[squash] { <H> >- 't2 ~ 's2 } -->
-  sequent['ext] { <H> >- ('t1 ~ 's1) = ('t2 ~ 's2) in univ[i:l]} =
+  [wf] sequent{ <H> >- 't1 ~ 's1 } -->
+  [wf] sequent{ <H> >- 't2 ~ 's2 } -->
+  sequent{ <H> >- ('t1 ~ 's1) = ('t2 ~ 's2) in univ[i:l]} =
   it
 
 interactive squiggleFormation ('t ~ 's) :
-  [wf] sequent[squash] { <H> >- 't ~ 's } -->
-  sequent['ext] { <H> >- univ[i:l]}
+  [wf] sequent{ <H> >- 't ~ 's } -->
+  sequent{ <H> >- univ[i:l]}
      (* = 't ~ 's *)
 
 interactive squiggleType {| intro [] |} :
-  [wf] sequent[squash] { <H> >- 't ~ 's } -->
-  sequent['ext] { <H> >- "type"{.'t ~ 's}}
+  [wf] sequent{ <H> >- 't ~ 's } -->
+  sequent{ <H> >- "type"{.'t ~ 's}}
 
 doc <:doc< 
    @begin[doc]
@@ -154,13 +154,13 @@ doc <:doc<
 >>
 
 prim squiggle_memberEquality {| intro []; eqcd; squash |} :
-  [wf] sequent[squash] { <H> >- 't ~ 's } -->
-  sequent['ext] { <H> >- it in ('t ~ 's)} =
+  [wf] sequent{ <H> >- 't ~ 's } -->
+  sequent{ <H> >- it in ('t ~ 's)} =
   it
 
 prim squiggleElimination {|  elim [ThinOption thinT] |} 'H :
-   ('t : sequent['ext] { <H>; ('t ~ 's); <J[it]> >- 'C[it] }) -->
-   sequent ['ext] { <H>; x: ('t ~ 's); <J['x]> >- 'C['x] } =
+   ('t : sequent{ <H>; ('t ~ 's); <J[it]> >- 'C[it] }) -->
+   sequent { <H>; x: ('t ~ 's); <J['x]> >- 'C['x] } =
    't
 
 doc <:doc< 
@@ -172,15 +172,15 @@ doc <:doc<
 >>
 
 prim squiggleSubstitution ('t ~ 's) bind{x. 'A['x]} :
-  [equality] sequent[squash] { <H> >- 't ~ 's } -->
-  [main] ('t : sequent['ext] { <H> >- 'A['s] }) -->
-   sequent ['ext] { <H> >-  'A['t] } =
+  [equality] sequent{ <H> >- 't ~ 's } -->
+  [main] ('t : sequent{ <H> >- 'A['s] }) -->
+   sequent { <H> >-  'A['t] } =
    't
 
 prim squiggleHypSubstitution 'H ('t ~ 's) bind{x. 'A['x]}:
-   [equality] sequent [squash] { <H>; x: 'A['t]; <J['x]> >- 't ~ 's } -->
-   [main] ('t : sequent ['ext] { <H>; x: 'A['s]; <J['x]> >- 'C['x] }) -->
-   sequent ['ext] { <H>; x: 'A['t]; <J['x]> >- 'C['x] } =
+   [equality] sequent { <H>; x: 'A['t]; <J['x]> >- 't ~ 's } -->
+   [main] ('t : sequent { <H>; x: 'A['s]; <J['x]> >- 'C['x] }) -->
+   sequent { <H>; x: 'A['t]; <J['x]> >- 'C['x] } =
    't
 
 doc <:doc< 
@@ -203,17 +203,17 @@ doc <:doc<
 
 
 prim squiggleRef {|  intro [] |} :
-   sequent ['ext] { <H> >- 't ~ 't } =
+   sequent { <H> >- 't ~ 't } =
    it
 
 interactive squiggleSym :
-   sequent [squash] { <H> >- 's ~ 't } -->
-   sequent ['ext] { <H> >- 't ~ 's }
+   sequent { <H> >- 's ~ 't } -->
+   sequent { <H> >- 't ~ 's }
 
 interactive squiggleTrans 'r :
-   sequent [squash] { <H> >- 't ~ 'r } -->
-   sequent [squash] { <H> >- 'r ~ 's } -->
-   sequent ['ext] { <H> >- 't ~ 's }
+   sequent { <H> >- 't ~ 'r } -->
+   sequent { <H> >- 'r ~ 's } -->
+   sequent { <H> >- 't ~ 's }
 
 doc <:doc< @docoff >>
 

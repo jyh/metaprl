@@ -104,7 +104,7 @@ doc <:doc< *********************************************************************
    @emph{inclusion} (this is a builtin judgment in @MetaPRL).
   
    The $@type{t}$ term is used to define the @emph{type} judgment.  A term $T$ is a
-   type if <<sequent[squash]{ <H> >- "type"{'T}}>>.
+   type if <<sequent{ <H> >- "type"{'T}}>>.
   
    The semantic meaning of an open equality is that:
    @begin[enumerate]
@@ -119,6 +119,14 @@ declare univ[i:l]
 declare equal{'T; 'a; 'b}
 declare cumulativity[i:l, j:l]
 doc <:doc< @docoff >>
+
+(* 
+ * XXX HACK:
+ * Type theory should have its own sequent_arg, but instead it uses
+ * Base_rewrite!sequent_arg - this is necessary because the conditional rewrites
+ * take their semantics from both Base theory and ITT
+declare sequent_arg
+ *)
 
 declare "true"
 declare "false"
@@ -286,8 +294,6 @@ dform univ_df1 : except_mode[src] :: univ[i:l] =
 dform cumulativity_df : cumulativity[i:l, j:l] =
    `"cumulativity[" slot[i:l] `";" slot[j:l] `"]"
 
-dform squash_df : except_mode[src] :: squash = cdot
-dform squash_df2 : mode[src] :: squash = `"squash"
 dform it_df1 : except_mode[src] :: it = cdot
 dform it_df2 : mode[src] :: it = `"it"
 
@@ -299,7 +305,7 @@ dform it_df2 : mode[src] :: it = `"it"
  * True always holds.
  *)
 prim trueIntro {| intro [] |} :
-   sequent ['ext] { <H> >- "true" } =
+   sequent { <H> >- "true" } =
    it
 
 doc <:doc< ************************************************************************
@@ -313,7 +319,7 @@ doc <:doc< *********************************************************************
    @end[doc]
 >>
 prim equalityAxiom 'H :
-   sequent ['ext] { <H>; x: 'T; <J['x]> >- 'x in 'T } =
+   sequent { <H>; x: 'T; <J['x]> >- 'x in 'T } =
    it
 
 doc <:doc< ************************************************************************
@@ -331,25 +337,25 @@ doc <:doc< *********************************************************************
  * Reflexivity.
  *)
 prim equalityRef 'y :
-   sequent ['ext] { <H> >- 'x = 'y in 'T } -->
-   sequent ['ext] { <H> >- 'x in 'T } =
+   sequent { <H> >- 'x = 'y in 'T } -->
+   sequent { <H> >- 'x in 'T } =
    it
 
 (*
  * Symmetry.
  *)
 prim equalitySym :
-   sequent ['ext] { <H> >- 'y = 'x in 'T } -->
-   sequent ['ext] { <H> >- 'x = 'y in 'T } =
+   sequent { <H> >- 'y = 'x in 'T } -->
+   sequent { <H> >- 'x = 'y in 'T } =
    it
 
 (*
  * Transitivity.
  *)
 prim equalityTrans 'z :
-   sequent ['ext] { <H> >- 'x = 'z in 'T } -->
-   sequent ['ext] { <H> >- 'z = 'y in 'T } -->
-   sequent ['ext] { <H> >- 'x = 'y in 'T } =
+   sequent { <H> >- 'x = 'z in 'T } -->
+   sequent { <H> >- 'z = 'y in 'T } -->
+   sequent { <H> >- 'x = 'y in 'T } =
    it
 
 (*
@@ -360,9 +366,9 @@ prim equalityTrans 'z :
  * H >- T ext b
  *)
 prim equalityFormation 'T :
-   [main] ('a : sequent ['ext] { <H> >- 'T }) -->
-   [main] ('b : sequent ['ext] { <H> >- 'T }) -->
-   sequent ['ext] { <H> >- univ[i:l] } =
+   [main] ('a : sequent { <H> >- 'T }) -->
+   [main] ('b : sequent { <H> >- 'T }) -->
+   sequent { <H> >- univ[i:l] } =
    'a = 'b in 'T
 
 doc <:doc< ************************************************************************
@@ -384,19 +390,19 @@ doc <:doc< *********************************************************************
  * H >- b1 = b2 in T1
  *)
 prim equalityEquality {| intro [] |} :
-   [wf] sequent [squash] { <H> >- 'T1 = 'T2 in univ[i:l] } -->
-   [wf] sequent [squash] { <H> >- 'a1 = 'a2 in 'T1 } -->
-   [wf] sequent [squash] { <H> >- 'b1 = 'b2 in 'T2 } -->
-   sequent ['ext] { <H> >- ('a1 = 'b1 in 'T1) = ('a2 = 'b2 in 'T2) in univ[i:l] } =
+   [wf] sequent { <H> >- 'T1 = 'T2 in univ[i:l] } -->
+   [wf] sequent { <H> >- 'a1 = 'a2 in 'T1 } -->
+   [wf] sequent { <H> >- 'b1 = 'b2 in 'T2 } -->
+   sequent { <H> >- ('a1 = 'b1 in 'T1) = ('a2 = 'b2 in 'T2) in univ[i:l] } =
    it
 
 (*
  * Typehood.
  *)
 prim equalityType {| intro [] |} :
-   [wf] sequent [squash] { <H> >- 'a in 'T } -->
-   [wf] sequent [squash] { <H> >- 'b in 'T } -->
-   sequent ['ext] { <H> >- "type"{. 'a = 'b in 'T } } =
+   [wf] sequent { <H> >- 'a in 'T } -->
+   [wf] sequent { <H> >- 'b in 'T } -->
+   sequent { <H> >- "type"{. 'a = 'b in 'T } } =
    it
 
 doc <:doc< ************************************************************************
@@ -415,8 +421,8 @@ doc <:doc< *********************************************************************
  * H >- a = b in T
  *)
 prim axiomMember {| intro []; eqcd |} :
-   [wf] sequent [squash] { <H> >- 'a = 'b in 'T } -->
-   sequent ['ext] { <H> >- it in ('a = 'b in 'T) } =
+   [wf] sequent { <H> >- 'a = 'b in 'T } -->
+   sequent { <H> >- it in ('a = 'b in 'T) } =
    it
 
 (*
@@ -426,20 +432,20 @@ prim axiomMember {| intro []; eqcd |} :
  * H, x: a = b in T; J[it] >- C[it]
  *)
 prim equalityElimination {| elim [] |} 'H :
-   ('t : sequent ['ext] { <H>; 'a = 'b in 'T; <J[it]> >- 'C[it] }) -->
-   sequent ['ext] { <H>; x: 'a = 'b in 'T; <J['x]> >- 'C['x] } =
+   ('t : sequent { <H>; 'a = 'b in 'T; <J[it]> >- 'C[it] }) -->
+   sequent { <H>; x: 'a = 'b in 'T; <J['x]> >- 'C['x] } =
    't
 
 prim type_axiomMember {| intro []; eqcd |} :
-   sequent [squash] { <H> >- "type"{'T} } -->
-   sequent ['ext] { <H> >- it in "type"{'T} } =
+   sequent { <H> >- "type"{'T} } -->
+   sequent { <H> >- it in "type"{'T} } =
    it
 
 doc <:doc< ************************************************************************
    @begin[doc]
    @modsubsection{Truth implies typehood}
   
-   For any sequent judgment <<sequent['ext]{ <H> >- 'T}>> the term $T$ must be a
+   For any sequent judgment <<sequent{ <H> >- 'T}>> the term $T$ must be a
    type.  The following rule allows us to infer well-formedness of a
    type from its provability.  Note that this rule is useless for types $T$
    that are not true.
@@ -453,8 +459,8 @@ doc <:doc< *********************************************************************
  * H >- T
  *)
 prim typeEquality :
-   [main] sequent [squash] { <H> >- 'T } -->
-   sequent ['ext] { <H> >- "type"{'T} } =
+   [main] sequent { <H> >- 'T } -->
+   sequent { <H> >- "type"{'T} } =
    it
 
 doc <:doc< ************************************************************************
@@ -475,8 +481,8 @@ doc <:doc< *********************************************************************
  * unfold the cumulativity.
  *)
 prim universeMember :
-   sequent ['ext] { <H> >- cumulativity[j:l, i:l] } -->
-   sequent ['ext] { <H> >- univ[j:l] in univ[i:l] } =
+   sequent { <H> >- cumulativity[j:l, i:l] } -->
+   sequent { <H> >- univ[j:l] in univ[i:l] } =
   it
 
 (*
@@ -487,9 +493,9 @@ prim universeMember :
  * H >- cumulativity(j, i)
  *)
 prim universeCumulativity univ[j:l] :
-   sequent [squash] { <H> >- cumulativity[j:l, i:l] } -->
-   sequent [squash] { <H> >- 'x = 'y in univ[j:l] } -->
-   sequent ['ext] { <H> >- 'x = 'y in univ[i:l] } =
+   sequent { <H> >- cumulativity[j:l, i:l] } -->
+   sequent { <H> >- 'x = 'y in univ[j:l] } -->
+   sequent { <H> >- 'x = 'y in univ[i:l] } =
    it
 
 doc <:doc< @docoff >>
@@ -510,8 +516,8 @@ doc <:doc< *********************************************************************
    @end[doc]
 >>
 prim universeMemberType univ[i:l] :
-   [wf] sequent [squash] { <H> >- 'x in univ[i:l] } -->
-   sequent ['ext] { <H> >- "type"{'x} } =
+   [wf] sequent { <H> >- 'x in univ[i:l] } -->
+   sequent { <H> >- "type"{'x} } =
    it
 
 (*
@@ -519,10 +525,10 @@ prim universeMemberType univ[i:l] :
  * hypothesis rule is not know yet.
  *)
 interactive universeAssumType 'H :
-   sequent ['ext] { <H>; x: univ[l:l]; <J['x]> >- "type"{'x} }
+   sequent { <H>; x: univ[l:l]; <J['x]> >- "type"{'x} }
 
 interactive universeType {| intro [] |} :
-   sequent ['ext] { <H> >- "type"{univ[l:l]} }
+   sequent { <H> >- "type"{univ[l:l]} }
 
 doc <:doc< @docoff >>
 let univTypeT = universeMemberType
@@ -532,8 +538,8 @@ let univTypeT = universeMemberType
  * by universeFormation
  *)
 prim universeFormation univ[j:l] :
-   sequent ['ext] { <H> >- cumulativity[j:l, i:l] } -->
-   sequent ['ext] { <H> >- univ[i:l] } =
+   sequent { <H> >- cumulativity[j:l, i:l] } -->
+   sequent { <H> >- univ[i:l] } =
    univ[j:l]
 
 (************************************************************************

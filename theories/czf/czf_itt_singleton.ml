@@ -101,8 +101,8 @@ doc <:doc<
    @end[doc]
 >>
 interactive sing_isset {| intro [] |} :
-   sequent [squash] { <H> >- isset{'s} } -->
-   sequent ['ext] { <H> >- isset{sing{'s}} }
+   sequent { <H> >- isset{'s} } -->
+   sequent { <H> >- isset{sing{'s}} }
 
 doc <:doc< 
    @begin[doc]
@@ -113,14 +113,14 @@ doc <:doc<
    @end[doc]
 >>
 interactive sing_member_elim {| elim [] |} 'H :
-   sequent ['ext] { <H>; x: mem{'y; sing{'s}}; <J['x]>; w: eq{'y; 's} >- 'T['x] } -->
-   sequent ['ext] { <H>; x: mem{'y; sing{'s}}; <J['x]> >- 'T['x] }
+   sequent { <H>; x: mem{'y; sing{'s}}; <J['x]>; w: eq{'y; 's} >- 'T['x] } -->
+   sequent { <H>; x: mem{'y; sing{'s}}; <J['x]> >- 'T['x] }
 
 interactive sing_member_intro {| intro [] |} :
-   ["wf"] sequent [squash] { <H> >- isset{'s1} } -->
-   ["wf"] sequent [squash] { <H> >- isset{'s2} } -->
-   sequent ['ext] { <H> >- eq{'s1; 's2} } -->
-   sequent ['ext] { <H> >- mem{'s1; sing{'s2}} }
+   ["wf"] sequent { <H> >- isset{'s1} } -->
+   ["wf"] sequent { <H> >- isset{'s2} } -->
+   sequent { <H> >- eq{'s1; 's2} } -->
+   sequent { <H> >- mem{'s1; sing{'s2}} }
 
 doc <:doc< 
    @begin[doc]
@@ -130,8 +130,8 @@ doc <:doc<
    @end[doc]
 >>
 interactive sing_fun {| intro [] |} :
-   sequent ['ext] { <H> >- fun_set{z. 's['z]} } -->
-   sequent ['ext] { <H> >- fun_set{z. sing{'s['z]}} }
+   sequent { <H> >- fun_set{z. 's['z]} } -->
+   sequent { <H> >- fun_set{z. sing{'s['z]}} }
 doc <:doc< @docoff >>
 
 (*

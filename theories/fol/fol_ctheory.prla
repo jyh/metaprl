@@ -1184,7 +1184,11 @@ O	o436	var p435
 T	t436	o436
 B	b436	t436
 T	t437	o435 b436
-S	s	t435 h
+NBase_rewrite	Base_rw	Base_rewrite NIL
+NBase_rewrite!sequent_arg	brwsqarg	sequent_arg Base_rw
+O	obrarg	brwsqarg
+T	tbrarg	obrarg
+S	s	tbrarg h
 G	s	t437
 B	b437	s
 T	t438	o433 b437
@@ -1194,7 +1198,7 @@ O	o438	var p438
 T	t439	o438
 B	b439	t439
 T	t440	o435 b439
-S	s440	t435 h
+S	s440	tbrarg h
 G	s440	t440
 B	b440	s440
 T	t441	o433 b440
@@ -1204,7 +1208,7 @@ O	o441	var p441
 T	t442	o441
 B	b442	t442
 T	t443	o435 b442
-S	s443	t435 h
+S	s443	tbrarg h
 G	s443	t443
 B	b443	s443
 T	t444	o433 b443
@@ -1222,7 +1226,7 @@ B	b446	t446
 T	t447	o444 b436 b442
 B	b447	t447
 T	t448	o444 b446 b447
-S	s448	t435 h
+S	s448	tbrarg h
 G	s448	t448
 B	b448	s448
 T	t449	o433 b448
@@ -1264,7 +1268,7 @@ B	b461	t461
 T	t462	o456 b460 b4 b461
 B	b462	t462
 H	h462	v t446
-S	s462	t435 h h462
+S	s462	tbrarg h h462
 G	s462	t437
 B	b463	s462
 T	t463	o457 b463 b459
@@ -1272,7 +1276,7 @@ B	b464	t463
 T	t464	o456 b464 b4 b461
 B	b465	t464
 H	h465	v1 t436
-S	s465	t435 h h462 h465
+S	s465	tbrarg h h462 h465
 G	s465	t442
 B	b466	s465
 T	t466	o457 b466 b459
@@ -1293,7 +1297,7 @@ T	t472	o471 b454 b472 b4 b4
 B	b473	t472
 P	p473	String "dT 2"
 O	o473	ext_rule p473
-S	s473	t435 h h462 h465
+S	s473	tbrarg h h462 h465
 G	s473	t445
 B	b474	s473
 T	t474	o457 b474 b459
@@ -1301,7 +1305,7 @@ B	b475	t474
 T	t475	o456 b475 b4 b461
 B	b476	t475
 H	h476	v2 t442
-S	s476	t435 h h462 h465 h476
+S	s476	tbrarg h h462 h465 h476
 G	s476	t442
 B	b477	s476
 T	t477	o457 b477 b459
@@ -1316,14 +1320,14 @@ T	t481	o455 b468 b481
 B	b482	t481
 P	p482	String "thinT 2 thenT selT 1 (dT 0)"
 O	o482	ext_rule p482
-S	s482	t435 h h465
+S	s482	tbrarg h h465
 G	s482	t440
 B	b483	s482
 T	t483	o457 b483 b459
 B	b484	t483
 T	t484	o456 b484 b4 b461
 B	b485	t484
-S	s485	t435 h h465
+S	s485	tbrarg h h465
 G	s485	t436
 B	b486	s485
 T	t486	o457 b486 b459

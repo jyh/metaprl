@@ -121,10 +121,10 @@ doc <:doc<
    @end[doc]
 >>
 interactive group_bvd_wf {| intro [] |} :
-   sequent [squash] { <H> >- 'h IN label } -->
-   sequent [squash] { <H> >- 'g IN label } -->
-   sequent [squash] { <H> >- isset{'s} } -->
-   sequent ['ext] { <H> >- "type"{group_bvd{'h; 'g; 's}} }
+   sequent { <H> >- 'h IN label } -->
+   sequent { <H> >- 'g IN label } -->
+   sequent { <H> >- isset{'s} } -->
+   sequent { <H> >- "type"{group_bvd{'h; 'g; 's}} }
 
 doc <:doc< 
    @begin[doc]
@@ -137,15 +137,15 @@ doc <:doc<
    @end[doc]
 >>
 interactive group_bvd_intro {| intro [] |} :
-   sequent [squash] { <H> >- 'h IN label } -->
-   sequent [squash] { <H> >- 'g IN label } -->
-   sequent [squash] { <H> >- isset{'s} } -->
-   sequent ['ext] { <H> >- group{'h} } -->
-   sequent ['ext] { <H> >- group{'g} } -->
-   sequent ['ext] { <H> >- \subset{'s; car{'g}} } -->
-   sequent ['ext] { <H> >- equal{car{'h}; 's} } -->
-   sequent ['ext] { <H>; a: set; b: set; x: mem{'a; car{'h}}; y: mem{'b; car{'h}} >- eq{op{'h; 'a; 'b}; op{'g; 'a; 'b}} } -->
-   sequent ['ext] { <H> >- group_bvd{'h; 'g; 's} }
+   sequent { <H> >- 'h IN label } -->
+   sequent { <H> >- 'g IN label } -->
+   sequent { <H> >- isset{'s} } -->
+   sequent { <H> >- group{'h} } -->
+   sequent { <H> >- group{'g} } -->
+   sequent { <H> >- \subset{'s; car{'g}} } -->
+   sequent { <H> >- equal{car{'h}; 's} } -->
+   sequent { <H>; a: set; b: set; x: mem{'a; car{'h}}; y: mem{'b; car{'h}} >- eq{op{'h; 'a; 'b}; op{'g; 'a; 'b}} } -->
+   sequent { <H> >- group_bvd{'h; 'g; 's} }
 
 doc <:doc< 
    @begin[doc]
@@ -156,20 +156,20 @@ doc <:doc<
    @end[doc]
 >>
 interactive group_bvd_id {| intro [] |} 's :
-   sequent [squash] { <H> >- 'h IN label } -->
-   sequent [squash] { <H> >- 'g IN label } -->
-   sequent [squash] { <H> >- isset{'s} } -->
-   sequent ['ext] { <H> >- group_bvd{'h; 'g; 's} } -->
-   sequent ['ext] { <H> >- eq{id{'h}; id{'g}} }
+   sequent { <H> >- 'h IN label } -->
+   sequent { <H> >- 'g IN label } -->
+   sequent { <H> >- isset{'s} } -->
+   sequent { <H> >- group_bvd{'h; 'g; 's} } -->
+   sequent { <H> >- eq{id{'h}; id{'g}} }
 
 interactive group_bvd_inv {| intro [] |} 's :
-   sequent [squash] { <H> >- 'h IN label } -->
-   sequent [squash] { <H> >- 'g IN label } -->
-   sequent [squash] { <H> >- isset{'s} } -->
-   sequent [squash] { <H> >- isset{'a} } -->
-   sequent ['ext] { <H> >- group_bvd{'h; 'g; 's} } -->
-   sequent ['ext] { <H> >- mem{'a; car{'h}} } -->
-   sequent ['ext] { <H> >- eq{inv{'h; 'a}; inv{'g; 'a}} }
+   sequent { <H> >- 'h IN label } -->
+   sequent { <H> >- 'g IN label } -->
+   sequent { <H> >- isset{'s} } -->
+   sequent { <H> >- isset{'a} } -->
+   sequent { <H> >- group_bvd{'h; 'g; 's} } -->
+   sequent { <H> >- mem{'a; car{'h}} } -->
+   sequent { <H> >- eq{inv{'h; 'a}; inv{'g; 'a}} }
 
 doc <:doc< @docoff >>
 (*

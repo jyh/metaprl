@@ -120,9 +120,9 @@ doc <:doc<
    @end[doc]
 >>
 interactive dall_type {| intro [] |} :
-   ["wf"] sequent [squash] { <H> >- isset{'s} } -->
-   ["wf"] sequent [squash] { <H>; y: set >- "type"{'A['y]} } -->
-   sequent ['ext] { <H> >- "type"{."dall"{'s; x. 'A['x]}} }
+   ["wf"] sequent { <H> >- isset{'s} } -->
+   ["wf"] sequent { <H>; y: set >- "type"{'A['y]} } -->
+   sequent { <H> >- "type"{."dall"{'s; x. 'A['x]}} }
 
 doc <:doc< 
    @begin[doc]
@@ -133,10 +133,10 @@ doc <:doc<
    @end[doc]
 >>
 interactive dall_intro {| intro [] |} :
-   ["wf"]   sequent [squash] { <H> >- isset{'s} } -->
-   ["wf"]   sequent [squash] { <H>; a: set >- "type"{'A['a]} } -->
-   ["main"] sequent ['ext] { <H>; a: set; b: mem{'a; 's} >- 'A['a] } -->
-   sequent ['ext] { <H> >- "dall"{'s; x. 'A['x]} }
+   ["wf"]   sequent { <H> >- isset{'s} } -->
+   ["wf"]   sequent { <H>; a: set >- "type"{'A['a]} } -->
+   ["main"] sequent { <H>; a: set; b: mem{'a; 's} >- 'A['a] } -->
+   sequent { <H> >- "dall"{'s; x. 'A['x]} }
 
 doc <:doc< 
    @begin[doc]
@@ -148,11 +148,11 @@ doc <:doc<
    @end[doc]
 >>
 interactive dall_elim {| elim [] |} 'H 'z :
-   ["wf"]   sequent [squash] { <H>; x: "dall"{'s; y. 'A['y]}; <J['x]>; w: set >- "type"{'A['w]} } -->
-   ["wf"]   sequent ['ext] { <H>; x: "dall"{'s; y. 'A['y]}; <J['x]> >- fun_prop{w. 'A['w]} } -->
-   ["antecedent"] sequent ['ext] { <H>; x: "dall"{'s; y. 'A['y]}; <J['x]> >- member{'z; 's} } -->
-   ["main"] sequent ['ext] { <H>; x: "dall"{'s; y. 'A['y]}; <J['x]>; w: 'A['z] >- 'C['x] } -->
-   sequent ['ext] { <H>; x: "dall"{'s; y. 'A['y]}; <J['x]> >- 'C['x] }
+   ["wf"]   sequent { <H>; x: "dall"{'s; y. 'A['y]}; <J['x]>; w: set >- "type"{'A['w]} } -->
+   ["wf"]   sequent { <H>; x: "dall"{'s; y. 'A['y]}; <J['x]> >- fun_prop{w. 'A['w]} } -->
+   ["antecedent"] sequent { <H>; x: "dall"{'s; y. 'A['y]}; <J['x]> >- member{'z; 's} } -->
+   ["main"] sequent { <H>; x: "dall"{'s; y. 'A['y]}; <J['x]>; w: 'A['z] >- 'C['x] } -->
+   sequent { <H>; x: "dall"{'s; y. 'A['y]}; <J['x]> >- 'C['x] }
 
 doc <:doc< 
    @begin[doc]
@@ -163,11 +163,11 @@ doc <:doc<
    @end[doc]
 >>
 interactive dall_fun {| intro [] |} :
-   sequent ['ext] { <H> >- fun_set{z. 'A['z]} } -->
-   sequent ['ext] { <H>; z: set >- fun_prop{x. 'B['z; 'x]} } -->
-   sequent ['ext] { <H>; z: set >- fun_prop{x. 'B['x; 'z]} } -->
-   ["wf"] sequent [squash] { <H>; z: set; x: set >- "type"{'B['z; 'x]} } -->
-   sequent ['ext] { <H> >- fun_prop{z. "dall"{'A['z]; y. 'B['z; 'y]}} }
+   sequent { <H> >- fun_set{z. 'A['z]} } -->
+   sequent { <H>; z: set >- fun_prop{x. 'B['z; 'x]} } -->
+   sequent { <H>; z: set >- fun_prop{x. 'B['x; 'z]} } -->
+   ["wf"] sequent { <H>; z: set; x: set >- "type"{'B['z; 'x]} } -->
+   sequent { <H> >- fun_prop{z. "dall"{'A['z]; y. 'B['z; 'y]}} }
 
 doc <:doc< 
    @begin[doc]
@@ -180,9 +180,9 @@ doc <:doc<
    @end[doc]
 >>
 interactive dall_res {| intro [] |} :
-   ["wf"]   sequent [squash] { <H> >- isset{'A} } -->
-   sequent [squash] { <H>; x: set >- restricted{'B['x]} } -->
-   sequent ['ext] { <H> >- restricted{. "dall"{'A; y. 'B['y]}} }
+   ["wf"]   sequent { <H> >- isset{'A} } -->
+   sequent { <H>; x: set >- restricted{'B['x]} } -->
+   sequent { <H> >- restricted{. "dall"{'A; y. 'B['y]}} }
 doc <:doc< @docoff >>
 
 (*

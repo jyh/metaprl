@@ -45,53 +45,53 @@ doc <:doc<
 >>
 
 interactive bool1 :
-   sequent [fir] { >- "true" } -->
-   sequent [fir] { >-
+   sequent { >- "true" } -->
+   sequent { >-
       ifthenelse{ "and"{ not{"false"}; "not"{ "or"{ "false"; "true" } } };
          "false"; "true" } }
 
 interactive arith1 :
-   sequent [fir] { >- 42 } -->
-   sequent [fir] { >-  (-(6 /@ -3) +@ 5) *@ (10 -@ 4) }
+   sequent { >- 42 } -->
+   sequent { >-  (-(6 /@ -3) +@ 5) *@ (10 -@ 4) }
 
 interactive arith2 :
-   sequent [fir] { >- 2 } -->
-   sequent [fir] { >- int_min{ 2; 3 } }
+   sequent { >- 2 } -->
+   sequent { >- int_min{ 2; 3 } }
 
 interactive list1 :
-   sequent [fir] { >- 2 } -->
-   sequent [fir] { >- length{ cons{1; cons{2; nil}} } }
+   sequent { >- 2 } -->
+   sequent { >- length{ cons{1; cons{2; nil}} } }
 
 interactive list2 :
-   sequent [fir] { >- 2 } -->
-   sequent [fir] { >- nth_elt{ 2; cons{0; cons{1; cons{2; cons{3; nil}}}} } }
+   sequent { >- 2 } -->
+   sequent { >- nth_elt{ 2; cons{0; cons{1; cons{2; cons{3; nil}}}} } }
 
 interactive int_set1 :
-   sequent [fir] { >- "false" } -->
-   sequent [fir] { >- member{ 1024;
+   sequent { >- "false" } -->
+   sequent { >- member{ 1024;
       intset[32, "signed"]{ cons{ interval{ 0; 3 };
                             cons{ interval{ 5; 8 }; nil } } } } }
 
 interactive int_set2 :
-   sequent [fir] { >- intset[32, "signed"]{ cons{ interval{ 0; 12 }; nil } } } -->
-   sequent [fir] { >- normalize{
+   sequent { >- intset[32, "signed"]{ cons{ interval{ 0; 12 }; nil } } } -->
+   sequent { >- normalize{
       intset[32, "signed"]{ cons{ interval{ 0; 2 };
                             cons{ interval{ 3; 8 };
                             cons{ interval{ 9; 12 }; nil } } } } } }
 
 interactive int_set3 :
-   sequent [fir] { >-
+   sequent { >-
       intset[32, "signed"]{ cons{ interval{ 0; 4 };
                             cons{ interval{ 8; 12 }; nil } } } } -->
-   sequent [fir] { >- normalize{
+   sequent { >- normalize{
       intset[32, "signed"]{ cons{ interval{ 0; 3 };
                             cons{ interval{ 4; 4 };
                             cons{ interval{ 8; 10 };
                             cons{ interval{ 11; 12 }; nil } } } } } } }
 
 interactive int_set4 :
-   sequent [fir] { >- "false" } -->
-   sequent [fir] { >-
+   sequent { >- "false" } -->
+   sequent { >-
       intset[32, "signed"]{ cons{ interval{ 0; 3 };
                             cons{ interval{ 5; 8 }; nil } } }
       subset
@@ -99,8 +99,8 @@ interactive int_set4 :
                             cons{ interval{ 6; 10 }; nil } } } }
 
 interactive int_set5 :
-   sequent [fir] { >- "true" } -->
-   sequent [fir] { >-
+   sequent { >- "true" } -->
+   sequent { >-
       intset[32, "signed"]{ cons{ interval{ 0; 3 };
                             cons{ interval{ 8; 8 }; nil } } }
       subset
@@ -108,26 +108,26 @@ interactive int_set5 :
                             cons{ interval{ 6; 10 }; nil } } } }
 
 interactive int_set6 :
-   sequent [fir] { >- "false" } -->
-   sequent [fir] { >- set_eq{
+   sequent { >- "false" } -->
+   sequent { >- set_eq{
       intset[32, "signed"]{ cons{ interval{ 0; 3 };
                             cons{ interval{ 8; 8 }; nil } } };
       intset[32, "signed"]{ cons{ interval{. -3; 4 };
                             cons{ interval{ 6; 10 }; nil } } } } }
 
 interactive int_set7 :
-   sequent [fir] { >- "false" } -->
-   sequent [fir] { >- set_eq{
+   sequent { >- "false" } -->
+   sequent { >- set_eq{
       intset[32, "signed"]{ cons{ interval{ 0; 3 };
                             cons{ interval{ 11; 11 }; nil } } };
       intset[32, "signed"]{ cons{ interval{. -3; 4 };
                             cons{ interval{ 6; 10 }; nil } } } } }
 
 interactive int_set8 :
-   sequent [fir] { >-
+   sequent { >-
       intset[32, "signed"]{ cons{ interval{ 0; 15 };
                             cons{ interval{ 35; 60 }; nil } } } } -->
-   sequent [fir] { >- union{
+   sequent { >- union{
       intset[32, "signed"]{ cons{ interval{ 0; 4 };
                             cons{ interval{ 12; 15 }; nil } } };
       intset[32, "signed"]{ cons{ interval{ 3; 13 };

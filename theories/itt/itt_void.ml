@@ -108,7 +108,7 @@ doc <:doc<
   
 >>
 prim voidEquality {| intro []; eqcd |} :
-   sequent ['ext] { <H> >- void in univ[i:l] } =
+   sequent { <H> >- void in univ[i:l] } =
    it
 
 (*
@@ -116,13 +116,13 @@ prim voidEquality {| intro []; eqcd |} :
  * by voidFormation
  *)
 interactive voidFormation :
-   sequent ['ext] { <H> >- univ[i:l] }
+   sequent { <H> >- univ[i:l] }
 
 (*
  * Typehood.
  *)
 prim voidType {| intro [] |} :
-   sequent ['ext] { <H> >- "type"{void} } =
+   sequent { <H> >- "type"{void} } =
    it
 
 doc <:doc< 
@@ -134,7 +134,7 @@ doc <:doc<
    @end[doc]
 >>
 prim voidElimination {| elim []; squash |} 'H :
-   sequent ['ext] { <H>; x: void; <J['x]> >- 'C['x] } =
+   sequent { <H>; x: void; <J['x]> >- 'C['x] } =
    it
 
 doc <:doc< 
@@ -147,7 +147,7 @@ doc <:doc<
    @end[doc]
 >>
 interactive void_subtype {| intro[] |} :
-   sequent ['ext] { <H> >- \subtype{void; 'T} }
+   sequent { <H> >- \subtype{void; 'T} }
 doc <:doc< @docoff >>
 
 (************************************************************************

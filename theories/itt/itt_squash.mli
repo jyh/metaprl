@@ -56,45 +56,41 @@ declare squash{'A}
 
 
 rule squashEquality :
-   sequent [squash] { <H> >- 'A1 = 'A2 in univ[i:l] } -->
-   sequent ['ext] { <H> >- squash{'A1} = squash{'A2} in univ[i:l] }
+   sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
+   sequent { <H> >- squash{'A1} = squash{'A2} in univ[i:l] }
 
 rule squashType :
-   sequent [squash] { <H> >- "type"{'A} } -->
-   sequent ['ext] { <H> >- "type"{squash{'A}} }
+   sequent { <H> >- "type"{'A} } -->
+   sequent { <H> >- "type"{squash{'A}} }
 
 rule squashMemberFormation :
-   sequent [squash] { <H> >- 'A } -->
-   sequent ['ext]   { <H> >- squash{'A} }
+   sequent { <H> >- 'A } -->
+   sequent { <H> >- squash{'A} }
 
 rule squashElim 'H :
-   sequent ['ext] { <H>; squash{'P}; <J[it]> >- 'C[it] } -->
-   sequent ['ext] { <H>; u: squash{'P}; <J['u]> >- 'C['u] }
+   sequent { <H>; squash{'P}; <J[it]> >- 'C[it] } -->
+   sequent { <H>; u: squash{'P}; <J['u]> >- 'C['u] }
 
 rule unsquashEqual 'H :
-   sequent [squash] { <H>; 'P; <J[it]> >- 'x[it] = 'y[it] in 'A[it] } -->
-   sequent ['ext] { <H>; u: squash{'P}; <J['u]> >- 'x['u] = 'y['u] in 'A['u] }
-
-rule squashFromAny 'ext :
-   sequent ['ext] { <H> >- 'T } -->
-   sequent [squash] { <H> >- 'T }
+   sequent { <H>; 'P; <J[it]> >- 'x[it] = 'y[it] in 'A[it] } -->
+   sequent { <H>; u: squash{'P}; <J['u]> >- 'x['u] = 'y['u] in 'A['u] }
 
 rule squashMemberEquality :
-   [wf] sequent [squash] { <H> >- squash{'A} } -->
-   sequent ['ext] { <H> >- it in squash{'A} }
+   [wf] sequent { <H> >- squash{'A} } -->
+   sequent { <H> >- it in squash{'A} }
 
 rule squashStable 't :
-   [main] sequent [squash] { <H> >- squash{'A} } -->
-   [wf] sequent [squash] { <H>; 'A >- 't in 'A } -->
-   sequent ['ext] { <H> >- 'A}
+   [main] sequent { <H> >- squash{'A} } -->
+   [wf] sequent { <H>; 'A >- 't in 'A } -->
+   sequent { <H> >- 'A}
 
 rule unsquashHypEqual 'H :
-   sequent ['ext] { <H>; 'x = 'y in 'A; <J[it]> >- 'C[it] } -->
-   sequent ['ext] { <H>; u: squash{('x = 'y in 'A)}; <J['u]> >- 'C['u] }
+   sequent { <H>; 'x = 'y in 'A; <J[it]> >- 'C[it] } -->
+   sequent { <H>; u: squash{('x = 'y in 'A)}; <J['u]> >- 'C['u] }
 
 rule unsquash 'H :
-   sequent [squash] { <H>; 'P; <J[it]> >- squash{'T[it]} } -->
-   sequent ['ext] { <H>; u: squash{'P}; <J['u]> >- squash{'T['u]} }
+   sequent { <H>; 'P; <J[it]> >- squash{'T[it]} } -->
+   sequent { <H>; u: squash{'P}; <J['u]> >- squash{'T['u]} }
 
 (*
  * H >- Ui ext squash(A)
@@ -102,8 +98,8 @@ rule unsquash 'H :
  * H >- Ui ext A
  *)
 rule squashFormation :
-   sequent ['ext] { <H> >- univ[i:l] } -->
-   sequent ['ext] { <H> >- univ[i:l] }
+   sequent { <H> >- univ[i:l] } -->
+   sequent { <H> >- univ[i:l] }
 
 (************************************************************************
  * TACTICS                                                              *
@@ -127,21 +123,10 @@ resource (squash_info, int -> tactic) squash
 val process_squash_resource_annotation :
    (Tactic.pre_tactic, squash_info) annotation_processor
 
-(*
- * Utilities.
- *)
-val is_squash_goal : tactic_arg -> bool
-val is_squash_sequent : term -> bool
-val get_squash_arg : term -> term
-
 (* Squashing and unsquashing *)
 topval squashT : tactic
 topval unsquashT : int -> tactic
 topval unsquashAllT : tactic
-
-(* Sequent squash *)
-topval sqsquashT : tactic
-topval unsqsquashT : term -> tactic
 
 (* Do thinning and squashing to matche agains assumption *)
 topval nthAssumT : int -> tactic

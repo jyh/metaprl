@@ -7,7 +7,7 @@ extends Fol_type
 declare "false"
 
 rule false_type :
-   sequent ['ext] { <H> >- "type"{."false"} }
+   sequent { <H> >- "type"{."false"} }
 
 (*
  * -*-

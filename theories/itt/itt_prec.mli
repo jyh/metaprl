@@ -70,9 +70,9 @@ rewrite reducePrecind : precind{'a; p, h. 'g['p; 'h]} <-->
  *   >- y = y in B2[P2; x]
  *)
 rule precEquality 'A :
-   sequent [squash] { <H> >- 'a1 = 'a2 in 'A } -->
-   sequent [squash] { <H>; x: 'A; T: 'A -> univ[i:l] >- 'B1['T; 'x] = 'B2['T; 'x] in univ[i:l] } -->
-   sequent [squash] { <H>;
+   sequent { <H> >- 'a1 = 'a2 in 'A } -->
+   sequent { <H>; x: 'A; T: 'A -> univ[i:l] >- 'B1['T; 'x] = 'B2['T; 'x] in univ[i:l] } -->
+   sequent { <H>;
              P1: 'A -> univ[i:l];
              P2: 'A -> univ[i:l];
              z: x:'A -> \subtype{('P1 'x); ('P2 'x)};
@@ -80,7 +80,7 @@ rule precEquality 'A :
              y: 'B1['P1; 'x]
            >- 'y = 'y in 'B1['P2; 'x]
            } -->
-   sequent ['ext] { <H> >- "prec"{A1, x1. 'B1['A1; 'x1]; 'a1}
+   sequent { <H> >- "prec"{A1, x1. 'B1['A1; 'x1]; 'a1}
                    = "prec"{A2, x2. 'B2['A2; 'x2]; 'a2}
                    in univ[i:l]
            }
@@ -93,9 +93,9 @@ rule precEquality 'A :
  * H >- prec(T, x. B[T; x]; a) = prec(T, x. B[T; x]; a) in type
  *)
 rule precMemberFormation :
-   sequent ['ext] { <H> >- 'B[lambda{z. "prec"{T, x. 'B['T; 'x]; 'z}}; 'a] } -->
-   sequent [squash] { <H> >- "type"{("prec"{T, x. 'B['T; 'x]; 'a})} } -->
-   sequent ['ext] { <H> >- "prec"{T, x. 'B['T; 'x]; 'a} }
+   sequent { <H> >- 'B[lambda{z. "prec"{T, x. 'B['T; 'x]; 'z}}; 'a] } -->
+   sequent { <H> >- "type"{("prec"{T, x. 'B['T; 'x]; 'a})} } -->
+   sequent { <H> >- "prec"{T, x. 'B['T; 'x]; 'a} }
 
 (*
  * H >- a1 = a2 in prec(T, x. B[T; x]. a)
@@ -105,9 +105,9 @@ rule precMemberFormation :
  * H >- a1 = a2 in B[lambda(a. prec(T, x. B[T; x]); a); a]
  *)
 rule precMemberEquality :
-   sequent [squash] { <H> >- "type"{("prec"{T, x. 'B['T; 'x]; 'a})} } -->
-   sequent [squash] { <H> >- 'a1 = 'a2 in 'B[lambda{z. "prec"{T, x. 'B['T; 'x]; 'z}}; 'a] } -->
-   sequent ['ext] { <H> >- 'a1 = 'a2 in "prec"{T, x. 'B['T; 'x]; 'a} }
+   sequent { <H> >- "type"{("prec"{T, x. 'B['T; 'x]; 'a})} } -->
+   sequent { <H> >- 'a1 = 'a2 in 'B[lambda{z. "prec"{T, x. 'B['T; 'x]; 'z}}; 'a] } -->
+   sequent { <H> >- 'a1 = 'a2 in "prec"{T, x. 'B['T; 'x]; 'a} }
 
 (*
  * H; r: prec(T, x. B[T; x]; a); J[r] >- T[a]
@@ -121,15 +121,15 @@ rule precMemberEquality :
  * >- T[p]
  *)
 rule precElimination 'H lambda{z. 'G['z]} 'A univ[i:l] :
-   sequent [squash] { <H>; r: "prec"{T, x. 'B['T; 'x]; 'a}; <J['r]> >- 'a = 'a in 'A } -->
-   sequent ['ext] { <H>; r: "prec"{T, x. 'B['T; 'x]; 'a}; <J['r]>;
+   sequent { <H>; r: "prec"{T, x. 'B['T; 'x]; 'a}; <J['r]> >- 'a = 'a in 'A } -->
+   sequent { <H>; r: "prec"{T, x. 'B['T; 'x]; 'a}; <J['r]>;
       Z: 'A -> univ[i:l] ;
       u: \subtype{(a: 'A * 'Z 'a); (a: 'A * "prec"{T, x. 'B['T; 'x]; 'a})};
       h: p: (a: 'A * 'Z 'a) -> 'G['p];
       p: a: 'A * 'B['Z; 'a]
    >- 'G['p]
    } -->
-   sequent ['ext] { <H>; r: "prec"{T, x. 'B['T; 'x]; 'a}; <J['r]> >- 'G['a] }
+   sequent { <H>; r: "prec"{T, x. 'B['T; 'x]; 'a}; <J['r]> >- 'G['a] }
 
 (*
  * H; r: prec(T, x. B[T; x]; a); J[r] >- T[r]
@@ -141,12 +141,12 @@ rule precElimination 'H lambda{z. 'G['z]} 'A univ[i:l] :
  *   >- T[y]
  *)
 rule precUnrollElimination 'H :
-   sequent ['ext] { <H>; r: "prec"{T, x. 'B['T; 'x]; 'a}; <J['r]>;
+   sequent { <H>; r: "prec"{T, x. 'B['T; 'x]; 'a}; <J['r]>;
              y: 'B[lambda{z. "prec"{T, x. 'B['T; 'x]; 'z}}; 'a];
              u: 'r = 'y in 'B[lambda{z. "prec"{T, x. 'B['T; 'x]; 'z}}; 'a]
              >- 'G['y]
            } -->
-   sequent ['ext] { <H>; r: "prec"{T, x. 'B['T; 'x]; 'a}; <J['r]> >- 'G['r] }
+   sequent { <H>; r: "prec"{T, x. 'B['T; 'x]; 'a}; <J['r]> >- 'G['r] }
 
 (*
  * H >- precind(r1; h1, z1. t1[r1, z1]) = precind(r2; h2, z2. t2[r2; z2]) in S[r1]
@@ -160,14 +160,14 @@ rule precUnrollElimination 'H :
  *   >- t1[h; z] = t2[h; z] in S[z]
  *)
 rule precindEquality lambda{x. 'S['x]} (a:'A * "prec"{T, y. 'B['T; 'y]; 'a}) univ[i:l] :
-   sequent [squash] { <H> >- 'r1 = 'r2 in a: 'A * "prec"{T, y. 'B['T; 'y]; 'a} } -->
-   sequent [squash] { <H>; Z: 'A -> univ[i:l];
+   sequent { <H> >- 'r1 = 'r2 in a: 'A * "prec"{T, y. 'B['T; 'y]; 'a} } -->
+   sequent { <H>; Z: 'A -> univ[i:l];
              u: \subtype{(a: 'A * 'Z 'a); (a: 'A * "prec"{T, x. 'B['T; 'x]; 'a})};
              h: z: (a: 'A * 'Z 'a) -> 'S['z];
              z: a: 'A * 'B['Z; 'a]
              >- 't1['h; 'z] = 't2['h; 'z] in 'S['z]
            } -->
-   sequent ['ext] { <H> >- precind{'r1; h1, z1. 't1['h1; 'z1]}
+   sequent { <H> >- precind{'r1; h1, z1. 't1['h1; 'z1]}
                    = precind{'r2; h2, z2. 't2['h2; 'z2]}
                    in 'S['r1]
            }

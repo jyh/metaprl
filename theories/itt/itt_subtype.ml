@@ -139,9 +139,9 @@ dform subtype_df2 : mode[src] :: parens :: "prec"[prec_subtype] :: ('A subtype '
  * H >- Ui ext B
  *)
 prim subtypeFormation :
-   ('A : sequent ['ext] { <H> >- univ[i:l] }) -->
-   ('B : sequent ['ext] { <H> >- univ[i:l] }) -->
-   sequent ['ext] { <H> >- univ[i:l] } =
+   ('A : sequent { <H> >- univ[i:l] }) -->
+   ('B : sequent { <H> >- univ[i:l] }) -->
+   sequent { <H> >- univ[i:l] } =
    \subtype{'A; 'B}
 
 doc <:doc< 
@@ -156,15 +156,15 @@ doc <:doc<
    @end[doc]
 >>
 prim subtypeEquality {| intro []; eqcd |} :
-   [wf] sequent [squash] { <H> >- 'A1 = 'A2 in univ[i:l] } -->
-   [wf] sequent [squash] { <H> >- 'B1 = 'B2 in univ[i:l] } -->
-   sequent ['ext] { <H> >- 'A1 subtype 'B1 = 'A2 subtype 'B2 in univ[i:l] } =
+   [wf] sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
+   [wf] sequent { <H> >- 'B1 = 'B2 in univ[i:l] } -->
+   sequent { <H> >- 'A1 subtype 'B1 = 'A2 subtype 'B2 in univ[i:l] } =
    it
 
 prim subtypeType {| intro [] |} :
-   [wf] sequent [squash] { <H> >- "type"{'A} } -->
-   [wf] sequent [squash] { <H> >- "type"{'B} } -->
-   sequent ['ext] { <H> >- "type"{.'A subtype 'B} } =
+   [wf] sequent { <H> >- "type"{'A} } -->
+   [wf] sequent { <H> >- "type"{'B} } -->
+   sequent { <H> >- "type"{.'A subtype 'B} } =
    it
 
 doc <:doc< 
@@ -175,13 +175,13 @@ doc <:doc<
    @end[doc]
 >>
 prim subtypeTypeRight 'B :
-   [main] sequent [squash] { <H> >- 'A subtype 'B } -->
-   sequent ['ext] { <H> >- "type"{'A} } =
+   [main] sequent { <H> >- 'A subtype 'B } -->
+   sequent { <H> >- "type"{'A} } =
    it
 
 prim subtypeTypeLeft 'A :
-   [main] sequent [squash] { <H> >- 'A subtype 'B }  -->
-   sequent ['ext] { <H> >- "type"{'B} } =
+   [main] sequent { <H> >- 'A subtype 'B }  -->
+   sequent { <H> >- "type"{'B} } =
    it
 
 doc <:doc< 
@@ -195,9 +195,9 @@ doc <:doc<
    @end[doc]
 >>
 prim subtype_axiomFormation {| intro [] |} :
-   [wf] sequent [squash] { <H> >- "type"{'A} } -->
-   [main] sequent [squash] { <H>; x: 'A >- 'x in 'B } -->
-   sequent ['ext] { <H> >- 'A subtype 'B } =
+   [wf] sequent { <H> >- "type"{'A} } -->
+   [main] sequent { <H>; x: 'A >- 'x in 'B } -->
+   sequent { <H> >- 'A subtype 'B } =
    it
 
 doc <:doc< 
@@ -209,8 +209,8 @@ doc <:doc<
    @end[doc]
 >>
 prim subtype_axiomEquality {| intro []; eqcd; squash |} :
-   [main] sequent [squash] { <H> >- 'A subtype 'B } -->
-   sequent ['ext] { <H> >- it in 'A subtype 'B } =
+   [main] sequent { <H> >- 'A subtype 'B } -->
+   sequent { <H> >- it in 'A subtype 'B } =
    it
 
 doc <:doc< 
@@ -225,14 +225,14 @@ doc <:doc<
    @end[doc]
 >>
 prim subtypeElimination {| elim [ThinOption thinT] |} 'H :
-   ('t : sequent ['ext] { <H>; 'A subtype 'B; <J[it]> >- 'C[it] }) -->
-   sequent ['ext] { <H>; x: 'A subtype 'B; <J['x]> >- 'C['x] } =
+   ('t : sequent { <H>; 'A subtype 'B; <J[it]> >- 'C[it] }) -->
+   sequent { <H>; x: 'A subtype 'B; <J['x]> >- 'C['x] } =
    't
 
 prim subtypeElimination2 'H 'a 'b :
-   [wf] sequent [squash] { <H>; x: 'A subtype 'B; <J['x]> >- 'a='b in 'A } -->
-   ('t['y] : sequent ['ext] { <H>; x: 'A subtype 'B; <J['x]>; 'a='b in 'B >- 'C['x] }) -->
-   sequent ['ext] { <H>; x: 'A subtype 'B; <J['x]> >- 'C['x] } =
+   [wf] sequent { <H>; x: 'A subtype 'B; <J['x]> >- 'a='b in 'A } -->
+   ('t['y] : sequent { <H>; x: 'A subtype 'B; <J['x]>; 'a='b in 'B >- 'C['x] }) -->
+   sequent { <H>; x: 'A subtype 'B; <J['x]> >- 'C['x] } =
    't[it]
 
 (************************************************************************
@@ -343,14 +343,14 @@ let d_hyp_subtypeT = argfunT (fun i p ->
 let resource elim += (subtype_term, d_hyp_subtypeT)
 
 interactive use_subtype1 'A :
-   [aux] sequent [squash] { <H> >- 'A subtype 'B } -->
-   [main] sequent [squash] { <H> >- 't1 = 't2 in 'A } -->
-   sequent ['ext] { <H> >- 't1 = 't2 in 'B }
+   [aux] sequent { <H> >- 'A subtype 'B } -->
+   [main] sequent { <H> >- 't1 = 't2 in 'A } -->
+   sequent { <H> >- 't1 = 't2 in 'B }
 
 interactive use_subtype2 'A :
-   [aux] sequent [squash] { <H> >- 'A subtype 'B } -->
-   [main] sequent ['ext] { <H> >- 'A } -->
-   sequent ['ext] { <H> >- 'B }
+   [aux] sequent { <H> >- 'A subtype 'B } -->
+   [main] sequent { <H> >- 'A } -->
+   sequent { <H> >- 'B }
 
 let subtypeT = argfunT (fun t p ->
    if is_equal_term (Sequent.concl p) then
@@ -359,12 +359,12 @@ let subtypeT = argfunT (fun t p ->
       use_subtype2 t)
 
 interactive by_subtype1 'H: (* Add to auto??? then remove subtype_axiomFormation from auto *)
-   sequent [squash] { <H>; 'A; <J> >- 'A subtype 'B } -->
-   sequent ['ext] { <H>; x:'A; <J> >- 'x in 'B }
+   sequent { <H>; 'A; <J> >- 'A subtype 'B } -->
+   sequent { <H>; x:'A; <J> >- 'x in 'B }
 
 interactive by_subtype2 'H: (* Add to AutoMustComplete ??? *)
-   sequent [squash] { <H>; x:'A; <J['x]> >- 'A subtype 'B } -->
-   sequent ['ext] { <H>; x:'A; <J['x]> >- 'x in 'B }
+   sequent { <H>; x:'A; <J['x]> >- 'A subtype 'B } -->
+   sequent { <H>; x:'A; <J['x]> >- 'x in 'B }
 
 
 (************************************************************************

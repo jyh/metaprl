@@ -92,8 +92,8 @@ topval sqFromRwT : tactic -> tactic
  * Integers are canonical.
  *)
 rule int_sqequal :
-   sequent [squash] { <H> >- 'a = 'b in int } -->
-   sequent ['ext] { <H> >- 'a ~ 'b }
+   sequent { <H> >- 'a = 'b in int } -->
+   sequent { <H> >- 'a ~ 'b }
 
 topval int_sqequalC : term -> conv
 
@@ -155,51 +155,51 @@ topval reduce_lt : conv
 topval reduce_eq_int : conv
 
 rule add_wf :
-   [wf] sequent [squash] { <H> >- 'a = 'a1 in int } -->
-   [wf] sequent [squash] { <H> >- 'b = 'b1 in int } -->
-   sequent ['ext] { <H> >- 'a +@ 'b = 'a1 +@ 'b1 in int }
+   [wf] sequent { <H> >- 'a = 'a1 in int } -->
+   [wf] sequent { <H> >- 'b = 'b1 in int } -->
+   sequent { <H> >- 'a +@ 'b = 'a1 +@ 'b1 in int }
 
 rule minus_wf :
-   [wf] sequent [squash] { <H> >- 'a = 'a1 in int } -->
-   sequent ['ext] { <H> >- (- 'a) = (- 'a1) in int }
+   [wf] sequent { <H> >- 'a = 'a1 in int } -->
+   sequent { <H> >- (- 'a) = (- 'a1) in int }
 
 rule sub_wf :
-   [wf] sequent [squash] { <H> >- 'a = 'a1 in int } -->
-   [wf] sequent [squash] { <H> >- 'b = 'b1 in int } -->
-   sequent ['ext] { <H> >- 'a -@ 'b = 'a1 -@ 'b1 in int }
+   [wf] sequent { <H> >- 'a = 'a1 in int } -->
+   [wf] sequent { <H> >- 'b = 'b1 in int } -->
+   sequent { <H> >- 'a -@ 'b = 'a1 -@ 'b1 in int }
 
 rule lt_bool_wf :
-   sequent [squash] { <H> >- 'a='a1 in int } -->
-   sequent [squash] { <H> >- 'b='b1 in int } -->
-   sequent ['ext] { <H> >- lt_bool{'a; 'b} = lt_bool{'a1; 'b1} in bool }
+   sequent { <H> >- 'a='a1 in int } -->
+   sequent { <H> >- 'b='b1 in int } -->
+   sequent { <H> >- lt_bool{'a; 'b} = lt_bool{'a1; 'b1} in bool }
 
 rule beq_wf :
-   [wf] sequent [squash] { <H> >- 'a = 'a1 in int } -->
-   [wf] sequent [squash] { <H> >- 'b = 'b1 in int } -->
-   sequent ['ext] { <H> >- beq_int{'a; 'b} = beq_int{'a1; 'b1} in bool }
+   [wf] sequent { <H> >- 'a = 'a1 in int } -->
+   [wf] sequent { <H> >- 'b = 'b1 in int } -->
+   sequent { <H> >- beq_int{'a; 'b} = beq_int{'a1; 'b1} in bool }
 
 rule lt_wf :
-   [wf] sequent [squash] { <H> >- 'a in int } -->
-   [wf] sequent [squash] { <H> >- 'b in int } -->
-   sequent ['ext] { <H> >- "type"{ lt{'a; 'b} } }
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   sequent { <H> >- "type"{ lt{'a; 'b} } }
 
 rule beq_int2prop :
-   [main] sequent [squash] { <H> >- "assert"{beq_int{'a; 'b}} } -->
-   [wf] sequent [squash] { <H> >- 'a in int } -->
-   [wf] sequent [squash] { <H> >- 'b in int } -->
-   sequent ['ext] { <H> >- 'a = 'b in int }
+   [main] sequent { <H> >- "assert"{beq_int{'a; 'b}} } -->
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   sequent { <H> >- 'a = 'b in int }
 
 (* Derived from previous *)
 rule eq_int_assert_elim 'H :
-   [main]sequent['ext]{ <H>; x:"assert"{beq_int{'a;'b}}; <J[it]>;
+   [main]sequent{ <H>; x:"assert"{beq_int{'a;'b}}; <J[it]>;
                             y: 'a = 'b in int >- 'C[it]} -->
-   [wf]sequent['ext]{ <H>; x:"assert"{beq_int{'a;'b}}; <J[it]> >- 'a in int} -->
-   [wf]sequent['ext]{ <H>; x:"assert"{beq_int{'a;'b}}; <J[it]> >- 'b in int} -->
-   sequent['ext]{ <H>; x:"assert"{beq_int{'a;'b}}; <J['x]> >- 'C['x]}
+   [wf]sequent{ <H>; x:"assert"{beq_int{'a;'b}}; <J[it]> >- 'a in int} -->
+   [wf]sequent{ <H>; x:"assert"{beq_int{'a;'b}}; <J[it]> >- 'b in int} -->
+   sequent{ <H>; x:"assert"{beq_int{'a;'b}}; <J['x]> >- 'C['x]}
 
 rule beq_int_is_true :
-   sequent [squash] { <H> >- 'a = 'b in int } -->
-   sequent ['ext] { <H> >- beq_int{'a; 'b} ~ btrue }
+   sequent { <H> >- 'a = 'b in int } -->
+   sequent { <H> >- beq_int{'a; 'b} ~ btrue }
 
 topval beq_int_is_trueC: conv
 
@@ -207,14 +207,14 @@ topval beq_int_is_trueC: conv
  Derived from previous rewrite
  *)
 rule eq_2beq_int :
-   sequent [squash] { <H> >- 'a = 'b in int } -->
-   sequent ['ext] { <H> >- "assert"{beq_int{'a; 'b}} }
+   sequent { <H> >- 'a = 'b in int } -->
+   sequent { <H> >- "assert"{beq_int{'a; 'b}} }
 
 rule lt_bool_member :
-  [main]  sequent [squash] { <H> >- 'a < 'b } -->
-(*  [wf] sequent [squash] { <H> >- 'a in int } -->
-  [wf] sequent [squash] { <H> >- 'b in int } --> *)
-  sequent ['ext] { <H> >- "assert"{lt_bool{'a; 'b}} }
+  [main]  sequent { <H> >- 'a < 'b } -->
+(*  [wf] sequent { <H> >- 'a in int } -->
+  [wf] sequent { <H> >- 'b in int } --> *)
+  sequent { <H> >- "assert"{lt_bool{'a; 'b}} }
 
 (*
  * Reduction on induction combinator:
@@ -247,33 +247,33 @@ rewrite reduce_ind_base :
  * by intFormation
  *)
 rule intFormation :
-   sequent ['ext] { <H> >- univ[i:l] }
+   sequent { <H> >- univ[i:l] }
 
 (*
  * H >- int Type
  *)
 rule intType :
-   sequent ['ext] { <H> >- "type"{int} }
+   sequent { <H> >- "type"{int} }
 
 (*
  * H >- Z = Z in Ui ext Ax
  * by intEquality
  *)
 rule intEquality :
-   sequent ['ext] { <H> >- int in univ[i:l] }
+   sequent { <H> >- int in univ[i:l] }
 
 (*
  * H >- Z ext n
  * by numberFormation n
  *)
 rule numberFormation number[n:n] :
-   sequent ['ext] { <H> >- int }
+   sequent { <H> >- int }
 (*
  * H >- i = i in int
  * by numberEquality
  *)
 rule numberEquality :
-   sequent ['ext] { <H> >- number[n:n] in int }
+   sequent { <H> >- number[n:n] in int }
 
 (*
  * Induction:
@@ -286,12 +286,12 @@ up[n, m, it, z])
  * H, n:Z, J[n], m:Z, v: 0 < m, z: C[m - 1] >- C[m] ext up[n, m, v, z]
  *)
 rule intElimination 'H :
-   sequent ['ext] { <H>; n: int; <J['n]>; m: int; v: 'm < 0; z: 'C['m +@ 1] >-
+   sequent { <H>; n: int; <J['n]>; m: int; v: 'm < 0; z: 'C['m +@ 1] >-
  'C['m] } -->
-   sequent ['ext] { <H>; n: int; <J['n]> >- 'C[0] } -->
-   sequent ['ext] { <H>; n: int; <J['n]>; m: int; v: 0 < 'm; z: 'C['m -@ 1] >-
+   sequent { <H>; n: int; <J['n]> >- 'C[0] } -->
+   sequent { <H>; n: int; <J['n]>; m: int; v: 0 < 'm; z: 'C['m -@ 1] >-
  'C['m] } -->
-   sequent ['ext] { <H>; n: int; <J['n]> >- 'C['n] }
+   sequent { <H>; n: int; <J['n]> >- 'C['n] }
 
 (*
  * Equality on induction combinator:
@@ -307,13 +307,13 @@ rule intElimination 'H :
  * H, x: Z, w: 0 < x, y: T[x - 1] >- up1[x, y] = up2[x, y] in T[x]
  *)
 rule indEquality lambda{z. 'T['z]} :
-   sequent [squash] { <H> >- 'x1 = 'x2 in int } -->
-   sequent [squash] { <H>; x: int; w: 'x < 0; y: 'T['x +@ 1] >- 'down1['x; 'y] =
+   sequent { <H> >- 'x1 = 'x2 in int } -->
+   sequent { <H>; x: int; w: 'x < 0; y: 'T['x +@ 1] >- 'down1['x; 'y] =
  'down2['x; 'y] in 'T['x] } -->
-   sequent [squash] { <H> >- 'base1 = 'base2 in 'T[0] } -->
-   sequent [squash] { <H>; x: int; w: 0 < 'x; y: 'T['x -@ 1] >- 'up1['x; 'y] =
+   sequent { <H> >- 'base1 = 'base2 in 'T[0] } -->
+   sequent { <H>; x: int; w: 0 < 'x; y: 'T['x -@ 1] >- 'up1['x; 'y] =
  'up2['x; 'y] in 'T['x] } -->
-   sequent ['ext] { <H> >- ind{'x1; i1, j1. 'down1['i1; 'j1]; 'base1; k1, l1.
+   sequent { <H> >- ind{'x1; i1, j1. 'down1['i1; 'j1]; 'base1; k1, l1.
  'up1['k1; 'l1]}
                    = ind{'x2; i2, j2. 'down2['i2; 'j2]; 'base2; k2, l2.
  'up2['k2; 'l2]}
@@ -323,26 +323,26 @@ rule indEquality lambda{z. 'T['z]} :
  *)
 
 rule lt_Reflex :
-   [wf] sequent [squash] { <H> >- 'a in int } -->
-   [wf] sequent [squash] { <H> >- 'b in int } -->
-   sequent ['ext] { <H> >- band{lt_bool{'a; 'b}; lt_bool{'b; 'a}} ~ bfalse }
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   sequent { <H> >- band{lt_bool{'a; 'b}; lt_bool{'b; 'a}} ~ bfalse }
 
 topval lt_ReflexC: conv
 topval lt_IrreflexC: conv
 
 rule lt_Asym 'a 'b :
-   [main] sequent [squash] { <H> >- 'a < 'b } -->
-   [main] sequent [squash] { <H> >- 'b < 'a } -->
-   [wf] sequent [squash] { <H> >- 'a in int } -->
-   [wf] sequent [squash] { <H> >- 'b in int } -->
-   sequent ['ext] { <H> >- 'C }
+   [main] sequent { <H> >- 'a < 'b } -->
+   [main] sequent { <H> >- 'b < 'a } -->
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   sequent { <H> >- 'C }
 
 topval lt_AsymT : term -> term -> tactic
 
 rule lt_Trichot :
-   [wf] sequent [squash] { <H> >- 'a in int } -->
-   [wf] sequent [squash] { <H> >- 'b in int } -->
-   sequent ['ext] {
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   sequent {
      <H> >- bor{bor{lt_bool{'a; 'b};lt_bool{'b; 'a}}; beq_int{'a; 'b}} ~ btrue }
 
 topval lt_TrichotC: conv
@@ -350,81 +350,81 @@ topval lt_TrichotC: conv
 topval splitIntC : term -> term -> conv
 
 rule splitInt 'a 'b :
-   [wf] sequent [squash] { <H> >- 'a in int } -->
-   [wf] sequent [squash] { <H> >- 'b in int } -->
-   [main] sequent ['ext] { <H>; w: ('a < 'b) >- 'C } -->
-   [main] sequent ['ext] { <H>; w: 'a = 'b in int >- 'C } -->
-   [main] sequent ['ext] { <H>; w: ('b < 'a) >- 'C } -->
-   sequent ['ext] { <H> >- 'C }
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   [main] sequent { <H>; w: ('a < 'b) >- 'C } -->
+   [main] sequent { <H>; w: 'a = 'b in int >- 'C } -->
+   [main] sequent { <H>; w: ('b < 'a) >- 'C } -->
+   sequent { <H> >- 'C }
 
 topval splitIntT : term -> term -> tactic
 
 rule lt_Transit 'b :
-   [main] sequent [squash] {
+   [main] sequent {
    	<H> >- band{lt_bool{'a; 'b};lt_bool{'b; 'c}} = btrue in bool } -->
-   [wf] sequent [squash] { <H> >- 'a in int } -->
-   [wf] sequent [squash] { <H> >- 'b in int } -->
-   [wf] sequent [squash] { <H> >- 'c in int } -->
-   sequent ['ext] { <H> >- lt_bool{'a; 'c} ~ btrue }
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   [wf] sequent { <H> >- 'c in int } -->
+   sequent { <H> >- lt_bool{'a; 'c} ~ btrue }
 
 topval lt_TransitC: term -> conv
 
 rule ltDissect 'b:
-   [main] sequent [squash] { <H> >- 'a < 'b } -->
-   [main] sequent [squash] { <H> >- 'b < 'c } -->
-   [wf] sequent [squash] { <H> >- 'a in int } -->
-   [wf] sequent [squash] { <H> >- 'b in int } -->
-   [wf] sequent [squash] { <H> >- 'c in int } -->
-   sequent ['ext] { <H> >- 'a < 'c }
+   [main] sequent { <H> >- 'a < 'b } -->
+   [main] sequent { <H> >- 'b < 'c } -->
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   [wf] sequent { <H> >- 'c in int } -->
+   sequent { <H> >- 'a < 'c }
 
 topval ltDissectT : term -> tactic
 
 rule lt_Discret :
-   [wf] sequent [squash] { <H> >- 'a in int } -->
-   [wf] sequent [squash] { <H> >- 'b in int } -->
-   sequent ['ext] { <H> >- lt_bool{'a; 'b} ~
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   sequent { <H> >- lt_bool{'a; 'b} ~
                           bor{beq_int{('a +@ 1); 'b}; lt_bool{('a +@ 1); 'b}} }
 
 topval lt_DiscretC: conv
 
 rule lt_addMono 'c:
-   [wf] sequent [squash] { <H> >- 'a in int } -->
-   [wf] sequent [squash] { <H> >- 'b in int } -->
-   [wf] sequent [squash] { <H> >- 'c in int } -->
-   sequent ['ext] { <H> >- lt_bool{'a; 'b} ~ lt_bool{('a +@ 'c); ('b +@ 'c)} }
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   [wf] sequent { <H> >- 'c in int } -->
+   sequent { <H> >- lt_bool{'a; 'b} ~ lt_bool{('a +@ 'c); ('b +@ 'c)} }
 
 topval lt_addMonoC: term -> conv
 
 rule add_Commut :
-   [wf] sequent [squash] { <H> >- 'a in int } -->
-   [wf] sequent [squash] { <H> >- 'b in int } -->
-   sequent ['ext] { <H> >- ('a +@ 'b) ~ ('b +@ 'a) }
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   sequent { <H> >- ('a +@ 'b) ~ ('b +@ 'a) }
 
 topval add_CommutC: conv
 
 rule lt_add_lt :
-   [main] sequent [squash] { <H> >- 'a < 'b} -->
-   [main] sequent [squash] { <H> >- 'c < 'd} -->
-   [wf] sequent [squash] { <H> >- 'a in int } -->
-   [wf] sequent [squash] { <H> >- 'b in int } -->
-   [wf] sequent [squash] { <H> >- 'c in int } -->
-   [wf] sequent [squash] { <H> >- 'd in int } -->
-   sequent ['ext] { <H> >- ('a +@ 'c) < ('b +@ 'd) }
+   [main] sequent { <H> >- 'a < 'b} -->
+   [main] sequent { <H> >- 'c < 'd} -->
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   [wf] sequent { <H> >- 'c in int } -->
+   [wf] sequent { <H> >- 'd in int } -->
+   sequent { <H> >- ('a +@ 'c) < ('b +@ 'd) }
 
 topval lt_add_ltT : tactic
 
 rule add_Assoc :
-   [wf] sequent [squash] { <H> >- 'a in int } -->
-   [wf] sequent [squash] { <H> >- 'b in int } -->
-   [wf] sequent [squash] { <H> >- 'c in int } -->
-   sequent ['ext] { <H> >- ('a +@ ('b +@ 'c)) ~ (('a +@ 'b) +@ 'c) }
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   [wf] sequent { <H> >- 'c in int } -->
+   sequent { <H> >- ('a +@ ('b +@ 'c)) ~ (('a +@ 'b) +@ 'c) }
 
 topval add_AssocC: conv
 topval add_Assoc2C: conv
 
 rule add_Id :
-   [wf] sequent [squash] { <H> >- 'a in int } -->
-   sequent ['ext] { <H> >- ('a +@ 0) ~ 'a }
+   [wf] sequent { <H> >- 'a in int } -->
+   sequent { <H> >- ('a +@ 0) ~ 'a }
 
 topval add_IdC: conv
 
@@ -435,25 +435,25 @@ topval add_Id3C: conv
 topval add_Id4C: conv
 
 rule minus_add_inverse :
-   [wf] sequent [squash] { <H> >- 'a in int } -->
-   sequent ['ext] { <H> >- ( 'a +@ ( - 'a ) ) ~ 0 }
+   [wf] sequent { <H> >- 'a in int } -->
+   sequent { <H> >- ( 'a +@ ( - 'a ) ) ~ 0 }
 
 topval minus_add_inverseC: conv
 
 rule add_Functionality 'c :
-   [main] sequent ['ext] { <H> >- ('a +@ 'c) ~ ('b +@ 'c) } -->
-   [wf] sequent ['ext] { <H> >- 'a in int } -->
-   [wf] sequent ['ext] { <H> >- 'b in int } -->
-   [wf] sequent ['ext] { <H> >- 'c in int } -->
-   sequent ['ext] { <H> >- 'a ~ 'b }
+   [main] sequent { <H> >- ('a +@ 'c) ~ ('b +@ 'c) } -->
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   [wf] sequent { <H> >- 'c in int } -->
+   sequent { <H> >- 'a ~ 'b }
 
 topval add_FunctionalityC : term -> term -> conv
 
 rule minus_add_Distrib :
-   [wf] sequent [squash] { <H> >- 'a in int } -->
-   [wf] sequent [squash] { <H> >- 'b in int } -->
-   sequent ['ext] { <H> >- (- ('a +@ 'b)) ~ ( (- 'a) +@ (- 'b) ) }
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   sequent { <H> >- (- ('a +@ 'b)) ~ ( (- 'a) +@ (- 'b) ) }
 
 rule minus_minus_reduce :
-   [wf] sequent [squash] { <H> >- 'a in int } -->
-   sequent ['ext] { <H> >- (-(-'a)) ~ 'a }
+   [wf] sequent { <H> >- 'a in int } -->
+   sequent { <H> >- (-(-'a)) ~ 'a }

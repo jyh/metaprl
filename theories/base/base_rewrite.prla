@@ -2714,7 +2714,11 @@ O	o1150	var p1149
 T	t1150	o1150
 B	b1150	t1150
 T	t1151	o1149 b1150 b1150
-S	s	t1149 h
+NBase_rewrite	Base_rw	Base_rewrite NIL
+NBase_rewrite!sequent_arg	brwsqarg	sequent_arg Base_rw
+O	obrarg	brwsqarg
+T	tbrarg	obrarg
+S	s	tbrarg h
 G	s	t1151
 B	b1151	s
 T	t1152	o1147 b1151
@@ -3079,13 +3083,13 @@ P	p1310	String rewriteSym
 O	o1311	rule p1310
 NSummary!meta_implies	meta_implies	meta_implies Summary
 O	o1312	meta_implies
-S	s1312	t1149 h
+S	s1312	tbrarg h
 G	s1312	t1161
 B	b1312	s1312
 T	t1312	o1147 b1312
 B	b1313	t1312
 T	t1313	o1149 b1160 b1150
-S	s1313	t1149 h
+S	s1313	tbrarg h
 G	s1313	t1313
 B	b1314	s1313
 T	t1314	o1147 b1314
@@ -3119,7 +3123,7 @@ B	b1323	t1323
 T	t1324	o1320 b1322 b9 b1323
 B	b1324	t1324
 T	t1325	o1149 b1160 b1160
-S	s1325	t1149 h
+S	s1325	tbrarg h
 G	s1325	t1325
 B	b1325	s1325
 T	t1326	o1321 b1325 b1321

@@ -74,9 +74,9 @@ doc <:doc<
    @end[doc]
 >>
 interactive setdiff_isset {| intro [] |} :
-   ["wf"] sequent [squash] { <H> >- isset{'s1} } -->
-   ["wf"] sequent [squash] { <H> >- isset{'s2} } -->
-   sequent ['ext] { <H> >- isset{setdiff{'s1; 's2}} }
+   ["wf"] sequent { <H> >- isset{'s1} } -->
+   ["wf"] sequent { <H> >- isset{'s2} } -->
+   sequent { <H> >- isset{setdiff{'s1; 's2}} }
 
 doc <:doc< 
    @begin[doc]
@@ -87,12 +87,12 @@ doc <:doc<
    @end[doc]
 >>
 interactive setdiff_intro {| intro [] |} 'x :
-   ["wf"] sequent [squash] { <H> >- isset{'x} } -->
-   ["wf"] sequent [squash] { <H> >- isset{'s1} } -->
-   ["wf"] sequent [squash] { <H> >- isset{'s2} } -->
-   sequent ['ext] { <H> >- mem{'x; 's1} } -->
-   sequent ['ext] { <H> >- "implies"{mem{'x; 's2}; ."false"} } -->
-   sequent ['ext] { <H> >- mem{'x; setdiff{'s1; 's2}} }
+   ["wf"] sequent { <H> >- isset{'x} } -->
+   ["wf"] sequent { <H> >- isset{'s1} } -->
+   ["wf"] sequent { <H> >- isset{'s2} } -->
+   sequent { <H> >- mem{'x; 's1} } -->
+   sequent { <H> >- "implies"{mem{'x; 's2}; ."false"} } -->
+   sequent { <H> >- mem{'x; setdiff{'s1; 's2}} }
 
 doc <:doc< 
    @begin[doc]
@@ -103,11 +103,11 @@ doc <:doc<
    @end[doc]
 >>
 interactive setdiff_elim {| elim [] |} 'H :
-   ["wf"] sequent [squash] { <H>; x: mem{'y; setdiff{'s1; 's2}}; <J['x]> >- isset{'y} } -->
-   ["wf"] sequent [squash] { <H>; x: mem{'y; setdiff{'s1; 's2}}; <J['x]> >- isset{'s1} } -->
-   ["wf"] sequent [squash] { <H>; x: mem{'y; setdiff{'s1; 's2}}; <J['x]> >- isset{'s2} } -->
-   sequent ['ext] { <H>; x: mem{'y; setdiff{'s1; 's2}}; <J['x]>; u: mem{'y; 's1}; v: "implies"{mem{'y; 's2}; ."false"} >- 'T['x] } -->
-   sequent ['ext] { <H>; x: mem{'y; setdiff{'s1; 's2}}; <J['x]> >- 'T['x] }
+   ["wf"] sequent { <H>; x: mem{'y; setdiff{'s1; 's2}}; <J['x]> >- isset{'y} } -->
+   ["wf"] sequent { <H>; x: mem{'y; setdiff{'s1; 's2}}; <J['x]> >- isset{'s1} } -->
+   ["wf"] sequent { <H>; x: mem{'y; setdiff{'s1; 's2}}; <J['x]> >- isset{'s2} } -->
+   sequent { <H>; x: mem{'y; setdiff{'s1; 's2}}; <J['x]>; u: mem{'y; 's1}; v: "implies"{mem{'y; 's2}; ."false"} >- 'T['x] } -->
+   sequent { <H>; x: mem{'y; setdiff{'s1; 's2}}; <J['x]> >- 'T['x] }
 
 doc <:doc< 
    @begin[doc]
@@ -117,9 +117,9 @@ doc <:doc<
    @end[doc]
 >>
 interactive setdiff_fun {| intro [] |} :
-   sequent ['ext] { <H> >- fun_set{z. 's1['z]} } -->
-   sequent ['ext] { <H> >- fun_set{z. 's2['z]} } -->
-   sequent ['ext] { <H> >- fun_set{z. setdiff{'s1['z]; 's2['z]}} }
+   sequent { <H> >- fun_set{z. 's1['z]} } -->
+   sequent { <H> >- fun_set{z. 's2['z]} } -->
+   sequent { <H> >- fun_set{z. setdiff{'s1['z]; 's2['z]}} }
 
 (*
  * -*-
@@ -130,8 +130,8 @@ interactive setdiff_fun {| intro [] |} :
  *)
 
 (* interactive setdiff1 :
-   sequent ['ext] { <H> >- eq{setdiff{succ{empty}; empty}; succ{empty}} }
+   sequent { <H> >- eq{setdiff{succ{empty}; empty}; succ{empty}} }
 
 interactive setdiff2 :
-   sequent ['ext] { <H> >- eq{setdiff{succ{empty}; succ{empty}}; empty} }
+   sequent { <H> >- eq{setdiff{succ{empty}; succ{empty}}; empty} }
 *)

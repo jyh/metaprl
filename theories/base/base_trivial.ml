@@ -45,7 +45,6 @@ extends Summary
 
 doc "doc"{terms}
 declare it
-declare squash
 doc docoff
 
 (*

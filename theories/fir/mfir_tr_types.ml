@@ -65,9 +65,9 @@ doc <:doc<
 >>
 
 prim wf_mutable_ty :
-   sequent [fir] { <H> >- "or"{ 'flag; "not"{ 'flag } } } -->
-   sequent [fir] { <H> >- type_eq{ 'ty1; 'ty2; 'k } } -->
-   sequent [fir] { <H> >- type_eq{ mutable_ty{ 'ty1; 'flag };
+   sequent { <H> >- "or"{ 'flag; "not"{ 'flag } } } -->
+   sequent { <H> >- type_eq{ 'ty1; 'ty2; 'k } } -->
+   sequent { <H> >- type_eq{ mutable_ty{ 'ty1; 'flag };
                                   mutable_ty{ 'ty2; 'flag };
                                   'k } }
    = it
@@ -82,7 +82,7 @@ doc <:doc< ************************************
 >>
 
 prim wf_tyInt :
-   sequent [fir] { <H> >- type_eq{ tyInt; tyInt; small_type } }
+   sequent { <H> >- type_eq{ tyInt; tyInt; small_type } }
    = it
 
 
@@ -97,8 +97,8 @@ doc <:doc<
 >>
 
 prim wf_tyEnum :
-   sequent [fir] { <H> >- member{ number[i:n]; enum_max } } -->
-   sequent [fir] { <H> >- type_eq{ tyEnum[i:n]; tyEnum[i:n]; small_type } }
+   sequent { <H> >- member{ number[i:n]; enum_max } } -->
+   sequent { <H> >- type_eq{ tyEnum[i:n]; tyEnum[i:n]; small_type } }
    = it
 
 
@@ -113,33 +113,33 @@ doc <:doc<
 >>
 
 prim wf_tyRawInt1 :
-   sequent [fir] { <H> >-
+   sequent { <H> >-
       "or"{ int_eq{ number[p:n]; 8 };
       "or"{ int_eq{ number[p:n]; 16 };
       "or"{ int_eq{ number[p:n]; 32 };
             int_eq{ number[p:n]; 64 } } } } } -->
-   sequent [fir] { <H> >- type_eq{ tyRawInt[p:n, "signed"];
+   sequent { <H> >- type_eq{ tyRawInt[p:n, "signed"];
                                   tyRawInt[p:n, "signed"];
                                   large_type } }
    = it
 
 prim wf_tyRawInt2 :
-   sequent [fir] { <H> >-
+   sequent { <H> >-
       "or"{ int_eq{ number[p:n]; 8 };
       "or"{ int_eq{ number[p:n]; 16 };
       "or"{ int_eq{ number[p:n]; 32 };
             int_eq{ number[p:n]; 64 } } } } } -->
-   sequent [fir] { <H> >- type_eq{ tyRawInt[p:n, "unsigned"];
+   sequent { <H> >- type_eq{ tyRawInt[p:n, "unsigned"];
                                   tyRawInt[p:n, "unsigned"];
                                   large_type } }
    = it
 
 prim wf_tyFloat :
-   sequent [fir] { <H> >-
+   sequent { <H> >-
       "or"{ int_eq{ number[p:n]; 32 };
       "or"{ int_eq{ number[p:n]; 64 };
             int_eq{ number[p:n]; 80 } } } } -->
-   sequent [fir] { <H> >- type_eq{ tyFloat[p:n]; tyFloat[p:n]; large_type } }
+   sequent { <H> >- type_eq{ tyFloat[p:n]; tyFloat[p:n]; large_type } }
    = it
 
 
@@ -153,9 +153,9 @@ doc <:doc< ************************************
 >>
 
 prim wf_tyFun :
-   sequent [fir] { <H> >- type_eq{ 'a1; 'a2; large_type } } -->
-   sequent [fir] { <H> >- type_eq{ 'r1; 'r2; large_type } } -->
-   sequent [fir] { <H> >- type_eq{ tyFun{ 'a1; 'r1 };
+   sequent { <H> >- type_eq{ 'a1; 'a2; large_type } } -->
+   sequent { <H> >- type_eq{ 'r1; 'r2; large_type } } -->
+   sequent { <H> >- type_eq{ tyFun{ 'a1; 'r1 };
                                    tyFun{ 'a2; 'r2 };
                                    small_type } }
    = it
@@ -173,20 +173,20 @@ doc <:doc< ************************************
 prim wf_tyUnion 'H :
 
    (* The types the unions are instantiated at should be equal. *)
-   sequent [fir] { <H>; a: ty_def{'tv; polyKind{'i; union_type[j:n]}; 'd}; <J> >-
+   sequent { <H>; a: ty_def{'tv; polyKind{'i; union_type[j:n]}; 'd}; <J> >-
       type_eq_list{ 'tyl1; 'tyl2; small_type } } -->
 
    (* The subset of cases should be equal. *)
-   sequent [fir] { <H>; a: ty_def{'tv; polyKind{'i; union_type[j:n]}; 'd}; <J> >-
+   sequent { <H>; a: ty_def{'tv; polyKind{'i; union_type[j:n]}; 'd}; <J> >-
       set_eq{ 'set1; 'set2 } } -->
 
    (* The subset of cases should actually be a subset. *)
-   sequent [fir] { <H>; a: ty_def{'tv; polyKind{'i; union_type[j:n]}; 'd}; <J> >-
+   sequent { <H>; a: ty_def{'tv; polyKind{'i; union_type[j:n]}; 'd}; <J> >-
                'set1 subset
                intset[31, "signed"]{ interval{0; (number[j:n] -@ 1)} } }  -->
 
    (* Then the two tyUnion's are equal. *)
-   sequent [fir] { <H>; a: ty_def{'tv; polyKind{'i; union_type[j:n]}; 'd}; <J> >-
+   sequent { <H>; a: ty_def{'tv; polyKind{'i; union_type[j:n]}; 'd}; <J> >-
       type_eq{ tyUnion{ 'tv; 'tyl1; 'set1 };
                tyUnion{ 'tv; 'tyl2; 'set2 };
                small_type } }
@@ -202,22 +202,22 @@ doc <:doc<
 >>
 
 prim wf_tyTuple_normal :
-   sequent [fir] { <H> >- type_eq_list{ 'tyl1; 'tyl2; small_type } } -->
-   sequent [fir] { <H> >- type_eq{ tyTuple["normal"]{ 'tyl1 };
+   sequent { <H> >- type_eq_list{ 'tyl1; 'tyl2; small_type } } -->
+   sequent { <H> >- type_eq{ tyTuple["normal"]{ 'tyl1 };
                                   tyTuple["normal"]{ 'tyl2 };
                                   small_type } }
    = it
 
 prim wf_tyTuple_raw :
-   sequent [fir] { <H> >- type_eq_list{ 'tyl1; 'tyl2; small_type } } -->
-   sequent [fir] { <H> >- type_eq{ tyTuple["raw"]{ 'tyl1 };
+   sequent { <H> >- type_eq_list{ 'tyl1; 'tyl2; small_type } } -->
+   sequent { <H> >- type_eq{ tyTuple["raw"]{ 'tyl1 };
                                   tyTuple["raw"]{ 'tyl2 };
                                   small_type } }
    = it
 
 prim wf_tyTuple_box :
-   sequent [fir] { <H> >- type_eq{ 't1; 't2; large_type } } -->
-   sequent [fir] { <H> >- type_eq{ tyTuple["box"]{ cons{ 't1; nil } };
+   sequent { <H> >- type_eq{ 't1; 't2; large_type } } -->
+   sequent { <H> >- type_eq{ tyTuple["box"]{ cons{ 't1; nil } };
                                    tyTuple["box"]{ cons{ 't2; nil } };
                                    small_type } }
    = it
@@ -233,23 +233,23 @@ doc <:doc<
 (* XXX: documentation needs to be completed. *)
 
 prim wf_tyDTuple_none 'H :
-   sequent [fir] { <H>; a: ty_def{ 'tv; dtuple_type; 'd }; <J> >-
+   sequent { <H>; a: ty_def{ 'tv; dtuple_type; 'd }; <J> >-
       type_eq{ tyDTuple{ 'tv; none }; tyDTuple{ 'tv; none }; small_type } }
    = it
 
 prim wf_tyDTuple_some 'H :
-   sequent [fir] { <H>; a: ty_def{ 'tv; dtuple_type; 'd }; <J> >-
+   sequent { <H>; a: ty_def{ 'tv; dtuple_type; 'd }; <J> >-
       type_eq_list{ 'mtyl1; 'mtyl2; small_type } } -->
-   sequent [fir] { <H>; a: ty_def{ 'tv; dtuple_type; 'd }; <J> >-
+   sequent { <H>; a: ty_def{ 'tv; dtuple_type; 'd }; <J> >-
       type_eq{ tyDTuple{ 'tv; some{'mtyl1} };
                tyDTuple{ 'tv; some{'mtyl2} };
                small_type } }
    = it
 
 prim wf_tyTag 'H :
-   sequent [fir] { <H>; a: ty_def{ 'tv; dtuple_type; 'd }; <J> >-
+   sequent { <H>; a: ty_def{ 'tv; dtuple_type; 'd }; <J> >-
       type_eq_list{ 'mtyl1; 'mtyl2; small_type } } -->
-   sequent [fir] { <H>; a: ty_def{ 'tv; dtuple_type; 'd }; <J> >-
+   sequent { <H>; a: ty_def{ 'tv; dtuple_type; 'd }; <J> >-
       type_eq{ tyTag{ 'tv; 'mtyl1 }; tyTag{ 'tv; 'mtyl2 }; small_type } }
    = it
 
@@ -263,8 +263,8 @@ doc <:doc< ************************************
 >>
 
 prim wf_tyArray :
-   sequent [fir] { <H> >- type_eq{ 't1; 't2; large_type } } -->
-   sequent [fir] { <H> >- type_eq{ tyArray{'t1}; tyArray{'t2}; small_type } }
+   sequent { <H> >- type_eq{ 't1; 't2; large_type } } -->
+   sequent { <H> >- type_eq{ tyArray{'t1}; tyArray{'t2}; small_type } }
    = it
 
 
@@ -276,7 +276,7 @@ doc <:doc<
 >>
 
 prim wf_tyRawData :
-   sequent [fir] { <H> >- type_eq{ tyRawData; tyRawData; small_type } }
+   sequent { <H> >- type_eq{ tyRawData; tyRawData; small_type } }
    = it
 
 
@@ -290,11 +290,11 @@ doc <:doc<
 (* XXX: documentation needs to be completed. *)
 
 prim wf_tyFrame 'H :
-   sequent [fir] { <H>; a: ty_def{ 'tv; 'k; 'd }; <J> >-
+   sequent { <H>; a: ty_def{ 'tv; 'k; 'd }; <J> >-
       type_eq{apply_types{'d; 'tyl1}; apply_types{'d; 'tyl2}; frame_type} } -->
-   sequent [fir] { <H>; a: ty_def{ 'tv; 'k; 'd }; <J> >-
+   sequent { <H>; a: ty_def{ 'tv; 'k; 'd }; <J> >-
       type_eq_list{ 'tyl1; 'tyl2; small_type } } -->
-   sequent [fir] { <H>; a: ty_def{ 'tv; 'k; 'd }; <J> >-
+   sequent { <H>; a: ty_def{ 'tv; 'k; 'd }; <J> >-
       type_eq{ tyFrame{ 'tv; 'tyl1 }; tyFrame{ 'tv; 'tyl2 }; small_type } }
    = it
 
@@ -317,7 +317,7 @@ doc <:doc< ************************************
  *)
 
 prim wf_tyVar 'H :
-   sequent [fir] { <H>; a: ty_def{ 'tv; 'k; 'd }; <J> >-
+   sequent { <H>; a: ty_def{ 'tv; 'k; 'd }; <J> >-
       type_eq{ tyVar{ 'tv }; tyVar{ 'tv }; 'k } }
    = it
 
@@ -336,11 +336,11 @@ doc <:doc<
  *)
 
 prim wf_tyApply1 'H :
-   sequent [fir] { <H>; a: ty_def{ 'tv; polyKind{'i;  'k }; 'd }; <J> >-
+   sequent { <H>; a: ty_def{ 'tv; polyKind{'i;  'k }; 'd }; <J> >-
       int_eq{ 'i; length{ 'tyl1 } } } -->
-   sequent [fir] { <H>; a: ty_def{ 'tv; polyKind{'i;  'k }; 'd }; <J> >-
+   sequent { <H>; a: ty_def{ 'tv; polyKind{'i;  'k }; 'd }; <J> >-
       type_eq_list{ 'tyl1; 'tyl2; small_type } } -->
-   sequent [fir] { <H>; a: ty_def{ 'tv; polyKind{'i;  'k }; 'd }; <J> >-
+   sequent { <H>; a: ty_def{ 'tv; polyKind{'i;  'k }; 'd }; <J> >-
       type_eq{ tyApply{ 'tv; 'tyl1 }; tyApply{ 'tv; 'tyl2 }; 'k } }
    = it
 
@@ -358,9 +358,9 @@ doc <:doc<
 >>
 
 prim wf_tyExists :
-   sequent [fir] { <H>; tv: "type"; a: ty_def{ 'tv; small_type; no_def } >-
+   sequent { <H>; tv: "type"; a: ty_def{ 'tv; small_type; no_def } >-
       type_eq{ 't1['tv]; 't2['tv]; large_type } } -->
-   sequent [fir] { <H> >-
+   sequent { <H> >-
       type_eq{ tyExists{ x. 't1['x] }; tyExists{ y. 't2['y] }; small_type } }
    = it
 
@@ -374,9 +374,9 @@ doc <:doc<
 >>
 
 prim wf_tyAll :
-   sequent [fir] { <H>; tv: "type"; a: ty_def{ 'tv; small_type; no_def } >-
+   sequent { <H>; tv: "type"; a: ty_def{ 'tv; small_type; no_def } >-
       type_eq{ 't1['tv]; 't2['tv]; large_type } } -->
-   sequent [fir] { <H> >-
+   sequent { <H> >-
       type_eq{ tyAll{ x. 't1['x] }; tyAll{ y. 't2['y] }; small_type } }
    = it
 
@@ -395,11 +395,11 @@ doc <:doc<
  *)
 
 prim wf_tyProject 'H :
-   sequent [fir] { <H>;
+   sequent { <H>;
                    a: var_def{ 'v; tyExists{t. 'ty['t]}; 'd };
                    <J> >-
       project_in_bounds{ number[i:n]; tyExists{t. 'ty['t]} } } -->
-   sequent [fir] { <H>;
+   sequent { <H>;
                    a: var_def{ 'v; tyExists{t. 'ty['t]}; 'd };
                    <J> >-
       type_eq{ tyProject[i:n]{ atomVar{'v} };
@@ -422,9 +422,9 @@ doc <:doc< ************************************
 >>
 
 prim wf_tyDefPoly :
-   sequent [fir] { <H>; tv: "type"; a: ty_def{ 'tv; small_type; no_def } >-
+   sequent { <H>; tv: "type"; a: ty_def{ 'tv; small_type; no_def } >-
       type_eq{ 'ty1['tv]; 'ty2['tv]; polyKind{ ('i -@ 1); 'k } } } -->
-   sequent [fir] { <H> >- type_eq{ tyDefPoly{ x. 'ty1['x] };
+   sequent { <H> >- type_eq{ tyDefPoly{ x. 'ty1['x] };
                                   tyDefPoly{ y. 'ty2['y] };
                                   polyKind{ 'i; 'k } } }
    = it
@@ -438,26 +438,26 @@ doc <:doc<
 >>
 
 prim wf_recordEnd_record :
-   sequent [fir] { <H> >- type_eq{ recordEnd; recordEnd; record_type } }
+   sequent { <H> >- type_eq{ recordEnd; recordEnd; record_type } }
     = it
 
 prim wf_recordEnd_frame :
-   sequent [fir] { <H> >- type_eq{ recordEnd; recordEnd; frame_type } }
+   sequent { <H> >- type_eq{ recordEnd; recordEnd; frame_type } }
    = it
 
 
 prim wf_record_record :
-   sequent [fir] { <H> >- type_eq{ 'data1; 'data2; large_type } } -->
-   sequent [fir] { <H> >- type_eq{ 'rest1; 'rest2; record_type } } -->
-   sequent [fir] { <H> >- type_eq{ record[tag:s]{ 'data1; 'rest1 };
+   sequent { <H> >- type_eq{ 'data1; 'data2; large_type } } -->
+   sequent { <H> >- type_eq{ 'rest1; 'rest2; record_type } } -->
+   sequent { <H> >- type_eq{ record[tag:s]{ 'data1; 'rest1 };
                                   record[tag:s]{ 'data2; 'rest2 };
                                   record_type } }
    = it
 
 prim wf_record_frame :
-   sequent [fir] { <H> >- type_eq{ 'data1; 'data2; record_type } } -->
-   sequent [fir] { <H> >- type_eq{ 'rest1; 'rest2; frame_type } } -->
-   sequent [fir] { <H> >- type_eq{ record[tag:s]{ 'data1; 'rest1 };
+   sequent { <H> >- type_eq{ 'data1; 'data2; record_type } } -->
+   sequent { <H> >- type_eq{ 'rest1; 'rest2; frame_type } } -->
+   sequent { <H> >- type_eq{ record[tag:s]{ 'data1; 'rest1 };
                                   record[tag:s]{ 'data2; 'rest2 };
                                   frame_type } }
    = it
@@ -486,9 +486,9 @@ doc <:doc<
 >>
 
 prim wf_tyDefUnion :
-   sequent [fir] { <H> >- int_eq{ length{ 'cases1 }; number[i:n] } } -->
-   sequent [fir] { <H> >- union_type_eq_list{ 'cases1; 'cases2 } } -->
-   sequent [fir] { <H> >- type_eq{ tyDefUnion{ 'cases1 };
+   sequent { <H> >- int_eq{ length{ 'cases1 }; number[i:n] } } -->
+   sequent { <H> >- union_type_eq_list{ 'cases1; 'cases2 } } -->
+   sequent { <H> >- type_eq{ tyDefUnion{ 'cases1 };
                                   tyDefUnion{ 'cases2 };
                                   polyKind{0; union_type[i:n]} } }
    = it
@@ -502,13 +502,13 @@ doc <:doc<
 >>
 
 prim wf_tyDefUnion_cases1 :
-   sequent [fir] { <H> >- union_type_eq_list{ nil; nil } }
+   sequent { <H> >- union_type_eq_list{ nil; nil } }
    = it
 
 prim wf_tyDefUnion_cases2 :
-   sequent [fir] { <H> >- type_eq_list{ 'h1; 'h2; large_type } } -->
-   sequent [fir] { <H> >- union_type_eq_list{ 't1; 't2 } } -->
-   sequent [fir] { <H> >- union_type_eq_list{cons{'h1; 't1}; cons{'h2; 't2}} }
+   sequent { <H> >- type_eq_list{ 'h1; 'h2; large_type } } -->
+   sequent { <H> >- union_type_eq_list{ 't1; 't2 } } -->
+   sequent { <H> >- union_type_eq_list{cons{'h1; 't1}; cons{'h2; 't2}} }
    = it
 
 
@@ -522,7 +522,7 @@ doc <:doc<
 (* XXX: documentation needs to be completed. *)
 
 prim wf_tyDefDTuple 'H :
-   sequent [fir] { <H>; a: ty_def{ 'tv; dtuple_type; tyDefDTuple{'tv} }; <J> >-
+   sequent { <H>; a: ty_def{ 'tv; dtuple_type; tyDefDTuple{'tv} }; <J> >-
       type_eq{ tyDefDTuple{ 'tv }; tyDefDTuple{ 'tv }; dtuple_type } }
    = it
 

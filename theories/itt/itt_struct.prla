@@ -422,7 +422,11 @@ O	o557	var p557
 T	t558	o557
 H	h558	x t558
 C	h559	J t469
-S	s	t557 h h558 h559
+NBase_rewrite	Base_rw	Base_rewrite NIL
+NBase_rewrite!sequent_arg	brwsqarg	sequent_arg Base_rw
+O	obrarg	brwsqarg
+T	tbrarg	obrarg
+S	s	tbrarg h h558 h559
 G	s	t558
 B	b559	s
 T	t559	o555 b559
@@ -439,10 +443,10 @@ C	h566	J
 P	p566	Var C
 O	o566	var p566
 T	t567	o566
-S	s567	t557 h h558 h566
+S	s567	tbrarg h h558 h566
 G	s567	t567
 B	b567	s567
-S	s569	t557 h h566
+S	s569	tbrarg h h566
 G	s569	t567
 B	b569	s569
 NOcaml!fun	fun	fun Ocaml
@@ -491,7 +495,7 @@ B	b789	t789
 NSummary!meta_labeled	meta_labeled	meta_labeled Summary
 P	p789	String assertion
 O	o790	meta_labeled p789
-S	s790	t557 h h566
+S	s790	tbrarg h h566
 G	s790	t784
 B	b790	s790
 T	t790	o555 b790
@@ -506,14 +510,14 @@ P	p793	String main
 O	o793	meta_labeled p793
 H	h793	x t784
 T	t793	o468
-S	s793	t557 h h793 h566
+S	s793	tbrarg h h793 h566
 G	s793	t793
 B	b794	s793
 T	t794	o555 b794
 B	b795	t794
 T	t795	o793 b795
 B	b796	t795
-S	s796	t557 h h566
+S	s796	tbrarg h h566
 G	s796	t793
 B	b797	s796
 T	t797	o555 b797
@@ -534,7 +538,7 @@ T	t806	o b550 b4
 B	b806	t806
 NSummary!meta_implies	meta_implies	meta_implies Summary
 O	o807	meta_implies
-S	s807	t557 h
+S	s807	tbrarg h
 G	s807	t793
 B	b807	s807
 T	t807	o555 b807
@@ -603,7 +607,7 @@ NItt_equal!equal	equal	equal Itt_equal
 O	o845	equal
 B	b835	t793
 T	t836	o845 b835 b830 b830
-S	s836	t835 h
+S	s836	tbrarg h
 G	s836	t836
 B	b836	s836
 T	t837	o555 b836
@@ -652,7 +656,7 @@ T	t856	o b550 b855
 B	b856	t856
 P	p856	String equality
 O	o856	meta_labeled p856
-S	s856	t835 h
+S	s856	tbrarg h
 G	s856	t849
 B	b857	s856
 T	t857	o555 b857
@@ -660,7 +664,7 @@ B	b858	t857
 T	t858	o856 b858
 B	b859	t858
 T	t859	o850 b848
-S	s859	t557 h
+S	s859	tbrarg h
 G	s859	t859
 B	b860	s859
 T	t860	o555 b860
@@ -672,7 +676,7 @@ NItt_equal!type	type	type Itt_equal
 O	o862	type
 B	b863	t851
 T	t863	o862 b863
-S	s863	t835 h h862
+S	s863	tbrarg h h862
 G	s863	t863
 B	b864	s863
 T	t864	o555 b864
@@ -680,7 +684,7 @@ B	b865	t864
 T	t865	o833 b865
 B	b866	t865
 T	t866	o850 b847
-S	s866	t557 h
+S	s866	tbrarg h
 G	s866	t866
 B	b867	s866
 T	t867	o555 b867
@@ -717,7 +721,7 @@ B	b882	t882
 T	t883	o b550 b882
 B	b883	t883
 H	h883	x t876
-S	s883	t557 h h883 h559
+S	s883	tbrarg h h883 h559
 G	s883	t470
 B	b884	s883
 T	t884	o555 b884
@@ -726,14 +730,14 @@ T	t885	o793 b885
 B	b886	t885
 B	b887	t558
 T	t887	o845 b878 b887 b876
-S	s887	t835 h h558 h559
+S	s887	tbrarg h h558 h559
 G	s887	t887
 B	b888	s887
 T	t888	o555 b888
 B	b889	t888
 T	t889	o856 b889
 B	b890	t889
-S	s890	t557 h h558 h559
+S	s890	tbrarg h h558 h559
 G	s890	t470
 B	b891	s890
 T	t891	o555 b891
@@ -772,7 +776,7 @@ T	t908	o b550 b907
 B	b908	t908
 T	t909	o557 b847
 H	h909	x t909
-S	s909	t835 h h909 h559
+S	s909	tbrarg h h909 h559
 G	s909	t849
 B	b909	s909
 T	t910	o555 b909
@@ -781,7 +785,7 @@ T	t911	o856 b910
 B	b911	t911
 T	t912	o557 b848
 H	h912	x t912
-S	s912	t557 h h912 h559
+S	s912	tbrarg h h912 h559
 G	s912	t851
 B	b912	s912
 T	t913	o555 b912
@@ -796,14 +800,14 @@ B	b915	t915
 T	t916	o557 b915
 B	b916	t916
 T	t917	o862 b916
-S	s917	t835 h h909 h559 h914
+S	s917	tbrarg h h909 h559 h914
 G	s917	t917
 B	b917	s917
 T	t918	o555 b917
 B	b918	t918
 T	t919	o833 b918
 B	b919	t919
-S	s919	t557 h h909 h559
+S	s919	tbrarg h h909 h559
 G	s919	t851
 B	b920	s919
 T	t920	o555 b920
@@ -4332,12 +4336,12 @@ T	t2497	o b550 b2496
 B	b2497	t2497
 C	h2497	L
 C	h2498	K
-S	s2498	t557 h h2497 h2498 h566
+S	s2498	tbrarg h h2497 h2498 h566
 G	s2498	t567
 B	b2498	s2498
 T	t2498	o555 b2498
 B	b2501	t2498
-S	s2501	t557 h h2498 h2497 h566
+S	s2501	tbrarg h h2498 h2497 h566
 G	s2501	t567
 B	b2502	s2501
 T	t2502	o555 b2502
@@ -7000,7 +7004,7 @@ O	o102	location p101 p102
 P	p2534	String hypothesisType
 O	o2534	rule p2534
 T	t2535	o862 b887
-S	s2535	t557 h h558 h559
+S	s2535	tbrarg h h558 h559
 G	s2535	t2535
 B	b2535	s2535
 T	t2536	o555 b2535
@@ -7747,7 +7751,7 @@ B	b2377	t2377
 T	t2378	o b550 b2377
 B	b2378	t2378
 T	t2386	o845 b835 b789 b1720
-S	s2386	t835 h
+S	s2386	tbrarg h
 G	s2386	t2386
 B	b2386	s2386
 T	t2388	o555 b2386
@@ -7755,7 +7759,7 @@ B	b2388	t2388
 T	t2562	o833 b2388
 B	b2562	t2562
 T	t2406	o862 b835
-S	s2406	t557 h
+S	s2406	tbrarg h
 G	s2406	t2406
 B	b2406	s2406
 T	t2407	o555 b2406
@@ -7772,7 +7776,7 @@ T	t2458	o816 b2457 b4 b820
 B	b2458	t2458
 O	o2462	tactic_arg p833
 T	t2491	o845 b835 b789 b789
-S	s2491	t835 h
+S	s2491	tbrarg h
 G	s2491	t2491
 B	b2491	s2491
 T	t2492	o817 b2491 b2434
@@ -7789,7 +7793,7 @@ B	b2569	t2569
 T	t2575	o2462 b2492 b4 b2569
 B	b2575	t2575
 H	h2575	v t793
-S	s2575	t557 h h2575
+S	s2575	tbrarg h h2575
 G	s2575	t2406
 B	b2580	s2575
 T	t2580	o817 b2580 b2434

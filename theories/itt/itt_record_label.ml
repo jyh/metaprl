@@ -37,7 +37,7 @@ open Itt_equal
 declare label[t:t]
 
 prim labelMember {| intro []; eqcd |} :
-   sequent ['ext] { <H> >- label[t:t] in label } =
+   sequent { <H> >- label[t:t] in label } =
    it
 
 let label_term = << label[x:t] >>
@@ -58,13 +58,13 @@ define unfold_eq_label : eq_label[x:t,y:t]{'A;'B} <-->  meta_eq[x:t, y:t]{'A; 'B
 
 
 prim reduce_eq_label_true {| intro [] |} :
-   sequent[squash] { <H> >- label[x:t] = label[y:t]  in label} -->
-   sequent['ext] { <H> >- eq_label[x:t,y:t]{'A;'B} ~ 'A}
+   sequent{ <H> >- label[x:t] = label[y:t]  in label} -->
+   sequent{ <H> >- eq_label[x:t,y:t]{'A;'B} ~ 'A}
       = it
 
 prim reduce_eq_label_false {| intro [] |} :
-   sequent[squash] { <H> >- not{.label[x:t] = label[y:t]  in label}} -->
-   sequent['ext] { <H> >- eq_label[x:t,y:t]{'A;'B} ~ 'B}
+   sequent{ <H> >- not{.label[x:t] = label[y:t]  in label}} -->
+   sequent{ <H> >- eq_label[x:t,y:t]{'A;'B} ~ 'B}
       = it
 
 
@@ -85,13 +85,13 @@ let reduce_eq_label =  reduce_eq_label_trivial_rw orelseC
 let resource reduce += << eq_label[x:t,y:t]{'A;'B}  >>, reduce_eq_label
 
 interactive eq_label_false :
-   sequent['ext] { <H> >- not{.label[x:t] = label[y:t]  in label}} -->
-   sequent['ext] { <H> >- 'B} -->
-   sequent['ext] { <H> >- eq_label[x:t,y:t]{'A;'B}}
+   sequent{ <H> >- not{.label[x:t] = label[y:t]  in label}} -->
+   sequent{ <H> >- 'B} -->
+   sequent{ <H> >- eq_label[x:t,y:t]{'A;'B}}
 
 interactive eq_label_true :
-   sequent['ext] { <H> >- 'A} -->
-   sequent['ext] { <H> >- eq_label[x:t,x:t]{'A;'B}}
+   sequent{ <H> >- 'A} -->
+   sequent{ <H> >- eq_label[x:t,x:t]{'A;'B}}
 
 let eq_labelIntroT =
    rw reduce_eq_label 0 orelseT eq_label_false
@@ -99,8 +99,8 @@ let eq_labelIntroT =
 let resource intro += (<< eq_label[x:t,y:t]{'A;'B} >>, wrap_intro eq_labelIntroT )
 
 interactive not_eq_label :
-   sequent[squash] { <H> >- eq_label[x:t,y:t]{."false";."true"} } -->
-   sequent['ext] { <H> >- not{.label[x:t] = label[y:t]  in label}}
+   sequent{ <H> >- eq_label[x:t,y:t]{."false";."true"} } -->
+   sequent{ <H> >- not{.label[x:t] = label[y:t]  in label}}
 
 let not_eq_labelT =
    (not_eq_label thenT rw reduce_eq_label 0 thenT tryT (dT 0)) orelseT trivialT

@@ -101,18 +101,18 @@ doc <:doc<
 
 
 interactive set_subset {| intro [] |}  :
-   [wf] sequent [squash] { <H> >- "type"{'A} } -->
-   [wf] sequent [squash] { <H>; x: 'A >- "type"{'P['x]} } -->
-   sequent ['ext] { <H> >- {a: 'A | 'P['a]} subset 'A }
+   [wf] sequent { <H> >- "type"{'A} } -->
+   [wf] sequent { <H>; x: 'A >- "type"{'P['x]} } -->
+   sequent { <H> >- {a: 'A | 'P['a]} subset 'A }
 
 interactive subset_set {| intro [] |}  :
-   sequent [squash] { <H> >- 'A subset 'B } -->
-   sequent ['ext] { <H> >- ext_equal{{x: 'B | 'x in 'A subset 'B}; 'A} }
+   sequent { <H> >- 'A subset 'B } -->
+   sequent { <H> >- ext_equal{{x: 'B | 'x in 'A subset 'B}; 'A} }
 
 interactive subset_iff  :
-   [wf] sequent [squash] { <H> >- 'A in univ[i:l] } -->
-   [wf] sequent [squash] { <H> >- 'B in univ[i:l] } -->
-   sequent ['ext] { <H> >- iff{'A subset 'B; exst P:'B -> univ[i:l]. ext_equal{{x:'B| 'P 'x}; 'A}} }
+   [wf] sequent { <H> >- 'A in univ[i:l] } -->
+   [wf] sequent { <H> >- 'B in univ[i:l] } -->
+   sequent { <H> >- iff{'A subset 'B; exst P:'B -> univ[i:l]. ext_equal{{x:'B| 'P 'x}; 'A}} }
 
 
 doc <:doc< 
@@ -128,20 +128,20 @@ doc <:doc<
 
 
 interactive subset_ref {| intro [] |}  :
-   [wf] sequent [squash] { <H> >- "type"{'A} } -->
-   sequent ['ext] { <H> >- 'A subset 'A }
+   [wf] sequent { <H> >- "type"{'A} } -->
+   sequent { <H> >- 'A subset 'A }
 
 
 interactive subset_trans 'B:
-   sequent ['ext] { <H> >- 'A subset 'B } -->
-   sequent ['ext] { <H> >- 'B subset 'C } -->
-   sequent ['ext] { <H> >- 'A subset 'C }
+   sequent { <H> >- 'A subset 'B } -->
+   sequent { <H> >- 'B subset 'C } -->
+   sequent { <H> >- 'A subset 'C }
 
  
 interactive subset_exact:
-   sequent ['ext] { <H> >- 'A subset 'B } -->
-   sequent ['ext] { <H> >- 'B subset 'A } -->
-   sequent ['ext] { <H> >- ext_equal{'A;'B} }
+   sequent { <H> >- 'A subset 'B } -->
+   sequent { <H> >- 'B subset 'A } -->
+   sequent { <H> >- ext_equal{'A;'B} }
 
 
 
@@ -156,14 +156,14 @@ doc <:doc<
 >>
 
 interactive subset_isect {| intro[AutoMustComplete] |}:
-   sequent [squash] { <H> >-'I } -->
-   sequent [squash] { <H>; i: 'I >- 'A['i] subset 'T } -->
-   sequent ['ext] { <H> >- Isect i:'I. 'A['i] subset 'T }
+   sequent { <H> >-'I } -->
+   sequent { <H>; i: 'I >- 'A['i] subset 'T } -->
+   sequent { <H> >- Isect i:'I. 'A['i] subset 'T }
 
 interactive subset_bisect {| intro[AutoMustComplete] |}:
-   sequent [squash] { <H> >-'A subset 'T} -->
-   sequent [squash] { <H> >-'B subset 'T} -->
-   sequent ['ext] { <H> >- 'A isect 'B subset 'T }
+   sequent { <H> >-'A subset 'T} -->
+   sequent { <H> >-'B subset 'T} -->
+   sequent { <H> >- 'A isect 'B subset 'T }
 
 doc <:doc< 
    @begin[doc]
@@ -172,7 +172,7 @@ doc <:doc<
 >>
 
 interactive counterexample2 :
-   sequent ['ext] { <H> >- not{(bool isect top subset top)} }
+   sequent { <H> >- not{(bool isect top subset top)} }
 
 doc <:doc< 
    @begin[doc]
@@ -182,14 +182,14 @@ doc <:doc<
 >>
       
 interactive subset_union {| intro[] |}:
-   sequent [squash] { <H> >-"type"{'I} } -->
-   sequent [squash] { <H>; i: 'I >- 'A['i] subset 'T } -->
-   sequent ['ext] { <H> >- Union i:'I. 'A['i] subset 'T }
+   sequent { <H> >-"type"{'I} } -->
+   sequent { <H>; i: 'I >- 'A['i] subset 'T } -->
+   sequent { <H> >- Union i:'I. 'A['i] subset 'T }
 
 interactive subset_bunion {| intro[] |}:
-   sequent [squash] { <H> >-'A subset 'T}  -->
-   sequent [squash] { <H> >-'B subset 'T}  -->
-   sequent ['ext] { <H> >- 'A bunion 'B subset 'T }
+   sequent { <H> >-'A subset 'T}  -->
+   sequent { <H> >-'B subset 'T}  -->
+   sequent { <H> >- 'A bunion 'B subset 'T }
 
 
 doc <:doc< 
@@ -200,14 +200,14 @@ doc <:doc<
 >>
 
 interactive prod_subset {| intro [] |} :
-   sequent [squash] { <H> >- 'A subset '"A'" } -->
-   sequent [squash] { <H> >- 'B subset '"B'" } -->
-   sequent ['ext] { <H> >- 'A * 'B subset '"A'" * '"B'" } 
+   sequent { <H> >- 'A subset '"A'" } -->
+   sequent { <H> >- 'B subset '"B'" } -->
+   sequent { <H> >- 'A * 'B subset '"A'" * '"B'" } 
       
 interactive union_subset {| intro [] |} :
-   sequent [squash] { <H> >- 'A subset '"A'" } -->
-   sequent [squash] { <H> >- 'B subset '"B'" } -->
-   sequent ['ext] { <H> >- 'A + 'B subset '"A'" + '"B'" } 
+   sequent { <H> >- 'A subset '"A'" } -->
+   sequent { <H> >- 'B subset '"B'" } -->
+   sequent { <H> >- 'A + 'B subset '"A'" + '"B'" } 
 
 doc <:doc< @docoff >>
 

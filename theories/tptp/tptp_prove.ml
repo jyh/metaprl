@@ -87,9 +87,9 @@ let debug_subst = load_debug "subst"
  * Just create a rule to duplicate the goal for testing.
  *)
 interactive duplicate :
-   sequent ['ext] { <H> >- 'T } -->
-   sequent ['ext] { <H> >- 'T } -->
-   sequent ['ext] { <H> >- 'T }
+   sequent { <H> >- 'T } -->
+   sequent { <H> >- 'T } -->
+   sequent { <H> >- 'T }
 
 (************************************************************************
  * TYPES                                                                *

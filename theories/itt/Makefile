@@ -44,7 +44,8 @@ PFILES := test
 
 CMXDEPS =\
 	$(CAMLLIB)/unix.cmxa\
-        $(CAMLLIB)/nums.cmxa\
+	$(CAMLLIB)/nums.cmxa\
+	$(CAMLP4LIB)/gramlib.cmxa\
 	$(ROOT)/lib/util.cmxa\
 	$(ROOT)/lib/refiner.cmxa\
 	$(ROOT)/lib/library.cmxa\

@@ -1,4 +1,5 @@
 # Libraries
+ROOT := ../..
 INCLUDE = -I . -I ../../refiner
 
 # Commands

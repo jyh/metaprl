@@ -1,6 +1,7 @@
 #
 # Don't need any libraries.
 #
+ROOT := ../..
 INCLUDE := -I .
 
 # Common files
@@ -43,5 +44,5 @@ clean::
 	$(RM) -f *.p4* *.pp*
 
 # Real makefile
-include ../../mk/config
+include $(ROOT)/mk/config
 include Makefile.dep

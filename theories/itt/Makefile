@@ -1,7 +1,8 @@
 #
 # Libraries
 #
-INCLUDE := -I . -I ../tactic -I ../ocaml -I ../base -I $(NLLIB)
+ROOT := ../..
+INCLUDE := -I . -I ../tactic -I ../ocaml -I ../base -I $(ROOT)/lib
 OCAMLDEPFLAGS := -prl
 
 # Common files
@@ -46,5 +47,5 @@ clean::
 	del -f *.p4* *.pp*
 
 # Real makefile
-include ../../mk/config
+include $(ROOT)/mk/config
 include Makefile.dep

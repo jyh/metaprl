@@ -1,8 +1,10 @@
 #
 # Don't need any libraries.
 #
-INCLUDE := -I . -I $(NLLIB)
+ROOT := ../..
+INCLUDE := -I . -I $(ROOT)/lib
 OCAMLDEPFLAGS := -prl
+OCAMLFLAGS := -v
 
 # Common files
 MLZFILES :=\
@@ -34,5 +36,5 @@ clean::
 	$(RM) -f *.p4* *.pp*
 
 # Real makefile
-include ../../mk/config
+include $(ROOT)/mk/config
 include Makefile.dep

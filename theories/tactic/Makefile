@@ -1,7 +1,8 @@
 #
 # No special includes
 #
-INCLUDE := -I $(NLLIB)
+ROOT := ../..
+INCLUDE :=
 OCAMLDEPFLAGS := -prl
 
 # Types files
@@ -17,7 +18,7 @@ NLFILES :=\
 	var\
 	options
 
-# Name of main libraris
+# Name of main libraries
 MAIN = tactics
 
 all: $(MAIN).cma
@@ -28,5 +29,5 @@ clean::
 	$(RM) -f *.p4* *.pp*
 
 # Real makefile
-include ../../mk/config
+include $(ROOT)/mk/config
 include Makefile.dep

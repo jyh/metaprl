@@ -339,8 +339,9 @@ $$
 @end[array]
 $$
 
-For many AST expressions, the translation to IR is straightforward.
-The following rules give a few representative examples.
+For many AST expressions, the translation to IR is straightforward.  The following rules give a few
+representative examples.  Note that the @tt[add] and @tt[set] rules perform substitution, which is
+specified implicitly using higher-order abstract syntax.
 
 $$
 @begin[array,l]

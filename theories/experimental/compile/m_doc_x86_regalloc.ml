@@ -38,7 +38,7 @@ doc <:doc<
 @begin[doc]
 
 Register allocation is one of the easier phases of the compiler formally: the main objective of
-register allocation is to rename the variables in the program to use register names.  The formal
+register allocation is to rename the variables in the program to use register names.  Because we are using higher-order abstract syntax, the formal
 problem is just an $@alpha$-conversion, which can be checked readily by the formal system.  From a
 practical standpoint, however, register allocation is a NP-complete problem, and the majority of the
 code in our implementation is devoted to a Chaitin-style @cite["CACC+81"] graph-coloring register

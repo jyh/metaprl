@@ -58,7 +58,8 @@ bidirectional and neither imply nor presuppose any particular order of
 application.  Rewrite application is guided by programs in the
 meta-language of the logical framework.
 
-There are many advantages to using formal rewrites.  Program scoping
+There are many advantages to using higher-order abstract syntax and formal rewrites.
+Program scoping
 and substitution are managed implicitly by the logical framework; it
 is not possible to specify a program transformation that modifies the
 program scope.  Perhaps most importantly, the correctness of the

@@ -51,8 +51,8 @@ $$
 @end[array]
 $$
 
-As we mentioned in Section @refsection[m_doc_opt], this kind of dead-code elimination should not be
-applied if the instruction being eliminated can raise an exception.
+@comment{As we mentioned in Section @refsection[m_doc_opt], this kind of dead-code elimination should not be
+applied if the instruction being eliminated can raise an exception.}
 
 Another useful optimization is the coalescing of $@AsmReserve{i}$ instructions, which call the garbage
 collector if $i$ bytes of storage are not available.  In the current version of the language, all

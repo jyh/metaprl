@@ -272,7 +272,7 @@ dform inst3_df : Inst3[label:s]{'src1; 'src2; 'src3; dst2, dst3. 'rest} =
 dform shift_df1 : Shift[label:s]{'src; 'dst; 'rest} =
     bf{slot[label:s]} `" " slot{'src} bf[", "] slot{'dst} bf[" /* Memory operand */"] hspace slot{'rest}
 
-dform shift_df2 : Inst2[label:s]{'src1; 'src2; dst. 'rest} =
+dform shift_df2 : Shift[label:s]{'src1; 'src2; dst. 'rest} =
     bf{slot[label:s]} `" " slot{'src1} bf[", "] slot{'src2} bf[", %"] slot{'dst} hspace slot{'rest}
 
 dform cmp_df : Cmp[opcode:s]{'src1; 'src2; 'rest} =

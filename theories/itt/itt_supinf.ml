@@ -1140,13 +1140,13 @@ let leftBranch = function
 	Ignore -> Ignore
  |	Leaf _ -> raise (Invalid_argument "leftBranch applied to a leaf")
  | Left subtree -> subtree
- | Right subtree -> Ignore (*raise (Invalid_argument "leftBranch applied to Right node")*)
+ | Right subtree -> Ignore
  | Pair(left, right) -> left
 
 let rightBranch = function
 	Ignore -> Ignore
  | Leaf _ -> raise (Invalid_argument "rightBranch applied to a leaf")
- | Left subtree -> Ignore (*raise (Invalid_argument "rightBranch applied to Left node")*)
+ | Left subtree -> Ignore
  | Right subtree -> subtree
  | Pair(left, right) -> right
 
@@ -1181,15 +1181,14 @@ let rec mergeTreesLeft tree1 tree2 =
 	 | Leaf(n1,tac1), Leaf(n2,tac2) -> Leaf(n1+n2+1, (tac1 thenMT tac2 thenMT ge2transitiveT (-n2-1) (-1)))
 	 | _, Left sub2 -> mergeTreesLeft tree1 sub2
 	 | _, Right sub2 -> mergeTreesLeft tree1 sub2
-	 | Left sub1,Pair(left,right) -> (*Left*)(mergeTreesLeft sub1 left)
-	 | Right sub1,Pair(left,right) -> (*Right*)(mergeTreesLeft sub1 right)
-(**)	 | Pair(left1,right1),Pair(Ignore,right2) -> mergeTreesLeft right1 right2
+	 | Left sub1,Pair(left,right) -> (mergeTreesLeft sub1 left)
+	 | Right sub1,Pair(left,right) -> (mergeTreesLeft sub1 right)
+	 | Pair(left1,right1),Pair(Ignore,right2) -> mergeTreesLeft right1 right2
 	 | Pair(left1,right1),Pair(left2,Ignore) -> mergeTreesLeft left1 left2
 	 | Pair(Ignore,right1),Pair(left2,right2) -> mergeTreesLeft right1 right2
 	 | Pair(left1,Ignore),Pair(left2,right2) -> mergeTreesLeft left1 left2
 	 | Pair(left1,Ignore),Leaf _ -> mergeTreesLeft left1 tree2
 	 | Pair(Ignore,right1),Leaf _ -> mergeTreesLeft right1 tree2
-(**)
 	 | Pair(left1,right1),Pair(left2,right2) -> Pair(mergeTreesLeft left1 left2, mergeTreesLeft right1 right2)
 	 | Pair(left1,right1),Leaf _ -> Pair(mergeTreesLeft left1 tree2, mergeTreesLeft right1 tree2)
 	 | _, _ ->
@@ -1205,13 +1204,12 @@ let rec mergeTreesRight tree1 tree2 =
 	 | Right sub1, _ -> mergeTreesRight sub1 tree2
 	 | Pair(left,right),Left sub2 -> (*Left*)(mergeTreesRight left sub2)
 	 | Pair(left,right),Right sub2 -> (*Right*)(mergeTreesRight right sub2)
-(**)	 | Pair(left1,right1),Pair(Ignore,right2) -> mergeTreesRight right1 right2
+	 | Pair(left1,right1),Pair(Ignore,right2) -> mergeTreesRight right1 right2
 	 | Pair(left1,right1),Pair(left2,Ignore) -> mergeTreesRight left1 left2
 	 | Pair(Ignore,right1),Pair(left2,right2) -> mergeTreesRight right1 right2
 	 | Pair(left1,Ignore),Pair(left2,right2) -> mergeTreesRight left1 left2
 	 | Leaf _,Pair(left2,Ignore) -> mergeTreesRight tree1 left2
 	 | Leaf _,Pair(Ignore,right2) -> mergeTreesLeft tree1 right2
-(**)
 	 | Pair(left1,right1),Pair(left2,right2) -> Pair(mergeTreesRight left1 left2, mergeTreesRight right1 right2)
 	 | Leaf _,Pair(left2,right2) -> Pair(mergeTreesRight tree1 left2, mergeTreesRight tree1 right2)
 	 | _, _ ->
@@ -1230,70 +1228,85 @@ let rec proj2 = function
  | (a,b)::tail -> b::(proj2 tail)
 
 let rec source2hyp info = function
-	Signore -> (*raise (Invalid_argument "Signore reached source2hyp")*)
-		eprintf "Signore reached source2hyp@.";
+	Signore ->
+		if !debug_supinf_trace then
+         eprintf "Signore reached source2hyp@.";
 		Ignore
  | Shypothesis i ->
-		eprintf "hyp %i@." i;
+		if !debug_supinf_trace then
+			eprintf "hyp %i@." i;
 		Leaf(1, (copyHypT i (-1)))
  | Smin(Signore,s2) ->
 		let result = source2hyp info s2 in
-		eprintf "minRight %s@." (string_of_tree result);
+		if !debug_supinf_trace then
+			eprintf "minRight %s@." (string_of_tree result);
 		Right result
  | Smin(s1,Signore) ->
 		let result = source2hyp info s1 in
-		eprintf "minLeft %s@." (string_of_tree result);
+		if !debug_supinf_trace then
+			eprintf "minLeft %s@." (string_of_tree result);
 		Left result
  | Smin(s1,s2) ->
 		let result1 = source2hyp info s1 in
 		let result2 = source2hyp info s2 in
-		eprintf "min %s %s@." (string_of_tree result1) (string_of_tree result2);
+		if !debug_supinf_trace then
+			eprintf "min %s %s@." (string_of_tree result1) (string_of_tree result2);
 		Pair(result1, result2)
  | Smax(Signore,s2) ->
 		let result = source2hyp info s2 in
-		eprintf "maxRight %s@." (string_of_tree result);
+		if !debug_supinf_trace then
+			eprintf "maxRight %s@." (string_of_tree result);
 		Right result
  | Smax(s1,Signore) ->
 		let result = source2hyp info s1 in
-		eprintf "maxLeft %s@." (string_of_tree result);
+		if !debug_supinf_trace then
+			eprintf "maxLeft %s@." (string_of_tree result);
 		Left result
  | Smax(s1,s2) ->
 		let result1 = source2hyp info s1 in
 		let result2 = source2hyp info s2 in
-		eprintf "max %s %s@." (string_of_tree result1) (string_of_tree result2);
+		if !debug_supinf_trace then
+			eprintf "max %s %s@." (string_of_tree result1) (string_of_tree result2);
 		Pair(result1, result2)
  | Sleft(s) ->
 		let result = source2hyp info s in
-		eprintf "left %s@." (string_of_tree result);
+		if !debug_supinf_trace then
+			eprintf "left %s@." (string_of_tree result);
 		leftBranch result
  | Sright(s) ->
 		let result = source2hyp info s in
-		eprintf "right %s@." (string_of_tree result);
+		if !debug_supinf_trace then
+			eprintf "right %s@." (string_of_tree result);
 		rightBranch result
  | Sextract2left(vi,s) ->
 		let result = source2hyp info s in
 		let v = VI.restore info vi in
-		eprintf "extrLeft %i %s %s@." vi (SimplePrint.short_string_of_term v) (string_of_tree result);
+		if !debug_supinf_trace then
+			eprintf "extrLeft %i %s %s@." vi (SimplePrint.short_string_of_term v) (string_of_tree result);
 		addToLeaves 0 (rw (extract2leftC v) (-1)) result
  | Sextract2right(vi,s) ->
 		let result = source2hyp info s in
 		let v = VI.restore info vi in
-		eprintf "extrRight %i %s %s@." vi (SimplePrint.short_string_of_term v) (string_of_tree result);
+		if !debug_supinf_trace then
+			eprintf "extrRight %i %s %s@." vi (SimplePrint.short_string_of_term v) (string_of_tree result);
 		addToLeaves 0 (rw (extract2rightC v) (-1)) result
  | StrivialConst c ->
 		let ctm = term_of c in
 		let tm = mk_ge_rat_term ctm ctm in
-		eprintf "trivConst %s@." (SimplePrint.short_string_of_term ctm);
+		if !debug_supinf_trace then
+			eprintf "trivConst %s@." (SimplePrint.short_string_of_term ctm);
 		Leaf(1, (assertT tm thenAT geReflexive))
  | StrivialVar vi ->
 		let v = VI.restore info vi in
 		let tm = mk_ge_rat_term v v in
-		eprintf "trivVar %i %s@." vi (SimplePrint.short_string_of_term v);
+		if !debug_supinf_trace then
+			eprintf "trivVar %i %s@." vi (SimplePrint.short_string_of_term v);
 		Leaf(1, (assertT tm thenAT geReflexive))
  | Sscale(c,s) ->
 		let result = source2hyp info s in
 		let tm = term_of c in
-		eprintf "scale %a %s@." RationalBoundField.print c (string_of_tree result);
+		if !debug_supinf_trace then
+			eprintf "scale %a %s@." RationalBoundField.print c (string_of_tree result);
 		if compare c fieldZero >0 then
 			addToLeaves 0 (rw ((positive_multiply_ge tm) thenC ge_normC) (-1)) result
 		else
@@ -1302,7 +1315,8 @@ let rec source2hyp info = function
 		let result = source2hyp info s in
 		let v = VI.restore info vi in
 		let tm = mk_mul_rat_term (term_of c) v in
-		eprintf "addV %i %s %s@." vi (SimplePrint.short_string_of_term v) (string_of_tree result);
+		if !debug_supinf_trace then
+			eprintf "addV %i %s %s@." vi (SimplePrint.short_string_of_term v) (string_of_tree result);
 		addToLeaves 0 (rw ((ge_addMono_rw tm) thenC ge_normC) (-1)) result
  | Ssum(s1,s2) ->
 		(* this case computes a product of two trees
@@ -1310,27 +1324,32 @@ let rec source2hyp info = function
 		 *)
 		let result1 = source2hyp info s1 in
 		let result2 = source2hyp info s2 in
-		eprintf "sum %s %s@." (string_of_tree result1) (string_of_tree result2);
+		if !debug_supinf_trace then
+			eprintf "sum %s %s@." (string_of_tree result1) (string_of_tree result2);
 		treeProduct result1 result2
  | StransitiveLeft(s1,s2,vi) ->
 		let result1 = source2hyp info s1 in
 		let result2 = source2hyp info s2 in
 		let v = VI.restore info vi in
-		eprintf "tranL %i %s >= %s >= %s@." vi (string_of_tree result1) (string_of_tree result2) (SimplePrint.short_string_of_term v);
+		if !debug_supinf_trace then
+			eprintf "tranL %i %s >= %s >= %s@." vi (string_of_tree result1) (string_of_tree result2) (SimplePrint.short_string_of_term v);
 		mergeTreesLeft result1 result2
  | StransitiveRight(vi,s1,s2) ->
 		let result1 = source2hyp info s1 in
 		let result2 = source2hyp info s2 in
 		let v = VI.restore info vi in
-		eprintf "tranR %i %s >= %s >= %s@." vi (SimplePrint.short_string_of_term v) (string_of_tree result1) (string_of_tree result2);
+		if !debug_supinf_trace then
+			eprintf "tranR %i %s >= %s >= %s@." vi (SimplePrint.short_string_of_term v) (string_of_tree result1) (string_of_tree result2);
 		mergeTreesRight result1 result2
  | Scontradiction s ->
 		let result = source2hyp info s in
-		eprintf "contrad %s@." (string_of_tree result);
+		if !debug_supinf_trace then
+			eprintf "contrad %s@." (string_of_tree result);
 		result
 
 let source2hypT info s = funT (fun p ->
-	eprintf "%a@." print s;
+	if !debug_supinf_trace then
+		eprintf "%a@." print s;
 	let result = source2hyp info s in
 	let taclist = proj2 (leavesList result) in
 	seqOnMT taclist thenMT rw normalizeC (-1)

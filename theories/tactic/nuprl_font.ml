@@ -1,7 +1,16 @@
 (*
- * characters in the Nuprl font.
+ * @begin[doc]
+ * @theory[Nuprl_font]
+ *
+ * The @hreftheory[Nuprl_font] module defines display forms for the
+ * special characters used by the @MetaPRL editor.
+ *
+ * @docoff
+ * @end[doc]
  *
  * ----------------------------------------------------------------
+ *
+ * @begin[license]
  *
  * This file is part of MetaPRL, a modular, higher order
  * logical framework that provides a logical programming
@@ -27,7 +36,9 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  * Author: Jason Hickey
- * jyh@cs.cornell.edu
+ * @email{jyh@cs.caltech.edu}
+ *
+ * @end[license]
  *)
 
 open Printf
@@ -70,6 +81,7 @@ declare keyword_end
 declare bf[name:s]
 declare bf_begin
 declare bf_end
+declare i[name:s]
 declare it[name:s]
 declare it_begin
 declare it_end
@@ -79,6 +91,7 @@ declare sym_end
 declare em[name:s]
 declare em_begin
 declare em_end
+declare emph{'t}
 declare tt[name:s]
 declare tt_begin
 declare tt_end
@@ -265,8 +278,8 @@ dform keyword_end_df : internal :: mode[html] :: keyword_end =
 dform info_begin_df_all : internal :: except_mode[html] :: except_mode [tex] :: info_begin = `""
 dform info_end_df_all : internal :: except_mode[html] :: except_mode [tex] :: info_end = `""
 
-dform keyword_begin_df_all : internal :: except_mode[html] :: except_mode [tex] :: keyword_begin = `""
-dform keyword_end_df_all : internal :: except_mode[html] :: except_mode [tex] :: keyword_end = `""
+dform keyword_begin_df_all : internal :: except_mode[html] :: except_mode[tex] :: keyword_begin = `""
+dform keyword_end_df_all : internal :: except_mode[html] :: except_mode[tex] :: keyword_end = `""
 
 dform keyword_df1 : internal :: keyword[text:s] =
    keyword_begin slot[text:s] keyword_end
@@ -280,6 +293,12 @@ dform bf_begin_df : internal :: mode[html] :: bf_begin =
 dform bf_end_df : internal :: mode[html] :: bf_end =
    izone `"</b>" ezone
 
+dform bf_begin_df : internal :: mode[prl] :: bf_begin =
+   `""
+
+dform bf_end_df : internal :: mode[prl] :: bf_end =
+   `""
+
 dform bf_df1 : internal :: bf[text:s] =
    bf_begin slot[text:s] bf_end
 
@@ -292,11 +311,23 @@ dform it_begin_df : internal :: mode[html] :: it_begin =
 dform it_end_df : internal :: mode[html] :: it_end =
    izone `"</b>" ezone
 
+dform it_begin_df : internal :: mode[prl] :: it_begin =
+   `""
+
+dform it_end_df : internal :: mode[prl] :: it_end =
+   `""
+
 dform it_df1 : internal :: it[text:s] =
    it_begin slot[text:s] it_end
 
 dform it_df2 : internal :: it{'t} =
    it_begin 't it_end
+
+dform i_df1 : internal :: i[text:s] =
+   it[text:s]
+
+dform i_df2 : internal :: i{'t} =
+   it{'t}
 
 dform sym_begin_df : internal :: mode[html] :: sym_begin =
    izone `"<b>" ezone
@@ -316,10 +347,19 @@ dform em_begin_df : internal :: mode[html] :: em_begin =
 dform em_end_df : internal :: mode[html] :: em_end =
    izone `"</em>" ezone
 
+dform em_begin_df : internal :: mode[prl] :: em_begin =
+   `""
+
+dform em_end_df : internal :: mode[prl] :: em_end =
+   `""
+
 dform em_df1 : internal :: em[text:s] =
    em_begin slot[text:s] em_end
 
 dform em_df2 : internal :: em{'t} =
+   em_begin 't em_end
+
+dform emph_df1 : internal :: emph{'t} =
    em_begin 't em_end
 
 dform tt_begin_df : internal :: mode[html] :: tt_begin =
@@ -327,6 +367,12 @@ dform tt_begin_df : internal :: mode[html] :: tt_begin =
 
 dform tt_end_df : internal :: mode[html] :: tt_end =
    izone `"</tt>" ezone
+
+dform tt_begin_df : internal :: mode[prl] :: tt_begin =
+   `""
+
+dform tt_end_df : internal :: mode[prl] :: tt_end =
+   `""
 
 dform tt_df1 : internal :: tt[text:s] =
    tt_begin slot[text:s] tt_end
@@ -777,15 +823,15 @@ dform supminus_df		: internal :: mode[tex] :: supminus                  = ensure
 dform supcirc_df		: internal :: mode[tex] :: supcirc                   = ensuremath["^{\circ}"]
 dform subseteq_df		: internal :: mode[tex] :: subseteq                  = mathmacro["subseteq"]
 dform supseteq_df		: internal :: mode[tex] :: supseteq                  = mathmacro["supseteq"]
-dform subzero_df		: internal :: mode[tex] :: subzero                   = ensuremath["_0"]
-dform subone_df			: internal :: mode[tex] :: subone                    = ensuremath["_1"]
-dform subtwo_df			: internal :: mode[tex] :: subtwo                    = ensuremath["_2"]
-dform subthree_df		: internal :: mode[tex] :: subthree                  = ensuremath["_3"]
-dform suba_df			: internal :: mode[tex] :: suba                      = ensuremath["_a"]
-dform subb_df			: internal :: mode[tex] :: subb                      = ensuremath["_b"]
-dform subc_df			: internal :: mode[tex] :: subc                      = ensuremath["_c"]
-dform subq_df			: internal :: mode[tex] :: subq                      = ensuremath["_q"]
-dform subz_df			: internal :: mode[tex] :: subz                      = ensuremath["_z"]
+dform subzero_df		: internal :: mode[tex] :: subzero                   = ensuremath["0"]
+dform subone_df			: internal :: mode[tex] :: subone                    = ensuremath["1"]
+dform subtwo_df			: internal :: mode[tex] :: subtwo                    = ensuremath["2"]
+dform subthree_df		: internal :: mode[tex] :: subthree                  = ensuremath["3"]
+dform suba_df			: internal :: mode[tex] :: suba                      = ensuremath["a"]
+dform subb_df			: internal :: mode[tex] :: subb                      = ensuremath["b"]
+dform subc_df			: internal :: mode[tex] :: subc                      = ensuremath["c"]
+dform subq_df			: internal :: mode[tex] :: subq                      = ensuremath["q"]
+dform subz_df			: internal :: mode[tex] :: subz                      = ensuremath["z"]
 
 (*
  * Source

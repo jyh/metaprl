@@ -1,8 +1,16 @@
-(*
- * Binary intersection.
+(*!
+ * @begin[doc]
+ * @theory[Itt_bisect]
+ *
+ * The @tt{Itt_bisect} module derives a binary intersection
+ * $@bisect{A; B}$ from the intersection @hrefterm[isect] defined
+ * in the @hreftheory[Itt_isect] theory, and the Boolean values
+ * defined in the @hreftheory[Itt_bool] theory.
+ * @end[doc]
  *
  * ----------------------------------------------------------------
  *
+ * @begin[license]
  * This file is part of MetaPRL, a modular, higher order
  * logical framework that provides a logical programming
  * environment for OCaml and other languages.
@@ -27,11 +35,18 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  * Author: Jason Hickey
- * jyh@cs.cornell.edu
+ * @email{jyh@cs.cornell.edu}
+ * @end[license]
  *)
 
+(*!
+ * @begin[doc]
+ * @parents
+ * @end[doc]
+ *)
 include Itt_isect
 include Itt_bool
+(*! @docoff *)
 
 open Printf
 open Mp_debug
@@ -53,8 +68,17 @@ open Itt_equal
  * SYNTAX                                                               *
  ************************************************************************)
 
+(*!
+ * @begin[doc]
+ * @terms
+ *
+ * The definition of the binary intersection $@bisect{A; B}$
+ * is an intersection over the Booleans.
+ * @end[doc]
+ *)
 define unfold_bisect : bisect{'A; 'B} <-->
                           "isect"{bool; x. ifthenelse{'x; 'A; 'B}}
+(*! @docoff *)
 
 (************************************************************************
  * DISPLAY                                                              *
@@ -69,8 +93,14 @@ dform bisect_df : except_mode[src] :: parens :: "prec"[prec_bisect] :: bisect{'A
  * RULES                                                                *
  ************************************************************************)
 
-(*
- * Typehood.
+(*!
+ * @begin[doc]
+ * @rules
+ * @thysubsection{Typehood and equality}
+ *
+ * The binary intersection $@bisect{A; B}$ is well-formed if both $A$
+ * and $B$ are types.
+ * @end[doc]
  *)
 interactive bisectEquality {| intro_resource []; eqcd_resource |} 'H :
    [wf] sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
@@ -82,24 +112,38 @@ interactive bisectType {| intro_resource [] |} 'H :
    [wf] sequent [squash] { 'H >- "type"{'B} } -->
    sequent ['ext] { 'H >- "type"{bisect{'A; 'B}} }
 
-(*
+(*!
  * Formation.
+ * @docoff
  *)
 interactive bisectFormation 'H :
    sequent ['ext] { 'H >- univ[i:l] } -->
    sequent ['ext] { 'H >- univ[i:l] } -->
    sequent ['ext] { 'H >- univ[i:l] }
 
-(*
- * Membership.
+(*!
+ * @begin[doc]
+ * @thysubsection{Membership}
+ *
+ * Two terms $x$ and $y$ are equal in the binary intersection
+ * $@bisect{A; B}$ if they are equal in both $A$ and $B$.  Put another
+ * way, the elements of the binary intersection are the terms that
+ * are members of both $A$ and $B$.
+ * @end[doc]
  *)
 interactive bisectMemberEquality {| intro_resource []; eqcd_resource |} 'H :
    [wf] sequent [squash] { 'H >- 'x = 'y in 'A } -->
    [wf] sequent [squash] { 'H >- 'x = 'y in 'B } -->
    sequent ['ext] { 'H >- 'x = 'y in bisect{'A; 'B} }
 
-(*
- * Elimination.
+(*!
+ * @begin[doc]
+ * @thysubsection{Elimination}
+ *
+ * The elimination rule has two forms for an assumption $x@colon @bisect{A; B}$.
+ * The first produces a witness that $x @in A$, and the second produces a witness
+ * for $x @in B$.
+ * @end[doc]
  *)
 interactive bisectEliminationLeft 'H 'J 'y 'z :
    sequent ['ext] { 'H; x: bisect{'A; 'B}; 'J['x]; y: 'A; z: 'y = 'x in 'A >- 'C['x] } -->
@@ -109,8 +153,9 @@ interactive bisectEliminationRight 'H 'J 'y 'z :
    sequent ['ext] { 'H; x: bisect{'A; 'B}; 'J['x]; y: 'B; z: 'y = 'x in 'B >- 'C['x] } -->
    sequent ['ext] { 'H; x: bisect{'A; 'B}; 'J['x] >- 'C['x] }
 
-(*
+(*!
  * D tactic.
+ * @docoff
  *)
 let elim_bisectT i p =
    let sel = get_sel_arg p in
@@ -128,8 +173,13 @@ let bisect_term = << bisect{'A; 'B} >>
 
 let elim_resource = Mp_resource.improve elim_resource (bisect_term, elim_bisectT)
 
-(*
- * Subtyping.
+(*!
+ * @begin[doc]
+ * @thysubsection{Subtyping}
+ *
+ * The binary intersection $@bisect{A; B}$ is covariant
+ * in both $A$ and $B$.
+ * @end[doc]
  *)
 interactive bisectSubtypeLeft 'H :
    sequent [squash] { 'H >- "type"{'B} } -->
@@ -145,6 +195,7 @@ interactive bisectSubtypeBelow 'H :
    sequent [squash] { 'H >- subtype{'C; 'A} } -->
    sequent [squash] { 'H >- subtype{'C; 'B} } -->
    sequent ['ext] { 'H >- subtype{'C; bisect{'A; 'B}} }
+(*! @docoff *)
 
 (*
  * Subtyping.

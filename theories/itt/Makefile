@@ -11,6 +11,7 @@ OCAMLDEPFLAGS := -prl
 
 # Library files
 MPFILES :=\
+	itt_comment\
 	itt_squash\
 	itt_equal\
 	itt_struct\
@@ -24,7 +25,6 @@ MPFILES :=\
 	itt_dfun\
 	itt_fun\
 	itt_dprod\
-	itt_dprod_imp\
 	itt_prod\
 	itt_logic\
 	itt_well_founded\

@@ -1,7 +1,21 @@
-(*
- * Strutural rules.
+(*!
+ * @begin[spelling]
+ * assertT hypReplacement hypSubstitution nthHypT onSomeHypT
+ * ponens substT substition thinAllT thinT thinned
+ * thinning thins useWitnessT wf struct
+ * @end[spelling]
+ *
+ * @begin[doc]
+ * @theory[Itt_struct]
+ *
+ * The @tt{Itt_struct} module defines @emph{structural} rules.
+ * Structural rules are logical operations like thinning and substitution
+ * that are not associated with a particular type.
+ * @end[doc]
  *
  * ----------------------------------------------------------------
+ *
+ * @begin[license]
  *
  * This file is part of MetaPRL, a modular, higher order
  * logical framework that provides a logical programming
@@ -27,11 +41,18 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  * Author: Jason Hickey
- * jyh@cs.cornell.edu
+ * @email{jyh@cs.caltech.edu}
  *
+ * @end[license]
  *)
 
+(*!
+ * @begin[doc]
+ * @parents
+ * @end[doc]
+ *)
 include Itt_equal
+(*! @docoff *)
 
 open Printf
 open Mp_debug
@@ -65,11 +86,16 @@ let _ =
  * TERMS                                                                *
  ************************************************************************)
 
-(*
- * This is just syntax for a binding term.
+(*!
+ * @begin[doc]
+ * @terms
+ *
+ * The @tt{bind} term defines the syntax for a binding term.
  * It has no semantic meaning in the type theory.
+ * @end[doc]
  *)
 declare bind{x. 'T['x]}
+(*! @docoff *)
 
 let bind_term = << bind{x. 'T['x]} >>
 let bind_opname = opname_of_term bind_term
@@ -78,8 +104,27 @@ let dest_bind = dest_dep1_term bind_opname
 let mk_bind_term = mk_dep1_term bind_opname
 
 (************************************************************************
+ * DISPLAY
+ ************************************************************************)
+
+dform bind_df : bind{x. 'T} =
+   `"bind(" slot{'x} `"." slot{'T} `")"
+
+(************************************************************************
  * RULES                                                                *
  ************************************************************************)
+
+(*!
+ * @begin[doc]
+ * @rules
+ *
+ * @thysubsection{Axiom}
+ *
+ * The @tt{hypothesis} rule defines proof by assumption: if $A$ is
+ * assumed, then it is true.  The proof extract term is the program
+ * denoted by the assumption $x@colon A$.
+ * @end[doc]
+ *)
 
 (*
  * H; x: A; J >- A ext x
@@ -89,22 +134,41 @@ prim hypothesis 'H 'J 'x :
    sequent ['ext] { 'H; x: 'A; 'J['x] >- 'A } =
    'x
 
-(*
- * H, x: A, J >- A ext t
- * by thin
- * H, J >- A ext t
+(*!
+ * @begin[doc]
+ * @thysubsection{Thinning (of hypotheses)}
+ *
+ * The @tt{thin} rule states that if the conclusion $C$ can be proved
+ * from hypotheses defined in $H$ and $J$, then it can also be proved with
+ * an additional assumption $x@colon A$.  The name comes from the
+ * goal-directed view: the hypothesis $x@colon A$ is removed (``thinned'')
+ * by the application of the rule.
+ *
+ * Note that $x$ must be a variable that is not bound by any hypothesis
+ * in $H$.  The rule is even more stringent: $x$ may not occur free
+ * in $J$ or $C$ (note that the goal is @emph{not} phrased as
+ * $@sequent{ext; {H; x@colon A; J[x]}; C}$).
+ *
+ * The proof extract term $t$ is unchanged.
+ * @end[doc]
  *)
 prim thin 'H 'J :
    ('t : sequent ['ext] { 'H; 'J >- 'C }) -->
    sequent ['ext] { 'H; x: 'A; 'J >- 'C } =
    't
 
-
-(*
- * H, J >- T ext t[s]
- * by cut S
- * H, J >- S ext s
- * H, x: S, J >- T ext t[x]
+(*!
+ * @begin[doc]
+ * @thysubsection{Cut (lemma instantiation)}
+ *
+ * The @tt{cut} rule is an alternate form of @emph{modus-ponens}.
+ * If the lemma $S$ can be proved from the current assumptions $H$
+ * and $J$, and the goal $T$ can be proved with this additional assumption,
+ * the lemma can be instantiated to obtain a proof of the goal.
+ *
+ * The extract term is formed by instantiating the proof $a$ of the lemma
+ * in the abstracted proof $f[x]$, to get a proof $f[a]$ of $T$.
+ * @end[doc]
  *)
 prim cut 'H 'J 'S 'x :
    [assertion] ('a : sequent ['ext] { 'H; 'J >- 'S }) -->
@@ -112,7 +176,9 @@ prim cut 'H 'J 'S 'x :
    sequent ['ext] { 'H; 'J >- 'T } =
    'f['a]
 
-(*
+(*!
+ * @docoff
+ *
  * This is usually used for performance testing.
  *)
 interactive dup 'H :
@@ -120,22 +186,38 @@ interactive dup 'H :
    sequent ['ext] { 'H >- 'T } -->
    sequent ['ext] { 'H >- 'T}
 
-(*
- * H >- T
- * by introduction t
- * H >- t = t in T
+(*!
+ * @begin[doc]
+ * @thysubsection{Explicit proof introduction}
+ *
+ * The @tt{introduction} rule performs proof by explicit introduction
+ * of a proof term.  If the program $t$ has type $T$, then $T$ is
+ * provable with proof extract $t$.
+ * @end[doc]
  *)
 prim introduction 'H 't :
    [wf] sequent [squash] { 'H >- 't IN 'T } -->
    sequent ['ext] { 'H >- 'T } =
    't
 
-(*
- * H >- T1[t1] ext t
- * by substitution (t1 = t2 in T2) lambda(x. T1[x])
- * H >- t1 = t2 in T2
- * H >- T1[t2] ext t
- * H, x: T2 >- T1[x] = T1[x] in type
+(*!
+ * @begin[doc]
+ * @thysubsection{Substitution}
+ *
+ * There are three rules to define substitution.
+ * The @tt{substitution} rule defines substitution of an arbitrary
+ * subterm of the conclusion $T_11[t_1]$ with a new term $t_2$.  For the
+ * substitution to be valid, the terms $t_11$ and $t_2$ must be equal
+ * in some type $T_2$, the goal $T_1[t_2]$ must be provable, and the
+ * conclusion $T_1[x]$ must also be @emph{functional} for arbitrary terms
+ * $x @in T_2$.  Functionality means that the proofs of $T_1[x]$ must be
+ * equal for all terms $x @in T_2$; the @tt{type} judgment enforces this
+ * restriction.  This restriction allows the proof extract term
+ * $t$ to be copied from the proof of $T_1[t_2]$.
+ *
+ * The << bind{x. 'T1['x]} >> argument specifies the exact location
+ * of the subterm to be replaced.
+ * @end[doc]
  *)
 prim substitution 'H ('t1 = 't2 in 'T2) bind{x. 'T1['x]} :
    [equality] sequent [squash] { 'H >- 't1 = 't2 in 'T2 } -->
@@ -144,11 +226,16 @@ prim substitution 'H ('t1 = 't2 in 'T2) bind{x. 'T1['x]} :
    sequent ['ext] { 'H >- 'T1['t1] } =
    't
 
-(*
- * H, x: A, J >- T ext t
- * by hypothesesReplacement B
- * H, x:B, J >- T ext t
- * H, x: A, J >- A = B in type
+(*!
+ * @begin[doc]
+ * Hypothesis substition is defined with two rules.  The @tt{hypReplacement}
+ * performs entire replacement of a hypothesis $A$ with another $B$.  The
+ * two types must be equal (in some universe).  The proof extract is
+ * unchanged.
+ *
+ * The @tt{hypSubstitution} rule performs replacement of an arbitrary
+ * subterm in a hypothesis, in a similar manner to conclusion substitution.
+ * @end[doc]
  *)
 prim hypReplacement 'H 'J 'B univ[i:l] :
    [main] ('t : sequent ['ext] { 'H; x: 'B; 'J['x] >- 'T['x] }) -->
@@ -156,13 +243,6 @@ prim hypReplacement 'H 'J 'B univ[i:l] :
    sequent ['ext] { 'H; x: 'A; 'J['x] >- 'T['x] } =
    't
 
-(*
- * H; x: A[t1]; J[x] >> T1[x] ext t
- * by hypSubstitution (t1 = t2 in T2) bind(x. A[x])
- * H; x: A[t1]; J[x] >> t1 = t2 in T2
- * H; x: A[t2]; J[x] >> T1[x]
- * H, x: A[t1]; J[x]; z: T2 >> A[z] in type
- *)
 prim hypSubstitution 'H 'J ('t1 = 't2 in 'T2) bind{y. 'A['y]} 'z :
    [equality] sequent [squash] { 'H; x: 'A['t1]; 'J['x] >- 't1 = 't2 in 'T2 } -->
    [main] ('t : sequent ['ext] { 'H; x: 'A['t2]; 'J['x] >- 'T1['x] }) -->
@@ -174,18 +254,51 @@ prim hypSubstitution 'H 'J ('t1 = 't2 in 'T2) bind{y. 'A['y]} 'z :
  * TACTICS                                                              *
  ************************************************************************)
 
-(*
- * Prove by hypothesis.
+(*!
+ * @begin[doc]
+ * @tactics
+ *
+ * @thysubsection{Axiom}
+ * The @tactic[nthHypT] tactic uses the @hrefrule[hypothesis] rule
+ * to perform proof by assumption.
+ *
+ * $$
+ * @rulebox{nthHypT; i;
+ *    @cdot;
+ *    @sequent{ext; {H; i@colon x@colon A; J}; A}}
+ * $$
+ *
+ * @docoff
+ * @end[doc]
  *)
 let nthHypT i p =
    let x, h = Sequent.nth_hyp p i in
    let i, j = Sequent.hyp_indices p i in
       hypothesis i j x p
 
-(*
- * Thin a hyp.
- * Check that this doesn't introduce a free variable
- * (although the rule is still valid otherwise).
+(*!
+ * @begin[doc]
+ * @thysubsection{Thinning}
+ * The @tactic[thinT] tactic uses the @hrefrule[thin] rule to
+ * @emph{thin} a hypothesis in the current goal.
+ *
+ * $$
+ * @rulebox{thinT; i;
+ *   @sequent{ext; {H; J}; C};
+ *   @sequent{ext; {H; i@colon x@colon A; J}; C}}
+ * $$
+ *
+ * @noindent
+ * The @tactic[thinAllT] tactic thins a sequence of hypothesis.
+ *
+ * $$
+ * @rulebox{thinAllT; i@ j;
+ *    @sequent{ext; {H; J}; C};
+ *    @sequent{ext; {H; i@colon x_i@colon A_i; @cdots; j@colon x_j@colon A_j; J}; C}}
+ * $$
+ *
+ * @docoff
+ * @end[doc]
  *)
 let thinT i p =
    let i, j = Sequent.hyp_indices p i in
@@ -200,8 +313,22 @@ let thinAllT i j p =
    in
       tac j p
 
-(*
- * Cut rule.
+(*!
+ * @begin[doc]
+ * @thysubsection{Lemma assertion}
+ *
+ * The @tactic[assertT] tactic uses the @hrefrule[cut] rule to
+ * introduce a lemma.
+ *
+ * $$
+ * @rulebox{assertT; A;
+ *   @ldots @i{assertion} @ldots @sequent{ext; H; A}@cr
+ *     @sequent{ext; {H; x@colon A}; C};
+ *   @sequent{ext; H; C}}
+ * $$
+ *
+ * @docoff
+ * @end[doc]
  *)
 let assertT s p =
    let j, k = Sequent.hyp_split_addr p (Sequent.hyp_count p) in
@@ -213,8 +340,21 @@ let tryAssertT s ta tm p =
    if alpha_equal s concl then ta p else
       (assertT s thenLT [ta;tm]) p
 
-(*
- * Cut in at a certain point.
+(*!
+ * @begin[doc]
+ * @noindent
+ * The @tactic[assertAtT] introduces the lemma at a specific
+ * location in the hypothesis list.
+ *
+ * $$
+ * @rulebox{assertT; i@space A;
+ *    @ldots  @i{assertion} @ldots @sequent{ext; {H; J}; A}@cr
+ *       @sequent{ext; {H; x@colon A; J}; C};
+ *    @sequent{ext; {H; @i{(location i)}; J}; C}}
+ * $$
+ *
+ * @docoff
+ * @end[doc]
  *)
 let assertAtT i s p =
    let i, j = Sequent.hyp_split_addr p i in
@@ -224,15 +364,45 @@ let assertAtT i s p =
 let dupT p =
    dup (Sequent.hyp_count_addr p) p
 
-(*
- * Explicit extract.
+(*!
+ * @begin[doc]
+ * @thysubsection{Explicit witness introduction}
+ *
+ * The @tactic[useWitnessT] tactic uses the @hrefrule[introduction] rule
+ * to perform explicit proof witness introduction.
+ *
+ * $$
+ * @rulebox{useWitnessT; t;
+ *   @sequent{squash; H; t @in T};
+ *   @sequent{ext; H; T}}
+ * $$
+ *
+ * @docoff
+ * @end[doc]
  *)
 let useWitnessT t p =
    introduction (Sequent.hyp_count_addr p) t p
 
-(*
- * Substitution.
- * The binding term may be optionally supplied.
+(*!
+ * @begin[doc]
+ * @thysubsection{Substitution}
+ *
+ * The three substitution rules are unified into a single
+ * tactic @tactic[substT], which takes a clause number $i$, and
+ * an equality $t_1 = t_2 @in T$.  The tactic substitutes $t_2$ for
+ * @emph{all} occurrences of the term $t_1$ in the clause.  The following
+ * example illustrates the use.
+ *
+ * $$
+ * @rulebox{substT; 1 + 2 = 3 in @int;
+ *    @ldots @i{equality} @ldots @sequent{squash; H; 1 + 2 = 3 @in @int}@cr
+ *    @ldots @i{main} @ldots @sequent{ext; H; 3 < 1 * 3}@cr
+ *    @ldots @i{wf} @ldots @sequent{squash; {H; i@colon @int}; @type{(x < 1 * x)}};
+ *    @sequent{ext; H; (1 + 2) < 1 * (1 + 2)}}
+ * $$
+ *
+ * @docoff
+ * @end[doc]
  *)
 let substConclT t p =
    let _, a, _ = dest_equal t in
@@ -300,8 +470,15 @@ let replaceHypT t i p =
    let univ = get_univ_arg p in
       hypReplacement j k t univ p
 
-(*
- * Add to trivialT tactic.
+(*!
+ * @begin[doc]
+ * @resources
+ *
+ * The (@tt{onSomeHypT nthHypT}) tactic is added to the @hreftactic[trivialT]
+ * resource.
+ *
+ * @docoff
+ * @end[doc]
  *)
 let trivial_resource =
    Mp_resource.improve trivial_resource (**)

@@ -1,7 +1,20 @@
-(*
- * Define a resource to evaluate toplevel expressions.
+(*!
+ * @spelling{mptop toplevel}
+ *
+ * @begin[doc]
+ * @theory[Mptop]
+ *
+ * The @tt{Mptop} module defines a simplified OCaml top-loop
+ * that is used by the @MetaPRL editor to evaluate user input.
+ * The evaluator handle only a few basic types (for example, for
+ * strings, numbers, terms, and tactics), and it handle function
+ * application.  It does not implement more sophisticated OCaml
+ * expressions such as function definition and pattern matching.
+ * @end[doc]
  *
  * ----------------------------------------------------------------
+ *
+ * @begin[license]
  *
  * This file is part of MetaPRL, a modular, higher order
  * logical framework that provides a logical programming
@@ -27,8 +40,18 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  * Author: Jason Hickey
- * jyh@cs.cornell.edu
+ * @email{jyh@cs.caltech.edu}
+ *
+ * @end[license]
  *)
+
+(*!
+ * @begin[doc]
+ * @parents
+ * @end[doc]
+ *)
+include Summary
+(*! @docoff *)
 
 open MLast
 
@@ -44,8 +67,47 @@ open Tactic_type.Conversionals
  * TYPES                                                                *
  ************************************************************************)
 
-(*
- * These are the values that we recognize.
+(*!
+ * @begin[doc]
+ * The valid expression types are given with the following type
+ * definition.
+ *
+ * @begin[verbatim]
+ * type expr =
+ *    (* Base types *)
+ *    UnitExpr of unit
+ *  | BoolExpr of bool
+ *  | IntExpr of int
+ *  | StringExpr of string
+ *  | TermExpr of term
+ *  | TacticExpr of tactic
+ *  | ConvExpr of conv
+ *  | AddressExpr of address
+ *
+ *    (* Untyped tuples and functions *)
+ *  | ListExpr of expr list
+ *  | TupleExpr of expr list
+ *  | FunExpr of (expr -> expr)
+ *
+ *    (* Common cases are typed *)
+ *  | UnitFunExpr of (unit -> expr)
+ *  | BoolFunExpr of (bool -> expr)
+ *  | IntFunExpr of (int -> expr)
+ *  | StringFunExpr of (string -> expr)
+ *  | TermFunExpr of (term -> expr)
+ *  | TacticFunExpr of (tactic -> expr)
+ *  | IntTacticFunExpr of ((int -> tactic) -> expr)
+ *  | ConvFunExpr of (conv -> expr)
+ *  | AddressFunExpr of (address -> expr)
+ *
+ *    (* These functions take lists *)
+ *  | AddrFunExpr of (int list -> expr)
+ *  | StringListFunExpr of (string list -> expr)
+ *  | TermListFunExpr of (term list -> expr)
+ *  | TacticListFunExpr of (tactic list -> expr)
+ *  | ConvListFunExpr of (conv list -> expr)
+ * @end[verbatim]
+ * @end[doc]
  *)
 type expr =
    (* Base types *)
@@ -93,6 +155,14 @@ type top_data =
 type top_table =
    (string, string * expr) Hashtbl.t
 
+(*!
+ * @begin[doc]
+ * Toplevel values are added to the @Comment!resource[toploop_resource] resource.
+ * The argument has type @code{string * expr}, which includes
+ * the string name of the value, and it's value.
+ * @docoff
+ * @end[doc]
+ *)
 resource (string * expr, top_table, top_data, unit) toploop_resource
 
 (************************************************************************

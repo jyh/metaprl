@@ -1,8 +1,23 @@
-(*
- * Simplifications for undependent functions.
+(*!
+ * @spelling{independentFunctionElimination}
+ *
+ * @begin[doc]
+ * @theory[Itt_fun]
+ *
+ * The @tt{Itt_fun} module defines the non-dependent function type.
+ * The function type is @emph{derived} from the dependent-function
+ * type @hreftheory[Itt_dfun], which is in turn derived from the
+ * very-dependent function @hreftheory[Itt_rfun].
+ *
+ * The non-dependent function $@fun{A; B}$ is the type of functions
+ * with domain $A$, and range $B$.  It is equivalent to the
+ * dependent function space $@fun{x; A; B}$, where $x$ is not
+ * bound in $B$.
+ * @end[doc]
  *
  * ----------------------------------------------------------------
  *
+ * @begin[license]
  * This file is part of MetaPRL, a modular, higher order
  * logical framework that provides a logical programming
  * environment for OCaml and other languages.
@@ -27,12 +42,18 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  * Author: Jason Hickey
- * jyh@cs.cornell.edu
- *
+ * @email{jyh@cs.cornell.edu}
+ * @end[license]
  *)
 
+(*!
+ * @begin[doc]
+ * @parents
+ * @end[doc]
+ *)
 include Itt_equal
 include Itt_dfun
+(*! @docoff *)
 
 open Printf
 open Mp_debug
@@ -67,21 +88,26 @@ let _ =
  * REWRITES                                                             *
  ************************************************************************)
 
-prim_rw reduceIndependentEta ('A -> 'B) : ('f = 'f in 'A -> 'B) -->
-   lambda{x. 'f 'x} <--> 'f
-
+(*!
+ * @begin[doc]
+ * @rewrites
+ *
+ * The non-dependent function $@fun{A; B}$ is defined as the
+ * dependent function $@fun{x; A; B}$ (where $x$ is new).
+ * @end[doc]
+ *)
 prim_rw unfold_fun : ('A -> 'B) <--> (x: 'A -> 'B)
 
 (************************************************************************
  * RULES                                                                *
  ************************************************************************)
 
-(*
- * H >- (A1 -> B1) = (A2 -> B2) in Ui
- * by independentFunctionEquality
+(*!
+ * @begin[doc]
+ * @thysubsection{Typehood and equality}
  *
- * H >- A1 = A2 in Ui
- * H >- B1 = B2 in Ui
+ * The non-dependent function has an intensional type equality.
+ * @end[doc]
  *)
 interactive independentFunctionEquality {| intro_resource []; eqcd_resource |} 'H :
    [wf] sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
@@ -96,36 +122,46 @@ interactive independentFunctionType {| intro_resource [] |} 'H 'x :
    [wf] sequent [squash] { 'H; x: 'A1 >- "type"{'B1} } -->
    sequent ['ext] { 'H >- "type"{. 'A1 -> 'B1 } }
 
-(*
- * H >- a:A -> B[a] ext lambda(z. b[z])
- * by lambdaFormation Ui z
+(*!
+ * @begin[doc]
+ * @thysubsection{Introduction}
  *
- * H >- A = A in Ui
- * H, z: A >- B[z] ext b[z]
+ * The propositional interpretation of the function space $@fun{A; B}$
+ * is the implication term @hrefterm[implies], $@implies{A; B}$.
+ * The proposition is true if it is a type, and for any proof of $A$,
+ * there is a proof of $B$.
+ * @end[doc]
  *)
 interactive independentLambdaFormation {| intro_resource [] |} 'H 'z :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [main] ('b['z] : sequent ['ext] { 'H; z: 'A >- 'B }) -->
    sequent ['ext] { 'H >- 'A -> 'B }
 
-(*
- * H >- lambda(a1. b1[a1]) = lambda(a2. b2[a2]) in a:A -> B
- * by lambdaEquality Ui x
+(*!
+ * @begin[doc]
+ * @thysubsection{Membership}
  *
- * H >- A = A in Ui
- * H, x: A >- b1[x] = b2[x] in B[x]
+ * The elements in the function space $@fun{A; B}$ are the
+ * @hrefterm[lambda] functions.  The space $@fun{A; B}$ must be a
+ * type, and the body of the function must be an $B$ for any argument
+ * in $A$.
+ * @end[doc]
  *)
 interactive independentLambdaEquality {| intro_resource []; eqcd_resource |} 'H 'x :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H; x: 'A >- 'b1['x] = 'b2['x] in 'B } -->
    sequent ['ext] { 'H >- lambda{a1. 'b1['a1]} = lambda{a2. 'b2['a2]} in 'A -> 'B }
 
-(*
- * H, f: A -> B, J[x] >- T[x]                   ext t[f, f a]
- * by independentFunctionElimination i y
+(*!
+ * @begin[doc]
+ * @thysubsection{Elimination}
  *
- * H, f: A -> B, J >- A                         ext a
- * H, f: A -> B, J[x], y: B >- T[x]             ext t[f, y]
+ * There are two elimination forms.  The @tt{independentFunctionElimination}
+ * rule is more appropriate for the propositional interpretation of the function
+ * space $@fun{A; B}$: if there is a proof of $A$, then there is also a proof
+ * of $B$.  The second form, @tt{independentFunctionElimination2}, is
+ * more appropriate for the functional application to a specific argument $a @in A$.
+ * @end[doc]
  *)
 interactive independentFunctionElimination 'H 'J 'f 'y :
    [assertion] ('a : sequent ['ext] { 'H; f: 'A -> 'B; 'J['f] >- 'A }) -->
@@ -140,24 +176,28 @@ interactive independentFunctionElimination2 'H 'J 'f 'y 'z 'a :
    [main] ('t['y; 'z] : sequent ['ext] { 'H; f: 'A -> 'B; 'J['f]; y: 'B; z: 'y = ('f 'a) in 'B >- 'T['f] }) -->
    sequent ['ext] { 'H; f: 'A -> 'B; 'J['f] >- 'T['f] }
 
-(*
- * H >- (f1 a1) = (f2 a2) in B[a1]
- * by applyEquality (x:A -> B[x])
+(*!
+ * @begin[doc]
+ * @thysubsection{Combinator equality}
  *
- * H >- f1 = f2 in x:A -> B[x]
- * H >- a1 = a2 in A
+ * Applications have an intensional equality; they are equal if their
+ * functions and arguments are equal.
+ * @end[doc]
  *)
 interactive independentApplyEquality {| eqcd_resource |} 'H ('A -> 'B) :
    [wf] sequent [squash] { 'H >- 'f1 = 'f2 in 'A -> 'B } -->
    [wf] sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
    sequent ['ext] { 'H >- ('f1 'a1) = ('f2 'a2) in 'B }
 
-(*
- * H >- A1 -> B1 <= A2 -> B2
- * by functionSubtype
+(*!
+ * @begin[doc]
+ * @thysubsection{Subtyping}
  *
- * H >- A2 <= A1
- * H >- B1 <= B2
+ * The function space is @emph{contravariant} in their domains,
+ * and @emph{covariant} in their ranges.
+ *
+ * @docoff
+ * @end[doc]
  *)
 interactive independentFunctionSubtype 'H :
    sequent [squash] { 'H >- subtype{'A2; 'A1} } -->
@@ -277,18 +317,6 @@ let sub_resource =
                << 'A2 >>, << 'A1 >>;
                << 'B1 >>, << 'B2 >>],
               fun_subtypeT))
-
-(************************************************************************
- * CONVERSIONAL                                                         *
- ************************************************************************)
-
-let etaC t =
-   if is_fun_term t then
-      reduceIndependentEta t
-   else if is_dfun_term t then
-      Itt_dfun.reduceEta t
-   else
-      raise (RefineError ("etaC", StringTermError ("argument is not a function type", t)))
 
 (*
  * -*-

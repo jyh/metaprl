@@ -32,6 +32,7 @@
 
 include Czf_itt_member
 
+open Tactic_type.Tacticals
 open Tactic_type.Conversionals
 
 (************************************************************************
@@ -51,16 +52,16 @@ rewrite reduce_sep : sep{collect{'T; x. 'f['x]}; z. 'P['z]} <-->
 (*
  * A restricted formula has the separation property.
  *)
-rewrite unfold_restricted1 : restricted{'P} <-->
-   (exst P2: univ[1:l]. iff{'P2; 'P})
+rewrite unfold_restricted : restricted{'P} <-->
+   Itt_equal!equal{univ[1:l]; 'P; 'P}
 
-rewrite unfold_restricted : restricted{z. 'P['z]} <-->
-   (exst P2: (set -> univ[1:l]). (fun_prop{z. 'P2 'z} & (all z: set. "iff"{. 'P2 'z; 'P['z]})))
+topval fold_restricted : conv
 
-rewrite unfold_restricted3 : restricted{'A; x. 'B['x]} <-->
-   (exst P2: ('A -> univ[1:l]).
-      ((dfun_prop{'A; x. 'B['x]})
-      & (all x: 'A. "iff"{.'P2 'x; 'B['x]})))
+(************************************************************************
+ * TACTICS
+ ************************************************************************)
+
+topval squash_restrictedT : tactic
 
 (*
  * -*-

@@ -1,11 +1,18 @@
-(*
- * Although unit is not strictly necessary,
- * we define it anyway, so we can use it before numbers
- * are defined.
+(*!
+ * @spelling{unitElimination}
  *
- * Type unit contains one element, it.
+ * @begin[doc]
+ * @theory[Itt_unit]
+ *
+ * The @tt{Itt_unit} module defines a term containing exactly
+ * one element, $@it$.  The element is the same term that inhabits
+ * the equality (Section @reftheory[Itt_equal]) and subtype
+ * (Section @reftheory[Itt_subtype]) judgments.
+ * @end[doc]
  *
  * ----------------------------------------------------------------
+ *
+ * @begin[license]
  *
  * This file is part of MetaPRL, a modular, higher order
  * logical framework that provides a logical programming
@@ -31,11 +38,19 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  * Author: Jason Hickey
- * jyhcs.cornell.edu
+ * @email{jyh@cs.caltech.edu}
+ *
+ * @end[license]
  *)
 
+(*!
+ * @begin[doc]
+ * @parents
+ * @end[doc]
+ *)
 include Itt_equal
 include Itt_struct
+(*! @docoff *)
 
 open Printf
 open Mp_debug
@@ -60,16 +75,13 @@ open Itt_struct
 let _ =
    show_loading "Loading Itt_unit%t"
 
-(*
- * incr_debug_level DebugMessage
- * debug_string DebugLoad "Loading itt_void..."
- *)
-
 (************************************************************************
  * TERMS                                                                *
  ************************************************************************)
 
+(*! @terms *)
 declare unit
+(*! @docoff *)
 
 (*
  * Standard term.
@@ -96,9 +108,14 @@ prim unitFormation 'H :
    sequent ['ext] { 'H >- univ[i:l] } =
    unit
 
-(*
- * H >- Unit = Unit in Ui ext Ax
- * by unitEquality
+(*!
+ * @begin[doc]
+ * @rules
+ * @thysubsection{Typehood and equality}
+ *
+ * The $@unit$ type is a member of every universe, and it
+ * is also a type.
+ * @end[doc]
  *)
 prim unitEquality {| intro_resource []; eqcd_resource |} 'H :
    sequent ['ext] { 'H >- unit IN univ[i:l] } =
@@ -111,46 +128,66 @@ prim unitType {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- "type"{unit} } =
    it
 
-(*
- * H >- Ui ext Unit
- * by unitFormation
+(*!
+ * @begin[doc]
+ * @thysubsection{Introduction}
+ *
+ * The $@unit$ type is always provable.  The proof is the unique term
+ * $@it$.
+ * @end[doc]
  *)
 prim unit_memberFormation {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- unit } =
    it
 
-(*
- * H >- Unit = Unit in Ui ext Ax
- * by unitEquality
+(*!
+ * @begin[doc]
+ * @thysubsection{Membership}
+ * The unique inhabitant of the $@unit$ type is the term $@it$.
+ * @end[doc]
  *)
 prim unit_memberEquality {| intro_resource []; eqcd_resource |} 'H :
    sequent ['ext] { 'H >- it IN unit } =
    it
 
-(*
- * H; i:x:Unit; J >- C
- * by unitElimination i
- * H; i:x:Unit; J[it / x] >- C[it / x]
+(*!
+ * @begin[doc]
+ * @thysubsection{Elimination}
+ * The elimination rule @tt{unitElimination} performs a case analysis
+ * on $x@colon @unit$.  The witness is replaced with the term $@it$.
+ * @end[doc]
  *)
 prim unitElimination {| elim_resource [ThinOption thinT] |} 'H 'J :
    ('t : sequent['ext] { 'H; x: unit; 'J[it] >- 'C[it] }) -->
    sequent ['ext] { 'H; x: unit; 'J['x] >- 'C['x] } =
    't
 
-(*
- * Squash elimination.
+(*!
+ * @begin[doc]
+ * @thysubsection{Squash}
+ * The proof extract for a proof on $@unit$ can always be omitted;
+ * the proof is always the term $@it$.  This rule is added to the
+ * @hreftactic[squashT] resource.
+ * @end[doc]
  *)
 prim unit_squashElimination 'H :
    sequent [squash] { 'H >- unit } -->
    sequent ['ext] { 'H >- unit } =
    it
 
-(*
- * Squiggle equality.
+(*!
+ * @begin[doc]
+ * @thysubsection{Rewriting}
+ * Two terms in $@unit$ are always computationally equivalent.
+ *
+ * This rule is added to the @hreftactic[dT] resource for
+ * goals that match $t @longleftrightarrow @unit$.
+ * @end[doc]
  *)
 interactive unitSqequal 'H :
    sequent [squash] { 'H >- 'x = 'y in unit } -->
    sequent ['ext] { 'H >- Perv!"rewrite"{'x; 'y} }
+(*! @docoff *)
 
 (************************************************************************
  * TACTICS                                                              *

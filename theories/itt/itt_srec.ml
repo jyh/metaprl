@@ -1,8 +1,23 @@
-(*
- * Simple recursive type.
+(*!
+ * @spelling{memberFormation srec srecind unrollings}
+ *
+ * @begin[doc]
+ * @theory[Itt_srec]
+ *
+ * The @tt{Itt_srec} module defines a ``simple'' recursive type,
+ * without parameters that are passed along the unrollings of the
+ * type, as it is in the parameterized recursive type in @hreftheory[Itt_prec].
+ *
+ * The syntax of the recursive type is $@srec{T; B[T]}$.  The variable
+ * $T$ represents the type itself, which is given through the
+ * interpretation $T = B[T]$.  The body $B[T]$ must be a type for
+ * @emph{any} type $T @in @univ_i$, and in addition $B[T]$ must be
+ * monotone in the type argument $T$.
+ * @end[doc]
  *
  * ----------------------------------------------------------------
  *
+ * @begin[license]
  * This file is part of MetaPRL, a modular, higher order
  * logical framework that provides a logical programming
  * environment for OCaml and other languages.
@@ -27,15 +42,21 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  * Author: Jason Hickey
- * jyh@cs.cornell.edu
- *
+ * @email{jyh@cs.cornell.edu}
+ * @end[license]
  *)
 
+(*!
+ * @begin[doc]
+ * @parents
+ * @end[doc]
+ *)
 include Itt_equal
 include Itt_prec
 include Itt_subtype
 include Itt_void
 include Itt_struct
+(*! @docoff *)
 
 open Printf
 open Mp_debug
@@ -65,8 +86,17 @@ let _ =
  * TERMS                                                                *
  ************************************************************************)
 
+(*!
+ * @begin[doc]
+ * @terms
+ *
+ * The @tt{srec} term defines the recursive type.  The @tt{srecind}
+ * term defines an induction combinator over elements of the recursive type.
+ * @end[doc]
+ *)
 declare srec{T. 'B['T]}
 declare srecind{'a; p, h. 'g['p; 'h]}
+(*! @docoff *)
 
 (************************************************************************
  * DISPLAY                                                              *
@@ -75,10 +105,27 @@ declare srecind{'a; p, h. 'g['p; 'h]}
 dform srec_df : except_mode[src] :: srec{T. 'B} =
    szone mu `"{" slot{'T} `"." pushm[0] slot{'B} `"}" popm ezone
 
+dform srecind_df : except_mode[src] :: srecind{'a; p, h. 'g} =
+   szone pushm[3]
+   `"srecind(" slot{'a} `";" hspace
+   slot{'p} `"," slot{'p} `"." hspace
+   slot{'g}
+   popm ezone
+
 (************************************************************************
  * REWRITES                                                             *
  ************************************************************************)
 
+(*!
+ * @begin[doc]
+ * @rewrites
+ *
+ * The @tt{srecind} induction combinator takes an argument
+ * $a$ that belongs to a recursive type definition.  The computation
+ * is defined through the body $g[p, h]$, which takes a
+ * recursive instance $p$, and the argument element $h$.
+ * @end[doc]
+ *)
 prim_rw unfold_srecind : srecind{'a; p, h. 'g['p; 'h]} <-->
    'g[lambda{a. srecind{'a; p, h. 'g['p; 'h]}}; 'a]
 
@@ -86,23 +133,22 @@ prim_rw unfold_srecind : srecind{'a; p, h. 'g['p; 'h]} <-->
  * RULES                                                                *
  ************************************************************************)
 
-(*
- * H >- Ui ext srec(T. B[T])
- * by srecFormation T
- *
- * H, T: Ui >- Ui ext B[T]
+(*!
+ * @docoff
  *)
 prim srecFormation 'H 'T :
    ('B['T] : sequent ['ext] { 'H; T: univ[i:l] >- univ[i:l] }) -->
    sequent ['ext] { 'H >- univ[i:l] } =
    srec{T. 'B['T]}
 
-(*
- * H >- srec(T1. B1[T1]) = srec(T2. B2[T2]) in Ui
- * by srecEquality T S1 S2 z
+(*!
+ * @begin[doc]
+ * @rules
+ * @thysubsection{Typehood and equality}
  *
- * H; T: Ui >- B1[T] = B2[T] in Ui
- * H; S1: Ui; S2: Ui; z: subtype(S1; S2) >- subtype(B1[S1]; B1[S2])
+ * The simple recursive type $@srec{T; B[T]}$ is a type if $B[T]$ is
+ * a monotone type over types type $T @in @univ_i$.
+ * @end[doc]
  *)
 prim srecEquality {| intro_resource []; eqcd_resource |} 'H 'T 'S1 'S2 'z :
    [wf] sequent [squash] { 'H; T: univ[i:l] >- 'B1['T] = 'B2['T] in univ[i:l] } -->
@@ -115,12 +161,8 @@ prim srecType {| intro_resource [] |} 'H 'S1 'S2 'z univ[i:l] :
    sequent ['ext] { 'H >- "type"{srec{T. 'B['T]}} } =
    it
 
-(*
- * H >- srec(T. B[T]) ext g
- * by srec_memberFormation
- *
- * H >- B[srec(T. B[T])] ext g
- * H >- srec(T. B[T]) = srec(T. B[T]) in Ui
+(*!
+ * @docoff
  *)
 prim srec_memberFormation {| intro_resource [] |} 'H :
    [wf] ('g : sequent ['ext] { 'H >- 'B[srec{T. 'B['T]}] }) -->
@@ -128,12 +170,13 @@ prim srec_memberFormation {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- srec{T. 'B['T]} } =
    'g
 
-(*
- * H >- x1 = x2 in srec(T. B[T])
- * by srec_memberEquality
+(*!
+ * @begin[doc]
+ * @thysubsection{Membership}
  *
- * H >- x1 = x2 in B[srec(T. B[T])]
- * H >- srec(T. B[T]) = srec(T. B[T]) in Ui
+ * The elements of the recursive type $@srec{T; B[T]}$ are the
+ * elements of $B[@srec{T; B[T]}]$.
+ * @end[doc]
  *)
 prim srec_memberEquality {| intro_resource [] |} 'H :
    [wf] sequent [squash] { 'H >- 'x1 = 'x2 in 'B[srec{T. 'B['T]}] } -->
@@ -141,16 +184,15 @@ prim srec_memberEquality {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- 'x1 = 'x2 in srec{T. 'B['T]} } =
    it
 
-(*
- * H, x: srec(T. B[T]), J[x] >- C[x]
- * by srecElimination T1 u v w z
+(*!
+ * @begin[doc]
+ * @thysubsection{Elimination}
  *
- * H, x: srec(T. B[T]), J[x],
- *   T1: Ui,
- *   u: subtype(T1; srec(T. B[T])),
- *   w: v: T1 -> C[v],
- *   z: T[T1]
- * >- C[z]
+ * The elimination form performs induction over the
+ * assumption $x@colon @srec{T; B[T]}$.  The conclusion $C[x]$ is
+ * true for the arbitrary element $x$, if, given that it holds on
+ * the unrollings, it also holds on $x$.
+ * @end[doc]
  *)
 prim srecElimination {| elim_resource [ThinOption thinT] |} 'H 'J 'x srec{T. 'B['T]} 'T1 'u 'v 'w 'z univ[i:l] :
    [main] ('g['x; 'T1; 'u; 'w; 'z] : sequent ['ext] {
@@ -166,25 +208,26 @@ prim srecElimination {| elim_resource [ThinOption thinT] |} 'H 'J 'x srec{T. 'B[
    sequent ['ext] { 'H; x: srec{T. 'B['T]}; 'J['x] >- 'C['x] } =
    srecind{'x; p, h. 'g['x; srec{T. 'B['T]}; it; 'p; 'h]}
 
-(*
- * H, x: srec(T. B[T]); J[x] >- C[x]
- * by srecUnrollElimination y u
- *
- * H, x: srec(T. B[T]); J[x]; y: B[srec(T. B[T])]; u: x = y in B[srec(T. B[T])] >- C[y]
+(*!
+ * @begin[doc]
+ * The second elimination form performs unrolling of the recursive
+ * type definition.
+ * @end[doc]
  *)
 prim srecUnrollElimination {| elim_resource [ThinOption thinT] |} 'H 'J 'x 'y 'u :
    [main] ('g['x; 'y; 'u] : sequent ['ext] { 'H; x: srec{T. 'B['T]}; 'J['x]; y: 'B[srec{T. 'B['T]}]; u: 'x = 'y in 'B[srec{T. 'B['T]}] >- 'C['y] }) -->
    sequent ['ext] { 'H; x: srec{T. 'B['T]}; 'J['x] >- 'C['x] } =
    'g['x; 'x; it]
 
-(*
- * H >- srecind(r1; h1, z1. t1) = srecind(r2; h2, z2. t2) in S[r1]
- * by srecindEquality lambda(x. S[x]) srec(T. B[T]) T1 u v w z
+(*!
+ * @begin[doc]
+ * @thysubsection{Combinator equality}
  *
- * H >- r1 = r2 in srec(T. B[T])
- * H, T1: Ui, z: subtype(T1; srec(T. B[T])),
- *    v: w: T1 -> S[w], w: T[T1]
- *    >- t1[v; w] = t2[v; w] in S[w]
+ * The @hrefterm[srecind] term produces a value of type $S$ if the
+ * argument belongs to some recursive type, and the body computes
+ * a value of type $S$ given the argument $r$ and a function
+ * $h$ to compute the values of the recursive calls.
+ * @end[doc]
  *)
 prim srecindEquality {| intro_resource []; eqcd_resource |} 'H lambda{x. 'S['x]} srec{T. 'B['T]} 'T1 'u 'v 'w 'z univ[i:l] :
    [wf] sequent [squash] { 'H >- 'r1 = 'r2 in srec{T. 'B['T]} } -->
@@ -197,6 +240,7 @@ prim srecindEquality {| intro_resource []; eqcd_resource |} 'H lambda{x. 'S['x]}
                    in 'S['r1]
            } =
    it
+(*! @docoff *)
 
 (************************************************************************
  * TACTICS                                                              *

@@ -1,7 +1,19 @@
-(*
- * Atom is the type of tokens (strings)
+(*!
+ * @begin[doc]
+ * @theory[Itt_atom]
+ *
+ * The @tt{Itt_atom} module defines the $@atom$ type---a type of strings
+ * without any order relation.  The elements of the atom type are the
+ * @emph{tokens}.  The only comparison of tokens is equality; there is
+ * no elimination rule.
+ *
+ * The $@atom$ type is defined as primitive.  This is not strictly necessary;
+ * the type can be derived from the recursive type (Section @reftheory[Itt_srec]).
+ * @end[doc]
  *
  * ----------------------------------------------------------------
+ *
+ * @begin[license]
  *
  * This file is part of MetaPRL, a modular, higher order
  * logical framework that provides a logical programming
@@ -27,11 +39,18 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  * Author: Jason Hickey
- * jyh@cs.cornell.edu
+ * @email{jyh@cs.caltech.edu}
  *
+ * @end[license]
  *)
 
+(*!
+ * @begin[doc]
+ * @parents
+ * @end[doc]
+ *)
 include Itt_equal
+(*! @docoff *)
 
 open Printf
 open Mp_debug
@@ -60,8 +79,20 @@ let _ =
  * TERMS                                                                *
  ************************************************************************)
 
+(*!
+ * @begin[doc]
+ * @terms
+ *
+ * The @tt{atom} term defines the $@atom$ type.
+ * The @tt{token} term has a ``token'' parameter (a string)
+ * that defines the token.  The display representation of a
+ * token $@token{@misspelled{tok}}$ is the quoted form
+ * @misspelled{``tok''}.
+ * @end[doc]
+ *)
 declare atom
 declare token[t:t]
+(*! @docoff *)
 
 let atom_term = << atom >>
 let token_term = << token[x:t] >>
@@ -79,7 +110,7 @@ let bogus_token = << token["token":t] >>
 dform atom_df : except_mode[src] :: atom = `"Atom"
 dform atom_df2 : mode[src] :: atom = `"atom"
 dform token_df : except_mode[src] :: token[t:t] =
-   slot[t:s]
+   `"`" slot[t:s] `"'"
 
 (************************************************************************
  * RULES                                                                *
@@ -93,9 +124,13 @@ prim atomFormation 'H :
    sequent ['ext] { 'H >- univ[i:l] } =
    atom
 
-(*
- * H >- Atom = Atom in Ui ext Ax
- * by atomEquality
+(*!
+ * @begin[doc]
+ * @rules
+ *
+ * @thysubsection{Equality and typehood}
+ * The $@atom$ term is a member of every universe, and it is a type.
+ * @end[doc]
  *)
 prim atomEquality {| intro_resource []; eqcd_resource |} 'H :
    sequent ['ext] { 'H >- atom = atom in univ[i:l] } =
@@ -108,29 +143,42 @@ prim atomType {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- "type"{atom} } =
    it
 
-(*
- * H >- Atom ext "t"
- * by tokenFormation "t"
+(*!
+ * @begin[doc]
+ * @thysubsection{Introduction}
+ *
+ * The $@atom$ type is always provable; the token ``t'' is
+ * a witness.
+ * @end[doc]
  *)
 prim tokenFormation 'H token[t:t] :
    sequent ['ext] { 'H >- atom } =
    token[t:t]
 
-(*
- * H >- "t" = "t" in Atom
- * by tokenEquality
+(*!
+ * @begin[doc]
+ * @thysubsection{Membership}
+ *
+ * Two tokens are equal in the token type only if they are exactly the
+ * same token.
+ * @end[doc]
  *)
 prim tokenEquality {| intro_resource []; eqcd_resource |} 'H :
    sequent ['ext] { 'H >- token[t:t] = token[t:t] in atom } =
    it
 
-(*
- * Squiggle equality.
+(*!
+ * @begin[doc]
+ * @noindent
+ * Two tokens in $@atom$ are computationally equivalent if they
+ * are equal.
+ * @end[doc]
  *)
 prim atomSqequal 'H :
    sequent [squash] { 'H >- 'x = 'y in atom } -->
    sequent ['ext] { 'H >- Perv!"rewrite"{'x; 'y} } =
    it
+(*! @docoff *)
 
 (************************************************************************
  * TACTICS                                                              *

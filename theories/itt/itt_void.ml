@@ -1,9 +1,15 @@
-(*
- * Here are rules for the Void base type.
- * Void has no elements.  Its propositional
- * interpretation is "False".
+(*!
+ * @begin[doc]
+ * @theory[Itt_void]
+ *
+ * The @tt{Itt_void} module defines the @emph{empty} type.
+ * The $@void$ type is a subtype of every other type (since
+ * it has no elements).
+ * @end[doc]
  *
  * ----------------------------------------------------------------
+ *
+ * @begin[license]
  *
  * This file is part of MetaPRL, a modular, higher order
  * logical framework that provides a logical programming
@@ -29,12 +35,19 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  * Author: Jason Hickey
- * jyh@cs.cornell.edu
+ * @email{jyh@cs.caltech.edu}
  *
+ * @end[license]
  *)
 
+(*!
+ * @begin[doc]
+ * @parents
+ * @end[doc]
+ *)
 include Itt_equal
 include Itt_subtype
+(*! @docoff *)
 
 open Printf
 open Mp_debug
@@ -58,16 +71,14 @@ open Itt_subtype
 let _ =
    show_loading "Loading Itt_void%t"
 
-(*
- * incr_debug_level DebugMessage
- * debug_string DebugLoad "Loading itt_void..."
- *)
-
 (************************************************************************
  * TERMS                                                                *
  ************************************************************************)
 
+(*! @terms *)
 declare void
+(*! @docoff *)
+
 declare top (* we declare it here because we need it for type inference *)
 
 let void_term = << void >>
@@ -92,9 +103,16 @@ prim voidFormation 'H :
    sequent ['ext] { 'H >- univ[i:l] } =
    void
 
-(*
- * H >- Void = Void in Ui ext Ax
- * by voidEquality
+(*!
+ * @begin[doc]
+ * @rules
+ *
+ * @thysubsection{Equality and typehood}
+ *
+ * The $@void$ type is a member of very universe, and it
+ * is a type.
+ * @end[doc]
+ *
  *)
 prim voidEquality {| intro_resource []; eqcd_resource |} 'H :
    sequent ['ext] { 'H >- void IN univ[i:l] } =
@@ -107,36 +125,48 @@ prim voidType {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- "type"{void} } =
    it
 
-(*
- * H, i:x:Void, J >- C
- * by voidElimination i
+(*!
+ * @begin[doc]
+ * @thysubsection{Elimination}
+ *
+ * Since the $@void$ type is empty, induction over the
+ * $@void$ type produces no cases.
+ * @end[doc]
  *)
 prim voidElimination {| elim_resource [] |} 'H 'J :
    sequent ['ext] { 'H; x: void; 'J['x] >- 'C['x] } =
    it
 
-(*
- * Squash stability.
+(*!
+ * @begin[doc]
+ * @thysubsection{Squash}
+ *
+ * Any proof of void can be squashed because the proof will never be used.
+ * This rule is added to the @hreftactic[squashT] resource.
+ * @end[doc]
  *)
 prim void_squashElimination 'H :
    sequent [squash] { 'H >- void } -->
    sequent ['ext] { 'H >- void } =
    it
 
-(*
- * Subtyping.
+(*!
+ * @begin[doc]
+ * @thysubsection{Subtyping}
+ *
+ * The $@void$ type is a subtype of every other type.
+ * This rule is derived from the definition of subtyping, and the
+ * @hrefrule[voidElimination] rule.
+ * @end[doc]
  *)
-prim void_subtype 'H :
-   sequent ['ext] { 'H >- subtype{void; 'T} } =
-   it
+interactive void_subtype 'H :
+   sequent ['ext] { 'H >- subtype{void; 'T} }
+(*! @docoff *)
 
 (************************************************************************
  * SQUASH STABILITY                                                     *
  ************************************************************************)
 
-(*
- * Void is squash stable.
- *)
 let squash_voidT p =
    void_squashElimination (hyp_count_addr p) p
 

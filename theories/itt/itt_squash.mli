@@ -36,6 +36,7 @@
  *)
 
 include Base_theory
+include Itt_comment
 
 open Refiner.Refiner.Term
 

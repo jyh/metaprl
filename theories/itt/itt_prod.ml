@@ -1,8 +1,18 @@
-(*
- * Rules for dependent product.
+(*!
+ * @spelling{dprod}
+ *
+ * @begin[doc]
+ * @theory[Itt_prod]
+ *
+ * The product type $@prod{A; B}$ is @emph{derived} from the
+ * dependent production module @hreftheory[Itt_dprod].  The
+ * non-dependent product $@prod{A; B}$ is equivalent to
+ * $@prod{x; A; B}$, where $x$ is not free in $B$.
+ * @end[doc]
  *
  * ----------------------------------------------------------------
  *
+ * @begin[license]
  * This file is part of MetaPRL, a modular, higher order
  * logical framework that provides a logical programming
  * environment for OCaml and other languages.
@@ -27,13 +37,19 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  * Author: Jason Hickey
- * jyh@cs.cornell.edu
- *
+ * @email{jyh@cs.cornell.edu}
+ * @end[license]
  *)
 
+(*!
+ * @begin[doc]
+ * @parents
+ * @end[doc]
+ *)
 include Itt_equal
 include Itt_dprod
 include Itt_struct
+(*! @docoff *)
 
 open Printf
 open Mp_debug
@@ -62,16 +78,24 @@ let _ =
 
 (* debug_string DebugLoad "Loading itt_prod..." *)
 
-(*
- * The independent product is defined as a dependent product.
+(*!
+ * @begin[doc]
+ * @rewrites
+ * The @tt{unfold_dprod} rewrite unfold the non-dependent
+ * product to a dependent-product with a @emph{new} variable
+ * $x$.
+ * @end[doc]
  *)
 prim_rw unfold_prod : ('A * 'B) <--> (x: 'A * 'B)
 
-(*
- * H >- A1 * B1 = A2 * B2 in Ui
- * by independentProductEquality
- * H >- A1 = A2 in Ui
- * H >- B1 = B2 in Ui
+(*!
+ * @begin[doc]
+ * @rules
+ * @thysubsection{Typehood and equality}
+ *
+ * The product space $@prod{A; B}$ is well-formed if
+ * both $A$ and $B$ are types.
+ * @end[doc]
  *)
 interactive independentProductEquality {| intro_resource []; eqcd_resource |} 'H :
    [wf] sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
@@ -97,49 +121,58 @@ interactive independentProductFormation 'H :
    ('B : sequent ['ext] { 'H >- univ[i:l] }) -->
    sequent ['ext] { 'H >- univ[i:l] }
 
-(*
- * H, A * B, J >- T ext t
- * by independentProductElimination
- * H, A * B, u: A, v: B, J >- T ext t
+(*!
+ * @begin[doc]
+ * @thysubsection{Elimination}
+ *
+ * The elimination form splits the hypothesis $x@colon @prod{A; B}$ into
+ * its parts $u@colon A$ and $v@colon B$.
+ * @end[doc]
  *)
 interactive independentProductElimination {| elim_resource [ThinOption thinT] |} 'H 'J 'z 'u 'v :
    ('t['u; 'v] : sequent ['ext] { 'H; z: 'A * 'B; u: 'A; v: 'B; 'J['u, 'v] >- 'T['u, 'v] }) -->
    sequent ['ext] { 'H; z: 'A * 'B; 'J['z] >- 'T['z] }
 
-(*
- * H >- (a1, b1) = (a2, b2) in A * B
- * by independentPairEquality
- * H >- a1 = a2 in A
- * H >- b1 = b2 in B
+(*!
+ * @begin[doc]
+ * @thysubsection{Membership}
+ *
+ * The members of the non-dependent product $@prod{A; B}$
+ * are the pairs $@pair{a; b}$, where $a @in A$ and $b @in B$.
+ * @end[doc]
  *)
 interactive independentPairEquality {| intro_resource []; eqcd_resource |} 'H :
    [wf] sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
    [wf] sequent [squash] { 'H >- 'b1 = 'b2 in 'B } -->
    sequent ['ext] { 'H >- ('a1, 'b1) = ('a2, 'b2) in 'A * 'B }
 
-(*
- * H >- A * B ext (a, b)
- * by independentPairFormation a y
- * H >- a = a in A
- * H >- B[a] ext b
- * H, y:A >- B[y] = B[y] in Ui
+(*!
+ * @begin[doc]
+ * @thysubsection{Introduction}
+ *
+ * The propositional interpretation of the
+ * non-dependent product space $@prod{A; B}$ is the
+ * conjunction $@and{A; B}$.  The proposition is
+ * true if both $A$ and $B$ are true.
+ * @end[doc]
  *)
 interactive independentPairFormation {| intro_resource [] |} 'H :
    [wf] ('a : sequent ['ext] { 'H >- 'A }) -->
    [wf] ('b : sequent ['ext] { 'H >- 'B }) -->
    sequent ['ext] { 'H >- 'A * 'B }
 
-(*
- * H >- A1 -> B1 <= A2 -> B2
- * by functionSubtype
+(*!
+ * @begin[doc]
+ * @thysubsection{Subtyping}
  *
- * H >- A2 <= A1
- * H >- B1 <= B2
+ * The product space is covariant in both parts.
+ * @end[doc]
  *)
 interactive independentProductSubtype {| intro_resource [] |} 'H :
    sequent [squash] { 'H >- subtype{'A1; 'A2} } -->
    sequent [squash] { 'H >- subtype{'B1; 'B2} } -->
    sequent ['ext] { 'H >- subtype{ ('A1 * 'B1); ('A2 * 'B2) } }
+(*! @docoff *)
 
 (************************************************************************
  * TYPE INFERENCE                                                       *

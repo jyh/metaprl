@@ -1,7 +1,30 @@
-(*
- * Subtype type.
+(*!
+ * @begin[spelling]
+ * axiomFormation squashElimination
+ * subtypeElimination info
+ * @end[spelling]
+ *
+ * @begin[doc]
+ * @theory[Itt_subtype]
+ *
+ * The @tt{Itt_subtype} module provides the definition of
+ * @emph{subtyping}.  Informally a type $T_1$ is a subtype of
+ * a type $T_2$, $T_1 @subseteq T_2$, if any two equal elements of $T_1$ are also
+ * equal in $T_2$.  This is slightly different from the set-theoretic
+ * definition.  In set theory, the quotiented set $@int_2$ contains
+ * two equivalence classes; one is the set of even numbers and the other
+ * is the set of odd numbers.  In the @Nuprl{} type theory, the two types
+ * have the same elements, but all even numbers are equal in $@int_2$ (and
+ * all the odd numbers are also equal).  It follows that $@int @subseteq @int_2$.
+ *
+ * The subtype-type has trivial computational content, like equality.
+ * The subtype contains only the $@it$ term if it is true; it is
+ * empty otherwise.
+ * @end[doc]
  *
  * ----------------------------------------------------------------
+ *
+ * @begin[license]
  *
  * This file is part of MetaPRL, a modular, higher order
  * logical framework that provides a logical programming
@@ -27,12 +50,19 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  * Author: Jason Hickey
- * jyhcs.cornell.edu
+ * @email{jyh@cs.caltech.edu}
  *
+ * @end[license]
  *)
 
+(*!
+ * @begin[doc]
+ * @parents
+ * @end[doc]
+ *)
 include Itt_equal
 include Itt_struct
+(*! @docoff *)
 
 open Printf
 open Mp_debug
@@ -68,7 +98,15 @@ let _ =
  * TERMS                                                                *
  ************************************************************************)
 
+(*!
+ * @begin[doc]
+ * @terms
+ *
+ * The @tt{subtype} term is a binary relation.
+ * @end[doc]
+ *)
 declare subtype{'A; 'B}
+(*! @docoff *)
 
 let subtype_term = << subtype{'A; 'B} >>
 let subtype_opname = opname_of_term subtype_term
@@ -101,12 +139,16 @@ prim subtypeFormation 'H :
    sequent ['ext] { 'H >- univ[i:l] } =
    subtype{'A; 'B}
 
-(*
- * H >- subtype(A1; B1) = subtype(A2; B2) in Ui
- * by subtypeEquality
+(*!
+ * @begin[doc]
+ * @rules
  *
- * H >- A1 = A2 in Ui
- * H >- B1 = B2 in Ui
+ * @thysubsection{Typehood and equality}
+ *
+ * The << subtype{'A; 'B} >> term is a type if both
+ * $A$ and $B$ are types.  The equality is @emph{intensional}:
+ * two subtype-types are equal if their subterms are equal.
+ * @end[doc]
  *)
 prim subtypeEquality {| intro_resource []; eqcd_resource |} 'H :
    [wf] sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
@@ -120,6 +162,13 @@ prim subtypeType {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- "type"{subtype{'A; 'B}} } =
    it
 
+(*!
+ * @begin[doc]
+ * The intensional interpretation of typehood also means that if
+ * the subtype judgment $A @subseteq B$ is true, then both $A$
+ * and $B$ are types.
+ * @end[doc]
+ *)
 prim subtypeTypeLeft 'H 'A :
    [main] sequent [squash] { 'H >- subtype{'A; 'B} } -->
    sequent ['ext] { 'H >- "type"{'B} } =
@@ -130,12 +179,15 @@ prim subtypeTypeRight 'H 'B :
    sequent ['ext] { 'H >- "type"{'A} } =
    it
 
-(*
- * H >- subtype(A; B) ext it
- * by subtype_axiomFormation
+(*!
+ * @begin[doc]
+ * @thysubsection{Introduction}
  *
- * H >- A = A in Ui
- * H; x: A; y: A; x = y in A >- x = y in B
+ * The @tt{subtype_axiomFormation} rule gives the introduction form
+ * for the subtype judgment.  A type $A @subseteq B$ is true if $A$
+ * and $B$ are types, and any term $t @in A$ is also in $B$.  The
+ * proof extract term is always the $@it$ term.
+ * @end[doc]
  *)
 prim subtype_axiomFormation {| intro_resource [] |} 'H 'x :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
@@ -143,43 +195,48 @@ prim subtype_axiomFormation {| intro_resource [] |} 'H 'x :
    sequent ['ext] { 'H >- subtype{'A; 'B} } =
    it
 
-(*
- * H >- it = it in subtype(A; B)
- * by subtype_axiomEquality
- *
- * H >- subtype(A; B)
+(*!
+ * @begin[doc]
+ * @thysubsection{Member equality}
+ * The subtype-type, if true, contains only the term $@it$.
+ * For $@it$ to be in $A @subseteq B$, the subtype judgment
+ * must be true.
+ * @end[doc]
  *)
 prim subtype_axiomEquality {| intro_resource []; eqcd_resource |} 'H :
    [main] sequent [squash] { 'H >- subtype{'A; 'B} } -->
    sequent ['ext] { 'H >- it IN subtype{'A; 'B} } =
    it
 
-(*
- * H, x: subtype(A; B); J[x] >- C[x]
- * by subtypeElimination
+(*!
+ * @begin[doc]
+ * @thysubsection{Elimination}
  *
- * H, x: subtype(A; B); J[it] >- C[it]
+ * Subtype elimination has two forms.  The standard @tt{subtypeElimination}
+ * form corresponds to induction: the witness $x@colon A @subseteq B$ is
+ * replaced with the unique proof term $@it$.  The second rule
+ * @tt{subtypeElimination2} takes a witness $a @in A$ and adds the
+ * additional assumption $a @in B$.
+ * @end[doc]
  *)
 prim subtypeElimination {| elim_resource [ThinOption thinT] |} 'H 'J :
    ('t : sequent ['ext] { 'H; x: subtype{'A; 'B}; 'J[it] >- 'C[it] }) -->
    sequent ['ext] { 'H; x: subtype{'A; 'B}; 'J['x] >- 'C['x] } =
    't
 
-(*
- * H >- x = y in B
- * by subtypeElimination2 A
- *
- * H >- x = y in A
- * H >- subtype(A; B)
- *)
 prim subtypeElimination2 'H 'J 'a 'y :
    [wf] sequent [squash] { 'H; x: subtype{'A; 'B}; 'J['x] >- 'a IN 'A } -->
    ('t['y] : sequent ['ext] { 'H; x: subtype{'A; 'B}; 'J['x]; y: 'a IN 'B >- 'C['x] }) -->
    sequent ['ext] { 'H; x: subtype{'A; 'B}; 'J['x] >- 'C['x] } =
    't[it]
 
-(*
- * Squash elimination.
+(*!
+ * @begin[doc]
+ * @thysubsection{Squash}
+ *
+ * The @tt{subtype_squashElimination} rule allows the proof of
+ * the subtype to be omitted; the proof $@it$ can always be recovered.
+ * @end[doc]
  *)
 prim subtype_squashElimination 'H :
    sequent [squash] { 'H >- subtype{'A; 'B} } -->
@@ -190,9 +247,6 @@ prim subtype_squashElimination 'H :
  * SUBTYPE RESOURCE                                                     *
  ************************************************************************)
 
-(*
- * This is what is supplied to the resource.
- *)
 type sub_info_type = (term * term) list * tactic
 
 type sub_resource_info =
@@ -205,10 +259,18 @@ type sub_resource_info =
  *)
 type sub_data = tactic term_dtable
 
-(*
- * The resource itself.
+(*!
+ * @begin[doc]
+ * @resources
+ *
+ * The @tt{Itt_subtype} module defines the @hrefresource[subtype_resource], which is
+ * used to prove subtyping judgments.  The @tt{sub_resource_info} argument
+ * requires two terms $t_1 @subseteq t_2$ that match the goal term, and
+ * a tactic that can be used to refine goals of that form.
+ * @end[doc]
  *)
 resource (sub_resource_info, tactic, sub_data, unit) sub_resource
+(*! @docoff *)
 
 (*
  * Improve the subtyping information.

@@ -44,24 +44,6 @@ declare sing{'s}
 
 rewrite unfold_sing : sing{'s} <--> collect{unit; x. 's}
 
-(************************************************************************
- * RULES                                                                *
- ************************************************************************)
-
-(*
- * Empty is a set.
- *)
-rule sing_isset 'H :
-   sequent [squash] { 'H >- isset{'s} } -->
-   sequent ['ext] { 'H >- isset{sing{'s}} }
-
-(*
- * Nothing is in the empty set.
- *)
-rule sing_member_elim 'H 'J :
-   sequent ['ext] { 'H; x: member{'y; sing{'s}}; 'J['x]; w: eq{'y; 's} >- 'T['x] } -->
-   sequent ['ext] { 'H; x: member{'y; sing{'s}}; 'J['x] >- 'T['x] }
-
 (*
  * -*-
  * Local Variables:

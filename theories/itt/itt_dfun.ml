@@ -1,8 +1,22 @@
-(*
- * Dependent functions.
+(*!
+ * @spelling{dfun}
+ *
+ * @begin[doc]
+ * @theory[Itt_dfun]
+ *
+ * The @tt{Itt_dfun} module is @emph{derived} from the
+ * @hreftheory[Itt_rfun] module.  The type $@fun{x; A; B[x]}$ is
+ * equivalent to the type $@rfun{f; x; A; B[x]}$, where $f$ is
+ * not bound in $B[x]$.  The @emph{well-founded} restriction in
+ * for the very-dependent function type is always trivially satisfied
+ * (since the range type $B[x]$ never invokes $f$).
+ * The @tt{Itt_dfun} module derives the dependent-function
+ * rules.
+ * @end[doc]
  *
  * ----------------------------------------------------------------
  *
+ * @begin[license]
  * This file is part of MetaPRL, a modular, higher order
  * logical framework that provides a logical programming
  * environment for OCaml and other languages.
@@ -27,17 +41,21 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  * Author: Jason Hickey
- * jyh@cs.cornell.edu
- *
+ * @email{jyh@cs.cornell.edu}
+ * @end[license]
  *)
 
-include Var
-
+(*!
+ * @begin[doc]
+ * @parents
+ * @end[doc]
+ *)
 include Itt_equal
 include Itt_rfun
 include Itt_struct
 include Itt_void
 include Itt_unit
+(*! @docoff *)
 
 open Printf
 open Mp_debug
@@ -71,28 +89,42 @@ let _ =
  * REWRITES                                                             *
  ************************************************************************)
 
-prim_rw reduceEta (x: 'A -> 'B['x]) : ('f = 'f in (x: 'A -> 'B['x])) -->
-   lambda{x. 'f 'x} <--> 'f
-
+(*!
+ * @begin[doc]
+ * @rewrites
+ *
+ * The @tt{unfold_dfun} gives the definition of the
+ * dependent-function space.
+ * @end[doc]
+ *)
 prim_rw unfold_dfun : (x: 'A -> 'B['x]) <--> ({ f | x: 'A -> 'B['x] })
 
 (************************************************************************
  * RULES                                                                *
  ************************************************************************)
 
-(*
- * Use the discrete ordering.
+(*!
+ * @begin[doc]
+ * @rules
+ * @thysubsection{Lemmas}
+ *
+ * The @tt{void_well_founded} rule is a lemma that is
+ * useful for proving the well-formedness of the
+ * dependent-function space.  The @hrefterm[void]
+ * type is trivially well-founded, since it has no elements.
+ * @end[doc]
  *)
 interactive void_well_founded {| intro_resource [] |} 'H :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    sequent ['ext] { 'H >- well_founded{'A; a1, a2. void} }
 
 (*
- * H >- (a1:A1 -> B1[a1]) = (a2:A2 -> B2[a2]) in Ui
- * by functionEquality x
+ * @begin[doc]
+ * @thysubsection{Typehood and equality}
  *
- * H >- A1 = A2 in Ui
- * H, x: A1 >- B1[x] = B2[x] in Ui
+ * The dependent-function space retains the intensional type
+ * equality of the very-dependent type.
+ * @end[doc]
  *)
 interactive functionEquality {| intro_resource []; eqcd_resource |} 'H 'x :
    [wf] sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
@@ -107,38 +139,41 @@ interactive functionType {| intro_resource [] |} 'H 'x :
    [wf] sequent [squash] { 'H; x: 'A1 >- "type"{'B1['x]} } -->
    sequent ['ext] { 'H >- "type"{. a1:'A1 -> 'B1['a1] } }
 
-(*
- * H >- a:A -> B[a] ext lambda(z. b[z])
- * by lambdaFormation Ui z
+(*!
+ * @begin[doc]
+ * @thysubsection{Introduction}
  *
- * H >- A = A in Ui
- * H, z: A >- B[z] ext b[z]
+ * The propositional interpretation of the dependent-function
+ * is the universal quantification @hrefterm[all], $@all{a; A; B[x]}$.  The
+ * universal quantification is true, if it is a type,
+ * and $B[a]$ is true for any $a @in A$.
+ * @end[doc]
  *)
 interactive lambdaFormation {| intro_resource [] |} 'H 'z :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [main] ('b['z] : sequent ['ext] { 'H; z: 'A >- 'B['z] }) -->
    sequent ['ext] { 'H >- a:'A -> 'B['a] }
 
-(*
- * H >- lambda(a1. b1[a1]) = lambda(a2. b2[a2]) in a:A -> B
- * by lambdaEquality Ui x
+(*!
+ * @begin[doc]
+ * @thysubsection{Membership}
  *
- * H >- A = A in Ui
- * H, x: A >- b1[x] = b2[x] in B[x]
+ * The dependent function space contains the @hrefterm[lambda] functions.
+ * @end[doc]
  *)
 interactive lambdaEquality {| intro_resource [] |} 'H 'x :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
    [wf] sequent [squash] { 'H; x: 'A >- 'b1['x] = 'b2['x] in 'B['x] } -->
    sequent ['ext] { 'H >- lambda{a1. 'b1['a1]} = lambda{a2. 'b2['a2]} in a:'A -> 'B['a] }
 
-(*
- * H >- f = g in x:A -> B
- * by functionExtensionality Ui (y:C -> D) (z:E -> F) u
+(*!
+ * @begin[doc]
+ * @thysubsection{Extensionality}
  *
- * H, u:A >- f(u) = g(u) in B[u]
- * H >- A = A in Ui
- * H >- f = f in y:C -> D
- * H >- g = g in z:E -> F
+ * The dependent-function retains the extensional membership
+ * equality of the very-dependent function type.  This rule is
+ * derived from the @hrefrule[rfunctionExtensionality] rule.
+ * @end[doc]
  *)
 interactive functionExtensionality 'H (y:'C -> 'D['y]) (z:'E -> 'F['z]) 'u :
    [main] sequent [squash] { 'H; u: 'A >- ('f 'u) = ('g 'u) in 'B['u] } -->
@@ -147,24 +182,27 @@ interactive functionExtensionality 'H (y:'C -> 'D['y]) (z:'E -> 'F['z]) 'u :
    [wf] sequent [squash] { 'H >- 'g = 'g in z:'E -> 'F['z] } -->
    sequent ['ext] { 'H >- 'f = 'g in x:'A -> 'B['x] }
 
-(*
- * H, f: (x:A -> B), J[x] >- T[x] t[f, f a, it]
- * by functionElimination i a y v
+(*!
+ * @begin[doc]
+ * @thysubsection{Elimination}
  *
- * H, f: (x:A -> B), J[x] >- a = a in A
- * H, f: (x:A -> B), J[x], y: B[a], v: y = f(a) in B[a] >- T[x] ext t[f, y, v]
+ * The elimination rule @emph{instantiates} the function
+ * $f@colon @fun{x; A; B[x]}$ with an argument $a @in A$, to
+ * obtain a proof of $B[a]$.
+ * @end[doc]
  *)
 interactive functionElimination {| elim_resource [] |} 'H 'J 'f 'a 'y 'v :
    [wf] sequent [squash] { 'H; f: x:'A -> 'B['x]; 'J['f] >- 'a IN 'A } -->
    ('t['f; 'y; 'v] : sequent ['ext] { 'H; f: x:'A -> 'B['x]; 'J['f]; y: 'B['a]; v: 'y = ('f 'a) in 'B['a] >- 'T['f] }) -->
    sequent ['ext] { 'H; f: x:'A -> 'B['x]; 'J['f] >- 'T['f] }
 
-(*
- * H >- (f1 a1) = (f2 a2) in B[a1]
- * by applyEquality (x:A -> B[x])
+(*!
+ * @begin[doc]
+ * @thysubsection{Combinator equality}
  *
- * H >- f1 = f2 in x:A -> B[x]
- * H >- a1 = a2 in A
+ * Applications have (at least) an @emph{intensional} equality; they are
+ * equal if their functions and arguments are equal.
+ * @end[doc]
  *)
 interactive applyEquality {| eqcd_resource |} 'H (x:'A -> 'B['x]) :
    sequent [squash] { 'H >- 'f1 = 'f2 in x:'A -> 'B['x] } -->
@@ -174,17 +212,21 @@ interactive applyEquality {| eqcd_resource |} 'H (x:'A -> 'B['x]) :
 let applyEquality' t p =
    applyEquality (Sequent.hyp_count_addr p) t p
 
-(*
- * H >- a1:A1 -> B1 <= a2:A2 -> B2
- * by functionSubtype
+(*!
+ * @begin[doc]
+ * @thysubsection{Subtyping}
  *
- * H >- A2 <= A1
- * H, a: A1 >- B1[a] <= B2[a]
-*)
+ * Function spaces are @emph{contravariant} in the domains, and
+ * @emph{covariant} in their ranges.  More specifically, the
+ * ranges must be pointwise covariant.
+ *
+ * @end[doc]
+ *)
 interactive functionSubtype {| intro_resource [] |} 'H 'a :
    sequent [squash] { 'H >- subtype{'A2; 'A1} } -->
    sequent [squash] { 'H; a: 'A1 >- subtype{'B1['a]; 'B2['a]} } -->
    sequent ['prop] { 'H >- subtype{ (a1:'A1 -> 'B1['a1]); (a2:'A2 -> 'B2['a2]) } }
+(*! @docoff *)
 
 (*
 (*

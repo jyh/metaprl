@@ -12,12 +12,15 @@ OCAMLDEPFLAGS := -prl_init
 # Library files
 MPFILES :=\
 	tactic_cache\
+	perv\
+	nuprl_font\
+	base_dform\
+	comment\
+	summary\
 	var\
 	mptop\
-	perv\
 	top_tacticals\
-	top_conversionals\
-	nuprl_font
+	top_conversionals
 
 # Name of main libraries
 MAIN = theory

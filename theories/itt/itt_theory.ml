@@ -1,8 +1,15 @@
-(*
- * All the parts of ITT.
+(*!
+ * @begin[doc]
+ * @theory[Itt_theory]
+ *
+ * The @tt{Itt_theory} module collects all of the module in the
+ * @Nuprl type theory.  This is the basic module to use when
+ * stating and proving theorems the the @Nuprl type theory.
+ * @end[doc]
  *
  * ----------------------------------------------------------------
  *
+ * @begin[license]
  * This file is part of MetaPRL, a modular, higher order
  * logical framework that provides a logical programming
  * environment for OCaml and other languages.
@@ -27,19 +34,21 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  * Author: Jason Hickey
- * jyh@cs.cornell.edu
- *
+ * @email{jyh@cs.cornell.edu}
+ * @end[license]
  *)
 
+(*!
+ * @begin[doc]
+ * @parents
+ * @end[doc]
+ *)
 include Base_theory
 include Itt_equal
 include Itt_void
 include Itt_bool
 include Itt_atom
-include Itt_atom_bool
 include Itt_int
-include Itt_int_bool
-include Itt_arith
 include Itt_rfun
 include Itt_dfun
 include Itt_fun
@@ -57,14 +66,24 @@ include Itt_subtype
 include Itt_w
 include Itt_prec
 include Itt_srec
-include Itt_quotient
-include Itt_esquash
 include Itt_list
 include Itt_list2
+include Itt_quotient
+include Itt_esquash
+include Itt_decidable
+
+(*!
+ * Theories we do not want to include in the
+ * documentation.
+ *
+ * @docoff
+ *)
+include Itt_atom_bool
+include Itt_int_bool
+include Itt_arith
 include Itt_derive
 include Itt_prop_decide
 include Itt_fset
-include Itt_decidable
 
 open Itt_equal
 open Itt_rfun

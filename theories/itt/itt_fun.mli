@@ -43,9 +43,6 @@ open Tactic_type.Conversionals
  * REWRITES                                                             *
  ************************************************************************)
 
-rewrite reduceIndependentEta ('A -> 'B) : ('f = 'f in 'A -> 'B) -->
-   lambda{x. 'f 'x} <--> 'f
-
 rewrite unfold_fun : ('A -> 'B) <--> (x: 'A -> 'B)
 
 (************************************************************************
@@ -151,12 +148,6 @@ rule independentFunctionSubtype 'H :
    sequent [squash] { 'H >- subtype{'A2; 'A1} } -->
    sequent [squash] { 'H >- subtype{'B1; 'B2} } -->
    sequent ['ext] { 'H >- subtype{ ('A1 -> 'B1); ('A2 -> 'B2) } }
-
-(************************************************************************
- * TACTICS                                                              *
- ************************************************************************)
-
-val etaC : term -> conv
 
 (*
  * -*-

@@ -1,7 +1,30 @@
-(*
- * Rules for dependent product.
+(*!
+ * @begin[spelling]
+ * dT handedness inl inlFormation inr inrFormation reduceDecideInl
+ * reduceDecideInr selT
+ * @end[spelling]
+ *
+ * @begin[doc]
+ * @theory[Itt_union]
+ *
+ * The union type $T_1 + T_2$ defines a union space containing the
+ * elements of both $T_1$ and $T_2$.  The union is @emph{disjoint}: the
+ * elements are @emph{tagged} with the @hrefterm[inl] and @hrefterm[inr]
+ * tags as belonging to the ``left'' type $T_1$ or the ``right'' type
+ * $T_2$.
+ *
+ * The union type is the first primitive type that can have more than one
+ * element.  The tag makes the handedness of membership decidable, and
+ * the union type $@unit + @unit$ contains two elements: @inl{it} and
+ * @inr{it}.  The @hreftheory[Itt_bool] module uses this definition to
+ * define the Boolean values, where @emph{false} is @inl{it} and
+ * @emph{true} is @inr{it}.
+ *
+ * @end[doc]
  *
  * ----------------------------------------------------------------
+ *
+ * @begin[license]
  *
  * This file is part of MetaPRL, a modular, higher order
  * logical framework that provides a logical programming
@@ -27,14 +50,21 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  * Author: Jason Hickey
- * jyh@cs.cornell.edu
+ * @email{jyh@cs.cornell.edu}
  *
+ * @end[license]
  *)
 
+(*!
+ * @begin[doc]
+ * @parents
+ * @end[doc]
+ *)
 include Itt_void
 include Itt_equal
 include Itt_struct
 include Itt_subtype
+(*! @docoff *)
 
 open Printf
 open Mp_debug
@@ -68,6 +98,15 @@ let _ =
  * TERMS                                                                *
  ************************************************************************)
 
+(*!
+ * @begin[doc]
+ * @terms
+ *
+ * The @tt{union} type is the binary union of two types $A$ and $B$.
+ * The elements are @inl{'a} for $a @in A$ and @inr{b} for $b @in B$.
+ * The @tt{decide} term @emph{decides} the handedness of the term $x @in A + B$.
+ * @end[doc]
+ *)
 declare union{'A; 'B}
 declare inl{'x}
 declare inr{'x}
@@ -77,13 +116,21 @@ declare decide{'x; y. 'a['y]; z. 'b['z]}
  * REWRITES                                                             *
  ************************************************************************)
 
-(*
- * Reduction on decide.
- * decide(inl x; u. l[u]; v. r[v]) <--> l[x]
- * decide(inr x; u. l[u]; v. r[v]) <--> r[x]
+(*!
+ * @begin[doc]
+ * @rewrites
+ *
+ * The following two rules define the computational behavior of the
+ * @hrefterm[decide] term.  There are two reductions, the @tt{reduceDecideInl}
+ * rewrite describes reduction of @tt{decide} on the @hrefterm[inl] term,
+ * and @tt{reduceDecideInr} describes reduction on the @hrefterm[inr] term.
+ * The rewrites are added to the @hrefconv[reduceC] resource.
+ *
+ * @end[doc]
  *)
 prim_rw reduceDecideInl : decide{inl{'x}; u. 'l['u]; v. 'r['v]} <--> 'l['x]
 prim_rw reduceDecideInr : decide{inr{'x}; u. 'l['u]; v. 'r['v]} <--> 'r['x]
+(*! @docoff *)
 
 (************************************************************************
  * DISPLAY FORMS                                                        *
@@ -132,11 +179,14 @@ prim unionFormation 'H :
    sequent ['ext] { 'H >- univ[i:l] } =
    'A + 'B
 
-(*
- * H >- A1 + B1 = A2 + B2 in Ui
- * by unionEquality
- * H >- A1 = A2 in Ui
- * H >- B1 = B2 in Ui
+(*!
+ * @begin[doc]
+ * @rules
+ * @thysubsection{Typehood and equality}
+ *
+ * The equality of the @hrefterm[union] type is intensional; the
+ * union $A + B$ is a type if both $A$ and $B$ are types.
+ * @end[doc]
  *)
 prim unionEquality {| intro_resource []; eqcd_resource |} 'H :
    [wf] sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
@@ -153,11 +203,17 @@ prim unionType {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- "type"{. 'A + 'B } } =
    it
 
-(*
- * H >- A + B ext inl a
- * by inlFormation
- * H >- A
- * H >- B = B in Ui
+(*!
+ * @begin[doc]
+ * @thysubsection{Introduction}
+ *
+ * The union type $A + B$ is true if both $A$ and $B$ are types,
+ * and either 1) $A$ is provable, or 2) $B$ is provable.  The following
+ * two rules are added to the @hreftactic[dT] tactic.  The application
+ * uses the @hreftactic[selT] tactic to choose the handedness; the
+ * @tt{inlFormation} rule is applied with the tactic @tt{selT 1 (dT 0)}
+ * and the @tt{inrFormation} is applied with @tt{selT 2 (dT 0)}.
+ * @end[doc]
  *)
 prim inlFormation {| intro_resource [SelectOption 1] |} 'H :
    [main] ('a : sequent ['ext] { 'H >- 'A }) -->
@@ -177,11 +233,14 @@ prim inrFormation {| intro_resource [SelectOption 2] |} 'H :
    sequent ['ext] { 'H >- 'A + 'B } =
    inr{'b}
 
-(*
- * H >- inl a1 = inl a2 in A + B
- * by inlEquality
- * H >- a1 = a2 in A
- * H >- B = B in Ui
+(*!
+ * @begin[doc]
+ * @thysubsection{Membership}
+ *
+ * The following two rules define membership, $@inl{a} @in A + B$
+ * if $a @in A$ and $@inr{b} @in A + B$ if $b @in B$.  Both
+ * $A$ and $B$ must be types.
+ * @end[doc]
  *)
 prim inlEquality {| intro_resource []; eqcd_resource |} 'H :
    [wf] sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
@@ -201,10 +260,16 @@ prim inrEquality {| intro_resource []; eqcd_resource |} 'H :
    sequent ['ext] { 'H >- inr{'b1} = inr{'b2} in 'A + 'B } =
    it
 
-(*
- * H, x: A + B, J[x] >- T[x] ext decide(x; u. 'left['u]; v. 'right['v])
- * by unionElimination x u v
- * H, x: A # B, u:A, v:B[u], J[u, v] >- T[u, v] ext t[u, v]
+(*!
+ * @begin[doc]
+ * @thysubsection{Elimination}
+ *
+ * The handedness of the union membership is @emph{decidable}.  The
+ * elimination rule performs a case analysis in the assumption $x@colon A + B$;
+ * the first for the @tt{inl} case, and the second for the @tt{inr}.  The proof
+ * extract term is the @tt{decide} combinator (which performs a decision
+ * on element membership).
+ * @end[doc]
  *)
 prim unionElimination {| elim_resource [ThinOption thinT] |} 'H 'J 'x 'u 'v :
    [left] ('left['u] : sequent ['ext] { 'H; x: 'A + 'B; u: 'A; 'J[inl{'u}] >- 'T[inl{'u}] }) -->
@@ -212,12 +277,13 @@ prim unionElimination {| elim_resource [ThinOption thinT] |} 'H 'J 'x 'u 'v :
    sequent ['ext] { 'H; x: 'A + 'B; 'J['x] >- 'T['x] } =
    decide{'x; u. 'left['u]; v. 'right['v]}
 
-(*
- * H >- decide(e1; u1. l1[u1]; v1. r1[v1]) = decide(e2; u2. l2[u2]; v2. r2[v2]) in T[e1]
- * by unionEquality lambda(z. T[z]) (A + B) u v w
- * H >- e1 = e2 in A + B
- * H, u:A, w: e1 = inl u in A + B >- l1[u] = l2[u] in T[inl{u}]
- * H, v:A, w: e1 = inr v in A + B >- r1[v] = r2[v] in T[inr{v}]
+(*!
+ * @begin[doc]
+ * @thysubsection{Combinator equality}
+ *
+ * The @tt{decide} term equality is true if there is @emph{some} type
+ * $A + B$ for which all the subterms are equal.
+ * @end[doc]
  *)
 prim decideEquality {| intro_resource []; eqcd_resource |} 'H bind{z. 'T['z]} ('A + 'B) 'u 'v 'w :
    [wf] sequent [squash] { 'H >- 'e1 = 'e2 in 'A + 'B } -->
@@ -228,18 +294,20 @@ prim decideEquality {| intro_resource []; eqcd_resource |} 'H bind{z. 'T['z]} ('
                    'T['e1] } =
    it
 
-(*
- * H >- A1 + B1 <= A2 + B2
- * by unionSubtype
+(*!
+ * @begin[doc]
+ * @thysubsection{Subtyping}
  *
- * H >- A1 <= A2
- * H >- B1 <= B2
+ * The union type $A_1 + A_2$ is a subtype of type $A_2 + B_2$ if
+ * $A_1 @subseteq A_2$ and $B_1 @subseteq B_2$.
+ * @end[doc]
  *)
 prim unionSubtype {| intro_resource [] |} 'H :
    sequent [squash] { 'H >- subtype{'A1; 'A2} } -->
    sequent [squash] { 'H >- subtype{'B1; 'B2} } -->
    sequent ['ext] { 'H >- subtype{ ('A1 + 'B1); ('A2 + 'B2) } } =
    it
+(*! @docoff *)
 
 (*
  * Interactive.

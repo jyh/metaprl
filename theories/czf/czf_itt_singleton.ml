@@ -1,8 +1,16 @@
-(*
- * Singleton set.
+(*!
+ * @begin[doc]
+ * @theory[Czf_itt_singleton]
+ *
+ * The @tt{Czf_itt_singleton} module defines the singleton
+ * sets $@sing{s}$, which is a set that contains the single element
+ * $s$.  The singleton is used as a building block for pairing,
+ * defined in the @hreftheory[Czf_itt_pair] module.
+ * @end[doc]
  *
  * ----------------------------------------------------------------
  *
+ * @begin[license]
  * This file is part of MetaPRL, a modular, higher order
  * logical framework that provides a logical programming
  * environment for OCaml and other languages.
@@ -27,10 +35,13 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  * Author: Jason Hickey
- * jyh@cs.cornell.edu
+ * @email{jyh@cs.cornell.edu}
+ * @end[license]
  *)
 
+(*! @doc{@parents} *)
 include Czf_itt_member
+(*! @docoff *)
 
 open Printf
 open Mp_debug
@@ -48,13 +59,25 @@ let _ =
  * TERMS                                                                *
  ************************************************************************)
 
+(*! @doc{@terms} *)
 declare sing{'s}
 
 (************************************************************************
  * REWRITES                                                             *
  ************************************************************************)
 
+(*!
+ * @begin[doc]
+ * @rewrites
+ *
+ * The singleton set $@sing{s}$ is defined as a set
+ * with an index type $@unit$, and an element function
+ * that returns the set $s$.  Note that @emph{any}
+ * non-empty type can be used as the index type.
+ * @end[doc]
+ *)
 prim_rw unfold_sing : sing{'s} <--> collect{unit; x. 's}
+(*! @docoff *)
 
 (************************************************************************
  * DISPLAY                                                              *
@@ -67,19 +90,48 @@ dform sing_df : sing{'s} =
  * RULES                                                                *
  ************************************************************************)
 
-(*
- * Empty is a set.
+(*!
+ * @begin[doc]
+ * @rules
+ * @thysubsection{Well-formedness}
+ *
+ * The singleton $@sing{s}$ is well-formed if
+ * $s$ is a set.
+ * @end[doc]
  *)
 interactive sing_isset {| intro_resource [] |} 'H :
    sequent [squash] { 'H >- isset{'s} } -->
    sequent ['ext] { 'H >- isset{sing{'s}} }
 
-(*
- * Nothing is in the empty set.
+(*!
+ * @begin[doc]
+ * @thysubsection{Introduction and elimination}
+ *
+ * The @emph{only} element of the singleton set $@sing{s}$ is
+ * the set $s$.
+ * @end[doc]
  *)
 interactive sing_member_elim {| elim_resource [] |} 'H 'J :
-   sequent ['ext] { 'H; x: member{'y; sing{'s}}; 'J['x]; w: eq{'y; 's} >- 'T['x] } -->
-   sequent ['ext] { 'H; x: member{'y; sing{'s}}; 'J['x] >- 'T['x] }
+   sequent ['ext] { 'H; x: mem{'y; sing{'s}}; 'J['x]; w: eq{'y; 's} >- 'T['x] } -->
+   sequent ['ext] { 'H; x: mem{'y; sing{'s}}; 'J['x] >- 'T['x] }
+
+interactive sing_member_intro {| intro_resource [] |} 'H :
+   ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
+   ["wf"] sequent [squash] { 'H >- isset{'s2} } -->
+   sequent ['ext] { 'H >- eq{'s1; 's2} } -->
+   sequent ['ext] { 'H >- mem{'s1; sing{'s2}} }
+
+(*!
+ * @begin[doc]
+ * @thysubsection{Functionality}
+ *
+ * The singleton is functional in it's set argument.
+ * @end[doc]
+ *)
+interactive sing_fun {| intro_resource [] |} 'H :
+   sequent ['ext] { 'H >- fun_set{z. 's['z]} } -->
+   sequent ['ext] { 'H >- fun_set{z. sing{'s['z]}} }
+(*! @docoff *)
 
 (*
  * -*-

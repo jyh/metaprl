@@ -1,8 +1,33 @@
-(*
- * Dependent functions.
+(*!
+ * @spelling{rfun rfunctionFormation}
+ *
+ * @begin[doc]
+ * @theory[Itt_rfun]
+ *
+ * The @tt{Itt_rfun} module defines the @emph{very-dependent function
+ * type}.  This is the root type for the function types
+ * for the dependent-function @hreftheory[Itt_dfun] and
+ * the nondependent-function @hreftheory[Itt_fun].
+ *
+ * A complete description of the semantics of the type is given
+ * in Section @reftheory["issues-rfun"].  The type can be described
+ * informally as follows.
+ * The syntax of the type is $@rfun{f; x; A; B[f, x]}$.
+ * The term $f$ represents the functions $f$ that are members of
+ * the type, the term $A$ is the type of the @emph{domain}, and
+ * given any particular function $f$ in the type, and any argument
+ * $x @in A$, the type of the function @emph{value} is the type
+ * $B[f, x]$.  Roughly speaking, a function $g$ is in the
+ * type $@rfun{f; x; A; B[f, x]}$ if $g(x)$ has type $B[g, x]$ for
+ * any element $x @in A$.  In addition, the domain $A$ must be
+ * well-founded with a partial order on $A$, and the type $B[f, x]$
+ * must be well-formed if $f$ is restricted to arguments smaller
+ * the $x$.
+ * @end[doc]
  *
  * ----------------------------------------------------------------
  *
+ * @begin[license]
  * This file is part of MetaPRL, a modular, higher order
  * logical framework that provides a logical programming
  * environment for OCaml and other languages.
@@ -27,14 +52,20 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  * Author: Jason Hickey
- * jyhcs.cornell.edu
- *
+ * @email{jyh@cs.cornell.edu}
+ * @end[license]
  *)
 
+(*!
+ * @begin[doc]
+ * @parents
+ * @end[doc]
+ *)
 include Itt_equal
 include Itt_void
 include Itt_set
 include Itt_struct
+(*! @docoff *)
 
 open Printf
 open Mp_debug
@@ -71,6 +102,23 @@ let _ =
  * TERMS                                                                *
  ************************************************************************)
 
+(*!
+ * @begin[doc]
+ * @terms
+ *
+ * The @tt{rfun} type defines the very-dependent function $@rfun{f; x; A; B}$;
+ * the @tt{fun} type is used to define dependent functions $@fun{A; x. B[x]}$ and
+ * nondependent functions $@fun{A; B}$.
+ *
+ * The elements of the function types are
+ * the functions $@lambda{x; b[x]}$, and the induction combinator is the
+ * application $@apply{f; a}$.  The @tt{fix} term defines a @emph{fixpoint}.
+ *
+ * The @tt{well_founded} terms are used to define the well-founded order
+ * on the domain; the definition is given with the well-founded rules below.
+ * @end[doc]
+ *)
+
 (* declare "fun"{'A; 'B} *)
 declare "fun"{'A; x. 'B['x]}
 declare rfun{'A; f, x. 'B['f; 'x]}
@@ -83,6 +131,7 @@ declare well_founded_assum{'A; a1, a2. 'R['a1; 'a2]; 'P}
 declare well_founded_prop{'A}
 declare well_founded_apply{'P; 'a}
 declare fix{f. 'b['f]}
+(*! @docoff *)
 
 (*
  * Primitives.
@@ -156,7 +205,7 @@ dform lambda_df1 : parens :: "prec"[prec_lambda] :: lambda{x. 'b} =
    Nuprl_font!lambda slot{'x} `"." slot{'b}
 
 dform fix_df1 : except_mode[src] :: fix{f. 'b} =
-   `"fix" "(" slot{'f} `"." slot{'b} ")"
+   `"fix" `"(" slot{'f} `"." slot{'b} `")"
 
 dform well_founded_prop_df : except_mode[src] :: well_founded_prop{'A} =
    `"WellFounded " slot{'A} " " rightarrow `" Prop"
@@ -176,11 +225,20 @@ dform well_founded_df : except_mode[src] :: well_founded{'A; a, b. 'R} =
  * REWRITES                                                             *
  ************************************************************************)
 
-(*
- * apply(lambda(v. b[v]); a) -> b[a]
+(*!
+ * @begin[doc]
+ * @rewrites
+ *
+ * The @tt{reduce_beta} rewrite defines normal beta-reduction.
+ * The @tt{reduce_fix} rewrite defines reduction on the fixpoint
+ * combinator.  The @tt{reduce_fix} rewrite can be derived by defining
+ * the $Y$-combinator $Y @equiv @lambda f. @lambda x. (f@space (x@space x))@space (f@space (x@space x))$
+ * and defining $@fix{x; b[x]} @equiv Y@space (@lambda{x; b[x]})$.
+ * @end[doc]
  *)
 prim_rw reduce_beta : (lambda{v. 'b['v]} 'a) <--> 'b['a]
 prim_rw reduce_fix : fix{f. 'b['f]} <--> 'b[fix{f. 'b['f]}]
+(*! @docoff *)
 
 let reduce_info =
    [<< (lambda{v. 'b['v]} 'a) >>, reduce_beta;
@@ -192,8 +250,22 @@ let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_i
  * RULES                                                                *
  ************************************************************************)
 
-(*
- * Well-founded means that there is an induction principle.
+(*!
+ * @begin[doc]
+ * @thysubsection{Well-foundedness}
+ *
+ * The following three rules are used to define a well-founded order.
+ * The term @hrefterm[well_founded_prop] $@"well_founded_prop"{A}$ represents an arbitrary
+ * proposition (predicate) on $A$; the @hrefterm[well_founded_apply] $@"well_founded_apply"{P; a}$
+ * represents the application of the proposition $P$ to $a$.  The @hrefterm[well_founded_assum]
+ * term $@"well_founded_assum"{A; a_1, a_2. R[a_1, a_2]; P}$ asserts that predicate $P$ holds on
+ * all elements of $a$ by induction on the relation $R[a_1, a_2]$.
+ *
+ * The reason this definition is so convoluted is that the definition of
+ * well-foundedness must be give @emph{before} defining functions and application.
+ * The @hreftheory[Itt_well_founded] module provides simplified definitions
+ * of well-foundedness.
+ * @end[doc]
  *)
 prim well_founded_assum_elim {| elim_resource [ThinOption thinT] |} 'H 'J 'a 'a3 'u :
    [main] sequent [squash] { 'H; p: well_founded_assum{'A; a1, a2. 'R['a1; 'a2]; 'P}; 'J['p] >- 'a IN 'A } -->
@@ -219,24 +291,23 @@ prim well_founded_apply_type {| intro_resource [] |} 'H 'A :
    sequent ['ext] { 'H >- well_founded_apply{'P; 'a} IN univ[i:l] } =
    it
 
-(*
- * H >- Ui ext { f | a:A -> B }
- * by rfunctionFormation { f | a: A -> B }
- *
- * H >- { f | a: A -> B } = { f | a: A -> B } in Ui
+(*!
+ * @docoff
  *)
 prim rfunctionFormation 'H { f | a: 'A -> 'B['f; 'a] } :
    [wf] sequent [squash] { 'H >- { f | a: 'A -> 'B['f; 'a] } = { f | a: 'A -> 'B['f; 'a] } in univ[i:l] } -->
    sequent ['ext] { 'H >- univ[i:l] } =
    { f | a: 'A -> 'B['f; 'a] }
 
-(*
- * H >- { f1 | a1:A1 -> B1[f1, a1] } = { f2 | a2:A2 -> B2[f2, a2] } in Ui
- * by rfunctionEquality R[a, b] g y z
+(*!
+ * @begin[doc]
+ * @thysubsection{Typehood and equality}
  *
- * H >- A1 = A2 in Ui
- * H >- well_founded(A1; a, b. R[a, b])
- * H, y:A, g : { f1 | x1: { z: A1 | R z y } -> B1[f1, x1] } >- B1[g, y] = B2[g, y] in Ui
+ * The well-formedness of the very-dependent function
+ * requires that the domain type $A$ be a type, the the domain
+ * be well-founded with some relation $R$, and that $B[f, x]$ be
+ * a type for any restricted function $@rfun{f; y; @set{A; x. R[z, y]}; B[f, y]}$.
+ * @end[doc]
  *)
 prim rfunctionEquality  {| intro_resource []; eqcd_resource |} 'H lambda{a. lambda{b. 'R['a; 'b]}} 'g 'y 'z :
    [wf] sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
@@ -263,13 +334,20 @@ prim rfunctionType  {| intro_resource [] |} 'H lambda{a. lambda{b. 'R['a; 'b]}} 
    sequent ['ext] { 'H >- "type"{. { f | a:'A -> 'B['f; 'a] } } } =
    it
 
-(*
- * H >- { f | a:A -> B[a] } ext lambda(y. fix(g. b[g, y]))
- * by rfunctionLambdaFormation R[a, b] g y z
+(*!
+ * @begin[doc]
+ * @thysubsection{Introduction}
  *
- * H >- A = A in Ui
- * H >- well_founded(A; a, b. R[a, b])
- * H, y: A, g: { f | { z: A | R z y } -> B[f, x] } >- B[g, y] ext b[g, y]
+ * Viewed as a proposition, the very-dependent function type
+ * represents a @emph{recursive} proposition.  The function type
+ * $@rfun{f; x; A; B[f, x]}$ must be well-formed with well-founded
+ * order $R$ on $A$, and $B[f, x]$ must be true for each $B[g, y]$
+ * for $y @in A$ and $g$ a function in the restricted function space
+ * $@rfun{f; x; @set{A; z; R[z, y]}; B[f, x]}$ (the induction
+ * hypothesis).  The proof extract term contains a fixpoint, due to
+ * the induction.  The fixpoint is guaranteed to terminate
+ * because the domain is well-founded.
+ * @end[doc]
  *)
 prim rfunction_lambdaFormation {| intro_resource [] |} 'H lambda{a. lambda{b. 'R['a; 'b]}} 'g 'y 'z :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
@@ -278,12 +356,15 @@ prim rfunction_lambdaFormation {| intro_resource [] |} 'H lambda{a. lambda{b. 'R
    sequent ['ext] { 'H >- { f | x:'A -> 'B['f; 'x] } } =
    lambda{y. fix{g. 'b['g; 'y]}}
 
-(*
- * H >- lambda(x1. b1[x1]) = lambda(x2. b2[x2]) in {f | x:A -> B[f, x] }
- * by rfunction_lambdaEquality y
+(*!
+ * @begin[doc]
+ * @thysubsection{Membership}
  *
- * H >- { f | x:A -> B[f, x] } = { f | x:A -> B[f, x] } in type
- * H, y: A >- b1[y] = b2[y] in B[lambda(x1. b1[x1]); y]
+ * The members of the function space are the @hrefterm[lambda] terms.
+ * The function space must be well-formed, and the body of the function
+ * must inhabit the range type $B$ where the @tt{lambda} function is
+ * substituted for the function argument.
+ * @end[doc]
  *)
 prim rfunction_lambdaEquality {| intro_resource []; eqcd_resource |} 'H 'y :
    [wf] sequent [squash] { 'H >- "type"{{ f | x: 'A -> 'B['f; 'x] }} } -->
@@ -291,14 +372,19 @@ prim rfunction_lambdaEquality {| intro_resource []; eqcd_resource |} 'H 'y :
    sequent ['ext] { 'H >- lambda{x1. 'b1['x1]} = lambda{x2. 'b2['x2]} in { f | x: 'A -> 'B['f; 'x] } } =
    it
 
-(*
- * H >- f1 = f2 in { g | x:A -> B[g, x] }
- * by rfunctionExtensionality { g1 | x1:A1 -> B1[g1, x1] } { g2 | x2:A2 -> B2[g2, x2] } y
+(*!
+ * @begin[doc]
+ * @thysubsection{Extensional equality}
  *
- * H >- { g | x:A -> B[g, x] } = { g | x:A -> B[g, x] } in type
- * H, y: A >- f1 y = f2 y in B[f1, x]
- * H >- f1 = f1 in { g1 | x1:A1 -> B1[g1, x1] }
- * H >- f2 = f2 in { g2 | x2:A2 -> B2[g2, x2] }
+ * The function space is one of the few types in the @Nuprl type
+ * theory with an @emph{extensional} equality.  Normally, equality is
+ * intensional --- it depends on the syntactic structure of the the
+ * terms in the type.  The function space allows equality of functions
+ * $f_1$ and $f_2$ if their @emph{application} provides equal values on
+ * equal arguments.  The functions and the function type must all be
+ * well-formed (and in fact, this implicitly requires that $f_1$ and
+ * $f_2$ both be @tt{lambda} terms).
+ * @end[doc]
  *)
 prim rfunctionExtensionality 'H
         ({ g1 | x1:'A1 -> 'B1['g1; 'x1] })
@@ -311,12 +397,14 @@ prim rfunctionExtensionality 'H
    sequent ['ext] { 'H >- 'f1 = 'f2 in { g | x:'A -> 'B['g; 'x] } } =
    it
 
-(*
- * H, f: { g | x:A -> B[g, x] }, J[f] >- T[f] ext t[f, f a, it]
- * by rfunctionElimination a y v
+(*!
+ * @begin[doc]
+ * @thysubsection{Elimination}
  *
- * H, f: { g | x:A -> B[g, x] }, J[f] >- a = a in A
- * H, f: { g | x:A -> B[g, x] }, J[f], y: B[f, a], v: y = f a in B[f, a] >- T[f] ext t[f, y, v]
+ * The elimination form for a function type $f@colon @rfun{g; x; A; B[g, x]}$
+ * allows @emph{instantiation} of the function on an argument $a$, to
+ * get a proof $B[f, a]$.
+ * @end[doc]
  *)
 prim rfunctionElimination {| elim_resource [] |} 'H 'J 'f 'a 'y 'v :
    [wf] sequent [squash] { 'H; f: { g | x:'A -> 'B['g; 'x] }; 'J['f] >- 'a IN 'A } -->
@@ -329,24 +417,32 @@ prim rfunctionElimination {| elim_resource [] |} 'H 'J 'f 'a 'y 'v :
    sequent ['ext] { 'H; f: { g | x:'A -> 'B['g; 'x] }; 'J['f] >- 'T['f] } =
    't['f; 'f 'a; it]
 
-(*
- * H >- f1 a1 = f2 a2 in B[f1, a1]
- * by rfunction_applyEquality { f | x:A -> B[f, x] }
+(*!
+ * @begin[doc]
+ * @thysubsection{Combinator equality}
  *
- * H >- f1 = f2 in { f | x:A -> B[f, x] }
- * H >- a1 = a2 in A
+ * Two @emph{applications} are equal if their functions are equal,
+ * and their arguments are equal.
+ * @end[doc]
  *)
 prim rfunction_applyEquality {| eqcd_resource |} 'H ({ f | x:'A -> 'B['f; 'x] }) :
    [wf] sequent [squash] { 'H >- 'f1 = 'f2 in { f | x:'A -> 'B['f; 'x] } } -->
    [wf] sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
    sequent ['ext] { 'H >- 'f1 'a1 = 'f2 'a2 in 'B['f1; 'a1] } =
    it
+(*! @docoff *)
 
 let rfunction_applyEquality' t p =
    rfunction_applyEquality (Sequent.hyp_count_addr p) t p
 
-(*
- * Subtyping.
+(*!
+ * @begin[doc]
+ * @thysubsection{Subtyping}
+ *
+ * Function subtyping is @emph{contravariant} in the domain and
+ * @emph{covariant} in the range.  The range subtyping is given using
+ * an arbitrary instance $f$ in the function space.
+ * @end[doc]
  *)
 interactive rfunction_rfunction_subtype {| intro_resource [] |} 'H 'a 'f lambda{a. lambda{b. 'R['a; 'b]}} :
    [main] sequent [squash] { 'H >- subtype{'A2; 'A1} } -->
@@ -357,6 +453,7 @@ interactive rfunction_rfunction_subtype {| intro_resource [] |} 'H 'a 'f lambda{
                           subtype{'B1['f; 'a]; 'B2['f; 'a]}
                     } -->
    sequent ['ext] { 'H >- subtype{.{ f1 | x1: 'A1 -> 'B1['f1; 'x1] }; .{ f2 | x2: 'A2 -> 'B2['f2; 'x2] } } }
+(*! @docoff *)
 
 (************************************************************************
  * D TACTIC                                                             *

@@ -1,8 +1,32 @@
-(*
- * Empty set.
+(*!
+ * @spelling{sep}
+ *
+ * @begin[doc]
+ * @theory[Czf_itt_sep]
+ *
+ * The @tt{Czf_itt_sep} module defines @emph{restricted separation}.
+ * Separation is defined as a set constructor $@sep{x; s; P[x]}$.
+ * The term $s$ must be a set, and $P[x]$ must be a functional,
+ * restricted proposition.  The elements of the separation are the
+ * elements of $x @in s$ for which $P[x]$ is true.
+ *
+ * The separation constructor is a set if $s$ is a set, and
+ * if $P[x]$ is @emph{restricted}.  Our formalization of
+ * restriction differs slightly from Aczel's account, although
+ * both are equivalent.  In Aczel's definition, a proposition
+ * $P[x]$ is restricted if it contains no @emph{unbounded}
+ * quantifiers $@forall s@ldots$ and $@exists s@ldots$.  In
+ * our construction, a predicate $P$ is restricted if it
+ * is a well-formed proposition in $@univ_1$.
+ *
+ * The separation constructor $@sep{z; @collect{x; T; f[x]}; P[z]}$
+ * is defined with the product type as the set
+ * $@collect{z; (@prod{x; A; P[x]}); f(@fst{z})}$.
+ * @end[doc]
  *
  * ----------------------------------------------------------------
  *
+ * @begin[license]
  * This file is part of MetaPRL, a modular, higher order
  * logical framework that provides a logical programming
  * environment for OCaml and other languages.
@@ -27,10 +51,17 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  * Author: Jason Hickey
- * jyh@cs.cornell.edu
+ * @email{jyh@cs.cornell.edu}
+ * @end[license]
  *)
 
+(*!
+ * @begin[doc]
+ * @parents
+ * @end[doc]
+ *)
 include Czf_itt_member
+(*! @docoff *)
 
 open Printf
 open Mp_debug
@@ -53,6 +84,11 @@ let _ =
  * TERMS                                                                *
  ************************************************************************)
 
+(*!
+ * @begin[doc]
+ * @terms
+ * @end[doc]
+ *)
 declare sep{'s; x. 'P['x]}
 declare restricted{'P}
 
@@ -60,108 +96,147 @@ declare restricted{'P}
  * REWRITES                                                             *
  ************************************************************************)
 
+(*!
+ * @begin[doc]
+ * @rewrites
+ *
+ * The @tt{sep} term is defined by set induction.
+ * @end[doc]
+ *)
 prim_rw unfold_sep : sep{'s; x. 'P['x]} <-->
    set_ind{'s; T, f, g. collect{."prod"{'T; t. 'P['f 't]}; z. 'f fst{'z}}}
 
 interactive_rw reduce_sep : sep{collect{'T; x. 'f['x]}; z. 'P['z]} <-->
    collect{. "prod"{'T; t. 'P['f['t]]}; w. 'f[fst{'w}]}
+(*! @docoff *)
 
 let reduce_info =
    [<< sep{collect{'T; x. 'f['x]}; z. 'P['z]} >>, reduce_sep]
 
 let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_info
 
-(*
- * A restricted formula has the separation property.
+(*!
+ * @begin[doc]
+ * The $@restricted{P}$ predicate means that the proposition is
+ * well-formed in $@univ_1$.
+ * @end[doc]
  *)
-prim_rw unfold_restricted1 : restricted{'P} <-->
-   (exst P2: univ[1:l]. iff{'P2; 'P})
+prim_rw unfold_restricted : restricted{'P} <-->
+   Itt_equal!equal{univ[1:l]; 'P; 'P}
 
-prim_rw unfold_restricted : restricted{z. 'P['z]} <-->
-   (exst P2: (set -> univ[1:l]). (fun_prop{z. 'P2 'z} & (all z: set. "iff"{. 'P2 'z; 'P['z]})))
-
-prim_rw unfold_restricted3 : restricted{'A; x. 'B['x]} <-->
-   (exst P2: ('A -> univ[1:l]).
-      ((dfun_prop{'A; x. 'B['x]})
-      & (all x: 'A. "iff"{.'P2 'x; 'B['x]})))
+(*! @docoff *)
+let fold_restricted = makeFoldC << restricted{'P} >> unfold_restricted
 
 (************************************************************************
  * DISPLAY                                                              *
  ************************************************************************)
 
-dform sep_df : mode[prl] :: sep{'s; x. 'P} =
-   szone pushm[3] `"{ " slot{'x} " " Nuprl_font!member " " slot{'s} `" |"
+dform sep_df : except_mode[src] :: sep{'s; x. 'P} =
+   szone pushm[3] `"{ " slot{'x} " " Nuprl_font!member `"s " slot{'s} `" |"
    hspace slot{'P} " " `"}" popm ezone
 
-dform restricted_df : mode[prl] :: parens :: "prec"[prec_quant] :: restricted{'P} =
-   slot{'P} `" res"
+dform restricted_df : except_mode[src] :: parens :: "prec"[prec_quant] :: restricted{'P} =
+   `"<" slot{'P} `">"
 
-dform restricted_df : mode[prl] :: parens :: "prec"[prec_quant] :: restricted{z. 'P} =
-   Nuprl_font!forall slot{'z} `"." slot{'P} `" res"
-
-dform restricted_df : mode[prl] :: parens :: "prec"[prec_quant] :: restricted{'A; x. 'P} =
-   Nuprl_font!forall slot{'x} `":" slot{'A} `"." slot{'P} `" res"
+dform restricted_df : except_mode[src] :: parens :: "prec"[prec_quant] :: restricted{z. 'P} =
+   Nuprl_font!forall slot{'z} `"." restricted{'P}
 
 (************************************************************************
  * RULES                                                                *
  ************************************************************************)
 
 (*
- * Membership and equality are restricted predicates.
+ * Squash the restricted judgment.
  *)
-interactive intro_restricted {| intro_resource [] |} 'H :
-   ["wf"] sequent ['ext] { 'H; x: set >- "type"{'P['x]} } -->
-   ["wf"] sequent ['ext] { 'H >- fun_prop{x. 'P['x]} } -->
-   ["main"] sequent ['ext] { 'H; x: set >- restricted{'P['x]} } -->
-   sequent ['ext] { 'H >- restricted{x. 'P['x]} }
+interactive squash_restricted 'H :
+   sequent [squash] { 'H >- restricted{'P} } -->
+   sequent ['ext] { 'H >- restricted{'P} }
 
+let squash_restrictedT p =
+   squash_restricted (hyp_count_addr p) p
+
+(*!
+ * @begin[doc]
+ * @thysubsection{Equality and membership are restricted judgments}
+ *
+ * The next two rules show that equality and membership
+ * are restricted for any @hrefterm[set] arguments.
+ * @end[doc]
+ *)
 interactive eq_restricted {| intro_resource [] |} 'H :
-   sequent [squash] { 'H >- isset{'s1} } -->
-   sequent [squash] { 'H >- isset{'s2} } -->
+   ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
+   ["wf"] sequent [squash] { 'H >- isset{'s2} } -->
    sequent ['ext] { 'H >- restricted{eq{'s1; 's2}} }
 
 interactive member_restricted {| intro_resource [] |} 'H :
-   sequent [squash] { 'H >- isset{'s1} } -->
-   sequent [squash] { 'H >- isset{'s2} } -->
-   sequent ['ext] { 'H >- restricted{member{'s1; 's2}} }
+   ["wf"] sequent [squash] { 'H >- isset{'s1} } -->
+   ["wf"] sequent [squash] { 'H >- isset{'s2} } -->
+   sequent ['ext] { 'H >- restricted{mem{'s1; 's2}} }
 
-(*
- * Validity of separation.
+(*!
+ * @begin[doc]
+ * @thysubsection{Well-formedness}
+ *
+ * The separation $@sep{x; s; P[x]}$ is well-formed
+ * if $s$ is a set, and $P[x]$ is restricted and functional
+ * on any set argument $x$.
+ * @end[doc]
  *)
 interactive sep_isset {| intro_resource [] |} 'H 'z :
-   sequent ['ext] { 'H >- isset{'s} } -->
-   sequent [squash] { 'H; z: set >- 'P['z] = 'P['z] in univ[1:l] } -->
+   ["wf"] sequent [squash] { 'H >- isset{'s} } -->
+   ["wf"] sequent ['ext] { 'H >- fun_prop{z. 'P['z]} } -->
+   ["wf"] sequent [squash] { 'H; z: set >- restricted{'P['z]} } -->
    sequent ['ext] { 'H >- isset{.sep{'s; x. 'P['x]}} }
 
-(*
- * Intro form.
+(*!
+ * @begin[doc]
+ * @thysubsection{Introduction}
+ *
+ * A set $x$ is a member of $@sep{z; s; P[z]}$ if
+ * the separation is well-formed; if $@member{x; s}$;
+ * and $P[x]$.
+ * @end[doc]
  *)
 interactive sep_intro2 {| intro_resource [] |} 'H :
-   ["wf"]   sequent [squash] { 'H; w: set >- 'P['w] = 'P['w] in univ[1:l] } -->
+   ["wf"]   sequent [squash] { 'H; w: set >- restricted{'P['w]} } -->
    ["wf"]   sequent ['ext] { 'H >- fun_prop{z. 'P['z]} } -->
    ["main"] sequent ['ext] { 'H >- member{'x; 's} } -->
    ["main"] sequent ['ext] { 'H >- 'P['x] } -->
-   sequent ['ext] { 'H >- member{'x; sep{'s; z. 'P['z]}} }
+   sequent ['ext] { 'H >- mem{'x; sep{'s; z. 'P['z]}} }
 
-(*
- * Elim exposes the computational content.
+(*!
+ * @begin[doc]
+ * @thysubsection{Elimination}
+ *
+ * An assumption $@mem{x; @sep{y; s; P[y]}}$ implies two facts:
+ * $@mem{x; s}$ and $P[x]$.  The computational content of the
+ * predicate $P[x]$ is visible (unlike the separation ``set''
+ * constructor in the @Nuprl type theory module @hreftheory[Itt_set]).
+ * @end[doc]
  *)
 interactive sep_elim {| elim_resource [] |} 'H 'J 'u 'v 'z :
-   ["wf"]   sequent ['ext] { 'H; w: member{'x; sep{'s; y. 'P['y]}}; 'J['w] >- isset{'s} } -->
-   ["wf"]   sequent [squash] { 'H; w: member{'x; sep{'s; y. 'P['y]}}; 'J['w]; z: set >- 'P['z] = 'P['z] in univ[1:l] } -->
-   ["wf"]   sequent ['ext] { 'H; w: member{'x; sep{'s; y. 'P['y]}}; 'J['w] >- fun_prop{z. 'P['z]} } -->
-   ["main"] sequent ['ext] { 'H; w: member{'x; sep{'s; y. 'P['y]}}; 'J['w]; u: member{'x; 's}; v: 'P['x] >- 'T['w] } -->
-   sequent ['ext] { 'H; w: member{'x; sep{'s; y. 'P['y]}}; 'J['w] >- 'T['w] }
+   ["wf"]   sequent [squash] { 'H; w: mem{'x; sep{'s; y. 'P['y]}}; 'J['w] >- isset{'x} } -->
+   ["wf"]   sequent [squash] { 'H; w: mem{'x; sep{'s; y. 'P['y]}}; 'J['w] >- isset{'s} } -->
+   ["wf"]   sequent [squash] { 'H; w: mem{'x; sep{'s; y. 'P['y]}}; 'J['w]; z: set >- restricted{'P['z]} } -->
+   ["wf"]   sequent ['ext] { 'H; w: mem{'x; sep{'s; y. 'P['y]}}; 'J['w] >- fun_prop{z. 'P['z]} } -->
+   ["main"] sequent ['ext] { 'H; w: mem{'x; sep{'s; y. 'P['y]}}; 'J['w]; u: mem{'x; 's}; v: 'P['x] >- 'T['w] } -->
+   sequent ['ext] { 'H; w: mem{'x; sep{'s; y. 'P['y]}}; 'J['w] >- 'T['w] }
 
-(*
- * Functionality properties.
+(*!
+ * @begin[doc]
+ * @thysubsection{Functionality}
+ *
+ * The separation constructor is functional in both the
+ * set argument and the proposition.
+ * @end[doc]
  *)
 interactive sep_fun {| intro_resource [] |} 'H 'u 'v :
-   sequent ['ext] { 'H; u: set; v: set >- 'P['u; 'v] = 'P['u; 'v] in univ[1:l] } -->
+   sequent [squash] { 'H; u: set; v: set >- restricted{'P['u; 'v]} } -->
    sequent ['ext] { 'H; u: set >- fun_prop{z. 'P['z; 'u]} } -->
    sequent ['ext] { 'H; u: set >- fun_prop{z. 'P['u; 'z]} } -->
    sequent ['ext] { 'H >- fun_set{z. 's['z]} } -->
    sequent ['ext] { 'H >- fun_set{z. sep{'s['z]; x. 'P['x; 'z]}} }
+(*! @docoff *)
 
 (*
  * -*-

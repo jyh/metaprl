@@ -1,8 +1,22 @@
-(*
- * decideT tactic and decide_resource to reason about decidable predicates.
+(*!
+ * @spelling{decideT}
+ *
+ * @begin[doc]
+ * @theory[Itt_decidable]
+ *
+ * It is occasionally useful to assert the @emph{decidability}
+ * of a proposition $P$.  The proposition is decidable if
+ * $P @vee @not{P}$.  Decidable propositions allow reasoning
+ * by case analysis.
+ *
+ * The @tt{Itt_decidable} module defines a generic resource,
+ * and a tactic @hreftactic[decideT] to help prove the decidability
+ * of propositions.
+ * @end[doc]
  *
  * ----------------------------------------------------------------
  *
+ * @begin[license]
  * This file is part of MetaPRL, a modular, higher order
  * logical framework that provides a logical programming
  * environment for OCaml and other languages.
@@ -27,10 +41,17 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  * Author: Aleksey Nogin
- * nogin@cs.cornell.edu
+ * @email{nogin@cs.cornell.edu}
+ * @end[license]
  *)
 
+(*!
+ * @begin[doc]
+ * @parents
+ * @end[doc]
+ *)
 include Itt_logic
+(*! @docoff *)
 
 open Printf
 open Mp_debug
@@ -55,12 +76,28 @@ let _ =
  * decidable                                                            *
  ************************************************************************)
 
+(*!
+ * @begin[doc]
+ * @terms
+ *
+ * The definition of $@decidable{P}$ if $@or{P; @not{P}}$.
+ * @end[doc]
+ *)
 define unfold_decidable : decidable{'p} <--> ( 'p or not {'p} )
+(*! @docoff *)
 
 dform decidable_df : except_mode[src] :: decidable{'p} = `"Decidable(" 'p `")"
 
 interactive_rw fold_decidable : ( 'p or not {'p} ) <--> decidable{'p}
 
+(*!
+ * @begin[doc]
+ * @rules
+ *
+ * The @tt{assert_decidable} rule allows case analysis
+ * over a decidable proposition $p$.
+ * @end[doc]
+ *)
 interactive assert_decidable 'H 'p :
    [decidable] sequent ['ext]  { 'H >- decidable {'p} } -->
    sequent ['ext] { 'H; x: 'p >- 'G } -->
@@ -84,7 +121,18 @@ let dest_decidable_term term =
 
 type decide_data = (tactic, tactic) term_table
 
+(*!
+ * @begin[doc]
+ * @resources
+ *
+ * The @tt{decide_resource} provides a resource for reasoning about
+ * decidability of propositions.  The argument @code{term * tactic}
+ * provides a term that matches the goal to be proved, and a tactic
+ * to prove goals of that form.
+ * @end[doc]
+ *)
 resource (term * tactic, tactic, decide_data, Tactic.pre_tactic ) decide_resource
+(*! @docoff *)
 
 let identity x = x
 
@@ -161,6 +209,24 @@ let decidable_or_autoT = repeatT step_decidable_or_autoT
 
 let prove_decidableT = step_decidableT thenT decidable_or_autoT
 
+(*!
+ * @begin[doc]
+ * @tactics
+ *
+ * The @tactic[decideT] tactic applies the @hrefrule[assert_decidable]
+ * on a specific proposition $P$.
+ *
+ * $$
+ * @rulebox{decideT; P;
+ *   @sequent{squash; H; @decidable{P}}@cr
+ *     @sequent{ext; {H; x@colon P}; C}@cr
+ *     @sequent{ext; {H; x@colon @not{P}}; C};
+ *   @sequent{ext; H; C}}
+ * $$
+ *
+ * @docoff
+ * @end[doc]
+ *)
 let decideT t p =
    let tac =
       assert_decidable (Sequent.hyp_count_addr p) t
@@ -168,16 +234,16 @@ let decideT t p =
    in
       tac p
 
-(************************************************************************
- * decidability and logic                                               *
- ************************************************************************)
-
+(*!
+ * @begin[doc]
+ * @thysubsection{Basic decidability}
+ *
+ * The propositions $@true$ and $@false$ are always decidable.
+ * @end[doc]
+ *)
 interactive dec_false {| decide_resource |} 'H :
    sequent ['ext] { 'H >- decidable{."false"} }
 
 interactive dec_true {| decide_resource |} 'H :
    sequent ['ext] { 'H >- decidable{."true"} }
-
-
-
-
+(*! @docoff *)

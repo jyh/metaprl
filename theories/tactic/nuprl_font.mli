@@ -54,6 +54,7 @@ declare keyword_end
 declare bf[name:s]
 declare bf_begin
 declare bf_end
+declare i[name:s]
 declare it[name:s]
 declare it_begin
 declare it_end
@@ -63,6 +64,7 @@ declare sym_end
 declare em[name:s]
 declare em_begin
 declare em_end
+declare emph{'t}
 declare tt[name:s]
 declare tt_begin
 declare tt_end

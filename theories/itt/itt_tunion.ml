@@ -1,8 +1,29 @@
-(*
- * A normal set-style union of types.
+(*!
+ * @spelling{tunion}
+ *
+ * @begin[doc]
+ * @theory[Itt_tunion]
+ *
+ * The @tt{Itt_tunion} module defines a (joint) union type
+ * $@tunion{x; A; B[x]}$.  The elements of the union are the
+ * elements of any of the types $B[x]$ for any $x @in A$.
+ *
+ * The membership equality is the @emph{union} of the equalities
+ * in each of the cases $B[x]$.  That is, two elements are equal
+ * in the union if they are equal in @emph{any} of the cases.  This
+ * may be surprising.  For example, the type
+ * $$@tunion{T; @univ_i; T @rightarrow T}$$
+ * may seem to contain all of the polymorphic functions
+ * with type $T @rightarrow T$, for any $T @in @univ_i$.
+ * It does--but the union also contains the type case
+ * $@fun{@void; @void}$, in which all functions are equal.
+ * As a consequence, the union space also has the trivial
+ * equality, and thus it has no useful elimination form.
+ * @end[doc]
  *
  * ----------------------------------------------------------------
  *
+ * @begin[license]
  * This file is part of MetaPRL, a modular, higher order
  * logical framework that provides a logical programming
  * environment for OCaml and other languages.
@@ -27,12 +48,19 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  * Author: Jason Hickey
- * jyh@cs.cornell.edu
+ * @email{jyh@cs.cornell.edu}
+ * @end[license]
  *)
 
+(*!
+ * @begin[doc]
+ * @parents
+ * @end[doc]
+ *)
 include Itt_struct
 include Itt_equal
 include Itt_set
+(*! @docoff *)
 
 open Refiner.Refiner.TermType
 open Refiner.Refiner.Term
@@ -51,7 +79,15 @@ open Itt_equal
  * SYNTAX                                                               *
  ************************************************************************)
 
+(*!
+ * @begin[doc]
+ * @terms
+ *
+ * The @tt{tunion} term defines the union type.
+ * @end[doc]
+ *)
 declare tunion{'A; x. 'B['x]}
+(*! @docoff *)
 
 (************************************************************************
  * DISPLAY                                                              *
@@ -75,8 +111,14 @@ prim tunionFormation 'H 'x 'A :
    sequent ['ext] { 'H >- univ[i:l] } =
    tunion{'A; x. 'B['x]}
 
-(*
- * Typehood.
+(*!
+ * @begin[doc]
+ * @rules
+ * @thysubsection{Typehood and equality}
+ *
+ * The union type $@tunion{x; A; B[x]}$ is well-formed if $A$ is
+ * a type, and $B[a]$ is a type for any $a @in A$.
+ * @end[doc]
  *)
 prim tunionEquality {| intro_resource []; eqcd_resource |} 'H 'x :
    [wf] sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
@@ -90,8 +132,15 @@ prim tunionType {| intro_resource [] |} 'H 'y :
    sequent ['ext] { 'H >- "type"{tunion{'A; x. 'B['x]}} } =
    it
 
-(*
- * Membership.
+(*!
+ * @begin[doc]
+ * @thysubsection{Membership}
+ *
+ * The elements $t$ of the union type are the elements in
+ * any one of the branches $t @in B[a]$ for any $a @in A$.
+ * Two elements are equal if they are equal in @emph{any}
+ * of the branches $B[a]$.
+ * @end[doc]
  *)
 prim tunionMemberEquality {| intro_resource []; eqcd_resource |} 'H 'a 'y :
    [wf] sequent [squash] { 'H >- 'a = 'a in 'A } -->
@@ -100,6 +149,16 @@ prim tunionMemberEquality {| intro_resource []; eqcd_resource |} 'H 'a 'y :
    sequent ['ext] { 'H >- 'x1 = 'x2 in tunion{'A; x. 'B['x]} } =
    it
 
+(*!
+ * @begin[doc]
+ * @thysubsection{Introduction}
+ *
+ * The propositional interpretation of the union type
+ * is similar to the existential $@exists{x; A; B[x]}$.
+ * The union is inhabited if-and-only-if the existential
+ * is also inhabited.
+ * @end[doc]
+ *)
 prim tunionMemberFormation {| intro_resource [] |} 'H 'y 'a :
    [wf] sequent [squash] { 'H >- 'a = 'a in 'A } -->
    [wf] sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
@@ -107,13 +166,21 @@ prim tunionMemberFormation {| intro_resource [] |} 'H 'y 'a :
    sequent ['ext] { 'H >- tunion{'A; x. 'B['x]} } =
    't
 
-(*
- * Elimination.
+(*!
+ * @begin[doc]
+ * @thysubsection{Elimination}
+ *
+ * The elimination form is weak.  The desired rule would be that if,
+ * If $x@colon @tunion{y; A; B[y]}$, then $x @in B[a]$ for some
+ * $a @in A$.  This rule is allowed, but only for equality goals,
+ * where the computational content of the proof can be omitted.
+ * @end[doc]
  *)
 prim tunionElimination {| elim_resource [ThinOption thinT] |} 'H 'J 'x 'w 'z :
    sequent [squash] { 'H; x: tunion{'A; y. 'B['y]}; 'J['x]; w: 'A; z: 'B['w] >- 't1['z] = 't2['z] in 'C['z] } -->
    sequent ['ext] { 'H; x: tunion{'A; y. 'B['y]}; 'J['x] >- 't1['x] = 't2['x] in 'C['x] } =
    it
+(*! @docoff *)
 
 (************************************************************************
  * TACTICS                                                              *

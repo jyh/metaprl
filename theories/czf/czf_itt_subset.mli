@@ -23,11 +23,11 @@
  * jyh@cs.caltech.edu
  *)
 
-include Czf_itt_pre_theory
+include Czf_itt_dall
 
 declare subset{'s1; 's2}
 
-rewrite unfold_subset : subset{'s1; 's2} <--> dall{'s1; x. member{'x; 's2}}
+rewrite unfold_subset : subset{'s1; 's2} <--> dall{'s1; x. mem{'x; 's2}}
 
 prec prec_subset
 

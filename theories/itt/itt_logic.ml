@@ -1,8 +1,24 @@
-(*
- * Regular logic connectives.
+(*!
+ * @begin[spelling]
+ * bi SelectOption assumT backThruAssumT backThruHypT dT genAssumT
+ * genUnivCDT instHypT moveToConclT moveToConclVarsT
+ * ponens selT univCDT
+ * @end[spelling]
+ *
+ * @begin[doc]
+ * @theory[Itt_logic]
+ *
+ * The @tt{Itt_logic} module defines the propositional
+ * interpretations of the basic types.  This is a @emph{derived}
+ * module.  All the propositional connectives are coded in
+ * terms of the existing types.
+ *
+ * This module also defines several tactics.
+ * @end[doc]
  *
  * ----------------------------------------------------------------
  *
+ * @begin[license]
  * This file is part of MetaPRL, a modular, higher order
  * logical framework that provides a logical programming
  * environment for OCaml and other languages.
@@ -27,10 +43,15 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  * Author: Jason Hickey
- * jyh@cs.cornell.edu
- *
+ * @email{jyh@cs.cornell.edu}
+ * @end[license]
  *)
 
+(*!
+ * @begin[doc]
+ * @parents
+ * @end[doc]
+ *)
 include Itt_equal
 include Itt_rfun
 include Itt_dfun
@@ -41,6 +62,7 @@ include Itt_union
 include Itt_void
 include Itt_unit
 include Itt_struct
+(*! @docoff *)
 
 open Printf
 open Mp_debug
@@ -88,6 +110,36 @@ let debug_auto =
  * REWRITES								*
  ************************************************************************)
 
+(*!
+ * @begin[doc]
+ * @terms
+ *
+ * The following terms define the propositional connectives.
+ * The @tt{prop} term defines the space of @emph{propositions}
+ * (the same as the type universes).
+ *
+ * The propositional interpretations have the following
+ * definitions:
+ *
+ * $$
+ * @begin[array, rcl]
+ * @line{@true  @equiv  @unit}
+ * @line{@false  @equiv  @void}
+ * @line{@not{A}  @equiv  @fun{A; @void}}
+ * @line{@and{A; B}  @equiv  @prod{A; B}}
+ * @line{@or{A; B}  @equiv  @union{A; B}}
+ * @line{@implies{A; B}  @equiv  @fun{A; B}}
+ * @line{@iff{A; B}  @equiv  @and{(@fun{A; B}); (@fun{B; A})}}
+ * @line{@all{x; A; B[x]}  @equiv  @fun{x; A; B[x]}}
+ * @line{@exists{x; A; B[x]}  @equiv  @prod{x; A; B[x]}}
+ * @end[array]
+ * $$
+ *
+ * The @emph{conditional} forms $@cand{A; B}$ and
+ * $@cor{A; B}$ encode the propositional truth
+ * from left-to-right.
+ * @end[doc]
+ *)
 define unfold_prop : "prop"[i:l] <--> "univ"[i:l]
 
 define unfold_true : "true" <--> unit
@@ -101,6 +153,7 @@ define unfold_cand : "cand"{'a; 'b} <--> ('a & 'b)
 define unfold_cor : "cor"{'a; 'b} <--> "or"{'a; ."cand"{."not"{'a}; 'b}}
 define unfold_all : "all"{'A; x. 'B['x]} <--> x: 'A -> 'B['x]
 define unfold_exists : "exists"{'A; x. 'B['x]} <--> x: 'A * 'B['x]
+(*! @docoff *)
 
 let fold_true    = makeFoldC << "true" >> unfold_true
 let fold_false   = makeFoldC << "false" >> unfold_false
@@ -118,8 +171,21 @@ let fold_exists  = makeFoldC << exst x: 'A. 'B['x] >> unfold_exists
  * RULES                                                                *
  ************************************************************************)
 
-(*
- * True and false.
+(*!
+ * @begin[doc]
+ * @rules
+ *
+ * The rules are divided into groups for each of the
+ * propositional connectives.  Each of the connectives
+ * has a well-formedness rule, and introduction and elimination
+ * forms (where possible).
+ *
+ * @thysubsection{True and False}
+ * The @hrefterm[true] and @hrefterm[false] terms are
+ * both types.  The @tt{true} term is always true; there is
+ * no elimination form.  The @tt{false} term is always false;
+ * there is no introduction form.
+ * @end[doc]
  *)
 interactive true_univ {| intro_resource []; eqcd_resource |} 'H :
    sequent ['ext] { 'H >- "true" = "true" in univ[i:l] }
@@ -149,8 +215,17 @@ interactive false_squash 'H :
    sequent [squash] { 'H >- "false" } -->
    sequent ['ext] { 'H >- "false" }
 
-(*
- * Negation.
+(*!
+ * @begin[doc]
+ * @thysubsection{Negation}
+ *
+ * The negation << "not"{'A} >> is a well-formed if
+ * $A$ is a type.  The negation states that the type $A$
+ * is not inhabited: any proof of $A$ is also a proof of
+ * $@void$.  To prove the negation, assume $A$ and find
+ * a contradiction.  The elimination form forms a proof
+ * of the goal from a proof of $A$.
+ * @end[doc]
  *)
 interactive not_univ {| intro_resource []; eqcd_resource |} 'H :
    [wf] sequent [squash] { 'H >- 't1 = 't2 in univ[i:l] } -->
@@ -169,8 +244,15 @@ interactive not_elim {| elim_resource [] |} 'H 'J :
    [assertion] sequent ['ext] { 'H; x: "not"{'t}; 'J['x] >- 't } -->
    sequent ['ext] { 'H; x: "not"{'t}; 'J['x] >- 'C }
 
-(*
- * Conjunction.
+(*!
+ * @begin[doc]
+ * @thysubsection{Conjunction}
+ *
+ * The conjunction << "and"{'A; 'B} >> is well-formed if
+ * both $A$ and $B$ are types.  It is true if both $A$ and
+ * $B$ are true.  The elimination form splits the assumption
+ * into it two component proofs.
+ * @end[doc]
  *)
 interactive and_univ {| intro_resource []; eqcd_resource |} 'H :
    [wf] sequent [squash] { 'H >- 'a1 = 'b1 in univ[i:l] } -->
@@ -191,8 +273,21 @@ interactive and_elim {| elim_resource [] |} 'H 'J 'y 'z :
    [main] sequent ['ext] { 'H; y: 'a1; z: 'a2; 'J['y, 'z] >- 'C['y, 'z] } -->
    sequent ['ext] { 'H; x: "and"{'a1; 'a2}; 'J['x] >- 'C['x] }
 
-(*
- * Disjunction.
+(*!
+ * @begin[doc]
+ * @thysubsection{Disjunction}
+ *
+ * The disjunction << "or"{'A; 'B} >> is well-formed if both
+ * $A$ and $B$ are types.  The disjunction is true if it is
+ * a type and one of $A$ or $B$ is true.  The introduction
+ * rules use the @tt{SelectOption} to allow application with
+ * the @hreftactic[selT] tactical.  The @tt{selT 1 (dT 0)} tactic applies
+ * the @misspelled{@tt{or_intro_left}} rule, and @tt{selT 2 (dT 0)} applies the
+ * @misspelled{@tt{or_intro_right}} rule.  The elimination rule performs
+ * a case analysis on the disjunctive assumption, producing
+ * a case for the left proof of $A$, and another for the
+ * right proof of $B$.
+ * @end[doc]
  *)
 interactive or_univ {| intro_resource []; eqcd_resource |} 'H :
    [wf] sequent [squash] { 'H >- 'a1 = 'b1 in univ[i:l] } -->
@@ -219,8 +314,17 @@ interactive or_elim {| elim_resource [] |} 'H 'J 'y :
    [main] sequent ['ext] { 'H; y: 'a2; 'J[inr{'y}] >- 'C[inr{'y}] } -->
    sequent ['ext] { 'H; x: "or"{'a1; 'a2}; 'J['x] >- 'C['x] }
 
-(*
- * Implication.
+(*!
+ * @begin[doc]
+ * @thysubsection{Implication}
+ *
+ * The implication << "implies"{'A; 'B} >> is well-formed if both
+ * $A$ and $B$ are types.  The implication is true if it is a
+ * type, and a proof of $B$ can be produced from a proof of
+ * $A$.  The elimination rule corresponds to @emph{modus-ponens}:
+ * if a proof of $A$ can be found, so can a proof of $B$ by
+ * application of the proof of $@implies{A; B}$.
+ * @end[doc]
  *)
 interactive implies_univ {| intro_resource []; eqcd_resource |} 'H :
    [wf] sequent [squash] { 'H >- 'a1 = 'b1 in univ[i:l] } -->
@@ -242,8 +346,14 @@ interactive implies_elim {| elim_resource [ThinOption thinT] |} 'H 'J 'y :
    [main] sequent ['ext] { 'H; x: "implies"{'a1; 'a2}; 'J['x]; y: 'a2 >- 'C['x] } -->
    sequent ['ext] { 'H; x: "implies"{'a1; 'a2}; 'J['x] >- 'C['x] }
 
-(*
- * Bi-implication.
+(*!
+ * @begin[doc]
+ * @thysubsection{Bi-implication}
+ *
+ * The bi-implication << "iff"{'A; 'B} >> is a well-formed if
+ * both $A$ and $B$ are types.  The introduction and elimination rules
+ * perform the top-level conjunctive reasoning.
+ * @end[doc]
  *)
 interactive iff_univ {| intro_resource []; eqcd_resource |} 'H :
    [wf] sequent [squash] { 'H >- 'a1 = 'b1 in univ[i:l] } -->
@@ -264,8 +374,15 @@ interactive iff_elim {| elim_resource [] |} 'H 'J 'y 'z :
    sequent ['ext] { 'H; y: "implies"{'a1; 'a2}; z: "implies"{'a2; 'a1}; 'J['y, 'z] >- 'C['y, 'z] } -->
    sequent ['ext] { 'H; x: "iff"{'a1; 'a2}; 'J['x] >- 'C['x] }
 
-(*
- * Conjunction.
+(*!
+ * @begin[doc]
+ * @thysubsection{Conditional conjunction}
+ *
+ * The conditional conjunction << "cand"{'A; 'B} >> differs from
+ * the conjunction only in the introduction rule.  The conjunction
+ * is true if $A$ is true, and a proof of $B$ can be produced from
+ * a proof of $A$.
+ * @end[doc]
  *)
 interactive cand_univ {| intro_resource []; eqcd_resource |} 'H 'x :
    [wf] sequent [squash] { 'H >- 'a1 = 'b1 in univ[i:l] } -->
@@ -286,8 +403,18 @@ interactive cand_elim {| elim_resource [] |} 'H 'J 'y 'z :
    [main] sequent ['ext] { 'H; y: 'a1; z: 'a2; 'J['y, 'z] >- 'C['y, 'z] } -->
    sequent ['ext] { 'H; x: "cand"{'a1; 'a2}; 'J['x] >- 'C['x] }
 
-(*
- * Disjunction.
+(*!
+ * @begin[doc]
+ * @thysubsection{Conditional disjunction}
+ *
+ * The conditional disjunction << "cor"{'A; 'B} >> differs from
+ * the disjunction in that a proof of $B$ is needed only if
+ * a proof of $A$ can't be found.  The conditional disjunction
+ * is true if $A$ is true, or $B$ is true @emph{assuming} that
+ * $A$ is false.  The elimination rule produces the two cases,
+ * one where there is a proof of $A$, and another where
+ * there is a proof of $B$ and a proof of falsehood for $A$.
+ * @end[doc]
  *)
 interactive cor_univ {| intro_resource []; eqcd_resource |} 'H 'x :
    [wf] sequent [squash] { 'H >- 'a1 = 'b1 in univ[i:l] } -->
@@ -315,8 +442,18 @@ interactive cor_elim {| elim_resource [] |} 'H 'J 'u 'v :
    [main] sequent ['ext] { 'H; u: "not"{'a1}; v: 'a2; 'J[inr{'u, 'v}] >- 'C[inr{'u, 'v}] } -->
    sequent ['ext] { 'H; x: "cor"{'a1; 'a2}; 'J['x] >- 'C['x] }
 
-(*
- * All elimination performs a thinning
+(*!
+ * @begin[doc]
+ * @thysubsection{Universal quantification}
+ *
+ * The universal quantification << all x: 'A. 'B['x] >> is well-formed
+ * if $A$ is a type, and $B[x]$ is a type for any $x @in A$.
+ * The quantification is true if it is well-formed and
+ * a $B[a]$ is true for any element $a @in A$.  The elimination
+ * form allows @emph{instantiation} of quantification on
+ * a particular element $a @in A$, to produce a proof of
+ * $B[a]$.
+ * @end[doc]
  *)
 interactive all_univ {| intro_resource []; eqcd_resource |} 'H 'x :
    [wf] sequent [squash] { 'H >- 't1 = 't2 in univ[i:l] } -->
@@ -338,8 +475,16 @@ interactive all_elim {| elim_resource [ThinOption thinT] |} 'H 'J 'w 'z :
    [main] sequent ['ext] { 'H; x: all a: 'A. 'B['a]; 'J['x]; w: 'B['z] >- 'C['x] } -->
    sequent ['ext] { 'H; x: all a: 'A. 'B['a]; 'J['x] >- 'C['x] }
 
-(*
- * Existential.
+(*!
+ * @begin[doc]
+ * @thysubsection{Existential quantification}
+ *
+ * The existential quantification << exst x: 'A. 'B['x] >> is well-formed
+ * if $A$ is a type, and $B[x]$ is a type for any $x @in A$.  The quantification
+ * is true if it is well-formed and there is a proof $a @in A$ where $B[a]$
+ * is also true.  The elimination form splits the proof of $@exists{x; A; B[x]}$
+ * into its parts.
+ * @end[doc]
  *)
 interactive exists_univ {| intro_resource []; eqcd_resource |} 'H 'x :
    [wf] sequent [squash] { 'H >- 't1 = 't2 in univ[i:l] } -->
@@ -360,6 +505,7 @@ interactive exists_intro {| intro_resource [] |} 'H 'z 'x :
 interactive exists_elim {| elim_resource [] |} 'H 'J 'y 'z :
    [main] sequent ['ext] { 'H; y: 'a; z: 'b['y]; 'J['y, 'z] >- 'C['y, 'z] } -->
    sequent ['ext] { 'H; x: exst v: 'a. 'b['v]; 'J['x] >- 'C['x] }
+(*! @docoff *)
 
 (************************************************************************
  * DISPLAY FORMS							*
@@ -413,6 +559,20 @@ dform or_df3 : or_df{'a} =
 (*
  * Disjunction.
  *)
+declare cor_df{'a}
+
+dform cor_df1 : parens :: "prec"[prec_or] :: "cor"{'a; 'b} =
+   szone pushm[0] slot["le"]{'a} cor_df{'b} popm ezone
+
+dform cor_df2 : cor_df{."cor"{'a; 'b}} =
+   cor_df{'a} cor_df{'b}
+
+dform cor_df3 : cor_df{'a} =
+   hspace Nuprl_font!vee `"c" " " slot{'a}
+
+(*
+ * Conjunction.
+ *)
 declare and_df{'a}
 
 dform and_df1 : parens :: "prec"[prec_and] :: "and"{'a; 'b} =
@@ -423,6 +583,20 @@ dform and_df2 : and_df{."and"{'a; 'b}} =
 
 dform and_df3 : and_df{'a} =
    hspace Nuprl_font!wedge " " slot{'a}
+
+(*
+ * Conjunction.
+ *)
+declare cand_df{'a}
+
+dform cand_df1 : parens :: "prec"[prec_and] :: "cand"{'a; 'b} =
+   szone pushm[0] slot["le"]{'a} cand_df{'b} popm ezone
+
+dform cand_df2 : and_df{."cand"{'a; 'b}} =
+   cand_df{'a} cand_df{'b}
+
+dform cand_df3 : cand_df{'a} =
+   hspace Nuprl_font!wedge `"c" " " slot{'a}
 
 (*
  * Quantifiers.
@@ -558,6 +732,42 @@ let rec intersects vars fv =
          else
             intersects tl fv
 
+(*!
+ * @begin[doc]
+ * @tactics
+ *
+ * The @hreftheory[Itt_logic] module defines several tactics for
+ * reasoning the the @Nuprl type theory.  The tactics perform
+ * @emph{generic} reasoning of @Nuprl sequents.
+ *
+ * @begin[description]
+ * @item{@tactic[moveToConclT], @tactic[moveToConclVarsT];
+ * {  The @tt{moveToConclT} tactic ``moves'' a hypothesis to the conclusion
+ *    using the implication form.  The generic usage is as follows:
+ *
+ *    $$
+ *    @rulebox{moveToConclT; i;
+ *    @sequent{ext; {H; J}; @all{x; T_1; T_2}};
+ *    @sequent{ext; {H; i@colon x@colon T_1; J}; T_2}.}
+ *    $$
+ *
+ *    The argument $i$ is the index of the hypothesis.  In some
+ *    cases, there may be additional hypotheses following
+ *    $x@colon T_1$ that @emph{depend} on the hypothesis $x$.
+ *    These hypotheses are also moved to the conclusion.
+ *
+ *    $$
+ *    @rulebox{moveToConclT; i;
+ *    @sequent{ext; {H; j@colon @int}; @all i@colon @int. (i < j) @Rightarrow T_2[i]};
+ *    @sequent{ext; {H; i@colon @int; j@colon @int; w@colon i < j}; T_2[i]}}
+ *    $$
+ *
+ *    The @tt{moveToConclVarsT} takes a list of hypotheses, identified
+ *    by their binding variables, to move to the conclusion.}}
+ * @end[description]
+ * @docoff
+ * @end[doc]
+ *)
 let moveToConclVarsT vars p =
    let { sequent_hyps = hyps } = Sequent.explode_sequent p in
    let len = SeqHyp.length hyps in
@@ -598,8 +808,27 @@ let moveToConclT i p =
    let v, _ = Sequent.nth_hyp p i in
       moveToConclVarsT [v] p
 
-(*
- * Decompose universal formulas.
+(*!
+ * @begin[doc]
+ * @begin[description]
+ * @item{@tactic[univCDT], @tactic[genUnivCDT];
+ *  {   The @tt{univCDT} and @tt{genUnivCDT} tactics
+ *      apply introduction reasoning on the goal.  The @tt{univCDT}
+ *      tactic decomposes universal quantifications, implications,
+ *      and function spaces.  The @tt{genUnivCDT} tactic also
+ *      chains through conjunctions and bi-conditionals.
+ *
+ *      $$
+ *      @rulebox{univCDT; @space;
+ *       @sequent{ext; {H; x_1@colon T_1; @cdots; x_n@colon T_n}; T_{n + 1}}@cr
+ *       @sequent{squash; {H; x_1@colon T_1; @cdots; x_{n - 1}@colon T_{n - 1}}; @type{T_n}}@cr
+ *       @vdots@cr
+ *       @sequent{squash; H; @type{T_1}};
+ *       @sequent{ext; H; @all x_1@colon T_1. @ldots @all x_n@colon T_n. T_{n + 1}}}
+ *      $$}}
+ * @end[description]
+ * @docoff
+ * @end[doc]
  *)
 let univCDT =
    let rec tac p =
@@ -632,8 +861,28 @@ let genUnivCDT =
    in
       tac
 
-(*
- * Instantiate a hyp with some arguments.
+(*!
+ * @begin[doc]
+ * @begin[description]
+ * @item{@tactic[instHypT];
+ *  {   The @tt{instHypT} tactic performs or instantiation
+ *      of a hypothesis.  The hypothesis must be a universal quantification
+ *      or an implication.
+ *
+ *      $$
+ *      @rulebox{instHypT; t_1@space @cdots  t_n;
+ *       @sequent{ext; {H; y@colon @all x_1@colon T_1. @ldots . T_{n + 1}[x_1, @ldots, x_n]; J[y];
+ *                      z@colon T_{n + 1}[t_1, @ldots, t_n]}; C}@cr
+ *       @sequent{squash; {H; y@colon @all x_1@colon T_1. @ldots . T_{n + 1}[x_1, @ldots, x_n]; J[y]};
+ *                        t_1 @in T_1}@cr
+ *       @vdots@cr
+ *       @sequent{squash; {H; y@colon @all x_1@colon T_1. @ldots . T_{n + 1}[x_1, @ldots, x_n]; J[y]};
+ *                        t_n @in T_n};
+ *       @sequent{ext; {H; y@colon @all x_1@colon T_1. @ldots . T_{n + 1}[x_1, @ldots, x_n]; J[y]}; C}}
+ *      $$}}
+ * @end[description]
+ * @docoff
+ * @end[doc]
  *)
 let instHypT args i =
    let rec inst i firstp args p =
@@ -779,8 +1028,31 @@ let rec match_goal args form goal =
     | Not_found ->
          raise (RefineError ("match_goal", StringError "no match"))
 
-(*
- * Try the universal #1.
+(*!
+ * @begin[doc]
+ * @begin[description]
+ * @item{@tactic[backThruHypT];
+ *  {   The @tt{backThruHypT} performs backward-chaining through a
+ *      hypothesis.  The conclusion must match a suffix of the hypothesis,
+ *      which must be a sequence of universal quantifications or
+ *      implications through that suffix.
+ *
+ *      $$
+ *      @rulebox{backThruHypT; i;
+ *       @sequent{squash; {H; y@colon @all x_1@colon T_1. @ldots . T_{n + 1}[x_1, @ldots, x_n]; J[y]};
+ *                         t_1 @in T_1}@cr
+ *       @vdots@cr
+ *       @sequent{squash; {H; y@colon @all x_1@colon T_1. @ldots . T_{n + 1}[x_1, @ldots, x_n]; J[y]};
+ *                         t_n @in T_n};
+ *       @sequent{ext; {H; y@colon @all x_1@colon T_1. @ldots . T_{n + 1}[x_1, @ldots, x_n]; J[y]};
+ *                      T_{n + 1}[t_1, @ldots, t_n]}}
+ *      $$
+ *
+ *      The @tt{backThruHypT} computes the argument terms $t_1, @ldots, t_n$ by matching
+ *      the goal with the hypothesis.}}
+ * @end[description]
+ * @docoff
+ * @end[doc]
  *)
 let backThruHypT i p =
    if !debug_auto then
@@ -818,13 +1090,38 @@ let backThruHypT i p =
          end;
       thinningT false (tac info i true) p
 
-(*
- * We can also backchain through assumptions by pulling them
- * in as universally quantified formulas.
- * We assum that we can thin enough.
+(*!
+ * @begin[doc]
+ * @begin[description]
+ * @item{@tactic[assumT];
+ *  {   @emph{Assumptions} correspond to the subgoals of the outermost
+ *      theorem statement.  The @tt{assumT} tactic instantiates an
+ *      assumption as a universally quantified hypothesis.
  *
- * This next function adds the assumption as a universlly
- * quantified formula.
+ *      $$
+ *      @rulebox{assumT; i;
+ *       @sequent{{H; @ldots}; T_1}@cr
+ *       @vdots@cr
+ *       @sequent{{H; x_1@colon A_1; @cdots; x_n@colon A_n}; T_i}@cr
+ *       @vdots@cr
+ *       @sequent{{H; @ldots}; T_m}@cr
+ *       @hline
+ *       @sequent{{H; J; w@colon @all x_1@colon A_1. @ldots. @all x_n@colon A_n. T_i}; C}@cr
+ *       @sequent{{H; J}; @type{A_1}}@cr
+ *       @vdots@cr
+ *       @sequent{{H; J}; @type{A_n}};
+ *
+ *       @sequent{{H; @ldots}; T_1}@cr
+ *       @vdots@cr
+ *       @sequent{{H; x_1@colon A_1; @cdots; x_n@colon A_n}; T_i}@cr
+ *       @vdots@cr
+ *       @sequent{{H; @ldots}; T_m}@cr
+ *       @hline
+ *       @sequent{{H; J}; C}}
+ *      $$}}
+ * @end[description]
+ * @docoff
+ * @end[doc]
  *)
 let assumT i p =
    let goal, assums = dest_msequent (Sequent.msequent p) in
@@ -890,21 +1187,47 @@ let assumT i p =
          (thinAllT index (TermMan.num_hyps goal) thenT introT index)
          (addHiddenLabelT "main") ) p
 
-(*
- * Now try backchaining through the assumption.
+(*!
+ * @begin[doc]
+ * @begin[description]
+ * @item{@tactic[backThruAssumT];
+ *  { The @tt{backThruAssumT} performs backward chaining similar
+ *    to the @hreftactic[backThruHypT], but on an @emph{assumption}.}}
+ * @end[description]
+ * @docoff
+ * @end[doc]
  *)
 let backThruAssumT i p =
    let j = Sequent.hyp_count p + 1 in
       (assumT i thenMT (backThruHypT j thenT thinT j)) p
 
-(*
- * Generalize on a membership assumption:
- *         i. sequent [...] { ... >- t IN T } -->
- *         ...
- *         sequent [...] { ... >- 'T2 }
- *         BY genAssumT [i; and any others you want to include...]
+(*!
+ * @begin[doc]
+ * @begin[description]
+ * @item{@tactic[genAssumT];
+ *  {The @tt{genAssumT} generalizes on an assumption.
  *
- *         sequent [...] { ... >- all x: T. ...others... => T2 }
+ *   $$
+ *   @rulebox{genAssumT; i;
+ *    @sequent{ext; {H; @ldots}; T_1}@cr
+ *    @vdots@cr
+ *    @sequent{ext; H; t @in T_i}@cr
+ *    @vdots@cr
+ *    @sequent{ext; {H; @ldots}; T_n}@cr
+ *    @hline
+ *    @sequent{ext; H; @all x@colon T_i. C};
+ *
+ *    @sequent{ext; {H; @ldots}; T_1}@cr
+ *    @vdots@cr
+ *    @sequent{ext; H; t @in T_i}@cr
+ *    @vdots@cr
+ *    @sequent{ext; {H; @ldots}; T_n}@cr
+ *    @hline
+ *    @sequent{ext; H; C}}
+ *   $$}}
+ * @end[description]
+ * @docoff
+ * @end[doc]
  *)
 let genAssumT indices p =
    let goal, assums = dest_msequent (Sequent.msequent p) in
@@ -930,7 +1253,7 @@ let genAssumT indices p =
          else mk_implies_term t' t
    in
    let t = make_gen_term (TermMan.nth_concl goal 1) indices in
-   (assertT t thenMT (backThruHypT (-1) thenT autoT) ) p
+      (assertT t thenMT (backThruHypT (-1) thenT autoT) ) p
 
 (************************************************************************
  * AUTO TACTIC                                                          *

@@ -1,7 +1,26 @@
-(*
- * Set type.
+(*!
+ * @begin[spelling]
+ * unhiding unhidden unhideEqual unhideGoalEqual
+ * @end[spelling]
+ *
+ * @begin[doc]
+ * @theory[Itt_set]
+ *
+ * The @tt{Itt_set} module defines a ``set'' type, or more precisely,
+ * it defines a type by quantified @emph{separation}.  The form of the type is
+ * $@set{x; T; P[x]}$, where $T$ is a type, and $P[x]$ is a type for
+ * any element $x @in T$.  The elements of the set type are those elements
+ * of $x @in T$ where the proposition $P[x]$ is true.
+ *
+ * The set type is a ``squash'' type: the type is similar to the
+ * dependent product $x@colon A @times P[x]$ (Section @reftheory[Itt_dprod]),
+ * but the proof $P[x]$ is omitted (squashed).  The set type $@set{x; T; P[x]}$
+ * is always a subtype of $A$.
+ * @end[doc]
  *
  * ----------------------------------------------------------------
+ *
+ * @begin[license]
  *
  * This file is part of MetaPRL, a modular, higher order
  * logical framework that provides a logical programming
@@ -27,15 +46,22 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  * Author: Jason Hickey
- * jyhcs.cornell.edu
+ * @email{jyh@cs.caltech.edu}
  *
+ * @end[license]
  *)
 
+(*!
+ * @begin[doc]
+ * @parents
+ * @end[doc]
+ *)
 include Itt_squash
 include Itt_equal
 include Itt_unit
 include Itt_subtype
 include Itt_struct
+(*! @docoff *)
 
 open Printf
 open Mp_debug
@@ -68,8 +94,18 @@ let _ =
  * TERMS                                                                *
  ************************************************************************)
 
+(*!
+ * @begin[doc]
+ * @terms
+ *
+ * The @tt{set} term defines the set type.  The @tt{hide} term is
+ * used to represent sequent hypotheses $B[x]$ that have been squashed by
+ * the set type (see the elimination form @hrefrule[setElimination]).
+ * @end[doc]
+ *)
 declare set{'A; x. 'B['x]}
 declare hide{'A}
+(*! @docoff *)
 
 let set_term = << { a: 'A | 'B['a] } >>
 let set_opname = opname_of_term set_term
@@ -109,12 +145,19 @@ prim setFormation 'H 'a 'A :
    sequent ['ext] { 'H >- univ[i:l] } =
    { a: 'A | 'B['a] }
 
-(*
- * H >- { a1:A1 | B1[a1] } = { a2:A2 | B2[a2] } in Ui
- * by setEquality x
+(*!
+ * @begin[doc]
+ * @rules
+ * @thysubsection{Equality and typehood}
  *
- * H >- A1 = A2 in Ui
- * H, x: A1 >- B1[x] = B2[x] in Ui
+ * The set type $@set{x; A; B[x]}$ is a type if $A$ is a type,
+ * and $B[x]$ is a type for any $x @in A$.  Equality of the set
+ * type is @emph{intensional}.  Two set types are equal only if their
+ * parts are equal.  An alternative formulation would be to allow sets
+ * $@set{x; A_1; B_1[x]}$ and $@set{x; A_2; B_2[x]}$ to be equal
+ * if $A_1 = A_2 @in @univ_i$ and $B_1[x] @Leftrightarrow B_2[x]$ for
+ * any $x @in A_2$.
+ * @end[doc]
  *)
 prim setEquality {| intro_resource []; eqcd_resource |} 'H 'x :
    [wf] sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
@@ -127,13 +170,13 @@ prim setType {| intro_resource [] |} 'H 'x :
    sequent ['ext] { 'H >- "type"{.{ a1:'A1 | 'B1['a1] }} } =
    it
 
-(*
- * H >- { a:A | B[a] } ext a
- * by setMemberFormation Ui a z
+(*!
+ * @begin[doc]
+ * @thysubsection{Introduction}
  *
- * H >- a = a in A
- * H >- B[a]
- * H, z: A >- B[z] = B[z] in Ui
+ * A set type $@set{x; A; B[x]}$ is true if there is an element $a @in A$
+ * where $B[x]$ is true.
+ * @end[doc]
  *)
 prim setMemberFormation {| intro_resource [] |} 'H 'a 'z :
    [wf] sequent [squash] { 'H >- 'a = 'a in 'A } -->
@@ -142,13 +185,13 @@ prim setMemberFormation {| intro_resource [] |} 'H 'a 'z :
    sequent ['ext]   { 'H >- { x:'A | 'B['x] } } =
    'a
 
-(*
- * H >- a1 = a2 in { a:A | B }
- * by setMemberEquality Ui x
+(*!
+ * @begin[doc]
+ * @thysubsection{Membership}
  *
- * H >- a1 = a2 in A
- * H >- B[a1]
- * H, x: A >- B[x] = B[x] in Ui
+ * Two terms $a_1$ and $a_2$ are equal in the set type $@set{a; A; B[a]}$
+ * if they are equal in $A$ and also $B[a_1]$ is true.
+ * @end[doc]
  *)
 prim setMemberEquality {| intro_resource []; eqcd_resource |} 'H 'x :
    [wf] sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
@@ -157,27 +200,46 @@ prim setMemberEquality {| intro_resource []; eqcd_resource |} 'H 'x :
    sequent ['ext] { 'H >- 'a1 = 'a2 in { a:'A | 'B['a] } } =
    it
 
-(*
- * H, u: { x:A | B }, J[u] >> T[u] ext t[y]
- * by setElimination2 y v z
- * H, u: { x:A | B }, y: A; v: hide(B[y]); J[y] >> T[y]
+(*!
+ * @begin[doc]
+ * @thysubsection{Elimination}
+ *
+ * An assumption with a set type $u@colon @set{x; A; B[x]}$ asserts two facts:
+ * that $u @in A$ and $B[u]$.  However, the proof of $B[u]$ is unavailable.  The
+ * << hide{'B['u]} >> hypothesis states that $B[u]$ is true, but its proof is
+ * omitted.  Hidden hypotheses may be unhidden in a squashed sequent, when the
+ * proof extract term is unnecessary.
+ * @end[doc]
  *)
 prim setElimination {| elim_resource [] |} 'H 'J 'u 'v :
    ('t : sequent ['ext] { 'H; u: 'A; v: hide{'B['u]}; 'J['u] >- 'T['u] }) -->
    sequent ['ext] { 'H; u: { x:'A | 'B['x] }; 'J['u] >- 'T['u] } =
    't
 
-(*
- * Subtyping.
+(*!
+ * @begin[doc]
+ * @thysubsection{Subtyping}
+ *
+ * The set type $@set{x; A; B[x]}$ is always a subtype of $A$ if
+ * the set type is really a type.  This rule is added to the
+ * @hrefresource[subtype_resource].
+ * @end[doc]
  *)
 prim set_subtype {| intro_resource [] |} 'H :
    sequent [squash] { 'H >- "type"{ { a: 'A | 'B['a] } } } -->
    sequent ['ext] { 'H >- subtype{ { a: 'A | 'B['a] }; 'A } } =
    it
 
-(*
- * Equalities can be unhidden. See itt_equash if you are wondering
- * why we are replacing hidden variables with "it".
+(*!
+ * @begin[doc]
+ * @thysubsection{Unhiding}
+ *
+ * The next two rules allow special cases for hidden hypotheses to be
+ * unhidden.  The first rule, @tt{unhideEqual}, allows equalities to
+ * be unhidden (because the proof can always be inferred), and the
+ * @tt{unhideGoalEqual} rule allows hypotheses to be unhidden if an equality
+ * is being proved (for the same reason).
+ * @end[doc]
  *)
 prim unhideEqual 'H 'J 'u :
    ('t['u] : sequent ['ext] { 'H; u: 'x = 'y in 'A; 'J[it] >- 'C[it] }) -->
@@ -193,8 +255,11 @@ prim unhideGoalEqual 'H 'J 'u :
  * TACTICS                                                              *
  ************************************************************************)
 
-(*
- * Squash a goal.
+(*!
+ * @begin[doc]
+ * @docoff
+ * @comment{Squash a goal}
+ * @end[doc]
  *)
 let squashT p =
    if is_squash_goal p then

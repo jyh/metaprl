@@ -1,8 +1,22 @@
-(*
- * Int is the type of tokens (strings)
+(*!
+ * @spelling{ge gt int le lt}
+ *
+ * @begin[doc]
+ * @theory[Itt_int]
+ *
+ * The integers are formalized as a @emph{primitive}
+ * type in the @Nuprl type theory.  Computation over the
+ * integers is performed using primitive arithmetic
+ * operations in the @MetaPRL prover.  This encoding is
+ * fairly awkward; it is difficult to prove arithmetic
+ * statements by referring to the primitive rules.  A
+ * better solution would be to encode the integers using
+ * the recursive type in the @hreftheory[Itt_srec] module.
+ * @end[doc]
  *
  * ----------------------------------------------------------------
  *
+ * @begin[license]
  * This file is part of MetaPRL, a modular, higher order
  * logical framework that provides a logical programming
  * environment for OCaml and other languages.
@@ -27,15 +41,21 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  * Author: Jason Hickey
- * jyh@cs.cornell.edu
- *
+ * @email{jyh@cs.cornell.edu}
+ * @end[license]
  *)
 
+(*!
+ * @begin[doc]
+ * @parents
+ * @end[doc]
+ *)
 include Itt_equal
 include Itt_rfun
 include Itt_bool
 include Itt_logic
 include Itt_struct
+(*! @docoff *)
 
 open Printf
 open Mp_debug
@@ -69,20 +89,40 @@ let _ =
  * TERMS                                                                *
  ************************************************************************)
 
+(*!
+ * @begin[doc]
+ * @terms
+ *
+ * The @tt{int} term is the type of integers with elements
+ * $$@ldots, @number{-2}, @number{-1}, @number{0}, @number{1}, @number{2}, @ldots$$
+ *
+ * The @tt{ind} term is the induction combinator for building
+ * loops indexed by an integer argument.
+ * @end[doc]
+ *)
 declare int
 declare number[n:n]
 declare ind{'i; m, z. 'down; 'base; m, z. 'up}
 
+(*!
+ * @begin[doc]
+ * The binary arithmetic operators are defined with
+ * the following terms.
+ * The @tt{le}, @tt{gt}, and @tt{ge} binary operators
+ * are defined in terms the integer order $<$ and equality.
+ * @end[doc]
+ *)
 declare "add"{'a; 'b}
 declare "sub"{'a; 'b}
 declare "mul"{'a; 'b}
 declare "div"{'a; 'b}
 declare "rem"{'a; 'b}
 declare lt{'a; 'b}
-
 define unfold_le : le{'a; 'b} <--> (('a < 'b) or ('a = 'b in int))
 define unfold_gt : gt{'a; 'b} <--> ('b < 'a)
 define unfold_ge : ge{'a; 'b} <--> (('b < 'a) or ('a = 'b in int))
+(*! @docoff *)
+
 
 let int_term = << int >>
 let int_opname = opname_of_term int_term
@@ -219,6 +259,15 @@ dform gt_df1 : parens :: "prec"[prec_compare] :: gt{'a; 'b} =
  * REWRITES                                                             *
  ************************************************************************)
 
+(*!
+ * @begin[doc]
+ * @rewrites
+ *
+ * The binary arithmetic operators are defined using the
+ * the @emph{meta} arithmetic operators that are @MetaPRL
+ * builtin operations.
+ * @end[doc]
+ *)
 prim_rw reduce_add : "add"{number[i:n]; number[j:n]} <-->
    meta_sum{number[i:n]; number[j:n]}
 prim_rw reduce_sub : "sub"{number[i:n]; number[j:n]} <-->
@@ -234,6 +283,7 @@ prim_rw reduce_lt : "lt"{number[i:n]; number[j:n]} <-->
    meta_lt{number[i:n]; number[j:n]}
 prim_rw reduce_eq : (number[i:n] = number[j:n] in int) <-->
    meta_eq{number[i:n]; number[j:n]}
+(*! @docoff *)
 
 let reduce_add =
    reduce_add andthenC reduce_meta_sum
@@ -253,13 +303,16 @@ let reduce_lt =
 let reduce_eq =
    reduce_eq andthenC reduce_meta_eq
 
-(*
- * Reduction on induction combinator:
- * Three cases:
- *    let ind[x] = ind(x; i, j. down[i, j]; base; k, l. up[k, l]
- *    x < 0 => (ind[x] -> down[x, ind[x + 1]]
- *    x = 0 => (ind[x] -> base)
- *    x > 0 => (ind[x] -> up[x, ind[x - 1]]
+(*!
+ * @begin[doc]
+ * Reduction of the induction combinator @tt{ind} has three cases.
+ * If the argument $x$ is $0$, the combinator reduces to the @i{base}
+ * case; if it is positive, it reduces to the @i{up} case; and
+ * if it is negative, it reduces to the @i{down} case.
+ * The first argument in the @i{up} and @i{down} cases represents
+ * the induction value, and the second argument represents the
+ * ``next'' computational step.
+ * @end[doc]
  *)
 prim_rw reduce_ind_down :
    ('x < 0) -->
@@ -274,6 +327,7 @@ prim_rw reduce_ind_up :
 prim_rw reduce_ind_base :
    (ind{0; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]}) <-->
    'base
+(*! @docoff *)
 
 ml_rw reduce_ind : ('goal : ind{number[x:n]; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]}) =
    let x, i, j, down, base, k, l, up = dest_ind goal in
@@ -312,8 +366,14 @@ let reduce_resource = Top_conversionals.add_reduce_info reduce_resource reduce_i
 prim intFormation 'H :
    sequent ['ext] { 'H >- univ[i:l] } = int
 
-(*
- * H >- int Type
+(*!
+ * @begin[doc]
+ * @rules
+ * @thysubsection{Typehood and well-formedness}
+ *
+ * The $@int$ type inhabits every universe, and it
+ * is a type.
+ * @end[doc]
  *)
 prim intType {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- "type"{int} } =
@@ -326,6 +386,7 @@ prim intType {| intro_resource [] |} 'H :
 prim intEquality {| intro_resource []; eqcd_resource |} 'H :
    sequent ['ext] { 'H >- int IN univ[i:l] } =
    it
+(*! @docoff *)
 
 (*
  * H >- Z ext n
@@ -335,22 +396,26 @@ prim numberFormation 'H number[n:n] :
    sequent ['ext] { 'H >- int } =
    number[n:n]
 
-(*
- * H >- i = i in int
- * by numberEquality
+(*!
+ * @begin[doc]
+ * @thysubsection{Membership}
+ *
+ * The $@int$ type contains the @hrefterm[number] terms.
+ * @end[doc]
  *)
 prim numberEquality {| intro_resource []; eqcd_resource |} 'H :
    sequent ['ext] { 'H >- number[n:n] IN int } =
    it
 
-(*
- * Induction:
- * H, n:Z, J[n] >- C[n] ext ind(n; m, z. down[n, m, it, z]; base[n]; m, z. up[n, m, it, z])
- * by intElimination [m; v; z]
+(*!
+ * @begin[doc]
+ * @thysubsection{Elimination}
  *
- * H, n:Z, J[n], m:Z, v: m < 0, z: C[m + 1] >- C[m] ext down[n, m, v, z]
- * H, n:Z, J[n] >- C[0] ext base[n]
- * H, n:Z, J[n], m:Z, v: 0 < m, z: C[m - 1] >- C[m] ext up[n, m, v, z]
+ * Induction on an integer assumption produces three cases:
+ * one for the base case $0$, one for induction on negative arguments,
+ * and another for induction on positive arguments.  The proof extract term
+ * uses the @tt{ind} term, which performs a case analysis on its argument.
+ * @end[doc]
  *)
 prim intElimination {| elim_resource [ThinOption thinT] |} 'H 'J 'n 'm 'v 'z :
    [main] ('down['n; 'm; 'v; 'z] : sequent ['ext] { 'H; n: int; 'J['n]; m: int; v: 'm < 0; z: 'C['m +@ 1] >- 'C['m] }) -->
@@ -360,17 +425,12 @@ prim intElimination {| elim_resource [ThinOption thinT] |} 'H 'J 'n 'm 'v 'z :
    ind{'n; m, z. 'down['n; 'm; it; 'z]; 'base['n]; m, z. 'up['n; 'm; it; 'z]}
 
 (*
- * Equality on induction combinator:
- * let a = ind(x1; i1, j1. down1[i1, j1]; base1; k1, l1. up1[k1, l1])
- * let b = ind(x2; i2, j2. down2[i2, j2]; base2; k2, l2. up2[k2, l2])
+ * @begin[doc]
+ * @thysubsection{Combinator equality}
  *
- * H >- a = b in T[x1]
- * by indEquality [z. T[z]; x; y; w]
- *
- * H >- x1 = y1 in Z
- * H, x: Z, w: x < 0, y: T[x + 1] >- down1[x, y] = down2[x, y] in T[x]
- * H >- base1 = base2 in T[0]
- * H, x: Z, w: 0 < x, y: T[x - 1] >- up1[x, y] = up2[x, y] in T[x]
+ * Two @tt{ind} term compute values of type $T$ if each of the three
+ * cases (zero, positive, and negative) produce values of type $T$.
+ * @end[doc]
  *)
 prim indEquality {| intro_resource []; eqcd_resource |} 'H lambda{z. 'T['z]} 'x 'y 'w :
    [wf] sequent [squash] { 'H >- 'x1 = 'x2 in int } -->
@@ -381,6 +441,7 @@ prim indEquality {| intro_resource []; eqcd_resource |} 'H lambda{z. 'T['z]} 'x 
                    = ind{'x2; i2, j2. 'down2['i2; 'j2]; 'base2; k2, l2. 'up2['k2; 'l2]}
                    in 'T['x1] } =
    it
+(*! @docoff *)
 
 (*
  * less_thanFormation:
@@ -396,12 +457,14 @@ prim less_thanFormation 'H :
    sequent ['ext] { 'H >- univ[i:l] } =
    'a < 'b
 
-(*
- * H >- i1 < j1 = i2 < j2 in Ui
- * by less_thanEquality
+(*!
+ * @begin[doc]
+ * @thysubsection{Well-formedness of the arithmetic operators}
  *
- * H >- i1 = j1 in int
- * H >- i2 = j2 in int
+ * The $<$ binary operator is a type if its arguments
+ * are integers, and it is inhabited by the $@it$ term
+ * if it is true.
+ * @end[doc]
  *)
 prim less_thanEquality {| intro_resource []; eqcd_resource |} 'H :
    [wf] sequent [squash] { 'H >- 'i1 = 'j1 in int } -->
@@ -419,6 +482,7 @@ prim less_than_memberEquality {| intro_resource []; eqcd_resource |} 'H :
    [wf] sequent [squash] { 'H >- 'a < 'b } -->
    sequent ['ext] { 'H >- it IN ('a < 'b) } =
    it
+(*! @docoff *)
 
 (*
  * H, x: a < b, J[x] >- C[x]
@@ -439,8 +503,12 @@ prim int_sqequal 'H :
    sequent ['ext] { 'H >- Perv!"rewrite"{'i; 'j} } =
    it
 
-(*
- * Derive the wf rules.
+(*!
+ * @begin[doc]
+ * The well-formedness of the other binary operators
+ * is derived by induction on the integers.
+ * @docoff
+ * @end[doc]
  *)
 interactive add_wf {| intro_resource [] |} 'H :
    sequent [squash] { 'H >- 'i IN int } -->

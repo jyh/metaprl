@@ -1,7 +1,34 @@
-(*
- * NEw variable generation.
+(*!
+ * @spelling{var vars productElimination}
+ *
+ * @begin[doc]
+ * @theory[Var]
+ *
+ * The @tt{Var} module provides utilities to
+ * generate new variables that are guaranteed to be distinct
+ * from all other bound variables in a proof goal.  For example,
+ * the @tt{productElimination} (Section @reftheory[Itt_dprod])
+ * rule, splits a hypothesis of the form $x@colon T_1 @times T_2$
+ * into two hypotheses $u@colon T_1$ and $v@colon T_2$.  The variables
+ * $u$ and $v$ have to be chosen at rule application time, and this
+ * module assists in the generation of new names.
+ *
+ * There are three basic functions implemented here.
+ * @begin[verbatim]
+ * val new_var         : string -> string list -> string
+ * val maybe_new_var   : string -> string list -> string
+ * val maybe_new_vars  : string list -> string list -> string list
+ * @end[verbatim]
+ *
+ * The function $@tt{new_var}@space v@space @i{vars}$ generates a new variable
+ * ``similar'' to $v$, but not contained in $@i{vars}$.  In this
+ * case ``similar'' means that the variable has the same name, but
+ * it may have a numerical suffix to make it distinct.
+ * @end[doc]
  *
  * ----------------------------------------------------------------
+ *
+ * @begin[license]
  *
  * This file is part of MetaPRL, a modular, higher order
  * logical framework that provides a logical programming
@@ -27,8 +54,18 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  * Author: Jason Hickey
- * jyh@cs.cornell.edu
+ * @email{jyh@cs.caltech.edu}
+ *
+ * @end[license]
  *)
+
+(*!
+ * @begin[doc]
+ * @parents
+ * @end[doc]
+ *)
+include Summary
+(*! @docoff *)
 
 open Refiner.Refiner.Term
 open Refiner.Refiner.RefineError

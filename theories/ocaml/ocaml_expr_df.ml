@@ -132,6 +132,9 @@ dform apply_df3 : "apply"{."apply"{.lid{lid[name:s]}; 'e1}; 'e2} =
 dform apply_df4 : internal :: "apply"{."apply"[start1:n, finish1:n]{.lid[start2:n, finish2:n]{lid[name:s]}; 'e1}; 'e2} =
    "apply"{."apply"{lid{lid[name:s]}; 'e1}; 'e2}
 
+dform apply_df4 : internal :: "apply"{."apply"[start1:n, finish1:n]{.uid[start2:n, finish2:n]{uid[name:s]}; 'e1}; 'e2} =
+   "apply"{."apply"{lid{lid[name:s]}; 'e1}; 'e2}
+
 dform apply_plus_df : internal :: "apply"["+"]{'e1; 'e2} =
    pushm[0] slot{'e1} hspace "+" hspace slot{'e2} popm
 
@@ -150,9 +153,6 @@ dform apply_hat_df : internal :: "apply"["^"]{'e1; 'e2} =
 dform apply_at_df : internal :: "apply"["@"]{'e1; 'e2} =
    pushm[0] slot{'e1} hspace keyword["@"] hspace slot{'e2} popm
 
-dform apply_cons_df : internal :: "apply"["::"]{'e1; 'e2} =
-   pushm[0] slot{'e1} hspace keyword["::"] hspace slot{'e2} popm
-
 dform apply_lt_df : internal :: "apply"["<"]{'e1; 'e2} =
    pushm[0] slot{'e1} hspace keyword["<"] hspace slot{'e2} popm
 
@@ -170,6 +170,9 @@ dform apply_ge_df : internal :: "apply"[">="]{'e1; 'e2} =
 
 dform apply_gt_df : internal :: "apply"[">"]{'e1; 'e2} =
    pushm[0] slot{'e1} hspace keyword[">"] hspace slot{'e2} popm
+
+dform apply_cons_df : internal :: "apply"["::"]{'e1; 'e2} =
+   pushm[0] `"[" slot{'e1} `"]" popm
 
 dform apply_any_df : internal :: "apply"[name:s]{'e1; 'e2} =
    pushm[0] slot[name:s] hspace slot{'e1} hspace slot{'e2} popm

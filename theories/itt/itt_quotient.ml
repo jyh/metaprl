@@ -1,8 +1,96 @@
-(*
- * Quotient type.
+(*!
+ * @spelling{quot mod rem}
+ *
+ * @begin[doc]
+ * @theory[Itt_quotient]
+ *
+ * The @tt{Itt_quotient} module defines the @emph{quotient}
+ * type $@quot{T; x; y; E[x, y]}$, which imposes a @emph{new}
+ * equality $E$ on the type $T$.  The relation $E$ must be
+ * an equivalence relation on $T$; and to be well-formed the
+ * new equality must be @emph{coarser} than the native
+ * equality in $T$.  The elements of the quotient type are the
+ * elements of $T$, but equality is determined by the relation $E$.
+ *
+ * One use of the quotient type is to quotient a type in a similar
+ * manner as in set-theory.  For example, the following type defines
+ * the integers @emph{mod} 2.
+ *
+ * $$@int_2 @equiv @quot{@int; i; j; i @mathrel{rem} 2 = j @mathrel{rem} 2}$$
+ *
+ * The even integers are equal in $@int_2$, and so are the odd integers.
+ * Unlike set theory, the elements of the quotient type are not
+ * equivalence classes.  They are the original elements; only the
+ * equality has changed.
+ *
+ * Another use of the quotient is for @emph{abstraction}.  We could,
+ * for example, define data type of finite sets of numbers
+ * as follows:
+ *
+ * $$
+ * @begin[array, lllll]
+ * @line{@i{Set}  @equiv T               @colon @item{@univ_i}}
+ * @line{{}       @times @i{member}      @colon @item{T @rightarrow @int @rightarrow @univ_i}}
+ * @line{{}       @times @i{empty}       @colon T}
+ * @line{{}       @times @i{add}         @colon @item{T @rightarrow @int @rightarrow T}}
+ * @line{{}       @times @i{empty_axiom} @colon
+ *          @item{@forall i@colon @int. @not{(@i{member}(@i{empty}, i))}}}
+ * @line{{}       @times @i{add_axiom}  @colon
+ *          @item{@forall t@colon T. @forall i, j@colon@int.
+ *                   @i{member}(@i{add}(t, j), i) @Leftrightarrow}}
+ * @line{{}       {}     {}             {}
+ *                      @item{@i{member}(t, i) @vee i = j}}
+ * @end[array]
+ * $$
+ *
+ * The data type definition, as-is, allows the type $T$ to ``escape'' ---
+ * the type $T$ is just another field in the data type.  Abstractly, we
+ * are usually only concerned with the membership function --- two sets are
+ * equal if they have the same elements.  If the implementation $T$ is exposed,
+ * it is possible to construct functions that ``peek'' into the structure,
+ * possible producing non-functional behavior (with respect to the
+ * membership function).
+ *
+ * One way to address this problem is to use the quotient type to ``hide''
+ * the implementation.  The first step is to pair the module implementation
+ * with a set representative.
+ *
+ * $$@i{set} @equiv S@colon @i{Set} @times S.T$$
+ *
+ * The next step is to @emph{quotient} the construction by its membership.
+ *
+ * $$@i{Set}' @equiv @quot{@i{set}; S_1; S_2; @forall i@int.
+ *     S_1.1.@i{member}(S_1.2, i) @Leftrightarrow S_2.1.@i{member}(S_2.2, i)}$$
+ *
+ * Two sets in $@i{Set}'$ are equal if-and-only-if they have the
+ * same membership.  The other methods can be given wrapped definitions
+ * as follows:
+ *
+ * $$
+ * @begin[array, lcl]
+ * @line{{@i{empty}'(S)}      @equiv @item{(S, S.@i{empty})}}
+ * @line{{@i{member}'(S, i)}  @equiv @item{S.1.@i{member}(S.2, i)}}
+ * @line{{@i{add}'(S, i)}     @equiv @item{(S.1, S.1.@i{add}(S.2, i))}}
+ * @end[array]
+ * $$
+ *
+ * The types are as follows:
+ *
+ * $$
+ * @begin[array, lcl]
+ * @line{{@i{empty}'}  @colon @item{@i{Set} @rightarrow @i{Set}'}}
+ * @line{{@i{member}'} @colon @item{@i{Set}' @rightarrow @int @rightarrow @univ_i}}
+ * @line{{@i{add}'}    @colon @item{@i{Set}' @rightarrow @int @rightarrow @i{Set}'}}
+ * @end[array]
+ * $$
+ *
+ * In addition, the membership axioms @tt{empty_axiom} and @tt{add_axiom}
+ * can be proved for the $@i{Set}'$ definition.
+ * @end[doc]
  *
  * ----------------------------------------------------------------
  *
+ * @begin[license]
  * This file is part of MetaPRL, a modular, higher order
  * logical framework that provides a logical programming
  * environment for OCaml and other languages.
@@ -27,14 +115,20 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  * Author: Jason Hickey
- * jyh@cs.cornell.edu
- *
+ * @email{jyh@cs.cornell.edu}
+ * @end[license]
  *)
 
+(*!
+ * @begin[doc]
+ * @parents
+ * @end[doc]
+ *)
 include Itt_equal
 include Itt_set
 include Itt_rfun
 include Itt_struct
+(*! @docoff *)
 
 open Printf
 open Mp_debug
@@ -68,7 +162,15 @@ let _ =
  * TERMS                                                                *
  ************************************************************************)
 
+(*!
+ * @begin[doc]
+ * @terms
+ *
+ * The @tt{quot} type defines the quotient type $@quot{A; x; y; E[x, y]}$.
+ * @end[doc]
+ *)
 declare "quot"{'A; x, y. 'E['x; 'y]}
+(*! @docoff *)
 
 (************************************************************************
  * DISPLAY FORMS                                                        *
@@ -86,15 +188,9 @@ dform quot_df2 : mode[src] :: parens :: "prec"[prec_quot] :: "quot"{'A; x, y. 'E
  * RULES                                                                *
  ************************************************************************)
 
-(*
- * H >- Ui ext quot x, y: A // E
- * by quotientFormation (quot x, y: A // E) z u v
- *
- * H >- A = A in Ui
- * H, x: A, y: A >- E[x, y] = E[x, y] in Ui
- * H, x: A >- E[x, x]
- * H, x: A, y: A, u: E[x, y] >- E[y, x]
- * H, x: A, y: A, z: A, u: E[x, y], v: E[y, z] >- E[x, z]
+(*!
+ * @docoff
+ * This rule is hardly likely to be used.
  *)
 prim quotientFormation 'H (quot x, y: 'A // 'E['x; 'y]) 'z 'u 'v :
    [wf] sequent [squash] { 'H >- 'A = 'A in univ[i:l] } -->
@@ -105,15 +201,35 @@ prim quotientFormation 'H (quot x, y: 'A // 'E['x; 'y]) 'z 'u 'v :
    sequent ['ext] { 'H >- univ[i:l] } =
    quot x, y: 'A // 'E['x; 'y]
 
-(*
- * H >- quot x1, y1: A1 // E1 = quot x2, y2. A2 // E2 in Ui
- * by quotientWeakEquality x y z u v
+(*!
+ * @begin[doc]
+ * @rules
+ * @thysubsection{Equality and well-formedness}
  *
- * H >- A1 = A2 in Ui
- * H, x: A1, y: A1 >- E1[x, y] = E2[x, y] in Ui
- * H, x: A1 >- E1[x, x]
- * H, x: A1, y: A1, u: E1[x, y] >- E1[y, x]
- * H, x: A1, y: A1, z: A1, u: E1[x, y], v: E1[y, z] >- E1[x, z]
+ * The quotient $@quot{A; x; y; E[x, y]}$ if $A$ is a type,
+ * and $E$ is an @emph{equivalence relation}:
+ * @begin[itemize]
+ * @item{$E$ is reflexive: $E[x, x]$}
+ * @item{$E$ is symmetric: $E[x, y] @Rightarrow E[y, x]$}
+ * @item{$E$ is transitive: $E[x, y] @Rightarrow E[y, z] @Rightarrow E[x, z]$}
+ * @end[itemize]
+ * @end[doc]
+ *)
+prim quotientType {| intro_resource [] |} 'H 'u 'v 'w 'x1 'x2 :
+   [wf] sequent [squash] { 'H >- "type"{'A} } -->
+   [wf] sequent [squash] { 'H; u: 'A; v: 'A >- "type"{'E['u; 'v]} } -->
+   [wf] sequent [squash] { 'H; u: 'A >- 'E['u; 'u] } -->
+   [wf] sequent [squash] { 'H; u: 'A; v: 'A; x1: 'E['u; 'v] >- 'E['v; 'u] } -->
+   [wf] sequent [squash] { 'H; u: 'A; v: 'A; w: 'A; x1: 'E['u; 'v]; x2: 'E['v; 'w] >- 'E['u; 'w] } -->
+   sequent ['ext] { 'H >- "type"{.quot x, y: 'A // 'E['x; 'y]} } =
+   it
+
+(*!
+ * @begin[doc]
+ * In the @emph{weak} form, two quotient types $@quot{A_1; x; y; E_1[x, y]}$ and
+ * $@quot{A_2; x; y; E_2[x, y]}$ are equal if the types $A_1$ and $A_2$ and
+ * the equivalence relations $E_1$ and $E_2$ are equal.
+ * @end[doc]
  *)
 prim quotientWeakEquality {| intro_resource []; eqcd_resource |} 'H 'x 'y 'z 'u 'v :
    [wf] sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
@@ -127,15 +243,13 @@ prim quotientWeakEquality {| intro_resource []; eqcd_resource |} 'H 'x 'y 'z 'u 
            } =
    it
 
-(*
- * H >- quot x1, y1: A1 // E1 = quot x2, y2. A2 // E2 in Ui
- * by quotientEquality r s v
- *
- * H >- quot x1, y1: A1 // E1 = quot x1, y1: A1 // E1 in Ui
- * H >- quot x2, y2. A2 // E2 = quot x2, y2. A2 // E2 in Ui
- * H >- A1 = A2 in Ui
- * H; v: A1 = A2 in Ui; r: A1; s: A1 >- E1[r, s] -> E2[r, s]
- * H; v: A1 = A2 in Ui; r: A1; s: A1 >- E2[r, s] -> E1[r, s]
+(*!
+ * @begin[doc]
+ * In the @emph{strong} form, two quotient types $@quot{A_1; x; y; E_1[x, y]}$ and
+ * $@quot{A_2; x; y; E_2[x, y]}$ are equal if the types $A_1$ and $A_2$ are
+ * equal, and their equivalence relations are @emph{extensionally} equal
+ * $E_1[x, y] @Leftrightarrow E_2[x, y]$.
+ * @end[doc]
  *)
 prim quotientEquality {| intro_resource [SelectOption 1] |} 'H 'r 's 'v :
    [wf] sequent [squash] { 'H >- quot x1, y1: 'A1 // 'E1['x1; 'y1] = quot x1, y1: 'A1 // 'E1['x1; 'y1] in univ[i:l] } -->
@@ -146,24 +260,8 @@ prim quotientEquality {| intro_resource [SelectOption 1] |} 'H 'r 's 'v :
    sequent ['ext] { 'H >- quot x1, y1: 'A1 // 'E1['x1; 'y1] = quot x2, y2: 'A2 // 'E2['x2; 'y2] in univ[i:l] } =
    it
 
-(*
- * Typehood.
- *)
-prim quotientType {| intro_resource [] |} 'H 'u 'v 'w 'x1 'x2 :
-   [wf] sequent [squash] { 'H >- "type"{'A} } -->
-   [wf] sequent [squash] { 'H; u: 'A; v: 'A >- "type"{'E['u; 'v]} } -->
-   [wf] sequent [squash] { 'H; u: 'A >- 'E['u; 'u] } -->
-   [wf] sequent [squash] { 'H; u: 'A; v: 'A; x1: 'E['u; 'v] >- 'E['v; 'u] } -->
-   [wf] sequent [squash] { 'H; u: 'A; v: 'A; w: 'A; x1: 'E['u; 'v]; x2: 'E['v; 'w] >- 'E['u; 'w] } -->
-   sequent ['ext] { 'H >- "type"{.quot x, y: 'A // 'E['x; 'y]} } =
-   it
-
-(*
- * H >- quot x, y: A // E ext a
- * by quotient_memberFormation
- *
- * H >- quot x, y: A // E = quot x, y: A // E in Ui
- * H >- A ext a
+(*!
+ * @docoff
  *)
 prim quotient_memberFormation {| intro_resource [] |} 'H :
    [wf] sequent [squash] { 'H >- "type"{(quot x, y: 'A // 'E['x; 'y])} } -->
@@ -171,12 +269,14 @@ prim quotient_memberFormation {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- quot x, y: 'A // 'E['x; 'y] } =
    'a
 
-(*
- * H >- a1 = a2 in quot x, y: A // E
- * by quotient_memberWeakEquality
+(*!
+ * @begin[doc]
+ * @thysubsection{Membership}
  *
- * H >- quot x, y: A // E = quot x, y: A // E in Ui
- * H >- x1 = a2 in A
+ * In the @emph{weak} form, any two elements in $A$ are also
+ * in the quotient $@quot{A; x; y; E[x, y]}$ for @emph{any}
+ * equivalence relation $E$.
+ * @end[doc]
  *)
 prim quotient_memberWeakEquality {| intro_resource [] |} 'H :
    [wf] sequent [squash] { 'H >- "type"{(quot x, y: 'A // 'E['x; 'y])} } -->
@@ -184,23 +284,18 @@ prim quotient_memberWeakEquality {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y] } =
    it
 
-(*
- * Membership.
- *)
 prim quotientMember {| intro_resource [] |}  'H :
    [wf] sequent [squash] { 'H >- "type"{(quot x, y: 'A // 'E['x; 'y])} } -->
    [wf] sequent [squash] { 'H >- 'l IN 'A } -->
    sequent ['ext] { 'H >- 'l IN (quot x, y: 'A // 'E['x; 'y]) } =
    it
 
-(*
- * H >- a1 = a2 in quot x, y: A // E
- * by quotient_memberEquality
- *
- * H >- quot x, y: A // E = quot x, y: A // E in Ui
- * H >- a1 = a1 in A
- * H >- a2 = a2 in A
- * H >- E[a1; a2]
+(*!
+ * @begin[doc]
+ * In the @emph{strong} form, two elements $a_1$ and $a_2$ are in
+ * the quotient type $@quot{A; x; y; E[x, y]}$ if they are equal
+ * in $A$, and they are related with the equivalence relation $E[a_1, a_2]$.
+ * @end[doc]
  *)
 prim quotient_memberEquality {| intro_resource []; eqcd_resource |} 'H :
    [wf] sequent [squash] { 'H >- "type"{(quot x, y: 'A // 'E['x; 'y])} } -->
@@ -210,12 +305,15 @@ prim quotient_memberEquality {| intro_resource []; eqcd_resource |} 'H :
    sequent ['ext] { 'H >- 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y] } =
    it
 
-(*
- * H, a: quot x, y: A // E, J[x] >- s[a] = t[a] in T[a]
- * by quotientElimination v w z
+(*!
+ * @begin[doc]
+ * @thysubsection{Elimination}
  *
- * H, a: quot x, y: A // E, J[x] >- T[a] = T[a] in Ui
- * H, a: quot x, y: A // E, J[x], v: A, w: A, z: E[v, w] >- s[v] = t[w] in T[v]
+ * The first two elimination forms are valid only if the goal
+ * is an equality judgment.  For both cases, the judgment is true
+ * if it is true for any two elements that are equal in the quotient type.
+ * The difference is the ordering of the hypotheses in the subgoal.
+ * @end[doc]
  *)
 prim quotientElimination1 'H 'J 'v 'w 'z :
    [wf] sequent [squash] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a] >- "type"{'T['a]} } -->
@@ -233,22 +331,24 @@ prim quotientElimination2 {| elim_resource [ThinOption thinT] |} 'H 'J 'v 'w 'z 
    sequent ['ext] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a] >- 's['a] = 't['a] in 'T['a] } =
    it
 
-(*
- * Equality in a quotient space.
+(*!
+ * @begin[doc]
+ * An equality assumption $a_1 = a_2 @in @quot{A; x; y; E[x, y]}$ implies
+ * that $E[a_1, a_2]$.
+ * @end[doc]
  *)
 prim quotient_equalityElimination {| elim_resource [] |} 'H 'J 'v :
    [main] ('g['v] : sequent ['ext] { 'H; x: 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]; 'J['x]; v: hide{'E['a1; 'a2]} >- 'T['x] }) -->
    sequent ['ext] { 'H; x: 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]; 'J['x] >- 'T['x] } =
    'g[it]
 
-(*
- * H >- quot x1, y1: A1 // E1[x1; y1] <= quot x2, y2: A2 // E2[x2; y2]
- * by quotientSubtype
+(*!
+ * @begin[doc]
+ * @thysubsection{Subtyping}
  *
- * H >- A1 <= A2
- * H, x1: A1, y1: A1 >- E1[x1; y1] => E2[x2; y2]
- * H >- quot x1, y1: A1 // E1[x1; y1] in type
- * H >- quot x2, y2: A2 // E2[x2; y2] in type
+ * The quotient $@quot{A; x; y; E[x, y]}$ is covariant in  the type $A$ and the
+ * the equivalence relation $E$ (the relation must become coarser).
+ * @end[doc]
  *)
 prim quotientSubtype 'H 'a1 'a2 :
    sequent [squash] { 'H >- subtype{'A1; 'A2} } -->
@@ -257,6 +357,7 @@ prim quotientSubtype 'H 'a1 'a2 :
    sequent [squash] { 'H >- "type"{(quot x2, y2: 'A2 // 'E2['x2; 'y2])} } -->
    sequent ['ext] { 'H >- subtype{ (quot x1, y1: 'A1 // 'E1['x1; 'y1]); (quot x2, y2: 'A2 // 'E2['x2; 'y2]) } } =
    it
+(*! @docoff *)
 
 (************************************************************************
  * TACTICS                                                              *

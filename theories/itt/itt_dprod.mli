@@ -67,7 +67,6 @@ prec prec_spread
  * spread(u, v; a, b. c[a, b]) <--> c[u, v]
  *)
 rewrite reduceSpread : spread{'u, 'v; a, b. 'c['a; 'b]} <--> 'c['u; 'v]
-
 rewrite reduceFst : fst{pair{'a; 'b}} <--> 'a
 rewrite reduceSnd : snd{pair{'a; 'b}} <--> 'b
 

@@ -1,8 +1,41 @@
-(*
- * Intersection type.
+(*!
+ * @begin[doc]
+ * @theory[Itt_isect]
+ *
+ * The @tt{Itt_isect} module defines the @emph{intersection}
+ * type $@isect{x; A; B[x]}$.  The elements of the intersection
+ * are the terms that inhabit $B[x]$ for @emph{every} $x @in A$.
+ * The intersection is similar to the function space $@fun{x; A; B[x]}$;
+ * the intersection is inhabited if-and-only-if there is a constant
+ * function in the dependent-function space.
+ *
+ * The intersection does not have a conventional
+ * set-theoretic interpretation.  One example is the
+ * type $@top @equiv @isect{x; @void; @void}$.  If the set theoretic
+ * interpretation of $@void$ is the empty set, the intersection
+ * would probably be empty.  However, in the type theory,
+ * the intersection contains @emph{every} term $t$ because the
+ * quantification is empty.
+ *
+ * Another example is the type $@isect{T; @univ_i; T @rightarrow T}$,
+ * which contains all the identity functions.  The set-theoretic
+ * interpretation of functions as sets of ordered pairs would again
+ * be empty.
+ *
+ * The intersection is commonly used to express polymorphism of
+ * function spaces, and it is also used as an operator for
+ * record type concatenation.  If records are expressed as
+ * functions from labels ($@atom$ is commonly used for labels) to
+ * values, the record type $@record{l@colon T}$ denotes the
+ * functions that return values of type $T$ when applied to the
+ * label $l$.  The intersection of two record types $@record{l_1@colon T_1}
+ * @bigcap @record{l_2@colon T_2}$ is isomorphic to the
+ * record space $@record{{l_1@colon T_1; l_2@colon T_2}}$.
+ * @end[doc]
  *
  * ----------------------------------------------------------------
  *
+ * @begin[license]
  * This file is part of MetaPRL, a modular, higher order
  * logical framework that provides a logical programming
  * environment for OCaml and other languages.
@@ -27,14 +60,20 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  * Author: Jason Hickey
- * jyh@cs.cornell.edu
- *
+ * @email{jyh@cs.cornell.edu}
+ * @end[license]
  *)
 
+(*!
+ * @begin[doc]
+ * @parents
+ * @end[doc]
+ *)
 include Itt_equal
 include Itt_set
 include Itt_rfun
 include Itt_logic
+(*! @docoff *)
 
 open Printf
 open Mp_debug
@@ -63,9 +102,19 @@ let _ =
  * TERMS                                                                *
  ************************************************************************)
 
+(*!
+ * @begin[doc]
+ * @terms
+ *
+ * The @tt{isect} term denotes the intersection type.
+ * The @tt{top} type defines the type of all terms
+ * $@isect{x; @void; @void}$.
+ * @end[doc]
+ *)
 declare "isect"{'A; x. 'B['x]}
 
 prim_rw unfold_top : top <--> "isect"{void; x. void}
+(*! @docoff *)
 
 (************************************************************************
  * DISPLAY FORMS                                                        *
@@ -96,11 +145,15 @@ prim intersectionFormation 'H 'x 'A :
    sequent ['ext] { 'H >- univ[i:l] } =
    isect x: 'A. 'B['x]
 
-(*
- * H >- isect x1:A1. B1[x1] = isect x2:A2. B2[x2] in Ui
- * by intersectionEquality y
- * H >- A1 = A2 in Ui
- * H, y: A1 >- B1[y] = B2[y] in Ui
+(*!
+ * @begin[doc]
+ * @rules
+ * @thysubsection{Typehood and equality}
+ *
+ * The intersection $@isect{x; A; B[x]}$ is well-formed if
+ * $A$ is a type, and $B[x]$ is a family of types indexed by
+ * $x @in A$.
+ * @end[doc]
  *)
 prim intersectionEquality {| intro_resource []; eqcd_resource |} 'H 'y :
    [wf] sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
@@ -114,6 +167,12 @@ prim intersectionType {| intro_resource [] |} 'H 'y :
    sequent ['ext] { 'H >- "type"{."isect"{'A; x. 'B['x]}} } =
    it
 
+(*!
+ * @begin[doc]
+ * The well-formedness of the $@top$ type is derived.
+ * The $@top$ type is a member of every type universe.
+ * @end[doc]
+ *)
 interactive topUniv {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- top IN univ[i:l] }
 
@@ -135,11 +194,19 @@ interactive topType {| intro_resource [] |} 'H :
  *   'b[it]
  *)
 
-(*
- * H >- b1 = b2 in isect x:A. B[x]
- * by intersectionMemberEquality z
- * H >- A = A in type
- * H, z: A >- b1 = b2 in B[z]
+(*!
+ * @begin[doc]
+ * @thysubsection{Membership}
+ * The elements in the intersection $@isect{x; A; B[x]}$ are the
+ * terms $b$ that inhabit $B[z]$ for @emph{every} $a @in A$.
+ * The member equality of the intersection is the intersection
+ * of the equalities on each type $B[z]$.  That is, for two elements
+ * of the intersection to be equal, they must be equal in
+ * @emph{every} type $B[z]$.
+ *
+ * The @hrefterm[top] type contains every program.  The equality here
+ * is trivial; all terms are equal in $@top$.
+ * @end[doc]
  *)
 prim intersectionMemberEquality {| intro_resource []; eqcd_resource |} 'H 'z :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
@@ -150,11 +217,12 @@ prim intersectionMemberEquality {| intro_resource []; eqcd_resource |} 'H 'z :
 interactive topMemberEquality {| intro_resource []; eqcd_resource |} 'H :
    sequent ['ext] { 'H >- 'b1 = 'b2 in top }
 
-(*
- * H >- b1 = b2 in B[a]
- * by intersectionMemberCaseEquality (isect x:A. B[x]) a
- * H >- b1 = b2 in isect x:A. B[x]
- * H >- a = a in A
+(*!
+ * @begin[doc]
+ * The case equality works in the opposite direction: if
+ * two terms are equal in the intersection, they are also
+ * equal in each of the case of the intersection.
+ * @end[doc]
  *)
 prim intersectionMemberCaseEquality 'H (isect x: 'A. 'B['x]) 'a :
    [wf] sequent [squash] { 'H >- 'b1 = 'b2 in isect x: 'A. 'B['x] } -->
@@ -162,11 +230,15 @@ prim intersectionMemberCaseEquality 'H (isect x: 'A. 'B['x]) 'a :
    sequent ['ext] { 'H >- 'b1 = 'b2 in 'B['a] } =
    it
 
-(*
- * H, x: isect y: A. B[y], J[x] >- T[x] ext t[x, x, it]
- * by intersectionElimination a z v
- * H, x: isect y: A. B[y], J[x] >- a = a in A
- * H, x: isect y: A. B[y], J[x], z: B[a], v: z = f in B[a] >- T[x] ext t[x, y, z]
+(*!
+ * @begin[doc]
+ * @thysubsection{Elimination}
+ *
+ * The elimination form performs instantiation of the
+ * intersection space.  If $a @in A$, the elimination form
+ * instantiates the intersection assumption $x@colon @isect{u; A; B[y]}$
+ * to get a proof that $x @in B[a]$.
+ * @end[doc]
  *)
 prim intersectionElimination {| elim_resource [] |} 'H 'J 'a 'x 'y 'v :
    [wf] sequent [squash] { 'H; x: isect y: 'A. 'B['y]; 'J['x] >- 'a = 'a in 'A } -->
@@ -174,12 +246,15 @@ prim intersectionElimination {| elim_resource [] |} 'H 'J 'a 'x 'y 'v :
    sequent ['ext] { 'H; x: isect y: 'A. 'B['y]; 'J['x] >- 'T['x] } =
    't['x; 'x; it]
 
-(*
- * H >- isect a1:A1. B1 <= isect a2:A2. B2
- * by intersectionSubtype
+(*!
+ * @begin[doc]
+ * @thysubsection{Subtyping}
  *
- * H >- A2 <= A1
- * H, a: A1 >- B1[a] <= B2[a]
+ * The intersection type conforms to the subtyping properties
+ * of the dependent-function space.  The type is @emph{contravariant}
+ * in the quantified type $A$, and pointwise-covariant in the
+ * domain type $B[a]$ for each $a @in A$.
+ * @end[doc]
  *)
 prim intersectionSubtype {| intro_resource [] |} 'H 'a :
    sequent [squash] { 'H >- subtype{'A2; 'A1} } -->
@@ -187,6 +262,15 @@ prim intersectionSubtype {| intro_resource [] |} 'H 'a :
    sequent ['ext] { 'H >- subtype{ (isect a1:'A1. 'B1['a1]); (isect a2:'A2. 'B2['a2]) } } =
    it
 
+(*!
+ * @begin[doc]
+ * The alternate subtyping rules are for cases where one of
+ * the types is not an intersection.  The intersection is a subtype
+ * of another type $T$ if @emph{one} of the cases $B[a] @subseteq T$.
+ * A type $T$ is a subtype of the intersection if it is a subtype
+ * of @emph{every} case $B[a]$ for $a @in A$.
+ * @end[doc]
+ *)
 interactive intersectionSubtype2 'H 'y 'a :
    sequent [squash] { 'H >- 'a = 'a in 'A } -->
    sequent [squash] { 'H; y: 'A >- "type"{'B['y]} } -->
@@ -199,9 +283,16 @@ interactive intersectionSubtype3 'H 'x :
    sequent [squash] { 'H; x: 'A >- subtype{'C; 'B['x]} } -->
    sequent ['ext] { 'H >- subtype{'C; ."isect"{'A; x. 'B['x]}} }
 
+(*!
+ * @begin[doc]
+ * @noindent
+ * @emph{Every} type is a subtype of $@top$.
+ * @end[doc]
+ *)
 interactive topSubtype {| intro_resource [] |} 'H :
    sequent [squash] { 'H >- "type"{'T} } -->
    sequent ['ext] { 'H >- subtype{'T; top} }
+(*! @docoff *)
 
 (************************************************************************
  * TACTICS                                                              *

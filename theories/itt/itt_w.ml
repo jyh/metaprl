@@ -1,8 +1,32 @@
-(*
- * W types.
+(*!
+ * @begin[doc]
+ * @theory[Itt_w]
+ *
+ * The @tt{Itt_w} module defines the recursive @i{W}-type.
+ * The @i{W} type has the form $@w{x; A; B[x]}$, where
+ * $A$ is a type, and $B[a]$ is a family of types indexed by
+ * $a @in A$.
+ *
+ * The elements of the @i{W}-type are the nodes $@tree{a; f}$,
+ * where $a @in A$, and $f$ is a function with domain $B[a]$ that produces
+ * the ``children'' of the node.  The children also inhabit the
+ * @i{W}-type, and $f$ is required to have type
+ * $B[a] @rightarrow @w{x; A; B[x]}$.
+ *
+ * The @i{W}-type is defined as primitive.  It @emph{can}
+ * be derived from the recursive type @hreftheory[Itt_srec], with
+ * the definition:
+ *
+ * $$@w{x; A; B[x]} @equiv @srec{T; @prod{x; A; @fun{B[a]; T}}}.$$
+ *
+ * However, the $W$ type has a simpler semantics than the recursive
+ * type.  We keep it as primitive so that the recursive type can
+ * be omitted if the semantics are questionable.
+ * @end[doc]
  *
  * ----------------------------------------------------------------
  *
+ * @begin[license]
  * This file is part of MetaPRL, a modular, higher order
  * logical framework that provides a logical programming
  * environment for OCaml and other languages.
@@ -27,12 +51,19 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  * Author: Jason Hickey
- * jyh@cs.cornell.edu
+ * @email{jyh@cs.cornell.edu}
+ * @end[license]
  *)
 
+(*!
+ * @begin[doc]
+ * @parents
+ * @end[doc]
+ *)
 include Itt_equal
 include Itt_rfun
 include Itt_struct
+(*! @docoff *)
 
 open Opname
 open Refiner.Refiner
@@ -56,19 +87,29 @@ open Itt_struct
  * TERMS                                                                *
  ************************************************************************)
 
-(*
- * W type is type of trees   (type w = a:A * (B[a] -> w))
+(*!
+ * @begin[doc]
+ * @terms
+ *
+ * The $W$ type is type of trees, $W = @prod{a; A; @fun{B[a]; W}}$.
+ * @end[doc]
  *)
 declare w{'A; x. 'B['x]}
 
-(*
- * Trees.  Each node has a label 'a, and a function to
- * compute the children 'f.
+(*!
+ * @begin[doc]
+ * The @tt{tree} terms inhabit the $W$-type.
+ * Each node has a label $a @in A$, and a function $f$ with
+ * domain $B[a]$ to compute the children of the node.
+ * @end[doc]
  *)
 declare tree{'a; 'f}
 
-(*
- * Induction over trees.
+(*!
+ * @begin[doc]
+ * The @tt{tree_ind} term is the induction combinator, which
+ * provides computation over trees.
+ * @end[doc]
  *)
 declare tree_ind{'z; a, f, g. 'body['a; 'f; 'g]}
 
@@ -76,19 +117,31 @@ declare tree_ind{'z; a, f, g. 'body['a; 'f; 'g]}
  * REWRITING                                                            *
  ************************************************************************)
 
-(*
- * Reduction rule.
- * The g part composes the label with an application to f.
+(*!
+ * @begin[doc]
+ * @rewrites
+ *
+ * The induction combinator takes are $W$-node
+ * as its first argument, and a body that expect three arguments $a_2$,
+ * $f_2$, and $g_2$.  The $a_2$ argument is the label of the current node,
+ * the $f_2$ argument is the function that computes the children, and
+ * $g_2$ is the value that is returned by a recursive call.
+ * @end[doc]
  *)
 prim_rw reduce_tree_ind :
    tree_ind{tree{'a1; 'f1}; a2, f2, g2. 'body['a2; 'f2; 'g2]}
    <--> 'body['a1; 'f1; lambda{a. tree_ind{.'f1 'a; a2, f2, g2. 'body['a2; 'f2; 'g2]}}]
 
-(*
- * Trees allow eta-reduction.
+(*!
+ * @begin[doc]
+ * Trees admit eta-reduction on the function argument---the guarantee is that
+ * the function argument will only be used by application, not by
+ * any other intensional analysis.
+ * @end[doc]
  *)
 prim_rw reduce_tree_eta :
    tree{'a; lambda{x. 'f 'x}} <--> tree{'a; 'f}
+(*! @docoff *)
 
 let reduce_info =
    [<< tree_ind{tree{'a1; 'f1}; a2, f2, g2. 'body['a2; 'f2; 'g2]} >>, reduce_tree_ind;
@@ -130,11 +183,14 @@ prim wFormation 'H 'A 'x :
    sequent ['ext] { 'H >- univ[i:l] } =
    w{'A; x. 'B['x]}
 
-(*
- * H >- W(x1:A1; B1) = W(x2:A2; B2) in Ui
- * by wEquality y
- * H >- A1 = A2 in Ui
- * H, y:A1 >- B1[y] = B2[y] in Ui
+(*!
+ * @begin[doc]
+ * @rules
+ * @thysubsection{Typehood and equality}
+ *
+ * The $W$-type $@w{x; A; B[x]}$ is well-formed if $A$ is a type,
+ * and $B[a]$ is a type for any $a @in A$.
+ * @end[doc]
  *)
 prim wEquality {| intro_resource []; eqcd_resource |} 'H 'y :
    [wf] sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
@@ -151,12 +207,8 @@ prim wType {| intro_resource [] |} 'H 'x :
    sequent ['ext] { 'H >- "type"{.w{'A1; y.'A2['y]}} } =
    it
 
-(*
- * H >- W(x:A; B[x]) ext tree(a, f)
- * by treeFormation a y
- * H >- a = a in A
- * H >- B[a] -> W(x:A; B[x]) ext f
- * H, y:A >- B[y] = B[y] in Ui
+(*!
+ * @docoff
  *)
 prim treeFormation {| intro_resource [] |} 'H 'a 'y :
    [wf] sequent [squash] { 'H >- 'a = 'a in 'A } -->
@@ -165,12 +217,14 @@ prim treeFormation {| intro_resource [] |} 'H 'a 'y :
    sequent ['ext] { 'H >- w{'A; x. 'B['x]} } =
    tree{'a; 'f}
 
-(*
- * H >- tree(a1, b1) = tree(a2, b2) in W(x:A; B)
- * by treeEquality y
- * H >- a1 = a2 in A
- * H >- b1 = b2 in B[a1] -> W(x:A; B)
- * H, y:A >- B[y] = B[y] in Ui
+(*!
+ * @begin[doc]
+ * @thysubsection{Membership}
+ *
+ * The elements of the $W$-type $@w{x; A; B[x]}$ are the
+ * @hrefterm[tree] terms $@tree{a; f}$, where $a @in A$,
+ * and $f @in B[a] @rightarrow @w{x; A; B[x]}$.
+ * @end[doc]
  *)
 prim treeEquality {| intro_resource []; eqcd_resource |} 'H 'y :
    [wf] sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
@@ -179,10 +233,15 @@ prim treeEquality {| intro_resource []; eqcd_resource |} 'H 'y :
    sequent ['ext] { 'H >- tree{'a1; 'b1} = tree{'a2; 'b2} in w{'A; x. 'B['x]} } =
    it
 
-(*
- * H, x:W(y:A; B[y]), J[x] >- T[x] ext spread(x; u, v. t[u, v])
- * by wElimination u v
- * H, x:W(y:A; B[y]), u:A, v:B[u] -> W(y:A; B[y]), J[tree(u, v)] >- T[tree(u, v)] ext t[u, v]
+(*!
+ * @begin[doc]
+ * @thysubsection{Elimination}
+ *
+ * The elimination rule performs induction over the $W$-type
+ * $@w{x; A; B[x]}$.  The conclusion is true for all $z$ in the
+ * $W$-type if it is true for an arbitrary term $@tree{a; f}$, where
+ * the induction hypothesis holds on all children given by $f$.
+ * @end[doc]
  *)
 prim wElimination {| elim_resource [ThinOption thinT] |} 'H 'J 'z 'a 'f 'g 'b 'v :
    [main] ('t['z; 'a; 'f; 'g] :
@@ -198,8 +257,15 @@ prim wElimination {| elim_resource [ThinOption thinT] |} 'H 'J 'z 'a 'f 'g 'b 'v
    sequent ['ext] { 'H; z: w{'A; x. 'B['x]}; 'J['z] >- 'T['z] } =
       tree_ind{'z; a, f, g. 't['z; 'a; 'f; 'g]}
 
-(*
- * Equality on tree induction forms.
+(*!
+ * @begin[doc]
+ * @thysubsection{Combinator equality}
+ *
+ * The tree-induction term computes a value of type $T$ if the body
+ * computes a value of type $T$ given and argument $a @in A$, a child
+ * function $f$, and a function $g$ that computes the recursive values
+ * for each of the children.
+ * @end[doc]
  *)
 prim tree_indEquality {| intro_resource []; eqcd_resource |} 'H (w{'A; x. 'B['x]}) :
    [wf] sequent [squash] { 'H >- 'z1 = 'z2 in w{'A; x. 'B['x]} } -->
@@ -209,6 +275,7 @@ prim tree_indEquality {| intro_resource []; eqcd_resource |} 'H (w{'A; x. 'B['x]
                           = tree_ind{'z2; a2, f2, g2. 'body2['a2; 'f2; 'g2]}
                           in 'T } =
    it
+(*! @docoff *)
 
 (************************************************************************
  * PRIMITIVES                                                           *

@@ -1,9 +1,17 @@
-(*
- * Definition of well-foundedness that is a little easier
- * to use than the primtive definition in Itt_rfun.
+(*!
+ * @begin[doc]
+ * @theory[Itt_well_founded]
+ *
+ * The @tt{Itt_well_founded} module provides a more convenient
+ * description of well-foundedness than the @hrefterm[well_founded_prop]
+ * term formalized the the @hreftheory[Itt_rfun] module.  The definition
+ * of well-foundedness requires the derivation of an induction
+ * principle.
+ * @end[doc]
  *
  * ----------------------------------------------------------------
  *
+ * @begin[license]
  * This file is part of MetaPRL, a modular, higher order
  * logical framework that provides a logical programming
  * environment for OCaml and other languages.
@@ -28,9 +36,15 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  * Author: Jason Hickey
- * jyh@cs.cornell.edu
+ * @email{jyh@cs.cornell.edu}
+ * @end[license]
  *)
 
+(*!
+ * @begin[doc]
+ * @parents
+ * @end[doc]
+ *)
 include Itt_fun
 include Itt_logic
 
@@ -38,6 +52,24 @@ include Itt_logic
  * SYNTAX                                                               *
  ************************************************************************)
 
+(*!
+ * @begin[doc]
+ * @terms
+ *
+ * The @tt{partial_order} term specifies that $R$ is a partial
+ * order on type $A$.  The @tt{well_founded} term specifies that,
+ * in addition, $R$ is a well-founded order on $A$.
+ *
+ * The definition of @tt{partial_order} is that the order is
+ * anti-reflexive, anti-symmetric, and transitive.
+ *
+ * The definition of @tt{well_founded} requires that $R$ be a partial
+ * order, and that there is an @emph{induction} principle that can be
+ * used to prove any predicate $P$ on $A$.  This is different from the
+ * classical definition (that there are no infinite descending chains),
+ * but the induction principle implies that classical property.
+ * @end[doc]
+ *)
 define unfold_partial_order : partial_order{'A; x, y. 'R['x; 'y]} <-->
    ((all x: 'A. "not"{'R['x; 'x]})
     & (all x: 'A. all y: 'A. ('R['x; 'y] => "not"{'R['y; 'x]}))
@@ -48,6 +80,7 @@ define unfold_well_founded : well_founded[i:l]{'A; x, y. 'R['x; 'y]} <-->
     & (all P: ('A -> univ[i:l]).
        ((all x: 'A. ((all y: 'A. ('R['y; 'x] => ('P 'y))) => ('P 'x))) =>
         (all x: 'A. 'P 'x))))
+(*! @docoff *)
 
 (************************************************************************
  * DISPLAY                                                              *
@@ -63,8 +96,15 @@ dform well_founded_df : except_mode[src] :: well_founded[i:l]{'A; x, y. 'R} =
  * RULES                                                                *
  ************************************************************************)
 
-(*
- * Typing of definitions.
+(*!
+ * @begin[doc]
+ * @rules
+ * @thysubsection{Well-formedness}
+ *
+ * The @tt{partial_order} and @tt{well_founded} predicates are
+ * both well-formed if their domain $A$ is a type, and their
+ * relation $R$ is a binary relation.
+ * @end[doc]
  *)
 interactive partial_order_type {| intro_resource [] |} 'H 'a 'b :
    [wf] sequent [squash] { 'H >- "type"{'A} } -->
@@ -76,8 +116,16 @@ interactive well_founded_type {| intro_resource [] |} 'H 'a 'b :
    [wf] sequent [squash] { 'H; a: 'A; b: 'A >- "type"{'R['a; 'b]} } -->
    sequent ['ext] { 'H >- "type"{well_founded[i:l]{'A; x, y. 'R['x; 'y]}} }
 
-(*
- * Primitive well-foundedness can be derived.
+(*!
+ * @begin[doc]
+ * The purpose of this definition is to give a more convenient
+ * specification of well-foundedness that uses normal quantification
+ * in its formalization (the @hrefterm[well_founded_prop] predicate defined
+ * in the @hreftheory[Itt_rfun] can't use the function type in its
+ * definition).  The following rule specifies that the new
+ * description of well-foundedness is sufficient to derive the
+ * primitive definition.
+ * @end[doc]
  *)
 interactive well_founded_reduction 'H 'a 'b univ[i:l] :
    [wf] sequent [squash] { 'H >- 'A IN univ[i:l] } -->
@@ -85,7 +133,9 @@ interactive well_founded_reduction 'H 'a 'b univ[i:l] :
    [main] sequent ['ext] { 'H >- well_founded[i:l]{'A; x, y. 'R['x; 'y]} } -->
    sequent ['ext] { 'H >- Itt_rfun!well_founded{'A; x, y. 'R['x; 'y]} }
 
-(*
+(*!
+ * @docoff
+ *
  * -*-
  * Local Variables:
  * Caml-master: "nl"

@@ -1,7 +1,14 @@
-(*
- * Equality type.
+(*!
+ * @begin[doc]
+ * @theory[Itt_equal]
+ *
+ * The @tt{Itt_equal} module defines type @emph{universes},
+ * @emph{cumulativity} of type universes, and equality.
+ * @end[doc]
  *
  * ----------------------------------------------------------------
+ *
+ * @begin[license]
  *
  * This file is part of MetaPRL, a modular, higher order
  * logical framework that provides a logical programming
@@ -27,12 +34,20 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  * Author: Jason Hickey
- * jyh@cs.cornell.edu
+ * @email{jyh@cs.caltech.edu}
  *
+ * @end[license]
  *)
 
+(*!************************************************************************
+ * @begin[doc]
+ * @parents
+ * @end[doc]
+ *)
 include Base_theory
 include Itt_squash
+(*! @docoff *)
+include Itt_comment
 
 open Printf
 open Mp_debug
@@ -76,14 +91,37 @@ let debug_eqcd =
  * TERMS                                                                *
  ************************************************************************)
 
-let x = 1
-
+(*!************************************************************************
+ * @begin[doc]
+ * @terms
+ *
+ * The universe type $@univ_i$ is a @emph{type of types}.  The individual type
+ * universe judgments are listed in the modules for each of the types.
+ * Furthermore, there is no elimination rule, since each universe is just a set of
+ * points, with no order.
+ *
+ * The $@cumulativity{i; j}$ term is a primitive judgment that defines level
+ * @emph{inclusion} (this is a builtin judgment in @MetaPRL).
+ *
+ * The $@type{'t}$ term is used to define the @emph{type} judgment.  A term $T$ is a
+ * type if $@sequent{squash; H; @type{T}}$.
+ *
+ * The semantic meaning of an open equality is that:
+ * @begin[enumerate]
+ * @item{$T$ is a type,}
+ * @item{$t_1$ and $t_2$ are well-formed elements of type $T$.}
+ * @item{and $t_1$ and $t_2$ are equal using the equality of type $T$.}
+ * @end[enumerate]
+ * @end[doc]
+ *)
 declare "type"{'a}
 declare univ[i:l]
 declare equal{'T; 'a; 'b}
+declare cumulativity[i:l, j:l]
+(*! @docoff *)
+
 declare "true"
 declare "false"
-declare cumulativity[i:l, j:l]
 
 let true_term = << "true" >>
 let true_opname = opname_of_term true_term
@@ -274,8 +312,6 @@ dform member_df : except_mode[src] :: parens :: "prec"[prec_equal] :: ('x IN 'T)
 dform member_df2 : mode[src] :: parens :: "prec"[prec_equal] :: ('x IN 'T) =
    szone pushm slot{'x} space `"IN" hspace slot{'T} popm ezone
 
-dform it_df1 : it = cdot
-
 dform type_df1 : except_mode[src] :: parens :: "prec"[prec_type] :: "type"{'a} =
    slot{'a} " " `"Type"
 
@@ -285,9 +321,8 @@ dform type_df2 : mode[src] :: "type"{'a} =
 dform univ_df1 : except_mode[src] :: univ[i:l] =
    mathbbU `"[" slot[i:l] `"]"
 
-dform squash_df : except_mode[src] :: squash = cdot
-
-dform squash_df2 : mode[src] :: squash = `"squash"
+dform cumulativity_df : cumulativity[i:l, j:l] =
+   `"cumulativity[" slot[i:l] `";" slot[j:l] `"]"
 
 (************************************************************************
  * RULES                                                                *
@@ -298,14 +333,32 @@ dform squash_df2 : mode[src] :: squash = `"squash"
  *)
 prim trueIntro {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- "true" } =
-   it
+   it;;
 
-(*
- * Typehood is equality.
+(*!************************************************************************
+ * @begin[doc]
+ * @rules
+ *
+ * @thysubsection{Equality axiom}
+ *
+ * The @emph{axiom} rule declares that if a program $x$ has type
+ * $T$ by assumption, then $T$ is a type, and $x$ is a member of $T$.
+ * @end[doc]
  *)
 prim equalityAxiom 'H 'J :
    sequent ['ext] { 'H; x: 'T; 'J['x] >- 'x IN 'T } =
    it
+
+(*!************************************************************************
+ * @begin[doc]
+ * @thysubsection{Equality is an equivalence relation}
+ *
+ * The next three rules specify that equality is an equivalence relation.
+ * The @emph{reflexivity} rule differs from the standard definition:
+ * a program $x$ has type $T$ if it is equal to any other
+ * element of $T$.
+ * @end[doc]
+ *)
 
 (*
  * Reflexivity.
@@ -316,7 +369,7 @@ prim equalityRef 'H 'y :
    it
 
 (*
- * Symettry.
+ * Symmetry.
  *)
 prim equalitySym 'H :
    sequent ['ext] { 'H >- 'y = 'x in 'T } -->
@@ -345,6 +398,16 @@ prim equalityFormation 'H 'T :
    sequent ['ext] { 'H >- univ[i:l] } =
    'a = 'b in 'T
 
+(*!************************************************************************
+ * @begin[doc]
+ * @thysubsection{Well-formedness of equality}
+ *
+ * The next two rules describe well-formedness of the equality judgment.
+ * Equality is @emph{intensional}: two equalities are equal if all of their
+ * parts are equal.
+ * @end[doc]
+ *)
+
 (*
  * H >- (a1 = b1 in T1) = (a2 = b2 in T2)
  * by equalityEquality
@@ -369,14 +432,31 @@ prim equalityType {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- "type"{. 'a = 'b in 'T } } =
    it
 
+(*! @docoff *)
 interactive equalityType2 {| intro_resource [] |} 'H :
    [wf] sequent [squash] { 'H >- 'a IN 'T } -->
    sequent ['ext] { 'H >- "type"{. 'a IN 'T } }
 
+(*!************************************************************************
+ * @begin[doc]
+ * @thysubsection{Equality in a type}
+ *
+ * Equality in any term $T$ means that $T$ is a type.
+ * @end[doc]
+ *)
 prim equalityTypeIsType 'H 'a 'b :
    [wf] sequent [squash] { 'H >- 'a = 'b in 'T } -->
    sequent ['ext] { 'H >- "type"{'T} } =
    it
+
+(*!************************************************************************
+ * @begin[doc]
+ * @thysubsection{Inhabitants of the equality type}
+ *
+ * The two following rules state that $@it$ is the one-and-only element
+ * in a provable equality type.
+ * @end[doc]
+ *)
 
 (*
  * H >- it in (a = b in T)
@@ -400,6 +480,17 @@ prim equalityElimination {| elim_resource [] |} 'H 'J :
    sequent ['ext] { 'H; x: 'a = 'b in 'T; 'J['x] >- 'C['x] } =
    't
 
+(*!************************************************************************
+ * @begin[doc]
+ * @thysubsection{Truth implies typehood}
+ *
+ * For any sequent judgment $@sequent{ext; H; T}$ the term $T$ must be a
+ * a type.  The following rule allows us to infer well-formedness of a
+ * type from it provability.  Note that this rule is useless for types $T$
+ * that are not true.
+ * @end[doc]
+ *)
+
 (*
  * H >- T = T in type
  * by typeEquality
@@ -410,6 +501,17 @@ prim typeEquality 'H :
    [main] sequent [squash] { 'H >- 'T } -->
    sequent ['ext] { 'H >- "type"{'T} } =
    it
+
+(*!************************************************************************
+ * @begin[doc]
+ * @thysubsection{Forgetting proof extracts}
+ *
+ * The following four rules state that the proof extract (the program
+ * that inhabits the equality type) can always be found, even if the
+ * proof is not known.  This is always true because the equality type
+ * has only one proof ($@it$).
+ * @end[doc]
+ *)
 
 (*
  * Squash elim.
@@ -428,6 +530,24 @@ prim rewrite_squashElimination 'H :
    sequent [squash] { 'H >- Perv!"rewrite"{'a; 'b} } -->
    sequent ['ext] { 'H >- Perv!"rewrite"{'a; 'b} } =
    it
+
+(*
+ * Squash from any.
+ *)
+prim squashFromAny 'H 'ext :
+   sequent ['ext] { 'H >- 'T } -->
+   sequent [squash] { 'H >- 'T } =
+   it
+
+(*!************************************************************************
+ * @begin[doc]
+ * @thysubsection{Universe cumulativity}
+ *
+ * The following two rules describe universe @emph{cumulativity}.
+ * The $@cumulativity{i:l; j:l}$ term is a built-in judgment
+ * describing level inclusion.
+ * @end[doc]
+ *)
 
 (*
  * H >- Uj in Ui
@@ -454,6 +574,7 @@ prim universeCumulativity 'H univ[j:l] :
    sequent ['ext] { 'H >- 'x = 'y in univ[i:l] } =
    it
 
+(*! @docoff *)
 let univ_member_term = << univ[i:l] IN univ[j:l] >>
 
 let eqcd_univT p =
@@ -464,8 +585,13 @@ let eqcd_univT p =
 let eqcd_resource = Mp_resource.improve eqcd_resource (univ_term, eqcd_univT)
 let intro_resource = Mp_resource.improve intro_resource (univ_member_term, eqcd_univT)
 
-(*
- * Universe is a type.
+(*!************************************************************************
+ * @begin[doc]
+ * @thysubsection{The type universe is a type}
+ *
+ * The next three rules state that every universe $@univ_l$ is a type, and
+ * every inhabitant $x @in @univ_l$ is also a type.
+ * @end[doc]
  *)
 prim universeType {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- "type"{univ[l:l]} } =
@@ -479,9 +605,6 @@ prim universeMemberType 'H univ[i:l] :
    sequent ['ext] { 'H >- "type"{'x} } =
    it
 
-let univTypeT t p =
-   universeMemberType (Sequent.hyp_count_addr p) t p
-
 (*
  * Derived form for known membership.
  * hypothesis rule is not know yet.
@@ -489,6 +612,10 @@ let univTypeT t p =
 prim universeAssumType 'H 'J :
    sequent ['ext] { 'H; x: univ[l:l]; 'J['x] >- "type"{'x} } =
    it
+
+(*! @docoff *)
+let univTypeT t p =
+   universeMemberType (Sequent.hyp_count_addr p) t p
 
 (*
  * H >- Ui ext Uj
@@ -498,14 +625,6 @@ prim universeFormation 'H univ[j:l] :
    sequent ['ext] { 'H >- cumulativity[j:l, i:l] } -->
    sequent ['ext] {'H >- univ[i:l] } =
    univ[j:l]
-
-(*
- * Squash from any.
- *)
-prim squashFromAny 'H 'ext :
-   sequent ['ext] { 'H >- 'T } -->
-   sequent [squash] { 'H >- 'T } =
-   it
 
 (************************************************************************
  * TYPE INFERENCE                                                       *

@@ -1,12 +1,57 @@
-(*
- * We also define a resource to prove squash stability.
- * Terms are "squash stable" if their proof can be inferred from the
- * fact that they are true.  The general form is a squash
- * proof is just:
- *     sequent [it; squash] { H >> T } -->
- *     sequent [it; it] { H >> T }
+(*!
+ * @spelling{squashT}
+ *
+ * @begin[doc]
+ * @theory[Itt_squash]
+ *
+ * The @tt{Itt_squash} module defines a resource that can be used to
+ * help prove ``squash'' stability---that is, to infer the proof
+ * of a proposition given an assumption that it is true.
+ *
+ * Sequents in the @Nuprl type theory have two forms: one is the generic
+ * form $@sequent{ext; H; T}$, where @i{ext} is a variable.  The variable
+ * specifies that the proof extract is needed for the computational content
+ * of the proof.
+ *
+ * The other form is $@sequent{squash; H; T}$, where @hrefterm[squash] is a
+ * term defined in the @hreftheory[Base_trivial]{} module.
+ * The @tt{squash} term specifies that the proof
+ * extract is @em{not} needed for its computational content.
+ *
+ * Typically, @tt{squash} sequents are used for well-formedness
+ * goals (the computational content of well-formedness is never
+ * used), but @tt{squash} sequents are also used in cases where
+ * the computational content can be inferred.  Equality proofs
+ * $a = b @in T$ are the canonical example: the computational content
+ * of $a = b @in T$ is @emph{always} the term @it, and proofs
+ * of equalities can always be squashed because the content can
+ * be discovered later.
+ *
+ * Certain rules are valid only for @tt{squash} sequents; rules for
+ * using squashed assertions in the ``set'' type (in the @hreftheory[Itt_set])
+ * module), for example.  Also, it can be argued that it is consistent to use
+ * @emph{classical} reasoning on @tt{squash} goals without losing
+ * constructive content.
+ *
+ * This module defines a generic resource @hrefresource[squash_resource] that
+ * can be used to recover computational content from a @tt{squash} proof.
+ * The resource defines a tactic @hreftactic[squashT] that performs the
+ * following inference:
+ *
+ * $$
+ * @rulebox{squashT; ;
+ *    @sequent{squash; H; T};
+ *    @sequent{ext; H; T}}
+ * $$
+ *
+ * Additions to the resource require two arguments: a @emph{term} that
+ * matches the conclusion of the squashed goal, and a tactic that performs
+ * squash reduction on goals of that form.
+ * @end[doc]
  *
  * ----------------------------------------------------------------
+ *
+ * @begin[license]
  *
  * This file is part of MetaPRL, a modular, higher order
  * logical framework that provides a logical programming
@@ -32,10 +77,19 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  * Author: Jason Hickey
- * jyh@cs.cornell.edu
+ * @email{jyh@cs.caltech.edu}
+ *
+ * @end[license]
  *)
 
+(*!
+ * @begin[doc]
+ * @parents
+ * @end[doc]
+ *)
 include Base_theory
+(*! @docoff *)
+include Itt_comment
 
 open Printf
 open Mp_debug
@@ -56,6 +110,14 @@ let _ =
    show_loading "Loading Itt_squash%t"
 
 (************************************************************************
+ * DISPLAY FORMS                                                        *
+ ************************************************************************)
+
+dform squash_df : except_mode[src] :: squash = cdot
+dform squash_df2 : mode[src] :: squash = `"squash"
+dform it_df1 : it = cdot
+
+(************************************************************************
  * TYPES                                                                *
  ************************************************************************)
 
@@ -64,10 +126,18 @@ let _ =
  *)
 type squash_data = tactic term_stable
 
-(*
- * The resource itself.
+(*!
+ * @begin[doc]
+ * @resources
+ *
+ * The squash resource represents data using a table that maps
+ * goal terms to the tactic that performs squash inference on
+ * goals of that form.  The argument @code{term * tactic} specifies
+ * the matching term and the tactic.
+ * @end[doc]
  *)
 resource (term * tactic, tactic, squash_data, unit) squash_resource
+(*! @docoff *)
 
 (************************************************************************
  * PRIMITIVES                                                           *
@@ -145,8 +215,16 @@ let squash_resource =
 let get_resource modname =
    Mp_resource.find squash_resource modname
 
-(*
- * Resource argument.
+(*!
+ * @begin[doc]
+ * @tactics
+ *
+ * The @tactic[squashT]{} tactic is defined as a proof annotation
+ * that is passed down the proof.  The tactic retrieves the
+ * annotation and applies it to the current goal.
+ *
+ * @docoff
+ * @end[doc]
  *)
 let squashT p =
    Sequent.get_tactic_arg p "squash" p

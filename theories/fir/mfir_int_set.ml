@@ -35,6 +35,11 @@
  * @end[license]
  *)
 
+(*
+ * NOTE: To make this file remotely readable, I've gone ahead and made
+ * lines that are _much_ longer than 80 characters.
+ *)
+
 (*!
  * @begin[doc]
  * @parents
@@ -63,13 +68,15 @@ open Mfir_int
  * @hrefterm[matchExp]), and to designate a subset of the cases of a union
  * type (see @hrefterm[tyUnion]).  An integer set is represented as a sorted
  * list of closed intervals (the first interval in a set contains the
- * least values of the set).
+ * least values of the set).  Sets are assumed to be ``normalized''; in
+ * addition to being sorted, no two intervals in a set should overlap,
+ * and it should never be the case that two adjacent intervals are of the
+ * form $[a,i],[i+1,b]$.
  *
  * The term @tt[interval] represents a closed interval.  The left endpoint
  * should be less then or equal to the right endpoint.  The term @tt[intset]
  * consists of a sorted list of intervals.  The parameters are tags to
  * indicate the precision and signedness of the endpoints of each interval.
- * These tags are ignored in the set operations below.
  * @end[doc]
  *)
 
@@ -90,24 +97,24 @@ declare member{ 'num; 's }
 (*!
  * @begin[doc]
  *
- * The term @tt[interval_lt] is used to test if all the integers in
- * @tt[interval1] are less than the integers in @tt[interval2].
+ * The term @tt[normalize] is used to normalize a set.  It does normalize
+ * an abitrary set (see the rewrites below).
  * @end[doc]
  *)
 
-declare interval_lt{ 'interval1; 'interval2 }
+declare normalize{ 'set }
 
 (*!
  * @begin[doc]
- *
  * The term @tt[subset] is used to determine whether or not @tt[smaller_set]
  * is a subset of @tt[larger_set].  The term @tt[set_eq] is used to test two
- * sets for equality.
+ * sets for equality.  The term @tt[union] takes the union of two sets.
  * @end[doc]
  *)
 
 declare subset{ 'smaller_set; 'larger_set }
 declare set_eq{ 'set1; 'set2 }
+declare union{ 'set1; 'set2 }
 
 (*!
  * @begin[doc]
@@ -141,6 +148,31 @@ declare intset_max[precision:n, sign:s]
 declare enum_max
 
 (*!
+ * @begin[doc]
+ * @modsubsection{Auxiliary terms}
+ *
+ * The following terms are not available outside the @tt[Mfir_int_set] module.
+ * They are used internally to express the computations represented by the
+ * above set operations.
+ *
+ * The term @tt[interval_lt] is used to determine if all the members of
+ * @tt[interval1] are less than the members of @tt[interval2].
+ * @end[doc]
+ *)
+
+declare interval_lt{ 'interval1; 'interval2 }
+
+(*!
+ * @begin[doc]
+ *
+ * The next two terms are used in computing the union of two sets.
+ * @end[doc]
+ *)
+
+declare union_aux{ 'interval; 'head1; 'tail1; 'head2; 'tail2 }
+declare union_interval{ 'interval1; 'interval2 }
+
+(*!
  * @docoff
  *)
 
@@ -152,52 +184,9 @@ declare enum_max
 (*!
  * @begin[doc]
  * @rewrites
- * @modsubsection{Set operations}
+ * @modsubsection{Interval operations}
  *
- * The set (interval) membership relation $<< member{ 'i; 's } >>$
- * can be rewritten into a series of comparisons against the intervals
- * (endpoints) of $s$.
- * @end[doc]
- *)
-
-prim_rw reduce_member_interval :
-   member{ number[i:n]; interval{ number[l:n]; number[r:n] } } <-->
-   "and"{ int_le{ number[l:n]; number[i:n] };
-          int_le{ number[i:n]; number[r:n] } }
-
-prim_rw reduce_member_intset_ind :
-   member{ number[i:n]; intset[p:n, str:s]{cons{'head; 'tail}} } <-->
-   "or"{ member{number[i:n]; 'head};
-         member{number[i:n]; intset[p:n, str:s]{'tail}} }
-
-prim_rw reduce_member_intset_base :
-   member{ number[i:n]; intset[p:n, str:s]{nil} } <-->
-   "false"
-
-(*!
- * @docoff
- *)
-
-let reduce_member_interval_actual =
-   reduce_member_interval thenC
-   (addrC [0] reduce_int_le) thenC
-   (addrC [1] reduce_int_le) thenC
-   reduce_and thenC
-   reduce_ifthenelse
-
-let reduce_member =
-   reduce_member_interval_actual orelseC
-   reduce_member_intset_base orelseC
-   (  reduce_member_intset_ind thenC
-      (addrC [0] reduce_member_interval_actual) thenC
-      reduce_or thenC
-      reduce_ifthenelse
-   )
-
-(*!
- * @begin[doc]
- *
- * Comparing two intervals is straightforward.
+ * Rewriting of interval operations is straightforward.
  * @end[doc]
  *)
 
@@ -215,9 +204,111 @@ let reduce_interval_lt =
 
 (*!
  * @begin[doc]
+ * @modsubsection{Set membership}
  *
- * The subset relation depends on the two sets (intervals) being
- * well-formed.
+ * The @tt[reduce_member] conversional reduces the set membership relation
+ * $<< member{ 'i; 'set } >>$ to either $<< "true" >>$ or $<< "false" >>$,
+ * using the rewrites below.
+ * @end[doc]
+ *)
+
+prim_rw reduce_member_interval_aux :
+   member{ number[i:n]; interval{ number[l:n]; number[r:n] } } <-->
+   "and"{ int_le{ number[l:n]; number[i:n] };
+          int_le{ number[i:n]; number[r:n] } }
+
+prim_rw reduce_member_intset_base :
+   member{ number[i:n]; intset[p:n, s:s]{nil} } <-->
+   "false"
+
+prim_rw reduce_member_intset_ind :
+   member{ number[i:n];
+           intset[p:n, s:s]{ cons{ interval{number[j:n]; number[k:n]}; 'tail } } }
+   <-->
+   "or"{ member{ number[i:n]; interval{ number[j:n]; number[k:n] } };
+         member{ number[i:n]; intset[p:n, s:s]{ 'tail } } }
+
+(*!
+ * @docoff
+ *)
+
+let reduce_member_interval =
+   reduce_member_interval_aux thenC
+   (addrC [0] reduce_int_le) thenC
+   (addrC [1] reduce_int_le) thenC
+   reduce_and thenC
+   reduce_ifthenelse
+
+let reduce_member =
+   reduce_member_intset_base orelseC
+   (  reduce_member_intset_ind thenC
+      (addrC [0] reduce_member_interval) thenC
+      reduce_or thenC
+      reduce_ifthenelse
+   )
+
+let resource reduce += [
+   << member{ number[i:n]; intset[p:n, s:s]{ 'intervals } } >>, reduce_member
+]
+
+(*!
+ * @begin[doc]
+ *
+ * Set normalization is limited to combining intervals of the form
+ * $[a,i],[i+1,b]$.  Other ``normalization'' propertiers of integer sets are
+ * assumed to already hold.  The rewrites below are combined into the
+ * @tt[reduce_normalize] conversional.  Only well-formed sets can be
+ * normalized.
+ * @end[doc]
+ *)
+
+prim_rw reduce_normalize_aux :
+   normalize{ intset[p:n, s:s]{ 'intervals } } <-->
+   intset[p:n, s:s]{ normalize{ 'intervals } }
+
+prim_rw reduce_normalize_base1 :
+   normalize{ nil } <-->
+   nil
+
+prim_rw reduce_normalize_base2 :
+   normalize{ cons{ interval{ number[i:n]; number[j:n] }; nil } } <-->
+   cons{ interval{ number[i:n]; number[j:n] }; nil }
+
+prim_rw reduce_normalize_ind :
+   normalize{ cons{ interval{ number[i:n]; number[j:n] };
+              cons{ interval{ number[m:n]; number[n:n] }; 'tail } } } <-->
+      ifthenelse{ int_eq{ (number[j:n] +@ 1); number[m:n] };
+         normalize{ cons{ interval{ number[i:n]; number[n:n] }; 'tail } };
+         cons{ interval{ number[i:n]; number[j:n] };
+               normalize{ cons{ interval{ number[m:n]; number[n:n] }; 'tail } } } }
+
+(*!
+ * @docoff
+ *)
+
+let reduce_normalize_intervals =
+   reduce_normalize_base1 orelseC
+   reduce_normalize_base2 orelseC
+   (  reduce_normalize_ind thenC
+      (addrC [0; 0] reduce_add) thenC
+      (addrC [0] reduce_int_eq) thenC
+      reduce_ifthenelse
+   )
+
+let reduce_normalize =
+   reduce_normalize_aux thenC
+   (addrC [0] (repeatC (higherC reduce_normalize_intervals)))
+
+let resource reduce += [
+   << normalize{ intset[p:n, s:s]{ 'intervals } } >>, reduce_normalize
+]
+
+(*!
+ * @begin[doc]
+ *
+ * The @tt[reduce_subset] conversional uses the rewrites below to reduce
+ * $<< subset{ 'set1; 'set2 } >>$, where $<< 'set1 >>$ and $<< 'set2 >>$ must
+ * both be well-formed sets.
  * @end[doc]
  *)
 
@@ -228,22 +319,25 @@ prim_rw reduce_subset_interval_aux :
           int_le{ number[j:n]; number[m:n] } }
 
 prim_rw reduce_subset_base1 :
-   subset{ intset[p1:n, s1:s]{ nil }; intset[p2:n, s2:s]{ 'intervals } } <-->
+   subset{ intset[p:n, s:s]{ nil }; intset[p:n, s:s]{ 'intervals } } <-->
    "true"
 
 prim_rw reduce_subset_base2 :
-   subset{ intset[p1:n, s1:s]{cons{'a; 'b}}; intset[p2:n, s2:s]{nil} } <-->
+   subset{ intset[p:n, s:s]{cons{'a; 'b}}; intset[p:n, s:s]{nil} } <-->
    "false"
 
 prim_rw reduce_subset_ind :
-   subset{ intset[p1:n, s1:s]{ cons{ 'head1; 'tail1 } };
-           intset[p2:n, s2:s]{ cons{ 'head2; 'tail2 } } } <-->
-   ifthenelse{ interval_lt{ 'head2; 'head1 };
-      subset{ intset[p1:n, s1:s]{ cons{ 'head1; 'tail1 } };
-              intset[p2:n, s2:s]{ 'tail2 } };
-      ifthenelse{ subset{ 'head1; 'head2 };
-         subset{ intset[p1:n, s1:s]{ 'tail1 };
-                 intset[p2:n, s2:s]{ cons{ 'head2; 'tail2 } } };
+   subset{ intset[p:n, s:s]{ cons{ interval{ number[i:n]; number[j:n] }; 'tail1 } };
+           intset[p:n, s:s]{ cons{ interval{ number[m:n]; number[n:n] }; 'tail2 } } }
+   <-->
+   ifthenelse{ interval_lt{ interval{ number[m:n]; number[n:n] };
+                            interval{ number[i:n]; number[j:n] } };
+      subset{ intset[p:n, s:s]{ cons{ interval{ number[i:n]; number[j:n] }; 'tail1 } };
+              intset[p:n, s:s]{ 'tail2 } };
+      ifthenelse{ subset{ interval{ number[i:n]; number[j:n] };
+                          interval{ number[m:n]; number[n:n] } };
+         subset{ intset[p:n, s:s]{ 'tail1 };
+                 intset[p:n, s:s]{ cons{ interval{ number[m:n]; number[n:n] }; 'tail2 } } };
          "false"
       }
    }
@@ -270,10 +364,70 @@ let reduce_subset =
       (tryC reduce_ifthenelse)
    )
 
+let resource reduce += [
+   << subset{ 'set1; 'set2 } >>, reduce_subset
+]
+
 (*!
  * @begin[doc]
  *
- * Set equality is defined in the usual way.
+ * ...
+ * @end[doc]
+ *)
+
+prim_rw reduce_union_start :
+   union{ intset[p:n, s:s]{ 'intervals1 }; intset[p:n, s:s]{ 'intervals2 } } <-->
+   normalize{ intset[p:n, s:s]{ union{ 'intervals1; 'intervals2 } } }
+
+prim_rw reduce_union_base1 :
+   union{ nil; 'intervals } <-->
+   'intervals
+
+prim_rw reduce_union_base2 :
+   union{ cons{ 'a; 'b }; nil } <-->
+   cons{ 'a; 'b }
+
+prim_rw reduce_union_ind :
+   union{ cons{ 'head1; 'tail1 }; cons{ 'head2; 'tail2 } } <-->
+   ifthenelse{ interval_lt{ 'head1; 'head2 };
+      cons{ 'head1; union{ 'tail1; cons{ 'head2; 'tail2 } } };
+      ifthenelse{ interval_lt{ 'head2; 'head1 };
+         cons{ 'head2; union{ cons{ 'head1; 'tail1 }; 'tail2 } };
+         union_aux{ union_interval{ 'head1; 'head2}; 'head1; 'tail1; 'head2; 'tail2 } } }
+
+prim_rw reduce_union_interval :
+   union_interval{ interval{ number[i:n]; number[j:n] };
+                   interval{ number[m:n]; number[n:n] } } <-->
+   interval{ int_min{ number[i:n]; number[m:n] };
+             int_max{ number[j:n]; number[n:n] } }
+
+prim_rw reduce_union_aux :
+   union_aux{ 'interval; interval{ number[i:n]; number[j:n] }; 'tail1;
+                         interval{ number[m:n]; number[n:n] }; 'tail2 } <-->
+      ifthenelse{ int_lt{ number[j:n]; number[n:n] };
+         union{ 'tail1; cons{ 'interval; 'tail2 } };
+         union{ cons{ 'interval; 'tail1 }; 'tail2 } }
+
+(*!
+ * @docoff
+ *)
+
+(* XXX union auto should go here *)
+
+let reduce_union =
+   reduce_union_start
+
+let resource reduce += [
+   << union{ 'set1; 'set2 } >>, reduce_union
+]
+
+(*!
+ * @begin[doc]
+ *
+ * Set equality is defined in the usual way.  The @tt[reduce_set_eq]
+ * conversional uses the rewrite below, along with other rewrites, to avoid
+ * computing $<< subset{ 'set2; 'set1 } >>$ in cases where it is not
+ * necessary.
  * @end[doc]
  *)
 
@@ -292,6 +446,10 @@ let reduce_set_eq =
    reduce_ifthenelse thenC
    (tryC (repeatC reduce_subset))
 
+let resource reduce += [
+   << set_eq{ 'set1; 'set2 } >>, reduce_set_eq
+]
+
 (*!
  * @begin[doc]
  *
@@ -300,8 +458,16 @@ let reduce_set_eq =
  *)
 
 prim_rw reduce_singleton :
-   singleton[precision:n, sign:s]{ 'i } <-->
-   intset[precision:n, sign:s]{ cons{ interval{ 'i; 'i }; nil } }
+   singleton[precision:n, sign:s]{ number[i:n] } <-->
+   intset[precision:n, sign:s]{ cons{ interval{ number[i:n]; number[i:n] }; nil } }
+
+(*!
+ * @docoff
+ *)
+
+let resource reduce += [
+   << singleton[precision:n, sign:s]{ number[i:n] } >>, reduce_singleton
+]
 
 (*!
  * @begin[doc]
@@ -373,25 +539,8 @@ let reduce_intset_max =
    reduce_intset_max_s64
 
 let resource reduce += [
-
-   (* Set operations. *)
-
-   << member{ 'num; 'set } >>,
-      reduce_member;
-   << subset{ 'set1; 'set2 } >>,
-      reduce_subset;
-   << set_eq{ 'set1; 'set2 } >>,
-      reduce_set_eq;
-   << singleton[precision:n, sign:s]{ 'i } >>,
-      reduce_singleton;
-
-   (* Constants. *)
-
-   << intset_max[precision:n, sign:s] >>,
-      reduce_intset_max;
-   << enum_max >>,
-      reduce_enum_max
-
+   << intset_max[precision:n, sign:s] >>, reduce_intset_max;
+   << enum_max >>, reduce_enum_max
 ]
 
 
@@ -430,9 +579,9 @@ dform member_df : except_mode[src] ::
    member{ 'num; 'set } =
    slot{'num} member slot{'set}
 
-dform interval_lt_df : except_mode[src] ::
-   interval_lt{ 'interval1; 'interval2 } =
-   slot{'interval1} `"<" slot{'interval2}
+dform normalize_df : except_mode[src] ::
+   normalize{ 'set } =
+   bf["normalize"] `"(" slot{'set} `")"
 
 dform subset_df : except_mode[src] ::
    subset{ 'smaller_set; 'larger_set } =
@@ -441,6 +590,10 @@ dform subset_df : except_mode[src] ::
 dform set_eq : except_mode[src] ::
    set_eq{ 'set1; 'set2 } =
    slot{'set1} `"=" slot{'set2}
+
+dform union : except_mode[src] ::
+   union{ 'set1; 'set2 } =
+   `"(" slot{'set1} cup slot{'set2} `")"
 
 dform singleton_df1 : except_mode[src] ::
    singleton[precision:n, sign:s]{ 'i } =
@@ -473,3 +626,20 @@ dform intset_max_df3 : except_mode[src] ::
 dform enum_max_df : except_mode[src] ::
    enum_max =
    bf["enum_max"]
+
+(*
+ * Auxiliary terms.
+ *)
+
+dform interval_lt_df : except_mode[src] ::
+   interval_lt{ 'interval1; 'interval2 } =
+   slot{'interval1} `"<" sub{it["interval"]} slot{'interval2}
+
+dform union_aux_df : except_mode[src] ::
+   union_aux{ 'interval; 'head1; 'tail1; 'head2; 'tail2 } =
+   bf["union_aux"] `"(" slot{'interval} `"," slot{cons{'head1;'tail1}}
+      `"," slot{cons{'head2;'tail2}} `")"
+
+dform union_interval_df : except_mode[src] ::
+   union_interval{ 'interval1; 'interval2 } =
+   `"(" slot{'interval1} cup sub{it["interval"]} slot{'interval2} `")"

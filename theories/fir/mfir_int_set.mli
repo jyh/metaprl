@@ -54,9 +54,10 @@ declare intset[precision:n, sign:s]{ 'interval_list }
  *)
 
 declare member{ 'num; 's }
-declare interval_lt{ 'interval1; 'interval2 }
+declare normalize{ 'set }
 declare subset{ 'smaller_set; 'larger_set }
 declare set_eq{ 'set1; 'set2 }
+declare union{ 'set1; 'set2 }
 declare singleton[precision:n, sign:s]{ 'i }
 
 (*
@@ -76,9 +77,10 @@ declare enum_max
  *)
 
 topval reduce_member : conv
-topval reduce_interval_lt : conv
+topval reduce_normalize : conv
 topval reduce_subset : conv
 topval reduce_set_eq : conv
+topval reduce_union : conv
 topval reduce_singleton : conv
 
 (*

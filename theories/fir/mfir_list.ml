@@ -169,7 +169,7 @@ dform mfir_list_search_df2 :
 (* No nil terminator, so use :: notation. *)
 dform mfir_list_search_df3 :
    mfir_list_search{'examined; 'last_elt} =
-   mfir_list_colons{'examined} `" :: " slot{'last_elt}
+   mfir_list_colons{'examined} `"::" slot{'last_elt}
 
 (* Reverse entries and separate with ;. *)
 dform mfir_list_semicolons_df1 :
@@ -185,7 +185,7 @@ dform mfir_list_colons_df1 :
    slot{'last_elt}
 dform colons_df2 :
    mfir_list_colons{cons{'last_elt; 'first_elts}} =
-   mfir_list_colons{'first_elts} `" :: " slot{'last_elt}
+   mfir_list_colons{'first_elts} `"::" slot{'last_elt}
 
 (* List operators. *)
 

@@ -49,6 +49,7 @@ extends Mfir_bool
 
 open Base_meta
 open Top_conversionals
+open Mfir_bool
 
 
 (**************************************************************************
@@ -78,6 +79,9 @@ declare mul{ 'num1; 'num2 }
 declare div{ 'num1; 'num2 }
 declare rem{ 'num1; 'num2 }
 declare minus{ 'num }
+
+declare int_min{ 'num1; 'num2 }
+declare int_max{ 'num1; 'num2 }
 
 (*!
  * @begin[doc]
@@ -227,6 +231,43 @@ let resource reduce += [
    << int_ge{ 'num1; 'num2 } >>, reduce_int_ge
 ]
 
+(*!
+ * @begin[doc]
+ *
+ * Computing the minimum and maximim of two integers is straightforward.
+ * The two rewrites below are combined with rewrite for reducing boolean
+ * expressions to from the @tt[reduce_int_min] and @tt[reduce_int_max]
+ * conversionals.
+ * @end[doc]
+ *)
+
+prim_rw reduce_int_min_aux :
+   int_min{ number[i:n]; number[j:n] } <-->
+   ifthenelse{ int_lt{ number[i:n]; number[j:n] }; number[i:n]; number[j:n] }
+
+prim_rw reduce_int_max_aux :
+   int_max{ number[i:n]; number[j:n] } <-->
+   ifthenelse{ int_lt{ number[i:n]; number[j:n] }; number[j:n]; number[i:n] }
+
+(*!
+ * @docoff
+ *)
+
+let reduce_int_min =
+   reduce_int_min_aux thenC
+   (addrC [0] reduce_int_lt) thenC
+   reduce_ifthenelse
+
+let reduce_int_max =
+   reduce_int_max_aux thenC
+   (addrC [0] reduce_int_lt) thenC
+   reduce_ifthenelse
+
+let resource reduce += [
+   << int_min{ number[i:n]; number[j:n] } >>, reduce_int_min;
+   << int_max{ number[i:n]; number[j:n] } >>, reduce_int_max
+]
+
 
 (**************************************************************************
  * Display forms.
@@ -267,6 +308,14 @@ dform rem_df : except_mode[src] ::
 dform minus_df : except_mode[src] ::
    minus{ 'num } =
    `"(-" slot{'num} `")"
+
+dform int_min_df : except_mode[src] ::
+   int_min{ 'num1; 'num2 } =
+   bf["min"] `"(" slot{'num1} `"," slot{'num2} `")"
+
+dform int_max_df : except_mode[src] ::
+   int_max{ 'num1; 'num2 } =
+   bf["max"] `"(" slot{'num1} `"," slot{'num2} `")"
 
 dform int_eq_df : except_mode[src] ::
    int_eq{ 'num1; 'num2 } =

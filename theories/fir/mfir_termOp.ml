@@ -116,6 +116,18 @@ let is_minus_term = is_1_dep0_term minus_opname
 let mk_minus_term = mk_1_dep0_term minus_opname
 let dest_minus_term = dest_1_dep0_term minus_opname
 
+let int_min_term = << int_min{ 'num1; 'num2 } >>
+let int_min_opname = opname_of_term int_min_term
+let is_int_min_term = is_2_dep0_term int_min_opname
+let mk_int_min_term = mk_2_dep0_term int_min_opname
+let dest_int_min_term = dest_2_dep0_term int_min_opname
+
+let int_max_term = << int_max{ 'num1; 'num2 } >>
+let int_max_opname = opname_of_term int_max_term
+let is_int_max_term = is_2_dep0_term int_max_opname
+let mk_int_max_term = mk_2_dep0_term int_max_opname
+let dest_int_max_term = dest_2_dep0_term int_max_opname
+
 let int_eq_term = << int_eq{ 'num1; 'num2 } >>
 let int_eq_opname = opname_of_term int_eq_term
 let is_int_eq_term = is_2_dep0_term int_eq_opname
@@ -192,11 +204,11 @@ let is_member_term = is_2_dep0_term member_opname
 let mk_member_term = mk_2_dep0_term member_opname
 let dest_member_term = dest_2_dep0_term member_opname
 
-let interval_lt_term = << interval_lt{ 'interval1; 'interval2 } >>
-let interval_lt_opname = opname_of_term interval_lt_term
-let is_interval_lt_term = is_2_dep0_term interval_lt_opname
-let mk_interval_lt_term = mk_2_dep0_term interval_lt_opname
-let dest_interval_lt_term = dest_2_dep0_term interval_lt_opname
+let normalize_term = << normalize{ 'set } >>
+let normalize_opname = opname_of_term normalize_term
+let is_normalize_term = is_1_dep0_term normalize_opname
+let mk_normalize_term = mk_1_dep0_term normalize_opname
+let dest_normalize_term = dest_1_dep0_term normalize_opname
 
 let subset_term = << subset{ 'smaller_set; 'larger_set } >>
 let subset_opname = opname_of_term subset_term
@@ -209,6 +221,12 @@ let set_eq_opname = opname_of_term set_eq_term
 let is_set_eq_term = is_2_dep0_term set_eq_opname
 let mk_set_eq_term = mk_2_dep0_term set_eq_opname
 let dest_set_eq_term = dest_2_dep0_term set_eq_opname
+
+let union_term = << union{ 'set1; 'set2 } >>
+let union_opname = opname_of_term union_term
+let is_union_term = is_2_dep0_term union_opname
+let mk_union_term = mk_2_dep0_term union_opname
+let dest_union_term = dest_2_dep0_term union_opname
 
 let singleton_term = << singleton[precision:n, sign:s]{ 'i } >>
 let singleton_opname = opname_of_term singleton_term

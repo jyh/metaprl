@@ -102,6 +102,16 @@ val is_minus_term : term -> bool
 val mk_minus_term : term -> term
 val dest_minus_term : term -> term
 
+val int_min_term : term
+val is_int_min_term : term -> bool
+val mk_int_min_term : term -> term -> term
+val dest_int_min_term : term -> term * term
+
+val int_max_term : term
+val is_int_max_term : term -> bool
+val mk_int_max_term : term -> term -> term
+val dest_int_max_term : term -> term * term
+
 val int_eq_term : term
 val is_int_eq_term : term -> bool
 val mk_int_eq_term : term -> term -> term
@@ -165,10 +175,10 @@ val is_member_term : term -> bool
 val mk_member_term : term -> term -> term
 val dest_member_term : term -> term * term
 
-val interval_lt_term : term
-val is_interval_lt_term : term -> bool
-val mk_interval_lt_term : term -> term -> term
-val dest_interval_lt_term : term -> term * term
+val normalize_term : term
+val is_normalize_term : term -> bool
+val mk_normalize_term : term -> term
+val dest_normalize_term : term -> term
 
 val subset_term : term
 val is_subset_term : term -> bool
@@ -179,6 +189,11 @@ val set_eq_term : term
 val is_set_eq_term : term -> bool
 val mk_set_eq_term : term -> term -> term
 val dest_set_eq_term : term -> term * term
+
+val union_term : term
+val is_union_term : term -> bool
+val mk_union_term : term -> term -> term
+val dest_union_term : term -> term * term
 
 val singleton_term : term
 val is_singleton_term : term -> bool

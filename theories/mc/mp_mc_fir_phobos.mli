@@ -40,6 +40,6 @@ open Refiner.Refiner.Term
 open Refiner.Refiner.TermType
 open Refiner.Refiner.RefineError
 open Tactic_type.Conversionals
+open Phobos_type
 
-topval test_rewrite : conv -> term -> term
-topval preFirToFirC : conv
+val applyAllIFormC : (mp_pre_term * mp_pre_term) list -> conv

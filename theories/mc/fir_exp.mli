@@ -15,20 +15,6 @@ include Fir_ty
  * Declarations.
  *************************************************************************)
 
-(*
- * Program.
- * Encapsulates an expression and the state in which the expression
- *    should be evaluated.
- *)
-declare prog{ 'state; 'exp }
-
-(*
- * Program value.
- * Declares that 'v is a value and that when the program evaluates,
- *    we can now drop the state from future consideration.
- *)
-declare value{ 'v }
-
 (* Identity (polymorphic). *)
 declare idOp
 
@@ -69,19 +55,19 @@ declare atomVar{ 'var }
 (* Primitive operations. *)
 declare unop_exp{ 'op; 'a1 }
 declare binop_exp{ 'op; 'a1; 'a2 }
-declare letUnop{ 'op; 'ty; 'a1; v. 'exp['v] }
-declare letBinop{ 'op; 'ty; 'a1; 'a2; v. 'exp['v] }
+declare letUnop{ 'state; 'op; 'ty; 'a1; s, v. 'exp['s; 'v] }
+declare letBinop{ 'state; 'op; 'ty; 'a1; 'a2; s, v. 'exp['s; 'v] }
 
 (* Function application. *)
 declare tailCall{ 'var; 'atom_list }
 
 (* Control. *)
-declare matchCase{ 'set; 'exp }
-declare "match"{ 'key; 'cases }
+declare matchCase{ 'set; s. 'exp['s] }
+declare "match"{ 'state; 'key; 'cases }
 
 (* Allocation. *)
-declare letAlloc{ 'alloc_op; v. 'exp['v] }
+declare letAlloc{ 'state; 'alloc_op; s, v. 'exp['s; 'v] }
 
 (* Subscripting. *)
-declare letSubscript{ 'ref; 'index; v. 'exp['v] }
-declare setSubscript{ 'ref; 'index; 'new_val; 'exp }
+declare letSubscript{ 'state; 'ref; 'index; s, v. 'exp['s; 'v] }
+declare setSubscript{ 'state; 'ref; 'index; 'new_val; s. 'exp['s] }

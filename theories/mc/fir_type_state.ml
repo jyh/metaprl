@@ -111,6 +111,9 @@ prim ty_state_member_equality {| intro [] |} 'H :
    sequent ['ext] { 'H >- pair{ 'n1; 'a1 } = pair{ 'n2; 'a2 } in ty_state }
    = it
 
+interactive empty_ty_state_member_equality {| intro [] |} 'H :
+   sequent ['ext] { 'H >- empty = empty in ty_state }
+
 (*
  * Match equality.
  *)

@@ -18,3 +18,6 @@ include Fir_type_state
 
 (* Judgement that a match statement produces a match. *)
 declare produces_match{ 'key; 'cases }
+
+(* Allocation operator type. *)
+declare ty_alloc_op

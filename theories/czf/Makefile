@@ -6,10 +6,6 @@ ROOT := ../..
 INCLUDE := -I . -I ../itt -I ../tactic -I ../ocaml -I ../base -I $(ROOT)/lib
 OCAMLDEPFLAGS := -prl
 
-# Common files
-MLZFILES :=\
-	czf_theory
-
 # Library files
 MPFILES :=\
 	czf_itt_set\

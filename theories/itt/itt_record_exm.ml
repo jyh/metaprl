@@ -16,6 +16,7 @@ include Itt_atom
 include Itt_set
 include Itt_fun
 include Itt_tsquash
+include Itt_list
 
 open Printf
 open Mp_debug
@@ -38,6 +39,7 @@ open Itt_struct
 open Itt_record
 open Itt_fun
 open Itt_rfun
+open Itt_list
 
 (*!
  * @begin[doc]
@@ -324,6 +326,37 @@ interactive semigroupAssos4 'H semigroup[i:l] :
       )}
 
 
+
+(*!
+ * Data structures
+ *)
+
+
+define unfold_stack :
+      Stack[i:l]{'A} <-->                     (* The stack of elements of A *)
+         record["car":t]{univ[i:l]; car.
+         record["empty":t]{'car;  empty.
+         record["push":t]{.'car->'A->'car; push.
+         record["pop":t]{.'car->('car * 'A + unit); pop.
+         tsquash{.
+            (all s: 'car. all a:'A. ('pop('push 's 'a) = inl{('s,'a)} in ('car * 'A + unit)))
+            & ('pop('empty) = inr{it} in ('car * 'A + unit))
+         }}}}}
+
+
+define stack_as_list :
+         list_stack{'A} <-->
+            rcrd["car":t]{list{'A};
+            rcrd["empty":t]{nil;
+            rcrd["push":t]{lambda{s.lambda{a.cons{'a;'s}}};
+            rcrd["pop":t]{lambda{s.list_ind{'s; inr{it}; a,s,f.inl{('s,'a)}}}
+         }}}}
+
+
+
+interactive stack_as_list_wf 'H :
+   sequent[squash] {'H >- 'A IN univ[i:l]} -->
+   sequent['ext] {'H >- list_stack{'A} IN Stack[i:l]{'A}}
 
 
 (*

@@ -8,9 +8,17 @@ open Basic_tactics
 define unfold_subst2: subst{'f;'b} <--> subst{add_vars_upto{'f;'b};last_var{'f};'b}
 
 interactive subst_wf {| intro [] |} :
-   sequent { <H> >- 'f in BTerm } -->
+   sequent { <H> >- 'f in BTerm_plus{1} } -->
    sequent { <H> >- 'b in BTerm } -->
+   sequent { <H> >- bdepth{'b} >= bdepth{'f} } -->
    sequent { <H> >- subst{'f;'b} in BTerm }
+
+interactive subst_LambdaTerm {| intro [] |} :
+   sequent { <H> >- 'f in LambdaTerm } -->
+   sequent { <H> >- 'b in LambdaTerm } -->
+   sequent { <H> >- bdepth{'b} >= bdepth{'f} } -->
+   sequent { <H> >- bdepth{'f} >= 1 } -->
+   sequent { <H> >- subst{'f;'b} in LambdaTerm }
 
 
 define unfold_beta_redex: beta_redex{'redex;'contractum} <-->

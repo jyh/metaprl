@@ -102,9 +102,13 @@ interactive_rw last_var_var_reduce :
       ('u in Var) -->
       last_var{'u} <--> var{left{'u}+@right{'u}; 0}
 
-interactive_rw last_var_bdepth {| reduce |} :
+interactive_rw last_var_depth {| reduce |} :
    ('bt in BTerm_plus{1})  -->
    depth{last_var{'bt}} <--> bdepth{'bt}
+
+interactive_rw last_var_bdepth {| reduce |} :
+   ('bt in BTerm_plus{1})  -->
+   bdepth{last_var{'bt}} <--> bdepth{'bt}
 
 interactive last_var_wf {| intro [] |} :
    sequent { <H> >- 'bt in BTerm_plus{1} } -->

@@ -83,6 +83,19 @@ interactive make_depth_lambdaterm {| intro[] |} :
    sequent { <H> >- 'n >= bdepth{'s} } -->
    sequent { <H> >- make_depth{'s;'n} in LambdaTerm }
 
+interactive add_vars_upto_lambdaterm {| intro [] |} :
+   sequent { <H> >- 't in LambdaTerm } -->
+   sequent { <H> >- 's in LambdaTerm } -->
+   sequent { <H> >- bdepth{'t} >= bdepth{'s} } -->
+   sequent { <H> >- add_vars_upto{'s;'t} in LambdaTerm }
+
+interactive subst_lambdaterm {| intro [] |} :
+   sequent { <H> >- 't in LambdaTerm } -->
+   sequent { <H> >- 'v in Vars_of{'t} } -->
+   sequent { <H> >- 's in LambdaTerm } -->
+   sequent { <H> >- bdepth{'t} >= bdepth{'s} } -->
+   sequent { <H> >- subst{'t;'v;'s} in LambdaTerm }
+
 interactive mk_lambda_wf  {| intro[] |} :
    sequent { <H> >- 't in LambdaTerm } -->
    sequent { <H> >- mk_lambda{'t} in LambdaTerm }

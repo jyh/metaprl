@@ -17,7 +17,7 @@ doc <:doc<
    See the file doc/index.html for information on Nuprl,
    OCaml, and more information about this system.
 
-   Copyright (C) 1998 Jason Hickey, Cornell University
+   Copyright (C) 1997-2004 MetaPRL Group
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License

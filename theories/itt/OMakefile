@@ -83,6 +83,7 @@ MPFILES =\
    itt_quotient_group\
    itt_ring\
    itt_field\
+   itt_ring2\
    itt_order\
    itt_example
 

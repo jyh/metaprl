@@ -1,5 +1,5 @@
 (*
- * Group-like Objects.
+ * Rings.
  *
  * ----------------------------------------------------------------
  *
@@ -30,10 +30,8 @@
  * Email : xiny@cs.caltech.edu
  *)
 
-extends Itt_record
-extends Itt_set
-extends Itt_fun
-extends Itt_disect
+extends Itt_group
+extends Itt_record_renaming
 
 open Tactic_type.Conversionals
 
@@ -41,49 +39,41 @@ open Tactic_type.Conversionals
  * SYNTAX                                                               *
  ************************************************************************)
 
-declare groupoid[i:l]
-declare isSemigroup{'g}
-declare semigroup[i:l]
-declare premonoid[i:l]
-declare isMonoid{'g}
-declare monoid[i:l]
-declare isCommutative{'g}
-declare csemigroup[i:l]
-declare cmonoid[i:l]
-declare subStructure{'s; 'g}
+declare isRDistrib{'r}
+declare isLDistrib{'r}
+declare isDistrib{'r}
+
+declare prering[i:l]
+declare isRing{'G}
+declare ring[i:l]
 
 (************************************************************************
- * DISPLAY                                                              *
+ * DISPLAY FORMS                                                        *
  ************************************************************************)
 
-prec prec_mul
+prec prec_add
+prec prec_neg
 
 (************************************************************************
  * TACTICS                                                              *
  ************************************************************************)
 
-topval unfold_isSemigroup : conv
-topval unfold_semigroup : conv
-topval unfold_premonoid : conv
-topval unfold_isMonoid : conv
-topval unfold_monoid : conv
-topval unfold_subStructure : conv
-topval unfold_isCommutative : conv
+topval unfold_isRDistrib : conv
+topval unfold_isLDistrib : conv
+topval unfold_isDistrib : conv
+topval fold_isRDistrib : conv
+topval fold_isLDistrib : conv
+topval fold_isDistrib : conv
 
-topval fold_groupoid : conv
-topval fold_isSemigroup : conv
-topval fold_semigroup1 : conv
-topval fold_semigroup : conv
-topval fold_premonoid1 : conv
-topval fold_premonoid : conv
-topval fold_isMonoid1 : conv
-topval fold_isMonoid : conv
-topval fold_monoid1 : conv
-topval fold_monoid : conv
-topval fold_isCommutative : conv
-topval fold_csemigroup : conv
-topval fold_cmonoid : conv
-topval fold_subStructure : conv
+topval unfold_prering : conv
+topval unfold_isRing : conv
+topval unfold_ring : conv
+
+topval fold_prering : conv
+topval fold_isRing1 : conv
+topval fold_isRing : conv
+topval fold_ring1 : conv
+topval fold_ring : conv
 
 (*
  * -*-

@@ -73,25 +73,26 @@ MPFILES :=\
 	itt_record_exm\
 	itt_algebra_df\
 	itt_record_renaming\
-        itt_relation_str\
-        itt_set_str\
-        itt_bintree\
-        itt_datatree\
-        itt_sortedtree\
-        itt_rbtree\
+	itt_relation_str\
+	itt_set_str\
+	itt_bintree\
+	itt_datatree\
+	itt_sortedtree\
+	itt_rbtree\
 	itt_sort\
-        itt_singleton\
+	itt_singleton\
 	itt_subset\
 	itt_subset2\
 	itt_grouplikeobj\
 	itt_group\
-        itt_cyclic_group\
+	itt_cyclic_group\
 	itt_quotient_group\
 	itt_ring\
 	itt_field\
+	itt_ring2\
 	itt_order\
-        itt_example\
-		itt_rat
+	itt_example\
+	itt_rat
 
 ifeq ($(TESTS_ENABLED),YES)
 	MPFILES:= $(MPFILES)\

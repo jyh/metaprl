@@ -15,7 +15,7 @@ doc <:doc<
    See the file doc/index.html for information on Nuprl,
    OCaml, and more information about this system.
 
-   Copyright (C) 1998 Jason Hickey, Cornell University
+   Copyright (C) 1997-2004 MetaPRL Group
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -175,17 +175,17 @@ interactive inv_wf {| intro [AutoMustComplete; intro_typeinf <<'G>>] |} group[i:
    sequent { <H> >- 'G in group[i:l] } -->
    sequent { <H> >- 'G^inv in 'G^car -> 'G^car }
 
-interactive op_in_G {| intro [AutoMustComplete; intro_typeinf <<'G>>] |} group[i:l] :
+interactive op_in_car {| intro [AutoMustComplete; intro_typeinf <<'G>>] |} group[i:l] :
    sequent { <H> >- 'G in group[i:l] } -->
    sequent { <H> >- 'a in 'G^car } -->
    sequent { <H> >- 'b in 'G^car } -->
    sequent { <H> >- 'a *['G] 'b in 'G^car }
 
-interactive id_in_G {| intro [AutoMustComplete; intro_typeinf <<'G>>] |} group[i:l] :
+interactive id_in_car {| intro [AutoMustComplete; intro_typeinf <<'G>>] |} group[i:l] :
    sequent { <H> >- 'G in group[i:l] } -->
    sequent { <H> >- 'G^"1" in 'G^car }
 
-interactive inv_in_G {| intro [AutoMustComplete; intro_typeinf <<'G>>] |} group[i:l] :
+interactive inv_in_car {| intro [AutoMustComplete; intro_typeinf <<'G>>] |} group[i:l] :
    sequent { <H> >- 'G in group[i:l] } -->
    sequent { <H> >- 'a in 'G^car } -->
    sequent { <H> >- 'G^inv 'a in 'G^car }

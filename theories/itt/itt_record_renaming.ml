@@ -320,7 +320,8 @@ let resource reduce +=
   [ << field[c:t]{rename_mul_add{'r}} >>, (addrC [0] unfold_rename_mul_add thenC repeatForC rename_mul_add_length rename_reduceC);
     << field[c:t]{rename_add_mul{'r}} >>, (addrC [0] unfold_rename_add_mul thenC repeatForC rename_mul_add_length rename_reduceC);
     << rename_add_mul{rcrd[c:t]{'a;'r}} >>, unfold_rename_add_mul;
-    << rename_mul_add{rcrd[c:t]{'a;'r}} >>, unfold_rename_mul_add
+    << rename_mul_add{rcrd[c:t]{'a;'r}} >>, unfold_rename_mul_add;
+    << as_additive{'r} >>, unfold_as_additive
   ]
 
 doc <:doc<

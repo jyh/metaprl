@@ -243,9 +243,6 @@ rewrite reduce_ind_base :
  ************************************************************************)
 
 (*
- * BUG WEAK
-
-(*
  * H >- Ui ext Z
  * by intFormation
  *)
@@ -281,8 +278,7 @@ rule numberEquality :
 
 (*
  * Induction:
- * H, n:Z, J[n] >- C[n] ext ind(i; m, z. down[n, m, it, z]; base[n]; m, z.
-up[n, m, it, z])
+ * H, n:Z, J[n] >- C[n] ext ind(i; m, z. down[n, m, it, z]; base[n]; m, z. up[n, m, it, z])
  * by intElimination
  *
  * H, n:Z, J[n], m:Z, v: m < 0, z: C[m + 1] >- C[m] ext down[n, m, v, z]
@@ -320,7 +316,6 @@ rule indEquality lambda{z. 'T['z]} :
                    = ind{'x2; i2, j2. 'down2['i2; 'j2]; 'base2; k2, l2.
  'up2['k2; 'l2]}
                    in 'T['x1] }
-*)
 
 (*
  Definition of basic operations (and relations) on int
@@ -444,26 +439,20 @@ rule minus_add_inverse :
 
 topval minus_add_inverseC: conv
 
-(* BUG WEAK
 rule add_Functionality 'c :
    [main] sequent { <H> >- ('a +@ 'c) ~ ('b +@ 'c) } -->
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->
    [wf] sequent { <H> >- 'c in int } -->
    sequent { <H> >- 'a ~ 'b }
-*)
 
 topval add_FunctionalityC : term -> term -> conv
 
-(* BUG WEAK
 rule minus_add_Distrib :
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->
    sequent { <H> >- (- ('a +@ 'b)) ~ ( (- 'a) +@ (- 'b) ) }
-*)
 
-(* BUG WEAK
 rule minus_minus_reduce :
    [wf] sequent { <H> >- 'a in int } -->
    sequent { <H> >- (-(-'a)) ~ 'a }
-*)

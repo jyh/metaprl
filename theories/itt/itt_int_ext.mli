@@ -150,8 +150,6 @@ val is_neq_int_term : term -> bool
 val mk_neq_int_term : term -> term -> term
 val dest_neq_int : term -> term * term
 
-(*
- * BUG WEAK
 rule mul_wf :
    [wf] sequent { <H> >- 'a = 'a1 in int } -->
    [wf] sequent { <H> >- 'b = 'b1 in int } -->
@@ -161,47 +159,34 @@ rule mul_Commut :
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->
    sequent { <H> >- ('a *@ 'b) ~ ('b *@ 'a) }
-*)
 
 topval mul_CommutC: conv
 
-(*
- * BUG WEAK
 rule mul_Assoc :
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->
    [wf] sequent { <H> >- 'c in int } -->
    sequent { <H> >- ('a *@ ('b *@ 'c)) ~ (('a *@ 'b) *@ 'c) }
-*)
 
 topval mul_AssocC: conv
 topval mul_Assoc2C: conv
 
-(*
- * BUG WEAK
 rule mul_add_Distrib :
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->
    [wf] sequent { <H> >- 'c in int } -->
    sequent { <H> >- ('a *@ ('b +@ 'c)) ~ (('a *@ 'b) +@ ('a *@ 'c)) }
-*)
 
 topval mul_add_DistribC: conv
 
-(*
- * BUG WEAK
 rule mul_Id :
    [wf] sequent { <H> >- 'a in int } -->
    sequent { <H> >- (1 *@ 'a) ~ 'a }
-*)
 
 topval mul_IdC: conv
 topval mul_Id2C: conv
 topval mul_Id3C: conv
 
-(*
- * BUG WEAK
- *
 rule mul_Zero :
    [wf] sequent { <H> >- 'a in int } -->
    sequent { <H> >- (0 *@ 'a) ~ 0 }
@@ -224,13 +209,10 @@ rule mul_uni_Assoc :
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->
    sequent { <H> >- ('a *@ (- 'b)) ~ ((- 'a) *@ 'b) }
-*)
 
 topval mul_uni_AssocC : conv
 
-(*
- * BUG WEAK
- *
+(* BUG WEAK
 rule lt_mulNegMono 'c :
    sequent { <H> >- 'c < 0 } -->
    [wf] sequent { <H> >- 'a in int } -->

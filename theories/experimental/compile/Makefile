@@ -11,8 +11,8 @@ INCLUDE := -I . -I ../../base -I $(ROOT)/libmojave/stdlib -I $(ROOT)/libmojave/u
 OCAMLDEPFLAGS := -prl
 
 MLZFILES :=\
-	ra_type\
-	x86_inst_type
+	m_ra_type\
+	m_x86_inst_type
 
 # Library files
 MPFILES :=\

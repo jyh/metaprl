@@ -1493,7 +1493,7 @@ T	t1036	o b1035 b23
 B	b1036	t1036
 T	t1037	o714 b1035 b1036 b1030
 B	b1037	t1037
-P	p1040	String Itt_hide
+P	p1040	String Itt_squash
 O	o1040	parent p1040
 T	t1040	o1040
 B	b1040	t1040
@@ -1989,9 +1989,9 @@ S	s1356	t1286 h h1293
 G	s1356	t1356
 B	b1357	s1356
 H	h1373	z t1270
-NItt_hide	Itt_hide	Itt_hide NIL
-NItt_hide!hide	hide	hide Itt_hide
-O	o1374	hide
+NItt_squash	Itt_squash	Itt_squash NIL
+NItt_squash!squash	squash2	squash Itt_squash
+O	o1374	squash2
 T	t1374	o1269 b1270 b1325 b1271
 B	b1374	t1374
 T	t1375	o1269 b1270 b1325 b1272
@@ -2149,7 +2149,7 @@ B	b1541	t1541
 B	b1547	t1481
 P	p1557	String "equalRefT <<'s_1>> thenT equalSymT thenT autoT"
 O	o1557	ext_rule p1557
-P	p1572	String cutHide
+P	p1572	String cutSquash
 O	o717	comment_string p1572
 T	t808	o717
 B	b808	t808
@@ -2161,7 +2161,7 @@ P	p2	String letT
 O	o8	comment_string p2
 T	t94	o8
 B	b94	t94
-P	p831	String assertHideT
+P	p831	String assertSquashT
 O	o831	comment_string p831
 T	t839	o831
 B	b839	t839
@@ -2173,7 +2173,7 @@ P	p858	String assertEq
 O	o858	comment_string p858
 T	t860	o858
 B	b860	t860
-P	p867	String assertHideAtT
+P	p867	String assertSquashAtT
 O	o867	comment_string p867
 T	t871	o867
 B	b871	t871
@@ -4172,7 +4172,7 @@ T	t2478	o b2466 b2478
 B	b2479	t2478
 T	t2479	o1306 b2460 b2479
 B	b2480	t2479
-P	p2480	String "unhideT 3 thenT equalSymT thenT autoT"
+P	p2480	String "unSquashT 3 thenT equalSymT thenT autoT"
 O	o2480	ext_rule p2480
 T	t2480	o1306 b2466 b23
 B	b2481	t2480
@@ -4503,7 +4503,7 @@ T	t2619	o b2619 b23
 B	b2620	t2619
 T	t2620	o1306 b2554 b2620
 B	b2621	t2620
-P	p2621	String "assertT <<'t1='z in 'T>> thenMT assertT <<'t2='z in 'T>> thenAT unhideT 5 thenAT autoT"
+P	p2621	String "assertT <<'t1='z in 'T>> thenMT assertT <<'t2='z in 'T>> thenAT unSquashT 5 thenAT autoT"
 O	o2621	ext_rule p2621
 S	s2621	t1286 h h2521 h2522 h1373 h2615 h2466 h2473
 G	s2621	t2529
@@ -5054,7 +5054,7 @@ T	t2858	o1306 b2852 b23
 B	b2859	t2858
 T	t2859	o2858 b1305 b2859 b23 b23
 B	b2860	t2859
-P	p2860	String "dT 2 thenT unhideT 3 thenT trivialT"
+P	p2860	String "dT 2 thenT unSquashT 3 thenT trivialT"
 O	o2860	ext_rule p2860
 T	t2860	o1306 b2855 b23
 B	b2861	t2860
@@ -6450,13 +6450,13 @@ T	t3481	o1306 b3445 b23
 B	b3482	t3481
 T	t3482	o3481 b1305 b3482 b23 b23
 B	b3483	t3482
-P	p3483	String "squashT thenT trivialT"
+P	p3483	String "sqsquashT thenT trivialT"
 O	o3483	ext_rule p3483
 T	t3483	o1306 b3462 b23
 B	b3484	t3483
 T	t3484	o3483 b1305 b3484 b23 b23
 B	b3485	t3484
-P	p3485	String "equalRefT <<'s_1>> thenT equalSymT thenT squashT thenT trivialT"
+P	p3485	String "equalRefT <<'s_1>> thenT equalSymT thenT sqsquashT thenT trivialT"
 O	o3485	ext_rule p3485
 T	t3485	o1306 b3477 b23
 B	b3486	t3485
@@ -6973,7 +6973,7 @@ T	t1585	o1282 b1583 b1585
 B	b1586	t1585
 T	t1586	o1282 b1580 b1586
 B	b1587	t1586
-P	p1587	String "assertAtT 1 <<hide{'S}>>"
+P	p1587	String "assertAtT 1 <<squash{'S}>>"
 O	o1587	ext_rule p1587
 T	t1587	o b1581 b23
 B	b1588	t1587
@@ -9768,7 +9768,7 @@ P	p4893	Number 9546
 O	o4894	patt_var p4893 p4892
 O	o4895	patt_done p4891 p4892
 T	t4895	o4895
-B	b4895	t4895 assertHideT
+B	b4895	t4895 assertSquashT
 T	t4896	o4894 b4895
 B	b4896	t4896
 O	o4896	fun p4893 p4892
@@ -9972,7 +9972,7 @@ P	p4973	Number 9693
 O	o4974	patt_var p4973 p4972
 O	o4975	patt_done p4971 p4972
 T	t4975	o4975
-B	b4975	t4975 assertHideAtT
+B	b4975	t4975 assertSquashAtT
 T	t4976	o4974 b4975
 B	b4976	t4976
 O	o4976	fun p4973 p4972

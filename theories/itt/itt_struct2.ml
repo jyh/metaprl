@@ -1,8 +1,8 @@
 (*!
  * @begin[spelling]
- * cutEq cutMem cutHide
- * assertEqT letT assertHideT
- * assertAtT assertHideAtT assertT
+ * cutEq cutMem cutSquash
+ * assertEqT letT assertSquashT
+ * assertAtT assertSquashAtT assertT
  * hypSubstitution substT struct th
  * @end[spelling]
  *
@@ -54,7 +54,7 @@
 include Itt_equal
 include Itt_struct
 include Itt_squiggle
-include Itt_hide
+include Itt_squash
 include Itt_set
 include Itt_logic
 (*! @docoff *)
@@ -156,7 +156,7 @@ interactive cutMem 'H 'x 's 'S bind{y.'T['y]} :
 (*!
  * @begin[doc]
  * The corresponding tactic is the @tt{letT} tactic.
- * This tactic takes a term $x=ss @in S$ as an argument
+ * This tactic takes a term $x=s @in S$ as an argument
  * and a term <<bind{x.'T['x]}>> as an optional with-argument.
  * If this argument is omitted then the tactic finds all occurrences of $s$
  * in the conclusion and replace them with $x$.
@@ -201,25 +201,27 @@ interactive cutEq 'H ('s_1='s_2 in 'S) bind{x.'t['x]} 'x:
 (*!
  * @begin[doc]
  *
- * The @tt{cutHide} rule is similar to the @hrefrule[cut] rule.
+ * The @tt{cutSquash} rule is similar to the @hrefrule[cut] rule.
  * If we prove $S$, but do not show the extract term, then we can assert
- * $S$ as a @emph{hidden} hypothesis, that is we are not allow to use its extract
- * (see @hreftheory[Itt_hide]).
+ * $S$ as a @emph{squashed} hypothesis, that is we are not allow to use its extract
+ * (see @hreftheory[Itt_squash]).
  * @end[doc]
  *)
 
 
-interactive cutHide 'H 'J 'S 'x :
-  [assertion] sequent [squash] { 'H; 'J >- 'S } -->
-   [main]      sequent ['ext] { 'H; x: hide{'S}; 'J >- 'T } -->
+interactive cutSquash 'H 'J 'S 'x :
+   [assertion] sequent [squash] { 'H; 'J >- 'S } -->
+   [main]      sequent ['ext] { 'H; x: squash{'S}; 'J >- 'T } -->
    sequent ['ext] { 'H; 'J >- 'T}
 
 (*!
  * @begin[doc]
- * There are two tactics that used this rule: @tt{assertHideT} and @tt{assertHideAtT}.
+ * There are two tactics that used this rule: @tt{assertSquashT} and
+ * @tt{assertSquashAtT}.
  * They are similar to @hreftactic[assertT] and  @hreftactic[assertAtT].
- * The @tt{assertHideAtT n S} introduces the lemma $S$ after $n$th hypothesis.
- * The @tt{assertHideT S} introduces the lemma $S$ at the end of the hypothesis list.
+ * The @tt{assertSquashAtT n S} introduces the lemma $S$ after $n$th hypothesis.
+ * The @tt{assertSquashT S} introduces the lemma $S$ at the end
+ * of the hypothesis list.
  *
  * @docoff
  * @end[doc]
@@ -342,16 +344,16 @@ let assertEqT eq p =
       else
          raise (RefineError ("assertEqT", StringTermError ("need a \"bind\" term: ", bind)))
 
-(* cutHide *)
+(* cutSquash *)
 
-let assertHideT s p =
+let assertSquashT s p =
    let j, k = Sequent.hyp_split_addr p (Sequent.hyp_count p) in
    let v = maybe_new_vars1 p "v" in
-      cutHide j k s v p
+      cutSquash j k s v p
 
-let assertHideAtT i s p =
+let assertSquashAtT i s p =
    let i, j = Sequent.hyp_split_addr p i in
    let v = get_opt_var_arg "v" p in
-      cutHide i j s v p
+      cutSquash i j s v p
 
 

@@ -3476,7 +3476,7 @@ T	t1402	o1401
 B	b1402	t1402
 T	t1403	o b1402 b13
 B	b1403	t1403
-P	p1403	String Itt_hide
+P	p1403	String Itt_squash
 O	o1403	parent p1403
 T	t1404	o1403
 B	b1404	t1404
@@ -6005,7 +6005,7 @@ T	t2453	o1673 b2428 b2452
 B	b2453	t2453
 T	t2454	o1673 b1816 b2453
 B	b2454	t2454
-P	p2454	String "rwh unfoldSquashTop 0 thenT dT 2 thenT unhideT (-1) thenT autoT"
+P	p2454	String "rwh unfoldSquashTop 0 thenT dT 2 thenT unsquashT (-1) thenT autoT"
 O	o2454	ext_rule p2454
 T	t2455	o2071 b2451 b2438
 B	b2455	t2455
@@ -6148,9 +6148,9 @@ B	b2509	t2509
 P	p2509	String "rwh unfoldSquashTop 5 thenT dT 5"
 O	o2509	ext_rule p2509
 H	h2509	b t2368
-NItt_hide	Itt_hide	Itt_hide NIL
-NItt_hide!hide	hide	hide Itt_hide
-O	o2510	hide
+NItt_squash	Itt_squash	Itt_squash NIL
+NItt_squash!squash	squash2	squash Itt_squash
+O	o2510	squash2
 T	t2510	o2510 b2502
 H	h2510	v_1 t2510
 S	s2510	t1677 h h2477 h2176 h2177 h2509 h2510 h2504
@@ -6178,7 +6178,7 @@ T	t2518	o b2518 b13
 B	b2519	t2518
 T	t2519	o2069 b2507 b2519
 B	b2520	t2519
-P	p2520	String "unhideT 6 thenT dT 0"
+P	p2520	String "unsquashT 6 thenT dT 0"
 O	o2520	ext_rule p2520
 H	h2520	v_1 t2502
 T	t2520	o1677 b1637 b1639 b1639

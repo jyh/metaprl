@@ -4855,7 +4855,7 @@ B	b2563	t2563
 P	p2563	Number 2871
 P	p2564	Number 2886
 O	o2564	location p2563 p2564
-P	p60	String Itt_hide
+P	p60	String Itt_squash
 O	o60	parent p60
 T	t61	o60
 B	b61	t61
@@ -7098,9 +7098,9 @@ P	p1118	Number 7891
 O	o1120	location p1116 p1118
 P	p1120	String intersectionMemberFormation2
 O	o1121	rule p1120
-NItt_hide	Itt_hide	Itt_hide NIL
-NItt_hide!hide	hide	hide Itt_hide
-O	o1122	hide
+NItt_squash	Itt_squash	Itt_squash NIL
+NItt_squash!squash	squash2	squash Itt_squash
+O	o1122	squash2
 T	t1125	o1122 b517
 H	h1125	z t1125
 S	s1125	t591 h h1125
@@ -7119,7 +7119,7 @@ T	t1132	o581 b1127 b1132
 B	b1133	t1132
 T	t1133	o581 b328 b1133
 B	b1134	t1133
-P	p1134	String "assertT <<hide{'A} -> 'B>> thenAT autoT"
+P	p1134	String "assertT <<squash{'A} -> 'B>> thenAT autoT"
 O	o1134	ext_rule p1134
 T	t1134	o b1125 b4
 B	b1135	t1134
@@ -7740,7 +7740,7 @@ T	t3558	o b3555 b4
 B	b3558	t3558
 T	t3569	o3516 b644 b3553 b3558 b4
 B	b3569	t3569
-P	p3572	String squashT
+P	p3572	String sqsquashT
 O	o3576	ext_rule p3572
 T	t3582	o2 b3084
 B	b3582	t3582
@@ -7834,7 +7834,7 @@ T	t3739	o b3738 b4
 B	b3739	t3739
 T	t3740	o b3719 b3739
 B	b3740	t3740
-P	p3740	String "useWitnessT <<'x>> thenT assertT <<hide{'A}>>"
+P	p3740	String "useWitnessT <<'x>> thenT assertT <<squash{'A}>>"
 O	o3744	ext_rule p3740
 S	s3744	t591 h h2611 h786
 G	s3744	t541
@@ -7887,7 +7887,7 @@ NSummary!ext_goal	ext_goal	ext_goal Summary
 O	o3835	ext_goal
 T	t3844	o3835 b3799
 B	b3844	t3844
-P	p3847	String "unhideT (-1)"
+P	p3847	String "unsquashT (-1)"
 O	o3847	ext_rule p3847
 H	h3847	v t517
 S	s3847	t585 h h2611 h786 h3847
@@ -8607,7 +8607,7 @@ T	t4310	o b4310 b4
 B	b4311	t4310
 T	t4311	o645 b4301 b4311
 B	b4312	t4311
-P	p4312	String "squashT thenT trivialT"
+P	p4312	String "sqsquashT thenT trivialT"
 O	o4312	ext_rule p4312
 T	t4312	o645 b4310 b4
 B	b4313	t4312

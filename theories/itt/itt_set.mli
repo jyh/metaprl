@@ -32,10 +32,10 @@
  *)
 
 include Itt_equal
+include Itt_squash
 include Itt_subtype
 include Itt_unit
 include Itt_struct
-include Itt_hide
 
 open Refiner.Refiner.Term
 
@@ -103,10 +103,10 @@ rule setMemberEquality 'H 'x :
  * H, u: { x:A | B }, J[u] >- T[u] ext t[y]
  * by setElimination y v
  *
- * H, u: { x:A | B }, y: A; v: hide{B[y]}; J[y] >- T[y]
+ * H, u: { x:A | B }, y: A; v: squash{B[y]}; J[y] >- T[y]
  *)
 rule setElimination 'H 'J 'u 'v :
-   sequent ['ext] { 'H; u: 'A; v: hide{'B['u]}; 'J['u] >- 'T['u] } -->
+   sequent ['ext] { 'H; u: 'A; v: squash{'B['u]}; 'J['u] >- 'T['u] } -->
    sequent ['ext] { 'H; u: { x:'A | 'B['x] }; 'J['u] >- 'T['u] }
 
 (*

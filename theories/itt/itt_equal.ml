@@ -45,7 +45,6 @@
  * @end[doc]
  *)
 include Base_theory
-include Itt_squash
 (*! @docoff *)
 include Itt_comment
 
@@ -305,7 +304,7 @@ dform equal_df : except_mode[src] :: parens :: "prec"[prec_equal] :: equal{'T; '
 dform equal_df2 : mode[src] :: parens :: "prec"[prec_equal] :: equal{'T; 'a; 'b} =
    szone pushm slot{'a} space `"= " slot{'b} space `"in " slot{'T} popm ezone
 
-(* HACK! - this should be replaced with a proper I/O abstruction *)
+(* HACK! - this should be replaced with a proper I/O abstraction *)
 dform member_df : except_mode[src] :: parens :: "prec"[prec_equal] :: ('x IN 'T) =
    szone pushm slot{'x} space Nuprl_font!member hspace slot{'T} popm ezone
 
@@ -513,9 +512,6 @@ prim typeEquality 'H :
  * @end[doc]
  *)
 
-(*
- * Squash elim.
- *)
 prim equality_squashElimination 'H :
    sequent [squash] { 'H >- 'a = 'b in 'T } -->
    sequent ['ext] { 'H >- 'a = 'b in 'T } =
@@ -524,15 +520,6 @@ prim equality_squashElimination 'H :
 prim type_squashElimination 'H :
    sequent [squash] { 'H >- "type"{'T} } -->
    sequent ['ext] { 'H >- "type"{'T} } =
-   it
-
-
-(*
- * Squash from any.
- *)
-prim squashFromAny 'H 'ext :
-   sequent ['ext] { 'H >- 'T } -->
-   sequent [squash] { 'H >- 'T } =
    it
 
 (*!************************************************************************
@@ -691,27 +678,6 @@ let infer_univ_dep0_dep1 destruct inf consts decls eqs opt_eqs defs t =
       eqs''', opt_eqs''', defs'', mk_univ_term (max_level_exp le1 le2 0)
 
 let infer_univ1 = Typeinf.infer_const univ1_term
-
-(************************************************************************
- * SQUASH STABILITY                                                     *
- ************************************************************************)
-
-(*
- * Equality is squash stable.
- *)
-let squash_equalT p =
-   equality_squashElimination (Sequent.hyp_count_addr p) p
-
-
-let squash_resource = Mp_resource.improve squash_resource (equal_term, squash_equalT)
-
-let squash_typeT p =
-   type_squashElimination (Sequent.hyp_count_addr p) p
-
-let squash_resource = Mp_resource.improve squash_resource (type_term, squash_typeT)
-
-let unsquashT v p =
-   squashFromAny (Sequent.hyp_count_addr p) v p
 
 (************************************************************************
  * OTHER TACTICS                                                        *

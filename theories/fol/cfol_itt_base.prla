@@ -199,7 +199,7 @@ T	t62	o61
 B	b62	t62
 T	t63	o b62 b4
 B	b63	t63
-P	p202	String Itt_hide
+P	p202	String Itt_squash
 O	o202	parent p202
 T	t204	o202
 B	b204	t204
@@ -2788,9 +2788,9 @@ T	t1031	o666 b1028 b1031
 B	b1032	t1031
 T	t1032	o665 b1032 b4 b667
 B	b1033	t1032
-NItt_hide	Itt_hide	Itt_hide NIL
-NItt_hide!hide	hide1476	hide Itt_hide
-O	o1477	hide1476
+NItt_squash	Itt_squash	Itt_squash NIL
+NItt_squash!squash	squash2	squash Itt_squash
+O	o1477	squash2
 B	b1034	t1026
 T	t1477	o1477 b1034
 H	h1477	v t1477

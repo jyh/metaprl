@@ -20,7 +20,7 @@ topval hypSubstT : int -> int -> tactic
 topval revHypSubstT : int -> int -> tactic
 
 
-topval unhideT : int -> tactic
+topval unsquashT : int -> tactic
 topval reverseT : tactic
 topval cutMemberT:  term -> tactic
 topval cutMember1T :  term -> tactic

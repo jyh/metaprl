@@ -38,20 +38,15 @@ open Refiner.Refiner.Term
 open Tactic_type.Tacticals
 open Tactic_type.Sequent
 
-
-
-
 topval substConclT : term -> tactic
 topval substT : term -> int -> tactic
-
 
 topval letT : term -> tactic
 
 topval assertEqT  : term -> tactic
 
-topval assertHideT  : term -> tactic
-topval assertHideAtT  : int -> term -> tactic
-
+topval assertSquashT  : term -> tactic
+topval assertSquashAtT  : int -> term -> tactic
 
 (*
  * -*-

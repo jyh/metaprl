@@ -46,6 +46,7 @@
  * @end[doc]
  *)
 include Itt_equal
+include Itt_squash
 include Itt_subtype
 (*! @docoff *)
 
@@ -64,6 +65,7 @@ open Base_auto_tactic
 
 open Itt_equal
 open Itt_subtype
+open Itt_squash
 
 (*
  * Show that the file is loading.

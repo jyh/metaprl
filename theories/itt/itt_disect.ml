@@ -34,7 +34,7 @@
  * $@bisect{x@colon @record{@tt{x}@colon A};@record{B[x.@tt{x}]}}$
  *
  * Sets also can be defined as dependent intersection
- * $@set{x;A;P[x]} = @bisect{x@colon A;hide(P[x])}$
+ * $@set{x;A;P[x]} = @bisect{x@colon A;squash(P[x])}$
  * @end[doc]
  *
  * ----------------------------------------------------------------

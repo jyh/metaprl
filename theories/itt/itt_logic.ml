@@ -1191,7 +1191,7 @@ let assumT i p =
                if is_squash_sequent assum then
                   nthAssumT i p
                else
-                  (unsquashT (get_squash_arg assum) thenT nthAssumT i) p
+                  (unsqsquashT (get_squash_arg assum) thenT nthAssumT i) p
             else
                nthAssumT i p
       else

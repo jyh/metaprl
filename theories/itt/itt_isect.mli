@@ -90,11 +90,11 @@ rule topType 'H :
  * H >- isect x: A. B ext b[it]
  * by intersectionMemberFormation z
  * H >- A = A in type
- * H, z: hide(A) >- B ext b[z]
+ * H, z: squash(A) >- B ext b[z]
 
 rule intersectionMemberFormation 'H 'z :
     sequent [squash] { 'H >- "type"{'A} } -->
-    sequent ['ext] { 'H; z: hide{'A} >- 'B } -->
+    sequent ['ext] { 'H; z: squash{'A} >- 'B } -->
     sequent ['ext] { 'H >- isect x: 'A. 'B }
  *)
 

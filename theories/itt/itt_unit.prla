@@ -3924,7 +3924,7 @@ O	o1535	comment_string p1535
 T	t1536	o1535
 B	b1536	t1536
 NComment!hreftactic	hreftactic	hreftactic Comment
-P	p1536	String squashT
+P	p1536	String sqsquashT
 O	o1536	hreftactic p1536
 T	t1537	o1536
 B	b1537	t1537

@@ -58,7 +58,6 @@ include Itt_equal
 include Itt_unit
 include Itt_subtype
 include Itt_struct
-include Itt_hide
 (*! @docoff *)
 
 open Printf
@@ -194,13 +193,12 @@ prim setMemberEquality {| intro_resource []; eqcd_resource |} 'H 'x :
  *
  * An assumption with a set type $u@colon @set{x; A; B[x]}$ asserts two facts:
  * that $u @in A$ and $B[u]$.  However, the proof of $B[u]$ is unavailable.  The
- * << hide{'B['u]} >> hypothesis states that $B[u]$ is true, but its proof is
- * omitted.  Hidden hypotheses may be unhidden in a squashed sequent, when the
- * proof extract term is unnecessary.
+ * << squash{'B['u]} >> hypothesis states that $B[u]$ is true, but its proof is
+ * omitted.
  * @end[doc]
  *)
 prim setElimination {| elim_resource [] |} 'H 'J 'u 'v :
-   ('t : sequent ['ext] { 'H; u: 'A; v: hide{'B['u]}; 'J['u] >- 'T['u] }) -->
+   ('t : sequent ['ext] { 'H; u: 'A; v: squash{'B['u]}; 'J['u] >- 'T['u] }) -->
    sequent ['ext] { 'H; u: { x:'A | 'B['x] }; 'J['u] >- 'T['u] } =
    't
 

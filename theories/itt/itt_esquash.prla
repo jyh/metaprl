@@ -2993,9 +2993,9 @@ B	b2369	t2369
 T	t1077	o512 b1065 b2369
 B	b1078	t1077
 NItt_set	Itt_set	Itt_set NIL
-NItt_hide	Itt_hide	Itt_hide NIL
-NItt_hide!hide	hide	hide Itt_hide
-O	o1924	hide
+NItt_squash	Itt_squash	Itt_squash NIL
+NItt_squash!squash	squash2	squash Itt_squash
+O	o1924	squash2
 P	p2008	Var P2
 O	o2008	var p2008
 T	t2008	o2008 b1898
@@ -6743,7 +6743,7 @@ T	t2283	o b2279 b2283
 B	b2284	t2283
 T	t2284	o527 b2267 b2284
 B	b2285	t2284
-P	p2286	String "rwh unfold_esquash 0 thenT unhideT 3 thenT rwh fold_esquash 0"
+P	p2286	String "rwh unfold_esquash 0 thenT unsquashT 3 thenT rwh fold_esquash 0"
 O	o2286	ext_rule p2286
 H	h2286	v t2250
 S	s2286	t516 h h2249 h2286 h1906

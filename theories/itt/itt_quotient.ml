@@ -338,7 +338,7 @@ prim quotientElimination2 {| elim_resource [ThinOption thinT] |} 'H 'J 'v 'w 'z 
  * @end[doc]
  *)
 prim quotient_equalityElimination {| elim_resource [] |} 'H 'J 'v :
-   [main] ('g['v] : sequent ['ext] { 'H; x: 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]; 'J['x]; v: hide{'E['a1; 'a2]} >- 'T['x] }) -->
+   [main] ('g['v] : sequent ['ext] { 'H; x: 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]; 'J['x]; v: squash{'E['a1; 'a2]} >- 'T['x] }) -->
    sequent ['ext] { 'H; x: 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]; 'J['x] >- 'T['x] } =
    'g[it]
 

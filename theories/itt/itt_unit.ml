@@ -49,6 +49,7 @@
  * @end[doc]
  *)
 include Itt_equal
+include Itt_squash
 include Itt_struct
 include Itt_squiggle
 (*! @docoff *)
@@ -70,6 +71,7 @@ open Base_dtactic
 open Itt_equal
 open Itt_struct
 open Itt_squiggle
+open Itt_squash
 
 (*
  * Show that the file is loading.

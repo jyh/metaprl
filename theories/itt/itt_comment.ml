@@ -849,7 +849,7 @@ dform exists_df1 : except_mode[tex] :: parens :: "prec"[prec_quant] :: except_mo
  ************************************************************************)
 
 declare math_set{'x; 'A; 'B}
-declare math_hide{'A}
+declare math_squash{'A}
 
 (************************************************
  * TeX mode
@@ -864,8 +864,8 @@ dform math_set_df1 : mode[tex] :: math_set{'x; 'A; 'B} =
    slot{'B}
    izone `"\\right\\}}" ezone
 
-dform math_hide_df1 : mode[tex] :: math_hide{'A} =
-   izone `"{\\downarrow " ezone
+dform math_squash_df1 : mode[tex] :: math_squash{'A} =
+   izone `"\\sq{" ezone
    slot{'A}
    izone `"}" ezone
 
@@ -875,7 +875,7 @@ dform math_hide_df1 : mode[tex] :: math_hide{'A} =
 dform set_df1 : except_mode[tex] :: math_set{'x; 'A; 'B} =
    pushm[3] `"{ " bvar{'x} `":" slot{'A} `" | " slot{'B} `"}" popm
 
-dform hide_df1 : except_mode[tex] :: math_hide{'A} = "[" 'A "]"
+dform math_squash_df2 : except_mode[tex] :: math_squash{'A} = "[" 'A "]"
 
 (************************************************************************
  * Decidable

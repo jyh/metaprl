@@ -2602,7 +2602,7 @@ T	t1796	o b1796 b4
 B	b1797	t1796
 T	t1797	o1022 b1788 b1797
 B	b1798	t1797
-P	p1798	String "unsquashT << 'ext>> thenT trivialT"
+P	p1798	String "unsqsquashT << 'ext>> thenT trivialT"
 O	o1798	ext_rule p1798
 T	t1798	o1022 b1796 b4
 B	b1799	t1798
@@ -2806,7 +2806,7 @@ T	t1930	o b1930 b4
 B	b1931	t1930
 T	t1931	o1022 b1923 b1931
 B	b1932	t1931
-P	p1933	String "typeAssertT thenT unsquashT << 'ext >> thenT trivialT"
+P	p1933	String "typeAssertT thenT unsqsquashT << 'ext >> thenT trivialT"
 O	o1933	ext_rule p1933
 T	t1933	o1022 b1930 b4
 B	b1934	t1933
@@ -4879,7 +4879,7 @@ P	p7112	String nthAssumT
 O	o7112	lid p7112
 T	t7112	o7112
 B	b7112	t7112
-P	p7122	String unsquashT
+P	p7122	String unsqsquashT
 O	o7123	lid p7122
 T	t7123	o7123
 B	b7123	t7123

@@ -188,10 +188,10 @@ rule quotientElimination2 'H 'J 'v 'w 'z :
  * H, x: a1 = a2 in quot x, y: A // E, J[x] >- T[x]
  * by quotient_equalityElimination v
  *
- * H, x: a1 = a2 in quot x, y: A // E, J[x], v: hide(E[a, b]) >- T[x]
+ * H, x: a1 = a2 in quot x, y: A // E, J[x], v: squash(E[a, b]) >- T[x]
  *)
 rule quotient_equalityElimination 'H 'J 'v :
-   sequent ['ext] { 'H; x: 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]; 'J['x]; v: hide{'E['a1; 'a2]} >- 'T['x] } -->
+   sequent ['ext] { 'H; x: 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]; 'J['x]; v: squash{'E['a1; 'a2]} >- 'T['x] } -->
    sequent ['ext] { 'H; x: 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]; 'J['x] >- 'T['x] }
 
 (*

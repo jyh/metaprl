@@ -1408,7 +1408,7 @@ B	b657	t657
 P	p657	Number 1923
 O	o657	location p425 p657
 NSummary!rule	rule	rule Summary
-P	p658	String unhide_with_type
+P	p658	String unsquash_with_type
 O	o658	rule p658
 NSummary!context_param	context_param	context_param Summary
 P	p659	String H
@@ -1459,9 +1459,9 @@ T	t671	o670
 B	b671	t671
 T	t672	o b671 b4
 NItt_set	Itt_set	Itt_set NIL
-NItt_hide	Itt_hide	Itt_hide NIL
-NItt_hide!hide	hide	hide Itt_hide
-O	o672	hide
+NItt_squash	Itt_squash	Itt_squash NIL
+NItt_squash!squash	squash2	squash Itt_squash
+O	o672	squash2
 B	b672	t666
 T	t673	o672 b672
 H	h673	x t673
@@ -1487,7 +1487,7 @@ B	b679	t679
 P	p679	Number 1925
 P	p680	Number 2065
 O	o680	location p679 p680
-P	p681	String unhide_with_equal
+P	p681	String unsquash_with_equal
 O	o681	rule p681
 NItt_equal!equal	equal	equal Itt_equal
 O	o682	equal
@@ -1525,7 +1525,7 @@ O	o693	patt_var p277 p691
 NOcaml!patt_done	patt_done	patt_done Ocaml
 O	o694	patt_done p282 p691
 T	t694	o694
-B	b694	t694 unhide_with_typeT
+B	b694	t694 unsquash_with_typeT
 T	t695	o693 b694
 B	b695	t695
 NOcaml!fun	fun	fun Ocaml
@@ -1680,7 +1680,7 @@ P	p755	Number 2167
 O	o756	patt_var p755 p754
 O	o757	patt_done p753 p754
 T	t757	o757
-B	b757	t757 unhide_with_equalT
+B	b757	t757 unsquash_with_equalT
 T	t758	o756 b757
 B	b758	t758
 O	o758	fun p755 p754
@@ -1806,7 +1806,7 @@ P	p812	Number 2265
 O	o813	patt_var p812 p811
 O	o814	patt_done p810 p811
 T	t814	o814
-B	b814	t814 unhideT
+B	b814	t814 unsquashT
 T	t815	o813 b814
 B	b815	t815
 O	o815	fun p812 p811
@@ -1828,7 +1828,7 @@ P	p822	Number 2296
 O	o822	apply p818 p822
 P	p823	Number 2294
 O	o823	lid p818 p823
-P	p824	String unhide_with_typeT
+P	p824	String unsquash_with_typeT
 O	o824	lid p824
 T	t824	o824
 B	b824	t824
@@ -1846,7 +1846,7 @@ P	p828	Number 2305
 O	o828	apply p828 p811
 P	p829	Number 2323
 O	o829	lid p828 p829
-P	p830	String unhide_with_equalT
+P	p830	String unsquash_with_equalT
 O	o830	lid p830
 T	t830	o830
 B	b830	t830
@@ -3099,7 +3099,7 @@ T	t1424	o1263 b1423 b4
 B	b1424	t1424
 T	t1425	o1413 b1262 b1424 b4 b4
 B	b1425	t1425
-P	p1425	String "dT 2 thenT unhideT 3 thenT autoT"
+P	p1425	String "dT 2 thenT unsquashT 3 thenT autoT"
 O	o1425	ext_rule p1425
 P	p1426	String antecedent
 O	o1426	tactic_arg p1426
@@ -3274,7 +3274,7 @@ T	t1502	o1263 b1502 b4
 B	b1503	t1502
 T	t1503	o1393 b1262 b1503 b4 b4
 B	b1504	t1503
-P	p1504	String "dT 4 thenT unhideT 5 thenT autoT"
+P	p1504	String "dT 4 thenT unsquashT 5 thenT autoT"
 O	o1504	ext_rule p1504
 S	s1504	t665 h h1461 h1462 h1420
 G	s1504	t1421
@@ -3287,7 +3287,7 @@ T	t1507	o1263 b1507 b4
 B	b1508	t1507
 T	t1508	o1504 b1262 b1508 b4 b4
 B	b1509	t1508
-P	p1509	String "dT 4 thenT  unhideT 5 thenT autoT"
+P	p1509	String "dT 4 thenT unsquashT 5 thenT autoT"
 O	o1509	ext_rule p1509
 S	s1509	t665 h h1461 h1462 h1420
 G	s1509	t1417

@@ -4125,7 +4125,7 @@ P	p	Number 1511
 O	o16	location p450 p
 T	t70	o16 b1484
 B	b70	t70
-P	p70	String Itt_hide
+P	p70	String Itt_squash
 O	o70	parent p70
 T	t71	o70
 B	b71	t71

@@ -45,6 +45,7 @@
  * @end[doc]
  *)
 include Itt_equal
+include Itt_squash
 include Itt_rfun
 include Itt_bool
 include Itt_logic
@@ -72,6 +73,7 @@ open Base_dtactic
 
 open Itt_equal
 open Itt_struct
+open Itt_squash
 open Itt_bool
 open Itt_squiggle
 
@@ -231,7 +233,7 @@ dform lt_bool_df1 : parens :: "prec"[prec_compare] :: lt_bool{'a; 'b} =
  *)
 
 let finishSq2ExT i =
-   unsquashT <<'ext>> thenT nthAssumT i
+   unsqsquashT <<'ext>> thenT nthAssumT i
 
 let sqeq2rwT t =
    t thenT onSomeAssumT finishSq2ExT

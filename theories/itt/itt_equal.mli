@@ -33,8 +33,7 @@
  *)
 
 include Base_theory
-
-include Itt_squash
+include Itt_comment
 
 open Refiner.Refiner.TermType
 open Refiner.Refiner.Term
@@ -232,13 +231,6 @@ rule universeFormation 'H univ[j:l] :
    sequent ['ext] { 'H >- cumulativity[j:l, i:l] } -->
    sequent ['ext] {'H >- univ[i:l] }
 
-(*
- * Squash from any.
- *)
-rule squashFromAny 'H 'ext :
-   sequent ['ext] { 'H >- 'T } -->
-   sequent [squash] { 'H >- 'T }
-
 (************************************************************************
  * EQCD TACTIC                                                          *
  ************************************************************************)
@@ -291,9 +283,6 @@ val infer_univ_dep0_dep0 : (term -> term * term) -> typeinf_comp
 val infer_univ_dep0_dep1 : (term -> string * term * term) -> typeinf_comp
 val infer_univ1 : typeinf_comp
 
-topval squash_equalT : tactic
-topval squash_typeT : tactic
-
 (*
  * Typehood from truth.
  *)
@@ -302,7 +291,6 @@ topval typeAssertT : tactic
 (*
  * Turn an eqcd tactic into a d tactic.
  *)
-topval unsquashT : term -> tactic
 topval equalAssumT : int -> tactic
 topval equalRefT : term -> tactic
 topval equalSymT : tactic

@@ -68,25 +68,25 @@ open Itt_struct
 open Itt_tunion
 open Itt_int
 
-(*===--- unhide ---===*)
+(*===--- unsquash ---===*)
 
-prim unhide_with_type 'H 'J :
+prim unsquash_with_type 'H 'J :
  sequent[squash] { 'H; x:'A; 'J >- "type"{'T}} -->
- sequent['ext] { 'H; x:hide{'A}; 'J >- "type"{'T}} =
+ sequent['ext] { 'H; x:squash{'A}; 'J >- "type"{'T}} =
  it
 
-prim unhide_with_equal 'H 'J :
+prim unsquash_with_equal 'H 'J :
  sequent[squash] { 'H; x:'A; 'J >- 'a='b in 'T} -->
- sequent['ext] { 'H; x:hide{'A}; 'J >- 'a='b in 'T} =
+ sequent['ext] { 'H; x:squash{'A}; 'J >- 'a='b in 'T} =
  it
 
-let unhide_with_typeT i p =
+let unsquash_with_typeT i p =
     let i', j = hyp_indices p i in
-         unhide_with_type i' j p
-let unhide_with_equalT i p =
+         unsquash_with_type i' j p
+let unsquash_with_equalT i p =
     let i', j = hyp_indices p i in
-         unhide_with_equal i' j p
-let unhideT i = unhide_with_typeT i orelseT unhide_with_equalT i
+         unsquash_with_equal i' j p
+let unsquashT i = unsquash_with_typeT i orelseT unsquash_with_equalT i
 
 (*===--- auto... ---===*)
 

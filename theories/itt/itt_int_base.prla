@@ -2616,7 +2616,7 @@ T	t1026	o1025
 B	b1026	t1026
 T	t1027	o b1026 b18
 B	b1027	t1027
-P	p1027	String Itt_hide
+P	p1027	String Itt_squash
 O	o1027	parent p1027
 T	t1028	o1027
 B	b1028	t1028
@@ -4276,7 +4276,7 @@ T	t1945	o1679 b1940 b18
 B	b1946	t1945
 T	t1946	o1769 b1678 b1946 b18 b18
 B	b1947	t1946
-P	p1947	String "squashT thenT autoT"
+P	p1947	String "sqsquashT thenT autoT"
 O	o1947	ext_rule p1947
 T	t1947	o1679 b1942 b18
 B	b1948	t1947
@@ -6381,7 +6381,7 @@ T	t3142	o1656 b3141 b2169
 S	s3142	t1656 h
 G	s3142	t3142
 B	b3142	s3142
-P	p3607	String "squashT thenT nthAssumT 1"
+P	p3607	String "sqsquashT thenT nthAssumT 1"
 O	o3607	ext_rule p3607
 P	p3624	String "sqSubstT <<(0 +@ 'a) ~ 'a>> 0 thenMT autoT thenT sqeq2rwT (add_Id2 2)"
 O	o3624	ext_rule p3624
@@ -7552,7 +7552,7 @@ T	t4701	o1437 b2841 b4685
 B	b4701	t4701
 P	p4707	String "sqSubstT <<('a +@ 'c) ~ ('b +@ 'c)>> 0"
 O	o4707	ext_rule p4707
-P	p4717	String "unsquashT <<'ext>> thenT nthAssumT 1"
+P	p4717	String "unsqsquashT <<'ext>> thenT nthAssumT 1"
 O	o4717	ext_rule p4717
 P	p4729	String "nthAssumT 3"
 O	o4729	ext_rule p4729
@@ -7720,7 +7720,7 @@ B	b3813	s3812
 O	o3840	lid p3800
 T	t3840	o3840
 B	b3840	t3840
-P	p3850	String "add_Functionality 2 << 'a +@ 'b >> thenWT (squashT thenT autoT)"
+P	p3850	String "add_Functionality 2 << 'a +@ 'b >> thenWT (sqsquashT thenT autoT)"
 O	o3850	ext_rule p3850
 T	t3852	o1437 b3176 b1440
 B	b3853	t3852
@@ -7732,7 +7732,7 @@ T	t3860	o1437 b1440 b3176
 B	b3861	t3860
 P	p3867	String "rw (addrC [0] minus_add_inverseC) 0 thenAT autoT"
 O	o3867	ext_rule p3867
-P	p3873	String "rw (addrC [1;1] add_CommutC) 0 thenAT (squashT thenT trivialT)"
+P	p3873	String "rw (addrC [1;1] add_CommutC) 0 thenAT (sqsquashT thenT trivialT)"
 O	o3873	ext_rule p3873
 T	t3873	o1437 b3177 b2910
 B	b3874	t3873
@@ -7742,7 +7742,7 @@ T	t3881	o1437 b3881 b1438
 B	b3882	t3881
 T	t3886	o1681 b2681 b1771
 B	b3887	t3886
-P	p3898	String "rw (addrC [1;0] add_Assoc2C) 0 thenAT (autoT thenT squashT thenT trivialT)"
+P	p3898	String "rw (addrC [1;0] add_Assoc2C) 0 thenAT (autoT thenT sqsquashT thenT trivialT)"
 O	o3898	ext_rule p3898
 T	t3898	o1437 b1496 b1439
 B	b3899	t3898
@@ -7750,7 +7750,7 @@ T	t3899	o1437 b1445 b3899
 B	b3900	t3899
 T	t3900	o1437 b3900 b1438
 B	b3901	t3900
-P	p3907	String "rw (addrC [1;0;1] (add_CommutC andthenC minus_add_inverseC)) 0 thenAT (autoT thenT squashT thenT trivialT)"
+P	p3907	String "rw (addrC [1;0;1] (add_CommutC andthenC minus_add_inverseC)) 0 thenAT (autoT thenT sqsquashT thenT trivialT)"
 O	o3907	ext_rule p3907
 T	t3907	o1437 b1445 b2169
 B	b3908	t3907
@@ -7760,7 +7760,7 @@ P	p3915	String "rw (addrC [1;0] add_IdC) 0 thenAT autoT"
 O	o3915	ext_rule p3915
 T	t3915	o1437 b1445 b1438
 B	b3916	t3915
-P	p3930	String "squashT thenT trivialT"
+P	p3930	String "sqsquashT thenT trivialT"
 O	o3930	ext_rule p3930
 T	t5668	o1679 b5665 b18
 B	b5668	t5668
@@ -8170,7 +8170,7 @@ T	t5897	o b5896 b18
 B	b5897	t5897
 T	t5898	o1679 b5890 b5897
 B	b5898	t5898
-P	p5898	String "rw (addrC [1] add_AssocC) 0 thenAT (squashT thenT autoT)"
+P	p5898	String "rw (addrC [1] add_AssocC) 0 thenAT (sqsquashT thenT autoT)"
 O	o5898	ext_rule p5898
 T	t5899	o1656 b2169 b3882
 S	s5899	t1656 h
@@ -8228,7 +8228,7 @@ T	t5921	o b5920 b18
 B	b5921	t5921
 T	t5922	o1679 b5914 b5921
 B	b5922	t5922
-P	p5922	String "rw (addrC [1] add_CommutC) 0 thenAT (autoT thenT squashT thenT autoT)"
+P	p5922	String "rw (addrC [1] add_CommutC) 0 thenAT (autoT thenT sqsquashT thenT autoT)"
 O	o5922	ext_rule p5922
 T	t5923	o1656 b2169 b3141
 S	s5923	t1656 h
@@ -10545,7 +10545,7 @@ T	t5156	o b5156 b18
 B	b5157	t5156
 T	t5157	o1679 b5152 b5157
 B	b5158	t5157
-P	p5158	String "rw (addrC [1] (splitIntC <<'a>> <<'b>>)) 2 thenAT (thinT 2 thenT squashT thenT trivialT)"
+P	p5158	String "rw (addrC [1] (splitIntC <<'a>> <<'b>>)) 2 thenAT (thinT 2 thenT sqsquashT thenT trivialT)"
 O	o5158	ext_rule p5158
 T	t5158	o1652 b1744 b2707 b1849
 H	h5158	v t5158
@@ -10667,7 +10667,7 @@ T	t5223	o b5220 b5223
 B	b5224	t5223
 T	t5224	o5170 b1678 b5210 b5224 b18
 B	b5225	t5224
-P	p5225	String "dT 2 thenWT squashT thenT autoT"
+P	p5225	String "dT 2 thenWT sqsquashT thenT autoT"
 O	o5225	ext_rule p5225
 T	t5225	o1679 b5177 b18
 B	b5226	t5225
@@ -11939,7 +11939,7 @@ T	t6261	o b1209 b6261
 B	b6262	t6261
 T	t6262	o1679 b1166 b6262
 B	b6263	t6262
-P	p6263	String "rwh (foldC <<band{lt_bool{'a;'b};lt_bool{'b;'a}}>> lt_ReflexC) 0 thenAT squashT thenT autoT"
+P	p6263	String "rwh (foldC <<band{lt_bool{'a;'b};lt_bool{'b;'a}}>> lt_ReflexC) 0 thenAT sqsquashT thenT autoT"
 O	o6263	ext_rule p6263
 T	t6263	o1679 b1209 b18
 B	b6264	t6263
@@ -12522,7 +12522,7 @@ T	t4234	o b4234 b18
 B	b4235	t4234
 T	t4235	o1679 b4225 b4235
 B	b4236	t4235
-P	p4236	String "rw (addrC [1] (lt_TransitC <<'b>>)) 0 thenT squashT thenT autoT"
+P	p4236	String "rw (addrC [1] (lt_TransitC <<'b>>)) 0 thenT sqsquashT thenT autoT"
 O	o4236	ext_rule p4236
 T	t4236	o1681 b2740 b4223
 B	b4238	t4236
@@ -12782,7 +12782,7 @@ T	t4448	o1649 b4436 b4446
 B	b4448	t4448
 T	t4449	o1649 b4672 b4448
 B	b4449	t4449
-P	p4449	String "ltDissectT <<'a +@ 'd>> thenWT (squashT thenT autoT)"
+P	p4449	String "ltDissectT <<'a +@ 'd>> thenWT (sqsquashT thenT autoT)"
 O	o4449	ext_rule p4449
 T	t4450	o b4437 b18
 B	b4450	t4450
@@ -13280,7 +13280,7 @@ T	t5984	o1650 b5983
 B	b5984	t5984
 T	t5985	o1649 b1762 b5984
 B	b5985	t5985
-P	p3984	String "add_Functionality 2 <<- 'a>> thenAT (autoT thenT squashT thenT autoT)"
+P	p3984	String "add_Functionality 2 <<- 'a>> thenAT (autoT thenT sqsquashT thenT autoT)"
 O	o3984	ext_rule p3984
 T	t5986	o1681 b5983 b3053
 B	b5986	t5986
@@ -13302,7 +13302,7 @@ T	t5992	o b5991 b18
 B	b5992	t5992
 T	t5993	o1679 b5987 b5992
 B	b5993	t5993
-P	p4031	String "rw (addrC [0] add_CommutC) 0 thenAT (autoT thenT squashT thenT trivialT)"
+P	p4031	String "rw (addrC [0] add_CommutC) 0 thenAT (autoT thenT sqsquashT thenT trivialT)"
 O	o4031	ext_rule p4031
 T	t4036	o1437 b1445 b3189
 B	b4036	t4036
@@ -13320,7 +13320,7 @@ T	t5998	o b5997 b18
 B	b5998	t5998
 T	t5999	o1679 b5991 b5998
 B	b5999	t5999
-P	p4052	String "rw (allSubC minus_add_inverseC) 0 thenT autoT thenAT squashT thenT trivialT"
+P	p4052	String "rw (allSubC minus_add_inverseC) 0 thenT autoT thenAT sqsquashT thenT trivialT"
 O	o4061	ext_rule p4052
 T	t6000	o1679 b5997 b18
 B	b6000	t6000

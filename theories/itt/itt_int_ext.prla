@@ -2558,7 +2558,7 @@ T	t1000	o999
 B	b1000	t1000
 T	t1001	o b1000 b17
 B	b1001	t1001
-P	p1001	String Itt_hide
+P	p1001	String Itt_squash
 O	o1001	parent p1001
 T	t1002	o1001
 B	b1002	t1002
@@ -7591,7 +7591,7 @@ T	t3865	o b3864 b17
 B	b3865	t3865
 T	t3866	o821 b2187 b3607 b3865 b17
 B	b3866	t3866
-P	p3866	String "squashT thenT autoT"
+P	p3866	String "sqsquashT thenT autoT"
 O	o3866	ext_rule p3866
 T	t3867	o2188 b3597 b17
 B	b3867	t3867
@@ -7788,7 +7788,7 @@ T	t1967	o b1967 b17
 B	b1974	t1967
 T	t1974	o2188 b1937 b1974
 B	b1975	t1974
-P	p1975	String "squashT thenT trivialT"
+P	p1975	String "sqsquashT thenT trivialT"
 O	o1977	ext_rule p1975
 T	t1982	o2188 b1967 b17
 B	b1982	t1982

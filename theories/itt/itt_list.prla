@@ -3538,7 +3538,7 @@ B	b2539	t2539
 P	p2539	Number 1700
 P	p2540	Number 1716
 O	o2540	location p2539 p2540
-P	p60	String Itt_hide
+P	p60	String Itt_squash
 O	o60	parent p60
 T	t61	o60
 B	b61	t61

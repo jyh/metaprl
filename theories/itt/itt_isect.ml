@@ -229,13 +229,13 @@ interactive intersectionMemberFormation {| intro_resource [] |} 'H 'z 'b :
  * In one special case when $B$ does not depend on $x$  we can derive
  * simpler rule:
  * $@isect{x; A; B}$ is inhabited if we can proof $B$ with the
- * @emph{hidden} hypothesis $A$ (see @hrefterm[hide]).
+ * @emph{squashed} hypothesis $A$ (see @hrefterm[squash]).
  * @end[doc]
  *)
 
 interactive intersectionMemberFormation2 {| intro_resource [] |} 'H 'z :
     [wf] sequent [squash] { 'H >- "type"{'A} } -->
-    [main] sequent ['ext] { 'H; z: hide{'A} >- 'B } -->
+    [main] sequent ['ext] { 'H; z: squash{'A} >- 'B } -->
     sequent ['ext] { 'H >- isect x: 'A. 'B }
 
 

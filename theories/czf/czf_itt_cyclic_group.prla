@@ -1434,8 +1434,26 @@ B	b558	t558
 T	t559	o553 b558
 B	b559	t559
 P	p559	Number 547
-P	p3	Number 626
-O	o6	location p559 p3
+P	p4	Number 635
+O	o8	location p559 p4
+NSummary!rewrite	rewrite	rewrite Summary
+P	p8	String unfold_cyclic_group
+O	o10	rewrite p8
+NCzf_itt_cyclic_subgroup!cyclic_subgroup	cyclic_subgroup	cyclic_subgroup Czf_itt_cyclic_subgroup
+O	o12	cyclic_subgroup
+T	t239	o12 b556
+B	b239	t239
+NSummary!prim	prim	prim Summary
+O	o241	prim
+T	t242	o241 b4
+B	b242	t242
+T	t243	o10 b557 b239 b242 b4
+B	b243	t243
+T	t253	o8 b243
+B	b253	t253
+P	p259	Number 637
+P	p270	Number 723
+O	o270	location p259 p270
 NSummary!dform	dform	dform Summary
 P	p561	String cyclic_group_df
 O	o561	dform p561
@@ -1449,22 +1467,31 @@ B	b563	t563
 NSummary!df_term	df_term	df_term Summary
 O	o563	df_term
 NPerv!string	string563	string Perv
-P	p563	String <a>
-O	o564	string563 p563
-T	t564	o564
-B	b564	t564
-T	t565	o b564 b4
-B	b565	t565
-T	t566	o563 b565
-B	b566	t566
-T	t567	o561 b563 b557 b566
-B	b567	t567
-T	t238	o6 b567
-B	b238	t238
-P	p248	Number 641
-P	p249	Number 748
-O	o249	location p248 p249
+P	p271	String <gen>
+O	o271	string563 p271
+T	t280	o271
+B	b280	t280
+NNuprl_font	Nuprl_font	Nuprl_font NIL
+NNuprl_font!subc	subc	subc Nuprl_font
+O	o280	subc
+T	t281	o280
+B	b281	t281
+T	t289	o b281 b4
+B	b289	t289
+T	t290	o b280 b289
+B	b290	t290
+T	t292	o563 b290
+B	b292	t292
+T	t293	o561 b563 b557 b292
+B	b293	t293
+T	t294	o270 b293
+B	b294	t294
+P	p304	Number 738
+P	p305	Number 849
+O	o305	location p304 p305
 NSummary!rule	rule	rule Summary
+P	p306	String cyclic_group_wf
+O	o306	rule p306
 P	p570	String cyclic_group_wf1
 O	o570	rule p570
 NSummary!context_param	context_param	context_param Summary
@@ -1497,33 +1524,11 @@ O	o576	incomplete
 T	t577	o576
 B	b577	t577
 NSummary!resource_defs	resource_defs	resource_defs Summary
-P	p250	Number 673
-P	p251	Number 681
-O	o251	resource_defs p250 p251 p288
 NOcaml!uid	uid	uid Ocaml
-P	p258	Number 679
-O	o259	uid p258 p251
 P	p580	String []
 O	o580	uid p580
 T	t580	o580
 B	b580	t580
-T	t261	o259 b580
-B	b261	t261
-T	t262	o b261 b4
-B	b262	t262
-T	t263	o251 b262
-B	b263	t263
-T	t266	o b263 b4
-B	b266	t266
-T	t267	o570 b572 b576 b577 b266
-B	b267	t267
-T	t275	o249 b267
-B	b275	t275
-P	p278	Number 750
-P	p284	Number 862
-O	o284	location p278 p284
-P	p588	String cyclic_group_wf2
-O	o588	rule p588
 NCzf_itt_eq	Czf_itt_eq	Czf_itt_eq NIL
 NCzf_itt_eq!equal	equal	equal Czf_itt_eq
 O	o589	equal
@@ -1538,24 +1543,305 @@ G	s591	t591
 B	b591	s591
 T	t592	o572 b591
 B	b592	t592
-P	p285	Number 782
-P	p301	Number 790
-O	o301	resource_defs p285 p301 p288
-P	p303	Number 788
-O	o303	uid p303 p301
-T	t313	o303 b580
-B	b313	t313
-T	t314	o b313 b4
-B	b314	t314
-T	t316	o301 b314
-B	b316	t316
-T	t324	o b316 b4
-B	b324	t324
-T	t325	o588 b572 b592 b577 b324
-B	b325	t325
-T	t328	o284 b325
-B	b328	t328
+P	p307	Number 769
+P	p308	Number 777
+O	o308	resource_defs p307 p308 p288
+P	p309	Number 775
+O	o309	uid p309 p308
+T	t444	o309 b580
+B	b444	t444
+T	t445	o b444 b4
+B	b445	t445
+T	t453	o308 b445
+B	b453	t453
+T	t454	o b453 b4
+B	b454	t454
+T	t462	o306 b572 b592 b577 b454
+B	b462	t462
+T	t463	o305 b462
+B	b463	t463
 O	o599	location p p
+NSummary!interactive	interactive	interactive Summary
+O	o465	interactive
+NSummary!ext_rule	ext_rule	ext_rule Summary
+P	p465	String "setSubstT << equal{cyclic_group{elem_in_G}; car} >> 0 thenT autoT"
+O	o466	ext_rule p465
+NSummary!status_incomplete	status_incomplete	status_incomplete Summary
+O	o467	status_incomplete
+T	t471	o467
+B	b471	t471
+NSummary!ext_unjustified	ext_unjustified	ext_unjustified Summary
+O	o474	ext_unjustified
+NSummary!tactic_arg	tactic_arg	tactic_arg Summary
+P	p474	String main
+O	o475	tactic_arg p474
+NSummary!msequent	msequent	msequent Summary
+O	o476	msequent
+T	t480	o476 b575 b4
+B	b480	t480
+NSummary!parent_none	parent_none	parent_none Summary
+O	o483	parent_none
+T	t487	o483
+B	b487	t487
+T	t488	o475 b480 b4 b487
+B	b488	t488
+P	p489	String wf
+O	o490	tactic_arg p489
+NCzf_itt_eq!fun_prop	fun_prop	fun_prop Czf_itt_eq
+O	o491	fun_prop
+P	p491	Var v
+O	o492	var p491
+T	t494	o492
+B	b494	t494
+T	t495	o574 b494
+B	b495	t495 v
+T	t501	o491 b495
+S	s501	t574 h
+G	s501	t501
+B	b501	s501
+T	t502	o476 b501 b4
+B	b502	t502
+T	t509	o2 b488
+B	b509	t509
+T	t510	o490 b502 b4 b509
+B	b510	t510
+T	t517	o b510 b4
+B	b517	t517
+T	t518	o474 b488 b517
+B	b518	t518
+P	p519	String "rwh unfold_fun_prop 0 thenT autoT"
+O	o520	ext_rule p519
+T	t525	o474 b510 b4
+B	b525	t525
+T	t526	o520 b471 b525 b4 b4
+B	b526	t526
+T	t532	o b526 b4
+B	b532	t532
+T	t533	o466 b471 b518 b532 b4
+B	b533	t533
+T	t539	o465 b533
+B	b539	t539
+P	p540	Number 917
+P	p541	Number 925
+O	o542	resource_defs p540 p541 p288
+P	p542	Number 923
+O	o543	uid p542 p541
+T	t546	o543 b580
+B	b546	t546
+T	t547	o b546 b4
+B	b547	t547
+T	t553	o542 b547
+B	b553	t553
+T	t554	o b553 b4
+B	b554	t554
+T	t555	o570 b572 b576 b539 b554
+B	b555	t555
+T	t560	o599 b555
+B	b560	t560
+P	p560	String cyclic_group_op_wf
+O	o560	rule p560
+NSummary!meta_implies	meta_implies	meta_implies Summary
+O	o565	meta_implies
+NBase_trivial	Base_trivial	Base_trivial NIL
+NBase_trivial!squash	squash	squash Base_trivial
+O	o566	squash
+T	t568	o566
+B	b568	t568
+T	t569	o b568 b4
+P	p569	Var s1
+O	o569	var p569
+T	t570	o569
+B	b570	t570
+T	t578	o574 b570
+S	s578	t569 h
+G	s578	t578
+B	b578	s578
+T	t579	o572 b578
+B	b579	t579
+P	p579	Var s2
+O	o579	var p579
+T	t581	o579
+B	b581	t581
+T	t582	o574 b581
+S	s582	t569 h
+G	s582	t582
+B	b582	s582
+T	t583	o572 b582
+B	b583	t583
+NCzf_itt_member	Czf_itt_member	Czf_itt_member NIL
+NCzf_itt_member!mem	mem	mem Czf_itt_member
+O	o583	mem
+T	t584	o583 b570 b557
+S	s584	t574 h
+G	s584	t584
+B	b584	s584
+T	t585	o572 b584
+B	b585	t585
+T	t586	o583 b581 b557
+S	s586	t574 h
+G	s586	t586
+B	b586	s586
+T	t587	o572 b586
+B	b587	t587
+NCzf_itt_group!op	op	op Czf_itt_group
+O	o587	op
+T	t588	o587 b570 b581
+B	b588	t588
+T	t589	o583 b588 b557
+S	s589	t574 h
+G	s589	t589
+B	b589	s589
+T	t593	o572 b589
+B	b593	t593
+T	t594	o565 b587 b593
+B	b594	t594
+T	t595	o565 b585 b594
+B	b595	t595
+T	t596	o565 b583 b595
+B	b596	t596
+T	t597	o565 b579 b596
+B	b597	t597
+P	p597	String "assumT 3 thenT assumT 4 thenT setSubstT << equal{cyclic_group{elem_in_G}; car} >> 3 thenT setSubstT << equal{cyclic_group{elem_in_G}; car} >> 2 thenT setSubstT << equal{cyclic_group{elem_in_G}; car} >> 0 thenT autoT"
+O	o597	ext_rule p597
+T	t598	o b586 b4
+B	b598	t598
+T	t599	o b584 b598
+B	b599	t599
+T	t603	o b582 b599
+B	b603	t603
+T	t604	o b578 b603
+B	b604	t604
+T	t605	o476 b589 b604
+B	b605	t605
+T	t606	o475 b605 b4 b487
+B	b606	t606
+T	t607	o474 b606 b4
+B	b607	t607
+T	t608	o597 b471 b607 b4 b4
+B	b608	t608
+T	t609	o465 b608
+B	b609	t609
+P	p609	Number 1029
+P	p610	Number 1036
+O	o610	resource_defs p609 p610 p288
+P	p611	Number 1034
+O	o611	uid p611 p610
+T	t611	o611 b580
+B	b611	t611
+T	t612	o b611 b4
+B	b612	t612
+T	t613	o610 b612
+B	b613	t613
+T	t614	o b613 b4
+B	b614	t614
+T	t615	o560 b572 b597 b609 b614
+B	b615	t615
+T	t616	o599 b615
+B	b616	t616
+P	p616	String cyclic_group_id_wf
+O	o616	rule p616
+NCzf_itt_group!id	id616	id Czf_itt_group
+O	o617	id616
+T	t617	o617
+B	b617	t617
+T	t618	o583 b617 b557
+S	s618	t574 h
+G	s618	t618
+B	b618	s618
+T	t619	o572 b618
+B	b619	t619
+T	t620	o476 b618 b4
+B	b620	t620
+T	t621	o475 b620 b4 b487
+B	b621	t621
+T	t622	o474 b621 b4
+B	b622	t622
+T	t623	o466 b471 b622 b4 b4
+B	b623	t623
+T	t624	o465 b623
+B	b624	t624
+P	p624	Number 1373
+P	p625	Number 1380
+O	o625	resource_defs p624 p625 p288
+P	p626	Number 1378
+O	o626	uid p626 p625
+T	t626	o626 b580
+B	b626	t626
+T	t627	o b626 b4
+B	b627	t627
+T	t628	o625 b627
+B	b628	t628
+T	t629	o b628 b4
+B	b629	t629
+T	t630	o616 b572 b619 b624 b629
+B	b630	t630
+T	t631	o599 b630
+B	b631	t631
+P	p631	String cyclic_group_inv_wf
+O	o631	rule p631
+P	p632	Var s
+O	o632	var p632
+T	t632	o632
+B	b632	t632
+T	t633	o574 b632
+S	s633	t569 h
+G	s633	t633
+B	b633	s633
+T	t634	o572 b633
+B	b634	t634
+T	t635	o583 b632 b557
+S	s635	t574 h
+G	s635	t635
+B	b635	s635
+T	t636	o572 b635
+B	b636	t636
+NCzf_itt_group!inv	inv	inv Czf_itt_group
+O	o636	inv
+T	t637	o636 b632
+B	b637	t637
+T	t638	o583 b637 b557
+S	s638	t574 h
+G	s638	t638
+B	b638	s638
+T	t639	o572 b638
+B	b639	t639
+T	t640	o565 b636 b639
+B	b640	t640
+T	t641	o565 b634 b640
+B	b641	t641
+P	p641	String "assumT 2 thenT setSubstT << equal{cyclic_group{elem_in_G}; car} >> 2 thenT setSubstT << equal{cyclic_group{elem_in_G}; car} >> 0 thenT autoT"
+O	o641	ext_rule p641
+T	t642	o b635 b4
+B	b642	t642
+T	t643	o b633 b642
+B	b643	t643
+T	t644	o476 b638 b643
+B	b644	t644
+T	t645	o475 b644 b4 b487
+B	b645	t645
+T	t646	o474 b645 b4
+B	b646	t646
+T	t647	o641 b471 b646 b4 b4
+B	b647	t647
+T	t648	o465 b647
+B	b648	t648
+P	p648	Number 1486
+P	p649	Number 1493
+O	o649	resource_defs p648 p649 p288
+P	p650	Number 1491
+O	o650	uid p650 p649
+T	t650	o650 b580
+B	b650	t650
+T	t651	o b650 b4
+B	b651	t651
+T	t652	o649 b651
+B	b652	t652
+T	t653	o b652 b4
+B	b653	t653
+T	t654	o631 b572 b641 b648 b653
+B	b654	t654
+T	t655	o599 b654
+B	b655	t655
 NSummary!id	id	id Summary
 P	p599	Number 293428801
 O	o600	id p599
@@ -1565,54 +1851,62 @@ T	t601	o599 b600
 B	b601	t601
 T	t602	o b601 b4
 B	b602	t602
-T	t333	o b328 b602
-B	b333	t333
-T	t334	o b275 b333
-B	b334	t334
-T	t339	o b238 b334
-B	b339	t339
-T	t340	o b559 b339
-B	b340	t340
-T	t342	o b552 b340
-B	b342	t342
-T	t344	o b545 b342
-B	b344	t344
-T	t351	o b538 b344
-B	b351	t351
-T	t355	o b531 b351
-B	b355	t355
-T	t356	o b524 b355
-B	b356	t356
-T	t359	o b516 b356
-B	b359	t359
-T	t363	o b508 b359
-B	b363	t363
-T	t364	o b500 b363
-B	b364	t364
-T	t383	o b493 b364
-B	b383	t383
-T	t392	o b486 b383
-B	b392	t392
-T	t393	o b479 b392
-B	b393	t393
-T	t394	o b470 b393
-B	b394	t394
-T	t400	o b461 b394
-B	b400	t400
-T	t401	o b452 b400
-B	b401	t401
-T	t407	o b443 b401
-B	b407	t407
-T	t408	o b434 b407
-B	b408	t408
-T	t417	o b425 b408
-B	b417	t417
-T	t418	o b416 b417
-B	b418	t418
-T	t426	o b406 b418
-B	b426	t426
-T	t427	o b399 b426
-B	b427	t427
-T	t435	o b391 b427
-B	b435	t435
-T	t436	o b382 b435
+T	t656	o b655 b602
+B	b656	t656
+T	t657	o b631 b656
+B	b657	t657
+T	t658	o b616 b657
+B	b658	t658
+T	t659	o b560 b658
+B	b659	t659
+T	t660	o b463 b659
+B	b660	t660
+T	t661	o b294 b660
+B	b661	t661
+T	t662	o b253 b661
+B	b662	t662
+T	t663	o b559 b662
+B	b663	t663
+T	t664	o b552 b663
+B	b664	t664
+T	t665	o b545 b664
+B	b665	t665
+T	t666	o b538 b665
+B	b666	t666
+T	t667	o b531 b666
+B	b667	t667
+T	t668	o b524 b667
+B	b668	t668
+T	t669	o b516 b668
+B	b669	t669
+T	t670	o b508 b669
+B	b670	t670
+T	t671	o b500 b670
+B	b671	t671
+T	t672	o b493 b671
+B	b672	t672
+T	t673	o b486 b672
+B	b673	t673
+T	t674	o b479 b673
+B	b674	t674
+T	t675	o b470 b674
+B	b675	t675
+T	t676	o b461 b675
+B	b676	t676
+T	t677	o b452 b676
+B	b677	t677
+T	t678	o b443 b677
+B	b678	t678
+T	t679	o b434 b678
+B	b679	t679
+T	t680	o b425 b679
+B	b680	t680
+T	t681	o b416 b680
+B	b681	t681
+T	t682	o b406 b681
+B	b682	t682
+T	t683	o b399 b682
+B	b683	t683
+T	t684	o b391 b683
+B	b684	t684
+T	t685	o b382 b684

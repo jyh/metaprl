@@ -57,4 +57,4 @@ declare letAlloc{ 'op; v. 'exp['v] }
 (* Subscripting. *)
 declare letSubscript{ 'block; 'index; v. 'exp['v] }
 (*declare setSubscript{ 'a1; 'a2; 'a3; 'exp }*)
-declare letSubCheck{ 'a1; 'a2; 'a3; 'exp }
+declare letSubCheck{ 'a1; 'a2; v1, v2. 'exp['v1; 'v2] }

@@ -57,7 +57,7 @@ declare letAlloc{ 'op; v. 'exp['v] }
 (* Subscripting. *)
 declare letSubscript{ 'block; 'index; v. 'exp['v] }
 (*declare setSubscript{ 'a1; 'a2; 'a3; 'exp }*)
-declare letSubCheck{ 'a1; 'a2; 'a3; 'exp }
+declare letSubCheck{ 'a1; 'a2; v1, v2. 'exp['v1; 'v2] }
 
 (*************************************************************************
  * Display forms.
@@ -145,7 +145,9 @@ prim_rw reduce_match_block :
 prim_rw reduce_letSubscript :
    letSubscript{ block{'tag; 'args}; 'index; v. 'exp['v] } <-->
    'exp[ nth{'args; 'index} ]
-prim_rw reduce_letSubCheck : letSubCheck{'a1; 'a2; 'a3; 'exp} <--> 'exp
+prim_rw reduce_letSubCheck :
+   letSubCheck{ 'a1; 'a2; v1, v2. 'exp['v1; 'v2] } <-->
+   'exp['a1; 'a2]
 
 (*************************************************************************
  * Automation.
@@ -165,5 +167,5 @@ let resource reduce += [
 
    << letSubscript{ block{'tag; 'args}; 'index; v. 'exp['v] } >>,
       reduce_letSubscript;
-   << letSubCheck{'a1; 'a2; 'a3; 'exp} >>, reduce_letSubCheck
+   << letSubCheck{ 'a1; 'a2; v1, v2. 'exp['v1; 'v2] } >>, reduce_letSubCheck
 ]

@@ -107,7 +107,8 @@ val identity' : '_a -> '_a = <fun>
 - : int -> int = <fun>
 # identity' "Hello";;
 Characters 10-17:
-This expression has type string but is here used with type int
+This expression has type string
+but is here used with type int
 @end[verbatim]
 
 This doesn't quite work as we expect.  Note the type assignment
@@ -373,7 +374,8 @@ value @tt{x} is in a list @tt{l} could be defined as follows.
 val mem : 'a -> 'a list -> bool = <fun>
 # mem 5 [1; 7; 3];;
 - : bool = false
-# mem "do" ["I'm"; "afraid"; "I"; "can't"; "do"; "that"; "Dave"];;
+# mem "do" ["I'm"; "afraid"; "I"; "can't";
+            "do"; "that"; "Dave"];;
 - : bool = true
 @end[verbatim]
 
@@ -411,8 +413,8 @@ The @tt{List} library contains many list functions.  The
       ("phone", "626-395-6568");
       ("salary", "$50")];;
 val entry : (string * string) list =
-  ["name", "Jason"; "height", "6' 3''"; "phone", "626-345-9692";
-   "salary", "$50"]
+  ["name", "Jason"; "height", "6' 3''";
+   "phone", "626-345-9692"; "salary", "$50"]
 # List.assoc "phone" entry;;
 - : string = "626-395-6568"
 @end[verbatim]

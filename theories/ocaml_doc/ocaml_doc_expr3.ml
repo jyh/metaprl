@@ -122,7 +122,8 @@ val s : int btree =
   Node
    (3, Leaf,
     Node (5, Leaf,
-      Node (7, Leaf, Node (11, Leaf, Node (13, Leaf, Leaf)))))
+      Node (7, Leaf,
+        Node (11, Leaf, Node (13, Leaf, Leaf)))))
 @end[verbatim]
 
 The membership function is defined by induction on the tree: an
@@ -132,7 +133,8 @@ is the label, or $x$ is in the left or right subtrees.
 @begin[verbatim]
 # let rec mem x = function
      Leaf -> false
-   | Node (y, left, right) -> x = y || mem x left || mem x right;;
+   | Node (y, left, right) ->
+       x = y || mem x left || mem x right;;
 val mem : 'a -> 'a btree -> bool = <fun>
 # mem 11 s;;
 - : bool = true
@@ -170,7 +172,9 @@ val set_of_list : 'a list -> 'a btree = <fun>
 val s : int btree =
   Node
    (3, Leaf,
-    Node (11, Node (9, Node (5, Leaf, Node (7, Leaf, Leaf)), Leaf), Leaf))
+    Node (11,
+      Node (9,
+        Node (5, Leaf, Node (7, Leaf, Leaf)), Leaf), Leaf))
 @end[verbatim]
 
 Note that this insertion function does not build balanced trees.  If
@@ -206,12 +210,14 @@ guarantee balancing, the complexity is still $O(n)$, worst case.
 @section[balanced_red_black_trees]{Balanced red-black trees}
 
 For a more advanced example of pattern matching on unions, consider
-the implementation of balanced trees as red-black trees.  This section
-may be skipped by the reader who is already familiar with advanced
-pattern matching.
+the implementation of balanced trees as red-black trees.  This section may
+be skipped by the reader who is already familiar with advanced pattern
+matching.
 
-Red-black trees add a label, either @code{Red} or @code{Black} to each
-of the interior nodes.  Several new invariants are maintained.
+We'll use a functional implementation of red-black trees due to Chris
+Okasaki @cite["okasaki:red-black-trees"].  Red-black trees add a label, either
+@code{Red} or @code{Black} to each of the interior nodes.  Several new
+invariants are maintained.
 
 @begin[enumerate]
 @item{Every leaf is colored black.}
@@ -260,7 +266,7 @@ the @tt{Red} label upward in the tree.
 
 @begin[verbatim]
 # let balance = function
-     Black, Node (Red, Node (Red, a, x, b), y, c), z, d ->
+    Black, Node (Red, Node (Red, a, x, b), y, c), z, d ->
         Node (Red, Node (Black, a, x, b), y, Node (Black, c, z, d))
    | Black, Node (Red, a, x, Node (Red, b, y, c)), z, d ->
         Node (Red, Node (Black, a, x, b), y, Node (Black, c, z, d))

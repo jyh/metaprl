@@ -62,7 +62,8 @@ record redefines the database entry from Chapter
        phone : string;
        salary : float
      };;
-type db_entry = { name: string; height: float; phone: string; salary: float }
+type db_entry = { name: string; height: float;
+                  phone: string; salary: float }
 @end[verbatim]
 
 The syntax for a value is similar to the type declaration, but the
@@ -77,7 +78,8 @@ database entry.
        salary = 50.0
      };;
 val jason : db_entry =
-  {name="Jason"; height=6.25; phone="626-395-6568"; salary=50}
+  {name="Jason"; height=6.25;
+   phone="626-395-6568"; salary=50}
 @end[verbatim]
 
 There are two ways to access the fields in a record.  The
@@ -154,7 +156,8 @@ if we want to give @tt{jason} a raise, we would use the following statement.
 # jason.salary <- 150.0;;
 - : unit = ()
 # jason;;
-- : db_entry = {name="Jason"; height=6.25; phone="626-395-6568"; salary=150}
+- : db_entry = {name="Jason"; height=6.25;
+                phone="626-395-6568"; salary=150}
 @end[verbatim]
 
 Note that the assignment statement itself returns the canonical unit
@@ -169,9 +172,11 @@ val dave : db_entry =
 # dave.salary <- 180.0;;
 - : unit = ()
 # dave;;
-- : db_entry = {name="Dave"; height=6.25; phone="626-395-6568"; salary=180}
+- : db_entry = {name="Dave"; height=6.25;
+                phone="626-395-6568"; salary=180}
 # jason;;
-- : db_entry = {name="Jason"; height=6.25; phone="626-395-6568"; salary=150}
+- : db_entry = {name="Jason"; height=6.25;
+                phone="626-395-6568"; salary=150}
 @end[verbatim]
 
 @subsection[record_labels]{Field label namespace}

@@ -519,7 +519,8 @@ file).  The compiler produces the following error.
 % ocamlc -c fset.mli
 % ocamlc -c test.ml
 % ocamlc -o test fset.cmo test.cmo
-Files test.cmo and fset.cmo make inconsistent assumptions over interface Fset
+Files test.cmo and fset.cmo make inconsistent
+assumptions over interface Fset
 Exit 2
 @end[verbatim]
 
@@ -642,10 +643,10 @@ on the @code{ocamldebug} command line.
 
 (ocd) help
 List of commands :
-cd complete pwd directory kill help quit run reverse step backstep goto
-finish next start previous print display source break delete set show info
-frame backtrace bt up down last list load_printer install_printer
-remove_printer
+cd complete pwd directory kill help quit run reverse step
+backstep goto finish next start previous print display source
+break delete set show info frame backtrace bt up down last
+list load_printer install_printer remove_printer
 
 (ocd)
 @end[verbatim]

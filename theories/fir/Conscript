@@ -14,7 +14,7 @@ my @src =
          ty exp util sequent
          tr_base tr_types tr_atom_base tr_atom tr_store tr_exp
          termOp_base termOp
-         connect_base connect_ty
+         connect_base connect_ty connect_exp
          test );
 
 

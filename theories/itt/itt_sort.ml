@@ -126,7 +126,7 @@ dform partial_order_df : partial_order{'A; 'lt} =
    `"PartialOrder(" slot{'lt} " " Nuprl_font!member " " slot{'A} `")"
 
 dform compare_lt_df : compare_lt{'lt; 'a; 'b} =
-   ('lt 'a 'b)
+   `"(" slot{'a} " " `"<[" slot{'lt} `"] " slot{'b} `")"
 
 (*
  * Definition of being sorted.

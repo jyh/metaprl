@@ -73,10 +73,10 @@ prim_rw rlist_list_nil {| reduce |} :
 
 declare list_of_rlist{'l}
 
-prim_rw reduce_rlist_cons :
+prim_rw reduce_rlist_cons {| reduce |} :
    list_of_rlist{rcons{'hd; 'tl}} <--> ('hd :: list_of_rlist{'tl})
 
-prim_rw reduce_rlist_nil :
+prim_rw reduce_rlist_nil {| reduce |} :
    list_of_rlist{rnil} <--> nil
 
 let rec reduce_rlist t =
@@ -105,12 +105,14 @@ prim bterm_op {| intro[AutoMustComplete] |} :
 let resource intro +=
  (<<bterm{| <J> >- 'op<||> |} in BOperator>>,wrap_intro (bterm_op thenT rw reduce_if_quoted_op 0 thenT trivialT) )
 
-prim_rw bterm_op_bdepth1 : op_bdepth{ bterm{| >- 'op |}} <--> 0
-prim_rw bterm_op_bdepth2 : op_bdepth{ bterm{| x:term; <H> >- 'op |}} <--> op_bdepth{ bterm{| <H> >- 'op |} } +@ 1
+prim_rw bterm_op_bdepth1 {| reduce |} : op_bdepth{ bterm{| >- 'op |}} <--> 0
+prim_rw bterm_op_bdepth2 {| reduce |} : op_bdepth{ bterm{| x:term; <H> >- 'op |}} <--> op_bdepth{ bterm{| <H> >- 'op |} } +@ 1
 
-prim_rw bterm_shape:
+prim_rw bterm_shape :
     if_quoted_op{'op<||>;"true"} -->
     shape{'op} <-->  map{lambda{x.op_bdepth{'x}}; list_of_rlist{subterms{'op}} }
+
+let resource reduce += (<<shape{bterm{| <K> >- 't |}}>>,bterm_shape)
 
 prim_rw bterm_same_op:
        is_same_op{'op1;'op2} <--> Base_reflection!if_same_op{'op1;'op2;btrue;bfalse}

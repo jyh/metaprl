@@ -137,7 +137,7 @@ let resource reduce +=
 
 declare dest_bterm{'bt}
 
-ml_rw reduce_dest_bterm (* {| reduce |} *) : ('goal :  dest_bterm{ sequent[bterm]{ <H> >- 't} }) =
+ml_rw reduce_dest_bterm {| reduce |} : ('goal :  dest_bterm{ sequent[bterm]{ <H> >- 't} }) =
    let bt = one_subterm goal in
    let hyps, t = dest_bterm_sequent bt in
    let t' = dest_term (unquote_term t) in
@@ -145,9 +145,6 @@ ml_rw reduce_dest_bterm (* {| reduce |} *) : ('goal :  dest_bterm{ sequent[bterm
       let bt = dest_bterm s in
       	make_bterm_sequent (hyps @ (List.map hyp_of_var bt.bvars)) bt.bterm
    in mk_xlist_term (List.map wrap t'.term_terms)
-
-let resource reduce +=
-   (<< dest_bterm{ sequent[bterm]{ <H> >- 't} } >>, reduce_dest_bterm)
 
 (************************************************************************
  * make_bterm{'bt; 'btl} takes the top-level operator of 'bt and
@@ -178,7 +175,7 @@ let rec make_bterm_aux lista listb fvars hvar lenh =
     | _, _ -> raise (Invalid_argument "Base_reflection.make_bterm_aux: unmatched arity.")
 
 
-ml_rw reduce_make_bterm (* {| reduce |} *) : ('goal :  make_bterm{ 'bt; 'bt1 }) =
+ml_rw reduce_make_bterm {| reduce |} : ('goal :  make_bterm{ 'bt; 'bt1 }) =
    let bt, bt1 = two_subterms goal in
    let hyps1, t = dest_bterm_sequent bt in
    let t' = dest_term (unquote_term t) in
@@ -201,9 +198,6 @@ ml_rw reduce_make_bterm (* {| reduce |} *) : ('goal :  make_bterm{ 'bt; 'bt1 }) 
                   else raise (RefineError ("reduce_make_bterm", StringTermError ("not a qualified bterm for replacement", b1)))
       else  raise (RefineError ("reduce_make_bterm", StringError "unmatched arities"))
 
-let resource reduce +=
-   (<< make_bterm{ 'bt; 'bt1 } >>, reduce_make_bterm)
-
 (**************************************************************************
  * if_same_op{'bt1; 'bt2; 'tt; 'ff} evaluates to 'tt if 'bt1 and 'bt2
  * are two well-formed bterms with the same top-level operator (including
@@ -213,7 +207,7 @@ let resource reduce +=
 
 declare if_same_op{'bt1; 'bt2; 'tt; 'ff}
 
-ml_rw reduce_if_same_op (* {| reduce |} *) : ('goal :  if_same_op{ 'bt1; 'bt2; 'tt; 'ff } ) =
+ml_rw reduce_if_same_op {| reduce |} : ('goal :  if_same_op{ 'bt1; 'bt2; 'tt; 'ff } ) =
    let bt1, bt2, tt, ff = four_subterms goal in
    let hyps1, g1 = dest_bterm_sequent bt1 in
    let hyps2, g2 = dest_bterm_sequent bt2 in
@@ -225,9 +219,6 @@ ml_rw reduce_if_same_op (* {| reduce |} *) : ('goal :  if_same_op{ 'bt1; 'bt2; '
          && List.map bvar_len t1.term_terms = List.map bvar_len t1.term_terms
       then  tt
       else  ff
-
-let resource reduce +=
-   (<< if_same_op{ 'bt1; 'bt2; 'tt; 'ff } >>, reduce_if_same_op)
 
 (**************************************************************************
  * if_simple_bterm{'bt; 'tt; 'ff} evaluates to 'tt when 'bt is a bterm
@@ -244,14 +235,11 @@ declare if_simple_bterm{'bt; 'tt; 'ff}
 prim_rw reduce_if_simple_bterm1 {| reduce |} :
    if_simple_bterm{ sequent [bterm] { x: term; <H> >- 't }; 'tt; 'ff } <--> 'ff
 
-ml_rw reduce_if_simple_bterm2 (* {| reduce |} *) : ('goal :  if_simple_bterm{ sequent[bterm]{ >- 't}; 'tt; 'ff }) =
+ml_rw reduce_if_simple_bterm2 {| reduce |} : ('goal :  if_simple_bterm{ sequent[bterm]{ >- 't}; 'tt; 'ff }) =
    let bt, tt, ff = three_subterms goal in
    let hyps, t = dest_bterm_sequent bt in
       if hyps = [] && is_quoted_term t  then tt
       else raise (RefineError ("reduce_if_simple_bterm2", StringTermError ("not a quoted term", t)))
-
-let resource reduce +=
-   (<< if_simple_bterm{ sequent[bterm]{ >- 't}; 'tt; 'ff } >>, reduce_if_simple_bterm2)
 
 (*************************************************************************
  * if_var_bterm{'bt; 'tt; 'ff} evaluates to 'tt when 'bt is a
@@ -269,7 +257,7 @@ declare if_var_bterm{'bt; 'tt; 'ff}
 prim_rw reduce_if_var_bterm1 'H :
    if_var_bterm{ sequent [bterm] { <H>; x: term; <J> >- 'x }; 'tt; 'ff } <--> 'tt
 
-ml_rw reduce_if_var_bterm2 (* {| reduce |} *) : ('goal :  if_var_bterm{ sequent[bterm]{ <H> >- 't }; 'tt; 'ff }) =
+ml_rw reduce_if_var_bterm2 : ('goal :  if_var_bterm{ sequent[bterm]{ <H> >- 't }; 'tt; 'ff }) =
    let bt, tt, ff = three_subterms goal in
    let hyps, t = dest_bterm_sequent bt in
       if is_quoted_term t  then ff
@@ -300,3 +288,5 @@ declare subst{'bt; 't}
 prim_rw reduce_subst {| reduce |} :
    subst{ sequent[bterm]{ x: term; <H> >- 't1['x] }; sequent[bterm]{ >- 't2 } } <-->
       sequent[bterm]{ <H> >- 't1['t2] }
+
+doc docoff

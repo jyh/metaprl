@@ -12,5 +12,6 @@ declare if_simple_bterm{'bt; 'tt; 'ff}
 declare if_var_bterm{'bt; 'tt; 'ff}
 declare subst{'bt; 't}
 
-val reduce_ifbterm : conv
-val reduce_if_var_bterm : conv
+topval reduce_ifbterm : conv
+topval reduce_if_var_bterm : conv
+topval reduce_dest_bterm : conv

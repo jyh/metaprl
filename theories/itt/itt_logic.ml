@@ -37,7 +37,7 @@ primrw reduceImplies : 'a => 'b <--> 'a -> 'b
 primrw reduceAnd : 'a & 'b <--> 'a * 'b
 primrw reduceOr : 'a or 'b <--> 'a + 'b
 primrw reduceAll : all x: 'A. 'B['x] <--> x:'A -> 'B['x]
-primrw reduceExists : exists x: 'A. 'B['x] <--> x:'A * 'B['x]
+primrw reduceExists : exst x: 'A. 'B['x] <--> x:'A * 'B['x]
 
 (************************************************************************
  * DISPLAY FORMS							*
@@ -104,7 +104,7 @@ let is_all_term = is_dep0_dep1_term all_opname
 let dest_all = dest_dep0_dep1_term all_opname
 let mk_all_term = mk_dep0_dep1_term all_opname
      
-let exists_term = << exists x: 'A. 'B['x] >>
+let exists_term = << exst x: 'A. 'B['x] >>
 let exists_opname = opname_of_term exists_term
 let is_exists_term = is_dep0_dep1_term exists_opname
 let dest_exists = dest_dep0_dep1_term exists_opname
@@ -214,6 +214,9 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (not_t
 
 (*
  * $Log$
+ * Revision 1.3  1997/09/08 15:02:35  jyh
+ * This version compiles Ensemble.
+ *
  * Revision 1.2  1997/08/06 16:18:34  jyh
  * This is an ocaml version with subtyping, type inference,
  * d and eqcd tactics.  It is a basic system, but not debugged.

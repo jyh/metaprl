@@ -231,7 +231,7 @@ interactive listFormation 'H :
  * @end[doc]
  *)
 prim nilEquality {| intro [] |} 'H :
-   [wf] sequent [squash] { 'H >- "type"{'A} } -->
+   [wf] sequent [squash] { 'H >- "type"{list{'A}} } -->
    sequent ['ext] { 'H >- nil IN list{'A} } =
    it
 
@@ -267,24 +267,6 @@ interactive consFormation 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Elimination}
- *
- * The elimination for performs induction over the assumption
- * $l@colon @list{A}$.  The rule produces two cases for a conclusion
- * $C[l]$.  In the base case, $C$ must hold on the empty list, and
- * in the induction step, $C[@cons{h; t}]$ must hold for any elements
- * $h @in A$ and $t @in @list{A}$, where the induction hypothesis
- * $C[t]$ holds on $t$.
- * @end[doc]
- *)
-prim listElimination {| elim [ThinOption thinT] |} 'H 'J 'w 'u 'v :
-   [main] ('base['l] : sequent ['ext] { 'H; l: list{'A}; 'J['l] >- 'C[nil] }) -->
-   [main] ('step['l; 'u; 'v; 'w] : sequent ['ext] { 'H; l: list{'A}; 'J['l]; u: 'A; v: list{'A}; w: 'C['v] >- 'C['u::'v] }) -->
-   sequent ['ext] { 'H; l: list{'A}; 'J['l] >- 'C['l] } =
-   list_ind{'l; 'base['l]; u, v, w. 'step['l; 'u; 'v; 'w]}
-
-(*!
- * @begin[doc]
  * @thysubsection{Combinator equality}
  *
  * The @hrefterm[list_ind] term $@listind{l; u; v; z; @i{base}; @i{step}[u, v, z]}$
@@ -304,6 +286,48 @@ prim list_indEquality {| intro []; eqcd |} 'H lambda{l. 'T['l]} list{'A} 'u 'v '
                    in 'T['e1]
            } =
    it
+
+(*!
+ * @begin[doc]
+ * @thysubsection{Elimination}
+ *
+ * The elimination for performs induction over the assumption
+ * $l@colon @list{A}$.  The rule produces two cases for a conclusion
+ * $C[l]$.  In the base case, $C$ must hold on the empty list, and
+ * in the induction step, $C[@cons{h; t}]$ must hold for any elements
+ * $h @in A$ and $t @in @list{A}$, where the induction hypothesis
+ * $C[t]$ holds on $t$.
+ * @end[doc]
+ *)
+prim listElimination {| elim [ThinOption thinT] |} 'H 'J 'w 'u 'v :
+   [main] ('base['l] : sequent ['ext] { 'H; l: list{'A}; 'J['l] >- 'C[nil] }) -->
+   [main] ('step['l; 'u; 'v; 'w] : sequent ['ext] { 'H; l: list{'A}; 'J['l]; u: 'A; v: list{'A}; w: 'C['v] >- 'C['u::'v] }) -->
+   sequent ['ext] { 'H; l: list{'A}; 'J['l] >- 'C['l] } =
+   list_ind{'l; 'base['l]; u, v, w. 'step['l; 'u; 'v; 'w]}
+
+(*!
+ * @begin[doc]
+ * @thysubsection{Contradiction}
+ *
+ * The terms @hrefterm[nil] and @hrefterm[cons] are distinct in
+ * every list type.
+ * @end[doc]
+ *)
+interactive nil_neq_cons {| elim [] |} 'H 'J :
+   sequent ['ext] { 'H; x: nil = cons{'h; 't} in list{'T}; 'J['x] >- 'C['x] }
+
+interactive cons_neq_nil {| elim [] |} 'H 'J :
+   sequent ['ext] { 'H; x: cons{'h; 't} = nil in list{'T}; 'J['x] >- 'C['x] }
+
+(*
+ * @begin[doc]
+ * @thysubsection{Equality elimination}
+ * @end[doc]
+ *)
+interactive consEqElimination {| elim [ThinOption thinT] |} 'H 'J 'v 'w :
+   sequent ['ext] {'H; u: cons{'h1; 't1} = cons{'h2; 't2} in list{'A};
+                       v: 'h1 = 'h2 in 'A; w: 't1 = 't2 in list{'A};   'J['u] >- 'C['u] } -->
+   sequent ['ext] {'H; u: cons{'h1; 't1} = cons{'h2; 't2} in list{'A}; 'J['u] >- 'C['u] }
 
 (*!
  * @begin[doc]
@@ -328,20 +352,6 @@ prim nilSqequal 'H 'T :
 interactive listSubtype 'H :
    sequent [squash] { 'H >- subtype{'A1; 'A2} } -->
    sequent ['ext] { 'H >- subtype{list{'A1}; list{'A2}}}
-
-(*!
- * @begin[doc]
- * @thysubsection{Contradiction}
- *
- * The terms @hrefterm[nil] and @hrefterm[cons] are distinct in
- * every list type.
- * @end[doc]
- *)
-interactive nil_neq_cons {| elim [] |} 'H 'J :
-   sequent ['ext] { 'H; x: nil = cons{'h; 't} in list{'T}; 'J['x] >- 'C['x] }
-
-interactive cons_neq_nil {| elim [] |} 'H 'J :
-   sequent ['ext] { 'H; x: cons{'h; 't} = nil in list{'T}; 'J['x] >- 'C['x] }
 (*! @docoff *)
 
 (************************************************************************

@@ -725,7 +725,7 @@ dform subq_df			: internal :: mode[html] :: subq                      = sub["q"]
 dform subz_df			: internal :: mode[html] :: subz                      = sub["z"]
 
 dform wedge_df			: internal :: mode[tex] :: wedge                     = mathmacro["wedge"]
-dform tneg_df			: internal :: mode[tex] :: tneg                      = mathmacro["tneg"]
+dform tneg_df			: internal :: mode[tex] :: tneg                      = mathmacro["neg"]
 dform member_df			: internal :: mode[tex] :: member                    = mathmacro["in"]
 dform plusminus_df		: internal :: mode[tex] :: plusminus                 = mathmacro["pluminus"]
 dform oplus_df			: internal :: mode[tex] :: oplus                     = mathmacro["oplus"]

@@ -4,11 +4,6 @@
 
 include Fol_type
 
-open Mp_resource
-open Refiner.Refiner.RefineError
-
-open Tactic_type.Tacticals
-
 open Base_dtactic
 
 (************************************************************************

@@ -4,12 +4,10 @@
 
 include Base_theory
 
-open Refiner.Refiner.RefineError
-open Base_auto_tactic
-open Mp_resource
-
 open Tactic_type
 open Tactic_type.Tacticals
+
+open Base_auto_tactic
 
 (*
  * Hypothesis.
@@ -42,12 +40,8 @@ let nthHypT i p =
       hypothesis j k v p
 
 let thinT i p =
-   let x, _ = Sequent.nth_hyp p i in
-      if Sequent.is_free_seq_var i x p then
-         raise (RefineError ("thinT", StringStringError ("free variable: ", x)))
-      else
-         let i, j = Sequent.hyp_indices p i in
-            thin i j p
+   let i, j = Sequent.hyp_indices p i in
+      thin i j p
 
 let assertT t p =
    let v = Var.maybe_new_vars1 p "v" in

@@ -1,7 +1,6 @@
 (*
  * Classical reasoning.
  *)
-
 include Fol_not
 
 open Tactic_type
@@ -10,7 +9,7 @@ declare magic{x. 't['x]}
 
 dform magic_df : magic = `"magic"
 
-prim magic {| elim_resource [] |} 'H 'x :
+prim magic 'H 'x :
    ('t['x] : sequent ['ext] { 'H; x: "not"{'T} >- "false" }) -->
    sequent ['ext] { 'H >- 'T } =
    magic{x. 't['x]}

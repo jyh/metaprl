@@ -122,6 +122,7 @@ rule set_subtype 'H :
 
 (* Hiding and unhiding *)
 topval squashT : tactic
+topval unhideT : int -> tactic
 
 (* Primitives *)
 val is_set_term : term -> bool

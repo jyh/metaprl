@@ -191,7 +191,7 @@ rule quotientElimination2 'H 'J 'v 'w 'z :
  * H, x: a1 = a2 in quot x, y: A // E, J[x], v: hide(E[a, b]) >- T[x]
  *)
 rule quotient_equalityElimination 'H 'J 'v :
-   sequent ['ext] { 'H; x: 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]; 'J['x]; v: hide('E['a1; 'a2]) >- 'T['x] } -->
+   sequent ['ext] { 'H; x: 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]; 'J['x]; v: hide{'E['a1; 'a2]} >- 'T['x] } -->
    sequent ['ext] { 'H; x: 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]; 'J['x] >- 'T['x] }
 
 (*

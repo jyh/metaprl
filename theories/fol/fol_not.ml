@@ -5,9 +5,6 @@
 include Fol_false
 include Fol_implies
 
-open Mp_resource
-open Refiner.Refiner.RefineError
-
 (************************************************************************
  * TERMS                                                                *
  ************************************************************************)

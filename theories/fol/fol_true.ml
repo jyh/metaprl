@@ -4,9 +4,6 @@
 
 include Fol_type
 
-open Mp_resource
-open Refiner.Refiner.RefineError
-
 declare "true"
 declare "it"
 

@@ -3,7 +3,7 @@
  *)
 
 include Fol_and
-include Fol_univ
+include Fol_pred
 
 declare "exists"{x. 'B['x]}
 

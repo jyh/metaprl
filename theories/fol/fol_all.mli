@@ -3,7 +3,8 @@
  *)
 
 include Fol_implies
-include Fol_univ
+include Fol_struct
+include Fol_pred
 
 declare "all"{x. 'B['x]}
 

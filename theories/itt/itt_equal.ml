@@ -262,7 +262,7 @@ prec prec_type
 prec prec_equal
 
 dform equal_df1 : parens :: "prec"[prec_equal] :: equal{'T; 'a; 'b} =
-   szone pushm slot{'a} space `"= " slot{'b} space Nuprl_font!member slot{'T} popm ezone
+   szone pushm slot{'a} space `"= " slot{'b} space Nuprl_font!member `" " slot{'T} popm ezone
 
 dform member_df1 : parens :: "prec"[prec_equal] :: member{'T; 'x} =
    szone pushm slot{'x} space Nuprl_font!member hspace slot{'T} popm ezone

@@ -4,9 +4,6 @@
 
 include Fol_type
 
-open Mp_resource
-open Refiner.Refiner.RefineError
-
 (************************************************************************
  * TERMS                                                                *
  ************************************************************************)
@@ -56,7 +53,7 @@ prim implies_intro {| intro_resource [] |} 'H 'x :
    [main] ('b['x] : sequent ['ext] { 'H; x: 'A >- 'B }) -->
    sequent ['ext] { 'H >- 'A => 'B } = lambda{x. 'b['x]}
 
-prim implies_elim {| intro_resource [] |} 'H 'J 'f 'b :
+prim implies_elim {| elim_resource [] |} 'H 'J 'f 'b :
    [assertion] ('a : sequent ['ext] { 'H; f: 'A => 'B; 'J['f] >- 'A }) -->
    [main] ('t['f; 'b] : sequent ['ext] { 'H; f: 'A => 'B; 'J['f]; b: 'B >- 'C['f] }) -->
    sequent ['ext] { 'H; f: 'A => 'B; 'J['f] >- 'C['f] } = 't['f; 'f 'a]

@@ -3,18 +3,10 @@
  *)
 
 include Fol_implies
-include Fol_univ
 include Fol_struct
-
-open Refiner.Refiner.Term
-open Refiner.Refiner.TermOp
-open Refiner.Refiner.RefineError
-open Mp_resource
-open Tactic_type.Tacticals
+include Fol_pred
 
 open Base_dtactic
-
-open Fol_type
 open Fol_struct
 
 (************************************************************************
@@ -37,17 +29,18 @@ dform all_df : parens :: "prec"["prec_all"] :: "all"{x. 'B} =
  ************************************************************************)
 
 prim all_type {| intro_resource [] |} 'H 'x :
-   [wf] sequent ['ext] { 'H; x: univ >- "type"{'B[prop{'x}]} } -->
+   [wf] sequent ['ext] { 'H; x: pred >- "type"{'B['x]} } -->
    sequent ['ext] { 'H >- "type"{."all"{y. 'B['y]}} } = trivial
 
 prim all_intro {| intro_resource [] |} 'H 'x :
-   [main] ('b['x] : sequent ['ext] { 'H; x: univ >- 'B[prop{'x}] }) -->
-   [wf] sequent ['ext] { 'H; x: univ >- "type"{'B[prop{'x}]} } -->
+   [main] ('b['x] : sequent ['ext] { 'H; x: pred >- 'B['x] }) -->
+   [wf] sequent ['ext] { 'H; x: pred >- "type"{'B['x]} } -->
    sequent ['ext] { 'H >- "all"{y. 'B['y]} } =
    lambda{y. 'b['y]}
 
 prim all_elim {| elim_resource [ThinOption thinT] |} 'H 'J 'x 'z 'a :
    [wf] sequent ['ext] { 'H; x: "all"{y. 'B['y]}; 'J['x] >- "type"{'a} } -->
+   [wf] sequent ['ext] { 'H; x: "all"{y. 'B['y]}; 'J['x]; z: pred >- "type"{'B['z]} } -->
    [main] ('b['x; 'z] : sequent ['ext] { 'H; x: "all"{y. 'B['y]}; 'J['x]; z: 'B['a] >- 'C['x] }) -->
    sequent ['ext] { 'H; x: "all"{y. 'B['y]}; 'J['x] >- 'C['x] } =
    'b['x; 'x 'a]

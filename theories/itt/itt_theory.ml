@@ -58,6 +58,7 @@ include Itt_w
 include Itt_prec
 include Itt_srec
 include Itt_quotient
+include Itt_esquash
 include Itt_list
 include Itt_list2
 include Itt_derive
@@ -76,12 +77,14 @@ open Itt_bisect
 open Itt_bunion
 open Itt_atom_bool
 open Itt_fset
+open Itt_esquash
 
 (*
  * Combine the precedences.
  *)
 prec prec_assoc < prec_equal
-prec prec_equal < prec_apply
+prec prec_equal < prec_esquash
+prec prec_esquash < prec_apply
 prec prec_type = prec_apply
 prec prec_not < prec_apply
 prec prec_w = prec_quant

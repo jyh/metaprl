@@ -58,6 +58,7 @@ include Itt_w
 include Itt_prec
 include Itt_srec
 include Itt_quotient
+include Itt_esquash
 include Itt_list
 include Itt_list2
 include Itt_derive

@@ -40,6 +40,7 @@ MPFILES :=\
 	itt_prec\
 	itt_srec\
 	itt_quotient\
+	itt_esquash\
 	itt_list\
 	itt_list2\
 	itt_derive\

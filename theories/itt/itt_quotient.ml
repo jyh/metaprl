@@ -47,7 +47,7 @@ open Refiner.Refiner.RefineError
 open Mp_resource
 
 open Var
-open Tactic_type.Sequent
+open Tactic_type
 open Tactic_type.Tacticals
 
 open Base_dtactic
@@ -127,6 +127,14 @@ prim quotientWeakEquality {| intro_resource []; eqcd_resource |} 'H 'x 'y 'z 'u 
                    in univ[i:l]
            } =
    it
+
+interactive quotientWeakMember {| intro_resource [] |} 'H 'x 'y 'z 'u 'v :
+   [wf] sequent [squash] { 'H >- member{univ[i:l]; 'A1} } -->
+   [wf] sequent [squash] { 'H; x: 'A1; y: 'A1 >- member{univ[i:l]; 'E1['x; 'y]} } -->
+   [wf] sequent [squash] { 'H; x: 'A1 >- 'E1['x; 'x] } -->
+   [wf] sequent [squash] { 'H; x: 'A1; y: 'A1; u: 'E1['x; 'y] >- 'E1['y; 'x] } -->
+   [wf] sequent [squash] { 'H; x: 'A1; y: 'A1; z: 'A1; u: 'E1['x; 'y]; v: 'E1['y; 'z] >- 'E1['x; 'z] } -->
+   sequent ['ext] { 'H >- member{univ[i:l]; .quot x1, y1: 'A1 // 'E1['x1; 'y1]} }
 
 (*
  * H >- quot x1, y1: A1 // E1 = quot x2, y2. A2 // E2 in Ui
@@ -218,7 +226,7 @@ prim quotientMember {| intro_resource [] |}  'H :
  * H, a: quot x, y: A // E, J[x] >- T[a] = T[a] in Ui
  * H, a: quot x, y: A // E, J[x], v: A, w: A, z: E[v, w] >- s[v] = t[w] in T[v]
  *)
-prim quotientElimination1 {| elim_resource [ThinOption thinT] |} 'H 'J 'v 'w 'z :
+prim quotientElimination1 'H 'J 'v 'w 'z :
    [wf] sequent [squash] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a] >- "type"{'T['a]} } -->
    [main] sequent [squash] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a];
              v: 'A; w: 'A; z: 'E['v; 'w] >- 's['v] = 't['w] in 'T['v]
@@ -226,7 +234,7 @@ prim quotientElimination1 {| elim_resource [ThinOption thinT] |} 'H 'J 'v 'w 'z 
    sequent ['ext] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a] >- 's['a] = 't['a] in 'T['a] } =
    it
 
-prim quotientElimination2 {| elim_resource [ThinOption thinT] |} 'H 'J 'v 'w 'z :
+prim quotientElimination2 'H 'J 'v 'w 'z :
    [wf] sequent [squash] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a] >- "type"{'T['a]} } -->
    [main] sequent [squash] { 'H; a: quot x, y: 'A // 'E['x; 'y];
              v: 'A; w: 'A; z: 'E['v; 'w]; 'J['v] >- 's['v] = 't['w] in 'T['v]
@@ -234,27 +242,33 @@ prim quotientElimination2 {| elim_resource [ThinOption thinT] |} 'H 'J 'v 'w 'z 
    sequent ['ext] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a] >- 's['a] = 't['a] in 'T['a] } =
    it
 
-(*
- * H, x: a1 = a2 in quot x, y: A // E, J[x] >- T[x]
- * by quotient_equalityElimination v
- *
- * H, x: a1 = a2 in quot x, y: A // E, J[x], v: hide(E[a, b]) >- T[x]
- *)
-prim quotient_equalityElimination {| elim_resource [ThinOption thinT] |} 'H 'J 'v :
-   [main] ('g['v] : sequent ['ext] { 'H; x: 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]; 'J['x]; v: hide('E['a1; 'a2]) >- 'T['x] }) -->
-   sequent ['ext] { 'H; x: 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]; 'J['x] >- 'T['x] } =
-   'g[it]
-
-(*
- * Elimination under membership.
- *)
-prim quotient_memberElimination {| elim_resource [ThinOption thinT] |} 'H 'J 'v 'w 'z :
+interactive quotient_memberElimination {| elim_resource [ThinOption thinT] |} 'H 'J 'v 'w 'z :
    [wf] sequent [squash] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a] >- "type"{'T['a]} } -->
    [main] sequent [squash] { 'H; a: quot x, y: 'A // 'E['x; 'y];
              v: 'A; w: 'A; z: 'E['v; 'w]; 'J['v] >- 's['v] = 's['w] in 'T['v]
            } -->
-   sequent ['ext] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a] >- member{'T['a]; 's['a]} } =
-   it
+   sequent ['ext] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a] >- member{'T['a]; 's['a]} }
+
+let d_quot_elim i p =
+   let j, k = Sequent.hyp_indices p i in
+   let v, w, z = Var.maybe_new_vars3 p "v" "w" "z" in
+   let goal = Sequent.concl p in
+      if is_equal_term goal then
+         quotientElimination1 j k v w z p
+      else if is_member_term goal then
+         quotient_memberElimination j k v w z p
+      else
+         raise (RefineError ("d_quot_elim", StringError "conclusion is not an equality or membership"))
+
+let elim_resource = Mp_resource.improve elim_resource (<< quot x, y: 'A // 'E['x; 'y] >>, d_quot_elim)
+
+(*
+ * Equality in a quotient space.
+ *)
+prim quotient_equalityElimination {| elim_resource [] |} 'H 'J 'v :
+   [main] ('g['v] : sequent ['ext] { 'H; x: 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]; 'J['x]; v: hide{'E['a1; 'a2]} >- 'T['x] }) -->
+   sequent ['ext] { 'H; x: 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]; 'J['x] >- 'T['x] } =
+   'g[it]
 
 (*
  * H >- quot x1, y1: A1 // E1[x1; y1] <= quot x2, y2: A2 // E2[x2; y2]
@@ -307,9 +321,9 @@ let typeinf_resource = Mp_resource.improve typeinf_resource (quotient_term, inf_
  * Subtyping of two quotient types.
  *)
 let quotient_subtypeT p =
-   (match maybe_new_vars ["x"; "y"] (declared_vars p) with
+   (match Var.maybe_new_vars ["x"; "y"] (Sequent.declared_vars p) with
        [x; y] ->
-          (quotientSubtype (hyp_count_addr p) x y
+          (quotientSubtype (Sequent.hyp_count_addr p) x y
            thenLT [addHiddenLabelT "subtype";
                    addHiddenLabelT "aux";
                    addHiddenLabelT "wf";

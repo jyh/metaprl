@@ -195,6 +195,11 @@ prim unhideEqual 'H 'J 'u :
    sequent ['ext] { 'H; u: hide{('x = 'y in 'A)}; 'J['u] >- 'C['u] } =
    't[it]
 
+prim unhideGoalEqual 'H 'J 'u :
+   sequent [squash] { 'H; u: 'P; 'J >- 'x = 'y in 'T } -->
+   sequent ['ext] { 'H; u: hide{'P}; 'J >- 'x = 'y in 'T } =
+   it
+
 (************************************************************************
  * TACTICS                                                              *
  ************************************************************************)
@@ -207,6 +212,15 @@ let squashT p =
       idT p
    else
       Sequent.get_tactic_arg p "squash" p
+
+let unhideT i p =
+   let u, t = Sequent.nth_hyp p i in
+   let t = dest_hide t in
+   let j, k = Sequent.hyp_indices p i in
+      if is_equal_term t then
+         unhideEqual j k u p
+      else
+         unhideGoalEqual j k u p
 
 (************************************************************************
  * TYPE INFERENCE                                                       *

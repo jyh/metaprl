@@ -92,6 +92,11 @@ prim independentProductEquality {| intro_resource []; eqcd_resource |} 'H :
    sequent ['ext] { 'H >- 'A1 * 'B1 = 'A2 * 'B2 in univ[i:l] } =
    it
 
+interactive independentProductMember {| intro_resource [] |} 'H :
+   [wf] sequent [squash] { 'H >- member{univ[i:l]; 'A1} } -->
+   [wf] sequent [squash] { 'H >- member{univ[i:l]; 'B1} } -->
+   sequent ['ext] { 'H >- member{univ[i:l]; .'A1 * 'B1} }
+
 (*
  * Typehood.
  *)

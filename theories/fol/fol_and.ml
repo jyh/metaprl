@@ -4,11 +4,6 @@
 
 include Fol_type
 
-open Mp_resource
-open Refiner.Refiner.RefineError
-
-open Base_dtactic
-
 (************************************************************************
  * TERMS                                                                *
  ************************************************************************)
@@ -54,6 +49,8 @@ prim and_intro {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- 'A & 'B } = pair{'a; 'b}
 
 prim and_elim {| elim_resource [] |} 'H 'J 'x 'y 'z :
+   [wf] sequent ['ext] { 'H; x: 'A & 'B; 'J['x] >- "type"{'A} } -->
+   [wf] sequent ['ext] { 'H; x: 'A & 'B; 'J['x] >- "type"{'B} } -->
    [main] ('body['y; 'z] : sequent ['ext] { 'H; y: 'A; z: 'B; 'J['y, 'z] >- 'C['y, 'z] }) -->
    sequent ['ext] { 'H; x: 'A & 'B; 'J['x] >- 'C['x] } =
    spread{'x; y, z. 'body['y; 'z]}

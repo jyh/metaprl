@@ -1,69 +1,50 @@
 (*
- * Typehood in FOL.
+ * Definition of typehood.
+ *
+ * ----------------------------------------------------------------
+ *
+ * This file is part of Nuprl-Light, a modular, higher order
+ * logical framework that provides a logical programming
+ * environment for OCaml and other languages.
+ *
+ * See the file doc/index.html for information on Nuprl,
+ * OCaml, and more information about this system.
+ *
+ * Copyright (C) 1998 Jason Hickey, Cornell University
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *
+ * Author: Jason Hickey
+ * jyh@cs.cornell.edu
  *)
 
 include Base_theory
 
-open Refiner.Refiner.Term
-open Refiner.Refiner.TermOp
-
-open Mp_resource
-
-open Tactic_type
-open Tactic_type.Tacticals
-
-open Base_auto_tactic
-
-(************************************************************************
- * SYNTAX                                                               *
- ************************************************************************)
-
-declare univ
-declare prop{'t}
-declare "type"{'A}
+declare "type"{'t}
 declare trivial
 
-dform type_df : "type"{'A} = slot{'A} `" type"
-dform trivial_df : trivial = cdot
-dform univ_df : univ = `"Univ"
-dform prop_df : prop{'t} = downarrow slot{'t}
+dform type_df : "type"{'t} =
+   slot{'t} `" type"
 
-(************************************************************************
- * RULES                                                                *
- ************************************************************************)
-
-prim univ_type 'H 'J :
-   sequent ['ext] { 'H; x: univ; 'J['x] >- "type"{prop{'x}} } =
-   trivial
-
-(************************************************************************
- * TACTICS                                                              *
- ************************************************************************)
-
-(*
- * Automation.  Add a search tactic to trivialT.
- *)
-let nthUnivT i p =
-   let j, k = Sequent.hyp_indices p i in
-      univ_type j k p
-
-let trivial_resource =
-   Mp_resource.improve trivial_resource (**)
-      { auto_name = "nthUnivT";
-        auto_prec = trivial_prec;
-        auto_tac = onSomeHypT nthUnivT
-      }
-
-let type_term = << "type"{'A} >>
-let type_opname = opname_of_term type_term
-let is_type_term = is_dep0_term type_opname
-let mk_type_term = mk_dep0_term type_opname
-let dest_type = dest_dep0_term type_opname
+dform trivial_df : trivial =
+   cdot
 
 (*
  * -*-
  * Local Variables:
- * Caml-master: "pousse"
+ * Caml-master: "nl"
  * End:
  * -*-
  *)

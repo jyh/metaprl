@@ -660,10 +660,10 @@ let assert_new_goal level constants subst hyp_index goal tac = funT (fun p ->
  *)
 let resolveT = argfunT (fun i p ->
    let hyp = Sequent.nth_hyp p i in
-   let { sequent_hyps = hyps; sequent_goals = goals } = Sequent.explode_sequent p in
+   let { sequent_hyps = hyps; sequent_concl = concl } = Sequent.explode_sequent p in
    let j, constants = first_clause hyps in
    let hyp_info = dest_hyp hyp in
-   let goal_info = dest_goal (SeqGoal.get goals 0) in
+   let goal_info = dest_goal concl in
    let _ =
       if !debug_tptp then
          eprintf "Starting unification: constants %a%t" print_string_list (StringSet.elements constants) eflush
@@ -756,14 +756,14 @@ let rec prove_auxT
 
 let proveT = argfunT (fun bound p ->
    eprintf "Tptp_prove.proveT: %d%t" bound eflush;
-   let { sequent_goals = goals;
+   let { sequent_concl = concl;
          sequent_hyps = hyps
        } = Sequent.explode_sequent p
    in
    let info = dest_hyps bound hyps in
    let info =
       { tptp_goal_cache = TptpCache.create info.tptp_constants;
-        tptp_goal = dest_goal (SeqGoal.get goals 0);
+        tptp_goal = dest_goal concl;
         tptp_level = 0;
         tptp_info = info
       }

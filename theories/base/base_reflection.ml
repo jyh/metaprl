@@ -73,23 +73,23 @@ let get_var = function
  | Context (v, conts, subterms) ->
       raise (Invalid_argument "Base_reflection.get_bterm_var: bterm cannot have contexts as hypotheses")
 
-let make_bterm_sequent hyps goal =
+let make_bterm_sequent hyps concl =
    mk_sequent_term {
       sequent_args = bterm_arg;
       sequent_hyps = SeqHyp.of_list hyps;
-      sequent_goals = SeqGoal.of_list [goal]
+      sequent_concl = concl
    }
 
 let dest_bterm_sequent term =
    let seq = TermMan.explode_sequent term in
-      if (SeqGoal.length seq.sequent_goals = 1) && alpha_equal seq.sequent_args bterm_arg then
-         SeqHyp.to_list seq.sequent_hyps, (SeqGoal.get seq.sequent_goals 0)
+      if alpha_equal seq.sequent_args bterm_arg then
+         SeqHyp.to_list seq.sequent_hyps, seq.sequent_concl
       else raise (RefineError ("dest_bterm_sequent", StringTermError ("not a bterm sequent", term)))
 
 let dest_bterm_sequent_and_rename term vars =
    let seq = TermMan.explode_sequent_and_rename term vars in
-      if (SeqGoal.length seq.sequent_goals = 1) && alpha_equal seq.sequent_args bterm_arg then
-         SeqHyp.to_list seq.sequent_hyps, (SeqGoal.get seq.sequent_goals 0)
+      if alpha_equal seq.sequent_args bterm_arg then
+         SeqHyp.to_list seq.sequent_hyps, seq.sequent_concl
       else raise (RefineError ("dest_bterm_sequent_and_rename", StringTermError ("not a bterm sequent", term)))
 
 (*************************************************************************
@@ -132,9 +132,9 @@ let reduce_ifbterm =
    termC (fun goal ->
       let t,tt =  two_subterms goal in
       let seq = TermMan.explode_sequent  t in
-      let goal = SeqGoal.get seq.sequent_goals 0 in
-         if is_quoted_term goal then reduce_ifbterm2
-         else if is_var_term goal then onSomeHypC reduce_ifbterm1 (SeqHyp.length seq.sequent_hyps)
+      let concl = seq.sequent_concl in
+         if is_quoted_term concl then reduce_ifbterm2
+         else if is_var_term concl then onSomeHypC reduce_ifbterm1 (SeqHyp.length seq.sequent_hyps)
          else failC)
 
 let resource reduce +=
@@ -169,9 +169,9 @@ let reduce_subterms =
    termC (fun goal ->
       let bt =  one_subterm goal in
       let seq = TermMan.explode_sequent bt in
-      let goal = SeqGoal.get seq.sequent_goals 0 in
-         if is_quoted_term goal then reduce_subterms2
-         else if is_var_term goal then onSomeHypC reduce_subterms1 (SeqHyp.length seq.sequent_hyps)
+      let concl = seq.sequent_concl in
+         if is_quoted_term concl then reduce_subterms2
+         else if is_var_term concl then onSomeHypC reduce_subterms1 (SeqHyp.length seq.sequent_hyps)
          else failC)
 
 let resource reduce +=
@@ -236,9 +236,9 @@ let reduce_make_bterm =
    termC (fun goal ->
       let bt, btl =  two_subterms goal in
       let seq = TermMan.explode_sequent  bt in
-      let goal = SeqGoal.get seq.sequent_goals 0 in
-         if is_quoted_term goal then reduce_make_bterm2
-         else if is_var_term goal then onSomeHypC reduce_make_bterm1 (SeqHyp.length seq.sequent_hyps)
+      let concl = seq.sequent_concl in
+         if is_quoted_term concl then reduce_make_bterm2
+         else if is_var_term concl then onSomeHypC reduce_make_bterm1 (SeqHyp.length seq.sequent_hyps)
          else failC)
 
 let resource reduce +=
@@ -319,9 +319,9 @@ let reduce_if_var_bterm =
    termC (fun goal ->
       let t, tt, ff =  three_subterms goal in
       let seq = TermMan.explode_sequent  t in
-      let goal = SeqGoal.get seq.sequent_goals 0 in
-         if is_quoted_term goal then reduce_if_var_bterm2
-         else if is_var_term goal then onSomeHypC reduce_if_var_bterm1 (SeqHyp.length seq.sequent_hyps)
+      let concl = seq.sequent_concl in
+         if is_quoted_term concl then reduce_if_var_bterm2
+         else if is_var_term concl then onSomeHypC reduce_if_var_bterm1 (SeqHyp.length seq.sequent_hyps)
          else failC)
 
 let resource reduce +=
@@ -384,7 +384,6 @@ let format_context format_term buf v conts values =
    format_bconts format_term buf v conts;
    format_term_list format_term buf values
 
-
 let format_bterm_prl format_term buf =
    let rec format_hyp hyps i len =
       if i <> len then
@@ -410,17 +409,10 @@ let format_bterm_prl format_term buf =
             format_ezone buf;
             format_hyp hyps (succ i) len
    in
-   let rec format_goal goals i len =
-      if i < len then
-         let a = SeqGoal.get goals i in
-            if i > 0 then format_hbreak buf "; " "";
-            format_term buf NOParens a;
-            format_goal goals (succ i) len
-   in
    let format term =
       let { sequent_args = args;
             sequent_hyps = hyps;
-            sequent_goals = goals
+            sequent_concl = concl
           } = explode_sequent term
       in
          format_szone buf;
@@ -429,7 +421,7 @@ let format_bterm_prl format_term buf =
          if (hlen>0) then
             format_hyp hyps 0 hlen;
          format_pushm buf 0;
-         format_goal goals 0 (SeqGoal.length goals);
+         format_term buf NOParens concl;
          format_popm buf;
          format_popm buf;
          format_ezone buf
@@ -441,7 +433,6 @@ ml_dform bterm_prl_df : mode["prl"] :: sequent[bterm]{ <H> >- 'concl } format_te
 
 ml_dform bterm_prl_df : mode["prl"] :: sequent[bterm]{ <H> >- } format_term buf =
    format_bterm_prl format_term buf
-
 
 
 let mk_tslot t = <:con< slot{$t$} >>
@@ -469,18 +460,10 @@ let format_bterm_html format_term buf =
             format_ezone buf;
             format_hyp hyps (succ i) len
    in
-   let rec format_goal goals i len =
-      if i <> len then
-         let a = SeqGoal.get goals i in
-            if i > 0 then
-               format_hbreak buf "; " "  ";
-            format_term buf NOParens (mk_tslot a);
-            format_goal goals (succ i) len
-   in
    let format term =
       let { sequent_args = arg;
             sequent_hyps = hyps;
-            sequent_goals = goals
+            sequent_concl = concl
           } = explode_sequent term
       in
          format_szone buf;
@@ -489,7 +472,7 @@ let format_bterm_html format_term buf =
          if (hlen>0) then
             format_hyp hyps 0 hlen;
          format_pushm buf 0;
-         format_goal goals 0 (SeqGoal.length goals);
+         format_term buf NOParens (mk_tslot concl);
          format_popm buf;
          format_popm buf;
          format_ezone buf
@@ -526,18 +509,10 @@ let format_bterm_tex format_term buf =
             format_ezone buf;
             format_hyp hyps (succ i) len
    in
-   let rec format_goal goals i len =
-      if i <> len then
-         let a = SeqGoal.get goals i in
-            if i > 0 then
-               format_hbreak buf "; " "";
-            format_term buf NOParens a;
-            format_goal goals (succ i) len
-   in
    let format term =
       let { sequent_args = arg;
             sequent_hyps = hyps;
-            sequent_goals = goals
+            sequent_concl = concl
           } = explode_sequent term
       in
          format_szone buf;
@@ -546,7 +521,7 @@ let format_bterm_tex format_term buf =
          if (hlen>0) then
             format_hyp hyps 0 hlen;
          format_pushm buf 0;
-         format_goal goals 0 (SeqGoal.length goals);
+         format_term buf NOParens concl;
          format_popm buf;
          format_popm buf;
          format_ezone buf

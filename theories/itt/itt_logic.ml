@@ -1123,7 +1123,7 @@ let assum_term goal assum =
                collect j (mk_implies_term hyp assum)
           | _ -> assum, j + 2
    in
-   let res = collect len (SeqGoal.get eassum.sequent_goals 0) in
+   let res = collect len eassum.sequent_concl in
       if !debug_auto then
          eprintf "Found assumption: %a%t" debug_print (fst res) eflush;
       res
@@ -1200,7 +1200,7 @@ let genAssumT = argfunT (fun indices p ->
          t, hypothesis (-1), idT
     | i :: indices ->
          let t, tac1, tac2 = make_gen_term t indices in
-         let t' = TermMan.nth_concl (Sequent.nth_assum p i) 1 in
+         let t' = TermMan.concl (Sequent.nth_assum p i) in
          if is_member_term t' then
             let t_type, t_var, t_var' = dest_equal t' in
                (if is_var_term t_var then
@@ -1220,7 +1220,7 @@ let genAssumT = argfunT (fun indices p ->
             (implies_elim (-1) thenLT [nthAssumT i; tac1]),
             (implies_intro thenLT [typeAssertT thenT nthAssumT i; tac2])
    in
-   let t, tac1, tac2 = make_gen_term (TermMan.nth_concl goal 1) indices in
+   let t, tac1, tac2 = make_gen_term (TermMan.concl goal) indices in
       (assertT t thenLT [tac2; tac1]))
 
 (************ logic instance for j-prover in refiner/reflib/jall.ml  **********)
@@ -1364,7 +1364,7 @@ let base_jproverT def_mult = funT (fun p ->
    let assums = make_j_assums p goal (Sequent.num_assums p) 1 in
    let hyps = (Sequent.all_hyps p) @ (List.map fst assums) in
    match
-      ITT_JProver.prover mult_limit hyps (SeqGoal.get seq.sequent_goals 0)
+      ITT_JProver.prover mult_limit hyps seq.sequent_concl
    with
       [t] ->
          let substs = try [Lm_symbol.add "v0_jprover", get_with_arg p] with RefineError _ -> [] in

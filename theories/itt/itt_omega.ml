@@ -353,10 +353,10 @@ let ge2af var2index (i,t) =
 	(i, f)
 
 let apply_rewrite p conv t =
-	let es={sequent_args= <<sequent_arg>>; sequent_hyps=(SeqHyp.of_list []); sequent_goals=(SeqGoal.of_list [t])} in
+	let es={sequent_args= <<sequent_arg>>; sequent_hyps=(SeqHyp.of_list []); sequent_concl=t} in
 	let s=mk_sequent_term es in
 	let s'=Top_conversionals.apply_rewrite p (higherC conv) s in
-	SeqGoal.get (TermMan.explode_sequent s').sequent_goals 0
+	TermMan.concl s'
 
 let rec make_sacs_aux p i l = function
 	[] -> l

@@ -260,21 +260,21 @@ let tptp_load name =
          (List.map mk_pred_decl preds) @
          (List.map mk_axiom_decl axioms)
    in
-   let goals =
+   let concl =
       match goals with
          [] ->
             eprintf "TPTP Warning: %s has no goals%t" name eflush;
-            [<<"false">>]
+            <<"false">>
        | [_, goal] ->
-            [goal]
-       | _ ->
+            goal
+       | (_, goal) :: _ ->
             eprintf "TPTP Warning: %s has multiple goals%t" name eflush;
-            List.map snd goals
+            goal
    in
    let seq =
-      mk_sequent_term { sequent_args = mk_xlist_term [mk_var_term "ext"];
+      mk_sequent_term { sequent_args = <<sequent_arg>>;
                         sequent_hyps = SeqHyp.of_list hyps;
-                        sequent_goals = SeqGoal.of_list goals
+                        sequent_concl = concl
       }
    in
       seq

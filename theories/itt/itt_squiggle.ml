@@ -236,11 +236,11 @@ let revHypC i = funC (fun p ->
 
 
 let assumC i = funC (fun p ->
-   let trm = TermMan.nth_concl (Sequent.nth_assum (env_arg p) i) 1 in
+   let trm = TermMan.concl (Sequent.nth_assum (env_arg p) i) in
    rewriteC trm  thenTC nthAssumT i)
 
 let revAssumC i = funC (fun p ->
-   let trm = TermMan.nth_concl (Sequent.nth_assum (env_arg p) i) 1 in
+   let trm = TermMan.concl (Sequent.nth_assum (env_arg p) i) in
    rewriteC (revSqTerm trm)  thenTC (sqSymT thenT nthAssumT i))
 
 

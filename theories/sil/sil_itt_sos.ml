@@ -165,16 +165,9 @@ interactive evals_identity {| intro [] |} :
    sequent { <H> >- evalsto{'t1; 't1} }
 
 let rwevalT = argfunT (fun i p ->
-   let mseq = Sequent.msequent p in
-   let _, hyps = Refine.dest_msequent mseq in
-   let len = List.length hyps in
-   let _ =
-      if i <= 0 || i > len then
-         raise (RefineError ("rwevalT", StringIntError ("hyp is out of range", i)))
-   in
-   let hyp = List.nth hyps (pred i) in
-   let goal = TermMan.nth_concl hyp 1 in
-   let a, b = two_subterms goal in
+   let assum = Sequent.nth_assum p i in
+   let concl = TermMan.concl assum in
+   let a, b = two_subterms concl in
    let t = mk_xrewrite_term a b in
       rewriteT t thenAT (rw fold_evalsto 0 thenT autoT))
 
@@ -186,15 +179,8 @@ interactive value_thm :
    sequent { <H> >- Perv!"rewrite"{eval{'e1; 's}; ."val"{progof{eval{'e1; .Sil_itt_state!empty}}; 's}} }
 
 let rwvalueT s2 i = funT (fun p ->
-   let mseq = Sequent.msequent p in
-   let _, hyps = Refine.dest_msequent mseq in
-   let len = List.length hyps in
-   let _ =
-      if i <= 0 || i > len then
-         raise (RefineError ("rwevalT", StringIntError ("hyp is out of range", i)))
-   in
-   let hyp = List.nth hyps (pred i) in
-   let b = TermMan.nth_concl hyp 1 in
+   let assum = Sequent.nth_assum p i in
+   let b = TermMan.concl assum in
    let e2 = one_subterm b in
    let a = mk_eval_term e2 s2 in
    let b = mk_val_term (mk_progof_term (mk_eval_term e2 empty_term)) s2 in
@@ -202,15 +188,8 @@ let rwvalueT s2 i = funT (fun p ->
       rewriteT t thenAT value_thm thenT autoT)
 
 let rwvalueRevT s2 i = funT (fun p ->
-   let mseq = Sequent.msequent p in
-   let _, hyps = Refine.dest_msequent mseq in
-   let len = List.length hyps in
-   let _ =
-      if i <= 0 || i > len then
-         raise (RefineError ("rwevalT", StringIntError ("hyp is out of range", i)))
-   in
-   let hyp = List.nth hyps (pred i) in
-   let b = TermMan.nth_concl hyp 1 in
+   let assum = Sequent.nth_assum p i in
+   let b = TermMan.concl assum in
    let e2 = one_subterm b in
    let b = mk_eval_term e2 s2 in
    let a = mk_val_term (mk_progof_term (mk_eval_term e2 empty_term)) s2 in

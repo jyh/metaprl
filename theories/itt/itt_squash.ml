@@ -333,13 +333,13 @@ let unsquash_tactic tbl = argfunT (fun i p ->
 let process_squash_resource_annotation name contexts args stmt tac =
    let assums, goal = unzip_mfunction stmt in
    let egoal = TermMan.explode_sequent goal in
-   let concl = SeqGoal.get egoal.sequent_goals 0 in
+   let concl = egoal.sequent_concl in
    match contexts, args, assums, (SeqHyp.to_list egoal.sequent_hyps) with
       (* H |- [T] --> H |- T *)
       [||], [], [_, _, assum], [Context(h,[],[])] when
          let eassum = TermMan.explode_sequent assum in
          SeqHyp.get eassum.sequent_hyps 0 = Context(h,[],[]) &&
-         let aconcl = SeqGoal.get eassum.sequent_goals 0 in
+         let aconcl = eassum.sequent_concl in
          is_squash_term aconcl &&
          alpha_equal (dest_squash aconcl) concl
       ->
@@ -351,7 +351,7 @@ let process_squash_resource_annotation name contexts args stmt tac =
          alpha_equal a b &&
          let eassum = TermMan.explode_sequent assum in
          SeqHyp.get eassum.sequent_hyps 0 = Context(h,[],[]) &&
-         alpha_equal (SeqGoal.get eassum.sequent_goals 0) t
+         alpha_equal eassum.sequent_concl t
       ->
          let t,a,_ = dest_equal concl in
             [t, SqStable(a, Tactic_type.Tactic.tactic_of_rule tac [||] [])]

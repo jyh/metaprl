@@ -140,9 +140,9 @@ let rec on_main_subgoals = function
 
 let process_ge_elim_resource_annotation name context_args term_args statement pre_tactic =
    let assums, goal = unzip_mfunction statement in
-	let _=if !debug_arith_dtactic then
-			let l = SeqGoal.to_list (TermMan.explode_sequent goal).sequent_goals in
-				eprintf "Itt_int_arith.improve_ge_elim: %s goal: %s%t" name (SimplePrint.short_string_of_term (List.hd l)) eflush
+	let () =
+      if !debug_arith_dtactic then
+		   eprintf "Itt_int_arith.improve_ge_elim: %s concl: %s%t" name (SimplePrint.short_string_of_term (TermMan.concl goal)) eflush
 	in
    let v,t =
       match SeqHyp.to_list (TermMan.explode_sequent goal).sequent_hyps with
@@ -156,14 +156,10 @@ let process_ge_elim_resource_annotation name context_args term_args statement pr
 
 let process_ge_intro_resource_annotation name context_args term_args statement pre_tactic =
    let assums, goal = unzip_mfunction statement in
-   let t =
-      match SeqGoal.to_list (TermMan.explode_sequent goal).sequent_goals with
-         [ t ] ->
-				if !debug_arith_dtactic then
-					eprintf "Itt_int_arith.improve_ge_intro: %s goal: %s%t" name (SimplePrint.short_string_of_term t) eflush;
-				t
-       | _ ->
-            raise (Invalid_argument (sprintf "Itt_int_arith.improve_ge_intro: %s: only one goal is supported" name))
+   let t = TermMan.concl goal in
+   let () =
+	   if !debug_arith_dtactic then
+	      eprintf "Itt_int_arith.improve_ge_intro: %s goal: %s%t" name (SimplePrint.short_string_of_term t) eflush
    in
    let seq_terms = on_main_subgoals assums in
 	let tac = funT (fun p -> Tactic_type.Tactic.tactic_of_rule pre_tactic [| |] []) in
@@ -491,8 +487,7 @@ let neqInConcl2HypT =
 	(assert_bnot_intro thenMT (eq_int_assert_elim (-1)) thenMT (thinT (-2)))
 
 let arithRelInConcl2HypT = funT (fun p ->
-   let g=Sequent.goal p in
-   let t=Refiner.Refiner.TermMan.nth_concl g 1 in
+   let t=Sequent.concl p in
    if is_lt_term t then ltInConcl2HypT
    else if is_gt_term t then gtInConcl2HypT
    else if is_le_term t then leInConcl2HypT
@@ -812,10 +807,10 @@ let num0 = num_of_int 0
 let num1 = num_of_int 1
 
 let term2term_number p t =
-	let es={sequent_args=t; sequent_hyps=(SeqHyp.of_list []); sequent_goals=(SeqGoal.of_list [t])} in
+	let es={sequent_args=t; sequent_hyps=(SeqHyp.of_list []); sequent_concl=t} in
 	let s=mk_sequent_term es in
 	let s'=Top_conversionals.apply_rewrite p normalizeC s in
-	let t'=SeqGoal.get (TermMan.explode_sequent s').sequent_goals 0 in
+	let t'=TermMan.concl s' in
 	begin
 		if !debug_int_arith then
 			eprintf "t2t_n: %a -> %a%t" print_term t print_term t' eflush;

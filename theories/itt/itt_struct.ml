@@ -424,7 +424,7 @@ let memberTypeT a = equalTypeT a a ttca
 
 let equalityAssumT = argfunT (fun i p ->
    let t' = dest_type_term (Sequent.concl p) in
-   let t,a,b = dest_equal (TermMan.nth_concl (Sequent.nth_assum p i) 1) in
+   let t,a,b = dest_equal (TermMan.concl (Sequent.nth_assum p i)) in
       if alpha_equal t t' then
          equalTypeT a b thenT nthAssumT i
       else if alpha_equal t' a && is_univ_term t then

@@ -85,7 +85,7 @@ doc <:doc<
 >>
 declare AstLetRec{R1. 'e1['R1]; R2. 'e2['R2]}
 declare AstFields{'fields}
-declare AstLabel[label:t]
+declare AstLabel[label:s]
 declare AstFunDef{'label; 'e; 'cont}
 declare AstEndDef
 declare AstLetFun{'R; 'label; f. 'cont['f]}

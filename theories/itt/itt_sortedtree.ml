@@ -11,6 +11,7 @@ extends Itt_bintree
 extends Itt_relation_str
 extends Itt_record
 extends Itt_logic
+extends Itt_labels
 
 doc <:doc< @docoff >>
 

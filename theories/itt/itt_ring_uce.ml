@@ -38,6 +38,7 @@ doc <:doc<
 doc <:doc< @doc{@parents} >>
 extends Itt_unitring
 extends Itt_ring_e
+extends Itt_labels
 doc docoff
 extends Itt_poly
 

@@ -44,22 +44,24 @@ open Refiner.Refiner.RefineError
 (*
  * Meta-operations.
  *)
-declare meta_num[n:n]
-declare meta_sum[a:n, b:n]
-declare meta_diff[a:n, b:n]
-declare meta_prod[a:n, b:n]
-declare meta_quot[a:n, b:n]
-declare meta_rem[a:n, b:n]
+declare typeclass MetaNum -> Term
 
-declare meta_eq[a:n,b:n]{'tt; 'ff}
-declare meta_eq[a:s,b:s]{'tt; 'ff}
-declare meta_eq[a:t,b:t]{'tt; 'ff}
-declare meta_eq[a:l,b:l]{'tt; 'ff}
+declare meta_num[n:n]          : MetaNum
+declare meta_sum[a:n, b:n]     : MetaNum
+declare meta_diff[a:n, b:n]    : MetaNum
+declare meta_prod[a:n, b:n]    : MetaNum
+declare meta_quot[a:n, b:n]    : MetaNum
+declare meta_rem[a:n, b:n]     : MetaNum
 
-declare meta_lt[a:n,b:n]{'tt; 'ff}
-declare meta_lt[a:s,b:s]{'tt; 'ff}
-declare meta_lt[a:t,b:t]{'tt; 'ff}
-declare meta_lt[a:l,b:l]{'tt; 'ff}
+declare meta_eq[a:n,b:n]{'tt : 'a; 'ff : 'a} : 'a
+declare meta_eq[a:s,b:s]{'tt : 'a; 'ff : 'a} : 'a
+declare meta_eq[a:t,b:t]{'tt : 'a; 'ff : 'a} : 'a
+declare meta_eq[a:l,b:l]{'tt : 'a; 'ff : 'a} : 'a
+
+declare meta_lt[a:n,b:n]{'tt : 'a; 'ff : 'a} : 'a
+declare meta_lt[a:s,b:s]{'tt : 'a; 'ff : 'a} : 'a
+declare meta_lt[a:t,b:t]{'tt : 'a; 'ff : 'a} : 'a
+declare meta_lt[a:l,b:l]{'tt : 'a; 'ff : 'a} : 'a
 
 (*
  * Arithmetic operations.
@@ -106,18 +108,21 @@ let eq goal =
     | [ String s1; String s2 ] ->
          s1 = s1
     | [ Token t1; Token t2 ] ->
-         t1 = t2
+         Opname.eq t1 t2
     | [ MLevel l1; MLevel l2 ] ->
          l1 == l2
     | _ ->
          raise (RefineError ("meta_eq", StringTermError ("ill-formed operation", goal)))
    in
-      if flag then true_term else false_term
+      if flag then
+         true_term
+      else
+         false_term
 
-ml_rw reduce_meta_eq_num : ('goal : meta_eq[a:n,b:n]{'tt; 'ff}) = eq goal
-ml_rw reduce_meta_eq_str : ('goal : meta_eq[a:s,b:s]{'tt; 'ff}) = eq goal
-ml_rw reduce_meta_eq_tok : ('goal : meta_eq[a:t,b:t]{'tt; 'ff}) = eq goal
-ml_rw reduce_meta_eq_lev : ('goal : meta_eq[a:l,b:l]{'tt; 'ff}) = eq goal
+ml_rw reduce_meta_eq_num : ('goal : meta_eq[a:n, b:n]{'tt; 'ff}) = eq goal
+ml_rw reduce_meta_eq_str : ('goal : meta_eq[a:s, b:s]{'tt; 'ff}) = eq goal
+ml_rw reduce_meta_eq_tok : ('goal : meta_eq[a:t, b:t]{'tt; 'ff}) = eq goal
+ml_rw reduce_meta_eq_lev : ('goal : meta_eq[a:l, b:l]{'tt; 'ff}) = eq goal
 
 let lt goal =
    let true_term, false_term = two_subterms goal in
@@ -126,8 +131,6 @@ let lt goal =
          Lm_num.lt_num i1 i2
     | [ String s1; String s2 ] ->
          s1 < s2
-    | [ Token t1; Token t2 ] ->
-         t1 < t2
     | [ MLevel l1; MLevel l2 ] ->
          level_lt l1 l2
     | _ ->
@@ -137,11 +140,10 @@ let lt goal =
 
 ml_rw reduce_meta_lt_num : ('goal : meta_lt[a:n, b:n]{'tt; 'ff}) = lt goal
 ml_rw reduce_meta_lt_str : ('goal : meta_lt[a:s, b:s]{'tt; 'ff}) = lt goal
-ml_rw reduce_meta_lt_tok : ('goal : meta_lt[a:t, b:t]{'tt; 'ff}) = lt goal
 ml_rw reduce_meta_lt_lev : ('goal : meta_lt[a:l, b:l]{'tt; 'ff}) = lt goal
 
-dform num_df : meta_num[n:n] = slot[n:n] subm
-dform sum_df : meta_sum[m:n,n:n] = slot[m:n] `" +" subm space slot[n:n]
+dform num_df  : meta_num[n:n] = slot[n:n] subm
+dform sum_df  : meta_sum[m:n,n:n] = slot[m:n] `" +" subm space slot[n:n]
 dform diff_df : meta_diff[m:n,n:n] = slot[m:n] `" -" subm space slot[n:n]
 dform quot_df : meta_quot[m:n,n:n] = slot[m:n] `" " div subm space slot[n:n]
 dform prod_df : meta_prod[m:n,n:n] = slot[m:n] `" *" subm space slot[n:n]

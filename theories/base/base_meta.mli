@@ -37,40 +37,41 @@ extends Summary
 (*
  * Meta-operations.
  *)
-declare meta_num[n:n]
-declare meta_sum[a:n, b:n]
-declare meta_diff[a:n, b:n]
-declare meta_prod[a:n, b:n]
-declare meta_quot[a:n, b:n]
-declare meta_rem[a:n, b:n]
+declare typeclass MetaNum -> Term
 
-declare meta_eq[a:n,b:n]{'tt; 'ff}
-declare meta_eq[a:s,b:s]{'tt; 'ff}
-declare meta_eq[a:t,b:t]{'tt; 'ff}
-declare meta_eq[a:l,b:l]{'tt; 'ff}
+declare meta_num[n:n]          : MetaNum
+declare meta_sum[a:n, b:n]     : MetaNum
+declare meta_diff[a:n, b:n]    : MetaNum
+declare meta_prod[a:n, b:n]    : MetaNum
+declare meta_quot[a:n, b:n]    : MetaNum
+declare meta_rem[a:n, b:n]     : MetaNum
 
-declare meta_lt[a:n,b:n]{'tt; 'ff}
-declare meta_lt[a:s,b:s]{'tt; 'ff}
-declare meta_lt[a:t,b:t]{'tt; 'ff}
-declare meta_lt[a:l,b:l]{'tt; 'ff}
+declare meta_eq[a:n, b:n]{'tt : 'a; 'ff : 'a} : 'a
+declare meta_eq[a:s, b:s]{'tt : 'a; 'ff : 'a} : 'a
+declare meta_eq[a:t, b:t]{'tt : 'a; 'ff : 'a} : 'a
+declare meta_eq[a:l, b:l]{'tt : 'a; 'ff : 'a} : 'a
+
+declare meta_lt[a:n, b:n]{'tt : 'a; 'ff : 'a} : 'a
+declare meta_lt[a:s, b:s]{'tt : 'a; 'ff : 'a} : 'a
+declare meta_lt[a:t, b:t]{'tt : 'a; 'ff : 'a} : 'a
+declare meta_lt[a:l, b:l]{'tt : 'a; 'ff : 'a} : 'a
 
 (*
  * sum{op1[@i1:n]; op2[@i2:n]} --> op1[@i1 + @i2]
  *)
-ml_rw reduce_meta_sum : meta_sum[a:n, b:n]
+ml_rw reduce_meta_sum  : meta_sum[a:n, b:n]
 ml_rw reduce_meta_diff : meta_diff[a:n, b:n]
 ml_rw reduce_meta_prod : meta_prod[a:n, b:n]
 ml_rw reduce_meta_quot : meta_quot[a:n, b:n]
 ml_rw reduce_meta_rem  : meta_rem[a:n, b:n]
 
-ml_rw reduce_meta_eq_num : meta_eq[a:n,b:n]{'tt; 'ff}
-ml_rw reduce_meta_eq_str : meta_eq[a:s,b:s]{'tt; 'ff}
-ml_rw reduce_meta_eq_tok : meta_eq[a:t,b:t]{'tt; 'ff}
-ml_rw reduce_meta_eq_lev : meta_eq[a:l,b:l]{'tt; 'ff}
+ml_rw reduce_meta_eq_num : meta_eq[a:n, b:n]{'tt; 'ff}
+ml_rw reduce_meta_eq_str : meta_eq[a:s, b:s]{'tt; 'ff}
+ml_rw reduce_meta_eq_tok : meta_eq[a:t, b:t]{'tt; 'ff}
+ml_rw reduce_meta_eq_lev : meta_eq[a:l, b:l]{'tt; 'ff}
 
 ml_rw reduce_meta_lt_num : meta_lt[a:n, b:n]{'tt; 'ff}
 ml_rw reduce_meta_lt_str : meta_lt[a:s, b:s]{'tt; 'ff}
-ml_rw reduce_meta_lt_tok : meta_lt[a:t, b:t]{'tt; 'ff}
 ml_rw reduce_meta_lt_lev : meta_lt[a:l, b:l]{'tt; 'ff}
 
 (*

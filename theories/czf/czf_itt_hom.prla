@@ -1,6 +1,6 @@
 #PRL version 1.0.8 ASCII term
 NPerv	Perv	Perv NIL
-NPerv!cons	cons	cons Perv
+NPerv!cons	cons	xcons Perv
 O	o	cons
 NSummary	Summary	Summary NIL
 NSummary!location	location	location Summary
@@ -19,7 +19,7 @@ O	o5	comment_white
 T	t5	o5
 B	b5	t5
 P	p6	String hom
-NPerv!nil	nil7	nil Perv
+NPerv!nil	nil7	xnil Perv
 O	o8	nil7
 T	t8	o8
 B	b8	t8
@@ -4200,9 +4200,9 @@ O	o1715	opname p6
 NCzf_itt_hom	Czf_itt_hom	Czf_itt_hom NIL
 NCzf_itt_hom!hom	hom	hom Czf_itt_hom
 O	o1716	hom
-Vg1	g1	g1\\ \\ 
+Vg1	g1	g1\\ \\
 B	b2648	g1
-Vg2	g2	g2\\ \\ 
+Vg2	g2	g2\\ \\
 B	b2649	g2
 Nvar	var	var NIL
 P	p1719	Var x
@@ -4544,7 +4544,7 @@ T	t1862	o b1861 b8
 B	b1862	t1862
 T	t1863	o b1860 b1862
 B	b1863	t1863
-Vf	f2683	f\\ \\ 
+Vf	f2683	f\\ \\
 B	b2684	f2683 x
 T	t2684	o1716 b2648 b2649 b2684
 B	b2685	t2684
@@ -4815,15 +4815,15 @@ NBase_rewrite	Base_rw	Base_rewrite NIL
 NBase_rewrite!sequent_arg	brwsqarg	sequent_arg Base_rw
 O	obrarg	brwsqarg
 T	tbrarg	obrarg
-C	h2698	H\\ \\ 
-Vg1	g12698	g1\\ H\\ 
+C	h2698	H\\ \\
+Vg1	g12698	g1\\ H\\
 B	b2699	g12698
 T	t2699	o1981 b1982 b2699 b2699
 S	s2699	tbrarg\\ h2698\\ t2699
 B	b2700	s2699
 T	t2710	o1979 b2700
 B	b2710	t2710
-Vg2	g22710	g2\\ H\\ 
+Vg2	g22710	g2\\ H\\
 B	b2713	g22710
 T	t2714	o1981 b1982 b2713 b2713
 S	s2714	tbrarg\\ h2698\\ t2714
@@ -6797,7 +6797,7 @@ S	s3290	tbrarg\\ h2698 h2358 h2359 h5992 h2743 h2744 h3043 h3044 h2005 h2042 h32
 B	b3291	s3290
 T	t3293	o2000 b3291 b2934
 B	b3293	t3293
-Vs1	s1	s1\\ \\ 
+Vs1	s1	s1\\ \\
 B	b3296	s1
 T	t3296	o b3296 b8
 B	b3297	t3296
@@ -6821,9 +6821,9 @@ S	s3310	tbrarg\\ h2698 h2358 h2359 h5992 h2743 h2744 h3043 h3044 h2005 h2042 h32
 B	b3311	s3310
 T	t3315	o2000 b3311 b2934
 B	b3316	t3315
-Va	a	a\\ \\ 
+Va	a	a\\ \\
 B	b3317	a
-Vb	b3318	b\\ \\ 
+Vb	b3318	b\\ \\
 B	b3319	b3318
 T	t3319	o1840 b2648 b3317 b3319
 B	b3320	t3319
@@ -7225,7 +7225,7 @@ T	t3639	o b3639 b8
 B	b3641	t3639
 T	t3644	o1998 b3588 b3641
 B	b3644	t3644
-Vs2	s2	s2\\ \\ 
+Vs2	s2	s2\\ \\
 B	b3647	s2
 T	t3647	o b3647 b8
 B	b3648	t3647
@@ -8043,7 +8043,7 @@ T	t4142	o b4142 b8
 B	b4143	t4142
 T	t4143	o1998 b4036 b4143
 B	b4144	t4143
-Vd	d	d\\ \\ 
+Vd	d	d\\ \\
 B	b4145	d
 T	t4145	o b4145 b8
 B	b4146	t4145
@@ -8053,7 +8053,7 @@ T	t4151	o2719 b4151
 B	b4152	t4151
 T	t4152	o b4152 b2717
 B	b4155	t4152
-Vc	c	c\\ \\ 
+Vc	c	c\\ \\
 B	b4156	c
 T	t4156	o b4156 b8
 B	b4157	t4156
@@ -8187,7 +8187,7 @@ T	t4219	o b4219 b8
 B	b4220	t4219
 T	t4220	o1998 b4039 b4220
 B	b4221	t4220
-Vg	g	g\\ \\ 
+Vg	g	g\\ \\
 B	b4222	g
 T	t4222	o b4222 b8
 B	b4223	t4222
@@ -8197,7 +8197,7 @@ T	t4224	o2719 b4224
 B	b4225	t4224
 T	t4225	o b4225 b2717
 B	b4226	t4225
-Ve	e	e\\ \\ 
+Ve	e	e\\ \\
 B	b4227	e
 T	t4227	o b4227 b8
 B	b4228	t4227
@@ -9169,7 +9169,7 @@ S	s4738	tbrarg\\ h2698 h4444 h2743 h2744 h2804 h2805 h4445 h2743 h4450 h2005 h20
 B	b4739	s4738
 T	t4739	o2000 b4739 b4439
 B	b4740	t4739
-Vy_8	y_8	y_8\\ \\ 
+Vy_8	y_8	y_8\\ \\
 B	b4741	y_8
 T	t4741	o b4741 b8
 B	b4742	t4741
@@ -9179,7 +9179,7 @@ T	t4743	o2719 b4743
 B	b4744	t4743
 T	t4744	o b4744 b2717
 B	b4745	t4744
-Vy_6	y_6	y_6\\ \\ 
+Vy_6	y_6	y_6\\ \\
 B	b4746	y_6
 T	t4746	o b4746 b8
 B	b4747	t4746
@@ -10863,7 +10863,7 @@ B	b2269	t2269
 P	p2270	Number 9122
 P	p2271	Number 9456
 O	o2271	location p2270 p2271
-Va	a5827	a\\ H\\ 
+Va	a5827	a\\ H\\
 B	b5828	a5827
 T	t5828	o3524 b5828
 B	b5829	t5828
@@ -11718,7 +11718,7 @@ B	b2280	t2280
 P	p2281	Number 9611
 P	p2282	Number 10203
 O	o2282	location p2281 p2282
-Va	a7580	a\\ J H\\ 
+Va	a7580	a\\ J H\\
 B	b7581	a7580
 T	t7581	o3524 b7581
 B	b7582	t7581
@@ -12093,11 +12093,11 @@ T	t8724	o b8724 b8
 B	b8725	t8724
 T	t8725	o1998 b8674 b8725
 B	b8726	t8725
-Vg1	g18726	g1\\ J H\\ 
+Vg1	g18726	g1\\ J H\\
 B	b8727	g18726
 T	t8727	o1818 b8727
 H	h8727	t8727
-Vg2	g28727	g2\\ J H\\ 
+Vg2	g28727	g2\\ J H\\
 B	b8728	g28727
 T	t8728	o1818 b8728
 H	h8728	t8728
@@ -13073,11 +13073,11 @@ B	b5516	t5516
 O	o5557	location p p
 P	p2	String hom_subg1
 O	o9	rule p2
-Vh1	h1	h1\\ H\\ 
+Vh1	h1	h1\\ H\\
 B	b9036	h1
 T	t9036	o3524 b9036
 B	b9037	t9036
-Vh2	h2	h2\\ H\\ 
+Vh2	h2	h2\\ H\\
 B	b9038	h2
 T	t9038	o3524 b9038
 B	b9039	t9038

@@ -40,6 +40,7 @@ extends Itt_group
 extends Itt_quotient
 extends Itt_subset
 extends Itt_subset2
+extends Itt_labels
 doc docoff
 
 open Lm_debug

@@ -50,6 +50,8 @@ define unfold_apply5 : "apply"{'f1; 'x1; 'x2; 'x3; 'x4; 'x5} <--> ('f1 'x1 'x2 '
 define unfold_atomic : "atomic"{'x} <--> ('x in atom0)
 define unfold_all : "all"{v. 'b['v]} <--> Itt_logic!"all"{atom0; v. 'b['v]}
 define unfold_exists : "exists"{v. 'b['v]} <--> Itt_logic!"exists"{atom0; v. 'b['v]}
+
+declare "default-token" : Token
 define unfold_t : "t" <--> token["default-token":t]
 
 let fold_atomic = makeFoldC << atomic{'x} >> unfold_atomic
@@ -80,8 +82,8 @@ let fold_apply5 = makeFoldC << apply{'f; 'x1; 'x2; 'x3; 'x4; 'x5} >> unfold_appl
  * DISPLAY FORMS                                                        *
  ************************************************************************)
 
-declare all_df{'b}
-declare exists_df{'b}
+declare all_df{'b : Dform} : Dform
+declare exists_df{'b : Dform} : Dform
 
 dform all_df1 : "all"{v. 'b} =
    Nuprl_font!"forall" slot{'v} all_df{'b}

@@ -31,8 +31,9 @@
  *)
 open Dform
 
-val format_exn : dform_base -> buffer -> exn -> unit
-val print_exn  : dform_base -> string option -> ('a -> 'b) -> 'a -> 'b
+val format_exn  : dform_base -> buffer -> exn -> unit
+val print_exn   : dform_base -> string option -> ('a -> 'b) -> 'a -> 'b
+val handle_exn  : dform_base -> string option -> Token.flocation -> (unit -> 'a) -> 'a
 
 (*
  * -*-

@@ -483,9 +483,9 @@ declare TyDefDTuple{'ty_var}
 
 doc docoff
 
-declare display_Lambda1{'ty}
-declare display_Lambda2{'ty}
-declare display_Union{'ty_list_list}
+declare display_Lambda1{'ty : Dform} : Dform
+declare display_Lambda2{'ty : Dform} : Dform
+declare display_Union{'ty_list_list : Dform} : Dform
 
 dform display_Lambda1_df : display_Lambda1{TyLambda{v. 'ty}} =
    slot{'v} display_Lambda2{'ty}

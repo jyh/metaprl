@@ -41,6 +41,7 @@ extends Itt_subset
 extends Itt_subset2
 extends Itt_bisect
 extends Itt_ext_equal
+extends Itt_labels
 doc docoff
 
 open Lm_debug

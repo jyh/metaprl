@@ -40,6 +40,8 @@ extends Itt_group
 extends Itt_record_renaming
 doc docoff
 extends Itt_singleton
+extends Itt_labels
+extends Itt_atom
 
 open Lm_debug
 open Lm_printf
@@ -426,19 +428,21 @@ doc docoff
  * TYPE INFERENCE                                                       *
  ************************************************************************)
 
+let car_opname = dest_token_param << token["car":t] >>
+
 let inf_addid _ _ _ eqs opt_eqs defs t =
    let t, _ = dest_field t in
-   let car = mk_field_term t "car" in
+   let car = mk_field_term t car_opname in
       eqs, opt_eqs, defs, car
 
 let inf_neg _ _ _ eqs opt_eqs defs t =
    let t, _ = dest_field t in
-   let car = mk_field_term t "car" in
+   let car = mk_field_term t car_opname in
       eqs, opt_eqs, defs, mk_fun_term car car
 
 let inf_add _ _ _ eqs opt_eqs defs t =
    let t, _ = dest_field t in
-   let car = mk_field_term t "car" in
+   let car = mk_field_term t car_opname in
       eqs, opt_eqs, defs, mk_fun_term car (mk_fun_term car car)
 
 let resource typeinf += [

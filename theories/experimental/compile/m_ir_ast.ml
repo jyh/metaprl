@@ -47,7 +47,7 @@ doc <<"doc"{terms}>>
 declare IR{'e}
 declare IR{'e1; v. 'e2['v]}
 declare IR{'args; 'f; v. 'e['v]}
-declare IR_size{'tuple; 'init}
+declare IR_size{'tuple; 'init : MetaNum}
 
 doc <<docoff>>
 
@@ -157,10 +157,10 @@ prim_rw ir_lambda {| ir |} :
    IR{LambdaExpr{v1. 'body['v1]}; v2. 'e['v2]}
    <-->
    LetRec{R. Fields{
-      FunDef{Label["g":t]; AtomFun{v1. IR{'body['v1]; v3.
+      FunDef{Label["g":s]; AtomFun{v1. IR{'body['v1]; v3.
          Return{'v3}}}; (**)
       EndDef}};
-   R. LetFun{'R; Label["g":t]; g. 'e[AtomVar{'g}]}}
+   R. LetFun{'R; Label["g":s]; g. 'e[AtomVar{'g}]}}
 
 doc <:doc<
    @begin[doc]
@@ -171,9 +171,9 @@ prim_rw ir_if {| ir |} :
    IR{IfExpr{'e1; 'e2; 'e3}; v. 'e['v]}
    <-->
    LetRec{R. Fields{
-      FunDef{Label["g":t]; AtomFun{v. 'e[AtomVar{'v}]}; (* ? *)
+      FunDef{Label["g":s]; AtomFun{v. 'e[AtomVar{'v}]}; (* ? *)
       EndDef}};
-   R. LetFun{'R; Label["g":t]; g.
+   R. LetFun{'R; Label["g":s]; g.
       IR{'e1; v1.
          If{'v1;
             IR{'e2; v2. TailCall{AtomVar{'g}; ArgCons{'v2; ArgNil}}};
@@ -193,7 +193,7 @@ prim_rw ir_fields {| ir |} :
    IR{AstFields{'fields}} <--> Fields{IR{'fields}}
 
 prim_rw ir_label {| ir |} :
-   IR{AstLabel[t:t]} <--> Label[t:t]
+   IR{AstLabel[t:s]} <--> Label[t:s]
 
 prim_rw ir_fun_def {| ir |} :
    IR{AstFunDef{'label; 'e; 'rest}}
@@ -254,7 +254,7 @@ doc <:doc<
    We use Base_meta arithmetic to figure out the size of a tuple.
    @end[doc]
 >>
-declare succ{'e}
+declare succ{'e : MetaNum} : MetaNum
 
 prim_rw ir_alloc_tuple_cons {| ir |} :
    IR{AstAllocTupleCons{'e; 'rest}; v. 'e2['v]}

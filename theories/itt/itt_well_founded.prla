@@ -1,6 +1,6 @@
 #PRL version 1.0.8 ASCII term
 NPerv	Perv	Perv NIL
-NPerv!cons	cons	cons Perv
+NPerv!cons	cons	xcons Perv
 O	o	cons
 NSummary	Summary	Summary NIL
 NSummary!location	location	location Summary
@@ -9,7 +9,7 @@ P	p4	Number 1550
 O	o6	location p3 p4
 NSummary!parent	parent	parent Summary
 O	o2	parent
-NPerv!nil	nil3	nil Perv
+NPerv!nil	nil3	xnil Perv
 O	o4	nil3
 T	t4	o4
 B	b4	t4
@@ -3380,7 +3380,7 @@ P	p2309	Number 2836
 O	o2309	location p2308 p2309
 NSummary!definition	definition	definition Summary
 O	o2310	definition p429
-VA	A	A\\ \\ 
+VA	A	A\\ \\
 B	b2310	A
 VR	R	R\\ \\ t370 t371
 B	b2311	R x y
@@ -3482,15 +3482,15 @@ T	t2088	o2088
 B	b2088	t2088
 T	t2089	o b2088 b4
 B	b2089	t2089
-VR	R2387	R\\ \\ 
+VR	R2387	R\\ \\
 B	b2387	R2387 x y
 T	t2387	o367 b2310 b2387
 B	b2388	t2387
-Vx	x	x\\ \\ 
+Vx	x	x\\ \\
 B	b2389	x
 T	t2389	o387 b2389
 B	b2390	t2389
-Vy	y	y\\ \\ 
+Vy	y	y\\ \\
 B	b2391	y
 T	t2391	o387 b2391
 B	b2392	t2391
@@ -3727,8 +3727,8 @@ B	b2604	t2604
 P	p2604	Number 4203
 P	p2605	Number 4422
 O	o2605	location p2604 p2605
-C	h2605	H\\ \\ 
-VA	A2605	A\\ H\\ 
+C	h2605	H\\ \\
+VA	A2605	A\\ H\\
 B	b2605	A2605
 T	t2605	o484 b2605
 S	s2605	tbrarg\\ h2605\\ t2605
@@ -4446,7 +4446,7 @@ T	t2842	o b2842 b4
 B	b2843	t2842
 T	t2843	o502 b2810 b2843
 B	b2844	t2843
-VP	P	P\\ \\ 
+VP	P	P\\ \\
 B	b2845	P
 T	t2845	o711 b2845 b876
 B	b2846	t2845 v
@@ -4606,7 +4606,7 @@ T	t2916	o916 b501 b2910 b2916 b4
 B	b2917	t2916
 P	p946	String "dT 10"
 O	o946	ext_rule p946
-Va1	a1	a1\\ \\ 
+Va1	a1	a1\\ \\
 B	b2918	a1
 T	t2918	o b2918 b4
 B	b2919	t2918
@@ -4889,7 +4889,7 @@ T	t3036	o502 b3025 b3036
 B	b3037	t3036
 P	p1048	String "rw reduceC 12 thenT autoT"
 O	o1048	ext_rule p1048
-Va3	a3	a3\\ \\ 
+Va3	a3	a3\\ \\
 B	b3038	a3
 T	t3038	o b3038 b4
 B	b3039	t3038

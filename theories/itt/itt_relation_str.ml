@@ -50,6 +50,7 @@ extends Itt_algebra_df
 extends Itt_logic
 extends Itt_bisect
 extends Itt_comment
+extends Itt_labels
 doc <:doc< @docoff >>
 
 open Basic_tactics

@@ -43,6 +43,7 @@ extends Itt_ext_equal*)
 extends Itt_record
 extends Itt_record_renaming
 extends Itt_bool
+extends Itt_labels
 doc docoff
 
 open Lm_debug

@@ -4,12 +4,12 @@ doc <:doc<
 
    The integers are formalized as a @emph{primitive}
    type in the @Nuprl type theory. This module defines additive fragment
-   (<<Perv!nil +@ Perv!nil>>, <<Perv!nil -@ Perv!nil>>, <<- cdot>>)
-   with linear order both in propositional (<<Perv!nil < Perv!nil>>)
-   and boolean (<<lt_bool{(Perv!nil) ; (Perv!nil)}>>) forms.
+   (<<'x +@ 'y>>, <<'x -@ 'y>>, <<- 'x>>)
+   with linear order both in propositional (<<'x < 'y>>)
+   and boolean (<<lt_bool{'x ; 'y}>>) forms.
 	It was decided that because inequalities on integers are decidable, it would
    be better to define boolean inequalities as primitive ones and
-   propositional as derived (via <<"assert"{cdot}>>) from the correspondent
+   propositional as derived (via <<"assert"{'x}>>) from the correspondent
    boolean inequalities.
 
    The theory of integers continues in @hrefmodule[Itt_int_ext] where multiplicative
@@ -279,30 +279,42 @@ dform lt_df1 : parens :: "prec"[prec_compare] :: lt{'a; 'b} =
 dform lt_bool_df1 : parens :: "prec"[prec_compare] :: lt_bool{'a; 'b} =
    slot["lt"]{'a} `" <" Nuprl_font!subb `" " slot["le"]{'b}
 
-declare display_ind{'x}
-declare display_ind_n
-declare display_ind_eq{'x;'y}
+(*
+ * XXX: JYH: this display form is rather poorly designed.
+ * Why displya using the constant string "n" -- why
+ * not use the binding variables that are present
+ * in the original term.  Also, this display form substitutes
+ * stuff into the expression bodies, which is not really
+ * a good idea.
+ *)
+declare display_n : Dform
+declare display_ind{'x : Dform } : Dform
+declare display_ind_n : Dform
+declare display_ind_eq{'x : Dform; 'y : Dform} : Dform
+
+dform display_n_df : display_n =
+   math_it["n":s]
 
 dform display_ind_df1 : display_ind{'x} =
    math_it["Ind":s] `"(" 'x `")"
 
 dform display_ind_df2 : display_ind_n =
-   display_ind{math_it["n":s]}
+   display_ind{display_n}
 
 dform ind_eq_df: except_mode[src] :: display_ind_eq{'x;'y} =
    szone 'x space `"=" space 'y ezone
 
 dform ind_df : parens :: "prec"[prec_bor] :: except_mode[src] ::
-   ind{'x; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]} =
-   szone pushm[3] szone display_ind{'x} space `"where" space display_ind_n space
- `"=" ezone hspace
-   ((math_it["n":s] < 0) => display_ind_eq{display_ind_n;
- 'down[math_it["n":s]; display_ind{(math_it["n":s] +@ 1)}]})
- hspace
-   (display_ind_eq{math_it["n":s];0} => display_ind_eq{display_ind_n; 'base}) hspace
-   ((0 < math_it["n":s]) => display_ind_eq{display_ind_n;
- 'up[math_it["n":s]; display_ind{(math_it["n":s] -@ 1)}]})
- popm ezone
+   ind{'x; i, j. 'down['i :> Dform; 'j :> Dform]; 'base; k, l. 'up['k :> Dform; 'l :> Dform]} =
+   szone pushm[3]
+     szone display_ind{'x} space `"where" space display_ind_n space `"=" ezone
+   hspace
+     math_implies{math_lt{display_n; 0}; display_ind_eq{display_ind_n; 'down[display_n; display_ind{math_add{display_n;1}}]}}
+   hspace
+     math_implies{display_ind_eq{display_n; 0}; display_ind_eq{display_ind_n; 'base}}
+   hspace
+     math_implies{math_lt{0; display_n}; display_ind_eq{display_ind_n; 'up[display_n; display_ind{math_sub{display_n;1}}]}}
+   popm ezone
 
 doc <:doc<
    @begin[doc]

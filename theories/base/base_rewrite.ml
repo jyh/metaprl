@@ -85,7 +85,7 @@ doc <:doc<
    are interchangeable in context <<df_context_var[H:v]>>.
    @end[doc]
 >>
-declare sequent_arg
+declare sequent [sequent_arg] { Term : Term >- Term } : Judgment
 
 doc <:doc<
    @begin[doc]

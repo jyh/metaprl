@@ -15,6 +15,7 @@ extends Itt_logic
 extends Itt_bisect
 extends Itt_tunion
 extends Itt_nat
+extends Itt_labels
 
 doc <:doc< @docoff >>
 
@@ -84,7 +85,6 @@ doc <:doc<
    @end[doc]
 >>
 
-
 define rbtree: RBTreeOf{'A} <--> fix {rbtree. lambda {n. lambda {parent_color.
                        if beq_int{'n;.  -1}
                          then void
@@ -93,7 +93,6 @@ define rbtree: RBTreeOf{'A} <--> fix {rbtree. lambda {n. lambda {parent_color.
                             (if beq_int{'n;  0} then unit else void)
                          }}}
 
-
 define btree1: BTree{'A;'n} <--> RBTreeOf{'A} 'n red           (* Red-black tree with a black root *)
 
 define rbtree1: RBTree{'A;'n} <--> RBTreeOf{'A} 'n black        (* Red-black tree with an arbitary root *)
@@ -101,8 +100,6 @@ define rbtree1: RBTree{'A;'n} <--> RBTreeOf{'A} 'n black        (* Red-black tre
 define btree2: BTree{'A} <--> tunion{ nat; n.BTree{'A;'n} }
 
 define rbtree2: RBTree{'A} <--> tunion{ nat; n.RBTree{'A;'n} }
-
-
 
 doc <:doc<
    @begin[doc]

@@ -62,6 +62,7 @@ extends Itt_bisect
 extends Itt_list2
 extends Itt_pairwise
 extends Itt_pairwise2
+extends Itt_labels
 
 doc docoff
 

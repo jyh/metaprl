@@ -78,8 +78,8 @@ val atom_term : term
 val token_term : term
 val bogus_token : term
 val is_token_term : term -> bool
-val dest_token : term -> string
-val mk_token_term : string -> term
+val dest_token : term -> opname
+val mk_token_term : opname -> term
 
 topval atomSqequalT : tactic
 

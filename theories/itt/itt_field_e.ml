@@ -40,6 +40,7 @@ extends Itt_field2
 extends Itt_intdomain_e
 doc docoff
 extends Itt_poly
+extends Itt_labels
 
 open Lm_debug
 open Lm_printf

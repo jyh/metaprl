@@ -73,9 +73,10 @@ topval fold_lt : conv
  ************************************************************************)
 
 (* Display mechanisms *)
-declare display_ind{'x}
-declare display_ind_n
-declare display_ind_eq{'x;'y}
+declare display_n : Dform
+declare display_ind{'x : Dform} : Dform
+declare display_ind_n : Dform
+declare display_ind_eq{'x : Dform; 'y : Dform} : Dform
 
 prec prec_compare
 prec prec_add

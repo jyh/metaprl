@@ -29,7 +29,6 @@
  * Author: Jason Hickey
  * jyh@cs.cornell.edu
  *)
-
 extends Sil_state
 extends Sil_syntax
 extends Sil_sos

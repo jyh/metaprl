@@ -16,6 +16,7 @@ extends Itt_disect
 extends Itt_logic
 extends Itt_tsquash
 extends Itt_bisect
+extends Itt_labels
 
 doc docoff
 
@@ -655,6 +656,9 @@ declare self{'self}
 
 declare self[n:t]{'x}
 
+declare var{'x} : Dform
+declare cdot
+
 (*
 dform self_df : except_mode [src] ::  self{'self} = `""
 *)
@@ -667,10 +671,16 @@ dform field_self  : except_mode [src] ::  field[t:t]{self{'self}} = label[t:t]
 
 dform self_lab_df : except_mode [src] ::  self[n:t]{'x} = field[n:t]{self{'x}}
 
-declare "{"
-declare "}"
-declare ";"
-declare "|"
+dform var_df : var{'x} =
+   'x
+
+dform cdot_df : cdot =
+   Nuprl_font!cdot
+
+declare "{" : Dform
+declare "}" : Dform
+declare ";" : Dform
+declare "|" : Dform
 
 dform open_record_df : "{" = szone pushm  `"{" pushm
 dform close_record_df : "}" = popm `"}" popm ezone
@@ -701,7 +711,7 @@ dform subrecordR_df : except_mode [src] :: subrecord{record[n:t]{'a;x.'r['x]}}
    = subrecord{record[n:t]{'a}} ";" subrecord{'r[self[n:t]{'x}]}
 
 dform set_record_df : except_mode [src] :: subrecord{{self: 'A | 'P['self]}}
-   =  'self `":" slot{'A} "|" 'P[self{'self}]
+   =  var{'self} `":" slot{'A} "|" 'P[self{'self}]
 
 dform set_record_df : except_mode [src] :: subrecord{{self:{self2:'a | 'P2['self2]} | 'P['self]}}
    =  subrecord{{self:'a | 'P2['self]}} "|" 'P[self{'self}]
@@ -731,7 +741,7 @@ dform set_record_df : except_mode [src] ::  ({self:'a | 'P['self]})
    =  "{" subrecord{{self:'a | 'P['self]}} "}"
 
 dform functionOrt_df : except_mode [src] :: function_ort{x.'f['x];'R}
-     =  slot{'f[math_bf{cdot}]} perp slot{'R}
+     =  slot{'f[cdot]} perp slot{'R}
 
 dform recordOrt_df : except_mode [src] :: record_ort[n:t]{'a;'R}
      =   rcrd[n:t]{'a} perp 'R

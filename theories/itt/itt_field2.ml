@@ -41,6 +41,7 @@ extends Itt_record_renaming
 doc docoff
 extends Itt_unitring
 extends Itt_intdomain
+extends Itt_labels
 
 open Lm_debug
 open Lm_printf

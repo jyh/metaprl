@@ -1,6 +1,6 @@
 #PRL version 1.0.8 ASCII term
 NPerv	Perv	Perv NIL
-NPerv!cons	cons	cons Perv
+NPerv!cons	cons	xcons Perv
 O	o	cons
 NSummary	Summary	Summary NIL
 NSummary!location	location	location Summary
@@ -46,7 +46,7 @@ P	p11	String w
 O	o12	comment_string p11
 T	t12	o12
 B	b12	t12
-NPerv!nil	nil12	nil Perv
+NPerv!nil	nil12	xnil Perv
 O	o13	nil12
 T	t13	o13
 B	b13	t13
@@ -3532,7 +3532,7 @@ B	b3460	t3460
 P	p3460	Number 2757
 P	p3461	Number 2781
 O	o3461	location p3460 p3461
-VA	A	A\\ \\ 
+VA	A	A\\ \\
 B	b3461	A
 VB	B	B\\ \\ t1467
 B	b3462	B x
@@ -3699,9 +3699,9 @@ O	o3469	location p3468 p3469
 O	o1545	opname p1473
 NItt_w!tree	tree	tree Itt_w
 O	o1546	tree
-Va	a	a\\ \\ 
+Va	a	a\\ \\
 B	b3469	a
-Vf	f	f\\ \\ 
+Vf	f	f\\ \\
 B	b3470	f
 T	t3470	o1546 b3469 b3470
 B	b3471	t3470
@@ -3821,7 +3821,7 @@ O	o3488	location p3487 p3488
 O	o1599	opname p1599
 NItt_w!tree_ind	tree_ind	tree_ind Itt_w
 O	o1600	tree_ind
-Vz	z	z\\ \\ 
+Vz	z	z\\ \\
 B	b3488	z
 P	p1600	Var z
 O	o1601	var p1600
@@ -4193,9 +4193,9 @@ O	o3538	location p3537 p3538
 NSummary!rewrite	rewrite	rewrite Summary
 P	p1768	String reduce_tree_ind
 O	o1768	rewrite p1768
-Va1	a1	a1\\ \\ 
+Va1	a1	a1\\ \\
 B	b3538	a1
-Vf1	f1	f1\\ \\ 
+Vf1	f1	f1\\ \\
 B	b3539	f1
 T	t3539	o1546 b3538 b3539
 B	b3540	t3539
@@ -4555,11 +4555,11 @@ B	b3556	t3556
 P	p3557	Number 4256
 P	p3558	Number 4379
 O	o3558	location p3557 p3558
-VB	B3558	B\\ \\ 
+VB	B3558	B\\ \\
 B	b3558	B3558 x
 T	t3558	o1464 b3461 b3558
 B	b3559	t3558
-Vx	x	x\\ \\ 
+Vx	x	x\\ \\
 B	b3560	x
 T	t3560	o1823 b3560
 B	b3561	t3560
@@ -4612,11 +4612,11 @@ B	b3583	t3583
 P	p3583	Number 4477
 P	p3584	Number 4751
 O	o3584	location p3583 p3584
-Vbody	body3584	body\\ \\ 
+Vbody	body3584	body\\ \\
 B	b3584	body3584 a f g
 T	t3584	o1600 b3488 b3584
 B	b3585	t3584
-Vg	g	g\\ \\ 
+Vg	g	g\\ \\
 B	b3586	g
 T	t3586	o1823 b3586
 B	b3587	t3586
@@ -4672,13 +4672,13 @@ B	b3612	t3611
 P	p3612	Number 5075
 P	p3613	Number 5250
 O	o3613	location p3612 p3613
-VA	A3613	A\\ H\\ 
+VA	A3613	A\\ H\\
 B	b3613	A3613
 T	t3613	o1903 b3613
 B	b3614	t3613
 T	t3614	o b3614 b13
 B	b3615	t3614
-C	h3615	H\\ \\ 
+C	h3615	H\\ \\
 T	t3615	o1910 b1911 b3613 b3613
 S	s3615	tbrarg\\ h3615\\ t3615
 B	b3616	s3615
@@ -4744,9 +4744,9 @@ B	b3643	t3643
 P	p3643	Number 5455
 P	p3644	Number 5703
 O	o3644	location p3643 p3644
-VA1	A1	A1\\ H\\ 
+VA1	A1	A1\\ H\\
 B	b3644	A1
-VA2	A2	A2\\ H\\ 
+VA2	A2	A2\\ H\\
 B	b3645	A2
 T	t3645	o1910 b1911 b3644 b3645
 S	s3645	tbrarg\\ h3615\\ t3645
@@ -4880,7 +4880,7 @@ P	p3695	Number 6194
 O	o3695	location p3694 p3695
 P	p2057	String treeFormation
 O	o2057	rule p2057
-Va	a3695	a\\ H\\ 
+Va	a3695	a\\ H\\
 B	b3695	a3695
 T	t3695	o1903 b3695
 B	b3696	t3695
@@ -4893,7 +4893,7 @@ T	t3698	o1908 b3698
 B	b3699	t3698
 T	t3699	o1997 b3699
 B	b3700	t3699
-Vf	f3700	f\\ H\\ 
+Vf	f3700	f\\ H\\
 S	s3700	tbrarg\\ h3615\\ f3700
 B	b3701	s3700
 P	p2062	String main
@@ -5075,9 +5075,9 @@ P	p3736	Number 6725
 O	o3736	location p3735 p3736
 P	p2143	String treeEquality
 O	o2143	rule p2143
-Va1	a13736	a1\\ H\\ 
+Va1	a13736	a1\\ H\\
 B	b3736	a13736
-Va2	a2	a2\\ H\\ 
+Va2	a2	a2\\ H\\
 B	b3737	a2
 T	t3737	o1910 b3613 b3736 b3737
 S	s3737	tbrarg\\ h3615\\ t3737
@@ -5090,9 +5090,9 @@ VB	B3740	B\\ H\\ a13736
 B	b3741	B3740
 T	t3741	o2063 b3741 b3703
 B	b3742	t3741
-Vb1	b1	b1\\ H\\ 
+Vb1	b1	b1\\ H\\
 B	b3743	b1
-Vb2	b2	b2\\ H\\ 
+Vb2	b2	b2\\ H\\
 B	b3744	b2
 T	t3744	o1910 b3742 b3743 b3744
 S	s3744	tbrarg\\ h3615\\ t3744
@@ -5737,9 +5737,9 @@ T	t3820	o b3820 b13
 B	b3821	t3820
 T	t3821	o b3817 b3821
 B	b3822	t3821
-Vz1	z1	z1\\ H\\ 
+Vz1	z1	z1\\ H\\
 B	b3823	z1
-Vz2	z2	z2\\ H\\ 
+Vz2	z2	z2\\ H\\
 B	b3824	z2
 T	t3824	o1910 b3703 b3823 b3824
 S	s3824	tbrarg\\ h3615\\ t3824
@@ -6303,7 +6303,7 @@ B	b4028	t4028
 P	p4028	Number 8886
 P	p4029	Number 8920
 O	o4029	location p4028 p4029
-Vb	b4029	b\\ \\ 
+Vb	b4029	b\\ \\
 B	b4030	b4029
 T	t4030	o1546 b3469 b4030
 B	b4031	t4030
@@ -6494,7 +6494,7 @@ B	b4094	t4094
 P	p4094	Number 9111
 P	p4095	Number 9174
 O	o4095	location p4094 p4095
-Ve	e	e\\ \\ 
+Ve	e	e\\ \\
 B	b4095	e
 P	p4096	Var u
 O	o4096	var p4096

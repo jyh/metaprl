@@ -1,6 +1,6 @@
 #PRL version 1.0.8 ASCII term
 NPerv	Perv	Perv NIL
-NPerv!cons	cons	cons Perv
+NPerv!cons	cons	xcons Perv
 O	o	cons
 NSummary	Summary	Summary NIL
 NSummary!location	location	location Summary
@@ -39,7 +39,7 @@ P	p2	String SqStable
 P	p66	String SqUnsquash
 P	p111	String SqUnsquashGoal
 P	p1676	String tac
-NPerv!nil	nil18	nil Perv
+NPerv!nil	nil18	xnil Perv
 O	o19	nil18
 T	t19	o19
 B	b19	t19
@@ -2299,9 +2299,9 @@ NBase_rewrite	Base_rw	Base_rewrite NIL
 NBase_rewrite!sequent_arg	brwsqarg	sequent_arg Base_rw
 O	obrarg	brwsqarg
 T	tbrarg	obrarg
-C	h	H\\ H\\ 
+C	h	H\\ H\\
 H	h65	x t67
-C	h2636	J\\ J\\ 
+C	h2636	J\\ J\\
 NItt_equal	Itt_equal	Itt_equal NIL
 NItt_equal!equal	equal	equal Itt_equal
 O	o2309	equal
@@ -4242,7 +4242,7 @@ B	b4940	t4940
 P	p4941	Number 3792
 P	p4942	Number 3810
 O	o4942	location p4941 p4942
-VA	A	A\\ \\ 
+VA	A	A\\ \\
 B	b4944	A
 T	t4944	o65 b4944
 B	b4945	t4944
@@ -4260,7 +4260,7 @@ P	p4952	Number 3868
 O	o4952	location p4951 p4952
 NSummary!term_binding	term_binding	term_binding Summary
 O	o4953	term_binding
-Va	a	a\\ \\ 
+Va	a	a\\ \\
 B	b4954	a
 T	t4954	o65 b4954
 B	b4955	t4954
@@ -4476,10 +4476,10 @@ B	b5047	t5047
 P	p5049	Number 4719
 P	p5052	Number 4882
 O	o5053	location p5049 p5052
-C	h5053	H\\ \\ 
-VA1	A1	A1\\ H\\ 
+C	h5053	H\\ \\
+VA1	A1	A1\\ H\\
 B	b5053	A1
-VA2	A2	A2\\ H\\ 
+VA2	A2	A2\\ H\\
 B	b5054	A2
 T	t5054	o2309 b2310 b5053 b5054
 S	s5054	tbrarg\\ h5053\\ t5054
@@ -4526,7 +4526,7 @@ B	b5081	t5081
 P	p5081	Number 4884
 P	p5083	Number 5008
 O	o5085	location p5081 p5083
-VA	A5085	A\\ H\\ 
+VA	A5085	A\\ H\\
 B	b5085	A5085
 T	t5085	o2338 b5085
 S	s5085	tbrarg\\ h5053\\ t5085
@@ -4953,14 +4953,14 @@ T	t5249	o5243
 B	b5249	t5249
 T	t5250	o b5249 b19
 B	b5250	t5250
-VP	P	P\\ H\\ 
+VP	P	P\\ H\\
 H	h5250	P
-C	h5251	J\\ H\\ 
-VA	A5251	A\\ J H\\ 
+C	h5251	J\\ H\\
+VA	A5251	A\\ J H\\
 B	b5251	A5251
-Vx	x	x\\ J H\\ 
+Vx	x	x\\ J H\\
 B	b5252	x
-Vy	y	y\\ J H\\ 
+Vy	y	y\\ J H\\
 B	b5253	y
 T	t5253	o2309 b5251 b5252 b5253
 S	s5253	tbrarg\\ h5053 h5250 h5251\\ t5253
@@ -4986,7 +4986,7 @@ O	o5262	location p5261 p5262
 O	o2647	rule p13
 NSummary!meta_function	meta_function	meta_function Summary
 O	o2648	meta_function
-Vu	u	u\\ \\ 
+Vu	u	u\\ \\
 Vt	t5262	t\\ \\ u
 B	b5262	t5262
 H	h5262	u t5256
@@ -5273,7 +5273,7 @@ P	p4222	String unsquashWWitness
 O	o4222	rule p4222
 NSummary!term_param	term_param	term_param Summary
 O	o2661	term_param
-Vt	t5328	t\\ J H\\ 
+Vt	t5328	t\\ J H\\
 B	b5328	t5328
 T	t5329	o2661 b5328
 B	b5329	t5329
@@ -5657,7 +5657,7 @@ P	p5410	Number 7501
 P	p5411	Number 7642
 O	o5411	location p5410 p5411
 O	o2998	rule p16
-Vt	t5411	t\\ H\\ 
+Vt	t5411	t\\ H\\
 B	b5411	t5411
 T	t5412	o2661 b5411
 B	b5412	t5412
@@ -5728,9 +5728,9 @@ P	p5444	Number 7800
 O	o5444	location p5443 p5444
 P	p3034	String unsquashHypEqual
 O	o3034	rule p3034
-Vx	x5444	x\\ H\\ 
+Vx	x5444	x\\ H\\
 B	b5444	x5444
-Vy	y5444	y\\ H\\ 
+Vy	y5444	y\\ H\\
 B	b5445	y5444
 T	t5445	o2309 b5085 b5444 b5445
 H	h5445	t5445
@@ -6011,7 +6011,7 @@ T	t5633	o2661 b5085
 B	b5633	t5633
 T	t5634	o b5633 b19
 B	b5634	t5634
-VC	C5634	C\\ H\\ 
+VC	C5634	C\\ H\\
 S	s5634	tbrarg\\ h5053 h5356\\ C5634
 B	b5635	s5634
 T	t5635	o2307 b5635

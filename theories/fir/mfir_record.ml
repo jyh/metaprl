@@ -162,7 +162,7 @@ let resource reduce +=
  * Use an auxiliary term to come up with a nicer display form.
  *)
 
-declare mfir_record_display{ 'record }
+declare mfir_record_display{ 'record : Dform } : Dform
 
 (*
  * Define the display forms now.

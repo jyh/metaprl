@@ -1,4 +1,5 @@
 extends Itt_record
+extends Itt_labels
 
 open Basic_tactics
 
@@ -68,7 +69,7 @@ dform update_method_df  : parens :: except_mode [src] ::
 (*  Examples      *)
 (******************)
 
-define flea: flea <-->
+define flea : flea <-->
    obj{ self.
            {x=1;
             getX = apply["x":t]{'self};                            (* x *)

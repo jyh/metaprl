@@ -204,7 +204,7 @@ declare math_LetRecDef{'d}
 declare math_LetRecBody{'e}
 
 declare math_Fields{'fields}
-declare math_Label[tag:t]
+declare math_Label[tag:s]
 
 declare math_FunDef{'label; 'exp; 'rest}
 declare math_FunDef{'label; 'exp}

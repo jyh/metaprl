@@ -1,6 +1,6 @@
 #PRL version 1.0.8 ASCII term
 NPerv	Perv	Perv NIL
-NPerv!cons	cons	cons Perv
+NPerv!cons	cons	xcons Perv
 O	o	cons
 NSummary	Summary	Summary NIL
 NSummary!location	location	location Summary
@@ -10,7 +10,7 @@ O	o26	location p10 p14
 NSummary!parent	parent	parent Summary
 O	o2	parent
 P	p2	String Itt_isect
-NPerv!nil	nil3	nil Perv
+NPerv!nil	nil3	xnil Perv
 O	o4	nil3
 T	t4	o4
 B	b4	t4
@@ -3737,9 +3737,9 @@ P	p3094	Number 2431
 O	o3094	location p3093 p3094
 NSummary!definition	definition	definition Summary
 O	o3095	definition p507
-VA	A	A\\ \\ 
+VA	A	A\\ \\
 B	b3095	A
-VB	B	B\\ \\ 
+VB	B	B\\ \\
 B	b3096	B
 T	t3096	o479 b3095 b3096
 B	b3097	t3096
@@ -3818,10 +3818,10 @@ B	b3118	t3118
 P	p3118	Number 3241
 P	p3119	Number 3469
 O	o3119	location p3118 p3119
-C	h3119	H\\ \\ 
-VA1	A1	A1\\ H\\ 
+C	h3119	H\\ \\
+VA1	A1	A1\\ H\\
 B	b3119	A1
-VA2	A2	A2\\ H\\ 
+VA2	A2	A2\\ H\\
 B	b3120	A2
 T	t3120	o524 b525 b3119 b3120
 S	s3120	tbrarg\\ h3119\\ t3120
@@ -3830,9 +3830,9 @@ T	t3121	o522 b3121
 B	b3122	t3121
 T	t3122	o521 b3122
 B	b3123	t3122
-VB1	B1	B1\\ H\\ 
+VB1	B1	B1\\ H\\
 B	b3124	B1
-VB2	B2	B2\\ H\\ 
+VB2	B2	B2\\ H\\
 B	b3125	B2
 T	t3125	o524 b525 b3124 b3125
 S	s3125	tbrarg\\ h3119\\ t3125
@@ -3922,7 +3922,7 @@ B	b3165	t3165
 P	p3165	Number 3471
 P	p3167	Number 3639
 O	o3167	location p3165 p3167
-VA	A3167	A\\ H\\ 
+VA	A3167	A\\ H\\
 B	b3167	A3167
 T	t3167	o635 b3167
 S	s3167	tbrarg\\ h3119\\ t3167
@@ -3931,7 +3931,7 @@ T	t3168	o522 b3168
 B	b3169	t3168
 T	t3169	o521 b3169
 B	b3170	t3169
-VB	B3170	B\\ H\\ 
+VB	B3170	B\\ H\\
 B	b3171	B3170
 T	t3171	o635 b3171
 S	s3171	tbrarg\\ h3119\\ t3171
@@ -4071,9 +4071,9 @@ B	b3223	t3223
 P	p3223	Number 4128
 P	p3224	Number 4318
 O	o3224	location p3223 p3224
-Vx	x	x\\ H\\ 
+Vx	x	x\\ H\\
 B	b3224	x
-Vy	y	y\\ H\\ 
+Vy	y	y\\ H\\
 B	b3225	y
 T	t3225	o524 b3167 b3224 b3225
 S	s3225	tbrarg\\ h3119\\ t3225
@@ -5840,9 +5840,9 @@ P	p3837	Number 7177
 O	o3837	location p2591 p3837
 P	p2138	String bisectEqualityElim
 O	o2138	rule p2138
-Vt1	t1	t1\\ H\\ 
+Vt1	t1	t1\\ H\\
 B	b3838	t1
-Vt2	t2	t2\\ H\\ 
+Vt2	t2	t2\\ H\\
 B	b3839	t2
 T	t3839	o524 b3175 b3838 b3839
 H	h3839	x t3839
@@ -6025,7 +6025,7 @@ B	b3904	t3904
 P	p3904	Number 7334
 P	p3905	Number 7517
 O	o3905	location p3904 p3905
-VC	C3905	C\\ H\\ 
+VC	C3905	C\\ H\\
 B	b3905	C3905
 T	t3905	o1132 b3167 b3905
 S	s3905	tbrarg\\ h3119\\ t3905
@@ -6272,7 +6272,7 @@ T	t4015	o b4015 b4
 B	b4016	t4015
 T	t4016	o546 b4008 b4016
 B	b4017	t4016
-Vx	x4017	x\\ \\ 
+Vx	x4017	x\\ \\
 B	b4018	x4017
 T	t4018	o b4018 b4
 B	b4019	t4018

@@ -30,12 +30,12 @@
  * Author: Jason Hickey
  * jyh@cs.cornell.edu
  *)
-
 open Lm_debug
 open Lm_printf
 open Lm_symbol
 open Lm_string_set
 
+open Term_sig
 open Refiner.Refiner.TermType
 open Refiner.Refiner.Term
 

@@ -93,13 +93,13 @@ let is_token_term = TermOp.is_token_term token_opname
 let dest_token = TermOp.dest_token_term token_opname
 let mk_token_term = TermOp.mk_token_term token_opname
 
-let bogus_token = << token["token":t] >>
+let bogus_token = << token[token:t] >>
 
 (************************************************************************
  * DISPLAY FORMS                                                        *
  ************************************************************************)
 
-declare df_token[t:t]
+declare df_token[t:t] : Dform
 dform atom_df : except_mode[src] :: atom = `"Atom"
 dform atom_df2 : mode[src] :: atom = `"atom"
 dform token_df : except_mode[src] :: token[t:t] =
@@ -175,11 +175,6 @@ let token_opname = opname_of_term token_term
 let is_token_term = TermOp.is_token_term token_opname
 let dest_token = TermOp.dest_token_term token_opname
 let mk_token_term = TermOp.mk_token_term token_opname
-
-(*
- * D
- *)
-let bogus_token = << token["token":t] >>
 
 (*
  * Sqequal.

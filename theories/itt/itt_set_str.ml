@@ -47,6 +47,7 @@ extends Itt_record
 extends Itt_algebra_df
 extends Itt_logic
 extends Itt_union2
+extends Itt_labels
 doc <:doc< @docoff >>
 
 open Dtactic
@@ -138,8 +139,8 @@ doc <:doc<
    @doc{Definition:}
 >>
 define set_as_list: set_as_list{'A} <-->
-   {car =  fset{'A^"=";'A^car};
-    empty =  fempty;
+   {car    = fset{'A^"=";'A^car};
+    empty  = fempty;
     member = lambda {S. lambda{x.fmember{'A^"="; 'x; 'S} }};
     insert = lambda {S. lambda{x.funion{'A^"="; 'S;  fsingleton{'x}} }};
     delete = lambda {S. lambda{x.fsub{'A^"="; 'S;  fsingleton{'x}} }}

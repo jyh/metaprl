@@ -532,7 +532,7 @@ dform not_df2 : mode[src] :: parens :: "prec"[prec_implies] :: "not"{'a} =
 (*
  * Implication.
  *)
-declare implies_df{'a}
+declare implies_df{'a : Dform } : Dform
 
 dform implies_df1 : parens :: "prec"[prec_implies] :: mode[src] :: mode[prl] :: mode[html] :: mode[tex] :: "implies"{'a; 'b} =
    szone pushm[0] slot["le"]{'a} implies_df{'b} popm ezone
@@ -552,7 +552,7 @@ dform iff_df : parens :: "prec"[prec_iff] :: iff{'a; 'b} =
 (*
  * Disjunction.
  *)
-declare or_df{'a}
+declare or_df{'a : Dform } : Dform
 
 dform or_df1 : parens :: "prec"[prec_or] :: mode[src] :: mode[prl] :: mode[html] :: mode[tex] :: "or"{'a; 'b} =
    szone pushm[0] slot["le"]{'a} or_df{'b} popm ezone
@@ -566,7 +566,7 @@ dform or_df3 : mode[src] :: mode[prl] :: mode[html] :: mode[tex] :: or_df{'a} =
 (*
  * Disjunction.
  *)
-declare cor_df{'a}
+declare cor_df{'a : Dform } : Dform
 
 dform cor_df1 : parens :: "prec"[prec_or] :: "cor"{'a; 'b} =
    szone pushm[0] slot["le"]{'a} cor_df{'b} popm ezone
@@ -580,7 +580,7 @@ dform cor_df3 : cor_df{'a} =
 (*
  * Conjunction.
  *)
-declare and_df{'a}
+declare and_df{'a : Dform } : Dform
 
 dform and_df1 : parens :: "prec"[prec_and] :: mode[src] :: mode[prl] :: mode[html] :: mode[tex] :: "and"{'a; 'b} =
    szone pushm[0] slot["le"]{'a} and_df{'b} popm ezone
@@ -594,7 +594,7 @@ dform and_df3 : mode[src] :: mode[prl] :: mode[html] :: mode[tex] :: and_df{'a} 
 (*
  * Conjunction.
  *)
-declare cand_df{'a}
+declare cand_df{'a : Dform } : Dform
 
 dform cand_df1 : parens :: "prec"[prec_and] :: "cand"{'a; 'b} =
    szone pushm[0] slot["le"]{'a} cand_df{'b} popm ezone

@@ -1,6 +1,6 @@
 #PRL version 1.0.8 ASCII term
 NPerv	Perv	Perv NIL
-NPerv!cons	cons	cons Perv
+NPerv!cons	cons	xcons Perv
 O	o	cons
 NSummary	Summary	Summary NIL
 NSummary!location	location	location Summary
@@ -34,7 +34,7 @@ T	t265	o260
 B	b265	t265
 NSummary!parent	parent	parent Summary
 O	o2	parent
-NPerv!nil	nil3	nil Perv
+NPerv!nil	nil3	xnil Perv
 O	o4	nil3
 T	t4	o4
 B	b4	t4
@@ -3775,7 +3775,7 @@ B	b2011	t2011
 P	p2011	Number 2562
 P	p2012	Number 2592
 O	o2012	location p2011 p2012
-Vs	s77	s\\ \\ 
+Vs	s77	s\\ \\
 B	b78	s77
 Va	a	a\\ \\ t545
 B	b79	a x
@@ -3886,7 +3886,7 @@ B	b87	t86
 P	p2039	Number 3092
 P	p2041	Number 3217
 O	o2041	location p2039 p2041
-VT	T	T\\ \\ 
+VT	T	T\\ \\
 B	b88	T
 Vf	f	f\\ \\ t545
 B	b89	f x
@@ -3899,7 +3899,7 @@ Va	a91	a\\ \\ f91
 B	b92	a91 y
 T	t92	o553 b88 b92
 B	b93	t92
-C	h93	H\\ \\ 
+C	h93	H\\ \\
 T	t93	o580 b91 b93
 S	s93	tbrarg\\ h93\\ t93
 B	b94	s93
@@ -3932,14 +3932,14 @@ B	b2049	t2049
 P	p2051	Number 3454
 P	p2052	Number 3609
 O	o2052	location p2051 p2052
-Va	a101	a\\ \\ 
+Va	a101	a\\ \\
 B	b102	a101 x
 T	t102	o542 b78 b102
 B	b103	t102
 B	b104	a101
 T	t104	o620 b104
 B	b105	t104
-Vx	x	x\\ \\ 
+Vx	x	x\\ \\
 B	b106	x
 T	t106	o620 b106
 B	b107	t106
@@ -4123,7 +4123,7 @@ B	b2057	t2057
 P	p2057	Number 4034
 P	p2058	Number 4212
 O	o2058	location p2057 p2058
-Vs	s120	s\\ H\\ 
+Vs	s120	s\\ H\\
 B	b121	s120
 T	t121	o651 b121
 S	s121	tbrarg\\ h93\\ t121
@@ -4465,7 +4465,7 @@ B	b2075	t2075
 P	p2075	Number 4474
 P	p2076	Number 4799
 O	o2076	location p2075 p2076
-Vy	y	y\\ H\\ 
+Vy	y	y\\ H\\
 B	b255	y
 T	t255	o651 b255
 S	s255	tbrarg\\ h93\\ t255
@@ -5907,7 +5907,7 @@ T	t2940	o576 b2924 b2940
 B	b2941	t2940
 P	p1219	String "setSubstT << equal{'s1; 's2} >> 9 ttca"
 O	o1219	ext_rule p1219
-Vz	z	z\\ \\ 
+Vz	z	z\\ \\
 B	b2942	z
 T	t2942	o b2942 b4
 B	b2943	t2942

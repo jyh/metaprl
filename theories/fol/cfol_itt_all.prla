@@ -1,6 +1,6 @@
 #PRL version 1.0.8 ASCII term
 NPerv	Perv	Perv NIL
-NPerv!cons	cons	cons Perv
+NPerv!cons	cons	xcons Perv
 O	o	cons
 NSummary	Summary	Summary NIL
 NSummary!location	location	location Summary
@@ -13,7 +13,7 @@ P	p4	String itt_theory
 O	o10	parent p4
 T	t38	o10
 B	b38	t38
-NPerv!nil	nil3	nil Perv
+NPerv!nil	nil3	xnil Perv
 O	o4	nil3
 T	t4	o4
 B	b4	t4
@@ -1251,7 +1251,7 @@ NBase_rewrite	Base_rw	Base_rewrite NIL
 NBase_rewrite!sequent_arg	brwsqarg	sequent_arg Base_rw
 O	obrarg	brwsqarg
 T	tbrarg	obrarg
-C	h1097	H\\ \\ 
+C	h1097	H\\ \\
 VB	B	B\\ H\\ t500
 B	b1098	B
 T	t1098	o521 b1098
@@ -1343,7 +1343,7 @@ P	p556	String all_intro
 O	o556	rule p556
 NSummary!meta_function	meta_function	meta_function Summary
 O	o557	meta_function
-Vx	x	x\\ \\ 
+Vx	x	x\\ \\
 Vb	b1124	b\\ \\ x
 B	b1125	b1124
 O	o558	meta_labeled p534
@@ -1407,7 +1407,7 @@ T	t1151	o1151
 B	b1151	t1151
 NSummary!term_param	term_param	term_param Summary
 O	o586	term_param
-Va	a	a\\ J H\\ 
+Va	a	a\\ J H\\
 B	b1152	a
 T	t1152	o586 b1152
 B	b1153	t1152
@@ -1437,7 +1437,7 @@ T	t1160	o518 b1160
 B	b1161	t1160
 T	t1161	o517 b1161
 B	b1162	t1161
-Vz	z	z\\ \\ 
+Vz	z	z\\ \\
 Vb	b1163	b\\ \\ x z
 B	b1164	b1163
 VB	B1164	B\\ H\\ a

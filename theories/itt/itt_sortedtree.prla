@@ -1,6 +1,57 @@
 #PRL version 1.0.8 ASCII term
+N!!Itt_labels	Itt_labels	Itt_labels NIL
+NItt_labels!*	*	* Itt_labels
+NItt_labels!+	+	+ Itt_labels
+NItt_labels!-	-	- Itt_labels
+NItt_labels!/	/	/ Itt_labels
+NItt_labels!0	0	0 Itt_labels
+NItt_labels!1	1	1 Itt_labels
+NItt_labels!<	<	< Itt_labels
+NItt_labels!<=	<=	<= Itt_labels
+NItt_labels!<add>	<add>	<add> Itt_labels
+NItt_labels!<mul>	<mul>	<mul> Itt_labels
+NItt_labels!=	=	= Itt_labels
+NItt_labels!>	>	> Itt_labels
+NItt_labels!>=	>=	>= Itt_labels
+NItt_labels!bottom	bottom	bottom Itt_labels
+NItt_labels!car	car	car Itt_labels
+NItt_labels!car0	car0	car0 Itt_labels
+NItt_labels!color	color	color Itt_labels
+NItt_labels!data	data	data Itt_labels
+NItt_labels!delete	delete	delete Itt_labels
+NItt_labels!dom	dom	dom Itt_labels
+NItt_labels!down	down	down Itt_labels
+NItt_labels!empty	empty	empty Itt_labels
+NItt_labels!eq	eq	eq Itt_labels
+NItt_labels!f	f	f Itt_labels
+NItt_labels!fee	fee	fee Itt_labels
+NItt_labels!fld	fld	fld Itt_labels
+NItt_labels!foo	foo	foo Itt_labels
+NItt_labels!getNextX	getNextX	getNextX Itt_labels
+NItt_labels!getX	getX	getX Itt_labels
+NItt_labels!inf	inf	inf Itt_labels
+NItt_labels!inv	inv	inv Itt_labels
+NItt_labels!left	left	left Itt_labels
+NItt_labels!leftt	leftt	leftt Itt_labels
+NItt_labels!max	max	max Itt_labels
+NItt_labels!member	member	member Itt_labels
+NItt_labels!min	min	min Itt_labels
+NItt_labels!move	move	move Itt_labels
+NItt_labels!moveBy	moveBy	moveBy Itt_labels
+NItt_labels!neg	neg	neg Itt_labels
+NItt_labels!pop	pop	pop Itt_labels
+NItt_labels!push	push	push Itt_labels
+NItt_labels!red	red	red Itt_labels
+NItt_labels!rel	rel	rel Itt_labels
+NItt_labels!right	right	right Itt_labels
+NItt_labels!sup	sup	sup Itt_labels
+NItt_labels!tp	tp	tp Itt_labels
+NItt_labels!up	up	up Itt_labels
+NItt_labels!x	x	x Itt_labels
+NItt_labels!y	y	y Itt_labels
+NItt_labels!z	z	z Itt_labels
 NPerv	Perv	Perv NIL
-NPerv!cons	cons	cons Perv
+NPerv!cons	cons	xcons Perv
 O	o	cons
 NSummary	Summary	Summary NIL
 NSummary!location	location	location Summary
@@ -63,7 +114,7 @@ P	p16	String .
 O	o16	comment_string p16
 T	t17	o16
 B	b17	t17
-NPerv!nil	nil17	nil Perv
+NPerv!nil	nil17	xnil Perv
 O	o17	nil17
 T	t18	o17
 B	b18	t18
@@ -2995,7 +3046,7 @@ P	p2117	Number 1219
 O	o2117	location p2116 p2117
 NSummary!definition	definition	definition Summary
 O	o2118	definition p966
-VD	D	D\\ \\ 
+VD	D	D\\ \\
 B	b2120	D
 VN	N	N\\ \\ t962
 B	b2122	N data
@@ -3010,11 +3061,11 @@ B	b2127	t2126
 P	p2127	Number 1221
 P	p2128	Number 1319
 O	o2128	location p2127 p2128
-VN	N2128	N\\ \\ 
+VN	N2128	N\\ \\
 B	b2128	N2128 data
 T	t2128	o959 b2120 b2128
 B	b2129	t2128
-Vdata	data	data\\ \\ 
+Vdata	data	data\\ \\
 B	b2130	data
 B	b2131	N2128
 T	t2131	o b2131 b982
@@ -3039,7 +3090,7 @@ P	p2141	Number 1321
 P	p2142	Number 1687
 O	o2142	location p2141 p2142
 O	o2143	definition p999
-VO	O	O\\ \\ 
+VO	O	O\\ \\
 B	b2143	O
 VA	A	A\\ \\ t962
 B	b2144	A data
@@ -3072,7 +3123,7 @@ B	b2157	t2156
 P	p2157	Number 1689
 P	p2158	Number 1797
 O	o2158	location p2157 p2158
-VA	A2158	A\\ \\ 
+VA	A2158	A\\ \\
 B	b2158	A2158 data
 T	t2158	o994 b2143 b2158
 B	b2159	t2158
@@ -3179,13 +3230,13 @@ B	b2201	t2201
 P	p2201	Number 1981
 P	p2202	Number 2242
 O	o2202	location p2201 p2202
-Vnd	nd	nd\\ \\ 
+Vnd	nd	nd\\ \\
 B	b2202	nd
 T	t2202	o1467 b2202
 B	b2203	t2202
 T	t2203	o1149 b2145 b2203 b2203
 B	b2204	t2203
-Vt	t2204	t\\ \\ 
+Vt	t2204	t\\ \\
 B	b2205	t2204
 T	t2205	o1149 b2123 b2205 b2205
 B	b2206	t2205
@@ -3310,8 +3361,8 @@ T	t2261	o2202 b2260
 B	b2261	t2261
 P	p2261	Number 2442
 O	o2261	location p1060 p2261
-C	h2261	H\\ \\ 
-VO	O2261	O\\ H\\ 
+C	h2261	H\\ \\
+VO	O2261	O\\ H\\
 B	b2262	O2261
 T	t2262	o1149 b1150 b2262 b2262
 S	s2262	tbrarg\\ h2261\\ t2262
@@ -3419,7 +3470,7 @@ P	p2303	Number 2936
 P	p2304	Number 3252
 O	o2304	location p2303 p2304
 O	o2305	definition p1201
-Va	a	a\\ \\ 
+Va	a	a\\ \\
 B	b2305	a
 T	t2305	o1202 b2305 b2205 b2143
 B	b2306	t2305
@@ -3434,14 +3485,14 @@ B	b2310	t2309
 P	p2310	Number 3254
 P	p2311	Number 3553
 O	o2311	location p2310 p2311
-Va	a2311	a\\ H\\ 
+Va	a2311	a\\ H\\
 B	b2311	a2311
 T	t2311	o1149 b2292 b2311 b2311
 S	s2311	tbrarg\\ h2261\\ t2311
 B	b2312	s2311
 T	t2312	o1147 b2312
 B	b2313	t2312
-Vt	t2313	t\\ H\\ 
+Vt	t2313	t\\ H\\
 B	b2314	t2313
 T	t2314	o1149 b2269 b2314 b2314
 S	s2314	tbrarg\\ h2261\\ t2314
@@ -7002,7 +7053,7 @@ VA	A3831	A\\ H\\ t962
 B	b3831	A3831 data
 T	t3831	o959 b2292 b3831
 B	b3832	t3831
-Vnd	nd3832	nd\\ H\\ 
+Vnd	nd3832	nd\\ H\\
 B	b3833	nd3832
 T	t3833	o1149 b3832 b3833 b3833
 S	s3833	tbrarg\\ h2261\\ t3833
@@ -7036,7 +7087,7 @@ T	t3846	o1301 b3837 b3846
 B	b3847	t3846
 T	t3847	o1300 b3847 b18 b1305
 B	b3848	t3847
-Vd	d	d\\ H\\ 
+Vd	d	d\\ H\\
 VA	A3848	A\\ H\\ d
 B	b3849	A3848
 T	t3849	o1152 b3849

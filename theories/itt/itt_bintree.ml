@@ -11,6 +11,7 @@ extends Itt_algebra_df
 extends Itt_srec
 extends Itt_bisect
 extends Itt_struct
+extends Itt_labels
 
 doc <:doc< @docoff >>
 

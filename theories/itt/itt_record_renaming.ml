@@ -9,7 +9,9 @@ doc <:doc<
 
 doc <:doc< @doc{@parents} >>
 
+extends Base_theory
 extends Itt_record
+extends Itt_labels
 
 doc docoff
 
@@ -389,19 +391,19 @@ doc <:doc<
 
    $$
    @rulebox{foldAdditiveT; <<'F>>;
-     <<sequent(nil){ <H> >- 'a +['F] 'F^"0" = 'a in 'F^car }>>;
-     <<sequent(nil){ <H> >- 'a *[as_additive{'F}] as_additive{'F}^"1" = 'a in as_additive{'F}^car }>>}
+     <<sequent [dummy_arg] { <H> >- 'a +['F] 'F^"0" = 'a in 'F^car }>>;
+     <<sequent [dummy_arg] { <H> >- 'a *[as_additive{'F}] as_additive{'F}^"1" = 'a in as_additive{'F}^car }>>}
    $$
 
    Assuming that @hrefresource[auto_resource] knows the corresponding rule for the groups and
    @hrefresource[typeinf_resource] knows that <<as_additive{'F}>> is a group, we can apply the @tt[autoT] tactic:
-     <<sequent(nil){ <H> >- 'a in as_additive{'F}^car }>>
+     <<sequent [dummy_arg] { <H> >- 'a in as_additive{'F}^car }>>
 
       Then
    $$
    @rulebox{unfoldAdditiveT; <<'F>>;
-     <<sequent(nil){ <H> >- 'a in as_additive{'F}^car }>>;
-     <<sequent(nil){ <H> >- 'a in 'F^car }>>}
+     <<sequent [dummy_arg] { <H> >- 'a in as_additive{'F}^car }>>;
+     <<sequent [dummy_arg] { <H> >- 'a in 'F^car }>>}
    $$
 
    The @hreftactic[useAdditiveWithT] tactic allows us to use the three above steps in one.
@@ -452,14 +454,14 @@ doc <:doc<
         and visa versa:
    $$
    @rulebox{foldAdditiveT; <<'R>>;
-     <<sequent(nil){ <H> >- group_mult{'R; 'a; 0} = 'R^"0" in 'R^car}>>;
-     <<sequent(nil){ <H> >- group_power{as_additive{'R}; 'a; 0} = as_additive{'R}^"1" in as_additive{'R}^car}>>}
+     <<sequent [dummy_arg] { <H> >- group_mult{'R; 'a; 0} = 'R^"0" in 'R^car}>>;
+     <<sequent [dummy_arg] { <H> >- group_power{as_additive{'R}; 'a; 0} = as_additive{'R}^"1" in as_additive{'R}^car}>>}
    $$
 
    $$
    @rulebox{unfoldAdditiveT; <<'R>>;
-     <<sequent(nil){ <H> >- group_power{as_additive{'R}; 'a; 0} = as_additive{'R}^"1" in as_additive{'R}^car}>>;
-     <<sequent(nil){ <H> >- group_mult{'R; 'a; 0} = 'R^"0" in 'R^car}>>}
+     <<sequent [dummy_arg] { <H> >- group_power{as_additive{'R}; 'a; 0} = as_additive{'R}^"1" in as_additive{'R}^car}>>;
+     <<sequent [dummy_arg] { <H> >- group_mult{'R; 'a; 0} = 'R^"0" in 'R^car}>>}
    $$
 
    @end[doc]
@@ -488,7 +490,7 @@ define unfold_reverse_order: reverse_order{'ord} <-->
    rename["<=":t,">=":t]{
    rename["min":t,"max":t]{
    rename["inf":t,"sup":t]{
-   rename["bottom":t,"top":t]{
+   rename["bottom":t,"tp":t]{
    rename["up":t,"down":t]{
    rename["0":t,"1":t]{
       'ord }}}}}}}

@@ -1,6 +1,6 @@
 #PRL version 1.0.8 ASCII term
 NPerv	Perv	Perv NIL
-NPerv!cons	cons	cons Perv
+NPerv!cons	cons	xcons Perv
 O	o	cons
 NSummary	Summary	Summary NIL
 NSummary!location	location	location Summary
@@ -13,7 +13,7 @@ P	p10	String itt_theory
 O	o16	parent p10
 T	t160	o16
 B	b160	t160
-NPerv!nil	nil3	nil Perv
+NPerv!nil	nil3	xnil Perv
 O	o4	nil3
 T	t4	o4
 B	b4	t4
@@ -1273,9 +1273,9 @@ B	b1014	t1013
 P	p692	Number 1287
 P	p693	Number 1348
 O	o693	location p692 p693
-VA	A	A\\ \\ 
+VA	A	A\\ \\
 B	b1015	A
-VB	B	B\\ \\ 
+VB	B	B\\ \\
 B	b1018	B
 T	t1018	o480 b1015 b1018
 B	b1019	t1018
@@ -1290,9 +1290,9 @@ B	b1024	t1024
 P	p694	Number 1349
 P	p695	Number 1406
 O	o695	location p694 p695
-Va	a	a\\ \\ 
+Va	a	a\\ \\
 B	b1036	a
-Vb	b1038	b\\ \\ 
+Vb	b1038	b\\ \\
 B	b1042	b1038
 T	t1042	o491 b1036 b1042
 B	b1043	t1042
@@ -1303,8 +1303,8 @@ B	b1045	t1044
 P	p696	Number 1421
 P	p697	Number 1591
 O	o697	location p696 p697
-C	h1045	H\\ \\ 
-VA	A1045	A\\ H\\ 
+C	h1045	H\\ \\
+VA	A1045	A\\ H\\
 B	b1046	A1045
 T	t1046	o505 b1046
 S	s1046	tbrarg\\ h1045\\ t1046
@@ -1313,7 +1313,7 @@ T	t1047	o503 b1047
 B	b1048	t1047
 T	t1048	o502 b1048
 B	b1049	t1048
-VB	B1049	B\\ H\\ 
+VB	B1049	B\\ H\\
 B	b1050	B1049
 T	t1050	o505 b1050
 S	s1050	tbrarg\\ h1045\\ t1050

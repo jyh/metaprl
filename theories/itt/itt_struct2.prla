@@ -1,6 +1,6 @@
 #PRL version 1.0.9 ASCII term
 NPerv	Perv	Perv NIL
-NPerv!cons	cons	cons Perv
+NPerv!cons	cons	xcons Perv
 O	o	cons
 NSummary	Summary	Summary NIL
 NSummary!location	location	location Summary
@@ -30,7 +30,7 @@ P	p21	String struct
 O	o22	comment_string p21
 T	t22	o22
 B	b22	t22
-NPerv!nil	nil22	nil Perv
+NPerv!nil	nil22	xnil Perv
 O	o23	nil22
 T	t23	o23
 B	b23	t23

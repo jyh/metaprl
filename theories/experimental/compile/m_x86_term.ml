@@ -43,12 +43,12 @@ open M_x86_inst_type
  * Term operations.
  *)
 let immediate_number_term = << ImmediateNumber[i:n] >>
-let immediate_label_term = << ImmediateLabel[label:t]{'R} >>
-let immediate_clabel_term = << ImmediateCLabel[label:t]{'R} >>
+let immediate_label_term = << ImmediateLabel[label:s]{'R} >>
+let immediate_clabel_term = << ImmediateCLabel[label:s]{'R} >>
 let register_term = << Register{'v} >>
 let spill_memory_term = << SpillMemory{'spill} >>
 let spill_register_term = << SpillRegister{'v; 'spill} >>
-let context_register_term = << ContextRegister[reg:t] >>
+let context_register_term = << ContextRegister[reg:s] >>
 let mem_reg_term = << MemReg{'r} >>
 let mem_reg_off_term = << MemRegOff[i:n]{'r} >>
 let mem_reg_reg_off_mul_term = << MemRegRegOffMul[off:n, mul:n]{'r1; 'r2} >>
@@ -83,7 +83,7 @@ let jcc_term          = << Jcc["j"]{'cc; 'rest1; 'rest2} >>
 let asm_reserve_term  = << AsmReserve[words:n]{'params} >>
 let comment_term      = << Comment[comment:s]{'rest} >>
 let init_term         = << Init{'rest} >>
-let label_asm_term    = << LabelAsm[label:t]{'R} >>
+let label_asm_term    = << LabelAsm[label:s]{'R} >>
 let label_rec_term    = << LabelRec{R1. 'fields['R1]; R2. 'rest['R2]} >>
 let label_def_term    = << LabelDef{'label; 'code; 'rest} >>
 let label_end_term    = << LabelEnd >>
@@ -316,12 +316,12 @@ let dest_operand_aux dest_reg t =
             ImmediateNumber (int32_of_num i)
 
          (* ImmediateLabel *)
-       | [Token label], [{ bvars = []; bterm = t }]
+       | [String label], [{ bvars = []; bterm = t }]
          when Opname.eq op immediate_label_opname ->
             ImmediateLabel (Lm_symbol.add label, dest_var t)
 
          (* ImmediateCLabel *)
-       | [Token label], [{ bvars = []; bterm = t }]
+       | [String label], [{ bvars = []; bterm = t }]
          when Opname.eq op immediate_clabel_opname ->
             ImmediateCLabel (Lm_symbol.add label, dest_var t)
 
@@ -342,7 +342,7 @@ let dest_operand_aux dest_reg t =
             SpillRegister (dest_var v, dest_var spill)
 
          (* ContextRegister *)
-       | [Token s], []
+       | [String s], []
          when Opname.eq op context_register_opname ->
             ContextRegister (Lm_symbol.add s)
 
@@ -567,7 +567,7 @@ let dest_inst_aux dest_reg dest_rest t =
             Init (dest_rest rest)
 
          (* LabelAsm *)
-       | [Token label], [{ bvars = []; bterm = v }]
+       | [String label], [{ bvars = []; bterm = v }]
          when Opname.eq op label_asm_opname ->
             LabelAsm (Lm_symbol.add label, dest_var v)
 
@@ -732,11 +732,11 @@ let mk_operand_aux mk_reg op =
             []
     | ImmediateLabel (v1, v2) ->
          mk_term immediate_label_opname (**)
-            [Token (string_of_symbol v1)]
+            [String (string_of_symbol v1)]
             [{ bvars = []; bterm = mk_var_term v2 }]
     | ImmediateCLabel (v1, v2) ->
          mk_term immediate_clabel_opname (**)
-            [Token (string_of_symbol v1)]
+            [String (string_of_symbol v1)]
             [{ bvars = []; bterm = mk_var_term v2 }]
     | Register v ->
          mk_term register_opname (**)
@@ -892,7 +892,7 @@ let mk_inst_aux mk_reg mk_rest inst =
             [{ bvars = []; bterm = mk_rest rest }]
     | LabelAsm (label, v) ->
          mk_term label_asm_opname (**)
-            [Token (string_of_symbol label)]
+            [String (string_of_symbol label)]
             [{ bvars = []; bterm = mk_var_term v }]
     | LabelRec (v1, rest1, v2, rest2) ->
          mk_term label_rec_opname (**)

@@ -1,6 +1,6 @@
 #PRL version 1.0.15 ASCII term
 NPerv	Perv	Perv NIL
-NPerv!cons	cons	cons Perv
+NPerv!cons	cons	xcons Perv
 O	o	cons
 NSummary	Summary	Summary NIL
 NSummary!location	location	location Summary
@@ -25,7 +25,7 @@ T	t6	o6
 B	b6	t6
 T	t7	o3 b6
 B	b7	t7
-NPerv!nil	nil7	nil Perv
+NPerv!nil	nil7	xnil Perv
 O	o7	nil7
 T	t8	o7
 B	b8	t8
@@ -2261,13 +2261,11 @@ NSummary!improve	improve	improve Summary
 O	o883	improve p723
 NSummary!term_binding	term_binding	term_binding Summary
 O	o884	term_binding
-NBase_reflection!sequent_arg	sequent_arg	sequent_arg Base_reflection
-O	o885	sequent_arg
 NBase_reflection!bterm	bterm	bterm Base_reflection
 O	o886	bterm
 T	t886	o886
 B	b886	t886
-T	t887	o885 b886
+T	t887	o886
 C	h	H\\ \\
 Vt	t888	t\\ H\\
 S	s	t887\\ h\\ t888

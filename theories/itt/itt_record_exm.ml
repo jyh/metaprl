@@ -17,6 +17,7 @@ extends Itt_set
 extends Itt_fun
 extends Itt_tsquash
 extends Itt_list
+extends Itt_labels
 
 open Basic_tactics
 open Itt_rfun

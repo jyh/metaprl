@@ -1,6 +1,6 @@
 #PRL version 1.0.8 ASCII term
 NPerv	Perv	Perv NIL
-NPerv!cons	cons	cons Perv
+NPerv!cons	cons	xcons Perv
 O	o	cons
 NSummary	Summary	Summary NIL
 NSummary!location	location	location Summary
@@ -9,7 +9,7 @@ P	p8	Number 80
 O	o10	location p4 p8
 NSummary!parent	parent	parent Summary
 O	o2	parent
-NPerv!nil	nil3	nil Perv
+NPerv!nil	nil3	xnil Perv
 O	o4	nil3
 T	t4	o4
 B	b4	t4
@@ -1012,7 +1012,7 @@ T	t712	o712
 B	b712	t712
 NSummary!term_param	term_param	term_param Summary
 O	o461	term_param
-Vt1	t1	t1\\ J_1 H\\ 
+Vt1	t1	t1\\ J_1 H\\
 B	b713	t1
 T	t713	o461 b713
 B	b714	t713
@@ -1057,8 +1057,8 @@ NBase_rewrite	Base_rw	Base_rewrite NIL
 NBase_rewrite!sequent_arg	brwsqarg	sequent_arg Base_rw
 O	obrarg	brwsqarg
 T	tbrarg	obrarg
-C	h721	H\\ \\ 
-VT	T	T\\ H\\ 
+C	h721	H\\ \\
+VT	T	T\\ H\\
 H	h722	t T
 C	h723	J_1\\ H\\ t479
 VA	A723	A\\ J_1 H\\ t479

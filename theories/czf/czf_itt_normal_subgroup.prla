@@ -1,6 +1,6 @@
 #PRL version 1.0.8 ASCII term
 NPerv	Perv	Perv NIL
-NPerv!cons	cons	cons Perv
+NPerv!cons	cons	xcons Perv
 O	o	cons
 NSummary	Summary	Summary NIL
 NSummary!location	location	location Summary
@@ -32,7 +32,7 @@ P	p9	String abelNormalSubgT
 O	o10	comment_string p9
 T	t10	o10
 B	b10	t10
-NPerv!nil	nil10	nil Perv
+NPerv!nil	nil10	xnil Perv
 O	o11	nil10
 T	t11	o11
 B	b11	t11
@@ -3316,9 +3316,9 @@ O	o1288	opname p1288
 NCzf_itt_normal_subgroup	Czf_itt_normal_subgroup	Czf_itt_normal_subgroup NIL
 NCzf_itt_normal_subgroup!normal_subg	normal_subg	normal_subg Czf_itt_normal_subgroup
 O	o1289	normal_subg
-Vs	s1916	s\\ \\ 
+Vs	s1916	s\\ \\
 B	b1916	s1916
-Vg	g	g\\ \\ 
+Vg	g	g\\ \\
 B	b1917	g
 T	t1917	o1289 b1916 b1917
 B	b1918	t1917
@@ -3691,15 +3691,15 @@ NBase_rewrite	Base_rw	Base_rewrite NIL
 NBase_rewrite!sequent_arg	brwsqarg	sequent_arg Base_rw
 O	obrarg	brwsqarg
 T	tbrarg	obrarg
-C	h1958	H\\ \\ 
-Vs	s1958	s\\ H\\ 
+C	h1958	H\\ \\
+Vs	s1958	s\\ H\\
 B	b1958	s1958
 T	t1958	o1441 b1442 b1958 b1958
 S	s1959	tbrarg\\ h1958\\ t1958
 B	b1959	s1959
 T	t1959	o1439 b1959
 B	b1960	t1959
-Vg	g1960	g\\ H\\ 
+Vg	g1960	g\\ H\\
 B	b1961	g1960
 T	t1961	o1441 b1442 b1961 b1961
 S	s1961	tbrarg\\ h1958\\ t1961
@@ -4120,7 +4120,7 @@ T	t2028	o2028
 B	b2028	t2028
 NSummary!term_param	term_param	term_param Summary
 O	o1630	term_param
-Vs	s2028	s\\ J H\\ 
+Vs	s2028	s\\ J H\\
 B	b2029	s2028
 T	t2029	o1630 b2029
 B	b2030	t2029

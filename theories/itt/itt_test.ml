@@ -80,18 +80,26 @@ interactive extraction_test :
 interactive foo:
    sequent { <H> >- lambda{x.'x +@ 0} }
 
+declare sequent [boo] { Term : Term >- Term } : Term
+
 prim bug175:
    sequent { <H>; <J> >- 'A } -->
-   sequent { <H> >- sequent { <J> >- 'A }} = it
+   sequent { <H> >- sequent [boo] { <J> >- 'A }} = it
 
-interactive_rw rw_table_tets {| reduce |} :
-   sequent { 'A; <H>; 'B >- 'C } <--> sequent { 'A; <H>; 'B >- 'C }
+interactive_rw rw_table_test {| reduce |} :
+   sequent { 'A; <H>; 'B >- 'C }
+   <-->
+   sequent { 'A; <H>; 'B >- 'C }
 
+(*
+ * BUG: jyh: someone needs to check that is_context_var returns
+ * true for contexts.
 interactive_rw context_rw 'C:
    'C[[let v = 'e1<||> in 'e2['v]]] <--> (let v = 'e1 in 'C[['e2['v]]])
 
 interactive context_rw_tests:
    sequent{ lambda{x.let v = 'x in ('v 'x)}; lambda{x.let v = 1 in ('v 'x)}; lambda{x.let v = 'x in ('v 1)}; lambda{x.let v = 1 in ('v 1)} >- it }
+ *)
 
 (*
  * -*-

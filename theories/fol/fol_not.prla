@@ -1,6 +1,6 @@
 #PRL version 1.0.8 ASCII term
 NPerv	Perv	Perv NIL
-NPerv!cons	cons	cons Perv
+NPerv!cons	cons	xcons Perv
 O	o	cons
 NSummary	Summary	Summary NIL
 NSummary!location	location	location Summary
@@ -13,7 +13,7 @@ P	p6	String fol_false
 O	o12	parent p6
 T	t69	o12
 B	b69	t69
-NPerv!nil	nil3	nil Perv
+NPerv!nil	nil3	xnil Perv
 O	o4	nil3
 T	t4	o4
 B	b4	t4
@@ -724,7 +724,7 @@ O	o290	opname p290
 NFol_not	Fol_not	Fol_not NIL
 NFol_not!not	not	not Fol_not
 O	o291	not
-VA	A	A\\ \\ 
+VA	A	A\\ \\
 B	b528	A
 T	t528	o291 b528
 B	b529	t528
@@ -827,8 +827,8 @@ NBase_rewrite	Base_rw	Base_rewrite NIL
 NBase_rewrite!sequent_arg	brwsqarg	sequent_arg Base_rw
 O	obrarg	brwsqarg
 T	tbrarg	obrarg
-C	h543	H\\ \\ 
-VA	A543	A\\ H\\ 
+C	h543	H\\ \\
+VA	A543	A\\ H\\
 B	b543	A543
 T	t543	o327 b543
 S	s543	tbrarg\\ h543\\ t543

@@ -29,7 +29,6 @@
  * Author: Jason Hickey
  * jyh@cs.cornell.edu
  *)
-
 extends Base_theory
 
 (************************************************************************
@@ -94,19 +93,19 @@ prec prec_alloc < prec_if_eq_label
 (*
  * Labels and booleans.
  *)
-declare next_loop{'nil; 'first}
+declare next_loop{'xnil : Dform; 'first} : Dform
 
 dform first_df : first =
-   next_loop{nil; first}
+   next_loop{xnil; first}
 
 dform next_df : next{'l} =
-   next_loop{nil; next{'l}}
+   next_loop{xnil; next{'l}}
 
 dform next_loop_df1 : next_loop{'index; first} =
    `"L" df_length{'index}
 
 dform next_loop_df2 : next_loop{'index; next{'l}} =
-   next_loop{cons{nil; 'index}; 'l}
+   next_loop{xcons{xnil; 'index}; 'l}
 
 dform next_loop_df3 : next_loop{'index; 'l} =
    `"L{" slot{'l} `"+" df_length{'index} `"}"

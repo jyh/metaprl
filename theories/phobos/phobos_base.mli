@@ -66,6 +66,11 @@ declare ge[a:t, b:t]{'t; 'f}
 declare ge[a:l, b:l]{'t; 'f}
 
 (*
+ * For wrapping meta-numbers.
+ *)
+declare number{'i : MetaNum}
+
+(*
  * Phobos error terms.
  *)
 declare error[msg:s]

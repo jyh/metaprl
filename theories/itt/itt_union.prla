@@ -1,6 +1,6 @@
 #PRL version 1.0.8 ASCII term
 NPerv	Perv	Perv NIL
-NPerv!cons	cons	cons Perv
+NPerv!cons	cons	xcons Perv
 O	o	cons
 NSummary	Summary	Summary NIL
 NSummary!location	location	location Summary
@@ -57,7 +57,7 @@ P	p14	String selT
 O	o15	comment_string p14
 T	t15	o15
 B	b15	t15
-NPerv!nil	nil15	nil Perv
+NPerv!nil	nil15	xnil Perv
 O	o16	nil15
 T	t16	o16
 B	b16	t16
@@ -4278,9 +4278,9 @@ B	b3376	t3376
 P	p3376	Number 3139
 P	p3377	Number 3161
 O	o3377	location p3376 p3377
-VA	A	A\\ \\ 
+VA	A	A\\ \\
 B	b3377	A
-VB	B	B\\ \\ 
+VB	B	B\\ \\
 B	b3378	B
 T	t3378	o1475 b3377 b3378
 B	b3379	t3378
@@ -4291,7 +4291,7 @@ B	b3382	t3380
 P	p3382	Number 3162
 P	p3383	Number 3177
 O	o3383	location p3382 p3383
-Vx	x	x\\ \\ 
+Vx	x	x\\ \\
 B	b3383	x
 T	t3383	o126 b3383
 B	b3384	t3383
@@ -4412,7 +4412,7 @@ B	b3433	t3433
 P	p3433	Number 4442
 P	p3434	Number 4539
 O	o3434	location p3433 p3434
-Va	a3434	a\\ \\ 
+Va	a3434	a\\ \\
 B	b3434	a3434
 T	t3434	o126 b3434
 B	b3435	t3434
@@ -4447,7 +4447,7 @@ P	p3447	Number 4640
 P	p3448	Number 4903
 O	o3448	location p3447 p3448
 B	b3448	a3434 y
-Vb	b3449	b\\ \\ 
+Vb	b3449	b\\ \\
 B	b3450	b3449 z
 T	t3450	o1493 b3383 b3448 b3450
 B	b3451	t3450
@@ -4456,7 +4456,7 @@ T	t3451	o3451
 B	b3452	t3451
 T	t3452	o1661 b3383
 B	b3453	t3452
-Vy	y	y\\ \\ 
+Vy	y	y\\ \\
 B	b3454	y
 T	t3454	o1661 b3454
 B	b3455	t3454
@@ -4468,7 +4468,7 @@ P	p3456	String "inr "
 O	o3456	string1662 p3456
 T	t3456	o3456
 B	b3457	t3456
-Vz	z	z\\ \\ 
+Vz	z	z\\ \\
 B	b3458	z
 T	t3458	o1661 b3458
 B	b3459	t3458
@@ -4530,7 +4530,7 @@ B	b3494	t3493
 P	p3494	Number 5212
 P	p3495	Number 5364
 O	o3495	location p3494 p3495
-C	h3495	H\\ \\ 
+C	h3495	H\\ \\
 S	s3495	tbrarg\\ h3495\\ t1793
 B	b3495	s3495
 T	t3495	o1790 b3495
@@ -4579,9 +4579,9 @@ B	b3515	t3515
 P	p3515	Number 5583
 P	p3516	Number 5797
 O	o3516	location p3515 p3516
-VA1	A1	A1\\ H\\ 
+VA1	A1	A1\\ H\\
 B	b3516	A1
-VA2	A2	A2\\ H\\ 
+VA2	A2	A2\\ H\\
 B	b3517	A2
 T	t3517	o1878 b1878 b3516 b3517
 S	s3517	tbrarg\\ h3495\\ t3517
@@ -4590,9 +4590,9 @@ T	t3518	o1790 b3518
 B	b3519	t3518
 T	t3519	o1876 b3519
 B	b3520	t3519
-VB1	B1	B1\\ H\\ 
+VB1	B1	B1\\ H\\
 B	b3521	B1
-VB2	B2	B2\\ H\\ 
+VB2	B2	B2\\ H\\
 B	b3522	B2
 T	t3522	o1878 b1878 b3521 b3522
 S	s3522	tbrarg\\ h3495\\ t3522
@@ -4645,7 +4645,7 @@ P	p1907	String unionType
 O	o1907	rule p1907
 NItt_equal!type	type	type Itt_equal
 O	o1908	type
-VA	A3543	A\\ H\\ 
+VA	A3543	A\\ H\\
 B	b3543	A3543
 T	t3543	o1908 b3543
 S	s3543	tbrarg\\ h3495\\ t3543
@@ -4654,7 +4654,7 @@ T	t3544	o1790 b3544
 B	b3545	t3544
 T	t3545	o1876 b3545
 B	b3546	t3545
-VB	B3546	B\\ H\\ 
+VB	B3546	B\\ H\\
 B	b3547	B3546
 T	t3547	o1908 b3547
 S	s3547	tbrarg\\ h3495\\ t3547
@@ -5330,9 +5330,9 @@ P	p3653	Number 7326
 O	o3653	location p3652 p3653
 P	p2221	String inlEquality
 O	o2221	rule p2221
-Va1	a1	a1\\ H\\ 
+Va1	a1	a1\\ H\\
 B	b3653	a1
-Va2	a2	a2\\ H\\ 
+Va2	a2	a2\\ H\\
 B	b3655	a2
 T	t3655	o1878 b3543 b3653 b3655
 S	s3655	tbrarg\\ h3495\\ t3655
@@ -5383,9 +5383,9 @@ P	p3679	Number 7616
 O	o3679	location p3678 p3679
 P	p2243	String inrEquality
 O	o2243	rule p2243
-Vb1	b1	b1\\ H\\ 
+Vb1	b1	b1\\ H\\
 B	b3679	b1
-Vb2	b2	b2\\ H\\ 
+Vb2	b2	b2\\ H\\
 B	b3680	b2
 T	t3680	o1878 b3547 b3679 b3680
 S	s3680	tbrarg\\ h3495\\ t3680
@@ -5747,8 +5747,8 @@ T	t3720	o3720
 B	b3720	t3720
 T	t3721	o b3720 b16
 B	b3721	t3721
-Vu	u	u\\ \\ 
-Vp	p3721	p\\ \\ 
+Vu	u	u\\ \\
+Vp	p3721	p\\ \\
 Vleft	left	left\\ \\ u p3721
 B	b3722	left
 O	o2415	meta_labeled p97
@@ -5763,7 +5763,7 @@ T	t3725	o1790 b3725
 B	b3726	t3725
 T	t3726	o2415 b3726
 B	b3727	t3726
-Vv	v	v\\ \\ 
+Vv	v	v\\ \\
 Vright	right	right\\ \\ v p3721
 B	b3728	right
 B	b2417	t2416
@@ -5999,9 +5999,9 @@ T	t3782	o b3782 b16
 B	b3783	t3782
 T	t3783	o b3781 b3783
 B	b3784	t3783
-Ve1	e1	e1\\ H\\ 
+Ve1	e1	e1\\ H\\
 B	b3785	e1
-Ve2	e2	e2\\ H\\ 
+Ve2	e2	e2\\ H\\
 B	b3786	e2
 T	t3786	o1878 b3551 b3785 b3786
 S	s3786	tbrarg\\ h3495\\ t3786
@@ -6328,11 +6328,11 @@ O	o3862	location p3861 p3862
 O	o2667	location p p
 P	p2667	String unionContradiction1
 O	o2668	rule p2667
-Vy	y3862	y\\ H\\ 
+Vy	y3862	y\\ H\\
 B	b3862	y3862
 T	t3862	o126 b3862
 B	b3863	t3862
-Vz	z3863	z\\ H\\ 
+Vz	z3863	z\\ H\\
 B	b3864	z3863
 T	t3864	o130 b3864
 B	b3865	t3864
@@ -9364,15 +9364,15 @@ B	b5833	t5833
 P	p5833	Number 13164
 O	o5833	location p4675 p5833
 O	o3938	improve p1104
-VA1	A15833	A1\\ \\ 
+VA1	A15833	A1\\ \\
 B	b5834	A15833
-VB1	B15834	B1\\ \\ 
+VB1	B15834	B1\\ \\
 B	b5835	B15834
 T	t5835	o1475 b5834 b5835
 B	b5836	t5835
-VA2	A25836	A2\\ \\ 
+VA2	A25836	A2\\ \\
 B	b5837	A25836
-VB2	B25837	B2\\ \\ 
+VB2	B25837	B2\\ \\
 B	b5838	B25837
 T	t5838	o1475 b5837 b5838
 B	b5839	t5838

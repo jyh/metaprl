@@ -36,7 +36,7 @@ extends Auto_tactic
 open Refiner.Refiner.TermType
 open Tactic_type.Tactic
 
-declare sequent_arg
+declare sequent [sequent_arg] { Term : Term >- Term } : Judgment
 
 rule rewriteAxiom1 :
    sequent { <H> >- Perv!"rewrite"{'a; 'a} }

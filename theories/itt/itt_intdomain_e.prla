@@ -1,6 +1,58 @@
 #PRL version 1.0.9 ASCII term
+N!!Itt_labels	Itt_labels	Itt_labels NIL
+NItt_labels!*	*	* Itt_labels
+NItt_labels!+	+	+ Itt_labels
+NItt_labels!-	-	- Itt_labels
+NItt_labels!/	/	/ Itt_labels
+NItt_labels!0	0	0 Itt_labels
+NItt_labels!1	1	1 Itt_labels
+NItt_labels!<	<	< Itt_labels
+NItt_labels!<=	<=	<= Itt_labels
+NItt_labels!<add>	<add>	<add> Itt_labels
+NItt_labels!<mul>	<mul>	<mul> Itt_labels
+NItt_labels!=	=	= Itt_labels
+NItt_labels!>	>	> Itt_labels
+NItt_labels!>=	>=	>= Itt_labels
+NItt_labels!bottom	bottom	bottom Itt_labels
+NItt_labels!car	car	car Itt_labels
+NItt_labels!car0	car0	car0 Itt_labels
+NItt_labels!color	color	color Itt_labels
+NItt_labels!data	data	data Itt_labels
+NItt_labels!delete	delete	delete Itt_labels
+NItt_labels!dom	dom	dom Itt_labels
+NItt_labels!down	down	down Itt_labels
+NItt_labels!empty	empty	empty Itt_labels
+NItt_labels!eq	eq	eq Itt_labels
+NItt_labels!f	f	f Itt_labels
+NItt_labels!fee	fee	fee Itt_labels
+NItt_labels!fld	fld	fld Itt_labels
+NItt_labels!foo	foo	foo Itt_labels
+NItt_labels!getNextX	getNextX	getNextX Itt_labels
+NItt_labels!getX	getX	getX Itt_labels
+NItt_labels!inf	inf	inf Itt_labels
+NItt_labels!insert	insert	insert Itt_labels
+NItt_labels!inv	inv	inv Itt_labels
+NItt_labels!left	left	left Itt_labels
+NItt_labels!leftt	leftt	leftt Itt_labels
+NItt_labels!max	max	max Itt_labels
+NItt_labels!member	member	member Itt_labels
+NItt_labels!min	min	min Itt_labels
+NItt_labels!move	move	move Itt_labels
+NItt_labels!moveBy	moveBy	moveBy Itt_labels
+NItt_labels!neg	neg	neg Itt_labels
+NItt_labels!pop	pop	pop Itt_labels
+NItt_labels!push	push	push Itt_labels
+NItt_labels!red	red	red Itt_labels
+NItt_labels!rel	rel	rel Itt_labels
+NItt_labels!right	right	right Itt_labels
+NItt_labels!sup	sup	sup Itt_labels
+NItt_labels!tp	tp	tp Itt_labels
+NItt_labels!up	up	up Itt_labels
+NItt_labels!x	x	x Itt_labels
+NItt_labels!y	y	y Itt_labels
+NItt_labels!z	z	z Itt_labels
 NPerv	Perv	Perv NIL
-NPerv!cons	cons	cons Perv
+NPerv!cons	cons	xcons Perv
 O	o	cons
 NSummary	Summary	Summary NIL
 NSummary!location	location	location Summary
@@ -62,7 +114,7 @@ P	p15	String .
 O	o15	comment_string p15
 T	t16	o15
 B	b16	t16
-NPerv!nil	nil16	nil Perv
+NPerv!nil	nil16	xnil Perv
 O	o16	nil16
 T	t17	o16
 B	b17	t17

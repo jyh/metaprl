@@ -29,225 +29,225 @@ extends Itt_theory
  * SETS
  ************************************************************************)
 
-declare math_set
-declare math_isset{'s}
-declare math_collect{'x; 'T; 'a}
-declare math_set_ind{'s; 'T; 'f; 'g; 'b}
+declare math_set : Dform
+declare math_isset{'s : Dform} : Dform
+declare math_collect{'x : Dform; 'T; 'a : Dform} : Dform
+declare math_set_ind{'s : Dform; 'T; 'f : Dform; 'g : Dform; 'b : Dform} : Dform
 
 (************************************************************************
  * EQUALITY
  ************************************************************************)
 
-declare math_eq{'s1; 's2}
-declare math_equal{'s1; 's2}
-declare math_funset{'z; 'f}
-declare math_funprop{'z; 'P}
-declare math_dfunprop{'x; 'A; 'B}
+declare math_eq{'s1 : Dform; 's2 : Dform} : Dform
+declare math_equal{'s1 : Dform; 's2 : Dform} : Dform
+declare math_funset{'z : Dform; 'f : Dform} : Dform
+declare math_funprop{'z : Dform; 'P} : Dform
+declare math_dfunprop{'x : Dform; 'A; 'B} : Dform
 
 (************************************************************************
  * MEMBERSHIP
  ************************************************************************)
 
-declare math_mem{'x; 'y}
-declare math_member{'x; 'y}
+declare math_mem{'x : Dform; 'y : Dform} : Dform
+declare math_member{'x : Dform; 'y : Dform} : Dform
 
 (************************************************************************
  * LOGIC
  ************************************************************************)
 
-declare math_strue
-declare math_sfalse
-declare math_sor{'A; 'B}
-declare math_sand{'A; 'B}
-declare math_simplies{'A; 'B}
-declare math_snot{'A}
-declare math_siff{'A; 'B}
-declare math_sall{'x; 'A; 'B}
-declare math_sall{'x; 'A}
-declare math_sexists{'x; 'A; 'B}
-declare math_sexists{'x; 'A}
-declare math_dall{'x; 'A; 'B}
-declare math_dexists{'x; 'A; 'B}
+declare math_strue : Dform
+declare math_sfalse : Dform
+declare math_sor{'A; 'B} : Dform
+declare math_sand{'A; 'B} : Dform
+declare math_simplies{'A; 'B} : Dform
+declare math_snot{'A} : Dform
+declare math_siff{'A; 'B} : Dform
+declare math_sall{'x : Dform; 'A; 'B} : Dform
+declare math_sall{'x : Dform; 'A} : Dform
+declare math_sexists{'x : Dform; 'A; 'B} : Dform
+declare math_sexists{'x : Dform; 'A} : Dform
+declare math_dall{'x : Dform; 'A; 'B} : Dform
+declare math_dexists{'x : Dform; 'A; 'B} : Dform
 
 (************************************************************************
  * SEPARATION
  ************************************************************************)
 
-declare math_sep{'x; 's; 'P}
-declare math_restricted{'P}
+declare math_sep{'x : Dform; 's : Dform; 'P} : Dform
+declare math_restricted{'P} : Dform
 
 (************************************************************************
  * EMPTY
  ************************************************************************)
 
-declare math_empty
+declare math_empty : Dform
 
 (************************************************************************
  * SINGLETON
  ************************************************************************)
 
-declare math_sing{'s}
+declare math_sing{'s : Dform} : Dform
 
 (************************************************************************
  * UNION
  ************************************************************************)
 
-declare math_union{'s}
+declare math_union{'s : Dform} : Dform
 
 (************************************************************************
  * INTERSECTION
  ************************************************************************)
 
-declare math_isect{'s1; 's2}
-declare math_isect{'s}
+declare math_isect{'s1 : Dform; 's2 : Dform} : Dform
+declare math_isect{'s : Dform} : Dform
 
 (************************************************************************
  * PAIR
  ************************************************************************)
 
-declare math_pair{'s1; 's2}
+declare math_pair{'s1 : Dform; 's2 : Dform} : Dform
 
 (************************************************************************
  * INFINITY
  ************************************************************************)
 
-declare math_inf
-declare math_zero
-declare math_succ{'i}
-declare math_lt{'i; 'j}
+declare math_inf : Dform
+declare math_zero : Dform
+declare math_succ{'i : Dform} : Dform
+declare math_lt{'i : Dform; 'j : Dform} : Dform
 
 (************************************************************************
  * RELATION
  ************************************************************************)
 
-declare math_rel{'x; 'y; 'P; 's1; 's2}
+declare math_rel{'x : Dform; 'y : Dform; 'P; 's1 : Dform; 's2 : Dform} : Dform
 
 (************************************************************************
  * SUBSET COLLECTION
  ************************************************************************)
 
-declare math_power{'s1; 's2}
+declare math_power{'s1 : Dform; 's2 : Dform} : Dform
 
 (************************************************************************
  * SUBSET
  ************************************************************************)
 
-declare math_subset{'s1; 's2}
+declare math_subset{'s1 : Dform; 's2 : Dform} : Dform
 
 (************************************************************************
  * ORDERED PAIR
  ************************************************************************)
 
-declare math_opair{'s1; 's2}
+declare math_opair{'s1 : Dform; 's2 : Dform} : Dform
 
 (************************************************************************
  * EQUIVALENCE RELATION
  ************************************************************************)
 
-declare math_equiv{'s; 'r; 'a; 'b}
-declare math_equiv{'s; 'r}
-declare math_equivfunset{'s; 'r; 'z; 'f}
-declare math_equivfunprop{'s; 'r; 'z; 'P}
+declare math_equiv{'s : Dform; 'r : Dform; 'a : Dform; 'b : Dform} : Dform
+declare math_equiv{'s : Dform; 'r : Dform} : Dform
+declare math_equivfunset{'s : Dform; 'r : Dform; 'z : Dform; 'f : Dform} : Dform
+declare math_equivfunprop{'s : Dform; 'r : Dform; 'z : Dform; 'P} : Dform
 
 (************************************************************************
  * SET BUILDER
  ************************************************************************)
 
-declare math_setbvd{'x; 's; 'a}
+declare math_setbvd{'x : Dform; 's : Dform; 'a : Dform} : Dform
 
 (************************************************************************
  * INVERSE IMAGE
  ************************************************************************)
 
-declare math_invimage{'x; 's; 'a; 't}
+declare math_invimage{'x : Dform; 's : Dform; 'a : Dform; 't : Dform} : Dform
 
 (************************************************************************
  * GROUP
  ************************************************************************)
 
-declare math_group{'g}
-declare math_car{'g}
-declare math_op{'g; 'a; 'b}
-declare math_id{'g}
-declare math_inv{'g; 'a}
+declare math_group{'g : Dform} : Dform
+declare math_car{'g : Dform} : Dform
+declare math_op{'g : Dform; 'a : Dform; 'b : Dform} : Dform
+declare math_id{'g : Dform} : Dform
+declare math_inv{'g : Dform; 'a : Dform} : Dform
 
 (************************************************************************
  * GROUP BUILDER
  ************************************************************************)
 
-declare math_groupbvd{'h; 'g; 's}
+declare math_groupbvd{'h : Dform; 'g : Dform; 's : Dform} : Dform
 
 (************************************************************************
  * ABELIAN GROUP
  ************************************************************************)
 
-declare math_abel{'g}
+declare math_abel{'g : Dform} : Dform
 
 (************************************************************************
  * SUBGROUP
  ************************************************************************)
 
-declare math_subgroup{'s; 'g}
+declare math_subgroup{'s : Dform; 'g : Dform} : Dform
 
 (************************************************************************
  * GROUP POWER
  ************************************************************************)
 
-declare math_power{'g; 'z; 'n}
+declare math_power{'g : Dform; 'z : Dform; 'n : Dform} : Dform
 
 (************************************************************************
  * CYCLIC SUBGROUP
  ************************************************************************)
 
-declare math_cycsubg{'s; 'g; 'a}
+declare math_cycsubg{'s : Dform; 'g : Dform; 'a : Dform} : Dform
 
 (************************************************************************
  * CYCLIC GROUP
  ************************************************************************)
 
-declare math_cycgroup{'g; 'a}
-declare math_cycg{'g}
+declare math_cycgroup{'g : Dform; 'a : Dform} : Dform
+declare math_cycg{'g : Dform} : Dform
 
 (************************************************************************
  * COSET
  ************************************************************************)
 
-declare math_lcoset{'h; 'g; 'a}
-declare math_rcoset{'h; 'g; 'a}
+declare math_lcoset{'h : Dform; 'g : Dform; 'a : Dform} : Dform
+declare math_rcoset{'h : Dform; 'g : Dform; 'a : Dform} : Dform
 
 (************************************************************************
  * NORMAL SUBGROUP
  ************************************************************************)
 
-declare math_normalsubg{'s; 'g}
+declare math_normalsubg{'s : Dform; 'g : Dform} : Dform
 
 (************************************************************************
  * HOMOMORPHISM
  ************************************************************************)
 
-declare math_hom{'x; 'g1; 'g2; 'f}
+declare math_hom{'x : Dform; 'g1 : Dform; 'g2 : Dform; 'f : Dform} : Dform
 
 (************************************************************************
  * KERNEL
  ************************************************************************)
 
-declare math_ker{'x; 'h; 'g1; 'g2; 'f}
+declare math_ker{'x : Dform; 'h : Dform; 'g1 : Dform; 'g2 : Dform; 'f : Dform} : Dform
 
 (************************************************************************
  * ISOMORPHISM
  ************************************************************************)
 
-declare math_iso{'x; 'g1; 'g2; 'f}
+declare math_iso{'x : Dform; 'g1 : Dform; 'g2 : Dform; 'f : Dform} : Dform
 
 (************************************************************************
  * KLEIN 4-GROUP
  ************************************************************************)
 
-declare math_klein4
-declare math_k0
-declare math_k1
-declare math_k2
-declare math_k3
+declare math_klein4 : Dform
+declare math_k0 : Dform
+declare math_k1 : Dform
+declare math_k2 : Dform
+declare math_k3 : Dform
 
 (*
  * -*-

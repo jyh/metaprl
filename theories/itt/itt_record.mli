@@ -6,8 +6,8 @@ extends Itt_disect
 
 open Basic_tactics
 
-val dest_field : term -> term * string
-val mk_field_term : term -> string -> term
+val dest_field : term -> term * opname
+val mk_field_term : term -> opname -> term
 
 topval record_exchangeC : int -> conv
 

@@ -31,27 +31,18 @@ extends Base_theory
 
 (* x86 operands *)
 declare ImmediateNumber[i:n]
-declare ImmediateLabel[label:t]{'R}
-declare ImmediateCLabel[label:t]{'R}
+declare ImmediateLabel[label:s]{'R}
+declare ImmediateCLabel[label:s]{'R}
 declare Register{'v}
 declare SpillMemory{'label}
 declare SpillRegister{'v; 'label}
-declare ContextRegister[label:t]
+declare ContextRegister[label:s]
 declare MemReg{'r}
 declare MemRegOff[i:n]{'r}
 declare MemRegRegOffMul[off:n, mul:n]{'r1; 'r2}
 
 (* Condition codes *)
-declare CC["lt"]
-declare CC["le"]
-declare CC["z"]
-declare CC["nz"]
-declare CC["gt"]
-declare CC["ge"]
-declare CC["b"]
-declare CC["be"]
-declare CC["a"]
-declare CC["ae"]
+declare CC[cc:s]
 
 (* Instructions *)
 declare Mov{'src; dst. 'rest['dst]}
@@ -92,7 +83,7 @@ declare Comment[comment:s]{'rest}
 declare Init{'rest}
 
 (* Programs *)
-declare LabelAsm[label:t]{'R}
+declare LabelAsm[label:s]{'R}
 
 declare LabelRec{R1. 'fields['R1]; R2. 'rest['R2]}
 declare LabelDef{'label; 'code; 'rest}

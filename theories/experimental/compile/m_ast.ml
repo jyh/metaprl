@@ -109,7 +109,7 @@ doc <:doc<
 >>
 declare AstLetRec{R1. 'e1['R1]; R2. 'e2['R2]}
 declare AstFields{'fields}
-declare AstLabel[label:t]
+declare AstLabel[label:s]
 declare AstFunDef{'label; 'e; 'cont}
 declare AstEndDef
 declare AstLetFun{'R; 'label; f. 'cont['f]}
@@ -249,8 +249,8 @@ dform ast_fun_def_df : parens :: "prec"[prec_let] :: AstFunDef{'label; 'e; 'rest
 dform ast_end_def_df : AstEndDef =
    `""
 
-dform ast_label_df : AstLabel[s:t] =
-   `"\"" slot[s:t] `"\""
+dform ast_label_df : AstLabel[s:s] =
+   `"\"" slot[s:s] `"\""
 
 dform ast_let_fun_df : parens :: "prec"[prec_let] :: AstLetFun{'R; 'label; f. 'e} =
    szone pushm[3] bf["let"] bf[" fun "] slot{'f} `" = " slot{'R} `"." slot{'label} `" " bf[" in"]

@@ -1,6 +1,6 @@
 #PRL version 1.0.15 ASCII term
 NPerv	Perv	Perv NIL
-NPerv!cons	cons	cons Perv
+NPerv!cons	cons	xcons Perv
 O	o	cons
 NSummary	Summary	Summary NIL
 NSummary!location	location	location Summary
@@ -25,7 +25,7 @@ T	t6	o6
 B	b6	t6
 T	t7	o3 b6
 B	b7	t7
-NPerv!nil	nil7	nil Perv
+NPerv!nil	nil7	xnil Perv
 O	o7	nil7
 T	t8	o7
 B	b8	t8

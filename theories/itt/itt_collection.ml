@@ -491,7 +491,7 @@ let colEqTransT = argfunT (fun t p ->
 
 (********************** dforms **********************)
 
-declare display_col{'T}
+declare display_col{'T: Dform} : Dform
 
 dform col_df : except_mode[src] :: col[l:l]{'T} =
    `"col[" slot[l:l] `"](" slot{'T} `")"
@@ -503,7 +503,7 @@ dform col_member_df : except_mode[src] :: col_member{'C;'x} =
    ('x in 'C)
 
 dform col_equal_df : except_mode[src] :: col_equal{'T;'c_1;'c_2} =
-   equal{display_col{'T};'c_1;'c_2}
+   math_equal{display_col{'T};'c_1;'c_2}
 
 dform display_col_df : display_col{'T} =
    `"collection{" slot{'T} `"}"

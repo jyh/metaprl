@@ -1,6 +1,6 @@
 #PRL version 1.0.8 ASCII term
 NPerv	Perv	Perv NIL
-NPerv!cons	cons	cons Perv
+NPerv!cons	cons	xcons Perv
 O	o	cons
 NSummary	Summary	Summary NIL
 NSummary!location	location	location Summary
@@ -22,7 +22,7 @@ P	p6	String tunion
 O	o7	comment_string p6
 T	t7	o7
 B	b7	t7
-NPerv!nil	nil7	nil Perv
+NPerv!nil	nil7	xnil Perv
 O	o8	nil7
 T	t8	o8
 B	b8	t8
@@ -4396,7 +4396,7 @@ B	b2911	t2911
 P	p2911	Number 2840
 P	p2912	Number 2869
 O	o2912	location p2911 p2912
-VA	A	A\\ \\ 
+VA	A	A\\ \\
 B	b2912	A
 VB	B	B\\ \\ t1406
 B	b2913	B x
@@ -4419,11 +4419,11 @@ B	b2919	t2919
 P	p2920	Number 3135
 P	p2921	Number 3268
 O	o2921	location p2920 p2921
-VB	B2921	B\\ \\ 
+VB	B2921	B\\ \\
 B	b2921	B2921 x
 T	t2921	o1403 b2912 b2921
 B	b2922	t2921
-Vx	x	x\\ \\ 
+Vx	x	x\\ \\
 B	b2923	x
 T	t2923	o1427 b2923
 B	b2924	t2923
@@ -4453,13 +4453,13 @@ B	b2936	t2935
 P	p2936	Number 3516
 P	p1251	Number 3706
 O	o2936	location p2936 p1251
-VA	A2936	A\\ H\\ 
+VA	A2936	A\\ H\\
 B	b2937	A2936
 T	t2937	o1446 b2937
 B	b2938	t2937
 T	t2938	o b2938 b8
 B	b2939	t2938
-C	h2939	H\\ \\ 
+C	h2939	H\\ \\
 T	t2939	o1453 b1454 b2937 b2937
 S	s2939	tbrarg\\ h2939\\ t2939
 B	b2940	s2939
@@ -4522,9 +4522,9 @@ B	b2955	t2955
 P	p2955	Number 3921
 P	p2956	Number 4185
 O	o2956	location p2955 p2956
-VA1	A1	A1\\ H\\ 
+VA1	A1	A1\\ H\\
 B	b2956	A1
-VA2	A2	A2\\ H\\ 
+VA2	A2	A2\\ H\\
 B	b2957	A2
 T	t2957	o1453 b1454 b2956 b2957
 S	s2957	tbrarg\\ h2939\\ t2957
@@ -4663,7 +4663,7 @@ B	b3004	t3004
 P	p3004	Number 4653
 P	p3005	Number 4916
 O	o3005	location p3004 p3005
-Va	a	a\\ H\\ 
+Va	a	a\\ H\\
 B	b3005	a
 T	t3005	o1446 b3005
 B	b3006	t3005
@@ -4678,9 +4678,9 @@ T	t3009	o1450 b3009
 B	b3010	t3009
 VB	B3010	B\\ H\\ a
 B	b3011	B3010
-Vx1	x1	x1\\ H\\ 
+Vx1	x1	x1\\ H\\
 B	b3012	x1
-Vx2	x2	x2\\ H\\ 
+Vx2	x2	x2\\ H\\
 B	b3013	x2
 T	t3013	o1453 b3011 b3012 b3013
 S	s3013	tbrarg\\ h2939\\ t3013
@@ -4752,7 +4752,7 @@ B	b3033	t3033
 P	p3033	Number 5185
 P	p3034	Number 5426
 O	o3034	location p3033 p3034
-Vt	t3034	t\\ \\ 
+Vt	t3034	t\\ \\
 B	b3034	t3034
 S	s3034	tbrarg\\ h2939\\ B3010
 B	b3035	s3034
@@ -5337,7 +5337,7 @@ P	p3242	Number 6820
 O	o3242	location p3241 p3242
 P	p2433	String tunionElimination_disjoint
 O	o2433	rule p2433
-Vf	f	f\\ J H\\ 
+Vf	f	f\\ J H\\
 B	b3242	f
 T	t3242	o1446 b3242
 B	b3243	t3242

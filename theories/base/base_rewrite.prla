@@ -1,6 +1,6 @@
 #PRL version 1.0.8 ASCII term
 NPerv	Perv	Perv NIL
-NPerv!cons	cons	cons Perv
+NPerv!cons	cons	xcons Perv
 O	o	cons
 NSummary	Summary	Summary NIL
 NSummary!location	location	location Summary
@@ -28,7 +28,7 @@ P	p7	String rw
 O	o8	comment_string p7
 T	t8	o8
 B	b8	t8
-NPerv!nil	nil8	nil Perv
+NPerv!nil	nil8	xnil Perv
 O	o9	nil8
 T	t9	o9
 B	b9	t9
@@ -2542,10 +2542,10 @@ T	t2170	o2169
 B	b2170	t2170
 T	t2171	o3 b2170
 B	b2171	t2171
-C	h2171	H\\ \\ 
-Va	a	a\\ H\\ 
+C	h2171	H\\ \\
+Va	a	a\\ H\\
 B	b2172	a
-Vb	b2173	b\\ H\\ 
+Vb	b2173	b\\ H\\
 B	b2174	b2173
 T	t2174	o1149 b2172 b2174
 S	s2174	tbrarg\\ h2171\\ t2174
@@ -2562,7 +2562,7 @@ P	p2179	String means
 O	o2179	comment_string p2179
 T	t2179	o2179
 B	b2180	t2179
-Va	a2180	a\\ \\ 
+Va	a2180	a\\ \\
 B	b2181	a2180
 T	t2181	o3 b2181
 B	b2182	t2181
@@ -2572,7 +2572,7 @@ T	t2183	o19 b2183
 B	b2184	t2183
 T	t2184	o3 b2184
 B	b2185	t2184
-Vb	b2186	b\\ \\ 
+Vb	b2186	b\\ \\
 B	b2187	b2186
 T	t2187	o3 b2187
 B	b2188	t2187

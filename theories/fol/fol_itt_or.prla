@@ -1,6 +1,6 @@
 #PRL version 1.0.8 ASCII term
 NPerv	Perv	Perv NIL
-NPerv!cons	cons	cons Perv
+NPerv!cons	cons	xcons Perv
 O	o	cons
 NSummary	Summary	Summary NIL
 NSummary!location	location	location Summary
@@ -13,7 +13,7 @@ P	p4	String itt_theory
 O	o8	parent p4
 T	t38	o8
 B	b38	t38
-NPerv!nil	nil3	nil Perv
+NPerv!nil	nil3	xnil Perv
 O	o4	nil3
 T	t4	o4
 B	b4	t4
@@ -1405,9 +1405,9 @@ T	t1021	o2 b1014 b1015 b1021
 B	b1022	t1021
 T	t1022	o461 b1022
 B	b1023	t1022
-VA	A	A\\ \\ 
+VA	A	A\\ \\
 B	b1024	A
-VB	B	B\\ \\ 
+VB	B	B\\ \\
 B	b1025	B
 T	t1025	o484 b1024 b1025
 B	b1026	t1025
@@ -1417,7 +1417,7 @@ T	t1027	o483 b1026 b1027 b489 b4
 B	b1028	t1027
 T	t1028	o482 b1028
 B	b1029	t1028
-Va	a	a\\ \\ 
+Va	a	a\\ \\
 B	b1030	a
 T	t1030	o494 b1030
 B	b1031	t1030
@@ -1537,7 +1537,7 @@ T	t1084	o473 b1083
 B	b1084	t1084
 T	t1085	o590 b1084
 B	b1085	t1085
-Vx	x	x\\ \\ 
+Vx	x	x\\ \\
 B	b1086	x
 T	t1086	o494 b1086
 B	b1087	t1086
@@ -1549,7 +1549,7 @@ T	t1089	o507 b1087 b1088 b1089
 B	b1090	t1089
 Vbody1	body11090	body1\\ \\ x
 B	b1091	body11090
-C	h1091	H\\ \\ 
+C	h1091	H\\ \\
 T	t1091	o627 b1090 b1091
 S	s	tbrarg\\ h1091\\ t1091
 B	b1092	s
@@ -1592,7 +1592,7 @@ T	t1109	o637 b1109
 B	b1110	t1109
 P	p1110	Number 2667
 O	o1110	location p648 p1110
-VA	A1110	A\\ H\\ 
+VA	A1110	A\\ H\\
 B	b1111	A1110
 T	t1111	o655 b1111
 S	s1111	tbrarg\\ h1091\\ t1111
@@ -1601,7 +1601,7 @@ T	t1112	o654 b1112
 B	b1113	t1112
 T	t1113	o653 b1113
 B	b1114	t1113
-VB	B1114	B\\ H\\ 
+VB	B1114	B\\ H\\
 B	b1115	B1114
 T	t1115	o655 b1115
 S	s1115	tbrarg\\ h1091\\ t1115
@@ -1753,7 +1753,7 @@ P	p1184	Number 2973
 O	o1184	location p1183 p1184
 P	p733	String or_intro_right
 O	o733	rule p733
-Vb	b1184	b\\ \\ 
+Vb	b1184	b\\ \\
 B	b1185	b1184
 S	s1185	tbrarg\\ h1091\\ B1114
 B	b1186	s1185

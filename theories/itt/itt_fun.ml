@@ -258,8 +258,8 @@ interactive independentFunctionFormation :
  *)
 let d_apply_equalT weak = funT (fun p ->
    let _, app, app' = dest_equal (Sequent.concl p) in
-   if weak && (not (alpha_equal app app'))
-   then raise generic_refiner_exn;
+   if weak && (not (alpha_equal app app')) then
+      raise generic_refiner_exn;
    let f, _ = dest_apply app in
    let f_type =
       try get_with_arg p with

@@ -5,7 +5,11 @@ open Basic_tactics
 (* MetaPRL doesn't allow to declare a variable twice  in one Context
 so in rules w-s, ... we skip such things as "x not in H" *)
 
-declare sequent_arg{'T}
+(* Sequent judgments *)
+declare sequent [cic] { Term -> Term >- Term } : Term
+
+(* Terms *)
+declare sequent [sequent_arg{'a}] { Term -> Term >- Term } : Term
 
 declare le[i:l,j:l]  (* i is less or equal to j *)
 
@@ -47,9 +51,6 @@ declare subst{'u;'x;'t} (* declaration of substitution of a term 't to all
 declare math_fun{'x; 'A; 'B}
 declare math_fun{'A; 'B}
 
-val sequent_arg_term : term
-val is_sequent_arg_term : term -> bool
-val dest_sequent_arg : term -> term
 val mk_sequent_arg_term : term -> term
 
 val member_term : term

@@ -121,13 +121,17 @@ dform bounded_df : except_mode[src] :: bounded{'u; 'l; 'lt} =
  * Sorting algorithm.
  *)
 dform insert_df : except_mode[src] :: insert{'u; 'l; 'lt} =
-   (keyword["insert"] 'u 'l 'lt)
+   pushm[3] szone
+   keyword["insert"] `"{" 'u `";" hspace 'l `";" hspace 'lt `"}"
+   ezone popm
 
 dform sort_df : except_mode[src] :: sort{'l; 'lt} =
-   (keyword["sort"] 'l 'lt)
+   pushm[3] szone
+   keyword["sort"] `"{" 'l `";" hspace 'lt `"}"
+   ezone popm
 
 dform list_ind_df : except_mode[src] :: parens :: "prec"[prec_list] :: list_ind{'l; 'base; u, v, g. 'step['g]} =
-   szone pushm[0] pushm[1] `"let rec " slot{'g} `" = function" hbreak["",""]
+   szone pushm[0] pushm[1] `"let rec " slot{'g :> Term} `" = function" hbreak["",""]
    pushm[5] `"  " cons{'u; 'v} `" ->" hspace slot{'step[('g 'v)]} popm hspace
    pushm[5] `"| [] ->" hspace slot{'base} popm popm hspace
    pushm[3] `"in" hspace slot{'g} `" " slot{'l} popm popm ezone

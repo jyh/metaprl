@@ -62,7 +62,7 @@ doc <:doc<
    @end[doc]
 >>
 
-declare sequent_arg
+declare sequent [sequent_arg] { Term : Term >- Term } : Judgment
 declare default_extract
 
 doc <:doc< ************************************
@@ -236,9 +236,6 @@ doc <:doc<
 (*
  * Sequent tags.
  *)
-
-dform mfir_df : except_mode[src] :: sequent_arg =
-   sub{it["fir"]}
 
 dform it_df1 : except_mode[src] :: except_mode[tex] ::
    default_extract =

@@ -58,32 +58,32 @@ open Itt_squash
 
 (************************************************************************
  * Xlist                                                                *
-  ***********************************************************************)
+ ************************************************************************)
 
-declare xlist_of_list{'l}
+declare rlist_of_list{'l}
 
-prim_rw xlist_list_cons {| reduce |} :
-   xlist_of_list{ 'hd :: 'tl } <--> Perv!cons{'hd; xlist_of_list{'tl}}
+prim_rw rlist_list_cons {| reduce |} :
+   rlist_of_list{ 'hd :: 'tl } <--> rcons{'hd; rlist_of_list{'tl}}
 
-prim_rw xlist_list_nil {| reduce |} :
-   xlist_of_list{ nil } <--> (Perv!nil)
+prim_rw rlist_list_nil {| reduce |} :
+   rlist_of_list{ nil } <--> rnil
 
-declare list_of_xlist{'l}
+declare list_of_rlist{'l}
 
-prim_rw reduce_xlist_cons :
-   list_of_xlist{ (Perv!cons{'hd; 'tl})} <--> ('hd :: list_of_xlist{'tl})
+prim_rw reduce_rlist_cons :
+   list_of_rlist{rcons{'hd; 'tl}} <--> ('hd :: list_of_rlist{'tl})
 
-prim_rw reduce_xlist_nil :
-   list_of_xlist{ (Perv!nil) } <--> nil
+prim_rw reduce_rlist_nil :
+   list_of_rlist{rnil} <--> nil
 
-let rec reduce_xlist t =
-   if is_xnil_term (one_subterm t) then
-      reduce_xlist_nil
-   else reduce_xlist_cons thenC addrC [Subterm 2] (termC reduce_xlist)
+let rec reduce_rlist t =
+   if is_rnil_term (one_subterm t) then
+      reduce_rlist_nil
+   else
+      reduce_rlist_cons thenC addrC [Subterm 2] (termC reduce_rlist)
 
-
-dform list_of_xlist_df : except_mode[src] :: list_of_xlist{'l} =
-   `"list_of_xlist(" slot{'l} `")"
+dform list_of_rlist_df : except_mode[src] :: list_of_rlist{'l} =
+   `"list_of_rlist(" slot{'l} `")"
 
 (************************************************************************
  * Var                                                                  *
@@ -120,7 +120,7 @@ prim_rw bterm_op_bdepth2 : op_bdepth{ bterm{| x:term; <H> >- 'op |}} <--> op_bde
 
 prim_rw bterm_arity:
     if_quoted_op{'op<||>;"true"} -->
-    arity{'op} <-->  map{lambda{x.op_bdepth{'x}}; list_of_xlist{subterms{'op}} }
+    arity{'op} <-->  map{lambda{x.op_bdepth{'x}}; list_of_rlist{subterms{'op}} }
 
 prim_rw bterm_same_op:
        is_same_op{'op1;'op2} <--> Base_reflection!if_same_op{'op1;'op2;btrue;bfalse}
@@ -135,5 +135,5 @@ prim_rw make_bterm_base :
  (if_quoted_op{'op;"true"} ) -->
  ('btl in list{BTerm} ) -->
  (compatible_shapes{'op;'btl}) -->
- make_bterm{'op;'btl} <--> Base_reflection!make_bterm{'op; xlist_of_list{'btl}}
+ make_bterm{'op;'btl} <--> Base_reflection!make_bterm{'op; rlist_of_list{'btl}}
 

@@ -1,6 +1,6 @@
 #PRL version 1.0.8 ASCII term
 NPerv	Perv	Perv NIL
-NPerv!cons	cons	cons Perv
+NPerv!cons	cons	xcons Perv
 O	o	cons
 NSummary	Summary	Summary NIL
 NSummary!location	location	location Summary
@@ -45,7 +45,7 @@ P	p10	String nequal
 O	o11	comment_string p10
 T	t11	o11
 B	b11	t11
-NPerv!nil	nil11	nil Perv
+NPerv!nil	nil11	xnil Perv
 O	o12	nil11
 T	t12	o12
 B	b12	t12
@@ -88,11 +88,11 @@ O	o23	math
 NItt_nequal	Itt_nequal	Itt_nequal NIL
 NItt_nequal!nequal	nequal	nequal Itt_nequal
 O	o24	nequal
-VT	T	T\\ \\ 
+VT	T	T\\ \\
 B	b24	T
-Va	a	a\\ \\ 
+Va	a	a\\ \\
 B	b25	a
-Vb	b26	b\\ \\ 
+Vb	b26	b\\ \\
 B	b27	b26
 T	t27	o24 b24 b25 b27
 B	b28	t27
@@ -3130,10 +3130,10 @@ NBase_rewrite	Base_rewrite	Base_rewrite NIL
 NBase_rewrite!sequent_arg	sequent_arg	sequent_arg Base_rewrite
 O	o1259	sequent_arg
 T	t1259	o1259
-C	h	H\\ \\ 
-VT	T1259	T\\ H\\ 
+C	h	H\\ \\
+VT	T1259	T\\ H\\
 B	b1259	T1259
-Vx	x	x\\ H\\ 
+Vx	x	x\\ H\\
 B	b1260	x
 T	t1260	o1199 b1259 b1260 b1260
 S	s	t1259\\ h\\ t1260
@@ -3142,7 +3142,7 @@ T	t1261	o1258 b1261
 B	b1262	t1261
 T	t1262	o1257 b1262
 B	b1263	t1262
-Vy	y	y\\ H\\ 
+Vy	y	y\\ H\\
 B	b1264	y
 T	t1264	o1199 b1259 b1264 b1264
 S	s1264	t1259\\ h\\ t1264
@@ -3212,27 +3212,27 @@ P	p1289	MLevel 0 i 0
 O	o1289	univ p1289
 T	t1289	o1289
 B	b1289	t1289
-VT1	T1	T1\\ H\\ 
+VT1	T1	T1\\ H\\
 B	b1290	T1
-VT2	T2	T2\\ H\\ 
+VT2	T2	T2\\ H\\
 B	b1291	T2
 T	t1291	o1199 b1289 b1290 b1291
 S	s1291	t1259\\ h\\ t1291
 B	b1292	s1291
 T	t1292	o1258 b1292
 B	b1293	t1292
-Vx1	x1	x1\\ H\\ 
+Vx1	x1	x1\\ H\\
 B	b1294	x1
-Vx2	x2	x2\\ H\\ 
+Vx2	x2	x2\\ H\\
 B	b1295	x2
 T	t1295	o1199 b1290 b1294 b1295
 S	s1295	t1259\\ h\\ t1295
 B	b1296	s1295
 T	t1296	o1258 b1296
 B	b1297	t1296
-Vy1	y1	y1\\ H\\ 
+Vy1	y1	y1\\ H\\
 B	b1298	y1
-Vy2	y2	y2\\ H\\ 
+Vy2	y2	y2\\ H\\
 B	b1299	y2
 T	t1299	o1199 b1290 b1298 b1299
 S	s1299	t1259\\ h\\ t1299
@@ -3407,7 +3407,7 @@ T	t1368	o1258 b1367
 B	b1368	t1368
 T	t1369	o1366 b1368
 B	b1369	t1369
-VC	C	C\\ J H\\ 
+VC	C	C\\ J H\\
 S	s1369	t1259\\ h h1366 h1367\\ C
 B	b1370	s1369
 T	t1370	o1258 b1370
@@ -3577,9 +3577,9 @@ NSummary!improve	improve	improve Summary
 O	o1434	improve p877
 NSummary!term_binding	term_binding	term_binding Summary
 O	o1435	term_binding
-Vx	x1435	x\\ \\ 
+Vx	x1435	x\\ \\
 B	b1435	x1435
-Vy	y1435	y\\ \\ 
+Vy	y1435	y\\ \\
 B	b1436	y1435
 T	t1436	o24 b24 b1435 b1436
 B	b1437	t1436

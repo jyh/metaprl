@@ -68,7 +68,7 @@ declare math_Return{'a}
 declare math_LetRec{'R; 'e1; 'e2}
 declare math_LetRec{'R; 'e1}
 declare math_Fields{'fields}
-declare math_Label[tag:t]
+declare math_Label[tag:s]
 declare math_FunDef{'label; 'exp; 'rest}
 declare math_FunDef{'label; 'exp}
 declare math_EndDef

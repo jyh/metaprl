@@ -59,7 +59,7 @@ prec prec_exists > prec_union
 (*
  * Display utilities.
  *)
-declare display_list[sep:s]{'l}
+declare display_list[sep:s]{'l : Dform} : Dform
 
 dform display_list_cons2_df : display_list[sep:s]{cons{'a; cons{'b; 'c}}} =
    slot{'a} slot[sep:s] display_list[sep:s]{cons{'b; 'c}}

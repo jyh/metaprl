@@ -25,7 +25,7 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  * Author: Jason Hickey
- * @email{jyh@cs.caltech.edu}
+ * @email{jyh@cs.caltech.edu} : Dform
  * @end[doc]
  *)
 
@@ -35,165 +35,165 @@ extends Base_theory
  * UNIVERSES AND EQULITY
  ************************************************************************)
 
-declare math_type{'a}
-declare math_univ{'i}
-declare math_equal{'T; 'a; 'b}
-declare math_member{'T; 'a}
-declare math_cumulativity{'i; 'j}
+declare math_type{'a : Dform} : Dform
+declare math_univ{'i : Dform} : Dform
+declare math_equal{'T : Dform; 'a : Dform; 'b : Dform} : Dform
+declare math_member{'T : Dform; 'a : Dform} : Dform
+declare math_cumulativity{'i : Dform; 'j : Dform} : Dform
 
 (************************************************************************
  * VOID
  ************************************************************************)
 
-declare math_false
+declare math_false : Dform
 
 (************************************************************************
  * UNIT
  ************************************************************************)
 
-declare math_unit
-declare math_true
-declare math_it
+declare math_unit : Dform
+declare math_true : Dform
+declare math_it : Dform
 
 (************************************************************************
  * ATOM
  ************************************************************************)
 
-declare math_atom
-declare math_token{'t}
+declare math_atom : Dform
+declare math_token{'t : Dform} : Dform
 
 (************************************************************************
  * BOOL
  ************************************************************************)
 
-declare math_bool
-declare math_btrue
-declare math_bfalse
-declare math_bor{'a; 'b}
-declare math_band{'a; 'b}
-declare math_bimplies{'a; 'b}
-declare math_bnot{'a}
-declare math_if{'a; 'b; 'c}
+declare math_bool : Dform
+declare math_btrue : Dform
+declare math_bfalse : Dform
+declare math_bor{'a : Dform; 'b : Dform} : Dform
+declare math_band{'a : Dform; 'b : Dform} : Dform
+declare math_bimplies{'a : Dform; 'b : Dform} : Dform
+declare math_bnot{'a : Dform} : Dform
+declare math_if{'a : Dform; 'b : Dform; 'c : Dform} : Dform
 
 (************************************************************************
  * INTEGERS
  ************************************************************************)
 
-declare math_int
-declare math_number{'n}
-declare math_ind{'i; 'm; 'z; 'down; 'base; 'm; 'z; 'up}
-declare math_add{'a; 'b}
-declare math_sub{'a; 'b}
-declare math_mul{'a; 'b}
-declare math_div{'a; 'b}
-declare math_rem{'a; 'b}
-declare math_lt{'a; 'b}
-declare math_le{'a; 'b}
-declare math_ge{'a; 'b}
-declare math_gt{'a; 'b}
+declare math_int : Dform
+declare math_number{'n : Dform} : Dform
+declare math_ind{'i : Dform; 'm : Dform; 'z : Dform; 'down : Dform; 'base : Dform; 'm : Dform; 'z : Dform; 'up : Dform} : Dform
+declare math_add{'a : Dform; 'b : Dform} : Dform
+declare math_sub{'a : Dform; 'b : Dform} : Dform
+declare math_mul{'a : Dform; 'b : Dform} : Dform
+declare math_div{'a : Dform; 'b : Dform} : Dform
+declare math_rem{'a : Dform; 'b : Dform} : Dform
+declare math_lt{'a : Dform; 'b : Dform} : Dform
+declare math_le{'a : Dform; 'b : Dform} : Dform
+declare math_ge{'a : Dform; 'b : Dform} : Dform
+declare math_gt{'a : Dform; 'b : Dform} : Dform
 
 (************************************************************************
  * UNION
  ************************************************************************)
 
-declare math_union{'A; 'B}
-declare math_inl{'x}
-declare math_inr{'x}
-declare math_decide{'x; 'y; 'a; 'z; 'b}
-declare math_or{'a; 'b}
-declare math_cor{'a; 'b}
+declare math_union{'A : Dform; 'B : Dform} : Dform
+declare math_inl{'x : Dform} : Dform
+declare math_inr{'x : Dform} : Dform
+declare math_decide{'x : Dform; 'y : Dform; 'a : Dform; 'z : Dform; 'b : Dform} : Dform
+declare math_or{'a : Dform; 'b : Dform} : Dform
+declare math_cor{'a : Dform; 'b : Dform} : Dform
 
 (************************************************************************
  * FUNCTIONS
  ************************************************************************)
 
-declare math_rfun{'f; 'x; 'A; 'B}
-declare math_fun{'x; 'A; 'B}
-declare math_fun{'A; 'B}
-declare math_lambda{'v; 'b}
-declare math_apply{'f; 'a}
-declare math_well_founded{'A; 'x; 'y; 'R}
-declare math_well_founded_assum{'A; 'a1; 'a2; 'R; 'P}
-declare math_well_founded_prop{'A}
-declare math_well_founded_apply{'P; 'a}
-declare math_fix{'f; 'b}
+declare math_rfun{'f : Dform; 'x : Dform; 'A : Dform; 'B : Dform} : Dform
+declare math_fun{'x : Dform; 'A : Dform; 'B : Dform} : Dform
+declare math_fun{'A : Dform; 'B : Dform} : Dform
+declare math_lambda{'v : Dform; 'b : Dform} : Dform
+declare math_apply{'f : Dform; 'a : Dform} : Dform
+declare math_well_founded{'A : Dform; 'x : Dform; 'y : Dform; 'R : Dform} : Dform
+declare math_well_founded_assum{'A : Dform; 'a1 : Dform; 'a2 : Dform; 'R : Dform; 'P : Dform} : Dform
+declare math_well_founded_prop{'A : Dform} : Dform
+declare math_well_founded_apply{'P : Dform; 'a : Dform} : Dform
+declare math_fix{'f : Dform; 'b : Dform} : Dform
 
-declare math_not{'A}
-declare math_all{'x; 'A; 'B}
-declare math_implies{'A; 'B}
-declare math_iff{'A; 'B}
+declare math_not{'A : Dform} : Dform
+declare math_all{'x : Dform; 'A : Dform; 'B : Dform} : Dform
+declare math_implies{'A : Dform; 'B : Dform} : Dform
+declare math_iff{'A : Dform; 'B : Dform} : Dform
 
 (************************************************************************
  * PRODUCT
  ************************************************************************)
 
-declare math_prod{'x; 'A; 'B}
-declare math_prod{'A; 'B}
-declare math_pair{'a; 'b}
-declare math_spread{'e; 'u; 'v; 'b}
-declare math_fst{'e}
-declare math_snd{'e}
-declare math_and{'a; 'b}
-declare math_cand{'a; 'b}
-declare math_exists{'x; 'A; 'B}
+declare math_prod{'x : Dform; 'A : Dform; 'B : Dform} : Dform
+declare math_prod{'A : Dform; 'B : Dform} : Dform
+declare math_pair{'a : Dform; 'b : Dform} : Dform
+declare math_spread{'e : Dform; 'u : Dform; 'v : Dform; 'b : Dform} : Dform
+declare math_fst{'e : Dform} : Dform
+declare math_snd{'e : Dform} : Dform
+declare math_and{'a : Dform; 'b : Dform} : Dform
+declare math_cand{'a : Dform; 'b : Dform} : Dform
+declare math_exists{'x : Dform; 'A : Dform; 'B : Dform} : Dform
 
 (************************************************************************
  * SET TYPE
  ************************************************************************)
 
-declare math_set{'x; 'A; 'B}
-declare math_squash{'A}
+declare math_set{'x : Dform; 'A : Dform; 'B : Dform} : Dform
+declare math_squash{'A : Dform} : Dform
 
 (************************************************************************
  * DECIDABLE
  ************************************************************************)
 
-declare math_decidable{'P}
+declare math_decidable{'P : Dform} : Dform
 
 (************************************************************************
  * INTERSECTION
  ************************************************************************)
 
-declare math_isect{'x; 'A; 'B}
-declare math_top
-declare math_record{'t}
-declare math_bisect{'A; 'B}
+declare math_isect{'x : Dform; 'A : Dform; 'B : Dform} : Dform
+declare math_top : Dform
+declare math_record{'t : Dform} : Dform
+declare math_bisect{'A : Dform; 'B : Dform} : Dform
 
 (************************************************************************
  * Union
  ************************************************************************)
 
-declare math_tunion{'x; 'A; 'B}
-declare math_bunion{'A; 'B}
+declare math_tunion{'x : Dform; 'A : Dform; 'B : Dform} : Dform
+declare math_bunion{'A : Dform; 'B : Dform} : Dform
 
 (************************************************************************
  * RECURSIVE TYPES
  ************************************************************************)
 
-declare math_srec{'T; 'B}
-declare math_prec{'T; 'y; 'B; 'a}
-declare math_srecind{'t; 'a; 'b; 'c}
-declare math_precind{'t; 'a; 'b; 'c}
+declare math_srec{'T : Dform; 'B : Dform} : Dform
+declare math_prec{'T : Dform; 'y : Dform; 'B : Dform; 'a : Dform} : Dform
+declare math_srecind{'t : Dform; 'a : Dform; 'b : Dform; 'c : Dform} : Dform
+declare math_precind{'t : Dform; 'a : Dform; 'b : Dform; 'c : Dform} : Dform
 
-declare math_w{'x; 'A; 'B}
-declare math_tree{'a; 'f}
-declare math_treeind{'z; 'a; 'f; 'g; 'body}
+declare math_w{'x : Dform; 'A : Dform; 'B : Dform} : Dform
+declare math_tree{'a : Dform; 'f : Dform} : Dform
+declare math_treeind{'z : Dform; 'a : Dform; 'f : Dform; 'g : Dform; 'body : Dform} : Dform
 
-declare math_nil
-declare math_cons{'a; 'b}
-declare math_list{'l}
-declare math_listind{'e; 'base; 'h; 't; 'f; 'step}
+declare math_nil : Dform
+declare math_cons{'a : Dform; 'b : Dform} : Dform
+declare math_list{'l : Dform} : Dform
+declare math_listind{'e : Dform; 'base : Dform; 'h : Dform; 't : Dform; 'f : Dform; 'step : Dform} : Dform
 
 (************************************************************************
  * QUOTIENT TYPE
  ************************************************************************)
 
-declare math_quot{'T; 'x; 'y; 'E}
+declare math_quot{'T : Dform; 'x : Dform; 'y : Dform; 'E : Dform} : Dform
 
 (* OTHER *)
 
-declare colons{'a}
-declare semicolons{'a}
+declare colons{'a : Dform} : Dform
+declare semicolons{'a : Dform} : Dform
 
 (*
  * -*-

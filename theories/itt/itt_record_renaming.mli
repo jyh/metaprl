@@ -1,3 +1,5 @@
+extends Base_theory
+
 open Basic_tactics
 
 declare rename[a:t, b:t]{'r}

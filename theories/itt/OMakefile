@@ -5,9 +5,12 @@ OCAMLINCLUDES[] +=
    $(SUPPORT_DIRS)
    ../base
 
+MLZFILES =
+
 # Library files
 MPFILES =\
    itt_comment\
+   itt_labels\
    itt_equal\
    itt_struct\
    itt_squash\

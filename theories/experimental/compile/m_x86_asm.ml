@@ -49,12 +49,12 @@ doc <:doc<
    @end[doc]
 >>
 declare ImmediateNumber[i:n]
-declare ImmediateLabel[label:t]{'R}
-declare ImmediateCLabel[label:t]{'R}
+declare ImmediateLabel[label:s]{'R}
+declare ImmediateCLabel[label:s]{'R}
 declare Register{'v}
 declare SpillMemory{'label}
 declare SpillRegister{'v; 'label}
-declare ContextRegister[label:t]
+declare ContextRegister[label:s]
 declare MemReg{'r}
 declare MemRegOff[i:n]{'r}
 declare MemRegRegOffMul[off:n, mul:n]{'r1; 'r2}
@@ -71,16 +71,7 @@ doc <:doc<
    instruction below.
    @end[doc]
 >>
-declare CC["lt"]
-declare CC["le"]
-declare CC["z"]
-declare CC["nz"]
-declare CC["gt"]
-declare CC["ge"]
-declare CC["b"]
-declare CC["be"]
-declare CC["a"]
-declare CC["ae"]
+declare CC[cc:s]
 
 (*************************************************************************
  * Instructions.
@@ -184,7 +175,7 @@ doc <:doc<
    calling convention is respected.
    @end[doc]
 >>
-declare LabelAsm[label:t]{'R}
+declare LabelAsm[label:s]{'R}
 
 declare LabelRec{R1. 'fields['R1]; R2. 'rest['R2]}
 declare LabelDef{'label; 'code; 'rest}
@@ -204,11 +195,11 @@ doc <:doc< @docoff >>
 dform immediate_number_df : ImmediateNumber[i:n] =
    `"$" slot[i:n]
 
-dform immediate_label_df : ImmediateLabel[label:t]{'R} =
-   slot{'R} `"." slot[label:t]
+dform immediate_label_df : ImmediateLabel[label:s]{'R} =
+   slot{'R} `"." slot[label:s]
 
-dform immediate_clabel_df : ImmediateCLabel[label:t]{'R} =
-   `"$" slot{'R} `"." slot[label:t]
+dform immediate_clabel_df : ImmediateCLabel[label:s]{'R} =
+   `"$" slot{'R} `"." slot[label:s]
 
 dform register_df : Register{'v} =
    `"%" slot{'v}
@@ -219,8 +210,8 @@ dform spill_memory_df : SpillMemory{'spill} =
 dform spill_register_df : SpillRegister{'v; 'spill} =
    bf["spill["] slot{'v} bf[", "] slot{'spill} bf["]"]
 
-dform context_register_df : ContextRegister[name:t] =
-   bf["context["] slot[name:t] bf["]"]
+dform context_register_df : ContextRegister[name:s] =
+   bf["context["] slot[name:s] bf["]"]
 
 dform mem_reg_df : MemReg{'r} =
    `"(%" slot{'r} `")"
@@ -334,8 +325,8 @@ dform label_def_df : LabelDef{'label; 'insts; 'rest} =
 dform label_end_df : LabelEnd =
    `""
 
-dform label_asm_df : LabelAsm[label:t]{'R} =
-   slot{'R} `"." slot[label:t] `":"
+dform label_asm_df : LabelAsm[label:s]{'R} =
+   slot{'R} `"." slot[label:s] `":"
 
 (*
  * -*-

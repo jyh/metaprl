@@ -35,11 +35,6 @@ open Itt_w
  * SETS
  ************************************************************************)
 
-declare math_set
-declare math_isset{'s}
-declare math_collect{'x; 'T; 'a}
-declare math_set_ind{'s; 'T; 'f; 'g; 'b}
-
 dform set_df : math_set =
    i["set"]
 
@@ -84,12 +79,6 @@ dform set_ind_df : except_mode[tex] :: parens :: "prec"[prec_tree_ind] :: math_s
 (************************************************************************
  * EQUALITY
  ************************************************************************)
-
-declare math_eq{'s1; 's2}
-declare math_equal{'s1; 's2}
-declare math_funset{'z; 'f}
-declare math_funprop{'z; 'P}
-declare math_dfunprop{'x; 'A; 'B}
 
 dform eqinner_df1 : mode[tex] :: math_eq{'s1; 's2} =
    izone `"{{\\it eq}(" ezone
@@ -144,9 +133,6 @@ dform fun_prop_df : except_mode[tex] :: parens :: "prec"[prec_apply] :: math_fun
  * MEMBERSHIP
  ************************************************************************)
 
-declare math_mem{'x; 'y}
-declare math_member{'x; 'y}
-
 dform mem_df1 : mode[tex] :: math_mem{'s1; 's2} =
    izone `"{" ezone
    slot{'s1}
@@ -171,9 +157,6 @@ dform member_df : except_mode[tex] :: parens :: "prec"[prec_apply] :: math_membe
  * SEPARATION
  ************************************************************************)
 
-declare math_sep{'x; 's; 'P}
-declare math_restricted{'P}
-
 dform sep_df1 : mode[tex] :: math_sep{'x; 's; 'P} =
    izone `"{\\left\\{" ezone
    slot{'x}
@@ -196,20 +179,6 @@ dform restricted_df : except_mode[tex] :: parens :: "prec"[prec_quant] :: math_r
 (************************************************************************
  * LOGIC
  ************************************************************************)
-
-declare math_strue
-declare math_sfalse
-declare math_sor{'A; 'B}
-declare math_sand{'A; 'B}
-declare math_simplies{'A; 'B}
-declare math_snot{'A}
-declare math_siff{'A; 'B}
-declare math_sall{'x; 'A; 'B}
-declare math_sall{'x; 'A}
-declare math_sexists{'x; 'A; 'B}
-declare math_sexists{'x; 'A}
-declare math_dall{'x; 'A; 'B}
-declare math_dexists{'x; 'A; 'B}
 
 dform strue_df1 : mode[tex] :: math_strue =
    izone `"{\\it true}_s " ezone
@@ -333,8 +302,6 @@ dform exists_df3 : except_mode[tex] :: except_mode[src] :: parens :: "prec"[prec
  * EMPTY
  ************************************************************************)
 
-declare math_empty
-
 dform empty_df1 : mode[tex] :: math_empty =
    izone `"{\\{\\}}" ezone
 
@@ -344,8 +311,6 @@ dform empty_df2 : except_mode[tex] :: except_mode[src] :: math_empty =
 (************************************************************************
  * SINGLETON
  ************************************************************************)
-
-declare math_sing{'s}
 
 dform sing_df1 : mode[tex] :: math_sing{'s} =
    izone `"{\\{" ezone
@@ -359,8 +324,6 @@ dform sing_df2 : except_mode[tex] :: math_sing{'s} =
 (************************************************************************
  * UNION
  ************************************************************************)
-
-declare math_union{'s}
 
 dform union_df1 : mode[tex] :: math_union{'s} =
    izone `"{\\bigcup " ezone
@@ -384,9 +347,6 @@ dform union_df4 : except_mode[tex] :: parens :: "prec"[prec_or] :: math_union{'s
  * INTERSECTION
  ************************************************************************)
 
-declare math_isect{'s1; 's2}
-declare math_isect{'s}
-
 dform isect_df1 : mode[tex] :: math_isect{'s} =
    izone `"{\\bigcap " ezone
    slot{'s}
@@ -409,8 +369,6 @@ dform isect_df4 : except_mode[tex] :: parens :: "prec"[prec_or] :: math_isect{'s
  * PAIR
  ************************************************************************)
 
-declare math_pair{'s1; 's2}
-
 dform pair_df1 : mode[tex] :: math_pair{'s1; 's2} =
    izone `"{\\left( " ezone
    slot{'s1}
@@ -425,8 +383,6 @@ dform pair_df : except_mode[tex] :: math_pair{'s1; 's2} =
  * SUBSET
  ************************************************************************)
 
-declare math_subset{'s1; 's2}
-
 dform subset_df1 : mode[tex] :: math_subset{'s1; 's2} =
    izone `"{" ezone
    slot{'s1}
@@ -440,11 +396,6 @@ dform subset_df : except_mode[tex] :: math_subset{'s1; 's2} =
 (************************************************************************
  * INFINITY
  ************************************************************************)
-
-declare math_inf
-declare math_zero
-declare math_succ{'i}
-declare math_lt{'i; 'j}
 
 dform inf_df1 : mode[tex] :: math_inf =
    izone `"\\omega " ezone
@@ -480,8 +431,6 @@ dform lt_df2 : except_mode[tex] :: parens :: "prec"[prec_compare] :: math_lt{'i;
  * RELATION
  ************************************************************************)
 
-declare math_rel{'x; 'y; 'P; 's1; 's2}
-
 dform rel_df1 : mode[tex] :: math_rel{'x; 'y; 'P; 's1; 's2} =
    izone `"{{\\mathbb B}(" ezone
    slot{'x}
@@ -506,8 +455,6 @@ dform rel_df : except_mode[tex] :: parens :: "prec"[prec_quant] :: math_rel{'a; 
  * SUBSET COLLECTION
  ************************************************************************)
 
-declare math_power{'s1; 's2}
-
 dform power_df1 : mode[tex] :: math_power{'s1; 's2} =
    izone `"{{\\mathbb P}{" ezone
    slot{'s1}
@@ -522,8 +469,6 @@ dform power_df3 : except_mode[tex] :: math_power{'s1; 's2} =
  * ORDERED PAIR
  ************************************************************************)
 
-declare math_opair{'s1; 's2}
-
 dform opair_df1 : mode[tex] :: math_opair{'s1; 's2} =
    izone `"{\\left< " ezone
    slot{'s1}
@@ -537,11 +482,6 @@ dform opair_df : except_mode[tex] :: math_pair{'s1; 's2} =
 (************************************************************************
  * EQUIVALENCE RELATION
  ************************************************************************)
-
-declare math_equiv{'s; 'r; 'a; 'b}
-declare math_equiv{'s; 'r}
-declare math_equivfunset{'s; 'r; 'z; 'f}
-declare math_equivfunprop{'s; 'r; 'z; 'P}
 
 dform equiv_df1 : mode[tex] :: math_equiv{'s; 'r; 'a; 'b} =
    izone `"{{\\it equiv}(" ezone
@@ -599,8 +539,6 @@ dform equiv_fun_prop_df : except_mode[tex] :: parens :: "prec"[prec_apply] :: ma
  * SET BUILDER
  ************************************************************************)
 
-declare math_setbvd{'x; 's; 'a}
-
 dform set_bvd_df1 : mode[tex] :: math_setbvd{'x; 's; 'a} =
    izone `"{\\left\\{" ezone
    slot{'a} `"| "
@@ -615,8 +553,6 @@ dform set_bvd_df : parens :: except_mode[tex] :: math_setbvd{'x; 's; 'a} =
 (************************************************************************
  * INVERSE IMAGE
  ************************************************************************)
-
-declare math_invimage{'x; 's; 'a; 't}
 
 dform inv_image_df1 : mode[tex] :: math_invimage{'x; 's; 'a; 't} =
    izone `"{\\left\\{" ezone
@@ -634,12 +570,6 @@ dform inv_image_df : parens :: except_mode[tex] :: math_invimage{'x; 's; 'a; 't}
 (************************************************************************
  * GROUP
  ************************************************************************)
-
-declare math_group{'g}
-declare math_car{'g}
-declare math_op{'g; 'a; 'b}
-declare math_id{'g}
-declare math_inv{'g; 'a}
 
 dform group_df1 : mode[tex] :: math_group{'g} =
    izone `"{{\\it group}(" ezone
@@ -691,8 +621,6 @@ dform inv_df : parens :: except_mode[tex] :: math_inv{'g; 'a} =
  * GROUP BUILDER
  ************************************************************************)
 
-declare math_groupbvd{'h; 'g; 's}
-
 dform group_bvd_df1 : mode[tex] :: math_groupbvd{'h; 'g; 's} =
    izone `"{{\\it group\\_bvd}(" ezone
    slot{'h}
@@ -709,8 +637,6 @@ dform group_bvd_df : parens :: except_mode[tex] :: math_groupbvd{'h; 'g; 's} =
  * ABELIAN GROUP
  ************************************************************************)
 
-declare math_abel{'g}
-
 dform abel_df1 : mode[tex] :: math_abel{'g} =
    izone `"{{\\it abel}(" ezone
    slot{'g}
@@ -722,8 +648,6 @@ dform abel_df : except_mode[tex] :: math_abel{'g} =
 (************************************************************************
  * SUBGROUP
  ************************************************************************)
-
-declare math_subgroup{'s; 'g}
 
 dform subgroup_df1 : mode[tex] :: math_subgroup{'s; 'g} =
    izone `"{{\\it subgroup}(" ezone
@@ -738,8 +662,6 @@ dform subgroup_df : except_mode[tex] :: math_subgroup{'s; 'g} =
 (************************************************************************
  * GROUP POWER
  ************************************************************************)
-
-declare math_power{'g; 'z; 'n}
 
 dform power_df1 : mode[tex] :: math_power{'g; 'z; 'n} =
    izone `"{{\\it power}(" ezone
@@ -757,8 +679,6 @@ dform power_df : parens :: except_mode[tex] :: math_power{'g; 'z; 'n} =
  * CYCLIC SUBGROUP
  ************************************************************************)
 
-declare math_cycsubg{'s; 'g; 'a}
-
 dform cycsubg_df1 : mode[tex] :: math_cycsubg{'s; 'g; 'a} =
    izone `"{{\\it cyclic\\_subgroup}(" ezone
    slot{'s}
@@ -774,9 +694,6 @@ dform cycsubg_df : except_mode[tex] :: math_cycsubg{'s; 'g; 'a} =
 (************************************************************************
  * CYCLIC GROUP
  ************************************************************************)
-
-declare math_cycgroup{'g; 'a}
-declare math_cycg{'g}
 
 dform cycgroup_df1 : mode[tex] :: math_cycgroup{'g; 'a} =
    izone `"{{\\it cyclic\\_group}(" ezone
@@ -799,9 +716,6 @@ dform cycg_df : except_mode[tex] :: math_cycg{'g} =
 (************************************************************************
  * COSET
  ************************************************************************)
-
-declare math_lcoset{'h; 'g; 'a}
-declare math_rcoset{'h; 'g; 'a}
 
 dform lcoset_df1 : mode[tex] :: math_lcoset{'h; 'g; 'a} =
    izone `"{{\\it left\\_coset}(" ezone
@@ -831,8 +745,6 @@ dform rcoset_df : parens :: except_mode[tex] :: math_rcoset{'h; 'g; 'a} =
  * NORMAL SUBGROUP
  ************************************************************************)
 
-declare math_normalsubg{'s; 'g}
-
 dform normalsubg_df1 : mode[tex] :: math_normalsubg{'s; 'g} =
    izone `"{{\\it normal\\_subgroup}(" ezone
    slot{'s}
@@ -846,8 +758,6 @@ dform normalsubg_df : except_mode[tex] :: math_normalsubg{'s; 'g} =
 (************************************************************************
  * HOMOMORPHISM
  ************************************************************************)
-
-declare math_hom{'x; 'g1; 'g2; 'f}
 
 dform hom_df1 : mode[tex] :: math_hom{'x; 'g1; 'g2; 'f} =
    izone `"{{\\it hom}(" ezone
@@ -864,8 +774,6 @@ dform hom_df : parens :: except_mode[tex] :: math_hom{'x; 'g1; 'g2; 'f} =
 (************************************************************************
  * KERNEL
  ************************************************************************)
-
-declare math_ker{'x; 'h; 'g1; 'g2; 'f}
 
 dform ker_df1 : mode[tex] :: math_ker{'x; 'h; 'g1; 'g2; 'f} =
    izone `"{{\\it ker}(" ezone
@@ -887,8 +795,6 @@ dform ker_df : parens :: except_mode[tex] :: math_ker{'x; 'h; 'g1; 'g2; 'f} =
  * ISOMORPHISM
  ************************************************************************)
 
-declare math_iso{'x; 'g1; 'g2; 'f}
-
 dform iso_df1 : mode[tex] :: math_iso{'x; 'g1; 'g2; 'f} =
    izone `"{{\\it iso}(" ezone
    slot{'f}
@@ -904,12 +810,6 @@ dform iso_df : parens :: except_mode[tex] :: math_iso{'x; 'g1; 'g2; 'f} =
 (************************************************************************
  * KLEIN 4-GROUP
  ************************************************************************)
-
-declare math_klein4
-declare math_k0
-declare math_k1
-declare math_k2
-declare math_k3
 
 dform klein4_df1 : mode[tex] :: math_klein4 =
    izone `"{{\\it klein4}}" ezone

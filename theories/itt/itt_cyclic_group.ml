@@ -41,6 +41,7 @@ extends Itt_int_base
 extends Itt_int_ext
 extends Itt_int_arith
 extends Itt_subset
+extends Itt_labels
 doc docoff
 
 open Lm_debug

@@ -50,6 +50,7 @@ extends Czf_itt_dall
 extends Czf_itt_dexists
 doc <:doc< @docoff >>
 
+open Term_sig
 open Refiner.Refiner.TermType
 open Refiner.Refiner.Term
 open Refiner.Refiner.RefineError

@@ -37,6 +37,7 @@ doc <:doc<
 
 doc <:doc< @doc{@parents} >>
 extends Itt_unitring
+extends Itt_labels
 doc docoff
 
 open Lm_debug

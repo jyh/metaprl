@@ -42,7 +42,7 @@ extends Base_theory
  * Sequent tags.
  *)
 
-declare sequent_arg
+declare sequent [sequent_arg] { Term : Term >- Term } : Judgment
 declare default_extract
 
 (*

@@ -1,6 +1,6 @@
 #PRL version 1.0.8 ASCII term
 NPerv	Perv	Perv NIL
-NPerv!cons	cons	cons Perv
+NPerv!cons	cons	xcons Perv
 O	o	cons
 NSummary	Summary	Summary NIL
 NSummary!location	location	location Summary
@@ -9,7 +9,7 @@ P	p1	Number 1464
 O	o1	location p p1
 NSummary!parent	parent	parent Summary
 O	o2	parent
-NPerv!nil	nil3	nil Perv
+NPerv!nil	nil3	xnil Perv
 O	o4	nil3
 T	t4	o4
 B	b4	t4
@@ -3569,7 +3569,7 @@ T	t1431	o453 b1430
 B	b1431	t1431
 T	t1432	o424 b1431
 B	b1432	t1432
-VT	T	T\\ \\ 
+VT	T	T\\ \\
 B	b1433	T
 T	t1433	o2589 b1433
 B	b1448	t1433
@@ -3603,8 +3603,8 @@ T	t1465	o453 b1465
 B	b1466	t1465
 T	t1466	o484 b1466
 B	b1467	t1466
-C	h1467	H\\ \\ 
-VT	T1467	T\\ H\\ 
+C	h1467	H\\ \\
+VT	T1467	T\\ H\\
 B	b1468	T1467
 T	t1468	o682 b2619 b1468 b1468
 S	s1468	tbrarg\\ h1467\\ t1468
@@ -3664,9 +3664,9 @@ T	t1497	o2604 b4 b1489 b1497 b661
 B	b1498	t1497
 T	t1498	o524 b1498
 B	b1499	t1498
-VC	C	C\\ \\ 
+VC	C	C\\ \\
 B	b1500	C
-Vx	x	x\\ \\ 
+Vx	x	x\\ \\
 B	b1502	x
 T	t1502	o2919 b1500 b1502
 B	b1503	t1502
@@ -3704,14 +3704,14 @@ T	t1517	o1351 b1468
 B	b1518	t1517
 T	t1518	o b1518 b4
 B	b1519	t1518
-Vx	x1519	x\\ H\\ 
+Vx	x1519	x\\ H\\
 B	b1520	x1519
 T	t1520	o682 b1468 b1520 b1520
 S	s1520	tbrarg\\ h1467\\ t1520
 B	b1521	s1520
 T	t1521	o663 b1521
 B	b1522	t1521
-VC	C1522	C\\ H\\ 
+VC	C1522	C\\ H\\
 B	b1526	C1522
 T	t1526	o682 b1471 b1526 b1526
 S	s1526	tbrarg\\ h1467\\ t1526
@@ -3891,9 +3891,9 @@ P	p2095	Number 3344
 P	p2096	Number 3457
 O	o2096	location p2095 p2096
 O	o2097	definition p3109
-VC_1	C_1	C_1\\ \\ 
+VC_1	C_1	C_1\\ \\
 B	b1583	C_1
-VC_2	C_2	C_2\\ \\ 
+VC_2	C_2	C_2\\ \\
 B	b1584	C_2
 T	t1584	o3102 b1433 b1583 b1584
 B	b1585	t1584
@@ -3917,14 +3917,14 @@ S	s1593	tbrarg\\ h1467\\ t1593
 B	b1594	s1593
 T	t1594	o663 b1594
 B	b1595	t1594
-VC_1	C_11595	C_1\\ H\\ 
+VC_1	C_11595	C_1\\ H\\
 B	b1596	C_11595
 T	t1596	o682 b1471 b1596 b1596
 S	s1596	tbrarg\\ h1467\\ t1596
 B	b1601	s1596
 T	t1601	o663 b1601
 B	b1602	t1601
-VC_2	C_21602	C_2\\ H\\ 
+VC_2	C_21602	C_2\\ H\\
 B	b1603	C_21602
 T	t1603	o682 b1471 b1603 b1603
 S	s1603	tbrarg\\ h1467\\ t1603
@@ -4096,7 +4096,7 @@ B	b1660	t1659
 P	p2189	Number 4150
 P	p2190	Number 4466
 O	o2190	location p2189 p2190
-VB	B	B\\ H\\ 
+VB	B	B\\ H\\
 B	b1661	B
 T	t1661	o1351 b1661
 B	b1662	t1661
@@ -4104,7 +4104,7 @@ T	t1662	o b1662 b4
 B	b1665	t1662
 T	t1665	o b3016 b1665
 B	b1666	t1665
-VA	A	A\\ H\\ 
+VA	A	A\\ H\\
 B	b1671	A
 T	t1671	o682 b1471 b1671 b1671
 S	s1671	tbrarg\\ h1467\\ t1671
@@ -5457,7 +5457,7 @@ B	b2524	t2523
 P	p2693	Number 6917
 P	p2694	Number 7055
 O	o2694	location p2693 p2694
-Vy	y	y\\ H\\ 
+Vy	y	y\\ H\\
 B	b2526	y
 T	t2526	o682 b1468 b1520 b2526
 S	s2526	tbrarg\\ h1467\\ t2526
@@ -5634,7 +5634,7 @@ P	p2741	Number 7432
 P	p2742	Number 7526
 O	o2742	location p2741 p2742
 O	o2743	definition p3566
-VX	X	X\\ \\ 
+VX	X	X\\ \\
 B	b2688	X
 VY	Y	Y\\ \\ t1358
 B	b2694	Y x
@@ -5654,7 +5654,7 @@ B	b2765	t2761
 P	p2746	Number 7528
 P	p2747	Number 7754
 O	o2747	location p2746 p2747
-VX	X2765	X\\ H\\ 
+VX	X2765	X\\ H\\
 B	b2766	X2765
 T	t2766	o682 b2595 b2766 b2766
 S	s2766	tbrarg\\ h1467\\ t2766
@@ -5971,7 +5971,7 @@ B	b2855	t2854
 P	p2855	Number 7957
 P	p2856	Number 8241
 O	o2856	location p2855 p2856
-Vz	z	z\\ H\\ 
+Vz	z	z\\ H\\
 B	b3009	z
 T	t3009	o1351 b3009
 B	b3015	t3009
@@ -6102,7 +6102,7 @@ P	p2875	Number 8243
 P	p2876	Number 8690
 O	o2876	location p2875 p2876
 H	h3237	u t3102
-C	h3238	J\\ H\\ 
+C	h3238	J\\ H\\
 T	t3239	o667 b2766
 S	s3239	tbrarg\\ h1467 h3237 h3238\\ t3239
 B	b3239	s3239
@@ -6117,7 +6117,7 @@ B	b3247	t3245
 T	t3247	o2498 b3247
 B	b3250	t3247
 H	h3250	v t3067
-VZ	Z3250	Z\\ J H\\ 
+VZ	Z3250	Z\\ J H\\
 B	b3258	Z3250
 T	t3258	o672 b3258
 S	s3258	tbrarg\\ h1467 h3237 h2768 h3250 h3238\\ t3258
@@ -6395,7 +6395,7 @@ P	p2936	Number 9308
 O	o2939	location p2935 p2936
 P	p4706	String member_col_filter
 O	o4706	rule p4706
-Vt	t3451	t\\ H\\ 
+Vt	t3451	t\\ H\\
 B	b3453	t3451
 T	t3453	o2919 b1526 b3453
 S	s3454	tbrarg\\ h1467\\ t3453
@@ -6489,7 +6489,7 @@ B	b3575	t3574
 P	p3064	Number 9310
 P	p3065	Number 9696
 O	o3065	location p3064 p3065
-VT	T3575	T\\ J H\\ 
+VT	T3575	T\\ J H\\
 B	b3576	T3575
 T	t3576	o1351 b3576
 B	b3577	t3576
@@ -6708,7 +6708,7 @@ P	p3191	Number 9717
 P	p3192	Number 9810
 O	o3192	location p3191 p3192
 O	o3193	definition p5323
-VS	S	S\\ \\ 
+VS	S	S\\ \\
 B	b3716	S
 VC	C3716	C\\ \\ t2216
 B	b3717	C3716 s
@@ -6728,7 +6728,7 @@ B	b3724	t3723
 P	p3195	Number 9812
 P	p3196	Number 10037
 O	o3196	location p3195 p3196
-VS	S3724	S\\ H\\ 
+VS	S3724	S\\ H\\
 B	b3726	S3724
 T	t3726	o682 b2595 b3726 b3726
 S	s3726	tbrarg\\ h1467\\ t3726
@@ -6919,7 +6919,7 @@ B	b3846	t3845
 P	p3278	Number 10247
 P	p3279	Number 10709
 O	o3279	location p3278 p3279
-Vs	s3846	s\\ H\\ 
+Vs	s3846	s\\ H\\
 B	b3847	s3846
 T	t3847	o1351 b3847
 B	b3848	t3847
@@ -8334,9 +8334,9 @@ B	b4534	t4534
 P	p4094	Number 17552
 P	p4095	Number 17654
 O	o4095	location p4094 p4095
-Vc_1	c_1	c_1\\ \\ 
+Vc_1	c_1	c_1\\ \\
 B	b4535	c_1
-Vc_2	c_2	c_2\\ \\ 
+Vc_2	c_2	c_2\\ \\
 B	b4536	c_2
 T	t4536	o3102 b1433 b4535 b4536
 B	b4537	t4536
@@ -8466,7 +8466,7 @@ T	t6117	o b6063 b6117
 B	b6118	t6117
 P	p6130	String col_filter_df
 O	o6130	dform p6130
-VP	P4581	P\\ \\ 
+VP	P4581	P\\ \\
 B	b4582	P4581 x
 T	t4582	o4609 b1500 b4582
 B	b4583	t4582
@@ -8511,7 +8511,7 @@ NNuprl_font!cap	cap	cap Nuprl_font
 O	o6146	cap
 T	t6146	o6146
 B	b6147	t6146
-Vs	s4598	s\\ \\ 
+Vs	s4598	s\\ \\
 B	b4599	s4598
 T	t4599	o6005 b4599
 B	b4600	t4599
@@ -8561,9 +8561,9 @@ T	t6167	o b6166 b6075
 B	b6167	t6167
 T	t1722	o b1676 b6167
 B	b1722	t1722
-Va	a	a\\ \\ 
+Va	a	a\\ \\
 B	b4609	a
-Vb	b4612	b\\ \\ 
+Vb	b4612	b\\ \\
 B	b4613	b4612
 T	t4613	o6010 b4609 b4613
 B	b4614	t4613

@@ -204,7 +204,7 @@ declare math_LetRecDef{'d}
 declare math_LetRecBody{'e}
 
 declare math_Fields{'fields}
-declare math_Label[tag:t]
+declare math_Label[tag:s]
 
 declare math_FunDef{'label; 'exp; 'rest}
 declare math_FunDef{'label; 'exp}
@@ -292,7 +292,7 @@ In this form, the IR is partitioned into two main parts: ``atoms''
 define values like numbers, arithmetic, and variables; and
 ``expressions'' define all other computation.  The language includes
 arithmetic, conditionals, tuples, functions, and function definitions.
-A fragment of the language is shown in Figure @reffigure[ir]. 
+A fragment of the language is shown in Figure @reffigure[ir].
 
 @docoff
 @end[doc]

@@ -38,11 +38,13 @@ doc <:doc<
 >>
 
 doc <:doc< @doc{@parents} >>
+extends Itt_atom
 extends Itt_record
 extends Itt_set
 extends Itt_subset
 extends Itt_fun
 extends Itt_disect
+extends Itt_labels
 doc docoff
 
 open Lm_debug
@@ -524,19 +526,21 @@ dform subStructure_df2 : mode[prl] :: parens :: "prec"[prec_subtype] :: subStruc
  * TYPE INFERENCE                                                       *
  ************************************************************************)
 
+let car_opname = dest_token_param << token["car":t] >>
+
 let inf_id _ _ _ eqs opt_eqs defs t =
    let t, _ = dest_field t in
-   let car = mk_field_term t "car" in
+   let car = mk_field_term t car_opname in
       eqs, opt_eqs, defs, car
 
 let inf_inv _ _ _ eqs opt_eqs defs t =
    let t, _ = dest_field t in
-   let car = mk_field_term t "car" in
+   let car = mk_field_term t car_opname in
       eqs, opt_eqs, defs, mk_fun_term car car
 
 let inf_mul _ _ _ eqs opt_eqs defs t =
    let t, _ = dest_field t in
-   let car = mk_field_term t "car" in
+   let car = mk_field_term t car_opname in
       eqs, opt_eqs, defs, mk_fun_term car (mk_fun_term car car)
 
 let resource typeinf += [

@@ -201,7 +201,7 @@ doc <:doc<
    @end[doc]
 >>
 declare Fields{'fields}
-declare Label[tag:t]
+declare Label[tag:s]
 declare FunDef{'label; 'exp; 'rest}
 declare EndDef
 
@@ -373,11 +373,9 @@ dform reserve_nil_df : parens :: "prec"[prec_comma] :: ReserveNil =
 
 doc <:doc< Sequent tag for the M language. >>
 
-declare sequent_arg
+declare sequent [sequent_arg] { Term : Term >- Term } : Judgment
 
 doc docoff
-
-dform m_df : sequent_arg = subm
 
 declare default_extract
 
@@ -459,8 +457,8 @@ dform fun_def_df : parens :: "prec"[prec_let] :: FunDef{'label; 'e; 'rest} =
 dform end_def_df : EndDef =
    `""
 
-dform label_df : Label[s:t] =
-   `"\"" slot[s:t] `"\""
+dform label_df : Label[s:s] =
+   `"\"" slot[s:s] `"\""
 
 dform let_fun_def : parens :: "prec"[prec_let] :: LetFun{'R; 'label; f. 'e} =
    szone pushm[3] xlet bf[" fun "] slot{'f} `" = " slot{'R} `"." slot{'label} `" " xin hspace slot["lt"]{'e} popm ezone

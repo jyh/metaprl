@@ -294,7 +294,9 @@ dform subset_df : except_mode[src] :: \subset{'l1; 'l2; 'T} =
    `"(" slot{'l1} " " Nuprl_font!subseteq `"[" slot{'T} `"] " slot{'l2} `")"
 
 dform sameset_df : except_mode[src] :: sameset{'l1; 'l2; 'T} =
-   (keyword["sameset"] 'l1 'l2 'T)
+   pushm[3] szone
+   keyword["sameset"] `"{" 'l1 `";" hspace 'l2 `";" hspace 'T `"}"
+   ezone popm
 
 dform append_df : except_mode[src] :: parens :: "prec"[prec_append] :: append{'l1; 'l2} =
    slot["le"]{'l1} `" @" space slot{'l2}

@@ -1,6 +1,6 @@
 #PRL version 1.0.8 ASCII term
 NPerv	Perv	Perv NIL
-NPerv!cons	cons	cons Perv
+NPerv!cons	cons	xcons Perv
 O	o	cons
 NSummary	Summary	Summary NIL
 NSummary!location	location	location Summary
@@ -13,7 +13,7 @@ P	p4	String czf_itt_set
 O	o8	parent p4
 T	t183	o8
 B	b1291	t183
-NPerv!nil	nil3	nil Perv
+NPerv!nil	nil3	xnil Perv
 O	o4	nil3
 T	t4	o4
 B	b4	t4
@@ -1923,7 +1923,7 @@ B	b3101	t3101
 P	p3102	Number 721
 P	p3103	Number 737
 O	o3103	location p3102 p3103
-Vx	x	x\\ \\ 
+Vx	x	x\\ \\
 B	b	x
 T	t	o613 b
 B	b2	t
@@ -1934,9 +1934,9 @@ B	b5	t3
 P	p3104	Number 738
 P	p3106	Number 758
 O	o3106	location p3104 p3106
-Va	a	a\\ \\ 
+Va	a	a\\ \\
 B	b6	a
-Vb	b7	b\\ \\ 
+Vb	b7	b\\ \\
 B	b8	b7
 T	t8	o620 b6 b8
 B	b9	t8
@@ -3227,7 +3227,7 @@ NBase_rewrite	Base_rw	Base_rewrite NIL
 NBase_rewrite!sequent_arg	brwsqarg	sequent_arg Base_rw
 O	obrarg	brwsqarg
 T	tbrarg	obrarg
-C	h173	H\\ \\ 
+C	h173	H\\ \\
 S	s173	tbrarg\\ h173\\ t1281
 B	b174	s173
 T	t174	o1278 b174
@@ -3362,7 +3362,7 @@ O	o1343	meta_labeled p1285
 NCzf_itt_member	Czf_itt_member	Czf_itt_member NIL
 NCzf_itt_member!mem	mem	mem Czf_itt_member
 O	o1344	mem
-Vy	y	y\\ H\\ 
+Vy	y	y\\ H\\
 B	b244	y
 T	t244	o1344 b244 b598
 H	h244	x t244
@@ -3600,7 +3600,7 @@ P	p4403	Number 7461
 O	o4404	location p4402 p4403
 P	p1423	String sprop_type
 O	o1423	rule p1423
-Vs	s366	s\\ H\\ 
+Vs	s366	s\\ H\\
 B	b367	s366
 T	t367	o1280 b367
 S	s367	tbrarg\\ h173\\ t367
@@ -4916,7 +4916,7 @@ P	p4712	Number 9301
 O	o4712	location p4711 p4712
 P	p2272	String snot_isset
 O	o2272	rule p2272
-Vx	x1214	x\\ H\\ 
+Vx	x1214	x\\ H\\
 B	b1223	x1214
 T	t1223	o1280 b1223
 S	s1223	tbrarg\\ h173\\ t1223
@@ -6269,7 +6269,7 @@ T	t5180	o1285 b5047 b5180
 B	b5181	t5180
 P	p3043	String "setSubstT << equal{'s2; 's1} >> 0 thenT autoT"
 O	o3043	ext_rule p3043
-Vy	y5181	y\\ \\ 
+Vy	y5181	y\\ \\
 B	b5183	y5181
 T	t5183	o b5183 b4
 B	b5190	t5183
@@ -6637,7 +6637,7 @@ P	p4824	Number 10082
 O	o4824	location p4823 p4824
 P	p3352	String boolset_contradiction
 O	o3352	rule p3352
-Va	a6242	a\\ H\\ 
+Va	a6242	a\\ H\\
 B	b6243	a6242
 T	t6243	o633 b6243
 H	h6243	x t6243
@@ -6645,7 +6645,7 @@ T	t6244	o613 b6243
 B	b6244	t6244
 T	t6245	o633 b6244
 H	h6245	y t6245
-C	h6246	J\\ H\\ 
+C	h6246	J\\ H\\
 T	t6246	o1280 b6243
 S	s6246	tbrarg\\ h173 h6243 h6245 h6246\\ t6246
 B	b6246	s6246
@@ -6653,7 +6653,7 @@ T	t6247	o1278 b6246
 B	b6247	t6247
 T	t6248	o1664 b6247
 B	b6248	t6248
-VC	C6248	C\\ J H\\ 
+VC	C6248	C\\ J H\\
 S	s6248	tbrarg\\ h173 h6243 h6245 h6246\\ C6248
 B	b6249	s6248
 T	t6249	o1278 b6249
@@ -7415,7 +7415,7 @@ S	s7836	tbrarg\\ h173\\ t6246
 B	b7837	s7836
 T	t7837	o1278 b7837
 B	b7838	t7837
-Vb	b7839	b\\ H\\ 
+Vb	b7839	b\\ H\\
 B	b7840	b7839
 T	t7840	o1280 b7840
 S	s7840	tbrarg\\ h173\\ t7840
@@ -8800,7 +8800,7 @@ P	p5021	Number 12358
 O	o5021	location p5020 p5021
 P	p4895	String sor_intro_left
 O	o4895	rule p4895
-Vs1	s19559	s1\\ H\\ 
+Vs1	s19559	s1\\ H\\
 B	b9560	s19559
 T	t9560	o1280 b9560
 S	s9560	tbrarg\\ h173\\ t9560
@@ -8809,7 +8809,7 @@ T	t9561	o1278 b9561
 B	b9562	t9561
 T	t9562	o1664 b9562
 B	b9563	t9562
-Vs2	s29563	s2\\ H\\ 
+Vs2	s29563	s2\\ H\\
 B	b9564	s29563
 T	t9564	o1280 b9564
 S	s9564	tbrarg\\ h173\\ t9564
@@ -16408,7 +16408,7 @@ P	p7010	Number 29380
 O	o7010	location p7009 p7010
 P	p9398	String sxor_hyp_assoc1
 O	o9398	rule p9398
-Vc	c	c\\ H\\ 
+Vc	c	c\\ H\\
 B	b13475	c
 T	t13475	o658 b7840 b13475
 B	b13476	t13475
@@ -16446,7 +16446,7 @@ T	t13659	o658 b13102 b13475
 B	b13660	t13659
 T	t13666	o633 b13660
 H	h13666	u t13666
-VT	T13666	T\\ J H\\ 
+VT	T13666	T\\ J H\\
 S	s13666	tbrarg\\ h173 h13477 h6246 h13666\\ T13666
 B	b13667	s13666
 T	t13667	o1278 b13667

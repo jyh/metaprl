@@ -5,8 +5,6 @@ open Basic_tactics
 (* MetaPRL doesn't allow to declare a variable twice  in one Context
 so in rules w-s, ... we skip such things as "x not in H" *)
 
-declare sequent_arg{'T}
-
 declare le[i:l,j:l]  (* i is less or equal to j *)
 
 (*
@@ -42,12 +40,15 @@ declare let_in{'t;x.'u['x]} (* declaration of the let-in expressions -
 *)
 declare apply{'t;'u} (* declaration of "term 't applied to term 'u" *)
 declare subst{'u;'x;'t} (* declaration of substitution of a term 't to all
-                            free occurrences of a variable 'x in a term 'u *)
+                         free occurrences of a variable 'x in a term 'u *)
 
-let sequent_arg_term = << sequent_arg{'t} >>
-let sequent_arg_opname = opname_of_term sequent_arg_term
-let is_sequent_arg_term = is_dep0_term sequent_arg_opname
-let dest_sequent_arg = dest_dep0_term sequent_arg_opname
+(* Sequent judgments *)
+declare sequent [cic] { Term -> Term >- Term } : Term
+
+(* Terms *)
+declare sequent [sequent_arg{'a}] { Term -> Term >- Term } : Term
+
+let sequent_arg_opname = opname_of_term << sequent_arg{'a} >>
 let mk_sequent_arg_term = mk_dep0_term sequent_arg_opname
 
 let member_term = << 'a in 'c >>
@@ -113,7 +114,7 @@ dform fun_df2 : parens :: "prec"[prec_fun] :: except_mode[tex] :: math_fun{'x; '
 dform it_df1 : except_mode[src] :: it = cdot
 dform it_df2 : mode[src] :: it = `"it"
 
-declare declaration{'decl;'term} (* Used only for display forms, such as let *)
+declare declaration{'decl : Dform; 'term : Dform} : Dform
 
 dform declaration_df : declaration{'decl;'a}
    = 'decl `" := " slot{'a}

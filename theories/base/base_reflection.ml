@@ -39,6 +39,7 @@ doc <:doc<
    @parents
    @end[doc]
 >>
+extends Perv
 extends Shell_theory
 extends Top_conversionals
 doc docoff
@@ -59,11 +60,75 @@ open Refiner.Refiner.RefineError
 open Dform
 open Lm_rformat
 
-declare bterm
-declare sequent_arg{'t}
+(************************************************************************
+ * List utilities.
+ *)
+
+(*
+ * Lists.
+ *)
+let rnil_term = << rnil >>
+let rnil_opname = opname_of_term rnil_term
+let is_rnil_term t =
+   t = rnil_term
+
+let rcons_term = << rcons{'a; 'b} >>
+let rcons_opname = opname_of_term rcons_term
+
+let is_rcons_term = is_dep0_dep0_term rcons_opname
+let mk_rcons_term = mk_dep0_dep0_term rcons_opname
+let dest_rcons = dest_dep0_dep0_term rcons_opname
+
+let rec is_rlist_term t =
+   match dest_term t with
+      { term_op = op; term_terms = [bterm1; bterm2] } ->
+         begin
+            match dest_bterm bterm1, dest_bterm bterm2, dest_op op  with
+               { bvars = []; bterm = _ }, { bvars = []; bterm = b }, { op_name = opname; op_params = [] } ->
+                  Opname.eq opname rcons_opname && is_rlist_term b
+             | _ ->
+                  false
+         end
+    | { term_op = op; term_terms = [] } ->
+         let op = dest_op op in
+            Opname.eq op.op_name rnil_opname && op.op_params = []
+    | _ ->
+         false
+
+let dest_rlist t =
+   let rec aux trm =
+      match dest_term trm with
+         { term_op = op; term_terms = [bterm1; bterm2] }
+            when let op = dest_op op in Opname.eq op.op_name rcons_opname && op.op_params = [] ->
+            begin
+               match (dest_bterm bterm1, dest_bterm bterm2) with
+                  ({ bvars = []; bterm = a },
+                   { bvars = []; bterm = b }) -> a::(aux b)
+                | _ -> raise (RefineError ("dest_rlist", TermMatchError (t, "not a list")))
+            end
+       | { term_op = op; term_terms = [] }
+            when let op = dest_op op in Opname.eq op.op_name rnil_opname && op.op_params = [] ->
+            []
+       | _ ->
+            raise (RefineError ("dest_rlist", TermMatchError (t, "not a list")))
+   in
+      aux t
+
+let rcons_op = mk_op rcons_opname []
+
+let rec mk_rlist_term = function
+   h::t ->
+      mk_term rcons_op [mk_simple_bterm h; mk_simple_bterm (mk_rlist_term t)]
+ | [] ->
+      rnil_term
+
+(************************************************************************
+ * Reflection terms.
+ *)
+declare sequent [bterm] { Term : Term >- Term } : Term
 declare term
 
-let bterm_arg = <<sequent_arg{bterm}>>
+let bterm_arg = <<bterm>>
 
 let hyp_of_var v =
    Hypothesis(v, <<term>>)
@@ -162,7 +227,7 @@ let resource reduce +=
 declare subterms{'bt}
 
 prim_rw reduce_subterms1 'H :
-   subterms{ bterm{| <H>; x: term; <J> >- 'x |} } <--> Perv!nil
+   subterms{ bterm{| <H>; x: term; <J> >- 'x |} } <--> rnil
 
 ml_rw reduce_subterms2 {| reduce |} : ('goal :  subterms{ bterm{| <H> >- 't |} }) =
    let bt = one_subterm goal in
@@ -171,7 +236,8 @@ ml_rw reduce_subterms2 {| reduce |} : ('goal :  subterms{ bterm{| <H> >- 't |} }
    let wrap s =
       let bt = dest_bterm s in
       	make_bterm_sequent (hyps @ (List.map hyp_of_var bt.bvars)) bt.bterm
-   in mk_xlist_term (List.map wrap t'.term_terms)
+   in
+      mk_rlist_term (List.map wrap t'.term_terms)
 
 let reduce_subterms =
    termC (fun goal ->
@@ -203,7 +269,7 @@ let resource reduce +=
 declare make_bterm{'bt; 'bt1}
 
 prim_rw reduce_make_bterm1 'H :
-   make_bterm{ bterm{| <H>; x: term; <J> >- 'x |}; Perv!nil } <--> bterm{| <H>; x: term; <J> >- 'x |}
+   make_bterm{ bterm{| <H>; x: term; <J> >- 'x |}; rnil } <--> bterm{| <H>; x: term; <J> >- 'x |}
 
 let rec make_bterm_aux lista listb fvars hvar lenh =
    match lista, listb with
@@ -222,7 +288,7 @@ ml_rw reduce_make_bterm2 : ('goal :  make_bterm{ 'bt; 'bt1 }) =
    let fvars = free_vars_set bt1 in
    let hyps1, t = dest_bterm_sequent_and_rename bt fvars in
    let t' = dest_term (unquote_term t) in
-   let bt1' = dest_xlist bt1 in
+   let bt1' = dest_rlist bt1 in
       if (List.length t'.term_terms = (List.length bt1')) then
                let lenJr_list = List.map (fun tmp -> List.length (dest_bterm tmp).bvars) t'.term_terms in
                let lenh = List.length hyps1 in
@@ -350,7 +416,7 @@ doc docoff
 dform term_df : except_mode[src] :: term =
    `"_"
 
-declare df_bconts{'conts}
+declare df_bconts{'conts : Dform} : Dform
 
 let rec fmt_term_lst format_term buf = function
    [] ->
@@ -377,7 +443,7 @@ let make_cont v = <:con< df_context_var[$v$:v] >>
 
 let format_bconts format_term buf v = function
    [v'] when Lm_symbol.eq v v' -> ()
- | conts -> format_term buf NOParens <:con< df_bconts{$mk_xlist_term (List.map make_cont conts)$} >>
+ | conts -> format_term buf NOParens <:con< df_bconts{$mk_rlist_term (List.map make_cont conts)$} >>
 
 let format_context format_term buf v conts values =
    format_term buf NOParens <:con< df_context_var[$v$:v] >>;
@@ -434,7 +500,6 @@ ml_dform bterm_prl_df : mode["prl"] :: sequent[bterm]{ <H> >- 'concl } format_te
 ml_dform bterm_prl_df : mode["prl"] :: sequent[bterm]{ <H> >- } format_term buf =
    format_bterm_prl format_term buf
 
-
 let mk_tslot t = <:con< slot{$t$} >>
 
 let format_bterm_html format_term buf =
@@ -484,8 +549,6 @@ ml_dform bterm_html_df : mode["html"] :: sequent[bterm]{ <H> >- 'concl } format_
 
 ml_dform bterm_html_df : mode["html"] :: sequent[bterm]{ <H> >- } format_term buf =
    format_bterm_html format_term buf
-
-
 
 let format_bterm_tex format_term buf =
    let rec format_hyp hyps i len =

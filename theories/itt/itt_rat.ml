@@ -52,6 +52,7 @@ extends Itt_nequal
 extends Itt_order
 extends Itt_int_arith
 extends Itt_field2
+extends Itt_labels
 doc <:doc< @docoff >>
 
 open Lm_debug
@@ -65,6 +66,12 @@ open Itt_squash
 open Itt_int_base
 open Itt_int_ext
 
+(* For display *)
+declare cdot
+
+dform cdot_df : cdot =
+   Nuprl_font!cdot
+
 (********************************************
  *	THIS PART SHOULD GO TO A SEPARATE MODULE *
  ********************************************)
@@ -73,6 +80,7 @@ define unfold_abs : abs{'a} <-->
 
 define unfold_let_in {| reduce |} : let_in{'e1; v.'e2['v]} <--> 'e2['e1]
 
+(* XXX: BUG: gcd should be _defined_ using the fix-point operator, instead of being postulated *)
 declare gcd{'a; 'b}
 
 prim_rw unfold_gcd : gcd{'a; 'b} <-->
@@ -166,12 +174,6 @@ define unfold_sub_rat : sub_rat{'x; 'y} <-->
 
 (*******************************)
 (* CHECK !!!                   *)
-declare lt_bool_rat{'a;'b}
-declare gt_bool_rat{'a;'b}
-declare le_bool_rat{'a;'b}
-declare ge_bool_rat{'a;'b}
-declare beq_rat{'a;'b}
-
 define unfold_lt_bool_rat : lt_bool_rat{'a;'b} <-->
 	spread{'a; a1,a2.spread{'b; b1,b2.lt_bool{('a1 *@ 'b2);('a2 *@ 'b1)}}}
 
@@ -182,6 +184,8 @@ define unfold_ge_bool_rat : ge_bool_rat{'a;'b} <--> le_bool_rat{'b;'a}
 define unfold_bneq_rat : bneq_rat{'x; 'y} <-->
 	spread{'x; x1,x2.spread{'y; y1,y2.(('x1 *@ 'y2) <>@ ('y1 *@ 'x2))}}
 
+(* XXX: BUG: beq_rat should be defined, not postulated *)
+declare beq_rat{'a; 'b}
 prim_rw reduce_beq_rat :
    beq_rat{ ('a,'b) ; ('c,'d) } <--> beq_int{ ('a *@ 'd) ; ('c *@ 'b) }
 
@@ -571,7 +575,7 @@ let add_rat_Assoc2C = add_rat_Assoc2_rw
 doc <:doc<
    @begin[doc]
 
-   <<rat{0; 1}>> is neutral element for <<add_rat{Perv!nil;Perv!nil}>> in <<rationals>>.
+   <<rat{0; 1}>> is neutral element for <<add_rat{cdot;cdot}>> in <<rationals>>.
 
 	@end[doc]
 >>

@@ -26,6 +26,7 @@
  *)
 extends M_theory
 
+(*
 (************************************************************************
  * Just for testing.
  *)
@@ -34,8 +35,8 @@ interactive fib_prog :
       LetAtom{AtomInt[1:n]; one.
       LetAtom{AtomInt[2:n]; two.
       LetRec{R. Fields{
-         FunDef{Label["fib":t]; AtomFun{i.
-            LetFun{'R; Label["fib":t]; fib.
+         FunDef{Label["fib":s]; AtomFun{i.
+            LetFun{'R; Label["fib":s]; fib.
             If{AtomRelop{LeOp; AtomVar{'i}; AtomInt[1:n]};
                Return{AtomVar{'i}};
 
@@ -43,14 +44,14 @@ interactive fib_prog :
                LetApply{AtomVar{'fib}; AtomBinop{SubOp; AtomVar{'i}; AtomVar{'two}}; v2.
                Return{AtomBinop{AddOp; AtomVar{'v1}; AtomVar{'v2}}}}}}}};
          EndDef}};
-      R. LetFun{'R; Label["fib":t]; fib.
+      R. LetFun{'R; Label["fib":s]; fib.
          TailCall{AtomVar{'fib}; ArgCons{AtomInt[35:n]; ArgNil}}}}}}} }
 
 interactive fib_prog2 :
    sequent { <H> >- compilable{
       LetRec{R. Fields{
-         FunDef{Label["fib":t]; AtomFun{i.
-            LetFun{'R; Label["fib":t]; fib.
+         FunDef{Label["fib":s]; AtomFun{i.
+            LetFun{'R; Label["fib":s]; fib.
             If{AtomRelop{LeOp; AtomVar{'i}; AtomInt[1:n]};
                Return{AtomVar{'i}};
 
@@ -58,7 +59,7 @@ interactive fib_prog2 :
                LetApply{AtomVar{'fib}; AtomBinop{SubOp; AtomVar{'i}; AtomInt[2:n]}; v2.
                Return{AtomBinop{AddOp; AtomVar{'v1}; AtomVar{'v2}}}}}}}};
          EndDef}};
-      R. LetFun{'R; Label["fib":t]; fib.
+      R. LetFun{'R; Label["fib":s]; fib.
          TailCall{AtomVar{'fib}; ArgCons{AtomInt[25:n]; ArgNil}}}}} }
 
 (*
@@ -67,7 +68,7 @@ interactive fib_prog2 :
 interactive spill_prog :
    sequent { <H> >- compilable{
       LetRec{R. Fields{
-         FunDef{Label["spill":t]; AtomFun{i.
+         FunDef{Label["spill":s]; AtomFun{i.
             LetAtom{AtomBinop{AddOp; AtomVar{'i}; AtomInt[1:n]}; i1.
             LetAtom{AtomBinop{AddOp; AtomVar{'i}; AtomInt[2:n]}; i2.
             LetAtom{AtomBinop{AddOp; AtomVar{'i}; AtomInt[3:n]}; i3.
@@ -82,7 +83,7 @@ interactive spill_prog :
                    AtomBinop{AddOp; AtomVar{'i5};
                    AtomBinop{AddOp; AtomVar{'i6}; AtomVar{'i7}}}}}}}}}}}}}}}};
          EndDef}};
-      R. LetFun{'R; Label["spill":t]; spill.
+      R. LetFun{'R; Label["spill":s]; spill.
          TailCall{AtomVar{'spill}; ArgCons{AtomInt[25:n]; ArgNil}}}}} }
 
 interactive spill_prog2 :
@@ -160,6 +161,7 @@ interactive ext_test5 :
          t[1] <- t[2];
          t
       >> } }
+*)
 
 (*
  * -*-

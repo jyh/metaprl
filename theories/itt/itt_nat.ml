@@ -94,12 +94,13 @@ dform finite_nat_df2 : mode[src] :: nat{'k} = `"{0..(" slot{'k} `"-1)}"
 dform nat_plus_df : except_mode[src] :: nat_plus = mathbbN sup{slot["*"]}
 
 dform ind_df : parens :: "prec"[prec_bor] :: except_mode[src] ::
-   ind{'x; 'base; k, l. 'up['k; 'l]} =
-   szone pushm[3] szone display_ind{'x} space `"where" space display_ind_n space
-   `"=" ezone hspace
-   ((display_ind_eq{math_it["n":s];0}) => (display_ind_eq{display_ind_n;'base})) hspace
-   ((math_it["n":s] > 0) => (display_ind_eq{display_ind_n;
-   'up[math_it["n":s]; display_ind{(math_it["n":s] -@ 1)}]}))
+   ind{'x; 'base; k, l. 'up['k :> Dform; 'l :> Dform]} =
+   szone pushm[3]
+     szone display_ind{'x} space `"where" space display_ind_n space `"=" ezone
+   hspace
+     math_implies{display_ind_eq{display_n;0}; display_ind_eq{display_ind_n;'base}}
+   hspace
+     math_implies{math_gt{display_n; 0}; display_ind_eq{display_ind_n; 'up[display_n; display_ind{math_sub{display_n;1}}]}}
    popm ezone
 
 doc <:doc< @doc{@rewrites} >>

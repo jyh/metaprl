@@ -228,10 +228,10 @@ prim_rw cps_if {| cps |} : CPS{'cont; If{'a; 'e1; 'e2}} <-->
 prim_rw cps_let_apply {| cps |} :
    CPS{'cont; LetApply{CPSFunVar{'f}; 'a2; v. 'e['v]}}
    <-->
-   LetRec{R. FunDef{Label["g":t]; AtomFun{v. CPS{'cont; 'e['v]}};
+   LetRec{R. FunDef{Label["g":s]; AtomFun{v. CPS{'cont; 'e['v]}};
              EndDef};
           R.
-          LetFun{'R; Label["g":t]; g.
+          LetFun{'R; Label["g":s]; g.
           TailCall{AtomVar{'f}; ArgCons{AtomVar{'g}; ArgCons{CPS{'a2}; ArgNil}}}}}
 
 doc <:doc<
@@ -277,8 +277,8 @@ doc <:doc<
 >>
 prim cps_prog :
    sequent { <H>; cont: exp >-
-      compilable{LetRec{R. FunDef{Label[".init":t]; AtomFun{cont. CPS{'cont; 'e}}; EndDef};
-                        R. LetFun{'R; Label[".init":t]; init. Initialize{TailCall{AtomVar{'init}; ArgCons{AtomVar{'cont}; ArgNil}}}}}} } -->
+      compilable{LetRec{R. FunDef{Label[".init":s]; AtomFun{cont. CPS{'cont; 'e}}; EndDef};
+                        R. LetFun{'R; Label[".init":s]; init. Initialize{TailCall{AtomVar{'init}; ArgCons{AtomVar{'cont}; ArgNil}}}}}} } -->
    sequent { <H> >- compilable{'e} }
 
 doc <:doc< @docoff >>

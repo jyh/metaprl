@@ -56,8 +56,8 @@ declare state{'D}
  * DISPLAY                                                              *
  ************************************************************************)
 
-declare decl_df{'D}
-declare decl_inner{'D}
+declare decl_df{'D : Dform} : Dform
+declare decl_inner{'D : Dform} : Dform
 
 dform label_type_df : label_type =
    `"#Label"

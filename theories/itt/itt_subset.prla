@@ -1,6 +1,6 @@
 #PRL version 1.0.8 ASCII term
 NPerv	Perv	Perv NIL
-NPerv!cons	cons	cons Perv
+NPerv!cons	cons	xcons Perv
 O	o	cons
 NSummary	Summary	Summary NIL
 NSummary!location	location	location Summary
@@ -78,7 +78,7 @@ P	p19	String subset
 O	o20	comment_string p19
 T	t20	o20
 B	b20	t20
-NPerv!nil	nil20	nil Perv
+NPerv!nil	nil20	xnil Perv
 O	o21	nil20
 T	t21	o21
 B	b21	t21
@@ -4824,11 +4824,11 @@ P	p1836	Number 4018
 O	o1836	location p1835 p1836
 NSummary!definition	definition	definition Summary
 O	o2528	definition p2755
-Va	a	a\\ \\ 
+Va	a	a\\ \\
 B	b1836	a
-VA	A	A\\ \\ 
+VA	A	A\\ \\
 B	b1837	A
-VB	B	B\\ \\ 
+VB	B	B\\ \\
 B	b1838	B
 T	t1838	o2756 b1836 b1837 b1838
 B	b1839	t1838
@@ -5206,16 +5206,16 @@ P	p2998	Number 5972
 O	o2998	location p2997 p2998
 P	p2675	String mem_univ
 O	o2675	rule p2675
-C	h2998	H\\ \\ 
-Va1	a1	a1\\ H\\ 
+C	h2998	H\\ \\
+Va1	a1	a1\\ H\\
 B	b3008	a1
-VB1	B1	B1\\ H\\ 
+VB1	B1	B1\\ H\\
 B	b3010	B1
 T	t3010	o2759 b3008 b3010
 B	b3011	t3010
-Va2	a2	a2\\ H\\ 
+Va2	a2	a2\\ H\\
 B	b3012	a2
-VB2	B2	B2\\ H\\ 
+VB2	B2	B2\\ H\\
 B	b3013	B2
 T	t3013	o2759 b3012 b3013
 B	b3014	t3013
@@ -5224,9 +5224,9 @@ S	s3014	tbrarg\\ h2998\\ t3014
 B	b3021	s3014
 T	t3021	o1489 b3021
 B	b3022	t3021
-VA1	A1	A1\\ H\\ 
+VA1	A1	A1\\ H\\
 B	b3028	A1
-VA2	A2	A2\\ H\\ 
+VA2	A2	A2\\ H\\
 B	b3030	A2
 T	t3030	o1347 b1422 b3028 b3030
 S	s3030	tbrarg\\ h2998\\ t3030
@@ -5291,16 +5291,16 @@ B	b3445	t3259
 P	p3445	Number 5974
 P	p3446	Number 6126
 O	o3446	location p3445 p3446
-VB	B3446	B\\ H\\ 
+VB	B3446	B\\ H\\
 B	b3446	B3446
-Va	a3446	a\\ H\\ 
+Va	a3446	a\\ H\\
 B	b3447	a3446
 T	t3447	o1347 b3446 b3447 b3447
 S	s3447	tbrarg\\ h2998\\ t3447
 B	b3448	s3447
 T	t3448	o1489 b3448
 B	b3449	t3448
-VA	A3449	A\\ H\\ 
+VA	A3449	A\\ H\\
 B	b3450	A3449
 T	t3450	o1491 b3450
 S	s3450	tbrarg\\ h2998\\ t3450
@@ -7299,9 +7299,9 @@ T	t4185	o3358 b3450
 B	b4185	t4185
 T	t4186	o b4185 b21
 B	b4186	t4186
-Vx	x	x\\ H\\ 
+Vx	x	x\\ H\\
 B	b4187	x
-Vy	y	y\\ H\\ 
+Vy	y	y\\ H\\
 B	b4188	y
 T	t4188	o1347 b3450 b4187 b4188
 S	s4188	tbrarg\\ h2998\\ t4188
@@ -7503,7 +7503,7 @@ T	t4284	o b4284 b21
 B	b4285	t4284
 T	t4285	o1511 b4270 b4285
 B	b4286	t4285
-Vx	x4286	x\\ \\ 
+Vx	x4286	x\\ \\
 B	b4287	x4286
 T	t4287	o b4287 b21
 B	b4302	t4287
@@ -8155,8 +8155,8 @@ T	t4745	o b4744 b21
 B	b4745	t4745
 H	h4745	u t4665
 H	h4746	v t3621
-C	h4747	J\\ H\\ 
-VC	C	C\\ J H\\ 
+C	h4747	J\\ H\\
+VC	C	C\\ J H\\
 S	s4747	tbrarg\\ h2998 h4745 h4746 h4747\\ C
 B	b4747	s4747
 T	t4747	o1489 b4747
@@ -8498,7 +8498,7 @@ B	b4808	t4808
 P	p4809	Number 11733
 P	p4810	Number 11926
 O	o4810	location p4809 p4810
-VB'	B'	B'\\ H\\ 
+VB'	B'	B'\\ H\\
 B	b4810	B'
 T	t4810	o1344 b3450 b4810
 S	s4810	tbrarg\\ h2998\\ t4810

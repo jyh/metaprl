@@ -52,24 +52,24 @@ prim bracketsProp {| intro [] |} :
 
 prim emptyDefSimple :
 	sequent { <H> >-
-	   sequent [IndParamsWF] { <Hp> >-
-		   sequent [IndTypesWF] { I: 'A >-
-	         sequent [IndConstrsWF] { >- it } }}}   -->
+	   sequent [|IndParamsWF|] { <Hp> >-
+		   sequent [|IndTypesWF|] { I: 'A >-
+	         sequent [|IndConstrsWF|] { >- it } }}}   -->
 	sequent { <H> >-
-	   sequent [IndParamsSubst] { <Hp> >-
-		   sequent [IndTypesSubst] { I: 'A >-
-	         sequent [IndConstrsSubst] { >- emptyDef{'I} } } } } = it
+	   sequent [|IndParamsSubst|] { <Hp> >-
+		   sequent [|IndTypesSubst|] { I: 'A >-
+	         sequent [|IndConstrsSubst|] { >- emptyDef{'I} } } } } = it
 
 (*
 prim emptyDefMutual :
 	sequent { <H> >-
-	   sequent [IndParamsWF] { <Hp> >-
-		   sequent [IndTypesWF] { <Hi>; I: 'A; <Ji> >-
-	         sequent [IndConstrsWF] { <Hc['I]> >- it } }}}   -->
+	   sequent [|IndParamsWF|] { <Hp> >-
+		   sequent [|IndTypesWF|] { <Hi>; I: 'A; <Ji> >-
+	         sequent [|IndConstrsWF|] { <Hc['I]> >- it } }}}   -->
 	sequent { <H> >-
-	   sequent [IndParamsSubst] { <Hp> >-
-		   sequent [IndTypesSubst] { <Hi>; I: 'A; <Ji> >-
-	         sequent [IndConstrsSubst] { <Hc['I]> >- emptyDef{'I} } } } } = it
+	   sequent [|IndParamsSubst|] { <Hp> >-
+		   sequent [|IndTypesSubst|] { <Hi>; I: 'A; <Ji> >-
+	         sequent [|IndConstrsSubst|] { <Hc['I]> >- emptyDef{'I} } } } } = it
 *)
 
 
@@ -77,14 +77,14 @@ declare branchType
 declare branchType{'P;'c;'C}
 
 prim_rw branchTypeApp {| reduce |} :
-	sequent [branchType] { <Hp> >-
-		branchType{ 'P<||>; 'c<||>; sequent[applH] { <Hp>;<T<| |> > >- 'I} } } <-->
-	sequent [applH] { <T>; 'c >- 'P }
+	sequent [|branchType|] { <Hp> >-
+		branchType{ 'P<||>; 'c<||>; sequent [|applH|] { <Hp>;<T<| |> > >- 'I} } } <-->
+	sequent [|applH|] { <T>; 'c >- 'P }
 
 prim_rw branchTypeFun {| reduce |} :
-	sequent [branchType] { <Hp> >-
+	sequent [|branchType|] { <Hp> >-
 		branchType{ 'P<||>; 'c<||>; (x:'T<||> -> 'C['x]) } } <-->
-	(x: 'T -> sequent [branchType] { <Hp> >- branchType{'P; 'c 'x; 'C['x]}} )
+	(x: 'T -> sequent [|branchType|] { <Hp> >- branchType{'P; 'c 'x; 'C['x]}} )
 
 let branchType_term = << branchType{'P; 'c; 'C} >>
 let branchType_opname = opname_of_term branchType_term
@@ -94,20 +94,19 @@ let mk_branchType_term = mk_dep0_dep0_dep0_term branchType_opname
 
 let mk_branchType_sequent args p c c_type =
 	let br = mk_branchType_term p c c_type in
-	let goal = SeqGoal.singleton br in
-	let label = <<sequent_arg{branchType}>> in
-	TermMan.mk_sequent_term {sequent_args=label; sequent_hyps=args; sequent_goals=goal}
+	let label = <<branchType>> in
+	TermMan.mk_sequent_term {sequent_args=label; sequent_hyps=args; sequent_concl = br}
 
 (*
 prim branchTypes :
-	f in  sequent [branchType] { <Hp> >-
+	f in  sequent [|branchType|] { <Hp> >-
 		branchType{'P; sequent[applH]{ <Hp> >- 'c}; sequent[applH]{ <Hp> >- 'C} } } -->
 	sequent { <H> >-
-		sequent [IndParams] { <Hp> >-
-			sequent [IndTypes] { <Hi>; I: 'A<|H|>; <Ji<|H|> > >-
-				sequent [IndConstrs] { <Hc['I]>; c: 'C['I]; <Jc['I]> >-
-					sequent [branchConstrs] { <HcI>; 'C['I] >-
-						sequent [branchCases] { <F>; 'f >- 'P} } } } } }
+		sequent [|IndParams|] { <Hp> >-
+			sequent [|IndTypes|] { <Hi>; I: 'A<|H|>; <Ji<|H|> > >-
+				sequent [|IndConstrs|] { <Hc['I]>; c: 'C['I]; <Jc['I]> >-
+					sequent [|branchConstrs|] { <HcI>; 'C['I] >-
+						sequent [|branchCases|] { <F>; 'f >- 'P} } } } } }
 *)
 
 
@@ -115,38 +114,38 @@ prim branchTypes :
  *    typing rules for case-analysis                                  *
  **********************************************************************)
 
-prim indCases 'Hi 'B sequent [branchConstrs] { <HcI> >- it } :
+prim indCases 'Hi 'B sequent [|branchConstrs|] { <HcI> >- it } :
 	sequent { <H> >-
-	   sequent [IndParamsWF] { <Hp> >-
-			sequent [IndTypesWF] { <Hi>; I: 'A<|H|>; <Ji<|H|> > >-
-				sequent [IndConstrsWF] { <Hc['I]> >- it } } } } -->
+	   sequent [|IndParamsWF|] { <Hp> >-
+			sequent [|IndTypesWF|] { <Hi>; I: 'A<|H|>; <Ji<|H|> > >-
+				sequent [|IndConstrsWF|] { <Hc['I]> >- it } } } } -->
 	sequent { <H> >-
-		sequent [IndParams] { <Hp> >-
-			sequent [IndTypes] { <Hi>; I: 'A<|H|>; <Ji<|H|> > >-
-				sequent [IndConstrs] { <Hc['I]> >-
-					'c in sequent [applH] { <Hp>; <T> >- 'I } } } } } -->
+		sequent [|IndParams|] { <Hp> >-
+			sequent [|IndTypes|] { <Hi>; I: 'A<|H|>; <Ji<|H|> > >-
+				sequent [|IndConstrs|] { <Hc['I]> >-
+					'c in sequent [|applH|] { <Hp>; <T> >- 'I } } } } } -->
 	sequent { <H> >-
-		sequent [IndParams] { <Hp> >-
-			sequent [IndTypes] { <Hi>; I: 'A<|H|>; <Ji<|H|> > >-
-				sequent [IndConstrs] { <Hc['I]> >-
+		sequent [|IndParams|] { <Hp> >-
+			sequent [|IndTypes|] { <Hi>; I: 'A<|H|>; <Ji<|H|> > >-
+				sequent [|IndConstrs|] { <Hc['I]> >-
 					'P in 'B } } } } -->
 	sequent { <H> >-
-		sequent [IndParams] { <Hp> >-
-			sequent [IndTypes] { <Hi>; I: 'A<|H|>; <Ji<|H|> > >-
-				sequent [IndConstrs] { <Hc['I]> >-
-					brackets{sequent [applH] { <Hp> >- 'I }; 'B} } } } } -->
+		sequent [|IndParams|] { <Hp> >-
+			sequent [|IndTypes|] { <Hi>; I: 'A<|H|>; <Ji<|H|> > >-
+				sequent [|IndConstrs|] { <Hc['I]> >-
+					brackets{sequent [|applH|] { <Hp> >- 'I }; 'B} } } } } -->
 	sequent { <H> >-
-		sequent [IndParams] { <Hp> >-
-			sequent [IndTypes] { <Hi>; I: 'A<|H|>; <Ji<|H|> > >-
-				sequent [IndConstrs] { <Hc['I]> >-
-					sequent [branchConstrs] { <HcI> >-
-						sequent [branchCases] { <F> >- 'P} } } } } } -->
+		sequent [|IndParams|] { <Hp> >-
+			sequent [|IndTypes|] { <Hi>; I: 'A<|H|>; <Ji<|H|> > >-
+				sequent [|IndConstrs|] { <Hc['I]> >-
+					sequent [|branchConstrs|] { <HcI> >-
+						sequent [|branchCases|] { <F> >- 'P} } } } } } -->
 	sequent { <H> >-
-		sequent [IndParams] { <Hp> >-
-			sequent [IndTypes] { <Hi>; I: 'A<|H|>; <Ji<|H|> > >-
-				sequent [IndConstrs] { <Hc['I]> >-
-					case{'c;'P; sequent [cases] { <F> >- it} }
-					in (sequent [applH] { <T>; 'c >- 'P }) } } } } = it
+		sequent [|IndParams|] { <Hp> >-
+			sequent [|IndTypes|] { <Hi>; I: 'A<|H|>; <Ji<|H|> > >-
+				sequent [|IndConstrs|] { <Hc['I]> >-
+					case{'c;'P; sequent [|cases|] { <F> >- it} }
+					in (sequent [|applH|] { <T>; 'c >- 'P }) } } } } = it
 
 open Lm_printf
 open Simple_print
@@ -205,13 +204,12 @@ let explode_hyp = function
 let extract_type_def def i =
 	let {sequent_args=arg;
 	     sequent_hyps=params;
-		  sequent_goals=goals} = TermMan.explode_sequent def in
-	let goal = SeqGoal.get goals 0 in
+		  sequent_concl=goal} = TermMan.explode_sequent def in
 	let {sequent_args=arg;
 	     sequent_hyps=types;
-		  sequent_goals=goals} = TermMan.explode_sequent goal in
+		  sequent_concl=goal} = TermMan.explode_sequent goal in
 	let {sequent_args=arg;
-	     sequent_hyps=constrs} = TermMan.explode_sequent (SeqGoal.get goals 0) in
+	     sequent_hyps=constrs} = TermMan.explode_sequent goal in
 	print_hyps params;
 	print_hyps types;
 	print_hyps constrs;
@@ -232,41 +230,38 @@ let extract_type_def def i =
 let morph_type_def def params_label types_label constrs_label concl =
 	let {sequent_args=arg;
 	     sequent_hyps=params;
-		  sequent_goals=goals} = TermMan.explode_sequent def in
-	let goal = SeqGoal.get goals 0 in
+		  sequent_concl=goal} = TermMan.explode_sequent def in
 	let {sequent_args=arg;
 	     sequent_hyps=types;
-		  sequent_goals=goals} = TermMan.explode_sequent goal in
+		  sequent_concl=goal} = TermMan.explode_sequent goal in
 	let {sequent_args=arg;
-	     sequent_hyps=constrs} = TermMan.explode_sequent (SeqGoal.get goals 0) in
-	let goal = SeqGoal.singleton concl in
+	     sequent_hyps=constrs} = TermMan.explode_sequent goal in
 	let params_label' = mk_sequent_arg_term params_label in
 	let types_label' = mk_sequent_arg_term types_label in
 	let constrs_label' = mk_sequent_arg_term constrs_label in
 	let constrs_seq = TermMan.mk_sequent_term
-			{sequent_args=constrs_label'; sequent_hyps=constrs; sequent_goals=goal} in
+			{sequent_args=constrs_label'; sequent_hyps=constrs; sequent_concl=goal} in
 	let types_seq = TermMan.mk_sequent_term
-			{sequent_args=types_label'; sequent_hyps=types; sequent_goals=(SeqGoal.singleton constrs_seq)} in
+			{sequent_args=types_label'; sequent_hyps=types; sequent_concl=constrs_seq} in
 	let params_seq = TermMan.mk_sequent_term
-			{sequent_args=params_label'; sequent_hyps=params; sequent_goals=(SeqGoal.singleton types_seq)} in
+			{sequent_args=params_label'; sequent_hyps=params; sequent_concl=types_seq} in
 	params_seq
 
 (* extracts conclusion from any inductive sequent (we need it to extract the conclusion
 	from an inductive definition (def))*)
 let extract_ind_concl ind_seq =
-	let {sequent_goals=goals} = TermMan.explode_sequent ind_seq in
-	let goal = SeqGoal.get goals 0 in
-	let {sequent_goals=goals} = TermMan.explode_sequent goal in
-	let {sequent_goals=concl} = TermMan.explode_sequent (SeqGoal.get goals 0) in
-	SeqGoal.get concl 0
+	let {sequent_concl=goal} = TermMan.explode_sequent ind_seq in
+	let {sequent_concl=goal} = TermMan.explode_sequent goal in
+	let {sequent_concl=concl} = TermMan.explode_sequent goal in
+	concl
 
 let apply_rewrite conv t =
-	let es={sequent_args= <<sequent_arg>>; sequent_hyps=(SeqHyp.of_list []); sequent_goals=(SeqGoal.of_list [t])} in
+	let es={sequent_args= <<sequent_arg>>; sequent_hyps=(SeqHyp.of_list []); sequent_concl=t} in
 	let s=mk_sequent_term es in
 	let b=Mp_resource.theory_bookmark "cic_ind_cases" in
 	let r=Mp_resource.find b in
 	let s'=Tactic_type.Conversionals.apply_rewrite r (higherC conv) s in
-	SeqGoal.get (TermMan.explode_sequent s').sequent_goals 0
+	(TermMan.explode_sequent s').sequent_concl
 
 (* extracts conclusion "c in C'" from ind. definition *)
 let get_c_in_C' def c_type c =
@@ -281,18 +276,18 @@ let get_c_in_C' def c_type c =
 declare AppMember
 
 prim_rw app_member_rw :
-  sequent [AppMember] { 'q; <Hp> >- 'c in (p:'P -> 'C['p]) } <-->
-  sequent [AppMember] { <Hp> >- ('c 'q) in 'C['q] }
+  sequent [|AppMember|] { 'q; <Hp> >- 'c in (p:'P -> 'C['p]) } <-->
+  sequent [|AppMember|] { <Hp> >- ('c 'q) in 'C['q] }
 
 let apply_context t params =
    let app_seq = TermMan.mk_sequent_term
-			{ sequent_args= <<sequent_arg{AppMember}>>;
+			{ sequent_args= <<AppMember>>;
 			 sequent_hyps=params;
-			 sequent_goals=SeqGoal.singleton t} in
+			 sequent_concl=t} in
 	let length = SeqHyp.length params in
 	let s = apply_rewrite (repeatForC length app_member_rw) app_seq in
-	let {sequent_goals=g} = TermMan.explode_sequent s in
-	SeqGoal.get g 0
+	let {sequent_concl=concl} = TermMan.explode_sequent s in
+	concl
 
 
 
@@ -354,43 +349,43 @@ declare IndParamsIota
 
 
 prim_rw iotaStart 'Hc :
-	case{ sequent [IndParams] { <Hp> >-
-				sequent [IndTypes] { <Hi> >-
-					sequent [IndConstrs] { <Hc>; c: 'C; <Jc> >-
-						sequent [applH] { <Q> >- 'c} } } };
-			'P; sequent [cases] { <F> >- it} } <-->
+	case{ sequent [|IndParams|] { <Hp> >-
+				sequent [|IndTypes|] { <Hi> >-
+					sequent [|IndConstrs|] { <Hc>; c: 'C; <Jc> >-
+						sequent [|applH|] { <Q> >- 'c} } } };
+			'P; sequent [|cases|] { <F> >- it} } <-->
 	caseAux{
-		sequent [IndParams] { <Hp> >-
-			sequent [IndParamsIota] { >-
-				sequent [IndTypes] { <Hi> >-
-					sequent [IndConstrs] { <Hc>; c: 'C; <Jc> >-
-						sequent [applH] { <Q> >- 'c} } } } };
-			'P; sequent [cases] { <F> >- it} }
+		sequent [|IndParams|] { <Hp> >-
+			sequent [|IndParamsIota|] { >-
+				sequent [|IndTypes|] { <Hi> >-
+					sequent [|IndConstrs|] { <Hc>; c: 'C; <Jc> >-
+						sequent [|applH|] { <Q> >- 'c} } } } };
+			'P; sequent [|cases|] { <F> >- it} }
 
 (*
 prim_rw iotaStep 'Hc :
 	caseAux{
-		sequent [IndParams] { <Hp>; p:'P >-
-			sequent [IndParamsIota] { <Jp['p]> >-
-				sequent [IndTypes] { <Hi['p]> >-
-					sequent [IndConstrs] { <Hc['p]>; c: 'C['p]; <Jc['p]> >-
-						sequent [applH] { 'q; <Q> >- 'c} } } } };
-			'P; sequent [cases] { <F> >- it} } <-->
+		sequent [|IndParams|] { <Hp>; p:'P >-
+			sequent [|IndParamsIota|] { <Jp['p]> >-
+				sequent [|IndTypes|] { <Hi['p]> >-
+					sequent [|IndConstrs|] { <Hc['p]>; c: 'C['p]; <Jc['p]> >-
+						sequent [|applH|] { 'q; <Q> >- 'c} } } } };
+			'P; sequent [|cases|] { <F> >- it} } <-->
 	caseAux{
-		sequent [IndParams] { <Hp> >-
-			sequent [IndParamsIota] { p:'P; <Jp['p]> >-
-				sequent [IndTypes] { <Hi['p]> >-
-					sequent [IndConstrs] { <Hc['p]>; c: 'C['p]; <Jc['p]> >-
-						sequent [applH] { <Q> >- 'c} } } } };
-			'P; sequent [cases] { <F> >- it} }
+		sequent [|IndParams|] { <Hp> >-
+			sequent [|IndParamsIota|] { p:'P; <Jp['p]> >-
+				sequent [|IndTypes|] { <Hi['p]> >-
+					sequent [|IndConstrs|] { <Hc['p]>; c: 'C['p]; <Jc['p]> >-
+						sequent [|applH|] { <Q> >- 'c} } } } };
+			'P; sequent [|cases|] { <F> >- it} }
 
 prim_rw iotaFinal 'Hc :
 	caseAux{
-		sequent [IndParams] { >-
-			sequent [IndParamsIota] { <Jp> >-
-				sequent [IndTypes] { <Hi> >-
-					sequent [IndConstrs] { <Hc>; c: 'C; <Jc> >-
-						sequent [applH] { <Q> >- 'c} } } } };
-			'P; sequent [cases] { <F> >- it} } <-->
-	sequent [applH] { <Q> >- 'f }
+		sequent [|IndParams|] { >-
+			sequent [|IndParamsIota|] { <Jp> >-
+				sequent [|IndTypes|] { <Hi> >-
+					sequent [|IndConstrs|] { <Hc>; c: 'C; <Jc> >-
+						sequent [|applH|] { <Q> >- 'c} } } } };
+			'P; sequent [|cases|] { <F> >- it} } <-->
+	sequent [|applH|] { <Q> >- 'f }
 *)

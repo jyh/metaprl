@@ -178,15 +178,15 @@ prec prec_lambda < prec_apply
 prec prec_fun < prec_apply
 prec prec_fun < prec_lambda
 
-declare declaration{'decl;'term} (* Used only for display forms, such as let and records *)
+declare declaration{'decl : Dform ;'term : Dform } : Dform
 
 dform decl_df : declaration{'decl;'a}
    = 'decl `" = " slot{'a}
 
 dform decl_df : except_mode [src] :: declaration{'decl;lambda{x.'a}}
-   = declaration{'decl 'x;'a}
+   = declaration{math_apply{'decl; 'x};'a}
 
-dform decl_df : except_mode [src] :: declaration{'decl;fix{f.'a['f]}}
+dform decl_df : except_mode [src] :: declaration{'decl;fix{f.'a['f :> Dform]}}
    = declaration{'decl; 'a['decl]}
 
 dform fun_df1 : "fun"{'A; 'B} = math_fun{'A; 'B}
@@ -217,8 +217,8 @@ dform well_founded_apply_df : except_mode[src] :: well_founded_apply{'P; 'a} =
    slot{'P} `"[" slot{'a} `"]"
 
 dform well_founded_assum_df : except_mode[src] :: well_founded_assum{'A; a1, a2. 'R; 'P} =
-   szone pushm[3] `"WellFounded " Nuprl_font!forall slot{'a2} `":" slot{'A} `"."
-   `"(" Nuprl_font!forall slot{'a1} `":" slot{'A} `". " slot{'R} " " Rightarrow well_founded_apply{'P; 'a1} `")"
+   szone pushm[3] `"WellFounded " Nuprl_font!forall slot{'a2 :> Term} `":" slot{'A} `"."
+   `"(" Nuprl_font!forall slot{'a1 :> Term} `":" slot{'A} `". " slot{'R} " " Rightarrow well_founded_apply{'P; 'a1} `")"
    Rightarrow well_founded_apply{'P; 'a2} popm ezone
 
 dform well_founded_df : except_mode[src] :: well_founded{'A; a, b. 'R} =

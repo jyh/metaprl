@@ -31,6 +31,7 @@
  *)
 
 open Refiner.Refiner.TermType
+open Refiner.Refiner.TermTy
 
 open Filter_type
 open Filter_summary_type
@@ -73,7 +74,8 @@ val view_def :
    package ->
    parse_arg ->
    display_fun ->
-   (term, MLast.expr) opname_definition ->
+   ty_term ->
+   (term, MLast.expr) term_def ->
    edit_object
 
 (*

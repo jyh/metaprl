@@ -1,6 +1,6 @@
 #PRL version 1.0.8 ASCII term
 NPerv	Perv	Perv NIL
-NPerv!cons	cons	cons Perv
+NPerv!cons	cons	xcons Perv
 O	o	cons
 NSummary	Summary	Summary NIL
 NSummary!location	location	location Summary
@@ -13,7 +13,7 @@ P	p6	String itt_isect
 O	o8	parent p6
 T	t143	o8
 B	b143	t143
-NPerv!nil	nil3	nil Perv
+NPerv!nil	nil3	xnil Perv
 O	o4	nil3
 T	t4	o4
 B	b4	t4
@@ -958,7 +958,7 @@ O	o416	tsquash
 Nvar	var	var NIL
 P	p420	String unfold_tsquash
 O	o848	definition p420
-VA	A	A\\ \\ 
+VA	A	A\\ \\
 B	b848	A
 T	t848	o416 b848
 B	b849	t848
@@ -1003,10 +1003,10 @@ NBase_rewrite	Base_rw	Base_rewrite NIL
 NBase_rewrite!sequent_arg	brwsqarg	sequent_arg Base_rw
 O	obrarg	brwsqarg
 T	tbrarg	obrarg
-C	h854	H\\ \\ 
-VA1	A1	A1\\ H\\ 
+C	h854	H\\ \\
+VA1	A1	A1\\ H\\
 B	b854	A1
-VA2	A2	A2\\ H\\ 
+VA2	A2	A2\\ H\\
 B	b855	A2
 T	t855	o435 b436 b854 b855
 S	s855	tbrarg\\ h854\\ t855
@@ -1088,7 +1088,7 @@ P	p470	String tsquashType
 O	o470	rule p470
 NItt_equal!type	type	type Itt_equal
 O	o471	type
-VA	A877	A\\ H\\ 
+VA	A877	A\\ H\\
 B	b877	A877
 T	t877	o471 b877
 S	s877	tbrarg\\ h854\\ t877
@@ -1146,9 +1146,9 @@ S	s897	tbrarg\\ h854\\ t897
 B	b897	s897
 T	t898	o433 b897
 B	b898	t898
-Vx	x	x\\ H\\ 
+Vx	x	x\\ H\\
 B	b899	x
-Vy	y	y\\ H\\ 
+Vy	y	y\\ H\\
 B	b900	y
 T	t900	o435 b880 b899 b900
 S	s900	tbrarg\\ h854\\ t900

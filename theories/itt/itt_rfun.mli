@@ -68,7 +68,7 @@ prec prec_fun
 prec prec_apply
 prec prec_lambda
 
-declare declaration{'decl;'term}
+declare declaration{'decl : Dform ;'term : Dform } : Dform
 
 (************************************************************************
  * REWRITES                                                             *

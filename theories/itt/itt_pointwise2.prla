@@ -1,6 +1,6 @@
 #PRL version 1.0.8 ASCII term
 NPerv	Perv	Perv NIL
-NPerv!cons	cons	cons Perv
+NPerv!cons	cons	xcons Perv
 O	o	cons
 NSummary	Summary	Summary NIL
 NSummary!location	location	location Summary
@@ -10,7 +10,7 @@ O	o16	location p1 p8
 NSummary!parent	parent	parent Summary
 O	o2	parent
 P	p2	String Itt_equal
-NPerv!nil	nil3	nil Perv
+NPerv!nil	nil3	xnil Perv
 O	o4	nil3
 T	t4	o4
 B	b4	t4
@@ -1685,8 +1685,8 @@ T	t1122	o1122
 B	b1122	t1122
 T	t1123	o b1122 b4
 B	b1123	t1123
-C	h1123	H\\ \\ 
-VA	A	A\\ H\\ 
+C	h1123	H\\ \\
+VA	A	A\\ H\\
 B	b1124	A
 VE	E	E\\ H\\ t498 t499
 B	b1125	E x y
@@ -1967,7 +1967,7 @@ T	t1240	o493 b1240
 B	b1241	t1240
 T	t1241	o507 b1241
 B	b1242	t1241
-VB	B1242	B\\ H\\ 
+VB	B1242	B\\ H\\
 H	h1242	x B1242
 S	s1242	tbrarg\\ h1123 h1242 h1190\\ t1190
 B	b1243	s1242

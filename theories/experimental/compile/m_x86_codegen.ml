@@ -296,9 +296,9 @@ doc <:doc<
    @end[doc]
 >>
 prim_rw asm_atom_fun_var {| reduce |} :
-   ASM{AtomFunVar{'R; Label[label:t]}; v2. 'e['v2]}
+   ASM{AtomFunVar{'R; Label[label:s]}; v2. 'e['v2]}
    <-->
-   'e[ImmediateCLabel[label:t]{'R}]
+   'e[ImmediateCLabel[label:s]{'R}]
 
 doc <:doc<
    @begin[doc]
@@ -408,8 +408,8 @@ doc <:doc<
 prim_rw asm_reserve_1 {| reduce |} :
    ASM{Reserve[reswords:n]{'params; 'e}}
    <-->
-   Mov{ContextRegister["limit":t]; limit.
-   Inst2["sub"]{ContextRegister["next":t]; Register{'limit}; bytes.
+   Mov{ContextRegister["limit":s]; limit.
+   Inst2["sub"]{ContextRegister["next":s]; Register{'limit}; bytes.
    Cmp["cmp"]{ImmediateNumber{mul{number[reswords:n]; word_size}}; Register{'bytes};
    Jcc["j"]{CC["b"];
       ASM{'params; AsmArgNil; v.
@@ -538,8 +538,8 @@ prim_rw asm_alloc_tuple {| reduce |} :
    ASM{LetTuple{Length[i:n]; 'tuple; v. 'e['v]}}
    <-->
    Comment["asm_alloc_tuple"]{
-   Mov{ContextRegister["next":t]; v.
-   Inst2["add"]{ImmediateNumber{mul{add{number[i:n]; number[1:n]}; word_size}}; ContextRegister["next":t];
+   Mov{ContextRegister["next":s]; v.
+   Inst2["add"]{ImmediateNumber{mul{add{number[i:n]; number[1:n]}; word_size}}; ContextRegister["next":s];
    Inst2["mov"]{header[i:n]; MemReg{'v};
    Inst2["add"]{ImmediateNumber{word_size}; Register{'v}; p.
    store_tuple{'p; reverse_tuple{'tuple};
@@ -554,8 +554,8 @@ prim_rw asm_let_closure {| reduce |} :
    ASM{LetClosure{'a1; 'a2; v. 'e['v]}}
    <-->
    Comment["asm_let_closure"]{
-   Mov{ContextRegister["next":t]; v.
-   Inst2["add"]{ImmediateNumber{mul{number[3:n]; word_size}}; ContextRegister["next":t];
+   Mov{ContextRegister["next":s]; v.
+   Inst2["add"]{ImmediateNumber{mul{number[3:n]; word_size}}; ContextRegister["next":s];
    Inst2["mov"]{ header[2:n]; MemReg{'v};
    ASM{'a1; v1.
    ASM{'a2; v2.
@@ -572,12 +572,12 @@ doc <:doc<
    @end[doc]
 >>
 prim_rw asm_tailcall_direct {| reduce |} :
-   ASM{TailCall{AtomFunVar{'R; Label[label:t]}; 'args}}
+   ASM{TailCall{AtomFunVar{'R; Label[label:s]}; 'args}}
    <-->
    Comment["asm_tailcall_direct"]{
    ASM{'args; AsmArgNil; args1.
    copy_args{'args1; args2.
-   Jmp["jmp"]{ImmediateLabel[label:t]{'R}; 'args2}}}}
+   Jmp["jmp"]{ImmediateLabel[label:s]{'R}; 'args2}}}}
 
 prim_rw asm_tailcall_indirect {| reduce |} :
    ASM{TailCall{'a; 'args}}
@@ -608,9 +608,9 @@ prim_rw asm_fields {| reduce |} :
    ASM{'R; 'fields}
 
 prim_rw asm_fun_def {| reduce |} :
-   ASM{'R; FunDef{Label[label:t]; 'e; 'rest}}
+   ASM{'R; FunDef{Label[label:s]; 'e; 'rest}}
    <-->
-   LabelDef{LabelAsm[label:t]{'R}; ASM{'e}; ASM{'R; 'rest}}
+   LabelDef{LabelAsm[label:s]{'R}; ASM{'e}; ASM{'R; 'rest}}
 
 prim_rw asm_end_def {| reduce |} :
    ASM{'R; EndDef}

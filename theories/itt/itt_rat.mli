@@ -29,7 +29,6 @@
  * Author: Yegor Bryukhov
  * @email{ybryukhov@gc.cuny.edu}
  *)
-
 extends Itt_equal
 extends Itt_rfun
 extends Itt_bool
@@ -39,6 +38,7 @@ extends Itt_decidable
 extends Itt_nequal
 extends Itt_order
 extends Itt_int_arith
+extends Itt_labels
 
 open Basic_tactics
 

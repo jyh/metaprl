@@ -1,6 +1,6 @@
 #PRL version 1.0.8 ASCII term
 NPerv	Perv	Perv NIL
-NPerv!cons	cons	cons Perv
+NPerv!cons	cons	xcons Perv
 O	o	cons
 NSummary	Summary	Summary NIL
 NSummary!location	location	location Summary
@@ -13,7 +13,7 @@ P	p2	String base_theory
 O	o3	parent p2
 T	t	o3
 B	b	t
-NPerv!nil	nil3	nil Perv
+NPerv!nil	nil3	xnil Perv
 O	o4	nil3
 T	t4	o4
 B	b4	t4
@@ -737,8 +737,8 @@ NBase_rewrite	Base_rewrite	Base_rewrite NIL
 NBase_rewrite!sequent_arg	sequent_arg	sequent_arg Base_rewrite
 O	o273	sequent_arg
 T	t273	o273
-C	h	H\\ \\ 
-VT	T	T\\ H\\ 
+C	h	H\\ \\
+VT	T	T\\ H\\
 H	h273	x T
 Nvar	var	var NIL
 P	p273	Var x
@@ -751,7 +751,7 @@ T	t275	o272 b274
 B	b275	t275
 NSummary!prim	prim	prim Summary
 O	o275	prim
-Vx	x	x\\ \\ 
+Vx	x	x\\ \\
 B	b276	x
 T	t276	o275 b276
 B	b277	t276
@@ -774,15 +774,15 @@ T	t284	o b271 b283
 B	b284	t284
 NSummary!meta_function	meta_function	meta_function Summary
 O	o284	meta_function
-Vt	t285	t\\ \\ 
+Vt	t285	t\\ \\
 B	b285	t285
-C	h285	K\\ H\\ 
-VC	C	C\\ H K\\ 
+C	h285	K\\ H\\
+VC	C	C\\ H K\\
 S	s285	t273\\ h h285\\ C
 B	b286	s285
 T	t286	o272 b286
 B	b287	t286
-C	h287	J\\ H\\ 
+C	h287	J\\ H\\
 S	s287	t273\\ h h287 h285\\ C
 B	b288	s287
 T	t288	o272 b288
@@ -801,12 +801,12 @@ P	p294	String thin
 O	o294	rule p294
 NSummary!meta_implies	meta_implies	meta_implies Summary
 O	o295	meta_implies
-VC	C295	C\\ J H\\ 
+VC	C295	C\\ J H\\
 S	s295	t273\\ h h287\\ C295
 B	b295	s295
 T	t295	o272 b295
 B	b296	t295
-VA	A	A\\ H\\ 
+VA	A	A\\ H\\
 H	h296	A
 S	s296	t273\\ h h296 h287\\ C295
 B	b297	s296
@@ -862,7 +862,7 @@ T	t315	o315 b315
 B	b316	t315
 T	t316	o b316 b4
 B	b317	t316
-Va	a	a\\ \\ 
+Va	a	a\\ \\
 B	b318	a
 S	s318	t273\\ h\\ T
 B	b319	s318
@@ -870,7 +870,7 @@ T	t319	o272 b319
 B	b320	t319
 Vb	b321	b\\ \\ x
 B	b322	b321
-VC	C322	C\\ H\\ 
+VC	C322	C\\ H\\
 S	s322	t273\\ h h273\\ C322
 B	b323	s322
 T	t323	o272 b323

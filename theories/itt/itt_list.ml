@@ -285,20 +285,20 @@ interactive consFormation :
 prec prec_cons
 prec prec_list
 
-declare df_search{'a; 'b}
-declare df_semicolons{'a}
-declare df_colons{'a}
+declare df_search{'a : Dform; 'b : Dform} : Dform
+declare df_semicolons{'a : Dform} : Dform
+declare df_colons{'a : Dform} : Dform
 
 (* Empty list *)
 dform nil_df : except_mode[src] :: nil = `"[]"
 
 (* Search for nil entry *)
 dform cons_df : except_mode[src] :: cons{'a; 'b} =
-   df_search{cons{'a; nil}; 'b}
+   df_search{xcons{'a; xnil}; 'b}
 
 (* Keep searching down the list *)
 dform search_df1 : df_search{'a; cons{'b; 'c}} =
-   df_search{cons{'b; 'a}; 'c}
+   df_search{xcons{'b; 'a}; 'c}
 
 (* Found a nil terminator: use bracket notation *)
 dform search_df2 : df_search{'a; nil} =
@@ -309,17 +309,17 @@ dform search_df3 : df_search{'a; 'b} =
    df_colons{'a} `"::" slot{'b}
 
 (* Reverse entries and separate with ; *)
-dform semicolons_df1 : df_semicolons{cons{'a; nil}} =
+dform semicolons_df1 : df_semicolons{xcons{'a; xnil}} =
    slot{'a}
 
-dform semicolons_df2 : df_semicolons{cons{'a; 'b}} =
+dform semicolons_df2 : df_semicolons{xcons{'a; 'b}} =
    df_semicolons{'b} `";" slot{'a}
 
 (* Reverse entries and separate with :: *)
-dform colons_df1 : df_colons{cons{'a; nil}} =
+dform colons_df1 : df_colons{xcons{'a; xnil}} =
    slot{'a}
 
-dform colons_df2 : df_colons{cons{'a; 'b}} =
+dform colons_df2 : df_colons{xcons{'a; 'b}} =
    df_colons{'b} `"::" slot{'a}
 
 dform list_df1 : except_mode[src] :: parens :: "prec"[prec_list] :: list{'a} =

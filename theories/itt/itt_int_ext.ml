@@ -3,13 +3,13 @@ doc <:doc<
    @module[Itt_int_ext]
 
    Here we define multiplicative operations on integers
-   (<<Perv!nil *@ Perv!nil>>, <<Perv!nil /@ Perv!nil>>,
-   <<Perv!nil %@ Perv!nil>>)
+   (<<'x *@ 'x>>, <<'x /@ 'x>>,
+   <<'x %@ 'x>>)
    and the rest of traditional inequalities both in propositional
-   (<<Perv!nil > Perv!nil>>, <<Perv!nil <= Perv!nil>>, <<Perv!nil >= Perv!nil>>,
-   <<nequal{(Perv!nil) ; (Perv!nil)}>>) and boolean
-   (<<gt_bool{(Perv!nil) ; (Perv!nil)}>>, <<le_bool{(Perv!nil) ; (Perv!nil)}>>,
-   <<ge_bool{(Perv!nil) ; (Perv!nil)}>>, <<bneq_int{(Perv!nil) ; (Perv!nil)}>>) forms.
+   (<<'x > 'x>>, <<'x <= 'x>>, <<'x >= 'x>>,
+   <<nequal{('x) ; ('x)}>>) and boolean
+   (<<gt_bool{('x) ; ('x)}>>, <<le_bool{('x) ; ('x)}>>,
+   <<ge_bool{('x) ; ('x)}>>, <<bneq_int{('x) ; ('x)}>>) forms.
    @end[doc]
 
    ----------------------------------------------------------------
@@ -594,7 +594,7 @@ interactive min_reduce2 {| intro [] |} :
 
 doc <:doc<
    @begin[doc]
-   @modsection{Well-formedness and algebraic properties of <<(Perv!nil) *@ (Perv!nil)>>}
+   @modsection{Well-formedness and algebraic properties of <<('x) *@ ('x)>>}
    @end[doc]
 >>
 
@@ -809,7 +809,7 @@ interactive_rw beq_mulMono_rw 'c :
 
 doc <:doc<
    @begin[doc]
-   @modsection{Definition and well-formedness of <<Perv!nil %@ Perv!nil>>}
+   @modsection{Definition and well-formedness of <<'x %@ 'x>>}
    @end[doc]
 >>
 prim rem_baseReduce :
@@ -866,7 +866,7 @@ interactive rem_wf {| intro [] |} :
 
 doc <:doc<
    @begin[doc]
-   @modsection{Definition and properties of <<Perv!nil /@ Perv!nil>>}
+   @modsection{Definition and properties of <<'x /@ 'x>>}
    @end[doc]
 >>
 prim div_baseReduce :

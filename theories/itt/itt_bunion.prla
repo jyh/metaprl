@@ -1,6 +1,6 @@
 #PRL version 1.0.9 ASCII term
 NPerv	Perv	Perv NIL
-NPerv!cons	cons	cons Perv
+NPerv!cons	cons	xcons Perv
 O	o	cons
 NSummary	Summary	Summary NIL
 NSummary!location	location	location Summary
@@ -9,7 +9,7 @@ P	p10	Number 1515
 O	o18	location p8 p10
 NSummary!parent	parent	parent Summary
 O	o2	parent
-NPerv!nil	nil3	nil Perv
+NPerv!nil	nil3	xnil Perv
 O	o4	nil3
 T	t4	o4
 B	b4	t4

@@ -59,6 +59,12 @@ open Opname
 open Refiner.Refiner.TermType
 
 (*
+ * Lists.
+ *)
+declare nil
+declare cons{'hd; 'tl}
+
+(*
  * Display form precendences.
  *)
 prec prec_var
@@ -130,7 +136,7 @@ declare Return{'a}
  *)
 declare LetRec{R1. 'e1['R1]; R2. 'e2['R2]}
 declare Fields{'fields}
-declare Label[tag:t]
+declare Label[tag:s]
 declare FunDef{'label; 'exp; 'rest}
 declare EndDef
 declare LetFun{'R; 'label; f. 'e['f]}
@@ -154,7 +160,7 @@ declare compilable{'e}
 (*
  * Sequent tag for M programs.
  *)
-declare sequent_arg
+declare sequent [sequent_arg] { Term : Term >- Term } : Judgment
 declare default_extract
 
 (*

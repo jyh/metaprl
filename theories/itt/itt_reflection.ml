@@ -266,31 +266,31 @@ interactive var_or_opbterm_hyp 'H bind{x. 'A['x]} 'b :
  * Subterms                                                             *
  ************************************************************************)
 
-declare list_of_xlist{'l}
+declare list_of_rlist{'l}
 
-prim_rw reduce_xlist_cons :
-   list_of_xlist{ (Perv!cons{'hd; 'tl})} <--> ('hd :: list_of_xlist{'tl})
+prim_rw reduce_rlist_cons :
+   list_of_rlist{rcons{'hd; 'tl}} <--> ('hd :: list_of_rlist{'tl})
 
-prim_rw reduce_xlist_nil :
-   list_of_xlist{ (Perv!nil) } <--> nil
+prim_rw reduce_rlist_nil :
+   list_of_rlist{rnil} <--> nil
 
-let rec reduce_xlist t =
-   if is_xnil_term (one_subterm t) then
-      reduce_xlist_nil
-   else reduce_xlist_cons thenC addrC [Subterm 2] (termC reduce_xlist)
-
+let rec reduce_rlist t =
+   if is_rnil_term (one_subterm t) then
+      reduce_rlist_nil
+   else
+      reduce_rlist_cons thenC addrC [Subterm 2] (termC reduce_rlist)
 
 define unfold_subterms:
-   subterms{'t} <--> list_of_xlist{ (Base_reflection!subterms{'t}) }
+   subterms{'t} <--> list_of_rlist{ (Base_reflection!subterms{'t}) }
 
-dform list_of_xlist_df : except_mode[src] :: list_of_xlist{'l} =
-   `"list_of_xlist(" slot{'l} `")"
+dform list_of_rlist_df : except_mode[src] :: list_of_rlist{'l} =
+   `"list_of_rlist(" slot{'l} `")"
 
 dform subterms_df : except_mode[src] :: subterms{'bt} =
    `"subterms(" slot{'bt} `")"
 
 let reduce_subterms =
-   unfold_subterms thenC addrC [Subterm 1] Base_reflection.reduce_subterms thenC termC reduce_xlist
+   unfold_subterms thenC addrC [Subterm 1] Base_reflection.reduce_subterms thenC termC reduce_rlist
 
 let resource reduce +=
    ( << subterms{ bterm{| <H> >- 't |} } >>, reduce_subterms )
@@ -713,15 +713,15 @@ interactive depth_subterms {| intro [] |} :
  * Make_bterm                                                           *
  ************************************************************************)
 
-declare xlist_of_list{'l}
+declare rlist_of_list{'l}
 
-prim_rw xlist_list_cons {| reduce |} :
-   xlist_of_list{ 'hd :: 'tl } <--> Perv!cons{'hd; xlist_of_list{'tl}}
+prim_rw rlist_list_cons {| reduce |} :
+   rlist_of_list{ 'hd :: 'tl } <--> rcons{'hd; rlist_of_list{'tl}}
 
-prim_rw xlist_list_nil {| reduce |} :
-   xlist_of_list{ nil } <--> (Perv!nil)
+prim_rw rlist_list_nil {| reduce |} :
+   rlist_of_list{ nil } <--> rnil
 
-define unfold_make_bterm : make_bterm{'bt; 'bt_list} <--> Base_reflection!make_bterm{'bt; xlist_of_list{'bt_list}}
+define unfold_make_bterm : make_bterm{'bt; 'bt_list} <--> Base_reflection!make_bterm{'bt; rlist_of_list{'bt_list}}
 
 dform make_bterm_df : except_mode[src] :: make_bterm{'bt; 'btl} =
    `"make_bterm(" slot{'bt} `"; " slot{'btl} `")"

@@ -1,6 +1,6 @@
 #PRL version 1.0.8 ASCII term
 NPerv	Perv	Perv NIL
-NPerv!cons	cons	cons Perv
+NPerv!cons	cons	xcons Perv
 O	o	cons
 NSummary	Summary	Summary NIL
 NSummary!location	location	location Summary
@@ -20,7 +20,7 @@ T	t5	o5
 B	b5	t5
 P	p6	String lcoset
 P	p7	String rcoset
-NPerv!nil	nil8	nil Perv
+NPerv!nil	nil8	xnil Perv
 O	o9	nil8
 T	t9	o9
 B	b9	t9
@@ -3868,11 +3868,11 @@ B	b2929	t2929
 P	p2929	Number 2573
 P	p2930	Number 2599
 O	o2930	location p2929 p2930
-Vh	h2930	h\\ \\ 
+Vh	h2930	h\\ \\
 B	b2930	h2930
-Vg	g	g\\ \\ 
+Vg	g	g\\ \\
 B	b2931	g
-Va	a	a\\ \\ 
+Va	a	a\\ \\
 B	b2932	a
 T	t2932	o1458 b2930 b2931 b2932
 B	b2933	t2932
@@ -4131,22 +4131,22 @@ B	b3047	t3047
 P	p3047	Number 4173
 P	p3048	Number 4414
 O	o3048	location p3047 p3048
-C	h3048	H\\ \\ 
-Vh	h3049	h\\ H\\ 
+C	h3048	H\\ \\
+Vh	h3049	h\\ H\\
 B	b3049	h3049
 T	t3049	o1654 b1655 b3049 b3049
 S	s3049	tbrarg\\ h3048\\ t3049
 B	b3050	s3049
 T	t3050	o1652 b3050
 B	b3051	t3050
-Vg	g3051	g\\ H\\ 
+Vg	g3051	g\\ H\\
 B	b3052	g3051
 T	t3052	o1654 b1655 b3052 b3052
 S	s3052	tbrarg\\ h3048\\ t3052
 B	b3053	s3052
 T	t3053	o1652 b3053
 B	b3054	t3053
-Va	a3054	a\\ H\\ 
+Va	a3054	a\\ H\\
 B	b3055	a3054
 T	t3055	o1659 b3055
 S	s3055	tbrarg\\ h3048\\ t3055
@@ -4483,13 +4483,13 @@ P	p1833	String lcoset_intro
 O	o1833	rule p1833
 NSummary!term_param	term_param	term_param Summary
 O	o1834	term_param
-Vz	z	z\\ H\\ 
+Vz	z	z\\ H\\
 B	b3210	z
 T	t3210	o1834 b3210
 B	b3211	t3210
 T	t3211	o b3211 b9
 B	b3212	t3211
-Vx	x	x\\ H\\ 
+Vx	x	x\\ H\\
 B	b3213	x
 T	t3213	o1659 b3213
 S	s3213	tbrarg\\ h3048\\ t3213
@@ -4906,7 +4906,7 @@ T	t3353	o3353
 B	b3353	t3353
 T	t3354	o b3353 b9
 B	b3354	t3354
-Vy	y	y\\ H\\ 
+Vy	y	y\\ H\\
 B	b3355	y
 T	t3355	o1842 b3355 b3058
 H	h3355	x t3355

@@ -1,6 +1,6 @@
 #PRL version 1.0.14 ASCII term
 NPerv	Perv	Perv NIL
-NPerv!cons	cons	cons Perv
+NPerv!cons	cons	xcons Perv
 O	o	cons
 NSummary	Summary	Summary NIL
 NSummary!location	location	location Summary
@@ -13,7 +13,7 @@ P	p2	String itt_theory
 O	o3	parent p2
 T	t	o3
 B	b	t
-NPerv!nil	nil3	nil Perv
+NPerv!nil	nil3	xnil Perv
 O	o4	nil3
 T	t4	o4
 B	b4	t4
@@ -701,13 +701,11 @@ P	p50	Number 128
 P	p51	Number 277
 O	o51	location p50 p51
 NBase_reflection	Base_reflection	Base_reflection NIL
-NBase_reflection!sequent_arg	sequent_arg	sequent_arg Base_reflection
-O	o259	sequent_arg
 NBase_reflection!bterm	bterm259	bterm Base_reflection
 O	o260	bterm259
 T	t260	o260
 B	b260	t260
-T	t261	o259 b260
+T	t261	o260
 C	h	H\\ \\
 Nvar	var	var NIL
 NSummary!rule	rule	rule Summary

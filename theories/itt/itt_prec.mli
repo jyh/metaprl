@@ -125,7 +125,7 @@ rule precMemberEquality :
 rule precElimination 'H lambda{z. 'G['z]} 'A univ[i:l] :
    sequent { <H>; r: "prec"{T, x. 'B['T; 'x]; 'a}; <J['r]> >- 'a = 'a in 'A } -->
    sequent { <H>; r: "prec"{T, x. 'B['T; 'x]; 'a}; <J['r]>;
-      Z: 'A -> univ[i:l] ;
+      Z: 'A -> univ[i:l];
       u: \subtype{(a: 'A * 'Z 'a); (a: 'A * "prec"{T, x. 'B['T; 'x]; 'a})};
       h: p: (a: 'A * 'Z 'a) -> 'G['p];
       p: a: 'A * 'B['Z; 'a]

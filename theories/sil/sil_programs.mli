@@ -33,6 +33,12 @@
 extends Base_theory
 
 (*
+ * Meta-terms.
+ *)
+declare "true"
+declare "false"
+
+(*
  * Numbers.
  *)
 declare number[i:n]

@@ -40,16 +40,13 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< 
-   @begin[doc]
-   @parents
-   @end[doc]
->>
+doc <:doc< @doc{@parents} >>
 extends Summary
-doc <:doc< @docoff >>
 
+doc "doc"{terms}
 declare it
 declare squash
+doc docoff
 
 (*
  * -*-

@@ -153,7 +153,7 @@ rule consEquality 'H :
  * H; l: list(A); J[l] >- C[nil]
  * H; l: list(A); J[l]; u: A; v: list(A); w: C[v] >- C[u::v]
  *)
-rule listElimination 'H 'J 'l 'w 'u 'v :
+rule listElimination 'H 'J 'w 'u 'v :
    sequent ['ext] { 'H; l: list{'A}; 'J['l] >- 'C[nil] } -->
    sequent ['ext] { 'H; l: list{'A}; 'J['l]; u: 'A; v: list{'A}; w: 'C['v] >- 'C['u::'v] } -->
    sequent ['ext] { 'H; l: list{'A}; 'J['l] >- 'C['l] }

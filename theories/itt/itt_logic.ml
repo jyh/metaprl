@@ -462,14 +462,14 @@ interactive all_univ {| intro []; eqcd |} 'H 'x :
    [wf] sequent [squash] { 'H; x : 't1 >- 'b1['x] = 'b2['x] in univ[i:l] } -->
    sequent ['ext] { 'H >- "all"{'t1; x1. 'b1['x1]} = "all"{'t2; x2. 'b2['x2]} in univ[i:l] }
 
-interactive all_type {| intro [] |} 'H 'x :
+interactive all_type {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- "type"{'t} } -->
-   [wf] sequent [squash] { 'H; x: 't >- "type"{'b['x]} } -->
+   [wf] sequent [squash] { 'H; v: 't >- "type"{'b['v]} } -->
    sequent ['ext] { 'H >- "type"{."all"{'t; v. 'b['v]}} }
 
-interactive all_intro {| intro [] |} 'H 'x :
+interactive all_intro {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- "type"{'t} } -->
-   [main] sequent ['ext] { 'H; x: 't >- 'b['x] } -->
+   [main] sequent ['ext] { 'H; v: 't >- 'b['v] } -->
    sequent ['ext] { 'H >- "all"{'t; v. 'b['v]} }
 
 interactive all_elim {| elim [ThinOption thinT] |} 'H 'J 'w 'z :
@@ -493,15 +493,15 @@ interactive exists_univ {| intro []; eqcd |} 'H 'x :
    [wf] sequent [squash] { 'H; x : 't1 >- 'b1['x] = 'b2['x] in univ[i:l] } -->
    sequent ['ext] { 'H >- "exists"{'t1; x1. 'b1['x1]} = "exists"{'t2; x2. 'b2['x2]} in univ[i:l] }
 
-interactive exists_type {| intro [] |} 'H 'x :
+interactive exists_type {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- "type"{'t} } -->
-   [wf] sequent [squash] { 'H; x: 't >- "type"{'b['x]} } -->
+   [wf] sequent [squash] { 'H; v: 't >- "type"{'b['v]} } -->
    sequent ['ext] { 'H >- "type"{."exists"{'t; v. 'b['v]}} }
 
-interactive exists_intro {| intro [] |} 'H 'z 'x :
+interactive exists_intro {| intro [] |} 'H 'z :
    [wf] sequent [squash] { 'H >- 'z IN 't } -->
    [main] sequent ['ext] { 'H >- 'b['z] } -->
-   [wf] sequent [squash] { 'H; x: 't >- "type"{'b['x]} } -->
+   [wf] sequent [squash] { 'H; v: 't >- "type"{'b['v]} } -->
    sequent ['ext] { 'H >- "exists"{'t; v. 'b['v]} }
 
 interactive exists_elim {| elim [] |} 'H 'J 'y 'z :

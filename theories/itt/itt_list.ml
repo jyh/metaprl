@@ -277,7 +277,7 @@ interactive consFormation 'H :
  * $C[t]$ holds on $t$.
  * @end[doc]
  *)
-prim listElimination {| elim [ThinOption thinT] |} 'H 'J 'l 'w 'u 'v :
+prim listElimination {| elim [ThinOption thinT] |} 'H 'J 'w 'u 'v :
    [main] ('base['l] : sequent ['ext] { 'H; l: list{'A}; 'J['l] >- 'C[nil] }) -->
    [main] ('step['l; 'u; 'v; 'w] : sequent ['ext] { 'H; l: list{'A}; 'J['l]; u: 'A; v: list{'A}; w: 'C['v] >- 'C['u::'v] }) -->
    sequent ['ext] { 'H; l: list{'A}; 'J['l] >- 'C['l] } =

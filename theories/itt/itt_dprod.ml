@@ -359,7 +359,7 @@ prim pairEquality {| intro []; eqcd |} 'H 'y :
  * induction combinator.
  * @end[doc]
  *)
-prim productElimination {| elim [ThinOption thinT] |} 'H 'J 'z 'u 'v :
+prim productElimination {| elim [ThinOption thinT] |} 'H 'J 'u 'v :
    [wf] ('t['u; 'v] : sequent ['ext] { 'H; z: x:'A * 'B['x]; u: 'A; v: 'B['u]; 'J['u, 'v] >- 'T['u, 'v] }) -->
    sequent ['ext] { 'H; z: x:'A * 'B['x]; 'J['z] >- 'T['z] } =
    spread{'z; u, v. 't['u; 'v]}

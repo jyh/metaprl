@@ -91,19 +91,18 @@ define unfold_prefield1 : prefield[i:l] <-->
  *		all b: 'F^car0. (('b in 'F^car) & ('b <> 'F^"0" in 'F^car)) &
  *		all c: 'F^car0. ('F^inv 'c) *['F] 'c = 'F^"1" in 'F^car
  *)
-
+(*
 define unfold_isField1 : isField[i:l]{'F} <-->
 	'F^car0 = {a: 'F^car | 'a <> 'F^"0" in 'F^car} in univ[i:l] &
 	all c: 'F^car0. ('F^inv 'c) *['F] 'c = 'F^"1" in 'F^car
+*)
 
-(* I'm going to try this definition next.
 define unfold_isField1 : isField{'F} <-->
 	ext_equal{ 'F^car0; {a: 'F^car | 'a <> 'F^"0" in 'F^car} } &
 	all c: 'F^car0. ('F^inv 'c) *['F] 'c = 'F^"1" in 'F^car
-*)
 
 define unfold_field1 : field[i:l] <-->
-   { F: prefield[i:l] | isField[i:l]{'F} }
+   { F: prefield[i:l] | isField{'F} }
 
 define unfold_as_multiplicative_group : as_multiplicative_group{'F} <-->
 	rename["car":t,"car0":t]{'F}
@@ -116,8 +115,8 @@ let unfold_field = unfold_field1 thenC addrC [0] unfold_prefield thenC addrC [1]
 
 let fold_prefield1 = makeFoldC << prefield[i:l] >> unfold_prefield1
 let fold_prefield = makeFoldC << prefield[i:l] >> unfold_prefield
-let fold_isField1 = makeFoldC << isField[i:l]{'F} >> unfold_isField1
-let fold_isField = makeFoldC << isField[i:l]{'F} >> unfold_isField
+let fold_isField1 = makeFoldC << isField{'F} >> unfold_isField1
+let fold_isField = makeFoldC << isField{'F} >> unfold_isField
 let fold_field1 = makeFoldC << field[i:l] >> unfold_field1
 let fold_field = makeFoldC << field[i:l] >> unfold_field
 let fold_as_multiplicative_group = makeFoldC << as_multiplicative_group{'F} >> unfold_as_multiplicative_group
@@ -164,18 +163,18 @@ interactive prefield_elim {| elim [] |} 'H :
 
 interactive isField_wf {| intro [intro_typeinf <<'F>>] |} prefield[i:l] :
    sequent { <H> >- 'F in prefield[i:l] } -->
-   sequent { <H> >- isField[i:l]{'F} Type }
+   sequent { <H> >- isField{'F} Type }
 
 interactive field_wf {| intro [] |} :
    sequent { <H> >- "type"{field[i:l]} }
 
 interactive field_intro {| intro [] |} :
    [wf] sequent { <H> >- 'F in prefield[i:l] } -->
-   [main] sequent { <H> >- isField[i:l]{'F} } -->
+   [main] sequent { <H> >- isField{'F} } -->
    sequent { <H> >- 'F in field[i:l] }
 
 interactive field_elim {| elim [] |} 'H :
-   sequent { <H>; F: prefield[i:l]; v: isField[i:l]{'F}; <J['F]> >- 'C['F] } -->
+   sequent { <H>; F: prefield[i:l]; v: isField{'F}; <J['F]> >- 'C['F] } -->
    sequent { <H>; F: field[i:l]; <J['F]> >- 'C['F] }
 
 doc <:doc<

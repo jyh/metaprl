@@ -48,9 +48,9 @@ syntax.
 @begin[tabular, l]
 @line{{@tt{match} @emph{expression} @tt{with}}}
 @line{{$@space$ $@space$ $@emph{pattern}_1$ @code{->} $@emph{expression}_1$}}
-@line{{$@space$ | $@emph{pattern}_2$ @code{->} $@emph{expression}_2$}}
+@line{{$@space$ @tt{|} $@emph{pattern}_2$ @code{->} $@emph{expression}_2$}}
 @line{{$@space$ $@space$ $@vdots$}}
-@line{{$@space$ | $@emph{pattern}_n$ @code{->} $@emph{expression}_n$}}
+@line{{$@space$ @tt{|} $@emph{pattern}_n$ @code{->} $@emph{expression}_n$}}
 @end[tabular]
 @end[center]
 

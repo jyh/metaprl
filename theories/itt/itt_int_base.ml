@@ -308,7 +308,7 @@ prim add_wf {| intro_resource []; eqcd_resource |} 'H :
    [wf] sequent [squash] { 'H >- 'b = 'b1 in int } -->
    sequent ['ext] { 'H >- 'a +@ 'b = 'a1 +@ 'b1 in int } = it
 
-prim uni_wf {| intro_resource []; eqcd_resource |} 'H :
+prim minus_wf {| intro_resource []; eqcd_resource |} 'H :
    [wf] sequent [squash] { 'H >- 'a = 'a1 in int } -->
    sequent ['ext] { 'H >- (-'a) = (-'a1) in int } = it
 
@@ -693,19 +693,19 @@ let add_Id2C = add_Id2_rw
  *
  * @end[doc]
  *)
-prim uni_add_inverse 'H :
+prim minus_add_inverse 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    sequent ['ext] { 'H >- ( 'a +@ (- 'a ) ) ~ 0 } = it
 
-interactive_rw uni_add_inverse_rw :
+interactive_rw minus_add_inverse_rw :
    ( 'a IN int ) -->
    ( 'a +@ (- 'a) ) <--> 0
 
-let uni_add_inverseC = uni_add_inverse_rw
+let minus_add_inverseC = minus_add_inverse_rw
 (*
-let unfold_zeroC t = foldC (mk_add_term t (mk_minus_term t)) uni_add_inverseC 
+let unfold_zeroC t = foldC (mk_add_term t (mk_minus_term t)) minus_add_inverseC 
 
-interactive uni_add_inverse2 'H :
+interactive minus_add_inverse2 'H :
    [wf] sequent [squash] { 'H >- 'c IN int } -->
    sequent ['ext] { 'H >- 0 ~ ('c +@ (- 'c)) }
 *)
@@ -733,12 +733,12 @@ interactive_rw add_Functionality_rw 'b 'c :
 
 let add_FunctionalityC = add_Functionality_rw
 
-interactive uni_add_Distrib 'H :
+interactive minus_add_Distrib 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    [wf] sequent [squash] { 'H >- 'b IN int } -->
    sequent ['ext] { 'H >- (-('a +@ 'b)) ~ ((-'a) +@ (-'b)) }
 
-interactive uni_uni_reduce 'H :
+interactive minus_minus_reduce 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    sequent ['ext] { 'H >- (-(-'a)) ~ 'a }
 
@@ -759,8 +759,8 @@ let reduce_info =
    [<< band{lt_bool{'a; 'b}; lt_bool{'b; 'a}} >>, lt_Reflex;
     << ('a +@ 0) >>, add_Id;
     << (0 +@ 'a) >>, add_Id2;
-    << ( 'a +@ (- 'a)) >>, uni_add_inverse;
-    << (-(-'a)) >>, uni_uni_reduce;
+    << ( 'a +@ (- 'a)) >>, minus_add_inverse;
+    << (-(-'a)) >>, minus_minus_reduce;
     << ('a +@ ('b +@ 'c)) >>, add_Assoc]
 
 

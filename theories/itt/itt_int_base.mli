@@ -119,12 +119,55 @@ rewrite reduce_eq : (number[i:n] = number[j:n] in int) <-->
    meta_eq{number[i:n]; number[j:n]}
 *)
 
+val int_term : term
+val is_int_term : term -> bool
+
+val beq_int_term : term
+val is_beq_int_term : term -> bool
+val mk_beq_int_term : term -> term -> term
+val dest_beq_int : term -> term * term
+
+val lt_term : term
+val is_lt_term : term -> bool
+val mk_lt_term : term -> term -> term
+val dest_lt : term -> term * term
+
+val lt_bool_term : term
+val is_lt_bool_term : term -> bool
+val mk_lt_bool_term : term -> term -> term
+val dest_lt_bool : term -> term * term
+
+val add_term : term
+val is_add_term : term -> bool
+val mk_add_term : term -> term -> term
+val dest_add : term -> term * term
+
+val minus_term : term
+val is_minus_term : term -> bool
+val mk_minus_term : term -> term
+val dest_minus : term -> term
+
+val sub_term : term
+val is_sub_term : term -> bool
+val mk_sub_term : term -> term -> term
+val dest_sub : term -> term * term
+
+val number_term : term
+val is_number_term : term -> bool
+val dest_number : term -> Mp_num.num
+val mk_number_term : Mp_num.num -> term
+
+val ind_term : term
+val is_ind_term : term -> bool
+val dest_ind : term -> term * string * string * term * term * string * string * term
+val mk_ind_term : term -> string -> string -> term -> term -> string -> string -> term -> term
+
 rule add_wf 'H :
    [wf] sequent [squash] { 'H >- 'a = 'a1 in int } -->
    [wf] sequent [squash] { 'H >- 'b = 'b1 in int } -->
    sequent ['ext] { 'H >- 'a +@ 'b = 'a1 +@ 'b1 in int }
 
-rule uni_wf 'H :
+rule minus_wf 'H :
    [wf] sequent [squash] { 'H >- 'a = 'a1 in int } -->
    sequent ['ext] { 'H >- (- 'a) = (- 'a1) in int }
 
@@ -349,15 +392,15 @@ rule add_Id2 'H :
 
 topval add_Id2C: conv
 
-rule uni_add_inverse 'H :
+rule minus_add_inverse 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    sequent ['ext] { 'H >- ( 'a +@ ( - 'a ) ) ~ 0 }
 
-topval uni_add_inverseC: conv
+topval minus_add_inverseC: conv
 (*
 topval unfold_zeroC: term -> conv
 
-rule uni_add_inverse2 'H :
+rule minus_add_inverse2 'H :
    [wf] sequent [squash] { 'H >- 'c IN int } -->
    sequent ['ext] { 'H >- 0 ~ ('c +@ ( - 'c )) }
 *)
@@ -378,11 +421,11 @@ rule add_Functionality 'H 'c :
 
 topval add_FunctionalityC : term -> term -> conv
 
-rule uni_add_Distrib 'H :
+rule minus_add_Distrib 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    [wf] sequent [squash] { 'H >- 'b IN int } -->
    sequent ['ext] { 'H >- (- ('a +@ 'b)) ~ ( (- 'a) +@ (- 'b) ) }
 
-rule uni_uni_reduce 'H :
+rule minus_minus_reduce 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    sequent ['ext] { 'H >- (-(-'a)) ~ 'a }

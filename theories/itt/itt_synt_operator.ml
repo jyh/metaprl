@@ -125,7 +125,9 @@ prim bop_univ {| intro [] |}:
 interactive bop_type {| intro [] |}:
    sequent { <H> >- BOperator Type }
 
-(* is_same_op is an equivalence relation on BOperator. *)
+doc <:doc< @begin[doc]
+   @tt[is_same_op] is an equivalence relation on << BOperator >>.
+@end[doc] >>
 prim is_same_op_wf {| intro [] |} :
    sequent { <H> >- 'op_1 in BOperator } -->
    sequent { <H> >- 'op_2 in BOperator } -->
@@ -151,6 +153,9 @@ prim is_same_op_trans 'op2 :
    sequent { <H> >- "assert"{is_same_op{'op2;'op3}} } -->
    sequent { <H> >- "assert"{is_same_op{'op1;'op3}} } = it
 
+doc <:doc< @begin[doc]
+   << BOperator >> is a subtype of << Operator >>.
+@end[doc] >>
 interactive op_univ {| intro [] |}:
    sequent { <H> >- Operator in univ[l:l] }
 
@@ -164,6 +169,9 @@ interactive bop_subtype_op {| intro [AutoMustComplete] |}:
 interactive bop_subtype_op2 {| nth_hyp |} 'H :
    sequent { <H>; op: BOperator; <J['op]> >- 'op in Operator }
 
+doc <:doc< @begin[doc]
+   Some well-formedness rules.
+@end[doc] >>
 prim op_bdepth_wf {| intro [] |} :
    sequent { <H> >- 'op in BOperator } -->
    sequent { <H> >- op_bdepth{'op} in nat }
@@ -184,6 +192,18 @@ prim inject_wf {| intro [] |} :
    sequent { <H> >- inject{'op; 'n} in BOperator }
    = it
 
+interactive bind_wf {| intro [] |} :
+   sequent { <H> >- 'op in BOperator } -->
+   sequent { <H> >- 'n in nat } -->
+   sequent { <H> >- bind{'op; 'n} in  BOperator }
+
+interactive bind1_wf {| intro [] |} :
+   sequent { <H> >- 'op in BOperator } -->
+   sequent { <H> >- bind{'op} in  BOperator }
+
+doc <:doc< @begin[doc]
+   Properties of the operators.
+@end[doc] >>
 prim inject_id {| intro [] |} :
    [wf] sequent { <H> >- 'op in BOperator } -->
    sequent { <H> >- inject{'op; op_bdepth{'op}} = 'op in BOperator }
@@ -199,15 +219,6 @@ interactive inject_equal {| intro [] |} :
    [wf] sequent { <H> >- 'op in BOperator } -->
    [wf] sequent { <H> >- 'n in nat } -->
    sequent { <H> >- inject{'op;'n} = 'op in Operator }
-
-interactive bind_wf {| intro [] |} :
-   sequent { <H> >- 'op in BOperator } -->
-   sequent { <H> >- 'n in nat } -->
-   sequent { <H> >- bind{'op; 'n} in  BOperator }
-
-interactive bind1_wf {| intro [] |} :
-   sequent { <H> >- 'op in BOperator } -->
-   sequent { <H> >- bind{'op} in  BOperator }
 
 interactive_rw bind_red {| reduce |} :
    'op in BOperator -->
@@ -227,6 +238,7 @@ interactive_rw unbind_red {| reduce |} :
    'op in BOperator -->
    op_bdepth{'op} > 0 -->
    op_bdepth{unbind{'op}} <--> op_bdepth{'op} -@ 1
+doc docoff
 
 interactive shape_int_list {| intro [] |} :
    sequent { <H> >- 'op in Operator } -->
@@ -244,6 +256,8 @@ interactive shape_int_list2 {| intro [] |} :
    sequent { <H> >- 'op1 = 'op2 in Operator } -->
    sequent { <H> >- shape{'op1} ~ shape{'op2} }
 
+doc <:doc< @begin[doc]
+@end[doc] >>
 interactive_rw shape_inject {| reduce |} :
    'op in BOperator -->
    'n in nat -->

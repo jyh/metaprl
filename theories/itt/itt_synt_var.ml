@@ -41,13 +41,12 @@ doc <:doc<
 >>
 
 doc "doc"{parents}
-
 extends Itt_int_base
 extends Itt_nat
 extends Itt_omega
+doc docoff
 
 open Basic_tactics
-
 
 doc <:doc< @begin[doc]
    @modsection{Abstract type}
@@ -58,15 +57,9 @@ doc <:doc< @begin[doc]
 @end[doc] >>
 
 declare Var
-dform vars_df : Var = `"Var"
-
 declare var{'left; 'right} (* depth = left + right + 1 *)
-dform var_df : var{'l; 'r} = `"var(" slot{'l} `"," slot{'r} `")"
-
 declare left{'v}
 declare right{'v}
-dform left_df : left{'v} = pi sub["L"] `"("slot{'v} `")"
-dform right_df : right{'v} = pi sub["R"] `"(" slot{'v} `")"
 
 prim_rw left_id {| reduce |} :
    'left in nat -->
@@ -78,7 +71,6 @@ prim_rw right_id {| reduce |} :
    'right in nat -->
    right {var{'left; 'right}} <--> 'right
 
-
 doc <:doc< @begin[doc]
  @modsection{Definitions}
  @modsubsection{Depth}
@@ -87,21 +79,17 @@ doc <:doc< @begin[doc]
 
 define unfold_depth:
    depth{'v} <--> left{'v} +@ right{'v} +@ 1
-dform depth_df : depth{'v} = `"depth(" slot{'v} `")"
 
 interactive_rw depth_reduce {| reduce |} :
    'l in nat -->
    'r in nat -->
    depth{var{'l;'r}} <--> 'l +@ 'r +@ 1
 
-
 doc <:doc< @begin[doc]
    <<Var{'n}>> is a set of variables with depth <<'n>>.
 @end[doc] >>
 
 define unfold_var: Var{'n} <--> {v:Var| depth{'v} = 'n in int }
-dform var_df : Var{'n} = Var sub{'n}
-
 
 doc <:doc< @begin[doc]
    @modsubsection{Equality}
@@ -112,11 +100,9 @@ doc <:doc< @begin[doc]
 
 define unfold_is_eq:
    is_eq{'v;'u} <--> (left{'v} =@ left{'u})
-dform is_eq_df : is_eq{'v;'u} =  slot{'v} space cong sub{bool} space slot{'u}
 
 declare eq{'v;'u}
 iform unfold_eq: eq{'v;'u} <--> "assert"{is_eq{'v;'u}}
-dform eq_df : eq{'v;'u} =  slot{'v} space cong sub{Var} space slot{'u}
 
 interactive_rw eq_equal {| reduce |} :
    'left_1 in nat -->
@@ -222,3 +208,16 @@ interactive varSquiggle {| nth_hyp |} :
    sequent { <H> >- 'b1 ~ 'b2 }
 
 doc <:doc< @docoff >>
+
+(************************************************************************
+ * DISPLAY FORMS                                                        *
+ ************************************************************************)
+
+dform vars_df : Var = `"Var"
+dform var_df : var{'l; 'r} = `"var(" slot{'l} `"," slot{'r} `")"
+dform left_df : left{'v} = pi sub["L"] `"("slot{'v} `")"
+dform right_df : right{'v} = pi sub["R"] `"(" slot{'v} `")"
+dform depth_df : depth{'v} = `"depth(" slot{'v} `")"
+dform var_df : Var{'n} = Var sub{'n}
+dform is_eq_df : is_eq{'v;'u} =  slot{'v} space cong sub{bool} space slot{'u}
+dform eq_df : eq{'v;'u} =  slot{'v} space cong sub{Var} space slot{'u}

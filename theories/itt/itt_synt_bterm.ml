@@ -135,7 +135,7 @@ doc <:doc< @begin[doc]
    @modsubsection{Compatible shapes}
 
    Suppose the shape of an operator << 'op >> is $[b_1;@ldots;b_n]$ ($n @ge 0$)
-   and the binding depth is << 'd >>. We say << 'mbtl >> and << 'op >> have
+   and its binding depth is << 'd >>. We say << 'mbtl >> and << 'op >> have
    compatible shapes if << 'mbtl >> is a list of length << 'n >> where the
    binding depth of the $i$-th element is $b_i+d$ (for each $i @in 1..n$).
    @end[doc]
@@ -295,7 +295,8 @@ dform var_bterm_df : except_mode[src] :: var_bterm{'bt} =
 
 let fold_var_bterm = makeFoldC << var_bterm{'bt} >> unfold_var_bterm
 
-doc <:doc< >>
+doc <:doc< @begin[doc]
+@end[doc] >>
 interactive_rw is_var_reduce1 {| reduce |}: is_var_bterm{var{'l;'r}} <--> btrue
 interactive_rw is_var_reduce2 {| reduce |}: is_var_bterm{make_bterm{'op;'btl}} <--> bfalse
 interactive_rw var_reduce1 {| reduce |}: var_bterm{var{'l;'r}} <--> "assert"{btrue}
@@ -364,7 +365,8 @@ doc docoff
 dform opbterm_df : except_mode[src] :: OpBTerm =
    `"OpBTerm"
 
-doc <:doc< >>
+doc <:doc< @begin[doc]
+@end[doc] >>
 interactive opbterm_univ {| intro [] |} :
    sequent { <H> >- OpBTerm in univ[i:l] }
 
@@ -412,7 +414,8 @@ doc docoff
 
 dform op_of_df: op_of{'bt} = `"op_of(" slot{'bt} `")"
 
-doc <:doc< >>
+doc <:doc< @begin[doc]
+@end[doc] >>
 interactive_rw op_of_reduce {| reduce |}: op_of{make_bterm{'op;'btl}} <--> 'op
 
 interactive op_of_wf {| intro [] |} :
@@ -447,7 +450,8 @@ doc docoff
 dform subterms_df : except_mode[src] :: subterms{'bt} =
    `"subterms(" slot{'bt} `")"
 
-doc <:doc< >>
+doc <:doc< @begin[doc]
+@end[doc] >>
 interactive_rw subterms_reduce1 {| reduce |}:  subterms{var{'l;'r}} <--> nil
 interactive_rw subterms_reduce2 {| reduce |}:  subterms{make_bterm{'op;'btl}} <--> 'btl
 
@@ -505,7 +509,8 @@ dform is_sameop_df : except_mode[src] :: is_same_op{'b1; 'b2} =
 dform sameop_df : except_mode[src] :: same_op{'b1; 'b2} =
    `"same_op(" slot{'b1} `"; " slot{'b2} `")"
 
-doc <:doc< >>
+doc <:doc< @begin[doc]
+@end[doc] >>
 interactive is_same_op_wf {| intro [] |} :
    sequent { <H> >- 'b1 in BTerm } -->
    sequent { <H> >- 'b2 in BTerm } -->

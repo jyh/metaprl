@@ -199,14 +199,6 @@ dform list_ind_df1 : except_mode[src] :: parens :: "prec"[prec_list] :: list_ind
  * RULES                                                                *
  ************************************************************************)
 
-(*
- * @docoff
- *)
-prim listFormation 'H :
-   ('A : sequent ['ext] { 'H >- univ[i:l] }) -->
-   sequent ['ext] { 'H >- univ[i:l] } =
-   'A
-
 (*!
  * @begin[doc]
  * @rules
@@ -226,10 +218,12 @@ prim listEquality {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- list{'A} = list{'B} in univ[i:l] } =
    it
 
-prim nilFormation {| intro_resource [] |} 'H :
-   [wf] sequent [squash] { 'H >- "type"{'A} } -->
-   sequent ['ext] { 'H >- list{'A} } =
-   nil
+(*
+ * @docoff
+ *)
+interactive listFormation 'H :
+   sequent ['ext] { 'H >- univ[i:l] } -->
+   sequent ['ext] { 'H >- univ[i:l] }
 
 (*!
  * @begin[doc]
@@ -243,19 +237,9 @@ prim nilEquality {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- nil IN list{'A} } =
    it
 
-(*!
- * @docoff
- * H >- list(A) ext cons(h; t)
- * by consFormation
- *
- * H >- A ext h
- * H >- list(A) ext t
- *)
-prim consFormation 'H :
-   ('h : sequent ['ext] { 'H >- 'A }) -->
-   ('t : sequent ['ext] { 'H >- list{'A} }) -->
-   sequent ['ext] { 'H >- list{'A} } =
-   'h :: 't
+interactive nilFormation {| intro_resource [] |} 'H :
+   [wf] sequent [squash] { 'H >- "type"{'A} } -->
+   sequent ['ext] { 'H >- list{'A} }
 
 (*!
  * @begin[doc]
@@ -269,6 +253,19 @@ prim consEquality {| intro_resource []; eqcd_resource |} 'H :
    [wf] sequent [squash] { 'H >- 'v1 = 'v2 in list{'A} } -->
    sequent ['ext] { 'H >- cons{'u1; 'v1} = cons{'u2; 'v2} in list{'A} } =
    it
+
+(*!
+ * @docoff
+ * H >- list(A) ext cons(h; t)
+ * by consFormation
+ *
+ * H >- A ext h
+ * H >- list(A) ext t
+ *)
+interactive consFormation 'H :
+   sequent ['ext] { 'H >- 'A } -->
+   sequent ['ext] { 'H >- list{'A} } -->
+   sequent ['ext] { 'H >- list{'A} }
 
 (*!
  * @begin[doc]

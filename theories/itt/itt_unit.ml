@@ -100,14 +100,6 @@ dform unit_df1 : except_mode[src] :: unit = `"Unit"
  * RULES                                                                *
  ************************************************************************)
 
-(*
- * H >- Ui ext Unit
- * by unitFormation
- *)
-prim unitFormation 'H :
-   sequent ['ext] { 'H >- univ[i:l] } =
-   unit
-
 (*!
  * @begin[doc]
  * @rules
@@ -122,22 +114,17 @@ prim unitEquality {| intro_resource []; eqcd_resource |} 'H :
    it
 
 (*
+ * H >- Ui ext Unit
+ * by unitFormation
+ *)
+interactive unitFormation 'H :
+   sequent ['ext] { 'H >- univ[i:l] }
+
+(*
  * Is a type.
  *)
 prim unitType {| intro_resource [] |} 'H :
    sequent ['ext] { 'H >- "type"{unit} } =
-   it
-
-(*!
- * @begin[doc]
- * @thysubsection{Introduction}
- *
- * The $@unit$ type is always provable.  The proof is the unique term
- * $@it$.
- * @end[doc]
- *)
-prim unit_memberFormation {| intro_resource [] |} 'H :
-   sequent ['ext] { 'H >- unit } =
    it
 
 (*!
@@ -149,6 +136,17 @@ prim unit_memberFormation {| intro_resource [] |} 'H :
 prim unit_memberEquality {| intro_resource []; eqcd_resource |} 'H :
    sequent ['ext] { 'H >- it IN unit } =
    it
+
+(*!
+ * @begin[doc]
+ * @thysubsection{Introduction}
+ *
+ * The $@unit$ type is always provable.  The proof is the unique term
+ * $@it$.
+ * @end[doc]
+ *)
+interactive unit_memberFormation {| intro_resource [] |} 'H :
+   sequent ['ext] { 'H >- unit }
 
 (*!
  * @begin[doc]
@@ -184,24 +182,14 @@ prim unit_squashElimination 'H :
  * goals that match $t @longleftrightarrow @unit$.
  * @end[doc]
  *)
-interactive unitSqequal 'H :
+prim unitSqequal {| intro_resource [] |} 'H :
    sequent [squash] { 'H >- 'x = 'y in unit } -->
-   sequent ['ext] { 'H >- 'x ~ 'y }
+   sequent ['ext] { 'H >- 'x ~ 'y } = it
 (*! @docoff *)
 
 (************************************************************************
  * TACTICS                                                              *
  ************************************************************************)
-
-(*
- * Squiggle reasoning.
- *)
-let intro_unit_sqequalT p =
-   unitSqequal (Sequent.hyp_count_addr p) p
-
-let unit_rewrite_term = << 'e1 ~ it >>
-
-let intro_resource = Mp_resource.improve intro_resource (unit_rewrite_term, intro_unit_sqequalT)
 
 (************************************************************************
  * SQUASH STABILITY                                                     *

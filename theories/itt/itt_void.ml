@@ -95,14 +95,6 @@ dform void_df1 : except_mode[src] :: void = `"Void"
  * RULES                                                                *
  ************************************************************************)
 
-(*
- * H >- Ui ext Void
- * by voidFormation
- *)
-prim voidFormation 'H :
-   sequent ['ext] { 'H >- univ[i:l] } =
-   void
-
 (*!
  * @begin[doc]
  * @rules
@@ -117,6 +109,13 @@ prim voidFormation 'H :
 prim voidEquality {| intro_resource []; eqcd_resource |} 'H :
    sequent ['ext] { 'H >- void IN univ[i:l] } =
    it
+
+(*
+ * H >- Ui ext Void
+ * by voidFormation
+ *)
+interactive voidFormation 'H :
+   sequent ['ext] { 'H >- univ[i:l] }
 
 (*
  * Typehood.

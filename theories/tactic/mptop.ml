@@ -57,6 +57,7 @@ open MLast
 
 open Refiner.Refiner.TermType
 open Refiner.Refiner.TermAddr
+open Refiner.Refiner.TermMan
 open Refiner.Refiner.RefineError
 open Mp_resource
 
@@ -399,6 +400,8 @@ and mk_apply_expr base loc f a =
                match a with
                   AddressExpr a ->
                      f a
+                | IntExpr i ->
+                     f (clause_address i)
                 | ListExpr _ ->
                      f (make_address (int_list_of_list loc a))
                 | _ ->

@@ -18,9 +18,13 @@ prim hypothesis 'H :
 (*
  * Thinning.
  *)
-prim thin 'H :
-   ('t : sequent { <H>; <J> >- 'C }) -->
-   sequent { <H>; x: 'T; <J> >- 'C } = 't
+prim thin_many 'H 'J :
+   ('t : sequent { <H>; <K> >- 'C }) -->
+   sequent { <H>; <J>; < K<|H|> > >- 'C<|H;K|> } = 't
+
+interactive thin 'H :
+   sequent { <H>; <J> >- 'C } -->
+   sequent { <H>; 'A; <J> >- 'C }
 
 (*
  * Cut rule.
@@ -39,7 +43,7 @@ let thinT = thin
 
 let nthAssumT = argfunT (fun i p ->
    let assum = Sequent.nth_assum p i in
-      Top_tacticals.thinMatchT thinT assum)
+      Top_tacticals.thinMatchT thin_many assum)
 
 let assertT = cut
 

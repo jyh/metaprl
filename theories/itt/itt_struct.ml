@@ -93,24 +93,26 @@ doc <:doc<
   
    @modsubsection{Thinning (of hypotheses)}
   
-   The @tt{thin} rule states that if the conclusion $C$ can be proved
-   from hypotheses defined in $H$ and $J$, then it can also be proved with
-   an additional assumption $x@colon A$.  The name comes from the
-   goal-directed view: the hypothesis $x@colon A$ is removed (``thinned'')
+   The @tt[thin_many] rule states that if the conclusion $C$ can be proved
+   from hypotheses defined in $H$ and $K$, then it can also be proved with
+   additional assumptions $J$.  The name comes from the
+   goal-directed view: the hypotheses $J$ are removed (``thinned'')
    by the application of the rule.
   
-   Note that $x$ must be a variable that is not bound by any hypothesis
-   in $H$.  The rule is even more stringent: $x$ may not occur free
-   in $J$ or $C$ (note that the goal is @emph{not} phrased as
-   <<sequent{ <H>; x: 'A; <J['x]> >- 'C}>>).
+   Note that the rule requires that variables introduces by $J$ may not occur
+   free in $K$ or $C$.
   
    The proof extract term $t$ is unchanged.
    @end[doc]
 >>
-prim thin 'H :
-   ('t : sequent { <H>; <J> >- 'C }) -->
-   sequent { <H>; 'A; <J> >- 'C } =
+prim thin_many 'H 'J :
+   ('t : sequent { <H>; <K> >- 'C }) -->
+   sequent { <H>; <J>; < K<|H|> > >- 'C<|H;K|> } =
    't
+
+interactive thin 'H :
+   sequent { <H>; <J> >- 'C } -->
+   sequent { <H>; 'A; <J> >- 'C }
 
 prim exchange 'H 'K 'L:
    ('t : sequent { <H>; <L>; <K>; <J> >- 'C }) -->
@@ -309,17 +311,11 @@ let thinIfThinningT = argfunT (fun hyps p ->
 let thinAllT i j = funT (fun p ->
    let i = get_pos_hyp_num p i in
    let j = get_pos_hyp_num p j in
-   let rec tac j =
-      if j < i then
-         idT
-      else
-         thinT j thenT tac (pred j)
-   in
-      tac j)
+      thin_many i (j-i+2) )
 
 let nthAssumT = argfunT (fun i p ->
    let assum = Sequent.nth_assum p i in
-      Top_tacticals.thinMatchT thinT assum thenT nthAssumT i)
+      Top_tacticals.thinMatchT thin_many assum thenT nthAssumT i)
 
 doc <:doc< 
    @begin[doc]

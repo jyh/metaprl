@@ -197,23 +197,23 @@ declare m
 
 dform m_df : m = bf["m"]
 
-let tprog = <:ext<
-            let t = 1+2 in
-               t>>
-
+(*
+ * Just for testing the ext: quotation.
+ *)
+let tprog = <:ext<let t = 1 in t+1>>
 
 (************************************************************************
  * Just for testing.
  *)
 interactive test_prog 'H :
-   sequent [m] { 'H >- LetAtom{AtomInt[1:n]; v1.
-                       LetAtom{AtomBinop{AddOp; AtomInt[2:n]; 'v1}; v2.
-                       LetFun{v3.
-                           LetPair{'v2; 'v3; v4.
-                           LetSubscript{'v4; AtomInt[0:n]; v5.
-                           Return{'v5}}}; f.
-                       TailCall{'f; AtomInt[17:n]}}}}}
-
+   sequent [m] { 'H >- $"let v1 = 1 in
+                         let v2 = 2+v1 in
+                         let f (v3) =
+                            let v4 = (v2, v3) in
+                            let v5 = v4[0] in
+                              v5
+                         in
+                            f(17)"$ }
 
 (*!
  * @docoff

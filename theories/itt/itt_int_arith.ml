@@ -530,7 +530,7 @@ let resource arith_unfold +=[
 	(*<<number[i:n] *@ 'a>>, failC;*)
 	<<'a *@ number[i:n]>>, mul_CommutC;
 	(*<<number[i:n] *@ ('b *@ 'c)>>, failC;*)
-	<<'b *@ (number[i:n] *@ 'c)>>, mul_BubblePrimitiveC;
+	(*<<'b *@ (number[i:n] *@ 'c)>>, mul_BubblePrimitiveC;*)
 	<<number[i:n] *@ (number[j:n] *@ 'c)>>, (mul_AssocC thenC (addrC [0] reduce_mul));
 
 	<<'a +@ 'b>>, termC addSwap1C;
@@ -538,7 +538,7 @@ let resource arith_unfold +=[
 	(*<<number[i:n] +@ 'a>>, failC;*)
 	<<'a +@ number[i:n]>>, add_CommutC;
 	(*<<number[i:n] +@ ('b +@ 'c)>>, failC;*)
-	<<'a +@ (number[i:n] +@ 'c)>>, add_BubblePrimitiveC;
+	(*<<'a +@ (number[i:n] +@ 'c)>>, add_BubblePrimitiveC;*)
 	<<number[i:n] +@ (number[j:n] +@ 'c)>>, (add_AssocC thenC (addrC [0] reduce_add));
 
 	<<('a +@ 'b) +@ 'c>>, add_Assoc2C;

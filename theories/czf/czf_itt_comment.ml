@@ -427,7 +427,7 @@ dform pair_df : except_mode[tex] :: math_pair{'s1; 's2} =
 
 declare math_subset{'s1; 's2}
 
-dform pair_df1 : mode[tex] :: math_subset{'s1; 's2} =
+dform subset_df1 : mode[tex] :: math_subset{'s1; 's2} =
    izone `"{" ezone
    slot{'s1}
    izone `"\\subseteq_s " ezone

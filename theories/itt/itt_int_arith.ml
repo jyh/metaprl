@@ -490,7 +490,7 @@ let mul_BubbleStepC tm =
          if is_mul_term s then
             let (b,c) = dest_mul s in
 	       if (is_number_term a) & (is_number_term b) then
-	          (mul_AssocC thenC (addrC [0] reduce_mul))
+	          (mul_AssocC thenC (addrC [0] reduceC))
 	       else
                   if (compare_terms b a)=Less or
                    (is_number_term b) then
@@ -529,19 +529,19 @@ let mul_normalizeC = (sweepDnC mul_Assoc2C) thenC
 
 interactive_rw sum_same_products1_rw :
    ('a = 'b in int) -->
-   ((number[i:n] *@ 'a) +@ (number[j:n] *@ 'b)) <--> (number{meta_sum[i:n, j:n]} *@ 'a)
+   ((number[i:n] *@ 'a) +@ (number[j:n] *@ 'b)) <--> ((number[i:n] +@ number[j:n]) *@ 'a)
 
 let sum_same_products1C = sum_same_products1_rw
 
 interactive_rw sum_same_products2_rw :
    ('a = 'b in int) -->
-   ((number[i:n] *@ 'a) +@ 'b) <--> (number{meta_sum[i:n, 1:n]} *@ 'a)
+   ((number[i:n] *@ 'a) +@ 'b) <--> ((number[i:n] +@ 1) *@ 'a)
 
 let sum_same_products2C = sum_same_products2_rw
 
 interactive_rw sum_same_products3_rw :
    ('a = 'b in int) -->
-   ('a +@ (number[j:n] *@ 'b)) <--> (number{meta_sum[1:n, j:n]} *@ 'a)
+   ('a +@ (number[j:n] *@ 'b)) <--> ((number[j:n] +@ 1) *@ 'a)
 
 let sum_same_products3C = sum_same_products3_rw
 
@@ -601,7 +601,7 @@ let add_BubbleStepC tm =
          if is_add_term s then
             let (b,c) = dest_add s in
 	       if (is_number_term a) & (is_number_term b) then
-	          (add_AssocC thenC (addrC [0] reduce_add))
+	          (add_AssocC thenC (addrC [0] reduceC))
 	       else
                   if (compare_terms b a)=Less then
                      add_BubblePrimitiveC
@@ -609,7 +609,7 @@ let add_BubbleStepC tm =
                      idC
          else
             if (is_number_term a) & (is_number_term s) then
-	       reduce_add
+	       reduceC
 	    else
                if (compare_terms s a)=Less then
 	          add_CommutC
@@ -627,12 +627,12 @@ let add_BubbleSortC = (sweepDnC (termC same_productC)) thenC
 (* Before terms sorting we have to put parentheses in the rightmost-first
 manner
  *)
-let add_normalizeC = (sweepDnC add_Assoc2C) thenC
+let add_normalizeC = (whileProgressC (sweepDnC add_Assoc2C)) thenC
                      (whileProgressC add_BubbleSortC)
 
 let open_parenthesesC = whileProgressC (sweepDnC mul_add_DistribC)
 
-let normalizeC = (sweepDnC reduce_minus) thenC
+let normalizeC = (sweepDnC reduceC) thenC
                  open_parenthesesC thenC
                  mul_normalizeC thenC
                  add_normalizeC

@@ -56,8 +56,13 @@ open Refiner.Refiner.Term
 open Refiner.Refiner.TermMan
 open Refiner.Refiner.TermSubst
 open Refiner.Refiner.TermType
+open Refiner.Refiner.TermMeta
+open Refiner.Refiner.TermAddr
+open Refiner.Refiner.RefineError
+open Refiner.Refiner.Rewrite
 open Term_order
 open Mp_resource
+open Term_match_table
 
 open Tactic_type
 open Tactic_type.Tactic
@@ -67,6 +72,7 @@ open Tactic_type.Conversionals
 open Auto_tactic
 open Dtactic
 
+open Top_tacticals
 open Top_conversionals
 
 open Itt_equal
@@ -92,31 +98,107 @@ let debug_int_arith =
 (*******************************************************
  * ARITH
  *******************************************************)
-(*
-let resource ge_elim = Functional {
-   fp_empty = [];
-   fp_add = add_elim_data;
-   fp_retr = extract_elim_data;
-}
 
-let resource ge_intro = Functional {
+let identity x = x
+
+(*
+type ge_elim_data_type = int -> tactic_arg -> term
+
+let extract_ge_elim_data_data data i p =
+   let tbl = create_table data identity in
+   let t = Sequent.nth_hyp p i in
+   let rwrule,result =
+      try
+         (* Find and apply the right tactic *)
+         if !debug_int_arith then
+            eprintf "Dtactic: lookup %s%t" (Simple_print.SimplePrint.string_of_opname (opname_of_term t)) eflush;
+         let (rwrule,_),r=Term_match_table.lookup tbl t in
+			rwrule,r
+      with
+         Not_found ->
+            raise (RefineError ("extract_elim_data", StringTermError ("D tactic doesn't know about", t)))
+   in
+   if !debug_int_arith then
+      eprintf "Dtactic: applying elim %s%t" (Simple_print.SimplePrint.string_of_opname (opname_of_term t)) eflush;
+   result rwrule i p
+
+let resource ge_elim_data = (*table_resource_info compact_arg_table_data extract_ge_elim_data_data*)
+	let add datas data = data :: datas in
+		Functional {
+			fp_empty = [];
+			(*fp_add = add_elim_data;*)
+			fp_add = add;
+			fp_retr = extract_ge_elim_data_data;
+		}
+*)
+
+(*let resource ge_intro = table_resource_info intro_compact extract_intro_data
+Functional {
    fp_empty = [];
    fp_add = add_intro_data;
    fp_retr = extract_intro_data;
-}
+}*)
+
+(*
+let process_ge_elim_data_resource_annotation name context_args term_args statement (pre_tactic, options) =
+   let assums, goal = unzip_mfunction statement in
+   let v, t =
+      match SeqHyp.to_list (TermMan.explode_sequent goal).sequent_hyps with
+         [ Context _; Hypothesis(v,t); Context _ ] ->
+            Some v, t
+       | _ ->
+            raise (Invalid_argument (sprintf "Itt_int_arith.improve_ge_elim_data: %s: must be an elimination rule" name))
+   in
+	let fvs = TermSubst.free_vars_list t in
+	let _, _, main = List.nth assums (List.length assums - 1)in
+   let res_t =
+      match SeqHyp.to_list (TermMan.explode_sequent main).sequent_hyps with
+         [ _; _; _; Hypothesis(v,t)] ->
+            t
+       | _ ->
+            raise (Invalid_argument (sprintf "Itt_int_arith.improve_ge_elim_data: %s: main subgoal should add one hyp to the end of hyp-list" name))
+	in
+	let f l i p =
+		(*let t' = Sequent.nth_hyp p i in
+		let subst = TermSubst.match_terms [] t t' in*)
+		let subst = List.combine fvs l in
+		TermSubst.apply_subst subst res_t
+	in
+   t, f
+
+let tT = funT ( fun p ->
+	let _=TermSubst.match_terms [] <<'a < 'b>> <<'c < 5>> in
+	idT)
 
 let process_ge_elim_resource_annotation = process_elim_resource_annotation
 let process_ge_intro_resource_annotation = process_intro_resource_annotation
+*)
 
-let conv2geT = argfunT (fun i p ->
+(*let conv2geT = argfunT (fun i p ->
    if i = 0 then
       Sequent.get_resource_arg p get_ge_intro_resource
    else
-      Sequent.get_resource_arg p get_ge_elim_resource (Sequent.get_pos_hyp_num p i)
-)
+      let tac = Sequent.get_resource_arg p get_ge_elim_resource in
+		tac (Sequent.get_pos_hyp_num p i)
+)*)
 
-let all2geT = (tryT (conv2geT 0)) thenMT (tryOnAllMCumulativeHypsT conv2geT)
+(*
+let testT = argfunT (fun i p ->
+   if i = 0 then
+      (*let _=Sequent.get_resource_arg p get_ge_intro_resource in*)
+		failT
+   else
+      let f = Sequent.get_resource_arg p get_ge_elim_data_resource in
+		let t = Sequent.nth_hyp p i in
+		let t' = f i p in
+		eprintf "%a -> %a%t" print_term t print_term t' eflush;
+		idT
+)
 *)
+
+(*let all2geT = (tryT (conv2geT 0)) thenMT (tryOnAllMCumulativeHypsT conv2geT)*)
+
+(*
 let reportT = funT (fun p ->
 	if !debug_int_arith then
 		let g=Sequent.goal p in
@@ -126,13 +208,34 @@ let reportT = funT (fun p ->
 		();
 	idT
 	)
+*)
 
-interactive lt2ge (*{| ge_elim [] |}*) 'H :
+interactive lt2ge (*{| ge_elim_data [] |}*) 'H :
    [wf] sequent { <H>; x: 'a < 'b; <J['x]> >- 'a in int } -->
    [wf] sequent { <H>; x: 'a < 'b; <J['x]> >- 'b in int } -->
    [main] sequent { <H>; x: 'a < 'b; <J['x]>; 'b >= ('a +@ 1) >- 'C['x] } -->
    sequent { <H>; x: 'a < 'b; <J['x]> >- 'C['x] }
+(*
+let resource ge_elim_data += [
+	<<'a < 'b>>, (fun l i p -> (match l with [a;b] -> mk_ge_term b (mk_add_term a <<1>>) | _ -> <<0>>));
+]
+*)
 
+(*let lt2ge_term l i p =
+	match l with
+		[a;b] -> mk_ge_term b (mk_add_term a <<1>>)
+	 | _ -> <<0>>*)
+
+(*
+let lt2ge_term rw i p =
+	let primrw = Refiner.Refine.conv_rewrite rw in
+	let conv = rewrite_of_pre_rewrite primrw [||] [] in
+	apply_rewrite p conv <<'b >= ('a +@ 1)>>
+
+let resource ge_elim_data += [
+	<<'a < 'b>>, lt2ge_term;
+]
+*)
 interactive gt2ge (*{| ge_elim [] |}*) 'H :
    [wf] sequent { <H>; x: 'a > 'b; <J['x]> >- 'a in int } -->
    [wf] sequent { <H>; x: 'a > 'b; <J['x]> >- 'b in int } -->
@@ -337,36 +440,6 @@ interactive_rw mul_BubblePrimitive_rw :
 
 let mul_BubblePrimitiveC = mul_BubblePrimitive_rw
 
-(* One step of sorting of production of some terms with simultaneous
-   contraction of product of integers
- *)
-let mul_BubbleStepC tm =
-   if is_mul_term tm then
-      let (a,s) = dest_mul tm in
-         if is_mul_term s then
-            let (b,c) = dest_mul s in
-				if is_number_term a then
-					if is_number_term b then
-						(mul_AssocC thenC (addrC [0] reduceC))
-					else
-						failC
-				else
-					if (compare_terms b a)=Less or (is_number_term b) then
-						mul_BubblePrimitiveC
-					else
-                  failC
-         else
-            if (is_number_term a) & (is_number_term s) then
-	       		reduceC
-	    		else
-               if ((compare_terms s a)=Less & not (is_number_term a)) or
-                	(is_number_term s) then
-	          		mul_CommutC
-	       		else
-	          		failC
-   else
-      failC
-
 interactive_rw sum_same_products1_rw :
    ('a in int) -->
    ((number[i:n] *@ 'a) +@ (number[j:n] *@ 'a)) <-->
@@ -401,7 +474,7 @@ interactive_rw add_BubblePrimitive_rw :
 let add_BubblePrimitiveC = add_BubblePrimitive_rw
 
 let stripCoef t =
-   if is_mul_term t then
+	if is_mul_term t then
       let (c,t')=dest_mul t in
       if (is_number_term c) then
          t'
@@ -410,70 +483,64 @@ let stripCoef t =
    else
       t
 
-(* One step of sorting of sum of some terms with simultenious
-   contraction of sum of integers
- *)
-let add_BubbleStepC tm =
-  (if !debug_int_arith then
-		eprintf "\nadd_BubbleStepC: %a%t" debug_print tm eflush;
-   if is_add_term tm then
-      let (a,s) = dest_add tm in
-         if is_add_term s then
-            let (b,c) = dest_add s in
-	       	if is_number_term a then
-					if is_number_term b then
-						begin
-							if !debug_int_arith then
-								eprintf "add_BubbleStepC: adding numbers a b%t" eflush;
-							(add_AssocC thenC (addrC [0] reduceC)) thenC (tryC add_Id2C)
-						end
-					else
-						failC
-	       	else
-                  let a'=stripCoef a in
-                  let b'=stripCoef b in
-                  if (compare_terms b' a')=Less then
-                     add_BubblePrimitiveC
-                  else
-                     failC
-         else
-            if (is_number_term a) & (is_number_term s) then
-               begin
-               	if !debug_int_arith then
-							eprintf "add_BubbleStepC: adding numbers a s%t" eflush;
-		       		reduceC
-               end
-	    		else
-               let a'=stripCoef a in
-               let s'=stripCoef s in
-     				if (compare_terms s' a')=Less then
-	          		add_CommutC
-	       		else
-	          		failC
-   else
-      begin
-        	if !debug_int_arith then
-				eprintf "add_BubbleStepC: wrong term%t" eflush;
-	      failC
-      end
-  )
-
 interactive_rw sub_elim_rw {| arith_unfold |} :
    ( 'a in int ) -->
    ( 'b in int ) -->
    ('a -@ 'b ) <--> ('a +@ ((-1) *@ 'b))
 
-let sub_elimC = repeatC (higherC sub_elim_rw)
+let addSwap1C t =
+	match explode_term t with
+		<<'a +@ 'b>> when (compare_terms (stripCoef b) (stripCoef a))=Less -> add_CommutC
+	 | _ -> failC
+
+let addSwap2C t =
+	match explode_term t with
+		<<'a +@ 'b>> ->
+			(match explode_term b with
+				<<'c +@ 'd>> when (compare_terms (stripCoef c) (stripCoef a))=Less -> add_BubblePrimitiveC
+			 | _ -> failC
+			)
+	 | _ -> failC
+
+let mulSwap1C t =
+	match explode_term t with
+		<<'a *@ 'b>> when (compare_terms b a)=Less -> mul_CommutC
+	 | _ -> failC
+
+let mulSwap2C t =
+	match explode_term t with
+		<<'a *@ 'b>> ->
+			(match explode_term b with
+				<<'c *@ 'd>> when (compare_terms c a)=Less -> mul_BubblePrimitiveC
+			 | _ -> failC
+			)
+	 | _ -> failC
 
 let resource arith_unfold +=[
-	<<'a *@ 'b>>, termC mul_BubbleStepC;
-	<<'a +@ 'b>>, termC add_BubbleStepC;
+	<<'a *@ 'b>>, termC mulSwap1C;
+	<<'a *@ ('b *@ 'c)>>, termC mulSwap2C;
+	<<number[i:n] *@ 'a>>, failC;
+	<<'a *@ number[i:n]>>, mul_CommutC;
+	<<number[i:n] *@ ('b *@ 'c)>>, failC;
+	<<'b *@ (number[i:n] *@ 'c)>>, mul_BubblePrimitiveC;
+	<<number[i:n] *@ (number[j:n] *@ 'c)>>, (mul_AssocC thenC (addrC [0] reduce_mul));
+
+	<<'a +@ 'b>>, termC addSwap1C;
+	<<'a +@ ('b +@ 'c)>>, termC addSwap2C;
+	<<number[i:n] +@ 'a>>, failC;
+	<<'a +@ number[i:n]>>, add_CommutC;
+	<<number[i:n] +@ ('b +@ 'c)>>, failC;
+	<<'a +@ (number[i:n] +@ 'c)>>, add_BubblePrimitiveC;
+	<<number[i:n] +@ (number[j:n] +@ 'c)>>, (add_AssocC thenC (addrC [0] reduce_add));
+
 	<<('a +@ 'b) +@ 'c>>, add_Assoc2C;
 	<<('a *@ 'b) *@ 'c>>, mul_Assoc2C;
+
 	<<(number[i:n] *@ 'a) +@ (number[j:n] *@ 'a)>>, sum_same_products1C;
 	<<(number[i:n] *@ 'a) +@ 'a>>, sum_same_products2C;
 	<<'a +@ (number[j:n] *@ 'a)>>, sum_same_products3C;
 	<<'a +@ 'a>>, sum_same_products4C;
+
 	<<(number[i:n] *@ 'a) +@ ((number[j:n] *@ 'a) +@ 'b)>>, (add_AssocC thenC (addrC [0] sum_same_products1C));
 	<<(number[i:n] *@ 'a) +@ ('a +@ 'b)>>, (add_AssocC thenC (addrC [0] sum_same_products2C));
 	<<'a +@ ((number[j:n] *@ 'a) +@ 'b)>>, (add_AssocC thenC (addrC [0] sum_same_products3C));
@@ -488,7 +555,7 @@ doc <:doc<
    The @tt[normalizeC] converts polynomials to canonical form (normalizes),
    it is supposed to work not only when applied precisely
    on a polynomial but also when the polynomial is just a subterm of the
-   term the rewrite applied  For instance, if you have a hypothesis
+   term the rewrite applied to.  For instance, if you have a hypothesis
    in the form of inequality or equality you can apply this rewrite to the whole
    hypothesis and it will normalize both sides of inequality (or equality).
 
@@ -948,17 +1015,7 @@ let genT vl seed nvars nineq intrange maxdepth =
 	let l=gen nvars intrange nineq in
 	assertListT terms l
 
-interactive testn (*'v 'v1 'v2 'v3 'v4 'v5 'v6 'v7 'v8 'v9*) :
-(*	sequent { <H> >- 'v in int } -->
-	sequent { <H> >- 'v1 in int } -->
-	sequent { <H> >- 'v2 in int } -->
-	sequent { <H> >- 'v3 in int } -->
-	sequent { <H> >- 'v4 in int } -->
-	sequent { <H> >- 'v5 in int } -->
-	sequent { <H> >- 'v6 in int } -->
-	sequent { <H> >- 'v7 in int } -->
-	sequent { <H> >- 'v8 in int } -->
-	sequent { <H> >- 'v9 in int } -->*)
+interactive testn :
 	sequent {'v  in int;
 				'v1 in int;
 				'v2 in int;

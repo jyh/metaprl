@@ -41,16 +41,26 @@ open Tactic_type.Conversionals
 
 open Mp_resource
 open Refiner.Refiner.Term
+open Refiner.Refiner.Rewrite
 open Dtactic
-(*
-resource (term * (int -> tactic), int -> tactic) ge_elim
-resource (term * (string * int option * tactic), tactic) ge_intro
 
-val process_ge_elim_resource_annotation :
-   (Tactic.pre_tactic * elim_option list, term * (int -> tactic)) annotation_processor
-val process_ge_intro_resource_annotation :
-   (Tactic.pre_tactic * intro_option list, term * (string * int option * tactic)) annotation_processor
+(*
+type ge_elim_data_type = int -> tactic_arg -> term
+
+val extract_ge_elim_data_data : (term * (term list -> ge_elim_data_type)) list -> ge_elim_data_type
+val extract_ge_elim_data_data : (term * (rewrite_rule -> ge_elim_data_type)) list -> ge_elim_data_type
 *)
+
+(*resource (term * (int -> tactic), (int -> tactic)) ge_elim*)
+(*resource (term * (term list -> ge_elim_data_type), ge_elim_data_type) ge_elim_data*)
+(*resource (term * (rewrite_rule -> ge_elim_data_type), ge_elim_data_type) ge_elim_data*)
+(*resource (term * (string * int option * tactic), tactic) ge_intro*)
+
+(*val process_ge_elim_data_resource_annotation :
+   (Tactic.pre_tactic * elim_option list, term * (term list -> ge_elim_data_type)) annotation_processor
+val process_ge_elim_data_resource_annotation :
+   (Tactic.pre_tactic * elim_option list, term * (rewrite_rule -> ge_elim_data_type)) annotation_processor*)
+
 (* Parts of normalizeC, use for debugging
 topval sub_elimC : conv
 topval mul_normalizeC : conv
@@ -67,6 +77,11 @@ topval normalizeC : conv
 
 topval arithT : tactic
 
+(*
+ * this tactic generates an artificial example used in testn
+ *)
+topval genT : term list -> int -> int -> int -> int -> int -> tactic
+
 (* sometimes these parts of arithT are useful to figure out why arithT does not work
 topval neqInConcl2HypT : tactic
 topval arithRelInConcl2HypT : tactic
@@ -75,7 +90,9 @@ topval reduceIneqT : int -> tactic
 topval findContradRelT : tactic
 topval reduceContradRelT : int -> tactic
 *)
-(*topval conv2geT : int -> tactic
-topval all2geT : tactic
+(*topval conv2geT : int -> tactic*)
+(*topval testT : int -> tactic*)
+(*topval all2geT : tactic*)
+
+(*topval tT : tactic
 *)
-topval genT : term list -> int -> int -> int -> int -> int -> tactic

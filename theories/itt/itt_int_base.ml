@@ -821,13 +821,13 @@ prim add_Id :
    [wf] sequent { <H> >- 'a in int } -->
    sequent { <H> >- ('a +@ 0) ~ 'a } = it
 
-interactive_rw add_Id_rw {| reduce |} :
+interactive_rw add_Id_rw {| reduce; arith_unfold |} :
    ( 'a in int ) -->
    ('a +@ 0) <--> 'a
 
 let add_IdC = add_Id_rw
 
-interactive_rw add_Id2_rw {| reduce |} :
+interactive_rw add_Id2_rw {| reduce; arith_unfold |} :
    ( 'a in int ) -->
    (0 +@ 'a) <--> 'a
 

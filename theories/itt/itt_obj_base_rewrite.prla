@@ -1180,9 +1180,17 @@ T	t441	o431 b433 b434 b440 b4
 B	b441	t441
 T	t295	o291 b441
 B	b295	t295
-P	p297	Number 2726
-P	p298	Number 3125
-O	o298	location p297 p298
+P	p13	Number 2640
+P	p14	Number 2836
+O	o14	location p13 p14
+P	p30	String recursiveFlea
+O	o30	definition p30
+NItt_obj_base_rewrite!recursiveFlea	recursiveFlea	recursiveFlea Itt_obj_base_rewrite
+O	o31	recursiveFlea
+T	t34	o31
+B	b34	t34
+P	p69	Token moveBy
+O	o69	update p69
 P	p302	String feeFoo
 O	o304	definition p302
 NItt_obj_base_rewrite!feeFoo	feeFoo	feeFoo Itt_obj_base_rewrite
@@ -1205,6 +1213,11 @@ T	t329	o324
 B	b342	t329
 T	t342	o316 b320 b342
 B	b349	t342
+O	o71	apply p69
+T	t82	o409 b225
+B	b82	t82
+T	t84	o71 b82
+B	b84	t84
 P	p351	Token foo
 O	o352	apply p351
 T	t360	o352 b225
@@ -1213,6 +1226,18 @@ NItt_int_base!sub	sub	sub Itt_int_base
 O	o363	sub
 T	t372	o363 b320 b397
 B	b372	t372
+T	t85	o217 b84 b372
+B	b85	t85
+T	t96	o312 b349 b225 b85
+B	b96	t96 n
+T	t119	o201 b96
+B	b119	t119 self
+T	t122	o69 b119 b390
+B	b122	t122
+T	t126	o30 b34 b122 b4
+B	b126	t126
+T	t127	o14 b126
+B	b127	t127
 T	t375	o217 b361 b372
 B	b388	t375
 T	t388	o312 b349 b397 b388
@@ -1237,11 +1262,6 @@ T	t430	o199 b424
 B	b430	t430
 T	t470	o304 b308 b430 b4
 B	b470	t470
-T	t471	o298 b470
-B	b471	t471
-P	p471	Number 3128
-P	p472	Number 3187
-O	o472	location p471 p472
 P	p473	String example4
 O	o473	rewrite p473
 T	t473	o352 b308
@@ -1265,9 +1285,48 @@ T	t480	o242 b479
 B	b480	t480
 T	t481	o473 b474 b397 b480 b4
 B	b481	t481
-T	t482	o472 b481
-B	b482	t482
 O	o442	location p p
+P	p154	String example3
+O	o154	rewrite p154
+T	t157	o71 b34
+B	b157	t157
+T	t160	o217 b157 b434
+B	b160	t160
+T	t165	o408 b160
+B	b165	t165
+P	p172	Number 6
+O	o172	number p172
+T	t190	o172
+B	b190	t190
+P	p193	String "byDefsT [recursiveFlea;flea] thenT repeatT reduceT ttca"
+O	o194	ext_rule p193
+T	t198	o249 b165 b190
+S	s198	t248\\ h\\ t198
+B	b198	s198
+T	t199	o247 b198 b4
+B	b199	t199
+T	t209	o246 b199 b4
+B	b209	t209
+T	t210	o245 b209 b4
+B	b210	t210
+T	t211	o194 b244 b210 b4 b4
+B	b211	t211
+T	t212	o242 b211
+B	b212	t212
+T	t214	o154 b165 b190 b212 b4
+B	b214	t214
+T	t216	o442 b214
+B	b220	t216
+P	p220	Number 2926
+P	p221	Number 3325
+O	o221	location p220 p221
+T	t222	o221 b470
+B	b222	t222
+P	p225	Number 3328
+P	p226	Number 3387
+O	o226	location p225 p226
+T	t229	o226 b481
+B	b230	t229
 NSummary!id	id	id Summary
 P	p442	Number 717058532
 O	o443	id p442
@@ -1277,54 +1336,58 @@ T	t444	o442 b443
 B	b444	t444
 T	t445	o b444 b4
 B	b445	t445
-T	t483	o b482 b445
-B	b483	t483
-T	t484	o b471 b483
-B	b484	t484
-T	t485	o b295 b484
-B	b485	t485
-T	t486	o b288 b485
-B	b486	t486
-T	t487	o b274 b486
-B	b487	t487
-T	t488	o b259 b487
-B	b488	t488
-T	t489	o b239 b488
-B	b489	t489
-T	t490	o b231 b489
-B	b490	t490
-T	t491	o b221 b490
-B	b491	t491
-T	t492	o b213 b491
-B	b492	t492
-T	t493	o b205 b492
-B	b493	t493
-T	t494	o b197 b493
-B	b494	t494
-T	t495	o b189 b494
-B	b495	t495
-T	t496	o b164 b495
-B	b496	t496
-T	t497	o b156 b496
-B	b497	t497
-T	t498	o b141 b497
-B	b498	t498
-T	t499	o b118 b498
-B	b499	t499
-T	t500	o b95 b499
-B	b500	t500
-T	t501	o b74 b500
-B	b501	t501
-T	t502	o b53 b501
-B	b502	t502
-T	t503	o b41 b502
-B	b503	t503
-T	t504	o b33 b503
-B	b504	t504
-T	t505	o b23 b504
-B	b505	t505
-T	t506	o b204 b505
-B	b506	t506
-T	t507	o b196 b506
-B	b507	t507
-T	t508	o b188 b507
+T	t231	o b230 b445
+B	b238	t231
+T	t239	o b222 b238
+B	b243	t239
+T	t243	o b220 b243
+B	b245	t243
+T	t245	o b127 b245
+B	b246	t245
+T	t246	o b295 b246
+B	b247	t246
+T	t247	o b288 b247
+B	b248	t247
+T	t255	o b274 b248
+B	b255	t255
+T	t256	o b259 b255
+B	b256	t256
+T	t257	o b239 b256
+B	b257	t257
+T	t258	o b231 b257
+B	b258	t258
+T	t270	o b221 b258
+B	b270	t270
+T	t271	o b213 b270
+B	b271	t271
+T	t272	o b205 b271
+B	b272	t272
+T	t273	o b197 b272
+B	b273	t273
+T	t274	o b189 b273
+B	b284	t274
+T	t284	o b164 b284
+B	b285	t284
+T	t285	o b156 b285
+B	b286	t285
+T	t286	o b141 b286
+B	b287	t286
+T	t287	o b118 b287
+B	b289	t287
+T	t289	o b95 b289
+B	b292	t289
+T	t292	o b74 b292
+B	b293	t292
+T	t293	o b53 b293
+B	b294	t293
+T	t294	o b41 b294
+B	b296	t294
+T	t296	o b33 b296
+B	b299	t296
+T	t299	o b23 b299
+B	b300	t299
+T	t300	o b204 b300
+B	b301	t300
+T	t301	o b196 b301
+B	b302	t301
+T	t302	o b188 b302

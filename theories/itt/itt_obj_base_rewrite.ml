@@ -61,7 +61,7 @@ dform update_field_df  : parens :: except_mode [src] ::
       update[m:t]{'f;'o} = slot{'o} obj_dot label[m:t] obj_assign slot{'f}
 
 dform update_method_df  : parens :: except_mode [src] ::
-      update[m:t]{s.'f;'o} = slot{'o} obj_dot label[m:t] obj_assign sigma slot{'s} `"." slot{'f}
+      update[m:t]{s.'f;'o} = slot{'o} obj_dot label[m:t] "(" slot{'s} ")" obj_assign slot{'f}
 
 
 (******************)
@@ -87,11 +87,17 @@ interactive_rw example2 : apply["getX":t]{apply["move":t]{apply["move":t]{fastFl
 (******************)
 (*  Recursion     *)
 (******************)
-(*
-define recursiveFlea:  recursiveFlea <-->
-   update["moveBy":t]{self.x:=1;flea}
 
-*)
+define recursiveFlea:  recursiveFlea <-->
+   update["moveBy":t]{self.
+       lambda{n.
+         if 'n=@ 0 then 'self
+           else apply["moveBy":t]{apply["move":t]{'self}} ('n -@ 1) };
+   flea}
+
+interactive_rw example3 : apply["getX":t]{.apply["moveBy":t]{recursiveFlea} 5} <--> 6
+
+
 define feeFoo: feeFoo <-->
    obj{ self.
            {foo =  lambda{n. ifthenelse{ 'n =@ 0 ;

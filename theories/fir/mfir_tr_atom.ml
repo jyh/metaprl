@@ -162,11 +162,11 @@ prim ty_atomVar 'H 'J :
  *)
 
 prim ty_atomLabel 'H 'J :
-   sequent [fir] { 'H; a: ty_def{ 'frame; 'k; 'd }; 'J >-
-      field_mem[subfield:s]{ field[field:s]{ get_core{ 'd } } } } -->
-   sequent [fir] { 'H; a: ty_def{ 'frame; 'k; 'd }; 'J >-
+   sequent [fir] { 'H; a: ty_def{ 'frame; polyKind{ 'i; 'k }; 'd }; 'J >-
+      field_mem[subfield:s]{ field[field:s]{ get_core{ 'i; 'd } } } } -->
+   sequent [fir] { 'H; a: ty_def{ 'frame; polyKind{ 'i; 'k }; 'd }; 'J >-
       member{ 'num; intset_max[32, "signed"] } } -->
-   sequent [fir] { 'H; a: ty_def{ 'frame; 'k; 'd }; 'J >-
+   sequent [fir] { 'H; a: ty_def{ 'frame; polyKind{ 'i; 'k }; 'd }; 'J >-
       has_type["atom"]{ atomLabel[field:s, subfield:s]{ 'frame; 'num };
                         tyRawInt[32, "signed"] } }
    = it

@@ -79,19 +79,6 @@ declare offset
 
 (*!************************************
  * @begin[doc]
- * @modsubsection{Definition extraction}
- *
- * If @tt[poly_ty] is a parametrized type definition, then
- * @tt[get_core] instantiates the parameters at $<< it >>$ and returns
- * the resulting ``type''.
- * @end[doc]
- *)
-
-declare get_core{ 'poly_ty }
-
-
-(*!************************************
- * @begin[doc]
  * @modsubsection{Type application}
  *
  * If @tt[poly_ty] is a parametrized type definition or quantified type, then
@@ -100,6 +87,19 @@ declare get_core{ 'poly_ty }
  *)
 
 declare apply_types{ 'poly_ty; 'ty_list }
+
+
+(*!************************************
+ * @begin[doc]
+ * @modsubsection{Definition extraction}
+ *
+ * (Documentation incomplete.)
+ * @end[doc]
+ *)
+
+(* XXX: documentation needs to be completed. *)
+
+declare get_core{ 'num; 'poly_ty }
 
 
 (*!************************************
@@ -162,43 +162,6 @@ declare ty_of_mutable_ty{ 'mutable_ty }
 (*!
  * @begin[doc]
  * @rewrites
- * @modsubsection{Definition extraction}
- *
- * Obtaining the ``core'' portion of a parametrized type definition
- * is straightforward.  The following two rewrites are combined into the
- * @tt[reduce_get_core] conversional in order to control the order of
- * their application.
- * @end[doc]
- *)
-
-(*
- * BUG: I really should not be using orelseC to control how
- * the following rewrites are applied.
- *)
-
-prim_rw reduce_get_core_poly :
-   get_core{ tyDefPoly{ t. 'ty['t] } } <-->
-   get_core{ 'ty[it] }
-
-prim_rw reduce_get_core_any :
-   get_core{ 'ty } <-->
-   'ty
-
-(*!
- * @docoff
- *)
-
-let reduce_get_core =
-   reduce_get_core_poly orelseC reduce_get_core_any
-
-let resource reduce += [
-   << get_core{ 'ty } >>,
-      reduce_get_core
-]
-
-
-(*!************************************
- * @begin[doc]
  * @modsubsection{Type application}
  *
  * Instantiating a parameterized type definition or quantified type
@@ -240,6 +203,40 @@ let resource reduce += [
 
 (*!************************************
  * @begin[doc]
+ * @modsubsection{Definition extraction}
+ *
+ * (Documentation incomplete.)
+ * @end[doc]
+ *)
+
+(* XXX: documentation needs to be completed. *)
+
+prim_rw reduce_get_core_main :
+   get_core{ number[i:n]; 'ty } <-->
+   (if int_eq{ number[i:n]; 0 } then
+      'ty
+   else if int_gt{ number[i:n]; 0 } then
+      get_core{ (number[i:n] -@ 1); apply_types{ 'ty; (it ::nil) } }
+   else
+      get_core{ number[i:n]; 'ty })
+
+(*!
+ * @docoff
+ *)
+
+let reduce_get_core =
+   reduce_get_core_main thenC
+   (addrC [0] reduce_int_eq) thenC
+   reduce_ifthenelse thenC
+   (tryC ((addrC [0] reduce_int_gt) thenC reduce_ifthenelse))
+
+let resource reduce += [
+   << get_core{ number[i:n]; 'ty } >>, reduce_get_core
+]
+
+
+(*!************************************
+ * @begin[doc]
  * @modsubsection{Type projection}
  *
  * (Documentation incomplete.)
@@ -247,11 +244,6 @@ let resource reduce += [
  *)
 
 (* XXX: Documentation incomplete. *)
-
-(*
- * BUG: I really should not be using orelseC to control how
- * the following rewrites are applied.
- *)
 
 prim_rw reduce_project_in_bounds_main :
    project_in_bounds{ number[i:n]; tyExists{ t. 'ty['t] } } <-->
@@ -268,10 +260,9 @@ prim_rw reduce_project_in_bounds_main :
 
 let reduce_project_in_bounds =
    reduce_project_in_bounds_main thenC
-   (  (addrC [0] reduce_int_lt) thenC
-      reduce_ifthenelse thenC
-      (tryC ((addrC [0] reduce_int_eq) thenC reduce_ifthenelse))
-   )
+   (addrC [0] reduce_int_lt) thenC
+   reduce_ifthenelse thenC
+   (tryC ((addrC [0] reduce_int_eq) thenC reduce_ifthenelse))
 
 let resource reduce += [
    << project_in_bounds{ number[i:n]; tyExists{ t. 'ty['t] } } >>,
@@ -425,13 +416,13 @@ dform offset_df : except_mode[src] ::
    offset =
    bf["offset"]
 
-dform get_core_df : except_mode[src] ::
-   get_core{ 'ty } =
-   bf["core"] `"(" slot{'ty} `")"
-
 dform apply_types_df : except_mode[src] ::
    apply_types{ 'poly_ty; 'ty_list } =
    `"(" slot{'poly_ty} `" " slot{'ty_list} `")"
+
+dform get_core_df : except_mode[src] ::
+   get_core{ 'num; 'ty } =
+   bf["core"] `"[" slot{'num} `"](" slot{'ty} `")"
 
 dform project_in_bounds_df : except_mode[src] ::
    project_in_bounds{ 'num; 'ty } =

@@ -55,17 +55,17 @@ declare offset
 
 
 (*
- * Definition extraction.
- *)
-
-declare get_core{ 'poly_ty }
-
-
-(*
  * Type application.
  *)
 
 declare apply_types{ 'poly_ty; 'ty_list }
+
+
+(*
+ * Definition extraction.
+ *)
+
+declare get_core{ 'num; 'poly_ty }
 
 
 (*
@@ -101,8 +101,8 @@ declare ty_of_mutable_ty{ 'mutable_ty }
  * Rewrites.
  **************************************************************************)
 
-topval reduce_get_core : conv
 topval reduce_apply_types : conv
+topval reduce_get_core : conv
 topval reduce_project_in_bounds : conv
 topval reduce_unpack_exists : conv
 topval reduce_union_cases : conv

@@ -1,45 +1,45 @@
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @module[Itt_collection]
    The @tt{Itt_collection} module formalized the type of indexed collections.
    See @cite["Nog02a,Nog02b"] for more information.
    @end[doc]
-  
+
    ----------------------------------------------------------------
-  
+
    @begin[license]
-  
+
    This file is part of MetaPRL, a modular, higher order
    logical framework that provides a logical programming
    environment for OCaml and other languages.
-  
+
    See the file doc/index.html for information on Nuprl,
    OCaml, and more information about this system.
-  
+
    Copyright (C) 2000-2001
    Alexei Kopylov & Aleksey Nogin, Cornell University
-  
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
    as published by the Free Software Foundation; either version 2
    of the License, or (at your option) any later version.
-  
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-  
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-  
+
    Authors: Alexei Kopylov @email{kopylov@cs.cornell.edu}
             Aleksey Nogin @email{nogin@cs.cornell.edu}
-  
+
    @end[license]
 >>
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @parents
    @end[doc]
@@ -79,7 +79,7 @@ open Typeinf
 open Auto_tactic
 open Dtactic
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @rules
    @modsubsection{Basic definitions}
@@ -300,11 +300,14 @@ interactive member_col_filter_elim {| elim [elim_univ_typeinf <<'x>>] |} 'H univ
 define unfold_isect : "isect"{'S;s.'C['s]} <-->
    lambda{x.all s:'S. col_member{'C['s]; 'x}}
 
+(*
+ * JYH: somehow, this proof has a free [l:l]
 interactive isect_wf {| intro [] |} :
    sequent[squash]{ <H> >- "type"{'T}} -->
    sequent[squash]{ <H> >- 'S in univ[l:l] } -->
    sequent[squash]{ <H>; s:'S >- 'C['s] in Col[l:l]{'T} } -->
    sequent['ext]  { <H> >- "isect"{'S;s.'C['s]} in Col[l:l]{'T} }
+*)
 
 interactive member_isect {| intro [intro_univ_arg] |} :
    [wf] sequent[squash]{ <H> >- "type"{'S} } -->

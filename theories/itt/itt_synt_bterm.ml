@@ -145,21 +145,32 @@ interactive bterm_ind_wf {| intro [] |} bind{bt.'C['bt]}:
                                op,subterms,ind_hyp. 'op_case['op; 'subterms; 'ind_hyp] } in 'C['bt] }
 
 define unfold_dest_bterm:
-      dest_bterm{'bt; v.'var_case['v];
-                      op,subterms. 'op_case['op; 'subterms] }
+   dest_bterm{'bt; v.'var_case['v];
+                   op,subterms. 'op_case['op; 'subterms] }
  <--> bterm_ind{'bt; v.'var_case['v];
                      op,subterms,ind. 'op_case['op; 'subterms] }
 
+interactive_rw dest_bterm_op_reduce {| reduce |}:
+   dest_bterm{make_bterm{'op; 'subterms};
+             v.'var_case['v];
+             op,subterms. 'op_case['op; 'subterms] } <-->
+      'op_case['op; 'subterms]
+
+interactive_rw dest_bterm_var_reduce {| reduce |}:
+   dest_bterm{var{'l;'r};
+             v.'var_case['v];
+             op,subterms. 'op_case['op; 'subterms] } <-->
+      'var_case[var{'l;'r}]
+
+interactive_rw dest_bterm_var_reduce2 :
+   ('v in Var) -->
+   dest_bterm{'v;
+             v.'var_case['v];
+             op,subterms. 'op_case['op; 'subterms] } <-->
+      'var_case['v]
+
 interactive var_subtype {| intro [] |} :
    sequent { <H> >- Var subtype BTerm }
-
-interactive btermSquiggle {| nth_hyp |} :
-   sequent { <H> >- 'b1 = 'b2 in BTerm } -->
-   sequent { <H> >- 'b1 ~ 'b2 }
-
-interactive btermlistSquiggle {| nth_hyp |} :
-   sequent { <H> >- 'b1 = 'b2 in list{BTerm} } -->
-   sequent { <H> >- 'b1 ~ 'b2 }
 
 (************************************************************************
  * Var_bterm                                                            *
@@ -261,6 +272,27 @@ interactive var_or_opbterm_hyp 'H bind{x. 'A['x]} 'b :
    [main] sequent { <H>; x: 'A['b]; <J['x]>; 'b in Var >- 'C['x] } -->
    [main] sequent { <H>; x: 'A['b]; <J['x]>; 'b in OpBTerm >- 'C['x] } -->
    sequent { <H>; x: 'A['b]; <J['x]> >- 'C['x] }
+
+(************************************************************************
+ * Op_of                                                                *
+ ************************************************************************)
+
+define unfold_op_of:
+   op_of{'t} <--> dest_bterm{'t; v.'v; op,subterms.'op}
+
+interactive_rw op_of_reduce {| reduce |}: op_of{make_bterm{'op;'btl}} <--> 'op
+
+interactive op_of_wf {| intro [] |} :
+   sequent { <H> >- 'bt in OpBTerm } -->
+   sequent { <H> >- op_of{'bt} in BOperator }
+
+interactive btermSquiggle {| nth_hyp |} :
+   sequent { <H> >- 'b1 = 'b2 in BTerm } -->
+   sequent { <H> >- 'b1 ~ 'b2 }
+
+interactive btermlistSquiggle {| nth_hyp |} :
+   sequent { <H> >- 'b1 = 'b2 in list{BTerm} } -->
+   sequent { <H> >- 'b1 ~ 'b2 }
 
 (************************************************************************
  * Subterms                                                             *

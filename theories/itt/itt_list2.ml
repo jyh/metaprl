@@ -822,13 +822,13 @@ interactive all_list_intro  {| intro[AutoMustComplete; intro_typeinf <<'l>>] |} 
    sequent { <H> >- all_list{'l;  x. 'P['x]} }
 
 
-interactive all_list_elim1 {| elim[elim_typeinf <<'l>>] |} 'H 'a list{'A} :
+interactive all_list_elim1 {| elim[elim_typeinf <<'l>>] |} 'H list{'A} 'a :
    sequent { <H>; u: all_list{'l;  x. 'P['x]}; <J['u]> >- 'l in list{'A}  } -->
    sequent { <H>; u: all_list{'l;  x. 'P['x]}; <J['u]> >- 'a in {x: 'A | mem{'x;'l;'A} } } -->
    sequent { <H>; u: all_list{'l;  x. 'P['x]}; <J['u]>; 'P['a] >- 'C['u] } -->
    sequent { <H>; u: all_list{'l;  x. 'P['x]}; <J['u]> >- 'C['u] }
 
-interactive all_list_elim {| elim[elim_typeinf <<'l>>] |} 'H 'a list{'A} :
+interactive all_list_elim {| elim[elim_typeinf <<'l>>] |} 'H list{'A} 'a :
    sequent { <H>; u: all_list{'l;  x. 'P['x]}; <J['u]> >- 'l in list{'A}  } -->
    sequent { <H>; u: all_list{'l;  x. 'P['x]}; <J['u]> >- 'a in 'A  } -->
    sequent { <H>; u: all_list{'l;  x. 'P['x]}; <J['u]> >- mem{'a;'l;'A}  } -->
@@ -839,6 +839,12 @@ interactive all_list_witness_wf  {| intro[intro_typeinf <<'l>>] |} list{'A} :
    sequent { <H> >- 'A Type  } -->
    sequent { <H> >- 'l in list{'A}  } -->
    sequent { <H>; x:'A; mem{'x; 'l; 'A} >- 'p['x] in 'P['x]  } -->
+   sequent { <H> >- all_list_witness{'l;  x. 'p['x]} in all_list{'l;  x. 'P['x]} }
+
+interactive all_list_witness_wf2  {| intro[intro_typeinf <<'l>>] |} list{'A} :
+   sequent { <H> >- 'A Type  } -->
+   sequent { <H> >- 'l in list{'A}  } -->
+   sequent { <H> >- all_list{'l;  x. 'p['x] in 'P['x]}  } -->
    sequent { <H> >- all_list_witness{'l;  x. 'p['x]} in all_list{'l;  x. 'P['x]} }
 
 doc <:doc<

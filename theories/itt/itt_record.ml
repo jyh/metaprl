@@ -104,7 +104,7 @@ define unfoldRecordOrt : record_ort[t:t]{'a;'R} <-->  function_ort{r.rcrd[t:t]{'
 (*   Rules        *)
 (******************)
 
-(*! 
+(*!
  * @begin[doc]
  * @rules
  * @modsubsection{Typehood and equality}
@@ -404,7 +404,7 @@ let recordL_elim n p =
     thenT
        ifLabT "ort"
                 (tryT (dT 0 thenWT tryT (typeAssertT thenT nthHypT (-2))))
-       (*else*) (record_reduceT thenMT tryT (dT (n+1)))
+       (*else*) (record_reduceT thenMT tryT (dT n))
  in
     tac p
 
@@ -728,106 +728,3 @@ dform functionOrt_df : except_mode [src] :: function_ort{x.'f['x];'R}
 dform recordOrt_df : except_mode [src] :: record_ort[n:t]{'a;'R}
      =   rcrd[n:t]{'a} perp 'R
 
-(*
-interactive tst 'H :
-   sequent['ext]  { 'H >-
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["y":t]{'b;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;
-rcrd["x":t]{'a;rcrd}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}
-   IN record["y":t]{'A}
-                  }
-*)

@@ -1,0 +1,20 @@
+OCAMLINCLUDES =\
+	-I .\
+	-I $(ROOT)/support/display\
+	$(SUPPORT_INCLUDE)\
+	-I ../../base\
+
+include Files
+
+# Library files
+MPFILES = $(CORE_FILES)
+
+Theory($(MPFILES))
+
+#
+# Clean up
+#
+clean:
+    $(CLEAN)
+
+all: theory$(LIB_SUFFIX)

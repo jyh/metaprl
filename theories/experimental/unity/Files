@@ -1,0 +1,7 @@
+CORE_FILES =\
+	unity_util\
+	unity_ast\
+	unity_source\
+	unity_translate\
+	unity_theory\
+	unity_test\

@@ -3,6 +3,9 @@ Thu Jan 23 19:33:52 PST 2003
 This is an experimental theory to determine whether it is
 easy to use MetaPRL to build a compiler.
 
+The language is called "M".  The AST is (to be) defined in
+m_ast.ml, and the IR is in m_ir.ml.
+
 Comments should be directed to:
 	Jason Hickey	jyh@metaprl.org
 	Aleksey Nogin	nogin@metaprl.org

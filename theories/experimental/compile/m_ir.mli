@@ -4,15 +4,22 @@
  *
  * Here is the abstract syntax:
  *
- *   (* Atoms (functional values) *)
+ *   (* Values *)
+ *   v ::= i            (integers)
+ *      |  v            (variables)
+ *      |  fun v -> e   (functions)
+ *      |  (v1, v2)     (pairs)
+ *
+ *   (* Atoms (functional expressions) *)
  *   a ::= i            (integers)
  *      |  v            (variables)
- *      |  a1 op a2     (binary operation)
+ *      |  a1 op a2     (binary operations)
  *
  *   (* Expressions *)
  *   e ::= let v = a in e               (LetAtom)
  *      |  f(a)                         (TailCall)
  *      |  if a then e1 else e2         (Conditional)
+ *      |  let v = (a1, a2) in e        (Allocation)
  *      |  let v = a1[a2] in e          (Subscripting)
  *      |  a1[a2] <- a3; e              (Assignment)
  *
@@ -44,6 +51,16 @@
  * @end[license]
  *)
 
+extends Base_theory
+
+(*
+ * Display form precendences.
+ *)
+prec prec_mul
+prec prec_add
+prec prec_if
+prec prec_fun
+
 (*
  * Binary operators.
  *)
@@ -52,9 +69,12 @@ declare SubOp
 declare MulOp
 declare DivOp
 
-prec prec_mul
-prec prec_add < prec_mul
-prec prec_if < prec_add
+(*
+ * Values are numbers, functions, and pairs.
+ *)
+declare ValInt[i:n]
+declare ValFun{v. 'e['v]}
+declare ValPair{'v1; 'v2}
 
 (*
  * Atoms.
@@ -67,63 +87,30 @@ declare AtomBinop{'op; 'a1; 'a2}
  * Expressions.
  *)
 declare LetAtom{'a; v. 'e['v]}
+declare LetFun{v. 'e1['v]; f. 'e2['f]}
 declare TailCall{'f; 'a}
 declare If{'a; 'e1; 'e2}
+declare LetPair{'a1; 'a2; v. 'e['v]}
 declare LetSubscript{'a1; 'a2; v. 'e['v]}
 declare SetSubscript{'a1; 'a2; 'a3; 'e}
 
 declare LetApply{'f; 'a; v. 'e['v]}
 declare Return{'a}
 
-(************************************************************************
- * Display forms
+(*
+ * Programs are represented as sequents:
+ *    declarations, definitions >- exp
+ *
+ * For now the language is untyped, so each declaration
+ * has the form v:exp.  A definition is an equality judegment.
  *)
+declare exp
+declare def{'v; 'e}
 
-(* Some convenient keywords *)
-declare xlet
-declare xin
-dform xlet_df = bf["in"]
-dform xin_df = bf["in"]
-
-(* Atoms *)
-dform atom_int_df : AtomInt[i:n] =
-   slot[i:n]
-
-dform atom_binop_add_df : parens :: "prec"[prec_add] :: AtomBinop{AddOp; 'e1; 'e2} =
-   slot["lt"]{'e1} " " `"+ " slot["le"]{'e2}
-
-dform atom_binop_sub_df : parens :: "prec"[prec_add] :: AtomBinop{SubOp; 'e1; 'e2} =
-   slot["lt"]{'e1} " " `"- " slot["le"]{'e2}
-
-dform atom_binop_mul_df : parens :: "prec"[prec_mul] :: AtomBinop{MulOp; 'e1; 'e2} =
-   slot["lt"]{'e1} " " `"* " slot["le"]{'e2}
-
-dform atom_binop_div_df : parens :: "prec"[prec_mul] :: AtomBinop{DivOp; 'e1; 'e2} =
-   slot["lt"]{'e1} " " `"/ " slot["le"]{'e2}
-
-(* Expressions *)
-dform exp_let_atom_df : LetAtom{'a; v. 'e} =
-   " " xlet `" " slot{'v} `" = " slot{'a} xin 'e
-
-dform exp_tail_call_df : TailCall{'f; 'a} =
-   slot{'f} `"(" slot{'a} `")"
-
-dform exp_if_df : parens :: "prec"[prec_if] :: except_mode[tex] :: If{'a; 'e1; 'e2} =
-   szone pushm[0] pushm[3] `"if" `" " szone{'a} `" " `"then" hspace
-   szone{'e1} popm hspace
-   pushm[3] `"else" hspace szone{'e2} popm popm ezone
-
-dform exp_subscript_df : LetSubscript{'a1; 'a2; v. 'e} =
-   " " xlet `" " slot{'v} `" = " slot{'a1} `"[" slot{'a2} `"] " xin 'e
-
-dform exp_set_subscript_df : SetSubscript{'a1; 'a2; 'a3; 'e} =
-   slot{'a1} `"[" slot{'a2} `"] <- " slot{'a3} `";" 'e
-
-dform exp_let_apply_df : LetApply{'f; 'a; v. 'e} =
-   " " xlet `" " slot{'v} `" = " slot{'f} `"(" slot{'a} `") " xin 'e
-
-dform exp_return_df : Return{'a} =
-   bf["return"] `"(" slot{'a} `")"
+(*
+ * Sequent tag for m programs.
+ *)
+declare m
 
 (*!
  * @docoff

@@ -232,9 +232,9 @@ dform bnot_df : parens :: "prec"[prec_bnot] :: except_mode[tex] :: math_bnot{'a}
    tneg subb slot{'a}
 
 dform ifthenelse_df : parens :: "prec"[prec_bor] :: except_mode[tex] :: math_if{'e1; 'e2; 'e3} =
-   szone pushm[0] pushm[3] `"if" `" " szone{'e1} `" " `"then" hspace
-   szone{'e2} popm hspace
-   pushm[3] `"else" hspace szone{'e3} popm popm ezone
+   szone pushm[0] pushm[3] `"if" `" " szone{slot{'e1}} `" " `"then" hspace
+   szone{slot{'e2}} popm hspace
+   pushm[3] `"else" hspace szone{slot{'e3}} popm popm ezone
 
 (************************************************************************
  * INTEGERS

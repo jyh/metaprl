@@ -50,12 +50,13 @@ declare "parent"{'path; 'opens; 'resources}
 declare "module"[name:s]{'info}
 declare "dform"{'modes; 'redex; 'def}
 declare "prec"[name:s]
-declare "prec_rel"{'op; 'left; 'right}
-declare "id"{'id}
+declare "prec_rel"[pr:s]
+declare "id"[n:n]
 declare "resource"[name:s]{'extract; 'improve; 'data}
 declare "infix"[name:s]
 declare "magic_block"[name:s]{'items}
 declare "summary_item"{'term}
+declare "resource_defs"{'res}
 
 declare "inherit_df"
 declare "prec_df"[name:s]

@@ -64,12 +64,13 @@ declare "parent"{'path; 'opens; 'resources}
 declare "module"[name:s]{'info}
 declare "dform"{'modes; 'redex; 'def}
 declare "prec"[name:s]
-declare "prec_rel"{'op; 'left; 'right}
-declare "id"{'id}
+declare "prec_rel"[pr:s]
+declare "id"[n:n]
 declare "resource"[name:s]{'extract; 'improve; 'data}
 declare "infix"[name:s]
 declare "magic_block"[name:s]{'items}
 declare "summary_item"{'term}
+declare "resource_defs"{'res}
 
 declare "inherit_df"
 declare "prec_df"[name:s]
@@ -179,9 +180,9 @@ dform location_df : "location"[start:n, finish:n]{'body} =
 (*
  * Display a simple rewrite.
  *)
-dform rewrite_df : "rewrite"[name:s]{'redex; 'contractum; 'proof} =
+dform rewrite_df : "rewrite"[name:s]{'redex; 'contractum; 'proof; 'res} =
    szone pushm[4]
-   slot{'proof} `" rewrite" " " slot[name:s] " " slot{'redex} " " longleftrightarrow hspace slot{'contractum}
+   slot{'proof} `" rewrite" " " slot[name:s] " " slot{'res} slot{'redex} " " longleftrightarrow hspace slot{'contractum}
    popm ezone
 
 (*
@@ -198,20 +199,20 @@ dform term_param_df : "term_param"{'t} =
    slot{'t}
    popm ezone
 
-dform cond_rewrite_df : "cond_rewrite"[name:s]{'params; 'args; 'redex; 'contractum; 'proof} =
+dform cond_rewrite_df : "cond_rewrite"[name:s]{'params; 'args; 'redex; 'contractum; 'proof; 'res} =
    szone pushm[4]
-   slot{'proof} `" rewrite" " " slot[name:s] " " slot{'params} `" :" " " slot{'args}
+   slot{'proof} `" rewrite" " " slot[name:s] " " slot{'res} slot{'params} `" :" " " slot{'args}
    " " longrightarrow slot{'redex} longleftrightarrow slot{'contractum}
    popm ezone
 
-dform axiom_df : "axiom"[name:s]{'stmt; 'proof} =
+dform axiom_df : "axiom"[name:s]{'stmt; 'proof; 'res} =
    szone pushm[4]
-   slot{'proof} `" rule" " " slot[name:s] `" : : " slot{'stmt}
+   slot{'proof} `" rule" " " slot[name:s] `" " slot{'res} `": : " slot{'stmt}
    popm ezone
 
-dform rule_df : "rule"[name:s]{'params; 'stmt; 'proof} =
+dform rule_df : "rule"[name:s]{'params; 'stmt; 'proof; 'res} =
    szone pushm[4]
-   slot{'proof} `" rule" " " slot[name:s] " " space_list{'params} `":" hspace slot{'stmt}
+   slot{'proof} `" rule" " " slot[name:s] " " slot{'res} space_list{'params} `":" hspace slot{'stmt}
    ezone popm
 
 dform opname_df : "opname"[name:s]{'term} =
@@ -228,6 +229,22 @@ dform condition_df : "condition"{'term; 'cons; 'oexpr} =
    szone pushm[4]
    `"condition" " " slot{'term}
    ezone popm
+
+(*
+ * Resource annotations
+ *)
+
+declare res_def_list{'res}
+
+dform resource_defs_nil_df : resource_defs{nil} = `""
+
+dform resource_defs_df : resource_defs{'res} =
+   `"{|" res_def_list{'res} `"|} "
+
+dform res_def_list_df1 : res_def_list{cons{'a;nil}} = slot{'a}
+
+dform res_def_list_df2 : res_def_list{cons{'a;'b}} =
+   slot{'a} `"; " res_def_list{'b}
 
 (*
  * Parent path is separated by dots.
@@ -263,18 +280,18 @@ dform dform_df : "dform"[name:s]{'modes; 'redex; 'def} =
  *)
 declare "rel"{'op}
 
-dform rel_lt_df : "rel"{."prec_rel"["lt"]} = `"<"
-dform rel_eq_df : "rel"{."prec_rel"["eq"]} = `"="
-dform rel_gt_df : "rel"{."prec_rel"["gt"]} = `">"
+dform rel_lt_df : "rel"["lt"] = `"<"
+dform rel_eq_df : "rel"["eq"] = `"="
+dform rel_gt_df : "rel"["gt"] = `">"
 
 dform prec_df : "prec"[name:s] =
    `"prec" " " slot[name:s]
 
-dform prec_rel_df : "prec_rel"{'op; 'left; 'right} =
-   `"prec_rel " slot{'left} "rel"{'op} slot{'right}
+dform prec_rel_df : cons{prec_rel[op];cons{prec_rel[left];cons{prec_rel[right];nil}}} =
+   `"prec " slot[left] `" " "rel"[op] `" " slot[right]
 
-dform id_df : "id"{'id} =
-   `"id " slot{'id}
+dform id_df : "id"[n:n] =
+   `"Id: " slot[n:s]
 
 dform resource_df : "resource"[name]{'extract; 'improve; 'data} =
    szone pushm[4]

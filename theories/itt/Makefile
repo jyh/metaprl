@@ -98,7 +98,7 @@ $(TEST).run: $(CMOBJS)
 
 $(TEST).opt: $(CMXOBJS)
 	rm -f $@
-	$(OCAMLOPT) -o $@ -linkall $(CMXOBJS) $(CCLIBS)
+	$(OCAMLOPT) $(PROFILE) -o $@ -linkall $(CMXOBJS) $(CCLIBS)
 
 clean::
 	del -f *.p4* *.pp*

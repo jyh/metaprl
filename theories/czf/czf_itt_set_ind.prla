@@ -1216,7 +1216,7 @@ T	t637	o2 b633
 B	b638	t637
 T	t638	o633 b637 b4 b638
 B	b639	t638
-P	p645	String "dT 0 thenWT autoT"
+P	p645	String "dT 0 twa"
 O	o645	ext_rule p645
 H	h645	x t603
 T	t645	o609 b614 b617
@@ -1722,7 +1722,7 @@ T	t1365	o b1365 b685
 B	b1366	t1365
 P	p1395	String "thinT 6"
 O	o1395	ext_rule p1395
-P	p1431	String "instHypT [<< 'x >>; << 'x_1 >>] 6 thenWT autoT"
+P	p1431	String "instHypT [<< 'x >>; << 'x_1 >>] 6 twa"
 O	o1431	ext_rule p1431
 P	p1446	String "dT 7 thenT trivialT"
 O	o1446	ext_rule p1446
@@ -1749,7 +1749,7 @@ T	t1499	o634 b634 b1499
 T	t1509	o609 b814 b1476
 B	b1510	t1509 w
 T	t1510	o605 b1510
-P	p1516	String "dT 5 thenWT autoT"
+P	p1516	String "dT 5 twa"
 O	o1516	ext_rule p1516
 T	t1516	o609 b615 b1476
 B	b1517	t1516 w
@@ -1803,7 +1803,7 @@ B	b1597	t1596
 T	t1597	o612 b613 b1597
 B	b1598	t1597
 T	t1598	o590 b942 b1598
-P	p1604	String "withT << 'z_1 >> (dT 12) thenWT autoT"
+P	p1604	String "withT << 'z_1 >> (dT 12) twa"
 O	o1604	ext_rule p1604
 T	t1604	o590 b814 b1598
 H	h1604	y t1604
@@ -1823,11 +1823,11 @@ T	t1611	o679 b1611
 B	b1612	t1611
 T	t1612	o b1612 b4
 B	b1613	t1612
-P	p1618	String "assumT 4 thenWT autoT"
+P	p1618	String "assumT 4 twa"
 O	o1618	ext_rule p1618
 B	b1619	t728 v
 T	t1619	o634 b634 b1619
-P	p1625	String "withT << 'f 'z_1 >> (dT 16) thenWT autoT"
+P	p1625	String "withT << 'f 'z_1 >> (dT 16) twa"
 O	o1625	ext_rule p1625
 T	t1625	o590 b716 b1598
 B	b1626	t1625 z
@@ -1848,7 +1848,7 @@ T	t1642	o590 b765 b1598
 B	b1643	t1642
 T	t1643	o754 b1642 b1643
 B	b1644	t1643
-P	p1652	String "instHypT [<< 'x_3 >>; << 'x_4 >>] 16 thenWT autoT"
+P	p1652	String "instHypT [<< 'x_3 >>; << 'x_4 >>] 16 twa"
 O	o1652	ext_rule p1652
 B	b1653	t1598
 T	t1653	o754 b1605 b1653
@@ -1879,7 +1879,7 @@ T	t1766	o609 b755 b769
 B	b1767	t1766
 T	t1767	o754 b1766 b1767
 B	b1768	t1767
-P	p1776	String "instHypT [<< 'x >>; << 'x_1 >>] 7 thenWT autoT"
+P	p1776	String "instHypT [<< 'x >>; << 'x_1 >>] 7 twa"
 O	o1776	ext_rule p1776
 T	t1776	o754 b1264 b758
 B	b1777	t1776
@@ -2067,7 +2067,7 @@ T	t2709	o754 b2701 b1056
 T	t2711	o754 b2701 b991
 P	p2769	String "thinT 12 thenT thinT 8"
 O	o2769	ext_rule p2769
-P	p2937	String "withT << 'z_2 >> (dT 15) thenWT autoT"
+P	p2937	String "withT << 'z_2 >> (dT 15) twa"
 O	o2937	ext_rule p2937
 T	t2955	o745 b1005 b1015
 B	b2955	t2955 y1
@@ -2153,7 +2153,7 @@ B	b2141	t2140
 H	h2148	y t978
 T	t2148	o612 b980 b704
 B	b2149	t2148
-P	p2155	String "withT << 'y >> (dT 0) thenWT autoT"
+P	p2155	String "withT << 'y >> (dT 0) twa"
 O	o2155	ext_rule p2155
 T	t2155	o590 b614 b2149
 T	t2188	o745 b2073 b2149
@@ -2283,7 +2283,7 @@ T	t4013	o754 b2701 b2095
 T	t4015	o754 b2701 b2099
 T	t4017	o754 b2701 b2102
 T	t4019	o754 b2701 b2055
-P	p4055	String "withT << 'u >> (dT 14) thenWT autoT"
+P	p4055	String "withT << 'u >> (dT 14) twa"
 O	o4055	ext_rule p4055
 T	t4055	o745 b2073 b1007
 B	b4056	t4055 y2
@@ -2312,7 +2312,7 @@ T	t2367	o634 b634 b2367
 T	t2377	o609 b942 b2365
 B	b2378	t2377 w
 T	t2378	o605 b2378
-P	p2384	String "dT 7 thenWT autoT"
+P	p2384	String "dT 7 twa"
 O	o2384	ext_rule p2384
 T	t2384	o609 b615 b2365
 B	b2385	t2384 w
@@ -2358,10 +2358,10 @@ B	b2428	t2427 x
 T	t2428	o1845 b611 b2428
 B	b2429	t2428 w
 T	t2429	o605 b2429
-P	p2451	String "withT << 'u >> (dT 0) thenWT autoT"
+P	p2451	String "withT << 'u >> (dT 0) twa"
 O	o2451	ext_rule p2451
 T	t2451	o590 b1145 b2073
-P	p2464	String "withT << 'f 'u >> (dT 16) thenWT autoT"
+P	p2464	String "withT << 'f 'u >> (dT 16) twa"
 O	o2464	ext_rule p2464
 T	t2464	o590 b716 b2073
 B	b2465	t2464 z
@@ -2379,7 +2379,7 @@ B	b4306	t4305 s2
 T	t4306	o634 b634 b4306
 B	b4307	t4306 s1
 T	t4307	o634 b634 b4307
-P	p2488	String "instHypT [<< 'x_4 >>; << 'x_5 >>] 16 thenWT autoT"
+P	p2488	String "instHypT [<< 'x_4 >>; << 'x_5 >>] 16 twa"
 O	o2488	ext_rule p2488
 B	b2489	t2398
 B	b2490	t2451
@@ -2429,7 +2429,7 @@ B	b2625	t2624
 T	t4390	o754 b145 b2625
 B	b4391	t4390 s2
 T	t4391	o634 b634 b4391
-P	p2639	String "thinT 7 thenT dT 7 thenAT autoT"
+P	p2639	String "thinT 7 thenT dT 7 taa"
 O	o2639	ext_rule p2639
 NOcaml!str_let	str_let	str_let Ocaml
 NOcaml!patt_var	patt_var	patt_var Ocaml

@@ -1719,7 +1719,7 @@ P	p986	String sqst_ex4
 O	o986	rule p986
 P	p1001	String sqst_ex5
 O	o1001	rule p1001
-P	p1005	String "rwh unfold_sqst 0 thenT repeatT (dT 0) thenWT autoT"
+P	p1005	String "rwh unfold_sqst 0 thenT repeatT (dT 0) twa"
 O	o1005	ext_rule p1005
 P	p1029	String "dT 2 thenT autoT"
 O	o1029	ext_rule p1029
@@ -2596,7 +2596,7 @@ T	t2596	o698 b654 b2584 b2596 b4
 B	b2597	t2596
 P	p1481	Number 3580
 P	p1322	Number 1
-P	p1383	String "markovN thenWT autoT"
+P	p1383	String "markovN twa"
 O	o1383	ext_rule p1383
 B	b2598	t2559
 T	t2598	o729 b2598
@@ -2991,7 +2991,7 @@ T	t1786	o1593 b1703 b1738 b1739
 B	b1786	t1786
 P	p1828	String squash_ex4m
 O	o1828	rule p1828
-P	p1831	String "dT 0 thenWT autoT"
+P	p1831	String "dT 0 twa"
 O	o1831	ext_rule p1831
 P	p1867	String "autoT thenT dT 3 thenT autoT"
 O	o1867	ext_rule p1867

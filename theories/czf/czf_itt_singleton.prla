@@ -4126,7 +4126,7 @@ T	t1753	o560 b1744 b4
 B	b1754	t1753
 T	t1754	o1753 b559 b1754 b4 b4
 B	b1755	t1754
-P	p1755	String "setExtT thenWT autoT"
+P	p1755	String "setExtT twa"
 O	o1755	ext_rule p1755
 S	s1755	tbrarg h h1692 h1693 h1695
 G	s1755	t1700

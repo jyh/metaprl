@@ -2574,7 +2574,7 @@ B	b1616	t1606 s2
 T	t1616	o1614 b1615 b1616
 B	b1617	t1616 s1
 T	t1617	o1614 b1615 b1617
-P	p1627	String "dT 0 thenWT autoT"
+P	p1627	String "dT 0 twa"
 O	o1627	ext_rule p1627
 H	h3197	s1 t1615
 H	h1627	x t1615
@@ -4143,7 +4143,7 @@ T	t2144	o2009 b2144
 B	b2145	t2144
 T	t2145	o1413 b1668 b2145
 B	b2146	t2145
-P	p2157	String "withT << 'z_2 >> (dT 8) thenWT autoT"
+P	p2157	String "withT << 'z_2 >> (dT 8) twa"
 O	o2157	ext_rule p2157
 T	t2161	o b2094 b8
 B	b2162	t2161
@@ -4462,7 +4462,7 @@ P	p2507	String "rwh fold_isset 0 thenT autoT"
 O	o2507	ext_rule p2507
 P	p2511	String "thinT 2 thenT dT 2"
 O	o2511	ext_rule p2511
-P	p2535	String "dT 2 thenWT autoT"
+P	p2535	String "dT 2 twa"
 O	o2535	ext_rule p2535
 P	p2545	String "rwh unfold_rel 0"
 O	o2545	ext_rule p2545
@@ -6308,7 +6308,7 @@ B	b4851	t4850
 T	t4851	o1441 b4794 b4851
 B	b4852	t4851
 T	t2618	o1799 b2560 b1874
-P	p2633	String "withT << 'a_1 >> (dT 6) thenWT autoT"
+P	p2633	String "withT << 'a_1 >> (dT 6) twa"
 O	o2633	ext_rule p2633
 H	h3901	t2557
 T	t4852	o1826 b2896 b3281
@@ -6468,7 +6468,7 @@ T	t4916	o1441 b4916 b8
 B	b4917	t4916
 T	t4917	o2053 b1440 b4917 b8 b8
 B	b4918	t4917
-P	p2651	String "dT 10 thenWT autoT"
+P	p2651	String "dT 10 twa"
 O	o2651	ext_rule p2651
 S	s4918	tbrarg\\ h2513 h4763 h1627 h2556 h3901 h4852 h4853 h2560 h4854 h4901\\ t4855
 B	b4919	s4918
@@ -6585,7 +6585,7 @@ T	t1182	o b4918 b1182
 B	b1183	t1182
 T	t1183	o2633 b1440 b1171 b1183 b8
 B	b1184	t1183
-P	p2683	String "withT << 'a_1 >> (dT 7) thenAT autoT"
+P	p2683	String "withT << 'a_1 >> (dT 7) taa"
 O	o2683	ext_rule p2683
 H	h3983	t2618
 VP	P4960	P\\ H\\ t1415 t2560

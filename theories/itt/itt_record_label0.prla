@@ -323,7 +323,7 @@ P	p664	Var y
 O	o665	var p664
 T	t665	o665
 B	b665	t665
-P	p671	String "assertEqT <<'x='y in label>> thenAT autoT"
+P	p671	String "assertEqT <<'x='y in label>> taa"
 O	o671	ext_rule p671
 H	h674	z t492
 P	p674	Var z

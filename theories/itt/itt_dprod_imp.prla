@@ -5831,7 +5831,7 @@ T	t2517	o b2517 b4
 B	b2518	t2517
 T	t2518	o570 b2513 b2518
 B	b2519	t2518
-P	p2519	String "withT << left >> (dT 2) thenWT autoT"
+P	p2519	String "withT << left >> (dT 2) twa"
 O	o2519	ext_rule p2519
 B	b1232	t1231
 T	t1232	o b1232 b4
@@ -6028,7 +6028,7 @@ G	s2524	t2508
 B	b2525	s2524
 T	t2525	o572 b2525 b2511
 B	b2526	t2525
-P	p2530	String "withT << right >> (dT 2) thenWT autoT"
+P	p2530	String "withT << right >> (dT 2) twa"
 O	o2530	ext_rule p2530
 T	t2530	o b484 b4
 B	b2531	t2530

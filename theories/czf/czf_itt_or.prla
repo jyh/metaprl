@@ -1005,7 +1005,7 @@ H	h643	u t570
 P	p650	String right
 O	o650	tactic_arg p650
 H	h650	v t573
-P	p660	String "selT 1 (dT 0) thenWT autoT"
+P	p660	String "selT 1 (dT 0) twa"
 O	o660	ext_rule p660
 NSummary!arg_named	arg_named	arg_named Summary
 P	p662	String sel
@@ -1028,7 +1028,7 @@ T	t676	o602 b623 b614
 B	b677	t676
 P	p685	String "instHypT [<< 'x >>; << 'x_1 >>] 6 thenT autoT"
 O	o685	ext_rule p685
-P	p693	String "selT 2 (dT 0) thenWT autoT"
+P	p693	String "selT 2 (dT 0) twa"
 O	o693	ext_rule p693
 P	p695	Number 2
 O	o695	arg_int p695

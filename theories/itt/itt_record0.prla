@@ -673,7 +673,7 @@ P	p1818	String recordEqualS1
 O	o1818	rule p1818
 P	p1826	String "equalTransT <<rcrd{'n;'a;'r2}>>"
 O	o1826	ext_rule p1826
-P	p1843	String "assertEqT <<'r1='r2 in record{'m;'A}>> thenAT autoT"
+P	p1843	String "assertEqT <<'r1='r2 in record{'m;'A}>> taa"
 O	o1843	ext_rule p1843
 P	p1844	Var z
 O	o1844	var p1844
@@ -2799,7 +2799,7 @@ O	o2873	ext_rule p2873
 P	p2886	String record_cover
 O	o2886	rule p2886
 H	h2951	x t680
-P	p3018	String "withT <<snd{'x}>> (dT 3) thenAT autoT"
+P	p3018	String "withT <<snd{'x}>> (dT 3) taa"
 O	o3018	ext_rule p3018
 T	t3022	o b2714 b4
 B	b3023	t3022

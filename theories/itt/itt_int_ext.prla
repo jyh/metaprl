@@ -6948,7 +6948,7 @@ P	p821	String "genAssumT [4]"
 O	o821	ext_rule p821
 NItt_logic!all	all	all Itt_logic
 O	o822	all
-P	p846	String "dT 0 thenWT autoT"
+P	p846	String "dT 0 twa"
 O	o846	ext_rule p846
 H	h4789	c_1 t2133
 P	p4790	Var c_1
@@ -6992,7 +6992,7 @@ P	p3660	String "lt_AsymT <<0>> <<0>> thenT autoT"
 O	o3660	ext_rule p3660
 P	p3670	String "thinT 5"
 O	o3670	ext_rule p3670
-P	p3676	String "splitIntT <<0>> <<'m -@ 1>> thenWT autoT"
+P	p3676	String "splitIntT <<0>> <<'m -@ 1>> twa"
 O	o3676	ext_rule p3676
 H	h5013	t1092
 T	t1617	o2132 b2133 b2168 b1091
@@ -8696,7 +8696,7 @@ T	t297	o b297 b17
 B	b298	t297
 T	t298	o2188 b5232 b298
 B	b300	t298
-P	p300	String "splitInt <<'a>> <<'b>> thenWT autoT"
+P	p300	String "splitInt <<'a>> <<'b>> twa"
 O	o300	ext_rule p300
 P	p301	String ""
 O	o301	tactic_arg p301
@@ -8995,7 +8995,7 @@ T	t364	o2188 b364 b17
 B	b365	t364
 T	t365	o363 b2187 b365 b17 b17
 B	b366	t365
-P	p366	String "splitInt <<'b>> <<'c>> thenWT autoT"
+P	p366	String "splitInt <<'b>> <<'c>> twa"
 O	o366	ext_rule p366
 T	t366	o301 b331 b17 b313
 B	b367	t366

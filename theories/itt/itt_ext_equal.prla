@@ -781,7 +781,7 @@ B	b893	t892
 NSummary!interactive	interactive	interactive Summary
 O	o418	interactive
 NSummary!ext_rule	ext_rule	ext_rule Summary
-P	p418	String "assertT <<ext_equal{'A; 'B}>> thenAT autoT"
+P	p418	String "assertT <<ext_equal{'A; 'B}>> taa"
 O	o419	ext_rule p418
 NSummary!status_incomplete	status_incomplete	status_incomplete Summary
 O	o420	status_incomplete

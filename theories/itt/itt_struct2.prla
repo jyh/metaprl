@@ -3706,7 +3706,7 @@ T	t2952	o b2952 b23
 B	b2953	t2952
 T	t2953	o1306 b2624 b2953
 B	b2954	t2953
-P	p2621	String "assertT <<'t1='z in 'T>> thenMT assertT <<'t2='z in 'T>> thenAT autoT"
+P	p2621	String "assertT <<'t1='z in 'T>> thenMT assertT <<'t2='z in 'T>> taa"
 O	o2621	ext_rule p2621
 T	t722	o690 b2946 b23 b2947
 B	b722	t722
@@ -5223,7 +5223,7 @@ T	t4031	o1282 b4024 b4031
 B	b4032	t4031
 T	t4032	o1282 b4020 b4032
 B	b4033	t4032
-P	p1004	String "cutEq0 <<'c_1='c_2 in 'C['t_2]>> <<bind{c.'c 'c}>> thenMT onHypsT[-1;-1] thinT thenAT autoT"
+P	p1004	String "cutEq0 <<'c_1='c_2 in 'C['t_2]>> <<bind{c.'c 'c}>> thenMT onHypsT[-1;-1] thinT taa"
 O	o1004	ext_rule p1004
 H	h4033	t4024
 H	h4034	t4025
@@ -6111,7 +6111,7 @@ T	t4203	o1282 b4198 b4203
 B	b4205	t4203
 T	t4205	o1282 b3691 b4205
 B	b4206	t4205
-P	p1228	String "cutEq0 <<'s_1='s_2 in 'S>> <<bind{x.'t_1['x] 't_2['x]}>> thenAT autoT"
+P	p1228	String "cutEq0 <<'s_1='s_2 in 'S>> <<bind{x.'t_1['x] 't_2['x]}>> taa"
 O	o1228	ext_rule p1228
 S	s4206	tbrarg\\ h1590 h3463 h3802 h3803\\ t4190
 B	b4207	s4206

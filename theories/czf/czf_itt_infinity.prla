@@ -1727,7 +1727,7 @@ T	t600	o b596 b600
 B	b601	t600
 T	t601	o542 b592 b601
 B	b602	t601
-P	p602	String "withT << empty >> (dT 0) thenWT autoT"
+P	p602	String "withT << empty >> (dT 0) twa"
 O	o602	ext_rule p602
 T	t602	o576 b515 b506
 S	s602	tbrarg h
@@ -1843,7 +1843,7 @@ T	t645	o542 b639 b4
 B	b646	t645
 T	t646	o560 b541 b646 b4 b4
 B	b647	t646
-P	p647	String "withT << nil >> (dT 0) thenWT autoT"
+P	p647	String "withT << nil >> (dT 0) twa"
 O	o647	ext_rule p647
 NItt_list!nil	nil647	nil Itt_list
 O	o648	nil647
@@ -1954,7 +1954,7 @@ T	t690	o b686 b690
 B	b691	t690
 T	t691	o542 b599 b691
 B	b692	t691
-P	p692	String "dT 0 thenWT autoT"
+P	p692	String "dT 0 twa"
 O	o692	ext_rule p692
 NCzf_itt_set!set	set	set Czf_itt_set
 O	o693	set

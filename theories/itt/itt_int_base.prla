@@ -3087,7 +3087,7 @@ P	p4666	String "rw (someSubC (foldC <<'b +@ 0>> add_IdC)) 0"
 O	o4666	ext_rule p4666
 P	p4684	String "sqSubstT << 0 ~ ('c +@ minus{'c})>> 0"
 O	o4684	ext_rule p4684
-P	p4699	String "rw (allSubC add_AssocC) 0 thenAT autoT"
+P	p4699	String "rw (allSubC add_AssocC) 0 taa"
 O	o4699	ext_rule p4699
 P	p4707	String "sqSubstT <<('a +@ 'c) ~ ('b +@ 'c)>> 0"
 O	o4707	ext_rule p4707
@@ -3125,11 +3125,11 @@ O	o3804	ext_rule p3804
 O	o3840	lid p3800
 T	t3840	o3840
 B	b3840	t3840
-P	p3850	String "add_Functionality << 'a +@ 'b >> thenWT autoT"
+P	p3850	String "add_Functionality << 'a +@ 'b >> twa"
 O	o3850	ext_rule p3850
-P	p3860	String "rw (addrC [0] add_CommutC) 0 thenAT autoT"
+P	p3860	String "rw (addrC [0] add_CommutC) 0 taa"
 O	o3860	ext_rule p3860
-P	p3867	String "rw (addrC [0] minus_add_inverseC) 0 thenAT autoT"
+P	p3867	String "rw (addrC [0] minus_add_inverseC) 0 taa"
 O	o3867	ext_rule p3867
 P	p3873	String "rw (addrC [1;1] add_CommutC) 0 ttca"
 O	o3873	ext_rule p3873
@@ -3137,15 +3137,15 @@ P	p3898	String "rw (addrC [1;0] add_Assoc2C) 0 ttca"
 O	o3898	ext_rule p3898
 P	p3907	String "rw (addrC [1;0;1] (add_CommutC thenC minus_add_inverseC)) 0 ttca"
 O	o3907	ext_rule p3907
-P	p3915	String "rw (addrC [1;0] add_IdC) 0 thenAT autoT"
+P	p3915	String "rw (addrC [1;0] add_IdC) 0 taa"
 O	o3915	ext_rule p3915
 P	p3930	String trivialT
 O	o3930	ext_rule p3930
 P	p5847	String "add_Functionality <<'c>> thenT trivialT"
 O	o5847	ext_rule p5847
-P	p5898	String "rw (addrC [1] add_AssocC) 0 thenAT autoT"
+P	p5898	String "rw (addrC [1] add_AssocC) 0 taa"
 O	o5898	ext_rule p5898
-P	p5922	String "rw (addrC [1] add_CommutC) 0 thenAT autoT"
+P	p5922	String "rw (addrC [1] add_CommutC) 0 taa"
 O	o5922	ext_rule p5922
 P	p5928	String "rw (addrC [1] minus_add_inverseC) 0"
 O	o5928	ext_rule p5928
@@ -3484,7 +3484,7 @@ B	b5109	t5109
 P	p5126	String splitInt
 O	o5126	rule p5126
 T	t1170	o1526 b2669
-P	p5145	String "assertT <<btrue=btrue in bool>> thenAT autoT"
+P	p5145	String "assertT <<btrue=btrue in bool>> taa"
 O	o5145	ext_rule p5145
 T	t5152	o1652 b1744 b1849 b1849
 P	p5158	String "rw (addrC [1] (splitIntC <<'a>> <<'b>>)) 2 ttca"
@@ -4466,9 +4466,9 @@ T	t5428	o1493 b2509 b2178
 B	b5430	t5428
 T	t5439	o1437 b2509 b2178
 B	b5440	t5439
-P	p5508	String "thinT (-1) thenT rw (addrC [0] reduce_ind_down) 0 thenAT autoT"
+P	p5508	String "thinT (-1) thenT rw (addrC [0] reduce_ind_down) 0 taa"
 O	o5520	ext_rule p5508
-P	p5668	String "splitITE 0 thenAT autoT"
+P	p5668	String "splitITE 0 taa"
 O	o5673	ext_rule p5668
 T	t5819	o1526 b5376
 H	h6976	t5819
@@ -4486,7 +4486,7 @@ P	p6144	String "dT (-1) thenMT rw (addrC [0] (int_sqequalC <<0>>)) 3 thenMT rwh 
 O	o6144	ext_rule p6144
 P	p6190	String "rwh reduceC 0 thenT rwh reduce_ind_base 0 thenT trivialT"
 O	o6190	ext_rule p6190
-P	p6201	String "thinT (-1) thenT splitITE 0 thenAT autoT"
+P	p6201	String "thinT (-1) thenT splitITE 0 taa"
 O	o6201	ext_rule p6201
 T	t6552	o6829 b5375
 B	b6554	t6552
@@ -10926,9 +10926,9 @@ T	t9549	o1437 b2169 b2018
 B	b9549	t9549
 P	p4428	String lt_add_lt
 O	o4428	rule p4428
-P	p4449	String "ltDissectT <<'a +@ 'd>> thenWT autoT"
+P	p4449	String "ltDissectT <<'a +@ 'd>> twa"
 O	o4449	ext_rule p4449
-P	p4471	String "rw (allSubC add_CommutC) 0 thenAT autoT"
+P	p4471	String "rw (allSubC add_CommutC) 0 taa"
 O	o4472	ext_rule p4471
 P	p4488	String "rw (addrC [0] (foldC <<lt_bool{'c ; 'd}>> (lt_addMonoC <<'a>>))) 0 thenT autoT"
 O	o4488	ext_rule p4488
@@ -11636,7 +11636,7 @@ T	t10062	o1650 b10061
 B	b10062	t10062
 T	t10063	o1649 b7555 b10062
 B	b10063	t10063
-P	p3984	String "add_Functionality <<- 'a>> thenAT autoT"
+P	p3984	String "add_Functionality <<- 'a>> taa"
 O	o3984	ext_rule p3984
 T	t10064	o b7545 b18
 B	b10064	t10064

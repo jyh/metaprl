@@ -1019,7 +1019,7 @@ T	t659	o607 b628 b619
 B	b660	t659
 T	t663	o607 b629 b620
 B	b663	t663
-P	p675	String "instHypT [<< 'x_1 >>; << 'x >>] 7 thenWT autoT"
+P	p675	String "instHypT [<< 'x_1 >>; << 'x >>] 7 twa"
 O	o675	ext_rule p675
 T	t675	o598 b599 b571
 T	t676	o607 b604 b578

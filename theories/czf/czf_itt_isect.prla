@@ -3712,7 +3712,7 @@ T	t1799	o1583 b1789 b1798
 B	b1799	t1799
 T	t1800	o1583 b1712 b1799
 B	b1800	t1800
-P	p1800	String "assumT 3 thenWT autoT"
+P	p1800	String "assumT 3 twa"
 O	o1800	ext_rule p1800
 T	t1801	o b1793 b12
 B	b1801	t1801
@@ -3740,7 +3740,7 @@ T	t1810	o b1810 b12
 B	b1811	t1810
 T	t1811	o1602 b1806 b1811
 B	b1812	t1811
-P	p1812	String "rwh unfold_isect 0 thenT dT 0 thenWT autoT"
+P	p1812	String "rwh unfold_isect 0 thenT dT 0 twa"
 O	o1812	ext_rule p1812
 NCzf_itt_member!member	member	member Czf_itt_member
 O	o1813	member
@@ -4217,7 +4217,7 @@ T	t2058	o b2058 b12
 B	b2059	t2058
 T	t2059	o1602 b2052 b2059
 B	b2060	t2059
-P	p2060	String "dT 4 thenWT autoT"
+P	p2060	String "dT 4 twa"
 O	o2060	ext_rule p2060
 T	t2060	o1480 b1492 b1491
 H	h2060	u t2060

@@ -2697,9 +2697,9 @@ NItt_logic!implies	implies	implies Itt_logic
 O	o612	implies
 P	p623	String logicAutoT
 O	o623	ext_rule p623
-P	p625	String "rwh unfold_sall 0 thenT dT 0 thenWT autoT"
+P	p625	String "rwh unfold_sall 0 thenT dT 0 twa"
 O	o625	ext_rule p625
-P	p635	String "withT << 'x >> (dT 2) thenWT autoT"
+P	p635	String "withT << 'x >> (dT 2) twa"
 O	o635	ext_rule p635
 NSummary!arg_named	arg_named	arg_named Summary
 O	o639	arg_named p639
@@ -2751,7 +2751,7 @@ O	o681	var p681
 T	t681	o681
 B	b681	t681
 T	t682	o664 b665 b681
-P	p689	String "dT 0 thenWT autoT"
+P	p689	String "dT 0 twa"
 O	o689	ext_rule p689
 H	h689	z_1 t663
 P	p690	Var z_1
@@ -2782,7 +2782,7 @@ B	b1708	t1707
 H	h2150	t661
 H	h2152	t664
 H	h2273	t663
-P	p759	String "withT << 'f 'z_1 >> (dT 7) thenWT autoT"
+P	p759	String "withT << 'f 'z_1 >> (dT 7) twa"
 O	o759	ext_rule p759
 NOcaml!str_let	str_let	str_let Ocaml
 NOcaml!patt_var	patt_var	patt_var Ocaml
@@ -4558,7 +4558,7 @@ B	b1392	t1392
 T	t1393	o1363 b1392
 B	b1393	t1393
 T	t1394	o668 b1393
-P	p1399	String "withT << 'y >> (dT 6) thenWT autoT"
+P	p1399	String "withT << 'y >> (dT 6) twa"
 O	o1399	ext_rule p1399
 T	t1400	o664 b665 b883
 B	b1400	t1400
@@ -4609,7 +4609,7 @@ B	b1469	t1468
 P	p1480	String "withT << 'z_1 >> (dT 0) thenWT logicAutoT"
 O	o1480	ext_rule p1480
 T	t1485	o1119 b611 b1393 b1393
-P	p1521	String "withT << 'z_1 >> (dT 6) thenWT autoT"
+P	p1521	String "withT << 'z_1 >> (dT 6) twa"
 O	o1521	ext_rule p1521
 P	p1530	String "dT 8"
 O	o1530	ext_rule p1530
@@ -6046,7 +6046,7 @@ T	t4675	o603 b4675 b4
 B	b4676	t4675
 T	t4676	o1149 b602 b4676 b4 b4
 B	b4677	t4676
-P	p1748	String "dT 2 thenAT autoT"
+P	p1748	String "dT 2 taa"
 O	o1748	ext_rule p1748
 S	s4677	tbrarg\\ h250 h4600 h4652\\ C1131
 B	b4678	s4677
@@ -7313,7 +7313,7 @@ B	b5300	t5299
 T	t5300	o603 b5229 b5300
 B	b5301	t5300
 B	b2619	t2618
-P	p2630	String "withT << 'z >> (dT 9) thenWT autoT"
+P	p2630	String "withT << 'z >> (dT 9) twa"
 O	o2630	ext_rule p2630
 T	t5301	o4821 b5232 b4 b5289
 B	b5302	t5301

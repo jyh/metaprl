@@ -697,7 +697,7 @@ P	p2606	String recordTypeEliminationL
 O	o2606	rule p2606
 P	p2632	String "rwh unfoldRecordL 2 thenT rwch unfoldRecordL 1 2 thenT rwch unfoldRecordL 2 2"
 O	o2632	ext_rule p2632
-P	p2671	String "withT <<'r>> (dT 2) thenAT autoT"
+P	p2671	String "withT <<'r>> (dT 2) taa"
 O	o2671	ext_rule p2671
 P	p2674	String with
 O	o2674	arg_named p2674
@@ -739,9 +739,9 @@ O	o3587	ext_rule p3587
 P	p3608	String recordMemberOrt
 O	o3608	rule p3608
 O	o3609	record_ort p1245
-P	p3630	String "assertT <<record_ort[n:t]{'a;'R}>> thenAT autoT"
+P	p3630	String "assertT <<record_ort[n:t]{'a;'R}>> taa"
 O	o3630	ext_rule p3630
-P	p760	String "rw (unfoldRecordOrt thenC unfoldFunctionOrt) 3 thenT withT <<'rr>> (dT 3) thenWT autoT"
+P	p760	String "rw (unfoldRecordOrt thenC unfoldFunctionOrt) 3 thenT withT <<'rr>> (dT 3) twa"
 O	o760	ext_rule p760
 T	t766	o b1682 b4
 B	b766	t766
@@ -854,7 +854,7 @@ T	t4226	o3668 b1641 b718
 B	b4227	t4226
 P	p4261	String "rwh reduceC 0 thenT withT <<'A>> autoT"
 O	o4261	ext_rule p4261
-P	p4271	String "letT <<'rr='r in record[n:t]{'A; x. 'R['x]}>> thenAT autoT"
+P	p4271	String "letT <<'rr='r in record[n:t]{'A; x. 'R['x]}>> taa"
 O	o4271	ext_rule p4271
 P	p4283	String "recordEliminationR1 4 thenT autoT"
 O	o4283	ext_rule p4283
@@ -874,9 +874,9 @@ P	p4405	String "rwh unfoldFunctionOrt 0 thenT autoT"
 O	o4405	ext_rule p4405
 P	p4443	String "assumT 1 thenT withT <<'a>> (dT (-1)) thenT autoT"
 O	o4443	ext_rule p4443
-P	p4485	String "assertT <<function_ort{x.'f['x];'A} >> thenAT autoT"
+P	p4485	String "assertT <<function_ort{x.'f['x];'A} >> taa"
 O	o4485	ext_rule p4485
-P	p4511	String "assertT <<function_ort{x.'f['x];'B['a]} >> thenAT autoT"
+P	p4511	String "assertT <<function_ort{x.'f['x];'B['a]} >> taa"
 O	o4511	ext_rule p4511
 P	p4629	String recordOrtIntroL
 O	o4629	rule p4629
@@ -1093,7 +1093,7 @@ P	p1122	String record_eqcdST
 O	o1122	lid p1122
 T	t1122	o1122
 B	b1122	t1122
-P	p2429	String "letT <<'rr='r in 'R>> thenAT autoT"
+P	p2429	String "letT <<'rr='r in 'R>> taa"
 O	o2429	ext_rule p2429
 P	p1472	String "autoT thenT assumT 2"
 O	o1472	ext_rule p1472
@@ -1127,7 +1127,7 @@ T	t1363	o2675 b1363
 B	b1364	t1363
 T	t1364	o2674 b1364
 B	b1365	t1364
-P	p1372	String "letT <<'rr='r in record[n:t]{self.'A['self];'R}>> thenAT autoT"
+P	p1372	String "letT <<'rr='r in record[n:t]{self.'A['self];'R}>> taa"
 O	o1372	ext_rule p1372
 T	t1373	o1020 b1972 b1682 b1682
 P	p1474	String "cutT <<sequent{ <H>; r:record[n:t]{'A;x.'R['x]}; <J['r]>; x:'A >- \"type\"{'R['x]}}>> thenMT substUsingEpimorphism 2 <<x:'A * 'R['x]>> <<bind{y.spread{'y;a,r.rcrd[n:t]{'a;'r}}}>> <<bind{z.(field[n:t]{'z},'z)}>>"
@@ -12043,7 +12043,7 @@ T	t1245	o b1245 b4
 B	b1247	t1245
 T	t1247	o978 b1229 b1247
 B	b1248	t1247
-P	p1248	String "dT 0 thenWT autoT"
+P	p1248	String "dT 0 twa"
 O	o1248	ext_rule p1248
 T	t1248	o5319 b1239 b4 b1240
 B	b1249	t1248

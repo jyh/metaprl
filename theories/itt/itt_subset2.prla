@@ -2533,7 +2533,7 @@ T	t1745	o130
 B	b1745	t1745
 T	t1746	o1745 b1745 b131
 B	b1746	t1746 x
-P	p1753	String "dT 0 thenT dT 0 thenWT autoT"
+P	p1753	String "dT 0 thenT dT 0 twa"
 O	o1753	ext_rule p1753
 NItt_logic!implies	implies	implies Itt_logic
 O	o1759	implies

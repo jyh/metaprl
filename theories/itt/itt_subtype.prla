@@ -5378,7 +5378,7 @@ T	t3829	o589 b3825 b3829
 B	b3830	t3829
 T	t3830	o589 b3819 b3830
 B	b3831	t3830
-P	p1332	String "assertT <<\"subtype\"{'A;'B}>> thenAT autoT"
+P	p1332	String "assertT <<\"subtype\"{'A;'B}>> taa"
 O	o1332	ext_rule p1332
 T	t3831	o b3823 b4
 B	b3832	t3831
@@ -5558,7 +5558,7 @@ T	t3388	o589 b3388 b1327
 B	b3389	t3388
 T	t3389	o589 b3386 b3389
 B	b3390	t3389
-P	p3390	String "assertT <<'A subtype 'C>> thenAT autoT"
+P	p3390	String "assertT <<'A subtype 'C>> taa"
 O	o3390	ext_rule p3390
 P	p3391	String ""
 O	o3391	tactic_arg p3391
@@ -5583,7 +5583,7 @@ T	t3412	o b3412 b4
 B	b3414	t3412
 T	t3414	o1204 b3399 b3414
 B	b3415	t3414
-P	p3416	String "assertT <<'C subtype 'B>> thenAT autoT"
+P	p3416	String "assertT <<'C subtype 'B>> taa"
 O	o3416	ext_rule p3416
 T	t3416	o3391 b3409 b4 b3411
 B	b3416	t3416
@@ -5659,7 +5659,7 @@ T	t3528	o b3527 b4
 B	b3528	t3528
 T	t3529	o1204 b3447 b3528
 B	b3529	t3529
-P	p3529	String "(withT <<'x>> (dT 2)) thenWT autoT"
+P	p3529	String "(withT <<'x>> (dT 2)) twa"
 O	o3529	ext_rule p3529
 T	t3530	o3391 b3458 b4 b3525
 B	b3530	t3530

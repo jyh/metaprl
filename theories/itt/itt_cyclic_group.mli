@@ -72,6 +72,9 @@ topval fold_group_power : conv
 topval fold_cycGroup : conv
 topval fold_cycSubg : conv
 
+topval positiveRule1T : tactic
+topval positiveRule2T : tactic
+
 (*
  * -*-
  * Local Variables:

@@ -40,6 +40,8 @@
 extends Itt_group
 extends Itt_int_base
 (*! @docoff *)
+extends Itt_int_ext
+extends Itt_int_arith
 
 open Printf
 open Mp_debug
@@ -129,37 +131,37 @@ dform cycSubg_df : except_mode[src] :: cycSubg[i:l]{'s; 'g; 'a} =
  * @end[doc]
  *)
 interactive group_power_wf {| intro [intro_typeinf <<'g>>] |} 'H group[i:l] :
-   sequent [squash] {'H >- 'g in group[i:l] } -->
-   sequent [squash] {'H >- 'a in 'g^car } -->
-   sequent [squash] {'H >- 'n IN int } -->
-   sequent ['ext] {'H >- group_power{'g; 'a; 'n} in 'g^car }
+   sequent [squash] { 'H >- 'g in group[i:l] } -->
+   sequent [squash] { 'H >- 'a in 'g^car } -->
+   sequent [squash] { 'H >- 'n in int } -->
+   sequent ['ext] { 'H >- group_power{'g; 'a; 'n} in 'g^car }
 (*! @docoff *)
 
 (* a ^ 0 = e *)
 interactive group_power_0 {| intro [intro_typeinf <<'g>>] |} 'H group[i:l] :
-   sequent [squash] {'H >- 'g in group[i:l] } -->
-   sequent [squash] {'H >- 'a in 'g^car } -->
-   sequent ['ext] {'H >- group_power{'g; 'a; 0} = 'g^"1" in 'g^car }
+   sequent [squash] { 'H >- 'g in group[i:l] } -->
+   sequent [squash] { 'H >- 'a in 'g^car } -->
+   sequent ['ext] { 'H >- group_power{'g; 'a; 0} = 'g^"1" in 'g^car }
 
 (* a ^ 1 = a *)
 interactive group_power_1 {| intro [intro_typeinf <<'g>>] |} 'H group[i:l] :
-   sequent [squash] {'H >- 'g in group[i:l] } -->
-   sequent [squash] {'H >- 'a in 'g^car } -->
-   sequent ['ext] {'H >- group_power{'g; 'a; 1} = 'a in 'g^car }
+   sequent [squash] { 'H >- 'g in group[i:l] } -->
+   sequent [squash] { 'H >- 'a in 'g^car } -->
+   sequent ['ext] { 'H >- group_power{'g; 'a; 1} = 'a in 'g^car }
 
 (* a ^ (n + 1) * a ^ (-1) = a ^ n *)
 interactive group_power_less {| intro [intro_typeinf <<'g>>] |} 'H group[i:l] :
-   sequent [squash] {'H >- 'g in group[i:l] } -->
-   sequent [squash] {'H >- 'a in 'g^car } -->
-   sequent [squash] {'H >- 'n IN int } -->
-   sequent ['ext] {'H >- group_power{'g; 'a; ('n +@ 1)} *['g] ('g^inv 'a) = group_power{'g; 'a; 'n} in 'g^car }
+   sequent [squash] { 'H >- 'g in group[i:l] } -->
+   sequent [squash] { 'H >- 'a in 'g^car } -->
+   sequent [squash] { 'H >- 'n in int } -->
+   sequent ['ext] { 'H >- group_power{'g; 'a; ('n +@ 1)} *['g] ('g^inv 'a) = group_power{'g; 'a; 'n} in 'g^car }
 
 (* a ^ n * x = a ^ (n + 1) *)
 interactive group_power_more {| intro [intro_typeinf <<'g>>] |} 'H group[i:l] :
-   sequent [squash] {'H >- 'g in group[i:l] } -->
-   sequent [squash] {'H >- 'a in 'g^car } -->
-   sequent [squash] {'H >- 'n IN int } -->
-   sequent ['ext] {'H >- group_power{'g; 'a; 'n} *['g] 'a = group_power{'g; 'a; ('n +@ 1)} in 'g^car }
+   sequent [squash] { 'H >- 'g in group[i:l] } -->
+   sequent [squash] { 'H >- 'a in 'g^car } -->
+   sequent [squash] { 'H >- 'n in int } -->
+   sequent ['ext] { 'H >- group_power{'g; 'a; 'n} *['g] 'a = group_power{'g; 'a; ('n +@ 1)} in 'g^car }
 
 (*!
  * @begin[doc]
@@ -168,18 +170,18 @@ interactive group_power_more {| intro [intro_typeinf <<'g>>] |} 'H group[i:l] :
  * @end[doc]
  *)
 interactive group_power_reduce {| intro [intro_typeinf <<'g>>] |} 'H group[i:l] :
-   sequent [squash] {'H >- 'g in group[i:l] } -->
-   sequent [squash] {'H >- 'a in 'g^car } -->
-   sequent [squash] {'H >- 'm IN int } -->
-   sequent [squash] {'H >- 'n IN int } -->
-   sequent ['ext] {'H >- group_power{'g; 'a; 'm} *['g] group_power{'g; 'a; 'n} = group_power{'g; 'a; ('m +@ 'n)} in 'g^car }
+   sequent [squash] { 'H >- 'g in group[i:l] } -->
+   sequent [squash] { 'H >- 'a in 'g^car } -->
+   sequent [squash] { 'H >- 'm in int } -->
+   sequent [squash] { 'H >- 'n in int } -->
+   sequent ['ext] { 'H >- group_power{'g; 'a; 'm} *['g] group_power{'g; 'a; 'n} = group_power{'g; 'a; ('m +@ 'n)} in 'g^car }
 (*! @docoff *)
 
 interactive group_power_inv_reduce {| intro [intro_typeinf <<'g>>] |} 'H group[i:l] :
-   sequent [squash] {'H >- 'g in group[i:l] } -->
-   sequent [squash] {'H >- 'a in 'g^car } -->
-   sequent [squash] {'H >- 'n IN int } -->
-   sequent ['ext] {'H >- 'g^inv group_power{'g; 'a; 'n} = group_power{'g; 'a; (-'n)} in 'g^car }
+   sequent [squash] { 'H >- 'g in group[i:l] } -->
+   sequent [squash] { 'H >- 'a in 'g^car } -->
+   sequent [squash] { 'H >- 'n in int } -->
+   sequent ['ext] { 'H >- 'g^inv group_power{'g; 'a; 'n} = group_power{'g; 'a; (-'n)} in 'g^car }
 
 (*!
  * @begin[doc]
@@ -188,11 +190,11 @@ interactive group_power_inv_reduce {| intro [intro_typeinf <<'g>>] |} 'H group[i
  * @end[doc]
  *)
 interactive group_power_power_reduce {| intro [intro_typeinf <<'g>>] |} 'H group[i:l] :
-   sequent [squash] {'H >- 'g in group[i:l] } -->
-   sequent [squash] {'H >- 'a in 'g^car } -->
-   sequent [squash] {'H >- 'm IN int } -->
-   sequent [squash] {'H >- 'n IN int } -->
-   sequent ['ext] {'H >- group_power{'g; group_power{'g; 'a; 'm}; 'n} = group_power{'g; 'a; ('m *@ 'n)} in 'g^car }
+   sequent [squash] { 'H >- 'g in group[i:l] } -->
+   sequent [squash] { 'H >- 'a in 'g^car } -->
+   sequent [squash] { 'H >- 'm in int } -->
+   sequent [squash] { 'H >- 'n in int } -->
+   sequent ['ext] { 'H >- group_power{'g; group_power{'g; 'a; 'm}; 'n} = group_power{'g; 'a; ('m *@ 'n)} in 'g^car }
 
 (*!
  * @begin[doc]
@@ -202,12 +204,12 @@ interactive group_power_power_reduce {| intro [intro_typeinf <<'g>>] |} 'H group
  * @end[doc]
  *)
 interactive subgroup_power {| intro [AutoMustComplete; intro_typeinf <<'g>>] |} 'H group[i:l] :
-   [wf] sequent [squash] {'H >- 's in group[i:l] } -->
-   [wf] sequent [squash] {'H >- 'g in group[i:l] } -->
+   [wf] sequent [squash] { 'H >- 's in group[i:l] } -->
+   [wf] sequent [squash] { 'H >- 'g in group[i:l] } -->
    [main] sequent ['ext] { 'H >- subStructure{'s; 'g} } -->
-   [wf] sequent [squash] {'H >- 'a in 's^car } -->
-   [wf] sequent [squash] {'H >- 'n IN int } -->
-   sequent ['ext] {'H >- group_power{'s; 'a; 'n} = group_power{'g; 'a; 'n} in 's^car }
+   [wf] sequent [squash] { 'H >- 'a in 's^car } -->
+   [wf] sequent [squash] { 'H >- 'n in int } -->
+   sequent ['ext] { 'H >- group_power{'s; 'a; 'n} = group_power{'g; 'a; 'n} in 's^car }
 
 (*!
  * @begin[doc]
@@ -216,17 +218,17 @@ interactive subgroup_power {| intro [AutoMustComplete; intro_typeinf <<'g>>] |} 
  * @end[doc]
  *)
 interactive cycGroup_type {| intro [intro_typeinf <<'g>>] |} 'H group[i:l] :
-   sequent [squash] {'H >- 'g in group[i:l] } -->
+   sequent [squash] { 'H >- 'g in group[i:l] } -->
    sequent ['ext] { 'H >- "type"{cycGroup{'g}} }
 
 interactive cycGroup_intro {| intro [intro_typeinf <<'g>>] |} 'H group[i:l] 'a :
-   sequent [squash] {'H >- 'g in group[i:l] } -->
+   sequent [squash] { 'H >- 'g in group[i:l] } -->
    sequent [squash] { 'H >- 'a in 'g^car } -->
    sequent ['ext] { 'H; x: 'g^car >- exst n: int. 'x = group_power{'g; 'a; 'n} in 'g^car } -->
    sequent ['ext] { 'H >- cycGroup{'g} }
 
 interactive cycGroup_elim {| elim [elim_typeinf <<'g>>] |} 'H 'J group[i:l] :
-   [wf] sequent [squash] {'H; x: cycGroup{'g}; 'J['x] >- 'g in group[i:l] } -->
+   [wf] sequent [squash] { 'H; x: cycGroup{'g}; 'J['x] >- 'g in group[i:l] } -->
    [main] sequent ['ext] { 'H; x: cycGroup{'g}; 'J['x]; a: 'g^car; b: all x: 'g^car. exst n: int. ('x = group_power{'g; 'a; 'n} in 'g^car) >- 'C['x] } -->
    sequent ['ext] { 'H; x: cycGroup{'g}; 'J['x] >- 'C['x] }
 
@@ -237,26 +239,59 @@ interactive cycGroup_elim {| elim [elim_typeinf <<'g>>] |} 'H 'J group[i:l] :
  * @end[doc]
  *)
 interactive cycGroup_commutative {| intro [AutoMustComplete; intro_typeinf <<'g>>] |} 'H group[i:l] :
-   [wf] sequent [squash] {'H >- 'g in group[i:l] } -->
+   [wf] sequent [squash] { 'H >- 'g in group[i:l] } -->
    [main] sequent ['ext] { 'H >- cycGroup{'g} } -->
    sequent ['ext] { 'H >- isCommutative{'g} }
 
 interactive cycGroup_abelian {| intro [AutoMustComplete] |} 'H :
-   [wf] sequent [squash] {'H >- 'g in group[i:l] } -->
+   [wf] sequent [squash] { 'H >- 'g in group[i:l] } -->
    [main] sequent ['ext] { 'H >- cycGroup{'g} } -->
    sequent ['ext] { 'H >- 'g in abelg[i:l] }
+(*! @docoff *)
+
+(*interactive smallest_positive_elim {| elim [] |} 'H 'J :
+   sequent ['ext] { 'H; x: exst a: int. ('a > 0 & 'P['a]); 'J['x]; y: exst u: int. ('u > 0 & 'P['u] & all b: int. (('b > 0 & 'P['b]) => 'b < 'u)) >- 'C['x] } -->
+   sequent ['ext] { 'H; x: exst a: int. ('a > 0 & 'P['a]); 'J['x] >- 'C['x] }
+*)
+
+interactive positive_rule1 {| intro [] |} 'H :
+   [wf] sequent [squash] { 'H; a: int >- "type"{'P['a]} } -->
+   [wf] sequent [squash] { 'H >- 'n in int } -->
+   [wf] sequent ['ext] { 'H >- 'n > 0 } -->
+   [decidable] sequent ['ext] { 'H; a: int >- decidable{'P['a]} } -->
+   sequent ['ext] { 'H >- (all b: int. ('b > 0 & 'b <= 'n => not{'P['b]})) or (exst u: int. ('u > 0 & 'u <= 'n & 'P['u] & all b: int. (('b > 0 & 'P['b]) => 'b >= 'u))) }
+
+let positiveRule1T p =
+   positive_rule1 (hyp_count_addr p) p
+
+interactive smallest_positive {| intro [] |} 'H :
+   [wf] sequent [squash] { 'H; a: int >- "type"{'P['a]} } -->
+   [decidable] sequent ['ext] { 'H; a: int >- decidable{'P['a]} } -->
+   [main] sequent ['ext] { 'H >- exst a: int. ('a > 0 & 'P['a]) } -->
+   sequent ['ext] { 'H >- exst u: int. ('u > 0 & 'P['u] & all b: int. (('b > 0 & 'P['b]) => 'b >= 'u)) }
+
+let positiveRule2T p =
+   smallest_positive (hyp_count_addr p) p
+
+interactive int_div_rem {| intro [] |} 'H :
+   sequent [squash] { 'H >- 'm in int } -->
+   sequent [squash] { 'H >- 'k in int } -->
+   sequent ['ext] { 'H >- 'k > 0 } -->
+   sequent ['ext] { 'H >- exst q: int. exst r: nat. (('m = 'k *@ 'q +@ 'r in int) & 'r < 'k) }
 
 (*!
  * @begin[doc]
  *
- * Every subgroup of a cyclic group is cyclic.
+ * Every non-trivial subgroup of a cyclic group is cyclic.
  * @end[doc]
  *)
 interactive subg_cycGroup 'H group[i:l] 'g :
-   [wf] sequent [squash] {'H >- 's in group[i:l] } -->
-   [wf] sequent [squash] {'H >- 'g in group[i:l] } -->
+   [wf] sequent [squash] { 'H >- 's in group[i:l] } -->
+   [wf] sequent [squash] { 'H >- 'g in group[i:l] } -->
    [main] sequent ['ext] { 'H >- cycGroup{'g} } -->
    [main] sequent ['ext] { 'H >- subStructure{'s; 'g} } -->
+   [main] sequent ['ext] { 'H >- exst x: 's^car. not {('x = 's^"1" in 's^car)} } -->
+   [decidable] sequent ['ext] { 'H; a: int; x: 'g^car >- decidable{(group_power{'g; 'x; 'a} in 's^car)} } -->
    sequent ['ext] { 'H >- cycGroup{'s} }
 
 (*!
@@ -266,16 +301,16 @@ interactive subg_cycGroup 'H group[i:l] 'g :
  * @end[doc]
  *)
 interactive cycSubg_intro {| intro [] |} 'H :
-   [wf] sequent [squash] {'H >- 's in group[i:l] } -->
-   [wf] sequent [squash] {'H >- 'g in group[i:l] } -->
+   [wf] sequent [squash] { 'H >- 's in group[i:l] } -->
+   [wf] sequent [squash] { 'H >- 'g in group[i:l] } -->
    [wf] sequent [squash] { 'H >- 'a in 'g^car } -->
    [main] sequent ['ext] { 'H >- 's^car = {x: 'g^car| exst n: int. 'x = group_power{'g; 'a; 'n} in 'g^car} in univ[i:l] } -->
    [main] sequent ['ext] { 'H >- 's^"*" = 'g^"*" in 's^car -> 's^car -> 's^car } -->
    sequent ['ext] { 'H >- cycSubg[i:l]{'s; 'g; 'a} }
 
 interactive cycSubg_elim {| elim [] |} 'H 'J :
-   [wf] sequent [squash] {'H; u: cycSubg[i:l]{'s; 'g; 'a}; 'J['u] >- 's in group[i:l] } -->
-   [wf] sequent [squash] {'H; u: cycSubg[i:l]{'s; 'g; 'a}; 'J['u] >- 'g in group[i:l] } -->
+   [wf] sequent [squash] { 'H; u: cycSubg[i:l]{'s; 'g; 'a}; 'J['u] >- 's in group[i:l] } -->
+   [wf] sequent [squash] { 'H; u: cycSubg[i:l]{'s; 'g; 'a}; 'J['u] >- 'g in group[i:l] } -->
    [wf] sequent [squash] { 'H; u: cycSubg[i:l]{'s; 'g; 'a}; 'J['u] >- 'a in 'g^car } -->
    [main] sequent ['ext] { 'H; u: cycSubg[i:l]{'s; 'g; 'a}; 'J['u]; v: 's^car = {x: 'g^car| exst n: int. 'x = group_power{'g; 'a; 'n} in 'g^car} in univ[i:l]; w: 's^"*" = 'g^"*" in 's^car -> 's^car -> 's^car >- 'C['u] } -->
    sequent ['ext] { 'H; u: cycSubg[i:l]{'s; 'g; 'a}; 'J['u] >- 'C['u] }
@@ -287,8 +322,8 @@ interactive cycSubg_elim {| elim [] |} 'H 'J :
  * @end[doc]
  *)
 interactive cycsubg_subgroup {| intro [AutoMustComplete; intro_typeinf <<'g>>] |} 'H group[i:l] 'a :
-   [wf] sequent [squash] {'H >- 's in group[i:l] } -->
-   [wf] sequent [squash] {'H >- 'g in group[i:l] } -->
+   [wf] sequent [squash] { 'H >- 's in group[i:l] } -->
+   [wf] sequent [squash] { 'H >- 'g in group[i:l] } -->
    [wf] sequent [squash] { 'H >- 'a in 'g^car } -->
    [main] sequent ['ext] { 'H >- cycSubg[i:l]{'s; 'g; 'a} } -->
    sequent ['ext] { 'H >- subStructure{'s; 'g} }

@@ -44,6 +44,11 @@ open Refiner.Refiner.RefineError
 declare param_add_string[s:s]{'term}
 
 (*
+ * Rewrite tactics.
+ *)
+ml_rw reduce_param_add_string : param_add_string[s:s]{'term}
+
+(*
  * -*-
  * Local Variables:
  * Caml-master: "mp.run"

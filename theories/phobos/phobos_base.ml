@@ -65,7 +65,7 @@ let ml_param_add_string goal =
                         [s2] ->
                            (match dest_param s2 with
                               String s2 ->
-                                 mk_term (mk_op opname [make_param (String (s1 ^ s2))]) subterms
+                                 mk_term (mk_op opname [make_param (String (s2 ^ s1))]) subterms
                             | _ ->
                                  error "param_add_string" "subterm parameter type mismatch" goal
                            )

@@ -1,30 +1,48 @@
-Maintainer of this theory: Brian Emre Aydemir (emre@its.caltech.edu)
-Last update to this file: 4 April 2002
+Maintainer of this theory: Brian Emre Aydemir (emre (a) its.caltech.edu)
+Last update to this file: 24 April 2002
 
-THIS FILE IS REALLY INCOMPLETE!
 
-I describe the purpose of this theory and its implementation in this file.
+<<
+   Pending issues concerning this file:
+   -  At some point, the Caltech PRL group will have a webpage, so
+      I can actually include the website for MC in here.
+>>
 
 
 Overview:
 --------------------------------------------------------------------------
-The purpose of this theory is to provide a formal representation of the
-Mojave compiler's FIR.
+The Mojave Compiler (MC) is one component of the Caltech PRL group's mission to
+develop methods and tools for building safe and reliable distributed systems.
+At it's core, MC uses a typed, mostly functional intermediate representation
+(FIR).  Every source language compiled by MC is eventually transformed into the
+FIR language.  By combining MC with a theorem prover / logical programming
+environment, e.g. MetaPRL, it is believed that we will be able to reason about
+code and perform higher level optimizations and program transformations that
+typical compilers are unable to perform.  The goal of this theory is to
+formalize the FIR in order to perform these transformations and to reason about
+FIR programs.
 
-<< more information should go here eventually >>
+Currently, there are terms for everything in the FIR, some minimal operational
+semantics, and partial implementations of some trivial optimizations.  The
+truly "interesting" portions of this theory will be investigated and
+implemented this summer, hopefully.  (My classes severely limit the amount of
+time I can devote to working on this theory during the academic school year.)
+
+On a related note, Adam Granicz (granicz (a) cs.caltech.edu) is currently
+working on using the MetaPRL term rewriting system to transform source files in
+MC into the FIR terms defined here.
 
 
 Compilation issues:
 --------------------------------------------------------------------------
-While this theory is intended to compile with (as in, be linked with)
-the Mojave compiler, though it will compile without as well.  In order
-to compile with MC, you must set the MC_ROOT environment variable to point to
-the the root directory of MC.
+While this theory is intended to compile with (as in, be linked with) the
+Mojave Compiler, it will compile without it as well. In order to compile
+MetaPRL and MC together, you will need to:
 
+1) cons must be used to build MetaPRL if MC support is to be included.
+   cons can be obtained at http://www.dsmit.com/cons/
 
-Module -- Mp_mc_term_op:
---------------------------------------------------------------------------
-This module provides basic term construction and deconstruction operations
-similar to those in Refiner.Refiner.TermOp.  The most notable difference is my
-naming scheme for the functions.  This scheme and other information is
-documented in mp_mc_term_op.mli.
+2) Set the MC_ROOT environment variable to point to the root directory
+   of the MC source tree.
+
+3) Run cons from the root directory of the MetaPRL source tree.

@@ -11,8 +11,10 @@ declare sequent_arg{'T}
 
 declare le[i:l,j:l]  (* i is less or equal to j *)
 
+(*
 declare WF (* hypothesises are well-formed *)
 declare WF{'H}
+*)
 declare "type"[i:l]
 declare Prop
 declare Set
@@ -67,6 +69,15 @@ val mk_apply_term : term -> term -> term
 *   Set, Prop, Type[i] are sorts.
 ******************************************************)
 
+rule ax_prop :
+   sequent { <H> >- member{Prop;"type"[i:l]}  }
+
+rule ax_set :
+   sequent { <H> >- member{Set;"type"[i:l]}  }
+
+rule ax_type :
+   sequent { <H> >- member{"type"[i:l];"type"[i':l]}  }
+
 (* Prop is a sort *)
 rule prop_a_sort:
    sequent { <H> >- member{'P;Prop} } -->
@@ -81,7 +92,6 @@ rule set_a_sort:
 rule type_a_sort "type"[i:l]:
    sequent { <H> >- member{'P;"type"[i:l]} } -->
    sequent { <H> >- of_some_sort{'P} }
-
 
 (****************************************************
 * Tentative axioms stating that type Prop (Set)
@@ -99,54 +109,14 @@ rule set_a_prop_set:
 *      RULES
 *************************************************)
 
-rule w_e :
-   sequent { >- WF{it} }
+rule var 'H :
+   sequent { <H>; <J> >- of_some_sort{'T} } -->
+   sequent { <H>; x: 'T; <J> >- 'x in 'T }
 
-(************************************************
-*
-*************************************************)
-
-rule w_s :
-   sequent { <H> >- of_some_sort{'T} } -->
-   sequent { <H>; x: 'T >- WF }
-
-(************************************************
- *                                              *
- ************************************************)
-
-
-(************************************************
- *                                              *
- ************************************************)
-
-rule ax_prop :
-   sequent { <H> >- WF } -->
-   sequent { <H> >- member{Prop;"type"[i:l]}  }
-
-
-
-rule ax_set :
-   sequent { <H> >- WF } -->
-   sequent { <H> >- member{Set;"type"[i:l]}  }
-
-
-
-rule ax_type :
-   sequent { <H> >- WF } -->
-   sequent { <H> >- member{"type"[i:l];"type"[i':l]}  }
-
-
-(************************************************
- *                                              *
- ************************************************)
-
-rule var 'H:
-   sequent { <H>; x: 'T; <J['x]> >- WF } -->
-   sequent { <H>; x: 'T; <J['x]> >- member{'x;'T}  }
-
-(************************************************
- *                                              *
- ************************************************)
+rule weak 'H :
+	sequent { <H>; <J> >- 'A in 'B } -->
+	sequent { <H>; <J> >- of_some_sort{'C} } -->
+	sequent { <H>; x: 'C; <J> >- 'A in 'B }
 
 rule prod_1 's1:
    sequent { <H> >- prop_set{'s1}  } -->

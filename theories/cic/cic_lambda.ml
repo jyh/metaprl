@@ -13,8 +13,10 @@ declare sequent_arg{'T}
 
 declare le[i:l,j:l]  (* i is less or equal to j *)
 
+(*
 declare WF (* hypothesises are well-formed *)
 declare WF{'H}
+*)
 declare Prop
 declare Set
 declare "type"[i:l]
@@ -107,10 +109,6 @@ declare declaration{'decl;'term} (* Used only for display forms, such as let *)
 dform declaration_df : declaration{'decl;'a}
    = 'decl `" := " slot{'a}
 
-dform wf_df : except_mode[src] :: WF = `"WF"
-
-dform wfh_df : except_mode[src] :: WF{'H} = `"WF{" slot{'H} `"}"
-
 dform prop_df : except_mode[src] :: Prop = `"Prop"
 
 dform set_df : except_mode[src] :: Set = `"Set"
@@ -163,21 +161,38 @@ dform bind2_df : except_mode[src] :: bind{x,y.'T} = `"bind{" slot{'x} `"," slot{
 *   Set, Prop, Type[i] are sorts.
 ******************************************************)
 
+prim ax_prop {| intro [] |} :
+   sequent { <H> >- member{Prop;"type"[i:l]}  } = it
+
+prim ax_set {| intro [] |} :
+   sequent { <H> >- member{Set;"type"[i:l]}  } = it
+
+prim ax_type {| intro [] |} :
+   sequent { <H> >- member{"type"[i:l];"type"[i':l]}  } = it
+
 (* Prop is a sort *)
-prim prop_a_sort :
+prim prop_a_sort {| intro [] |} :
    sequent { <H> >- member{'P;Prop} } -->
    sequent { <H> >- of_some_sort{'P} } = it
 
 (* Set is a sort *)
-prim set_a_sort :
+prim set_a_sort {| intro [] |} :
    sequent { <H> >- member{'P;Set} } -->
    sequent { <H> >- of_some_sort{'P} } = it
 
 (* Type[i] is a sort *)
-prim type_a_sort "type"[i:l] :
+prim type_a_sort {| intro [] |} "type"[i:l] :
    sequent { <H> >- member{'P;"type"[i:l]} } -->
    sequent { <H> >- of_some_sort{'P} } = it
 
+interactive propHasSort {| intro [] |} :
+   sequent { <H> >- of_some_sort{Prop} }
+
+interactive setHasSort {| intro [] |} :
+   sequent { <H> >- of_some_sort{Set} }
+
+interactive typeHasSort {| intro [] |} :
+   sequent { <H> >- of_some_sort{"type"[i:l]} }
 
 (****************************************************
 * Tentative axioms stating that type Prop (Set)
@@ -195,69 +210,14 @@ prim set_a_prop_set {| intro [] |} :
 *      RULES
 *************************************************)
 
-prim w_e :
-   sequent { >- WF{it} } = it
-
-(************************************************
-*
-*************************************************)
-
-(*
-prim w_s_decl :
-   sequent { <H> >- of_some_sort{'T} } -->
-   sequent { <H>; x: decl{'T} >- WF } = it
-*)
-
-(************************************************
-*
-*************************************************)
-
-(*
-prim w_s_let :
-   sequent { <H> >-  member{'t;'T} } -->
-   sequent { <H>; x: "let"{'t;'T} >- WF } = it
-*)
-
-(************************************************
- *                                              *
- ************************************************)
-
-prim w_s :
-   sequent { <H> >- of_some_sort{'T} } -->
-   sequent { <H>; x: 'T >- WF } = it
-
-(************************************************
- *                                              *
- ************************************************)
-
-prim ax_prop {| intro [] |} :
-   sequent { <H> >- WF } -->
-   sequent { <H> >- member{Prop;"type"[i:l]}  } = it
-
-
-
-prim ax_set {| intro [] |} :
-   sequent { <H> >- WF } -->
-   sequent { <H> >- member{Set;"type"[i:l]}  } = it
-
-
-
-prim ax_type {| intro [] |} :
-   sequent { <H> >- WF } -->
-   sequent { <H> >- member{"type"[i:l];"type"[i':l]}  } = it
-
-
-(************************************************
- *                                              *
- ************************************************)
-
 prim var 'H :
-   sequent { <H>; x: 'T; <J['x]> >- WF } -->
-   sequent { <H>; x: 'T; <J['x]> >- 'x in 'T  } = it
+   sequent { <H>; <J> >- of_some_sort{'T} } -->
+   sequent { <H>; x: 'T; <J> >- 'x in 'T } = it
 
-(************************************************
- *                                              *
- ************************************************)
+prim weak 'H :
+	sequent { <H>; <J> >- 'A in 'B } -->
+	sequent { <H>; <J> >- of_some_sort{'C} } -->
+	sequent { <H>; x: 'C; <J> >- 'A in 'B } = it
 
 prim prod_1 's1 :
    sequent { <H> >- prop_set{'s1}  } -->

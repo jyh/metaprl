@@ -169,3 +169,51 @@ prim indCases 'Hi 'B sequent [branchConstrs] { <HcI> >- it } :
 					in (sequent [applH] { <T>; 'c >- 'P }) } } } } = it
 
 
+(* iota - reduction *)
+
+declare caseAux{'S1;'P;'S2}
+
+declare IndParamsIota
+
+
+prim_rw iotaStart 'Hc :
+	case{ sequent [IndParams] { <Hp> >-
+				sequent [IndTypes] { <Hi> >-
+					sequent [IndConstrs] { <Hc>; c: 'C; <Jc> >-
+						sequent [applH] { <Q> >- 'c} } } };
+			'P; sequent [cases] { <F> >- it} } <-->
+	caseAux{
+		sequent [IndParams] { <Hp> >-
+			sequent [IndParamsIota] { >-
+				sequent [IndTypes] { <Hi> >-
+					sequent [IndConstrs] { <Hc>; c: 'C; <Jc> >-
+						sequent [applH] { <Q> >- 'c} } } } };
+			'P; sequent [cases] { <F> >- it} }
+
+(*
+prim_rw iotaStep 'Hc :
+	caseAux{
+		sequent [IndParams] { <Hp>; p:'P >-
+			sequent [IndParamsIota] { <Jp['p]> >-
+				sequent [IndTypes] { <Hi['p]> >-
+					sequent [IndConstrs] { <Hc['p]>; c: 'C['p]; <Jc['p]> >-
+						sequent [applH] { 'q; <Q> >- 'c} } } } };
+			'P; sequent [cases] { <F> >- it} } <-->
+	caseAux{
+		sequent [IndParams] { <Hp> >-
+			sequent [IndParamsIota] { p:'P; <Jp['p]> >-
+				sequent [IndTypes] { <Hi['p]> >-
+					sequent [IndConstrs] { <Hc['p]>; c: 'C['p]; <Jc['p]> >-
+						sequent [applH] { <Q> >- 'c} } } } };
+			'P; sequent [cases] { <F> >- it} }
+
+prim_rw iotaFinal 'Hc :
+	caseAux{
+		sequent [IndParams] { >-
+			sequent [IndParamsIota] { <Jp> >-
+				sequent [IndTypes] { <Hi> >-
+					sequent [IndConstrs] { <Hc>; c: 'C; <Jc> >-
+						sequent [applH] { <Q> >- 'c} } } } };
+			'P; sequent [cases] { <F> >- it} } <-->
+	sequent [applH] { <Q> >- 'f }
+*)

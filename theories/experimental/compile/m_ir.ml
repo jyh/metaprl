@@ -186,11 +186,16 @@ dform exp_df : exp = bf["exp"]
 dform def_df : def{'v; 'e} =
    slot{'v} `" = " slot{'e}
 
-(************************************************************************
- * Just for testing.
+(*
+ * Sequent tag for the M language.
  *)
 declare m
 
+dform m_df : m = bf["m"]
+
+(************************************************************************
+ * Just for testing.
+ *)
 interactive test_prog 'H :
    sequent [m] { 'H >- LetAtom{AtomInt[1:n]; v1.
                        LetAtom{AtomBinop{AddOp; AtomInt[2:n]; 'v1}; v2.

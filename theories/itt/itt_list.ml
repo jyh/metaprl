@@ -395,7 +395,7 @@ let inf_cons inf consts decls eqs opt_eqs defs t =
    let eqs'', opt_eqs'', defs'', tl' = inf consts decls eqs' opt_eqs' defs' tl in
    let t = Typeinf.vnewname consts defs'' "T" in
    let tt = mk_var_term t in
-      eqs'', ((mk_list_term tt,tl')::(tt,hd')::opt_eqs''), ((t,<<void>>)::defs''), hd'
+      eqs'', ((mk_list_term tt,tl')::(tt,hd')::opt_eqs''), ((t,<<void>>)::defs''), mk_list_term hd'
 
 let resource typeinf += (cons_term, inf_cons)
 

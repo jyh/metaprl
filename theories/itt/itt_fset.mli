@@ -50,14 +50,14 @@ declare fset{'eq; 'T}
 declare feset{'eq; 'T}
 declare fempty
 declare fsingleton{'x}
-declare funion{'eq; 't1; 't2}
-declare fisect{'eq; 't1; 't2}
-declare fsub{'eq; 't1; 't2}
+declare funion{'eq; 's1; 's2}
+declare fisect{'eq; 's1; 's2}
+declare fsub{'eq; 's1; 's2}
 
-declare fisempty{'t1}
-declare fmember{'eq; 'x; 't1}
+declare fisempty{'s}
+declare fmember{'eq; 'x; 's1}
 declare fsubseteq{'eq; 's1; 's2}
-declare fequal{'eq; 't1; 't2}
+declare fequal{'eq; 's1; 's2}
 
 declare fequalp{'eq; 'T}
 declare fsquash{'eq; 's}
@@ -119,14 +119,11 @@ topval fmember_subst_elementT : term -> tactic
 (*
 topval fsub_nonmemberT : tactic
 topval fsquash_memberT : tactic
+*)
 
-topval fcompareRefT : tactic
 topval fcompareSymT : tactic
 topval fcompareTransT : term -> tactic
-
-topval testT : tactic
-topval dupRT : tactic -> int -> tactic
-*)
+topval fsubseteqTransT : term -> tactic
 
 (*
  * -*-

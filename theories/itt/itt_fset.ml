@@ -47,6 +47,8 @@ open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
 open Refiner.Refiner.RefineError
 open Mp_resource
+open Mp_debug
+open Printf
 
 open Tactic_type
 open Tactic_type.Tacticals
@@ -63,35 +65,128 @@ open Itt_rfun
 open Itt_list
 open Itt_struct
 open Itt_logic
+open Itt_quotient
 
 (************************************************************************
- * SYNTAX                                                               *
+ * DEFINITIONS                                                          *
  ************************************************************************)
 
-declare fset{'eq; 'T}
-declare fempty
-declare fsingleton{'x}
-declare funion{'eq; 't1; 't2}
-declare fisect{'eq; 't1; 't2}
-declare fsub{'eq; 't1; 't2}
+define unfold_fcompare : fcompare{'eq; 'x; 'y} <--> ('eq 'x 'y)
 
-declare fisempty{'t1}
-declare fmember{'eq; 'x; 't1}
-declare fsubseteq{'eq; 's1; 's2}
-declare fequal{'eq; 't1; 't2}
+define unfold_fmember : fmember{'eq; 'x; 's1} <-->
+   list_ind{'s1; bfalse; h, t, g. bor{.fcompare{'eq; 'x; 'h}; 'g}}
 
-declare fequalp{'eq; 'T}
-declare fcompare{'eq; 'x1; 'x2}
+define unfold_fsubseteq : fsubseteq{'eq; 's1; 's2} <-->
+   list_ind{'s1; btrue; h, t, g. band{fmember{'eq; 'h; 's2}; 'g}}
 
-declare fsquash{'eq; 's}
+define unfold_fequal : fequal{'eq; 's1; 's2} <-->
+   band{fsubseteq{'eq; 's1; 's2}; fsubseteq{'eq; 's2; 's1}}
 
-declare fball{'s; x. 'b['x]}
-declare fbexists{'s; x. 'b['x]}
-declare fall{'eq; 'T; 's; x. 'b['x]}
-declare fexists{'eq; 'T; 's; x. 'b['x]}
-declare foflist{'l}
+define unfold_fequalp : fequalp{'eq; 'T} <-->
+   ((((('eq IN ('T -> 'T -> bool))
+      & (all x: 'T. "assert"{.fcompare{'eq; 'x; 'x}}))
+      & (all x: 'T. all y: 'T. ("assert"{fcompare{'eq; 'x; 'y}} => "assert"{fcompare{'eq; 'y; 'x}})))
+      & (all x: 'T. all y: 'T. all z: 'T. ("assert"{fcompare{'eq; 'x; 'y}} => ("assert"{fcompare{'eq; 'y; 'z}} => "assert"{fcompare{'eq; 'x; 'z}})))))
 
-declare feset{'eq; 'T}
+define unfold_fset : fset{'eq; 'T} <--> (quot x, y : list{'T} // "assert"{fequal{'eq; 'x; 'y}})
+
+define unfold_fempty : fempty <--> nil
+
+define unfold_fsingleton : fsingleton{'x} <--> cons{'x; nil}
+
+define unfold_funion : funion{'eq; 's1; 's2} <--> append{'s1; 's2}
+
+define unfold_fisect : fisect{'eq; 's1; 's2} <-->
+   list_ind{'s1; nil; h, t, g. ifthenelse{fmember{'eq; 'h; 's2}; cons{'h; 'g}; 'g}}
+
+define unfold_fsub : fsub{'eq; 's1; 's2} <-->
+   list_ind{'s1; nil; h, t, g. ifthenelse{fmember{'eq; 'h; 's2}; 'g; cons{'h; 'g}}}
+
+define unfold_fisempty : fisempty{'s} <-->
+   list_ind{'s; btrue; h, t, g. bfalse}
+
+define unfold_fsquash : fsquash{'eq; 's} <-->
+   list_ind{'s; nil; h, t, g. ifthenelse{fmember{'eq; 'h; 't}; 'g; cons{it; 'g}}}
+
+define unfold_fball : fball{'s; x. 'b['x]} <-->
+   list_ind{'s; btrue; x, t, g. band{'b['x]; 'g}}
+
+define unfold_fbexists : fbexists{'s; x. 'b['x]} <-->
+   list_ind{'s; bfalse; x, t, g. bor{'b['x]; 'g}}
+
+define unfold_fall : fall{'eq; 'T; 's; x. 'b['x]} <-->
+   (all x: { y: 'T | "assert"{fmember{'eq; 'y; 's}} }. 'b['x])
+
+define unfold_fexists : fexists{'eq; 'T; 's; x. 'b['x]} <-->
+   (exst x: { y: 'T | "assert"{fmember{'eq; 'y; 's}} }. 'b['x])
+
+define unfold_feset : feset{'eq; 'T} <--> (quot x, y: 'T // "assert"{fcompare{'eq; 'x; 'y}})
+
+define unfold_foflist : foflist{'l} <--> 'l
+
+let fold_fequalp = makeFoldC << fequalp{'eq; 'T} >> unfold_fequalp
+let fold_fset = makeFoldC << fset{'eq; 'T} >> unfold_fset
+let fold_fempty = makeFoldC << fempty >> unfold_fempty
+let fold_fsingleton = makeFoldC << fsingleton{'x} >> unfold_fsingleton
+let fold_fisect = makeFoldC << fisect{'eq; 's1; 's2} >> unfold_fisect
+let fold_fsub = makeFoldC << fsub{'eq; 's1; 's2} >> unfold_fsub
+let fold_fmember = makeFoldC << fmember{'eq; 'x; 's1} >> unfold_fmember
+let fold_fisempty = makeFoldC << fisempty{'s1} >> unfold_fisempty
+let fold_fsubseteq = makeFoldC << fsubseteq{'e1; 's1; 's2} >> unfold_fsubseteq
+let fold_fequal = makeFoldC << fequal{'eq; 's1; 's2} >> unfold_fequal
+let fold_fsquash = makeFoldC << fsquash{'eq; 's1} >> unfold_fsquash
+let fold_fball = makeFoldC << fball{'s; x. 'b['x]} >> unfold_fball
+let fold_fbexists = makeFoldC << fbexists{'s; x. 'b['x]} >> unfold_fbexists
+let fold_fall = makeFoldC << fall{'eq; 'T; 's; x. 'b['x]} >> unfold_fall
+let fold_fexists = makeFoldC << fexists{'eq; 'T; 's; x. 'b['x]} >> unfold_fexists
+let fold_feset = makeFoldC << feset{'eq; 'T} >> unfold_feset
+let fold_foflist = makeFoldC << foflist{'l} >> unfold_foflist
+
+(************************************************************************
+ * TERMS                                                                *
+ ************************************************************************)
+
+let fempty_term = << fempty >>
+let fsingleton_term = << fsingleton{'x} >>
+let funion_term = << funion{'eq; 's1; 's2} >>
+let fisect_term = << fisect{'eq; 's1; 's2} >>
+let fsub_term = << fsub{'eq; 's1; 's2} >>
+let fisempty_term = << fisempty{'s1} >>
+let fmember_term = << fmember{'eq; 'x; 's1} >>
+let fsubseteq_term = << fsubseteq{'eq; 's1; 's2} >>
+let fequal_term = << fequal{'eq; 's1; 's2} >>
+let fcompare_term = << fcompare{'eq; 'x1; 'x2} >>
+let fequalp_term = << fequalp{'eq; 'T} >>
+let fset_term = << fset{'eq; 'T} >>
+
+let fempty_opname = opname_of_term fempty_term
+let fsingleton_opname = opname_of_term fsingleton_term
+let funion_opname = opname_of_term funion_term
+let fisect_opname = opname_of_term fisect_term
+let fsub_opname = opname_of_term fsub_term
+let fisempty_opname = opname_of_term fisempty_term
+let fmember_opname = opname_of_term fmember_term
+let fsubseteq_opname = opname_of_term fsubseteq_term
+let fequal_opname = opname_of_term fequal_term
+let fcompare_opname = opname_of_term fcompare_term
+let fequalp_opname = opname_of_term fequalp_term
+let fset_opname = opname_of_term fset_term
+
+let dest_fsingleton = dest_dep0_term fsingleton_opname
+let dest_funion = dest_dep0_dep0_dep0_term funion_opname
+let dest_fisect = dest_dep0_dep0_dep0_term fisect_opname
+let dest_fsub = dest_dep0_dep0_dep0_term fsub_opname
+let dest_fisempty = dest_dep0_term fisempty_opname
+let dest_fmember = dest_dep0_dep0_dep0_term fmember_opname
+let dest_fsubseteq = dest_dep0_dep0_dep0_term fsubseteq_opname
+let dest_fequal = dest_dep0_dep0_dep0_term fequal_opname
+let dest_fcompare = dest_dep0_dep0_dep0_term fcompare_opname
+let dest_fequalp = dest_dep0_dep0_term fequalp_opname
+let dest_fset = dest_dep0_dep0_term fset_opname
+
+let is_fset_term = is_dep0_dep0_term fset_opname
+
+let mk_fset_term = mk_dep0_dep0_term fset_opname
 
 (************************************************************************
  * DISPLAY                                                              *
@@ -177,85 +272,6 @@ dform feset_df : parens :: "prec"[prec_feset] :: except_mode[src] :: feset{'eq; 
 
 dform foflist_df : parens :: "prec"[prec_foflist] :: except_mode[src] :: foflist{'l} =
    `"of_list " slot{'l}
-
-(************************************************************************
- * REWRITES                                                             *
- ************************************************************************)
-
-prim_rw unfold_fcompare : fcompare{'eq; 'x; 'y} <--> ('eq 'x 'y)
-
-prim_rw unfold_fequalp : fequalp{'eq; 'T} <-->
-   ((((('eq IN ('T -> 'T -> bool))
-      & (all x: 'T. "assert"{.fcompare{'eq; 'x; 'x}}))
-      & (all x: 'T. all y: 'T. ("assert"{fcompare{'eq; 'x; 'y}} => "assert"{fcompare{'eq; 'y; 'x}})))
-      & (all x: 'T. all y: 'T. all z: 'T. ("assert"{fcompare{'eq; 'x; 'y}} => ("assert"{fcompare{'eq; 'y; 'z}} => "assert"{fcompare{'eq; 'x; 'z}})))))
-
-prim_rw unfold_fset : fset{'eq; 'T} <--> (quot x, y : list{'T} // "assert"{fequal{'eq; 'x; 'y}})
-
-prim_rw unfold_fempty : fempty <--> nil
-
-prim_rw unfold_fsingleton : fsingleton{'x} <--> cons{'x; nil}
-
-prim_rw unfold_funion : funion{'eq; 's1; 's2} <--> append{'s1; 's2}
-
-prim_rw unfold_fisect : fisect{'eq; 's1; 's2} <-->
-   list_ind{'s1; nil; h, t, g. ifthenelse{fmember{'eq; 'h; 's2}; cons{'h; 'g}; 'g}}
-
-prim_rw unfold_fsub : fsub{'eq; 's1; 's2} <-->
-   list_ind{'s1; nil; h, t, g. ifthenelse{fmember{'eq; 'h; 's2}; 'g; cons{'h; 'g}}}
-
-prim_rw unfold_fmember : fmember{'eq; 'x; 's1} <-->
-   list_ind{'s1; bfalse; h, t, g. bor{.fcompare{'eq; 'x; 'h}; 'g}}
-
-prim_rw unfold_fisempty : fisempty{'s1} <-->
-   list_ind{'s1; btrue; h, t, g. bfalse}
-
-prim_rw unfold_fsubseteq : fsubseteq{'eq; 's1; 's2} <-->
-   list_ind{'s1; btrue; h, t, g. band{fmember{'eq; 'h; 's2}; 'g}}
-
-prim_rw unfold_fequal : fequal{'eq; 's1; 's2} <-->
-   band{fsubseteq{'eq; 's1; 's2}; fsubseteq{'eq; 's2; 's1}}
-
-prim_rw unfold_fsquash : fsquash{'eq; 's1} <-->
-   list_ind{'s1; nil; h, t, g. ifthenelse{fmember{'eq; 'h; 't}; 'g; cons{it; 'g}}}
-
-prim_rw unfold_fball : fball{'s; x. 'b['x]} <-->
-   list_ind{'s; btrue; x, t, g. band{'b['x]; 'g}}
-
-prim_rw unfold_fbexists : fbexists{'s; x. 'b['x]} <-->
-   list_ind{'s; bfalse; x, t, g. bor{'b['x]; 'g}}
-
-prim_rw unfold_fall : fall{'eq; 'T; 's; x. 'b['x]} <-->
-   (all x: { y: 'T | "assert"{fmember{'eq; 'y; 's}} }. 'b['x])
-
-prim_rw unfold_fexists : fexists{'eq; 'T; 's; x. 'b['x]} <-->
-   (exst x: { y: 'T | "assert"{fmember{'eq; 'y; 's}} }. 'b['x])
-
-prim_rw unfold_feset : feset{'eq; 'T} <--> (quot x, y: 'T // "assert"{fcompare{'eq; 'x; 'y}})
-
-prim_rw unfold_foflist : foflist{'l} <--> 'l
-
-let fold_fequalp = makeFoldC << fequalp{'eq; 'T} >> unfold_fequalp
-let fold_fset = makeFoldC << fset{'eq; 'T} >> unfold_fset
-let fold_fempty = makeFoldC << fempty >> unfold_fempty
-let fold_fsingleton = makeFoldC << fsingleton{'x} >> unfold_fsingleton
-let fold_fisect = makeFoldC << fisect{'eq; 's1; 's2} >> unfold_fisect
-let fold_fsub = makeFoldC << fsub{'eq; 's1; 's2} >> unfold_fsub
-let fold_fmember = makeFoldC << fmember{'eq; 'x; 's1} >> unfold_fmember
-let fold_fisempty = makeFoldC << fisempty{'s1} >> unfold_fisempty
-let fold_fsubseteq = makeFoldC << fsubseteq{'e1; 's1; 's2} >> unfold_fsubseteq
-let fold_fequal = makeFoldC << fequal{'eq; 's1; 's2} >> unfold_fequal
-let fold_fsquash = makeFoldC << fsquash{'eq; 's1} >> unfold_fsquash
-let fold_fball = makeFoldC << fball{'s; x. 'b['x]} >> unfold_fball
-let fold_fbexists = makeFoldC << fbexists{'s; x. 'b['x]} >> unfold_fbexists
-let fold_fall = makeFoldC << fall{'eq; 'T; 's; x. 'b['x]} >> unfold_fall
-let fold_fexists = makeFoldC << fexists{'eq; 'T; 's; x. 'b['x]} >> unfold_fexists
-let fold_feset = makeFoldC << feset{'eq; 'T} >> unfold_feset
-let fold_foflist = makeFoldC << foflist{'l} >> unfold_foflist
-
-(************************************************************************
- * REWRITE LEMMAS                                                       *
- ************************************************************************)
 
 (************************************************************************
  * REDUCTIONS                                                           *
@@ -379,6 +395,95 @@ let resource reduce +=
     << fbexists{cons{'h; 't}; x. 'b['x]} >>, reduce_fbexists_cons]
 
 (************************************************************************
+ * TYPE INFERENCE                                                       *
+ ************************************************************************)
+
+(*
+ * Fequalp gives more info.
+ *)
+let infer_fequalp subst (so, t) =
+   let eq, t = dest_fequalp t in
+      if is_var_term eq then
+         (dest_var eq, mk_fun_term t (mk_fun_term t bool_term)) :: subst
+      else
+         subst
+
+let resource typeinf_subst += (fequalp_term, infer_fequalp)
+
+(*
+(*
+ * Type of pair.
+ *)
+let inf_funion f decl t =
+   let eq, s1, s2 = dest_funion t in
+   let decl, s1 = f decl s1 in
+      decl, s1
+
+let inf_fisect f decl t =
+   let eq, s1, s2 = dest_fisect t in
+   let decl, s1 = f decl s1 in
+      decl, s1
+
+let inf_fsub f decl t =
+   let eq, s1, s2 = dest_fsub t in
+   let decl, s1 = f decl s1 in
+      decl, s1
+
+let inf_fisempty f decl t =
+   decl, bool_term
+
+let inf_fmember f decl t =
+   decl, bool_term
+
+let inf_fsubseteq f decl t =
+   decl, bool_term
+
+let inf_fequal f decl t =
+   decl, bool_term
+
+let inf_fcompare f decl t =
+   decl, bool_term
+
+let inf_fsingleton f decl t =
+   let t = one_subterm t in
+   let decl, t = f decl t in
+      decl, mk_list_term t
+
+let resource typeinf +=
+   [<< funion{'eq; 's1; 's2} >>, inf_funion;
+    << fisect{'eq; 's1; 's2} >>, inf_fisect;
+    << fsub{'eq; 's1; 's2} >>, inf_fsub;
+    << fisempty{'x} >>, inf_fisempty;
+    << fmember{'eq; 'x; 's1} >>, inf_fmember;
+    << fsubseteq{'eq; 's1; 's2} >>, inf_fsubseteq;
+    << fequal{'eq; 's1; 's2} >>, inf_fequal;
+    << fcompare{'eq; 'x1; 'x2} >>, inf_fcompare;
+    << fsingleton{'x} >>, inf_fsingleton]
+*)
+
+let dest_fset_type t =
+   if !(load_debug "auto") then eprintf "\ttype is %a%t" print_term t eflush;
+   if is_list_term t then
+      dest_list t
+   else if is_fset_term t then
+      snd (dest_fset t)
+   else (* if is_quotient_term t then *)
+      let _, _, tlist, _ = dest_quotient t in
+      dest_list tlist
+
+let typeinf_fset_arg p t =
+   let t =
+      try get_with_arg p with
+         RefineError _ ->
+            if !(load_debug "auto") then eprintf "Type of: %a%t" print_term t eflush;
+            dest_fset_type (infer_type p t)
+   in
+      [t]
+
+let intro_typeinf_fset t = IntroArgsOption (typeinf_fset_arg, Some t)
+let elim_typeinf_fset t = ElimArgsOption (typeinf_fset_arg, Some t)
+
+(************************************************************************
  * RULES                                                                *
  ************************************************************************)
 
@@ -388,7 +493,7 @@ interactive fcompare_wf {| intro [intro_typeinf <<'x>>] |} 'H 'T :
    sequent [squash] { 'H >- 'y IN 'T } -->
    sequent ['ext] { 'H >- fcompare{'eq; 'x; 'y} IN bool }
 
-interactive fcompare_ref 'H 'T :
+interactive fcompare_ref {| intro [intro_typeinf <<'x>>] |} 'H 'T :
    sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
    sequent [squash] { 'H >- 'x IN 'T } -->
    sequent ['ext] { 'H >- "assert"{fcompare{'eq; 'x; 'x}} }
@@ -424,17 +529,7 @@ interactive fmember_fun 'H 'T 'y :
    sequent [squash] { 'H >- "assert"{fmember{'eq; 'y; 'l}} } -->
    sequent ['ext] { 'H >- "assert"{fmember{'eq; 'x; 'l}} }
 
-let typeinf_list_arg p t =
-   let t =
-      try get_with_arg p with
-         RefineError _ ->
-            dest_list (infer_type p t)
-   in
-      [t]
-
-let intro_typeinf_list t = IntroArgsOption (typeinf_list_arg, Some t)
-
-interactive fsubseteq_wf1 {| intro [intro_typeinf_list <<'s1>>] |} 'H 'T :
+interactive fsubseteq_wf1 {| intro [intro_typeinf_fset <<'s2>>] |} 'H 'T :
    sequent [squash] { 'H >- "type"{'T} } -->
    sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
    sequent [squash] { 'H >- 's1 IN list{'T} } -->
@@ -450,7 +545,7 @@ interactive fsubseteq_elim2 {| elim [] |} 'H 'J 'T 'a 'y :
    sequent ['ext] { 'H; x: "assert"{fsubseteq{'eq; 'l1; 'l2}}; 'J['x]; y: "assert"{fmember{'eq; 'a; 'l2}} >- 'C['x] } -->
    sequent ['ext] { 'H; x: "assert"{fsubseteq{'eq; 'l1; 'l2}}; 'J['x] >- 'C['x] }
 
-interactive fsubseteq_intro1 {| intro [AutoMustComplete; intro_typeinf_list <<'s1>>] |} 'H 'T 'x 'y :
+interactive fsubseteq_intro1 {| intro [AutoMustComplete; intro_typeinf_fset <<'s2>>] |} 'H 'T 'x 'y :
    ["wf"] sequent [squash] { 'H >- "type"{'T} } -->
    ["wf"] sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
    ["wf"] sequent [squash] { 'H >- 's1 IN list{'T} } -->
@@ -466,7 +561,7 @@ interactive fsubseteq_cons2 {| intro [intro_typeinf <<'u>>] |} 'H 'T :
    sequent [squash] { 'H >- "assert"{fsubseteq{'eq; 'l1; 'l2}} } -->
    sequent ['ext] { 'H >- "assert"{fsubseteq{'eq; 'l1; cons{'u; 'l2}}} }
 
-interactive fsubseteq_ref {| intro [intro_typeinf_list <<'l>>] |} 'H 'T :
+interactive fsubseteq_ref {| intro [intro_typeinf_fset <<'l>>] |} 'H 'T :
    ["wf"] sequent [squash] { 'H >- "type"{'T} } -->
    ["wf"] sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
    ["wf"] sequent [squash] { 'H >- 'l IN list{'T} } -->
@@ -482,11 +577,11 @@ interactive fsubseteq_trans 'H 'T 'l2 :
    sequent [squash] { 'H >- "assert"{fsubseteq{'eq; 'l2; 'l3}} } -->
    sequent ['ext] { 'H >- "assert"{fsubseteq{'eq; 'l1; 'l3}} }
 
-interactive fequal_wf1 {| intro [intro_typeinf_list <<'s1>>] |} 'H 'T :
-   sequent [squash] { 'H >- "type"{'T} } -->
-   sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
-   sequent [squash] { 'H >- 's1 IN list{'T} } -->
-   sequent [squash] { 'H >- 's2 IN list{'T} } -->
+interactive fequal_wf1 {| intro [intro_typeinf_fset <<'s1>>] |} 'H 'T :
+   [wf] sequent [squash] { 'H >- "type"{'T} } -->
+   [wf] sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
+   [wf] sequent [squash] { 'H >- 's1 IN list{'T} } -->
+   [wf] sequent [squash] { 'H >- 's2 IN list{'T} } -->
    sequent ['ext] { 'H >- fequal{'eq; 's1; 's2} IN bool }
 
 interactive fequal_elim1 'H 'J 'T 'a 'y :
@@ -498,21 +593,56 @@ interactive fequal_elim1 'H 'J 'T 'a 'y :
    sequent ['ext] { 'H; x: "assert"{fequal{'eq; 's1; 's2}}; 'J['x]; y: "assert"{fmember{'eq; 'a; 's2}} >- 'C['x] } -->
    sequent ['ext] { 'H; x: "assert"{fequal{'eq; 's1; 's2}}; 'J['x] >- 'C['x] }
 
-interactive fequal_intro1 {| intro [intro_typeinf_list <<'s1>>] |} 'H 'T 'x 'y :
-   sequent [squash] { 'H >- "type"{'T} } -->
-   sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
-   sequent [squash] { 'H >- 's1 IN list{'T} } -->
-   sequent [squash] { 'H >- 's2 IN list{'T} } -->
+interactive fequal_intro1 {| intro [intro_typeinf_fset <<'s1>>] |} 'H 'T 'x 'y :
+   [wf] sequent [squash] { 'H >- "type"{'T} } -->
+   [wf] sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
+   [wf] sequent [squash] { 'H >- 's1 IN list{'T} } -->
+   [wf] sequent [squash] { 'H >- 's2 IN list{'T} } -->
    sequent [squash] { 'H; x: 'T; y: "assert"{fmember{'eq; 'x; 's1}} >- "assert"{fmember{'eq; 'x; 's2}} } -->
    sequent [squash] { 'H; x: 'T; y: "assert"{fmember{'eq; 'x; 's2}} >- "assert"{fmember{'eq; 'x; 's1}} } -->
    sequent ['ext] { 'H >- "assert"{fequal{'eq; 's1; 's2}} }
 
 interactive fset_type {| intro [] |} 'H :
-   sequent [squash] { 'H >- "type"{'T} } -->
-   sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
+   [wf] sequent [squash] { 'H >- "type"{'T} } -->
+   [wf] sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
    sequent ['ext] { 'H >- "type"{fset{'eq; 'T}} }
 
-interactive fequal_intro2 {| intro [intro_typeinf_list <<'s1>>] |} 'H 'T 'x 'y :
+interactive fset_list {| intro [AutoMustComplete] |} 'H :
+   [wf] sequent [squash] { 'H >- "type"{'T} } -->
+   [wf] sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
+   [wf] sequent [squash] { 'H >- 'x IN list{'T} } -->
+   sequent ['ext] { 'H >- 'x IN fset{'eq; 'T} }
+
+(*
+ * Membership.
+ *)
+interactive fmember_wf2 {| intro [intro_typeinf <<'x>>] |} 'H 'T :
+   sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
+   sequent [squash] { 'H >- 'x IN 'T } -->
+   sequent [squash] { 'H >- 's IN fset{'eq; 'T} } -->
+   sequent ['ext] { 'H >- fmember{'eq; 'x; 's} IN bool }
+
+(*
+ * Subset.
+ *)
+interactive fsubseteq_wf2 {| intro [intro_typeinf_fset <<'s2>>] |} 'H 'T :
+   sequent [squash] { 'H >- "type"{'T} } -->
+   sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
+   sequent [squash] { 'H >- 's1 IN fset{'eq; 'T} } -->
+   sequent [squash] { 'H >- 's2 IN fset{'eq; 'T} } -->
+   sequent ['ext] { 'H >- fsubseteq{'eq; 's1; 's2} IN bool }
+
+(*
+ * Equality.
+ *)
+interactive fequal_wf2 {| intro [intro_typeinf_fset <<'s1>>] |} 'H 'T :
+   sequent [squash] { 'H >- "type"{'T} } -->
+   sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
+   sequent [squash] { 'H >- 's1 IN fset{'eq; 'T} } -->
+   sequent [squash] { 'H >- 's2 IN fset{'eq; 'T} } -->
+   sequent ['ext] { 'H >- fequal{'eq; 's1; 's2} IN bool }
+
+interactive fequal_intro2 {| intro [intro_typeinf_fset <<'s1>>] |} 'H 'T 'x 'y :
    sequent [squash] { 'H >- "type"{'T} } -->
    sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
    sequent [squash] { 'H >- 's1 IN fset{'eq; 'T} } -->
@@ -558,10 +688,10 @@ interactive funion_member_intro_right2 'H 'T :
    sequent ['ext] { 'H >- "assert"{fmember{'eq; 'x; funion{'eq; 's1; 's2}}} }
 
 interactive funion_member_elim2 'H 'J 'T :
-   sequent [squash] { 'H; z: "assert"{fmember{'eq; 'x; funion{'eq; 's1; 's2}}}; 'J['z] >- fequalp{'eq; 'T} } -->
-   sequent [squash] { 'H; z: "assert"{fmember{'eq; 'x; funion{'eq; 's1; 's2}}}; 'J['z] >- 'x IN 'T } -->
-   sequent [squash] { 'H; z: "assert"{fmember{'eq; 'x; funion{'eq; 's1; 's2}}}; 'J['z] >- 's1 IN list{'T} } -->
-   sequent [squash] { 'H; z: "assert"{fmember{'eq; 'x; funion{'eq; 's1; 's2}}}; 'J['z] >- 's2 IN list{'T} } -->
+   sequent [squash] { 'H; z: "assert"{fmember{'eq; 'x; funion{'eq; 's1; 's2}}}; 'J[it] >- fequalp{'eq; 'T} } -->
+   sequent [squash] { 'H; z: "assert"{fmember{'eq; 'x; funion{'eq; 's1; 's2}}}; 'J[it] >- 'x IN 'T } -->
+   sequent [squash] { 'H; z: "assert"{fmember{'eq; 'x; funion{'eq; 's1; 's2}}}; 'J[it] >- 's1 IN list{'T} } -->
+   sequent [squash] { 'H; z: "assert"{fmember{'eq; 'x; funion{'eq; 's1; 's2}}}; 'J[it] >- 's2 IN list{'T} } -->
    sequent ['ext] { 'H; z: "assert"{fmember{'eq; 'x; 's1}}; 'J[it] >- 'C[it] } -->
    sequent ['ext] { 'H; z: "assert"{fmember{'eq; 'x; 's2}}; 'J[it] >- 'C[it] } -->
    sequent ['ext] { 'H; z: "assert"{fmember{'eq; 'x; funion{'eq; 's1; 's2}}}; 'J['z] >- 'C['z] }
@@ -648,17 +778,17 @@ interactive fsingleton_wf1 {| intro [] |} 'H :
    sequent [squash] { 'H >- 'x IN 'T } -->
    sequent ['ext] { 'H >- fsingleton{'x} IN list{'T} }
 
-interactive fsingleton_member_intro 'H 'T :
-   sequent [squash] { 'H >- "type"{'T} } -->
-   sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
+interactive fsingleton_member_intro {| intro [intro_typeinf <<'x>>] |} 'H 'T :
+   [wf] sequent [squash] { 'H >- "type"{'T} } -->
+   [wf] sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
    sequent [squash] { 'H >- "assert"{fcompare{'eq; 'x; 'y}} } -->
    sequent ['ext] { 'H >- "assert"{fmember{'eq; 'x; fsingleton{'y}}} }
 
-interactive fsingleton_member_elim 'H 'J 'T :
-   sequent [squash] { 'H; x: "assert"{fmember{'eq; 'y; fsingleton{'z}}}; 'J['x] >- "type"{'T} } -->
-   sequent [squash] { 'H; x: "assert"{fmember{'eq; 'y; fsingleton{'z}}}; 'J['x] >- fequalp{'eq; 'T} } -->
-   sequent [squash] { 'H; x: "assert"{fmember{'eq; 'y; fsingleton{'z}}}; 'J['x] >- 'y IN 'T } -->
-   sequent [squash] { 'H; x: "assert"{fmember{'eq; 'y; fsingleton{'z}}}; 'J['x] >- 'z IN 'T } -->
+interactive fsingleton_member_elim {| elim [elim_typeinf <<'y>>] |} 'H 'J 'T :
+   [wf] sequent [squash] { 'H; x: "assert"{fmember{'eq; 'y; fsingleton{'z}}}; 'J['x] >- "type"{'T} } -->
+   [wf] sequent [squash] { 'H; x: "assert"{fmember{'eq; 'y; fsingleton{'z}}}; 'J['x] >- fequalp{'eq; 'T} } -->
+   [wf] sequent [squash] { 'H; x: "assert"{fmember{'eq; 'y; fsingleton{'z}}}; 'J['x] >- 'y IN 'T } -->
+   [wf] sequent [squash] { 'H; x: "assert"{fmember{'eq; 'y; fsingleton{'z}}}; 'J['x] >- 'z IN 'T } -->
    sequent ['ext] { 'H; x: "assert"{fcompare{'eq; 'y; 'z}}; 'J[it] >- 'C[it] } -->
    sequent ['ext] { 'H; x: "assert"{fmember{'eq; 'y; fsingleton{'z}}}; 'J['x] >- 'C['x] }
 
@@ -682,40 +812,11 @@ interactive fempty_wf2 {| intro [] |} 'H :
    sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
    sequent ['ext] { 'H >- fempty IN fset{'eq; 'T} }
 
-(*
- * Membership.
- *)
-interactive fmember_wf2 {| intro [] |} 'H 'T :
-   sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
-   sequent [squash] { 'H >- 'x IN 'T } -->
-   sequent [squash] { 'H >- 's IN fset{'eq; 'T} } -->
-   sequent ['ext] { 'H >- fmember{'eq; 'x; 's} IN bool }
-
-(*
- * Subset.
- *)
-interactive fsubseteq_wf2 {| intro [] |} 'H 'T :
-   sequent [squash] { 'H >- "type"{'T} } -->
-   sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
-   sequent [squash] { 'H >- 's1 IN fset{'eq; 'T} } -->
-   sequent [squash] { 'H >- 's2 IN fset{'eq; 'T} } -->
-   sequent ['ext] { 'H >- fsubseteq{'eq; 's1; 's2} IN bool }
-
-(*
- * Equality.
- *)
-interactive fequal_wf2 {| intro [] |} 'H 'T :
-   sequent [squash] { 'H >- "type"{'T} } -->
-   sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
-   sequent [squash] { 'H >- 's1 IN fset{'eq; 'T} } -->
-   sequent [squash] { 'H >- 's2 IN fset{'eq; 'T} } -->
-   sequent ['ext] { 'H >- fequal{'eq; 's1; 's2} IN bool }
-
-interactive fequal_assert_elim2 'H 'J 'T :
-   sequent [squash] { 'H; x: "assert"{fequal{'eq; 's1; 's2}}; 'J['x] >- "type"{'T} } -->
-   sequent [squash] { 'H; x: "assert"{fequal{'eq; 's1; 's2}}; 'J['x] >- fequalp{'eq; 'T} } -->
-   sequent [squash] { 'H; x: "assert"{fequal{'eq; 's1; 's2}}; 'J['x] >- 's1 IN fset{'eq; 'T} } -->
-   sequent [squash] { 'H; x: "assert"{fequal{'eq; 's1; 's2}}; 'J['x] >- 's2 IN fset{'eq; 'T} } -->
+interactive fequal_assert_elim2 {| elim [elim_typeinf_fset <<'s1>>] |} 'H 'J 'T :
+   [wf] sequent [squash] { 'H; x: "assert"{fequal{'eq; 's1; 's2}}; 'J['x] >- "type"{'T} } -->
+   [wf] sequent [squash] { 'H; x: "assert"{fequal{'eq; 's1; 's2}}; 'J['x] >- fequalp{'eq; 'T} } -->
+   [wf] sequent [squash] { 'H; x: "assert"{fequal{'eq; 's1; 's2}}; 'J['x] >- 's1 IN fset{'eq; 'T} } -->
+   [wf] sequent [squash] { 'H; x: "assert"{fequal{'eq; 's1; 's2}}; 'J['x] >- 's2 IN fset{'eq; 'T} } -->
    sequent ['ext] { 'H; x: 's1 = 's2 in fset{'eq; 'T}; 'J[it] >- 'C[it] } -->
    sequent ['ext] { 'H; x: "assert"{fequal{'eq; 's1; 's2}}; 'J['x] >- 'C['x] }
 
@@ -728,7 +829,7 @@ interactive fequal_intro3 {| intro [] |} 'H 'T :
 (*
  * Induction principle.
  *)
-interactive fsquash_wf1 {| intro [intro_typeinf_list <<'s>>] |} 'H 'T :
+interactive fsquash_wf1 {| intro [intro_typeinf_fset <<'s>>] |} 'H 'T :
    sequent [squash] { 'H >- "type"{'T} } -->
    sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
    sequent [squash] { 'H >- 's IN list{'T} } -->
@@ -756,9 +857,9 @@ interactive fsquash_wf2 {| intro [] |} 'H 'T :
    sequent [squash] { 'H >- 's IN fset{'eq; 'T} } -->
    sequent ['ext] { 'H >- fsquash{'eq; 's} IN list{unit} }
 
-interactive fset_elim1 'H 'J 'u 'z 'w :
-   sequent [squash] { 'H; x: fset{'eq; 'T}; 'J['x] >- "type"{'T} } -->
-   sequent [squash] { 'H; x: fset{'eq; 'T}; 'J['x] >- fequalp{'eq; 'T} } -->
+interactive fset_elim1 {| elim [] |} 'H 'J 'u 'z 'w :
+   [wf] sequent [squash] { 'H; x: fset{'eq; 'T}; 'J['x] >- "type"{'T} } -->
+   [wf] sequent [squash] { 'H; x: fset{'eq; 'T}; 'J['x] >- fequalp{'eq; 'T} } -->
    sequent ['ext] { 'H; x: fset{'eq; 'T}; 'J['x];
       u: fset{'eq; 'T};
       w: all z: 'T. ("assert"{fmember{'eq; 'z; 'u}} => 'C[fsub{'eq; 'u; fsingleton{'z}}]) >-
@@ -847,10 +948,10 @@ interactive fbexists_assert_intro1 'H fset{'eq; 'T} 'a 'u 'v 'w :
    sequent ['ext] { 'H >- "assert"{fbexists{'s; x. 'b['x]}} }
 
 interactive fbexists_assert_elim1 'H 'J fset{'eq; 'T} 'u 'v 'w :
-   sequent [squash] { 'H; x: "assert"{fbexists{'s; x. 'b['x]}}; 'J['x] >- "type"{'T} } -->
-   sequent [squash] { 'H; x: "assert"{fbexists{'s; x. 'b['x]}}; 'J['x] >- fequalp{'eq; 'T} } -->
-   sequent [squash] { 'H; x: "assert"{fbexists{'s; x. 'b['x]}}; 'J['x] >- 's IN list{'T} } -->
-   sequent [squash] { 'H; x: "assert"{fbexists{'s; x. 'b['x]}}; 'J['x]; u: 'T >- 'b['u] IN bool } -->
+   [wf] sequent [squash] { 'H; x: "assert"{fbexists{'s; x. 'b['x]}}; 'J['x] >- "type"{'T} } -->
+   [wf] sequent [squash] { 'H; x: "assert"{fbexists{'s; x. 'b['x]}}; 'J['x] >- fequalp{'eq; 'T} } -->
+   [wf] sequent [squash] { 'H; x: "assert"{fbexists{'s; x. 'b['x]}}; 'J['x] >- 's IN list{'T} } -->
+   [wf] sequent [squash] { 'H; x: "assert"{fbexists{'s; x. 'b['x]}}; 'J['x]; u: 'T >- 'b['u] IN bool } -->
    sequent ['ext] { 'H; u: 'T; v: "assert"{fmember{'eq; 'u; 's}}; w: "assert"{'b['u]}; 'J[it] >- 'C[it] } -->
    sequent ['ext] { 'H; x: "assert"{fbexists{'s; x. 'b['x]}}; 'J['x] >- 'C['x] }
 
@@ -888,33 +989,33 @@ interactive foflist_wf {| intro [] |} 'H :
    sequent [squash] { 'H >- 'l IN list{'T} } -->
    sequent ['ext] { 'H >- foflist{'l} IN fset{'eq; 'T} }
 
-interactive foflist_member_intro_left 'H 'T :
-   sequent [squash] { 'H >- "type"{'T} } -->
-   sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
-   sequent [squash] { 'H >- 'x IN 'T } -->
-   sequent [squash] { 'H >- 'y IN 'T } -->
-   sequent [squash] { 'H >- 't IN list{'T} } -->
+interactive foflist_member_intro_left {| intro [SelectOption 1; intro_typeinf <<'x>>] |} 'H 'T :
+   [wf] sequent [squash] { 'H >- "type"{'T} } -->
+   [wf] sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
+   [wf] sequent [squash] { 'H >- 'x IN 'T } -->
+   [wf] sequent [squash] { 'H >- 'y IN 'T } -->
+   [wf] sequent [squash] { 'H >- 't IN list{'T} } -->
    sequent [squash] { 'H >- "assert"{fcompare{'eq; 'x; 'y}} } -->
    sequent ['ext] { 'H >- "assert"{fmember{'eq; 'x; foflist{cons{'y; 't}}}} }
 
-interactive foflist_member_intro_right 'H 'T :
-   sequent [squash] { 'H >- "type"{'T} } -->
-   sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
-   sequent [squash] { 'H >- 'x IN 'T } -->
-   sequent [squash] { 'H >- 'y IN 'T } -->
-   sequent [squash] { 'H >- 't IN list{'T} } -->
+interactive foflist_member_intro_right {| intro [SelectOption 2; intro_typeinf <<'x>>] |} 'H 'T :
+   [wf] sequent [squash] { 'H >- "type"{'T} } -->
+   [wf] sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
+   [wf] sequent [squash] { 'H >- 'x IN 'T } -->
+   [wf] sequent [squash] { 'H >- 'y IN 'T } -->
+   [wf] sequent [squash] { 'H >- 't IN list{'T} } -->
    sequent [squash] { 'H >- "assert"{fmember{'eq; 'x; 't}} } -->
    sequent ['ext] { 'H >- "assert"{fmember{'eq; 'x; foflist{cons{'y; 't}}}} }
 
 interactive foflist_member_elim_nil 'H 'J :
    sequent ['ext] { 'H; z: "assert"{fmember{'eq; 'x; foflist{nil}}}; 'J['z] >- 'C['z] }
 
-interactive foflist_member_elim_cons3 'H 'J 'T :
-   sequent ['ext] { 'H; z: "assert"{fmember{'eq; 'x; foflist{cons{'y; 't}}}}; 'J['z] >- "type"{'T} } -->
-   sequent ['ext] { 'H; z: "assert"{fmember{'eq; 'x; foflist{cons{'y; 't}}}}; 'J['z] >- fequalp{'eq; 'T} } -->
-   sequent ['ext] { 'H; z: "assert"{fmember{'eq; 'x; foflist{cons{'y; 't}}}}; 'J['z] >- 'x IN 'T } -->
-   sequent ['ext] { 'H; z: "assert"{fmember{'eq; 'x; foflist{cons{'y; 't}}}}; 'J['z] >- 'y IN 'T } -->
-   sequent ['ext] { 'H; z: "assert"{fmember{'eq; 'x; foflist{cons{'y; 't}}}}; 'J['z] >- 't IN list{'T} } -->
+interactive foflist_member_elim_cons3 {| elim [elim_typeinf <<'x>>] |} 'H 'J 'T :
+   [wf] sequent ['ext] { 'H; z: "assert"{fmember{'eq; 'x; foflist{cons{'y; 't}}}}; 'J['z] >- "type"{'T} } -->
+   [wf] sequent ['ext] { 'H; z: "assert"{fmember{'eq; 'x; foflist{cons{'y; 't}}}}; 'J['z] >- fequalp{'eq; 'T} } -->
+   [wf] sequent ['ext] { 'H; z: "assert"{fmember{'eq; 'x; foflist{cons{'y; 't}}}}; 'J['z] >- 'x IN 'T } -->
+   [wf] sequent ['ext] { 'H; z: "assert"{fmember{'eq; 'x; foflist{cons{'y; 't}}}}; 'J['z] >- 'y IN 'T } -->
+   [wf] sequent ['ext] { 'H; z: "assert"{fmember{'eq; 'x; foflist{cons{'y; 't}}}}; 'J['z] >- 't IN list{'T} } -->
    sequent ['ext] { 'H; z: "assert"{fcompare{'eq; 'x; 'y}}; 'J[it] >- 'C[it] } -->
    sequent ['ext] { 'H; z: "assert"{fmember{'eq; 'x; foflist{'t}}}; 'J[it] >- 'C[it] } -->
    sequent ['ext] { 'H; z: "assert"{fmember{'eq; 'x; foflist{cons{'y; 't}}}}; 'J['z] >- 'C['z] }
@@ -1016,48 +1117,6 @@ interactive fall_elim 'H 'J 'a 'w :
 (************************************************************************
  * TACTICS                                                              *
  ************************************************************************)
-
-let fempty_term = << fempty >>
-let fsingleton_term = << fsingleton{'x} >>
-let funion_term = << funion{'eq; 's1; 's2} >>
-let fisect_term = << fisect{'eq; 's1; 's2} >>
-let fsub_term = << fsub{'eq; 's1; 's2} >>
-let fisempty_term = << fisempty{'s1} >>
-let fmember_term = << fmember{'eq; 'x; 's1} >>
-let fsubseteq_term = << fsubseteq{'eq; 's1; 's2} >>
-let fequal_term = << fequal{'eq; 's1; 's2} >>
-let fcompare_term = << fcompare{'eq; 'x1; 'x2} >>
-let fequalp_term = << fequalp{'eq; 'T} >>
-let fset_term = << fset{'eq; 'T} >>
-
-let fempty_opname = opname_of_term fempty_term
-let fsingleton_opname = opname_of_term fsingleton_term
-let funion_opname = opname_of_term funion_term
-let fisect_opname = opname_of_term fisect_term
-let fsub_opname = opname_of_term fsub_term
-let fisempty_opname = opname_of_term fisempty_term
-let fmember_opname = opname_of_term fmember_term
-let fsubseteq_opname = opname_of_term fsubseteq_term
-let fequal_opname = opname_of_term fequal_term
-let fcompare_opname = opname_of_term fcompare_term
-let fequalp_opname = opname_of_term fequalp_term
-let fset_opname = opname_of_term fset_term
-
-let dest_fsingleton = dest_dep0_term fsingleton_opname
-let dest_funion = dest_dep0_dep0_dep0_term funion_opname
-let dest_fisect = dest_dep0_dep0_dep0_term fisect_opname
-let dest_fsub = dest_dep0_dep0_dep0_term fsub_opname
-let dest_fisempty = dest_dep0_term fisempty_opname
-let dest_fmember = dest_dep0_dep0_dep0_term fmember_opname
-let dest_fsubseteq = dest_dep0_dep0_dep0_term fsubseteq_opname
-let dest_fequal = dest_dep0_dep0_dep0_term fequal_opname
-let dest_fcompare = dest_dep0_dep0_dep0_term fcompare_opname
-let dest_fequalp = dest_dep0_dep0_term fequalp_opname
-let dest_fset = dest_dep0_dep0_term fset_opname
-
-let is_fset_term = is_dep0_dep0_term fset_opname
-
-let mk_fset_term = mk_dep0_dep0_term fset_opname
 
 (*
 let get_clause p i =
@@ -1345,30 +1404,6 @@ let d_fmember_fsub_assertT i p =
                      addHiddenLabelT "wf";
                      addHiddenLabelT "main"]) p
 
-let d_fmember_fsingleton_assertT i p =
-   let t = dest_assert (get_clause p i) in
-   let _, t = infer_three_subterms_set_type p t () () in
-      if i = 0 then
-         (fsingleton_member_intro (Sequent.hyp_count_addr p) t
-          thenLT [addHiddenLabelT "wf";
-                  addHiddenLabelT "wf";
-                  addHiddenLabelT "main"]) p
-      else
-         let j, k = Sequent.hyp_indices p i in
-            (fsingleton_member_elim j k t
-             thenLT [addHiddenLabelT "wf";
-                     addHiddenLabelT "wf";
-                     addHiddenLabelT "wf";
-                     addHiddenLabelT "wf";
-                     addHiddenLabelT "main"]) p
-
-let d_fmember_fempty_assertT i p =
-   if i = 0 then
-      raise (RefineError ("d_fempty_member_assertT", StringError "no introduction form"))
-   else
-      let j, k = Sequent.hyp_indices p i in
-         fempty_member_elim j k p
-
 let d_fball_assertT i p =
    let t = dest_assert (get_clause p i) in
    let altp, t = infer_quant_type p t in
@@ -1439,62 +1474,6 @@ let d_fbexists_assertT i p =
                      addHiddenLabelT "wf";
                      addHiddenLabelT "wf";
                      addHiddenLabelT "main"]) p
-
-let d_fmember_foflist_assertT i p =
-   let memt = dest_assert (get_clause p i) in
-   let _, t = infer_three_subterms_set_type p memt () () in
-      if i = 0 then
-         let tac =
-            if get_sel_arg p = 1 then
-               foflist_member_intro_left
-            else
-               foflist_member_intro_right
-         in
-            (tac (Sequent.hyp_count_addr p) t
-             thenLT [addHiddenLabelT "wf";
-                     addHiddenLabelT "wf";
-                     addHiddenLabelT "wf";
-                     addHiddenLabelT "wf";
-                     addHiddenLabelT "wf";
-                     addHiddenLabelT "main"]) p
-      else
-         let j, k = Sequent.hyp_indices p i in
-         let _, _, t' = three_subterms memt in
-         let t' = one_subterm t' in
-            if is_cons_term t' then
-               (foflist_member_elim_cons3 j k t
-                thenLT [addHiddenLabelT "wf";
-                        addHiddenLabelT "wf";
-                        addHiddenLabelT "wf";
-                        addHiddenLabelT "wf";
-                        addHiddenLabelT "wf";
-                        addHiddenLabelT "main";
-                        addHiddenLabelT "main"]) p
-            else
-               foflist_member_elim_nil j k p
-
-let d_fsetT i p =
-   let j, k = Sequent.hyp_indices p i in
-   let u, v, w = maybe_new_vars3 p "u" "v" "w" in
-      (fset_elim1 j k u v w
-       thenLT [addHiddenLabelT "wf";
-               addHiddenLabelT "wf";
-               addHiddenLabelT "main"]) p
-
-let d_info =
-   [<< "assert"{fsubseteq{'eq; 'l1; 'l2}} >>, d_fsubseteq_assertT;
-    << "assert"{fequal{'eq; 'l1; 'l2}} >>, d_fequal_assertT;
-    << "assert"{fmember{'eq; 'x; funion{'eq; 's1; 's2}}} >>, d_fmember_funion_assertT;
-    << "assert"{fmember{'eq; 'x; fisect{'eq; 's1; 's2}}} >>, d_fmember_fisect_assertT;
-    << "assert"{fmember{'eq; 'x; fsub{'eq; 's1; 's2}}} >>, d_fmember_fsub_assertT;
-    << "assert"{fmember{'eq; 'x; fsingleton{'y}}} >>, d_fmember_fsingleton_assertT;
-    << "assert"{fmember{'eq; 'x; fempty}} >>, d_fmember_fempty_assertT;
-    << "assert"{fmember{'eq; 'x; foflist{'t}}} >>, d_fmember_foflist_assertT;
-    << "assert"{fball{'s; x.'b['x]}} >>, d_fball_assertT;
-    << "assert"{fbexists{'s; x.'b['x]}} >>, d_fbexists_assertT;
-    << fset{'eq; 'T} >>, wrap_elim d_fsetT]
-
-let d_resource = add_d_info d_resource d_info
 *)
 
 (*
@@ -1551,8 +1530,10 @@ let fsquash_memberT p =
                addHiddenLabelT "wf";
                addHiddenLabelT "main"]) p
 
-let fcompare_type p t =
-   try get_univ_arg p with
+*)
+
+let assert_2of3_type p t =
+   try get_with_arg p with
       RefineError _ ->
          let t = dest_assert t in
          let _, x, y = three_subterms t in begin
@@ -1561,99 +1542,17 @@ let fcompare_type p t =
                   infer_type p y
          end
 
-let fcompareRefT p =
-   fcompare_ref (Sequent.hyp_count_addr p) (fcompare_type p (Sequent.concl p)) p
-
 let fcompareSymT p =
-   fcompare_sym (Sequent.hyp_count_addr p) (fcompare_type p (Sequent.concl p)) p
+   fcompare_sym (Sequent.hyp_count_addr p) (assert_2of3_type p (Sequent.concl p)) p
 
 let fcompareTransT z p =
-   fcompare_trans (Sequent.hyp_count_addr p) (fcompare_type p (Sequent.concl p)) z p
+   fcompare_trans (Sequent.hyp_count_addr p) (assert_2of3_type p (Sequent.concl p)) z p
 
-(*
- * Typehood of fset.
- *)
-let d_fset_typeT p =
-   (fset_type (Sequent.hyp_count_addr p)
-    thenT addHiddenLabelT "wf") p
+let assert_2of3_fset_type p t =
+   dest_fset_type (assert_2of3_type p t)
 
-let fset_type_term = << "type"{fset{'eq; 'T}} >>
-
-let resource d += (fset_type_term, wrap_intro d_fset_typeT)
-
-(************************************************************************
- * TYPE INFERENCE                                                       *
- ************************************************************************)
-
-(*
- * Fequalp gives more info.
- *)
-let infer_fequalp subst (so, t) =
-   let eq, t = dest_fequalp t in
-      if is_var_term eq then
-         (dest_var eq, mk_fun_term t (mk_fun_term t bool_term)) :: subst
-      else
-         subst
-
-let resource typeinf_subst += (fequalp_term, infer_fequalp)
-
-(*
- * Type of pair.
- *)
-let inf_funion f decl t =
-   let eq, s1, s2 = dest_funion t in
-   let decl, s1 = f decl s1 in
-      decl, s1
-
-let inf_fisect f decl t =
-   let eq, s1, s2 = dest_fisect t in
-   let decl, s1 = f decl s1 in
-      decl, s1
-
-let inf_fsub f decl t =
-   let eq, s1, s2 = dest_fsub t in
-   let decl, s1 = f decl s1 in
-      decl, s1
-
-let inf_fisempty f decl t =
-   decl, bool_term
-
-let inf_fmember f decl t =
-   decl, bool_term
-
-let inf_fsubseteq f decl t =
-   decl, bool_term
-
-let inf_fequal f decl t =
-   decl, bool_term
-
-let inf_fcompare f decl t =
-   decl, bool_term
-
-let inf_fsingleton f decl t =
-   let t = one_subterm t in
-   let decl, t = f decl t in
-      decl, mk_list_term t
-
-let resource typeinf +=
-   [<< funion{'eq; 's1; 's2} >>, inf_funion;
-    << fisect{'eq; 's1; 's2} >>, inf_fisect;
-    << fsub{'eq; 's1; 's2} >>, inf_fsub;
-    << fisempty{'x} >>, inf_fisempty;
-    << fmember{'eq; 'x; 's1} >>, inf_fmember;
-    << fsubseteq{'eq; 's1; 's2} >>, inf_fsubseteq;
-    << fequal{'eq; 's1; 's2} >>, inf_fequal;
-    << fcompare{'eq; 'x1; 'x2} >>, inf_fcompare;
-    << fsingleton{'x} >>, inf_fsingleton]
-
-let testT = assertT << all s: list{'T}. ("assert"{fmember{'eq; 'a; 's}} => "assert"{'b['a]} => "assert"{fbexists{'s; x.'b['x]}}) >> thenLT [dT 0 thenWT autoT thenLT [dT 2 thenLT [rw reduceC 0 thenT dT 0 thenWT autoT thenLT [dT 3]; univCDT thenWT autoT thenLT [backThruAssumT 5 thenT autoT thenLT [fcompareRefT thenT autoT]; rw reduceC 0 thenLT [rw reduceC 6 thenT dT 6 thenWT autoT thenLT [selT 1 (dT 0) thenWT autoT thenLT [withTermT "eq" << 'eq >> autoT thenLT [backThruAssumT 5 thenT autoT thenLT [fcompareRefT thenT autoT]]; assumT 5 thenWT autoT thenLT [instHypT [<< 'a >>; << 'u >>] 8 thenWT autoT thenLT [dT 9 thenAT trivialT thenLT [revHypSubstT 10 0 thenLT [trivialT; autoT]]]]]; selT 2 (dT 0) thenWT autoT thenLT [backThruAssumT 5 thenT autoT thenLT [fcompareRefT thenT autoT]; autoT]]]]]]; withT << 's >> (dT 2) thenWT autoT thenLT [dT 3 thenLT [rwh unfold_assert 0 thenT squash_equalT thenT rwh fold_assert 0 thenLT [autoT]; dT 4 thenLT [rwh unfold_assert 0 thenT squash_equalT thenT rwh fold_assert 0 thenLT [autoT]; trivialT]]]]
-
-let rec dupRT tac i p =
-   if i = 0 then
-      tac p
-   else
-      (dupT thenLT [tac; dupRT tac (pred i)]) p
-*)
+let fsubseteqTransT t p =
+   fsubseteq_trans (Sequent.hyp_count_addr p) (assert_2of3_fset_type p (Sequent.concl p)) t p
 
 (*
  * -*-

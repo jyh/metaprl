@@ -286,6 +286,11 @@ interactive cycSubg_intro {| intro [] |} :
    [wf] sequent [squash] { <H> >- 'a in 'g^car } -->
    sequent ['ext] { <H> >- cycSubg{'g; 'a} in group[i:l] }
 
+interactive cycSubg_subgroup {| intro [] |} :
+   [wf] sequent [squash] { <H> >- 'g in group[i:l] } -->
+   [wf] sequent [squash] { <H> >- 'a in 'g^car } -->
+   sequent ['ext] { <H> >- subgroup[i:l]{cycSubg{'g; 'a}; 'g} }
+
 interactive cycSubg_car {| intro [AutoMustComplete] |} :
    [wf] sequent [squash] { <H> >- 'g in group[i:l] } -->
    [wf] sequent [squash] { <H> >- 'a in 'g^car } -->

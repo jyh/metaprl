@@ -166,7 +166,7 @@ interactive group_intro {| intro [AutoMustComplete] |} :
    sequent ['ext] { <H> >- 'G in group[i:l] }
 
 interactive group_elim {| elim [] |} 'H :
-   sequent ['ext] { <H>; G: {car: univ[i:l]; "*": ^car -> ^car -> ^car; "1": ^car; inv: ^car -> ^car}; u: squash{.all x: 'G^car. all y: 'G^car. all z: 'G^car. (('x *['G] 'y) *['G] 'z = 'x *['G] ('y *['G] 'z) in 'G^car)}; v: squash{.all x: 'G^car. 'G^"1" *['G] 'x = 'x in 'G^car}; w: squash{.all x: 'G^car. ('G^inv 'x) *['G] 'x = 'G^"1" in 'G^car}; <J['G]> >- 'C['G] } -->
+   sequent ['ext] { <H>; G: {car: univ[i:l]; "*": ^car -> ^car -> ^car; "1": ^car; inv: ^car -> ^car}; u: all x: 'G^car. all y: 'G^car. all z: 'G^car. (('x *['G] 'y) *['G] 'z = 'x *['G] ('y *['G] 'z) in 'G^car); v: all x: 'G^car. 'G^"1" *['G] 'x = 'x in 'G^car; w: all x: 'G^car. ('G^inv 'x) *['G] 'x = 'G^"1" in 'G^car; <J['G]> >- 'C['G] } -->
    sequent ['ext] { <H>; G: group[i:l]; <J['G]> >- 'C['G] }
 
 interactive car_wf {| intro [AutoMustComplete; intro_typeinf <<'G>>] |} group[i:l] :
@@ -509,11 +509,11 @@ interactive subgroup_ref {| intro [] |} :
 doc <:doc< 
    @begin[doc]
   
-     If $s$ is a subgroup of $g$, then
+     If $S$ is a subgroup of $G$, then
      @begin[enumerate]
-     @item{$s$ is closed under the binary operation of $g$.}
-     @item{the identity of $s$ is the identity of $g$.}
-     @item{the inverse of <<'a in 's^car>> is also the inverse of $a$ in $g$.}
+     @item{$S$ is closed under the binary operation of $G$.}
+     @item{the identity of $S$ is the identity of $G$.}
+     @item{the inverse of <<'a in 'S^car>> is also the inverse of $a$ in $G$.}
      @end[enumerate]
    @end[doc]
 >>

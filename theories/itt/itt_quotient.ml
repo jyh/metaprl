@@ -292,9 +292,10 @@ doc <:doc<
    The first two elimination forms are valid only if the goal
    is an equality judgment.  For both cases, the judgment is true
    if it is true for any two elements that are equal in the quotient type.
+   The third elimination rule is valid when the conclusion is squashed.
   
-   The @hreftactic[dT] tactic would use the first rule; for the second one use
-   the @tactic[quotientT] tactic.
+   The @hreftactic[dT] tactic would use the first and third rules;
+   for the second one use the @tactic[quotientT] tactic.
    @end[doc]
 >>
 prim quotientElimination1 {| elim [ThinOption thinT] |} 'H :
@@ -314,7 +315,12 @@ interactive quotientElimination1_eq 'H :
            } -->
    sequent { <H>; a: quot x, y: 'A // 'E['x; 'y]; <J['a]> >- 's['a] = 't['a] in 'T['a] }
 
-doc <:doc< @docoff >>
+interactive quotientElimination2 {| elim [ThinOption thinT] |} 'H :
+   sequent { <H>; a: quot x, y: 'A // 'E['x; 'y]; <J['a]> >- "type"{'C['a]} } -->
+   sequent { <H>; a: quot x, y: 'A // 'E['x; 'y]; x: 'A; <J['a]> >- squash{'C['x]} } -->
+   sequent { <H>; a: quot x, y: 'A // 'E['x; 'y]; <J['a]> >- squash{'C['a]} }
+
+doc docoff
 let quotientT = quotientElimination1_eq
 
 doc <:doc< 

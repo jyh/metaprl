@@ -1,5 +1,5 @@
 (*
- * Groups.
+ * Subsets.
  *
  * ----------------------------------------------------------------
  *
@@ -27,65 +27,37 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  * Author: Xin Yu
- * Email : xiny@cs.caltech.edu
+ * xiny@cs.caltech.edu
+ *
  *)
 
-extends Itt_grouplikeobj
+extends Itt_subtype
 
-open Mp_debug
-open Refiner.Refiner.TermType
 open Refiner.Refiner.Term
-open Refiner.Refiner.TermOp
-open Refiner.Refiner.TermAddr
-open Refiner.Refiner.TermMan
-open Refiner.Refiner.TermSubst
-open Refiner.Refiner.Refine
-open Refiner.Refiner.RefineError
-open Mp_resource
-open Simple_print
 
-open Tactic_type
-open Tactic_type.Tacticals
 open Tactic_type.Sequent
-open Tactic_type.Conversionals
-open Mptop
-open Var
-
-open Base_dtactic
-open Base_auto_tactic
-open Itt_fun
+open Tactic_type.Tacticals
 
 (************************************************************************
- * SYNTAX                                                               *
+ * TERMS                                                                *
  ************************************************************************)
 
-declare pregroup[i:l]
-declare isGroup{'g}
-declare group[i:l]
-declare lcoset{'s; 'g; 'b}
-declare rcoset{'s; 'g; 'b}
-declare normalSubg[i:l]{'s; 'g}
-
-(************************************************************************
- * DISPLAY FORMS                                                        *
- ************************************************************************)
-
-prec prec_inv
+declare "subset"{'A; 'B}
 
 (************************************************************************
  * TACTICS                                                              *
  ************************************************************************)
 
-topval fold_pregroup1 : conv
-topval fold_pregroup : conv
-topval fold_isGroup : conv
-topval fold_group1 : conv
-topval fold_group : conv
+topval fold_subset : conv
+
+val is_subset_term : term -> bool
+val dest_subset : term -> term * term
+val mk_subset_term : term -> term -> term
 
 (*
  * -*-
  * Local Variables:
- * Caml-master: "editor.run"
+ * Caml-master: "prlcomp.run"
  * End:
  * -*-
  *)

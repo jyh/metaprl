@@ -1,5 +1,5 @@
 (*
- * Groups.
+ * Cyclic groups.
  *
  * ----------------------------------------------------------------
  *
@@ -30,7 +30,8 @@
  * Email : xiny@cs.caltech.edu
  *)
 
-extends Itt_grouplikeobj
+extends Itt_group
+extends Itt_int_base
 
 open Mp_debug
 open Refiner.Refiner.TermType
@@ -56,31 +57,20 @@ open Base_auto_tactic
 open Itt_fun
 
 (************************************************************************
- * SYNTAX                                                               *
+ * TERMS                                                               *
  ************************************************************************)
 
-declare pregroup[i:l]
-declare isGroup{'g}
-declare group[i:l]
-declare lcoset{'s; 'g; 'b}
-declare rcoset{'s; 'g; 'b}
-declare normalSubg[i:l]{'s; 'g}
-
-(************************************************************************
- * DISPLAY FORMS                                                        *
- ************************************************************************)
-
-prec prec_inv
+declare group_power{'g; 'a; 'n}
+declare cycGroup{'g}
+declare cycSubg[i:l]{'s; 'g; 'a}
 
 (************************************************************************
  * TACTICS                                                              *
  ************************************************************************)
 
-topval fold_pregroup1 : conv
-topval fold_pregroup : conv
-topval fold_isGroup : conv
-topval fold_group1 : conv
-topval fold_group : conv
+topval fold_group_power : conv
+topval fold_cycGroup : conv
+topval fold_cycSubg : conv
 
 (*
  * -*-

@@ -69,6 +69,8 @@ declare semigroup[i:l]
 declare premonoid[i:l]
 declare isMonoid{'g}
 declare monoid[i:l]
+declare isCommutative{'g}
+declare subStructure{'s; 'g}
 
 (************************************************************************
  * TACTICS                                                              *
@@ -83,6 +85,8 @@ topval fold_premonoid : conv
 topval fold_isMonoid : conv
 topval fold_monoid1 : conv
 topval fold_monoid : conv
+topval fold_isCommutative : conv
+topval fold_subStructure : conv
 
 (*
  * -*-

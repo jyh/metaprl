@@ -69,10 +69,11 @@ MPFILES :=\
 	itt_record\
 	itt_record_exm\
 	itt_sort\
+	itt_subset\
 	itt_grouplikeobj\
 	itt_group\
-	itt_abelian_group\
-	itt_example
+        itt_cyclic_group\
+        itt_example
 
 ifeq ($(TESTS),YES)
 	MPFILES:= $(MPFILES)\

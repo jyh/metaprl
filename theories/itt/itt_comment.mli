@@ -194,6 +194,12 @@ declare math_quot{'T; 'x; 'y; 'E}
 declare math_esquash{'P}
 
 (************************************************************************
+ * SUBSET
+ ************************************************************************)
+
+declare math_subset{'t1; 't2}
+
+(************************************************************************
  * GROUP THEORY
  ************************************************************************)
 
@@ -213,6 +219,15 @@ declare math_csemigroup{'i}
 declare math_cmonoid{'i}
 declare math_abelg{'i}
 
+declare math_subStructure{'s; 'g}
+
+declare math_lcoset{'h; 'g; 'a}
+declare math_rcoset{'h; 'g; 'a}
+declare math_normalSubg{'i; 's; 'g}
+
+declare math_group_power{'g; 'a; 'n}
+declare math_cycGroup{'g}
+declare math_cycSubg{'i; 's; 'g; 'a}
 (* OTHER *)
 
 declare colons{'a}

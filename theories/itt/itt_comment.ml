@@ -1198,6 +1198,30 @@ dform math_esquash_df2 : except_mode[tex] :: math_esquash{'P} =
    `"[[" slot{'P} `"]]"
 
 (************************************************************************
+ * SUBSET
+ ************************************************************************)
+
+declare math_subset{'t1; 't2}
+
+(************************************************
+ * TeX mode
+ *)
+
+dform subset_df1 : mode[tex] :: math_subset{'t1; 't2} =
+   izone `"{" ezone
+   slot{'t1}
+   izone `"\\subseteq_s " ezone
+   slot{'t2}
+   izone `"}" ezone
+
+(************************************************
+ * Normal mode
+ *)
+
+dform subset_df : except_mode[tex] :: math_subset{'t1; 't2} =
+   slot{'t1} `" " subseteq `"s " slot{'t2}
+
+(************************************************************************
  * GROUP THEORY
  ************************************************************************)
 
@@ -1216,6 +1240,16 @@ declare math_inv{'g; 'a}
 declare math_csemigroup{'i}
 declare math_cmonoid{'i}
 declare math_abelg{'i}
+
+declare math_subStructure{'s; 'g}
+
+declare math_lcoset{'h; 'g; 'a}
+declare math_rcoset{'h; 'g; 'a}
+declare math_normalSubg{'i; 's; 'g}
+
+declare math_group_power{'g; 'a; 'n}
+declare math_cycGroup{'g}
+declare math_cycSubg{'i; 's; 'g; 'a}
 
 (************************************************
  * TeX mode
@@ -1292,6 +1326,65 @@ dform math_abelg_df : mode[tex] :: math_abelg{'i} =
    slot{'i}
    izone `"}" ezone
 
+dform subStructure_df1 : mode[tex] :: math_subStructure{'s; 'g} =
+   izone `"{" ezone
+   slot{'s}
+   izone `"\\subseteq_{str} " ezone
+   slot{'g}
+   izone `"}" ezone
+
+dform lcoset_df1 : mode[tex] :: math_lcoset{'h; 'g; 'a} =
+   izone `"{{\\it Left\\_coset}(" ezone
+   slot{'h}
+   izone `"," ezone
+   slot{'g}
+   izone `"," ezone
+   slot{'a}
+   izone `")}" ezone
+
+dform rcoset_df1 : mode[tex] :: math_rcoset{'h; 'g; 'a} =
+   izone `"{{\\it Right\\_coset}(" ezone
+   slot{'h}
+   izone `"," ezone
+   slot{'g}
+   izone `"," ezone
+   slot{'a}
+   izone `")}" ezone
+
+dform normalSubg_df1 : mode[tex] :: math_normalSubg{'i; 's; 'g} =
+   izone `"{{\\it Normal\\_subgroup}_{" ezone
+   slot{'i}
+   izone `"}(" ezone
+   slot{'s}
+   izone `"," ezone
+   slot{'g}
+   izone `")}" ezone
+
+dform math_group_power_df1 : mode[tex] :: math_group_power{'g; 'a; 'n} =
+   izone `"{" ezone
+   slot{'a}
+   izone `"}^{" ezone
+   slot{'n}
+   izone `"}_{" ezone
+   slot{'g}
+   izone `"}" ezone
+
+dform cycGroup_df1 : mode[tex] :: math_cycGroup{'g} =
+   izone `"{{\\it Cyclic\\_group}(" ezone
+   slot{'g}
+   izone `")}" ezone
+
+dform cycSubg_df1 : mode[tex] :: math_cycSubg{'i; 's; 'g; 'a} =
+   izone `"{{\\it Cyclic\\_subgroup}_{" ezone
+   slot{'i}
+   izone `"}(" ezone
+   slot{'s}
+   izone `"," ezone
+   slot{'g}
+   izone `"," ezone
+   slot{'a}
+   izone `")}" ezone
+
 (************************************************
  * Normal mode
  *)
@@ -1340,6 +1433,27 @@ dform cmonoid_df1 : except_mode[tex] :: math_cmonoid{'i} =
 
 dform abelg_df1 : except_mode[tex] :: math_abelg{'i} =
    `"Abelian_group[" slot{'i} `"]"
+
+dform subStructure_df : except_mode[tex] :: math_subStructure{'s; 'g} =
+   slot{'s} `" " subseteq `"str " slot{'g}
+
+dform lcoset_df : parens :: except_mode[tex] :: math_lcoset{'h; 'g; 'a} =
+   `"Left_coset(" slot{'h} `"; " slot{'g} `"; " slot{'a} `")"
+
+dform rcoset_df : parens :: except_mode[tex] :: math_rcoset{'h; 'g; 'a} =
+   `"Right_coset(" slot{'h} `"; " slot{'g} `"; " slot{'a} `")"
+
+dform normalSubg_df : except_mode[tex] :: math_normalSubg{'i; 's; 'g} =
+   `"Normal_subgroup[" slot{'i} `"](" slot{'s} `"; " slot{'g} `")"
+
+dform group_power_df1 : except_mode[tex] :: parens :: "prec"[prec_inv] :: math_group_power{'g; 'a; 'n} =
+   slot{'g} `".power(" slot{'a}`"; " slot{'n} `")"
+
+dform cycGroup_df : except_mode[src] :: math_cycGroup{'g} =
+   `"Cyclic_group(" slot{'g} `")"
+
+dform cycSubg_df : except_mode[tex] :: math_cycSubg{'i; 's; 'g; 'a} =
+   `"Cyclic_subgroup[" slot{'i} `"](" slot{'s} `"; " slot{'g} `"; " slot{'a} `")"
 
 (*
  * -*-

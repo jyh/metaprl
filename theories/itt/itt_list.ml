@@ -187,7 +187,7 @@ prim listEquality 'H :
  *)
 prim nilFormation 'H :
    sequent [squash] { 'H >- "type"{'A} } -->
-   sequent ['ext] { 'H >- 'A list } =
+   sequent ['ext] { 'H >- list{'A} } =
    nil
 
 (*

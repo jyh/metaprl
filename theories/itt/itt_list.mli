@@ -112,7 +112,7 @@ rule listEquality 'H :
  *)
 rule nilFormation 'H :
    sequent [squash] { 'H >- "type"{'A} } -->
-   sequent ['ext] { 'H >- 'A list }
+   sequent ['ext] { 'H >- list{'A} }
 
 (*
  * H >- nil = nil in list(A)

@@ -172,8 +172,13 @@ topval jtest : term -> string -> string -> unit
 
 (* sequent calculus, another argumnet for proof reconstruction *)
 
+topval jseqtest : term -> string -> string -> unit 
 
-val jprover : term -> (string * term * term) list
+(* Application to sequents: give a list_term of hyps,concl as input *)
+
+
+
+val jprover : term list * term  -> (string * term * term) list
 
 
 

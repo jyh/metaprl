@@ -1125,8 +1125,12 @@ module ITT_JProver = Jall.JProver(Itt_JLogic)
 
 let jtest t s c = ITT_JProver.test t s c 
 
+let jseqtest t s c = ITT_JProver.seqtest t s c 
+(* input a list_term of hyps,concl *)
 
-let jprover t = ITT_JProver.prover t 
+
+let jprover (t,c) = ITT_JProver.prover (t,c)
+
 
 
 (* sequent calculus, another argumnet for proof reconstruction *)

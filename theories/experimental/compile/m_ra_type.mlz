@@ -26,7 +26,7 @@
  *)
 extends Base_theory
 
-open Lm_format
+open Lm_printf
 open Lm_symbol
 open Lm_symbol_matrix
 open Lm_trace

@@ -26,12 +26,11 @@
 extends M_ra_type
 extends M_ra_state
 
-open Lm_format
+open Lm_printf
 open Lm_debug
 open Lm_trace
 open Lm_symbol
 open Lm_symbol_matrix
-open Lm_symbol_format
 
 open M_ra_type
 open M_ra_state

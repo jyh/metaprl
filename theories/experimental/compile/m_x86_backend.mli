@@ -28,7 +28,7 @@ extends M_x86_term
 extends M_ra_type
 
 open Lm_symbol
-open Lm_format
+open Lm_printf
 
 open Refiner.Refiner.TermType
 

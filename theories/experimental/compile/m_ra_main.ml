@@ -30,8 +30,7 @@ extends M_ra_live
 open Lm_flags
 open Lm_symbol
 open Lm_symbol_matrix
-open Lm_symbol_format
-open Lm_format
+open Lm_printf
 
 open M_ra_type
 open M_ra_live
@@ -798,11 +797,11 @@ struct
             move_depth = depth
           } = move
       in
-         Lm_format.printf "@[<hv 3>Move:@ dst = %a" pp_print_symbol dst.node_name;
-         Lm_format.printf "; expanded = %a" pp_print_symbol (node_alias dst).node_name;
-         Lm_format.printf ";@ src = %a" pp_print_symbol src.node_name;
-         Lm_format.printf "; expanded = %a" pp_print_symbol (node_alias src).node_name;
-         Lm_format.printf "@]"
+         printf "@[<hv 3>Move:@ dst = %a" pp_print_symbol dst.node_name;
+         printf "; expanded = %a" pp_print_symbol (node_alias dst).node_name;
+         printf ";@ src = %a" pp_print_symbol src.node_name;
+         printf "; expanded = %a" pp_print_symbol (node_alias src).node_name;
+         printf "@]"
 
    (************************************************************************
     * SPILL COST

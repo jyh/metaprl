@@ -32,11 +32,10 @@
 extends M_x86_term
 extends M_ra_type
 
-open Lm_format
+open Lm_printf
 open Lm_symbol
 open Lm_trace
 open Lm_debug
-open Lm_symbol_format
 
 open Refiner.Refiner.RefineError
 

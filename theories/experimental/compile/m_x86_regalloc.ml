@@ -27,6 +27,7 @@
 extends Top_tacticals
 
 open Lm_symbol
+open Lm_printf
 
 open M_standardize
 open M_x86_backend
@@ -37,9 +38,6 @@ open M_ra_main
 
 open Tactic_type.Tacticals
 open Tactic_type.Sequent
-
-let eprintf = Lm_printf.eprintf
-let eflush  = Lm_printf.eflush
 
 module RegAlloc = MakeRegAlloc (Frame)
 
@@ -94,8 +92,8 @@ let allocT =
  * Print the assembly to a file.
  *)
 let printT_aux filename p =
-   let out = open_out filename in
-   let buf = Lm_format.formatter_of_out_channel out in
+   let out = Pervasives.open_out filename in
+   let buf = formatter_of_out_channel out in
       pp_print_prog buf (concl p);
       close_out out;
       idT

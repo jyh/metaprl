@@ -60,9 +60,9 @@ struct
       type t = var * var
 
       let compare (v11, v12) (v21, v22) =
-         let cmp = Symbol.compare v11 v21 in
+         let cmp = Lm_symbol.compare v11 v21 in
             if cmp = 0 then
-               Symbol.compare v12 v22
+               Lm_symbol.compare v12 v22
             else
                cmp
    end
@@ -258,7 +258,7 @@ struct
    let cenv_lookup cenv v =
       try SymbolTable.find cenv v with
          Not_found ->
-            raise (Invalid_argument ("Regalloc: unclassified var: " ^ Symbol.to_string v))
+            raise (Invalid_argument ("Regalloc: unclassified var: " ^ string_of_symbol v))
 
    (************************************************************************
     * NODE OPERATIONS
@@ -611,7 +611,7 @@ struct
     * Test for equality.
     *)
    let node_eq node1 node2 =
-      Symbol.eq node1.node_name node2.node_name
+      Lm_symbol.eq node1.node_name node2.node_name
 
    (*
     * Get the node's neighbors.
@@ -966,7 +966,7 @@ struct
          eprintf "Classify moves@.";
       let edges = ra.ra_edges in
          AsymSymbolMatrix.iter (fun dst src { M_ra_type.move_depth = depth } ->
-               if not (Symbol.eq dst src) then
+               if not (Lm_symbol.eq dst src) then
                   let dst_node = SymbolTable.find nodes dst in
                   let src_node = SymbolTable.find nodes src in
                   let move = new_move ra dst_node src_node depth MoveWL in
@@ -1214,7 +1214,7 @@ struct
          let v = node_alias v in
          let u = u.node_name in
          let v = v.node_name in
-         let cmp = Symbol.compare u v in
+         let cmp = Lm_symbol.compare u v in
             if cmp = 0 then
                table, moves
             else
@@ -1264,9 +1264,9 @@ struct
          v.node_base_cost <- u.node_base_cost + v.node_base_cost;
          v.node_moves <- combine_moves u.node_moves v.node_moves;
          v.node_total_length <- u.node_total_length + v.node_total_length;
-         assert (not (Symbol.eq u.node_name v.node_name));
+         assert (not (Lm_symbol.eq u.node_name v.node_name));
          List.iter (fun t ->
-               assert (not (Symbol.eq v.node_name t.node_name));
+               assert (not (Lm_symbol.eq v.node_name t.node_name));
                dump_neighbors_list "before copy_edge" t;
                add_edge ra v t;
                dump_neighbors_list "after copy_edge" t;
@@ -1413,7 +1413,7 @@ struct
                   eprintf "Selected: %s@." (string_of_symbol (var_of_node ra node));
                node_reclassify ra node NodeStack;
                List.iter (fun node2 ->
-                     assert (not (Symbol.eq node.node_name node2.node_name));
+                     assert (not (Lm_symbol.eq node.node_name node2.node_name));
                      decrement_degree ra node2) (node_neighbors ra node);
                freeze_moves ra node
           | None ->

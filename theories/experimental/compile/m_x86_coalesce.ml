@@ -30,7 +30,6 @@ extends M_x86_backend
 open Format
 
 open Lm_symbol
-open Lm_string_util
 
 open M_standardize
 open M_x86_inst_type
@@ -56,7 +55,7 @@ let table_lookup table v =
          v
 
 let table_equal table v1 v2 =
-   Symbol.eq (table_lookup table v1) (table_lookup table v2)
+   Lm_symbol.eq (table_lookup table v1) (table_lookup table v2)
 
 (*
  * Coalesce moves.
@@ -87,10 +86,7 @@ let coalesceT table =
  *)
 let renameT_aux p =
    let table = rename_term (concl p) in
-   let table =
-      SymbolTable.fold (fun stable v1 v2 ->
-            StringTable.add stable (Symbol.to_string v1) (Symbol.to_string v2)) StringTable.empty table
-   in
+   let table = SymbolTable.fold SymbolTable.add SymbolTable.empty table in
       destandardizeT table
 
 let renameT =

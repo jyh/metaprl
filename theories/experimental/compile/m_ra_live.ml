@@ -159,7 +159,7 @@ struct
    let cenv_lookup cenv v =
       try SymbolTable.find cenv v with
          Not_found ->
-            raise (Invalid_argument ("liveness: unclassified var: " ^ Symbol.to_string v))
+            raise (Invalid_argument ("liveness: unclassified var: " ^ string_of_symbol v))
 
 
    (***  Control Flow Graph  ***)
@@ -334,7 +334,7 @@ struct
       let stats =
          try SymbolTable.find graph.igraph_stats v with
             Not_found ->
-               raise (Invalid_argument ("graph_add: " ^ Symbol.to_string v))
+               raise (Invalid_argument ("graph_add: " ^ string_of_symbol v))
       in
       let defs = get stats in
       let len = Array.length defs in
@@ -354,7 +354,7 @@ struct
       let stats =
          try SymbolTable.find graph.igraph_stats v with
             Not_found ->
-               raise (Invalid_argument ("graph_add: " ^ Symbol.to_string v))
+               raise (Invalid_argument ("graph_add: " ^ string_of_symbol v))
       in
          stats.stats_length <- min stats.stats_length i
 
@@ -395,7 +395,7 @@ struct
                let (rc1 : int) = cenv_lookup cenv v1 in
                   LiveSet.iter (fun v2 _ ->
                         let (rc2 : int) = cenv_lookup cenv v2 in
-                           if rc1 = rc2 && not (Symbol.eq v1 v2) then
+                           if rc1 = rc2 && not (Lm_symbol.eq v1 v2) then
                               SymSymbolMatrix.add igraph v1 v2 true) live) defs
 
 
@@ -447,7 +447,7 @@ struct
          (* Add interference edges *)
          LiveSet.iter (fun v _ ->
                let (rc2 : int) = cenv_lookup cenv v in
-                  if rc1 = rc2 && not (Symbol.eq v def) && not (Symbol.eq v use) then
+                  if rc1 = rc2 && not (Lm_symbol.eq v def) && not (Lm_symbol.eq v use) then
                      SymSymbolMatrix.add igraph def v true) live;
 
          (* Add move stats *)

@@ -85,31 +85,31 @@ type flag =
 (*
  * Names of the standard args.
  *)
-let eax    = Symbol.add "eax"
-let ebx    = Symbol.add "ebx"
-let ecx    = Symbol.add "ecx"
-let edx    = Symbol.add "edx"
-let esi    = Symbol.add "esi"
-let edi    = Symbol.add "edi"
-let esp    = Symbol.add "esp"
-let ebp    = Symbol.add "ebp"
-let fp0    = Symbol.add "fp0"
-let fp1    = Symbol.add "fp1"
-let fp2    = Symbol.add "fp2"
-let fp3    = Symbol.add "fp3"
-let fp4    = Symbol.add "fp4"
-let fp5    = Symbol.add "fp5"
-let iflags = Symbol.add "iflags"
-let fflags = Symbol.add "fflags"
+let eax    = Lm_symbol.add "eax"
+let ebx    = Lm_symbol.add "ebx"
+let ecx    = Lm_symbol.add "ecx"
+let edx    = Lm_symbol.add "edx"
+let esi    = Lm_symbol.add "esi"
+let edi    = Lm_symbol.add "edi"
+let esp    = Lm_symbol.add "esp"
+let ebp    = Lm_symbol.add "ebp"
+let fp0    = Lm_symbol.add "fp0"
+let fp1    = Lm_symbol.add "fp1"
+let fp2    = Lm_symbol.add "fp2"
+let fp3    = Lm_symbol.add "fp3"
+let fp4    = Lm_symbol.add "fp4"
+let fp5    = Lm_symbol.add "fp5"
+let iflags = Lm_symbol.add "iflags"
+let fflags = Lm_symbol.add "fflags"
 let fpmap  = [fp0, 0; fp1, 1; fp2, 2; fp3, 3; fp4, 4; fp5, 5]
-let mmx0   = Symbol.add "mmx0"
-let mmx1   = Symbol.add "mmx1"
-let mmx2   = Symbol.add "mmx2"
-let mmx3   = Symbol.add "mmx3"
-let mmx4   = Symbol.add "mmx4"
-let mmx5   = Symbol.add "mmx5"
-let mmx6   = Symbol.add "mmx6"
-let mmx7   = Symbol.add "mmx7"
+let mmx0   = Lm_symbol.add "mmx0"
+let mmx1   = Lm_symbol.add "mmx1"
+let mmx2   = Lm_symbol.add "mmx2"
+let mmx3   = Lm_symbol.add "mmx3"
+let mmx4   = Lm_symbol.add "mmx4"
+let mmx5   = Lm_symbol.add "mmx5"
+let mmx6   = Lm_symbol.add "mmx6"
+let mmx7   = Lm_symbol.add "mmx7"
 
 (*
  * Register classes.
@@ -174,7 +174,7 @@ let pp_print_operand buf op =
          fprintf buf "%a(%%ebp)" pp_print_symbol label
     | ContextRegister r ->
          let s =
-            match Symbol.to_string r with
+            match string_of_symbol r with
                "next" -> "__mem_next"
              | "limit" -> "__mem_limit"
              | s -> raise (Invalid_argument ("pp_print_operand: bad context var: " ^ s))
@@ -249,7 +249,7 @@ let rec pp_print_inst bound depth out (Inst inst) =
                   pp_print_operand dst;
                pp_print_rest rest
           | Inst1Reg (opcode, src, dst, rest) ->
-               if not (Symbol.eq src dst) then
+               if not (Lm_symbol.eq src dst) then
                   fprintf out "\tmovl\t%%%a, %%%a\t/* implicit inst1 move */\n" (**)
                      pp_print_symbol src
                      pp_print_symbol dst;
@@ -266,7 +266,7 @@ let rec pp_print_inst bound depth out (Inst inst) =
                   pp_print_operand dst;
                pp_print_rest rest
           | Inst2Reg (opcode, src1, src2, dst, rest) ->
-               if not (Symbol.eq src2 dst) then
+               if not (Lm_symbol.eq src2 dst) then
                   fprintf out "\tmovl\t%%%a, %%%a\t/* implicit inst2 move */\n" (**)
                      pp_print_symbol src2
                      pp_print_symbol dst;
@@ -278,11 +278,11 @@ let rec pp_print_inst bound depth out (Inst inst) =
 
             (* Inst3 *)
           | Inst3Reg (opcode, src1, src2, src3, dst2, dst3, rest) ->
-               if not (Symbol.eq src2 dst2) then
+               if not (Lm_symbol.eq src2 dst2) then
                    fprintf out "\tmovl\t%%%a, %%%a\t/* implicit inst3 move */\n" (**)
                      pp_print_symbol src2
                      pp_print_symbol dst2;
-               if not (Symbol.eq src3 dst3) then
+               if not (Lm_symbol.eq src3 dst3) then
                    fprintf out "\tmovl\t%%%a, %%%a\t/* implicit inst3 move */\n" (**)
                      pp_print_symbol src3
                      pp_print_symbol dst3;
@@ -301,7 +301,7 @@ let rec pp_print_inst bound depth out (Inst inst) =
                   pp_print_operand dst;
                pp_print_rest rest
           | ShiftReg (opcode, src1, src2, dst, rest) ->
-               if not (Symbol.eq src2 dst) then
+               if not (Lm_symbol.eq src2 dst) then
                   fprintf out "\tmovl\t%%%a, %%%a\t/* implicit shift move */\n" (**)
                      pp_print_symbol src2
                      pp_print_symbol dst;
@@ -327,7 +327,7 @@ let rec pp_print_inst bound depth out (Inst inst) =
                   pp_print_operand dst;
                pp_print_rest rest
           | SetReg (opcode, cc, src, dst, rest) ->
-               if not (Symbol.eq src dst) then
+               if not (Lm_symbol.eq src dst) then
                   fprintf out "\tmovl\t%%%a, %%%a\t/* implicit set move */\n" (**)
                      pp_print_symbol src
                      pp_print_symbol dst;
@@ -358,7 +358,7 @@ let rec pp_print_inst bound depth out (Inst inst) =
 
             (* Reserve *)
           | Reserve (words, params) ->
-               let label = Symbol.new_symbol_string "reserve" in
+               let label = Lm_symbol.new_symbol_string "reserve" in
                   fprintf out "\t/* reserve %ld words (%a) */\n" (**)
                      words
                      pp_print_symbols params;
@@ -1166,7 +1166,7 @@ let blocks_of_term t =
        | LabelDef (Inst label, body, rest) ->
             let label = label_of_label_asm label in
             let block =
-               { block_debug = Symbol.to_string label;
+               { block_debug = string_of_symbol label;
                  block_label = label;
                  block_code = body;
                  block_jumps = []

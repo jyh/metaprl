@@ -245,7 +245,7 @@ let rec splitC_aux vars =
             let t = env_term e in
 
             (* Abstract the term for the rewrite argument *)
-            let s = ".hide" in
+            let s = Lm_symbol.add ".hide" in
             let op = mk_operand_term (SpillRegister (v, spill)) in
             let abs = var_subst t op s in
             let bind = mk_bind1_term s abs in
@@ -522,7 +522,7 @@ let spillT_aux vars p =
       let vars_all = SymbolSet.union vars1 vars2 in
       let other_vars = SymbolSet.diff vars vars_all in
          if not (SymbolSet.is_empty other_vars) then
-            let s = Symbol.to_string (SymbolSet.choose other_vars) in
+            let s = Lm_symbol.to_string (SymbolSet.choose other_vars) in
                raise (RefineError ("spillT", StringStringError ("don't know how to spill", s)))
    in
 *)
@@ -552,7 +552,7 @@ let spillT vars =
  * Debug version.
  *)
 let spillST s =
-   spillT (SymbolSet.singleton (Symbol.add s))
+   spillT (SymbolSet.singleton (Lm_symbol.add s))
 
 (*
  * -*-

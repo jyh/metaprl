@@ -6,7 +6,7 @@ ROOT := ../../..
 
 include $(ROOT)/mk/preface
 
-INCLUDE := -I . -I ../../base $(SUPPORT_INCL)
+INCLUDE := -I . -I ../../base -I $(ROOT)/libmojave/stdlib -I $(ROOT)/libmojave/util $(SUPPORT_INCL)
 
 OCAMLDEPFLAGS := -prl
 
@@ -42,18 +42,6 @@ MPFILES :=\
 	m_x86_codegen\
 	m_ra_state\
 	m_x86_opt\
-
-#
-# Register allocation uses lm_libmojave
-#
-ifneq ($(LIBMOJAVE),undefined)
-INCLUDE := \
-	$(INCLUDE)\
-	-I $(LIBMOJAVE)/naml/stdlib\
-	-I $(LIBMOJAVE)/util
-
-MPFILES :=\
-	$(MPFILES)\
 	m_standardize\
 	m_x86_inst_type\
 	m_x86_term\
@@ -66,8 +54,6 @@ MPFILES :=\
 	m_x86_regalloc\
 	m_theory\
 	m_test
-
-endif
 
 # Name of main libraries
 MAIN = theory

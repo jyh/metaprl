@@ -266,19 +266,19 @@ let mk_jcc_opcode = function
 (*
  * Get the name of a label.
  *)
-let init_label = Symbol.add ".init"
+let init_label = Lm_symbol.add ".init"
 
 let is_init_label_asm = function
    LabelAsm (v, _) ->
-      Symbol.eq v init_label
+      Lm_symbol.eq v init_label
  | _ ->
       false
 
 let label_of_asm_label v1 v2 =
-   let r = Symbol.to_string v2 in
-   let s = Symbol.to_string v1 in
+   let r = string_of_symbol v2 in
+   let s = string_of_symbol v1 in
    let s = r ^ "." ^ s in
-      Symbol.add s
+      Lm_symbol.add s
 
 let label_of_label_asm = function
    LabelAsm (v1, v2) ->
@@ -289,15 +289,12 @@ let label_of_label_asm = function
 (*
  * Operands.
  *)
-let dest_symbol v =
-   Symbol.add (dest_var v)
-
 let int32_of_num i =
    Int32.of_string (Lm_num.string_of_num i)
 
 let dest_spill_reg t =
    if is_var_term t then
-      SpillRegRegister (dest_symbol t)
+      SpillRegRegister (dest_var t)
    else
       let { term_op = op; term_terms = bterms } = dest_term t in
       let { op_name = op; op_params = params } = dest_op op in
@@ -306,7 +303,7 @@ let dest_spill_reg t =
             [], [{ bvars = []; bterm = v };
                  { bvars = []; bterm = spill }]
             when Opname.eq op spill_register_opname ->
-               SpillRegSpill (dest_symbol v, dest_symbol spill)
+               SpillRegSpill (dest_var v, dest_var spill)
           | _ ->
                raise (RefineError ("dest_spill_reg", StringTermError ("not a valid spill register", t)))
 
@@ -324,12 +321,12 @@ let dest_operand_aux dest_reg t =
          (* ImmediateLabel *)
        | [Token label], [{ bvars = []; bterm = t }]
          when Opname.eq op immediate_label_opname ->
-            ImmediateLabel (Symbol.add label, dest_symbol t)
+            ImmediateLabel (Lm_symbol.add label, dest_var t)
 
          (* ImmediateCLabel *)
        | [Token label], [{ bvars = []; bterm = t }]
          when Opname.eq op immediate_clabel_opname ->
-            ImmediateCLabel (Symbol.add label, dest_symbol t)
+            ImmediateCLabel (Lm_symbol.add label, dest_var t)
 
          (* Register *)
        | [], [{ bvars = []; bterm = t }]
@@ -339,18 +336,18 @@ let dest_operand_aux dest_reg t =
          (* SpillMemory *)
        | [], [{ bvars = []; bterm = spill }]
          when Opname.eq op spill_memory_opname ->
-            SpillMemory (dest_symbol spill)
+            SpillMemory (dest_var spill)
 
          (* SpillRegister *)
        | [], [{ bvars = []; bterm = v };
               { bvars = []; bterm = spill }]
          when Opname.eq op spill_register_opname ->
-            SpillRegister (dest_symbol v, dest_symbol spill)
+            SpillRegister (dest_var v, dest_var spill)
 
          (* ContextRegister *)
        | [Token s], []
          when Opname.eq op context_register_opname ->
-            ContextRegister (Symbol.add s)
+            ContextRegister (Lm_symbol.add s)
 
          (* MemReg *)
        | [], [{ bvars = []; bterm = t }]
@@ -375,7 +372,7 @@ let dest_operand_aux dest_reg t =
             raise (RefineError ("dest_operand", StringTermError ("not an x86 operand", t)))
 
 let dest_operand_term op =
-   dest_operand_aux dest_symbol op
+   dest_operand_aux dest_var op
 
 let dest_operand_spill op =
    dest_operand_aux dest_spill_reg op
@@ -439,8 +436,7 @@ let dest_inst_aux dest_reg dest_rest t =
               { bvars = [dst]; bterm = rest }]
          when Opname.eq op mov_opname ->
             Mov (dest_operand_aux dest_reg src,
-                 Symbol.add dst,
-                 dest_rest rest)
+                 dst, dest_rest rest)
 
          (* Spill *)
        | [String opcode], [{ bvars = [];  bterm = src };
@@ -448,8 +444,7 @@ let dest_inst_aux dest_reg dest_rest t =
          when Opname.eq op spill_opname ->
             Spill (dest_spill_opcode opcode,
                    dest_operand_aux dest_reg src,
-                   Symbol.add dst,
-                   dest_rest rest)
+                   dst, dest_rest rest)
 
          (* Inst1 *)
        | [String opcode], [{ bvars = []; bterm = dst };
@@ -463,8 +458,7 @@ let dest_inst_aux dest_reg dest_rest t =
          when Opname.eq op inst1_opname ->
             Inst1Reg (dest_inst1_opcode opcode,
                       dest_reg_operand_term dest_reg src,
-                      Symbol.add dst,
-                      dest_rest rest)
+                      dst, dest_rest rest)
 
          (* Inst2 *)
        | [String opcode], [{ bvars = []; bterm = src };
@@ -482,8 +476,7 @@ let dest_inst_aux dest_reg dest_rest t =
             Inst2Reg (dest_inst2_opcode opcode,
                       dest_operand_aux dest_reg src1,
                       dest_reg_operand_term dest_reg src2,
-                      Symbol.add dst,
-                      dest_rest rest)
+                      dst, dest_rest rest)
 
          (* Inst3 *)
        | [String opcode], [{ bvars = []; bterm = src1 };
@@ -495,9 +488,7 @@ let dest_inst_aux dest_reg dest_rest t =
                       dest_operand_aux dest_reg src1,
                       dest_reg_operand_term dest_reg src2,
                       dest_reg_operand_term dest_reg src3,
-                      Symbol.add dst1,
-                      Symbol.add dst2,
-                      dest_rest rest)
+                      dst1, dst2, dest_rest rest)
 
          (* Shift *)
        | [String opcode], [{ bvars = []; bterm = src };
@@ -515,8 +506,7 @@ let dest_inst_aux dest_reg dest_rest t =
             ShiftReg (dest_shift_opcode opcode,
                       dest_operand_aux dest_reg src1,
                       dest_reg_operand_term dest_reg src2,
-                      Symbol.add dst,
-                      dest_rest rest)
+                      dst, dest_rest rest)
 
          (* Cmp *)
        | [String opcode], [{ bvars = []; bterm = src1 };
@@ -544,8 +534,7 @@ let dest_inst_aux dest_reg dest_rest t =
             SetReg (dest_set_opcode opcode,
                     dest_cc cc,
                     dest_reg_operand_term dest_reg src,
-                    Symbol.add dst,
-                    dest_rest rest)
+                    dst, dest_rest rest)
 
          (* Jmp *)
        | [String opcode], [{ bvars = []; bterm = f };
@@ -583,13 +572,13 @@ let dest_inst_aux dest_reg dest_rest t =
          (* LabelAsm *)
        | [Token label], [{ bvars = []; bterm = v }]
          when Opname.eq op label_asm_opname ->
-            LabelAsm (Symbol.add label, dest_symbol v)
+            LabelAsm (Lm_symbol.add label, dest_var v)
 
          (* LabelRec *)
        | [], [{ bvars = [v1]; bterm = fields };
               { bvars = [v2]; bterm = rest }]
          when Opname.eq op label_rec_opname ->
-            LabelRec (Symbol.add v1, dest_rest fields, Symbol.add v2, dest_rest rest)
+            LabelRec (v1, dest_rest fields, v2, dest_rest rest)
 
          (* LabelDef *)
        | [], [{ bvars = []; bterm = label };
@@ -606,19 +595,19 @@ let dest_inst_aux dest_reg dest_rest t =
          (* LabelFun *)
        | [], [{ bvars = [v]; bterm = code }]
          when Opname.eq op label_fun_opname ->
-            LabelFun (Symbol.add v, dest_rest code)
+            LabelFun (v, dest_rest code)
 
        | _ ->
             raise (RefineError ("not an x86 instruction", TermError t))
 
 let dest_inst_term t =
-   dest_inst_aux dest_symbol (fun rest -> rest) t
+   dest_inst_aux dest_var (fun rest -> rest) t
 
 let dest_inst_spill t =
    dest_inst_aux dest_spill_reg (fun rest -> rest) t
 
 let rec dest_inst t =
-   Inst (dest_inst_aux dest_symbol dest_inst t)
+   Inst (dest_inst_aux dest_var dest_inst t)
 
 (*
  * Get the operands of the term in a list.
@@ -701,12 +690,6 @@ let next_inst inst =
  *)
 
 (*
- * Var of symbol.
- *)
-let mk_symbol_term v =
-   mk_var_term (Symbol.to_string v)
-
-(*
  * Make a number.
  *)
 let num_of_int32 i =
@@ -729,13 +712,13 @@ let mk_spill_reg_term op =
       SpillRegRegister v ->
          mk_term register_opname (**)
             []
-            [{ bvars = []; bterm = mk_symbol_term v }]
+            [{ bvars = []; bterm = mk_var_term v }]
     | SpillRegSpill (v1, v2) ->
          let t =
             mk_term spill_register_opname (**)
                []
-               [{ bvars = []; bterm = mk_symbol_term v1 };
-                { bvars = []; bterm = mk_symbol_term v2 }]
+               [{ bvars = []; bterm = mk_var_term v1 };
+                { bvars = []; bterm = mk_var_term v2 }]
          in
             mk_term register_opname (**)
                []
@@ -752,12 +735,12 @@ let mk_operand_aux mk_reg op =
             []
     | ImmediateLabel (v1, v2) ->
          mk_term immediate_label_opname (**)
-            [Token (Symbol.to_string v1)]
-            [{ bvars = []; bterm = mk_symbol_term v2 }]
+            [Token (string_of_symbol v1)]
+            [{ bvars = []; bterm = mk_var_term v2 }]
     | ImmediateCLabel (v1, v2) ->
          mk_term immediate_clabel_opname (**)
-            [Token (Symbol.to_string v1)]
-            [{ bvars = []; bterm = mk_symbol_term v2 }]
+            [Token (string_of_symbol v1)]
+            [{ bvars = []; bterm = mk_var_term v2 }]
     | Register v ->
          mk_term register_opname (**)
             []
@@ -765,16 +748,16 @@ let mk_operand_aux mk_reg op =
     | SpillMemory v ->
          mk_term spill_memory_opname (**)
             []
-            [{ bvars = []; bterm = mk_symbol_term v }]
+            [{ bvars = []; bterm = mk_var_term v }]
     | SpillRegister (v1, v2) ->
          mk_term spill_register_opname (**)
             []
-            [{ bvars = []; bterm = mk_symbol_term v1 };
-             { bvars = []; bterm = mk_symbol_term v2 }]
+            [{ bvars = []; bterm = mk_var_term v1 };
+             { bvars = []; bterm = mk_var_term v2 }]
     | ContextRegister v ->
          mk_term context_register_opname (**)
             []
-            [{ bvars = []; bterm = mk_symbol_term v }]
+            [{ bvars = []; bterm = mk_var_term v }]
     | MemReg v ->
          mk_term mem_reg_opname (**)
             []
@@ -790,7 +773,7 @@ let mk_operand_aux mk_reg op =
             [{ bvars = []; bterm = mk_reg v1 };
              { bvars = []; bterm = mk_reg v2 }]
 
-let mk_operand_term = mk_operand_aux mk_symbol_term
+let mk_operand_term = mk_operand_aux mk_var_term
 let mk_operand_spill = mk_operand_aux mk_spill_reg_term
 
 let mk_cc_term cc =
@@ -818,12 +801,12 @@ let mk_inst_aux mk_reg mk_rest inst =
          mk_term mov_opname (**)
             []
             [{ bvars = []; bterm = mk_operand_aux mk_reg src };
-             { bvars = [Symbol.to_string dst]; bterm = mk_rest rest }]
+             { bvars = [dst]; bterm = mk_rest rest }]
     | Spill (opcode, src, dst, rest) ->
          mk_term spill_opname (**)
             [String (mk_spill_opcode opcode)]
             [{ bvars = []; bterm = mk_operand_aux mk_reg src };
-             { bvars = [Symbol.to_string dst]; bterm = mk_rest rest }]
+             { bvars = [dst]; bterm = mk_rest rest }]
     | Inst1Mem (opcode, dst, rest) ->
          mk_term inst1_opname (**)
             [String (mk_inst1_opcode opcode)]
@@ -833,7 +816,7 @@ let mk_inst_aux mk_reg mk_rest inst =
          mk_term inst1_opname (**)
             [String (mk_inst1_opcode opcode)]
             [{ bvars = []; bterm = mk_reg src };
-             { bvars = [Symbol.to_string dst]; bterm = mk_rest rest }]
+             { bvars = [dst]; bterm = mk_rest rest }]
     | Inst2Mem (opcode, src, dst, rest) ->
          mk_term inst2_opname (**)
             [String (mk_inst2_opcode opcode)]
@@ -845,14 +828,14 @@ let mk_inst_aux mk_reg mk_rest inst =
             [String (mk_inst2_opcode opcode)]
             [{ bvars = []; bterm = mk_operand_aux mk_reg src1 };
              { bvars = []; bterm = mk_reg src2 };
-             { bvars = [Symbol.to_string dst]; bterm = mk_rest rest }]
+             { bvars = [dst]; bterm = mk_rest rest }]
     | Inst3Reg (opcode, src1, src2, src3, dst2, dst3, rest) ->
          mk_term inst3_opname (**)
             [String (mk_inst3_opcode opcode)]
             [{ bvars = []; bterm = mk_operand_aux mk_reg src1 };
              { bvars = []; bterm = mk_reg src2 };
              { bvars = []; bterm = mk_reg src3 };
-             { bvars = [Symbol.to_string dst2; Symbol.to_string dst3]; bterm = mk_rest rest }]
+             { bvars = [dst2; dst3]; bterm = mk_rest rest }]
     | ShiftMem (opcode, src, dst, rest) ->
          mk_term shift_opname (**)
             [String (mk_shift_opcode opcode)]
@@ -864,7 +847,7 @@ let mk_inst_aux mk_reg mk_rest inst =
             [String (mk_shift_opcode opcode)]
             [{ bvars = []; bterm = mk_operand_aux mk_reg src1 };
              { bvars = []; bterm = mk_reg src2 };
-             { bvars = [Symbol.to_string dst]; bterm = mk_rest rest }]
+             { bvars = [dst]; bterm = mk_rest rest }]
     | Cmp (opcode, src1, src2, rest) ->
          mk_term cmp_opname (**)
             [String (mk_cmp_opcode opcode)]
@@ -882,7 +865,7 @@ let mk_inst_aux mk_reg mk_rest inst =
             [String (mk_set_opcode opcode)]
             [{ bvars = []; bterm = mk_cc_term cc };
              { bvars = []; bterm = mk_reg src };
-             { bvars = [Symbol.to_string dst]; bterm = mk_rest rest }]
+             { bvars = [dst]; bterm = mk_rest rest }]
     | Jmp (opcode, f, args) ->
          mk_term jmp_opname (**)
             [String (mk_jmp_opcode opcode)]
@@ -912,13 +895,13 @@ let mk_inst_aux mk_reg mk_rest inst =
             [{ bvars = []; bterm = mk_rest rest }]
     | LabelAsm (label, v) ->
          mk_term label_asm_opname (**)
-            [Token (Symbol.to_string label)]
-            [{ bvars = []; bterm = mk_symbol_term v }]
+            [Token (string_of_symbol label)]
+            [{ bvars = []; bterm = mk_var_term v }]
     | LabelRec (v1, rest1, v2, rest2) ->
          mk_term label_rec_opname (**)
             []
-            [{ bvars = [Symbol.to_string v1]; bterm = mk_rest rest1 };
-             { bvars = [Symbol.to_string v2]; bterm = mk_rest rest2 }]
+            [{ bvars = [v1]; bterm = mk_rest rest1 };
+             { bvars = [v2]; bterm = mk_rest rest2 }]
     | LabelDef (rest1, rest2, rest3) ->
          mk_term label_def_opname (**)
             []
@@ -931,15 +914,15 @@ let mk_inst_aux mk_reg mk_rest inst =
     | LabelFun (v, rest) ->
          mk_term label_fun_opname (**)
             []
-            [{ bvars = [Symbol.to_string v]; bterm = mk_rest rest }]
+            [{ bvars = [v]; bterm = mk_rest rest }]
 
     | IMov _ ->
          raise (RefineError ("mk_inst_aux", StringError "illegal IMov instruction"))
 
-let mk_inst_term = mk_inst_aux mk_symbol_term (fun rest -> rest)
+let mk_inst_term = mk_inst_aux mk_var_term (fun rest -> rest)
 
 let rec mk_inst (Inst inst) =
-   mk_inst_aux mk_symbol_term mk_inst inst
+   mk_inst_aux mk_var_term mk_inst inst
 
 let mk_inst_spill = mk_inst_aux mk_spill_reg_term (fun rest -> rest)
 

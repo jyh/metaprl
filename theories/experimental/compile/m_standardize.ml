@@ -30,7 +30,7 @@ extends M_ir
 open Printf
 open Lm_debug
 
-open Lm_string_util
+open Lm_symbol
 
 open Refiner.Refiner.TermType
 open Refiner.Refiner.Term
@@ -64,12 +64,12 @@ let standardizeT =
  * Destandardize a term.
  *)
 let destandardize_var table v =
-   try StringTable.find table v with
+   try SymbolTable.find table v with
       Not_found ->
          v
 
 let destandardize_var_term table v =
-   try mk_var_term (StringTable.find table (dest_var v)) with
+   try mk_var_term (SymbolTable.find table (dest_var v)) with
       Not_found ->
          v
 
@@ -93,11 +93,11 @@ let destandardizeT table =
 
 let destandardize_debugT table =
    let vars =
-      StringTable.fold (fun vars v1 v2 ->
+      SymbolTable.fold (fun vars v1 v2 ->
             (v1, v2) :: vars) [] table
    in
    let failT v1 v2 =
-      eprintf "Failed on %s -> %s%t" v1 v2 eflush;
+      eprintf "Failed on %s -> %s%t" (string_of_symbol v1) (string_of_symbol v2) eflush;
       idT
    in
    let rec debugT vars =
@@ -105,7 +105,7 @@ let destandardize_debugT table =
          [] ->
             idT
        | (v1, v2) :: vars ->
-            let table = StringTable.add StringTable.empty v1 v2 in
+            let table = SymbolTable.add SymbolTable.empty v1 v2 in
                ((destandardizeT table thenT debugT vars)
                 orelseT failT v1 v2)
    in

@@ -34,7 +34,6 @@ open Printf
 open Lm_debug
 
 open Lm_symbol
-open Lm_string_util
 
 open M_standardize
 open M_x86_backend
@@ -65,8 +64,7 @@ let flatten_table table =
          SymbolTable.add stable v1 (flatten_var table v2)) SymbolTable.empty table
 
 let table_colors table =
-   SymbolTable.fold (fun stable v1 v2 ->
-         StringTable.add stable (Symbol.to_string v1) (Symbol.to_string v2)) StringTable.empty table
+   SymbolTable.fold SymbolTable.add SymbolTable.empty table
 
 let runT_aux contT p =
    let t = concl p in
@@ -76,7 +74,7 @@ let runT_aux contT p =
             let _ =
                eprintf "*** Spills%t" eflush;
                SymbolSet.iter (fun s ->
-                     eprintf "Spilling %s%t" (Symbol.to_string s) eflush) vars
+                     eprintf "Spilling %s%t" (string_of_symbol s) eflush) vars
             in
                spillT vars thenT renameT thenT contT
        | RegAllocColor vars ->
@@ -84,8 +82,8 @@ let runT_aux contT p =
             let svars = table_colors vars in
             let _ =
                eprintf "*** Colors%t" eflush;
-               StringTable.iter (fun v1 v2 ->
-                     eprintf "Coloring %s -> %s%t" v1 v2 eflush) svars
+               SymbolTable.iter (fun v1 v2 ->
+                     eprintf "Coloring %s -> %s%t" (string_of_symbol v1) (string_of_symbol v2) eflush) svars
             in
                coalesceT vars thenT destandardize_debugT svars
 

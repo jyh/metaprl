@@ -9,8 +9,8 @@ OCAMLINCLUDES =\
 	-I $(ROOT)/support/tactics\
 	-I $(ROOT)/theories/ocaml\
 	-I $(ROOT)/theories/base\
-	-I $(LIBMOJAVE)/naml/stdlib\
-	-I $(LIBMOJAVE)/util
+	-I $(ROOT)/libmojave/stdlib\
+	-I $(ROOT)/libmojave/util
 
 #
 # Library files

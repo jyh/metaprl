@@ -26,14 +26,14 @@
  *)
 extends M_ir
 
-open Lm_string_util
+open Lm_symbol
 
 open Tactic_type.Tacticals
 
 topval standardizeT : tactic
 
-val destandardizeT : string StringTable.t -> tactic
-val destandardize_debugT : string StringTable.t -> tactic
+val destandardizeT : var SymbolTable.t -> tactic
+val destandardize_debugT : var SymbolTable.t -> tactic
 
 (*
  * -*-

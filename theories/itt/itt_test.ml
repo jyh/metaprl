@@ -56,7 +56,7 @@ let test () =
    let subgoals, ext = Tacticals.refine (timingT (rw (repeatC (higherC redexC)) 0)) arg in
       match subgoals with
          [subgoal] ->
-            Simple_print.print_simple_term (Sequent.goal subgoal);
+            Simple_print.SimplePrint.print_simple_term (Sequent.goal subgoal);
             eflush stdout
        | [] ->
             eprintf "No subgoals%t" eflush

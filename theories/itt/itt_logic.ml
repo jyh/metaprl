@@ -22,6 +22,7 @@ open Refiner.Refiner.TermSubst
 open Refiner.Refiner.Refine
 open Refiner.Refiner.RefineError
 open Resource
+open Simple_print
 
 open Tacticals
 open Conversionals
@@ -465,7 +466,7 @@ type formula_args =
 let eprint_info info =
    let print_item = function
       AllTerm (v, t) ->
-         eprintf "\tAllTerm %s: %a\n" v Simple_print.print_simple_term_fp t
+         eprintf "\tAllTerm %s: %a\n" v SimplePrint.print_simple_term_fp t
     | ImpliesTerm ->
          eprintf "\tImpliesTerm\n"
     | IffLeft ->
@@ -495,7 +496,7 @@ let rec assoc v = function
 let check_subst subst =
    let check (v, t) =
       if !debug_auto then
-         eprintf "check_subst: checking %s/%a%t" v Simple_print.print_simple_term_fp t eflush;
+         eprintf "check_subst: checking %s/%a%t" v SimplePrint.print_simple_term_fp t eflush;
       if not (is_var_term t & dest_var t = v) then
          raise (RefineError ("check_subst", StringError "bad match"))
    in
@@ -510,7 +511,7 @@ let instantiate_vars args subst =
    if !debug_auto then
       begin
          let print_subst (v, t) =
-            eprintf "\t%s: %a%t" v Simple_print.print_simple_term_fp t eflush
+            eprintf "\t%s: %a%t" v SimplePrint.print_simple_term_fp t eflush
          in
             eprintf "instantiate_vars: got subst\n";
             List.iter print_subst subst
@@ -655,7 +656,7 @@ let assumT i p =
    let form = collect index in
    let _ =
       if !debug_auto then
-         eprintf "Found assumption: %a%t" Simple_print.print_simple_term_fp form eflush
+         eprintf "Found assumption: %a%t" SimplePrint.print_simple_term_fp form eflush
    in
 
    (* Call intro form on each arg *)

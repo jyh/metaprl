@@ -231,7 +231,7 @@ let substHypT i t p =
    in
    let i, j = hyp_indices p i in
       eprintf "Subst binding: ";
-      Simple_print.prerr_simple_term bind;
+      Simple_print.SimplePrint.prerr_simple_term bind;
       eflush stderr;
       (hypSubstitution i j t bind z
        thenLT [addHiddenLabelT "equality";

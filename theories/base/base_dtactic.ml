@@ -67,7 +67,7 @@ let extract_data tbl =
          try
             (* Find and apply the right tactic *)
             if !debug_dtactic then
-               eprintf "Base_dtactic: lookup %s%t" (Simple_print.string_of_opname (opname_of_term t)) eflush;
+               eprintf "Base_dtactic: lookup %s%t" (SimplePrint.string_of_opname (opname_of_term t)) eflush;
             let _, _, tac = Term_table.lookup "Base_dtactic.extract_data" tbl t in
                tac
          with
@@ -75,7 +75,7 @@ let extract_data tbl =
                raise (RefineError ("extract_data", StringTermError ("D tactic doesn't know about", t)))
       in
          if !debug_dtactic then
-            eprintf "Base_dtactic: applying %s%t" (Simple_print.string_of_opname (opname_of_term t)) eflush;
+            eprintf "Base_dtactic: applying %s%t" (SimplePrint.string_of_opname (opname_of_term t)) eflush;
          tac i p
    in
       d

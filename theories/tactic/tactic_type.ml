@@ -20,6 +20,7 @@
 
 open Nl_debug
 open Printf
+open Simple_print
 
 open Refiner.Refiner
 open Refiner.Refiner.Term
@@ -801,10 +802,10 @@ let nthAssumT i p =
             let goal, hyps = dest_msequent seq in
                eprintf "Tactic_type.nthAssumT:\nHyp: %d%t" i eflush;
                List.iter (fun hyp ->
-                     Simple_print.prerr_simple_term hyp;
+                     SimplePrint.prerr_simple_term hyp;
                      eflush stderr) hyps;
                eprintf "\nGoal: ";
-               Simple_print.prerr_simple_term goal;
+               SimplePrint.prerr_simple_term goal;
                eflush stderr
          end;
       tactic_of_refine_tactic (Refine.nth_hyp i) p

@@ -320,10 +320,10 @@ let extract_data base =
          try
             (* Find and apply the right tactic *)
             if !debug_eqcd then
-               eprintf "Itt_equal.eqcd: looking up %s%t" (Simple_print.string_of_opname (opname_of_term l)) eflush;
+               eprintf "Itt_equal.eqcd: looking up %s%t" (SimplePrint.string_of_opname (opname_of_term l)) eflush;
             let tac = slookup tbl l in
                if !debug_eqcd then
-                  eprintf "Itt_equal.eqcd: found a tactic for %s%t" (Simple_print.string_of_opname (opname_of_term l)) eflush;
+                  eprintf "Itt_equal.eqcd: found a tactic for %s%t" (SimplePrint.string_of_opname (opname_of_term l)) eflush;
                tac p
          with
             Not_found ->

@@ -1,5 +1,5 @@
 doc <:doc< 
-   @spelling{cons consFormation nilFormation}
+   @spelling{cons}
   
    @begin[doc]
    @module[Itt_list]
@@ -124,60 +124,6 @@ prim_rw reduce_listindNil {| reduce |} :
 prim_rw reduce_listindCons {| reduce |} :
    list_ind{('u :: 'v); 'base; h, t, f. 'step['h; 't; 'f]} <-->
       'step['u; 'v; list_ind{'v; 'base; h, t, f. 'step['h; 't; 'f]}]
-doc docoff
-
-(************************************************************************
- * DISPLAY FORMS                                                        *
- ************************************************************************)
-
-prec prec_cons
-prec prec_list
-
-declare search{'a; 'b}
-declare semicolons{'a; 'b}
-declare colons{'a; 'b}
-
-(* Empty list *)
-dform nil_df : except_mode[src] :: nil = `"[]"
-
-(* Search for nil entry *)
-dform cons_df : except_mode[src] :: cons{'a; 'b} =
-   search{cons{'a; nil}; 'b}
-
-(* Keep searching down the list *)
-dform search_df1 : search{'a; cons{'b; 'c}} =
-   search{cons{'b; 'a}; 'c}
-
-(* Found a nil terminator: use bracket notation *)
-dform search_df2 : search{'a; nil} =
-   `"[" semicolons{'a} `"]"
-
-(* No nil terminator, so use :: notation *)
-dform search_df3 : search{'a; 'b} =
-   colons{'a} `"::" slot{'b}
-
-(* Reverse entries and separate with ; *)
-dform semicolons_df1 : semicolons{cons{'a; nil}} =
-   slot{'a}
-
-dform semicolons_df2 : semicolons{cons{'a; 'b}} =
-   semicolons{'b} `";" slot{'a}
-
-(* Reverse entries and separate with :: *)
-dform colons_df1 : colons{cons{'a; nil}} =
-   slot{'a}
-
-dform colons_df2 : colons{cons{'a; 'b}} =
-   colons{'b} `"::" slot{'a}
-
-dform list_df1 : except_mode[src] :: parens :: "prec"[prec_list] :: list{'a} =
-   slot{'a} `" List"
-
-dform list_ind_df1 : except_mode[src] :: parens :: "prec"[prec_list] :: list_ind{'e; 'base; h, t, f. 'step} =
-   szone pushm[1] pushm[3]
-   `"match " slot{'e} `" with" hspace
-   `"  [] ->" hspace slot{'base} popm hspace
-   `"| " pushm[0] slot{'h} `"::" slot{'t} `"." slot{'f} `" ->" hspace slot{'step} popm popm ezone
 
 (************************************************************************
  * RULES                                                                *
@@ -201,13 +147,6 @@ prim listEquality {| intro [] |} :
    [wf] sequent { <H> >- 'A = 'B in univ[i:l] } -->
    sequent { <H> >- list{'A} = list{'B} in univ[i:l] } =
    it
-
-(*
- * @docoff
- *)
-interactive listFormation :
-   sequent { <H> >- univ[i:l] } -->
-   sequent { <H> >- univ[i:l] }
 
 doc <:doc< 
    @begin[doc]
@@ -237,19 +176,6 @@ prim consEquality {| intro []; eqcd |} :
    [wf] sequent { <H> >- 'v1 = 'v2 in list{'A} } -->
    sequent { <H> >- cons{'u1; 'v1} = cons{'u2; 'v2} in list{'A} } =
    it
-
-doc <:doc< 
-   @docoff
-   H >- list(A) ext cons(h; t)
-   by consFormation
-  
-   H >- A ext h
-   H >- list(A) ext t
->>
-interactive consFormation :
-   sequent { <H> >- 'A } -->
-   sequent { <H> >- list{'A} } -->
-   sequent { <H> >- list{'A} }
 
 doc <:doc< 
    @begin[doc]
@@ -338,8 +264,78 @@ doc <:doc<
 interactive listSubtype {| intro [] |} :
    ["subtype"] sequent { <H> >- \subtype{'A1; 'A2} } -->
    sequent { <H> >- \subtype{list{'A1}; list{'A2}}}
-doc <:doc< @docoff >>
+doc docoff
 
+(* Formation rules *)
+
+interactive listFormation :
+   sequent { <H> >- univ[i:l] } -->
+   sequent { <H> >- univ[i:l] }
+
+(*
+   H >- list(A) ext cons(h; t)
+   by consFormation
+  
+   H >- A ext h
+   H >- list(A) ext t
+*)
+interactive consFormation :
+   sequent { <H> >- 'A } -->
+   sequent { <H> >- list{'A} } -->
+   sequent { <H> >- list{'A} }
+
+(************************************************************************
+ * DISPLAY FORMS                                                        *
+ ************************************************************************)
+
+prec prec_cons
+prec prec_list
+
+declare df_search{'a; 'b}
+declare df_semicolons{'a}
+declare df_colons{'a}
+
+(* Empty list *)
+dform nil_df : except_mode[src] :: nil = `"[]"
+
+(* Search for nil entry *)
+dform cons_df : except_mode[src] :: cons{'a; 'b} =
+   df_search{cons{'a; nil}; 'b}
+
+(* Keep searching down the list *)
+dform search_df1 : df_search{'a; cons{'b; 'c}} =
+   df_search{cons{'b; 'a}; 'c}
+
+(* Found a nil terminator: use bracket notation *)
+dform search_df2 : df_search{'a; nil} =
+   `"[" df_semicolons{'a} `"]"
+
+(* No nil terminator, so use :: notation *)
+dform search_df3 : df_search{'a; 'b} =
+   df_colons{'a} `"::" slot{'b}
+
+(* Reverse entries and separate with ; *)
+dform semicolons_df1 : df_semicolons{cons{'a; nil}} =
+   slot{'a}
+
+dform semicolons_df2 : df_semicolons{cons{'a; 'b}} =
+   df_semicolons{'b} `";" slot{'a}
+
+(* Reverse entries and separate with :: *)
+dform colons_df1 : df_colons{cons{'a; nil}} =
+   slot{'a}
+
+dform colons_df2 : df_colons{cons{'a; 'b}} =
+   df_colons{'b} `"::" slot{'a}
+
+dform list_df1 : except_mode[src] :: parens :: "prec"[prec_list] :: list{'a} =
+   slot{'a} `" List"
+
+dform list_ind_df1 : except_mode[src] :: parens :: "prec"[prec_list] :: list_ind{'e; 'base; h, t, f. 'step} =
+   szone pushm[1] pushm[3]
+   `"match " slot{'e} `" with" hspace
+   `"  [] ->" hspace slot{'base} popm hspace
+   `"| " pushm[0] slot{'h} `"::" slot{'t} `"." slot{'f} `" ->" hspace slot{'step} popm popm ezone
 (************************************************************************
  * PRIMITIVES                                                           *
  ************************************************************************)

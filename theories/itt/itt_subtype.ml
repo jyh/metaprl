@@ -1,24 +1,20 @@
 doc <:doc< 
-   @begin[spelling]
-   axiomFormation squashElimination
-   subtypeElimination info
-   @end[spelling]
-  
    @begin[doc]
    @module[Itt_subtype]
   
    The @tt[Itt_subtype] module provides the definition of
    @emph{subtyping}.  Informally a type $T_1$ is a subtype of
-   a type $T_2$, $T_1 @subseteq T_2$, if any two equal elements of $T_1$ are also
+   a type $T_2$, <<'T_1 subtype 'T_2>>, if any two equal elements of $T_1$ are also
    equal in $T_2$.  This is slightly different from the set-theoretic
    definition.  In set theory, the quotiented set $@int_2$ contains
    two equivalence classes; one is the set of even numbers and the other
-   is the set of odd numbers.  In the @Nuprl{} type theory, the two types
+   is the set of odd numbers.  In the @Nuprl type theory, the two types
    have the same elements, but all even numbers are equal in $@int_2$ (and
-   all the odd numbers are also equal).  It follows that $@int @subseteq @int_2$.
+   all the odd numbers are also equal).  It follows that 
+   << (<:doc<@int>>) subtype (<:doc< @int_2 >>) >>.
   
    The subtype-type has trivial computational content, like equality.
-   The subtype contains only the $@it$ term if it is true; it is
+   The subtype contains only the <<it>> term if it is true; it is
    empty otherwise.
    @end[doc]
   
@@ -132,18 +128,6 @@ dform subtype_df2 : mode[src] :: parens :: "prec"[prec_subtype] :: ('A subtype '
  * RULES                                                                *
  ************************************************************************)
 
-(*
- * H >- Ui ext subtype(A; B)
- * by subtypeFormation
- * H >- Ui ext A
- * H >- Ui ext B
- *)
-prim subtypeFormation :
-   ('A : sequent { <H> >- univ[i:l] }) -->
-   ('B : sequent { <H> >- univ[i:l] }) -->
-   sequent { <H> >- univ[i:l] } =
-   \subtype{'A; 'B}
-
 doc <:doc< 
    @begin[doc]
    @rules
@@ -170,7 +154,7 @@ prim subtypeType {| intro [] |} :
 doc <:doc< 
    @begin[doc]
    The intensional interpretation of typehood also means that if
-   the subtype judgment $A @subseteq B$ is true, then both $A$
+   the subtype judgment <<'A subtype 'B>> is true, then both $A$
    and $B$ are types.
    @end[doc]
 >>
@@ -188,8 +172,8 @@ doc <:doc<
    @begin[doc]
    @modsubsection{Introduction}
   
-   The @tt{subtype_axiomFormation} rule gives the introduction form
-   for the subtype judgment.  A type $A @subseteq B$ is true if $A$
+   The @tt[subtype_axiomFormation] rule gives the introduction form
+   for the subtype judgment.  A type <<'A subtype 'B>> is true if $A$
    and $B$ are types, and any term $t @in A$ is also in $B$.  The
    proof extract term is always the $@it$ term.
    @end[doc]
@@ -204,7 +188,7 @@ doc <:doc<
    @begin[doc]
    @modsubsection{Member equality}
    The subtype-type, if true, contains only the term $@it$.
-   For $@it$ to be in $A @subseteq B$, the subtype judgment
+   For $@it$ to be in <<'A subtype 'B>>, the subtype judgment
    must be true.
    @end[doc]
 >>
@@ -217,10 +201,10 @@ doc <:doc<
    @begin[doc]
    @modsubsection{Elimination}
   
-   Subtype elimination has two forms.  The standard @tt{subtypeElimination}
-   form corresponds to induction: the witness $x@colon A @subseteq B$ is
-   replaced with the unique proof term $@it$.  The second rule
-   @tt{subtypeElimination2} takes a witness $a @in A$ and adds the
+   Subtype elimination has two forms.  The standard @tt[subtypeElimination]
+   form corresponds to induction: the witness $x@colon <<'A subtype 'B>>$ is
+   replaced with the unique proof term <<it>>.  The second rule
+   @tt[subtypeElimination2] takes a witness $a @in A$ and adds the
    additional assumption $a @in B$.
    @end[doc]
 >>
@@ -234,6 +218,8 @@ prim subtypeElimination2 'H 'a 'b :
    ('t['y] : sequent { <H>; x: 'A subtype 'B; <J['x]>; 'a='b in 'B >- 'C['x] }) -->
    sequent { <H>; x: 'A subtype 'B; <J['x]> >- 'C['x] } =
    't[it]
+
+doc docoff
 
 (************************************************************************
  * SUBTYPE RESOURCE                                                     *
@@ -251,12 +237,12 @@ doc <:doc<
    @resources
   
    The @tt{Itt_subtype} module defines the @resource[subtype_resource], which is
-   used to prove subtyping judgments.  The @tt{sub_resource_info} argument
-   requires two terms $t_1 @subseteq t_2$ that match the goal term, and
+   used to prove subtyping judgments.  The @tt[sub_resource_info] argument
+   requires two terms <<'t_1 subtype 't_2>> that match the goal term, and
    a tactic that can be used to refine goals of that form.
    @end[doc]
+   @docoff
 >>
-doc <:doc< @docoff >>
 
 (*
  * Improve the subtyping information.
@@ -366,6 +352,16 @@ interactive by_subtype2 'H: (* Add to AutoMustComplete ??? *)
    sequent { <H>; x:'A; <J['x]> >- 'A subtype 'B } -->
    sequent { <H>; x:'A; <J['x]> >- 'x in 'B }
 
+(*
+ * H >- Ui ext subtype(A; B)
+ * by subtypeFormation
+ * H >- Ui ext A
+ * H >- Ui ext B
+ *)
+interactive subtypeFormation :
+   sequent { <H> >- univ[i:l] } -->
+   sequent { <H> >- univ[i:l] } -->
+   sequent { <H> >- univ[i:l] }
 
 (************************************************************************
  * TYPE INFERENCE                                                       *

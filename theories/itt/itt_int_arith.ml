@@ -176,7 +176,8 @@ let hyp2geT = argfunT (fun i p ->
 		let terms,tac=Sequent.get_resource_arg p get_ge_elim_resource (Sequent.get_pos_hyp_num p i) p in
 		if List.length terms > 1 then
 			begin
-				eprintf "Itt_int_arith.hyp2geT: hyp %i - branching is not supported yet" i;
+				if !debug_arith_dtactic then
+					eprintf "Itt_int_arith.hyp2geT: hyp %i - branching is not supported yet@." i;
 				idT
 			end
 		else
@@ -239,7 +240,8 @@ let rec hyp2ge p l = function
 						let l'=append (tac i) len pos l terms in
 						hyp2ge p l' tail
 				 | _ -> (*raise (Invalid_argument "Itt_int_arith: branching is not supported yet")*)
-						eprintf "Itt_int_arith.hyp2ge: hyp %i - branching is not supported yet" i;
+						if !debug_arith_dtactic then
+							eprintf "Itt_int_arith.hyp2ge: hyp %i - branching is not supported yet@." i;
 						hyp2ge p l tail
 			with Not_found ->
 				if !debug_arith_dtactic then

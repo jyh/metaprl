@@ -1117,15 +1117,72 @@ struct
    let is_not_term = is_not_term
    let dest_not = dest_not
 
-   type inference = tactic_arg -> (tactic_value * opt_inf)
-   and opt_inf =
-      Some of inference
-    | None
+   type inference = (term_subst -> tactic) list
+   let empty_inf = []
+   
+   let find_hyp_exn = RefineError("find_hyp_exn", StringError "not found")
 
-   let empty_inf p = idT p, None
-   let append_inf inf t1 t2 = function
-      Fail -> raise (RefineError("Itt_JLogic.create_inf", StringError "failed"))
-    | _ -> raise (Invalid_argument "Itt_JLogic.create_inf")
+   let tryfind_hyp term tact i p =
+      match Sequent.nth_hyp p i with
+         (_,t) when alpha_equal t term -> tact i p
+       | _ -> raise find_hyp_exn
+      
+   let find_hyp term tact = onSomeHypT (tryfind_hyp term tact)
+
+   let tryappend_subst subst t tact i p =
+      tact (match_terms subst t (snd (Sequent.nth_hyp p i))) p
+
+   let append_subst subst t v tact = 
+      match (dest_term t).term_terms with
+         [_;bt] ->
+            let bt = dest_bterm bt in
+            begin match bt.bvars with
+               [dv] ->
+                  onSomeHypT (tryappend_subst subst (subst1 bt.bterm dv v) tact)
+             | _ -> raise (Invalid_argument "Itt_logic.append_subst")
+            end
+       | _ -> raise (Invalid_argument "Itt_logic.append_subst")
+
+   let goal_append_subst subst t v tact p = 
+      match (dest_term t).term_terms with
+         [_;bt] ->
+            let bt = dest_bterm bt in
+            begin match bt.bvars with
+               [dv] ->
+                  tact (match_terms subst (subst1 bt.bterm dv v) (Sequent.concl p)) p
+             | _ -> raise (Invalid_argument "Itt_logic.append_subst")
+            end
+       | _ -> raise (Invalid_argument "Itt_logic.append_subst")
+
+   let append_inf inf hyp inst_term r =
+      match r, inf with
+         Ax,  _ -> (fun _ -> onSomeHypT nthHypT) :: inf
+       | Andl,t::ts -> (fun subst -> (find_hyp hyp dT) thenT t subst) :: ts
+       | Negl,t::ts -> (fun subst -> (find_hyp hyp dT) thenT t subst) :: ts
+       | Orl, t1::t2::ts -> (fun subst -> (find_hyp hyp dT) thenLT [t1 subst; t2 subst]) :: ts
+       | Impl,t1::t2::ts -> (fun subst -> (find_hyp hyp dT) thenLT [t1 subst; t2 subst]) :: ts
+       | Andr,t1::t2::ts -> (fun subst -> dT 0 thenLT [t1 subst; t2 subst]) :: ts
+       | Orr1,t::ts -> (fun subst -> selT 1 (dT 0) thenLT [idT; t subst]) :: ts
+       | Orr2,t::ts -> (fun subst -> selT 2 (dT 0) thenLT [idT; t subst]) :: ts
+       | Impr,t::ts -> (fun subst -> dT 0 thenLT [idT; t subst]) :: ts
+       | Negr,t::ts -> (fun subst -> dT 0 thenLT [idT; t subst]) :: ts
+       | Exr, t::ts ->
+            (fun subst ->
+               withT (apply_subst inst_term subst) (dT 0) thenLT [idT; t subst; idT]) :: ts
+       | Alll,t::ts ->
+            (fun subst ->
+               withT (apply_subst inst_term subst) (find_hyp hyp dT)
+               thenLT [idT; t subst])
+            :: ts
+       | Exl, t::ts ->
+            (fun subst ->
+               (find_hyp hyp dT) thenT append_subst subst hyp inst_term t) :: ts
+       | Allr,t::ts ->
+            (fun subst ->
+               dT 0 thenLT [idT;goal_append_subst subst hyp inst_term t]) :: ts
+    (* | Orr, ->  *)
+       | Fail,_ -> raise (RefineError("Itt_JLogic.create_inf", StringError "failed"))
+       | _ -> raise (Invalid_argument "Itt_JLogic.create_inf")
 end
 
 module ITT_JProver = Jall.JProver(Itt_JLogic)
@@ -1137,9 +1194,12 @@ let rec filter_hyps = function
 
 (* input a list_term of hyps,concl *)
 let jproverT p = 
-   let goal = Sequent.concl p in
-   let seq = explode_sequent goal in
-   fst ( ITT_JProver.prover (filter_hyps (SeqHyp.to_list seq.sequent_hyps)) (SeqGoal.get seq.sequent_goals 1) p)
+   let seq = explode_sequent (Sequent.goal p) in
+   match
+      ITT_JProver.prover (filter_hyps (SeqHyp.to_list seq.sequent_hyps)) (SeqGoal.get seq.sequent_goals 0)
+   with
+      [t] -> t [] p
+    | _ -> raise (Invalid_argument "Problems decoding ITT_JProver.prover proof")
 
 (*
  * -*-

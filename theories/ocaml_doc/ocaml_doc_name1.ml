@@ -1,28 +1,28 @@
 doc <:doc< -*- Mode: text -*-
-  
+
    @begin[doc]
-   @chapter[ocaml_doc_name1]{Variables, naming, and binding}
+   @chapter["ocaml-doc-name1"]{Variables, naming, and binding}
    @end[doc]
-  
+
    ----------------------------------------------------------------
-  
+
    @begin[license]
    Copyright (C) 2000 Jason Hickey, Caltech
-  
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
    as published by the Free Software Foundation; either version 2
    of the License, or (at your option) any later version.
-  
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-  
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-  
+
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
@@ -31,7 +31,7 @@ doc <:doc< -*- Mode: text -*-
 doc <:doc< @docoff >>
 extends Base_theory
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
 
 So far, we can only considered simple expressions, not involving
@@ -96,7 +96,7 @@ What is the value of $z$ in the following definition?
         x + x
 @end[verbatim]
 
-@section[ocaml_doc_functions]{Functions}
+@section["ocaml-doc-functions"]{Functions}
 
 Functions are defined with the @tt{fun} keyword.  The @tt{fun} is
 followed by a sequence of variables that name the arguments, the
@@ -162,7 +162,7 @@ before the equality.
 val sum : int -> int -> int = <fun>
 @end[verbatim]
 
-@subsection[ocaml_doc_scoping]{Scoping and nested functions}
+@subsection["ocaml-doc-scoping"]{Scoping and nested functions}
 
 In ML, functions may be arbitrarily nested.  They may also be defined
 and passed as arguments.  The rule for scoping uses static binding:
@@ -217,7 +217,7 @@ argument.  Static (lexical) scoping determines this: the value of
 @tt{i} is 5---even though @tt{sum2} is evaluated within the @tt{apply}
 function where the value of @tt{i} is determined by the argument $i$.
 
-@subsection[ocaml_doc_recursive_functions]{Recursive functions}
+@subsection["ocaml-doc-recursive-functions"]{Recursive functions}
 
 Suppose we want to define a recursive function: that is, a function
 where the function is used in its own function body.  In functional
@@ -277,7 +277,7 @@ val g : int -> int = <fun>
 - : int = 3
 @end[verbatim]
 
-@subsection[ocaml_doc_hof]{Higher order functions}
+@subsection["ocaml-doc-hof"]{Higher order functions}
 
 Let's consider another definition where a function is passed as an
 argument, and another function is returned.  Given an arbitrary
@@ -338,7 +338,7 @@ val g' : float -> float = <fun>
 - : float = 59.9999339101
 @end[verbatim]
 
-@section[ocaml_doc_naming]{Variable names}
+@section["ocaml-doc-naming"]{Variable names}
 
 As you may have noticed in the previous section, the @bf{'} character
 is a valid character in a variable name.  In general, a variable name
@@ -385,7 +385,7 @@ val ** : float -> int -> float = <fun>
    @end[doc]
 >>
 
-doc <:doc< 
+doc <:doc<
    @docoff
    -*-
    Local Variables:

@@ -3,7 +3,7 @@ doc <:doc< -*- Mode: text -*-
    @spelling{coercions doesn ll}
 
    @begin[doc]
-   @chapter[ocaml_doc_expr1]{Simple Expressions}
+   @chapter["ocaml-doc-expr1"]{Simple Expressions}
    @end[doc]
 
    ----------------------------------------------------------------
@@ -34,7 +34,6 @@ doc <:doc< @docoff >>
 extends Base_theory
 
 doc <:doc<
-
 @begin[doc]
 
 Many functional programming implementations include a significant
@@ -43,26 +42,26 @@ also often include a toploop that can be used to interact with the
 system.  OCaml provides a compiler, a runtime, and a toploop.  By
 default, the toploop is called @tt[ocaml].  The toploop prints a
 prompt (@code{#}), reads an input expression, evaluates it, and prints
-the result .  Expressions in the toploop must be terminated by a
-double-semicolon @code{;;}.  My machine name is @code{kenai}.
+the result .  Expressions in the toploop are terminated by a
+double-semicolon @code{;;}.
 
-@begin[verbatim]
-<kenai 113>ocaml
-        Objective Caml version 2.04
+@begin[iverbatim]
+% ocaml
+        Objective Caml version 3.08.0
 
 # 1 + 4;;
 - : int = 5
 #
-@end[verbatim]
+@end[iverbatim]
 
 The toploop prints the @emph{type} of the result (in this case,
 @code{int}) and the value ($5$).  To exit the toploop, you may type
 the end-of-file character (usually Control-D in Unix, and Control-Z in
-Windows).
+Microsoft Windows).
 
-@section[ocaml_doc_expr1]{Basic expressions}
+@section["ocaml-doc-expr1"]{Basic expressions}
 
-OCaml is a @emph{strongly typed} language: every expression must have
+OCaml is a @emph{strongly typed} language---every expression must have
 a type, and expressions of one type may not be used as expressions in
 another type.  There are no implicit coercions.  Normally, you do not
 have to input the types of expressions.  @emph{Type inference}
@@ -71,15 +70,15 @@ have to input the types of expressions.  @emph{Type inference}
 The basic types are @code{unit}, @code{int}, @code{char}, @code{float},
 @code{bool}, and @code{string}.
 
-@subsection[ocaml_doc_expr_unit]{@tt{unit}: the singleton type}
+@subsection["ocaml-doc-expr-unit"]{@tt{unit}: the singleton type}
 
 The simplest type in OCaml is the @tt{unit} type, which contains one
- element: @code{()}.  This seems to be a rather silly type.  In a functional
-language every function must return a value; unit
-is commonly used as the value of a procedure that computes by
+element: @code{()}.  This seems to be a rather silly type.  However,
+in a functional language every function must return a value; unit is
+commonly used as the value of a procedure that computes by
 side-effect.  It corresponds to the @code{void} type in C.
 
-@subsection[ocaml_doc_expr_int]{@tt{int}: the integers}
+@subsection["ocaml-doc-expr-int"]{@tt{int}: the integers}
 
 The @code{int} type is the type of signed integers: $@ldots, -2, -1,
 0, 1, 2, @ldots$.  The precision is finite.  On a 32-bit machine
@@ -88,36 +87,37 @@ the runtime), and on a 64-bit architecture, the precision is
 63 bits.
 
 There are the usual expressions on integers
-@target[ocaml_doc_expr_plus]{+} (addition),
-@target[ocaml_doc_expr_minus]{-} (subtraction),
-@target[ocaml_doc_expr_star]{*} (multiplication),
-@target[ocaml_doc_expr_div]{/} (division), and
-@target[ocaml_doc_expr_mod]{@tt{mod}} (remainder).
+@target["ocaml-doc-expr-plus"]{+} (addition),
+@target["ocaml-doc-expr-minus"]{-} (subtraction),
+@target["ocaml-doc-expr-star"]{*} (multiplication),
+@target["ocaml-doc-expr-div"]{/} (division), and
+@target["ocaml-doc-expr-mod"]{@tt{mod}} (remainder).
 In addition there are the normal shifting and masking operators on the
 binary representations of the numbers.
 
-@begin[itemize]
+@begin[quote]
+@begin[tabular,ll]
+@line{{$i$ @target["ocaml-doc-expr-lsl"]{@tt{lsl}} $j$}{logical shift left $i @cdot 2^{j}$.}}
 
-@item{$i$ @target[ocaml_doc_expr_lsl]{@tt{lsl}} $j$: logical shift left $i @cdot 2^{j}$.}
+@line{{$i$ @target["ocaml-doc-expr-lsr"]{@tt{lsr}} $j$}{logical shift right $i @div
+   2^{j}$ ($i$ is treated as an unsigned twos-complement number).}}
 
-@item{$i$ @target[ocaml_doc_expr_lsr]{@tt{lsr}} $j$: logical shift right $i @div
-   2^{j}$ ($i$ is treated as an unsigned twos-complement number).}
+@line{{$i$ @target["ocaml-doc-expr-asr"]{@tt{asl}} $j$}{arithmetic shift
+   left $i @cdot 2^{j}$.}}
 
-@item{$i$ @target[ocaml_doc_expr_asr]{@tt{asl}} $j$: arithmetic shift
-   left $i @cdot 2^{j}$.}
+@line{{$i$ @target["ocaml-doc-expr-asr"]{@tt{asr}} $j$}{arithmetic shift right $i @div
+   2^{j}$ (the sign of $i$ is preserved).}}
 
-@item{$i$ @target[ocaml_doc_expr_asr]{@tt{asr}} $j$: arithmetic shift right $i @div
-   2^{j}$ (the sign of $i$ is preserved).}
+@line{{$i$ @target["ocaml-doc-expr-land"]{@tt{land}} $j$}{bitwise-and.}}
 
-@item{$i$ @target[ocaml_doc_expr_land]{@tt{land}} $j$: bitwise-and.}
+@line{{$i$ @target["ocaml-doc-expr-lor"]{@tt{lor}} $j$}{bitwise-or.}}
 
-@item{$i$ @target[ocaml_doc_expr_lor]{@tt{lor}} $j$: bitwise-or.}
+@line{{$i$ @target["ocaml-doc-expr-lxor"]{@tt[lxor]} $j$}{bitwise exclusive-or.}}
 
-@item{$i$ @target[ocaml_doc_expr_lor]{@tt[lxor]} $j$: bitwise exclusive-or.}
+@end[tabular]
+@end[quote]
 
-@end[itemize]
-
-@subsection[ocaml_doc_expr_float]{@tt{float}: the floating-point numbers}
+@subsection["ocaml-doc-expr-float"]{@tt{float}: the floating-point numbers}
 
 The floating-point numbers provide fractional numbers.  The syntax of
 a floating point includes either a decimal point, or an exponent (base
@@ -130,52 +130,49 @@ Here are a few examples.
 
 The integer arithmetic operators @emph{do not work} with floating
 point values.  The corresponding operators include a `.': addition is
-@target[ocaml_doc_expr_plusf]{+.}, subtraction is
-@target[ocaml_doc_expr_minusf]{-.}, multiplication is
-@target[ocaml_doc_expr_starf]{*.}, and division is
-@target[ocaml_doc_expr_divf]{/.}.  There are also coercion functions
-@target[int_of_float]{@tt{int_of_float}} and
-@target[float_of_int]{@tt{float_of_int}}.
+@target["ocaml-doc-expr-plusf"]{+.}, subtraction is
+@target["ocaml-doc-expr-minusf"]{-.}, multiplication is
+@target["ocaml-doc-expr-starf"]{*.}, and division is
+@target["ocaml-doc-expr-divf"]{/.}.  There are also coercion functions
+@target["int-of-float"]{@tt{int_of_float}} and
+@target["float-of-int"]{@tt{float_of_int}}.
 
-@begin[verbatim]
-<kenai 114>!!
-ocaml
-        Objective Caml version 2.04
+@begin[iverbatim]
+% ocaml
+        Objective Caml version 3.08.0
 
 # 31.415926e-1;;
 - : float = 3.1415926
 # float_of_int 1;;
-- : float = 1
+- : float = 1.
 # int_of_float 1.2;;
 - : int = 1
 # 3.1415926 *. 17.2;;
 - : float = 54.03539272
-@end[verbatim]
+@end[iverbatim]
 
-@subsection[ocaml_doc_expr_char]{@tt{char}: the characters}
+@subsection["ocaml-doc-expr-char"]{@tt{char}: the characters}
 
 The character type is implemented as characters from the ASCII
 character set.  The syntax for a character constant uses single
 quotes.
 
-@begin[center]
-@begin[verbatim]
+@begin[iverbatim]
 'a', 'Z', '\120', '\t', '\r', '\n'
-@end[verbatim]
-@end[center]
+@end[iverbatim]
 
-The numerical specification is in @emph{decimal}, so @code{'\120'} is the
-ASCII character @tt{'x'}, not @tt{'P'}.
+The numerical specification is in decimal, so @code{'\120'} is the
+ASCII character @tt{'x'}, not @tt{'P'} as it would be in octal.
 
 There are functions for converting between characters and integers.
-The function @target[char_code]{@tt{Char.code}} returns the integer
+The function @target["char-code"]{@tt{Char.code}} returns the integer
 corresponding to a character, and @target[chr]{@tt{Char.chr}} returns
 the character with the given ASCII code.  The
 @target[lowercase]{@tt["Char.lowercase"]} and
 @target[uppercase]{@tt["Char.uppercase"]} functions give the equivalent
 lower- or upper-case characters.
 
-@subsection[ocaml_doc_expr_string]{@tt{string}: character strings}
+@subsection["ocaml-doc-expr-string"]{@tt{string}: character strings}
 
 Character strings are a built-in type.  Unlike strings in C, character
 strings are not arrays of characters, and they do not use
@@ -185,40 +182,41 @@ length of the string.  The syntax for strings uses double-quotes.
 Characters in the string may use the @code{\ddd} syntax.
 
 @begin[center]
-@begin[verbatim]
-"Hello", " world\000 is not a terminator\n", ""
-@end[verbatim]
+@begin[iverbatim]
+"Hello", " world\000 is not a terminator\n", "\120yz"
+@end[iverbatim]
 @end[center]
 
 The @code{^} operator performs string concatenation.
 
-@begin[verbatim]
-# "Hello " ^ "world\000Not a terminator\n";;
-- : string = "Hello world\000Not a terminator\n"
-# Lm_printf.printf "%s" ("Hello " ^ "world\000Not a terminator\n");;
-Hello worldNot a terminator
-- : unit = ()
-@end[verbatim]
+@begin[iverbatim]
+# "Hello " ^ "world\000 is not a terminator\n";;
+- : string = "Hello world\000 is not a terminator\n"
+# Printf.printf "%s" ("Hello " ^ "world\000 is not a terminator\n");;
+Hello world is not a terminator
+@end[iverbatim]
 
-Strings also allow random access.  The @code{s.[i]} operator gets
-character $i$ from string $s$, and the command @code{s.[i] <- c}
+Strings also allow random access.  The @code{s.[i]} operation gets
+character $i$ from string $s$, and the operation @code{s.[i] <- c}
 replaces character $i$ in string $s$ by character $c$.
 
-@subsection[ocaml_doc_expr_bool]{@tt{bool}: the Boolean values}
+@subsection["ocaml-doc-expr-bool"]{@tt{bool}: the Boolean values}
 
 There are only two Boolean values: @tt{true} and @tt{false}.  Every
 relation returns a Boolean value.  Logical negation is
 performed by the @tt{not} function.  The standard binary relations
 take two values of equal types and compare them in the normal way.
 
-@begin[itemize]
-@item{$x = y$: equality}
-@item{$x <> y$: $x$ is not equal to $y$}
-@item{$x < y$: $x$ is less than $y$}
-@item{$x <= y$: $x$ is no more than $y$}
-@item{$x >= y$: $x$ is no less than $y$}
-@item{$x > y$: $x$ is greater than $y$}
-@end[itemize]
+@begin[quote]
+@begin[tabular,ll]
+@line{{$x$ @code{=}  $y$}{$x$ is equal to $y$}}
+@line{{$x$ @code{<>} $y$}{$x$ is not equal to $y$}}
+@line{{$x$ @code{<}  $y$}{$x$ is less than $y$}}
+@line{{$x$ @code{<=} $y$}{$x$ is no more than $y$}}
+@line{{$x$ @code{>=} $y$}{$x$ is no less than $y$}}
+@line{{$x$ @code{>}  $y$}{$x$ is greater than $y$}}
+@end[tabular]
+@end[quote]
 
 These relations operate on values of @emph{arbitrary} type.  For the
 base types in this chapter, the comparison is what you would expect.
@@ -232,28 +230,28 @@ expression, the clause $3 > 4$ is not evaluated (which makes no
 difference at this point, but will make a difference when we add
 side-effects).
 
-@begin[verbatim]
+@begin[iverbatim]
 # 1 < 2 || 3 > 4;;
 - : bool = true
-@end[verbatim]
+@end[iverbatim]
 
 There is also a conditional operator @tt{if $b$ then $e_1$ else
 $e_2$}.
 
-@begin[verbatim]
+@begin[iverbatim]
 # if 1 < 2 then
      3 + 7
   else
      4;;
 - : int = 10
-@end[verbatim]
+@end[iverbatim]
 
-@section[ocaml_compiling]{Compiling your code}
+@section["ocaml-compiling"]{Compiling your code}
 
 If you wish to compile your code, you should place it in a file with
 the @tt{.ml} suffix.  There are two compilers: @tt[ocamlc] compiles to
 byte-code, and @tt[ocamlopt] compiles to native machine code.  The
-native code is roughly three times faster, but compile time is
+native code is several times faster, but compile time is
 longer.  The usage is similar to @tt{cc}.  The double-semicolon
 terminators are not necessary in the source files; you may omit them
 if the source text is unambiguous.
@@ -267,15 +265,15 @@ includes debugging information in the output file.}
 @item{To link together several files into a single executable, use
 @tt[ocamlc] to link the @tt{.cmo} files.  Normally, you would also
 specify the @tt{-o @emph{program_file}} option to specify the output
-file (the default is @tt{a.out}).  for example, if you have to program
+file (the default is @tt{a.out}).  For example, if you have two program
 files @tt{x.cmo} and @tt{y.cmo}, the command would be:
 
 @begin[center]
-@begin[verbatim]
-<kenai 165>ocamlc -g -o program x.cmo y.cmo
-<kenai 166>./program
+@begin[iverbatim]
+% ocamlc -g -o program x.cmo y.cmo
+% ./program
 ...
-@end[verbatim]
+@end[iverbatim]
 @end[center]}
 @end[itemize]
 
@@ -284,17 +282,16 @@ your programs.  The usage is a lot like @tt{gdb}, with one major
 exception: execution can go backwards.  The @tt{back} command will
 go back one instruction.
 
-@section[ocaml_type_system]{The OCaml type system}
+@section["ocaml-type-system"]{The OCaml type system}
 
-The ML languages are @emph{strictly} typed.  In addition, every
+The ML languages are statically and strictly typed.  In addition, every
 expression has a exactly one type.  In contrast, C is a weakly-typed
-language: values of one type can be coerced to a value of any other
-type, whether the coercion makes sense or not.  Lisp is not an
-explicitly typed
-language: the compiler (or interpreter) will accept any program that
-is syntactically correct; the types are checked at run time.  The type
-system is not necessarily related to safety: both Lisp and ML are
-@emph{safe} languages, while C is not.
+language: values of one type can usually be coerced to a value of any
+other type, whether the coercion makes sense or not.  Lisp is not a
+statically typed language: the compiler (or interpreter) will accept
+any program that is syntactically correct; the types are checked at
+run time.  The type system is not necessarily related to safety: both
+Lisp and ML are @emph{safe} languages, while C is not.
 
 What is ``safety?''  There is a formal definition based on the
 operational semantics of the programming language, but an approximate
@@ -339,7 +336,7 @@ the trivial @tt{unit} type).
 To begin to see how this works, let's look at the conditional
 expression.
 
-@begin[verbatim]
+@begin[iverbatim]
 <kenai 229>cat -b x.ml
     1	if 1 < 2 then
     2	   1
@@ -348,7 +345,7 @@ expression.
 <kenai 230>ocamlc -c x.ml
 File "x.ml", line 4, characters 3-6:
 This expression has type float but is here used with type int
-@end[verbatim]
+@end[iverbatim]
 
 This error message seems rather cryptic: it says that there is a type
 error on line 4, characters 3-6 (the expression @tt{1.3}).  The
@@ -365,27 +362,27 @@ One other issue: the @tt{else} branch is not required in a conditional.
 If it is omitted, the conditional is treated as if the @tt{else} case
 returns the @tt{()} value.  The following code has a type error.
 
-@begin[verbatim]
-<kenai 236>cat -b y.ml
+@begin[iverbatim]
+% cat -b y.ml
     1	if 1 < 2 then
     2	   1
-<kenai 237>ocamlc -c y.ml
+% ocamlc -c y.ml
 File "y.ml", line 2, characters 3-4:
 This expression has type int but is here used with type unit
-@end[verbatim]
+@end[iverbatim]
 
 In this case, the expression @tt[1] is flagged as a type error,
 because it does not have the same type as the omitted @tt{else}
 branch.
 
-@section[ocaml_doc_comments]{Comment convention}
+@section["ocaml-doc-comments"]{Comment convention}
 
 In OCaml, comments are enclosed in matching @tt{({}*} and @tt{*{})}
 pairs.  Comments may be nested, and the comment is treated
 as white space.
 
-   @end[doc]
-   @docoff
+@end[doc]
+@docoff
 >>
 
 (*

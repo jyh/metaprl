@@ -54,7 +54,7 @@ C, but OCaml exceptions are safe.
 To see how this works, consider the @code{List.assoc} function, which
 is defined as follows.
 
-@begin[verbatim]
+@begin[iverbatim]
 # let rec assoc key = function
      (k, v) :: l ->
         if k = key then
@@ -74,7 +74,7 @@ Uncaught exception: Not_found
 - : string = "HelloWorld"
 # "Hello" ^ assoc 3 l;;
 Uncaught exception: Not_found
-@end[verbatim]
+@end[iverbatim]
 
 In the first case, @code{assoc 2 l}, the key is found in the list and
 its value is returned.  In the second case, @code{assoc 3 l}, the key
@@ -86,12 +86,12 @@ Exceptions are declared with the @code{exception} keyword, and their
 syntax has the same form as a constructor declaration in a union type.
 Exceptions are raised with the @code{raise} function.
 
-@begin[verbatim]
+@begin[iverbatim]
 # exception Abort of int * string;;
 exception Abort of int * string
 # raise (Abort (1, "GNU is not Unix"));;
 Uncaught exception: Abort(1, "GNU is not Unix")
-@end[verbatim]
+@end[iverbatim]
 
 Exception handlers have the same form as a @tt{match} pattern match,
 using the @tt{try} keyword.  The syntax is as follows:
@@ -114,7 +114,7 @@ the exception matches is $p_i$, the expression $e_i$ is evaluated and returned
 as the result.  Otherwise, if no pattern matches, the exception is
 propagated to the next exception handler.
 
-@begin[verbatim]
+@begin[iverbatim]
 # try "Hello" ^ assoc 2 l with
      Abort (i, s) -> s
    | Not_found -> "Not_found";;
@@ -126,24 +126,24 @@ propagated to the next exception handler.
 # try "Hello" ^ assoc 3 l with
      Abort (i, s) -> s;;
 Uncaught exception: Not_found
-@end[verbatim]
+@end[iverbatim]
 
 Exceptions are also used to manage control flow.  For example,
 consider the binary trees in the previous chapter.
 
-@begin[verbatim]
+@begin[iverbatim]
 # type 'a btree =
      Node of 'a btree * 'a * 'a btree
    | Leaf;;
 type 'a btree = | Node of 'a btree * 'a * 'a btree | Leaf
-@end[verbatim]
+@end[iverbatim]
 
 Suppose we wish to build a @tt{replace} function that replaces a value
 in the set.  The expression @code{replace x y s} should replace value
 @tt[x] with @tt[y] in tree @tt[s], or raise the exception
 @code{Not_found} if the value does not exist.
 
-@begin[verbatim]
+@begin[iverbatim]
 # let rec replace x y = function
      Leaf -> raise Not_found
    | Node (left, z, right) ->
@@ -162,7 +162,7 @@ in the set.  The expression @code{replace x y s} should replace value
            else
               raise Not_found;;
 val replace : 'a -> 'a -> 'a btree -> 'a btree = <fun>
-@end[verbatim]
+@end[iverbatim]
 
 In this function, the left and right subtrees are recursively
 modified.  The @tt{mod_left} and @tt{mod_right} flags are set iff the

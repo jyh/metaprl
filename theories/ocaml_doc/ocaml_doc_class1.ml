@@ -48,7 +48,7 @@ provides similar features for code re-use.  However, classes and
 objects are often appropriate in programs where extensibility is
 desirable.
 
-@section[basic_classes]{The basic object system}
+@section["basic-classes"]{The basic object system}
 
 The OCaml object system differs in one major way from the classes
 defined in many other languages: the object system includes both class
@@ -59,7 +59,7 @@ class type are signatures for classes, classes are initial
 specifications for objects, and objects are instances of classes
 created with the @tt[new] keyword.
 
-@subsection[class_types]{Class types}
+@subsection["class-types"]{Class types}
 
 A class type is defined using a @tt{class type} definition.  The syntax of
 a class type declaration is as follows.
@@ -87,7 +87,7 @@ position of the point, and another to @tt{set} the position of the
 point.  We will also include a@tt{reset} function to return the point to
 the origin.
 
-@begin[verbatim]
+@begin[iverbatim]
 # class type point_type =
   object
      method get : int
@@ -99,9 +99,9 @@ class type point_type = object
     method set : int -> unit
     method reset : unit
 end
-@end[verbatim]
+@end[iverbatim]
 
-@subsection[class_expressions]{Class expressions}
+@subsection["class-expressions"]{Class expressions}
 
 A class expression gives the definition of a class.  The syntax for an
 class expression uses the @tt{class} keyword.
@@ -125,7 +125,7 @@ need to include a @tt{pos} field that specifies the position of the
 point.  The @tt{get} method should return the @tt{pos} value, and the
 @tt{move} method should add an offset to the position.
 
-@begin[verbatim]
+@begin[iverbatim]
 # class point =
   object
      val mutable pos = 0
@@ -139,7 +139,7 @@ class point : object
    method reset : unit
    method set : int -> unit
 end
-@end[verbatim]
+@end[iverbatim]
 
 The @code{pos <- pos + off} is a @emph{side-effect}: the value of
 @tt{pos} is updated by adding the offset argument.
@@ -147,7 +147,7 @@ The @code{pos <- pos + off} is a @emph{side-effect}: the value of
 Note that the @tt{pos} field is @emph{visible} in the class type.  To
 get the correct class type, we need to add a type constraint.
 
-@begin[verbatim]
+@begin[iverbatim]
 # class point : point_type =
   object
      val mutable pos = 0
@@ -156,7 +156,7 @@ get the correct class type, we need to add a type constraint.
      method reset = pos <- 0
   end;;
 class point : point_type
-@end[verbatim]
+@end[iverbatim]
 
 Class expressions are templates, like function bodies.  The
 expressions in a class expression are not evaluated when the class is
@@ -169,7 +169,7 @@ Objects are the values created from classes using the @tt{new}
 keyword.  The methods in the object can be accessed by using the
 @code{#} operator.
 
-@begin[verbatim]
+@begin[iverbatim]
 # let p = new point;;
 val p : point = <obj>
 # p#get;;
@@ -182,15 +182,15 @@ val p : point = <obj>
 val p2 : point = <obj>
 # p2#get;;
 - : int = 0
-@end[verbatim]
+@end[iverbatim]
 
-@subsection[parameterized_classes]{Parameterized class expressions}
+@subsection["parameterized-classes"]{Parameterized class expressions}
 
 Class expressions can be parameterized in OCaml, using a @tt{fun}
 expression.  For example, suppose we want to specify the initial
 position of the point as an argument to the class expression.
 
-@begin[verbatim]
+@begin[iverbatim]
 # class make_point_class (initial_pos : int) =
      object
         val mutable pos = initial_pos
@@ -205,13 +205,13 @@ class make_point_class : int ->
       method reset : unit
       method set : int -> unit
    end
-@end[verbatim]
+@end[iverbatim]
 
 We have to constrain the argument @tt{initial_pos} to be an @tt{int}:
 otherwise the object would be polymorphic.  Specific classes can be
 defined by application.
 
-@begin[verbatim]
+@begin[iverbatim]
 # class point7 = make_point_class 7;;
 class point7 : make_point_class
 # let p = new point7;;
@@ -222,13 +222,13 @@ val p : point7 = <obj>
 - : unit = ()
 # p#get;;
 - : int = 0
-@end[verbatim]
+@end[iverbatim]
 
 A parameterized class can also include @tt{let} definitions in the
 function body.  For example, we can lift the @tt{pos} field out of the
 class and use a reference cell instead.
 
-@begin[verbatim]
+@begin[iverbatim]
 # class make_point_class (initial_pos : int) =
      let pos = ref initial_pos in
         object
@@ -242,13 +242,13 @@ class make_point_class : int ->
       method reset : unit
       method set : int -> unit
    end
-@end[verbatim]
+@end[iverbatim]
 
 The body of the @tt{class} definition is not evaluated initially---it
 is evaluated at object instantiation time.  All @tt{point} objects will
 have separate positions.
 
-@begin[verbatim]
+@begin[iverbatim]
 # let p1 = new point7;;
 val p1 : point7 = <obj>
 # let p2 = new point7;;
@@ -257,9 +257,9 @@ val p2 : point7 = <obj>
 - : unit = ()
 # p2#get;;
 - : int = 7
-@end[verbatim]
+@end[iverbatim]
 
-@section[class_polymorphism]{Polymorphism}
+@section["class-polymorphism"]{Polymorphism}
 
 Class types, class expressions, and methods can also be polymorphic.
 For example, consider the parameterized class @code{make_point_class}
@@ -267,7 +267,7 @@ we just defined.  If we do not constrain the type of argument, we get
 a type of reference cells.  The syntax of a polymorphic class includes
 the type parameters in square brackets after the @tt{class} keyword.
 
-@begin[verbatim]
+@begin[iverbatim]
 # class ['a] make_ref_cell (x : 'a) =
   object
      val mutable contents = x
@@ -297,7 +297,7 @@ val s : string_ref = <obj>
 - : unit = ()
 # s#get;;
 - : string = "Hello"
-@end[verbatim]
+@end[iverbatim]
 
 @section[inheritance]{Inheritance}
 
@@ -312,7 +312,7 @@ The self parameter is defined after the @tt{object} keyword.  We make
 a new class @tt{movable_point} using the @tt{inherit} keyword to
 inherit the @tt{point} class definition.
 
-@begin[verbatim]
+@begin[iverbatim]
 # class movable_point =
   object (self)
      inherit point
@@ -336,15 +336,15 @@ val p : movable_point = <obj>
 - : unit = ()
 # p#get;;
 - : int = 12
-@end[verbatim]
+@end[iverbatim]
 
-@subsection[multiple_inheritance]{Multiple inheritance}
+@subsection["multiple-inheritance"]{Multiple inheritance}
 
 Classes can also be defined by inheriting from multiple classes.  For
 example, let's define a point class that also has a color.  The
 @tt{color} class can be defined in the normal way.
 
-@begin[verbatim]
+@begin[iverbatim]
 # type color = Black | Red | Green | Blue;;
 type color = | Black | Red | Green | Blue
 # class color =
@@ -367,12 +367,12 @@ val c : color = <obj>
 - : unit = ()
 # c#get_color;;
 - : color = Green
-@end[verbatim]
+@end[iverbatim]
 
 To define a colored point we @tt{inherit} from both classes.  Objects
 in this class will have the methods and values defined in both classes.
 
-@begin[verbatim]
+@begin[iverbatim]
 # class colored_point =
   object
      inherit point
@@ -395,14 +395,14 @@ val cp : colored_point = <obj>
 # cp#get;;
 - : int = 0
 # cp#get_color;;
-@end[verbatim]
+@end[iverbatim]
 
 Note that the compiler produced a warning message when the colored
 point is created.  The @tt{point} and @tt{color} @emph{both}
 define a method called @tt{reset}.  Which definition does the colored
 point use?
 
-@begin[verbatim]
+@begin[iverbatim]
 # cp#set 7;;
 - : unit = ()
 # cp#set_color Red;;
@@ -413,7 +413,7 @@ point use?
 - : int = 7
 # cp#get_color;;
 - : color = Black
-@end[verbatim]
+@end[iverbatim]
 
 As usual, the compiler chooses the @emph{last} definition of the
 method.
@@ -424,7 +424,7 @@ The correct version of the colored point should call @emph{both} the
 we need to include a name for the object in each of the @tt{inherit}
 declarations.
 
-@begin[verbatim]
+@begin[iverbatim]
 class colored_point =
   object
       inherit point as p
@@ -458,12 +458,12 @@ val cp : colored_point = <obj>
 - : int = 0
 # cp#get_color;;
 - : color = Black
-@end[verbatim]
+@end[iverbatim]
 
 The compiler still produces a warning message, but this time the
 @tt{reset} method works correctly.
 
-@subsection[virtual_methods]{Virtual methods}
+@subsection["virtual-methods"]{Virtual methods}
 
 Virtual methods can be used to postpone the implementation of methods
 for definition in subclasses.  For example, suppose we wish to make a
@@ -476,7 +476,7 @@ the @tt{get} and @tt{set} methods.  This class must be declared as
 @tt{virtual} because it can't be instantiated (the @tt{get} and
 @tt{set} methods are not implemented).
 
-@begin[verbatim]
+@begin[iverbatim]
 # class virtual movable =
   object (self)
      method virtual get : int
@@ -493,12 +493,12 @@ class virtual movable :
 # let m = new movable;;
 Characters 8-19:
 One cannot create instances of the virtual class movable
-@end[verbatim]
+@end[iverbatim]
 
 Now to create the class @code{movable_point}, we combine the classes
 by multiple inheritance.
 
-@begin[verbatim]
+@begin[iverbatim]
 # class movable_point =
   object
      inherit point
@@ -520,7 +520,7 @@ val p : movable_point = <obj>
 - : unit = ()
 # p#get;;
 - : int = 12
-@end[verbatim]
+@end[iverbatim]
 
 Note that a @tt{virtual} method in OCaml does not mean the same thing
 as a @tt{virtual} declaration in C++.  In C++, the @tt{virtual}
@@ -536,7 +536,7 @@ type of any of its ancestors.  Coercions in OCaml must be made
 explicitly using the @code{:>} operator, which requires two class types: the
 type of the object, and the type of the object after the coercion.
 
-@begin[verbatim]
+@begin[iverbatim]
 # let p = (cp : colored_point :> point);;
 val p : point = <obj>
 # p#get;;
@@ -545,20 +545,20 @@ val p : point = <obj>
 Characters 0-1:
 This expression has type point
 It has no method get_color
-@end[verbatim]
+@end[iverbatim]
 
 If the class type can be inferred, the first type can be omitted.
 
-@begin[verbatim]
+@begin[iverbatim]
 # let p = (cp :> point);;
 val p : point = <obj>
-@end[verbatim]
+@end[iverbatim]
 
 In OCaml, objects can also be coerced to any class type that has fewer
 methods.  For example, suppose we want a ``read only'' colored point
 without the @tt{set} and @tt{set_color} methods.
 
-@begin[verbatim]
+@begin[iverbatim]
 # class type read_only_point =
   object
      method get : int
@@ -579,7 +579,7 @@ val ro_p : funny_point = <obj>
 Characters 0-4:
 This expression has type read_only_point
 It has no method set
-@end[verbatim]
+@end[iverbatim]
 
 @subsection[superclassing]{Superclassing, or @tt{typecase}}
 
@@ -611,7 +611,7 @@ actual value.  We will call this method @tt{typecase}, and it will have type
 @tt{unit} (since it returns the result by exception).  The @tt{point}
 class implements the @tt{typecase} method as follows.
 
-@begin[verbatim]
+@begin[iverbatim]
 # class type point_type =
   object
      method get : int
@@ -644,7 +644,7 @@ exception Point of point_type
     method set : int -> unit
     method typecase : unit
   end
-@end[verbatim]
+@end[iverbatim]
 
 The @tt{typecase} method raises the @tt{Point} exception.  Note that
 the @tt{self} parameter must be coerced to @code{point_type}.
@@ -652,7 +652,7 @@ the @tt{self} parameter must be coerced to @code{point_type}.
 For the @code{colored_point}, we perform a similar operation.  First,
 we define the type of colored points, and the exception.
 
-@begin[verbatim]
+@begin[iverbatim]
 # class type colored_point_type =
   object
      inherit point
@@ -671,11 +671,11 @@ class type colored_point_type =
   end
 # exception ColoredPoint of colored_point_type;;
 exception ColoredPoint of colored_point_type
-@end[verbatim]
+@end[iverbatim]
 
 Next, we define the class, and override the @tt{typecase} method.
 
-@begin[verbatim]
+@begin[iverbatim]
 # class colored_point =
   object (self)
       inherit point as p
@@ -700,12 +700,12 @@ class colored_point :
     method set_color : color -> unit
     method typecase : unit
   end
-@end[verbatim]
+@end[iverbatim]
 
 Now, the @tt{typecase} method can be used to determine the class type
 of a point.
 
-@begin[verbatim]
+@begin[iverbatim]
 # let p1 = new point;;
 val p1 : point = <obj>
 # let p2 = new colored_point;;
@@ -718,11 +718,11 @@ Uncaught exception: Point(_)
 Uncaught exception: ColoredPoint(_)
 # p3#typecase;;
 Uncaught exception: ColoredPoint(_)
-@end[verbatim]
+@end[iverbatim]
 
 At this point, we can define the @code{point_print} printing function.
 
-@begin[verbatim]
+@begin[iverbatim]
 # let point_print p =
      try p#typecase with
         Point p ->
@@ -748,23 +748,23 @@ Point: position = 7
 ColoredPoint: position = 0, color = green
 ColoredPoint: position = 0, color = green
 - : unit = ()
-@end[verbatim]
+@end[iverbatim]
 
 There are two things to note.  First, the @code{point_print} function
 takes @emph{any} object with a @tt{typecase} method---no just points.
 Second, we include a default exception case: if the @tt{typecase}
 method returns some other exception, the argument is invalid.
 
-@section[functional_object]{Functional objects}
+@section["functional-object"]{Functional objects}
 
 In all of the examples we have given so far, the methods work by
 side-effect.  OCaml can also be used to implement @emph{functional}
 objects, where method updates produce new values by copying the self
 object.  The syntax for a functional update uses the
 
-@begin[verbatim]
+@begin[iverbatim]
 {< ... >}
-@end[verbatim]
+@end[iverbatim]
 
 notation to produce a copy of the current object with @emph{the same
 type} as the current object, with updated fields.  The use of the update operator is
@@ -773,7 +773,7 @@ important---it is the only way to preserve the current object's type.
 Let's build a functional version of points.  We include the @tt{pos}
 field, which the @tt{set} method replaces.
 
-@begin[verbatim]
+@begin[iverbatim]
 # class point =
   object
      val pos = 0
@@ -794,7 +794,7 @@ val p1 : point = <obj>
 val p2 : point = <obj>
 # p2#get;;
 - : int = 5
-@end[verbatim]
+@end[iverbatim]
 
 Note the type of the @code{set} method: on an object of type
 @code{'a}, it takes an integer argument, and returns a new object of
@@ -802,7 +802,7 @@ type @code{'a}.
 
 The @code{color} class can also be modified so that it is functional.
 
-@begin[verbatim]
+@begin[iverbatim]
 # class color =
   object
      val color = Black
@@ -817,7 +817,7 @@ class color :
     method reset : 'a
     method set_color : color -> 'a
   end
-@end[verbatim]
+@end[iverbatim]
 
 What about the @code{colored_point} example?  For the @code{reset}
 function, we need to invoke the @tt{reset} method from both the
@@ -825,7 +825,7 @@ function, we need to invoke the @tt{reset} method from both the
 this directly; for this purpose, we will need to make use of
 @tt{private} methods, so that we can name the @tt{reset} functions.
 
-@begin[verbatim]
+@begin[iverbatim]
 # class colored_point =
   object (self)
      inherit point as p
@@ -849,11 +849,11 @@ class colored_point :
     method set : int -> 'a
     method set_color : color -> 'a
   end
-@end[verbatim]
+@end[iverbatim]
 
 The resulting object has the expected behavior.
 
-@begin[verbatim]
+@begin[iverbatim]
 # let p1 = new colored_point;;
 val p1 : colored_point = <obj>
 # let p2 = p1#set 7;;
@@ -872,7 +872,7 @@ val p4 : colored_point = <obj>
 - : int = 0
 # p4#get_color;;
 - : color = Black
-@end[verbatim]
+@end[iverbatim]
 
 @end[doc]
 @docoff

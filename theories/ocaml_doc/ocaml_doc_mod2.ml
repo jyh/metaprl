@@ -1,33 +1,33 @@
 doc <:doc< -*- Mode: text -*-
-  
+
    @begin[spelling]
    Arg ArgName ArgSig Elt EltSig FsetSig Int IntSet MakeFset
    SigName arg doesn elt int ll mem namespace sig struct val
    @end[spelling]
-  
+
    @begin[doc]
    @chapter[modules]{The OCaml Module System}
    @end[doc]
-  
+
    ----------------------------------------------------------------
-  
+
    @begin[license]
    Copyright (C) 2000 Jason Hickey, Caltech
-  
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
    as published by the Free Software Foundation; either version 2
    of the License, or (at your option) any later version.
-  
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-  
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-  
+
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
@@ -36,7 +36,7 @@ doc <:doc< -*- Mode: text -*-
 doc <:doc< @docoff >>
 extends Base_theory
 
-doc <:doc< 
+doc <:doc<
 @begin[doc]
 
 The compilation units discussed in the Chapter @refchapter[files] are not the
@@ -78,7 +78,7 @@ In the following sections, we'll describe the three different parts of
 the module system by developing the finite set example in the context
 of the module system.
 
-@section[modules_signatures]{Module signatures}
+@section["modules-signatures"]{Module signatures}
 
 A module signature is declared with a @code{module type} declaration.
 
@@ -110,7 +110,7 @@ declaration for the set type, and method declarations for the @tt{empty},
 @tt{mem}, and @tt{insert} methods.  For this example, we'll return to
 the OCaml toploop, which will display the types of the modules we define.
 
-@begin[verbatim]
+@begin[iverbatim]
 # module type FsetSig =
   sig
      type 'a t
@@ -125,7 +125,7 @@ module type FsetSig =
     val mem : 'a -> 'a t -> bool
     val insert : 'a -> 'a t -> 'a t
   end
-@end[verbatim]
+@end[iverbatim]
 
 The @tt{include} statement can be used to create a new signature that
 @emph{extends} an existing signature.  For example, suppose we would
@@ -135,7 +135,7 @@ entire signature for finite sets followed by the @tt{delete}
 declaration.  The @tt{include} statement performs this inclusion
 automatically.
 
-@begin[verbatim]
+@begin[iverbatim]
 # module type FsetDSig =
   sig
      include Fset
@@ -149,9 +149,9 @@ module type FsetDSig =
     val insert : 'a -> 'a t -> 'a t
     val delete : 'a -> 'a t -> 'a t
   end
-@end[verbatim]
+@end[iverbatim]
 
-@section[modules_structures]{Module structures}
+@section["modules-structures"]{Module structures}
 
 Module structures are defined with the @tt{module} keyword.
 
@@ -176,9 +176,9 @@ of a @code{.ml} file.  It can include any of the following.
 
 Let's try this with the balanced binary tree example (the complete
 definitions for the @tt{balance} and @tt{insert} functions are given
-in Section @refsubsection[method_definitions]).
+in Section @refsubsection["method-definitions"]).
 
-@begin[verbatim]
+@begin[iverbatim]
 # module Fset =
   struct
      type color =
@@ -215,9 +215,9 @@ module Fset :
 - : 'a Fset.t = Fset.Leaf
 # Fset.balance;;
 - : Fset.color * 'a Fset.t * 'a * 'a Fset.t -> 'a Fset.t = <fun>
-@end[verbatim]
+@end[iverbatim]
 
-@subsection[sig_assignment]{Assigning a signature}
+@subsection["sig-assignment"]{Assigning a signature}
 
 Note that the default signature assigned to the structure exposes
 @emph{all} of the types and functions in the structure, including the
@@ -233,7 +233,7 @@ a signature to a structure, we include a type constraint using a
 In the finite set example, we want to assign the @code{FsetSig}
 signature to the module.
 
-@begin[verbatim]
+@begin[iverbatim]
 # module Fset : FsetSig =
   struct
      type color =
@@ -255,7 +255,7 @@ module Fset : FsetSig
 # Fset.balance;;
 Characters 0-12:
 Unbound value Fset.balance
-@end[verbatim]
+@end[iverbatim]
 
 When we assign this signature, the type definition for @code{'a t}
 becomes @emph{abstract}, and the @tt{balance} function is no longer
@@ -298,19 +298,19 @@ We'll have the @tt{compare} function return one of three kinds of values:
    the second.}
 @end[itemize]
 
-@begin[verbatim]
+@begin[iverbatim]
 module type EltSig =
 sig
    type elt
    val compare : elt -> elt -> int
 end
-@end[verbatim]
+@end[iverbatim]
 
 The finite set signature @code{FsetSig} must also be modified to used
 a specific element type @tt{elt}.  Note that the set itself is no
 longer polymorphic, it is defined for a specific type of elements.
 
-@begin[verbatim]
+@begin[iverbatim]
 module type FsetSig =
 sig
    type elt
@@ -320,14 +320,14 @@ sig
    val mem : elt -> t -> bool
    val insert : elt -> t -> t
 end
-@end[verbatim]
+@end[iverbatim]
 
 Next, we redefine the set implementation as a functor.  The
 implementation must be modified to include a type definition for the
 @tt{elt} type, and the @tt{mem} and @tt{insert} functions must be
 modified to make use of the comparison function from @code{Elt}.
 
-@begin[verbatim]
+@begin[iverbatim]
 # module MakeFset (Elt : EltSig) =
   struct
      type elt = Elt.elt
@@ -372,14 +372,14 @@ module MakeFset :
       val balance : color * t * elt * t -> t
       val insert : elt -> t -> t
     end
-@end[verbatim]
+@end[iverbatim]
 
 Note the return type.  The argument type is right: the functor takes
 an argument module @tt{Elt} with signature @tt{EltSig}.  But the
 returned module makes the implementation fully visible.  To fix this
 problem, we need to add a type constraint using the @code{:} modifier.
 
-@begin[verbatim]
+@begin[iverbatim]
 # module MakeFset (Elt : EltSig) : FsetSig =
   struct
      type elt = Elt.elt
@@ -391,16 +391,16 @@ problem, we need to add a type constraint using the @code{:} modifier.
      let insert x s = ...
   end;;
 module MakeFset : functor(Elt : EltSig) -> FsetSig
-@end[verbatim]
+@end[iverbatim]
 
-@subsection[using_functor]{Using a functor}
+@subsection["using-functors"]{Using a functor}
 
 To @emph{use} the module produced by the functor, we need to
 @emph{apply} it to a specific module implementation the
 @tt{EltSig} signature.  Let's define a comparison function for a
 finite set of integers.  The comparison function is straightforward.
 
-@begin[verbatim]
+@begin[iverbatim]
 # module Int =
   struct
      type elt = int
@@ -415,7 +415,7 @@ finite set of integers.  The comparison function is straightforward.
 module Int : sig type elt = int val compare : int -> int -> int end
 # Int.compare 3 5;;
 - : int = -1
-@end[verbatim]
+@end[iverbatim]
 
 We @emph{must not} give the @tt{Int} module the signature @tt{EltSig}.
 In the @tt{EltSig} signature, the @tt{elt} type is @emph{abstract}.
@@ -423,19 +423,19 @@ Since there is no way to create a value of the abstract type @tt{elt},
 it would become impossible to use the @tt{compare} function, and the
 module would become useless.
 
-@begin[verbatim]
+@begin[iverbatim]
 # module Int' = (Int : EltSig);;
 module Int' : EltSig
 # Int'.compare 3 5;;
 Characters 13-14:
 This expression has type int but is here used with type Int'.elt
-@end[verbatim]
+@end[iverbatim]
 
 A functor is applied to an argument with the syntax
 @tt{@emph{Functor_name} (@emph{Arg_name})}.  To build a finite set of
 integers, we apply the @tt{MakeFset} functor to the @tt{Int} module.
 
-@begin[verbatim]
+@begin[iverbatim]
 # module IntSet = MakeFset (Int);;
 module IntSet :
   sig
@@ -447,11 +447,11 @@ module IntSet :
   end
 # IntSet.empty;;
 - : IntSet.t = <abstr>
-@end[verbatim]
+@end[iverbatim]
 
 Note the type definitions for @tt{elt} and @tt{t}: both types are abstract.
 
-@subsection[sharing_constraints]{Sharing constraints}
+@subsection["sharing-constraints"]{Sharing constraints}
 
 In its current state, the @tt{IntSet} module is actually useless.
 Once again, the problem is with type abstraction: the @tt{elt} type is
@@ -460,12 +460,12 @@ OCaml compiler remembers that the type of elements @tt{elt} is
 produced by an application of the functor, but it doesn't know that
 the argument type in the @tt{Int} module was @tt{int}.
 
-@begin[verbatim]
+@begin[iverbatim]
 # IntSet.insert 5 IntSet.empty;;
 Characters 14-15:
 This expression has type int but is here used with type
   IntSet.elt = MakeFset(Int).elt
-@end[verbatim]
+@end[iverbatim]
 
 To fix this problem, we can't add a type definition in the
 @tt{FsetSig} module, since we want to be able to construct finite sets
@@ -474,7 +474,7 @@ problem is to add a constraint on the functor type that specifies that
 the @tt{elt} type produced by the functor is the @emph{same} as the
 @tt{elt} type in the argument.
 
-@subsection[proper_definition]{An implementation that works}
+@subsection["proper-definition"]{An implementation that works}
 
 These kind of type constraints are called @emph{sharing constraints}.
 The argument and value of the @tt{MakeFset} functor ``share'' the same
@@ -482,7 +482,7 @@ The argument and value of the @tt{MakeFset} functor ``share'' the same
 type} constraint to a signature.  The corrected definition of the
 @tt{MakeFset} functor is as follows.
 
-@begin[verbatim]
+@begin[iverbatim]
 # module MakeFset (Elt : EltSig)
     : FsetSig with type elt = Elt.elt =
   struct
@@ -503,13 +503,13 @@ module MakeFset :
       val mem : elt -> t -> bool
       val insert : elt -> t -> t
     end
-@end[verbatim]
+@end[iverbatim]
 
 The toploop now displays the correct element specification.  When we
 redefine the @tt{IntSet} module, we get a working version of finite
 sets of integers.
 
-@begin[verbatim]
+@begin[iverbatim]
 # module IntSet = MakeFset (Int);;
 module IntSet :
   sig
@@ -528,7 +528,7 @@ val s : IntSet.t = <abstr>
 - : bool = true
 # mem 4 s;;
 - : bool = false
-@end[verbatim]
+@end[iverbatim]
 
 @end[doc]
 @docoff

@@ -1,33 +1,33 @@
 doc <:doc< -*- Mode: text -*-
-  
+
    @begin[spelling]
    acts Fibonacci inexhaustive ll patt wildcard
    aren expr
    @end[spelling]
-  
+
    @begin[doc]
-   @chapter[ocaml_doc_patt1]{Basic Pattern Matching}
+   @chapter["ocaml-doc-patt1"]{Basic Pattern Matching}
    @end[doc]
-  
+
    ----------------------------------------------------------------
-  
+
    @begin[license]
    Copyright (C) 2000 Jason Hickey, Caltech
-  
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
    as published by the Free Software Foundation; either version 2
    of the License, or (at your option) any later version.
-  
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-  
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-  
+
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
@@ -36,7 +36,7 @@ doc <:doc< -*- Mode: text -*-
 doc <:doc< @docoff >>
 extends Base_theory
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
 
 One of the more powerful features of ML is that it uses @emph{pattern
@@ -63,7 +63,7 @@ matching.  Fibonacci numbers are defined inductively: $@tt{fib}@space
 0 = 0$, $@tt{fib}@space 1 = 1$, and for all other natural numbers $i$,
 $@tt{fib}@space i = @tt{fib}(i - 1) + @tt{fib}(i - 2)$.
 
-@begin[verbatim]
+@begin[iverbatim]
 # let rec fib i =
      match i with
         0 -> 0
@@ -78,7 +78,7 @@ val fib : int -> int = <fun>
 - : int = 2
 # fib 6;;
 - : int = 8
-@end[verbatim]
+@end[iverbatim]
 
 In this code, the argument $i$ is compared against the constants 0 and
 1.  If either of these cases match, the return value is $i$.  The final
@@ -92,7 +92,7 @@ the following code produces a result you might not expect.  The first
 case matches all expressions, returning the value matched.  The
 toploop issues warning for the second and third cases.
 
-@begin[verbatim]
+@begin[iverbatim]
 # let zero = 0;;
 # let one = 1;;
 # let rec fib i =
@@ -109,7 +109,7 @@ val fib : int -> int = <fun>
 - : int = 10
 # fib 2002;;
 - : int = 2002
-@end[verbatim]
+@end[iverbatim]
 
 The general form of matching, where the function body is a @tt{match}
 expression applied to the function argument, is quite common in ML
@@ -119,7 +119,7 @@ case, using the @tt{function} keyword (instead of @tt{fun}).  A
 is used in a pattern match.  The @tt{fib} definition using
 @tt{function} is as follows.
 
-@begin[verbatim]
+@begin[iverbatim]
 # let rec fib = function
      0 -> 0
    | 1 -> 1
@@ -129,7 +129,7 @@ val fib : int -> int = <fun>
 - : int = 1
 # fib 6;;
 - : int = 8
-@end[verbatim]
+@end[iverbatim]
 
 Patterns can also be used with values having the other basic types,
 like characters, strings, and Boolean values.  In addition, multiple
@@ -137,7 +137,7 @@ patterns @emph{without variables} can be used for a single body.  For
 example, one way to check for capital letters is with the following
 function definition.
 
-@begin[verbatim]
+@begin[iverbatim]
 # let is_uppercase = function
    'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G' | 'H'
  | 'I' | 'J' | 'K' | 'L' | 'M' | 'N' | 'O' | 'P'
@@ -151,13 +151,13 @@ val is_uppercase : char -> bool = <fun>
 - : bool = true
 # is_uppercase 'm';;
 - : bool = false
-@end[verbatim]
+@end[iverbatim]
 
 It is rather tedious to specify @emph{all} the letters one at a time.
 OCaml also allows pattern @emph{ranges} $c_1 .. c_2$,
 where $c_1$ and $c_2$ are character constants.
 
-@begin[verbatim]
+@begin[iverbatim]
 # let is_uppercase = function
      'A' .. 'Z' -> true
    | c -> false;;
@@ -166,7 +166,7 @@ val is_uppercase : char -> bool = <fun>
 - : bool = true
 # is_uppercase 'm';;
 - : bool = false
-@end[verbatim]
+@end[iverbatim]
 
 Note that the pattern variable $c$ in these functions acts as a
 ``wildcard'' pattern to handle all non-uppercase characters.  The
@@ -177,7 +177,7 @@ is a wildcard pattern that matches anything.  It is not a variable (so
 it can't be used in an expression).  The @tt{is_uppercase} function
 would normally be written this way.
 
-@begin[verbatim]
+@begin[iverbatim]
 # let is_uppercase = function
      'A' .. 'Z' -> true
    | _ -> false;;
@@ -186,15 +186,15 @@ val is_uppercase : char -> bool = <fun>
 - : bool = true
 # is_uppercase 'm';;
 - : bool = false
-@end[verbatim]
+@end[iverbatim]
 
-@section[patt1_incomplete_match]{Incomplete matches}
+@section["patt1-incomplete-match"]{Incomplete matches}
 
 You might wonder about what happens if all the cases are not
 considered.  For example, what happens if we leave off the default
 case in the @tt{is_uppercase} function?
 
-@begin[verbatim]
+@begin[iverbatim]
 # let is_uppercase = function
      'A' .. 'Z' -> true;;
 Characters 19-49:
@@ -202,7 +202,7 @@ Warning: this pattern-matching is not exhaustive.
 Here is an example of a value that is not matched:
 'a'
 val is_uppercase : char -> bool = <fun>
-@end[verbatim]
+@end[iverbatim]
 
 The OCaml compiler and toploop are verbose about inexhaustive
 patterns.  They warn when the pattern match is inexhaustive, and even
@@ -210,12 +210,12 @@ suggest a case that is not matched.  An inexhaustive set of patterns
 is usually an error---what would happen if we applied the
 @tt{is_uppercase} function to a non-uppercase character?
 
-@begin[verbatim]
+@begin[iverbatim]
 # is_uppercase 'M';;
 - : bool = true
 # is_uppercase 'm';;
 Uncaught exception: Match_failure("", 19, 49)
-@end[verbatim]
+@end[iverbatim]
 
 Again, OCaml is fairly strict.  In the case where the pattern does not
 match, it raises an @emph{exception} (we'll see more about exceptions
@@ -231,7 +231,7 @@ ignore the compiler.  For example, in the following function, we know
 that a complete match is not needed if the @tt{is_odd} function is
 always applied to nonnegative numbers.
 
-@begin[verbatim]
+@begin[iverbatim]
 # let is_odd i =
      match i mod 2 with
         0 -> false
@@ -245,7 +245,7 @@ val is_odd : int -> bool = <fun>
 - : bool = true
 # is_odd 12;;
 - : bool = false
-@end[verbatim]
+@end[iverbatim]
 
 However, @emph{do not} ignore the warning!  If you do, you will find
 that you begin to ignore @emph{all} the compiler warnings---both real
@@ -257,7 +257,7 @@ takes a string argument that identifies the name of the place where
 the failure occurred.  You can generate an exception with the
 @emph{raise} construction.
 
-@begin[verbatim]
+@begin[iverbatim]
 # let is_odd i =
      match i mod 2 with
         0 -> false
@@ -268,9 +268,9 @@ val is_odd : int -> bool = <fun>
 - : bool = true
 # is_odd (-1);;
 Uncaught exception: Invalid_argument("is_odd")
-@end[verbatim]
+@end[iverbatim]
 
-@section[patt1_everywhere]{Patterns are everywhere}
+@section["patt1-everywhere"]{Patterns are everywhere}
 
 It may not be obvious at this point, but patterns are used in
 @emph{all} the binding mechanisms, including the @tt{let} and @tt{fun}
@@ -289,7 +289,7 @@ always be inexhaustive (except for the @tt{()} pattern).  However,
 they will be handy when we introduce tuples and records in the next
 chapter.
 
-@begin[verbatim]
+@begin[iverbatim]
 # let is_one = fun 1 -> true;;
 Characters 13-26:
 Warning: this pattern-matching is not exhaustive.
@@ -310,7 +310,7 @@ Uncaught exception: Match_failure("", 11, 19)
 val is_unit : unit -> bool = <fun>
 # is_unit ();;
 - : bool = true
-@end[verbatim]
+@end[iverbatim]
 
 @end[doc]
 @docoff

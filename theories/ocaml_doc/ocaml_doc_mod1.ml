@@ -106,7 +106,7 @@ The data structure defines a type for sets, and three methods: an
 insertion function.  The complete signature is defined below; we'll
 discuss each of the parts in the following sections.
 
-@begin[verbatim]
+@begin[iverbatim]
 (* The abstract type of sets *)
 type 'a t
 
@@ -118,9 +118,9 @@ val mem : 'a -> 'a t -> bool
 
 (* Insertion is functional *)
 val insert : 'a -> 'a t -> 'a t
-@end[verbatim]
+@end[iverbatim]
 
-@subsection[sig_types]{Type declarations}
+@subsection["sig-types"]{Type declarations}
 
 Type declarations in a signature can be either @emph{transparent} or
 @emph{abstract}.  An abstract type declaration declares a type without
@@ -139,11 +139,11 @@ would make the type visible to other program modules.  For example, if
 we intend to use the unbalanced tree representation, we might include
 the following type declaration in the signature.
 
-@begin[verbatim]
+@begin[iverbatim]
 type 'a t =
    Node of 'a t * 'a * 'a t
  | Leaf
-@end[verbatim]
+@end[iverbatim]
 
 By doing this, we would make the binary tree structure visible
 to other program components; they can now use the type definition to
@@ -158,7 +158,7 @@ binary tree are ordered.  If the type definition is visible, it would
 be possible for other program modules to construct trees that violate
 the invariant, leading to errors that may be difficult to find.
 
-@subsection[method_declarations]{Method declarations}
+@subsection["method-declarations"]{Method declarations}
 
 The method declarations include all the functions and values that are
 visible to other program modules.  For the @tt{Fset} module, the
@@ -193,7 +193,7 @@ The definitions do not have to occur in the same order as declarations in the
 signature, but there must be a definition for every item in the
 signature.
 
-@subsection[type_definitions]{Type definitions}
+@subsection["type-definitions"]{Type definitions}
 
 In the implementation, definitions must be given for each of the types
 in the signature.  The implementation may also include other types.
@@ -204,7 +204,7 @@ For the @tt{Fset} module, let's use the red-black implementation of
 balanced binary trees.  We need two type definitions: the definition
 of the @tt{Red} and @tt{Black} labels, and the tree definition itself.
 
-@begin[verbatim]
+@begin[iverbatim]
 type color =
    Red
  | Black
@@ -212,33 +212,33 @@ type color =
 type 'a t =
    Node of color * 'a t * 'a * 'a t
  | Leaf
-@end[verbatim]
+@end[iverbatim]
 
 The @tt{color} type is a private type, the @code{'a t} type gives the
 type definition for the abstract type declaration @code{type 'a t} in
 the signature.
 
-@subsection[method_definitions]{Method definitions}
+@subsection["method-definitions"]{Method definitions}
 
 In the implementation we need to implement each of the methods
 declared in the signature.  The @tt{empty} method is easy: the
 @tt{Leaf} node is used to implement the empty set.
 
-@begin[verbatim]
+@begin[iverbatim]
 let empty = Leaf
-@end[verbatim]
+@end[iverbatim]
 
 The @tt{mem} method performs a search over the binary tree.  The nodes
 in the tree are ordered, and we can use a binary search.
 
-@begin[verbatim]
+@begin[iverbatim]
 let rec mem x = function
    Leaf -> false
  | Node (_, a, y, b) ->
       if x < y then mem x a
       else if x > y then mem x b
       else true
-@end[verbatim]
+@end[iverbatim]
 
 The implement the @tt{insert} method we need two methods: one is the
 actual @tt{insert} function, and another is the helper function
@@ -246,7 +246,7 @@ actual @tt{insert} function, and another is the helper function
 functions in the implementation.  The @tt{balance} function will be
 private, since it is not declared in the signature.
 
-@begin[verbatim]
+@begin[iverbatim]
 let balance = function
    Black, Node (Red, Node (Red, a, x, b), y, c), z, d ->
       Node (Red, Node (Black, a, x, b), y, Node (Black, c, z, d))
@@ -270,7 +270,7 @@ let insert x s =
       match ins s with  (* guaranteed to be non-empty *)
          Node (_, a, y, b) -> Node (Black, a, y, b)
        | Leaf -> raise (Invalid_argument "insert")
-@end[verbatim]
+@end[iverbatim]
 
 @end[doc]
 >>
@@ -278,7 +278,7 @@ let insert x s =
 doc <:doc<
 @begin[doc]
 
-@section[using_comp_unit]{Building a program}
+@section["using-comp-unit"]{Building a program}
 
 Once a compilation unit is defined, the types and methods can be used
 in other files by prefixing the names of the methods with the
@@ -306,7 +306,7 @@ methods.  By default, the @code{test.mli} file should be empty.  The
 
 We'll implement this as a @tt{loop} method.
 
-@begin[verbatim]
+@begin[iverbatim]
 let loop () =
    let set = ref Fset.empty in
       try
@@ -325,7 +325,7 @@ let loop () =
             ()
 
 let _ = loop ()
-@end[verbatim]
+@end[iverbatim]
 
 There are a few things to note.  First, we need to catch the
 @code{End_of_file} exception that is raised when the end of the input
@@ -353,19 +353,19 @@ implementations.
 For the @tt{fset} module, the signature can be compiled with the
 following command.
 
-@begin[verbatim]
+@begin[iverbatim]
 % ocamlc -c fset.mli
-@end[verbatim]
+@end[iverbatim]
 
 If there are no errors in the signature, this step produces a file
 called @code{fset.cmi}.
 
 The implementations are compiled with the following command.
 
-@begin[verbatim]
+@begin[iverbatim]
 % ocamlc -c fset.ml
 % ocamlc -c test.ml
-@end[verbatim]
+@end[iverbatim]
 
 If this step is successful, the compiler produces the files
 @code{fset.cmo} and @code{test.cmo}.
@@ -373,9 +373,9 @@ If this step is successful, the compiler produces the files
 The modules can now be linked into a complete program using the
 @tt[ocamlc] linker.  The command is as follows.
 
-@begin[verbatim]
+@begin[iverbatim]
 % ocamlc -o test fset.cmo test.cmo
-@end[verbatim]
+@end[iverbatim]
 
 The linker requires all of the @code{.cmo} files to be included in the
 program.  The order of these files is important!  Each module in the
@@ -383,15 +383,15 @@ link line can refer only to the modules listed @emph{before} it.  If
 we reverse the order of the modules on the link line, we will get an
 error.
 
-@begin[verbatim]
+@begin[iverbatim]
 % ocamlc -o test test.cmo fset.cmo
 Error while linking test.cmo: Reference to undefined global `Fset'
 Exit 2
-@end[verbatim]
+@end[iverbatim]
 
 Once the program is linked, we can run it.
 
-@begin[verbatim]
+@begin[iverbatim]
 % ./test
 set> hello
 hello added to the set
@@ -403,9 +403,9 @@ set> x
 x added to the set
 set> world
 world is already in the set
-@end[verbatim]
+@end[iverbatim]
 
-@subsection[main]{Where is the ``main'' function?}
+@subsection[main]{Where is the main function?}
 
 Unlike C programs, OCaml program do not have a ``@tt{main}''
 function.  When an OCaml program is evaluated, all the statements in
@@ -416,27 +416,27 @@ _ = loop ()} statement in the @code["test.ml"] file is an example: it
 evaluates the @code{loop} function.  Informally, this is the main
 loop; it is the last expression to be executed in the program.
 
-@subsection[common_errors]{Some common errors}
+@subsection["common-errors"]{Some common errors}
 
 When a @code[".ml"] file is compiled, the compiler compares the
 implementation with the signature in the @code{.cmi} file.  If a
 definition does not match the signature, the compiler will print an
 error and refuse to compile the file.
 
-@subsubsection[type_mismatch_error]{Type errors}
+@subsubsection["type-mismatch-error"]{Type errors}
 
 For example, suppose we had reversed the order of arguments in the
 @code{Fset.insert} function so that the set argument is first.
 
-@begin[verbatim]
+@begin[iverbatim]
 let insert s x =
    ...
-@end[verbatim]
+@end[iverbatim]
 
 When we compile the file, we get an error.  The compiler prints the
 types of the mismatched values, and exits with an error code.
 
-@begin[verbatim]
+@begin[iverbatim]
 % ocamlc -c fset.ml
 The implementation fset.ml does not match the interface fset.cmi:
 Values do not match:
@@ -444,9 +444,9 @@ Values do not match:
 is not included in
   val insert : 'a -> 'a t -> 'a t
 Exit 2
-@end[verbatim]
+@end[iverbatim]
 
-@subsubsection[missing_def_error]{Missing definition errors}
+@subsubsection["missing-def-error"]{Missing definition errors}
 
 Another common error occurs when a method declared in the signature is
 not defined in the implementation.  For example, suppose we had
@@ -454,14 +454,14 @@ defined an @tt{add} method rather than an @tt{insert} method.  In this
 case, the compiler prints the name of the missing method, and exits
 with an error code.
 
-@begin[verbatim]
+@begin[iverbatim]
 % ocamlc -c fset.ml
 The implementation fset.ml does not match the interface fset.cmi:
 The field `insert' is required but not provided
 Exit 2
-@end[verbatim]
+@end[iverbatim]
 
-@subsubsection[type_def_errors]{Type definition mismatch errors}
+@subsubsection["type-def-errors"]{Type definition mismatch errors}
 
 @emph{Transparent} type definitions in the signature can also cause an
 error if the type definition in the implementation does not match.
@@ -469,13 +469,13 @@ Suppose we were to export the definition for @code{type 'a t}.  We
 need to include exactly the same definition in the implementation.
 A correct @code{fset.mli} file would contain the following definition.
 
-@begin[verbatim]
+@begin[iverbatim]
 type color
 
 type 'a t =
    Node of color * 'a t * 'a * 'a t
  | Leaf
-@end[verbatim]
+@end[iverbatim]
 
 Note that we must include a type definition for @code{color}, since it
 is used in the definition of the set type @code{'a t}.  The type
@@ -484,18 +484,18 @@ definition for @code{color} may be transparent or abstract.
 Now, suppose we reorder the constructors in the interface definition
 for @code{'a t} by placing the @code{Leaf} constructor first.
 
-@begin[verbatim]
+@begin[iverbatim]
 type color
 
 type 'a t =
    Leaf
  | Node of color * 'a t * 'a * 'a t
-@end[verbatim]
+@end[iverbatim]
 
 When we compile the file, the compiler will produce an error with
 the mismatched types.
 
-@begin[verbatim]
+@begin[iverbatim]
 % ocamlc -c fset.mli
 % ocamlc -c fset.ml
 The implementation fset.ml does not match the interface fset.cmi:
@@ -504,9 +504,9 @@ Type declarations do not match:
 is not included in
   type 'a t = | Leaf | Node of color * 'a t * 'a * 'a t
 Exit 2
-@end[verbatim]
+@end[iverbatim]
 
-@subsubsection[compile_errors]{Compile dependency errors}
+@subsubsection["compile-errors"]{Compile dependency errors}
 
 The compiler will also produce errors if the compile state is
 inconsistent.  Each time an interface is compile, all the files that
@@ -515,14 +515,14 @@ update the @code{fset.mli} file, and recompile it and the
 @code{test.ml} file (but we forget to recompile the @code{fset.ml}
 file).  The compiler produces the following error.
 
-@begin[verbatim]
+@begin[iverbatim]
 % ocamlc -c fset.mli
 % ocamlc -c test.ml
 % ocamlc -o test fset.cmo test.cmo
 Files test.cmo and fset.cmo make inconsistent
 assumptions over interface Fset
 Exit 2
-@end[verbatim]
+@end[iverbatim]
 
 It takes a little work to detect the cause of the error.  The compiler
 says that the files make inconsistent assumptions for interface
@@ -548,7 +548,7 @@ exceptions, and methods.  For example, the @code{test.ml} module can
 be somewhat simplified by using the @code{open} statements for the
 @code{Lm_printf} and @code{Fset} modules.
 
-@begin[verbatim]
+@begin[iverbatim]
 
 let loop () =
    let set = ref empty in
@@ -568,7 +568,7 @@ let loop () =
             ()
 
 let _ = loop ()
-@end[verbatim]
+@end[iverbatim]
 
 Sometimes multiple @tt{open}ed modules will define the same name.  In
 this case, the @emph{last} module with an @tt{open} statement will
@@ -577,7 +577,7 @@ form @tt{@emph{Module_name}.@emph{name}}) may still be used even if
 the module has been opened.  Fully qualified names can be used to
 access values that may have been hidden by an @tt{open} statement.
 
-@subsection[open_errors]{A note about @tt{open}}
+@subsection["open-errors"]{A note about @tt{open}}
 
 Be careful with the use of @tt{open}.  In general, fully qualified
 names provide more information, specifying not only the name of the
@@ -625,17 +625,17 @@ program variables can be examined.
 To use @code{ocamldebug}, the program must be compiled with the
 @code{-g} flag.
 
-@begin[verbatim]
+@begin[iverbatim]
 % ocamlc -c -g fset.mli
 % ocamlc -c -g fset.ml
 % ocamlc -c -g test.ml
 % ocamlc -o test -g fset.cmo test.cmo
-@end[verbatim]
+@end[iverbatim]
 
 The debugger is invoked using by specifying the program to be debugged
 on the @code{ocamldebug} command line.
 
-@begin[verbatim]
+@begin[iverbatim]
 % ocamldebug ./test
 	Objective Caml Debugger version 2.04
 
@@ -647,7 +647,7 @@ break delete set show info frame backtrace bt up down last
 list load_printer install_printer remove_printer
 
 (ocd)
-@end[verbatim]
+@end[iverbatim]
 
 There are several commands that can be used.  The basic commands are
 @code{run}, @code{step}, @code{next}, @code{break}, @code{list},
@@ -676,7 +676,7 @@ numbers.  Let's set a breakpoint in the @code{loop} function, which
 starts in line 27 in the @code{Test} module.  We'll want to stop at
 the first line of the function.
 
-@begin[verbatim]
+@begin[iverbatim]
 (ocd) break @ Test 28
 Loading program... done.
 Breakpoint 1 at 24476 : file Test, line 28 column 4
@@ -689,12 +689,12 @@ Time : 8 - pc : 24488 - module Test
 29       <|b|>try
 (ocd) p set
 set : string Fset.t ref = {contents=Fset.Leaf}
-@end[verbatim]
+@end[iverbatim]
 
 Next, let's set a breakpoint after the next input line is read and
 continue execution to that point.
 
-@begin[verbatim]
+@begin[iverbatim]
 (ocd) list
 27 let loop () =
 28    let set = ref Fset.empty in
@@ -718,13 +718,13 @@ Breakpoint : 2
 34                <|b|>if Fset.mem line !set then
 (ocd) p line
 line : string = "hello"
-@end[verbatim]
+@end[iverbatim]
 
 When we run the program, the evaluation prompts us for an input line,
 and we can see the value of the line in the @code{line} variable.
 Let's continue and view the set after the line is added.
 
-@begin[verbatim]
+@begin[iverbatim]
 (ocd) n
 Time : 24 - pc : 24628 - module Test
 34                if Fset.mem line !set<|a|> then
@@ -744,7 +744,7 @@ Time : 142 - pc : 24508 - module Test
 set : string Fset.t ref =
   {contents=Fset.Node (<abstr>, Fset.Leaf, "hello", Fset.Leaf)}
 (ocd)
-@end[verbatim]
+@end[iverbatim]
 
 This value seems to be correct.  Next, suppose we want to go back a
 descend into the @code{Fset.mem} function.  We can go back to time
@@ -752,7 +752,7 @@ descend into the @code{Fset.mem} function.  We can go back to time
 and use the @code{step} command to descend into the membership
 function.
 
-@begin[verbatim]
+@begin[iverbatim]
 (ocd) goto 22
 set> hello
 Time : 22 - pc : 24604 - module Test
@@ -765,7 +765,7 @@ Time : 23 - pc : 22860 - module Fset
 Time : 24 - pc : 24628 - module Test
 34                if Fset.mem line !set<|a|> then
 (ocd)
-@end[verbatim]
+@end[iverbatim]
 
 Note that when we go back in time, the program prompts us again for an
 input line.  This is due to way time travel is implemented in

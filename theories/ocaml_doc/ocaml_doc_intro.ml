@@ -1,33 +1,33 @@
 doc <:doc< -*- Mode: text -*-
-  
+
    @begin[spelling]
    API CS Caml LCF ML Milner Monolithic Scalability Vino rec scalability
    stance filesystems ll gcd updatable coercions destructors vs
    @end[spelling]
-  
+
    @begin[doc]
-   @chapter[ocaml_doc_intro]{Introduction}
+   @chapter["ocaml-doc-intro"]{Introduction}
    @end[doc]
-  
+
    ----------------------------------------------------------------
-  
+
    @begin[license]
    Copyright (C) 2000 Jason Hickey, Caltech
-  
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
    as published by the Free Software Foundation; either version 2
    of the License, or (at your option) any later version.
-  
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-  
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-  
+
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
@@ -36,7 +36,7 @@ doc <:doc< -*- Mode: text -*-
 doc <:doc< @docoff >>
 extends Base_theory
 
-doc <:doc< 
+doc <:doc<
 @begin[doc]
 
 This document is an introduction to ML programming, specifically for
@@ -116,31 +116,68 @@ language easier to understand and explain.}}
 
 @end[itemize]
 
-@section[ocaml_doc_intro_functional]{Functional and imperative languages}
-
-The ML languages are @emph{semi-functional}, which means that the normal
-programming style is functional, but the language includes assignment and
-side-effects.
-
-To compare ML with an imperative language, here is how Euclid's
-algorithm would normally be written in an imperative language like C.
-
+@begin[figure,"c-vs-ocaml",t]
+@begin[center]
+@begin[tabular,ll]
+@line{{
+@begin[minipage,"2.5in",t]
 @begin[verbatim]
 /*
-  * Determine the greatest common divisor of two positive
-  * numbers a and b.  We assume a>b.
-  */
+ * A C function to
+ * determine the greatest
+ * common divisor of two
+ * positive numbers a and b.
+ * We assume a>b.
+ */
 int gcd(int a, int b)
 {
    int r;
 
-   while(r = a % b) {
+   while((r = a % b) != 0) {
       a = b;
       b = r;
    }
    return b;
 }
 @end[verbatim]
+@end[minipage]}
+
+{@begin[minipage,"2.0in",t]
+@begin[verbatim]
+(*
+ * An OCaml function to
+ * determine the greatest
+ * common divisor of two
+ * positive numbers a and b.
+ * We assume a>b.
+ *)
+let rec gcd a b =
+   let r = a mod b in
+      if r = 0 then
+         b
+      else
+         gcd b r
+@end[verbatim]
+@end[minipage]}}
+@end[tabular]
+@end[center]
+@begin[caption]
+C is an imperative programming language, while @OCaml is functional.
+The code on the left is a C program to compute the greatest common divisor
+of two natural numbers.  The code on the right is equivalent @OCaml code,
+written functionally.
+@end[caption]
+@end[figure]
+
+@section["ocaml-doc-intro-functional"]{Functional and imperative languages}
+
+The ML languages are @emph{semi-functional}, which means that the normal
+programming style is functional, but the language includes assignment and
+side-effects.
+
+To compare ML with an imperative language, a comparison of two simple
+implementations of Euclid's algorithm is shown in Figure
+@reffigure["c-vs-ocaml"].
 
 In a language like C, the algorithm is normally implemented as a loop,
 and progress is made by modifying the state.  Reasoning about this
@@ -153,15 +190,6 @@ The steps are the same, but there are no side-effects.  The @tt{let}
 keyword specifies a definition, the @tt{rec} keyword specifies that
 the definition is recursive, and the @tt{gcd a b} defines a function
 with two arguments $a$ and $b$.
-
-@begin[verbatim]
-let rec gcd a b =
-   let r = a mod b in
-      if r = 0 then
-         b
-      else
-         gcd b r
-@end[verbatim]
 
 In ML, programs rarely use assignment or side-effects except for I/O.
 Functional programs have some nice properties: one is that data
@@ -176,7 +204,7 @@ if there are too many of these data structures.  We take a moderate
 approach.  We use imperative code when necessary, but its use is
 discouraged.
 
-@section[ocaml_doc_intro_organization]{Organization}
+@section["ocaml-doc-intro-organization"]{Organization}
 
 This document is organized as a @emph{user guide} to programming in
 OCaml.  It is not a reference manual: there is already an online
@@ -185,7 +213,7 @@ experience using an imperative programming language like C; I'll point
 out the differences between ML and C in the cases that seem
 appropriate.
 
-@section[ocaml_doc_intro_additional_source]{Additional Sources of Information}
+@section["ocaml-doc-intro-additional-source"]{Additional Sources of Information}
 
 This document was originally used for a course in compiler
 construction at Caltech.  The course material, including exercises, is
@@ -199,7 +227,7 @@ The author can be reached at @email{jyh@cs.caltech.edu}.
 @end[doc]
 >>
 
-doc <:doc< 
+doc <:doc<
    @docoff
    -*-
    Local Variables:

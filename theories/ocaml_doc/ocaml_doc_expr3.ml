@@ -1,42 +1,42 @@
 doc <:doc< -*- Mode: text -*-
-  
+
    @begin[spelling]
    btree iff log Okasaki ll deprecated rebalancing
    @end[spelling]
-  
+
    @begin[doc]
    @chapter[unions]{Unions}
    @end[doc]
-  
+
    ----------------------------------------------------------------
-  
+
    @begin[license]
    Copyright (C) 2000 Jason Hickey, Caltech
-  
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
    as published by the Free Software Foundation; either version 2
    of the License, or (at your option) any later version.
-  
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-  
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-  
+
    Author: Jason Hickey
    @email{jyh@cs.caltech.edu}
    @end[license]
-  
+
    @docoff
 >>
 
 extends Base_theory
 
-doc <:doc< 
+doc <:doc<
 @begin[doc]
 
 Disjoint unions, also called @emph{tagged unions} or @emph{variant
@@ -49,12 +49,12 @@ expressed as a type definition using the @tt{type} keyword.  The type
 is recursively defined, and it contains a type parameter @code{'a} for
 the type of elements.
 
-@begin[verbatim]
+@begin[iverbatim]
 # type 'a btree =
      Node of 'a * 'a btree * 'a btree
    | Leaf;;
 type 'a btree = | Node of 'a * 'a btree * 'a btree | Leaf
-@end[verbatim]
+@end[iverbatim]
 
 The name of the type is @tt{btree}, and the type parameterization uses
 prefix notation @code{'a btree}.  The cases are separated by a
@@ -73,7 +73,7 @@ constructor would be a function of type
 For technical reasons, OCaml does not allow
 constructors with arguments to be used as values.
 
-@begin[verbatim]
+@begin[iverbatim]
 # Leaf;;
 - : 'a btree = Leaf
 # Node (1, Leaf, Leaf);;
@@ -81,14 +81,14 @@ constructors with arguments to be used as values.
 # Node;;
 The constructor Node expects 3 argument(s),
 but is here applied to 0 argument(s)
-@end[verbatim]
+@end[iverbatim]
 
 A value with a union type is a value having @emph{one of} the cases.
 The value can be recovered through pattern matching.  For example, a
 function that counts the number of interior nodes in a value of type
 @code{'a btree} would be defined as follows.
 
-@begin[verbatim]
+@begin[iverbatim]
 # let rec cardinality = function
      Leaf -> 0
    | Node (_, left, right) ->
@@ -96,9 +96,9 @@ function that counts the number of interior nodes in a value of type
 val cardinality : 'a btree -> int = <fun>
 # cardinality (Node (1, Node (2, Leaf, Leaf), Leaf));;
 - : int = 2
-@end[verbatim]
+@end[iverbatim]
 
-@section[unbalanced_btree]{Unbalanced binary trees}
+@section["unbalanced-btree"]{Unbalanced binary trees}
 
 To see how this works, lets build a simple data structure for
 unbalanced binary trees that represent sets of values of type
@@ -108,7 +108,7 @@ The empty set is just a @code{Leaf}.  To add an element to a set @tt{s}, we
 create a new @code{Node} with a @code{Leaf} as a left-child, and
 @tt{s} as the right child.
 
-@begin[verbatim]
+@begin[iverbatim]
 # let empty = Leaf;;
 val empty : 'a btree = Leaf
 # let insert x s = Node (x, Leaf, s);;
@@ -124,13 +124,13 @@ val s : int btree =
     Node (5, Leaf,
       Node (7, Leaf,
         Node (11, Leaf, Node (13, Leaf, Leaf)))))
-@end[verbatim]
+@end[iverbatim]
 
 The membership function is defined by induction on the tree: an
 element $x$ is a member of a tree iff the tree is a @code{Node} and $x$
 is the label, or $x$ is in the left or right subtrees.
 
-@begin[verbatim]
+@begin[iverbatim]
 # let rec mem x = function
      Leaf -> false
    | Node (y, left, right) ->
@@ -140,9 +140,9 @@ val mem : 'a -> 'a btree -> bool = <fun>
 - : bool = true
 # mem 12 s;;
 - : bool = false
-@end[verbatim]
+@end[iverbatim]
 
-@section[ordered_btree]{Unbalanced, ordered, binary trees}
+@section["ordered-btree"]{Unbalanced, ordered, binary trees}
 
 One problem with the unbalanced tree is that the complexity of the
 membership operation is $O(n)$, where $n$ is cardinality of the set.
@@ -153,7 +153,7 @@ smaller than @tt{x}, and all the labels in the right child are larger
 than @tt{x}.  To maintain this invariant, we need to modify the
 insertion function.
 
-@begin[verbatim]
+@begin[iverbatim]
 # let rec insert x = function
      Leaf -> Node (x, Leaf, Leaf)
    | Node (y, left, right) ->
@@ -175,7 +175,7 @@ val s : int btree =
     Node (11,
       Node (9,
         Node (5, Leaf, Node (7, Leaf, Leaf)), Leaf), Leaf))
-@end[verbatim]
+@end[iverbatim]
 
 Note that this insertion function does not build balanced trees.  If
 elements are inserted in order, the tree will be maximally unbalanced,
@@ -184,7 +184,7 @@ with all the elements inserted along the right branch.
 For the membership function, we can take advantage of
 the set ordering during the search.
 
-@begin[verbatim]
+@begin[iverbatim]
 # let rec mem x = function
      Leaf -> false
    | Node (y, left, right) ->
@@ -201,13 +201,13 @@ val mem : 'a -> 'a btree -> bool = <fun>
 - : bool = true
 # mem 12 s;;
 - : bool = false
-@end[verbatim]
+@end[iverbatim]
 
 The complexity of this membership function is $O(l)$ where $l$ is the
 maximal depth of the tree.  Since the @tt{insert} function does not
 guarantee balancing, the complexity is still $O(n)$, worst case.
 
-@section[balanced_red_black_trees]{Balanced red-black trees}
+@section["balanced-red-black-trees"]{Balanced red-black trees}
 
 For a more advanced example of pattern matching on unions, consider
 the implementation of balanced trees as red-black trees.  This section may
@@ -235,7 +235,7 @@ the shortest path.
 The type definitions are similar to the unbalanced binary tree; we
 just need to add a red/black label.
 
-@begin[verbatim]
+@begin[iverbatim]
 type color =
    Red
  | Black
@@ -243,18 +243,18 @@ type color =
 type 'a btree =
    Node of color * 'a btree * 'a * 'a btree
  | Leaf
-@end[verbatim]
+@end[iverbatim]
 
 The membership function also has to be redefined for the new type.
 
-@begin[verbatim]
+@begin[iverbatim]
 let rec mem x = function
    Leaf -> false
  | Node (_, a, y, b) ->
       if x < y then mem x a
       else if x > y then mem x b
       else true
-@end[verbatim]
+@end[iverbatim]
 
 The @tt{insert} function must maintain the invariants during
 insertion.  This can be done in two parts.  First find the location where
@@ -264,7 +264,7 @@ however, violate invariant 2 because the new @tt{Red} node may have a
 @tt{Red} parent.  If this happens, the @tt{balance} function migrates
 the @tt{Red} label upward in the tree.
 
-@begin[verbatim]
+@begin[iverbatim]
 # let balance = function
     Black, Node (Red, Node (Red, a, x, b), y, c), z, d ->
         Node (Red, Node (Black, a, x, b), y, Node (Black, c, z, d))
@@ -290,7 +290,7 @@ the @tt{Red} label upward in the tree.
          | Leaf -> raise (Invalid_argument "insert");;
 val balance : color * 'a btree * 'a * 'a btree -> 'a btree = <fun>
 val insert : 'a -> 'a btree -> 'a btree = <fun>
-@end[verbatim]
+@end[iverbatim]
 
 Note the use of nested patterns in the @tt{balance} function.  The
 @tt{balance} function takes a 4-tuple, with a @tt{color}, two
@@ -304,7 +304,7 @@ shortest path, the depth of the tree is $O(log@space n)$.  The
 @tt{balance} function takes constant time.  This means that the
 @tt{insert} and @tt[mem] functions both take time $O(log@space n)$.
 
-@begin[verbatim]
+@begin[iverbatim]
 # let empty = Leaf;;
 val empty : 'a btree = Leaf
 # let rec set_of_list = function
@@ -320,20 +320,20 @@ val s : int btree =
 - : bool = true
 # mem 6 s;;
 - : bool = false
-@end[verbatim]
+@end[iverbatim]
 
-@section[common_unions]{Some common built-in unions}
+@section["common-unions"]{Some common built-in unions}
 
 A few of the types we have already seen are defined as unions.  The
 built-in Boolean type is defined as a union (the @tt{true} and
 @tt{false} keywords are treated as capitalized identifiers).
 
-@begin[verbatim]
+@begin[iverbatim]
 # type bool =
      true
    | false
 type bool = | true | false
-@end[verbatim]
+@end[iverbatim]
 
 The list type is similar: once again, the compiler treats the
 @code{[]} and @code{::} identifiers as capitalized
@@ -343,21 +343,21 @@ this definition was accepted literally.  In OCaml 3.04 this usage is
 deprecated, and the [] produces a syntax error.
 @end[footnote].
 
-@begin[verbatim]
+@begin[iverbatim]
 # type 'a list = [] | :: of 'a * 'a list;;
 type 'a list = | [] | :: of 'a * 'a list
-@end[verbatim]
+@end[iverbatim]
 
 Although it is periodically suggested on the OCaml mailing list, OCaml
 does @emph{not} have a NIL value that can be assigned to a variable of
 any type.  Instead, the built-in @tt{'a option} type is used in this case.
 
-@begin[verbatim]
+@begin[iverbatim]
 # type 'a option =
      None
    | Some of 'a;;
 type 'a option = | None | Some of 'a
-@end[verbatim]
+@end[iverbatim]
 
 The @tt{None} case is intended to represent a NIL value, while the
 @tt{Some} case handles non-default values.

@@ -37,10 +37,20 @@ define dom_app: dom_app{'T;'S} <-->
    {p:(BTerm isect 'T)*(BTerm isect 'S) |
        bdepth{fst{'p}} =  bdepth{snd{'p}} in nat}
 
+interactive dom_app_wf  {| intro[] |}:
+   sequent { <H> >- "type"{'T} } -->
+   sequent { <H> >- "type"{'S} } -->
+   sequent { <H> >- dom_app{'T;'S} Type }
+
 interactive mk_app_wf  {| intro[] |}:
    sequent { <H> >- "type"{'T} } -->
    sequent { <H> >- "type"{'S} } -->
    sequent { <H> >- mk_app in dom_app{'T;'S} -> BTerm }
+
+interactive dom_app_subtype  {| intro[] |}:
+   sequent { <H> >- 'T_1 subtype 'T_2 } -->
+   sequent { <H> >- 'S_1 subtype 'S_2 } -->
+   sequent { <H> >- dom_app{'T_1;'S_1} subtype dom_app{'T_2;'S_2} }
 
 define mk_lambda: mk_lambda <--> lambda {t. make_bterm{lambda_term; 't::nil}}
 
@@ -54,7 +64,7 @@ interactive mk_lambda_wf  {| intro[] |}:
    sequent { <H> >- mk_lambda: dom_lambda{'T} -> BTerm }
 
 
-define dom: dom{'T} <--> Var + dom_app{'T;'T} + dom_lambda{'T}
+define dom: dom{'T} <--> Var + (dom_app{'T;'T} + dom_lambda{'T})
 
 define mk: mk <-->
    lambda{d.

@@ -161,13 +161,13 @@ prim_rw ir_if {| ir |} :
    IR{IfExpr{'e1; 'e2; 'e3}; v. 'e['v]}
    <-->
    LetRec{R. Fields{
-      FunDef{Label["g":t]; AtomFun{v. 'e['v]};
+      FunDef{Label["g":t]; AtomFun{v. 'e[AtomVar{'v}]}; (* ? *)
       EndDef}};
    R. LetFun{'R; Label["g":t]; g.
       IR{'e1; v1.
          If{'v1;
-            IR{'e2; v2. TailCall{'g; ArgCons{'v2; ArgNil}}};
-            IR{'e3; v3. TailCall{'g; ArgCons{'v3; ArgNil}}}}}}}
+            IR{'e2; v2. TailCall{AtomVar{'g}; ArgCons{'v2; ArgNil}}};
+            IR{'e3; v3. TailCall{AtomVar{'g}; ArgCons{'v3; ArgNil}}}}}}}
 
 doc <:doc<
    @begin[doc]

@@ -120,7 +120,7 @@ interactive ext_test1 :
          let rec f (i) =
             g (if i <> 1 then 0 else 1)
          and g (i) =
-             if i = 1 then 0 else 1
+            if i = 1 then 0 else 1
          in
             f (2)
       >> } }

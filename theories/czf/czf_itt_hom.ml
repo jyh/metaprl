@@ -21,16 +21,18 @@
  * @begin[array, l]
  * @line{@item{@hom{x; g_1; g_2; f[x]} @equiv}}
  * @line{@item{@space @space @space
- *   @group{g_1} @wedge @group{g_2}}}
+ *   @group{g_1}}}
+ * @line{@item{@space @space @space
+ *   @wedge @group{g_2}}}
  * @line{@item{@space @space @space
  *   @wedge @forall a@colon @set. (@mem{a; @car{g_1}} @Rightarrow @mem{f[a]; @car{g_2}})}}
  * @line{@item{@space @space @space
  *   @wedge @forall a@colon @set. @forall b@colon @set. (@mem{a; @car{g_1}} @Rightarrow @mem{b; @car{g_1}}}}
- * @line{@item{@space @space @space @space @space @space
+ * @line{@item{@space @space @space @space @space @space @space @space
  * @Rightarrow @eq{a; b} @Rightarrow @eq{f[a]; f[b]})}}
  * @line{@item{@space @space @space
  *   @wedge @forall a@colon @set. @forall b@colon @set. (@mem{a; @car{g_1}} @Rightarrow @mem{b; @car{g_1}}}}
- * @line{@item{@space @space @space @space @space @space
+ * @line{@item{@space @space @space @space @space @space @space @space
  * @Rightarrow @eq{f[@op{g_{1}; a; b}]; @op{g_{2}; f[a]; f[b]}})}}
  * @end[array]
  * $$
@@ -238,6 +240,13 @@ interactive hom_abel 'H hom{'g1; 'g2; x. 'f['x]} :
    sequent ['ext] { 'H >- hom{'g1; 'g2; x. 'f['x]} } -->
    sequent ['ext] { 'H >- abel{'g1} } -->
    sequent ['ext] { 'H >- abel{'g2} }
+(*! @docoff *)
+
+interactive hom_id {| intro [] |} 'H hom{'g1; 'g2; x. 'f['x]} :
+   sequent [squash] { 'H >- 'g1 IN label } -->
+   sequent [squash] { 'H >- 'g2 IN label } -->
+   sequent ['ext] { 'H >- hom{'g1; 'g2; x. 'f['x]} } -->
+   sequent ['ext] { 'H >- eq{'f[id{'g1}]; id{'g2}} }
 
 (*!
  * @begin[doc]
@@ -245,25 +254,13 @@ interactive hom_abel 'H hom{'g1; 'g2; x. 'f['x]} :
  *   $f$ maps the identity of $g_1$ to the identity of $g_2$.
  * @end[doc]
  *)
-interactive hom_id {| intro [] |} 'H hom{'g1; 'g2; x. 'f['x]} :
-   sequent [squash] { 'H >- 'g1 IN label } -->
-   sequent [squash] { 'H >- 'g2 IN label } -->
-   sequent ['ext] { 'H >- hom{'g1; 'g2; x. 'f['x]} } -->
-   sequent ['ext] { 'H >- eq{'f[id{'g1}]; id{'g2}} }
-
 interactive hom_id_elim (*{| elim [] |}*) 'H 'J :
    sequent [squash] { 'H; u: hom{'g1; 'g2; x. 'f['x]}; 'J['u] >- 'g1 IN label } -->
    sequent [squash] { 'H; u: hom{'g1; 'g2; x. 'f['x]}; 'J['u] >- 'g2 IN label } -->
    sequent ['ext] { 'H; u: hom{'g1; 'g2; x. 'f['x]}; 'J['u]; v: eq{'f[id{'g1}]; id{'g2}} >- 'C['u] } -->
    sequent ['ext] { 'H; u: hom{'g1; 'g2; x. 'f['x]}; 'J['u] >- 'C['u] }
+(*! @docoff *)
 
-(*!
- * @begin[doc]
- *
- *   $f$ maps the inverse of an element $a$ in $@car{g_1}$ to
- *   the inverse of $f[a]$ in $@car{g_2}$.
- * @end[doc]
- *)
 interactive hom_inv {| intro [] |} 'H 'a hom{'g1; 'g2; x. 'f['x]} :
    sequent [squash] { 'H >- 'g1 IN label } -->
    sequent [squash] { 'H >- 'g2 IN label } -->
@@ -272,6 +269,13 @@ interactive hom_inv {| intro [] |} 'H 'a hom{'g1; 'g2; x. 'f['x]} :
    sequent ['ext] { 'H >- mem{'a; car{'g1}} } -->
    sequent ['ext] { 'H >- eq{'f[inv{'g1; 'a}]; inv{'g2; 'f['a]}} }
 
+(*!
+ * @begin[doc]
+ *
+ *   $f$ maps the inverse of an element $a$ in $@car{g_1}$ to
+ *   the inverse of $f[a]$ in $@car{g_2}$.
+ * @end[doc]
+ *)
 interactive hom_inv_elim (*{| elim [] |}*) 'H 'J 'a :
    sequent [squash] { 'H; u: hom{'g1; 'g2; x. 'f['x]}; 'J['u] >- 'g1 IN label } -->
    sequent [squash] { 'H; u: hom{'g1; 'g2; x. 'f['x]}; 'J['u] >- 'g2 IN label } -->

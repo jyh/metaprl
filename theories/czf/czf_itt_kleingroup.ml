@@ -306,6 +306,7 @@ interactive klein4_op_assoc1 {| intro[] |} 'H :
    sequent ['ext] { 'H >- mem{'s2; car{klein4}} } -->
    sequent ['ext] { 'H >- mem{'s3; car{klein4}} } -->
    sequent ['ext] { 'H >- eq{op{klein4; op{klein4; 's1; 's2}; 's3}; op{klein4; 's1; op{klein4; 's2; 's3}}} }
+(*! @docoff *)
 
 interactive klein4_op_assoc2 {| intro[] |} 'H :
    sequent [squash] { 'H >- isset{'s1} } -->

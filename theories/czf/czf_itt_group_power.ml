@@ -118,7 +118,7 @@ dform power_df : parens :: except_mode[src] :: power{'g; 'z; 'n} =
 (*!
  * @begin[doc]
  * @rules
- * @thysubsection{Typehood for power operation}
+ * @thysubsection{Well-formedness}
  *
  * The $@power{g; z; n}$ is well-formed if $g$ is a label,
  * $z$ is a set, and $n$ is an integer in ITT.
@@ -132,7 +132,7 @@ interactive power_wf {| intro [] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Power membership}
+ * @thysubsection{Membership}
  *
  * If $z$ is a member of $@car{g}$, then $@power{g; z; n}$
  * is also in $@car{g}$.
@@ -148,7 +148,7 @@ interactive power_mem {| intro [] |} 'H :
 
 (*!
  * @begin[doc]
- * @thysubsection{Power functionality}
+ * @thysubsection{Functionality}
  *
  * The @tt{power} is functional in its set argument.
  * @end[doc]

@@ -67,7 +67,7 @@ declare cyc_subg{'s; 'g; 'a}
  ************************************************************************)
 
 rewrite unfold_cyc_subg : cyc_subg{'s; 'g; 'a} <-->
-   (group{'s} & group{'g} & mem{'a; car{'g}} & equal{car{'s}; collect{int; x. power{'g; 'a; 'x}}} & (all a: set. all b: set. (mem{'a; car{'s}} => mem{'b; car{'s}} => eq{op{'s; 'a; 'b}; op{'g; 'a; 'b}})))
+   (group{'s} & group{'g} & mem{'a; car{'g}} & equal{car{'s}; sep{car{'g}; x. (exst n: int. eq{'x; power{'g; 'a; 'n}})}} & (all a: set. all b: set. (mem{'a; car{'s}} => mem{'b; car{'s}} => eq{op{'s; 'a; 'b}; op{'g; 'a; 'b}})))
 
 topval fold_cyc_subg : conv
 

@@ -67,7 +67,7 @@ declare cycgroup{'g; 'a}
  ************************************************************************)
 
 rewrite unfold_cycgroup : cycgroup{'g; 'a} <-->
-   (group{'g} & mem{'a; car{'g}} & equal{car{'g}; collect{int; x. power{'g; 'a; 'x}}})
+   (group{'g} & mem{'a; car{'g}} & equal{car{'g}; sep{car{'g}; x. (exst n: int. eq{'x; power{'g; 'a; 'n}})}})
 
 topval fold_cycgroup : conv
 

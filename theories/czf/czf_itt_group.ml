@@ -399,6 +399,7 @@ interactive unique_inv2 {| intro [] |} 'H :
    sequent ['ext] { 'H >- mem{'s2; car{'g}} } -->
    sequent ['ext] { 'H >- eq{op{'g; 's; 's2}; id{'g}} } -->
    sequent ['ext] { 'H >- eq{'s2; inv{'g; 's}} }
+(*! @docoff *)
 
 interactive unique_inv_elim1 (*{| elim [] |}*) 'H 'J :
    sequent [squash] { 'H; x: eq{op{'g; 's2; 's}; id{'g}}; 'J['x] >- isset{'s} } -->
@@ -419,7 +420,6 @@ interactive unique_inv_elim2 (*{| elim [] |}*) 'H 'J :
    sequent ['ext] { 'H; x: eq{op{'g; 's; 's2}; id{'g}}; 'J['x] >- mem{'s2; car{'g}} } -->
    sequent ['ext] { 'H; x: eq{op{'g; 's; 's2}; id{'g}}; 'J['x]; y: eq{'s2; inv{'g; 's}} >- 'C['x] } -->
    sequent ['ext] { 'H; x: eq{op{'g; 's; 's2}; id{'g}}; 'J['x] >- 'C['x] }
-(*! @docoff *)
 
 let uniqueInvLeftT i p =
    let j, k = Sequent.hyp_indices p i in

@@ -219,7 +219,7 @@ interactive subgroup_isect 'H 'h1 'h2 :
  * @begin[description]
  * @item{@tactic[subgroupIsectT];
  *    The tactic applies the @hrefrule[subgroup_isect] rule
- *    and proves $h$ is a subgroup of $g$ if it is the
+ *    and proves group $h$ is a subgroup of $g$ if it is the
  *    intersection of two subgroups of $g$.}
  * @end[description]
  * @docoff

@@ -1,42 +1,42 @@
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @module[Mfir_tr_types]
-  
+
    The @tt[Mfir_tr_types] module defines type equality judgments, which are
    used to determine the well-formedness of FIR types.
    @end[doc]
-  
+
    ------------------------------------------------------------------------
-  
+
    @begin[license]
    This file is part of MetaPRL, a modular, higher order
    logical framework that provides a logical programming
    environment for OCaml and other languages.  Additional
    information about the system is available at
    http://www.metaprl.org/
-  
+
    Copyright (C) 2002 Brian Emre Aydemir, Caltech
-  
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
    as published by the Free Software Foundation; either version 2
    of the License, or (at your option) any later version.
-  
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-  
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-  
+
    Author: Brian Emre Aydemir
    @email{emre@cs.caltech.edu}
    @end[license]
 >>
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @parents
    @end[doc]
@@ -55,11 +55,11 @@ extends Mfir_sequent
  * Rules.
  **************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @rules
    @modsubsection{Mutable types}
-  
+
    The types must be equal, and the flags should be identical booleans.
    @end[doc]
 >>
@@ -70,25 +70,23 @@ prim wf_mutable_ty :
    sequent { <H> >- type_eq{ mutable_ty{ 'ty1; 'flag };
                                   mutable_ty{ 'ty2; 'flag };
                                   'k } }
-   = it
 
 
 doc <:doc< ************************************
    @begin[doc]
    @modsubsection{Numbers}
-  
+
    The type << tyInt >> is well-formed.
    @end[doc]
 >>
 
 prim wf_tyInt :
    sequent { <H> >- type_eq{ tyInt; tyInt; small_type } }
-   = it
 
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-  
+
    Enumeration types are well-formed if the parameter $i$ is within the
    allowed range of values.  This latter restriction assists the Mojave
    compiler's garbage collector in differentiating between enumeration
@@ -99,12 +97,11 @@ doc <:doc<
 prim wf_tyEnum :
    sequent { <H> >- member{ number[i:n]; enum_max } } -->
    sequent { <H> >- type_eq{ tyEnum[i:n]; tyEnum[i:n]; small_type } }
-   = it
 
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-  
+
    The types << tyRawInt[p:n, sign:s] >> and << tyFloat[p:n] >>
    are well-formed if their parameters are well-formed.  Note that
    << tyRawInt[p:n, sign:s] >> and << tyFloat[p:n] >> cannot be
@@ -121,7 +118,6 @@ prim wf_tyRawInt1 :
    sequent { <H> >- type_eq{ tyRawInt[p:n, "signed"];
                                   tyRawInt[p:n, "signed"];
                                   large_type } }
-   = it
 
 prim wf_tyRawInt2 :
    sequent { <H> >-
@@ -132,7 +128,6 @@ prim wf_tyRawInt2 :
    sequent { <H> >- type_eq{ tyRawInt[p:n, "unsigned"];
                                   tyRawInt[p:n, "unsigned"];
                                   large_type } }
-   = it
 
 prim wf_tyFloat :
    sequent { <H> >-
@@ -140,13 +135,12 @@ prim wf_tyFloat :
       "or"{ int_eq{ number[p:n]; 64 };
             int_eq{ number[p:n]; 80 } } } } -->
    sequent { <H> >- type_eq{ tyFloat[p:n]; tyFloat[p:n]; large_type } }
-   = it
 
 
 doc <:doc< ************************************
    @begin[doc]
    @modsubsection{Functions}
-  
+
    Function types are well-formed if the argument and result types
    are well-formed.
    @end[doc]
@@ -158,13 +152,12 @@ prim wf_tyFun :
    sequent { <H> >- type_eq{ tyFun{ 'a1; 'r1 };
                                    tyFun{ 'a2; 'r2 };
                                    small_type } }
-   = it
 
 
 doc <:doc< ************************************
    @begin[doc]
    @modsubsection{Tuples}
-  
+
    Two union types are equal if they name the same union definition, select
    the same subset of cases, and instantiate the definition at equal types.
    @end[doc]
@@ -190,12 +183,11 @@ prim wf_tyUnion 'H :
       type_eq{ tyUnion{ 'tv; 'tyl1; 'set1 };
                tyUnion{ 'tv; 'tyl2; 'set2 };
                small_type } }
-   = it
 
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-  
+
    Two tuple types are equal if they are the same kind of tuple and their
    projections are pointwise equal.  Note that box tuples must have arity one.
    @end[doc]
@@ -206,26 +198,23 @@ prim wf_tyTuple_normal :
    sequent { <H> >- type_eq{ tyTuple["normal"]{ 'tyl1 };
                                   tyTuple["normal"]{ 'tyl2 };
                                   small_type } }
-   = it
 
 prim wf_tyTuple_raw :
    sequent { <H> >- type_eq_list{ 'tyl1; 'tyl2; small_type } } -->
    sequent { <H> >- type_eq{ tyTuple["raw"]{ 'tyl1 };
                                   tyTuple["raw"]{ 'tyl2 };
                                   small_type } }
-   = it
 
 prim wf_tyTuple_box :
    sequent { <H> >- type_eq{ 't1; 't2; large_type } } -->
    sequent { <H> >- type_eq{ tyTuple["box"]{ cons{ 't1; nil } };
                                    tyTuple["box"]{ cons{ 't2; nil } };
                                    small_type } }
-   = it
 
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-  
+
    (Documentation incomplete.)
    @end[doc]
 >>
@@ -235,7 +224,6 @@ doc <:doc<
 prim wf_tyDTuple_none 'H :
    sequent { <H>; a: ty_def{ 'tv; dtuple_type; 'd }; <J> >-
       type_eq{ tyDTuple{ 'tv; none }; tyDTuple{ 'tv; none }; small_type } }
-   = it
 
 prim wf_tyDTuple_some 'H :
    sequent { <H>; a: ty_def{ 'tv; dtuple_type; 'd }; <J> >-
@@ -244,20 +232,18 @@ prim wf_tyDTuple_some 'H :
       type_eq{ tyDTuple{ 'tv; some{'mtyl1} };
                tyDTuple{ 'tv; some{'mtyl2} };
                small_type } }
-   = it
 
 prim wf_tyTag 'H :
    sequent { <H>; a: ty_def{ 'tv; dtuple_type; 'd }; <J> >-
       type_eq_list{ 'mtyl1; 'mtyl2; small_type } } -->
    sequent { <H>; a: ty_def{ 'tv; dtuple_type; 'd }; <J> >-
       type_eq{ tyTag{ 'tv; 'mtyl1 }; tyTag{ 'tv; 'mtyl2 }; small_type } }
-   = it
 
 
 doc <:doc< ************************************
    @begin[doc]
    @modsubsection{Other aggregates}
-  
+
    Two array types are equal if their element types are equal.
    @end[doc]
 >>
@@ -265,24 +251,22 @@ doc <:doc< ************************************
 prim wf_tyArray :
    sequent { <H> >- type_eq{ 't1; 't2; large_type } } -->
    sequent { <H> >- type_eq{ tyArray{'t1}; tyArray{'t2}; small_type } }
-   = it
 
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-  
+
    The type << tyRawData >> is well-formed.
    @end[doc]
 >>
 
 prim wf_tyRawData :
    sequent { <H> >- type_eq{ tyRawData; tyRawData; small_type } }
-   = it
 
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-  
+
    (Documentation incomplete.)
    @end[doc]
 >>
@@ -296,13 +280,12 @@ prim wf_tyFrame 'H :
       type_eq_list{ 'tyl1; 'tyl2; small_type } } -->
    sequent { <H>; a: ty_def{ 'tv; 'k; 'd }; <J> >-
       type_eq{ tyFrame{ 'tv; 'tyl1 }; tyFrame{ 'tv; 'tyl2 }; small_type } }
-   = it
 
 
 doc <:doc< ************************************
    @begin[doc]
    @modsubsection{Polymorphism}
-  
+
    Two type variables are considered equal if they name the same variable
    and the variable is declared in the context with the specified kind.
    @end[doc]
@@ -319,12 +302,11 @@ doc <:doc< ************************************
 prim wf_tyVar 'H :
    sequent { <H>; a: ty_def{ 'tv; 'k; 'd }; <J> >-
       type_eq{ tyVar{ 'tv }; tyVar{ 'tv }; 'k } }
-   = it
 
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-  
+
    Two type applications are equal if they name the same parametrized type
    and instantiate that type at equal types.
    @end[doc]
@@ -342,16 +324,15 @@ prim wf_tyApply1 'H :
       type_eq_list{ 'tyl1; 'tyl2; small_type } } -->
    sequent { <H>; a: ty_def{ 'tv; polyKind{'i;  'k }; 'd }; <J> >-
       type_eq{ tyApply{ 'tv; 'tyl1 }; tyApply{ 'tv; 'tyl2 }; 'k } }
-   = it
 
-doc <:doc< 
+doc <:doc<
    @docoff
 >>
 
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-  
+
    Two existential types are equal if when instantiated at the same
    << small_type >> type, the resulting types are equal.
    @end[doc]
@@ -362,12 +343,11 @@ prim wf_tyExists :
       type_eq{ 't1['tv]; 't2['tv]; large_type } } -->
    sequent { <H> >-
       type_eq{ tyExists{ x. 't1['x] }; tyExists{ y. 't2['y] }; small_type } }
-   = it
 
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-  
+
    Two universal types are equal if when instantiated at the same
    << small_type >> type, the resulting types are equal.
    @end[doc]
@@ -378,12 +358,11 @@ prim wf_tyAll :
       type_eq{ 't1['tv]; 't2['tv]; large_type } } -->
    sequent { <H> >-
       type_eq{ tyAll{ x. 't1['x] }; tyAll{ y. 't2['y] }; small_type } }
-   = it
 
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-  
+
    Type projections are well-formed if $i$ is in bounds.
    @end[doc]
 >>
@@ -405,9 +384,8 @@ prim wf_tyProject 'H :
       type_eq{ tyProject[i:n]{ atomVar{'v} };
                tyProject[i:n]{ atomVar{'v} };
                small_type } }
-   = it
 
-doc <:doc< 
+doc <:doc<
    @docoff
 >>
 
@@ -415,7 +393,7 @@ doc <:doc<
 doc <:doc< ************************************
    @begin[doc]
    @modsubsection{Type definitions}
-  
+
    Two parametrized types are equal if when instantiated at the same
    << small_type >>, the resulting types are equal.
    @end[doc]
@@ -427,23 +405,20 @@ prim wf_tyDefPoly :
    sequent { <H> >- type_eq{ tyDefPoly{ x. 'ty1['x] };
                                   tyDefPoly{ y. 'ty2['y] };
                                   polyKind{ 'i; 'k } } }
-   = it
 
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-  
+
    Well-formedness of frames and records is straightforward.
    @end[doc]
 >>
 
 prim wf_recordEnd_record :
    sequent { <H> >- type_eq{ recordEnd; recordEnd; record_type } }
-    = it
 
 prim wf_recordEnd_frame :
    sequent { <H> >- type_eq{ recordEnd; recordEnd; frame_type } }
-   = it
 
 
 prim wf_record_record :
@@ -452,7 +427,6 @@ prim wf_record_record :
    sequent { <H> >- type_eq{ record[tag:s]{ 'data1; 'rest1 };
                                   record[tag:s]{ 'data2; 'rest2 };
                                   record_type } }
-   = it
 
 prim wf_record_frame :
    sequent { <H> >- type_eq{ 'data1; 'data2; record_type } } -->
@@ -460,9 +434,8 @@ prim wf_record_frame :
    sequent { <H> >- type_eq{ record[tag:s]{ 'data1; 'rest1 };
                                   record[tag:s]{ 'data2; 'rest2 };
                                   frame_type } }
-   = it
 
-doc <:doc< 
+doc <:doc<
    @docoff
 >>
 
@@ -476,9 +449,9 @@ doc <:doc<
 declare union_type_eq_list{ 'cases1; 'cases2 }
 
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-  
+
    Two union definitions are equal if the cases they define are equal, and if
    they define the same kind of union.  Note that a union definition may
    define zero cases.
@@ -491,30 +464,27 @@ prim wf_tyDefUnion :
    sequent { <H> >- type_eq{ tyDefUnion{ 'cases1 };
                                   tyDefUnion{ 'cases2 };
                                   polyKind{0; union_type[i:n]} } }
-   = it
 
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-  
+
    Equality of union case definitions is straightforward.
    @end[doc]
 >>
 
 prim wf_tyDefUnion_cases1 :
    sequent { <H> >- union_type_eq_list{ nil; nil } }
-   = it
 
 prim wf_tyDefUnion_cases2 :
    sequent { <H> >- type_eq_list{ 'h1; 'h2; large_type } } -->
    sequent { <H> >- union_type_eq_list{ 't1; 't2 } } -->
    sequent { <H> >- union_type_eq_list{cons{'h1; 't1}; cons{'h2; 't2}} }
-   = it
 
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-  
+
    (Documentation incomplete.)
    @end[doc]
 >>
@@ -524,9 +494,8 @@ doc <:doc<
 prim wf_tyDefDTuple 'H :
    sequent { <H>; a: ty_def{ 'tv; dtuple_type; tyDefDTuple{'tv} }; <J> >-
       type_eq{ tyDefDTuple{ 'tv }; tyDefDTuple{ 'tv }; dtuple_type } }
-   = it
 
-doc <:doc< 
+doc <:doc<
    @docoff
 >>
 

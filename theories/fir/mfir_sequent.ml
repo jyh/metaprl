@@ -1,47 +1,47 @@
-doc <:doc< 
+doc <:doc<
    @spelling{conversional Mojave}
-  
+
    @begin[doc]
    @module[Mfir_sequent]
-  
+
    The @tt[Mfir_sequent] module declares terms used in FIR theory sequents.
    We take the following interpretation of sequents in the FIR theory.  If a
    sequent is not well-formed, then it holds trivially.  A well-formed
    sequent is closed, and the context (list of hypotheses) must be
    well-formed.
    @end[doc]
-  
+
    ------------------------------------------------------------------------
-  
+
    @begin[license]
    This file is part of MetaPRL, a modular, higher order
    logical framework that provides a logical programming
    environment for OCaml and other languages.  Additional
    information about the system is available at
    http://www.metaprl.org/
-  
+
    Copyright (C) 2002 Brian Emre Aydemir, Caltech
-  
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
    as published by the Free Software Foundation; either version 2
    of the License, or (at your option) any later version.
-  
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-  
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-  
+
    Author: Brian Emre Aydemir
    @email{emre@cs.caltech.edu}
    @end[license]
 >>
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @parents
    @end[doc]
@@ -54,24 +54,23 @@ extends Base_theory
  * Declarations.
  **************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @terms
    @modsubsection{Sequent tags}
-  
-   The term @tt[sequent_arg] is used to tag FIR theory sequents.  The term @tt[it] is
-   a trivial term that has no meaning.
+
+   The term @tt[sequent_arg] is used to tag FIR theory sequents.  The term @tt[default_extract]
+   is a trivial term that has no meaning.
    @end[doc]
 >>
 
 declare sequent_arg
-declare it
-
+declare default_extract
 
 doc <:doc< ************************************
    @begin[doc]
    @modsubsection{Kinds}
-  
+
    Kinds are used to classify FIR types and type definitions.  Types may be
    @em[small] or @em[large].  The raw integers and floating point values are
    large; all other types are small.  The distinction between small and large
@@ -84,9 +83,9 @@ declare small_type
 declare large_type
 
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-  
+
    Union definitions (@hrefterm[tyDefUnion]) belong to the @tt[union_type]
    kind, where the parameter $i$ indicates the number of cases in the union.
    @end[doc]
@@ -95,9 +94,9 @@ doc <:doc<
 declare union_type[i:n]
 
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-  
+
    (Documentation incomplete.)
    @end[doc]
 >>
@@ -108,9 +107,9 @@ declare record_type
 declare frame_type
 
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-  
+
    (Documentation incomplete.)
    @end[doc]
 >>
@@ -120,9 +119,9 @@ doc <:doc<
 declare dtuple_type
 
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-  
+
    All types, including parametrized type definitions, belong to the
    @tt[polyKind] kind.  The subterm @tt[i] is the number of parameters in the
    definition, and the subterm @tt[k] is the kind of the type once all the
@@ -136,7 +135,7 @@ declare polyKind{ 'i; 'k }
 doc <:doc< ************************************
    @begin[doc]
    @modsubsection{Contexts}
-  
+
    (Documentation incomplete.)
    @end[doc]
 >>
@@ -150,9 +149,9 @@ declare "type"
 declare variable
 
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-  
+
    The terms @tt[ty_def], @tt[var_def], and @tt[global_def] are used for
    definitions in the context.  The first subterm is the variable being
    declared/defined.  If the subterm @tt[def] is @tt[no_def], then the
@@ -173,7 +172,7 @@ declare no_def
 doc <:doc< ************************************
    @begin[doc]
    @modsubsection{Store values}
-  
+
    The term @tt[polyFun] is a polymorphic function that takes one type
    argument.  The term @tt[lambda] is a non-polymorphic function that takes
    one argument.  The term @tt[union_val] is a value of case $i$ of some
@@ -192,7 +191,7 @@ declare raw_data
 doc <:doc< ************************************
    @begin[doc]
    @modsubsection{Judgments}
-  
+
    The judgment @tt[wf_kind] says that the kind @tt[k] is well-formed.
    @end[doc]
 >>
@@ -200,9 +199,9 @@ doc <:doc< ************************************
 declare wf_kind{ 'k }
 
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-  
+
    A proof of @tt[type_eq] says that two types (or type definitions)
    @tt[ty1] and @tt[ty2] are equal in the kind @tt[k], and that @tt[k]
    is well-formed.  A proof of @tt[type_eq_list] says that two lists of types
@@ -215,9 +214,9 @@ declare type_eq{ 'ty1; 'ty2; 'k }
 declare type_eq_list{ 'tyl1; 'tyl2; 'k }
 
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-  
+
    A proof of @tt[has_type] says that a term @tt[t] has type @tt[ty],
    and that @tt[ty] is a well-formed type.  The string parameter is an
    annotation that is intended to describe some aspect of @tt[t] or
@@ -227,7 +226,7 @@ doc <:doc<
 
 declare has_type[str:s]{ 't; 'ty }
 
-doc <:doc< 
+doc <:doc<
    @docoff
 >>
 
@@ -244,13 +243,12 @@ dform mfir_df : except_mode[src] :: sequent_arg =
    sub{it["fir"]}
 
 dform it_df1 : except_mode[src] :: except_mode[tex] ::
-   it =
+   default_extract =
    cdot
 
 dform it_df2 : mode[tex] ::
-   it =
+   default_extract =
    izone `"\\bullet" ezone
-
 
 (*
  * Kinds.

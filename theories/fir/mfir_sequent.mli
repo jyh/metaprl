@@ -43,8 +43,7 @@ extends Base_theory
  *)
 
 declare sequent_arg
-declare it
-
+declare default_extract
 
 (*
  * Kinds.

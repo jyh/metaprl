@@ -1,41 +1,41 @@
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @module[Mfir_tr_atom]
-  
+
    The @tt[Mfir_tr_atom] module defines the typing rules for FIR atoms.
    @end[doc]
-  
+
    ------------------------------------------------------------------------
-  
+
    @begin[license]
    This file is part of MetaPRL, a modular, higher order
    logical framework that provides a logical programming
    environment for OCaml and other languages.  Additional
    information about the system is available at
    http://www.metaprl.org/
-  
+
    Copyright (C) 2002 Brian Emre Aydemir, Caltech
-  
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
    as published by the Free Software Foundation; either version 2
    of the License, or (at your option) any later version.
-  
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-  
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-  
+
    Author: Brian Emre Aydemir
    @email{emre@cs.caltech.edu}
    @end[license]
 >>
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @parents
    @end[doc]
@@ -55,11 +55,11 @@ extends Mfir_tr_atom_base
  * Rules.
  **************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @rules
    @modsubsection{Normal atoms}
-  
+
    The type of the nil-value of a type is simply that type.
    @end[doc]
 >>
@@ -67,12 +67,11 @@ doc <:doc<
 prim ty_atomNil :
    sequent { <H> >- type_eq{ 'ty; 'ty; large_type } } -->
    sequent { <H> >- has_type["atom"]{ atomNil{ 'ty }; 'ty } }
-   = it
 
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-  
+
    The atom <<atomInt{'i}>> has type <<tyInt>> if <<'i>> is in the
    set of 31-bit, signed integers.
    @end[doc]
@@ -81,12 +80,11 @@ doc <:doc<
 prim ty_atomInt :
    sequent { <H> >- member{ 'i; intset_max[31, "signed"] } } -->
    sequent { <H> >- has_type["atom"]{ atomInt{'i}; tyInt } }
-   = it
 
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-  
+
    An enumeration atom <<atomEnum[i:n]{'n}>> has type <<tyEnum[i:n]>>
    if $ 0 <<le>> n < i $, and if <<tyEnum[i:n]>> is a well-formed type.
    @end[doc]
@@ -96,12 +94,11 @@ prim ty_atomEnum :
    sequent { <H> >- type_eq{ tyEnum[i:n]; tyEnum[i:n]; small_type } } -->
    sequent { <H> >- "and"{int_le{0; 'n}; int_lt{'n; number[i:n]}} } -->
    sequent { <H> >- has_type["atom"]{atomEnum[i:n]{'n}; tyEnum[i:n]} }
-   = it
 
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-  
+
    The atom << atomRawInt[p:n, sign:s]{'i} >> has type
    << tyRawInt[p:n, sign:s] >>, if $i$ is in the appropriate set of
    integers, and if << tyRawInt[p:n, sign:s] >> is a well-formed type.
@@ -115,12 +112,11 @@ prim ty_atomRawInt :
    sequent { <H> >- member{ 'i; intset_max[p:n, sign:s] } } -->
    sequent { <H> >-
       has_type["atom"]{ atomRawInt[p:n, sign:s]{'i}; tyRawInt[p:n, sign:s] } }
-   = it
 
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-  
+
    Due to the representation of floating-point values in the FIR theory,
    the typing rule for << atomFloat[p:n, value:s] >> reduces to
    checking if << tyFloat[p:n] >> is a well-formed type.
@@ -132,12 +128,11 @@ prim ty_atomFloat :
       type_eq{ tyFloat[p:n]; tyFloat[p:n]; large_type } } -->
    sequent { <H> >-
       has_type["atom"]{ atomFloat[p:n, value:s]; tyFloat[p:n] } }
-   = it
 
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-  
+
    A variable << atomVar{'v} >> has type << 'ty >> if it is declared in
    the context to have type << 'ty >>.
    @end[doc]
@@ -146,13 +141,12 @@ doc <:doc<
 prim ty_atomVar 'H :
    sequent { <H>; a: var_def{ 'v; 'ty; 'd }; <J> >-
       has_type["atom"]{ atomVar{'v}; 'ty } }
-   = it
 
 
 doc <:doc< ************************************
    @begin[doc]
    @modsubsection{Frames and constant constructors}
-  
+
    The atom << atomLabel[field:s, subfield:s]{ 'frame; 'num } >>
    is used to index subfields of frame objects.  They are unsafe and
    treated as 32-bit, signed integers.  To be well-formed, the frame
@@ -169,12 +163,11 @@ prim ty_atomLabel 'H :
    sequent { <H>; a: ty_def{ 'frame; polyKind{ 'i; 'k }; 'd }; <J> >-
       has_type["atom"]{ atomLabel[field:s, subfield:s]{ 'frame; 'num };
                         tyRawInt[32, "signed"] } }
-   = it
 
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-  
+
    The atom << atomSizeof{ 'tvl; 'num } >> is a constant representing
    the size of the frames named in the list << 'tvl >> plus some constant
    << 'num >>.  To be well-formed, each element of << 'tvl >> should
@@ -188,23 +181,20 @@ prim ty_atomSizeof :
    sequent { <H> >- has_type["atomSizeof"]{ 'tvl; frame_type } } -->
    sequent { <H> >-
       has_type["atom"]{ atomSizeof{ 'tvl; 'num }; tyRawInt[32, "signed"] } }
-   = it
 
 prim ty_atomSizeof_aux_base :
    sequent { <H> >- has_type["atomSizeof"]{ nil; frame_type }}
-   = it
 
 prim ty_atomSizeof_aux_ind 'H :
    sequent { <H>; a: ty_def{ 'tv; polyKind{'i; frame_type}; 'd }; <J> >-
       has_type["atomSizeof"]{ 'rest; frame_type } } -->
    sequent { <H>; a: ty_def{ 'tv; polyKind{'i; frame_type}; 'd }; <J> >-
       has_type["atomSizeof"]{ (tyVar{'tv} :: 'rest); frame_type } }
-   = it
 
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-  
+
    The atom << atomConst{ 'ty; 'tv; 'n } >> is a constant constructor
    for case << 'n >> of a union.  It is well-formed if it references
    a constant case of a union type and if the union type is well-formed.
@@ -221,13 +211,12 @@ prim ty_atomConst 'H :
    sequent { <H>; a: ty_def{ 'tv; 'k; 'd }; <J> >-
       has_type["atom"]{ atomConst{ 'ty; 'tv; 'n }; tyUnion{ 'tv; 'tyl;
          intset[31, "signed"]{ (interval{ 'n; 'n } :: nil) } } } }
-   = it
 
 
 doc <:doc< ************************************
    @begin[doc]
    @modsubsection{Polymorphism}
-  
+
    The atom << atomTyApply{ atomVar{'v}; 'u1; 'types } >> instantiates
    << atomVar{'v} >> at a list of types, where << atomVar{'v} >> should
    have a universal type.
@@ -261,16 +250,15 @@ prim ty_atomTyApply 'H :
                     <J> >-
       has_type["atom"]{ atomTyApply{ atomVar{'v}; 'u1; 'types };
                         'u2 } }
-   = it
 
-doc <:doc< 
+doc <:doc<
    @docoff
 >>
 
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-  
+
    The atom << atomTyPack{ 'var; 'u; 'types } >> is the introduction
    form for type packing.  A value is packaged with a list of types
    to form a value with an existential type.
@@ -287,12 +275,11 @@ prim ty_atomTyPack :
    sequent { <H> >-
       has_type["atom"]{ atomTyPack{ 'var; 'u; 'types };
                         tyExists{ t. 'ty['t] } } }
-   = it
 
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
-  
+
    The atom << atomTyUnpack{ atomVar{'v} } >> is the elimination
    form for type packing.  If << atomVar{'v} >> has an existential type
    $t$, then the type unpacking has a type equal to $t$ instantiated
@@ -311,9 +298,8 @@ prim ty_atomTyUnpack 'H :
                     a: var_def{ 'v; tyExists{ t. 'ty['t] }; 'd };
                     <J> >-
       has_type["atom"]{ atomTyUnpack{ atomVar{'v} }; 'u } }
-   = it
 
-doc <:doc< 
+doc <:doc<
    @docoff
 >>
 
@@ -321,7 +307,7 @@ doc <:doc<
 doc <:doc< ************************************
    @begin[doc]
    @modsubsection{Unary and binary operators}
-  
+
    For the atoms << atomUnop{ 'unop; 'a } >> and
    << atomBinop{ 'binop; 'a1; 'a2 } >>, the typing rules are
    straightforward.  The arguments should have the correct type, and
@@ -333,15 +319,13 @@ prim ty_atomUnop :
    sequent { <H> >- type_eq{ 'ty; res_type{ 'op }; large_type } } -->
    sequent { <H> >- has_type["atom"]{ 'a; arg1_type{ 'op } } } -->
    sequent { <H> >- has_type["atom"]{ atomUnop{ 'op; 'a }; 'ty } }
-   = it
 
 prim ty_atomBinop :
    sequent { <H> >- type_eq{ 'ty; res_type{ 'op }; large_type } } -->
    sequent { <H> >- has_type["atom"]{ 'a1; arg1_type{ 'op } } } -->
    sequent { <H> >- has_type["atom"]{ 'a2; arg2_type{ 'op } } } -->
    sequent { <H> >- has_type["atom"]{ atomBinop{ 'op; 'a1; 'a2 }; 'ty } }
-   = it
 
-doc <:doc< 
+doc <:doc<
    @docoff
 >>

@@ -1,7 +1,7 @@
 doc <:doc< 
    @begin[spelling]
    cutEq cutMem cutSquash
-   assertEqT letT assertSquashT
+   assertEqT assertSquashT
    assertAtT assertSquashAtT assertT
    hypSubstitution substT struct th
    @end[spelling]
@@ -158,9 +158,9 @@ interactive cutMem 's 'S bind{x.'T['x]} :
 
 doc <:doc< 
    @begin[doc]
-   The corresponding tactic is the @tt{letT} tactic.
+   The corresponding tactic is the @tt[letT] tactic.
    This tactic takes a term $x=s @in S$ as an argument
-   and a term $<<bind{x.'T['x]}>>$ as an optional with-argument.
+   and a term <<bind{x.'T['x]}>> as an optional with-argument.
    If this argument is omitted then the tactic finds all occurrences of $s$
    in the conclusion and replace them with $x$.
   
@@ -228,7 +228,7 @@ doc <:doc<
   
    The @tt{assertEqT} tactic applies this rule.
    This tactic takes a term $s1=s2 @in S$ as an argument
-   and a term $<<bind{x.'t['x]}>>$ as an optional with-argument.
+   and a term <<bind{x.'t['x]}>> as an optional with-argument.
    This tactic helps us to prove an equality from a membership.
   
    @end[doc]

@@ -149,7 +149,7 @@ dform comment_block_df1 : comment_block{'t} =
    't
 
 dform comment_term_df1 : comment_term{'t} =
-   't
+   slot["noparens"]{'t}
 
 doc <:doc< 
    @begin[doc]
@@ -314,7 +314,7 @@ dform modsection_df1 : mode[tex] :: modsection{'t} =
    izone `"\\modsection{" ezone slot{'t} izone `"}" ezone
 
 dform modsection_df2 : except_mode[tex] :: modsection{'t} =
-   com_hbreak bf_begin 't bf_end com_hbreak com_hbreak
+   com_hbreak bf{'t} com_hbreak com_hbreak
 
 doc <:doc< 
    @begin[doc]
@@ -328,7 +328,7 @@ dform modsubsection_df1 : mode[tex] :: modsubsection{'t} =
    izone `"\\modsubsection{" ezone slot{'t} izone `"}" ezone
 
 dform modsubsection_df2 : except_mode[tex] :: modsubsection{'t} =
-   com_hbreak bf_begin 't bf_end com_hbreak
+   com_hbreak bf{'t} com_hbreak
 
 doc <:doc< 
    @begin[doc]

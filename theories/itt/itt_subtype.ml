@@ -150,7 +150,7 @@ doc <:doc<
   
    @modsubsection{Typehood and equality}
   
-   The $<< \subtype{'A; 'B} >>$ term is a type if both
+   The << \subtype{'A; 'B} >> term is a type if both
    $A$ and $B$ are types.  The equality is @emph{intensional}:
    two subtype-types are equal if their subterms are equal.
    @end[doc]

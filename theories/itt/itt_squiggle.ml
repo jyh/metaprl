@@ -8,7 +8,7 @@ doc <:doc<
    @module[Itt_squiggle]
   
    The @tt[Itt_squiggle] module defines the squiggle equality.
-   The squiggle equality $<<'t ~ 's>>$ holds for closed terms $t$ and $s$ iff
+   The squiggle equality <<'t ~ 's>> holds for closed terms $t$ and $s$ iff
    $t$ can be reduced to $s$. We can expand this semantics for open terms
    in the given context the same way as for any other type.
    For example one can prove that
@@ -125,8 +125,8 @@ doc <:doc<
    @begin[doc]
    @rewrites
    @modsubsection{Typehood and equality}
-   The squiggle relation $<<'t ~ 's>>$ is a type if and only if
-   it holds.  Two squiggle relation $<<'t_1 ~ 's_1>>$ and $<<'t_2 ~ 's_2>>$
+   The squiggle relation <<'t ~ 's>> is a type if and only if
+   it holds.  Two squiggle relation <<'t_1 ~ 's_1>> and <<'t_2 ~ 's_2>>
    are equal as types whenever they are correct types.
    @end[doc]
 >>
@@ -166,7 +166,7 @@ prim squiggleElimination {|  elim [ThinOption thinT] |} 'H :
 doc <:doc< 
    @begin[doc]
    @modsubsection{Substitution}
-   If we can prove that $<<'t ~ 's>>$, then we can substitute $s$ for $t$
+   If we can prove that <<'t ~ 's>>, then we can substitute $s$ for $t$
    in any place without generating any well-formedness subgoals.
    @end[doc]
 >>
@@ -186,10 +186,10 @@ prim squiggleHypSubstitution 'H ('t ~ 's) bind{x. 'A['x]}:
 doc <:doc< 
    @begin[doc]
    The  @tt{sqSubstT} tactic takes a clause number $i$, and
-   a term $<<'t ~ 's>>$ and applies one of two above rules.
+   a term <<'t ~ 's>> and applies one of two above rules.
    This tactic substitutes the term $s$ for
    @emph{all} occurrences of the term $t$ in the clause.
-   One can give a term  $<< bind{x. 'A['x]} >>$ as an optional with-argument
+   One can give a term  << bind{x. 'A['x]} >> as an optional with-argument
    to specify exact location of the subterm to be replaced.
    @end[doc]
 >>

@@ -103,8 +103,8 @@ doc <:doc< ************************************
    @modsubsection{Functions}
   
    The typing rules for functions are straightforward.  These rules use the
-   ``@tt[exp]'' tag since in $<< polyFun{ x. 'f['x] } >>$ and
-   $<< lambda{ x. 'f['x] } >>$, $f$ may be an expression.
+   ``@tt[exp]'' tag since in << polyFun{ x. 'f['x] } >> and
+   << lambda{ x. 'f['x] } >>, $f$ may be an expression.
    @end[doc]
 >>
 
@@ -128,7 +128,7 @@ doc <:doc< ************************************
    @begin[doc]
    @modsubsection{Union values}
   
-   A value $<< union_val[i:n]{ 'tv; 'atom_list } >>$ belongs to a union type
+   A value << union_val[i:n]{ 'tv; 'atom_list } >> belongs to a union type
    if the union type is well-formed, and if the atoms belong to the specific
    case of the union definition given by the union type.
    @end[doc]
@@ -183,7 +183,7 @@ doc <:doc< ************************************
    @begin[doc]
    @modsubsection{Raw data values}
   
-   Raw data is represented abstractly as the value $<< raw_data >>$.
+   Raw data is represented abstractly as the value << raw_data >>.
    @end[doc]
 >>
 

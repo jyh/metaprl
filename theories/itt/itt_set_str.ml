@@ -114,8 +114,8 @@ interactive set_intro  {| intro[] |}:
 
  doc <:doc< 
    @begin[doc]
-   The $<<label["car":t]>>$ is an abstract carrier for sets (in concrete implementations it could be, for example, list or tree type),
-   $<<label["empty":t]>>$ is a constant of this type for an empty set.
+   The <<label["car":t]>> is an abstract carrier for sets (in concrete implementations it could be, for example, list or tree type),
+   <<label["empty":t]>> is a constant of this type for an empty set.
    Set data type has also the following functions:
    @begin[itemize]
     @item{ <<label["member":t] 'S 'a>> checks whether element $a$ is a member of set $S$.}
@@ -125,13 +125,13 @@ interactive set_intro  {| intro[] |}:
 
    There are three specifications that guarantees that sets works properly:
   @begin[itemize]
-    @item{ $<< not{"assert"{.(self{'self}^member) (self{'self}^empty) 'a}}>>$ guarantees that <<label["empty":t]>> is an empty set.}
-    @item{ $<< iff{"assert"{.(self{'self}^member) ((self{'self}^insert) 'S 'b) 'a}; ("assert"{.((self{'self}^member) 'S 'a)} or 'a='b in 'T)}>>$
+    @item{ << not{"assert"{.(self{'self}^member) (self{'self}^empty) 'a}}>> guarantees that <<label["empty":t]>> is an empty set.}
+    @item{ << iff{"assert"{.(self{'self}^member) ((self{'self}^insert) 'S 'b) 'a}; ("assert"{.((self{'self}^member) 'S 'a)} or 'a='b in 'T)}>>
 
      guarantees that  <<label["insert":t] 'S 'b>> has all elements that $S$ had, an element $b$ and nothing more.}
-    @item{ $<< iff{"assert"{.(self{'self}^member) ((self{'self}^delete) 'S 'b) 'a}; ("assert"{.((self{'self}^member) 'S 'a)} and not{.'a='b in 'T})}>>$
+    @item{ << iff{"assert"{.(self{'self}^member) ((self{'self}^delete) 'S 'b) 'a}; ("assert"{.((self{'self}^member) 'S 'a)} and not{.'a='b in 'T})}>>
 
-     guarantees that  $<<label["delete":t] 'S 'b>>$ has all elements that $S$ had except element $b$.}
+     guarantees that  <<label["delete":t] 'S 'b>> has all elements that $S$ had except element $b$.}
    @end[itemize]
    @end[doc]
 >>
@@ -147,13 +147,13 @@ doc <:doc<
    quotiented over all permutations:
    $$<< fset{'eq; 'T} >> = << (quot x, y : list{'T} // "assert"{fequal{'eq; 'x; 'y}}) >>$$
 
-  where $T$ is an arbitrary type and $<<'eq>>$ is an equivalence relation on this type.
+  where $T$ is an arbitrary type and <<'eq>> is an equivalence relation on this type.
   Theory @hrefmodule[Itt_fset] also defines some basic operations on this type.
    Here we combine these operations in one data structure.
 
    Since @hrefmodule[Itt_fset]'s definition of sets needs a  decidable equality,
    we will define a functor that take a type with decidable equality $A$
-   and construct a data structure of the type $<<Set[i:l]{.'A^car}>>$.
+   and construct a data structure of the type <<Set[i:l]{.'A^car}>>.
    @end[doc]
 >>
 extends Itt_fset
@@ -210,7 +210,7 @@ doc <:doc<
    @modsection{Map data structure}
   
    Another common data structure is Table. A table is a partial function with a finite domain.
-   It can be viewed as a set of pairs $<<('argument,'value)>>$, where the first components of all pairs are different.
+   It can be viewed as a set of pairs <<('argument,'value)>>, where the first components of all pairs are different.
 
    @modsubsection{Definitions}
    @end[doc]
@@ -246,37 +246,37 @@ dform table_df2 : except_mode[src] :: Table[i:l]{'T; 'M} = mathbbT `"able" sub{s
 
  doc <:doc< 
    @begin[doc]
-   This definitions says that table data structure has a constant $<<label["empty":t]>>$
+   This definitions says that table data structure has a constant <<label["empty":t]>>
    (an empty table, i.e. function that undefined on all elements).
    Table has also the following functions:
    @begin[itemize]
     @item{ <<label["apply":t] 'F 'a>> applies the function $F$ to $a$.
-     It returns $<<inr{'y}>>$  if $y$ is an result of the application
-     and  $<<inl{it}>>$ if $a$ is not in domain of function $F$.
-     In other words: it looks for a pair of the form $<<'a,'y>>$ in the table. }
-     and returns $<<inl{'y}>>$  if it finds one and  $<<inr{it}>>$ otherwise.
+     It returns <<inr{'y}>>  if $y$ is an result of the application
+     and  <<inl{it}>> if $a$ is not in domain of function $F$.
+     In other words: it looks for a pair of the form <<'a,'y>> in the table. }
+     and returns <<inl{'y}>>  if it finds one and  <<inr{it}>> otherwise.
 
     @item{ <<label["insert":t] 'F 'a 'b>> defines the value of the function at the point $a$ to be $b$.
-   In other words: inserts a pair $<<'a,'b>>$ in table $F$.}
+   In other words: inserts a pair <<'a,'b>> in table $F$.}
 
     @item{<<label["delete":t] 'F 'a>> makes the function undefined at the point $a$.
-    In other words it deletes a pair $<<'a,'y>>$
+    In other words it deletes a pair <<'a,'y>>
     from table $F$.}
    @end[itemize]
 
    There are five specifications that guarantees that sets works properly:
   @begin[itemize]
     @item{
-   $<<label[apply:t] label[empty:t] 'x = inr{it} in 'M['x] + unit >>$
+   <<label[apply:t] label[empty:t] 'x = inr{it} in 'M['x] + unit >>
     }
     @item{
-   $<<label[apply:t] (label[insert:t] 'F 'x 'y) 'x = inl{'y} in  'M['x] + unit >>$
+   <<label[apply:t] (label[insert:t] 'F 'x 'y) 'x = inl{'y} in  'M['x] + unit >>
    }
     @item{
    $<<(not{'x_1='x_2 in 'T} => label[apply:t] (label[insert:t] 'F 'x_2 'y) 'x_1 = label[apply:t] 'F 'x_1 in  'M['x_1] + unit) >>$
     }
     @item{
-   $<< label[apply:t] (label[delete:t] 'F 'x) 'x = inl{it} in  'M['x] + unit >>$
+   << label[apply:t] (label[delete:t] 'F 'x) 'x = inl{it} in  'M['x] + unit >>
     }
     @item{
    $<< (not{'x_1='x_2 in 'T} => label[apply:t] (label[delete:t] 'F 'x_2) 'x_1 = label[apply:t] 'F 'x_1 in  'M['x_1] + unit) >>$
@@ -314,7 +314,7 @@ doc <:doc<
   
    The simplest way to implement Tables is to use lists as carrier in the same way as we defined sets.
 
-   Let us construct a $<<Table[i:l]{'A^car; x.'S['x]}>>$, where $A$ is an ordered set.
+   Let us construct a <<Table[i:l]{'A^car; x.'S['x]}>>, where $A$ is an ordered set.
    @end[doc]
 >>
 

@@ -77,7 +77,7 @@ doc <:doc< ************************************
    @begin[doc]
    @modsubsection{Numbers}
   
-   The type $<< tyInt >>$ is well-formed.
+   The type << tyInt >> is well-formed.
    @end[doc]
 >>
 
@@ -105,10 +105,10 @@ prim wf_tyEnum :
 doc <:doc< 
    @begin[doc]
   
-   The types $<< tyRawInt[p:n, sign:s] >>$ and $<< tyFloat[p:n] >>$
+   The types << tyRawInt[p:n, sign:s] >> and << tyFloat[p:n] >>
    are well-formed if their parameters are well-formed.  Note that
-   $<< tyRawInt[p:n, sign:s] >>$ and $<< tyFloat[p:n] >>$ cannot be
-   used as $<< small_type >>$ types.
+   << tyRawInt[p:n, sign:s] >> and << tyFloat[p:n] >> cannot be
+   used as << small_type >> types.
    @end[doc]
 >>
 
@@ -271,7 +271,7 @@ prim wf_tyArray :
 doc <:doc< 
    @begin[doc]
   
-   The type $<< tyRawData >>$ is well-formed.
+   The type << tyRawData >> is well-formed.
    @end[doc]
 >>
 
@@ -353,7 +353,7 @@ doc <:doc<
    @begin[doc]
   
    Two existential types are equal if when instantiated at the same
-   $<< small_type >>$ type, the resulting types are equal.
+   << small_type >> type, the resulting types are equal.
    @end[doc]
 >>
 
@@ -369,7 +369,7 @@ doc <:doc<
    @begin[doc]
   
    Two universal types are equal if when instantiated at the same
-   $<< small_type >>$ type, the resulting types are equal.
+   << small_type >> type, the resulting types are equal.
    @end[doc]
 >>
 
@@ -417,7 +417,7 @@ doc <:doc< ************************************
    @modsubsection{Type definitions}
   
    Two parametrized types are equal if when instantiated at the same
-   $<< small_type >>$, the resulting types are equal.
+   << small_type >>, the resulting types are equal.
    @end[doc]
 >>
 

@@ -44,7 +44,7 @@ open Itt_list
 doc <:doc< 
    @begin[doc]
    @modsection{Simple Records}
-   First, let us define two record types: $<<plane>>$ and $<<space>>$.
+   First, let us define two record types: <<plane>> and <<space>>.
    @end[doc]
 >>
 
@@ -61,7 +61,7 @@ interactive spaceType {|intro[] |} :
 
 doc <:doc< 
    @begin[doc]
-   The elements of these types are records. E.g., the point $<<O>>$ is an element of the type $<<space>>$:
+   The elements of these types are records. E.g., the point <<O>> is an element of the type <<space>>:
    @end[doc]
 >>
 
@@ -72,7 +72,7 @@ interactive oInSpace {|intro[] |} :
 
 doc <:doc< 
    @begin[doc]
-   $<<O>>$ also can be considered as an element of the type $<<plane>>$:
+   <<O>> also can be considered as an element of the type <<plane>>:
    @end[doc]
 >>
 
@@ -81,7 +81,7 @@ interactive oInPlane {|intro[] |} :
 
 doc <:doc< 
    @begin[doc]
-   In general $<<space>>$ is a subtype of $<<plane>>$.
+   In general <<space>> is a subtype of <<plane>>.
    @end[doc]
 >>
 
@@ -90,7 +90,7 @@ interactive spacePlane {|intro[] |} :
 
 doc <:doc< 
    @begin[doc]
-   Let us consider two points $<<A>>$ and $<<B>>$:
+   Let us consider two points <<A>> and <<B>>:
    @end[doc]
 >>
 
@@ -108,9 +108,9 @@ interactive bInSpace {|intro[] |} :
 
 doc <:doc< 
    @begin[doc]
-   These points are equal in $<<plane>>$, since they have
-   the same $<<label["x":t]>>$ and $<<label["y":t]>>$ coordinates,
-   But they are not equal in $<<space>>$, since they differ in $<<label["z":t]>>$ coordinate.
+   These points are equal in <<plane>>, since they have
+   the same <<label["x":t]>> and <<label["y":t]>> coordinates,
+   But they are not equal in <<space>>, since they differ in <<label["z":t]>> coordinate.
    @end[doc]
 >>
 
@@ -141,7 +141,7 @@ interactive_rw cover_rw  :
 
 doc <:doc< 
    @begin[doc]
-   The field operator $<<field[x:t]{'r}>>$ gets the field $<<label[x:t]>>$ of the record $<<'r>>$. E.g.,
+   The field operator <<field[x:t]{'r}>> gets the field <<label[x:t]>> of the record <<'r>>. E.g.,
    @end[doc]
 >>
 
@@ -198,7 +198,7 @@ interactive point_eta :
 
 doc <:doc< 
    @begin[doc]
-   The last reduction says that any element of $<<plane>>$ is a point of the form $<<point{'a;'b;rcrd}>>$.
+   The last reduction says that any element of <<plane>> is a point of the form <<point{'a;'b;rcrd}>>.
    Therefore we have the following elimination rule:
    @end[doc]
 >>
@@ -254,7 +254,7 @@ interactive length_wf {|intro[] |} :
 
 doc <:doc< 
    @begin[doc]
-   Record can be extended. For example we can define $<<cplane>>$ and $<<cspace>>$ types.
+   Record can be extended. For example we can define <<cplane>> and <<cspace>> types.
    @end[doc]
 >>
 

@@ -49,39 +49,24 @@ declare info[name:s]
 declare info_begin
 declare info_end
 declare keyword[name:s]
-declare keyword_begin
-declare keyword_end
 declare bf[name:s]
 declare bf{'t}
-declare bf_begin
-declare bf_end
 declare i[name:s]
 declare i{'t}
 declare it[name:s]
 declare it{'t}
-declare it_begin
-declare it_end
 declare em[s:s]
 declare em{'s}
-declare em_begin
-declare em_end
 declare emph{'t}
 declare tt[name:s]
 declare tt{'t}
-declare tt_begin
-declare tt_end
 declare url[url:s]
 declare sub{'t}
 declare sub[name:s]
-declare sub_begin
-declare sub_end
 declare sup{'t}
 declare sup[name:s]
-declare sup_begin
-declare sup_end
 declare small[name:s]
-declare small_begin
-declare small_end
+declare esquash{'t}
 
 (*
  * HTML control.

@@ -15,10 +15,10 @@ doc <:doc<
   
    The union type is the first primitive type that can have more than one
    element.  The tag makes the handedness of membership decidable, and
-   the union type $@unit + @unit$ contains two elements: @inl{it} and
-   @inr{it}.  The @hrefmodule[Itt_bool] module uses this definition to
-   define the Boolean values, where @emph{false} is @inl{it} and
-   @emph{true} is @inr{it}.
+   the union type $@unit + @unit$ contains two elements: <<inl{it}>> and
+   <<inr{it}>>.  The @hrefmodule[Itt_bool] module uses this definition to
+   define the Boolean values, where @emph{false} is <<inl{it}>> and
+   @emph{true} is <<inr{it}>>.
   
    @end[doc]
   
@@ -64,7 +64,7 @@ extends Itt_void
 extends Itt_equal
 extends Itt_struct
 extends Itt_subtype
-doc <:doc< @docoff >>
+doc docoff
 
 open Printf
 open Mp_debug

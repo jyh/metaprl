@@ -88,7 +88,7 @@ doc <:doc<
   
    The following terms define the Boolean connectives.
    The Boolean values are @emph{not} propositions; the
-   @tt{assert} term converts a Boolean expression
+   @tt[assert] term converts a Boolean expression
    to propositional form.  Note that these connectives
    are completely separate from the logical connectives
    defined in @hrefmodule[Itt_logic].
@@ -233,9 +233,8 @@ dform ifthenelse_df : parens :: "prec"[prec_bor] :: except_mode[src] ::
  ifthenelse{'e1; 'e2; 'e3} =
    math_if{'e1; 'e2; 'e3}
 
-dform assert_df : parens :: "prec"[prec_assert] :: except_mode[src] ::
- "assert"{'t} =
-   downarrow slot{'t}
+dform assert_df : parens :: "prec"[prec_assert] :: except_mode[src] :: "assert"{'t} =
+   uparrow slot{'t}
 
 (************************************************************************
  * RULES                                                                *
@@ -401,8 +400,8 @@ doc <:doc<
    @tt{assert} term is well-formed if its argument is
    a Boolean value.
   
-   The $@assert{@true}$ goal is always provable;
-   the $@assert{@false}$ assumption is contradictory.
+   The <<"assert"{"true"}>> goal is always provable;
+   the <<"assert"{"false"}>> assumption is contradictory.
    @end[doc]
 >>
 interactive assert_type {| intro [] |} :

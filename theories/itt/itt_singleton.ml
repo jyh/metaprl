@@ -88,7 +88,7 @@ let _ =
 doc <:doc< 
    @begin[doc]
    @modsection{Definition}
-   By definition $<<singleton{'a;'A}>>$ is a subtype of $A$ that contain only one element $a$
+   By definition <<singleton{'a;'A}>> is a subtype of $A$ that contain only one element $a$
    (and of course all elements equal to $a$).
    @end[doc]
 >>

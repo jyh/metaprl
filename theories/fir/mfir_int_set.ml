@@ -302,7 +302,7 @@ doc <:doc<
    @begin[doc]
   
    The @tt[reduce_subset] conversional uses the three rewrites below to reduce
-   $<< 'set1 subset 'set2  >>$.  The cases in which one of the sets is
+   <<'set1 subset 'set2>>.  The cases in which one of the sets is
    empty are straightforward.  The case in which both sets are non-empty
    reduces to a case analysis on the first interval in each set.
    @end[doc]

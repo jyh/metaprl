@@ -13,14 +13,14 @@ doc <:doc<
   
    The binary union is defined for sets $s_1 = @collect{x_1; T_1; f_1[x_1]}$
    and $s_2 = @collect{x_2; T_2; f_2[x_2]}$ as a set with the disjoint
-   union index type $@"Itt_comment"!union{T_1; T_2}$ defined in
+   union index type <<Itt_union!union{'T_1; 'T_2}>> defined in
    the @hrefmodule[Itt_union] module.
   
    $$
    @begin[array,l]
    @line{@item{@union{@collect{x_1; T_1; f_1[x_1]}; @collect{x_1; T_1; f_1[x_1]}} @equiv}}
    @line{@item{@space @space @space
-      @collect{x; @"Itt_comment"!union{T_1; T_2};
+      @collect{x; <<Itt_union!union{'T_1; 'T_2}>>;
          @decide{x; u; f_1[u]; v; f_2[v]}}}}
    @end[array]
    $$

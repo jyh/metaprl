@@ -138,10 +138,10 @@ declare math_dst{'dst1; 'dst2}
  * Display forms.
  *)
 dform math_dst_df1 : mode[tex] :: math_dst{'dst} =
-   math_lambda slot{'dst} `"."
+   lambda slot{'dst} `"."
 
 dform math_dst_df2 : mode[tex] :: math_dst{'dst1; 'dst2} =
-   math_lambda slot{'dst1} `"," slot{'dst2} `"."
+   lambda slot{'dst1} `"," slot{'dst2} `"."
 
 (*
  * Operands.
@@ -304,7 +304,7 @@ dform init_df : mode[tex] :: math_Init{'rest} =
  * Programs.
  *)
 dform label_fun_df : mode[tex] :: math_LabelFun{'v; 'insts} =
-   math_lambda slot{'v} `"." slot{'insts}
+   lambda slot{'v} `"." slot{'insts}
 
 dform math_LabelRec_df : mode[tex] :: math_LabelRec{'R; 'e1; 'e2} =
    math_xlet math_bf[" rec "] slot{'R} `"=" slot{'e1} math_xin slot{'e2}
@@ -313,7 +313,7 @@ dform label_def_df : mode[tex] :: math_LabelDef{'label; 'insts; 'rest} =
    slot{'label} `"=" slot{'insts} bf[" and "] slot{'rest}
 
 dform label_end_df : mode[tex] :: math_LabelEnd =
-   math_epsilon
+   epsilon
 
 dform label_asm_df : mode[tex] :: math_LabelAsm{'R; 'label} =
    slot{'R} `"." slot{'label} `":"

@@ -112,7 +112,7 @@ doc <:doc<
    nondependent functions $@fun{A; B}$.
   
    The elements of the function types are
-   the functions $@lambda{x; b[x]}$, and the induction combinator is the
+   the functions <<lambda{x.'b['x]}>>, and the induction combinator is the
    application $@apply{f; a}$.  The @tt{fix} term defines a @emph{fixpoint}.
   
    The @tt{well_founded} terms are used to define the well-founded order
@@ -250,7 +250,7 @@ doc <:doc<
    The @tt{reduce_fix} rewrite defines reduction on the fixpoint
    combinator.  The @tt{reduce_fix} rewrite can be derived by defining
    the $Y$-combinator $Y @equiv @lambda f. @lambda x. (f@space (x@space x))@space (f@space (x@space x))$
-   and defining $@fix{x; b[x]} @equiv Y@space (@lambda{x; b[x]})$.
+   and defining $@fix{x; b[x]} @equiv Y@space (<<lambda{x.'b['x]}>>)$.
    @end[doc]
 >>
 prim_rw reduce_beta : (lambda{v. 'b['v]} 'a) <--> 'b['a]

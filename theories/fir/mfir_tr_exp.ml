@@ -59,10 +59,10 @@ doc <:doc<
    @rules
    @modsubsection{Basic expressions}
   
-   Operationally, the $<< letAtom{ 'ty1; 'atom; v. 'exp['v] } >>$ expression
-   binds $<< 'atom >>$ to $<< 'v >>$ in $<< 'exp >>$.  The expression has type
-   $<< 'ty2 >>$ if $<< 'atom >>$ has type $<< 'ty1 >>$, and $<< 'exp['v] >>$
-   has type $<< 'ty2 >>$ assuming that $<< 'v >>$ has type $<< 'ty1 >>$.
+   Operationally, the << letAtom{ 'ty1; 'atom; v. 'exp['v] } >> expression
+   binds << 'atom >> to << 'v >> in << 'exp >>.  The expression has type
+   << 'ty2 >> if << 'atom >> has type << 'ty1 >>, and << 'exp['v] >>
+   has type << 'ty2 >> assuming that << 'v >> has type << 'ty1 >>.
    @end[doc]
 >>
 
@@ -78,9 +78,9 @@ prim ty_letAtom :
 doc <:doc< 
    @begin[doc]
   
-   The expression $<< letExt[str:s]{ 'u; 'tyl; 'args; v. 'exp['v] } >>$ binds
+   The expression << letExt[str:s]{ 'u; 'tyl; 'args; v. 'exp['v] } >> binds
    the result of a call to an external (e.g.~standard library) function
-   $<< 'str >>$ to $<< 'v >>$ in $<< 'exp >>$.  We make no attempt to see that
+   << 'str >> to << 'v >> in << 'exp >>.  We make no attempt to see that
    the types in the expression correspond to the actual types for the function
    @tt[str].
    @end[doc]
@@ -101,7 +101,7 @@ doc <:doc<
   
    The next three rules assume that FIR programs are written in continuation
    passing style.  A function call is well-formed if the variable
-   $<< atomVar{'v} >>$ is a function, and if the arguments have the
+   << atomVar{'v} >> is a function, and if the arguments have the
    appropriate types.
    @end[doc]
 >>
@@ -370,10 +370,10 @@ doc <:doc< ************************************
    @begin[doc]
    @modsubsection{Allocation}
   
-   The rules for the expression $<< letAlloc{ 'op; v. 'exp['v] } >>$
+   The rules for the expression << letAlloc{ 'op; v. 'exp['v] } >>
    defer, when possible, to the rules for the well-formedness of
-   the value allocated.  The result of the allocation is bound to $<< 'v >>$
-   in $<< 'exp >>$.
+   the value allocated.  The result of the allocation is bound to << 'v >>
+   in << 'exp >>.
    @end[doc]
 >>
 
@@ -591,9 +591,9 @@ doc <:doc< ************************************
    @begin[doc]
    @modsubsection{Global Values}
   
-   The expression $<< letGlobal{ 'ty1; 'label; v. 'exp['v] } >>$ is used to
+   The expression << letGlobal{ 'ty1; 'label; v. 'exp['v] } >> is used to
    read a global value, and the expression
-   $<< setGlobal{ 'label; 'ty1; 'atom; 'exp } >>$ is used to set a global
+   << setGlobal{ 'label; 'ty1; 'atom; 'exp } >> is used to set a global
    value.  There is no way to use global values directly.  The typing rules
    for these expressions are straightforward.
    @end[doc]

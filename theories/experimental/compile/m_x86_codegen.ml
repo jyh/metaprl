@@ -1,7 +1,5 @@
 doc <:doc< 
-   @begin[spelling]
-   compilable
-   @end[spelling]
+   @spelling{compilable}
   
    @begin[doc]
    @module[M_x86_codegen]
@@ -33,14 +31,10 @@ doc <:doc<
    @end[license]
 >>
 
-doc <:doc< 
-   @begin[doc]
-   @parents
-   @end[doc]
->>
+doc <:doc< @doc{@parents} >>
 extends M_ir
 extends M_x86_frame
-doc <:doc< @docoff >>
+doc docoff
 
 open M_util
 
@@ -63,14 +57,14 @@ doc <:doc<
    terms are eliminated by the end of the translation process.
 
    @begin[itemize]
-   @item{{ASM@{'e@} represents the translation of IR @emph{expressions} into sequences
-   of assembly instructions.}}
-   @item{{ASM@{'a; v. 'e['v]@} represents the translation of an IR @emph{atom} into
-   an assembly operand, which in turn is substituted for variable v in e[v].}}
-   @item{{ASM@{'args1; 'args2; v. 'e['v]@} represents the translation of IR function @emph{arguments} into
-   assembly operands}}
-   @item{{ASM@{'R; 'e@} represents the translation of the mutually recursive IR @emph{functions}
-   in record R and the rest of the program.}}
+   @item{<<ASM{'e}>> represents the translation of IR @emph{expressions} into sequences
+   of assembly instructions.}
+   @item{<<ASM{'a; v. 'e['v]}>> represents the translation of an IR @emph{atom} into
+   an assembly operand, which in turn is substituted for variable v in e[v].}
+   @item{<<ASM{'args1; 'args2; v. 'e['v]}>> represents the translation of IR function @emph{arguments} into
+   assembly operands}
+   @item{<<ASM{'R; 'e}>> represents the translation of the mutually recursive IR @emph{functions}
+   in record R and the rest of the program.}
    @end[itemize]
    @end[doc]
 >>
@@ -391,7 +385,7 @@ prim_rw asm_atom_binop_div :
 doc <:doc< 
    @begin[doc]
    Assembling IR relational operators is a mapping to the appropriate
-   condition codes. The operations themselves become assembly comparisions.
+   condition codes. The operations themselves become assembly comparisons.
    @end[doc]
 >>
 prim_rw asm_eq  : ASM{EqOp}  <--> CC["z"]
@@ -438,7 +432,7 @@ prim_rw asm_reserve_2 :
 
 doc <:doc<
    @begin[doc]
-   The translation of LetAtom is straightforward: we
+   The translation of @tt[LetAtom] is straightforward: we
    first translate the atom a into an operand v1, which is then moved
    into v.
    @end[doc]
@@ -453,7 +447,7 @@ prim_rw asm_let_atom :
 
 doc <:doc<
    @begin[doc]
-   Conditionals are translated into a comparision followed by
+   Conditionals are translated into a comparison followed by
    a conditional branch.
    @end[doc]
 >>
@@ -581,7 +575,7 @@ prim_rw asm_let_closure :
 
 doc <:doc<
    @begin[doc]
-   Assembling tailcalls to IR functions involve assembling
+   Assembling tail-calls to IR functions involve assembling
    the function arguments and jumping to the appropriate
    function label.
    @end[doc]

@@ -706,7 +706,7 @@ doc <:doc<
    @begin[doc]
    @rules
   
-   A list $v$ is a subset of the list $<<cons{'u; 'v}>>$.
+   A list $v$ is a subset of the list <<cons{'u; 'v}>>.
    @end[doc]
 >>
 interactive subset_cons {| intro [AutoMustComplete] |} :

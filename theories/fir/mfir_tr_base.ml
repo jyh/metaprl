@@ -110,8 +110,8 @@ doc <:doc< ************************************
    @modsubsection{Kind well-formedness}
   
    The kind well-formedness rules specify how kinds may be used
-   in classifying FIR types.  Specifically, some kinds $<< 'k >>$
-   may only appear as $<< polyKind{ 'i; 'k } >>$.
+   in classifying FIR types.  Specifically, some kinds << 'k >>
+   may only appear as << polyKind{ 'i; 'k } >>.
    @end[doc]
 >>
 
@@ -157,8 +157,8 @@ doc <:doc< ************************************
    @begin[doc]
    @modsubsection{Kind equivalence}
   
-   The @tt[wf_small_type] rule allows any $<< small_type >>$ type
-   to be used as a $<< large_type >>$ type.
+   The @tt[wf_small_type] rule allows any << small_type >> type
+   to be used as a << large_type >> type.
    @end[doc]
 >>
 
@@ -171,8 +171,8 @@ prim ty_small_as_large :
 doc <:doc< 
    @begin[doc]
   
-   If two types are equal in some kind $<< 'k >>$,
-   then they are equal equal in $<< polyKind{ 0; 'k } >>$.
+   If two types are equal in some kind << 'k >>,
+   then they are equal equal in << polyKind{ 0; 'k } >>.
    @end[doc]
 >>
 

@@ -1,5 +1,5 @@
 doc <:doc< 
-   @spelling{bool esquash esquashT unhidden squashes}
+   @spelling{bool esquashT unhidden squashes}
   
    @begin[doc]
    @module[Itt_esquash]
@@ -10,10 +10,10 @@ doc <:doc<
    the computational context we want to be able to squash the
    intensional term structure as well.
   
-   The @tt{Itt_esquash} module defines a generic squash term
-   $@esquash{P}$.  The elements of the type are the trivial terms
+   The @tt[Itt_esquash] module defines a generic squash term
+   <<esquash{'P}>>.  The elements of the type are the trivial terms
    $@it$ (provided $P$ itself is non-empty), and two terms
-   $@esquash{P_1}$ and $@esquash{P_2}$ have the @emph{extensional}
+   <<esquash{'P_1}>> and <<esquash{'P_2}>> have the @emph{extensional}
    equality $P_1 @Leftrightarrow P_2$.
   
    For more information on the @tt[esquash] operator see @cite["Nog02a,Nog02b"].
@@ -74,21 +74,21 @@ doc <:doc<
    @begin[doc]
    @terms
   
-   The @tt{esquash} operator @i{extensionally squashes} a proposition.
+   The @tt[esquash] operator @i{extensionally squashes} a proposition.
    @end[doc]
 >>
 declare esquash{'P}
 doc <:doc< @docoff >>
 
 dform esquash_df : except_mode[src] :: esquash{'P} =
-   math_esquash{'P}
+   Nuprl_font!esquash{'P}
 
 doc <:doc< 
    @begin[doc]
    @rules
    @modsubsection{Typehood and equality}
   
-   The @tt{esquash} term inhabits the type universe $@univ{i}$
+   The @tt[esquash] term inhabits the type universe $@univ{i}$
    if the proposition $P$ is also in $@univ{i}$.
    @end[doc]
 >>
@@ -99,7 +99,7 @@ prim esquash_type {| intro [AutoMustComplete] |} :
 
 doc <:doc< 
    @begin[doc]
-   Two squashed propositions $@esquash{'A}$ and $@esquash{'B}$
+   Two squashed propositions <<esquash{'A}>> and <<esquash{'B}>>
    are equal if both are types, and if each one implies another.
    @end[doc]
 >>
@@ -120,7 +120,7 @@ doc <:doc<
    @begin[doc]
    @modsubsection{Introduction}
   
-   The $@esquash{P}$ proposition is true if $P$ is true.
+   The <<esquash{'P}>> proposition is true if $P$ is true.
    However, this rule is too strong to add to the
    @hrefresource[intro_resource] directly.  Instead, the
    @hreftactic[esquashT] tactic is defined below to
@@ -136,7 +136,7 @@ doc <:doc<
    @begin[doc]
    @modsubsection{Membership}
   
-   The element in the $@esquash{P}$ term is always the term
+   The element in the <<esquash{'P}>> term is always the term
    $@it$.
    @end[doc]
 >>
@@ -179,7 +179,7 @@ interactive unesquash 'H :
 
 doc <:doc< 
    @begin[doc]
-   The $@esquash{@void}$ can not be inhabited.
+   The <<esquash{void}>> can not be inhabited.
    @end[doc]
 >>
 interactive esquash_void_elim {| elim [] |} 'H :

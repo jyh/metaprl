@@ -101,7 +101,7 @@ doc <:doc<
    @begin[doc]
    @modsection{Order}
    @modsubsection{Definition}
-   Order is a type  $<<label["car":t]>>$ with an irreflexive transitive complete
+   Order is a type  <<label["car":t]>> with an irreflexive transitive complete
   relation:
      $$<<label["<":t]>>  : <<label["car":t]-> label["car":t] -> bool>>$$
    @end[doc]

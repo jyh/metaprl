@@ -163,7 +163,6 @@ declare math_bor{'a; 'b}
 declare math_band{'a; 'b}
 declare math_bimplies{'a; 'b}
 declare math_bnot{'a}
-declare math_assert{'t}
 declare math_if{'a; 'b; 'c}
 
 dform math_Bool_df1 : math_bool =
@@ -204,11 +203,6 @@ dform math_bnot_df1 : mode[tex] :: math_bnot{'a} =
    slot{'a}
    izone `"}" ezone
 
-dform math_assert_df1 : mode[tex] :: math_assert{'a} =
-   izone `"{\\uparrow " ezone
-   slot{'a}
-   izone `"}" ezone
-
 dform math_if_df1 : mode[tex] :: math_if{'a; 'b; 'c} =
    izone `"\\mathop{\\bf if}" ezone
    szone{'a}
@@ -224,12 +218,10 @@ prec prec_bimplies
 prec prec_bor
 prec prec_band
 prec prec_bnot
-prec prec_assert
 
 prec prec_bimplies < prec_bor
 prec prec_bor < prec_band
 prec prec_band < prec_bnot
-prec prec_bnot < prec_assert
 
 dform bor_df : parens :: "prec"[prec_bor] :: except_mode[tex] :: math_bor{'a; 'b} =
    slot{'a} " " vee subb " " slot{'b}
@@ -247,9 +239,6 @@ dform ifthenelse_df : parens :: "prec"[prec_bor] :: except_mode[tex] :: math_if{
    szone pushm[0] pushm[3] `"if" `" " szone{'e1} `" " `"then" hspace
    szone{'e2} popm hspace
    pushm[3] `"else" hspace szone{'e3} popm popm ezone
-
-dform assert_df : parens :: "prec"[prec_assert] :: except_mode[tex] :: math_assert{'t} =
-   downarrow slot{'t}
 
 (************************************************************************
  * INTEGERS
@@ -546,9 +535,6 @@ dform math_lambda_df1 : mode[tex] :: math_lambda{'v; 'b} =
    'v
    izone `"." ezone
    'b
-
-dform math_lambda_df1 : mode[tex] :: math_lambda =
-   izone `"\\lambda " ezone
 
 dform math_apply_df1 : mode[tex] :: math_apply{'f; 'a} =
    'f
@@ -1164,7 +1150,6 @@ dform list_ind_df1 : except_mode[tex] :: parens :: "prec"[prec_list] :: math_lis
  ************************************************************************)
 
 declare math_quot{'T; 'x; 'y; 'E}
-declare math_esquash{'P}
 
 (************************************************
  * TeX
@@ -1180,11 +1165,6 @@ dform math_quot_df1 : mode[tex] :: math_quot{'T; 'x; 'y; 'E} =
    slot{'E}
    izone `"}" ezone
 
-dform math_esquash_df1 : mode[tex] :: math_esquash{'P} =
-   izone `"[\!" ezone
-   `"[" slot{'P} `"]"
-   izone `"\!]" ezone
-
 (************************************************
  * Normal mode
  *)
@@ -1193,9 +1173,6 @@ prec prec_quot
 
 dform quot_df1 : except_mode[tex] :: parens :: "prec"[prec_quot] :: math_quot{'A; 'x; 'y; 'E} =
    slot{'x} `", " slot{'y} `":" " " slot{'A} `" // " slot{'E}
-
-dform math_esquash_df2 : except_mode[tex] :: math_esquash{'P} =
-   `"[[" slot{'P} `"]]"
 
 (************************************************************************
  * SUBSET

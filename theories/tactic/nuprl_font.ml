@@ -118,6 +118,7 @@ declare small[name:s]
 declare small{'t}
 declare small_begin
 declare small_end
+declare esquash{'t}
 
 (*
  * HTML control.
@@ -213,6 +214,8 @@ declare ge
 declare equiv
 declare vee
 declare perp
+declare esq_l
+declare esq_r
 declare leftarrow
 declare middlearrow
 declare rightarrow
@@ -454,6 +457,9 @@ dform small_df1 : internal :: small[text:s] =
 
 dform small_df2 : internal :: small{'t} =
    small_begin 't small_end
+
+dform esquash_df : internal :: esquash{'t} =
+   esq_l 't esq_r
 
 (************************************************************************
  * TEX HELPERS                                                          *
@@ -769,6 +775,8 @@ dform ge_df			: internal :: mode[prl] :: ge                        = `"≥"
 dform equiv_df			: internal :: mode[prl] :: equiv                     = `"≡"
 dform vee_df			: internal :: mode[prl] :: vee                       = `"∨"
 dform perp_df			: internal :: mode[prl] :: perp                      = `"⊥"
+dform esq_dfl			: internal :: mode[prl] :: esq_l                     = `"〚"
+dform esq_dfr			: internal :: mode[prl] :: esq_r                     = `"〛"
 dform leftarrow_df		: internal :: mode[prl] :: leftarrow                 = `"←─"
 dform middlearrow_df		: internal :: mode[prl] :: middlearrow               = `"─"
 dform rightarrow_df		: internal :: mode[prl] :: rightarrow                = `"─→"
@@ -795,7 +803,7 @@ dform subthree_df		: internal :: mode[prl] :: subthree                  = `"₃"
 dform suba_df			: internal :: mode[prl] :: suba                      = `"⒜"
 dform subb_df			: internal :: mode[prl] :: subb                      = `"⒝"
 dform subc_df			: internal :: mode[prl] :: subc                      = `"⒞"
-dform subc_df			: internal :: mode[prl] :: subc                      = `"e"   (* is any symbol for sube? *)
+dform sube_df			: internal :: mode[prl] :: sube                      = `"e"   (* is any symbol for sube? *)
 dform subq_df			: internal :: mode[prl] :: subq                      = `"⒬"
 dform subt_df			: internal :: mode[prl] :: subt                      = `"⒯"
 dform subz_df			: internal :: mode[prl] :: subz                      = `"⒵"
@@ -825,6 +833,8 @@ dform ge_df			: internal :: mode[html] :: ge                        = html_uni[8
 dform equiv_df			: internal :: mode[html] :: equiv                     = html_uni[8801]
 dform vee_df			: internal :: mode[html] :: vee                       = html_uni[8744]
 dform perp_df			: internal :: mode[html] :: perp                      = html_sym["perp"]
+dform esq_dfl			: internal :: mode[html] :: esq_l                     = html_uni[12314]
+dform esq_dfr			: internal :: mode[html] :: esq_r                     = html_uni[12315]
 dform leftarrow_df		: internal :: mode[html] :: leftarrow                 = html_uni[8592]
 dform middlearrow_df		: internal :: mode[html] :: middlearrow               = html_uni[9472]
 dform rightarrow_df		: internal :: mode[html] :: rightarrow                = html_uni[8594]
@@ -881,6 +891,8 @@ dform ge_df			: internal :: mode[tex] :: ge                        = mathmacro["
 dform equiv_df			: internal :: mode[tex] :: equiv                     = mathmacro["equiv"]
 dform vee_df			: internal :: mode[tex] :: vee                       = mathmacro["vee"]
 dform perp_df			: internal :: mode[tex] :: perp                      = mathmacro["perp"]
+dform esq_dfl			: internal :: mode[tex] :: esq_l                     = `"[" izone `"\\![" ezone
+dform esq_dfr			: internal :: mode[tex] :: esq_r                     = `"]" izone `"\\!]" ezone
 dform leftarrow_df		: internal :: mode[tex] :: leftarrow                 = mathmacro["leftarrow"]
 dform middlearrow_df		: internal :: mode[tex] :: middlearrow               = mathmacro["-"]
 dform rightarrow_df		: internal :: mode[tex] :: rightarrow                = mathmacro["rightarrow"]

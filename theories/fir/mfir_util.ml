@@ -275,7 +275,7 @@ doc <:doc< ************************************
    @modsubsection{Existential unpacking}
   
    The following rewrites are the basis for reducing
-   $<< unpack_exists{ 'ty; 'var; 'num } >>$. The following two
+   << unpack_exists{ 'ty; 'var; 'num } >>. The following two
    rewrites are combined into the @tt[reduce_instantiate_tyExists]
    conversional in order to control the order of their application.
    @end[doc]
@@ -389,8 +389,8 @@ let resource reduce += [
 doc <:doc< 
    @begin[doc]
   
-   Converting a mutable type $<< mutable_ty{ 'ty; 'flag } >>$ to
-   a plain type $<< 'ty >>$ is straightforward.
+   Converting a mutable type << mutable_ty{ 'ty; 'flag } >> to
+   a plain type << 'ty >> is straightforward.
    @end[doc]
 >>
 

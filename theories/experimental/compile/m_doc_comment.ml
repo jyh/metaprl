@@ -121,7 +121,7 @@ dform math_xand_df2 : except_mode[tex] :: math_xand =
 dform math_xrewrite_df : mode[tex] :: math_xrewrite[label:s]{'e1; 'e2} =
    izone `"\\hbox to 4em{[" ezone
    slot[label:s]
-   izone `"] \\hfill}" ezone slot{'e1} math_longleftrightarrow slot{'e2}
+   izone `"] \\hfill}" ezone slot{'e1} longleftrightarrow slot{'e2}
 
 dform math_xrewrite2_df : mode[tex] :: math_xrewrite2[label:s]{'e1; 'e2} =
    izone `"{\\xrewrite{" ezone

@@ -13,15 +13,15 @@ doc <:doc<
    elements of $A$. That is, for any two elements of $A$ if they are equal in $B$,
    then they are also equal in $A$ (see rule @hrefrule[use_superset1]).
 
-   Not every subtype is subset. For example, $<<int  subtype (int subtwo)>>$
-   but not $<<int subset (int subtwo)>>$. See also @hrefrule[counterexample1].
+   Not every subtype is subset. For example, <<int  subtype (int subtwo)>>
+   but not <<int subset (int subtwo)>>. See also @hrefrule[counterexample1].
   
-   The main property of $<<'A subset 'B>>$ is that the membership in $A$ could
+   The main property of <<'A subset 'B>> is that the membership in $A$ could
    be defined for all elements in $B$.
   
    The subset relation corresponds to set type (Section @refmodule[Itt_set]) in the following way:
-   $<<'A subset 'B>>$ if and only if there is a proposition $P: <<'B -> univ[i:l]>>$, such that
-   $<<ext_equal{'A; {x:'B | 'P['x]}}>>$ (see @hrefrule[subset_iff]).
+   <<'A subset 'B>> if and only if there is a proposition $P: <<'B -> univ[i:l]>>$, such that
+   <<ext_equal{'A; {x:'B | 'P['x]}}>> (see @hrefrule[subset_iff]).
   
    Type-theoretic intersection and union (Sections @refmodule[Itt_isect] and @refmodule[Itt_tunion])
    behaves on subsets of a given type  like usual intersection and union.
@@ -187,7 +187,7 @@ doc <:doc<
    @begin[doc]
    @modsubsection{Subset}
    @modsubsection{Well-formedness}
-   Type $<<'A subset 'B>>$ is well-formed whenever $A$ and $B$ are types.
+   Type <<'A subset 'B>> is well-formed whenever $A$ and $B$ are types.
    @end[doc]
 >>
 
@@ -219,7 +219,7 @@ doc <:doc<
    @begin[doc]
    @modsubsection{Elimination Rules}
 
-   By definition if $<<'A subset 'B>>$ then  $<<'A subtype 'B>>$. (The opposite is not true --- see @hrefrule[counterexample1] below).
+   By definition if <<'A subset 'B>> then  <<'A subtype 'B>>. (The opposite is not true --- see @hrefrule[counterexample1] below).
    @end[doc]
 >>
 
@@ -269,8 +269,8 @@ interactive use_superset 'B 'y:
 
 doc <:doc< 
    @begin[doc]
-   Note that the rule @hrefrule[subset_is_subtype] is not reversible: $<<'A subtype 'B>>$ does not imply $<<'A subset 'B>>$.
-   For example, any type is subtype of $<<top>>$, but not every type is @emph{subset} of $<<top>>$.
+   Note that the rule @hrefrule[subset_is_subtype] is not reversible: <<'A subtype 'B>> does not imply <<'A subset 'B>>.
+   For example, any type is subtype of <<top>>, but not every type is @emph{subset} of <<top>>.
    @end[doc]
 >>
 
@@ -279,7 +279,7 @@ interactive counterexample1 :
 
 doc <:doc< 
    @begin[doc]
-   If $<<'A subset 'B>>$ is true, then both $A$ and $B$ are types.
+   If <<'A subset 'B>> is true, then both $A$ and $B$ are types.
    @end[doc]
 >>
 (* Note than if would have reverse functionality we could say that if A subset B Type then both A and B are types *)
@@ -295,9 +295,9 @@ interactive subsetTypeLeft  'A :
 doc <:doc< 
    @begin[doc]
    @modsubsection{Membership}
-   Proposition $<<'a in 'A subset 'B>>$ is almost equal to conjunction of
-   $<<'a in 'A>>$ and $<<'A subset 'B>>$, but its well-formedness is more liberal.
-   Indeed, $<<'a in 'A subset 'B>>$ is well-formed whenever $<<'a in 'B>>$ and $A$ and $B$ are types.
+   Proposition <<'a in 'A subset 'B>> is almost equal to conjunction of
+   <<'a in 'A>> and <<'A subset 'B>>, but its well-formedness is more liberal.
+   Indeed, <<'a in 'A subset 'B>> is well-formed whenever <<'a in 'B>> and $A$ and $B$ are types.
    @end[doc]
 >>
 
@@ -310,8 +310,8 @@ interactive member_wf {| intro [] |}  :
 
 doc <:doc< 
    @begin[doc]
-   Introduction and elimination rules reflect the fact that $<<'a in 'A subset 'B>>$
-   if and only if $<<'a in 'A>>$ and $<<'A subset 'B>>$.
+   Introduction and elimination rules reflect the fact that <<'a in 'A subset 'B>>
+   if and only if <<'a in 'A>> and <<'A subset 'B>>.
    @end[doc]
 >>
       
@@ -326,9 +326,9 @@ interactive member_elim {| elim [] |} 'H :
 
 doc <:doc< 
    @begin[doc]
-   Note that the truth of predicate $<<'a in 'A subset 'B>>$ does not depend on $B$ whenever
-   $<<'A subtype 'B>>$ and this predicate is well-formed.
-   This fact establishes a validity of introducing a binary membership $<<'a in 'A>>$ with the liberal well-formedness rule.
+   Note that the truth of predicate <<'a in 'A subset 'B>> does not depend on $B$ whenever
+   <<'A subtype 'B>> and this predicate is well-formed.
+   This fact establishes a validity of introducing a binary membership <<'a in 'A>> with the liberal well-formedness rule.
    @end[doc]
 >>
 

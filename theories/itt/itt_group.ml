@@ -1178,7 +1178,7 @@ interactive groupMono_ker2 group[i:l] :
 
 doc <:doc< 
    @begin[doc]
-   If $f: A -> B$ is an isomomorphism, then its inverse mapping is
+   If $f: A -> B$ is an isomorphism, then its inverse mapping is
    also an isomorphism.
    @end[doc]
 >>

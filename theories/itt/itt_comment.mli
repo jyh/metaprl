@@ -74,7 +74,6 @@ declare math_bor{'a; 'b}
 declare math_band{'a; 'b}
 declare math_bimplies{'a; 'b}
 declare math_bnot{'a}
-declare math_assert{'t}
 declare math_if{'a; 'b; 'c}
 
 (************************************************************************
@@ -191,7 +190,6 @@ declare math_listind{'e; 'base; 'h; 't; 'f; 'step}
  ************************************************************************)
 
 declare math_quot{'T; 'x; 'y; 'E}
-declare math_esquash{'P}
 
 (************************************************************************
  * SUBSET

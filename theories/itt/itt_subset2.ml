@@ -94,8 +94,8 @@ doc <:doc<
  @begin[doc]
    @modsection{Sets}
   The subset relation corresponds to set type (Section @refmodule[Itt_set]) in the following way:
-  $<<'A subset 'B>>$ if and only if there is a proposition $P: <<'B -> univ[i:l]>>$, such that
-  $<<ext_equal{'A; {x:'B | 'P['x]}}>>$.
+  <<'A subset 'B>> if and only if there is a proposition $P: <<'B -> univ[i:l]>>$, such that
+  <<ext_equal{'A; {x:'B | 'P['x]}}>>.
  @end[doc]
 >>
 
@@ -118,7 +118,7 @@ interactive subset_iff  :
 doc <:doc< 
  @begin[doc]
  @modsection{Lattice}
-  Subsets of a given type forms a lattice with respect to $<<space subset space>>$ relation and intersection and union operations.
+  Subsets of a given type forms a lattice with respect to <<space subset space>> relation and intersection and union operations.
 
   @modsubsection{Order}
   Subset relation forms a partial order on types.
@@ -195,7 +195,7 @@ interactive subset_bunion {| intro[] |}:
 doc <:doc< 
    @begin[doc]
    @modsection{Monotonicity}
-    Most of the type constructors are monotone with respect to $<<space subset space>>$.
+    Most of the type constructors are monotone with respect to <<space subset space>>.
    @end[doc]
 >>
 

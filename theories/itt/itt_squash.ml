@@ -7,10 +7,10 @@ doc <:doc<
    @module[Itt_squash]
   
    The @tt{Itt_squash} module defines a @i[squash] type.
-   $<<squash{'A}>>$ hides computational content of $A$.
-   $<<squash{'A}>>$ is inhabited @emph{iff} $A$ is inhabited.
-   When inhabited, $<<squash{'A}>>$ contains only one element $@it$.
-   That is $<<squash{'A}>>$ means that $A$ is true, but we do not know its
+   <<squash{'A}>> hides computational content of $A$.
+   <<squash{'A}>> is inhabited @emph{iff} $A$ is inhabited.
+   When inhabited, <<squash{'A}>> contains only one element $@it$.
+   That is <<squash{'A}>> means that $A$ is true, but we do not know its
    computational content.
    Consequentially,  the sequent
    $$@sequent{@it; {H; x@colon @squash{A}; J}; C}$$
@@ -172,7 +172,7 @@ doc <:doc<
    @rules
    @modsubsection{Equality and typehood}
   
-   $<<squash{'A}>>$ is a type if $A$ is a type.
+   <<squash{'A}>> is a type if $A$ is a type.
    @end[doc]
 >>
 prim squashEquality {| intro []; eqcd |}  :
@@ -188,7 +188,7 @@ doc <:doc<
    @begin[doc]
    @modsubsection{Introduction}
   
-   A squashed type $<<squash{'A}>>$ is true if $A$ is true.
+   A squashed type <<squash{'A}>> is true if $A$ is true.
    This rule is irreversible, so we use @tt[AutoMustComplete] to prevent
    @hreftactic[autoT] from using it.
    @end[doc]

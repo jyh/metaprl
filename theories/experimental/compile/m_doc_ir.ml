@@ -55,7 +55,7 @@ dform math_IR_df3 : mode[tex] :: math_IR{'e1; 'v; 'e2} =
 declare math_AtomParam{'v; 'e}
 
 dform math_AtomParam_df : mode[tex] :: math_AtomParam{'x; 'e} =
-   math_subscript{math_lambda; math_it["p"]} slot{'x} `"." slot{'e}
+   math_subscript{lambda; math_it["p"]} slot{'x} `"." slot{'e}
 
 (*
  * Math mode versions.
@@ -133,7 +133,7 @@ dform math_AtomRelop_df : mode[tex] :: math_AtomRelop{'op; 'a1; 'a2} =
    slot{'a1} math_mathrel{slot{'op}} slot{'a2}
 
 dform math_AtomFun_df : mode[tex] :: math_AtomFun{'x; 'e} =
-   math_lambda slot{'x} `"." slot{'e}
+   lambda slot{'x} `"." slot{'e}
 
 dform math_AtomVar_Df : mode[tex] :: math_AtomVar{'v} =
    slot{'v}
@@ -180,10 +180,10 @@ dform math_LetSubscript_df : mode[tex] :: math_LetSubscript{'a1; 'a2; 'v; 'e} =
    math_xlet slot{'v} `"= " slot{'a1} `"[" slot{'a2} `"]" math_xin slot{'e}
 
 dform math_SetSubscript_df1 : mode[tex] :: math_SetSubscript{'a1; 'a2; 'a3} =
-   slot{'a1} `"[" slot{'a2} `"]" math_leftarrow slot{'a3} `";"
+   slot{'a1} `"[" slot{'a2} `"]" leftarrow slot{'a3} `";"
 
 dform math_SetSubscript_df2 : mode[tex] :: math_SetSubscript{'a1; 'a2; 'a3; 'e} =
-   slot{'a1} `"[" slot{'a2} `"]" math_leftarrow slot{'a3} `";" slot{'e}
+   slot{'a1} `"[" slot{'a2} `"]" leftarrow slot{'a3} `";" slot{'e}
 
 dform math_LetApply_df : mode[tex] :: math_LetApply{'f; 'a; 'v; 'e} =
    math_xlet slot{'v} `"=" slot{'f} `"(" slot{'a} `")" math_xin slot{'e}
@@ -238,7 +238,7 @@ dform math_FunDef_df2 : mode[tex] :: math_FunDef{'label; 'exp; 'rest} =
    math_bf["fun "] slot{'label} `"=" slot{'exp} math_xand slot{'rest}
 
 dform math_EndDef_df : mode[tex] :: math_EndDef =
-   math_epsilon
+   epsilon
 
 doc <:doc< 
 @begin[doc]

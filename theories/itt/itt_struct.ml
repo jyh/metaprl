@@ -194,7 +194,7 @@ doc <:doc<
    restriction.  This restriction allows the proof extract term
    $t$ to be copied from the proof of $T_1[t_2]$.
   
-   The $<< bind{x. 'T_1['x]} >>$ argument specifies the exact location
+   The << bind{x. 'T_1['x]} >> argument specifies the exact location
    of the subterm to be replaced.
    @end[doc]
 >>

@@ -2,12 +2,8 @@
 # No special includes
 #
 ROOT := ../..
-INCLUDE :=
-OCAMLDEPFLAGS := -prl
-
-# Types files
-MLZFILES :=\
-	tactic_type
+INCLUDE := -I $(ROOT)/lib -I .
+OCAMLDEPFLAGS := -prl_init
 
 # Library files
 NLFILES :=\
@@ -15,6 +11,8 @@ NLFILES :=\
 	tactic_type\
 	sequent\
 	tacticals\
+	rewrite_type\
+	conversionals\
 	var\
 	options
 

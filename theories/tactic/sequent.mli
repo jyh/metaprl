@@ -1,7 +1,39 @@
 (*
  * Utilities for tactics.
- *
+ *)
+
+open Refiner.Refiner.Term
+open Refiner.Refiner.Refine
+open Tactic_type
+
+(*
+ * Hypothesis operations.
+ *)
+val create : msequent -> tactic_argument -> tactic_arg
+val dest : tactic_arg -> msequent * tactic_argument
+val arg : tactic_arg -> tactic_argument
+val goal : tactic_arg -> term
+
+val concl : tactic_arg -> term
+val concl_addr : tactic_arg -> address
+
+val hyp_addr : tactic_arg -> int -> address
+val clause_addr : tactic_arg -> int -> address
+
+val var_of_hyp : int -> tactic_arg -> string
+val get_decl_number : tactic_arg -> string -> int
+val nth_hyp : int -> tactic_arg -> term
+val declared_vars : tactic_arg -> string list
+
+val get_pos_hyp_index : int -> int -> int
+val get_pos_hyp_num : int -> tactic_arg -> int
+val hyp_count : tactic_arg -> int
+
+(*
  * $Log$
+ * Revision 1.3  1998/06/03 22:19:59  jyh
+ * Nonpolymorphic refiner.
+ *
  * Revision 1.2  1998/05/28 13:48:35  jyh
  * Updated the editor to use new Refiner structure.
  * ITT needs dform names.
@@ -21,25 +53,6 @@
  * Revision 1.1  1996/09/25 22:52:06  jyh
  * Initial "tactical" commit.
  *
- *)
-
-open Refiner.Refiner.Term
-open Tactic_type
-
-(*
- * Hypothesis operations.
- *)
-val get_pos_hyp_index : int -> int -> int
-val get_pos_hyp_num : int -> tactic_arg -> int
-val hyp_count : tactic_arg -> int
-val var_of_hyp : int -> tactic_arg -> string
-val get_decl_number : tactic_arg -> string -> int
-val nth_hyp : int -> tactic_arg -> term
-val declared_vars : tactic_arg -> string list
-val concl : tactic_arg -> term
-val goal : tactic_arg -> term
-
-(*
  * -*-
  * Local Variables:
  * Caml-master: "prlcomp.run"

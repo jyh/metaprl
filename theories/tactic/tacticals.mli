@@ -1,36 +1,14 @@
 (*
  * Some basic tacticals.
- *
- * $Log$
- * Revision 1.3  1998/05/28 13:48:42  jyh
- * Updated the editor to use new Refiner structure.
- * ITT needs dform names.
- *
- * Revision 1.2  1997/08/06 16:18:55  jyh
- * This is an ocaml version with subtyping, type inference,
- * d and eqcd tactics.  It is a basic system, but not debugged.
- *
- * Revision 1.1  1997/04/28 15:52:45  jyh
- * This is the initial checkin of Nuprl-Light.
- * I am porting the editor, so it is not included
- * in this checkin.
- *
- * Directories:
- *     refiner: logic engine
- *     filter: front end to the Ocaml compiler
- *     editor: Emacs proof editor
- *     util: utilities
- *     mk: Makefile templates
- *
- * Revision 1.1  1996/09/25 22:52:07  jyh
- * Initial "tactical" commit.
- *
  *)
 
 open Refiner.Refiner.Term
-open Refine
+open Refiner.Refiner.Refine
 open Tactic_type
 
+(*
+ * Identity rule is valid for all logics derived from this theory.
+ *)
 axiom id : 'T --> 'T
 
 (* Trivial tactics *)
@@ -58,9 +36,7 @@ val tryT : tactic -> tactic
 
 val prefix_thenT : tactic -> tactic -> tactic
 val prefix_thenLT : tactic -> tactic list -> tactic
-val prefix_thenFLT : tactic ->
-       (tactic_arg list -> safe_tactic list) ->
-       tactic
+val prefix_thenFLT : tactic -> (tactic_arg list -> Tactic_type.t list) -> tactic
 val prefix_then_OnFirstT : tactic -> tactic -> tactic
 val prefix_then_OnLastT : tactic -> tactic -> tactic
 val prefix_then_OnSameConclT : tactic -> tactic -> tactic
@@ -155,6 +131,33 @@ val get_term_args : tactic_arg -> term list
 val get_thinning_arg : tactic_arg -> bool
 
 (*
+ * $Log$
+ * Revision 1.4  1998/06/03 22:20:05  jyh
+ * Nonpolymorphic refiner.
+ *
+ * Revision 1.3  1998/05/28 13:48:42  jyh
+ * Updated the editor to use new Refiner structure.
+ * ITT needs dform names.
+ *
+ * Revision 1.2  1997/08/06 16:18:55  jyh
+ * This is an ocaml version with subtyping, type inference,
+ * d and eqcd tactics.  It is a basic system, but not debugged.
+ *
+ * Revision 1.1  1997/04/28 15:52:45  jyh
+ * This is the initial checkin of Nuprl-Light.
+ * I am porting the editor, so it is not included
+ * in this checkin.
+ *
+ * Directories:
+ *     refiner: logic engine
+ *     filter: front end to the Ocaml compiler
+ *     editor: Emacs proof editor
+ *     util: utilities
+ *     mk: Makefile templates
+ *
+ * Revision 1.1  1996/09/25 22:52:07  jyh
+ * Initial "tactical" commit.
+ *
  * -*-
  * Local Variables:
  * Caml-master: "editor.run"

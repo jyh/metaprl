@@ -247,7 +247,9 @@ let sub_resource =
 (*
  * Resource argument.
  *)
-let subtyper_of_proof { tac_arg = { ref_rsrc = { ref_subtype = f } } } = f
+let subtyper_of_proof p =
+   let { ref_rsrc = { ref_subtype = f } } = Sequent.arg p in
+      f
 
 (************************************************************************
  * TACTICS                                                              *
@@ -314,6 +316,9 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (subty
 
 (*
  * $Log$
+ * Revision 1.8  1998/06/03 22:19:49  jyh
+ * Nonpolymorphic refiner.
+ *
  * Revision 1.7  1998/06/01 13:56:26  jyh
  * Proving twice one is two.
  *

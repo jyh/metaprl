@@ -19,12 +19,15 @@ val add_soft_abs :
        (term * (int -> tactic), int -> tactic, d_data) rsrc ->
        (term * tactic, tactic, eqcd_data) rsrc ->
        term ->
-       tactic_argument Refine.rw ->
+       Rewrite_type.conv ->
        (term * (int -> tactic), int -> tactic, d_data) rsrc *
        (term * tactic, tactic, eqcd_data) rsrc
 
 (*
  * $Log$
+ * Revision 1.5  1998/06/03 22:19:46  jyh
+ * Nonpolymorphic refiner.
+ *
  * Revision 1.4  1998/06/01 13:56:17  jyh
  * Proving twice one is two.
  *

@@ -11,7 +11,6 @@ open Refiner.Refiner.TermMan
 open Refiner.Refiner.TermSubst
 open Refiner.Refiner.Refine
 
-open Sequent
 open Tactic_type
 
 (*
@@ -44,18 +43,11 @@ let failWithT s p =
  * SEQUENCING                                                           *
  ************************************************************************)
 
-(*
- * Sequencing tactics.
- *)
-let prefix_orelseT = Refine.orelse
-
-let prefix_andalsoT = Refine.andthen
-
-let prefix_thenT = Refine.andthen
-
-let prefix_thenLT = Refine.andthenL
-
-let prefix_thenFLT = Refine.andthenFL
+let prefix_orelseT = Tactic_type.prefix_orelseT
+let prefix_andalsoT = Tactic_type.prefix_thenT
+let prefix_thenT = Tactic_type.prefix_thenT
+let prefix_thenLT = Tactic_type.prefix_thenLT
+let prefix_thenFLT = Tactic_type.prefix_thenFLT
 
 let tryT tac = tac orelseT idT
 
@@ -64,9 +56,10 @@ let prefix_orthenT tac1 tac2 = (tac1 thenT tryT tac2) orelseT tac2
 let rec firstT = function
    [tac] ->
       tac
- | tac::tactl ->
+ | tac :: tactl ->
       tac orelseT (firstT tactl)
- | [] -> idT
+ | [] ->
+      idT
 
 let prefix_then_OnFirstT tac1 tac2 =
    let aux = function
@@ -92,9 +85,9 @@ let prefix_then_OnLastT tac1 tac2 =
 
 let prefix_then_OnSameConclT tac1 tac2 =
    let first p =
-      let t = nth_concl p.tac_goal 0 in
+      let t = Sequent.concl p in
       let second p =
-         let t' = nth_concl p.tac_goal 0 in
+         let t' = Sequent.concl p in
             (if alpha_equal t t' then
                 tac2
              else
@@ -118,11 +111,11 @@ let completeT tac =
  *)
 let progressT tac =
    let aux p =
-      let t = p.tac_goal in
+      let t = Sequent.goal p in
       let aux' p' =
          match p' with
             [p''] ->
-               [(if alpha_equal p''.tac_goal t then
+               [(if alpha_equal (Sequent.goal p'') t then
                     idT
                  else
                     failWithT "progressT") p'']
@@ -139,14 +132,14 @@ let progressT tac =
  *)
 let repeatT tac =
    let rec aux t p =
-      let t' = p.tac_goal in
+      let t' = Sequent.goal p in
          (if alpha_equal t t' then
              idT
           else
              tac thenT (aux t')) p
    in
    let start p =
-      let t = p.tac_goal in
+      let t = Sequent.goal p in
          (tac thenT (aux t)) p
    in
       start
@@ -183,12 +176,12 @@ let seqOnSameConclT = function
  | tacs ->
       let start p =
          (* Save the first conclusion *)
-         let t = nth_concl p.tac_goal 0 in
+         let t = Sequent.concl p in
          let rec aux tacs p =
             (* Recurse through the tactics *)
             (match tacs with
                 tac::tactl ->
-                   let t' = nth_concl p.tac_goal 0 in
+                   let t' = Sequent.concl p in
                       if alpha_equal t t' then
                          tac thenT (aux tactl)
                       else
@@ -213,16 +206,16 @@ let ifT pred tac1 tac2 p =
        tac2) p
 
 let ifOnConclT pred =
-   ifT (function p -> pred (nth_concl p.tac_goal 0))
+   ifT (function p -> pred (Sequent.concl p))
 
 let ifOnHypT pred tac1 tac2 i p =
-   (if pred (nth_hyp i p) then
+   (if pred (Sequent.nth_hyp i p) then
        tac1
     else
        tac2) i p
 
 let ifThenT pred tac1 =
-   ifT (function { tac_goal = t } -> pred t) tac1 idT
+   ifT (function p -> pred (Sequent.goal p)) tac1 idT
 
 let ifThenOnConclT pred tac =
    let failT = failWithT "ifThenOnConclT" in
@@ -266,21 +259,17 @@ let predicate_labels =
 (*
  * Get the label from a proof.
  *)
-let proof_label { tac_arg = { ref_label = label } } =
-   label
+let proof_label p =
+   let { ref_label = label } = Sequent.arg p in
+      label
 
 (*
  * Add a label attribute.
  *)
-let addHiddenLabelT s
-    { tac_goal = t;
-      tac_hyps = hyps;
-      tac_arg = { ref_args = args; ref_fcache = fcache; ref_rsrc = rsrc }
-    } =
-   idT { tac_goal = t;
-         tac_hyps = hyps;
-         tac_arg = { ref_label = s; ref_args = args; ref_fcache = fcache; ref_rsrc = rsrc }
-   }
+let addHiddenLabelT s p =
+   let seq, { ref_args = args; ref_fcache = fcache; ref_rsrc = rsrc } = Sequent.dest p in
+   let p = Sequent.create seq { ref_label = s; ref_args = args; ref_fcache = fcache; ref_rsrc = rsrc } in
+      idT p
 
 let removeHiddenLabelT =
    addHiddenLabelT "main"
@@ -396,14 +385,14 @@ let prefix_thenALT =
  *)
 let repeatMT tac =
    let rec aux t p =
-      let t' = p.tac_goal in
+      let t' = Sequent.goal p in
          (if alpha_equal t t' then
              idT
           else
              tac thenMT (aux t')) p
    in
    let start p =
-      let t = p.tac_goal in
+      let t = Sequent.goal p in
          (tac thenMT (aux t)) p
    in
       start
@@ -442,12 +431,12 @@ let completeMT tac =
  *)
 let labProgressT tac =
    let aux p =
-      let t = p.tac_goal in
+      let t = Sequent.goal p in
       let lab = proof_label p in
       let aux' p' =
          match p' with
             [p''] ->
-               let t' = p''.tac_goal in
+               let t' = Sequent.goal p'' in
                let lab' = proof_label p'' in
                   [(if alpha_equal t t' & lab = lab' then
                        idT
@@ -468,7 +457,7 @@ let labProgressT tac =
  * Renumbering.
  *)
 let onClauseT i tac p =
-   (tac (get_pos_hyp_num i p) p : safe_tactic)
+   tac (Sequent.get_pos_hyp_num i p) p
 
 let onHypT = onClauseT
 
@@ -515,7 +504,7 @@ let onAllHypsT tac p =
       else
          idT
    in
-      aux ((hyp_count p) - 1) p
+      aux ((Sequent.hyp_count p) - 1) p
 
 (*
  * Include conclusion.
@@ -544,7 +533,7 @@ let onAllMHypsT tac p =
       else
          idT
    in
-      aux ((hyp_count p) - 1) p
+      aux ((Sequent.hyp_count p) - 1) p
 
 let onAllMClausesT tac =
    onAllMHypsT tac thenMT onConclT tac
@@ -567,14 +556,14 @@ let onSomeHypT tac p =
       else
          idT
    in
-      aux ((hyp_count p) - 1) p
+      aux ((Sequent.hyp_count p) - 1) p
 
 (*
  * Variable name addressing.
  *)
 let onVarT v tac p =
    let i =
-      try get_decl_number p v with
+      try Sequent.get_decl_number p v with
          Not_found ->
             raise (RefineError (StringError ("onVarT: var not found: " ^ v)))
    in
@@ -587,70 +576,39 @@ let onVarT v tac p =
 (*
  * Push args.
  *)
-let withArgListT args tac
-    { tac_goal = goal;
-      tac_hyps = hyps;
-      tac_arg = { ref_label = label;
-                  ref_args = args';
-                  ref_fcache = fcache;
-                  ref_rsrc = rsrc
-                }
-    } =
-   let restoreArgListT { tac_goal = goal';
-                         tac_hyps = hyps';
-                         tac_arg = { ref_label = label'; ref_fcache = fcache; ref_rsrc = rsrc }
-       } =
-      idT { tac_goal = goal';
-            tac_hyps = hyps';
-            tac_arg = { ref_label = label'; ref_args = args'; ref_fcache = fcache; ref_rsrc = rsrc }
-      }
+let withArgListT args tac p =
+   let (seq, { ref_label = label; ref_args = args'; ref_fcache = fcache; ref_rsrc = rsrc }) = Sequent.dest p in
+   let restoreArgListT p =
+      let (seq, { ref_label = label'; ref_fcache = fcache; ref_rsrc = rsrc }) = Sequent.dest p in
+      let p = Sequent.create seq { ref_label = label'; ref_args = args'; ref_fcache = fcache; ref_rsrc = rsrc } in
+         idT p
    in
-      (tac thenT restoreArgListT) { tac_goal = goal;
-                                    tac_hyps = hyps;
-                                    tac_arg = { ref_label = label;
-                                                ref_args = args @ args';
-                                                ref_fcache = fcache;
-                                                ref_rsrc = rsrc
-                                              }
-      }
+   let p = Sequent.create seq { ref_label = label; ref_args = args @ args'; ref_fcache = fcache; ref_rsrc = rsrc } in
+      (tac thenT restoreArgListT) p
 
-let withArgT arg tac
-    { tac_goal = goal;
-      tac_hyps = hyps;
-      tac_arg = { ref_label = label;
-                  ref_args = args';
-                  ref_fcache = fcache;
-                  ref_rsrc = rsrc
-                }
-    } =
-   let restoreArgListT { tac_goal = goal';
-                         tac_hyps = hyps';
-                         tac_arg = { ref_label = label'; ref_fcache = fcache; ref_rsrc = rsrc }
-       } =
-      idT { tac_goal = goal';
-            tac_hyps = hyps';
-            tac_arg = { ref_label = label'; ref_args = args'; ref_fcache = fcache; ref_rsrc = rsrc }
-      }
+let withArgT arg tac p =
+   let (seq, { ref_label = label; ref_args = args'; ref_fcache = fcache; ref_rsrc = rsrc }) = Sequent.dest p in
+   let restoreArgListT p =
+      let (seq, { ref_label = label'; ref_fcache = fcache; ref_rsrc = rsrc }) = Sequent.dest p in
+      let p = Sequent.create seq { ref_label = label'; ref_args = args'; ref_fcache = fcache; ref_rsrc = rsrc } in
+         idT p
    in
-      (tac thenT restoreArgListT) { tac_goal = goal;
-                                    tac_hyps = hyps;
-                                    tac_arg = { ref_label = label;
-                                                ref_args = arg::args';
-                                                ref_fcache = fcache;
-                                                ref_rsrc = rsrc
-                                              }
-      }
+   let p = Sequent.create seq { ref_label = label; ref_args = arg::args'; ref_fcache = fcache; ref_rsrc = rsrc } in
+      (tac thenT restoreArgListT) p
 
 (*
  * Get an arg, given a test.
  *)
-let get_arg test { tac_arg = { ref_args = args } } =
+let get_arg test p =
+   let { ref_args = args } = Sequent.arg p in
    let rec aux = function
       h::t ->
          begin
             match test h with
-               Some x -> x
-             | None -> aux t
+               Some x ->
+                  x
+             | None ->
+                  aux t
          end
     | [] ->
          raise Not_found
@@ -660,7 +618,8 @@ let get_arg test { tac_arg = { ref_args = args } } =
 (*
  * A particular argument.
  *)
-let withT t = withArgT (TermArgs [t])
+let withT t =
+   withArgT (TermArgs [t])
 
 let get_term_arg i =
    let test = function
@@ -759,6 +718,9 @@ let get_thinning_arg =
 
 (*
  * $Log$
+ * Revision 1.11  1998/06/03 22:20:04  jyh
+ * Nonpolymorphic refiner.
+ *
  * Revision 1.10  1998/06/01 13:57:09  jyh
  * Proving twice one is two.
  *

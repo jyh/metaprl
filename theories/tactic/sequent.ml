@@ -6,8 +6,11 @@ open Printf
 open Debug
 open Refiner.Refiner
 open Refiner.Refiner.Term
+open Refiner.Refiner.TermAddr
 open Refiner.Refiner.TermMan
 open Refiner.Refiner.Refine
+
+open Tactic_type
 
 (*
  * Debug statement.
@@ -17,42 +20,69 @@ let _ =
       eprintf "Loading Sequent%t" eflush
 
 (*
- * Sequent operations.
+ * Construction.
  *)
+let create = create_arg
+
+let dest = dest_arg
+
+let arg = tactic_arg
+
+let goal p =
+   (tactic_seq p).mseq_goal
+
+let concl p =
+   nth_concl (goal p) 0
+
+let concl_addr p =
+   nth_concl_addr (goal p) 0
+
+let hyp_addr p i =
+   let goal = goal p in
+      if i < 0 then
+         nth_address ((num_hyps goal) + i) true
+      else
+         nth_hyp_addr goal i
+
+let clause_addr p i =
+   if i = 0 then
+      concl_addr p
+   else
+      hyp_addr p i
+
+let var_of_hyp i p =
+   fst (TermMan.nth_hyp (goal p) i)
+
+let hyp_count p =
+   num_hyps (goal p)
+
+let get_decl_number p v =
+   TermMan.get_decl_number (goal p) v
+
+let nth_hyp i p =
+   let _, h = TermMan.nth_hyp (goal p) i in
+      h
+
+let declared_vars p =
+   TermMan.declared_vars (goal p)
+
 let get_pos_hyp_index i count =
    if i < 0 then
       count - i
    else
       i
 
-let get_pos_hyp_num i { tac_goal = t } =
+let get_pos_hyp_num i p =
    if i < 0 then
-      (num_hyps t) - i
+      (num_hyps (goal p)) - i
    else
       i
 
-let var_of_hyp i { tac_goal = t } =
-   fst (TermMan.nth_hyp t i)
-
-let hyp_count { tac_goal = t } =
-   num_hyps t
-
-let get_decl_number { tac_goal = t } v =
-   TermMan.get_decl_number t v
-
-let nth_hyp i { tac_goal = t } =
-   let _, h = TermMan.nth_hyp t i in
-      h
-
-let declared_vars { tac_goal = t } =
-   TermMan.declared_vars t
-
-let concl { tac_goal = t } = nth_concl t 0
-
-let goal { tac_goal = t } = t
-
 (*
  * $Log$
+ * Revision 1.5  1998/06/03 22:19:58  jyh
+ * Nonpolymorphic refiner.
+ *
  * Revision 1.4  1998/05/28 13:48:33  jyh
  * Updated the editor to use new Refiner structure.
  * ITT needs dform names.

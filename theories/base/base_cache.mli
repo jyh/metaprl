@@ -11,10 +11,10 @@ open Tactic_cache
 open Tactic_type
 
 type cache_rule =
-   Forward of tactic_argument Refine.tactic frule
- | Backward of tactic_argument Refine.tactic brule
+   Forward of tactic frule
+ | Backward of tactic brule
 
-type cache = tactic_argument Refine.tactic Tactic_cache.cache
+type cache = tactic Tactic_cache.cache
 
 type t
 
@@ -22,6 +22,9 @@ resource (cache_rule, cache, t) cache_resource
 
 (*
  * $Log$
+ * Revision 1.3  1998/06/03 22:19:41  jyh
+ * Nonpolymorphic refiner.
+ *
  * Revision 1.2  1998/05/28 13:47:11  jyh
  * Updated the editor to use new Refiner structure.
  * ITT needs dform names.

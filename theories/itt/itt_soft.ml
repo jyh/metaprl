@@ -4,6 +4,7 @@
  *)
 
 include Tactic_type
+include Conversionals
 
 include Itt_equal
 
@@ -16,6 +17,7 @@ open Refine
 open Resource
 
 open Sequent
+open Conversionals
 
 (*
  * Show that the file is loading.
@@ -29,21 +31,14 @@ let _ =
 (*
  * D tactic.
  *)
-let d_soft rw i p =
-   let count = hyp_count p in
-   let i' =
-      if i = 0 then
-         count
-      else
-         get_pos_hyp_index i count
-   in
-      (Refine.rwtactic (Refine.rwaddr (make_seq_address i') rw)) p
+let d_soft conv i p =
+   Conversionals.rw conv i p
 
 (*
  * EqCD.
  *)
-let eqcd_soft rw p =
-   (Refine.rwtactic (Refine.rwaddr (make_seq_address (hyp_count p)) rw)) p
+let eqcd_soft conv p =
+   Conversionals.rw conv (hyp_count p) p
 
 (*
  * Combine them.
@@ -54,6 +49,9 @@ let add_soft_abs dres eqcdres t rw =
 
 (*
  * $Log$
+ * Revision 1.6  1998/06/03 22:19:45  jyh
+ * Nonpolymorphic refiner.
+ *
  * Revision 1.5  1998/06/01 13:56:16  jyh
  * Proving twice one is two.
  *

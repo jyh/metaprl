@@ -262,7 +262,9 @@ let eqcd_resource =
 (*
  * Resource argument.
  *)
-let eqcd_of_proof { tac_arg = { ref_rsrc = { ref_eqcd = eqcd } } } = eqcd
+let eqcd_of_proof p =
+   let  { ref_rsrc = { ref_eqcd = eqcd } } = Sequent.arg p in
+      eqcd
 
 (************************************************************************
  * D TACTIC                                                             *
@@ -333,6 +335,9 @@ let squash_resource = squash_resource.resource_improve squash_resource (equal_te
 
 (*
  * $Log$
+ * Revision 1.9  1998/06/03 22:19:44  jyh
+ * Nonpolymorphic refiner.
+ *
  * Revision 1.8  1998/06/01 13:55:50  jyh
  * Proving twice one is two.
  *

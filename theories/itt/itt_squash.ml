@@ -59,8 +59,8 @@ let squash_opname = opname_of_term squash_term
 (*
  * Is a goal squashed?
  *)
-let is_squash_goal { tac_goal = s } =
-   match dest_sequent s with
+let is_squash_goal p =
+   match dest_sequent (goal p) with
       [_; _; flag] ->
          opname_of_term flag == squash_opname
     | _ ->
@@ -117,10 +117,15 @@ let squash_resource =
 (*
  * Resource argument.
  *)
-let squash_of_proof { tac_arg = { ref_rsrc = { ref_squash = squash } } } = squash
+let squash_of_proof p =
+   let { ref_rsrc = { ref_squash = squash } } = Sequent.arg p in
+      squash
 
 (*
  * $Log$
+ * Revision 1.7  1998/06/03 22:19:47  jyh
+ * Nonpolymorphic refiner.
+ *
  * Revision 1.6  1998/06/01 13:56:19  jyh
  * Proving twice one is two.
  *

@@ -106,10 +106,15 @@ let typeinf_resource =
 (*
  * Projector.
  *)
-let typeinf_of_proof { tac_arg = { ref_rsrc = { ref_typeinf = inf } } } = inf
+let typeinf_of_proof p =
+   let { ref_rsrc = { ref_typeinf = inf } } = Sequent.arg p in
+      inf
 
 (*
  * $Log$
+ * Revision 1.10  1998/06/03 22:19:42  jyh
+ * Nonpolymorphic refiner.
+ *
  * Revision 1.9  1998/06/01 13:55:41  jyh
  * Proving twice one is two.
  *

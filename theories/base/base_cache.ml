@@ -16,10 +16,10 @@ open Tactic_type
  ************************************************************************)
 
 type cache_rule =
-   Forward of tactic_argument Refine.tactic frule
- | Backward of tactic_argument Refine.tactic brule
+   Forward of tactic frule
+ | Backward of tactic brule
 
-type cache = tactic_argument Refine.tactic Tactic_cache.cache
+type cache = tactic Tactic_cache.cache
 
 (*
  * Our "abstract" type is just a cache.
@@ -77,6 +77,9 @@ let cache = cache_resource.resource_extract cache_resource
 
 (*
  * $Log$
+ * Revision 1.4  1998/06/03 22:19:40  jyh
+ * Nonpolymorphic refiner.
+ *
  * Revision 1.3  1998/06/01 13:55:34  jyh
  * Proving twice one is two.
  *

@@ -893,6 +893,15 @@ end
 
 let ge_normC = (addrC [Subterm 1] normalizeC) thenC (addrC [Subterm 2] normalizeC)
 
+let relNorm_aux t =
+	match explode_term t with
+		<<'a = 'b in 'T>> ->
+			(addrC [Subterm 1] normalizeC) thenC (addrC [Subterm 2] normalizeC)
+	 | _ ->
+			(addrC [Subterm 1] normalizeC) thenC (addrC [Subterm 2] normalizeC)
+
+let relNormC = termC relNorm_aux
+
 let monom2af var2index t =
 	match explode_term t with
 		<<'t1 *@ 't2>> ->
@@ -972,12 +981,54 @@ let make_sacs var2index p =
  * OMEGA
  *********************************************************************)
 
+interactive_rw ge_mulMonoPosit_rw 'c :
+   (0 < 'c) -->
+   ('a in int) -->
+   ('b in int) -->
+   ('c in int) -->
+   ('a >= 'b) <--> (('c *@ 'a) >= ('c *@ 'b))
+
+interactive_rw ge_mulMonoPosit2_rw 'c :
+   (0 < 'c) -->
+   ('a in int) -->
+   ('c in int) -->
+   ('a >= 0) <--> (('c *@ 'a) >= 0)
+
+let scaleC n = ge_mulMonoPosit2_rw n
+
+interactive ge_scaleAndWeaken 'c 'd :
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   [wf] sequent { <H> >- 'c in int } -->
+   [wf] sequent { <H> >- 'd in int } -->
+   [aux] sequent { <H> >- 'd >= 0 } -->
+   [aux] sequent { <H> >- 'd < 'c } -->
+	sequent { <H> >- (('c *@ 'a) +@ 'd) >= ('c *@ 'b) } -->
+   sequent { <H> >- 'a >= 'b }
+
+interactive ge_scaleAndWeaken2 number[k:n] number[c:n] :
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   [aux] sequent { <H> >- number[c:n] >= 0 } -->
+   [aux] sequent { <H> >- number[c:n] < number[k:n] } -->
+	sequent { <H> >- ((number[k:n] *@ 'a) +@ number[c:n]) >= (number[k:n] *@ 'b) } -->
+   sequent { <H> >- 'a >= 'b }
+
+interactive ge_scaleAndWeaken3 number[k:n] number[c:n] :
+   [wf] sequent { <H> >- 'a in int } -->
+   [aux] sequent { <H> >- number[c:n] >= 0 } -->
+   [aux] sequent { <H> >- number[c:n] < number[k:n] } -->
+	sequent { <H> >- ((number[k:n] *@ 'a) +@ number[c:n]) >= 0 } -->
+   sequent { <H> >- 'a >= 0 }
+
+let scaleAndWeakenT k c = ge_scaleAndWeaken3 k c
+
 interactive var_elim 'v :
 	[wf] sequent { <H> >- 'a in int } -->
 	[wf] sequent { <H> >- 'b in int } -->
 	[wf] sequent { <H> >- 'v in int } -->
-	[aux] sequent { <H> >- number[i:n] > 0 } -->
-	[aux] sequent { <H> >- number[j:n] > 0 } -->
+	[aux] sequent { <H> >- 0 < number[i:n] } -->
+	[aux] sequent { <H> >- 0 < number[j:n] } -->
 	sequent { <H> >- number[i:n] *@ 'v -@ 'a >= 0 } -->
 	sequent { <H> >- 'b -@ number[j:n] *@ 'v >= 0 } -->
 	sequent { <H> >- number[i:n] *@ 'b >= number[j:n] *@ 'a }
@@ -987,26 +1038,20 @@ interactive_rw factor_out 'cleft 'tleft 'cright 'tright :
 	('tleft in int) -->
 	('cright in int) -->
 	('tright in int) -->
-	('left +@ ('cright *@ 'tright) = 'right +@ ('cleft *@ 'tleft) in int) -->
+	('right in int) -->
+	('left = 'right +@ ('cleft *@ 'tleft) -@ ('cright *@ 'tright) in int) -->
 	('left >= 'right) <-->
 	('cleft *@ 'tleft >= 'cright *@ 'tright)
-
-interactive_rw factor_out2 number[l:n] 'tleft number[r:n] 'tright :
-	('tleft in int) -->
-	('tright in int) -->
-	('left +@ (number[r:n] *@ 'tright) = (number[l:n] *@ 'tleft) in int) -->
-	('left >= 0) <-->
-	(number[l:n] *@ 'tleft >= number[r:n] *@ 'tright)
 
 interactive var_elim2 'v number[l:n] 'tleft number[r:n] 'tright :
 	[wf] sequent { <H> >- 'tleft in int } -->
 	[wf] sequent { <H> >- 'tright in int } -->
 	[wf] sequent { <H> >- 'v in int } -->
-	[aux] sequent { <H> >- number[l:n] > 0 } -->
-	[aux] sequent { <H> >- number[r:n] > 0 } -->
+	[aux] sequent { <H> >- 0 < number[l:n] } -->
+	[aux] sequent { <H> >- 0 < number[r:n] } -->
 	sequent { <H> >- number[l:n] *@ 'v -@ 'tright >= 0 } -->
 	sequent { <H> >- 'tleft -@ number[r:n] *@ 'v >= 0 } -->
-	[aux] sequent { <H> >- 'left +@ (number[r:n] *@ 'tright) = (number[l:n] *@ 'tleft) in int } -->
+	[aux] sequent { <H> >- 'left = (number[l:n] *@ 'tleft) -@ (number[r:n] *@ 'tright) in int } -->
 	sequent { <H> >- 'left >= 0 }
 
 let rec rev_flatten = function
@@ -1203,48 +1248,6 @@ let ge_to_ge0C t =
 		idC
 
 let normalize2C =	(termC ge_to_ge0C) thenC normalizeC
-
-interactive_rw ge_mulMonoPosit_rw 'c :
-   (0 < 'c) -->
-   ('a in int) -->
-   ('b in int) -->
-   ('c in int) -->
-   ('a >= 'b) <--> (('c *@ 'a) >= ('c *@ 'b))
-
-interactive_rw ge_mulMonoPosit2_rw 'c :
-   (0 < 'c) -->
-   ('a in int) -->
-   ('c in int) -->
-   ('a >= 0) <--> (('c *@ 'a) >= 0)
-
-let scaleC n = ge_mulMonoPosit2_rw n
-
-interactive ge_scaleAndWeaken 'c 'd :
-   [wf] sequent { <H> >- 'a in int } -->
-   [wf] sequent { <H> >- 'b in int } -->
-   [wf] sequent { <H> >- 'c in int } -->
-   [wf] sequent { <H> >- 'd in int } -->
-   [aux] sequent { <H> >- 'd >= 0 } -->
-   [aux] sequent { <H> >- 'c > 'd } -->
-	sequent { <H> >- (('c *@ 'a) +@ 'd) >= ('c *@ 'b) } -->
-   sequent { <H> >- 'a >= 'b }
-
-interactive ge_scaleAndWeaken2 number[k:n] number[c:n] :
-   [wf] sequent { <H> >- 'a in int } -->
-   [wf] sequent { <H> >- 'b in int } -->
-   [aux] sequent { <H> >- number[c:n] >= 0 } -->
-   [aux] sequent { <H> >- number[k:n] > number[c:n] } -->
-	sequent { <H> >- ((number[k:n] *@ 'a) +@ number[c:n]) >= (number[k:n] *@ 'b) } -->
-   sequent { <H> >- 'a >= 'b }
-
-interactive ge_scaleAndWeaken3 number[k:n] number[c:n] :
-   [wf] sequent { <H> >- 'a in int } -->
-   [aux] sequent { <H> >- number[c:n] >= 0 } -->
-   [aux] sequent { <H> >- number[k:n] > number[c:n] } -->
-	sequent { <H> >- ((number[k:n] *@ 'a) +@ number[c:n]) >= 0 } -->
-   sequent { <H> >- 'a >= 0 }
-
-let scaleAndWeakenT k c = ge_scaleAndWeaken3 k c
 
 let endT i =
 	if !debug_omega then

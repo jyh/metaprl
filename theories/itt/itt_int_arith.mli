@@ -75,6 +75,15 @@ topval sum_same_products2C : conv
 topval sum_same_products3C : conv
 topval sum_same_products4C : conv
 *)
+
+rewrite ge_addMono2_rw 'c :
+   ( 'a in int ) -->
+   ( 'b in int ) -->
+   ( 'c in int ) -->
+   ('a >= 'b) <--> (('c +@ 'a) >= ('c +@ 'b))
+
+topval ge_addMono2C : term -> conv
+
 topval normalizeC : conv
 
 topval preT : tactic

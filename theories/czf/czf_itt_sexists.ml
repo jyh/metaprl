@@ -60,7 +60,7 @@ open Itt_logic
 open Itt_rfun
 
 let _ =
-   show_loading "Loading Czf_itt_exists%t"
+   show_loading "Loading Czf_itt_sexists%t"
 
 (************************************************************************
  * TERMS                                                                *

@@ -70,7 +70,7 @@ open Base_dtactic
 open Itt_logic
 
 let _ =
-   show_loading "Loading Czf_itt_union%t"
+   show_loading "Loading Czf_itt_isect%t"
 
 (************************************************************************
  * TERMS                                                                *

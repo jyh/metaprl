@@ -70,7 +70,7 @@ open Refiner.Refiner.TermMeta
 open Refiner.Refiner.RefineError
 
 let _ =
-   show_loading "Loading Base_dtactic%t"
+   show_loading "Loading Itt_decidable%t"
 
 (************************************************************************
  * decidable                                                            *

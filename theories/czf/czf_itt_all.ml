@@ -56,7 +56,7 @@ open Itt_derive
 open Itt_dprod
 
 let _ =
-   show_loading "Loading Czf_itt_and%t"
+   show_loading "Loading Czf_itt_all%t"
 
 (************************************************************************
  * RULES                                                                *

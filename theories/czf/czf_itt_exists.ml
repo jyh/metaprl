@@ -61,7 +61,7 @@ open Itt_dprod
 open Czf_itt_all
 
 let _ =
-   show_loading "Loading Czf_itt_and%t"
+   show_loading "Loading Czf_itt_exists%t"
 
 (************************************************************************
  * RULES                                                                *

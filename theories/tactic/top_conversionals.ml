@@ -96,7 +96,7 @@ open Tactic_type.Conversionals
  * Debug statement.
  *)
 let _ =
-   show_loading "Loading Tacticals%t"
+   show_loading "Loading Top_conversionals%t"
 
 let debug_conv =
    create_debug (**)

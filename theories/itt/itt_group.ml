@@ -869,20 +869,6 @@ interactive groupHom_inv {| intro [AutoMustComplete; intro_typeinf <<'A>>] |} gr
 doc <:doc< 
    @begin[doc]
   
-   If $f$ is @emph{onto}, then $A$ is abelian
-   implies $B$ is abelian.
-   @end[doc]
->>
-interactive groupHom_abel 'A 'f :
-   [wf] sequent [squash] { <H> >- 'A in abelg[i:l] } -->
-   [wf] sequent [squash] { <H> >- 'B in group[i:l] } -->
-   [wf] sequent [squash] { <H> >- 'f in groupHom{'A; 'B} } -->
-   [main] sequent ['ext] { <H>; x: 'B^car >- exst y: 'A^car. 'x = 'f 'y in 'B^car } -->
-   sequent ['ext] { <H> >- 'B in abelg[i:l] }
-
-doc <:doc< 
-   @begin[doc]
-  
      If $S$ is a subgroup of $A$, then the image of $S$ under
      $f$ is a subgroup of $B$.
    @end[doc]
@@ -1173,6 +1159,19 @@ interactive groupMono_ker2 group[i:l] :
    [wf] sequent [squash] { <H> >- 'f in groupHom{'A; 'B} } -->
    [wf] sequent [squash] { <H> >- ext_equal{.groupKer{'f; 'A; 'B}^car; {x:'A^car | 'x = 'A^"1" in 'A^car}} } -->
    sequent ['ext] { <H> >- 'f in groupMono{'A; 'B} }
+
+doc <:doc< 
+   @begin[doc]
+  
+   If $f: (<<'A -> 'B>>)$ is a group epimorphism, then $A$ is abelian
+   implies $B$ is abelian.
+   @end[doc]
+>>
+interactive groupEpi_abel 'A 'f :
+   [wf] sequent [squash] { <H> >- 'A in abelg[i:l] } -->
+   [wf] sequent [squash] { <H> >- 'B in group[i:l] } -->
+   [wf] sequent [squash] { <H> >- 'f in groupEpi{'A; 'B} } -->
+   sequent ['ext] { <H> >- 'B in abelg[i:l] }
 
 doc <:doc< 
    @begin[doc]

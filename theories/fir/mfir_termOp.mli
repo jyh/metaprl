@@ -165,6 +165,9 @@ val dest_member_term : term -> term * term
 val intset_max_term : term
 val is_intset_max_term : term -> bool
 
+val enum_max_term : term
+val is_enum_max_term : term -> bool
+
 val tyInt_term : term
 val is_tyInt_term : term -> bool
 
@@ -218,18 +221,38 @@ val dest_tyApply_term : term -> term * term
 
 val tyExists_term : term
 val is_tyExists_term : term -> bool
-val mk_tyExists_term : term -> term -> term
-val dest_tyExists_term : term -> term * term
+val mk_tyExists_term : string -> term -> term
+val dest_tyExists_term : term -> string * term
 
 val tyAll_term : term
 val is_tyAll_term : term -> bool
-val mk_tyAll_term : term -> term -> term
-val dest_tyAll_term : term -> term * term
+val mk_tyAll_term : string -> term -> term
+val dest_tyAll_term : term -> string * term
 
 val tyProject_term : term
 val is_tyProject_term : term -> bool
 val mk_tyProject_term : Mp_num.num -> term -> term
 val dest_tyProject_term : term -> Mp_num.num * term
+
+val tyDefPoly_term : term
+val is_tyDefPoly_term : term -> bool
+val mk_tyDefPoly_term : string -> term -> term
+val dest_tyDefPoly_term : term -> string * term
+
+val unionCaseElt_term : term
+val is_unionCaseElt_term : term -> bool
+val mk_unionCaseElt_term : term -> term -> term
+val dest_unionCaseElt_term : term -> term * term
+
+val unionCase_term : term
+val is_unionCase_term : term -> bool
+val mk_unionCase_term : term -> term
+val dest_unionCase_term : term -> term
+
+val tyDefUnion_term : term
+val is_tyDefUnion_term : term -> bool
+val mk_tyDefUnion_term : string -> term -> term
+val dest_tyDefUnion_term : term -> string * term
 
 val idOp_term : term
 val is_idOp_term : term -> bool

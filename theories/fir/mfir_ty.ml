@@ -1,5 +1,5 @@
 (*!
- * @spelling{th ty tyRawInt tyFloat tyApply tyEnum var}
+ * @spelling{exn tailcalls th ty tyRawInt tyFloat tyApply tyEnum var}
  *
  * @begin[doc]
  * @module[Mfir_ty]
@@ -57,9 +57,6 @@ extends Mfir_basic
  * DROPPED: TyObject.         Part of the (unsound) FIR object system.
  * DROPPED: TyDelayed.        Not doing type inference.
  * TODO:    frame.            I'm confused.
- * TODO:    TyDefLambda.      I'm lazy.
- * TODO:    TyDefUnion.       I'm lazy.
- * TODO:    union_class.      I'm lazy.
  *)
 
 (*!
@@ -85,14 +82,16 @@ declare tyFloat[precision:n]
  * @begin[doc]
  * @modsubsection{Functions}
  *
- * If @tt[arg_type_list] is a list of types of length $n$, then @tt[tyFun] is
- * the type of functions taking $n$ arguments (with the types in
- * @tt[arg_type_list]), and returning a value of type @tt[res_type]. A
- * function may take no arguments.
+ * The type @tt[tyFun] represents functions that take an argument of
+ * type @tt[arg_type], and return a result of type @tt[res_type].  Strictly
+ * speaking, all function calls in the FIR are tailcalls, so functions never
+ * return.  They usually have a return type of @tt{tyEnum[0]}.  The @MetaPRL
+ * representation, though, represents functions in curried form.  Thus,
+ * @tt[res_type] maybe another @tt[tyFun] term.
  * @end[doc]
  *)
 
-declare tyFun{ 'arg_type_list; 'res_type }
+declare tyFun{ 'arg_type; 'res_type }
 
 (*!
  * @begin[doc]
@@ -164,15 +163,15 @@ declare tyApply{ 'ty_var; 'ty_list }
 (*!
  * @begin[doc]
  *
- * The existential type @tt[tyExists] defines a type @tt[ty] abstracted over
- * the types in the list @tt[ty_var_list].  The term @tt[tyAll] defines a
- * polymorphic type, where @tt[ty] is restricted to be a function type. This
- * corresponds to value restriction @cite["ullman:sml"].
+ * The existential type @tt[tyExists] defines a type @tt[ty] abstracted over a
+ * type variable @tt[t].  The term @tt[tyAll] defines a polymorphic type,
+ * where @tt[ty] is restricted to be either @tt[tyFun] or another @tt[tyAll].
+ * This corresponds to value restriction @cite["ullman:sml"].
  * @end[doc]
  *)
 
-declare tyExists{ 'ty_var_list; 'ty }
-declare tyAll{ 'ty_var_list; 'ty }
+declare tyExists{ t. 'ty['t] }
+declare tyAll{ t. 'ty['t] }
 
 (*!
  * @begin[doc]
@@ -184,6 +183,34 @@ declare tyAll{ 'ty_var_list; 'ty }
  *)
 
 declare tyProject[i:n]{ 'var }
+
+(*!
+ * @begin[doc]
+ * @modsubsection{Type definitions}
+ *
+ * Type definitions defined parameterized types and unions.  The term
+ * @tt[tyDefPoly] abstracts a type @tt[ty] over @tt[t].
+ * @end[doc]
+ *)
+
+declare tyDefPoly{ t. 'ty['t] }
+
+(*!
+ * @begin[doc]
+ *
+ * The term @tt[tyDefUnion] is used to define a disjoint union.  The parameter
+ * @tt[str] should either be ``normal'' or ``exn''.  Unions are tagged with
+ * ``exn'' when they have more than 100 cases.  The subterms @tt[cases] should
+ * be a list of @tt[unionCase] terms, and each @tt[unionCase] term should have
+ * a list of @tt[unionCaseElt] terms.  A union case can be viewed as a tuple
+ * space in which each field is tagged with a boolean indicating whether or
+ * not it is mutable.
+ * @end[doc]
+ *)
+
+declare unionCaseElt{ 'ty; 'boolean }
+declare unionCase{ 'elts }
+declare tyDefUnion[str:s]{ 'cases }
 
 (*!
  * @docoff
@@ -218,8 +245,8 @@ dform tyFloat_df : except_mode[src] ::
  *)
 
 dform tyFun_df : except_mode[src] ::
-   tyFun{ 'arg_type_list; 'res_type } =
-   `"(" slot{'arg_type_list} rightarrow slot{'res_type} `")"
+   tyFun{ 'arg_type; 'res_type } =
+   `"(" slot{'arg_type} rightarrow slot{'res_type} `")"
 
 (*
  * Aggregate data.
@@ -231,7 +258,7 @@ dform tyUnion_df : except_mode[src] ::
 
 dform tyTuple_df : except_mode[src] ::
    tyTuple[tc:s]{ 'ty_list } =
-   slot{'ty_list} sub{bf[tc:s]}
+   bf["tuple"] sub{bf[tc:s]} slot{'ty_list}
 
 dform tyArray_df : except_mode[src] ::
    tyArray{ 'ty } =
@@ -254,13 +281,37 @@ dform tyApply_df : except_mode[src] ::
    slot{'ty_var} slot{'ty_list}
 
 dform tyExists_df : except_mode[src] ::
-   tyExists{ 'ty_var_list; 'ty } =
-   exists slot{'ty_var_list} `". " slot{'ty}
+   tyExists{ t. 'ty } =
+   exists slot{'t} `". " slot{'ty}
 
 dform tyAll_df : except_mode[src] ::
-   tyAll{ 'ty_var_list; 'ty } =
-   forall slot{'ty_var_list} `". " slot{'ty}
+   tyAll{ t. 'ty } =
+   forall slot{'t} `". " slot{'ty}
 
 dform tyProject_df : except_mode[src] ::
    tyProject[i:n]{ 'var } =
    slot{'var} `"." slot[i:n]
+
+(*
+ * Type definitions.
+ *)
+
+dform tyDefPoly_df : except_mode[src] :: except_mode[tex] ::
+   tyDefPoly{ t. 'ty } =
+   lambda uparrow slot{'t} `". " slot{'ty}
+
+dform tyDefPoly_df : mode[tex] ::
+   tyDefPoly{ t. 'ty } =
+   izone `"\\Lambda " ezone slot{'t} `". " slot{'ty}
+
+dform unionCaseElt : except_mode[src] ::
+   unionCaseElt{ 'ty; 'boolean } =
+   `"(" slot{'ty} `"," slot{'boolean} `")"
+
+dform unionCase_df : except_mode[src] ::
+   unionCase{ 'elts } =
+   `"+" slot{'elts}
+
+dform tyDefUnion_df : except_mode[src] ::
+   tyDefUnion[str:s]{ 'cases } =
+   bf["union"] sub{bf[str:s]} slot{'cases}

@@ -89,6 +89,10 @@ let is_1_dep0_term = is_dep0_term
 let mk_1_dep0_term = mk_dep0_term
 let dest_1_dep0_term = dest_dep0_term
 
+let is_0_dep0_1_dep1_term = is_dep1_term
+let mk_0_dep0_1_dep1_term = mk_dep1_term
+let dest_0_dep0_1_dep1_term = dest_dep1_term
+
 (*
  * No parameters, 2 subterms.
  *)

@@ -12,7 +12,7 @@ is likely to be in the form of comments in .ml files.
 The following remarks by Brian Emre Aydemir (emre) are intended to
 serve as notes to himself.  They may not make sense to others.
 
--- mfir_exp display forms may be a bit wacky since I haven't tested them.
+-- Mfir_exp display forms may be a bit wacky since I haven't tested them.
 
 Comments that will be around a while:
 

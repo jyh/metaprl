@@ -51,20 +51,5 @@ interactive arith1 :
    sequent [mfir] { >-  (-(6 /@ -3) +@ 5) *@ (10 -@ 4) }
 
 (*!
- * @begin[doc]
- * Temporary tests.
- * @end[doc]
- *)
-
-interactive t1 :
-   sequent [mfir] { >- has_type["atom"]{ atomInt{2}; tyInt } }
-
-interactive t2 :
-   sequent [mfir] { >- has_type["atom"]{ atomInt{222222222222222222}; tyInt } }
-
-interactive t3 :
-   sequent [mfir] { >- has_type["atom"]{ atomInt{. -2}; tyInt } }
-
-(*!
  * @docoff
  *)

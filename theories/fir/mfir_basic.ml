@@ -167,6 +167,16 @@ declare member{ 'num; 'set }
 
 declare intset_max
 
+(*!
+ * @begin[doc]
+ *
+ * The term @tt[enum_max] is the set of allowed values for the parameter of
+ * @hrefterm[tyEnum].
+ * @end[doc]
+ *)
+
+declare enum_max
+
 (**************************************************************************
  * Rewrites.
  **************************************************************************)
@@ -383,6 +393,10 @@ prim_rw reduce_intset_max :
    intset_max <-->
    intset{ cons{ interval{. -1073741824; 1073741823}; nil } }
 
+prim_rw reduce_enum_max :
+   enum_max <-->
+   intset{ cons{ interval{ 0; 2048 }; nil } }
+
 (*!
  * @docoff
  *)
@@ -399,7 +413,9 @@ let resource reduce += [
    << member{ 'num; rawintset[p:n, s:s]{nil} } >>,
       reduce_member_rawintset_base;
    << intset_max >>,
-      reduce_intset_max
+      reduce_intset_max;
+   << enum_max >>,
+      reduce_enum_max
 ]
 
 (**************************************************************************
@@ -574,6 +590,10 @@ dform member_df : except_mode[src] ::
    member{ 'num; 'set } =
    slot{'num} member slot{'set}
 
-dform intset_max : except_mode[src] ::
+dform intset_max_df : except_mode[src] ::
    intset_max =
    bf["intset_max"]
+
+dform enum_max_df : except_mode[src] ::
+   enum_max =
+   bf["enum_max"]

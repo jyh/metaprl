@@ -51,8 +51,8 @@ extends Mfir_ty
  **************************************************************************)
 
 (*
- * DROPPED: PointerOfBlockOp     Contains a sub_block.
- * DROPPED: PlusPointerOp        Contains a sub_block.
+ * DROPPED: PointerOfBlockOp.    Contains a sub_block.
+ * DROPPED: PlusPointerOp.       Contains a sub_block.
  * DROPPED: frame_label.         Can fold this into AtomLabel.
  * DROPPED: AtomNil.             Not sure if this is sound.
  * TODO:    AtomFloat.           MetaPRL doesn't have floats.
@@ -71,7 +71,7 @@ extends Mfir_ty
  * DROPPED: Memcpy.              Not dealing with this yet.
  * DROPPED: Call.                No idea what this does.
  * DROPPED: Assert.              No idea what this does.
- * DROPPED: Debug                Contains no useful (formal) content.
+ * DROPPED: Debug.               Contains no useful (formal) content.
  *)
 
 (*

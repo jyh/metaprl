@@ -45,6 +45,10 @@ val is_1_dep0_term : opname -> term -> bool
 val mk_1_dep0_term : opname -> term -> term
 val dest_1_dep0_term : opname -> term -> term
 
+val is_0_dep0_1_dep1_term : opname -> term -> bool
+val mk_0_dep0_1_dep1_term : opname -> string -> term -> term
+val dest_0_dep0_1_dep1_term : opname -> term -> string * term
+
 (* No parameters, 2 subterms. *)
 
 val is_2_dep0_term : opname -> term -> bool

@@ -1,4 +1,6 @@
 (*!
+ * @spelling{pointwise}
+ *
  * @begin[doc]
  * @module[Mfir_type_rules]
  *
@@ -49,24 +51,153 @@ open Base_dtactic
 
 (*!
  * @begin[doc]
+ * @modsection{Side conditions}
  *
- * Just some dummy rules for the moment.
+ * Proofs of side-conditions require a proof of $<< "true" >>$, which we
+ * take to be an axiom.
  * @end[doc]
  *)
 
-prim wf_empty_context {| intro [] |} :
-   sequent [mfir] { >- wf_context }
-   = it
-
-prim truth {| intro [] |} 'H :
-   sequent [mfir] { 'H >- wf_context } -->
+prim truth_intro {| intro [] |} 'H :
    sequent [mfir] { 'H >- "true" }
    = it
 
+(*!
+ * @begin[doc]
+ * @modsection{Store typing rules}
+ *
+ * The typing rules for functions are straightforward.  The body of the
+ * function must be typed as the result type of the function, assuming that
+ * its binding variable has the appropriate type (or kind).
+ * @end[doc]
+ *)
+
+prim ty_store_lambda {| intro [] |} 'H 'a :
+   sequent [mfir] { 'H; a: var_def{ 'arg_type; no_def } >-
+      has_type{ 'f['a]; 'res_type } } -->
+   sequent [mfir] { 'H >-
+      has_type{ lambda{ v. 'f['v] }; tyFun{ 'arg_type; 'res_type } } }
+   = it
+
+prim ty_store_polyFun {| intro [] |} 'H 'a :
+   sequent [mfir] { 'H; a: ty_def{ small_type; no_def } >-
+      has_type{ 'f['a]; 'ty['a] } } -->
+   sequent [mfir] { 'H >-
+      has_type{ polyFun{ t. 'f['t] }; tyAll{ t. 'ty['t] } } }
+   = it
+
+(*!
+ * @begin[doc]
+ * @modsection{Type equality}
+ *
+ * Type well-formedness judgments are expressed as a set of type
+ * equality judgments.  The @tt[wf_small_type] rule allows any
+ * $<< small_type >>$ type to be used as a $<< large_type >>$.
+ * @end[doc]
+ *)
+
+prim wf_small_type {| intro [] |} 'H :
+   sequent [mfir] { 'H >- type_eq{ 'ty1; 'ty2; small_type } } -->
+   sequent [mfir] { 'H >- type_eq{ 'ty1; 'ty2; large_type } }
+   = it
+
+(*!
+ * @begin[doc]
+ *
+ * An enumeration type is well-formed if the parameter is within the allowed
+ * range of values.
+ * @end[doc]
+ *)
+
+prim wf_tyEnum {| intro [] |} 'H :
+   sequent [mfir] { 'H >- member{ number[i:n]; enum_max } } -->
+   sequent [mfir] { 'H >- type_eq{ tyEnum[i:n]; tyEnum[i:n]; small_type } }
+   = it
+
+(*!
+ * @begin[doc]
+ *
+ * The equality judgments for numeric data types are straightforward. Note
+ * that $<< tyRawInt[precision:n, sign:s] >>$ and $<< tyFloat[precision:n] >>$
+ * cannot be used as $<< small_type >>$ types.
+ * @end[doc]
+ *)
+
+prim wf_tyInt {| intro [] |} 'H :
+   sequent [mfir] { 'H >- type_eq{ tyInt; tyInt; small_type } }
+   = it
+
+prim wf_tyRawInt {| intro [] |} 'H :
+   sequent [mfir] { 'H >- type_eq{ tyRawInt[precision:n, sign:s];
+                                   tyRawInt[precisoin:n, sign:s];
+                                   large_type } }
+   = it
+
+prim wf_tyFloat {| intro [] |} 'H :
+   sequent [mfir] { 'H >- type_eq{ tyFloat[precision:n];
+                                   tyFloat[precision:n];
+                                   large_type } }
+   = it
+
+(*!
+ * @begin[doc]
+ *
+ * Two tuple types are equal if they have the same ``class'', and they are
+ * pointwise equal.  Note that ``box'' tuples must have arity one.
+ * @end[doc]
+ *)
+
+prim wf_tyTuple_box {| intro [] |} 'H :
+   sequent [mfir] { 'H >- type_eq{ 'ty1; 'ty2; large_type } } -->
+   sequent [mfir] { 'H >-
+      type_eq{ tyTuple["box"]{ cons{ 'ty1; nil } };
+               tyTuple["box"]{ cons{ 'ty2; nil } };
+               small_type } }
+   = it
+
+prim wf_tyTuple_normal1 {| intro [] |} 'H :
+   sequent [mfir] { 'H >- type_eq{ 'h1; 'h2; large_type } } -->
+   sequent [mfir] { 'H >-
+      type_eq{ tyTuple["normal"]{ 't1 };
+               tyTuple["normal"]{ 't2 };
+               small_type } } -->
+   sequent [mfir] { 'H >-
+      type_eq{ tyTuple["normal"]{ cons{ 'h1; 't1 } };
+               tyTuple["normal"]{ cons{ 'h2; 't2 } };
+               small_type } }
+   = it
+
+prim wf_tyTuple_normal2 {| intro [] |} 'H :
+   sequent [mfir] { 'H >-
+      type_eq{ tyTuple["normal"]{ nil };
+               tyTuple["normal"]{ nil };
+               small_type } }
+   = it
+
+(*!
+ * @begin[doc]
+ * @modsection{Atom typing rules}
+ *
+ * Integer atoms are well-formed if the constant is in the set of 31-bit,
+ * signed integers.
+ * @end[doc]
+ *)
+
 prim ty_atomInt {| intro [] |} 'H :
-   sequent [mfir] { 'H >- wf_context } -->
    sequent [mfir] { 'H >- member{ 'i; intset_max } } -->
-   sequent [mfir] { 'H >- has_type["atom"]{ atomInt{'i}; tyInt } }
+   sequent [mfir] { 'H >- has_type{ atomInt{'i}; tyInt } }
+   = it
+
+(*!
+ * @begin[doc]
+ *
+ * A variable is well-typed if it is declared to have that type.
+ * @end[doc]
+ *)
+
+prim ty_atomVar {| elim [] |} 'H 'J 'v :
+   sequent [mfir] { 'H; v: var_def{ 'ty; no_def }; 'J['v] >-
+      has_type{ atomVar{'v}; 'ty } }
    = it
 
 (*!

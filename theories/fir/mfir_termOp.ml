@@ -193,6 +193,10 @@ let intset_max_term = << intset_max >>
 let intset_max_opname = opname_of_term intset_max_term
 let is_intset_max_term = is_0_dep0_term intset_max_opname
 
+let enum_max_term = << enum_max >>
+let enum_max_opname = opname_of_term enum_max_term
+let is_enum_max_term = is_0_dep0_term enum_max_opname
+
 let tyInt_term = << tyInt >>
 let tyInt_opname = opname_of_term tyInt_term
 let is_tyInt_term = is_0_dep0_term tyInt_opname
@@ -215,7 +219,7 @@ let is_tyFloat_term = is_num_0_dep0_term tyFloat_opname
 let mk_tyFloat_term = mk_num_0_dep0_term tyFloat_opname
 let dest_tyFloat_term = dest_num_0_dep0_term tyFloat_opname
 
-let tyFun_term = << tyFun{ 'arg_type_list; 'res_type } >>
+let tyFun_term = << tyFun{ 'arg_type; 'res_type } >>
 let tyFun_opname = opname_of_term tyFun_term
 let is_tyFun_term = is_2_dep0_term tyFun_opname
 let mk_tyFun_term = mk_2_dep0_term tyFun_opname
@@ -255,23 +259,47 @@ let is_tyApply_term = is_2_dep0_term tyApply_opname
 let mk_tyApply_term = mk_2_dep0_term tyApply_opname
 let dest_tyApply_term = dest_2_dep0_term tyApply_opname
 
-let tyExists_term = << tyExists{ 'ty_var_list; 'ty } >>
+let tyExists_term = << tyExists{ t. 'ty['t] } >>
 let tyExists_opname = opname_of_term tyExists_term
-let is_tyExists_term = is_2_dep0_term tyExists_opname
-let mk_tyExists_term = mk_2_dep0_term tyExists_opname
-let dest_tyExists_term = dest_2_dep0_term tyExists_opname
+let is_tyExists_term = is_0_dep0_1_dep1_term tyExists_opname
+let mk_tyExists_term = mk_0_dep0_1_dep1_term tyExists_opname
+let dest_tyExists_term = dest_0_dep0_1_dep1_term tyExists_opname
 
-let tyAll_term = << tyAll{ 'ty_var_list; 'ty } >>
+let tyAll_term = << tyAll{ t. 'ty['t] } >>
 let tyAll_opname = opname_of_term tyAll_term
-let is_tyAll_term = is_2_dep0_term tyAll_opname
-let mk_tyAll_term = mk_2_dep0_term tyAll_opname
-let dest_tyAll_term = dest_2_dep0_term tyAll_opname
+let is_tyAll_term = is_0_dep0_1_dep1_term tyAll_opname
+let mk_tyAll_term = mk_0_dep0_1_dep1_term tyAll_opname
+let dest_tyAll_term = dest_0_dep0_1_dep1_term tyAll_opname
 
 let tyProject_term = << tyProject[i:n]{ 'var } >>
 let tyProject_opname = opname_of_term tyProject_term
 let is_tyProject_term = is_num_1_dep0_term tyProject_opname
 let mk_tyProject_term = mk_num_1_dep0_term tyProject_opname
 let dest_tyProject_term = dest_num_1_dep0_term tyProject_opname
+
+let tyDefPoly_term = << tyDefPoly{ t. 'ty['t] } >>
+let tyDefPoly_opname = opname_of_term tyDefPoly_term
+let is_tyDefPoly_term = is_0_dep0_1_dep1_term tyDefPoly_opname
+let mk_tyDefPoly_term = mk_0_dep0_1_dep1_term tyDefPoly_opname
+let dest_tyDefPoly_term = dest_0_dep0_1_dep1_term tyDefPoly_opname
+
+let unionCaseElt_term = << unionCaseElt{ 'ty; 'boolean } >>
+let unionCaseElt_opname = opname_of_term unionCaseElt_term
+let is_unionCaseElt_term = is_2_dep0_term unionCaseElt_opname
+let mk_unionCaseElt_term = mk_2_dep0_term unionCaseElt_opname
+let dest_unionCaseElt_term = dest_2_dep0_term unionCaseElt_opname
+
+let unionCase_term = << unionCase{ 'elts } >>
+let unionCase_opname = opname_of_term unionCase_term
+let is_unionCase_term = is_1_dep0_term unionCase_opname
+let mk_unionCase_term = mk_1_dep0_term unionCase_opname
+let dest_unionCase_term = dest_1_dep0_term unionCase_opname
+
+let tyDefUnion_term = << tyDefUnion[str:s]{ 'cases } >>
+let tyDefUnion_opname = opname_of_term tyDefUnion_term
+let is_tyDefUnion_term = is_str_1_dep0_term tyDefUnion_opname
+let mk_tyDefUnion_term = mk_str_1_dep0_term tyDefUnion_opname
+let dest_tyDefUnion_term = dest_str_1_dep0_term tyDefUnion_opname
 
 let idOp_term = << idOp >>
 let idOp_opname = opname_of_term idOp_term

@@ -52,7 +52,7 @@ declare tyFloat[precision:n]
  * Functions.
  *)
 
-declare tyFun{ 'arg_type_list; 'res_type }
+declare tyFun{ 'arg_type; 'res_type }
 
 (*
  * Aggregate data.
@@ -69,6 +69,15 @@ declare tyRawData
 
 declare tyVar{ 'ty_var }
 declare tyApply{ 'ty_var; 'ty_list }
-declare tyExists{ 'ty_var_list; 'ty }
-declare tyAll{ 'ty_var_list; 'ty }
+declare tyExists{ t. 'ty['t] }
+declare tyAll{ t. 'ty['t] }
 declare tyProject[i:n]{ 'var }
+
+(*
+ * Type definitions.
+ *)
+
+declare tyDefPoly{ t. 'ty['t] }
+declare unionCaseElt{ 'ty; 'boolean }
+declare unionCase{ 'elts }
+declare tyDefUnion[str:s]{ 'cases }

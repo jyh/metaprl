@@ -33,6 +33,8 @@
 
 extends Base_theory
 
+open Tactic_type.Conversionals
+
 (**************************************************************************
  * Declarations.
  **************************************************************************)
@@ -45,8 +47,40 @@ declare mfir
 declare it
 
 (*
+ * Kinds.
+ *)
+
+declare small_type
+declare large_type
+
+(*
+ * Store values.
+ *)
+
+declare polyFun{ t. 'f['t] }
+declare lambda{ v. 'f['v] }
+declare union_val[i:n]{ 'ty_var; 'atom_list }
+declare raw_data
+
+(*
+ * Contexts.
+ *)
+
+declare ty_def{ 'k; 'def }
+declare var_def{ 'ty; 'def }
+declare global_def{ 'ty; 'def }
+declare no_def
+
+(*
  * Judgments.
  *)
 
-declare wf_context
-declare has_type[str:s]{ 't; 'ty }
+declare type_eq{ 'ty1; 'ty2; 'k }
+declare type_eq{ 'ty; 'k }
+declare has_type{ 't; 'ty }
+
+(**************************************************************************
+ * Rewrites.
+ **************************************************************************)
+
+topval unfold_type_eq : conv

@@ -86,7 +86,9 @@ declare interval{ 'left; 'right }
 declare intset{ 'interval_list }
 declare rawintset[precision:n, sign:s]{ 'interval_list }
 declare member{ 'num; 'set }
+
 declare intset_max
+declare enum_max
 
 (**************************************************************************
  * Rewrites.
@@ -96,37 +98,44 @@ declare intset_max
  * Booleans.
  *)
 
-val reduce_and : conv
-val reduce_or : conv
-val reduce_not : conv
-val reduce_ifthenelse_true : conv
-val reduce_ifthenelse_false : conv
+topval reduce_and : conv
+topval reduce_or : conv
+topval reduce_not : conv
+topval reduce_ifthenelse_true : conv
+topval reduce_ifthenelse_false : conv
 
 (*
  * Integers.
  *)
 
-val reduce_add : conv
-val reduce_sub : conv
-val reduce_mul : conv
-val reduce_div : conv
-val reduce_rem : conv
-val reduce_minus : conv
-val reduce_numeral : conv
+topval reduce_add : conv
+topval reduce_sub : conv
+topval reduce_mul : conv
+topval reduce_div : conv
+topval reduce_rem : conv
+topval reduce_minus : conv
+topval reduce_numeral : conv
 
-val reduce_int_eq : conv
-val reduce_int_neq : conv
-val reduce_int_lt : conv
-val reduce_int_le : conv
-val reduce_int_gt : conv
-val reduce_int_ge : conv
+topval reduce_int_eq : conv
+topval reduce_int_neq : conv
+topval reduce_int_lt : conv
+topval reduce_int_le : conv
+topval reduce_int_gt : conv
+topval reduce_int_ge : conv
 
 (*
  * Lists.
  *)
 
-val reduce_member_interval : conv
-val reduce_member_intset_ind : conv
-val reduce_member_intset_base : conv
-val reduce_member_rawintset_ind : conv
-val reduce_member_rawintset_base : conv
+topval reduce_member_interval : conv
+topval reduce_member_intset_ind : conv
+topval reduce_member_intset_base : conv
+topval reduce_member_rawintset_ind : conv
+topval reduce_member_rawintset_base : conv
+
+(*
+ * Integer sets.
+ *)
+
+topval reduce_intset_max : conv
+topval reduce_enum_max : conv

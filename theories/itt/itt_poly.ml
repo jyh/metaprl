@@ -193,6 +193,7 @@ interactive_rw reduce_coeff_degree1 {| reduce |} :
    coeff{'p; fst{'p}; 'F} <--> (snd{'p} fst{'p})
 
 interactive_rw reduce_coeff_0 {| reduce |} :
+   ('p in poly{'F}) -->
    coeff{'p; 0; 'F} <--> (snd{'p} 0)
 
 interactive_rw reduce_coeff_degree2 {| reduce |} :

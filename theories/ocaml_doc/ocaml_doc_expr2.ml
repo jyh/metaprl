@@ -36,8 +36,7 @@
 extends Base_theory
 
 (*!
-@begin[doc]
-
+ * @begin[doc]
 In the chapters leading up to this one, we have seen simple
 expressions involving numbers, characters, strings, functions and
 variables.  This language is already Turing complete---we can code
@@ -46,8 +45,10 @@ practice, this would not only be inefficient, it would also make it
 very hard to understand our programs.  For efficient, and readable,
 data structure implementation we need @emph{aggregate types}.
 
+
+
 OCaml provides a rich set of aggregate types, including tuples, lists,
-disjoint union (also called tagged unions, or variant records),
+disjoint unions (also called tagged unions, or variant records),
 records, and arrays.  In this chapter, we'll look at the simplest
 part: tuples and lists.  We'll discuss unions in Chapter
 @refchapter[unions], and we'll leave the remaining types for Chapter
@@ -75,7 +76,7 @@ quote (@code{'}).  A type variable represents an @emph{arbitrary}
 type.  The typing @code{identity : 'a -> 'a} says that the
 @tt{identity} function takes an argument of some arbitrary type
 @code{'a} and returns a value of the same type @code{'a}.  If the
-@tt{identity} function is applied to a @tt{int}, then it returns and
+@tt{identity} function is applied to an @tt{int}, then it returns an
 @tt{int}; if it is applied to a @tt{string}, then it returns a
 @tt{string}.  The @tt{identity} function can even be applied to
 function arguments.
@@ -95,7 +96,7 @@ return @code{3}.
 
 @subsection[value_restriction]{Value restriction}
 
-What happens if the apply the @tt{identity} to a @emph{polymorphic}
+What happens if we apply the @tt{identity} to a @emph{polymorphic}
 function type?
 
 @begin[verbatim]
@@ -124,11 +125,11 @@ expression to be truly polymorphic, it must be a value.  Values are
 expressions that evaluate to themselves.  For example, all numbers,
 characters, and string constants are values.  Functions are also
 values.  Function applications, like @code{identity identity} are
-@emph{not} values, because they can be simplified (the @code{identity
-identity} expression evaluates to @code{identity}).
+@emph{not} values, because they can be simplified (the
+@code{identity identity} expression evaluates to @code{identity}).
 
-the normal way to get around the value restriction is to use
-``eta-expansion,'' which is the technical term for adding extra
+The normal way to get around the value restriction is to use
+@emph{eta-expansion}, which is the technical term for adding extra
 arguments to the function.  We know that @code{identity'} is a
 function; we can add its argument explicitly.
 
@@ -152,7 +153,7 @@ Chapter @refchapter[records].
 
 Polymorphism can be a powerful tool.  In ML, a single identity
 function can be defined that works on all types.  In a non-polymorphic
-language, like C, a separate identity function would have to be
+language like C, a separate identity function would have to be
 defined for each type.
 
 @begin[verbatim]
@@ -168,29 +169,29 @@ char *string_identity(char *s)
 @end[verbatim]
 
 Another kind of polymorphism is @emph{overloading} (also called
-@emph{adhoc} polymorphism).  Overloading allows several functions to
-have the same name, but different types.  When that function is
+@emph{ad-hoc} polymorphism).  Overloading allows several functions to
+have the same name but different types.  When that function is
 applied, the compiler selects the appropriate function by checking the
 type of the arguments.  For example, in Java we could define a class
 that includes several definitions of addition for different types
-(note that the @code{+} expression is already overloaded).
+(note that the @code{+} operator is already overloaded).
 
 @begin[verbatim]
 class Adder {
-    int Add(int i, int j) {
+    static int Add(int i, int j) {
        return i + j;
     }
-    float Add(float x, float y) {
+    static float Add(float x, float y) {
        return x + y;
     }
-    String Add(String s1, String s2) {
+    static String Add(String s1, String s2) {
        return s1.concat(s2);
     }
 }
 @end[verbatim]
 
-The expression @code{Add(5, 7)} would evaluate to @code{12}, while the
-expression @code{Add("Hello ", "world")} would evaluate to the string
+The expression @code{Adder.Add(5, 7)} would evaluate to @code{12}, while the
+expression @code{Adder.Add("Hello ", "world")} would evaluate to the string
 @code{"Hello world"}.
 
 OCaml does @emph{not} provide overloading.  There are probably two
@@ -219,7 +220,7 @@ is being called, and there is no way for a compiler to check if all
 the function's instances do ``similar'' things.
 
 I'm not sure I buy this argument.  Properly used, overloading reduces
-``namespace clutter'' by grouping similar functions under the same
+namespace clutter'by grouping similar functions under the same
 name.  True, overloading is grounds for obfuscation, but OCaml is
 already ripe for obfuscation by allowing arithmetic functions like
 @code{(+)} to be redefined!
@@ -228,8 +229,8 @@ already ripe for obfuscation by allowing arithmetic functions like
 
 Tuples are the simplest aggregate type.  They correspond to the
 @emph{ordered} tuples you have seen in mathematics, or set theory.  A
-tuple is a collection of values of arbitrary type.  The syntax for a
-tuple is a sequence of expression separated by commas.  for example,
+tuple is a collection of values of arbitrary types.  The syntax for a
+tuple is a sequence of expressions separated by commas.  For example,
 the following tuple is a pair containing a number and a string.
 
 @begin[verbatim]
@@ -237,11 +238,11 @@ the following tuple is a pair containing a number and a string.
 val p : int * string = 1, "Hello"
 @end[verbatim]
 
-The syntax for the @emph{type} of a tuple is the type of the
-components, separated by a @code{*}.  In this case, the type of the
+The syntax for the @emph{type} of a tuple is a @code{*} delimited list of the types of the
+components.  In this case, the type of the
 pair is @code{int * string}.
 
-Tuples can be ``deconstructed'' using pattern matching, with any of
+Tuples can be @emph{deconstructed} using pattern matching, with any of
 the pattern matching constructs like @tt{let}, @tt{match}, @tt{fun},
 or @tt{function}.  For example, to recover the parts of the pair in
 the variables @tt{x} and @tt{y}, we might use a @tt{let} form.
@@ -252,7 +253,7 @@ val x : int = 1
 val y : string = "Hello"
 @end[verbatim]
 
-The built-in function @tt{fst} and @tt{snd} return the components of
+The built-in functions @tt{fst} and @tt{snd} return the components of
 a pair, defined as follows.
 
 @begin[verbatim]
@@ -302,8 +303,6 @@ For example, tuples would be an appropriate way of defining Cartesian
 coordinates.
 
 @begin[verbatim]
-# type coord = int * int;;
-type coord = int * int
 # let make_coord x y = x, y;;
 val make_coord : 'a -> 'b -> 'a * 'b = <fun>
 # let x_of_coord = fst;;
@@ -332,9 +331,9 @@ val jason : string * float * string * float =
 @section[lists]{Lists}
 
 Lists are also used extensively in OCaml programs.  A list contains a
-sequence of values of the same type.  There are are two constructors:
+sequence of values of the same type.  There are two constructors:
 the @code{[]} expression is the empty list, and the $e_1 @tt{::} e_2$
-expression is the ``cons'' of expression $e_1$ onto the list $e_2$.
+expression is the @emph{cons} of expression $e_1$ onto the list $e_2$.
 
 @begin[verbatim]
 # let l = "Hello" :: "World" :: [];;
@@ -344,10 +343,10 @@ val l : string list = ["Hello"; "World"]
 The bracket syntax $[ e_1; @ldots; e_n ]$ is an alternate syntax for
 the list containing the values computed by $e_1, @ldots, e_n$.
 
-The syntax for a list with elements of type @tt{t} is @code{t list}.
-The @tt{list} type is an instance of a @emph{parameterized} type.  A
+The syntax for the type of a list with elements of type @tt{t} is @code{t list}.
+The @tt{list} type is a of a @emph{parameterized} type.  An
 @code{int list} is a list containing integers, a @code{string list} is
-a list containing strings, and a @code{'a list} is a list containing
+a list containing strings, and an @code{'a list} is a list containing
 elements of some type @code{'a} (but all the elements have to have the
 same type).
 
@@ -372,16 +371,16 @@ value @tt{x} is in a list @tt{l} could be defined as follows.
         [] -> false
       | y :: l -> x = y || mem x l;;
 val mem : 'a -> 'a list -> bool = <fun>
-# mem "Jason" ["Hello"; "World"];;
+# mem 5 [1; 7; 3];;
 - : bool = false
-# mem "Dave" ["I'm"; "afraid"; "Dave"; "I"; "can't"; "do"; "that"];;
+# mem "do" ["I'm"; "afraid"; "I"; "can't"; "do"; "that"; "Dave"];;
 - : bool = true
 @end[verbatim]
 
 This function takes an argument of any type @code{'a}, and checks if
 the element is in the @code{'a list}.
 
-The standard ``map'' function, like @code{List.map}, is defined as
+The standard map function, @code{List.map}, can be defined as
 follows.
 
 @begin[verbatim]
@@ -401,21 +400,21 @@ value of type @code{'b}), and a list containing elements of type
 $$@tt{map}@space f@space[] [v_1; @ldots; v_n] = [f@space v_1; @ldots;
 f@space v_n].$$
 
-Lists are commonly used to represent sets of values, or key-value relationships.
+Lists are commonly used to represent sets of values or key-value relationships.
 The @tt{List} library contains many list functions.  The
 @code{List.assoc} function returns the value for a key in a list.
 
 @begin[verbatim]
 # let entry =
-     ["name", "Jason";
-      "height", "6' 3''";
-      "phone", "626-345-9692";
-      "salary", "$50"];;
+     [("name", "Jason");
+      ("height", "6' 3''");
+      ("phone", "626-395-6568");
+      ("salary", "$50")];;
 val entry : (string * string) list =
   ["name", "Jason"; "height", "6' 3''"; "phone", "626-345-9692";
    "salary", "$50"]
 # List.assoc "phone" entry;;
-- : string = "626-345-9692"
+- : string = "626-395-6568"
 @end[verbatim]
 
 Note that the comma separates the elements of the pairs in the list,

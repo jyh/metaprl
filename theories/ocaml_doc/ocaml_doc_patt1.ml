@@ -38,77 +38,102 @@ extends Base_theory
 (*!
  * @begin[doc]
 
-One of the more powerful features of ML is that is uses @emph{pattern
+One of the more powerful features of ML is that it uses @emph{pattern
 matching} to define functions by case analysis.  Pattern matching is
-performed by the @bf{match} expression, which has the following
+performed by the @tt{match} expression, which has the following
 general form.
 
 @begin[center]
 @begin[tabular, l]
-@line{{@bf{match} @emph{expr} @bf{with}}}
+@line{{@tt{match} @emph{expr} @tt{with}}}
 @line{{@phantom{$$@space$$ |} $@emph{patt}_1$ @code{->} $@emph{expr}_1$}}
 @line{{$@space$ | $@emph{patt}_2$ @code{->} $@emph{expr}_2$}}
-@line{$@cdots$}
+@line{$@vdots$}
 @line{{$@space$ | $@emph{patt}_n$ @code{->} $@emph{expr}_n$}}
 @end[tabular]
 @end[center]
 
 A @emph{pattern} is an expression made of constants and variables.
-When the pattern matches the argument, the variables are given the
-values that match.
+When the pattern matches with an argument, the variables are bound to the
+corresponding values in the argument.
 
 For example, Fibonacci numbers can be defined succinctly using pattern
 matching.  Fibonacci numbers are defined inductively: $@tt{fib}@space
-1 = 1$, $@emph{fib}@space 2 = 1$, for all other natural numbers $i$,
-$@emph{fib}@space i = @emph{fib}(i - 1) + @emph{fib}(i - 2)$.
+1 = 1$, $@tt{fib}@space 2 = 1$, for all other natural numbers $i$,
+$@tt{fib}@space i = @tt{fib}(i - 1) + @tt{fib}(i - 2)$.
 
 @begin[verbatim]
 # let rec fib i =
      match i with
-        0 -> 1
+        0 -> 0
       | 1 -> 1
       | j -> fib (j - 2) + fib (j - 1);;
 val fib : int -> int = <fun>
 # fib 1;;
 - : int = 1
 # fib 2;;
-- : int = 2
+- : int = 1
 # fib 3;;
-- : int = 3
+- : int = 2
 # fib 6;;
-- : int = 13
+- : int = 8
 @end[verbatim]
 
-In this code, the argument $i$ is compared against the constants 1 and
-2.  If either of these cases match, the return value is 1.  The final
+In this code, the argument $i$ is compared against the constants 0 and
+1.  If either of these cases match, the return value is $i$.  The final
 pattern is the variable $j$, which matches any argument.  When this
 pattern is reached, $j$ takes on the value of the argument, and the
 body @code{fib (j - 2) + fib (j - 1)} computes the returned value.
 
-This form of matching, where the function body is a @bf{match}
+Note that the variables in a pattern are @emph{binding} occurrences
+unrelated to any previous definition of the variable.  For example,
+the following code produces a result you might not expect.  The first case
+matches all expressions, returning the value matched.
+
+@begin[verbatim]
+# let zero = 0;;
+# let one = 1;;
+# let rec fib i =
+     match i with
+        zero -> zero
+      | one -> one
+      | j -> fib (j - 2) + fib (j - 1);;
+Warning: this match case is unused.
+Warning: this match case is unused.
+val fib : int -> int = <fun>
+# fib 1;;
+- : int = 1
+# fib 10;;
+- : int = 10
+# fib 2002;;
+- : int = 2002
+@end[verbatim]
+
+The general form of matching, where the function body is a @tt{match}
 expression applied to the function argument, is quite common in ML
 programs.  OCaml defines an equivalent syntactic form to handle this
-case, using the @bf{function} keyword (instead of @bf{fun}).  A
-@bf{function} definition is just like a @bf{fun}, except that multiple
-patterns are allowed.  The @tt{fib} definition using @bf{function} is
+case, using the @tt{function} keyword (instead of @tt{fun}).  A
+@tt{function} definition is just like a @tt{fun}, except that multiple
+patterns are allowed.  The @tt{fib} definition using @tt{function} is
 as follows.
 
 @begin[verbatim]
 # let rec fib = function
-     0 -> 1
+     0 -> 0
    | 1 -> 1
    | i -> fib (i - 1) + fib (i - 2);;
 val fib : int -> int = <fun>
 # fib 1;;
 - : int = 1
 # fib 6;;
-- : int = 13
+- : int = 8
 @end[verbatim]
 
-Patterns can also be used the other basic types, like characters, strings,
-and Boolean values.  In addition, multiple patterns @emph{without
-variables} can be used for a single body.  For example, one way to
-check for capital letters is the following function definition.
+Patterns can also be used with value having the other basic types,
+like characters, strings, and Boolean values.  In addition, multiple
+patterns @emph{without variables} can be used for a single body.  For
+example, one way to check for capital letters is with the following
+function definition.
 
 @begin[verbatim]
 # let is_uppercase = function
@@ -146,10 +171,9 @@ Note that the pattern variable $c$ in these functions acts as a
 variable itself is not used in the body @tt{false}.  This is another
 commonly occurring structure, and OCaml provides a special pattern for
 cases like these.  The @tt{_} pattern (a single underscore character)
-is a pattern that matches anything.  It is not a variable (so it can't
-be used in an expression).  By convention, the @tt{is_uppercase}
-function would more appropriately be written using the wildcard
-pattern.
+is a wildcard pattern that matches anything.  It is not a variable (so
+it can't be used in an expression).  The @tt{is_uppercase} function
+would normally be written using the wildcard pattern.
 
 @begin[verbatim]
 # let is_uppercase = function
@@ -178,9 +202,9 @@ Here is an example of a value that is not matched:
 val is_uppercase : char -> bool = <fun>
 @end[verbatim]
 
-The OCaml compiler (and toploop) is verbose about inexhaustive
-patterns.  It warns that the pattern is non-exhaustive, and it even
-suggests a case that is not matched.  An inexhaustive set of patterns
+The OCaml compiler and toploop are verbose about inexhaustive
+patterns.  They warn when the pattern match is non-exhaustive, and even
+suggest a case that is not matched.  An inexhaustive set of patterns
 is usually an error---what would happen if we applied the
 @tt{is_uppercase} function to a non-uppercase character?
 
@@ -191,7 +215,7 @@ is usually an error---what would happen if we applied the
 Uncaught exception: Match_failure("", 19, 49)
 @end[verbatim]
 
-Again. OCaml is fairly strict.  In the case where the pattern does not
+Again, OCaml is fairly strict.  In the case where the pattern does not
 match, it raises an @emph{exception} (we'll see more about exceptions
 in Chapter @refchapter[exceptions]).  In this case, the exception
 means that an error occurred during evaluation (a pattern matching
@@ -253,6 +277,7 @@ constructions.  The general forms are as follows.
 @begin[center]
 @begin[tabular, l]
 @line{@tt{let @emph{patt} = @emph{expr}}}
+@line{@tt{let @emph{name} @emph{patt} $@ldots$ @emph{path} = @emph{expr}}}
 @line{@tt{fun @emph{patt} -> @emph{expr}}}
 @end[tabular]
 @end[center]
@@ -260,7 +285,7 @@ constructions.  The general forms are as follows.
 These aren't much use with constants because the pattern match will
 always be non-exhaustive (except for the @tt{()} pattern).  However,
 they will be handy when we introduce tuples and records in the next
-Chapter.
+chapter.
 
 @begin[verbatim]
 # let is_one = fun 1 -> true;;

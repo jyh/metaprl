@@ -42,7 +42,7 @@ variables.  In ML, variables are @emph{names} for values.  In a purely
 functional setting, it is not possible to tell the difference between
 a variable from the value it stands for.
 
-In OCaml, variable bindings are introduced with the @tt{let} keyword.
+In OCaml variable bindings are introduced with the @tt{let} keyword.
 The syntax of a simple top-level declaration is as follows.
 
 @begin[center]
@@ -61,8 +61,19 @@ val y : int = 2
 val z : int = 3
 @end[verbatim]
 
-Definitions using @tt{let} can also be nested arbitrarily using the
+Definitions using @tt{let} can also be nested using the
 @tt{in} form.
+
+@begin[center]
+@tt{let @emph{name} = @emph{expr1} in @emph{expr2}}
+@end[center]
+
+The expression @emph{expr2} is called the body of the @tt{let}.  Lets
+of this form are expressions; the value of a @tt{let} expression is
+the value of the body.  The variable @emph{name} is defined as the
+value of @emph{expr1} within the body.  Assuming that there is only
+one definition for @emph{name}, the variable @emph{name} is defined
+@emph{only} in the body @emph{expr2} and not @emph{expr1}.
 
 @begin[verbatim]
 # let x = 1 in
@@ -76,10 +87,11 @@ Definitions using @tt{let} can also be nested arbitrarily using the
 val z : int = 3
 @end[verbatim]
 
-Binding is @emph{static} (lexical scoping): the value of a variable is
-defined by the innermost @tt{let} definition for the variable.  The
-variable is bound only in the body of the let; or, for toplevel
-definitions, the rest of the file.
+Binding is @emph{static} (lexical scoping): if there is more than one
+definition for a variable, the value of the variable is defined by the
+most recent @tt{let} definition for the variable.  The variable is
+bound only in the body of the let; or, for toplevel definitions, the
+rest of the file.
 
 @begin[verbatim]
 # let x = 1 in
@@ -92,11 +104,15 @@ definitions, the rest of the file.
 What is the value of $z$ in the following definition?
 
 @begin[verbatim]
-# let x = 1
-  let z =
+# let x = 1;;
+val x : int = 1
+# let z =
      let x = 2 in
      let x = x + x in
-        x + x
+        x + x;;
+val z : int = 8
+# x;;
+- : int = 1
 @end[verbatim]
 
 @section[ocaml_doc_functions]{Functions}
@@ -106,7 +122,7 @@ followed by a sequence of variables that name the arguments, the
 @code{->} separator, and then the body of the function.  By default,
 functions are not @emph{named}.  In ML, functions are values like any
 other.  They may be constructed, passed as arguments, and applied to
-specific arguments.  Like any other value, they may be named by using
+arguments.  Like any other value, they may be named by using
 a @tt{let}.
 
 @begin[verbatim]
@@ -114,9 +130,9 @@ a @tt{let}.
 val incr : int -> int = <fun>
 @end[verbatim]
 
-The @code{->} is a @emph{function type}.  The type before the arrow is
-the type of the function's argument, and the value after the arrow is
-the type of the value.  The @tt{incr} function takes an integer
+The @code{->} is for a @emph{function type}.  The type before the arrow is
+the type of the function's argument, and the type after the arrow is
+the type of the result.  The @tt{incr} function takes an integer
 argument, and returns an integer.
 
 The syntax for function application (function call) is concatenation:
@@ -137,14 +153,22 @@ val sum : int -> int -> int = <fun>
 - : int = 7
 @end[verbatim]
 
-Note the @emph{type} of the sum: @code{int -> int -> int}.  The arrow
-associates to the right, so this could also be written
-@code{int -> (int -> int)}.  That is, the @tt{sum} is a function that
-takes a single integer argument, and returns a function that takes
-another integer argument and returns an integer.  Strictly speaking,
-all functions in ML take a single argument; multiple-argument
-functions are implemented as @emph{nested} functions.  The application
-of a function to only some of its arguments is called a ``partial
+Note the @emph{type} for @tt{sum}: @code{int -> int -> int}.  The
+arrow associates to the right, so this could also be written
+@code{int -> (int -> int)}.  That is, @tt{sum} is a function that takes a single
+integer argument, and returns a function that takes another integer
+argument and returns an integer.  Strictly speaking, all functions in
+ML take a single argument; multiple-argument functions are implemented
+as @emph{nested} functions (this is called ``Currying'').
+The definition of @tt{sum} above is equivalent to the following
+explicitly-curried definition.
+
+@begin[verbatim]
+# let sum = fun i -> (fun j -> i + j);;
+val sum : int -> int -> int = <fun>
+@end[verbatim]
+
+The application of @tt{sum} to only one argument is called a ``partial
 application.''
 
 @begin[verbatim]
@@ -156,8 +180,8 @@ val incr : int -> int = <fun>
 
 Since named functions are so common, OCaml provides an alternate
 syntax for functions using a @tt{let} definition.  The formal
-parameters of the function are listed next to the function name,
-before the equality.
+parameters of the function are listed after to the function name,
+before the equality symbol.
 
 @begin[verbatim]
 # let sum i j =
@@ -170,10 +194,8 @@ val sum : int -> int -> int = <fun>
 In ML, functions may be arbitrarily nested.  They may also be defined
 and passed as arguments.  The rule for scoping uses static binding:
 the value of a variable is determined by the code in which a function
-is defined---not by the code in which a function is evaluated.  All
-arguments, and @tt{let}-bound variables are visible in nested
-functions.  For example, another way to define the summation is as
-follows.
+is defined---not by the code in which a function is evaluated.  For
+example, another way to define @tt{sum} is as follows.
 
 @begin[verbatim]
 # let sum i =
@@ -190,35 +212,21 @@ To illustrate the scoping rules, let's consider the following
 definition.
 
 @begin[verbatim]
-# let sum i j =
-     let apply f k =
-        f k
-     in
-     let i = 5 in
-     let sum2 l =
-        i + l
-     in
-        apply sum2 j;;
-val sum : 'a -> int -> int = <fun>
+# let i = 5;;
+val i : int = 5
+# let addi j =
+     i + j;;
+val addi : int -> int = <fun>
+# let i = 7;;
+val i : int = 7
+# addi 3;;
+- : val = 8
 @end[verbatim]
 
-You can ignore the @code{'a} type for the moment.  What is the value
-of this function?  The @tt{apply} function takes a function @tt{f} and
-an argument @tt{j}, and it applies @tt{f} to @tt{j}.  In the next
-step, @tt{i} is bound to $5$.  In @tt{sum2}, is the value of @tt{i} 5,
-or is it determined by the formal parameter @tt{i}.  Trying this out
-we find the following.
-
-@begin[verbatim]
-# sum 3 10;;
-- : int = 15
-@end[verbatim]
-
-Apparently, the value of @tt{i} is 5, not 3 as we passed in the
-argument.  Static (lexical) scoping determines this: the value of
-@tt{i} in @tt{sum2} must be 5, because the closest definition of
-@tt{i} is 5---even though @tt{sum2} is evaluated within the @tt{apply}
-function where the value of @tt{i} is determined by the argument $i$.
+In the @tt{addi} function, the value of @tt{i} is defined by the
+previous definition of @tt{i} as 5.  The second definition of @tt{i}
+has no effect on the definition for @tt{addi}, and the application of
+@tt{addi} to the argument 3 results in $3 + 5 = 8$.
 
 @subsection[ocaml_doc_recursive_functions]{Recursive functions}
 
@@ -241,26 +249,24 @@ val power : int -> float -> float = <fun>
 
 Note the use of the @tt{rec} modifier after the @tt{let} keyword.
 Normally, the function is @bf{not} defined in its own body.  The
-following definition is very different (note the use of the type
-variables @code{'a} and @code{'b}, which we describe in the section on
-polymorphic types).
+following definition is very different.
 
 @begin[verbatim]
-# let power i x =
-     x;;
-val power : 'a -> 'b -> 'b = <fun>
-# let power i x =
+# let bogus i x =
+     (float_of_int i) +. x;;
+val bogus : int -> float -> float = <fun>
+# let bogus i x =
      if i = 0 then
-        1
+        1.0
      else
-        x *. (power (i - 1) x);;
-val power : int -> float -> float = <fun>
-# power 5 2.0;;
-- : float = 4
+        x *. (bogus (i - 1) x);;
+val bogus : int -> float -> float = <fun>
+# bogus 5 2.0;;
+- : float = 12
 @end[verbatim]
 
 Mutually recursive definitions (functions that call one another) can
-be defined use the @tt{and} keyword to connect several @tt{let}
+be defined using the @tt{and} keyword to connect several @tt{let}
 definitions.
 
 @begin[verbatim]
@@ -282,7 +288,7 @@ val g : int -> int = <fun>
 
 @subsection[ocaml_doc_hof]{Higher order functions}
 
-Let's consider another definition where a function is passed as an
+Let's consider a definition where a function is passed as an
 argument, and another function is returned.  Given an arbitrary
 function $f$ on the real numbers, a numerical derivative is defined
 approximately as follows.
@@ -315,6 +321,13 @@ val f' : float -> float = <fun>
 - : float = 75.0000594962
 # f' 1.0;;
 - : float = 3.00000024822
+@end[verbatim]
+
+As we would expect, the derivative of $x^3$ is approximately $3x^2$.
+To get the second derivative, we apply the @tt{deriv} function to
+@code{f'}.
+
+@begin[verbatim]
 # let f'' = deriv f';;
 val f'' : float -> float = <fun>
 # f'' 0.0;;
@@ -325,7 +338,6 @@ val f'' : float -> float = <fun>
 - : float = 0
 @end[verbatim]
 
-As we would expect, the derivative of $x^3$ is approximately $3x^2$.
 The second derivative, which we would expect to be $6x$, is way off!
 Ok, there are some numerical errors here.  Don't expect functional
 programming to solve all your problems.
@@ -351,7 +363,7 @@ the underscore character.
 
 In OCaml, sequences of characters from the infix operators, like
 @code{+, -, *, /, ...} are also valid names.  The normal prefix
-version is obtained by enclosing them in parenthesis.  For example,
+version is obtained by enclosing them in parentheses.  For example,
 the following code is a proper entry for the Obfuscated ML contest.
 Don't use this code in class.
 
@@ -374,7 +386,7 @@ This is because of comment conventions: comments start with
 
 The redefinition of infix operators may make sense in some contexts.
 For example, a program module that defines arithmetic over complex
-number may wish to redefine the arithmetic operators.  It is also
+numbers may wish to redefine the arithmetic operators.  It is also
 sensible to add new infix operators.  For example, we may wish to have
 an infix operator for the @tt{power} construction.
 

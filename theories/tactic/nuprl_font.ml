@@ -237,6 +237,8 @@ declare subc
 declare subq
 declare subz
 
+declare math_div
+
 (************************************************************************
  * DISPLAY CONTROL                                                      *
  ************************************************************************)
@@ -868,6 +870,12 @@ dform subb_df			: internal :: mode[tex] :: subb                      = izone `"_
 dform subc_df			: internal :: mode[tex] :: subc                      = izone `"_c" ezone
 dform subq_df			: internal :: mode[tex] :: subq                      = izone `"_q" ezone
 dform subz_df			: internal :: mode[tex] :: subz                      = izone `"_z" ezone
+
+(*
+ * Math mode.
+ *)
+dform math_div_df1              : internal :: mode[tex] :: math_div                  = izone `"\\div{}" ezone
+dform math_div_df2              : internal :: except_mode[tex] :: math_div           = `"div"
 
 (*
  * Source

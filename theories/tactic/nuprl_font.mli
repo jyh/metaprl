@@ -208,6 +208,8 @@ declare subc
 declare subq
 declare subz
 
+declare math_div
+
 (*
  * -*-
  * Local Variables:

@@ -75,17 +75,17 @@ let typeT p =
    type_univ (Sequent.hyp_count_addr p) p
 
 (* Rules for false *)
-derived false_type 'H :
+derived false_type {| intro [] |} 'H :
    sequent ['ext] { 'H >- "type"{."false"} }
 
-derived false_elim 'H 'J :
+derived false_elim {| elim [] |} 'H 'J :
    sequent ['ext] { 'H; x: "false"; 'J['x] >- 'C['x] }
 
 (* Rules for true *)
-derived true_type 'H :
+derived true_type {| intro [] |} 'H :
    sequent ['ext] { 'H >- "type"{."true"} }
 
-derived true_intro 'H :
+derived true_intro {| intro [] |} 'H :
    sequent ['ext] { 'H >- "true" }
 
 interactive true_concl_elim 'H :
@@ -118,7 +118,7 @@ interactive false_pred {| intro [] |} 'H :
 interactive pred_type1 {| intro [] |} 'H :
    sequent ['ext] { 'H >- Itt_equal!"type"{pred} }
 
-derived pred_type 'H 'J :
+derived pred_type {| elim [] |} 'H 'J :
    sequent ['ext] { 'H; x: pred; 'J['x] >- "type"{'x} }
 
 (*

@@ -1331,12 +1331,12 @@ let totaltime = ref 0.
 let starttime = ref 0.
 
 let startT = argfunT (fun i p ->
+	starttime := Unix.time ();
 	if !debug_omega then
 		begin
 			eprintf "start %i@." i;
 			let i' = mk_number_term (Lm_num.num_of_int i) in
 			let t = mk_equal_term <<int>> i' i' in
-			starttime := Unix.time ();
 			assertT t
 		end
 	else
@@ -1344,10 +1344,10 @@ let startT = argfunT (fun i p ->
 )
 
 let endT = argfunT (fun i p ->
+	totaltime := Unix.time() -. !starttime;
+	eprintf "endT: total time spent is %f@." !totaltime;
 	if !debug_omega then
 		begin
-			totaltime := Unix.time() -. !starttime;
-			eprintf "endT: total time spent is %f@." !totaltime;
 			eprintf "end %i@." i;
 			let i' = mk_number_term (Lm_num.num_of_int i) in
 			let t = mk_equal_term <<int>> i' i' in
@@ -1500,18 +1500,32 @@ let rec map_leaves f = function
 		Leaf (f data)
 
 let rec smart_map_leaves f used_hyps = function
-	Node (first::rest) ->
+ | Node [] ->
+		raise (Invalid_argument "smart_map_leaves: empty set of edges")
+ |	Node ((data,_)::_ as edges) ->
+		begin
+			let i,_,_,_,_ = List.hd data in
+			let backup = used_hyps.(i) in
+			used_hyps.(i) <- false;
+			let r = map_edges f used_hyps [] edges in
+			if backup then
+				used_hyps.(i) <- backup;
+			r
+		end
+ | Leaf data ->
+		Leaf (f data)
+and
+   map_edges f used_hyps mapped = function
+	first::rest ->
 		let data, subtree = first in
 		let i,_,_,_,_ = List.hd data in
 		let subtree' = smart_map_leaves f used_hyps subtree in
 		if used_hyps.(i) then
-			Node ((data, subtree')::(List.map (fun (data,tree) -> data, smart_map_leaves f used_hyps tree) rest))
+			map_edges f used_hyps ((data, subtree')::mapped) rest
 		else
 			subtree'
- | Leaf data ->
-		Leaf (f data)
- | Node [] ->
-		raise (Invalid_argument "smart_map_leaves: empty set of edges")
+ | [] ->
+		Node (List.rev mapped)
 
 let rec leaves2list = function
 	Node edges ->
@@ -1673,7 +1687,7 @@ let omegaPrepT = funT (fun p ->
 		end;
 	let info = VI.invert var2index in
 	total := !total +. (Unix.time() -. start);
-	if !debug_omega then
+	(*if !debug_omega then*)
 		eprintf "Total time spent in omegaPrepT is %f@." !total;
 	let aux used_hyps (tree, f) =
 		omegaCoreT info hyp_num hyp_length used_hyps tree f
@@ -1684,10 +1698,68 @@ let omegaPrepT = funT (fun p ->
 
 let omegaT =
 	startT 2 thenMT arithRelInConcl2HypT thenMT
-	omegaPrepT thenMT endT 2 thenT rw relNormC 0
+	omegaPrepT thenT rw relNormC 0 thenMT endT 2
 
 let getTimeT = funT (fun p ->
 	eprintf "spent %f seconds in omegaPrepT@." !total;
 	total := 0.;
 	failT
 )
+
+(****************************
+ * Currently I skip alternative branches only if first branch actually ignored current node constraint;
+ * it actually should be done with all branches - if any branch ignored the current state constraint then we don't
+ * need current node at all.
+ ****************************)
+
+interactive dark_shadow_or_splinters 'c 'L 'd 'U :
+	[wf] sequent { <H> >- 'c in int } -->
+	[wf] sequent { <H> >- 'L in int } -->
+	[wf] sequent { <H> >- 'd in int } -->
+	[wf] sequent { <H> >- 'U in int } -->
+	[splinters] sequent { <H>; 'c *@ 'd -@ 'c -@ 'd >= ('c *@ 'U) -@ ('d *@ 'L) >- 'C } -->
+	[dark_shadow] sequent { <H>; ('c *@ 'U) -@ ('d *@ 'L) -@ ('c -@ 1) *@ ('d -@ 1) >= 0 >- 'C } -->
+	sequent { <H> >- 'C }
+
+interactive splinter_intro 'U :
+	[wf] sequent { <H> >- 'c in int } -->
+	[wf] sequent { <H> >- 'L in int } -->
+	[wf] sequent { <H> >- 'v in int } -->
+	[wf] sequent { <H> >- 'd in int } -->
+	[wf] sequent { <H> >- 'U in int } -->
+	sequent { <H> >- 'c *@ 'd -@ 'c -@ 'd >= ('c *@ 'U) -@ ('d *@ 'L) } -->
+	sequent { <H> >- 'U >= 'd *@ 'v } -->
+	sequent { <H> >- 'c *@ 'v >= 'L } -->
+	sequent { <H> >- exst k: int_seg{0; ('c *@ 'd -@ 'c -@ 'd)/@ 'd}. ('c *@ 'v = 'L +@ 'k in int) }
+
+interactive splinter_elim 'v :
+	[wf] sequent { <H> >- 'c in int } -->
+	[wf] sequent { <H> >- 'L in int } -->
+	[wf] sequent { <H> >- 'v in int } -->
+	[wf] sequent { <H> >- 'd in int } -->
+	[wf] sequent { <H> >- 'U in int } -->
+	sequent { <H> >- 'U >= 'd *@ 'v } -->
+	sequent { <H> >- 'c *@ 'v >= 'L } -->
+	sequent { <H>;
+		'c *@ 'd -@ 'c -@ 'd >= ('c *@ 'U) -@ ('d *@ 'L);
+		exst k: int_seg{0; ('c *@ 'd -@ 'c -@ 'd)/@ 'd}. ('c *@ 'v = 'L +@ 'k in int) >- 'C
+	} -->
+	sequent { <H>; 'c *@ 'd -@ 'c -@ 'd >= ('c *@ 'U) -@ ('d *@ 'L) >- 'C }
+
+interactive exst_elim_cases :
+	[wf] sequent { <H> >- 'n in int } -->
+	sequent { <H> >- 'n > 0 } -->
+	sequent { <H>; 'P['n -@ 1] >- 'C } -->
+	sequent { <H>; exst k: int_seg{0; 'n -@ 1}. 'P['k] >- 'C } -->
+	sequent { <H>; exst k: int_seg{0; 'n}. 'P['k] >- 'C }
+
+interactive splinters_test :
+	sequent {
+		x: int;
+		y: int;
+		11 *@ 'x +@ 13 *@ 'y >= 27;
+		45 >= 11 *@ 'x +@ 13 *@ 'y;
+		7 *@ 'x -@ 9 *@ 'y >= -10;
+		4 >= 7 *@ 'x -@ 9 *@ 'y
+		>- 'C
+	}

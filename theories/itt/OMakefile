@@ -38,6 +38,7 @@ MPFILES =\
    itt_int_base\
    itt_int_ext\
    itt_int_arith\
+   itt_omega\
    itt_atom_bool\
    itt_nat\
    itt_isect\
@@ -109,9 +110,28 @@ MPFILES =\
    itt_reflection_example_lambda\
    itt_example
 
+OCamlProgramInstall(.DEFAULT, $(BIN), gen_int_bench, gen_int_bench)
+
+GEN= $(BIN)/gen_int_bench$(EXE)
+
+itt_int_bench.mli:
+	touch $@
+
+itt_int_bench2.mli:
+	touch $@
+
+itt_int_bench.ml itt_int_bench2.ml: gen_int_bench$(EXE)
+	$(GEN)
+
+clean:
+	$(CLEAN) gen_int_bench.ml
+
 TEST_FILES =\
    itt_bugs\
    jprover_tests\
+   itt_int_test\
+   itt_int_bench\
+   itt_int_bench2\
    itt_test
 
 MPFILES = $(if $(TESTS_ENABLED), $(MPFILES) $(TEST_FILES), $(MPFILES))

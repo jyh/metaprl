@@ -15,7 +15,8 @@ LMFILES :=\
 	nuprl_font\
 	base_dform\
 	base_dtactic\
-	base_theory
+	base_theory\
+	evaluator
 
 # Name of main libraris
 MAIN = base

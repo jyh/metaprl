@@ -582,6 +582,18 @@ let proveT p =
       prove_auxT info p
 
 (*
+ * This tactic is just for performance testing.
+ *)
+let loopTestT p =
+   for i = 0 to 10 do
+      Tactic_type.refine proveT p
+   done
+
+let testT p =
+   Utils.time_it loopTestT p;
+   idT p
+
+(*
  * -*-
  * Local Variables:
  * Caml-master: "refiner"

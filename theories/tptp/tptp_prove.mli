@@ -10,6 +10,8 @@ open Tacticals
 topval resolveT : int -> tactic
 topval proveT : tactic
 
+topval testT : tactic
+
 (*
  * -*-
  * Local Variables:

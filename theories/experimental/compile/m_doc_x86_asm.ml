@@ -385,7 +385,8 @@ $$
 @caption{Scoped Intel x86 instruction set}
 @end[figure]
 
-The complete abstract instruction set that we use is shown in Figure @reffigure[isa] (the Intel x86
+The complete abstract instruction set that we use is shown in Figure @reffigure[isa] on the next
+page (the Intel x86
 architecture includes a large number of complex instructions that we do not use).  Instructions may
 use several forms of operands and addressing modes.
 

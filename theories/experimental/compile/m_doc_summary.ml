@@ -52,12 +52,14 @@ compiler for a fragment of the Java language we developed as part of the Mojave 
 similar to the one presented in this paper, with two main differences: the Java intermediate
 representation is typed, and the x86 assembly language is not scoped.
 
-Figure @reffigure[locxxx] gives a comparison of some of the key parts of both compilers in terms of
+Figure @reffigure[locxxx] above gives a comparison of some of the key parts of both compilers in
+terms of
 lines of code, where we omit code that implements the Java type system and class constructs.  The
 formal compiler columns list the total lines of code for the term rewrites, as well as the total
 code including rewrite strategies.  The size of the total code base in the formal compiler is still
 quite large due to the extensive code needed to implemented the graph coloring algorithm for the
-register allocator.  Preliminary tests suggest that performance of programs generated from the formal compiler is comparable,
+register allocator.  Preliminary tests suggest that performance of programs generated from the
+formal compiler is comparable,
 sometimes better than, the Java compiler due to a better spilling strategy.
 
 @begin[figure,locxxx]

@@ -293,7 +293,7 @@ In this form, the IR is partitioned into two main parts: ``atoms''
 define values like numbers, arithmetic, and variables; and
 ``expressions'' define all other computation.  The language includes
 arithmetic, conditionals, tuples, functions, and function definitions,
-as shown in Figure @reffigure[ir].
+as shown in Figure @reffigure[ir] on the next page.
 
 Function definitions deserve special mention.  Functions are defined using the $@LetRec{R; d; e}$
 term, where $d$ is a list of mutually recursive functions, and variable $R$

@@ -88,7 +88,8 @@ allowing a conflicting assignment of another variable to the same spill location
 
 To address both of these concerns, we treat spill locations as variables, and introduce scoping for
 spill variables.  We introduce two new pseudo-operands, and two new instructions, shown in Figure
-@reffigure[spilling].  The instruction $@Spill[set]{o_r; s; e[s]}$ generates a new spill location
+@reffigure[spilling] on the next page.  The instruction $@Spill[set]{o_r; s; e[s]}$ generates a new
+spill location
 represented in the variable $s$, and stores the operand $o_r$ in that spill location.  The operand
 $@SpillRegister{v; s}$ represents the value in spill location $s$, and it also specifies that the
 values in spill location $s$ and in the register $v$ are the same.  The operand $@SpillMemory{s}$
@@ -112,7 +113,7 @@ The actual generation of spill code then proceeds in two main phases.  Given a v
 the first phase generates the code to store the value in a new spill location, then adds copy
 instruction to split the live range of the variable so that all uses of the variable refer to
 different freshly-generated operands of the form $@SpillRegister{v; s}$.  For example, consider the
-code fragment shown in Figure @reffigure[spillex] on the left, and suppose the register allocator
+code fragment shown in Figure @reffigure[spillex] above, and suppose the register allocator
 determines that the variable $v$ is to be spilled, because a register cannot be assigned in code
 segment 2.
 
@@ -150,7 +151,7 @@ $$
 
 The first phase rewrites the code as follows.  The initial occurrence of the variable is spilled
 into a new spill location $s$.  The value is fetched just before each use of the variable, and
-copied to a new register, as shown in Figure @reffigure[spillex] on the right.  Note that the later
+copied to a new register, as shown in Figure @reffigure[spillex] above.  Note that the later
 uses refer to the new registers, creating a copying daisy-chain, but the registers have not been
 actually eliminated.
 

@@ -87,7 +87,7 @@ $$
 
 The parser is defined as a set of grammar productions.  For each
 grammar production in the program syntax shown in Figure
-@reffigure[syntax], we define a production in the form
+@reffigure[syntax] on the left, we define a production in the form
 $$
 S ::= S_1 @ldots S_n @longleftrightarrow term
 $$

@@ -43,6 +43,7 @@ extends Itt_theory
 extends Itt_nat
 extends Itt_synt_var
 extends Itt_synt_operator
+extends Itt_pairwise2
 doc docoff
 
 open Basic_tactics
@@ -188,8 +189,8 @@ let fold_var_bterm = makeFoldC << var_bterm{'bt} >> unfold_var_bterm
 
 interactive_rw is_var_reduce1 {| reduce |}: is_var_bterm{var{'l;'r}} <--> btrue
 interactive_rw is_var_reduce2 {| reduce |}: is_var_bterm{make_bterm{'op;'btl}} <--> bfalse
-interactive_rw var_reduce1 {| reduce |}: var_bterm{var{'l;'r}} <--> "true"
-interactive_rw var_reduce2 {| reduce |}: var_bterm{make_bterm{'op;'btl}} <--> "false"
+interactive_rw var_reduce1 {| reduce |}: var_bterm{var{'l;'r}} <--> "assert"{btrue}
+interactive_rw var_reduce2 {| reduce |}: var_bterm{make_bterm{'op;'btl}} <--> "assert"{bfalse}
 
 interactive is_var_bterm_wf {| intro [] |} :
    sequent { <H> >- 'bt in BTerm } -->
@@ -305,14 +306,6 @@ interactive op_of_eq 'bl1 'bl2 :
    sequent { <H> >- make_bterm{'op1; 'bl1} = make_bterm{'op2; 'bl2} in BTerm} -->
    sequent { <H> >- 'op1 = 'op2 in BOperator}
 
-interactive btermSquiggle {| nth_hyp |} :
-   sequent { <H> >- 'b1 = 'b2 in BTerm } -->
-   sequent { <H> >- 'b1 ~ 'b2 }
-
-interactive btermlistSquiggle {| nth_hyp |} :
-   sequent { <H> >- 'b1 = 'b2 in list{BTerm} } -->
-   sequent { <H> >- 'b1 ~ 'b2 }
-
 (************************************************************************
  * Subterms                                                             *
  ************************************************************************)
@@ -333,6 +326,14 @@ interactive subterms_wf {| intro [] |} :
 interactive_rw subterms_var :
       ('bt in Var) -->
       subterms{'bt} <--> nil
+
+interactive btermSquiggle {| nth_hyp |} :
+   sequent { <H> >- 'b1 = 'b2 in BTerm } -->
+   sequent { <H> >- 'b1 ~ 'b2 }
+
+interactive btermlistSquiggle {| nth_hyp |} :
+   sequent { <H> >- 'b1 = 'b2 in list{BTerm} } -->
+   sequent { <H> >- 'b1 ~ 'b2 }
 
 
 (************************************************************************

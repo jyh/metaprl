@@ -134,7 +134,7 @@ doc <:doc<
    two subtype-types are equal if their subterms are equal.
    @end[doc]
 >>
-prim subtypeEquality {| intro []; eqcd |} :
+prim subtypeEquality {| intro [] |} :
    [wf] sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
    [wf] sequent { <H> >- 'B1 = 'B2 in univ[i:l] } -->
    sequent { <H> >- 'A1 subtype 'B1 = 'A2 subtype 'B2 in univ[i:l] } =
@@ -221,7 +221,7 @@ doc <:doc<
    must be true.
    @end[doc]
 >>
-interactive subtype_axiomEquality {| intro []; eqcd; squash |} :
+interactive subtype_axiomEquality {| intro []; squash |} :
    [main] sequent { <H> >- 'A subtype 'B } -->
    sequent { <H> >- it in 'A subtype 'B }
 

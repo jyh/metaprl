@@ -104,7 +104,7 @@ doc <:doc<
    @end[doc]
 
 >>
-prim voidEquality {| intro []; eqcd |} :
+prim voidEquality {| intro [] |} :
    sequent { <H> >- void in univ[i:l] } =
    it
 

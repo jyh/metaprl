@@ -118,7 +118,7 @@ doc <:doc<
    The non-dependent function has an intensional type equality.
    @end[doc]
 >>
-interactive independentFunctionEquality {| intro []; eqcd |} :
+interactive independentFunctionEquality {| intro [] |} :
    [wf] sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
    [wf] sequent { <H> >- 'B1 = 'B2 in univ[i:l] } -->
    sequent { <H> >- ('A1 -> 'B1) = ('A2 -> 'B2) in univ[i:l] }
@@ -156,7 +156,7 @@ doc <:doc<
    in $A$.
    @end[doc]
 >>
-interactive independentLambdaEquality {| intro []; eqcd |} :
+interactive independentLambdaEquality {| intro [] |} :
    [wf] sequent { <H> >- "type"{'A} } -->
    [wf] sequent { <H>; x: 'A >- 'b1['x] = 'b2['x] in 'B } -->
    sequent { <H> >- lambda{a1. 'b1['a1]} = lambda{a2. 'b2['a2]} in 'A -> 'B }
@@ -209,7 +209,7 @@ doc <:doc<
    functions and arguments are equal.
    @end[doc]
 >>
-interactive independentApplyEquality {| eqcd |} ('A -> 'B) :
+interactive independentApplyEquality ('A -> 'B) :
    [wf] sequent { <H> >- 'f1 = 'f2 in 'A -> 'B } -->
    [wf] sequent { <H> >- 'a1 = 'a2 in 'A } -->
    sequent { <H> >- ('f1 'a1) = ('f2 'a2) in 'B }
@@ -285,17 +285,17 @@ let d_apply_typeT = funT (fun p ->
          RefineError _ ->
             infer_type p f
    in
-   let univ =
+   let tac, univ =
       if is_dfun_term f_type then
          let _, _, univ = dest_dfun f_type in
-            univ
+            applyEquality, univ
       else if is_fun_term f_type then
-         snd (dest_fun f_type)
+         independentApplyEquality, snd (dest_fun f_type)
       else
          raise (RefineError ("d_apply_typeT", StringTermError ("inferred type is not a function type", f_type)))
    in
       if is_univ_term univ then
-         univTypeT univ thenT withT f_type eqcdT
+         univTypeT univ thenT tac f_type
       else
          raise (RefineError ("d_apply_typeT", StringTermError ("inferred type is not a univ", univ))))
 

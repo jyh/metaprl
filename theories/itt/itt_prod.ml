@@ -88,7 +88,7 @@ doc <:doc<
    both $A$ and $B$ are types.
    @end[doc]
 >>
-interactive independentProductEquality {| intro []; eqcd |} :
+interactive independentProductEquality {| intro [] |} :
    [wf] sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
    [wf] sequent { <H> >- 'B1 = 'B2 in univ[i:l] } -->
    sequent { <H> >- 'A1 * 'B1 = 'A2 * 'B2 in univ[i:l] }
@@ -132,7 +132,7 @@ doc <:doc<
    are the pairs $@pair{a; b}$, where $a @in A$ and $b @in B$.
    @end[doc]
 >>
-interactive independentPairEquality {| intro []; eqcd |} :
+interactive independentPairEquality {| intro [] |} :
    [wf] sequent { <H> >- 'a1 = 'a2 in 'A } -->
    [wf] sequent { <H> >- 'b1 = 'b2 in 'B } -->
    sequent { <H> >- ('a1, 'b1) = ('a2, 'b2) in 'A * 'B }

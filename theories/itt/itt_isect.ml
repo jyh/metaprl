@@ -156,7 +156,7 @@ doc <:doc<
    $x @in A$.
    @end[doc]
 >>
-prim intersectionEquality {| intro []; eqcd |} :
+prim intersectionEquality {| intro [] |} :
    [wf] sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
    [wf] sequent { <H>; y: 'A1 >- 'B1['y] = 'B2['y] in univ[i:l] } -->
    sequent { <H> >- Isect x1: 'A1. 'B1['x1] = Isect x2: 'A2. 'B2['x2] in univ[i:l] } =
@@ -194,13 +194,13 @@ doc <:doc<
    is trivial; all terms are equal in $@top$.
    @end[doc]
 >>
-prim intersectionMemberEquality {| intro []; eqcd |} :
+prim intersectionMemberEquality {| intro [] |} :
    [wf] sequent { <H> >- "type"{'A} } -->
    [wf] sequent { <H>; z: 'A >- 'b1 = 'b2 in 'B['z] } -->
    sequent { <H> >- 'b1 = 'b2 in Isect x: 'A. 'B['x] } =
    it
 
-interactive topMemberEquality {| intro []; eqcd |} :
+interactive topMemberEquality {| intro [] |} :
    sequent { <H> >- 'b1 = 'b2 in top }
 
 doc <:doc<

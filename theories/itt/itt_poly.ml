@@ -245,7 +245,7 @@ interactive poly_intro {| intro [AutoMustComplete] |} :
    sequent { <H>; 0 < fst{'p} >- "not"{"assert"{isZero{(snd{'p} fst{'p}); 'F}}} } -->
    sequent { <H> >- 'p in poly{'F} }
 
-interactive poly_equality {| intro [AutoMustComplete; complete_unless_member]; eqcd |} :
+interactive poly_equality {| intro [AutoMustComplete; complete_unless_member] |} :
    [wf] sequent { <H> >- 'p = 'q in n: nat * (nat{'n +@ 1} -> 'F^car) } -->
    [wf] sequent { <H> >- 'F^"0" in 'F^car } -->
    [wf] sequent { <H>; x: 'F^car >- 'F^eq 'x 'F^"0" in bool } -->

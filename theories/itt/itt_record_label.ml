@@ -28,7 +28,7 @@ open Itt_equal
 
 declare label[t:t]
 
-prim labelMember {| intro []; eqcd |} :
+prim labelMember {| intro [] |} :
    sequent { <H> >- label[t:t] in label } =
    it
 

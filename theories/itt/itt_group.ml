@@ -728,13 +728,13 @@ interactive rcoset_wf {| intro [] |} :
    [wf] sequent { <H>; a: 'S^car >- 'a *['G] 'b in 'G^car } -->
    sequent { <H> >- "type"{rcoset{'S; 'G; 'b}} }
 
-interactive lcoset_equality {| intro []; eqcd |} :
+interactive lcoset_equality {| intro [] |} :
    [wf] sequent { <H> >- 'G^car in univ[i:l] } -->
    [wf] sequent { <H> >- 'S1^car = 'S2^car in univ[i:l] } -->
    [wf] sequent { <H>; a: 'S1^car >- 'b *['G] 'a in 'G^car } -->
    sequent { <H> >- lcoset{'S1; 'G; 'b} = lcoset{'S2; 'G; 'b} in univ[i:l] }
 
-interactive rcoset_equality {| intro []; eqcd |} :
+interactive rcoset_equality {| intro [] |} :
    [wf] sequent { <H> >- 'G^car in univ[i:l] } -->
    [wf] sequent { <H> >- 'S1^car = 'S2^car in univ[i:l] } -->
    [wf] sequent { <H>; a: 'S1^car >- 'a *['G] 'b in 'G^car } -->

@@ -181,7 +181,7 @@ doc <:doc<
    union $A + B$ is a type if both $A$ and $B$ are types.
    @end[doc]
 >>
-prim unionEquality {| intro []; eqcd |} :
+prim unionEquality {| intro [] |} :
    [wf] sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
    [wf] sequent { <H> >- 'B1 = 'B2 in univ[i:l] } -->
    sequent { <H> >- 'A1 + 'B1 = 'A2 + 'B2 in univ[i:l] } =
@@ -235,7 +235,7 @@ doc <:doc<
    $A$ and $B$ must be types.
    @end[doc]
 >>
-prim inlEquality {| intro []; eqcd |} :
+prim inlEquality {| intro [] |} :
    [wf] sequent { <H> >- 'a1 = 'a2 in 'A } -->
    [wf] sequent { <H> >- "type"{'B} } -->
    sequent { <H> >- inl{'a1} = inl{'a2} in 'A + 'B } =
@@ -247,7 +247,7 @@ prim inlEquality {| intro []; eqcd |} :
  * H >- b1 = b2 in B
  * H >- A = A in Ui
  *)
-prim inrEquality {| intro []; eqcd |} :
+prim inrEquality {| intro [] |} :
    [wf] sequent { <H> >- 'b1 = 'b2 in 'B } -->
    [wf] sequent { <H> >- "type"{'A} } -->
    sequent { <H> >- inr{'b1} = inr{'b2} in 'A + 'B } =
@@ -278,7 +278,7 @@ doc <:doc<
    $A + B$ for which all the subterms are equal.
    @end[doc]
 >>
-prim decideEquality {| intro []; eqcd |} bind{z. 'T['z]} ('A + 'B) :
+prim decideEquality {| intro [] |} bind{z. 'T['z]} ('A + 'B) :
    [wf] sequent { <H> >- 'e1 = 'e2 in 'A + 'B } -->
    [wf] sequent { <H>; u: 'A; 'e1 = inl{'u} in 'A + 'B >- 'l1['u] = 'l2['u] in 'T[inl{'u}] } -->
    [wf] sequent { <H>; v: 'B; 'e1 = inr{'v} in 'A + 'B >- 'r1['v] = 'r2['v] in 'T[inr{'v}] } -->

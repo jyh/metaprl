@@ -5867,7 +5867,7 @@ T	t5077	o b5077 b13
 B	b5078	t5077
 T	t5078	o6435 b1007 b5053 b5078 b13
 B	b5079	t5078
-P	p6166	String "eqcdT thenT byDefT reduceC"
+P	p6166	String "byDefT reduceC"
 O	o6166	ext_rule p6166
 H	h6059	_1010 t6058
 S	s6073	t990\\ h h4567 h4800 h6058 h6059 h6060\\ t6073

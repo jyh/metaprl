@@ -91,7 +91,7 @@ interactive neq_type {| intro[] |}:
    [wf] sequent { <H> >- 'y in 'T } -->
    sequent { <H> >- "type"{'x <> 'y in 'T} }
 
-interactive neq_univ {| intro []; eqcd |} :
+interactive neq_univ {| intro [] |} :
    sequent { <H> >- 'T1 = 'T2 in univ[i:l] }  -->
    sequent { <H> >- 'x1 = 'x2 in 'T1 } -->
    sequent { <H> >- 'y1 = 'y2 in 'T1 } -->

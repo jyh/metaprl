@@ -155,7 +155,7 @@ doc <:doc<
    @end[doc]
 >>
 
-prim dintersectionEquality {| intro []; eqcd |} :
+prim dintersectionEquality {| intro [] |} :
    [wf] sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
    [wf] sequent { <H>; y: 'A1 >- 'B1['y] = 'B2['y] in univ[i:l] } -->
    sequent { <H> >- bisect{'A1; x1.'B1['x1]} = bisect{'A2; x2.'B2['x2]} in univ[i:l] } =
@@ -183,7 +183,7 @@ doc <:doc<
    @end[doc]
 >>
 
-prim dintersectionMemberEquality {| intro []; eqcd |} :
+prim dintersectionMemberEquality {| intro [] |} :
    [wf] sequent { <H>; x:'A >- "type"{'B['x]} } -->
    sequent { <H> >- 't1 = 't2 in 'A } -->
    sequent { <H> >- 't1 = 't2 in 'B['t1] } -->

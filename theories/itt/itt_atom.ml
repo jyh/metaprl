@@ -122,7 +122,7 @@ doc <:doc<
    The $@atom$ term is a member of every universe, and it is a type.
    @end[doc]
 >>
-prim atomEquality {| intro []; eqcd |} :
+prim atomEquality {| intro [] |} :
    sequent { <H> >- atom in univ[i:l] } =
    it
 
@@ -140,7 +140,7 @@ doc <:doc<
    same token.
    @end[doc]
 >>
-prim tokenEquality {| intro []; eqcd |} :
+prim tokenEquality {| intro [] |} :
    sequent { <H> >- token[t:t] in atom } =
    it
 

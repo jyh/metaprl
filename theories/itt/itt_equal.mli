@@ -213,17 +213,6 @@ rule universeFormation univ[j:l] :
    sequent { <H> >- univ[i:l] }
 
 (************************************************************************
- * EQCD TACTIC                                                          *
- ************************************************************************)
-
-resource (term * tactic, tactic) eqcd
-
-val process_eqcd_resource_annotation :
-   (Tactic.pre_tactic, term * tactic) annotation_processor
-
-topval eqcdT : tactic
-
-(************************************************************************
  * PRIMITIVES AND TACTICS                                               *
  ************************************************************************)
 

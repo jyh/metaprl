@@ -157,7 +157,7 @@ doc <:doc<
    @end[doc]
 >>
 
-interactive mem_univ {| intro []; eqcd |}  :
+interactive mem_univ {| intro [] |}  :
    sequent { <H> >- singleton{'a1; 'B1} = singleton{'a2; 'B2} in univ[i:l] } -->
    sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
    sequent { <H> >- mem{'a1;'A1;'B1} = mem{'a2; 'A2; 'B2} in univ[i:l]}
@@ -182,7 +182,7 @@ doc <:doc<
    @end[doc]
 >>
 
-interactive subset_univ {| intro []; eqcd |} :
+interactive subset_univ {| intro [] |} :
    sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
    sequent { <H> >- 'B1 = 'B2 in univ[i:l] } -->
    sequent { <H>; x: 'A1 >- 'x in 'B1 } -->
@@ -301,7 +301,7 @@ doc <:doc<
 
 (* Note that we don't need this membership if we add a rule: A subset B --> x in B --> x in A Type  *)
 
-interactive member_univ {| intro []; eqcd |} :
+interactive member_univ {| intro [] |} :
    sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
    sequent { <H> >- 'B1 = 'B2 in univ[i:l] } -->
    sequent { <H> >- 'a1 = 'a2 in 'B1 } -->

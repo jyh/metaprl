@@ -103,7 +103,7 @@ doc <:doc<
    is also a type.
    @end[doc]
 >>
-prim unitEquality {| intro []; eqcd |} :
+prim unitEquality {| intro [] |} :
    sequent { <H> >- unit in univ[i:l] } =
    it
 
@@ -119,7 +119,7 @@ doc <:doc<
    The unique inhabitant of the <<unit>> type is the term <<it>>.
    @end[doc]
 >>
-prim unit_memberEquality {| intro []; eqcd; squash |} :
+prim unit_memberEquality {| intro []; squash |} :
    sequent { <H> >- it in unit } =
    it
 

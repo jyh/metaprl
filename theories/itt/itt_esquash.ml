@@ -106,7 +106,7 @@ doc <:doc<
    are equal if both are types, and if each one implies another.
    @end[doc]
 >>
-prim esquash_equal {| eqcd |} :
+prim esquash_equal {| intro [AutoMustComplete] |} :
    [wf] sequent { <H> >- esquash{'P1} in univ[i:l] } -->
    [wf] sequent { <H> >- esquash{'P2} in univ[i:l] } -->
    sequent { <H>; esquash{'P1} >- esquash{'P2} } -->

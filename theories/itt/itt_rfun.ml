@@ -318,7 +318,7 @@ doc <:doc<
    a type for any restricted function $@rfun{f; y; @set{z; A; R[z, y]}; B[f, y]}$.
    @end[doc]
 >>
-prim rfunctionEquality  {| intro []; eqcd |} bind{a,b. 'R['a; 'b]} :
+prim rfunctionEquality  {| intro [] |} bind{a,b. 'R['a; 'b]} :
    [wf] sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
    [wf] sequent { <H> >- well_founded{'A1; a, b. 'R['a; 'b]} } -->
    [wf] sequent { <H>;
@@ -375,7 +375,7 @@ doc <:doc<
    substituted for the function argument.
    @end[doc]
 >>
-prim rfunction_lambdaEquality {| intro []; eqcd |} :
+prim rfunction_lambdaEquality {| intro [] |} :
    [wf] sequent { <H> >- "type"{{ f | x: 'A -> 'B['f; 'x] }} } -->
    [wf] sequent { <H>; y: 'A >- 'b1['y] = 'b2['y] in 'B[lambda{x1. 'b1['x1]}; 'y] } -->
    sequent { <H> >- lambda{x1. 'b1['x1]} = lambda{x2. 'b2['x2]} in { f | x: 'A -> 'B['f; 'x] } } =
@@ -433,7 +433,7 @@ doc <:doc<
    and their arguments are equal.
    @end[doc]
 >>
-prim rfunction_applyEquality {| intro[]; eqcd |} ({ f | x:'A -> 'B['f; 'x] }) :
+prim rfunction_applyEquality {| intro[] |} ({ f | x:'A -> 'B['f; 'x] }) :
    [wf] sequent { <H> >- 'f1 = 'f2 in { f | x:'A -> 'B['f; 'x] } } -->
    [wf] sequent { <H> >- 'a1 = 'a2 in 'A } -->
    sequent { <H> >- 'f1 'a1 = 'f2 'a2 in 'B['f1; 'a1] } =

@@ -1,13 +1,13 @@
-doc <:doc< 
+doc <:doc<
    @spelling{tunion}
-  
+
    @begin[doc]
    @module[Itt_tunion]
-  
+
    The @tt{Itt_tunion} module defines a (joint) union type
    $@tunion{x; A; B[x]}$.  The elements of the union are the
    elements of any of the types $B[x]$ for any $x @in A$.
-  
+
    The membership equality is the @emph{the transitive closure of union}
    of the equalities
    in each of the cases $B[x]$.  That is, two elements are equal
@@ -21,39 +21,39 @@ doc <:doc<
    As a consequence, the union space also has the trivial
    equality, and thus it has no useful elimination form.
    @end[doc]
-  
+
    ----------------------------------------------------------------
-  
+
    @begin[license]
    This file is part of MetaPRL, a modular, higher order
    logical framework that provides a logical programming
    environment for OCaml and other languages.
-  
+
    See the file doc/index.html for information on Nuprl,
    OCaml, and more information about this system.
-  
+
    Copyright (C) 1998 Jason Hickey, Cornell University
-  
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
    as published by the Free Software Foundation; either version 2
    of the License, or (at your option) any later version.
-  
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-  
+
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-  
+
    Author: Jason Hickey
    @email{jyh@cs.cornell.edu}
    @end[license]
 >>
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @parents
    @end[doc]
@@ -78,10 +78,10 @@ open Itt_equal
  * SYNTAX                                                               *
  ************************************************************************)
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @terms
-  
+
    The @tt{tunion} term defines the union type.
    @end[doc]
 >>
@@ -111,16 +111,16 @@ prim tunionFormation 'A :
    sequent { <H> >- univ[i:l] } =
    tunion{'A; x. 'B['x]}
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @rules
    @modsubsection{Typehood and equality}
-  
+
    The union type $@tunion{x; A; B[x]}$ is well-formed if $A$ is
    a type, and $B[a]$ is a type for any $a @in A$.
    @end[doc]
 >>
-prim tunionEquality {| intro []; eqcd |} :
+prim tunionEquality {| intro [] |} :
    [wf] sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
    [wf] sequent { <H>; x: 'A1 >- 'B1['x] = 'B2['x] in univ[i:l] } -->
    sequent { <H> >- tunion{'A1; x1. 'B1['x1]} = tunion{'A2; x2. 'B2['x2] } in univ[i:l] } =
@@ -132,27 +132,27 @@ prim tunionType {| intro [] |} :
    sequent { <H> >- "type"{.Union x:'A. 'B['x] } } =
    it
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Membership}
-  
+
    The elements $t$ of the union type are the elements in
    any one of the branches $t @in B[a]$ for any $a @in A$.
    Two elements are equal if they are equal in @emph{any}
    of the branches $B[a]$.
    @end[doc]
 >>
-prim tunionMemberEquality {| intro []; eqcd |} 'a :
+prim tunionMemberEquality {| intro [] |} 'a :
    [wf] sequent { <H> >- 'a = 'a in 'A } -->
    [wf] sequent { <H>; y: 'A >- "type"{'B['y]} } -->
    [wf] sequent { <H> >- 'x1 = 'x2 in 'B['a] } -->
    sequent { <H> >- 'x1 = 'x2 in Union x:'A. 'B['x]  } =
    it
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Introduction}
-  
+
    The propositional interpretation of the union type
    is similar to the existential $@exists{x; A; B[x]}$.
    The union is inhabited if-and-only-if the existential
@@ -166,10 +166,10 @@ prim tunionMemberFormation {| intro [] |} 'a :
    sequent { <H> >- Union x:'A. 'B['x]  } =
    't
 
-doc <:doc< 
+doc <:doc<
    @begin[doc]
    @modsubsection{Elimination}
-  
+
    The elimination form is weak.  The desired rule would be that if
    $x@colon @tunion{y; A; B[y]}$, then $x @in B[a]$ for some
    $a @in A$.  This rule is allowed, but only for equality goals,

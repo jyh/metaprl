@@ -280,7 +280,7 @@ doc <:doc<
    $B[x]$ is a family of types indexed by $x @in A$.
    @end[doc]
 >>
-prim productEquality {| intro []; eqcd |} :
+prim productEquality {| intro [] |} :
    [wf] sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
    [wf] sequent { <H>; y: 'A1 >- 'B1['y] = 'B2['y] in univ[i:l] } -->
    sequent { <H> >- x1:'A1 * 'B1['x1] = x2:'A2 * 'B2['x2] in univ[i:l] } =
@@ -324,7 +324,7 @@ doc <:doc<
    $y @in A$, which is the purpose of the third subgoal.
    @end[doc]
 >>
-prim pairEquality {| intro []; eqcd |} :
+prim pairEquality {| intro [] |} :
    [wf] sequent { <H> >- 'a1 = 'a2 in 'A } -->
    [wf] sequent { <H> >- 'b1 = 'b2 in 'B['a1] } -->
    [wf] sequent { <H>; y: 'A >- "type"{'B['y]} } -->
@@ -355,14 +355,14 @@ doc <:doc<
    its parts are well-formed.
    @end[doc]
 >>
-prim spreadEquality {| eqcd |} bind{z. 'T['z]} (w:'A * 'B['w]) :
+prim spreadEquality bind{z. 'T['z]} (w:'A * 'B['w]) :
    [wf] sequent { <H> >- 'e1 = 'e2 in w:'A * 'B['w] } -->
    [wf] sequent { <H>; u: 'A; v: 'B['u]; a: 'e1 = ('u, 'v) in w:'A * 'B['w] >-
              'b1['u; 'v] = 'b2['u; 'v] in 'T['u, 'v] } -->
    sequent { <H> >- spread{'e1; u1, v1. 'b1['u1; 'v1]} = spread{'e2; u2, v2. 'b2['u2; 'v2]} in 'T['e1] } =
    it
 
-interactive spreadEquality_simple {| eqcd; intro [intro_typeinf <<'e1>>] |} (w:'A * 'B['w]) :
+interactive spreadEquality_simple {| intro [intro_typeinf <<'e1>>] |} (w:'A * 'B['w]) :
    [wf] sequent { <H> >- 'e1 = 'e2 in w:'A * 'B['w] } -->
    [wf] sequent { <H>; u: 'A; v: 'B['u]; a: 'e1 = ('u, 'v) in w:'A * 'B['w] >-
              'b1['u; 'v] = 'b2['u; 'v] in 'T } -->

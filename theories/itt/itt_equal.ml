@@ -59,7 +59,6 @@ open Refiner.Refiner.TermMan
 open Refiner.Refiner.TermMeta
 open Refiner.Refiner.RefineError
 open Simple_print
-open Term_stable
 
 open Tactic_type
 open Tactic_type.Tacticals
@@ -74,13 +73,6 @@ open Auto_tactic
  *)
 let _ =
    show_loading "Loading Itt_equal%t"
-
-let debug_eqcd =
-   create_debug (**)
-      { debug_name = "eqcd";
-        debug_description = "display eqcd operations";
-        debug_value = false
-      }
 
 (************************************************************************
  * TERMS                                                                *
@@ -166,86 +158,6 @@ let try_dest_univ t =
    if is_univ_term t then dest_univ t else unknown_level
 
 let it_term = << it >>
-
-(************************************************************************
- * EQCD RESOURCE                                                        *
- ************************************************************************)
-
-(*
- * Extract an EQCD tactic from the data.
- * The tactic checks for an optable.
- *)
-let extract_data tbl =
-   let eqcd p =
-      let t = Sequent.concl p in
-      let _, l, _ = dest_equal t in
-         try
-            (* Find and apply the right tactic *)
-            if !debug_eqcd then
-               eprintf "Itt_equal.eqcd: looking up %s%t" (SimplePrint.string_of_opname (opname_of_term l)) eflush;
-            let tac = slookup tbl l in
-               if !debug_eqcd then
-                  eprintf "Itt_equal.eqcd: found a tactic for %s%t" (SimplePrint.string_of_opname (opname_of_term l)) eflush;
-               tac
-         with
-            Not_found ->
-               raise (RefineError ("eqcd", StringTermError ("EQCD tactic doesn't know about ", l)))
-   in
-      funT eqcd
-
-(*
- * Add info from a rule definition.
- *)
-let process_eqcd_resource_annotation name context_args term_args statement pre_tactic =
-   let _, goal = unzip_mfunction statement in
-   let t =
-      try TermMan.nth_concl goal 1 with
-         RefineError _ ->
-            raise (Invalid_argument (sprintf "Itt_equal.process_eqcd_resource_annotation: %s: must be an introduction rule" name))
-   in
-   let _, t, _ =
-      try dest_equal t with
-         RefineError _ ->
-            raise (Invalid_argument (sprintf "Itt_equal.process_eqcd_resource_annotation: %s: must be an equality judgement" name))
-   in
-   let term_args =
-      match term_args with
-         [] ->
-            (fun _ -> [])
-       | _ ->
-            let length = List.length term_args in
-               (fun p ->
-                     let args =
-                        try get_with_args p with
-                           RefineError _ ->
-                              raise (RefineError (name, StringIntError ("arguments required", length)))
-                     in
-                     let length' = List.length args in
-                        if length' != length then
-                           raise (RefineError (name, StringIntError ("wrong number of arguments", length')));
-                        args)
-   in
-   let tac =
-      match context_args with
-         [||] ->
-            funT (fun p ->
-                Tactic_type.Tactic.tactic_of_rule pre_tactic [| |] (term_args p))
-       | _ ->
-            raise (Invalid_argument (sprintf "Itt_equal.process_eqcd_resource_annotation: %s: not an introduction rule" name))
-   in
-      (t, tac)
-
-(*
- * Resource.
- *)
-let resource (term * tactic, tactic) eqcd =
-   stable_resource_info extract_data
-
-(*
- * Resource argument.
- *)
-let eqcdT =
-   funT (fun p -> Sequent.get_resource_arg p get_eqcd_resource)
 
 (************************************************************************
  * DEFINITIONS                                                          *
@@ -413,7 +325,7 @@ doc <:doc< *********************************************************************
  *
  * H >- a = b in T
  *)
-prim axiomMember {| intro []; eqcd |} :
+prim axiomMember {| intro [] |} :
    [wf] sequent { <H> >- 'a = 'b in 'T } -->
    sequent { <H> >- it in ('a = 'b in 'T) } =
    it
@@ -429,7 +341,7 @@ prim equalityElimination {| elim [] |} 'H :
    sequent { <H>; x: 'a = 'b in 'T; <J['x]> >- 'C['x] } =
    't[it]
 
-prim type_axiomMember {| intro []; eqcd |} :
+prim type_axiomMember {| intro [] |} :
    sequent { <H> >- 'T Type } -->
    sequent { <H> >- it in ('T Type) } =
    it
@@ -491,14 +403,9 @@ prim universeCumulativity univ[j:l] :
    sequent { <H> >- 'x = 'y in univ[i:l] } =
    it
 
-doc <:doc< @docoff >>
-let univ_member_term = << univ[i:l] in univ[j:l] >>
-
-let eqcd_univT =
-   universeMember thenT tryT (rw reduce_cumulativity 0 thenT trueIntro)
-
-let resource eqcd += (univ_term, eqcd_univT)
-let resource intro += (univ_member_term, wrap_intro eqcd_univT)
+let resource intro +=
+   << univ[i:l] in univ[j:l] >>,
+   ("universeMember", None, false, (universeMember thenT tryT (rw reduce_cumulativity 0 thenT trueIntro)))
 
 doc <:doc< ************************************************************************
    @begin[doc]

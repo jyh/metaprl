@@ -160,7 +160,7 @@ doc <:doc<
    of $@list{A}$.
    @end[doc]
 >>
-prim consEquality {| intro []; eqcd |} :
+prim consEquality {| intro [] |} :
    [wf] sequent { <H> >- 'u1 = 'u2 in 'A } -->
    [wf] sequent { <H> >- 'v1 = 'v2 in list{'A} } -->
    sequent { <H> >- cons{'u1; 'v1} = cons{'u2; 'v2} in list{'A} } =
@@ -176,7 +176,7 @@ doc <:doc<
    of type $T$ for any elements $u @in A$, $v @in @list{A}$, and $z @in T$.
    @end[doc]
 >>
-prim list_indEquality {| intro []; eqcd |} bind{l. 'T['l]} list{'A} :
+prim list_indEquality {| intro [] |} bind{l. 'T['l]} list{'A} :
    [wf] sequent { <H> >- 'e1 = 'e2 in list{'A} } -->
    [wf] sequent { <H> >- 'base1 = 'base2 in 'T[nil] } -->
    [wf] sequent { <H>; u: 'A; v: list{'A}; w: 'T['v] >-

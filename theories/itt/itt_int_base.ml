@@ -410,7 +410,7 @@ doc <:doc<
  * H >- Z = Z in Ui ext Ax
  * by intEquality
  *)
-prim intEquality {| intro []; eqcd |} :
+prim intEquality {| intro [] |} :
    sequent { <H> >- int in univ[i:l] } = it
 
 (*
@@ -442,26 +442,26 @@ doc <:doc<
    @end[doc]
 >>
 
-prim add_wf {| intro [complete_unless_member]; eqcd |} :
+prim add_wf {| intro [complete_unless_member] |} :
    [wf] sequent { <H> >- 'a = 'a1 in int } -->
    [wf] sequent { <H> >- 'b = 'b1 in int } -->
    sequent { <H> >- 'a +@ 'b = 'a1 +@ 'b1 in int } = it
 
-prim minus_wf {| intro []; eqcd |} :
+prim minus_wf {| intro [] |} :
    [wf] sequent { <H> >- 'a = 'a1 in int } -->
    sequent { <H> >- (-'a) = (-'a1) in int } = it
 
-interactive sub_wf {| intro [complete_unless_member]; eqcd |} :
+interactive sub_wf {| intro [complete_unless_member] |} :
    [wf] sequent { <H> >- 'a = 'a1 in int } -->
    [wf] sequent { <H> >- 'b = 'b1 in int } -->
    sequent { <H> >- 'a -@ 'b = 'a1 -@ 'b1 in int }
 
-prim lt_bool_wf {| intro [complete_unless_member]; eqcd |} :
+prim lt_bool_wf {| intro [complete_unless_member] |} :
    sequent { <H> >- 'a='a1 in int } -->
    sequent { <H> >- 'b='b1 in int } -->
    sequent { <H> >- lt_bool{'a; 'b} = lt_bool{'a1; 'b1} in bool } = it
 
-prim beq_wf {| intro [complete_unless_member]; eqcd |} :
+prim beq_wf {| intro [complete_unless_member] |} :
    [wf] sequent { <H> >- 'a = 'a1 in int } -->
    [wf] sequent { <H> >- 'b = 'b1 in int } -->
    sequent { <H> >- beq_int{'a; 'b} = beq_int{'a1; 'b1} in bool } = it
@@ -551,7 +551,7 @@ doc <:doc<
  * H >- i = i in int
  * by numberEquality
  *)
-prim numberEquality {| intro []; eqcd |} :
+prim numberEquality {| intro [] |} :
    sequent { <H> >- number[n:n] in int } = it
 
 doc <:doc<
@@ -990,7 +990,7 @@ interactive_rw minus_plus_rw {| reduce |} :
  * H >- base1 = base2 in T[0]
  * H, x: Z, w: 0 < x, y: T[x - 1] >- up1[x, y] = up2[x, y] in T[x]
  *)
-interactive indEquality {| intro [complete_unless_member]; eqcd |} bind{z. 'T['z]} :
+interactive indEquality {| intro [complete_unless_member] |} bind{z. 'T['z]} :
    sequent { <H> >- 'x1 = 'x2 in int } -->
    sequent { <H>; x: int; 'x < 0; 'x1 < 'x +@ 1; y: 'T['x +@ 1] >- 'down1['x; 'y] =
  'down2['x; 'y] in 'T['x] } -->

@@ -222,7 +222,7 @@ doc <:doc<
    of the goal from a proof of $t$.
    @end[doc]
 >>
-interactive not_univ {| intro []; eqcd |} :
+interactive not_univ {| intro [] |} :
    [wf] sequent { <H> >- 't1 = 't2 in univ[i:l] } -->
    sequent { <H> >- "not"{'t1} = "not"{'t2} in univ[i:l] }
 
@@ -255,7 +255,7 @@ doc <:doc<
    into its two component proofs.
    @end[doc]
 >>
-interactive and_univ {| intro []; eqcd |} :
+interactive and_univ {| intro [] |} :
    [wf] sequent { <H> >- 'a1 = 'b1 in univ[i:l] } -->
    [wf] sequent { <H>; 'a1 >- 'a2 = 'b2 in univ[i:l] } -->
    sequent { <H> >- "and"{'a1; 'a2} = "and"{'b1; 'b2} in univ[i:l] }
@@ -299,7 +299,7 @@ doc <:doc<
    right proof of $a_2$.
    @end[doc]
 >>
-interactive or_univ {| intro []; eqcd |} :
+interactive or_univ {| intro [] |} :
    [wf] sequent { <H> >- 'a1 = 'b1 in univ[i:l] } -->
    [wf] sequent { <H> >- 'a2 = 'b2 in univ[i:l] } -->
    sequent { <H> >- "or"{'a1; 'a2} = "or"{'b1; 'b2} in univ[i:l] }
@@ -336,7 +336,7 @@ doc <:doc<
    application of the proof of << implies{'a_1; 'a_2} >>.
    @end[doc]
 >>
-interactive implies_univ {| intro []; eqcd |} :
+interactive implies_univ {| intro [] |} :
    [wf] sequent { <H> >- 'a1 = 'b1 in univ[i:l] } -->
    [wf] sequent { <H> >- 'a2 = 'b2 in univ[i:l] } -->
    sequent { <H> >- "implies"{'a1; 'a2} = "implies"{'b1; 'b2} in univ[i:l] }
@@ -365,7 +365,7 @@ doc <:doc<
    perform the top-level conjunctive reasoning.
    @end[doc]
 >>
-interactive iff_univ {| intro []; eqcd |} :
+interactive iff_univ {| intro [] |} :
    [wf] sequent { <H> >- 'a1 = 'b1 in univ[i:l] } -->
    [wf] sequent { <H> >- 'a2 = 'b2 in univ[i:l] } -->
    sequent { <H> >- "iff"{'a1; 'a2} = "iff"{'b1; 'b2} in univ[i:l] }
@@ -394,7 +394,7 @@ doc <:doc<
    a proof of $a_1$.
    @end[doc]
 >>
-interactive cand_univ {| intro []; eqcd |} :
+interactive cand_univ {| intro [] |} :
    [wf] sequent { <H> >- 'a1 = 'b1 in univ[i:l] } -->
    [wf] sequent { <H>; x: 'a1 >- 'a2 = 'b2 in univ[i:l] } -->
    sequent { <H> >- "cand"{'a1; 'a2} = "cand"{'b1; 'b2} in univ[i:l] }
@@ -426,7 +426,7 @@ doc <:doc<
    there is a proof of $a_2$ and a proof of falsehood for $a_1$.
    @end[doc]
 >>
-interactive cor_univ {| intro []; eqcd |} :
+interactive cor_univ {| intro [] |} :
    [wf] sequent { <H> >- 'a1 = 'b1 in univ[i:l] } -->
    [wf] sequent { <H>; x: "not"{'a1} >- 'a2 = 'b2 in univ[i:l] } -->
    sequent { <H> >- "cor"{'a1; 'a2} = "cor"{'b1; 'b2} in univ[i:l] }
@@ -465,7 +465,7 @@ doc <:doc<
    $B[a]$.
    @end[doc]
 >>
-interactive all_univ {| intro []; eqcd |} :
+interactive all_univ {| intro [] |} :
    [wf] sequent { <H> >- 't1 = 't2 in univ[i:l] } -->
    [wf] sequent { <H>; x : 't1 >- 'b1['x] = 'b2['x] in univ[i:l] } -->
    sequent { <H> >- "all"{'t1; x1. 'b1['x1]} = "all"{'t2; x2. 'b2['x2]} in univ[i:l] }
@@ -496,7 +496,7 @@ doc <:doc<
    into its parts.
    @end[doc]
 >>
-interactive exists_univ {| intro []; eqcd |} :
+interactive exists_univ {| intro [] |} :
    [wf] sequent { <H> >- 't1 = 't2 in univ[i:l] } -->
    [wf] sequent { <H>; x : 't1 >- 'b1['x] = 'b2['x] in univ[i:l] } -->
    sequent { <H> >- "exists"{'t1; x1. 'b1['x1]} = "exists"{'t2; x2. 'b2['x2]} in univ[i:l] }

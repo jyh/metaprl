@@ -119,7 +119,7 @@ doc <:doc<
    by applying the @hrefterm[esquash] operator to the set predicate.
    @end[doc]
 >>
-prim setEquality {| intro []; eqcd |} :
+prim setEquality {| intro [] |} :
    [wf] sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
    [wf] sequent { <H>; x: 'A1 >- 'B1['x] = 'B2['x] in univ[i:l] } -->
    sequent { <H> >- { a1:'A1 | 'B1['a1] } = { a2:'A2 | 'B2['a2] } in univ[i:l] } =
@@ -139,7 +139,7 @@ doc <:doc<
    if they are equal in $A$ and also $B[a_1]$ is true.
    @end[doc]
 >>
-prim setMemberEquality {| intro []; eqcd |} :
+prim setMemberEquality {| intro [] |} :
    [wf] sequent { <H> >- 'a1 = 'a2 in 'A } -->
    [assertion] sequent { <H> >- squash{'B['a1]} } -->
    [wf] sequent { <H>; x: 'A >- "type"{'B['x]} } -->

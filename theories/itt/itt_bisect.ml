@@ -98,7 +98,7 @@ doc <:doc<
    and $B$ are types.
    @end[doc]
 >>
-interactive bisectEquality {| intro []; eqcd |} :
+interactive bisectEquality {| intro [] |} :
    [wf] sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
    [wf] sequent { <H> >- 'B1 = 'B2 in univ[i:l] } -->
    sequent { <H> >- bisect{'A1; 'B1} = bisect{'A2; 'B2} in univ[i:l] }
@@ -127,7 +127,7 @@ doc <:doc<
    are members of both $A$ and $B$.
    @end[doc]
 >>
-interactive bisectMemberEquality {| intro []; eqcd |} :
+interactive bisectMemberEquality {| intro [] |} :
    [wf] sequent { <H> >- 'x = 'y in 'A } -->
    [wf] sequent { <H> >- 'x = 'y in 'B } -->
    sequent { <H> >- 'x = 'y in 'A isect 'B }

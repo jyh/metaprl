@@ -225,16 +225,16 @@ doc <:doc<
    contains the terms $@true$ and $@false$.
    @end[doc]
 >>
-interactive boolEquality {| intro []; eqcd |} :
+interactive boolEquality {| intro [] |} :
    sequent { <H> >- "bool" in univ[i:l] }
 
 interactive boolType {| intro [] |} :
    sequent { <H> >- "type"{bool} }
 
-interactive btrue_member {| intro []; eqcd |} :
+interactive btrue_member {| intro [] |} :
   sequent { <H> >- btrue in "bool" }
 
-interactive bfalse_member {| intro []; eqcd |} :
+interactive bfalse_member {| intro [] |} :
    sequent { <H> >- bfalse in "bool" }
 
 doc <:doc<
@@ -295,7 +295,7 @@ doc <:doc<
    condition.
    @end[doc]
 >>
-interactive ifthenelse_equality {| intro []; eqcd |} :
+interactive ifthenelse_equality {| intro [] |} :
    [wf] sequent { <H> >- 'e1 = 'e2 in bool } -->
    [wf] sequent { <H>; w: 'e1 = btrue in bool >- 'x1 = 'x2 in 'T } -->
    [wf] sequent { <H>; w: 'e1 = bfalse in bool >- 'y1 = 'y2 in 'T } -->
@@ -347,7 +347,7 @@ interactive bimplies_member {| intro [] |} :
    [wf] sequent { <H>; "assert"{'t1} >- 't2 in bool } -->
    sequent { <H> >- bimplies{'t1; 't2} in bool }
 
-interactive bnot_equal {| intro []; eqcd |} :
+interactive bnot_equal {| intro [] |} :
    [wf] sequent { <H> >- 'a = 'b in bool } -->
    sequent { <H> >- bnot{'a} = bnot{'b} in bool }
 
@@ -727,7 +727,7 @@ interactive_rw reduce_bnot_bnot {| reduce |} :
 
 let reduce_bnot_bnotC = reduce_bnot_bnot
 
-interactive eq_bfalse2assert {| intro []; eqcd |} :
+interactive eq_bfalse2assert {| intro [] |} :
    [wf] sequent { <H> >- 'e1 in bool } -->
    [main] sequent { <H> >- "assert"{bnot{'e1}} } -->
    sequent { <H> >- 'e1 = bfalse in bool }

@@ -170,7 +170,7 @@ doc <:doc<
    and $B[a]$ is a type for any $a @in A$.
    @end[doc]
 >>
-prim wEquality {| intro []; eqcd |} :
+prim wEquality {| intro [] |} :
    [wf] sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
    [wf] sequent { <H>; y: 'A1 >- 'B1['y] = 'B2['y] in univ[i:l] } -->
    sequent { <H> >- w{'A1; x1. 'B1['x1]} = w{'A2; x2. 'B2['x2]} in univ[i:l] } =
@@ -204,7 +204,7 @@ doc <:doc<
    and $f @in B[a] @rightarrow @w{x; A; B[x]}$.
    @end[doc]
 >>
-prim treeEquality {| intro []; eqcd |} :
+prim treeEquality {| intro [] |} :
    [wf] sequent { <H> >- 'a1 = 'a2 in 'A } -->
    [wf] sequent { <H> >- 'b1 = 'b2 in 'B['a1] -> w{'A; x. 'B['x]} } -->
    [wf] sequent { <H>; y: 'A >- "type"{'B['y]} } -->
@@ -244,7 +244,7 @@ doc <:doc<
    for each of the children.
    @end[doc]
 >>
-interactive tree_indEquality {| intro []; eqcd |} (w{'A; x. 'B['x]}) bind{z.'T['z]} :
+interactive tree_indEquality {| intro [] |} (w{'A; x. 'B['x]}) bind{z.'T['z]} :
    [wf] sequent { <H> >- 'z1 = 'z2 in w{'A; x. 'B['x]} } -->
    [wf] sequent { <H>;
                            a: 'A;

@@ -86,7 +86,7 @@ doc <:doc<
    @end[doc]
 >>
 
-interactive singletonEquality {| intro []; eqcd |} :
+interactive singletonEquality {| intro [] |} :
    [wf] sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
    [wf] sequent { <H> >- 'a1 = 'a2 in 'A1 } -->
    [wf] sequent { <H>; x: 'A1 >- 'x in 'A2 } -->

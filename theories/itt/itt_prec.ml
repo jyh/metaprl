@@ -154,7 +154,7 @@ doc <:doc<
    $B[T_1, x] @subseteq B[T_2, x]$.
    @end[doc]
 >>
-prim precEquality {| intro []; eqcd |} 'A :
+prim precEquality {| intro [] |} 'A :
    [wf] sequent { <H> >- 'a1 = 'a2 in 'A } -->
    [wf] sequent { <H>; x: 'A; T: 'A -> univ[i:l] >- 'B1['T; 'x] = 'B2['T; 'x] in univ[i:l] } -->
    [wf] sequent { <H>;
@@ -189,7 +189,7 @@ doc <:doc<
    definition of the type has been unrolled.
    @end[doc]
 >>
-prim precMemberEquality {| intro []; eqcd |} :
+prim precMemberEquality {| intro [] |} :
    [wf] sequent { <H> >- "type"{("prec"{T, x. 'B['T; 'x]; 'a})} } -->
    [wf] sequent { <H> >- 'a1 = 'a2 in 'B[lambda{z. "prec"{T, x. 'B['T; 'x]; 'z}}; 'a] } -->
    sequent { <H> >- 'a1 = 'a2 in "prec"{T, x. 'B['T; 'x]; 'a} } =
@@ -244,7 +244,7 @@ doc <:doc<
    unrollings.
    @end[doc]
 >>
-prim precindEquality {| intro []; eqcd |} lambda{x. 'S['x]} (a:'A * "prec"{T, y. 'B['T; 'y]; 'a}) univ[i:l] :
+prim precindEquality {| intro [] |} lambda{x. 'S['x]} (a:'A * "prec"{T, y. 'B['T; 'y]; 'a}) univ[i:l] :
    [wf] sequent { <H> >- 'r1 = 'r2 in a: 'A * "prec"{T, y. 'B['T; 'y]; 'a} } -->
    [wf] sequent { <H>; Z: 'A -> univ[i:l];
              u: \subtype{(a: 'A * 'Z 'a); (a: 'A * "prec"{T, x. 'B['T; 'x]; 'a})};

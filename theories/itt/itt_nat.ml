@@ -163,7 +163,7 @@ interactive well_ordering_principle bind{i.'P['i]} 'i :
       all n:nat. ("not"{'P['n]} or "not"{.all n2:nat. ('P['n2] => 'n < 'n2)})} -->
    sequent{ <H> >- "not"{'P['i]}}
 
-interactive indEquality {| intro [complete_unless_member]; eqcd |} bind{z. 'T['z]} :
+interactive indEquality {| intro [complete_unless_member] |} bind{z. 'T['z]} :
    sequent { <H> >- 'n1 = 'n2 in nat } -->
    sequent { <H> >- 'base1 = 'base2 in 'T[0] } -->
    sequent { <H>; x: nat; le{'x;'n1}; y: 'T['x -@ 1] >- 'up1['x; 'y] = 'up2['x; 'y] in 'T['x] } -->

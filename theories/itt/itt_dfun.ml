@@ -113,7 +113,7 @@ interactive void_well_founded {| intro [] |} :
  * equality of the very-dependent type.
  * @end[doc]
  *)
-interactive functionEquality {| intro []; eqcd |} :
+interactive functionEquality {| intro [] |} :
    [wf] sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
    [wf] sequent { <H>; x: 'A1 >- 'B1['x] = 'B2['x] in univ[i:l] } -->
    sequent { <H> >- (a1:'A1 -> 'B1['a1]) = (a2:'A2 -> 'B2['a2]) in univ[i:l] }
@@ -192,7 +192,7 @@ doc <:doc<
    @end[doc]
 >>
 
-interactive applyEquality {| intro[intro_typeinf <<'f1>>]; eqcd |} (x:'A -> 'B['x]) :
+interactive applyEquality {| intro[intro_typeinf <<'f1>>] |} (x:'A -> 'B['x]) :
    sequent { <H> >- 'f1 = 'f2 in x:'A -> 'B['x] } -->
    sequent { <H> >- 'a1 = 'a2 in 'A } -->
    sequent { <H> >- ('f1 'a1) = ('f2 'a2) in 'B['a1] }

@@ -220,7 +220,7 @@ doc <:doc<
    the equivalence relations $E_1$ and $E_2$ are equal.
    @end[doc]
 >>
-prim quotientEquality {| intro []; eqcd |} :
+prim quotientEquality {| intro [] |} :
    [wf] sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
    [wf] sequent { <H>; x: 'A1; y: 'A1 >- 'E1['x; 'y] = 'E2['x; 'y] in univ[i:l] } -->
    [wf] sequent { <H> >- "type"{.quot x1, y1: 'A1 // 'E1['x1; 'y1]} } -->

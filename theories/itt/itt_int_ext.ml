@@ -363,22 +363,22 @@ doc <:doc<
    @end[doc]
 >>
 
-interactive gt_bool_wf {| intro [complete_unless_member]; eqcd |} :
+interactive gt_bool_wf {| intro [complete_unless_member] |} :
    [wf] sequent { <H> >- 'a1='a2 in int } -->
    [wf] sequent { <H> >- 'b1='b2 in int } -->
    sequent { <H> >- gt_bool{'a1; 'b1}=gt_bool{'a2; 'b2} in bool }
 
-interactive le_bool_wf {| intro [complete_unless_member]; eqcd |} :
+interactive le_bool_wf {| intro [complete_unless_member] |} :
    [wf] sequent { <H> >- 'a1='a2 in int } -->
    [wf] sequent { <H> >- 'b1='b2 in int } -->
    sequent { <H> >- le_bool{'a1; 'b1}=le_bool{'a2; 'b2} in bool }
 
-interactive ge_bool_wf {| intro [complete_unless_member]; eqcd |} :
+interactive ge_bool_wf {| intro [complete_unless_member] |} :
    [wf] sequent { <H> >- 'a1='a2 in int } -->
    [wf] sequent { <H> >- 'b1='b2 in int } -->
    sequent { <H> >- ge_bool{'a1; 'b1}=ge_bool{'a2; 'b2} in bool }
 
-interactive bneq_int_wf {| intro [complete_unless_member]; eqcd |} :
+interactive bneq_int_wf {| intro [complete_unless_member] |} :
    [wf] sequent { <H> >- 'a1='a2 in int } -->
    [wf] sequent { <H> >- 'b1='b2 in int } -->
    sequent { <H> >- bneq_int{'a1; 'b1}=bneq_int{'a2; 'b2} in bool }
@@ -564,7 +564,7 @@ doc <:doc<
    @end[doc]
 >>
 
-prim mul_wf {| intro [complete_unless_member]; eqcd |} :
+prim mul_wf {| intro [complete_unless_member] |} :
    [wf] sequent { <H> >- 'a = 'a1 in int } -->
    [wf] sequent { <H> >- 'b = 'b1 in int } -->
    sequent { <H> >- 'a *@ 'b = 'a1 *@ 'b1 in int } = it
@@ -824,7 +824,7 @@ interactive_rw rem_indReduce_rw :
 
 let rem_indReduceC = rem_indReduce_rw
 
-interactive rem_wf {| intro []; eqcd |} :
+interactive rem_wf {| intro [] |} :
    sequent { <H> >- 'b <> 0 } -->
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->
@@ -881,7 +881,7 @@ interactive_rw div_indReduce_rw :
 
 let div_indReduceC = div_indReduce_rw
 
-interactive div_wf {| intro []; eqcd |} :
+interactive div_wf {| intro [] |} :
    sequent { <H> >- 'b <> 0 } -->
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->

@@ -115,7 +115,7 @@ doc <:doc<
    are equal as types whenever they are correct types.
    @end[doc]
 >>
-prim squiggleEquality {| intro []; eqcd |} :
+prim squiggleEquality {| intro [] |} :
   [wf] sequent{ <H> >- 't1 ~ 's1 } -->
   [wf] sequent{ <H> >- 't2 ~ 's2 } -->
   sequent{ <H> >- ('t1 ~ 's1) = ('t2 ~ 's2) in univ[i:l]} =
@@ -138,7 +138,7 @@ prim squiggleElimination {|  elim [ThinOption thinT] |} 'H :
    sequent { <H>; x: ('t ~ 's); <J['x]> >- 'C['x] } =
    'f['x]
 
-interactive squiggle_memberEquality {| intro []; eqcd; squash |} :
+interactive squiggle_memberEquality {| intro []; squash |} :
   [wf] sequent{ <H> >- 't ~ 's } -->
   sequent{ <H> >- it in ('t ~ 's)}
 

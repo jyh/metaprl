@@ -148,7 +148,7 @@ doc <:doc<
    <<squash{'A}>> is a type if $A$ is a type.
    @end[doc]
 >>
-prim squashEquality {| intro []; eqcd |}  :
+prim squashEquality {| intro [] |}  :
    [wf] sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
    sequent { <H> >- squash{'A1} = squash{'A2} in univ[i:l] } = it
 
@@ -225,7 +225,7 @@ doc <:doc<
    Next, we show that a witness of a provable hidden type is $@it$.
    @end[doc]
 >>
-interactive squashMemberEquality {| intro []; eqcd |} :
+interactive squashMemberEquality {| intro [] |} :
    [wf] sequent { <H> >- squash{'A} } -->
    sequent { <H> >- it in squash{'A} }
 

@@ -166,7 +166,7 @@ interactive two_well_founded {| intro [] |} :
  * H >- A1 = A2 in Ui
  * H, y:A1 >- B1[y] = B2[y] in Ui
  *)
-interactive productEquality {| intro []; eqcd |} 'y :
+interactive productEquality {| intro [] |} 'y :
    [wf] sequent { <H> >- 'A1 = 'A2 in univ[i:l] } -->
    [wf] sequent { <H>; y: 'A1 >- 'B1['y] = 'B2['y] in univ[i:l] } -->
    sequent { <H> >- x1:'A1 * 'B1['x1] = x2:'A2 * 'B2['x2] in univ[i:l] }
@@ -215,7 +215,7 @@ interactive pairFormation {| intro [] |} 'a :
  * H >- b1 = b2 in B[a1]
  * H, y:A >- B[y] = B[y] in Ui
  *)
-interactive pairEquality {| intro []; eqcd |} :
+interactive pairEquality {| intro [] |} :
    [wf] sequent { <H> >- 'a1 = 'a2 in 'A } -->
    [wf] sequent { <H> >- 'b1 = 'b2 in 'B['a1] } -->
    [wf] sequent { <H>; y: 'A >- "type"{'B['y]} } -->
@@ -236,7 +236,7 @@ interactive productElimination {| elim [ThinOption thinT] |} 'H :
  * H >- e1 = e2 in w:A * B
  * H, u:A, v: B[u], a: e1 = (u, v) in w:A * B >- b1[u; v] = b2[u; v] in T[u, v]
  *)
-interactive spreadEquality {| intro []; eqcd |} bind{z. 'T['z]} (w:'A * 'B['w]) :
+interactive spreadEquality {| intro [] |} bind{z. 'T['z]} (w:'A * 'B['w]) :
    [wf] sequent { <H> >- 'e1 = 'e2 in w:'A * 'B['w] } -->
    [wf] sequent { <H>; u: 'A; v: 'B['u]; a: 'e1 = ('u, 'v) in w:'A * 'B['w] >-
              'b1['u; 'v] = 'b2['u; 'v] in 'T['u, 'v] } -->

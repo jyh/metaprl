@@ -20,7 +20,10 @@ open Tactic_type.Conversionals
 (* Identity (polymorphic). *)
 declare idOp
 
-(* Pointer equality. *)
+(*
+ * Pointer equality.
+ * Binary ops that evaluate as integer (in)equality.
+ *)
 declare eqEqOp
 declare neqEqOp
 
@@ -37,9 +40,9 @@ declare allocMalloc{ 'atom }
 
 (*
  * Normal values.
- * 'int in atomInt is the integer itself (a number).
- * 'bound and 'num in atomEnum are numbers satisfying 0 <= 'num < 'bound.
- * 'var in atomVar is the variable itself.
+ * atomInt evaluates to 'int (a number).
+ * atomEnum evalutes to 'num (a number).
+ * atomVar evaluates to 'var (a free variable).
  *)
 declare atomInt{ 'int }
 declare atomEnum{ 'bound; 'num }
@@ -50,17 +53,28 @@ declare atomVar{ 'var }
  * Expressions.
  *)
 
-(* Primitive operations. *)
+(*
+ * Primitive operations.
+ * We bind 'v to the value of ('op args).
+ *)
 declare unop_exp{ 'op; 'a1 }
 declare binop_exp{ 'op; 'a1; 'a2 }
 declare letUnop{ 'op; 'ty; 'a1; v. 'exp['v] }
 declare letBinop{ 'op; 'ty; 'a1; 'a2; v. 'exp['v] }
 
-(* Function application. *)
-declare letExt{ 'ty; 'string; 'ty_str; 'atom_list; v. 'exp['v] }
+(*
+ * Function application.
+ * letExt is treated as a no-op; it evaluates to 'exp[it].
+ *)
+declare letExt{ 'ty; 'string; 'ty_of_str; 'atom_list; v. 'exp['v] }
 declare tailCall{ 'var; 'atom_list }
 
-(* Control. *)
+(*
+ * Control.
+ * A matchCase consists of an int_set an expression.
+ * A match statement has a 'key (a number/int or block), and a list
+ * of matchCases.
+ *)
 declare matchCase{ 'set; 'exp }
 declare "match"{ 'key; 'cases }
 
@@ -70,6 +84,19 @@ declare letAlloc{ 'alloc_op; v. 'exp['v] }
 (* Subscripting. *)
 declare letSubscript{ 'subop; 'ty; 'ref; 'index; v. 'exp['v] }
 declare setSubscript{ 'subop; 'ty; 'ref; 'index; 'new_val; 'exp }
+
+(*
+ * Misc.
+ * Used in making output from the mc compiler more manageable.
+ *)
+
+declare unknownFun
+declare unknownSet
+declare unknownTy
+declare unknownTydef
+declare unknownAtom
+declare unknownAlloc
+declare unknownSubop
 
 (*************************************************************************
  * Rewrites.
@@ -83,5 +110,9 @@ topval reduce_atomEnum : conv
 topval reduce_atomVar : conv
 topval reduce_letUnop : conv
 topval reduce_letBinop : conv
+topval reduce_letExt : conv
 topval reduce_match_int : conv
 topval reduce_match_block : conv
+topval reduce_allocTuple : conv
+topval reduce_allocArray : conv
+topval reduce_letSubscript : conv

@@ -77,7 +77,8 @@ define unfold_val_true : val_true <--> 1
 define unfold_val_false : val_false <--> 0
 
 (* Functions. *)
-declare lambda{ x. 'f['x] }
+declare lambda{ x. 'f['x] }   (* for functions with >= 1 arguments *)
+declare lambda{ 'f }          (* function with no arguments *)
 declare apply{ 'f; 'x }
 declare fix{ f. 'b['f] }
 
@@ -91,4 +92,5 @@ topval unfold_val_true : conv
 topval unfold_val_false : conv
 topval reduce_tyVar : conv
 topval beta_reduce : conv
+topval reduce_apply_nil : conv
 topval reduce_fix : conv

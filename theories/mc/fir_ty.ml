@@ -53,7 +53,8 @@ define unfold_val_true : val_true <--> 1
 define unfold_val_false : val_false <--> 0
 
 (* Functions. *)
-declare lambda{ x. 'f['x] }
+declare lambda{ x. 'f['x] }   (* for functions with >= 1 arguments *)
+declare lambda{ 'f }          (* function with no arguments *)
 declare apply{ 'f; 'x }
 declare fix{ f. 'b['f] }
 
@@ -120,8 +121,10 @@ dform val_true_df : except_mode[src] :: val_true = `"val_true"
 dform val_false_df : except_mode[src] :: val_false = `"val_false"
 
 (* Functions. *)
-dform lambda_df : except_mode[src] :: lambda{ x. 'f } =
+dform lambda_df1 : except_mode[src] :: lambda{ x. 'f } =
    `"(" Nuprl_font!lambda slot{'x} `"." slot{'f} `")"
+dform lambda_df0 : except_mode[src] :: lambda{ 'f } =
+   `"(" Nuprl_font!lambda `"()." slot{'f} `")"
 dform apply_df : except_mode[src] :: apply{ 'f; 'x } =
    `"(" slot{'f} `" " slot{'x} `")"
 dform fix_df : except_mode[src] :: fix{ f. 'b } =
@@ -134,8 +137,8 @@ dform fix_df : except_mode[src] :: fix{ f. 'b } =
  *************************************************************************)
 
 prim_rw reduce_tyVar : tyVar{ 'ty_var } <--> 'ty_var
-
 prim_rw beta_reduce : apply{ lambda{ x. 'f['x] }; 'y } <--> 'f['y]
+prim_rw reduce_apply_nil : apply{ lambda{ 'f }; nil } <--> 'f
 prim_rw reduce_fix : fix{ f. 'b['f] } <--> 'b[ fix{ f. 'b['f] } ]
 
 (*************************************************************************
@@ -149,5 +152,6 @@ let resource reduce += [
    << val_false >>, unfold_val_false;
    << tyVar{ 'ty_var } >>, reduce_tyVar;
    << apply{ lambda{ x. 'f['x] }; 'y } >>, beta_reduce;
+   << apply{ lambda{ 'f }; nil } >>, reduce_apply_nil;
    << fix{ f. 'b['f] } >>, reduce_fix
 ]

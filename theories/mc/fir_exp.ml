@@ -50,7 +50,7 @@ declare letUnop{ 'op; 'ty; 'a1; v. 'exp['v] }
 declare letBinop{ 'op; 'ty; 'a1; 'a2; v. 'exp['v] }
 
 (* Function application. *)
-declare letExt{ 'ty; 'string; 'ty_str; 'atom_list; v. 'exp['v] }
+declare letExt{ 'ty; 'string; 'ty_of_str; 'atom_list; v. 'exp['v] }
 declare tailCall{ 'var; 'atom_list }
 
 (* Control. *)
@@ -63,6 +63,18 @@ declare letAlloc{ 'alloc_op; v. 'exp['v] }
 (* Subscripting. *)
 declare letSubscript{ 'subop; 'ty; 'ref; 'index; v. 'exp['v] }
 declare setSubscript{ 'subop; 'ty; 'ref; 'index; 'new_val; 'exp }
+
+(*
+ * Misc.
+ *)
+
+declare unknownFun
+declare unknownSet
+declare unknownTy
+declare unknownTydef
+declare unknownAtom
+declare unknownAlloc
+declare unknownSubop
 
 (*************************************************************************
  * Display forms.
@@ -132,9 +144,10 @@ dform letBinop_df : except_mode[src] ::
 
 (* Function application. *)
 dform letExt_df : except_mode[src] ::
-   letExt{ 'ty; 'string; 'ty_str; 'atom_list; v. 'exp } =
+   letExt{ 'ty; 'string; 'ty_of_str; 'atom_list; v. 'exp } =
    pushm[0] szone push_indent `"let " slot{'v} `":" slot{'ty} `" =" hspace
-   szone slot{'string} `":" slot{'ty_str} `"(" slot{'atom_list} `")" ezone popm
+   szone slot{'string} `":" slot{'ty_of_str}
+   `"(" slot{'atom_list} `")" ezone popm
    ezone popm
 dform tailCall_df : except_mode[src] :: tailCall{ 'var; 'atom_list } =
    szone `"TailCall(" slot{'var} `", " slot{'atom_list} `")" ezone
@@ -176,6 +189,12 @@ dform setSubscript_df : except_mode[src] ::
    `"with subop " slot{'subop} hspace
    slot{'exp} ezone
 
+(*
+ * Misc.
+ *)
+
+dform unknownFun_df : except_mode[src] :: unknownFun = `"UnknownFun"
+
 (*************************************************************************
  * Rewrites.
  *************************************************************************)
@@ -204,8 +223,8 @@ prim_rw reduce_letBinop :
 
 (* Function application. *)
 prim_rw reduce_letExt :
-   letExt{ 'ty; 'string; 'ty_str; 'atom_list; v. 'exp } <-->
-   'exp
+   letExt{ 'ty; 'string; 'ty_of_str; 'atom_list; v. 'exp['v] } <-->
+   'exp[it]
 
 (* Control. *)
 prim_rw reduce_match_int :
@@ -219,6 +238,19 @@ prim_rw reduce_match_block :
    ifthenelse{ member{ number[i:n]; 'set };
       'e;
       ."match"{ number[i:n]; 'el } }
+
+(* Allocation. *)
+prim_rw reduce_allocTuple :
+   letAlloc{ allocTuple{ 'ty; 'atom_list }; v. 'exp['v] } <-->
+   'exp['atom_list]
+prim_rw reduce_allocArray :
+   letAlloc{ allocArray{ 'ty; 'atom_list }; v. 'exp['v] } <-->
+   'exp['atom_list]
+
+(* Subscripting. *)
+prim_rw reduce_letSubscript :
+   letSubscript{ 'subop; 'ty; 'ref; 'index; v. 'exp['v] } <-->
+   'exp[ nth{'ref; 'index} ]
 
 (*************************************************************************
  * Automation.
@@ -235,11 +267,17 @@ let resource reduce += [
       reduce_letUnop;
    << letBinop{ 'op; 'ty; 'a1; 'a2; v. 'exp['v] } >>,
       reduce_letBinop;
-   << letExt{ 'ty; 'string; 'ty_str; 'atom_list; v. 'exp } >>,
+   << letExt{ 'ty; 'string; 'ty_str; 'atom_list; v. 'exp['v] } >>,
       reduce_letExt;
    << "match"{ number[i:n]; cons{ matchCase{'set; 'e }; 'el } } >>,
       reduce_match_int;
    << "match"{ block{ number[i:n]; 'args };
       cons{ matchCase{'set; 'e }; 'el } } >>,
-      reduce_match_block
+      reduce_match_block;
+   << letAlloc{ allocTuple{ 'ty; 'atom_list }; v. 'exp['v] } >>,
+      reduce_allocTuple;
+   << letAlloc{ allocArray{ 'ty; 'atom_list }; v. 'exp['v] } >>,
+      reduce_allocArray;
+   << letSubscript{ 'subop; 'ty; 'ref; 'index; v. 'exp['v] } >>,
+      reduce_letSubscript
 ]

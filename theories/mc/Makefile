@@ -20,10 +20,8 @@ MPFILES := \
    fir_type_state \
    fir_type_exp \
    fir_type_int \
-   fir_auto \
    mc_theory \
-   fir_test \
-   fir_test2
+   fir_test
 
 # Name of main libraries
 MAIN = theory

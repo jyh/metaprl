@@ -32,7 +32,7 @@
  * jyh@cs.cornell.edu
  *)
 
-include Tptp
+include Tptp_load
 
 open Printf
 open Mp_debug

@@ -32,7 +32,9 @@
 
 open Refiner.Refiner.TermType
 
-val load : string -> term
+include Tptp
+
+topval tptp_load : string -> term
 
 (*
  * -*-

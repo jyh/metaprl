@@ -243,7 +243,7 @@ let mk_axiom_decl (v, ax) =
 (*
  * Collect the sequent.
  *)
-let load name =
+let tptp_load name =
    let funs, preds, axioms, goals = compile [] [] 0 [] [] (parse_tptp name) in
    let hyps =
       (List.map mk_fun_decl funs) @

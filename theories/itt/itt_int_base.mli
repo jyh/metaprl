@@ -408,7 +408,6 @@ rule add_Commut :
 
 topval add_CommutC: conv
 
-(* BUG WEAK
 rule lt_add_lt :
    [main] sequent { <H> >- 'a < 'b} -->
    [main] sequent { <H> >- 'c < 'd} -->
@@ -417,7 +416,6 @@ rule lt_add_lt :
    [wf] sequent { <H> >- 'c in int } -->
    [wf] sequent { <H> >- 'd in int } -->
    sequent { <H> >- ('a +@ 'c) < ('b +@ 'd) }
-*)
 
 topval lt_add_ltT : tactic
 

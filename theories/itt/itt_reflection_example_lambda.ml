@@ -1,6 +1,6 @@
 (* This theory is a toy example of how we are going to define a language *)
 
-extends Itt_synt_language
+extends Itt_synt_lang
 extends Itt_reflection_new
 
 open Basic_tactics
@@ -35,7 +35,7 @@ interactive_rw depth_of_lam {| reduce |}: op_bdepth{lambda_term} <--> 0
 
 
 declare LambdaTerm
-iform lambdaTerm: LambdaTerm <--> Languge{lambda_term::app_term::nil}
+iform lambdaTerm: LambdaTerm <--> Lang{lambda_term::app_term::nil}
 dform lambda_df: LambdaTerm = `"Term" sub{lambda}
 
 
@@ -79,6 +79,3 @@ define unfold_dest_lambda_term: dest_lambda_term{'t; v.'var_case['v]; f.'lambda_
                   then 'lambda_case[nth{'subterms;0}]
                   else 'apply_case[nth{'subterms;0};nth{'subterms;1}]
              }
-
-
-

@@ -18,7 +18,7 @@ P	p3	Number 25
 O	o3	location p2 p3
 NSummary!parent	parent	parent Summary
 O	o4	parent
-P	p4	String itt_synt_language
+P	p4	String itt_synt_lang
 O	o5	parent p4
 T	t5	o5
 B	b5	t5
@@ -762,9 +762,9 @@ P	p274	Number 508
 O	o274	location p273 p274
 P	p275	String typeTerm
 O	o275	input_form p275
-NItt_synt_language	Itt_synt_language	Itt_synt_language NIL
-NItt_synt_language!Languge	Languge	Languge Itt_synt_language
-O	o276	Languge
+NItt_synt_lang	Itt_synt_lang	Itt_synt_lang NIL
+NItt_synt_lang!Lang	Lang	Lang Itt_synt_lang
+O	o276	Lang
 T	t276	o258 b219 b261
 B	b276	t276
 T	t277	o276 b276

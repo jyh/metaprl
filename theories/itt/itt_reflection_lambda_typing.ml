@@ -1,4 +1,4 @@
-extends Itt_synt_language
+extends Itt_synt_lang
 extends Itt_reflection_new
 extends Itt_reflection_example_lambda
 extends Itt_reflection_lambda_reduction
@@ -12,7 +12,7 @@ dform fun_df: fun_term = `"\"fun\""
 define unfold_mk_fun: mk_fun{'t;'s} <--> let depth=max{bdepth{'t};bdepth{'s}} in  make_bterm{fun_term; 'depth; make_depth{'t;'depth}::make_depth{'s;'depth}::nil}
 
 declare TypeTerm
-iform typeTerm: TypeTerm <--> Languge{fun_term::nil}
+iform typeTerm: TypeTerm <--> Lang{fun_term::nil}
 dform type_df: TypeTerm = `"Term" sub{rightarrow}
 
 

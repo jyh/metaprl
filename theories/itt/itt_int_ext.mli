@@ -112,6 +112,41 @@ rewrite reduce_rem : "rem"{number[i:n]; number[j:n]} <-->
    meta_rem{number[i:n]; number[j:n]}
 *)
 
+val le_term : term
+val is_le_term : term -> bool
+val mk_le_term : term -> term -> term
+val dest_le : term -> term * term
+
+val ge_term : term
+val is_ge_term : term -> bool
+val mk_ge_term : term -> term -> term
+val dest_ge : term -> term * term
+
+val gt_term : term
+val is_gt_term : term -> bool
+val mk_gt_term : term -> term -> term
+val dest_gt : term -> term * term
+
+val mul_term : term
+val is_mul_term : term -> bool
+val mk_mul_term : term -> term -> term
+val dest_mul : term -> term * term
+
+val div_term : term
+val is_div_term : term -> bool
+val mk_div_term : term -> term -> term
+val dest_div : term -> term * term
+
+val rem_term : term
+val is_rem_term : term -> bool
+val mk_rem_term : term -> term -> term
+val dest_rem : term -> term * term
+
+val bneq_int_term : term
+val is_bneq_int_term : term -> bool
+val mk_bneq_int_term : term -> term -> term
+val dest_bneq_int : term -> term * term
+
 rule mul_wf 'H :
    [wf] sequent [squash] { 'H >- 'a = 'a1 in int } -->
    [wf] sequent [squash] { 'H >- 'b = 'b1 in int } -->

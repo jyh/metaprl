@@ -114,24 +114,6 @@ define unfold_bneq_int :
 define unfold_gt :
    gt{'a; 'b} <--> ('b < 'a)
 
-let le_term = << 'x <= 'y >>
-let le_opname = opname_of_term le_term
-let is_le_term = is_dep0_dep0_term le_opname
-let mk_le_term = mk_dep0_dep0_term le_opname
-let dest_le = dest_dep0_dep0_term le_opname
-
-let ge_term = << 'x >= 'y >>
-let ge_opname = opname_of_term ge_term
-let is_ge_term = is_dep0_dep0_term ge_opname
-let mk_ge_term = mk_dep0_dep0_term ge_opname
-let dest_ge = dest_dep0_dep0_term ge_opname
-
-let gt_term = << 'x > 'y >>
-let gt_opname = opname_of_term gt_term
-let is_gt_term = is_dep0_dep0_term gt_opname
-let mk_gt_term = mk_dep0_dep0_term gt_opname
-let dest_gt = dest_dep0_dep0_term gt_opname
-
 let mul_term = << 'x *@ 'y >>
 let mul_opname = opname_of_term mul_term
 let is_mul_term = is_dep0_dep0_term mul_opname
@@ -150,24 +132,35 @@ let is_rem_term = is_dep0_dep0_term rem_opname
 let mk_rem_term = mk_dep0_dep0_term rem_opname
 let dest_rem = dest_dep0_dep0_term rem_opname
 
+let le_term = << 'x <= 'y >>
+let le_opname = opname_of_term le_term
+let is_le_term = is_dep0_dep0_term le_opname
+let mk_le_term = mk_dep0_dep0_term le_opname
+let dest_le = dest_dep0_dep0_term le_opname
+
+let ge_term = << 'x >= 'y >>
+let ge_opname = opname_of_term ge_term
+let is_ge_term = is_dep0_dep0_term ge_opname
+let mk_ge_term = mk_dep0_dep0_term ge_opname
+let dest_ge = dest_dep0_dep0_term ge_opname
+
+let gt_term = << 'x > 'y >>
+let gt_opname = opname_of_term gt_term
+let is_gt_term = is_dep0_dep0_term gt_opname
+let mk_gt_term = mk_dep0_dep0_term gt_opname
+let dest_gt = dest_dep0_dep0_term gt_opname
+
+let bneq_int_term = << bneq_int{'x; 'y} >>
+let bneq_int_opname = opname_of_term bneq_int_term
+let is_bneq_int_term = is_dep0_dep0_term bneq_int_opname
+let mk_bneq_int_term = mk_dep0_dep0_term bneq_int_opname
+let dest_bneq_int = dest_dep0_dep0_term bneq_int_opname
+
 (************************************************************************
  * DISPLAY FORMS                                                        *
  ************************************************************************)
 
 prec prec_mul
-
-dform le_df1 : except_mode[src] :: parens :: "prec"[prec_compare] :: le{'a; 'b} =
-   slot["lt"]{'a} Nuprl_font!le slot["le"]{'b}
-dform le_df2 : mode[src] :: parens :: "prec"[prec_compare] :: le{'a; 'b} =
-   slot["lt"]{'a} `" <= " slot["le"]{'b}
-
-dform ge_df1 : except_mode[src] :: parens :: "prec"[prec_compare] :: ge{'a; 'b} =
-   slot["lt"]{'a} Nuprl_font!ge slot["le"]{'b}
-dform ge_df2 : mode[src] :: parens :: "prec"[prec_compare] :: ge{'a; 'b} =
-   slot["lt"]{'a} `" >= " slot["le"]{'b}
-
-dform gt_df1 : parens :: "prec"[prec_compare] :: gt{'a; 'b} =
-   slot["lt"]{'a} `" > " slot["le"]{'b}
 
 dform mul_df1 : except_mode[src] :: parens :: "prec"[prec_mul] :: "mul"{'a; 'b} =
    slot["lt"]{'a} `" * " slot["le"]{'b}
@@ -183,6 +176,22 @@ dform rem_df1 : except_mode[src] :: parens :: "prec"[prec_mul] :: "rem"{'a; 'b} 
    slot["lt"]{'a} `" % " slot["le"]{'b}
 dform rem_df2 : mode[src] :: parens :: "prec"[prec_mul] :: "rem"{'a; 'b} =
    slot["lt"]{'a} `" %@ " slot["le"]{'b}
+
+dform le_df1 : except_mode[src] :: parens :: "prec"[prec_compare] :: le{'a; 'b} =
+   slot["lt"]{'a} Nuprl_font!le slot["le"]{'b}
+dform le_df2 : mode[src] :: parens :: "prec"[prec_compare] :: le{'a; 'b} =
+   slot["lt"]{'a} `" <= " slot["le"]{'b}
+
+dform ge_df1 : except_mode[src] :: parens :: "prec"[prec_compare] :: ge{'a; 'b} =
+   slot["lt"]{'a} Nuprl_font!ge slot["le"]{'b}
+dform ge_df2 : mode[src] :: parens :: "prec"[prec_compare] :: ge{'a; 'b} =
+   slot["lt"]{'a} `" >= " slot["le"]{'b}
+
+dform gt_df1 : parens :: "prec"[prec_compare] :: gt{'a; 'b} =
+   slot["lt"]{'a} `" > " slot["le"]{'b}
+
+dform bneq_int_df1 : parens :: "prec"[prec_compare] :: bneq_int{'a; 'b} =
+   slot["lt"]{'a} `" " Nuprl_font!neq Nuprl_font!subb `" " slot["le"]{'b}
 
 (*
 Switching to define-version to provide the same behaviour as bool-relations,
@@ -261,10 +270,26 @@ interactive lt_mulPositMono 'H 'c :
    [wf] sequent [squash] { 'H >- 'c IN int } -->
    sequent ['ext] { 'H >- lt_bool{'a; 'b} ~ lt_bool{('c *@ 'a); ('c *@ 'b) } }
 
+interactive_rw lt_mulPositMono_rw 'c :
+   (0 < 'c) -->
+   ('a IN int) -->
+   ('b IN int) -->
+   ('c IN int) -->
+   lt_bool{'a; 'b} <--> lt_bool{('c *@ 'a); ('c *@ 'b) }
+
+let lt_mulPositMonoC = lt_mulPositMono_rw
+
 prim mul_Commut 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    [wf] sequent [squash] { 'H >- 'b IN int } -->
    sequent ['ext] { 'H >- ('a *@ 'b) ~ ('b *@ 'a) } = it
+
+interactive_rw mul_Commut_rw :
+   ('a IN int) -->
+   ('b IN int) -->
+   ('a *@ 'b) <--> ('b *@ 'a)
+
+let mul_CommutC = mul_Commut_rw
 
 prim mul_Assoc 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
@@ -272,32 +297,79 @@ prim mul_Assoc 'H :
    [wf] sequent [squash] { 'H >- 'c IN int } -->
    sequent ['ext] { 'H >- ('a *@ ('b *@ 'c)) ~ (('a *@ 'b) *@ 'c) } = it
 
+interactive_rw mul_Assoc_rw :
+   ('a IN int) -->
+   ('b IN int) -->
+   ('c IN int) -->
+   ('a *@ ('b *@ 'c)) <--> (('a *@ 'b) *@ 'c)
+
+let mul_AssocC = mul_Assoc_rw
+
 prim mul_add_Distrib 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    [wf] sequent [squash] { 'H >- 'b IN int } -->
    [wf] sequent [squash] { 'H >- 'c IN int } -->
    sequent ['ext] { 'H >- ('a *@ ('b +@ 'c)) ~ (('a *@ 'b) +@ ('a *@ 'c)) } = it
 
+interactive_rw mul_add_Distrib_rw :
+   ('a IN int) -->
+   ('b IN int) -->
+   ('c IN int) -->
+   ('a *@ ('b +@ 'c)) <--> (('a *@ 'b) +@ ('a *@ 'c))
+
+let mul_add_DistribC = mul_add_Distrib_rw
+
 prim mul_Id 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    sequent ['ext] { 'H >- (1 *@ 'a) ~ 'a } = it
+
+interactive_rw mul_Id_rw :
+   ('a IN int) -->
+   (1 *@ 'a) <--> 'a
+
+let mul_IdC = mul_Id_rw
 
 interactive mul_Id2 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    sequent ['ext] { 'H >- ('a *@ 1) ~ 'a }
 
+interactive_rw mul_Id2_rw :
+   ('a IN int) -->
+   ('a *@ 1) <--> 'a
+
+let mul_Id2C = mul_Id2_rw
+
 prim mul_Zero 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    sequent ['ext] { 'H >- (0 *@ 'a) ~ 0 } = it
+ 
+interactive_rw mul_Zero_rw :
+   ('a IN int) -->
+   (0 *@ 'a) <--> 0
+
+let mul_ZeroC = mul_Zero_rw
  
 interactive mul_Zero2 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    sequent ['ext] { 'H >- ('a *@ 0) ~ 0 }
 
+interactive_rw mul_Zero2_rw :
+   ('a IN int) -->
+   ('a *@ 0) <--> 0
+
+let mul_Zero2C = mul_Zero2_rw
+
 interactive mul_uni_Assoc 'H :
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    [wf] sequent [squash] { 'H >- 'b IN int } -->
    sequent ['ext] { 'H >- ('a *@ (- 'b)) ~ ((- 'a) *@ 'b) }
+
+interactive_rw mul_uni_Assoc_rw :
+   ('a IN int) -->
+   ('b IN int) -->
+   ('a *@ (- 'b)) <--> ((- 'a) *@ 'b)
+
+let mul_uni_AssocC = mul_uni_Assoc_rw
 
 interactive lt_mulNegMono 'H 'c :
    sequent [squash] { 'H >- 'c < 0 } -->
@@ -305,6 +377,15 @@ interactive lt_mulNegMono 'H 'c :
    [wf] sequent [squash] { 'H >- 'b IN int } -->
    [wf] sequent [squash] { 'H >- 'c IN int } -->
    sequent ['ext] { 'H >- lt_bool{'a; 'b} ~ lt_bool{('c *@ 'b) ; ('c *@ 'a)} }
+
+interactive_rw lt_mulNegMono_rw 'c :
+   ('c < 0)  -->
+   ('a IN int) -->
+   ('b IN int) -->
+   ('c IN int) -->
+   lt_bool{'a; 'b} <--> lt_bool{('c *@ 'b) ; ('c *@ 'a)}
+
+let lt_mulNegMonoC = lt_mulNegMono_rw
 
 (*!
  * @begin[doc]
@@ -318,12 +399,30 @@ prim rem_baseReduce 'H :
    [wf] sequent [squash] { 'H >- 'b IN int } -->
    sequent ['ext] { 'H >- ('a rem 'b) ~ 'a } = it
 
+interactive_rw rem_baseReduce_rw :
+   (0 <= 'a) -->
+   ('a < 'b) -->
+   ('a IN int) -->
+   ('b IN int) -->
+   ('a rem 'b) <--> 'a
+
+let rem_baseReduceC = rem_baseReduce_rw
+
 prim rem_indReduce 'H :
    sequent [squash] { 'H >- 0 < 'b } -->
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    [wf] sequent [squash] { 'H >- 'b IN int } -->
    [wf] sequent [squash] { 'H >- 'c IN int } -->
    sequent ['ext] { 'H >- ((('a *@ 'b) +@ 'c) rem 'b) ~ ('c rem 'b) } = it
+
+interactive_rw rem_indReduce_rw :
+   (0 < 'b) -->
+   ('a IN int) -->
+   ('b IN int) -->
+   ('c IN int) -->
+   ((('a *@ 'b) +@ 'c) rem 'b) <--> ('c rem 'b)
+
+let rem_indReduceC = rem_indReduce_rw
 
 interactive rem_wf {| intro_resource []; eqcd_resource |} 'H :
    sequent [squash] { 'H >- "nequal"{'b ; 0} } -->
@@ -343,12 +442,30 @@ prim div_baseReduce 'H :
    [wf] sequent [squash] { 'H >- 'b IN int } -->
    sequent ['ext] { 'H >- ('a /@ 'b) ~ 0 } = it
 
+interactive_rw div_baseReduce_rw :
+   (0 <= 'a) -->
+   ('a < 'b) -->
+   ('a IN int) -->
+   ('b IN int) -->
+   ('a /@ 'b) <--> 0
+
+let div_baseReduceC = div_baseReduce_rw
+
 prim div_indReduce 'H :
    sequent [squash] { 'H >- 0 < 'b } -->
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    [wf] sequent [squash] { 'H >- 'b IN int } -->
    [wf] sequent [squash] { 'H >- 'c IN int } -->
    sequent ['ext] { 'H >- ((('a *@ 'b) +@ 'c) /@ 'b) ~ ('a +@ ('c /@ 'b)) } = it
+
+interactive_rw div_indReduce_rw :
+   (0 < 'b) -->
+   ('a IN int) -->
+   ('b IN int) -->
+   ('c IN int) -->
+   ((('a *@ 'b) +@ 'c) /@ 'b) <--> ('a +@ ('c /@ 'b))
+
+let div_indReduceC = div_indReduce_rw
 
 interactive div_wf {| intro_resource []; eqcd_resource |} 'H :
    sequent [squash] { 'H >- "nequal"{'b ; 0} } -->
@@ -381,6 +498,17 @@ interactive div_Assoc 'H :
    [wf] sequent [squash] { 'H >- 'b IN int } -->
    [wf] sequent [squash] { 'H >- 'c IN int } -->
    sequent ['ext] { 'H >- (('a /@ 'b) /@ 'c) ~ ('a /@ ('b *@ 'c)) }
+
+interactive_rw div_Assoc_rw :
+   (0 <= 'a) -->
+   (0 < 'b) -->
+   (0 < 'c) -->
+   ('a IN int) -->
+   ('b IN int) -->
+   ('c IN int) -->
+   (('a /@ 'b) /@ 'c) <--> ('a /@ ('b *@ 'c))
+
+let div_AssocC = div_Assoc_rw
 
 (*
 Incorrect but there has to be some assoc/commut/composition property

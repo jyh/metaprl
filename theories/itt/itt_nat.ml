@@ -190,7 +190,7 @@ interactive well_ordering_principle bind{i.'P['i]} 'i :
 interactive indEquality {| intro [complete_unless_member] |} bind{z. 'T['z]} :
    sequent { <H> >- 'n1 = 'n2 in nat } -->
    sequent { <H> >- 'base1 = 'base2 in 'T[0] } -->
-   sequent { <H>; x: nat; le{'x;'n1}; y: 'T['x -@ 1] >- 'up1['x; 'y] = 'up2['x; 'y] in 'T['x] } -->
+   sequent { <H>; x: nat; 0<'x; le{'x;'n1}; y: 'T['x -@ 1] >- 'up1['x; 'y] = 'up2['x; 'y] in 'T['x] } -->
    sequent { <H> >- ind{'n1; 'base1; k1, l1. 'up1['k1; 'l1]} = ind{'n2; 'base2; k2, l2. 'up2['k2; 'l2]} in 'T['n1] }
 
 interactive finiteNatType {| intro [] |} :
@@ -207,6 +207,11 @@ interactive finiteNatMemberEquality {| intro [] |} :
 
 interactive finiteNatElimination {| elim [] |} 'H :
    sequent { <H>; x: int; v:'x >= 0; w: 'x < 'k; <J['x]> >- 'C['x] }  -->
+   sequent { <H>; x: nat{'k}; <J['x]> >- 'C['x] }
+
+interactive finiteNat_ge_elim {| ge_elim |} 'H :
+	[wf] sequent { <H>; x: int; <J['x]> >- 'k in int } -->
+   sequent { <H>; x: int; <J['x]>; 'x >= 0; 'k >= 'x+@1 >- 'C['x] }  -->
    sequent { <H>; x: nat{'k}; <J['x]> >- 'C['x] }
 
 interactive finiteNatIsInt {| nth_hyp |} 'H :
@@ -263,4 +268,5 @@ let positiveRule2T = smallest_positive
    sequent { <H>; x: exst a: int. ('a > 0 & 'P['a]); <J['x]>; y: exst u: int. ('u > 0 & 'P['u] & all b: int. (('b > 0 & 'P['b]) => 'b < 'u)) >- 'C['x] } -->
    sequent { <H>; x: exst a: int. ('a > 0 & 'P['a]); <J['x]> >- 'C['x] }
 *)
+
 

@@ -307,6 +307,9 @@ dform nth_df : except_mode[src] :: nth{'l; 'i} =
 dform replace_nth_df : except_mode[src] :: replace_nth{'l; 'i; 'v} =
    szone `"replace_nth(" pushm[0] slot{'l} `"," hspace slot{'i} `"," hspace slot{'v} `")" popm ezone
 
+dform rev_df : except_mode[src] :: rev{'l} =
+   `"rev(" slot{'l} `")"
+
 (************************************************************************
  * REWRITES                                                             *
  ************************************************************************)
@@ -688,6 +691,7 @@ interactive replace_nth_wf {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- 'l IN list{'T} } -->
    [wf] sequent [squash] { 'H >- ge{'i; 0} } -->
    [wf] sequent [squash] { 'H >- lt{'i; length{'l}} } -->
+   [wf] sequent [squash] { 'H >- 'i IN int } -->
    [wf] sequent [squash] { 'H >- 't IN 'T } -->
    sequent ['ext] { 'H >- replace_nth{'l; 'i; 't} IN list{'T} }
 

@@ -2737,7 +2737,7 @@ T	t1329	o1263 b1268 b1328
 B	b1329	t1329
 T	t1273	o1264 b1273 b4 b1267
 B	b1274	t1273
-P	p1277	String "thinT 2 thenT autoT"
+P	p1277	String "autoT"
 O	o1277	ext_rule p1277
 T	t1277	o1263 b1271 b4
 B	b1278	t1277
@@ -12732,7 +12732,7 @@ T	t4099	o1265 b4099 b4079
 B	b4100	t4099
 T	t4100	o1268 b4100 b4 b1267
 B	b4101	t4100
-P	p4104	String "rwh unfold_col_member 0 thenT withT <<'u>> (dT 0) thenT autoT thenT cutColT <<'X>> thenT onHypsT [4;3;2] thinT  thenT autoT"
+P	p4104	String "rwh unfold_col_member 0 thenT withT <<'u>> (dT 0) thenT autoT thenT cutColT <<'X>> thenT autoT"
 O	o4104	ext_rule p4104
 T	t4104	o1263 b4098 b4
 B	b4105	t4104
@@ -14061,7 +14061,7 @@ T	t4387	o1265 b4387 b4345
 B	b4388	t4387
 T	t4388	o1388 b4388 b4 b1267
 B	b4389	t4388
-P	p4392	String "onHypsT [4;3;2] thinT thenT autoT"
+P	p4392	String "autoT"
 O	o4392	ext_rule p4392
 T	t4392	o1263 b4386 b4
 B	b4393	t4392
@@ -14159,7 +14159,7 @@ T	t4404	o1265 b4404 b4345
 B	b4405	t4404
 T	t4405	o1388 b4405 b4 b1267
 B	b4406	t4405
-P	p4409	String "onHypsT [6;4;3;2] thinT thenT autoT"
+P	p4409	String "autoT"
 O	o4409	ext_rule p4409
 T	t4409	o1263 b4402 b4
 B	b4410	t4409
@@ -16348,7 +16348,7 @@ T	t4751	o1265 b4751 b4721
 B	b4752	t4751
 T	t4752	o3881 b4752 b4 b1267
 B	b4753	t4752
-P	p4755	String "onHypsT [5;4;3;2] thinT thenT autoT"
+P	p4755	String "autoT"
 O	o4755	ext_rule p4755
 T	t4755	o1263 b4753 b4
 B	b4756	t4755
@@ -16429,7 +16429,7 @@ T	t4794	o1263 b4788 b4
 B	b4795	t4794
 T	t4795	o1279 b1262 b4795 b4 b4
 B	b4796	t4795
-P	p4796	String "onHypsT [7;6;5;4;3;2] thinT thenT autoT"
+P	p4796	String "autoT"
 O	o4796	ext_rule p4796
 T	t4796	o1263 b4791 b4
 B	b4797	t4796
@@ -16696,7 +16696,7 @@ T	t4903	o1265 b4903 b4850
 B	b4904	t4903
 T	t4904	o1268 b4904 b4 b1267
 B	b4905	t4904
-P	p4908	String "thinT 6 thenT thinT 4 thenT thinT 3 thenT thinT 2 thenT   autoT"
+P	p4908	String "autoT"
 O	o4908	ext_rule p4908
 T	t4908	o1263 b4898 b4
 B	b4909	t4908
@@ -16728,7 +16728,7 @@ T	t4921	o4920 b1262 b4921 b4 b4
 B	b4922	t4921
 T	t4922	o b4922 b4
 B	b4923	t4922
-P	p4925	String "thinT 4 thenT thinT 2 thenT autoT"
+P	p4925	String "autoT"
 O	o4925	ext_rule p4925
 T	t4925	o1263 b4872 b4
 B	b4926	t4925
@@ -16736,7 +16736,7 @@ T	t4926	o4925 b1262 b4926 b4 b4
 B	b4927	t4926
 T	t4927	o b4927 b4
 B	b4928	t4927
-P	p4930	String "repeatForT 3 (thinT (-3)) thenT autoT"
+P	p4930	String "autoT"
 O	o4930	ext_rule p4930
 T	t4930	o1263 b4863 b4
 B	b4931	t4930
@@ -17887,7 +17887,7 @@ T	t5125	o b5125 b4
 B	b5126	t5125
 T	t5126	o1263 b5125 b5126
 B	b5127	t5126
-P	p5127	String "repeatT (tryT(thinT (-2))) thenT autoT"
+P	p5127	String "autoT"
 O	o5127	ext_rule p5127
 T	t5127	o1263 b5125 b4
 B	b5128	t5127
@@ -17962,7 +17962,7 @@ T	t5155	o b5155 b4
 B	b5156	t5155
 T	t5156	o1263 b5146 b5156
 B	b5157	t5156
-P	p5157	String "repeatForT 6 (thinT (-2)) thenT autoT"
+P	p5157	String "autoT"
 O	o5157	ext_rule p5157
 T	t5157	o1263 b5155 b4
 B	b5158	t5157
@@ -18171,7 +18171,7 @@ T	t5233	o1263 b5206 b5233
 B	b5234	t5233
 T	t5234	o1263 b5232 b4
 B	b5235	t5234
-P	p5274	String "onHypsT [3;2] thinT thenT autoT"
+P	p5274	String "autoT"
 O	o5274	ext_rule p5274
 T	t5235	o5274 b1262 b5235 b4 b4
 B	b5236	t5235

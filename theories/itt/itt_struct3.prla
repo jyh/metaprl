@@ -1776,7 +1776,7 @@ T	t669	o b665 b669
 B	b670	t669
 T	t670	o619 b655 b670
 B	b671	t670
-P	p671	String "sqSymT thenT thinT 5 thenT thinT 3 thenT autoT"
+P	p671	String "sqSymT thenT autoT"
 O	o671	ext_rule p671
 T	t671	o619 b665 b4
 B	b672	t671
@@ -1827,7 +1827,7 @@ T	t688	o619 b677 b4
 B	b688	t688
 T	t689	o687 b618 b688 b4 b4
 B	b689	t689
-P	p689	String "thinT 8 thenT thinT 7 thenT thinT 5 thenT thinT 3 thenT autoT"
+P	p689	String "autoT"
 O	o689	ext_rule p689
 S	s689	t607 h h591 h592 h677
 G	s689	t682
@@ -1889,7 +1889,7 @@ T	t714	o b673 b714
 B	b715	t714
 T	t715	o617 b618 b671 b715 b4
 B	b716	t715
-P	p716	String "thinT 5 thenT thinT 2 thenT autoT"
+P	p716	String "autoT"
 O	o716	ext_rule p716
 T	t716	o619 b658 b4
 B	b717	t716

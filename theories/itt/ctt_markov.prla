@@ -2924,7 +2924,7 @@ T	t1118	o655 b1112 b4
 B	b1119	t1118
 T	t1119	o1118 b654 b1119 b4 b4
 B	b1120	t1119
-P	p1120	String "thinT 2 thenT autoT"
+P	p1120	String "autoT"
 O	o1120	ext_rule p1120
 T	t1120	o655 b1115 b4
 B	b1121	t1120
@@ -3658,7 +3658,7 @@ T	t1421	o b1417 b1421
 B	b1422	t1421
 T	t1422	o655 b1405 b1422
 B	b1423	t1422
-P	p1423	String "thinT 2 thenT trivialT"
+P	p1423	String "autoT"
 O	o1423	ext_rule p1423
 T	t1423	o655 b1417 b4
 B	b1424	t1423

@@ -5179,7 +5179,7 @@ T	t1142	o b1138 b1142
 B	b1143	t1142
 T	t1143	o854 b1124 b1143
 B	b1144	t1143
-P	p1145	String "thinAllT 2 4 thenT trivialT"
+P	p1145	String "trivialT"
 O	o1145	ext_rule p1145
 T	t1145	o854 b1138 b4
 B	b1146	t1145

@@ -984,7 +984,7 @@ T	t576	o549 b566 b4
 B	b576	t576
 T	t439	o572 b548 b576 b4 b4
 B	b439	t439
-P	p578	String "thinT 2 thenT trivialT"
+P	p578	String "trivialT"
 O	o578	ext_rule p578
 T	t579	o549 b569 b4
 B	b579	t579

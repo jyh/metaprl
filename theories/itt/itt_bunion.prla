@@ -1335,7 +1335,7 @@ T	t846	o577 b845 b825
 B	b846	t846
 P	p850	String "equalTypeT << 'x >> << 'y >>"
 O	o850	ext_rule p850
-P	p866	String "thinAllT 2 3 thenT trivialT"
+P	p866	String "autoT"
 O	o866	ext_rule p866
 P	p884	String bunionElimination
 O	o884	rule p884

@@ -7434,7 +7434,7 @@ T	t3046	o b3046 b19
 B	b3047	t3046
 T	t3047	o2780 b3042 b3047
 B	b3048	t3047
-P	p3048	String "squashElim 2 3 thenT thinT 2 thenT trivialT"
+P	p3048	String "squashElim 2 3 thenT trivialT"
 O	o3048	ext_rule p3048
 T	t3048	o2780 b3046 b19
 B	b3049	t3048

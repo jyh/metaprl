@@ -3692,7 +3692,7 @@ T	t886	o b886 b4
 B	b896	t886
 T	t896	o802 b839 b896
 B	b897	t896
-P	p898	String "thinT 2 thenT trivialT"
+P	p898	String "trivialT"
 O	o901	ext_rule p898
 T	t907	o802 b886 b4
 B	b907	t907

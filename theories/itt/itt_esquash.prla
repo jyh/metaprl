@@ -6790,7 +6790,7 @@ T	t2303	o b2303 b4
 B	b2304	t2303
 T	t2304	o2286 b526 b2301 b2304 b4
 B	b2305	t2304
-P	p2305	String "thinT 3 thenT trivialT"
+P	p2305	String "trivialT"
 O	o2305	ext_rule p2305
 T	t2305	o527 b2282 b4
 B	b2306	t2305

@@ -26,8 +26,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
- * Author: Jason Hickey
- * jyh@cs.cornell.edu
+ * Author: Jason Hickey <jyh@cs.cornell.edu>
+ * Modified by: Aleksey Nogin <nogin@cs.cornell.edu>
  *
  *)
 
@@ -128,6 +128,7 @@ rule equalityTypeIsType 'H 'a 'b :
 topval nthHypT : int -> tactic
 topval thinT : int -> tactic
 topval thinAllT : int -> int -> tactic
+topval nthAssumT : int -> tactic
 topval assertT : term -> tactic
 (* do not assert if already have the right conclusion *)
 topval tryAssertT : term -> tactic -> tactic -> tactic

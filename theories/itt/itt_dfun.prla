@@ -1424,7 +1424,7 @@ H	h897	a2 t761
 S	s897	t552 h h896 h897
 G	s897	t578
 B	b897	s897
-P	p1011	String "thinT 3 thenT trivialT"
+P	p1011	String "trivialT"
 O	o1011	ext_rule p1011
 T	t3056	o569 b829 b4
 B	b3056	t3056
@@ -5264,7 +5264,7 @@ T	t2472	o b2468 b2472
 B	b2473	t2472
 T	t2473	o569 b2452 b2473
 B	b2474	t2473
-P	p2475	String "thinAllT 2 3 thenT trivialT"
+P	p2475	String "trivialT"
 O	o2475	ext_rule p2475
 P	p2501	String "withT << 'x >> (dT 4) thenT autoT"
 O	o2501	ext_rule p2501
@@ -5396,7 +5396,7 @@ T	t2668	o b2668 b4
 B	b2669	t2668
 T	t2669	o b2665 b2669
 B	b2670	t2669
-P	p2674	String "thinT 2 thenT trivialT"
+P	p2674	String "trivialT"
 O	o2674	ext_rule p2674
 P	p2684	String "withT << 'a >> (dT 3) thenT autoT"
 O	o2684	ext_rule p2684

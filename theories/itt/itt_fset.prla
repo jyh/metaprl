@@ -6161,7 +6161,7 @@ T	t2247	o b2247 b4
 B	b2248	t2247
 T	t2248	o1378 b2242 b2248
 B	b2249	t2248
-P	p2249	String "thinAllT 2 5 thenT autoT"
+P	p2249	String "autoT"
 O	o2249	ext_rule p2249
 T	t2249	o1378 b2247 b4
 B	b2250	t2249
@@ -6289,7 +6289,7 @@ T	t2304	o b2304 b4
 B	b2305	t2304
 T	t2305	o1378 b2297 b2305
 B	b2306	t2305
-P	p2306	String "dT 6"
+P	p2306	String "dT (-1)"
 O	o2306	ext_rule p2306
 S	s2306	t2102 h h2121 h2198 h2199 h2200 h2301
 G	s2306	t927
@@ -6312,13 +6312,13 @@ T	t2313	o b2309 b2313
 B	b2314	t2313
 T	t2314	o1378 b2304 b2314
 B	b2315	t2314
-P	p2315	String "thinAllT 2 6 thenT trivialT"
+P	p2315	String "trivialT"
 O	o2315	ext_rule p2315
 T	t2315	o1378 b2309 b4
 B	b2316	t2315
 T	t2316	o2315 b1376 b2316 b4 b4
 B	b2317	t2316
-P	p2317	String "dT 7"
+P	p2317	String "dT (-1) thenT autoT"
 O	o2317	ext_rule p2317
 S	s2317	t2102 h h2121 h2198 h2199 h2200 h2301 h2309
 G	s2317	t2272
@@ -6341,7 +6341,7 @@ T	t2324	o b2320 b2324
 B	b2325	t2324
 T	t2325	o1378 b2312 b2325
 B	b2326	t2325
-P	p2326	String "thinAllT 2 7 thenT trivialT"
+P	p2326	String "trivialT"
 O	o2326	ext_rule p2326
 T	t2326	o1378 b2320 b4
 B	b2327	t2326
@@ -6919,7 +6919,7 @@ T	t2561	o b2557 b2561
 B	b2562	t2561
 T	t2562	o1378 b2543 b2562
 B	b2563	t2562
-P	p2563	String "thinAllT 2 12 thenT trivialT"
+P	p2563	String "trivialT"
 O	o2563	ext_rule p2563
 T	t2563	o1378 b2557 b4
 B	b2564	t2563
@@ -7061,7 +7061,7 @@ T	t2622	o b2622 b4
 B	b2623	t2622
 T	t2623	o1378 b2613 b2623
 B	b2624	t2623
-P	p2624	String "thinAllT 2 4 thenT trivialT"
+P	p2624	String "trivialT"
 O	o2624	ext_rule p2624
 T	t2624	o1378 b2622 b4
 B	b2625	t2624
@@ -7759,7 +7759,7 @@ T	t2907	o1378 b2901 b4
 B	b2908	t2907
 T	t2908	o2907 b1376 b2908 b4 b4
 B	b2909	t2908
-P	p2909	String "thinAllT 4 7 thenT trivialT"
+P	p2909	String "trivialT"
 O	o2909	ext_rule p2909
 T	t2909	o1378 b2904 b4
 B	b2910	t2909
@@ -8377,7 +8377,7 @@ T	t3169	o b3169 b4
 B	b3170	t3169
 T	t3170	o1378 b3164 b3170
 B	b3171	t3170
-P	p3171	String "thinAllT 2 3 thenT trivialT"
+P	p3171	String "trivialT"
 O	o3171	ext_rule p3171
 T	t3171	o1378 b3169 b4
 B	b3172	t3171
@@ -9407,7 +9407,7 @@ T	t3603	o1378 b3597 b4
 B	b3604	t3603
 T	t3604	o7409 b1376 b3604 b4 b4
 B	b3605	t3604
-P	p3605	String "thinAllT 4 6 thenT trivialT"
+P	p3605	String "trivialT"
 O	o3605	ext_rule p3605
 T	t3605	o1378 b3600 b4
 B	b3606	t3605
@@ -13510,7 +13510,7 @@ T	t5324	o b5324 b4
 B	b5325	t5324
 T	t5325	o1378 b5319 b5325
 B	b5326	t5325
-P	p5326	String "thinAllT 6 7 thenT thinT 2 thenT trivialT"
+P	p5326	String "trivialT"
 O	o5326	ext_rule p5326
 T	t5326	o1378 b5324 b4
 B	b5327	t5326
@@ -15120,7 +15120,7 @@ T	t6026	o b6026 b4
 B	b6027	t6026
 T	t6027	o1378 b6021 b6027
 B	b6028	t6027
-P	p6028	String "thinAllT 5 6 thenT trivialT"
+P	p6028	String "trivialT"
 O	o6028	ext_rule p6028
 T	t6028	o1378 b6026 b4
 B	b6029	t6028
@@ -15861,7 +15861,7 @@ T	t6347	o b6347 b4
 B	b6348	t6347
 T	t6348	o1378 b6342 b6348
 B	b6349	t6348
-P	p6349	String "thinT 4 thenT trivialT"
+P	p6349	String "trivialT"
 O	o6349	ext_rule p6349
 T	t6349	o1378 b6347 b4
 B	b6350	t6349
@@ -18857,7 +18857,7 @@ T	t7629	o b7629 b4
 B	b7630	t7629
 T	t7630	o1378 b7624 b7630
 B	b7631	t7630
-P	p7631	String "thinAllT 2 3 thenT autoT"
+P	p7631	String "autoT"
 O	o7631	ext_rule p7631
 T	t7631	o1378 b7629 b4
 B	b7632	t7631
@@ -25556,7 +25556,7 @@ T	t10481	o1378 b10475 b4
 B	b10482	t10481
 T	t10482	o2907 b1376 b10482 b4 b4
 B	b10483	t10482
-P	p10483	String "thinAllT 4 8 thenT trivialT"
+P	p10483	String "trivialT"
 O	o10483	ext_rule p10483
 T	t10483	o1378 b10478 b4
 B	b10484	t10483
@@ -28283,13 +28283,13 @@ B	b14135	t14135
 T	t14136	o1378 b11698 b14135
 B	b14136	t14136
 H	h11706	v t11603
-P	p11713	String "thinT 3 thenT autoT"
+P	p11713	String "autoT"
 O	o11713	ext_rule p11713
 T	t11713	o1378 b11703 b4
 B	b11714	t11713
 T	t11714	o11713 b1376 b11714 b4 b4
 B	b11715	t11714
-P	p11715	String "rwh unfold_assert 2 thenT dT 2 thenT thinT 2 thenT trivialT"
+P	p11715	String "rwh unfold_assert 2 thenT dT 2 thenT trivialT"
 O	o11715	ext_rule p11715
 T	t14137	o1378 b5954 b4
 B	b14137	t14137
@@ -29663,7 +29663,7 @@ T	t12410	o b12410 b4
 B	b12411	t12410
 T	t14321	o1378 b5963 b12411
 B	b14321	t14321
-P	p12412	String "thinAllT 2 3 thenT autoT"
+P	p12412	String "autoT"
 O	o12412	ext_rule p12412
 T	t12412	o1378 b12410 b4
 B	b12413	t12412

@@ -2687,7 +2687,7 @@ T	t2241	o b2230 b2241
 B	b2242	t2241
 T	t2242	o1565 b4167 b2242
 B	b2243	t2242
-P	p2244	String "thinT 2 thenT trivialT"
+P	p2244	String "trivialT"
 O	o2244	ext_rule p2244
 P	p2259	String "assertT << subtype{'B1['x; 'x2]; 'B2['x; 'x2]} >>"
 O	o2259	ext_rule p2259
@@ -2824,7 +2824,7 @@ T	t2347	o b2343 b2347
 B	b2348	t2347
 T	t2348	o1565 b2327 b2348
 B	b2349	t2348
-P	p2350	String "thinAllT 2 4 thenT trivialT"
+P	p2350	String "trivialT"
 O	o2350	ext_rule p2350
 P	p2390	String "withT << 'x2 >> (dT 5) thenT autoT"
 O	o2390	ext_rule p2390

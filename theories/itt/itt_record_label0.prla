@@ -2320,7 +2320,7 @@ T	t864	o626 b850 b4
 B	b864	t864
 T	t865	o863 b625 b864 b4 b4
 B	b865	t865
-P	p865	String "onHypsT[5;3] thinT thenT autoT"
+P	p865	String "autoT"
 O	o865	ext_rule p865
 S	s865	t621 h h759 h760
 G	s865	t819
@@ -2633,7 +2633,7 @@ T	t991	o990 b625 b991 b4 b4
 B	b992	t991
 T	t992	o681 b983
 B	b993	t992
-P	p993	String "onHypsT [7;6;3] thinT thenT autoT"
+P	p993	String "autoT"
 O	o993	ext_rule p993
 T	t993	o626 b986 b4
 B	b994	t993

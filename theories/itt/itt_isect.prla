@@ -4614,7 +4614,7 @@ H	h968	x t954
 T	t971	o2 b968
 B	b971	t971
 T	t985	o807 b954 b713
-P	p996	String "thinT 2 thenT trivialT"
+P	p996	String "trivialT"
 O	o996	ext_rule p996
 T	t1000	o585 b713 b519 b519
 P	p1025	String topSubtype
@@ -7800,7 +7800,7 @@ T	t3659	o b3659 b4
 B	b3660	t3659
 T	t3660	o645 b3648 b3660
 B	b3662	t3660
-P	p3668	String "thinT (-1) thenT trivialT"
+P	p3668	String "trivialT"
 O	o3670	ext_rule p3668
 T	t3684	o645 b3659 b4
 B	b3684	t3684

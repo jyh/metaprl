@@ -40,8 +40,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
- * Author: Jason Hickey
- * @email{jyh@cs.caltech.edu}
+ * Author: Jason Hickey @email{jyh@cs.caltech.edu}
+ * Modified by: Aleksey Nogin @email{nogin@cs.cornell.edu}
  *
  * @end[license]
  *)
@@ -275,6 +275,9 @@ let nthHypT i p =
  *   @sequent{ext; {H; i@colon x@colon A; J}; C}}
  * $$
  *
+ * We also create a new version of @hreftactic[nthAssumT] tactic that knows how
+ * to do thinning. This new @tt[thinT] is added to @hreftactic[autoT].
+ *
  * @noindent
  * The @tactic[thinAllT] tactic thins a sequence of hypothesis.
  *
@@ -290,6 +293,28 @@ let nthHypT i p =
 let thinT i p =
    let i, j = Sequent.hyp_indices p i in
       thin i j p
+
+let nthAssumT i p =
+   let mseq = Sequent.msequent p in
+   let goal, assums = Refine.dest_msequent mseq in
+   let assum = List.nth assums (pred i) in
+   let index = Match_seq.match_hyps (explode_sequent goal) (explode_sequent assum) in
+   let rec tac j =
+      if j = 0 then idT else
+         match index.(pred j) with
+            Some _ ->
+               tac (pred j)
+          | None ->
+               thinT j thenT tac (pred j)
+   in
+      (tac (Sequent.hyp_count p) thenT nthAssumT i) p
+
+let trivial_resource =
+   Mp_resource.improve trivial_resource {
+      auto_name = "nthAssumT";
+      auto_prec = create_auto_prec [trivial_prec] [];
+      auto_tac = onSomeAssumT nthAssumT
+   }
 
 let thinAllT i j p =
    let rec tac j =

@@ -2135,7 +2135,7 @@ T	t1549	o b1549 b4
 B	b1550	t1549
 T	t1550	o1022 b1540 b1550
 B	b1551	t1550
-P	p1551	String "thinT 2 thenT trivialT"
+P	p1551	String "trivialT"
 O	o1551	ext_rule p1551
 T	t1551	o1022 b1549 b4
 B	b1552	t1551
@@ -2261,7 +2261,7 @@ T	t1625	o1110 b1349 b1624
 B	b1625	t1625
 T	t1626	o1110 b1346 b1625
 B	b1626	t1626
-P	p1626	String "rwh unfold_iff 0 thenT autoT thenT thinT 2 thenT trivialT"
+P	p1626	String "rwh unfold_iff 0 thenT autoT"
 O	o1626	ext_rule p1626
 T	t1627	o1024 b1623 b1355
 B	b1627	t1627
@@ -3283,7 +3283,7 @@ T	t2196	o1022 b2184 b4
 B	b2197	t2196
 T	t735	o1207 b1021 b2197 b4 b4
 B	b735	t735
-P	p2199	String "thinT 5 thenT trivialT"
+P	p2199	String "trivialT"
 O	o2199	ext_rule p2199
 T	t2199	o1022 b2193 b4
 B	b2200	t2199

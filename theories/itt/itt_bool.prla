@@ -1914,7 +1914,7 @@ T	t1565	o807 b1565 b1502
 B	b1566	t1565
 P	p1571	String "equalSymT thenT trivialT"
 O	o1571	ext_rule p1571
-P	p1573	String "thinT 2 thenT trivialT"
+P	p1573	String "autoT"
 O	o1573	ext_rule p1573
 P	p1578	String "assertT << 'e = bfalse in bool >> thenAT (equalSymT thenT trivialT)"
 O	o1578	ext_rule p1578
@@ -2281,7 +2281,7 @@ T	t1903	o609 b1780 b1895 b1891
 B	b1927	t1661
 P	p1942	String "revHypSubstT 2 0 thenT autoT"
 O	o1942	ext_rule p1942
-P	p1945	String "dT 4"
+P	p1945	String "dT 4 thenT autoT"
 O	o1945	ext_rule p1945
 P	p1966	String "revHypSubstT 3 0 thenT autoT"
 O	o1966	ext_rule p1966
@@ -2355,7 +2355,7 @@ G	s2138	t2000
 B	b2139	s2138
 T	t2139	o807 b2139 b1814
 B	b2140	t2139
-P	p2145	String "equalRefT << 'e2 >> thenT thinT 2 thenT trivialT"
+P	p2145	String "equalRefT << 'e2 >> thenT autoT"
 O	o2145	ext_rule p2145
 P	p2292	String trivialT
 O	o2292	ext_rule p2292
@@ -4261,7 +4261,7 @@ T	t5428	o b5428 b4
 B	b5429	t5428
 T	t5429	o805 b5422 b5429
 B	b5430	t5429
-P	p5430	String "thinT 4 thenT trivialT"
+P	p5430	String "autoT"
 O	o5430	ext_rule p5430
 T	t5430	o805 b5428 b4
 B	b5431	t5430
@@ -4290,7 +4290,7 @@ T	t5440	o b5440 b4
 B	b5441	t5440
 T	t5441	o805 b5403 b5441
 B	b5442	t5441
-P	p5442	String "rwh unfold_assert 2 thenT dT 2 thenT rw fold_assert 2 thenT thinT 4 thenT trivialT"
+P	p5442	String "rwh unfold_assert 2 thenT dT 2 thenT rw fold_assert 2 thenT autoT"
 O	o5442	ext_rule p5442
 T	t5442	o805 b5440 b4
 B	b5443	t5442
@@ -4449,7 +4449,7 @@ T	t5580	o b5580 b4
 B	b5581	t5580
 T	t5581	o805 b5574 b5581
 B	b5582	t5581
-P	p5582	String "thinT (-1) thenT trivialT"
+P	p5582	String "trivialT"
 O	o5582	ext_rule p5582
 T	t5582	o805 b5580 b4
 B	b5583	t5582
@@ -12899,7 +12899,7 @@ T	t2791	o805 b2774 b4
 B	b2792	t2791
 T	t2792	o2145 b804 b2792 b4 b4
 B	b2793	t2792
-P	p2793	String "thinT 2 thenT autoT"
+P	p2793	String "autoT"
 O	o2793	ext_rule p2793
 T	t2793	o805 b2787 b4
 B	b2794	t2793

@@ -4224,7 +4224,7 @@ T	t1675	o b1655 b1675
 B	b1676	t1675
 T	t1676	o570 b1635 b1676
 B	b1677	t1676
-P	p2300	String "thinT 2 thenT trivialT"
+P	p2300	String "trivialT"
 O	o1677	ext_rule p2300
 T	t1677	o570 b1655 b4
 B	b1678	t1677
@@ -5107,7 +5107,7 @@ T	t2106	o b2102 b2106
 B	b2107	t2106
 T	t2107	o570 b2091 b2107
 B	b2108	t2107
-P	p2109	String "thinAllT 2 4 thenT autoT"
+P	p2109	String "autoT"
 O	o2109	ext_rule p2109
 T	t2109	o570 b2102 b4
 B	b2110	t2109
@@ -5355,7 +5355,7 @@ T	t2230	o b2226 b2230
 B	b2231	t2230
 T	t2231	o570 b2222 b2231
 B	b2232	t2231
-P	p2233	String "thinT 2 thenT autoT"
+P	p2233	String "autoT"
 O	o2233	ext_rule p2233
 T	t2233	o572 b1922 b2396
 B	b2234	t2233

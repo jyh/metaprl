@@ -4549,7 +4549,7 @@ T	t2629	o b2629 b23
 B	b2630	t2629
 T	t2630	o1306 b2619 b2630
 B	b2631	t2630
-P	p2631	String "thinT 5 thenT autoT"
+P	p2631	String "autoT"
 O	o2631	ext_rule p2631
 T	t2631	o1306 b2629 b23
 B	b2632	t2631

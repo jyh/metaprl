@@ -28,7 +28,7 @@ extends Base_theory
 
 declare sequent { Term : Term >- Term } : Judgment
 
-interactive foo :
+interactive foo 'C :
    sequent { <H> >- 'C } -->
    sequent { <H> >- 'A }
 

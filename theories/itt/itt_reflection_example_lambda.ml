@@ -9,8 +9,8 @@ extends Itt_pairwise2
 
 open Basic_tactics
 
-define app_term: app_term <--> apply[@]{term[@];term[@]}
-define lambda_term: lambda_term <--> lambda[@]{x.term[@]}
+define app_term : app_term : Quote <--> apply[@]{term[@];term[@]}
+define lambda_term: lambda_term : Quote <--> lambda[@]{x.term[@]}
 
 define mk_app: mk_app <--> lambda {p. spread{'p; t1,t2. make_bterm{app_term; 't1::'t2::nil}}}
 

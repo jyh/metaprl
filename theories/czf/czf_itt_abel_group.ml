@@ -7,6 +7,7 @@ open Var
 open Base_dtactic
 open Base_auto_tactic
 
+(* axioms *)
 interactive op_commut {| intro[] |} 'H :
    sequent [squash] { 'H >- isset{'s1} } -->
    sequent [squash] { 'H >- isset{'s2} } -->

@@ -64,6 +64,7 @@ open Var
 
 open Dtactic
 open Auto_tactic
+open Top_conversionals
 
 open Itt_struct
 open Itt_record
@@ -93,7 +94,29 @@ define unfold_quotGroup : quotGroup{'A; 'B} <-->
 
 doc docoff
 
+let resource typeinf += (<<quotGroup{'A; 'B}>>, Typeinf.infer_map (fun t -> fst(two_subterms t)))
+
 let fold_quotGroup = makeFoldC << quotGroup{'A; 'B} >> unfold_quotGroup
+
+(************************************************************************
+ * REDUCTIONS                                                           *
+ ************************************************************************)
+
+interactive_rw reduce_quotGroup_car {| reduce |} :
+   (quotGroup{'A; 'B}^car) <--> (quot x, y: 'B^car // ('x *['B] ('B^inv 'y) in 'A^car subset 'B^car))
+
+interactive_rw reduce_quotGroup_op {| reduce |} :
+   (quotGroup{'A; 'B}^"*") <--> ('B^"*")
+
+interactive_rw reduce_quotGroup_inv {| reduce |} :
+   (quotGroup{'A; 'B}^inv) <--> ('B^inv)
+
+interactive_rw reduce_quotGroup_id {| reduce |} :
+   (quotGroup{'A; 'B}^"1") <--> ('B^"1")
+
+(************************************************************************
+ * RULES                                                                *
+ ************************************************************************)
 
 interactive quotG_equiv_type {| intro [intro_typeinf <<'B>>] |} group[i:l] :
    [wf] sequent { <H> >- subgroup[i:l]{'A; 'B} } -->
@@ -128,7 +151,7 @@ interactive quotGroup_abel {| intro [AutoMustComplete] |} :
 doc <:doc< 
    @begin[doc]
 
-   If <<normalSubg[i:l]{'A; 'B}>>, then $f: ('B -> <<quotGroup{'A; 'B}>>)$ defined by ??? is an epimorphism of $B$ to <<quotGroup{'A; 'B}>> with kernel $A$.
+   If <<normalSubg[i:l]{'A; 'B}>>, then $f: ('B -> <<quotGroup{'A; 'B}>>)$ defined by $f a = a$ is an epimorphism of $B$ to <<quotGroup{'A; 'B}>> with kernel $A$.
    @end[doc]
 >>
 interactive quotGroup_hom {| intro [AutoMustComplete; intro_typeinf <<'B>>] |} group[i:l] :
@@ -139,9 +162,23 @@ interactive quotGroup_epi {| intro [AutoMustComplete; intro_typeinf <<'B>>] |} g
    sequent { <H> >- normalSubg[i:l]{'A; 'B} } -->
    sequent { <H> >- lambda{a. 'a} in groupEpi{'B; quotGroup{'A; 'B}} }
 
-interactive quotGroup_ker {| intro [AutoMustComplete; intro_typeinf <<'B>>] |} group[i:l] :
+interactive quotGroup_ker_ext {| intro [AutoMustComplete; intro_typeinf <<'B>>] |} group[i:l] :
    sequent { <H> >- normalSubg[i:l]{'A; 'B} } -->
-   sequent { <H> >- groupKer{lambda{a. 'a}; 'B; quotGroup{'A; 'B}} = 'A in group[i:l] }
+   sequent { <H> >- groupExtEqual{groupKer{lambda{a. 'a}; 'B; quotGroup{'A; 'B}}; {car='A^car; "*"='A^"*"; "1"='A^"1"; inv='A^inv}} }
+
+doc <:doc< 
+   @begin[doc]
+
+   First Isomorphism Theorem for Groups. Let $f$ be a group epimorphism
+   from $B$ to $A$ and let $K$ be the kernel of $f$. Then $A$ is isomorphism
+   to the quotient group <<quotGroup{'K; 'B}>>.
+   @end[doc]
+>>
+interactive quotGroup_iso {| intro [AutoMustComplete; intro_typeinf <<'B>>] |} group[i:l] :
+   [wf] sequent { <H> >- 'A in group[i:l] } -->
+   [wf] sequent { <H> >- 'B in group[i:l] } -->
+   sequent { <H> >- 'f in groupEpi{'A; 'B} } -->
+   sequent { <H> >- lambda{a. ('f 'a)} in groupIso{quotGroup{groupKer{'f; 'A; 'B}; 'A}; 'B} }
 
 doc docoff
 

@@ -65,6 +65,7 @@ open Var
 
 open Dtactic
 open Auto_tactic
+open Top_conversionals
 
 open Itt_struct
 open Itt_record
@@ -145,6 +146,10 @@ interactive pregroup_intro {| intro [AutoMustComplete] |} :
    sequent { <H> >- 'G in {car: univ[i:l]; "*": ^car -> ^car -> ^car; "1": ^car; inv: ^car -> ^car} } -->
    sequent { <H> >- 'G in pregroup[i:l] }
 
+interactive pregroup_equality {| intro [AutoMustComplete] |} :
+   sequent { <H> >- 'A = 'B in {car: univ[i:l]; "*": ^car -> ^car -> ^car; "1": ^car; inv: ^car -> ^car} } -->
+   sequent { <H> >- 'A = 'B in pregroup[i:l] }
+
 interactive pregroup_elim {| elim [] |} 'H :
    sequent { <H>; G: {car: univ[i:l]; "*": ^car -> ^car -> ^car; "1": ^car; inv: ^car -> ^car}; <J['G]> >- 'C['G] } -->
    sequent { <H>; G: pregroup[i:l]; <J['G]> >- 'C['G] }
@@ -164,6 +169,11 @@ interactive group_intro {| intro [AutoMustComplete] |} :
    [wf] sequent { <H> >- 'G in pregroup[i:l] } -->
    [main] sequent { <H> >- isGroup{'G} } -->
    sequent { <H> >- 'G in group[i:l] }
+
+interactive group_equality {| intro [AutoMustComplete] |} :
+   sequent { <H> >- 'A = 'B in pregroup[i:l] } -->
+   [main] sequent { <H> >- isGroup{'A} } -->
+   sequent { <H> >- 'A = 'B in group[i:l] }
 
 interactive group_elim {| elim [] |} 'H :
    sequent { <H>; G: {car: univ[i:l]; "*": ^car -> ^car -> ^car; "1": ^car; inv: ^car -> ^car}; u: all x: 'G^car. all y: 'G^car. all z: 'G^car. (('x *['G] 'y) *['G] 'z = 'x *['G] ('y *['G] 'z) in 'G^car); v: all x: 'G^car. 'G^"1" *['G] 'x = 'x in 'G^car; w: all x: 'G^car. ('G^inv 'x) *['G] 'x = 'G^"1" in 'G^car; <J['G]> >- 'C['G] } -->
@@ -381,6 +391,36 @@ interactive id_commut2 {| intro [intro_typeinf <<'G>>] |} group[i:l] :
    sequent { <H> >- 'G in group[i:l] } -->
    sequent { <H> >- 'a in 'G^car } -->
    sequent { <H> >- 'a *['G] 'G^"1" = 'G^"1" *['G] 'a in 'G^car }
+
+(************************************************************************
+ * GROUP EQUALITY                                                       *
+ ************************************************************************)
+
+doc <:doc< 
+   @begin[doc]
+   @modsection{Extentional Group Equality}
+   @modsubsection{Rewrites}
+  
+   We define two groups as extentionally equal if their opeartions,
+   identities, and inverse operations are equal and their carriers
+   are extensionally equal.
+   @end[doc]
+>>
+define unfold_groupExtEqual : groupExtEqual{'A; 'B} <-->
+   (ext_equal{'A^car; 'B^car}) & ('A^"*" = 'B^"*" in 'A^car -> 'A^car -> 'A^car) & ('A^"1" = 'B^"1" in 'A^car) & ('A^inv = 'B^inv in 'A^car -> 'A^car)
+doc docoff
+
+let fold_groupExtEqual = makeFoldC << groupExtEqual{'A; 'B} >> unfold_groupExtEqual
+
+let groupExtEqualDT n = rw unfold_groupExtEqual n thenT dT n
+
+let resource intro +=
+   [<<groupExtEqual{'A; 'B}>>, wrap_intro (rw unfold_groupExtEqual 0 thenT dT 0);
+    <<"type"{groupExtEqual{'A; 'B}}>>, wrap_intro (rw unfold_groupExtEqual 0 thenT dT 0 thenT dT 0)
+   ]
+
+let resource elim +=
+   [<<groupExtEqual{'A; 'B}>>, groupExtEqualDT]
 
 (************************************************************************
  * ABELIAN GROUP                                                        *
@@ -627,21 +667,21 @@ doc <:doc<
   
    @end[doc]
 >>
-interactive lcoset_intro {| intro [intro_typeinf <<'G>>] |} group[i:l] 'x :
+interactive lcoset_intro {| intro [intro_typeinf_plusone <<'G>>] |} group[i:l] 'x :
    [main] sequent { <H> >- subgroup[i:l]{'S; 'G} } -->
    [wf] sequent { <H> >- 'b in 'G^car } -->
    [wf] sequent { <H> >- 'x in 'G^car } -->
    [main] sequent { <H> >- exst a: 'S^car. 'x = 'b *['G] 'a in 'G^car } -->
    sequent { <H> >- lcoset{'S; 'G; 'b} }
 
-interactive rcoset_intro {| intro [intro_typeinf <<'G>>] |} group[i:l] 'x :
+interactive rcoset_intro {| intro [intro_typeinf_plusone <<'G>>] |} group[i:l] 'x :
    [main] sequent { <H> >- subgroup[i:l]{'S; 'G} } -->
    [wf] sequent { <H> >- 'b in 'G^car } -->
    [wf] sequent { <H> >- 'x in 'G^car } -->
    [main] sequent { <H> >- exst a: 'S^car. 'x = 'a *['G] 'b in 'G^car } -->
    sequent { <H> >- rcoset{'S; 'G; 'b} }
 
-interactive lcoset_member_intro {| intro [intro_typeinf <<'G>>] |} group[i:l] 'a :
+interactive lcoset_member_intro {| intro [intro_typeinf_plusone <<'G>>] |} group[i:l] 'a :
    [main] sequent { <H> >- subgroup[i:l]{'S; 'G} } -->
    [wf] sequent { <H> >- 'b in 'G^car } -->
    [wf] sequent { <H> >- 'x1 = 'x2 in 'G^car } -->
@@ -649,7 +689,7 @@ interactive lcoset_member_intro {| intro [intro_typeinf <<'G>>] |} group[i:l] 'a
    [main] sequent { <H> >- 'x1 = 'b *['G] 'a in 'G^car } -->
    sequent { <H> >- 'x1 = 'x2 in lcoset{'S; 'G; 'b} }
 
-interactive rcoset_member_intro {| intro [intro_typeinf <<'G>>] |} group[i:l] 'a :
+interactive rcoset_member_intro {| intro [intro_typeinf_plusone <<'G>>] |} group[i:l] 'a :
    [main] sequent { <H> >- subgroup[i:l]{'S; 'G} } -->
    [wf] sequent { <H> >- 'b in 'G^car } -->
    [wf] sequent { <H> >- 'x1 = 'x2 in 'G^car } -->
@@ -911,6 +951,23 @@ doc docoff
 
 let fold_groupKer = makeFoldC << groupKer{'f; 'A; 'B}  >> unfold_groupKer
 
+let group_of_ker_term t =
+   let _, g, _ = three_subterms t in g
+
+let resource typeinf += (<<groupKer{'f; 'A; 'B}>>, Typeinf.infer_map group_of_ker_term)
+
+interactive_rw reduce_groupKer_car {| reduce |} :
+   (groupKer{'f; 'A; 'B}^car) <--> { x: 'A^car | 'f 'x = 'B^"1" in 'B^car }
+
+interactive_rw reduce_groupKer_op {| reduce |} :
+   (groupKer{'f; 'A; 'B}^"*") <--> ('A^"*")
+
+interactive_rw reduce_groupKer_inv {| reduce |} :
+   (groupKer{'f; 'A; 'B}^inv) <--> ('A^inv)
+
+interactive_rw reduce_groupKer_id {| reduce |} :
+   (groupKer{'f; 'A; 'B}^"1") <--> ('A^"1")
+
 doc <:doc< 
    @begin[doc]
    @modsubsection{Introduction}
@@ -1123,7 +1180,7 @@ interactive groupEpi_elim {| elim [elim_typeinf <<'B>>] |} 'H group[i:l] :
    [main] sequent { <H>; f: groupHom{'A; 'B}; u: squash{isSurjective{'f; 'A^car; ' B^car}}; <J['f]> >- 'C['f] } -->
    sequent { <H>; f: groupEpi{'A; 'B}; <J['f]> >- 'C['f] }
 
-interactive groupIso_intro {| intro [intro_typeinf <<'A>>] |} group[i:l] :
+interactive groupIso_intro {| intro [intro_typeinf <<'B>>] |} group[i:l] :
    [wf] sequent { <H> >- 'A in group[i:l] } -->
    [wf] sequent { <H> >- 'B in group[i:l] } -->
    [wf] sequent { <H> >- 'f in groupHom{'A; 'B} } -->

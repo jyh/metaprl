@@ -62,6 +62,7 @@ open Itt_fun
 declare pregroup[i:l]
 declare isGroup{'G}
 declare group[i:l]
+declare groupExtEqual{'A; 'B}
 declare abelg[i:l]
 declare subgroup[i:l]{'S; 'G}
 declare lcoset{'S; 'G; 'b}
@@ -90,6 +91,7 @@ prec prec_inv
 topval unfold_pregroup : conv
 topval unfold_isGroup : conv
 topval unfold_group : conv
+topval unfold_groupExtEqual : conv
 topval unfold_abelg : conv
 topval unfold_subgroup : conv
 topval unfold_lcoset : conv
@@ -111,6 +113,7 @@ topval fold_isGroup1 : conv
 topval fold_isGroup : conv
 topval fold_group1 : conv
 topval fold_group : conv
+topval fold_groupExtEqual : conv
 topval fold_abelg : conv
 topval fold_subgroup : conv
 topval fold_lcoset : conv

@@ -61,6 +61,7 @@ open Lm_printf
 open Basic_tactics
 
 open Itt_equal
+open Itt_rfun
 open Itt_struct
 open Itt_squash
 open Itt_int_base
@@ -80,23 +81,21 @@ define unfold_abs : abs{'a} <-->
 
 define unfold_let_in {| reduce |} : let_in{'e1; v.'e2['v]} <--> 'e2['e1]
 
-(* XXX: BUG: gcd should be _defined_ using the fix-point operator, instead of being postulated *)
-declare gcd{'a; 'b}
-
-prim_rw unfold_gcd : gcd{'a; 'b} <-->
-	(if 'a =@ 1 then 1 else
-	if 'b =@ 1 then 1 else
-	let_in{abs{'a}; a.
-	let_in{abs{'b}; b.
-		if 'a =@ 0 then 'b else
-		if 'b =@ 0 then 'a else
-		if 'a <@ 'b then gcd{'a; ('b %@ 'a)} else gcd{('a %@ 'b); 'b}
-	}}
-	)
+define unfold_gcd : gcd{'x; 'y} <-->
+	(fix{gcd.lambda{a.lambda{b.
+		if 'a =@ 1 then 1 else
+		if 'b =@ 1 then 1 else
+		let_in{abs{'a}; a.
+		let_in{abs{'b}; b.
+			if 'a =@ 0 then 'b else
+			if 'b =@ 0 then 'a else
+			if 'a <@ 'b then ('gcd 'a ('b %@ 'a)) else ('gcd ('a %@ 'b) 'b)
+		}}
+	}}} 'x 'y)
 
 let resource reduce += [
 	<<abs{number[i:n]}>>, unfold_abs;
-	<<gcd{number[i:n]; number[j:n]}>>, unfold_gcd;
+	<<gcd{number[i:n]; number[j:n]}>>, (unfold_gcd thenC reduce_fix);
 ]
 
 dform gcd_df1 : except_mode[src] :: gcd{'a; 'b}
@@ -184,9 +183,10 @@ define unfold_ge_bool_rat : ge_bool_rat{'a;'b} <--> le_bool_rat{'b;'a}
 define unfold_bneq_rat : bneq_rat{'x; 'y} <-->
 	spread{'x; x1,x2.spread{'y; y1,y2.(('x1 *@ 'y2) <>@ ('y1 *@ 'x2))}}
 
-(* XXX: BUG: beq_rat should be defined, not postulated *)
-declare beq_rat{'a; 'b}
-prim_rw reduce_beq_rat :
+define unfold_beq_rat : beq_rat{'x; 'y} <-->
+	spread{'x; a,b.spread{'y; c,d.beq_int{('a *@ 'd) ; ('c *@ 'b)}}}
+
+interactive_rw reduce_beq_rat :
    beq_rat{ ('a,'b) ; ('c,'d) } <--> beq_int{ ('a *@ 'd) ; ('c *@ 'b) }
 
 define unfold_lt_rat : lt_rat{'a;'b} <--> "assert"{lt_bool_rat{'a;'b}}

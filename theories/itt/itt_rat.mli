@@ -50,6 +50,8 @@ define unfold_int0 :
 
 define unfold_let_in : let_in{'e1; v.'e2['v]} <--> 'e2['e1]
 
+declare gcd{'a;'b}
+
 declare ratn{'a; 'b}
 topval fold_ratn : conv
 

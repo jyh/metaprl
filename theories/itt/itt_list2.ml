@@ -50,10 +50,7 @@ extends Itt_int_ext
 extends Itt_int_arith
 doc <:doc< @docoff >>
 
-open Refiner.Refiner.Term
-open Refiner.Refiner.TermOp
-open Dtactic
-open Top_conversionals
+open Basic_tactics
 
 open Itt_equal
 open Itt_rfun
@@ -246,6 +243,9 @@ doc <:doc<
 >>
 define unfold_length :
    length{'l} <--> list_ind{'l; 0; u, v, g. 'g +@ 1}
+
+define unfold_index :
+   Index{'l} <--> nat{length{'l}}
 
 doc <:doc<
    @begin[doc]
@@ -734,17 +734,13 @@ interactive length_cons_pos {| intro [intro_typeinf <<'h>>] |} 'T1 :
 interactive nth_wf {| intro [] |} :
    [wf] sequent { <H> >- "type"{'T} } -->
    [wf] sequent { <H> >- 'l in list{'T} } -->
-   [wf] sequent { <H> >- ge{'i; 0} } -->
-   [wf] sequent { <H> >- lt{'i; length{'l}} } -->
-   [wf] sequent { <H> >- 'i in int } -->
+   [wf] sequent { <H> >- 'i in Index{'l} } -->
    sequent { <H> >- nth{'l; 'i} in 'T }
 
 interactive replace_nth_wf {| intro [] |} :
    [wf] sequent { <H> >- "type"{'T} } -->
    [wf] sequent { <H> >- 'l in list{'T} } -->
-   [wf] sequent { <H> >- ge{'i; 0} } -->
-   [wf] sequent { <H> >- lt{'i; length{'l}} } -->
-   [wf] sequent { <H> >- 'i in int } -->
+   [wf] sequent { <H> >- 'i in Index{'l} } -->
    [wf] sequent { <H> >- 't in 'T } -->
    sequent { <H> >- replace_nth{'l; 'i; 't} in list{'T} }
 
@@ -753,6 +749,14 @@ interactive list_lengthzero {| elim [] |} 'H 'A :
    sequent { <H>; x: (length{'l} = 0 in int); <J[it]> >- 'l in list{'A} } -->
    sequent { <H>; x: (length{'l} = 0 in int); <J[it]>; y: 'l = nil in list{'A} >- 'C[it] } -->
    sequent { <H>; x: (length{'l} = 0 in int); <J['x]> >- 'C['x] }
+
+interactive index_mem {| intro [AutoMustComplete] |} :
+    sequent { <H> >- 'i in nat } -->
+    sequent { <H> >- 'i < length{'l} } -->
+    sequent { <H> >- 'i in Index{'l} }
+
+interactive index_is_int {| nth_hyp |} 'H :
+    sequent { <H>; i:Index{'l}; <J['i]> >- 'i in int }
 
 (*
  * Reverse.
@@ -798,6 +802,24 @@ interactive restrict_list {| intro[] |} :
    sequent { <H> >- 'l in list{'A} } -->
    sequent { <H> >- 'l in list{{x:'A | mem{'x;'l;'A}}} }
 
+interactive listTop {| nth_hyp |} 'H :
+   sequent { <H>; l : list{'A}; <J['l]> >- 'l in list{top} }
+
+interactive listTop2 {| intro[AutoMustComplete; intro_typeinf <<'l>>] |} list{'A} :
+   sequent { <H> >- 'l in list{'A} } -->
+   sequent { <H> >- 'l in list{top} }
+
+interactive list_elements_id {| intro [] |} :
+   [wf] sequent { <H> >- 'l in list{top} } -->
+   sequent { <H> >- 'l ~ list_ind{'l; nil; h,t,r. cons{nth{'l; length{'l} -@ length{'t} -@ 1}; 'r}}}
+
+interactive listSquiggle :
+   [wf] sequent { <H> >- 'l1 in list{top} } -->
+   [wf] sequent { <H> >- 'l2 in list{top} } -->
+   [wf] sequent { <H> >- length{'l1} = length{'l2} in nat } -->
+   sequent { <H>; i: Index{'l1} >- nth{'l1; 'i} ~ nth{'l2; 'i} } -->
+   sequent { <H> >- 'l1 ~ 'l2 }
+
 doc <:doc<
    @begin[doc]
    @rules
@@ -817,24 +839,21 @@ interactive all_list_map  {| intro[] |} :
    sequent { <H> >-  all_list{'l; x. 'P['f('x)]} } -->
    sequent { <H> >- all_list{map{'f;'l};  y. 'P['y]} }
 
-interactive all_list_intro  {| intro[AutoMustComplete; intro_typeinf <<'l>>] |} list{'A} :
+interactive all_list_intro  {| intro[] |} :
+   sequent { <H> >- 'l in list{top}  } -->
+   sequent { <H>; i:Index{'l}  >- 'P[nth{'l;'i}]  } -->
+   sequent { <H> >- all_list{'l;  x. 'P['x]} }
+
+interactive all_list_intro1  {| intro[SelectOption 1;  intro_typeinf <<'l>>] |} list{'A} :
    sequent { <H> >- 'A Type  } -->
    sequent { <H> >- 'l in list{'A}  } -->
    sequent { <H>; x:'A; mem{'x; 'l; 'A}  >- 'P['x]  } -->
    sequent { <H> >- all_list{'l;  x. 'P['x]} }
 
-
-interactive all_list_elim1 {| elim[elim_typeinf <<'l>>] |} 'H list{'A} 'a :
-   sequent { <H>; u: all_list{'l;  x. 'P['x]}; <J['u]> >- 'l in list{'A}  } -->
-   sequent { <H>; u: all_list{'l;  x. 'P['x]}; <J['u]> >- 'a in {x: 'A | mem{'x;'l;'A} } } -->
-   sequent { <H>; u: all_list{'l;  x. 'P['x]}; <J['u]>; 'P['a] >- 'C['u] } -->
-   sequent { <H>; u: all_list{'l;  x. 'P['x]}; <J['u]> >- 'C['u] }
-
-interactive all_list_elim {| elim[elim_typeinf <<'l>>] |} 'H list{'A} 'a :
-   sequent { <H>; u: all_list{'l;  x. 'P['x]}; <J['u]> >- 'l in list{'A}  } -->
-   sequent { <H>; u: all_list{'l;  x. 'P['x]}; <J['u]> >- 'a in 'A  } -->
-   sequent { <H>; u: all_list{'l;  x. 'P['x]}; <J['u]> >- mem{'a;'l;'A}  } -->
-   sequent { <H>; u: all_list{'l;  x. 'P['x]}; <J['u]>; 'P['a] >- 'C['u] } -->
+interactive all_list_elim {| elim[] |} 'H  'i :
+   sequent { <H>; u: all_list{'l;  x. 'P['x]}; <J['u]> >- 'l in list{top}  } -->
+   sequent { <H>; u: all_list{'l;  x. 'P['x]}; <J['u]> >- 'i in Index{'l}  } -->
+   sequent { <H>; u: all_list{'l;  x. 'P['x]}; <J['u]>; 'P[nth{'l;'i}] >- 'C['u] } -->
    sequent { <H>; u: all_list{'l;  x. 'P['x]}; <J['u]> >- 'C['u] }
 
 interactive all_list_witness_wf  {| intro[intro_typeinf <<'l>>] |} list{'A} :
@@ -843,9 +862,8 @@ interactive all_list_witness_wf  {| intro[intro_typeinf <<'l>>] |} list{'A} :
    sequent { <H>; x:'A; mem{'x; 'l; 'A} >- 'p['x] in 'P['x]  } -->
    sequent { <H> >- all_list_witness{'l;  x. 'p['x]} in all_list{'l;  x. 'P['x]} }
 
-interactive all_list_witness_wf2  {| intro[intro_typeinf <<'l>>] |} list{'A} :
-   sequent { <H> >- 'A Type  } -->
-   sequent { <H> >- 'l in list{'A}  } -->
+interactive all_list_witness_wf2  {| intro[] |} :
+   sequent { <H> >- 'l in list{top}  } -->
    sequent { <H> >- all_list{'l;  x. 'p['x] in 'P['x]}  } -->
    sequent { <H> >- all_list_witness{'l;  x. 'p['x]} in all_list{'l;  x. 'P['x]} }
 

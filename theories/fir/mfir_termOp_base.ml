@@ -70,10 +70,7 @@ let check_basics opname arities t =
  *)
 
 let get_params t =
-   let { term_op = op } = dest_term t in
-   let { op_params = param_list } = dest_op op in
-      List.map dest_param param_list
-
+   dest_params (dest_op (dest_term t).term_op).op_params
 
 (*
  * Take a list of param' elts and make a list of param elts.

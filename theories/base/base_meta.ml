@@ -107,7 +107,7 @@ ml_rw reduce_meta_rem  : ('goal : meta_rem[a:n, b:n]) =
  *)
 let eq goal =
    let true_term, false_term = two_subterms goal in
-   let flag = match List.map dest_param (dest_op (dest_term goal).term_op).op_params with
+   let flag = match dest_params (dest_op (dest_term goal).term_op).op_params with
       [ Number i1; Number i2 ] ->
          Mp_num.eq_num i1 i2
     | [ String s1; String s2 ]
@@ -130,7 +130,7 @@ ml_rw reduce_meta_eq_lev : ('goal : meta_eq[a:l,b:l]{'tt; 'ff}) = eq goal
 
 let lt goal =
    let true_term, false_term = two_subterms goal in
-   let flag = match List.map dest_param (dest_op (dest_term goal).term_op).op_params with
+   let flag = match dest_params (dest_op (dest_term goal).term_op).op_params with
       [ Number i1; Number i2 ] ->
          Mp_num.lt_num i1 i2
     | [ String s1; String s2 ] ->

@@ -134,6 +134,7 @@ prim is_same_op_wf {| intro [] |} :
    sequent { <H> >- is_same_op{'op_1;'op_2} in bool }
    = it
 
+
 prim is_same_op_ref {| intro [] |} :
    [wf] sequent { <H> >- 'op in BOperator } -->
    sequent { <H> >- "assert"{is_same_op{'op;'op}} }
@@ -201,6 +202,13 @@ interactive bind1_wf {| intro [] |} :
    sequent { <H> >- 'op in BOperator } -->
    sequent { <H> >- bind{'op} in  BOperator }
 
+interactive is_same_op_wf2 {| intro [] |} :
+   sequent { <H> >- 'op_1 in Operator } -->
+   sequent { <H> >- 'op_2 in Operator } -->
+   sequent { <H> >- is_same_op{'op_1;'op_2} in bool }
+
+
+
 doc <:doc< @begin[doc]
    Properties of the operators.
 @end[doc] >>
@@ -255,6 +263,8 @@ interactive shape_int_list1 {| intro [] |} :
 interactive shape_int_list2 {| intro [] |} :
    sequent { <H> >- 'op1 = 'op2 in Operator } -->
    sequent { <H> >- shape{'op1} ~ shape{'op2} }
+
+
 
 doc <:doc< @begin[doc]
 @end[doc] >>

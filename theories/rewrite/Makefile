@@ -39,5 +39,5 @@ $(addsuffix .cmiz, $(MFILES)) $(addsuffix .cmoz, $(MFILES)): $(ROOT)/filter/prlc
 $(addsuffix .p4i, $(MFILES)) $(addsuffix .p4, $(MFILES)): $(ROOT)/filter/prlcomp.cma
 
 # Real makefile
-include $(ROOT)/mk/config
+include $(ROOT)/mk/rules
 include Makefile.dep

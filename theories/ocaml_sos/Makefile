@@ -33,5 +33,5 @@ clean::
 	$(RM) -f *.p4* *.pp*
 
 # Real makefile
-include $(ROOT)/mk/config
+include $(ROOT)/mk/rules
 include Makefile.dep

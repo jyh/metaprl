@@ -32,5 +32,5 @@ clean::
 	$(RM) *.p4* *.pp* tptp_lex.ml
 
 # Real makefile
-include $(ROOT)/mk/config
+include $(ROOT)/mk/rules
 include Makefile.dep

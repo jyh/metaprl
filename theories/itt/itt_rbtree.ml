@@ -289,7 +289,7 @@ doc <:doc<
 >>
 
 define rbtree_set {| reduce |} : rbtree_set{'ord} <-->
-   {car = bisect{BTree{{data:'ord^car}};. SortedTree{'ord;t.top} isect BinTree{(color:Color)}};
+   {car = bisect{BTree{{data:'ord^car}};. SortedTree{'ord;t.top} isect BinTree{ {color:Color} }};
     empty = emptytree;
     insert = lambda {s. lambda {a. insert{{data='a}; 's; 'ord}}};
     member = lambda {s. lambda {a. is_in_tree{'a; 's; 'ord}}}

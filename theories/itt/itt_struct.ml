@@ -369,7 +369,7 @@ doc <:doc<
    @rulebox{substT; (1 + 2 = 3 @in @int)@space@tt[0];
       @ldots @i{equality} @ldots <<sequent{ <H> >- <:doc<1 + 2 = 3 @in @int>>}>>@cr
       @ldots @i{main} @ldots <<sequent{ <H> >- <:doc<3 < 1 * 3>>}>>@cr
-      @ldots @i{wf} @ldots <<sequent{ <H>; x: (<:doc<@int>>) >- "type"{.<:doc<(x < 1 * x)>>}}>>;
+      @ldots @i{wf} @ldots <<sequent{ <H>; x: (<:doc<@int>>) >- "type"{<:doc<(x < 1 * x)>>}}>>;
       <<sequent{ <H> >- <:doc< (1 + 2) < 1 * (1 + 2)>>}>>}
    $$
 

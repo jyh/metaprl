@@ -508,7 +508,15 @@ doc <:doc<
    @end[doc]
 >>
 define unfold_Z : Z <-->
-   {car=int; "*"=lambda{x. lambda{y. 'x *@ 'y}}; "+"=lambda{x. lambda{y. 'x +@ 'y}}; "0"=0; neg=lambda{x. (-'x)}}
+	{
+		car=int;
+		"*"=lambda{x. lambda{y. 'x *@ 'y}};
+		"+"=lambda{x. lambda{y. 'x +@ 'y}};
+		"0"=0;
+		neg=lambda{x. (-'x)};
+		eq=lambda{x.lambda{y.beq_int{'x;'y}}};
+		"1"=1
+	}
 doc docoff
 
 let fold_Z = makeFoldC << Z >> unfold_Z

@@ -108,12 +108,23 @@ let test4 () =
 
 let test5 () =
    print_string "\n\n*** Beginning test 5...\n\n";
-      let t = <<
+   let t = <<
       Mp_mc_fir_exp!matchExp{ 0;
          cons{ matchCase{ 'dummy_label;
                           int_set{ cons{ interval{0; 0}; nil } };
                           'success};
          nil }} >> in
+   print_simple_term t;
+   print_string "\n\nApplying firExpEvalC...\n\n";
+   let t = apply_rewrite firExpEvalC t in
+   print_simple_term t;
+   print_string "\n"
+
+let test6 () =
+   print_string "\n\n*** Beginning test 6...\n\n";
+   let t = <<
+      letUnop{ tyInt; idOp; atomInt{0}; y.
+      setSubscript{ 'subop; 'label; 'y; 'atom1; 'ty; 'atom2; 'y }} >> in
    print_simple_term t;
    print_string "\n\nApplying firExpEvalC...\n\n";
    let t = apply_rewrite firExpEvalC t in
@@ -129,4 +140,5 @@ let _ =
    test2 ();
    test3 ();
    test4 ();
-   test5 ()
+   test5 ();
+   test6 ()

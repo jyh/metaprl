@@ -1,8 +1,54 @@
+(*!
+ * @spelling{gt_bool le_bool ge_bool gt le ge nequal mul div rem}
+ *
+ * @begin[doc]
+ * @theory[Itt_int_ext]
+ *
+ * Some more about integers
+ * @end[doc]
+ *
+ * ----------------------------------------------------------------
+ *
+ * @begin[license]
+ * This file is part of MetaPRL, a modular, higher order
+ * logical framework that provides a logical programming
+ * environment for OCaml and other languages.
+ *
+ * See the file doc/index.html for information on Nuprl,
+ * OCaml, and more information about this system.
+ *
+ * Copyright (C) 1998 Jason Hickey, Cornell University
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *
+ * Author: Yegor Bryukhov
+ * @email{ynb@mail.ru}
+ * @end[license]
+ *)
+
+(*!
+ * @begin[doc]
+ * @parents
+ * @ned[doc]
+ *)
 include Itt_equal
 include Itt_rfun
 include Itt_logic
 include Itt_bool
 include Itt_int_base
+(*! @docoff *)
 
 open Printf
 open Mp_debug
@@ -26,50 +72,42 @@ open Itt_struct
 (************************************************************************
  * TERMS                                                                *
  ************************************************************************)
-
+(*!
+ * @begin[doc]
+ * @terms
+ * Multiplicative operations on int
+ * @end[doc]
+ *)
 declare "mul"{'a; 'b}
 declare "div"{'a; 'b}
 declare "rem"{'a; 'b}
-
-prim mul_wf 'H :
-   [wf] sequent [squash] { 'H >- 'a = 'a1 in int } -->
-   [wf] sequent [squash] { 'H >- 'b = 'b1 in int } -->
-   sequent ['ext] { 'H >- 'a *@ 'b = 'a1 *@ 'b1 in int } = it
 
 (*
  Definitions of >b <=b >=b
  *)
 
-declare gt_bool{'a; 'b}
-
-declare le_bool{'a; 'b}
-
-declare ge_bool{'a; 'b}
-
-prim_rw unfold_gt_bool :
+(*!
+ * @begin[doc]
+ * More order relation operations
+ * @end[doc]
+ *)
+define unfold_gt_bool :
    gt_bool{'a; 'b} <--> lt_bool{'b; 'a}
 
-prim_rw unfold_le_bool :
+define unfold_le_bool :
    le_bool{'a; 'b} <--> bnot{lt_bool{'b; 'a}}
 
-prim_rw unfold_ge_bool :
+define unfold_ge_bool :
    ge_bool{'a; 'b} <--> bnot{lt_bool{'a; 'b}}
 
-declare bneq_int{'a; 'b}
-
-prim_rw unfold_bneq_int :
+define unfold_bneq_int :
    bneq_int{'a; 'b} <--> bnot{beq_int{'a; 'b}}
 
 (*
  Prop-int-relations definitions
  *)
 
-declare gt{'a; 'b}
-
-prim_rw unfold_lt :
-   lt{'a; 'b} <--> "assert"{lt_bool{'a; 'b}}
-
-prim_rw unfold_gt :
+define unfold_gt :
    gt{'a; 'b} <--> ('b < 'a)
 
 (*
@@ -87,22 +125,28 @@ prim_rw unfold_ge 'H :
    sequent ['ext] { 'H >- 'a >= 'b <--> ('a < 'b) \/ ('a = 'b in int) }
 *)
 
-declare le{'a; 'b}
-
-declare ge{'a; 'b}
-
-declare nequal{'a; 'b}
-
-prim_rw unfold_le :
+define unfold_le :
    le{'a; 'b} <--> "assert"{le_bool{'a; 'b}}
 
-prim_rw unfold_ge :
+define unfold_ge :
    ge{'a; 'b} <--> ('b <= 'a)
 
-prim_rw unfold_neq_int :
+define unfold_neq_int :
    nequal{'a; 'b} <--> "assert"{bneq_int{'a; 'b}}
 
-nteractive_rw lt_mulPositMono 'H 'c:
+(*! @docoff *)
+
+(*!
+ * @begin[doc]
+ * @thysection{Well-formedness and algebraic properties of @tt[mul]}
+ * @end[doc]
+ *)
+prim mul_wf {| intro_resource []; eqcd_resource |} 'H :
+   [wf] sequent [squash] { 'H >- 'a = 'a1 in int } -->
+   [wf] sequent [squash] { 'H >- 'b = 'b1 in int } -->
+   sequent ['ext] { 'H >- 'a *@ 'b = 'a1 *@ 'b1 in int } = it
+
+interactive_rw lt_mulPositMono 'H 'c:
    (0 < 'c ) -->
    ('a IN int ) -->
    ('b IN int ) -->
@@ -146,6 +190,11 @@ interactive_rw lt_mulNegMono 'H 'c:
    ('c IN int ) -->
    lt_bool{'a; 'b} <--> lt_bool{('c *@ 'b) ; ('c *@ 'a)} 
 
+(*!
+ * @begin[doc]
+ * @thysection{@tt[rem] definition and well-formedness}
+ * @end[doc]
+ *)
 prim_rw rem_baseReduce 'H:
    (0 <= 'a ) -->
    ('a < 'b ) -->
@@ -160,12 +209,17 @@ prim_rw rem_indReduce 'H:
    ('c IN int ) -->
    ((('a *@ 'b) +@ 'c) rem 'b) <--> ('c rem 'b) 
 
-interactive rem_wf 'H :
+interactive rem_wf {| intro_resource []; eqcd_resource |} 'H :
    sequent [squash] { 'H >- "nequal"{'b ; 0} } -->
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    [wf] sequent [squash] { 'H >- 'b IN int } -->
    sequent ['ext] { 'H >- ('a rem 'b) IN int }
 
+(*!
+ * @begin[doc]
+ * @thysection{@tt[div] definition and properties}
+ * @end[doc]
+ *)
 prim_rw div_baseReduce 'H:
    (0 <= 'a ) -->
    ('a < 'b ) -->
@@ -180,7 +234,7 @@ prim_rw div_indReduce 'H:
    ('c IN int ) -->
    ((('a *@ 'b) +@ 'c) /@ 'b) <--> ('a +@ ('c /@ 'b)) 
 
-interactive div_wf 'H :
+interactive div_wf {| intro_resource []; eqcd_resource |} 'H :
    sequent [squash] { 'H >- "nequal"{'b ; 0} } -->
    [wf] sequent [squash] { 'H >- 'a IN int } -->
    [wf] sequent [squash] { 'H >- 'b IN int } -->

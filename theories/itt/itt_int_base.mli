@@ -1,3 +1,36 @@
+(*
+ * Basic properties of integers
+ *
+ * ----------------------------------------------------------------
+ *
+ * This file is part of MetaPRL, a modular, higher order
+ * logical framework that provides a logical programming
+ * environment for OCaml and other languages.
+ *
+ * See the file doc/index.html for information on Nuprl,
+ * OCaml, and more information about this system.
+ *
+ * Copyright (C) 1998 Jason Hickey, Cornell University
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *
+ * Author: Yegor Bryukhov
+ * ynb@mail.ru
+ *
+ *)
+
 include Itt_equal
 include Itt_rfun
 include Itt_logic
@@ -20,6 +53,16 @@ declare uni_minus{'a}
 
 declare beq_int{'a; 'b}
 declare lt_bool{'a; 'b}
+
+define unfold_sub :
+   "sub"{'a ; 'b} <--> ('a +@ uni_minus{'b})
+
+(*
+ Prop-int-lt definition
+ *)
+
+define unfold_lt :
+   lt{'a; 'b} <--> "assert"{lt_bool{'a; 'b}}
 
 rule add_wf 'H :
    [wf] sequent [squash] { 'H >- 'a = 'a1 in int } -->
@@ -76,13 +119,6 @@ rewrite beq_int_is_true 'H :
 rule eq_2beq_int 'H :
    sequent [squash] { 'H >- 'a = 'b in int } -->
    sequent ['ext] { 'H >- "assert"{beq_int{'a; 'b}} }
-
-(*
- Prop-int-lt definition
- *)
-
-define unfold_lt :
-   lt{'a; 'b} <--> "assert"{lt_bool{'a; 'b}}
 
 (************************************************************************
  * RULES                                                                *
@@ -253,9 +289,6 @@ rewrite sub_reduce 'H :
    [wf] sequent [squash] { 'H >- 'b IN int } -->
    sequent ['ext] { 'H >- 'a -@ 'b <--> 'a +@ uni_minus{'b}
 *)
-
-define unfold_sub :
-   "sub"{'a ; 'b} <--> ('a +@ uni_minus{'b})
 
 rewrite uni_add_Distrib 'H :
    ('a IN int ) -->

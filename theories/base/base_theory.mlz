@@ -29,7 +29,7 @@ doc <:doc<
    introduction and elimination reasoning to the @hreftactic[dT] tactic.
 
    The @tt[Base_theory] module itself defines no new primitives; it
-   simply bring together all the parts of the base logic into a unified
+   simply brings together all the parts of the base logic into a unified
    module.  Descendent theories (such as the @MartinLof-style Type Theory, Section
    @refmodule[Itt_theory], and the Constructive Set Theory Section @refmodule[Czf_itt_theory])
    include the @hrefmodule[Base_theory] directly.

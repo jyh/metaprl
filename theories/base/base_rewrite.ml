@@ -110,7 +110,7 @@ prim_rw rewriteAxiom2 'a 'b : (Perv!"rewrite"{'a; 'b}) --> 'a <--> 'b
 doc <:doc< 
    @begin[doc]
    A rule for symmetry is also defined.  The rules for symmetry and
-   transitivity and symmetry can be derived from reflexivity @hrefrule[rewriteAxiom1] and
+   transitivity can be derived from reflexivity @hrefrule[rewriteAxiom1] and
    substitution @hrefrewrite[rewriteAxiom2].
    @end[doc]
 >>

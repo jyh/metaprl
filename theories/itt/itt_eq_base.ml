@@ -56,6 +56,8 @@ doc <:doc<
 extends Itt_equal
 extends Itt_squiggle
 extends Itt_esquash
+extends Itt_bisect
+extends Itt_subset
 
 doc <:doc<
    @doc{
@@ -63,7 +65,6 @@ doc <:doc<
       of these constructors.
    }
 >>
-extends Itt_isect
 extends Itt_quotient
 extends Itt_ext_equal
 extends Itt_logic
@@ -71,11 +72,19 @@ extends Itt_antiquotient
 
 doc "doc"{terms}
 declare base
+define unfold_base : base{'T} <--> 'T isect base
 doc docoff
 
 dform base_df : except_mode[src] :: base = `"Base"
+dform base_op_df : except_mode[src] :: base{'T} =
+   `"Base(" slot["no"]{'T} `")"
 
-doc "doc"{rules}
+doc <:doc<
+   @begin[doc]
+   @rules
+   @modsubsection{The $base$ type.}
+   @end[doc]
+>>
 
 prim base_univ {| intro [] |} :
    sequent { <H> >- base in univ[i:l] } = it
@@ -97,5 +106,27 @@ prim base_eq :
 
 interactive base_top {| intro [] |} :
    sequent { <H> >- ext_equal {top; quot x,y:base // "true"} }
+
+doc <:doc< @doc{@modsubsection{The propepries of the $base{`""}$ type constructor}} >>
+
+interactive base_op_wf {| intro [] |} :
+   sequent { <H> >- 'T Type } -->
+   sequent { <H> >- base{'T} Type }
+
+interactive base_op_univ {| intro [] |} :
+   sequent { <H> >- 'T in univ[i:l] } -->
+   sequent { <H> >- base{'T} in univ[i:l] }
+
+interactive base_subtype {| intro [] |} :
+   sequent { <H> >- 'T Type } -->
+   sequent { <H> >- base{'T} subtype base }
+
+interactive base_subset {| intro [] |} :
+   sequent { <H> >- 'T Type } -->
+   sequent { <H> >- base{'T} subset base }
+
+interactive base_op_eq {| intro [] |} :
+   sequent { <H> >- 'T Type } -->
+   sequent { <H> >- ext_equal{quot x,y:base{'T}//('x = 'y in 'T); 'T} }
 
 doc docoff

@@ -61,10 +61,13 @@ MPFILES :=\
 	itt_derive\
 	itt_prop_decide\
 	itt_fset\
-	itt_pointwise2\
 	itt_antiquotient\
+	itt_singleton\
+	itt_subset\
+	itt_subset2\
 	itt_eq_base\
 	itt_theory\
+	itt_pointwise2\
 	itt_collection\
 	ctt_markov\
 	itt_record_label0\
@@ -81,9 +84,6 @@ MPFILES :=\
 	itt_sortedtree\
 	itt_rbtree\
 	itt_sort\
-	itt_singleton\
-	itt_subset\
-	itt_subset2\
 	itt_grouplikeobj\
 	itt_group\
 	itt_cyclic_group\
@@ -91,7 +91,7 @@ MPFILES :=\
 	itt_ring\
 	itt_field\
 	itt_ring2\
-        itt_unitring\
+    itt_unitring\
 	itt_field2\
 	itt_poly\
 	itt_order\

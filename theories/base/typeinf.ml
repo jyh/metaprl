@@ -47,6 +47,8 @@ open Refiner.Refiner.RefineError
 open Term_match_table
 open Mp_resource
 
+open Tactic_boot_sig
+
 open Tactic_type
 open Tactic_type.Tacticals
 open Tactic_type.Sequent
@@ -66,16 +68,10 @@ let _ =
  * The subst_fun gets a clause from the current sequent or its
  * assumptions.
  *)
-type typeinf_subst_fun = term_subst -> (string option * term) -> term_subst
 type typeinf_subst_info = term * typeinf_subst_fun
 type typeinf_subst_data = (typeinf_subst_fun, typeinf_subst_fun) term_table
 
 resource (typeinf_subst_info, typeinf_subst_fun, typeinf_subst_data, unit) typeinf_subst_resource
-
-(*
- * This is the type of the inference algorithm.
- *)
-type typeinf_func = eqnlist -> term -> eqnlist * term
 
 (*
  * Modular components also get a recursive instance of

@@ -28,43 +28,34 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
- * Author: Jason Hickey
- * jyh@cs.cornell.edu
+ * Author: Jason Hickey <jyh@cs.cornell.edu>
+ * Modified by: Alexey Nogin <nogin@cs.cornell.edu>
  *)
 
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermSubst
+
+open Tactic_boot_sig
 
 open Tactic_type
 open Tactic_type.Sequent
 open Tactic_type.Tacticals
 
 (*
- * This resource is used to analyze the sequent to gather type info.
- * The subst_fun gets a clause from the current sequent or its
- * assumptions.
+ * The types of the main type inference functions, 
+ * typeinf_subst_fun and typeinf_func
+ * are described in filter/boot/tactic_boot_sig.mlz
  *)
-type typeinf_subst_fun = term_subst -> (string option * term) -> term_subst
+
+(*
+ * This resource is used to analyze the sequent to gather type info.
+ *)
 type typeinf_subst_info = term * typeinf_subst_fun
 type typeinf_subst_data
 
 resource (typeinf_subst_info, typeinf_subst_fun, typeinf_subst_data, unit) typeinf_subst_resource
 
 val get_typeinf_subst_resource : string -> typeinf_subst_resource
-
-(*
- * A type inference is performed in a type context,
- * which maps variables to type.
- *
- * The inference infers the type for a term in the given context,
- * or it throws the exception (TypeInfer t) for a term "t" that
- * doesn't have an inferable type.
- *)
-
-(*
- * This is the type of the inference algorithm.
- *)
-type typeinf_func = eqnlist -> term -> eqnlist * term
 
 (*
  * Modular components also get a recursive instance of

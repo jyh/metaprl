@@ -50,7 +50,6 @@ open Var
 open Tactic_type.Sequent
 open Tactic_type.Tacticals
 open Tactic_type.Conversionals
-open Typeinf
 
 open Base_dtactic
 
@@ -340,7 +339,7 @@ let typeinf_resource = Mp_resource.improve typeinf_resource (inr_term, inf_inr)
 (*
  * Type of decide.
  *)
-let inf_decide (inf : typeinf_func) (decl : eqnlist) (t : term) =
+let inf_decide inf decl t =
    let e, x, a, y, b = dest_decide t in
    let decl', e' = inf decl e in
    let l, r = dest_union e' in

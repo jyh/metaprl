@@ -47,7 +47,6 @@ open Refiner.Refiner.RefineError
 open Mp_resource
 
 open Var
-open Typeinf
 open Base_dtactic
 
 open Tactic_type
@@ -422,10 +421,10 @@ let typeinf_resource = Mp_resource.improve typeinf_resource (rfun_term, inf_rfun
 (*
  * Type of lambda.
  *)
-let inf_lambda (f : typeinf_func) (decl : eqnlist) (t : term) =
+let inf_lambda inf decl t =
    let v, b = dest_lambda t in
    let a = new_eqns_var decl v in
-   let decl', b' = f (eqnlist_append_var_eqn v (mk_var_term a) decl) b in
+   let decl', b' = inf (eqnlist_append_var_eqn v (mk_var_term a) decl) b in
    let decl'', a' =
 (*
       try decl', List.assoc a decl' with

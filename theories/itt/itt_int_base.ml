@@ -535,14 +535,14 @@ prim lt_Reflex :
    sequent ['ext] { <H> >- band{lt_bool{'a; 'b}; lt_bool{'b; 'a}} ~ bfalse } =
  it
 
-interactive_rw lt_Reflex_rw :
+interactive_rw lt_Reflex_rw {| reduce |} :
    ( 'a in int ) -->
    ( 'b in int ) -->
    band{lt_bool{'a; 'b}; lt_bool{'b; 'a}} <--> bfalse
 
 let lt_ReflexC = lt_Reflex_rw
 
-interactive_rw lt_irreflex_rw :
+interactive_rw lt_irreflex_rw {| reduce |} :
    ( 'a in int ) -->
    lt_bool{'a;'a} <--> bfalse
 
@@ -821,7 +821,7 @@ interactive_rw add_Assoc_rw :
 
 let add_AssocC = add_Assoc_rw
 
-interactive_rw add_Assoc2_rw :
+interactive_rw add_Assoc2_rw {| reduce |} :
    ( 'a in int ) -->
    ( 'b in int ) -->
    ( 'c in int ) -->
@@ -840,13 +840,13 @@ prim add_Id :
    [wf] sequent [squash] { <H> >- 'a in int } -->
    sequent ['ext] { <H> >- ('a +@ 0) ~ 'a } = it
 
-interactive_rw add_Id_rw :
+interactive_rw add_Id_rw {| reduce |} :
    ( 'a in int ) -->
    ('a +@ 0) <--> 'a
 
 let add_IdC = add_Id_rw
 
-interactive_rw add_Id2_rw :
+interactive_rw add_Id2_rw {| reduce |} :
    ( 'a in int ) -->
    (0 +@ 'a) <--> 'a
 
@@ -875,7 +875,7 @@ prim minus_add_inverse :
    [wf] sequent [squash] { <H> >- 'a in int } -->
    sequent ['ext] { <H> >- ( 'a +@ (- 'a ) ) ~ 0 } = it
 
-interactive_rw minus_add_inverse_rw :
+interactive_rw minus_add_inverse_rw {| reduce |} :
    ( 'a in int ) -->
    ( 'a +@ (- 'a) ) <--> 0
 
@@ -920,27 +920,27 @@ interactive minus_minus_reduce :
    [wf] sequent [squash] { <H> >- 'a in int } -->
    sequent ['ext] { <H> >- (-(-'a)) ~ 'a }
 
-interactive_rw minus_minus_reduce_rw :
+interactive_rw minus_minus_reduce_rw {| reduce |} :
    ('a in int) -->
    (-(-'a)) <--> 'a
 
 let minus_minus_reduceC = minus_minus_reduce_rw
 
-interactive_rw minus_same_rw:
+interactive_rw minus_same_rw {| reduce |} :
    ('a in int) -->
    ('a -@ 'a) <--> 0
 
-interactive_rw plus_minus_rw :
+interactive_rw plus_minus_rw {| reduce |} :
    ('a in int) -->
    ('b in int) -->
    (('a +@ 'b) -@ 'b) <--> 'a
 
-interactive_rw minus_plus_rw :
+interactive_rw minus_plus_rw {| reduce |} :
    ('a in int) -->
    ('b in int) -->
    (('a -@ 'b) +@ 'b) <--> 'a
 
-doc <:doc< @docoff >>
+doc docoff
 
 (***********************************************************
  * TYPE INFERENCE
@@ -955,16 +955,6 @@ let resource typeinf += [
 ]
 
 let resource reduce += [
-   << band{lt_bool{'a; 'b}; lt_bool{'b; 'a}} >>, lt_ReflexC;
-   << ('a +@ 0) >>, add_IdC;
-   << (0 +@ 'a) >>, add_Id2C;
-   << ( 'a +@ (- 'a)) >>, minus_add_inverseC;
-   << ( 'a -@ 'a) >>, minus_same_rw;
-   << (-(-'a)) >>, minus_minus_reduceC;
-   << (('a +@ 'b) +@ 'c) >>, add_Assoc2C;
-   << ('a +@ 'b) -@ 'b >>, plus_minus_rw;
-   << ('a -@ 'b) +@ 'b >>, minus_plus_rw;
-   << lt_bool{'a;'a} >>, lt_irreflex_rw;
    << ('a < 'a) >>, (unfold_lt thenC (addrC [0] lt_irreflex_rw));
    <<ind{number[n:n]; i, j. 'down['i; 'j]; 'base; k, l. 'up['k; 'l]}>>, reduce_ind_numberC;
 ]

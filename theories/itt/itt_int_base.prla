@@ -10781,7 +10781,7 @@ P	p3181	String lt_irreflex_rw
 O	o3181	cond_rewrite p3181
 T	t3183	o1455 b1438 b1438
 B	b3183	t3183
-P	p3183	String "assertT <<band{lt_bool{'a;'a};lt_bool{'a;'a}} ~ bfalse>> thenAT byDefT lt_ReflexC thenT byDefT reduceC"
+P	p3183	String "assertT <<band{lt_bool{'a;'a};lt_bool{'a;'a}} ~ bfalse>> thenAT byDefT lt_ReflexC thenT byDefT reduce_band_same"
 O	o3183	ext_rule p3183
 T	t3186	o1656 b3183 b2669
 S	s3186	t1652 h

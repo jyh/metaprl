@@ -26,13 +26,15 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
- * Author: Jason Hickey
- * jyh@cs.cornell.edu
+ * Author: Jason Hickey <jyh@cs.cornell.edu>
+ * Modified By: Alexei Kopylov <kopylov@cs.cornell.edu>
+ * Modified By: Aleksey Nogin <nogin@cs.cornell.edu>
  *)
 
 extends Mptop
 
 open Refiner.Refiner.Term
+open Refiner.Refiner.Refine
 open Refiner.Refiner.RefineError
 open Mp_resource
 
@@ -89,7 +91,7 @@ topval repeatForC : int -> conv -> conv
  ************************************************************************)
 
 resource (term * conv, conv) reduce
-val process_reduce_resource_annotation : (conv, term*conv) annotation_processor
+val process_reduce_resource_rw_annotation : (prim_rewrite, term*conv) rw_annotation_processor
 
 topval reduceTopC : conv
 topval reduceC : conv

@@ -72,6 +72,7 @@ open Perv
 
 open Base_dtactic
 open Base_auto_tactic
+open Top_conversionals
 
 open Itt_equal
 open Itt_struct
@@ -143,45 +144,29 @@ doc <:doc<
    type.
    @end[doc]
 >>
-interactive_rw reduce_ifthenelse_true : ifthenelse{btrue; 'e1; 'e2} <--> 'e1
-interactive_rw reduce_ifthenelse_false : ifthenelse{bfalse; 'e1; 'e2} <--> 'e2
-doc <:doc< @docoff >>
-
-let resource reduce +=
-   [<< ifthenelse{btrue; 'e1; 'e2} >>, reduce_ifthenelse_true;
-    << ifthenelse{bfalse; 'e1; 'e2} >>, reduce_ifthenelse_false]
+interactive_rw reduce_ifthenelse_true {| reduce |} : ifthenelse{btrue; 'e1; 'e2} <--> 'e1
+interactive_rw reduce_ifthenelse_false {| reduce |} : ifthenelse{bfalse; 'e1; 'e2} <--> 'e2
 
 (************************************************************************
  * REDUCTIONS                                                           *
  ************************************************************************)
 
-doc <:doc< @doc{nil} >>
-interactive_rw reduce_bnot_true : bnot{btrue} <--> bfalse
+interactive_rw reduce_bnot_true {| reduce |} : bnot{btrue} <--> bfalse
 
-interactive_rw reduce_bnot_false : bnot{bfalse} <--> btrue
+interactive_rw reduce_bnot_false {| reduce |} : bnot{bfalse} <--> btrue
 
-interactive_rw reduce_bor_true : bor{btrue; 'e1} <--> btrue
+interactive_rw reduce_bor_true {| reduce |} : bor{btrue; 'e1} <--> btrue
 
-interactive_rw reduce_bor_false : bor{bfalse; 'e1} <--> 'e1
+interactive_rw reduce_bor_false {| reduce |} : bor{bfalse; 'e1} <--> 'e1
 
-interactive_rw reduce_band_true : band{btrue; 'e1} <--> 'e1
+interactive_rw reduce_band_true {| reduce |} : band{btrue; 'e1} <--> 'e1
 
-interactive_rw reduce_band_false : band{bfalse; 'e1} <--> bfalse
+interactive_rw reduce_band_false {| reduce |} : band{bfalse; 'e1} <--> bfalse
 
-interactive_rw reduce_bimplies_true : bimplies{btrue; 'e1} <--> 'e1
+interactive_rw reduce_bimplies_true {| reduce |} : bimplies{btrue; 'e1} <--> 'e1
 
-interactive_rw reduce_bimplies_false : bimplies{bfalse; 'e1} <--> btrue
-doc <:doc< @docoff >>
-
-let resource reduce +=
-   [<< bnot{btrue} >>, reduce_bnot_true;
-    << bnot{bfalse} >>, reduce_bnot_false;
-    << bor{btrue; 'e1} >>, reduce_bor_true;
-    << bor{bfalse; 'e1} >>, reduce_bor_false;
-    << band{btrue; 'e1} >>, reduce_band_true;
-    << band{bfalse; 'e1} >>, reduce_band_false;
-    << bimplies{btrue; 'e1} >>, reduce_bimplies_true;
-    << bimplies{bfalse; 'e1} >>, reduce_bimplies_false]
+interactive_rw reduce_bimplies_false {| reduce |} : bimplies{bfalse; 'e1} <--> btrue
+doc docoff
 
 (************************************************************************
  * DISPLAY FORMS                                                        *
@@ -778,7 +763,7 @@ let resource typeinf += [
  * ADDITIONAL FACTS                                                    *
  ***********************************************************************)
 
-interactive_rw reduce_bnot_bnot :
+interactive_rw reduce_bnot_bnot {| reduce |} :
    ( 'e1 in bool ) -->
    bnot{bnot{'e1}} <--> 'e1
 
@@ -802,19 +787,14 @@ interactive not_assert_intro {| intro [] |} :
    [main] sequent ['ext] { <H> >- "assert"{bnot{'b}} } -->
    sequent ['ext] { <H> >- not{"assert"{'b}} }
 
-interactive_rw reduce_band_same :
+interactive_rw reduce_band_same {| reduce |} :
    ( 'e in bool ) -->
    band{'e;'e} <--> 'e
 
-interactive_rw reduce_bor_same :
+interactive_rw reduce_bor_same {| reduce |} :
    ( 'e in bool ) -->
    bor{'e;'e} <--> 'e
 
-let resource reduce +=
-   [<< bnot{bnot{'e}} >>, reduce_bnot_bnot;
-    << band{'e; 'e} >>, reduce_band_same;
-    << bor{'e; 'e} >>, reduce_bor_same;
-   ]
 (*
  * -*-
  * Local Variables:

@@ -86,6 +86,7 @@ open Mp_resource
 open Simple_print
 open Term_match_table
 
+open Tactic_type.Rewrite
 open Tactic_type.Conversionals
 open Tactic_type.Sequent
 
@@ -413,12 +414,7 @@ let extract_data tbl =
    in
       funC rw
 
-let process_reduce_resource_annotation name cvars args params mterm conv =
-   match mterm with
-      MetaIff (MetaTheorem t, _) ->
-         (t, conv)
-    | _ ->
-         raise (RefineError ("Conversionals.improve_resource_arg", StringError "not a simple rewrite"))
+let process_reduce_resource_rw_annotation = redex_and_conv_of_rw_annotation "reduce"
 
 (*
  * Resource.

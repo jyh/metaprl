@@ -26,8 +26,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
- * Author: Jason Hickey
- * jyh@cs.cornell.edu
+ * Author: Jason Hickey <jyh@cs.cornell.edu>
+ * Modified By: Aleksey Nogin <nogin@cs.cornell.edu>
+ * Modified By: Xin Yu <xiny@cs.caltech.edu>
  *)
 
 extends Itt_theory
@@ -42,9 +43,9 @@ open Tactic_type.Conversionals
 open Tactic_type.Tacticals
 
 open Var
-
 open Typeinf
 open Base_dtactic
+open Top_conversionals
 
 open Itt_rfun
 open Itt_list
@@ -141,35 +142,25 @@ dform list_ind_df : except_mode[src] :: parens :: "prec"[prec_list] :: list_ind{
  * REWRITE LEMMAS                                                       *
  ************************************************************************)
 
-interactive_rw reduce_bounded_nil : bounded{'u; nil; 'lt} <--> "true"
+interactive_rw reduce_bounded_nil {| reduce |} : bounded{'u; nil; 'lt} <--> "true"
 
-interactive_rw reduce_bounded_cons : bounded{'u1; cons{'u2; 'v}; 'lt} <-->
+interactive_rw reduce_bounded_cons {| reduce |} : bounded{'u1; cons{'u2; 'v}; 'lt} <-->
    "and"{."not"{compare_lt{'lt; 'u2; 'u1}}; bounded{'u1; 'v; 'lt}}
 
-interactive_rw reduce_sorted_nil : sorted{nil; 'lt} <--> "true"
+interactive_rw reduce_sorted_nil {| reduce |} : sorted{nil; 'lt} <--> "true"
 
-interactive_rw reduce_sorted_cons : sorted{cons{'u; 'v}; 'lt} <-->
+interactive_rw reduce_sorted_cons {| reduce |} : sorted{cons{'u; 'v}; 'lt} <-->
    "and"{bounded{'u; 'v; 'lt}; sorted{'v; 'lt}}
 
-interactive_rw reduce_insert_nil : insert{'u1; nil; 'lt} <--> cons{'u1; nil}
+interactive_rw reduce_insert_nil {| reduce |} : insert{'u1; nil; 'lt} <--> cons{'u1; nil}
 
-interactive_rw reduce_insert_cons : insert{'u1; cons{'u2; 'v}; 'lt} <-->
+interactive_rw reduce_insert_cons {| reduce |} : insert{'u1; cons{'u2; 'v}; 'lt} <-->
    ifthenelse{('lt 'u1 'u2); cons{'u1; cons{'u2; 'v}}; cons{'u2; insert{'u1; 'v; 'lt}}}
 
-interactive_rw reduce_sort_nil : sort{nil; 'lt} <--> nil
+interactive_rw reduce_sort_nil {| reduce |} : sort{nil; 'lt} <--> nil
 
-interactive_rw reduce_sort_cons : sort{cons{'u; 'v}; 'lt} <-->
+interactive_rw reduce_sort_cons {| reduce |} : sort{cons{'u; 'v}; 'lt} <-->
    insert{'u; sort{'v; 'lt}; 'lt}
-
-let resource reduce +=
-   [<< bounded{'u; nil; 'lt} >>, reduce_bounded_nil;
-    << bounded{'u1; cons{'u2; 'v}; 'lt} >>, reduce_bounded_cons;
-    << sorted{nil; 'lt} >>, reduce_sorted_nil;
-    << sorted{cons{'u; 'v}; 'lt} >>, reduce_sorted_cons;
-    << insert{'u1; nil; 'lt} >>, reduce_insert_nil;
-    << insert{'u1; cons{'u2; 'v}; 'lt} >>, reduce_insert_cons;
-    << sort{nil; 'lt} >>, reduce_sort_nil;
-    << sort{cons{'u; 'v}; 'lt} >>, reduce_sort_cons]
 
 (************************************************************************
  * WELL-FORMEDNESS

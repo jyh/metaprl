@@ -440,6 +440,15 @@ interactive ge_addMono :
    sequent { <H> >- 'c >= 'd } -->
    sequent { <H> >- ('a +@ 'c) >= ('b +@ 'd) }
 
+interactive_rw lt_bool2le_bool_rw :
+	('a in int) -->
+	('b in int) -->
+	('a <@ 'b) <--> (('a +@ 1)<=@'b)
+
+let lt_bool2le_boolC = lt_bool2le_bool_rw
+
+let le_bool2lt_boolC = foldC <<'a <@ 'b>> lt_bool2le_boolC
+
 interactive min_wf {| intro [] |} :
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->

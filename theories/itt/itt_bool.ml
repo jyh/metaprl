@@ -764,6 +764,22 @@ interactive boolMoveToConcl 'H :
 	[main] sequent { <H>; <J> >- "assert"{bimplies{'B; 'C}} } -->
 	sequent { <H>; "assert"{'B}; <J> >- "assert"{'C} }
 
+interactive xor_property :
+   [wf] sequent { <H> >- 'a in bool } -->
+   [wf] sequent { <H> >- 'b in bool } -->
+	sequent { <H> >- "assert"{bnot{band{'a;'b}}} } -->
+	sequent { <H> >- "assert"{bor{'a;'b}} } -->
+	sequent { <H> >- bnot{'a}='b in bool }
+
+interactive_rw xor_property_rw 'b :
+   ('a in bool) -->
+   ('b in bool) -->
+	("assert"{bnot{band{'a;'b}}}) -->
+	("assert"{bor{'a;'b}}) -->
+	bnot{'a} <--> 'b
+
+let xor_propertyC = xor_property_rw
+
 (*
  * H >- Ui ext Unit
  * by boolFormation

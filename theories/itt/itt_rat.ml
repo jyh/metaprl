@@ -116,7 +116,7 @@ prim_rw reduce_lt_bool_rat : lt_bool_rat{rat{'a;'b};rat{'c;'d}} <--> lt_bool{('a
 prim_rw reduce_le_bool_rat : le_bool_rat{rat{'a;'b};rat{'c;'d}} <--> le_bool{('a *@ 'd);('c *@ 'b)}
 
 prim_rw reduce_inv_rat :
-	('a in posnat) -->
+	('a in int0) -->
 	inv_rat{rat{'a;'b}} <--> rat{ (sign{'a} *@ 'b) ; abs{'a}}
 
 prim_rw reduce_beq_rat :
@@ -585,5 +585,58 @@ interactive ge_addMonoElim 'H 'c :
 	[wf] sequent { <H>; w: ge_rat{'a;'b}; <J['w]> >- 'c in rationals } -->
 	sequent { <H>; w: ge_rat{'a;'b}; <J['w]>; ge_rat{add_rat{'a;'c};add_rat{'b;'c}} >- 'C['w] } -->
 	sequent { <H>; w: ge_rat{'a;'b}; <J['w]> >- 'C['w] }
+
+interactive_rw mul_rat_of_int_rw {| reduce |} :
+	('a in int) -->
+	('b in int) -->
+	mul_rat{rat_of_int{'a}; rat_of_int{'b}} <--> rat_of_int{'a *@ 'b}
+
+interactive_rw add_rat_of_int_rw {| reduce |} :
+	('a in int) -->
+	('b in int) -->
+	add_rat{rat_of_int{'a}; rat_of_int{'b}} <--> rat_of_int{'a +@ 'b}
+(*
+interactive_rw inv_rat_of_int_rw :
+	('a in posnat) -->
+	inv_rat{rat_of_int{'a}} <--> rat{1; 'a}
+*)
+interactive_rw neg_rat_of_int_rw {| reduce |} :
+	neg_rat{rat_of_int{'a}} <--> rat_of_int{minus{'a}}
+
+interactive_rw ge_bool_int2ge_bool_rat_rw :
+	('a in int) -->
+	('b in int) -->
+	('a >=@ 'b) <--> ge_bool_rat{rat_of_int{'a}; rat_of_int{'b}}
+
+interactive_rw ge_int2ge_rat_rw :
+	('a in int) -->
+	('b in int) -->
+	('a >= 'b) <--> (ge_rat{rat_of_int{'a}; rat_of_int{'b}})
+
+interactive_rw le_bool_int2ge_bool_rat_rw :
+	('a in int) -->
+	('b in int) -->
+	('a <=@ 'b) <--> ge_bool_rat{rat_of_int{'b}; rat_of_int{'a}}
+
+interactive_rw le_int2ge_rat_rw :
+	('a in int) -->
+	('b in int) -->
+	('a <= 'b) <--> (ge_rat{rat_of_int{'b}; rat_of_int{'a}})
+
+interactive_rw lt_bool_int2lt_bool_rat_rw :
+	('a in int) -->
+	('b in int) -->
+	('a <@ 'b) <--> (lt_bool_rat{rat_of_int{'a}; rat_of_int{'b}})
+
+interactive_rw gt_bool_int2lt_bool_rat_rw :
+	('a in int) -->
+	('b in int) -->
+	('a >@ 'b) <--> (lt_bool_rat{rat_of_int{'b}; rat_of_int{'a}})
+
+interactive ge_int_elim 'H :
+	[wf] sequent { <H>; x: 'a >= 'b; <J['x]> >- 'a in int } -->
+	[wf] sequent { <H>; x: 'a >= 'b; <J['x]> >- 'b in int } -->
+	sequent { <H>; x: 'a >= 'b; <J['x]>; ge_rat{rat_of_int{'a};rat_of_int{'b}} >- 'C['x] } -->
+	sequent { <H>; x: 'a >= 'b; <J['x]> >- 'C['x] }
 
 doc <:doc< @docoff >>

@@ -193,6 +193,9 @@ rule ge_addMono :
    sequent { <H> >- 'c >= 'd } -->
    sequent { <H> >- ('a +@ 'c) >= ('b +@ 'd) }
 
+topval lt_bool2le_boolC: conv
+topval le_bool2lt_boolC: conv
+
 rule mul_wf :
    [wf] sequent { <H> >- 'a = 'a1 in int } -->
    [wf] sequent { <H> >- 'b = 'b1 in int } -->

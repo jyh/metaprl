@@ -41,6 +41,9 @@ MPFILES :=\
 	czf_itt_axioms\
 	czf_itt_theory
 
+MLZFILES :=\
+	czf_itt_theory
+
 # Name of main libraris
 MAIN = theory
 

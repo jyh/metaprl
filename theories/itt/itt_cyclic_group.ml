@@ -215,9 +215,7 @@ doc <:doc<
    @end[doc]
 >>
 interactive subgroup_power {| intro [AutoMustComplete; intro_typeinf <<'g>>] |} group[i:l] :
-   [wf] sequent [squash] { 'H >- 's in group[i:l] } -->
-   [wf] sequent [squash] { 'H >- 'g in group[i:l] } -->
-   [main] sequent ['ext] { 'H >- subStructure{'s; 'g} } -->
+   [main] sequent [squash] { 'H >- subgroup[i:l]{'s; 'g} } -->
    [wf] sequent [squash] { 'H >- 'a in 's^car } -->
    [wf] sequent [squash] { 'H >- 'n in int } -->
    sequent ['ext] { 'H >- group_power{'g; 'a; 'n} = group_power{'s; 'a; 'n} in 's^car }
@@ -267,10 +265,8 @@ doc <:doc<
    @end[doc]
 >>
 interactive subg_cycGroup group[i:l] 'g :
-   [wf] sequent [squash] { 'H >- 's in group[i:l] } -->
-   [wf] sequent [squash] { 'H >- 'g in group[i:l] } -->
    [main] sequent ['ext] { 'H >- cycGroup{'g} } -->
-   [main] sequent ['ext] { 'H >- subStructure{'s; 'g} } -->
+   [main] sequent [squash] { 'H >- subgroup[i:l]{'s; 'g} } -->
    [main] sequent ['ext] { 'H >- exst x: 's^car. not {('x = 's^"1" in 's^car)} } -->
    [decidable] sequent ['ext] { 'H; a: int; x: 'g^car >- decidable{(group_power{'g; 'x; 'a} in 's^car subset 'g^car)} } -->
    sequent ['ext] { 'H >- cycGroup{'s} }
@@ -302,12 +298,12 @@ doc <:doc<
    A cyclic subgroup is a subgroup.
    @end[doc]
 >>
-interactive cycsubg_subgroup {| intro [AutoMustComplete; intro_typeinf <<'g>>] |} group[i:l] 'a :
+interactive cycsubg_subgroup {| intro [AutoMustComplete] |} 'a :
    [wf] sequent [squash] { 'H >- 's in group[i:l] } -->
    [wf] sequent [squash] { 'H >- 'g in group[i:l] } -->
    [wf] sequent [squash] { 'H >- 'a in 'g^car } -->
    [main] sequent ['ext] { 'H >- cycSubg[i:l]{'s; 'g; 'a} } -->
-   sequent ['ext] { 'H >- subStructure{'s; 'g} }
+   sequent ['ext] { 'H >- subgroup[i:l]{'s; 'g} }
 
 doc <:doc< @docoff >>
 

@@ -3903,7 +3903,7 @@ T	t6263	o b6263 b4
 B	b6264	t6263
 T	t6264	o3434 b804 b4783 b6264 b4
 B	b6267	t6264
-P	p4835	String "rwh unfold_assert 2 thenT dT 2 thenT rwh fold_assert 2"
+P	p4835	String "rw unfold_assert 2 thenT dT 2 thenT rw fold_assert 2"
 O	o4835	ext_rule p4835
 T	t4836	o b550 b4
 B	b4836	t4836
@@ -4290,7 +4290,7 @@ T	t5440	o b5440 b4
 B	b5441	t5440
 T	t5441	o805 b5403 b5441
 B	b5442	t5441
-P	p5442	String "rwh unfold_assert 2 thenT dT 2 thenT rw fold_assert 2 thenT autoT"
+P	p5442	String "byDefT unfold_assert thenT dT 2 thenT autoT"
 O	o5442	ext_rule p5442
 T	t5442	o805 b5440 b4
 B	b5443	t5442
@@ -4528,7 +4528,7 @@ T	t5665	o1389 b5663 b5665
 B	b5666	t5665
 T	t5666	o1389 b5660 b5666
 B	b5667	t5666
-P	p5667	String "splitBoolT << 't1 >> 2\nthenT (rwh unfold_assert 2 thenT dT 2 thenT rwh fold_assert 2)"
+P	p5667	String "splitBoolT << 't1 >> 2 thenT (rwh unfold_assert 2 thenT dT 2 thenT rwh fold_assert 2)"
 O	o5667	ext_rule p5667
 T	t5667	o b5661 b4
 B	b5668	t5667
@@ -14279,7 +14279,7 @@ T	t5838	o1312 b5837
 B	b5838	t5838
 T	t5839	o1389 b6220 b5838
 B	b5839	t5839
-P	p5839	String "rwh unfold_assert 0 thenT autoT thenT rwh fold_assert 0 thenT trivialT"
+P	p5839	String "byDefT unfold_assert"
 O	o5839	ext_rule p5839
 T	t5840	o807 b5837 b6222
 B	b5840	t5840

@@ -622,7 +622,7 @@ let d_prec = create_auto_prec [trivial_prec] []
 let resource auto += {
    auto_name = "dT";
    auto_prec = d_prec;
-   auto_tac = auto_wrap (dT 0)
+   auto_tac = auto_progress (dT 0)
 }
 
 let univ_arg_fun p _ = [get_univ_arg p]

@@ -7753,7 +7753,7 @@ T	t2905	o b2901 b2905
 B	b2906	t2905
 T	t2906	o1378 b2896 b2906
 B	b2907	t2906
-P	p2907	String "rwh unfold_assert 0 thenT squashT thenT rwh fold_assert 0 thenT autoT"
+P	p2907	String "byDefT unfold_assert"
 O	o2907	ext_rule p2907
 T	t2907	o1378 b2901 b4
 B	b2908	t2907
@@ -8745,7 +8745,7 @@ T	t3326	o b3326 b4
 B	b3327	t3326
 T	t3327	o1378 b3321 b3327
 B	b3328	t3327
-P	p3328	String "rwh unfold_assert 0 thenT squashT thenT rwh fold_assert 0 thenT trivialT"
+P	p3328	String "byDefT unfold_assert"
 O	o3328	ext_rule p3328
 T	t3328	o1378 b3326 b4
 B	b3329	t3328
@@ -28498,7 +28498,7 @@ T	t11820	o b11820 b4
 B	b11821	t11820
 T	t14168	o1378 b3872 b11821
 B	b14168	t14168
-P	p11822	String "thinAllT 2 3 thenT rwh unfold_assert 0 thenT squashT thenT rwh fold_assert 0"
+P	p11822	String "byDefT unfold_assert"
 O	o11822	ext_rule p11822
 T	t11822	o1380 b4151 b11753
 B	b11823	t11822
@@ -28649,7 +28649,7 @@ T	t11903	o b11903 b4
 B	b11904	t11903
 T	t14189	o1378 b4283 b11904
 B	b14189	t14189
-P	p11905	String "thinAllT 2 3 thenT rwh unfold_assert 0 thenT squashT thenT rwh fold_assert 0 thenT trivialT"
+P	p11905	String "byDefT unfold_assert"
 O	o11905	ext_rule p11905
 T	t11905	o1378 b11903 b4
 B	b11906	t11905

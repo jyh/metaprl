@@ -1,9 +1,9 @@
 include Itt_record_label0
-include Czf_itt_set
 include Czf_itt_member
 include Czf_itt_eq
 include Czf_itt_dall
 include Czf_itt_and
+include Czf_itt_equiv
 
 open Mp_debug
 open Refiner.Refiner.TermType
@@ -28,15 +28,19 @@ open Base_dtactic
 open Base_auto_tactic
 
 declare group{'g}
-declare car{'g}   (* The "carrier" set for the group *)
+declare car{'g}         (* The "carrier" set for the group *)
+declare eqG{'g}         (* The equivalence relation for the group *)
+(*declare eqG{'g; 'a; 'b} (* a and b are equivalent in the group *)*)
 declare op{'g; 'a; 'b}
 declare id{'g}
 declare inv{'g; 'a}
-(*declare eqElem{'s; 'a; 'b}*)
+(*
+rewrite unfold_eqG : eqG{'g; 'a; 'b} <-->
+   equiv{car{'g}; eqG{'g}; 'a; 'b}
 
-prec prec_op
-
+topval fold_eqG : conv
+*)
 topval groupCancelLeftT : int -> tactic
 topval groupCancelRightT : int -> tactic
-(*topval groupCancelLeftT : term -> term -> tactic
-topval groupCancelRightT : term -> term -> tactic*)
+topval uniqueInvLeftT : int -> tactic
+topval uniqueInvRightT : int -> tactic

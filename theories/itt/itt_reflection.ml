@@ -872,7 +872,7 @@ interactive subst_make_bterm {| intro [] |} :
    sequent { <H> >- 'bt in OpBTerm } -->
    sequent { <H> >- 'btl in list{BBTerm} } -->
    sequent { <H> >- make_bterm{'bt; 'btl} in BBTerm } -->
-   sequent { <H> >- subst{make_bterm{'bt; 'btl}; 't} ~ make_bterm{'bt; map{lambda{x.subst{'x; 't}}; 'btl}} }
+   sequent { <H> >- subst{make_bterm{'bt; 'btl}; 't} ~ make_bterm{subst{'bt;'t}; map{lambda{x.subst{'x; 't}}; 'btl}} }
 
 
 

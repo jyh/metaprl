@@ -642,6 +642,7 @@ let logic_autoT i p =
       if is_and_term hyp
          or is_prod_term hyp
          or is_dprod_term hyp
+         or is_exists_term hyp
       then
          dT i p
       else

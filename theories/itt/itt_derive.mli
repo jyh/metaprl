@@ -15,6 +15,8 @@ open Tacticals
  ************************************************************************)
 
 val applyT : term -> int -> tactic
+val anyApplyT : term list -> int -> tactic
+val autoApplyT : int -> tactic
 
 (*
  * -*-

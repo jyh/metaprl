@@ -22,6 +22,7 @@ open Typeinf
 open Itt_rfun
 open Itt_logic
 open Itt_struct
+open Itt_equal
 
 (************************************************************************
  * RULES                                                                *
@@ -41,18 +42,6 @@ interactive applyIntro 'H (x: 'A -> 'B['x]) (bind{y. 'C['y]}) 'f 'a :
    sequent ['ext] { 'H >- 'C['f 'a] }
 
 (*
- * Similar elimination form.
- *)
-interactive applyElim 'H 'J (z: 'A -> 'B['z]) 'y 'z :
-   sequent [squash] { 'H; x: 'f 'a; 'J['x] >- "type"{'A} } -->
-   sequent [squash] { 'H; x: 'f 'a; 'J['x]; y: 'A >- "type"{'B['y]} } -->
-   sequent [squash] { 'H; x: 'f 'a; 'J['x] >- 'a = 'a in 'A } -->
-   sequent [squash] { 'H; x: 'f 'a; 'J['x] >- 'f = 'f in (z: 'A -> 'B['z]) } -->
-   sequent [squash] { 'H; x: 'f 'a; 'J['x]; y: 'A; z: 'B['y] >- "type"{'z} } -->
-   sequent ['ext] { 'H; x: 'f 'a; 'J['x]; y: 'B['a]; z: 'y >- 'C['z] } -->
-   sequent ['ext] { 'H; x: 'f 'a; 'J['x] >- 'C['x] }
-
-(*
  * To prove an application,
  * Show that the function is family of types,
  * and the argument is an index.
@@ -65,51 +54,9 @@ interactive independentApplyIntro 'H ('A -> 'B) (bind{y. 'C['y]}) 'f 'a :
    sequent ['ext] { 'H; y: 'B >- 'C['y] } -->
    sequent ['ext] { 'H >- 'C['f 'a] }
 
-(*
- * Similar elimination form.
- *)
-interactive independentApplyElim 'H 'J ('A -> 'B) 'y 'z :
-   sequent [squash] { 'H; x: 'f 'a; 'J['x] >- "type"{'B} } -->
-   sequent [squash] { 'H; x: 'f 'a; 'J['x] >- 'a = 'a in 'A } -->
-   sequent [squash] { 'H; x: 'f 'a; 'J['x] >- 'f = 'f in ('A -> 'B) } -->
-   sequent [squash] { 'H; x: 'f 'a; 'J['x]; z: 'B >- "type"{'z} } -->
-   sequent ['ext] { 'H; x: 'f 'a; 'J['x]; y: 'B; z: 'y >- 'C['z] } -->
-   sequent ['ext] { 'H; x: 'f 'a; 'J['x] >- 'C['x] }
-
 (************************************************************************
  * TACTICS                                                              *
  ************************************************************************)
-
-(*
- * Search for an application that we can reduce.
- *)
-let search_apply =
-   let rec search goal p =
-      if is_apply_term goal then
-         let f, a = dest_apply goal in
-            try
-               let _, t = infer_type p f in
-                  goal, t
-            with
-               RefineError _ ->
-                  search_term goal p
-      else
-         search_term goal p
-   and search_term goal p =
-      let { term_op = op; term_terms = bterms } = dest_term goal in
-         search_bterms bterms p
-   and search_bterms bterms p =
-      match bterms with
-         bterm :: bterms ->
-            begin
-               try search (dest_bterm bterm).bterm p with
-                  RefineError _ ->
-                     search_bterms bterms p
-            end
-       | [] ->
-            raise (RefineError ("search_apply", StringError "no applications found"))
-   in
-      search
 
 (*
  * Add them as resources.
@@ -138,26 +85,87 @@ let applyT app i p =
       in
       let v = maybe_new_vars1 p "v" in
       let bind = mk_bind_term v (var_subst (Sequent.concl p) app v) in
-         tac (hyp_count p) goal_type bind f a p
+         (tac (hyp_count p) goal_type bind f a
+          thenLT [addHiddenLabelT "wf";
+                  addHiddenLabelT "wf";
+                  addHiddenLabelT "wf";
+                  addHiddenLabelT "wf";
+                  addHiddenLabelT "main"]) p
    else
       raise (RefineError ("d_applyT", StringError "no elimination form"))
+
 (*
-         let _, hyp = Sequent.nth_hyp p i in
-         let t = get_type hyp in
-         let j, k = Sequent.hyp_indices p i in
-         let y, z = maybe_new_vars2 p "u" "v" in
-         let tac =
-            if is_fun_term t then
-               independentApplyElim
+ * Search for an application that we can reduce.
+ * In this heuristic, we don't descend into the type in equalities.
+ *)
+let add_term app apps =
+   let rec search app = function
+      app' :: apps ->
+         if alpha_equal app app' then
+            true
+         else
+            search app apps
+    | [] ->
+         false
+   in
+      if search app apps then
+         apps
+      else
+         app :: apps
+
+let search_apply =
+   let rec search apps vars goal =
+      if is_apply_term goal then
+         let f, a = dest_apply goal in
+            if is_var_term f & List.mem (dest_var f) vars then
+               search_term (add_term goal apps) vars goal
             else
-               applyElim
+               search_term apps vars goal
+      else
+         search_term apps vars goal
+   and search_term apps vars goal =
+      let { term_op = op; term_terms = bterms } = dest_term goal in
+         if is_equal_term goal then
+            search_bterms apps vars (List.tl bterms)
+         else
+            search_bterms apps vars bterms
+   and search_bterms apps vars = function
+      bterm :: bterms ->
+         let apps = search apps vars (dest_bterm bterm).bterm in
+            search_bterms apps vars bterms
+    | [] ->
+         apps
+   in
+      search []
+
+(*
+ * Search for a possible application in the conclusion.
+ * This is quite heuristic.  We don't descend into
+ * the types for equalities.
+ *)
+let rec anyApplyT apps i p =
+   match apps with
+      [app] ->
+         applyT app i p
+    | app :: apps ->
+         (applyT app i orelseT anyApplyT apps i) p
+    | [] ->
+         raise (RefineError ("anyApplyT", StringError "no applications found"))
+
+let autoApplyT i p =
+   let goal = Sequent.concl p in
+      if is_type_term goal then
+         raise (RefineError ("autoApplyT", StringError "don't apply to 'type' goals"))
+      else
+         let vars = Sequent.declared_vars p in
+         let apps =
+            if i = 0 then
+               search_apply vars (Sequent.concl p)
+            else
+               let _, hyp = Sequent.nth_hyp p i in
+                  search_apply vars hyp
          in
-            tac j k t y z p
-
-let apply_term = << 'f 'a >>
-
-let d_resource = d_resource.resource_improve d_resource (apply_term, d_applyT)
-*)
+            anyApplyT apps i p
 
 (*
  * -*-

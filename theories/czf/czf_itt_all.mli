@@ -4,13 +4,16 @@
 
 include Czf_itt_sep
 
+open Refiner.Refiner.TermType
+
+open Tacticals
+
 (************************************************************************
  * RULES                                                                *
  ************************************************************************)
 
 (*
  * Implication is restricted.
- *)
 axiom dfun_fun 'H 'u 'v 'z :
    sequent ['ext] { 'H; u: set >- "type"{'A['u]} } -->
    sequent ['ext] { 'H; u: set; v: set; z: 'A['v] >- "type"{'B['u; 'z]} } -->
@@ -21,6 +24,7 @@ axiom dfun_fun 'H 'u 'v 'z :
 
 (*
  * Implication is restricted.
+ *)
 axiom prod_res 'H 'w :
    sequent ['ext] { 'H; w: set >- "type"{'A['w]} } -->
    sequent ['ext] { 'H; w: set >- "type"{'B['w]} } -->
@@ -48,6 +52,13 @@ axiom and_res 'H 'w :
    sequent ['ext] { 'H >- restricted{x. 'B['x]} } -->
    sequent ['ext] { 'H >- restricted{x. "and"{'A['x]; 'B['x]}} }
  *)
+
+(************************************************************************
+ * TACTICS                                                              *
+ ************************************************************************)
+
+val type2T : tactic
+val allAutoT : tactic
 
 (*
  * -*-

@@ -131,15 +131,15 @@ let completeT tac =
 let progressT tac =
    let aux p =
       let t = Sequent.goal p in
-      let tac' p' =
-         match p' with
-            [p''] ->
-               [(if alpha_equal (Sequent.goal p'') t then
-                    idT
-                 else
-                    failWithT "progressT") p'']
+      let tac' p =
+         match p with
+            [p] ->
+               if alpha_equal (Sequent.goal p) t then
+                  raise (RefineError ("progressT", StringError "no progress"))
+               else
+                  [idT p]
           | _ ->
-               List.map idT p'
+               List.map idT p
       in
          (tac thenFLT tac') p
    in

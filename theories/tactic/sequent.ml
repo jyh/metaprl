@@ -46,8 +46,6 @@ let msequent = Tactic_type.msequent
 let concl arg =
    Tactic_type.nth_concl arg 0
 
-let nth_hyp = Tactic_type.nth_hyp
-
 let cache = Tactic_type.cache
 
 let label = Tactic_type.label
@@ -63,18 +61,21 @@ let hyp_count arg =
 let hyp_indices arg i =
    let count = hyp_count arg in
       if i < 0 then
-         count + i, count + i - 1
+         count + i, (-1) - i
       else
          i - 1, count - i
 
 let get_pos_hyp_num arg i =
    if i < 0 then
-      (hyp_count arg) + i
+      (hyp_count arg) + i + 1
    else
       i
 
-let clause_addr arg i =
-   TermMan.nth_clause_addr (goal arg) i
+let nth_hyp p i =
+   Tactic_type.nth_hyp p (get_pos_hyp_num p i)
+
+let clause_addr p i =
+   TermMan.nth_clause_addr (goal p) (get_pos_hyp_num p i)
 
 let get_decl_number arg v =
    TermMan.get_decl_number (goal arg) v
@@ -87,8 +88,8 @@ let declared_vars arg =
 let explode_sequent arg =
    TermMan.explode_sequent (goal arg)
 
-let is_free_seq_var i v arg =
-   TermMan.is_free_seq_var i v (goal arg)
+let is_free_seq_var i v p =
+   TermMan.is_free_seq_var (get_pos_hyp_num p i) v (goal p)
 
 (*
  * Modification of the argument.

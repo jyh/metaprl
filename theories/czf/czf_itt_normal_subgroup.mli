@@ -59,7 +59,7 @@ open Base_auto_tactic
 
 (*
  * A subgroup H of a group G is normal if its left and right cosets
- * coincide, that is, if gH = Ha for all g in G.
+ * coincide, that is, if aH = Ha for all a in G.
  *)
 declare normal_subg{'s; 'g}
 

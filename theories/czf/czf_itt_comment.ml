@@ -790,9 +790,9 @@ dform normalsubg_df : except_mode[tex] :: math_normalsubg{'s; 'g} =
  * SET BUILDER
  ************************************************************************)
 
-declare math_set_bvd{'x; 's; 'a}
+declare math_setbvd{'x; 's; 'a}
 
-dform set_bvd_df1 : mode[tex] :: math_set_bvd{'x; 's; 'a} =
+dform set_bvd_df1 : mode[tex] :: math_setbvd{'x; 's; 'a} =
    izone `"{\\left\\{" ezone
    slot{'a} `"| " 
    slot{'x}
@@ -800,16 +800,16 @@ dform set_bvd_df1 : mode[tex] :: math_set_bvd{'x; 's; 'a} =
    slot{'s}
    izone `"\\right\\}}" ezone
 
-dform set_bvd_df : parens :: except_mode[tex] :: math_set_bvd{'x; 's; 'a} =
+dform set_bvd_df : parens :: except_mode[tex] :: math_setbvd{'x; 's; 'a} =
    pushm[0] `"{" slot{'a} mid slot{'x} " " Nuprl_font!member `"s " slot{'s} `"}" popm
 
 (************************************************************************
  * INVERSE IMAGE
  ************************************************************************)
 
-declare math_inv_image{'x; 's; 'a; 't}
+declare math_invimage{'x; 's; 'a; 't}
 
-dform inv_image_df1 : mode[tex] :: math_inv_image{'x; 's; 'a; 't} =
+dform inv_image_df1 : mode[tex] :: math_invimage{'x; 's; 'a; 't} =
    izone `"{\\left\\{" ezone
    slot{'x}
    izone `"\\in_s " ezone
@@ -819,7 +819,7 @@ dform inv_image_df1 : mode[tex] :: math_inv_image{'x; 's; 'a; 't} =
    slot{'t}
    izone `"\\right\\}}" ezone
 
-dform inv_image_df : parens :: except_mode[tex] :: math_inv_image{'x; 's; 'a; 't} =
+dform inv_image_df : parens :: except_mode[tex] :: math_invimage{'x; 's; 'a; 't} =
    pushm[0] `"{" slot{'x} " " Nuprl_font!member `"s " slot{'s} mid slot{'a} " " Nuprl_font!member `"s " slot{'t} `"}" popm
 
 (************************************************************************

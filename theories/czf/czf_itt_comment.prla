@@ -109,30 +109,36 @@ T	t34	o33
 B	b34	t34
 T	t35	o b34 b4
 B	b35	t35
+P	p6	String Itt_struct2
+O	o14	parent p6
+T	t219	o14
+B	b219	t219
+T	t220	o b219 b4
+B	b220	t220
 P	p35	String Itt_well_founded
 O	o35	parent p35
 T	t36	o35
 B	b36	t36
 T	t37	o b36 b4
 B	b37	t37
-P	p37	String Itt_arith
-O	o37	parent p37
-T	t38	o37
-B	b38	t38
-T	t39	o b38 b4
-B	b39	t39
-P	p39	String Itt_int_bool
-O	o39	parent p39
-T	t40	o39
-B	b40	t40
-T	t41	o b40 b4
-B	b41	t41
-P	p41	String Itt_int
-O	o41	parent p41
-T	t42	o41
-B	b42	t42
-T	t43	o b42 b4
-B	b43	t43
+P	p231	String Itt_int_arith
+O	o231	parent p231
+T	t243	o231
+B	b243	t243
+T	t247	o b243 b4
+B	b247	t247
+P	p247	String Itt_int_ext
+O	o247	parent p247
+T	t248	o247
+B	b248	t248
+T	t249	o b248 b4
+B	b249	t249
+P	p251	String Itt_int_base
+O	o251	parent p251
+T	t251	o251
+B	b251	t251
+T	t253	o b251 b4
+B	b253	t253
 P	p43	String Itt_logic
 O	o43	parent p43
 T	t44	o43
@@ -199,6 +205,12 @@ T	t64	o63
 B	b64	t64
 T	t65	o b64 b4
 B	b65	t65
+P	p253	String Itt_squiggle
+O	o253	parent p253
+T	t254	o253
+B	b254	t254
+T	t255	o b254 b4
+B	b255	t255
 P	p65	String Itt_union
 O	o65	parent p65
 T	t66	o65
@@ -467,808 +479,189 @@ T	t163	o b81 b162
 B	b163	t163
 T	t164	o b79 b163
 B	b164	t164
-T	t165	o b77 b164
-B	b165	t165
-T	t166	o b75 b165
-B	b166	t166
-T	t167	o b73 b166
-B	b167	t167
-T	t168	o b71 b167
-B	b168	t168
-T	t169	o b69 b168
-B	b169	t169
-T	t170	o b67 b169
-B	b170	t170
-T	t171	o b65 b170
-B	b171	t171
-T	t172	o b63 b171
-B	b172	t172
-T	t173	o b61 b172
-B	b173	t173
-T	t174	o b59 b173
-B	b174	t174
-T	t175	o b57 b174
-B	b175	t175
-T	t176	o b55 b175
-B	b176	t176
-T	t177	o b53 b176
-B	b177	t177
-T	t178	o b51 b177
-B	b178	t178
-T	t179	o b49 b178
-B	b179	t179
-T	t180	o b47 b179
-B	b180	t180
-T	t181	o b45 b180
-B	b181	t181
-T	t182	o b43 b181
-B	b182	t182
-T	t183	o b41 b182
-B	b183	t183
-T	t184	o b39 b183
-B	b184	t184
-T	t185	o b37 b184
-B	b185	t185
-T	t186	o b35 b185
-B	b186	t186
-T	t187	o b33 b186
-B	b187	t187
-T	t188	o b31 b187
-B	b188	t188
-T	t189	o b29 b188
-B	b189	t189
-T	t190	o b27 b189
-B	b190	t190
-T	t191	o b25 b190
-B	b191	t191
-T	t192	o b23 b191
-B	b192	t192
-T	t193	o b21 b192
-B	b193	t193
-T	t194	o b19 b193
-B	b194	t194
-T	t195	o b17 b194
-B	b195	t195
-T	t196	o b15 b195
-B	b196	t196
-T	t197	o b13 b196
-B	b197	t197
-T	t198	o b11 b197
-B	b198	t198
-T	t199	o b9 b198
-B	b199	t199
-T	t200	o b7 b199
-B	b200	t200
-T	t201	o b5 b200
-B	b201	t201
+T	t256	o b75 b164
+B	b256	t256
+T	t257	o b73 b256
+B	b257	t257
+T	t260	o b71 b257
+B	b260	t260
+T	t262	o b69 b260
+B	b262	t262
+T	t263	o b67 b262
+B	b263	t263
+T	t264	o b77 b263
+B	b264	t264
+T	t265	o b255 b264
+B	b265	t265
+T	t275	o b65 b265
+B	b275	t275
+T	t276	o b63 b275
+B	b276	t276
+T	t287	o b55 b276
+B	b287	t287
+T	t291	o b53 b287
+B	b291	t291
+T	t304	o b51 b291
+B	b304	t304
+T	t313	o b49 b304
+B	b313	t313
+T	t318	o b47 b313
+B	b318	t318
+T	t320	o b45 b318
+B	b320	t320
+T	t321	o b7 b320
+B	b321	t321
+T	t375	o b61 b321
+B	b375	t375
+T	t376	o b59 b375
+B	b376	t376
+T	t379	o b57 b376
+B	b379	t379
+T	t384	o b253 b379
+B	b384	t384
+T	t385	o b249 b384
+B	b385	t385
+T	t388	o b247 b385
+B	b388	t388
+T	t402	o b37 b388
+B	b402	t402
+T	t403	o b220 b402
+B	b403	t403
+T	t407	o b35 b403
+B	b407	t407
+T	t411	o b33 b407
+B	b411	t411
+T	t412	o b31 b411
+B	b412	t412
+T	t422	o b29 b412
+B	b422	t422
+T	t431	o b27 b422
+B	b431	t431
+T	t432	o b25 b431
+B	b432	t432
+T	t435	o b23 b432
+B	b435	t435
+T	t438	o b19 b435
+B	b438	t438
+T	t453	o b21 b438
+B	b453	t453
+T	t454	o b17 b453
+B	b454	t454
+T	t455	o b15 b454
+B	b455	t455
+T	t456	o b13 b455
+B	b456	t456
+T	t457	o b11 b456
+B	b457	t457
+T	t459	o b9 b457
+B	b459	t459
+T	t460	o b5 b459
+B	b460	t460
 NSummary!resource	resource	resource Summary
-P	p201	String auto_resource
-O	o201	resource p201
+P	p461	String auto
+O	o465	resource p461
 NOcaml	Ocaml	Ocaml NIL
 NOcaml!type_lid	type_lid	type_lid Ocaml
-P	p202	Number 2439
+P	p467	Number 2332
 P	p203	Number 2445
-O	o203	type_lid p202 p203
 P	p204	String tactic
 O	o204	type_lid p204
 T	t204	o204
 B	b204	t204
-T	t205	o203 b204
-B	b205	t205
 NOcaml!type_apply	type_apply	type_apply Ocaml
-P	p205	Number 2419
-P	p206	Number 2437
-O	o206	type_apply p205 p206
-P	p207	Number 2428
-O	o207	type_lid p207 p206
 P	p208	String auto_info
 O	o208	type_lid p208
 T	t208	o208
 B	b208	t208
-T	t209	o207 b208
-B	b209	t209
-P	p209	Number 2427
-O	o209	type_lid p205 p209
-P	p210	String auto_tac
-O	o210	type_lid p210
-T	t210	o210
-B	b210	t210
-T	t211	o209 b210
-B	b211	t211
-T	t212	o206 b209 b211
-B	b212	t212
-P	p212	Number 2447
-P	p213	Number 2465
-O	o213	type_apply p212 p213
-P	p214	Number 2456
-O	o214	type_lid p214 p213
-P	p215	String auto_data
-O	o215	type_lid p215
-T	t215	o215
-B	b215	t215
-T	t216	o214 b215
-B	b216	t216
-P	p216	Number 2455
-O	o216	type_lid p212 p216
-T	t217	o216 b210
-B	b217	t217
-T	t218	o213 b216 b217
-B	b218	t218
 NOcaml!type_prod	type_prod	type_prod Ocaml
 P	p218	Number 2467
-P	p219	Number 2496
-O	o219	type_prod p218 p219
-NOcaml!type_proj	type_proj	type_proj Ocaml
-P	p220	Number 2484
-O	o220	type_proj p218 p220
-NOcaml!type_uid	type_uid	type_uid Ocaml
-P	p221	Number 2473
-O	o221	type_uid p218 p221
-P	p222	String Tactic
-O	o222	type_uid p222
-T	t222	o222
-B	b222	t222
-T	t223	o221 b222
-B	b223	t223
-P	p223	Number 2474
-O	o223	type_lid p223 p220
-P	p224	String pre_tactic
-O	o224	type_lid p224
-T	t224	o224
-B	b224	t224
-T	t225	o223 b224
-B	b225	t225
-T	t226	o220 b223 b225
-B	b226	t226
-P	p226	Number 2487
-O	o226	type_lid p226 p219
-P	p227	String auto_prec
-O	o227	type_lid p227
-T	t227	o227
-B	b227	t227
-T	t228	o226 b227
-B	b228	t228
-T	t229	o b228 b4
-B	b229	t229
-T	t230	o b226 b229
-B	b230	t230
-T	t231	o219 b230
-B	b231	t231
-T	t232	o201 b205 b212 b218 b231
-B	b232	t232
-P	p232	String cache_resource
-O	o232	resource p232
-P	p233	Number 1444
-P	p234	Number 1449
-O	o234	type_lid p233 p234
 P	p235	String cache
 O	o235	type_lid p235
 T	t235	o235
 B	b235	t235
-T	t236	o234 b235
-B	b236	t236
-P	p236	Number 1432
-P	p237	Number 1442
-O	o237	type_lid p236 p237
 P	p238	String cache_rule
 O	o238	type_lid p238
 T	t238	o238
 B	b238	t238
-T	t239	o237 b238
-B	b239	t239
-P	p239	Number 1451
-P	p240	Number 1452
-O	o240	type_lid p239 p240
-P	p241	String t
-O	o241	type_lid p241
-T	t241	o241
-B	b241	t241
-T	t242	o240 b241
-B	b242	t242
-P	p242	Number 1454
-P	p243	Number 1458
-O	o243	type_lid p242 p243
-P	p244	String unit
-O	o244	type_lid p244
-T	t244	o244
-B	b244	t244
-T	t245	o243 b244
-B	b245	t245
-T	t246	o232 b236 b239 b242 b245
-B	b246	t246
-P	p246	String decide_resource
-O	o246	resource p246
-P	p4	Number 1438
-O	o12	type_lid p4 p233
-T	t214	o12 b204
-B	b214	t214
-P	p228	Number 1423
 P	p229	Number 1436
-O	o229	type_prod p228 p229
 P	p230	Number 1427
-O	o230	type_lid p228 p230
-P	p249	Number 1446
-P	p250	Number 1459
 P	p252	String term
 O	o252	type_lid p252
 T	t252	o252
 B	b252	t252
-T	t240	o230 b252
-B	b240	t240
-P	p255	Number 1430
-O	o255	type_lid p255 p229
-T	t261	o255 b204
-B	b261	t261
-T	t266	o b261 b4
-B	b266	t266
-T	t267	o b240 b266
-B	b267	t267
-T	t268	o229 b267
-B	b268	t268
-P	p281	Number 1457
-O	o281	type_lid p249 p281
-P	p259	String decide_data
-O	o259	type_lid p259
-T	t259	o259
-B	b259	t259
-T	t286	o281 b259
-B	b286	t286
-P	p297	Number 1476
-O	o297	type_proj p250 p297
-P	p298	Number 1465
-O	o298	type_uid p250 p298
-T	t303	o298 b222
-B	b303	t303
-P	p325	Number 1466
-O	o325	type_lid p325 p297
-T	t330	o325 b224
-B	b330	t330
-T	t331	o297 b303 b330
-B	b331	t331
-T	t336	o246 b214 b268 b286 b331
-B	b336	t336
-P	p265	String elim_resource
-O	o265	resource p265
 NOcaml!type_fun	type_fun	type_fun Ocaml
-P	p266	Number 2009
-P	p267	Number 2022
-O	o267	type_fun p266 p267
-P	p268	Number 2012
-O	o268	type_lid p266 p268
 P	p269	String int
 O	o269	type_lid p269
 T	t269	o269
 B	b269	t269
-T	t270	o268 b269
-B	b270	t270
-P	p270	Number 2016
-O	o270	type_lid p270 p267
-T	t271	o270 b204
-B	b271	t271
-T	t272	o267 b270 b271
-B	b272	t272
-P	p272	Number 1985
-P	p273	Number 2007
-O	o273	type_prod p272 p273
-P	p274	Number 1989
-O	o274	type_lid p272 p274
-T	t274	o274 b252
-B	b274	t274
-P	p275	Number 1993
-P	p276	Number 2006
-O	o276	type_fun p275 p276
-P	p277	Number 1996
-O	o277	type_lid p275 p277
-T	t277	o277 b269
-B	b277	t277
-P	p278	Number 2000
-O	o278	type_lid p278 p276
-T	t278	o278 b204
-B	b278	t278
-T	t279	o276 b277 b278
-B	b279	t279
-T	t280	o b279 b4
-B	b280	t280
-T	t281	o b274 b280
-B	b281	t281
-T	t282	o273 b281
-B	b282	t282
-P	p282	Number 2024
-P	p283	Number 2033
-O	o283	type_lid p282 p283
-P	p284	String elim_data
-O	o284	type_lid p284
-T	t284	o284
-B	b284	t284
-T	t285	o283 b284
-B	b285	t285
-P	p285	Number 2035
-P	p286	Number 2071
-O	o286	type_prod p285 p286
-P	p287	Number 2052
-O	o287	type_proj p285 p287
-P	p288	Number 2041
-O	o288	type_uid p285 p288
-T	t288	o288 b222
-B	b288	t288
-P	p289	Number 2042
-O	o289	type_lid p289 p287
-T	t289	o289 b224
-B	b289	t289
-T	t290	o287 b288 b289
-B	b290	t290
-P	p290	Number 2055
-O	o290	type_apply p290 p286
-P	p291	Number 2067
-O	o291	type_lid p291 p286
-P	p292	String list
-O	o292	type_lid p292
-T	t292	o292
-B	b292	t292
-T	t293	o291 b292
-B	b293	t293
-P	p293	Number 2066
-O	o293	type_lid p290 p293
-P	p294	String elim_option
-O	o294	type_lid p294
-T	t294	o294
-B	b294	t294
-T	t295	o293 b294
-B	b295	t295
-T	t296	o290 b293 b295
-B	b296	t296
-T	t297	o b296 b4
-B	b297	t297
-T	t298	o b290 b297
-B	b298	t298
-T	t299	o286 b298
-B	b299	t299
-T	t300	o265 b272 b282 b285 b299
-B	b300	t300
-P	p300	String eqcd_resource
-O	o300	resource p300
-P	p301	Number 6559
-P	p302	Number 6565
-O	o302	type_lid p301 p302
-T	t302	o302 b204
-B	b302	t302
-P	p303	Number 6544
-P	p304	Number 6557
-O	o304	type_prod p303 p304
-P	p305	Number 6548
-O	o305	type_lid p303 p305
-T	t305	o305 b252
-B	b305	t305
-P	p306	Number 6551
-O	o306	type_lid p306 p304
-T	t306	o306 b204
-B	b306	t306
-T	t307	o b306 b4
-B	b307	t307
-T	t308	o b305 b307
-B	b308	t308
-T	t309	o304 b308
-B	b309	t309
-P	p309	Number 6567
-P	p310	Number 6576
-O	o310	type_lid p309 p310
-P	p311	String eqcd_data
-O	o311	type_lid p311
-T	t311	o311
-B	b311	t311
-T	t312	o310 b311
-B	b312	t312
-P	p312	Number 6578
-P	p313	Number 6595
-O	o313	type_proj p312 p313
-P	p314	Number 6584
-O	o314	type_uid p312 p314
-T	t314	o314 b222
-B	b314	t314
-P	p315	Number 6585
-O	o315	type_lid p315 p313
-T	t315	o315 b224
-B	b315	t315
-T	t316	o313 b314 b315
-B	b316	t316
-T	t317	o300 b302 b309 b312 b316
-B	b317	t317
-P	p317	String intro_resource
-O	o317	resource p317
-P	p318	Number 2112
-P	p319	Number 2118
-O	o319	type_lid p318 p319
-T	t319	o319 b204
-B	b319	t319
-P	p320	Number 2097
-P	p321	Number 2110
-O	o321	type_prod p320 p321
-P	p322	Number 2101
-O	o322	type_lid p320 p322
-T	t322	o322 b252
-B	b322	t322
-P	p323	Number 2104
-O	o323	type_lid p323 p321
-T	t323	o323 b204
-B	b323	t323
-T	t324	o b323 b4
-B	b324	t324
-T	t325	o b322 b324
-B	b325	t325
-T	t326	o321 b325
-B	b326	t326
-P	p326	Number 2120
-P	p327	Number 2130
-O	o327	type_lid p326 p327
-P	p328	String intro_data
-O	o328	type_lid p328
-T	t328	o328
-B	b328	t328
-T	t329	o327 b328
-B	b329	t329
-P	p329	Number 2132
-P	p330	Number 2169
-O	o330	type_prod p329 p330
-P	p331	Number 2149
-O	o331	type_proj p329 p331
-P	p332	Number 2138
-O	o332	type_uid p329 p332
-T	t332	o332 b222
-B	b332	t332
-P	p333	Number 2139
-O	o333	type_lid p333 p331
-T	t333	o333 b224
-B	b333	t333
-T	t334	o331 b332 b333
-B	b334	t334
-P	p334	Number 2152
-O	o334	type_apply p334 p330
-P	p335	Number 2165
-O	o335	type_lid p335 p330
-T	t335	o335 b292
-B	b335	t335
-P	p336	Number 2164
-O	o336	type_lid p334 p336
-P	p337	String intro_option
-O	o337	type_lid p337
-T	t337	o337
-B	b337	t337
-T	t338	o336 b337
-B	b338	t338
-T	t339	o334 b335 b338
-B	b339	t339
-T	t340	o b339 b4
-B	b340	t340
-T	t341	o b334 b340
-B	b341	t341
-T	t342	o330 b341
-B	b342	t342
-T	t343	o317 b319 b326 b329 b342
-B	b343	t343
-P	p343	String reduce_resource
-O	o343	resource p343
-P	p344	Number 2389
-P	p345	Number 2393
-O	o345	type_lid p344 p345
 P	p346	String conv
 O	o346	type_lid p346
 T	t346	o346
 B	b346	t346
-T	t347	o345 b346
-B	b347	t347
-P	p347	Number 2376
-P	p348	Number 2387
-O	o348	type_prod p347 p348
-P	p349	Number 2380
-O	o349	type_lid p347 p349
-T	t349	o349 b252
-B	b349	t349
-P	p350	Number 2383
-O	o350	type_lid p350 p348
-T	t350	o350 b346
-B	b350	t350
-T	t351	o b350 b4
-B	b351	t351
-T	t352	o b349 b351
-B	b352	t352
-T	t353	o348 b352
-B	b353	t353
-P	p353	Number 2395
-P	p354	Number 2406
-O	o354	type_lid p353 p354
-P	p355	String reduce_data
-O	o355	type_lid p355
-T	t355	o355
-B	b355	t355
-T	t356	o354 b355
-B	b356	t356
-P	p356	Number 2408
-P	p357	Number 2412
-O	o357	type_lid p356 p357
-T	t357	o357 b346
-B	b357	t357
-T	t358	o343 b347 b353 b356 b357
-B	b358	t358
-P	p358	String squash_resource
-O	o358	resource p358
-P	p359	Number 1658
-P	p360	Number 1664
-O	o360	type_lid p359 p360
-T	t360	o360 b204
-B	b360	t360
-P	p361	Number 1643
-P	p362	Number 1656
-O	o362	type_prod p361 p362
-P	p363	Number 1647
-O	o363	type_lid p361 p363
-T	t363	o363 b252
-B	b363	t363
-P	p364	Number 1650
-O	o364	type_lid p364 p362
-T	t364	o364 b204
-B	b364	t364
-T	t365	o b364 b4
-B	b365	t365
-T	t366	o b363 b365
-B	b366	t366
-T	t367	o362 b366
-B	b367	t367
-P	p367	Number 1666
-P	p368	Number 1677
-O	o368	type_lid p367 p368
-P	p369	String squash_data
-O	o369	type_lid p369
-T	t369	o369
-B	b369	t369
-T	t370	o368 b369
-B	b370	t370
-P	p370	Number 1679
-P	p371	Number 1683
-O	o371	type_lid p370 p371
-T	t371	o371 b244
-B	b371	t371
-T	t372	o358 b360 b367 b370 b371
-B	b372	t372
-P	p372	String sub_resource
-O	o372	resource p372
-P	p373	Number 5096
-P	p374	Number 5102
-O	o374	type_lid p373 p374
-T	t374	o374 b204
-B	b374	t374
-P	p375	Number 5077
-P	p376	Number 5094
-O	o376	type_lid p375 p376
 P	p377	String sub_resource_info
 O	o377	type_lid p377
 T	t377	o377
 B	b377	t377
-T	t378	o376 b377
-B	b378	t378
-P	p378	Number 5104
-P	p379	Number 5112
-O	o379	type_lid p378 p379
-P	p380	String sub_data
-O	o380	type_lid p380
-T	t380	o380
-B	b380	t380
-T	t381	o379 b380
-B	b381	t381
-P	p381	Number 5114
 P	p382	Number 5118
-O	o382	type_lid p381 p382
-T	t382	o382 b244
-B	b382	t382
-T	t383	o372 b374 b378 b381 b382
-B	b383	t383
-P	p383	String toploop_resource
-O	o383	resource p383
-P	p384	Number 2434
-P	p385	Number 2443
-O	o385	type_lid p384 p385
 P	p386	String top_table
 O	o386	type_lid p386
 T	t386	o386
 B	b386	t386
-T	t387	o385 b386
-B	b387	t387
-P	p387	Number 2432
-O	o387	type_prod p205 p387
-P	p388	Number 2425
-O	o388	type_lid p205 p388
 P	p389	String string
 O	o389	type_lid p389
 T	t389	o389
 B	b389	t389
-T	t390	o388 b389
-B	b390	t390
-O	o390	type_lid p207 p387
 P	p390	String expr
 O	o391	type_lid p390
 T	t391	o391
 B	b391	t391
-T	t392	o390 b391
-B	b392	t392
-T	t393	o b392 b4
-B	b393	t393
-T	t394	o b390 b393
-B	b394	t394
-T	t395	o387 b394
-B	b395	t395
-P	p395	Number 2453
-O	o395	type_lid p203 p395
-P	p396	String top_data
-O	o396	type_lid p396
-T	t396	o396
-B	b396	t396
-T	t397	o395 b396
-B	b397	t397
-P	p397	Number 2459
-O	o397	type_lid p216 p397
-T	t398	o397 b244
-B	b398	t398
-T	t399	o383 b387 b395 b397 b398
-B	b399	t399
-P	p399	String trivial_resource
-O	o399	resource p399
-P	p400	Number 2335
 P	p401	Number 2341
-O	o401	type_lid p400 p401
-T	t401	o401 b204
-B	b401	t401
-P	p402	Number 2317
-P	p403	Number 2333
-O	o403	type_apply p402 p403
-P	p404	Number 2324
-O	o404	type_lid p404 p403
-T	t404	o404 b208
-B	b404	t404
-P	p405	Number 2323
-O	o405	type_lid p402 p405
-T	t405	o405 b204
-B	b405	t405
-T	t406	o403 b404 b405
-B	b406	t406
+O	o469	type_lid p467 p401
+T	t474	o469 b208
+B	b474	t474
 P	p406	Number 2343
-P	p407	Number 2359
-O	o407	type_apply p406 p407
-P	p408	Number 2350
-O	o408	type_lid p408 p407
-T	t408	o408 b215
-B	b408	t408
 P	p409	Number 2349
 O	o409	type_lid p406 p409
 T	t409	o409 b204
 B	b409	t409
-T	t410	o407 b408 b409
-B	b410	t410
 P	p410	Number 2361
-P	p411	Number 2390
-O	o411	type_prod p410 p411
-P	p412	Number 2378
-O	o412	type_proj p410 p412
 P	p413	Number 2367
-O	o413	type_uid p410 p413
-T	t413	o413 b222
-B	b413	t413
-P	p414	Number 2368
-O	o414	type_lid p414 p412
-T	t414	o414 b224
-B	b414	t414
-T	t415	o412 b413 b414
-B	b415	t415
-P	p415	Number 2381
-O	o415	type_lid p415 p411
-T	t416	o415 b227
-B	b416	t416
-T	t417	o b416 b4
-B	b417	t417
-T	t418	o b415 b417
-B	b418	t418
-T	t419	o411 b418
-B	b419	t419
-T	t420	o399 b401 b406 b410 b419
-B	b420	t420
-P	p420	String typeinf_resource
-O	o420	resource p420
-P	p421	Number 2345
-P	p422	Number 2357
-O	o422	type_lid p421 p422
+O	o477	type_prod p406 p413
+P	p477	Number 2352
+P	p478	Number 2358
+O	o478	type_lid p477 p478
+T	t481	o478 b204
+B	b481	t481
+O	o481	type_lid p410 p413
+T	t484	o481 b204
+B	b484	t484
+T	t485	o b484 b4
+B	b485	t485
+T	t486	o b481 b485
+B	b486	t486
+T	t488	o b409 b486
+B	b488	t488
+T	t491	o477 b488
+B	b491	t491
+T	t493	o465 b474 b491
+B	b493	t493
+O	o497	resource p235
 P	p423	String typeinf_func
 O	o423	type_lid p423
 T	t423	o423
 B	b423	t423
-T	t424	o422 b423
-B	b424	t424
-P	p424	Number 2322
-O	o424	type_lid p424 p406
 P	p425	String typeinf_resource_info
 O	o425	type_lid p425
 T	t425	o425
 B	b425	t425
-T	t426	o424 b425
-B	b426	t426
-P	p426	Number 2371
-O	o426	type_lid p407 p426
-P	p427	String typeinf_data
-O	o427	type_lid p427
-T	t427	o427
-B	b427	t427
-T	t428	o426 b427
-B	b428	t428
-P	p428	Number 2373
-P	p429	Number 2377
-O	o429	type_lid p428 p429
-T	t429	o429 b244
-B	b429	t429
-T	t430	o420 b424 b426 b428 b429
-B	b430	t430
-P	p430	String typeinf_subst_resource
-O	o430	resource p430
-P	p431	Number 1870
-P	p432	Number 1887
-O	o432	type_lid p431 p432
 P	p433	String typeinf_subst_fun
 O	o433	type_lid p433
 T	t433	o433
 B	b433	t433
-T	t434	o432 b433
-B	b434	t434
-P	p434	Number 1850
-P	p435	Number 1868
-O	o435	type_lid p434 p435
 P	p436	String typeinf_subst_info
 O	o436	type_lid p436
 T	t436	o436
 B	b436	t436
-T	t437	o435 b436
-B	b437	t437
-P	p437	Number 1889
-P	p438	Number 1907
-O	o438	type_lid p437 p438
-P	p439	String typeinf_subst_data
-O	o439	type_lid p439
-T	t439	o439
-B	b439	t439
-T	t440	o438 b439
-B	b440	t440
-P	p440	Number 1909
-P	p441	Number 1913
-O	o441	type_lid p440 p441
-T	t441	o441 b244
-B	b441	t441
-T	t442	o430 b434 b437 b440 b441
-B	b442	t442
-T	t443	o b442 b4
-B	b443	t443
-T	t444	o b430 b443
-B	b444	t444
-T	t445	o b420 b444
-B	b445	t445
-T	t446	o b399 b445
-B	b446	t446
-T	t447	o b383 b446
-B	b447	t447
-T	t448	o b372 b447
-B	b448	t448
-T	t449	o b358 b448
-B	b449	t449
-T	t450	o b343 b449
-B	b450	t450
-T	t451	o b317 b450
-B	b451	t451
-T	t452	o b300 b451
-B	b452	t452
-T	t345	o b336 b452
-B	b345	t345
-T	t348	o b246 b345
-B	b348	t348
-T	t359	o b232 b348
-B	b359	t359
-T	t361	o2 b5 b201 b359
-B	b361	t361
-T	t362	o1 b361
-B	b362	t362
 P	p457	Number 927
 P	p458	Number 941
 O	o458	location p457 p458
@@ -1319,38 +712,11 @@ B	b478	t478
 T	t479	o473 b478
 B	b479	t479
 P	p479	Number 971
-P	p3	Number 983
-O	o6	location p479 p3
-O	o8	str_open p479 p3
-O	o10	string p41
-T	t202	o10
-B	b202	t202
-T	t203	o b202 b4
-B	b203	t203
-T	t206	o8 b203
-B	b206	t206
-T	t207	o459 b206
-B	b207	t207
-T	t213	o6 b207
-B	b213	t213
-P	p217	Number 984
-P	p225	Number 994
-O	o225	location p217 p225
-O	o228	str_open p217 p225
 O	o482	string p25
 T	t482	o482
 B	b482	t482
 T	t483	o b482 b4
 B	b483	t483
-T	t233	o228 b483
-B	b233	t233
-T	t234	o459 b233
-B	b234	t234
-T	t237	o225 b234
-B	b237	t237
-P	p245	Number 1154
-P	p254	Number 1170
-O	o254	location p245 p254
 NSummary!opname	opname	opname Summary
 P	p488	String math_set
 O	o488	opname p488
@@ -1361,11 +727,6 @@ T	t489	o489
 B	b489	t489
 T	t490	o488 b489
 B	b490	t490
-T	t258	o254 b490
-B	b258	t258
-P	p264	Number 1171
-P	p271	Number 1193
-O	o271	location p264 p271
 P	p493	String math_isset
 O	o493	opname p493
 NCzf_itt_comment!math_isset	math_isset	math_isset Czf_itt_comment
@@ -1379,11 +740,6 @@ T	t496	o494 b495
 B	b496	t496
 T	t497	o493 b496
 B	b497	t497
-T	t273	o271 b497
-B	b273	t273
-P	p279	Number 1194
-P	p280	Number 1226
-O	o280	location p279 p280
 P	p500	String math_collect
 O	o500	opname p500
 NCzf_itt_comment!math_collect	math_collect	math_collect Czf_itt_comment
@@ -1404,11 +760,6 @@ T	t505	o501 b502 b503 b504
 B	b505	t505
 T	t506	o500 b505
 B	b506	t506
-T	t283	o280 b506
-B	b283	t283
-P	p295	Number 1227
-P	p296	Number 1267
-O	o296	location p295 p296
 P	p509	String math_set_ind
 O	o509	opname p509
 NCzf_itt_comment!math_set_ind	math_set_ind	math_set_ind Czf_itt_comment
@@ -1429,11 +780,6 @@ T	t514	o510 b495 b503 b511 b512 b513
 B	b514	t514
 T	t515	o509 b514
 B	b515	t515
-T	t301	o296 b515
-B	b301	t301
-P	p307	Number 1269
-P	p308	Number 1306
-O	o308	location p307 p308
 NSummary!dform	dform	dform Summary
 P	p518	String set_df
 O	o518	dform p518
@@ -1451,11 +797,6 @@ T	t522	o519 b521
 B	b522	t522
 T	t523	o518 b4 b489 b522
 B	b523	t523
-T	t310	o308 b523
-B	b310	t310
-P	p316	Number 1308
-P	p324	Number 1422
-O	o324	location p316 p324
 P	p526	String isset_df1
 O	o526	dform p526
 NSummary!mode_df	mode_df	mode_df Summary
@@ -1504,11 +845,63 @@ T	t541	o519 b540
 B	b541	t541
 T	t542	o526 b528 b496 b541
 B	b542	t542
-T	t327	o324 b542
-B	b327	t327
 P	p338	Number 1424
-P	p339	Number 1619
-O	o339	location p338 p339
+P	p497	Number 1434
+O	o498	type_lid p338 p497
+T	t498	o498 b238
+B	b498	t498
+P	p498	Number 1441
+O	o499	type_lid p229 p498
+T	t507	o499 b235
+B	b507	t507
+T	t510	o497 b498 b507
+B	b510	t510
+P	p515	String elim
+O	o516	resource p515
+P	p516	Number 1761
+P	p517	Number 1783
+O	o517	type_prod p516 p517
+P	p520	Number 1765
+O	o521	type_lid p516 p520
+T	t524	o521 b252
+B	b524	t524
+P	p524	Number 1769
+P	p525	Number 1782
+O	o525	type_fun p524 p525
+P	p528	Number 1772
+O	o533	type_lid p524 p528
+T	t543	o533 b269
+B	b543	t543
+P	p543	Number 1776
+O	o543	type_lid p543 p525
+T	t545	o543 b204
+B	b545	t545
+T	t569	o525 b543 b545
+B	b569	t569
+T	t571	o b569 b4
+B	b571	t571
+T	t600	o b524 b571
+B	b600	t600
+T	t602	o517 b600
+B	b602	t602
+P	p606	Number 1785
+P	p607	Number 1798
+O	o607	type_fun p606 p607
+P	p609	Number 1788
+O	o609	type_lid p606 p609
+T	t614	o609 b269
+B	b614	t614
+P	p614	Number 1792
+O	o614	type_lid p614 p607
+T	t616	o614 b204
+B	b616	t616
+T	t637	o607 b614 b616
+B	b637	t637
+T	t672	o516 b602 b637
+B	b672	t672
+P	p672	String eqcd
+O	o672	resource p672
+P	p673	Number 6168
 P	p545	String collect_df1
 O	o545	dform p545
 P	p546	String "{{\\it collect}("
@@ -1565,11 +958,6 @@ T	t567	o519 b566
 B	b567	t567
 T	t568	o545 b528 b505 b567
 B	b568	t568
-T	t344	o339 b568
-B	b344	t344
-P	p351	Number 1621
-P	p352	Number 1885
-O	o352	location p351 p352
 P	p571	String set_ind_df1
 O	o571	dform p571
 P	p572	String "{{\\it set\\_ind("
@@ -1634,10 +1022,6 @@ T	t598	o519 b597
 B	b598	t598
 T	t599	o571 b528 b514 b598
 B	b599	t599
-T	t354	o352 b599
-B	b354	t354
-P	p365	Number 1992
-O	o365	location p432 p365
 P	p602	String isset_df
 O	o602	dform p602
 NSummary!except_mode_df	except_mode_df	except_mode_df Summary
@@ -1671,11 +1055,6 @@ T	t612	o519 b611
 B	b612	t612
 T	t613	o602 b608 b496 b612
 B	b613	t613
-T	t368	o365 b613
-B	b368	t368
-P	p391	Number 1994
-P	p392	Number 2180
-O	o392	location p391 p392
 P	p616	String collect_df
 O	o616	dform p616
 Nszone	szone	szone NIL
@@ -1732,10 +1111,6 @@ T	t635	o519 b634
 B	b635	t635
 T	t636	o616 b608 b505 b635
 B	b636	t636
-T	t400	o392 b636
-B	b400	t400
-P	p416	Number 2182
-O	o416	location p416 p212
 P	p637	String set_ind_df
 O	o638	dform p637
 P	p638	String prec_tree_ind
@@ -1822,11 +1197,6 @@ T	t670	o519 b669
 B	b670	t670
 T	t671	o638 b641 b644 b670
 B	b671	t671
-T	t421	o416 b671
-B	b421	t421
-P	p442	Number 2611
-P	p443	Number 2636
-O	o443	location p442 p443
 P	p674	String math_eq
 O	o674	opname p674
 NCzf_itt_comment!math_eq	math_eq	math_eq Czf_itt_comment
@@ -1843,11 +1213,6 @@ T	t678	o675 b676 b677
 B	b678	t678
 T	t679	o674 b678
 B	b679	t679
-T	t458	o443 b679
-B	b458	t458
-P	p459	Number 2637
-P	p460	Number 2665
-O	o462	location p459 p460
 P	p462	String math_equal
 O	o463	opname p462
 NCzf_itt_comment!math_equal	math_equal	math_equal Czf_itt_comment
@@ -1856,11 +1221,6 @@ T	t466	o464 b676 b677
 B	b466	t466
 T	t467	o463 b466
 B	b467	t467
-T	t473	o462 b467
-B	b473	t473
-P	p474	Number 2666
-P	p475	Number 2693
-O	o476	location p474 p475
 P	p687	String math_funset
 O	o687	opname p687
 NCzf_itt_comment!math_funset	math_funset	math_funset Czf_itt_comment
@@ -1869,11 +1229,6 @@ T	t688	o688 b642 b511
 B	b688	t688
 T	t689	o687 b688
 B	b689	t689
-T	t480	o476 b689
-B	b480	t480
-P	p481	Number 2694
-P	p482	Number 2722
-O	o483	location p481 p482
 P	p692	String math_funprop
 O	o692	opname p692
 NCzf_itt_comment!math_funprop	math_funprop	math_funprop Czf_itt_comment
@@ -1886,11 +1241,6 @@ T	t695	o693 b642 b694
 B	b695	t695
 T	t696	o692 b695
 B	b696	t696
-T	t487	o483 b696
-B	b487	t487
-P	p489	Number 2723
-P	p490	Number 2756
-O	o490	location p489 p490
 P	p699	String math_dfunprop
 O	o699	opname p699
 NCzf_itt_comment!math_dfunprop	math_dfunprop	math_dfunprop Czf_itt_comment
@@ -1907,12 +1257,6 @@ T	t703	o700 b502 b701 b702
 B	b703	t703
 T	t704	o699 b703
 B	b704	t704
-T	t492	o490 b704
-B	b492	t492
-P	p495	Number 2758
-P	p496	Number 2907
-O	o496	location p495 p496
-P	p706	Number 2909
 P	p707	String eqinner_df1
 O	o707	dform p707
 T	t709	o531 b676
@@ -1945,10 +1289,6 @@ T	t501	o519 b500
 B	b501	t501
 T	t508	o707 b528 b678 b501
 B	b508	t508
-T	t509	o496 b508
-B	b509	t509
-P	p513	Number 3059
-O	o514	location p706 p513
 P	p514	String "{{\\it equal}("
 O	o515	string529 p514
 T	t517	o515
@@ -1961,11 +1301,6 @@ T	t525	o519 b519
 B	b525	t525
 T	t526	o723 b528 b466 b525
 B	b526	t526
-T	t544	o514 b526
-B	b544	t544
-P	p548	Number 3061
-P	p550	Number 3216
-O	o550	location p548 p550
 P	p725	String }
 O	o725	string529 p725
 T	t725	o725
@@ -2004,11 +1339,6 @@ T	t750	o519 b749
 B	b750	t750
 T	t751	o740 b528 b688 b750
 B	b751	t751
-T	t570	o550 b751
-B	b570	t570
-P	p575	Number 3218
-P	p576	Number 3376
-O	o576	location p575 p576
 P	p754	String funprop_df1
 O	o754	dform p754
 T	t754	o693 b642 b511
@@ -2025,11 +1355,6 @@ T	t758	o519 b757
 B	b758	t758
 T	t759	o754 b528 b754 b758
 B	b759	t759
-T	t601	o576 b759
-B	b601	t601
-P	p604	Number 3378
-P	p605	Number 3582
-O	o606	location p604 p605
 P	p762	String dfunprop_df1
 O	o762	dform p762
 T	t762	o700 b502 b642 b511
@@ -2058,11 +1383,6 @@ T	t771	o519 b770
 B	b771	t771
 T	t772	o762 b528 b762 b771
 B	b772	t772
-T	t615	o606 b772
-B	b615	t615
-P	p619	Number 3584
-P	p621	Number 3700
-O	o623	location p619 p621
 P	p775	String eq_df
 O	o775	dform p775
 P	p776	String prec_equal
@@ -2087,11 +1407,6 @@ T	t675	o519 b674
 B	b675	t675
 T	t681	o775 b778 b678 b675
 B	b681	t681
-T	t682	o623 b681
-B	b682	t682
-P	p683	Number 3702
-P	p684	Number 3792
-O	o684	location p683 p684
 P	p787	String eq_inner_df
 O	o787	dform p787
 T	t787	o b603 b4
@@ -2108,11 +1423,6 @@ T	t698	o519 b693
 B	b698	t698
 T	t699	o787 b787 b678 b698
 B	b699	t699
-T	t700	o684 b699
-B	b700	t700
-P	p702	Number 3794
-P	p703	Number 3942
-O	o703	location p702 p703
 P	p790	String )
 O	o790	string529 p790
 T	t790	o790
@@ -2147,11 +1457,6 @@ T	t809	o519 b808
 B	b809	t809
 T	t810	o800 b608 b800 b809
 B	b810	t810
-T	t706	o703 b810
-B	b706	t706
-P	p709	Number 3944
-P	p710	Number 4094
-O	o710	location p709 p710
 T	t812	o693 b502 b694
 B	b812	t812
 P	p813	String " fun_prop"
@@ -2170,13 +1475,6 @@ T	t818	o b801 b817
 B	b818	t818
 T	t819	o519 b818
 B	b819	t819
-T	t820	o800 b608 b812 b819
-B	b820	t820
-T	t722	o710 b820
-B	b722	t722
-P	p726	Number 4260
-P	p727	Number 4284
-O	o727	location p726 p727
 P	p728	String math_mem
 O	o728	opname p728
 NCzf_itt_comment!math_mem	math_mem	math_mem Czf_itt_comment
@@ -2193,18 +1491,10 @@ T	t739	o729 b502 b825
 B	b739	t739
 T	t740	o728 b739
 B	b740	t740
-T	t753	o727 b740
-B	b753	t753
-P	p756	Number 4285
-P	p757	Number 4312
-O	o757	location p756 p757
 T	t826	o824 b502 b825
 B	b826	t826
 T	t827	o823 b826
 B	b827	t827
-T	t761	o757 b827
-B	b761	t761
-P	p765	Number 4314
 P	p830	String member_df1
 O	o830	dform p830
 T	t830	o824 b676 b677
@@ -2227,19 +1517,12 @@ T	t837	o b529 b836
 B	b837	t837
 T	t838	o519 b837
 B	b838	t838
-P	p840	Number 4455
-O	o765	location p765 p840
 P	p766	String mem_df1
 O	o766	dform p766
 T	t774	o729 b676 b677
 B	b774	t774
 T	t775	o766 b528 b774 b838
 B	b775	t775
-T	t786	o765 b775
-B	b786	t786
-P	p791	Number 4457
-P	p841	Number 4604
-O	o791	location p791 p841
 P	p792	String "\\in_S "
 O	o792	string529 p792
 T	t799	o792
@@ -2260,11 +1543,6 @@ T	t843	o519 b842
 B	b843	t843
 T	t858	o830 b528 b830 b843
 B	b858	t858
-T	t859	o791 b858
-B	b859	t859
-P	p860	Number 4606
-P	p861	Number 4741
-O	o861	location p860 p861
 P	p865	String mem_df
 O	o866	dform p865
 P	p842	String member_df
@@ -2275,8 +1553,6 @@ P	p843	Var t
 O	o844	var p843
 T	t844	o844
 B	b844	t844
-T	t845	o843 b502 b844
-B	b845	t845
 T	t846	o843
 B	b846	t846
 P	p866	String s
@@ -2299,13 +1575,6 @@ T	t900	o b547 b891
 B	b900	t900
 T	t901	o519 b900
 B	b901	t901
-T	t922	o866 b608 b845 b901
-B	b922	t922
-T	t923	o861 b922
-B	b923	t923
-P	p925	Number 4743
-P	p927	Number 4881
-O	o927	location p925 p927
 P	p928	String S
 O	o928	string529 p928
 T	t949	o928
@@ -2320,13 +1589,6 @@ T	t959	o b547 b955
 B	b959	t959
 T	t960	o519 b959
 B	b960	t960
-T	t964	o842 b608 b845 b960
-B	b964	t964
-T	t965	o927 b964
-B	b965	t965
-P	p966	Number 5047
-P	p967	Number 5075
-O	o967	location p966 p967
 P	p859	String math_sep
 O	o859	opname p859
 NCzf_itt_comment!math_sep	math_sep	math_sep Czf_itt_comment
@@ -2335,11 +1597,6 @@ T	t860	o860 b502 b495 b694
 B	b860	t860
 T	t861	o859 b860
 B	b861	t861
-T	t969	o967 b861
-B	b969	t969
-P	p971	Number 5076
-P	p972	Number 5103
-O	o972	location p971 p972
 P	p864	String math_restricted
 O	o864	opname p864
 NCzf_itt_comment!math_restricted	math_restricted	math_restricted Czf_itt_comment
@@ -2348,21 +1605,12 @@ T	t865	o865 b694
 B	b865	t865
 T	t866	o864 b865
 B	b866	t866
-T	t974	o972 b866
-B	b974	t974
-P	p976	Number 5105
-P	p977	Number 5308
-O	o977	location p976 p977
 P	p869	String sep_df1
 O	o869	dform p869
 P	p870	String "{\\left\\{"
 O	o870	string529 p870
 T	t870	o870
 B	b870	t870
-P	p871	String "\\mathrel{|}"
-O	o871	string529 p871
-T	t871	o871
-B	b871	t871
 P	p872	String "\\right\\}}"
 O	o872	string529 p872
 T	t872	o872
@@ -2373,37 +1621,6 @@ T	t874	o b529 b873
 B	b874	t874
 T	t875	o b802 b874
 B	b875	t875
-T	t876	o b531 b875
-B	b876	t876
-T	t877	o b871 b876
-B	b877	t877
-T	t878	o b529 b877
-B	b878	t878
-T	t879	o b532 b878
-B	b879	t879
-T	t880	o b531 b879
-B	b880	t880
-T	t979	o b831 b880
-B	b979	t979
-T	t980	o b529 b979
-B	b980	t980
-T	t984	o b547 b980
-B	b984	t984
-T	t985	o b531 b984
-B	b985	t985
-T	t989	o b870 b985
-B	b989	t989
-T	t990	o b529 b989
-B	b990	t990
-T	t994	o519 b990
-B	b994	t994
-T	t995	o869 b528 b860 b994
-B	b995	t995
-T	t999	o977 b995
-B	b999	t999
-P	p1001	Number 5310
-P	p1002	Number 5438
-O	o1002	location p1001 p1002
 P	p891	String restricted_df1
 O	o891	dform p891
 P	p892	String "{{\\it restricted}("
@@ -2422,11 +1639,6 @@ T	t897	o519 b896
 B	b897	t897
 T	t898	o891 b528 b865 b897
 B	b898	t898
-T	t1004	o1002 b898
-B	b1004	t1004
-P	p1007	Number 5440
-P	p1008	Number 5610
-O	o1008	location p1007 p1008
 P	p901	String sep_df
 O	o901	dform p901
 P	p903	String "{ "
@@ -2467,11 +1679,6 @@ T	t919	o519 b918
 B	b919	t919
 T	t1012	o901 b787 b860 b919
 B	b1012	t1012
-T	t1013	o1008 b1012
-B	b1013	t1013
-P	p1015	Number 5612
-P	p1016	Number 5727
-O	o1016	location p1015 p1016
 P	p923	String restricted_df
 O	o923	dform p923
 P	p924	String prec_quant
@@ -2684,22 +1891,6 @@ P	p1056	String "\\Rightarrow_s "
 O	o1056	string529 p1056
 T	t1056	o1056
 B	b1056	t1056
-T	t1057	o b1056 b729
-B	b1057	t1057
-T	t1058	o b529 b1057
-B	b1058	t1058
-T	t1059	o b709 b1058
-B	b1059	t1059
-T	t1060	o b531 b1059
-B	b1060	t1060
-T	t1061	o b530 b1060
-B	b1061	t1061
-T	t1062	o b529 b1061
-B	b1062	t1062
-T	t1063	o519 b1062
-B	b1063	t1063
-T	t1064	o1055 b528 b1055 b1063
-B	b1064	t1064
 P	p1067	String siff_df1
 O	o1067	dform p1067
 T	t1067	o981 b676 b677
@@ -2708,108 +1899,20 @@ P	p1068	String "\\Leftrightarrow_s "
 O	o1068	string529 p1068
 T	t1068	o1068
 B	b1068	t1068
-T	t1069	o b1068 b729
-B	b1069	t1069
-T	t1070	o b529 b1069
-B	b1070	t1070
-T	t1071	o b709 b1070
-B	b1071	t1071
-T	t1072	o b531 b1071
-B	b1072	t1072
-T	t1073	o b530 b1072
-B	b1073	t1073
-T	t1074	o b529 b1073
-B	b1074	t1074
-T	t1075	o519 b1074
-B	b1075	t1075
-T	t1076	o1067 b528 b1067 b1075
-B	b1076	t1076
 P	p1079	String sall_df1
 O	o1079	dform p1079
-P	p1080	String "{\\forall_s "
-O	o1080	string529 p1080
-T	t1080	o1080
-B	b1080	t1080
 T	t1081	o531 b702
 B	b1081	t1081
-T	t1082	o b1081 b727
-B	b1082	t1082
-T	t1083	o b531 b1082
-B	b1083	t1083
-T	t1084	o b550 b1083
-B	b1084	t1084
-T	t1085	o b529 b1084
-B	b1085	t1085
-T	t1086	o b941 b1085
-B	b1086	t1086
-T	t1087	o b531 b1086
-B	b1087	t1087
-T	t1088	o b764 b1087
-B	b1088	t1088
-T	t1089	o b529 b1088
-B	b1089	t1089
-T	t1090	o b547 b1089
-B	b1090	t1090
-T	t1091	o b531 b1090
-B	b1091	t1091
-T	t1092	o b1080 b1091
-B	b1092	t1092
-T	t1093	o b529 b1092
-B	b1093	t1093
-T	t1094	o519 b1093
-B	b1094	t1094
-T	t1095	o1079 b528 b986 b1094
-B	b1095	t1095
 P	p1098	String sall_df2
 O	o1098	dform p1098
 T	t1098	o986 b502 b701
 B	b1098	t1098
-T	t1099	o b941 b727
-B	b1099	t1099
-T	t1100	o b531 b1099
-B	b1100	t1100
-T	t1101	o b550 b1100
-B	b1101	t1101
-T	t1102	o b529 b1101
-B	b1102	t1102
-T	t1103	o b547 b1102
-B	b1103	t1103
-T	t1104	o b531 b1103
-B	b1104	t1104
-T	t1105	o b1080 b1104
-B	b1105	t1105
-T	t1106	o b529 b1105
-B	b1106	t1106
-T	t1107	o519 b1106
-B	b1107	t1107
-T	t1108	o1098 b528 b1098 b1107
-B	b1108	t1108
 P	p1111	String sexists_df1
 O	o1111	dform p1111
-P	p1112	String "{\\exists_s "
-O	o1112	string529 p1112
-T	t1112	o1112
-B	b1112	t1112
-T	t1113	o b1112 b1091
-B	b1113	t1113
-T	t1114	o b529 b1113
-B	b1114	t1114
-T	t1115	o519 b1114
-B	b1115	t1115
-T	t1116	o1111 b528 b991 b1115
-B	b1116	t1116
 P	p1119	String sexists_df2
 O	o1119	dform p1119
 T	t1119	o991 b502 b701
 B	b1119	t1119
-T	t1120	o b1112 b1104
-B	b1120	t1120
-T	t1121	o b529 b1120
-B	b1121	t1121
-T	t1122	o519 b1121
-B	b1122	t1122
-T	t1123	o1119 b528 b1119 b1122
-B	b1123	t1123
 P	p1126	String dall_df1
 O	o1126	dform p1126
 P	p1136	String dexists_df1
@@ -2824,8 +1927,6 @@ T	t1144	o b1143 b4
 B	b1144	t1144
 T	t1145	o519 b1144
 B	b1145	t1145
-T	t1146	o1142 b787 b951 b1145
-B	b1146	t1146
 P	p1149	String false_df
 O	o1149	dform p1149
 P	p1150	String False_s
@@ -2836,8 +1937,6 @@ T	t1151	o b1150 b4
 B	b1151	t1151
 T	t1152	o519 b1151
 B	b1152	t1152
-T	t1153	o1149 b787 b956 b1152
-B	b1153	t1153
 P	p1156	String not_df1
 O	o1156	dform p1156
 P	p1157	String prec_not
@@ -2846,8 +1945,6 @@ T	t1157	o1157
 B	b1157	t1157
 T	t1158	o b1157 b606
 B	b1158	t1158
-T	t1159	o b603 b1158
-B	b1159	t1159
 T	t1160	o976 b504
 B	b1160	t1160
 NNuprl_font!tneg	tneg	tneg Nuprl_font
@@ -2864,8 +1961,6 @@ T	t1164	o b1161 b1163
 B	b1164	t1164
 T	t1165	o519 b1164
 B	b1165	t1165
-T	t1166	o1156 b1159 b1160 b1165
-B	b1166	t1166
 P	p1169	String implies_df
 O	o1169	dform p1169
 P	p1170	String prec_implies
@@ -2874,8 +1969,6 @@ T	t1170	o1170
 B	b1170	t1170
 T	t1171	o b1170 b606
 B	b1171	t1171
-T	t1172	o b603 b1171
-B	b1172	t1172
 T	t1173	o971 b504 b513
 B	b1173	t1173
 NNuprl_font!Rightarrow	Rightarrow	Rightarrow Nuprl_font
@@ -2898,8 +1991,6 @@ T	t1180	o b1162 b1179
 B	b1180	t1180
 T	t1181	o519 b1180
 B	b1181	t1181
-T	t1182	o1169 b1172 b1173 b1181
-B	b1182	t1182
 P	p1185	String and_df
 O	o1185	dform p1185
 P	p1186	String prec_and
@@ -2908,8 +1999,6 @@ T	t1186	o1186
 B	b1186	t1186
 T	t1187	o b1186 b606
 B	b1187	t1187
-T	t1188	o b603 b1187
-B	b1188	t1188
 T	t1189	o966 b504 b513
 B	b1189	t1189
 NNuprl_font!wedge	wedge	wedge Nuprl_font
@@ -2924,8 +2013,6 @@ T	t1193	o b1162 b1192
 B	b1193	t1193
 T	t1194	o519 b1193
 B	b1194	t1194
-T	t1195	o1185 b1188 b1189 b1194
-B	b1195	t1195
 P	p1198	String or_df
 O	o1198	dform p1198
 P	p1199	String prec_or
@@ -2950,8 +2037,6 @@ T	t1206	o b1162 b1205
 B	b1206	t1206
 T	t1207	o519 b1206
 B	b1207	t1207
-T	t1208	o1198 b1201 b1202 b1207
-B	b1208	t1208
 P	p1211	String iff_df
 O	o1211	dform p1211
 P	p1212	String prec_iff
@@ -2960,8 +2045,6 @@ T	t1212	o1212
 B	b1212	t1212
 T	t1213	o b1212 b606
 B	b1213	t1213
-T	t1214	o b603 b1213
-B	b1214	t1214
 T	t1215	o981 b504 b513
 B	b1215	t1215
 NNuprl_font!Leftrightarrow	Leftrightarrow	Leftrightarrow Nuprl_font
@@ -2976,206 +2059,831 @@ T	t1219	o b1162 b1218
 B	b1219	t1219
 T	t1220	o519 b1219
 B	b1220	t1220
-T	t1221	o1211 b1214 b1215 b1220
-B	b1221	t1221
 P	p1224	String all_df1
 O	o1224	dform p1224
 T	t1224	o b603 b925
 B	b1224	t1224
 T	t1020	o923 b1224 b865 b930
 B	b1020	t1020
-T	t1030	o1016 b1020
-B	b1030	t1030
-P	p1033	Number 5888
-P	p1034	Number 5906
-O	o1034	location p1033 p1034
-T	t1042	o1034 b952
-B	b1042	t1042
-P	p1045	Number 5907
-P	p1046	Number 5926
-O	o1046	location p1045 p1046
-T	t1054	o1046 b957
-B	b1054	t1054
-P	p1057	Number 5927
-P	p1058	Number 5951
-O	o1058	location p1057 p1058
-T	t1066	o1058 b962
-B	b1066	t1066
-P	p1069	Number 5952
-P	p1070	Number 5977
-O	o1070	location p1069 p1070
-T	t1078	o1070 b967
-B	b1078	t1078
-P	p1081	Number 5978
-P	p1082	Number 6007
-O	o1082	location p1081 p1082
-T	t1097	o1082 b972
-B	b1097	t1097
-P	p1099	Number 6008
-P	p1100	Number 6029
-O	o1100	location p1099 p1100
-T	t1110	o1100 b977
-B	b1110	t1110
-P	p1113	Number 6030
-P	p1114	Number 6055
-O	o1114	location p1113 p1114
-T	t1118	o1114 b982
-B	b1118	t1118
-P	p1120	Number 6056
-P	p1121	Number 6085
-O	o1121	location p1120 p1121
-T	t1125	o1121 b987
-B	b1125	t1125
-P	p1127	Number 6086
-P	p1128	Number 6118
-O	o1128	location p1127 p1128
-T	t1135	o1128 b992
-B	b1135	t1135
-P	p1137	Number 6119
-P	p1138	Number 6148
-O	o1138	location p1137 p1138
-T	t1141	o1138 b997
-B	b1141	t1141
-P	p1144	Number 6149
 P	p1145	Number 6181
-O	o1145	location p1144 p1145
-T	t1148	o1145 b1002
-B	b1148	t1148
+O	o673	type_prod p673 p1145
+P	p677	Number 6172
+O	o678	type_lid p673 p677
+T	t680	o678 b252
+B	b680	t680
+P	p680	Number 6175
+O	o680	type_lid p680 p1145
+T	t683	o680 b204
+B	b683	t683
+T	t684	o b683 b4
+B	b684	t684
+T	t685	o b680 b684
+B	b685	t685
+T	t686	o673 b685
+B	b686	t686
 P	p1151	Number 6183
-P	p1152	Number 6259
-O	o1152	location p1151 p1152
-T	t1155	o1152 b1010
-B	b1155	t1155
-P	p1158	Number 6261
-P	p1159	Number 6340
-O	o1159	location p1158 p1159
-T	t1168	o1159 b1018
-B	b1168	t1168
-P	p1171	Number 6342
-P	p1172	Number 6447
-O	o1172	location p1171 p1172
-T	t1184	o1172 b1028
-B	b1184	t1184
-P	p1187	Number 6449
-P	p1188	Number 6591
-O	o1188	location p1187 p1188
-T	t1197	o1188 b1040
-B	b1197	t1197
-P	p1200	Number 6593
-P	p1201	Number 6739
-O	o1201	location p1200 p1201
-T	t1210	o1201 b1052
-B	b1210	t1210
-P	p1213	Number 6741
+P	p686	Number 6189
+O	o686	type_lid p1151 p686
+T	t687	o686 b204
+B	b687	t687
+T	t690	o672 b686 b687
+B	b690	t690
+P	p690	String intro
+O	o690	resource p690
+P	p691	Number 1815
+P	p694	Number 1852
+O	o695	type_prod p691 p694
+P	p695	Number 1819
+O	o696	type_lid p691 p695
+T	t697	o696 b252
+B	b697	t697
+P	p697	Number 1823
+P	p698	Number 1851
+O	o698	type_prod p697 p698
+P	p704	Number 1829
+O	o704	type_lid p697 p704
+T	t705	o704 b389
+B	b705	t705
+P	p705	Number 1832
+P	p708	Number 1842
+O	o708	type_apply p705 p708
+P	p711	Number 1836
+O	o711	type_lid p711 p708
+P	p712	String option
+O	o712	type_lid p712
+T	t717	o712
+B	b717	t717
+T	t718	o711 b717
+B	b718	t718
+P	p718	Number 1835
+O	o718	type_lid p705 p718
+T	t719	o718 b269
+B	b719	t719
+T	t720	o708 b718 b719
+B	b720	t720
+P	p720	Number 1845
+O	o720	type_lid p720 p698
+T	t721	o720 b204
+B	b721	t721
+T	t723	o b721 b4
+B	b723	t723
+T	t730	o b720 b723
+B	b730	t730
+T	t731	o b705 b730
+B	b731	t731
+T	t732	o698 b731
+B	b732	t732
+T	t733	o b732 b4
+B	b733	t733
+T	t734	o b697 b733
+B	b734	t734
+T	t735	o695 b734
+B	b735	t735
+P	p735	Number 1854
+P	p736	Number 1860
+O	o736	type_lid p735 p736
+T	t736	o736 b204
+B	b736	t736
+T	t737	o690 b735 b736
+B	b737	t737
+P	p737	String reduce
+O	o737	resource p737
+P	p738	Number 2920
+P	p739	Number 2931
+O	o739	type_prod p738 p739
+P	p742	Number 2924
+O	o742	type_lid p738 p742
+T	t752	o742 b252
+B	b752	t752
+P	p752	Number 2927
+O	o752	type_lid p752 p739
+T	t760	o752 b346
+B	b760	t760
+T	t773	o b760 b4
+B	b773	t773
+T	t779	o b752 b773
+B	b779	t779
+T	t781	o739 b779
+B	b781	t781
+P	p781	Number 2933
+P	p782	Number 2937
+O	o782	type_lid p781 p782
+T	t782	o782 b346
+B	b782	t782
+T	t783	o737 b781 b782
+B	b783	t783
+P	p783	String squash
+O	o783	resource p783
+P	p784	Number 4017
+P	p785	Number 4028
+O	o785	type_lid p784 p785
+P	p786	String squash_info
+O	o786	type_lid p786
+T	t788	o786
+B	b788	t788
+T	t789	o785 b788
+B	b789	t789
+P	p789	Number 4030
+P	p793	Number 4043
+O	o793	type_fun p789 p793
+P	p794	Number 4033
+O	o794	type_lid p789 p794
+T	t794	o794 b269
+B	b794	t794
+P	p795	Number 4037
+O	o795	type_lid p795 p793
+T	t795	o795 b204
+B	b795	t795
+T	t796	o793 b794 b795
+B	b796	t796
+T	t797	o783 b789 b796
+B	b797	t797
+P	p797	String sub
+O	o797	resource p797
+P	p798	Number 4882
+P	p799	Number 4899
+O	o799	type_lid p798 p799
+T	t811	o799 b377
+B	b811	t811
+P	p811	Number 4901
+P	p812	Number 4907
+O	o812	type_lid p811 p812
+T	t821	o812 b204
+B	b821	t821
+T	t828	o797 b811 b821
+B	b828	t828
+P	p828	String toploop
+O	o828	resource p828
+O	o829	type_prod p203 p218
+P	p829	Number 2451
+O	o832	type_lid p203 p829
+T	t839	o832 b389
+B	b839	t839
+P	p839	Number 2454
+P	p844	Number 2460
+O	o845	type_lid p839 p844
+T	t847	o845 b389
+B	b847	t847
+P	p847	Number 2463
+O	o847	type_lid p847 p218
+T	t851	o847 b391
+B	b851	t851
+T	t852	o b851 b4
+B	b852	t852
+T	t853	o b847 b852
+B	b853	t853
+T	t854	o b839 b853
+B	b854	t854
+T	t855	o829 b854
+B	b855	t855
+P	p855	Number 2469
+P	p856	Number 2478
+O	o856	type_lid p855 p856
+T	t856	o856 b386
+B	b856	t856
+T	t857	o828 b855 b856
+B	b857	t857
+P	p857	String typeinf
+O	o857	resource p857
+P	p858	Number 2151
+P	p862	Number 2172
+O	o862	type_lid p858 p862
+T	t862	o862 b425
+B	b862	t862
+P	p863	Number 2174
+P	p867	Number 2186
+O	o868	type_lid p863 p867
+T	t881	o868 b423
+B	b881	t881
+T	t882	o857 b862 b881
+B	b882	t882
+P	p882	String typeinf_subst
+O	o882	resource p882
+P	p883	Number 1825
+P	p884	Number 1843
+O	o884	type_lid p883 p884
+T	t884	o884 b436
+B	b884	t884
+P	p885	Number 1862
+O	o885	type_lid p720 p885
+T	t885	o885 b433
+B	b885	t885
+T	t886	o882 b884 b885
+B	b886	t886
+T	t887	o b886 b4
+B	b887	t887
+T	t888	o b882 b887
+B	b888	t888
+T	t889	o b857 b888
+B	b889	t889
+T	t899	o b828 b889
+B	b899	t899
+T	t902	o b797 b899
+B	b902	t902
+T	t903	o b783 b902
+B	b903	t903
+T	t920	o b737 b903
+B	b920	t920
+T	t921	o b690 b920
+B	b921	t921
+T	t926	o b672 b921
+B	b926	t926
+T	t931	o b510 b926
+B	b931	t931
+T	t932	o b493 b931
+B	b932	t932
+T	t933	o2 b5 b460 b932
+B	b933	t933
+T	t934	o1 b933
+B	b934	t934
+P	p934	Number 988
+O	o934	location p479 p934
+O	o935	str_open p479 p934
+O	o936	string p251
+T	t936	o936
+B	b936	t936
+T	t937	o b936 b4
+B	b937	t937
+T	t938	o935 b937
+B	b938	t938
+T	t939	o459 b938
+B	b939	t939
+T	t940	o934 b939
+B	b940	t940
+P	p940	Number 989
+P	p941	Number 999
+O	o941	location p940 p941
+O	o942	str_open p940 p941
+T	t942	o942 b483
+B	b942	t942
+T	t943	o459 b942
+B	b943	t943
+T	t944	o941 b943
+B	b944	t944
+P	p944	Number 1159
+P	p945	Number 1175
+O	o945	location p944 p945
+T	t945	o945 b490
+B	b945	t945
+P	p946	Number 1176
+P	p947	Number 1198
+O	o947	location p946 p947
+T	t947	o947 b497
+B	b947	t947
+P	p948	Number 1199
+P	p949	Number 1231
+O	o949	location p948 p949
+T	t953	o949 b506
+B	b953	t953
+P	p953	Number 1232
+P	p954	Number 1272
+O	o954	location p953 p954
+T	t958	o954 b515
+B	b958	t958
+P	p958	Number 1274
+P	p959	Number 1311
+O	o959	location p958 p959
+T	t963	o959 b523
+B	b963	t963
+P	p963	Number 1313
+O	o963	location p963 p230
+T	t968	o963 b542
+B	b968	t968
+P	p968	Number 1429
+P	p969	Number 1624
+O	o969	location p968 p969
+T	t970	o969 b568
+B	b970	t970
+P	p973	Number 1626
+P	p974	Number 1890
+O	o974	location p973 p974
+T	t975	o974 b599
+B	b975	t975
+P	p978	Number 1892
+P	p979	Number 1997
+O	o979	location p978 p979
+T	t983	o979 b613
+B	b983	t983
+P	p983	Number 1999
+P	p984	Number 2185
+O	o984	location p983 p984
+T	t988	o984 b636
+B	b988	t988
+P	p988	Number 2187
+P	p989	Number 2452
+O	o989	location p988 p989
+T	t993	o989 b671
+B	b993	t993
+P	p993	Number 2616
+P	p994	Number 2641
+O	o994	location p993 p994
+T	t998	o994 b679
+B	b998	t998
+P	p998	Number 2642
+P	p999	Number 2670
+O	o999	location p998 p999
+T	t1000	o999 b467
+B	b1000	t1000
+P	p1003	Number 2671
+P	p1004	Number 2698
+O	o1004	location p1003 p1004
+T	t1005	o1004 b689
+B	b1005	t1005
+P	p1009	Number 2699
+P	p1010	Number 2727
+O	o1010	location p1009 p1010
+T	t1011	o1010 b696
+B	b1011	t1011
+P	p1011	Number 2728
+P	p1012	Number 2761
+O	o1012	location p1011 p1012
+T	t1019	o1012 b704
+B	b1019	t1019
+P	p1019	Number 2763
+P	p1020	Number 2912
+O	o1020	location p1019 p1020
+T	t1029	o1020 b508
+B	b1029	t1029
+P	p1029	Number 2914
+P	p1030	Number 3064
+O	o1030	location p1029 p1030
+T	t1041	o1030 b526
+B	b1041	t1041
+P	p1041	Number 3066
+P	p1042	Number 3221
+O	o1042	location p1041 p1042
+T	t1053	o1042 b751
+B	b1053	t1053
+P	p1053	Number 3223
+P	p1054	Number 3381
+O	o1054	location p1053 p1054
+T	t1065	o1054 b759
+B	b1065	t1065
+P	p1065	Number 3383
+P	p1066	Number 3587
+O	o1066	location p1065 p1066
+T	t1077	o1066 b772
+B	b1077	t1077
+P	p1077	Number 3589
+P	p1078	Number 3705
+O	o1078	location p1077 p1078
+T	t1079	o1078 b681
+B	b1079	t1079
+P	p1083	Number 3707
+P	p1084	Number 3797
+O	o1084	location p1083 p1084
+T	t1096	o1084 b699
+B	b1096	t1096
+P	p1096	Number 3799
+P	p1097	Number 3947
+O	o1097	location p1096 p1097
+T	t1109	o1097 b810
+B	b1109	t1109
+P	p1109	Number 3949
+P	p1110	Number 4100
+O	o1110	location p1109 p1110
+P	p1115	String fun_prop_df
+O	o1115	dform p1115
+T	t1117	o1115 b608 b812 b819
+B	b1117	t1117
+T	t1124	o1110 b1117
+B	b1124	t1124
+P	p1124	Number 4266
+P	p1125	Number 4290
+O	o1125	location p1124 p1125
+T	t1126	o1125 b740
+B	b1126	t1126
+P	p1129	Number 4291
+P	p1130	Number 4318
+O	o1130	location p1129 p1130
+T	t1130	o1130 b827
+B	b1130	t1130
+P	p1131	Number 4320
+P	p1132	Number 4461
+O	o1132	location p1131 p1132
+T	t1132	o1132 b775
+B	b1132	t1132
+P	p1133	Number 4463
+P	p1134	Number 4610
+O	o1134	location p1133 p1134
+T	t1134	o1134 b858
+B	b1134	t1134
+P	p1135	Number 4612
+P	p1139	Number 4749
+O	o1139	location p1135 p1139
+T	t1139	o729 b502 b844
+B	b1139	t1139
+T	t1140	o866 b608 b1139 b901
+B	b1140	t1140
+T	t1142	o1139 b1140
+B	b1142	t1142
+P	p1146	Number 4751
+P	p1147	Number 4894
+O	o1147	location p1146 p1147
+T	t1147	o824 b502 b844
+B	b1147	t1147
+T	t1149	o842 b608 b1147 b960
+B	b1149	t1149
+T	t1154	o1147 b1149
+B	b1154	t1154
+P	p1154	Number 5060
+P	p1155	Number 5088
+O	o1155	location p1154 p1155
+T	t1156	o1155 b861
+B	b1156	t1156
+P	p1160	Number 5089
+P	p1162	Number 5116
+O	o1162	location p1160 p1162
+T	t1167	o1162 b866
+B	b1167	t1167
+P	p1167	Number 5293
+O	o1167	location p382 p1167
+P	p1168	String "| "
+O	o1168	string529 p1168
+T	t1169	o1168
+B	b1169	t1169
+T	t1183	o b1169 b875
+B	b1183	t1183
+T	t1185	o b532 b1183
+B	b1185	t1185
+T	t1196	o b531 b1185
+B	b1196	t1196
+T	t1198	o b831 b1196
+B	b1198	t1198
+T	t1209	o b529 b1198
+B	b1209	t1209
+T	t1211	o b547 b1209
+B	b1211	t1211
+T	t1222	o b531 b1211
+B	b1222	t1222
+T	t1225	o b870 b1222
+B	b1225	t1225
+T	t1237	o b529 b1225
+B	b1237	t1237
+T	t1239	o519 b1237
+B	b1239	t1239
+T	t1245	o869 b528 b860 b1239
+B	b1245	t1245
+T	t1253	o1167 b1245
+B	b1253	t1253
+P	p1253	Number 5295
+P	p1254	Number 5423
+O	o1254	location p1253 p1254
+T	t1259	o1254 b898
+B	b1259	t1259
+P	p1259	Number 5425
+P	p1260	Number 5595
+O	o1260	location p1259 p1260
+T	t1267	o1260 b1012
+B	b1267	t1267
+P	p1267	Number 5597
+P	p1268	Number 5712
+O	o1268	location p1267 p1268
+T	t1274	o1268 b1020
+B	b1274	t1274
+P	p1276	Number 5873
+P	p1277	Number 5891
+O	o1277	location p1276 p1277
+T	t1278	o1277 b952
+B	b1278	t1278
+P	p1278	Number 5892
+P	p1279	Number 5911
+O	o1279	location p1278 p1279
+T	t1279	o1279 b957
+B	b1279	t1279
+P	p1280	Number 5912
+P	p1281	Number 5936
+O	o1281	location p1280 p1281
+T	t1281	o1281 b962
+B	b1281	t1281
+P	p1282	Number 5937
+P	p1283	Number 5962
+O	o1283	location p1282 p1283
+T	t1283	o1283 b967
+B	b1283	t1283
+P	p1284	Number 5963
+P	p1285	Number 5992
+O	o1285	location p1284 p1285
+T	t1285	o1285 b972
+B	b1285	t1285
+P	p1286	Number 5993
+P	p1287	Number 6014
+O	o1287	location p1286 p1287
+T	t1287	o1287 b977
+B	b1287	t1287
+P	p1288	Number 6015
+P	p1289	Number 6040
+O	o1289	location p1288 p1289
+T	t1289	o1289 b982
+B	b1289	t1289
+P	p1290	Number 6041
+P	p1291	Number 6070
+O	o1291	location p1290 p1291
+T	t1291	o1291 b987
+B	b1291	t1291
+P	p1292	Number 6071
+P	p1293	Number 6096
+O	o1293	location p1292 p1293
+T	t1293	o985 b1098
+B	b1293	t1293
+T	t1294	o1293 b1293
+B	b1294	t1294
+P	p1294	Number 6097
+P	p1295	Number 6129
+O	o1295	location p1294 p1295
+T	t1295	o1295 b992
+B	b1295	t1295
+P	p1296	Number 6130
+P	p1297	Number 6158
+O	o1297	location p1296 p1297
+T	t1297	o990 b1119
+B	b1297	t1297
+T	t1298	o1297 b1297
+B	b1298	t1298
+P	p1298	Number 6159
+P	p1299	Number 6188
+O	o1299	location p1298 p1299
+T	t1299	o1299 b997
+B	b1299	t1299
+P	p1300	Number 6221
+O	o1300	location p686 p1300
+T	t1300	o1300 b1002
+B	b1300	t1300
+P	p1301	Number 6223
+P	p1302	Number 6299
+O	o1302	location p1301 p1302
+T	t1302	o1302 b1010
+B	b1302	t1302
+P	p1303	Number 6301
+P	p1304	Number 6380
+O	o1304	location p1303 p1304
+T	t1304	o1304 b1018
+B	b1304	t1304
+P	p1305	Number 6382
+P	p1306	Number 6487
+O	o1306	location p1305 p1306
+T	t1306	o1306 b1028
+B	b1306	t1306
+P	p1307	Number 6489
+P	p1308	Number 6631
+O	o1308	location p1307 p1308
+T	t1308	o1308 b1040
+B	b1308	t1308
+P	p1309	Number 6633
+P	p1310	Number 6779
+O	o1310	location p1309 p1310
+T	t1310	o1310 b1052
+B	b1310	t1310
+P	p1311	Number 6781
 P	p1214	Number 6900
-O	o1214	location p1213 p1214
-T	t1223	o1214 b1064
-B	b1223	t1223
+O	o1311	location p1311 p1214
+T	t1311	o b531 b780
+B	b1311	t1311
+T	t1312	o b1056 b1311
+B	b1312	t1312
+T	t1313	o b529 b1312
+B	b1313	t1313
+T	t1314	o b709 b1313
+B	b1314	t1314
+T	t1315	o519 b1314
+B	b1315	t1315
+T	t1316	o1055 b528 b1055 b1315
+B	b1316	t1316
+T	t1317	o1311 b1316
+B	b1317	t1317
 P	p1227	Number 6902
-P	p1228	Number 7057
-O	o1228	location p1227 p1228
-T	t1238	o1228 b1076
-B	b1238	t1238
-P	p1240	Number 7059
-P	p1241	Number 7246
-O	o1241	location p1240 p1241
-T	t1246	o1241 b1095
-B	b1246	t1246
-P	p1248	Number 7248
-P	p1249	Number 7392
-O	o1249	location p1248 p1249
-T	t1254	o1249 b1108
-B	b1254	t1254
-P	p1256	Number 7394
-P	p1257	Number 7587
-O	o1257	location p1256 p1257
-T	t1260	o1257 b1116
-B	b1260	t1260
-P	p1262	Number 7589
-P	p1263	Number 7739
-O	o1263	location p1262 p1263
-T	t1268	o1263 b1123
-B	b1268	t1268
-P	p1270	Number 7741
-P	p1271	Number 7925
-O	o1271	location p1270 p1271
-P	p1272	String "{\\forall "
-O	o1272	string529 p1272
-T	t1356	o1272
-B	b1356	t1356
-T	t1357	o b831 b1087
-B	b1357	t1357
-T	t1358	o b529 b1357
-B	b1358	t1358
-T	t1359	o b547 b1358
-B	b1359	t1359
-T	t1360	o b531 b1359
-B	b1360	t1360
-T	t1361	o b1356 b1360
-B	b1361	t1361
-T	t1362	o b529 b1361
-B	b1362	t1362
-T	t1363	o519 b1362
-B	b1363	t1363
-T	t1364	o1126 b528 b996 b1363
-B	b1364	t1364
-T	t1365	o1271 b1364
-B	b1365	t1365
-P	p1365	Number 7927
-P	p1366	Number 8117
-O	o1366	location p1365 p1366
-P	p1367	String "{\\exists "
-O	o1367	string529 p1367
-T	t1367	o1367
-B	b1367	t1367
-T	t1368	o b1367 b1360
-B	b1368	t1368
-T	t1369	o b529 b1368
-B	b1369	t1369
-T	t1370	o519 b1369
-B	b1370	t1370
-T	t1371	o1136 b528 b1001 b1370
-B	b1371	t1371
-T	t1372	o1366 b1371
-B	b1372	t1372
-P	p1372	Number 8119
-P	p1373	Number 8180
-O	o1373	location p1372 p1373
-T	t1373	o1373 b1146
-B	b1373	t1373
-P	p1374	Number 8182
-P	p1375	Number 8246
-O	o1375	location p1374 p1375
-T	t1375	o1375 b1153
-B	b1375	t1375
-P	p1376	Number 8248
-P	p1377	Number 8363
-O	o1377	location p1376 p1377
-T	t1377	o1377 b1166
-B	b1377	t1377
-P	p1378	Number 8365
-P	p1379	Number 8524
-O	o1379	location p1378 p1379
-T	t1379	o1379 b1182
-B	b1379	t1379
-P	p1380	Number 8526
-P	p1381	Number 8668
-O	o1381	location p1380 p1381
-T	t1381	o1381 b1195
-B	b1381	t1381
-P	p1382	Number 8670
-P	p1383	Number 8807
-O	o1383	location p1382 p1383
-T	t1383	o1383 b1208
-B	b1383	t1383
-P	p1384	Number 8809
-P	p1385	Number 8960
-O	o1385	location p1384 p1385
-T	t1385	o1385 b1221
-B	b1385	t1385
-P	p1386	Number 8962
-P	p1387	Number 9136
-O	o1387	location p1386 p1387
+P	p1317	Number 7017
+O	o1317	location p1227 p1317
+T	t1318	o b1068 b1311
+B	b1318	t1318
+T	t1319	o b529 b1318
+B	b1319	t1319
+T	t1320	o b709 b1319
+B	b1320	t1320
+T	t1321	o519 b1320
+B	b1321	t1321
+T	t1322	o1067 b528 b1067 b1321
+B	b1322	t1322
+T	t1323	o1317 b1322
+B	b1323	t1323
+P	p1323	Number 7019
+P	p1324	Number 7185
+O	o1324	location p1323 p1324
+P	p1325	String "\\forall_s "
+O	o1325	string529 p1325
+T	t1325	o1325
+B	b1325	t1325
+T	t1326	o b1081 b4
+B	b1326	t1326
+T	t1327	o b531 b1326
+B	b1327	t1327
+T	t1328	o b550 b1327
+B	b1328	t1328
+T	t1329	o b529 b1328
+B	b1329	t1329
+T	t1330	o b941 b1329
+B	b1330	t1330
+T	t1331	o b531 b1330
+B	b1331	t1331
+T	t1332	o b764 b1331
+B	b1332	t1332
+T	t1333	o b529 b1332
+B	b1333	t1333
+T	t1334	o b547 b1333
+B	b1334	t1334
+T	t1335	o b531 b1334
+B	b1335	t1335
+T	t1336	o b1325 b1335
+B	b1336	t1336
+T	t1337	o b529 b1336
+B	b1337	t1337
+T	t1338	o519 b1337
+B	b1338	t1338
+T	t1339	o1079 b528 b986 b1338
+B	b1339	t1339
+T	t1340	o1324 b1339
+B	b1340	t1340
+P	p1340	Number 7187
+P	p1341	Number 7310
+O	o1341	location p1340 p1341
+T	t1341	o b941 b4
+B	b1341	t1341
+T	t1342	o b531 b1341
+B	b1342	t1342
+T	t1343	o b550 b1342
+B	b1343	t1343
+T	t1344	o b529 b1343
+B	b1344	t1344
+T	t1345	o b547 b1344
+B	b1345	t1345
+T	t1346	o b531 b1345
+B	b1346	t1346
+T	t1347	o b1325 b1346
+B	b1347	t1347
+T	t1348	o b529 b1347
+B	b1348	t1348
+T	t1349	o519 b1348
+B	b1349	t1349
+T	t1350	o1098 b528 b1098 b1349
+B	b1350	t1350
+T	t1351	o1341 b1350
+B	b1351	t1351
+P	p1351	Number 7312
+P	p1352	Number 7484
+O	o1352	location p1351 p1352
+P	p1353	String "\\exists_s "
+O	o1353	string529 p1353
+T	t1353	o1353
+B	b1353	t1353
+T	t1354	o b1353 b1335
+B	b1354	t1354
+T	t1355	o b529 b1354
+B	b1355	t1355
+T	t1366	o519 b1355
+B	b1366	t1366
+T	t1374	o1111 b528 b991 b1366
+B	b1374	t1374
+T	t1376	o1352 b1374
+B	b1376	t1376
+P	p1401	Number 7486
+P	p1402	Number 7615
+O	o1402	location p1401 p1402
+T	t1404	o b1353 b1346
+B	b1404	t1404
+T	t1405	o b529 b1404
+B	b1405	t1405
+T	t1412	o519 b1405
+B	b1412	t1412
+T	t1413	o1119 b528 b1119 b1412
+B	b1413	t1413
+T	t1419	o1402 b1413
+B	b1419	t1419
+P	p1421	Number 7617
+P	p1422	Number 7780
+O	o1422	location p1421 p1422
+P	p1428	String "\\forall "
+O	o1428	string529 p1428
+T	t1437	o1428
+B	b1437	t1437
+T	t1444	o b831 b1331
+B	b1444	t1444
+T	t1445	o b529 b1444
+B	b1445	t1445
+T	t1449	o b547 b1445
+B	b1449	t1449
+T	t1450	o b531 b1449
+B	b1450	t1450
+T	t1459	o b1437 b1450
+B	b1459	t1459
+T	t1471	o b529 b1459
+B	b1471	t1471
+T	t1472	o519 b1471
+B	b1472	t1472
+T	t1481	o1126 b528 b996 b1472
+B	b1481	t1481
+T	t1488	o1422 b1481
+B	b1488	t1488
+P	p1490	Number 7782
+P	p1491	Number 7951
+O	o1491	location p1490 p1491
+P	p1496	String "\\exists "
+O	o1496	string529 p1496
+T	t1501	o1496
+B	b1501	t1501
+T	t1513	o b1501 b1450
+B	b1513	t1513
+T	t1514	o b529 b1513
+B	b1514	t1514
+T	t1522	o519 b1514
+B	b1522	t1522
+T	t1527	o1136 b528 b1001 b1522
+B	b1527	t1527
+T	t1528	o1491 b1527
+B	b1528	t1528
+P	p1529	Number 7953
+P	p1530	Number 8034
+O	o1530	location p1529 p1530
+P	p1536	String src
+O	o1536	except_mode_df p1536
+T	t1549	o1536
+B	b1549	t1549
+T	t1550	o b1549 b4
+B	b1550	t1550
+T	t1565	o b603 b1550
+B	b1565	t1565
+T	t1566	o1142 b1565 b951 b1145
+B	b1566	t1566
+T	t1570	o1530 b1566
+B	b1570	t1570
+P	p1572	Number 8036
+P	p1573	Number 8120
+O	o1573	location p1572 p1573
+T	t1581	o1149 b1565 b956 b1152
+B	b1581	t1581
+T	t1582	o1573 b1581
+B	b1582	t1582
+P	p1585	Number 8122
+P	p1586	Number 8257
+O	o1586	location p1585 p1586
+T	t1593	o b1549 b1158
+B	b1593	t1593
+T	t1594	o b603 b1593
+B	b1594	t1594
+T	t1598	o1156 b1594 b1160 b1165
+B	b1598	t1598
+T	t1599	o1586 b1598
+B	b1599	t1599
+P	p1600	Number 8259
+P	p1601	Number 8438
+O	o1601	location p1600 p1601
+T	t1603	o b1549 b1171
+B	b1603	t1603
+T	t1604	o b603 b1603
+B	b1604	t1604
+T	t1605	o1169 b1604 b1173 b1181
+B	b1605	t1605
+T	t1610	o1601 b1605
+B	b1610	t1610
+P	p1613	Number 8440
+P	p1614	Number 8602
+O	o1614	location p1613 p1614
+T	t1617	o b1549 b1187
+B	b1617	t1617
+T	t1618	o b603 b1617
+B	b1618	t1618
+T	t1625	o1185 b1618 b1189 b1194
+B	b1625	t1625
+T	t1626	o1614 b1625
+B	b1626	t1626
+P	p1628	Number 8604
+P	p1629	Number 8761
+O	o1629	location p1628 p1629
+T	t1633	o b1549 b1200
+B	b1633	t1633
+T	t1634	o b603 b1633
+B	b1634	t1634
+T	t1644	o1198 b1634 b1202 b1207
+B	b1644	t1644
+T	t1645	o1629 b1644
+B	b1645	t1645
+P	p1647	Number 8763
+P	p1648	Number 8934
+O	o1648	location p1647 p1648
+T	t1659	o b1549 b1213
+B	b1659	t1659
+T	t1660	o b603 b1659
+B	b1660	t1660
+T	t1666	o1211 b1660 b1215 b1220
+B	b1666	t1666
+T	t1667	o1648 b1666
+B	b1667	t1667
+P	p1669	Number 8936
+P	p1670	Number 9130
+O	o1670	location p1669 p1670
+T	t1674	o b1549 b925
+B	b1674	t1674
+T	t1675	o b603 b1674
+B	b1675	t1675
 Nsbreak	sbreak	sbreak NIL
 P	p1225	String ""
 P	p1226	String ". "
@@ -3200,13 +2908,13 @@ T	t1234	o b618 b1233
 B	b1234	t1234
 T	t1235	o519 b1234
 B	b1235	t1235
-T	t1236	o1224 b1224 b986 b1235
-B	b1236	t1236
-T	t1387	o1387 b1236
-B	b1387	t1387
-P	p1388	Number 9138
-P	p1389	Number 9320
-O	o1389	location p1388 p1389
+T	t1682	o1224 b1675 b986 b1235
+B	b1682	t1682
+T	t1683	o1670 b1682
+B	b1683	t1683
+P	p1685	Number 9132
+P	p1687	Number 9334
+O	o1687	location p1685 p1687
 P	p1239	String exists_df1
 O	o1239	dform p1239
 NNuprl_font!exists	exists	exists Nuprl_font
@@ -3219,13 +2927,13 @@ T	t1242	o b618 b1241
 B	b1242	t1242
 T	t1243	o519 b1242
 B	b1243	t1243
-T	t1244	o1239 b1224 b991 b1243
-B	b1244	t1244
-T	t1389	o1389 b1244
-B	b1389	t1389
-P	p1390	Number 9322
-P	p1391	Number 9509
-O	o1391	location p1390 p1391
+T	t1697	o1239 b1675 b991 b1243
+B	b1697	t1697
+T	t1698	o1687 b1697
+B	b1698	t1698
+P	p1699	Number 9336
+P	p1700	Number 9543
+O	o1700	location p1699 p1700
 P	p1247	String all_df2
 O	o1247	dform p1247
 T	t1247	o b846 b1230
@@ -3238,13 +2946,13 @@ T	t1250	o b618 b1249
 B	b1250	t1250
 T	t1251	o519 b1250
 B	b1251	t1251
-T	t1252	o1247 b1224 b996 b1251
-B	b1252	t1252
-T	t1391	o1391 b1252
-B	b1391	t1391
-P	p1392	Number 9511
-P	p1393	Number 9706
-O	o1393	location p1392 p1393
+T	t1702	o1247 b1675 b996 b1251
+B	b1702	t1702
+T	t1703	o1700 b1702
+B	b1703	t1703
+P	p1705	Number 9545
+P	p1706	Number 9760
+O	o1706	location p1705 p1706
 P	p1255	String exists_df2
 O	o1255	dform p1255
 T	t1255	o b1240 b1248
@@ -3253,13 +2961,13 @@ T	t1256	o b618 b1255
 B	b1256	t1256
 T	t1257	o519 b1256
 B	b1257	t1257
-T	t1258	o1255 b1224 b1001 b1257
-B	b1258	t1258
-T	t1393	o1393 b1258
-B	b1393	t1393
-P	p1394	Number 9708
-P	p1395	Number 9864
-O	o1395	location p1394 p1395
+T	t1728	o1255 b1675 b1001 b1257
+B	b1728	t1728
+T	t1751	o1706 b1728
+B	b1752	t1751
+P	p1754	Number 9762
+P	p1755	Number 9938
+O	o1755	location p1754 p1755
 P	p1261	String all_df3
 O	o1261	dform p1261
 T	t1261	o986 b502 b702
@@ -3272,13 +2980,13 @@ T	t1264	o b618 b1263
 B	b1264	t1264
 T	t1265	o519 b1264
 B	b1265	t1265
-T	t1266	o1261 b1224 b1261 b1265
-B	b1266	t1266
-T	t1395	o1395 b1266
-B	b1395	t1395
-P	p1396	Number 9866
-P	p1397	Number 10030
-O	o1397	location p1396 p1397
+T	t1757	o1261 b1675 b1261 b1265
+B	b1757	t1757
+T	t1758	o1755 b1757
+B	b1758	t1758
+P	p1762	Number 9940
+P	p1763	Number 10124
+O	o1763	location p1762 p1763
 P	p1269	String exists_df3
 O	o1269	dform p1269
 T	t1269	o991 b502 b702
@@ -3289,13 +2997,13 @@ T	t1271	o b618 b1270
 B	b1271	t1271
 T	t1272	o519 b1271
 B	b1272	t1272
-T	t1273	o1269 b1224 b1269 b1272
-B	b1273	t1273
-T	t1397	o1397 b1273
-B	b1397	t1397
-P	p1398	Number 10191
-P	p1399	Number 10209
-O	o1399	location p1398 p1399
+T	t1775	o1269 b1675 b1269 b1272
+B	b1775	t1775
+T	t1776	o1763 b1775
+B	b1776	t1776
+P	p1778	Number 10285
+P	p1779	Number 10303
+O	o1779	location p1778 p1779
 P	p1400	String math_empty
 O	o1400	opname p1400
 NCzf_itt_comment!math_empty	math_empty	math_empty Czf_itt_comment
@@ -3304,11 +3012,11 @@ T	t1401	o1401
 B	b1401	t1401
 T	t1402	o1400 b1401
 B	b1402	t1402
-T	t1403	o1399 b1402
-B	b1403	t1403
-P	p1403	Number 10211
-P	p1404	Number 10281
-O	o1404	location p1403 p1404
+T	t1907	o1779 b1402
+B	b1907	t1907
+P	p1907	Number 10305
+P	p1908	Number 10375
+O	o1908	location p1907 p1908
 P	p1405	String empty_df1
 O	o1405	dform p1405
 P	p1406	String "{\\{\\}}"
@@ -3323,11 +3031,11 @@ T	t1409	o519 b1408
 B	b1409	t1409
 T	t1410	o1405 b528 b1401 b1409
 B	b1410	t1410
-T	t1411	o1404 b1410
-B	b1411	t1411
-P	p1411	Number 10283
-P	p1412	Number 10342
-O	o1412	location p1411 p1412
+T	t1908	o1908 b1410
+B	b1908	t1908
+P	p1909	Number 10377
+P	p1910	Number 10456
+O	o1910	location p1909 p1910
 P	p1413	String empty_df2
 O	o1413	dform p1413
 P	p1414	String {}
@@ -3338,13 +3046,13 @@ T	t1415	o b1414 b4
 B	b1415	t1415
 T	t1416	o519 b1415
 B	b1416	t1416
-T	t1417	o1413 b787 b1401 b1416
-B	b1417	t1417
-T	t1418	o1412 b1417
-B	b1418	t1418
-P	p1418	Number 10507
-P	p1419	Number 10528
-O	o1419	location p1418 p1419
+T	t1910	o1413 b1565 b1401 b1416
+B	b1910	t1910
+T	t1911	o1910 b1910
+B	b1911	t1911
+P	p1911	Number 10621
+P	p1912	Number 10642
+O	o1912	location p1911 p1912
 P	p1420	String math_sing
 O	o1420	opname p1420
 NCzf_itt_comment!math_sing	math_sing	math_sing Czf_itt_comment
@@ -3353,11 +3061,11 @@ T	t1421	o1421 b495
 B	b1421	t1421
 T	t1422	o1420 b1421
 B	b1422	t1422
-T	t1423	o1419 b1422
-B	b1423	t1423
-P	p1423	Number 10530
-P	p1424	Number 10633
-O	o1424	location p1423 p1424
+T	t1912	o1912 b1422
+B	b1912	t1912
+P	p1913	Number 10644
+P	p1914	Number 10747
+O	o1914	location p1913 p1914
 P	p1425	String sing_df1
 O	o1425	dform p1425
 P	p1426	String "{\\{"
@@ -3384,11 +3092,11 @@ T	t1434	o519 b1433
 B	b1434	t1434
 T	t1435	o1425 b528 b1421 b1434
 B	b1435	t1435
-T	t1436	o1424 b1435
-B	b1436	t1436
-P	p1436	Number 10636
-P	p1437	Number 10710
-O	o1437	location p1436 p1437
+T	t1914	o1914 b1435
+B	b1914	t1914
+P	p1915	Number 10750
+P	p1916	Number 10824
+O	o1916	location p1915 p1916
 P	p1438	String sing_df2
 O	o1438	dform p1438
 T	t1438	o b725 b4
@@ -3401,11 +3109,11 @@ T	t1441	o519 b1440
 B	b1441	t1441
 T	t1442	o1438 b787 b1421 b1441
 B	b1442	t1442
-T	t1443	o1437 b1442
-B	b1443	t1443
-P	p1443	Number 10871
-P	p1444	Number 10893
-O	o1444	location p1443 p1444
+T	t1916	o1916 b1442
+B	b1916	t1916
+P	p1917	Number 10985
+P	p1918	Number 11007
+O	o1918	location p1917 p1918
 P	p1445	String math_union
 O	o1445	opname p1445
 NCzf_itt_comment!math_union	math_union	math_union Czf_itt_comment
@@ -3414,11 +3122,11 @@ T	t1446	o1446 b495
 B	b1446	t1446
 T	t1447	o1445 b1446
 B	b1447	t1447
-T	t1448	o1444 b1447
-B	b1448	t1448
-P	p1448	Number 10895
-P	p1449	Number 11003
-O	o1449	location p1448 p1449
+T	t1918	o1918 b1447
+B	b1918	t1918
+P	p1919	Number 11009
+P	p1920	Number 11117
+O	o1920	location p1919 p1920
 P	p1450	String union_df1
 O	o1450	dform p1450
 P	p1451	String "{\\bigcup "
@@ -3437,15 +3145,18 @@ T	t1456	o519 b1455
 B	b1456	t1456
 T	t1457	o1450 b528 b1446 b1456
 B	b1457	t1457
-T	t1458	o1449 b1457
-B	b1458	t1458
-P	p1458	Number 11005
-P	p1459	Number 11149
-O	o1459	location p1458 p1459
+T	t1920	o1920 b1457
+B	b1920	t1920
+P	p1921	Number 11119
+P	p1922	Number 11263
+O	o1922	location p1921 p1922
 P	p1460	String union_df2
 O	o1460	dform p1460
-T	t1460	o1446 b676 b677
-B	b1460	t1460
+NItt_comment	Itt_comment	Itt_comment NIL
+NItt_comment!math_union	math_union1922	math_union Itt_comment
+O	o1923	math_union1922
+T	t1923	o1923 b676 b677
+B	b1923	t1923
 P	p1461	String "\\cup "
 O	o1461	string529 p1461
 T	t1461	o1461
@@ -3464,13 +3175,13 @@ T	t1467	o b529 b1466
 B	b1467	t1467
 T	t1468	o519 b1467
 B	b1468	t1468
-T	t1469	o1460 b528 b1460 b1468
-B	b1469	t1469
-T	t1470	o1459 b1469
-B	b1470	t1470
-P	p1470	Number 11151
-P	p1471	Number 11275
-O	o1471	location p1470 p1471
+T	t1924	o1460 b528 b1923 b1468
+B	b1924	t1924
+T	t1925	o1922 b1924
+B	b1925	t1925
+P	p1925	Number 11265
+P	p1926	Number 11389
+O	o1926	location p1925 p1926
 P	p1472	String union_df3
 O	o1472	dform p1472
 NNuprl_font!cup	cup	cup Nuprl_font
@@ -3487,13 +3198,13 @@ T	t1477	o b709 b1476
 B	b1477	t1477
 T	t1478	o519 b1477
 B	b1478	t1478
-T	t1479	o1472 b1201 b1460 b1478
-B	b1479	t1479
-T	t1480	o1471 b1479
-B	b1480	t1480
-P	p1480	Number 11277
-P	p1481	Number 11380
-O	o1481	location p1480 p1481
+T	t1926	o1472 b1201 b1923 b1478
+B	b1926	t1926
+T	t1927	o1926 b1926
+B	b1927	t1927
+P	p1927	Number 11391
+P	p1928	Number 11494
+O	o1928	location p1927 p1928
 P	p1482	String union_df4
 O	o1482	dform p1482
 T	t1482	o b532 b4
@@ -3506,11 +3217,11 @@ T	t1485	o519 b1484
 B	b1485	t1485
 T	t1486	o1482 b1201 b1446 b1485
 B	b1486	t1486
-T	t1487	o1481 b1486
-B	b1487	t1487
-P	p1487	Number 11548
-P	p1488	Number 11570
-O	o1488	location p1487 p1488
+T	t1928	o1928 b1486
+B	b1928	t1928
+P	p1929	Number 11662
+P	p1930	Number 11690
+O	o1930	location p1929 p1930
 P	p1489	String math_isect
 O	o1489	opname p1489
 NCzf_itt_comment!math_isect	math_isect	math_isect Czf_itt_comment
@@ -3519,11 +3230,6 @@ T	t1490	o1490 b495
 B	b1490	t1490
 T	t1491	o1489 b1490
 B	b1491	t1491
-T	t1492	o1488 b1491
-B	b1492	t1492
-P	p1492	Number 11572
-P	p1493	Number 11680
-O	o1493	location p1492 p1493
 P	p1494	String isect_df1
 O	o1494	dform p1494
 P	p1495	String "{\\bigcap "
@@ -3538,15 +3244,27 @@ T	t1498	o519 b1497
 B	b1498	t1498
 T	t1499	o1494 b528 b1490 b1498
 B	b1499	t1499
-T	t1500	o1493 b1499
-B	b1500	t1500
-P	p1500	Number 11682
-P	p1501	Number 11826
-O	o1501	location p1500 p1501
 P	p1502	String isect_df2
 O	o1502	dform p1502
 T	t1502	o1490 b676 b677
 B	b1502	t1502
+T	t1930	o1489 b1502
+B	b1930	t1930
+T	t1931	o1930 b1930
+B	b1931	t1931
+P	p1931	Number 11691
+P	p1932	Number 11713
+O	o1932	location p1931 p1932
+T	t1932	o1932 b1491
+B	b1932	t1932
+P	p1933	Number 11715
+P	p1934	Number 11823
+O	o1934	location p1933 p1934
+T	t1934	o1934 b1499
+B	b1934	t1934
+P	p1935	Number 11825
+P	p1936	Number 11969
+O	o1936	location p1935 p1936
 P	p1503	String "\\cap "
 O	o1503	string529 p1503
 T	t1503	o1503
@@ -3567,11 +3285,11 @@ T	t1510	o519 b1509
 B	b1510	t1510
 T	t1511	o1502 b528 b1502 b1510
 B	b1511	t1511
-T	t1512	o1501 b1511
-B	b1512	t1512
-P	p1512	Number 11828
-P	p1513	Number 11952
-O	o1513	location p1512 p1513
+T	t1936	o1936 b1511
+B	b1936	t1936
+P	p1937	Number 11971
+P	p1938	Number 12095
+O	o1938	location p1937 p1938
 P	p1514	String isect_df3
 O	o1514	dform p1514
 NNuprl_font!cap	cap	cap Nuprl_font
@@ -3588,11 +3306,11 @@ T	t1519	o519 b1518
 B	b1519	t1519
 T	t1520	o1514 b1201 b1502 b1519
 B	b1520	t1520
-T	t1521	o1513 b1520
-B	b1521	t1521
-P	p1521	Number 11954
-P	p1522	Number 12057
-O	o1522	location p1521 p1522
+T	t1938	o1938 b1520
+B	b1938	t1938
+P	p1939	Number 12097
+P	p1940	Number 12200
+O	o1940	location p1939 p1940
 P	p1523	String isect_df4
 O	o1523	dform p1523
 T	t1523	o b1515 b1483
@@ -3601,11 +3319,11 @@ T	t1524	o519 b1523
 B	b1524	t1524
 T	t1525	o1523 b1201 b1490 b1524
 B	b1525	t1525
-T	t1526	o1522 b1525
-B	b1526	t1526
-P	p1526	Number 12217
-P	p1527	Number 12244
-O	o1527	location p1526 p1527
+T	t1940	o1940 b1525
+B	b1940	t1940
+P	p1941	Number 12360
+P	p1942	Number 12387
+O	o1942	location p1941 p1942
 P	p1528	String math_pair
 O	o1528	opname p1528
 NCzf_itt_comment!math_pair	math_pair	math_pair Czf_itt_comment
@@ -3614,11 +3332,11 @@ T	t1529	o1529 b676 b677
 B	b1529	t1529
 T	t1530	o1528 b1529
 B	b1530	t1530
-T	t1531	o1527 b1530
-B	b1531	t1531
-P	p1531	Number 12246
-P	p1532	Number 12399
-O	o1532	location p1531 p1532
+T	t1942	o1942 b1530
+B	b1942	t1942
+P	p1943	Number 12389
+P	p1944	Number 12542
+O	o1944	location p1943 p1944
 P	p1533	String pair_df1
 O	o1533	dform p1533
 P	p1534	String "{\\left( "
@@ -3653,11 +3371,11 @@ T	t1546	o519 b1545
 B	b1546	t1546
 T	t1547	o1533 b528 b1529 b1546
 B	b1547	t1547
-T	t1548	o1532 b1547
-B	b1548	t1548
-P	p1548	Number 12401
-P	p1549	Number 12529
-O	o1549	location p1548 p1549
+T	t1944	o1944 b1547
+B	b1944	t1944
+P	p1945	Number 12544
+P	p1946	Number 12672
+O	o1946	location p1945 p1946
 P	p1550	String pair_df
 O	o1550	dform p1550
 P	p1551	String (
@@ -3690,11 +3408,11 @@ T	t1562	o519 b1561
 B	b1562	t1562
 T	t1563	o1550 b787 b1529 b1562
 B	b1563	t1563
-T	t1564	o1549 b1563
-B	b1564	t1564
-P	p1564	Number 12691
-P	p1565	Number 12720
-O	o1565	location p1564 p1565
+T	t1946	o1946 b1563
+B	b1946	t1946
+P	p1947	Number 12834
+P	p1948	Number 12863
+O	o1948	location p1947 p1948
 P	p1566	String math_subset
 O	o1566	opname p1566
 NCzf_itt_comment!math_subset	math_subset	math_subset Czf_itt_comment
@@ -3703,11 +3421,11 @@ T	t1567	o1567 b676 b677
 B	b1567	t1567
 T	t1568	o1566 b1567
 B	b1568	t1568
-T	t1569	o1565 b1568
-B	b1569	t1569
-P	p1569	Number 12722
-P	p1570	Number 12873
-O	o1570	location p1569 p1570
+T	t1948	o1948 b1568
+B	b1948	t1948
+P	p1949	Number 12865
+P	p1950	Number 13016
+O	o1950	location p1949 p1950
 P	p1571	String "\\subseteq_s "
 O	o1571	string529 p1571
 T	t1571	o1571
@@ -3728,11 +3446,11 @@ T	t1578	o519 b1577
 B	b1578	t1578
 T	t1579	o1533 b528 b1567 b1578
 B	b1579	t1579
-T	t1580	o1570 b1579
-B	b1580	t1580
-P	p1580	Number 12875
-P	p1581	Number 12990
-O	o1581	location p1580 p1581
+T	t1950	o1950 b1579
+B	b1950	t1950
+P	p1951	Number 13018
+P	p1952	Number 13133
+O	o1952	location p1951 p1952
 P	p1582	String subset_df
 O	o1582	dform p1582
 P	p1583	String " "
@@ -3759,11 +3477,11 @@ T	t1590	o519 b1589
 B	b1590	t1590
 T	t1591	o1582 b787 b1567 b1590
 B	b1591	t1591
-T	t1592	o1581 b1591
-B	b1592	t1592
-P	p1592	Number 13154
-P	p1593	Number 13170
-O	o1593	location p1592 p1593
+T	t1952	o1952 b1591
+B	b1952	t1952
+P	p1953	Number 13297
+P	p1954	Number 13313
+O	o1954	location p1953 p1954
 P	p1594	String math_inf
 O	o1594	opname p1594
 NCzf_itt_comment!math_inf	math_inf	math_inf Czf_itt_comment
@@ -3772,11 +3490,11 @@ T	t1595	o1595
 B	b1595	t1595
 T	t1596	o1594 b1595
 B	b1596	t1596
-T	t1597	o1593 b1596
-B	b1597	t1597
-P	p1597	Number 13171
-P	p1598	Number 13188
-O	o1598	location p1597 p1598
+T	t1954	o1954 b1596
+B	b1954	t1954
+P	p1955	Number 13314
+P	p1956	Number 13331
+O	o1956	location p1955 p1956
 P	p1599	String math_zero
 O	o1599	opname p1599
 NCzf_itt_comment!math_zero	math_zero	math_zero Czf_itt_comment
@@ -3785,11 +3503,11 @@ T	t1600	o1600
 B	b1600	t1600
 T	t1601	o1599 b1600
 B	b1601	t1601
-T	t1602	o1598 b1601
-B	b1602	t1602
-P	p1602	Number 13189
-P	p1603	Number 13210
-O	o1603	location p1602 p1603
+T	t1956	o1956 b1601
+B	b1956	t1956
+P	p1957	Number 13332
+P	p1958	Number 13353
+O	o1958	location p1957 p1958
 P	p1604	String math_succ
 O	o1604	opname p1604
 NCzf_itt_comment!math_succ	math_succ	math_succ Czf_itt_comment
@@ -3802,11 +3520,11 @@ T	t1607	o1605 b1606
 B	b1607	t1607
 T	t1608	o1604 b1607
 B	b1608	t1608
-T	t1609	o1603 b1608
-B	b1609	t1609
-P	p1609	Number 13211
-P	p1610	Number 13234
-O	o1610	location p1609 p1610
+T	t1958	o1958 b1608
+B	b1958	t1958
+P	p1959	Number 13354
+P	p1960	Number 13377
+O	o1960	location p1959 p1960
 P	p1611	String math_lt
 O	o1611	opname p1611
 NCzf_itt_comment!math_lt	math_lt	math_lt Czf_itt_comment
@@ -3819,11 +3537,11 @@ T	t1614	o1612 b1606 b1613
 B	b1614	t1614
 T	t1615	o1611 b1614
 B	b1615	t1615
-T	t1616	o1610 b1615
-B	b1616	t1616
-P	p1616	Number 13236
-P	p1617	Number 13302
-O	o1617	location p1616 p1617
+T	t1960	o1960 b1615
+B	b1960	t1960
+P	p1961	Number 13379
+P	p1962	Number 13445
+O	o1962	location p1961 p1962
 P	p1618	String inf_df1
 O	o1618	dform p1618
 P	p1619	String "\\omega "
@@ -3838,11 +3556,11 @@ T	t1622	o519 b1621
 B	b1622	t1622
 T	t1623	o1618 b528 b1595 b1622
 B	b1623	t1623
-T	t1624	o1617 b1623
-B	b1624	t1624
-P	p1624	Number 13304
-P	p1625	Number 13368
-O	o1625	location p1624 p1625
+T	t1962	o1962 b1623
+B	b1962	t1962
+P	p1963	Number 13447
+P	p1964	Number 13511
+O	o1964	location p1963 p1964
 P	p1626	String zero_df1
 O	o1626	dform p1626
 P	p1627	String "0_s "
@@ -3857,11 +3575,11 @@ T	t1630	o519 b1629
 B	b1630	t1630
 T	t1631	o1626 b528 b1600 b1630
 B	b1631	t1631
-T	t1632	o1625 b1631
-B	b1632	t1632
-P	p1632	Number 13370
-P	p1633	Number 13470
-O	o1633	location p1632 p1633
+T	t1964	o1964 b1631
+B	b1964	t1964
+P	p1965	Number 13513
+P	p1966	Number 13613
+O	o1966	location p1965 p1966
 P	p1634	String succ_df1
 O	o1634	dform p1634
 P	p1635	String {s(
@@ -3882,11 +3600,11 @@ T	t1641	o519 b1640
 B	b1641	t1641
 T	t1642	o1634 b528 b1607 b1641
 B	b1642	t1642
-T	t1643	o1633 b1642
-B	b1643	t1643
-P	p1643	Number 13472
-P	p1644	Number 13605
-O	o1644	location p1643 p1644
+T	t1966	o1966 b1642
+B	b1966	t1966
+P	p1967	Number 13615
+P	p1968	Number 13748
+O	o1968	location p1967 p1968
 P	p1645	String lt_df1
 O	o1645	dform p1645
 P	p1646	String " <_s "
@@ -3915,11 +3633,11 @@ T	t1656	o519 b1655
 B	b1656	t1656
 T	t1657	o1645 b528 b1614 b1656
 B	b1657	t1657
-T	t1658	o1644 b1657
-B	b1658	t1658
-P	p1658	Number 13607
-P	p1659	Number 13664
-O	o1659	location p1658 p1659
+T	t1968	o1968 b1657
+B	b1968	t1968
+P	p1969	Number 13750
+P	p1970	Number 13807
+O	o1970	location p1969 p1970
 P	p1660	String zero_df2
 O	o1660	dform p1660
 P	p1661	String 0s
@@ -3932,11 +3650,11 @@ T	t1663	o519 b1662
 B	b1663	t1663
 T	t1664	o1660 b787 b1600 b1663
 B	b1664	t1664
-T	t1665	o1659 b1664
-B	b1665	t1665
-P	p1665	Number 13666
-P	p1666	Number 13741
-O	o1666	location p1665 p1666
+T	t1970	o1970 b1664
+B	b1970	t1970
+P	p1971	Number 13809
+P	p1972	Number 13884
+O	o1972	location p1971 p1972
 P	p1667	String succ_df2
 O	o1667	dform p1667
 P	p1668	String s(
@@ -3951,11 +3669,11 @@ T	t1671	o519 b1670
 B	b1671	t1671
 T	t1672	o1667 b787 b1607 b1671
 B	b1672	t1672
-T	t1673	o1666 b1672
-B	b1673	t1673
-P	p1673	Number 13743
-P	p1674	Number 13816
-O	o1674	location p1673 p1674
+T	t1972	o1972 b1672
+B	b1972	t1972
+P	p1973	Number 13886
+P	p1974	Number 13959
+O	o1974	location p1973 p1974
 P	p1675	String inf_df2
 O	o1675	dform p1675
 NNuprl_font!mathbbN	mathbbN	mathbbN Nuprl_font
@@ -3970,11 +3688,11 @@ T	t1679	o519 b1678
 B	b1679	t1679
 T	t1680	o1675 b787 b1595 b1679
 B	b1680	t1680
-T	t1681	o1674 b1680
-B	b1681	t1681
-P	p1681	Number 13818
-P	p1682	Number 13964
-O	o1682	location p1681 p1682
+T	t1974	o1974 b1680
+B	b1974	t1974
+P	p1975	Number 13961
+P	p1976	Number 14107
+O	o1976	location p1975 p1976
 P	p1683	String lt_df2
 O	o1683	dform p1683
 P	p1684	String prec_compare
@@ -4005,11 +3723,11 @@ T	t1694	o519 b1693
 B	b1694	t1694
 T	t1695	o1683 b1686 b1614 b1694
 B	b1695	t1695
-T	t1696	o1682 b1695
-B	b1696	t1696
-P	p1696	Number 14128
-P	p1697	Number 14166
-O	o1697	location p1696 p1697
+T	t1976	o1976 b1695
+B	b1976	t1976
+P	p1977	Number 14271
+P	p1978	Number 14309
+O	o1978	location p1977 p1978
 P	p1698	String math_rel
 O	o1698	opname p1698
 NCzf_itt_comment!math_rel	math_rel	math_rel Czf_itt_comment
@@ -4018,11 +3736,11 @@ T	t1699	o1699 b502 b825 b694 b676 b677
 B	b1699	t1699
 T	t1700	o1698 b1699
 B	b1700	t1700
-T	t1701	o1697 b1700
-B	b1701	t1701
-P	p1701	Number 14168
-P	p1702	Number 14435
-O	o1702	location p1701 p1702
+T	t1978	o1978 b1700
+B	b1978	t1978
+P	p1979	Number 14311
+P	p1980	Number 14578
+O	o1980	location p1979 p1980
 P	p1703	String rel_df1
 O	o1703	dform p1703
 P	p1704	String "{{\\mathbb B}("
@@ -4074,16 +3792,15 @@ T	t1725	o519 b1724
 B	b1725	t1725
 T	t1726	o1703 b528 b1699 b1725
 B	b1726	t1726
-T	t1727	o1702 b1726
-B	b1727	t1727
-P	p1727	Number 14437
-P	p1728	Number 14713
-O	o1728	location p1727 p1728
+T	t1980	o1980 b1726
+B	b1980	t1980
+P	p1981	Number 14580
+P	p1982	Number 14858
+O	o1982	location p1981 p1982
 P	p1729	String rel_df
 O	o1729	dform p1729
-B	b1729	t694 a b
-T	t1729	o1699 b1729 b676 b677
-B	b1730	t1729
+T	t1982	o1699 b504 b513 b694 b676 b677
+B	b1982	t1982
 NNuprl_font!mathbbB	mathbbB	mathbbB Nuprl_font
 O	o1730	mathbbB
 T	t1730	o1730
@@ -4124,13 +3841,13 @@ T	t1747	o b617 b1747
 B	b1748	t1747
 T	t1748	o519 b1748
 B	b1749	t1748
-T	t1749	o1729 b1224 b1730 b1749
-B	b1750	t1749
-T	t1750	o1728 b1750
-B	b1751	t1750
-P	p1751	Number 14886
-P	p1752	Number 14914
-O	o1752	location p1751 p1752
+T	t1983	o1729 b1224 b1982 b1749
+B	b1983	t1983
+T	t1984	o1982 b1983
+B	b1984	t1984
+P	p1984	Number 15031
+P	p1985	Number 15059
+O	o1985	location p1984 p1985
 P	p1753	String math_power
 O	o1753	opname p1753
 NCzf_itt_comment!math_power	math_power	math_power Czf_itt_comment
@@ -4139,11 +3856,11 @@ T	t1754	o1754 b676 b677
 B	b1754	t1754
 T	t1755	o1753 b1754
 B	b1755	t1755
-T	t1756	o1752 b1755
-B	b1756	t1756
-P	p1756	Number 14916
-P	p1757	Number 15081
-O	o1757	location p1756 p1757
+T	t1985	o1985 b1755
+B	b1985	t1985
+P	p1986	Number 15061
+P	p1987	Number 15226
+O	o1987	location p1986 p1987
 P	p1758	String power_df1
 O	o1758	dform p1758
 P	p1759	String "{{\\mathbb P}{"
@@ -4182,11 +3899,11 @@ T	t1772	o519 b1771
 B	b1772	t1772
 T	t1773	o1758 b528 b1754 b1772
 B	b1773	t1773
-T	t1774	o1757 b1773
-B	b1774	t1774
-P	p1774	Number 15083
-P	p1775	Number 15225
-O	o1775	location p1774 p1775
+T	t1987	o1987 b1773
+B	b1987	t1987
+P	p1988	Number 15228
+P	p1989	Number 15370
+O	o1989	location p1988 p1989
 P	p1776	String power_df3
 O	o1776	dform p1776
 NNuprl_font!mathbbP	mathbbP	mathbbP Nuprl_font
@@ -4213,8 +3930,1554 @@ T	t1785	o519 b1784
 B	b1785	t1785
 T	t1786	o1776 b787 b1754 b1785
 B	b1786	t1786
-T	t1787	o1775 b1786
-B	b1787	t1787
+T	t1989	o1989 b1786
+B	b1989	t1989
+P	p1990	Number 15546
+P	p1991	Number 15580
+O	o1991	location p1990 p1991
+P	p1992	String math_equiv
+O	o1992	opname p1992
+NCzf_itt_comment!math_equiv	math_equiv	math_equiv Czf_itt_comment
+O	o1993	math_equiv
+P	p1993	Var r
+O	o1994	var p1993
+T	t1994	o1994
+B	b1994	t1994
+T	t1995	o1993 b495 b1994 b504 b513
+B	b1995	t1995
+T	t1996	o1992 b1995
+B	b1996	t1996
+T	t1997	o1991 b1996
+B	b1997	t1997
+P	p1997	Number 15581
+P	p1998	Number 15607
+O	o1998	location p1997 p1998
+T	t1998	o1993 b495 b1994
+B	b1998	t1998
+T	t1999	o1992 b1998
+B	b1999	t1999
+T	t2000	o1998 b1999
+B	b2000	t2000
+P	p2000	Number 15608
+P	p2001	Number 15648
+O	o2001	location p2000 p2001
+P	p2002	String math_equivfunset
+O	o2002	opname p2002
+NCzf_itt_comment!math_equivfunset	math_equivfunset	math_equivfunset Czf_itt_comment
+O	o2003	math_equivfunset
+T	t2003	o2003 b495 b1994 b642 b511
+B	b2003	t2003
+T	t2004	o2002 b2003
+B	b2004	t2004
+T	t2005	o2001 b2004
+B	b2005	t2005
+P	p2005	Number 15649
+P	p2006	Number 15690
+O	o2006	location p2005 p2006
+P	p2007	String math_equivfunprop
+O	o2007	opname p2007
+NCzf_itt_comment!math_equivfunprop	math_equivfunprop	math_equivfunprop Czf_itt_comment
+O	o2008	math_equivfunprop
+T	t2008	o2008 b495 b1994 b642 b694
+B	b2008	t2008
+T	t2009	o2007 b2008
+B	b2009	t2009
+T	t2010	o2006 b2009
+B	b2010	t2010
+P	p2010	Number 15692
+P	p2011	Number 15913
+O	o2011	location p2010 p2011
+P	p2012	String equiv_df1
+O	o2012	dform p2012
+P	p2013	String "{{\\it equiv}("
+O	o2013	string529 p2013
+T	t2013	o2013
+B	b2013	t2013
+T	t2014	o531 b1994
+B	b2014	t2014
+T	t2015	o b574 b579
+B	b2015	t2015
+T	t2016	o b529 b2015
+B	b2016	t2016
+T	t2017	o b551 b2016
+B	b2017	t2017
+T	t2018	o b531 b2017
+B	b2018	t2018
+T	t2019	o b574 b2018
+B	b2019	t2019
+T	t2020	o b529 b2019
+B	b2020	t2020
+T	t2021	o b2014 b2020
+B	b2021	t2021
+T	t2022	o b531 b2021
+B	b2022	t2022
+T	t2023	o b574 b2022
+B	b2023	t2023
+T	t2024	o b529 b2023
+B	b2024	t2024
+T	t2025	o b532 b2024
+B	b2025	t2025
+T	t2026	o b531 b2025
+B	b2026	t2026
+T	t2027	o b2013 b2026
+B	b2027	t2027
+T	t2028	o b529 b2027
+B	b2028	t2028
+T	t2029	o519 b2028
+B	b2029	t2029
+T	t2030	o2012 b528 b1995 b2029
+B	b2030	t2030
+T	t2031	o2011 b2030
+B	b2031	t2031
+P	p2031	Number 15915
+P	p2032	Number 16068
+O	o2032	location p2031 p2032
+T	t2032	o1993 b676 b677
+B	b2032	t2032
+T	t2033	o b2013 b716
+B	b2033	t2033
+T	t2034	o b529 b2033
+B	b2034	t2034
+T	t2035	o519 b2034
+B	b2035	t2035
+T	t2036	o2012 b528 b2032 b2035
+B	b2036	t2036
+T	t2037	o2032 b2036
+B	b2037	t2037
+P	p2037	Number 16070
+P	p2038	Number 16315
+O	o2038	location p2037 p2038
+P	p2039	String equivfunset_df1
+O	o2039	dform p2039
+P	p2040	String "{{\\it equiv\\_fun\\_set}("
+O	o2040	string529 p2040
+T	t2040	o2040
+B	b2040	t2040
+T	t2041	o b574 b747
+B	b2041	t2041
+T	t2042	o b529 b2041
+B	b2042	t2042
+T	t2043	o b2014 b2042
+B	b2043	t2043
+T	t2044	o b531 b2043
+B	b2044	t2044
+T	t2045	o b574 b2044
+B	b2045	t2045
+T	t2046	o b529 b2045
+B	b2046	t2046
+T	t2047	o b532 b2046
+B	b2047	t2047
+T	t2048	o b531 b2047
+B	b2048	t2048
+T	t2049	o b2040 b2048
+B	b2049	t2049
+T	t2050	o b529 b2049
+B	b2050	t2050
+T	t2051	o519 b2050
+B	b2051	t2051
+T	t2052	o2039 b528 b2003 b2051
+B	b2052	t2052
+T	t2053	o2038 b2052
+B	b2053	t2053
+P	p2053	Number 16317
+P	p2054	Number 16565
+O	o2054	location p2053 p2054
+P	p2055	String equivfunprop_df1
+O	o2055	dform p2055
+P	p2056	String "{{\\it equiv\\_fun\\_prop}("
+O	o2056	string529 p2056
+T	t2056	o2056
+B	b2056	t2056
+T	t2057	o b550 b894
+B	b2057	t2057
+T	t2058	o b529 b2057
+B	b2058	t2058
+T	t2059	o b650 b2058
+B	b2059	t2059
+T	t2060	o b531 b2059
+B	b2060	t2060
+T	t2061	o b574 b2060
+B	b2061	t2061
+T	t2062	o b529 b2061
+B	b2062	t2062
+T	t2063	o b2014 b2062
+B	b2063	t2063
+T	t2064	o b531 b2063
+B	b2064	t2064
+T	t2065	o b574 b2064
+B	b2065	t2065
+T	t2066	o b529 b2065
+B	b2066	t2066
+T	t2067	o b532 b2066
+B	b2067	t2067
+T	t2068	o b531 b2067
+B	b2068	t2068
+T	t2069	o b2056 b2068
+B	b2069	t2069
+T	t2070	o b529 b2069
+B	b2070	t2070
+T	t2071	o519 b2070
+B	b2071	t2071
+T	t2072	o2055 b528 b2008 b2071
+B	b2072	t2072
+T	t2073	o2054 b2072
+B	b2073	t2073
+P	p2073	Number 16567
+P	p2074	Number 16682
+O	o2074	location p2073 p2074
+P	p2075	String equivrl_df
+O	o2075	dform p2075
+T	t2075	o b603 b606
+B	b2075	t2075
+P	p2076	String equiv(
+O	o2076	string529 p2076
+T	t2076	o2076
+B	b2076	t2076
+P	p2077	String "; "
+O	o2077	string529 p2077
+T	t2077	o2077
+B	b2077	t2077
+T	t2078	o b710 b791
+B	b2078	t2078
+T	t2079	o b2077 b2078
+B	b2079	t2079
+T	t2080	o b709 b2079
+B	b2080	t2080
+T	t2081	o b2076 b2080
+B	b2081	t2081
+T	t2082	o519 b2081
+B	b2082	t2082
+T	t2083	o2075 b2075 b2032 b2082
+B	b2083	t2083
+T	t2084	o2074 b2083
+B	b2084	t2084
+P	p2084	Number 16684
+P	p2085	Number 16832
+O	o2085	location p2084 p2085
+P	p2086	String equiv__df
+O	o2086	dform p2086
+T	t2086	o b577 b791
+B	b2086	t2086
+T	t2087	o b2077 b2086
+B	b2087	t2087
+T	t2088	o b551 b2087
+B	b2088	t2088
+T	t2089	o b2077 b2088
+B	b2089	t2089
+T	t2090	o b2014 b2089
+B	b2090	t2090
+T	t2091	o b2077 b2090
+B	b2091	t2091
+T	t2092	o b532 b2091
+B	b2092	t2092
+T	t2093	o b2076 b2092
+B	b2093	t2093
+T	t2094	o519 b2093
+B	b2094	t2094
+T	t2095	o2086 b2075 b1995 b2094
+B	b2095	t2095
+T	t2096	o2085 b2095
+B	b2096	t2096
+P	p2096	Number 16834
+P	p2097	Number 17007
+O	o2097	location p2096 p2097
+P	p2098	String equiv_fun_set_df
+O	o2098	dform p2098
+P	p2099	String " equiv_fun_set"
+O	o2099	string529 p2099
+T	t2099	o2099
+B	b2099	t2099
+T	t2100	o b2099 b4
+B	b2100	t2100
+T	t2101	o b575 b2100
+B	b2101	t2101
+T	t2102	o b550 b2101
+B	b2102	t2102
+T	t2103	o b650 b2102
+B	b2103	t2103
+T	t2104	o b801 b2103
+B	b2104	t2104
+T	t2105	o519 b2104
+B	b2105	t2105
+T	t2106	o2098 b608 b2003 b2105
+B	b2106	t2106
+T	t2107	o2097 b2106
+B	b2107	t2107
+P	p2107	Number 17009
+P	p2108	Number 17185
+O	o2108	location p2107 p2108
+P	p2109	String equiv_fun_prop_df
+O	o2109	dform p2109
+P	p2110	String " equiv_fun_prop"
+O	o2110	string529 p2110
+T	t2110	o2110
+B	b2110	t2110
+T	t2111	o b2110 b4
+B	b2111	t2111
+T	t2112	o b802 b2111
+B	b2112	t2112
+T	t2113	o b550 b2112
+B	b2113	t2113
+T	t2114	o b650 b2113
+B	b2114	t2114
+T	t2115	o b801 b2114
+B	b2115	t2115
+T	t2116	o519 b2115
+B	b2116	t2116
+T	t2117	o2109 b608 b2008 b2116
+B	b2117	t2117
+T	t2118	o2108 b2117
+B	b2118	t2118
+P	p2118	Number 17346
+P	p2119	Number 17368
+O	o2119	location p2118 p2119
+P	p2120	String math_group
+O	o2120	opname p2120
+NCzf_itt_comment!math_group	math_group	math_group Czf_itt_comment
+O	o2121	math_group
+T	t2121	o2121 b512
+B	b2121	t2121
+T	t2122	o2120 b2121
+B	b2122	t2122
+T	t2123	o2119 b2122
+B	b2123	t2123
+P	p2123	Number 17369
+P	p2124	Number 17389
+O	o2124	location p2123 p2124
+P	p2125	String math_car
+O	o2125	opname p2125
+NCzf_itt_comment!math_car	math_car	math_car Czf_itt_comment
+O	o2126	math_car
+T	t2126	o2126 b512
+B	b2126	t2126
+T	t2127	o2125 b2126
+B	b2127	t2127
+T	t2128	o2124 b2127
+B	b2128	t2128
+P	p2128	Number 17390
+P	p2129	Number 17410
+O	o2129	location p2128 p2129
+P	p2130	String math_eqG
+O	o2130	opname p2130
+NCzf_itt_comment!math_eqG	math_eqG	math_eqG Czf_itt_comment
+O	o2131	math_eqG
+T	t2131	o2131 b512
+B	b2131	t2131
+T	t2132	o2130 b2131
+B	b2132	t2132
+T	t2133	o2129 b2132
+B	b2133	t2133
+P	p2133	Number 17411
+P	p2134	Number 17438
+O	o2134	location p2133 p2134
+P	p2135	String math_op
+O	o2135	opname p2135
+NCzf_itt_comment!math_op	math_op	math_op Czf_itt_comment
+O	o2136	math_op
+T	t2136	o2136 b512 b504 b513
+B	b2136	t2136
+T	t2137	o2135 b2136
+B	b2137	t2137
+T	t2138	o2134 b2137
+B	b2138	t2138
+P	p2138	Number 17439
+P	p2139	Number 17458
+O	o2139	location p2138 p2139
+P	p2140	String math_id
+O	o2140	opname p2140
+NCzf_itt_comment!math_id	math_id	math_id Czf_itt_comment
+O	o2141	math_id
+T	t2141	o2141 b512
+B	b2141	t2141
+T	t2142	o2140 b2141
+B	b2142	t2142
+T	t2143	o2139 b2142
+B	b2143	t2143
+P	p2143	Number 17459
+P	p2144	Number 17483
+O	o2144	location p2143 p2144
+P	p2145	String math_inv
+O	o2145	opname p2145
+NCzf_itt_comment!math_inv	math_inv	math_inv Czf_itt_comment
+O	o2146	math_inv
+T	t2146	o2146 b512 b504
+B	b2146	t2146
+T	t2147	o2145 b2146
+B	b2147	t2147
+T	t2148	o2144 b2147
+B	b2148	t2148
+P	p2148	Number 17485
+P	p2149	Number 17598
+O	o2149	location p2148 p2149
+P	p2150	String group_df1
+O	o2150	dform p2150
+P	p2151	String "{{\\it group}("
+O	o2151	string529 p2151
+T	t2151	o2151
+B	b2151	t2151
+T	t2152	o b576 b554
+B	b2152	t2152
+T	t2153	o b531 b2152
+B	b2153	t2153
+T	t2154	o b2151 b2153
+B	b2154	t2154
+T	t2155	o b529 b2154
+B	b2155	t2155
+T	t2156	o519 b2155
+B	b2156	t2156
+T	t2157	o2150 b528 b2121 b2156
+B	b2157	t2157
+T	t2158	o2149 b2157
+B	b2158	t2158
+P	p2158	Number 17600
+P	p2159	Number 17707
+O	o2159	location p2158 p2159
+P	p2160	String car_df1
+O	o2160	dform p2160
+P	p2161	String "{{\\it car}("
+O	o2161	string529 p2161
+T	t2161	o2161
+B	b2161	t2161
+T	t2162	o b2161 b2153
+B	b2162	t2162
+T	t2163	o b529 b2162
+B	b2163	t2163
+T	t2164	o519 b2163
+B	b2164	t2164
+T	t2165	o2160 b528 b2126 b2164
+B	b2165	t2165
+T	t2166	o2159 b2165
+B	b2166	t2166
+P	p2166	Number 17709
+P	p2167	Number 17816
+O	o2167	location p2166 p2167
+P	p2168	String eqG_df1
+O	o2168	dform p2168
+P	p2169	String "{{\\it eqG}("
+O	o2169	string529 p2169
+T	t2169	o2169
+B	b2169	t2169
+T	t2170	o b2169 b2153
+B	b2170	t2170
+T	t2171	o b529 b2170
+B	b2171	t2171
+T	t2172	o519 b2171
+B	b2172	t2172
+T	t2173	o2168 b528 b2131 b2172
+B	b2173	t2173
+T	t2174	o2167 b2173
+B	b2174	t2174
+P	p2174	Number 17818
+P	p2175	Number 17922
+O	o2175	location p2174 p2175
+P	p2176	String id_df1
+O	o2176	dform p2176
+P	p2177	String "{{\\it id}("
+O	o2177	string529 p2177
+T	t2177	o2177
+B	b2177	t2177
+T	t2178	o b2177 b2153
+B	b2178	t2178
+T	t2179	o b529 b2178
+B	b2179	t2179
+T	t2180	o519 b2179
+B	b2180	t2180
+T	t2181	o2176 b528 b2141 b2180
+B	b2181	t2181
+T	t2182	o2175 b2181
+B	b2182	t2182
+P	p2182	Number 17924
+P	p2183	Number 18100
+O	o2183	location p2182 p2183
+P	p2184	String op_df1
+O	o2184	dform p2184
+P	p2185	String "{{\\it op}("
+O	o2185	string529 p2185
+T	t2185	o2185
+B	b2185	t2185
+T	t2186	o b576 b2020
+B	b2186	t2186
+T	t2187	o b531 b2186
+B	b2187	t2187
+T	t2188	o b2185 b2187
+B	b2188	t2188
+T	t2189	o b529 b2188
+B	b2189	t2189
+T	t2190	o519 b2189
+B	b2190	t2190
+T	t2191	o2184 b528 b2136 b2190
+B	b2191	t2191
+T	t2192	o2183 b2191
+B	b2192	t2192
+P	p2192	Number 18102
+P	p2193	Number 18245
+O	o2193	location p2192 p2193
+P	p2194	String inv_df1
+O	o2194	dform p2194
+P	p2195	String "{{\\it inv}("
+O	o2195	string529 p2195
+T	t2195	o2195
+B	b2195	t2195
+T	t2196	o b574 b556
+B	b2196	t2196
+T	t2197	o b529 b2196
+B	b2197	t2197
+T	t2198	o b576 b2197
+B	b2198	t2198
+T	t2199	o b531 b2198
+B	b2199	t2199
+T	t2200	o b2195 b2199
+B	b2200	t2200
+T	t2201	o b529 b2200
+B	b2201	t2201
+T	t2202	o519 b2201
+B	b2202	t2202
+T	t2203	o2194 b528 b2146 b2202
+B	b2203	t2203
+T	t2204	o2193 b2203
+B	b2204	t2204
+P	p2204	Number 18247
+P	p2205	Number 18322
+O	o2205	location p2204 p2205
+P	p2206	String group_df
+O	o2206	dform p2206
+P	p2207	String " group"
+O	o2207	string529 p2207
+T	t2207	o2207
+B	b2207	t2207
+T	t2208	o b2207 b4
+B	b2208	t2208
+T	t2209	o b576 b2208
+B	b2209	t2209
+T	t2210	o519 b2209
+B	b2210	t2210
+T	t2211	o2206 b787 b2121 b2210
+B	b2211	t2211
+T	t2212	o2205 b2211
+B	b2212	t2212
+P	p2212	Number 18324
+P	p2213	Number 18398
+O	o2213	location p2212 p2213
+P	p2214	String car_df
+O	o2214	dform p2214
+P	p2215	String car(
+O	o2215	string529 p2215
+T	t2215	o2215
+B	b2215	t2215
+T	t2216	o b576 b791
+B	b2216	t2216
+T	t2217	o b2215 b2216
+B	b2217	t2217
+T	t2218	o519 b2217
+B	b2218	t2218
+T	t2219	o2214 b787 b2126 b2218
+B	b2219	t2219
+T	t2220	o2213 b2219
+B	b2220	t2220
+P	p2220	Number 18400
+P	p2221	Number 18475
+O	o2221	location p2220 p2221
+P	p2222	String eqG(
+O	o2222	string529 p2222
+T	t2222	o2222
+B	b2222	t2222
+T	t2223	o b2222 b2216
+B	b2223	t2223
+T	t2224	o519 b2223
+B	b2224	t2224
+T	t2225	o2168 b787 b2131 b2224
+B	b2225	t2225
+T	t2226	o2221 b2225
+B	b2226	t2226
+P	p2226	Number 18477
+P	p2227	Number 18548
+O	o2227	location p2226 p2227
+P	p2228	String id_df
+O	o2228	dform p2228
+P	p2229	String id(
+O	o2229	string529 p2229
+T	t2229	o2229
+B	b2229	t2229
+T	t2230	o b2229 b2216
+B	b2230	t2230
+T	t2231	o519 b2230
+B	b2231	t2231
+T	t2232	o2228 b787 b2141 b2231
+B	b2232	t2232
+T	t2233	o2227 b2232
+B	b2233	t2233
+P	p2233	Number 18550
+P	p2234	Number 18670
+O	o2234	location p2233 p2234
+P	p2235	String op_df
+O	o2235	dform p2235
+P	p2236	String op(
+O	o2236	string529 p2236
+T	t2236	o2236
+B	b2236	t2236
+T	t2237	o b576 b2089
+B	b2237	t2237
+T	t2238	o b2236 b2237
+B	b2238	t2238
+T	t2239	o519 b2238
+B	b2239	t2239
+T	t2240	o2235 b2075 b2136 b2239
+B	b2240	t2240
+T	t2241	o2234 b2240
+B	b2241	t2241
+P	p2241	Number 18672
+P	p2242	Number 18775
+O	o2242	location p2241 p2242
+P	p2243	String inv_df
+O	o2243	dform p2243
+P	p2244	String inv(
+O	o2244	string529 p2244
+T	t2244	o2244
+B	b2244	t2244
+T	t2245	o b551 b791
+B	b2245	t2245
+T	t2246	o b2077 b2245
+B	b2246	t2246
+T	t2247	o b576 b2246
+B	b2247	t2247
+T	t2248	o b2244 b2247
+B	b2248	t2248
+T	t2249	o519 b2248
+B	b2249	t2249
+T	t2250	o2243 b2075 b2146 b2249
+B	b2250	t2250
+T	t2251	o2242 b2250
+B	b2251	t2251
+P	p2251	Number 18944
+P	p2252	Number 18977
+O	o2252	location p2251 p2252
+P	p2253	String math_groupbvd
+O	o2253	opname p2253
+NCzf_itt_comment!math_groupbvd	math_groupbvd	math_groupbvd Czf_itt_comment
+O	o2254	math_groupbvd
+P	p2254	Var h
+O	o2255	var p2254
+T	t2255	o2255
+B	b2255	t2255
+T	t2256	o2254 b2255 b512 b495
+B	b2256	t2256
+T	t2257	o2253 b2256
+B	b2257	t2257
+T	t2258	o2252 b2257
+B	b2258	t2258
+P	p2258	Number 18979
+P	p2259	Number 19177
+O	o2259	location p2258 p2259
+P	p2260	String group_bvd_df1
+O	o2260	dform p2260
+P	p2261	String "{{\\it group\\_bvd}("
+O	o2261	string529 p2261
+T	t2261	o2261
+B	b2261	t2261
+T	t2262	o531 b2255
+B	b2262	t2262
+T	t2263	o b532 b554
+B	b2263	t2263
+T	t2264	o b531 b2263
+B	b2264	t2264
+T	t2265	o b574 b2264
+B	b2265	t2265
+T	t2266	o b529 b2265
+B	b2266	t2266
+T	t2267	o b576 b2266
+B	b2267	t2267
+T	t2268	o b531 b2267
+B	b2268	t2268
+T	t2269	o b574 b2268
+B	b2269	t2269
+T	t2270	o b529 b2269
+B	b2270	t2270
+T	t2271	o b2262 b2270
+B	b2271	t2271
+T	t2272	o b531 b2271
+B	b2272	t2272
+T	t2273	o b2261 b2272
+B	b2273	t2273
+T	t2274	o b529 b2273
+B	b2274	t2274
+T	t2275	o519 b2274
+B	b2275	t2275
+T	t2276	o2260 b528 b2256 b2275
+B	b2276	t2276
+T	t2277	o2259 b2276
+B	b2277	t2277
+P	p2277	Number 19179
+P	p2278	Number 19322
+O	o2278	location p2277 p2278
+P	p2279	String group_bvd_df
+O	o2279	dform p2279
+P	p2280	String group_builder(
+O	o2280	string529 p2280
+T	t2280	o2280
+B	b2280	t2280
+T	t2281	o b532 b791
+B	b2281	t2281
+T	t2282	o b2077 b2281
+B	b2282	t2282
+T	t2283	o b576 b2282
+B	b2283	t2283
+T	t2284	o b2077 b2283
+B	b2284	t2284
+T	t2285	o b2262 b2284
+B	b2285	t2285
+T	t2286	o b2280 b2285
+B	b2286	t2286
+T	t2287	o519 b2286
+B	b2287	t2287
+T	t2288	o2279 b2075 b2256 b2287
+B	b2288	t2288
+T	t2289	o2278 b2288
+B	b2289	t2289
+P	p2289	Number 19491
+P	p2290	Number 19512
+O	o2290	location p2289 p2290
+P	p2291	String math_abel
+O	o2291	opname p2291
+NCzf_itt_comment!math_abel	math_abel	math_abel Czf_itt_comment
+O	o2292	math_abel
+T	t2292	o2292 b512
+B	b2292	t2292
+T	t2293	o2291 b2292
+B	b2293	t2293
+T	t2294	o2290 b2293
+B	b2294	t2294
+P	p2294	Number 19514
+P	p2295	Number 19624
+O	o2295	location p2294 p2295
+P	p2296	String abel_df1
+O	o2296	dform p2296
+P	p2297	String "{{\\it abel}("
+O	o2297	string529 p2297
+T	t2297	o2297
+B	b2297	t2297
+T	t2298	o b2297 b2153
+B	b2298	t2298
+T	t2299	o b529 b2298
+B	b2299	t2299
+T	t2300	o519 b2299
+B	b2300	t2300
+T	t2301	o2296 b528 b2292 b2300
+B	b2301	t2301
+T	t2302	o2295 b2301
+B	b2302	t2302
+P	p2302	Number 19626
+P	p2303	Number 19703
+O	o2303	location p2302 p2303
+P	p2304	String abel_df
+O	o2304	dform p2304
+P	p2305	String abel(
+O	o2305	string529 p2305
+T	t2305	o2305
+B	b2305	t2305
+T	t2306	o b2305 b2216
+B	b2306	t2306
+T	t2307	o519 b2306
+B	b2307	t2307
+T	t2308	o2304 b787 b2292 b2307
+B	b2308	t2308
+T	t2309	o2303 b2308
+B	b2309	t2309
+P	p2309	Number 19867
+P	p2310	Number 19896
+O	o2310	location p2309 p2310
+P	p2311	String math_subgroup
+O	o2311	opname p2311
+NCzf_itt_comment!math_subgroup	math_subgroup	math_subgroup Czf_itt_comment
+O	o2312	math_subgroup
+T	t2312	o2312 b495 b512
+B	b2312	t2312
+T	t2313	o2311 b2312
+B	b2313	t2313
+T	t2314	o2310 b2313
+B	b2314	t2314
+P	p2314	Number 19898
+P	p2315	Number 20056
+O	o2315	location p2314 p2315
+P	p2316	String subgroup_df1
+O	o2316	dform p2316
+P	p2317	String "{{\\it subgroup}("
+O	o2317	string529 p2317
+T	t2317	o2317
+B	b2317	t2317
+T	t2318	o b574 b2153
+B	b2318	t2318
+T	t2319	o b529 b2318
+B	b2319	t2319
+T	t2320	o b532 b2319
+B	b2320	t2320
+T	t2321	o b531 b2320
+B	b2321	t2321
+T	t2322	o b2317 b2321
+B	b2322	t2322
+T	t2323	o b529 b2322
+B	b2323	t2323
+T	t2324	o519 b2323
+B	b2324	t2324
+T	t2325	o2316 b528 b2312 b2324
+B	b2325	t2325
+T	t2326	o2315 b2325
+B	b2326	t2326
+P	p2326	Number 20058
+P	p2327	Number 20166
+O	o2327	location p2326 p2327
+P	p2328	String subgroup_df
+O	o2328	dform p2328
+P	p2329	String subgroup(
+O	o2329	string529 p2329
+T	t2329	o2329
+B	b2329	t2329
+T	t2330	o b2077 b2216
+B	b2330	t2330
+T	t2331	o b532 b2330
+B	b2331	t2331
+T	t2332	o b2329 b2331
+B	b2332	t2332
+T	t2333	o519 b2332
+B	b2333	t2333
+T	t2334	o2328 b787 b2312 b2333
+B	b2334	t2334
+T	t2335	o2327 b2334
+B	b2335	t2335
+P	p2335	Number 20337
+P	p2336	Number 20367
+O	o2336	location p2335 p2336
+P	p2337	Var n
+O	o2337	var p2337
+T	t2337	o2337
+B	b2337	t2337
+T	t2338	o1754 b512 b642 b2337
+B	b2338	t2338
+T	t2339	o1753 b2338
+B	b2339	t2339
+T	t2340	o2336 b2339
+B	b2340	t2340
+P	p2340	Number 20368
+P	p2341	Number 20400
+O	o2341	location p2340 p2341
+P	p2342	String math_cycsubg
+O	o2342	opname p2342
+NCzf_itt_comment!math_cycsubg	math_cycsubg	math_cycsubg Czf_itt_comment
+O	o2343	math_cycsubg
+T	t2343	o2343 b495 b512 b504
+B	b2343	t2343
+T	t2344	o2342 b2343
+B	b2344	t2344
+T	t2345	o2341 b2344
+B	b2345	t2345
+P	p2345	Number 20402
+P	p2346	Number 20587
+O	o2346	location p2345 p2346
+P	p2347	String "{{\\it power}("
+O	o2347	string529 p2347
+T	t2347	o2347
+B	b2347	t2347
+T	t2348	o531 b2337
+B	b2348	t2348
+T	t2349	o b2348 b554
+B	b2349	t2349
+T	t2350	o b531 b2349
+B	b2350	t2350
+T	t2351	o b574 b2350
+B	b2351	t2351
+T	t2352	o b529 b2351
+B	b2352	t2352
+T	t2353	o b650 b2352
+B	b2353	t2353
+T	t2354	o b531 b2353
+B	b2354	t2354
+T	t2355	o b574 b2354
+B	b2355	t2355
+T	t2356	o b529 b2355
+B	b2356	t2356
+T	t2357	o b576 b2356
+B	b2357	t2357
+T	t2358	o b531 b2357
+B	b2358	t2358
+T	t2359	o b2347 b2358
+B	b2359	t2359
+T	t2360	o b529 b2359
+B	b2360	t2360
+T	t2361	o519 b2360
+B	b2361	t2361
+T	t2362	o1758 b528 b2338 b2361
+B	b2362	t2362
+T	t2363	o2346 b2362
+B	b2363	t2363
+P	p2363	Number 20589
+P	p2364	Number 20790
+O	o2364	location p2363 p2364
+P	p2365	String cycsubg_df1
+O	o2365	dform p2365
+P	p2366	String "{{\\it cyclic\\_subgroup}("
+O	o2366	string529 p2366
+T	t2366	o2366
+B	b2366	t2366
+T	t2367	o b574 b2199
+B	b2367	t2367
+T	t2368	o b529 b2367
+B	b2368	t2368
+T	t2369	o b532 b2368
+B	b2369	t2369
+T	t2370	o b531 b2369
+B	b2370	t2370
+T	t2371	o b2366 b2370
+B	b2371	t2371
+T	t2372	o b529 b2371
+B	b2372	t2372
+T	t2373	o519 b2372
+B	b2373	t2373
+T	t2374	o2365 b528 b2343 b2373
+B	b2374	t2374
+T	t2375	o2364 b2374
+B	b2375	t2375
+P	p2375	Number 20792
+P	p2376	Number 20921
+O	o2376	location p2375 p2376
+P	p2377	String power_df
+O	o2377	dform p2377
+P	p2378	String power(
+O	o2378	string529 p2378
+T	t2378	o2378
+B	b2378	t2378
+T	t2379	o b2348 b791
+B	b2379	t2379
+T	t2380	o b2077 b2379
+B	b2380	t2380
+T	t2381	o b650 b2380
+B	b2381	t2381
+T	t2382	o b2077 b2381
+B	b2382	t2382
+T	t2383	o b576 b2382
+B	b2383	t2383
+T	t2384	o b2378 b2383
+B	b2384	t2384
+T	t2385	o519 b2384
+B	b2385	t2385
+T	t2386	o2377 b2075 b2338 b2385
+B	b2386	t2386
+T	t2387	o2376 b2386
+B	b2387	t2387
+P	p2387	Number 20923
+P	p2388	Number 21055
+O	o2388	location p2387 p2388
+P	p2389	String cycsubg_df
+O	o2389	dform p2389
+P	p2390	String cyclic_subgroup(
+O	o2390	string529 p2390
+T	t2390	o2390
+B	b2390	t2390
+T	t2391	o b2077 b2247
+B	b2391	t2391
+T	t2392	o b532 b2391
+B	b2392	t2392
+T	t2393	o b2390 b2392
+B	b2393	t2393
+T	t2394	o519 b2393
+B	b2394	t2394
+T	t2395	o2389 b787 b2343 b2394
+B	b2395	t2395
+T	t2396	o2388 b2395
+B	b2396	t2396
+P	p2396	Number 21223
+P	p2397	Number 21252
+O	o2397	location p2396 p2397
+P	p2398	String math_cycgroup
+O	o2398	opname p2398
+NCzf_itt_comment!math_cycgroup	math_cycgroup	math_cycgroup Czf_itt_comment
+O	o2399	math_cycgroup
+T	t2399	o2399 b512 b504
+B	b2399	t2399
+T	t2400	o2398 b2399
+B	b2400	t2400
+T	t2401	o2397 b2400
+B	b2401	t2401
+P	p2401	Number 21254
+P	p2402	Number 21418
+O	o2402	location p2401 p2402
+P	p2403	String cycgroup_df1
+O	o2403	dform p2403
+P	p2404	String "{{\\it cyclic\\_group}("
+O	o2404	string529 p2404
+T	t2404	o2404
+B	b2404	t2404
+T	t2405	o b2404 b2199
+B	b2405	t2405
+T	t2406	o b529 b2405
+B	b2406	t2406
+T	t2407	o519 b2406
+B	b2407	t2407
+T	t2408	o2403 b528 b2399 b2407
+B	b2408	t2408
+T	t2409	o2402 b2408
+B	b2409	t2409
+P	p2409	Number 21420
+P	p2410	Number 21532
+O	o2410	location p2409 p2410
+P	p2411	String cycgroup_df
+O	o2411	dform p2411
+P	p2412	String cyclic_group(
+O	o2412	string529 p2412
+T	t2412	o2412
+B	b2412	t2412
+T	t2413	o b2412 b2247
+B	b2413	t2413
+T	t2414	o519 b2413
+B	b2414	t2414
+T	t2415	o2411 b787 b2399 b2414
+B	b2415	t2415
+T	t2416	o2410 b2415
+B	b2416	t2416
+P	p2416	Number 21693
+P	p2417	Number 21724
+O	o2417	location p2416 p2417
+P	p2418	String math_lcoset
+O	o2418	opname p2418
+NCzf_itt_comment!math_lcoset	math_lcoset	math_lcoset Czf_itt_comment
+O	o2419	math_lcoset
+T	t2419	o2419 b2255 b512 b504
+B	b2419	t2419
+T	t2420	o2418 b2419
+B	b2420	t2420
+T	t2421	o2417 b2420
+B	b2421	t2421
+P	p2421	Number 21725
+P	p2422	Number 21756
+O	o2422	location p2421 p2422
+P	p2423	String math_rcoset
+O	o2423	opname p2423
+NCzf_itt_comment!math_rcoset	math_rcoset	math_rcoset Czf_itt_comment
+O	o2424	math_rcoset
+T	t2424	o2424 b2255 b512 b504
+B	b2424	t2424
+T	t2425	o2423 b2424
+B	b2425	t2425
+T	t2426	o2422 b2425
+B	b2426	t2426
+P	p2426	Number 21758
+P	p2427	Number 21952
+O	o2427	location p2426 p2427
+P	p2428	String lcoset_df1
+O	o2428	dform p2428
+P	p2429	String "{{\\it left\\_coset}("
+O	o2429	string529 p2429
+T	t2429	o2429
+B	b2429	t2429
+T	t2430	o b2262 b2368
+B	b2430	t2430
+T	t2431	o b531 b2430
+B	b2431	t2431
+T	t2432	o b2429 b2431
+B	b2432	t2432
+T	t2433	o b529 b2432
+B	b2433	t2433
+T	t2434	o519 b2433
+B	b2434	t2434
+T	t2435	o2428 b528 b2419 b2434
+B	b2435	t2435
+T	t2436	o2427 b2435
+B	b2436	t2436
+P	p2436	Number 21954
+P	p2437	Number 22149
+O	o2437	location p2436 p2437
+P	p2438	String rcoset_df1
+O	o2438	dform p2438
+P	p2439	String "{{\\it right\\_coset}("
+O	o2439	string529 p2439
+T	t2439	o2439
+B	b2439	t2439
+T	t2440	o b2439 b2431
+B	b2440	t2440
+T	t2441	o b529 b2440
+B	b2441	t2441
+T	t2442	o519 b2441
+B	b2442	t2442
+T	t2443	o2438 b528 b2424 b2442
+B	b2443	t2443
+T	t2444	o2437 b2443
+B	b2444	t2444
+P	p2444	Number 22151
+P	p2445	Number 22282
+O	o2445	location p2444 p2445
+P	p2446	String lcoset_df
+O	o2446	dform p2446
+P	p2447	String lcoset(
+O	o2447	string529 p2447
+T	t2447	o2447
+B	b2447	t2447
+T	t2448	o b2262 b2391
+B	b2448	t2448
+T	t2449	o b2447 b2448
+B	b2449	t2449
+T	t2450	o519 b2449
+B	b2450	t2450
+T	t2451	o2446 b2075 b2419 b2450
+B	b2451	t2451
+T	t2452	o2445 b2451
+B	b2452	t2452
+P	p2452	Number 22284
+P	p2453	Number 22415
+O	o2453	location p2452 p2453
+P	p2454	String rcoset_df
+O	o2454	dform p2454
+P	p2455	String rcoset(
+O	o2455	string529 p2455
+T	t2455	o2455
+B	b2455	t2455
+T	t2456	o b2455 b2448
+B	b2456	t2456
+T	t2457	o519 b2456
+B	b2457	t2457
+T	t2458	o2454 b2075 b2424 b2457
+B	b2458	t2458
+T	t2459	o2453 b2458
+B	b2459	t2459
+P	p2459	Number 22586
+P	p2460	Number 22617
+O	o2460	location p2459 p2460
+P	p2461	String math_normalsubg
+O	o2461	opname p2461
+NCzf_itt_comment!math_normalsubg	math_normalsubg	math_normalsubg Czf_itt_comment
+O	o2462	math_normalsubg
+T	t2462	o2462 b495 b512
+B	b2462	t2462
+T	t2463	o2461 b2462
+B	b2463	t2463
+T	t2464	o2460 b2463
+B	b2464	t2464
+P	p2464	Number 22619
+P	p2465	Number 22790
+O	o2465	location p2464 p2465
+P	p2466	String normalsubg_df1
+O	o2466	dform p2466
+P	p2467	String "{{\\it normal\\_subgroup}("
+O	o2467	string529 p2467
+T	t2467	o2467
+B	b2467	t2467
+T	t2468	o b2467 b2321
+B	b2468	t2468
+T	t2469	o b529 b2468
+B	b2469	t2469
+T	t2470	o519 b2469
+B	b2470	t2470
+T	t2471	o2466 b528 b2462 b2470
+B	b2471	t2471
+T	t2472	o2465 b2471
+B	b2472	t2472
+P	p2472	Number 22792
+P	p2473	Number 22911
+O	o2473	location p2472 p2473
+P	p2474	String normalsubg_df
+O	o2474	dform p2474
+P	p2475	String normal_subgroup(
+O	o2475	string529 p2475
+T	t2475	o2475
+B	b2475	t2475
+T	t2476	o b2475 b2331
+B	b2476	t2476
+T	t2477	o519 b2476
+B	b2477	t2477
+T	t2478	o2474 b787 b2462 b2477
+B	b2478	t2478
+T	t2479	o2473 b2478
+B	b2479	t2479
+P	p2479	Number 23078
+P	p2480	Number 23109
+O	o2480	location p2479 p2480
+P	p2481	String math_setbvd
+O	o2481	opname p2481
+NCzf_itt_comment!math_setbvd	math_setbvd	math_setbvd Czf_itt_comment
+O	o2482	math_setbvd
+T	t2482	o2482 b502 b495 b504
+B	b2482	t2482
+T	t2483	o2481 b2482
+B	b2483	t2483
+T	t2484	o2480 b2483
+B	b2484	t2484
+P	p2484	Number 23111
+P	p2485	Number 23297
+O	o2485	location p2484 p2485
+P	p2486	String set_bvd_df1
+O	o2486	dform p2486
+T	t2486	o b532 b874
+B	b2486	t2486
+T	t2487	o b531 b2486
+B	b2487	t2487
+T	t2488	o b831 b2487
+B	b2488	t2488
+T	t2489	o b529 b2488
+B	b2489	t2489
+T	t2490	o b547 b2489
+B	b2490	t2490
+T	t2491	o b1169 b2490
+B	b2491	t2491
+T	t2492	o b551 b2491
+B	b2492	t2492
+T	t2493	o b531 b2492
+B	b2493	t2493
+T	t2494	o b870 b2493
+B	b2494	t2494
+T	t2495	o b529 b2494
+B	b2495	t2495
+T	t2496	o519 b2495
+B	b2496	t2496
+T	t2497	o2486 b528 b2482 b2496
+B	b2497	t2497
+T	t2498	o2485 b2497
+B	b2498	t2498
+P	p2498	Number 23299
+P	p2499	Number 23459
+O	o2499	location p2498 p2499
+P	p2500	String set_bvd_df
+O	o2500	dform p2500
+NNuprl_font!mid	mid	mid Nuprl_font
+O	o2501	mid
+T	t2501	o2501
+B	b2501	t2501
+T	t2502	o b725 b1227
+B	b2502	t2502
+T	t2503	o b532 b2502
+B	b2503	t2503
+T	t2504	o b1585 b2503
+B	b2504	t2504
+T	t2505	o b846 b2504
+B	b2505	t2505
+T	t2506	o b620 b2505
+B	b2506	t2506
+T	t2507	o b547 b2506
+B	b2507	t2507
+T	t2508	o b2501 b2507
+B	b2508	t2508
+T	t2509	o b551 b2508
+B	b2509	t2509
+T	t2510	o b530 b2509
+B	b2510	t2510
+T	t2511	o b1552 b2510
+B	b2511	t2511
+T	t2512	o519 b2511
+B	b2512	t2512
+T	t2513	o2500 b2075 b2482 b2512
+B	b2513	t2513
+T	t2514	o2499 b2513
+B	b2514	t2514
+P	p2514	Number 23628
+P	p2515	Number 23665
+O	o2515	location p2514 p2515
+P	p2516	String math_invimage
+O	o2516	opname p2516
+NCzf_itt_comment!math_invimage	math_invimage	math_invimage Czf_itt_comment
+O	o2517	math_invimage
+T	t2517	o2517 b502 b495 b504 b844
+B	b2517	t2517
+T	t2518	o2516 b2517
+B	b2518	t2518
+T	t2519	o2515 b2518
+B	b2519	t2519
+P	p2519	Number 23667
+P	p2520	Number 23899
+O	o2520	location p2519 p2520
+P	p2521	String inv_image_df1
+O	o2521	dform p2521
+T	t2521	o b848 b874
+B	b2521	t2521
+T	t2522	o b531 b2521
+B	b2522	t2522
+T	t2523	o b831 b2522
+B	b2523	t2523
+T	t2524	o b529 b2523
+B	b2524	t2524
+T	t2525	o b551 b2524
+B	b2525	t2525
+T	t2526	o b1169 b2525
+B	b2526	t2526
+T	t2527	o b532 b2526
+B	b2527	t2527
+T	t2528	o b531 b2527
+B	b2528	t2528
+T	t2529	o b831 b2528
+B	b2529	t2529
+T	t2530	o b529 b2529
+B	b2530	t2530
+T	t2531	o b547 b2530
+B	b2531	t2531
+T	t2532	o b531 b2531
+B	b2532	t2532
+T	t2533	o b870 b2532
+B	b2533	t2533
+T	t2534	o b529 b2533
+B	b2534	t2534
+T	t2535	o519 b2534
+B	b2535	t2535
+T	t2536	o2521 b528 b2517 b2535
+B	b2536	t2536
+T	t2537	o2520 b2536
+B	b2537	t2537
+P	p2537	Number 23901
+P	p2538	Number 24106
+O	o2538	location p2537 p2538
+P	p2539	String inv_image_df
+O	o2539	dform p2539
+T	t2539	o b848 b2502
+B	b2539	t2539
+T	t2540	o b1585 b2539
+B	b2540	t2540
+T	t2541	o b846 b2540
+B	b2541	t2541
+T	t2542	o b620 b2541
+B	b2542	t2542
+T	t2543	o b551 b2542
+B	b2543	t2543
+T	t2544	o b2501 b2543
+B	b2544	t2544
+T	t2545	o b532 b2544
+B	b2545	t2545
+T	t2546	o b1585 b2545
+B	b2546	t2546
+T	t2547	o b846 b2546
+B	b2547	t2547
+T	t2548	o b620 b2547
+B	b2548	t2548
+T	t2549	o b547 b2548
+B	b2549	t2549
+T	t2550	o b530 b2549
+B	b2550	t2550
+T	t2551	o b1552 b2550
+B	b2551	t2551
+T	t2552	o519 b2551
+B	b2552	t2552
+T	t2553	o2539 b2075 b2517 b2552
+B	b2553	t2553
+T	t2554	o2538 b2553
+B	b2554	t2554
+P	p2554	Number 24274
+P	p2555	Number 24308
+O	o2555	location p2554 p2555
+P	p2556	String math_hom
+O	o2556	opname p2556
+NCzf_itt_comment!math_hom	math_hom	math_hom Czf_itt_comment
+O	o2557	math_hom
+P	p2557	Var g1
+O	o2558	var p2557
+T	t2558	o2558
+B	b2558	t2558
+P	p2558	Var g2
+O	o2559	var p2558
+T	t2559	o2559
+B	b2559	t2559
+T	t2560	o2557 b502 b2558 b2559 b511
+B	b2560	t2560
+T	t2561	o2556 b2560
+B	b2561	t2561
+T	t2562	o2555 b2561
+B	b2562	t2562
+P	p2562	Number 24310
+P	p2563	Number 24507
+O	o2563	location p2562 p2563
+P	p2564	String hom_df1
+O	o2564	dform p2564
+P	p2565	String "{{\\it homomorphism}("
+O	o2565	string529 p2565
+T	t2565	o2565
+B	b2565	t2565
+T	t2566	o531 b2558
+B	b2566	t2566
+P	p2566	String ->
+O	o2566	string529 p2566
+T	t2567	o2566
+B	b2567	t2567
+T	t2568	o531 b2559
+B	b2568	t2568
+T	t2569	o b2568 b554
+B	b2569	t2569
+T	t2570	o b531 b2569
+B	b2570	t2570
+T	t2571	o b2567 b2570
+B	b2571	t2571
+T	t2572	o b529 b2571
+B	b2572	t2572
+T	t2573	o b2566 b2572
+B	b2573	t2573
+T	t2574	o b531 b2573
+B	b2574	t2574
+T	t2575	o b621 b2574
+B	b2575	t2575
+T	t2576	o b529 b2575
+B	b2576	t2576
+T	t2577	o b575 b2576
+B	b2577	t2577
+T	t2578	o b531 b2577
+B	b2578	t2578
+T	t2579	o b2565 b2578
+B	b2579	t2579
+T	t2580	o b529 b2579
+B	b2580	t2580
+T	t2581	o519 b2580
+B	b2581	t2581
+T	t2582	o2564 b528 b2560 b2581
+B	b2582	t2582
+T	t2583	o2563 b2582
+B	b2583	t2583
+P	p2583	Number 24509
+P	p2584	Number 24639
+O	o2584	location p2583 p2584
+P	p2585	String hom_df
+O	o2585	dform p2585
+P	p2586	String hom(
+O	o2586	string529 p2586
+T	t2586	o2586
+B	b2586	t2586
+T	t2587	o b575 b791
+B	b2587	t2587
+T	t2588	o b2077 b2587
+B	b2588	t2588
+T	t2589	o b2568 b2588
+B	b2589	t2589
+T	t2590	o b2077 b2589
+B	b2590	t2590
+T	t2591	o b2566 b2590
+B	b2591	t2591
+T	t2592	o b2586 b2591
+B	b2592	t2592
+T	t2593	o519 b2592
+B	b2593	t2593
+T	t2594	o2585 b2075 b2560 b2593
+B	b2594	t2594
+T	t2595	o2584 b2594
+B	b2595	t2595
+P	p2595	Number 24801
+P	p2596	Number 24839
+O	o2596	location p2595 p2596
+P	p2597	String math_ker
+O	o2597	opname p2597
+NCzf_itt_comment!math_ker	math_ker	math_ker Czf_itt_comment
+O	o2598	math_ker
+T	t2598	o2598 b502 b2255 b2558 b2559 b511
+B	b2598	t2598
+T	t2599	o2597 b2598
+B	b2599	t2599
+T	t2600	o2596 b2599
+B	b2600	t2600
+P	p2600	Number 24841
+P	p2601	Number 25099
+O	o2601	location p2600 p2601
+P	p2602	String ker_df1
+O	o2602	dform p2602
+P	p2603	String "{{\\it kernel}("
+O	o2603	string529 p2603
+T	t2603	o2603
+B	b2603	t2603
+T	t2604	o b547 b745
+B	b2604	t2604
+T	t2605	o b531 b2604
+B	b2605	t2605
+T	t2606	o b574 b2605
+B	b2606	t2606
+T	t2607	o b529 b2606
+B	b2607	t2607
+T	t2608	o b2568 b2607
+B	b2608	t2608
+T	t2609	o b531 b2608
+B	b2609	t2609
+T	t2610	o b574 b2609
+B	b2610	t2610
+T	t2611	o b529 b2610
+B	b2611	t2611
+T	t2612	o b2566 b2611
+B	b2612	t2612
+T	t2613	o b531 b2612
+B	b2613	t2613
+T	t2614	o b574 b2613
+B	b2614	t2614
+T	t2615	o b529 b2614
+B	b2615	t2615
+T	t2616	o b2262 b2615
+B	b2616	t2616
+T	t2617	o b531 b2616
+B	b2617	t2617
+T	t2618	o b2603 b2617
+B	b2618	t2618
+T	t2619	o b529 b2618
+B	b2619	t2619
+T	t2620	o519 b2619
+B	b2620	t2620
+T	t2621	o2602 b528 b2598 b2620
+B	b2621	t2621
+T	t2622	o2601 b2621
+B	b2622	t2622
+P	p2622	Number 25101
+P	p2623	Number 25250
+O	o2623	location p2622 p2623
+P	p2624	String ker_df
+O	o2624	dform p2624
+P	p2625	String ker(
+O	o2625	string529 p2625
+T	t2625	o2625
+B	b2625	t2625
+T	t2626	o b2077 b2591
+B	b2626	t2626
+T	t2627	o b2262 b2626
+B	b2627	t2627
+T	t2628	o b2625 b2627
+B	b2628	t2628
+T	t2629	o519 b2628
+B	b2629	t2629
+T	t2630	o2624 b2075 b2598 b2629
+B	b2630	t2630
+T	t2631	o2623 b2630
+B	b2631	t2631
+P	p2631	Number 25417
+P	p2632	Number 25451
+O	o2632	location p2631 p2632
+P	p2633	String math_iso
+O	o2633	opname p2633
+NCzf_itt_comment!math_iso	math_iso	math_iso Czf_itt_comment
+O	o2634	math_iso
+T	t2634	o2634 b502 b2558 b2559 b511
+B	b2634	t2634
+T	t2635	o2633 b2634
+B	b2635	t2635
+T	t2636	o2632 b2635
+B	b2636	t2636
+P	p2636	Number 25453
+P	p2637	Number 25649
+O	o2637	location p2636 p2637
+P	p2638	String iso_df1
+O	o2638	dform p2638
+P	p2639	String "{{\\it isomorphism}("
+O	o2639	string529 p2639
+T	t2639	o2639
+B	b2639	t2639
+T	t2640	o b2639 b2578
+B	b2640	t2640
+T	t2641	o b529 b2640
+B	b2641	t2641
+T	t2642	o519 b2641
+B	b2642	t2642
+T	t2643	o2638 b528 b2634 b2642
+B	b2643	t2643
+T	t2644	o2637 b2643
+B	b2644	t2644
+P	p2644	Number 25817
+P	p2645	Number 25947
+O	o2645	location p2644 p2645
+P	p2646	String iso_df
+O	o2646	dform p2646
+P	p2647	String iso(
+O	o2647	string529 p2647
+T	t2647	o2647
+B	b2647	t2647
+T	t2648	o b2647 b2591
+B	b2648	t2648
+T	t2649	o519 b2648
+B	b2649	t2649
+T	t2650	o2646 b2075 b2634 b2649
+B	b2650	t2650
+T	t2651	o2645 b2650
+B	b2651	t2651
 O	o1274	location p1274 p1274
 NSummary!id	id	id Summary
 P	p1275	Number 91606035
@@ -4225,242 +5488,392 @@ T	t1276	o1274 b1275
 B	b1276	t1276
 T	t1277	o b1276 b4
 B	b1277	t1277
-T	t1788	o b1787 b1277
-B	b1788	t1788
-T	t1789	o b1774 b1788
-B	b1789	t1789
-T	t1790	o b1756 b1789
-B	b1790	t1790
-T	t1791	o b1751 b1790
-B	b1791	t1791
-T	t1792	o b1727 b1791
-B	b1792	t1792
-T	t1793	o b1701 b1792
-B	b1793	t1793
-T	t1794	o b1696 b1793
-B	b1794	t1794
-T	t1795	o b1681 b1794
-B	b1795	t1795
-T	t1796	o b1673 b1795
-B	b1796	t1796
-T	t1797	o b1665 b1796
-B	b1797	t1797
-T	t1798	o b1658 b1797
-B	b1798	t1798
-T	t1799	o b1643 b1798
-B	b1799	t1799
-T	t1800	o b1632 b1799
-B	b1800	t1800
-T	t1801	o b1624 b1800
-B	b1801	t1801
-T	t1802	o b1616 b1801
-B	b1802	t1802
-T	t1803	o b1609 b1802
-B	b1803	t1803
-T	t1804	o b1602 b1803
-B	b1804	t1804
-T	t1805	o b1597 b1804
-B	b1805	t1805
-T	t1806	o b1592 b1805
-B	b1806	t1806
-T	t1807	o b1580 b1806
-B	b1807	t1807
-T	t1808	o b1569 b1807
-B	b1808	t1808
-T	t1809	o b1564 b1808
-B	b1809	t1809
-T	t1810	o b1548 b1809
-B	b1810	t1810
-T	t1811	o b1531 b1810
-B	b1811	t1811
-T	t1812	o b1526 b1811
-B	b1812	t1812
-T	t1813	o b1521 b1812
-B	b1813	t1813
-T	t1814	o b1512 b1813
-B	b1814	t1814
-T	t1815	o b1500 b1814
-B	b1815	t1815
-T	t1816	o b1492 b1815
-B	b1816	t1816
-T	t1817	o b1487 b1816
-B	b1817	t1817
-T	t1818	o b1480 b1817
-B	b1818	t1818
-T	t1819	o b1470 b1818
-B	b1819	t1819
-T	t1820	o b1458 b1819
-B	b1820	t1820
-T	t1821	o b1448 b1820
-B	b1821	t1821
-T	t1822	o b1443 b1821
-B	b1822	t1822
-T	t1823	o b1436 b1822
-B	b1823	t1823
-T	t1824	o b1423 b1823
-B	b1824	t1824
-T	t1825	o b1418 b1824
-B	b1825	t1825
-T	t1826	o b1411 b1825
-B	b1826	t1826
-T	t1827	o b1403 b1826
-B	b1827	t1827
-T	t1828	o b1397 b1827
-B	b1828	t1828
-T	t1829	o b1395 b1828
-B	b1829	t1829
-T	t1830	o b1393 b1829
-B	b1830	t1830
-T	t1831	o b1391 b1830
-B	b1831	t1831
-T	t1832	o b1389 b1831
-B	b1832	t1832
-T	t1833	o b1387 b1832
-B	b1833	t1833
-T	t1834	o b1385 b1833
-B	b1834	t1834
-T	t1835	o b1383 b1834
-B	b1835	t1835
-T	t1836	o b1381 b1835
-B	b1836	t1836
-T	t1837	o b1379 b1836
-B	b1837	t1837
-T	t1838	o b1377 b1837
-B	b1838	t1838
-T	t1839	o b1375 b1838
-B	b1839	t1839
-T	t1840	o b1373 b1839
-B	b1840	t1840
-T	t1841	o b1372 b1840
-B	b1841	t1841
-T	t1842	o b1365 b1841
-B	b1842	t1842
-T	t1843	o b1268 b1842
-B	b1843	t1843
-T	t1844	o b1260 b1843
-B	b1844	t1844
-T	t1845	o b1254 b1844
-B	b1845	t1845
-T	t1846	o b1246 b1845
-B	b1846	t1846
-T	t1847	o b1238 b1846
-B	b1847	t1847
-T	t1848	o b1223 b1847
-B	b1848	t1848
-T	t1849	o b1210 b1848
-B	b1849	t1849
-T	t1850	o b1197 b1849
-B	b1850	t1850
-T	t1851	o b1184 b1850
-B	b1851	t1851
-T	t1852	o b1168 b1851
-B	b1852	t1852
-T	t1853	o b1155 b1852
-B	b1853	t1853
-T	t1854	o b1148 b1853
-B	b1854	t1854
-T	t1855	o b1141 b1854
-B	b1855	t1855
-T	t1856	o b1135 b1855
-B	b1856	t1856
-T	t1857	o b1125 b1856
-B	b1857	t1857
-T	t1858	o b1118 b1857
-B	b1858	t1858
-T	t1859	o b1110 b1858
-B	b1859	t1859
-T	t1860	o b1097 b1859
-B	b1860	t1860
-T	t1861	o b1078 b1860
-B	b1861	t1861
-T	t1862	o b1066 b1861
-B	b1862	t1862
-T	t1863	o b1054 b1862
-B	b1863	t1863
-T	t1864	o b1042 b1863
-B	b1864	t1864
-T	t1865	o b1030 b1864
-B	b1865	t1865
-T	t1866	o b1013 b1865
-B	b1866	t1866
-T	t1867	o b1004 b1866
-B	b1867	t1867
-T	t1868	o b999 b1867
-B	b1868	t1868
-T	t1869	o b974 b1868
-B	b1869	t1869
-T	t1870	o b969 b1869
-B	b1870	t1870
-T	t1871	o b965 b1870
-B	b1871	t1871
-T	t1872	o b923 b1871
-B	b1872	t1872
-T	t1873	o b859 b1872
-B	b1873	t1873
-T	t1874	o b786 b1873
-B	b1874	t1874
-T	t1875	o b761 b1874
-B	b1875	t1875
-T	t1876	o b753 b1875
-B	b1876	t1876
-T	t1877	o b722 b1876
-B	b1877	t1877
-T	t1878	o b706 b1877
-B	b1878	t1878
-T	t1879	o b700 b1878
-B	b1879	t1879
-T	t1880	o b682 b1879
-B	b1880	t1880
-T	t1881	o b615 b1880
-B	b1881	t1881
-T	t1882	o b601 b1881
-B	b1882	t1882
-T	t1883	o b570 b1882
-B	b1883	t1883
-T	t1884	o b544 b1883
-B	b1884	t1884
-T	t1885	o b509 b1884
-B	b1885	t1885
-T	t1886	o b492 b1885
-B	b1886	t1886
-T	t1887	o b487 b1886
-B	b1887	t1887
-T	t1888	o b480 b1887
-B	b1888	t1888
-T	t1889	o b473 b1888
-B	b1889	t1889
-T	t1890	o b458 b1889
-B	b1890	t1890
-T	t1891	o b421 b1890
-B	b1891	t1891
-T	t1892	o b400 b1891
-B	b1892	t1892
-T	t1893	o b368 b1892
-B	b1893	t1893
-T	t1894	o b354 b1893
-B	b1894	t1894
-T	t1895	o b344 b1894
-B	b1895	t1895
-T	t1896	o b327 b1895
-B	b1896	t1896
-T	t1897	o b310 b1896
-B	b1897	t1897
-T	t1898	o b301 b1897
-B	b1898	t1898
-T	t1899	o b283 b1898
-B	b1899	t1899
-T	t1900	o b273 b1899
-B	b1900	t1900
-T	t1901	o b258 b1900
-B	b1901	t1901
-T	t1902	o b237 b1901
-B	b1902	t1902
-T	t1903	o b213 b1902
-B	b1903	t1903
-T	t1904	o b479 b1903
-B	b1904	t1904
-T	t1905	o b472 b1904
-B	b1905	t1905
-T	t1906	o b465 b1905
-B	b1906	t1906
-T	t373	o b362 b1906
+T	t2652	o b2651 b1277
+B	b2652	t2652
+T	t2653	o b2644 b2652
+B	b2653	t2653
+T	t2654	o b2636 b2653
+B	b2654	t2654
+T	t2655	o b2631 b2654
+B	b2655	t2655
+T	t2656	o b2622 b2655
+B	b2656	t2656
+T	t2657	o b2600 b2656
+B	b2657	t2657
+T	t2658	o b2595 b2657
+B	b2658	t2658
+T	t2659	o b2583 b2658
+B	b2659	t2659
+T	t2660	o b2562 b2659
+B	b2660	t2660
+T	t2661	o b2554 b2660
+B	b2661	t2661
+T	t2662	o b2537 b2661
+B	b2662	t2662
+T	t2663	o b2519 b2662
+B	b2663	t2663
+T	t2664	o b2514 b2663
+B	b2664	t2664
+T	t2665	o b2498 b2664
+B	b2665	t2665
+T	t2666	o b2484 b2665
+B	b2666	t2666
+T	t2667	o b2479 b2666
+B	b2667	t2667
+T	t2668	o b2472 b2667
+B	b2668	t2668
+T	t2669	o b2464 b2668
+B	b2669	t2669
+T	t2670	o b2459 b2669
+B	b2670	t2670
+T	t2671	o b2452 b2670
+B	b2671	t2671
+T	t2672	o b2444 b2671
+B	b2672	t2672
+T	t2673	o b2436 b2672
+B	b2673	t2673
+T	t2674	o b2426 b2673
+B	b2674	t2674
+T	t2675	o b2421 b2674
+B	b2675	t2675
+T	t2676	o b2416 b2675
+B	b2676	t2676
+T	t2677	o b2409 b2676
+B	b2677	t2677
+T	t2678	o b2401 b2677
+B	b2678	t2678
+T	t2679	o b2396 b2678
+B	b2679	t2679
+T	t2680	o b2387 b2679
+B	b2680	t2680
+T	t2681	o b2375 b2680
+B	b2681	t2681
+T	t2682	o b2363 b2681
+B	b2682	t2682
+T	t2683	o b2345 b2682
+B	b2683	t2683
+T	t2684	o b2340 b2683
+B	b2684	t2684
+T	t2685	o b2335 b2684
+B	b2685	t2685
+T	t2686	o b2326 b2685
+B	b2686	t2686
+T	t2687	o b2314 b2686
+B	b2687	t2687
+T	t2688	o b2309 b2687
+B	b2688	t2688
+T	t2689	o b2302 b2688
+B	b2689	t2689
+T	t2690	o b2294 b2689
+B	b2690	t2690
+T	t2691	o b2289 b2690
+B	b2691	t2691
+T	t2692	o b2277 b2691
+B	b2692	t2692
+T	t2693	o b2258 b2692
+B	b2693	t2693
+T	t2694	o b2251 b2693
+B	b2694	t2694
+T	t2695	o b2241 b2694
+B	b2695	t2695
+T	t2696	o b2233 b2695
+B	b2696	t2696
+T	t2697	o b2226 b2696
+B	b2697	t2697
+T	t2698	o b2220 b2697
+B	b2698	t2698
+T	t2699	o b2212 b2698
+B	b2699	t2699
+T	t2700	o b2204 b2699
+B	b2700	t2700
+T	t2701	o b2192 b2700
+B	b2701	t2701
+T	t2702	o b2182 b2701
+B	b2702	t2702
+T	t2703	o b2174 b2702
+B	b2703	t2703
+T	t2704	o b2166 b2703
+B	b2704	t2704
+T	t2705	o b2158 b2704
+B	b2705	t2705
+T	t2706	o b2148 b2705
+B	b2706	t2706
+T	t2707	o b2143 b2706
+B	b2707	t2707
+T	t2708	o b2138 b2707
+B	b2708	t2708
+T	t2709	o b2133 b2708
+B	b2709	t2709
+T	t2710	o b2128 b2709
+B	b2710	t2710
+T	t2711	o b2123 b2710
+B	b2711	t2711
+T	t2712	o b2118 b2711
+B	b2712	t2712
+T	t2713	o b2107 b2712
+B	b2713	t2713
+T	t2714	o b2096 b2713
+B	b2714	t2714
+T	t2715	o b2084 b2714
+B	b2715	t2715
+T	t2716	o b2073 b2715
+B	b2716	t2716
+T	t2717	o b2053 b2716
+B	b2717	t2717
+T	t2718	o b2037 b2717
+B	b2718	t2718
+T	t2719	o b2031 b2718
+B	b2719	t2719
+T	t2720	o b2010 b2719
+B	b2720	t2720
+T	t2721	o b2005 b2720
+B	b2721	t2721
+T	t2722	o b2000 b2721
+B	b2722	t2722
+T	t2723	o b1997 b2722
+B	b2723	t2723
+T	t2724	o b1989 b2723
+B	b2724	t2724
+T	t2725	o b1987 b2724
+B	b2725	t2725
+T	t2726	o b1985 b2725
+B	b2726	t2726
+T	t2727	o b1984 b2726
+B	b2727	t2727
+T	t2728	o b1980 b2727
+B	b2728	t2728
+T	t2729	o b1978 b2728
+B	b2729	t2729
+T	t2730	o b1976 b2729
+B	b2730	t2730
+T	t2731	o b1974 b2730
+B	b2731	t2731
+T	t2732	o b1972 b2731
+B	b2732	t2732
+T	t2733	o b1970 b2732
+B	b2733	t2733
+T	t2734	o b1968 b2733
+B	b2734	t2734
+T	t2735	o b1966 b2734
+B	b2735	t2735
+T	t2736	o b1964 b2735
+B	b2736	t2736
+T	t2737	o b1962 b2736
+B	b2737	t2737
+T	t2738	o b1960 b2737
+B	b2738	t2738
+T	t2739	o b1958 b2738
+B	b2739	t2739
+T	t2740	o b1956 b2739
+B	b2740	t2740
+T	t2741	o b1954 b2740
+B	b2741	t2741
+T	t2742	o b1952 b2741
+B	b2742	t2742
+T	t2743	o b1950 b2742
+B	b2743	t2743
+T	t2744	o b1948 b2743
+B	b2744	t2744
+T	t2745	o b1946 b2744
+B	b2745	t2745
+T	t2746	o b1944 b2745
+B	b2746	t2746
+T	t2747	o b1942 b2746
+B	b2747	t2747
+T	t2748	o b1940 b2747
+B	b2748	t2748
+T	t2749	o b1938 b2748
+B	b2749	t2749
+T	t2750	o b1936 b2749
+B	b2750	t2750
+T	t2751	o b1934 b2750
+B	b2751	t2751
+T	t2752	o b1932 b2751
+B	b2752	t2752
+T	t2753	o b1931 b2752
+B	b2753	t2753
+T	t2754	o b1928 b2753
+B	b2754	t2754
+T	t2755	o b1927 b2754
+B	b2755	t2755
+T	t2756	o b1925 b2755
+B	b2756	t2756
+T	t2757	o b1920 b2756
+B	b2757	t2757
+T	t2758	o b1918 b2757
+B	b2758	t2758
+T	t2759	o b1916 b2758
+B	b2759	t2759
+T	t2760	o b1914 b2759
+B	b2760	t2760
+T	t2761	o b1912 b2760
+B	b2761	t2761
+T	t2762	o b1911 b2761
+B	b2762	t2762
+T	t2763	o b1908 b2762
+B	b2763	t2763
+T	t2764	o b1907 b2763
+B	b2764	t2764
+T	t2765	o b1776 b2764
+B	b2765	t2765
+T	t2766	o b1758 b2765
+B	b2766	t2766
+T	t2767	o b1752 b2766
+B	b2767	t2767
+T	t2768	o b1703 b2767
+B	b2768	t2768
+T	t2769	o b1698 b2768
+B	b2769	t2769
+T	t2770	o b1683 b2769
+B	b2770	t2770
+T	t2771	o b1667 b2770
+B	b2771	t2771
+T	t2772	o b1645 b2771
+B	b2772	t2772
+T	t2773	o b1626 b2772
+B	b2773	t2773
+T	t2774	o b1610 b2773
+B	b2774	t2774
+T	t2775	o b1599 b2774
+B	b2775	t2775
+T	t2776	o b1582 b2775
+B	b2776	t2776
+T	t2777	o b1570 b2776
+B	b2777	t2777
+T	t2778	o b1528 b2777
+B	b2778	t2778
+T	t2779	o b1488 b2778
+B	b2779	t2779
+T	t2780	o b1419 b2779
+B	b2780	t2780
+T	t2781	o b1376 b2780
+B	b2781	t2781
+T	t2782	o b1351 b2781
+B	b2782	t2782
+T	t2783	o b1340 b2782
+B	b2783	t2783
+T	t2784	o b1323 b2783
+B	b2784	t2784
+T	t2785	o b1317 b2784
+B	b2785	t2785
+T	t2786	o b1310 b2785
+B	b2786	t2786
+T	t2787	o b1308 b2786
+B	b2787	t2787
+T	t2788	o b1306 b2787
+B	b2788	t2788
+T	t2789	o b1304 b2788
+B	b2789	t2789
+T	t2790	o b1302 b2789
+B	b2790	t2790
+T	t2791	o b1300 b2790
+B	b2791	t2791
+T	t2792	o b1299 b2791
+B	b2792	t2792
+T	t2793	o b1298 b2792
+B	b2793	t2793
+T	t2794	o b1295 b2793
+B	b2794	t2794
+T	t2795	o b1294 b2794
+B	b2795	t2795
+T	t2796	o b1291 b2795
+B	b2796	t2796
+T	t2797	o b1289 b2796
+B	b2797	t2797
+T	t2798	o b1287 b2797
+B	b2798	t2798
+T	t2799	o b1285 b2798
+B	b2799	t2799
+T	t2800	o b1283 b2799
+B	b2800	t2800
+T	t2801	o b1281 b2800
+B	b2801	t2801
+T	t2802	o b1279 b2801
+B	b2802	t2802
+T	t2803	o b1278 b2802
+B	b2803	t2803
+T	t2804	o b1274 b2803
+B	b2804	t2804
+T	t2805	o b1267 b2804
+B	b2805	t2805
+T	t2806	o b1259 b2805
+B	b2806	t2806
+T	t2807	o b1253 b2806
+B	b2807	t2807
+T	t2808	o b1167 b2807
+B	b2808	t2808
+T	t2809	o b1156 b2808
+B	b2809	t2809
+T	t2810	o b1154 b2809
+B	b2810	t2810
+T	t2811	o b1142 b2810
+B	b2811	t2811
+T	t2812	o b1134 b2811
+B	b2812	t2812
+T	t2813	o b1132 b2812
+B	b2813	t2813
+T	t2814	o b1130 b2813
+B	b2814	t2814
+T	t2815	o b1126 b2814
+B	b2815	t2815
+T	t2816	o b1124 b2815
+B	b2816	t2816
+T	t2817	o b1109 b2816
+B	b2817	t2817
+T	t2818	o b1096 b2817
+B	b2818	t2818
+T	t2819	o b1079 b2818
+B	b2819	t2819
+T	t2820	o b1077 b2819
+B	b2820	t2820
+T	t2821	o b1065 b2820
+B	b2821	t2821
+T	t2822	o b1053 b2821
+B	b2822	t2822
+T	t2823	o b1041 b2822
+B	b2823	t2823
+T	t2824	o b1029 b2823
+B	b2824	t2824
+T	t2825	o b1019 b2824
+B	b2825	t2825
+T	t2826	o b1011 b2825
+B	b2826	t2826
+T	t2827	o b1005 b2826
+B	b2827	t2827
+T	t2828	o b1000 b2827
+B	b2828	t2828
+T	t2829	o b998 b2828
+B	b2829	t2829
+T	t2830	o b993 b2829
+B	b2830	t2830
+T	t2831	o b988 b2830
+B	b2831	t2831
+T	t2832	o b983 b2831
+B	b2832	t2832
+T	t2833	o b975 b2832
+B	b2833	t2833
+T	t2834	o b970 b2833
+B	b2834	t2834
+T	t2835	o b968 b2834
+B	b2835	t2835
+T	t2836	o b963 b2835
+B	b2836	t2836
+T	t2837	o b958 b2836
+B	b2837	t2837
+T	t2838	o b953 b2837
+B	b2838	t2838
+T	t2839	o b947 b2838
+B	b2839	t2839
+T	t2840	o b945 b2839
+B	b2840	t2840
+T	t2841	o b944 b2840
+B	b2841	t2841
+T	t2842	o b940 b2841
+B	b2842	t2842
+T	t2843	o b479 b2842
+B	b2843	t2843
+T	t2844	o b472 b2843
+B	b2844	t2844
+T	t2845	o b465 b2844
+B	b2845	t2845
+T	t2846	o b934 b2845

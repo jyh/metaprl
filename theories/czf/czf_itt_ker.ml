@@ -5,7 +5,7 @@
  * @theory[Czf_itt_ker]
  *
  * The @tt{Czf_itt_ker} module defines the kernel proposition
- * $@ker{x; h; g1; g2; f}$, in which $f$ is a homomorphism of
+ * $@ker{x; h; g1; g2; f[x]}$, in which $f$ is a homomorphism of
  * $g1$ into $g2$, i.e., $@hom{x; g1; g2; f}$, and $h$ is a
  * group formed by the elements of $g1$ that are mapped into
  * the identity of $g2$.
@@ -117,7 +117,7 @@ dform ker_df : parens :: except_mode[src] :: ker{'h; 'g1; 'g2; x. 'f} =
  * @rules
  * @thysubsection{Well-formedness}
  *
- * The kernel proposition $@ker{x; h; g1; g2; f}$ is well-formed if
+ * The kernel proposition $@ker{x; h; g1; g2; f[x]}$ is well-formed if
  * $g1$, $g2$, and $h$ are labels, and $f[x]$ is functional on any
  * set argument $x$.
  * @end[doc]
@@ -133,7 +133,7 @@ interactive ker_type {| intro [] |} 'H :
  * @begin[doc]
  * @thysubsection{Introduction}
  *
- * The kernel proposition $@ker{x; h; g1; g2; f}$ is true if the
+ * The kernel proposition $@ker{x; h; g1; g2; f[x]}$ is true if the
  * homomorphism proposition $@hom{x; g1; g2; f}$ is true and $h$
  * is a group formed by the elements of group $g1$ whose mapping
  * is $@id{g2}$.
@@ -185,20 +185,15 @@ interactive ker_subgroup_elim (*{| elim [] |}*) 'H 'J :
    sequent ['ext] { 'H; u: ker{'h; 'g1; 'g2; x. 'f['x]}; 'J['u] >- fun_set{x. 'f['x]} } -->
    sequent ['ext] { 'H; u: ker{'h; 'g1; 'g2; x. 'f['x]}; 'J['u]; v: subgroup{'h; 'g1} >- 'C['u] } -->
    sequent ['ext] { 'H; u: ker{'h; 'g1; 'g2; x. 'f['x]}; 'J['u] >- 'C['u] }
-(*! @docoff *)
-
-let kerSubgT i p =
-   let j, k = Sequent.hyp_indices p i in
-      ker_subgroup_elim j k p
 
 (*!
  * @begin[doc]
- * If the kernel proposition $@ker{x; h; g1; g2; f}$ is true, then
+ * If the kernel proposition $@ker{x; h; g1; g2; f[x]}$ is true, then
  * the set $@sep{x; @car{g1}; @mem{@pair{f[x]; f[a]}; @eqG{g2}}}$
  * is equal to $@lcoset{h; g1; a}$ and $@rcoset{h; g1; a}$.
  * @end[doc]
  *)
-interactive ker_lcoset_intro {| intro [] |} 'H :
+interactive ker_lcoset1 {| intro [] |} 'H :
    sequent [squash] { 'H >- 'g1 IN label } -->
    sequent [squash] { 'H >- 'g2 IN label } -->
    sequent [squash] { 'H >- 'h IN label } -->
@@ -208,7 +203,7 @@ interactive ker_lcoset_intro {| intro [] |} 'H :
    sequent ['ext] { 'H >- ker{'h; 'g1; 'g2; x. 'f['x]} } -->
    sequent ['ext] { 'H >- equal{sep{car{'g1}; x. mem{pair{'f['x]; 'f['a]}; eqG{'g2}}}; lcoset{'h; 'g1; 'a}} }
 
-interactive ker_lcoset_elim (*{| elim [] |}*) 'H 'J 'a :
+interactive ker_lcoset2 (*{| elim [] |}*) 'H 'J 'a :
    sequent [squash] { 'H; u: ker{'h; 'g1; 'g2; x. 'f['x]}; 'J['u] >- 'g1 IN label } -->
    sequent [squash] { 'H; u: ker{'h; 'g1; 'g2; x. 'f['x]}; 'J['u] >- 'g2 IN label } -->
    sequent [squash] { 'H; u: ker{'h; 'g1; 'g2; x. 'f['x]}; 'J['u] >- 'h IN label } -->
@@ -218,7 +213,7 @@ interactive ker_lcoset_elim (*{| elim [] |}*) 'H 'J 'a :
    sequent ['ext] { 'H; u: ker{'h; 'g1; 'g2; x. 'f['x]}; 'J['u]; v: equal{sep{car{'g1}; x. mem{pair{'f['x]; 'f['a]}; eqG{'g2}}}; lcoset{'h; 'g1; 'a}} >- 'C['u] } -->
    sequent ['ext] { 'H; u: ker{'h; 'g1; 'g2; x. 'f['x]}; 'J['u] >- 'C['u] }
 
-interactive ker_rcoset_intro {| intro [] |} 'H :
+interactive ker_rcoset1 {| intro [] |} 'H :
    sequent [squash] { 'H >- 'g1 IN label } -->
    sequent [squash] { 'H >- 'g2 IN label } -->
    sequent [squash] { 'H >- 'h IN label } -->
@@ -228,7 +223,7 @@ interactive ker_rcoset_intro {| intro [] |} 'H :
    sequent ['ext] { 'H >- ker{'h; 'g1; 'g2; x. 'f['x]} } -->
    sequent ['ext] { 'H >- equal{sep{car{'g1}; x. mem{pair{'f['x]; 'f['a]}; eqG{'g2}}}; rcoset{'h; 'g1; 'a}} }
 
-interactive ker_rcoset_elim (*{| elim [] |}*) 'H 'J 'a :
+interactive ker_rcoset2 (*{| elim [] |}*) 'H 'J 'a :
    sequent [squash] { 'H; u: ker{'h; 'g1; 'g2; x. 'f['x]}; 'J['u] >- 'g1 IN label } -->
    sequent [squash] { 'H; u: ker{'h; 'g1; 'g2; x. 'f['x]}; 'J['u] >- 'g2 IN label } -->
    sequent [squash] { 'H; u: ker{'h; 'g1; 'g2; x. 'f['x]}; 'J['u] >- 'h IN label } -->
@@ -237,15 +232,6 @@ interactive ker_rcoset_elim (*{| elim [] |}*) 'H 'J 'a :
    sequent ['ext] { 'H; u: ker{'h; 'g1; 'g2; x. 'f['x]}; 'J['u] >- fun_set{x. 'f['x]} } -->
    sequent ['ext] { 'H; u: ker{'h; 'g1; 'g2; x. 'f['x]}; 'J['u]; v: equal{sep{car{'g1}; x. mem{pair{'f['x]; 'f['a]}; eqG{'g2}}}; rcoset{'h; 'g1; 'a}} >- 'C['u] } -->
    sequent ['ext] { 'H; u: ker{'h; 'g1; 'g2; x. 'f['x]}; 'J['u] >- 'C['u] }
-(*! @docoff *)
-
-let kerLcosetT t i p =
-   let j, k = Sequent.hyp_indices p i in
-      ker_lcoset_elim j k t p
-
-let kerRcosetT t i p =
-   let j, k = Sequent.hyp_indices p i in
-      ker_rcoset_elim j k t p
 
 (*!
  * @begin[doc]
@@ -254,11 +240,7 @@ let kerRcosetT t i p =
  * of $f$ equals ${@id{g1}}$.
  * @end[doc]
  *)
-(*
- * A group homomorphism f: G1 -> G2 is a one-to-one map
- * if and only if Ker(f) = {id(g1)}.
- *)
-interactive ker_monomorphism1 (*{| elim [] |}*) 'H 'J :
+interactive ker_mono1 (*{| elim [] |}*) 'H 'J :
    sequent [squash] { 'H; u: ker{'h; 'g1; 'g2; x. 'f['x]}; 'J['u] >- 'g1 IN label } -->
    sequent [squash] { 'H; u: ker{'h; 'g1; 'g2; x. 'f['x]}; 'J['u] >- 'g2 IN label } -->
    sequent [squash] { 'H; u: ker{'h; 'g1; 'g2; x. 'f['x]}; 'J['u] >- 'h IN label } -->
@@ -287,6 +269,39 @@ interactive ker_normalSubg (*{| elim [] |}*) 'H 'J :
    sequent ['ext] { 'H; u: ker{'h; 'g1; 'g2; x. 'f['x]}; 'J['u]; v: normal_subg{'h; 'g1} >- 'C['u] } -->
    sequent ['ext] { 'H; u: ker{'h; 'g1; 'g2; x. 'f['x]}; 'J['u] >- 'C['u] }
 (*! @docoff *)
+
+(************************************************************************
+ * TACTICS                                                              *
+ ************************************************************************)
+
+(*!
+ * @begin[doc]
+ * @tactics
+ *
+ * @begin[description]
+ * @item{@tactic[kerSubgT], @tactic[kerLcosetT], @tactic[kerRcosetT], @tactic[kerNormalSubgT];
+ *    The four @tt{ker} tactics apply the theorems for the
+ *    @hrefterm[ker] judgment. The @tt{kerSubgT} applies the
+ *    @hrefrule[ker_subgroup_elim] rule, the @tt{kerLcosetT}
+ *    tactic applies the @hrefrule[ker_lcoset2] rule, the
+ *    @tt[kerRcosetT] tactic applies the @hrefrule[ker_rcoset2]
+ *    rule, and the @tt[kerNormalSubgT] tactic applies the
+ *    @hrefrule[ker_normalSubg] rule.}
+ * @end[description]
+ * @docoff
+ * @end[doc]
+ *)
+let kerSubgT i p =
+   let j, k = Sequent.hyp_indices p i in
+      ker_subgroup_elim j k p
+
+let kerLcosetT t i p =
+   let j, k = Sequent.hyp_indices p i in
+      ker_lcoset2 j k t p
+
+let kerRcosetT t i p =
+   let j, k = Sequent.hyp_indices p i in
+      ker_rcoset2 j k t p
 
 let kerNormalSubgT i p =
    let j, k = Sequent.hyp_indices p i in

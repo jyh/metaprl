@@ -114,8 +114,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
- * Author: Jason Hickey
- * @email{jyh@cs.cornell.edu}
+ * Author: Jason Hickey @email{jyh@cs.cornell.edu}
+ * Modified by: Aleksey Nogin @email{nogin@cs.cornell.edu}
  * @end[license]
  *)
 
@@ -129,16 +129,17 @@ include Itt_set
 include Itt_rfun
 include Itt_struct
 include Itt_struct2
+include Itt_esquash
 (*! @docoff *)
 
 open Printf
 open Mp_debug
 open Refiner.Refiner
-open Refiner.Refiner.Term
-open Refiner.Refiner.TermOp
-open Refiner.Refiner.TermMan
-open Refiner.Refiner.TermSubst
-open Refiner.Refiner.RefineError
+open Term
+open TermOp
+open TermMan
+open TermSubst
+open RefineError
 open Mp_resource
 
 open Var
@@ -190,19 +191,6 @@ dform quot_df2 : mode[src] :: parens :: "prec"[prec_quot] :: "quot"{'A; x, y. 'E
  ************************************************************************)
 
 (*!
- * @docoff
- * This rule is hardly likely to be used.
- *)
-prim quotientFormation 'H (quot x, y: 'A // 'E['x; 'y]) 'z 'u 'v :
-   [wf] sequent [squash] { 'H >- 'A = 'A in univ[i:l] } -->
-   [wf] sequent [squash] { 'H; x: 'A; y: 'A >- 'E['x; 'y] = 'E['x; 'y] in univ[i:l] } -->
-   [wf] sequent [squash] { 'H; x: 'A >- 'E['x; 'x] } -->
-   [wf] sequent [squash] { 'H; x: 'A; y: 'A; u: 'E['x; 'y] >- 'E['y; 'x] } -->
-   [wf] sequent [squash] { 'H; x: 'A; y: 'A; z: 'A; u: 'E['x; 'y]; v: 'E['y; 'z] >- 'E['x; 'z] } -->
-   sequent ['ext] { 'H >- univ[i:l] } =
-   quot x, y: 'A // 'E['x; 'y]
-
-(*!
  * @begin[doc]
  * @rules
  * @thysubsection{Equality and well-formedness}
@@ -227,12 +215,12 @@ prim quotientType {| intro [] |} 'H 'u 'v 'w 'x1 'x2 :
 
 (*!
  * @begin[doc]
- * In the @emph{weak} form, two quotient types $@quot{A_1; x; y; E_1[x, y]}$ and
+ * Two quotient types $@quot{A_1; x; y; E_1[x, y]}$ and
  * $@quot{A_2; x; y; E_2[x, y]}$ are equal if the types $A_1$ and $A_2$ and
  * the equivalence relations $E_1$ and $E_2$ are equal.
  * @end[doc]
  *)
-prim quotientWeakEquality {| intro []; eqcd |} 'H 'x 'y 'z 'u 'v :
+prim quotientEquality {| intro []; eqcd |} 'H 'x 'y 'z 'u 'v :
    [wf] sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
    [wf] sequent [squash] { 'H; x: 'A1; y: 'A1 >- 'E1['x; 'y] = 'E2['x; 'y] in univ[i:l] } -->
    [wf] sequent [squash] { 'H; x: 'A1 >- 'E1['x; 'x] } -->
@@ -246,32 +234,6 @@ prim quotientWeakEquality {| intro []; eqcd |} 'H 'x 'y 'z 'u 'v :
 
 (*!
  * @begin[doc]
- * In the @emph{strong} form, two quotient types $@quot{A_1; x; y; E_1[x, y]}$ and
- * $@quot{A_2; x; y; E_2[x, y]}$ are equal if the types $A_1$ and $A_2$ are
- * equal, and their equivalence relations are @emph{extensionally} equal
- * $E_1[x, y] @Leftrightarrow E_2[x, y]$.
- * @end[doc]
- *)
-prim quotientEquality {| intro [SelectOption 1] |} 'H 'r 's 'v :
-   [wf] sequent [squash] { 'H >- quot x1, y1: 'A1 // 'E1['x1; 'y1] = quot x1, y1: 'A1 // 'E1['x1; 'y1] in univ[i:l] } -->
-   [wf] sequent [squash] { 'H >- quot x2, y2: 'A2 // 'E2['x2; 'y2] = quot x2, y2: 'A2 // 'E2['x2; 'y2] in univ[i:l] } -->
-   [wf] sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
-   [wf] sequent [squash] { 'H; v: 'A1 = 'A2 in univ[i:l]; r: 'A1; s: 'A1 >- 'E1['r; 's] -> 'E2['r; 's] } -->
-   [wf] sequent [squash] { 'H; v: 'A1 = 'A2 in univ[i:l]; r: 'A1; s: 'A1 >- 'E2['r; 's] -> 'E1['r; 's] } -->
-   sequent ['ext] { 'H >- quot x1, y1: 'A1 // 'E1['x1; 'y1] = quot x2, y2: 'A2 // 'E2['x2; 'y2] in univ[i:l] } =
-   it
-
-(*!
- * @docoff
- *)
-prim quotient_memberFormation {| intro [] |} 'H :
-   [wf] sequent [squash] { 'H >- "type"{(quot x, y: 'A // 'E['x; 'y])} } -->
-   [main] ('a : sequent ['ext] { 'H >- 'A }) -->
-   sequent ['ext] { 'H >- quot x, y: 'A // 'E['x; 'y] } =
-   'a
-
-(*!
- * @begin[doc]
  * @thysubsection{Membership}
  *
  * In the @emph{weak} form, any two elements in $A$ are also
@@ -279,17 +241,19 @@ prim quotient_memberFormation {| intro [] |} 'H :
  * equivalence relation $E$.
  * @end[doc]
  *)
-prim quotient_memberWeakEquality {| intro [] |} 'H :
+prim quotient_memberWeakEquality {| intro [AutoMustComplete] |} 'H :
    [wf] sequent [squash] { 'H >- "type"{(quot x, y: 'A // 'E['x; 'y])} } -->
    [wf] sequent [squash] { 'H >- 'a1 = 'a2 in 'A } -->
    sequent ['ext] { 'H >- 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y] } =
    it
 
-prim quotientMember {| intro [] |}  'H :
+(*!
+ * @docoff
+ *)
+interactive quotient_memberFormation {| intro [] |} 'H :
    [wf] sequent [squash] { 'H >- "type"{(quot x, y: 'A // 'E['x; 'y])} } -->
-   [wf] sequent [squash] { 'H >- 'l IN 'A } -->
-   sequent ['ext] { 'H >- 'l IN (quot x, y: 'A // 'E['x; 'y]) } =
-   it
+   [main] ('a : sequent ['ext] { 'H >- 'A }) -->
+   sequent ['ext] { 'H >- quot x, y: 'A // 'E['x; 'y] }
 
 (*!
  * @begin[doc]
@@ -298,13 +262,27 @@ prim quotientMember {| intro [] |}  'H :
  * in $A$, and they are related with the equivalence relation $E[a_1, a_2]$.
  * @end[doc]
  *)
-prim quotient_memberEquality {| intro []; eqcd |} 'H :
-   [wf] sequent [squash] { 'H >- "type"{(quot x, y: 'A // 'E['x; 'y])} } -->
-   [wf] sequent [squash] { 'H >- 'a1 IN 'A } -->
-   [wf] sequent [squash] { 'H >- 'a2 IN 'A } -->
-   [wf] sequent [squash] { 'H >- 'E['a1; 'a2] } -->
+prim quotient_memberEquality 'H :
+   [wf] sequent [squash] { 'H >- 'a1 IN quot x, y: 'A // 'E['x; 'y] } -->
+   [wf] sequent [squash] { 'H >- 'a2 IN quot x, y: 'A // 'E['x; 'y] } -->
+   [wf] sequent [squash] { 'H >- esquash{'E['a1; 'a2]} } -->
    sequent ['ext] { 'H >- 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y] } =
    it
+
+(*! @docoff *)
+let quotientIntroT p =
+   let _, a1, a2 = dest_equal (Sequent.concl p) in
+   if alpha_equal a1 a2 then begin
+      if try Sequent.get_bool_arg p "d_auto"
+         with RefineError _ -> false
+      then
+         raise generic_refiner_exn;
+      quotient_memberWeakEquality (Sequent.hyp_count_addr p) p
+   end else
+      quotient_memberEquality (Sequent.hyp_count_addr p) p
+
+let resource intro +=
+   (<<'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]>>, ("quotientIntroT", None, quotientIntroT))
 
 (*!
  * @begin[doc]
@@ -333,14 +311,6 @@ interactive quotientElimination1_eq {| elim [ThinOption thinT] |} 'H 'J 'v 'w 'z
            } -->
    sequent ['ext] { 'H; a: quot x, y: 'A // 'E['x; 'y]; 'J['a] >- 's['a] = 't['a] in 'T['a] }
 
-let quotientEliminationT n p =
-   let n = if n<0 then (Sequent.hyp_count p) + n + 1 else n in
-   let i,j = Sequent.hyp_indices p n in
-   let v,w,z,e1,e2 = maybe_new_vars5 p "v" "w" "z" "e_1" "e_2" in
-     (quotientElimination1_eq i j v w z e1 e2 thenT thinIfThinningT [-2;-1;n]) p
-
-let resource elim +=  (<<quot x, y: 'A // 'E['x; 'y]>>, quotientEliminationT)
-
 (*!
  * @begin[doc]
  * An equality assumption $a_1 = a_2 @in @quot{A; x; y; E[x, y]}$ implies
@@ -348,7 +318,7 @@ let resource elim +=  (<<quot x, y: 'A // 'E['x; 'y]>>, quotientEliminationT)
  * @end[doc]
  *)
 prim quotient_equalityElimination {| elim [] |} 'H 'J 'v :
-   [main] ('g['v] : sequent ['ext] { 'H; x: 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]; 'J['x]; v: squash{'E['a1; 'a2]} >- 'T['x] }) -->
+   [main] ('g['v] : sequent ['ext] { 'H; x: 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]; 'J['x]; v: esquash{'E['a1; 'a2]} >- 'T['x] }) -->
    sequent ['ext] { 'H; x: 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]; 'J['x] >- 'T['x] } =
    'g[it]
 
@@ -360,13 +330,12 @@ prim quotient_equalityElimination {| elim [] |} 'H 'J 'v :
  * the equivalence relation $E$ (the relation must become coarser).
  * @end[doc]
  *)
-prim quotientSubtype 'H 'a1 'a2 :
-   sequent [squash] { 'H >- subtype{'A1; 'A2} } -->
-   sequent [squash] { 'H; a1: 'A1; a2: 'A1 (* ; 'E1['a1; 'a2] *) >- 'E2['a1; 'a2] } -->
-   sequent [squash] { 'H >- "type"{(quot x1, y1: 'A1 // 'E1['x1; 'y1])} } -->
-   sequent [squash] { 'H >- "type"{(quot x2, y2: 'A2 // 'E2['x2; 'y2])} } -->
-   sequent ['ext] { 'H >- subtype{ (quot x1, y1: 'A1 // 'E1['x1; 'y1]); (quot x2, y2: 'A2 // 'E2['x2; 'y2]) } } =
-   it
+interactive quotientSubtype 'H 'a1 'a2 :
+   [subtype] sequent [squash] { 'H >- subtype{'A1; 'A2} } -->
+   [aux] sequent [squash] { 'H; a1: 'A1; a2: 'A1 (* ; 'E1['a1; 'a2] *) >- 'E2['a1; 'a2] } -->
+   [wf] sequent [squash] { 'H >- "type"{(quot x1, y1: 'A1 // 'E1['x1; 'y1])} } -->
+   [wf] sequent [squash] { 'H >- "type"{(quot x2, y2: 'A2 // 'E2['x2; 'y2])} } -->
+   sequent ['ext] { 'H >- subtype{ (quot x1, y1: 'A1 // 'E1['x1; 'y1]); (quot x2, y2: 'A2 // 'E2['x2; 'y2]) } }
 (*! @docoff *)
 
 (************************************************************************
@@ -402,12 +371,7 @@ let resource typeinf += (quotient_term, infer_univ_dep0_dep1 dest_quotient_inf)
 let quotient_subtypeT p =
    (match Var.maybe_new_vars ["x"; "y"] (Sequent.declared_vars p) with
        [x; y] ->
-          (quotientSubtype (Sequent.hyp_count_addr p) x y
-           thenLT [addHiddenLabelT "subtype";
-                   addHiddenLabelT "aux";
-                   addHiddenLabelT "wf";
-                   addHiddenLabelT "wf"])
-
+          quotientSubtype (Sequent.hyp_count_addr p) x y
      | _ -> failT) p
 
 let resource sub +=

@@ -111,7 +111,7 @@ rule subtype_axiomFormation 'H 'x :
  *)
 rule subtype_axiomEquality 'H :
    sequent [squash] { 'H >- subtype{'A; 'B} } -->
-   sequent ['ext] { 'H >- it = it in subtype{'A; 'B} }
+   sequent ['ext] { 'H >- it IN subtype{'A; 'B} }
 
 (*
  * H, x: subtype(A; B); J[x] >- C[x]
@@ -134,13 +134,6 @@ rule subtypeElimination2 'H 'J 'a 'y :
    sequent [squash] { 'H; x: subtype{'A; 'B}; 'J['x] >- 'a IN 'A } -->
    sequent ['ext] { 'H; x: subtype{'A; 'B}; 'J['x]; y: 'a IN 'B >- 'C['x] } -->
    sequent ['ext] { 'H; x: subtype{'A; 'B}; 'J['x] >- 'C['x] }
-
-(*
- * Squash elimination.
- *)
-rule subtype_squashElimination 'H :
-   sequent [squash] { 'H >- subtype{'A; 'B} } -->
-   sequent ['ext] { 'H >- subtype{'A; 'B} }
 
 (************************************************************************
  * RESOURCE                                                             *
@@ -178,7 +171,6 @@ val is_subtype_term : term -> bool
 val dest_subtype : term -> term * term
 val mk_subtype_term : term -> term -> term
 
-topval squash_subtypeT : tactic
 topval type_subtype_leftT : term -> tactic
 topval type_subtype_rightT : term -> tactic
 

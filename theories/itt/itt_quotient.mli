@@ -26,14 +26,15 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
- * Author: Jason Hickey
- * jyh@cs.cornell.edu
+ * Author: Jason Hickey <jyh@cs.cornell.edu>
+ * Mofidied by: Aleksey Nogin <nogin@cs.cornell.edu>
  *
  *)
 
 include Itt_equal
 include Itt_set
 include Itt_rfun
+include Itt_esquash
 
 open Refiner.Refiner.Term
 
@@ -56,26 +57,8 @@ prec prec_quot
  ************************************************************************)
 
 (*
- * H >- Ui ext quot x, y: A // E
- * by quotientFormation (quot x, y: A // E) z u v
- *
- * H >- A = A in Ui
- * H, x: A, y: A >- E[x, y] = E[x, y] in Ui
- * H, x: A >- E[x, x]
- * H, x: A, y: A, u: E[x, y] >- E[y, x]
- * H, x: A, y: A, z: A, u: E[x, y], v: E[y, z] >- E[x, z]
- *)
-rule quotientFormation 'H (quot x, y: 'A // 'E['x; 'y]) 'z 'u 'v :
-   sequent [squash] { 'H >- 'A = 'A in univ[i:l] } -->
-   sequent [squash] { 'H; x: 'A; y: 'A >- 'E['x; 'y] = 'E['x; 'y] in univ[i:l] } -->
-   sequent [squash] { 'H; x: 'A >- 'E['x; 'x] } -->
-   sequent [squash] { 'H; x: 'A; y: 'A; u: 'E['x; 'y] >- 'E['y; 'x] } -->
-   sequent [squash] { 'H; x: 'A; y: 'A; z: 'A; u: 'E['x; 'y]; v: 'E['y; 'z] >- 'E['x; 'z] } -->
-   sequent ['ext] { 'H >- univ[i:l] }
-
-(*
  * H >- quot x1, y1: A1 // E1 = quot x2, y2. A2 // E2 in Ui
- * by quotientWeakEquality x y z u v
+ * by quotientEquality x y z u v
  *
  * H >- A1 = A2 in Ui
  * H, x: A1, y: A1 >- E1[x, y] = E2[x, y] in Ui
@@ -83,7 +66,7 @@ rule quotientFormation 'H (quot x, y: 'A // 'E['x; 'y]) 'z 'u 'v :
  * H, x: A1, y: A1, u: E1[x, y] >- E1[y, x]
  * H, x: A1, y: A1, z: A1, u: E1[x, y], v: E1[y, z] >- E1[x, z]
  *)
-rule quotientWeakEquality 'H 'x 'y 'z 'u 'v :
+rule quotientEquality 'H 'x 'y 'z 'u 'v :
    sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
    sequent [squash] { 'H; x: 'A1; y: 'A1 >- 'E1['x; 'y] = 'E2['x; 'y] in univ[i:l] } -->
    sequent [squash] { 'H; x: 'A1 >- 'E1['x; 'x] } -->
@@ -93,24 +76,6 @@ rule quotientWeakEquality 'H 'x 'y 'z 'u 'v :
                    = quot x2, y2: 'A2 // 'E2['x2; 'y2]
                    in univ[i:l]
            }
-
-(*
- * H >- quot x1, y1: A1 // E1 = quot x2, y2. A2 // E2 in Ui
- * by quotientEquality r s v
- *
- * H >- quot x1, y1: A1 // E1 = quot x1, y1: A1 // E1 in Ui
- * H >- quot x2, y2. A2 // E2 = quot x2, y2. A2 // E2 in Ui
- * H >- A1 = A2 in Ui
- * H; v: A1 = A2 in Ui; r: A1; s: A1 >- E1[r, s] -> E2[r, s]
- * H; v: A1 = A2 in Ui; r: A1; s: A1 >- E2[r, s] -> E1[r, s]
- *)
-rule quotientEquality 'H 'r 's 'v :
-   sequent [squash] { 'H >- quot x1, y1: 'A1 // 'E1['x1; 'y1] = quot x1, y1: 'A1 // 'E1['x1; 'y1] in univ[i:l] } -->
-   sequent [squash] { 'H >- quot x2, y2: 'A2 // 'E2['x2; 'y2] = quot x2, y2: 'A2 // 'E2['x2; 'y2] in univ[i:l] } -->
-   sequent [squash] { 'H >- 'A1 = 'A2 in univ[i:l] } -->
-   sequent [squash] { 'H; v: 'A1 = 'A2 in univ[i:l]; r: 'A1; s: 'A1 >- 'E1['r; 's] -> 'E2['r; 's] } -->
-   sequent [squash] { 'H; v: 'A1 = 'A2 in univ[i:l]; r: 'A1; s: 'A1 >- 'E2['r; 's] -> 'E1['r; 's] } -->
-   sequent ['ext] { 'H >- quot x1, y1: 'A1 // 'E1['x1; 'y1] = quot x2, y2: 'A2 // 'E2['x2; 'y2] in univ[i:l] }
 
 (*
  * Typehood.
@@ -151,16 +116,14 @@ rule quotient_memberWeakEquality 'H :
  * H >- a1 = a2 in quot x, y: A // E
  * by quotient_memberEquality
  *
- * H >- quot x, y: A // E = quot x, y: A // E in Ui
- * H >- a1 = a1 in A
- * H >- a2 = a2 in A
- * H >- E[a1; a2]
+ * H >- a1 = a1 in quot x, y: A // E
+ * H >- a2 = a2 in quot x, y: A // E
+ * H >- [[ E[a1; a2] ]]
  *)
 rule quotient_memberEquality 'H :
-   sequent [squash] { 'H >- "type"{(quot x, y: 'A // 'E['x; 'y])} } -->
-   sequent [squash] { 'H >- 'a1 IN 'A } -->
-   sequent [squash] { 'H >- 'a2 IN 'A } -->
-   sequent [squash] { 'H >- 'E['a1; 'a2] } -->
+   sequent [squash] { 'H >- 'a1 IN quot x, y: 'A // 'E['x; 'y] } -->
+   sequent [squash] { 'H >- 'a2 IN quot x, y: 'A // 'E['x; 'y] } -->
+   sequent [squash] { 'H >- esquash{'E['a1; 'a2]} } -->
    sequent ['ext] { 'H >- 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y] }
 
 (*
@@ -188,10 +151,10 @@ rule quotientElimination2 'H 'J 'v 'w 'z :
  * H, x: a1 = a2 in quot x, y: A // E, J[x] >- T[x]
  * by quotient_equalityElimination v
  *
- * H, x: a1 = a2 in quot x, y: A // E, J[x], v: squash(E[a, b]) >- T[x]
+ * H, x: a1 = a2 in quot x, y: A // E, J[x], v: esquash(E[a, b]) >- T[x]
  *)
 rule quotient_equalityElimination 'H 'J 'v :
-   sequent ['ext] { 'H; x: 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]; 'J['x]; v: squash{'E['a1; 'a2]} >- 'T['x] } -->
+   sequent ['ext] { 'H; x: 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]; 'J['x]; v: esquash{'E['a1; 'a2]} >- 'T['x] } -->
    sequent ['ext] { 'H; x: 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]; 'J['x] >- 'T['x] }
 
 (*

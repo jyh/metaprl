@@ -62,6 +62,7 @@
  *)
 include Itt_equal
 include Itt_struct
+include Itt_squash
 (*! @docoff *)
 
 open Printf
@@ -85,6 +86,7 @@ open Base_dtactic
 
 open Itt_equal
 open Itt_struct
+open Itt_squash
 
 (*
  * Show that the file is loading.
@@ -203,7 +205,7 @@ prim subtype_axiomFormation {| intro [] |} 'H 'x :
  * must be true.
  * @end[doc]
  *)
-prim subtype_axiomEquality {| intro []; eqcd |} 'H :
+prim subtype_axiomEquality {| intro []; eqcd; squash |} 'H :
    [main] sequent [squash] { 'H >- subtype{'A; 'B} } -->
    sequent ['ext] { 'H >- it IN subtype{'A; 'B} } =
    it
@@ -229,19 +231,6 @@ prim subtypeElimination2 'H 'J 'a 'y :
    ('t['y] : sequent ['ext] { 'H; x: subtype{'A; 'B}; 'J['x]; y: 'a IN 'B >- 'C['x] }) -->
    sequent ['ext] { 'H; x: subtype{'A; 'B}; 'J['x] >- 'C['x] } =
    't[it]
-
-(*!
- * @begin[doc]
- * @thysubsection{Squash}
- *
- * The @tt{subtype_squashElimination} rule allows the proof of
- * the subtype to be omitted; the proof $@it$ can always be recovered.
- * @end[doc]
- *)
-prim subtype_squashElimination 'H :
-   sequent [squash] { 'H >- subtype{'A; 'B} } -->
-   sequent ['ext] { 'H >- subtype{'A; 'B} } =
-   it
 
 (************************************************************************
  * SUBTYPE RESOURCE                                                     *
@@ -354,13 +343,6 @@ let resource elim += (subtype_term, d_hyp_subtypeT)
  ************************************************************************)
 
 let resource typeinf += (subtype_term, infer_univ_dep0_dep0 dest_subtype)
-
-(************************************************************************
- * SQUASH                                                               *
- ************************************************************************)
-
-let squash_subtypeT p =
-   subtype_squashElimination (Sequent.hyp_count_addr p) p
 
 (************************************************************************
  * TYPEHOOD FROM SUBTYPE                                                *

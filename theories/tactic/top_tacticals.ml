@@ -467,6 +467,20 @@ let seqOnMT = Tactic_type.Tacticals.seqOnMT
 let completeMT = Tactic_type.Tacticals.completeMT
 let labProgressT = Tactic_type.Tacticals.labProgressT
 
+let thinMatchT thinT assum p =
+   let goal = Tactic_type.Sequent.goal p in
+   let index = Match_seq.match_hyps
+      (Refiner.Refiner.TermMan.explode_sequent goal)
+      (Refiner.Refiner.TermMan.explode_sequent assum) in
+   let rec tac j =
+      if j = 0 then idT else
+         match index.(pred j) with
+            Some _ ->
+               tac (pred j)
+          | None ->
+               thinT j thenT tac (pred j)
+   in
+      tac (Tactic_type.Sequent.hyp_count p) p
 
 (*
  * -*-

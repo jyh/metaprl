@@ -43,6 +43,10 @@ let thinT i p =
    let i, j = Sequent.hyp_indices p i in
       thin i j p
 
+let nthAssumT i p =
+   let assum = Sequent.nth_assum p i in
+      Top_tacticals.thinMatchT thinT assum p
+
 let assertT t p =
    let v = Var.maybe_new_vars1 p "v" in
       cut (Sequent.hyp_count_addr p) t v p
@@ -51,9 +55,9 @@ let assertT t p =
  * Add to trivialT tactic.
  *)
 let resource auto += {
-   auto_name = "Fol_struct.nthHypT";
+   auto_name = "Fol_struct.nthHypT+nthAssumT";
    auto_prec = trivial_prec;
-   auto_tac = onSomeHypT nthHypT;
+   auto_tac = onSomeHypT nthHypT orelseT onSomeAssumT nthAssumT;
    auto_type = AutoTrivial;
 }
 

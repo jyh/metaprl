@@ -38,6 +38,7 @@ include Fol_and
 include Fol_or
 include Fol_implies
 include Fol_not
+include Fol_struct
 
 (* An example theorem *)
 interactive distrib_or 'H :

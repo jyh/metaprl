@@ -602,7 +602,7 @@ let nthAssumArg assum p =
 
 let nthAssumT i p =
    let assum = Sequent.nth_assum p i in
-      (thinMatchT assum thenT nthAssumArg assum thenT nthAssumT i) p
+      (Top_tacticals.thinMatchT thinT assum thenT nthAssumArg assum thenT nthAssumT i) p
 
 let allSquashT =
    unsquashAllT thenT tryT sqsquashT

@@ -298,20 +298,6 @@ let thinIfThinningT hyps p =
        tryOnHypsT hyps thinT
     else idT) p
 
-
-let thinMatchT assum p =
-   let goal = Sequent.goal p in
-   let index = Match_seq.match_hyps (explode_sequent goal) (explode_sequent assum) in
-   let rec tac j =
-      if j = 0 then idT else
-         match index.(pred j) with
-            Some _ ->
-               tac (pred j)
-          | None ->
-               thinT j thenT tac (pred j)
-   in
-      tac (Sequent.hyp_count p) p
-
 let thinAllT i j p =
    let rec tac j =
       if j < i then

@@ -119,6 +119,8 @@ topval altT : tactic -> tactic
 topval thinningT : bool -> tactic -> tactic
 topval doNotThinT : tactic -> tactic
 
+topval thinMatchT : (int -> tactic) -> term -> tactic
+
 (*
  * -*-
  * Local Variables:

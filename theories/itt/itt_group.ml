@@ -44,7 +44,7 @@ doc <:doc< @docoff >>
 extends Itt_subset
 extends Itt_subset2
 extends Itt_bisect
-extends Itt_esquash
+extends Itt_ext_equal
 
 open Printf
 open Mp_debug
@@ -77,7 +77,6 @@ open Itt_fun
 open Itt_int_ext
 open Itt_bisect
 open Itt_equal
-open Itt_esquash
 
 let _ =
    show_loading "Loading Itt_group%t"
@@ -703,7 +702,7 @@ doc <:doc<
    @end[doc]
 >>
 define unfold_normalSubg : normalSubg[i:l]{'S; 'G} <-->
-   subgroup[i:l]{'S; 'G} & all x: 'G^car. esquash{lcoset{'S; 'G; 'x}} = esquash{rcoset{'S; 'G; 'x}} in univ[i:l]
+   subgroup[i:l]{'S; 'G} & all x: 'G^car. ext_equal{lcoset{'S; 'G; 'x}; rcoset{'S; 'G; 'x}}
 doc <:doc< @docoff >>
 
 let fold_normalSubg = makeFoldC << normalSubg[i:l]{'S; 'G} >> unfold_normalSubg
@@ -730,11 +729,11 @@ doc <:doc<
 >>
 interactive normalSubg_intro {| intro [] |} :
    [main] sequent [squash] { <H> >- subgroup[i:l]{'S; 'G} } -->
-   [main] sequent [squash] { <H>; x: 'G^car >- esquash{lcoset{'S; 'G; 'x}} = esquash{rcoset{'S; 'G; 'x}} in univ[i:l] } -->
+   [main] sequent [squash] { <H>; x: 'G^car >- ext_equal{lcoset{'S; 'G; 'x}; rcoset{'S; 'G; 'x}} } -->
    sequent ['ext] { <H> >- normalSubg[i:l]{'S; 'G} }
 
 interactive normalSubg_elim {| elim [] |} 'H :
-   [main] sequent ['ext] { <H>; x: normalSubg[i:l]{'S; 'G}; <J['x]>; y: subgroup[i:l]{'S; 'G}; z: all b: 'G^car. esquash{lcoset{'S; 'G; 'b}} = esquash{rcoset{'S; 'G; 'b}} in univ[i:l] >- 'C['x] } -->
+   [main] sequent ['ext] { <H>; x: normalSubg[i:l]{'S; 'G}; <J['x]>; y: subgroup[i:l]{'S; 'G}; z: all b: 'G^car. ext_equal{lcoset{'S; 'G; 'b}; rcoset{'S; 'G; 'b}} >- 'C['x] } -->
    sequent ['ext] { <H>; x: normalSubg[i:l]{'S; 'G}; <J['x]> >- 'C['x] }
 
 doc <:doc< 
@@ -965,19 +964,19 @@ doc <:doc<
    coset
    @end[doc]
 >>
-interactive groupKer_lcoset {| intro [] |} :
+interactive groupKer_lcoset {| intro [intro_typeinf <<'A>>] |} group[i:l] :
    [wf] sequent [squash] { <H> >- 'A in group[i:l] } -->
    [wf] sequent [squash] { <H> >- 'B in group[i:l] } -->
    [wf] sequent [squash] { <H> >- 'f in groupHom{'A; 'B} } -->
    [wf] sequent [squash] { <H> >- 'x in 'A^car } -->
-   sequent ['ext] { <H> >- esquash{lcoset{groupKer{'f; 'A; 'B}; 'A; 'x}} = esquash{{ y: 'A^car | 'f 'y = 'f 'x in 'B^car }} in univ[i:l] }
+   sequent ['ext] { <H> >- ext_equal{lcoset{groupKer{'f; 'A; 'B}; 'A; 'x}; { y: 'A^car | 'f 'y = 'f 'x in 'B^car }} }
 
-interactive groupKer_rcoset {| intro [] |} :
+interactive groupKer_rcoset {| intro [intro_typeinf <<'A>>] |} group[i:l] :
    [wf] sequent [squash] { <H> >- 'A in group[i:l] } -->
    [wf] sequent [squash] { <H> >- 'B in group[i:l] } -->
    [wf] sequent [squash] { <H> >- 'f in groupHom{'A; 'B} } -->
    [wf] sequent [squash] { <H> >- 'x in 'A^car } -->
-   sequent ['ext] { <H> >- esquash{rcoset{groupKer{'f; 'A; 'B}; 'A; 'x}} = esquash{{ y: 'A^car | 'f 'y = 'f 'x in 'B^car }} in univ[i:l] }
+   sequent ['ext] { <H> >- ext_equal{rcoset{groupKer{'f; 'A; 'B}; 'A; 'x}; { y: 'A^car | 'f 'y = 'f 'x in 'B^car }} }
 
 doc <:doc< 
    @begin[doc]
@@ -1164,17 +1163,17 @@ doc <:doc<
    $@id{'A}$ alone.
    @end[doc]
 >>
-interactive groupMono_ker1 :
+interactive groupMono_ker1 group[i:l] :
    [wf] sequent [squash] { <H> >- 'A in group[i:l] } -->
    [wf] sequent [squash] { <H> >- 'B in group[i:l] } -->
    [wf] sequent [squash] { <H> >- 'f in groupMono{'A; 'B} } -->
-   sequent ['ext] { <H> >- esquash{.groupKer{'f; 'A; 'B}^car} = esquash{{x:'A^car | 'x = 'A^"1" in 'A^car}} in univ[i:l] }
+   sequent ['ext] { <H> >- ext_equal{.groupKer{'f; 'A; 'B}^car; {x:'A^car | 'x = 'A^"1" in 'A^car}} }
 
 interactive groupMono_ker2 group[i:l] :
    [wf] sequent [squash] { <H> >- 'A in group[i:l] } -->
    [wf] sequent [squash] { <H> >- 'B in group[i:l] } -->
    [wf] sequent [squash] { <H> >- 'f in groupHom{'A; 'B} } -->
-   [wf] sequent [squash] { <H> >- esquash{.groupKer{'f; 'A; 'B}^car} = esquash{{x:'A^car | 'x = 'A^"1" in 'A^car}} in univ[i:l] } -->
+   [wf] sequent [squash] { <H> >- ext_equal{.groupKer{'f; 'A; 'B}^car; {x:'A^car | 'x = 'A^"1" in 'A^car}} } -->
    sequent ['ext] { <H> >- 'f in groupMono{'A; 'B} }
 
 doc <:doc< 
@@ -1193,6 +1192,20 @@ interactive groupIso_iso group[i:l] 'f :
 
 doc <:doc< @docoff >>
 
+(*
+(************************************************************************
+ * GROUP EXAMPLES                                                       *
+ ************************************************************************)
+doc <:doc< 
+   @begin[doc]
+   @modsection{Group Examples}
+   The set of integers under addition is a group
+  
+   @end[doc]
+>>
+interactive integer_add_group group[i:l] 'f :
+   sequent ['ext] { <H> >- {car=int; "*"=; "1"=0; inv=} in group[i:l] }
+*)
 (************************************************************************
  * DISPLAY FORMS                                                        *
  ************************************************************************)

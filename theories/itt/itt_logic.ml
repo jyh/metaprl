@@ -381,11 +381,13 @@ prec prec_iff
 prec prec_implies
 prec prec_and
 prec prec_or
+prec prec_not
 prec prec_quant
 
 prec prec_implies < prec_iff
 prec prec_iff < prec_or
 prec prec_or < prec_and
+prec prec_and < prec_not
 prec prec_quant < prec_iff
 
 dform true_df1 : mode[src] :: "true" = `"True"
@@ -419,7 +421,7 @@ dform true_df2 : mode[prl] :: "true" =
 dform false_df2 : mode[prl] :: "false" =
    `"False"
 
-dform not_df2 : mode[prl] :: parens :: "prec"[prec_implies] :: "not"{'a} =
+dform not_df2 : mode[prl] :: parens :: "prec"[prec_not] :: "not"{'a} =
    Nuprl_font!tneg slot[le]{'a}
 
 dform implies_df2 : mode[prl] :: parens :: "prec"[prec_implies] :: implies{'a; 'b} =
@@ -437,10 +439,10 @@ dform and_df1 : mode[prl] :: parens :: "prec"[prec_and] :: "and"{'a; 'b} =
 declare or_df{'a}
 
 dform or_df2 : mode[prl] :: parens :: "prec"[prec_or] :: "or"{'a; 'b} =
-   szone pushm[0] slot{'a} or_df{'b} popm ezone
+   szone pushm[0] slot["le"]{'a} or_df{'b} popm ezone
 
 dform or_df3 : mode[prl] :: or_df{."or"{'a; 'b}} =
-   hspace Nuprl_font!vee " " slot{'a} or_df{'b}
+   hspace Nuprl_font!vee " " slot["le"]{'a} or_df{'b}
 
 dform or_df4 : mode[prl] :: or_df{'a} =
    hspace Nuprl_font!vee " " slot{'a}

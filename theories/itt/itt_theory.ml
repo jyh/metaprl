@@ -81,7 +81,7 @@ open Itt_fset
 prec prec_assoc < prec_equal
 prec prec_equal < prec_apply
 prec prec_type = prec_apply
-prec prec_and < prec_apply
+prec prec_not < prec_apply
 prec prec_w = prec_quant
 prec prec_tree_ind < prec_quant
 prec prec_list = prec_apply

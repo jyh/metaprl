@@ -93,6 +93,7 @@ prec prec_iff
 prec prec_implies
 prec prec_and
 prec prec_or
+prec prec_not
 prec prec_quant
 
 (************************************************************************

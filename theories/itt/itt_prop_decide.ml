@@ -11,21 +11,21 @@
  * OCaml, and more information about this system.
  *
  * Copyright (C) 1998 Jason Hickey, Cornell University
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- * 
+ *
  * Author: Jason Hickey
  * jyh@cs.cornell.edu
  *)
@@ -36,8 +36,10 @@ open Printf
 open Mp_debug
 
 open Refiner.Refiner.TermType
+open Refiner.Refiner.Term
 open Refiner.Refiner.TermAddr
 open Refiner.Refiner.RefineError
+
 open Itt_logic
 open Itt_struct
 open Tacticals
@@ -46,9 +48,8 @@ open Base_dtactic
 open Conversionals
 open Var
 
-(**)
 let debug_prop_decide =
-  create_debug
+  create_debug (**)
      { debug_name = "prop_decide";
        debug_description = "show propDecide operations";
        debug_value = false
@@ -60,7 +61,7 @@ let revOnSomeHypT tac p =
       if i = 1 then
          tac i
       else if i > 1 then
-         tac i orelseT (aux (i - 1))
+         tac i orelseT (aux (pred i))
       else
          idT
    in
@@ -139,64 +140,60 @@ let d_imp_impT i p =
                   thinT i]) p
 
 (* Try to decompose a hypothesis *)
-let rec decompPropDecideHypT i p =
-   if !debug_prop_decide then
-      begin
-         eprintf "decompPropDecideHypT %d: %a%t" i Refiner.Refiner.Term.debug_print (snd(Sequent.nth_hyp p i)) eflush
-      end;
-   (let term = snd(Sequent.nth_hyp p i) in
+let rec decompPropDecideHypT count i p =
+   (let term = snd (Sequent.nth_hyp p i) in
        if is_false_term term then
           dT i
        else if is_and_term term or is_or_term term then
-          dT i thenT ifNotWT internalPropDecideT
+          dT i thenT ifNotWT (internalPropDecideT count)
        else if is_imp_and_term term then
           (* {C & D => B} => {C => D => B} *)
-          (d_and_impT i)
-          thenT ifNotWT internalPropDecideT
+          d_and_impT i thenT ifNotWT (internalPropDecideT count)
        else if is_imp_or_term term then
           (* {C or D => B} => {(C => B) & (D => B)} *)
-          (d_or_impT i)
-          thenT ifNotWT internalPropDecideT
+          d_or_impT i thenT ifNotWT (internalPropDecideT count)
        else if is_imp_imp_term term then
           (* {(C => D) => B} => {D => B} *)
-          (d_imp_impT i)
-          thenT ifNotWT internalPropDecideT
+          d_imp_impT i thenT ifNotWT (internalPropDecideT count)
        else if is_implies_term term then
-          dT i thenT thinT i thenT ifNotWT internalPropDecideT
+          dT i thenT thinT i thenT ifNotWT (internalPropDecideT count)
        else
           (* Nothing recognized, try to see if we're done. *)
           nthHypT i) p
 
 (* Decompose the goal *)
-and decompPropDecideConclT p =
+and decompPropDecideConclT count p =
    if !debug_prop_decide then
       begin
          eprintf "decompPropDecideConclT: %a%t" Refiner.Refiner.Term.debug_print (Sequent.concl p) eflush
       end;
    (let goal = Sequent.concl p in
        if is_or_term goal then
-          (selT 1 (dT 0) thenT ifNotWT internalPropDecideT)
-          orelseT (selT 2 (dT 0) thenT ifNotWT internalPropDecideT)
+          (selT 1 (dT 0) thenT ifNotWT (internalPropDecideT count))
+          orelseT (selT 2 (dT 0) thenT ifNotWT (internalPropDecideT count))
        else if is_and_term goal or is_implies_term goal then
-          dT 0 thenT ifNotWT internalPropDecideT
+          dT 0 thenT ifNotWT (internalPropDecideT count)
        else
           trivialT) p
 
-(* Prove the proposition - internal version that does not handle not's *)
-and internalPropDecideT p =
-   (onSomeHypT decompPropDecideHypT orelseT decompPropDecideConclT) p
+(* Prove the proposition - internal version that does not handle negation *)
+and internalPropDecideT count p =
+   if !debug_prop_decide then
+      eprintf "propDecideT: %d: %a%t" count debug_print (Sequent.goal p) eflush;
+   let count = succ count in
+      (revOnSomeHypT (decompPropDecideHypT count) orelseT decompPropDecideConclT count) p
 
 (* Convert all "not X" terms to "X => False" *)
 let notToImpliesFalseC =
    sweepUpC (unfoldNot andthenC foldImplies andthenC (addrC [1] foldFalse))
 
-(* Toplevel tactic *)
-let propDecideT p =
-   ((onAllClausesT (fun i -> tryT (rw notToImpliesFalseC i))
-     thenT internalPropDecideT)
-    orelseT (fun p -> raise (RefineError("propDecideT", StringError "formula is not valid"))))
-   p
-
+(*
+ * Toplevel tactic:
+ * Unfold all negations, then run Dyckoff's algorithm.
+ *)
+let propDecideT =
+   onAllClausesT (fun i -> tryT (rw notToImpliesFalseC i))
+   thenT internalPropDecideT 0
 
 (*
  * -*-

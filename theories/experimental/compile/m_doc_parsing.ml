@@ -46,27 +46,15 @@ framework.  We assume that the source language can be specified using
 a context-free grammar, and traditional lexing and parsing methods can
 be used to perform the translation.
 
-@MetaPRL provides these capabilities using the integrated Phobos
-@cite["GH02"] generic lexer and parser, which enables users to specify
-parts of their logical theories using their own notation.  For
-instance, we can use actual program notation (instead of the uniform
-term syntax) to express program transformations in rewrite rules and
-we can specify test programs in source notation.
+@MetaPRL provides these capabilities using the Phobos @cite["GH02"] lexer and parser.  A Phobos
+language specification resembles a typical parser definition in YACC @cite[Joh75], except that
+semantic actions for productions use term rewriting.  Phobos uses @emph{informal} rewriting, which
+means that it can create new variable bindings and perform capturing substitution.
 
-A Phobos language specification resembles a typical parser definition
-in YACC @cite[Joh75], except that semantic actions for productions use
-term rewriting.  Phobos employs @emph{informal} rewriting, which means
-that it uses a rewriting engine that can create new variable bindings
-and perform capturing substitution.
-
-In Phobos, the lexer for a language is specified as a set of lexical
-rewrite rules of the form $@it{regex} @longleftrightarrow @it{term}$,
-where $@it{regex}$ is a special term that is created for every token
-and contains the matched input as a string parameter as well as a
-subterm containing the position in the source text, which can be used
-to produce more informative messages if an error is detected.  The
-following example demonstrates a single lexer clause, that translates
-a nonnegative decimal number to a term with operator name @tt{number} and a
+The lexer for a language is specified as a set of lexical rewrite rules of the form $@it{regex}
+@longleftrightarrow @it{term}$, where $@it{regex}$ is a special term that is created for each token
+with the the matched input as a string parameter.  The following example demonstrates a single lexer
+clause, that translates a nonnegative decimal number to a term with operator name @tt{number} and a
 single integer parameter.
 $$
 @tt["NUM = \"[0-9]+\""] @space @lbrace @bf[token][i] @lbrace pos @rbrace @longleftrightarrow number[i] @rbrace
@@ -80,7 +68,6 @@ $
 @line{@it{op} {::=}   {+ @pipe - @pipe * @pipe / @pipe = @pipe <> @pipe < @pipe @le @pipe > @pipe
 @ge }
 {@space} @hbox{Binary operators}}
-@line{{}{}{}{}{}}
 @end[array]}}
 @line{{@begin[array,rcll]
 @line{@it{e} {::=} {@AtomTrue @pipe @AtomFalse} @hbox{Booleans}}
@@ -106,12 +93,12 @@ $
 @caption{Program syntax}
 @end[figure]
 
-The parser is defined as a set of grammar productions. For each
+The parser is defined as a set of grammar productions.  For each
 grammar production in the program syntax shown in Figure
 @reffigure[syntax], we define a production in the form
-$$
+$
 S ::= S_1 @ldots S_n @longleftrightarrow term
-$$
+$
 where the symbols $S_i$ may be annotated with a term pattern. For
 instance, the production for the let-expression is defined with the
 following production and semantic action.
@@ -119,20 +106,19 @@ $$
    @tt{exp ::= LET @space ID@left["<"] v @right[">"] @space EQ @space exp@left["<"] e
    @right[">"] @space IN @space exp@left["<"] rest @right[">"]} @longleftrightarrow @LetAtom{e; v; rest}
 $$
+Phobos constructs an LALR(1) parser from the grammar specification, applying the appropriate rewrite
+rule when a production is reduced.
 
-Phobos constructs an LALR(1) parser from these specifications that
-maintains a stack of terms and applies the associated rewrite rule
-each time a production is reduced by replacing the corresponding terms
-on the stack with the result. For the parser to accept, the stack must
-contain a single term corresponding to the start symbol of the
-grammar.
+@comment{{
+For the parser to accept, the stack must contain a single term
+corresponding to the start symbol of the grammar.
 
 It may not be feasible during parsing to create the initial binding structure of the programs.  For
 instance, in our implementation function parameters are collected as a list and are not initially
 bound in the function body. Furthermore, for mutually recursive functions, the function variables
 are not initially bound in the functions' bodies.  For this reason, the parsing phases is usually
 followed by an additional rewrite phase that performs these operations using the informal rewriting
-engine.  The source text is replaced with the resulting term on completion.
+engine.  The source text is replaced with the resulting term on completion.}}
 
 @docoff
 @end[doc]

@@ -144,18 +144,13 @@ The language that we are using as an example (see Section
 untyped.  However, it includes higher-order and nested functions, and
 one necessary step in the compilation process is closure conversion,
 in which the program is modified so that all functions are closed.
-The high-level outline of the paper is as follows.
 
-@begin[center]
-@begin[tabular,lll]
-@line{$@bullet$ {Section  @refsection[m_doc_parsing]}  {Parsing}}
-@line{$@bullet$ {Section  @refsection[m_doc_ir]}       {Intermediate representation (IR)}}
-@line{$@bullet$ {Section  @refsection[m_doc_x86_asm]}  {Intel x86 assembly code generation}}
-@line{$@bullet$ {Section  @refsection[m_doc_summary]}  {Summary and future work}}
-@line{$@bullet$ {Section  @refsection["related-work"]} {Related work}}
-@end[tabular]
-@end[center]
-
+The high-level outline of the paper includes the following sections:
+{Section  @refsection[m_doc_parsing]}  {Parsing},
+{Section  @refsection[m_doc_ir]}       {Intermediate representation (IR)},
+{Section  @refsection[m_doc_x86_asm]}  {Intel x86 assembly code generation},
+{Section  @refsection[m_doc_summary]}  {Summary and future work},
+{Section  @refsection["related-work"]} {Related work}.
 Before describing each of these
 stages, we first introduce the terminology and syntax of the formal
 system in which we define the program rewrites.

@@ -126,7 +126,7 @@ dform set_df1 : {x:'A | 'B} = math_set {'x; 'A; 'B}
  *)
 prim setFormation 'A :
    [wf] sequent [squash] { <H> >- 'A = 'A in univ[i:l] } -->
-   ('B['a] : sequent ['ext] { <H>; a: 'A >- univ[i:l] }) -->
+   ('B['a] : sequent ['ext] { <H>; 'A >- univ[i:l] }) -->
    sequent ['ext] { <H> >- univ[i:l] } =
    { a: 'A | 'B['a] }
 
@@ -195,7 +195,7 @@ doc <:doc<
    @end[doc]
 >>
 prim setElimination {| elim [] |} 'H :
-   ('t : sequent ['ext] { <H>; u: 'A; v: squash{'B['u]}; <J['u]> >- 'T['u] }) -->
+   ('t : sequent ['ext] { <H>; u: 'A; .squash{'B['u]}; <J['u]> >- 'T['u] }) -->
    sequent ['ext] { <H>; u: { x:'A | 'B['x] }; <J['u]> >- 'T['u] } =
    't
 

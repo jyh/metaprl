@@ -426,7 +426,7 @@ prim axiomMember {| intro []; eqcd |} :
  * H, x: a = b in T; J[it] >- C[it]
  *)
 prim equalityElimination {| elim [] |} 'H :
-   ('t : sequent ['ext] { <H>; x: 'a = 'b in 'T; <J[it]> >- 'C[it] }) -->
+   ('t : sequent ['ext] { <H>; 'a = 'b in 'T; <J[it]> >- 'C[it] }) -->
    sequent ['ext] { <H>; x: 'a = 'b in 'T; <J['x]> >- 'C['x] } =
    't
 

@@ -53,7 +53,7 @@ rule hypothesis 'H :
  *)
 rule thin 'H :
    sequent ['ext] { <H>; <J> >- 'C } -->
-   sequent ['ext] { <H>; x: 'A; <J> >- 'C }
+   sequent ['ext] { <H>; 'A; <J> >- 'C }
 
 (*
  * H, J >- T ext t[s]
@@ -63,7 +63,7 @@ rule thin 'H :
  *)
 rule cut 'H 'S :
    sequent ['ext] { <H>; <J> >- 'S } -->
-   sequent ['ext] { <H>; x: 'S; <J> >- 'T } -->
+   sequent ['ext] { <H>; 'S; <J> >- 'T } -->
    sequent ['ext] { <H>; <J> >- 'T }
 
 (*

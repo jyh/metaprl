@@ -120,7 +120,7 @@ rule subtype_axiomEquality :
  * H, x: subtype(A; B); J[it] >- C[it]
  *)
 rule subtypeElimination 'H :
-   sequent ['ext] { <H>; x: 'A subtype 'B; <J[it]> >- 'C[it] } -->
+   sequent ['ext] { <H>; 'A subtype 'B; <J[it]> >- 'C[it] } -->
    sequent ['ext] { <H>; x: 'A subtype 'B; <J['x]> >- 'C['x] }
 
 (*
@@ -132,7 +132,7 @@ rule subtypeElimination 'H :
  *)
 rule subtypeElimination2 'H 'a 'b :
    sequent [squash] { <H>; x: 'A subtype 'B; <J['x]> >- 'a='b in 'A } -->
-   sequent ['ext] { <H>; x: 'A subtype 'B; <J['x]>; y: 'a = 'b in 'B >- 'C['x] } -->
+   sequent ['ext] { <H>; x: 'A subtype 'B; <J['x]>; 'a = 'b in 'B >- 'C['x] } -->
    sequent ['ext] { <H>; x: 'A subtype 'B; <J['x]> >- 'C['x] }
 
 (************************************************************************

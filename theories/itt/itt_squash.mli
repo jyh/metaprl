@@ -68,11 +68,11 @@ rule squashMemberFormation :
    sequent ['ext]   { <H> >- squash{'A} }
 
 rule squashElim 'H :
-   sequent ['ext] { <H>; u: squash{'P}; <J[it]> >- 'C[it] } -->
+   sequent ['ext] { <H>; .squash{'P}; <J[it]> >- 'C[it] } -->
    sequent ['ext] { <H>; u: squash{'P}; <J['u]> >- 'C['u] }
 
 rule unsquashEqual 'H :
-   sequent [squash] { <H>; u: 'P; <J[it]> >- 'x[it] = 'y[it] in 'A[it] } -->
+   sequent [squash] { <H>; 'P; <J[it]> >- 'x[it] = 'y[it] in 'A[it] } -->
    sequent ['ext] { <H>; u: squash{'P}; <J['u]> >- 'x['u] = 'y['u] in 'A['u] }
 
 rule squashFromAny 'ext :
@@ -85,15 +85,15 @@ rule squashMemberEquality :
 
 rule squashStable 't :
    [main] sequent [squash] { <H> >- squash{'A} } -->
-   [wf] sequent [squash] { <H>; x: 'A >- 't in 'A } -->
+   [wf] sequent [squash] { <H>; 'A >- 't in 'A } -->
    sequent ['ext] { <H> >- 'A}
 
 rule unsquashHypEqual 'H :
-   sequent ['ext] { <H>; u: 'x = 'y in 'A; <J[it]> >- 'C[it] } -->
+   sequent ['ext] { <H>; 'x = 'y in 'A; <J[it]> >- 'C[it] } -->
    sequent ['ext] { <H>; u: squash{('x = 'y in 'A)}; <J['u]> >- 'C['u] }
 
 rule unsquash 'H :
-   sequent [squash] { <H>; u: 'P; <J[it]> >- squash{'T[it]} } -->
+   sequent [squash] { <H>; 'P; <J[it]> >- squash{'T[it]} } -->
    sequent ['ext] { <H>; u: squash{'P}; <J['u]> >- squash{'T['u]} }
 
 (*

@@ -211,8 +211,8 @@ prim quotientType {| intro [] |} :
    [wf] sequent [squash] { <H> >- "type"{'A} } -->
    [wf] sequent [squash] { <H>; u: 'A; v: 'A >- "type"{'E['u; 'v]} } -->
    [wf] sequent [squash] { <H>; u: 'A >- 'E['u; 'u] } -->
-   [wf] sequent [squash] { <H>; u: 'A; v: 'A; x1: 'E['u; 'v] >- 'E['v; 'u] } -->
-   [wf] sequent [squash] { <H>; u: 'A; v: 'A; w: 'A; x1: 'E['u; 'v]; x2: 'E['v; 'w] >- 'E['u; 'w] } -->
+   [wf] sequent [squash] { <H>; u: 'A; v: 'A; 'E['u; 'v] >- 'E['v; 'u] } -->
+   [wf] sequent [squash] { <H>; u: 'A; v: 'A; w: 'A; 'E['u; 'v]; 'E['v; 'w] >- 'E['u; 'w] } -->
    sequent ['ext] { <H> >- "type"{.quot x, y: 'A // 'E['x; 'y]} } =
    it
 

@@ -108,7 +108,7 @@ doc <:doc<
 >>
 prim thin 'H :
    ('t : sequent ['ext] { <H>; <J> >- 'C }) -->
-   sequent ['ext] { <H>; x: 'A; <J> >- 'C } =
+   sequent ['ext] { <H>; 'A; <J> >- 'C } =
    't
 
 prim exchange 'H 'K 'L:
@@ -131,7 +131,7 @@ doc <:doc<
 >>
 prim cut 'H 'S :
    [assertion] ('a : sequent ['ext] { <H>; <J> >- 'S }) -->
-   [main] ('f['x] : sequent ['ext] { <H>; x: 'S; <J> >- 'T }) -->
+   [main] ('f['x] : sequent ['ext] { <H>; 'S; <J> >- 'T }) -->
    sequent ['ext] { <H>; <J> >- 'T } =
    'f['a]
 

@@ -159,7 +159,7 @@ prim squiggle_memberEquality {| intro []; eqcd; squash |} :
   it
 
 prim squiggleElimination {|  elim [ThinOption thinT] |} 'H :
-   ('t : sequent['ext] { <H>; x: ('t ~ 's); <J[it]> >- 'C[it] }) -->
+   ('t : sequent['ext] { <H>; ('t ~ 's); <J[it]> >- 'C[it] }) -->
    sequent ['ext] { <H>; x: ('t ~ 's); <J['x]> >- 'C['x] } =
    't
 

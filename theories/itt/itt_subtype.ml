@@ -225,13 +225,13 @@ doc <:doc<
    @end[doc]
 >>
 prim subtypeElimination {| elim [ThinOption thinT] |} 'H :
-   ('t : sequent ['ext] { <H>; x: 'A subtype 'B; <J[it]> >- 'C[it] }) -->
+   ('t : sequent ['ext] { <H>; 'A subtype 'B; <J[it]> >- 'C[it] }) -->
    sequent ['ext] { <H>; x: 'A subtype 'B; <J['x]> >- 'C['x] } =
    't
 
 prim subtypeElimination2 'H 'a 'b :
    [wf] sequent [squash] { <H>; x: 'A subtype 'B; <J['x]> >- 'a='b in 'A } -->
-   ('t['y] : sequent ['ext] { <H>; x: 'A subtype 'B; <J['x]>; y: 'a='b in 'B >- 'C['x] }) -->
+   ('t['y] : sequent ['ext] { <H>; x: 'A subtype 'B; <J['x]>; 'a='b in 'B >- 'C['x] }) -->
    sequent ['ext] { <H>; x: 'A subtype 'B; <J['x]> >- 'C['x] } =
    't[it]
 
@@ -359,7 +359,7 @@ let subtypeT t p =
       use_subtype2 t p
 
 interactive by_subtype1 'H: (* Add to auto??? then remove subtype_axiomFormation from auto *)
-   sequent [squash] { <H>; x:'A; <J> >- 'A subtype 'B } -->
+   sequent [squash] { <H>; 'A; <J> >- 'A subtype 'B } -->
    sequent ['ext] { <H>; x:'A; <J> >- 'x in 'B }
 
 interactive by_subtype2 'H: (* Add to AutoMustComplete ??? *)

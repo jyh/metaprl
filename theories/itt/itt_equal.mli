@@ -162,7 +162,7 @@ rule type_axiomMember :
  * H, x: a = b in T; J[it] >- C[it]
  *)
 rule equalityElimination 'H :
-   sequent ['ext] { <H>; x: 'a = 'b in 'T; <J[it]> >- 'C[it] } -->
+   sequent ['ext] { <H>; 'a = 'b in 'T; <J[it]> >- 'C[it] } -->
    sequent ['ext] { <H>; x: 'a = 'b in 'T; <J['x]> >- 'C['x] }
 
 (*

@@ -82,8 +82,8 @@ rule quotientType :
    sequent [squash] { <H> >- "type"{'A} } -->
    sequent [squash] { <H>; u: 'A; v: 'A >- "type"{'E['u; 'v]} } -->
    sequent [squash] { <H>; u: 'A >- 'E['u; 'u] } -->
-   sequent [squash] { <H>; u: 'A; v: 'A; x1: 'E['u; 'v] >- 'E['v; 'u] } -->
-   sequent [squash] { <H>; u: 'A; v: 'A; w: 'A; x1: 'E['u; 'v]; x2: 'E['v; 'w] >- 'E['u; 'w] } -->
+   sequent [squash] { <H>; u: 'A; v: 'A; 'E['u; 'v] >- 'E['v; 'u] } -->
+   sequent [squash] { <H>; u: 'A; v: 'A; w: 'A; 'E['u; 'v]; 'E['v; 'w] >- 'E['u; 'w] } -->
    sequent ['ext] { <H> >- "type"{.quot x, y: 'A // 'E['x; 'y]} }
 
 (*
@@ -134,7 +134,7 @@ rule quotient_memberEquality :
 rule quotientElimination1 'H :
    sequent [squash] { <H>; a: quot x, y: 'A // 'E['x; 'y]; <J['a]> >- "type"{'T['a]} } -->
    sequent [squash] { <H>; a: quot x, y: 'A // 'E['x; 'y]; <J['a]>;
-             v: 'A; w: 'A; z: 'E['v; 'w] >- 's['v] = 't['w] in 'T['v]
+             v: 'A; w: 'A; 'E['v; 'w] >- 's['v] = 't['w] in 'T['v]
            } -->
    sequent ['ext] { <H>; a: quot x, y: 'A // 'E['x; 'y]; <J['a]> >- 's['a] = 't['a] in 'T['a] }
 (*
@@ -152,7 +152,7 @@ rule quotientElimination2 'H 'v 'w 'z :
  * H, x: a1 = a2 in quot x, y: A // E, J[x], v: esquash(E[a, b]) >- T[x]
  *)
 rule quotient_equalityElimination 'H :
-   sequent ['ext] { <H>; x: 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]; <J['x]>; v: esquash{'E['a1; 'a2]} >- 'T['x] } -->
+   sequent ['ext] { <H>; x: 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]; <J['x]>; .esquash{'E['a1; 'a2]} >- 'T['x] } -->
    sequent ['ext] { <H>; x: 'a1 = 'a2 in quot x, y: 'A // 'E['x; 'y]; <J['x]> >- 'T['x] }
 
 (*

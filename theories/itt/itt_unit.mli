@@ -88,7 +88,7 @@ rule unit_memberEquality : sequent ['ext] { <H> >- it in unit }
  * H; i:x:Unit; J[it / x] >- C[it / x]
  *)
 rule unitElimination 'H :
-   sequent['ext] { <H>; x: unit; <J[it]> >- 'C[it] } -->
+   sequent['ext] { <H>; .unit; <J[it]> >- 'C[it] } -->
    sequent ['ext] { <H>; x: unit; <J['x]> >- 'C['x] }
 
 (************************************************************************

@@ -167,7 +167,7 @@ rule rfunctionElimination 'H 'a :
              f: { g | x:'A -> 'B['g; 'x] };
              <J['f]>;
              y: 'B['f; 'a];
-             v: 'y = 'f 'a in 'B['f; 'a]
+             'y = 'f 'a in 'B['f; 'a]
              >- 'T['f] } -->
    sequent ['ext] { <H>; f: { g | x:'A -> 'B['g; 'x] }; <J['f]> >- 'T['f] }
 

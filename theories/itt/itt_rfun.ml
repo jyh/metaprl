@@ -284,8 +284,8 @@ doc <:doc<
 >>
 prim well_founded_assum_elim {| elim [ThinOption thinT] |} 'H 'a :
    [main] sequent [squash] { <H>; p: well_founded_assum{'A; a1, a2. 'R['a1; 'a2]; 'P}; <J['p]> >- 'a in 'A } -->
-   [main] sequent [squash] { <H>; p: well_founded_assum{'A; a1, a2. 'R['a1; 'a2]; 'P}; <J['p]>; a3: 'A; u: 'R['a3; 'a] >- well_founded_apply{'P; 'a3} } -->
-   [main] ('t['u] : sequent [squash] { <H>; p: well_founded_assum{'A; a1, a2. 'R['a1; 'a2]; 'P}; <J['p]>; u: well_founded_apply{'P; 'a} >- 'C['p] }) -->
+   [main] sequent [squash] { <H>; p: well_founded_assum{'A; a1, a2. 'R['a1; 'a2]; 'P}; <J['p]>; a3: 'A; 'R['a3; 'a] >- well_founded_apply{'P; 'a3} } -->
+   [main] ('t['u] : sequent ['ext] { <H>; p: well_founded_assum{'A; a1, a2. 'R['a1; 'a2]; 'P}; <J['p]>; u: well_founded_apply{'P; 'a} >- 'C['p] }) -->
    sequent ['ext] { <H>; p: well_founded_assum{'A; a1, a2. 'R['a1; 'a2]; 'P}; <J['p]> >- 'C['p] } =
    't[it]
 

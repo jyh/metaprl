@@ -56,7 +56,7 @@ declare set{'A; x. 'B['x]}
  *)
 rule setFormation 'A :
    sequent [squash] { <H> >- 'A = 'A in univ[i:l] } -->
-   sequent ['ext] { <H>; a: 'A >- univ[i:l] } -->
+   sequent ['ext] { <H>; 'A >- univ[i:l] } -->
    sequent ['ext] { <H> >- univ[i:l] }
 
 (*
@@ -106,7 +106,7 @@ rule setMemberEquality :
  * H, u: { x:A | B }, y: A; v: squash{B[y]}; J[y] >- T[y]
  *)
 rule setElimination 'H :
-   sequent ['ext] { <H>; u: 'A; v: squash{'B['u]}; <J['u]> >- 'T['u] } -->
+   sequent ['ext] { <H>; u: 'A; .squash{'B['u]}; <J['u]> >- 'T['u] } -->
    sequent ['ext] { <H>; u: { x:'A | 'B['x] }; <J['u]> >- 'T['u] }
 
 (*

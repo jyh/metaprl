@@ -1,8 +1,10 @@
 doc <:doc<
    @begin[doc]
    @module[Itt_synt_var]
-   A deBruijn-like implementation of a type of bound variables.
-
+    Our simple theory of syntax has three core parts.
+    The first part @hrefmodule[Itt_synt_var] defines a type of variables <<Var>> in a deDruijn-like style @cite[deb72].
+    The second part @hrefmodule[Itt_synt_operators] defines a type of operators BOperator.
+    The third part @hrefmodule[Itt_synt_bterm] defines a type of terms BTerm.
    @end[doc]
 
    ----------------------------------------------------------------
@@ -46,22 +48,27 @@ extends Itt_omega
 
 open Basic_tactics
 
-doc "doc"{terms}
+
+doc <:doc< @begin[doc]
+   @modsection{Abstract type}
+   $Var$ consists of terms of the form <<var{'i;'j}>>, where $i$ and $j$ are arbitrary natural numbers,
+   and <<var{it;it}>> is a new constructor.
+   The expression <<var{'i;'j}>> is meant to represent the bterm
+   $bterm(<<Gamma>>; x; <<Delta>>. x)$
+   where $|<<Gamma>>|=i$ and  $|<<Delta>>|=j$.
+@end[doc] >>
+
 
 declare Var
+dform vars_df : Var = `"Var"
+
 declare var{'left; 'right} (* depth = left + right + 1 *)
+dform var_df : var{'l; 'r} = `"var(" slot{'l} `"," slot{'r} `")"
+
 declare left{'v}
 declare right{'v}
-
-define unfold_depth:
-   depth{'v} <--> left{'v} +@ right{'v} +@ 1
-
-define unfold_var: Var{'n} <--> {v:Var| depth{'v} = 'n in int }
-
-define unfold_eq:
-   is_eq{'v;'u} <--> (left{'v} =@ left{'u})
-
-doc "doc"{rewrites}
+dform left_df : left{'v} = pi sub["L"] slot{'v}
+dform right_df : right{'v} = pi sub["R"] slot{'v}
 
 prim_rw left_id {| reduce |} :
    'left in nat -->
@@ -73,10 +80,47 @@ prim_rw right_id {| reduce |} :
    'right in nat -->
    right {var{'left; 'right}} <--> 'right
 
+
+doc <:doc< @begin[doc]
+ @modsection{Definitions}
+
+ @modsubsection{Depth}
+ We specify that the depth of a variable <<var{'i;'j}>> is <<'i+@'j+@1>>.
+@end[doc] >>
+
+define unfold_depth:
+   depth{'v} <--> left{'v} +@ right{'v} +@ 1
+dform depth_df : depth{'v} = `"depth(" slot{'v} `")"
+
 interactive_rw depth_reduce {| reduce |} :
    'l in nat -->
    'r in nat -->
    depth{var{'l;'r}} <--> 'l +@ 'r +@ 1
+
+
+doc <:doc< @begin[doc]
+ <<Var{'n}>> is a set of variabless with the depth $n$.
+@end[doc] >>
+
+define unfold_var: Var{'n} <--> {v:Var| depth{'v} = 'n in int }
+dform var_df : Var{'n} = Var sub{'n}
+
+
+doc <:doc< @begin[doc]
+ @modsubsection{Equality}
+  Two variables <<var{'i;'j}>> and <<var{'i;'k}>> are represent the same variable in a term.
+  So, we define:
+@end[doc] >>
+
+define unfold_is_eq:
+   is_eq{'v;'u} <--> (left{'v} =@ left{'u})
+dform is_eq_df : is_eq{'v;'u} =  slot{'v} cong sub{bool} slot{'u}
+
+declare eq{'v;'u}
+iform unfold_eq:
+   eq{'v;'u} <--> "assert"{is_eq{'v;'u}}
+dform eq_df : eq{'v;'u} =  slot{'v} cong sub{Var} slot{'u}
+
 
 interactive_rw eq_equal {| reduce |} :
    'left_1 in nat -->
@@ -117,7 +161,7 @@ interactive right_wf {| intro [] |} :
 
 interactive right_wf2 {| intro [] |} :
    sequent { <H> >- 'v in Var } -->
-   sequent { <H> >- left{'v} in int }
+   sequent { <H> >- right{'v} in int }
 
 interactive depth_wf {| intro [] |} :
    sequent { <H> >- 'v in Var } -->
@@ -178,5 +222,3 @@ interactive varSquiggle {| nth_hyp |} :
 
 doc <:doc< @docoff >>
 
-dform vars_df : Var = `"Var"
-dform var_df : var{'l; 'r} = `"var(" slot{'l} `"," slot{'r} `")"

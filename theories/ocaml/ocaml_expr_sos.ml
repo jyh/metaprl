@@ -156,6 +156,66 @@ rewrite assign_right_raise :
       (assign{'e1; raise{'e2}} <--> raise{'e2})
 
 (************************************************************************
+ * LISTS                                                                *
+ ************************************************************************)
+
+(*
+ * Lists are handled differently from other sequences because they
+ * are not mutable.
+ *
+ * Three cases:
+ *    *1. car val, cdr val
+ *    *2. car arb, cdr val
+ *    *3. car val, cdr arb
+ *)
+axiom list_nil_equiv :
+   sequent { 'H >- is_type{'t} } -->
+   sequent { 'H >- value_equiv{'S; list{nil}; list{nil}; type_list{'t}} }
+
+axiom list_cons_equiv :
+   sequent { 'H >- value_equiv{'S; 'e1; 'e2; 't} } -->
+   sequent { 'H >- value_equiv{'S; list{'el1}; list{'el2}; type_list{'t}} } -->
+   sequent { 'H >- value_equiv{'S; list{cons{'e1; 'el1}}; list{cons{'e2; 'el2}}; type_list{'t}} }
+
+axiom list_hd_equiv :
+   sequent { 'H >- value_equiv{'S; 'e1; 'e2; 't} } -->
+   sequent { 'H >- equiv{'S; list{'el1}; list{'el2}; type_list{'t}; 'exn} } -->
+   sequent { 'H >- equiv{'S; list{cons{'e1; 'el1}}; list{cons{'e2; 'el2}}; type_list{'t}; 'exn} }
+
+axiom list_tl_equiv :
+   sequent { 'H >- equiv{'S; 'e1; 'e2; 't; 'exn} } -->
+   sequent { 'H >- value_equiv{'S; list{'el1}; list{'el2}; type_list{'t}} } -->
+   sequent { 'H >- equiv{'S; list{cons{'e1; 'el1}}; list{cons{'e2; 'el2}}; type_list{'t}; 'exn} }
+
+axiom nil_equiv :
+   sequent { 'H >- is_type{'t} } -->
+   sequent { 'H >- value_equiv{'S; nil; nil; type_list{'t}} }
+
+axiom cons_equiv :
+   sequent { 'H >- value_equiv{'S; 'e1; 'e3; 't} } -->
+   sequent { 'H >- value_equiv{'S; 'e2; 'e4; type_list{'t}} } -->
+   sequent { 'H >- value_equiv{'S; cons{'e1; 'e2}; cons{'e3; 'e4}; type_list{'t}} }
+
+axiom cons_hd_equiv :
+   sequent { 'H >- value_equiv{'S; 'e1; 'e3; 't} } -->
+   sequent { 'H >- equiv{'S; 'e2; 'e4; type_list{'t}; 'exn} } -->
+   sequent { 'H >- equiv{'S; cons{'e1; 'e2}; cons{'e3; 'e4}; type_list{'t}; 'exn} }
+
+axiom cons_tl_equiv :
+   sequent { 'H >- equiv{'S; 'e1; 'e3; 't; 'exn} } -->
+   sequent { 'H >- value_equiv{'S; 'e2; 'e4; type_list{'t}} } -->
+   sequent { 'H >- equiv{'S; cons{'e1; 'e2}; cons{'e3; 'e4}; type_list{'t}; 'exn} }
+
+rewrite list_cons_eval :
+   "or"{is_value{'S; 'e}; is_value{'S; 'el}} -->
+      (eval{'S; list{cons{'e; 'el}}} <-->
+          eval{'S; list{cons{expr{'S; 'e1}; expr{'S; list{'el}}}}})
+
+rewrite cons_eval :
+   "or"{is_value{'S; 'e1}; is_value{'S; 'e2}} -->
+      (eval{'S; cons{'e1; 'e2}} <--> eval{'S; cons{expr{'S; 'e1}; expr{'S; 'e2}}})
+
+(************************************************************************
  * STRINGS                                                              *
  ************************************************************************)
 
@@ -280,7 +340,7 @@ rewrite array_eval :
  *      + same three cases but out-of-bounds
  *)
 axiom array_subscript_equiv : :
-   sequent { 'H >- value_equiv{'S; 'e1; 'e3; type_address{type_array{'t}}} } -->
+   sequent { 'H >- value_equiv{'S; 'e1; 'e3; type_array{'t}} } -->
    sequent { 'H >- value_equiv{'S; 'e2; 'e4; type_int} } -->
    sequent { 'H >- prim_array_bounds{'S; 'e1; 'e2} } -->
    sequent { 'H >- value_equiv{'S; array_subscript{'e1; 'e2}; array_subscript{'e3; 'e4}; 't}}
@@ -350,39 +410,39 @@ rewrite array_set_value_raise :
 
 (*
  * Record creation.
+ * Force all the entries to be values.
  *)
 axiom record_equiv :
    sequent { 'H >- value_equiv{'S; 'e1; 'e2; 't1} } -->
-   sequent { 'H >- equiv{'S; record{'el1}; record{'el2}; type_record{'tl1}} } -->
+   sequent { 'H >- equiv{'S; record{'el1}; record{'el2}; type_record{'tl1}; 'exn} } -->
    sequent { 'H >- equiv{'S;
                          record{cons{cons{'n1; 'e1}; 'el1}};
                          record{cons{cons{'n1; 'e2}; 'el2}};
-                         type_record{cons{'n1; 't1}; 'tl1}} }
+                         type_record{cons{'n1; 't1}; 'tl1};
+                         'exn} }
 
 rewrite record_eval :
    is_value{'S; 'el} -->
       (eval{'S; record{'el}} <-->
-          spread{eval{'S; 'el}; S2, vl.
-                    allocate{'S; record{'vl}}})
+          allocate{'S; record{expr_value{'S; 'vl}}})
 
 (*
  * Projection.
+ * Two cases:
+ *    *1. record val, label val
+ *    *2. record arb, label val
  *)
-axiom proj_equiv :
-   sequent { 'H >- value_equiv{'S; 'e1; 'e2; type_address{type_record{cons{cons{lid[$n:s]; 't}; nil}}}} } -->
+axiom proj_value_equiv :
+   sequent { 'H >- value_equiv{'S; 'e1; 'e2; type_record{cons{cons{lid[$n:s]; 't}; nil}}} } -->
    sequent { 'H >- value_equiv{'S; proj{'e1; lid[$n:s]}; proj{'e2; lid[$n:s]}; 't} }
 
-rewrite proj_record_eval :
-   is_value{'S; 'e1} -->
-   is_value{'S; 'e2} -->
-      (eval{'S; proj{'e1; 'e2}} <-->
-          eval{'S; proj{expr{'S; 'e1}; 'e2}})
+axiom proj_equiv :
+   sequent { 'H >- equiv{'S; 'e1; 'e2; type_record{cons{cons{lid[$n:s]; 't}; nil}}; 'exn} } -->
+   sequent { 'H >- equiv{'S; proj{'e1; lid[$n:s]}; proj{'e2; lid[$n:s]}; 't; 'exn} }
 
-rewrite proj_label_eval :
-   is_value{'S; 'e1} -->
-   is_value{'S; 'e2} -->
-      (eval{'S; proj{'e1; 'e2}} <-->
-          eval{'S; proj{'e1; expr{'S; 'e2}}})
+rewrite proj_eval :
+      (eval{'S; proj{'e1; lid[$label:s]}} <-->
+          eval{'S; proj{expr{'S; 'e1}; lid[$label:s]}})
 
 rewrite proj_redex :
    eval{'S; proj{address[$name:s]; lid[$label:s]}} <-->
@@ -390,35 +450,41 @@ rewrite proj_redex :
 
 (*
  * Set a record field.
+ * Three cases:
+ *    *1. record val, label val, value val
+ *    *2. record arb, label val, value val
+ *    *3. record val, label val, value arb
  *)
-axiom record_set_equiv :
-   sequent { 'H >- value_equiv{'S; 'e1; 'e3; type_address{type_record{cons{cons{lid[$n:s]; 't}; nil}}}} } -->
+axiom record_set_value_equiv :
+   sequent { 'H >- value_equiv{'S; 'e1; 'e3; type_record{cons{cons{lid[$n:s]; 't}; nil}}} } -->
+   sequent { 'H >- value_equiv{'S; 'e2; 'e4; 't} } -->
+   sequent { 'H >- value_equiv{'S;
+                               record_set{'e1; lid[$n:s]; 'e2}; 
+                               record_set{'e3; lid[$n:s]; 'e4};
+                               type_unit} }
+
+axiom record_set_record_equiv :
+   sequent { 'H >- equiv{'S; 'e1; 'e3; type_record{cons{cons{lid[$n:s]; 't}; nil}}; 'exn} } -->
    sequent { 'H >- value_equiv{'S; 'e2; 'e4; 't} } -->
    sequent { 'H >- equiv{'S;
                          record_set{'e1; lid[$n:s]; 'e2}; 
                          record_set{'e3; lid[$n:s]; 'e4};
-                         type_unit} }
+                         type_unit;
+                         'exn} }
 
-rewrite record_set_record_eval :
-   is_value{'S; 'e1} -->
-   is_value{'S; 'e2} -->
-   is_value{'S; 'e3} -->
-      (eval{'S; record_set{'e1; 'e2; 'e3}} <-->
-          eval{'S; record_set{expr{'S; 'e1}; 'e2; 'e3}})
+axiom record_set_arg_equiv :
+   sequent { 'H >- value_equiv{'S; 'e1; 'e3; type_record{cons{cons{lid[$n:s]; 't}; nil}}} } -->
+   sequent { 'H >- equiv{'S; 'e2; 'e4; 't; 'exn} } -->
+   sequent { 'H >- equiv{'S;
+                         record_set{'e1; lid[$n:s]; 'e2}; 
+                         record_set{'e3; lid[$n:s]; 'e4};
+                         type_unit;
+                         'exn} }
 
-rewrite record_set_label_eval :
-   is_value{'S; 'e1} -->
-   is_value{'S; 'e2} -->
-   is_value{'S; 'e3} -->
-      (eval{'S; record_set{'e1; 'e2; 'e3}} <-->
-          eval{'S; record_set{expr{'e1; expr{'S; 'e2}; 'e3}})
-
-rewrite record_set_record_eval :
-   is_value{'S; 'e1} -->
-   is_value{'S; 'e2} -->
-   is_value{'S; 'e3} -->
-      (eval{'S; record_set{'e1; 'e2; 'e3}} <-->
-          eval{'S; record_set{expr{'e1; 'e2; expr{'S; 'e3}}})
+rewrite record_set_eval :
+   "or"{is_value{'e1}; is_value{'e3}} -->
+      (eval{'S; record_set{'e1; lid[$label:s]; 'e3}} <-->
+          eval{'S; record_set{expr{'S; 'e1}; lid[$label:s]; expr{'S; 'e3}}})
 
 rewrite record_set_redex :
    is_value{'S; 'e} -->
@@ -427,6 +493,16 @@ rewrite record_set_redex :
               prim_record_set{lookup{'S; address[$name:s]};
                               lid[$label:s];
                               expr_value{'S; 'e}}})
+
+(************************************************************************
+ * FUNCTIONS                                                            *
+ ************************************************************************)
+
+(*
+ * Intensional equivalence of functions.
+ *)
+axiom fun_equiv :
+   sequent { 'H >- value_equiv{'S; "fun"{'pwel1}; "fun"{'pwel2}; type_fun{'t1; 't2}} }
 
 (************************************************************************
  * LET                                                                  *
@@ -490,107 +566,10 @@ rewrite apply_apply_eval :
       eval{'S; "match"{'e2; 'pwel}}
 
 (*
- * Array subscripting.
- *)
-declare array_subscript_value{'a; 'i}
-
-dform array_subscript_value{'a; 'i} =
-   array_subscript{'a; 'i}
-
-axiom array_subscript_equiv :
-   sequent { 'H >- value_equiv{'S; 'e1; 'e3; type_apply{type_array; 't}} } -->
-   sequent { 'H >- value_equiv{'S; 'e2; 'e4; type_int} } -->
-   sequent { 'H >- value_equiv{'S; array_subscript{'e1; 'e2}; array_subscript{'e3; 'e4}} }
-
-rewrite array_subscript_eval :
-   is_value{'S; 'e1} -->
-   is_value{'S; 'e2} -->
-      (eval{'S; array_subscript{'e1; 'e2}} <-->
-          eval{'S; array_subscript_value{expr{'S; 'e1}; expr{'S; 'e2}}})
-
-rewrite array_subscript_value :
-   array_subscript_value{array{cons{'v1; 'vl}}; int[$i:n]} <-->
-      eq_int[$i:n; 0:n]{'v1; array_subscript_value{array{'vl}; int[$i - 1]}}
-
-(*
- * Lists.
- * Once again, we only construct lists from values.
- *)
-axiom list_cons_equiv :
-   sequent { 'H >- value_equiv{'S; 'e1; 'e2} } -->
-   sequent { 'H >- value_equiv{'S; list{'el1}; list{'el2}} } -->
-   sequent { 'H >- value_equiv{'S; list{cons{'e1; 'el1}}; list{cons{'e2; 'el2}}} }
-
-rewrite list_cons_eval :
-   is_value{'S; 'e} -->
-      (eval{'S; list{cons{'e; 'el}}} <-->
-          eval{'S; list{expr{'S; 'e1}; expr{'S; list{'el}}}})
-
-axiom cons_equiv :
-   sequent { 'H >- value_equiv{'S; 'e1; 'e3} } -->
-   sequent { 'H >- value_equiv{'S; 'e2; 'e4} } -->
-   sequent { 'H >- value_equiv{'S; cons{'e1; 'e2}; cons{'e3; 'e4}} }
-
-rewrite cons_eval :
-   is_value{'S; 'e1} -->
-   is_value{'S; 'e2} --> 
-      (eval{'S; cons{'e1; 'e2}} <--> value{'S; cons{expr{'S; 'e1}; expr{'S; 'e2}}})
-
-(*
- * Records.
- * These rules require the same label order.
- *)
-axiom record_cons_equiv :
-   sequent { 'H >- lid_equiv{'S; 'n1; 'n2} } -->
-   sequent { 'H >- value_equivun_equiv{'S; 'e1; 'e2} } -->
-   sequent { 'H >- value_equiv{'S; record{'el1}; record{'el2}} } -->
-   sequent { 'H >- equiv{'S; record{cons{cons{'n1; 'e1}; 'el1}}; record{cons{cons{'n2; 'e2}; 'el2}}} }
-
-rewrite record_cons_eval :
-   is_value{'S; 'e1} -->
-   is_value{'S; record{'el}} -->
-      (eval{'S; record{cons{cons{lid[$n:s]; 'e1}; 'el}}} <-->
-          allocate{'S; expr{'S; 'e1}; v, S2.
-             spread{eval{'S2; record{'el}}; vl, S3.
-                value{'S3; record{cons{cons{lid[$n:s]; 'v}; 'vl}}}}})
-
-(*
- * "Match" forms.
- *)
-axiom fun_cons_equiv :
-   sequent { 'H >- value_equivun_equiv{'S; 'pwe1; 'pwe2} } -->
-   sequent { 'H >- value_equiv{'S; "fun"{'pwel1}; "fun"{'pwel2} } -->
-   sequent { 'H >- value_equiv{'S; "fun"{patt_ifelse{'pwe1; 'pwel1}};
-                                 "fun"{patt_ifelse{'pwe2; 'pwel2}}} }
-             
-axiom fun_nil_equiv :
-   sequent { 'H >- value_equivun_equiv{'S; 'pwe1; 'pwe2} } -->
-   sequent { 'H >- value_equiv{'S; "fun"{patt_if{'pwe1}}; "fun"{patt_if{'pwe2}}} }
-
-axiom match_equiv :
-   sequent { 'H >- equiv{'S; 'e1; 'e2} } -->
-   sequent { 'H >- equiv{augment{'S; 'e1}; "fun"{'pwel1}; "fun"{'pwel2}} } -->
-   sequent { 'H >- equiv{'S; "match"{'e1; 'pwel1}; "match"{'e2; 'pwel2}} }
-
-axiom try_equiv :
-   sequent { 'H >- equiv{'S; 'e1; 'e2} } -->
-   sequent { 'H >- equiv{augment{'S; 'e1}; "fun"{'pwel1}; "fun"{'pwel2}} } -->
-   sequent { 'H >- equiv{'S; "try"{'e1; 'pwel1}; "try"{'e2; 'pwel2}} }
-
-(*
- * "Let" forms.  The real work is performed in the patterns.
- *)
-axiom let_equiv :
-   sequent { 'H >- equiv{'S; 'el1; 'el2} } -->
-   sequent { 'H >- equiv{augment{'S; 'el1}; 'pl1; 'pl2} } -->
-   sequent { 'H >- equiv{'S; "let"{'pl1; 'el1}; "let"{'pl2; 'el2}} }
-
-axiom fix_equiv :
-   sequent { 'H >- equiv{'S; 'pl1; 'pl2} } -->
-   sequent { 'H >- equiv{'S; "fix"{'pl1}; "fix"{'pl2}} }
-
-(*
  * $Log$
+ * Revision 1.2  1998/02/13 22:10:25  jyh
+ * Adding pattern semantics.
+ *
  * Revision 1.1  1998/02/13 16:02:13  jyh
  * Partially implemented semantics for caml.
  *

@@ -71,6 +71,8 @@ prim_rw reduce_eq_atom' : eq_atom{token[x:t]; token[y:t]} <-->
 let reduce_eq_atom =
    reduce_eq_atom' thenC reduce_meta_eq
 
+let resource reduce += << eq_atom{token[x:t]; token[y:t]} >>, reduce_eq_atom
+
 (************************************************************************
  * RULES                                                                *
  ************************************************************************)

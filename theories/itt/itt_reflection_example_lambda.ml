@@ -40,10 +40,9 @@ interactive lambda_app_diffops {| intro[] |}:
 interactive lambda_app_diffops2 {| intro[] |}:
    sequent{ <H> >- lambda_term::app_term::nil in diff_list{Operator} }
 
-declare LambdaTerm
+declare iform LambdaTerm
 iform lambdaTerm: LambdaTerm <--> Lang{lambda_term::app_term::nil}
 dform lambda_df: LambdaTerm = `"Term" sub{lambda}
-
 
 interactive lambda_term_induction  {| elim[] |} 'H:
    sequent { <H>; <J>; v:Var >- 'P[ 'v ] } -->

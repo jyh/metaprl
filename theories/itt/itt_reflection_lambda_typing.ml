@@ -11,10 +11,9 @@ dform fun_df: fun_term = `"\"fun\""
 
 define unfold_mk_fun: mk_fun{'t;'s} <--> let depth=max{bdepth{'t};bdepth{'s}} in  make_bterm{fun_term; 'depth; make_depth{'t;'depth}::make_depth{'s;'depth}::nil}
 
-declare TypeTerm
+declare iform TypeTerm
 iform typeTerm: TypeTerm <--> Lang{fun_term::nil}
 dform type_df: TypeTerm = `"Term" sub{rightarrow}
-
 
 interactive type_term_induction  {| elim[] |} 'H:
    sequent { <H>; <J>; v:Var >- 'P[ 'v ] } -->

@@ -4,18 +4,18 @@ extends Itt_synt_operator
 open Basic_tactics
 
 declare BTerm
-declare BTerm{'n}
-declare BTerm_plus{'n}
+declare iform BTerm{'n}
+declare iform BTerm_plus{'n}
 
 declare make_bterm{'op; 'subterms}
-declare make_bterm{'op;'bdepth;'subterms}
+declare iform make_bterm{'op;'bdepth;'subterms}
 
 declare bterm_ind{'bt; v.'var_case['v];
                        op,subterms,ind. 'op_case['op; 'subterms; 'ind] }
 declare compatible_shapes{'op; 'btl}
 
 declare bdepth{'bt}
-declare dest_bterm{'bt; v.'var_case['v]; op,subterms. 'op_case['op; 'subterms] }
+declare iform dest_bterm{'bt; v.'var_case['v]; op,subterms. 'op_case['op; 'subterms] }
 
 declare Vars_of{'bt}
 

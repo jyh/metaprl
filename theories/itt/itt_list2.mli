@@ -133,7 +133,7 @@ declare diff_list{'T}
 (*
  * I/O abstraction for list{top}
  *)
-declare list : Nonterminal
+declare iform list : Term
 iform unfold_list: list <--> list{top}
 
 (************************************************************************

@@ -240,8 +240,8 @@ doc <:doc< @begin[doc]
    <<BTerm{'n}>> is a set of bterms with depth <<'n>>; <<BTerm_plus{'n}>> is a set of bterms with depth greater than or equal to <<'n>>.
 @end[doc] >>
 
-declare BTerm{'n}
-declare BTerm_plus{'n}
+declare iform BTerm{'n}
+declare iform BTerm_plus{'n}
 
 iform bterm: BTerm{'n} <--> { bt:BTerm | bdepth{'bt} = 'n in nat }
 iform bterm_plus: BTerm_plus{'n} <--> { bt:BTerm | bdepth{'bt} >= 'n }
@@ -258,10 +258,10 @@ doc <:doc< @begin[doc]
 
 @end[doc] >>
 
-declare make_bterm{'op;'bdepth;'subterms}
+declare iform make_bterm{'op;'bdepth;'subterms}
 iform make_bterm: make_bterm{'op;'bdepth;'subterms} <--> make_bterm{inject{'op;'bdepth};'subterms}
 
-declare dest_bterm{'bt; v.'var_case['v];
+declare iform dest_bterm{'bt; v.'var_case['v];
                         op,subterms. 'op_case['op; 'subterms] }
 iform dest_bterm:
    dest_bterm{'bt; v.'var_case['v];

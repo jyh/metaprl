@@ -2,6 +2,9 @@
  * Some basic tacticals.
  *
  * $Log$
+ * Revision 1.6  1998/04/17 01:31:36  jyh
+ * Editor is almost constructed.
+ *
  * Revision 1.5  1998/04/13 21:11:18  jyh
  * Added interactive proofs to filter.
  *
@@ -36,7 +39,7 @@ open Term
 open Refine_sig
 open Refine
 
-open Proof_type
+open Filter_proof_type
 
 open Sequent
 open Tactic_type

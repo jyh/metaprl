@@ -2,6 +2,9 @@
  * Characters in the nuprl font.
  *
  * $Log$
+ * Revision 1.2  1998/04/17 01:31:26  jyh
+ * Editor is almost constructed.
+ *
  * Revision 1.1  1997/04/28 15:51:57  jyh
  * This is the initial checkin of Nuprl-Light.
  * I am porting the editor, so it is not included
@@ -67,6 +70,9 @@ declare oinfty
 declare shortleftrightarrow
 declare shortleftarrow
 declare shortrightarrow
+declare longleftrightarrow
+declare longleftarrow
+declare longrightarrow
 declare neq
 declare sim
 declare le

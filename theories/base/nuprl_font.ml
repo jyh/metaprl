@@ -2,6 +2,9 @@
  * characters in the Nuprl font.
  *
  * $Log$
+ * Revision 1.2  1998/04/17 01:31:25  jyh
+ * Editor is almost constructed.
+ *
  * Revision 1.1  1997/04/28 15:51:56  jyh
  * This is the initial checkin of Nuprl-Light.
  * I am porting the editor, so it is not included
@@ -67,6 +70,9 @@ declare oinfty
 declare shortleftrightarrow
 declare shortleftarrow
 declare shortrightarrow
+declare longleftrightarrow
+declare longleftarrow
+declare longrightarrow
 declare neq
 declare sim
 declare le
@@ -141,6 +147,9 @@ dform mode[prl] :: oinfty                    = `"\164"
 dform mode[prl] :: shortleftrightarrow       = `"\165"
 dform mode[prl] :: shortleftarrow            = `"\166"
 dform mode[prl] :: shortrightarrow           = `"\167"
+dform mode[prl] :: longleftrightarrow        = `"\135\136\136\137"
+dform mode[prl] :: longleftarrow             = `"\135\136\136"
+dform mode[prl] :: longrightarrow            = `"\136\136\137"
 dform mode[prl] :: neq                       = `"\168"
 dform mode[prl] :: sim                       = `"\169"
 dform mode[prl] :: le                        = `"\170"

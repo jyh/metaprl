@@ -187,6 +187,10 @@ rule beq_wf 'H :
    [wf] sequent [squash] { 'H >- 'b = 'b1 in int } -->
    sequent ['ext] { 'H >- beq_int{'a; 'b} = beq_int{'a1; 'b1} in bool }
 
+rule lt_squashElimination 'H :
+   sequent [squash] { 'H >- 'a < 'b } -->
+   sequent ['ext] { 'H >- 'a < 'b }
+
 rule beq_int2prop 'H :
    [main] sequent [squash] { 'H >- "assert"{beq_int{'a; 'b}} } -->
    [wf] sequent [squash] { 'H >- 'a IN int } -->

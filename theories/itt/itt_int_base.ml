@@ -329,6 +329,10 @@ prim beq_wf {| intro_resource []; eqcd_resource |} 'H :
    sequent ['ext] { 'H >- beq_int{'a; 'b} = beq_int{'a1; 'b1} in bool } = it
 (*! @docoff *)
 
+prim lt_squashElimination 'H :
+   sequent [squash] { 'H >- 'a < 'b } -->
+   sequent ['ext] { 'H >- 'a < 'b } = it
+
 (*!
  * @begin[doc]
  * @thysubsection{@tt{beq_int} and @tt{= in int} correspondence}
@@ -743,6 +747,23 @@ interactive minus_minus_reduce 'H :
    sequent ['ext] { 'H >- (-(-'a)) ~ 'a }
 
 (*! @docoff *)
+
+(************************************************************
+ * SQUASH STABILITY
+ ************************************************************)
+
+(*
+ * lt is squash stable
+ *)
+let squash_lt p =
+   lt_squashElimination (Sequent.hyp_count_addr p) p
+
+let squash_resource = Mp_resource.improve squash_resource (lt_term, squash_lt)
+
+(***********************************************************
+ * TYPE INFERENCE
+ ***********************************************************)
+
 (*
  * Type of int.
  *)

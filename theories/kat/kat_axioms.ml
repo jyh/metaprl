@@ -3,11 +3,19 @@ extends Kat_terms
 open Top_conversionals
 open Base_select
 open Dtactic
+open Tactic_type.Conversionals
+open Refiner.Refiner.TermMan
+open Refiner.Refiner.TermOp
+open Refiner.Refiner.Term
+
+open Term_stable
 
 
 
 
 prim_rw prod_assotiative {|reduce |}: (('x * 'y) * 'z) <--> ('x * ('y * 'z))
+
+interactive_rw rev_prod_assotiative: ('x * ('y * 'z)) <--> (('x * 'y) * 'z)
 
 prim_rw prod_1_r {|reduce |}:  ('x * 1) <--> 'x
 
@@ -21,11 +29,18 @@ prim_rw prod_0_l {|reduce |}:  (0 *'x) <--> 0
 
 prim_rw plus_assotiative {|reduce |}: (('x + 'y) + 'z) <--> ('x + ('y + 'z))
 
+interactive_rw rev_plus_assotiative: ('x + ('y + 'z)) <--> (('x + 'y) + 'z)
+
 prim_rw plus_commutative:  ('x + 'y)  <--> ('y + 'x)
 
 prim_rw plus_0_r {|reduce |}:  ('x + 0) <--> 'x
 
 prim_rw plus_0_l {|reduce |}:  (0 + 'x) <--> 'x
+
+
+let resource associative +=
+   [ <<'a * 'b>>, (prod_assotiative, rev_prod_assotiative);
+     <<'a + 'b>>, (plus_assotiative, rev_plus_assotiative)]
 
 
 (* Less and greater *)
@@ -44,11 +59,8 @@ interactive transitivity 'y:
   sequent{ <H> >- 'y <= 'z } -->
   sequent{ <H> >- 'x <= 'z }
 
-let r_assotiativeC =  prod_assotiative orelseC plus_assotiative
 
-let selectRightC =  (addrC [0] unselectC) thenC r_assotiativeC thenC (addrC [1] selectC)
 
-(*???*)
 
 
 
@@ -70,6 +82,11 @@ prim_rw and_commutative:
       ('x in bool) -->
       ('y in bool)  -->
       ('x * 'y)  <--> ('y * 'x)
+
+
+let resource commutative +=
+   [ <<'a * 'b>>, and_commutative;
+     <<'a + 'b>>, plus_commutative]
 
 
 prim_rw neg_l {|reduce |}:   (-1)  <--> 0

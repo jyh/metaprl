@@ -11,6 +11,7 @@ OCAMLDEPFLAGS := -prl
 
 # Library files
 MPFILES :=\
+	support_algebra \
 	base_select \
 	kat_terms \
 	kat_axioms \

@@ -1,4 +1,5 @@
 extends Base_theory
+extends Support_algebra
 extends Base_select
 extends Itt_struct2
 
@@ -47,6 +48,7 @@ dform star_df : parens :: "prec"[prec_star] :: star{'a} =
    slot["le"]{'a} sup{slot["*"]}
 
 dform bool_df : bool = mathbbB
+
 
 
 

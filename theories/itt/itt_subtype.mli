@@ -130,9 +130,9 @@ rule subtypeElimination 'H 'J :
  * H >- x = y in A
  * H >- subtype(A; B)
  *)
-rule subtypeElimination2 'H 'J 'a 'y :
-   sequent [squash] { 'H; x: subtype{'A; 'B}; 'J['x] >- 'a IN 'A } -->
-   sequent ['ext] { 'H; x: subtype{'A; 'B}; 'J['x]; y: 'a IN 'B >- 'C['x] } -->
+rule subtypeElimination2 'H 'J 'a 'b 'y :
+   sequent [squash] { 'H; x: subtype{'A; 'B}; 'J['x] >- 'a='b in 'A } -->
+   sequent ['ext] { 'H; x: subtype{'A; 'B}; 'J['x]; y: 'a = 'b in 'B >- 'C['x] } -->
    sequent ['ext] { 'H; x: subtype{'A; 'B}; 'J['x] >- 'C['x] }
 
 (************************************************************************

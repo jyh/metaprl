@@ -226,9 +226,9 @@ prim subtypeElimination {| elim [ThinOption thinT] |} 'H 'J :
    sequent ['ext] { 'H; x: subtype{'A; 'B}; 'J['x] >- 'C['x] } =
    't
 
-prim subtypeElimination2 'H 'J 'a 'y :
-   [wf] sequent [squash] { 'H; x: subtype{'A; 'B}; 'J['x] >- 'a IN 'A } -->
-   ('t['y] : sequent ['ext] { 'H; x: subtype{'A; 'B}; 'J['x]; y: 'a IN 'B >- 'C['x] }) -->
+prim subtypeElimination2 'H 'J 'a 'b 'y :
+   [wf] sequent [squash] { 'H; x: subtype{'A; 'B}; 'J['x] >- 'a='b in 'A } -->
+   ('t['y] : sequent ['ext] { 'H; x: subtype{'A; 'B}; 'J['x]; y: 'a='b in 'B >- 'C['x] }) -->
    sequent ['ext] { 'H; x: subtype{'A; 'B}; 'J['x] >- 'C['x] } =
    't[it]
 
@@ -330,22 +330,22 @@ let resource intro +=
  *)
 let d_hyp_subtypeT i p =
    let j, k = hyp_indices p i in
-      try
-         let a = get_with_arg p in
-         let v, _ = Sequent.nth_hyp p i in
-         let v = maybe_new_vars1 p v in
-            subtypeElimination2 j k a v p
-      with
-         RefineError _ ->
-            subtypeElimination j k p
+   try
+      let v, _ = Sequent.nth_hyp p i in
+      let v = maybe_new_vars1 p v in
+      let args = get_with_args p in
+            match args with
+              [a] -> subtypeElimination2 j k a a v p |
+              [a;b] -> subtypeElimination2 j k a b v p |
+              _ -> raise (RefineError ("subtypeElimination", StringError ("1 or 2 arguments required")))
+   with RefineError ("get_attribute",_) -> subtypeElimination j k p
 
 let resource elim += (subtype_term, d_hyp_subtypeT)
 
-prim use_subtype1 'H 'A :
+interactive use_subtype1 'H 'A :
    [aux] sequent [squash] { 'H >- subtype{'A; 'B} } -->
    [main] sequent [squash] { 'H >- 't1 = 't2 in 'A } -->
-   sequent ['ext] { 'H >- 't1 = 't2 in 'B } =
-      it
+   sequent ['ext] { 'H >- 't1 = 't2 in 'B }
 
 interactive use_subtype2 'H 'A :
    [aux] sequent [squash] { 'H >- subtype{'A; 'B} } -->

@@ -164,14 +164,9 @@ type sub_resource_info =
  | DSubtype of sub_info_type
 
 (*
- * Internal type.
- *)
-type sub_data
-
-(*
  * The resource itself.
  *)
-resource (sub_resource_info, sub_data, tactic) sub
+resource (sub_resource_info, tactic) sub
 
 topval subtypeT : tactic
 

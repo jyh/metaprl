@@ -89,9 +89,7 @@ topval repeatForC : int -> conv -> conv
  * REDUCTION RESOURCE                                                   *
  ************************************************************************)
 
-type reduce_data
-
-resource (term * conv, reduce_data, conv) reduce
+resource (term * conv, conv) reduce
 val process_reduce_resource_annotation : (conv, term*conv) annotation_processor
 
 topval reduceTopC : conv

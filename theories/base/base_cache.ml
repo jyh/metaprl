@@ -49,11 +49,6 @@ type cache_rule =
 
 type cache = tactic Tactic_cache.cache
 
-(*
- * Our "abstract" type is just a cache.
- *)
-type t = cache
-
 (************************************************************************
  * IMPLEMENTATION                                                       *
  ************************************************************************)

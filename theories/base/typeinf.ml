@@ -82,7 +82,6 @@ let _ =
  * assumptions.
  *)
 type typeinf_subst_info = term * typeinf_subst_fun
-type typeinf_subst_data = typeinf_subst_info list
 
 (*
  * Modular components also get a recursive instance of
@@ -94,7 +93,6 @@ type typeinf_comp = typeinf_func -> typeinf_func
  * This is the resource addition.
  *)
 type typeinf_resource_info = term * typeinf_comp
-type typeinf_data = typeinf_resource_info list
 
 (************************************************************************
  * IMPLEMENTATION                                                       *

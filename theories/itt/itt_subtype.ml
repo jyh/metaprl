@@ -254,11 +254,6 @@ type sub_resource_info =
  | RLSubtype of sub_info_type
  | DSubtype of sub_info_type
 
-(*
- * Subtype resource is a DAG.
- *)
-type sub_data = tactic term_dtable
-
 (*!
  * @begin[doc]
  * @resources

@@ -44,9 +44,7 @@ type cache_rule =
 
 type cache = tactic Tactic_cache.cache
 
-type t
-
-resource (cache_rule, t, cache) cache
+resource (cache_rule, cache) cache
 
 (*
  * -*-

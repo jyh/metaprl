@@ -401,8 +401,6 @@ let cutC = Tactic_type.Conversionals.cutC
  * @docoff
  * @end[doc]
  *)
-type reduce_data = (term * conv) list
-
 let identity x = x
 
 let extract_data tbl =

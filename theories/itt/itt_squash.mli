@@ -118,12 +118,11 @@ val mk_squash_term : term -> term
  * Internal type.
  *)
 type squash_info
-type squash_data
 
 (*
  * The resource itself.
  *)
-resource (squash_info, squash_data, int -> tactic) squash
+resource (squash_info, int -> tactic) squash
 
 val process_squash_resource_annotation :
    (Tactic.pre_tactic, squash_info) annotation_processor

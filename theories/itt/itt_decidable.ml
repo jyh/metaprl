@@ -119,8 +119,6 @@ let dest_decidable_term term =
  * decide_resource                                                      *
  ************************************************************************)
 
-type decide_data = (term * tactic) list
-
 (*!
  * @begin[doc]
  * @resources

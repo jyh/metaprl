@@ -186,10 +186,6 @@ let debug_dtactic =
 (*
  * The d_tactic uses a term_table to match against terms.
  *)
-type elim_data = (term * (int -> tactic)) list
-
-type intro_data = (term * (string * int option * tactic)) list
-
 type intro_option =
    SelectOption of int
  | IntroArgsOption of (tactic_arg -> term -> term list) * term option

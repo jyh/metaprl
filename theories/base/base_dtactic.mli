@@ -41,12 +41,6 @@ open Tactic_type.Tacticals
 open Mp_resource
 open Base_auto_tactic
 
-(*
- * This are the types.
- *)
-type elim_data
-type intro_data
-
 type intro_option =
    (* Select among multiple introduction rules *)
    SelectOption of int
@@ -62,8 +56,8 @@ type elim_option =
    ThinOption of (int -> tactic)  (* Thin the eliminated hyp, unless overridden *)
  | ElimArgsOption of (tactic_arg -> term -> term list) * term option
 
-resource (term * (int -> tactic), elim_data, int -> tactic) elim
-resource (term * (string * int option * tactic), intro_data, tactic) intro
+resource (term * (int -> tactic), int -> tactic) elim
+resource (term * (string * int option * tactic), tactic) intro
 
 val process_elim_resource_annotation :
    (Tactic.pre_tactic * elim_option list, term * (int -> tactic)) annotation_processor

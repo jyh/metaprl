@@ -39,9 +39,7 @@ open Mp_resource
 
 define unfold_decidable : decidable{'p} <--> ('p or not {'p})
 
-type decide_data
-
-resource (term * tactic, decide_data, tactic ) decide
+resource (term * tactic, tactic ) decide
 
 val process_decide_resource_annotation:
    (Tactic.pre_tactic, term * tactic) annotation_processor

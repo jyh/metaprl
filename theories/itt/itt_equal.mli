@@ -225,9 +225,7 @@ rule universeFormation 'H univ[j:l] :
  * EQCD TACTIC                                                          *
  ************************************************************************)
 
-type eqcd_data
-
-resource (term * tactic, eqcd_data, tactic) eqcd
+resource (term * tactic, tactic) eqcd
 
 val process_eqcd_resource_annotation :
    (Tactic.pre_tactic, term * tactic) annotation_processor

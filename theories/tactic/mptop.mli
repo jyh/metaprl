@@ -74,13 +74,13 @@ type expr =
  | TacticListFunExpr of (tactic list -> expr)
  | ConvListFunExpr of (conv list -> expr)
 
-(*
- * The resource maps strings to values.
- *)
 type top_table
 
-(* Input: module name, local name, expr *)
-resource (string * string * expr, top_table, top_table) toploop
+(*
+ * The resource maps strings to values.
+ * Input: module name, local name, expr
+ *)
+resource (string * string * expr, top_table) toploop
 
 val add_commands : top_table -> (string * expr) list -> unit
 

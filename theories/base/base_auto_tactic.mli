@@ -49,12 +49,6 @@ open Tactic_type.Tacticals
 open Tactic_type.Sequent
 
 (*
- * This are the types.
- *)
-type 'a auto_data
-type auto_prec
-
-(*
  * The info provided is a name,
  * a precedence, and a function
  * to produce a tactic.  The function
@@ -69,6 +63,8 @@ type auto_prec
 type auto_tac =
    AutoTac of (tactic_arg -> (tactic * auto_tac) list)
 
+type auto_prec
+
 type 'a auto_info =
    { auto_name : string;
      auto_prec : auto_prec;
@@ -78,8 +74,8 @@ type 'a auto_info =
 (*
  * The string is for debugging.
  *)
-resource (tactic auto_info, tactic auto_data, tactic) trivial
-resource (auto_tac auto_info, auto_tac auto_data, tactic) auto
+resource (tactic auto_info, tactic) trivial
+resource (auto_tac auto_info, tactic) auto
 
 val process_trivial_resource_annotation :
    (Tactic.pre_tactic * auto_prec, tactic auto_info) annotation_processor

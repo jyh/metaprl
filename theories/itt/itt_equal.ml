@@ -169,12 +169,6 @@ let it_term = << it >>
  ************************************************************************)
 
 (*
- * EQCD resource.
- * Use simple table.
- *)
-type eqcd_data = tactic term_stable
-
-(*
  * Extract an EQCD tactic from the data.
  * The tactic checks for an optable.
  *)

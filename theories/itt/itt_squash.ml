@@ -353,6 +353,8 @@ interactive squashFormation 'H :
  * $@sequent{ext;H;t @in A}$ and $@sequent{ext;{H; x@colon A; J[x]};C[x]}$
  * (e.g $A$ is a falsity), although it is possible
  * to add support for other kinds of rules if necessary.
+ *
+ * The squash resource represents data using a shape table.
  * @end[doc]
  *)
 type squash_inf =
@@ -362,16 +364,6 @@ type squash_inf =
 
 
 type squash_info = term * squash_inf
-
-(*!
- * @begin[doc]
- *
- * The squash resource represents data using a shape table.
- * @end[doc]
- *)
-type squash_data = squash_inf term_stable
-
-(*! @docoff *)
 
 (************************************************************************
  * Sequent Squash PRIMITIVES                                            *

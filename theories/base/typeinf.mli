@@ -52,9 +52,8 @@ open Tactic_type.Tacticals
  * This resource is used to analyze the sequent to gather type info.
  *)
 type typeinf_subst_info = term * typeinf_subst_fun
-type typeinf_subst_data
 
-resource (typeinf_subst_info, typeinf_subst_data, typeinf_subst_fun) typeinf_subst
+resource (typeinf_subst_info, typeinf_subst_fun) typeinf_subst
 
 (*
  * Modular components also get a recursive instance of
@@ -68,14 +67,9 @@ type typeinf_comp = typeinf_func -> typeinf_func
 type typeinf_resource_info = term * typeinf_comp
 
 (*
- * Internal type.
- *)
-type typeinf_data
-
-(*
  * The resource itself.
  *)
-resource (typeinf_resource_info, typeinf_data, typeinf_func) typeinf
+resource (typeinf_resource_info, typeinf_func) typeinf
 
 (*
  * Utilities.

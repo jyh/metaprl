@@ -217,30 +217,26 @@ let extract tactics =
          (names trivial) (names normal) (names complete) eflush;
    end;
    let make_progress_first reset next =
-      let rec progress_original goals = progress_first next reset goals
-      and progress_reset tacs goals = progress_first progress_original tacs goals
-      and progress_first next =
-         let rec prog_first tacs goals =
-            match tacs with
-               [] ->
-                  next goals
-             | tac :: tacs ->
-                  (tac.auto_tac thenT (make_progressT goals prog_reset)) orelseT
-                     (prog_first tacs goals)
-         and prog_reset goals = prog_first reset goals
-         in
-            prog_first
+      let rec prog_first tacs goals =
+         match tacs with
+            [] ->
+               next goals
+          | tac :: tacs ->
+               (tac.auto_tac thenT (make_progressT goals prog_reset)) orelseT
+                  (prog_first tacs goals)
+      and prog_reset goals = prog_first reset goals
       in
-         progress_first next
+         prog_first
    in
    let next_idT _ = idT in
    let gen_trivT next = make_progress_first trivial next trivial [] in
    let trivT = gen_trivT next_idT in
    let gen_normT next = gen_trivT (make_progress_first (trivial @ normal) next normal) in
-   let exn = RefineError("auto_tactic", StringError ("failed to complete")) in
-   let try_complete goals = tryT (completeT (make_progress_first (trivial @ normal @ complete) next_idT complete goals)) in
+   let all_tacs = trivial @ normal @ complete in
+   let try_complete goals = tryT (completeT (make_progress_first all_tacs next_idT complete goals)) in
    let autoT = gen_normT try_complete in
-      (trivT, autoT)
+   let strongAutoT = make_progress_first all_tacs next_idT all_tacs [] in
+      (trivT, autoT, strongAutoT)
 
 let improve_resource data info = info::data
 
@@ -278,13 +274,21 @@ let rec check_progress goal = function
  * Actual tactics.
  *)
 let trivialT p =
-   (fst (get_resource_arg p get_auto_resource)) p
+   let trivT, _, _ = get_resource_arg p get_auto_resource in
+      trivT p
 
 let autoT p =
-   (snd (get_resource_arg p get_auto_resource)) p
+   let _, autoT, _ = get_resource_arg p get_auto_resource in
+      autoT p
+
+let strongAutoT p =
+   let _, _, sAutoT = get_resource_arg p get_auto_resource in
+      sAutoT p
+
+let tcaT = tryT (completeT strongAutoT)
 
 let tryAutoT tac =
-   tac thenT tryT (completeT autoT)
+   tac thenT tcaT
 
 let byDefT conv =
    rwhAllAll (conv thenC reduceC) thenT autoT

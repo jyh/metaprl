@@ -486,6 +486,7 @@ let resource auto += {
  *)
 let equalTypeT a b p =
    equalityTypeIsType (Sequent.hyp_count_addr p) a b p
+let memberTypeT a = equalTypeT a a ttca
 
 (*
  * -*-

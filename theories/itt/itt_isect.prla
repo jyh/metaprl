@@ -2961,7 +2961,7 @@ T	t863	o b862 b4
 B	b863	t863
 T	t864	o645 b850 b863
 B	b864	t864
-P	p865	String "equalTypeT << 'a >> << 'a >> thenT trivialT"
+P	p865	String "memberTypeT << 'a >>"
 O	o865	ext_rule p865
 T	t866	o645 b862 b4
 B	b866	t866

@@ -15,18 +15,11 @@ open Var
 open Tactic_type.Tacticals
 open Tactic_type.Conversionals
 
-topval substT : term -> int -> tactic
-topval hypSubstT : int -> int -> tactic
-topval revHypSubstT : int -> int -> tactic
-
-
-topval unsquashT : int -> tactic
 topval reverseT : tactic
 topval cutMemberT:  term -> tactic
 topval cutMember1T :  term -> tactic
 topval useAssumptionT : int -> tactic
 topval autoRT : tactic
-topval memberTypeT : term -> tactic
 topval equalRefComplT : term -> tactic
 
 topval mem_col_memT : term -> tactic

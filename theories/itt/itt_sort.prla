@@ -4315,7 +4315,7 @@ T	t8122	o b8823 b4
 B	b8132	t8122
 T	t8132	o863 b8819 b8132
 B	b8133	t8132
-P	p9007	String "dT 0 thenMT dT (-1) thenMT rw reduceC 0 thenT tryT (completeT autoT)"
+P	p9007	String "dT 0 thenMT dT (-1) thenMT rw reduceC 0 ttca"
 O	o9007	ext_rule p9007
 T	t9008	o2 b8823
 B	b9009	t9008

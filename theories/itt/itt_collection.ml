@@ -100,8 +100,6 @@ let resource auto += {
    auto_type = AutoNormal;
 }
 
-let memberTypeT a = equalTypeT a a thenT tryT (completeT autoT)
-
 let equalRef2T a = equalRefT a thenT equalSymT
 
 let equalRefComplT a =  completeT (equalRefT a thenT autoT) orelseT  completeT (equalRef2T a thenT autoT)
@@ -115,92 +113,6 @@ interactive reverse 'H :
 let reverseT p =
       let j,_ = Sequent.hyp_indices p ((Sequent.hyp_count p)) in
                 reverse j p
-
-
-(*===--- subst ---===*)
-
-interactive substitution 'H ('t1 = 't2 in 'T2) bind{x. 'T1['x]} :
-   sequent [squash] { 'H >- 't1 = 't2 in 'T2 } -->
-   sequent ['ext] { 'H >- 'T1['t2] } -->
-   sequent [squash] { 'H; x: 'T2; u:'x='t1 in 'T2; v:'x='t2 in 'T2 >- "type"{'T1['x]} } -->
-   sequent ['ext] { 'H >- 'T1['t1] }
-
-interactive hypSubstitution 'H 'J ('t1 = 't2 in 'T2) bind{y. 'A['y]} 'z :
-   sequent [squash] { 'H; x: 'A['t1]; 'J['x] >- 't1 = 't2 in 'T2 } -->
-   sequent ['ext] { 'H; x: 'A['t2];'J['x] >- 'T1['x] }  -->
-   sequent [squash] { 'H; x: 'A['t1]; 'J['x]; z: 'T2;  u:'z='t1 in 'T2; v:'z='t2 in 'T2  >- "type"{'A['z]} } -->
-   sequent ['ext] { 'H; x: 'A['t1]; 'J['x] >- 'T1['x] }
-
-
-
-(*
- * Substitution.
- * The binding term may be optionally supplied.
- *)
-let substConclT t p =
-   let _, a, _ = dest_equal t in
-   let bind =
-      try
-         let t1 = get_with_arg p in
-            if is_xbind_term t1 then
-               t1
-            else
-               raise (RefineError ("substT", StringTermError ("need a \"bind\" term: ", t1)))
-      with
-         RefineError _ ->
-            let x = get_opt_var_arg "z" p in
-               mk_xbind_term x (var_subst (concl p) a x)
-   in
-      (substitution (hyp_count_addr p) t bind
-       thenLT [addHiddenLabelT "equality";
-               addHiddenLabelT "main";
-               addHiddenLabelT "aux"]) p
-
-(*
- * Hyp substitution requires a replacement.
- *)
-let substHypT i t p =
-   let _, a, _ = dest_equal t in
-   let _, t1 = Sequent.nth_hyp p i in
-   let z = get_opt_var_arg "z" p in
-   let bind =
-      try
-         let b = get_with_arg p in
-            if is_xbind_term b then
-               b
-            else
-               raise (RefineError ("substT", StringTermError ("need a \"bind\" term: ", b)))
-      with
-         RefineError _ ->
-            mk_xbind_term z (var_subst t1 a z)
-   in
-   let i, j = hyp_indices p i in
-      (hypSubstitution i j t bind z
-       thenLT [addHiddenLabelT "equality";
-               addHiddenLabelT "main";
-               addHiddenLabelT "aux"]) p
-
-(*
- * General substition.
- *)
-let substT t i =
-   if i = 0 then
-      substConclT t
-   else
-      substHypT i t
-
-(*
- * Derived versions.
- *)
-let hypSubstT i j p =
-   let _, h = Sequent.nth_hyp p i in
-      (substT h j thenET nthHypT i) p
-
-let revHypSubstT i j p =
-   let t, a, b = dest_equal (snd (Sequent.nth_hyp p i)) in
-   let h' = mk_equal_term t b a in
-      (substT h' j thenET (equalSymT thenT nthHypT i)) p
-
 
 (*===--- CutMember ---===*)
 
@@ -282,9 +194,9 @@ let d_colT i p =
        let i', j = hyp_indices p i in
           col_elim i' j a b p
 
-let cutColT c = cutMemberT  (mk_equal_term <<col[l:l]{'T}>> c c) thenLT [tryT (completeT autoT);  d_colT (-1) thenT rwh reduceC 0]
+let cutColT c = cutMemberT  (mk_equal_term <<col[l:l]{'T}>> c c) thenLT [tcaT;  d_colT (-1) thenT rwh reduceC 0]
 
-let cutColS c = cutMemberT  (mk_equal_term <<col[l:l]{'S}>> c c) thenLT [tryT (completeT autoT);  d_colT (-1) thenT rwh reduceC 0]
+let cutColS c = cutMemberT  (mk_equal_term <<col[l:l]{'S}>> c c) thenLT [tcaT;  d_colT (-1) thenT rwh reduceC 0]
 
 (*--- col_member ---*)
 

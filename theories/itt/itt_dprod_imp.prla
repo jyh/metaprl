@@ -5376,7 +5376,7 @@ T	t2240	o b2240 b4
 B	b2241	t2240
 T	t2241	o570 b2226 b2241
 B	b2242	t2241
-P	p2242	String "equalTypeT << 'a >> << 'a >> thenT trivialT"
+P	p2242	String "memberTypeT << 'a >>"
 O	o2242	ext_rule p2242
 T	t2242	o570 b2240 b4
 B	b2243	t2242

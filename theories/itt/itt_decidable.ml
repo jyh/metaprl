@@ -129,7 +129,7 @@ let dest_decidable_term = dest_dep0_term decidable_opname
  *)
 let decideT t p =
    (assert_decidable (Sequent.hyp_count_addr p) t
-      thenLT [tryT (completeT autoT); idT; idT]) p
+      thenLT [tcaT; idT; idT]) p
 
 (*!
  * @begin[doc]

@@ -77,7 +77,7 @@ and auto_type =
 (*
  * The string is for debugging.
  *)
-resource (auto_info, tactic * tactic) auto
+resource (auto_info, tactic * tactic * tactic) auto
 
 (*
  * Operations on precedences.
@@ -95,14 +95,12 @@ val trivial_prec : auto_prec
  * Trivial tactic.
  *)
 topval trivialT : tactic
+topval strongAutoT : tactic (* use AutoComplete entries freely *)
+topval tcaT : tactic (* tryT (completeT strongAutoT) *)
+topval autoT : tactic (* weakAutoT thenT tcaT *)
 
 (*
- * The inherited tactic.
- *)
-topval autoT : tactic
-
-(*
- * Short for tryT (completeT autoT)
+ * tryAutoT tac is a short for "tac thenT tcaT"
  *)
 topval tryAutoT : tactic -> tactic
 

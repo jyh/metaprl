@@ -1701,7 +1701,7 @@ T	t1805	o807 b1804 b1791
 B	b1805	t1805
 T	t1806	o806 b1805 b4 b812
 B	b1806	t1806
-P	p1809	String "equalTypeT << 'l >> << 'l >>"
+P	p1809	String "memberTypeT << 'l >>"
 O	o1809	ext_rule p1809
 T	t1676	o2 b1793
 B	b1677	t1676
@@ -1865,7 +1865,7 @@ T	t1860	o807 b1860 b1848
 B	b1861	t1860
 T	t1861	o1795 b1861 b4 b812
 B	b1862	t1861
-P	p1865	String "equalTypeT << 'l1 >> << 'l1 >>"
+P	p1865	String "memberTypeT << 'l1 >>"
 O	o1865	ext_rule p1865
 P	p1870	String idT
 O	o1870	ext_rule p1870
@@ -2559,7 +2559,7 @@ T	t2154	o807 b2141 b2154
 B	b2155	t2154
 T	t2155	o806 b2155 b4 b812
 B	b2156	t2155
-P	p2157	String "equalTypeT << 'x >> << 'x >>"
+P	p2157	String "memberTypeT << 'x >>"
 O	o2157	ext_rule p2157
 S	s2157	t809 h
 G	s2157	t1980
@@ -2679,7 +2679,7 @@ T	t2316	o807 b2304 b2316
 B	b2317	t2316
 T	t2317	o806 b2317 b4 b812
 B	b2318	t2317
-P	p2319	String "equalTypeT << 'x >> << 'x >> thenT trivialT"
+P	p2319	String "memberTypeT << 'x >>"
 O	o2319	ext_rule p2319
 S	s2319	t809 h
 G	s2319	t1983

@@ -4114,7 +4114,7 @@ NItt_equal!type	type	type Itt_equal
 O	o2128	type
 T	t2128	o2128 b521
 H	h2130	v t2128
-P	p2136	String "equalTypeT << 'x >> << 'x >>"
+P	p2136	String "memberTypeT << 'x >>"
 O	o2136	ext_rule p2136
 O	o7409	ext_rule p1410
 P	p2145	String "withT << 'T -> bool >> (dT 0)"
@@ -4382,7 +4382,7 @@ T	t2359	o1380 b2351 b2358
 B	b2359	t2359
 T	t2360	o1379 b2359 b4 b1385
 B	b2360	t2360
-P	p2361	String "equalTypeT << 'x >> << 'x >> thenT autoT"
+P	p2361	String "memberTypeT << 'x >>"
 O	o2361	ext_rule p2361
 S	s2361	t1382 h
 G	s2361	t2128
@@ -5740,7 +5740,7 @@ T	t2750	o1380 b2737 b2750
 B	b2751	t2750
 T	t2751	o1379 b2751 b4 b1385
 B	b2752	t2751
-P	p2753	String "equalTypeT << 'a >> << 'a >> thenT autoT"
+P	p2753	String "memberTypeT << 'a >>"
 O	o2753	ext_rule p2753
 S	s2753	t1382 h h2722 h2723
 G	s2753	t2128
@@ -6711,7 +6711,7 @@ T	t3214	o1380 b3203 b3214
 B	b3215	t3214
 T	t3215	o1379 b3215 b4 b1385
 B	b3216	t3215
-P	p3217	String "equalTypeT << 'u >> << 'u >> thenT trivialT"
+P	p3217	String "memberTypeT << 'u >>"
 O	o3217	ext_rule p3217
 T	t3217	o1380 b2362 b3214
 B	b3218	t3217
@@ -16309,7 +16309,7 @@ T	t4658	o1380 b4648 b4657
 B	b4658	t4658
 T	t4659	o1379 b4658 b4 b1385
 B	b4659	t4659
-P	p4660	String "equalTypeT << 's1 >> << 's1 >> thenT autoT"
+P	p4660	String "memberTypeT << 's1 >>"
 O	o4660	ext_rule p4660
 T	t4661	o1380 b3659 b4657
 B	b4661	t4661
@@ -18724,7 +18724,7 @@ T	t8574	o b8574 b4
 B	b8575	t8574
 T	t8575	o1378 b8513 b8575
 B	b8576	t8575
-P	p8576	String "rwh unfold_fset 0 thenT dT 0 thenT dT 0 thenMT dT 0 thenWT (tryT (completeT autoT))"
+P	p8576	String "rwh unfold_fset 0 thenT dT 0 thenT dT 0 thenMT dT 0 thenWT tcaT"
 O	o8576	ext_rule p8576
 S	s8576	t2102 h h2669 h3719 h13686 h2063 h14826 h14268 h14270
 G	s8576	t8110
@@ -20837,7 +20837,7 @@ T	t10993	o b10993 b4
 B	b10994	t10993
 T	t10997	o1378 b10965 b10994
 B	b10997	t10997
-P	p10997	String "rwh unfold_fset 0 thenT dT 0 thenT dT 0 thenT (tryT (completeT autoT))"
+P	p10997	String "rwh unfold_fset 0 thenT dT 0 thenT dT 0 ttca"
 O	o10997	ext_rule p10997
 T	t10998	o3812 b10974 b4 b1385
 B	b10998	t10998
@@ -25750,7 +25750,7 @@ T	t18760	o b18756 b18759
 B	b18760	t18760
 T	t18761	o1378 b18754 b18760
 B	b18761	t18761
-P	p11756	String "equalTypeT << 'x >> << 'x >> thenT trivialT"
+P	p11756	String "memberTypeT << 'x >>"
 O	o11756	ext_rule p11756
 T	t11758	o2127 b11757 b4 b1385
 B	b11758	t11758
@@ -35187,7 +35187,7 @@ T	t7983	o b7956 b7983
 B	b7984	t7983
 T	t7984	o1378 b7925 b7984
 B	b7985	t7984
-P	p7991	String "equalTypeT <<'x>> <<'x>> thenT trivialT"
+P	p7991	String "memberTypeT <<'x>>"
 O	o7994	ext_rule p7991
 T	t8008	o1378 b7956 b4
 B	b8008	t8008

@@ -3648,7 +3648,7 @@ T	t2235	o1265 b2230 b2235
 B	b2236	t2235
 T	t2236	o1264 b2236 b4 b1267
 B	b2237	t2236
-P	p2238	String "equalTypeT <<'s>> <<'s>> thenT autoT"
+P	p2238	String "memberTypeT <<'s>>"
 O	o2238	ext_rule p2238
 T	t2238	o667 b2215
 S	s2238	t665 h
@@ -16336,7 +16336,7 @@ T	t4744	o1265 b4744 b4721
 B	b4745	t4744
 T	t4745	o1264 b4745 b4 b1267
 B	b4746	t4745
-P	p4749	String "substT <<'phi 'i = 'x in 'T>> 0 thenT tryT (completeT autoT)"
+P	p4749	String "substT <<'phi 'i = 'x in 'T>> 0 ttca"
 O	o4749	ext_rule p4749
 T	t4749	o4610 b1416
 B	b4750	t4749
@@ -16395,7 +16395,7 @@ T	t4772	o1265 b4772 b4721
 B	b4773	t4772
 T	t4773	o1388 b4773 b4 b1267
 B	b4774	t4773
-P	p4778	String "dT 0 thenT tryT (completeT autoT)"
+P	p4778	String "dT 0 ttca"
 O	o4778	ext_rule p4778
 H	h4778	i_2 t2597
 T	t4779	o4610 b4779

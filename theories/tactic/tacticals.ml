@@ -680,7 +680,7 @@ let get_alt_arg arg =
 (*
  * -*-
  * Local Variables:
- * Caml-master: "/usr/local/lib/nuprl-light/camlp4o.run"
+ * Caml-master: "camlp4o.run"
  * End:
  * -*-
  *)

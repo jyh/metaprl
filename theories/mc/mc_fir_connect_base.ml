@@ -47,7 +47,7 @@ open Refiner.Refiner.RefineError
 open Itt_atom
 open Itt_int_base
 open Itt_list
-open Mc_set
+open Mp_mc_set
 open Fir_ty
 
 (*************************************************************************

@@ -32,7 +32,7 @@
 
 include Base_theory
 
-open Mc_term_op
+open Mp_mc_term_op
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
 

@@ -32,7 +32,7 @@
  * Email:  emre@its.caltech.edu
  *)
 
-include Mc_theory
+include Mp_mc_theory
 
 (*************************************************************************
  * Mc_set

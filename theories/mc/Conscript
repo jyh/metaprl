@@ -24,8 +24,8 @@ if(defined($ENV{'MC_ROOT'})) {
                   "$env->{MC}/fir/util"]
    );
    OCamlSources $env
-      'mc_term_op.ml',
-      'mc_set.ml',
+      'mp_mc_term_op.ml',
+      'mp_mc_set.ml',
       'fir_ty.ml',
       'fir_exp.ml',
       'fir_eval.ml',
@@ -35,11 +35,11 @@ if(defined($ENV{'MC_ROOT'})) {
       'mc_fir_connect_ty.ml',
       'mc_fir_connect_exp.ml',
       'mc_fir_connect.ml',
-      'mc_theory.ml',
+      'mp_mc_theory.ml',
       'fir_test.ml';
    OCamlLibrary $env 'base',
-      'mc_term_op',
-      'mc_set',
+      'mp_mc_term_op',
+      'mp_mc_set',
       'fir_ty',
       'fir_exp',
       'fir_eval',
@@ -49,28 +49,28 @@ if(defined($ENV{'MC_ROOT'})) {
       'mc_fir_connect_ty',
       'mc_fir_connect_exp',
       'mc_fir_connect',
-      'mc_theory',
+      'mp_mc_theory',
       'fir_test';
 } else {
    OCamlSources $env
-      'mc_term_op.ml',
-      'mc_set.ml',
+      'mp_mc_term_op.ml',
+      'mp_mc_set.ml',
       'fir_ty.ml',
       'fir_exp.ml',
       'fir_eval.ml',
       'fir_deadcode.ml',
       'fir_const_elim.ml',
-      'mc_theory.ml',
+      'mp_mc_theory.ml',
       'fir_test.ml';
    OCamlLibrary $env 'base',
-      'mc_term_op',
-      'mc_set',
+      'mp_mc_term_op',
+      'mp_mc_set',
       'fir_ty',
       'fir_exp',
       'fir_eval',
       'fir_deadcode',
       'fir_const_elim',
-      'mc_theory',
+      'mp_mc_theory',
       'fir_test';
 }
 

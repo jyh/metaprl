@@ -11,14 +11,14 @@ OCAMLDEPFLAGS := -prl
 
 # Library files
 MPFILES := \
-   mc_term_op \
-   mc_set \
+   mp_mc_term_op \
+   mp_mc_set \
    fir_ty \
    fir_exp \
    fir_eval \
    fir_deadcode \
    fir_const_elim \
-   mc_theory \
+   mp_mc_theory \
    fir_test
 
 # Name of main libraries

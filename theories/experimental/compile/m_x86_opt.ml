@@ -31,6 +31,7 @@ doc <:doc<
 >>
 
 doc <:doc< @doc{@parents} >>
+extends Base_theory
 extends M_x86_asm
 doc docoff
 

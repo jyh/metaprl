@@ -26,7 +26,6 @@
  *)
 extends M_theory
 
-(*
 (************************************************************************
  * Just for testing.
  *)
@@ -87,8 +86,8 @@ interactive spill_prog :
          TailCall{AtomVar{'spill}; ArgCons{AtomInt[25:n]; ArgNil}}}}} }
 
 interactive spill_prog2 :
-   sequent { <H> >- compilable{.
-      <:ext<
+   sequent { <H> >- compilable{
+      <:m<
          let spill (i) =
             let i1 = i + 1 in
             let i2 = i + 2 in
@@ -102,8 +101,8 @@ interactive spill_prog2 :
       >>} }
 
 interactive ext_fib_prog2 :
-   sequent { <H> >- compilable{.
-      <:ext<
+   sequent { <H> >- compilable{
+      <:m<
          let rec fib (i) =
             if i < 1 then
                i
@@ -116,8 +115,8 @@ interactive ext_fib_prog2 :
       >> } }
 
 interactive ext_test1 :
-   sequent { <H> >- compilable{.
-      <:ext<
+   sequent { <H> >- compilable{
+      <:m<
          let rec f (i) =
             g (if i <> 1 then 0 else 1)
          and g (i) =
@@ -127,8 +126,8 @@ interactive ext_test1 :
       >> } }
 
 interactive ext_test2 :
-   sequent { <H> >- compilable{.
-      <:ext<
+   sequent { <H> >- compilable{
+      <:m<
          let x = 2 in
          let f (i) = i + 2 in
          let g (i) = i * 2 in
@@ -140,14 +139,14 @@ interactive ext_test2 :
       >> } }
 
 interactive ext_test3 :
-   sequent { <H> >- compilable{.
-      <:ext<
+   sequent { <H> >- compilable{
+      <:m<
          let t = (1, 2, 3) in t[0]
       >> } }
 
 interactive ext_test4 :
-   sequent { <H> >- compilable{.
-      <:ext<
+   sequent { <H> >- compilable{
+      <:m<
          let f (x) = x * x in
          let t1 = (1, 2 + 2, 3 + f (3)) in
          let t2 = (1, 2 + if true then 1 else 0, 3) in
@@ -155,13 +154,12 @@ interactive ext_test4 :
       >> } }
 
 interactive ext_test5 :
-   sequent { <H> >- compilable{.
-      <:ext<
+   sequent { <H> >- compilable{
+      <:m<
          let t = (1, 2, 3) in
          t[1] <- t[2];
          t
       >> } }
-*)
 
 (*
  * -*-

@@ -10,7 +10,7 @@ MLZFILES =\
 MPFILES =\
         m_doc_comment\
         m_doc_intro\
-	m_doc_intro_fdl\
+        m_doc_intro_fdl\
         m_doc_ir\
         m_doc_parsing\
         m_doc_cps\
@@ -21,7 +21,7 @@ MPFILES =\
         m_doc_x86_regalloc\
         m_doc_x86_opt\
         m_doc_summary\
-	m_doc_summary_fdl\
+        m_doc_summary_fdl\
         m_doc_proposal\
         m_util\
         m_arith\

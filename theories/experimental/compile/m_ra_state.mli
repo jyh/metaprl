@@ -24,7 +24,6 @@
  * @email{jyh@cs.caltech.edu}
  * @end[license]
  *)
-extends Base_theory
 
 (*
  * Debug liveness analysis.

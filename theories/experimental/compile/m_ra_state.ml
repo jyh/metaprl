@@ -25,7 +25,6 @@
  * @end[license]
  * @docoff
  *)
-extends Base_theory
 
 (*
  * Debug liveness analysis.

@@ -24,8 +24,6 @@
  * @email{jyh@cs.caltech.edu}
  * @end[license]
  *)
-extends Base_theory
-
 declare number[i:n]
 
 declare add{'i1; 'i2}

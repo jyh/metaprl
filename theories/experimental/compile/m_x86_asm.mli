@@ -27,8 +27,6 @@
  * @end[license]
  *)
 
-extends Base_theory
-
 (* x86 operands *)
 declare ImmediateNumber[i:n]
 declare ImmediateLabel[label:s]{'R}

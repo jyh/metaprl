@@ -374,6 +374,7 @@ dform reserve_nil_df : parens :: "prec"[prec_comma] :: ReserveNil =
 doc <:doc< Sequent tag for the M language. >>
 
 declare sequent [sequent_arg] { Term : Term >- Term } : Judgment
+dform sequent_arg_df: sequent_arg = subm
 
 doc docoff
 

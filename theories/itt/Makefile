@@ -59,6 +59,7 @@ MPFILES :=\
 	itt_prop_decide\
 	itt_fset\
 	itt_theory\
+	itt_inv_typing\
 	itt_collection\
 	ctt_markov\
 	itt_record_label0\

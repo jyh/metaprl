@@ -1,7 +1,7 @@
-
 include Itt_theory
 include Itt_record_label0
 include Itt_struct3
+include Itt_inv_typing
 
 open Printf
 open Mp_debug
@@ -24,6 +24,7 @@ open Itt_subtype
 open Itt_struct
 open Itt_record_label0
 open Itt_struct3
+open Itt_inv_typing
 
 (*
  * Show that the file is loading.
@@ -157,6 +158,13 @@ interactive record_elim1 'H 'n :
    [wf] sequent[squash]{'H >- 'n IN label } -->
    sequent['ext]{'H >- record{'n;'A} } -->
    sequent['ext]  {'H >- "type"{'A} }
+
+interactive recordTypeElimination{| elim_resource [ThinOption thinT]  |} 'H 'J 'v:
+   sequent[squash]{'H; u:"type"{record{'n;'A}}; 'J['u] >- 'n IN label} -->
+   sequent['ext]  {'H; u:"type"{record{'n;'A}}; v:"type"{'A}; 'J['u] >- 'C['u] } -->
+   sequent['ext]  {'H; u:"type"{record{'n;'A}}; 'J['u] >- 'C['u] }
+
+
 
 (*** Introductions ***)
 

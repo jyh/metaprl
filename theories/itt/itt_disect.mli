@@ -50,6 +50,10 @@ declare "disect"{'A; x. 'B['x]}
  * RULES                                                                *
  ************************************************************************)
 
+rule dintersectionTypeElimination 'H 'J 'a 'v:
+   [wf] sequent [squash] { 'H; u:"type"{.disect{'A; x. 'B['x]}}; 'J['u]  >- 'a IN 'A } -->
+   sequent ['ext] { 'H; u:"type"{.disect{'A; x. 'B['x]}}; v:"type"{'B['a]}; 'J['u] >- 'C['u] } -->
+   sequent ['ext] { 'H; u:"type"{.disect{'A; x. 'B['x]}}; 'J['u] >- 'C['u] }
 
 
 

@@ -96,8 +96,13 @@ open Var
 open Tactic_type
 open Tactic_type.Tacticals
 
+open Base_auto_tactic
+open Base_dtactic
+
+
 open Itt_equal
 open Itt_subtype
+open Itt_struct
 
 (*
  * Show that the file is loading.
@@ -169,18 +174,12 @@ prim dintersectionType {| intro_resource [] |} 'H 'y :
    sequent ['ext] { 'H >- "type"{.disect{'A; x. 'B['x]}} } =
    it
 
-(*
-prim dintersectionInverseType1 'H  disect{'A; x. 'B['x]} :
-   sequent [squash]{ 'H >- "type"{.disect{'A; x. 'B['x]}} } -->
-   sequent ['ext]  { 'H >- "type"{'A} } =
-   it
-
-prim dintersectionInverseType2 'H  disect{'A; x. 'B['x]} 'a:
-   sequent [squash] { 'H >- "type"{.disect{'A; x. 'B['x]}} } -->
-   sequent [squash] { 'H >- 'a IN 'A } -->
-   sequent ['ext] { 'H >- "type"{'B['a]} }  =
-   it
-*)
+prim dintersectionTypeElimination {| elim_resource [ThinOption thinT] |} 'H 'J 'a 'v:
+   [wf] sequent [squash] { 'H; u:"type"{.disect{'A; x. 'B['x]}}; 'J['u]  >- 'a IN 'A } -->
+   ('t['u,'v] :
+   sequent ['ext] { 'H; u:"type"{.disect{'A; x. 'B['x]}}; v:"type"{'B['a]}; 'J['u] >- 'C['u] }) -->
+   sequent ['ext] { 'H; u:"type"{.disect{'A; x. 'B['x]}}; 'J['u] >- 'C['u] } =
+   't['u,it]
 
 (*!
  * @begin[doc]
@@ -227,7 +226,13 @@ prim dintersectionElimination {| elim_resource [] |} 'H 'J  bind{a,b,dumb.'T['a;
    sequent ['ext] { 'H; x: disect{'A; y.'B['y]}; 'J['x];  a:'A; b: 'B['a]  >- 'T['a;'b; it] }) -->
    sequent ['ext] { 'H; x: disect{'A; y.'B['y]}; 'J['x] >- 'T['x;'x; it] } =
    't['x; 'x]
-
+(*
+prim dintersectionElimination {| elim_resource [] |} 'H 'J  bind{a,b.'T['a;'b]}:
+   [main] ('t['a; 'b] :
+   sequent ['ext] { 'H; x: disect{'A; y.'B['y]}; 'J['x];  a:'A; b: 'B['a]  >- 'T['a;'b] }) -->
+   sequent ['ext] { 'H; x: disect{'A; y.'B['y]}; 'J['x] >- 'T['x;'x] } =
+   't['x; 'x]
+*)
 interactive dintersectionElimination2 'H 'J 'x 'a 'b 'v 'w:
    sequent ['ext] { 'H; x: disect{'A; y.'B['y]}; 'J['x];
      a:'A; v: 'a='x in 'A; b: 'B['a]; w: 'b = 'x in 'B['a] >- 'T['x] } -->

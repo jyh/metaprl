@@ -91,15 +91,11 @@ interactive_rw rw_table_test {| reduce |} :
    <-->
    sequent { 'A; <H>; 'B >- 'C }
 
-(*
- * BUG: jyh: someone needs to check that is_context_var returns
- * true for contexts.
 interactive_rw context_rw 'C:
-   'C[[let v = 'e1<||> in 'e2['v]]] <--> (let v = 'e1 in 'C[['e2['v]]])
+   'C[[let v = 'e1<||> in 'e2['v]]] :> Term <--> (let v = 'e1 in 'C[['e2['v]]])
 
 interactive context_rw_tests:
    sequent{ lambda{x.let v = 'x in ('v 'x)}; lambda{x.let v = 1 in ('v 'x)}; lambda{x.let v = 'x in ('v 1)}; lambda{x.let v = 1 in ('v 1)} >- it }
- *)
 
 (*
  * -*-

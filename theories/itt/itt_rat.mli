@@ -168,6 +168,20 @@ rule max_ge_maxIntro :
 	sequent { <H> >- ge_rat{'c;'d} } -->
 	sequent { <H> >- ge_rat{max_rat{'a;'c};max_rat{'b;'d}} }
 
+rule ge_minLeftElim 'H :
+	[wf] sequent { <H> >- 'a in rationals } -->
+	[wf] sequent { <H> >- 'b in rationals } -->
+	[wf] sequent { <H> >- 'c in rationals } -->
+	sequent { <H>; ge_rat{'a; 'c}; ge_rat{'b; 'c}; <J> >- 'C } -->
+	sequent { <H>; ge_rat{min_rat{'a;'b}; 'c}; <J> >- 'C }
+
+rule ge_maxRightElim 'H :
+	[wf] sequent { <H> >- 'a in rationals } -->
+	[wf] sequent { <H> >- 'b in rationals } -->
+	[wf] sequent { <H> >- 'c in rationals } -->
+	sequent { <H>; ge_rat{'a;'b}; ge_rat{'a;'c}; <J> >- 'C } -->
+	sequent { <H>; ge_rat{'a;max_rat{'b;'c}}; <J> >- 'C }
+
 rule min_ge_minIntro :
 	[wf] sequent { <H> >- 'a in rationals } -->
 	[wf] sequent { <H> >- 'b in rationals } -->

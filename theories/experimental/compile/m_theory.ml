@@ -27,6 +27,19 @@
 extends M_cps
 extends M_closure
 
+open M_cps
+open M_closure
+
+open Tactic_type.Tacticals
+open Tactic_type.Conversionals
+
+let compileT =
+   (* CPS conversion *)
+   rw cpsC 0
+
+   (* Closure conversion *)
+   thenT closeT
+
 (*!
  * @docoff
  *

@@ -10,9 +10,6 @@ INCLUDE := -I . -I ../../tactic -I ../../ocaml -I ../../base
 OCAMLDEPFLAGS := -prl
 
 # Library files
-MLZFILES :=\
-	m_theory
-
 MPFILES :=\
 	m_ir\
 	m_cps\

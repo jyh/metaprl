@@ -350,6 +350,14 @@ interactive subtypeTransitive 'C :
    sequent { <H> >- 'C subtype 'B } -->
    sequent { <H> >- 'A subtype 'B }
 
+interactive subtypeTransitiveHyp1 'H :
+	sequent { <H>; w: 'A subtype 'C; <J['w]> >- 'C subtype 'B } -->
+	sequent { <H>; w: 'A subtype 'C; <J['w]> >- 'A subtype 'B }
+
+interactive subtypeTransitiveHyp2 'H :
+	sequent { <H>; w: 'C subtype 'B; <J['w]> >- 'A subtype 'C } -->
+	sequent { <H>; w: 'C subtype 'B; <J['w]> >- 'A subtype 'B }
+
 (*
  * H >- Ui ext subtype(A; B)
  * by subtypeFormation

@@ -185,6 +185,18 @@ interactive field_elim {| elim [] |} 'H :
 
 doc <:doc<
    @begin[doc]
+   @modsubsection{Auxiliary properties}
+
+	Some properties we need to establish before we can prove that field has a
+	multiplicative subgroup over car0
+   @end[doc]
+>>
+
+interactive fieldUnitInCar0 'H :
+	sequent { <H>; F: field[i:l]; <J['F]> >- 'F^"1" in 'F^car0 }
+
+doc <:doc<
+   @begin[doc]
    @modsubsection{Hierarchy}
 
    A field is a ring and group wrt to multiplicative operations over car0.

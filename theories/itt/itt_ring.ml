@@ -149,21 +149,29 @@ doc <:doc<
 define unfold_prering1 : prering[i:l] <-->
    bisect{monoid[i:l]; aabelg[i:l]}
 
-define unfold_isDistrib1 : isDistrib{'R} <-->
+define unfold_isDistrib : isDistrib{'R} <-->
 	all a: 'R^car. all b: 'R^car. all c: 'R^car. 'a *['R] ('b +['R] 'c) = ('a *['R] 'b) +['R] ('a *['R] 'c) in 'R^car
 
+define unfold_isNonDegenerate : isNonDegenerate{'R} <-->
+	('R^"0" <> 'R^"1" in 'R^car)
+
+define unfold_isRing1 : isRing{'R} <-->
+	isDistrib{'R} & isNonDegenerate{'R}
+
 define unfold_ring1 : ring[i:l] <-->
-   {R: prering[i:l] | isDistrib{'R}}
+   {R: prering[i:l] | isRing{'R}}
 doc docoff
 
 let unfold_prering = unfold_prering1 (*thenC addrC [0] unfold_monoid*)
-let unfold_isDistrib = unfold_isDistrib1
-let unfold_ring = unfold_ring1 thenC addrC [0] unfold_prering thenC addrC [1] unfold_isDistrib
+let unfold_isRing = unfold_isRing1 thenC (addrC [0] unfold_isDistrib) thenC (addrC [1] unfold_isNonDegenerate)
+let unfold_ring = unfold_ring1 thenC addrC [0] unfold_prering thenC addrC [1] unfold_isRing
 
 let fold_prering1 = makeFoldC << prering[i:l] >> unfold_prering1
 let fold_prering = makeFoldC << prering[i:l] >> unfold_prering
-let fold_isDistrib1 = makeFoldC << isDistrib{'R} >> unfold_isDistrib1
 let fold_isDistrib = makeFoldC << isDistrib{'R} >> unfold_isDistrib
+let fold_isNonDegenerate = makeFoldC << isNonDegenerate{'R} >> unfold_isNonDegenerate
+let fold_isRing1 = makeFoldC << isRing{'R} >> unfold_isRing1
+let fold_isRing = makeFoldC << isRing{'R} >> unfold_isRing
 let fold_ring1 = makeFoldC << ring[i:l] >> unfold_ring1
 let fold_ring = makeFoldC << ring[i:l] >> unfold_ring
 
@@ -202,6 +210,22 @@ interactive isDistrib_wf {| intro [intro_typeinf <<'R>>] |} prering[i:l] :
    sequent { <H> >- 'R in prering[i:l] } -->
    sequent { <H> >- isDistrib{'R} Type }
 
+interactive zeroInPrering {| intro [intro_typeinf <<'R>>] |} prering[i:l] :
+	sequent { <H> >- 'R in prering[i:l] } -->
+	sequent { <H> >- 'R^"0" in 'R^car }
+
+interactive unitInPrering {| intro [intro_typeinf <<'R>>] |} prering[i:l] :
+	sequent { <H> >- 'R in prering[i:l] } -->
+	sequent { <H> >- 'R^"1" in 'R^car }
+
+interactive isNonDegenerate_wf {| intro [intro_typeinf <<'R>>] |} prering[i:l] :
+   sequent { <H> >- 'R in prering[i:l] } -->
+   sequent { <H> >- isNonDegenerate{'R} Type }
+
+interactive isRing_wf {| intro [intro_typeinf <<'R>>] |} prering[i:l] :
+   sequent { <H> >- 'R in prering[i:l] } -->
+   sequent { <H> >- isRing{'R} Type }
+
 interactive ring_wf {| intro [] |} :
    sequent { <H> >- "type"{ring[i:l]} }
 
@@ -223,10 +247,11 @@ interactive prering_elim {| elim [] |} 'H :
 interactive ring_intro {| intro [] |} :
    [wf] sequent { <H> >- 'R in prering[i:l] } -->
    [main] sequent { <H> >- isDistrib{'R} } -->
+   [main] sequent { <H> >- isNonDegenerate{'R} } -->
    sequent { <H> >- 'R in ring[i:l] }
 
 interactive ring_elim {| elim [] |} 'H :
-   sequent { <H>; R: prering[i:l]; v: isDistrib{'R}; <J['R]> >- 'C['R] } -->
+   sequent { <H>; R: prering[i:l]; v: isDistrib{'R}; w: isNonDegenerate{'R}; <J['R]> >- 'C['R] } -->
    sequent { <H>; R: ring[i:l]; <J['R]> >- 'C['R] }
 
 doc <:doc<

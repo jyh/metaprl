@@ -31,6 +31,7 @@
  *)
 
 extends Itt_group
+extends Itt_bisect
 
 open Tactic_type.Conversionals
 
@@ -41,9 +42,21 @@ open Tactic_type.Conversionals
 declare agroup[i:l]
 declare aabelg[i:l]
 
-declare prering[i:l]
-declare isDistrib{'R}
-declare ring[i:l]
+define unfold_prering1 : prering[i:l] <-->
+   bisect{monoid[i:l]; aabelg[i:l]}
+
+define unfold_isDistrib : isDistrib{'R} <-->
+	all a: 'R^car. all b: 'R^car. all c: 'R^car. 'a *['R] ('b +['R] 'c) = ('a *['R] 'b) +['R] ('a *['R] 'c) in 'R^car
+
+define unfold_isNonDegenerate : isNonDegenerate{'R} <-->
+	('R^"0" <> 'R^"1" in 'R^car)
+
+define unfold_isRing1 : isRing{'R} <-->
+	isDistrib{'R} & isNonDegenerate{'R}
+
+define unfold_ring1 : ring[i:l] <-->
+   {R: prering[i:l] | isRing{'R}}
+
 declare Z
 
 (************************************************************************
@@ -51,14 +64,16 @@ declare Z
  ************************************************************************)
 
 topval unfold_prering : conv
-topval unfold_isDistrib : conv
+topval unfold_isRing : conv
 topval unfold_ring : conv
 topval unfoldZ : conv
 
 topval fold_prering1 : conv
 topval fold_prering : conv
-topval fold_isDistrib1 : conv
 topval fold_isDistrib : conv
+topval fold_isNonDegenerate : conv
+topval fold_isRing1 : conv
+topval fold_isRing : conv
 topval fold_ring1 : conv
 topval fold_ring : conv
 topval foldZ : conv

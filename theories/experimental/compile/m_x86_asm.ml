@@ -97,7 +97,7 @@ doc <:doc<
 
    This presents an interesting problem for the x86, since it
    uses the two-operand instruction form.  To get around this,
-   we define a normal two-operand instruction set for _memory_
+   we define a normal two-operand instruction set for @emph{memory}
    operands.  Then we define a three-operand set for register
    destination operands.  Again, the allocator is responsible
    for making sure the <<'dst>> and the first <<'src>> register are the
@@ -112,7 +112,7 @@ doc <:doc<
    @item{<<'Inst2['opname]>>: this is a normal two-operand instruction}
    @item{<<'Inst3['opname]>>: a MUL/DIV instruction}
    @item{$@tt[Shift][<<'opname>>]$: a shift instruction}
-   @item{$@tt[Cmp][<<'opname>>]$: a comparison; both operands are sources}
+   @item{$@tt[Cmp][<<'opname>>]$: a comparison@; both operands are sources}
    @item{$@tt[Set][<<'opname>>]$: the set/cc instruction}
    @end[itemize]
    @end[doc]

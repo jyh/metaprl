@@ -237,17 +237,13 @@ doc <:doc<
    R, frame (length = i + 1)(v :: args) in
    ...
    @end[verbatim]
+ 
+   Variable closure is a beta-rewrite.
    @end[doc]
 >>
-
-(*
- * Variable closure is a beta-rewrite.
- *)
 prim_rw reduce_beta : CloseVar{v. 'e['v]; 'a} <--> 'e['a]
 
-(*
- * This is the main function to lift out free vars.
- *)
+doc <:doc< @doc{This is the main function to lift out free variables.} >>
 declare Length{'length}
 
 prim_rw wrap_length : Length{meta_num[i:n]} <--> Length[i:n]
@@ -262,6 +258,10 @@ prim_rw close_frame :
             R2, frame2. LetAtom{AtomVar{'a}; v. 'body['v; 'R2; 'frame2]};
             Length{meta_sum[i:n, 1:n]};
             AllocTupleCons{AtomVar{'a}; 'tuple}}
+
+doc docoff
+
+dform length_df : Length{'t} = math_it["Length"] `"(" 't `")"
 
 doc <:doc<
    @begin[doc]

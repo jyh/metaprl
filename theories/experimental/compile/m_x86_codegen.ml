@@ -59,11 +59,11 @@ doc <:doc<
    @item{<<ASM{'e}>> represents the translation of IR @emph{expressions} into sequences
    of assembly instructions.}
    @item{<<ASM{'a; v. 'e['v]}>> represents the translation of an IR @emph{atom} into
-   an assembly operand, which in turn is substituted for variable v in e[v].}
+   an assembly operand, which in turn is substituted for variable $v$ in $e[v]$.}
    @item{<<ASM{'args1; 'args2; v. 'e['v]}>> represents the translation of IR function @emph{arguments} into
    assembly operands}
    @item{<<ASM{'R; 'e}>> represents the translation of the mutually recursive IR @emph{functions}
-   in record R and the rest of the program.}
+   in record $R$ and the rest of the program.}
    @end[itemize]
    @end[doc]
 >>
@@ -432,8 +432,8 @@ prim_rw asm_reserve_2 {| reduce |} :
 doc <:doc<
    @begin[doc]
    The translation of @tt[LetAtom] is straightforward: we
-   first translate the atom a into an operand v1, which is then moved
-   into v.
+   first translate the atom a into an operand <<'v1>>, which is then moved
+   into <<'v>>.
    @end[doc]
 >>
 prim_rw asm_let_atom {| reduce |} :
@@ -478,7 +478,7 @@ doc <:doc<
    @begin[doc]
    Reading from the memory involves assembling the pointer to the
    appropriate block and the index within that block. We then fetch
-   the value from the specified memory location and move it into v.
+   the value from the specified memory location and move it into <<'v>>.
    @end[doc]
 >>
 prim_rw asm_let_subscript_1 {| reduce |} :

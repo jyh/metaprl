@@ -142,6 +142,8 @@ let resource reduce += [
 let inlineT =
    onAllHypsT (fun i -> tryT (rw reduceC i)) thenT rw reduceC 0
 
+dform int_df : MetaInt{'t} = math_it["Meta"] `"[" 't `"]"
+
 (*
  * -*-
  * Local Variables:

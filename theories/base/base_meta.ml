@@ -149,6 +149,12 @@ ml_rw reduce_meta_lt_str : ('goal : meta_lt[a:s, b:s]{'tt; 'ff}) = lt goal
 ml_rw reduce_meta_lt_tok : ('goal : meta_lt[a:t, b:t]{'tt; 'ff}) = lt goal
 ml_rw reduce_meta_lt_lev : ('goal : meta_lt[a:l, b:l]{'tt; 'ff}) = lt goal
 
+dform num_df : meta_num[n:n] = slot[n:n] subm
+dform sum_df : meta_sum[m:n,n:n] = slot[m:n] `" +" subm space slot[n:n]
+dform diff_df : meta_diff[m:n,n:n] = slot[m:n] `" -" subm space slot[n:n]
+dform quot_df : meta_quot[m:n,n:n] = slot[m:n] `" " div subm space slot[n:n]
+dform prod_df : meta_prod[m:n,n:n] = slot[m:n] `" *" subm space slot[n:n]
+
 (*
  * -*-
  * Local Variables:

@@ -1,4 +1,4 @@
-OCAMLINCLUDES = $(OCAMLINCLUDES) -I ../tactic -I ../ocaml
+OCAMLINCLUDES += $(addprefix -I , $(SUPPORT_DIRS))
 
 # Common files
 MLZFILES =\
@@ -6,11 +6,7 @@ MLZFILES =\
 
 # Library files
 MPFILES =\
-	typeinf\
 	base_trivial\
-	base_auto_tactic\
-	base_dtactic\
-	base_cache\
 	base_meta\
 	base_rewrite\
 	base_theory
@@ -25,3 +21,5 @@ clean:
 
 realclean:
     $(REALCLEAN)
+
+all: theory$(LIB_SUFFIX)

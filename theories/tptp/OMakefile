@@ -1,4 +1,7 @@
-OCAMLINCLUDES = $(OCAMLINCLUDES) -I ../itt -I ../boot -I ../tactic -I ../ocaml -I ../base
+OCAMLINCLUDES +=\
+	$(addprefix -I , $(SUPPORT_DIRS))\
+	-I ../itt\
+	-I ../base
 
 MLZFILES =\
 	tptp_type\
@@ -9,6 +12,11 @@ LMFILES =\
 	tptp_type\
 	tptp_parse\
 	tptp_lex
+
+#
+# Ocamldep usually forgests this dependency
+#
+tptp_lex.cmi: tptp_parse.cmi
 
 OCamlLibrary(tptp, $(LMFILES))
 
@@ -28,3 +36,5 @@ clean:
 
 realclean:
     $(REALCLEAN)
+
+all: theory$(LIB_SUFFIX)

@@ -1,3 +1,9 @@
+#
+# Include support
+#
+OCAMLINCLUDES +=\
+	$(addprefix -I , $(SUPPORT_DIRS))
+
 # Library files
 MPFILES = \
    mfir_auto \
@@ -33,3 +39,5 @@ clean:
 
 realclean:
     $(REALCLEAN)
+
+all: theory$(LIB_SUFFIX)

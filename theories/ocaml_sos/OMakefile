@@ -1,7 +1,5 @@
 OCAMLINCLUDES =\
-	$(OCAMLINCLUDES)\
-	-I ../tactic\
-	-I ../ocaml\
+	$(addprefix -I , $(SUPPORT_DIRS))\
 	-I ../base
 
 # Common files
@@ -31,3 +29,5 @@ clean:
 
 realclean:
     $(REALCLEAN)
+
+all: theory$(LIB_SUFFIX)

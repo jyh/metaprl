@@ -1,5 +1,6 @@
 extends Cic_lambda
 
+open Refiner.Refiner.Term
 open Tactic_type.Conversionals
 
 rule collapse_base :
@@ -77,6 +78,16 @@ rewrite indCarryOut :
 	      sequent [IndConstrs] { <Hc> >- 't<||> } } } <-->
 	't<||>
 
+rewrite indWrap
+		sequent [IndParams] { <Hp> >-
+			sequent [IndTypes] { <Hi> >-
+				sequent [IndConstrs] { <Hc> >- 'aux } } } :
+	't <-->
+   sequent [IndParams] { <Hp> >-
+	   sequent [IndTypes] { <Hi> >-
+	      sequent [IndConstrs] { <Hc> >- 't<||> } } }
+
+topval indWrapC : term -> conv -> conv
 
 (* implementation of the first part of the Coq's Ind-Const rule *)
 rule ind_ConstDef 'Hi :
@@ -99,6 +110,15 @@ declare IndConstrsSubst
 declare IndParamsSubstApp
 declare IndTypesSubstApp
 declare IndConstrsSubstApp
+
+topval fold_substStart : conv
+topval fold_substStep : conv
+topval fold_substFinal : conv
+topval fold_appStart : conv
+topval fold_appStep : conv
+topval fold_appFinal : conv
+topval fold_substApp : conv
+topval fold_subst : conv
 
 (* implementation of the second part of the Coq's Ind-Const rule *)
 rule ind_ConstConstrs 'Hc :

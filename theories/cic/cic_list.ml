@@ -10,14 +10,15 @@ define unfold_nil: nil <-->
 	   sequent [IndTypes] { List: Set >-
 		   sequent [IndConstrs] { nil: 'List; cons: 'B -> 'List -> 'List >- 'nil}}}
 
-define unfold_cons: cons{'a; 'l} <-->
+define unfold_cons: cons <-->
 	sequent [IndParams] { B: Set >-
 	   (sequent [IndTypes] { List: Set >-
-		   (sequent [IndConstrs] { nil: 'List; cons: 'B -> 'List -> 'List >- 'cons 'a 'l })})}
+		   (sequent [IndConstrs] { nil: 'List; cons: 'B -> 'List -> 'List >- 'cons })})}
 
 dform list_df : List = `"List"
 dform nil_df : nil = `"[]"
-dform cons_df : cons{'a; 'l} = slot{'a} `"::" slot{'l}
+dform cons_df : cons = `"cons"
+dform cons_df : apply{apply{cons; 'a}; 'l} = slot{'a} `"::" slot{'l}
 
 interactive listDef_wf :
 	sequent { <H> >-
@@ -29,13 +30,7 @@ interactive list_wf :
    sequent { <H> >- List in (Set -> Set) }
 
 interactive nil_wf :
-   sequent { <H> >- 'C in Set } -->
-   sequent { <H> >- nil in (List 'C) }
+   sequent { <H> >- nil in dfun{Set; C.(List 'C)} }
 
 interactive cons_wf :
-	sequent { <H> >- 'C in Set } -->
-	sequent { <H> >- 'l in (List 'C) } -->
-	sequent { <H> >- 'a in 'C } -->
-	sequent { <H> >- cons{'a; 'l} in (List 'C) }
-
-
+	sequent { <H> >- cons in dfun{Set; C.('C -> (List 'C) -> (List 'C))} }

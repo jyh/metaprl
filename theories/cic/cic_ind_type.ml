@@ -1,5 +1,4 @@
 extends Cic_lambda
-open Top_conversionals
 open Cic_lambda
 
 open Refiner.Refiner.TermOp
@@ -7,6 +6,9 @@ open Refiner.Refiner.TermMan
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermType
 open Term_sig
+
+open Tactic_type.Conversionals
+open Top_conversionals
 
 prim collapse_base :
 	sequent { <H> >- 'C } -->
@@ -149,6 +151,18 @@ prim_rw indSubstDef 'Hi :
 				   (sequent [IndTypes] { <Hi>; x:'T<|Hp|>; <Ji<|Hp|> > >-
 				      sequent [IndConstrs] { <Hc['x]> >- 'x}})}] })})}
 
+interactive_rw indFoldDef 'Hi bind{x.'t['x]} :
+   sequent [IndParams] { <Hp> >-
+	   (sequent [IndTypes] { <Hi>; x1:'T<|Hp|>; <Ji<|Hp|> > >-
+		   (sequent [IndConstrs] { <Hc['x1]> >-
+			   't[sequent [IndParams] { <Hp> >-
+				   (sequent [IndTypes] { <Hi>; x:'T<|Hp|>; <Ji<|Hp|> > >-
+				      sequent [IndConstrs] { <Hc['x]> >- 'x}})}] })})} <-->
+	sequent [IndParams] { <Hp> >-
+	   (sequent [IndTypes] { <Hi>; x:'T<|Hp|>; <Ji<|Hp|> > >-
+		   (sequent [IndConstrs] { <Hc['x]> >- 't['x]})})}
+
+
 (* for constructors (names, types) *)
 prim_rw indSubstConstr 'Hc :
    sequent [IndParams] { <Hp> >-
@@ -161,6 +175,18 @@ prim_rw indSubstConstr 'Hc :
 				   sequent [IndTypes] { <Hi> >-
 				      sequent [IndConstrs] { <Hc>; c:'C<|Hi; Hp|>; < Jc<|Hi; Hp|> > >- 'c}}}]}}}
 
+interactive_rw indFoldConstr 'Hc bind{x.'t['x]} :
+   sequent [IndParams] { <Hp> >-
+	   sequent [IndTypes] { <Hi> >-
+		   sequent [IndConstrs] { <Hc>; c1:'C<|Hi; Hp|>; < Jc<|Hi; Hp|> > >-
+				't[ sequent [IndParams] { <Hp> >-
+				   sequent [IndTypes] { <Hi> >-
+				      sequent [IndConstrs] { <Hc>; c:'C<|Hi; Hp|>; < Jc<|Hi; Hp|> > >- 'c}}}]}}} <-->
+	sequent [IndParams] { <Hp> >-
+	   sequent [IndTypes] { <Hi> >-
+		   sequent [IndConstrs] { <Hc>; c:'C<|Hi;Hp|>; < Jc<|Hi;Hp|> > >- 't['c]}}}
+
+
 (* carry out ground terms from the Ind *)
 prim_rw indCarryOut :
    sequent [IndParams] { <Hp> >-
@@ -168,6 +194,23 @@ prim_rw indCarryOut :
 	      sequent [IndConstrs] { <Hc> >- 't<||> } } } <-->
 	't<||>
 
+interactive_rw indWrap
+		sequent [IndParams] { <Hp> >-
+			sequent [IndTypes] { <Hi> >-
+				sequent [IndConstrs] { <Hc> >- 'aux } } } :
+	't <-->
+   sequent [IndParams] { <Hp> >-
+	   sequent [IndTypes] { <Hi> >-
+	      sequent [IndConstrs] { <Hc> >- 't<||> } } }
+
+let indWrapC def cnv = funC (fun e ->
+	let p = env_arg e in
+	let es={sequent_args=def; sequent_hyps=(SeqHyp.of_list []); sequent_goals=(SeqGoal.of_list [def])} in
+	let s=mk_sequent_term es in
+	let s'=apply_rewrite p cnv s in
+	let def'=SeqGoal.get (explode_sequent s').sequent_goals 0 in
+	indWrap def'
+)
 
 (* implementation of the first part of the Coq's Ind-Const rule *)
 prim ind_ConstDef 'Hi :
@@ -196,6 +239,10 @@ prim_rw applHBase {| reduce |} :
 prim_rw applHStep {| reduce |} :
    sequent { x:'T; <H> >- 'S } <-->
 	sequent { <H> >- apply{'S;'T}}
+
+let fold_applHBase = makeFoldC <<sequent [applH] { >- 'S }>> applHBase
+let fold_applHStep = makeFoldC <<sequent { x:'T; <H> >- 'S }>> applHStep
+let fold_applH = fold_applHBase thenC (repeatC fold_applHStep)
 
 (* declaration of multiple substitution C[I/(I p1)...pn] *)
 declare IndParamsSubst
@@ -261,6 +308,11 @@ prim_rw substStart {| reduce |} :
 			sequent { >-
 				sequent [IndConstrsSubstAux] { <Hc> >- 'C } } } }
 
+let fold_substStart = makeFoldC
+	<<sequent [IndParamsSubst] { <Hp> >-
+	   sequent [IndTypesSubst] { <Hi> >-
+         sequent [IndConstrsSubst] { <Hc> >- 'C } } }>> substStart
+
 prim_rw substStep {| reduce |} :
 	sequent [IndParamsSubstAux] { <Hp> >-
 	   sequent [IndTypesSubstAux] { <Hi>; I: 'A >-
@@ -271,6 +323,12 @@ prim_rw substStep {| reduce |} :
 			sequent { I: 'A; <Ji> >-
 				sequent [IndConstrsSubstApp] { <Hc> >- 'C['I] } } } }
 
+let fold_substStep = makeFoldC
+	<<sequent [IndParamsSubstAux] { <Hp> >-
+	   sequent [IndTypesSubstAux] { <Hi>; I: 'A >-
+			sequent { <Ji> >-
+				sequent [IndConstrsSubstAux] { <Hc> >- 'C['I] } } } }>> substStep
+
 prim_rw substFinal {| reduce |} :
 	sequent [IndParamsSubstAux] { <Hp> >-
 	   sequent [IndTypesSubstAux] { >-
@@ -279,6 +337,12 @@ prim_rw substFinal {| reduce |} :
 	sequent [IndParams] { <Hp> >-
 	   sequent [IndTypes] { <Ji> >-
 			sequent [IndConstrs] { <Hc> >- 'C } } }
+
+let fold_substFinal = makeFoldC
+	<<sequent [IndParamsSubstAux] { <Hp> >-
+	   sequent [IndTypesSubstAux] { >-
+			sequent { <Ji> >-
+				sequent [IndConstrsSubstAux] { <Hc> >- 'C } } } }>> substFinal
 
 prim_rw appStart {| reduce |} :
 	sequent [IndParamsSubstApp] { <Hp> >-
@@ -290,6 +354,12 @@ prim_rw appStart {| reduce |} :
 			sequent [IndTypesSubstAppAux] { <Hi> >-
 				sequent { <Ji> >-
 					sequent [IndConstrsSubstAppAux] { <Hc> >- 'C } } } } }
+
+let fold_appStart = makeFoldC
+	<<sequent [IndParamsSubstApp] { <Hp> >-
+	   sequent [IndTypesSubstApp] { <Hi> >-
+			sequent { <Ji> >-
+				sequent [IndConstrsSubstApp] { <Hc> >- 'C } } } }>> appStart
 
 prim_rw appStep {| reduce |} :
 	sequent [IndParamsSubstAppAux] { <Hp>; p: 'P >-
@@ -303,6 +373,13 @@ prim_rw appStep {| reduce |} :
 				sequent { I: 'A; <Ji> >-
 					sequent [IndConstrsSubstAppAux] { <Hc> >- 'C['I 'p] } } } } }
 
+let fold_appStep = foldC
+	<<sequent [IndParamsSubstAppAux] { <Hp>; p: 'P >-
+		sequent { <Jp> >-
+			sequent [IndTypesSubstAppAux] { <Hi> >-
+				sequent { I: 'A; <Ji> >-
+					sequent [IndConstrsSubstAppAux] { <Hc> >- 'C['I] } } } } }>> appStep
+
 prim_rw appFinal {| reduce |} :
 	sequent [IndParamsSubstAppAux] { >-
 		sequent { <Jp> >-
@@ -313,6 +390,18 @@ prim_rw appFinal {| reduce |} :
 		sequent [IndTypesSubstAux] { <Hi> >-
 			sequent { <Ji> >-
 				sequent [IndConstrsSubstAux] { <Hc> >- 'C } } } }
+
+let fold_appFinal = makeFoldC
+	<<sequent [IndParamsSubstAppAux] { >-
+		sequent { <Jp> >-
+			sequent [IndTypesSubstAppAux] { <Hi> >-
+				sequent { <Ji> >-
+					sequent [IndConstrsSubstAppAux] { <Hc> >- 'C } } } } }>> appFinal
+
+let fold_substApp = fold_appStart thenC (repeatC fold_appStep) thenC fold_appFinal
+let fold_subst = fold_substStart thenC
+						(repeatC (fold_substStep thenC fold_substApp)) thenC
+						fold_substFinal
 
 (* implementation of the second part of the Coq's Ind-Const rule *)
 prim ind_ConstConstrs 'Hc :

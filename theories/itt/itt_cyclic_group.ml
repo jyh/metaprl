@@ -120,6 +120,16 @@ dform cycSubg_df : except_mode[src] :: cycSubg[i:l]{'s; 'g; 'a} =
    math_cycSubg{slot[i:l]; 's; 'g; 'a}
 
 (************************************************************************
+ * REDUCTIONS                                                           *
+ ************************************************************************)
+
+interactive_rw reduce_group_power_0 : group_power{'g; 'a; 0} <--> ('g^"1")
+
+let resource reduce +=
+   [<< group_power{'g; 'a; 0} >>, reduce_group_power_0;
+    << group_power{'g; 'a; number[n:n]} >>, unfold_group_power]
+
+(************************************************************************
  * RULES                                                                *
  ************************************************************************)
 
@@ -248,36 +258,6 @@ interactive cycGroup_abelian {| intro [AutoMustComplete] |} 'H :
    [main] sequent ['ext] { 'H >- cycGroup{'g} } -->
    sequent ['ext] { 'H >- 'g in abelg[i:l] }
 (*! @docoff *)
-
-(*interactive smallest_positive_elim {| elim [] |} 'H 'J :
-   sequent ['ext] { 'H; x: exst a: int. ('a > 0 & 'P['a]); 'J['x]; y: exst u: int. ('u > 0 & 'P['u] & all b: int. (('b > 0 & 'P['b]) => 'b < 'u)) >- 'C['x] } -->
-   sequent ['ext] { 'H; x: exst a: int. ('a > 0 & 'P['a]); 'J['x] >- 'C['x] }
-*)
-
-interactive positive_rule1 {| intro [] |} 'H :
-   [wf] sequent [squash] { 'H; a: int >- "type"{'P['a]} } -->
-   [wf] sequent [squash] { 'H >- 'n in int } -->
-   [wf] sequent ['ext] { 'H >- 'n > 0 } -->
-   [decidable] sequent ['ext] { 'H; a: int >- decidable{'P['a]} } -->
-   sequent ['ext] { 'H >- (all b: int. ('b > 0 & 'b <= 'n => not{'P['b]})) or (exst u: int. ('u > 0 & 'u <= 'n & 'P['u] & all b: int. (('b > 0 & 'P['b]) => 'b >= 'u))) }
-
-let positiveRule1T p =
-   positive_rule1 (hyp_count_addr p) p
-
-interactive smallest_positive {| intro [] |} 'H :
-   [wf] sequent [squash] { 'H; a: int >- "type"{'P['a]} } -->
-   [decidable] sequent ['ext] { 'H; a: int >- decidable{'P['a]} } -->
-   [main] sequent ['ext] { 'H >- exst a: int. ('a > 0 & 'P['a]) } -->
-   sequent ['ext] { 'H >- exst u: int. ('u > 0 & 'P['u] & all b: int. (('b > 0 & 'P['b]) => 'b >= 'u)) }
-
-let positiveRule2T p =
-   smallest_positive (hyp_count_addr p) p
-
-interactive int_div_rem {| intro [] |} 'H :
-   sequent [squash] { 'H >- 'm in int } -->
-   sequent [squash] { 'H >- 'k in int } -->
-   sequent ['ext] { 'H >- 'k > 0 } -->
-   sequent ['ext] { 'H >- exst q: int. exst r: nat. (('m = 'k *@ 'q +@ 'r in int) & 'r < 'k) }
 
 (*!
  * @begin[doc]

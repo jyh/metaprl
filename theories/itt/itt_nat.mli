@@ -11,4 +11,11 @@ define unfoldInd : ind{'n; 'base; k,l. 'up['k;'l]} <-->
 
 
 
+(************************************************************************
+ * TACTICS                                                              *
+ ************************************************************************)
+
 topval natBackInductionT : term -> tactic
+
+topval positiveRule1T : tactic
+topval positiveRule2T : tactic

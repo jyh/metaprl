@@ -54,19 +54,23 @@ extends Itt_int_arith
 
 open Printf
 open Mp_debug
-open Refiner.Refiner
+open Refiner.Refiner.TermType
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
+open Refiner.Refiner.TermAddr
 open Refiner.Refiner.TermMan
 open Refiner.Refiner.TermSubst
 open Refiner.Refiner.Refine
 open Refiner.Refiner.RefineError
 open Mp_resource
+open Simple_print
 
 open Tactic_type
 open Tactic_type.Tacticals
-open Var
+open Tactic_type.Sequent
+open Tactic_type.Conversionals
 open Mptop
+open Var
 
 open Base_dtactic
 open Base_auto_tactic
@@ -171,3 +175,42 @@ let natBackInductionT n p =
    in
       natBackInduction (Sequent.hyp_count_addr p) n bind p
 
+
+(*
+ * Some applications
+ *)
+
+interactive int_div_rem {| intro [] |} 'H :
+   sequent [squash] { 'H >- 'm in int } -->
+   sequent [squash] { 'H >- 'k in int } -->
+   sequent ['ext] { 'H >- 'k > 0 } -->
+   sequent ['ext] { 'H >- exst q: int. exst r: nat. (('m = 'k *@ 'q +@ 'r in int) & 'r < 'k) }
+
+(*
+ * If there is a positive number x such that P[x], then there is
+ * a smallest positive number k such that P[k], as long as P[y]
+ * is well-formed and decidable for any integer y.
+ *)
+interactive positive_rule1 {| intro [] |} 'H :
+   [wf] sequent [squash] { 'H; a: int >- "type"{'P['a]} } -->
+   [wf] sequent [squash] { 'H >- 'n in int } -->
+   [wf] sequent ['ext] { 'H >- 'n > 0 } -->
+   [decidable] sequent ['ext] { 'H; a: int >- decidable{'P['a]} } -->
+   sequent ['ext] { 'H >- (all b: int. ('b > 0 & 'b <= 'n => not{'P['b]})) or (exst u: int. ('u > 0 & 'u <= 'n & 'P['u] & all b: int. (('b > 0 & 'P['b]) => 'b >= 'u))) }
+
+let positiveRule1T p =
+   positive_rule1 (hyp_count_addr p) p
+
+interactive smallest_positive {| intro [] |} 'H :
+   [wf] sequent [squash] { 'H; a: int >- "type"{'P['a]} } -->
+   [decidable] sequent ['ext] { 'H; a: int >- decidable{'P['a]} } -->
+   [main] sequent ['ext] { 'H >- exst a: int. ('a > 0 & 'P['a]) } -->
+   sequent ['ext] { 'H >- exst u: int. ('u > 0 & 'P['u] & all b: int. (('b > 0 & 'P['b]) => 'b >= 'u)) }
+
+let positiveRule2T p =
+   smallest_positive (hyp_count_addr p) p
+
+(*interactive smallest_positive_elim {| elim [] |} 'H 'J :
+   sequent ['ext] { 'H; x: exst a: int. ('a > 0 & 'P['a]); 'J['x]; y: exst u: int. ('u > 0 & 'P['u] & all b: int. (('b > 0 & 'P['b]) => 'b < 'u)) >- 'C['x] } -->
+   sequent ['ext] { 'H; x: exst a: int. ('a > 0 & 'P['a]); 'J['x] >- 'C['x] }
+*)

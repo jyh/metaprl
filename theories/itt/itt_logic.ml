@@ -660,7 +660,7 @@ let moveToConclVarsT vars p =
       else
          match SeqHyp.get hyps (i - 1) with
             Hypothesis (v, hyp) ->
-               if List.mem v vars or intersects vars (free_vars hyp) then
+               if (List.mem v vars) or (is_some_var_free vars hyp) then
                   collect (i + 1) (v :: vars) ((i, v, hyp) :: indices)
                else
                   collect (i + 1) vars indices

@@ -450,7 +450,10 @@ let equalityAssumT = argfunT (fun i p ->
    let t' = dest_type_term (Sequent.concl p) in
    let t,a,b = dest_equal (TermMan.nth_concl (Sequent.nth_assum p i) 1) in
       if alpha_equal t t' then
-         equalTypeT a b thenT nthAssumT i else failT)
+         equalTypeT a b thenT nthAssumT i
+      else if alpha_equal t' a && is_univ_term t then
+         univTypeT t thenT nthAssumT i
+      else failT)
 
 let autoAssumT i =
    nthAssumT i orelseT equalityAssumT i

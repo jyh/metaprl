@@ -2890,9 +2890,9 @@ P	p1922	Var _$item_bnd4
 O	o1922	var p1922
 T	t1922	o1922
 B	b1922	t1922
-P	p1933	String unfold_is_same_op
-NItt_synt_bterm!is_same_op	is_same_op	is_same_op Itt_synt_bterm
-O	o1934	is_same_op
+P	p1933	String unfold_is_same_op_of
+NItt_synt_bterm!is_same_op_of	is_same_op_of	is_same_op_of Itt_synt_bterm
+O	o1934	is_same_op_of
 Vb1	b11934	b1\\ \\
 B	b1934	b11934
 Vb2	b21934	b2\\ \\
@@ -2915,16 +2915,16 @@ O	o1942	var p1941
 T	t1942	o1942
 B	b1942	t1942
 T	t1943	o1941 b1547 b1942
-P	p1949	String unfold_same_op
-NItt_synt_bterm!same_op	same_op	same_op Itt_synt_bterm
-O	o1950	same_op
+P	p1949	String unfold_same_op_of
+NItt_synt_bterm!same_op_of	same_op_of	same_op_of Itt_synt_bterm
+O	o1950	same_op_of
 T	t1950	o1950 b1934 b1935
 B	b1950	t1950
 T	t1951	o1263 b1936
 B	b1951	t1951
-P	p1955	String is_sameop_df
+P	p1955	String is_same_op_of_df
 O	o1955	dform p1955
-P	p1956	String is_same_op(
+P	p1956	String is_same_op_of(
 O	o1956	string892 p1956
 T	t1956	o1956
 B	b1956	t1956
@@ -2944,9 +2944,9 @@ T	t2586	o892 b2585
 B	b2586	t2586
 T	t2587	o1955 b892 b1936 b2586
 B	b2587	t2587
-P	p1967	String sameop_df
+P	p1967	String same_op_of_df
 O	o1967	dform p1967
-P	p1968	String same_op(
+P	p1968	String same_op_of(
 O	o1968	string892 p1968
 T	t1968	o1968
 B	b1968	t1968
@@ -2956,7 +2956,7 @@ T	t2590	o892 b2589
 B	b2590	t2590
 T	t2591	o1967 b892 b1950 b2590
 B	b2591	t2591
-P	p1974	String is_same_op_wf
+P	p1974	String is_same_op_of_wf
 O	o1974	rule p1974
 T	t1974	o1014 b1507
 B	b1974	t1974
@@ -2975,7 +2975,7 @@ T	t1979	o1047 b1976 b1979
 B	b1980	t1979
 T	t1980	o1047 b1974 b1980
 B	b1981	t1980
-P	p2594	String "genAssumT [1;2] thenT dT (-1) thenT tryT (dT (-1)) thenT dT 0 thenMT dT (-1) thenT tryT (dT (-1)) thenT byDefT unfold_is_same_op"
+P	p2594	String "genAssumT [1;2] thenT dT (-1) thenT tryT (dT (-1)) thenT dT 0 thenMT dT (-1) thenT tryT (dT (-1)) thenT byDefT unfold_is_same_op_of"
 O	o2594	ext_rule p2594
 T	t1981	o b1975 b8
 B	b1982	t1981
@@ -2995,7 +2995,7 @@ P	p1996	String sameop_is_sameop
 O	o1996	cond_rewrite p1996
 T	t1996	o b1950 b8
 B	b1996	t1996
-P	p2606	String "byDefsT [unfold_same_op;unfold_assert]"
+P	p2606	String "byDefsT [unfold_same_op_of;unfold_assert]"
 O	o2606	ext_rule p2606
 T	t1997	o950 b1936 b1305
 S	s1997	t949\\ h\\ t1997
@@ -3030,7 +3030,7 @@ T	t2011	o b2008 b2010
 B	b2011	t2011
 T	t2012	o b2007 b2011
 B	b2012	t2012
-P	p2612	String "byDefT unfold_same_op"
+P	p2612	String "byDefT unfold_same_op_of"
 O	o2612	ext_rule p2612
 T	t2013	o950 b1936 b982
 S	s2013	t949\\ h\\ t2013
@@ -3059,7 +3059,7 @@ T	t2614	o943 b2613
 B	b2614	t2614
 T	t2615	o2007 b8 b2012 b1936 b982 b2614 b8
 B	b2615	t2615
-P	p2027	String same_op_wf
+P	p2027	String same_op_of_wf
 O	o2027	rule p2027
 T	t2027	o1950 b1457 b1458
 B	b2027	t2027
@@ -3082,7 +3082,7 @@ T	t2618	o2612 b945 b2617 b8 b8
 B	b2618	t2618
 T	t2619	o943 b2618
 B	b2619	t2619
-P	p2044	String same_op_decidable
+P	p2044	String same_op_of_decidable
 O	o2044	rule p2044
 T	t2044	o1425 b1974
 B	b2044	t2044
@@ -3107,7 +3107,7 @@ T	t2628	o2612 b945 b2627 b8 b8
 B	b2628	t2628
 T	t2629	o943 b2628
 B	b2629	t2629
-P	p2062	String same_op_id
+P	p2062	String same_op_of_id
 O	o2062	rule p2062
 T	t2062	o1950 b1740 b1740
 S	s2062	t949\\ h\\ t2062
@@ -3116,7 +3116,7 @@ T	t2063	o1014 b2062
 B	b2063	t2063
 T	t2064	o1047 b1745 b2063
 B	b2064	t2064
-P	p2638	String "genAssumT [1] thenT dT (-1) thenT byDefsT [unfold_same_op; unfold_is_same_op] thenT dT (-1) thenT reduceT ttca"
+P	p2638	String "genAssumT [1] thenT dT (-1) thenT byDefsT [unfold_same_op_of; unfold_is_same_op_of] thenT dT (-1) thenT reduceT ttca"
 O	o2638	ext_rule p2638
 T	t2065	o b1744 b8
 B	b2065	t2065
@@ -3130,7 +3130,7 @@ T	t2639	o2638 b945 b2638 b8 b8
 B	b2639	t2639
 T	t2640	o943 b2639
 B	b2640	t2640
-P	p2078	String same_op_id2
+P	p2078	String same_op_of_id2
 O	o2078	rule p2078
 S	s2078	t949\\ h\\ t2027
 B	b2078	s2078
@@ -3162,7 +3162,7 @@ T	t2657	o2649 b945 b2653 b2656 b8
 B	b2657	t2657
 T	t2658	o943 b2657
 B	b2658	t2658
-P	p2098	String same_op_sym
+P	p2098	String same_op_of_sym
 O	o2098	rule p2098
 T	t2098	o1950 b1458 b1457
 S	s2098	t949\\ h\\ t2098
@@ -3183,7 +3183,7 @@ T	t2105	o b1507 b2104
 B	b2105	t2105
 T	t2106	o948 b2098 b2105
 B	b2106	t2106
-P	p2113	String same_op_trans
+P	p2113	String same_op_of_trans
 O	o2113	rule p2113
 T	t2113	o1149 b1458
 B	b2113	t2113
@@ -3228,7 +3228,7 @@ T	t2130	o b1507 b2130
 B	b2131	t2130
 T	t2131	o948 b2120 b2131
 B	b2132	t2131
-P	p2671	String "genAssumT [1;2;3] thenT dT (-1) thenT tryT (dT (-1)) thenT dT 0 thenMT dT (-1) thenT tryT (dT (-1)) thenT byDefsT [unfold_same_op; unfold_is_same_op; reduceC]"
+P	p2671	String "genAssumT [1;2;3] thenT dT (-1) thenT tryT (dT (-1)) thenT dT 0 thenMT dT (-1) thenT tryT (dT (-1)) thenT byDefsT [unfold_same_op_of; unfold_is_same_op_of; reduceC]"
 O	o2671	ext_rule p2671
 T	t2671	o1205 b2106 b8
 B	b2671	t2671
@@ -3246,7 +3246,7 @@ B	b2693	t2687
 T	t2694	o1263 b2693
 P	p2705	String "is_same_op_sym ttca"
 O	o2705	ext_rule p2705
-P	p2714	String "genAssumT [1;2;3;4;5] thenT repeatForT 2 (dT (-1) thenT tryT (dT (-1)) thenT dT 0 ttca) thenMT dT (-1) thenT tryT (dT (-1)) thenT byDefsT [unfold_same_op; unfold_is_same_op; reduceC]"
+P	p2714	String "genAssumT [1;2;3;4;5] thenT repeatForT 2 (dT (-1) thenT tryT (dT (-1)) thenT dT 0 ttca) thenMT dT (-1) thenT tryT (dT (-1)) thenT byDefsT [unfold_same_op_of; unfold_is_same_op_of; reduceC]"
 O	o2714	ext_rule p2714
 T	t2714	o1205 b2132 b8
 B	b2714	t2714

@@ -2,6 +2,7 @@
 
 extends Itt_synt_lang
 extends Itt_reflection_new
+extends Itt_nequal
 
 open Basic_tactics
 
@@ -33,6 +34,11 @@ interactive_rw depth_of_app {| reduce |}: op_bdepth{app_term} <--> 0
 
 interactive_rw depth_of_lam {| reduce |}: op_bdepth{lambda_term} <--> 0
 
+interactive lambda_app_diffops {| intro[] |}:
+   sequent{ <H> >- app_term <> lambda_term in Operator }
+
+interactive lambda_app_diffops2 {| intro[] |}:
+   sequent{ <H> >- lambda_term::app_term::nil in diff_list{Operator} }
 
 declare LambdaTerm
 iform lambdaTerm: LambdaTerm <--> Lang{lambda_term::app_term::nil}
@@ -75,7 +81,7 @@ define unfold_dest_lambda_term: dest_lambda_term{'t; v.'var_case['v]; f.'lambda_
    dest_bterm{'t;
               v. 'var_case['v];
               op,subterms.
-                 if Itt_synt_operator!is_same_op{lambda_term;'op}
+                 if is_same_op{lambda_term;'op}
                   then 'lambda_case[nth{'subterms;0}]
                   else 'apply_case[nth{'subterms;0};nth{'subterms;1}]
              }

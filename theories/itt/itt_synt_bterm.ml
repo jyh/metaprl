@@ -513,84 +513,84 @@ let resource typeinf += (<< BTerm >>, infer_univ1)
 let resource typeinf += (<< subterms{'bt} >>, infer_const << list{BTerm} >>)
 
 (************************************************************************
- * Same_op                                                              *
+ * Same_op_of                                                              *
  ************************************************************************)
 
 doc <:doc< @begin[doc]
-   << same_op{'b1; 'b2} >> decides whether two bterms have the same operator.
+   << same_op_of{'b1; 'b2} >> decides whether two bterms have the same operator.
    If both are variables, it returns << "true" >>; if both are composed bterms,
    its result depends on whether their operators are the same; otherwise, it
    returns << "false">>.
 @end[doc] >>
-define unfold_is_same_op: is_same_op{'b1; 'b2} <-->
+define unfold_is_same_op_of: is_same_op_of{'b1; 'b2} <-->
    dest_bterm{'b1;
                v1. dest_bterm{'b2; v2. is_eq{'v1;'v2}; op2,btl2.bfalse};
                op1,btl1. dest_bterm{'b2; v2. bfalse;
-                                    op2,btl2. Itt_synt_operator!is_same_op{'op1;'op2}} }
+                                    op2,btl2. is_same_op{'op1;'op2}} }
 
-define unfold_same_op: same_op{'b1; 'b2} <--> "assert"{is_same_op{'b1; 'b2}}
+define unfold_same_op_of: same_op_of{'b1; 'b2} <--> "assert"{is_same_op_of{'b1; 'b2}}
 doc docoff
 
-dform is_sameop_df : except_mode[src] :: is_same_op{'b1; 'b2} =
-   `"is_same_op(" slot{'b1} `"; " slot{'b2} `")"
-dform sameop_df : except_mode[src] :: same_op{'b1; 'b2} =
-   `"same_op(" slot{'b1} `"; " slot{'b2} `")"
+dform is_same_op_of_df : except_mode[src] :: is_same_op_of{'b1; 'b2} =
+   `"is_same_op_of(" slot{'b1} `"; " slot{'b2} `")"
+dform same_op_of_df : except_mode[src] :: same_op_of{'b1; 'b2} =
+   `"same_op_of(" slot{'b1} `"; " slot{'b2} `")"
 
 doc <:doc< @begin[doc]
 @end[doc] >>
-interactive is_same_op_wf {| intro [] |} :
+interactive is_same_op_of_wf {| intro [] |} :
    sequent { <H> >- 'b1 in BTerm } -->
    sequent { <H> >- 'b2 in BTerm } -->
-   sequent { <H> >- is_same_op{'b1; 'b2} in bool }
+   sequent { <H> >- is_same_op_of{'b1; 'b2} in bool }
 
 interactive_rw sameop_is_sameop :
-   (same_op{'b1; 'b2}) -->
-   is_same_op{'b1; 'b2} <--> btrue
+   (same_op_of{'b1; 'b2}) -->
+   is_same_op_of{'b1; 'b2} <--> btrue
 
 interactive_rw notsameop_is_not_sameop :
    ('b1 in BTerm ) -->
    ('b2 in BTerm ) -->
-   (not{same_op{'b1; 'b2}} ) -->
-   is_same_op{'b1; 'b2} <--> bfalse
+   (not{same_op_of{'b1; 'b2}} ) -->
+   is_same_op_of{'b1; 'b2} <--> bfalse
 
-interactive same_op_wf {| intro [] |} :
+interactive same_op_of_wf {| intro [] |} :
    sequent { <H> >- 'b1 in BTerm } -->
    sequent { <H> >- 'b2 in BTerm } -->
-   sequent { <H> >- same_op{'b1; 'b2} Type }
+   sequent { <H> >- same_op_of{'b1; 'b2} Type }
 
-interactive same_op_decidable {| intro [] |} :
+interactive same_op_of_decidable {| intro [] |} :
    [wf] sequent { <H> >- 'b1 in BTerm } -->
    [wf] sequent { <H> >- 'b2 in BTerm } -->
-   sequent { <H> >- decidable{same_op{'b1; 'b2}} }
+   sequent { <H> >- decidable{same_op_of{'b1; 'b2}} }
 
-interactive same_op_id {| intro [] |} :
+interactive same_op_of_id {| intro [] |} :
    sequent { <H> >- 'b in BTerm } -->
-   sequent { <H> >- same_op{'b; 'b} }
+   sequent { <H> >- same_op_of{'b; 'b} }
 
-interactive same_op_id2 {| intro [AutoMustComplete] |} :
+interactive same_op_of_id2 {| intro [AutoMustComplete] |} :
    sequent { <H> >- 'b1 = 'b2 in BTerm } -->
-   sequent { <H> >- same_op{'b1; 'b2} }
+   sequent { <H> >- same_op_of{'b1; 'b2} }
 
-interactive same_op_sym :
+interactive same_op_of_sym :
    sequent { <H> >- 'b1 in BTerm } -->
    sequent { <H> >- 'b2 in BTerm } -->
-   sequent { <H> >- same_op{'b1; 'b2} } -->
-   sequent { <H> >- same_op{'b2; 'b1} }
+   sequent { <H> >- same_op_of{'b1; 'b2} } -->
+   sequent { <H> >- same_op_of{'b2; 'b1} }
 
-interactive same_op_trans 'b2:
+interactive same_op_of_trans 'b2:
    sequent { <H> >- 'b1 in BTerm } -->
    sequent { <H> >- 'b2 in BTerm } -->
    sequent { <H> >- 'b3 in BTerm } -->
-   sequent { <H> >- same_op{'b1; 'b2} } -->
-   sequent { <H> >- same_op{'b2; 'b3} } -->
-   sequent { <H> >- same_op{'b1; 'b3} }
+   sequent { <H> >- same_op_of{'b1; 'b2} } -->
+   sequent { <H> >- same_op_of{'b2; 'b3} } -->
+   sequent { <H> >- same_op_of{'b1; 'b3} }
 
 interactive_rw is_same_op_make_bterm :
    ('op in BOperator) -->
    ('btl in list{BTerm}) -->
    (compatible_shapes{'op; 'btl}) -->
-   Itt_synt_operator!is_same_op{op_of{make_bterm{'op; 'btl}}; 'op} <--> btrue
+   is_same_op{op_of{make_bterm{'op; 'btl}}; 'op} <--> btrue
 doc docoff
 
-let sameOpSymT = same_op_sym
-let sameOpTransT = same_op_trans
+let sameOpOfSymT = same_op_of_sym
+let sameOpOfTransT = same_op_of_trans

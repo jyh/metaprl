@@ -65,6 +65,10 @@
  * @end[doc]
  *)
 extends Base_theory
+(*! @docoff *)
+
+open Refiner.Refiner.Term
+open Refiner.Refiner.TermOp
 
 (*!
  * @begin[doc]
@@ -186,6 +190,21 @@ declare FunDef{'f; 'e1; 'e2}
 declare exp
 declare def{'v; 'e}
 declare compilable{'e}
+
+(************************************************************************
+ * Destructors.
+ *)
+let fundecl_term = << FunDecl{f. 'e['f]} >>
+let fundecl_opname = opname_of_term fundecl_term
+let is_fundecl_term = is_dep1_term fundecl_opname
+let dest_fundecl_term = dest_dep1_term fundecl_opname
+let mk_fundecl_term = mk_dep1_term fundecl_opname
+
+let fundef_term = << FunDef{'f; 'e1; 'e2} >>
+let fundef_opname = opname_of_term fundef_term
+let is_fundef_term = is_dep0_dep0_dep0_term fundef_opname
+let dest_fundef_term = dest_dep0_dep0_dep0_term fundef_opname
+let mk_fundef_term = mk_dep0_dep0_dep0_term fundef_opname
 
 (************************************************************************
  * Display forms

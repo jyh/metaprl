@@ -24,7 +24,7 @@
  * @email{jyh@cs.caltech.edu}
  * @end[license]
  *)
-extends M_cps
+extends M_theory
 
 (************************************************************************
  * Just for testing.

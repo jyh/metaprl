@@ -50,8 +50,9 @@
  * @email{jyh@cs.caltech.edu}
  * @end[license]
  *)
-
 extends Base_theory
+
+open Refiner.Refiner.Term
 
 (*
  * Display form precendences.
@@ -137,6 +138,19 @@ declare compilable{'e}
  * Sequent tag for m programs.
  *)
 declare m
+
+(*
+ * Destructors.
+ *)
+val fundecl_term : term
+val is_fundecl_term : term -> bool
+val dest_fundecl_term : term -> string * term
+val mk_fundecl_term : string -> term ->  term
+
+val fundef_term : term
+val is_fundef_term : term -> bool
+val dest_fundef_term : term -> term * term * term
+val mk_fundef_term : term -> term -> term ->  term
 
 (*!
  * @docoff

@@ -176,7 +176,7 @@ declare "rule"[name:s]{'params; 'stmt; 'proof; 'res}
  * to improve and the expression to improve the resource with.
  * @end[doc]
  *)
-declare "resource"[name:s]{'extract; 'improve; 'data; 'arg}
+declare "resource"[name:s]{'expr}
 declare "resource_defs"[name:s]{'res}
 declare "improve"[name:s]{'expr}
 (*! @docoff *)
@@ -594,19 +594,17 @@ dform prec_rel_df : cons{prec_rel[op]; cons{prec_rel[left]; cons{prec_rel[right]
 dform id_df : "id"[n:n] =
    info["Id: "] slot[n:n]
 
-dform resource_df : "resource"[name]{'extract; 'improve; 'data; 'arg} =
-   szone
-   info["resource"] " " resource_name[name:s]
-   keyword["("] pushm[0]
-                'improve keyword[";"] hspace
-                'extract keyword[";"] hspace
-                'data keyword[";"] hspace
-                'arg keyword[")"]
-                popm
-   ezone
+dform resource_df : "resource"[name]{'expr} =
+   pushm[3] szone
+   info["let"] " " info["resource"] " " resource_name[name:s] " " keyword ["="] hspace
+   szone slot{'expr} ezone
+   ezone popm
 
-dform improve_df : "improve"[name]{'exr} =
-   szone info["improves"] " " info ["resource"] " " resource_name[name:s] ezone
+dform improve_df : "improve"[name]{'expr} =
+   pushm[3] szone
+   info["let"] " " info["resource"] " " resource_name[name:s] " " keyword ["+="] hspace
+   szone slot{'expr} ezone
+   ezone popm
 
 dform infix_df : "infix"[name:s] =
    info["infix"] " " slot[name:s]

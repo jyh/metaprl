@@ -84,8 +84,6 @@ let _ =
 type typeinf_subst_info = term * typeinf_subst_fun
 type typeinf_subst_data = (typeinf_subst_fun, typeinf_subst_fun) term_table
 
-resource (typeinf_subst_info, typeinf_subst_fun, typeinf_subst_data, unit) typeinf_subst_resource
-
 (*
  * Modular components also get a recursive instance of
  * the inference algorithm.
@@ -101,11 +99,6 @@ type typeinf_resource_info = term * typeinf_comp
  * Internal type.
  *)
 type typeinf_data = (typeinf_comp, typeinf_comp) term_table
-
-(*
- * The resource itself.
- *)
-resource (typeinf_resource_info, typeinf_func, typeinf_data, unit) typeinf_resource
 
 (************************************************************************
  * IMPLEMENTATION                                                       *
@@ -140,15 +133,14 @@ let close_subst_resource rsrc modname =
 (*
  * Resource.
  *)
-let typeinf_subst_resource =
-   Mp_resource.create (**)
-      { resource_join = join_subst_resource;
-        resource_extract = extract_subst_resource;
-        resource_improve = improve_subst_resource;
-        resource_improve_arg = Mp_resource.improve_arg_fail "typeinf_subst_resource";
-        resource_close = close_subst_resource
-      }
-      (new_table ())
+let resource typeinf_subst = {
+   resource_empty = new_table ();
+   resource_join = join_subst_resource;
+   resource_extract = extract_subst_resource;
+   resource_improve = improve_subst_resource;
+   resource_improve_arg = Mp_resource.improve_arg_fail "typeinf_subst_resource";
+   resource_close = close_subst_resource
+}
 
 let get_typeinf_subst_resource modname =
    Mp_resource.find typeinf_subst_resource modname
@@ -234,17 +226,16 @@ let close_resource rsrc modname =
    rsrc
 
 (*
- * Resource.
+ * The resource itself.
  *)
-let typeinf_resource =
-   Mp_resource.create (**)
-      {  resource_join = join_resource;
-         resource_extract = extract_resource;
-         resource_improve = improve_resource;
-         resource_improve_arg = Mp_resource.improve_arg_fail "typeinf_resource";
-         resource_close = close_resource
-      }
-      (new_table ())
+let resource typeinf = {
+   resource_empty = new_table ();
+   resource_join = join_resource;
+   resource_extract = extract_resource;
+   resource_improve = improve_resource;
+   resource_improve_arg = Mp_resource.improve_arg_fail "typeinf_resource";
+   resource_close = close_resource
+}
 
 let get_typeinf_resource modname =
    Mp_resource.find typeinf_resource modname

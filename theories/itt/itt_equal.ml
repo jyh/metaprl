@@ -173,8 +173,6 @@ let it_term = << it >>
  *)
 type eqcd_data = tactic term_stable
 
-resource (term * tactic, tactic, eqcd_data, Tactic.pre_tactic) eqcd_resource
-
 (*
  * Extract an EQCD tactic from the data.
  * The tactic checks for an optable.
@@ -258,15 +256,14 @@ let close_resource rsrc _ =
 (*
  * Resource.
  *)
-let eqcd_resource =
-   ((Mp_resource.create (**)
-      { resource_join = join_resource;
-        resource_extract = extract_resource;
-        resource_improve = improve_resource;
-        resource_improve_arg = improve_intro_arg;
-        resource_close = close_resource
-      }
-      (new_stable ())) : (term * tactic, tactic, eqcd_data, Tactic.pre_tactic) Mp_resource.t)
+let resource eqcd = {
+   resource_empty = new_stable ();
+   resource_join = join_resource;
+   resource_extract = extract_resource;
+   resource_improve = improve_resource;
+   resource_improve_arg = improve_intro_arg;
+   resource_close = close_resource
+}
 
 let get_resource modname =
    Mp_resource.find eqcd_resource modname

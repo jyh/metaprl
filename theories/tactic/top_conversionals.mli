@@ -90,7 +90,7 @@ topval repeatForC : int -> conv -> conv
 
 type reduce_data
 
-resource (term * conv, conv, reduce_data, conv) reduce_resource
+resource (term * conv, conv, reduce_data, conv) reduce
 
 topval reduceTopC : conv
 topval reduceC : conv

@@ -269,7 +269,6 @@ type sub_data = tactic term_dtable
  * a tactic that can be used to refine goals of that form.
  * @end[doc]
  *)
-resource (sub_resource_info, tactic, sub_data, unit) sub_resource
 (*! @docoff *)
 
 (*
@@ -334,15 +333,14 @@ let close_resource rsrc modname =
 (*
  * Resource.
  *)
-let sub_resource =
-   Mp_resource.create (**)
-      { resource_join = join_resource;
-        resource_extract = extract_resource;
-        resource_improve = improve_resource;
-        resource_improve_arg = Mp_resource.improve_arg_fail "sub_resource";
-        resource_close = close_resource
-      }
-      (new_dtable ())
+let resource sub = {
+   resource_empty = new_dtable ();
+   resource_join = join_resource;
+   resource_extract = extract_resource;
+   resource_improve = improve_resource;
+   resource_improve_arg = Mp_resource.improve_arg_fail "sub_resource";
+   resource_close = close_resource
+}
 
 let get_resource modname =
    Mp_resource.find sub_resource modname

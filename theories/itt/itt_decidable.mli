@@ -40,7 +40,7 @@ define unfold_decidable : decidable{'p} <--> ('p or not {'p})
 
 type decide_data
 
-resource (term * tactic, tactic, decide_data, Tactic.pre_tactic ) decide_resource
+resource (term * tactic, tactic, decide_data, Tactic.pre_tactic ) decide
 
 (* Works only on sequents of form "H |- Decidable(P)", tries to prove
    that P is in fact decidable using rules added to decide_resource *)

@@ -122,7 +122,7 @@ type squash_data
 (*
  * The resource itself.
  *)
-resource (squash_info, int -> tactic, squash_data, Tactic.pre_tactic) squash_resource
+resource (squash_info, int -> tactic, squash_data, Tactic.pre_tactic) squash
 
 (*
  * Access to resources from the toploop.

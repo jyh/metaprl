@@ -165,9 +165,6 @@ type 'a auto_data =
  | Label of 'a auto_data
  | Join of 'a auto_data * 'a auto_data
 
-resource (tactic auto_info, tactic, tactic auto_data, Tactic.pre_tactic * auto_prec) trivial_resource
-resource (auto_tac auto_info, tactic, auto_tac auto_data, Tactic.pre_tactic * auto_prec) auto_resource
-
 (************************************************************************
  * IMPLEMENTATION                                                       *
  ************************************************************************)
@@ -360,28 +357,26 @@ let close_resource data modname =
 let extract_triv_resource data =
    extract compileTrivialT data
 
-let trivial_resource =
-   Mp_resource.create (**)
-      { resource_join = join_resource;
-        resource_extract = extract_triv_resource;
-        resource_improve = improve_resource;
-        resource_improve_arg = improve_triv_resource_arg;
-        resource_close = close_resource
-      }
-      Empty
+let resource trivial = {
+   resource_empty = Empty;
+   resource_join = join_resource;
+   resource_extract = extract_triv_resource;
+   resource_improve = improve_resource;
+   resource_improve_arg = improve_triv_resource_arg;
+   resource_close = close_resource
+}
 
 let extract_auto_resource data =
    extract compileAutoT data
 
-let auto_resource =
-   Mp_resource.create (**)
-      { resource_join = join_resource;
-        resource_extract = extract_auto_resource;
-        resource_improve = improve_resource;
-        resource_improve_arg = improve_auto_resource_arg;
-        resource_close = close_resource
-      }
-      Empty
+let resource auto = {
+   resource_empty = Empty;
+   resource_join = join_resource;
+   resource_extract = extract_auto_resource;
+   resource_improve = improve_resource;
+   resource_improve_arg = improve_auto_resource_arg;
+   resource_close = close_resource
+}
 
 (*
  * Create a precedence.

@@ -371,8 +371,6 @@ type squash_data =
    (int -> tactic) term_stable
  * (term * tactic) term_stable
  * (int -> tactic) term_stable
-
-resource (squash_info, int -> tactic, squash_data, Tactic.pre_tactic) squash_resource
 (*! @docoff *)
 
 (************************************************************************
@@ -521,15 +519,14 @@ let close_resource rsrc modname =
 (*
  * Resource.
  *)
-let squash_resource =
-   Mp_resource.create (**)
-      { resource_join = join_resource;
-        resource_extract = extract_data;
-        resource_improve = improve_resource;
-        resource_improve_arg = improve_arg;
-        resource_close = close_resource
-      }
-      (new_stable (), new_stable (), new_stable ())
+let resource squash = {
+   resource_empty = new_stable (), new_stable (), new_stable ();
+   resource_join = join_resource;
+   resource_extract = extract_data;
+   resource_improve = improve_resource;
+   resource_improve_arg = improve_arg;
+   resource_close = close_resource
+}
 
 let get_resource modname =
    Mp_resource.find squash_resource modname

@@ -61,8 +61,8 @@ type elim_option =
    ThinOption of (int -> tactic)  (* Thin the eliminated hyp, unless overridden *)
  | ElimArgsOption of (tactic_arg -> term -> term list) * term option
 
-resource (term * (int -> tactic), int -> tactic, elim_data, Tactic.pre_tactic * elim_option list) elim_resource
-resource (term * tactic, tactic, intro_data, Tactic.pre_tactic * intro_option list) intro_resource
+resource (term * (int -> tactic), int -> tactic, elim_data, Tactic.pre_tactic * elim_option list) elim
+resource (term * tactic, tactic, intro_data, Tactic.pre_tactic * intro_option list) intro
 
 (*
  * The inherited d tactic.

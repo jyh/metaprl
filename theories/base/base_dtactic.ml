@@ -198,9 +198,6 @@ type elim_option =
    ThinOption of (int -> tactic)
  | ElimArgsOption of (tactic_arg -> term -> term list) * term option
 
-resource (term * (int -> tactic), int -> tactic, elim_data, Tactic.pre_tactic * elim_option list) elim_resource
-resource (term * tactic, tactic, intro_data, Tactic.pre_tactic * intro_option list) intro_resource
-
 (************************************************************************
  * IMPLEMENTATION                                                       *
  ************************************************************************)
@@ -587,25 +584,23 @@ let close_resource rsrc modname =
 (*
  * Resource.
  *)
-let elim_resource =
-   Mp_resource.create (**)
-      { resource_join = join_resource;
-        resource_extract = extract_elim_data;
-        resource_improve = improve_elim_resource;
-        resource_improve_arg = improve_elim_arg;
-        resource_close = close_resource
-      }
-      (new_table ())
+let resource elim = {
+   resource_empty = new_table ();
+   resource_join = join_resource;
+   resource_extract = extract_elim_data;
+   resource_improve = improve_elim_resource;
+   resource_improve_arg = improve_elim_arg;
+   resource_close = close_resource
+}
 
-let intro_resource =
-   Mp_resource.create (**)
-      { resource_join = join_resource;
-        resource_extract = extract_intro_data;
-        resource_improve = improve_intro_resource;
-        resource_improve_arg = improve_intro_arg;
-        resource_close = close_resource
-      }
-      (new_table ())
+let resource intro = {
+   resource_empty = new_table ();
+   resource_join = join_resource;
+   resource_extract = extract_intro_data;
+   resource_improve = improve_intro_resource;
+   resource_improve_arg = improve_intro_arg;
+   resource_close = close_resource
+}
 
 let dT i p =
    if i = 0 then

@@ -171,7 +171,7 @@ type sub_data
 (*
  * The resource itself.
  *)
-resource (sub_resource_info, tactic, sub_data, unit) sub_resource
+resource (sub_resource_info, tactic, sub_data, unit) sub
 
 (*
  * Access to resources from the toploop.

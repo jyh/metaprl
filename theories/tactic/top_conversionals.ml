@@ -367,8 +367,6 @@ let cutC = Tactic_type.Conversionals.cutC
  *)
 type reduce_data = (conv, conv) term_table
 
-resource (term * conv, conv, reduce_data, conv) reduce_resource
-
 (*
  * Extract a D tactic from the data.
  * The tactic checks for an optable.
@@ -430,15 +428,14 @@ let close_resource rsrc modname =
 (*
  * Resource.
  *)
-let reduce_resource =
-   Mp_resource.create (**)
-      { resource_join = join_resource;
-        resource_extract = extract_resource;
-        resource_improve = improve_resource;
-        resource_improve_arg = improve_resource_arg;
-        resource_close = close_resource
-      }
-      (new_table ())
+let resource reduce = {
+   resource_empty = new_table ();
+   resource_join = join_resource;
+   resource_extract = extract_resource;
+   resource_improve = improve_resource;
+   resource_improve_arg = improve_resource_arg;
+   resource_close = close_resource
+}
 
 let get_resource modname =
    Mp_resource.find reduce_resource modname

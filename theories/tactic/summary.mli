@@ -55,7 +55,7 @@ declare "dform"[name:s]{'modes; 'redex; 'def}
 declare "prec"[name:s]
 declare "prec_rel"[pr:s]
 declare "id"[n:n]
-declare "resource"[name:s]{'extract; 'improve; 'data; 'arg}
+declare "resource"[name:s]{'expr}
 declare "infix"[name:s]
 declare "magic_block"[name:s]{'items}
 declare "summary_item"{'term}

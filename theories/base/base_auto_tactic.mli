@@ -78,8 +78,8 @@ type 'a auto_info =
 (*
  * The string is for debugging.
  *)
-resource (tactic auto_info, tactic, tactic auto_data, Tactic.pre_tactic * auto_prec) trivial_resource
-resource (auto_tac auto_info, tactic, auto_tac auto_data, Tactic.pre_tactic * auto_prec) auto_resource
+resource (tactic auto_info, tactic, tactic auto_data, Tactic.pre_tactic * auto_prec) trivial
+resource (auto_tac auto_info, tactic, auto_tac auto_data, Tactic.pre_tactic * auto_prec) auto
 
 (*
  * Get values for the toploop.

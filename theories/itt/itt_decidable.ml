@@ -131,7 +131,6 @@ type decide_data = (tactic, tactic) term_table
  * to prove goals of that form.
  * @end[doc]
  *)
-resource (term * tactic, tactic, decide_data, Tactic.pre_tactic ) decide_resource
 (*! @docoff *)
 
 let identity x = x
@@ -186,15 +185,14 @@ let improve_arg data name context_args var_args term_args _ statement pre_tactic
    in
       improve_resource data (t,tac)
 
-let decide_resource =
-   Mp_resource.create (**)
-      { resource_join = join_tables;
-        resource_extract = extract_data;
-        resource_improve = improve_resource;
-        resource_improve_arg = improve_arg;
-        resource_close = fun rsrc modname -> rsrc
-      }
-      (new_table ())
+let resource decide = {
+   resource_empty = new_table ();
+   resource_join = join_tables;
+   resource_extract = extract_data;
+   resource_improve = improve_resource;
+   resource_improve_arg = improve_arg;
+   resource_close = fun rsrc modname -> rsrc
+}
 
 let step_decidableT p = Sequent.get_tactic_arg p "decide" p
 

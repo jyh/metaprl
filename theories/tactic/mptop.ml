@@ -156,16 +156,6 @@ type top_data =
 type top_table =
    (string, string * expr) Hashtbl.t
 
-(*!
- * @begin[doc]
- * Toplevel values are added to the @Comment!resource[toploop_resource] resource.
- * The argument has type @code{string * expr}, which includes
- * the string name of the value, and it's value.
- * @docoff
- * @end[doc]
- *)
-resource (string * expr, top_table, top_data, unit) toploop_resource
-
 (************************************************************************
  * IMPLEMENTATION                                                       *
  ************************************************************************)
@@ -729,15 +719,22 @@ let rec add_resources base = function
  | [] ->
       base
 
-let toploop_resource =
-   Mp_resource.create (**)
-      { resource_join = join_resource;
-        resource_extract = extract_resource;
-        resource_improve = improve_resource;
-        resource_improve_arg = Mp_resource.improve_arg_fail "toploop_resource";
-        resource_close = close_resource
-      }
-      (add_resources Empty values)
+(*!
+ * @begin[doc]
+ * Toplevel values are added to the @Comment!resource[toploop_resource] resource.
+ * The argument has type @code{string * expr}, which includes
+ * the string name of the value, and it's value.
+ * @docoff
+ * @end[doc]
+ *)
+let resource toploop = {
+   resource_empty = add_resources Empty values;
+   resource_join = join_resource;
+   resource_extract = extract_resource;
+   resource_improve = improve_resource;
+   resource_improve_arg = Mp_resource.improve_arg_fail "toploop_resource";
+   resource_close = close_resource
+}
 
 let get_resource modname =
    Mp_resource.find toploop_resource modname

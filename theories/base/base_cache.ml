@@ -54,8 +54,6 @@ type cache = tactic Tactic_cache.cache
  *)
 type t = cache
 
-resource (cache_rule, cache, t, unit) cache_resource
-
 (************************************************************************
  * IMPLEMENTATION                                                       *
  ************************************************************************)
@@ -86,15 +84,14 @@ let close_resource rsrc modname =
 (*
  * Resource.
  *)
-let cache_resource =
-   Mp_resource.create (**)
-      { resource_join = join_resource;
-        resource_extract = extract_resource;
-        resource_improve = improve_resource;
-        resource_improve_arg = Mp_resource.improve_arg_fail "cache_resource";
-        resource_close = close_resource
-      }
-      (new_cache ())
+let resource cache = {
+   resource_empty = new_cache ();
+   resource_join = join_resource;
+   resource_extract = extract_resource;
+   resource_improve = improve_resource;
+   resource_improve_arg = Mp_resource.improve_arg_fail "cache_resource";
+   resource_close = close_resource
+}
 
 let get_resource modname =
    Mp_resource.find cache_resource modname

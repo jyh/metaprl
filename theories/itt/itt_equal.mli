@@ -226,7 +226,7 @@ rule universeFormation 'H univ[j:l] :
 
 type eqcd_data
 
-resource (term * tactic, tactic, eqcd_data, Tactic.pre_tactic) eqcd_resource
+resource (term * tactic, tactic, eqcd_data, Tactic.pre_tactic) eqcd
 
 (*
  * Access to resources from toploop.

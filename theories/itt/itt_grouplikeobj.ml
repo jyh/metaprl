@@ -124,7 +124,7 @@ interactive groupoid_intro {| intro [AutoMustComplete] |} :
 
 (*interactive groupoid_elim {| elim [] |} 'H :
    sequent ['ext] { 'H; g: {car: univ[i:l]; "*": ^car -> ^car -> ^car}; 'J['g] >- 'C['g] } -->
-   sequent ['ext] { 'H; g: groupoid[i:l]; 'J['g] >- 'C['g] }   
+   sequent ['ext] { 'H; g: groupoid[i:l]; 'J['g] >- 'C['g] }
 *)
 (************************************************************************
  * SEMIGROUP                                                            *
@@ -182,7 +182,7 @@ interactive isSemigroup_intro {| intro [AutoMustComplete] |} :
 
 interactive isSemigroup_elim {| elim [] |} 'H :
    sequent ['ext] { 'H; u: all x: 'g^car. all y: 'g^car. all z: 'g^car. (('x *['g] 'y) *['g] 'z = 'x *['g] ('y *['g] 'z) in 'g^car); 'J['u] >- 'C['u] } -->
-   sequent ['ext] { 'H; u: isSemigroup{'g}; 'J['u] >- 'C['u] }   
+   sequent ['ext] { 'H; u: isSemigroup{'g}; 'J['u] >- 'C['u] }
 
 interactive semigroup_intro {| intro [AutoMustComplete] |} :
    [wf] sequent [squash] { 'H >- 'g in groupoid[i:l] } -->
@@ -191,7 +191,7 @@ interactive semigroup_intro {| intro [AutoMustComplete] |} :
 
 interactive semigroup_elim {| elim [] |} 'H :
    sequent ['ext] { 'H; g: {car: univ[i:l]; "*": ^car -> ^car -> ^car}; u: all x: 'g^car. all y: 'g^car. all z: 'g^car. (('x *['g] 'y) *['g] 'z = 'x *['g] ('y *['g] 'z) in 'g^car); 'J['g] >- 'C['g] } -->
-   sequent ['ext] { 'H; g: semigroup[i:l]; 'J['g] >- 'C['g] }   
+   sequent ['ext] { 'H; g: semigroup[i:l]; 'J['g] >- 'C['g] }
 
 (*!
  * @begin[doc]
@@ -267,7 +267,7 @@ interactive premonoid_intro {| intro [AutoMustComplete] |} :
 
 interactive premonoid_elim {| elim [] |} 'H :
    sequent ['ext] { 'H; g: {car: univ[i:l]; "*": ^car -> ^car -> ^car; "1": ^car}; 'J['g] >- 'C['g] } -->
-   sequent ['ext] { 'H; g: premonoid[i:l]; 'J['g] >- 'C['g] }   
+   sequent ['ext] { 'H; g: premonoid[i:l]; 'J['g] >- 'C['g] }
 
 interactive isMonoid_intro {| intro [AutoMustComplete] |} :
    [wf] sequent [squash] { 'H >- "type"{.'g^car} } -->
@@ -278,7 +278,7 @@ interactive isMonoid_intro {| intro [AutoMustComplete] |} :
 
 interactive isMonoid_elim {| elim [] |} 'H :
    sequent ['ext] { 'H; u: isMonoid{'g}; v: all x: 'g^car. all y: 'g^car. all z: 'g^car. (('x *['g] 'y) *['g] 'z = 'x *['g] ('y *['g] 'z) in 'g^car); w: all x: 'g^car. (('g^"1" *['g] 'x = 'x in 'g^car) & ('x *['g] 'g^"1" = 'x in 'g^car)); 'J['u] >- 'C['u] } -->
-   sequent ['ext] { 'H; u: isMonoid{'g}; 'J['u] >- 'C['u] }   
+   sequent ['ext] { 'H; u: isMonoid{'g}; 'J['u] >- 'C['u] }
 
 interactive monoid_intro {| intro [AutoMustComplete] |} :
    [wf] sequent [squash] { 'H >- 'g in premonoid[i:l] } -->
@@ -287,7 +287,7 @@ interactive monoid_intro {| intro [AutoMustComplete] |} :
 
 interactive monoid_elim {| elim [] |} 'H :
    sequent ['ext] { 'H; g: {car: univ[i:l]; "*": ^car -> ^car -> ^car; "1": ^car}; u: all x: 'g^car. all y: 'g^car. all z: 'g^car. (('x *['g] 'y) *['g] 'z = 'x *['g] ('y *['g] 'z) in 'g^car); v: all x: 'g^car. ('g^"1" *['g] 'x = 'x in 'g^car & 'x *['g] 'g^"1" = 'x in 'g^car); 'J['g] >- 'C['g] } -->
-   sequent ['ext] { 'H; g: monoid[i:l]; 'J['g] >- 'C['g] }   
+   sequent ['ext] { 'H; g: monoid[i:l]; 'J['g] >- 'C['g] }
 
 (*!
  * @begin[doc]
@@ -410,7 +410,7 @@ define unfold_subStructure1 : subStructure{'s; 'g} <-->
    ('s^car subset 'g^car) & ('s^"*" = 'g^"*" in 's^car -> 's^car -> 's^car)
 (*! @docoff *)
 
-let unfold_subStructure = unfold_subStructure1 thenC addrC [0] unfold_subset
+let unfold_subStructure = unfold_subStructure1
 
 let fold_subStructure1 = makeFoldC << subStructure{'s; 'g} >> unfold_subStructure1
 let fold_subStructure = makeFoldC << subStructure{'s; 'g} >> unfold_subStructure
@@ -426,7 +426,7 @@ interactive subStructure_intro {| intro [] |} :
    sequent ['ext] { 'H >- subStructure{'s; 'g} }
 
 interactive subStructure_elim {| elim [] |} 'H :
-   sequent ['ext] { 'H; u: subStructure{'s; 'g}; x: 's^car subtype 'g^car; y: all a: 's^car. all b: 's^car. (('a = 'b in 'g^car) => ('a = 'b in 's^car)); z: {b: 'g^car | exst a: 's^car. 'b = 'a in 'g^car} subtype 's^car; v: 's^"*" = 'g^"*" in 's^car -> 's^car -> 's^car; 'J['u] >- 'C['u] } -->
+   sequent ['ext] { 'H; u: subStructure{'s; 'g}; x: 's^car subset 'g^car; v: 's^"*" = 'g^"*" in 's^car -> 's^car -> 's^car; 'J['u] >- 'C['u] } -->
    sequent ['ext] { 'H; u: subStructure{'s; 'g}; 'J['u] >- 'C['u] }
 
 (*!

@@ -165,8 +165,6 @@ declare plusminus
 declare oplus
 declare infty
 declare partial
-declare "subset"
-declare supset
 declare cap
 declare cup
 declare forall
@@ -196,8 +194,14 @@ declare "div"
 declare supplus
 declare supminus
 declare supcirc
+declare "subset"
+declare supset
 declare subseteq
 declare supseteq
+declare sqsubset
+declare sqsupset
+declare sqsubseteq
+declare sqsupseteq
 declare subzero
 declare subone
 declare subtwo

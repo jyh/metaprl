@@ -194,8 +194,6 @@ declare plusminus
 declare oplus
 declare infty
 declare partial
-declare "subset"
-declare supset
 declare cap
 declare cup
 declare forall
@@ -225,8 +223,14 @@ declare "div"
 declare supplus
 declare supminus
 declare supcirc
+declare "subset"
+declare supset
+declare sqsubset
+declare sqsupset
 declare subseteq
 declare supseteq
+declare sqsubseteq
+declare sqsupseteq
 declare subzero
 declare subone
 declare subtwo
@@ -730,8 +734,6 @@ dform plusminus_df		: internal :: mode[prl] :: plusminus                 = `"±"
 dform oplus_df			: internal :: mode[prl] :: oplus                     = `"⊕"
 dform infty_df			: internal :: mode[prl] :: infty                     = `"∞"
 dform partial_df		: internal :: mode[prl] :: partial                   = `"∂"
-dform subset_df			: internal :: mode[prl] :: "subset"                  = `"⊆"
-dform supset_df			: internal :: mode[prl] :: supset                    = `"⊇"
 dform cap_df			: internal :: mode[prl] :: cap                       = `"∩"
 dform cup_df			: internal :: mode[prl] :: cup                       = `"∪"
 dform forall_df			: internal :: mode[prl] :: forall                    = `"∀"
@@ -761,8 +763,14 @@ dform div_df            	: internal :: mode[prl] :: "div"                     = 
 dform supplus_df		: internal :: mode[prl] :: supplus                   = `"⁺"
 dform supminus_df		: internal :: mode[prl] :: supminus                  = `"⁻"
 dform supcirc_df		: internal :: mode[prl] :: supcirc                   = `"°"
+dform subset_df			: internal :: mode[prl] :: "subset"                  = `"⊆"
+dform supset_df			: internal :: mode[prl] :: supset                    = `"⊇"
 dform subseteq_df		: internal :: mode[prl] :: subseteq                  = `"⊆"
 dform supseteq_df		: internal :: mode[prl] :: supseteq                  = `"⊇"
+dform sqsubset_df		: internal :: mode[prl] :: sqsubset                  = `"⊆" (* does unicode have symbols for sqsubset and Co? *)
+dform sqsupset_df		: internal :: mode[prl] :: sqsupset                  = `"⊇"
+dform sqsubseteq_df		: internal :: mode[prl] :: sqsubseteq                = `"⊆"
+dform sqsupseteq_df		: internal :: mode[prl] :: sqsupseteq                = `"⊇"
 dform subzero_df		: internal :: mode[prl] :: subzero                   = `"₀"
 dform subone_df			: internal :: mode[prl] :: subone                    = `"₁"
 dform subtwo_df			: internal :: mode[prl] :: subtwo                    = `"₂"
@@ -781,8 +789,6 @@ dform plusminus_df		: internal :: mode[html] :: plusminus                 = html
 dform oplus_df			: internal :: mode[html] :: oplus                     = html_uni[8853]
 dform infty_df			: internal :: mode[html] :: infty                     = html_uni[8734]
 dform partial_df		: internal :: mode[html] :: partial                   = html_uni[8706]
-dform subset_df			: internal :: mode[html] :: "subset"                  = html_uni[8838]
-dform supset_df			: internal :: mode[html] :: supset                    = html_uni[8839]
 dform cap_df			: internal :: mode[html] :: cap                       = html_uni[8745]
 dform cup_df			: internal :: mode[html] :: cup                       = html_uni[8746]
 dform forall_df			: internal :: mode[html] :: forall                    = html_uni[8704]
@@ -812,8 +818,14 @@ dform div_df            	: internal :: mode[html] :: "div"                     =
 dform supplus_df		: internal :: mode[html] :: supplus                   = sup["+"]
 dform supminus_df		: internal :: mode[html] :: supminus                  = sup["-"]
 dform supcirc_df		: internal :: mode[html] :: supcirc                   = html_sym["deg"]
-dform subseteq_df		: internal :: mode[html] :: subseteq                  = html_uni[8838]
+dform subset_df			: internal :: mode[html] :: "subset"                  = html_uni[8838] (* shoud be subset, not subseteq! *)
+dform supset_df			: internal :: mode[html] :: supset                    = html_uni[8839] 
+dform subseteq_df		: internal :: mode[html] :: subseteq                  = html_uni[8838] 
 dform supseteq_df		: internal :: mode[html] :: supseteq                  = html_uni[8839]
+dform sqsubset_df		: internal :: mode[html] :: sqsubset                  = html_uni[8838] (* Are there symbols for sqsub*? *)
+dform sqsupset_df		: internal :: mode[html] :: sqsupset                  = html_uni[8839]
+dform sqsubseteq_df		: internal :: mode[html] :: sqsubseteq                = html_uni[8838]
+dform sqsupseteq_df		: internal :: mode[html] :: sqsupseteq                = html_uni[8839]
 dform subzero_df		: internal :: mode[html] :: subzero                   = sub["0"]
 dform subone_df			: internal :: mode[html] :: subone                    = sub["1"]
 dform subtwo_df			: internal :: mode[html] :: subtwo                    = sub["2"]
@@ -832,8 +844,6 @@ dform plusminus_df		: internal :: mode[tex] :: plusminus                 = mathm
 dform oplus_df			: internal :: mode[tex] :: oplus                     = mathmacro["oplus"]
 dform infty_df			: internal :: mode[tex] :: infty                     = mathmacro["infty"]
 dform partial_df		: internal :: mode[tex] :: partial                   = mathmacro["partial"]
-dform subset_df			: internal :: mode[tex] :: "subset"                  = mathmacro["subseteq"]
-dform supset_df			: internal :: mode[tex] :: supset                    = mathmacro["supseteq"]
 dform cap_df			: internal :: mode[tex] :: cap                       = mathmacro["cap"]
 dform cup_df			: internal :: mode[tex] :: cup                       = mathmacro["cup"]
 dform forall_df			: internal :: mode[tex] :: forall                    = mathmacro["forall"]
@@ -863,8 +873,14 @@ dform div_df            	: internal :: mode[tex] :: "div"                     = 
 dform supplus_df		: internal :: mode[tex] :: supplus                   = izone `"^{+}" ezone
 dform supminus_df		: internal :: mode[tex] :: supminus                  = izone `"^{-}" ezone
 dform supcirc_df		: internal :: mode[tex] :: supcirc                   = izone `"^{\circ}" ezone
+dform subset_df			: internal :: mode[tex] :: "subset"                  = mathmacro["subset"]
+dform supset_df			: internal :: mode[tex] :: supset                    = mathmacro["supset"]
 dform subseteq_df		: internal :: mode[tex] :: subseteq                  = mathmacro["subseteq"]
 dform supseteq_df		: internal :: mode[tex] :: supseteq                  = mathmacro["supseteq"]
+dform sqsubset_df		: internal :: mode[tex] :: sqsubset                  = mathmacro["sqsubset"]
+dform sqsupset_df		: internal :: mode[tex] :: sqsupset                  = mathmacro["sqsupset"]
+dform sqsubseteq_df		: internal :: mode[tex] :: sqsubseteq                = mathmacro["sqsubseteq"]
+dform sqsupseteq_df		: internal :: mode[tex] :: sqsupseteq                = mathmacro["sqsupseteq"]
 dform subzero_df		: internal :: mode[tex] :: subzero                   = izone `"_0" ezone
 dform subone_df			: internal :: mode[tex] :: subone                    = izone `"_1" ezone
 dform subtwo_df			: internal :: mode[tex] :: subtwo                    = izone `"_2" ezone

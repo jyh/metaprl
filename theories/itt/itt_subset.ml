@@ -20,8 +20,8 @@
  * be defined for all elements in $B$.
  *
  * The subset relation corresponds to set type (Section @refmodule[Itt_set]) in the following way:
- * $<<'A subset 'B>>$ if and only if there is a proposition $P: <<'B -> univ[i:l]>>, such that
- * $<<ext_equal{'A; {x:'B | 'P['x]}}>> (see @hrefrule[subset_iff]).
+ * $<<'A subset 'B>>$ if and only if there is a proposition $P: <<'B -> univ[i:l]>>$, such that
+ * $<<ext_equal{'A; {x:'B | 'P['x]}}>>$ (see @hrefrule[subset_iff]).
  *
  * Type-theoretic intersection and union (Sections @refmodule[Itt_isect] and @refmodule[Itt_tunion])
    behaves on subsets of a given type  like usual intersection and union.

@@ -42,6 +42,7 @@
 extends Itt_grouplikeobj
 (*! @docoff *)
 extends Itt_subset
+extends Itt_subset2
 extends Itt_bisect
 
 open Printf
@@ -193,7 +194,7 @@ interactive pregroup_intro {| intro [AutoMustComplete] |} :
 
 interactive pregroup_elim {| elim [] |} 'H :
    sequent ['ext] { 'H; g: {car: univ[i:l]; "*": ^car -> ^car -> ^car; "1": ^car; inv: ^car -> ^car}; 'J['g] >- 'C['g] } -->
-   sequent ['ext] { 'H; g: pregroup[i:l]; 'J['g] >- 'C['g] }   
+   sequent ['ext] { 'H; g: pregroup[i:l]; 'J['g] >- 'C['g] }
 
 interactive isGroup_wf {| intro [intro_typeinf <<'g>>] |} pregroup[i:l] :
    sequent [squash] { 'H >- 'g in pregroup[i:l] } -->
@@ -208,7 +209,7 @@ interactive isGroup_intro {| intro [AutoMustComplete] |} :
 
 interactive isGroup_elim {| elim [] |} 'H :
    sequent ['ext] { 'H; u: isGroup{'g}; v: all x: 'g^car. all y: 'g^car. all z: 'g^car. (('x *['g] 'y) *['g] 'z = 'x *['g] ('y *['g] 'z) in 'g^car); w: all x: 'g^car. ('g^"1" *['g] 'x = 'x in 'g^car); x: all x: 'g^car. ('g^inv 'x) *['g] 'x = 'g^"1" in 'g^car; 'J['u] >- 'C['u] } -->
-   sequent ['ext] { 'H; u: isGroup{'g}; 'J['u] >- 'C['u] }   
+   sequent ['ext] { 'H; u: isGroup{'g}; 'J['u] >- 'C['u] }
 
 interactive group_intro {| intro [AutoMustComplete] |} :
    [wf] sequent [squash] { 'H >- 'g in pregroup[i:l] } -->
@@ -217,7 +218,7 @@ interactive group_intro {| intro [AutoMustComplete] |} :
 
 interactive group_elim {| elim [] |} 'H :
    sequent ['ext] { 'H; g: {car: univ[i:l]; "*": ^car -> ^car -> ^car; "1": ^car; inv: ^car -> ^car}; u: squash{.all x: 'g^car. all y: 'g^car. all z: 'g^car. (('x *['g] 'y) *['g] 'z = 'x *['g] ('y *['g] 'z) in 'g^car)}; v: squash{.all x: 'g^car. 'g^"1" *['g] 'x = 'x in 'g^car}; w: squash{.all x: 'g^car. ('g^inv 'x) *['g] 'x = 'g^"1" in 'g^car}; 'J['g] >- 'C['g] } -->
-   sequent ['ext] { 'H; g: group[i:l]; 'J['g] >- 'C['g] }   
+   sequent ['ext] { 'H; g: group[i:l]; 'J['g] >- 'C['g] }
 
 interactive car_wf {| intro [intro_typeinf <<'g>>] |} group[i:l] :
    sequent [squash] {'H >- 'g in group[i:l] } -->
@@ -681,7 +682,7 @@ interactive groupHom_elim {| elim [elim_typeinf <<'B>>] |} 'H group[i:l] :
    [wf] sequent [squash] {'H; f: groupHom{'A; 'B}; 'J['f] >- 'A in group[i:l] } -->
    [wf] sequent [squash] {'H; f: groupHom{'A; 'B}; 'J['f] >- 'B in group[i:l] } -->
    [main] sequent ['ext] { 'H; f: 'A^car -> 'B^car; u: all x: 'A^car. all y: 'A^car. ('f ('x *['A] 'y)) = ('f 'x) *['B] ('f 'y) in 'B^car; 'J['f] >- 'C['f] } -->
-   sequent ['ext] { 'H; f: groupHom{'A; 'B}; 'J['f] >- 'C['f] }   
+   sequent ['ext] { 'H; f: groupHom{'A; 'B}; 'J['f] >- 'C['f] }
 
 (*!
  * @begin[doc]

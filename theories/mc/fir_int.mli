@@ -54,7 +54,3 @@ declare leIntOp
 declare gtIntOp
 declare geIntOp
 declare cmpIntOp
-
-(* Exponentiation assuming a non-negative, integral exponent. *)
-define unfold_pow : pow{ 'base; 'exp } <-->
-   ind{ 'exp; i, j. 1; 1; i, j. "mul"{'base; 'j} }

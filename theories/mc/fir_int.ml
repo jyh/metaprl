@@ -46,10 +46,6 @@ declare gtIntOp
 declare geIntOp
 declare cmpIntOp
 
-(* Exponentiation assuming a non-negative, integral exponent. *)
-define unfold_pow : pow{ 'base; 'exp } <-->
-   ind{ 'exp; i, j. 1; 1; i, j. "mul"{'base; 'j} }
-
 (*************************************************************************
  * Display forms.
  * Use C-style notation for the bitwise operators.
@@ -86,10 +82,6 @@ dform leIntOp_df : except_mode[src] :: leIntOp = Nuprl_font!le
 dform gtIntOp_df : except_mode[src] :: gtIntOp = `">"
 dform geIntOp_df : except_mode[src] :: geIntOp = Nuprl_font!ge
 dform cmpIntOp_df : except_mode[src] :: cmpIntOp = `"compare"
-
-(* Exponentiation. *)
-dform pow_df : except_mode[src] :: pow{ 'base; 'exp } =
-   lzone  slot{'base}  Nuprl_font!sup{'exp} ezone
 
 (*************************************************************************
  * Rewrites.

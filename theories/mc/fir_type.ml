@@ -125,7 +125,7 @@ prim_rw reduce_tyTuple2 : tyTuple{ cons{'h; 't} } <--> ('h * tyTuple{'t})
 (* Arrays are like lists. *)
 prim_rw reduce_tyArray : tyArray{'ty} <--> array{'ty}
 
-(* Use intersection/union for all/exists. *)
+(* Existential and universal quantification. *)
 prim_rw reduce_tyExists1 :
    tyExists{ cons{'h; nil}; 'ty } <--> ty_exists{ h. 'ty }
 prim_rw reduce_tyExists2 :
@@ -169,6 +169,14 @@ interactive tyInt_equality {| intro [] |} 'H :
 interactive number_tyInt_membership {| intro [] |} 'H :
    sequent ['ext] { 'H >- number[i:n] = number[i:n] in tyInt }
 
+interactive int_tyInt_folding_equality {| intro [] |} 'H :
+   [wf] sequent ['ext] { 'H >- 'i = 'j in tyInt } -->
+   sequent ['ext] { 'H >- 'i = 'j in int }
+
+interactive minus_int_tyInt_membership {| intro [] |} 'H :
+   [wf] sequent ['ext] { 'H >- 'a = 'b in tyInt } -->
+   sequent ['ext] { 'H >- minus{'a} = minus{'b} in tyInt }
+
 (*
  * Product type.
  * The ITT rules should be sufficient here. If needed,
@@ -204,9 +212,9 @@ prim dunion_inr_member_equality {| intro [] |} 'H :
    sequent ['ext] { 'H >- inr{'x1} = inr{'x2} in dunion{'A; 'B} }
    = it
 
-prim dunion_elim {| elim [] |} 'H 'J :
-   [main] sequent ['ext] { 'H; v: 'A; 'J[ inl{'v} ] >- 'C[ inl{'v} ] } -->
-   [main] sequent ['ext] { 'H; v: 'B; 'J[ inr{'v} ] >- 'C[ inr{'v} ] } -->
+prim dunion_elim {| elim [] |} 'H 'J 'v1 'v2 :
+   [main] sequent ['ext] { 'H; v1: 'A; 'J[ inl{'v1} ] >- 'C[ inl{'v1} ] } -->
+   [main] sequent ['ext] { 'H; v2: 'B; 'J[ inr{'v2} ] >- 'C[ inr{'v2} ] } -->
    sequent ['ext] { 'H; v: dunion{'A; 'B}; 'J['v] >- 'C['v] }
    = it
 
@@ -234,16 +242,17 @@ prim array_cons_member_equality {| intro [] |} 'H :
    sequent ['ext] { 'H >- cons{'h1; 't1} = cons{'h2; 't2} in array{'T} }
    = it
 
-prim array_elim {| elim [] |} 'H 'J 'h 't 'k :
-   [main] sequent ['ext] { 'H; v: array{'A}; 'J['v] >- 'C[ nil ] } -->
+prim array_elim {| elim [] |} 'H 'J 'u 'a 'b 'c :
+   [main] sequent ['ext] { 'H; u: array{'A}; 'J['u] >- 'C[ nil ] } -->
    [main] sequent ['ext]
-      { 'H; v: array{'A}; 'J['v]; h: 'A; t: array{'A}; k: 'C['h] >-
-        'C[ cons{'h; 't} ] } -->
+      { 'H; v: array{'A}; 'J['v]; a: 'A; b: array{'A}; c: 'C['a] >-
+        'C[ cons{'a; 'b} ] } -->
    sequent ['ext] { 'H; v: array{'A}; 'J['v] >- 'C['v] }
    = it
 
 (*
  * Function type.
+ * We use an intentional equality.
  *)
 
 prim ty_fun_equality {| intro [] |} 'H :
@@ -252,11 +261,23 @@ prim ty_fun_equality {| intro [] |} 'H :
    sequent ['ext] { 'H >- ty_fun{'A1; 'B1} = ty_fun{'A2; 'B2} in fir_univ }
    = it
 
+prim lambda_member_equality {| intro [] |} 'H 'x :
+   [wf] sequent ['ext] { 'H; x: 'A >- 'f1['x] = 'f2['x] in 'B } -->
+   sequent ['ext] { 'H >-
+      lambda{ x1. 'f1['x1] } = lambda{ x2. 'f2['x2] } in ty_fun{'A; 'B} }
+   = it
+
+prim apply_equality {| intro [] |} 'H 'A :
+   [wf] sequent ['ext] { 'H >- 'x1 = 'x2 in 'A } -->
+   [wf] sequent ['ext] { 'H >- 'f1 = 'f2 in ty_fun{'A; 'B} } -->
+   sequent ['ext] { 'H >- apply{ 'f1; 'x1 } = apply{ 'f2; 'x2 } in 'B }
+   = it
+
 (*
  * Universally quantified type.
  *)
 
-prim all_equality {| intro [] |} 'H :
+prim all_equality {| intro [] |} 'H 'a :
    [wf] sequent ['ext] { 'H; a: 'T >- 'ty1['a] = 'ty2['a] in 'T } -->
    sequent ['ext] { 'H >-
       ty_all{ x1. 'ty1['x1] } =
@@ -267,7 +288,7 @@ prim all_equality {| intro [] |} 'H :
  * Existentially quantified type.
  *)
 
-prim exist_equality {| intro [] |} 'H :
+prim exist_equality {| intro [] |} 'H 'a :
    [wf] sequent ['ext] { 'H; a: 'T >- 'ty1['a] = 'ty2['a] in 'T } -->
    sequent ['ext] { 'H >-
       ty_exists{ x1. 'ty1['x1] } =
@@ -278,7 +299,7 @@ prim exist_equality {| intro [] |} 'H :
  * Recursive type.
  *)
 
-prim rec_equality {| intro[] |} 'H :
+prim rec_equality {| intro[] |} 'H 'x :
    [wf] sequent ['ext]
       { 'H; x: fir_univ >- 'ty1['x] = 'ty2['x] in fir_univ } -->
    sequent ['ext]
@@ -330,6 +351,12 @@ interactive member_nil_in_bool {| intro [] |} 'H :
    sequent ['ext] { 'H >-
       member{ 'n1; int_set{nil} } =
       member{ 'n2; int_set{nil} } in bool }
+
+interactive true_set_member_equality {| intro [] |} 'H :
+   sequent ['ext] { 'H >- true_set = true_set in ty_int_set }
+
+interactive false_set_member_equality {| intro [] |} 'H :
+   sequent ['ext] { 'H >- false_set = false_set in ty_int_set }
 
 (*
  * FIR value type.

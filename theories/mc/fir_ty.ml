@@ -52,6 +52,10 @@ define unfold_false_set : false_set <--> int_set{ 0; 0 }
 define unfold_val_true : val_true <--> 1
 define unfold_val_false : val_false <--> 0
 
+(* Functions. *)
+declare lambda{ x. 'f['x] }
+declare apply{ 'f; 'x }
+
 (*************************************************************************
  * Display forms.
  *************************************************************************)
@@ -65,7 +69,7 @@ dform tyEnum_df : except_mode[src] :: tyEnum{ 'num } =
 
 (* Function type. *)
 dform tyFun_df : except_mode[src] :: tyFun{ 'ty_list; 'ty } =
-   szone `"TyFun" `"(" slot{'ty_list} `") -> " slot{'ty} ezone
+   szone `"TyFun" `"(" slot{'ty_list} `" -> " slot{'ty} `")" ezone
 
 (* Tuples. *)
 dform tyUnion_df : except_mode[src] ::
@@ -114,6 +118,18 @@ dform false_set_df : except_mode[src] :: false_set = `"false_set"
 dform val_true_df : except_mode[src] :: val_true = `"val_true"
 dform val_false_df : except_mode[src] :: val_false = `"val_false"
 
+(* Functions. *)
+dform lambda_df : except_mode[src] :: lambda{ x. 'f } =
+   `"(" Nuprl_font!lambda slot{'x} `"." slot{'f} `")"
+dform apply_df : except_mode[src] :: apply{ 'f; 'x } =
+   `"(" slot{'f} `" " slot{'x} `")"
+
+(*************************************************************************
+ * Rewrites.
+ *************************************************************************)
+
+prim_rw beta_reduce : apply{ lambda{ x. 'f['x] }; 'y } <--> 'f['y]
+
 (*************************************************************************
  * Automation.
  *************************************************************************)
@@ -123,4 +139,5 @@ let resource reduce += [
    << false_set >>, unfold_false_set;
    << val_true >>, unfold_val_true;
    << val_false >>, unfold_val_false;
+   << apply{ lambda{ x. 'f['x] }; 'y } >>, beta_reduce
 ]

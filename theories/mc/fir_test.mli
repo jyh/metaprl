@@ -16,3 +16,4 @@ include Fir_int
 include Fir_type
 include Fir_type_state
 include Fir_type_exp
+include Fir_type_int

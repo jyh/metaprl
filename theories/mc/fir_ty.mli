@@ -73,3 +73,7 @@ define unfold_true_set : true_set <--> int_set{ 1; 1 }
 define unfold_false_set : false_set <--> int_set{ 0; 0 }
 define unfold_val_true : val_true <--> 1
 define unfold_val_false : val_false <--> 0
+
+(* Functions. *)
+declare lambda{ x. 'f['x] }
+declare apply{ 'f; 'x }

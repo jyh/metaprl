@@ -27,11 +27,7 @@ declare blockPolySub
 declare rawDataSub
 declare rawFunctionSub
 
-(*
- * Allocation operators.
- * copy makes a list with 'len copies of 'init.
- * 'len should be a positive number.
- *)
+(* Allocation operators. *)
 declare allocTuple{ 'ty; 'atom_list }
 declare allocArray{ 'ty; 'atom_list }
 declare allocUnion{ 'ty; 'ty_var; 'num; 'atom_list }
@@ -39,10 +35,6 @@ declare allocMalloc{ 'atom }
 
 (*
  * Normal values.
- *)
-
-(*
- * Normal atoms.
  * 'int in atomInt is the integer itself (a number).
  * 'bound and 'num in atomEnum are numbers satisfying 0 <= 'num < 'bound.
  * 'var in atomVar is the variable itself.
@@ -63,14 +55,14 @@ declare letUnop{ 'state; 'op; 'ty; 'a1; s, v. 'exp['s; 'v] }
 declare letBinop{ 'state; 'op; 'ty; 'a1; 'a2; s, v. 'exp['s; 'v] }
 
 (* Function application. *)
-(*
 declare letExt{ 'var; 'ty; 'string; 'ty; 'atom_list; 'exp }
-*)
-(*
 declare tailCall{ 'var; 'atom_list }
-*)
 
-(* Control. *)
+(*
+ * Control.
+ * If the match key is in 'set, the matchCase evaluates
+ * to 'exp1, otherwise we attempt to match the key in 'exp2.
+ *)
 declare matchCase{ 'set; s. 'exp['s] }
 declare "match"{ 'state; 'key; 'cases }
 
@@ -78,5 +70,6 @@ declare "match"{ 'state; 'key; 'cases }
 declare letAlloc{ 'state; 'alloc_op; s, v. 'exp['s; 'v] }
 
 (* Subscripting. *)
-declare letSubscript{ 'state; 'ref; 'index; s, v. 'exp['s; 'v] }
-declare setSubscript{ 'state; 'ref; 'index; 'new_val; s. 'exp['s] }
+declare letSubscript{ 'state; 'subop; 'ty; 'ref; 'index; s, v. 'exp['s; 'v] }
+declare setSubscript{ 'state; 'subop; 'ty; 'ref; 'index;
+                      'new_val; s. 'exp['s] }

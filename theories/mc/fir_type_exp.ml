@@ -6,7 +6,7 @@
  *)
 
 include Base_theory
-include Itt_equal
+include Itt_theory
 include Fir_int_set
 include Fir_exp
 include Fir_type
@@ -37,26 +37,35 @@ dform ty_alloc_op_df : except_mode[src] :: ty_alloc_op =
    `"Ty_alloc_op"
 
 (*************************************************************************
+ * Rewrites.
+ *************************************************************************)
+
+prim_rw reduce_produces_match_base :
+   produces_match{ 'key; nil } <-->
+   bfalse
+prim_rw reduce_produces_match_ind :
+   produces_match{ 'key; cons{ matchCase{'set; s. 'e}; 'el } } <-->
+   ifthenelse{ member{ 'key; 'set };
+      btrue;
+      produces_match{ 'key; 'el } }
+
+(* Automation for rewrites. *)
+let resource reduce += [
+   << produces_match{ 'key; nil } >>, reduce_produces_match_base;
+   << produces_match{ 'key; cons{ matchCase{'set; s. 'e}; 'el } } >>,
+      reduce_produces_match_ind
+]
+
+(*************************************************************************
  * Rules.
  *************************************************************************)
 
 (*
  * LetUnop/LetBinop equality. Note that 'T is the type 'e[v] and that
  *    the equality here is intensional.
- * To prove { 'H >- op_exp{'op1; 'a1} = op_exp{'op2; 'a2} in 'ty1 },
- *    it may be necessary to first apply rwh reduceC 0 and then
- *    prove the resulting sequent, as all op_exp's should reduce
- *    to some simpler form that can be worked with (they're all
- *    integer related at the moment, so this shouldn't be a problem).
  *)
 
-(***
- * I question the v: ty1, s: ty_state stuff...
- * suppose 'e1 has fetches...and s is empty...does that type check
- * or not? what about dividing by v in 'e1 when v is zero??
- ***)
-
-prim letUnop_equality {| intro [] |} 'H :
+prim letUnop_equality {| intro [] |} 'H 's 'v :
    [wf] sequent ['ext] { 'H >- 'state1 = 'state2 in ty_state } -->
    [wf] sequent ['ext] { 'H >- 'ty1 = 'ty2 in fir_univ } -->
    [wf] sequent ['ext]
@@ -68,7 +77,7 @@ prim letUnop_equality {| intro [] |} 'H :
       letUnop{ 'state2; 'op2; 'ty2; 'b; s2, v2. 'e2['s2; 'v2] } in 'T }
    = it
 
-prim letBinop_equality {| intro [] |} 'H :
+prim letBinop_equality {| intro [] |} 'H 's 'v :
    [wf] sequent ['ext] { 'H >- 'state1 = 'state2 in ty_state } -->
    [wf] sequent ['ext] { 'H >- 'ty1 = 'ty2 in fir_univ } -->
    [wf] sequent ['ext] { 'H >-
@@ -80,36 +89,16 @@ prim letBinop_equality {| intro [] |} 'H :
       letBinop{ 'state2; 'op2; 'ty2; 'b1; 'b2; s2, v2. 'e2['s2; 'v2] } in 'T }
    = it
 
+interactive idOp_equality {| intro [] |} 'H :
+   [wf] sequent ['ext] { 'H >- 'a1 = 'a2 in 'T } -->
+   sequent ['ext] { 'H >- unop_exp{ idOp; 'a1 } = unop_exp{ idOp; 'a2 } in 'T }
+
 (*
  * Match equality.
- * As in LetOp, the equality here is intentional.  We need two
- *    equalities, one for matching on integers, and one for
- *    matching on blocks.
+ * As in LetOp, the equality here is intentional.
+ * We assume that matches on blocks have been reduced
+ *    to matches on integers.
  *)
-
-(***
- * Better way to automate?  the selT won't go, but I can make other
- * aspects that show up easier I think...
- * and is there a better split for int matching and block matching...
- * then again, the split here is the same as in Fir_exp for reduction
- ***)
-
-prim produces_match_base {| intro [SelectOption 1] |} 'H :
-   [main] sequent ['ext] { 'H >- "assert"{member{'num; 'set}} } -->
-   sequent ['ext]
-      { 'H >- produces_match{ 'num; cons{matchCase{'set; s. 'exp['s]}; 't} } }
-   = it
-
-prim produces_match_ind {| intro [SelectOption 2] |} 'H :
-   [main] sequent ['ext] { 'H >- "assert"{bnot{member{'num; 'set}}} } -->
-   [main] sequent ['ext] { 'H >- produces_match{ 'num; 't } } -->
-   sequent ['ext]
-      { 'H >- produces_match{ 'num; cons{matchCase{'set; s. 'exp['s]}; 't} } }
-   = it
-
-(***
- * ditto concern about s: ty_state
- ***)
 
 prim matchCase_equality {| intro [] |} 'H :
    [wf] sequent ['ext] { 'H >- 'k1 = 'k2 in ty_int_set } -->
@@ -119,11 +108,29 @@ prim matchCase_equality {| intro [] |} 'H :
       matchCase{'k2; s2. 'e2['s2]} in 'T }
    = it
 
+(*
+prim match_equality {| intro [] |} 'H :
+   [wf] sequent ['ext] { 'H >- 'state1 = 'state2 in ty_state } -->
+   [wf] sequent ['ext] { 'H >- 'i1 = 'i2 in int } -->
+   [wf] sequent ['ext] { 'H >- 'cases1 = 'cases2 in array{'T} } -->
+(*
+   [main] sequent ['ext] { 'H >-
+      "assert"{ produces_match{ 'i1; 'cases1 } } } -->
+*)
+   sequent ['ext] { 'H >-
+      "match"{ 'state1; 'i1; 'cases1 } =
+      "match"{ 'state2; 'i2; 'cases2 } in 'T }
+   = it
+*)
+
 prim match_int_equality {| intro [] |} 'H :
    [wf] sequent ['ext] { 'H >- 'state1 = 'state2 in ty_state } -->
    [wf] sequent ['ext] { 'H >- number[i:n] = number[j:n] in int } -->
    [wf] sequent ['ext] { 'H >- 'cases1 = 'cases2 in array{'T} } -->
-   [main] sequent ['ext] { 'H >- produces_match{ number[i:n]; 'cases1 } } -->
+(*
+   [main] sequent ['ext] { 'H >-
+      "assert"{ produces_match{ number[i:n]; 'cases1 } } } -->
+*)
    sequent ['ext] { 'H >-
       "match"{ 'state1; number[i:n]; 'cases1 } =
       "match"{ 'state2; number[j:n]; 'cases2 } in 'T }
@@ -134,14 +141,17 @@ prim match_block_equality {| intro [] |} 'H :
    [wf] sequent ['ext] { 'H >- 'cases1 = 'cases2 in array{'T} } -->
    [wf] sequent ['ext]
       { 'H >- block{'i; 'args1} = block{'j; 'args2} in ty_block } -->
-   [main] sequent ['ext] { 'H >- produces_match{ 'i; 'cases1 } } -->
+(*
+   [main] sequent ['ext] { 'H >-
+      "assert"{ produces_match{ 'i; 'cases1 } } } -->
+*)
    sequent ['ext] { 'H >-
       "match"{ 'state1; block{'i; 'args1}; 'cases1 } =
       "match"{ 'state2; block{'j; 'args2}; 'cases2 } in 'T }
    = it
 
 (*
- * Allocation operators.
+ * Allocation operators and expressions.
  *)
 
 prim ty_alloc_op_equality {| intro [] |} 'H :
@@ -164,11 +174,7 @@ prim allocArray_member_equality {| intro [] |} 'H :
       allocArray{'ty2; 'list2} in ty_alloc_op }
    = it
 
-(****
- * same concern about s: ty_state, etc...
- ****)
-
-prim letAlloc_equality {| intro [] |} 'H :
+prim letAlloc_equality {| intro [] |} 'H 's 'v :
    [wf] sequent ['ext] { 'H >- 'state1 = 'state2 in ty_state } -->
    [wf] sequent ['ext] { 'H >- 'alloc_op1 = 'alloc_op2 in ty_alloc_op } -->
    [main] sequent ['ext] { 'H; s: ty_state; v: ty_ref >-
@@ -179,33 +185,31 @@ prim letAlloc_equality {| intro [] |} 'H :
    = it
 
 (*
- * Subscripting operators.
+ * Subscripting operators and expressions.
+ * We're completely ignoring the subscripting operators at the moment.
+ * We're also not requiring that references/indices be in bounds.
  *)
 
-(****
- * same concern about s: ty_state, etc...
- ****)
-
-prim letSubscript_equality {| intro [] |} 'H :
-   [wf] sequent ['ext] { 'H >- 'state1 = 'state2 in ty_state } -->
-   [wf] sequent ['ext] { 'H >- 'ref1 = 'ref2 in ty_ref } -->
-   [wf] sequent ['ext] { 'H >- 'index1 = 'index2 in int } -->
-   [main] sequent ['ext] { 'H; s: ty_state; v: fir_value >-
-      'e1['s; 'v] = 'e2['s; 'v] in 'T } -->
-(* assertions about actually being able to fetch that? *)
+prim letSubscript_equality {| intro [] |} 'H 's 'v :
+   [wf] sequent ['ext] { 'H >- 'st1 = 'st2 in ty_state } -->
+   [wf] sequent ['ext] { 'H >- 'ty1 = 'ty2 in fir_univ } -->
+   [wf] sequent ['ext] { 'H >- 'r1 = 'r2 in ty_ref } -->
+   [wf] sequent ['ext] { 'H >- 'i1 = 'i2 in int } -->
+   [main] sequent ['ext] { 'H; s: ty_state; v: 'ty1 >-
+      'e1['s; 'v] = 'e1['s; 'v] in 'T } -->
    sequent ['ext] { 'H >-
-      letSubscript{ 'state1; 'ref1; 'index1; s1, v1. 'e1['s1; 'v1] } =
-      letSubscript{ 'state2; 'ref2; 'index2; s2, v2. 'e2['s2; 'v2] } in 'T }
+      letSubscript{ 'st1; 'op1; 'ty1; 'r1; 'i1; s1, v1. 'e1['s1; 'v1] } =
+      letSubscript{ 'st2; 'op2; 'ty2; 'r2; 'i2; s2, v2. 'e2['s2; 'v2] } in 'T }
    = it
 
-prim setSubscript_equality {| intro [] |} 'H :
-   [wf] sequent ['ext] { 'H >- 'state1 = 'state2 in ty_state } -->
-   [wf] sequent ['ext] { 'H >- 'ref1 = 'ref2 in ty_ref } -->
-   [wf] sequent ['ext] { 'H >- 'index1 = 'index2 in int } -->
-   [wf] sequent ['ext] { 'H >- 'val1 = 'val2 in fir_value } -->
+prim setSubscript_equality {| intro [] |} 'H 's :
+   [wf] sequent ['ext] { 'H >- 'st1 = 'st2 in ty_state } -->
+   [wf] sequent ['ext] { 'H >- 'ty1 = 'ty2 in fir_univ } -->
+   [wf] sequent ['ext] { 'H >- 'r1 = 'r2 in ty_ref } -->
+   [wf] sequent ['ext] { 'H >- 'i1 = 'i2 in int } -->
+   [wf] sequent ['ext] { 'H >- 'n1 = 'n2 in 'ty1 } -->
    [main] sequent ['ext] { 'H; s: ty_state >- 'e1['s] = 'e2['s] in 'T } -->
-(* assertions about being able to set that location?? *)
    sequent ['ext] { 'H >-
-      setSubscript{ 'state1; 'ref1; 'index1; 'val1; s1. 'e1['s1] } =
-      setSubscript{ 'state2; 'ref2; 'index2; 'val2; s2. 'e2['s2] } in 'T }
+      setSubscript{ 'st1; 'op1; 'ty1; 'r1; 'i1; 'n1; s1. 'e1['s1] } =
+      setSubscript{ 'st2; 'op2; 'ty2; 'r2; 'i2; 'n2; s2. 'e2['s2] } in 'T }
    = it

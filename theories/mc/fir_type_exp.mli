@@ -6,7 +6,7 @@
  *)
 
 include Base_theory
-include Itt_equal
+include Itt_theory
 include Fir_int_set
 include Fir_exp
 include Fir_type

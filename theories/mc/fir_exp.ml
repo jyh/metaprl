@@ -33,11 +33,7 @@ declare allocArray{ 'ty; 'atom_list }
 declare allocUnion{ 'ty; 'ty_var; 'num; 'atom_list }
 declare allocMalloc{ 'atom }
 
-(*
- * Normal values.
- *)
-
-(* Normal atoms. *)
+(* Normal values. *)
 declare atomInt{ 'int }
 declare atomEnum{ 'bound; 'num }
 declare atomConst{ 'ty; 'ty_var; 'num }
@@ -54,12 +50,8 @@ declare letUnop{ 'state; 'op; 'ty; 'a1; s, v. 'exp['s; 'v] }
 declare letBinop{ 'state; 'op; 'ty; 'a1; 'a2; s, v. 'exp['s; 'v] }
 
 (* Function application. *)
-(*
 declare letExt{ 'var; 'ty; 'string; 'ty; 'atom_list; 'exp }
-*)
-(*
 declare tailCall{ 'var; 'atom_list }
-*)
 
 (* Control. *)
 declare matchCase{ 'set; s. 'exp['s] }
@@ -69,8 +61,9 @@ declare "match"{ 'state; 'key; 'cases }
 declare letAlloc{ 'state; 'alloc_op; s, v. 'exp['s; 'v] }
 
 (* Subscripting. *)
-declare letSubscript{ 'state; 'ref; 'index; s, v. 'exp['s; 'v] }
-declare setSubscript{ 'state; 'ref; 'index; 'new_val; s. 'exp['s] }
+declare letSubscript{ 'state; 'subop; 'ty; 'ref; 'index; s, v. 'exp['s; 'v] }
+declare setSubscript{ 'state; 'subop; 'ty; 'ref; 'index;
+                      'new_val; s. 'exp['s] }
 
 (*************************************************************************
  * Display forms.
@@ -103,11 +96,7 @@ dform allocUnion_df : except_mode[src] ::
 dform allocMalloc_df : except_mode[src] :: allocMalloc{ 'atom } =
    `"AllocMalloc(" slot{'atom} `")"
 
-(*
- * Normal values.
- *)
-
-(* Normal atoms. *)
+(* Normal values. *)
 dform atomInt_df : except_mode[src] :: atomInt{ 'int } =
    lzone `"AtomInt(" slot{'int} `")" ezone
 dform atomEnum_df : except_mode[src] :: atomEnum{ 'bound; 'num } =
@@ -151,10 +140,8 @@ dform letBinop_df : except_mode[src] ::
 dform letExt_df : except_mode[src] ::
    letExt{ 'var; 'ty; 'string; 'ty; 'atom_list; 'exp }
 *)
-(*
 dform tailCall_df : except_mode[src] :: tailCall{ 'var; 'atom_list } =
    szone `"TailCall(" slot{'var} `", " slot{'atom_list} `")" ezone
-*)
 
 (* Control. *)
 dform matchCase_df : except_mode[src] :: matchCase{ 'set; s. 'exp } =
@@ -183,19 +170,24 @@ dform letAlloc_df : except_mode[src] ::
 
 (* Subscripting. *)
 dform letSubscript_df : except_mode[src] ::
-   letSubscript{ 'state; 'ref; 'index; s, v. 'exp } =
-   pushm[0] szone push_indent `"let " slot{'v} `" =" hspace
+   letSubscript{ 'state; 'subop; 'ty; 'ref; 'index; s, v. 'exp } =
+   pushm[0] szone push_indent `"let " slot{'v} `":" slot{'ty} `" =" hspace
    lzone slot{'ref} `"[" slot{'index} `"]" ezone popm hspace
+   push_indent `"with subop" hspace
+   szone slot{'subop} ezone popm hspace
    push_indent `"with state" hspace
    szone slot{'state} ezone popm hspace
    push_indent `"in" hspace
    szone slot{'exp} ezone popm
    ezone popm
 dform setSubscript_df : except_mode[src] ::
-   setSubscript{ 'state; 'ref; 'index; 'new_val; s. 'exp } =
+   setSubscript{ 'state; 'subop; 'ty; 'ref; 'index; 'new_val; s. 'exp } =
    szone slot{'ref} `"[" slot{'index} `"]" Nuprl_font!leftarrow
    slot{'new_val} hspace
-   `"with state " slot{'state} `";" hspace
+   push_indent `"with subop" hspace
+   szone slot{'subop} ezone popm hspace
+   push_indent `"with state" hspace
+   szone slot{'state} ezone popm hspace
    slot{'exp} ezone
 
 (*************************************************************************
@@ -233,7 +225,23 @@ prim_rw reduce_allocArray :
    letAlloc{ 'state; allocArray{ 'ty; 'atom_list }; s, v. 'exp['s; 'v] } <-->
    smatch{ alloc{ 'state; 0; 'atom_list }; s, v. 'exp['s; 'v] }
 
-(* Control *)
+(*
+ * Control.
+ * The automation should be set up so that reduce_match_block
+ * is tried first.
+ *)
+
+(*
+prim_rw reduce_match_block :
+   "match"{ 'state; block{ 'i; 'args }; 'cases } <-->
+   "match"{ 'state; 'i; 'cases }
+prim_rw reduce_match_num :
+   "match"{ 'state; 'i; cons{matchCase{'set; s. 'exp['s]}; 'el} } <-->
+   ifthenelse{ member{'i; 'set};
+      'exp['state];
+      ."match"{'state; 'i; 'el} }
+*)
+
 prim_rw reduce_match_num :
    "match"{ 'state; number[i:n];
       cons{matchCase{'set; s. 'exp['s]}; 'el} } <-->
@@ -249,10 +257,11 @@ prim_rw reduce_match_block :
 
 (* Subscripting. *)
 prim_rw reduce_letSubscript :
-   letSubscript{ 'state; 'ref; 'index; s, v. 'exp['s; 'v] } <-->
+   letSubscript{ 'state; 'subop; 'ty; 'ref; 'index; s, v. 'exp['s; 'v] } <-->
    smatch{ fetch{ 'state; 'ref; 'index }; s, v. 'exp['s; 'v] }
 prim_rw reduce_setSubscript :
-   setSubscript{ 'state; 'ref; 'index; 'new_val; s. 'exp['s] } <-->
+   setSubscript{ 'state; 'subop; 'ty; 'ref; 'index;
+      'new_val; s. 'exp['s] } <-->
    smatch{ store{ 'state; 'ref; 'index; 'new_val }; s, v. 'exp['s] }
 
 (*************************************************************************
@@ -271,14 +280,20 @@ let resource reduce += [
       reduce_allocTuple;
    << letAlloc{ 'state; allocArray{ 'ty; 'atom_list }; s, v. 'exp['s; 'v] } >>,
       reduce_allocArray;
+(*
+   << "match"{ 'state; block{ 'i; 'args }; 'cases } >>, reduce_match_block;
+   << "match"{ 'state; 'i; cons{matchCase{'set; s. 'exp['s]}; 'el } } >>,
+      reduce_match_num;
+*)
    << "match"{ 'state; number[i:n];
       cons{matchCase{'set; s. 'exp['s]}; 'el} } >>,
       reduce_match_num;
    << "match"{ 'state; block{ 'i; 'args };
       cons{matchCase{'set; s. 'exp['s]}; 'el}} >>,
       reduce_match_block;
-   << letSubscript{ 'state; 'ref; 'index; s, v. 'exp['s; 'v] } >>,
+   << letSubscript{ 'state; 'subop; 'ty; 'ref; 'index; s, v. 'exp['s; 'v] } >>,
       reduce_letSubscript;
-   << setSubscript{ 'state; 'ref; 'index; 'new_val; s. 'exp['s] } >>,
+   << setSubscript{ 'state; 'subop; 'ty; 'ref; 'index;
+      'new_val; s. 'exp['s] } >>,
       reduce_setSubscript
 ]

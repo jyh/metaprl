@@ -67,12 +67,12 @@ prim ty_block_member_equality {| intro [] |} 'H :
       { 'H >- block{'tag1; 'args1} = block{'tag2; 'args2} in ty_block }
    = it
 
-(*
 prim nth_block_equality {| intro [] |} 'H :
+   sequent ['ext] { 'H >- 'b1 = 'b2 in ty_block } -->
+   sequent ['ext] { 'H >- 'i1 = 'i2 in int } -->
    sequent ['ext] { 'H >-
       nth_block{ 'b1; 'i1 } = nth_block{ 'b2; 'i2 } in 'T }
    = it
-*)
 
 (*
  * Triple equality.
@@ -145,23 +145,11 @@ prim ty_ref_member_equality {| intro [] |} 'H :
  * State operations equality.
  *)
 
-(***
- * What I have ought to be provable given the above...
- * (i.e. they should be interactive)
- * but I need some sort of decomposition on the first assumption
- * (the one about the pairs being equal in ty_state)
- ***)
-
 prim alloc_equality {| intro [] |} 'H :
-(*
-   [wf] sequent ['ext] { 'H >- 'n1 = 'n2 in int } -->
-   [wf] sequent ['ext] { 'H >- 's1 = 's2 in array{ty_block} } -->
-*)
    [wf] sequent ['ext]
       { 'H >- pair{'n1; 's1} = pair{'n2; 's2} in ty_state } -->
    [wf] sequent ['ext] { 'H >- 't1 = 't2 in int } -->
    [wf] sequent ['ext] { 'H >- 'i1 = 'i2 in array{fir_value} } -->
-(* assertions concerning the result of the allocation?? *)
    sequent ['ext] { 'H >-
       alloc{ pair{'n1; 's1}; 't1; 'i1 } =
       alloc{ pair{'n2; 's2}; 't2; 'i2 }
@@ -169,16 +157,11 @@ prim alloc_equality {| intro [] |} 'H :
    = it
 
 prim store_equality {| intro [] |} 'H :
-(*
-   [wf] sequent ['ext] { 'H >- 'n1 = 'n3 in int } -->
-   [wf] sequent ['ext] { 'H >- 's1 = 's2 in array{ty_block} } -->
-*)
    [wf] sequent ['ext]
       { 'H >- pair{'n1; 's1} = pair{'n3; 's2} in ty_state } -->
    [wf] sequent ['ext] { 'H >- ref{'n2} = ref{'n4} in ty_ref } -->
    [wf] sequent ['ext] { 'H >- 'i1 = 'i2 in int } -->
    [wf] sequent ['ext] { 'H >- 'list1 = 'list2 in array{fir_value} } -->
-(* assertions concerning indexing of the block and state *)
    sequent ['ext] { 'H >-
       store{ pair{'n1; 's1}; ref{'n2}; 'i1; 'list1 } =
       store{ pair{'n3; 's2}; ref{'n4}; 'i2; 'list2 }
@@ -186,15 +169,10 @@ prim store_equality {| intro [] |} 'H :
    = it
 
 prim fetch_equality {| intro [] |} 'H :
-(*
-   [wf] sequent ['ext] { 'H >- 'n1 = 'n3 in int } -->
-   [wf] sequent ['ext] { 'H >- 's1 = 's2 in array{ty_block} } -->
-*)
    [wf] sequent ['ext]
       { 'H >- pair{'n1; 's1} = pair{'n3; 's2} in ty_state } -->
    [wf] sequent ['ext] { 'H >- ref{'n2} = ref{'n4} in ty_ref } -->
    [wf] sequent ['ext] { 'H >- 'i1 = 'i2 in int } -->
-(* assertions concerning indexing of the block and state and type... *)
    sequent ['ext] { 'H >-
       fetch{ pair{'n1; 's1}; ref{'n2}; 'i1 } =
       fetch{ pair{'n3; 's2}; ref{'n4}; 'i2 }

@@ -60,13 +60,13 @@ open Itt_fun
  ************************************************************************)
 
 declare pregroup[i:l]
-declare isGroup{'g}
+declare isGroup{'G}
 declare group[i:l]
 declare abelg[i:l]
 declare subgroup[i:l]{'S; 'G}
-declare lcoset{'s; 'g; 'b}
-declare rcoset{'s; 'g; 'b}
-declare normalSubg[i:l]{'s; 'g}
+declare lcoset{'S; 'G; 'b}
+declare rcoset{'S; 'G; 'b}
+declare normalSubg[i:l]{'S; 'G}
 declare groupHom{'A; 'B}
 
 (************************************************************************

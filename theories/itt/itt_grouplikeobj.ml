@@ -459,11 +459,11 @@ interactive subStructure_sqStable {| squash |} :
 doc <:doc< @docoff >>
 
 interactive subStructure_type_right 'B :
-   sequent ['ext] { 'H >- subStructure{'A; 'B} } -->
+   sequent [squash] { 'H >- subStructure{'A; 'B} } -->
    sequent ['ext] { 'H >- "type"{'A^car} }
 
 interactive subStructure_type_left 'A :
-   sequent ['ext] { 'H >- subStructure{'A; 'B} } -->
+   sequent [squash] { 'H >- subStructure{'A; 'B} } -->
    sequent ['ext] { 'H >- "type"{'B^car} }
 
 (************************************************************************

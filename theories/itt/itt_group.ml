@@ -75,6 +75,7 @@ open Itt_squash
 open Itt_fun
 open Itt_int_ext
 open Itt_bisect
+open Itt_equal
 
 let _ =
    show_loading "Loading Itt_group%t"
@@ -93,11 +94,11 @@ doc <:doc<
 define unfold_pregroup1 : pregroup[i:l] <-->
    record["inv":t]{r. 'r^car -> 'r^car; premonoid[i:l]}
 
-define unfold_isGroup1 : isGroup{'g} <-->
-   isSemigroup{'g} & all x: 'g^car. 'g^"1" *['g] 'x = 'x in 'g^car & all x: 'g^car. ('g^inv 'x) *['g] 'x = 'g^"1" in 'g^car
+define unfold_isGroup1 : isGroup{'G} <-->
+   isSemigroup{'G} & all x: 'G^car. 'G^"1" *['G] 'x = 'x in 'G^car & all x: 'G^car. ('G^inv 'x) *['G] 'x = 'G^"1" in 'G^car
 
 define unfold_group1 : group[i:l] <-->
-   {g: pregroup[i:l] | isGroup{'g}}
+   {G: pregroup[i:l] | isGroup{'G}}
 doc <:doc< @docoff >>
 
 let unfold_pregroup = unfold_pregroup1 thenC addrC [1] unfold_premonoid
@@ -106,8 +107,8 @@ let unfold_group = unfold_group1 thenC addrC [0] unfold_pregroup thenC addrC [1]
 
 let fold_pregroup1 = makeFoldC << pregroup[i:l] >> unfold_pregroup1
 let fold_pregroup = makeFoldC << pregroup[i:l] >> unfold_pregroup
-let fold_isGroup1 = makeFoldC << isGroup{'g} >> unfold_isGroup1
-let fold_isGroup = makeFoldC << isGroup{'g} >> unfold_isGroup
+let fold_isGroup1 = makeFoldC << isGroup{'G} >> unfold_isGroup1
+let fold_isGroup = makeFoldC << isGroup{'G} >> unfold_isGroup
 let fold_group1 = makeFoldC << group[i:l] >> unfold_group1
 let fold_group = makeFoldC << group[i:l] >> unfold_group
 
@@ -142,92 +143,92 @@ doc <:doc<
    @end[doc]
 >>
 interactive pregroup_intro {| intro [AutoMustComplete] |} :
-   sequent [squash] { 'H >- 'g in {car: univ[i:l]; "*": ^car -> ^car -> ^car; "1": ^car; inv: ^car -> ^car} } -->
-   sequent ['ext] { 'H >- 'g in pregroup[i:l] }
+   sequent [squash] { 'H >- 'G in {car: univ[i:l]; "*": ^car -> ^car -> ^car; "1": ^car; inv: ^car -> ^car} } -->
+   sequent ['ext] { 'H >- 'G in pregroup[i:l] }
 
 interactive pregroup_elim {| elim [] |} 'H :
-   sequent ['ext] { 'H; g: {car: univ[i:l]; "*": ^car -> ^car -> ^car; "1": ^car; inv: ^car -> ^car}; 'J['g] >- 'C['g] } -->
-   sequent ['ext] { 'H; g: pregroup[i:l]; 'J['g] >- 'C['g] }
+   sequent ['ext] { 'H; G: {car: univ[i:l]; "*": ^car -> ^car -> ^car; "1": ^car; inv: ^car -> ^car}; 'J['G] >- 'C['G] } -->
+   sequent ['ext] { 'H; G: pregroup[i:l]; 'J['G] >- 'C['G] }
 
 interactive isGroup_intro {| intro [AutoMustComplete] |} :
-   [wf] sequent [squash] { 'H >- "type"{.'g^car} } -->
-   [main] sequent ['ext] { 'H >- isSemigroup{'g} } -->
-   [main] sequent ['ext] { 'H; x: 'g^car >- 'g^"1" *['g] 'x = 'x in 'g^car } -->
-   [main] sequent ['ext] { 'H; x: 'g^car >- ('g^inv 'x) *['g] 'x = 'g^"1" in 'g^car } -->
-   sequent ['ext] { 'H >- isGroup{'g} }
+   [wf] sequent [squash] { 'H >- "type"{.'G^car} } -->
+   [main] sequent ['ext] { 'H >- isSemigroup{'G} } -->
+   [main] sequent ['ext] { 'H; x: 'G^car >- 'G^"1" *['G] 'x = 'x in 'G^car } -->
+   [main] sequent ['ext] { 'H; x: 'G^car >- ('G^inv 'x) *['G] 'x = 'G^"1" in 'G^car } -->
+   sequent ['ext] { 'H >- isGroup{'G} }
 
 interactive isGroup_elim {| elim [] |} 'H :
-   sequent ['ext] { 'H; u: isGroup{'g}; v: all x: 'g^car. all y: 'g^car. all z: 'g^car. (('x *['g] 'y) *['g] 'z = 'x *['g] ('y *['g] 'z) in 'g^car); w: all x: 'g^car. ('g^"1" *['g] 'x = 'x in 'g^car); x: all x: 'g^car. ('g^inv 'x) *['g] 'x = 'g^"1" in 'g^car; 'J['u] >- 'C['u] } -->
-   sequent ['ext] { 'H; u: isGroup{'g}; 'J['u] >- 'C['u] }
+   sequent ['ext] { 'H; u: isGroup{'G}; v: all x: 'G^car. all y: 'G^car. all z: 'G^car. (('x *['G] 'y) *['G] 'z = 'x *['G] ('y *['G] 'z) in 'G^car); w: all x: 'G^car. ('G^"1" *['G] 'x = 'x in 'G^car); x: all x: 'G^car. ('G^inv 'x) *['G] 'x = 'G^"1" in 'G^car; 'J['u] >- 'C['u] } -->
+   sequent ['ext] { 'H; u: isGroup{'G}; 'J['u] >- 'C['u] }
 
 interactive group_intro {| intro [AutoMustComplete] |} :
-   [wf] sequent [squash] { 'H >- 'g in pregroup[i:l] } -->
-   [main] sequent ['ext] { 'H >- isGroup{'g} } -->
-   sequent ['ext] { 'H >- 'g in group[i:l] }
+   [wf] sequent [squash] { 'H >- 'G in pregroup[i:l] } -->
+   [main] sequent ['ext] { 'H >- isGroup{'G} } -->
+   sequent ['ext] { 'H >- 'G in group[i:l] }
 
 interactive group_elim {| elim [] |} 'H :
-   sequent ['ext] { 'H; g: {car: univ[i:l]; "*": ^car -> ^car -> ^car; "1": ^car; inv: ^car -> ^car}; u: squash{.all x: 'g^car. all y: 'g^car. all z: 'g^car. (('x *['g] 'y) *['g] 'z = 'x *['g] ('y *['g] 'z) in 'g^car)}; v: squash{.all x: 'g^car. 'g^"1" *['g] 'x = 'x in 'g^car}; w: squash{.all x: 'g^car. ('g^inv 'x) *['g] 'x = 'g^"1" in 'g^car}; 'J['g] >- 'C['g] } -->
-   sequent ['ext] { 'H; g: group[i:l]; 'J['g] >- 'C['g] }
+   sequent ['ext] { 'H; G: {car: univ[i:l]; "*": ^car -> ^car -> ^car; "1": ^car; inv: ^car -> ^car}; u: squash{.all x: 'G^car. all y: 'G^car. all z: 'G^car. (('x *['G] 'y) *['G] 'z = 'x *['G] ('y *['G] 'z) in 'G^car)}; v: squash{.all x: 'G^car. 'G^"1" *['G] 'x = 'x in 'G^car}; w: squash{.all x: 'G^car. ('G^inv 'x) *['G] 'x = 'G^"1" in 'G^car}; 'J['G] >- 'C['G] } -->
+   sequent ['ext] { 'H; G: group[i:l]; 'J['G] >- 'C['G] }
 
-interactive car_wf {| intro [intro_typeinf <<'g>>] |} group[i:l] :
-   sequent [squash] {'H >- 'g in group[i:l] } -->
-   sequent ['ext] {'H >- "type"{('g^car)} }
+interactive car_wf {| intro [AutoMustComplete; intro_typeinf <<'G>>] |} group[i:l] :
+   sequent [squash] {'H >- 'G in group[i:l] } -->
+   sequent ['ext] {'H >- "type"{('G^car)} }
 
-interactive car_wf2 {| intro [] |} :
-   sequent [squash] {'H >- 'g in group[i:l] } -->
-   sequent ['ext] {'H >- 'g^car in univ[i:l] }
+interactive car_wf2 {| intro [AutoMustComplete] |} :
+   sequent [squash] {'H >- 'G in group[i:l] } -->
+   sequent ['ext] {'H >- 'G^car in univ[i:l] }
 
-interactive op_wf {| intro [intro_typeinf <<'g>>] |} group[i:l] :
-   sequent [squash] {'H >- 'g in group[i:l] } -->
-   sequent ['ext] {'H >- 'g^"*" in 'g^car -> 'g^car -> 'g^car }
+interactive op_wf {| intro [AutoMustComplete; intro_typeinf <<'G>>] |} group[i:l] :
+   sequent [squash] {'H >- 'G in group[i:l] } -->
+   sequent ['ext] {'H >- 'G^"*" in 'G^car -> 'G^car -> 'G^car }
 
-interactive inv_wf {| intro [intro_typeinf <<'g>>] |} group[i:l] :
-   sequent [squash] {'H >- 'g in group[i:l] } -->
-   sequent ['ext] {'H >- 'g^inv in 'g^car -> 'g^car }
+interactive inv_wf {| intro [AutoMustComplete; intro_typeinf <<'G>>] |} group[i:l] :
+   sequent [squash] {'H >- 'G in group[i:l] } -->
+   sequent ['ext] {'H >- 'G^inv in 'G^car -> 'G^car }
 
-interactive op_in_G {| intro [intro_typeinf <<'g>>] |} group[i:l] :
-   sequent [squash] {'H >- 'g in group[i:l] } -->
-   sequent [squash] {'H >- 'a in 'g^car } -->
-   sequent [squash] {'H >- 'b in 'g^car } -->
-   sequent ['ext] {'H >- 'a *['g] 'b in 'g^car }
+interactive op_in_G {| intro [AutoMustComplete; intro_typeinf <<'G>>] |} group[i:l] :
+   sequent [squash] {'H >- 'G in group[i:l] } -->
+   sequent [squash] {'H >- 'a in 'G^car } -->
+   sequent [squash] {'H >- 'b in 'G^car } -->
+   sequent ['ext] {'H >- 'a *['G] 'b in 'G^car }
 
-interactive id_in_G {| intro [intro_typeinf <<'g>>] |} group[i:l] :
-   sequent [squash] {'H >- 'g in group[i:l] } -->
-   sequent ['ext] {'H >- 'g^"1" in 'g^car }
+interactive id_in_G {| intro [AutoMustComplete; intro_typeinf <<'G>>] |} group[i:l] :
+   sequent [squash] {'H >- 'G in group[i:l] } -->
+   sequent ['ext] {'H >- 'G^"1" in 'G^car }
 
-interactive inv_in_G {| intro [intro_typeinf <<'g>>] |} group[i:l] :
-   sequent [squash] {'H >- 'g in group[i:l] } -->
-   sequent [squash] {'H >- 'a in 'g^car } -->
-   sequent ['ext] {'H >- 'g^inv 'a in 'g^car }
+interactive inv_in_G {| intro [AutoMustComplete; intro_typeinf <<'G>>] |} group[i:l] :
+   sequent [squash] {'H >- 'G in group[i:l] } -->
+   sequent [squash] {'H >- 'a in 'G^car } -->
+   sequent ['ext] {'H >- 'G^inv 'a in 'G^car }
 
-interactive group_assoc {| intro [intro_typeinf <<'g>>] |} group[i:l] :
-   sequent [squash] {'H >- 'g in group[i:l] } -->
-   sequent [squash] {'H >- 'a in 'g^car } -->
-   sequent [squash] {'H >- 'b in 'g^car } -->
-   sequent [squash] {'H >- 'c in 'g^car } -->
-   sequent ['ext] {'H >- ('a *['g] 'b) *['g] 'c = 'a *['g] ('b *['g] 'c) in 'g^car }
+interactive group_assoc {| intro [AutoMustComplete; intro_typeinf <<'G>>] |} group[i:l] :
+   sequent [squash] {'H >- 'G in group[i:l] } -->
+   sequent [squash] {'H >- 'a in 'G^car } -->
+   sequent [squash] {'H >- 'b in 'G^car } -->
+   sequent [squash] {'H >- 'c in 'G^car } -->
+   sequent ['ext] {'H >- ('a *['G] 'b) *['G] 'c = 'a *['G] ('b *['G] 'c) in 'G^car }
 
-interactive group_left_id {| intro [intro_typeinf <<'g>>] |} group[i:l] :
-   sequent [squash] {'H >- 'g in group[i:l] } -->
-   sequent [squash] {'H >- 'a in 'g^car } -->
-   sequent ['ext] {'H >- 'g^"1" *['g] 'a = 'a in 'g^car }
+interactive group_left_id {| intro [AutoMustComplete; intro_typeinf <<'G>>] |} group[i:l] :
+   sequent [squash] {'H >- 'G in group[i:l] } -->
+   sequent [squash] {'H >- 'a in 'G^car } -->
+   sequent ['ext] {'H >- 'G^"1" *['G] 'a = 'a in 'G^car }
 
-interactive group_left_inv {| intro [intro_typeinf <<'g>>] |} group[i:l] :
-   sequent [squash] {'H >- 'g in group[i:l] } -->
-   sequent [squash] {'H >- 'a in 'g^car } -->
-   sequent ['ext] {'H >- ('g^inv 'a) *['g] 'a = 'g^"1" in 'g^car }
+interactive group_left_inv {| intro [AutoMustComplete; intro_typeinf <<'G>>] |} group[i:l] :
+   sequent [squash] {'H >- 'G in group[i:l] } -->
+   sequent [squash] {'H >- 'a in 'G^car } -->
+   sequent ['ext] {'H >- ('G^inv 'a) *['G] 'a = 'G^"1" in 'G^car }
 
-interactive op_eq1 {| intro [AutoMustComplete; intro_typeinf <<'g>>] |} group[i:l] :
-   sequent [squash] {'H >- 'g in group[i:l] } -->
-   sequent [squash] {'H >- 'a = 'b in 'g^car } -->
-   sequent [squash] {'H >- 'c in 'g^car } -->
-   sequent ['ext] {'H >- 'a *['g] 'c = 'b *['g] 'c in 'g^car }
+interactive op_eq1 {| intro [AutoMustComplete; intro_typeinf <<'G>>] |} group[i:l] :
+   sequent [squash] {'H >- 'G in group[i:l] } -->
+   sequent [squash] {'H >- 'a = 'b in 'G^car } -->
+   sequent [squash] {'H >- 'c in 'G^car } -->
+   sequent ['ext] {'H >- 'a *['G] 'c = 'b *['G] 'c in 'G^car }
 
-interactive op_eq2 {| intro [AutoMustComplete; intro_typeinf <<'g>>] |} group[i:l] :
-   sequent [squash] {'H >- 'g in group[i:l] } -->
-   sequent [squash] {'H >- 'a = 'b in 'g^car } -->
-   sequent [squash] {'H >- 'c in 'g^car } -->
-   sequent ['ext] {'H >- 'c *['g] 'a = 'c *['g] 'b in 'g^car }
+interactive op_eq2 {| intro [AutoMustComplete; intro_typeinf <<'G>>] |} group[i:l] :
+   sequent [squash] {'H >- 'G in group[i:l] } -->
+   sequent [squash] {'H >- 'a = 'b in 'G^car } -->
+   sequent [squash] {'H >- 'c in 'G^car } -->
+   sequent ['ext] {'H >- 'c *['G] 'a = 'c *['G] 'b in 'G^car }
 
 doc <:doc< 
    @begin[doc]
@@ -240,20 +241,20 @@ doc <:doc<
      @end[enumerate]
    @end[doc]
 >>
-interactive id_judge {| elim [elim_typeinf <<'g>>] |} 'H group[i:l] :
-   sequent [squash] {'H; x: 'u *['g] 'u = 'u in 'g^car; 'J['x] >- 'g in group[i:l] } -->
-   sequent ['ext] {'H; x: 'u *['g] 'u = 'u in 'g^car; 'J['x]; y: 'u = 'g^"1" in 'g^car >- 'C['x] } -->
-   sequent ['ext] {'H; x: 'u *['g] 'u = 'u in 'g^car; 'J['x] >- 'C['x] }
+interactive id_judge {| elim [elim_typeinf <<'G>>] |} 'H group[i:l] :
+   sequent [squash] {'H; x: 'u *['G] 'u = 'u in 'G^car; 'J['x] >- 'G in group[i:l] } -->
+   sequent ['ext] {'H; x: 'u *['G] 'u = 'u in 'G^car; 'J['x]; y: 'u = 'G^"1" in 'G^car >- 'C['x] } -->
+   sequent ['ext] {'H; x: 'u *['G] 'u = 'u in 'G^car; 'J['x] >- 'C['x] }
 
-interactive right_inv {| intro [intro_typeinf <<'g>>] |} group[i:l] :
-   sequent [squash] {'H >- 'g in group[i:l] } -->
-   sequent [squash] {'H >- 'a in 'g^car } -->
-   sequent ['ext] {'H >- 'a *['g] ('g^inv 'a) = 'g^"1" in 'g^car }
+interactive right_inv {| intro [intro_typeinf <<'G>>] |} group[i:l] :
+   sequent [squash] {'H >- 'G in group[i:l] } -->
+   sequent [squash] {'H >- 'a in 'G^car } -->
+   sequent ['ext] {'H >- 'a *['G] ('G^inv 'a) = 'G^"1" in 'G^car }
 
-interactive right_id {| intro [intro_typeinf <<'g>>] |} group[i:l] :
-   sequent [squash] {'H >- 'g in group[i:l] } -->
-   sequent [squash] {'H >- 'a in 'g^car } -->
-   sequent ['ext] {'H >- 'a *['g] 'g^"1" = 'a in 'g^car }
+interactive right_id {| intro [intro_typeinf <<'G>>] |} group[i:l] :
+   sequent [squash] {'H >- 'G in group[i:l] } -->
+   sequent [squash] {'H >- 'a in 'G^car } -->
+   sequent ['ext] {'H >- 'a *['G] 'G^"1" = 'a in 'G^car }
 
 doc <:doc< 
    @begin[doc]
@@ -263,8 +264,8 @@ doc <:doc<
    @end[doc]
 >>
 interactive group_is_monoid :
-   sequent [squash] { 'H >- 'g in group[i:l] } -->
-   sequent ['ext] { 'H >- 'g in monoid[i:l] }
+   sequent [squash] { 'H >- 'G in group[i:l] } -->
+   sequent ['ext] { 'H >- 'G in monoid[i:l] }
 
 doc <:doc< 
    @begin[doc]
@@ -274,20 +275,20 @@ doc <:doc<
    @end[doc]
 >>
 (* Cancellation: a * b = a * c => b = c *)
-interactive cancel_left {| elim [elim_typeinf <<'g>>] |} 'H group[i:l] :
-   sequent [squash] { 'H; x: 'u *['g] 'v = 'u *['g] 'w in 'g^car; 'J['x] >- 'g in group[i:l] } -->
-   sequent [squash] { 'H; x: 'u *['g] 'v = 'u *['g] 'w in 'g^car; 'J['x] >- 'u in 'g^car } -->
-   sequent [squash] { 'H; x: 'u *['g] 'v = 'u *['g] 'w in 'g^car; 'J['x] >- 'v in 'g^car } -->
-   sequent [squash] { 'H; x: 'u *['g] 'v = 'u *['g] 'w in 'g^car; 'J['x] >- 'w in 'g^car } -->
-   sequent ['ext] { 'H; x: 'u *['g] 'v = 'u *['g] 'w in 'g^car; 'J['x] >- 'v = 'w in 'g^car }
+interactive cancel_left {| elim [elim_typeinf <<'G>>] |} 'H group[i:l] :
+   sequent [squash] { 'H; x: 'u *['G] 'v = 'u *['G] 'w in 'G^car; 'J['x] >- 'G in group[i:l] } -->
+   sequent [squash] { 'H; x: 'u *['G] 'v = 'u *['G] 'w in 'G^car; 'J['x] >- 'u in 'G^car } -->
+   sequent [squash] { 'H; x: 'u *['G] 'v = 'u *['G] 'w in 'G^car; 'J['x] >- 'v in 'G^car } -->
+   sequent [squash] { 'H; x: 'u *['G] 'v = 'u *['G] 'w in 'G^car; 'J['x] >- 'w in 'G^car } -->
+   sequent ['ext] { 'H; x: 'u *['G] 'v = 'u *['G] 'w in 'G^car; 'J['x] >- 'v = 'w in 'G^car }
 
 (* Cancellation: b * a = c * a => b = c *)
-interactive cancel_right {| elim [elim_typeinf <<'g>>] |} 'H group[i:l] :
-   sequent [squash] { 'H; x: 'v *['g] 'u = 'w *['g] 'u in 'g^car; 'J['x] >- 'g in group[i:l] } -->
-   sequent [squash] { 'H; x: 'v *['g] 'u = 'w *['g] 'u in 'g^car; 'J['x] >- 'u in 'g^car } -->
-   sequent [squash] { 'H; x: 'v *['g] 'u = 'w *['g] 'u in 'g^car; 'J['x] >- 'v in 'g^car } -->
-   sequent [squash] { 'H; x: 'v *['g] 'u = 'w *['g] 'u in 'g^car; 'J['x] >- 'w in 'g^car } -->
-   sequent ['ext] { 'H; x: 'v *['g] 'u = 'w *['g] 'u in 'g^car; 'J['x] >- 'v = 'w in 'g^car }
+interactive cancel_right {| elim [elim_typeinf <<'G>>] |} 'H group[i:l] :
+   sequent [squash] { 'H; x: 'v *['G] 'u = 'w *['G] 'u in 'G^car; 'J['x] >- 'G in group[i:l] } -->
+   sequent [squash] { 'H; x: 'v *['G] 'u = 'w *['G] 'u in 'G^car; 'J['x] >- 'u in 'G^car } -->
+   sequent [squash] { 'H; x: 'v *['G] 'u = 'w *['G] 'u in 'G^car; 'J['x] >- 'v in 'G^car } -->
+   sequent [squash] { 'H; x: 'v *['G] 'u = 'w *['G] 'u in 'G^car; 'J['x] >- 'w in 'G^car } -->
+   sequent ['ext] { 'H; x: 'v *['G] 'u = 'w *['G] 'u in 'G^car; 'J['x] >- 'v = 'w in 'G^car }
 
 doc <:doc< 
    @begin[doc]
@@ -296,16 +297,16 @@ doc <:doc<
    @end[doc]
 >>
 interactive unique_id_left group[i:l] :
-   [wf] sequent [squash] {'H >- 'g in group[i:l] } -->
-   [wf] sequent [squash] {'H >- 'e2 in 'g^car } -->
-   [main] sequent ['ext] {'H >- all a: 'g^car. 'e2 *['g] 'a = 'a in 'g^car } -->
-   sequent ['ext] {'H >- 'e2 = 'g^"1" in 'g^car }
+   [wf] sequent [squash] {'H >- 'G in group[i:l] } -->
+   [wf] sequent [squash] {'H >- 'e2 in 'G^car } -->
+   [main] sequent ['ext] {'H >- all a: 'G^car. 'e2 *['G] 'a = 'a in 'G^car } -->
+   sequent ['ext] {'H >- 'e2 = 'G^"1" in 'G^car }
 
 interactive unique_id_right group[i:l] :
-   [wf] sequent [squash] {'H >- 'g in group[i:l] } -->
-   [wf] sequent [squash] {'H >- 'e2 in 'g^car } -->
-   [main] sequent ['ext] {'H >- all a: 'g^car. 'a *['g] 'e2 = 'a in 'g^car } -->
-   sequent ['ext] {'H >- 'e2 = 'g^"1" in 'g^car }
+   [wf] sequent [squash] {'H >- 'G in group[i:l] } -->
+   [wf] sequent [squash] {'H >- 'e2 in 'G^car } -->
+   [main] sequent ['ext] {'H >- all a: 'G^car. 'a *['G] 'e2 = 'a in 'G^car } -->
+   sequent ['ext] {'H >- 'e2 = 'G^"1" in 'G^car }
 
 doc <:doc< 
    @begin[doc]
@@ -313,19 +314,19 @@ doc <:doc<
    Unique inverse (left and right).
    @end[doc]
 >>
-interactive unique_inv_left {| intro [intro_typeinf <<'g>>] |} group[i:l] :
-   [wf] sequent [squash] {'H >- 'g in group[i:l] } -->
-   [wf] sequent [squash] {'H >- 'a in 'g^car } -->
-   [wf] sequent [squash] {'H >- 'a2 in 'g^car } -->
-   [main] sequent ['ext] {'H >- 'a2 *['g] 'a = 'g^"1" in 'g^car } -->
-   sequent ['ext] {'H >- 'a2 = 'g^inv 'a in 'g^car }
+interactive unique_inv_left {| intro [intro_typeinf <<'G>>] |} group[i:l] :
+   [wf] sequent [squash] {'H >- 'G in group[i:l] } -->
+   [wf] sequent [squash] {'H >- 'a in 'G^car } -->
+   [wf] sequent [squash] {'H >- 'a2 in 'G^car } -->
+   [main] sequent ['ext] {'H >- 'a2 *['G] 'a = 'G^"1" in 'G^car } -->
+   sequent ['ext] {'H >- 'a2 = 'G^inv 'a in 'G^car }
 
-interactive unique_inv_right {| intro [intro_typeinf <<'g>>] |} group[i:l] :
-   [wf] sequent [squash] {'H >- 'g in group[i:l] } -->
-   [wf] sequent [squash] {'H >- 'a in 'g^car } -->
-   [wf] sequent [squash] {'H >- 'a2 in 'g^car } -->
-   [main] sequent ['ext] {'H >- 'a *['g] 'a2 = 'g^"1" in 'g^car } -->
-   sequent ['ext] {'H >- 'a2 = 'g^inv 'a in 'g^car }
+interactive unique_inv_right {| intro [intro_typeinf <<'G>>] |} group[i:l] :
+   [wf] sequent [squash] {'H >- 'G in group[i:l] } -->
+   [wf] sequent [squash] {'H >- 'a in 'G^car } -->
+   [wf] sequent [squash] {'H >- 'a2 in 'G^car } -->
+   [main] sequent ['ext] {'H >- 'a *['G] 'a2 = 'G^"1" in 'G^car } -->
+   sequent ['ext] {'H >- 'a2 = 'G^inv 'a in 'G^car }
 
 doc <:doc< 
    @begin[doc]
@@ -334,22 +335,22 @@ doc <:doc<
    @end[doc]
 >>
 (* The unique solution for a * x = b is x = a' * b *)
-interactive unique_sol1 {| intro [AutoMustComplete; intro_typeinf <<'g>>] |} group[i:l] :
-   [wf] sequent [squash] {'H >- 'g in group[i:l] } -->
-   [wf] sequent [squash] {'H >- 'a in 'g^car } -->
-   [wf] sequent [squash] {'H >- 'b in 'g^car } -->
-   [wf] sequent [squash] {'H >- 'x in 'g^car } -->
-   [main] sequent ['ext] {'H >- 'a *['g] 'x = 'b in 'g^car } -->
-   sequent ['ext] {'H >- 'x = ('g^inv 'a) *['g] 'b in 'g^car }
+interactive unique_sol1 {| intro [AutoMustComplete; intro_typeinf <<'G>>] |} group[i:l] :
+   [wf] sequent [squash] {'H >- 'G in group[i:l] } -->
+   [wf] sequent [squash] {'H >- 'a in 'G^car } -->
+   [wf] sequent [squash] {'H >- 'b in 'G^car } -->
+   [wf] sequent [squash] {'H >- 'x in 'G^car } -->
+   [main] sequent ['ext] {'H >- 'a *['G] 'x = 'b in 'G^car } -->
+   sequent ['ext] {'H >- 'x = ('G^inv 'a) *['G] 'b in 'G^car }
 
 (* The unique solution for y * a = b is y = b * a' *)
-interactive unique_sol2 {| intro [AutoMustComplete; intro_typeinf <<'g>>] |} group[i:l] :
-   [wf] sequent [squash] {'H >- 'g in group[i:l] } -->
-   [wf] sequent [squash] {'H >- 'a in 'g^car } -->
-   [wf] sequent [squash] {'H >- 'b in 'g^car } -->
-   [wf] sequent [squash] {'H >- 'y in 'g^car } -->
-   [main] sequent ['ext] {'H >- 'y *['g] 'a = 'b in 'g^car } -->
-   sequent ['ext] {'H >- 'y = 'b *['g] ('g^inv 'a) in 'g^car }
+interactive unique_sol2 {| intro [AutoMustComplete; intro_typeinf <<'G>>] |} group[i:l] :
+   [wf] sequent [squash] {'H >- 'G in group[i:l] } -->
+   [wf] sequent [squash] {'H >- 'a in 'G^car } -->
+   [wf] sequent [squash] {'H >- 'b in 'G^car } -->
+   [wf] sequent [squash] {'H >- 'y in 'G^car } -->
+   [main] sequent ['ext] {'H >- 'y *['G] 'a = 'b in 'G^car } -->
+   sequent ['ext] {'H >- 'y = 'b *['G] ('G^inv 'a) in 'G^car }
 
 doc <:doc< 
    @begin[doc]
@@ -358,29 +359,29 @@ doc <:doc<
    @end[doc]
 >>
 (* (a * b)' = b' * a'  *)
-interactive inv_simplify {| intro [intro_typeinf <<'g>>] |} group[i:l] :
-   sequent [squash] {'H >- 'g in group[i:l] } -->
-   sequent [squash] {'H >- 'a in 'g^car } -->
-   sequent [squash] {'H >- 'b in 'g^car } -->
-   sequent ['ext] {'H >- 'g^inv ('a *['g] 'b)  = ('g^inv 'b) *['g] ('g^inv 'a) in 'g^car }
+interactive inv_simplify {| intro [intro_typeinf <<'G>>] |} group[i:l] :
+   sequent [squash] {'H >- 'G in group[i:l] } -->
+   sequent [squash] {'H >- 'a in 'G^car } -->
+   sequent [squash] {'H >- 'b in 'G^car } -->
+   sequent ['ext] {'H >- 'G^inv ('a *['G] 'b)  = ('G^inv 'b) *['G] ('G^inv 'a) in 'G^car }
 doc <:doc< @docoff >>
 
 (* Inverse of id *)
-interactive inv_of_id {| intro [intro_typeinf <<'g>>] |} group[i:l] :
-   sequent [squash] {'H >- 'g in group[i:l] } -->
-   sequent ['ext] {'H >- 'g^inv 'g^"1" = 'g^"1" in 'g^car }
+interactive inv_of_id {| intro [intro_typeinf <<'G>>] |} group[i:l] :
+   sequent [squash] {'H >- 'G in group[i:l] } -->
+   sequent ['ext] {'H >- 'G^inv 'G^"1" = 'G^"1" in 'G^car }
 
 (* e * a = a * e *)
-interactive id_commut1 {| intro [intro_typeinf <<'g>>] |} group[i:l] :
-   sequent [squash] {'H >- 'g in group[i:l] } -->
-   sequent [squash] {'H >- 'a in 'g^car } -->
-   sequent ['ext] {'H >- 'g^"1" *['g] 'a = 'a *['g] 'g^"1" in 'g^car }
+interactive id_commut1 {| intro [intro_typeinf <<'G>>] |} group[i:l] :
+   sequent [squash] {'H >- 'G in group[i:l] } -->
+   sequent [squash] {'H >- 'a in 'G^car } -->
+   sequent ['ext] {'H >- 'G^"1" *['G] 'a = 'a *['G] 'G^"1" in 'G^car }
 
 (* a * e = e * a *)
-interactive id_commut2 {| intro [intro_typeinf <<'g>>] |} group[i:l] :
-   sequent [squash] {'H >- 'g in group[i:l] } -->
-   sequent [squash] {'H >- 'a in 'g^car } -->
-   sequent ['ext] {'H >- 'a *['g] 'g^"1" = 'g^"1" *['g] 'a in 'g^car }
+interactive id_commut2 {| intro [intro_typeinf <<'G>>] |} group[i:l] :
+   sequent [squash] {'H >- 'G in group[i:l] } -->
+   sequent [squash] {'H >- 'a in 'G^car } -->
+   sequent ['ext] {'H >- 'a *['G] 'G^"1" = 'G^"1" *['G] 'a in 'G^car }
 
 (************************************************************************
  * ABELIAN GROUP                                                        *
@@ -394,7 +395,7 @@ doc <:doc<
    @end[doc]
 >>
 define unfold_abelg : abelg[i:l] <-->
-   {g: group[i:l] | isCommutative{'g}}
+   {G: group[i:l] | isCommutative{'G}}
 doc <:doc< @docoff >>
 
 let fold_abelg = makeFoldC << abelg[i:l] >> unfold_abelg
@@ -420,13 +421,13 @@ doc <:doc<
    @end[doc]
 >>
 interactive abelg_intro {| intro [] |} :
-   [wf] sequent [squash] { 'H >- 'g in group[i:l] } -->
-   [main] sequent ['ext] { 'H >- isCommutative{'g} } -->
-   sequent ['ext] { 'H >- 'g in abelg[i:l] }
+   [wf] sequent [squash] { 'H >- 'G in group[i:l] } -->
+   [main] sequent ['ext] { 'H >- isCommutative{'G} } -->
+   sequent ['ext] { 'H >- 'G in abelg[i:l] }
 
 interactive abelg_elim {| elim [] |} 'H :
-   sequent ['ext] { 'H; g: group[i:l]; x: isCommutative{'g}; 'J['g] >- 'C['g] } -->
-   sequent ['ext] { 'H; g: abelg[i:l]; 'J['g] >- 'C['g] }
+   sequent ['ext] { 'H; G: group[i:l]; x: isCommutative{'G}; 'J['G] >- 'C['G] } -->
+   sequent ['ext] { 'H; G: abelg[i:l]; 'J['G] >- 'C['G] }
 
 doc <:doc< 
    @begin[doc]
@@ -435,8 +436,8 @@ doc <:doc<
    @end[doc]
 >>
 interactive abelg_is_group :
-   sequent [squash] { 'H >- 'g in abelg[i:l] } -->
-   sequent ['ext] { 'H >- 'g in group[i:l] }
+   sequent [squash] { 'H >- 'G in abelg[i:l] } -->
+   sequent ['ext] { 'H >- 'G in group[i:l] }
 
 doc <:doc< 
    @begin[doc]
@@ -493,8 +494,7 @@ interactive subgroup_intro {| intro [] |} :
 
 (*
 interactive subgroup_elim {| elim [] |} 'H 'S 'G :
-(*   [main] sequent ['ext] { 'H; S: group[i:l]; G: group[i:l]; x: subStructure{'S; 'G}; y: 'S^car subtype 'G^car; z: all a: 'S^car. all b: 'S^car. (('a = 'b in 'G^car) => ('a = 'b in 'G^car)); u: {b: 'G^car | exst a: 'S^car. 'b = 'a in 'G^car} subtype 'S^car; v: 'S^"*" = 'G^"*" in 'S^car -> 'S^car -> 'S^car; 'J['x] >- 'C['x] } -->*)
-   [main] sequent ['ext] { 'H; S: group[i:l]; G: group[i:l]; y: 'S^car subtype 'G^car; z: all a: 'S^car. all b: 'S^car. (('a = 'b in 'G^car) => ('a = 'b in 'G^car)); u: {b: 'G^car | exst a: 'S^car. 'b = 'a in 'G^car} subtype 'S^car; v: 'S^"*" = 'G^"*" in 'S^car -> 'S^car -> 'S^car; 'J['S, 'G] >- 'C['S, 'G] } -->
+   [main] sequent ['ext] { 'H; S: group[i:l]; G: group[i:l]; x: subStructure{'S; 'G}; 'J['S, 'G] >- 'C['S, 'G] } -->
    sequent ['ext] { 'H; x: subgroup[i:l]{'S; 'G}; 'J['x] >- 'C['x] }
 *)
 
@@ -526,32 +526,32 @@ doc <:doc<
    @end[doc]
 >>
 interactive subgroup_op {| intro [intro_typeinf <<'G>>] |} group[i:l] :
-   [main] sequent ['ext] { 'H >- subgroup[i:l]{'S; 'G} } -->
+   [main] sequent [squash] { 'H >- subgroup[i:l]{'S; 'G} } -->
    [wf] sequent [squash] {'H >- 'a in 'S^car } -->
    [wf] sequent [squash] {'H >- 'b in 'S^car } -->
    sequent ['ext] { 'H >- 'a *['G] 'b = 'a *['S] 'b in 'S^car }
 
 interactive subgroup_op1 {| intro [intro_typeinf <<'G>>] |} group[i:l] :
-   [main] sequent ['ext] { 'H >- subgroup[i:l]{'S; 'G} } -->
+   [main] sequent [squash] { 'H >- subgroup[i:l]{'S; 'G} } -->
    [wf] sequent [squash] {'H >- 'a in 'S^car } -->
    [wf] sequent [squash] {'H >- 'b in 'S^car } -->
    sequent ['ext] { 'H >- 'a *['G] 'b in 'S^car }
 
 interactive subgroup_id {| intro [intro_typeinf <<'G>>] |} group[i:l] :
-   [main] sequent ['ext] { 'H >- subgroup[i:l]{'S; 'G} } -->
+   [main] sequent [squash] { 'H >- subgroup[i:l]{'S; 'G} } -->
    sequent ['ext] {'H >- 'G^"1" = 'S^"1" in 'S^car }
 
 interactive subgroup_id1 {| intro [AutoMustComplete; intro_typeinf <<'G>>] |} group[i:l] :
-   [main] sequent ['ext] { 'H >- subgroup[i:l]{'S; 'G} } -->
+   [main] sequent [squash] { 'H >- subgroup[i:l]{'S; 'G} } -->
    sequent ['ext] {'H >- 'G^"1" in 'S^car }
 
 interactive subgroup_inv {| intro [intro_typeinf <<'G>>] |} group[i:l] :
-   [main] sequent ['ext] { 'H >- subgroup[i:l]{'S; 'G} } -->
+   [main] sequent [squash] { 'H >- subgroup[i:l]{'S; 'G} } -->
    [wf] sequent [squash] {'H >- 'a in 'S^car } -->
    sequent ['ext] {'H >- 'G^inv 'a = 'S^inv 'a in 'S^car }
 
 interactive subgroup_inv1 {| intro [AutoMustComplete; intro_typeinf <<'G>>] |} group[i:l] :
-   [main] sequent ['ext] { 'H >- subgroup[i:l]{'S; 'G} } -->
+   [main] sequent [squash] { 'H >- subgroup[i:l]{'S; 'G} } -->
    [wf] sequent [squash] {'H >- 'a in 'S^car } -->
    sequent ['ext] {'H >- 'G^inv 'a in 'S^car }
 
@@ -563,7 +563,7 @@ doc <:doc<
    @end[doc]
 >>
 interactive subgroup_thm1 group[i:l] :
-   [main] sequent ['ext] { 'H >- subgroup[i:l]{'S; 'G} } -->
+   [main] sequent [squash] { 'H >- subgroup[i:l]{'S; 'G} } -->
    sequent ['ext] { 'H >- all a: 'S^car. all b: 'S^car. ('a *['G] ('G^inv 'b) in 'S^car) }
 
 doc <:doc< 
@@ -574,8 +574,8 @@ doc <:doc<
    @end[doc]
 >>
 interactive subgroup_isect :
-   sequent ['ext] { 'H >- subgroup[i:l]{'S1; 'G} } -->
-   sequent ['ext] { 'H >- subgroup[i:l]{'S2; 'G} } -->
+   sequent [squash] { 'H >- subgroup[i:l]{'S1; 'G} } -->
+   sequent [squash] { 'H >- subgroup[i:l]{'S2; 'G} } -->
    sequent ['ext] { 'H >- subgroup[i:l]{{car=bisect{.'S1^car;.'S2^car}; "*"='G^"*"; "1"='G^"1"; inv='G^inv}; 'G} }
 
 (************************************************************************
@@ -589,15 +589,15 @@ doc <:doc<
   
    @end[doc]
 >>
-define unfold_lcoset : lcoset{'s; 'g; 'b} <-->
-   {x: 'g^car | exst a: 's^car. 'x = 'b *['g] 'a in 'g^car}
+define unfold_lcoset : lcoset{'S; 'G; 'b} <-->
+   {x: 'G^car | exst a: 'S^car. 'x = 'b *['G] 'a in 'G^car}
 
-define unfold_rcoset : rcoset{'s; 'g; 'b} <-->
-   {x: 'g^car | exst a: 's^car. 'x = 'a *['g] 'b in 'g^car}
+define unfold_rcoset : rcoset{'S; 'G; 'b} <-->
+   {x: 'G^car | exst a: 'S^car. 'x = 'a *['G] 'b in 'G^car}
 doc <:doc< @docoff >>
 
-let fold_lcoset = makeFoldC << lcoset{'s; 'g; 'b} >> unfold_lcoset
-let fold_rcoset = makeFoldC << rcoset{'s; 'g; 'b} >> unfold_rcoset
+let fold_lcoset = makeFoldC << lcoset{'S; 'G; 'b} >> unfold_lcoset
+let fold_rcoset = makeFoldC << rcoset{'S; 'G; 'b} >> unfold_rcoset
 
 doc <:doc< 
    @begin[doc]
@@ -606,16 +606,28 @@ doc <:doc<
    @end[doc]
 >>
 interactive lcoset_wf {| intro [] |} :
-   [wf] sequent [squash] { 'H >- "type"{.'g^car} } -->
-   [wf] sequent [squash] { 'H >- "type"{.'s^car} } -->
-   [wf] sequent [squash] { 'H; a: 's^car >- 'b *['g] 'a in 'g^car } -->
-   sequent ['ext] { 'H >- "type"{lcoset{'s; 'g; 'b}} }
+   [wf] sequent [squash] { 'H >- "type"{.'G^car} } -->
+   [wf] sequent [squash] { 'H >- "type"{.'S^car} } -->
+   [wf] sequent [squash] { 'H; a: 'S^car >- 'b *['G] 'a in 'G^car } -->
+   sequent ['ext] { 'H >- "type"{lcoset{'S; 'G; 'b}} }
 
 interactive rcoset_wf {| intro [] |} :
-   [wf] sequent [squash] { 'H >- "type"{.'g^car} } -->
-   [wf] sequent [squash] { 'H >- "type"{.'s^car} } -->
-   [wf] sequent [squash] { 'H; a: 's^car >- 'a *['g] 'b in 'g^car } -->
-   sequent ['ext] { 'H >- "type"{rcoset{'s; 'g; 'b}} }
+   [wf] sequent [squash] { 'H >- "type"{.'G^car} } -->
+   [wf] sequent [squash] { 'H >- "type"{.'S^car} } -->
+   [wf] sequent [squash] { 'H; a: 'S^car >- 'a *['G] 'b in 'G^car } -->
+   sequent ['ext] { 'H >- "type"{rcoset{'S; 'G; 'b}} }
+
+interactive lcoset_equality {| intro []; eqcd |} :
+   [wf] sequent [squash] { 'H >- 'G^car in univ[i:l] } -->
+   [wf] sequent [squash] { 'H >- 'S1^car = 'S2^car in univ[i:l] } -->
+   [wf] sequent [squash] { 'H; a: 'S1^car >- 'b *['G] 'a in 'G^car } -->
+   sequent ['ext] { 'H >- lcoset{'S1; 'G; 'b} = lcoset{'S2; 'G; 'b} in univ[i:l] }
+
+interactive rcoset_equality {| intro []; eqcd |} :
+   [wf] sequent [squash] { 'H >- 'G^car in univ[i:l] } -->
+   [wf] sequent [squash] { 'H >- 'S1^car = 'S2^car in univ[i:l] } -->
+   [wf] sequent [squash] { 'H; a: 'S1^car >- 'a *['G] 'b in 'G^car } -->
+   sequent ['ext] { 'H >- rcoset{'S1; 'G; 'b} = rcoset{'S2; 'G; 'b} in univ[i:l] }
 
 doc <:doc< 
    @begin[doc]
@@ -623,59 +635,47 @@ doc <:doc<
   
    @end[doc]
 >>
-interactive lcoset_intro {| intro [intro_typeinf <<'g>>] |} group[i:l] 'x :
-   [wf] sequent [squash] {'H >- 's in group[i:l] } -->
-   [wf] sequent [squash] {'H >- 'g in group[i:l] } -->
-   [main] sequent ['ext] { 'H >- subStructure{'s; 'g} } -->
-   [wf] sequent [squash] {'H >- 'b in 'g^car } -->
-   [wf] sequent [squash] {'H >- 'x in 'g^car } -->
-   [main] sequent [squash] {'H >- exst a: 's^car. 'x = 'b *['g] 'a in 'g^car } -->
-   sequent ['ext] { 'H >- lcoset{'s; 'g; 'b} }
+interactive lcoset_intro {| intro [intro_typeinf <<'G>>] |} group[i:l] 'x :
+   [main] sequent [squash] { 'H >- subgroup[i:l]{'S; 'G} } -->
+   [wf] sequent [squash] {'H >- 'b in 'G^car } -->
+   [wf] sequent [squash] {'H >- 'x in 'G^car } -->
+   [main] sequent [squash] {'H >- exst a: 'S^car. 'x = 'b *['G] 'a in 'G^car } -->
+   sequent ['ext] { 'H >- lcoset{'S; 'G; 'b} }
 
-interactive rcoset_intro {| intro [intro_typeinf <<'g>>] |} group[i:l] 'x :
-   [wf] sequent [squash] {'H >- 's in group[i:l] } -->
-   [wf] sequent [squash] {'H >- 'g in group[i:l] } -->
-   [main] sequent ['ext] { 'H >- subStructure{'s; 'g} } -->
-   [wf] sequent [squash] {'H >- 'b in 'g^car } -->
-   [wf] sequent [squash] {'H >- 'x in 'g^car } -->
-   [main] sequent [squash] {'H >- exst a: 's^car. 'x = 'a *['g] 'b in 'g^car } -->
-   sequent ['ext] { 'H >- rcoset{'s; 'g; 'b} }
+interactive rcoset_intro {| intro [intro_typeinf <<'G>>] |} group[i:l] 'x :
+   [main] sequent [squash] { 'H >- subgroup[i:l]{'S; 'G} } -->
+   [wf] sequent [squash] {'H >- 'b in 'G^car } -->
+   [wf] sequent [squash] {'H >- 'x in 'G^car } -->
+   [main] sequent [squash] {'H >- exst a: 'S^car. 'x = 'a *['G] 'b in 'G^car } -->
+   sequent ['ext] { 'H >- rcoset{'S; 'G; 'b} }
 
-interactive lcoset_member_intro {| intro [intro_typeinf <<'g>>] |} group[i:l] 'a :
-   [wf] sequent [squash] {'H >- 's in group[i:l] } -->
-   [wf] sequent [squash] {'H >- 'g in group[i:l] } -->
-   [wf] sequent ['ext] { 'H >- subStructure{'s; 'g} } -->
-   [wf] sequent [squash] {'H >- 'b in 'g^car } -->
-   [wf] sequent [squash] {'H >- 'x1 = 'x2 in 'g^car } -->
-   [wf] sequent [squash] {'H >- 'a in 's^car } -->
-   [main] sequent [squash] {'H >- 'x1 = 'b *['g] 'a in 'g^car } -->
-   sequent ['ext] { 'H >- 'x1 = 'x2 in lcoset{'s; 'g; 'b} }
+interactive lcoset_member_intro {| intro [intro_typeinf <<'G>>] |} group[i:l] 'a :
+   [main] sequent [squash] { 'H >- subgroup[i:l]{'S; 'G} } -->
+   [wf] sequent [squash] {'H >- 'b in 'G^car } -->
+   [wf] sequent [squash] {'H >- 'x1 = 'x2 in 'G^car } -->
+   [wf] sequent [squash] {'H >- 'a in 'S^car } -->
+   [main] sequent [squash] {'H >- 'x1 = 'b *['G] 'a in 'G^car } -->
+   sequent ['ext] { 'H >- 'x1 = 'x2 in lcoset{'S; 'G; 'b} }
 
-interactive rcoset_member_intro {| intro [intro_typeinf <<'g>>] |} group[i:l] 'a :
-   [wf] sequent [squash] {'H >- 's in group[i:l] } -->
-   [wf] sequent [squash] {'H >- 'g in group[i:l] } -->
-   [wf] sequent ['ext] { 'H >- subStructure{'s; 'g} } -->
-   [wf] sequent [squash] {'H >- 'b in 'g^car } -->
-   [wf] sequent [squash] {'H >- 'x1 = 'x2 in 'g^car } -->
-   [wf] sequent [squash] {'H >- 'a in 's^car } -->
-   [main] sequent ['ext] {'H >- 'x1 = 'a *['g] 'b in 'g^car } -->
-   sequent ['ext] { 'H >- 'x1 = 'x2 in rcoset{'s; 'g; 'b} }
+interactive rcoset_member_intro {| intro [intro_typeinf <<'G>>] |} group[i:l] 'a :
+   [main] sequent [squash] { 'H >- subgroup[i:l]{'S; 'G} } -->
+   [wf] sequent [squash] {'H >- 'b in 'G^car } -->
+   [wf] sequent [squash] {'H >- 'x1 = 'x2 in 'G^car } -->
+   [wf] sequent [squash] {'H >- 'a in 'S^car } -->
+   [main] sequent ['ext] {'H >- 'x1 = 'a *['G] 'b in 'G^car } -->
+   sequent ['ext] { 'H >- 'x1 = 'x2 in rcoset{'S; 'G; 'b} }
 
-interactive lcoset_elim {| elim [elim_typeinf <<'g>>] |} 'H group[i:l] :
-   [wf] sequent [squash] {'H; u: lcoset{'s; 'g; 'b}; 'J['u] >- 's in group[i:l] } -->
-   [wf] sequent [squash] {'H; u: lcoset{'s; 'g; 'b}; 'J['u] >- 'g in group[i:l] } -->
-   [wf] sequent ['ext] { 'H; u: lcoset{'s; 'g; 'b}; 'J['u] >- subStructure{'s; 'g} } -->
-   [wf] sequent [squash] {'H; u: lcoset{'s; 'g; 'b}; 'J['u] >- 'b in 'g^car } -->
-   [main] sequent ['ext] {'H; u: 'g^car; v: squash{.exst a: 's^car. 'u = 'b *['g] 'a in 'g^car}; 'J['u] >- 'C['u] } -->
-   sequent ['ext] { 'H; u: lcoset{'s; 'g; 'b}; 'J['u] >- 'C['u] }
+interactive lcoset_elim {| elim [elim_typeinf <<'G>>] |} 'H group[i:l] :
+   [wf] sequent [squash] { 'H; u: lcoset{'S; 'G; 'b}; 'J['u] >- subgroup[i:l]{'S; 'G} } -->
+   [wf] sequent [squash] {'H; u: lcoset{'S; 'G; 'b}; 'J['u] >- 'b in 'G^car } -->
+   [main] sequent ['ext] {'H; u: 'G^car; v: squash{.exst a: 'S^car. 'u = 'b *['G] 'a in 'G^car}; 'J['u] >- 'C['u] } -->
+   sequent ['ext] { 'H; u: lcoset{'S; 'G; 'b}; 'J['u] >- 'C['u] }
 
-interactive rcoset_elim {| elim [elim_typeinf <<'g>>] |} 'H group[i:l] :
-   [wf] sequent [squash] {'H; u: rcoset{'s; 'g; 'b}; 'J['u] >- 's in group[i:l] } -->
-   [wf] sequent [squash] {'H; u: rcoset{'s; 'g; 'b}; 'J['u] >- 'g in group[i:l] } -->
-   [wf] sequent [squash] { 'H; u: rcoset{'s; 'g; 'b}; 'J['u] >- subStructure{'s; 'g} } -->
-   [wf] sequent [squash] {'H; u: rcoset{'s; 'g; 'b}; 'J['u] >- 'b in 'g^car } -->
-   [main] sequent ['ext] {'H; u: 'g^car; v: squash{.exst a: 's^car. 'u = 'a *['g] 'b in 'g^car}; 'J['u] >- 'C['u] } -->
-   sequent ['ext] { 'H; u: rcoset{'s; 'g; 'b}; 'J['u] >- 'C['u] }
+interactive rcoset_elim {| elim [elim_typeinf <<'G>>] |} 'H group[i:l] :
+   [wf] sequent [squash] { 'H; u: rcoset{'S; 'G; 'b}; 'J['u] >- subgroup[i:l]{'S; 'G} } -->
+   [wf] sequent [squash] {'H; u: rcoset{'S; 'G; 'b}; 'J['u] >- 'b in 'G^car } -->
+   [main] sequent ['ext] {'H; u: 'G^car; v: squash{.exst a: 'S^car. 'u = 'a *['G] 'b in 'G^car}; 'J['u] >- 'C['u] } -->
+   sequent ['ext] { 'H; u: rcoset{'S; 'G; 'b}; 'J['u] >- 'C['u] }
 
 doc <:doc< 
    @begin[doc]
@@ -686,19 +686,15 @@ doc <:doc<
      $g$.
    @end[doc]
 >>
-interactive lcoset_subset {| intro [intro_typeinf <<'g>>] |} group[i:l] :
-   [wf] sequent [squash] {'H >- 's in group[i:l] } -->
-   [wf] sequent [squash] {'H >- 'g in group[i:l] } -->
-   [main] sequent ['ext] { 'H >- subStructure{'s; 'g} } -->
-   [wf] sequent [squash] {'H >- 'b in 'g^car } -->
-   sequent ['ext] { 'H >- \subset{lcoset{'s; 'g; 'b}; .'g^car} }
+interactive lcoset_subset {| intro [intro_typeinf <<'G>>] |} group[i:l] :
+   [main] sequent [squash] { 'H >- subgroup[i:l]{'S; 'G} } -->
+   [wf] sequent [squash] {'H >- 'b in 'G^car } -->
+   sequent ['ext] { 'H >- \subset{lcoset{'S; 'G; 'b}; .'G^car} }
 
-interactive rcoset_subset {| intro [intro_typeinf <<'g>>] |} group[i:l] :
-   [wf] sequent [squash] {'H >- 's in group[i:l] } -->
-   [wf] sequent [squash] {'H >- 'g in group[i:l] } -->
-   [main] sequent ['ext] { 'H >- subStructure{'s; 'g} } -->
-   [wf] sequent [squash] {'H >- 'b in 'g^car } -->
-   sequent ['ext] { 'H >- \subset{rcoset{'s; 'g; 'b}; .'g^car} }
+interactive rcoset_subset {| intro [intro_typeinf <<'G>>] |} group[i:l] :
+   [main] sequent [squash] { 'H >- subgroup[i:l]{'S; 'G} } -->
+   [wf] sequent [squash] {'H >- 'b in 'G^car } -->
+   sequent ['ext] { 'H >- \subset{rcoset{'S; 'G; 'b}; .'G^car} }
 
 (************************************************************************
  * NORMAL SUBGROUP                                                      *
@@ -711,11 +707,11 @@ doc <:doc<
   
    @end[doc]
 >>
-define unfold_normalSubg : normalSubg[i:l]{'s; 'g} <-->
-   subStructure{'s; 'g} & all x: 'g^car. lcoset{'s; 'g; 'x} = rcoset{'s; 'g; 'x} in univ[i:l]
+define unfold_normalSubg : normalSubg[i:l]{'S; 'G} <-->
+   subgroup[i:l]{'S; 'G} & all x: 'G^car. lcoset{'S; 'G; 'x} = rcoset{'S; 'G; 'x} in univ[i:l]
 doc <:doc< @docoff >>
 
-let fold_normalSubg = makeFoldC << normalSubg[i:l]{'s; 'g} >> unfold_normalSubg
+let fold_normalSubg = makeFoldC << normalSubg[i:l]{'S; 'G} >> unfold_normalSubg
 
 doc <:doc< 
    @begin[doc]
@@ -723,13 +719,13 @@ doc <:doc<
   
    @end[doc]
 >>
-(*
 interactive normalSubg_wf {| intro [] |} :
-   [wf] sequent [squash] {'H >- 's in group[i:l] } -->
-   [wf] sequent [squash] {'H >- 'g in group[i:l] } -->
-   [main] sequent ['ext] { 'H >- subStructure{'s; 'g} } -->
-   sequent ['ext] { 'H >- "type"{normalSubg[i:l]{'s; 'g}} }
-*)
+   sequent [squash] { 'H >- 'S in group[i:l] } -->
+   sequent [squash] { 'H >- 'G in group[i:l] } -->
+   sequent [squash] { 'H >- 'G^"*" = 'S^"*" in 'S^car -> 'S^car -> 'S^car } -->
+   sequent [squash] { 'H; x: 'G^car; a: 'S^car >- 'x *['G] 'a in 'G^car } -->
+   sequent [squash] { 'H; x: 'G^car; a: 'S^car >- 'a *['G] 'x in 'G^car } -->
+   sequent ['ext] { 'H >- "type"{normalSubg[i:l]{'S; 'G}} }
 
 doc <:doc< 
    @begin[doc]
@@ -738,19 +734,13 @@ doc <:doc<
    @end[doc]
 >>
 interactive normalSubg_intro {| intro [] |} :
-   [wf] sequent [squash] {'H >- 's in group[i:l] } -->
-   [wf] sequent [squash] {'H >- 'g in group[i:l] } -->
-   [main] sequent ['ext] { 'H >- subStructure{'s; 'g} } -->
-   [main] sequent ['ext] { 'H; x: 'g^car >- lcoset{'s; 'g; 'x} = rcoset{'s; 'g; 'x} in univ[i:l] } -->
-   sequent ['ext] { 'H >- normalSubg[i:l]{'s; 'g} }
+   [main] sequent [squash] { 'H >- subgroup[i:l]{'S; 'G} } -->
+   [main] sequent [squash] { 'H; x: 'G^car >- lcoset{'S; 'G; 'x} = rcoset{'S; 'G; 'x} in univ[i:l] } -->
+   sequent ['ext] { 'H >- normalSubg[i:l]{'S; 'G} }
 
-interactive normalSubg_elim {| elim [] |} 'H 'b :
-   [wf] sequent [squash] {'H; x: normalSubg[i:l]{'s; 'g}; 'J['x] >- 's in group[i:l] } -->
-   [wf] sequent [squash] {'H; x: normalSubg[i:l]{'s; 'g}; 'J['x] >- 'g in group[i:l] } -->
-   [main] sequent ['ext] { 'H; x: normalSubg[i:l]{'s; 'g}; 'J['x] >- subStructure{'s; 'g} } -->
-   [wf] sequent [squash] {'H; x: normalSubg[i:l]{'s; 'g}; 'J['x] >- 'b in 'g^car } -->
-   [main] sequent ['ext] { 'H; x: normalSubg[i:l]{'s; 'g}; 'J['x]; y: lcoset{'s; 'g; 'b} = rcoset{'s; 'g; 'b} in univ[i:l] >- 'C['x] } -->
-   sequent ['ext] { 'H; x: normalSubg[i:l]{'s; 'g}; 'J['x] >- 'C['x] }
+interactive normalSubg_elim {| elim [] |} 'H :
+   [main] sequent ['ext] { 'H; x: normalSubg[i:l]{'S; 'G}; 'J['x]; y: subgroup[i:l]{'S; 'G}; z: all b: 'G^car. lcoset{'S; 'G; 'b} = rcoset{'S; 'G; 'b} in univ[i:l] >- 'C['x] } -->
+   sequent ['ext] { 'H; x: normalSubg[i:l]{'S; 'G}; 'J['x] >- 'C['x] }
 
 doc <:doc< 
    @begin[doc]
@@ -760,11 +750,9 @@ doc <:doc<
    @end[doc]
 >>
 interactive abel_subg_normal :
-   [wf] sequent [squash] {'H >- 's in group[i:l] } -->
-   [wf] sequent [squash] {'H >- 'g in group[i:l] } -->
-   [main] sequent ['ext] { 'H >- isCommutative{'g} } -->
-   [main] sequent ['ext] { 'H >- subStructure{'s; 'g} } -->
-   sequent ['ext] { 'H >- normalSubg[i:l]{'s; 'g} }
+   [main] sequent [squash] { 'H >- subgroup[i:l]{'S; 'G} } -->
+   [main] sequent ['ext] { 'H >- isCommutative{'G} } -->
+   sequent ['ext] { 'H >- normalSubg[i:l]{'S; 'G} }
 
 (************************************************************************
  * GROUP HOMOMORPHISM                                                   *
@@ -789,10 +777,12 @@ doc <:doc<
   
    @end[doc]
 >>
-interactive groupHom_type {| intro [intro_typeinf <<'A>>] |} group[i:l] :
-   [wf] sequent [squash] {'H >- 'A in group[i:l] } -->
-   [wf] sequent [squash] {'H >- 'B in group[i:l] } -->
-    sequent ['ext] { 'H >- "type"{groupHom{'A; 'B}} }
+interactive groupHom_wf {| intro [] |} :
+   sequent [squash] { 'H >- "type"{'A^car} } -->
+   sequent [squash] { 'H >- "type"{'B^car} } -->
+   sequent [squash] { 'H; x: 'A^car; y: 'A^car >- 'x *['A] 'y in 'A^car} -->
+   sequent [squash] { 'H; x: 'B^car; y: 'B^car >- 'x *['B] 'y in 'B^car} -->
+   sequent ['ext] { 'H >- "type"{groupHom{'A; 'B}} }
 
 doc <:doc< 
    @begin[doc]
@@ -832,12 +822,12 @@ interactive trivial_hom {| intro [AutoMustComplete; intro_typeinf <<'A>>] |} gro
 
 doc <:doc< 
    @begin[doc]
-   Let $f@colon g_1 @rightarrow g_2$ be a group
-   homomorphism of $g_1$ into $g_2$.
+   Let $f@colon A @rightarrow B$ be a group
+   homomorphism of $A$ into $B$.
   
    $@space @space$
   
-     $f$ maps the identity of $G_1$ into the identity of $G_2$.
+     $f$ maps the identity of $A$ into the identity of $B$.
    @end[doc]
 >>
 interactive groupHom_id {| intro [AutoMustComplete; intro_typeinf <<'A>>] |} group[i:l] :
@@ -855,8 +845,8 @@ interactive hom_id {| intro [AutoMustComplete; intro_typeinf <<'A>>] |} group[i:
 doc <:doc< 
    @begin[doc]
   
-     $f$ maps the inverse of an element $a$ in $@car{G_1}$ into
-     the inverse of $f[a]$ in $@car{G_2}$.
+     $f$ maps the inverse of an element $a$ in $@car{A}$ into
+     the inverse of $f[a]$ in $@car{B}$.
    @end[doc]
 >>
 interactive groupHom_inv {| intro [AutoMustComplete; intro_typeinf <<'A>>] |} group[i:l] :
@@ -869,8 +859,8 @@ interactive groupHom_inv {| intro [AutoMustComplete; intro_typeinf <<'A>>] |} gr
 doc <:doc< 
    @begin[doc]
   
-   If $f$ is @emph{onto}, then $G_1$ is abelian
-   implies $G_2$ is abelian.
+   If $f$ is @emph{onto}, then $A$ is abelian
+   implies $B$ is abelian.
    @end[doc]
 >>
 interactive groupHom_abel 'A 'f :
@@ -883,38 +873,29 @@ interactive groupHom_abel 'A 'f :
 doc <:doc< 
    @begin[doc]
   
-     If $S$ is a subgroup of $G_1$, then the image of $S$ under
-     $f$ is a subgroup of $G_2$.
+     If $S$ is a subgroup of $A$, then the image of $S$ under
+     $f$ is a subgroup of $B$.
    @end[doc]
 >>
-interactive groupHom_subg1 group[i:l] 'f 'A 'S :
-   [wf] sequent [squash] {'H >- 'A in group[i:l] } -->
+interactive groupHom_subg1 'f 'A 'S :
    [wf] sequent [squash] {'H >- 'B in group[i:l] } -->
-   [wf] sequent [squash] {'H >- 'S in group[i:l] } -->
-   [wf] sequent [squash] {'H >- 'T in group[i:l] } -->
-   [wf] sequent [squash] { 'H >- 'f in groupHom{'A; 'B} } -->
-   [main] sequent ['ext] { 'H >- subStructure{'S; 'A} } -->
-   [main] sequent ['ext] { 'H >- 'T^car = {x: 'B^car | exst y: 'S^car. 'x = 'f 'y in 'B^car} in univ[i:l] } -->
-   [main] sequent ['ext] { 'H >- 'T^"*" = 'B^"*" in 'T^car -> 'T^car -> 'T^car } -->
-   sequent ['ext] { 'H >- subStructure{'T; 'B} }
+   [main] sequent [squash] { 'H >- 'f in groupHom{'A; 'B} } -->
+   [main] sequent [squash] { 'H >- subgroup[i:l]{'S; 'A} } -->
+   sequent ['ext] { 'H >- subgroup[i:l]{{car={x: 'B^car | exst y: 'S^car. 'x = 'f 'y in 'B^car}; "*"='B^"*"; "1"='B^"1"; inv='B^inv}; 'B} }
 
 doc <:doc< 
    @begin[doc]
   
-     If $T$ is a subgroup of $G_2$, then the inverse image of
-     $T$ under $f$ is a subgroup of $G_1$.
+     If $T$ is a subgroup of $B$, then the inverse image of
+     $T$ under $f$ is a subgroup of $A$.
    @end[doc]
 >>
-interactive groupHom_subg2 group[i:l] 'f 'B 'T :
+interactive groupHom_subg2 'f 'B 'T :
    [wf] sequent [squash] {'H >- 'A in group[i:l] } -->
-   [wf] sequent [squash] {'H >- 'B in group[i:l] } -->
-   [wf] sequent [squash] {'H >- 'S in group[i:l] } -->
-   [wf] sequent [squash] {'H >- 'T in group[i:l] } -->
-   [wf] sequent [squash] { 'H >- 'f in groupHom{'A; 'B} } -->
-   [main] sequent ['ext] { 'H >- subStructure{'T; 'B} } -->
-   [main] sequent ['ext] { 'H >- 'S^car = {x: 'A^car | 'f 'x in 'T^car} in univ[i:l] } -->
-   [main] sequent ['ext] { 'H >- 'S^"*" = 'A^"*" in 'S^car -> 'S^car -> 'S^car } -->
-   sequent ['ext] { 'H >- subStructure{'S; 'A} }
+   [main] sequent [squash] { 'H >- 'f in groupHom{'A; 'B} } -->
+   [main] sequent [squash] { 'H >- subgroup[i:l]{'T; 'B} } -->
+   [wf] sequent [squash] { 'H; x: 'A^car >- "type"{'f 'x in 'T^car} } -->
+   sequent ['ext] { 'H >- subgroup[i:l]{{car={x: 'A^car | 'f 'x in 'T^car subset 'B^car}; "*"='A^"*"; "1"='A^"1"; inv='A^inv}; 'A} }
 
 doc <:doc< @docoff >>
 
@@ -931,26 +912,26 @@ dform group_df : except_mode[src] :: group[i:l] =
 dform pregroup_df : except_mode[src] :: pregroup[i:l] =
    math_pregroup{slot[i:l]}
 
-dform isGroup_df : except_mode[src] :: isGroup{'g} =
-   `"isGroup(" slot{'g} `")"
+dform isGroup_df : except_mode[src] :: isGroup{'G} =
+   `"isGroup(" slot{'G} `")"
 
-dform inv_df1 : except_mode[src] :: parens :: "prec"[prec_inv] :: ('g^inv 'a) =
-   math_inv{'g; 'a}
+dform inv_df1 : except_mode[src] :: parens :: "prec"[prec_inv] :: ('G^inv 'a) =
+   math_inv{'G; 'a}
 
 dform abelg_df : except_mode[src] :: abelg[i:l] =
    math_abelg{slot[i:l]}
 
-dform subgroup_df : except_mode[src] :: subgroup[i:l]{'s; 'g} =
-   math_subgroup{slot[i:l]; 's; 'g}
+dform subgroup_df : except_mode[src] :: subgroup[i:l]{'S; 'G} =
+   math_subgroup{slot[i:l]; 'S; 'G}
 
-dform lcoset_df : except_mode[src] :: lcoset{'h; 'g; 'a} =
-   math_lcoset{'h; 'g; 'a}
+dform lcoset_df : except_mode[src] :: lcoset{'H; 'G; 'a} =
+   math_lcoset{'H; 'G; 'a}
 
-dform rcoset_df : except_mode[src] :: rcoset{'h; 'g; 'a} =
-   math_rcoset{'h; 'g; 'a}
+dform rcoset_df : except_mode[src] :: rcoset{'H; 'G; 'a} =
+   math_rcoset{'H; 'G; 'a}
 
-dform normalSubg_df : except_mode[src] :: normalSubg[i:l]{'s; 'g} =
-   math_normalSubg{slot[i:l]; 's; 'g}
+dform normalSubg_df : except_mode[src] :: normalSubg[i:l]{'S; 'G} =
+   math_normalSubg{slot[i:l]; 'S; 'G}
 
 dform groupHom_df : except_mode[src] :: groupHom{'A; 'B} =
    math_groupHom{'A; 'B}

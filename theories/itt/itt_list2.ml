@@ -962,12 +962,6 @@ interactive_rw tail_reduce1 {| reduce |}:
 interactive_rw tail_reduce2 {| reduce |}: ('n in nat) -->
    tail{'l;'n+@1} <-->  cons{nth{'l;length{'l} -@ ('n +@ 1)};  tail{'l;'n} }
 
-interactive tail_wf {| intro[] |}:
-   sequent { <H> >-  'l in list{'A} } -->
-   sequent { <H> >-  'n in nat } -->
-   sequent { <H> >- 'n <= length{'l} } -->
-   sequent { <H> >- tail{'l;'n} in list{'A} }
-
 interactive tail_does_not_depend_on_the_head {| intro[] |}:
    sequent { <H> >-  'l in list } -->
    sequent { <H> >-  'n in nat } -->
@@ -982,6 +976,13 @@ interactive tail_squiggle {| intro[] |}:
    sequent { <H> >-  'n in nat } -->
    sequent { <H>; i:nat; 'i<'n >-  nth{'l_1;length{'l_1}-@('i+@1)} ~ nth{'l_2;length{'l_2}-@('i+@1)} } -->
    sequent { <H> >-  tail{'l_1;'n} ~ tail{'l_2;'n} }
+
+interactive tail_wf {| intro[] |}:
+   [wf] sequent { <H> >- 'A Type } -->
+   [wf] sequent { <H> >-  'l in list{'A} } -->
+   [wf] sequent { <H> >-  'n in nat } -->
+   sequent { <H> >- 'n <= length{'l} } -->
+   sequent { <H> >- tail{'l;'n} in list{'A} }
 
 interactive listSquiggle :
    [wf] sequent { <H> >- 'l1 in list } -->
@@ -1140,13 +1141,24 @@ doc <:doc<
    @end[doc]
 >>
 
-define unfold_find: find{'l; 'a; x,y.'eq['x;'y]} <--> list_ind{'l; 0; hd,tl,r. if 'eq['hd;'a] then length{'l} -@ length{'tl} else 'r+@ 1}
+define unfold_find: find{'l; 'a; x,y.'eq['x;'y]} <--> list_ind{'l; 0; hd,tl,r. if 'eq['hd;'a] then 0 else 'r +@ 1}
+
+interactive_rw reduce_find_nil {| reduce |} :
+   find{nil; 'a; x,y.'eq['x;'y]} <--> 0
+interactive_rw reduce_find_cons {| reduce |} :
+   find{'hd::'tl; 'a; x,y.'eq['x;'y]} <--> (if 'eq['hd;'a] then 0 else find{'tl; 'a; x,y.'eq['x;'y]} +@ 1)
 
 interactive find_wf  {| intro [intro_typeinf <<'l>>] |}  list{'T} :
    sequent  { <H> >- 'l in list{'T} } -->
    sequent  { <H> >- 'a in 'T } -->
    sequent  { <H>; x:'T; y:'T >- 'eq['x;'y] in bool } -->
    sequent  { <H> >- find{'l; 'a; x,y.'eq['x;'y]} in nat }
+
+interactive find_wf2  {| intro [intro_typeinf <<'l>>] |}  list{'T} :
+   sequent  { <H> >- 'l in list{'T} } -->
+   sequent  { <H> >- 'a in 'T } -->
+   sequent  { <H>; x:'T; y:'T >- 'eq['x;'y] in bool } -->
+   sequent  { <H> >- find{'l; 'a; x,y.'eq['x;'y]} in int }
 
 interactive find_when_found_wf  {| intro [intro_typeinf <<'l>>] |}  list{'T} :
    sequent  { <H> >- 'l in list{'T} } -->
@@ -1160,7 +1172,8 @@ interactive find_correct_when_found  <<find{'l; 'a; x,y.'eq['x;'y]}>>  list{'T}:
    sequent  { <H> >- 'l in list{'T} } -->
    sequent  { <H> >- 'a in 'T } -->
    sequent  { <H>; x:'T; y:'T >- 'eq['x;'y] in bool } -->
-   sequent  { <H> >- find{'l; 'a; x,y.'eq['x;'y]} in Index{'l} } -->
+   sequent  { <H> >- "assert"{'eq['a;'a]} } -->
+   sequent  { <H> >- mem{'a;'l;'T} } -->
    sequent  { <H> >- "assert"{'eq[nth{'l;find{'l; 'a; x,y.'eq['x;'y]}};'a]} }
 
 interactive find_when_not_found_wf  {| intro [intro_typeinf <<'l>>] |}  list{'T} :

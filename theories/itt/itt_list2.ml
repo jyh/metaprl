@@ -58,6 +58,7 @@ open Top_conversionals
 open Itt_equal
 open Itt_rfun
 open Itt_logic
+open Itt_squash
 
 
 (************************************************************************
@@ -352,6 +353,18 @@ interactive_rw reduce_tl {| reduce |} : tl{cons{'h; 't}} <--> 't
 
 doc <:doc<
    @begin[doc]
+   The @hrefterm[all_list] term performs induction over the list.
+   @end[doc]
+>>
+
+interactive_rw reduce_all_list_nil {| reduce |} : all_list{nil; x. 'P['x]} <--> "true"
+
+interactive_rw reduce_all_list_cons {| reduce |} :
+   all_list{cons{'u; 'v}; x. 'P['x]} <--> 'P['u] and all_list{'v; x.'P['x]}
+doc docoff
+
+doc <:doc<
+   @begin[doc]
    @rewrites
 
    The @hrefterm[is_nil] term is defined with the
@@ -376,21 +389,6 @@ interactive_rw reduce_mem_nil {| reduce |} : mem{'x; nil; 'T} <--> "false"
 
 interactive_rw reduce_mem_cons {| reduce |} :
    mem{'x; cons{'u; 'v}; 'T} <--> "or"{('x = 'u in 'T); mem{'x; 'v; 'T}}
-
-interactive mem_nil {| intro[] |} :
-   sequent { <H> >- "false" } -->
-   sequent { <H> >- mem{'x; nil; 'T} }
-
-interactive mem_cons2 {| intro[AutoMustComplete] |} :
-   [wf] sequent { <H> >- 'x in 'T } -->
-   [wf] sequent { <H> >- 'h in 'T } -->
-   sequent { <H> >- mem{'x; 't; 'T}  } -->
-   sequent { <H> >- mem{'x; 'h::'t; 'T} }
-
-interactive mem_cons1 {| intro[] |} :
-   [wf] sequent { <H> >- 'x in 'T } -->
-   sequent { <H> >- mem{'x; 'x::'t; 'T} }
-
 doc docoff
 
 let fold_mem = makeFoldC << mem{'x; 'l; 'T} >> unfold_mem
@@ -772,6 +770,32 @@ interactive_rw rev2 'A :
    ('l in list{'A}) -->
    rev{rev{'l}} <--> 'l
 
+
+doc <:doc<
+   @begin[doc]
+   @rules
+   Rules for mem.
+   @end[doc]
+>>
+interactive mem_nil {| intro[] |} :
+   sequent { <H> >- "false" } -->
+   sequent { <H> >- mem{'x; nil; 'T} }
+
+interactive mem_cons2 {| intro[AutoMustComplete] |} :
+   [wf] sequent { <H> >- 'x in 'T } -->
+   [wf] sequent { <H> >- 'h in 'T } -->
+   sequent { <H> >- mem{'x; 't; 'T}  } -->
+   sequent { <H> >- mem{'x; 'h::'t; 'T} }
+
+interactive mem_cons1 {| intro[] |} :
+   [wf] sequent { <H> >- 'x in 'T } -->
+   sequent { <H> >- mem{'x; 'x::'t; 'T} }
+
+interactive restrict_list {| intro[] |} :
+   sequent { <H> >- 'A Type } -->
+   sequent { <H> >- 'l in list{'A} } -->
+   sequent { <H> >- 'l in list{{x:'A | mem{'x;'l;'A}}} }
+
 doc <:doc<
    @begin[doc]
    @rules
@@ -792,13 +816,29 @@ interactive all_list_map  {| intro[] |} :
    sequent { <H> >- all_list{map{'f;'l};  y. 'P['y]} }
 
 interactive all_list_intro  {| intro[AutoMustComplete; intro_typeinf <<'l>>] |} list{'A} :
+   sequent { <H> >- 'A Type  } -->
    sequent { <H> >- 'l in list{'A}  } -->
-   sequent { <H>; x:'A >- 'P['x]  } -->
+   sequent { <H>; x:'A; mem{'x; 'l; 'A}  >- 'P['x]  } -->
    sequent { <H> >- all_list{'l;  x. 'P['x]} }
 
+
+interactive all_list_elim1 {| elim[elim_typeinf <<'l>>] |} 'H 'a list{'A} :
+   sequent { <H>; u: all_list{'l;  x. 'P['x]}; <J['u]> >- 'l in list{'A}  } -->
+   sequent { <H>; u: all_list{'l;  x. 'P['x]}; <J['u]> >- 'a in {x: 'A | mem{'x;'l;'A} } } -->
+   sequent { <H>; u: all_list{'l;  x. 'P['x]}; <J['u]>; 'P['a] >- 'C['u] } -->
+   sequent { <H>; u: all_list{'l;  x. 'P['x]}; <J['u]> >- 'C['u] }
+
+interactive all_list_elim {| elim[elim_typeinf <<'l>>] |} 'H 'a list{'A} :
+   sequent { <H>; u: all_list{'l;  x. 'P['x]}; <J['u]> >- 'l in list{'A}  } -->
+   sequent { <H>; u: all_list{'l;  x. 'P['x]}; <J['u]> >- 'a in 'A  } -->
+   sequent { <H>; u: all_list{'l;  x. 'P['x]}; <J['u]> >- mem{'a;'l;'A}  } -->
+   sequent { <H>; u: all_list{'l;  x. 'P['x]}; <J['u]>; 'P['a] >- 'C['u] } -->
+   sequent { <H>; u: all_list{'l;  x. 'P['x]}; <J['u]> >- 'C['u] }
+
 interactive all_list_witness_wf  {| intro[intro_typeinf <<'l>>] |} list{'A} :
+   sequent { <H> >- 'A Type  } -->
    sequent { <H> >- 'l in list{'A}  } -->
-   sequent { <H>; x:'A >- 'p['x] in 'P['x]  } -->
+   sequent { <H>; x:'A; mem{'x; 'l; 'A} >- 'p['x] in 'P['x]  } -->
    sequent { <H> >- all_list_witness{'l;  x. 'p['x]} in all_list{'l;  x. 'P['x]} }
 
 doc <:doc<

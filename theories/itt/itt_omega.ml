@@ -1442,8 +1442,11 @@ let sim_make_sacs p var2index constrs =
 		afs
 
 let ge_elimT = argfunT (fun i p ->
-	let _,tac=Sequent.get_resource_arg p get_ge_elim_resource (Sequent.get_pos_hyp_num p i) p in
-	tac i
+	try
+		let _,tac=Sequent.get_resource_arg p get_ge_elim_resource (Sequent.get_pos_hyp_num p i) p in
+		tac i
+	with Not_found ->
+		idT
 )
 
 let omegaPrepT = funT (fun p ->
@@ -1465,8 +1468,15 @@ let omegaPrepT = funT (fun p ->
 			List.iter (eprintf "%i ") used_hyps;
 			eprintf "@.";
 		end;
-	onMHypsT used_hyps (rw normalizeC) thenMT
-	onMHypsT used_hyps ge_elimT
+ 	if List.length used_hyps = 1 then
+ 		(* If hypothesis contains contradiction
+ 		   do not normalize it because it could evaluate to falsum
+ 			and the rest of our code would not understand it
+ 		*)
+ 		onMHypsT used_hyps ge_elimT
+	else
+		onMHypsT used_hyps (rw normalizeC) thenMT
+		onMHypsT used_hyps ge_elimT
 )
 
 let omegaT =

@@ -419,6 +419,9 @@ dform res_def_list_df2 : internal :: res_def_list{cons{'a; 'b}} =
 dform resource_defs_df1 : resource_defs[name:s]{'args} =
    slot[name:s] " " slot{'args}
 
+dform resource_defs_df1 : resource_defs[name:s]{nil} =
+   slot[name:s]
+
 dform resource_defs_dfs : internal :: resource_defs[start:n, finish:n, name:s]{'args} =
    resource_defs[name:s]{'args}
 

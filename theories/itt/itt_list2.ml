@@ -80,7 +80,7 @@ declare undefined
 define unfold_hd :
    hd{'l} <--> list_ind{'l; undefined; h, t, g. 'h}
 
-define unfold_hd :
+define unfold_tl :
    tl{'l} <--> list_ind{'l; undefined; h, t, g. 't}
 
 

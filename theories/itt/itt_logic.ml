@@ -1105,12 +1105,11 @@ struct
    type inference = (term_subst -> tactic) list
    let empty_inf = []
    
-   let find_hyp_exn = RefineError("find_hyp_exn", StringError "not found")
-
    let tryfind_hyp term tact i p =
       match Sequent.nth_hyp p i with
          (_,t) when alpha_equal t term -> tact i p
-       | _ -> raise find_hyp_exn
+       | _ ->
+            raise (RefineError("find_hyp_exn - hypothesys not found", TermPairMatchError(term,Sequent.goal p)))
       
    let find_hyp term tact = onSomeHypT (tryfind_hyp term tact)
 
@@ -1139,6 +1138,9 @@ struct
             end
        | _ -> raise (Invalid_argument "Itt_logic.append_subst")
 
+   (* Do not do any thinning *)
+   let nt_dT i = thinningT false (dT i)
+
    let append_inf inf hyp inst_term r =
       match r, inf with
          Ax,  _ -> (fun _ -> onSomeHypT nthHypT) :: inf
@@ -1162,7 +1164,7 @@ struct
                withT (apply_subst inst_term subst) (dT 0) thenLT [idT; t subst; idT]) :: ts
        | Alll,t::ts ->
             (fun subst ->
-               withT (apply_subst inst_term subst) (find_hyp (apply_subst hyp subst) dT)
+               withT (apply_subst inst_term subst) (find_hyp (apply_subst hyp subst) nt_dT)
                thenLT [idT; t subst])
             :: ts
        | Exl, t::ts ->

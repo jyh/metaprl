@@ -59,7 +59,9 @@ interactive_rw new_var_reduce1 {| reduce |} :
       new_var{make_bterm{'op;'subterms}} <--> var{op_bdepth{'op};0}
 
 interactive_rw new_var_reduce2 {| reduce |} :
-      new_var{var{'l;'r}} <--> var{'l +@ 'r +@ 1; 0}
+      'l in nat -->
+      'r in nat -->
+       new_var{var{'l;'r}} <--> var{'l +@ 'r +@ 1; 0}
 
 interactive_rw new_var_var_reduce :
       ('u in Var) -->
@@ -114,6 +116,11 @@ interactive add_var_wf {| intro [] |} :
    sequent { <H> >- 'v in Var } -->
    sequent { <H> >- add_var{'bt;'v} in BTerm }
 
+interactive add_var_wf2 {| intro [] |} :
+   sequent { <H> >- 'bt in Var } -->
+   sequent { <H> >- 'v in Var } -->
+   sequent { <H> >- add_var{'bt;'v} in Var }
+
 (*
  *  add_var( <H>.s ) = <H>,x.s
  *)
@@ -148,6 +155,7 @@ define unfold_add_vars_upto:
    add_vars_upto{'s;'t} <--> ind{bdepth{'t} -@ bdepth{'s};'s; k,s.add_var{'s}}
 
 let fold_add_vars_upto = makeFoldC << add_vars_upto{'s;'t} >> unfold_add_vars_upto
+
 interactive_rw add_vars_upto_bdepth {| reduce |} :
    ('t in BTerm)  -->
    ('s in BTerm)  -->
@@ -225,7 +233,7 @@ interactive_rw not_free_var_reduce :
       not_free{'v; 'u} <-->  "assert"{bnot{is_eq{'v;'u}}}
 
 interactive not_free_wf {| intro[] |}:
-   sequent { <H> >- 'v in Vars_of{'t} } -->
+   sequent { <H> >- 'v in Var } -->
    sequent { <H> >- 't in BTerm } -->
    sequent { <H> >- not_free{'v;'t} Type  }
 
@@ -259,7 +267,7 @@ interactive not_free_eq_var 'v  :
    sequent { <H> >- 'v in Vars_of{'t} } -->
    sequent { <H> >- 'u in Vars_of{'t} } -->
    sequent { <H> >- "assert"{is_eq{'v;'u}} } -->
-   sequent { <H> >- not_free{'v;'t} } -->
+   sequent { <H> >- not_free{'v; 't} } -->
    sequent { <H> >- not_free{'u; 't} }
 
 interactive add_var_not_free1 {| intro[] |} :
@@ -269,7 +277,7 @@ interactive add_var_not_free1 {| intro[] |} :
    sequent { <H> >- not_free{'v;'t} } -->
    sequent { <H> >- not_free{add_var{'v;'u}; add_var{'t; 'u}} }
 
-interactive add_var_not_free2 {| intro[] |} :
+interactive add_var_not_free2 {| intro[AutoMustComplete] |} :
    sequent { <H> >- 't in BTerm } -->
    sequent { <H> >- 'v in Vars_of{'t} } -->
    sequent { <H> >- 'u in Var } -->
@@ -308,9 +316,9 @@ interactive subst_add_vars_upto :
    sequent { <H> >- subst{add_vars_upto{'s1;'v};'v2;'s2} ~ add_vars_upto{'s1;'v} }
 
 interactive subst_commute {| intro [] |} :
+   sequent { <H> >- 't in BTerm } -->
    sequent { <H> >- 'v1 in Vars_of{'t} } -->
    sequent { <H> >- 'v2 in Vars_of{'t} } -->
-   sequent { <H> >- 't in BTerm } -->
    sequent { <H> >- 's1 in BTerm } -->
    sequent { <H> >- 's2 in BTerm } -->
    sequent { <H> >- bdepth{'t} >= bdepth{'s1} } -->

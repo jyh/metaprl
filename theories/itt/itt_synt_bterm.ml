@@ -214,9 +214,27 @@ interactive subterms_have_greater_bdepth {| intro [AutoMustComplete] |} :
    sequent { <H> >- all_list{'btl; bt. bdepth{'bt} >= op_bdepth{'op}} }
 
 (************************************************************************
- * Var{bterm}                                                           *
+ * Vars_of{bt} are defined the set of vars whose depth is less than     *
+ * or equal to the depth of bt                                          *
  ************************************************************************)
-define unfold_vars_of: Vars_of{'bt} <--> { v: Var | depth{'v} <= bdepth{'bt} }
+define unfold_vars_of: Vars_of{'bt} <--> { v: Var | bdepth{'v} <= bdepth{'bt} }
+
+interactive vars_of_wf {| intro [] |} :
+   [wf] sequent { <H> >- 'bt in BTerm } -->
+   sequent { <H> >- Vars_of{'bt} Type }
+
+interactive vars_of_intro {| intro [] |} :
+   [wf] sequent { <H> >- 'v in Var } -->
+   [wf] sequent { <H> >- 'bt in BTerm } -->
+   sequent { <H> >- bdepth{'v} <= bdepth{'bt} } -->
+   sequent { <H> >- 'v in Vars_of{'bt} }
+
+interactive vars_of_elim {| elim [] |} 'H :
+   sequent { <H>; v: Var; i: bdepth{'v} <= bdepth{'bt}; <J['v]> >- 'T['v] } -->
+   sequent { <H>; v: Vars_of{'bt}; <J['v]> >- 'T['v] }
+
+interactive vars_of_member {| nth_hyp |} 'H :
+   sequent { <H>; u: Vars_of{'bt}; <J['u]> >- 'u in Var }
 
 (************************************************************************
  * Var_bterm                                                            *

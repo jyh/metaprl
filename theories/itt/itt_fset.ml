@@ -382,7 +382,7 @@ let resource reduce +=
  * RULES                                                                *
  ************************************************************************)
 
-interactive fcompare_wf {| intro [] |} 'H 'T :
+interactive fcompare_wf {| intro [intro_typeinf <<'x>>] |} 'H 'T :
    sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
    sequent [squash] { 'H >- 'x IN 'T } -->
    sequent [squash] { 'H >- 'y IN 'T } -->
@@ -409,7 +409,7 @@ interactive fcompare_trans 'H 'T 'z :
    sequent [squash] { 'H >- "assert"{fcompare{'eq; 'z; 'y}} } -->
    sequent ['ext] { 'H >- "assert"{fcompare{'eq; 'x; 'y}} }
 
-interactive fmember_wf1 {| intro [] |} 'H 'T :
+interactive fmember_wf1 {| intro [intro_typeinf << 'x >>] |} 'H 'T :
    sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
    sequent [squash] { 'H >- 'x IN 'T } -->
    sequent [squash] { 'H >- 's IN list{'T} } -->
@@ -424,42 +424,52 @@ interactive fmember_fun 'H 'T 'y :
    sequent [squash] { 'H >- "assert"{fmember{'eq; 'y; 'l}} } -->
    sequent ['ext] { 'H >- "assert"{fmember{'eq; 'x; 'l}} }
 
-interactive fsubseteq_wf1 {| intro [] |} 'H 'T :
+let typeinf_list_arg p t =
+   let t =
+      try get_with_arg p with
+         RefineError _ ->
+            dest_list (infer_type p t)
+   in
+      [t]
+
+let intro_typeinf_list t = IntroArgsOption (typeinf_list_arg, Some t)
+
+interactive fsubseteq_wf1 {| intro [intro_typeinf_list <<'s1>>] |} 'H 'T :
    sequent [squash] { 'H >- "type"{'T} } -->
    sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
    sequent [squash] { 'H >- 's1 IN list{'T} } -->
    sequent [squash] { 'H >- 's2 IN list{'T} } -->
    sequent ['ext] { 'H >- fsubseteq{'eq; 's1; 's2} IN bool }
 
-interactive fsubseteq_elim2 'H 'J 'T 'a 'y :
-   sequent [squash] { 'H; x: "assert"{fsubseteq{'eq; 'l1; 'l2}}; 'J['x] >- fequalp{'eq; 'T} } -->
-   sequent [squash] { 'H; x: "assert"{fsubseteq{'eq; 'l1; 'l2}}; 'J['x] >- 'a IN 'T } -->
-   sequent [squash] { 'H; x: "assert"{fsubseteq{'eq; 'l1; 'l2}}; 'J['x] >- 'l1 IN list{'T} } -->
-   sequent [squash] { 'H; x: "assert"{fsubseteq{'eq; 'l1; 'l2}}; 'J['x] >- 'l2 IN list{'T} } -->
+interactive fsubseteq_elim2 {| elim [] |} 'H 'J 'T 'a 'y :
+   ["wf"] sequent [squash] { 'H; x: "assert"{fsubseteq{'eq; 'l1; 'l2}}; 'J['x] >- fequalp{'eq; 'T} } -->
+   ["wf"] sequent [squash] { 'H; x: "assert"{fsubseteq{'eq; 'l1; 'l2}}; 'J['x] >- 'a IN 'T } -->
+   ["wf"] sequent [squash] { 'H; x: "assert"{fsubseteq{'eq; 'l1; 'l2}}; 'J['x] >- 'l1 IN list{'T} } -->
+   ["wf"] sequent [squash] { 'H; x: "assert"{fsubseteq{'eq; 'l1; 'l2}}; 'J['x] >- 'l2 IN list{'T} } -->
    sequent [squash] { 'H; x: "assert"{fsubseteq{'eq; 'l1; 'l2}}; 'J['x] >- "assert"{fmember{'eq; 'a; 'l1}} } -->
    sequent ['ext] { 'H; x: "assert"{fsubseteq{'eq; 'l1; 'l2}}; 'J['x]; y: "assert"{fmember{'eq; 'a; 'l2}} >- 'C['x] } -->
    sequent ['ext] { 'H; x: "assert"{fsubseteq{'eq; 'l1; 'l2}}; 'J['x] >- 'C['x] }
 
-interactive fsubseteq_intro1 'H 'T 'x 'y :
-   sequent [squash] { 'H >- "type"{'T} } -->
-   sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
-   sequent [squash] { 'H >- 's1 IN list{'T} } -->
-   sequent [squash] { 'H >- 's2 IN list{'T} } -->
+interactive fsubseteq_intro1 {| intro [AutoMustComplete; intro_typeinf_list <<'s1>>] |} 'H 'T 'x 'y :
+   ["wf"] sequent [squash] { 'H >- "type"{'T} } -->
+   ["wf"] sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
+   ["wf"] sequent [squash] { 'H >- 's1 IN list{'T} } -->
+   ["wf"] sequent [squash] { 'H >- 's2 IN list{'T} } -->
    sequent [squash] { 'H; x: 'T; y: "assert"{fmember{'eq; 'x; 's1}} >- "assert"{fmember{'eq; 'x; 's2}} } -->
    sequent ['ext] { 'H >- "assert"{fsubseteq{'eq; 's1; 's2}} }
 
-interactive fsubseteq_cons2 'H 'T :
-   sequent [squash] { 'H >- 'l1 IN list{'T} } -->
-   sequent [squash] { 'H >- 'l2 IN list{'T} } -->
-   sequent [squash] { 'H >- 'u IN 'T } -->
-   sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
+interactive fsubseteq_cons2 {| intro [intro_typeinf <<'u>>] |} 'H 'T :
+   ["wf"] sequent [squash] { 'H >- 'l1 IN list{'T} } -->
+   ["wf"] sequent [squash] { 'H >- 'l2 IN list{'T} } -->
+   ["wf"] sequent [squash] { 'H >- 'u IN 'T } -->
+   ["wf"] sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
    sequent [squash] { 'H >- "assert"{fsubseteq{'eq; 'l1; 'l2}} } -->
    sequent ['ext] { 'H >- "assert"{fsubseteq{'eq; 'l1; cons{'u; 'l2}}} }
 
-interactive fsubseteq_ref 'H 'T :
-   sequent [squash] { 'H >- "type"{'T} } -->
-   sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
-   sequent [squash] { 'H >- 'l IN list{'T} } -->
+interactive fsubseteq_ref {| intro [intro_typeinf_list <<'l>>] |} 'H 'T :
+   ["wf"] sequent [squash] { 'H >- "type"{'T} } -->
+   ["wf"] sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
+   ["wf"] sequent [squash] { 'H >- 'l IN list{'T} } -->
    sequent ['ext] { 'H >- "assert"{fsubseteq{'eq; 'l; 'l}} }
 
 interactive fsubseteq_trans 'H 'T 'l2 :
@@ -472,7 +482,7 @@ interactive fsubseteq_trans 'H 'T 'l2 :
    sequent [squash] { 'H >- "assert"{fsubseteq{'eq; 'l2; 'l3}} } -->
    sequent ['ext] { 'H >- "assert"{fsubseteq{'eq; 'l1; 'l3}} }
 
-interactive fequal_wf1 {| intro [] |} 'H 'T :
+interactive fequal_wf1 {| intro [intro_typeinf_list <<'s1>>] |} 'H 'T :
    sequent [squash] { 'H >- "type"{'T} } -->
    sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
    sequent [squash] { 'H >- 's1 IN list{'T} } -->
@@ -488,7 +498,7 @@ interactive fequal_elim1 'H 'J 'T 'a 'y :
    sequent ['ext] { 'H; x: "assert"{fequal{'eq; 's1; 's2}}; 'J['x]; y: "assert"{fmember{'eq; 'a; 's2}} >- 'C['x] } -->
    sequent ['ext] { 'H; x: "assert"{fequal{'eq; 's1; 's2}}; 'J['x] >- 'C['x] }
 
-interactive fequal_intro1 'H 'T 'x 'y :
+interactive fequal_intro1 {| intro [intro_typeinf_list <<'s1>>] |} 'H 'T 'x 'y :
    sequent [squash] { 'H >- "type"{'T} } -->
    sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
    sequent [squash] { 'H >- 's1 IN list{'T} } -->
@@ -497,12 +507,12 @@ interactive fequal_intro1 'H 'T 'x 'y :
    sequent [squash] { 'H; x: 'T; y: "assert"{fmember{'eq; 'x; 's2}} >- "assert"{fmember{'eq; 'x; 's1}} } -->
    sequent ['ext] { 'H >- "assert"{fequal{'eq; 's1; 's2}} }
 
-interactive fset_type 'H :
+interactive fset_type {| intro [] |} 'H :
    sequent [squash] { 'H >- "type"{'T} } -->
    sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
    sequent ['ext] { 'H >- "type"{fset{'eq; 'T}} }
 
-interactive fequal_intro2 'H 'T 'x 'y :
+interactive fequal_intro2 {| intro [intro_typeinf_list <<'s1>>] |} 'H 'T 'x 'y :
    sequent [squash] { 'H >- "type"{'T} } -->
    sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
    sequent [squash] { 'H >- 's1 IN fset{'eq; 'T} } -->
@@ -718,7 +728,7 @@ interactive fequal_intro3 {| intro [] |} 'H 'T :
 (*
  * Induction principle.
  *)
-interactive fsquash_wf1 {| intro [] |} 'H 'T :
+interactive fsquash_wf1 {| intro [intro_typeinf_list <<'s>>] |} 'H 'T :
    sequent [squash] { 'H >- "type"{'T} } -->
    sequent [squash] { 'H >- fequalp{'eq; 'T} } -->
    sequent [squash] { 'H >- 's IN list{'T} } -->
@@ -1075,20 +1085,6 @@ let infer_one_subterm_type p t =
          let s1 = one_subterm t in
          infer_type p s1
 
-(*
- * Typehood of compare.
- *)
-let fcompare_wfT p =
-   let t = Sequent.concl p in
-   let _, t = dest_member t in
-   let t = infer_three_subterms_type p t in
-      (fcompare_wf (Sequent.hyp_count_addr p) t
-       thenT addHiddenLabelT "wf") p
-
-let fcompare_member_term = << fcompare{'eq; 'x; 'y} IN bool >>
-
-let resource d += (fcompare_member_term, wrap_intro fcompare_wfT)
-
 let infer_three_subterms_set_type p t tac1 tac2 =
    let t = infer_three_subterms_type p t in
       if is_list_term t then
@@ -1218,31 +1214,6 @@ let d_resource =
 (*
  * More D tactics.
  *)
-let d_fsubseteq_assertT i p =
-   if i = 0 then
-      let t = dest_assert (Sequent.concl p) in
-      let _, t = infer_three_subterms_set_type p t () () in
-      let u, v = maybe_new_vars2 p "u" "v" in
-         (fsubseteq_intro1 (Sequent.hyp_count_addr p) t u v
-          thenLT [addHiddenLabelT "wf";
-                  addHiddenLabelT "wf";
-                  addHiddenLabelT "wf";
-                  addHiddenLabelT "wf";
-                  addHiddenLabelT "main"]) p
-   else
-      let _, t = Sequent.nth_hyp p i in
-      let _, t = infer_three_subterms_set_type p (dest_assert t) () () in
-      let a = get_with_arg p in
-      let v = maybe_new_vars1 p "v" in
-      let j, k = Sequent.hyp_indices p i in
-         (fsubseteq_elim2 j k t a v
-          thenLT [addHiddenLabelT "wf";
-                  addHiddenLabelT "wf";
-                  addHiddenLabelT "wf";
-                  addHiddenLabelT "wf";
-                  addHiddenLabelT "main";
-                  addHiddenLabelT "main"]) p
-
 let d_fequal_assertT i p =
    if i = 0 then
       let t = dest_assert (Sequent.concl p) in
@@ -1524,16 +1495,11 @@ let d_info =
     << fset{'eq; 'T} >>, wrap_elim d_fsetT]
 
 let d_resource = add_d_info d_resource d_info
+*)
 
 (*
  * Other tactics.
  *)
-let d_fsubseteq_consT p =
-   let t = get_with_arg p in
-      (fsubseteq_cons2 (Sequent.hyp_count_addr p) t
-       thenT addHiddenLabelT "wf") p
-*)
-
 let fmember_subst_elementT x p =
    let t =
       try get_univ_arg p with

@@ -117,7 +117,6 @@ topval fold_foflist : conv
 
 topval fmember_subst_elementT : term -> tactic
 (*
-topval d_fsubseteq_consT : tactic
 topval fsub_nonmemberT : tactic
 topval fsquash_memberT : tactic
 

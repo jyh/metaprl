@@ -157,21 +157,6 @@ prim setType {| intro [] |} 'x :
 
 (*!
  * @begin[doc]
- * @modsubsection{Introduction}
- *
- * A set type $@set{x; A; B[x]}$ is true if there is an element $a @in A$
- * where $B[a]$ is true.
- * @end[doc]
- *)
-prim setMemberFormation {| intro [] |} 'a 'z :
-   [wf] sequent [squash] { 'H >- 'a = 'a in 'A } -->
-   [main] sequent [squash]   { 'H >- squash{'B['a]} } -->
-   [wf] sequent [squash] { 'H; z: 'A >- "type"{'B['z]} } -->
-   sequent ['ext]   { 'H >- { x:'A | 'B['x] } } =
-   'a
-
-(*!
- * @begin[doc]
  * @modsubsection{Membership}
  *
  * Two terms $a_1$ and $a_2$ are equal in the set type $@set{a; A; B[a]}$
@@ -184,6 +169,20 @@ prim setMemberEquality {| intro []; eqcd |} 'x :
    [wf] sequent [squash] { 'H; x: 'A >- "type"{'B['x]} } -->
    sequent ['ext] { 'H >- 'a1 = 'a2 in { a:'A | 'B['a] } } =
    it
+
+(*!
+ * @begin[doc]
+ * @modsubsection{Introduction}
+ *
+ * A set type $@set{x; A; B[x]}$ is true if there is an element $a @in A$
+ * where $B[a]$ is true.
+ * @end[doc]
+ *)
+interactive setMemberFormation {| intro [] |} 'a 'z :
+   [wf] sequent [squash] { 'H >- 'a = 'a in 'A } -->
+   [main] sequent [squash]   { 'H >- squash{'B['a]} } -->
+   [wf] sequent [squash] { 'H; z: 'A >- "type"{'B['z]} } -->
+   sequent ['ext]   { 'H >- { x:'A | 'B['x] } }
 
 (*!
  * @begin[doc]
@@ -209,10 +208,9 @@ prim setElimination {| elim [] |} 'H 'u 'v :
  * @hrefresource[subtype_resource].
  * @end[doc]
  *)
-prim set_subtype {| intro [] |} :
+interactive set_subtype {| intro [] |} :
    sequent [squash] { 'H >- "type"{ { a: 'A | 'B['a] } } } -->
-   sequent ['ext] { 'H >- \subtype{ { a: 'A | 'B['a] }; 'A } } =
-   it
+   sequent ['ext] { 'H >- \subtype{ { a: 'A | 'B['a] }; 'A } }
 
 (*! @docoff *)
 

@@ -2,7 +2,7 @@
  * @begin[doc]
  * @module[Mfir_tr_atom]
  *
- * The @tt[Mfir_tr_atom] module defines the typing rules for atoms.
+ * The @tt[Mfir_tr_atom] module defines the typing rules for FIR atoms.
  * @end[doc]
  *
  * ------------------------------------------------------------------------

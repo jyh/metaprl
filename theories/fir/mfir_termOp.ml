@@ -34,6 +34,7 @@
 
 extends Mfir_option
 extends Mfir_bool
+extends Mfir_token
 extends Mfir_record
 extends Mfir_int
 extends Mfir_int_set
@@ -85,6 +86,18 @@ let ifthenelse_opname = opname_of_term ifthenelse_term
 let is_ifthenelse_term = is_3_dep0_term ifthenelse_opname
 let mk_ifthenelse_term = mk_3_dep0_term ifthenelse_opname
 let dest_ifthenelse_term = dest_3_dep0_term ifthenelse_opname
+
+let token_term = << token[str:s] >>
+let token_opname = opname_of_term token_term
+let is_token_term = is_str_0_dep0_term token_opname
+let mk_token_term = mk_str_0_dep0_term token_opname
+let dest_token_term = dest_str_0_dep0_term token_opname
+
+let token_eq_term = << token_eq{ 'tok1; 'tok2 } >>
+let token_eq_opname = opname_of_term token_eq_term
+let is_token_eq_term = is_2_dep0_term token_eq_opname
+let mk_token_eq_term = mk_2_dep0_term token_eq_opname
+let dest_token_eq_term = dest_2_dep0_term token_eq_opname
 
 let recordEnd_term = << recordEnd >>
 let recordEnd_opname = opname_of_term recordEnd_term
@@ -552,11 +565,11 @@ let is_intOfFloatOp_term = is_num_0_dep0_term intOfFloatOp_opname
 let mk_intOfFloatOp_term = mk_num_0_dep0_term intOfFloatOp_opname
 let dest_intOfFloatOp_term = dest_num_0_dep0_term intOfFloatOp_opname
 
-let intOfRawIntOp_term = << intOfRawIntOp[precision:n, sign:n] >>
+let intOfRawIntOp_term = << intOfRawIntOp[precision:n, sign:s] >>
 let intOfRawIntOp_opname = opname_of_term intOfRawIntOp_term
-let is_intOfRawIntOp_term = is_num_num_0_dep0_term intOfRawIntOp_opname
-let mk_intOfRawIntOp_term = mk_num_num_0_dep0_term intOfRawIntOp_opname
-let dest_intOfRawIntOp_term = dest_num_num_0_dep0_term intOfRawIntOp_opname
+let is_intOfRawIntOp_term = is_num_str_0_dep0_term intOfRawIntOp_opname
+let mk_intOfRawIntOp_term = mk_num_str_0_dep0_term intOfRawIntOp_opname
+let dest_intOfRawIntOp_term = dest_num_str_0_dep0_term intOfRawIntOp_opname
 
 let floatOfIntOp_term = << floatOfIntOp[precision:n] >>
 let floatOfIntOp_opname = opname_of_term floatOfIntOp_term

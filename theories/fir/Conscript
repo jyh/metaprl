@@ -1,11 +1,14 @@
 #
 # Import environment
 #
+
 Import qw( env );
+
 
 #
 # Set up file lists.
 #
+
 my @src =
    qw(   auto option bool token record int list int_set
          ty exp util sequent
@@ -14,11 +17,14 @@ my @src =
          connect_base connect_ty
          test );
 
+
 #
 # Set up file lists and build everything.
 #
+
 OCamlSources $env (map "mfir_$_.ml", @src), 'mfir_theory.mlz';
 OCamlLibrary $env 'base', (map "mfir_$_", @src), 'mfir_theory';
+
 
 #
 # Default target to build.

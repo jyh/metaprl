@@ -2,7 +2,7 @@
  * @begin[doc]
  * @module[Mfir_tr_exp]
  *
- * The @tt[Mfir_tr_exp] module defines the typing rules for expressions.
+ * The @tt[Mfir_tr_exp] module defines the typing rules for FIR expressions.
  * @end[doc]
  *
  * ------------------------------------------------------------------------
@@ -68,11 +68,12 @@ extends Mfir_tr_store
 
 prim ty_letAtom 'H 'a 'b :
    sequent [fir] { 'H >- has_type["atom"]{ 'atom; 'ty1 } } -->
-   sequent [fir] { 'H; a: var_def{ 'b; 'ty1; no_def } >-
+   sequent [fir] { 'H; b: variable; a: var_def{ 'b; 'ty1; no_def } >-
       has_type["exp"]{ 'exp['b]; 'ty2 } } -->
    sequent [fir] { 'H >-
       has_type["exp"]{ letAtom{ 'ty1; 'atom; v. 'exp['v] }; 'ty2 } }
    = it
+
 
 (*!
  * @begin[doc]
@@ -87,12 +88,13 @@ prim ty_letAtom 'H 'a 'b :
 
 prim ty_letExt 'H 'a 'b :
    sequent [fir] { 'H >- has_type["atom_list"]{ 'args; 'tyl } } -->
-   sequent [fir] { 'H; a: var_def{ 'b; 'u; no_def } >-
+   sequent [fir] { 'H; b: variable; a: var_def{ 'b; 'u; no_def } >-
       has_type["exp"]{ 'exp['b]; 't } } -->
    sequent [fir] { 'H >-
       has_type["exp"]{ letExt[str:s]{ 'u; 'tyl; 'args; v. 'exp['v] };
                        't } }
    = it
+
 
 (*!
  * @begin[doc]
@@ -100,11 +102,7 @@ prim ty_letExt 'H 'a 'b :
  * The next three rules assume that FIR programs are written in continuation
  * passing style.  A function call is well-formed if the variable
  * $<< atomVar{'v} >>$ is a function, and if the arguments have the
- * appropriate types.  Note that the type of $<< atomVar{'v} >>$ must be a
- * function type that ``returns'' a value of type $<< tyEnum[0] >>$. Note
- * that in the two auxilary rules below (@tt[ty_tailCall_args1] and
- * @tt[ty_tailCall_args2]), the well-formedness of the types is ensured by the
- * sequent used in the application of the @tt[ty_tailCall] rule.
+ * appropriate types.
  * @end[doc]
  *)
 
@@ -131,13 +129,6 @@ prim ty_tailCall_args2 'H :
  *)
 
 
-(*
- * The term check_cases is used to check the cases of a match expression.
- *)
-
-declare check_cases{ 'ty; 'cases }
-
-
 (*!************************************
  * @begin[doc]
  * @modsubsection{Pattern matching}
@@ -146,33 +137,36 @@ declare check_cases{ 'ty; 'cases }
  * is a set of constant intervals.  Operationally, the first case for which
  * the number is a member of the cases's set is selected for execution.
  * One case must always match; that is, the list of cases for a match
- * expression cannot be empty, and the must cover all possible values
+ * expression cannot be empty, and they must cover all possible values
  * of the number (atom) being matched.
  *
- * The next two rules are used to check that the expression in each case
- * has the appropriate type.
+ * (Documentation incomplete.)
  * @end[doc]
  *)
 
-prim ty_check_cases_base 'H :
-   sequent [fir] { 'H >- check_cases{ 'ty; nil } }
+(* XXX: documentation needs to be completed. *)
+
+prim ty_match_cases_base 'H :
+   sequent [fir] { 'H >- has_type["match_cases"]{ nil; 'ty } }
    = it
 
-prim ty_check_cases_ind 'H :
+prim ty_match_cases_ind 'H :
    sequent [fir] { 'H >- has_type["exp"]{ 'exp; 'ty } } -->
-   sequent [fir] { 'H >- check_cases{ 'ty; 'tail } } -->
-   sequent [fir] { 'H >- check_cases{ 'ty; cons{ matchCase{ 'set; 'exp };
-                                                 'tail } } }
+   sequent [fir] { 'H >- has_type["match_cases"]{ 'tail; 'ty } } -->
+   sequent [fir] { 'H >-
+      has_type["match_cases"]{ cons{ matchCase{ 'set; 'exp }; 'tail }; 'ty } }
    = it
+
 
 (*!
  * @begin[doc]
  *
- * The next three rules are fairly straightforward.
+ * (Documentation incomplete.)
  * @end[doc]
  *)
 
-(*
+(* XXX: documentation needs to be completed. *)
+
 prim ty_matchExp_tyInt 'H :
    (* The  atom being matched should be well-formed. *)
    sequent [fir] { 'H >- has_type["atom"]{ atomInt{'i}; tyInt } } -->
@@ -183,11 +177,11 @@ prim ty_matchExp_tyInt 'H :
                                               'cases } } } -->
 
    (* The cases should have the right type. *)
-   sequent [fir] { 'H >- check_cases{ 't; 'cases } } -->
+   sequent [fir] { 'H >- has_type["match_cases"]{ 'cases; 't } } -->
 
    (* Then the matchExp is well-typed. *)
-   sequent [fir] { 'H >- has_type["exp"]{ matchExp{ atomInt{'i}; 'cases };
-                                          't } }
+   sequent [fir] { 'H >-
+      has_type["exp"]{ matchExp{ atomInt{'i}; 'cases }; 't } }
    = it
 
 prim ty_matchExp_tyEnum 'H :
@@ -197,93 +191,85 @@ prim ty_matchExp_tyEnum 'H :
 
    (* The cases should cover all of tyEnum. *)
    sequent [fir] { 'H >-
-      set_eq{ intset[31, "signed"]{ cons{ interval{ 0; (number[i:n] -@ 1) };
-                                          nil } };
+      set_eq{ intset[31, "signed"]{ (interval{0; (number[i:n] -@ 1)} :: nil) };
               union_cases{ intset[31, "signed"]{ nil }; 'cases } } } -->
 
    (* The cases should have the right type. *)
-   sequent [fir] { 'H >- check_cases{ 't; 'cases } } -->
+   sequent [fir] { 'H >- has_type["match_cases"]{ 'cases; 't } } -->
 
    (* Then the matchExp is well-typed. *)
    sequent [fir] { 'H >-
-      has_type["exp"]{ matchExp{ atomEnum[i:n]{'j}; 'cases };
-                       't } }
+      has_type["exp"]{ matchExp{ atomEnum[i:n]{'j}; 'cases }; 't } }
    = it
 
-prim ty_matchExp_tyRawInt {| intro [] |} 'H :
+prim ty_matchExp_tyRawInt 'H :
    (* The  atom being matched should be well-formed. *)
    sequent [fir] { 'H >-
       has_type["atom"]{ atomRawInt[p:n, s:s]{'i}; tyRawInt[p:n, s:s] } } -->
 
    (* The cases should cover all of tyRawInt. *)
-   sequent [fir] { 'H >- set_eq{ intset_max[p:n, s:s];
-                                 union_cases{ intset[p:n, s:s]{ nil };
-                                              'cases } } } -->
+   sequent [fir] { 'H >-
+      set_eq{ intset_max[p:n, s:s];
+              union_cases{ intset[p:n, s:s]{ nil }; 'cases } } } -->
 
    (* The cases should have the right type. *)
-   sequent [fir] { 'H >- check_cases{ 't; 'cases } } -->
+   sequent [fir] { 'H >- has_type["match_cases"]{ 'cases; 't } } -->
 
    (* Then the matchExp is well-typed. *)
    sequent [fir] { 'H >-
-      has_type["exp"]{ matchExp{ atomRawInt[p:n, s:s]{'i}; 'cases };
-                       't } }
+      has_type["exp"]{ matchExp{ atomRawInt[p:n, s:s]{'i}; 'cases }; 't } }
    = it
-*)
 
 
 (*!
  * @begin[doc]
  *
- * The typing rules for matching a union values are the only difficult
- * cases for match statements.  The expression in each case must
- * have the given type, given the restricted type for the variable
- * being matched.
+ * (Documentation incomplete.)
  * @end[doc]
  *)
 
-(* NOTE: I'm using the technical report rule for union values here. *)
+(* XXX: documentation needs to be completed. *)
 
 (*
+ * BUG:  I'm not convinced that the three rules below are okay.
+ * The problems stem from ty_matchExp_tyUnion_cases_ind.  Changing
+ * the type of 'v seems like it could introduce quite a few problems.
+ * Like what happens if there's multiple declarations/definitions for 'v?
+ * What happens if 'v is defined with some concrete value?  Changing
+ * its type could invalidate the well-formedness of the definition.
+ *)
+
 prim ty_matchExp_tyUnion_start 'H 'J :
-   sequent [mfir] { 'H; v: var_def{ tyUnion{ 'tv; 'tyl; 's }; 'd }; 'J['v] >-
+   sequent [fir] { 'H; a: var_def{ 'v; tyUnion{ 'tv; 'tyl; 's }; 'd }; 'J >-
       not{ set_eq{ intset[31, "signed"]{ nil }; 's } } } -->
-   sequent [mfir] { 'H; v: var_def{ tyUnion{ 'tv; 'tyl; 's }; 'd }; 'J['v] >-
+   sequent [fir] { 'H; a: var_def{ 'v; tyUnion{ 'tv; 'tyl; 's }; 'd }; 'J >-
       set_eq{ 's; union_cases{ intset[31, "signed"]{ nil }; 'cases } } } -->
-   sequent [hack] { 'H; v: var_def{ tyUnion{ 'tv; 'tyl; 's }; 'd }; 'J['v] >-
-      has_type["exp"]{ matchExp{ atomVar{'v}; 'cases }; 't } } -->
-   sequent [mfir] { 'H; v: var_def{ tyUnion{ 'tv; 'tyl; 's }; 'd }; 'J['v] >-
+   sequent [fir] { 'H; a: var_def{ 'v; tyUnion{ 'tv; 'tyl; 's }; 'd }; 'J >-
+      has_type["union_cases"]{ matchExp{ atomVar{'v}; 'cases }; 't } } -->
+   sequent [fir] { 'H; a: var_def{ 'v; tyUnion{ 'tv; 'tyl; 's }; 'd }; 'J >-
       has_type["exp"]{ matchExp{ atomVar{'v}; 'cases }; 't } }
    = it
 
 prim ty_matchExp_tyUnion_cases_base 'H 'J :
-   sequent [hack] { 'H; v: var_def{ tyUnion{ 'tv; 'tyl; 's }; 'd }; 'J['v] >-
-      has_type["exp"]{ matchExp{ atomVar{'v}; nil }; 't } }
+   sequent [fir] { 'H; a: var_def{ 'v; tyUnion{ 'tv; 'tyl; 's }; 'd }; 'J >-
+      has_type["union_cases"]{ matchExp{ atomVar{'v}; nil }; 't } }
    = it
-*)
 
-(*
- * BUG: The following is just wrong given the current semantics
- * of sequents we're using.
- *)
-
-(*
 prim ty_matchExp_tyUnion_cases_ind 'H 'J :
-   sequent [mfir] { 'H; v: var_def{ tyUnion{ 'tv; 'tyl; 'set}; 'd}; 'J['v] >-
+   sequent [fir] { 'H; a: var_def{ 'v; tyUnion{ 'tv; 'tyl; 'set}; 'd}; 'J >-
       has_type["exp"]{ 'exp; 't } } -->
-   sequent [hack] { 'H; v: var_def{ tyUnion{ 'tv; 'tyl; 's }; 'd }; 'J['v] >-
-      has_type["exp"]{ matchExp{ atomVar{'v}; 'tail };
-                       't } } -->
-   sequent [hack] { 'H; v: var_def{ tyUnion{ 'tv; 'tyl; 's }; 'd }; 'J['v] >-
-      has_type["exp"]{ matchExp{ atomVar{'v};
-                                 cons{ matchCase{ 'set; 'exp }; 'tail } };
-                       't } }
+   sequent [fir] { 'H; a: var_def{ 'v; tyUnion{ 'tv; 'tyl; 's }; 'd }; 'J >-
+      has_type["union_cases"]{ matchExp{ atomVar{'v}; 'tail }; 't } } -->
+   sequent [fir] { 'H; a: var_def{ 'v; tyUnion{ 'tv; 'tyl; 's }; 'd }; 'J >-
+      has_type["union_cases"]{ matchExp{ atomVar{'v};
+                                         (matchCase{'set; 'exp} :: 'tail) };
+                               't } }
    = it
-*)
 
 
 (*!************************************
  * @begin[doc]
- * @modsubsection{Allocation}
+ * @modsubsection{Offsets}
  *
  * An offset atom should either be an integer or a raw integer.
  * Note that offsets cannot be negative, but in the case of variables,
@@ -292,34 +278,38 @@ prim ty_matchExp_tyUnion_cases_ind 'H 'J :
  *)
 
 (*
+ * BUG: If a variable is defined as an atom, then I should be able
+ * to check that it has an appropriate value.
+ *)
+
 prim ty_offset_tyInt 'H :
-   sequent [mfir] { 'H >- int_le{ 0; 'i } } -->
-   sequent [mfir] { 'H >- has_type["atom"]{ atomInt{'i}; tyInt } } -->
-   sequent [mfir] { 'H >- has_type["offset"]{ atomInt{'i}; offset } }
+   sequent [fir] { 'H >- int_le{ 0; 'i } } -->
+   sequent [fir] { 'H >- has_type["atom"]{ atomInt{'i}; tyInt } } -->
+   sequent [fir] { 'H >- has_type["offset"]{ atomInt{'i}; offset } }
    = it
 
 prim ty_offset_tyInt_var 'H 'J :
-   sequent [mfir] { 'H; v: var_def{ tyInt; 'd }; 'J['v] >-
+   sequent [fir] { 'H; a: var_def{ 'v; tyInt; 'd }; 'J >-
       has_type["offset"]{ atomVar{'v}; offset } }
    = it
 
-prim ty_offset_tyRawInt {| intro [] |} 'H :
-   sequent [mfir] { 'H >- int_le{ 0; 'i } } -->
-   sequent [mfir] { 'H >- has_type["atom"]{ atomRawInt[32, "signed"]{'i};
-                                            tyRawInt[32, "signed"] } } -->
-   sequent [mfir] { 'H >- has_type["offset"]{ atomRawInt[32, "signed"]{'i};
-                                              offset } }
+prim ty_offset_tyRawInt 'H :
+   sequent [fir] { 'H >- int_le{ 0; 'i } } -->
+   sequent [fir] { 'H >- has_type["atom"]{ atomRawInt[32, "signed"]{'i};
+                                           tyRawInt[32, "signed"] } } -->
+   sequent [fir] { 'H >- has_type["offset"]{ atomRawInt[32, "signed"]{'i};
+                                             offset } }
    = it
 
 prim ty_offset_tyRawInt_var 'H 'J :
-   sequent [mfir] { 'H; v: var_def{ tyRawInt[32, "signed"]; 'd }; 'J['v] >-
+   sequent [fir] { 'H; a: var_def{ 'v; tyRawInt[32, "signed"]; 'd }; 'J >-
       has_type["offset"]{ atomVar{'v}; offset } }
    = it
-*)
 
 
-(*!
+(*!************************************
  * @begin[doc]
+ * @modsubsection{Allocation}
  *
  * The rules for the expression $<< letAlloc{ 'op; v. 'exp['v] } >>$
  * defer, when possible, to the rules for the well-formedness of
@@ -388,102 +378,123 @@ prim ty_letAlloc_malloc 'H 'a :
  * @begin[doc]
  * @modsubsection{Subscripting}
  *
- * XXX Some sort of documentation needs to go here.
+ * (Documentation incomplete.)
  * @end[doc]
  *)
 
-(*
-prim ty_letSubscript_tyTuple 'H 'J 'a :
-   sequent [mfir] { 'H; x: var_def{ tyTuple[s:s]{'tyl}; 'd }; 'J['x] >-
+(* XXX: documentation needs to be completed. *)
+
+prim ty_letSubscript_tyTuple 'H 'J 'p 'q :
+   sequent [fir] { 'H; y: var_def{ 'x; tyTuple[s:s]{'mtyl}; 'd }; 'J >-
       type_eq{ 'u;
-               nth_elt{ index_of_subscript{'a2}; 'tyl };
+               ty_of_mutable_ty{ nth_elt{ index_of_subscript{'a2}; 'mtyl } };
                large_type } } -->
-   sequent [mfir] { 'H;
-                    x: var_def{ tyTuple[s:s]{'tyl}; 'd };
-                    'J['x];
-                    a: var_def{ 'u; no_def } >-
-      has_type["exp"]{ 'exp['a]; 't } } -->
-   sequent [mfir] { 'H; x: var_def{ tyTuple[s:s]{'tyl}; 'd }; 'J['x] >-
+   sequent [fir] { 'H;
+                   y: var_def{ 'x; tyTuple[s:s]{'mtyl}; 'd };
+                   'J;
+                   p: variable;
+                   q: var_def{ 'p; 'u; no_def } >-
+      has_type["exp"]{ 'exp['p]; 't } } -->
+   sequent [fir] { 'H; y: var_def{ 'x; tyTuple[s:s]{'mtyl}; 'd }; 'J >-
       has_type["exp"]{letSubscript{'u; atomVar{'x}; 'a2; v. 'exp['v]}; 't} }
    = it
 
 prim ty_setSubscript_tyTuple 'H 'J :
-   sequent [mfir] { 'H; x: var_def{ tyTuple[s:s]{'tyl}; 'd }; 'J['x] >-
-      type_eq{ 'u;
-               nth_elt{ index_of_subscript{'a2}; 'tyl };
+   sequent [fir] { 'H; y: var_def{ 'x; tyTuple[s:s]{'mtyl}; 'd }; 'J >-
+      type_eq{ mutable_ty{ 'u; "true" };
+               nth_elt{ index_of_subscript{'a2}; 'mtyl };
                large_type } } -->
-   sequent [mfir] { 'H; x: var_def{ tyTuple[s:s]{'tyl}; 'd }; 'J['x] >-
+   sequent [fir] { 'H; y: var_def{ 'x; tyTuple[s:s]{'mtyl}; 'd }; 'J >-
       has_type["atom"]{ 'a3; 'u } } -->
-   sequent [mfir] { 'H; x: var_def{ tyTuple[s:s]{'tyl}; 'd }; 'J['x] >-
+   sequent [fir] { 'H; y: var_def{ 'x; tyTuple[s:s]{'mtyl}; 'd }; 'J >-
       has_type["exp"]{ 'exp; 't } } -->
-   sequent [mfir] { 'H; x: var_def{ tyTuple[s:s]{'tyl}; 'd }; 'J['x] >-
+   sequent [fir] { 'H; y: var_def{ 'x; tyTuple[s:s]{'mtyl}; 'd }; 'J >-
       has_type["exp"]{setSubscript{atomVar{'x}; 'a2; 'u; 'a3; 'exp}; 't} }
    = it
-*)
 
 
 (*!
  * @begin[doc]
  *
- * XXX arrays are easy!
+ * (Documentation incomplete.)
  * @end[doc]
  *)
 
-(*
-prim ty_letSubsript_tyArray {| intro [] |} 'H 'a :
-   sequent [mfir] { 'H >- has_type["atom"]{ 'a1; tyArray{ 'u } } } -->
-   sequent [mfir] { 'H >- has_type["offset"]{ 'a2; offset } } -->
-   sequent [mfir] { 'H; a: var_def{ 'u; no_def } >-
-      has_type["exp"]{ 'exp['a]; 't } } -->
-   sequent [mfir] { 'H >-
+(* XXX: documentation needs to be completed. *)
+
+prim ty_letSubsript_tyArray 'H 'a 'b :
+   sequent [fir] { 'H >- has_type["atom"]{ 'a1; tyArray{ 'u } } } -->
+   sequent [fir] { 'H >- has_type["offset"]{ 'a2; offset } } -->
+   sequent [fir] { 'H; b: variable; a: var_def{ 'b; 'u; no_def } >-
+      has_type["exp"]{ 'exp['b]; 't } } -->
+   sequent [fir] { 'H >-
       has_type["exp"]{ letSubscript{ 'u; 'a1; 'a2; v. 'exp['v] }; 't } }
    = it
 
-prim ty_setSubscript_tyArray {| intro [] |} 'H :
-   sequent [mfir] { 'H >- has_type["atom"]{ 'a1; tyArray{ 'u } } } -->
-   sequent [mfir] { 'H >- has_type["offset"]{ 'a2; offset } } -->
-   sequent [mfir] { 'H >- has_type["atom"]{ 'a3; 'u } } -->
-   sequent [mfir] { 'H >- has_type["exp"]{ 'exp; 't } } -->
-   sequent [mfir] { 'H >-
+prim ty_setSubscript_tyArray 'H :
+   sequent [fir] { 'H >- has_type["atom"]{ 'a1; tyArray{ 'u } } } -->
+   sequent [fir] { 'H >- has_type["offset"]{ 'a2; offset } } -->
+   sequent [fir] { 'H >- has_type["atom"]{ 'a3; 'u } } -->
+   sequent [fir] { 'H >- has_type["exp"]{ 'exp; 't } } -->
+   sequent [fir] { 'H >-
       has_type["exp"]{ setSubscript{ 'a1; 'a2; 'u; 'a3; 'exp }; 't } }
    = it
-*)
+
 
 (*!
  * @begin[doc]
  *
- * XXX unions are icky
+ * (Documentation incomplete.)
  * @end[doc]
  *)
 
-(* XXX union subscripting *)
-
-(*!
- * @begin[doc]
- *
- * XXX rawdata is fun!
- * @end[doc]
- *)
+(* XXX: documentation needs to be completed. *)
+(* XXX: union subscripting rules need to be completed. *)
 
 (*
-prim ty_letSubscript_rawData {| intro [] |} 'H 'a :
-   sequent [mfir] { 'H >- has_type["atom"]{ 'a1; tyRawData } } -->
-   sequent [mfir] { 'H >- has_type["offset"]{ 'a2; offset } } -->
-   sequent [mfir] { 'H; a: var_def{ 'u; no_def } >-
-      has_type["exp"]{ 'exp['a]; 't } } -->
-   sequent [mfir] { 'H >-
+prim ty_letSubscript_tyUnion 'H 'J :
+   sequent [fir] { 'H; y: var_def{ 'x;
+   = it
+*)
+
+
+(*!
+ * @begin[doc]
+ *
+ * (Documentation incomplete.)
+ * @end[doc]
+ *)
+
+(* XXX: documentation needs to be completed. *)
+
+prim ty_letSubscript_rawData 'H 'a 'b :
+   sequent [fir] { 'H >- has_type["atom"]{ 'a1; tyRawData } } -->
+   sequent [fir] { 'H >- has_type["offset"]{ 'a2; offset } } -->
+   sequent [fir] { 'H; b: variable; a: var_def{ 'b; 'u; no_def } >-
+      has_type["exp"]{ 'exp['b]; 't } } -->
+   sequent [fir] { 'H >-
       has_type["exp"]{ letSubscript{ 'u; 'a1; 'a2; v. 'exp['v] }; 't } }
    = it
 
-prim ty_setSubscript_rawdata {| intro [] |} 'H :
-   sequent [mfir] { 'H >- has_type["atom"]{ 'a1; tyRawData } } -->
-   sequent [mfir] { 'H >- has_type["offset"]{ 'a2; offset } } -->
-   sequent [mfir] { 'H >- has_type["atom"]{ 'a3; 'u } } -->
-   sequent [mfir] { 'H >- has_type["exp"]{ 'exp; 't } } -->
-   sequent [mfir] { 'H >-
+prim ty_setSubscript_rawdata 'H :
+   sequent [fir] { 'H >- has_type["atom"]{ 'a1; tyRawData } } -->
+   sequent [fir] { 'H >- has_type["offset"]{ 'a2; offset } } -->
+   sequent [fir] { 'H >- has_type["atom"]{ 'a3; 'u } } -->
+   sequent [fir] { 'H >- has_type["exp"]{ 'exp; 't } } -->
+   sequent [fir] { 'H >-
       has_type["exp"]{ setSubscript{ 'a1; 'a2; 'u; 'a3; 'exp };'t } }
    = it
-*)
+
+
+(*!
+ * @begin[doc]
+ *
+ * (Documentation incomplete.)
+ * @end[doc]
+ *)
+
+(* XXX: documentation needs to be completed. *)
+(* XXX: frame subscripting rules need to be completed. *)
 
 
 (*!************************************
@@ -505,7 +516,7 @@ prim ty_label 'H 'J :
 
 prim ty_letGlobal 'H 'a 'b :
    sequent [fir] { 'H >- has_type["label"]{ 'label; 'ty1 } } -->
-   sequent [fir] { 'H; a: var_def{ 'b; 'ty1; no_def } >-
+   sequent [fir] { 'H; b: global; a: var_def{ 'b; 'ty1; no_def } >-
       has_type["exp"]{ 'exp['b]; 'ty2 } } -->
    sequent [fir] { 'H >-
       has_type["exp"]{ letGlobal{ 'ty1; 'label; v. 'exp['v] }; 'ty2 } }
@@ -522,12 +533,3 @@ prim ty_setGlobal 'H :
 (*!
  * @docoff
  *)
-
-
-(**************************************************************************
- * Display forms.
- **************************************************************************)
-
-dform check_cases_df : except_mode[src] ::
-   check_cases{ 'ty; 'cases } =
-   bf["check_cases"] `"(" slot{'ty} `"," slot{'cases} `")"

@@ -55,9 +55,9 @@ extends Mfir_ty
  * @terms
  * @modsubsection{Unary operators}
  *
- * The FIR unary operators include arithmetic operators and coercion operators
- * that safely transform a value between two types.  We omit an explicit
- * listing these terms.
+ * The FIR unary operators include arithmetic operators and coercion
+ * operators that safely transform a value between two types.  We omit
+ * an explicit listing these terms.
  * @end[doc]
  *)
 
@@ -95,7 +95,7 @@ declare ceilFloatOp[precision:n]
 declare floorFloatOp[precision:n]
 
 declare intOfFloatOp[precision:n]
-declare intOfRawIntOp[precision:n, sign:n]
+declare intOfRawIntOp[precision:n, sign:s]
 
 declare floatOfIntOp[precision:n]
 declare floatOfFloatOp[dest_prec:n, src_prec:n]
@@ -118,8 +118,8 @@ declare rawDataOfFrameOp{ 'ty_var; 'tyl }
  * @begin[doc]
  * @modsubsection{Binary operators}
  *
- * The FIR binary operators include various arithmetic operators, and pointer
- * equality operators. We omit an explicit listing of these terms.
+ * The FIR binary operators include various arithmetic operators, and
+ * pointer equality operators.  We omit an explicit listing of these terms.
  * @end[doc]
  *)
 
@@ -206,9 +206,9 @@ declare neqEqOp{ 'ty }
  * @begin[doc]
  * @modsubsection{Atoms}
  *
- * Atoms represent values, including numbers, variables, and basic arithmetic.
- * Apart from arithmetic exceptions, such as division by zero, they are
- * functional; the order of atom evaluation does not matter.
+ * Atoms represent values, including numbers, variables, and basic
+ * arithmetic.  Apart from arithmetic exceptions, such as division by zero,
+ * they are functional; the order of atom evaluation does not matter.
  *
  * The term @tt[atomNil] is the nil value for the given type.
  * @end[doc]
@@ -565,7 +565,7 @@ dform atomSizeof_df : except_mode[src] ::
 
 dform atomConst_df : except_mode[src] ::
    atomConst{ 'ty; 'ty_var; 'num } =
-   bf["const"] `"(" slot{'ty} `"," slot{'ty_var} `"," slot{'num} `")"
+   bf["const"] `"[" slot{'ty} `"](" slot{'ty_var} `"," slot{'num} `")"
 
 dform atomTyApply_df : except_mode[src] ::
    atomTyApply{ 'atom; 'ty; 'ty_list } =
@@ -641,9 +641,9 @@ dform tailCall_df : except_mode[src] ::
 
 dform matchCase_df : except_mode[src] ::
    matchCase{ 'set; 'exp } =
-   pushm[0] szone push_indent slot{'set} rightarrow hspace
+   `"(" pushm[0] szone push_indent slot{'set} rightarrow hspace
    szone slot{'exp} ezone popm
-   ezone popm
+   ezone popm `")"
 
 dform matchExp_df : except_mode[src] ::
    matchExp{ 'atom; 'matchCase_list } =

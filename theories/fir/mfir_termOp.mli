@@ -34,6 +34,7 @@
 
 extends Mfir_option
 extends Mfir_bool
+extends Mfir_token
 extends Mfir_record
 extends Mfir_int
 extends Mfir_int_set
@@ -76,6 +77,16 @@ val ifthenelse_term : term
 val is_ifthenelse_term : term -> bool
 val mk_ifthenelse_term : term -> term -> term -> term
 val dest_ifthenelse_term : term -> term * term * term
+
+val token_term : term
+val is_token_term : term -> bool
+val mk_token_term : string -> term
+val dest_token_term : term -> string
+
+val token_eq_term : term
+val is_token_eq_term : term -> bool
+val mk_token_eq_term : term -> term -> term
+val dest_token_eq_term : term -> term * term
 
 val recordEnd_term : term
 val is_recordEnd_term : term -> bool
@@ -464,8 +475,8 @@ val dest_intOfFloatOp_term : term -> Mp_num.num
 
 val intOfRawIntOp_term : term
 val is_intOfRawIntOp_term : term -> bool
-val mk_intOfRawIntOp_term : Mp_num.num -> Mp_num.num -> term
-val dest_intOfRawIntOp_term : term -> Mp_num.num * Mp_num.num
+val mk_intOfRawIntOp_term : Mp_num.num -> string -> term
+val dest_intOfRawIntOp_term : term -> Mp_num.num * string
 
 val floatOfIntOp_term : term
 val is_floatOfIntOp_term : term -> bool

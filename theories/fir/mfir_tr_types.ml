@@ -331,7 +331,7 @@ prim wf_tyVar 'H 'J :
  *)
 
 (*
- * BUG: There's other rules that we can right down for tyApply,
+ * BUG: There's other rules that we can write down for tyApply,
  * such as the case in which one of the types has already been applied.
  *)
 

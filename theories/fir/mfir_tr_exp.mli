@@ -1,5 +1,5 @@
 (*
- * The Mfir_tr_exp module defines the typing rules for expressions.
+ * The Mfir_tr_exp module defines the typing rules for FIR expressions.
  *
  * ------------------------------------------------------------------------
  *

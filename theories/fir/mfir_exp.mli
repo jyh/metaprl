@@ -72,7 +72,7 @@ declare ceilFloatOp[precision:n]
 declare floorFloatOp[precision:n]
 
 declare intOfFloatOp[precision:n]
-declare intOfRawIntOp[precision:n, sign:n]
+declare intOfRawIntOp[precision:n, sign:s]
 
 declare floatOfIntOp[precision:n]
 declare floatOfFloatOp[dest_prec:n, src_prec:n]

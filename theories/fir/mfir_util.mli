@@ -47,6 +47,13 @@ open Tactic_type.Conversionals
  **************************************************************************)
 
 (*
+ * Offset type.
+ *)
+
+declare offset
+
+
+(*
  * Definition extraction.
  *)
 
@@ -74,6 +81,21 @@ declare num_params{ 'ty }
 declare unpack_exists{ 'ty; 'var; 'num }
 
 
+(*
+ * Union of match cases.
+ *)
+
+declare union_cases{ 'set; 'cases }
+
+
+(*
+ * Conversions.
+ *)
+
+declare index_of_subscript{ 'atom }
+declare ty_of_mutable_ty{ 'mutable_ty }
+
+
 (**************************************************************************
  * Rewrites.
  **************************************************************************)
@@ -82,3 +104,6 @@ topval reduce_get_core : conv
 topval reduce_apply_types : conv
 topval reduce_num_params : conv
 topval reduce_unpack_exists : conv
+topval reduce_union_cases : conv
+topval reduce_index_of_subscript : conv
+topval reduce_ty_of_mutable_ty : conv

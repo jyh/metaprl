@@ -2,7 +2,7 @@
  * @begin[doc]
  * @module[Mfir_tr_atom]
  *
- * The @tt[Mfir_tr_atom] module defines the typing rules for atoms.
+ * The @tt[Mfir_tr_atom] module defines the typing rules for FIR atoms.
  * @end[doc]
  *
  * ------------------------------------------------------------------------
@@ -60,7 +60,7 @@ extends Mfir_tr_atom_base
  * @rules
  * @modsubsection{Normal atoms}
  *
- * Nil!
+ * The type of the nil-value of a type is simply that type.
  * @end[doc]
  *)
 
@@ -88,13 +88,12 @@ prim ty_atomInt 'H :
  * @begin[doc]
  *
  * An enumeration atom $<< atomEnum[i:n]{'n} >>$ has type $<< tyEnum[i:n] >>$
- * if $ 0 <<le>> n < i $, and if $<< tyEnum[i:n] >>$ is a well-formed type
- * (that is, if $<< member{ number[i:n]; enum_max } >>$).
+ * if $ 0 <<le>> n < i $, and if $<< tyEnum[i:n] >>$ is a well-formed type.
  * @end[doc]
  *)
 
 prim ty_atomEnum 'H :
-   sequent [fir] { 'H >- member{ number[i:n]; enum_max } } -->
+   sequent [fir] { 'H >- type_eq{ tyEnum[i:n]; tyEnum[i:n]; small_type } } -->
    sequent [fir] { 'H >- "and"{int_le{0; 'n}; int_lt{'n; number[i:n]}} } -->
    sequent [fir] { 'H >- has_type["atom"]{atomEnum[i:n]{'n}; tyEnum[i:n]} }
    = it
@@ -122,7 +121,9 @@ prim ty_atomRawInt 'H :
 (*!
  * @begin[doc]
  *
- * Floats!
+ * Due to the representation of floating-point values in the FIR theory,
+ * the typing rule for $<< atomFloat[p:n, value:s] >>$ reduces to
+ * checking if $<< tyFloat[p:n] >>$ is a well-formed type.
  * @end[doc]
  *)
 
@@ -150,9 +151,13 @@ prim ty_atomVar 'H 'J :
 
 (*!************************************
  * @begin[doc]
- * @modsubsection{Shrug}
+ * @modsubsection{Frames and constant constructors}
  *
- * Shrug
+ * The atom $<< atomLabel[field:s, subfield:s]{ 'frame; 'num } >>$
+ * is used to index subfields of frame objects.  They are unsafe and
+ * treated as 32-bit, signed integers.  To be well-formed, the frame
+ * named must have the specified field and subfield, and $<< 'num >>$
+ * should be a 32-bit, signed integer.
  * @end[doc]
  *)
 
@@ -166,6 +171,25 @@ prim ty_atomLabel 'H 'J :
                         tyRawInt[32, "signed"] } }
    = it
 
+
+(*!
+ * @begin[doc]
+ *
+ * The atom $<< atomSizeof{ 'tvl; 'num } >>$ is a constant representing
+ * the size of the frames named in the list $<< 'tvl >>$ plus some constant
+ * $<< 'num >>$.  To be well-formed, each element of $<< 'tvl >>$ should
+ * be a type variable $<< tyVar{'tv} >>$ that names a frame definition,
+ * and $<< 'num >>$ should be a 32-bit, signed integer.
+ * @end[doc]
+ *)
+
+prim ty_atomSizeof 'H :
+   sequent [fir] { 'H >- has_type["atom"]{'num; tyRawInt[32, "signed"]} } -->
+   sequent [fir] { 'H >- has_type["atomSizeof"]{ 'tvl; frame_type } } -->
+   sequent [fir] { 'H >-
+      has_type["atom"]{ atomSizeof{ 'tvl; 'num }; tyRawInt[32, "signed"] } }
+   = it
+
 prim ty_atomSizeof_aux_base 'H :
    sequent [fir] { 'H >- has_type["atomSizeof"]{ nil; frame_type }}
    = it
@@ -177,31 +201,26 @@ prim ty_atomSizeof_aux_ind 'H 'J :
       has_type["atomSizeof"]{ (tyVar{'tv} :: 'rest); frame_type } }
    = it
 
-prim ty_atomSizeof 'H :
-   sequent [fir] { 'H >- has_type["atom"]{'num; tyRawInt[32, "signed"]} } -->
-   sequent [fir] { 'H >- has_type["atomSizeof"]{ 'tvl; frame_type } } -->
-   sequent [fir] { 'H >-
-      has_type["atom"]{ atomSizeof{ 'tvl; 'num }; tyRawInt[32, "signed"] } }
-   = it
+
+(*!
+ * @begin[doc]
+ *
+ * The atom $<< atomConst{ 'ty; 'tv; 'n } >>$ is a constant constructor
+ * for case $<< 'n >>$ of a union.  It is well-formed if it references
+ * a constant case of a union type and if the union type is well-formed.
+ * @end[doc]
+ *)
 
 prim ty_atomConst 'H 'J :
-   sequent [fir] { 'H; a: ty_def{ 'tv; 'k; 'def }; 'J >-
-      type_eq{ 'ty;
-               tyUnion{ 'tv;
-                         'tyl;
-                         intset[31, "signed"]{
-                            (interval{ 'num; 'num } :: nil) } };
-               small_type } } -->
-   sequent [fir] { 'H; a: ty_def{ 'tv; 'k; 'def }; 'J >-
-      type_eq_list{ nil;
-                    nth_elt{ 'num; apply_types{ 'def; 'tyl } };
-                    small_type } } -->
-   sequent [fir] { 'H; a: ty_def{ 'tv; 'k; 'def }; 'J >-
-      has_type["atom"]{ atomConst{ 'ty; 'tv; 'num };
-                        tyUnion{ 'tv;
-                                 'tyl;
-                                 intset[31, "signed"]{
-                                    (interval{ 'num; 'num } :: nil) } } } }
+   sequent [fir] { 'H; a: ty_def{ 'tv; 'k; 'd }; 'J >-
+      type_eq{ 'ty; tyUnion{ 'tv; 'tyl; intset[31, "signed"]{
+         (interval{ 'n; 'n } :: nil) } }; small_type } } -->
+   sequent [fir] { 'H; a: ty_def{ 'tv; 'k; 'd }; 'J >-
+      type_eq_list{ nil; nth_elt{ 'n; apply_types{ 'd; 'tyl } };
+         small_type } } -->
+   sequent [fir] { 'H; a: ty_def{ 'tv; 'k; 'd }; 'J >-
+      has_type["atom"]{ atomConst{ 'ty; 'tv; 'n }; tyUnion{ 'tv; 'tyl;
+         intset[31, "signed"]{ (interval{ 'n; 'n } :: nil) } } } }
    = it
 
 
@@ -304,9 +323,9 @@ prim ty_atomTyUnpack 'H 'J:
  * @modsubsection{Unary and binary operators}
  *
  * For the atoms $<< atomUnop{ 'unop; 'a } >>$ and
- * $<< atomBinop{ 'binop; 'a1; 'a2 } >>$, there is a typing rule for each
- * possible operator.  The rules are straightforward, and we will illustrate
- * their basic form with two examples.
+ * $<< atomBinop{ 'binop; 'a1; 'a2 } >>$, the typing rules are
+ * straightforward.  The arguments should have the correct type, and
+ * the result type of the operator should be equal to $<< 'ty >>$.
  * @end[doc]
  *)
 

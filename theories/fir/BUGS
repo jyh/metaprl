@@ -11,6 +11,23 @@ I make no guarentees that all BUGs are documented in this file, though
 I do claim that every bug or problem that I'm aware of is documented.
 
 
+-- Allocation operators are out of sync with the actual MCC FIR.
+
+-- No terms are declared for tailops and specialCall.  These should
+   go in Mfir_exp.
+
+-- In Mfir_sequent, need to say a bit more about the sequents,
+   store values, kinds, etc.
+
+-- Mfir_tr_atom_base is woefully incomplete.
+
+-- Need to update alloc ops, pattern matching ruels, alloc
+   and subscripting rules...  LetExt needs to encode the
+   external definitions or something... using rewrites of course...
+
+
+Bugs that will probably be unresolved for a long time:
+
 -- Cannot give a type for functions of zero arguments (see Mfir_ty!tyFun).
    In particular, Mfir_connect_ty will convert TyFun ([], t) to some
    term representing t instead of a tyFun term.
@@ -29,11 +46,6 @@ I do claim that every bug or problem that I'm aware of is documented.
 -- No term is declared for the binary operator plusPointerOp.
    It should go in Mfir_exp.  (It depends on subops.)
 
--- Allocation operators are out of sync with the actual MCC FIR.
-
--- No terms are declared for tailops and specialCall.  These should
-   go in Mfir_exp.
-
 -- Other expressions that are missing include Memcpy, Call, and Assert.
    Related to Assert is the fact that no terms are declared for preds.
    These should all go in Mfir_exp.
@@ -42,19 +54,6 @@ I do claim that every bug or problem that I'm aware of is documented.
       .  In many places, I assume the OCaml int type is
          31-bit, signed integers.
       .  I assume integer sets and raw integer sets have closed bounds.
-
--- Mfir_util is a mess.  I should figure out a way to clean it up.
-
--- Mfir_tr_atom needs to be checked to see if it has all the necessary
-   rules and the right organization of stuff.
-
--- Documentation needs to be checked and cleaned up.
-
--- I need to identify places where orelseC is used to control the
-   order of rewrite application and remove those instances.
-
--- In Mfir_sequent, need to say a bit more about the sequents,
-   store values, kinds, etc.
 
 
 Things that might look like bugs, but really aren't

@@ -66,6 +66,18 @@ open Mfir_int_set
 (*!
  * @begin[doc]
  * @terms
+ * @modsubsection{Offset type}
+ *
+ * The term @tt[offset] represents the type of offset atoms, atoms
+ * that are used to index aggregate data.
+ * @end[doc]
+ *)
+
+declare offset
+
+
+(*!************************************
+ * @begin[doc]
  * @modsubsection{Definition extraction}
  *
  * If @tt[poly_ty] is a parametrized type definition, then
@@ -114,6 +126,33 @@ declare num_params{ 'ty }
 declare unpack_exists{ 'ty; 'var; 'num }
 
 
+(*!************************************
+ * @begin[doc]
+ * @modsubsection{Union of match cases}
+ *
+ * (Documentation incomplete.)
+ * @end[doc]
+ *)
+
+(* XXX: documentation needs to be completed. *)
+
+declare union_cases{ 'set; 'cases }
+
+
+(*!************************************
+ * @begin[doc]
+ * @modsubsection{Conversions}
+ *
+ * (Documentation incomplete.)
+ * @end[doc]
+ *)
+
+(* XXX: documentation needs to be completed. *)
+
+declare index_of_subscript{ 'atom }
+declare ty_of_mutable_ty{ 'mutable_ty }
+
+
 (**************************************************************************
  * Rewrites.
  **************************************************************************)
@@ -128,6 +167,11 @@ declare unpack_exists{ 'ty; 'var; 'num }
  * @tt[reduce_get_core] conversional in order to control the order of
  * their application.
  * @end[doc]
+ *)
+
+(*
+ * BUG: I really should not be using orelseC to control how
+ * the following rewrites are applied.
  *)
 
 prim_rw reduce_get_core_poly :
@@ -204,6 +248,11 @@ let resource reduce += [
  * @end[doc]
  *)
 
+(*
+ * BUG: I really should not be using orelseC to control how
+ * the following rewrites are applied.
+ *)
+
 prim_rw reduce_num_params_exists :
    num_params{ tyExists{ t. 'ty['t] } } <-->
    (1 +@ num_params{ 'ty[it] })
@@ -235,6 +284,11 @@ let resource reduce += [
  * @end[doc]
  *)
 
+(*
+ * BUG: I really should not be using orelseC to control how
+ * the following rewrites are applied.
+ *)
+
 prim_rw reduce_unpack_exists_aux1 :
    unpack_exists{ 'ty; 'var; 'num } <-->
    'ty
@@ -251,9 +305,10 @@ prim_rw reduce_unpack_exists_aux2 :
  *)
 
 let reduce_unpack_exists =
-   (reduce_unpack_exists_aux2
-      thenC (repeatC reduce_apply_types)
-      thenC reduce_add)
+   (  reduce_unpack_exists_aux2 thenC
+      (repeatC reduce_apply_types) thenC
+      reduce_add
+   )
    orelseC
    (reduce_unpack_exists_aux1)
 
@@ -263,9 +318,106 @@ let resource reduce += [
 ]
 
 
+(*!************************************
+ * @begin[doc]
+ * @modsubsection{Union of match cases}
+ *
+ * Taking the union of the sets in a list of match cases is straightforward.
+ * @end[doc]
+ *)
+
+prim_rw reduce_union_cases_base :
+   union_cases{ 'set; nil } <-->
+   'set
+
+prim_rw reduce_union_cases_ind :
+   union_cases{ 'set; cons{ matchCase{ 'case; 'exp }; 'tail } } <-->
+   union_cases{ union{ 'set; 'case }; 'tail }
+
+(*!
+ * @docoff
+ *)
+
+let reduce_union_cases =
+   reduce_union_cases_base orelseC
+   (  reduce_union_cases_ind thenC
+      (addrC [0] (repeatC reduce_union))
+   )
+
+let resource reduce += [
+   << union_cases{ 'set; 'cases } >>, reduce_union_cases
+]
+
+
+(*!************************************
+ * @begin[doc]
+ * @modsubsection{Conversions}
+ *
+ * Raw integer subscripts represent byte offsets, while integer
+ * subscripts represent logical offsets.  Byte offsets must be aligned
+ * on four byte boundaries.  If this is not the case, then the result
+ * of converting the subscript to a (logical) index is $-1$, which is
+ * an invalid index.
+ * @end[doc]
+ *)
+
+prim_rw reduce_index_of_subscript_atomInt :
+   index_of_subscript{ atomInt{ number[i:n] } } <-->
+   number[i:n]
+
+prim_rw reduce_index_of_subscript_atomRawInt :
+   index_of_subscript{ atomRawInt[32, "signed"]{ number[i:n] } } <-->
+   ifthenelse{ int_eq{ 0; rem{ number[i:n]; 4 } };
+      rem{ number[i:n]; 4 };
+      . -1 }
+
+(*!
+ * @docoff
+ *)
+
+let reduce_index_of_subscript =
+   reduce_index_of_subscript_atomInt orelseC
+   (  reduce_index_of_subscript_atomRawInt thenC
+      (addrC [0; 1] reduce_rem) thenC
+      (addrC [0] reduce_int_eq) thenC
+      reduce_ifthenelse thenC
+      (tryC reduce_rem)
+   )
+
+let resource reduce += [
+   << index_of_subscript{ 'atom } >>, reduce_index_of_subscript
+]
+
+
+(*!
+ * @begin[doc]
+ *
+ * Converting a mutable type $<< mutable_ty{ 'ty; 'flag } >>$ to
+ * a plain type $<< 'ty >>$ is straightforward.
+ * @end[doc]
+ *)
+
+prim_rw reduce_ty_of_mutable_ty :
+   ty_of_mutable_ty{ mutable_ty{ 'ty; 'flag } } <-->
+   'ty
+
+(*!
+ * @docoff
+ *)
+
+let resource reduce += [
+   << ty_of_mutable_ty{ mutable_ty{ 'ty; 'flag } } >>,
+      reduce_ty_of_mutable_ty
+]
+
+
 (**************************************************************************
  * Display forms.
  **************************************************************************)
+
+dform offset_df : except_mode[src] ::
+   offset =
+   bf["offset"]
 
 dform get_core_df : except_mode[src] ::
    get_core{ 'ty } =
@@ -282,3 +434,15 @@ dform num_params_df : except_mode[src] ::
 dform unpack_exists_df : except_mode[src] ::
    unpack_exists{ 'ty; 'var; 'num } =
    bf["unpack"] `"[" slot{'num} `"](" slot{'ty} `"," slot{'var} `")"
+
+dform union_cases_df : except_mode[src] ::
+   union_cases{ 'set; 'cases } =
+   `"(" slot{'set} cup sub{it["cases"]} slot{'cases} `")"
+
+dform index_of_subscript_df : except_mode[src] ::
+   index_of_subscript{ 'atom } =
+   `"(" bf["index"] leftarrow bf["sub"] `")(" slot{'atom} `")"
+
+dform ty_of_mutable_ty_df : except_mode[src] ::
+   ty_of_mutable_ty{ 'mutable_ty } =
+   `"(" bf["ty"] leftarrow bf["mty"] `")(" slot{'mutable_ty} `")"

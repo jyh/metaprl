@@ -21,6 +21,7 @@ sig_file_name = 'mfir_termOp.mli'
 def_file_name = 'mfir_termOp.ml'
 inputs        = [ 'mfir_option.mli',
                   'mfir_bool.mli',
+                  'mfir_token.mli',
                   'mfir_record.mli',
                   'mfir_int.mli',
                   'mfir_list.mli',
@@ -237,6 +238,7 @@ def_file = open( def_file_name, 'w' )
 sig_file.write( get_header() )
 sig_file.write( '\n\nextends Mfir_option\n' + \
                 'extends Mfir_bool\n' + \
+                'extends Mfir_token\n' + \
                 'extends Mfir_record\n' + \
                 'extends Mfir_int\n' + \
                 'extends Mfir_int_set\n' + \
@@ -248,6 +250,7 @@ sig_file.write( '\n\nextends Mfir_option\n' + \
 def_file.write( get_header() )
 def_file.write( '\n\nextends Mfir_option\n' + \
                 'extends Mfir_bool\n' + \
+                'extends Mfir_token\n' + \
                 'extends Mfir_record\n' + \
                 'extends Mfir_int\n' + \
                 'extends Mfir_int_set\n' + \

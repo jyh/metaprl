@@ -3,8 +3,10 @@
 #
 DIR := theories/tactic
 ROOT := ../..
-INCLUDE := -I . -I $(ROOT)/lib 
-INCAMLP4 := yes
+
+include $(ROOT)/mk/preface
+
+INCLUDE = -I . -I $(ROOT)/lib -I $(CAMLP4LIB)
 OCAMLDEPFLAGS := -prl_init
 
 # Library files

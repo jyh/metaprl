@@ -912,6 +912,13 @@ h::t
 *)
 
 
+interactive index_rev_wf {| intro[] |} :
+   [wf] sequent { <H> >- 'l in list } -->
+   sequent { <H> >-  'i in Index{'l} } -->
+   sequent { <H> >-  length{'l} -@ ('i +@ 1) in Index{'l} }
+
+
+
 define unfold_tail: tail{'l;'n} <--> ind{'n; nil;   k,r. cons{nth{'l;length{'l} -@ 'k}; 'r} }
 
 interactive_rw tail_reduce1 {| reduce |}:
@@ -935,13 +942,19 @@ interactive tail_squiggle {| intro[] |}:
    sequent { <H>; i:nat; 'i<'n >-  nth{'l_1;length{'l_1}-@('i+@1)} ~ nth{'l_2;length{'l_2}-@('i+@1)} } -->
    sequent { <H> >-  tail{'l_1;'n} ~ tail{'l_2;'n} }
 
-
 interactive listSquiggle :
    [wf] sequent { <H> >- 'l1 in list } -->
    [wf] sequent { <H> >- 'l2 in list } -->
    [wf] sequent { <H> >- length{'l1} = length{'l2} in nat } -->
    sequent { <H>; i: Index{'l1} >- nth{'l1; 'i} ~ nth{'l2; 'i} } -->
    sequent { <H> >- 'l1 ~ 'l2 }
+
+interactive tail_induction 'H :
+   sequent { <H>; l:list{'A}; <J['l]> >-  'P[nil] } -->
+   sequent { <H>; l:list{'A}; <J['l]>; n:Index{'l}; 'P[tail{'l;'n}] >- 'P[ cons{nth{'l;length{'l} -@ ('n +@ 1)};  tail{'l;'n}}] } -->
+   sequent { <H>; l:list{'A}; <J['l]> >-  'P['l] }
+
+
 
 doc <:doc<
    @begin[doc]

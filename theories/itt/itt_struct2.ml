@@ -281,23 +281,30 @@ let move_and_substT t i = funT (fun p ->
 let substT t i =
    substTaux t i orelseT move_and_substT t i
 
+let justSubstT t i tac1 tac2 j =
+   (substTaux t i thenET (tac1 thenT tac2 j)) orelseT
+      funT (fun p ->
+         (* move_and_substT messes up hyp numbers; need to recompute into a neg number and subtract 1 *)
+         let j = if j < 0 then j - 1 else hyp_count p - j - 2 in
+            move_and_substT t i thenET (tac1 thenT tac2 j))
+
 (*
  * Derived versions.
  *)
 
 let hypSubstT i j = funT (fun p ->
-   substT (Sequent.nth_hyp p i) j thenET hypothesis i)
+   justSubstT (Sequent.nth_hyp p i) j idT hypothesis i)
 
 let revHypSubstT i j = funT (fun p ->
    let trm = Sequent.nth_hyp p i in
    if is_squiggle_term trm then
       let a, b = dest_squiggle trm in
       let h' = mk_squiggle_term  b a in
-         substT h' j thenET (sqSymT thenT hypothesis i)
+         justSubstT h' j sqSymT hypothesis i
    else
       let t, a, b = dest_equal trm in
       let h' = mk_equal_term t b a in
-         substT h' j thenET (equalSymT thenT hypothesis i))
+         justSubstT h' j equalSymT hypothesis i)
 
 (* cutMem *)
 

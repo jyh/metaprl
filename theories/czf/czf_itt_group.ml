@@ -220,25 +220,25 @@ interactive op_eqG2 {| intro[] |} 'H :
 interactive op_eqG_fun1 {| intro[] |} 'H :
    sequent [squash] { 'H >- isset{'s} } -->
    sequent [squash] { 'H >- 'g IN label } -->
-   sequent ['ext] { 'H >- group{'g} } -->
+(*   sequent ['ext] { 'H >- group{'g} } -->*)
    sequent ['ext] { 'H >- equiv_fun_set{car{'g}; eqG{'g}; z. op{'g; 'z; 's}} }
 
 interactive op_equiv_fun2 {| intro[] |} 'H :
    sequent [squash] { 'H >- isset{'s} } -->
    sequent [squash] { 'H >- 'g IN label } -->
-   sequent ['ext] { 'H >- group{'g} } -->
+(*   sequent ['ext] { 'H >- group{'g} } -->*)
    sequent ['ext] { 'H >- equiv_fun_set{car{'g}; eqG{'g}; z. op{'g; 's; 'z}} }
 
 interactive op_eq_fun1 {| intro[] |} 'H :
    sequent [squash] { 'H >- isset{'s} } -->
    sequent [squash] { 'H >- 'g IN label } -->
-   sequent ['ext] { 'H >- group{'g} } -->
+(*   sequent ['ext] { 'H >- group{'g} } -->*)
    sequent ['ext] { 'H >- fun_set{z. op{'g; 'z; 's}} }
 
 interactive op_eq_fun2 {| intro[] |} 'H :
    sequent [squash] { 'H >- isset{'s} } -->
    sequent [squash] { 'H >- 'g IN label } -->
-   sequent ['ext] { 'H >- group{'g} } -->
+(*   sequent ['ext] { 'H >- group{'g} } -->*)
    sequent ['ext] { 'H >- fun_set{z. op{'g; 's; 'z}} }
 
 (*!
@@ -300,22 +300,20 @@ interactive id_eq1 {| intro[] |} 'H :
  * $@equiv{@car{g}; @eqG{g}; @op{g; @inv{g; s}; s}; @id{g}}$.
  * @end[doc]
  *)
+interactive inv_equiv_fun1 {| intro[] |} 'H :
+   sequent [squash] { 'H >- 'g IN label } -->
+   sequent ['ext] { 'H >- equiv_fun_set{car{'g}; eqG{'g}; z. inv{'g; 'z}} }
+
+interactive inv_eq_fun1 {| intro[] |} 'H :
+   sequent [squash] { 'H >- 'g IN label } -->
+   sequent ['ext] { 'H >- fun_set{z. inv{'g; 'z}} }
+
 interactive inv_wf2 {| intro[] |} 'H :
    sequent [squash] { 'H >- isset{'s1} } -->
    sequent [squash] { 'H >- 'g IN label } -->
    sequent ['ext] { 'H >- group{'g} } -->
    sequent ['ext] { 'H >- mem{'s1; car{'g}} } -->
    sequent ['ext] { 'H >- mem{inv{'g; 's1}; car{'g}} }
-
-interactive inv_equiv_fun1 {| intro[] |} 'H :
-   sequent [squash] { 'H >- 'g IN label } -->
-   sequent ['ext] { 'H >- group{'g} } -->
-   sequent ['ext] { 'H >- equiv_fun_set{car{'g}; eqG{'g}; z. inv{'g; 'z}} }
-
-interactive inv_eq_fun1 {| intro[] |} 'H :
-   sequent [squash] { 'H >- 'g IN label } -->
-   sequent ['ext] { 'H >- group{'g} } -->
-   sequent ['ext] { 'H >- fun_set{z. inv{'g; 'z}} }
 
 interactive inv_id1 {| intro[] |} 'H :
    sequent [squash] { 'H >- isset{'s1} } -->

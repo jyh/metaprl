@@ -157,7 +157,7 @@ interactive natElimination 'H :
    sequent { <H>; x: nat; <J['x]> >- 'C['x]}
 
 interactive nat2ge {| ge_elim |} 'H :
-   sequent { <H>; x: int; <J['x]>; 'x>=0 >- 'C['x]}  -->
+   sequent { <H>; x: nat; <J['x]>; 'x>=0 >- 'C['x]}  -->
    sequent { <H>; x: nat; <J['x]> >- 'C['x]}
 
 interactive natInduction {| elim [ThinOption thinT] |} 'H  :

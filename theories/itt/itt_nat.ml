@@ -235,7 +235,7 @@ doc <:doc< @docoff >>
 let natBackInductionT =
    argfunT (fun n p -> natBackInduction n (get_bind_from_arg_or_concl_subst p <<0>>))
 
-interactive max_nat_wf {| intro [] |} :
+interactive max_nat_wf :
    [wf] sequent { <H> >- 'a in nat } -->
    [wf] sequent { <H> >- 'b in nat } -->
    sequent { <H> >- max{'a; 'b} in nat }

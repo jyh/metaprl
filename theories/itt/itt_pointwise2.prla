@@ -1368,8 +1368,8 @@ B	b524	t524
 NSummary!interactive	interactive	interactive Summary
 O	o524	interactive
 NSummary!ext_rule	ext_rule	ext_rule Summary
-P	p524	String "dT 2 thenWT autoT"
-O	o525	ext_rule p524
+P	p3	String "doNotThinT (dT 2) thenT autoT"
+O	o6	ext_rule p3
 NSummary!status_incomplete	status_incomplete	status_incomplete Summary
 O	o526	status_incomplete
 T	t526	o526
@@ -1394,8 +1394,37 @@ T	t533	o528 b531 b4 b532
 B	b533	t533
 B	b534	t501
 T	t534	o511 b534 b508 b503
+H	h6	e_1 t534
 H	h534	e1 t534
 T	t535	o511 b534 b509 b503
+H	h7	e_2 t535
+S	s7	t495 h h501 h502 h507 h508 h510 h6 h7
+G	s7	t514
+B	b94	s7
+T	t94	o529 b94 b530
+B	b95	t94
+NSummary!arg_named	arg_named	arg_named Summary
+P	p100	String thin
+O	o100	arg_named p100
+NSummary!arg_bool	arg_bool	arg_bool Summary
+P	p104	String false
+O	o104	arg_bool p104
+T	t106	o104
+B	b106	t106
+T	t107	o100 b106
+B	b107	t107
+T	t110	o b107 b4
+B	b110	t110
+T	t114	o528 b531 b110 b532
+B	b114	t114
+T	t115	o2 b114
+B	b115	t115
+T	t116	o528 b95 b4 b115
+B	b116	t116
+T	t119	o b116 b4
+B	b119	t119
+T	t120	o527 b533 b119
+B	b120	t120
 H	h535	e2 t535
 S	s535	t495 h h501 h502 h507 h508 h510 h534 h535
 G	s535	t514
@@ -1406,15 +1435,33 @@ T	t537	o2 b533
 B	b537	t537
 T	t538	o528 b536 b4 b537
 B	b538	t538
-T	t539	o b538 b4
-B	b539	t539
-T	t540	o527 b533 b539
-B	b540	t540
 P	p540	String "contextSubstPointwise 2 1 2 6 <<'v>>"
 O	o540	ext_rule p540
 P	p541	String equality
 O	o541	tactic_arg p541
 T	t541	o511 b534 b503 b508
+S	s120	t495 h h501 h502 h507 h508 h510 h6 h7
+G	s120	t541
+B	b128	s120
+T	t128	o529 b128 b530
+B	b133	t128
+T	t133	o2 b116
+B	b134	t133
+T	t134	o541 b133 b4 b134
+B	b142	t134
+S	s142	t495 h h501 h511 h507 h508 h510 h6 h7
+G	s142	t514
+B	b143	s142
+T	t143	o529 b143 b530
+B	b145	t143
+T	t145	o528 b145 b4 b134
+B	b146	t145
+T	t146	o b146 b4
+B	b147	t146
+T	t147	o b142 b147
+B	b150	t147
+T	t150	o527 b116 b150
+B	b151	t150
 S	s541	t495 h h501 h502 h507 h508 h510 h534 h535
 G	s541	t541
 B	b541	s541
@@ -1424,19 +1471,6 @@ T	t543	o2 b538
 B	b543	t543
 T	t544	o541 b542 b4 b543
 B	b544	t544
-S	s544	t495 h h501 h511 h507 h508 h510 h534 h535
-G	s544	t514
-B	b545	s544
-T	t545	o529 b545 b530
-B	b546	t545
-T	t546	o528 b546 b4 b543
-B	b547	t546
-T	t547	o b547 b4
-B	b548	t547
-T	t548	o b544 b548
-B	b549	t548
-T	t549	o527 b538 b549
-B	b550	t549
 P	p550	String "equalSymT thenT autoT"
 O	o550	ext_rule p550
 T	t550	o527 b544 b4
@@ -1445,22 +1479,22 @@ T	t551	o550 b526 b551 b4 b4
 B	b552	t551
 P	p552	String "exchange 3 2 4 3 thenT autoT"
 O	o552	ext_rule p552
-T	t552	o527 b547 b4
-B	b553	t552
-T	t553	o552 b526 b553 b4 b4
-B	b554	t553
-T	t554	o b554 b4
-B	b555	t554
-T	t555	o b552 b555
-B	b556	t555
-T	t556	o540 b526 b550 b556 b4
-B	b557	t556
-T	t557	o b557 b4
-B	b558	t557
-T	t558	o525 b526 b540 b558 b4
-B	b559	t558
-T	t559	o524 b559
-B	b560	t559
+T	t151	o527 b146 b4
+B	b166	t151
+T	t166	o552 b526 b166 b4 b4
+B	b167	t166
+T	t167	o b167 b4
+B	b169	t167
+T	t169	o b552 b169
+B	b177	t169
+T	t177	o540 b526 b151 b177 b4
+B	b178	t177
+T	t178	o b178 b4
+B	b180	t178
+T	t180	o6 b526 b120 b180 b4
+B	b182	t180
+T	t182	o524 b182
+B	b189	t182
 NSummary!resource_defs	resource_defs	resource_defs Summary
 P	p560	Number 1047
 P	p561	Number 1070
@@ -1512,10 +1546,12 @@ T	t578	o561 b577
 B	b578	t578
 T	t579	o b578 b4
 B	b579	t579
-T	t580	o481 b491 b524 b560 b579
-B	b580	t580
-T	t581	o480 b580
-B	b581	t581
+T	t189	o481 b491 b524 b189 b579
+B	b193	t189
+T	t193	o480 b193
+B	b194	t193
+P	p206	Number 1695
+O	o206	location p110 p206
 P	p581	Number 0
 O	o581	location p581 p581
 P	p582	String tunionElimination2
@@ -1557,8 +1593,8 @@ T	t591	o493 b591
 B	b592	t591
 T	t592	o491 b590 b592
 B	b593	t592
-P	p593	String "dT 2"
-O	o593	ext_rule p593
+P	p214	String "doNotThinT (dT 2)"
+O	o214	ext_rule p214
 T	t593	o b589 b4
 B	b594	t593
 T	t594	o529 b591 b594
@@ -1581,14 +1617,20 @@ G	s600	t600
 B	b600	s600
 T	t601	o529 b600 b594
 B	b601	t601
+T	t228	o528 b595 b110 b532
+B	b228	t228
+T	t256	o2 b228
+B	b256	t256
+T	t257	o528 b601 b4 b256
+B	b257	t257
+T	t260	o b257 b4
+B	b260	t260
+T	t265	o527 b596 b260
+B	b265	t265
 T	t602	o2 b596
 B	b602	t602
 T	t603	o528 b601 b4 b602
 B	b603	t603
-T	t604	o b603 b4
-B	b604	t604
-T	t605	o527 b596 b604
-B	b605	t605
 P	p605	String "contextSubstPointwise 2 1 2 4 <<'z>>"
 O	o605	ext_rule p605
 T	t606	o511 b597 b498 b598
@@ -1597,6 +1639,10 @@ G	s606	t606
 B	b606	s606
 T	t607	o529 b606 b594
 B	b607	t607
+T	t266	o2 b257
+B	b266	t266
+T	t283	o541 b607 b4 b266
+B	b283	t283
 T	t608	o2 b603
 B	b608	t608
 T	t609	o541 b607 b4 b608
@@ -1607,36 +1653,36 @@ G	s609	t600
 B	b610	s609
 T	t610	o529 b610 b594
 B	b611	t610
-T	t611	o528 b611 b4 b608
-B	b612	t611
-T	t612	o b612 b4
-B	b613	t612
-T	t613	o b609 b613
-B	b614	t613
-T	t614	o527 b603 b614
-B	b615	t614
+T	t289	o528 b611 b4 b266
+B	b289	t289
+T	t301	o b289 b4
+B	b301	t301
+T	t307	o b283 b301
+B	b307	t307
+T	t308	o527 b257 b307
+B	b308	t308
 T	t615	o527 b609 b4
 B	b616	t615
 T	t616	o550 b526 b616 b4 b4
 B	b617	t616
 P	p617	String "exchange 3 2 3 2 thenT autoT"
 O	o617	ext_rule p617
-T	t617	o527 b612 b4
-B	b618	t617
-T	t618	o617 b526 b618 b4 b4
-B	b619	t618
-T	t619	o b619 b4
-B	b620	t619
-T	t620	o b617 b620
-B	b621	t620
-T	t621	o605 b526 b615 b621 b4
-B	b622	t621
-T	t622	o b622 b4
-B	b623	t622
-T	t623	o593 b526 b605 b623 b4
-B	b624	t623
-T	t624	o524 b624
-B	b625	t624
+T	t309	o527 b289 b4
+B	b309	t309
+T	t321	o617 b526 b309 b4 b4
+B	b321	t321
+T	t322	o b321 b4
+B	b322	t322
+T	t323	o b617 b322
+B	b323	t323
+T	t329	o605 b526 b308 b323 b4
+B	b329	t329
+T	t330	o b329 b4
+B	b330	t330
+T	t336	o214 b526 b265 b330 b4
+B	b336	t336
+T	t337	o524 b336
+B	b337	t337
 P	p625	Number 1475
 P	p626	Number 1498
 O	o626	resource_defs p625 p626 p113
@@ -1670,10 +1716,12 @@ T	t637	o626 b636
 B	b637	t637
 T	t638	o b637 b4
 B	b638	t638
-T	t639	o582 b583 b593 b625 b638
-B	b639	t639
-T	t640	o581 b639
-B	b640	t640
+T	t344	o582 b583 b593 b337 b638
+B	b344	t344
+T	t345	o206 b344
+B	b345	t345
+P	p346	Number 1697
+O	o347	location p346 p128
 P	p640	String bunionElimination2
 O	o640	rule p640
 T	t641	o b483 b4
@@ -1686,6 +1734,8 @@ G	s642	t589
 B	b643	s642
 T	t643	o493 b643
 B	b644	t643
+T	t353	o507 b644
+B	b353	t353
 T	t644	o584
 H	h644	x t644
 S	s644	t495 h h644 h587
@@ -1693,6 +1743,8 @@ G	s644	t589
 B	b645	s644
 T	t645	o493 b645
 B	b646	t645
+T	t354	o507 b646
+B	b354	t354
 NItt_bunion	Itt_bunion	Itt_bunion NIL
 NItt_bunion!bunion	bunion	bunion Itt_bunion
 O	o646	bunion
@@ -1704,12 +1756,12 @@ G	s647	t589
 B	b648	s647
 T	t648	o493 b648
 B	b649	t648
-T	t649	o491 b646 b649
-B	b650	t649
-T	t650	o491 b644 b650
-B	b651	t650
-P	p651	String "dT 2 thenT contextSubstPointwise 2 1 2 3 <<'y>> thenET equalSymT thenMT exchange 2 3 2 2 thenT autoT"
-O	o651	ext_rule p651
+T	t362	o491 b354 b649
+B	b362	t362
+T	t363	o491 b353 b362
+B	b363	t363
+P	p364	String "doNotThinT(dT 2) thenT contextSubstPointwise 2 1 2 3 <<'y>> thenET equalSymT thenMT exchange 2 3 2 2 thenT autoT"
+O	o365	ext_rule p364
 T	t651	o b645 b4
 B	b652	t651
 T	t652	o b643 b652
@@ -1720,10 +1772,10 @@ T	t654	o528 b654 b4 b532
 B	b655	t654
 T	t655	o527 b655 b4
 B	b656	t655
-T	t656	o651 b526 b656 b4 b4
-B	b657	t656
-T	t657	o524 b657
-B	b658	t657
+T	t371	o365 b526 b656 b4 b4
+B	b371	t371
+T	t372	o524 b371
+B	b372	t372
 P	p658	Number 1731
 P	p659	Number 1754
 O	o659	resource_defs p658 p659 p113
@@ -1757,10 +1809,10 @@ T	t670	o659 b669
 B	b670	t670
 T	t671	o b670 b4
 B	b671	t671
-T	t672	o640 b642 b651 b658 b671
-B	b672	t672
-T	t673	o581 b672
-B	b673	t673
+T	t380	o640 b642 b363 b372 b671
+B	b380	t380
+T	t381	o347 b380
+B	b381	t381
 NSummary!id	id	id Summary
 P	p673	Number 1070649212
 O	o673	id p673
@@ -1770,62 +1822,62 @@ T	t675	o581 b674
 B	b675	t675
 T	t676	o b675 b4
 B	b676	t676
-T	t677	o b673 b676
-B	b677	t677
-T	t678	o b640 b677
-B	b678	t678
-T	t679	o b581 b678
-B	b679	t679
-T	t680	o b479 b679
-B	b680	t680
-T	t681	o b468 b680
-B	b681	t681
-T	t682	o b461 b681
-B	b682	t682
-T	t683	o b454 b682
-B	b683	t683
-T	t684	o b447 b683
-B	b684	t684
-T	t685	o b440 b684
-B	b685	t685
-T	t686	o b433 b685
-B	b686	t686
-T	t687	o b426 b686
-B	b687	t687
-T	t688	o b419 b687
-B	b688	t688
-T	t689	o b411 b688
-B	b689	t689
-T	t690	o b404 b689
-B	b690	t690
-T	t691	o b397 b690
-B	b691	t691
-T	t692	o b388 b691
-B	b692	t692
-T	t693	o b379 b692
-B	b693	t693
-T	t694	o b370 b693
-B	b694	t694
-T	t695	o b361 b694
-B	b695	t695
-T	t696	o b352 b695
-B	b696	t696
-T	t697	o b343 b696
-B	b697	t697
-T	t698	o b335 b697
-B	b698	t698
-T	t699	o b328 b698
-B	b699	t699
-T	t700	o b320 b699
-B	b700	t700
-T	t701	o b306 b700
-B	b701	t701
-T	t702	o b300 b701
-B	b702	t702
-T	t703	o b288 b702
-B	b703	t703
-T	t704	o b282 b703
-B	b704	t704
-T	t705	o b280 b704
-B	b705	t705
-T	t706	o b227 b705
+T	t389	o b381 b676
+B	b389	t389
+T	t390	o b345 b389
+B	b390	t390
+T	t398	o b194 b390
+B	b398	t398
+T	t399	o b479 b398
+B	b399	t399
+T	t405	o b468 b399
+B	b405	t405
+T	t406	o b461 b405
+B	b406	t406
+T	t412	o b454 b406
+B	b412	t412
+T	t413	o b447 b412
+B	b413	t413
+T	t420	o b440 b413
+B	b420	t420
+T	t421	o b433 b420
+B	b421	t421
+T	t427	o b426 b421
+B	b427	t427
+T	t428	o b419 b427
+B	b428	t428
+T	t434	o b411 b428
+B	b434	t434
+T	t435	o b404 b434
+B	b435	t435
+T	t441	o b397 b435
+B	b441	t441
+T	t442	o b388 b441
+B	b442	t442
+T	t448	o b379 b442
+B	b448	t448
+T	t449	o b370 b448
+B	b449	t449
+T	t455	o b361 b449
+B	b455	t455
+T	t456	o b352 b455
+B	b456	t456
+T	t462	o b343 b456
+B	b462	t462
+T	t463	o b335 b462
+B	b463	t463
+T	t469	o b328 b463
+B	b469	t469
+T	t470	o b320 b469
+B	b470	t470
+T	t471	o b306 b470
+B	b471	t471
+T	t472	o b300 b471
+B	b472	t472
+T	t480	o b288 b472
+B	b480	t480
+T	t481	o b282 b480
+B	b481	t481
+T	t492	o b280 b481
+B	b492	t492
+T	t493	o b227 b492

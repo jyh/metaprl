@@ -94,9 +94,11 @@ topval onMClausesT : int list -> (int -> tactic) -> tactic
 topval onMHypsT : int list -> (int -> tactic) -> tactic
 topval onAllHypsT : (int -> tactic) -> tactic
 topval onAllClausesT : (int -> tactic) -> tactic
+topval onAllAssumT : (int -> tactic) -> tactic
 topval tryOnAllHypsT : (int -> tactic) -> tactic
 topval tryOnAllClausesT : (int -> tactic) -> tactic
 topval onAllMHypsT : (int -> tactic) -> tactic
+topval onAllMAssumT : (int -> tactic) -> tactic
 topval onAllMClausesT : (int -> tactic) -> tactic
 topval tryOnAllMHypsT : (int -> tactic) -> tactic
 topval tryOnAllMClausesT : (int -> tactic) -> tactic

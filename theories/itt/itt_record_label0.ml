@@ -15,12 +15,13 @@ open Tactic_type.Tacticals
 open Itt_bool
 
 
-let rwaAll convs = onAllMClausesT (rwa convs)
-
+(*
 let rwAll c = onAllMClausesT (rw c)
 
-let rwhAll c = onAllMClausesT (rwh c)
+let rwaAll convs = onAllMClausesT (rwa convs)
 
+let rwhAll c = onAllMClausesT (rwh c)
+*)
 
 (******************)
 (*  Defenitions   *)

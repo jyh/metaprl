@@ -63,14 +63,6 @@ let resource reduce +=
     << record{next{'n};'A} >>,stepRecord_rw]
 (*! *)
 
-(*** Dependent Record Type ***)
-
-(*** Recursive Record Type ***)
-
-define unfoldRecord : record{'n;'A;'R} <--> bisect{record{'n;'A};'R}
-
-let foldRecord = makeFoldC  <<record{'n;'A;'R}>> unfoldRecord
-
 (*** records ***)
 
 declare rcrd
@@ -88,20 +80,11 @@ interactive_rw stepRcrd_rw  :
    ('n IN label) -->
    rcrd{.next{'n};'a; 'r} <--> (fst{'r},rcrd{'n;'a;snd{'r}})
 
-define unfoldRcrdS : rcrd{'n;'a} <--> rcrd{'n; 'a; rcrd}
-
 (*! @docoff *)
 let resource reduce +=
    [<< rcrd{zero;'a; 'r} >>, baseRcrd;
     << rcrd{next{'n};'a; 'r} >>, stepRcrd_rw;
-    << rcrd{'n;'a} >>, unfoldRcrdS
    ]
-
-let resource intro +=
-   [ (<<rcrd{'n;'a} = 'r in 'R>>, (rwh unfoldRcrdS 0 thenT dT 0));
-     (<<'r = rcrd{'n;'a} in 'R>>, (rwh unfoldRcrdS 0 thenT dT 0)) ]
-(*! *)
-
 
 (*** Field ***)
 
@@ -123,10 +106,6 @@ let resource reduce +=
     << field{'r;next{'n}} >>, stepField_rw]
 (*! *)
 
-(*** RecordOrt ***)
-
-define unfoldRecordOrt : record_ort{'n;'a;'R} <--> (all r:'R. (rcrd{'n;'a;'r} IN 'R))
-
 (******************)
 (*   Rules        *)
 (******************)
@@ -141,12 +120,6 @@ interactive recordType {| intro_resource [] |} 'H :
    sequent[squash]{'H >- 'n IN label} -->
    sequent['ext]  {'H >- "type"{record{'n;'A}} }
 
-interactive recordType2 {| intro_resource [] |} 'H :
-   [wf] sequent[squash]{'H >- 'n IN label} -->
-   sequent[squash]{'H >- "type"{'A} } -->
-   sequent[squash]{'H >- "type"{'R} } -->
-   sequent['ext]  {'H >- "type"{record{'n;'A;'R}} }
-
 interactive record_elim1 'H 'n :
    [wf] sequent[squash]{'H >- 'n IN label } -->
    sequent['ext]{'H >- record{'n;'A} } -->
@@ -156,7 +129,6 @@ interactive recordTypeElimination{| elim_resource [ThinOption thinT]  |} 'H 'J '
    sequent[squash]{'H; u:"type"{record{'n;'A}}; 'J['u] >- 'n IN label} -->
    sequent['ext]  {'H; u:"type"{record{'n;'A}}; v:"type"{'A}; 'J['u] >- 'C['u] } -->
    sequent['ext]  {'H; u:"type"{record{'n;'A}}; 'J['u] >- 'C['u] }
-
 
 
 (*** Introductions ***)
@@ -196,17 +168,6 @@ interactive recordEqualS3  {| intro_resource[SelectOption 3] |} 'H:
    sequent[squash]{'H >- 'r1='r2 in record{'m;'A} } -->
    sequent['ext]  {'H >- 'r1=rcrd{'n;'a;'r2} in record{'m;'A} }
 
-interactive recordIntro  {| intro_resource[] |} 'H:
-   sequent[squash]{'H >- 'r = 's in 'R } -->
-   sequent[squash]{'H >- 'r = 's in record{'n;'A} } -->
-   sequent['ext]  {'H >- 'r = 's in record{'n;'A;'R} }
-
-interactive recordIntro0  {| intro_resource[SelectOption 0] |} 'H:
-   [wf] sequent[squash]{'H >- 'n IN label } -->
-   sequent[squash]{'H >- 'r IN 'R } -->
-   [ort] sequent[squash]{'H; u:'R >- record_ort{'n;'a;'R} } -->
-   sequent['ext]  {'H >- rcrd{'n;'a;'r} IN 'R }
-
 (*** Reductions ***)
 
 interactive record_beta1 {| intro_resource[] |} 'H:
@@ -229,7 +190,6 @@ interactive record_eta  {| intro_resource[] |}'H 'A:
    [wf] sequent[squash]{'H >- 'n IN label } -->
    [wf] sequent[squash]{'H >- 'r IN record{'n;'A} } -->
    sequent['ext]  {'H >- rcrd{'n; field{'r;'n}; 'r} ~ 'r }
-
 
 interactive_rw record_eta_rw  :
    ('n IN label ) -->
@@ -261,98 +221,6 @@ interactive recordEliminationS {| elim_resource[] |} 'H 'J 'x:
    sequent['ext]  {'H; r:record{'n;'A}; 'J['r] >- 'C['r]}
 
 
-interactive recordElimination  'H 'J :
-   [ort] sequent[squash]{'H; r:record{'n;'A;'R}; 'J['r]; x:'A; rr:'R >- record_ort{'n;'x;'R} } -->
-   [wf]  sequent[squash]{'H; r:record{'n;'A;'R}; 'J['r] >- 'n IN label } -->
-   sequent['ext]  {'H; x:'A; r:'R; 'J[rcrd{'n;'x;'r}] >- 'C[rcrd{'n;'x;'r}]} -->
-   sequent['ext]  {'H; r:record{'n;'A;'R}; 'J['r] >- 'C['r]}
-
-interactive recordElimination1  'H 'J :
-   [wf]  sequent[squash]{'H; r:record{'n;'A;'R}; 'J >- 'n IN label } -->
-   sequent['ext]  {'H; x:'A; r:'R; 'J >- 'C[rcrd{'n;'x;'r}]} -->
-   sequent['ext]  {'H; r:record{'n;'A;'R}; 'J >- 'C['r]}
-
-interactive recordElimination2  'H 'J :
-   [wf]  sequent[squash]{'H; r:record{'n;'A;'R}; 'J['r] >- 'n IN label } -->
-   sequent['ext]  {'H; r:record{'n;'A;'R}; 'J['r]; x:'A; rr:'R >- 'C['rr]} -->
-   sequent['ext]  {'H; r:record{'n;'A;'R}; 'J['r] >- 'C['r]}
-(*
-let recordEliminationT n p =
-   let j, k = Sequent.hyp_indices p n in
-   try
-      let sel = get_sel_arg p in
-         if sel = 0 then recordElimination0 j k p else
-         if sel = 1 then recordElimination1 j k p else
-         if sel = 2 then recordElimination2 j k p else
-           recordElimination j k p
-   with
-         RefineError _ -> recordElimination j k p
-
-let resource elim += (<<record{'n;'A;'R}>>, recordEliminationT)
-*)
-(*** Orthogonality ***)
-
-interactive recordOrtIntro0 {| intro_resource[] |} 'H  :
-   sequent['ext]  {'H  >- record_ort{'n;'a;record} }
-
-interactive recordOrtIntroS1  'H  'x  :
-   [wf] sequent[squash]{'H >- 'n IN label } -->
-   [wf] sequent[squash]{'H >- 'm IN label } -->
-   [wf] sequent[squash]{'H >- "type"{record{'m;'A}} } -->
-   sequent[squash]  {'H; x:'A >- 'a IN 'A } -->
-   sequent['ext]  {'H   >- record_ort{'n;'a;record{'m;'A}} }
-
-interactive recordOrtIntroSM1  'H  'x  :
-   [wf] sequent[squash]{'H >- 'n IN label } -->
-   [wf] sequent[squash]{'H >- 'm IN label } -->
-   sequent[squash]  {'H; x:'A >- 'a IN 'A } -->
-   sequent['ext]  {'H; r:record{'m;'A}  >- record_ort{'n;'a;record{'m;'A}} }
-
-interactive recordOrtIntroS2 'H  'x  :
-   [wf] sequent[squash]{'H >- 'n IN label } -->
-   [wf] sequent[squash]{'H >- 'm IN label } -->
-   [wf] sequent[squash]{'H >- "type"{record{'m;'A}} } -->
-   [equality] sequent[squash]{'H; r:record{'m;'A} >- not{.'n = 'm in label} } -->
-   sequent['ext]  {'H  >- record_ort{'n;'a;record{'m;'A}} }
-
-interactive recordOrtIntroSM2 'H  'x  :
-   [wf] sequent[squash]{'H >- 'n IN label } -->
-   [wf] sequent[squash]{'H >- 'm IN label } -->
-   [equality] sequent[squash]{'H; r:record{'m;'A} >- not{.'n = 'm in label} } -->
-   sequent['ext]  {'H; r:record{'m;'A}  >- record_ort{'n;'a;record{'m;'A}} }
-
-interactive recordOrtIntro1  'H  'x  :
-   [wf] sequent[squash]{'H >- 'n IN label } -->
-   [wf] sequent[squash]{'H >- 'm IN label } -->
-   [wf] sequent[squash]{'H >- "type"{record{'m;'A; 'R}} } -->
-   sequent[squash]  {'H; x:'A; r:'R >- 'a IN 'A } -->
-   [ort] sequent[squash]  {'H; x:'A; r:'R >- record_ort{'n;'a;'R} } -->
-   sequent['ext]  {'H >- record_ort{'n;'a;record{'m;'A;'R}} }
-
-interactive recordOrtIntroM1 'H  'x  :
-   [wf] sequent[squash]{'H >- 'n IN label } -->
-   [wf] sequent[squash]{'H >- 'm IN label } -->
-   sequent[squash]  {'H; x:'A; r:'R >- 'a IN 'A } -->
-   [ort] sequent[squash]  {'H; x:'A; r:'R >- record_ort{'n;'a;'R} } -->
-   sequent['ext]  {'H; r:record{'m;'A;'R}  >- record_ort{'n;'a;record{'m;'A;'R}} }
-
-interactive recordOrtIntro2  'H  'x  :
-   [wf] sequent[squash]{'H >- 'n IN label } -->
-   [wf] sequent[squash]{'H >- 'm IN label } -->
-   [wf] sequent[squash]{'H >- "type"{record{'m;'A; 'R}} } -->
-   [equality] sequent[squash]{'H; r:record{'m;'A;'R} >- not{.'n = 'm in label} } -->
-   [ort] sequent[squash]  {'H; x:'A; r:'R >- record_ort{'n;'a;'R} } -->
-   sequent['ext]  {'H >- record_ort{'n;'a;record{'m;'A;'R}} }
-
-interactive recordOrtIntroM2  'H  'x  :
-   [wf] sequent[squash]{'H >- 'n IN label } -->
-   [wf] sequent[squash]{'H >- 'm IN label } -->
-   [equality] sequent[squash]{'H; r:record{'m;'A;'R} >- not{.'n = 'm in label} } -->
-   [ort] sequent[squash]  {'H; x:'A; r:'R >- record_ort{'n;'a;'R} } -->
-   sequent['ext]  {'H; r:record{'m;'A;'R}  >- record_ort{'n;'a;record{'m;'A;'R}} }
-
-
-
 
 (******************)
 (*  Display Forms *)
@@ -371,16 +239,13 @@ dform emptyRcrd_df : except_mode [src] :: rcrd = `"{}"
 dform field_df : except_mode [src] :: field{'r;'n} =  slot{'r} `"." slot{'n}
 
 
-dform rcrdS_df : except_mode [src] :: rcrd{'n;'a} = `"{" slot{'n} `"=" slot{'a} `"}"
 
 dform rcrd_df : except_mode [src] :: rcrd{'n;'a; 'r} = `"{" slot{'n} `"=" slot{'a} `";" slot{'r} `"}"
 
 
 dform recordS_df : except_mode [src] :: record{'n;'A} = `"{" slot{'n} `":" slot{'A} `"}"
 
-dform record_df : except_mode [src] :: record{'n;'A;'R} = `"{" slot{'n} `":" slot{'A} `";" slot{'R} `"}"
 
-dform recordOrt_df : except_mode [src] :: record_ort{'n;'a;'R} =  `"{" slot{'n} `"=" slot{'a} `"}_|_" slot{'R}
 
 
 

@@ -131,10 +131,23 @@ let debug_reduce =
  * @end[doc]
  *)
 let rw = Tactic_type.Conversionals.rw
-let rwh = Tactic_type.Conversionals.rwh
 let rwc = Tactic_type.Conversionals.rwc
+let rwAll = Tactic_type.Conversionals.rwAll
+let rwcAll = Tactic_type.Conversionals.rwcAll
+let rwAllAll = Tactic_type.Conversionals.rwAllAll
+
+let rwh = Tactic_type.Conversionals.rwh
 let rwch = Tactic_type.Conversionals.rwch
+let rwhAll = Tactic_type.Conversionals.rwhAll
+let rwchAll = Tactic_type.Conversionals.rwchAll
+let rwhAllAll = Tactic_type.Conversionals.rwhAllAll
+
 let rwa = Tactic_type.Conversionals.rwa
+let rwca = Tactic_type.Conversionals.rwca
+let rwaAll = Tactic_type.Conversionals.rwaAll
+let rwcaAll = Tactic_type.Conversionals.rwcaAll
+let rwaAllAll = Tactic_type.Conversionals.rwaAllAll
+
 
 (*!
  * @begin[doc]

@@ -7,13 +7,13 @@ open Tactic_type.Tacticals
 open Tactic_type.Sequent
 open Tactic_type.Conversionals
 
-
+(*
 topval rwaAll  :  conv list -> tactic
 
 topval rwAll  :  conv -> tactic
 
 topval rwhAll  :  conv -> tactic
-
+*)
 
 define unfold_label : label <--> nat
 

@@ -74,6 +74,9 @@ doc <:doc<
 define unfold_all_list : all_list{'l; x. 'P['x]} <-->
    list_ind{'l; "true"; x, t, g. 'P['x] and 'g}
 
+define unfold_all_list_witness : all_list_witness{'l; x. 'f['x]} <-->
+   list_ind{'l; it; x, t, g. ('f['x],'g)}
+
 define unfold_exists_list : exists_list{'l; x. 'P['x]} <-->
    list_ind{'l; "false"; x, t, g. 'P['x] or 'g}
 
@@ -792,6 +795,11 @@ interactive all_list_intro  {| intro[AutoMustComplete; intro_typeinf <<'l>>] |} 
    sequent { <H> >- 'l in list{'A}  } -->
    sequent { <H>; x:'A >- 'P['x]  } -->
    sequent { <H> >- all_list{'l;  x. 'P['x]} }
+
+interactive all_list_witness_wf  {| intro[intro_typeinf <<'l>>] |} list{'A} :
+   sequent { <H> >- 'l in list{'A}  } -->
+   sequent { <H>; x:'A >- 'p['x] in 'P['x]  } -->
+   sequent { <H> >- all_list_witness{'l;  x. 'p['x]} in all_list{'l;  x. 'P['x]} }
 
 doc <:doc<
    @begin[doc]

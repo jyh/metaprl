@@ -41,6 +41,7 @@ open Basic_tactics
  ************************************************************************)
 
 declare all_list{'l; x. 'P['x]}
+declare all_list_witness{'l; x. 'f['x]}
 
 declare exists_list{'l; x. 'P['x]}
 

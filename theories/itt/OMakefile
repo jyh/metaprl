@@ -101,6 +101,7 @@ MPFILES =\
    itt_supinf\
    itt_synt_var\
    itt_synt_operator\
+   itt_synt_bterm\
    itt_reflection\
    itt_reflection_test\
    itt_pairwise\

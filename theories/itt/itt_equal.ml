@@ -261,12 +261,12 @@ let reduce_cumulativity =
 prec prec_type
 prec prec_equal
 
-(* HACK! HACK! HACK! - this should be replaced with a proper I/O abstruction *)
-dform equal_df0 : parens :: "prec"[prec_equal] :: ('x IN 'T) =
-   szone pushm slot{'x} space Nuprl_font!member hspace slot{'T} popm ezone
-
-dform equal_df1 : parens :: "prec"[prec_equal] :: equal{'T; 'a; 'b} =
+dform equal_df : parens :: "prec"[prec_equal] :: equal{'T; 'a; 'b} =
    szone pushm slot{'a} space `"= " slot{'b} space Nuprl_font!member `" " slot{'T} popm ezone
+
+(* HACK! - this should be replaced with a proper I/O abstruction *)
+dform member_df : parens :: "prec"[prec_equal] :: ('x IN 'T) =
+   szone pushm slot{'x} space Nuprl_font!member hspace slot{'T} popm ezone
 
 dform it_df1 : it = cdot
 

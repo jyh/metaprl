@@ -1,0 +1,8 @@
+OCAMLINCLUDES = $(OCAMLINCLUDES) -I ../tactic -I ../ocaml -I ../base -I ../itt
+
+# Library files
+MPFILES =\
+	phobos_base\
+	phobos_theory
+
+Theory($(MPFILES))

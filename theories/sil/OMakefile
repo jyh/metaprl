@@ -1,0 +1,14 @@
+OCAMLINCLUDES = $(OCAMLINCLUDES) -I ../itt -I ../boot -I ../tactic -I ../ocaml -I ../base
+
+# Library files
+MPFILES =\
+	sil_state\
+	sil_programs\
+	sil_sos\
+	sil_itt_state\
+	sil_itt_sos\
+	sil_state_types\
+	sil_types\
+	sil_itt_state_types
+
+Theory($(MPFILES))

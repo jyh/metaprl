@@ -1,0 +1,21 @@
+OCAMLINCLUDES = $(OCAMLINCLUDES) -I ../itt -I ../boot -I ../tactic -I ../ocaml -I ../base
+
+MLZFILES =\
+	tptp_type\
+	tptp_parse
+
+# Library files
+LMFILES =\
+	tptp_type\
+	tptp_parse\
+	tptp_lex
+
+OCamlLibrary(tptp, $(LMFILES))
+
+MPFILES =\
+	tptp\
+	tptp_load\
+	tptp_cache\
+	tptp_prove
+
+Theory($(MPFILES))

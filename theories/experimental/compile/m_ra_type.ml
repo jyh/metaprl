@@ -23,7 +23,6 @@
  * Author: Jason Hickey
  * @email{jyh@cs.caltech.edu}
  * @end[license]
- * @docoff
  *)
 extends Base_theory
 
@@ -251,10 +250,12 @@ sig
    val compile : block trace -> spset
 end
 
-(*
- * -*-
- * Local Variables:
- * Caml-master: "compile"
- * End:
- * -*-
- *)
+doc <:doc< 
+   @docoff
+  
+   -*-
+   Local Variables:
+   Caml-master: "compile"
+   End:
+   -*-
+>>

@@ -1,0 +1,16 @@
+OCAMLDEPFLAGS = -prl_init
+
+# Library files
+MPFILES =\
+	tactic_cache\
+	perv\
+	nuprl_font\
+	base_dform\
+	comment\
+	summary\
+	var\
+	mptop\
+	top_tacticals\
+	top_conversionals
+
+Theory($(MPFILES))

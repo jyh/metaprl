@@ -98,9 +98,18 @@ interactive mk_reverse {| intro[] |} :
    sequent { <H> >- 'T subtype BTerm } -->
    sequent { <H> >- dest{'ops} in RReverse{mk{'ops}; dom{'ops;'T}; BTerm} }
 
+interactive mk_reverse2 {| intro[] |} :
+   sequent { <H> >- 'ops in diff_list{Operator} } -->
+   sequent { <H> >- 'T subtype BTerm } -->
+   sequent { <H> >- RReverse{mk{'ops}; dom{'ops;'T}; BTerm} }
+
 interactive language_wf  {| intro[] |} :
    sequent { <H> >- 'ops in list{Operator} } -->
    sequent { <H> >- Language{'ops} Type }
+
+interactive language_subtype  {| intro[] |} :
+   sequent { <H> >- 'ops in diff_list{Operator} } -->
+   sequent { <H> >- Language{'ops} subtype BTerm }
 
 interactive language_induction  {| elim[] |} 'H:
    [wf] sequent { <H> >- 'ops in diff_list{Operator} } -->

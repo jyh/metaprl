@@ -213,6 +213,11 @@ interactive compatible_shapes_intro {| intro [] |} :
    sequent { <H> >- all i:Index{'btl}. bdepth{nth{'btl;'i}} =  op_bdepth{'op} +@ nth{shape{'op};'i} in int } -->
    sequent { <H> >- compatible_shapes{'op; 'btl} }
 
+interactive compatible_shapes_squash :
+   [wf] sequent { <H> >- 'btl in list } -->
+   [wf] sequent { <H> >- squash{compatible_shapes{'op; 'btl}} } -->
+   sequent { <H> >- compatible_shapes{'op; 'btl} }
+
 interactive makebterm_wf2 {| intro [] |} :
    sequent { <H> >- 'op1 = 'op2 in BOperator } -->
    sequent { <H> >- 'btl in list{BTerm} } -->

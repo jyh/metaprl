@@ -96,9 +96,6 @@ declare lambda{ 'f }          (* function with no arguments *)
 declare apply{ 'f; 'x }
 declare fix{ f. 'b['f] }
 
-(* Misc. *)
-declare unknownTydef
-
 (*************************************************************************
  * Display forms.
  *************************************************************************)
@@ -187,9 +184,6 @@ dform fix_df : except_mode[src] :: fix{ f. 'b } =
    pushm[0] szone push_indent `"(fix " slot{'f} `"." hspace
    szone slot{'b} `")" ezone popm
    ezone popm
-
-(* Misc. *)
-dform unknownTydef_df : except_mode[src] :: unknownTydef = `"UnknownTydef"
 
 (*************************************************************************
  * Rewrites.

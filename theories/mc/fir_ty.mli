@@ -130,15 +130,6 @@ declare lambda{ 'f }          (* function with no arguments *)
 declare apply{ 'f; 'x }
 declare fix{ f. 'b['f] }
 
-(*
- * Misc.
- * Used in making output from the mc compiler more manageable.
- * They indicate that compiler "didn't know" how to print out
- * a given term properly.
- *)
-
-declare unknownTydef
-
 (*************************************************************************
  * Rewrites.
  *************************************************************************)

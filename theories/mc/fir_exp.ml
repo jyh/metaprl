@@ -66,6 +66,7 @@ declare allocMalloc{ 'atom }
 declare atomInt{ 'int }
 declare atomEnum{ 'bound; 'num }
 declare atomRawInt{ 'num }
+declare atomFloat{ 'f }
 declare atomConst{ 'ty; 'ty_var; 'num }
 declare atomVar{ 'var }
 
@@ -100,9 +101,6 @@ declare memcpy{ 'subop; 'var1; 'atom1; 'var2; 'atom2; 'len; 'exp }
  *)
 
 declare unknownFun
-declare unknownSet
-declare unknownAtom
-declare unknownAlloc
 
 (*************************************************************************
  * Display forms.
@@ -150,6 +148,8 @@ dform atomEnum_df : except_mode[src] :: atomEnum{ 'bound; 'num } =
    lzone `"AtomEnum(" slot{'bound} `", " slot{'num} `")" ezone
 dform atomRawInt_df : except_mode[src] :: atomRawInt{ 'num } =
    lzone `"AtomRawInt(" slot{'num} `")" ezone
+dform atomFloat_df : except_mode[src] :: atomFloat{ 'f } =
+   lzone `"AtomFloat(" slot{'f} `")" ezone
 dform atomConst_df : except_mode[src] :: atomConst{ 'ty; 'ty_var; 'num } =
    lzone `"AtomConst(" slot{'ty} `", " slot{'ty_var} `", "
    slot{'num} `")" ezone
@@ -235,9 +235,6 @@ dform memcpy_df : except_mode[src] ::
 
 (* Misc. *)
 dform unknownFun_df : except_mode[src] :: unknownFun = `"UnknownFun"
-dform unknownSet_df : except_mode[src] :: unknownSet = `"UnknownSet"
-dform unknownAtom_df : except_mode[src] :: unknownAtom = `"UnknownAtom"
-dform unknownAlloc_df : except_mode[src] :: unknownAlloc = `"UnknownAlloc"
 
 (*************************************************************************
  * Rewrites.

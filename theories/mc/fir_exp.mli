@@ -80,10 +80,13 @@ declare allocMalloc{ 'atom }
  * atomInt evaluates to 'int (a number).
  * atomEnum evalutes to 'num (a number).
  * atomVar evaluates to 'var (a free variable).
+ * atomRawInt, atomConst, and atomFloat are declared for completeness.
+ *    These haven't been dealt with as of yet.
  *)
 declare atomInt{ 'int }
 declare atomEnum{ 'bound; 'num }
 declare atomRawInt{ 'num }
+declare atomFloat{ 'f }
 declare atomConst{ 'ty; 'ty_var; 'num }
 declare atomVar{ 'var }
 
@@ -134,15 +137,10 @@ declare memcpy{ 'subop; 'var1; 'atom1; 'var2; 'atom2; 'len; 'exp }
 
 (*
  * Misc.
- * Used in making output from the mc compiler more manageable.
- * They indicate that compiler "didn't know" how to print out
- * a given term properly.
+ * Indicates that the function in question could not be found.
  *)
 
 declare unknownFun
-declare unknownSet
-declare unknownAtom
-declare unknownAlloc
 
 (*************************************************************************
  * Rewrites.

@@ -167,11 +167,11 @@ dform false_df : except_mode[src] ::
 
 dform or_df : except_mode[src] ::
    "or"{ 'bool1; 'bool2 } =
-   `"(" slot{'bool1} vee space slot{'bool2} `")"
+   `"(" slot{'bool1} vee slot{'bool2} `")"
 
 dform and_df : except_mode[src] ::
    "and"{ 'bool1; 'bool2 } =
-   `"(" slot{'bool1} wedge space slot{'bool2} `")"
+   `"(" slot{'bool1} wedge slot{'bool2} `")"
 
 dform not_df : except_mode[src] ::
    "not"{ 'boolean } =
@@ -183,9 +183,7 @@ dform not_df : except_mode[src] ::
 
 dform ifthenelse_df : except_mode[src] ::
    ifthenelse{ 'test; 'true_case; 'false_case } =
-   pushm[0] szone push_indent bf["if"] hspace
-      szone slot{'test} ezone popm hspace
-      push_indent bf["then"] hspace
+   pushm[0] szone push_indent bf["if"] `" " slot{'test} `" " bf["then"] hspace
       szone slot{'true_case} ezone popm hspace
       push_indent bf["else"] hspace
       szone slot{'false_case} ezone popm

@@ -55,16 +55,6 @@ open Top_conversionals
  * Declarations.
  **************************************************************************)
 
-(*
- * DROPPED: TyPointer.        Not worrying about this optimization.
- * TODO:    TyFrame.          I'm confused.
- * DROPPED: TyCase.           Part of the (unsound) FIR object system.
- * DROPPED: TyObject.         Part of the (unsound) FIR object system.
- * DROPPED: TyDelayed.        Not doing type inference.
- * TODO:    frame.            I'm confused.
- * BUG:     TyFun*            Need a type for functions of zero arguments.
- *)
-
 (*!
  * @begin[doc]
  * @terms
@@ -158,8 +148,8 @@ declare tyVar{ 'ty_var }
  * @begin[doc]
  *
  * The term @tt[tyApply] applies the types in the list @tt[ty_list] to a
- * parametrized type given by @tt[ty_var].  The application should be
- * complete; the resulting type should not be a parametrized type.
+ * parametrized type given by @tt[ty_var].  The application must be
+ * complete; the resulting type cannot be a parametrized type.
  * @end[doc]
  *)
 
@@ -169,10 +159,8 @@ declare tyApply{ 'ty_var; 'ty_list }
  * @begin[doc]
  *
  * The existential type @tt[tyExists] defines a type @tt[ty] abstracted over a
- * type variable @tt[t].  The term @tt[tyAll] defines a polymorphic type,
- * where @tt[ty] is restricted to be either a @tt[tyFun] term or another
- * @tt[tyAll] term.  This corresponds to value restriction
- * @cite["ullman:sml"].
+ * type variable @tt[t].  The term @tt[tyAll] defines a universally quantified
+ * type.
  * @end[doc]
  *)
 

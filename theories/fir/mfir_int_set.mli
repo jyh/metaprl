@@ -55,7 +55,7 @@ declare intset[precision:n, sign:s]{ 'interval_list }
 
 declare member{ 'num; 's }
 declare normalize{ 'set }
-declare subset{ 'smaller_set; 'larger_set }
+declare subset{ 'set1; 'set2 }
 declare set_eq{ 'set1; 'set2 }
 declare union{ 'set1; 'set2 }
 declare singleton[precision:n, sign:s]{ 'i }

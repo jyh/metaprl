@@ -59,7 +59,7 @@ open Mfir_int
  *
  * Lists are used in the FIR to encode entities whose arities may vary.
  * The term @tt[nil] is the empty list, and the term @tt[cons] adds a
- * term @tt[elt] to the list @tt[tail].  Unless otherwise states, it
+ * term @tt[elt] to the list @tt[tail].  Unless otherwise stated, it
  * will be assumed that lists are nil-terminated.
  * @end[doc]
  *)

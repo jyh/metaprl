@@ -113,7 +113,7 @@ prim ty_store_array2 {| intro [] |} 'H :
  *)
 
 prim ty_store_lambda {| intro [] |} 'H 'a :
-   sequent [mfir] { 'H >- type_eq{ 'u; 'u; polyKind[0]{large_type} } } -->
+   sequent [mfir] { 'H >- type_eq{ 'u; 'u; large_type } } -->
    sequent [mfir] { 'H; a: var_def{ 'u; no_def } >-
       has_type["exp"]{ 'f['a]; 't } } -->
    sequent [mfir] { 'H >-
@@ -121,7 +121,7 @@ prim ty_store_lambda {| intro [] |} 'H 'a :
    = it
 
 prim ty_store_polyFun {| intro [] |} 'H 'a :
-   sequent [mfir] { 'H; a: ty_def{ polyKind[0]{small_type}; no_def } >-
+   sequent [mfir] { 'H; a: ty_def{ small_type; no_def } >-
       has_type["exp"]{ 'f['a]; 'ty['a] } } -->
    sequent [mfir] { 'H >-
       has_type["exp"]{ polyFun{ x. 'f['x] }; tyAll{ t. 'ty['t] } } }
@@ -142,15 +142,15 @@ prim ty_store_polyFun {| intro [] |} 'H 'a :
 prim ty_store_union 'H 'J :
    (* well-formedness of the union type. *)
    sequent [mfir] { 'H;
-                    tv: ty_def{ polyKind[j:n]{'k}; tyDefPoly{t. 'ty['t]} };
+                    tv: ty_def{ polyKind{'j; 'k}; tyDefPoly{t. 'ty['t]} };
                     'J['tv] >-
       type_eq{ tyUnion{'tv; 'tyl; singleton[31, "signed"]{number[i:n]}};
                tyUnion{'tv; 'tyl; singleton[31, "signed"]{number[i:n]}};
-               polyKind[0]{small_type} } } -->
+               small_type } } -->
 
    (* check that the atoms have the right types. *)
    sequent [mfir] { 'H;
-                    tv: ty_def{ polyKind[j:n]{'k}; tyDefPoly{t. 'ty['t]} };
+                    tv: ty_def{ polyKind{'j; 'k}; tyDefPoly{t. 'ty['t]} };
                     'J['tv] >-
       has_type["union_atoms"]{'atoms;
                               nth_unionCase{number[i:n];
@@ -159,7 +159,7 @@ prim ty_store_union 'H 'J :
 
    (* then the union value is well-typed. *)
    sequent [mfir] { 'H;
-                    tv: ty_def{ polyKind[j:n]{'k}; tyDefPoly{t. 'ty['t]} };
+                    tv: ty_def{ polyKind{'j; 'k}; tyDefPoly{t. 'ty['t]} };
                     'J['tv] >-
       has_type["store"]{ union_val[i:n]{ 'tv; 'atoms };
                          tyUnion{ 'tv; 'tyl;

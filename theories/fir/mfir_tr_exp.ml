@@ -88,7 +88,7 @@ prim ty_letAtom {| intro [] |} 'H 'a :
  * @begin[doc]
  *
  * The expression $<< letExt[str:s]{ 'u; 'tyl; 'args; v. 'exp['v] } >>$ binds
- * the result of a call to an @it[external] (e.g.~standard library) function
+ * the result of a call to an external (e.g.~standard library) function
  * $<< 'str >>$ to $<< 'v >>$ in $<< 'exp >>$.  We make no attempt to see that
  * the types in the expression correspond to the actual types for the function
  * @tt[str].
@@ -450,7 +450,7 @@ prim ty_letSubscript_tyTuple 'H 'J 'a :
    sequent [mfir] { 'H; x: var_def{ tyTuple[s:s]{'tyl}; 'd }; 'J['x] >-
       type_eq{ 'u;
                nth_elt{ index_of_subscript{'a2}; 'tyl };
-               polyKind[0]{ large_type } } } -->
+               large_type } } -->
    sequent [mfir] { 'H;
                     x: var_def{ tyTuple[s:s]{'tyl}; 'd };
                     'J['x];
@@ -464,7 +464,7 @@ prim ty_setSubscript_tyTuple 'H 'J :
    sequent [mfir] { 'H; x: var_def{ tyTuple[s:s]{'tyl}; 'd }; 'J['x] >-
       type_eq{ 'u;
                nth_elt{ index_of_subscript{'a2}; 'tyl };
-               polyKind[0]{ large_type } } } -->
+               large_type } } -->
    sequent [mfir] { 'H; x: var_def{ tyTuple[s:s]{'tyl}; 'd }; 'J['x] >-
       has_type["atom"]{ 'a3; 'u } } -->
    sequent [mfir] { 'H; x: var_def{ tyTuple[s:s]{'tyl}; 'd }; 'J['x] >-

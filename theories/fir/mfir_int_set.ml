@@ -87,8 +87,7 @@ declare intset[precision:n, sign:s]{ 'interval_list }
  * @begin[doc]
  * @modsubsection{Set operations}
  *
- * The term @tt[member] is used to determine whether or not a number @tt[num]
- * is in a set or interval @tt[s].
+ * The term @tt[member] tests if @tt[num] is a member of the set @tt[s].
  * @end[doc]
  *)
 
@@ -97,8 +96,8 @@ declare member{ 'num; 's }
 (*!
  * @begin[doc]
  *
- * The term @tt[normalize] is used to normalize a set.  It does normalize
- * an abitrary set (see the rewrites below).
+ * The term @tt[normalize] is used to normalize a set.  It does not
+ * normalize an abitrary set (see the rewrites below).
  * @end[doc]
  *)
 
@@ -106,13 +105,13 @@ declare normalize{ 'set }
 
 (*!
  * @begin[doc]
- * The term @tt[subset] is used to determine whether or not @tt[smaller_set]
- * is a subset of @tt[larger_set].  The term @tt[set_eq] is used to test two
+ * The term @tt[subset] is used to determine whether or not @tt[set1]
+ * is a subset of @tt[set2].  The term @tt[set_eq] is used to test two
  * sets for equality.  The term @tt[union] takes the union of two sets.
  * @end[doc]
  *)
 
-declare subset{ 'smaller_set; 'larger_set }
+declare subset{ 'set1; 'set2 }
 declare set_eq{ 'set1; 'set2 }
 declare union{ 'set1; 'set2 }
 
@@ -169,7 +168,7 @@ declare interval_lt{ 'interval1; 'interval2 }
  * @end[doc]
  *)
 
-declare union_aux{ 'interval; 'head1; 'tail1; 'head2; 'tail2 }
+declare union_aux{ 'interval; 'h1; 't1; 'h2; 't2 }
 declare union_interval{ 'interval1; 'interval2 }
 
 (*!
@@ -186,7 +185,9 @@ declare union_interval{ 'interval1; 'interval2 }
  * @rewrites
  * @modsubsection{Interval operations}
  *
- * Rewriting of interval operations is straightforward.
+ * Rewriting of interval operations is straightforward. Note that in
+ * taking the union of two intervals, we assume that the two intervals
+ * overlap.
  * @end[doc]
  *)
 
@@ -195,6 +196,12 @@ prim_rw reduce_interval_lt_aux :
                 interval{ number[m:n]; number[n:n] } } <-->
    int_lt{ number[j:n]; number[m:n] }
 
+prim_rw reduce_union_interval_aux :
+   union_interval{ interval{ number[i:n]; number[j:n] };
+                   interval{ number[m:n]; number[n:n] } } <-->
+   interval{ int_min{ number[i:n]; number[m:n] };
+             int_max{ number[j:n]; number[n:n] } }
+
 (*!
  * @docoff
  *)
@@ -202,9 +209,14 @@ prim_rw reduce_interval_lt_aux :
 let reduce_interval_lt =
    reduce_interval_lt_aux thenC reduce_int_lt
 
+let reduce_union_interval =
+   reduce_union_interval_aux thenC
+   (addrC [0] reduce_int_min) thenC
+   (addrC [1] reduce_int_max)
+
 (*!
  * @begin[doc]
- * @modsubsection{Set membership}
+ * @modsubsection{Set operations}
  *
  * The @tt[reduce_member] conversional reduces the set membership relation
  * $<< member{ 'i; 'set } >>$ to either $<< "true" >>$ or $<< "false" >>$,
@@ -255,10 +267,8 @@ let resource reduce += [
  * @begin[doc]
  *
  * Set normalization is limited to combining intervals of the form
- * $[a,i],[i+1,b]$.  Other ``normalization'' propertiers of integer sets are
- * assumed to already hold.  The rewrites below are combined into the
- * @tt[reduce_normalize] conversional.  Only well-formed sets can be
- * normalized.
+ * $[a,i],[i+1,b]$.  Other ``normalization'' propertiers of integer
+ * sets are assumed to already hold.
  * @end[doc]
  *)
 
@@ -307,8 +317,9 @@ let resource reduce += [
  * @begin[doc]
  *
  * The @tt[reduce_subset] conversional uses the rewrites below to reduce
- * $<< subset{ 'set1; 'set2 } >>$, where $<< 'set1 >>$ and $<< 'set2 >>$ must
- * both be well-formed sets.
+ * $<< subset{ 'set1; 'set2 } >>$.  The base cases are straightforward,
+ * while the ``inductive'' step is a case analysis on the first interval
+ * of each list of intervals.
  * @end[doc]
  *)
 
@@ -373,10 +384,9 @@ let resource reduce += [
  *
  * Computing the union of two integer sets is rather involved.
  * The base cases are straightforward, while the ``inductive'' step
- * amounts to a case analysis on the intervals at the beginning of
+ * amounts to a case analysis on first interval of each list of intervals.
  * each list.  The rewrites below are combined into the @tt[reduce_union]
- * conversional, which can be used to reduce terms
- * $<< union{ 'set1; 'set2 } >>$.
+ * conversional, which can be used to reduce $<< union{ 'set1; 'set2 } >>$.
  * @end[doc]
  *)
 
@@ -392,6 +402,14 @@ prim_rw reduce_union_base2 :
    union{ cons{ 'a; 'b }; nil } <-->
    cons{ 'a; 'b }
 
+(*!
+ * @begin[doc]
+ *
+ * For the ``inductive'' step, it is convinient to express one of the cases
+ * through an auxiliary rewrite/term.
+ * @end[doc]
+ *)
+
 prim_rw reduce_union_ind :
    union{ cons{ 'head1; 'tail1 }; cons{ 'head2; 'tail2 } } <-->
    ifthenelse{ interval_lt{ 'head1; 'head2 };
@@ -399,12 +417,6 @@ prim_rw reduce_union_ind :
       ifthenelse{ interval_lt{ 'head2; 'head1 };
          cons{ 'head2; union{ cons{ 'head1; 'tail1 }; 'tail2 } };
          union_aux{ union_interval{ 'head1; 'head2}; 'head1; 'tail1; 'head2; 'tail2 } } }
-
-prim_rw reduce_union_interval :
-   union_interval{ interval{ number[i:n]; number[j:n] };
-                   interval{ number[m:n]; number[n:n] } } <-->
-   interval{ int_min{ number[i:n]; number[m:n] };
-             int_max{ number[j:n]; number[n:n] } }
 
 prim_rw reduce_union_aux :
    union_aux{ 'interval; interval{ number[i:n]; number[j:n] }; 'tail1;
@@ -610,8 +622,8 @@ dform normalize_df : except_mode[src] ::
    bf["normalize"] `"(" slot{'set} `")"
 
 dform subset_df : except_mode[src] ::
-   subset{ 'smaller_set; 'larger_set } =
-   slot{'smaller_set} subseteq slot{'larger_set}
+   subset{ 'set1; 'set2 } =
+   slot{'set1} subseteq slot{'set2}
 
 dform set_eq : except_mode[src] ::
    set_eq{ 'set1; 'set2 } =
@@ -662,9 +674,9 @@ dform interval_lt_df : except_mode[src] ::
    slot{'interval1} `"<" sub{it["interval"]} slot{'interval2}
 
 dform union_aux_df : except_mode[src] ::
-   union_aux{ 'interval; 'head1; 'tail1; 'head2; 'tail2 } =
-   bf["union_aux"] `"(" slot{'interval} `"," slot{cons{'head1;'tail1}}
-      `"," slot{cons{'head2;'tail2}} `")"
+   union_aux{ 'interval; 'h1; 't1; 'h2; 't2 } =
+   bf["union_aux"] `"(" slot{'interval} `"," slot{cons{'h1;'t1}}
+      `"," slot{cons{'h2;'t2}} `")"
 
 dform union_interval_df : except_mode[src] ::
    union_interval{ 'interval1; 'interval2 } =

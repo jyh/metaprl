@@ -106,10 +106,10 @@ declare int_ge{ 'num1; 'num2 }
  * @begin[doc]
  * @rewrites
  *
- * The arithmetic and comparison operators above can be rewritten
- * to numbers and meta-booleans using the meta operations from the
- * @tt[Base_meta] module.  These rewrites are straightforward, and
- * we omit an explicit listing of them.
+ * The arithmetic and comparison operators above can be rewritten to numbers
+ * and meta-booleans (see the @hrefmodule[Mfir_bool] module) using the meta
+ * operations from the @tt[Base_meta] module.  These rewrites are
+ * straightforward, and we omit an explicit listing of them.
  * @end[doc]
  *)
 
@@ -231,14 +231,9 @@ let resource reduce += [
    << int_ge{ 'num1; 'num2 } >>, reduce_int_ge
 ]
 
-(*!
- * @begin[doc]
- *
- * Computing the minimum and maximim of two integers is straightforward.
- * The two rewrites below are combined with rewrite for reducing boolean
- * expressions to from the @tt[reduce_int_min] and @tt[reduce_int_max]
- * conversionals.
- * @end[doc]
+(*
+ * The reductions for min/max are here since they depend on the
+ * less-than relation.
  *)
 
 prim_rw reduce_int_min_aux :
@@ -248,10 +243,6 @@ prim_rw reduce_int_min_aux :
 prim_rw reduce_int_max_aux :
    int_max{ number[i:n]; number[j:n] } <-->
    ifthenelse{ int_lt{ number[i:n]; number[j:n] }; number[j:n]; number[i:n] }
-
-(*!
- * @docoff
- *)
 
 let reduce_int_min =
    reduce_int_min_aux thenC

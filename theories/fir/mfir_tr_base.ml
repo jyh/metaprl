@@ -63,18 +63,6 @@ open Base_dtactic
  * @rules
  * @modsubsection{Basic axioms}
  *
- * Type equality is a symmetric relation.
- * @end[doc]
- *)
-
-prim ty_symmetric {| intro [] |} 'H :
-   sequent [mfir] { 'H >- type_eq{ 't1; 't2; 'k } } -->
-   sequent [mfir] { 'H >- type_eq{ 't2; 't1; 'k } }
-   = it
-
-(*!
- * @begin[doc]
- *
  * The @tt[truth_intro] rule allows proofs of side-conditions to be completed.
  * @end[doc]
  *)
@@ -93,8 +81,21 @@ prim truth_intro {| intro [] |} 'H :
  *)
 
 prim ty_small_as_large {| intro [] |} 'H :
-   sequent [mfir] { 'H >- type_eq{ 't1; 't2; polyKind[0]{small_type} } } -->
-   sequent [mfir] { 'H >- type_eq{ 't1; 't2; polyKind[0]{large_type} } }
+   sequent [mfir] { 'H >- type_eq{ 't1; 't2; small_type } } -->
+   sequent [mfir] { 'H >- type_eq{ 't1; 't2; large_type } }
+   = it
+
+(*!
+ * @begin[doc]
+ *
+ * The next rule says that if two types are equal in some kind $<< 'k >>$,
+ * then they are equal equal in $<< polyKind{ 0; 'k } >>$.
+ * @end[doc]
+ *)
+
+prim ty_polyKind_to_normal_kind {| intro [] |} 'H :
+   sequent [mfir] { 'H >- type_eq{ 't1; 't2; 'k } } -->
+   sequent [mfir] { 'H >- type_eq{ 't1; 't2; polyKind{ 0; 'k } } }
    = it
 
 (*!
@@ -139,27 +140,44 @@ prim wf_ty_list2 {| intro [] |} 'H :
  * @begin[doc]
  * @modsubsection{Kind well-formedness}
  *
- * Recall that in typing rules, all kinds are expressed using the
- * @hrefterm[polyKind] term.  The well-formedness of this kind is
- * straightforward.  Note that we do not allow nesting of @hrefterm[polyKind]
- * terms.
+ * Kind well-formedness if straightforward for $<< small_type >>$
+ * and $<< large_type >>$.
+ * @end[doc]
+ *)
+
+prim wf_small_type {| intro [] |} 'H :
+   sequent [mfir] { 'H >- wf_kind{ small_type } }
+   = it
+
+prim wf_large_type {| intro [] |} 'H :
+   sequent [mfir] { 'H >- wf_kind{ large_type } }
+   = it
+
+(*!
+ * @begin[doc]
+ *
+ * The rules for the kind describing parametrized types are somewhat
+ * more involved.  In the case of $<< small_type >>$ and $<< large_type >>$,
+ * we disallow the case of $i = 0$.  The kind for union definitions, on the
+ * other hand, must reflect some parametrization, even if there are
+ * no parameters.
  * @end[doc]
  *)
 
 prim wf_polyKind1 {| intro [] |} 'H :
-   sequent [mfir] { 'H >- int_le{ 0; number[i:n] } } -->
-   sequent [mfir] { 'H >- wf_kind{ polyKind[i:n]{ small_type } } }
+   sequent [mfir] { 'H >- int_lt{ 0; 'i } } -->
+   sequent [mfir] { 'H >- wf_kind{ polyKind{ 'i; small_type } } }
    = it
 
 prim wf_polyKind2 {| intro [] |} 'H :
-   sequent [mfir] { 'H >- int_le{ 0; number[i:n] } } -->
-   sequent [mfir] { 'H >- wf_kind{ polyKind[i:n]{ large_type } } }
+   sequent [mfir] { 'H >- int_lt{ 0; 'i } } -->
+   sequent [mfir] { 'H >- wf_kind{ polyKind{ 'i; large_type } } }
    = it
 
 prim wf_polyKind3 {| intro [] |} 'H :
-   sequent [mfir] { 'H >- "and"{ int_le{ 0; number[i:n] };
+   sequent [mfir] { 'H >- "and"{ int_le{ 0; 'i };
                                  int_le{ 0; number[j:n] } } } -->
-   sequent [mfir] { 'H >- wf_kind{ polyKind[i:n]{ union_type[j:n] } } }
+   sequent [mfir] { 'H >- wf_kind{ polyKind{ 'i; union_type[j:n] } } }
    = it
 
 (*!

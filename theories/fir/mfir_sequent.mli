@@ -31,7 +31,7 @@
  * @end[license]
  *)
 
-extends Base_theory
+extends Mfir_int
 
 
 (**************************************************************************
@@ -53,7 +53,7 @@ declare it
 declare small_type
 declare large_type
 declare union_type[i:n]
-declare polyKind[i:n]{ 'k }
+declare polyKind{ 'i; 'k }
 
 (*
  * Store values.

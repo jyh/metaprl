@@ -76,9 +76,8 @@ declare offset
 
 (*! @begin[doc]
  *
- * If @tt[poly_ty] is a parametrized type definition (see
- * @hrefterm[tyDefPoly]), then @tt[do_tyApply] instantiates the type
- * definition at the types in the list @tt[ty_list].
+ * If @tt[poly_ty] is a parametrized type definition or type, then
+ * @tt[do_tyApply] instantiates it at the types in the list @tt[ty_list].
  * @end[doc]
  *)
 
@@ -129,7 +128,7 @@ declare union_cases{ 'set; 'cases }
  * @begin[doc]
  *
  * The term @tt[index_of_subscript] is used to turn a term representing
- * a subscript (into some data aggregate) into a number term.
+ * a subscript into a number term.
  * @end[doc]
  *)
 
@@ -145,8 +144,7 @@ declare index_of_subscript{ 'atom }
  * @rewrites
  *
  * Instantiating a parameterized type at a given list of types is
- * straightforward.  (The following rewrites can be applied
- * using the @tt[reduce_do_tyApply] conversional.)
+ * straightforward.
  * @end[doc]
  *)
 
@@ -185,9 +183,9 @@ let resource reduce += [
  * @begin[doc]
  *
  * The following rewrites are the basis for reducing
- * $<< instantiate_tyExists{ 'ty; 'var; 'num } >>$.  They are combined
- * with various conversionals into the conversional
- * @tt[reduce_instantiate_tyExists].
+ * $<< instantiate_tyExists{ 'ty; 'var; 'num } >>$.
+ * The are combined into the @tt[reduce_instantiate_tyExists]
+ * conversional in order to control the order of their application.
  * @end[doc]
  *)
 
@@ -223,8 +221,9 @@ let resource reduce += [
  *
  * Counting the number of parameters in a type $<< tyExists{t. 'ty['t]} >>$ is
  * also straightforward. Note the bogus instantiation at $<< tyInt >>$ to
- * address the problem of free variables. We use the @tt[orelseC] conversional
- * to control the order in which the following rewrites are executed.
+ * address the problem of free variables.  The following rewrites are
+ * combined into the @tt[reduce_num_params] conversional in order to control
+ * the order of their application.
  * @end[doc]
  *)
 
@@ -302,8 +301,10 @@ let resource reduce += [
  * @begin[doc]
  *
  * Raw integer subscripts represent byte offsets, while integer
- * subscripts represent logical offsets.  Byte offsets must be
- * aligned on four byte boundaries.
+ * subscripts represent logical offsets.  Byte offsets must be aligned
+ * on four byte boundaries.  If this is not the case, then the result
+ * of converting the subscript to a (logical) index is $-1$, which is
+ * an invalid index.
  * @end[doc]
  *)
 

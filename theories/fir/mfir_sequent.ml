@@ -50,7 +50,7 @@
  * @end[doc]
  *)
 
-extends Base_theory
+extends Mfir_int
 
 
 (**************************************************************************
@@ -104,12 +104,13 @@ declare union_type[i:n]
  * All types, including parametrized types, belong to the @tt[polyKind] kind.
  * The parameter @tt[i] is the number of parameters in the definition, and
  * the subterm @tt[k] is the kind of the type once all the parameters are
- * instantiated.  We allow the case $i = 0$.  All typing rules express kinds
- * using the @tt[polyKind] term.
+ * instantiated.  We allow the case $i = 0$.  In practice, it assumed
+ * that the ``simplest'' kind is used; this is made clear by the rules
+ * in @hrefmodule[Mfir_tr_base].
  * @end[doc]
  *)
 
-declare polyKind[i:n]{ 'k }
+declare polyKind{ 'i; 'k }
 
 (*!
  * @begin[doc]
@@ -235,13 +236,9 @@ dform union_type_df : except_mode[src] ::
    union_type[i:n] =
    bf["union"] `"[" slot[i:n] `"]"
 
-dform polyKind_df1 : except_mode[src] ::
-   polyKind[i:n]{ 'k } =
-   small_type sup{slot[i:n]} rightarrow slot{'k}
-
-dform polyKind_df2 : except_mode[src] ::
-   polyKind[0]{ 'k } =
-   `"(" slot{'k} `")"
+dform polyKind_df : except_mode[src] ::
+   polyKind{ 'i; 'k } =
+   small_type sup{slot{'i}} rightarrow slot{'k}
 
 (*
  * Store values.

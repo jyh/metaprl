@@ -56,7 +56,6 @@ declare mul{ 'num1; 'num2 }
 declare div{ 'num1; 'num2 }
 declare rem{ 'num1; 'num2 }
 declare minus{ 'num }
-
 declare int_min{ 'num1; 'num2 }
 declare int_max{ 'num1; 'num2 }
 
@@ -78,7 +77,6 @@ topval reduce_mul : conv
 topval reduce_div : conv
 topval reduce_rem : conv
 topval reduce_minus : conv
-
 topval reduce_int_min : conv
 topval reduce_int_max : conv
 

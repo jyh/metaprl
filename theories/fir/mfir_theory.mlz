@@ -12,8 +12,8 @@
  *
  * The FIR theory differs from the Mojave Compiler theory in its
  * approach to modelling the FIR.  Here, FIR programs are represented
- * using sequents, and only that portion of the FIR that has been
- * formalized in @cite["fir:tech-report1"] is modelled.
+ * using sequents, and the results of @cite["fir:tech-report1"] have
+ * been used as a basis for developing the @MetaPRL formalization.
  *
  * Our current goal is to formalize the FIR type system, and then use that
  * formalization to type-check programs from the Mojave compiler.

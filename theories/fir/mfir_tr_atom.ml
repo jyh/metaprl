@@ -106,7 +106,7 @@ prim ty_atomEnum {| intro [] |} 'H :
 prim ty_atomRawInt 'H :
    sequent [mfir] { 'H >- type_eq{ tyRawInt[p:n, sign:s];
                                    tyRawInt[p:n, sign:s];
-                                   polyKind[0]{large_type} } } -->
+                                   large_type } } -->
    sequent [mfir] { 'H >- member{ 'i; intset_max[p:n, sign:s] } } -->
    sequent [mfir] { 'H >-
       has_type["atom"]{ atomRawInt[p:n, sign:s]{'i}; tyRawInt[p:n, sign:s] } }
@@ -155,13 +155,13 @@ prim ty_atomTyApply 'H 'J :
    sequent [mfir] { 'H;
                     v: var_def{ tyAll{ t. 'ty['t] }; 'd };
                     'J['v] >-
-      type_eq{ 'u1; 'u2; polyKind[0]{ small_type } } } -->
+      type_eq{ 'u1; 'u2;  small_type } } -->
 
    (* The types being applied should be small. *)
    sequent [mfir] { 'H;
                     v: var_def{ tyAll{ t. 'ty['t] }; 'd };
                     'J['v] >-
-      type_eq_list{ 'types; 'types; polyKind[0]{ small_type } } } -->
+      type_eq_list{ 'types; 'types; small_type } } -->
 
    (* The type should correspond to the tyAll applied to the given types. *)
    sequent [mfir] { 'H;
@@ -169,7 +169,7 @@ prim ty_atomTyApply 'H 'J :
                     'J['v] >-
       type_eq{ 'u1;
                do_tyApply{ tyAll{ t. 'ty['t] }; 'types };
-               polyKind[0]{ small_type } } } -->
+               small_type } } -->
 
    (* Then the atom is well-typed. *)
    sequent [mfir] { 'H;
@@ -205,9 +205,9 @@ let resource auto += {
 
 prim ty_atomTyPack {| intro [] |} 'H :
    sequent [mfir] { 'H >-
-      type_eq_list{ 'types; 'types; polyKind[0]{ small_type } } } -->
+      type_eq_list{ 'types; 'types; small_type } } -->
    sequent [mfir] { 'H >-
-      type_eq{ 'u; tyExists{ t. 'ty['t] }; polyKind[0]{ small_type } } } -->
+      type_eq{ 'u; tyExists{ t. 'ty['t] }; small_type } } -->
    sequent [mfir] { 'H >-
       has_type["atom"]{ 'var; do_tyApply{tyExists{t. 'ty['t]}; 'types} } } -->
    sequent [mfir] { 'H >-
@@ -231,7 +231,7 @@ prim ty_atomTyUnpack 'H 'J:
                     'J['v] >-
       type_eq{ 'u;
                instantiate_tyExists{ tyExists{ t. 'ty['t] }; 'v; 0 };
-               polyKind[0]{ large_type } } } -->
+               large_type } } -->
    sequent [mfir] { 'H;
                     v: var_def{ tyExists{ t. 'ty['t] }; 'd };
                     'J['v] >-

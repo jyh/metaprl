@@ -50,35 +50,6 @@ extends Mfir_ty
  * Declarations.
  **************************************************************************)
 
-(*
- * DROPPED: PointerOfBlockOp.    Contains a sub_block.
- * DROPPED: PlusPointerOp.       Contains a sub_block.
- * DROPPED: frame_label.         Can fold this into AtomLabel.
- * DROPPED: AtomNil.             Not sure if this is sound.
- * TODO:    AtomFloat.           MetaPRL doesn't have floats.
- * TODO:    AtomLabel.           I'm lazy.
- * TODO:    AtomSizeof.          I'm lazy.
- * TODO:    AtomConst.           I'm lazy.
- * DROPPED: AtomFun.             Not sure if this is really needed. (BUG?)
- * DROPPED: AtomRawDataOfFrame.  No idea what this is for.
- * DROPPED: debugging.           Contains no useful (formal) content.
- * DROPPED: AllocArray.          No idea how this works.
- * TODO:    AllocFrame.          I'm lazy/confused.
- * TODO:    tailop.              I'm lazy.
- * DROPPED: pred.                Unsound implementation in MCC.
- * TODO:    SpecialCall          Blocks on implementing tailop.
- * DROPPED: TypeCase             Part of the (unsound) FIR object system.
- * DROPPED: Memcpy.              Not dealing with this yet.
- * DROPPED: Call.                No idea what this does.
- * DROPPED: Assert.              No idea what this does.
- * DROPPED: Debug.               Contains no useful (formal) content.
- *)
-
-(*
- * BUG: I don't think I need AtomFun.  So it's been dropped for now.
- *)
-
-
 (*!
  * @begin[doc]
  * @terms

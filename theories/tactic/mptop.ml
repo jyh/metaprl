@@ -119,7 +119,7 @@ let collect_table data =
          let labels = collect mod_name labels next1 in
             collect mod_name labels next2
    in
-      collect "." [] data;
+   let _ = collect "." [] data in
       hash
 
 (*
@@ -532,7 +532,10 @@ and mk_type base t =
             not_supported loc "type param"
        | (<:ctyp< $t1$ == $t2$ >>) ->
             not_supported loc "type equality"
+(*
        | (<:ctyp< < $list:stl$ $dd:b$ > >>) ->
+*)
+       | MLast.TyObj (loc, _, _) ->
             not_supported loc "type class"
        | (<:ctyp< { $list:sbtl$ } >>) ->
             not_supported loc "type record"

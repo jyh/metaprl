@@ -44,21 +44,21 @@
  * OCaml, and more information about this system.
  *
  * Copyright (C) 1998 Jason Hickey, Cornell University
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- * 
+ *
  * Author: Jason Hickey
  * jyh@cs.cornell.edu
  *)
@@ -874,8 +874,8 @@ let find_inf { ext_base = { ext_terms = terms } } world t hash =
 
 let inf_is_already_known extract world t hash =
    try
-      find_inf extract world t hash;
-      true
+      let _ = find_inf extract world t hash in
+         true
    with
       Not_found ->
          false
@@ -1339,8 +1339,8 @@ let new_bchain node =
 
        | Derived | Primitive _ ->
             (* This node is provable *)
-            Ref_util.pop fstack;
-            ()
+            let _ = Ref_util.pop fstack in
+               ()
 
    in
    let search extract =
@@ -1358,9 +1358,9 @@ let new_bchain node =
 
        | OrBranch ->
             (* All subgoals failed, pop the node, and fail its branch *)
-            Ref_util.pop fstack;
-            pop_failed_branch fstack;
-            false
+            let _ = Ref_util.pop fstack in
+            let _ = pop_failed_branch fstack in
+               false
 
        | RootNode node ->
             (* Is this node successful *)

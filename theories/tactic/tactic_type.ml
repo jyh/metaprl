@@ -357,14 +357,14 @@ let get_theory name =
       search (get_theories ())
 
 let sentinal_of_refiner mod_name =
-   let lazy () =
+   let xlazy () =
       let refiner = (get_theory mod_name).thy_refiner in
          ShareSentinal (Refine.sentinal_of_refiner refiner)
    in
-      ThreadRefiner.share (get_remote_server ()) "sentinal" lazy
+      ThreadRefiner.share (get_remote_server ()) "sentinal" xlazy
 
 let sentinal_of_refiner_object mod_name name =
-   let lazy () =
+   let xlazy () =
       let refiner = (get_theory mod_name).thy_refiner in
       let opname = make_opname [name; mod_name] in
       let refiner =
@@ -375,7 +375,7 @@ let sentinal_of_refiner_object mod_name name =
       in
          ShareSentinal (Refine.sentinal_of_refiner refiner)
    in
-      ThreadRefiner.share (get_remote_server ()) "sentinal_object" lazy
+      ThreadRefiner.share (get_remote_server ()) "sentinal_object" xlazy
 
 let get_sentinal key =
    match ThreadRefiner.arg_of_key (get_remote_server ()) key with

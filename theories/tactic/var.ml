@@ -73,16 +73,10 @@ let split_var v =
  * If the var has a name matching "%s%d", then keep the same form
  * and use the smallest index to keep the var name disjoint.
  *)
+let mem' vars v = List.mem v vars
+
 let new_var v vars =
-   let root, _ = split_var v in
-   let rec aux i =
-      let newv = root ^ (string_of_int i) in
-         if List.mem newv vars then
-            aux (i + 1)
-         else
-            newv
-   in
-      aux 1
+   String_util.vnewname (fst (split_var v)) (mem' vars)
 
 let maybe_new_var v vars =
    if List.mem v vars then

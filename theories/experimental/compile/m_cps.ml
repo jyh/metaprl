@@ -144,10 +144,10 @@ declare CPS{'cont; 'e}
 declare CPS{cont. 'fields['cont]}
 
 dform cps_record_var_df : CPSRecordVar{'R} =
-   bf["CPSrec["] slot{'R} bf["]"]
+   bf["CPSRecordVar["] slot{'R} bf["]"]
 
-dform cps_fun_var_df : CPSFunVar{'R} =
-   bf["CPSfun["] slot{'R} bf["]"]
+dform cps_fun_var_df : CPSFunVar{'f} =
+   bf["CPSFunVar["] slot{'f} bf["]"]
 
 dform cps_atom_df : CPS{'a} =
    bf["CPS["] slot{'a} bf["]"]
@@ -213,7 +213,7 @@ prim_rw cps_let_apply : CPS{'cont; LetApply{'a1; 'a2; v. 'e['v]}} <-->
              EndDef};
           R.
           LetFun{'R; Label["g":t]; g.
-          TailCall{CPS{'a1}; 'g; CPS{'a2}}}}
+          CPS{'cont; TailCall{'a1; AtomVar{'g}; 'a2}}}}
 
 (*!
  * @begin[doc]
@@ -237,10 +237,16 @@ prim_rw cps_let_fun : CPS{'cont; LetFun{CPSRecordVar{'R}; 'label; f. 'e['f]}} <-
    LetFun{'R; 'label; f. CPS{'cont; 'e[CPSFunVar{'f}]}}
 
 prim_rw cps_return : CPS{'cont; Return{'a}} <-->
-   TailCall{'cont; CPS{'a}}
+   TailCall{AtomVar{'cont}; CPS{'a}}
 
-prim_rw cps_tailcall : CPS{'cont; TailCall{CPSFunVar{'f}; 'a2}} <-->
-   TailCall{'f; 'cont; CPS{'a2}}
+prim_rw cps_tailcall_1 : CPS{'cont; TailCall{CPSFunVar{'f}; 'a2}} <-->
+   TailCall{AtomVar{'f}; AtomVar{'cont}; CPS{'a2}}
+
+prim_rw cps_tailcall_2 : CPS{'cont; TailCall{CPSFunVar{'f}; 'a2; 'a3}} <-->
+   TailCall{AtomVar{'f}; AtomVar{'cont}; CPS{'a2}; CPS{'a3}}
+
+prim_rw cps_fun_var_cleanup :
+   AtomVar{CPSFunVar{'f}} <--> CPSFunVar{'f}
 (*! docoff *)
 
 (*
@@ -268,7 +274,9 @@ let resource cps +=
      << CPS{cont. CPS{'cont; EndDef}} >>, cps_end_def;
      << CPS{'cont; LetFun{CPSRecordVar{'R}; 'label; f. 'e['f]}} >>, cps_let_fun;
      << CPS{'cont; Return{'a}} >>, cps_return;
-     << CPS{'cont; TailCall{CPSFunVar{'f}; 'a2}} >>, cps_tailcall]
+     << CPS{'cont; TailCall{CPSFunVar{'f}; 'a2}} >>, cps_tailcall_1;
+     << CPS{'cont; TailCall{CPSFunVar{'f}; 'a2; 'a3}} >>, cps_tailcall_2;
+     << AtomVar{CPSFunVar{'f}} >>, cps_fun_var_cleanup]
 
 (*!
  * @begin[doc]
@@ -278,7 +286,7 @@ let resource cps +=
 interactive cps_prog :
    sequent [m] { 'H; cont: exp >-
       compilable{LetRec{R. FunDef{Label["init":t]; AtomFun{cont. CPS{'cont; 'e}}; EndDef};
-                        R. LetFun{'R; Label["init":t]; init. TailCall{'init; AtomVar{'cont}}}}} } -->
+                        R. LetFun{'R; Label["init":t]; init. TailCall{AtomVar{'init}; AtomVar{'cont}}}}} } -->
    sequent [m] { 'H >- compilable{'e} }
 
 (*

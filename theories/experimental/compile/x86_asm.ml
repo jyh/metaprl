@@ -45,8 +45,8 @@ extends Base_theory
  * @end[doc]
  *)
 declare ImmediateNumber[i:n]
-declare ImmediateLabel{'v}
-declare ImmediateCLabel{'v}
+declare ImmediateLabel[label:t]{'R}
+declare ImmediateCLabel[label:t]{'R}
 declare Register{'v}
 declare SpillRegister{'v}
 declare MemReg{'r}
@@ -74,13 +74,14 @@ declare UGE
  * @modsubsection{Instructions}
  * @end[doc]
  *)
-declare MOV{'dst; 'src}
-declare NEG{'dst}
-declare NOT{'dst}
-declare ADD{'dst; 'src}
-declare LEA{'dst; 'src}
-declare SUB{'dst; 'src}
-declare IMUL{'dst; 'src}
+declare MOV{'src; dst. 'rest['dst]}
+declare MOV{'dst; 'src; 'rest}
+declare NEG{'dst; 'rest}
+declare NOT{'dst; 'rest}
+declare ADD{'dst; 'src; 'rest}
+declare LEA{'dst; 'src; 'rest}
+declare SUB{'dst; 'src; 'rest}
+declare IMUL{'dst; 'src; 'rest}
 
 (*!
  * @begin[doc]
@@ -89,36 +90,52 @@ declare IMUL{'dst; 'src}
  * repectively.
  * @end[doc]
  *)
-declare MUL{'dst1; 'dst2; 'src}
-declare DIV{'dst1; 'dst2; 'src}
+declare MUL{'dst1; 'dst2; 'src; 'rest}
+declare DIV{'dst1; 'dst2; 'src; 'rest}
 
-declare AND{'dst; 'src}
-declare OR{'dst; 'src}
-declare XOR{'dst; 'src}
-declare SAR{'dst; 'src}
-declare SHL{'dst; 'src}
-declare SHR{'dst; 'src}
+declare AND{'dst; 'src; 'rest}
+declare OR{'dst; 'src; 'rest}
+declare XOR{'dst; 'src; 'rest}
+declare SAR{'dst; 'src; 'rest}
+declare SHL{'dst; 'src; 'rest}
+declare SHR{'dst; 'src; 'rest}
 
-declare TEST{'src1; 'src2}
-declare CMP{'src1; 'src2}
-declare JMP{'label}
-declare JCC{'cc; 'label}
-declare IJMP{'params; 'src}
-declare SET{'cc; 'dst}
+declare TEST{'src1; 'src2; 'rest}
+declare CMP{'src1; 'src2; 'rest}
+declare SET{'cc; 'dst; 'rest}
 
-declare GC{'i; 'params}
-declare LABEL{'v}
+(*
+ * Various forms of tailcalls.
+ *)
+declare JMP{'label; 'arg1}
+declare JMP{'label; 'arg1; 'arg2}
+declare JMP{'label; 'arg1; 'arg2; 'arg3}
+declare JCC{'cc; 'label; 'arg1; 'rest}
+declare JCC{'cc; 'label; 'arg1; 'arg2; 'rest}
+declare JCC{'cc; 'label; 'arg1; 'arg2; 'arg3; 'rest}
+declare IJMP{'src; 'arg1}
+declare IJMP{'src; 'arg1; 'arg2}
+declare IJMP{'src; 'arg1; 'arg2; 'arg3}
+
+(*
+ * Also add a comment instruction.
+ *)
+declare Comment[comment:s]{'rest}
 
 (*!
  * @begin[doc]
- * @modsubsection{Scoping}
+ * @modsubsection{Programs}
  *
- * The variables and labels in the assembly are scoped.
+ * A program is a set of recursive definitions.
  * @end[doc]
  *)
-declare RegDecl{v. 'e['v]}
-declare LabelDecl{v. 'e['v]}
-declare Label{'label}
+declare LabelAsm[label:t]{'R}
+
+declare LabelRec{R1. 'fields['R1]; R2. 'rest['R2]}
+declare LabelDef{'label; 'code; 'rest}
+declare LabelEnd
+
+declare LabelFun{v. 'insts['v]}
 
 (************************************************************************
  * Display forms.
@@ -126,146 +143,143 @@ declare Label{'label}
 dform immediate_number_df : ImmediateNumber[i:n] =
    `"#" slot[i:n]
 
-dform immediate_label_df : ImmediateLabel{'label} =
-   slot{'label}
+dform immediate_label_df : ImmediateLabel[label:t]{'R} =
+   slot{'R} `"." slot[label:t]
 
-dform immediate_clabel_df : ImmediateCLabel{'label} =
-   slot{'label}
+dform immediate_clabel_df : ImmediateCLabel[label:t]{'R} =
+   `"$" slot{'R} `"." slot[label:t]
 
 dform register_df : Register{'v} =
-   bf["%"] slot{'v}
+   `"%" slot{'v}
 
 dform mem_reg_df : MemReg{'r} =
-   `"(" slot{'r} `")"
+   `"(%" slot{'r} `")"
 
 dform mem_reg_off_df : MemRegOff[i:n]{'r} =
-   `"(" slot{'r} `"," slot[i:n] `")"
+   `"(%" slot{'r} `"," slot[i:n] `")"
 
 dform mem_reg_reg_off_mul_df : MemRegRegOffMul[off:n, mul:n]{'r1; 'r2} =
-   `"(" slot{'r1} `"," slot{'r2} `"," slot[off:n] `"," slot[mul:n] `")"
+   `"(%" slot{'r1} `",%" slot{'r2} `"," slot[off:n] `"," slot[mul:n] `")"
 
-dform mov_df : MOV{'dst; 'src} =
-    `"MOV " slot{'dst} `"," slot{'src}
+dform mov_df : MOV{'dst; 'src; 'rest} =
+    `"MOV " slot{'dst} `"," slot{'src} hspace slot{'rest}
 
-dform neg_df : NEG{'dst} =
-    `"NEG " slot{'dst}
+dform mov_df : MOV{'src; dst. 'rest} =
+    `"MOV %" slot{'dst} `", " slot{'src} `" /* LET */" hspace slot{'rest}
 
-dform not_df : NOT{'dst} =
-    `"NOT " slot{'dst}
+dform neg_df : NEG{'dst; 'rest} =
+    `"NEG " slot{'dst} hspace slot{'rest}
 
-dform add_df : ADD{'dst; 'src} =
-    `"ADD " slot{'dst} `"," slot{'src}
+dform not_df : NOT{'dst; 'rest} =
+    `"NOT " slot{'dst} hspace slot{'rest}
 
-dform lea_df : LEA{'dst; 'src} =
-    `"LEA " slot{'dst} `"," slot{'src}
+dform add_df : ADD{'dst; 'src; 'rest} =
+    `"ADD " slot{'dst} `", " slot{'src} hspace slot{'rest}
 
-dform sub_df : SUB{'dst; 'src} =
-    `"SUB " slot{'dst} `"," slot{'src}
+dform lea_df : LEA{'dst; 'src; 'rest} =
+    `"LEA " slot{'dst} `", " slot{'src} hspace slot{'rest}
 
-dform imul_df : IMUL{'dst; 'src} =
-   space `"IMUL " slot{'dst} `"," slot{'src}
+dform sub_df : SUB{'dst; 'src; 'rest} =
+    `"SUB " slot{'dst} `", " slot{'src} hspace slot{'rest}
 
-dform mul_df : MUL{'dst1; 'dst2; 'src} =
-    `"MUL /* " slot{'dst1} `"," slot{'dst2} `" */ " slot{'src}
+dform imul_df : IMUL{'dst; 'src; 'rest} =
+   space `"IMUL " slot{'dst} `", " slot{'src} hspace slot{'rest}
 
-dform div_df : DIV{'dst1; 'dst2; 'src} =
-    `"DIV /* " slot{'dst1} `"," slot{'dst2} `" */ " slot{'src}
+dform mul_df : MUL{'dst1; 'dst2; 'src; 'rest} =
+    `"MUL /* " slot{'dst1} `", " slot{'dst2} `" */ " slot{'src} hspace slot{'rest}
 
-dform and_df : AND{'dst; 'src} =
-    `"AND " slot{'dst} `"," slot{'src}
+dform div_df : DIV{'dst1; 'dst2; 'src; 'rest} =
+    `"DIV /* " slot{'dst1} `", " slot{'dst2} `" */ " slot{'src} hspace slot{'rest}
 
-dform or_df : OR{'dst; 'src} =
-    `"OR " slot{'dst} `"," slot{'src}
+dform and_df : AND{'dst; 'src; 'rest} =
+    `"AND " slot{'dst} `", " slot{'src} hspace slot{'rest}
 
-dform xor_df : XOR{'dst; 'src} =
-    `"XOR " slot{'dst} `"," slot{'src}
+dform or_df : OR{'dst; 'src; 'rest} =
+    `"OR " slot{'dst} `", " slot{'src} hspace slot{'rest}
 
-dform sar_df : SAR{'dst; 'src} =
-   `"SAR " slot{'dst} `"," slot{'src}
+dform xor_df : XOR{'dst; 'src; 'rest} =
+    `"XOR " slot{'dst} `", " slot{'src} hspace slot{'rest}
 
-dform shl_df : SHL{'dst; 'src} =
-   `"SHL " slot{'dst} `"," slot{'src}
+dform sar_df : SAR{'dst; 'src; 'rest} =
+   `"SAR " slot{'dst} `", " slot{'src} hspace slot{'rest}
 
-dform shr_df : SHR{'dst; 'src} =
-   `"SHR " slot{'dst} `"," slot{'src}
+dform shl_df : SHL{'dst; 'src; 'rest} =
+   `"SHL " slot{'dst} `", " slot{'src} hspace slot{'rest}
 
-dform test_df : TEST{'src1; 'src2} =
-   `"TEST " slot{'src1} `"," slot{'src2}
+dform shr_df : SHR{'dst; 'src; 'rest} =
+   `"SHR " slot{'dst} `", " slot{'src} hspace slot{'rest}
 
-dform cmp_df : CMP{'src1; 'src2} =
-   `"CMP " slot{'src1} `"," slot{'src2}
+dform test_df : TEST{'src1; 'src2; 'rest} =
+   `"TEST " slot{'src1} `", " slot{'src2} hspace slot{'rest}
 
-dform jmp_df : JMP{'label} =
-   `"JMP " slot{'label}
+dform cmp_df : CMP{'src1; 'src2; 'rest} =
+   `"CMP " slot{'src1} `", " slot{'src2} hspace slot{'rest}
 
-dform jcc_eq_df : JCC{EQ; 'label} =
-   `"JZ " slot{'label}
+dform jmp_df : JMP{'label; 'arg1} =
+   `"JMP " slot{'label} `" /* args(" slot{'arg1} `") */"
 
-dform jcc_neq_df : JCC{NEQ; 'label} =
-   `"JNZ " slot{'label}
+dform jmp_df : JMP{'label; 'arg1; 'arg2} =
+   `"JMP " slot{'label} `" /* args(" slot{'arg1} `"," slot{'arg2} `") */"
 
-dform jcc_lt_df : JCC{LT; 'label} =
-   `"JLT " slot{'label}
+dform jmp_df : JMP{'label; 'arg1; 'arg2; 'arg3} =
+   `"JMP " slot{'label} `" /* args(" slot{'arg1} `"," slot{'arg2} `"," slot{'arg3} `") */"
 
-dform jcc_le_df : JCC{LE; 'label} =
-   `"JLE " slot{'label}
+dform ijmp_df : IJMP{'src; 'arg1} =
+   `"JMP *" slot{'src} `" /* args(" slot{'arg1} `") */"
 
-dform jcc_gt_df : JCC{GT; 'label} =
-   `"JGT " slot{'label}
+dform ijmp_df : IJMP{'src; 'arg1; 'arg2} =
+   `"JMP *" slot{'src} `" /* args(" slot{'arg1} `"," slot{'arg2} `") */"
 
-dform jcc_ge_df : JCC{GE; 'label} =
-   `"JGE " slot{'label}
+dform ijmp_df : IJMP{'src; 'arg1; 'arg2; 'arg3} =
+   `"JMP *" slot{'src} `" /* args(" slot{'arg1} `"," slot{'arg2} `"," slot{'arg3} `") */"
 
-dform jcc_ult_df : JCC{ULT; 'label} =
-   `"JB " slot{'label}
+declare CC{'cc}
 
-dform jcc_ule_df : JCC{ULE; 'label} =
-   `"JBE " slot{'label}
+dform jcc_df : JCC{'cc; 'label; 'arg1; 'rest} =
+   `"J" CC{'cc} `" " slot{'label} `" /* args(" slot{'arg1} `") */" hspace slot{'rest}
 
-dform jcc_ugt_df : JCC{UGT; 'label} =
-   `"JA " slot{'label}
+dform jcc_df : JCC{'cc; 'label; 'arg1; 'arg2; 'rest} =
+   `"J" CC{'cc} `" " slot{'label} `" /* args(" slot{'arg1} `"," slot{'arg2} `") */" hspace slot{'rest}
 
-dform jcc_uge_df : JCC{UGE; 'label} =
-   `"JAE " slot{'label}
+dform jcc_df : JCC{'cc; 'label; 'arg1; 'arg2; 'arg3; 'rest} =
+   `"J" CC{'cc} `" " slot{'label} `" /* args(" slot{'arg1} `"," slot{'arg2} `"," slot{'arg3} `") */" hspace slot{'rest}
 
-dform set_eq_df : SET{EQ; 'label} =
-   `"SETZ " slot{'label}
+dform set_eq_df : SET{'cc; 'label; 'rest} =
+   `"SET" CC{'cc} `" " slot{'label} hspace slot{'rest}
 
-dform set_neq_df : SET{NEQ; 'label} =
-   `"SETNZ " slot{'label}
+dform cc_eq_df  : CC{EQ}  = `"Z"
+dform cc_neq_df : CC{NEQ} = `"NZ"
+dform cc_lt_df  : CC{LT}  = `"LT"
+dform cc_le_df  : CC{LE}  = `"LE"
+dform cc_gt_df  : CC{GT}  = `"GT"
+dform cc_ge_df  : CC{GE}  = `"GE"
+dform cc_ult_df : CC{ULT} = `"B"
+dform cc_ule_df : CC{ULE} = `"BE"
+dform cc_ugt_df : CC{UGT} = `"A"
+dform cc_uge_df : CC{UGE} = `"AE"
 
-dform set_lt_df : SET{LT; 'label} =
-   `"SETLT " slot{'label}
+dform comment_df : Comment[comment:s]{'rest} =
+   `"/* Comment: " slot[comment:s] `" */" hspace slot{'rest}
 
-dform set_le_df : SET{LE; 'label} =
-   `"SETLE " slot{'label}
+(*
+ * Programs.
+ *)
+dform label_fun_df : LabelFun{v. 'insts} =
+   `"/* param " slot{'v} `" */" hspace slot{'insts}
 
-dform set_gt_df : SET{GT; 'label} =
-   `"SETGT " slot{'label}
+dform label_rec_df : LabelRec{R1. 'fields; R2. 'rest} =
+   szone `"/* LabelRecFields[" slot{'R1} `"] begins here */"
+   hspace slot{'fields} hspace `"/* LabelRecFields[" slot{'R1} `"] ends here */" ezone
+   hspace `"/* LabelRecBody[" slot{'R2} `"] begins here */" hspace slot{'rest}
 
-dform set_ge_df : SET{GE; 'label} =
-   `"SETGE " slot{'label}
+dform label_def_df : LabelDef{'label; 'insts; 'rest} =
+   szone pushm[3] slot{'label} hspace slot{'insts} popm ezone hspace slot{'rest}
 
-dform set_ult_df : SET{ULT; 'label} =
-   `"SETB " slot{'label}
+dform label_end_df : LabelEnd =
+   `""
 
-dform set_ule_df : SET{ULE; 'label} =
-   `"SETBE " slot{'label}
-
-dform set_ugt_df : SET{UGT; 'label} =
-   `"SETA " slot{'label}
-
-dform set_uge_df : SET{UGE; 'label} =
-   `"SETAE " slot{'label}
-
-dform ijmp_df : IJMP{'params; 'src} =
-   `"JMP /* " slot{'params} `"*/ *" slot{'src}
-
-dform gc_df : GC{'i; 'params} =
-   `"/* GC " slot{'i} `"," slot{'params} `" */"
-
-dform label_df : LABEL{'v} =
-   slot{'v} `":"
+dform label_asm_df : LabelAsm[label:t]{'R} =
+   slot{'R} `"." slot[label:t] `":"
 
 (*!
  * @docoff

@@ -1,5 +1,5 @@
 (*
- * Compile to x86 assembly.
+ * Basic arithmetic.
  *
  * ----------------------------------------------------------------
  *
@@ -24,35 +24,14 @@
  * @email{jyh@cs.caltech.edu}
  * @end[license]
  *)
+extends Base_theory
 
-(*!
- * @begin[doc]
- * @parents
- * @end[doc]
- *)
-extends M_ir
-extends X86_asm
-(*! @docoff *)
+declare number[i:n]
 
-open Refiner.Refiner.Term
-
-open Tactic_type.Tacticals
-open Tactic_type.Conversionals
-
-(*
- * Dead resource
- *)
-resource (term * conv, conv) assemble
-
-(*
- * Debug functions.
- *)
-topval assembleC : conv
-
-(*
- * Dead-code elim.
- *)
-topval assembleT : tactic
+declare add{'i1; 'i2}
+declare sub{'i1; 'i2}
+declare mul{'i1; 'i2}
+declare div{'i1; 'i2}
 
 (*!
  * @docoff

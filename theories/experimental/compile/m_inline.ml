@@ -83,6 +83,9 @@ prim_rw reduce_let_atom_int :
 prim_rw reduce_let_atom_var :
    LetAtom{AtomVar{'v1}; v2. 'e['v2]} <--> 'e['v1]
 
+prim_rw unfold_atom_var_int :
+   AtomVar{AtomInt[i:n]} <--> AtomInt[i:n]
+
 (*
  * Add all these rules to the reduce resource.
  *)
@@ -95,7 +98,9 @@ let resource reduce +=
      << AtomBinop{DivOp; AtomInt[i:n]; AtomInt[j:n]} >>, (reduce_div thenC addrC [0] reduce_meta_quot);
 
      << LetAtom{AtomInt[i:n]; v. 'e['v]} >>, reduce_let_atom_int;
-     << LetAtom{AtomVar{'v1}; v2. 'e['v2]} >>, reduce_let_atom_var]
+     << LetAtom{AtomVar{'v1}; v2. 'e['v2]} >>, reduce_let_atom_var;
+
+     << AtomVar{AtomInt[i:n]} >>, unfold_atom_var_int]
 
 (*
  * Inlining.

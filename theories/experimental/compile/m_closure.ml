@@ -248,9 +248,9 @@ prim_rw close_frame :
                         'tuple};
             'a} <-->
    CloseRec{R1, frame1. CloseSubscript{AtomVar{'frame1}; AtomInt[i:n]; v. 'fields['v; 'R1; 'frame1]};
-            R2, frame2. LetAtom{'a; v. 'body['v; 'R2; 'frame2]};
+            R2, frame2. LetAtom{AtomVar{'a}; v. 'body['v; 'R2; 'frame2]};
             Length{meta_sum[i:n, 1:n]};
-            AllocTupleCons{'a; 'tuple}}
+            AllocTupleCons{AtomVar{'a}; 'tuple}}
 
 (*!
  * @begin[doc]
@@ -339,7 +339,7 @@ prim_rw close_let_subscript :
  *)
 prim_rw close_let_fun :
    LetFun{CloseRecVar{'R; 'frame}; 'label; v. 'e['v]} <-->
-   LetClosure{AtomFunVar{'R; 'label}; 'frame; v. 'e['v]}
+   LetClosure{AtomFunVar{'R; 'label}; AtomVar{'frame}; v. 'e['v]}
 
 (*
  * Optimize closures just before tailcalls.

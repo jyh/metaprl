@@ -12,22 +12,16 @@ OCAMLDEPFLAGS := -prl
 # Library files
 MPFILES :=\
 	m_util\
+	m_arith\
 	m_ir\
 	m_cps\
 	m_closure\
 	m_prog\
 	m_dead\
 	m_inline\
-	m_theory\
-	m_test
-
-OTHER =\
-	m_ast\
-	m_post_parsing\
-	m_cps\
-	m_closure\
 	x86_asm\
-	m_x86\
+	m_x86_frame\
+	m_x86_codegen\
 	m_theory\
 	m_test
 

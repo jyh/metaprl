@@ -30,9 +30,11 @@ extends M_closure
 extends M_prog
 extends M_dead
 extends M_inline
+extends M_x86_codegen
 
 open Tactic_type.Tacticals
 
+topval convertT : tactic
 topval compileT : tactic
 
 (*!

@@ -1,5 +1,5 @@
 (*
- * The general theory for the M language.
+ * Basic architecture parameters.
  *
  * ----------------------------------------------------------------
  *
@@ -24,48 +24,30 @@
  * @email{jyh@cs.caltech.edu}
  * @end[license]
  *)
-extends M_ir
-extends M_cps
-extends M_closure
-extends M_prog
-extends M_dead
-extends M_inline
-extends M_x86_codegen
+extends M_arith
 
-open M_cps
-open M_closure
-open M_prog
-open M_dead
-open M_inline
-open M_x86_codegen
+(*
+ * We need more general operands during code construction.
+ *)
+declare ImmediateNumber{'i}
+declare MemRegOff{'r; 'off}
+declare MemRegRegOffMul{'r1; 'r2; 'off; 'mul}
 
-open Tactic_type.Tacticals
-open Tactic_type.Conversionals
+(*
+ * Size of a word on this platform, in bytes.
+ *)
+declare word_size
 
-let convertT =
-   (* CPS conversion *)
-   cpsT
+(*
+ * This is the format of the header word of a given size.
+ *)
+declare header[i:n]
+declare header{'i}
 
-   (* Closure conversion *)
-   thenT closeT
-
-   (* Lift definitions to top level *)
-   thenT progT
-
-   (* Perform dead code elimination *)
-   thenT deadT
-
-   (* Perform inlining and constant folding *)
-   thenT inlineT
-
-   (* Another round of dead code elimination *)
-   thenT deadT
-
-let compileT =
-   convertT
-
-   (* Generate assembly *)
-   thenT codegenT
+(*
+ * Allocation handles.
+ *)
+declare LetAllocHandle{base, next, limit. 'e['base; 'next; 'limit]}
 
 (*!
  * @docoff

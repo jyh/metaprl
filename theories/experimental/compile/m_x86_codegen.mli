@@ -1,5 +1,5 @@
 (*
- * The general theory for the M language.
+ * Compile to x86 assembly.
  *
  * ----------------------------------------------------------------
  *
@@ -24,48 +24,35 @@
  * @email{jyh@cs.caltech.edu}
  * @end[license]
  *)
-extends M_ir
-extends M_cps
-extends M_closure
-extends M_prog
-extends M_dead
-extends M_inline
-extends M_x86_codegen
 
-open M_cps
-open M_closure
-open M_prog
-open M_dead
-open M_inline
-open M_x86_codegen
+(*!
+ * @begin[doc]
+ * @parents
+ * @end[doc]
+ *)
+extends M_ir
+extends X86_asm
+(*! @docoff *)
+
+open Refiner.Refiner.Term
 
 open Tactic_type.Tacticals
 open Tactic_type.Conversionals
 
-let convertT =
-   (* CPS conversion *)
-   cpsT
+(*
+ * Dead resource
+ *)
+resource (term * conv, conv) codegen
 
-   (* Closure conversion *)
-   thenT closeT
+(*
+ * Debug functions.
+ *)
+topval codegenC : conv
 
-   (* Lift definitions to top level *)
-   thenT progT
-
-   (* Perform dead code elimination *)
-   thenT deadT
-
-   (* Perform inlining and constant folding *)
-   thenT inlineT
-
-   (* Another round of dead code elimination *)
-   thenT deadT
-
-let compileT =
-   convertT
-
-   (* Generate assembly *)
-   thenT codegenT
+(*
+ * Dead-code elim.
+ *)
+topval codegenT : tactic
 
 (*!
  * @docoff

@@ -39,12 +39,12 @@ interactive fib_prog :
             If{AtomBinop{LeOp; AtomVar{'i}; AtomInt[1:n]};
                Return{AtomVar{'i}};
 
-               LetApply{'fib; AtomBinop{SubOp; AtomVar{'i}; AtomVar{'one}}; v1.
-               LetApply{'fib; AtomBinop{SubOp; AtomVar{'i}; AtomVar{'two}}; v2.
+               LetApply{AtomVar{'fib}; AtomBinop{SubOp; AtomVar{'i}; AtomVar{'one}}; v1.
+               LetApply{AtomVar{'fib}; AtomBinop{SubOp; AtomVar{'i}; AtomVar{'two}}; v2.
                Return{AtomBinop{AddOp; AtomVar{'v1}; AtomVar{'v2}}}}}}}};
          EndDef}};
       R. LetFun{'R; Label["fib":t]; fib.
-         TailCall{'fib; AtomInt[35:n]}}}}}} }
+         TailCall{AtomVar{'fib}; AtomInt[35:n]}}}}}} }
 
 (*!
  * @docoff

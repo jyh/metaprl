@@ -45,8 +45,8 @@ extends Base_theory
  * @end[doc]
  *)
 declare ImmediateNumber[i:n]
-declare ImmediateLabel{'v}
-declare ImmediateCLabel{'v}
+declare ImmediateLabel[label:t]{'R}
+declare ImmediateCLabel[label:t]{'R}
 declare Register{'v}
 declare SpillRegister{'v}
 declare MemReg{'r}
@@ -74,13 +74,14 @@ declare UGE
  * @modsubsection{Instructions}
  * @end[doc]
  *)
-declare MOV{'dst; 'src}
-declare NEG{'dst}
-declare NOT{'dst}
-declare ADD{'dst; 'src}
-declare LEA{'dst; 'src}
-declare SUB{'dst; 'src}
-declare IMUL{'dst; 'src}
+declare MOV{'src; dst. 'rest['dst]}
+declare MOV{'dst; 'src; 'rest}
+declare NEG{'dst; 'rest}
+declare NOT{'dst; 'rest}
+declare ADD{'dst; 'src; 'rest}
+declare LEA{'dst; 'src; 'rest}
+declare SUB{'dst; 'src; 'rest}
+declare IMUL{'dst; 'src; 'rest}
 
 (*!
  * @begin[doc]
@@ -89,35 +90,52 @@ declare IMUL{'dst; 'src}
  * repectively.
  * @end[doc]
  *)
-declare MUL{'dst1; 'dst2; 'src}
-declare DIV{'dst1; 'dst2; 'src}
+declare MUL{'dst1; 'dst2; 'src; 'rest}
+declare DIV{'dst1; 'dst2; 'src; 'rest}
 
-declare AND{'dst; 'src}
-declare OR{'dst; 'src}
-declare XOR{'dst; 'src}
-declare SAR{'dst; 'src}
-declare SHL{'dst; 'src}
-declare SHR{'dst; 'src}
+declare AND{'dst; 'src; 'rest}
+declare OR{'dst; 'src; 'rest}
+declare XOR{'dst; 'src; 'rest}
+declare SAR{'dst; 'src; 'rest}
+declare SHL{'dst; 'src; 'rest}
+declare SHR{'dst; 'src; 'rest}
 
-declare TEST{'src1; 'src2}
-declare CMP{'src1; 'src2}
-declare JMP{'label}
-declare JCC{'cc; 'label}
-declare IJMP{'params; 'src}
-declare SET{'cc; 'dst}
+declare TEST{'src1; 'src2; 'rest}
+declare CMP{'src1; 'src2; 'rest}
+declare SET{'cc; 'dst; 'rest}
 
-declare GC{'i; 'params}
-declare LABEL{'v}
+(*
+ * Various forms of tailcalls.
+ *)
+declare JMP{'label; 'arg1}
+declare JMP{'label; 'arg1; 'arg2}
+declare JMP{'label; 'arg1; 'arg2; 'arg3}
+declare JCC{'cc; 'label; 'arg1; 'rest}
+declare JCC{'cc; 'label; 'arg1; 'arg2; 'rest}
+declare JCC{'cc; 'label; 'arg1; 'arg2; 'arg3; 'rest}
+declare IJMP{'src; 'arg1}
+declare IJMP{'src; 'arg1; 'arg2}
+declare IJMP{'src; 'arg1; 'arg2; 'arg3}
+
+(*
+ * Comment for debugging.
+ *)
+declare Comment[comment:s]{'rest}
 
 (*!
  * @begin[doc]
- * @modsubsection{Scoping}
+ * @modsubsection{Programs}
  *
- * The variables and labels in the assembly are scoped.
+ * A program is a set of recursive definitions.
+ * @end[doc]
  *)
-declare RegDecl{v. 'e['v]}
-declare LabelDecl{v. 'e['v]}
-declare Label{'label}
+declare LabelAsm[label:t]{'R}
+
+declare LabelRec{R1. 'fields['R1]; R2. 'rest['R2]}
+declare LabelDef{'label; 'code; 'rest}
+declare LabelEnd
+
+declare LabelFun{v. 'insts['v]}
 
 (*!
  * @docoff

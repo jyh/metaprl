@@ -139,6 +139,7 @@ declare rawint_set{ 'int_precision; 'int_signed; 'interval_list }
  *)
 
 declare normalTuple
+declare boxedTuple
 declare rawTuple
 
 
@@ -275,6 +276,9 @@ dform rawint_set_df : except_mode[src] ::
 dform normalTuple_df : except_mode[src] ::
    normalTuple =
    `"NormalTuple"
+dform boxedTuple_df : except_mode[src] ::
+   boxedTuple =
+   `"BoxedTuple"
 dform rawTuple_df : except_mode[src] ::
    rawTuple =
    `"RawTuple"
@@ -455,6 +459,10 @@ let dest_rawint_set_term = dest_dep0_dep0_dep0_term rawint_set_opname
 let normalTuple_term = << normalTuple >>
 let normalTuple_opname = opname_of_term normalTuple_term
 let is_normalTuple_term = is_no_subterms_term normalTuple_opname
+
+let boxedTuple_term = << boxedTuple >>
+let boxedTuple_opname = opname_of_term boxedTuple_term
+let is_boxedTuple_term = is_no_subterms_term boxedTuple_opname
 
 let rawTuple_term = << rawTuple >>
 let rawTuple_opname = opname_of_term rawTuple_term

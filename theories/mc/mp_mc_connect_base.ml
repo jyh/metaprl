@@ -466,11 +466,14 @@ let set_of_term t =
 let term_of_tuple_class tc =
    match tc with
       NormalTuple -> normalTuple_term
+    | BoxedTuple  -> boxedTuple_term
     | RawTuple    -> rawTuple_term
 
 let tuple_class_of_term t =
    if is_normalTuple_term t then
       NormalTuple
+   else if is_boxedTuple_term t then
+      BoxedTuple
    else if is_rawTuple_term t then
       RawTuple
    else

@@ -73,6 +73,7 @@ declare rawint_set{ 'int_precision; 'int_signed; 'interval_list }
 (* Tuple classes. *)
 
 declare normalTuple
+declare boxedTuple
 declare rawTuple
 
 (* Union tags. *)
@@ -196,6 +197,9 @@ val dest_rawint_set_term : term -> term * term * term
 
 val normalTuple_term : term
 val is_normalTuple_term : term -> bool
+
+val boxedTuple_term : term
+val is_boxedTuple_term : term -> bool
 
 val rawTuple_term : term
 val is_rawTuple_term : term -> bool

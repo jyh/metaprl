@@ -14,7 +14,7 @@ open Printf
 open Debug
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
-open Refiner.Refiner.Refine
+open Refiner.Refiner.RefineErrors
 open Rformat
 open Resource
 
@@ -437,6 +437,9 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (ind_t
 
 (*
  * $Log$
+ * Revision 1.13  1998/07/01 04:37:39  nogin
+ * Moved Refiner exceptions into a separate module RefineErrors
+ *
  * Revision 1.12  1998/06/15 22:33:21  jyh
  * Added CZF.
  *

@@ -26,6 +26,7 @@ open Refiner.Refiner.Term
 open Refiner.Refiner.TermMan
 open Refiner.Refiner.TermAddr
 open Refiner.Refiner.TermSubst
+open Refiner.Refiner.RefineErrors
 open Refiner.Refiner.Refine
 
 (*
@@ -921,6 +922,9 @@ let timingT tac arg =
 
 (*
  * $Log$
+ * Revision 1.10  1998/07/01 04:38:02  nogin
+ * Moved Refiner exceptions into a separate module RefineErrors
+ *
  * Revision 1.9  1998/06/23 22:12:44  jyh
  * Improved rewriter speed with conversion tree and flist.
  *

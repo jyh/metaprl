@@ -25,7 +25,7 @@ open Debug
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
 open Refiner.Refiner.TermSubst
-open Refiner.Refiner.Refine
+open Refiner.Refiner.RefineErrors
 open Resource
 open Term_stable
 
@@ -435,6 +435,9 @@ let d_subsetT s p =
 
 (*
  * $Log$
+ * Revision 1.4  1998/07/01 04:37:28  nogin
+ * Moved Refiner exceptions into a separate module RefineErrors
+ *
  * Revision 1.3  1998/06/23 22:12:24  jyh
  * Improved rewriter speed with conversion tree and flist.
  *

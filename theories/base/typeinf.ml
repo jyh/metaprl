@@ -11,7 +11,7 @@ open Debug
 
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermSubst
-open Refiner.Refiner.Refine
+open Refiner.Refiner.RefineErrors
 open Term_table
 open Resource
 
@@ -112,6 +112,9 @@ let typeinf_of_proof p =
 
 (*
  * $Log$
+ * Revision 1.14  1998/07/01 04:37:16  nogin
+ * Moved Refiner exceptions into a separate module RefineErrors
+ *
  * Revision 1.13  1998/06/15 22:32:42  jyh
  * Added CZF.
  *

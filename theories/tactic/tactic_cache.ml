@@ -42,6 +42,7 @@ open Refiner.Refiner.Term
 open Refiner.Refiner.TermMan
 open Refiner.Refiner.TermShape
 open Refiner.Refiner.TermSubst
+open Refiner.Refiner.RefineErrors
 open Refiner.Refiner.Rewrite
 open Refiner.Refiner.Refine
 
@@ -2204,6 +2205,9 @@ let used_hyps
 
 (*
  * $Log$
+ * Revision 1.12  1998/07/01 04:38:01  nogin
+ * Moved Refiner exceptions into a separate module RefineErrors
+ *
  * Revision 1.11  1998/06/12 13:47:46  jyh
  * D tactic works, added itt_bool.
  *

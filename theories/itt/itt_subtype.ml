@@ -12,7 +12,7 @@ open Refiner.Refiner
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
 open Refiner.Refiner.TermMan
-open Refiner.Refiner.Refine
+open Refiner.Refiner.RefineErrors
 open Resource
 open Term_dtable
 
@@ -318,6 +318,9 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (subty
 
 (*
  * $Log$
+ * Revision 1.12  1998/07/01 04:37:51  nogin
+ * Moved Refiner exceptions into a separate module RefineErrors
+ *
  * Revision 1.11  1998/06/22 19:46:25  jyh
  * Rewriting in contexts.  This required a change in addressing,
  * and the body of the context is the _last_ subterm, not the first.

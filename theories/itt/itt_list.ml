@@ -10,10 +10,11 @@ include Itt_rfun
 
 open Printf
 open Debug
+open Refiner.Refiner
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
 open Refiner.Refiner.TermSubst
-open Refiner.Refiner.Refine
+open Refiner.Refiner.RefineErrors
 open Options
 open Resource
 
@@ -305,7 +306,7 @@ let inf_cons inf decl t =
    let decl', hd' = inf decl hd in
    let decl'', tl' = inf decl' tl in
       try unify decl'' (mk_list_term hd') tl', tl' with
-         BadMatch _ -> raise (RefineError ("typeinf", StringTermError ("can't infer type for", t)))
+         Term.BadMatch _ -> raise (RefineError ("typeinf", StringTermError ("can't infer type for", t)))
 
 let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (cons_term, inf_cons)
 
@@ -345,6 +346,9 @@ let sub_resource =
 
 (*
  * $Log$
+ * Revision 1.13  1998/07/01 04:37:42  nogin
+ * Moved Refiner exceptions into a separate module RefineErrors
+ *
  * Revision 1.12  1998/06/22 19:46:17  jyh
  * Rewriting in contexts.  This required a change in addressing,
  * and the body of the context is the _last_ subterm, not the first.

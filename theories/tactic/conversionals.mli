@@ -5,7 +5,7 @@
 include Tacticals
 
 open Refiner.Refiner.Term
-open Refiner.Refiner.Refine
+open Refiner.Refiner.RefineErrors
 
 open Tactic_type
 open Tacticals
@@ -94,6 +94,9 @@ val repeatForC : int -> conv -> conv
 
 (*
  * $Log$
+ * Revision 1.6  1998/07/01 04:37:59  nogin
+ * Moved Refiner exceptions into a separate module RefineErrors
+ *
  * Revision 1.5  1998/06/23 22:12:40  jyh
  * Improved rewriter speed with conversion tree and flist.
  *

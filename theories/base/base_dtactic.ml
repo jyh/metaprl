@@ -8,7 +8,7 @@ open Debug
 open Opname
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermAddr
-open Refiner.Refiner.Refine
+open Refiner.Refiner.RefineErrors
 open Resource
 open Simple_print
 open Term_table
@@ -122,6 +122,9 @@ let dT = d_resource.resource_extract d_resource
 
 (*
  * $Log$
+ * Revision 1.9  1998/07/01 04:37:13  nogin
+ * Moved Refiner exceptions into a separate module RefineErrors
+ *
  * Revision 1.8  1998/06/15 22:32:38  jyh
  * Added CZF.
  *

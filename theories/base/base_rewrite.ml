@@ -5,7 +5,7 @@
 include Rewrite_type
 include Base_dtactic
 
-open Refiner.Refiner.Refine
+open Refiner.Refiner.RefineErrors
 open Resource
 
 open Tactic_type
@@ -29,6 +29,9 @@ let d_resource = d_resource.resource_improve d_resource (rewrite_term, d_rewrite
 
 (*
  * $Log$
+ * Revision 1.4  1998/07/01 04:37:15  nogin
+ * Moved Refiner exceptions into a separate module RefineErrors
+ *
  * Revision 1.3  1998/06/22 19:46:02  jyh
  * Rewriting in contexts.  This required a change in addressing,
  * and the body of the context is the _last_ subterm, not the first.

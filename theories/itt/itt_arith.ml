@@ -16,7 +16,7 @@ open Debug
 
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermMan
-open Refiner.Refiner.Refine
+open Refiner.Refiner.RefineErrors
 
 open Itt_int
 open Itt_equal
@@ -479,6 +479,9 @@ prim arith : arith_check{'t} --> 't = it
 
 (*
  * $Log$
+ * Revision 1.2  1998/07/01 04:37:33  nogin
+ * Moved Refiner exceptions into a separate module RefineErrors
+ *
  * Revision 1.1  1998/06/15 22:33:08  jyh
  * Added CZF.
  *

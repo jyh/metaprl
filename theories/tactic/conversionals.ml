@@ -13,7 +13,7 @@ open Printf
 
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermSubst
-open Refiner.Refiner.Refine
+open Refiner.Refiner.RefineErrors
 
 open Tactic_type
 
@@ -192,6 +192,9 @@ let rec repeatForC i conv =
 
 (*
  * $Log$
+ * Revision 1.8  1998/07/01 04:37:57  nogin
+ * Moved Refiner exceptions into a separate module RefineErrors
+ *
  * Revision 1.7  1998/06/23 22:12:39  jyh
  * Improved rewriter speed with conversion tree and flist.
  *

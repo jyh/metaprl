@@ -14,7 +14,7 @@ open Printf
 open Debug
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermMan
-open Refiner.Refiner.Refine
+open Refiner.Refiner.RefineErrors
 open Term_stable
 open Resource
 
@@ -124,6 +124,9 @@ let squash_of_proof p =
 
 (*
  * $Log$
+ * Revision 1.11  1998/07/01 04:37:49  nogin
+ * Moved Refiner exceptions into a separate module RefineErrors
+ *
  * Revision 1.10  1998/06/15 22:33:33  jyh
  * Added CZF.
  *

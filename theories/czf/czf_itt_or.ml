@@ -4,7 +4,7 @@
 
 include Czf_itt_wf
 
-open Refiner.Refiner.Refine
+open Refiner.Refiner.RefineErrors
 open Resource
 
 open Tacticals
@@ -156,6 +156,9 @@ let d_resource = d_resource.resource_improve d_resource (res_or_term, d_res_orT)
 
 (*
  * $Log$
+ * Revision 1.5  1998/07/01 04:37:27  nogin
+ * Moved Refiner exceptions into a separate module RefineErrors
+ *
  * Revision 1.4  1998/06/23 22:12:22  jyh
  * Improved rewriter speed with conversion tree and flist.
  *

@@ -15,7 +15,7 @@ open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
 open Refiner.Refiner.TermMan
 open Refiner.Refiner.TermSubst
-open Refiner.Refiner.Refine
+open Refiner.Refiner.RefineErrors
 open Options
 open Resource
 
@@ -347,6 +347,9 @@ let sub_resource =
 
 (*
  * $Log$
+ * Revision 1.13  1998/07/01 04:37:36  nogin
+ * Moved Refiner exceptions into a separate module RefineErrors
+ *
  * Revision 1.12  1998/06/23 22:12:30  jyh
  * Improved rewriter speed with conversion tree and flist.
  *

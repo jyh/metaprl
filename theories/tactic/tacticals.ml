@@ -9,7 +9,7 @@ open Refiner.Refiner
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermMan
 open Refiner.Refiner.TermSubst
-open Refiner.Refiner.Refine
+open Refiner.Refiner.RefineErrors
 
 open Tactic_type
 
@@ -615,6 +615,9 @@ let get_thinning_arg arg =
 
 (*
  * $Log$
+ * Revision 1.16  1998/07/01 04:38:04  nogin
+ * Moved Refiner exceptions into a separate module RefineErrors
+ *
  * Revision 1.15  1998/06/22 19:46:46  jyh
  * Rewriting in contexts.  This required a change in addressing,
  * and the body of the context is the _last_ subterm, not the first.

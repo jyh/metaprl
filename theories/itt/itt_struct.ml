@@ -14,7 +14,7 @@ open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
 open Refiner.Refiner.TermMan
 open Refiner.Refiner.TermSubst
-open Refiner.Refiner.Refine
+open Refiner.Refiner.RefineErrors
 
 open Tactic_type
 open Sequent
@@ -272,6 +272,9 @@ let revHypSubstT i p =
 
 (*
  * $Log$
+ * Revision 1.12  1998/07/01 04:37:50  nogin
+ * Moved Refiner exceptions into a separate module RefineErrors
+ *
  * Revision 1.11  1998/06/23 22:12:37  jyh
  * Improved rewriter speed with conversion tree and flist.
  *

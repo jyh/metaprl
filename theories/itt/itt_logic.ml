@@ -16,7 +16,7 @@ open Refiner.Refiner
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
 open Refiner.Refiner.TermMan
-open Refiner.Refiner.Refine
+open Refiner.Refiner.RefineErrors
 open Resource
 
 open Itt_equal
@@ -240,6 +240,9 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (not_t
 
 (*
  * $Log$
+ * Revision 1.12  1998/07/01 04:37:43  nogin
+ * Moved Refiner exceptions into a separate module RefineErrors
+ *
  * Revision 1.11  1998/06/23 22:12:33  jyh
  * Improved rewriter speed with conversion tree and flist.
  *

@@ -15,7 +15,7 @@ open Refiner.Refiner
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
 open Refiner.Refiner.TermMan
-open Refiner.Refiner.Refine
+open Refiner.Refiner.RefineErrors
 open Options
 open Resource
 
@@ -306,6 +306,9 @@ let sub_resource =
 
 (*
  * $Log$
+ * Revision 1.11  1998/07/01 04:37:45  nogin
+ * Moved Refiner exceptions into a separate module RefineErrors
+ *
  * Revision 1.10  1998/06/22 19:46:21  jyh
  * Rewriting in contexts.  This required a change in addressing,
  * and the body of the context is the _last_ subterm, not the first.

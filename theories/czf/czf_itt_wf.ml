@@ -9,7 +9,7 @@
 
 include Czf_itt_set
 
-open Refiner.Refiner.Refine
+open Refiner.Refiner.RefineErrors
 open Itt_rfun
 
 declare wf{'A}
@@ -53,6 +53,9 @@ let d_wf_typeT i p =
 
 (*
  * $Log$
+ * Revision 1.3  1998/07/01 04:37:30  nogin
+ * Moved Refiner exceptions into a separate module RefineErrors
+ *
  * Revision 1.2  1998/06/22 19:46:08  jyh
  * Rewriting in contexts.  This required a change in addressing,
  * and the body of the context is the _last_ subterm, not the first.

@@ -4,7 +4,7 @@
 
 include Czf_itt_wf
 
-open Refiner.Refiner.Refine
+open Refiner.Refiner.RefineErrors
 
 open Sequent
 open Resource
@@ -94,6 +94,9 @@ let d_resource = d_resource.resource_improve d_resource (res_true_term, d_res_tr
 
 (*
  * $Log$
+ * Revision 1.3  1998/07/01 04:37:29  nogin
+ * Moved Refiner exceptions into a separate module RefineErrors
+ *
  * Revision 1.2  1998/06/16 16:26:06  jyh
  * Added itt_test.
  *

@@ -9,6 +9,7 @@ open Refiner.Refiner
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermMan
 open Refiner.Refiner.TermAddr
+open Refiner.Refiner.RefineErrors
 open Refiner.Refiner.Rewrite
 open Refiner.Refiner.Refine
 
@@ -228,7 +229,7 @@ let makeFoldC contractum conv =
                          | _ ->
                               raise (RefineError ("Rewrite_type.fold", StringTermError ("rewrite failed", redex)))
                         with
-                           Rewrite.RewriteError err ->
+                           RewriteErr err ->
                               raise (RefineError ("Rewrite_Type.fold", RewriteError err))
                      in
                         Fun doCE
@@ -363,6 +364,9 @@ let rw conv i p =
 
 (*
  * $Log$
+ * Revision 1.6  1998/07/01 04:38:00  nogin
+ * Moved Refiner exceptions into a separate module RefineErrors
+ *
  * Revision 1.5  1998/06/27 05:29:50  nogin
  * Prevent some closure creations
  *

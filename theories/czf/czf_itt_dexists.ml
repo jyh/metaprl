@@ -4,7 +4,7 @@
 
 include Czf_itt_exists
 
-open Refiner.Refiner.Refine
+open Refiner.Refiner.RefineErrors
 open Resource
 
 open Tacticals
@@ -116,6 +116,9 @@ let d_resource = d_resource.resource_improve d_resource (wf_dexists_term, d_wf_d
 
 (*
  * $Log$
+ * Revision 1.2  1998/07/01 04:37:22  nogin
+ * Moved Refiner exceptions into a separate module RefineErrors
+ *
  * Revision 1.1  1998/06/23 22:12:21  jyh
  * Improved rewriter speed with conversion tree and flist.
  *

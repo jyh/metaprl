@@ -16,7 +16,7 @@ open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
 open Refiner.Refiner.TermMan
 open Refiner.Refiner.TermSubst
-open Refiner.Refiner.Refine
+open Refiner.Refiner.RefineErrors
 open Resource
 
 open Tactic_type
@@ -389,6 +389,9 @@ let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (apply
 
 (*
  * $Log$
+ * Revision 1.14  1998/07/01 04:37:47  nogin
+ * Moved Refiner exceptions into a separate module RefineErrors
+ *
  * Revision 1.13  1998/06/23 22:12:36  jyh
  * Improved rewriter speed with conversion tree and flist.
  *

@@ -15,7 +15,7 @@ open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
 open Refiner.Refiner.TermMan
 open Refiner.Refiner.TermSubst
-open Refiner.Refiner.Refine
+open Refiner.Refiner.RefineErrors
 open Options
 open Resource
 
@@ -365,7 +365,7 @@ let inf_decide (inf : typeinf_func) (decl : term_subst) (t : term) =
    let decl'', a' = inf ((x, l)::decl') a in
    let decl''', b' = inf ((y, l)::decl'') b in
       try unify decl''' a' b', a' with
-         BadMatch _ ->
+         Term.BadMatch _ ->
             raise (RefineError ("typeinf", StringTermError ("can't infer type for", t)))
 
 let typeinf_resource = typeinf_resource.resource_improve typeinf_resource (decide_term, inf_decide)
@@ -391,6 +391,9 @@ let sub_resource =
 
 (*
  * $Log$
+ * Revision 1.13  1998/07/01 04:37:53  nogin
+ * Moved Refiner exceptions into a separate module RefineErrors
+ *
  * Revision 1.12  1998/06/22 19:46:29  jyh
  * Rewriting in contexts.  This required a change in addressing,
  * and the body of the context is the _last_ subterm, not the first.

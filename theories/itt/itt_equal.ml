@@ -14,7 +14,7 @@ open Refiner.Refiner
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermOp
 open Refiner.Refiner.TermMan
-open Refiner.Refiner.Refine
+open Refiner.Refiner.RefineErrors
 open Rformat
 open Simple_print
 open Term_stable
@@ -148,12 +148,12 @@ let dest_level_param t =
             begin
                match dest_param param with
                   Level s -> s
-                | _ -> raise (TermMatch ("dest_level_param", t, "param type"))
+                | _ -> raise (Term.TermMatch ("dest_level_param", t, "param type"))
             end
        | { op_params = [] } ->
-            raise (TermMatch ("dest_level_param", t, "no params"))
+            raise (Term.TermMatch ("dest_level_param", t, "no params"))
        | _ ->
-            raise (TermMatch ("dest_level_param", t, "too many params"))
+            raise (Term.TermMatch ("dest_level_param", t, "too many params"))
 
 (* Cumulativity over universes *)
 mlterm cumulativity{univ[@j:l]; univ[@i:l]} =
@@ -359,6 +359,9 @@ let unsquashT v p =
 
 (*
  * $Log$
+ * Revision 1.14  1998/07/01 04:37:37  nogin
+ * Moved Refiner exceptions into a separate module RefineErrors
+ *
  * Revision 1.13  1998/06/22 19:46:15  jyh
  * Rewriting in contexts.  This required a change in addressing,
  * and the body of the context is the _last_ subterm, not the first.

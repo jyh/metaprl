@@ -105,14 +105,14 @@ transformation.
 A downside of such a conservative approach is that it becomes very hard to write transformations in
 an optimal way. In particular, the CPS rewrites presented is this paper introduce a large number of
 ``administrative'' beta-redices that would need to be eliminated in subsequent optimization stages.
-In the work-in-progress compiler for the typed language, we chose an alternative approach. There, in
+We can chose an alternative approach where
 the CPS term is defined as performing a syntactical transformation of a program. In this approach,
 all the rewrites for the CPS term become simply parts of the @emph{definition} of the CPS
 transformation. All the work required to prove that the transformation does not change the meaning
 of the program goes into establishing that the corresponding @tt[cps_prog] rule is valid. This
 approach makes it much easier to specify the CPS transformation in an optimal way, following the
-approach of Danvy and Fellinski @cite[DF92]. In fact, in the work-in-progress compiler, the
-specification of the CPS transformation ends up being even simpler than Danvy and Fellinski's one
+approach of Danvy and Fellinski @cite[DF92]. We currently use this approach in our work-in-progress compiler; the
+specification of the CPS transformation ends up being even simpler than Danvy and Fellinski's
 because of the efficiency of the HOAS language that we use.
 
 @section["related-work"]{Related work}

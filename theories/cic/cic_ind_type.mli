@@ -1,7 +1,6 @@
 extends Cic_lambda
 
-open Refiner.Refiner.Term
-open Tactic_type.Conversionals
+open Basic_tactics
 
 rule collapse_base :
 	sequent { <H> >- 'C } -->

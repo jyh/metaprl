@@ -1,10 +1,6 @@
 extends Base_theory
 
-open Refiner.Refiner.TermOp
-open Refiner.Refiner.Term
-open Top_conversionals
-open Dtactic
-open Auto_tactic
+open Basic_tactics
 
 (* MetaPRL doesn't allow to declare a variable twice  in one Context
 so in rules w-s, ... we skip such things as "x not in H" *)

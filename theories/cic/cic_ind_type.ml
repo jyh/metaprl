@@ -3,7 +3,7 @@ open Cic_lambda
 
 open Lm_printf
 
-open Basic_tactic
+open Basic_tactics
 
 prim collapse_base {| intro [] |} :
 	sequent { <H> >- 'C } -->
@@ -145,7 +145,7 @@ interactive_rw indFoldDef 'Hi bind{x.'t['x]} :
 
 (* Returns sequent conclusion as a term, fails if there is more than one conclusion *)
 let seq_concl seq =
-   match SeqGoal.to_list (explode_sequent seq).sequent_goals with
+   match SeqGoal.to_list (TermMan.explode_sequent seq).sequent_goals with
       [ t ] ->
 			t
       | _ ->
@@ -228,7 +228,7 @@ interactive_rw indWrap
 
 let indWrapC def cnv = funC (fun e ->
 	let p = env_arg e in
-	let def'=apply_rewrite p cnv def in
+	let def' = Top_conversionals.apply_rewrite p cnv def in
 	indWrap def'
 )
 
@@ -445,8 +445,8 @@ let fold_appStepAuxC seq =
 	let intermed = seq_concl (seq_concl first) in
 	let head = seq_concl (seq_concl (intermed)) in
 	let el,ty = two_subterms head in
-	let defvar = mk_var_term (nth_binding intermed 1) in
-	let param = mk_var_term (nth_binding first 1) in
+	let defvar = mk_var_term (TermMan.nth_binding intermed 1) in
+	let param = mk_var_term (TermMan.nth_binding first 1) in
 	let appl = mk_apply_term defvar param in
 	let bind = var_subst_to_bind2 ty appl param in
 	fold_appStep bind

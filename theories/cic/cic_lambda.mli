@@ -1,8 +1,6 @@
 extends Base_theory
 
-open Lm_symbol
-open Refiner.Refiner.Term
-open Tactic_type.Conversionals
+open Basic_tactics
 
 (* MetaPRL doesn't allow to declare a variable twice  in one Context
 so in rules w-s, ... we skip such things as "x not in H" *)
